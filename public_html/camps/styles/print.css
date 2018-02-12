@@ -1,0 +1,8 @@
+#nav, .slider_back, .action, .add_new, #assign_staff_member, #assign_a_camper  {
+ display:none;
+}
+
+body, #wrapper > div, #wrapper > div .col_title_bg, div.module, div.lists li a.link {
+	background:none;
+}
+
