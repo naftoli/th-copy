@@ -1,0 +1,33 @@
+.tz-main-body .tz-inner{
+    padding:0 50px;
+}
+#tz-content{
+    min-height:0;
+}
+
+.container-fluid { max-width: 1340px!important; }
+.tz-main-menu ul ul { width: 200px; } .tz-main-menu ul ul ul { margin-left: 180px; }
+
+body, input.inputbox,
+.content div.tz_new_leading span.tz_title a, .item-music-descrip h3, .tz-main-menu ul ul li a:hover { font-family: SourceSansProRegular, Arial, sans-serif; }
+
+.box h3.header,
+.content div.tz_new_leading span.tz_date, .tz-bottom, .music-left, .album-info,
+.item-music-descrip, .tz_artist, .footer-menu, .tz-main-menu ul ul li a { font-family: SourceSansProLight, Arial, sans-serif; }
+
+.twtr-bd .twtr-tweets p, ._clients .gb-content { font-family: SourceSansProItalic, Arial, sans-serif; }
+
+.tz_title a, .btn-inner a { font-family: SourceSansProSemibold, Arial, sans-serif; }
+
+._action h2 { font-family: SourceSansProSemiboldItalic, Arial, sans-serif; }
+
+.album-info, .item-music-descrip .item-music-intro p, div.jp-type-playlist div.jp-playlist a, div.tz_new_leading, .sidebar-nav .custom p { font-family: Verdana; }
+
+
+.item-music-pattern{
+    background:url("../../images/pattern.png") repeat;
+}
+
+.item-music-image{
+    background-image: url('http://placehold.it/900x600');
+}
