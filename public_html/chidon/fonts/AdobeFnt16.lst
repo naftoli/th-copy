@@ -1,0 +1,259 @@
+%!Adobe-FontList 1.16
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:AdobeHebrew-Regular
+FamilyName:Adobe Hebrew
+StyleName:Regular
+FullName:Adobe Hebrew Regular
+MenuName:Adobe Hebrew
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Regular
+FullNameNative:
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Chana\Desktop\Dropbox\Chava\chidon webpage 3 Folder\Document fonts\AdobeHebrew-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:73124
+FileModTime:1399003606
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,Adobe Hebrew
+NameArray:0,Mac,4,Adobe Hebrew Regular
+NameArray:0,Win,1,Adobe Hebrew
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbReforma-Medium
+FamilyName:FbReforma
+StyleName:Medium
+FullName:FbReforma-Medium
+MenuName:FbReforma Medium
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Medium
+FullNameNative:
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Chana\Desktop\Dropbox\Chava\chidon webpage 3 Folder\Document fonts\FbReforma-Medium.otf
+DataFormat:sfntData
+FileLength:61376
+FileModTime:1230230776
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,FbReforma Medium
+NameArray:0,Win,1,FbReforma Medium
+NameArray:0,Win,16,FbReforma
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbReforma-Regular
+FamilyName:FbReforma
+StyleName:Regular
+FullName:FbReforma-Regular
+MenuName:FbReforma Regular
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Regular
+FullNameNative:
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Chana\Desktop\Dropbox\Chava\chidon webpage 3 Folder\Document fonts\FbReforma-Regular.otf
+DataFormat:sfntData
+FileLength:61236
+FileModTime:1230231132
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,FbReforma Regular
+NameArray:0,Win,1,FbReforma Regular
+NameArray:0,Win,16,FbReforma
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Interstate-Black
+FamilyName:Interstate
+StyleName:Black
+FullName:Interstate-Black
+MenuName:Interstate-Black
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chana\Desktop\Dropbox\Chava\chidon webpage 3 Folder\Document fonts\Interstate-Black.PFB
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+FileLength:26825
+FileModTime:929852460
+WeightClass:900
+WidthClass:5
+AngleClass:0
+DesignSize:-1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:PFM
+FontName:Interstate-Black
+NumMMAxes:0
+OutlineFileName:C:\Users\Chana\Desktop\Dropbox\Chava\chidon webpage 3 Folder\Document fonts\Interstate-Black.pfm
+FileLength:11014
+FileModTime:929853096
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Interstate-Regular
+FamilyName:Interstate
+StyleName:Regular
+FullName:Interstate-Regular
+MenuName:Interstate-Regular
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chana\Desktop\Dropbox\Chava\chidon webpage 3 Folder\Document fonts\Interstate-Regular.PFB
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+FileLength:26366
+FileModTime:929852466
+WeightClass:400
+WidthClass:5
+AngleClass:0
+DesignSize:-1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:PFM
+FontName:Interstate-Regular
+NumMMAxes:0
+OutlineFileName:C:\Users\Chana\Desktop\Dropbox\Chava\chidon webpage 3 Folder\Document fonts\Interstate-Regular.pfm
+FileLength:10946
+FileModTime:929853102
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Sanchez-Black
+FamilyName:Sanchez
+StyleName:Black
+FullName:Sanchez Black
+MenuName:Sanchez
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chana\Desktop\Dropbox\Chava\chidon webpage 3 Folder\Document fonts\Sanchez-Black.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:49344
+FileModTime:1315821342
+WeightClass:900
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Sanchez Black
+NameArray:0,Win,1,Sanchez
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Sanchez-Bold
+FamilyName:Sanchez
+StyleName:Bold
+FullName:Sanchez Bold
+MenuName:Sanchez
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chana\Desktop\Dropbox\Chava\chidon webpage 3 Folder\Document fonts\Sanchez-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:56340
+FileModTime:1315821506
+WeightClass:721
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Sanchez Bold
+NameArray:0,Win,1,Sanchez
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Sanchez-Light
+FamilyName:Sanchez
+StyleName:Light
+FullName:Sanchez Light
+MenuName:Sanchez
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chana\Desktop\Dropbox\Chava\chidon webpage 3 Folder\Document fonts\Sanchez-Light_0.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:56156
+FileModTime:1315822270
+WeightClass:300
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Sanchez Light
+NameArray:0,Win,1,Sanchez
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Sanchez-SemiBoldItalic
+FamilyName:Sanchez
+StyleName:SemiBold Italic
+FullName:Sanchez SemiBold Italic
+MenuName:Sanchez
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:C:\Users\Chana\Desktop\Dropbox\Chava\chidon webpage 3 Folder\Document fonts\Sanchez-Semi Bold Italic.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:57252
+FileModTime:1315821656
+WeightClass:600
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Sanchez SemiBold Italic
+NameArray:0,Win,1,Sanchez
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Sanchez
+FamilyName:Sanchez
+StyleName:Regular
+FullName:Sanchez
+MenuName:Sanchez
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chana\Desktop\Dropbox\Chava\chidon webpage 3 Folder\Document fonts\Sanchez.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:54704
+FileModTime:1315822170
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Sanchez
+NameArray:0,Win,1,Sanchez
+%EndFont
+

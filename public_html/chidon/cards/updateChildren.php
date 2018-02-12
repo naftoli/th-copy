@@ -1,0 +1,67 @@
+<?
+require '../../db.php';
+
+$children = array(
+2238 =>	'Brooklyn, NY',
+2239 =>	'Toronto, Canada',
+2241 =>	'Brooklyn, NY',
+2201 =>	'London, England',
+2180 =>	'Brooklyn, NY',
+2181 =>	'Brooklyn, NY',
+2182 =>	'Brooklyn, NY',
+2183 =>	'Brooklyn, NY',
+2184 =>	'Brooklyn, NY',
+2185 =>	'Melbourne, Australia',
+2073 =>	'Cincinnati, Ohio',
+1781 =>	'Vancouver, British Columbia',
+1794 =>	'Cleveland, Ohio',
+1795 =>	'Calgary, Alberta',
+1797 =>	'Manchester, UK',
+1796 =>	'Manchester, UK',
+1799 =>	'Victoria, British Columbia',
+1803 =>	'Massachusetts',
+1804 =>	'Curitibia, Brazil',
+1805 =>	'Providence, Rhode Island',
+1806 =>	'Boise, Idaho',
+1807 =>	'Boise, Idaho',
+1813 =>	'Harrisburg, Pennsylvania',
+1815 =>	'Birmingham, Alabama',
+1822 =>	'Tempe, Arizona',
+1821 =>	'Champaign, Illinois',
+2258 =>	'Detroit, Michigan',
+2259 =>	'Detroit, Michigan',
+1825 =>	'Boulder, Colorado',
+1829 =>	'S Rosa, California',
+1831 =>	'Weston, Florida',
+1830 =>	'Fresno, California',
+1826 =>	'Burlington, Vermont',
+677	 =>  'Hillsboro, OR',
+1840 =>	'California',
+1841 =>	'Morgantown, WV',
+1842 =>	'Mansfield, MA',
+1844 =>	'Harrisburg, PA',
+1838 =>	'Greenwich, CT',
+1847 =>	'Asuncion, Paraguay',
+2269 =>	'Riga, Latvia',
+1849 =>	'Coram, NY',
+1851 =>	'Gaithesburg, MD',
+1852 =>	'Yardley, PA',
+1862 =>	'Rochester, NY',
+1855 =>	'Ottawa, ON',
+1857 =>	'Herndon, VA',
+1858 =>	'Fort Colins, CO',
+1860 =>	'Needham, MA',
+2078 =>	'Venice, FL',
+2079 =>	'Profident, RI',
+1868 =>	'Asuncion, Paraguay',
+1869 =>	'Hawaii',
+1870 =>	'Balitimore, MD',
+1871 =>	'Needham, MA',
+1872 =>	'Rhode Island'
+);
+
+foreach ($children as $id => $info) {
+	$sql = "update chidon_reg set child_city_state = '" . $info . "' where chidon_reg_id = " . $id;
+	mysql_query($sql);
+}
+?>

@@ -1,0 +1,99 @@
+%!Adobe-FontList 1.16
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbReforma-Bold
+FamilyName:FbReforma
+StyleName:Bold
+FullName:FbReforma-Bold
+MenuName:FbReforma Bold
+StyleBits:2
+FamilyNameNative:
+StyleNameNative:Bold
+FullNameNative:
+WritingScript:Hebrew
+OutlineFileName:C:\Users\chavaleiba\Tzivos Hashem Dropbox\Dropbox\CTH\Chidon\Chidon Publicity 5776\ID Cards\Document fonts\FbReforma-Bold.otf
+DataFormat:sfntData
+FileLength:61468
+FileModTime:1230230552
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,FbReforma Bold
+NameArray:0,Win,1,FbReforma Bold
+NameArray:0,Win,16,FbReforma
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbReforma-Medium
+FamilyName:FbReforma
+StyleName:Medium
+FullName:FbReforma-Medium
+MenuName:FbReforma Medium
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Medium
+FullNameNative:
+WritingScript:Hebrew
+OutlineFileName:C:\Users\chavaleiba\Tzivos Hashem Dropbox\Dropbox\CTH\Chidon\Chidon Publicity 5776\ID Cards\Document fonts\FbReforma-Medium.otf
+DataFormat:sfntData
+FileLength:61376
+FileModTime:1230230776
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,FbReforma Medium
+NameArray:0,Win,1,FbReforma Medium
+NameArray:0,Win,16,FbReforma
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Sanchez-Black
+FamilyName:Sanchez
+StyleName:Black
+FullName:Sanchez Black
+MenuName:Sanchez
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\chavaleiba\Tzivos Hashem Dropbox\Dropbox\CTH\Chidon\Chidon Publicity 5776\ID Cards\Document fonts\Sanchez-Black.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:49344
+FileModTime:1315821342
+WeightClass:900
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Sanchez Black
+NameArray:0,Win,1,Sanchez
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Sanchez
+FamilyName:Sanchez
+StyleName:Regular
+FullName:Sanchez
+MenuName:Sanchez
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\chavaleiba\Tzivos Hashem Dropbox\Dropbox\CTH\Chidon\Chidon Publicity 5776\ID Cards\Document fonts\Sanchez.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:54704
+FileModTime:1315822170
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Sanchez
+NameArray:0,Win,1,Sanchez
+%EndFont
+
