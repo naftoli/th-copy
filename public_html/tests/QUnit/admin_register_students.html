@@ -1,0 +1,87 @@
+<!DOCtype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>admin_register_students.php Unit Tests</title>
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.4.0.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+<!--    A boiled down version of the modal -->
+    <div class="cc_modal">
+      
+      <input id="authorize_bill_to" name="authorize_bill_to" />
+      <input id="authorize_cc_num" name="authorize_cc_num" />
+      <input id="authorize_cc_exp" name="authorize_cc_exp" />
+      
+      <div id="cc_modal">
+          <h2 id="cc_modal_error"></h2>
+          <form id="update_cc" action="/update_cc.php" method="post">
+            
+            <input type="text" name="cc_number" id="cc_number" value="" maxlength="19" required/>
+            <span class="cc_form_error" id="cc_number_errors"></span>
+            
+            <input type="text" name="cc_exp" id="cc_exp" value="" maxlength="5" required/>
+            <span class="cc_form_error" id="cc_exp_errors"></span>
+
+            <input type="text" name="cc_cvv" id="cc_cvv" value="" maxlength="4"/>
+            <span class="cc_form_error" id="cc_cvv_errors"></span>
+
+            <input type="text" name="billing_address" id="billing_address" value="" maxlength=255 required/><br/>
+            <span class="cc_form_error" id="billing_address_errors"></span>
+            
+            <input type="text" name="billing_city" id="billing_city" value="" maxlength=255 required/>
+            <span class="cc_form_error" id="billing_city_errors"></span>
+
+            <input type="text" name="billing_state" id="billing_state" value="" maxlength=255 required/>
+            <span class="cc_form_error" id="billing_state_errors"></span>
+
+            <input type="text" name="billing_postal" id="billing_postal" value="" maxlength=10 required/>
+            <span class="cc_form_error" id="billing_postal_errors"></span>
+            
+            <input type="submit" value="Update and Charge" id="update_cc_submit"/>
+            <input type="button" value="Cancel" id="update_cc_cancel"/>
+          </form>
+        </div>
+    </div>
+    
+    <div id="cc_validate">
+      <span id="test_errors"></span>
+      
+      <div id="update_cc">
+        
+        <input id="cc_number" />
+        <span id="cc_number_errors"></span>
+        
+        <input id="cc_exp" />
+        <span id="cc_exp_errors"></span>
+        
+        <input id="cc_cvv" />
+        <span id="cc_cvv_errors"></span>
+        
+        <input id="billing_address" />
+        <span id="billing_address_errors"></span>
+        
+        <input id="billing_postal" />
+        <span id="billing_postal_errors"></span>
+        
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://code.jquery.com/qunit/qunit-2.4.0.js"></script>
+  <script src="vendor/jquery.mockjax.js"></script>
+  
+  <script src="/js/admin/components/cc_modal.js"></script>
+  <script src="js/admin_register_students/cc_modal_tests.js"></script>
+  
+  <script src="/js/utils/cc_validate.js"></script>
+  <script src="js/admin_register_students/cc_validate_tests.js"></script>
+  
+  <script src="/js/utils/money_format.js"></script>
+  <script src="js/admin_register_students/money_format_tests.js"></script>
+</body>
+</html>
