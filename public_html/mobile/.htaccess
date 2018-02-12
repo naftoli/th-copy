@@ -1,0 +1,15 @@
+
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^m\.mashpia\.com$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.m\.mashpia\.com$
+RewriteRule ^/?$ "http\:\/\/mashpia\.com\/mobile\/" [R=301,L]
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# NOTE this account's php is controlled via FPM and the vhost, this is a place holder.
+# Do not edit. This next line is to support the cPanel php wrapper (php_cli).
+# AddType application/x-httpd-ea-php54 .php .phtml
+# php -- END cPanel-generated handler, do not edit
+
+<filesMatch ".(gif|jpg|jpeg|png|ico|js|css|pdf|webp)$">
+Header set Cache-Control "max-age=2628000, public"
+</filesMatch>

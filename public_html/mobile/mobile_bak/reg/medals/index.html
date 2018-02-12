@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Mobile Web Site</title>
+		<link href="/mobile/reg/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+		<link href="css/default_skin.css" type="text/css" rel="stylesheet" />
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/responsive.css?v=1.1" type="text/css" rel="stylesheet" />
+		<script src="js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery.sky.carousel-1.0.2.min.js"></script>
+		<style>
+			#userImg {
+			    border-radius: 50%;
+			    border: 2px solid grey;
+			    margin-left: 5%;
+				max-width: 250px;
+			}
+			.personalImg {
+				border-radius: 50%; 
+				display: block;
+			}
+			.top-center {
+				margin: auto;	
+			}			
+		</style>
+	</head>
+	<body>
+        <div class="container">
+            <div class="header">
+                <div class="span12">
+                    <div class="header-top">
+                        <div class="header-setting" id="logOff">
+                        	<!--
+                        	<a href="#" id="logOff">
+                                <div style="float:left;"><span class="glyphicon glyphicon-lock"></span></div>
+                                <div style="float:left;margin-left:10px"><span class="lb-ico">log off</span></div>
+                            </a>
+                           -->
+                            <img src="images/setting.png" style="float: left;"/>
+                            <div style="float: left;">
+                                <span>log off</span>
+                            </div>
+                        </div>
+                        <div class="header-edit">
+                            <div style="float: left;">
+                                <span>edit</span>
+                            </div>
+                            <img src="images/edit.png" style="float: left;"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="span12 mt1">
+                    <div class="span4">
+                        <div class="top-left-space">
+                            <div class="span12">
+                                <img src="images/th.png">
+                            </div>
+                            <div class="span12" style="margin-top: 10px;">
+                                <span class="title" id="rank"></span>
+                            </div>
+                            <div class="span12">
+                                <span class="descr" id="name"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span4 top-center">
+                    	<div class="personalImg">
+                    		<img id="userImg" src="" />
+                    	</div>
+                    </div>
+                    <div class="span4" style="text-align: right;">
+                        <div class="top-right-space">
+                            <div class="span12">
+                                <img id="logo" src="">
+                            </div>
+                            <div class="span12" style="margin-top: 10px;">
+                                <span class="title">Platoon:<br /></span>
+                                <span class="descr" id="grade"></span>
+                            </div>
+                            <div class="span12">
+                                <span class="title">Commander:</br></span>
+                                <span class="descr" id="teacher"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="span12 body" style="margin-bottom: 120px;">
+                <div class="span12" style="margin-top:10px;">
+                    <div class="caption">
+                        <span class="points"></span>
+                    </div>
+                </div>
+                <a id="carouselLink" href="rank.html">
+	                <div class="sky-carousel" style="width: 96%;margin: 0px 2%">
+	                    <div class="sky-carousel-wrapper">
+	                        <ul class="sky-carousel-container">
+	                            <li>
+	                                <img src="images/trophits/1.png" alt="" />
+	                            </li>
+	                            <li>
+	                                <img src="images/trophits/2.png" alt="" />
+	                            </li>
+	                            <li>
+	                                <img src="images/trophits/3.png" alt="" />
+	                            </li>
+	                            <li>
+	                                <img src="images/trophits/4.png" alt="" />
+	                            </li>
+	                            <li>
+	                                <img src="images/trophits/5.png" alt="" />
+	                            </li>
+	                            <li>
+	                                <img src="images/trophits/6.png" alt="" />
+	                            </li>
+	                            <li>
+	                                <img src="images/trophits/7.png" alt="" />
+	                            </li>
+	                            <li>
+	                                <img src="images/trophits/8.png" alt="" />
+	                            </li>
+	                            <li>
+	                                <img src="images/trophits/9.png" alt="" />
+	                            </li>
+	                            <li>
+	                                <img src="images/trophits/10.png" alt="" />
+	                            </li>
+	                            <li>
+	                                <img src="images/trophits/11.png" alt="" />
+	                            </li>
+	                            <li>
+	                                <img src="images/trophits/12.png" alt="" />
+	                            </li>
+	                            <li>
+	                                <img src="images/trophits/13.png" alt="" />
+	                            </li>
+	                            <li>
+	                                <img src="images/trophits/14.png" alt="" />
+	                            </li>
+	                        </ul>
+	                    </div>
+	                </div>
+                </a>
+                <div class="span12 slider" style="margin-top:10px;text-align: center;">
+                    <img id="item0" src="images/circle.png">
+                    <img id="item1" src="images/circle.png">
+                    <img id="item2" src="images/circle.png">
+                    <img id="item3" src="images/circle.png">
+                    <img id="item4" src="images/circle.png">
+                    <img id="item5" src="images/circle.png">
+                    <img id="item6" src="images/circle.png">
+                    <img id="item7" src="images/circle.png">
+                    <img id="item8" src="images/circle.png">
+                    <img id="item9" src="images/circle.png">
+                    <img id="item10" src="images/circle.png">
+                    <img id="item11" src="images/circle.png">
+                    <img id="item12" src="images/circle.png">
+                    <img id="item13" src="images/circle.png">
+                </div>
+                <div class="span12" style="margin-top:30px;">
+                    <div class="medal-label">
+                        <span>MEDALS</span>
+                    </div>
+                </div>
+                               
+                <div id="medals"></div>
+                
+                <!--
+                <div class="span12">
+                    <div class="l-3">
+                        <div class="span4" style="text-align: center;">
+                            <img class="medal" src="images/medals/Tefilla.jpg">
+                            <div class="medal-sub" style="background-image: url(images/bot-caption.png);">
+                                <div style="display: table;width: 100%;"><span>TEFILA</span></div>
+                            </div>
+                            <span>3 to brown</span>
+                        </div>
+                        <div class="span4" style="text-align: center;">
+                            <img class="medal" src="images/medals/WWTC.jpg">
+                            <div class="medal-sub" style="background-image: url(images/bot-caption.png);">
+                                <div style="display: table;width: 100%;"><span>WWTC</span></div>
+                            </div>
+                            <span>3 to black</span>
+                        </div>
+                        <div class="span4" style="text-align: center;">
+                            <img class="medal" src="images/medals/Yomei.jpg">
+                            <div class="medal-sub" style="background-image: url(images/bot-caption.png);">
+                                <div style="display: table;width: 100%;"><span>YOMEI DIPAGRA</span></div>
+                            </div>
+                            <span>3 to yellow</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span12 mt2">
+                    <div class="l-4">
+                        <div class="span3" style="text-align: center;">
+                            <img class="medal" src="images/medals/Hiskashrus.jpg">
+                            <div class="medal-sub" style="background-image: url(images/bot-caption.png);">
+                                <div style="display: table;width: 100%;"><span>HISKASHRUS</span></div>
+                            </div>
+                            <span>3 to yellow</span>
+                        </div>
+                        <div class="span3" style="text-align: center;">
+                            <img class="medal" src="images/medals/Mivtzoim.jpg">
+                            <div class="medal-sub" style="background-image: url(images/bot-caption.png);">
+                                <div style="display: table;width: 100%;"><span>MIVTZOYIM</span></div>
+                            </div>
+                            <span>3 to yellow</span>
+                        </div>
+                        <div class="span3" style="text-align: center;">
+                            <img class="medal" src="images/medals/Avos.jpg">
+                            <div class="medal-sub" style="background-image: url(images/bot-caption.png);">
+                                <div style="display: table;width: 100%;"><span>AVOS UBONIM</span></div>
+                            </div>
+                            <span>3 to yellow</span>
+                        </div>
+                        <div class="span3" style="text-align: center;">
+                            <img class="medal" src="images/medals/Brias.jpg">
+                            <div class="medal-sub" style="background-image: url(images/bot-caption.png);">
+                                <div style="display: table;width: 100%;"><span>BRIAS HAGUF</span></div>
+                            </div>
+                            <span>3 to yellow</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            -->
+            <div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
+                <div class="span12 footer">
+        		<div class="span3 active">
+                    <a href="/mobile/reg/parent_detail.html">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="images/menu1.png">
+                            </div>
+                            <div class="span12">
+                                <span>Accounts</span>
+                            </div>
+                        </div>
+					</a>
+                    </div>
+				<!--
+                    <div class="span3">
+                    	<a href="#" id="goalsLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="images/menu3.png">
+                            </div>
+                            <div class="span12">
+                                <span>Goals</span>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+				-->
+                    <div class="span3">
+                    	<a href="#" id="missionsLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="images/menu2.png">
+                            </div>
+                            <div class="span12">
+                                <span>Missions</span>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                    <div class="span3">
+                    	<a href="#" id="rankLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="images/menu4.png">
+                            </div>
+                            <div class="span12">
+                                <span>Achievements</span>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+					<div class="span3">
+                    	<a href="#" id="storeLink">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="../../images/store-icon.png">
+                            </div>
+                            <div class="span12">
+                                <span>Rewards</span>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    <script src="js/js.cookie.js" type="text/javascript"></script>
+    <script>
+        var carousel = "";
+        var loop = 0;
+        function isiPhone(){
+            return (
+                    (navigator.platform.indexOf("iPhone") != -1) ||
+                            (navigator.platform.indexOf("iPod") != -1)
+                    );
+        }
+        $(document).ready(function(){
+
+            $(".footer .span3").click(function(){
+                $(".footer .span3").each(function(){
+                    $(this).removeClass("active");
+                });
+                if($(this).hasClass("active") == "active"){
+                    $(this).addClass("active");
+                }
+            });
+            
+        });
+        $(window).load(function(){
+            $( ".sky-carousel" ).unbind();
+            $(".slider img").click(function(){
+                var item_id = $(this).attr("id");
+                $(".slider img").each(function(){
+                    $(this).removeClass("active");
+                });
+                $("#item"+item_id).addClass("active");
+                item_id = item_id.replace("item","");
+                if(item_id == "0"){
+                    carousel.select(0, parseInt(item_id)+1);
+                }else{
+                    carousel.select(parseInt(item_id), parseInt(item_id)+1);
+                }
+                console.log(parseInt(item_id)+1);
+
+            });
+            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            }
+        });
+        
+        var url = location.toString();
+		var pos = url.indexOf('='); 
+		var id = url.substring( pos+1 );
+        
+        $(function() {
+        	var admin_id = Cookies.get('admin');
+			$.post('https://mashpia.com/mobile/reg/ajax/checkAuth.php', { user_id : id, admin_id : admin_id }, function( success ) {
+				if (success == 0) {
+					window.location = "/mobile";
+				}
+			});
+			
+			$("#logOff").click( function() {
+				//Cookies.set('isconnected', 'false');
+				//Cookies.remove('isconnected');
+				//Cookies.set('admin', '0');
+				//Cookies.remove('admin', { path: '/mobile/reg' });
+				//Cookies.set('admin', '0');
+				//Cookies.remove('admin', { path: '/' });
+				//Cookies.set('admin_id', '0');
+				Cookies.remove('admin', { path: '/' });
+				Cookies.remove('admin_id', { path: '/' });
+				window.location = "/mobile/reg/";
+			});
+		});
+		
+		$("#carouselLink").attr('href', '/mobile/reg/rank.html?id=' + id);
+		$("#missionsLink").attr('href', '/mobile/missionsNew.html?id=' + id);
+		$("#goalsLink").attr('href', '/mobile/goalsNew.html?id=' + id);
+		$("#rankLink").attr('href', '/mobile/reg/rank.html?id=' + id);
+		$("#storeLink").attr('href', '/mobile/store/index.html?id=' + id);
+		//$("#storeLink").attr('href', '/mobile/store/index.html?id=' + id + '&v=2');
+
+		$.post('ajax/getPoints.php', { user_id : id }, function( success ) {
+			//alert( success );
+			$(".points").append(success + ' miles');
+			$("#points").val( success );
+			
+			/*
+			$.post('ajax/login.php', { user_id : id, points : success }, function( diff ) {
+				if (diff > 0) {
+					alert("Mazal Tov, you earned an extra " + diff + " points since your last visit to this page.");
+				}
+			});
+			*/
+		});
+		
+		$.post('ajax/getUserInfo.php', { user_id : id }, function( success ) {
+			var user = $.parseJSON( success );
+			
+			var grade = user.class_grade;
+			if (user.class_sub) grade += '-' + user.class_sub;
+			
+			$("#rank").text( user.rank_name );
+			$("#name").text( user.first + ' ' + user.last );
+			$("#grade").text( grade );
+			$("#teacher").text( user.class_teacher );
+			
+			if (user.mobile_pic) {
+				$("#userImg").attr('src', '../' + user.mobile_pic);
+			} else if (user.thumb) {
+				$("#userImg").attr('src', 'https://mashpia.com/thumbs/' + user.thumb);
+			} else if (user.user_photo_id) {
+				$("#userImg").attr('src', 'https://mashpia.com/file_view.php?id=' + user.user_photo_id);
+			} else {
+				$("#userImg").attr('src', 'https://mashpia.com/mobile/reg/images/profile-photo-default.jpg');
+			}
+			
+			if (user.logo) {
+				$("#logo").attr('src', 'https://mashpia.com/schoolLogos/' + user.logo);
+			} else {
+				$("#logo").attr('src', 'https://mashpia.com/schoolLogos/TH-Blank Logo.gif');
+			}
+			
+			var rank = parseInt( user.rank_ord ) - 1;
+			if (rank > 8) rank = 8;
+			var isiPhone = navigator.userAgent.toLowerCase().indexOf("iphone");
+            var isiPad = navigator.userAgent.toLowerCase().indexOf("ipad");
+            var isiPod = navigator.userAgent.toLowerCase().indexOf("ipod");
+
+            //if (isiPhone > -1) {
+	        $(".sky-carousel-container li img").css({"width":"100px","height":"180px"});
+	        $(".sky-carousel").css("height","200px");
+	        setTimeout( function() {
+	            $( function() {
+	            	/*
+	                carousel = $('.sky-carousel').carousel({
+	                    itemWidth: 100,
+	                    itemHeight: 180,
+	                    distance: 40,
+	                    startIndex: 0,
+	                    autoSlideshowDelay: 1,
+	                    loop : false,
+	                    selectedItemDistance: 0,
+	                    selectedItemZoomFactor: 1,
+	                    unselectedItemZoomFactor: 0.7,
+	                    unselectedItemAlpha: 0.2,
+	                    topMargin: 10,
+	                    preload:true,
+	                    showPreloader:true,
+	                    navigationButtonsVisible: false,
+	                    gradientStartPoint: 0.5,
+	                    gradientEndPoint: 1,
+	                    reflectionDistance:100,
+	                    gradientOverlayColor: "#f5f5f5",
+	                    gradientOverlaySize: 0,
+	                    slideSpeed: 1,
+	                    enableMouseWheel : false,
+	                    selectByClick: false
+	                });
+	                */
+	                carousel = $('.sky-carousel').carousel({
+	                    itemWidth: 100,
+	                    itemHeight: 180,
+	                    distance: 40,
+	                    startIndex: 0,
+	                    autoSlideshowDelay: 1,
+	                    loop : false,
+	                    selectedItemDistance: 20,
+	                    selectedItemZoomFactor: 1,
+	                    unselectedItemZoomFactor: 0.7,
+	                    unselectedItemAlpha: 0.2,
+	                    topMargin: 10,
+	                    preload:true,
+	                    showPreloader:true,
+	                    navigationButtonsVisible: false,
+	                    gradientStartPoint: 0.5,
+	                    gradientEndPoint: 1,
+	                    reflectionDistance:100,
+	                    gradientOverlayColor: "#f5f5f5",
+	                    gradientOverlaySize: 100,
+	                    slideSpeed: 1,
+	                    enableMouseWheel : false,
+	                    selectByClick: false
+	                });
+	                carousel.startAutoSlideshow();
+	
+	                carousel.on('itemSelected.sc', function(evt) {
+	                    var item = evt.item.index();
+	                    if (item == 1 && rank == 0) {
+	                    	carousel.selectPrevious(1);
+	                    	carousel.stopAutoSlideshow();
+	                    	return;
+	                    }
+	                    var next_item = parseInt(item) + 1;
+	                    $(".slider img").each(function(){
+	                        $(this).removeClass("active");
+	                    });
+	                    $(".slider img:nth-child("+next_item+")").addClass("active");
+	                    
+	                    $(".real").attr('style', 'opacity: 0.3');
+	                    $("#" + next_item).find(".real").attr('style', 'opacity: 1');
+	                    
+	                    if (item == rank){
+	                    	$(".medalPic").attr('style', 'opacity: 1');
+	                        carousel.stopAutoSlideshow();
+	                        loop ++;
+	                    }else{
+	                        if(loop == 0){
+	                            carousel.startAutoSlideshow();
+	                        }else{
+	                            carousel.stopAutoSlideshow();
+	                        }
+	                    }
+	                });
+	            });
+	        }, 1000);
+	    /*
+	    }
+	    else if(isiPad > -1)
+	    {
+	        $(".sky-carousel-container li img").css({"width":"200px","height":"320px"});
+	        setTimeout( function() {
+	            $( function() {
+	                carousel = $('.sky-carousel').carousel({
+	                    itemWidth: 200,
+	                    itemHeight: 360,
+	                    distance: 80,
+	                    startIndex: 0,
+	                    autoSlideshowDelay: 1,
+	                    loop : false,
+	                    selectedItemDistance: 20,
+	                    selectedItemZoomFactor: 1,
+	                    unselectedItemZoomFactor: 0.7,
+	                    unselectedItemAlpha: 0.2,
+	                    topMargin: 10,
+	                    preload:true,
+	                    showPreloader:true,
+	                    navigationButtonsVisible: false,
+	                    gradientStartPoint: 0.5,
+	                    gradientEndPoint: 1,
+	                    reflectionDistance:100,
+	                    gradientOverlayColor: "#f5f5f5",
+	                    gradientOverlaySize: 100,
+	                    slideSpeed: 1,
+	                    enableMouseWheel : false,
+	                    selectByClick: false
+	                });
+	                carousel.startAutoSlideshow();
+	
+	                carousel.on('itemSelected.sc', function(evt) {
+	                    var item = evt.item.index();
+	                    if (item == 1 && rank == 0) {
+	                    	carousel.selectPrevious(1);
+	                    	carousel.stopAutoSlideshow();
+	                    	return;
+	                    }
+	                    var next_item = parseInt(item) + 1;
+	                    $(".slider img").each(function(){
+	                        $(this).removeClass("active");
+	                    });
+	                    $(".slider img:nth-child("+next_item+")").addClass("active");
+	                    
+	                    $(".real").attr('style', 'opacity: 0.3');
+	                    $("#" + next_item).find(".real").attr('style', 'opacity: 1');
+	                    
+	                    if (item == rank){
+	                    	$(".medalPic").attr('style', 'opacity: 1');
+	                        carousel.stopAutoSlideshow();
+	                        loop ++;
+	                    }else{
+	                        if(loop == 0){
+	                            carousel.startAutoSlideshow();
+	                        }else{
+	                            carousel.stopAutoSlideshow();
+	                        }
+	                    }
+	                });
+	            });
+	        }, 1000);
+	    }
+	    else
+	    {
+	        $(".sky-carousel-container li img").css({"width":"100px","height":"180px"});
+	        $(".sky-carousel").css("height","200px");
+	        setTimeout( function() {
+	            $( function() {
+	                carousel = $('.sky-carousel').carousel({
+	                    itemWidth: 100,
+	                    itemHeight: 180,
+	                    distance: 80,
+	                    startIndex: 0,
+	                    autoSlideshowDelay: 1,
+	                    loop : false,
+	                    selectedItemDistance: 20,
+	                    selectedItemZoomFactor: 1,
+	                    unselectedItemZoomFactor: 0.7,
+	                    unselectedItemAlpha: 0.2,
+	                    topMargin: 10,
+	                    preload:true,
+	                    showPreloader:true,
+	                    navigationButtonsVisible: false,
+	                    gradientStartPoint: 0.5,
+	                    gradientEndPoint: 1,
+	                    reflectionDistance:100,
+	                    gradientOverlayColor: "#f5f5f5",
+	                    gradientOverlaySize: 100,
+	                    slideSpeed: 1,
+	                    enableMouseWheel : false,
+	                    selectByClick: false
+	                });
+	                carousel.startAutoSlideshow();
+	
+	                carousel.on('itemSelected.sc', function(evt) {
+	                    var item = evt.item.index();
+	                    if (item == 1 && rank == 0) {
+	                    	carousel.selectPrevious(1);
+	                    	carousel.stopAutoSlideshow();
+	                    	return;
+	                    }
+	                    
+	                    var next_item = parseInt(item) + 1;
+	                    $(".slider img").each(function(){
+	                        $(this).removeClass("active");
+	                    });
+	                    $(".slider img:nth-child("+next_item+")").addClass("active");
+	                    
+	                    $(".real").attr('style', 'opacity: 0.3');
+	                    $("#" + next_item).find(".real").attr('style', 'opacity: 1');
+						
+	                    if (item == rank){
+	                    	$(".medalPic").attr('style', 'opacity: 1');
+	                    	for (var i = 0; i < item; i++) {
+	                    		$(".rankLogo").eq(i).attr('style', 'opacity: 1');
+	                    	}
+	                        carousel.stopAutoSlideshow();
+	                        loop++;
+	                    }else{
+	                        console.log(loop);
+	                        if(loop == 0){
+	                            carousel.startAutoSlideshow();
+	                        }else{
+	                            carousel.stopAutoSlideshow();
+	                        }
+	                    }
+	                });
+	
+	            });
+	        }, 1000);
+	    }
+	    */
+		});
+		
+		$(".header-edit").click( function() {
+			window.location = '/mobile/reg/re_register.html?child=' + id + '&e=1';
+		});
+		
+		var medalInfo = {
+			1 : 'black', 
+			2 : 'red', 
+			3 : 'orange', 
+			4 : 'yellow', 
+			5 : 'green', 
+			6 : 'blue', 
+			7 : 'purple', 
+			8 : 'brown', 
+			9 : 'grey', 
+			10 : 'black'
+		};
+		
+		$.post('ajax/getMedalInfo.php', { user_id : id }, function( success ) {
+			var medals = $.parseJSON( success );
+			
+			var html = '<div class="span12"><div class="l-3">';
+			for (var i in medals) {
+				var medal = medals[i];
+				if (i % 3 == 0 && i < 10) {
+					//if (i == 9) {
+					//    html += '</div></div><div class="span12 mt2"><div class="l-4">';
+					//} else {
+						html += '</div></div><div class="span12"><div class="l-3">';
+					//}
+				}
+				//if (i > 8) {
+				//    html += '<div class="span3" style="text-align: center;">';
+				//} else {
+					html += '<div class="span4" style="text-align: center;">';
+				//}
+				html += '<a href="https://mashpia.com/mobile/reg/medals3.html?id=' + id + '&subject=' + medal.id + '">';
+				if (medal.photo != '')
+					html += '<img class="medal" src="https://mashpia.com/file_view.php?id=' + medal.photo + '">';
+				else 
+					html += '<img class="medal" src="https://mashpia.com/kiosk/images/medals/holder.png">';
+				html += '</a><div class="medal-sub" style="background-image: url(images/bot-caption.png);">\
+								<div style="display: table;width: 100%;"><span>' + medal.name + '</span></div>\
+							</div>\
+							<span>' + medal.left + ' to Level ' + medal.next + '</span>\
+						</div>';
+			}
+			html += '</div></div>';
+			$("#medals").append( html );
+		    //$(".medal-sub").eq(i).next('span').attr('color', medalInfo[i+1]);
+		});
+    </script>
+    <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-71974937-1', 'auto');
+	  ga('send', 'pageview');
+	</script>
+	</body>
+</html>

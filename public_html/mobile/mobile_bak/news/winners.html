@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Web Site</title>
+    <link href="css/default_skin.css" type="text/css" rel="stylesheet" />
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.css" type="text/css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="css/component.css" />
+    <link href="css/responsive.css" type="text/css" rel="stylesheet" />
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <style>
+        body{/*margin-bottom: 100px;*/}
+        .disabled {
+        	opacity: 0.4;
+        }
+        .mazalTov {
+        	font-size: 26px; 
+        	padding-top: 10px; 
+        	text-align: center; 
+        	color: red; 
+        	line-height: 1.1;
+        }
+        .heDate {
+        	padding: 10px;
+        	font-size: 18px;
+        	width: auto;
+        	font-style: italic;
+        	text-align: center;
+        }
+        .date {
+        	border-bottom: 2px solid #ddd;
+        	clear: both;
+        }
+    </style>
+	<script src="js/modernizr.custom.js"></script>
+</head>
+<body class="news">
+<div class="header-green" style="position: relative">
+    <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
+        <table style="width: 100%;">
+            <tr>
+            	<td class="t-news" style="text-align: center;">
+            		<span class="span12">WINNERS</span>
+            	</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="container">
+    <div class="span12" style="max-width:1014px; width:100%;margin:0 auto;float:none;">
+    	
+        <!--<div class="span12 body">-->
+        	
+		<div class="body span12">
+			<div class="span12 footer media-group" style="width: 100%;">
+				<a href="index.html">
+	                <div class="span3">
+	                    <div class="menu-item">
+	                        <div class="span12">
+	                            <img src="/mobile/images/news-icon.png">
+	                        </div>
+	                        <div class="span12">
+	                            <span>News</span>
+	                        </div>
+	                    </div>
+	                </div>
+	            </a>
+	            <a href="birthdays.html">
+	                <div class="span3">
+	                    <div class="menu-item">
+	                        <div class="span12">
+	                            <img src="images/news/top-menu2.png">
+	                        </div>
+	                        <div class="span12">
+	                            <span>Birthdays</span>
+	                        </div>
+	                    </div>
+	                </div>
+	            </a>
+                <div class="span3 active">
+                    <div class="menu-item">
+                        <div class="span12">
+                            <img src="images/news/top-menu3.png">
+                        </div>
+                        <div class="span12">
+                            <span>Winners</span>
+                        </div>
+                    </div>
+                </div>
+                <a href="promotions.html">
+	                <div class="span3">
+	                    <div class="menu-item">
+	                        <div class="span12">
+	                            <img src="images/news/top-menu4.png">
+	                        </div>
+	                        <div class="span12">
+	                            <span>Promotions</span>
+	                        </div>
+	                    </div>
+	                </div>
+	            </a>
+            </div>
+            
+            <div id="wpContent" style="width: 92%; margin: 4%; float:left;">
+            	
+				<div class="span12 wrap1" style="">
+					<div class="heDate">
+						Auction Winners
+					</div>
+					<div class="date"></div>
+					<div style="padding: 20px; height: 200px;" id="raffles" align="center">
+						
+					</div>
+				</div>
+				
+			</div>
+        </div>
+        
+        <div class="span12" style="position: fixed;bottom: 0px;z-index: 9999;">
+            <div class="span12 footer">
+                <div class="span3 active" style="width: 100%">
+                	<a href="/mobile/reg/">
+	                    <div class="menu-item">
+	                        <div class="span12">
+	                            <img src="images/menu1.png">
+	                        </div>
+	                        <div class="span12">
+	                            <span>Accounts</span>
+	                        </div>
+	                    </div>
+	                </a>
+                </div>
+                <!--
+                <div class="span3">
+                    <div class="menu-item">
+                        <div class="span12">
+                            <img src="images/menu2.png">
+                        </div>
+                        <div class="span12">
+                            <span>Missions</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span3">
+                    <div class="menu-item">
+                        <div class="span12">
+                            <img src="images/menu3.png">
+                        </div>
+                        <div class="span12">
+                            <span>Golas</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span3">
+                    <div class="menu-item">
+                        <div class="span12">
+                            <img src="images/menu4.png">
+                        </div>
+                        <div class="span12">
+                            <span>Achievements</span>
+                        </div>
+                    </div>
+                </div>
+                -->
+            </div>
+        </div>
+        
+    </div>
+</div>
+<script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="js/classie.js"></script>
+	<script>
+		/*
+		$.post('ajax/getRaffles.php', function( success ) {
+			var html = '';
+			var raffles = $.parseJSON( success );
+			html += '<select name="raffles">';
+			for (var r in raffles) {
+				html += '<option value="' + r + '">' + raffles[r] + '</option>';
+			}
+			html += '</select><br /><br />';
+			html += '<button class="btn btn-success show">Show Winners</button>';
+			
+			//html = "<span style='font-size: 22px;'>Stay Tuned...</span>";
+			$("#raffles").append( html );
+			
+			$(".show").click( function() {
+				var id = $("#raffles select").val();
+				window.location.href = 'winners.html?raffle=' + id;
+			});
+		});
+		
+		var url = location.toString();
+		var pos = url.indexOf('='); 
+		var id = url.substring( pos+1 );
+		*/
+		var id = 77;
+		
+		if (id > 0) {
+			$("#wpContent").empty();
+			$.post('ajax/getWinners.php', { raffle : id }, function( success ) {
+				var posts = $.parseJSON( success );
+				var boys = posts.boys;
+				var girls = posts.girls;
+				
+				var html = '<div class="span12 wrap1">';
+				html += '<div class="heDate">' + posts.raffle + '</div><div class="date"></div>';
+				html += '<div class="mazalTov">!מזל טוב</div>';
+				html += '<div style="width : 90%; margin : 2% 5%;">';
+				html += '<div style="float: left; width: 48%;">';
+				html += '<div class="b-t-title"><span>Boys</span></div>';
+				
+				if (boys.length) {
+					for (var p in boys) {					
+						html += '<div class="b-t-description">';
+						html += '<span style="line-height: 1">' + boys[p]['rank'];
+						html += '<br />' + boys[p]['name'] + '</span>';
+						html += '</div>';
+						html += '<div>' + boys[p]['school'] + '</div>';
+						html += '<div style="font-size: 11px; color: red">Prize: ' + boys[p]['prize'] + '</div><br />';
+					}
+				}
+				html += '</div>';
+				
+				html += '<div style="float: right; width: 48%;">';
+				html += '<div class="b-t-title"><span>Girls</span></div>';
+				if (girls.length) {
+					for (var p in girls) {					
+						html += '<div class="b-t-description">';
+						html += '<span style="line-height: 1">' + girls[p]['rank'];
+						html += '<br />' + girls[p]['name'] + '</span>';
+						html += '</div>';
+						html += '<div>' + girls[p]['school'] + '</div>';
+						html += '<div style="font-size: 11px; color: red">Prize: ' + girls[p]['prize'] + '</div><br />';
+					}
+				}
+				html += '</div></div></div><div style="clear: both"></div>';
+				
+				$("#wpContent").append( html );
+			});
+		}
+	</script>
+</body>
+</html>
