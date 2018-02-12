@@ -1,0 +1,75 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+
+//set tick marks for checkboxes
+$army_points_selected = ($this->configuration->army_points) ? "checked" : '';
+$base_points_selected = ($this->configuration->base_points) ? "checked" : '';
+
+?>
+
+<script type="text/javascript">
+
+	$(document).ready(function()
+	{
+		$(".configure").click(function()
+		{
+			//alert("asdasd");
+			$.ajax({
+				type : "POST", 
+				cache : false,
+				start: $("#processing_status_configure").html('Loading...').fadeIn("slow"),
+				url : '<?php print $sn;?>/store/configuration',
+				dataType : "text",
+				data: $('#form_configuration').serialize(),
+				success : function(response) {
+					if (response.match(/^[0-9]+$/)) {
+						$("#processing_status_configure").html("Configuration updated successfully").fadeOut("slow");
+					} else {
+						$("#processing_status_configure").html(response).fadeIn("slow");
+					}
+				}
+			});
+		});
+	});
+	
+</script>
+
+<div class="slider">
+	<div class="col_title">
+		<span>Configure Store</span>
+	</div>
+	<div class="col_content camper">
+		<div class="module lists" id="lists-camper-groups">
+			<div class="module_content">
+				<form enctype="multipart/form-data" name="form_configuration" id="form_configuration" method="post" action="">
+					<input type="hidden" name="institution_id" id="institution_id" value="<?php echo $this->institution_id; ?>" >
+					<ul>
+<?php
+		if ($this->objRoles->isAllowed('Teacher'))
+		{
+?>
+						<li>
+							<span class="label">Allow purchases using points from:</span>
+							<div><input type="checkbox"  id="army_points" name="army_points" value="<?php echo $this->configuration->army_points; ?>" class="configure" <?php echo $army_points_selected; ?>/> Army-wide points</div>
+							<div class="clear"></div>
+							<div><input type="checkbox"  id="base_points" name="base_points" value="<?php echo $this->configuration->base_points; ?>" class="configure"  <?php echo $base_points_selected; ?> /> Base points</div>
+							<div class="clear"></div>
+						</li>
+<?php
+		}else{
+?>
+						<li>
+							You are not allowed to modify configuration settings
+						</li>
+<?php } ?>
+						<li>
+							<div id="processing_status_configure"></div>
+						</li>
+					
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

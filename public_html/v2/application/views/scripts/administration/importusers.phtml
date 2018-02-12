@@ -1,0 +1,190 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<style>
+.context-menu-item {
+	text-align: left !important;
+}
+.handsontable .dragdealer .handle {
+	background-color: #777 !important;
+}
+</style>
+<div class="slider" id="importuser">
+<script>
+if (!handsontable_handle)
+	var handsontable_handle = null;
+$(document).ready(function () {
+	if (handsontable_handle != null) {
+		handsontable_handle.destroy();
+	}
+	var fnLoadSpread = function (data) {
+		if (!data)
+			data = [];
+		var arrHeaders = [
+			"<?php print text('[|Class|]'); ?>",
+			"First Name *",
+			"Last Name *"
+		];
+		var arrWidths = [200,229,229];
+		var arrColumns = [
+			{
+				type: {
+					renderer: myAutocompleteRenderer,
+					editor: Handsontable.AutocompleteEditor
+				},
+				source: ["<?php print join('","', $this->arrClassNames); ?>"],
+				data : 'class'
+			},
+			{
+				data : 'first_name'
+			},
+			{
+				data : 'last_name'
+			}
+		];
+<?php
+	if ($this->tstyle == 'hoo')
+	{
+?>
+		arrHeaders.push("Email", "Home Phone", "Cell Phone");
+		arrColumns.push({
+			data : 'student_email'
+		},{
+			data : 'phone'
+		},{
+			data : 'cell'
+		});
+		arrWidths.push(229,200,200);
+<?php
+	}
+	$strCustomFields = $this->objInstitution->custom_fields;
+	$arrCustomFields = array();
+	if (empty($strCustomFields))
+		$arrCustomFields = array();
+	else
+		$arrCustomFields = unserialize($strCustomFields);
+	$intItr = -1;
+	foreach ($arrCustomFields as $arrRow)
+	{
+		$intItr++;
+?>
+		arrColumns.push({
+			data : 'custom_field_<?php print $intItr; ?>'
+		});
+		arrHeaders.push('<?php print $arrRow['field_name']; ?>');
+		arrWidths.push(<?php print $arrRow['field_type'] == 'textbox' ? 200 : 260; ?>);
+<?php
+	}
+?>
+		$("#spreadsheet_view").handsontable({
+			columns: arrColumns,
+			colHeaders: arrHeaders,
+			rowHeaders: true,
+			colWidths: arrWidths,
+			data: data,
+			minRows: 5,
+			minCols: 6,
+			minSpareRows: 1,
+			currentRowClassName: 'currentRow',
+			currentColClassName: 'currentCol',
+			autoWrapRow: true,
+			contextMenu: ['undo', 'redo', 'row_above', 'row_below', 'remove_row']
+		});
+		handsontable_handle = $("#spreadsheet_view").handsontable('getInstance');
+	}
+	function myAutocompleteRenderer(instance, td, row, col, prop, value, cellProperties) {
+	  Handsontable.AutocompleteCell.renderer.apply(this, arguments);
+	  td.style.fontStyle = 'italic';
+	  td.title = 'Type to show the list of options';
+	}
+	var fnHandlePaste = function () {
+		if ($(this).val().length < 10) {
+			$(this).val('');
+			return;
+		}
+		var strPasteRows = $(this).val();
+		$(this).val('');
+		var arrRows = strPasteRows.split(/[\r\n]+/);
+		$('.slider:last .start_blank').trigger('click');
+	};
+	$('.slider:last .paste_handler').keyup(fnHandlePaste);
+	$('.slider:last .download_template').click(function () {
+		window.location.href='<?php print $sn; ?>/administration/downloadtemplate';
+	});
+	$('.slider:last .start_blank').click(function () {
+		$('.slider:last .view').addClass('hidden');
+		$('.slider:last .view.spreadsheet_view').removeClass('hidden');
+	});
+	$('.slider:last .button.import').bind('click', function () {
+		$(".slider:last .processing_status")
+		.html('Saving...')
+		.fadeIn();
+		var arrData = handsontable_handle.getData();
+		var arrPost = {
+			arrData : arrData,
+			import_users : 'true'
+		};
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : "<?php print $sn; ?>/administration/importusers",
+			dataType : "text",
+			data: arrPost,
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					alert('Sorry, there was an error: VA-IU101-3g4kor');
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					alert('Sorry, there was an error: VA-IU102-g7fd8s');
+					$.alert(strResponse);
+					return;
+				} else if (arrResponse.error) {
+					$(".slider:last .processing_status").html(arrResponse.error);
+				} else {
+					fnLoadSpread([]);
+					$(".slider:last .processing_status").html('Success').delay(2000).queue(function () {
+						$(this).dequeue().fadeOut();
+					});
+				}
+			}
+		});
+	});
+	$('.slider:last .button.cancel').bind('click', function () {
+		fnLoadSpread([]);
+	});
+	fnLoadSpread([]);
+});
+</script>
+	<div class="col_title"><span><?php print text("Import [|Students|]"); ?></span></div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li style="font-size:10pt;padding:8px;">
+						You can copy paste directly to this spreadsheet using excel or google docs.<br/>Press the import button when you're finished.
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!--textarea class="paste_handler keydown_auto_focus" style="position: absolute;top:-1000px;max-height:100px;"></textarea-->
+		<div class="module form paste_view view hidden">
+			<div class="module_content list" style="text-align: center;vertical-align: middle;">
+				<div style="margin-top: 160px;margin-bottom: 200px">
+					<a class="download_template">Download the spreadsheet template.</a><br/>&nbsp;<br/>
+					Copy the rows you wish to import and paste them into this window.<br/>&nbsp;<br/>
+					or, if you prefer...<br/>&nbsp;<br/>
+					<a class="start_blank">Start with a blank spreadsheet in within this application.</a>
+				</div>
+			</div>
+		</div>
+		<div id="spreadsheet_view" class="module form spreadsheet_view view" style="padding:6px">
+		</div>
+		<div class="hidden processing_status"></div>
+		<div style="display:inline-block;margin-left:4px"><div class="button import">Import</div></div>&nbsp; <div style="display:inline-block"><div class="button cancel">Reset</div></div>
+	</div>
+</div>

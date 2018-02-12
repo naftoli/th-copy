@@ -1,0 +1,31 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+?>
+<table width="100%">
+<?php
+for ($intItr=0; $intItr!=8; $intItr++)
+{
+?>
+	<tr>
+		<td height="90" align="center">
+			<?php print urldecode($this->objPrize->prize_name); ?><br />
+			<?php if ($this->objPrize->prize_description)
+				print urldecode($this->objPrize->prize_description) . "<br />"; ?>
+			<?php print $this->strPrice; ?> miles<br />
+			<img src="<?php print $sn; ?>/kiosk/get-barcode-legacy/serial/<?php print $this->strBarCode; ?>" width="210" height="20" /><br />
+			<?php print $this->strBarCode; ?>
+		</td>
+		<td align="center">
+			<?php print urldecode($this->objPrize->prize_name); ?><br />
+			<?php if ($this->objPrize->prize_description)
+				print urldecode($this->objPrize->prize_description) . "<br />"; ?>
+			<?php print $this->strPrice; ?> miles<br />
+			<img src="<?php print $sn; ?>/kiosk/get-barcode-legacy/serial/<?php print $this->strBarCode; ?>" width="210" height="20" /><br />
+			<?php print $this->strBarCode; ?>
+		</td>
+	</tr>
+<?php
+}
+?>
+</table>

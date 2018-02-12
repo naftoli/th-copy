@@ -1,0 +1,119 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	global $arrAppDetails;
+	$arrDetails = $arrAppDetails[$this->tstyle];
+?>
+<script language="javascript">
+$(document).ready(function()
+{
+	$('.slider:last form').keyup(function (e) {
+		var charCode = (e.which) ? e.which : e.keyCode;
+		if (charCode == 13) {
+			e.preventDefault();
+			if ($(this).find('.submit').length)
+				$(this).find('.submit').click();
+			else
+				$(this).submit();
+		}
+	});
+	$('.slider:last a.submit').click(function (e) {
+		$('.slider:last form').submit();
+	});
+	$('#registration_selectbrand .inline_link').click(function (e) {
+		e.preventDefault();
+		$(this).closest('ul').find('li').removeClass('selected');
+		$(this).closest('li').addClass('selected');
+		var arrData = $('body').data("reg_data");
+		if (!arrData)
+			arrData = {};
+		arrData["template_style"] = $(this).attr('name');
+
+	});
+	$('.slider:last form').submit(function(e) {
+		e.preventDefault();
+	});
+	$('.slider:last .button.submit').click(function(e) {
+		var arrData = $('body').data("reg_data");
+		if (!arrData["template_style"]) {
+			alert('You must select a brand to be registered under.');
+			return;
+		}
+		var strURL = '<?php print $sn . "/registration/institution/tstyle/"; ?>' + arrData["template_style"];
+		slideURL(strURL);
+	});
+});
+</script>
+<div class="slider" id="registration_selectbrand">
+	<style>
+		#registration_selectbrand li.selected *,
+		#registration_selectbrand li.selected {
+			background-color: #ccc;
+			color:#000 !important;
+		}
+	</style>
+	<div class="col_title"><span><?php print $arrDetails['name']; ?> Registration</span></div>
+	<div class="col_content camper">
+		<h1><?php print text("Select a brand you would like to register under"); ?></h1>
+		<div class="module lists ">
+			<div class="module_content">
+				<ul>
+<?php
+	if (!isset($this->arrPermissions['tzivoshashem']))
+	{
+?>
+					<li>
+						<a href="<?php echo $sn; ?>/registration/index2/tstyle/tzivoshashem" name="tzivoshashem" class="inline_link"><div class="name"><?php print text("Tzivos Hashem"); ?></div></a>
+					</li>
+<?php
+	}
+	if (!isset($this->arrPermissions['chabadhebrewschool']))
+	{
+?>
+					<li>
+						<a href="<?php echo $sn; ?>/registration/index2/tstyle/chabadhebrewschool" name="chabadhebrewschool" class="inline_link"><div class="name"><?php print text("Chabad Hebrew School"); ?></div></a>
+					</li>
+<?php
+	}
+	if (!isset($this->arrPermissions['hoo']))
+	{
+?>
+					<li>
+						<a href="<?php echo $sn; ?>/registration/index2/tstyle/hoo" name="hoo" class="inline_link"><div class="name"><?php print text("HOO"); ?></div></a>
+					</li>
+<?php
+	}
+	if (!isset($this->arrPermissions['hebrewschool1']))
+	{
+?>
+					<li>
+						<a href="<?php echo $sn; ?>/registration/index2/tstyle/hebrewschool1" name="hebrewschool1" class="inline_link"><div class="name"><?php print text("Camp Gan Israel"); ?></div></a>
+					</li>
+<?php
+	}
+	if (!isset($this->arrPermissions['releasedtime']))
+	{
+?>
+					<li>
+						<a href="<?php echo $sn; ?>/registration/index2/tstyle/releasedtime" name="releasedtime" class="inline_link "><div class="name"><?php print text("Released Time"); ?></div></a>
+					</li>
+<?php
+	}
+	if (!isset($this->arrPermissions['friendshipcircle']))
+	{
+?>
+					<li>
+						<a href="<?php echo $sn; ?>/registration/index2/tstyle/friendshipcircle" name="friendshipcircle" class="inline_link "><div class="name"><?php print text("Friendship Circle"); ?></div></a>
+					</li>
+<?php
+	}
+?>
+					<li>
+						<span><a href="#" title="Next" class="button submit">Next</a></span>
+						<div class="clear"></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

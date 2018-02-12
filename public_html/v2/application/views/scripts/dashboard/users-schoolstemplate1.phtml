@@ -1,0 +1,64 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+
+<div class="slider">
+	<div class="col_title">
+		<span>User Accounts</span>
+	</div>
+	<div class="col_content">
+		<h2>Administrative Staff</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/users/permission/admin/url/<?php echo dblencode("users/editor/user_type/admin/user_types/admin" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title">View Institution Administrators</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h2>Teachers</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/users/permission/teacher/url/<?php echo dblencode("users/editor/user_type/teacher/user_types/teacher" . $strParamPath); ?>">
+						  <div class="icon"></div>
+						  <div class="title">View All Teachers</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/users/editor/user_types/teacher/user_type/teacher">
+							<div class="icon"></div>
+							<div class="title">Add New Teachers</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	if (0) {
+?>
+		<h2>Students</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/users/is_active/1/permission/student/url/<?php echo dblencode("users/transactions" . $strParamPath); ?>">
+						  <div class="icon"></div>
+						  <div class="title"><?php print text("View Student Transactions"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

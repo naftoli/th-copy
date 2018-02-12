@@ -1,0 +1,122 @@
+<?php
+	include "config.phtml";
+?>
+<script>
+	$(document).ready(function () {
+		$('#overlay').css({
+			width: 512,
+			left:$(document).width()/2-512/2
+		});
+		$('#contactus .closebtn').bind('click', function () {
+			$("#overlay .close").trigger('click');
+		});
+		$('#contactus .send').bind('click', function () {
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $(this).closest(".module_content").find(".ajax_status:last").html('Loading...').fadeIn(),
+				url : '<?php echo $sn . "/index/contact"; ?>',
+				dataType : "text",
+				data: $('#contactus form').serialize(),
+				success : function(strResponse) {
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$("#contactus .ajax_status:last").html('Sorry, there was an error: VI-C101-SDFASD');
+						$.alert(strResponse);
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						$("#contactus .ajax_status:last").html('Sorry, there was an error: VU-C102-VXZXVZ');
+						$.alert(strResponse);
+						return;
+					} else {
+						if (arrResponse["error"]) {
+							if (typeof(arrResponse["error"]) != "object") {
+								$("#contactus .ajax_status:last").html(arrResponse["error"]);
+							} else {
+								for (var strField in arrResponse["error"])
+								{
+									$("#contactus ." + strField).closest("li").find('.ajax_status').html(arrResponse["error"][strField]).fadeIn();
+								}
+							}
+							$("#contactus .ajax_status:last").fadeOut();
+						} else if (arrResponse["success"] == "true") {
+							$("#contactus .ajax_status:last").html('Message sent successfully.');
+							$('#contactus .module.contact_compose').addClass('hidden');
+							$('#contactus .module.contact_confirm').removeClass('hidden');
+
+						} else {
+							alert("Sorry, there was an error: VI-J103-99DS0S");
+							$.alert(strResponse);
+						}
+					}
+				}
+			});
+		});
+		$('#contactus .name').focus();
+	});
+</script>
+<div class="slider" id="contactus">
+	<div class="col_title">
+		<span>Contact Us</span>
+	</div>
+	<div class="col_content">
+		<style>
+			#contactus form *:not(a) {
+				font-size:12pt;
+			}
+			#contactus li {
+				padding:8px;
+				line-height: 26px;
+			}
+			#contactus .ajax_status {
+				display:none;
+				padding:2px;
+			}
+		</style>
+		<div class="module contact_compose">
+			<div class="module_content">
+				<div class="list">
+					<form>
+						<ul>
+							<li>
+								Your Name<br/>
+								<input name="name" class="name" type="text" style="width:450px" />
+								<div class="ajax_status"></div>
+							</li>
+							<li>
+								Email<br/>
+								<input name="email" class="email" type="text" style="width:450px" />
+								<div class="ajax_status"></div>
+							</li>
+							<li>
+								Reason for contacting us:<br/>
+								<select name="reason" class="reason" style="width:454px">
+									<option>Question</option>
+									<option>Comment</option>
+									<option>Suggestion</option>
+									<option>Bug</option>
+								</select>
+								<div class="ajax_status"></div>
+							</li>
+							<li>
+								Message<br/>
+								<textarea name="message" class="message" style="width:454px;height:100px"></textarea>
+								<div class="ajax_status"></div>
+							</li>
+							<li>
+								<div class="ajax_status"></div>
+								<a class="button fix send">Send Message</a>
+								<a class="button fix closebtn">Close</a>
+							</li>
+						</ul>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="module contact_confirm hidden" style="padding:10px">
+			Thank you for your submission. We will reply to your message shortly.
+		</div>
+	</div>
+</div>

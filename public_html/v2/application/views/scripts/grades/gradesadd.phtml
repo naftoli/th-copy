@@ -1,0 +1,70 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml"
+?>
+<script language="javascript">
+$('#slider_gradesadd #addnewgrade a.submit').click( function(e)
+{
+	e.preventDefault();
+	$('#addnewgrade').submit();			
+});
+$(document).ready(function()
+{
+	
+	$("#slider_gradesadd #addnewgrade").validate({
+		onsubmit: true,
+		rules:
+		{
+			name: { required: true },			   
+			hierarchy: { required: true },
+		},
+		messages: 
+		{ 
+			name: "Please enter your full name",
+			hierarchy: "please specify hierarchy",
+		},
+		submitHandler: function(form) {		
+			$.ajax( {
+				type : "POST",
+				cache : false,
+				start: $("#slider_gradesadd #processing_status").html('loading...'),
+				url : '<?php echo $sn; ?>/grades/gradesadd<?php echo $strParamPath; ?>',				
+				dataType : "text",
+				data: $('#slider_gradesadd #addnewgrade').serialize(),
+				success : function(response) {
+					$("#slider_gradesadd #processing_status").html(response);
+				}
+			});
+		}
+	});
+});
+</script>
+<div class="slider" id="slider_gradesadd">
+	<div class="col_title"><span>Add New Grade</span></div>
+	<div class="col_content camper">
+		<div class="module form" id="module-info"><h1>Add New Grade</h1>
+			<div class="module_content list">
+				<form name="addnewgrade" id="addnewgrade" method="post" action="">
+					<ul>
+						<li>
+							<span class="label">Name:</span>
+							<span class="input"><input type="text" name="name" id="name" value="" /></span>
+							<div class="clear"></div>						
+						</li>
+							
+						<li>
+							<span class="label">Hierarchy:</span>
+							<span class="input"><input type="text" name="hierarchy" id="hierarchy" value="" /></span>
+							<div class="clear"></div>						
+						</li>
+						<li>
+							<span><a href="#" title="Save" class="button submit">Save</a></span>							
+							<div class="clear"></div>							
+						</li>
+					</ul>
+				</form>
+			</div>
+			<div id="processing_status"><?php if ($this->message) { echo $this->message . "<br>"; } ?></div>
+		</div>
+	</div>
+</div>

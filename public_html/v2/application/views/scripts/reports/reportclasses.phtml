@@ -1,0 +1,61 @@
+<?php 
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Report Classes</span>
+	</div>
+	<div class="col_content">
+<?php
+	if (!count($this->arrClasses))
+	{
+?>
+		<div class="module" style="padding:5px;">
+			There are no <?php print $user_session_data->institution_type == "School" ? "classes" : "bunks"; ?> available to display.
+		</div>
+<?php
+	}
+	else
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php 
+		foreach ($this->arrClasses as $objClass)
+		{
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/reports/reportusers/class_id/" . $objClass->class_id . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">
+<?php
+			if ($user_session_data->institution_type == "School")
+			{
+				print "Grade: " . $objClass->grade ." " .$objClass->sub;
+				if ($objClass->objUser)
+				{
+					print " " . ucwords($objClass->objUser->first_name) ." ". ucwords($objClass->objUser->last_name);
+				}
+			}
+			else
+			{
+				print "Bunk: " . $objClass->sub;
+			}
+?>
+							</div>
+						</a>
+					</li>
+<?php		
+		}
+?>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

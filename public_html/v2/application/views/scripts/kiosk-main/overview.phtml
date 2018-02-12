@@ -1,0 +1,241 @@
+<?php
+	include "config.phtml";
+	
+	$objUtilities = new Utilities();
+?>
+	<script src="<?php print WEB_ROOT; ?>js/back-end/admin/easySlider1.7.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){    
+			$("#slider").easySlider({
+				numeric: true, 
+				controlsBefore:    '<div class="page_dots">',
+				controlsAfter:    '</div>'
+				});
+		});  
+	</script>
+	
+	<div id="page_title"><?php print $this->objCampaign->campaign_name; ?> Campaign Overview</div>
+        <div class="three_column padding_top">
+			<div class="content">
+				<!--div class="sticker">Sample</div-->
+				<div id="slider">
+					<ul class="overview">
+						<li>
+							<div class="slider_title">Your Weekly Mission</div>
+							<div class="mainbox ladder clearfix">
+								<div class="col2_image iconl_finish"></div>
+								<div class="scroll-pane">
+									<div class="col2_text">
+										
+											<div class="col2_list" style="font-size:16pt;">
+												<!--div>Your goal is to learn as much <?php print $this->objCampaign->campaign_name; ?> by heart as possible by your <?php print $strBarOrBat; ?> Mitzvah.</div-->
+												<div style="font-size:16pt;">The quota of <?php print $this->objCampaign->campaign_name; ?> that you chose is your weekly mission.</div>
+											</div>
+										
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="slider_title">Overview - Earning Medals</div>
+							<div class="mainbox">
+								<p>After completing your first <?php print count($this->arrSchedules[1]["missions"]); ?> missions, you'll earn your first medal.</p>
+								<div class="task_items_box small">
+<?php
+	foreach ($this->arrSchedules[1]["missions"] as $intKey => $arrMission)
+	{
+		$objParshos = $objUtilities->epoch_parshos($arrMission["epoch"]);
+?>
+									<div class="task_items mission_boxes task_col">
+										<div class="mission">
+											<div class="number">#<?php print $arrMission["mission_number"]; ?></div>
+<?php
+		if ($objParshos)
+		{
+?>
+											<div class='date'><nobr><?php print $objParshos->name; ?></nobr></div>
+											<div class='date'><?php print $objParshos->year; ?></div>
+<?php
+		}
+		else
+		{
+?>
+											<div class="date"><?php print date("n/j/Y", $arrMission["epoch"]); ?></div>
+<?php
+		}
+?>
+											<div class='date'>Ln:<?php
+		// Show the line number the user is currently on
+		$intStartIncrement = reset($arrMission["tasks"]);
+		$intEndIncrement = end($arrMission["tasks"]);
+		$intFantomIncrement = $intStartIncrement + $arrMission["velocity"];
+		if ($intFantomIncrement > $intEndIncrement)
+		{
+			$intEndIncrement = $intFantomIncrement;
+		}
+		if ($intStartIncrement != $intEndIncrement)
+			$intStartIncrement = $intEndIncrement;
+		
+		print $intStartIncrement;
+		print "</div>";
+?>
+											<div class="check_on"></div>
+										</div>
+										<div class="math_big"><?php print $intKey == count($this->arrSchedules[1]["missions"])-1 ? "=" : "+"; ?></div>
+									</div>
+<?php
+	}
+?>
+								</div>
+								<div class="math_big"></div>
+								<div class="medalImage medal31" style="background-image: url('<?php print "$sn/images/show-image/image_id/" . $this->arrSchedules[1]["medal"]->medal_image_id; ?>');"><span class="badge"><?php print count($this->arrSchedules[1]["missions"]); ?></span></div>
+							</div>
+                        </li>
+<?php
+	if (count($this->arrSchedules[2]["missions"]))
+	{
+?>
+						<li>
+							<div class="slider_title">Overview - Earning Medals</div>
+							<div class="mainbox">
+								<p>After completing your next <?php print count($this->arrSchedules[2]["missions"]); ?> missions, you'll earn your second medal.</p>
+								<div class="task_items_box small">
+<?php
+		foreach ($this->arrSchedules[2]["missions"] as $intKey => $arrMission)
+		{
+			$objParshos = $objUtilities->epoch_parshos($arrMission["epoch"]);
+?>
+									<div class="task_items mission_boxes task_col">
+										<div class="mission">
+											<div class="number">#<?php print $arrMission["mission_number"]; ?></div>
+<?php
+			if ($objParshos)
+			{
+?>
+											<div class='date'><nobr><?php print $objParshos->name; ?></nobr></div>
+											<div class='date'><?php print $objParshos->year; ?></div>
+<?php
+			}
+			else
+			{
+?>
+											<div class="date"><?php print date("n/j/Y", $arrMission["epoch"]); ?></div>
+<?php
+			}
+?>
+											
+											<div class='date'>Ln:<?php
+			// Show the line number the user is currently on
+			$intStartIncrement = reset($arrMission["tasks"]);
+			$intEndIncrement = end($arrMission["tasks"]);
+			$intFantomIncrement = $intStartIncrement + $arrMission["velocity"];
+			if ($intFantomIncrement > $intEndIncrement)
+			{
+				$intEndIncrement = $intFantomIncrement;
+			}
+			if ($intStartIncrement != $intEndIncrement)
+				$intStartIncrement = $intEndIncrement;
+			
+			print $intStartIncrement;
+			print "</div>";
+?>
+											<div class="check_on"></div>
+										</div>
+										<div class="math_big"><?php print $intKey == count($this->arrSchedules[2]["missions"])-1 ? "=" : "+"; ?></div>
+									</div>
+<?php
+		}
+?>
+								</div>
+								<div class="math_big"></div>
+								<div class="medalImage medal31" style="background-image: url('<?php print "$sn/images/show-image/image_id/" . $this->arrSchedules[2]["medal"]->medal_image_id; ?>');"><span class="badge"><?php print count($this->arrSchedules[2]["missions"]); ?></span></div>
+							</div>
+                        </li>
+<?php
+	}
+?>
+						<li>
+							<div class="slider_title">Overview - Earning Medals</div>
+                                <div class="mainbox">
+
+                                    <div class="col2_image iconl_medals"></div>
+                                    <div class="scroll-pane">
+                                        <div class="col2_text">
+											                                        	<p>You can earn up to <?php print count($this->arrFullSchedule); ?> medals<br />
+												for <?php print $this->objCampaign->campaign_name;?>!</p>
+                                            <div class="medals">
+<?php
+	$intTotalMissions = 0;
+	foreach ($this->arrFullSchedule as $arrSchedule)
+	{
+		$intTotalMissions += $arrSchedule["mission_count"];
+?>
+		<div class="medalImage medal31" style="background-image: url('<?php print "$sn/images/show-image/image_id/" . $arrSchedule["medal"]->medal_image_id; ?>');"><span class="badge"><?php print $arrSchedule["mission_count"]; ?></span></div>
+<?php
+	}
+?>
+                                            </div>
+                                        	<p>Total: <?php print $intTotalMissions; ?> Missions</p>
+											                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+<?php
+	/*
+?>
+							                            <li>
+                                <div class="slider_title">Overview - Miles for Mission Tasks</div>
+                                <div class="mainbox">
+                                    <div class="col2_image iconl_mileage"></div>
+                                    <div class="scroll-pane">
+                                        <div class="col2_text">
+
+																							
+																									<!--<p>If you miss a mission task, you will still earn miles for each task that you did complete. But this mission will NOT count toward your next medal.</p>-->
+													<p>If you miss a mission task, you will still earn miles for each task that you did complete.</p>
+																							
+                                            <div class="task_items mission_boxes task_row">
+                                                <div class="task">
+                                                    <div class="date">Task</div>
+                                                    <div class="number">1</div>
+                                                    <div class="miles">2 Miles</div>
+
+                                                    <div class="check_on"></div>
+                                                </div>
+                                                <div class="math_big">+</div>
+                                                <div class="task">
+                                                    <div class="date">Task</div>
+                                                    <div class="number">2</div>
+                                                    <div class="miles">1 Mile</div>
+
+                                                    <div class="check_off"></div>
+                                                </div>
+                                                <div class="math_big">=</div>
+                                                <div class="mission">
+                                                    <div class="number">#5</div>
+                                                    <div class="date">???? ????</div>
+                                                    <div class="meter" style="background-position:25% 0;"></div>
+
+                                                    <div class="miles">3 Miles</div>
+                                                    <div class="check_off"></div>
+                                                </div>
+												<div class="clear"></div>
+											</div>
+											<p>This mission will NOT count toward your next medal.</p>
+											                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+<?php
+	*/
+?>
+								
+							
+						</ul>
+					
+                    </div>
+              </div>
+            </div>
+        </div>

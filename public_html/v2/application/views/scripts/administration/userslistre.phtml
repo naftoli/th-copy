@@ -1,0 +1,54 @@
+<?php 
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+<div class="slider" id="slider_userlist">
+	<div class="col_title">
+		<span>User Accounts</span>
+	</div>
+	<div class="col_content">
+<?php
+	if(!count($this->arrUsers))
+	{
+?>
+		<div class="module" style="padding:5px;">There are no users available to display.</div>
+<?php 
+	}
+	foreach ($this->arrUsers as $arrUsers)
+	{
+		if(!count($arrUsers["arrList"]))
+		{
+?>
+		<div class="module" style="padding:5px;">There are no <?php print strtolower($arrUsers["strUserType"]); ?> available to display.</div>
+<?php 
+		}
+		else
+		{
+?>
+		<h2><?php print $arrUsers["strUserType"]; ?></h2>
+		<div class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+				foreach (@$arrUsers["arrList"] as $objUser)
+				{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/users/editor/user_types/teacher/user_type/teacher/user_id/<?php echo $objUser->user_id . $strParamPath;?>">
+							<div class="icon"></div>
+							<div class="title"><?php echo $objUser->first_name . " " . $objUser->last_name; ?></div>
+						</a>
+					</li>
+<?php
+				}
+?>
+				</ul>
+			</div>
+		</div>
+<?php
+		}
+	}
+?>
+	</div>
+</div>

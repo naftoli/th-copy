@@ -1,0 +1,242 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script>
+$(document).ready(function()
+{
+	$('.slider:last .ph_print_instructions li h3').nextAll().hide();
+	$('.slider:last .ph_print_instructions li h3').click(function(){
+		$(this).nextAll().slideToggle('fast');
+		$(this).parents('li').toggleClass('open');
+	});
+
+	$('.slider:last .fn_print').click(function () {
+		var strUsers = $(".slider:last #idcardhostnav_users").val();
+		var arrUsers = strUsers.split(/&/);
+		var arrUserIds = [];
+		for (var intItr in arrUsers)
+		{
+			arrUserIds.push(arrUsers[intItr].replace(/=1$/, ""));
+		}
+		$('.slider:last .print_frame')[0].contentWindow.print();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider:last .ph_bottom_status").html("Loading...").fadeIn(),
+			url : '<?php echo $sn . "/users/idcardhostnav" . $strParamPath; ?>',
+			dataType : "text",
+			data: "procaction=" + $(".slider:last .ph_prize_sent:checked").length + "&host_printed=true&user_ids=" + arrUserIds.join(','),
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					alert("Sorry, there was an error: VU-IDCHN101-DF9GF9");
+					$.dumper(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					alert("Sorry, there was an error: VU-IDCHN102-DOPSDO");
+					$.dumper(strResponse);
+					return;
+				} else {
+					if (arrResponse["error"]) {
+						$(".slider:last .ph_bottom_status").html(arrResponse["error"]);
+					} else if (arrResponse["success"] == "true") {
+						$(".slider:last .ph_bottom_status").html("Success!").fadeOut();
+					}
+				}
+			}
+		});
+	});
+
+	// checklist / load print page
+	$(".slider:last #idcardhostnav_users").change(function () {
+		var strUsers = $(this).val();
+		if (strUsers.length)
+		{
+			var arrUsers = strUsers.split(/&/);
+			var arrUserIds = [];
+			for (var intItr in arrUsers)
+			{
+				arrUserIds.push(arrUsers[intItr].replace(/=1$/, ""));
+			}
+			var strPrintUrl = '<?php print $sn . "/users/idcardshostprintcamps/user_ids/' + arrUserIds.join(',') + '" . $strParamPath; ?>';
+			$("#slider_idcardhostnav .fn_print_qr").attr('href', '<?php print $sn . "/users/idcardshostprintcampsqr/user_ids/' + arrUserIds.join(',') + '" . $strParamPath; ?>');
+			$("#slider_idcardhostnav .pl_is_generated_count").html(arrUserIds.length);
+			$("#slider_idcardhostnav .pl_is_generated").html("Loading...");
+			$("#slider_idcardhostnav .fn_print").html("Loading...");
+			$('#slider_idcardhostnav .print_frame')[0].contentWindow.location.href=strPrintUrl;
+			$("#slider_idcardhostnav .fn_print").attr('href', strPrintUrl);
+		}
+	});
+	$("#slider_idcardhostnav .fn_print").click(function (e) {
+		e.preventDefault();
+	});
+	$(".slider:last #idcardhostnav_users").trigger("change");
+	$(".slider:last .print_frame").load(function () {
+		$("#slider_idcardhostnav .pl_is_generated").html("Generated");
+		$("#slider_idcardhostnav .fn_print").html("Print");
+	});
+
+	$('.slider:last .ph_prize_sent').iphoneStyle({
+		checkedLabel: 'Complete',
+		uncheckedLabel: 'Pending',
+		onChange: function(elem, value)
+		{
+
+			var strUsers = $(".slider:last #idcardhostnav_users").val();
+			var arrUsers = strUsers.split(/&/);
+			var arrUserIds = [];
+			for (var intItr in arrUsers)
+			{
+				arrUserIds.push(arrUsers[intItr].replace(/=1$/, ""));
+			}
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $(".slider:last .ph_bottom_status").html("Loading...").fadeIn(),
+				url : '<?php echo $sn . "/users/idcardhostnav" . $strParamPath; ?>',
+				dataType : "text",
+				data: "procaction=" + $(".slider:last .ph_prize_sent:checked").length + "&confirm_order=true&user_ids=" + arrUserIds.join(','),
+				success : function(strResponse) {
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						alert("Sorry, there was an error: VU-IDCHN101-DF9GF9");
+						$.dumper(strResponse);
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						alert("Sorry, there was an error: VU-IDCHN102-DOPSDO");
+						$.dumper(strResponse);
+						return;
+					} else {
+						if (arrResponse["error"]) {
+							$(".slider:last .ph_bottom_status").html(arrResponse["error"]);
+						} else if (arrResponse["success"] == "true") {
+							$(".slider:last .ph_bottom_status").html("Success!").fadeOut();
+						}
+					}
+				}
+			});
+        }
+	});
+});
+</script>
+<div class="slider" id="slider_idcardhostnav">
+	<style>
+	<!--
+	a.button {
+		padding:6px 10px;
+	}
+	.list_expand li:first-child {
+		border-top:medium none;
+	}
+	.list_expand img {
+		border:1px solid #BBBBBB;
+		margin:2px;
+	}
+	.generate {
+		padding:5px;
+	}
+	.generate h3 {
+		line-height:1.6;
+		margin-bottom:15px;
+		text-align:center;
+	}
+	.generate .button {
+		float:none;
+		margin:3px 250px;
+		text-align:center;
+		line-height:1;
+	}
+	iframe.print_frame {
+		visibility: hidden;
+		position: absolute;
+		z-index: -1;
+	}
+	.mailing p {
+		font-size: 16pt;
+	}
+	.ph_bottom_status {
+		padding: 5px;
+		display:none;
+	}
+	-->
+	</style>
+	<div class="col_title">
+		<span>Print ID Cards</span>
+	</div>
+	<div class="col_content">
+		<iframe name="print_frame" class="print_frame"></iframe>
+		<div class="module_content marking_missions">
+			<div class="noprint">
+				<div class="module clearfix ph_print_instructions">
+					<div class="list_expand">
+						<ul>
+							<li>
+								<h3><span class="icon"></span>Print Instructions</h3>
+								<p><img src="<?php print $sn; ?>/images/back-end/admin/Print-Dialog-Small-2.jpg" align="right" /><img src="<?php print $sn; ?>/images/back-end/admin/Print-Dialog-Small-1.jpg" align="right" />
+									In your browser click 'File' then 'Page Setup...'</p>
+									<p>Step 1: Set the Orientation to Portrait</p>
+									<p>Step 2: Check 'Shrink to fit Page Width'</p>
+									<p>Step 3: In Options check 'Print Background (colors & images)'</p>
+									<p>Step 4: In the second tab set all Margins to 0.5 inches (All Sides)</p>
+									<p>Step 5: Set all Headers & Footers to Blank</p>
+									<p>Note: The browser will save these preferences for later use.</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="module">
+					<div class="module_content mailing" style="padding: 5px;">
+						<h1>Mailing Address</h1>
+						<p><b><?php print $this->objInstitution->name; ?></b></p>
+						<p><?php print $this->objInstitution->address; ?></p>
+						<p><?php print $this->objInstitution->city; ?>, <?php print $this->objInstitution->state; ?>, <?php print $this->objInstitution->postal; ?></p>
+					</div>
+				</div>
+				<div class="module form lists">
+					<div class="module_content list">
+						<ul>
+							<li id="idcardhostnav_users_li">
+								<input class="data_point" type="hidden" id="idcardhostnav_users" value="<?php print $this->strAuthCardSerialized; ?>" />
+<?php
+	$strAuthCardStatus = !$this->boolCompletedOrders ? "ordered" : "host+printed,redeemed";
+?>
+								<a class="link" href="<?php print $sn . "/users/idcardhostprintusers/auth_card_status/" . $strAuthCardStatus . "/container/idcardhostnav_users_li/inputname/idcardhostnav_users" . $strParamPath; ?>">
+									<div class="icon"></div>
+									<div class="title">Users Selected</div>
+									<div class="lable_count" style="float:right;background-color:#fff;border:1px solid gray;margin:5px;padding:2px 12px 2px 12px;text-align:center;"><span>All</span> Selected</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="module clearfix generate">
+					<h3>ID Cards <span class="pl_is_generated">Loading...</span><br />(<span class="pl_is_generated_count"><?php print count($this->arrAuthCards); ?></span> Pages)</h3>
+					<div style="text-align:center;">
+						<a class="button fn_print" style="display:inline-block;margin:4px;">Loading...</a>
+						<a target="_new" href="#" class="button fn_print_qr" style="display:inline-block;margin:4px;">Print QR</a>
+
+					</div>
+				</div>
+				<div class="module form lists">
+					<div class="module_content list">
+						<ul>
+							<li>
+								<span class="label">Order Status:</span>
+								<span class="input" style="margin: 4px 0px 0px 1px;">
+									<input type="checkbox" class="ph_prize_sent" value="1" <?php print $this->boolCompletedOrders ? "checked" : ""; ?> />
+								</span>
+								<div class="clear"></div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="ph_bottom_status"></div>
+			</div>
+		</div>
+	</div>
+</div>

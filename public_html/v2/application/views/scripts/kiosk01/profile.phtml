@@ -1,0 +1,188 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objSesh = new Zend_Session_Namespace('hebrewschools');
+?>
+<script language="javascript">
+function add_to_miles(intCardPoints)
+{
+	document.getElementById("total_miles").innerHTML = document.getElementById("total_miles").innerHTML * 1 + intCardPoints;
+	document.getElementById("store_miles").innerHTML = document.getElementById("store_miles").innerHTML * 1 + intCardPoints;
+}
+
+function process_barcode(mixBarCode)
+{
+	$.ajax({
+		type : "POST",
+		cache : false,
+		url : '<?php print $sn . "/kiosk01/processbarcode" . $strParamPath; ?>',
+		dataType : "text",
+		data: "mixBarCode=" + $(mixBarCode).val(),
+		success : function(strResponse) {
+			try {
+				var arrResponse = jQuery.parseJSON(strResponse);
+			} catch(e) {
+				$(".slider:last #processing_status").html('<?php print text("Sorry, there was an error"); ?>: VU-E101-3RR3RE');
+				alert(strResponse);
+				return;
+			}
+			if (typeof(arrResponse) != "object") {
+				$(".slider:last #processing_status").html('<?php print text("Sorry, there was an error"); ?>: VU-E102-SDF8BX');
+				alert("<?php print text("Sorry, there was an error"); ?>: VH-S102-F9F9FS");
+				return;
+			} else {
+				if (arrResponse["error"]) {
+					open_shadow_message('<?php print text("Unsuccessful!"); ?>', arrResponse["error"]);
+				} else if (arrResponse["success"] == "true") {
+					var strMsg = "<?php print text("Your order was successful! Please collect the prize"); ?> \""
+					strMsg += arrResponse["objPrize"]["prize_name"];
+					strMsg += "\" <?php print text("now."); ?>";
+					open_shadow_message('<?php print text("Order Successful!"); ?>', strMsg);
+				} else if (arrResponse["nothing_found"] == "true") {
+					loadShadow(mixBarCode);
+				}
+			}
+		}
+	});
+	return false;
+}
+
+function loadShadow(cardnum) {
+	Shadowbox.open({
+		content:    '<?php print $sn; ?>/kiosk01/achievementcard/q/' + cardnum.value,
+		player:     "iframe",
+		width:      774,
+		height:     434
+	});
+
+	cardnum.value='';
+	return false;
+}
+
+function open_shadow_message(strTitle, strContent) {
+	Shadowbox.open({
+		content: "<?php print $sn; ?>/kiosk01/shadowpoptemplate/title/" + encodeURIComponent(strTitle) + "/msg/" + encodeURIComponent(strContent),
+		player: 'iframe',
+		width: 780,
+		height: 440
+	});
+	return false;
+}
+function control(intControl, intSerial)
+{
+	/*
+	$.ajax({
+		type : "POST",
+		cache : false,
+		url : '/cardpop.php?card_id=' + intSerial,
+		dataType : "text",
+		data: {'control' : intControl},
+		success : function(strResponse) {
+			eval(strResponse);
+		}
+	});
+	*/
+}
+Shadowbox.init({
+	skipSetup: true,
+	players:    ["iframe"],
+	initialWidth:320,
+	initialHeight:30,
+	overlayOpacity:0.8,
+	overflow: "hidden"
+});
+
+$(document).ready(function() {
+	window.onload = scanFocus;
+	window.onkeydown = scanFocus;
+	scanFocus();
+	$('.slider:last form').keyup(function (e) {
+		var charCode = (e.which) ? e.which : e.keyCode;
+		if (charCode == 13) {
+			e.preventDefault();
+			if ($(this).find('.submit').length)
+				$(this).find('.submit').click();
+			else
+				$(this).submit();
+		}
+	});
+});
+function scanFocus() {
+	document.scancard.scantext.focus();
+}
+</script>
+<div id="header">
+	<div class="org">
+		<div class="nav">
+			<ul>
+				<li class="icon_logout"><a href="<?php print $sn; ?>/kiosk01/index"><?php print text("Logout"); ?></a></li>
+			</ul>
+		</div>
+		<div class="org_photo">
+			<IMG SRC='<?php print $sn . "/imgs/v/src/" . $this->objInstitution->image_id; ?>' WIDTH='100' HEIGHT='100' />
+		</div>
+		<?php print text("Institution"); ?>: <?php print text($this->objInstitution->name); ?><br>
+		<?php print text("Name"); ?>: <?php print $this->objUser->first_name . " " . $this->objUser->last_name; ?><br>
+		<?php print text("Total Miles"); ?>: <?=intval(@$this->intUserPointsTotal);?>
+	</div> <!-- org -->
+</div> <!-- header -->
+<div id="main">
+	<div id="page_title"><?php print text("Welcome"); ?></div>
+	<div class="two_column">
+		<div class="padding_top padding_left member_info_box">
+			<div class="member_photo">
+				<div class="member_photo_img">
+					<IMG SRC='<?php print $sn . "/imgs/v/src/" . $this->objUser->image_id; ?>' WIDTH='150' HEIGHT='150'  ALT='' />
+				</div>
+				<div class="member_photo_cover"></div>
+				<div class="member_badge"></div>
+			</div>
+			<div class="member_info">
+				<ul>
+					<li class="member_name"><?php print $this->objUser->first_name; ?> <?php print $this->objUser->last_name; ?></li>
+					<li><label><?php print text("Base"); ?> #:</label> <span><?php print $this->objInstitution->institution_id + institution_offset; ?></span></li>
+					<li><label><?php print text("Serial"); ?> #:</label> <span><?php print serial_offset + $this->objUser->user_id; ?></span></li>
+					<li><label><?php print text("Platoon"); ?>:</label> <span><?php
+if (count($this->arrClassNames))
+	print join(",", $this->arrClassNames);
+else
+	print text("Not Assigned");
+?></span></li>
+					<li><label><?php print text("Total Miles"); ?>:</label> <span id="total_miles"><?php print intval(@$this->intUserPointsTotal); ?></span></li>
+					<li><label><?php print text("Store Miles"); ?>:</label> <span id="store_miles"><?php print intval(@$this->intUserPointsStore); ?></span></li>
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="padding_left">
+			<div class="scan_card">
+				<div class="scan_card_inside">
+					<form name="scancard" id="scancard" onSubmit="return process_barcode(this.scantext)" onSubmittemp="return loadShadow(this.scantext)">
+						<?php print text("Scanning Station"); ?><br>
+						<input name="scantext" id="scantext" type="text" autocomplete="off"  />
+					</form>
+					<script type="text/javascript">document.getElementById('scantext').focus();</script>
+					<div class="scan_card_cover"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- <div class="two_column"> -->
+	<div class="one_column">
+		<ul class="buttons button_icons">
+<?php
+	if ($this->arrConfigOptions["kiosk"]["store"])
+	{
+?>
+			<li><a href="<?php print $sn; ?>/kiosk01/store" class="icon_shop"><?php print text("Store"); ?></a></li>
+<?php
+	}
+?>
+			<li><a href="<?php print $sn; ?>/kiosk01/transactionhistory" class="icon_review"><?php print text("Transactions"); ?></a></li>
+			<!--li><a href="<?php print $sn; ?>/kiosk01/incrementals-progress" class="icon_progress">My Progress</a></li-->
+			<!--<li><a href="prof_ranks.php" class="icon_ranks">Ranks</a></li>-->
+			<!--<li><a href="#" class="icon_mileage">Mileage</a></li -->
+			<!--<li><a href="../transactions.php">Transactions</a></li>-->
+		</ul>
+	</div> <!-- one_column -->
+</div>

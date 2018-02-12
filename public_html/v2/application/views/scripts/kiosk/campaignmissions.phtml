@@ -1,0 +1,69 @@
+<?php
+include "config.phtml";
+include "application/views/scripts/includes/headers/kiosk_header.phtml";
+?>
+
+<body class="blue">
+	
+	<div id="wrapper">
+		
+        <div id="header">
+          <?php include "application/views/scripts/includes/topbar.phtml"; ?>
+        </div>
+		
+		<div id="main">
+			
+            <div id="page_title">
+				Current Missions
+            </div>
+			
+			
+			
+			
+			
+			<div class="three_column padding_top">
+			
+				<div class="content">
+				
+					<div id="slider">
+					
+						<ul class="upcoming">
+						
+							<li>
+							
+								<div class="boxes padding_top">
+									
+									<?php foreach ($this->objMissions as $objMission) : ?>
+									
+										<div class="mission">
+											<!--<div class="number">#55</div>-->
+											<div class="date"><?php echo $objMission->mission_name; ?></div>
+											<!--<div style="background-position: 100% 0pt;" class="meter"></div>-->
+											<a href="<?php echo $sn . '/kiosk/campaignmissiontasks/campaign_id/' . $this->intCampaignId . '/mission_id/' . $objMission->mission_id; ?>" style="padding-left:20px;">
+											</a>
+										</div>
+										
+									<? endforeach; ?>
+
+								</div>
+									
+							</li>
+								
+						</ul>
+							
+					</div>
+						
+				</div>
+					
+				<div class="content_nav">					
+				</div>
+				
+			</div>
+						
+				
+		</div>
+			
+	</div>
+		
+</body>
+	

@@ -1,0 +1,314 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session = new Zend_Session_Namespace('user_session_data');
+	if(isset($this->caption) && $this->caption=="bunks")
+	{
+		$strType = "Bunk";
+	}
+	else{
+		$strType = "Class";
+	}
+?>
+
+<style type="text/css">
+	.importDataWrapper{ border: solid 1px #000; width:650px; overflow:auto; }
+	.colHeader { background-color:#aaddff; font-size:14px; color:#000; width:175px; padding:3px; }
+	.tdData {  background-color:#a67sf5; font-size:12px; color:#000; width:175px; padding:5px; }
+	.myTable { width: auto !important; }
+	tr { background-color: #DDDDDD;}
+	.initial { background-color: #DDDDDD; color:#000000; }
+	.normal { background-color: #CCCCCC; }
+	.highlight { background-color: #8888FF; }
+	.existing { background-color: #FAE35F; }
+</style>
+
+<script type="text/javascript">
+var uploadedImage = '';
+var uploadInProgress = false;
+var arrClasses = {<?php
+	$arrClassesResults = array();
+	foreach ($this->arrClasses as $objClass)
+	{
+		$arrClassesResults[] = $objClass->class_id . ":\"" . $objClass->sub . "\"";
+	}
+	print join(",", $arrClassesResults);
+?>};
+
+checked=false;
+
+function checkedAll (formName) {
+	var aa= document.getElementById('studentData');
+	 if (checked == false){
+			checked = true
+		}else{
+			checked = false
+		}
+	
+	for (var i =0; i < aa.elements.length; i++){
+		aa.elements[i].checked = checked;
+	}
+}
+var upload1;
+
+upload1 = new SWFUpload({
+	upload_url: "<?php echo $sn; ?>/store/processupload",
+	post_params: {"sid" : "<?php echo session_id(); ?>"},
+	file_size_limit : "102400",
+	file_types : "*.csv",
+	file_types_description : "CSV Files ",
+	file_upload_limit : 10,
+	file_queue_limit : 0,
+	swfupload_preload_handler : preLoad,
+	swfupload_load_failed_handler : loadFailed,
+	file_dialog_start_handler : fileDialogStart,
+	file_queued_handler : fileQueued,
+	file_queue_error_handler : fileQueueError,
+	file_dialog_complete_handler : fileDialogComplete,
+	upload_start_handler : uploadStart,
+	upload_progress_handler : uploadProgress,
+	upload_error_handler : uploadError,
+	upload_success_handler : uploadSuccess,
+	upload_complete_handler : form_submit,
+	button_image_url : "<?php echo $sn; ?>/images/XPButtonUploadText_61x22.png",
+	button_placeholder_id : "spanButtonPlaceholder1",
+	button_width: 61,
+	button_height: 22,
+	button_action : SWFUpload.BUTTON_ACTION.SELECT_FILES,
+	flash_url : "<?php echo $sn; ?>/js/back-end/uploader/swfupload.swf",
+	flash9_url : "<?php echo $sn; ?>/js/back-end/uploader/swfupload_fp9.swf",
+	custom_settings : {
+	 progressTarget : "fsUploadProgress1",
+	 cancelButtonId : "btnCancel1"
+	},
+	debug: false
+});
+
+$(document).ready(function() {
+  
+	$('#tableData tr').live('click', function(event) {
+	  if (event.target.type !== 'checkbox') {
+		$(':checkbox', this).trigger('click');
+	  }
+	});
+});
+function startUpload()
+{
+	if(uploadInProgress)
+	{
+		alert('Your file is being uploaded. Please wait till the upload process finishes.');
+	}
+	else
+	{
+		form_submit();
+	}
+}
+
+/**
+ * Parses CSV data and returns it in json format. Returned data is used to
+ * build form dynamically.
+ */
+function form_submit()
+{
+	$.ajax({	
+			type : "POST",
+			cache : false,
+			start: $("#processing_status").html('Uploading file ' + $("#uploader_photo_name").val()).fadeIn("slow"),
+			url : '<?php echo $sn . "/administration/userimport/mode/getcsvdata" . $strParamPath; ?>/file_name/'+$("#uploader_photo_name").val(),
+			dataType : "text",
+			data: $('#form_fileadd').serialize(),
+			success : function(response) {
+					
+					var myArr = jQuery.parseJSON(response);
+					if(myArr['result'] == 1){
+						
+						var formStart = '';
+						
+						var tableDataHeader = '<table id="tableData" width="100%" border="1" cellpadding="2" cellspacing="2" class="myTable">';
+						tableDataHeader += '<tr>';
+							tableDataHeader += '<td class="colHeader" nowrap><input type="checkbox" name="checkall" onclick="checkedAll(studentData);" />Select All</td>';
+							tableDataHeader += '<td class="colHeader" nowrap>First name</td>';
+							tableDataHeader += '<td class="colHeader" nowrap>Last name</td>';
+							tableDataHeader += '<td class="colHeader" nowrap>Gender</td>';
+							tableDataHeader += '<td class="colHeader" nowrap>DOB</td>';
+							tableDataHeader += '<td class="colHeader" nowrap>Address</td>';
+							tableDataHeader += '<td class="colHeader" nowrap>City</td>';
+							tableDataHeader += '<td class="colHeader" nowrap>State</td>';						
+							tableDataHeader += '<td class="colHeader" nowrap>Country</td>';
+							tableDataHeader += '<td class="colHeader" nowrap>Postal</td>';
+							tableDataHeader += '<td class="colHeader" nowrap>Phone</td>';
+							tableDataHeader += '<td class="colHeader" nowrap>Bunk</td>';
+						tableDataHeader += '</tr>';
+						
+						var tableData = '';
+						var formData = '';
+						
+						jQuery.each(myArr['data'], function() {
+							//alert("each loop  " + this['first_name']);
+							formData += '<input type="hidden" name="first_name[]" value="'+this['first_name']+'" />';
+							formData += '<input type="hidden" name="last_name[]" value="'+this['last_name']+'" />';
+							formData += '<input type="hidden" name="address[]" value="'+this['address']+'" />';
+							formData += '<input type="hidden" name="city[]" value="'+this['city']+'" />';
+							formData += '<input type="hidden" name="gender[]" value="'+this['gender']+'" />';
+							formData += '<input type="hidden" name="dob[]" value="'+this['dob']+'" />';
+							formData += '<input type="hidden" name="state[]" value="'+this['state']+'" />';
+							formData += '<input type="hidden" name="country[]" value="'+this['country']+'" />';
+							formData += '<input type="hidden" name="postal[]" value="'+this['postal']+'" />';
+							formData += '<input type="hidden" name="phone[]" value="'+this['phone']+'" />';
+							
+							tableData += '<tr class="initial" onMouseOver="this.className=\'highlight\'" onMouseOut="this.className=\'normal\'">';
+								tableData += '<td nowrap><input type="checkbox" name="insert[]" id="insert[]" /></td>';
+								tableData += '<td nowrap>'+this['first_name']+'</td>';
+								tableData += '<td nowrap>'+this['last_name']+'</td>';
+								tableData += '<td nowrap>'+this['gender']+'</td>';
+								tableData += '<td nowrap>'+this['dob']+'</td>';
+								tableData += '<td nowrap>'+this['address']+'</td>';
+								tableData += '<td nowrap>'+this['city']+'</td>';
+								tableData += '<td nowrap>'+this['state']+'</td>';
+								tableData += '<td nowrap>'+this['country']+'</td>';
+								tableData += '<td nowrap>'+this['postal']+'</td>';
+								tableData += '<td nowrap>'+this['phone']+'</td>';
+								tableData += '<td nowrap><select name="class_id[]">';
+								tableData += '<option value="0">No bunk selected</option>';
+								
+								for (intKey in arrClasses) {
+									var strSelected = "";
+									if (arrClasses[intKey].toLowerCase() == this['bunk'].toLowerCase()) {
+										strSelected = " selected";
+									}
+									tableData += '<option value="' + intKey + '"' + strSelected + '>' + arrClasses[intKey] + '</option>';
+								}
+								tableData += '</select></td>';
+							tableData += '</tr>';
+							
+							//alert("table data is: " + tableData);
+						});
+						tableData += '</table>';
+						
+						var saveButton = '<input type="button" name="submit" value="Save records..." id="submit" onClick="form_submit_for_insert(1);">';
+						
+						$("#processing_status").html('');
+						$("#tableWrapper").html( formData + tableDataHeader + tableData);
+						$("#institutionCombo").html("<input type='hidden' id='institution_id' name='institution_id' value='<?php print $user_session->institution_id?>'");
+						$("#saveButton").html(saveButton);
+					}else{
+						$("#processing_status").html('Error...');
+						$("#tableWrapper").html(myArr['message']);
+					}
+					
+					//slideRefresh();
+				
+			}
+		});
+}
+
+/**
+ * Inserts records into db from form data
+ * If checkDuplicate is 1 then duplicate records will be not checked and all
+ * records will be inserted.
+ */
+function form_submit_for_insert(checkDuplicates)
+{
+	//$("#tableWrapper").html("hello there");
+	if($("#institution_id").val() == "n/a"){
+		alert("You must select an institution");
+		return;
+	}else if($("#class_id").val() == "n/a"){
+		alert("You must select a class");
+		return;
+	}
+	var targetUrl = '<?php echo $sn;?>/administration/userimport/checkduplicates/' + checkDuplicates + '/mode/insertdata/<?php echo $strParamPath; ?>';
+	$.ajax({
+		type : "POST",
+		cache : false,
+		start: $("#processing_status").html('Processing file ' + $("#uploader_photo_name").val()).fadeIn("slow"),
+		url : targetUrl,
+		dataType : "text",
+		data: $('#studentData').serialize(),
+		success : function(response)
+		{
+			if (!response.match(/^[0-9]+$/))
+			{
+				alert(response);
+				alert("Sorry, there was an error: VA-UI101-S87DFD");
+			}
+			else
+			{
+				$("#processing_status").html(response + ' records were inserted succesfully');
+			}
+			//$("#tableWrapper").html('');
+			//$("#institutionCombo").html('');
+			//$("#saveButton").html('');
+		}
+	});
+}
+</script>
+<div class="slider">
+	<div class="col_title"><span>Import <?php print $strType;?> list</span></div>	
+	<div class="col_content camper">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<h1><strong>Please read the following instructions before proceeding</strong></h1>				
+				<ul>
+					<li>
+						1. You must use the template provided.
+					</li>
+					<li>
+						2. All records must be entered in their respective columns.
+					</li>
+					<li>
+						3. Make sure to fill the following fields: First Name, Last Name, Gender, DOB, and Bunk.
+					</li>
+					<li>
+						4. For Gender use m or f.
+					</li>
+					<li>
+						5. DOB should be in dd/mm/yyyy format (i.e. 01/01/2000).
+					</li>
+					<li>
+						6. Bunk should be the name that you gave for the bunk.
+					</li>
+					<li>
+						<a href="/administration/downloadtemplate">Click here</a> to download CSV Template here
+					</li>
+				</ul>				
+			</div>
+		</div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<form name="form_fileadd" id="form_fileadd" method="post" action="">
+					<input type="hidden" id="uploader_photo_name" value="">
+					<ul>
+						<li>
+							1. Upload a file
+						</li>
+						<li>
+							2. Make sure all children are assigned to a bunk
+						</li>
+						<li>
+							3. Save
+						</li>
+						<li>							
+							<span class="input">
+								<input type="hidden" id="uploader_photo_name" value="">
+								<div id="fsUploadProgress1" class="fieldset flash"></div>
+								<div><span id="spanButtonPlaceholder1"></span></div>
+								<input id="btnCancel1" style="margin-left: 2px; height: 22px; font-size: 8pt;" onclick="cancelQueue(upload1);" disabled="disabled" type="button" value="Cancel Uploads" />
+							</span>
+						</li>
+						<li>
+							<div id="processing_status"><?php if ($this->message){ echo $this->message . "<br>"; }?></div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div style="padding:10px;">
+			<form name="studentData" id="studentData" action="administration/importdata">
+				<div class="importDataWrapper" id="tableWrapper"></div>
+				<div class="institutionCombo" id="institutionCombo"></div>
+				<div class="saveButton" id="saveButton"></div>
+			</form>
+		</div>
+	</div>
+</div>

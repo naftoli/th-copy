@@ -1,0 +1,120 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+
+<script type="text/javascript">
+	var uploadedImage = '';
+	var uploadInProgress = false;
+
+	var upload1;
+	
+	upload1 = new SWFUpload({
+		upload_url: "<?php echo $sn; ?>/store/processupload",
+		post_params: {"sid" : "<?php echo session_id(); ?>"},
+		file_size_limit : "102400",
+		file_types : "*.jpg;*.png;*.gif;*.bmp",
+		file_types_description : "JPG Images; PNG Image; GIF Image; BMP Image",
+		file_upload_limit : 10,
+		file_queue_limit : 0,
+		swfupload_preload_handler : preLoad,
+		swfupload_load_failed_handler : loadFailed,
+		file_dialog_start_handler : fileDialogStart,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+		button_image_url : "<?php echo $sn; ?>/images/XPButtonUploadText_61x22.png",
+		button_placeholder_id : "spanButtonPlaceholder1",
+		button_width: 61,
+		button_height: 22,
+		button_action : SWFUpload.BUTTON_ACTION.SELECT_FILES,
+		flash_url : "<?php echo $sn; ?>/js/back-end/uploader/swfupload.swf",
+		flash9_url : "<?php echo $sn; ?>/js/back-end/uploader/swfupload_fp9.swf",
+		custom_settings : {
+		 progressTarget : "fsUploadProgress1",
+		 cancelButtonId : "btnCancel1"
+		},
+		debug: false
+	});
+
+	function startUpload()
+	{
+		if(uploadInProgress)
+		{
+			alert('Your file is being uploaded. Please wait till the upload process finishes.');
+		}
+		else
+		{
+			form_submit();
+		}
+	}
+
+	function form_submit()
+	{
+		alert($("#uploader_photo_name").val());
+	}
+	
+	function form_submitvv()
+	{
+		$.ajax({
+				type : "POST",
+				cache : false,
+				start: $("#processing_status").html('Loading...').fadeIn("slow"),
+				url : '<?php echo $sn . "/images/imagesadd" . $strParamPath; ?>/image_name/'+$("#uploader_photo_name").val(),
+				dataType : "text",
+				data: $('#form_imagesadd').serialize(),
+				success : function(response) {
+					if (response.match(/^[0-9]+$/)) {
+						$("#processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+						//slideURL('images/imagecategorieslist');
+					} else {
+						$("#processing_status").html(response).fadeIn("slow");
+					}
+				}
+			});
+	}
+	
+</script>
+
+<div class="slider">
+	<div class="col_title"><span>Add New Image</span></div>	
+	<div class="col_content camper">
+		<div class="module form" id="module-info">
+			
+			<div class="module lists forms">
+				
+				<form name="form_imagesadd" id="form_imagesadd" method="post" action="">
+					<input type="hidden" name="category_id" value="<?=$this->category_id?>" >
+					<input type="hidden" id="uploader_photo_name" value="">
+					
+					<input type="hidden" name="institution_id" id="institution_id" value="<?php print $this->institution_id; ?>" />
+					
+					<ul>
+						<li>
+							<span class="label">Picture:</span>
+
+							<span class="input">
+								<input type="hidden" id="uploader_photo_name" value="">
+								<div id="fsUploadProgress1" class="fieldset flash"></div>
+								<div><span id="spanButtonPlaceholder1"></span></div>
+								<input id="btnCancel1" style="margin-left: 2px; height: 22px; font-size: 8pt;" onclick="cancelQueue(upload1);" disabled="disabled" type="button" value="Cancel Uploads" />
+							</span>
+						</li>
+						<li>
+							<div id="processing_status"><?php if ($this->message){ echo $this->message . "<br>"; }?></div>
+						</li>
+						<li>
+							<span><a href="#" title="Save" class="button submit" onclick="startUpload();">Save</a></span>							
+							<div class="clear"></div>							
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

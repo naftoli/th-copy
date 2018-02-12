@@ -1,0 +1,204 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script>
+	$(function () {
+		$('.slider:last form a.delete_user').click (function () {
+			if (confirm("Are you sure you want to delete this user?"))
+				$.ajax({
+					type : "POST",
+					cache : false,
+					start : $(".slider:last #processing_status").html('Loading...').fadeIn(),
+					url : '<?php echo $sn . "/admin/deleteuser" . $strParamPath; ?>',
+					dataType : "text",
+					data : $('.slider:last form').serialize(),
+					success : function(strResponse) {
+						try {
+							var arrResponse = jQuery.parseJSON(strResponse);
+						} catch(e) {
+							alert("<?php print text("Sorry, there was an error"); ?>: VU-U103-f23fes");
+							$.alert(strResponse);
+							return;
+						}
+						if (typeof(arrResponse) != "object") {
+							alert("<?php print text("Sorry, there was an error"); ?>: VU-U104-2ffef3");
+							$.alert(strResponse);
+							return;
+						} else {
+							$(".slider:last #processing_status").fadeOut();
+							if (arrResponse["error"]) {
+								$(".slider:last #processing_status").html(arrResponse["error"]).fadeIn();
+							} else if (arrResponse["success"] == "true") {
+								$(".slider:last #processing_status").html("User deleted.").fadeIn("slow");
+							} else {
+								alert("Unexpected error: VA-U105-11c12c");
+								$.alert(arrResponse);
+							}
+						}
+					}
+				});
+		});
+		$('.slider:last form a.submit.save').click( function(e) {
+			$(".slider:last .processing_status").fadeOut();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start : $(".slider:last #processing_status").html('Loading...').fadeIn(),
+				url : '<?php echo $sn . "/admin/user" . $strParamPath; ?>',
+				dataType : "text",
+				data : $('.slider:last form').serialize(),
+				success : function(strResponse) {
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						alert("<?php print text("Sorry, there was an error"); ?>: VU-U101-3RR3RE");
+						$.alert(strResponse);
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						alert("<?php print text("Sorry, there was an error"); ?>: VU-U102-SDF8BX");
+						$.alert(strResponse);
+						return;
+					} else {
+						$(".slider:last #processing_status").fadeOut();
+						if (arrResponse["error"]) {
+							if (typeof(arrResponse["error"]) != "object") {
+								$(".slider:last #processing_status").html(arrResponse["error"]).fadeIn();
+							} else {
+								for (strField in arrResponse["error"])
+								{
+									//alert($.dump($(".slider:last #" + strField).closest("li").html()));return;
+									$(".slider:last #" + strField).closest("li").next().html(arrResponse["error"][strField]).fadeIn();
+								}
+							}
+						} else if (arrResponse["success"] == "true") {
+							$(".slider:last #processing_status").html("Save successful").fadeIn("slow").delay(2000).fadeOut("slow");
+						} else {
+							alert("Unexpected error: VA-U101-f1fno2f");
+							$.alert(arrResponse);
+						}
+					}
+				}
+			});
+		});
+	});
+</script>
+<div class="slider">
+	<div class="col_title"><span>MissionsApp User</span></div>
+
+	<div class="col_content camper">
+		<form>
+			<div class="module form lists">
+				<div class="module_content list">
+					<ul>
+						<?php include('uimods/uploadmessage.phtml'); ?>
+						<li>
+							<h3><?php print text("User Image"); ?></h3>
+							<input type="hidden" name="image_id" id="usereditor_image_id" value="<?php print @$this->objUser->image_id; ?>" />
+							<iframe src="<?php print $sn . "/imgs/smalluploader/current_image/" . @$this->objUser->image_id; ?>/resultid/usereditor_image_id" width="100%" height="80" scrolling="no">
+								<p><?php print text("Your browser does not support iframes."); ?></p>
+							</iframe>
+						</li>
+						<li>
+							<span class="label"><?php print text("Bar code"); ?>:</span>
+							<span class="input"><div style="padding:6px 0 0 0"><?php echo @$this->objUser->bar_code; ?></div></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label"><?php print text("Gender"); ?>:</span>
+							<div class="input"><select name="gender" id="gender" style="padding: 6px; width:100px">
+								<option></option>
+								<option<?php print @$this->objUser->gender == "M" ? " selected" : ""; ?>><?php print text("Male"); ?></option>
+								<option<?php print @$this->objUser->gender == "F" ? " selected" : ""; ?>><?php print text("Female"); ?></option>
+							</select></div>
+						</li>
+						<li>
+							<span class="label"><?php print text("First name"); ?>:*</span>
+							<span class="input"><input type="text" class="required" id="first_name" name="first_name" value="<?php echo @$this->objUser->first_name; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label"><?php print text("Last name"); ?>:*</span>
+							<span class="input"><input type="text" class="required" id="last_name" name="last_name" value="<?php echo @$this->objUser->last_name; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label"><?php print text("Student Email"); ?>:</span>
+							<span class="input"><input type="text" class="required" id="student_email" name="student_email" value="<?php echo @$this->objUser->student_email; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label"><?php print text("Phone"); ?>:</span>
+							<span class="input"><input type="text" class="required" id="phone" name="phone" value="<?php echo @$this->objUser->phone; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+<li>
+							<span class="label"><?php print text("Address"); ?>:</span>
+							<span class="input"><input type="text" class="required" id="address" name="address" value="<?php echo @$this->objUser->address; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label"><?php print text("City"); ?>:</span>
+							<span class="input"><input type="text" class="required" id="city" name="city" value="<?php echo @$this->objUser->city; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label"><?php print text("Zip/Postal Code"); ?>:</span>
+							<span class="input"><input type="text" class="required" id="postal" name="postal" value="<?php echo @$this->objUser->postal; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label"><?php print text("State"); ?>:</span>
+							<span class="input"><input type="text" class="required" id="state" name="state" value="<?php echo @$this->objUser->state; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label"><?php print text("Country"); ?>:</span>
+							<span class="input">
+<?php
+			$arrCountries = array('Select a country',"Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Central African Republic","Chad","Chile","China","Colombi","Comoros","Congo (Brazzaville)","Congo","Costa Rica","Cote d'Ivoire","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","East Timor (Timor Timur)","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Fiji","Finland","France","Gabon","Gambia, The","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Korea, North","Korea, South","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","Norway","Oman","Pakistan","Palau","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saint Kitts and Nevis","Saint Lucia","Saint Vincent","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia and Montenegro","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","Spain","Sri Lanka","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe");
+			if (isset($this->objUser) && strlen($this->objUser->country) && !in_array($this->objUser->country, $arrCountries))
+			{
+				// Country used to be a simple text input. Continue to support these values but inforce the new method on new users
+?>
+								<input type="text" class="required" id="country" name="country" value="" size="25" minlength="2" />
+<?php
+			} else {
+				// Country select dropdown
+?>
+								<select name="country" style="padding: 6px; width:355px">
+<?php
+				foreach ($arrCountries as $strCountry)
+				{
+?>
+									<option value="<?php print $strCountry; ?>" <?php print @$this->objUser->country == $strCountry ? " selected" : ""; ?>><?php print text($strCountry); ?></option>
+<?php
+				}
+?>
+								</select>
+<?php
+			}
+?>
+								</span>
+							<div class="clear"></div>
+						</li>
+						<div id="processing_status" style="padding:6px 6px 6px 10px; display:none"></div>
+						<li>
+							<span><a class="button submit save"><?php print text("Save"); ?></a></span>
+							<span style="float:right"><a class="button delete_user"><?php print text("Delete User"); ?></a></span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

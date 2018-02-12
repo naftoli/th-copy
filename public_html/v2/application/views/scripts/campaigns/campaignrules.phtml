@@ -1,0 +1,207 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script language="javascript">
+	var intRuleIncrement = 1;
+	$(document).ready(function()
+	{
+		$.mask.definitions['~']='9?';
+		$("#slider_campaignrules #age_start_limit").mask("9~",{placeholder:" "});
+		$("#slider_campaignrules #age_end_limit").mask("9~",{placeholder:" "});
+		$('#slider_campaignrules form a.submit').click( function(e) {
+			e.preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $("#slider_campaignrules #campaignrules_status").html('Loading...').fadeIn("slow"),
+				url : '<?php echo $sn . "/campaigns/campaignrules" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('#slider_campaignrules form').serialize(),
+				success : function(strResponse) {
+					var arrJSON = strResponse.match(/^[0-9]+\t(.+)/);
+					if (arrJSON) {
+						$("#slider_campaignrules #campaignrules_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+						var objRule = jQuery.parseJSON(arrJSON[1]);
+						campaignRuleAddtoDOM(objRule);
+					} else {
+						$("#slider_campaignrules #campaignrules_status").html(strResponse).fadeIn("slow");
+					}
+				}
+			});
+		});
+	});
+	
+	function campaignRuleAddtoDOM(objRule)
+	{
+		var strHTML = "<li id=\"campaign_rule_" + objRule.rule_id + "\"><table width=\"100%\">"
+			+ "	<tr>"
+			+ "		<td width=\"30\" valign=\"top\" style=\"padding-top:5px\">" + objRule.rule_type + "</td>"
+			+ "		<td width=\"50\" valign=\"top\" style=\"padding:5px 15px\"><nobr>" + objRule.rule_applies_to + "</nobr></td>"
+			+ "		<td>" + objRule.rule + "</td>"
+			+ "		<td width=\"50\" valign=\"top\">"
+			+ "			<span>"
+			+ "				<a href=\"#\" title=\"Delete\" onclick=\"campaignRuleDelete(" + objRule.rule_id + ")\" class=\"button submit\">Delete</a>"
+			+ "			</span>"
+			+ "		</td>"
+			+ "	</tr>"
+			+ "</table></li>";
+		$("#campaignruleslist").prepend(strHTML);
+	}
+	
+	function campaignRuleDelete(intRuleID)
+	{
+		$.blockUI({ message: $('#campaingruledelete')});
+		jQuery.data(document.body, "intRuleID", intRuleID);
+	}
+	
+	$('#campaingruledelete #option1').click(function(e) {
+		e.preventDefault();
+		$("#slider_campaignrules #campaignrules_status").html('Loading...').fadeIn("slow");
+		$.get('<?php echo $sn . "/campaigns/campaignrules/delete/' + jQuery.data(document.body, 'intRuleID') + '" . $strParamPath; ?>', 
+			function(strResponse) {
+				if (strResponse == "1") {
+					$("#slider_campaignrules #campaignrules_status").html("Delete successful.").fadeIn("slow").delay(500).fadeOut("slow");
+					$('#campaign_rule_' + jQuery.data(document.body, 'intRuleID')).remove();
+				} else if (strResponse == "0") {
+					$("#slider_campaignrules #campaignrules_status").html("Delete unsuccessful.").fadeIn("slow").delay(500).fadeOut("slow");
+					$('#campaign_rule_' + jQuery.data(document.body, 'intRuleID')).remove();
+				} else {
+					$("#slider_campaignrules #campaignrules_status").html(strResponse).fadeIn("slow");
+				}
+			}
+		);
+		$.unblockUI();
+	});
+	
+	$('#campaingruledelete #option2').click(function(e) {
+		e.preventDefault();
+		$.unblockUI();
+	});
+	
+</script>
+
+<div class="slider" id="slider_campaignrules">
+	<div class="col_title">
+		<span>Campaign Rules</span>
+	</div>
+	
+	<div class="col_content">
+		<div class="module form">
+			<div class="module_content" style="padding: 3px">
+				<form>
+					<table cellspacing="3" cellpadding="3">
+						<tr>
+							<td>
+								<b>Rules:</b>
+								<select name="ruletype">
+									<option>Allow</option>
+									<option>Deny</option>
+								</select>
+							</td>
+							<td>&nbsp;&nbsp;</td>
+							<td>
+								<b>Applies to:</b>
+								<select name="applies_to">
+									<option>Campaign Availability</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<table cellspacing="3" cellpadding="3">
+						<tr>
+							<td colspan="2"> - Age</td>
+						</tr>
+						<tr>
+							<td>Age Start Limit:</td>
+							<td>
+								<input type="text" name="start_age_limit" id="age_start_limit" />
+							</td>
+							<td>&nbsp;&nbsp;</td>
+							<td>Age End Limit:</td>
+							<td>
+								<input type="text" name="end_age_limit" id="age_end_limit" size="" />
+							</td>
+						</tr>
+					</table>&nbsp;
+					<table cellspacing="3" cellpadding="3">
+						<tr>
+							<td colspan="2"> - Gender</td>
+						</tr>
+						<tr>
+							<td>Limit To:</td>
+							<td>
+								<select name="gender_limit" id="gender_limit">
+									<option></option>
+									<option>Male Only</option>
+									<option>Female Only</option>
+								</select>
+							</td>
+						</tr>
+					</table>&nbsp;
+					<table cellspacing="3" cellpadding="3">
+						<tr>
+							<td colspan="2"> - Institutions</td>
+						</tr>
+						<tr>
+							<td>Limit To:</td>
+							<td>
+								<select name="institution_limit" id="institution_limit">
+									<option></option>
+									<option>Camps Only</option>
+									<option>Schools Only</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<div id="campaignrules_status"></div>
+				&nbsp;
+					<ul>
+						<li>
+							<span>
+								<a href="#" title="Create" class="button submit">Create</a>
+							</span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div class="module form lists">
+			<div class="module_content">
+				<ul id="campaignruleslist">
+<?php
+	$intRuleIncrement = 1;
+	$intRulesTotal = count($this->objRules);
+	foreach ($this->objRules as $objRule)
+	{
+?>
+					<li id="campaign_rule_<?php print $objRule->rule_id; ?>">
+						<table width="100%">
+							<tr>
+								<td width="30" valign="top" style="padding-top:5px"><?php print $objRule->rule_type; ?></td>
+								<td width="50" valign="top" style="padding:5px 15px;"><nobr><?php print $objRule->rule_applies_to; ?></nobr></td>
+								<td><?php print $objRule->rule; ?></td>
+								<td width="50" valign="top">
+									<span>
+										<a href="#" title="Create" onclick="campaignRuleDelete(<?php print $objRule->rule_id; ?>)" class="button submit">Delete</a>
+									</span>
+								</td>
+							</tr>
+						</table>
+					</li>
+<?php
+	}
+	// Update the javascript rule incrament value
+	print "<script>intRuleIncrement = " . ($intRuleIncrement-1) . ";</script>";
+?>
+				</ul>
+			</div>
+		</div>
+		<div class="question" id="campaingruledelete">
+			<p>Are you sure you would like to delete this rule?</p>
+			<p><a id="option1" class="button">Yes, delete the rule.</a></p>
+			<p><a id="option2" class="button">No, do not delete it.</a></p>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,498 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	if (!@$this->boolAjax)
+	{
+?>
+<script>
+
+$(document).ready(function()
+{
+	$(".slider:last").bind("ajax_grid_refresh", function () {
+		$(".slider:last .ajax_placeholder").html('');
+		$.ajax({
+			type : "POST",
+			cache : false,
+			data : $('.slider:last form').serialize(),
+			url : $("#pointsgridclasstasksprint").data("url") + '/boolAjax/true',
+			dataType : "text",
+			success : function(strResponse) {
+				$(".slider:last .task_order").removeClass("selected");
+				$(".slider:last .ajax_placeholder").html(strResponse);
+				$(".slider:last").trigger("update_cols");
+			}
+		});
+	});
+	$(".slider:last .button.process").click(function () {
+		$(".slider:last").trigger("ajax_grid_refresh");
+	});
+	$(this).delay(1).queue(function () {
+		$(this).dequeue();
+		$('.slider:last input[type=checkbox]').iphoneStyle({});
+	});
+	$(".slider:last").data("campaign_tasks", "<?php print @$this->arrConfig["admin"]["pointsclasstasks"]; ?>");
+	$(".slider:last").data("classes", "<?php print @$this->arrConfig["admin"]["classtasksclasses"]; ?>");
+	// process the grid objects
+	$(".slider:last").bind("update_cols", function () {
+		var strTasks = $(".slider:last").data("campaign_tasks");
+		var arrTasks = strTasks.split(/&/);
+		var arrTaskHash = {};
+		for (var intItr in arrTasks)
+		{
+			arrTaskHash[arrTasks[intItr].split(/=/)[0]] = 1;
+		}
+		// hide hidden tasks
+		var arrPods = ["header_task", "column_order", "fill_task", "row_task"];
+		for (var intItr2 in arrPods)
+		{
+			var arrTaskNames = $.makeArray($(this).find("." + arrPods[intItr2]));
+			for (var intItr in arrTaskNames)
+			{
+				var intTask = $(arrTaskNames[intItr]).attr("id").split(/_/)[2];
+				if (!arrTaskHash[intTask])
+				{
+					$(arrTaskNames[intItr]).addClass("hidden");
+					$(arrTaskNames[intItr]).find("input").val("");
+				}
+				else
+				{
+					$(arrTaskNames[intItr]).removeClass("hidden");
+				}
+			}
+		}
+	});
+	$(".slider:last").trigger("update_cols");
+	$(".slider:last .customize_page_width input").bind('didchange', function () {
+		if ($(this).is(':checked')) {
+			$('.slider:last .page_columns').removeClass('hidden');
+			$('.slider:last .page_columns input').select();
+		} else
+			$('.slider:last .page_columns').addClass('hidden');
+	});
+	$(".slider:last .customize_page_height input").bind('didchange', function () {
+		if ($(this).is(':checked')) {
+			$('.slider:last .page_rows').removeClass('hidden');
+			$('.slider:last .page_rows input').select();
+		} else
+			$('.slider:last .page_rows').addClass('hidden');
+	});
+
+});
+</script>
+<div class="slider" id="pointsgridclasstasksprint">
+	<style>
+	<!--
+	.marking .names .task_names .cell {
+		border-top:none;
+	}
+	.marking .cell input {
+		border:none;
+		background:none;
+		height:40px;
+		font-size:20px;
+		text-align:center;
+		width:40px;
+	}
+	.marking .task_names .cell, .marking .task_names.row {
+		height:150px !important;
+	}
+	.marking .header_task span {
+		font-size: 12px;
+		line-height:12px !important;
+		margin-left:4px !important;
+		letter-spacing:1px;
+		height:140px !important;
+		width:140px !important;
+	}
+	.marking .header_task b {
+		font-weight: bold !important;
+		font-size: 14px;
+	}
+	.task_names span {
+		overflow: hidden;
+		padding-top: 6px;
+	}
+	.hidden {
+		display: none !important;
+	}
+	.btn {
+		margin: 2px;
+		padding: 2px 4px 2px 4px;
+		border: 1px outset #EAEAEA;
+		display: inline;
+		cursor: default;
+		white-space: nowrap;
+		line-height: 30px;
+	}
+	.btn_select {
+		background-color: #DDD;
+		border: 1px inset #EAEAEA !important;
+	}
+	.date_editor {
+		padding: 8px;
+	}
+	.date_editor td {
+		padding-right: 8px;
+	}
+	.date_editor td.text {
+		padding-top: 3px;
+	}
+	.date_editor input {
+		padding: 2px;
+	}
+	.page_settings li:not(:first-child), .close_settings {
+		display: none;
+	}
+	li.selected {
+		background-color:#D5D8DE;
+	}
+	.column_order_row {
+		background-color:#D5D8DE;
+	}
+	.page_settings li {
+		cursor: pointer;
+	}
+	.noinput {
+		color: gray;
+	}
+	.fill_task .is_checkbox_button {
+		opacity:0;
+	}
+	.mission_window {
+		width:100px;
+	}
+	#col_names.grade {
+		width:100px;
+	}
+	#col_names.grade .cell {
+		border-right: 1px solid #ddd;
+	}
+	.module.ajax_grid_module.printable {
+		background-color: #fff;
+	}
+	.slider:last-child .label {
+		width:240px !important;
+	}
+	@media print
+	{
+		.missions {
+			overflow-x:visible !important;
+			width:auto !important
+		}
+		.task_names span {
+			overflow:visible !important;
+		}
+		#content {
+			/*overflow:visible !important;*/
+			background:none !important;
+			/*width:auto !important;*/
+			height:auto !important;
+		}
+		#wrapper, #content .slider,
+		#content .slider_container,
+		#content .col_content {
+			float:none !important;
+			width:auto !important;
+			height:auto !important;
+		}
+		#content .col_content {
+			padding:0 !important;
+		}
+		.col_title_bg {
+			background:none !important;
+			height:0 !important;
+			margin:0 !important;
+		}
+		div.module {
+			margin-right:0;
+		}
+		.slider_container  {
+			margin-left:0 !important;
+		}
+		.marking .task_names .cell, .marking .task_names.row {
+			height:148px !important;
+		}
+		.ajax_grid_module {
+			border:0px solid #000 !important;
+			page-break-after: always;
+		}
+		.dont_print,
+		.marking .cell input,
+		.bottom_buttons,
+		#footer_links,
+		.module.settings {
+			display:none !important;
+		}
+		.header, .body_header_left, .body_header_right, .left_menu, .noprint, #nav, .col_title {
+			display: none !important;
+		}
+		.slider_container .slider {
+			display:none;
+		}
+		.slider_container .slider:last-child {
+			display:block;
+		}
+	}
+	-->
+	</style>
+	<div class="col_title">
+		<span><?php print text("Print [|Point|] Grid"); ?></span>
+		<div class="title_help info" title="<?php print text("Below is a grid you can use to give [|points|] to [|students|] electronically, without having to create [|Point|] Cards. On the top of the page are various settings you can use to select which [|classes|] and tasks you want to see on the grid. Don’t forget to hit ‘Save’ when you’re done giving [|points|]! Or if you don’t want to save your changes, hit ‘Refresh’ to start fresh."); ?>"></div>
+	</div>
+	<div class="col_content">
+		<div class="module form settings">
+			<div class="module_content lists">
+				<form name="settings">
+					<ul class="header_on_all_pages">
+						<li>
+							<span class="label">Header on all pages:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<input type="checkbox" checked name="headers" value="1" />
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+					<ul class="names_on_all_pages">
+						<li>
+							<span class="label">Names on wrapped pages:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<input type="checkbox" checked name="names_on_wrapped_pages" value="1" />
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+					<ul class="customize_page_width">
+						<li>
+							<span class="label">Customize page width:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<input type="checkbox" name="page_columns_on" value="1" />
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+					<ul class="page_columns hidden">
+						<li>
+							<span class="label">Page columns:</span>
+							<span class="input">
+								<input type="text" name="page_columns" value="12" style="width:92px" />
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+					<ul class="customize_page_height">
+						<li>
+							<span class="label">Customize page height:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<input type="checkbox" name="page_rows_on" value="1" />
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+					<ul class="page_rows hidden">
+						<li>
+							<span class="label">Page rows:</span>
+							<span class="input">
+								<input type="text" name="page_rows" value="18" style="width:92px" />
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+					<ul>
+						<li style="padding-bottom:10px;">
+							<div class="button process">Process Changes</div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<form>
+<?php
+	} // boolAjax
+	$intMaxRows = isset($this->arrPost['page_rows_on']) ? $this->arrPost['page_rows'] : 18;
+	$intMaxCols = isset($this->arrPost['page_columns_on']) ? $this->arrPost['page_columns'] : 12;
+	$arrPages = array(
+		'arrUserData' => array(),
+		'arrCampaignData' => array()
+	);
+	$intItr = 0;
+	foreach($this->arrOutResults as $arrOutResult) // users
+	{
+		$intPage = floor($intItr/$intMaxRows);
+		if (!isset($this->arrPost['headers']) && count($arrPages['arrUserData']) > 1) {
+			$intPage = floor(($intItr+5)/($intMaxRows+5));
+		}
+		if (!isset($arrPages['arrUserData'][$intPage]))
+			$arrPages['arrUserData'][$intPage] = array();
+		$arrPages['arrUserData'][$intPage][] = $arrOutResult;
+		$intItr++;
+	}
+	$intItr = 0;
+	parse_str(@$this->arrConfig["admin"]["pointsclasstasks"], $arrAvailableTasks);
+	foreach ($this->arrRows as $arrItems) // tasks and campaigns
+	{
+		if (!isset($arrAvailableTasks[$arrItems['objTask']->task_id]))
+			continue;
+		$intPage = floor($intItr/$intMaxCols);
+		if (!isset($arrPages['arrCampaignData'][$intPage]))
+			$arrPages['arrCampaignData'][$intPage] = array();
+		$arrPages['arrCampaignData'][$intPage][] = $arrItems;
+		$intItr++;
+	}
+?>
+<script>
+	$(document).ready(function () {
+		$('.slider:last .set_x_width').css({
+			width: <?php print $intMaxCols; ?> * 44
+		});
+<?php
+	if (!isset($this->arrPost['names_on_wrapped_pages']))
+	{
+?>
+		$('.slider:last .set_x2_width').css({
+			width: (<?php print $intMaxCols; ?> + 10) * 44
+		});
+		$('.slider:last .set_x2_width').parent().css({
+			width: 440 + 228
+		});
+<?php
+	}
+?>
+	});
+</script>
+<div class="ajax_placeholder">
+<?php
+	$intPages = 0;
+	foreach ($arrPages['arrUserData'] as $arrUserData)
+	{
+		$intWrapping = 0;
+		foreach ($arrPages['arrCampaignData'] as $arrCampaignData)
+		{
+?>
+			<div class="module ajax_grid_module printable">
+				<div class="module_conntent">
+					<div class="marking">
+						<div id="col_names" class="col names grade<?php print (!isset($this->arrPost['names_on_wrapped_pages']) && $intWrapping) ? ' hidden' : ''; ?>">
+							<div class="mission_name<?php print (!isset($this->arrPost['headers']) && $intPages) ? ' hidden' : ''; ?>">
+								<div class="cell"><?php print text("[|Class|]"); ?></div>
+							</div>
+							<div class="row task_names<?php print (!isset($this->arrPost['headers']) && $intPages) ? ' hidden' : ''; ?>">
+								<div class="cell"></div>
+							</div>
+<?php
+			foreach($arrUserData as $arrOutResult)
+			{
+				$objUser = $arrOutResult['objUser'];
+				$arrUserClasses = $this->arrUserClasses[$objUser->user_id];
+				$arrClassNames = array();
+				foreach ($arrUserClasses as $objUserClass)
+				{
+					$arrClassNames[] = $this->arrClasses[$objUserClass->class_id]->custom_name1;
+				}
+				print '<div class="cell" style="text-align:center">' . join(',', $arrClassNames) . '</div>';
+			}
+?>
+
+						</div>
+						<div id="col_names" class="col names<?php print (!isset($this->arrPost['names_on_wrapped_pages']) && $intWrapping) ? ' hidden' : ''; ?>">
+							<div class="mission_name<?php print (!isset($this->arrPost['headers']) && $intPages) ? ' hidden' : ''; ?>">
+								<div class="cell">Camper</div>
+							</div>
+							<div class="row task_names<?php print (!isset($this->arrPost['headers']) && $intPages) ? ' hidden' : ''; ?>">
+								<div class="cell"></div>
+							</div>
+							<div class="cell column_order_row hidden dont_print">&nbsp;</div>
+<?php
+			foreach($arrUserData as $arrOutResult)
+			{
+				$objUser = $arrOutResult['objUser'];
+?>
+							<div class="cell"><?php echo $objUser->first_name . " " . $objUser->last_name; ?></div>
+
+<?php
+			}
+?>
+
+						</div>
+							<div class="mission_container">
+								<div class="missions" style="overflow-x:auto;width:440px;">
+									<div class="col mission set_x_width<?php print (!isset($this->arrPost['names_on_wrapped_pages']) && $intWrapping) ? ' set_x2_width' : ''; ?>">
+										<div class="row mission_name<?php print (!isset($this->arrPost['headers']) && $intPages) ? ' hidden' : ''; ?>">
+											<div class="cell<?php print (!isset($this->arrPost['names_on_wrapped_pages']) && $intWrapping) ? ' hidden' : ''; ?>" style="text-align:left;padding-left:20px;border-width: 0">Campaigns</div>
+										</div>
+										<div class="row task_names<?php print (!isset($this->arrPost['headers']) && $intPages) ? ' hidden' : ''; ?>">
+<?php
+			foreach ($arrCampaignData as $arrItems)
+			{
+?>
+											<div class="cell header_task" id="header_task_<?php print $arrItems["objTask"]->task_id; ?>">
+												<span><nobr><b><?php print $arrItems["objCampaign"]->campaign_name; ?></b></nobr><br /><nobr><?php print $arrItems["objTask"]->task_name; ?></nobr></span>
+											</div>
+<?php
+			}
+?>
+										</div>
+										<div id="mission_one_tasks">
+<?php
+			foreach ($arrUserData as $arrOutResult)
+			{
+				$objUser = $arrOutResult['objUser'];
+?>
+											<div class="row">
+<?php
+				foreach ($arrCampaignData as $arrItems)
+				{
+?>
+												<div style="<?php print $arrItems["objTask"]->is_checkbox ? 'background-color:#fafafa;':''; ?>" class="cell row_task row_task_<?php print $arrItems["objTask"]->task_id; ?>" id="row_task_<?php print $arrItems["objTask"]->task_id . "_" . $objUser->user_id; ?>">
+<?php
+					if ($arrItems["objTask"]->is_checkbox)
+					{
+?>
+													 <div style="overflow:hidden;padding:4px;color:#333;font-size:16px;width:33px;height:40px;"><?php print $arrItems["objTask"]->points; ?></div>
+<?php
+					}
+					else if ($arrItems["objTask"]->points)
+					{
+?>
+													<div style="overflow:hidden;padding:4px;color:#ccc;font-size:16px;width:33px;height:40px;"><?php print $arrItems["objTask"]->points; ?></div>
+<?php
+					}
+?>
+												</div>
+<?php
+				}
+?>
+											</div>
+<?php
+			}
+?>
+										</div>
+									</div>
+								</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div>&nbsp;
+<?php
+			$intWrapping++;
+		}
+		$intPages++;
+	}
+?>
+		</div>
+<?php
+	if (!@$this->boolAjax)
+	{
+?>
+		</form>
+	</div>
+</div>
+<?php
+	}
+?>

@@ -1,0 +1,58 @@
+<?php 
+	include "config.phtml"; 
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Tanya</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	if ($this->objRoles->isAllowed('Institution Administrator'))
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/tanya/tanyaclasses/">
+							<div class="icon"></div>
+							<div class="title">Tanya Testing by class</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/tanya/tanyabackdatingclasses/">
+							<div class="icon"></div>
+							<div class="title">Back Dating by Class</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/tanya/tanyareportclasses/">
+							<div class="icon"></div>
+							<div class="title">Reports</div>
+						</a>
+					</li>
+<?php
+	}
+	else if ($this->objRoles->isAllowed('Parent'))
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/tanya/tanyalist/">
+							<div class="icon"></div>
+							<div class="title">Tanya Testing</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/tanya/tanyareportlist/">
+							<div class="icon"></div>
+							<div class="title">Reports</div>
+						</a>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

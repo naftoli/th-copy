@@ -1,0 +1,456 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objUserSession = new Zend_Session_Namespace("user_session_data");
+	global $arrAppDetails;
+	$arrDetails = $arrAppDetails[$this->tstyle];
+	if (!empty($this->objInstitution->image_id))
+		$strInstitutionImage = $this->objInstitution->image_id;
+	//else
+	//	$strInstitutionImage = end(explode('/', $arrDetails['default_institution_logo']));
+?>
+<script language="javascript">
+$(document).ready(function()
+{
+	$(this).delay(1).queue(function () {
+		$(this).dequeue();
+		$('#profileadmin input[type=checkbox]').iphoneStyle({});
+	});
+
+	$('#profileadmin .module.accordion li h3').click(function(){
+		$(this).nextAll().slideToggle('fast');
+		$(this).parents('li').toggleClass('open');
+	});
+
+	$('#profileadmin .institution_logo .submit').click( function(e) {
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#profileadmin .institution_logo .processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn . "/administration/profileadmin/institution_logo/true" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('#profileadmin .institution_logo form').serialize(),
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					$("#profileadmin .institution_logo .processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+				} else {
+					$("#profileadmin .institution_logo .processing_status").html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	});
+	$('#profileadmin .settings .submit').click( function(e) {
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#profileadmin .settings .processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn . "/administration/profileadmin/settings/true" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('#profileadmin .settings form').serialize(),
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					$("#profileadmin .settings .processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+				} else {
+					$.dumper(strResponse);
+					$("#profileadmin .settings .processing_status").html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	});
+	var refProfileAdminStudentBarCodeLastConnection = false;
+	var refProfileAdminStudentBarCode = false;
+	var intQuickCurrentBarcode = 0;
+	$('#profileadmin #quick_student_access').trigger('click').trigger('mouseup');
+	$('#profileadmin .student_barcode').keyup(function () {
+		var parent = this;
+		var strInput = $(parent).val();
+		strInput = strInput.replace(/^ +/,'').replace(/ $/,'');
+		if (refProfileAdminStudentBarCode)
+			window.clearTimeout(refProfileAdminStudentBarCode);
+		refProfileAdminStudentBarCode = window.setTimeout(function () {
+			if (strInput.length != 16)
+			{
+				$('#profileadmin .quick_access_details').css({
+					display: 'none'
+				});
+				intQuickCurrentBarcode = strInput;
+				return;
+			}
+			if (intQuickCurrentBarcode == strInput)
+				return;
+			intQuickCurrentBarcode = strInput;
+			if (refProfileAdminStudentBarCodeLastConnection)
+				refProfileAdminStudentBarCodeLastConnection.abort();
+			var arrPostParams = {
+				'student_bar_code' : strInput
+			};
+			$('#profileadmin .quick_access_student_error').html('Loading...').fadeIn();
+			refProfileAdminStudentBarCodeLastConnection = $.ajax({
+				type : "POST",
+				cache : false,
+				url : '<?php print $sn . '/administration/profileadmin' . $strParamPath; ?>',
+				dataType : "text",
+				data: arrPostParams,
+				success : function(strResponse) {
+					$('#profileadmin .quick_access_student_error').html('Loaded...').fadeOut(0);
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						alert("<?php print text("Sorry, there was an error"); ?>: VU-E101-3RR3RE");
+						$.alert(strResponse);
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						alert("<?php print text("Sorry, there was an error"); ?>: VU-E102-SDF8BX");
+						$.alert(strResponse);
+						return;
+					} else {
+						if (arrResponse.objUser.image_id)
+							$('#profileadmin .quick_user_image').attr('src', '<?php print $sn; ?>/imgs/v/src/' + arrResponse.objUser.image_id + '/w/10');
+						else
+							$('#profileadmin .quick_user_image').attr('src', '<?php print $sn; ?>/imgs/v/src/0.gif/w/100');
+						$('#profileadmin .quick_access_name').html('Loading...');
+						$('#profileadmin .quick_access_class').html('Loading...');
+						$('#profileadmin .quick_access_balance').html('Loading...');
+						$('#profileadmin .quick_access_details').css({
+							display: 'block'
+						});
+						$('#profileadmin .quick_access_name').html(arrResponse.objUser.first_name + ' ' + arrResponse.objUser.last_name);
+						if (arrResponse.objUser.image_id)
+						{
+							window.setTimeout(function () {
+								$('#profileadmin .quick_user_image').attr('src', '<?php print $sn; ?>/imgs/v/src/' + arrResponse.objUser.image_id + '/w/100');
+							},1);
+						}
+						if (arrResponse.objClass)
+							$('#profileadmin .quick_access_class').html(arrResponse.objClass.custom_name1);
+						else
+							$('#profileadmin .quick_access_class').html('No Grade');
+						$('#profileadmin .quick_access_balance').html(arrResponse.objUserPoints.store + ' miles');
+						if (!$('#profileadmin .prize_barcode').hasClass('noinput'))
+						{
+							$('#profileadmin .prize_barcode').val('Enter a student bar code').addClass('noinput');
+						}
+						$('#profileadmin .transactions_link').attr('href', '<?php print $sn; ?>/users/transactions/user_id/' + arrResponse.objUser.user_id);
+						$('#profileadmin .user_edit_link').attr('href', '<?php print $sn; ?>/users/editor/user_type/student/user_types/student/tstyle/hebrewschool1/user_id/' + arrResponse.objUser.user_id);
+						$('#profileadmin').data('quick_user_id', arrResponse.objUser.user_id);
+					}
+				}
+			});
+		},500);
+	});
+	$('#profileadmin .noinput').blur(function () {
+		if ($(this).hasClass('hadnoinput') && $(this).val() == '') {
+			$(this)
+				.val($(this).data('noinput_vaue'))
+				.removeClass('hadnoinput')
+				.addClass('noinput');
+		}
+	});
+	$('#profileadmin .noinput').focus(function () {
+		if ($(this).hasClass('noinput')) {
+			$(this)
+				.data('noinput_vaue', $(this).val())
+				.val('')
+				.removeClass('noinput')
+				.addClass('hadnoinput');
+		}
+	});
+	$('#profileadmin .prize_barcode').closest('form').bind('submit', function (e) {
+		e.preventDefault();
+		$("#profileadmin .quick_access_prize_error").html('Loading...').fadeIn();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php print $sn; ?>/administration/profileadmin/',
+			data: {
+				buy_prize_barcode : 'true',
+				user_id : $('#profileadmin').data('quick_user_id'),
+				prize_barcode : $('#profileadmin .prize_barcode').val().replace(/^ +/,'').replace(/ $/,'')
+			},
+			dataType : "text",
+			success : function(strResponse) {
+				$("#profileadmin .quick_access_prize_error").html('Loaded...');
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$("#profileadmin .quick_access_prize_error").html('Sorry, there was an error: VU-E103-3RR3RE');
+					alert("Sorry, there was an error: VA-J101-3RR3RE");
+					$.dumper(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$("#profileadmin .quick_access_prize_error").html('Sorry, there was an error: VU-E104-SDF8BX');
+					alert("Sorry, there was an error: VA-J102-SDF8BX");
+					$.dumper(strResponse);
+					return;
+				} else {
+					if (arrResponse["error"]) {
+						$("#profileadmin .quick_access_prize_error").closest("li").next().html(arrResponse["error"]).fadeIn();
+					} else if (arrResponse["success"] == "true") {
+						$('#profileadmin .quick_access_balance').html(arrResponse.objUserPoints.store + ' miles');
+						$('#profileadmin .quick_access_prize_error').html('Prize `<b>' + arrResponse.objPrize.prize_name + '</b>` purchased successfully.');
+						//slideRefresh('http://v2dev1.mashpia.com/users/editor/user_id/16033/user_type/student/tstyle/hebrewschool1');
+					} else {
+						$.dumper(arrResponse);
+					}
+				}
+			}
+		});
+	});
+});
+</script>
+
+<div class="slider">
+	<style>
+		#profileadmin .process_student_prize li:not(.is_link) {
+			padding:0 12px 12px 12px!important;
+			font-size:12pt !important;
+			line-height: 34px
+		}
+		#profileadmin .quick_access_details {
+			display:none;
+		}
+		#profileadmin .noinput {
+			color:#999 !important;
+		}
+		#profileadmin input[type='text'] {
+			height:20px;
+		}
+		#profileadmin .button {
+			line-height: 21px
+		}
+		#profileadmin .list_expand .module {
+			margin-right:0;
+			margin-bottom:0;
+		}
+	</style>
+	<div class="col_title">
+		<span><?php print ucwords($this->objUser->first . "&nbsp;" . $this->objUser->last); ?></span>
+	</div>
+	<div class="col_content" id="profileadmin">
+	<!--
+<?php
+	if ($strInstitutionImage=='0.gif' || $objUserSession->frommashpia)
+	{
+
+?>
+		<div class="module form institution_logo">
+			<div class="module_content">
+				<form>
+					<ul>
+						<li>
+							<h3>Institution logo</h3>
+							<input type="hidden" name="image_id" id="usereditor_image_id" value="<?php print $strInstitutionImage; ?>" />
+							<iframe src="<?php print $sn . "/imgs/smalluploader/current_image/" . $strInstitutionImage; ?>/resultid/usereditor_image_id" width="100%" height="80" scrolling="no">
+								<p>Your browser does not support iframes.</p>
+							</iframe>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span>
+								<a href="#" title="Save" class="button submit">Save</a>
+							</span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+<?php
+	}
+?>
+	-->	
+		<div class="module lists forms">
+			<div class="module_content">
+				<h1 style="padding:6px"><strong><?php print $this->objInstitution->school_name; ?></strong><div style="margin-top:6px;margin-right: 8px" class="title_help info" title="This is your institution information. To edit it, click ‘Settings’ in the menu, and then ‘Edit Institution Info’."></div></h1>
+				<ul>
+					<li style="font-size: 12pt;margin-bottom: 6px;">
+						<!--<img style="float:right" src="<?php print $sn . "/imgs/v/src/" . $strInstitutionImage; ?>/w/100" height="100" />-->
+						<?php
+		print text('Welcome, ');
+		print ucfirst($this->objUser->first) . " " . ucfirst($this->objUser->last);
+		print '<br />' . text('of ');
+		$arrAddressData = array();
+		$arrAddressData[] = '<b>' . $this->objInstitution->school_name . '</b>';
+		if (!empty($this->objInstitution->address))
+			$arrAddressData[] = $this->objInstitution->school_address1;
+		$strCity = "";
+		if (!empty($this->objInstitution->school_city))
+			$strCity .= $this->objInstitution->school_city;
+		if (!empty($this->objInstitution->school_state))
+			$strCity .= (strlen($strCity) ? ' ' : '') . $this->objInstitution->school_state;
+		if (!empty($this->objInstitution->school_postal))
+			$strCity .= (strlen($strCity) ? ', ' : '') . $this->objInstitution->school_postal;
+		if (strlen($strCity))
+			$arrAddressData[] = $strCity;
+		if (!empty($this->objInstitution->school_country))
+			$arrAddressData[] = $this->objInstitution->school_country;
+		if (!empty($this->objInstitution->school_phone))
+			$arrAddressData[] = $this->objInstitution->school_phone;
+		//if (!empty($this->objInstitution->website))
+			//$arrAddressData[] = $this->objInstitution->website;
+		print join('<br/>', $arrAddressData);
+?>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<?php
+		$subjects = array(
+			"Tehillim"			=>	"tehillim club",
+			"Tefilla"   		=>  "Tefilla", 
+			"Mivtzoim" 			=>  "Mivtzoim", 
+			"Niggunim"  		=>  "Niggunim", 
+			"Hiskashrus"  		=>  "hiskashrus", 
+			"Sefer Hamitzvos"  	=>  "sefer hamitzvos",
+			"Tanya"				=> 	"Tanya",  
+			"Yomei Dipagra"  	=>  "Yom Dipagra", 
+			"Avos Ubanim"  		=>  "Father Son", 
+			"Cheshbon Hanefesh" =>  "Cheshbon Hanefesh", 
+			"Chitas"  			=>  "Chitas", 
+			"Brias Haguf" 		=> 	"Brias Haguf"
+		);
+		?>
+		
+		<h2>Resources</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content" style="padding: 10px; font-size: 14px;">
+				<a href="https://www.dropbox.com/sh/0sfxooey3wxf5sy/AADbl9ROU-V0bnK0oVBD97e9a?dl=0" target="_blank">Weekly Resources - Toldos</a><br />
+				<a href="https://www.dropbox.com/sh/c2g76cp76it1bf6/AABw7AHHEKWfahv-yIFXV8Qsa?dl=0" target="_blank">All Resources for 5778</a><br />
+				<a href="http://mashpia.com/chidon/marketing.php" target="_blank">Chidon Resources</a><br />
+				<img src="/v2/images/back-end/admin/calendar/December.jpg" width="684" />
+				<!--
+				<?php foreach ($subjects as $subject => $img) :	?>
+					<ul>
+						<li>
+							<div style="float: left; margin-right: 20px;">
+								<img src="/mission_report/campaignLogos/<?=$img?>.png" width="50" />
+							</div>
+							<div style="font-size: 14px; margin-top: 15px;">
+								<?php if ($subject == 'Niggunim') { ?>
+								<a target="_blank" href="https://www.dropbox.com/home/Resources/Resources%205777/Niggunim">Niggunim Resources</a>
+								<?php
+								} else {
+									echo $subject . " Resources";
+								}
+								?>								
+							</div>
+	
+						</li>
+					</ul>
+				<? endforeach; ?>
+				-->
+			</div>
+		</div>
+		
+<?php
+	if (!$objUserSession->frommashpia)
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a target="_blank" href="<?php echo $sn; ?>/hebrewschools/index/tstyle/<?php print $this->tstyle; ?>/institution_id/<?php print $objUserSession->institution_id; ?>">
+						  <div class="icon"></div>
+						  <div class="title" style="width:650px"><?php print text("Open kiosk page in a new tab"); ?></div>
+						  <div class="help info" title="<?php print text("The kiosk page is the front end that the students can access."); ?>"></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+
+		<!--h2>Quick Links</h2-->
+		<div class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<!--
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/users2/is_active/1/is_registered/1/permission/student/url/<?php echo dblencode("users/editor/user_type/student/user_types/student" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View Registered [|Students|]"); ?></div>
+						</a>
+					</li>
+		-->
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/store/prizelistexact/host_prizes/off">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View Enabled Prizes"); ?></div>
+						</a>
+					</li>
+					<!--
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/ordersonline">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View Active Orders"); ?></div>
+						</a>
+					</li>
+					-->
+<?php
+	//if (dev)
+	if (false)
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/dashboard/resetpoints">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Reset Points"); ?></div>
+						</a>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+		<!--div class="module" id="module_accordion">
+			<div class="module_content list_expand numbered">
+				<form>
+					<ul>
+						<li>
+							<h3 id="awaiting_actions">
+								<span class="icon"></span> Awaiting Actions
+							</h3>
+							<p>
+								<div id="lists" class="module lists forms">
+									<div class="module_content">
+										<ul>
+<?php
+	if (!count($this->arrAwaitingActions))
+	{
+?>
+											<li>
+												No action required at this time.
+											</li>
+<?php
+	}
+	if ($this->arrAwaitingActions)
+		foreach ($this->arrAwaitingActions as $arrAwaitingAction)
+		{
+?>
+											<li>
+												<a class="link" href="<?php echo $sn . $arrAwaitingAction["link"] . $strParamPath; ?>">
+													<div class="icon"></div>
+													<div class="title"><?php echo $arrAwaitingAction["text"]; ?></div>
+												</a>
+											</li>
+<?php
+		}
+?>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div-->
+	</div>
+</div>

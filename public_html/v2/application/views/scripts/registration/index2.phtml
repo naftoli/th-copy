@@ -1,0 +1,71 @@
+<?php
+	include "public_header.phtml";
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<style>
+#footer_links a {
+	color:#555;
+}
+#footer_links {
+	width:1024px;
+	margin:0 auto;
+	height:30px;
+	padding:4px;
+	color:#555;
+}
+</style>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#nav li").click(function () {
+			$("#nav li").removeClass("current");
+			$(this).addClass("current");
+		});
+		$('#footer_links a').mouseover(function () {
+			$(this).css({
+				'color' : '#000'
+			});
+		});
+		$('#footer_links a').mouseout(function () {
+			$(this).css({
+				'color' : '#555'
+			});
+		});
+		var arrData = $('body').data("reg_data");
+		if (!arrData)
+			arrData = {};
+		arrData["template_style"] = '<?php print $this->tstyle; ?>';
+		$('body').data("reg_data",arrData);
+	});
+	var arrRegCalc = {};
+</script>
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="nav">
+				<div class="col_title_bg"></div>
+
+				<div class="col_title">Menu</div>
+<?php
+	include "menus/menu_registration.phtml";
+?>
+			</div>
+			<div id="content">
+				<div class="col_title_bg"></div>
+				<div class="slider_container">
+<?php
+	//include "administrator.phtml";
+	include "login.phtml";
+?>
+				</div>
+			</div>
+		</div>
+		<div id="footer_links">
+			<div style="float:left;text-align:left;width:383px;margin:0 8px;"><a href="<?php print $sn; ?>/index/contact" class="overlay">Contact Us</a></div>
+			<div style="float:right;text-align:right;display:inline-block;margin:0 8px;width:383px;">Copyright © 2013 - mashpia.com</div>
+		</div>
+		<div id="overlay">
+			<div class="content"></div>
+		</div>
+	</body>
+</html>

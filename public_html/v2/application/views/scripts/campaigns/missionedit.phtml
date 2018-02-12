@@ -1,0 +1,267 @@
+<?php 
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script language="javascript">
+$(document).ready(function()
+{
+	$('#slider_missionedit #form a.submit').click( function(e) {
+		e.preventDefault();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#slider_missionedit #processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn . "/campaigns/missionedit/id/" . $this->objMission->mission_id . $strParamPath ?>',
+			dataType : "text",
+			data: $('#slider_missionedit #form').serialize(),
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					$("#slider_missionedit #processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+				} else {
+					$("#slider_missionedit #processing_status").html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	});
+	$('#slider_missionedit #toggle_activation').click(function(e) {
+		$.blockUI({ message: $('#question')});
+	});
+	// Activate / Deactivate
+	$('#slider_missionedit #question #option1').click(function(e) {
+		var strPath = "<?php echo $sn; ?>/administration/setstatus/id/<?php echo $this->objMission->mission_id ?>/cat/missions/status/<?php
+			echo $this->objMission->is_active
+			? "deactivate"
+			: "activate"; 
+		?>";
+		$("#slider_missionedit #processing_status").html('Loading...').fadeIn("slow");
+		$.get(strPath, 
+			function(strResponse) {
+				if (!strResponse.match(/error|notice:/i)) {
+					$("#slider_missionedit #processing_status").html(strResponse).fadeIn("slow").delay(500).fadeOut("slow").delay(500, function () {
+						naviageBack($(".slider:last .slider_back"));
+					});
+				} else {
+					$("#slider_missionedit #processing_status").html(strResponse).fadeIn("slow");
+				}
+			}
+		);
+		e.preventDefault();
+		$.unblockUI();
+	}); 
+	$('#slider_missionedit #question #option2').click(function(e) {
+		e.preventDefault();
+		$.unblockUI();
+	});
+	
+	$("#slider_missionedit #start_date").datepicker();
+	$("#slider_missionedit #end_date").datepicker();
+});
+</script>
+<div class="slider" id="slider_missionedit">
+	<div class="col_title">
+		<span>Edit Mission</span>
+	</div>
+	<div class="col_content camper">
+		<div class="module lists" id="lists-camper-groups">
+			<div class="module_content">
+				<ul>
+<?php
+	if ($this->objMission->mission_type == "Incremental")
+	{
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/incrementals/taskeditor" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">Task Editor</div>
+						</a>
+					</li>
+<?php
+	}
+	if ($this->objMission->mission_type == "Book")
+	{
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/campaigns/missionbooks" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">Assign a book</div>
+						</a>
+					</li>
+<?php
+	}
+	if ($this->objMission->mission_type == "General")
+	{
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/campaigns/tasklist" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">View Tasks</div>
+						</a>
+					</li>
+<?php
+	}
+	if ($this->objMission->mission_type == "Book" || $this->objMission->mission_type == "General")
+	{
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/ladders/editor" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">Edit Ladder</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php print $sn . "/scheduler/scheduleedit" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">Mission Scheduling</div>
+						</a>
+					</li>
+<?php /*					<li>
+						<a class="link" href="<?php print $sn . "/campaigns/missionrules" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">Mission Rules</div>
+						</a>
+					</li>
+*/
+	}
+?>
+					<li>
+						<a href="#" id="toggle_activation" class="inline_link">
+							<div class="name"><?php
+								echo $this->objMission->is_active
+								? "Deactivate"
+								: "Activate"; ?> mission</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				
+				<form name="form" id="form" method="post" action="">
+					
+					<input type="hidden" name="mission_id" id="mission_id" value="<?php echo $this->mission_id; ?>">
+						
+					<ul>					
+						
+<?php
+	if (isset($this->objNetwork)) {
+?>
+						<li>
+							<span class="label">Network:</span>
+							<span class="input">
+								<?php print $this->objNetwork->name ?>
+							</span>
+							<div class="clear"></div>
+						</li>
+<?php
+	}
+	if (isset($this->objInstitution2)) {
+?>
+						<li>
+							<span class="label">Institution:</span>
+							<span class="input">
+								<?php print $this->objInstitution2->name ?>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Campaign:</span>
+							<span class="input">
+								<select class="select" name="campaign" id="campaign">
+<?php
+		foreach ($this->arrCampaigns as $objRow)
+		{
+			print "<option value=\"" . $objRow->campaign_id . "\"" . (
+				$this->objMission->campaign_id == $objRow->campaign_id
+				? " selected"
+				: ""
+			) . ">" . $objRow->campaign_name . "</option>";
+		}
+	}
+?>
+								</select>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Mission Name:</span>
+							<span class="input"><input type="text" class="required" id="mission_name" name="mission_name" value="<?php echo $this->objMission->mission_name; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Mission Type:</span>
+							<span class="input">
+								<select class="select" name="mission_type" id="mission_type">
+									<option<?php print $this->objMission->mission_type == "General" ? " selected" : ""; ?>>General</option>
+									<option<?php print $this->objMission->mission_type == "Book" ? " selected" : ""; ?>>Book</option>
+								</select>
+							</span>
+							<div class="clear"></div>
+						</li>
+                  <li>
+							<span class="label">Min. percentage required:</span>
+							<span class="input">
+								<select class="select" id="percentage" name="percentage">
+<?php
+	for($i=0; $i<=100; $i+= 10){
+		echo '<option value="'.$i.'" '.($this->objMission->percentage_required == $i ? " selected" : "" ).'>'.($i=="0" ? "None" : $i . "%").'</option>' . chr(13);
+	}
+?>
+								</select>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Start date:</span>
+							<span class="input"><input type="text" class="required" id="start_date" name="start_date" value="<?php echo $this->objMission->start_date; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">End date:</span>
+							<span class="input"><input type="text" class="required" id="end_date" name="end_date" value="<?php echo $this->objMission->end_date; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Points up:</span>
+							<span class="input"><input type="text" class="required" id="points_up" name="points_up" value="<?php echo $this->objMission->points_up; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Medal up:</span>
+							<span class="input"><input type="text" class="required" id="medal_up" name="medal_up" value="<?php echo $this->objMission->medal_up; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Rank up:</span>
+							<span class="input"><input type="text" class="required" id="rank_up" name="rank_up" value="<?php echo $this->objMission->rank_up; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Sequence:</span>
+							<span class="input"><input type="text" class="required" id="sequence" name="sequence" value="<?php echo $this->objMission->sequence; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div id="processing_status"><?php if ($this->message) { echo $this->message . "<br>"; } ?></div>
+						<li>
+							<span><a href="#" title="Save" class="button submit">Save</a></span>							
+							<div class="clear"></div>							
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div id="question">
+			<p>Are you sure you would like to deactive this mission?</p>
+			<p><a id="option1" class="button">Yes, <?php
+			echo $this->objMission->is_active
+			? "deactivate"
+			: "activate"; 
+		?></a></p>
+			<p><a id="option2" class="button">No, do not <?php
+			echo $this->objMission->is_active
+			? "deactivate"
+			: "activate"; 
+		?></a></p>
+		</div>
+	</div>
+</div>

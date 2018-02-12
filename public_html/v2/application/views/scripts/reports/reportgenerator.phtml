@@ -1,0 +1,518 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+
+	$arrColumns = array(
+		"user_code" => "User Code",
+		"class" => "Class",
+		"first_name" => "First Name",
+		"last_name" => "Last Name",
+		"points" => "Store Points",
+		"total_points" => "Total Points",
+		"gender" => "Gender",
+		"dob" => "DOB"
+	);
+
+	if ($this->boolDownload)
+	{
+		// header
+		$arrHeader = first($this->arrResults["arrRowData"]);
+		foreach (array_keys($arrHeader) as $strColumn)
+		{
+			if (!in_array($strColumn, array("campaign_points")))
+			{
+				print $arrColumns[$strColumn] . "\t";
+			}
+		}
+
+		// header
+		if (isset($this->arrResults["arrPostParams"]["campaign_points"]))
+		{
+			foreach ($arrHeader["campaign_points"] as $intCampaign => $arrTasks)
+			{
+				if (!isset($this->arrResults["arrCampaignsHash"][$intCampaign]))
+					continue;
+				if (isset($this->arrResults["arrPostParams"]["tasks"]))
+				{
+					foreach ($arrTasks as $intTask => $intPoints)
+					{
+						if (!isset($this->arrResults["arrTasksHash"][$intTask]))
+							continue;
+						print "Points - " . $this->arrResults["arrCampaignsHash"][$intCampaign]->campaign_name . " / " . $this->arrResults["arrTasksHash"][$intTask]->task_name;
+						print "\t";
+					}
+					print "Points - Total\t";
+				}
+				else
+				{
+					print "Points - " . $this->arrResults["arrCampaignsHash"][$intCampaign]->campaign_name;
+					print "\t";
+				}
+			}
+		}
+		print "\n";
+
+		// rows
+		foreach ($this->arrResults["arrRowData"] as $arrRow)
+		{
+			foreach ($arrRow as $mixedData)
+			{
+				if (is_string($mixedData) || is_integer($mixedData))
+					print $mixedData . "\t";
+			}
+			if (isset($this->arrResults["arrPostParams"]["campaign_points"]))
+			{
+				foreach ($arrRow["campaign_points"] as $intCampaign => $arrTasks)
+				{
+					if (!isset($this->arrResults["arrCampaignsHash"][$intCampaign]))
+						continue;
+					$intCampaignSum = 0;
+					foreach ($arrTasks as $intTask => $intPoints)
+					{
+						if (!isset($this->arrResults["arrTasksHash"][$intTask]))
+							continue;
+						$intCampaignSum += $intPoints;
+					}
+					if (isset($this->arrResults["arrPostParams"]["tasks"]))
+					{
+						foreach ($arrTasks as $intTask => $intPoints)
+						{
+							if (!isset($this->arrResults["arrTasksHash"][$intTask]))
+								continue;
+							print $intPoints;
+							print "\t";
+						}
+					}
+					print $intCampaignSum . "\t";
+				}
+			}
+			print "\n";
+		}
+		header('Content-Disposition: attachment; filename="export_' . rand(100000,999999) . '.csv');
+		exit;
+	}
+?>
+
+<script type="text/javascript">
+	var arrColumns = <?php print json_encode($arrColumns); ?>;
+	$(document).ready(function()
+	{
+		$('.slider:last form#report_options_form').keyup(function (e) {
+			var charCode = (e.which) ? e.which : e.keyCode;
+			if (charCode == 13) {
+				e.preventDefault();
+				if ($(this).find('.submit').length)
+					$(this).find('.submit').click();
+				else
+					$(this).submit();
+			}
+		});
+
+		// Toggle checkbox
+		$(".report_options input:[type=checkbox][checked]").closest("div").addClass("report_option_select");
+		$(".report_options div").bind("click", function () {
+			if ($(this).hasClass("report_option_select")) {
+				$(this).removeClass("report_option_select");
+				$(this).find("input").removeAttr("checked");
+			} else {
+				$(this).addClass("report_option_select");
+				$(this).find("input").attr("checked", "checked");
+			}
+			$(this).find("input").focus();
+		});
+
+		$(".report_top .submit.generate").bind("click", function () {
+			var strPath = '<?php echo $sn . "/reports/reportgenerator/"; ?>';
+			var strData = $("#report_options_form").serialize();
+			$("#report_table_output").html("").fadeOut("fast");
+			$("#report_print_button").fadeOut("slow");
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $(".report_top .processing_status").html("Please wait...").fadeIn("slow"),
+				url : strPath,
+				data: strData,
+				success : function(strResponce) {
+					$(".report_top .processing_status").html("Complete").delay(1000).fadeOut("slow");
+					var arrResponce;
+					try {
+						arrResponce = jQuery.parseJSON(strResponce);
+					} catch (strError) {
+						if (strResponce.match(/<script>[ \n\r\t]+window.location.href/))
+						{
+							window.location.href = "<?php print $sn; ?>";
+							return;
+						}
+						$(".report_top .processing_status").html("Sorry, there was an error: VR-RG101-SD8FDD");
+						$.alert(strResponce);
+						return;
+					}
+					// Stop if there where no columns provided
+					if (Object.keys(arrResponce.arrPostParams).length == 0) {
+						$(".report_top .processing_status").html("There must be at least one column selected to generate a report.").fadeIn("slow");
+						return;
+					}
+					if (Object.keys(arrResponce.arrRowData).length == 0) {
+						$(".report_top .processing_status").html("Sorry, no results where found.").fadeIn("slow");
+						return;
+					}
+					var boolHeaderDone = 0;
+					var strTable = "<table>";
+					var intItr = 1;
+
+					for (intUser in arrResponce.arrRowData) {
+						strTable += "<tr>";
+
+						if (!boolHeaderDone) {
+
+							if (
+								0
+								//arrResponce.arrPostParams["campaign_points"]
+								//|| arrResponce.arrPostParams["campaign_status"]
+							) {
+								strTable += "<td>&nbsp;</td>";
+								for (strColumn in arrResponce.arrRowData[intUser]) {
+									var intCols = 0;
+									if (strColumn == "campaign_points" || strColumn == "campaign_status") {
+										if (arrResponce.arrPostParams["tasks"])
+										{
+											for (varTaskOrCampaign in arrResponce.arrRowData[intUser][strColumn])
+											{
+												intCols += Object.keys(arrResponce.arrRowData[intUser][strColumn][varTaskOrCampaign]).length;
+											}
+										}
+										intCols += Object.keys(arrResponce.arrRowData[intUser][strColumn]).length;
+									}
+									if (strColumn == "campaign_points") {
+										strTable += "<td style='background-color: #DDD' colspan='" + intCols + "'>Points</td>";
+									} else if (strColumn == "campaign_status") {
+										strTable += "<td style='background-color: #DDD' colspan='" + intCols + "'>Status</td>";
+									} else
+										strTable += "<td>&nbsp;</td>";
+								}
+								strTable += "</tr><tr>";
+							}
+
+							strTable += "<td>&nbsp;</td>";
+							for (strColumn in arrResponce.arrRowData[intUser])
+							{
+								if (typeof(arrColumns[strColumn]) == "string" || typeof(arrColumns[strColumn]) == "number")
+									strTable += "<td style='background-color: #DDD'><b>" + arrColumns[strColumn] + "</b></td>";
+								else
+								{
+									for (intCampaign in arrResponce.arrRowData[intUser][strColumn])
+									{
+										if (!arrResponce.arrCampaignsHash[intCampaign])
+											continue;
+										var intTaskCount = arrResponce.arrPostParams["tasks"] ? Object.keys(arrResponce.arrRowData[intUser][strColumn][intCampaign]).length+1 : 1;
+										strTable += "<td style='background-color: #DDD' colspan='" + intTaskCount + "'><b>" + arrResponce.arrCampaignsHash[intCampaign].campaign_name + "</b></td>";
+									}
+								}
+
+							}
+							boolHeaderDone = 1;
+							strTable += "</tr><tr>";
+
+							if (arrResponce.arrPostParams["tasks"]) {
+								strTable += "<td>&nbsp;</td>";
+								for (strColumn in arrResponce.arrRowData[intUser])
+								{
+									if (typeof(arrColumns[strColumn]) == "string" || typeof(arrColumns[strColumn]) == "number")
+										strTable += "<td>&nbsp;</td>";
+									if (strColumn == "campaign_points" || strColumn == "campaign_status") {
+										for (intCampaign in arrResponce.arrRowData[intUser][strColumn])
+										{
+											if (!arrResponce.arrCampaignsHash[intCampaign])
+												continue;
+											if (arrResponce.arrPostParams["tasks"]) {
+												for (intTask in arrResponce.arrRowData[intUser][strColumn][intCampaign]) {
+													if (!arrResponce.arrTasksHash[intTask])
+														continue;
+													strTable += "<td style='background-color: #DDD'>" + arrResponce.arrTasksHash[intTask].task_name + "</td>";
+												}
+												strTable += "<td style='background-color: #DDD'>total</td>";
+											} else {
+												strTable += "<td style='background-color: #DDD'><b>" + arrResponce.arrCampaignsHash[intCampaign].campaign_name + "</b></td>";
+											}
+										}
+									}
+								}
+								boolHeaderDone = 1;
+								strTable += "</tr><tr>";
+							}
+						}
+
+						// Rows
+						strTable += "<td style='text-align:right'>" + intItr + ".</td>";
+						for (strColumn in arrResponce.arrRowData[intUser])
+						{
+							if (typeof(arrResponce.arrRowData[intUser][strColumn]) == "string" || typeof(arrResponce.arrRowData[intUser][strColumn]) == "number")
+								strTable += "<td>" + arrResponce.arrRowData[intUser][strColumn] + "</td>";
+							if (strColumn == "campaign_points" || strColumn == "campaign_status") {
+								for (intCampaign in arrResponce.arrRowData[intUser][strColumn])
+								{
+									if (!arrResponce.arrCampaignsHash[intCampaign])
+										continue;
+									if (arrResponce.arrPostParams["tasks"]) {
+										var intSum = 0;
+										for (intTask in arrResponce.arrRowData[intUser][strColumn][intCampaign]) {
+											if (!arrResponce.arrTasksHash[intTask])
+												continue;
+											intSum += parseInt(arrResponce.arrRowData[intUser][strColumn][intCampaign][intTask]);
+											strTable += "<td>" + arrResponce.arrRowData[intUser][strColumn][intCampaign][intTask] + "</td>";
+										}
+										strTable += "<td>" + intSum + "</td>";
+									} else {
+										var intPoints = 0;
+										for (intTask in arrResponce.arrRowData[intUser][strColumn][intCampaign]) {
+											intPoints += arrResponce.arrRowData[intUser][strColumn][intCampaign][intTask];
+										}
+										strTable += "<td>" + intPoints + "</td>";
+									}
+								}
+							}
+						}
+						strTable += "</tr>";
+						intItr++;
+					}
+					strTable += "</table>";
+					$("#report_table_output").html(strTable).fadeIn("slow");
+					$("#report_print_button").fadeIn("slow");
+
+				}
+			});
+		});
+
+		$("#report_date_options #start_date").datepicker();
+		$("#report_date_options #end_date").datepicker();
+
+		// Generate report /w json
+		$(".report_top .submit.download").bind("click", function () {
+			var strData = $("#report_options_form").serialize();
+			$(".slider:last .print_frame_form input").val(strData);
+			$(".slider:last .print_frame_form").submit();
+			/*
+			$("#report_table_output").html("").fadeOut("fast");
+			$("#report_print_button").fadeOut("slow");
+			alert(123);
+			*/
+		});
+
+		$(".slider:last .print_frame").load(function () {
+			$("#slider_idcardhostnav .pl_is_generated").html("Generated");
+			$("#slider_idcardhostnav .fn_print").html("Print");
+		});
+	});
+</script>
+<div class="slider">
+	<style>
+	<!--
+		.report_options {
+			padding-top:3px;
+			padding-left:6px;
+		}
+		.report_options div {
+			margin: 2px;
+			padding: 0px 6px 0px 6px;
+			border: 1px outset #EAEAEA;
+			display: inline;
+			cursor: default;
+			white-space: nowrap;
+			line-height: 30px;
+		}
+		.report_options table {
+			margin: 2px;
+			border: 1px ridge #DDD;
+			cursor: default;
+		}
+		.report_option_select {
+			background-color: #DDD;
+			border: 1px inset #EAEAEA !important;
+		}
+		.report_top h1 {
+			padding: 2px 8px 2px 8px;
+			font-weight: bold;
+			text-align: left !important;
+		}
+		.report_top h3 {
+			padding: 2px 8px 2px 8px;
+			text-align: left !important;
+			font-size: 10pt;
+			font-weight: normal;
+		}
+		.report_top {
+			padding: 3px;
+		}
+		.report_top .processing_status {
+			padding: 4px;
+		}
+
+		#report_table_output table {
+			font-size: 10pt;
+		}
+		#report_table_output td {
+			padding-left: 10px;
+			padding-right: 2px;
+		}
+		#report_table_output td:last {
+			padding-right: 10px !important;
+		}
+
+		@media print {
+			.header, .body_header_left, .body_header_right, .left_menu, .noprint, #nav, .col_title, .report_top, #report_print_button {
+				display: none !important;
+			}
+			#content {
+				overflow:visible !important;
+				background:none !important;
+				width:auto !important;
+			}
+			#wrapper, #content .slider, #content .slider_container, #content .col_content {
+				float:none !important;
+				width:auto !important;
+				height:auto !important;
+			}
+			#content .col_content {
+				padding:0 !important;
+			}
+			.col_title_bg {
+				background:none !important;
+				height:0 !important;
+				margin:0 !important;
+			}
+			div.module {
+				margin-right:0;
+			}
+			.welcome_msg {
+				display: none;
+			}
+		}
+		iframe.print_frame {
+			visibility: hidden;
+			position: absolute;
+			z-index: -1;
+		}
+		.processing_status {
+			color: black;
+		}
+
+	-->
+	</style>
+	<div class="col_title">
+		<span>Report</span>
+		<!--div class="title_help info" title=""></div-->
+	</div>
+	<div class="col_content">
+		<iframe name="print_frame" class="print_frame"></iframe>
+		<form method="POST" class="print_frame_form" action="<?php echo $sn . "/reports/reportgenerator/download/true"; ?>" target="print_frame">
+			<input type="hidden" name="data" value="" />
+		</form>
+		<div class="module lists welcome_msg">
+			<div class="module_content">
+				<ul>
+					<li>
+						Welcome to the New Report Generator!<br />Is there anything you would like us to change? Please email your constructive criticism to <span><i>cth@tzivoshashem.org</i></span>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<form id="report_options_form">
+			<div class="module report_top" id="module-alerts">
+				<h1>Date:</h1>
+				<h3>Limit your results down to two dates.</h3>
+				<div class="report_options" id="report_date_options">
+					<table>
+						<tr>
+							<td>
+								<div><span>Choose:</span><input checked type="checkbox" name="date_range" onfocus="$(this).attr('checked') ? $('#report_dates').fadeIn('slow') : $('#report_dates').fadeOut('slow');" /></div>
+							</td>
+							<td id="report_dates">
+								&nbsp; Start: <input type="text" class="required" id="start_date" name="start_date" value="<?php print date('m',strtotime("last Sunday")) . "/" . date("d",strtotime("last Sunday")) . "/" . date("Y",strtotime("last Sunday")); ?>" size="25" /> End: <input type="text" class="required" id="end_date" name="end_date" value="<?php print date("m") . "/" . date("d") . "/" . date("Y"); ?>" size="25" />
+							</td>
+						</td>
+					</table>
+				</div>
+				<h1>Classes:</h1>
+				<h3>Limit your results down to any specific classes.</h3>
+				<div class="report_options">
+<?php
+	foreach ($this->arrClasses as $objClass)
+	{
+?>
+					<div><input type="checkbox" name="report_class_<?php print $objClass->class_id; ?>" value="<?php print $objClass->class_id; ?>" /> <span><?php print $objClass->grade . " " . $objClass->sub; ?></span>&nbsp;</div>
+<?php
+	}
+?>
+				</div>
+				<h1>Columns:</h1>
+				<h3>Specify which columns you would like to be displayed.</h3>
+				<div class="report_options">
+					<!--div><span>User Code:</span><input type="checkbox" name="user_code" /></div-->
+					<div><span>Class:</span><input type="checkbox" name="class" checked /></div>
+					<div><span>First Name:</span><input type="checkbox" name="first_name" checked /></div>
+					<div><span>Last Name:</span><input type="checkbox" name="last_name" checked /></div>
+					<!--div><span>Show Hebrew Name:</span><input type="checkbox" name="prioritize_hebrew_name" /></div-->
+					<div><span>Store Points:</span><input type="checkbox" name="points" /></div>
+					<div><span>Total Points:</span><input type="checkbox" name="total_points" /></div>
+					<div><span>Campaign Points:</span><input type="checkbox" name="campaign_points" /></div>
+					<!--div><span>Campaign Status:</span><input type="checkbox" name="campaign_status" /></div-->
+					<!--div><span>Gender:</span><input type="checkbox" name="gender" /></div-->
+					<!--div><span>DOB:</span><input type="checkbox" name="dob" /></div-->
+					<div><span>Tasks:</span><input type="checkbox" name="tasks" /></div>
+				</div>
+				<h1>Campaigns:</h1>
+				<div class="report_options">
+<?php
+	foreach ($this->arrCampaigns as $objCampaign)
+	{
+?>
+					<div><span><?php print $objCampaign->campaign_name; ?>:</span><input type="checkbox" name="report_campaign_<?php print $objCampaign->campaign_id; ?>" checked /></div>
+<?php
+	}
+?>
+
+				</div>
+				<h1>Show Only:</h1>
+				<div class="report_options">
+
+					<div><span>Active:</span><input type="checkbox" name="active" /></div>
+				</div>
+				<div style="padding: 10px 3px 6px 6px; height:25px; display: inline-block">
+					<span>
+						<a href="#" class="button submit generate">Display Report</a>
+					</span>
+				</div>
+				<div style="padding: 10px 6px 6px 0px; height:25px; display: inline-block">
+					<span>
+						<a href="#" class="button submit download">Download Report</a>
+					</span>
+				</div>
+				<div style="display:none" class="processing_status">Please wait...</div>
+			</div>
+		</form>
+<?php
+	if (0 && $this->objLegacyInstitution)
+	{
+?>
+		<div class="module lists">
+			<div class="module_content">
+				<ul>
+					<li>
+						Warning: Some of the data in this report may be missing because it has not been imported from our legacy system yet.
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+		<div style="padding: 10px 6px 6px 6px; height:25px;; display:none" id="report_print_button">
+			<span>
+				<a class="button submit" onclick="window.print();">Print Report</a>
+			</span>
+		</div>
+		<div class="module" id="report_table_output" style="padding: 5px; display:none">
+
+		</div>
+	</div>
+</div>

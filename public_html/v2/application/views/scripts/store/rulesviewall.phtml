@@ -1,0 +1,38 @@
+<?php
+	include "config.phtml";
+	$strUrl = "";
+	if (isset($this->intPrize))
+		$strUrl .= "prize_id/" . $this->intPrize . "/";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Rules List</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	if (!count($this->arrResults))
+	{
+?>
+	<div class="module" style="padding:5px;">There are no rules available to view.</div>
+<?php
+	} else {
+		foreach ($this->arrResults as $arrResult)
+		{
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/store/rules/" . $strUrl . "rule_id/" . $arrResult["objRule"]->rule_id; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print $arrResult["objRule"]->rule_type . " " . $arrResult["objRule"]->rule_applies_to; ?> - Institution: <?php print $arrResult["objInstitution"]->institution_type; ?> - <?php print $arrResult["objInstitution"]->name; ?> Extra: <?php print $arrResult["objRule"]->rule ? $arrResult["objRule"]->rule : "None"; ?></div>
+						</a>
+					</li>
+<?php
+		}
+	}
+?>				</ul>
+			</div>
+		</div>
+	</div>
+</div>

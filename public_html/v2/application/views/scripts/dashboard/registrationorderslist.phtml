@@ -1,0 +1,35 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Registration Orders</span>
+	</div>
+
+	<div class="col_content">
+		<div id="idcard_section1">
+			<div class="module form lists">
+				<div class="module_content list">
+					<ul>
+<?php
+	foreach ($this->arrRegistrations as $objRegistration)
+	{
+?>
+						<li>
+							<a class="link" href="<?php print $sn; ?>/dashboard/registrationorders/institution_id/<?php print $objRegistration->institution_id; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php print $objRegistration->institution_name; ?> (<?php print $objRegistration->administrator_email; ?>)</div>
+								<div class="lable_count" style="float:right;background-color:#fff;border:1px solid gray;margin:5px;padding:2px 12px 2px 12px;text-align:center;"><?php print $objRegistration->created; ?></div>
+								<div class="lable_count" style="float:right;background-color:#fff;border:1px solid gray;margin:5px;padding:2px 12px 2px 12px;text-align:center;">Reg</div>
+							</a>
+						</li>
+<?php
+	}
+?>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

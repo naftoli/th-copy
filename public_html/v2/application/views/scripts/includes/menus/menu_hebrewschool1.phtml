@@ -1,0 +1,132 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+$objSession = new Zend_Session_Namespace('user_session_data');
+$objRoles = new Roles();
+$objClasses = new Classes();
+?>
+
+<script type="text/javascript">
+$(document).ready(function () {
+	$("#nav li").click(function () {
+		$("#nav li").removeClass("current");
+		$(this).addClass("current");
+	});
+});
+</script>
+
+<?php
+if ($objRoles->isAllowed("Network"))
+{
+?>
+	<ul class="list_first">
+		<li class="list_parent current"><a href="<?php print $sn; ?>/administration/profile<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_school.png" width="28" height="28" /></span><?php print text("Home"); ?></a></li>
+		<ul class="list_second">
+<?php
+	if (0&&dev)
+	{
+?>
+			<li><a href="<?php echo $sn; ?>/announcements/announcements<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_clipboard.png" width="22" height="22" /></span><?php print text("Announcements"); ?></a></li>
+<?php
+	}
+?>
+			<li><a href="<?php echo $sn; ?>/dashboard/systemsettings<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" /></span><?php print text("[|Settings|]"); ?></a></li>
+			<li><a href="<?php echo $sn; ?>/menu/institutions/url/<?php echo dblencode("administration/profileeditor" . $strParamPath); ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/Bunks.png" width="22" height="22" /></span><?php print text("[|Schools|]"); ?></a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/networkprizes<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_shop.png" width="22" height="22" /></span><?php print text("Prizes"); ?></a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/networkcampaigns<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" /></span><?php print text("Campaigns"); ?></a></li>
+			<li><a href="<?php echo $sn; ?>/menu/institutions/url/<?php echo dblencode("dashboard/users_hebrewschool1" . $strParamPath); ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_profile.png" width="22" height="22" /></span><?php print text("Users"); ?></a></li>
+		</ul>
+<?php
+}
+else if ($objRoles->isAllowed("Institution Administrator"))
+{
+?>
+	<ul class="list_first">
+		<li class="list_parent current"><a href="<?php print $sn; ?>/administration/profile<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_school.png" width="28" height="28" /></span><?php print text("Home"); ?></a></li>
+		<ul class="list_second">
+
+			<li><a href="<?php echo $sn; ?>/dashboard/setup<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_dashboard.png" width="22" height="22" /></span><?php print text("Setup"); ?></a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/systemsettings<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" /></span><?php print text("Settings"); ?></a></li>
+<?php
+	if (dev)
+	{
+?>
+			<li><a href="<?php echo $sn; ?>/announcements/announcements<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_clipboard.png" width="22" height="22" /></span><?php print text("Announcements"); ?></a></li>
+<?php
+	}
+?>
+			<!--li><a href="<?php echo $sn; ?>/campaigns/incrementalscampaignlist/institution_id/<?php print $objSession->institution_id . $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Campaigns" /></span><?php print text("Campaigns"); ?></a></li-->
+			<li><a href="<?php echo $sn; ?>/points/classtasks<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_bonus.png" width="22" height="22" /></span><?php print text("[|Points|] Grid"); ?></a></li>
+			<li><a href="<?php echo $sn; ?>/campaigns/achievementcardsprint<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_rank_card.png" width="22" height="22" /></span><?php print text("[|Point|] Cards"); ?></a></li>
+<?php
+	if (0 && is_dev())
+	{
+		$arrListParams = array(
+			"data_source" => "/users/ajaxlistranksetup"
+		);
+?>
+			<li><a href="<?php print $sn . "/lists/standard2/params/" . dblencode(json_encode($arrListParams)); ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_rank_card.png" width="22" height="22" /></span><?php print text("Ranks Editor"); ?></a></li>
+<?php
+	}
+?>
+			<li><a href="<?php echo $sn; ?>/reports/reportoptions<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_report.png" width="22" height="22" /></span><?php print text("Reports"); ?></a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/store_hebrewschools1<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_shop.png" width="22" height="22" /></span><?php print text("Prizes"); ?></a></li>
+			<li><a href="<?php echo $sn; ?>/campaigns/incrementalscampaignlist<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" /></span><?php print text("Campaigns"); ?></a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/users_hebrewschool1<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_profile.png" width="22" height="22" /></span><?php print text("Users"); ?></a></li>
+<?php
+	if (1)
+	{
+?>
+			<li><a href="<?php echo $sn; ?>/dashboard/handbooks"><span class="icon"><img src="<?php echo $sn; ?>/images/iconl_tasklist.png" width="22" height="22" /></span><?php print text("Handbooks"); ?></a></li>
+<?php
+	}
+?>
+		</ul>
+<?php
+}
+else if ($objRoles->isAllowed("Teacher"))
+{
+	$arrUserClass = $objClasses->_user_classes_select(array(
+		"user_id" => $objSession->user_id,
+		"class_role" => "Teacher"
+	));
+?>
+	<ul class="list_first">
+		<li class="list_parent current"><a href="<?php print $sn; ?>/administration/profile<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_user.png" width="28" height="28" /></span><?php print text("Home"); ?></a></li>
+		<ul class="list_second">
+<?php
+	if (count($arrUserClass))
+	{
+		if (dev)
+		{
+?>
+			<li><a href="<?php echo $sn; ?>/announcements/announcements<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_clipboard.png" width="22" height="22" /></span><?php print text("Announcements"); ?></a></li>
+<?php
+		}
+?>
+			<li><a href="<?php echo $sn; ?>/campaigns/achievementcardsprint<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_rank_card.png" width="22" height="22" /></span><?php print text("[|Point|] Cards"); ?></a></li>
+			<li><a href="<?php echo $sn; ?>/points/classtasks<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_bonus.png" width="22" height="22" /></span><?php print text("[|Points|] Grid"); ?></a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/store<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_shop.png" width="22" height="22" /></span><?php print text("Prizes"); ?></a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/users_hebrewschool1<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_profile.png" width="22" height="22" /></span><?php print text("Users"); ?></a></li>
+			<li><a href="<?php echo $sn; ?>/reports/reportoptions<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_report.png" width="22" height="22" /></span><?php print text("Reports"); ?></a></li>
+<?php
+	}
+?>
+
+<?php
+}
+else
+{
+	print text("Sorry, there was an error: VI-MHS101-98S7DF");
+	exit;
+}
+?>
+		<li class="list_parent">
+			<a href="#" onclick="window.location.href = '<?php echo $sn; ?>/logout/index<?php print $strParamPath; ?>';">
+				<span class="icon">
+					<img src="<?php echo $sn; ?>/images/back-end/admin/icon_door.png" width="28" height="28" />
+				</span>
+				<?php print text("Logout"); ?>
+			</a>
+		</li>
+	</ul>

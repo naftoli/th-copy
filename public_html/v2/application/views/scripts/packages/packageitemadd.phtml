@@ -1,0 +1,91 @@
+<?php 
+	include "config.phtml";
+?>
+<script>
+$(document).ready(function()
+{
+	$('#formaddpackageitem a.submit').click( function(e) {
+		e.preventDefault();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn; ?>/packages/packageitemadd/host_id/<?=$this->host_id?>/network_id/<?=$this->network_id?>',
+			dataType : "text",
+			data: $('#formaddpackageitem').serialize(),
+			success : function(response) {
+				if (response.match(/^[0-9]+$/)) {
+					$("#processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+				} else {
+					$("#processing_status").html(response).fadeIn("slow");
+				}
+			}
+		});
+	});
+});
+</script>
+<div class="slider">
+	<div class="col_title"><span>Add New Package Item</span></div>	
+	<div class="col_content camper">
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form name="formaddpackageitem" id="formaddpackageitem" method="post" action="">
+				<input type="hidden" name="institution" value="<?php print $this->intInstitution; ?>" />
+					<ul>
+
+						<li>
+							<span class="label">Item name:</span>
+							<span class="input"><input type="text" class="required" id="item_name" name="item_name" value="<?php echo $this->name; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Item type(optional)</span>
+							<span class="input">
+								<select class="select" name="package_item_type" id="package_item_type">
+									<option></option>
+									<?php
+										$arrGrade = array('item','add-on');
+										foreach ($arrGrade as $strValue) {
+											print "<option>" . $strValue . "</option>";
+										}
+									?>
+								</select>
+								
+							</span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Price:</span>
+							<span class="input"><input type="text" class="required" id="price" name="price" value="<?php echo $this->price; ?>" size="5" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Student Price:</span>
+							<span class="input"><input type="text" class="required" id="student_price" name="student_price" value="<?php print $this->student_price; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Currency:</span>
+							<span class="input">
+								<select class="select" name="currency" id="currency">
+									<?php
+										$arrGrade = array('US','CDN');
+										foreach ($arrGrade as $strValue) {
+											print "<option>" . $strValue . "</option>";
+										}
+									?>
+								</select>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div id="processing_status"><?php if ($this->message){ echo $this->message . "<br>"; }?></div>
+						<li>
+							<span><a href="#" title="Save" class="button submit">Save</a></span>							
+							<div class="clear"></div>							
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

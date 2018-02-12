@@ -1,0 +1,112 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+
+if(isset($this->caption) && $this->caption == "bunks")
+{
+	$strType = "bunks";
+}
+else
+{
+	$strType = "classes";
+}
+
+?>
+<script language="javascript">
+$(function() {
+	$('.slider:last .module#module-alerts li h3').nextAll().hide();
+	$('.slider:last .module#module-alerts li h3').click(function(){
+		$(this).nextAll().slideToggle('fast');
+		$(this).parents('li').toggleClass('open');
+	});
+});
+</script>
+<div class="slider">	
+	<div class="col_title">
+		<span>Setup Guide Wizard</span>
+	</div>	
+	<div class="col_content">
+		<div id="lists" class="module lists forms">			
+			<div class="module_content">
+				<div style="padding: 5px 5px 5px 5px; font-size:10pt;">This guide will walk you through all the necessary steps to get you up and running.
+				You can always edit any options in the control panel.</div>
+			</div>
+		</div>
+		 <div class="module" id="module-alerts">
+            <div class="module_content list_expand numbered">				
+				<ul>
+                    <li>
+						<h3>
+							<span class="icon"></span>
+							Step 1: Setup your <?php print $strType;?>
+						</h3>
+						<p>
+							<a class="link" href="<?php echo $sn; ?>/classes/classadd<?php echo $strParamPath; ?>/caption/<?php print $strType;?>">
+								Click here 
+							</a>
+							To setup and name your <?php print $strType;?> (i.e. bunk alef, beis, etc.)
+						</p>						
+                    </li>		
+                    <li>
+						<h3>
+							<span class="icon"></span>
+							Step 2: Enter your <?php print $strType=="bunks"?"campers": "students";?> into the system  
+						</h3>	
+						<p>
+							<a class="link" href="<?php echo $sn; ?>/administration/userimport<?php echo $strParamPath; ?>/caption/<?php print $strType;?>">
+								Click here
+							</a>
+							to upload your <?php print $strType;?> individually
+						</p>
+                    </li>					
+                    <li>
+						<h3>
+							<span class="icon"></span>
+							Step 3: Register <?php print $strType == "bunks" ? "Campers" : "Students";?>
+						</h3>						
+						<p>
+							<a class="link" href="<?php echo $sn; ?>/administration/registerstudentsclasses<?php echo $strParamPath; ?>/caption/<?php print $strType;?>">
+								Click here
+							</a>
+							to register your <?php print $strType == "bunks" ? "campers" : "students";?>
+						</p>
+                    </li>
+					<li>
+						<h3>
+							<span class="icon"></span>
+							Step 4: Install Campaigns
+						</h3>						
+						<p>
+							<a class="link" href="<?php echo $sn; ?>/dashboard/campaigns<?php echo $strParamPath; ?>/caption/<?php print $strType;?>">
+								Click here
+							</a> to establish what you would like to give out points for
+						</p>
+                    </li>
+					<li>
+						<h3>
+							<span class="icon"></span>
+							Step 5: Configure Store / Prizes
+						</h3>
+						<p>
+							<a class="link" href="<?php echo $sn; ?>/dashboard/store<?php echo $strParamPath; ?>/caption/<?php print $strType;?>">
+								Click here
+							</a>
+							to configure your store prizes by installing predefined prizes and adding your own
+						</p>						
+                    </li>
+					<li>                   
+						<h3>
+							<span class="icon"></span>
+							Step 6: Print ID cards
+						</h3>
+						<p>
+							<a class="link" href="<?php echo $sn; ?>/ranks/ranksprintclasses<?php echo $strParamPath; ?>/caption/<?php print $strType;?>">
+								Click here
+							</a>
+							to print ID cards</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

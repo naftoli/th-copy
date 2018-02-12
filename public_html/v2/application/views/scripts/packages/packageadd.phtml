@@ -1,0 +1,146 @@
+<?php 
+	include "config.phtml";
+?>
+<script>
+function calculate_fees()
+{
+	var intPrice = 0;
+	
+	var arrAddonPrices =  $('.addon_fee');	
+	$("#price").val(0);
+	for (var intKey=0; intKey != arrAddonPrices.length; intKey++)
+	{
+		var arrInputs = $(arrAddonPrices[intKey]).children();
+		if($(arrInputs[0]).attr("checked"))
+		{
+			intPrice = parseFloat($(arrInputs[1]).val()) + parseFloat($("#price").val());
+			$("#price").val(intPrice);
+		}
+	}
+	$("#price").val(intPrice);
+}
+
+$(document).ready(function()
+{
+	$('#formaddpackage a.submit').click( function(e) {
+		e.preventDefault();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn; ?>/packages/packageadd/host_id/<?=$this->host_id?>/network_id/<?=$this->network_id?>',
+			dataType : "text",
+			data: $('#formaddpackage').serialize(),
+			success : function(response) {
+				if (response.match(/^[0-9]+$/)) {
+					$("#processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+				} else {
+					$("#processing_status").html(response).fadeIn("slow");
+				}
+			}
+		});
+	});
+});
+</script>
+<div class="slider">
+	<div class="col_title"><span>Add New Package</span></div>	
+	<div class="col_content camper">
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form name="formaddpackage" id="formaddpackage" method="post" action="">
+				<input type="hidden" name="institution" value="<?php print $this->intInstitution; ?>" />
+					<ul>
+
+						<li>
+							<span class="label">Package name:</span>
+							<span class="input"><input type="text" class="required" id="package_name" name="package_name" value="<?php echo $this->name; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Description:</span>
+							<span class="input"><input type="text" class="required" id="description" name="description" value="<?php echo $this->description; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Price:</span>
+							<span class="input"><input type="text" class="required" id="price" name="price" value="<?php echo $this->price; ?>" size="5" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Discount price:</span>
+							<span class="input"><input type="text" class="required" id="discount_price" name="discount_price" value="<?php echo $this->price; ?>" size="5" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Currency:</span>
+							<span class="input">
+								<select class="select" name="currency" id="currency">
+									<?php
+										$arrGrade = array('US','CDN');
+										foreach ($arrGrade as $strValue) {
+											print "<option>" . $strValue . "</option>";
+										}
+									?>
+								</select>
+							</span>
+							<div class="clear"></div>
+						</li>
+						
+						<li>
+							<span class="label">Offered to</span>
+							<span class="input">
+								<select class="select" name="offered_to" id="offered_to">
+									<?php
+										$arrGrade = array('Institutions','Students');
+										foreach ($arrGrade as $strValue) {
+											print "<option>" . $strValue . "</option>";
+										}
+									?>
+								</select>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<h1>Available items to add to this package</h1>
+						</li>
+<?php
+							$counter=0;
+							foreach($this->arrItems as $r)
+							{
+?>
+						<li>
+							<span class="input" style="width: 300px !important;">
+								<span class="addon_fee">
+									<input type="checkbox" class="required" id="item_id" name="item_id[<?php print $counter; ?>]" value="<?=$r->package_item_id?>" onClick="calculate_fees();"/>
+									<input type="hidden" id="price" value="<?php print $r->price; ?>">
+									<?=$r->name ?> - $<?= number_format($r->price)?> <?= $r->currency?>
+								</span>
+							</span>
+							<span class="label">Type:</span>
+							<span class="input">
+								<select class="select" name="type[<?php print $counter; ?>]" id="type">
+									<?php
+										$arrType = array('item','add-on');
+										foreach ($arrType as $strValue) {
+											print "<option>" . $strValue . "</option>";
+										}
+									?>
+								</select>
+							</span>	
+							<div class="clear"></div>
+						</li>
+<?php
+							$counter++;
+							}
+?>
+						<div id="processing_status"><?php if ($this->message){ echo $this->message . "<br>"; }?></div>
+						<li>
+							<span><a href="#" title="Save" class="button submit">Save</a></span>							
+							<div class="clear"></div>							
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

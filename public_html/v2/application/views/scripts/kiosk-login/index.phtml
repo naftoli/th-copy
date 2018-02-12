@@ -1,0 +1,88 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML DIR="LTR">
+<HEAD>
+<LINK href="/css/back-end/login.css" rel="stylesheet" type="text/css">
+<TITLE>Login - Tzivos Hashem Management System</TITLE>
+<script src="<?php print $sn; ?>/js/back-end/kiosk/jquery.core1.5.1.js" type="text/javascript"></script>
+<SCRIPT type="text/javascript">
+window.onload = scanFocus;
+window.onkeydown = scanFocus;
+function scanFocus() {
+	$("#user_code").focus();
+}
+/*
+function eKeyPress(evt) {
+	var charCode = (evt.which) ? evt.which : event.keyCode
+	if (charCode == 13)
+		$("form").trigger("submit");
+}
+*/
+scanFocus();
+$(document).ready(function() {
+	$("form").submit(function(e) {
+		e.preventDefault();
+		if ($("#user_code").val().length < 1)
+		{	
+			$("#processing_status").html('Please try again.');
+			return;
+		}
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#processing_status").html('Loading...').fadeIn(),
+			url : '<?php echo $sn . "/kiosk-login/index" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('form').serialize(),
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					alert("Sorry, there was an error: VKL-I101-3RR3RE");
+					alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					alert("Sorry, there was an error: VKL-I102-SDF8BX");
+					alert(strResponse);
+					return;
+				} else if (arrResponse["success"] == "true") {
+					$("#processing_status").html('Loading. Please wait...').delay(15000).queue(function() {
+						$(this).dequeue().html("Still trying...");
+					});
+					$("#processing_status").delay(30000).queue(function() {
+						$(this).dequeue().html("There seems to be a connection issue.");
+					});
+					window.location.href = "<?php print $sn . "/kiosk-main/index" . $strParamPath; ?>";
+				} else {
+					$("#processing_status").html('Failed. Please try again.').delay(3000).fadeOut();;
+				}
+			}
+		});
+	});
+});
+</SCRIPT>
+</HEAD>
+<BODY class="kiosk">
+	<DIV id="header">
+		<DIV></DIV>
+	</DIV>
+	<DIV STYLE="text-align: center;">
+		<NOSCRIPT>
+			<P STYLE="color: red; font-size: larger;">Notice: You have javascript disabled. Some parts of the site will not function without javascript.</P>
+		</NOSCRIPT>
+
+		<FORM>
+			<DIV id="body" class="login">
+				<DIV style="height:48px">
+					<INPUT type="text" name="user_code" id="user_code" title="Welcome! Please scan your rank card" size=25 maxlength=20 autocomplete="off">
+					<p id="processing_status" style="display:none"></p>
+				</DIV>
+			</DIV>
+		</FORM>
+	</DIV>
+</BODY>
+</HTML>

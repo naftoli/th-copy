@@ -1,0 +1,469 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$role = new Roles();
+	$boolReadonly = $this->boolReadonly;
+?>
+<div class="slider" id="announcements_posteditor">
+	<style type="text/css">
+		#announcements_posteditor .button {
+			margin:4px;
+			min-width: 70px;
+			text-align: center;
+		}
+		#announcements_posteditor li {
+			padding:12px 6px;
+		}
+		#announcements_posteditor .wysiwyg {
+			margin-bottom: 5px;
+		}
+		#announcements_posteditor input.headline {
+			width: 672px !important;
+			margin:4px 0 2px 0;
+			font-size: 14pt;
+			padding:5px;
+			min-height: 20px;
+		}
+		#announcements_posteditor .noinput {
+			color: gray;
+		}
+		#announcements_posteditor #new_announcements_students .title {
+			padding:10px 2px 0 0;
+		}
+		#announcements_posteditor .button {
+			cursor: pointer;
+		}
+		#announcements_posteditor .alert {
+			background: rgba(255, 255, 255, 0.4);
+			font-size: 13pt;
+			padding:8px;
+			text-align: left;
+		}
+		#announcements_posteditor .student_image_list div {
+			display: inline-block;
+			overflow:hidden;
+			width:50px;
+			height:50px;
+		}
+		#announcements_posteditor .text_only {
+			font-size: 18pt;
+			font-weight: bold;
+		}
+		#announcements_posteditor .action_pod {
+			width:100%;
+			margin:2px 0;
+			height: 30px;
+		}
+		#announcements_posteditor .action_pod .action_td {
+			width:110px;
+			text-align: center;
+		}
+		#announcements_posteditor .action_pod .button {
+			margin:0;
+			float:none;
+		}
+		#announcements_posteditor .action_pod td {
+			padding:2px;
+			padding-left:10px;
+			background-color: #ccc;
+		}
+		#announcements_posteditor .action_pod input {
+			width: 290px;
+			padding:4px;
+			border-width:1px;
+		}
+		#announcements_posteditor .action_pod select {
+			width: 300px;
+			padding:3px;
+			border-width:1px;
+		}
+	</style>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			var intAnnouncementId = <?php print isset($this->objAnnouncement->announcement_id) ? $this->objAnnouncement->announcement_id : 0; ?>;
+			$('#announcements_posteditor .message:not(.hidden)').delay(3000).fadeOut();
+			CKEDITOR.config.height = 550;
+			var posteditor = CKEDITOR.appendTo($('.slider:last .wysiwyg .pane')[0], null, "<?php print preg_replace_all('/\n/', "\\\\n", @$this->objAnnouncement->content); ?>");
+			CKEDITOR.config.readOnly = <?php print $boolReadonly ? 'true' : 'false'; ?>;
+			$('.slider:last .noinput').click(function () {
+				if ($(this).is('.noinput'))
+					$(this).removeClass('noinput').val('');
+			});
+			$('.slider:last .submit').click(function () {
+				var arrParams = {
+					'remove_publish' : $(this).hasClass('remove_publish'),
+					'publish' : $(this).hasClass('publish'),
+					'delete' : $(this).hasClass('delete'),
+					'draft' : $(this).hasClass('draft'),
+					'headline' : $('.slider:last input.headline').val(),
+					'content' : posteditor.getData(),
+					'associate_students' : $('#new_announcements_students_input').val()
+				};
+				$.ajax({
+					type : "POST",
+					cache : false,
+					url : '<?php print $sn . '/announcements/posteditor/setter/true/ajax/true' . $strParamPath; ?>',
+					dataType : "text",
+					data: arrParams,
+					success : function(strResponse) {
+						try {
+							var arrData = jQuery.parseJSON(strResponse);
+						} catch(e) {
+							$.alert(strResponse);
+							return;
+						}
+						if (typeof(arrData) != "object") {
+							$.alert(arrData);
+							return;
+						} else if (arrData.success) {
+							slideRefresh('<?php print $sn . '/announcements/posteditor/saved/true/announcement_id/'; ?>' + arrData.announcement_id);
+						} else {
+							$.alert(arrData);
+							return;
+						}
+					}
+				});
+			});
+			$('.slider:last .student_image_list img').hover(function (e) {
+				var strTitle = $(this).attr('tip');
+				if (!strTitle.length)
+					return;
+				var objPosition = $(this).position();
+				var objDiv = $("<div class='tooltip_workaround' />")
+					.css({
+						'position' : 'absolute',
+						'white-space' : 'nowrap',
+						'top' : objPosition.top + 50,
+						'left' : objPosition.left,
+						'background-color' : '#fff',
+						'border' : '1px solid black',
+						'z-index' : 10000,
+						'padding' : 6,
+						'display' : 'none'
+					})
+					.html(strTitle);
+				$('.slider:last').append(objDiv);
+				$(objDiv).fadeIn();
+
+			});
+			$('.slider:last .student_image_list img').mouseout(function () {
+				$('.slider:last .tooltip_workaround').stop().fadeOut().queue(function () {
+					$(this).dequeue().remove();
+				});
+			});
+			$('.slider:last #classes').change(function () {
+				var arrParams = {
+					'publish_to_classes' : $(this).val(),
+					'announcement_id' : intAnnouncementId
+				};
+				$.ajax({
+					type : "POST",
+					cache : false,
+					url : '<?php print $sn . '/announcements/posteditor/setter/true/ajax/true' . $strParamPath; ?>',
+					dataType : "text",
+					data: arrParams,
+					success : function(strResponse) {
+						try {
+							var arrData = jQuery.parseJSON(strResponse);
+						} catch(e) {
+							$.alert(strResponse);
+							return;
+						}
+						if (typeof(arrData) != "object") {
+							$.alert(arrData);
+							return;
+						} else {
+							if (!arrData.success)
+								$.alert(arrData);
+						}
+					}
+				});
+			});
+			$('.slider:last .deny_request').click(function () {
+				var arrParams = {
+					'deny_request' : true,
+					'reason' : $('.slider:last .deny_request_reason').val(),
+					'announcement_id' : intAnnouncementId
+				};
+				$.ajax({
+					type : "POST",
+					cache : false,
+					url : '<?php print $sn . '/announcements/posteditor/setter/true/ajax/true' . $strParamPath; ?>',
+					dataType : "text",
+					data: arrParams,
+					success : function(strResponse) {
+						try {
+							var arrData = jQuery.parseJSON(strResponse);
+						} catch(e) {
+							$.alert(strResponse);
+							return;
+						}
+						if (typeof(arrData) != "object") {
+							$.alert(arrData);
+							return;
+						} else {
+							if (!arrData.success)
+								$.alert(arrData);
+						}
+					}
+				});
+			});
+		});
+	</script>
+	<div class="col_title">
+		<span><?php print isset($this->objAnnouncement) ? 'Announcement Manager' : 'New Announcement'; ?></span>
+	</div>
+	<div class="col_content camper">
+<?php
+	if (@$this->objAnnouncement->status == 'Published')
+	{
+?>
+		<div class="module form lists alert">
+			<div class="module_content">
+				Published
+			</div>
+		</div>
+<?php
+	}
+?>
+		<div class="module form lists alert message<?php print !isset($this->arrGet['saved'])?' hidden':''; ?>">
+			<div class="module_content">
+				Saved
+			</div>
+		</div>
+		<input type="hidden" class="announcement_id" value="<?php print @$this->arrGet['announcement_id']; ?>" />
+		<div class="module form lists ">
+			<div class="module_content list">
+				<ul>
+					<li class="headline">
+<?php
+	$strHeadline = '';
+	if ($this->objAnnouncement)
+		$strHeadline = $this->objAnnouncement->headline;
+		if ($boolReadonly) {
+			// read only
+?>
+						<div class="text_only"><?php print $strHeadline; ?></div>
+<?php
+		}
+		else
+		{
+?>
+						<input type="text" placeholder="Insert headline" value="<?php print $strHeadline; ?>" class="headline<?php if (!$this->objAnnouncement) print ' noinput'; ?>" />
+<?php
+		}
+?>
+					</li>
+<?php
+	if ($boolReadonly)
+	{
+		if (count($this->arrAnnouncementStudents))
+		{
+?>
+					<li class="student_image_list">
+<?php
+			foreach ($this->arrAnnouncementStudents as $obAnnouncementjStudent)
+			{
+				if (!isset($this->arrStudents[$obAnnouncementjStudent->user_id]))
+					continue;
+				$objStudent = $this->arrStudents[$obAnnouncementjStudent->user_id];
+				$intImage = $objStudent->image_id;
+				if (!$intImage)
+					$intImage = '0.gif';
+?>
+						<div><img tip="<?php print $objStudent->first_name . ' ' . $objStudent->last_name; ?>" src="<?php print $sn . "/imgs/v/src/" . $intImage; ?>" style="height:50px;width:auto;" /></div>
+<?php
+			}
+?>
+					</li>
+<?php
+		}
+		if ($this->objCampaign)
+		{
+			$intCampaignImage = $this->objCampaign->image_id ? $this->objCampaign->image_id : '0.gif';
+?>
+					<li>
+						<table border="0" style="font-size:12pt;">
+							<tr>
+								<td width="60"><img src="<?php print $sn . "/imgs/v/w/40/h/40/src/" . $intCampaignImage; ?>" /></td>
+								<td>
+									<div style="margin-top:-4px;">
+										<?php print $this->objTask ? 'Campaign: ' : ''; ?>
+										<?php print $this->objCampaign->campaign_name; ?>
+<?php
+			if ($this->objTask)
+			{
+?>
+										<br/>Task: <?php print $this->objTask->task_name; ?>
+<?php
+			}
+?>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</li>
+<?php
+		}
+	}
+	else
+	{
+?>
+					<li id="new_announcements_students">
+						<div style="padding:0 5px">
+							<input type="hidden" id="new_announcements_students_input" value="<?php print $this->strStudentsOutput; ?>" />
+							<a class="link" href="<?php print $sn . "/checklist/users/permission/student/is_active/1/container/new_announcements_students/inputname/new_announcements_students_input" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title">Associate Students</div>
+								<div class="lable_count" style="float:right;background-color:#fff;border:1px solid gray;margin:5px;padding:2px 12px 2px 12px;text-align:center;"><span><?php print count($this->arrAnnouncementStudents); ?></span> Selected</div>
+							</a>
+						</div>
+					</li>
+<?php
+	}
+?>
+					<li class="wysiwyg">
+						<div class="pane"></div>
+					</li>
+<?php
+	if (
+		!isset($this->objAnnouncement)
+		|| $this->objAnnouncement->status == 'Saved'
+	) {
+		if ($role->isAllowed('Institution Administrator'))
+		{
+?>
+					<li style="padding:8px;">
+						<div class="button submit save">Save Draft</div>
+						<div class="button submit school_publish"><?php print text("Publish to [|School|]"); ?></div>
+						<div class="button submit school_publish"><?php print text("Request Publish to [|Network|]"); ?></div>
+						<div class="button submit delete" style="float:right;">Delete</div>
+					</li>
+<?php
+		}
+		else if ($role->isAllowed('Teacher'))
+		{
+?>
+					<li style="padding:8px;">
+						<div class="button submit save">Save Draft</div>
+						<div class="button submit school_publish"><?php print text("Publish to [|Class|]"); ?></div>
+						<div class="button submit school_publish"><?php print text("Request Publish to [|School|]"); ?></div>
+						<div class="button submit hq_publish">Request HQ Publish</div>
+						<div class="button submit delete" style="float:right;">Delete</div>
+					</li>
+<?php
+		}
+	}
+	else if ($this->objAnnouncement->status == 'Publish Request')
+	{
+		if ($role->isAllowed('Institution Administrator'))
+		{
+?>
+					<li style="padding:8px;">
+						<div class="button submit save">Save Draft</div>
+						<div class="button submit school_publish"><?php print text("Publish to [|School|]"); ?></div>
+						<div class="button submit school_publish"><?php print text("Request Publish to [|Network|]"); ?></div>
+						<div class="button submit delete" style="float:right;">Delete</div>
+					</li>
+<?php
+		}
+		else if ($role->isAllowed('Teacher'))
+		{
+?>
+					<li id="checklist_classes">
+						<div style="padding:0 5px">
+							<input type="hidden" id="classes" value="<?php print $this->strAnnouncementClasses; ?>" />
+							<a class="link" href="<?php print $sn . "/checklist/classes/is_active/1/container/checklist_classes/inputname/classes" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title">Publish to Classes</div>
+								<div class="lable_count" style="float:right;background-color:#fff;border:1px solid gray;margin:5px;padding:2px 12px 2px 12px;text-align:center;"><span><?php print count($this->arrAnnouncementClasses); ?></span> Selected</div>
+							</a>
+						</div>
+					</li>
+					<li style="">
+						<div>
+							<table class="action_pod">
+								<tr>
+									<td>
+										<b>Deny the publish request</b>
+									</td>
+									<td width="120">
+										<input type="text" class="deny_request_reason" placeholder="Reason" />
+									</td>
+									<td class="action_td" style="text-align:right">
+										<div class="button submit deny_request">Deny Request</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<div>
+							<table class="action_pod">
+								<tr>
+									<td>
+										<b>Request ability to publish to the school.</b>
+									</td>
+									<td class="action_td" style="text-align:right">
+										<div class="button submit remove_publish">Request</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</li>
+<?php
+		}
+	}
+	else if ($this->objAnnouncement->status == 'Published')
+	{
+		if ($role->isAllowed('Super Administrator'))
+		{
+?>
+					<li style="padding:8px;">
+						<div class="button submit publish">Save</div>
+						<div class="button submit remove_publish" style="float:right;">Remove Publishing</div>
+					</li>
+<?php
+		}
+		else
+		{
+?>
+					<li style="padding:8px;">
+						<div class="button submit save draft" style="float:right;">Remove Publishing</div>
+						<div class="button submit delete" style="float:right;">Delete</div>
+					</li>
+<?php
+		}
+	}
+	else if ($this->objAnnouncement->status == 'Denied Request')
+	{
+		if ($role->isAllowed('Super Administrator'))
+		{
+?>
+					<li style="padding:8px;">
+						<div class="button submit publish">Publish</div>
+					</li>
+<?php
+		}
+		else
+		{
+?>
+					<li style="padding:8px;">
+						<div class="button submit save">Un-Deny</div>
+						<div class="button submit delete" style="float:right;">Delete</div>
+					</li>
+<?php
+		}
+	}
+	else if ($this->objAnnouncement->status == 'Deleted')
+	{
+?>
+					<li style="padding:8px;">
+						<div class="button submit save draft">Save as Draft</div>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,60 @@
+<?php 
+include "config.phtml";
+include "parameters.phtml";	
+?>
+
+<div class="slider">
+	
+	<div class="col_title">
+		<span>Campaigns</span>
+	</div>
+	
+	<div class="col_content">
+		<div id="lists" class="module lists forms">			
+			<div class="module_content">
+				<h1><strong>Please read the following instructions before proceeding</strong></h1>
+				<ul>
+					<li>
+						Add the campaigns you would like to give out points for (such as Davening, Learning, Sports etc.)
+					</li>
+					<li>
+						Edit which tasks you would like to give out points for (i.e for Learning  you can give out points for coming on time and for learning well)     
+					</li>
+					<li>
+						Edit how many points you would like to give out for each task
+					</li>
+					<li>
+						If you have any other campaigns that you would like us to add to the system please email cth@tzivoshashem.org
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div id="lists" class="module lists forms">			
+			<div class="module_content">				
+				<ul>
+					
+<?php
+	if ($this->objRoles->isAllowed('Institution Administrator'))
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/campaigninstall<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add / Remove Campaigns</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/incrementalscampaignlist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Manage Campaigns</div>
+						</a>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

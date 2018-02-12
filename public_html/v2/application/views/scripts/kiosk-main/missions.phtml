@@ -1,0 +1,214 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+
+	$objUtilities = new Utilities();
+
+	function decimal_to_fraction ($number)
+	{
+		if (!preg_match("/\./", $number))
+			return "<sub>" . $number . "</sub>";
+		list ($whole, $numerator) = explode ('.', $number);
+
+		$denominator = 1 . str_repeat (0, strlen ($numerator));
+
+		$GCD = GCD ($numerator, $denominator);
+
+		$numerator /= $GCD;
+		$denominator /= $GCD;
+
+		return sprintf ('%d <sup>%d/%d</sup>',
+			$whole, $numerator, $denominator);
+	}
+
+	function GCD ($a, $b)
+	{
+		while ( $b != 0)
+		  {
+			$remainder = $a % $b;
+			$a = $b;
+			$b = $remainder;
+		  }
+		return abs ($a);
+	}
+?>
+<script type="text/javascript">
+	function sliderPage() {
+		return false;
+	}
+</script>
+<script type="text/javascript" src="<?=WEB_ROOT?>/js/front-end/kiosk/easySlider1.7.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#slider_inside").easySlider({
+			numeric: true,
+			controlsBefore:    '<div class="page_dots">',
+			controlsAfter:    '</div>'
+		});
+		var itemHeight = 88;
+		var itemCol = 7
+		var currentTop = 0;
+		var containerHeight = Math.ceil($("#slider_inside > div > div").length / itemCol) * itemHeight;
+
+		$("a#button_up").click(function () {
+
+			if (Math.abs(currentTop) > 0) {
+				$("#slider_inside > div").animate({"top":currentTop + itemHeight},{queue:false});
+				currentTop += itemHeight;
+			}
+			else {
+				$("#slider_inside > div").animate({"top":currentTop + (itemHeight/2)},"fast").animate({"top":currentTop},"fast");
+			}
+
+		});
+
+		$("a#button_dn").click(function () {
+
+			if (Math.abs(currentTop) < (containerHeight - itemHeight)) {
+				$("#slider_inside > div").stop().animate({"top":currentTop - itemHeight},{queue:false});
+				currentTop -= itemHeight;
+			}
+			else {
+				$("#slider_inside > div").stop().animate({"top":currentTop - (itemHeight/2)},"fast").animate({"top":currentTop},"fast");
+			}
+
+		});
+
+	 });
+</script>
+
+<div id="page_title">Missions</div>
+<div class="three_column padding_top">
+	<div class="content">
+		<div class="slider_box">
+			<ul class="missions">
+				<li>
+					<div class="slider_title"><?php print $this->arrSchedule["medal"]->medal_name; ?></div>
+					<div class="mission_side">
+<?php
+	if ($this->arrSchedule["medal"]->medal_image_id)
+	{
+?>
+						<span class="badge" style="position:absolute;"></span>
+						<img src="<?php print WEB_ROOT . "images/show-image/image_id/" . $this->arrSchedule["medal"]->medal_image_id; ?>" />
+<?php
+	}
+	else
+		print $this->arrSchedule["medal"]->medal_name . " (" . count($this->arrSchedule["missions"]) . ")";
+
+						/*
+						<div style='background: url(<?php print WEB_ROOT . "images/show-image/image_id/" . $this->arrSchedule["medal"]->medal_image_id; ?>);'>
+							<span class="badge"><?php print count($this->arrSchedule["missions"]); ?></span>
+						</div>
+						*/
+						?>
+						<a id="button_up">Up</a>
+						<a id="button_dn">Down</a>
+					</div>
+					<div id="slider_inside" class="mission_boxes">
+						<div id="missions_container">
+<?php
+	$intMissionNumber = $this->intMissionStart;
+	//print "intMissionNumber: " . $intMissionNumber;
+	$intMissionsLeft = count($this->arrSchedule["missions"]);
+	foreach ($this->arrSchedule["missions"] as $intKey => $arrMission)
+	{
+		$objParshos = $objUtilities->epoch_parshos($arrMission["epoch"]);
+?>
+							<div class='mission'>
+								<a href="<?php print WEB_ROOT . "kiosk-main/tasks/missiontime/" . $arrMission["epoch"] . "/medal/" . ($this->arrSchedule["medal"]->medal_hierarchy + 1) . $strParamPath; ?>">
+									<div class='number'>#<?php print ($intKey + 1); ?></div>
+<?php
+		if ($objParshos)
+		{
+?>
+									<div class='date'><nobr><?php print $objParshos->name; ?></nobr></div>
+									<div class='date'><?php print $objParshos->year; ?></div>
+<?php
+		}
+		else
+		{
+?>
+									<div class='date'><?php print date("n/j/Y", $arrMission["epoch"]); ?></div>
+<?php
+		}
+?>
+									<div class='date'>Ln <?php
+		// Show the line number the user is currently on
+		//var_dump($arrMission["tasks"]);
+		$intStartIncrement = reset($arrMission["tasks"]);
+		$intEndIncrement = end($arrMission["tasks"]);
+		$intFantomIncrement = $intStartIncrement + $arrMission["velocity"];
+		if ($intFantomIncrement > $intEndIncrement)
+		{
+			$intEndIncrement = $intFantomIncrement;
+		}
+		if ($intStartIncrement != $intEndIncrement
+			&& $intStartIncrement != $intEndIncrement - $arrMission["velocity"])
+			$intStartIncrement = $intEndIncrement;
+
+		print floor($this->arrBookLines[floor($intStartIncrement)]->line_number) . "<br>";
+
+		if ($intStartIncrement-floor($intStartIncrement) > 0)
+		{
+			print (($intStartIncrement-floor($intStartIncrement)+1)*100-100) . "%";
+		}
+		else if ($arrMission["velocity"] < 1)
+		{
+			print "0%";
+		}
+		print "</div>";
+		if (isset($this->arrPendingHash[$arrMission["epoch"]]))
+			print "<div class='check_off'></div>";
+		if ($this->intLatestMission >= $arrMission["mission_number"]-1)
+		{
+			print "<div class='check_on'></div>";
+			$intMissionsLeft--;
+		}
+?>
+									<!--div class='meter' style='background-position:100% 0;'></div-->
+								</a>
+							</div>
+<?php
+	}
+?>
+<script type="text/javascript">$('.badge').html(<?php print $intMissionsLeft; ?>);</script>
+<?php
+	if ($this->medal_hierarchy > 1)
+	{
+?>
+							<div class="mission button_back">
+								<form name="previous_medal">
+									<a href="<?php
+		print WEB_ROOT . "kiosk-main/missions/campaign_id/" . $this->campaign_id . "/medal/" . ($this->medal_hierarchy - 1);
+									?>">Previous<br />Medal</a>
+								</form>
+							</div>
+<?php
+	}
+	if ($this->intMedals >= $this->medal_hierarchy)
+	{
+?>
+							<div class="mission button_back">
+								<form name="netx_medal">
+									<a href="<?php
+		print WEB_ROOT . "kiosk-main/missions/campaign_id/" . $this->campaign_id . "/medal/" . ($this->medal_hierarchy + 1);
+									?>">Next<br />Medal</a>
+								</form>
+							</div>
+<?php
+	}
+?>
+							<div class="mission button_back">
+							   <form name="back_to_medals">
+								   <a href="<?php print WEB_ROOT . "kiosk-main/medals" . $strParamPath; ?>">Back to Medals</a>
+							   </form>
+							</div>
+						</div> <!-- missions_container -->
+					</div> <!-- mission_boxes -->
+				</li>
+			</ul>
+		</div> <!-- slider_box -->
+	</div> <!-- content -->
+</div> <!-- three_column padding_top -->
+<!--font color="#FFF"><?php print $this->intBMTime; ?></font-->

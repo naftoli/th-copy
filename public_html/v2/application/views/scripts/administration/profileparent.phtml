@@ -1,0 +1,156 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objUserSession = new Zend_Session_Namespace("user_session_data");
+?>
+<script language="javascript">
+function fn_remove_privileges(intUserID) {
+	jQuery.data(document.body, "intTempID", intUserID);
+	$.blockUI({ message: $('.slider:last #question_privileges')});
+}
+$(document).ready(function()
+{
+	$('.slider:last .module#module-alerts li h3').nextAll().hide();
+	$('.slider:last .module#module-alerts li h3').click(function(){
+		$(this).nextAll().slideToggle('fast');
+		$(this).parents('li').toggleClass('open');
+	});
+	$('.slider:last #question_privileges #option1').click(function(e) {
+		e.preventDefault();
+		var intChildID = jQuery.data(document.body, "intTempID");
+		$.get("<?php print $sn . "/administration/profileparent/removeassociation/"; ?>" + intChildID,
+			function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/) && strResponse > 0) {
+					slideRefresh("<?php print $sn . "/administration/profileparent/"; ?>");
+				} else {
+					alert("Sorry, there was an error: VA-PP101-DS98DF");
+					//alert(strResponse);
+				}
+			}
+		);
+		$.unblockUI();
+	});
+	$('.slider:last #question_privileges #option2').click(function(e) {
+		e.preventDefault();
+		$.unblockUI();
+	});
+<?php
+	if (count($this->arrAwaitingActions))
+	{
+?>
+	$(".slider:last #awaiting_actions").trigger("click");
+<?php
+	}
+?>
+});
+</script>
+
+<div class="slider">
+	<div class="col_title">
+		<span><?php print $this->objUser->first_name . " " . $this->objUser->last_name; ?></span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">			
+			<div class="module_content">
+				<h1><strong><?php
+	print $this->objInstitution->name . " - " . $this->objPermission->permission;
+?></strong></h1>
+				<ul>
+					<li>Welcome <?php print $this->objUser->first_name . " " . $this->objUser->last_name; ?>, you are currently logged in as a <?php print $this->objPermission->permission; ?>. From here you can enroll your children into campaigns, mark and view their reports.</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="module" id="module-alerts">
+			<div class="module_content list_expand numbered">
+				<ul>
+<?php
+	// Don't display this if it came from mashpia
+	if (!$objUserSession->referer_url)
+	{
+?>
+					<li>
+						<h3>
+							<span class="icon"></span> Your Account Information (<?php print count($this->arrChildren); ?> enrolled children)
+						</h3>
+						<p>
+							<div id="lists" class="module lists forms">
+								<div class="module_content">
+									<ul>
+										<li>
+											<a class="link" href="<?php echo $sn; ?>/administration/parentedit<?php print $strParamPath; ?>">
+												<div class="icon"></div>
+												<div class="title">Change Account Information</div>
+											</a>
+										</li>
+<?php
+		foreach ($this->arrChildren as $objChild)
+		{
+?>
+										<li>
+											<a href="#" onclick="fn_remove_privileges(<?php print $objChild->user_id; ?>)">
+												<div class="icon"></div>
+												<div class="title">Remove Parent Account for <?php print $objChild->first_name . " " . $objChild->last_name; ?>	</div>
+											</a>
+										</li>
+<?php
+		}
+?>
+										<li>
+											<a href="#" id="add_privileges">
+												<div class="icon"></div>
+												<div class="title">Add Another Child Account</div>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</p>
+					</li>
+<?php
+	}
+?>
+					<li>
+						<h3 id="awaiting_actions">
+							<span class="icon"></span> Awaiting Actions (<?php print count($this->arrAwaitingActions); ?>)
+						</h3>
+						<p>
+							<div id="lists" class="module lists forms">
+								<div class="module_content">
+									<ul>
+<?php
+	if (!count($this->arrAwaitingActions))
+	{
+?>
+										<li>
+											No action required at this time.
+										</li>
+<?php
+	}
+	foreach ($this->arrAwaitingActions as $arrAwaitingAction)
+	{
+?>
+										<li>
+											<a class="link" href="<?php echo $sn . $arrAwaitingAction["link"] . $strParamPath; ?>">
+												<div class="icon"></div>
+												<div class="title"><?php echo $arrAwaitingAction["text"]; ?></div>
+											</a>
+										</li>
+<?php
+	}
+?>
+									</ul>
+								</div>
+							</div>
+						</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="question_privileges" class="question">
+			<p>Are you sure you would like to remove your privileges as parent of <?php print $this->objUser->first_name . " " . $this->objUser->last_name; ?>?</p>
+			<p><a id="option1" class="button">Yes, remove privileges.</a></p>
+			<p><a id="option2" class="button">No, do not remove privileges.</a></p>
+		</div>
+	</div>
+</div>

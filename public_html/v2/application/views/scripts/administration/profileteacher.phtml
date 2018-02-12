@@ -1,0 +1,255 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objUserSession = new Zend_Session_Namespace("user_session_data");
+?>
+<script language="javascript">
+$(document).ready(function()
+{
+	$('#profileteacher .module_accordion li h3').nextAll().hide();
+	$('#profileteacher .module.accordion li h3').click(function(){
+		$(this).nextAll().slideToggle('fast');
+		$(this).parents('li').toggleClass('open');
+	});
+});
+</script>
+
+<div class="slider" id="profileteacher">
+	<div class="col_title">
+		<span><?php print ucwords($this->objUser->first . " " . $this->objUser->last); ?></span>
+	</div>
+	<div class="col_content">
+		<!--
+<?php
+	if (!count($this->arrUserClasses))
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li style="font-size:12pt;padding:8px">
+						<?php print text("<span style='color:darkred'><b>Notice:</b></span> The administration has not yet assigned you to any [|classes|]. Once your account has been assign to a [|class|], you will be able to re-log in and access your [|students|]."); ?>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+-->
+		<div id="lists" class="module lists forms">
+			<div class="module_content" style="padding-top: 6px;">
+				<h1><strong><?php
+	print $this->objInstitution->school_name . "<br />" . "Platoon Commander : " . $this->objUser->class_grade;
+	if (!empty($this->objUser->class_sub)) print "-" . $this->objUser->class_sub;
+?></strong></h1>
+				<ul>
+					<li>Welcome <?php print $this->objUser->first . " " . $this->objUser->last; ?>, you are currently logged in as a Platoon Commander.</li>
+				</ul>
+			</div>
+		</div>
+		
+		<?php
+		$subjects = array(
+			"Tehillim"			=>	"tehillim club",
+			"Tefilla"   		=>  "Tefilla", 
+			"Mivtzoim" 			=>  "Mivtzoim", 
+			"Niggunim"  		=>  "Niggunim", 
+			"Hiskashrus"  		=>  "hiskashrus", 
+			"Sefer Hamitzvos"  	=>  "sefer hamitzvos",
+			"Tanya"				=> 	"Tanya",  
+			"Yomei Dipagra"  	=>  "Yom Dipagra", 
+			"Avos Ubanim"  		=>  "Father Son", 
+			"Cheshbon Hanefesh" =>  "Cheshbon Hanefesh", 
+			"Chitas"  			=>  "Chitas", 
+			"Brias Haguf" 		=> 	"Brias Haguf"
+		);
+		?>
+		
+		<h2>Resources</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content" style="padding: 10px; font-size: 14px;">
+				<a href="https://www.dropbox.com/sh/0sfxooey3wxf5sy/AADbl9ROU-V0bnK0oVBD97e9a?dl=0" target="_blank">Weekly Resources - Toldos</a><br />
+				<a href="https://www.dropbox.com/sh/c2g76cp76it1bf6/AABw7AHHEKWfahv-yIFXV8Qsa?dl=0" target="_blank">All Resources for 5778</a><br />
+				<a href="http://mashpia.com/chidon/marketing.php" target="_blank">Chidon Resources</a><br />
+				<a href="https://www.dropbox.com/sh/9038psp9g41iyze/AACG5AuLuheWe3jd0hdQTvtea?dl=0">Shabbos Mevorchim Tehillim Resources</a><br />
+				<img src="/v2/images/back-end/admin/calendar/December.jpg" width="684" />
+				<!--
+				<?php foreach ($subjects as $subject => $img) :	?>
+					<ul>
+						<li>
+							<div style="float: left; margin-right: 20px;">
+								<img src="/mission_report/campaignLogos/<?=$img?>.png" width="50" />
+							</div>
+							<div style="font-size: 14px; margin-top: 15px;">
+								<?php if ($subject == 'Niggunim') { ?>
+								<a target="_blank" href="https://www.dropbox.com/home/Resources/Resources%205777/Niggunim">Niggunim Resources</a>
+								<?php
+								} else {
+									echo $subject . " Resources";
+								}
+								?>
+							</div>
+	
+						</li>
+					</ul>
+				<? endforeach; ?>
+				-->
+			</div>
+		</div>
+		
+		<h2>View Orders</h2>
+		<!--View orders -->
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/ordersonline<?php print $strParamPath; ?>/class_id/<?php print $this->class_id; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View Orders"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!--
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn . "/users/editor/user_type/teacher/user_types/teacher/user_id/" . $objUserSession->user_id . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">
+								Edit my Info
+							</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!--
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a target="_blank" href="<?php echo $sn; ?>/hebrewschools/index/tstyle/<?php print $this->tstyle; ?>/institution_id/<?php print $objUserSession->institution_id; ?>">
+						  <div class="icon"></div>
+						  <div class="title" style="width:650px"><?php print text("Open kiosk page in a new tab"); ?></div>
+						  <div class="help info" title="<?php print text("The kiosk page is the front end that the students can access."); ?>"></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="module accordion">
+			<div class="module_content list_expand numbered">
+				<form>
+					<ul>
+						<li>
+							<h3>
+							<span class="icon"></span> My classes
+							</h3>
+							<p>
+								<div id="lists" class="module lists forms">
+									<div class="module_content">
+										<ul>
+<?php
+	if (!count($this->arrClasses))
+	{
+?>
+											<li>
+												Your are not assigned to any classes.
+											</li>
+<?php
+	}
+	foreach ($this->arrClasses as $objClass)
+	{
+?>
+											<li>
+												<a class="link" href="<?php echo $sn . '/menu/users2/is_registered/1/is_active/1/permission/student/url/' . dblencode("users/editor/user_type/student/user_types/student" . $strParamPath) . '/tstyle/hebrewschool1/class_id/' . $objClass->class_id; ?>">
+													<div class="icon"></div>
+													<div class="title"><?php echo $objClass->grade . ' ' . $objClass->sub; ?></div>
+												</a>
+											</li>
+<?php
+	}
+?>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+		-->
+<?php
+/*
+if ($this->boolNoClass)
+{
+?>
+		<div class="module">
+			<div class="module_content">
+				<ul>
+					<li>
+						<b>Sorry...<br />Administration must assign you to a class to continue.</b>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+}
+else
+{
+?>
+		<div class="module" id="module_accordion">
+			<div class="module_content list_expand numbered">
+				<form>
+					<ul>
+						<li>
+							<h3 id="awaiting_actions">
+							<span class="icon"></span> Awaiting Actions (<?php print $this->intTotalActions . ")" . (count($this->arrAwaitingActions) < $this->intTotalActions ? " &nbsp;results limited to 25" : ""); ?>
+							</h3>
+							<p>
+								<div id="lists" class="module lists forms">
+									<div class="module_content">
+										<ul>
+<?php
+	if (!count($this->arrAwaitingActions))
+	{
+?>
+											<li>
+												No action required at this time.
+											</li>
+<?php
+	}
+	foreach ($this->arrAwaitingActions as $arrAwaitingAction)
+	{
+?>
+											<li>
+												<a class="link" href="<?php echo $sn . $arrAwaitingAction["link"]; ?>">
+													<div class="icon"></div>
+													<div class="title"><?php echo $arrAwaitingAction["text"]; ?></div>
+												</a>
+											</li>
+<?php
+	}
+?>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+<?php
+}
+ *
+ */
+?>
+	</div>
+</div>

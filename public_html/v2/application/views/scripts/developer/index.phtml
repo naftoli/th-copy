@@ -1,0 +1,139 @@
+<?php
+	if (empty($this->tstyle))
+		$this->tstyle = "chabadhebrewschool";
+	$title = "Mashpia Developer Resources";
+	include "dashboard_header.phtml";
+	include "config.phtml";
+	include "parameters.phtml";
+	global $arrAppDetails;
+	$arrDetails = $arrAppDetails[$this->tstyle];
+?>
+<script type="text/javascript">
+var GLOBAL_SLIDES = {};
+$(document).ready(function()
+{
+	$('#email').focus();
+	$('#footer_links a').mouseover(function () {
+		$(this).css({
+			'color' : '#000'
+		});
+	});
+	$('#footer_links a').mouseout(function () {
+		$(this).css({
+			'color' : '#555'
+		});
+	});
+});
+</script>
+<script type="text/javascript" src="<?php print $sn; ?>/js/scripthighlighter/shCore.js"></script>
+
+<script type="text/javascript" src="<?php print $sn; ?>/js/scripthighlighter/shBrushJScript.js"></script>
+<script type="text/javascript" src="<?php print $sn; ?>/js/scripthighlighter/shBrushXml.js"></script>
+<script type="text/javascript" src="<?php print $sn; ?>/js/scripthighlighter/shBrushPhp.js"></script>
+<link type="text/css" rel="stylesheet" href="<?php print $sn; ?>/js/scripthighlighter/shCoreDefault.css"/>
+
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/scripts.js"></script>
+<style>
+#footer_links a {
+	color:#555;
+}
+#footer_links {
+	width:1024px;
+	margin:0 auto;
+	height:30px;
+	padding:4px;
+	color:#555;
+}
+h2 {
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 8px;
+	padding:8px;
+	padding-bottom: 12px;
+}
+div.line {
+	border-bottom: 1px solid #ddd;
+	margin: 8px 0;
+	height:1px;
+}
+.promo td {
+	padding:4px;
+}
+#nav ul.list_first li img {
+	margin-right: 15px;
+}
+#nav .list_second:not(.expanded) {
+	height:0;
+	overflow: hidden;
+}
+.syntaxhighlighter {
+	padding:5px 0;
+	width:97% !important;
+}
+.syntaxhighlighter .toolbar {
+	display: none;
+}
+</style>
+<script>
+$(document).ready(function() {
+	$("#nav li").click(function () {
+		$("#nav li").removeClass("current");
+		$(this).addClass("current");
+	});
+	$("#nav a").click(function () {
+		var objSecondList = $(this).closest(".list_first").find('.list_second');
+		$("#nav").find(".list_second.expanded").removeClass("expanded");
+		objSecondList.addClass("expanded");
+	});
+});
+</script>
+</head>
+
+<body>
+    <NOSCRIPT><P STYLE="color: red; font-size: larger;"><?php print text("Notice: You have javascript disabled. This site will not function without javascript."); ?></P></NOSCRIPT>
+	<div id="wrapper">
+    	<div id="nav">
+        	<div class="col_title_bg"></div>
+			<div class="col_title">&nbsp;</div>
+			<ul class="list_first">
+				<li class="list_parent current"><a href="<?php echo $sn;?>/developer/front"><img src="<?php print $sn; ?>/images/icon_admin_home.png" width="28" height="28" /><?php print text("Home"); ?></a></li>
+            </ul>
+			<ul class="list_first">
+				<li class="list_parent"><a href="<?php echo $sn;?>/developer/htmldescription"><img src="<?php print $sn; ?>/images/Learning Class.png" width="28" height="28" /><?php print text("HTML"); ?></a></li>
+				<ul class="list_second">
+					<li><a href="<?php echo $sn;?>/developer/htmlsliders"><img src="<?php print $sn; ?>/images/icon_bonus.png" width="28" height="28" /><?php print text("Sliders"); ?></a></li>
+					<li><a href="<?php echo $sn;?>/developer/htmlformatting"><img src="<?php print $sn; ?>/images/icon_bonus.png" width="28" height="28" /><?php print text("Formatting"); ?></a></li>
+				</ul>
+            </ul>
+			<ul class="list_first">
+				<li class="list_parent"><a href="#"><img src="<?php print $sn; ?>/images/Learning Class.png" width="28" height="28" /><?php print text("Javascript"); ?></a></li>
+				<ul class="list_second">
+					<li><a href="<?php echo $sn;?>/developer/js/sub/ajax"><img src="<?php print $sn; ?>/images/icon_bonus.png" width="28" height="28" /><?php print text("AJAX"); ?></a></li>
+				</ul>
+            </ul>
+			<ul class="list_first">
+				<li class="list_parent"><a href="#"><img src="<?php print $sn; ?>/images/Learning Class.png" width="28" height="28" /><?php print text("PHP"); ?></a></li>
+				<ul class="list_second">
+					<li><a href="<?php echo $sn;?>/developer/php/sub/mysql_select"><img src="<?php print $sn; ?>/images/icon_bonus.png" width="28" height="28" /><?php print text("MySQL Queries"); ?></a></li>
+					<li><a href="<?php echo $sn;?>/developer/php/sub/mysql_select"><img src="<?php print $sn; ?>/images/icon_bonus.png" width="28" height="28" /><?php print text("Array Sorting"); ?></a></li>
+				</ul>
+            </ul>
+
+        </div>
+        <div id="content">
+        	<div class="col_title_bg"></div>
+            <div class="slider_container">
+                <?php include "front.phtml"; ?>
+            </div>
+        </div>
+    </div>
+	<div id="footer_links">
+		<div style="float:left;text-align:left;width:90px;margin:0 8px;"><a href="<?php print $sn; ?>/index/contact<?php print $strParamPath; ?>" class="overlay">Contact Us</a></div>
+		<div style="float:left;text-align:left;width:383px;margin:0 8px;"><a href="<?php print $sn; ?>/mobile/privacy<?php print $strParamPath; ?>">Privacy Policy</a></div>
+		<div style="float:right;text-align:right;display:inline-block;margin:0 8px;width:383px;">Copyright © 2015 - mashpia.com</div>
+	</div>
+	<div id="overlay">
+		<div class="content"></div>
+	</div>
+</body>
+</html>

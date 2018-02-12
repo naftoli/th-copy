@@ -1,0 +1,71 @@
+<?php
+	include "config.phtml";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Prizes List</span>
+	</div>
+	<div class="col_content">
+<?php
+//var_dump($this->arrPrizes); exit;
+	if (!count($this->arrPrizes))
+	{
+?>
+			<div style="padding:5px;">There are no prizes that are associated with your class available.</div>
+<?php
+	}
+	else
+	{
+?>
+			<div style="text-align:center; margin-left:auto !important; margin-right:auto !important;">Base Prizes</div>
+			<div id="lists" class="module lists forms">			
+				<div class="module_content">
+					<ul>
+<?php
+		foreach($this->arrPrizes as $arrResult)
+		{
+			if($arrResult->class_id==0 && $arrResult->institution_id !=0)
+			{
+?>
+						<li>
+							<a class="link" href="<?php print $sn . "/store/prize/prize_id/" . $arrResult->prize_id; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php print $arrResult->prize_name; ?> </div>
+							</a>
+						</li>
+<?php
+			}
+		}
+?>
+				</ul>
+			</div>
+		</div>
+		<div style="text-align:center; margin-left:auto !important; margin-right:auto !important;">Class Prizes</div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>	
+<?php
+		foreach($this->arrPrizes as $arrResult)
+		{
+			if($arrResult->class_id!=0 && $arrResult->institution_id !=0)
+			{
+?>
+						<li>
+							<a class="link" href="<?php print $sn . "/store/prize/prize_id/" . $arrResult->prize_id; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php print $arrResult->prize_name; ?> </div>
+							</a>
+						</li>					
+<?php
+			}
+		}
+?>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+		</div>
+	</div>
+</div>

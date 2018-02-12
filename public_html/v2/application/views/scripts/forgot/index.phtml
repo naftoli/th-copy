@@ -1,0 +1,17 @@
+<?php include "public_header.phtml"; ?>
+</head>
+
+<body>
+
+<h2>Mashpia.com - Forgot Password</h2>
+<?php if ($this->message) { echo $this->message . "<br>"; } ?>
+
+<form name="forgot" id="forgot" method="post" action="">
+	Enter Email: <input type="text" name="email" id="email" value="<?php echo $this->email; ?>" /><br>
+<input type="submit" name="submit" value="Reset Password">
+</form>
+<br><br>
+
+<?php include "public_footer.phtml"; ?>
+</body>
+</html>

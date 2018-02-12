@@ -1,0 +1,119 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+$objSession = new Zend_Session_Namespace('user_session_data');
+$objRoles = new Roles();
+$objClasses = new Classes();
+$objConfig = new Config();
+?>
+
+<script type="text/javascript">
+$(document).ready(function () {
+	$("#nav li").click(function () {
+		$("#nav li").removeClass("current");
+		$(this).addClass("current");
+	});
+});
+</script>
+
+<?php
+if ($objRoles->isAllowed("Host Administrator"))
+{
+?>
+	<ul class="list_first">
+		<li class="list_parent current"><a href="<?php print $sn; ?>/administration/profile<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_control.png" width="28" height="28" alt="Home" /></span>Home</a></li>
+		<ul class="list_second">
+			<li><a href="<?php echo $sn; ?>/users/idcardinstitutions<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_rank_card.png" width="22" height="22" alt="ID Cards" /></span>ID Cards</a></li>
+			<li><a href="<?php echo $sn; ?>/grades/gradeseditor<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_classes2.png" width="22" height="22" alt="Classes" /></span>Classes</a></li>
+			<li><a href="<?php echo $sn; ?>/campaigns/incrementalscampaignlist/institution_id/1<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Campaigns" /></span>Campaigns</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/store<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_shop.png" width="22" height="22" alt="Settings" /></span>Prizes</a></li>
+			<!--li><a href="<?php echo $sn; ?>/reports/reportgenerator<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_report.png" width="22" height="22" alt="Settings" /></span>Reports</a></li-->
+		</ul>
+<?
+}
+else if ($objRoles->isAllowed("Institution Administrator"))
+{
+?>
+	<ul class="list_first">
+		<li class="list_parent current"><a href="<?php print $sn; ?>/administration/profile<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_school.png" width="28" height="28" alt="Home" /></span>Home</a></li>
+		<ul class="list_second">
+
+			<li><a href="<?php echo $sn; ?>/dashboard/setup<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_dashboard.png" width="22" height="22" alt="Setup" /></span>Setup</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/systemsettings<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Setup" /></span>Settings</a></li>
+			<!--li><a href="<?php echo $sn; ?>/campaigns/incrementalscampaignlist/institution_id/<?php print $objSession->institution_id . $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Campaigns" /></span>Campaigns</a></li-->
+			<li><a href="<?php echo $sn; ?>/dashboard/campaigns<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Campaigns" /></span>Campaigns</a></li>
+			<li><a href="<?php echo $sn; ?>/campaigns/achievementcardeditor<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_rank_card.png" width="22" height="22" alt="Point Cards" /></span>Point Cards</a></li>
+<?php
+	if (0 && is_dev())
+	{
+?>
+			<li><a href="<?php echo $sn; ?>/campaigns/achievementcards<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_rank_card.png" width="22" height="22" alt="Point Cards" /></span>Point Cards 2</a></li>
+<?php
+	$arrListParams = array(
+		"data_source" => "/users/ajaxlistranksetup"
+	);
+?>
+			<li><a href="<?php print $sn . "/lists/standard2/params/" . dblencode(json_encode($arrListParams)); ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_rank_card.png" width="22" height="22" alt="Ranks Editor" /></span>Ranks Editor</a></li>
+<?php
+	}
+?>
+			<li><a href="<?php echo $sn; ?>/dashboard/store<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_shop.png" width="22" height="22" alt="Settings" /></span>Prizes</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/users_hebrewschool1<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_profile.png" width="22" height="22" alt="Settings" /></span>Users</a></li>
+			<li><a href="<?php echo $sn; ?>/reports/reportgenerator<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_report.png" width="22" height="22" alt="Settings" /></span>Reports</a></li>
+<?php
+	if (is_dev())
+	{
+		$arrContentOptions = $objConfig->load(array(
+			"set" => array("admin"),
+			"institution_id" => $objSession->institution_id
+		));
+		if ($arrContentOptions["admin"]["content_editing"])
+		{
+?>
+			<li><a href="<?php echo $sn; ?>/content/navigation<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_form_fill.png" width="22" height="22" alt="ID Cards" /></span>Content</a></li>
+<?php
+		}
+	}
+?>
+		</ul>
+<?php
+}
+else if ($objRoles->isAllowed("Teacher"))
+{
+	$arrUserClass = $objClasses->_user_classes_select(array(
+		"user_id" => $objSession->user_id,
+		"class_role" => "Teacher"
+	));
+?>
+	<ul class="list_first">
+		<li class="list_parent current"><a href="<?php print $sn; ?>/administration/profile"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_user.png" width="28" height="28" alt="Profile" /></span>Home</a></li>
+		<ul class="list_second">
+<?php
+	if (count($arrUserClass))
+	{
+?>
+			<li><a href="<?php echo $sn; ?>/campaigns/achievementcardeditor<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_rank_card.png" width="22" height="22" alt="Point Cards" /></span>Point Cards</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/store<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_shop.png" width="22" height="22" alt="Settings" /></span>Prizes</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/users_hebrewschool1<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_profile.png" width="22" height="22" alt="Settings" /></span>Users</a></li>
+			<li><a href="<?php echo $sn; ?>/reports/reportgenerator<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_report.png" width="22" height="22" alt="Settings" /></span>Reports</a></li>
+<?php
+	}
+?>
+
+<?php
+}
+else
+{
+	print "Sorry, there was an error: VI-MHS101-98S7DF";
+	exit;
+}
+?>
+		<li class="list_parent">
+			<a href="#" onclick="window.location.href = '<?php echo $sn; ?>/logout/index<?php print $strParamPath; ?>';">
+				<span class="icon">
+					<img src="<?php echo $sn; ?>/images/back-end/admin/icon_door.png" width="28" height="28" alt="Logout" />
+				</span>
+				Logout
+			</a>
+		</li>
+	</ul>

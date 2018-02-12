@@ -1,0 +1,133 @@
+<?php include "config.phtml";?>
+<script language="javascript">
+	$(document).ready(function()
+	{
+		$('#form a.submit').click( function(e) {
+			e.preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $("#processing_status").html('Loading...').fadeIn("slow"),
+				url : '<?php echo $sn; ?>/packages/packageitemedit/package_item_id/<?php print $this->arrPackageItems[0]->package_item_id ?>',				
+				dataType : "text",
+				data: $('#form').serialize(),
+				success : function(strResponse) {
+					if (strResponse.match(/^[0-9]+$/)) {
+						$("#processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+					} else {
+						$("#processing_status").html(strResponse).fadeIn("slow");
+					}
+				}
+			});
+		});
+		
+		$('#toggle_activation').click(function(e) {
+			$.blockUI({ message: $('#question')});
+		});
+		
+		// Activate / Deactivate
+		$('#question #option1').click(function(e) {
+			var strPath = "<?php echo $sn; ?>/administration/setstatus/id/<?php print $this->arrPackageItems[0]->package_item_id ?>/cat/package_items/status/<?php
+				echo $this->arrPackageItems[0]->is_active
+				? "deactivate"
+				: "activate"; 
+			?>";
+			$("#processing_status").html('Loading...').fadeIn("slow");
+			$.get(strPath, 
+				function(strResponse) {
+					if (!strResponse.match(/error|notice:/i)) {
+						$("#processing_status").html(strResponse).fadeIn("slow").delay(500).fadeOut("slow").delay(500, function () {
+							naviageBack($(".slider:last .slider_back"));
+						});
+					} else {
+						$("#processing_status").html(strResponse).fadeIn("slow");
+					}
+				}
+			);
+			e.preventDefault();
+			$.unblockUI();
+		});
+		
+		$('#question #option2').click(function(e) {
+			e.preventDefault();
+			$.unblockUI();
+		});
+		
+	});
+</script>
+
+<div class="slider">
+	
+	<div class="col_title">
+		<span>Edit Package Item</span>
+	</div>
+	
+	<div class="col_content camper">
+		<div class="module lists" id="lists-camper-groups">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a href="#" id="toggle_activation">
+							<div class="icon"></div>
+							<div class="title"><?php
+								echo $this->arrPackageItems[0]->is_active == 1
+								? "Deactivate"
+								: "Activate"; ?> package item</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form name="form" id="form" method="post" action="">
+					<ul>
+						<li>
+							<span class="label">Name:</span>
+							<span class="input"><input type="text" class="required" id="name" name="name" value="<?php echo $this->arrPackageItems[0]->name; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Description:</span>
+							<span class="input"><input type="text" class="required" id="description" name="description" value="<?php print $this->arrPackageItems[0]->description; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Base Price:</span>
+							<span class="input"><input type="text" class="required" id="price" name="price" value="<?php print $this->arrPackageItems[0]->price; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Student Price:</span>
+							<span class="input"><input type="text" class="required" id="student_price" name="student_price" value="<?php print $this->arrPackageItems[0]->student_price; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Currency:</span>
+							<span class="input"><input type="text" class="required" id="currency" name="currency" value="<?php print $this->arrPackageItems[0]->currency; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>						
+						<div id="processing_status"><?php if ($this->message) { echo $this->message . "<br>"; } ?></div>
+						<li>
+							<span><a href="#" title="Save" class="button submit">Save</a></span>							
+							<div class="clear"></div>							
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div id="question">
+			<p>Are you sure you would like to deactivate this package item?</p>
+			<p><a id="option1" class="button">Yes, <?php
+			echo $this->arrPackageItems[0]->is_active
+			? "deactivate"
+			: "activate"; 
+		?></a></p>
+			<p><a id="option2" class="button">No, do not <?php
+			echo $this->arrPackageItems[0]->is_active
+			? "deactivate"
+			: "activate"; 
+		?></a></p>
+		</div>
+	</div>
+</div>

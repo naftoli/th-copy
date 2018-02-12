@@ -1,0 +1,68 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script>
+	$(".slider:last a").click(function () {
+		$(".slider:last .processing_status").fadeOut();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider:last #processing_status").html('Loading...').fadeIn(),
+			url : '<?php echo $sn . "/users/addteacherpermission" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('.slider:last form').serialize(),
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					alert("Sorry, there was an error: VU-E101-3RR3RE");
+					alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					alert("Sorry, there was an error: VU-E102-SDF8BX");
+					alert(strResponse);
+					return;
+				} else {
+					$(".slider:last #processing_status").fadeOut();
+					if (arrResponse["success"] == "true") {
+						$(".slider:last #processing_status").html('New teacher association added.').fadeIn(function () {
+							naviageHome();
+						});
+					}
+				}
+			}
+		});
+	});
+</script>
+<div class="slider">
+
+	<div class="col_title">
+		<span>Confirmation</span>
+	</div>
+
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<b>User:</b> <?php print $this->objUser->first_name . " " . $this->objUser->last_name; ?>
+					</li>
+					<li>
+						<b>Class:</b> <?php print $this->objClass->grade . " " . $this->objClass->sub; ?>
+					</li>
+					<li>
+						<b>Role:</b> Teacher
+					</li>
+					<li>
+						<a onclick="" href="#">
+							<div class="title">Create Teacher Permission</div>
+						</a>
+					</li>
+				</ul>
+				<div id="processing_status" class="processing_status" style="color:black"></div>
+			</div>
+		</div>
+	</div>
+</div>

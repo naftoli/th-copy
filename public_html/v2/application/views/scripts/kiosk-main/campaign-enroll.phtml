@@ -1,0 +1,324 @@
+<?php
+
+	$strBarOrBat = $this->objUsers->gender == "M" ? "Bar" : "Bas";
+
+	function TextToSingular ($strText)
+	{
+		$arrText = array(
+			"yearly" => "year",
+			"monthly" => "month",
+			"weekly" => "week",
+			"daily" => "day"
+		);
+		return $arrText[strtolower($strText)];
+	}
+?>
+
+<script type="text/javascript">
+function proc_overview() {
+	var intLadder = $("#spinner-ladder-week :selected").val();
+	var intStartingLines = $("#chapter_offset").val();
+	$("#ladder_complete_learning").html(intLadder);
+	$("#ladder_complete_lines").html(intStartingLines);
+	$.ajax({
+		type : "POST",
+		cache : false,
+		start: $("#campaing_batbar_status").html("Loading...").hide().fadeIn(),
+		url : '<?php print WEB_ROOT . "kiosk-main/campaign-enroll/campaign_id/" . $this->objCampaign->campaign_id; ?>',
+		dataType : "text",
+		data: {
+			"task_offset" : intStartingLines,
+			"ladder" : intLadder
+		},
+		success : function(strResponse) {
+			var objResult;
+			try {
+				objResult = jQuery.parseJSON(strResponse);
+			} catch(e) {
+				if (strResponse == "You must have a valid date of birth entered into the system for ladders to become available to you.")
+				{
+					alert("You must have a valid date of birth entered into the system for ladders to become available to you. Please contact your base comander to fix this problem.");
+					history.go(-2);
+				} else
+					alert("Sorry, there was an error: VCE-PO101-S879DS");
+				return;
+			}
+			//alert($.dump(objResult));
+			$("#campaing_batbar_status").html(
+				"<span id=\"ladder_complete_perek\">" + objResult.chapters + "</span> Perokim, "
+				+ "<span id=\"ladder_complete_page\">" + objResult.pages + "</span> pages, "
+				+ "<span id=\"ladder_complete_total\">" + objResult.line_number + "</span> lines "
+				+ "<span class=\"ladder_text\"><br />of <?php print $this->objCampaign->campaign_name; ?> by heart.</span>"
+			).hide().fadeIn();
+		}
+	});
+}
+// Wrote this to get the value of a spinner from the index
+function spinnerValue($strSpinnerLink) {
+	return $($($strSpinnerLink).spinner("value")[0]["innerHTML"])[$("#spinner-ladder-week").val()]["innerHTML"];
+}
+$(document).ready(function(){
+	$("#slider").easySlider({
+		numeric: true,
+		controlsBefore:	'<div class="page_dots">',
+		controlsAfter:	'</div>'
+	});
+
+	$("#spinner-ladder-week").change(function () {
+		proc_overview();
+	});
+
+	$('.keypad').keypad();
+	$('.scroll-pane').jScrollPane({showArrows:true, scrollbarWidth: 42, arrowSize: 42});
+
+	$('#campaign_enroll_submit').click(function(e) {
+		e.preventDefault();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#campaign_enroll_submit").html("Loading"),
+			url : '<?php print WEB_ROOT . "kiosk-main/campaign-enroll/campaign_id/" . $this->objCampaign->campaign_id . "/enroll/true"; ?>',
+			dataType : "text",
+			data: {
+				"task_offset" : $("#chapter_offset").val(),
+				"ladder" : $("#spinner-ladder-week").val()
+			},
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					window.location.href = "<?php print WEB_ROOT . "kiosk-main/view-campaign/campaign_id/" . $this->objCampaign->campaign_id; ?>/lastaction/enrolled";
+				} else {
+					alert(strResponse);
+				}
+			}
+		});
+	});
+
+	$('#chapter_offset').change(function(e) {
+		e.preventDefault();
+		proc_overview();
+	});
+
+	proc_overview();
+});
+</script>
+<style>
+<!--
+.iconl_finish {
+	background-image:url("<?php print WEB_ROOT; ?>images/back-end/kiosk/iconl_finish.png");
+}
+.iconl_quota {
+	background-image:url("<?php print WEB_ROOT; ?>images/back-end/kiosk/iconl_quota.png");
+}
+.iconl_brain {
+	background-image:url("<?php print WEB_ROOT; ?>images/back-end/kiosk/iconl_brain.png");
+}
+.icon_alert {
+	background-image:url("<?php print WEB_ROOT; ?>images/back-end/kiosk/icon_alert.png");
+}
+.ladder_box_full {
+	margin-top:-130px;
+}
+.ladder_box_full icon_finish {
+	position:absolute;
+}
+.ladder_box_full p {
+	margin-bottom:12px !important;
+	line-height:1.4;
+}
+.overview .ladder .ladder_box_full .ladder_box {
+	width:auto;
+	float:none;
+}
+-->
+</style>
+<div id="main">
+	<div id="page_title"><?php print $this->objCampaign->campaign_name; ?> Campaign</div>
+	<div class="three_column padding_top">
+		<div class="content">
+			<div id="slider">
+				<ul class="overview">
+					<li>
+						<div class="slider_title">How to accomplish your goal</div>
+						<div class="mainbox ladder clearfix">
+							<div class="col2_image iconl_finish"></div>
+							<div class="scroll-pane">
+								<div class="col2_text">
+
+										<div class="col2_list" style="font-size:16pt;">
+											<div style="font-size:16pt;">Your goal is to learn as much <?php print $this->objCampaign->campaign_name; ?> by heart as possible by your Bar or Bas Mitzvah.</div>
+										</div>
+
+									<!--p>Next: Choose the amount of <?php print $this->objCampaign->campaign_name; ?> you can learn each <?php print TextToSingular($this->objMissionsSch->frequency); ?>.</p-->
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="slider_title">Choose Your <?php print $this->objMissionsSch->frequency; ?> Quota</div>
+						<div class="mainbox ladder clearfix">
+							<div class="col2_image iconl_quota"></div>
+							<div class="scroll-pane">
+								<div class="col2_text">
+									<p class="small">
+										<span style="float: left;">
+											<img src="<?php print WEB_ROOT . "images/icon_alert.png"; ?>" align="center"/>
+										</span>
+									</p>
+									<p class="small">Click on the arrows to choose the amount of <?php print $this->objCampaign->campaign_name; ?> you can learn by heart each week. This will be your <?php print strtolower($this->objMissionsSch->frequency); ?> mission.<br>Tip: Start with a smaller quota. You can always upgrade!</p>
+									<div class="ladder_box">
+										<p>I am able to learn</p>
+											<select id="spinner-ladder-week">
+<?php
+foreach ($this->arrLadders as $objLadder)
+{
+	print "<option>" . $objLadder->velocity . "</option>";
+}
+?>
+											</select>
+										<p>new lines by heart each <?php print TextToSingular($this->objMissionsSch->frequency); ?>.</p>
+									</div>
+									<div class="clear"></div>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="slider_title">Choose a starting point</div>
+						<div class="mainbox ladder clearfix">
+							<div class="col2_image iconl_brain"></div>
+							<div class="scroll-pane">
+								<div class="col2_text">
+									<p>Enter the amount of lines of <?php print $this->objCampaign->campaign_name; ?> that you already know by heart</p>
+									<p class="small">Your first Tanya mission will begin after those lines.</p>
+									<p class="small">Only enter lines you know very well.</p>
+									<div class="question icon_book">
+										<div class="input">
+											<input type="text" maxlength="3" class="keypad" name="chapter_offset" id="chapter_offset" value="0" onFocus="this.select()">
+										</div>
+										<p></p>
+									</div>
+									<p class="small">&nbsp;</p>
+								</div>
+							</div>
+							<div class="ladder_box_full">
+								<div class="ladder_box">
+									<div class="icon icon_finish"></div>
+									<p>
+										<span class="ladder_text">Wow! You already know </span>
+										<span id="ladder_complete_lines">X</span>
+										<span class="ladder_text">lines and can learn</span>
+										<span id="ladder_complete_learning">Y</span>
+										<span class="ladder_text">lines each week.</span>
+									</p>
+									<p>
+										<span class="ladder_text">By your <?php print $strBarOrBat; ?> Mitzvah you will know<br /></span>
+										<div id="campaing_batbar_status">Loading...</div>
+									</p>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="slider_title">Enroll</div>
+						<div class="mainbox">
+							<div class="col2_image iconl_enroll"></div>
+							<div class="scroll-pane">
+								<div class="col2_text">
+									<p>Now that you have seen how the <?php print $this->objCampaign->campaign_name; ?> Campaign works, are you ready to join?</p>
+									<div class="button button_icons">
+										<div><a href="#" class="icon_check" id="campaign_enroll_submit">Enroll</a></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<?php
+	/*
+?>
+					<li>
+						<div class="slider_title">Complete a Mission</div>
+						<div class="mainbox ladder clearfix">
+							<div class="col2_image iconl_taskslist"></div>
+							<div class="scroll-pane">
+								<div class="col2_text">
+									<p>When you are ready, your commander will test you on all the lines you know. </p>
+									<p class="small">Your commander will enter the lines into your account and your mission will be marked completed.</p>
+									<p>NOTE: You will always be tested from &ldquo;Perek Alef: <?php print $this->objCampaign->campaign_name; ?>&hellip;&rdquo;</p>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="slider_title">Earn Your First Medal</div>
+						<div class="mainbox">
+							<p>You will earn your first <?php print $this->objCampaign->campaign_name; ?> medal after just 15 completed missions!</p>
+							<p>Here's your schedule:</p>
+							<div class="task_items_box small" id="overview_medal_1">
+								Sorry, you are viewing this because there was an error with our javascript: KCTT-TO101-SD3F21.
+							</div>
+							<div class="math_big"></div>
+							<div class="medalImage medal121"><span class="badge">15</span></div>
+						</div>
+					</li>
+					<li>
+						<div class="slider_title">Earn More Medals</div>
+						<div class="mainbox">
+							<div class="col2_image iconl_medals"></div>
+							<div class="scroll-pane">
+								<div class="col2_text">
+									<p>You can earn up to 6 medals<br />
+										for <?php print $this->objCampaign->campaign_name; ?>!</p>
+									<div class="medals">
+										<div class="medal121"><span class="badge">15</span></div><div class="medal122"><span class="badge">20</span></div><div class="medal123"><span class="badge">25</span></div><div class="medal124"><span class="badge">30</span></div><div class="medal125"><span class="badge">35</span></div><div class="medal126"><span class="badge">40</span></div>
+									</div>
+									<p class="small"><img src="images/page_number.png" style="margin-bottom:-10px;"/>= The blue circles show the number of completed missions needed to earn each medal. <!--Click icons to see the full schedule.--></p>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="slider_title">Earn Miles</div>
+						<div class="mainbox">
+							<div class="col2_image iconl_mileage"></div>
+							<div class="scroll-pane">
+								<div class="col2_text">
+									<p>You can earn nearly 400 miles a year for the <?php print $this->objCampaign->campaign_name; ?> Campaign!</p>
+									<p class="small">Miles may be used in the online prize store and Global Chinese Auction.</p>
+									<div class="task_items mission_boxes task_row">
+										<div class="mission">
+											<div class="number">#14</div>
+											<div class="date">?"? ???</div>
+											<div class="date">Lines 1-5</div>
+											<div class="check_on"></div>
+										</div>
+										<div class="math_big">=</div>
+										<div class="mission">
+											<div class="miles">2 Miles</div>
+										</div>
+										<div class="clear"></div>
+									</div>
+									<p>Earn 2 miles for each mission that you complete.</p>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="slider_title">Earn Bonus Miles</div>
+						<div class="mainbox">
+							<div class="col2_image iconl_mileage"></div>
+							<div class="scroll-pane">
+								<div class="col2_text">
+									<div class="question icon_book">Earn a � mile each day that you learn <?php print $this->objCampaign->campaign_name; ?> for 5 minutes.</div>
+									<div class="question icon_book">Earn 2 miles each week for reviewing all the <?php print $this->objCampaign->campaign_name; ?> that you know.</div>
+								</div>
+							</div>
+						</div>
+					</li>
+<?php
+	*/
+?>

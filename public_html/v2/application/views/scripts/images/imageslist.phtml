@@ -1,0 +1,259 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$targetUrl = new Zend_Session_Namespace("targetUrl");
+?>
+
+<script type="text/javascript">
+
+	var image_set_id = '';
+	var uploadedImage = '';
+	var uploadInProgress = false;
+
+	var upload1;
+	var image_delete_id;
+	
+	upload1 = new SWFUpload({
+		upload_url: "<?php echo $sn; ?>/store/processupload",
+		post_params: {"sid" : "<?php echo session_id(); ?>"},
+		file_size_limit : "102400",
+		file_types : "*.jpg;*.png;*.gif;*.bmp",
+		file_types_description : "JPG Images; PNG Image; GIF Image; BMP Image",
+		file_upload_limit : 10,
+		file_queue_limit : 0,
+		swfupload_preload_handler : preLoad,
+		swfupload_load_failed_handler : loadFailed,
+		file_dialog_start_handler : fileDialogStart,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+		button_image_url : "<?php echo $sn; ?>/images/XPButtonUploadText_61x22.png",
+		button_placeholder_id : "spanButtonPlaceholder1",
+		button_width: 61,
+		button_height: 22,
+		button_action : SWFUpload.BUTTON_ACTION.SELECT_FILES,
+		flash_url : "<?php echo $sn; ?>/js/back-end/uploader/swfupload.swf",
+		flash9_url : "<?php echo $sn; ?>/js/back-end/uploader/swfupload_fp9.swf",
+		custom_settings : {
+		 progressTarget : "fsUploadProgress1",
+		 cancelButtonId : "btnCancel1"
+		},
+		debug: false
+	});
+	
+	function startUpload()
+	{
+		if(uploadInProgress)
+		{
+			alert('Your file is being uploaded. Please wait till the upload process finishes.');
+		}
+		else
+		{
+			form_submit();
+		}
+	}
+	
+	function form_submit()
+	{
+		if($("#uploader_photo_name").val() == ''){
+			alert("You must select a picture");
+			return;
+		}
+		
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#processing_status_imageslist").html('Saving...').fadeIn("slow"),
+			url : '<?php print $sn;?>/images/imageslist/',
+			data: { 'image_name' : $("#uploader_photo_name").val(), 'category_id' : <?=$this->category_id?>, 'myaction' : 'add' },
+			success : function(response) {
+				if (response.match(/^[0-9]+$/)) {
+					$("#processing_status_imageslist").html("Uploaded successfully...").fadeIn("slow").delay(200).fadeOut("slow");
+					slideRefresh();
+				} else {
+					$("#processing_status_imageslist").html(response).fadeIn("slow");
+				}
+			}
+		});
+	}
+	
+	function deleteImage(image_id)
+	{
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#processing_status").html('Saving...').fadeIn("slow"),
+			url : '<?php print $sn;?>/images/imageslist/',
+			data: { 'myaction' : 'delete', 'image_id' : image_id, 'category_id' : <?=$this->category_id?> },
+			success : function(response) {
+				if (response.match(/^[0-9]+$/)) {
+					//$("#processing_status").html("Uploaded successfully...").fadeIn("slow").delay(2000).fadeOut("slow");
+					slideRefresh();
+				} else {
+					$("#processing_status_imageslist").html(response).fadeIn("slow");
+				}
+			}
+		});
+	}
+	
+	function confirmDelete2(image_id)
+	{
+		$.blockUI({ message: $('#question2')});
+		image_delete_id = image_id;
+	}
+	
+	$('#question2 #no2').click(function(e) { 
+		e.preventDefault();
+		$.unblockUI();
+	}); 
+
+	$('#question2 #yes2').click(function(e) {
+		e.preventDefault();
+		$.unblockUI();
+		deleteImage(image_delete_id);
+	});
+	
+	function confirmSet(image_id)
+	{
+		image_set_id = image_id;
+		$.blockUI({ message: $('#question3')});
+	}
+	
+	$('#question3 #no3').click(function(e) { 
+		e.preventDefault();
+		$.unblockUI();
+		image_set_id = '';
+	}); 
+
+	$('#question3 #yes3').click(function(e) {
+		e.preventDefault();
+		$.unblockUI();
+		setImage(image_set_id);
+		image_set_id = '';
+	});
+	
+	function setImage(image_id)
+	{
+		//var update = '<?php echo $this->update; ?>';
+		//var id = '<?php echo $this->id; ?>';
+		//alert(image_id);
+		
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#processing_status").html('Saving...').fadeIn("slow"),
+			url : '<?php print $sn;?>/images/imageslist/',
+			data: { 'myaction' 		: 'set_image',
+					'image_id' 		: image_id,
+					'update' 		: '<?php echo $this->update; ?>',
+					'id'			: '<?php echo $this->id; ?>',
+					'category_id' 	: '<?php echo $this->category_id; ?>'
+				},
+			success : function(response) {
+				if (response.match(/^[0-9]+$/)) {
+					$("#processing_status_imageslist").html(response).fadeIn("slow");
+					$("#slider_imageslist").empty();
+					slideURL('<?php echo $this->targetUrl; ?>');					
+				} else {
+					$("#processing_status_imageslist").html(response).fadeIn("slow");
+				}
+			}
+		});
+	}
+	
+</script>
+
+<div class="slider" id="slider_imageslist">
+	<div class="col_title">
+		<span>Image Category List</span>
+	</div>
+	<div class="col_content">
+		<div class="module lists forms">
+				<form name="form_imagesadd" id="form_imagesadd" method="post" action="">
+					<input type="hidden" name="category_id" value="<?=$this->category_id?>" >
+					<input type="hidden" id="uploader_photo_name" value="">
+					<input type="hidden" name="institution_id" id="institution_id" value="<?php print $this->institution_id; ?>" />
+					<ul>
+						<li>
+							<span class="label">Picture:</span>
+							<span class="input">
+								<input type="hidden" id="uploader_photo_name" value="">
+								<div id="fsUploadProgress1" class="fieldset flash"></div>
+								<div><span id="spanButtonPlaceholder1"></span></div>
+								<input id="btnCancel1" style="margin-left: 2px; height: 22px; font-size: 8pt;" onclick="cancelQueue(upload1);" disabled="disabled" type="button" value="Cancel Uploads" />
+							</span>
+						</li>
+						<li>
+							<div id="processing_status_imageslist"></div>
+						</li>
+						<li>
+							<span><a href="#" title="Save" class="button submit" onclick="startUpload();">Save</a></span>							
+							<div class="clear"></div>							
+						</li>
+					</ul>
+				</form>
+			</div>
+		<div id="question2">
+			<p>Do you want to delete this picture permanently?</p>
+			<p><a id="yes2" class="button" href="#">Yes</a></p>
+			<p><a id="no2" class="button" href="#">No</a></p>
+		</div>
+		<div id="question3">
+			<p>Do you want to select picture?</p>
+			<p><a id="yes3" class="button" href="#">Yes</a></p>
+			<p><a id="no3" class="button" href="#">No</a></p>
+		</div>
+			<div id="lists" class="module lists forms">
+				<div class="module_content">
+					<ul>
+<?php
+//var_dump($this->arrImages); exit;
+	if (count($this->arrImages) == 0)
+	{
+?>
+						<li class="module" style="padding:5px;">
+							There are no images available in this category.
+						</li>
+<?php
+	}
+	else
+	{
+?>
+						<li>
+<?php
+		foreach ($this->arrImages as $r)
+		{
+?>
+						<div style="float:left; padding:3px; border:solid 1px #C0C0C0; margin:2px;">
+							<img src="<?=$sn;?>/images/show-image/image_id/<?=$r->image_id?>" width="50" height="50" border="0" />
+							<a href="/images/imagesedit/image_id/<?=$r->image_id?>" class="link">
+							<div style="padding:2px; float:clear;" >Edit</div>
+							</a>
+							<div style="padding:2px; float:clear; background-color:#ff0000;" ><a href="#" onclick="confirmDelete2(<?=$r->image_id?>)">Delete</a></div>
+							<?php if($this->mode == "callback")
+							{
+							?>
+								<div style="padding:2px; float:clear; background-color:#08912D;" ><a href="#" onclick="confirmSet(<?=$r->image_id?>)">Set</a></div>
+							<?php
+							}
+							?>
+						</div>
+<?php
+		}
+?>
+						</li>
+					</ul>
+						
+				</div>
+				
+			</div>
+<?php
+	}
+?>
+	</div>
+</div>

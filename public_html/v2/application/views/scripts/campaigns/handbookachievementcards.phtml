@@ -1,0 +1,94 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script language="javascript">
+	if ($('.slider:last .accordion.closed li h3').closest('li').hasClass('open')) {
+		$('.slider:last .accordion.closed li h3').nextAll().slideToggle(0);
+		$('.slider:last .accordion.closed li h3').closest('li').toggleClass('open');
+	}
+	$('.slider:last .accordion li h3').click(function(){
+		$(this).nextAll().slideToggle('fast');
+		if (!$(this).parents('li').hasClass('open'))
+			$(this).closest('.accordion').find('.select_icon').addClass('hidden');
+		else if ($(this).closest('.accordion').find('.selected').length)
+			$(this).closest('.accordion').find('.select_icon').removeClass('hidden');
+		$(this).parents('li').toggleClass('open');
+	});
+	$('.slider:last .button.load_cards').click(function () {
+		var arrDataParams = {
+			intSetCount : $('.slider:last input.sheets.required').val(),
+			arrTasks : [4217,4218,4219,4220,4221,4222,4223,4224,4225,4226,4227,4228,4229,4230,4231,4232,4233,4234,4235,4236,4237,4238,4239,4240,4241,4242,4243,4244,4245,4246,4247,4248,4249,4250,4251,4252,4253,4254,4255,4256,4257,4258,4259,4260,4261,4262,4263,4264,4265,4266,4267,4268,4269,4270],
+			intTopMargin : $('.slider:last input.top_margin').val(),
+			intRowMargin : $('.slider:last input.row_margin').val()
+		};
+		var strUrl = '<?php print $sn; ?>/campaigns/pointcardsetsprintoutput/dataparams/' + encodeURIComponent(JSON.stringify(arrDataParams));
+		window.open(strUrl, '_blank');
+	});
+</script>
+<div class="slider">
+	<style>
+		.slider:last-child h4 {
+			padding:0 0 3px 6px;
+		}
+	</style>
+	<div class="col_title">
+		<span><?php print text("Handbook [|Point|] Cards"); ?></span><div class="title_help info" title="<?php print text("[|Point|] Cards are given out for completing tasks, or at your discretion. <br/>[|Points|] Cards can be scanned or entered manually to a [|students|] account to provide them with points. [|Campers|] can do this themselves from Kiosk Mode, or you can do it for them by finding them in 'Users', and entering the correct information.<br/>Cards can only be used once. Once a card has been entered into one [|students|] account, it will no longer work for any [|student|]."); ?>"></div>
+	</div>
+	<div class="col_content">
+		<h4>Step 1. &nbsp;Choose how many sets you would like to print (20 sheets per set): &nbsp;<div class="help_icon info" title="If you need more sheets later, you can always come back and print more."></div></h4>
+		<div class="module form">
+			<div class="module_content list">
+				<ul>
+					<li>
+						<span class="label" style="width:200px;">Number Of Sets</span>
+						<span class="input"><input style="width:200px;" type="text" class="sheets required" name="sheets" value="1" size="25" /></span>
+						<div class="clear"></div>
+					</li>
+					<div class="processing_status"></div>
+				</ul>
+			</div>
+		</div>
+		<h4>Step 2. &nbsp;Check your print settings: &nbsp;<div class="help_icon info" title="<?php print text("In order to make sure your cards print properly, follow the instructions provided by clicking 'Print Instructions'."); ?>"></div></h4>
+		<div class="module accordion closed">
+			<div class="list_expand info">
+				<ul>
+					<li class="open">
+						<h3><span class="icon"></span>Print Instructions</h3>
+						<p style="display:block"><img src="http://v2.mashpia.com/images/back-end/admin/Print-Dialog-Small-2.jpg" align="right" /><img src="http://v2.mashpia.com/images/back-end/admin/Print-Dialog-Small-1.jpg" align="right" />
+						In your browser click 'File' then 'Page Setup...'</p>
+						<p>Step 1: Set the Orientation to Portrait</p>
+						<p>Step 2: Check 'Shrink to fit Page Width'</p>
+						<p>Step 3: In Options check 'Print Background (colors & images)'</p>
+						<p>Step 4: In the second tab set all Margins to 0.5 inches (All Sides)</p>
+						<p>Step 5: Set all Headers & Footers to Blank</p>
+						<p>Note: The browser will save these preferences for later use.</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h4>Step 3. &nbsp;Margin settings: &nbsp;<div class="help_icon info" title="Help text coming soon."></div></h4>
+		<div class="module form">
+			<div class="module_content list">
+				<ul>
+					<li>
+						<span class="label" style="width:200px;">Top margin</span>
+						<span class="input"><input style="width:200px;" type="text" class="top_margin required" name="top_margin" value="-0.1875in" size="25" /></span>
+						<div class="clear"></div>
+					</li>
+					<div class="processing_status"></div>
+					<li>
+						<span class="label" style="width:200px;">Row spacing</span>
+						<span class="input"><input style="width:200px;" type="text" class="row_margin required" name="row_margin" value="0.06in" size="25" /></span>
+						<div class="clear"></div>
+					</li>
+					<div class="processing_status"></div>
+				</ul>
+			</div>
+		</div>
+		<h4>Step 4. Ready to print: &nbsp;<div class="help_icon info" title="<?php print text("Clicking 'Print All' will bring up a new browser tab with your cards, and your computer's print dialog box. Press print/ok and watch those cards fly out of the printer!"); ?>"></div></h4>
+		<div class="processing_status"></div>
+		<a class="button load_cards">Print All</a>
+		<br/>&nbsp;<br/>&nbsp;<br/>&nbsp;
+	</div>
+</div>

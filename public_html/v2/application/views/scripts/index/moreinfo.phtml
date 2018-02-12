@@ -1,0 +1,59 @@
+<?php
+	include "config.phtml";
+?>
+<script>
+	$(document).ready(function () {
+		$('#overlay').css({
+			width: 512,
+			left:$(document).width()/2-512/2,
+			top:20
+		});
+		$('#moreinfo .closebtn').bind('click', function () {
+			$("#overlay .close").trigger('click');
+		});
+	});
+</script>
+<div class="slider" id="moreinfo">
+	<div class="col_title">
+		<span>More Info</span>
+	</div>
+	<div class="col_content">
+		<style>
+			#moreinfo form *:not(a) {
+				font-size:12pt;
+			}
+			#moreinfo li {
+				padding:8px;
+				line-height: 26px;
+			}
+			#moreinfo .ajax_status {
+				display:none;
+				padding:2px;
+			}
+		</style>
+		<div class="module">
+			<div class="module_content">
+				<div class="list">
+					<form>
+						<ul>
+							<li>
+								<div style="font-size:10pt;">
+									With our system, you can create IDs with scannable bar codes, start and track campaigns, and have a powerful motivational and discipline tool at your (and your counselors’!) disposal.<br/>
+									Instantly award or deduct points, based on behaviour and completion of tasks. Now you have an easy, pain-free way to reward good behavior, and stop bad behavior in its tracks.<br/>
+									Points lead to prizes - either cool toys that you can order from us, or just about anything you want. Like: a soda, a special toy, or a privilege that you designate (front seat on, anybody?)<br/>
+									Our low fee ensures that this option is economical for any system, big or small.<br/>
+									With our 1,2,3 setup and simple interface, take control of your institution like you never have. You’ll empower everybody; yourself, your staff, and your <?php print text('[|students|]'); ?>. The possibilities are endless.
+								</div>
+							</li>
+							<li>
+								<div class="ajax_status"></div>
+								<a class="button fix" href="<?php echo $sn;?>/registration/index2/tstyle/<?php print $this->tstyle; ?>">Sign Up</a>
+								<a class="button fix closebtn">Close</a>
+							</li>
+						</ul>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

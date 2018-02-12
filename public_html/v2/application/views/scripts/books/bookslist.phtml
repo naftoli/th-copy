@@ -1,0 +1,33 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Book List</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	if (count($this->arrBooks))
+	{
+		foreach ($this->arrBooks as $objBook)
+		{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn . "/books/bookeditor/book_id/" . $objBook->book_id; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php echo $objBook->book_name; ?></div>
+						</a>
+					</li>
+<?php
+		}
+	}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

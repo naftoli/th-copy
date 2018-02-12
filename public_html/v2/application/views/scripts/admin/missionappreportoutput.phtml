@@ -1,0 +1,120 @@
+<?php
+$arrKeys = array_keys((array) first($this->arrUsersData));
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+<title>MissionsApp Report</title>
+
+
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/jquery3.js"></script>
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/jquery-ui2.js"></script>
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/jquery.tools.js"></script>
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/jquery.editableText.js"></script>
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/jquery.blockui.js"></script>
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/jquery.form.js"></script>
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/jquery.styleselect.js"></script>
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/jquery.jeditable.min.js"></script>
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/jquery.dump.js"></script>
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/jquery.maskedinput.js"></script>
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/jquery.nodesearch.js"></script>
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/ckeditor/styles.js"></script>
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/jquery.iphone-style-checkbox.js"></script>
+<link rel="stylesheet" type="text/css"	href="//v2dev1.mashpia.com/css/back-end/admin/jquery.iphone-style-checkbox.css" />
+<script src="//v2dev1.mashpia.com/js/back-end/uploader/fileprogress.js" type="text/javascript"></script>
+<script src="//v2dev1.mashpia.com/js/back-end/uploader/handlers.js" type="text/javascript"></script>
+<script type="text/javascript" src="//v2dev1.mashpia.com/js/back-end/admin/jquery.toChecklist.min.js"></script>
+<link type="text/css" rel="stylesheet" href="//v2dev1.mashpia.com/css/back-end/admin/jquery.toChecklist.min.css">
+<script src="http://v2dev1.mashpia.com/js/back-end/admin/jquery.handsontable.full.js" type="text/javascript"></script>
+<link href="http://v2dev1.mashpia.com/css/back-end/admin/jquery.handsontable.full.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		
+<style>
+.context-menu-item {
+	text-align: left !important;
+}
+.handsontable .dragdealer .handle {
+	background-color: #777 !important;
+}
+#spreadsheet_view,
+#spreadsheet_view .wtHider {
+	width: 1570px !important;
+	height:100px !important;
+}
+.dragdealer {
+	top:auto !important;
+	bottom: 0px !important;
+	
+}
+</style>
+<script>
+var arrData = <?php print json_encode($this->arrUsersData);?>;
+if (!handsontable_handle)
+	var handsontable_handle = null;
+$(document).ready(function () {
+	if (handsontable_handle != null) {
+		handsontable_handle.destroy();
+	}
+	var fnLoadSpread = function (data) {
+		if (!data)
+			data = [];
+		var arrHeaders = <?php print json_encode($arrKeys); ?>;
+		var arrWidths = [<?php
+$arrWidths = array(100,200,229,229,229,229,229,229,229,229,229,229,229,229,229,229,229,229,229,229,229,229,229,229,229,229);
+print join(",", array_slice($arrWidths, 0, count($arrKeys)));
+$arrColData = array();
+foreach ($arrKeys as $strKey)
+{
+	$arrColData[] = (object) array(
+		"data" => $strKey
+	);
+}
+?>];
+		var arrColumns = <?php print json_encode($arrColData); ?>; // <
+		$("#spreadsheet_view").handsontable({
+			columns: arrColumns,
+			colHeaders: arrHeaders,
+			rowHeaders: true,
+			colWidths: arrWidths,
+			fillHandle: false,
+			data: data,
+			minRows: 5,
+			minCols: 12,
+			minSpareRows: 1,
+			currentRowClassName: 'currentRow',
+			currentColClassName: 'currentCol',
+			autoWrapRow: true,
+			contextMenu: ['undo', 'redo', 'row_above', 'row_below', 'remove_row']
+		});
+		handsontable_handle = $("#spreadsheet_view").handsontable('getInstance');
+	}
+	function myAutocompleteRenderer(instance, td, row, col, prop, value, cellProperties) {
+	  Handsontable.AutocompleteCell.renderer.apply(this, arguments);
+	  td.style.fontStyle = 'italic';
+	  td.title = 'Type to show the list of options';
+	}
+	var fnHandlePaste = function () {
+		if ($(this).val().length < 10) {
+			$(this).val('');
+			return;
+		}
+		var strPasteRows = $(this).val();
+		$(this).val('');
+		var arrRows = strPasteRows.split(/[\r\n]+/);
+		$('.slider:last .start_blank').trigger('click');
+	};
+	$('.slider:last .paste_handler').keyup(fnHandlePaste);
+	fnLoadSpread(arrData);
+});
+</script>
+<button>Download CSV</button>
+<div id="spreadsheet_view" class="module form spreadsheet_view view" style="padding:6px">
+</div>
+<div class="hidden processing_status"></div>
+</body>
+</html>

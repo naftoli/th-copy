@@ -1,0 +1,231 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+$objRoles = new Roles();
+$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+<div class="slider">
+<style type="text/css">
+	.lable_count {
+		float:right;
+		background-color:#fff;
+		border:1px solid gray;
+		margin:5px;
+		padding:2px 12px 2px 12px;
+		text-align:center;
+	}
+</style>
+	<div class="col_title">
+		<span><?php print text("Announcements"); ?></span>
+	</div>
+	<div class="col_content">
+<?php
+	include("uimods/sliderefresh.phtml");
+?>
+<?php
+	if ($objRoles->isAllowed('Super Administrator'))
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>Requests</h1>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Publish Request/pre/Publish Request/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Pending Requests"); ?></div>
+							<div class="lable_count"><?php echo count(@$this->arrStatusBubble['Publish Request']); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Denied Request/pre/Denied/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Denied Requests"); ?></div>
+							<div class="lable_count"><?php echo count(@$this->arrStatusBubble['Denied Requests']); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>Published</h1>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Published/pre/Published/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View All Published"); ?></div>
+							<div class="lable_count"><?php echo count(@$this->arrStatusBubble['Published']); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+<?php
+	}
+	else if ($objRoles->isAllowed('Institution Administrator'))
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>Your Announcements</h1>
+					</li>
+					<li>
+						<a class="link" href="<?php print $sn ?>/announcements/posteditor<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("New Post"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Saved/pre/Saved/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Saved Drafts"); ?></div>
+							<div class="lable_count"><?php echo count(@$this->arrStatusBubble['Saved']); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Deleted/pre/Deleted/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Deleted Posts"); ?></div>
+							<div class="lable_count"><?php echo count(@$this->arrStatusBubble['Deleted']); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>School Requests</h1>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Publish Request/pre/Publish Request/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Pending Requests"); ?></div>
+							<div class="lable_count"><?php echo count(@$this->arrStatusBubble['Publish Request']); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Denied Request/pre/Denied Request/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Denied Requests"); ?></div>
+							<div class="lable_count"><?php echo count(@$this->arrStatusBubble['Denied Request']); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>School Published</h1>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Published/pre/Published/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Published Announcements"); ?></div>
+							<div class="lable_count"><?php echo count(@$this->arrStatusBubble['Published']); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Published/all/true/pre/Published/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Full Announcement Listings"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+	else if ($objRoles->isAllowed('Teacher'))
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>Your Announcements</h1>
+					</li>
+					<li>
+						<a class="link" href="<?php print $sn ?>/announcements/posteditor<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("New Post"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Saved/pre/Saved/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Saved Drafts"); ?></div>
+							<div class="lable_count"><?php echo count(@$this->arrYourAnnouncements['Saved']); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Deleted/pre/Deleted/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Deleted Posts"); ?></div>
+							<div class="lable_count"><?php echo count(@$this->arrYourAnnouncements['Deleted']); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>Class Requests</h1>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Publish Request/pre/Publish Request/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Pending Requests"); ?></div>
+							<div class="lable_count"><?php echo count(@$this->arrClassAnnouncements['Publish Request']); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Denied Request/pre/Denied Request/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Denied Requests"); ?></div>
+							<div class="lable_count"><?php echo count(@$this->arrClassAnnouncements['Denied Request']); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>Published</h1>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Published/pre/Published/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Class Announcements"); ?></div>
+							<div class="lable_count"><?php echo count(@$this->arrStatusBubble['Published']); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/announcements/status/Published/all/true/pre/Published/url/" . dblencode("announcements/posteditor" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Full Announcement Listings"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

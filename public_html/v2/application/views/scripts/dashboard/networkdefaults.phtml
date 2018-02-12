@@ -1,0 +1,318 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objUserSession = new Zend_Session_Namespace("user_session_data");
+?>
+<script language="javascript">
+$(document).ready(function()
+{
+	$(this).delay(1).queue(function () {
+		$(this).dequeue();
+		$('.slider:last input[type=checkbox]').iphoneStyle({});
+	});
+	var fn_process_event = function(e) {
+		var strFormName = $(this).closest("form").attr("name");
+		$(".slider:last ." + strFormName + " .processing_status").delay(2000).queue(function () {
+			$(this).dequeue().html('Loading...').fadeIn("slow");
+		});
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php echo $sn . "/dashboard/systemsettings/' + strFormName + '/true" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('.slider:last .' + strFormName + ' form').serialize(),
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					$(".slider:last ." + strFormName + " .processing_status").dequeue().css({"display":"none"});
+				} else {
+					$(".slider:last ." + strFormName + " .processing_status").dequeue().html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	}
+	$('.slider:last form input').change(fn_process_event);
+	$('.slider:last form select').change(fn_process_event);
+	$('.slider:last form input').bind("didchange", fn_process_event);
+	$('.slider:last form .submit').bind("click", function(e) {
+		var strFormName = $(this).closest("form").attr("name");
+		$(".slider:last ." + strFormName + " .processing_status").html('Loading...').fadeIn("fast");
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php echo $sn . "/dashboard/systemsettings/' + strFormName + '/true" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('.slider:last .' + strFormName + ' form').serialize(),
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					$(".slider:last ." + strFormName + " .processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+				} else {
+					$(".slider:last ." + strFormName + " .processing_status").html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	});
+});
+</script>
+<div class="slider">
+	<style>
+		.processing_status {
+			color: black;
+		}
+	</style>
+	<div class="col_title">
+		<span>Network Defaults</span>
+		<div class="title_help info" title="Ability to set default details for your network schools."></div>
+	</div>
+<?php
+if (!isset($this->arrConfigOptions["system"]["network_logo"]))
+{
+	$intImage = $this->objInstitution->image_id;
+}
+else
+	$intImage = $this->arrConfigOptions["system"]["network_logo"];
+?>
+	<div class="col_content">
+<?php
+if ($objUserSession->network_id && !$this->institution_id) {
+?>
+		<div class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/institutions/url/<?php echo dblencode("dashboard/networkdefaults" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title">Browse Network Institutions</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+}
+?>
+		<h2>System Customizations</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn . "/dashboard/customizeachievementcards" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">
+								<?php print text('[|Point|] Cards Image'); ?>
+							</div>
+							<div class="help info" title="<?php print text("Change the center graphic on the [|point|] cards."); ?>"></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/settings/studentfields" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">
+								<?php print text('[|Student|] Fields'); ?>
+							</div>
+							<div class="help info" title="<?php print text("Set up the fields you want to have available for each user (example: Address, Home Phone, Email Address, Age)"); ?>"></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h2>Kiosk Customizations</h2>
+		<div class="module form settings">
+			<div class="module_content lists">
+				<form name="settings">
+					<ul>
+						<!--li>
+							<span class="label">User Ranking System:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<input type="checkbox" name="user__ranking" value="1"<?php print $this->arrConfigOptions["user"]["ranking"] ? " checked=\"checked\"" : ""; ?> />
+							</span>
+							<div class="clear"></div>
+						</li-->
+<?php
+	if ($this->tstyle != 'schoolstemplate1')
+	{
+?>
+						<li>
+							<span class="label">Online Store:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<input type="checkbox" name="kiosk__store" value="1"<?php print $this->arrConfigOptions["kiosk"]["store"] ? " checked=\"checked\"" : ""; ?> />
+							</span>
+							<div class="help info" title="<?php print text("Enable the store within the kiosk which allows [|students|] to use their [|points|] to purchase prizes."); ?>"></div>
+							<div class="clear"></div>
+						</li>
+<?php
+	}
+	if ($this->tstyle == 'schoolstemplate1')
+	{
+?>
+						<li>
+							<span class="label">Use Mission Miles:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<input type="checkbox" name="kiosk__import_mission_miles" value="1"<?php print $this->arrConfigOptions["kiosk"]["import_mission_miles"] ? " checked=\"checked\"" : ""; ?> />
+							</span>
+							<div class="help info" title="<?php print text("Description coming soon"); ?>"></div>
+							<div class="clear"></div>
+						</li>
+<?php
+	}
+	if ($this->tstyle != 'schoolstemplate1')
+	{
+?>
+						<li>
+							<a class="link" href="<?php echo $sn . "/settings/sponsorlogos" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title">
+									<?php print text('Sponsor Logos'); ?>
+								</div>
+								<div class="help info" title="<?php print text("Add logos to the bottom of the kiosk login page."); ?>"></div>
+							</a>
+						</li>
+<?php
+	}
+?>
+						<!--li>
+							<span class="label">Kiosk Printing:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<input type="checkbox" name="kiosk__printing" value="1"<?php print $this->arrConfigOptions["kiosk"]["printing"] ? " checked=\"checked\"" : ""; ?> />
+							</span>
+							<div class="clear"></div>
+						</li-->
+						<div class="processing_status"></div>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<h2>Other Tools</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn . "/settings/notifications" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">
+								<?php print text('Event Notifications'); ?>
+							</div>
+							<div class="help info" title="<?php print text("Set up notifications on events in the system."); ?>"></div>
+						</a>
+					</li>
+<?php
+	if ($objUserSession->network_id && !$this->institution_id) {
+?>
+					<li>
+						<a class="link" href="<?php echo $sn . "/dashboard/resetpoints" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">
+								<?php print text('Reset [|Points|]'); ?>
+							</div>
+							<div class="help info" title="<?php print text("Set all [|student|] points in your [|school|] to zero."); ?>"></div>
+						</a>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+
+
+		<!--div class="module form institution_language">
+			<div class="module_content lists">
+				<form name="institution_language">
+					<ul>
+						<li>
+							<h3>Institution Language Settings</h3>
+						</li>
+						<li>
+							<span class="label">Admin Default:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<select class="select" name="institution__language">
+<?php
+		foreach ($this->arrAppTextLanguages as $objAppTextLanguage)
+		{
+			$strSelected = "";
+			if ($this->arrConfigOptions["institution"]["language"] == $objAppTextLanguage->app_text_language_id)
+				$strSelected = "selected ";
+?>
+									<option <?php print $strSelected; ?>value="<?php print $objAppTextLanguage->app_text_language_id; ?>"><?php print $objAppTextLanguage->app_text_language; ?></option>
+<?php
+		}
+?>
+								</select>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Kiosk Default:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<select class="select" name="kiosk__language">
+<?php
+		foreach ($this->arrAppTextLanguages as $objAppTextLanguage)
+		{
+			$strSelected = "";
+			if ($this->arrConfigOptions["kiosk"]["language"] == $objAppTextLanguage->app_text_language_id)
+				$strSelected = "selected ";
+?>
+									<option <?php print $strSelected; ?>value="<?php print $objAppTextLanguage->app_text_language_id; ?>"><?php print $objAppTextLanguage->app_text_language; ?></option>
+<?php
+		}
+?>
+								</select>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div class="module form personal_language">
+			<div class="module_content lists">
+				<form name="personal_language">
+					<ul>
+						<li>
+							<h3>Personal Language Settings</h3>
+						</li>
+						<li>
+							<span class="label">Personal Language:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<select class="select" name="admin__language">
+<?php
+		foreach ($this->arrAppTextLanguages as $objAppTextLanguage)
+		{
+			$strSelected = "";
+			if ($this->arrUserOptions["admin"]["language"] == $objAppTextLanguage->app_text_language_id)
+				$strSelected = "selected ";
+?>
+									<option <?php print $strSelected; ?>value="<?php print $objAppTextLanguage->app_text_language_id; ?>"><?php print $objAppTextLanguage->app_text_language; ?></option>
+<?php
+		}
+?>
+								</select>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div class="module form content_editing">
+			<div class="module_content lists">
+				<form name="content_editing">
+					<ul>
+						<li>
+							<h3>Gain the ability to modify content or provide translations</h3>
+						</li>
+						<li>
+							<span class="label">Content Editor:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<input type="checkbox" name="admin__content_editing" value="1"<?php print $this->arrUserOptions["admin"]["content_editing"] ? " checked=\"checked\"" : ""; ?> />
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+				</form>
+			</div>
+		</div-->
+	</div>
+</div>

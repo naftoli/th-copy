@@ -1,0 +1,37 @@
+<?php include "config.phtml"; ?>
+<div class="slider">
+	<div class="col_title">
+		<span>Packages Add Hosts</span>
+	</div>
+	<div class="col_content">		
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<form name="missionaddhosts" id="missionaddhosts" method="post" action="">
+					<ul>
+<?php 
+	if ($this->arrCampaigns){
+						echo '
+						<li>
+							<a class="link" href="'.$sn.'/packages/packageaddnetworks/">
+								<div class="icon"></div>
+								<div class="title">> Skip to Network List</div>
+							</a>
+						</li>';
+		foreach ($this->arrCampaigns as $objCampaign){
+?>
+						<li>
+							<a class="link" href="<?php echo $sn; ?>/packages/packageaddnetworks/host_id/<?php echo $objCampaign->institution_id; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php echo $objCampaign->name; ?></div>
+							</a>
+						</li>
+<?php		
+		}
+	}
+?>
+					</ul>
+				</form>
+			</div>
+		</div>		
+	</div>
+</div>

@@ -1,0 +1,62 @@
+<style>
+<!--
+.iconl_finish {
+	background-image:url("images/iconl_finish.png");
+}
+.iconl_quota {
+	background-image:url("images/iconl_quota.png");
+}
+.iconl_brain {
+	background-image:url("images/iconl_brain.png");
+}
+.icon_alert {
+	background-image:url("images/icon_alert.png");
+}
+.ladder_box_full {
+	margin-top:-130px;
+}
+.ladder_box_full icon_finish {
+	position:absolute;
+}
+.ladder_box_full p {
+	margin-bottom:12px !important;
+	line-height:1.4;
+}
+.overview .ladder .ladder_box_full .ladder_box {
+	width:auto;
+	float:none;
+}
+-->
+</style>
+	<script type="text/javascript">
+		$(document).ready(function(){    
+			$("#slider").easySlider({
+				numeric: true, 
+				controlsBefore:    '<div class="page_dots">',
+				controlsAfter:    '</div>'
+				});
+		});  
+	</script>
+<div id="main">
+	<div id="page_title">Tanya Campaign</div>
+	<div class="three_column padding_top">
+		<div class="content">
+			<div id="slider">
+				<ul class="overview">
+					<li>
+						<div class="slider_title">Dedication</div>
+						<div class="mainbox ladder clearfix">
+							<div class="col2_image"><img src="<?php print WEB_ROOT . "images/back-end/kiosk/icon_nosson.png"; ?>" /></div>
+							<div class="scroll-pane">
+								<div class="col2_text">
+									<p>Dedicated in memory of Nosson Deitsch OBM.</p>
+									<p>Nosson was a young bochur who learned and continued to review all 53 prokim of Likutei Amorim by heart until his passing last year on Lag BaOmer 5770 and throughout his life inspired others to do the same.</p>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

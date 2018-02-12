@@ -1,0 +1,70 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objUserSession = new Zend_Session_Namespace("user_session_data");
+?>
+<script language="javascript">
+$(document).ready(function()
+{
+	$('.slider:last form .submit').bind("click", function(e) {
+		var strFormName = $(this).closest("form").attr("name");
+		$(".slider:last ." + strFormName + " .processing_status").html('Loading...').fadeIn("fast");
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php echo $sn . "/administration/profilesuper/' + strFormName + '/true" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('.slider:last .' + strFormName + ' form').serialize(),
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					$(".slider:last ." + strFormName + " .processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+				} else {
+					$(".slider:last ." + strFormName + " .processing_status").html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	});
+});
+</script>
+<div class="slider">
+	<style>
+		.processing_status {
+			color: black;
+		}
+	</style>
+	<div class="col_title">
+		<span>System Settings</span>
+	</div>
+<?php
+if (!isset($this->arrConfigOptions["system"]["network_logo"]))
+{
+	$intImage = $this->objInstitution->image_id;
+}
+else
+	$intImage = $this->arrConfigOptions["system"]["network_logo"];
+?>
+	<div class="col_content">
+		<div class="module form network_logo">
+			<div class="module_content">
+				<form name="network_logo">
+					<ul>
+						<li>
+							<h3>Network logo</h3>
+							<input type="hidden" name="system__network_logo" id="usereditor_network_logo" value="<?php print $intImage; ?>" />
+							<iframe src="<?php print $sn . "/imgs/smalluploader/current_image/" . $intImage; ?>/resultid/usereditor_network_logo" width="100%" height="80" scrolling="no">
+								<p>Your browser does not support iframes.</p>
+							</iframe>
+						</li>
+						<div class="processing_status" style="color: black;"></div>
+						<li>
+							<span>
+								<a href="#" title="Save" class="button submit">Save</a>
+							</span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

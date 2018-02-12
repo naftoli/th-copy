@@ -1,0 +1,115 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+$user_session_data = new Zend_Session_Namespace('user_session_data');
+$objRoles = new Roles();
+?>
+
+<div class="slider">
+	<div class="col_title">
+		<span><?php print text("User Accounts"); ?></span>
+		<div class="title_help info" title="<?php print text("View, edit and add different types of user accounts to your institution. There are three types of user accounts: [|students|], [|teachers|], and the admin."); ?>"></div>
+	</div>
+	<div class="col_content">
+<?php
+	if($objRoles->isAllowed('Institution Administrator'))
+	{
+?>
+		<h2><?php print text("Administrative Staff"); ?></h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php print $sn ?>/menu/users/permission/admin/url/<?php echo dblencode("users/editor/user_type/admin/user_types/admin" . $strParamPath) . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View Institution Administrators"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h2><?php print text("[|Teachers|]"); ?></h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/users/permission/teacher/url/<?php echo dblencode("users/editor/user_type/teacher/user_types/teacher" . $strParamPath) . $strParamPath; ?>">
+						  <div class="icon"></div>
+						  <div class="title"><?php print text("View All [|Teachers|]"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/users/editor/user_types/teacher/user_type/teacher<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Add New [|Teachers|]"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h2><?php print text("[|Students|]"); ?></h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/users2/is_active/1/is_registered/1/permission/student/url/<?php echo dblencode("users/editor/user_type/student/user_types/student" . $strParamPath) . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View Registered [|Students|]"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/users2/is_active/1/permission/student/url/<?php echo dblencode("users/editor/user_type/student/user_types/student" . $strParamPath) . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View All [|Students|]"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/classes/pre/order/url/" . dblencode("menu/users2/is_registered/1/is_active/1/permission/student/url/" . dblencode("users/editor/user_type/student/user_types/student" . $strParamPath) . $strParamPath); ?>">
+						  <div class="icon"></div>
+						  <div class="title"><?php print text("View [|Students|] by [|Class|]"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/users2/is_active/0/permission/student/url/<?php echo dblencode("users/editor/user_type/student/user_types/student" . $strParamPath) . $strParamPath; ?>">
+						  <div class="icon"></div>
+						  <div class="title"><?php print text("View All Deactivated [|Students|]"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/users/editor/user_types/student/user_type/student<?php print $strParamPath; ?> ">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Add New [|Student|]"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+	else if($objRoles->isAllowed('Teacher'))
+	{
+?>
+		<h2><?php print text("[|Students|]"); ?></h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/classes/pre/order/url/" . dblencode("menu/users2/is_registered/1/is_active/1/permission/student/url/" . dblencode("users/editor/user_type/student/user_types/student" . $strParamPath) . $strParamPath); ?>">
+						  <div class="icon"></div>
+						  <div class="title"><?php print text("View [|Students|] by [|Class|]"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/users/url/<?php echo dblencode("users/editor/user_type/student/user_types/student" . $strParamPath); ?>">
+						  <div class="icon"></div>
+						  <div class="title"><?php print text("View All [|Students|]"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

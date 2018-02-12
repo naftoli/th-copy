@@ -1,0 +1,136 @@
+
+body { font-family: 'Roboto', verdana, sans-serif; font-weight:400; color:#fff; }
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 { font-family: 'Roboto', verdana, sans-serif; font-weight:700; }
+input { font-family: 'Roboto', verdana, sans-serif; font-weight:400; }
+a { color:#555; }
+a:hover { color:#222; }
+
+
+#wrapper { text-shadow:none; }
+.green #wrapper { background:url(/images/ckids/bg_back_blue.jpg); }
+.lgreen #wrapper { background:#e8bf4f; }
+#header { height: auto; font-size: 20px; text-shadow: none; background:#373737; position:relative; line-height:1.4; }
+#header:after, #auction_container:after, .winner_boxes .one_column:after, .winner_boxes .two_column:after, .scan_card:after { content: ""; position:absolute; background: -webkit-radial-gradient(50% -20%, ellipse cover, rgba(00, 00, 00, 0.5), rgba(97, 97, 97, 0.0) 40%); top:100%; width: 100%; left:-20%; height: 25px; margin:0 -20px;  }
+
+#header .org { padding:20px 35px; }
+#header .org_photo { width:85px; height:85px; border-radius:5px; overflow:hidden; background:#fff; float:left; margin-right:20px; }
+
+.nav ul li { width:85px; height: 84px; float: left; text-indent: -9999px; margin:0; margin-left:15px; }
+.nav ul li a { width:85px; height: 84px; }
+.nav ul li.icon_back { background:url(/images/ckids/icon_lg_back.png); }
+.nav ul li.icon_home { background:url(/images/ckids/icon_lg_home.png); }
+.nav ul li.icon_logout { background:url(/images/ckids/icon_lg_power.png); }
+
+
+#main #page_title { height: auto; background: none; text-align: left; color: #fff; line-height: inherit; margin:0 80px; padding:40px 0 30px; font-weight:700; text-transform:uppercase; }
+#main .auction #page_title { background:url(/images/ckids/icon_md_shop.png) no-repeat 0 60%;  padding-left:65px; }
+.member_photo {margin-top:6px;}
+.member_photo_img { margin:0; margin-right: 35px; overflow:hidden; border-radius:5px; }
+.member_photo_cover { width: auto; height: auto; display: none; background:none;
+position: inherit; padding-right:0; }
+.member_info { position:relative; line-height:1.4; }
+.member_info .member_name { border-bottom:none; position:absolute; top:-91px; font-size:36px; font-weight:700; color:#ffcb05; width:500px; }
+.member_info label { font-size: 14px; text-transform: none; }
+.member_info span { font-weight:700; }
+
+
+.scan_card { width:auto; height:auto; background:#373737; margin: 90px 60px 0; border-radius:5px; }
+.scan_card .scan_card_inside { margin:0; padding:50px 0 30px; text-transform:uppercase; }
+.scan_card .scan_card_inside:before { content:''; position:absolute; top:-30px; left:30px; width:325px; height:132px; background:url(/images/ckids/bg_scan_barcode.png) no-repeat; }
+.scan_card input { padding:15px; border:none; border-radius:5px; margin-top:15px; font-weight:300; }
+
+
+ul.button_icons { margin-right:60px; }
+.buttons li, .button div { width:auto; height:auto; background:none; border-radius:5px; overflow:hidden; padding:0; float:none; margin-bottom:25px; }
+.buttons li a, .button div a { width:auto; height:auto; background-color:#ffcb05 !important; font-size:24px; font-weight:700; padding:25px; padding-left:80px; text-decoration:none; color:#555; overflow:hidden; line-height:1.4; display:block; border-radius:5px; }
+.buttons li a:hover, .button div a:hover { background-color:#f7941e !important; }
+
+ul.button_icons li a.icon_shop { background:#ffcb05 url(/images/ckids/icon_lg_store.png) no-repeat bottom left; }
+ul.button_icons li a.icon_review { background:#ffcb05 url(/images/ckids/icon_lg_transactions.png) no-repeat bottom left; }
+
+
+
+
+
+#auction_container { background:#f5f5f5 !important; color:#555; margin: 10px 80px 0 !important; width: auto !important; height: 489px !important; border-radius:5px; position:relative; }
+#auction_container #tabs .tabs_pane .tabs {
+	height:440px !important;
+}
+#auction_container #tabs { width:696px; margin:0; }
+#auction_container .tabs { width:160px; }
+#auction_container .tabs_main a { border-bottom: none; }
+#auction_container .tabs .prices { margin-left: 0; height: 425px; float:none; }
+#auction_container .tabs .prices li { background: none; width:auto; float:none; }
+#auction_container .tabs li a { margin:0 15px 15px; padding:8px; background:#f98460 url(../../../images/ckids/icon_sm_price.png) no-repeat bottom left; text-align:left; color:#fff; border-radius:5px; height: auto; width: auto; padding-left:40px; }
+
+#auction_container .pane.prizes { width:486px; height:445px; margin:0; border:#ebebeb solid; border-width:0 3px; background:#fff; padding:22px; position:absolute; top:0; left:160px; }
+#auction_container .pane .pane_title { font-size:20px; color:#878787; margin-bottom:25px; }
+#auction_container .pane_item { width: 120px; height: 160px; margin: 0 10px; font-size:15px; padding:0; padding-top:10px; }
+#auction_container .pane_item_image, #prizes_overlay .pane_item_image { width: auto; height: auto; background:none; margin-bottom:8px; }
+#auction_container .pane_item_image img, .cart_item_image img, .prize_image img { display:inline; }
+
+
+.jScrollPaneTrack { background: #f5f5f5 !important; }
+.jScrollPaneDrag { background: #e8bf4f !important; }
+a.jScrollArrowUp { background: #cdcdcd url(/images/ckids/bg_btn_scroll_up.png) no-repeat center center !important; border-radius:5px 5px 0 0; }
+a.jScrollArrowDown { background: #cdcdcd url(/images/ckids/bg_btn_scroll_down.png) no-repeat center center !important; border-radius:0 0 5px 5px; }
+
+
+.overlay#prizes_overlay { background:#fff; border-radius:5px; box-shadow:none; border:none; color:#555; padding:20px; min-height:400px; }
+.overlay#prizes_overlay .prize_overlay .pane_title { border-bottom: none; font-weight:300; text-align:left; text-transform:uppercase; }
+.overlay#prizes_overlay .prize_overlay .prize_info { font-size:16px; line-height:1.4; }
+.overlay#prizes_overlay .prize_text { margin-left:330px; width:auto; margin-bottom:20px; }
+.overlay#prizes_overlay .prize_bottom { margin-left:330px; width:auto; position:static; font-size: 100%; border-top: none; padding-top: 5px; }
+.overlay#prizes_overlay .prize_bottom .button_small input { background:#a1b863 url(/images/ckids/icon_md_check.png) no-repeat bottom left; width:100%; height:auto; padding:15px; margin:0; border-radius:5px; }
+.overlay#prizes_overlay .prize_bottom .button_small input:hover { background-color:#8ea058; }
+.overlay#prizes_overlay .prize_price { position:absolute; top:330px; left:180px; color:#777; font-size: 18px; line-height: 1.4; }
+.overlay#prizes_overlay .prize_price .prize_price_miles { position: absolute; top: 0; left: -160px; font-size:18px !important; }
+.overlay#prizes_overlay .prize_price .prize_price_miles span { font-size:30px; font-weight:700; padding-left:48px; color:#f19846; display:block; background:url(/images/ckids/icon_md_tag.png) no-repeat center left; }
+.overlay#prizes_overlay .prize_bottom .input { float:none !important; background:#94a6a6; padding:5px; border-radius:5px; margin-bottom:20px; }
+
+
+.cart { width: 160px !important; margin-left: 0 !important; }
+#cart_items_div { margin-left:0 !important; }
+.cart_items { margin:0 !important; width:auto !important; }
+.cart .cart_item { height:auto !important; margin:10px 0 0 20px !important; background:none !important; }
+.cart .cart_item .badge { background:#a1b863 !important; border-radius:100%; color:#fff !important; text-shadow:none !important; width:20px !important; height:20px !important; line-height:1.4 !important; }
+.pane_item .badge { top:3px !important; right:2px !important; background:#a1b863 !important;  border-radius:100%; color:#fff !important; text-shadow:none !important; width:20px !important; height:20px !important; line-height:1.4 !important; }
+.cart .cart_bottom { width:auto; bottom:0 !important; padding:0 15px; }
+.cart .cart_bottom > div { padding-left:0 !important; }
+.cart .cart_bottom .button_small div { background:none; width:auto; height:auto; margin:0;  }
+.cart .cart_bottom .button_small div #checkout_button, #cart_buynow { background:#a1b863 url(/images/ckids/icon_md_check.png) no-repeat bottom left; padding:15px; padding-left:45px; text-align:left; border-radius:5px; margin-bottom:15px; color:#fff; width:auto; height:auto; }
+.cart .cart_bottom .button_small div #empty_cart { background:#94a6a6 url(/images/ckids/icon_sm_cancel.png) no-repeat bottom left; padding:8px; padding-left:45px; text-align:left; border-radius:5px; color:#fff; width:auto;  }
+
+#prizes_overlay .button_small  { right:15px; bottom:15px; }
+.button_small div { background:none !important; width:auto !important; margin:0 !important; }
+.footer_logo { display:none; }
+
+#keypad-div { padding:10px; background:#f19846; border-radius:5px; box-shadow:0 0 8px rgba(0,0,0,.2); }
+.hasKeypad { background:none !important; position:relative; width:250px !important; }
+.keypad-key { background-image:url(/images/ckids/bg_keyboard.gif) !important; color:#f9f4b2 !important; }
+.keypad-key:hover { color:#e7be52 !important; }
+.keypad-trigger { opacity:0; position:relative; }
+.hasKeypad:after { content:''; position:absolute; top:0; left:0; width:42px; height:42px; background-image:url(/images/ckids/bg_keyboard_icon.jpg); }
+
+
+.winner_boxes { width:864px; background:none; }
+.winner_boxes .one_column, .winner_boxes .two_column { margin:0; background:#fff; color:#555; border-radius:5px; position:relative; height:425px; padding:5px 0; }
+.winner_boxes .one_column { margin-right:20px; }
+.winner_boxes .two_column { width:659px; }
+.winner_boxes .pane_title { border-bottom:none; }
+.winner_boxes .select { border-bottom:none; background:#ebebeb; padding:5px 8px; }
+.winner_boxes .select:nth-child(even) { background:#f5f5f5; }
+.winner_boxes .button_bar { border-bottom:none; }
+.winner_boxes #list_pane { margin:0; }
+.winner_boxes #list_pane .row { padding:3px 16px; background:none !important; }
+.winner_boxes #list_pane .row:nth-child(odd) { background:#fff5cd !important; }
+.winner_boxes #list_pane .row.header .cell { color:#555; }
+.winner_boxes .pager { margin-right:65px; }
+
+#pager.button_small a { position:absolute; left:0; width:auto; margin:3px 8px; width:48px; height:48px; text-indent:-999em; background:#f29942 url(/images/ckids/icon_md_prev.png) bottom left no-repeat; padding:0; border-radius:5px;  }
+#pager.button_small a:hover { background-color:#cc813c;  }
+#pager.button_small a.next { left:auto; right:0; background-image:url(/images/ckids/icon_md_next.png); }
+
+.overlay.display_overlay { background:#fa8561; border-radius:5px; box-shadow:none; border:none; color:#fff; padding:20px; }
+.overlay.display_overlay .selecton_box { margin: 0 50px 20px; padding:8px; border: none; background:#fff !important; color:#555; cursor: pointer; border-radius:5px; }
+.overlay.display_overlay .selecton_box:hover { background:#efefef !important; color:#333; }

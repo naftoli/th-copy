@@ -1,0 +1,42 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	global $arrAppDetails;
+?>
+<div class="slider" id="studenttransfer">
+	<style>
+	.context-menu-item {
+		text-align: left !important;
+	}
+	.handsontable .dragdealer .handle {
+		background-color: #777 !important;
+	}
+	</style>
+	<div class="col_title">
+		<span>Student Transfer</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	foreach ($this->arrInstitutions as $objInstitution)
+	{
+		$strName = $objInstitution->name;
+		if (isset($arrAppDetails[$objInstitution->template_style]['name']))
+			$strName .= ' - ' . $arrAppDetails[$objInstitution->template_style]['name'];
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/administration/studenttransferlist/institution_id/" . $objInstitution->institution_id . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print $strName; ?></div>
+						</a>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

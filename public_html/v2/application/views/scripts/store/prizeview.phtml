@@ -1,0 +1,279 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+
+	if(!isset($this->intUserId))
+		$strUrl = $sn . "/store/prizeview/";
+	else
+		$strUrl = $sn . "/store/prizeviewbyuser/";
+		
+	if (isset($this->intHost))
+		$strUrl .= "host_id/" . $this->intHost . "/";
+	if (isset($this->intNetwork))
+		$strUrl .= "network_id/" . $this->intNetwork . "/";
+	if (isset($this->intInstitution))
+		$strUrl .= "institution_id/" . $this->intInstitution . "/";
+	if (isset($this->intUserId))
+		$strUrl .= "user_id/" . $this->intUserId . "/";
+?>
+
+<div class="slider" id="slider_prizeview">	
+	<div class="col_title">
+		<span>Prize List</span>
+	</div>
+	<div class="col_content">
+		<div class="module lists" id="lists-camper-groups">
+			<div class="module_content" style="padding: 5px">
+				<input type="button" value="Sort by Price" onclick="slideRefresh('<?php echo $sn . "/store/prizeview/sort_by/prize_price"; ?>');" /> <input type="button" value="Sort by Name" onclick="slideRefresh('<?php echo $sn . "/store/prizeview"; ?>');" />
+			</div>
+		</div>
+<?php
+	if (!count($this->arrResults))
+	{
+?>
+		<div class="module" style="padding:5px;">There are no prizes available to view.</div>
+<?php
+	}
+	if (!$this->parent_prize_id)
+	{
+?>
+		<h2><?php print $user_session_data->institution_type; ?> Installed Prizes</h2>
+		<div id="lists" class="module lists forms">			
+			<div class="module_content">
+				<ul>
+<?php
+		foreach ($this->arrResults as $arrResult)
+		{
+			if($arrResult->prize_type == "School Installed" )
+			{
+			
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/store/prize/prize_id/" . $arrResult->prize_id; ?><?php echo $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">
+<?php
+				print $arrResult->prize_name;
+				if($arrResult->grade!='' && $arrResult->grade!=0 && $arrResult->grade!=null)
+				{
+					if($arrResult->sub !='' && $arrResult->sub !=0 && $arrResult->sub !=null){
+						echo " (" . ($user_session_data->institution_type == "School" ? "Grade" : "Bunk") . ": " .$arrResult->grade . $arrResult->sub .")";
+					}
+					else{
+						echo " (" . ($user_session_data->institution_type == "School" ? "Grade" : "Bunk") . ": " .$arrResult->grade .")";
+					}
+				}
+				print "<br />";
+				echo "<span style='color:green;'>[miles: " . $arrResult->points . "]</span>, ";
+				if($arrResult->prize_count < 5){
+					echo "<span style='color:red;'> [Low in stock: " . $arrResult->prize_count . " left]</span>";
+				}else{
+					echo "<span style='color:green;'> [" .$arrResult->prize_count ." in stock]</span>";
+				}
+				if($arrResult->is_active == 0)
+				{
+					print "<span style='float:right; padding-left:5px;'> Inactive Prize</span>";
+				}
+?>
+							</div>
+						</a>
+					</li>
+<?php
+		}
+	}
+?>
+				</ul>
+			</div>
+		</div>
+		<h2>Base Prizes</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>	
+<?php
+		foreach ($this->arrResults as $arrResult)
+		{
+			if($arrResult->class_id == 0 && $arrResult->institution_id > 0)
+			{
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/store/prize/prize_id/" . $arrResult->prize_id; ?><?php echo $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">
+<?php
+				print $arrResult->prize_name;
+				if($arrResult->grade!='' && $arrResult->grade!=0 && $arrResult->grade!=null)
+				{
+					if($arrResult->sub !='' && $arrResult->sub !=0 && $arrResult->sub !=null){
+						echo " (Grade: " .$arrResult->grade . $arrResult->sub .")";
+					}
+					else{
+						echo " (Grade: " .$arrResult->grade .")";
+					}
+				}
+				print "<span> [$" . $arrResult->prize_price . "]</span>";
+				if($arrResult->prize_count < 5){
+					echo "<br /><span style='color:red;'> [Low in stock: " . $arrResult->prize_count . " left]</span>";
+				}else{
+					echo "<br /><span style='color:green;'> [" .$arrResult->prize_count ." in stock]</span>";
+				}
+				if($arrResult->is_active == 0)
+				{
+					print "<span style='float:right; padding-left:5px;'> Inactive Prize</span>";
+				}
+						?>
+							</div>
+						</a>
+					</li>
+<?php
+			}
+		}
+?>
+				</ul>
+			</div>
+		</div>
+		<h2><?php print $user_session_data->institution_type == "School" ? "Class" : "Bunk"; ?> Prizes</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>	
+<?php
+		foreach ($this->arrResults as $arrResult)
+		{
+			if($arrResult->class_id != 0 && $arrResult->institution_id != 0)
+			{
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/store/prize/prize_id/" . $arrResult->prize_id; ?><?php echo $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">
+<?php
+								print $arrResult->prize_name;
+								if($arrResult->grade!='' && $arrResult->grade!=0 && $arrResult->grade!=null)
+								{
+									if ($user_session_data->institution_type == "School")
+									{
+										echo " (School: " .$arrResult->grade . $arrResult->sub . ")";
+									}
+									else
+									{
+										echo " (Bunk: " . $arrResult->sub . ")";
+									}
+								}
+								if($arrResult->prize_count < 5){
+									echo "<br /><span style='color:red;'> [Low in stock: " . $arrResult->prize_count . " left]</span>";
+								}else{
+									echo "<br /><span style='color:green;'> [" .$arrResult->prize_count ." in stock]</span>";
+								}
+								if($arrResult->is_active == 0)
+								{
+									print "<span style='float:right; padding-left:5px;'> Inactive Prize</span>";
+								}
+?>
+							</div>
+						</a>
+					</li>
+<?php
+			}
+		}
+?>
+				</ul>
+			</div>
+		</div>
+<?php
+		if($this->permission == 'Super Administrator')
+		{
+?>
+		<h2>Template Prizes</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+			foreach ($this->arrResults as $arrResult)
+			{
+				if($arrResult->prize_type == 'Template')
+				{
+?>
+						<li>
+							<a class="link" href="<?php print $sn . "/store/prize/prize_id/" . $arrResult->prize_id; ?><?php echo $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title">
+<?php
+					print $arrResult->prize_name;
+					if($arrResult->prize_count < 5)
+					{
+						echo "<br /><span style='color:red;'> [Low in stock: " . $arrResult->prize_count . " left]</span>";
+					}else{
+							echo "<br /><span style='color:green;'> [" .$arrResult->prize_count ." in stock]</span>";
+					}
+					if($arrResult->is_active == 0)
+					{
+						print "<span style='float:right; padding-left:5px;'> Inactive Prize</span>";
+					}
+?>
+								</div>
+							</a>
+						</li>	
+<?php	
+				}					
+			}
+?>
+					</ul>
+				</div>
+			</div>
+<?php
+		}
+	}
+	else
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>	
+<?php
+		foreach ($this->arrResults as $arrResult)
+		{
+			if($arrResult->class_id == 0 && $arrResult->institution_id > 0)
+			{
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/store/prize/prize_id/" . $arrResult->prize_id; ?><?php echo $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">
+<?php
+				print $arrResult->prize_name;
+				if($arrResult->grade!='' && $arrResult->grade!=0 && $arrResult->grade!=null)
+				{
+					if($arrResult->sub !='' && $arrResult->sub !=0 && $arrResult->sub !=null){
+						echo " (Grade: " .$arrResult->grade . $arrResult->sub .")";
+					}
+					else{
+						echo " (Grade: " .$arrResult->grade .")";
+					}
+				}
+				print "<span> [$" . $arrResult->prize_price . "]</span>";
+				if($arrResult->prize_count < 5){
+					echo "<br /><span style='color:red;'> [Low in stock: " . $arrResult->prize_count . " left]</span>";
+				}else{
+					echo "<br /><span style='color:green;'> [" .$arrResult->prize_count ." in stock]</span>";
+				}
+				if($arrResult->is_active == 0)
+				{
+					print "<span style='float:right; padding-left:5px;'> Inactive Prize</span>";
+				}
+						?>
+							</div>
+						</a>
+					</li>
+<?php
+			}
+		}
+?>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

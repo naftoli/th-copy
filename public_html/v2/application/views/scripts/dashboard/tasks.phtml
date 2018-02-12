@@ -1,0 +1,186 @@
+<?php 
+include "config.phtml";
+include "parameters.phtml";
+?>
+
+<div class="slider">
+	
+	<div class="col_title">
+		<span>Tasks</span>
+	</div>
+	
+	<div class="col_content">
+		
+		<div id="lists" class="module lists forms">
+			
+			<div class="module_content">
+				
+				<ul>
+					
+<?php if ($this->objRoles->isAllowed('Super Administrator')) : ?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskhosts/">
+							<div class="icon"></div>
+							<div class="title">View Tasks by Hosts</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/tasknetworks/">
+							<div class="icon"></div>
+							<div class="title">View Tasks by Networks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskinstitutions/">
+							<div class="icon"></div>
+							<div class="title">View Tasks by Institutions</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskcampaign/">
+							<div class="icon"></div>
+							<div class="title">View Task by Campaign</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskmission/">
+							<div class="icon"></div>
+							<div class="title">View Task by Mission</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/tasklist/">
+							<div class="icon"></div>
+							<div class="title">View All Tasks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskaddhosts">
+							<div class="icon"></div>
+							<div class="title">Add New Tasks</div>
+						</a>
+					</li>
+<?php elseif ($this->objRoles->isAllowed('Host Administrator')) : ?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/tasknetworks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Tasks by Networks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskinstitutions<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Tasks by Institutions</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskcampaign<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Task by Campaign</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskmission<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Task by Mission</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/tasklist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Tasks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskaddnetworks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New Tasks</div>
+						</a>
+					</li>
+<?php elseif ($this->objRoles->isAllowed('Network Administrator')) : ?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskinstitutions<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Tasks by Institutions</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskcampaign<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Task by Campaign</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskmission<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Task by Mission</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/tasklist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Tasks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskaddinstitutions<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New Tasks</div>
+						</a>
+					</li>
+<?php elseif ($this->objRoles->isAllowed('Network Administrator')) : ?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskcampaign<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Task by Campaign</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskmission<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Task by Mission</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/tasklist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Tasks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskadd<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New Tasks</div>
+						</a>
+					</li>
+<?php elseif ($this->objRoles->isAllowed('Institution Administrator')) : ?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskcampaign<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Task by Campaign</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskmission<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Task by Mission</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/tasklist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Tasks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/taskaddcampaign<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New Tasks</div>
+						</a>
+					</li>
+<?php endif; ?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

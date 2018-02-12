@@ -1,0 +1,69 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Image Hosts</span>
+	</div>
+	<div class="col_content">
+<?php
+	if (count($this->arrCampaigns) == 0)
+	{
+?>
+		<div class="module" style="padding:5px;">
+			There are no hosts available to display.
+		</div>
+<?php
+	}
+	else
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<form name="campaignaddhosts" id="campaignaddhosts" method="post" action="">
+					<ul>
+<?php
+		if (count($this->arrCampaigns) > 1)
+		{
+?>
+						<li>
+							<a class="link" href="<?php print $sn . "/images/imagesaddnetworks" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title">> Skip to Network List</div>
+							</a>
+						</li>
+<?php
+		}
+		if (count($this->arrCampaigns))
+		{
+?>
+						<li>
+							<a class="link" href="<?php print $sn . "/images/imagesaddinstitutions" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title">> Skip to Institution List</div>
+							</a>
+						</li>
+<?php
+		}
+		foreach ($this->arrCampaigns as $objCampaign)
+		{
+?>
+						<li>
+							<a class="link" href="<?php echo $sn . "/images/imagesaddnetworks/host_id/" . $objCampaign->institution_id . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php echo $objCampaign->name; ?></div>
+							</a>
+						</li>
+<?php
+		}
+?>
+					</ul>
+				</form>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

@@ -1,0 +1,125 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+if(isset($this->caption) && $this->caption =="bunks")
+{
+	$classes = "Bunks";
+}
+else{
+	$classes= "Classes";
+}
+?>
+
+<div class="slider">
+
+	<div class="col_title">
+		<span><?php echo $classes;?></span>
+	</div>
+
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+				<?php	if ($this->objRoles->isAllowed('Super Administrator')):?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classhosts">
+							<div class="icon"></div>
+							<div class="title">View <?php echo $classes;?> by Hosts</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classnetworks">
+							<div class="icon"></div>
+							<div class="title">View <?php echo $classes;?> by Network</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classinstitutions">
+							<div class="icon"></div>
+							<div class="title">View <?php echo $classes;?> by Institution</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classlist">
+							<div class="icon"></div>
+							<div class="title">View All <?php echo $classes;?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classaddhosts/">
+							<div class="icon"></div>
+							<div class="title">Add New <?php echo $classes;?></div>
+						</a>
+					</li>
+				<?php elseif($this->objRoles->isAllowed('Host Administrator')): ?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classnetworks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View <?php echo $classes;?> by Network</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classinstitutions<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View <?php echo $classes;?> by Institution</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classlist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All <?php echo $classes;?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classaddnetworks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New <?php echo $classes;?></div>
+						</a>
+					</li>
+				<?php elseif($this->objRoles->isAllowed('Network Administrator')): ?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classinstitutions<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View <?php echo $classes;?> by Institution</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classlist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All <?php echo $classes;?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classaddinstitutions<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New <?php echo $classes;?></div>
+						</a>
+					</li>
+					<?php elseif($this->objRoles->isAllowed('Institution Administrator')): ?>
+
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classlist<?php echo $institution_string; ?>/caption/<?php echo $this->caption;?>">
+							<div class="icon"></div>
+							<div class="title">View All <?php echo $classes;?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classadd<?php echo $institution_string; ?>/caption/<?php echo $this->caption;?>">
+							<div class="icon"></div>
+							<div class="title">Add New <?php echo $classes;?></div>
+						</a>
+					</li>
+					<?php elseif($this->objRoles->isAllowed('Teacher')):  ?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/classlist<?php echo $institution_string; ?>/role/teacher/">
+							<div class="icon"></div>
+							<div class="title">View My <?php echo $classes;?></div>
+						</a>
+					</li>
+					<?php endif; ?>
+
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

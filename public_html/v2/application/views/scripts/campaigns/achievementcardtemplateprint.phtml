@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Print Achievement Cards</title>
+        <style type="text/css">
+        .fronts, .backs {
+          margin:-.05in .125in;
+          page-break-after: always;
+        }
+        
+        .fronts td, .backs td {
+          border: 1px dashed black;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          vertical-align: middle;
+          height: 2in;
+          width: 3.5in;
+        }
+        
+        .fronts td td, .backs td td {
+          width: auto;
+          height: auto;
+          border: none;
+        }
+        
+        @media print {
+          .fronts td, .backs td {
+            border: none;
+          }
+        
+          hr {
+            display: none;
+          }
+        }
+        
+        </style>
+    </head>
+    <body>
+        <div align="center">
+            <table class="backs">
+<?php
+    include "config.phtml";
+    $line=2;
+    $columns = 2;
+    foreach($this->arrCardBarcode as $key => $intBarcode)
+    {
+        if($line % 2 ==0)
+		{
+            print '<tr class="row">';
+		}
+?>
+                <td style="-moz-border-radius:10px; padding-left: 20px; padding-right: 20px; border:2px solid #000000;">					
+                    <div align="center" style="padding:10px;">
+						<span>
+							<img src="<?php echo $sn; ?>/images/show-image/image_id/<?php print $this->objTemplate->campaign_image_id;?>" height="70" width="70" />
+						</span>
+					</div>
+					<div style="text-align:center; display:block;">
+						<span style="font-family: Times New Roman sans-serif; font-size:12px;">
+							<?php print $this->objTemplate->achievement; ?>
+						</span>                   
+					</div>
+					<!--<div align="center" style="text-align:center;">
+					<div style="font-weight: bold; font-size: 12px; border:2px solid black; float:left; -moz-border-radius:15px; width:25px; height:25px; vertical-align: middle;"><?php print $this->objTemplate->left_circle;?></div>
+					--><div style="font-weight: bold; font-size: 12px; border:2px solid black; float:right; -moz-border-radius:15px; width:25px; height:25px; vertical-align: middle;"><?php print $this->objTemplate->right_circle;?></div>	
+					</div>
+                    <div align="center">
+						<span>
+							<table>
+								<tr>
+									<td class="code">
+										<p align="center">
+											<img src="<?php echo $sn; ?>/kiosk/get-barcode-legacy/serial/<?php print $intBarcode; ?>" width="210" height="20"><br />
+											<?php print $intBarcode; ?>
+										</p>
+									</td>
+									</td>
+								</tr>
+							</table>
+						</span>
+                    </div>
+					
+                    <div align="center">
+                       <span style="font-size:12px; width:50px; font-weight:bold; border:2px solid #000000; -moz-border-radius:7px; padding:3px;"><?php print $this->objTemplate->card_points; ?> points</span>
+                    </div>
+                </td>
+<?php
+		if($line % 2 !=0){
+			print '</tr>';
+		}
+		$line++;
+    }
+?>
+            </table>
+        </div>
+    </body>
+</html>

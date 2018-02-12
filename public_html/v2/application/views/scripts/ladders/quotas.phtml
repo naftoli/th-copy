@@ -1,0 +1,271 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace("user_session_data");
+?>
+<script type="text/javascript">
+$(document).ready(function() {
+	/*$("#group_options").find("select").bind('change click keyup', function () {
+		var intLinesPerWeek = $(this).find("[selected=true]").text();
+		$(this).closest("div").find("#lines_per_year_group").html(intLinesPerWeek * 52);
+	});*/
+	$(".user_quota").bind('click', function () {
+		row_toggle($(this).closest("tr"));
+		var intLinesPerWeek = $(this).find(":selected").text();
+		$(this).closest("tr").find("#lines_per_year").html(intLinesPerWeek * 52);
+	});
+	$(".user_quota").trigger("click");
+	$(".user_quota").trigger("click");
+	$(".user_quota").bind('change keyup', function () {
+		if ($(this).closest("tr").find("input[type='checkbox']:not(:checked)").length)
+		{
+			//$(this).trigger("click");
+			row_toggle($(this).closest("tr"));
+		}
+	});
+	$('.slider:last .uncheckall').click(function () {
+		$(this).closest(".module_collection").find("input[type=checkbox]:checked").each(function() {
+			row_toggle($(this).closest("tr"));
+		});
+	});
+	$('.slider:last .checkall').click(function () {
+		$(this).closest(".module_collection").find("input[type=checkbox]:not(:checked)").each(function() {
+			row_toggle($(this).closest("tr"));
+		});
+	});
+	$('.slider:last .apply_all').click(function () {
+		$('.slider:last .is_selected:checked')
+			.closest('.row')
+			.find('.user_quota')
+			.val($('.slider:last .apply_quota').val()*1+1)
+	});
+});
+function change_quotas(objButton)
+{
+	var strPathExtra = '';
+	if ($(objButton).html() == "Change")
+	{
+		strPathExtra += "/group_commit/true";
+	}
+	var objForm = $(objButton).closest("form");
+	$.ajax({
+		type : "POST",
+		cache : false,
+		start: $(objForm).find(".processing_status").html('Loading...').stop().fadeIn("slow"),
+		url : "<?php print $sn . "/ladders/quotas" . $strParamPath; ?>" + strPathExtra,
+		dataType : "text",
+		data: $(objForm).serialize(),
+		success : function(strResponse)
+		{
+			$('.slider:last .processing_status').html('Saved').delay(1500).queue(function () {
+				$(this).stop().fadeOut();
+			});
+		}
+	});
+}
+function row_toggle(objThis)
+{
+	var boolChecked = $(objThis).find(":checkbox:checked").length;
+	$(objThis).find(":checkbox").attr("checked", !boolChecked);
+	$(objThis).css("background-color", !boolChecked ? "#dadee6" : "#e8eaef");
+	var arrCheckedCheckboxes = $(objThis).closest("form").find(":checkbox:checked");
+	var intCheckedItems = arrCheckedCheckboxes.length;
+	var objDivGroupOpts = $(objThis).closest("form").find("#group_options");
+	if (intCheckedItems == 1)
+		$(objDivGroupOpts).removeClass("selected_once");
+	/*
+	console.log(intCheckedItems);
+	if (intCheckedItems > 1) // show the group selector
+	{
+		// find the largest ladder
+		if (!$(objDivGroupOpts).hasClass("selected_once"))
+		{
+			var intLargest = 0;
+			for (var intItr = 0; intItr != $(arrCheckedCheckboxes).length; intItr++)
+			{
+				var intIndex = $(arrCheckedCheckboxes[intItr]).closest("tr").find(".user_quota option:selected").index();
+				if (intLargest < intIndex)
+					intLargest = intIndex;
+			}
+			$(objDivGroupOpts).find("option").eq(intLargest).attr("selected", true);
+		}
+		$(objDivGroupOpts).addClass("selected_once");
+		$(objDivGroupOpts).stop().fadeIn('fast', function () {
+			$(this).animate({opacity:1});
+		});
+	} else {
+		$(objDivGroupOpts).stop().fadeOut('fast', function () {
+			$(this).animate({opacity:0});
+		});
+	}
+	*/
+}
+
+</script>
+<div class="slider" id="slider_orderslist">
+	<div class="col_title">
+		<span>Quotas for <?php print isset($this->objClass) ? 'Grade ' . $this->objClass->custom_name1 : 'All Grades'; ?></span>
+	</div>
+	<div class="col_content">
+<?php
+	if (!count($this->arrResult))
+	{
+?>
+		<div class="module" style="padding:5px;">
+			Nothing to display.
+		</div>
+<?php
+	}
+	else
+	{
+?>
+		<div class="module lists">
+			<div class="module_content" style="margin:6px;">
+				<ul>
+					<li>
+<?php
+		$boolDefault = 1;
+		if (isset($this->objClass))
+		{
+			if (preg_match('/pre/i', $this->objClass->grade))
+			{
+				print "<h1>Suggested quota for grade Pre 1A is 0.25 at 12 lines per year.</h1>";
+			}
+			else if ($this->objClass->grade == 1)
+			{
+				$boolDefault = 0;
+				print "<h1>Suggested quota for grade 1 is 0.5 at 24 lines per year.</h1>";
+			}
+			else if ($this->objClass->grade == 2)
+			{
+				$boolDefault = 0;
+				print "<h1>Suggested quota for grade 2 is 0.75 at 36 lines per year.</h1>";
+			}
+			else if ($this->objClass->grade == 3)
+			{
+				$boolDefault = 0;
+				print "<h1>Suggested quota for grade 3 is 1 at 48 lines per year.</h1>";
+			}
+			else if ($this->objClass->grade == 4)
+			{
+				$boolDefault = 0;
+				print "<h1>Suggested quota for grade 4 is 1.5 at 72 lines per year.</h1>";
+			}
+			else if ($this->objClass->grade == 5)
+			{
+				$boolDefault = 0;
+				print "<h1>Suggested quota for grade 5 is 2 at 96 lines per year.</h1>";
+			}
+			else if ($this->objClass->grade == 6)
+			{
+				$boolDefault = 0;
+				print "<h1>Suggested quota for grade 6 is 2.5 at 120 lines per year.</h1>";
+			}
+			else if ($this->objClass->grade == 7)
+			{
+				$boolDefault = 0;
+				print "<h1>Suggested quota for grade 7 is 3 at 144 lines per year.</h1>";
+			}
+		}
+		if ($boolDefault)
+		{
+?>
+						<a href="#" onclick="window.open('<?php print $sn . "/ladders/suggestedtanya"; ?>', 'Tanya Ladder Suggestions', 'menubar=0,resizable=0,location=0,status=0,scrollbars=0,height=600,width=600')">
+							<div class="icon"></div>
+							<div class="title">Click here for suggested quotas per grade</div>
+						</a>
+<?php
+		}
+?>
+
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+		foreach ($this->arrResult as $intClass => $arrData)
+		{
+?>
+		<form>
+			<div class="module_collection">
+				<div style="margin-bottom:4px">
+					<table width="96%" cellpadding="4" cellspacing="4">
+						<tr>
+							<td>&nbsp;</td>
+
+							<td width="60"><span><a href="#" title="Check All" class="button checkall">Check All</a></span></td>
+							<td width="6">&nbsp;</td>
+							<td width="60"><span><a href="#" title="Uncheck All" class="button uncheckall">Uncheck All</a></span></td>
+							<td width="10"></td>
+							<td width="200" align="right">
+								<span><select style="padding:5px;margin-right:4px" class="apply_quota">
+<?php
+			foreach ($arrData as $intUser => $arrUserData)
+			{
+				if (!isset($arrUserData["arrLadders"]))
+					continue;
+				$arrLadders = $arrUserData['arrLadders'];
+				break;
+			}
+			foreach ($arrLadders as $intVelocity => $intLadder)
+			{
+				print '<option value="' . $intLadder . '">' . $intVelocity . '</option>';
+			}
+?>
+								</select></span>
+								<span><div class="button apply_all" style="float: right">Apply To Selected</div></span>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class='module' style='margin-bottom:6px !important'>
+					<table border='1' width='100%' style='margin-bottom:5px'>
+						<tr>
+							<td style='padding:4px'>&nbsp;</td>
+							<td colspan="3"><b><?php
+			if (!is_int($intClass))
+			{
+				print $intClass;
+			}
+			else
+				print "Grade: " . $this->arrClassesHash[$intClass]->grade  ." ". $this->arrClassesHash[$intClass]->sub;
+?></b></td>
+						</tr>
+<?php
+			foreach ($arrData as $intUser => $arrUserData)
+			{
+				if (!isset($arrUserData["arrLadders"]))
+					continue;
+?>
+						<tr class="row" style="background-color:#e8eaef; cursor:default;" onclick="row_toggle(this);">
+							<td width="30" style="padding:4px"><input class="is_selected" type="checkbox" onclick="this.checked = this.checked ? 0 : 1;" name="user_<?php print $arrUserData["objUser"]->user_id; ?>" value="1" /></td>
+							<td><?php print $arrUserData["objUser"]->first_name . " " . $arrUserData["objUser"]->last_name; ?></td>
+							<td width="210"><select style="padding:4px" class="user_quota" name="quota_<?php print $arrUserData["objUser"]->user_id; ?>">
+<?php
+				foreach ($arrUserData["arrLadders"] as $intVelocity => $intLadder)
+				{
+					$intLadder++;
+					$boolSelected = $arrUserData["objUserCampaign"]->ladder == $intLadder;
+					print "<option value='" . $intLadder . "'" . ($boolSelected ? " selected" : "") . ">" . $intVelocity . "</option>";
+				}
+?>
+							</select> lines per week</td>
+							<td width="200"><span id='lines_per_year'>13</span> lines per year</td>
+						</tr>
+<?php
+			}
+?>
+					</table>
+					<div style="padding: 4px;color:#000" class="processing_status"></div>
+					<div style='padding:8px 8px 14px 8px;'><span><a onclick="change_quotas(this);" id="normal_save" href="#" title="Save changes to all selected items in this group" class="button print_button">Save</a></span>&nbsp;</div>
+				</div>
+
+			</div>
+		</form>
+		&nbsp;<br>&nbsp;
+<?php
+		}
+	}
+?>
+	</div>
+</div>

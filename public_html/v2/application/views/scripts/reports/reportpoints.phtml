@@ -1,0 +1,74 @@
+<?php 
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Report Points</span>
+	</div>
+	<div class="col_content">
+<?php
+	if (!count($this->arrResult))
+	{
+?>
+		<div class="module" style="padding:5px;">
+			There are no <?php print $user_session_data->institution_type == "School" ? "students" : "campers"; ?> available to display.
+		</div>
+<?php
+	}
+	else
+	{
+?>
+		<div class="module" id="module-alerts">
+		<table>
+<?php 
+		foreach ($this->arrResult as $intUser => $arrData1)
+		{
+			$objUser = $this->arrCacheUsers[$intUser];
+?>
+			<tr>
+				<td valign="top" width="250" style="padding:3px;text-align:right"><?php print ucwords($objUser->first_name . " " . $objUser->last_name); ?></td>
+				<td valign="top">
+					<table style="border:1px solid black;margin:2px">
+<?php
+			foreach ($arrData1 as $intCampaign => $arrData2)
+			{
+				$objCampaign = $this->arrCacheCampaigns[$intCampaign];
+?>
+						<tr>
+							<td valign="top">Campaign: <b><?php print $objCampaign->campaign_name; ?></b></td>
+							<td width="50">Points</td>
+						</tr>
+						<tr>
+							<td valign="top" colspan="2">
+								<table style="border:1px solid black;margin:2px" width="400">
+<?php
+				foreach ($arrData2 as $intTask => $intPoints)
+				{
+					$objTask = $this->arrCacheTasks[$intTask];
+?>
+									<tr>
+										<td>Task: <?php print ucfirst($objTask->task_name); ?></td>
+										<td width="50"><?php print $intPoints; ?></td>
+									</tr>
+<?php
+				}
+?>
+								</table>
+							</td>
+						</tr>
+<?php
+			}
+?>
+					</table>
+				</td>
+			</tr>
+<?php
+		}
+	}
+?>
+		</table>
+		</div>
+	</div>
+</div>

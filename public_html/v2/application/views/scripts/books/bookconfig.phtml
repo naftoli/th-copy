@@ -1,0 +1,40 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script>
+$(document).ready(function()
+{
+	$("#slider_books_config a.submit").click(function (e) {
+		e.preventDefault();
+		for (var strName in sheetConfig)
+		{
+			sheetConfig[strName] = $("#slider_books_config #" + strName).is(":checked");
+		}
+		naviageBack();
+		bookDataSave(1);
+	});
+
+	for (var strName in sheetConfig)
+	{
+		$("#slider_books_config #" + strName).attr('checked', sheetConfig[strName]);
+	}
+});
+</script>
+<div class="slider" id='slider_books_config'>
+	<div class="col_title">
+		<span>Books Configuration</span>
+	</div>
+	<div class="col_content">
+		<div style="padding-bottom:10px">Please select the optional feilds you that would like to define.</div>
+		<div><input type="checkbox" id="line_number" /> Line Numbers</div>
+		<div><input type="checkbox" id="paragraphs" /> Paragraphs</div>
+		<div><input type="checkbox" id="pages" /> Pages</div>
+		<div><input type="checkbox" id="chapters" /> Chapters</div>
+		<div><input type="checkbox" id="volumes" /> Volumes</div>
+		<div style="padding-top:10px">
+			<span><a href="#" title="Save" class="button submit">Save</a></span>							
+			<div class="clear"></div>
+		</div>
+	</div>
+</div>

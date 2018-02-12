@@ -1,0 +1,1821 @@
+HTML {
+	WIDTH: 100%; HEIGHT: 100%
+}
+BODY {
+	WIDTH: 100%; HEIGHT: 100%
+}
+BODY {
+	TEXT-ALIGN: center; FONT-FAMILY: "Myriad Pro", Arial, Helvetica, sans-serif; BACKGROUND: #000000; FONT-SIZE: 30px; FONT-WEIGHT: bold
+}
+#wrapper {
+	POSITION: relative; TEXT-ALIGN: left; MARGIN: 0px auto; WIDTH: 1024px; BACKGROUND-POSITION: 0px 0px; HEIGHT: 768px; COLOR: #eee; text-shadow: 0px -1px 0px #000
+}
+#header {
+	BACKGROUND: url(../images/header.jpg); HEIGHT: 140px; FONT-SIZE: 23px; text-shadow: 1px 1px 4px #000
+}
+#main {
+	
+}
+#main #page_title {
+	TEXT-ALIGN: center; LINE-HEIGHT: 40px; BACKGROUND: url(../images/page_title.png); HEIGHT: 57px; COLOR: #eee
+}
+#footer {
+	POSITION: absolute; WIDTH: 984px; BOTTOM: 0px; HEIGHT: 80px; LEFT: 0px
+}
+#print {
+	DISPLAY: none
+}
+.yellow #wrapper {
+	BACKGROUND-IMAGE: url(../images/bg_yellow.jpg)
+}
+.green #wrapper {
+	BACKGROUND-IMAGE: url(../images/bg_green.jpg)
+}
+.lgreen #wrapper {
+	BACKGROUND-IMAGE: url(../images/bg_lgreen.jpg)
+}
+.blue #wrapper {
+	BACKGROUND-IMAGE: url(../images/bg_blue.jpg)
+}
+.orange #wrapper {
+	BACKGROUND-IMAGE: url(../images/bg_orange.jpg)
+}
+.red #wrapper {
+	BACKGROUND-IMAGE: url(../images/bg_red.jpg)
+}
+A {
+	COLOR: #fff; TEXT-DECORATION: none
+}
+.alert {
+	Z-INDEX: 999; BORDER-BOTTOM: red 1px solid; POSITION: absolute; TEXT-ALIGN: center; BORDER-LEFT: red 1px solid; PADDING-BOTTOM: 15px; LINE-HEIGHT: 30px; MARGIN: 0px auto; PADDING-LEFT: 15px; WIDTH: 75%; PADDING-RIGHT: 15px; BACKGROUND: #ffcc00; COLOR: red; BORDER-TOP: red 1px solid; TOP: 30px; FONT-WEIGHT: normal; BORDER-RIGHT: red 1px solid; PADDING-TOP: 15px; LEFT: 112px
+}
+.nav {
+	FLOAT: right
+}
+.nav UL LI A {
+	WIDTH: 64px; DISPLAY: block; HEIGHT: 64px
+}
+.nav UL LI {
+	TEXT-INDENT: -9999px; MARGIN: 25px 10px; WIDTH: 64px; FLOAT: left; HEIGHT: 64px
+}
+.nav UL LI.icon_back {
+	BACKGROUND: url(../images/icon_back.png)
+}
+.nav UL LI.icon_home {
+	BACKGROUND: url(../images/icon_home.png)
+}
+.nav UL LI.icon_logout {
+	BACKGROUND: url(../images/icon_logout.png)
+}
+.cardpop {
+	TEXT-ALIGN: center; WIDTH: 770px; BACKGROUND: url(../images/content_cover.png); HEIGHT: 430px
+}
+.cardpop #wrapper {
+	TEXT-ALIGN: center; WIDTH: 770px; BACKGROUND: url(../images/content_cover.png); HEIGHT: 430px
+}
+#close_pop A {
+	TEXT-INDENT: -9999px; WIDTH: 60px; DISPLAY: block; BACKGROUND: url(../images/button_close.png); FLOAT: right; HEIGHT: 60px; CURSOR: pointer; MARGIN-RIGHT: 23px
+}
+.org {
+	PADDING-BOTTOM: 15px; LINE-HEIGHT: 30px; PADDING-LEFT: 30px; PADDING-RIGHT: 30px; PADDING-TOP: 15px
+}
+.org IMG {
+	FLOAT: left; MARGIN-RIGHT: 15px
+}
+.one_column {
+	WIDTH: 333px; FLOAT: left
+}
+.two_column {
+	WIDTH: 683px; FLOAT: left
+}
+.three_column {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 32px; PADDING-RIGHT: 32px; PADDING-TOP: 0px
+}
+.padding_top {
+	PADDING-TOP: 20px
+}
+.padding_left {
+	PADDING-LEFT: 20px
+}
+.clear {
+	CLEAR: both
+}
+.buttons {
+	TEXT-ALIGN: center
+}
+.buttons LI {
+	PADDING-BOTTOM: 20px; MARGIN: 0px auto -20px; PADDING-LEFT: 20px; WIDTH: 280px; PADDING-RIGHT: 20px; BACKGROUND: url(../images/buttons_bg.png); HEIGHT: 80px; FONT-SIZE: 30px; PADDING-TOP: 20px
+}
+.button DIV {
+	PADDING-BOTTOM: 20px; MARGIN: 0px auto -20px; PADDING-LEFT: 20px; WIDTH: 280px; PADDING-RIGHT: 20px; BACKGROUND: url(../images/buttons_bg.png); HEIGHT: 80px; FONT-SIZE: 30px; PADDING-TOP: 20px
+}
+.buttons LI:hover {
+	BACKGROUND-POSITION: 0px -120px
+}
+.button DIV:hover {
+	BACKGROUND-POSITION: 0px -120px
+}
+.buttons LI A {
+	WIDTH: 280px; DISPLAY: table-cell; HEIGHT: 80px; COLOR: #eee; VERTICAL-ALIGN: middle; TEXT-DECORATION: none
+}
+.button DIV A {
+	WIDTH: 280px; DISPLAY: table-cell; HEIGHT: 80px; COLOR: #eee; VERTICAL-ALIGN: middle; TEXT-DECORATION: none
+}
+.button DIV.bottom {
+	POSITION: absolute; BOTTOM: 40px; RIGHT: 0px
+}
+.buttons SPAN.badge {
+	LINE-HEIGHT: 40px; MARGIN: -90px 0px 0px 250px; WIDTH: 45px; DISPLAY: block; BACKGROUND: url(../images/badge.png); HEIGHT: 45px; COLOR: #fff; FONT-SIZE: 25px
+}
+.button_icons LI A {
+	TEXT-ALIGN: left; PADDING-LEFT: 80px; WIDTH: 200px
+}
+.button_icons DIV A {
+	TEXT-ALIGN: left; PADDING-LEFT: 80px; WIDTH: 200px
+}
+.checkboxes {
+	TEXT-ALIGN: left; LINE-HEIGHT: 35px; MARGIN: 0px 10px
+}
+.checkboxes DIV {
+	BORDER-BOTTOM: #fff 1px dotted; MARGIN: 8px
+}
+.checkbox {
+	WIDTH: 60px; FLOAT: right; HEIGHT: 26px
+}
+#button_register {
+	DISPLAY: none
+}
+.show#button_register {
+	DISPLAY: block
+}
+.member_info_box {
+	MARGIN: 0px auto; PADDING-LEFT: 80px
+}
+.member_photo {
+	FLOAT: left
+}
+.member_photo_img {
+	TEXT-ALIGN: center; MARGIN: 19px; WIDTH: 150px; FLOAT: left; HEIGHT: 150px
+}
+.member_photo_img IMG {
+	MARGIN: 0px auto
+}
+.member_photo_cover {
+	POSITION: relative; WIDTH: 192px; PADDING-RIGHT: 35px; DISPLAY: block; BACKGROUND: url(../images/member_photo_cover.png) no-repeat; HEIGHT: 192px
+}
+.member_info {
+	LINE-HEIGHT: 27px; WIDTH: 320px; FLOAT: left; FONT-SIZE: 22px
+}
+.member_info LI {
+	
+}
+.member_info LI LABEL {
+	TEXT-TRANSFORM: uppercase; FONT-SIZE: 13px
+}
+.member_info LI.member_name {
+	BORDER-BOTTOM: #fff 1px dotted
+}
+.member_badge {
+	POSITION: absolute; MARGIN-TOP: -80px; WIDTH: 100px; HEIGHT: 100px; MARGIN-LEFT: 120px
+}
+.scan_card {
+	POSITION: relative; TEXT-ALIGN: center; MARGIN: 30px auto; WIDTH: 540px; DISPLAY: block; BACKGROUND: url(../images/scan_cover.png); HEIGHT: 200px
+}
+.scan_card INPUT {
+	BORDER-BOTTOM: #000 2px solid; TEXT-ALIGN: center; BORDER-LEFT: #000 2px solid; PADDING-BOTTOM: 2px; MARGIN: 10px 0px; PADDING-LEFT: 2px; WIDTH: 320px; PADDING-RIGHT: 2px; HEIGHT: 30px; COLOR: #000; FONT-SIZE: 25px; BORDER-TOP: #000 2px solid; FONT-WEIGHT: bold; BORDER-RIGHT: #000 2px solid; PADDING-TOP: 2px
+}
+.scan_card_inside {
+	PADDING-TOP: 70px
+}
+#sb-body {
+	BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; BACKGROUND-COLOR: transparent; BORDER-TOP: medium none; BORDER-RIGHT: medium none
+}
+#sb-loading {
+	DISPLAY: none
+}
+#sb-nav A {
+	DISPLAY: none
+}
+.cardpop #page_title {
+	MARGIN: 60px 0px 10px; BACKGROUND: none transparent scroll repeat 0% 0%
+}
+.card_box {
+	TEXT-ALIGN: left; MARGIN: 0px auto; WIDTH: 368px; BACKGROUND: url(../images/card_back.png); HEIGHT: 217px
+}
+.card_box IMG {
+	MARGIN: 3px 0px 0px 5px
+}
+UL.button_icons {
+	MARGIN: auto
+}
+.button_icons LI {
+	FLOAT: left
+}
+UL.button_icons LI A {
+	BACKGROUND-REPEAT: no-repeat; BACKGROUND-POSITION: 17px 18px
+}
+DIV.button_icons DIV A {
+	BACKGROUND-REPEAT: no-repeat; BACKGROUND-POSITION: 17px 18px
+}
+UL.button_icons LI A.icon_profile {
+	BACKGROUND: url(../images/icon_profile.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_deposit {
+	BACKGROUND: url(../images/icon_deposit.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_withdraw {
+	BACKGROUND: url(../images/icon_withdraw.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_campaigns {
+	BACKGROUND: url(../images/icon_campaign.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_wall {
+	BACKGROUND: url(../images/icon_wall.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_ranks {
+	BACKGROUND: url(../images/icon_ranks.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_medals {
+	BACKGROUND: url(../images/icon_medals.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_mileage {
+	BACKGROUND: url(../images/icon_wall.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_missions {
+	BACKGROUND: url(../images/icon_wall.png) no-repeat 17px 18px
+}
+DIV.button_icons DIV A.icon_deposit {
+	BACKGROUND: url(../images/icon_deposit.png) no-repeat 17px 18px
+}
+DIV.button_icons DIV A.icon_withdraw {
+	BACKGROUND: url(../images/icon_print.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_aleph {
+	BACKGROUND: url(../images/iconc_aleph.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_chitas {
+	BACKGROUND: url(../images/iconc_chitas.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_father {
+	BACKGROUND: url(../images/iconc_fatherson.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_footsteps {
+	BACKGROUND: url(../images/iconc_footsteps.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_gemara {
+	BACKGROUND: url(../images/iconc_gemorah.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_hiskashrus {
+	BACKGROUND: url(../images/iconc_hiskashrus.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_hiskashrus {
+	BACKGROUND: url(../images/iconc_test.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_mashpia {
+	BACKGROUND: url(../images/iconc_mashpia.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_mishnayos {
+	BACKGROUND: url(../images/iconc_mishnayos.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_mivtzoim {
+	BACKGROUND: url(../images/iconc_mivtzoim.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_moshiach {
+	BACKGROUND: url(../images/iconc_moshiach.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_niggunim {
+	BACKGROUND: url(../images/iconc_nigunim.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_tanya {
+	BACKGROUND: url(../images/iconc_tanya.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_tefilla {
+	BACKGROUND: url(../images/iconc_tefillah.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_tehillim {
+	BACKGROUND: url(../images/iconc_tehillim.png) no-repeat 17px 18px
+}
+UL.button_icons LI A.icon_yom {
+	BACKGROUND: url(../images/iconc_yom.png) no-repeat 17px 18px
+}
+UL LI.medal_aleph .medalImage {
+	BACKGROUND: url(../images/medals/aleph.png)
+}
+.medal10 {
+	BACKGROUND: url(../images/medals/aleph.png)
+}
+UL LI.medal_chitas .medalImage {
+	BACKGROUND: url(../images/medals/chitas.png)
+}
+.medal20 {
+	BACKGROUND: url(../images/medals/chitas.png)
+}
+UL LI.medal_father .medalImage {
+	BACKGROUND: url(../images/medals/fatherson.png)
+}
+.medal30 {
+	BACKGROUND: url(../images/medals/fatherson.png)
+}
+UL LI.medal_footsteps .medalImage {
+	BACKGROUND: url(../images/medals/footsteps.png)
+}
+.medal40 {
+	BACKGROUND: url(../images/medals/footsteps.png)
+}
+UL LI.medal_gemara .medalImage {
+	BACKGROUND: url(../images/medals/gemorah.png)
+}
+.medal50 {
+	BACKGROUND: url(../images/medals/gemorah.png)
+}
+UL LI.medal_hiskashrus .medalImage {
+	BACKGROUND: url(../images/medals/hiskashrus.png)
+}
+.medal60 {
+	BACKGROUND: url(../images/medals/hiskashrus.png)
+}
+UL LI.medal_mashpia .medalImage {
+	BACKGROUND: url(../images/medals/mashpia.png)
+}
+.medal70 {
+	BACKGROUND: url(../images/medals/mashpia.png)
+}
+UL LI.medal_mishnayos .medalImage {
+	BACKGROUND: url(../images/medals/mishnayos.png)
+}
+.medal80 {
+	BACKGROUND: url(../images/medals/mishnayos.png)
+}
+UL LI.medal_mivtzoim .medalImage {
+	BACKGROUND: url(../images/medals/mivtzoim.png)
+}
+.medal90 {
+	BACKGROUND: url(../images/medals/mivtzoim.png)
+}
+UL LI.medal_moshiach .medalImage {
+	BACKGROUND: url(../images/medals/moshiach.png)
+}
+.medal100 {
+	BACKGROUND: url(../images/medals/moshiach.png)
+}
+UL LI.medal_niggunim .medalImage {
+	BACKGROUND: url(../images/medals/nigunim.png)
+}
+.medal110 {
+	BACKGROUND: url(../images/medals/nigunim.png)
+}
+UL LI.medal_tanya .medalImage {
+	BACKGROUND: url(../images/medals/tanya.png)
+}
+.medal120 {
+	BACKGROUND: url(../images/medals/tanya.png)
+}
+UL LI.medal_tefilla .medalImage {
+	BACKGROUND: url(../images/medals/tefillah.png)
+}
+.medal130 {
+	BACKGROUND: url(../images/medals/tefillah.png)
+}
+UL LI.medal_tehillim .medalImage {
+	BACKGROUND: url(../images/medals/tehillim.png)
+}
+.medal140 {
+	BACKGROUND: url(../images/medals/tehillim.png)
+}
+UL LI.medal_yom .medalImage {
+	BACKGROUND: url(../images/medals/yom.png)
+}
+.medal150 {
+	BACKGROUND: url(../images/medals/yom.png)
+}
+UL LI.rank_1 .rankImage {
+	BACKGROUND: url(../images/ranksgold/1.png)
+}
+UL LI.rank_2 .rankImage {
+	BACKGROUND: url(../images/ranksgold/2.png)
+}
+UL LI.rank_3 .rankImage {
+	BACKGROUND: url(../images/ranksgold/3.png)
+}
+UL LI.rank_4 .rankImage {
+	BACKGROUND: url(../images/ranksgold/4.png)
+}
+UL LI.rank_5 .rankImage {
+	BACKGROUND: url(../images/ranksgold/5.png)
+}
+UL LI.rank_6 .rankImage {
+	BACKGROUND: url(../images/ranksgold/6.png)
+}
+UL LI.rank_7 .rankImage {
+	BACKGROUND: url(../images/ranksgold/7.png)
+}
+UL LI.rank_8 .rankImage {
+	BACKGROUND: url(../images/ranksgold/8.png)
+}
+UL LI.rank_9 .rankImage {
+	BACKGROUND: url(../images/ranksgold/9.png)
+}
+UL LI.rank_10 .rankImage {
+	BACKGROUND: url(../images/ranksgold/10.png)
+}
+UL LI.rank_11 .rankImage {
+	BACKGROUND: url(../images/ranksgold/11.png)
+}
+UL LI.rank_12 .rankImage {
+	BACKGROUND: url(../images/ranksgold/12.png)
+}
+UL LI.rank_13 .rankImage {
+	BACKGROUND: url(../images/ranksgold/13.png)
+}
+UL LI.rank_14 .rankImage {
+	BACKGROUND: url(../images/ranksgold/14.png)
+}
+UL LI .medals {
+	WIDTH: 450px; FLOAT: left; HEIGHT: 300px
+}
+UL LI .medals DIV {
+	MARGIN: 10px 0px 0px 15px; WIDTH: 96px; FLOAT: left; HEIGHT: 100px; opacity: .2
+}
+UL LI .medals DIV A {
+	WIDTH: 96px; DISPLAY: block; HEIGHT: 100px
+}
+UL LI .medals DIV.active {
+	opacity: 1
+}
+UL.ranks LI .medals {
+	WIDTH: 510px
+}
+UL.ranks LI .medals DIV {
+	MARGIN: 0px 0px 0px 5px; opacity: 1
+}
+UL.ranks LI .medals .medal {
+	BACKGROUND: url(../images/medals/holder.png); opacity: .4
+}
+UL LI.medal_aleph .medals .medal1 {
+	BACKGROUND: url(../images/medals/aleph/elements-1.png)
+}
+.medal11 {
+	BACKGROUND: url(../images/medals/aleph/elements-1.png)
+}
+UL LI.medal_aleph .medals .medal2 {
+	BACKGROUND: url(../images/medals/aleph/elements-2.png)
+}
+.medal12 {
+	BACKGROUND: url(../images/medals/aleph/elements-2.png)
+}
+UL LI.medal_aleph .medals .medal3 {
+	BACKGROUND: url(../images/medals/aleph/elements-3.png)
+}
+.medal13 {
+	BACKGROUND: url(../images/medals/aleph/elements-3.png)
+}
+UL LI.medal_aleph .medals .medal4 {
+	BACKGROUND: url(../images/medals/aleph/elements-4.png)
+}
+.medal14 {
+	BACKGROUND: url(../images/medals/aleph/elements-4.png)
+}
+UL LI.medal_aleph .medals .medal5 {
+	BACKGROUND: url(../images/medals/aleph/elements-5.png)
+}
+.medal15 {
+	BACKGROUND: url(../images/medals/aleph/elements-5.png)
+}
+UL LI.medal_aleph .medals .medal6 {
+	BACKGROUND: url(../images/medals/aleph/elements-6.png)
+}
+.medal16 {
+	BACKGROUND: url(../images/medals/aleph/elements-6.png)
+}
+UL LI.medal_aleph .medals .medal7 {
+	BACKGROUND: url(../images/medals/aleph/elements-7.png)
+}
+.medal17 {
+	BACKGROUND: url(../images/medals/aleph/elements-7.png)
+}
+UL LI.medal_aleph .medals .medal8 {
+	BACKGROUND: url(../images/medals/aleph/elements-8.png)
+}
+.medal18 {
+	BACKGROUND: url(../images/medals/aleph/elements-8.png)
+}
+UL LI.medal_aleph .medals .medal9 {
+	BACKGROUND: url(../images/medals/aleph/elements-9.png)
+}
+.medal19 {
+	BACKGROUND: url(../images/medals/aleph/elements-9.png)
+}
+UL LI.medal_aleph .medals .medal10 {
+	BACKGROUND: url(../images/medals/aleph/elements-10.png)
+}
+.medal110 {
+	BACKGROUND: url(../images/medals/aleph/elements-10.png)
+}
+UL LI.medal_chitas .medals .medal1 {
+	BACKGROUND: url(../images/medals/chitas/elements-1.png)
+}
+.medal21 {
+	BACKGROUND: url(../images/medals/chitas/elements-1.png)
+}
+UL LI.medal_chitas .medals .medal2 {
+	BACKGROUND: url(../images/medals/chitas/elements-2.png)
+}
+.medal22 {
+	BACKGROUND: url(../images/medals/chitas/elements-2.png)
+}
+UL LI.medal_chitas .medals .medal3 {
+	BACKGROUND: url(../images/medals/chitas/elements-3.png)
+}
+.medal23 {
+	BACKGROUND: url(../images/medals/chitas/elements-3.png)
+}
+UL LI.medal_chitas .medals .medal4 {
+	BACKGROUND: url(../images/medals/chitas/elements-4.png)
+}
+.medal24 {
+	BACKGROUND: url(../images/medals/chitas/elements-4.png)
+}
+UL LI.medal_chitas .medals .medal5 {
+	BACKGROUND: url(../images/medals/chitas/elements-5.png)
+}
+.medal25 {
+	BACKGROUND: url(../images/medals/chitas/elements-5.png)
+}
+UL LI.medal_chitas .medals .medal6 {
+	BACKGROUND: url(../images/medals/chitas/elements-6.png)
+}
+.medal26 {
+	BACKGROUND: url(../images/medals/chitas/elements-6.png)
+}
+UL LI.medal_chitas .medals .medal7 {
+	BACKGROUND: url(../images/medals/chitas/elements-7.png)
+}
+.medal27 {
+	BACKGROUND: url(../images/medals/chitas/elements-7.png)
+}
+UL LI.medal_chitas .medals .medal8 {
+	BACKGROUND: url(../images/medals/chitas/elements-8.png)
+}
+.medal28 {
+	BACKGROUND: url(../images/medals/chitas/elements-8.png)
+}
+UL LI.medal_chitas .medals .medal9 {
+	BACKGROUND: url(../images/medals/chitas/elements-9.png)
+}
+.medal29 {
+	BACKGROUND: url(../images/medals/chitas/elements-9.png)
+}
+UL LI.medal_chitas .medals .medal10 {
+	BACKGROUND: url(../images/medals/chitas/elements-10.png)
+}
+.medal210 {
+	BACKGROUND: url(../images/medals/chitas/elements-10.png)
+}
+UL LI.medal_father .medals .medal1 {
+	BACKGROUND: url(../images/medals/father/elements-1.png)
+}
+.medal31 {
+	BACKGROUND: url(../images/medals/father/elements-1.png)
+}
+UL LI.medal_father .medals .medal2 {
+	BACKGROUND: url(../images/medals/father/elements-2.png)
+}
+.medal32 {
+	BACKGROUND: url(../images/medals/father/elements-2.png)
+}
+UL LI.medal_father .medals .medal3 {
+	BACKGROUND: url(../images/medals/father/elements-3.png)
+}
+.medal33 {
+	BACKGROUND: url(../images/medals/father/elements-3.png)
+}
+UL LI.medal_father .medals .medal4 {
+	BACKGROUND: url(../images/medals/father/elements-4.png)
+}
+.medal34 {
+	BACKGROUND: url(../images/medals/father/elements-4.png)
+}
+UL LI.medal_father .medals .medal5 {
+	BACKGROUND: url(../images/medals/father/elements-5.png)
+}
+.medal35 {
+	BACKGROUND: url(../images/medals/father/elements-5.png)
+}
+UL LI.medal_father .medals .medal6 {
+	BACKGROUND: url(../images/medals/father/elements-6.png)
+}
+.medal36 {
+	BACKGROUND: url(../images/medals/father/elements-6.png)
+}
+UL LI.medal_father .medals .medal7 {
+	BACKGROUND: url(../images/medals/father/elements-7.png)
+}
+.medal37 {
+	BACKGROUND: url(../images/medals/father/elements-7.png)
+}
+UL LI.medal_father .medals .medal8 {
+	BACKGROUND: url(../images/medals/father/elements-8.png)
+}
+.medal38 {
+	BACKGROUND: url(../images/medals/father/elements-8.png)
+}
+UL LI.medal_father .medals .medal9 {
+	BACKGROUND: url(../images/medals/father/elements-9.png)
+}
+.medal39 {
+	BACKGROUND: url(../images/medals/father/elements-9.png)
+}
+UL LI.medal_father .medals .medal10 {
+	BACKGROUND: url(../images/medals/father/elements-10.png)
+}
+.medal310 {
+	BACKGROUND: url(../images/medals/father/elements-10.png)
+}
+UL LI.medal_footsteps .medals .medal1 {
+	BACKGROUND: url(../images/medals/footsteps/elements-1.png)
+}
+.medal41 {
+	BACKGROUND: url(../images/medals/footsteps/elements-1.png)
+}
+UL LI.medal_footsteps .medals .medal2 {
+	BACKGROUND: url(../images/medals/footsteps/elements-2.png)
+}
+.medal42 {
+	BACKGROUND: url(../images/medals/footsteps/elements-2.png)
+}
+UL LI.medal_footsteps .medals .medal3 {
+	BACKGROUND: url(../images/medals/footsteps/elements-3.png)
+}
+.medal43 {
+	BACKGROUND: url(../images/medals/footsteps/elements-3.png)
+}
+UL LI.medal_footsteps .medals .medal4 {
+	BACKGROUND: url(../images/medals/footsteps/elements-4.png)
+}
+.medal44 {
+	BACKGROUND: url(../images/medals/footsteps/elements-4.png)
+}
+UL LI.medal_footsteps .medals .medal5 {
+	BACKGROUND: url(../images/medals/footsteps/elements-5.png)
+}
+.medal45 {
+	BACKGROUND: url(../images/medals/footsteps/elements-5.png)
+}
+UL LI.medal_footsteps .medals .medal6 {
+	BACKGROUND: url(../images/medals/footsteps/elements-6.png)
+}
+.medal46 {
+	BACKGROUND: url(../images/medals/footsteps/elements-6.png)
+}
+UL LI.medal_footsteps .medals .medal7 {
+	BACKGROUND: url(../images/medals/footsteps/elements-7.png)
+}
+.medal47 {
+	BACKGROUND: url(../images/medals/footsteps/elements-7.png)
+}
+UL LI.medal_footsteps .medals .medal8 {
+	BACKGROUND: url(../images/medals/footsteps/elements-8.png)
+}
+.medal48 {
+	BACKGROUND: url(../images/medals/footsteps/elements-8.png)
+}
+UL LI.medal_footsteps .medals .medal9 {
+	BACKGROUND: url(../images/medals/footsteps/elements-9.png)
+}
+.medal49 {
+	BACKGROUND: url(../images/medals/footsteps/elements-9.png)
+}
+UL LI.medal_footsteps .medals .medal10 {
+	BACKGROUND: url(../images/medals/footsteps/elements-10.png)
+}
+.medal410 {
+	BACKGROUND: url(../images/medals/footsteps/elements-10.png)
+}
+UL LI.medal_gemara .medals .medal1 {
+	BACKGROUND: url(../images/medals/gemara/elements-1.png)
+}
+.medal51 {
+	BACKGROUND: url(../images/medals/gemara/elements-1.png)
+}
+UL LI.medal_gemara .medals .medal2 {
+	BACKGROUND: url(../images/medals/gemara/elements-2.png)
+}
+.medal52 {
+	BACKGROUND: url(../images/medals/gemara/elements-2.png)
+}
+UL LI.medal_gemara .medals .medal3 {
+	BACKGROUND: url(../images/medals/gemara/elements-3.png)
+}
+.medal53 {
+	BACKGROUND: url(../images/medals/gemara/elements-3.png)
+}
+UL LI.medal_gemara .medals .medal4 {
+	BACKGROUND: url(../images/medals/gemara/elements-4.png)
+}
+.medal54 {
+	BACKGROUND: url(../images/medals/gemara/elements-4.png)
+}
+UL LI.medal_gemara .medals .medal5 {
+	BACKGROUND: url(../images/medals/gemara/elements-5.png)
+}
+.medal55 {
+	BACKGROUND: url(../images/medals/gemara/elements-5.png)
+}
+UL LI.medal_gemara .medals .medal6 {
+	BACKGROUND: url(../images/medals/gemara/elements-6.png)
+}
+.medal56 {
+	BACKGROUND: url(../images/medals/gemara/elements-6.png)
+}
+UL LI.medal_gemara .medals .medal7 {
+	BACKGROUND: url(../images/medals/gemara/elements-7.png)
+}
+.medal57 {
+	BACKGROUND: url(../images/medals/gemara/elements-7.png)
+}
+UL LI.medal_gemara .medals .medal8 {
+	BACKGROUND: url(../images/medals/gemara/elements-8.png)
+}
+.medal58 {
+	BACKGROUND: url(../images/medals/gemara/elements-8.png)
+}
+UL LI.medal_gemara .medals .medal9 {
+	BACKGROUND: url(../images/medals/gemara/elements-9.png)
+}
+.medal59 {
+	BACKGROUND: url(../images/medals/gemara/elements-9.png)
+}
+UL LI.medal_gemara .medals .medal10 {
+	BACKGROUND: url(../images/medals/gemara/elements-10.png)
+}
+.medal510 {
+	BACKGROUND: url(../images/medals/gemara/elements-10.png)
+}
+UL LI.medal_hiskashrus .medals .medal1 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-1.png)
+}
+.medal61 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-1.png)
+}
+UL LI.medal_hiskashrus .medals .medal2 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-2.png)
+}
+.medal62 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-2.png)
+}
+UL LI.medal_hiskashrus .medals .medal3 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-3.png)
+}
+.medal63 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-3.png)
+}
+UL LI.medal_hiskashrus .medals .medal4 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-4.png)
+}
+.medal64 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-4.png)
+}
+UL LI.medal_hiskashrus .medals .medal5 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-5.png)
+}
+.medal65 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-5.png)
+}
+UL LI.medal_hiskashrus .medals .medal6 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-6.png)
+}
+.medal66 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-6.png)
+}
+UL LI.medal_hiskashrus .medals .medal7 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-7.png)
+}
+.medal67 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-7.png)
+}
+UL LI.medal_hiskashrus .medals .medal8 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-8.png)
+}
+.medal68 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-8.png)
+}
+UL LI.medal_hiskashrus .medals .medal9 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-9.png)
+}
+.medal69 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-9.png)
+}
+UL LI.medal_hiskashrus .medals .medal10 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-10.png)
+}
+.medal610 {
+	BACKGROUND: url(../images/medals/hiskashrus/elements-10.png)
+}
+UL LI.medal_mashpia .medals .medal1 {
+	BACKGROUND: url(../images/medals/mashpia/elements-1.png)
+}
+.medal71 {
+	BACKGROUND: url(../images/medals/mashpia/elements-1.png)
+}
+UL LI.medal_mashpia .medals .medal2 {
+	BACKGROUND: url(../images/medals/mashpia/elements-2.png)
+}
+.medal72 {
+	BACKGROUND: url(../images/medals/mashpia/elements-2.png)
+}
+UL LI.medal_mashpia .medals .medal3 {
+	BACKGROUND: url(../images/medals/mashpia/elements-3.png)
+}
+.medal73 {
+	BACKGROUND: url(../images/medals/mashpia/elements-3.png)
+}
+UL LI.medal_mashpia .medals .medal4 {
+	BACKGROUND: url(../images/medals/mashpia/elements-4.png)
+}
+.medal74 {
+	BACKGROUND: url(../images/medals/mashpia/elements-4.png)
+}
+UL LI.medal_mashpia .medals .medal5 {
+	BACKGROUND: url(../images/medals/mashpia/elements-5.png)
+}
+.medal75 {
+	BACKGROUND: url(../images/medals/mashpia/elements-5.png)
+}
+UL LI.medal_mashpia .medals .medal6 {
+	BACKGROUND: url(../images/medals/mashpia/elements-6.png)
+}
+.medal76 {
+	BACKGROUND: url(../images/medals/mashpia/elements-6.png)
+}
+UL LI.medal_mashpia .medals .medal7 {
+	BACKGROUND: url(../images/medals/mashpia/elements-7.png)
+}
+.medal77 {
+	BACKGROUND: url(../images/medals/mashpia/elements-7.png)
+}
+UL LI.medal_mashpia .medals .medal8 {
+	BACKGROUND: url(../images/medals/mashpia/elements-8.png)
+}
+.medal78 {
+	BACKGROUND: url(../images/medals/mashpia/elements-8.png)
+}
+UL LI.medal_mashpia .medals .medal9 {
+	BACKGROUND: url(../images/medals/mashpia/elements-9.png)
+}
+.medal79 {
+	BACKGROUND: url(../images/medals/mashpia/elements-9.png)
+}
+UL LI.medal_mashpia .medals .medal10 {
+	BACKGROUND: url(../images/medals/mashpia/elements-10.png)
+}
+.medal710 {
+	BACKGROUND: url(../images/medals/mashpia/elements-10.png)
+}
+UL LI.medal_mishnayos .medals .medal1 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-1.png)
+}
+.medal81 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-1.png)
+}
+UL LI.medal_mishnayos .medals .medal2 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-2.png)
+}
+.medal82 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-2.png)
+}
+UL LI.medal_mishnayos .medals .medal3 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-3.png)
+}
+.medal83 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-3.png)
+}
+UL LI.medal_mishnayos .medals .medal4 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-4.png)
+}
+.medal84 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-4.png)
+}
+UL LI.medal_mishnayos .medals .medal5 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-5.png)
+}
+.medal85 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-5.png)
+}
+UL LI.medal_mishnayos .medals .medal6 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-6.png)
+}
+.medal86 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-6.png)
+}
+UL LI.medal_mishnayos .medals .medal7 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-7.png)
+}
+.medal87 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-7.png)
+}
+UL LI.medal_mishnayos .medals .medal8 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-8.png)
+}
+.medal88 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-8.png)
+}
+UL LI.medal_mishnayos .medals .medal9 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-9.png)
+}
+.medal89 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-9.png)
+}
+UL LI.medal_mishnayos .medals .medal10 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-10.png)
+}
+.medal810 {
+	BACKGROUND: url(../images/medals/mishnayos/elements-10.png)
+}
+UL LI.medal_mivtzoim .medals .medal1 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-1.png)
+}
+.medal91 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-1.png)
+}
+UL LI.medal_mivtzoim .medals .medal2 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-2.png)
+}
+.medal92 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-2.png)
+}
+UL LI.medal_mivtzoim .medals .medal3 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-3.png)
+}
+.medal93 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-3.png)
+}
+UL LI.medal_mivtzoim .medals .medal4 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-4.png)
+}
+.medal94 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-4.png)
+}
+UL LI.medal_mivtzoim .medals .medal5 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-5.png)
+}
+.medal95 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-5.png)
+}
+UL LI.medal_mivtzoim .medals .medal6 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-6.png)
+}
+.medal96 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-6.png)
+}
+UL LI.medal_mivtzoim .medals .medal7 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-7.png)
+}
+.medal97 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-7.png)
+}
+UL LI.medal_mivtzoim .medals .medal8 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-8.png)
+}
+.medal98 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-8.png)
+}
+UL LI.medal_mivtzoim .medals .medal9 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-9.png)
+}
+.medal99 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-9.png)
+}
+UL LI.medal_mivtzoim .medals .medal10 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-10.png)
+}
+.medal910 {
+	BACKGROUND: url(../images/medals/mivtzoim/elements-10.png)
+}
+UL LI.medal_moshiach .medals .medal1 {
+	BACKGROUND: url(../images/medals/moshiach/elements-1.png)
+}
+.medal101 {
+	BACKGROUND: url(../images/medals/moshiach/elements-1.png)
+}
+UL LI.medal_moshiach .medals .medal2 {
+	BACKGROUND: url(../images/medals/moshiach/elements-2.png)
+}
+.medal102 {
+	BACKGROUND: url(../images/medals/moshiach/elements-2.png)
+}
+UL LI.medal_moshiach .medals .medal3 {
+	BACKGROUND: url(../images/medals/moshiach/elements-3.png)
+}
+.medal103 {
+	BACKGROUND: url(../images/medals/moshiach/elements-3.png)
+}
+UL LI.medal_moshiach .medals .medal4 {
+	BACKGROUND: url(../images/medals/moshiach/elements-4.png)
+}
+.medal104 {
+	BACKGROUND: url(../images/medals/moshiach/elements-4.png)
+}
+UL LI.medal_moshiach .medals .medal5 {
+	BACKGROUND: url(../images/medals/moshiach/elements-5.png)
+}
+.medal105 {
+	BACKGROUND: url(../images/medals/moshiach/elements-5.png)
+}
+UL LI.medal_moshiach .medals .medal6 {
+	BACKGROUND: url(../images/medals/moshiach/elements-6.png)
+}
+.medal106 {
+	BACKGROUND: url(../images/medals/moshiach/elements-6.png)
+}
+UL LI.medal_moshiach .medals .medal7 {
+	BACKGROUND: url(../images/medals/moshiach/elements-7.png)
+}
+.medal107 {
+	BACKGROUND: url(../images/medals/moshiach/elements-7.png)
+}
+UL LI.medal_moshiach .medals .medal8 {
+	BACKGROUND: url(../images/medals/moshiach/elements-8.png)
+}
+.medal108 {
+	BACKGROUND: url(../images/medals/moshiach/elements-8.png)
+}
+UL LI.medal_moshiach .medals .medal9 {
+	BACKGROUND: url(../images/medals/moshiach/elements-9.png)
+}
+.medal109 {
+	BACKGROUND: url(../images/medals/moshiach/elements-9.png)
+}
+UL LI.medal_moshiach .medals .medal10 {
+	BACKGROUND: url(../images/medals/moshiach/elements-10.png)
+}
+.medal1010 {
+	BACKGROUND: url(../images/medals/moshiach/elements-10.png)
+}
+UL LI.medal_niggunim .medals .medal1 {
+	BACKGROUND: url(../images/medals/niggunim/elements-1.png)
+}
+.medal111 {
+	BACKGROUND: url(../images/medals/niggunim/elements-1.png)
+}
+UL LI.medal_niggunim .medals .medal2 {
+	BACKGROUND: url(../images/medals/niggunim/elements-2.png)
+}
+.medal112 {
+	BACKGROUND: url(../images/medals/niggunim/elements-2.png)
+}
+UL LI.medal_niggunim .medals .medal3 {
+	BACKGROUND: url(../images/medals/niggunim/elements-3.png)
+}
+.medal113 {
+	BACKGROUND: url(../images/medals/niggunim/elements-3.png)
+}
+UL LI.medal_niggunim .medals .medal4 {
+	BACKGROUND: url(../images/medals/niggunim/elements-4.png)
+}
+.medal114 {
+	BACKGROUND: url(../images/medals/niggunim/elements-4.png)
+}
+UL LI.medal_niggunim .medals .medal5 {
+	BACKGROUND: url(../images/medals/niggunim/elements-5.png)
+}
+.medal115 {
+	BACKGROUND: url(../images/medals/niggunim/elements-5.png)
+}
+UL LI.medal_niggunim .medals .medal6 {
+	BACKGROUND: url(../images/medals/niggunim/elements-6.png)
+}
+.medal116 {
+	BACKGROUND: url(../images/medals/niggunim/elements-6.png)
+}
+UL LI.medal_niggunim .medals .medal7 {
+	BACKGROUND: url(../images/medals/niggunim/elements-7.png)
+}
+.medal117 {
+	BACKGROUND: url(../images/medals/niggunim/elements-7.png)
+}
+UL LI.medal_niggunim .medals .medal8 {
+	BACKGROUND: url(../images/medals/niggunim/elements-8.png)
+}
+.medal118 {
+	BACKGROUND: url(../images/medals/niggunim/elements-8.png)
+}
+UL LI.medal_niggunim .medals .medal9 {
+	BACKGROUND: url(../images/medals/niggunim/elements-9.png)
+}
+.medal119 {
+	BACKGROUND: url(../images/medals/niggunim/elements-9.png)
+}
+UL LI.medal_niggunim .medals .medal10 {
+	BACKGROUND: url(../images/medals/niggunim/elements-10.png)
+}
+.medal1110 {
+	BACKGROUND: url(../images/medals/niggunim/elements-10.png)
+}
+UL LI.medal_tanya .medals .medal1 {
+	BACKGROUND: url(../images/medals/tanya/elements-1.png)
+}
+.medal121 {
+	BACKGROUND: url(../images/medals/tanya/elements-1.png)
+}
+UL LI.medal_tanya .medals .medal2 {
+	BACKGROUND: url(../images/medals/tanya/elements-2.png)
+}
+.medal122 {
+	BACKGROUND: url(../images/medals/tanya/elements-2.png)
+}
+UL LI.medal_tanya .medals .medal3 {
+	BACKGROUND: url(../images/medals/tanya/elements-3.png)
+}
+.medal123 {
+	BACKGROUND: url(../images/medals/tanya/elements-3.png)
+}
+UL LI.medal_tanya .medals .medal4 {
+	BACKGROUND: url(../images/medals/tanya/elements-4.png)
+}
+.medal124 {
+	BACKGROUND: url(../images/medals/tanya/elements-4.png)
+}
+UL LI.medal_tanya .medals .medal5 {
+	BACKGROUND: url(../images/medals/tanya/elements-5.png)
+}
+.medal125 {
+	BACKGROUND: url(../images/medals/tanya/elements-5.png)
+}
+UL LI.medal_tanya .medals .medal6 {
+	BACKGROUND: url(../images/medals/tanya/elements-6.png)
+}
+.medal126 {
+	BACKGROUND: url(../images/medals/tanya/elements-6.png)
+}
+UL LI.medal_tanya .medals .medal7 {
+	BACKGROUND: url(../images/medals/tanya/elements-7.png)
+}
+.medal127 {
+	BACKGROUND: url(../images/medals/tanya/elements-7.png)
+}
+UL LI.medal_tanya .medals .medal8 {
+	BACKGROUND: url(../images/medals/tanya/elements-8.png)
+}
+.medal128 {
+	BACKGROUND: url(../images/medals/tanya/elements-8.png)
+}
+UL LI.medal_tanya .medals .medal9 {
+	BACKGROUND: url(../images/medals/tanya/elements-9.png)
+}
+.medal129 {
+	BACKGROUND: url(../images/medals/tanya/elements-9.png)
+}
+UL LI.medal_tanya .medals .medal10 {
+	BACKGROUND: url(../images/medals/tanya/elements-10.png)
+}
+.medal1210 {
+	BACKGROUND: url(../images/medals/tanya/elements-10.png)
+}
+UL LI.medal_tefilla .medals .medal1 {
+	BACKGROUND: url(../images/medals/tefilla/elements-1.png)
+}
+.medal131 {
+	BACKGROUND: url(../images/medals/tefilla/elements-1.png)
+}
+UL LI.medal_tefilla .medals .medal2 {
+	BACKGROUND: url(../images/medals/tefilla/elements-2.png)
+}
+.medal132 {
+	BACKGROUND: url(../images/medals/tefilla/elements-2.png)
+}
+UL LI.medal_tefilla .medals .medal3 {
+	BACKGROUND: url(../images/medals/tefilla/elements-3.png)
+}
+.medal133 {
+	BACKGROUND: url(../images/medals/tefilla/elements-3.png)
+}
+UL LI.medal_tefilla .medals .medal4 {
+	BACKGROUND: url(../images/medals/tefilla/elements-4.png)
+}
+.medal134 {
+	BACKGROUND: url(../images/medals/tefilla/elements-4.png)
+}
+UL LI.medal_tefilla .medals .medal5 {
+	BACKGROUND: url(../images/medals/tefilla/elements-5.png)
+}
+.medal135 {
+	BACKGROUND: url(../images/medals/tefilla/elements-5.png)
+}
+UL LI.medal_tefilla .medals .medal6 {
+	BACKGROUND: url(../images/medals/tefilla/elements-6.png)
+}
+.medal136 {
+	BACKGROUND: url(../images/medals/tefilla/elements-6.png)
+}
+UL LI.medal_tefilla .medals .medal7 {
+	BACKGROUND: url(../images/medals/tefilla/elements-7.png)
+}
+.medal137 {
+	BACKGROUND: url(../images/medals/tefilla/elements-7.png)
+}
+UL LI.medal_tefilla .medals .medal8 {
+	BACKGROUND: url(../images/medals/tefilla/elements-8.png)
+}
+.medal138 {
+	BACKGROUND: url(../images/medals/tefilla/elements-8.png)
+}
+UL LI.medal_tefilla .medals .medal9 {
+	BACKGROUND: url(../images/medals/tefilla/elements-9.png)
+}
+.medal139 {
+	BACKGROUND: url(../images/medals/tefilla/elements-9.png)
+}
+UL LI.medal_tefilla .medals .medal10 {
+	BACKGROUND: url(../images/medals/tefilla/elements-10.png)
+}
+.medal1310 {
+	BACKGROUND: url(../images/medals/tefilla/elements-10.png)
+}
+UL LI.medal_tehillim .medals .medal1 {
+	BACKGROUND: url(../images/medals/tehillim/elements-1.png)
+}
+.medal141 {
+	BACKGROUND: url(../images/medals/tehillim/elements-1.png)
+}
+UL LI.medal_tehillim .medals .medal2 {
+	BACKGROUND: url(../images/medals/tehillim/elements-2.png)
+}
+.medal142 {
+	BACKGROUND: url(../images/medals/tehillim/elements-2.png)
+}
+UL LI.medal_tehillim .medals .medal3 {
+	BACKGROUND: url(../images/medals/tehillim/elements-3.png)
+}
+.medal143 {
+	BACKGROUND: url(../images/medals/tehillim/elements-3.png)
+}
+UL LI.medal_tehillim .medals .medal4 {
+	BACKGROUND: url(../images/medals/tehillim/elements-4.png)
+}
+.medal144 {
+	BACKGROUND: url(../images/medals/tehillim/elements-4.png)
+}
+UL LI.medal_tehillim .medals .medal5 {
+	BACKGROUND: url(../images/medals/tehillim/elements-5.png)
+}
+.medal145 {
+	BACKGROUND: url(../images/medals/tehillim/elements-5.png)
+}
+UL LI.medal_tehillim .medals .medal6 {
+	BACKGROUND: url(../images/medals/tehillim/elements-6.png)
+}
+.medal146 {
+	BACKGROUND: url(../images/medals/tehillim/elements-6.png)
+}
+UL LI.medal_tehillim .medals .medal7 {
+	BACKGROUND: url(../images/medals/tehillim/elements-7.png)
+}
+.medal147 {
+	BACKGROUND: url(../images/medals/tehillim/elements-7.png)
+}
+UL LI.medal_tehillim .medals .medal8 {
+	BACKGROUND: url(../images/medals/tehillim/elements-8.png)
+}
+.medal148 {
+	BACKGROUND: url(../images/medals/tehillim/elements-8.png)
+}
+UL LI.medal_tehillim .medals .medal9 {
+	BACKGROUND: url(../images/medals/tehillim/elements-9.png)
+}
+.medal149 {
+	BACKGROUND: url(../images/medals/tehillim/elements-9.png)
+}
+UL LI.medal_tehillim .medals .medal10 {
+	BACKGROUND: url(../images/medals/tehillim/elements-10.png)
+}
+.medal1410 {
+	BACKGROUND: url(../images/medals/tehillim/elements-10.png)
+}
+UL LI.medal_yom .medals .medal1 {
+	BACKGROUND: url(../images/medals/yom/elements-1.png)
+}
+.medal151 {
+	BACKGROUND: url(../images/medals/yom/elements-1.png)
+}
+UL LI.medal_yom .medals .medal2 {
+	BACKGROUND: url(../images/medals/yom/elements-2.png)
+}
+.medal152 {
+	BACKGROUND: url(../images/medals/yom/elements-2.png)
+}
+UL LI.medal_yom .medals .medal3 {
+	BACKGROUND: url(../images/medals/yom/elements-3.png)
+}
+.medal153 {
+	BACKGROUND: url(../images/medals/yom/elements-3.png)
+}
+UL LI.medal_yom .medals .medal4 {
+	BACKGROUND: url(../images/medals/yom/elements-4.png)
+}
+.medal154 {
+	BACKGROUND: url(../images/medals/yom/elements-4.png)
+}
+UL LI.medal_yom .medals .medal5 {
+	BACKGROUND: url(../images/medals/yom/elements-5.png)
+}
+.medal155 {
+	BACKGROUND: url(../images/medals/yom/elements-5.png)
+}
+UL LI.medal_yom .medals .medal6 {
+	BACKGROUND: url(../images/medals/yom/elements-6.png)
+}
+.medal156 {
+	BACKGROUND: url(../images/medals/yom/elements-6.png)
+}
+UL LI.medal_yom .medals .medal7 {
+	BACKGROUND: url(../images/medals/yom/elements-7.png)
+}
+.medal157 {
+	BACKGROUND: url(../images/medals/yom/elements-7.png)
+}
+UL LI.medal_yom .medals .medal8 {
+	BACKGROUND: url(../images/medals/yom/elements-8.png)
+}
+.medal158 {
+	BACKGROUND: url(../images/medals/yom/elements-8.png)
+}
+UL LI.medal_yom .medals .medal9 {
+	BACKGROUND: url(../images/medals/yom/elements-9.png)
+}
+.medal159 {
+	BACKGROUND: url(../images/medals/yom/elements-9.png)
+}
+UL LI.medal_yom .medals .medal10 {
+	BACKGROUND: url(../images/medals/yom/elements-10.png)
+}
+.medal1510 {
+	BACKGROUND: url(../images/medals/yom/elements-10.png)
+}
+.icon_building {
+	BACKGROUND: url(../images/icon_office_building.png)
+}
+.icon_book {
+	BACKGROUND: url(../images/icon_book.png)
+}
+.icon_stopwatch {
+	BACKGROUND: url(../images/icon_stopwatch.png)
+}
+.icon_clock {
+	BACKGROUND: url(../images/icon_clock.png)
+}
+.icon_megaphone {
+	BACKGROUND: url(../images/icon_megaphone.png)
+}
+.icon_card {
+	BACKGROUND: url(../images/icon_hand_paper.png)
+}
+.icon_save {
+	BACKGROUND: url(../images/icon_save.png)
+}
+.icon_target {
+	BACKGROUND: url(../images/icon_target.png)
+}
+.icon_enroll {
+	BACKGROUND: url(../images/icon_enroll.png)
+}
+.slider_box {
+	TEXT-ALIGN: center; PADDING-BOTTOM: 20px; MARGIN: 0px 32px 0px 27px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; PADDING-TOP: 20px
+}
+UL.missions LI .medalImage {
+	Z-INDEX: 999; POSITION: absolute; MARGIN: -20px 0px 0px; WIDTH: 96px; HEIGHT: 100px; opacity: 1
+}
+UL.missions .mission_boxes .mission {
+	POSITION: relative; PADDING-BOTTOM: 10px; MARGIN: 0px; PADDING-LEFT: 10px; WIDTH: 68px; PADDING-RIGHT: 10px; BACKGROUND: url(../images/mission_box.png); FLOAT: left; HEIGHT: 68px; FONT-SIZE: 18px; PADDING-TOP: 10px; opacity: 1
+}
+UL.missions .mission_boxes .inactive {
+	opacity: .3
+}
+UL.missions .mission_boxes .empty {
+	VISIBILITY: hidden
+}
+UL.missions .mission_boxes .mission .number {
+	MARGIN-TOP: 8px; FONT-SIZE: 18px
+}
+UL.missions .mission_boxes .mission .date {
+	FONT-SIZE: 12px
+}
+UL.missions .mission_boxes .mission .meter {
+	BACKGROUND-IMAGE: url(../images/mission_meter.png); POSITION: absolute; MARGIN: 0px 9px 11px; WIDTH: 50px; BOTTOM: 5px; BACKGROUND-REPEAT: no-repeat; BACKGROUND-POSITION: 100% 0px; HEIGHT: 6px; opacity: 1
+}
+UL.missions .mission_boxes .mission .check_on {
+	POSITION: absolute; LINE-HEIGHT: 23px; WIDTH: 28px; HEIGHT: 28px; FONT-SIZE: 15px; TOP: 0px; RIGHT: 5px
+}
+UL.missions .mission_boxes .mission .check_off {
+	POSITION: absolute; WIDTH: 28px; HEIGHT: 28px; TOP: 0px; RIGHT: 5px
+}
+UL.missions .mission_boxes .mission A {
+	POSITION: absolute; WIDTH: 78px; DISPLAY: block; HEIGHT: 78px; TOP: 5px; LEFT: 5px
+}
+UL.missions .mission_boxes .button_back A {
+	PADDING-BOTTOM: 15px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; FONT-SIZE: 15px; FONT-WEIGHT: normal; PADDING-TOP: 15px
+}
+UL.missions SPAN.badge {
+	LINE-HEIGHT: 30px; MARGIN: -5px 0px 0px 65px; WIDTH: 35px; DISPLAY: block; BACKGROUND: url(../images/page_number.png); HEIGHT: 35px; COLOR: #fff; FONT-SIZE: 0.55em
+}
+UL.tasks .task_group {
+	MARGIN: 0px 10px; BACKGROUND: url(../images/bg_carbon.png) repeat-x 50% top; CLEAR: both; FONT-SIZE: 0.7em; -moz-border-radius: 12px; -webkit-border-radius: 12px; border-radius: 12px
+}
+UL.tasks .title {
+	MARGIN: 10px 0px 0px
+}
+UL.tasks .task {
+	BORDER-BOTTOM: #6587a5 1px dotted; TEXT-ALIGN: left; LINE-HEIGHT: 28px; MARGIN: 0px 15px 1px; PADDING-LEFT: 8px; FONT-SIZE: 0.8em; FONT-WEIGHT: normal
+}
+.check_on {
+	WIDTH: 28px; BACKGROUND: url(../images/check_circles.png); HEIGHT: 28px
+}
+.check_off {
+	WIDTH: 28px; BACKGROUND: url(../images/check_circles.png) right 50%; HEIGHT: 28px
+}
+UL.tasks .check_on {
+	FLOAT: right; MARGIN-RIGHT: 5px
+}
+UL.tasks .check_off {
+	FLOAT: right; MARGIN-RIGHT: 5px
+}
+UL.tasks .miles {
+	TEXT-ALIGN: right; WIDTH: 75px; FLOAT: right; MARGIN-RIGHT: 15px
+}
+.blockquote {
+	TEXT-INDENT: 24px; MARGIN: 0px 20px; BACKGROUND: url(../images/quotes1.png) no-repeat; CLEAR: both; FONT-SIZE: 0.7em; FONT-WEIGHT: normal
+}
+.blockquote SPAN {
+	PADDING-BOTTOM: 20px; MARGIN: 4px 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; BACKGROUND: url(../images/quotes2.png) no-repeat right top; FLOAT: right; FONT-SIZE: 0.7em; PADDING-TOP: 20px
+}
+.slider_title {
+	BORDER-BOTTOM: #597791 1px dotted; MARGIN: 15px 0px 0px
+}
+.medalImage {
+	MARGIN: 50px 20px 0px; WIDTH: 200px; FLOAT: left; HEIGHT: 210px
+}
+.rankImage {
+	WIDTH: 200px; FLOAT: left; HEIGHT: 162px
+}
+.rank_info {
+	MARGIN: 50px 0px; WIDTH: 240px; FLOAT: left
+}
+UL.upcoming .icon {
+	MARGIN: 10px 0px 0px 15px; WIDTH: 96px; FLOAT: left; HEIGHT: 100px
+}
+UL.upcoming .mission {
+	POSITION: relative; PADDING-BOTTOM: 10px; MARGIN: 0px; PADDING-LEFT: 10px; WIDTH: 68px; PADDING-RIGHT: 10px; BACKGROUND: url(../images/mission_box.png); FLOAT: left; HEIGHT: 68px; FONT-SIZE: 18px; PADDING-TOP: 10px; opacity: 1
+}
+UL.upcoming .mission A {
+	POSITION: absolute; WIDTH: 78px; DISPLAY: block; HEIGHT: 78px; TOP: 5px; LEFT: 5px
+}
+.mission .number {
+	MARGIN-TOP: 8px; FONT-SIZE: 18px
+}
+.mission .date {
+	FONT-SIZE: 12px
+}
+.mission .meter {
+	BACKGROUND-IMAGE: url(../images/mission_meter.png); POSITION: absolute; MARGIN: 0px 9px 11px; WIDTH: 50px; BOTTOM: 5px; BACKGROUND-REPEAT: no-repeat; BACKGROUND-POSITION: 100% 0px; HEIGHT: 6px; opacity: 1
+}
+#slider .report LI {
+	MARGIN: 0px
+}
+.report .boxes {
+	PADDING-BOTTOM: 0px; MARGIN: 10px 40px 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; BACKGROUND: url(../images/bg_gradient_1.png) repeat-x 50% top; CLEAR: both; PADDING-TOP: 5px; -moz-border-radius: 12px; -webkit-border-radius: 12px; border-radius: 12px
+}
+.report .mainbox {
+	MARGIN: 10px 15px 0px; FONT-SIZE: 0.7em
+}
+.report .question {
+	BORDER-BOTTOM: #597791 1px dotted; TEXT-ALIGN: left; PADDING-BOTTOM: 5px; MARGIN: 0px 10px; PADDING-LEFT: 60px; PADDING-RIGHT: 5px; BACKGROUND-REPEAT: no-repeat; BACKGROUND-POSITION: 0px 5px; FONT-SIZE: 0.8em; FONT-WEIGHT: normal; PADDING-TOP: 5px
+}
+.report .question P {
+	MARGIN: 15px 0px
+}
+.report .question .checkbox {
+	MARGIN-TOP: 15px
+}
+.report .question .input {
+	MARGIN-TOP: 3px; WIDTH: 192px; FLOAT: right; HEIGHT: 48px
+}
+.questions_box {
+	MARGIN: 15px 0px
+}
+.question_box {
+	TEXT-ALIGN: center; MARGIN: 0px 2px; WIDTH: 60px; FLOAT: left; FONT-SIZE: 0.8em
+}
+.question_box .date {
+	MARGIN-BOTTOM: 5px
+}
+.report .button DIV {
+	TEXT-ALIGN: center; MARGIN: 0px auto
+}
+.goal .text {
+	FONT-SIZE: 0.8em; FONT-WEIGHT: normal
+}
+.goal .icon {
+	MARGIN: 0px 10px 10px 0px; WIDTH: 48px; FLOAT: left; HEIGHT: 48px
+}
+.slider_buttons {
+	FLOAT: right; FONT-SIZE: 0.5em
+}
+.slider_button {
+	FLOAT: left
+}
+.button_dir {
+	BACKGROUND-IMAGE: url(../images/next_buttons.png); MARGIN-TOP: 183px; WIDTH: 64px; HEIGHT: 64px
+}
+.button_next {
+	
+}
+.button_prev {
+	BACKGROUND-POSITION: -64px 0px
+}
+.button_next:hover {
+	BACKGROUND-POSITION: 0px -128px
+}
+.button_prev:hover {
+	BACKGROUND-POSITION: -64px -128px
+}
+.button_next_disabled {
+	BACKGROUND-POSITION: 0px -64px
+}
+.button_prev_disabled {
+	BACKGROUND-POSITION: -64px -64px
+}
+LI.button_dir A {
+	TEXT-INDENT: -9999px; WIDTH: 64px; DISPLAY: block; HEIGHT: 64px
+}
+.three_column .content {
+	POSITION: relative; MARGIN: 0px auto; WIDTH: 770px; BACKGROUND: url(../images/content_cover.png); HEIGHT: 430px
+}
+.three_column .content #slider {
+	
+}
+.three_column .content .card_single {
+	POSITION: relative; TEXT-ALIGN: center; MARGIN: 0px auto; HEIGHT: 390px; FONT-SIZE: 24px
+}
+.three_column .content .card_single P {
+	MARGIN: 10px auto
+}
+.card_box {
+	
+}
+.card_shadow {
+	WIDTH: 350px; MARGIN-BOTTOM: 10px; BACKGROUND: url(../images/card_shadow.png) no-repeat 50% bottom; FLOAT: left; HEIGHT: 210px
+}
+.card_front {
+	PADDING-BOTTOM: 25px; PADDING-LEFT: 25px; PADDING-RIGHT: 25px; BACKGROUND: #fefefe; HEIGHT: 150px; COLOR: #333; FONT-SIZE: 12px; FONT-WEIGHT: normal; PADDING-TOP: 25px; text-shadow: none
+}
+.card_back {
+	PADDING-BOTTOM: 25px; PADDING-LEFT: 25px; PADDING-RIGHT: 25px; BACKGROUND: #fefefe; HEIGHT: 150px; COLOR: #333; FONT-SIZE: 12px; FONT-WEIGHT: normal; PADDING-TOP: 25px; text-shadow: none
+}
+.card_front TABLE {
+	MARGIN: auto
+}
+.card_front P {
+	MARGIN: 10px auto
+}
+.card_front TD {
+	TEXT-ALIGN: left; PADDING-BOTTOM: 0px; PADDING-LEFT: 8px; PADDING-RIGHT: 8px; PADDING-TOP: 0px
+}
+.card_front_left {
+	MARGIN-RIGHT: 10px
+}
+.card_front .border {
+	BORDER-BOTTOM: black 0.03in solid; BORDER-LEFT: black 0.03in solid; PADDING-BOTTOM: 10px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; BORDER-TOP: black 0.03in solid; BORDER-RIGHT: black 0.03in solid; PADDING-TOP: 10px; -moz-border-radius: .04in; -webkit-border-radius: .04in; border-radius: .04in
+}
+.card_back .border {
+	BORDER-BOTTOM: black 0.03in solid; BORDER-LEFT: black 0.03in solid; PADDING-BOTTOM: 10px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; BORDER-TOP: black 0.03in solid; BORDER-RIGHT: black 0.03in solid; PADDING-TOP: 10px; -moz-border-radius: .04in; -webkit-border-radius: .04in; border-radius: .04in
+}
+.card_front .circle {
+	BORDER-BOTTOM: black 0.03in solid; TEXT-ALIGN: center; BORDER-LEFT: black 0.03in solid; LINE-HEIGHT: 18px; MARGIN: auto; WIDTH: 18px; BORDER-TOP: black 0.03in solid; FONT-WEIGHT: bold; BORDER-RIGHT: black 0.03in solid; -moz-border-radius: .2in; -webkit-border-radius: .2in; border-radius: .2in
+}
+.card_back .circle {
+	BORDER-BOTTOM: black 0.03in solid; TEXT-ALIGN: center; BORDER-LEFT: black 0.03in solid; LINE-HEIGHT: 18px; MARGIN: auto; WIDTH: 18px; BORDER-TOP: black 0.03in solid; FONT-WEIGHT: bold; BORDER-RIGHT: black 0.03in solid; -moz-border-radius: .2in; -webkit-border-radius: .2in; border-radius: .2in
+}
+.card_back TD {
+	HEIGHT: auto
+}
+.card_back DIV {
+	POSITION: relative
+}
+.card_back DIV TD DIV {
+	PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; HEIGHT: auto; PADDING-TOP: 0px
+}
+.card_back .barcode {
+	PADDING-BOTTOM: 8px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; PADDING-TOP: 8px
+}
+.card_back .points {
+	POSITION: absolute; PADDING-BOTTOM: 0px; TEXT-TRANSFORM: uppercase; MARGIN: 0px; PADDING-LEFT: 0px; WIDTH: 2.875in; BOTTOM: -0.13in; PADDING-RIGHT: 0px; FONT: 11px/0.2in bold; HEIGHT: auto; PADDING-TOP: 0px
+}
+.card_back TABLE {
+	MARGIN: auto
+}
+.card_back .points TD DIV {
+	PADDING-BOTTOM: 0px; BACKGROUND-COLOR: #e0f3d2; MARGIN: 0px; PADDING-LEFT: 0.1in; PADDING-RIGHT: 0.1in; HEIGHT: auto; PADDING-TOP: 0px
+}
+.card_withdraw {
+	MARGIN: 0px 20px 0px 10px; HEIGHT: 370px
+}
+.card_withdraw .card_front {
+	HEIGHT: 310px
+}
+#slider .buttons {
+	POSITION: absolute; HEIGHT: 121px; TOP: 230px; LEFT: 580px
+}
+#slider .buttons DIV.icon_deposit {
+	BACKGROUND-IMAGE: url(../images/button_deposit.png); PADDING-BOTTOM: 0px; TEXT-INDENT: -9999px; PADDING-LEFT: 0px; WIDTH: 126px; PADDING-RIGHT: 0px; HEIGHT: 121px; PADDING-TOP: 0px
+}
+.card_single .buttons DIV:hover {
+	BACKGROUND-POSITION: right 50%
+}
+.card_single .buttons DIV A {
+	HEIGHT: 121px
+}
+.card_single .member_info LABEL {
+	DISPLAY: block
+}
+.card_single .member_info SPAN {
+	FONT-SIZE: 120%
+}
+.card_single .member_info DIV {
+	BORDER-BOTTOM: #fff 1px dotted; PADDING-BOTTOM: 10px; MARGIN-BOTTOM: 10px
+}
+.rank_badges {
+	MARGIN: 20px 0px 0px 40px
+}
+.rank_badges UL.rank_top {
+	MARGIN-LEFT: 14px
+}
+.rank_badges UL.rank_top LI {
+	BACKGROUND-IMAGE: url(../images/rankBadges1.png); TEXT-INDENT: -9999px; WIDTH: 75px; FLOAT: left; HEIGHT: 75px
+}
+.rank_badges UL.rank_bot LI {
+	BACKGROUND-IMAGE: url(../images/rankBadges2.png); TEXT-INDENT: -9999px; WIDTH: 104px; FLOAT: left; HEIGHT: 92px
+}
+.rank_badges UL LI.rank1 {
+	BACKGROUND-POSITION: 0px 0px
+}
+.rank_badges UL LI.rank2 {
+	BACKGROUND-POSITION: 0px -75px
+}
+.rank_badges UL LI.rank3 {
+	BACKGROUND-POSITION: 0px -150px
+}
+.rank_badges UL LI.rank4 {
+	BACKGROUND-POSITION: 0px -225px
+}
+.rank_badges UL LI.rank5 {
+	BACKGROUND-POSITION: 0px -300px
+}
+.rank_badges UL LI.rank6 {
+	BACKGROUND-POSITION: 0px -375px
+}
+.rank_badges UL LI.rank7 {
+	BACKGROUND-POSITION: 0px -450px
+}
+.rank_badges UL LI.rank8 {
+	BACKGROUND-POSITION: 0px -525px
+}
+.rank_badges UL LI.rank9 {
+	BACKGROUND-POSITION: 0px 0px
+}
+.rank_badges UL LI.rank10 {
+	BACKGROUND-POSITION: 0px -92px
+}
+.rank_badges UL LI.rank11 {
+	BACKGROUND-POSITION: 0px -184px
+}
+.rank_badges UL LI.rank12 {
+	BACKGROUND-POSITION: 0px -276px
+}
+.rank_badges UL LI.rank13 {
+	BACKGROUND-POSITION: 0px -368px
+}
+.rank_badges UL LI.rank14 {
+	BACKGROUND-POSITION: 0px -460px
+}
+.rank_badges UL LI.currentrank1 {
+	BACKGROUND-POSITION: -75px 0px
+}
+.rank_badges UL LI.currentrank2 {
+	BACKGROUND-POSITION: -75px -75px
+}
+.rank_badges UL LI.currentrank3 {
+	BACKGROUND-POSITION: -75px -150px
+}
+.rank_badges UL LI.currentrank4 {
+	BACKGROUND-POSITION: -75px -225px
+}
+.rank_badges UL LI.currentrank5 {
+	BACKGROUND-POSITION: -75px -300px
+}
+.rank_badges UL LI.currentrank6 {
+	BACKGROUND-POSITION: -75px -375px
+}
+.rank_badges UL LI.currentrank7 {
+	BACKGROUND-POSITION: -75px -450px
+}
+.rank_badges UL LI.currentrank8 {
+	BACKGROUND-POSITION: -75px -525px
+}
+.rank_badges UL LI.currentrank9 {
+	BACKGROUND-POSITION: -104px 0px
+}
+.rank_badges UL LI.currentrank10 {
+	BACKGROUND-POSITION: -104px -92px
+}
+.rank_badges UL LI.currentrank11 {
+	BACKGROUND-POSITION: -104px -184px
+}
+.rank_badges UL LI.currentrank12 {
+	BACKGROUND-POSITION: -104px -276px
+}
+.rank_badges UL LI.currentrank13 {
+	BACKGROUND-POSITION: -104px -368px
+}
+.rank_badges UL LI.currentrank14 {
+	BACKGROUND-POSITION: -104px -460px
+}
+#slider UL {
+	PADDING-BOTTOM: 0px; LIST-STYLE-TYPE: none; MARGIN: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; LIST-STYLE-IMAGE: none; PADDING-TOP: 0px
+}
+#slider LI {
+	PADDING-BOTTOM: 0px; LIST-STYLE-TYPE: none; MARGIN: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; LIST-STYLE-IMAGE: none; PADDING-TOP: 0px
+}
+#slider {
+	MARGIN: 0px 32px 20px 27px
+}
+#slider LI {
+	TEXT-ALIGN: center; MARGIN: 30px 0px; WIDTH: 710px; HEIGHT: 420px; OVERFLOW: hidden
+}
+#prevBtn {
+	BACKGROUND-IMAGE: url(../images/next_buttons.png); Z-INDEX: 1000; POSITION: absolute; TEXT-INDENT: -9999px; WIDTH: 64px; DISPLAY: block; BACKGROUND-POSITION: -64px -64px; HEIGHT: 64px; OVERFLOW: hidden; TOP: -270px; LEFT: -290px
+}
+#nextBtn {
+	BACKGROUND-IMAGE: url(../images/next_buttons.png); Z-INDEX: 1000; POSITION: absolute; TEXT-INDENT: -9999px; WIDTH: 64px; DISPLAY: block; BACKGROUND-POSITION: -64px -64px; HEIGHT: 64px; OVERFLOW: hidden; TOP: -270px; LEFT: -290px
+}
+#nextBtn {
+	BACKGROUND-POSITION: 0px -64px; LEFT: 585px
+}
+#prevBtn A {
+	BACKGROUND-IMAGE: url(../images/next_buttons.png); POSITION: relative; WIDTH: 64px; DISPLAY: block; BACKGROUND-POSITION: -64px -128px; HEIGHT: 64px
+}
+#nextBtn A {
+	BACKGROUND-IMAGE: url(../images/next_buttons.png); POSITION: relative; WIDTH: 64px; DISPLAY: block; BACKGROUND-POSITION: -64px -128px; HEIGHT: 64px
+}
+#nextBtn A {
+	BACKGROUND-POSITION: 0px -128px
+}
+#prevBtn A:hover {
+	BACKGROUND-POSITION: -64px 0px
+}
+#nextBtn A:hover {
+	BACKGROUND-POSITION: 0px 0px
+}
+#upBtn {
+	BACKGROUND-IMAGE: url(../images/next_buttons.png); Z-INDEX: 1000; POSITION: absolute; TEXT-INDENT: -9999px; WIDTH: 64px; DISPLAY: block; BACKGROUND-POSITION: -64px -64px; HEIGHT: 64px; OVERFLOW: hidden; TOP: 0px; LEFT: 0px
+}
+#dnBtn {
+	BACKGROUND-IMAGE: url(../images/next_buttons.png); Z-INDEX: 1000; POSITION: absolute; TEXT-INDENT: -9999px; WIDTH: 64px; DISPLAY: block; BACKGROUND-POSITION: -64px -64px; HEIGHT: 64px; OVERFLOW: hidden; TOP: 0px; LEFT: 0px
+}
+#dnBtn {
+	BACKGROUND-POSITION: 0px -64px; LEFT: 74px
+}
+#upBtn A {
+	BACKGROUND-IMAGE: url(../images/next_buttons.png); POSITION: relative; WIDTH: 64px; DISPLAY: block; BACKGROUND-POSITION: -64px -128px; HEIGHT: 64px
+}
+#dnBtn A {
+	BACKGROUND-IMAGE: url(../images/next_buttons.png); POSITION: relative; WIDTH: 64px; DISPLAY: block; BACKGROUND-POSITION: -64px -128px; HEIGHT: 64px
+}
+#dnBtn A {
+	BACKGROUND-POSITION: 0px -128px
+}
+#upBtn A:hover {
+	BACKGROUND-POSITION: -64px 0px
+}
+#dnBtn A:hover {
+	BACKGROUND-POSITION: 0px 0px
+}
+.button_box {
+	POSITION: relative; MARGIN: 20px auto; WIDTH: 138px
+}
+.page_dots {
+	BACKGROUND-IMAGE: url(../images/page_dots_bg.png); POSITION: relative; TEXT-ALIGN: center; MARGIN: 0px auto; WIDTH: 360px; HEIGHT: 16px
+}
+OL#controls {
+	TEXT-ALIGN: center; MARGIN: 2px auto 0px; DISPLAY: inline-block
+}
+OL#controls LI {
+	BACKGROUND-IMAGE: url(../images/page_dots.png); TEXT-INDENT: -9999px; MARGIN: 0px 4px; WIDTH: 16px; FLOAT: left; HEIGHT: 11px; CURSOR: pointer
+}
+OL#controls LI.current {
+	BACKGROUND-POSITION: right 50%
+}
+.footer_logo {
+	WIDTH: 113px; BACKGROUND: url(../images/cth_logo.png); FLOAT: left; HEIGHT: 70px; MARGIN-LEFT: 15px
+}
+.footer_logout {
+	
+}

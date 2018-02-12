@@ -1,0 +1,78 @@
+<?php
+	include "headers/dashboard_header.phtml";
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<style>
+#footer_links a {
+	color:#555;
+}
+#footer_links {
+	width:1024px;
+	margin:0 auto;
+	height:30px;
+	padding:4px;
+	color:#555;
+}
+</style>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#nav li").click(function () {
+		$("#nav li").removeClass("current");
+		$(this).addClass("current");
+	});
+	$('#footer_links a').mouseover(function () {
+		$(this).css({
+			'color' : '#000'
+		});
+	});
+	$('#footer_links a').mouseout(function () {
+		$(this).css({
+			'color' : '#555'
+		});
+	});
+	slideRefresh("<?php echo bp . "/admin/front" . $strParamPath; ?>");
+<?php
+	// disable the dumper
+	if (!is_dev())
+	{
+		print '$.dumper = function(object) {};';
+		print '$.alert = function(object) {};';
+	}
+
+?>
+});
+<?php
+print 'var is_dev = ' . is_dev() . ';';
+?>
+</script>
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="nav">
+				<div class="col_title_bg"></div>
+				<div class="col_title">Menu</div>
+				<?php include "menu.phtml"; ?>
+			</div>
+			<div id="content">
+				<div class="col_title_bg"></div>
+				<div class="slider_container">
+					<div class="slider">
+						<div class="col_title">
+								<span>Welcome to the Admin Dashboard</span>
+						</div>
+						<div class="col_content">
+							Loading...
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="footer_links">
+			<div style="float:right;text-align:right;display:inline-block;margin:0 8px;width:383px;">Copyright © 2016 - mashpia.com</div>
+		</div>
+		<div id="overlay">
+			<div class="content"></div>
+		</div>
+	</body>
+</html>

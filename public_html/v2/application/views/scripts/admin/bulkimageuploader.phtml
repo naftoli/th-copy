@@ -1,0 +1,33 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider" id="slider_idcards">
+	<div class="col_title">
+		<span>UPLOAD</span>
+	</div>
+	<div class="col_content camper">
+		<form>
+			<div class="module form lists">
+				<div class="module_content list">
+					<ul>
+<?php
+	for ($intItr=0; $intItr!=10; $intItr++)
+	{
+?>
+						<li>
+							<h3><?php print text("User Image"); ?></h3>
+							<input type="hidden" name="image_id_<?php print $intItr; ?>" id="usereditor_image_id_<?php print $intItr; ?>" value="" />
+							<iframe src="<?php print $sn . "/imgs/smalluploader"; ?>/resultid/usereditor_image_id_<?php print $intItr; ?>" width="100%" height="80" scrolling="no">
+								<p><?php print text("Your browser does not support iframes."); ?></p>
+							</iframe>
+						</li>
+<?php
+	}
+?>
+					</ul>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

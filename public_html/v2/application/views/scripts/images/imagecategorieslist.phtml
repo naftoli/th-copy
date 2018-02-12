@@ -1,0 +1,162 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	
+	$imagePickerLink = "/mode/" . $this->mode . "/update/" . $this->update . "/id/" . $this->id;
+	$linkToClick = $sn . '/images/imageslist/category_id/\'+response+\'' . $strParamPath . $imagePickerLink;
+	
+	$linkToAppend = '<a class="link" href="'.$linkToClick.'"><div style="float:left;">\'+category_name+\'</div></a><div style="cursor:pointer; float:left !important;" onclick="confirmDelete(\'+response+\')"> [ DELETE Category ] </div>';
+?> 
+
+<script>
+	var category_delete_id;
+	$(document).ready(function()
+	{
+		$('#form_categoryadd a.submit').click( function(e) {
+			e.preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $("#processing_status").html('Loading...').fadeIn("slow"),
+				url : '<?php echo $sn . "/images/imagecategorieslist" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('#form_categoryadd').serialize(),
+				success : function(response) {
+					if (response.match(/^[0-9]+$/))
+					{
+						//$("#processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+						var category_name = $("#category_name").val();
+						$('#mylist').append('<li><?php echo $linkToAppend; ?></li>');
+					}
+					else
+					{
+						//alert(response);
+						$("#slider_imagecategorieslist #processing_status").html("Sorry, this image category already exists.").fadeIn("slow").delay(2000).fadeOut("slow");
+					}
+				}
+			});
+		});
+	});
+	
+	function deleteCategory()
+	{
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#slider_imagecategorieslist #processing_status").html('Saving...').fadeIn("slow"),
+			url : '<?php print $sn;?>/images/imagecategorieslist/',
+			data: { 'myaction' : 'delete', 'category_id' : category_delete_id },
+			success : function(response) {
+				if (response.match(/^[0-9]+$/)) {
+					//$("#processing_status").html("Uploaded successfully...").fadeIn("slow").delay(2000).fadeOut("slow");
+					slideRefresh();
+				} else {
+					$("#slider_imagecategorieslist #processing_status").html(response).fadeIn("slow");
+				}
+			}
+		});
+	}
+	
+	function confirmDelete(category_id)
+	{
+		$.blockUI({ message: $('#slider_imagecategorieslist #question')});
+		category_delete_id = category_id;
+	}
+	
+	$('#slider_imagecategorieslist #question #no').click(function(e) { 
+		e.preventDefault();
+		$.unblockUI();
+	}); 
+
+	$('#slider_imagecategorieslist #question #yes').click(function(e) {
+		e.preventDefault();
+		$.unblockUI();
+		deleteCategory();
+	});
+	
+</script>
+
+<div class="slider" id="slider_imagecategorieslist">
+	
+	<div class="col_title">
+		<span>Image Category List</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				1. Choose an existing category or create a new category to upload a photo to.<br />
+				2. After you create a category you will be able to upload a photo.<br/>
+				3. Once a photo is uploaded an image will appear and an option [SET].<br />
+				4. Click on [SET], this will apply an image to whatever item that you created.<br />
+				5. After all is done you will be returned to the page where you came from initially.<br />
+			</div>
+		</div>		
+		
+		<div style="text-align:center; margin-left:auto !important; margin-right:auto !important;">Existing Category List</div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul id="mylist">
+<?php
+	if (count($this->arrCategories) == 0)
+	{
+?>
+					<li class="module" style="padding:5px;">
+						There are no image categories available to display.
+					</li>
+<?php
+	}
+	else
+	{
+		foreach ($this->arrCategories as $r)
+		{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn . "/images/imageslist/category_id/" . $r->image_category_id . $strParamPath; ?><?php echo $imagePickerLink; ?>">
+							<div style="float:left;"><?php print $r->name; ?></div>
+						</a>
+						<div style="cursor:pointer; float:left !important;" onclick="confirmDelete(<?=$r->image_category_id?>)"> [ DELETE Category ] </div>
+					</li>	
+<?php
+		}
+?>
+				</ul>					
+			</div>			
+		</div>
+<?php
+	}
+?>
+		<div style="text-align:center; margin-left:auto !important; margin-right:auto !important;">Create New Category </div>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form name="form_categoryadd" id="form_categoryadd" method="post" action="">
+					<input type="hidden" name="institution_id" id="institution_id" value="<?php print $this->institution_id; ?>" />
+					<input type="hidden" name="myaction" id="myaction" value="add">
+					<ul>
+						<li>
+							<span class="label">Category Name:</span>
+							<span class="input">
+								<input type="text" class="required" id="category_name" name="category_name" value="<?php echo $this->category_name; ?>" size="25" minlength="2" />
+							</span>
+							<div class="clear"></div>
+						</li>	
+						<li>
+							<span><a href="#" title="Save" class="button submit">Save</a></span>							
+							<div class="clear"></div>							
+						</li>
+						<li>
+							<div id="processing_status"><?php if ($this->message){ echo $this->message . "<br>"; }?></div>
+						</li>
+					</ul>
+				</form>
+			</div>
+			<div id="question">
+				<p>
+					This folder and all the images within this folder will be permanantly deleted.
+					Do you want to continue?
+				</p>
+				<p><a id="yes" class="button" href="#">Yes</a></p>
+				<p><a id="no" class="button" href="#">No</a></p>
+			</div>
+		</div>
+	</div>
+</div>

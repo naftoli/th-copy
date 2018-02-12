@@ -1,0 +1,51 @@
+<?php
+	include "config.phtml";
+	if(!isset($this->intUserId))
+		$strUrl = $sn . "/store/prizeview/";
+	else
+		$strUrl = $sn . "/store/prizeviewbyuser/";
+		
+	if (isset($this->intHost))
+		$strUrl .= "host_id/" . $this->intHost . "/";
+	if (isset($this->intNetwork))
+		$strUrl .= "network_id/" . $this->intNetwork . "/";
+	if (isset($this->intInstitution))
+		$strUrl .= "institution_id/" . $this->intInstitution . "/";
+	if (isset($this->intUserId))
+		$strUrl .= "user_id/" . $this->intUserId . "/";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Prize List</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<?php if($this->status=="active"):?>
+					<li>
+						<a class="link" href="<?php echo $strUrl; ?>status/inactive">
+							<div class="icon"></div>
+							<div class="title">Inactive prizes</div>
+						</a>
+					</li>
+					<? endif ?>
+					<?php if (!count($this->arrResults)):?>
+						<li>
+							<div class="module" style="padding:5px;">There are no prizes available to view.</div>
+						</li>
+					<?php else: ?>
+						<? foreach ($this->arrResults as $arrResult):?>
+							<li>
+								<a class="link" href="<?php print $sn . "/store/prize/prize_id/" . $arrResult->prize_id; ?>">
+									<div class="icon"></div>
+									<div class="title"><?php print $arrResult->prize_name; ?>  Category: <?php print $arrResult->prize_category; ?></div>
+								</a>
+							</li>
+						<?php endforeach ?>
+					<? endif ?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,161 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	
+	$imagePickerLink = "/images/imagecategorieslist/mode/callback/update/ranks/id/".$this->objRanks->rank_id;
+	
+	//set target url that will be used for slideUrl() once image has been added/edited for this item
+	$URL = new Zend_Session_Namespace('targetUrl');
+	$URL->url = $sn . "/ranks/ranksedit/rank_id/".$this->objRanks->rank_id;;
+?>
+
+<script language="javascript">
+	$(document).ready(function()
+	{
+		$('#form_rankedit a.submit').click( function(e) {
+			e.preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $("#processing_status").html('Loading...').fadeIn("slow"),
+				url : '<?php echo $sn . "/ranks/ranksedit/rank_id/" . $this->objRanks->rank_id . $strParamPath; ?>',
+				dataType : "text",
+				data: $('#form_rankedit').serialize(),
+				success : function(strResponse) {
+					if (strResponse.match(/^[0-9]+$/)) {
+						$("#processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+					} else {
+						$("#processing_status").html(strResponse).fadeIn("slow");
+					}
+				}
+			});
+		});
+	});
+</script>
+
+<div class="slider" id="slider_rankedit">
+	<div class="col_title">
+        <span>Edit Rank</span>
+    </div>	
+	<div class="col_content camper">
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form name="form_rankedit" id="form_rankedit" method="post" action="">
+					<ul>
+						<li>
+							<span class="label">Rank Name:</span>
+							<span class="input"><input type="text" class="required" id="rank_title" name="rank_title" value="<?php echo $this->objRanks->rank_title; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>						
+						<li>
+							<span class="label">Rank medal color:</span>
+							<span class="input"><input type="text" class="required" id="rank_color" name="rank_color" value="<?php echo $this->objRanks->rank_color; ?>"></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">How many medals for this rank:</span>
+							<span class="input"><input type="text" class="required" id="rank_medals" name="rank_medals" value="<?php echo $this->objRanks->rank_medals; ?>"></span>
+							<div class="clear"></div>
+                        </li>					
+<?php
+    if(!empty($this->objRanks->rank_image_1) && $this->objRanks->rank_image_1 != "")
+    {
+		if(!empty($this->objRanks->rank_image_2) && $this->objRanks->rank_image_2 != "") {
+			
+?>
+						<div id="processing_status"><?php if ($this->message){ echo $this->message . "<br>"; }?></div>
+						<li>
+							<span>
+								<a href="#" title="Save" class="button submit">Save</a>
+							</span>
+							<div class="clear"></div>
+						</li>						
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div class="module lists" id="lists-camper-groups">
+			<div class="module_content">
+				<ul>
+					<li>
+						<span class="label">Photo 2 Preview:</span>
+						<span class="input">
+							<a class="link" href="<?php echo $sn; ?><?php echo $imagePickerLink. "/institution_id/".$this->objRanks->institution_id; ?>">
+								<img src="<?php echo $sn; ?>/images/show-image/image_id/<?php echo $this->objRanks->rank_image_2; ?>" height="100" width="100" />
+							</a>
+						</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+<?php
+		}else{
+?>
+						<div id="processing_status"><?php if ($this->message){ echo $this->message . "<br>"; }?></div>
+						<li>
+							<span>
+								<a href="#" title="Save" class="button submit">Save</a>
+							</span>
+							<div class="clear"></div>
+						</li>						
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div class="module lists" id="lists-camper-groups">
+			<div class="module_content">
+				<ul>
+					<li>
+						<span class="label">Photo 1 Preview:</span>
+						<span class="input">
+							<a class="link" href="<?php echo $sn; ?><?php echo $imagePickerLink. "/institution_id/".$this->objRanks->institution_id; ?>">
+								<img src="<?php echo $sn; ?>/images/show-image/image_id/<?php echo $this->objRanks->rank_image_1; ?>" height="100" width="100" />
+							</a>
+						</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module lists" id="lists-camper-groups">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?><?php echo $imagePickerLink ."/institution_id/".$this->objRanks->institution_id;?>">
+							<div class="icon"></div>
+							<div class="title">Upload a less visible photo for <?php echo $this->objRanks->rank_title; ?> rank</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+		}
+	}else {
+?>
+						<div id="processing_status"><?php if ($this->message){ echo $this->message . "<br>"; }?></div>
+						<li>
+							<span>
+								<a href="#" title="Save" class="button submit">Save</a>
+							</span>
+							<div class="clear"></div>
+						</li>						
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div class="module lists" id="lists-camper-groups">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?><?php echo $imagePickerLink ."/institution_id/".$this->objRanks->institution_id;?>">
+							<div class="icon"></div>
+							<div class="title">Upload a visible photo for <?php echo $this->objRanks->rank_title; ?> rank</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>

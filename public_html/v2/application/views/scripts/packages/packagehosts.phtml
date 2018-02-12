@@ -1,0 +1,35 @@
+<?php include "config.phtml"; ?>
+<div class="slider">
+	<div class="col_title">
+		<span>Packages Hosts</span>
+	</div>
+	<div class="col_content">		
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<form name="packagehosts" id="packagehosts" method="post" action="">
+					<ul>
+						<li>
+							<a class="link" href="<?php echo $sn; ?>/packages/packagenetworks/">
+								<div class="icon"></div>
+								<div class="title">> Skip to Network List</div>
+							</a>
+						</li>
+<?php
+					foreach ($this->arrHosts as $objHosts)
+					{
+?>
+						<li>
+							<a class="link" href="<?php echo $sn; ?>/packages/packagenetworks/host_id/<?php echo $objHosts->institution_id; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php echo $objHosts->name; ?></div>
+							</a>
+						</li>
+<?php		
+					}
+?>
+					</ul>
+				</form>
+			</div>
+		</div>		
+	</div>
+</div>

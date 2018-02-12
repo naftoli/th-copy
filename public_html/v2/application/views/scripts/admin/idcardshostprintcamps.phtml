@@ -1,0 +1,317 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+
+	function dateToHebrewShortYear($date)
+	{
+		if(is_null($date)) return '';
+		@list($day, $month, $year, $year2) = mb_split(' ', dateToHebrew($date));
+		if(!empty($year2))
+		{
+		  $month = "$month $year";
+		}
+		$year = mb_substr($year, 3);
+		return "$day $month $year";
+	}
+	function dateToHebrew($date)
+	{
+		if(is_null($date))
+			return '';
+		else
+			return mb_convert_encoding(jdtojewish($date, true, CAL_JEWISH_ADD_GERESHAYIM), 'UTF-8', 'ISO-8859-8');
+	}
+	//covert yyyy-mm-dd to julian date
+	function dateToJD($date)
+	{
+		@list($year, $month, $day) = split('-', $date);
+		$jd = cal_to_jd(CAL_GREGORIAN, intval($month), intval($day), intval($year));
+		return $jd ? $jd : NULL;
+	}
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Print ID Cards</title>
+
+		<script type="text/javascript" src="<?php print $sn; ?>/js/back-end/admin/jquery3.js"></script>
+		<script type="text/javascript" src="<?php print $sn; ?>/js/back-end/admin/jquery.dump.js"></script>
+		<style type="text/css">
+			@font-face
+			{
+				font-family: ocr;
+				src: url('<?php print bp; ?>/images/OCRAStd.ttf');
+			}
+			* {
+				margin:0;
+				padding:0;
+				font-family:Impact, Charcoal, sans-serif;
+				border-spacing: 0;
+				border-collapse: collapse;
+			}
+			.cards {
+				font-family:'Myriad Pro',Arial,sans-serif;
+			}
+			.cards .card {
+				font-size:24px;
+				vertical-align: top;
+				display:inline-block;
+				margin:0px;
+				width:350px;
+				height:201px;
+				margin-left:-360px;
+			}
+			.cards .card_background {
+				width:360px;
+				height:231px;
+			}
+			@media print {
+			  body {
+				background-color: transparent;
+			  }
+			}
+			.row {
+				height:230px;
+				white-space: nowrap;
+			}
+			@media screen {
+				.row {
+					height:240px;
+				}
+			}
+			.page {
+				page-break-after:always;
+			}
+			.block {
+				display:inline-block;
+			}
+			.container {
+			}
+			.image {
+				overflow:hidden;
+				background-color:#fff;
+				width:104px;
+				height:128px;
+				margin-left: 19px;
+				margin-top: 22px;
+				border-radius:6px;
+				-moz-border-radius: 6px;
+			}
+			.student_image {
+				border-radius:6px;
+				-moz-border-radius: 6px;
+			}
+			.image div {
+				display: table-cell;
+				text-align: center;
+				vertical-align: middle;
+				width:95px;
+				height:114px;
+			}
+			.image2 {
+				overflow:hidden;
+				width:60px;
+				height:60px;
+			}
+			.image2 div {
+				display: table-cell;
+				text-align: center;
+				vertical-align: middle;
+				width:60px;
+				height:60px;
+			}
+			.card_text {
+				text-align: left;
+				font-size: 11pt;
+				vertical-align: top;
+				margin-top: 27px;
+				margin-left: 13px;
+			}
+			.card_text div {
+				line-height: 19px;
+				color:#fff;
+			}
+			.barcode_image {
+				margin-top:15px;
+				margin-left:2px;
+			}
+			.barcode_number {
+				margin-top:10px;
+				margin-left:18px;
+			}
+			.barcode_number span {
+				font-family: ocr;
+				font-size:16pt;
+				color:white;
+				font-weight:normal;
+				line-height:18px;
+			}
+			.barcode_number span:not(:last-child) {
+				padding-right:24px;
+			}
+			.bottom_text {
+				margin-top:2px;
+				font-family: ocr;
+				font-size:10pt;
+				color:#fff;
+				font-weight:normal;
+			}
+			.ellipsis {
+				white-space: nowrap;
+				text-overflow:ellipsis;
+				overflow: hidden;
+			}
+		</style>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				var strImageId = '<?php echo $this->objInstitution->image_id; ?>';
+				if (strImageId == '') {
+					$('.logo_td').css({
+						display:'none'
+					});
+					$('.institution_name').css({
+						'max-width' : 159
+					});
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div class="cards">
+<?php
+	function wrap($fontSize, $fontFace, $string, $width){
+		$ret = "";
+		$arr = explode(' ', $string);
+
+		foreach ( $arr as $word ){
+		  $teststring = $ret.' '.$word;
+		  $testbox = imagettfbbox($fontSize, 0, $fontFace, $teststring);
+		 if ( $testbox[2] > $width ){
+		   $ret.=($ret==""?"":"\n").$word;
+		  } else {
+			$ret.=($ret==""?"":' ').$word;
+		  }
+		}
+
+		return $ret;
+	}
+	if (isset($this->arrConfigOptions['system']['network_logo']))
+		$strNetworkLogo = $sn . '/imgs/v/src/' . $this->arrConfigOptions['system']['network_logo'];
+	else
+		$strNetworkLogo = $sn . '/imgs/v/src/' . $this->objInstitution->image_id;
+	$arrPages = array_chunk($this->arrUsers, 1);
+	$intTopTextWidth = 115;
+	$arrWordWrap = preg_split('/\n/', wrap(11, SERVER_ROOT . 'impact.ttf', !empty($this->strCustomeInstitutionName) ? $this->strCustomeInstitutionName : $this->objInstitution->name, $intTopTextWidth-5));
+	foreach ($arrPages as $arrPage)
+	{
+		print "<div class='page'>";
+		$arrRows = array_chunk($arrPage, 2);
+		foreach ($arrRows as $arrCells)
+		{
+			print "<div class='row'>";
+			foreach ($arrCells as $objCell)
+			{
+				if (!$objCell->image_id) {
+					$objCell->image_id = '0.gif';
+				}
+				print '<!-- ' . $objCell->user_id . ' -->';
+				$strFirstName = !empty($objCell->hebrew_first_name) ? $objCell->hebrew_first_name : $objCell->first_name;
+				$strLastName = !empty($objCell->hebrew_last_name) ? $objCell->hebrew_last_name : $objCell->last_name;
+				$strFullName = $strFirstName . " " . $strLastName;
+				if (preg_match('/^.{1,60}\b/s', $strFullName, $match)) {
+					$strFullName=$match[0];
+				}
+				$arrFullName = preg_split('/\n/', wrap(10, SERVER_ROOT . 'OCRAStd.ttf', $strFullName, 163));
+				$arrBarCode = str_split($objCell->bar_code, 4);
+				print '<img src="' . bp . '/images/empty_343_215.jpg" class="card_background" />';
+?>
+			<div class="card">
+				<div class="container">
+					<div class="block">
+						<div class="image"><div><img class="student_image" src="<?php echo $sn; ?>/imgs/v/src/<?php echo $objCell->image_id; ?>/w/204/h/251" width="104" height="128" /></div></div>
+					</div>
+					<div class="block card_text">
+						<table width="100%">
+							<tr>
+								<td style="vertical-align:top;height:62px;">
+									<div style="color:#FFCB58; height: 17px;"><img src="<?php print $sn; ?>/imgs/text/text/<?php print dblencode('Base  #' . ($this->objInstitution->institution_id+5893)); ?>/w/100/h/22/color/255,203,88/size/11/font/impact.ttf"/></div>
+									<div style="width:<?php print $intTopTextWidth; ?>px;max-height: 40px;white-space:normal;" class="ellipsis fix_bottom_margin institution_name"><img src="<?php print $sn; ?>/imgs/text/text/<?php print dblencode(strtoupper($arrWordWrap[0])); ?>/w/<?php print $intTopTextWidth; ?>/h/17/color/255,255,255/size/11/font/impact.ttf"/></div>
+									<div style="width:<?php print $intTopTextWidth; ?>px;" class="second_line ellipsis"><?php
+	$strLocation = $this->objInstitution->city;
+	if (strlen($strLocation) && strlen($this->objInstitution->state))
+		$strLocation .= ', ';
+	$strLocation .= $this->objInstitution->state;
+	if (count($arrWordWrap) > 1)
+		print '<img src="' . $sn . '/imgs/text/text/' . dblencode(strtoupper($arrWordWrap[1])) . '/w/' . $intTopTextWidth . '/h/17/color/255,255,255/size/11/font/impact.ttf"/>';
+	else
+		print '<img src="' . $sn . '/imgs/text/text/' . dblencode($strLocation) . '/w/' . $intTopTextWidth . '/h/17/color/255,255,255/size/11/font/impact.ttf"/>';
+	//print strlen($strLocation) ? $strLocation : '&nbsp;';
+?></div>
+									<div style="height:12px;width:<?php print $intTopTextWidth+5; ?>px;" class="second_line ellipsis">
+<?php
+	if (count($arrWordWrap) > 2)
+	{
+		print '<img src="' . $sn . '/imgs/text/text/' . dblencode(strtoupper($arrWordWrap[2])) . '/w/' . $intTopTextWidth . '/h/17/color/255,255,255/size/11/font/impact.ttf"/>';
+	}
+	else if (count($arrWordWrap) > 1)
+	{
+		print '<img src="' . $sn . '/imgs/text/text/' . dblencode($strLocation) . '/w/' . $intTopTextWidth . '/h/17/color/255,255,255/size/11/font/impact.ttf"/>';
+	}
+?>
+									</div>
+								</td>
+								<td class="logo_td" style="vertical-align:top;height:62px;text-align: right">
+									<img style="margin-top:2px;" src="<?php echo $sn; ?>/imgs/v/src/9497342_15209.gif/w/60/h/60/p/h" />
+								</td>
+							</tr>
+						</table>
+						<div class="barcode_image"><img width="190" height="42" src="<?php print $sn; ?>/kiosk/get-barcode-legacy/serial/<?php print $objCell->bar_code; ?>" /></div>
+					</div>
+					<div class="barcode_number">
+						<span><img src="<?php print $sn; ?>/imgs/text/text/<?php print $arrBarCode[0]; ?>/w/61/h/22/color/255,255,255/size/16/font/OCRAStd.ttf"/></span><span><img src="<?php print $sn; ?>/imgs/text/text/<?php print $arrBarCode[1]; ?>/w/61/h/22/color/255,255,255/size/16/font/OCRAStd.ttf"/></span><span><img src="<?php print $sn; ?>/imgs/text/text/<?php print $arrBarCode[2]; ?>/w/61/h/22/color/255,255,255/size/16/font/OCRAStd.ttf"/></span><span><img src="<?php print $sn; ?>/imgs/text/text/<?php print $arrBarCode[3]; ?>/w/61/h/22/color/255,255,255/size/16/font/OCRAStd.ttf"/></span>
+					</div>
+					<div style="margin-top:4px">
+						<table width="325">
+							<tr>
+								<td style="text-align:left;">
+<?php
+				$strFont = "OCRAStd.ttf";
+				$intSize = 10;
+				if (preg_match('/\p{Cyrillic}/u', $strFullName))
+				{
+					$strFont = "CharisSILB.ttf";
+					$intSize = 12;
+				}
+?>
+									<div class="bottom_text ellipsis" style="margin-left:23px;width:164px;<?php if (count($arrFullName) == 2) print "margin-top:-2px;"; ?>"><?php
+				foreach ($arrFullName as $intItr => $strLineName)
+				{
+?>
+									<img src="<?php print $sn; ?>/imgs/text/text/<?php print strtoupper($strLineName); ?>/w/163/h/16/color/255,255,255/size/<?php print $intSize; ?>/font/<?php print $strFont; ?>"/>
+<?php
+					if ($intItr != count($arrFullName)-1)
+						print "<br/>";
+				}
+?>
+								</div>
+								</td>
+								<td width="90" style="text-align:right">
+									<div class="bottom_text block"><!--<img src="<?php print $sn; ?>/imgs/text/text/<?php print dblencode('EXP 09/14'); ?>/w/86/h/22/color/255,255,255/size/10/font/OCRAStd.ttf"/>--></div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+<?php
+			}
+			print "</div>";
+		}
+		print "</div>";
+	}
+?>
+		</div>
+	</body>
+</html>

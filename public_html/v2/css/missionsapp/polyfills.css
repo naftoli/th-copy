@@ -1,0 +1,66 @@
+/*character highlighting*/
+::selection {
+	background: #aaa;
+	}
+::-moz-selection {
+	background: #aaa;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+div {
+	outline:none;
+}
+body {
+	background: #fff;
+	color: #000;
+	font-family:Helvetica,Verdana,sans-serif;
+	letter-spacing:0.2px;
+	font-size:12pt;
+	line-height:12pt;
+	text-align:left;
+	overflow-y:scroll;
+	cursor: default;
+}
+table {
+	border-width:0;
+}
+textarea,
+input[type='text'],
+input[type='password'],
+input[type='email'] {
+	cursor:text;
+	background-color: #fff;
+	border-radius:2px;
+}
+textarea {
+    resize: none;
+	padding: 1px;
+}
+a {
+	color:#000;
+	cursor:pointer;
+}
+a * {
+	cursor:pointer;
+}
+hr {
+	height: 1px;
+	border: 0;
+}
+.pointer { cursor:pointer }
+.pointer * { cursor:pointer }
+.text { cursor:text }
+.text * { cursor:text }
+.left { text-align: left !important; }
+.right { text-align: right !important; }
+.center { text-align: center !important; }
+.middle { vertical-align: middle !important; }
+.bottom { vertical-align: bottom !important; }
+.top { vertical-align: top !important; }
+.bold { font-weight: bold; }
+.nowrap,.nobr { white-space:nowrap; }
+.uppercase { text-transform: uppercase; }
+.floatright { float:right !important; }
+.floatleft { float:left !important; }

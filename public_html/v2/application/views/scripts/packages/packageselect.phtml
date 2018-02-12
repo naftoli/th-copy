@@ -1,0 +1,38 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider" id="slider_packageclasses">
+	<div class="col_title">
+		<span>
+			Package Select Configuration
+		</span>
+	</div>	
+	<div class="col_content camper">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+            if(count($this->arrPackages) == 0)
+            {
+                print "Your school did not purchases any addons for students";
+            }
+            foreach($this->arrPackages as $objPackageAddons)
+            {
+?>
+                
+                    <li>
+                        <a class="link" href="<?php echo $sn; ?>/packages/packagesclasses/addon_id/<?php print $objPackageAddons->pack_item_id;?>/institution_id/<?php print $this->institution_id; ?>">
+                            <div class="icon"></div>
+                            <div class="title"><?php echo $objPackageAddons->item_name; ?></div>
+                        </a>
+                    </li>
+                
+<?php
+            }
+?>
+				</ul>
+            </div>
+        </div>
+    </div>
+</div>

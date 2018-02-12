@@ -1,0 +1,207 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+$objRoles = new Roles();
+?>
+
+<div class="slider">
+	<style>
+		h4 {
+			font-weight: normal;
+		}
+	</style>
+	<div class="col_title">
+		<span>Application Content</span>
+	</div>
+
+	<div class="col_content">
+<?php
+	if($objRoles->isRole('Super Administrator'))
+	{
+?>
+		<div class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>Configuration</h1>
+					</li>
+<?php
+		$arrListParams = array(
+			"data_source" => "/content/managelanguages"
+		);
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/lists/standard3/params/" . dblencode(json_encode($arrListParams)); ?>">
+							<div class="icon"></div>
+							<div class="title">Manage Languages</div>
+						</a>
+						<h4>Manage which languages are available within the system.</h4>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>Content Management</h1>
+					</li>
+<?php
+		$arrListParams = array(
+			"data_source" => "/content/terminology"
+		);
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/lists/standard3/params/" . dblencode(json_encode($arrListParams)); ?>">
+							<div class="icon"></div>
+							<div class="title">Manage Terminology Types</div>
+						</a>
+						<h4>New types of terminology can be created besides just camp and school.</h4>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/content/terminologyeditor">
+							<div class="icon"></div>
+							<div class="title">Modify Terminology</div>
+						</a>
+						<h4>Manage the language alterations by terminology types.</h4>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<?
+	}
+/*
+		<div class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>Translations</h1>
+					</li>
+<?php
+		$arrListParams = array(
+			"data_source" => "/content/urgenttranslations",
+			"db_params" => array(
+				"controller" => "hebrewschools"
+			)
+		);
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/applanguages/kiosk/true/urgent_value/true/no_default/1/url/<?php echo dblencode("/lists/standard3/params/" . dblencode(json_encode($arrListParams))); ?>">
+							<div class="icon"></div>
+							<div class="title">Urgent Kiosk Translations</div>
+						</a>
+						<h4>Urgently required translations in currently active languages resulting from newly created textual modifications.</h4>
+					</li>
+<?php
+		$arrListParams = array(
+			"data_source" => "/content/urgenttranslations",
+			"db_params" => array(
+				"_NOT" => array(
+					"controller" => "hebrewschools"
+				)
+			)
+		);
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/applanguages/admin/true/urgent_value/true/no_default/1/url/<?php echo dblencode("/lists/standard3/params/" . dblencode(json_encode($arrListParams))); ?>">
+							<div class="icon"></div>
+							<div class="title">Urgent Admin Translations</div>
+						</a>
+						<h4>Urgently required translations in currently active languages resulting from newly created textual modifications.</h4>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>Content</h1>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/content/contentmanager">
+							<div class="icon"></div>
+							<div class="title">Content Management</div>
+						</a>
+						<h4>Browse all content, change content, add translations.</h4>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/content/campaigninstall">
+							<div class="icon"></div>
+							<div class="title">Keyword Manager</div>
+						</a>
+						<h4>Manage the keywords for each institution type.</h4>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+	else // none super
+	{
+?>
+		<div class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>Translations</h1>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/content/campaigninstall">
+							<div class="icon"></div>
+							<div class="title">Urgent Translations</div>
+						</a>
+						<h4>Urgently required translations in currently active languages resulting from newly created textual modifications.</h4>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/content/campaigninstall">
+							<div class="icon"></div>
+							<div class="title">Manage Translations</div>
+						</a>
+						<h4>Urgently required translations in currently active languages resulting from newly created textual modifications.</h4>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>Content</h1>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/content/translationmanager">
+							<div class="icon"></div>
+							<div class="title">Content Manager</div>
+						</a>
+						<h4>Browse all content, suggest content, vote on content and add translations.</h4>
+					</li>
+<?php
+		$arrListParams = array(
+			"data_source" => "/content/keywordtypes"
+		);
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/lists/standard3/params/" . dblencode(json_encode($arrListParams)); ?>">
+							<div class="icon"></div>
+							<div class="title">Keyword Types</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/content/campaigninstall">
+							<div class="icon"></div>
+							<div class="title">Keyword Manager</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>
+*/
+?>

@@ -1,0 +1,815 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objUserSession = new Zend_Session_Namespace("user_session_data");
+?>
+<script language="javascript">
+$(document).ready(function () {
+	var arrCheckItems = [
+		'sort_points',
+		'store_transactions',
+		'total_transactions',
+		'student_purchases',
+		'campaign_achievements',
+		'active_users',
+		'store_balance',
+		'total_points',
+		'campaign_totals',
+		'start_date_on',
+		'end_date_on'
+	];
+	$(this).delay(1).queue(function () {
+		$(this).dequeue();
+		$('.slider:last input.icheck').iphoneStyle({});
+	});
+	$('.slider:last').bind('binder', function () {
+		$('.slider:last .accordion.single .title:not(.binder)').click(function() {
+			if ($(this).hasClass('options'))
+				return;
+			if ($(this).closest('li').hasClass('header'))
+				return;
+			$(this).closest('.accordion').find('.selected').removeClass('selected');
+			$(this).closest('.accordion').find('h3').trigger('click')
+			$(this).closest('.accordion').find('.select_icon').removeClass('hidden');
+		});
+		$('.slider:last .select_list .title:not(.binder)').click(function () {
+			if ($(this).hasClass('options'))
+				return;
+			if ($(this).closest('li').hasClass('header'))
+				return;
+			//$(this).closest('.select_list').find('.selected').removeClass('selected').addClass('select');
+			if (!$(this).closest('li.selected').length) {
+				$(this).closest('li').removeClass('select').addClass('selected');
+			} else {
+				$(this).closest('li').addClass('select').removeClass('selected');
+			}
+			$(this).closest('.accordion').find('h3 .text').html('');
+			$(this).closest('.accordion').find('h3').removeClass('hidden');
+			//$(this).closest('.accordion').find('h3').trigger('click')
+			//.find('.text').html($(this).parent().find('.title.name').html());
+			//$(this).closest('.accordion').find('.select_icon').removeClass('hidden');
+		});
+		$('.slider:last .accordion.report .title:not(.binder)').click(function() {
+			if ($(this).hasClass('options'))
+				return;
+			if ($(this).closest('li').hasClass('header'))
+				return;
+			var strName = $(this).closest('li').attr('save_index');
+			$(this).closest('.accordion').find('h3 .text').html('Loaded Report: ' + $(this).parent().find('.title.name').html());
+			var strData = decodeURIComponent($(this).closest('li').find('.report_data').val());
+			var arrData = $.parseJSON(strData);
+			var arrItems = ['campaign','task','class'];
+			for (var intItr=0; intItr!=arrItems.length; intItr++) {
+				$('.slider:last .accordion.' + arrItems[intItr] + ' li.selected').each(function () {
+					$(this).find('.title:first').trigger('click');
+				});
+			}
+			if (arrData.campaigns) {
+				var arrCampaignIds = arrData.campaigns.split(/,/);
+				for (var intItr=0;intItr!=arrCampaignIds.length;intItr++)
+				{
+					var intCampaign = arrCampaignIds[intItr];
+					$('.slider:last .accordion.campaign li.campaign_id_' + intCampaign + ' .title:first').trigger('click');
+				}
+			}
+			if (arrData.tasks) {
+				var arrTaskIds = arrData.tasks.split(/,/);
+				for (var intItr=0;intItr!=arrTaskIds.length;intItr++)
+				{
+					var intTask = arrTaskIds[intItr];
+					$('.slider:last .accordion.task li.task_id_' + intTask + ' .title:first').trigger('click');
+				}
+			}
+			if (arrData.classes) {
+				var arrClassIds = arrData.classes.split(/,/);
+				for (var intItr=0;intItr!=arrClassIds.length;intItr++)
+				{
+					var intClass = arrClassIds[intItr];
+					$('.slider:last .accordion.class li.class_id_' + intClass + ' .title:first').trigger('click');
+				}
+			}
+			$('.slider:last .start_date').val(arrData.start_date);
+			$('.slider:last .end_date').val(arrData.end_date);
+			for (var intItr=0; intItr!=arrCheckItems.length; intItr++) {
+				var strItem = arrCheckItems[intItr];
+				if (arrData[strItem] == '1') {
+					if (!$('.slider:last .' + strItem).is(':checked'))
+						$('.slider:last .' + strItem).trigger('click');
+				} else {
+					if ($('.slider:last .' + strItem).is(':checked'))
+						$('.slider:last .' + strItem).trigger('click');
+				}
+			}
+			$('.slider:last input.report_name').val(strName).removeClass('noinput');
+		});
+		$('.slider:last .accordion .title').addClass('binder');
+	});
+	$('.slider:last').trigger('binder');
+	$(".slider:last .date").datepicker();
+	$('.slider:last .accordion li h3').click(function() {
+		$(this).nextAll().slideToggle('fast');
+		$(this).parents('li').toggleClass('open');
+		//else if ($(this).closest('.accordion').find('.selected').length)
+		//	$(this).closest('.accordion').find('.select_icon').removeClass('hidden');
+	});
+	window.setTimeout(function () {
+		$('.slider:last .accordion.closed li h3').each(function(){
+			$(this).nextAll().slideToggle(0);
+			//$(this).parents('li').toggleClass('open');
+		});
+	},1);
+	$('.slider:last .accordion:not(.single) .title').click(function() {
+		if ($(this).hasClass('options'))
+			return;
+		if ($(this).closest('.accordion').find('li.selected').length)
+			$(this).closest('.accordion').find('.select_icon').removeClass('hidden');
+		else
+			$(this).closest('.accordion').find('.select_icon').addClass('hidden');
+	});
+	// campaigns
+	$('.slider:last .accordion.campaign .title').click(function() {
+		var arrSelected = $.makeArray($(this).closest('ul').find('.selected'));
+		var arrSelectedText = [];
+		var arrSelectedCampaigns = [];
+		$('.slider:last .accordion.task li.task_row').addClass('hidden');
+		for (var intItr = 0; intItr != arrSelected.length; intItr++)
+		{
+			arrSelectedText.push($(arrSelected[intItr]).find('.name').html().replace(/^[ \t]+/, '').replace(/[ \t]+$/, ''));
+			arrSelectedCampaigns.push($(arrSelected[intItr]).attr('campaign_id'));
+			$('.slider:last .task_row.campaign_id_' + $(arrSelected[intItr]).attr('campaign_id')).removeClass('hidden');
+		}
+		$('.slider:last .accordion.campaign .select_value').val(arrSelectedCampaigns.join(','));
+		if (arrSelected.length) {
+			$('.slider:last .choose_task').removeClass('hidden');
+			if ($('.slider:last .accordion.closed.task').length) {
+				$('.slider:last .accordion.task li h3').nextAll().slideToggle(0);
+				$('.slider:last .accordion.closed.task').removeClass('closed');
+			}
+		} else
+			$('.slider:last .choose_task').addClass('hidden');
+
+		if (arrSelectedText.length) {
+			$(this).closest('.accordion').find('h3 .text').html(arrSelectedText.join(', '));
+			if ($(this).closest('.accordion').find('h3 .text').width() > 600)
+			{
+				$(this).closest('.accordion').find('h3 .text').html(arrSelectedText.length + ' Campaigns Selected');
+			}
+		} else
+			$(this).closest('.accordion').find('h3 .text').html('Nothing Selected');
+	});
+	// tasks
+	$('.slider:last .accordion.task .title').click(function() {
+		var arrSelected = $.makeArray($(this).closest('ul').find('.selected'));
+		var arrSelectedText = [];
+		var arrSelectedTask = [];
+		for (var intItr = 0; intItr != arrSelected.length; intItr++)
+		{
+			arrSelectedText.push($(arrSelected[intItr]).find('.name').html().replace(/^[ \t]+/, '').replace(/[ \t]+$/, ''));
+			arrSelectedTask.push($(arrSelected[intItr]).find('.name').attr('task_id'));
+		}
+		$('.slider:last .accordion.task .select_value').val(arrSelectedTask.join(','));
+		if (arrSelectedText.length) {
+			$(this).closest('.accordion').find('h3 .text').html(arrSelectedText.join(', '));
+			if ($(this).closest('.accordion').find('h3 .text').width() > 600)
+			{
+				$(this).closest('.accordion').find('h3 .text').html(arrSelectedText.length + ' Tasks Selected');
+			}
+		} else
+			$(this).closest('.accordion').find('h3 .text').html('Nothing Selected');
+	});
+	// classes
+	$('.slider:last .accordion.class .title').click(function() {
+		var arrSelected = $.makeArray($(this).closest('ul').find('.selected'));
+		var arrSelectedText = [];
+		var arrSelectedClass = [];
+		for (var intItr = 0; intItr != arrSelected.length; intItr++)
+		{
+			arrSelectedText.push(
+				$(arrSelected[intItr]).find('.name').html().replace(/^[ \t]+/, '').replace(/[ \t]+$/, '')
+				+ ' ' + $(arrSelected[intItr]).find('.sub').html().replace(/^[ \t]+/, '').replace(/[ \t]+$/, '')
+			);
+			arrSelectedClass.push($(arrSelected[intItr]).find('.name').attr('class_id'));
+		}
+		$('.slider:last .accordion.class .select_value').val(arrSelectedClass.join(','));
+		if (arrSelectedText.length) {
+			$(this).closest('.accordion').find('h3 .text').html(arrSelectedText.join(', '));
+			if ($(this).closest('.accordion').find('h3 .text').width() > 600)
+			{
+				$(this).closest('.accordion').find('h3 .text').html(arrSelectedText.length + ' Classes Selected');
+			}
+		} else
+			$(this).closest('.accordion').find('h3 .text').html('Nothing Selected');
+	});
+	$('.slider:last .output_report.button').click(function () {
+		var arrParams = $('.slider:last form').serializeObject();
+		window.open('<?php print $sn; ?>/reports/reportoutput/params/'+encodeURIComponent(encodeURIComponent(JSON.stringify(arrParams))),'_blank');
+	});
+	$('.slider:last .noinput').focus(function () {
+		if (!$(this).hasClass('noinput'))
+			return;
+		$(this).attr('noinput_val', $(this).val());
+		$(this).removeClass('noinput').val('');
+	});
+	$('.slider:last .noinput').blur(function () {
+		var parent = this;
+		window.setTimeout(function () {
+			if (!$(parent).val().match(/^ *$/))
+				return;
+			$(parent).addClass('noinput').val($(parent).attr('noinput_val'));
+		}, 200);
+	});
+	$('.slider:last .save_report').click(function () {
+		// if item already exists prompt to over write
+		// if item is selected dont provide prompt
+		if ($('.slider:last .report_name.noinput').length)
+			return;
+		var arrParams = $('.slider:last form').serializeObject();
+		arrParams.name = $('.slider:last .report_name').val();
+		var boolReturn = false;
+		$('.slider:last .accordion.report .select_list li').each(function () {
+			if (
+				!$(this).hasClass('selected')
+				&& $(this).attr('save_index') == $('.slider:last .report_name').val()
+			) {
+				if (!confirm("This name is already taken. Would you like to overwrite it?"))
+					boolReturn = true;
+			}
+		});
+		if (boolReturn)
+			return;
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php print $sn; ?>/reports/reportoptions',
+			dataType : "text",
+			data: {
+				'save_report' : 'true',
+				'arrParams' : JSON.stringify(arrParams)
+			},
+			success : function(strResponse) {
+				json_response(strResponse, {
+					success : function (arrResponse) {
+						$('.slider:last .save_status').html('Saved').stop().show(0).delay(2000).queue(function () {
+							$(this).dequeue().fadeOut(500);
+						});
+						var boolFound = false;
+						$('.slider:last .accordion.report .select_list li').each(function () {
+							if ($(this).attr('save_index') == $('.slider:last .report_name').val()) {
+								$(this).find('.report_data').val(arrResponse.objNewItem[arrResponse.strName]);
+								boolFound = true;
+							}
+						});
+						if (!boolFound)
+						{
+							var objData = $.parseJSON(arrResponse.objNewItem[arrResponse.strName]);
+							var strRow = '<li save_index="' + arrResponse.strName + '">';
+							strRow += '<input type="hidden" class="report_data" value="" /><a><div style="width:370px" class="title name">';
+							strRow += arrResponse.strName;
+							strRow += '</div><div style="width:170px" class="title">';
+							strRow += date('m/d/Y g:m A', objData.date);
+							strRow += '</div><div style="width:90px;" class="title options">';
+							strRow += '<input class="button delete_report_settings" value="Delete" style="position: relative;left:25px;width:45px;" /></div></a></li>';
+							var objRow = $(strRow);
+							objRow.find('.report_data').val(arrResponse.objNewItem[arrResponse.strName]);
+							$('.slider:last .module.accordion.report .select_list .header').after(objRow);
+							$('.slider:last').trigger('binder');
+						}
+					},
+					fail : function () {
+						$('.slider:last .save_status').html('Failed');
+					}
+				});
+			}
+		});
+	});
+	$('.slider:last .delete_report_settings').click(function () {
+		var parent = this;
+		var strSaveIndex = $(this).closest('li').attr('save_index');
+		if (!confirm("Are You sure you would like to delete a saved report?"))
+			return;
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php print $sn; ?>/reports/reportoptions',
+			dataType : "text",
+			data: {
+				'delete_report' : 'true',
+				'name' : strSaveIndex
+			},
+			success : function(strResponse) {
+				json_response(strResponse, {
+					success : function () {
+						$(parent).closest('li').remove();
+					},
+					fail : function () {
+
+					}
+				});
+			}
+		});
+	});
+	// reset items
+	$('.slider:last .button.reset').click(function () {
+		$('.slider:last .accordion.report .select_icon').trigger('click');
+	});
+	$('.slider:last .accordion.report .select_icon').click(function (e) {
+		e.stopPropagation();
+		var objAccordion = $(this).closest('.accordion');
+		objAccordion.find('h3 .text').html('Load a saved report');
+		objAccordion.find('.selected').removeClass('selected').addClass('select');
+		if (objAccordion.find('.open').length)
+			objAccordion.find('h3').trigger('click')
+		objAccordion.find('.select_icon').addClass('hidden');
+		$('.slider:last input.report_name').val('').addClass('noinput');
+		$('.slider:last .accordion li.selected').each(function () {
+			$(this).find('.title:first').trigger('click');
+		});
+		$('.slider:last .start_date').val('').blur();
+		$('.slider:last .end_date').val('').blur();
+		for (var intItr=0; intItr!=arrCheckItems.length; intItr++) {
+			var strItem = arrCheckItems[intItr];
+			if ($('.slider:last .' + strItem).is(':checked'))
+				$('.slider:last .' + strItem).trigger('click');
+		}
+
+	});
+	$('.slider:last .select_icon').mouseover(function () {
+		$(this).addClass('deselect_icon');
+	}).mouseout(function () {
+		$(this).removeClass('deselect_icon');
+	}).click(function () {
+		var objAccordion = $(this).closest('.accordion');
+		objAccordion.find('li.selected').each(function () {
+			$(this).find('.title:first').trigger('click');
+		});
+	});
+});
+</script>
+<div class="slider">
+	<style>
+		.slider:last-child .button {
+			margin-right:3px;
+		}
+		.slider:last-child h4 {
+			padding:0 0 3px 6px;
+		}
+		.slider:last-child h2.fix_line {
+			border-bottom:1px solid #bbb;
+		}
+		.slider:last-child .title {
+			width:100%;
+		}
+		.slider:last-child .select_list .selected {
+			background-color: #DADEE6;
+		}
+		.slider:last-child .text {
+			padding-left:4px;
+			display:inline-block;
+			text-overflow:ellipsis;
+			overflow: hidden;
+			white-space:nowrap;
+		}
+		.slider:last-child .select_icon {
+			width:17px;
+			height:17px;
+			position: relative;
+			float: right;
+			margin-top:7px;
+			margin-bottom:-24px;
+			background-image: url('<?php echo $sn . "/images/check.png"; ?>');
+			opacity:0.7;
+			background-repeat:no-repeat;
+			background-position:center;
+		}
+		.slider:last-child .deselect_icon {
+			background-image: url('<?php echo $sn . "/images/back-end/admin/x16.png"; ?>');
+			cursor:pointer;
+		}
+		.slider:last-child .module.lists.collapsible {
+			margin-right:0;
+			margin-bottom:0;
+		}
+		.slider:last-child .locked_message {
+			display:inline-block;
+			padding:8px;
+			font-size:12pt;
+		}
+		.slider:last-child .header {
+			background-color:#666 !important;
+			-webkit-border-top-left-radius: 6px;
+			-webkit-border-top-right-radius: 6px;
+			-moz-border-radius-topleft: 6px;
+			-moz-border-radius-topright: 6px;
+			border-top-left-radius: 6px;
+			border-top-right-radius: 6px;
+			border: 1px solid #ccc;
+			color:#fff;
+			border-width: 1px 1px 0 1px;
+		}
+		.slider:last-child li:not(.header) .title>div {
+			width: 190px;
+			overflow:hidden;
+			text-overflow:ellipsis;
+			white-space:nowrap;
+		}
+		.slider:last-child div.lists li.header {
+			padding-bottom: 0;
+			padding-top: 0;
+		}
+		.slider:last-child div.lists li.header .title:not(:last-child) {
+			border-right: 1px solid #777;
+		}
+		.slider:last-child div.lists li:not(.header) .title:not(:last-child) {
+			border-right: 1px solid #ddd;
+		}
+		.slider:last-child div.lists li .title:not(:first-child) {
+			padding-left: 8px;
+		}
+		.slider:last-child .choose_details * {
+
+		}
+		.slider:last-child .info.list_expand li:first-child {
+			border-top:medium none;
+		}
+		.slider:last-child .info.list_expand img {
+			border:1px solid #BBBBBB;
+			margin:2px;
+		}
+		.slider:last-child .report_options {
+			padding-top:3px;
+			padding-left:6px;
+		}
+		.slider:last-child .report_options table {
+			margin: 2px;
+			border: 1px ridge #DDD;
+			cursor: default;
+		}
+		.slider:last-child .report_option_select {
+			background-color: #DDD;
+			border: 1px inset #EAEAEA !important;
+		}
+		.slider:last-child .date {
+			background:url("/images/back-end/admin/icon_cal_small.png") no-repeat scroll 96% 50% #FFFFFF !important;
+		}
+		.slider:last-child .noinput {
+			color:gray;
+		}
+		.slider:last-child .collapsible div.options {
+			cursor:default;
+		}
+		.slider:last-child .save_status {
+			padding:6px;
+		}
+	</style>
+	<div class="col_title">
+		<span><?php print text("Reports"); ?></span><div class="title_help info" title="<?php print text("A report is a customized spreadsheet that lets you easily see data about campers in your [|school|]. You can define the time-period, which [|classes|], and what information you would like to have in your report. For instance, you can use Reports to create a weekly summary of your [|classes|] progress, and let your [|teachers|] track which campers need more attention."); ?>"></div>
+	</div>
+	<div class="col_content">
+		<form>
+		<div class="load_report">
+			<h4><?php print text("Load a saved report"); ?>: &nbsp;<div class="help_icon info" title="<?php print text("Access reports you’ve made in the past and saved. Selecting a report from here will automatically bring up that reports setting, which you can either edit below or display as is, by clicking ‘Display Report’ at the bottom of the page."); ?>"></div></h4>
+			<div class="module accordion report single closed">
+				<div class="module_content list_expand">
+					<ul>
+						<li class="">
+							<div class="select_icon hidden"></div>
+							<h3 class="">
+								<span class="icon"></span> <div class="text">Load a saved report</div>
+							</h3>
+							<p>
+								<div class="module lists collapsible">
+									<div class="module_content">
+										<ul class="select_list">
+											<li class="header">
+												<div class="title" style="width:370px">Report Name</div>
+												<div class="title" style="width:170px">Saved On</div>
+												<div class="title" style="width:90px"></div>
+											</li>
+<?php
+	if (isset($this->arrConfig['admin_report_settings_save']))
+	{
+		foreach ($this->arrConfig['admin_report_settings_save'] as $intItr => $strResult)
+		{
+			$arrResult = json_decode($strResult);
+?>
+											<li save_index="<?php print $intItr; ?>">
+												<input type="hidden" class="report_data" value="<?php print urlencode($strResult); ?>" />
+												<a>
+													<div style="width:370px" class="title name">
+														<?php print $arrResult->name; ?>
+													</div>
+													<div style="width:170px" class="title">
+														<?php print date('m/d/Y g:m A', $arrResult->date); ?>
+													</div>
+													<div style="width:90px;" class="title options">
+														<input class="button delete_report_settings" value="Delete" style="position: relative;left:25px;width:45px;" />
+													</div>
+												</a>
+											</li>
+<?php
+		}
+	}
+?>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="choose_campaign">
+			<h4>Select campaign(s): &nbsp;<div class="help_icon info" title="<?php print text("Select one or many campaigns you want to report on. You will be able to select specific tasks for each campaign in the next drop-down."); ?>"></div></h4>
+			<div class="module accordion closed campaign">
+				<input type="hidden" value="" name="campaigns" class="select_value" />
+				<div class="module_content list_expand">
+					<ul>
+						<li class="">
+							<div class="select_icon hidden"></div>
+							<h3 class="">
+								<span class="icon"></span> <div class="text">Nothing Selected</div>
+							</h3>
+							<p>
+								<div class="module lists collapsible">
+									<div class="module_content">
+										<ul class="select_list">
+											<li class="header">
+												<div class="title" style="width:510px">Campaign Name</div>
+												<div class="title" style="width:110px">Tasks</div>
+											</li>
+<?php
+	foreach ($this->arrCampaigns as $objCampaign)
+	{
+		if (!isset($this->arrTasksHash[$objCampaign->campaign_id]))
+			continue;
+?>
+											<li class="campaign_id_<?php print $objCampaign->campaign_id; ?>" campaign_id="<?php print $objCampaign->campaign_id; ?>">
+												<a>
+													<div style="width:510px" class="title name campaign_item" campaign_id="<?php print $objCampaign->campaign_id; ?>">
+														<?php print $objCampaign->campaign_name; ?>
+													</div>
+													<div style="width:110px" class="title count campaign_item" campaign_id="<?php print $objCampaign->campaign_id; ?>">
+														<?php print count($this->arrTasksHash[$objCampaign->campaign_id]); ?>
+													</div>
+												</a>
+											</li>
+<?php
+	}
+?>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="choose_task hidden">
+			<h4>Select tasks(s): &nbsp;<div class="help_icon info" title="<?php print text("Select which tasks you want to include in your report. (You can only select tasks that are part of the campaign(s) you selected in the previous drop-down)."); ?>"></div></h4>
+			<div class="module accordion closed task">
+				<input type="hidden" value="" name="tasks" class="select_value" />
+				<div class="module_content list_expand">
+					<ul>
+						<li class="">
+							<div class="select_icon hidden"></div>
+							<h3 class="">
+								<span class="icon"></span> <div class="text">Nothing Selected</div>
+							</h3>
+							<p>
+								<div class="module lists collapsible">
+									<div class="module_content">
+										<ul class="select_list">
+											<li class="header">
+												<div class="title" style="width:320px"><?php print text("Task Name"); ?></div>
+												<div class="title" style="width:180px"><?php print text("Campaign Name"); ?></div>
+												<div class="title" style="width:120px"><?php print text("[|Points|]"); ?></div>
+											</li>
+<?php
+	foreach ($this->arrTasks as $objTask)
+	{
+		if (!isset($this->arrTasksHash[$objTask->campaign_id])) {
+			continue;
+		}
+?>
+											<li class="hidden task_row campaign_id_<?php print $objTask->campaign_id; ?> task_id_<?php print $objTask->task_id; ?>">
+												<a>
+													<div style="width:320px" class="title name task_item" task_id="<?php print $objTask->task_id; ?>">
+														<?php print $objTask->task_name; ?>
+													</div>
+													<div style="width:180px" class="title name task_item" task_id="<?php print $objTask->task_id; ?>">
+														<?php print $this->arrCampaigns[$objTask->campaign_id]->campaign_name; ?>
+													</div>
+													<div style="width:120px" class="title points task_item" task_id="<?php print $objTask->task_id; ?>">
+														<?php print $objTask->points; ?>
+													</div>
+												</a>
+											</li>
+<?php
+	}
+?>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="choose_classes">
+			<h4><?php print text("Select [|class(es)|]"); ?>: &nbsp;<div class="help_icon info" title="<?php print text("Choose which [|classes|] you want to see in this report."); ?>"></div></h4>
+			<div class="module accordion closed class">
+				<input type="hidden" value="" name="classes" class="select_value" />
+				<div class="module_content list_expand">
+					<ul>
+						<li class="">
+							<div class="select_icon hidden"></div>
+							<h3>
+								<span class="icon"></span> <div class="text" style="">Nothing Selected</div>
+							</h3>
+							<p>
+								<div class="module lists collapsible">
+									<div class="module_content">
+										<ul class="select_list">
+											<li class="header">
+												<div class="title" style="width:320px"><?php print text("[|Class|] Name"); ?></div>
+												<div class="title" style="width:180px"><?php print text("[|Sub|]"); ?></div>
+												<div class="title" style="width:120px"><?php print text("[|Students|]"); ?></div>
+											</li>
+<?php
+	foreach ($this->arrClasses as $objClass)
+	{
+		//if (!isset($this->arrUserClasses[$objClass->class_id]))
+		//	continue;
+?>
+											<li class="class_row class_id_<?php print $objClass->class_id; ?>">
+												<a>
+													<div style="width:320px" class="title name class_item" class_id="<?php print $objClass->class_id; ?>">
+														<?php print $objClass->grade; ?>
+													</div>
+													<div style="width:180px" class="title sub class_item" class_id="<?php print $objClass->class_id; ?>">
+														<?php print $objClass->sub; ?>
+													</div>
+													<div style="width:120px" class="title points class_item" class_id="<?php print $objClass->class_id; ?>">
+														<?php print @count($this->arrUserClasses[$objClass->class_id]); ?>
+													</div>
+												</a>
+											</li>
+<?php
+	}
+?>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="more_options">
+			<h4>Add special columns to the report: &nbsp;<div class="help_icon info" title="<?php print text("Use these buttons to add extra columns to your report, that have special information about [|students|]."); ?>"></div></h4>
+			<div class="module accordion closed form add_columns">
+				<div class="module_content list_expand">
+					<ul>
+						<li class="">
+							<div class="select_icon hidden"></div>
+							<h3>
+								<span class="icon"></span> <div class="text" style="">Additional Columns</div>
+							</h3>
+							<p>
+								<div class="module lists collapsible">
+									<div class="module_content lists">
+										<ul>
+											<li>
+												<span class="label"><?php print text("Total [|Points|]"); ?>:</span>
+												<span class="input" style="margin: 4px 0px 0px 1px;">
+													<input type="checkbox" class="icheck total_points" name="total_points" value="1" />
+												</span>
+												<div class="help info" title="<?php print text("How many [|points|] have been earned this term."); ?>"></div>
+											</li>
+											<li>
+												<span class="label">Store Balance:</span>
+												<span class="input" style="margin: 4px 0px 0px 1px;">
+													<input type="checkbox" class="icheck store_balance" name="store_balance" value="1" />
+												</span>
+												<div class="help info" title="<?php print text("How many [|points|] are available to use in the store (Total [|Points|] - [|Point|] Deductions)."); ?>"></div>
+											</li>
+											<li>
+												<span class="label">Campaign Totals:</span>
+												<span class="input" style="margin: 4px 0px 0px 1px;">
+													<input type="checkbox" class="icheck campaign_totals" name="campaign_totals" value="1" />
+												</span>
+												<div class="help info" title="<?php print text("Total [|points|] earned from each campaign."); ?>"></div>
+											</li>
+											<li>
+												<span class="label">Achievements:</span>
+												<span class="input" style="margin: 4px 0px 0px 1px;">
+													<input type="checkbox" class="icheck campaign_achievements" name="campaign_achievements" value="1" />
+												</span>
+												<div class="help info" title="Help text coming soon."></div>
+											</li>
+											<li>
+												<span class="label">Purchases:</span>
+												<span class="input" style="margin: 4px 0px 0px 1px;">
+													<input type="checkbox" class="icheck student_purchases" name="student_purchases" value="1" />
+												</span>
+												<div class="help info" title="Help text coming soon."></div>
+											</li>
+											<li>
+												<span class="label">Store Transactions:</span>
+												<span class="input" style="margin: 4px 0px 0px 1px;">
+													<input type="checkbox" class="icheck store_transactions" name="store_transactions" value="1" />
+												</span>
+												<div class="help info" title="Help text coming soon."></div>
+											</li>
+											<li>
+												<span class="label">Total Transactions:</span>
+												<span class="input" style="margin: 4px 0px 0px 1px;">
+													<input type="checkbox" class="icheck total_transactions" name="total_transactions" value="1" />
+												</span>
+												<div class="help info" title="Help text coming soon."></div>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="more_options">
+			<h4>Customize the report: &nbsp;<div class="help_icon info" title="Help text coming soon."></div></h4>
+			<div class="module accordion closed form settings">
+				<div class="module_content list_expand">
+					<ul>
+						<li class="">
+							<div class="select_icon hidden"></div>
+							<h3>
+								<span class="icon"></span> <div class="text" style="">Output Options</div>
+							</h3>
+							<p>
+								<div class="module lists collapsible">
+									<div class="module_content lists">
+										<ul>
+											<li>
+												<span class="label"><?php print text("Sort By [|Points|]"); ?>:</span>
+												<span class="input" style="margin: 4px 0px 0px 1px;">
+													<input type="checkbox" class="icheck sort_points" name="sort_points" value="1" />
+												</span>
+												<div class="help info" title="<?php print text("Sort your [|students|] by [|points|] instead of alphabetically."); ?>"></div>
+											</li>
+											<li>
+												<span class="label"><?php print text("Active [|Students|] Only"); ?>:</span>
+												<span class="input" style="margin: 4px 0px 0px 1px;">
+													<input type="checkbox" class="icheck active_users" name="active_users" value="1" />
+												</span>
+												<div class="help info" title="Help text coming soon."></div>
+											</li>
+											<li>
+												<span class="label">Start Date:</span>
+												<span class="input">
+													<div style="float:left;margin: 4px 30px 0px 1px;">
+														<input type="checkbox" class="icheck start_date_on" name="start_date_on" value="1" />
+													</div>
+													<input style="padding-left:4px;width:160px" value="MM/DD/YYYY" type="text" class="noinput required date start_date" name="start_date" />
+												</span>
+												<div class="help info" title="<?php print text("Only show information that comes from a certain period of time."); ?>"></div>
+											</li>
+											<li>
+												<span class="label">End Date:</span>
+												<span class="input">
+													<div style="float:left;margin: 4px 30px 0px 1px;">
+														<input type="checkbox" class="icheck end_date_on" name="end_date_on" value="1" />
+													</div>
+													<input style="padding-left:4px;width:160px" value="MM/DD/YYYY" type="text" class="noinput required date end_date" name="end_date" />
+												</span>
+												<div class="help info" title="<?php print text("Only show information that comes from a certain period of time."); ?>"></div>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<a class="button output_report">Display Report</a>
+		<a class="button reset">Reset Report</a>
+		<a class="button save_report" style="float:right;margin-right: 30px">Save Report Settings</a>
+		<input type="text" class="noinput report_name" style="float:right;font-size: 12pt;margin-right: 3px" value="Report Name" />
+		<div style="float:right" class="save_status"></div>
+
+		</form>
+		&nbsp;<br/>
+		&nbsp;<br/>
+		&nbsp;<br/>
+		&nbsp;<br/>
+		&nbsp;<br/>
+		&nbsp;
+	</div>
+</div>

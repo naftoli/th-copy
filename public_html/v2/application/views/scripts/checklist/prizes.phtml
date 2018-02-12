@@ -1,0 +1,316 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script type="text/javascript">
+function row_toggle(objThis,boolProcessChange)
+{
+	if ($(objThis).is("input"))
+		return;
+	$(objThis).find(":checkbox").attr("checked", !$(objThis).find(":checkbox").is(':checked')).trigger("change");
+	$(objThis).css("background-color", $(objThis).find(":checkbox").is(':checked') ? "#dadee6" : "#e8eaef");
+	if (boolProcessChange)
+		process_change();
+}
+function uncheckall(objThis)
+{
+	$(objThis).closest(".module_collection").find(":checkbox").attr("checked", false);
+	$(objThis).closest(".module_collection").find(".module table .row").css("background-color", "#e8eaef").trigger("change");
+	process_change();
+}
+function checkall(objThis)
+{
+	$(objThis).closest(".module_collection").find(":checkbox").attr("checked", true);
+	$(objThis).closest(".module_collection").find(".module table .row").css("background-color", "#dadee6").trigger("change");
+	process_change();
+}
+function process_change()
+{
+	var prevSlider = $(".slider:last").prev();
+	var intSelected = $(".slider:last input:checkbox:checked").length;
+	$(prevSlider).find('<?php print $this->strInputPath; ?>').html(intSelected + " Prize" + (intSelected == 1 ? '' : 's') + " Selected");
+	var objDataPoint = $(prevSlider).find('<?php print $this->strInputPath; ?>_hidden');
+	// construct data
+	var arrInputs = $.makeArray($(".slider:last form").serializeArray());
+	var arrData = {};
+		for (var intKey in arrInputs)
+	{
+		var arrMatched = arrInputs[intKey].name.match(/^(.+?)_([0-9]+)$/);
+		var intRow = arrMatched[2];
+		var intCol = arrMatched[1];
+		if (!arrData[intRow])
+			arrData[intRow] = {};
+		arrData[intRow][intCol] = arrInputs[intKey].value;
+	}
+	var intMilesTotal = 0;
+	for (var intRow in arrData)
+	{
+		if (arrData[intRow].prize_id)
+		{
+			intMilesTotal+=arrData[intRow].miles_total*arrData[intRow].quantity;
+		}
+	}
+	$(".slider:last .miles_total").html(intMilesTotal);
+
+	var strSeriaized = JSON.stringify(arrData);
+	if (strSeriaized != objDataPoint.val())
+	{
+		objDataPoint.val(strSeriaized).trigger("change");
+	}
+}
+$(document).ready(function () {
+	$(".slider:last input.input").change(function () {
+		if ($(this).val()*1 < 1)
+		{
+			$(this).val(0);
+			if ($(this).closest("tr").find(".key").is(":checked")) {
+				row_toggle($(this).closest("tr"),1);
+			}
+		} else {
+			if (!$(this).closest("tr").find(".key").is(":checked")) {
+				row_toggle($(this).closest("tr"),1);
+			}
+			if ($(this).val()*1 > $(this).closest("tr").find(".in_stock").val()*1)
+				$(this).val($(this).closest("tr").find(".in_stock").val());
+			process_change();
+		}
+	});
+	$(".slider:last input.input").keydown(function (event) {
+		//
+		if (
+			!(event.which >= 48 && event.which <= 57) // numbers
+			&& !(event.which >= 96 && event.which <= 105) // numbers
+			&& !(event.which == 8 || event.which == 9 || event.which == 16 || event.which == 46)
+			&& !(event.which == 36 || event.which == 35  || event.which == 34 || event.which == 33 || event.which == 17)
+			&& !(event.which >= 37 && event.which <= 40) // arrows
+		) {
+			event.preventDefault();
+		}
+	});
+	$(".slider:last .key").change(function () {
+		if ($(this).is(":checked"))
+		{
+			if ($(this).closest("tr").find(".quantity").val()*1 < 1)
+				$(this).closest("tr").find(".quantity").val(1);
+		}
+	});
+});
+</script>
+<div class="slider">
+	<style>
+		.selectedTxt {
+			height:26px !important;
+			padding: 4px 0 0 4px !important;
+		}
+		.newListSelected {
+			width:90% !important;
+		}
+		.selector_display {
+			border: 1px solid #888;
+			background-color: #fff;
+			display: inline-block;
+			margin-bottom: 4px;
+			padding: 4px 10px 4px 10px;
+			cursor: pointer;
+		}
+		.button {
+			margin-right: 8px;
+		}
+		.bottom.button {
+			margin:0 !important;
+			float:none !important;
+			display:inline-block !important;
+		}
+		.bottom_items {
+			position: relative;
+			border-radius: 0px 0px 10px 10px;
+			border: 1px solid #BBBBBB;
+			line-height: 28px;
+			border-top-width: 0;
+			top:-21px;
+			width:150px;
+			background-color: #E8EAEF;
+			padding: 4px 2px 0px 0;
+			text-align: center;
+			white-space: nowrap;
+		}
+		.button_bottom {
+			width: 96%;
+			position: relative;
+			top:-50px;
+		}
+		.cust_module1 {
+			border-radius: 10px 10px 10px 0px !important;
+		}
+		.input {
+			height: 20px;
+			margin-bottom: 4px;
+			font-size: 12pt;
+			width: 88%;
+		}
+		.row.disabled {
+			background-color: #eee !important;
+		}
+	</style>
+	<div class="col_title">
+		<span>Student Prizes</span>
+	</div>
+	<div class="col_content">
+<?php
+	if (!count($this->arrList))
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<div style="padding: 5px 5px 5px 5px;">There are no users available.</div>
+			</div>
+		</div>
+<?php
+	}
+	else
+	{
+?>
+		<div class="module_collection">
+			<div class='module' style="padding:4px;">
+<?php
+	if ($this->objUser->image_id)
+	{
+?>
+				<div style="display:inline-block;width:80px;text-align: center">
+					<img style="height:76px;width:auto" src="<?php print $sn . "/imgs/v/src/" . $this->objUser->image_id  ?>" />
+				</div>
+<?php
+	}
+?>
+				<div style="display:inline-block;padding-top:10px;">
+					<span style="font-size:16pt;">Current Student</span><br />
+					<b><?php print $this->objUser->first_name; ?> <?php print $this->objUser->last_name; ?></b><br />
+					Bar Code: <?php print $this->objUser->bar_code; ?><br />
+					Store Miles: <?php print $this->intUserPointsTotal; ?><br />
+				</div>
+			</div>
+		</div>
+		<div class="module_collection">
+			<form>
+				<div style="margin-bottom:4px">
+					<table width="96%" cellpadding="4" cellspacing="4">
+						<tr>
+							<td>&nbsp;</td>
+							<td width="40"><span><a onclick="naviageBack();" class="button">Done</a></span></td>
+							<td width="6">&nbsp;</td>
+							<td width="30"><span><a onclick="checkall(this)" title="Check All" class="button">Check All</a></span></td>
+							<td width="6">&nbsp;</td>
+							<td width="60"><span><a onclick="uncheckall(this)" title="Uncheck All" class="button">Uncheck All</a></span></td>
+						</tr>
+					</table>
+				</div>
+				<div class='module cust_module1'>
+					<table border='1' width='100%'>
+						<tr>
+							<td style='padding:4px'>&nbsp;</td>
+							<td width='40'>&nbsp;</td>
+							<td><b>Name</b>&nbsp;</td>
+							<td width='65'><b>Stock</b>&nbsp;</td>
+							<td width='60'><b>Cost</b>&nbsp;</td>
+							<td width='150'><b>Sizes</b>&nbsp;</td>
+							<td width='100'><b>Quantity</b>&nbsp;</td>
+						</tr>
+<?php
+		$intRow = 0;
+		foreach ($this->arrList as $arrItem)
+		{
+			if (empty($arrItem["objPrize"]->image_id))
+				$arrItem["objPrize"]->image_id = "0.gif";
+?>
+				<input type="hidden" name="miles_total_<?php print $arrItem["value"]; ?>" value="<?php print $arrItem["objPrize"]->points; ?>" />
+				<tr class="row<?php print $arrItem["boolUserHasOnePerUserPrize"]?' disabled':''; ?>" style="background-color:#e8eaef; cursor:default;" onclick="row_toggle(this,1);">
+					<input type="hidden" class="in_stock" value="<?php print $arrItem["objPrize"]->prize_count; ?>" />
+					<td width="30" height="31" style="padding:4px;cursor:pointer;"><?php
+			if (!$arrItem["boolUserHasOnePerUserPrize"])
+			{
+?>
+					<input style="cursor:pointer;" type="checkbox" onclick="this.checked = this.checked ? 0 : 1;" name="prize_id_<?php print $arrItem["value"]; ?>" value="<?php print $arrItem["value"]; ?>" class="key key_<?php print $arrItem["value"]; ?>" /><?php
+			}
+?></td>
+
+					<td><img src="<?php print $sn . "/imgs/v/src/" . $arrItem["objPrize"]->image_id; ?>" width="35" height="35" /></td>
+					<td><?php print $arrItem["text"]; ?></td>
+					<td><?php print $arrItem["objPrize"]->prize_count; ?></td>
+					<td><?php print $arrItem["objPrize"]->points; ?></td>
+					<td><?php
+			if ($arrItem["arrPrizeSizes"])
+			{
+?>
+						<select class="select prize_size_<?php print $arrItem["value"]; ?>" name="prize_size_<?php print $arrItem["value"]; ?>" onchange="process_change();">
+<?php
+				foreach ($arrItem["arrPrizeSizes"] as $objPrizeSize)
+				{
+?>
+							<option><?php print $objPrizeSize->prize_size; ?></option>
+<?php
+				}
+?>
+						</select>
+<?php
+			}
+		?></td>
+					<td><?php
+			if ($arrItem["boolUserHasOnePerUserPrize"])
+			{
+?>
+					&nbsp;Purchased<input name="quantity_<?php print $arrItem["value"]; ?>" type="hidden" class="input quantity quantity_<?php print $arrItem["value"]; ?>" value="1" /><?php
+			}
+			else if ($arrItem["objPrize"]->one_per_user)
+			{
+?>
+					&nbsp;One Per User<input name="quantity_<?php print $arrItem["value"]; ?>" type="hidden" class="input quantity quantity_<?php print $arrItem["value"]; ?>" value="1" /><?php
+			}
+			else
+			{
+?>
+					<input onkeyup="process_change();" name="quantity_<?php print $arrItem["value"]; ?>" onclick="$(this).closest('tr').find('.key')[0].checked = $(this).closest('tr').find('.key')[0].checked ? 0 : 1;" type="text" class="input quantity quantity_<?php print $arrItem["value"]; ?>" value="1" /><?php
+			}
+
+?></td>
+				</tr>
+<?php
+			$intRow++;
+		}
+?>
+				</table></div>
+				<div class="bottom_items">
+					Total: <span class="miles_total">0</span> Miles<br />
+				</div>
+				<div class="button_bottom">
+					<a onclick="naviageBack();" class="button">Done</a>
+				</div>
+			</form>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>
+<script type="text/javascript">
+var prevSlider = $(".slider:last").prev();
+var strSerializedData = $(prevSlider).find('<?php print $this->strInputPath; ?>_hidden').val();
+if (strSerializedData.length)
+{
+	var arrSerializedData = JSON.parse(strSerializedData);
+	for (intItem in arrSerializedData)
+	{
+		if (arrSerializedData[intItem].prize_id)
+		{
+			row_toggle($('.slider:last form input.key_' + intItem).closest(".row"), 0);
+			for (var strKey in arrSerializedData[intItem])
+			{
+				var objKeyItems = $(".slider:last ." + strKey + "_" + arrSerializedData[intItem].prize_id);
+				if (objKeyItems.length) {
+					objKeyItems.val(arrSerializedData[intItem][strKey]);
+				}
+			}
+		}
+	}
+}
+process_change();
+</script>

@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Print Achievement Cards</title>
+        <style type="text/css">
+		.cards {
+			width:672px;
+			page-break-after:always;
+			font-family:'Myriad Pro',Arial,sans-serif;
+			margin:-0.1875in auto 0;
+		}
+		.cards .row {
+			display:table;
+			margin:-0.1875in auto 0;
+			margin-bottom: 8px;
+		}
+		.cards .card {
+			width:3.5in;
+			height:2in;
+			text-align:center;
+
+			width:306px;
+			height:162px;
+			padding:10px 15px 10px 15px;
+			display:table-cell;
+		}
+		.cards .card .container {
+			border:2px solid #000;
+			border-radius:10px;
+			-moz-border-radius:10px;
+			height:100%;
+		}
+
+		.cards .logo {
+			float:left;
+			margin-left:30px;
+		}
+		.cards .institution {
+			float:right;
+			margin-right:30px;
+		}
+		.cards .logo img, .cards .institution img {
+			margin:5px 0;
+			width:55px;
+			height:55px;
+		}
+		.cards .clear {
+			clear:both;
+		}
+
+		.cards .title img {
+			width:250px;
+			height:34px;
+		}
+
+		.cards .campaign {
+			/*clear:both;*/
+			font-weight:bold;
+			/*position:absolute;*/
+			width:302px;
+		}
+
+		.cards .name {
+			font-size:12px;
+			margin:6px 0;
+			height:15px;
+			/*font-weight:bold;*/
+		}
+
+		.cards .barcode {
+			font-size:9px;
+		}
+
+		.cards .points {
+			font-size:12px;
+			width:50px;
+			font-weight:bold;
+			border:2px solid #000000;
+			border-radius:7px;
+			-moz-border-radius:7px;
+			padding:3px;
+			margin:-55px auto 10px;
+		}
+		/*.cards:first-child {
+			margin-top: 20px;
+		}*/
+        </style>
+    </head>
+	<body>
+    <body onLoad="print();">
+		<div class="cards achievement" style="margin-top: 20px;">
+			<div class="row">
+<?php
+    include "config.phtml";
+    foreach($this->arrBarcodes as $intKey => $intBarcode)
+    {
+		if ($intKey && $intKey % 10 == 0)
+		{
+			if ($intKey && $intKey % 2 == 0)
+				print "
+					</div>
+				";
+			print "
+				</div><br /><div class='cards achievement'>
+				";
+			if ($intKey && $intKey % 2 == 0)
+				print "
+					<div class='row'>
+				";
+		}
+		else if ($intKey && $intKey % 2 == 0)
+		{
+			print "
+				</div><div class='row'>
+				";
+		}
+?>
+		<div class="card">
+			<div class="container">
+<?php
+		if (!empty($this->arrConfigOptions['system']['network_logo']))
+			$strNetworkLogo = $sn . '/imgs/v/w/55/src/' . $this->arrConfigOptions['system']['network_logo'];
+		else if (!empty($this->objInstitution->image_id))
+			$strNetworkLogo = $sn . '/imgs/v/w/55/src/' . $this->objInstitution->image_id;
+		else
+			$strNetworkLogo = $sn . '/imgs/v/w/55/src/0.gif';
+		$strImage = $this->arrAchievementCardConfig["achievementcards"]["achievementcardimage"];
+		if (empty($this->arrAchievementCardConfig["achievementcards"]["customimage"]))
+			$strImage = '3375159_3398.png';
+		// echo $sn . '/images/back-end/admin/cth_logo_print.png';
+		if (!empty($this->objInstitution->image_id))
+		{
+?>
+				<div class="logo"><img src="<?php echo $sn . '/imgs/v/w/55/h/55/p/h/src/' . $this->objInstitution->image_id; ?>" /></div>
+<?php
+		}
+		else if (!empty($this->objInstitution->logo)) 
+		{
+?>
+			<div class="logo"><img src="http://mashpia.com/mission_report/schoolLogos/<?=$this->objInstitution->logo?>" /></div>
+<?php
+		}
+		else if (!empty($this->objInstitution->school_logo_id))
+		{
+			echo "<div class='logo'><img src='http://mashpia.com/file_view.php?id=" . $this->objInstitution->school_logo_id . "' /></div>";
+		}
+		else
+		{
+?>
+				<div class="logo"><img src="<?php echo $strNetworkLogo; ?>" /></div>
+<?php
+		}
+		/*
+		if (empty($this->objCampaign->image_id))
+		{
+?>
+				<div class="institution"><img src="<?php echo $strNetworkLogo; ?>" /></div>
+<?php
+		}
+		else
+		{
+?>
+				<div class="institution"><img src="<?php echo $sn . '/imgs/v/w/55/h/55/p/h/src/' . $this->objCampaign->image_id; ?>" /></div>
+<?php
+		}
+		*/
+		$campaignLogos = array(
+			1	=>	'Tehillim.gif',
+			4	=>	'Tefilla.gif',
+			12	=>	'Mivtzoim.gif',
+			13	=>	'Niggunim.gif',
+			16	=>	'hiskashrus.gif',
+			21	=>	'sefer-hamitzvos.gif',
+			27	=>	'tanya.gif',
+			40	=>	'Yom-Dipagra.gif',
+			41	=>	'Father-Son.gif',
+			42	=>	'Footsteps.gif',
+			45	=>	'Cheshbon-Hanefesh.gif',
+			90	=>	'Chitas.gif',
+			100	=>	'Brias-Haguf.gif'
+		);
+		if (array_key_exists($this->objCampaign->subject_id, $campaignLogos))
+		{
+?>
+		<div class="institution"><img src="http://mashpia.com/mission_report/campaignLogos/<?=$campaignLogos[$this->objCampaign->subject_id]?>" /></div>
+<?php
+		} else {
+?>
+			<div class="institution"><img src="<?php echo $strNetworkLogo; ?>" /></div>
+<?php
+		}
+?>
+				<div class="clear"></div>
+<?php
+		//if ($this->objInstitution->template_style == 'hoo')
+		if (0)
+		{
+?>
+				<div class="points"><nobr><?php print text($this->intPoints . ' hoos'); ?></nobr></div>
+<?php
+		}
+		else
+		{
+?>
+				<div class="points"><nobr><?php print text($this->intPoints . ' ' . ($this->intPoints > 1?'[|points|]':'[|point|]')); ?></nobr></div>
+<?php
+		}
+?>
+				<div class="campaign"><nobr><?php print $this->objCampaign->subject_name; ?></nobr></div>
+				<div class="title"><img src="<?php print $sn; ?>/imgs/v/src/<?php print $strImage; ?>" /></div>
+				<div class="name"><?php print $this->strTask; ?></div>
+				<div class="barcode"><img src="<?php echo $sn; ?>/kiosk/get-barcode-legacy/serial/<?php print $intBarcode; ?>" width="210" height="20" /><br/><?php print $intBarcode; ?></div>
+			</div>
+		</div>
+<?php
+    }
+?>
+			</div>
+		</div>
+
+
+    </body>
+</html>

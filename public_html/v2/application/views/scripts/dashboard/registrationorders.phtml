@@ -1,0 +1,30 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Orders</span>
+	</div>
+	<div class="col_content camper">
+		<div class="module form lists" id="module-info">
+			<div class="module_content list">
+				<form>
+					<ul>
+<?php
+	foreach ((array) $this->objRegistration as $strKey => $strVal)
+	{
+?>
+						<li>
+							<span class="label" style="width:260px;"><?php print $strKey; ?></span>
+							<span class="input"><input type='text' value="<?php print $strVal; ?>" /></span>
+						</li>
+<?php
+	}
+?>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

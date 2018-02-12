@@ -1,0 +1,97 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objUserSession = new Zend_Session_Namespace("user_session_data");
+?>
+<script language="javascript">
+$(document).ready(function() {
+	$('#networkalerts .capture_change').bind('update', function () {
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php echo $sn . "/settings/networkalerts" . $strParamPath; ?>',
+			dataType : "text",
+			data: {
+				value : $(this).val()
+			},
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$.alert(strResponse);
+					$(".slider:last .processing_status").html('<?php print text("Sorry, there was an error"); ?>: VU-rp01-3RR3RE');
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$.alert(strResponse);
+					$(".slider:last .processing_status").html('<?php print text("Sorry, there was an error"); ?>: VU-rp102-SDF8BX');
+					return;
+				} else {
+					//$.alert(arrResponse);
+					$(".slider:last .processing_status").fadeOut();
+					if (arrResponse.success) {
+						$(".slider:last .processing_status").html("Saved.").delay(1000).fadeOut("slow");
+					} else {
+						$(".slider:last .processing_status").html('<?php print text('Sorry, there was an error'); ?>: VU-rp103-sdf98s').fadeIn("slow");
+					}
+				}
+			}
+		});
+	});
+});
+</script>
+<div class="slider" id="networkalerts">
+	<div class="col_title">
+		<span><?php print text("Network Alters"); ?></span>
+	</div>
+	<div class="col_content">
+		<h2><?php print text("ID Card Orders"); ?></h2>
+		<div class="module form">
+			<div class="module_content lists">
+				<form class="email_admins">
+					<ul>
+						<li id="network_idcards">
+							<input type="hidden" name="network_idcards" class="capture_change" value='<?php print addcslashes(json_encode($this->arrNetworkAlerts['ID Cards']), "'"); ?>' />
+<?php
+	$arrDataModel = array(
+		"alert_location" => 'ID Cards'
+	);
+?>
+							<a class="link" href="<?php print $sn . "/lists/standard1/ln/1/title/ID Card Alert Emails/fields/alert_email:420/datamodel/" . dblencode(json_encode($arrDataModel)) . "/objsrc/network_idcards" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title">ID Card Creation</div>
+							</a>
+						</li>
+						<div class="processing_status"></div>
+						<li id="network_user_registration">
+							<input type="hidden" name="network_user_registration" class="capture_change" value='<?php print addcslashes(json_encode($this->arrNetworkAlerts['User Registration']), "'"); ?>' />
+<?php
+	$arrDataModel = array(
+		"alert_location" => 'User Registration'
+	);
+?>
+							<a class="link" href="<?php print $sn . "/lists/standard1/ln/1/title/User Registration Alert Emails/fields/alert_email:420/datamodel/" . dblencode(json_encode($arrDataModel)) . "/objsrc/network_user_registration" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title">User Registration</div>
+							</a>
+						</li>
+						<div class="processing_status"></div>
+						<li id="network_institution_registration">
+							<input type="hidden" name="network_institution_registration" class="capture_change" value='<?php print addcslashes(json_encode($this->arrNetworkAlerts['Institution Registration']), "'"); ?>' />
+<?php
+	$arrDataModel = array(
+		"alert_location" => 'Institution Registration'
+	);
+?>
+							<a class="link" href="<?php print $sn . "/lists/standard1/ln/1/title/Institution Registration Alert Emails/fields/email:420/datamodel/" . dblencode(json_encode($arrDataModel)) . "/objsrc/network_institution_registration" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title">Institution Registration</div>
+							</a>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

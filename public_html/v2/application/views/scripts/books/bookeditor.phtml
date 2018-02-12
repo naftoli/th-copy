@@ -1,0 +1,478 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$intItemsPerPage = $this->intItemsPerPage;
+?>
+<style>
+#slider_bookeditor .hiddenSheetRow {
+	display: none;
+}
+#slider_bookeditor #currentPagePH {
+	padding: 2px;
+}
+</style>
+<script>
+var intBook = <?php print isset($this->book_id) ? $this->book_id : 0; ?>;
+var intAutoIncrement = 1;
+var intLineFeildLength = 35;
+var sheetConfig = {
+	"line_number" : true,
+	"paragraphs" : true,
+	"pages" : true,
+	"chapters" : true,
+	"volumes" : true
+};
+var intItemsPerPage = <?php print $intItemsPerPage; ?>;
+var intCurrentPageCount = 1;
+var intCurrentPage = <?php
+	if (isset($this->intTotalLines))
+	{
+		$intPage = ceil($this->intTotalLines / $intItemsPerPage);
+		$intPage = $intPage < 1 ? 1 : $intPage;
+		print $intPage;
+	}
+	else
+	{
+		print 1;
+	}
+?>;
+var boolCurrentlyLoading = 0;
+
+function handlePaging()
+{
+	var arrSheetRows = $(".visibleSheetRows");
+	if (arrSheetRows.length == intItemsPerPage+2)
+	{
+		$(".visibleSheetRows").slice(0,intItemsPerPage).removeClass("visibleSheetRows").addClass("hiddenSheetRow");
+		intCurrentPage++;
+		intCurrentPageCount++;
+		$(".visibleSheetRows:first textarea").slice(0).focus();
+	}
+	alterNextPreviousBtns();
+}
+
+function bookEditorChagePageKey(e)
+{
+	var code = (e.keyCode ? e.keyCode : e.which);
+	if (code == 13)
+		$("#currentPagePH_input").blur();
+}
+
+function bookEditorChangePage()
+{
+	var intCurrentPageVal = $("#currentPagePH_input").val();
+	if (!intCurrentPageVal.match(/^[0-9]+$/))
+	{
+		alert("You must use only numbers to change the page to.");
+	}
+	// If larger than the max, set to max
+	if (intCurrentPageVal > intCurrentPageCount)
+		intCurrentPageVal = intCurrentPageCount;
+	intCurrentPage = intCurrentPageVal - 1; // subtract one because next page function will add one
+	$("#nextPagingBtn").trigger("click");
+
+}
+
+function alterNextPreviousBtns()
+{
+	if (intCurrentPage != intCurrentPageCount) {
+		$("#nextPagingBtn").fadeTo("slow", 1).css("cursor", "pointer");
+	} else {
+		$("#nextPagingBtn").fadeTo("slow", 0.5).css("cursor", "default");
+	}
+	if (intCurrentPage != 1) {
+		$("#prevPagingBtn").fadeTo("slow", 1).css("cursor", "pointer");
+	} else {
+		$("#prevPagingBtn").fadeTo("slow", 0.5).css("cursor", "default");
+	}
+	$("#currentPagePH").html(intCurrentPage + "/" + intCurrentPageCount);
+}
+
+function loadSheet() {
+	// Load the items using ajax
+	var strURL = '<?php echo $sn . "/books/bookeditor/load_ajax/true"; ?>/book_id/' + intBook + "/page/" + (intCurrentPage - 1);
+	boolCurrentlyLoading = 1;
+	$("#bookeditor_table").css("display", "none");
+	$.ajax({
+		type : "GET",
+		cache : false,
+		start: $("#bookeditor_table_loading").stop().fadeIn("slow"),
+		url : strURL,
+		dataType : "text",
+		success : function(strResponse)
+		{
+			$("#bookeditor_table_loading").stop().fadeOut("fast");
+			$("#bookeditor_table").css("display", "block");
+			try
+			{
+				var arrLines = jQuery.parseJSON(strResponse);
+			}
+			catch(e)
+			{
+				alert("Sorry, there was an error: VBE-LS101-S8DF6D");
+				return;
+			}
+			//alert($.dump(arrLines));
+			$("#book_name").val(arrLines["book"]["book_name"]);
+			sheetConfig["line_number"] = arrLines["book"]["line_numbers_enabled"] == "1" ? true : false;
+			sheetConfig["paragraphs"] = arrLines["book"]["paragraphs_enabled"] == "1" ? true : false;
+			sheetConfig["pages"] = arrLines["book"]["pages_enabled"] == "1" ? true : false;
+			sheetConfig["chapters"] = arrLines["book"]["chapters_enabled"] == "1" ? true : false;
+			sheetConfig["volumes"] = arrLines["book"]["volumes_enabled"] == "1" ? true : false;
+			//alert($.dump(arrLines["book_lines"]));
+			if ($("#slider_bookeditor #bookeditor_table").children().length == 0)
+				buildCols();
+			if (intCurrentPageCount == 1)
+			{
+				intCurrentPageCount = Math.ceil(arrLines["lines_count"] / intItemsPerPage);
+				intCurrentPageCount = intCurrentPageCount < 1 ? 1 : intCurrentPageCount;
+			}
+			buildSheet(arrLines["book_lines"]);
+			//arrLines["lines_count"];
+			handlePaging();
+			boolCurrentlyLoading = 0;
+		}
+	});
+}
+function buildCols() {
+	// Build the columns
+	var strData = "<tr><td>&nbsp;</td><td>Text</td>";
+	for (var strKey in sheetConfig)
+	{
+		if (sheetConfig[strKey])
+		{
+			strData += "<td style=\"padding:0px 3px 0px 3px\"><nobr>"
+			// Quick and dirty column names
+			strData += ucwords(strKey.replace(/_/, " ").replace(/s$/, "")) + "</nobr></td>";
+		}
+	}
+	strData += "<td>&nbsp;</td></tr>";
+	$("#slider_bookeditor #bookeditor_table").append(strData);
+}
+/*
+ * Hide all currently display items and append items on next page from ajax.
+ */
+function buildSheet(arrSheetData) {
+	// Build the rows with data
+	var objRow = null;
+	var strData = "";
+	if (arrSheetData.length > 0)
+	{
+		for (var intKey in arrSheetData)
+		{
+			var objRow = arrSheetData[intKey];
+			strData += "<tr class='visibleSheetRows' id=\"bookeditor_row_" + objRow["line_hierarchy"] + "\"><td valign='top' width='26'>" + objRow["line_hierarchy"] + ". </td>";
+			strData += "<td valign=\"top\"><textarea name=\"row_" + objRow["line_hierarchy"] + "_col_line_data\" rows=\"1\" cols=\"" + intLineFeildLength + "\">" + objRow["line_data"] + "</textarea></td>";
+			for (var strCol in sheetConfig)
+			{
+				if (!sheetConfig[strCol])
+					continue;
+				strData += "<td valign=\"top\" align=\"center\"><input name=\"row_" + objRow["line_hierarchy"] + "_col_" + strCol + "\" type=\"text\" value=\"" + objRow[strCol] + "\" style=\"width:70px\" /></td>";
+			}
+			strData += "<td valign=\"top\" align=\"center\"><span style=\"cursor:pointer\" onclick=\"throwDelWarning(" + objRow["line_hierarchy"] + ")\">&nbsp;X&nbsp;</span></td></tr>";
+		}
+	}
+	if (objRow && intAutoIncrement == 1)
+		intAutoIncrement = objRow["line_hierarchy"] * 1 + 1;
+	//$("#slider_bookeditor .visibleSheetRows").removeClass("visibleSheetRows").addClass("hiddenSheetRow");
+	$("#bookeditor_table").append(strData);
+	addLineDynamic();
+}
+
+function throwDelWarning(item_id) {
+	jQuery.data(document, "item_id", item_id);
+	$.blockUI({ message: $('#bookeditor_delete_question')});
+}
+
+
+// add a new line under the latest
+function addLineDynamic(objThis) {
+	if (intCurrentPage == intCurrentPageCount)
+	{
+		// The current line in focus by the user
+		var arrListItems = $("#slider_bookeditor .visibleSheetRows");
+		// The number of items in the current page
+		var intListCount = arrListItems.length;
+
+		if (objThis)
+		{
+			// The id of the current row
+			var strCurrentRowId = $(objThis).parent().parent().attr("id");
+			// Loop through the visible items to find the current index() of the selected row
+			var intItemIndex = -1;
+			for (var intKey = 0; intKey != arrListItems.length; intKey++)
+			{
+				if ($(arrListItems[intKey]).attr("id") == strCurrentRowId)
+					intItemIndex = intKey+1;
+			}
+			//alert(intListCount + " != " + intItemIndex);
+			// If current line is not last line dont add new line
+			if (intListCount != intItemIndex)
+				return;
+		}
+
+		// Find the latest line number to incrament one
+		var arrInputs = $(arrListItems[intListCount-1]).find("input");
+
+		var strData = "<tr id=\"bookeditor_row_" + intAutoIncrement + "\" class='visibleSheetRows'><td valign='top' width='26'>" + intAutoIncrement + ". </td>";
+		strData += "<td valign=\"top\"><textarea onkeyup=\"addLineDynamic(this)\" name=\"row_" + intAutoIncrement + "__col_line_data\" rows=\"1\" cols=\"" + intLineFeildLength + "\" /></textarea>";
+		for (var strCol in sheetConfig)
+		{
+			var strAutocompleteVal = "";
+			// Loop through the inputs of the previous lines to provide auto completion
+			for (var intKey = 0; intKey != arrInputs.length; intKey++)
+			{
+				var arrMatched = $(arrInputs[intKey]).attr("name").match(/^row_[0-9]+_+col_(.+)/);
+				if (strCol == arrMatched[1])
+				{
+					strAutocompleteVal = $(arrInputs[intKey]).val();
+					if (strCol == "line_number")
+					{
+						strAutocompleteVal = strAutocompleteVal * 1 + 1;
+					}
+				}
+			}
+			// If its the first line of the book default postion values to 1
+			if (intAutoIncrement == 1 && !strAutocompleteVal.length)
+			{
+				strAutocompleteVal = 1;
+			}
+			if (!sheetConfig[strCol])
+				continue;
+			strData += "<td valign=\"top\" align=\"center\"><input name=\"row_" + intAutoIncrement + "__col_" + strCol + "\" type=\"text\" value=\"" + strAutocompleteVal + "\" style=\"width:70px\" /></td>";
+		}
+		strData += '</tr>';
+		$("#bookeditor_table").append(strData);
+		intAutoIncrement++;
+		handlePaging();
+	}
+}
+
+// Save all form data
+function bookDataSave(boolLoad) {
+	if ($('#book_name').val() == "")
+	{
+		alert("You must include a book name to save.");
+		return;
+	}
+	if ($("#book_config_status").val() != "" || $("#book_config_status").val() != "Saved successfully.")
+	{
+		// Looks like we need to save the config
+		//bookConfigSave();
+	}
+	var strData = $("#slider_bookeditor form").serialize();
+	$.each(sheetConfig, function(key, value) {
+		strData += "&" + key + "=" + value;
+	});
+	strData += "&book_name=" + escape($('#book_name').val());
+	$.ajax({
+		type : "POST",
+		cache : false,
+		start: $("#slider_bookeditor #loading_status").html('Loading...').fadeIn("slow"),
+		url : '<?php echo $sn . "/books/bookeditor/book_id/"; ?>' + intBook,
+		dataType : "text",
+		data: strData,
+		success : function(strResponse)
+		{
+			$("#slider_bookeditor #loading_status").fadeOut("fast");
+			// check if the transaction resulted in a new book
+			var arrMatched = strResponse.match(/book_id:([0-9]+)/);
+			if (arrMatched) {
+				intBook = arrMatched[1];
+				strResponse = strResponse.replace(/^[^,]+,/, "");
+			}
+			if (strResponse == "1") {
+				$("#slider_bookeditor #loading_status").html("Saved successfully.").delay(500).fadeIn("slow").delay(2000).fadeOut("slow");
+			} else {
+				$("#slider_bookeditor #loading_status").html(strResponse).fadeIn("slow");
+			}
+			// The save was successful now refresh everything to clean up the dom
+			$("#bookeditor_table tbody").children().remove();
+			buildCols();
+			intCurrentPage--; // subtract one because next page function will add one
+			intAutoIncrement--;
+			$("#nextPagingBtn").trigger("click");
+		}
+	});
+}
+
+function bookConfigSave() {
+	$.ajax({
+		type : "POST",
+		cache : false,
+		start: $("#slider_bookeditor #book_config_status").html('Loading...').fadeIn("slow"),
+		url : '<?php echo $sn . "/books/bookconfig" . $strParamPath; ?>',
+		dataType : "text",
+		data: sheetConfig,
+		success : function(strResponse) {
+			if (strResponse == "1") {
+				$("#slider_bookeditor #book_config_status").html("Saved successfully.").delay(500).fadeIn("slow").delay(2000).fadeOut("slow");
+			} else if (strResponse == "2") {
+				$("#slider_bookeditor #book_config_status").html("Configuration settings applied.").delay(500).fadeIn("slow").delay(2000).fadeOut("slow");
+			} else {
+				$("#slider_bookeditor #book_config_status").html(strResponse).fadeIn("slow");
+			}
+		}
+	});
+}
+$(document).ready(function()
+{
+	if (intBook > 0) {
+		// Load sheet data from json/ajax call
+		loadSheet();
+	} else {
+		buildCols();
+		// Build sheet from nothing
+		buildSheet(new Array());
+	}
+
+	$("#slider_bookeditor a.submit").click(function (e) {
+		bookDataSave(1);
+	});
+	$('#bookeditor_delete_question #option1').click(function(e) {
+		e.preventDefault();
+		var strPath = '<?php echo $sn . "/books/bookeditor/del_item/true/book_id/' + intBook + '/item_id/' + jQuery.data(document, 'item_id')"; ?>;
+		$("#slider_bookeditor #loading_status").html('Loading...').fadeIn("slow");
+		$.get(strPath,
+			function(strResponse) {
+				$("#slider_bookeditor #loading_status").fadeOut("fast");
+				if (strResponse == "1")
+				{
+					$("#bookeditor_table tbody").find(".visibleSheetRows").remove();
+					$("#bookeditor_table tbody").find(".hiddenSheetRow").remove();
+					intCurrentPage--; // subtract one because next page function will add one
+					intAutoIncrement-=2; // An item was deleted therefor the autoincrement can be reduced by one
+					$("#nextPagingBtn").trigger("click");
+				}
+				else
+					alert(strResponse);
+			}
+		);
+		$.unblockUI();
+	});
+	$('#bookeditor_delete_question #option2').click(function(e) {
+		e.preventDefault();
+		$.unblockUI();
+	});
+	$("#nextPagingBtn").dblclick(function () {
+		if (boolCurrentlyLoading)
+			return;
+		intCurrentPage+=2;
+		$('#nextPagingBtn').trigger('click');
+	});
+	$("#prevPagingBtn").click(function () {
+		if (boolCurrentlyLoading)
+			return;
+		if (intCurrentPage == 1)
+			return;
+		intCurrentPage--;
+		var intPageItem = (intCurrentPage-1)*intItemsPerPage;
+		$("#slider_bookeditor .visibleSheetRows").removeClass("visibleSheetRows").addClass("hiddenSheetRow");
+		for (var intItr=1; intItr!=intItemsPerPage+1; intItr++)
+		{
+			$("#bookeditor_row_" + (intPageItem + intItr)).removeClass("hiddenSheetRow").addClass("visibleSheetRows");
+		}
+		if ($("#slider_bookeditor .visibleSheetRows").length == 0)
+		{
+			// It appears there where no items already loaded, commence ajax load
+			loadSheet();
+		}
+		handlePaging();
+	});
+	$("#currentPagePH").bind("mouseover", function () {
+		$(this).css("border", "1px solid black");
+		$(this).css("padding", "1px");
+	});
+	$("#currentPagePH").bind("mouseout", function () {
+		$(this).css("padding", "2px");
+		$(this).css("border", "0px");
+	});
+	$("#currentPagePH").bind("click", function () {
+		if (!$("#currentPagePH_input").length)
+		{
+			$("#currentPagePH").html("<input type='text' style='width: 60px; text-align: center;' id='currentPagePH_input' value='" + intCurrentPage + "' onblur=\"bookEditorChangePage();\" onkeyup=\"bookEditorChagePageKey(event)\" />");
+			$("#currentPagePH_input").focus();
+			$("#currentPagePH_input").select();
+		}
+	});
+	$("#nextPagingBtn").click(function () {
+		if (boolCurrentlyLoading)
+			return;
+		if (intCurrentPage >= intCurrentPageCount)
+			return;
+		intCurrentPage++;
+		var intPageItem = (intCurrentPage-1)*intItemsPerPage;
+		$("#slider_bookeditor .visibleSheetRows").removeClass("visibleSheetRows").addClass("hiddenSheetRow");
+		for (var intItr=1; intItr!=intItemsPerPage+1; intItr++)
+		{
+			$("#bookeditor_row_" + (intPageItem + intItr)).removeClass("hiddenSheetRow").addClass("visibleSheetRows");
+		}
+		if ($("#slider_bookeditor .visibleSheetRows").length == 0)
+		{
+			// It appears there where no items already loaded, commence ajax load
+			loadSheet();
+		}
+		handlePaging();
+		// If last page need to add new dynamic line
+		if (
+			intCurrentPage == intCurrentPageCount
+			&& $("#slider_bookeditor .visibleSheetRows:last").find("textarea").val()
+		) {
+			addLineDynamic();
+		}
+	});
+});
+function ucwords (str) {
+    return (str + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
+        return $1.toUpperCase();
+    });
+}
+</script>
+<div class="slider" id='slider_bookeditor'>
+	<div class="col_title">
+		<span>Book Editor</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/books/bookconfig">
+							<div class="icon"></div>
+							<div class="title">Configuration</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div style="padding:14px">Book name: <input type="text" id="book_name" size="35" /></div>
+		<div id="sheet" style="height:<?php
+	print $intItemsPerPage * 45 + 30;
+?>px">
+			<form>
+				<table id="bookeditor_table">
+				</table>
+				<div id="bookeditor_table_loading" style="display:none;">Loading Items...</div>
+			</form>
+			<div id="book_config_status"></div>
+		</div>
+		<div style="text-align:right;padding-right:10px">
+			<div style="cursor: pointer;padding: 5px 10px 5px 10px;display: inline;">Current Page: <span id="currentPagePH">1/1</span></div>
+			<div id="prevPagingBtn" style="padding: 5px 10px 5px 10px;display: inline; border: 1px solid black;">&lt;</div>
+			<div id="nextPagingBtn" style="padding: 5px 10px 5px 10px;display: inline; border: 1px solid black;">&gt;</div>
+		</div>
+		<div id="loading_status"></div>
+		<div style="padding-top:10px">
+			<span>
+				<a href="#" title="Save" class="button submit">Save</a>
+			</span>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div id="bookeditor_delete_question" class="question">
+		<p>Are you sure you would like to delete this line?</p>
+		<p><a id="option1" class="button">Yes, delete it</a></p>
+		<p><a id="option2" class="button">No, do not delete it</a></p>
+	</div>
+
+</div>

@@ -1,0 +1,58 @@
+<?php 
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider" id="slider_imagesaddinstitutions">
+	<div class="col_title">
+		<span>Image Institutions</span>
+	</div>
+	<div class="col_content">
+<?php
+	if (count($this->arrCampaigns) == 0)
+	{
+?>
+		<div class="module" style="padding:5px;">
+			There are no institutions available to display.
+		</div>
+<?php
+	}
+	else
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<form name="campaignhosts" id="campaignhosts" method="post" action="">
+					<ul>
+<?php
+		if ($strParamPath != "")
+		{
+?>
+						<li>
+							<a class="link" href="<?php print $sn . "/images/imagecategorieslist" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title">> Add Image</div>
+							</a>
+						</li>
+<?php
+		}
+		foreach ($this->arrCampaigns as $objCampaign)
+		{
+?>
+						<li>
+							<a class="link" href="<?php print $sn . "/images/imagecategorieslist/institution_id/" . $objCampaign->institution_id . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php echo $objCampaign->name; ?></div>
+							</a>
+						</li>
+<?php
+		}
+?>
+					</ul>
+				</form>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

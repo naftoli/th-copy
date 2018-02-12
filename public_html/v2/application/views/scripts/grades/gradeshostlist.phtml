@@ -1,0 +1,55 @@
+<?php include "config.phtml"; ?>
+<div class="slider" id='slider_gradeshostlist'>
+	<div class="col_title">
+			<span>Institutions Host</span>
+	</div>
+	<div class="col_content">		
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<form name="listallinstitutions" id="listallinstitutions" method="post" action="">
+					<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/grades/gradenetworks">
+							<div class="icon"></div>
+							<div class="title">> Skip to Network List</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/grades/gradesinstitutions">
+							<div class="icon"></div>
+							<div class="title">> Skip to Institution List</div>
+						</a>
+					</li>
+<?php			if($this->intHost)
+				{		
+					foreach ($this->intHost as $value)
+					{		
+						echo '<li>
+								<a class="link" href="'.$sn.'/grades/gradenetworks/host_id/'.$value->institution_id.'">
+									<div class="icon"></div>
+									<div class="title">'.$value->name.'</div>
+								</a>
+							 </li>';
+		
+					}
+				}
+				else
+				{
+					echo "There are no ";
+						if ($this->is_active == 'active') 
+						{
+							 echo "active";
+						} 
+						else
+						{ 
+							echo "inactive";
+						}
+						echo " Hosts";
+				}
+?>
+					</ul>
+				</form>
+			</div>
+		</div>		
+	</div>
+</div>

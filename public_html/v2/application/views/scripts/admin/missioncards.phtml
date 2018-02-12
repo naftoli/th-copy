@@ -1,0 +1,36 @@
+<?php include "config.phtml"; ?>
+<?php include "parameters.phtml"; ?>
+<div class="slider" id='slider_grades'>
+	<div class="col_title">
+			<span>Grades</span>
+	</div>
+	<div class="col_content">
+		
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	foreach ($this->arrNetworks as $objNetwork)
+	{
+?>
+					<li>
+						<a target="new" class="" href="<?php echo $sn; ?>/admin/missionappcardsqr/network_id/<?php print $objNetwork->network_id . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print $objNetwork->network_name; ?> QR Codes</div>
+						</a>
+					</li>
+					<li>
+						<a target="new" class="" href="<?php echo $sn; ?>/admin/missionappcards/network_id/<?php print $objNetwork->network_id . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print $objNetwork->network_name; ?> Barcodes</div>
+						</a>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+		
+	</div>
+</div>

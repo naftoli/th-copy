@@ -1,0 +1,55 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session = new Zend_Session_Namespace('user_session_data');
+	if ($user_session->permission == "Network")
+	{
+		$strPath = $sn . "/administration/profilenetwork" . $strParamPath;
+	}
+	else if ($user_session->permission == "Parent")
+	{
+		$strPath = $sn . "/administration/profileparent" . $strParamPath;
+	}
+	else if ($user_session->permission == "Teacher")
+	{
+		$strPath = $sn . "/administration/profileteacher" . $strParamPath;
+	}
+	else if ($user_session->permission == "Super Administrator")
+	{
+		$strPath = $sn . "/administration/profilesuper" . $strParamPath;
+	}
+	else
+	{
+		$strPath = $sn . "/administration/profileadmin" . $strParamPath;
+	}
+?>
+<script>
+	slideRefresh("<?php print $strPath; ?>");
+	$(".slider:last").css("display", "none");
+	$(".slider:last").delay(1000, function () {
+		$(".slider:last").fadeIn();
+	});
+</script>
+<div class="slider">
+
+	<div class="col_title">
+		<span>Profile</span>
+	</div>
+
+	<div class="col_content">
+
+		<div id="lists" class="module lists forms">
+
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $strPath; ?>">
+							<div class="icon"></div>
+							<div class="title">Click here to be forwarded</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

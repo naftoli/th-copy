@@ -1,0 +1,97 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+
+<script language="javascript">
+	$(document).ready(function()
+	{
+		$('#slider_campaignmedals #form a.submit').click( function(e) {
+			e.preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $("#slider_campaignmedals #processing_status").html('Loading...').fadeIn("slow"),
+				url : '<?php echo $sn . "/campaigns/campaignmedals" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('#slider_campaignmedals #form').serialize(),
+				success : function(strResponse) {
+					$("#slider_campaignmedals #processing_status").html("Loading complete.").fadeIn("slow").delay(2000).fadeOut("slow").html("");
+				}
+			});
+		});
+		ajax_medals();
+	});
+	
+	function ajax_medals() {
+		$.ajax({
+			type : "GET",
+			cache : false,
+			start: $("#slider_campaignmedals #medal_list").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn . "/campaigns/campaignmedals/ajax/true" . $strParamPath; ?>',
+			dataType : "text",
+			success : function(strResponse) {
+				
+				var objTarget = $("#slider_campaignmedals #medal_list");
+				var arrResponse = jQuery.parseJSON(strResponse);
+				if (arrResponse.length) {
+					
+				} else {
+					$(objTarget).html("There are no medals within this campaign for this institution.");
+				}
+			}
+		});
+	}
+</script>
+
+<div class="slider" id="slider_campaignmedals">
+	
+	<div class="col_title">
+		<span>Add / Edit Medals</span>
+	</div>
+	
+	<div class="col_content camper">
+		<div class="module lists" id="lists-camper-groups">
+			<div class="module_content">
+				<ul>
+					<li>Number of Missions: <?=$this->num_of_missions?></li>
+					<li>Missions to Assign:  <?=$this->num_of_missions - $this->assigned_medals?></li>
+				</ul>
+			</div>
+		</div>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form name="form" id="form" method="post" action="">
+					<ul>
+						<li>
+							<h1>Add Medal</h1>
+						</li>
+						<li>
+							<span class="label">Medal name:</span>
+							<span class="input"><input type="text" class="required" id="medal_name" name="medal_name" value="" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Medal value:</span>
+							<span class="input"><input type="text" id="medal_value" name="medal_value" value=""  /></span>
+							<div class="clear"></div>
+						</li>
+						<div id="processing_status"><?php if ($this->message) { echo $this->message . "<br>"; } ?></div>
+						<li>
+							<span><a href="#" title="Save" class="button submit">Add Medal</a></span>							
+							<div class="clear"></div>							
+						</li>
+						<li>
+							<h1>Medal List</h1>
+						</li>
+						<li>
+							<div id="medal_list">
+								Loading medals...
+							</div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,30 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Networks</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	foreach ($this->arrNetworkAdmins as $objNetworkAdmin)
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/editnetwork/network_id/<?php print $objNetworkAdmin->network_id; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print $objNetworkAdmin->network_name; ?></div>
+						</a>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

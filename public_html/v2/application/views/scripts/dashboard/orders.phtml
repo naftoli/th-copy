@@ -1,0 +1,162 @@
+<?php include "config.phtml"; ?>
+<?php include "parameters.phtml"; ?>
+<script language="javascript">
+$(document).ready(function(){
+	$('#form a.submit').click( function(e) {
+		e.preventDefault();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn; ?>/orders/show-order/',
+			dataType : "text",
+			data: $('#form').serialize(),
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					$("#processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+				} else {
+					$("#processing_status").html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	});
+	
+	$('#redeem').live('click', function(e) {
+		e.preventDefault();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn; ?>/orders/validate-order/',
+			dataType : "text",
+			data: $('#form').serialize(),
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					$("#processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+				} else {
+					$("#processing_status").html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	});
+});
+</script>
+
+<div class="slider">
+	<div class="col_title">
+			<span>Scan Store Vouchers</span>
+	</div>
+	<div class="col_content">
+		<div id="processing_status1"></div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<form name="form" id="form" method="post" action="">
+					<div style="padding:10px;">
+						<input type="text" name="serial" id="serial" style="margin-left:10px;">
+						<span ><a href="#" title="Save" class="button submit">Validate</a></span>
+					</div>
+				</form>
+				<div id="processing_status"></div>
+			</div>
+		</div>
+		
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php	if ($this->objRoles->isAllowed('Super Administrator')):?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/ordershosts">
+							<div class="icon"></div>
+							<div class="title">View Orders by Hosts</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/ordersnetworks">
+							<div class="icon"></div>
+							<div class="title">View Orders by Network</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/ordersinstitutions">
+							<div class="icon"></div>
+							<div class="title">View Orders by Institution</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/ordersclasslist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Orders</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/orderslist">
+							<div class="icon"></div>
+							<div class="title">View All Orders</div>
+						</a>
+					</li>	
+<?php elseif($this->objRoles->isAllowed('Host Administrator')): ?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/ordersnetworks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Orders by Network</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/ordersinstitutions<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Orders by Institution</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/ordersclasslist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Orders</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/orderslist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Orders</div>
+						</a>
+					</li>	
+<?php elseif($this->objRoles->isAllowed('Network Administrator')): ?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/ordersinstitutions<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Orders by Institution</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/ordersclasslist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Orders</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/orderslist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Orders</div>
+						</a>
+					</li>
+<?php elseif($this->objRoles->isAllowed('Institution Administrator')): ?>
+					
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/ordersclasslist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Orders</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/orderslist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Orders</div>
+						</a>
+					</li>
+<?php endif ?>
+					
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+</div>

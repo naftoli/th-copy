@@ -1,0 +1,558 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+
+global $arrTemplateTypes;
+
+$objRoles = new Roles();
+$intPrize = $this->objPrize ? $this->objPrize->prize_id : 0;
+?>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	var intPrize = <?php print $intPrize; ?>;
+	var objTimeout1 = false;
+	// Implement plugins from a new thread
+	$(this).delay(1).queue(function () {
+		$(this).dequeue();
+		$('.slider_storeprint #use_sub_prizes').iphoneStyle({});
+		$('.slider_storeprint #add_on_restricted').iphoneStyle({});
+		$('.slider_storeprint #one_per_user').iphoneStyle({});
+	});
+	$('.slider_storeprint .fn_print').click(function () {
+		if (!intPrize) {
+			alert("You must first save the prize before you can generate the bar codes.");
+			return;
+		}
+		$('.slider_storeprint .print_frame')[0].contentWindow.print();
+	});
+	$(".slider_storeprint .print_frame").load(function () {
+		$(".slider_storeprint:last .fn_print").html("Print");
+	});
+	$(".slider_storeprint:last .bar_code").keyup(function () {
+		window.clearTimeout(objTimeout1);
+		objTimeout1 = window.setTimeout(function () {
+			$(".slider_storeprint:last .bar_code").trigger("change");
+		}, 700);
+
+	});
+	$(".slider_storeprint:last .bar_code").change(function () {
+		var strBarCode = $(this).val();
+		if (!strBarCode.length)
+		{
+			$(".slider_storeprint:last .fn_print").fadeOut();
+			return;
+		}
+		$(".slider_storeprint:last .fn_print").fadeIn();
+		$(".slider_storeprint:last .fn_print").html("Loading");
+		var strPrintUrl = '<?php print $sn; ?>/store/barcodeprint/barcode/' + strBarCode + '/prize_id/' + intPrize + '/price/' + $(".slider_storeprint:last #points").val();
+		$('.slider_storeprint:last .print_frame')[0].contentWindow.location.href=strPrintUrl;
+	});
+	$(".slider_storeprint:last .bar_code").trigger("change");
+
+	$(".slider_storeprint .cb-enable").click(function(){
+		var parent = $(this).closest('.switch');
+		$('.cb-disable',parent).removeClass('selected');
+		$(this).addClass('selected');
+		$('.checkbox',parent).attr('checked', true);
+	});
+	$(".slider_storeprint .cb-disable").click(function(){
+		var parent = $(this).closest('.switch');
+		$('.cb-enable',parent).removeClass('selected');
+		$(this).addClass('selected');
+		$('.checkbox',parent).attr('checked', false);
+	});
+	$(".slider_storeprint .switch input:checked").closest('label').addClass("selected");
+
+	$('.slider_storeprint .ph_bar_code').click(function () {
+		$.ajax({
+			type : "GET",
+			cache : false,
+			start: $(".slider_storeprint #processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php print $sn . "/store/prize/gen_bar_code/true" . $strParamPath; ?>',
+			dataType : "text",
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$(".slider_storeprint #processing_status").html('Sorry, there was an error: VU-E103-3RR3RE');
+					alert("Sorry, there was an error: VA-J101-3RR3RE");
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$(".slider_storeprint #processing_status").html('Sorry, there was an error: VU-E104-SDF8BX');
+					alert("Sorry, there was an error: VA-J102-SDF8BX");
+					return;
+				} else {
+					$(".slider_storeprint #processing_status").fadeOut();
+					if (arrResponse["error"]) {
+						$(".slider_storeprint #processing_status").html(arrResponse["error"]);
+					} else if (arrResponse["success"] == "true") {
+						$(".slider_storeprint #bar_code").val(arrResponse["bar_code"]);
+						$(".slider_storeprint:last .bar_code").trigger("change");
+					}
+				}
+			}
+		});
+	});
+	// Handel submit action
+	$('.slider_storeprint .copy_to_camp').click(function (e) {
+		e.preventDefault();
+		if (confirm("Are you sure you would like to copy this prize to your camp account?")) {
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $(".slider_storeprint #processing_status").html('Loading...').fadeIn("slow"),
+				url : '<?php print $sn . "/store/copyprizetocamp/prize_id/' + intPrize + '" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('.slider_storeprint form').serialize(),
+				success : function(strResponse) {
+					var arrResponse = {};
+					try {
+						arrResponse = JSON.parse(strResponse);
+					} catch(e) {
+						$.alert("JSON parsing issue");
+						$.alert(strResponse);
+						$(".slider_storeprint #processing_status").html('Sorry, there was an error: VU-E102-sakj22');
+						return;
+					}
+					if (arrResponse.failure) {
+						if (arrResponse.failure == "true")
+							alert("There was an unknown error: VS-P101-d1j32j");
+						else
+							alert(arrResponse.failure);
+					} else {
+						alert("Prize copied");
+					}
+					$(".slider_storeprint #processing_status").fadeOut();
+				}
+			});
+		}
+	});
+	$('.slider_storeprint .submit').click(function (e) {
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider_storeprint #processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php print $sn . "/store/prize" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('.slider_storeprint form').serialize(),
+			success : function(strResponse) {
+				//$.dumper(strResponse);return;
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$(".slider_storeprint #processing_status").html('Sorry, there was an error: VU-E101-3RR3RE');
+					alert("Sorry, there was an error: VA-J101-3RR3RE");
+					alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$(".slider_storeprint #processing_status").html('Sorry, there was an error: VU-E102-SDF8BX');
+					alert("Sorry, there was an error: VA-J102-SDF8BX");
+					return;
+				} else {
+					$(".slider_storeprint #processing_status").fadeOut();
+					if (arrResponse["error"]) {
+						if (typeof(arrResponse["error"]) != "object") {
+							$(".slider_storeprint #processing_status").html(arrResponse["error"]);
+						} else {
+							for (strField in arrResponse["error"])
+							{
+								//alert($.dump($(".slider_storeprint #" + strField).closest("li").html()));return;
+								$(".slider_storeprint #" + strField).closest("li").next().html(arrResponse["error"][strField]).fadeIn();
+							}
+						}
+					} else if (arrResponse["success"] == "true") {
+						$(".slider_storeprint #processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+						<?php echo 'slideRefresh("' . $sn . '/store/prize/prize_id/" + arrResponse["prize_id"] + " ' . $strParamPath . '");'; ?>
+					} else {
+						$(".slider_storeprint #processing_status").html("Sorry, there was an error: VA-J103-DS7DDS").fadeIn("slow");
+						//alert($.dump(arrResponse));
+					}
+				}
+			}
+		});
+	});
+});
+</script>
+
+<div class="slider slider_storeprint">
+	<style>
+	/* Used for the Switch effect: */
+	.cb-enable, .cb-disable, .cb-enable span, .cb-disable span { background: url(<?php print $sn; ?>/images/back-end/admin/switch2.gif) repeat-x; display: block; float: left; }
+	.cb-enable span, .cb-disable span { line-height: 30px; display: block; background-repeat: no-repeat; }
+	.cb-enable span { background-position: left -90px; padding: 0 10px; }
+	.cb-disable span { background-position: right -180px;padding: 0 10px; }
+	.cb-disable.selected { background-position: 0 -30px;  }
+	.cb-disable.selected span { background-position: right -210px; color: #fff; }
+	.cb-enable.selected { background-position: 0 -60px; }
+	.cb-enable.selected span { background-position: left -150px; color: #fff; }
+
+	.cb-enable, .cb-disable { font-family: Arial, Sans-serif; font-weight: bold; text-shadow: none; }
+	.field { width: 100%; float: left;  }
+	.switch input { display: none; }
+	.switch label { cursor: pointer; }
+	.ph_bar_code {
+		display: inline-block;
+	}
+	iframe.print_frame {
+		visibility: hidden;
+		position: absolute;
+		z-index: -1;
+	}
+	progress#image_upload_progress {
+		visibility: hidden;
+	}
+	img#image_upload_progress_result {
+		max-height: 75px;
+		float: left;
+		margin: 1%;
+		border-radius: 5px;
+	}
+	</style>
+	<div class="col_title">
+		<span><?php print (isset($this->objPrize) && !$this->intTemplate) ? "Edit Prize" : "Add Prize"; ?></span>
+	</div>
+
+	<div class="col_content camper">
+		<iframe name="print_frame" class="print_frame"></iframe>
+		<div class="module form" id="module-info">
+			<div class="module_content lists">
+				<ul>
+					<?php include('uimods/uploadmessage.phtml'); ?>
+					<li>
+						<div id="image_uploader">
+							<form id="image_upload_form" enctype="multipart/form-data">
+								<input type="hidden" name="sid" value="<?php echo session_id(); ?>"/>
+								<input name="Filedata" id="image_upload_file" type="file" />
+								<input type="button" id="image_upload_button" value="Upload" />
+							</form>
+							<progress id="image_upload_progress"></progress>
+							<img id="image_upload_progress_result" src="<?=WEB_ROOT ."/images/imgsrepo/".$this->objPrize->image_id;?>"/>
+							<script src="<?php print WEB_ROOT;?>/js/back-end/new_file_uploader/file_upload.js" type="text/javascript"></script>
+							<script> // create an instance of the file uploader for this form
+								var file_upload; // make the var if it does not exist
+								if (typeof(file_upload) === "function") { // make sure it is a function
+									var file_upload; // not defined?
+									var file_uploader = new file_upload({
+										upload_url: "<?php print WEB_ROOT . "/imgs/processupload"; ?>",
+										formId: "#image_upload_form",
+										fileId: "#image_upload_file",
+										buttonId: "#image_upload_button",
+										progressId: "#image_upload_progress",
+										max_file_size: 2100000, // 2.1 million bytes is 2 megabytes according to the file parser
+										success: function(data){
+											if (data.indexOf("CI-") > 0) {
+												alert(data); // show the error
+												return true;
+											}
+											// file uploaded correctly so update the data
+											var file_name = data;
+											var file_path = "<?php print WEB_ROOT;?>/images/imgsrepo/" + file_name;
+											//var file_id = file_name.split("_")[1].split(".")[0]; // we do not need the id
+											// update the correct fields
+											$("#image_upload_progress_result").attr("src", file_path);
+											$("input[name='image_id']").val(file_name); // the id is the file name
+											$('#image_upload_progress').css('visibility', 'hidden');
+										}
+									});
+								};
+							</script>
+						</div>
+					</li>
+				</ul>
+				
+				<form>
+					<input type="hidden" name="prize_id" value="<?php if (isset($this->objPrize)) echo $this->objPrize->prize_id; ?>" />
+					<input type="hidden" name="parent_prize_id" value="<?php echo intval(@$this->objPrize->parent_prize_id); ?>" />
+					<input type="hidden" name="teacher_id" value="<?php if (isset($this->objPrize)) echo $this->objPrize->teacher_id; ?>" />
+					<input type="hidden" name="guardian_id" value="<?php if (isset($this->objPrize)) echo $this->objPrize->guardian_id; ?>" />
+					<input type="hidden" name="image" value="<?php if (isset($this->objImage)) echo "image here" ?>" />
+<?php
+	$intPrizeImage = 0;
+	if (isset($this->objPrize) && $this->objPrize->image_id)
+		$intPrizeImage = $this->objPrize->image_id;
+?>
+					<ul>
+						<!--<li>-->
+							<input type="hidden" name="image_id" id="prizeeditor_image_id" value="<?php print $intPrizeImage; ?>" />
+<!--							Old file uploader. flash based does not work in any modern browsers-->
+<!--							<iframe src="<?php print $sn . "/imgs/smalluploader/current_image/" . $intPrizeImage; ?>/resultid/prizeeditor_image_id" width="100%" height="80" scrolling="no">
+								<p>Your browser does not support iframes.</p>
+							</iframe>-->
+						<!--</li>-->
+						<div class="processing_status"></div>
+<?php
+	if(
+		$this->objRoles->isRole('Institution Administrator')
+	) {
+?>
+						<li id="checklist_classes">
+							<input type="hidden" name="classes" id="classes" value="<?php print $this->strPrizeClasses; ?>" />
+							<a class="link" href="<?php print $sn . "/checklist/classes" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php print text('Limited to [|Classes|]'); ?> (<?php
+		//if ($this->objRoles->isRole('Institution Administrator')) {
+			if (
+				count($this->arrPrizeClasses) == count($this->arrClasses)
+				|| count($this->arrPrizeClasses) == 0
+			) {
+				print "None";
+			}
+			else 
+			{
+				print count($this->arrPrizeClasses);
+			}
+		//} else {
+		//	print "1";
+		//}
+?>)</div>
+							</a>
+						</li>
+						<div class="processing_status"></div>
+<?php
+	}
+	else
+	{
+?>
+		<input type="hidden" name="classes" value="<?php print $this->strClasses; ?>" />
+<?php
+	}
+	if(
+		$this->objRoles->isAllowed('Super Administrator')
+		&& @$this->objPrize->parent_prize_id < 1 // not a sub prize
+	) {
+?>
+						<li id="checklist_schooltypes">
+							<input type="hidden" name="school_types" value="<?php print $this->strPrizeSchoolTypes; ?>" />
+							<a class="link" href="<?php print $sn . "/checklist/schooltypes" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php print text('[|School|] Types'); ?> (<?php
+		if (
+			count($this->arrPrizeSchoolTypes) == count($arrTemplateTypes)
+			|| count($this->arrPrizeSchoolTypes) == 0
+		) {
+			print "All";
+		}
+		else
+		{
+			print count($this->arrPrizeSchoolTypes);
+		}
+?>)</div>
+							</a>
+						</li>
+<?php
+	} else {
+?>
+						<input type="hidden" name="prize_type" value="<?php echo intval(@$this->objPrize->prize_type); ?>" />
+<?php
+	}
+?>
+						<div class="processing_status"></div>
+<?php
+	$arrDataModel = array(
+		"prize_id" => intval(@$this->objPrize->prize_id)
+	);
+?>
+						<li id="prize_sizes">
+							<input type="hidden" name="prize_sizes" value='<?php print addcslashes(json_encode($this->arrPrizeSizes), "'"); ?>' />
+							<a class="link" href="<?php print $sn . "/lists/standard1/ln/1/hierarchy/prize_size_hierarchy/title/Prize+Sizes/fields/prize_size:420/datamodel/" . dblencode(json_encode($arrDataModel)) . "/objsrc/prize_sizes" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title">Prize Sizes (<?php print count($this->arrPrizeSizes); ?>)</div>
+							</a>
+						</li>
+						<div class="processing_status"></div>
+<?php
+	if(
+		$this->objRoles->isAllowed('Super Administrator')
+		&& @$this->objPrize->parent_prize_id < 1 // not a sub prize
+	) {
+?>
+						<li>
+							<span class="label">Type:</span>
+							<span class="input">
+								<select name="prize_type" id="prize_type">
+									<option value="Template"<?php print @$this->objPrize->prize_type == "Template" ? " selected" : ""; ?>>Template</option>
+									<option value="Installable ON"<?php print (@$this->objPrize->prize_type == "Installable" && $this->objPrize->installable_default_on) ? " selected" : ""; ?>>Installable (Default ON)</option>
+									<option value="Installable OFF"<?php print (@$this->objPrize->prize_type == "Installable" && !$this->objPrize->installable_default_on) ? " selected" : ""; ?>>Installable (Default OFF)</option>
+								</select>
+							</span>
+
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+<?php
+	} else {
+?>
+						<input type="hidden" name="prize_type" value="<?php echo intval(@$this->objPrize->prize_type); ?>" />
+						<input type="hidden" name="installable_default_on" value="<?php echo intval(@$this->objPrize->installable_default_on); ?>" />
+<?php
+	}
+?>
+						<li>
+							<span class="label">Name:</span>
+							<span class="input">
+								<input type="text" class="required" id="prize_name" name="prize_name" value="<?php if ($this->objPrize) echo $this->objPrize->prize_name; ?>">
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+
+						<li>
+							<span class="label">Description / <br/>Prize Sponsor:</span>
+							<span class="input">
+								<textarea name="prize_description"><?php if ($this->objPrize) echo stripcslashes(fixspecialchars(htmlentities(urldecode($this->objPrize->prize_description)))); ?></textarea>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<!--
+						<li>
+							<div>scan using scanner or 'generate'</div>
+							<span class="label">Bar Code:</span>
+							<span class="input">
+								<input type="text" onfocus="this.select()" class="required bar_code" id="bar_code" name="bar_code" value="<?php if ($this->objPrize) echo $this->objPrize->bar_code; ?>" />
+								<a title="Generate a bar code" class="button ph_bar_code">Generate</a>
+								<a title="Print a page of bar codes" class="button fn_print" style="margin-left:5px">Loading...</a>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						-->
+						<li>
+							<span class="label">In Stock:</span>
+							<span class="input">
+								<input type="text" class="required" id="prize_count" name="prize_count" value="<?php if ($this->objPrize) echo $this->objPrize->prize_count; ?>" />
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+
+						<li>
+							<span class="label"><?php print text('Cost (in [|points|])'); ?>:</span>
+							<span class="input">
+								<input type="text" class="required" id="points" name="points" value="<?php if ($this->objPrize) echo $this->objPrize->points; ?>" />
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+
+						<li>
+							<span class="label">Limit one per chayol:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<input type="checkbox" id="one_per_user" name="one_per_user" value="1" <?php echo @$this->objPrize->one_per_user ? " checked=\"checked\"" : ""; ?> />
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+<?php
+	if ($objRoles->isAllowed("Super Administrator"))
+	{
+?>
+						<li>
+							<span class="label">Price:</span>
+							<span class="input">
+								<input type="text" class="required prize_price" id="prize_price" name="prize_price" value="<?php if ($this->objPrize) echo $this->objPrize->prize_price; ?>" />
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+
+						<li>
+							<span class="label">Discounted Amount:</span>
+							<span class="input">
+								<input type="text" class="required" id="prize_discounted_price" name="prize_discounted_price" value="<?php if ($this->objPrize) echo $this->objPrize->prize_discounted_price; ?>" />
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label">Add On Prize:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<input type="checkbox" id="add_on_restricted" name="add_on_restricted" value="1"<?php print (isset($this->objPrize) && $this->objPrize->add_on_restricted) ? " checked=\"checked\"" : ""; ?> />
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+
+<?php
+		if (@$this->objPrize->parent_prize_id < 1) // not a sub prize
+		{
+?>
+						<li>
+							<span class="label">Use sub prizes:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<input type="checkbox" id="use_sub_prizes" name="use_sub_prizes" value="1"<?php print (isset($this->objPrize) && $this->objPrize->use_sub_prizes) ? " checked=\"checked\"" : ""; ?> />
+							</span>
+							<div class="clear"></div>
+						</li>
+<?php
+		}
+	}
+	else
+	{
+?>
+						<input type="hidden" name="add_on_restricted" value="<?php if (isset($this->objPrize)) echo $this->objPrize->add_on_restricted; ?>" />
+						<input type="hidden" name="use_sub_prizes" value="<?php if (isset($this->objPrize)) echo $this->objPrize->use_sub_prizes; ?>" />
+<?php
+	}
+?>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label" style="padding:12px 0 0 0;">Prize Status:</span>
+							<span class="input field switch" style="padding:6px 0 9px 0;">
+								<label for="radio1" class="cb-enable"><span>Enabled</span><input type="radio" id="radio1" value="1" name="is_active"<?php if (!isset($this->objPrize) || $this->objPrize->is_active == "1") print " checked='checked'";?> /></label>
+								<label for="radio2" class="cb-disable"><span>Disabled</span><input type="radio" id="radio2" value="0" name="is_active"<?php if (isset($this->objPrize) && $this->objPrize->is_active != "1") print " checked='checked'";?> /></label>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span>
+								<a href="#" title="Save" class="button submit">Save</a>
+<?php
+	if ($intPrize && $this->tstyle == "chabadhebrewschool") {
+?>
+								<a style="float:right;" href="#" title="Copy to Camp" class="button copy_to_camp">Copy to Camp</a>
+<?php
+	}
+?>
+							</span>
+						</li>
+					</ul>
+				</form>
+				<div id="processing_status"></div>
+			</div>
+		</div>
+<?php
+	if (
+		isset($this->objPrize)
+		&& !$this->intTemplate
+		&& !$this->intParentPrize
+		&& $this->objPrize->use_sub_prizes
+	) {
+?>
+		<div class="module lists" id="lists-camper-groups">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/store/prize/parent_prize_id/<?php echo $this->objPrize->prize_id; ?>/">
+							<div class="icon"></div>
+							<div class="title">Add sub prizes</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/store/prizelistexact/parent_prize_id/<?php echo $this->objPrize->prize_id; ?>/">
+							<div class="icon"></div>
+							<div class="title">View all sub prizes</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

@@ -1,0 +1,45 @@
+<?php 
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Report Campaigns</span>
+	</div>
+	<div class="col_content">
+<?php
+	if (!count($this->arrCampaigns))
+	{
+?>
+		<div class="module" style="padding:5px;">
+			There are no Users available to display.
+		</div>
+<?php
+	}
+	else
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php 
+		foreach ($this->arrCampaigns as $objCampaign)
+		{
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/reports/viewreport/campaign_id/" . $objCampaign->campaign_id . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print $objCampaign->campaign_name; ?></div>
+						</a>
+					</li>
+<?php		
+		}
+?>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

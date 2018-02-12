@@ -1,0 +1,203 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$intCustomSize = (isset($this->intCustomSize) && $this->intCustomSize) ? $this->intCustomSize : 70;
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+	<title>Mashpia.com Image Upload Tool</title>
+
+	<link href="<?php print WEB_ROOT; ?>/css/back-end/uploader.css" rel="stylesheet" type="text/css" />
+	<script src="<?php print WEB_ROOT; ?>/js/back-end/admin/jquery2.js" type="text/javascript"></script>
+	<script src="<?php print WEB_ROOT; ?>/js/back-end/uploader/swfupload.js" type="text/javascript"></script>
+	<script src="<?php print WEB_ROOT; ?>/js/back-end/uploader/swfupload.queue.js" type="text/javascript"></script>
+	<script src="<?php print WEB_ROOT; ?>/js/back-end/uploader/fileprogress.js" type="text/javascript"></script>
+	<script src="<?php print WEB_ROOT; ?>/js/back-end/uploader/handlers.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php print WEB_ROOT; ?>/js/back-end/admin/jquery.dump.js"></script>
+	<script language="javascript">
+		$(document).ready(function()
+		{
+<?php
+
+	if (preg_match("/^(?:[0-9]{7}_)?[0-9]+\.(jpeg|jpg|gif|png)$/i", $this->strCurrentImage) || $this->strCurrentImage > 0)
+	{
+?>
+			$('#photo_preview_table').css('display', 'block');
+			$('#photo_upload_table').css('display', 'none');
+			$("#photo_preview_image").html("<img src='<?php print WEB_ROOT; ?>/imgs/v/w/<?php print $intCustomSize; ?>/h/<?php print $intCustomSize; ?>/src/<?php print $this->strCurrentImage; ?>' border='0' width='<?php print $intCustomSize; ?>' height='<?php print $intCustomSize; ?>' />");
+<?php
+	}
+	else
+	{
+?>
+			$('#photo_preview_table').css('display', 'none');
+<?php
+	}
+?>
+		});
+	</script>
+</head>
+<body>
+	<script language="javascript">
+	var uploadedImage="<?php print $this->strCurrentImage; ?>";
+	$(document).ready(function()
+	{
+		var uploadInProgress=false;
+		upload_1 = new SWFUpload({
+			upload_url: "<?php print WEB_ROOT . "/imgs/processupload"; ?>",
+			post_params: {"sid" : "<?php echo session_id(); ?>"},
+			file_size_limit : "102400",
+			file_types : "*.jpeg;*.jpg;*.png;*.gif",
+			file_types_description : "JPEG Images; JPG Images; PNG Image; GIF Image",
+			file_upload_limit : 10,
+			file_queue_limit : 0,
+			swfupload_preload_handler : preLoad,
+			swfupload_load_failed_handler : loadFailed,
+			file_dialog_start_handler : fileDialogStart,
+			file_queued_handler : fileQueued,
+			file_queue_error_handler : fileQueueError,
+			file_dialog_complete_handler : fileDialogComplete,
+			upload_start_handler : uploadStart,
+			upload_progress_handler : uploadProgress,
+			upload_error_handler : uploadError,
+			upload_success_handler : uploadSuccessCust,
+			upload_complete_handler : uploadComplete,
+			button_image_url : "<?php print WEB_ROOT; ?>/images/XPButtonUploadText_61x22.png",
+			button_placeholder_id : "spanButtonPlaceholder_1",
+			button_width: 61,
+			button_height: 22,
+			button_action : SWFUpload.BUTTON_ACTION.SELECT_FILES,
+			flash_url : "<?php print WEB_ROOT; ?>/js/back-end/uploader/swfupload.swf",
+			flash9_url : "<?php print WEB_ROOT; ?>/js/back-end/uploader/swfupload_f9.swf",
+			custom_settings : {
+				progressTarget : "fsUploadProgress",
+				cancelButtonId : "btnCancel_1"
+			   },
+			debug: false // <- remove this
+		});
+	});
+	function uploadSuccessCust(file, serverData) {
+		try {
+			var progress = new FileProgress(file, this.customSettings.progressTarget);
+			progress.setComplete();
+			progress.setStatus("Complete.");
+			progress.toggleCancel(false);
+			uploadedImage=serverData;
+			uploadInProgress = false;
+			$("#photo_upload_table").css("display", "none");
+			$('#photo_preview_table').css('display', 'block');
+			if ($("#photo_preview_image img").attr("src") != "<?php print WEB_ROOT; ?>/imgs/v/w/<?php print $intCustomSize; ?>/h/<?php print $intCustomSize; ?>src/" + serverData)
+				$("#photo_preview_image").html("<img src='<?php print WEB_ROOT; ?>/imgs/v/w/<?php print $intCustomSize; ?>/h/<?php print $intCustomSize; ?>/src/" + serverData + "' border='0' width='<?php print $intCustomSize; ?>' height='<?php print $intCustomSize; ?>' />");
+			$(window.parent.document).find(".slider:last #<?php print $this->strResultID; ?>").val(serverData);
+			window.parent.$(".slider:last #<?php print $this->strResultID; ?>").trigger("updated");
+			$("#uploader_start_buttons").css({"visibility" : "visible"});
+		} catch (ex) {
+			this.debug(ex);
+		}
+	}
+	function uploaderRestart()
+	{
+		//alert(123);
+	}
+	function uploadStart(file) {
+		try {
+			var progress = new FileProgress(file, this.customSettings.progressTarget);
+			progress.setStatus("Uploading...");
+			progress.toggleCancel(true, this);
+			$("#smalluploader #lefttext").html("Uploading Image...");
+			$("#uploader_start_buttons").css({"visibility" : "hidden"});
+			$('#fsUploadProgress').css({'display' : 'block'});
+			$('#photo_upload_table').removeClass('photo_upload_table');
+		}
+		catch (ex) {
+		}
+
+		return true;
+	}
+
+	function fn_change_image() {
+		$('#fsUploadProgress').css({'display' : 'none'});
+		$('#photo_preview_table').css('display', 'none');
+		$('#photo_upload_table').css('display', 'block');
+		$('#photo_upload_table').addClass('photo_upload_table');
+		$("#smalluploader #lefttext").html("Upload Image");
+		$(".slider:last #<?php print $this->strResultID; ?>", top.document).val('');
+	}
+	function fn_set_image(strImageSrc) {
+		if (strImageSrc == "0.jpg")
+			return fn_change_image();
+		$('#photo_preview_table').css('display', 'block');
+		$('#photo_upload_table').css('display', 'none');
+		$("#photo_preview_image").html("<img src='<?php print WEB_ROOT; ?>/imgs/v/w/<?php print $intCustomSize; ?>/h/<?php print $intCustomSize; ?>/src/" + strImageSrc + "' border='0' width='<?php print $intCustomSize; ?>' height='<?php print $intCustomSize; ?>' />");
+		uploadedImage=strImageSrc;
+	}
+	function rotate_image(intDirection) {
+		$.ajax({
+			type : "POST",
+			data : {},
+			cache : false,
+			url : '<?php echo $sn . "/imgs/rotate/src/' + uploadedImage + '/direction/' + intDirection + '" . $strParamPath; ?>',
+			dataType : "text",
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					alert("<?php print text("Sorry, there was an error"); ?>: VU-E107-SDFG34");
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					alert("<?php print text("Sorry, there was an error"); ?>: VU-E108-32ASF3");
+					$.alert(strResponse);
+					return;
+				} else {
+					if (arrResponse.success) {
+						fn_set_image(arrResponse.filename);
+						$(window.parent.document).find(".slider:last #<?php print $this->strResultID; ?>").val(arrResponse.filename);
+						window.parent.$(".slider:last #<?php print $this->strResultID; ?>").trigger("updated");
+					}
+				}
+			}
+		});
+	}
+	</script>
+	<style>
+		.photo_upload_table {
+			padding: 8px 0 0 8px;
+		}
+		#lefttext {
+			padding-bottom: 7px;
+		}
+		body {
+			font-family:"Myriad Pro", Arial, Helvetica, sans-serif; font-size:17px; line-height:20px;
+		}
+	</style>
+	<form method="post" id="smalluploader">
+		<input type="hidden" id="uploader_photo_name" value="">
+		<table cellpadding="0" cellspacing="0" border="0" id="photo_upload_table" class="upload_image_ui">
+			<tr>
+				<td colspan="3" id="lefttext">Upload Image</td>
+				<td><div  id="fsUploadProgress" class="fieldset flash"></div></td>
+				<td style="display:none; padding-left: 4px" id="uploader_finish_buttons"><button>Change Image</button></td>
+			</tr>
+			<tr id="uploader_start_buttons">
+				<td><span id="spanButtonPlaceholder_1"></span></td>
+				<td><input id="btnCancel_1" style="margin-left: 2px; height: 22px; font-size: 8pt;" onclick="cancelQueue(upload_1);" disabled="disabled" type="button" value="Cancel Uploads" /></td>
+			</tr>
+		</table>
+		<table cellpadding="0" cellspacing="0" border="0" id="photo_preview_table">
+			<tr>
+				<td style="text-align:center;vertical-align:middle" width="<?php print $intCustomSize; ?>" height="<?php print $intCustomSize; ?>" id="photo_preview_image"></td>
+				<td style="padding-left: 4px">
+					<input type="button" onclick="fn_change_image();" value="Change Image" />
+					<input type="button" onclick="rotate_image(-1);" value="Rotate Image" />
+				</td>
+			</tr>
+		</table>
+	</form>
+	</body>
+</html>

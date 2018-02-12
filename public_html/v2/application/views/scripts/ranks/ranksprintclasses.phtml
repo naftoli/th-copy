@@ -1,0 +1,74 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+
+<div class="slider" id="ranksprintclasses">	
+	<div class="col_title">
+		<span>Print ID Cards</span>
+	</div>	
+	<div class="col_content">
+<?php
+	if (count($this->objClasses) == 0)
+	{
+?>
+		<div class="module" style="padding:5px;">
+			There are no <?php print $user_session_data->institution_type == "School" ? "classes" : "bunks"; ?> available to display.
+		</div>
+<?php
+	}
+	else
+	{
+?>
+        <div id="lists" class="module lists forms">				
+            <div class="module_content">					
+                <form name="ranksprintclasses" id="ranksprintclasses" method="post" action="">
+                    <ul>
+<?php
+		
+		if(!empty($strParamPath))
+		{
+?>
+                        <li>
+                            <a class="link" href="<?php echo $sn . "/ranks/ranksprintlist/rank_id/1" . $strParamPath; ?>">
+                                <div class="icon"></div>
+                                <div class="title">> Skip to list of Campers</div>
+                            </a>
+                        </li>
+<?php
+		}
+		foreach ($this->objClasses as $objClass)
+		{
+?>
+                        <li>
+                            <a class="link" href="<?php echo $sn . "/ranks/ranksprintlist/rank_id/1/class_id/" . $objClass->class_id?>">
+                                <div class="icon"></div>
+<?php
+			if ($user_session_data->institution_type == "School")
+			{
+?>
+                                <div class="title"><?php echo ($user_session_data->institution_type == "School" ? "Grade" : "Bunk") . ": " . $objClass->grade . " " . $objClass->sub;?></div>
+<?php
+			}
+			else
+			{
+?>
+                                <div class="title"><?php echo ($user_session_data->institution_type == "School" ? "Grade" : "Bunk") . ": " . $objClass->sub;?></div>
+<?php
+			}
+?>
+                            </a>
+                        </li>
+<?php
+		}
+?>
+                    </ul>
+                </form>
+            </div>
+        </div>		
+<?php
+	}
+?>
+    </div>
+</div>

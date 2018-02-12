@@ -1,0 +1,149 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	global $arrAppDetails;
+	$arrDetails = $arrAppDetails[$this->tstyle];
+?>
+<script language="javascript">
+$(document).ready(function()
+{
+	$('.slider:last form').keyup(function (e) {
+		var charCode = (e.which) ? e.which : e.keyCode;
+		if (charCode == 13) {
+			e.preventDefault();
+			if ($(this).find('.submit').length)
+				$(this).find('.submit').click();
+			else
+				$(this).submit();
+		}
+	});
+	$('.slider:last a.submit').click(function (e) {
+		$('.slider:last form').submit();
+	});
+	$('.slider:last form').submit(function(e) {
+		e.preventDefault();
+		$('body').data("reg_data", {});
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider:last .ajax_login_status").fadeIn().html('Loading...').removeClass("font_green").removeClass("font_red"),
+			url : '<?php echo $sn . "/registration/login" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('.slider:last form').serialize(),
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$(".slider:last .ajax_login_status").html('Sorry, there was an error: VU-E101-3RR3RE').addClass("font_red");
+					alert("Sorry, there was an error: VA-J101-3RR3RE");
+					alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$(".slider:last .ajax_login_status").html('Sorry, there was an error: VU-E102-SDF8BX').addClass("font_red");
+					alert("Sorry, there was an error: VA-J102-SDF8BX");
+					return;
+				} else {
+					if (arrResponse["error"]) {
+						if (typeof(arrResponse["error"]) != "object") {
+							$(".slider:last .ajax_login_status").html(arrResponse["error"]).addClass("font_red");
+						} else {
+							for (strField in arrResponse["error"])
+							{
+								//alert($.dump($(".slider:last #" + strField).closest("li").html()));return;
+								$(".slider:last #" + strField).closest("li").next().html(arrResponse["error"][strField]).fadeIn().addClass("font_red");
+							}
+						}
+					} else if (arrResponse["success"] == "true") {
+						var arrData = $('body').data("reg_data");
+						var arrNewData = arrResponse["objUser"];
+						arrData["administrator_first_name"] = arrNewData.first_name;
+						arrData["administrator_last_name"] = arrNewData.last_name;
+						arrData["administrator_email"] = arrNewData.email;
+						arrData["administrator_phone_number"] = arrNewData.phone;
+						arrData["administrator_address"] = arrNewData.address;
+						arrData["administrator_city"] = arrNewData.city;
+						arrData["administrator_postal"] = arrNewData.postal;
+						arrData["administrator_state"] = arrNewData.state;
+						arrData["administrator_country"] = arrNewData.country;
+						arrData["administrator_phone"] = arrNewData.phone;
+						arrData["administrator_user_id"] = arrNewData.user_id;
+						$('body').data("reg_data", arrData);
+						$(".slider:last .ajax_login_status").html("Authenticated... Redirecting").addClass("font_green").delay(1000).queue(function () {
+							$(this).dequeue().fadeOut();
+						});
+						var strURL = '<?php print $sn . "/registration/selectbrand" . $strParamPath; ?>';
+						slideURL(strURL);
+					} else {
+						alert("Sorry, there was an error: VA-J103-DS7DDS");
+						alert($.dump(arrResponse));
+					}
+				}
+			}
+		});
+	});
+});
+</script>
+<style>
+	#registration_administrator li.selected {
+		background-color: #ccc;
+	}
+	#registration_administrator .form a.submit {
+		float:none;
+		display: inline-block;
+	}
+	#registration_login li {
+		padding-left:150px;
+	}
+</style>
+<div class="slider" id="registration_administrator">
+	<div class="col_title"><span>Institution Registration</span></div>
+	<div class="col_content camper">
+		<h1><?php print text("New to the system?"); ?></h1>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php print $sn . "/registration/administrator" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title center">Create a new account</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h1><?php print text("Register with an existing account"); ?></h1>
+		<div class="module form">
+			<div class="module_content list">
+				<form id="registration_login">
+					<ul>
+						<li>
+							<span class="label"><label for="username">Email</label></span>
+							<span class="input"><input type="text" name="email" id="email" maxlength="64" value=""></span>
+						</li>
+						<li>
+							<span class="label"><label for="password">Password</label></span>
+							<span class="input"><input type="password" name="password" id="password" maxlength="64" value=""></span>
+						</li>
+						<li class="ajax_login_status hidden li_status">
+
+						</li>
+						<li>
+							<a href="<?php print $sn; ?>/registration/reset/<?php print $strParamPath; ?>" class="inline_link"><b>Forgot Your Password</b></a>
+						</li>
+						<li>
+							<span><a href="#" title="Next" class="button submit">Next</a></span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div class="module message" style="text-align: left">
+			<?php /* The information provided here will be granted administrative control of the new institution account currently being created.<br>&nbsp;<br>
+			Please note: You will need a credit card to complete the registration process.*/ ?>
+			To register a new school you must create a new account or login to an existing one. <br />
+			Please note: You will need a credit card to complete the registration process.
+		</div>
+	</div>
+</div>

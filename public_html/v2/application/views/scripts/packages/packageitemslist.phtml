@@ -1,0 +1,48 @@
+<?php include "config.phtml";
+	$strUrl = "";
+	if(isset($this->intHost))
+	{
+		$strUrl .="host_id/".$this->intHost ."/";
+	}
+	if(isset($this->intNetwork))
+	{
+		$strUrl .="network_id/" . $this->intNetowrk ."/";
+	}
+	if(isset($this->intInstitution))
+	{
+		$strUrl .="institution_id/" . $this->intInstitution ."/";
+	}	
+?>
+<div class="slider">	
+	<div class="col_title">
+		<span>Package Items List</span>
+	</div>	
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php if(!$this->arrPackageItems): ?>
+					<li>
+							<div class="icon"></div>
+							<div class="title">There are no package items for this category</div>
+						</a>
+					</li>
+<?php endif ?>
+<?php
+			foreach ($this->arrPackageItems as $objPackageItems)
+			{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageitemedit/<?php print $strUrl ?>package_item_id/<?php print $objPackageItems->package_item_id?>">
+							<div class="icon"></div>
+							<div class="title"><?php print $objPackageItems->name?></div>
+						</a>
+					</li>
+<?php
+			}
+?>				</ul>
+			</div>		
+	</div>
+	<!-- <div class="col_content"> -->	
+</div>
+<!-- <div class="slider"> -->

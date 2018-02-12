@@ -1,0 +1,66 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script language="javascript">
+	$(document).ready(function()
+	{
+		$('#slider_campaignladders .submit').click( function(e) {
+			e.preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $("#slider_campaignladders #processing_status").html('Loading...').fadeIn("slow"),
+				url : '<?php echo $sn . "/administration/campaignladders" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('#campginladdersform').serialize(),
+				success : function(strResponse) {
+					if (strResponse == "1") {
+						$("#slider_campaignladders #processing_status").html("Changed successfully.").delay(500).fadeIn("slow");
+					} else {
+						$("#slider_campaignladders #processing_status").html(strResponse).fadeIn("slow");
+					}
+				}
+			});
+		});
+	});
+</script>
+<div class="slider" id="slider_campaignladders">
+	<div class="col_title">
+		<span>User Campaign Ladders</span>
+	</div>
+	
+	<div class="col_content camper">
+		<b>Student:</b> <?php print $this->objUser->first_name . " " . $this->objUser->last_name; ?><br>&nbsp;
+		<div class="module lists editableText" id="lists-camper-info">
+			<div class="module_content list">
+				<form id="campginladdersform">
+<?php
+	if (!count($this->arrCampaigns))
+	{
+		print "User is currently not enrolled into any campaigns at the moment.";
+	}
+	else
+	{
+		
+		foreach ($this->arrCampaigns as $objUserCampaign)
+		{
+			print "<table cellpadding='3' cellspacing='3'>";
+			print "<td width='120' style='padding: 5px'>" . $objUserCampaign->objCampaign->campaign_name . "</td>";
+			print "<td><select name='campaign_" . $objUserCampaign->campaign_id . "'>";
+			foreach ($objUserCampaign->arrLadders as $objLadder)
+			{
+				print "<option " . ($objLadder->ladder == $objUserCampaign->ladder ? " selected" : "") . " value='" . $objLadder->ladder . "'>Quota " . $objLadder->velocity . "</option>";
+			}
+			print "</select></td>";
+			print "</table>";
+		}
+	}
+?>
+				</form>
+			</div>
+		</div>
+			<div id="processing_status"></div>
+			<span><a href="#" title="Save" class="button submit" id="appoval_save">Save</a></span>
+	</div>
+</div>

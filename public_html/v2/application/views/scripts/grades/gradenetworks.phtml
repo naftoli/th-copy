@@ -1,0 +1,64 @@
+<?php include "config.phtml"; 
+	$strUrl = "";
+	if (isset($this->intHost))
+		$strUrl .= "host_id/" . $this->intHost ."/";
+?>
+<div class="slider" id='slider_gradenetworks'>
+	<div class="col_title">
+			<span>Institutions Network</span>
+	</div>
+	<div class="col_content">	
+<?php 
+	if(!count($this->arrNetworks))
+	{
+?>
+		<div class="module" style="padding:5px;">There are no Networks available to display.</div>
+<?php 
+	}
+	else
+	{
+?>	
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<form name="listallinstitutions" id="listallinstitutions" method="post" action="">
+					<ul>
+						<li>
+							<a class="link" href="<?php print $sn . "/grades/gradeseditor/" . $strUrl; ?>">
+								<div class="icon"></div>
+								<div class="title">> Skip to Grades List</div>
+							</a>
+						</li>
+
+<?php 
+		if(count($this->arrNetworks) > 1)
+		{
+?>
+						<li>
+							<a class="link" href="<?php print $sn . "/grades/gradesinstitutions/" . $strUrl; ?>">
+								<div class="icon"></div>
+								<div class="title">> Skip to Institution List</div>
+							</a>
+						</li>
+<?php 
+		}
+?>
+<?php 
+		foreach ($this->arrNetworks as $objNetworks)
+		{
+?>
+						<li>
+							<a class="link" href="<?php print $sn . "/grades/gradesinstitutions/" . $strUrl . "network_id/" . $objNetworks->institution_id . "/"; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php echo $objNetworks->name; ?></div>
+							</a>
+						</li>
+<?php		
+		}
+	}
+?>
+					</ul>
+				</form>
+			</div>
+		</div>		
+	</div>
+</div>

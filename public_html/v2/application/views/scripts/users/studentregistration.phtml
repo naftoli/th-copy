@@ -1,0 +1,957 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script type="text/javascript">
+	$(document).ready(function()
+	{
+		var objTimer = false;
+		var intInitRegistrationCredits = <?php print intval($this->intUserCredits); ?>; // number of credits available
+		var intRegCount = <?php print $this->intRegCount; ?>; // number of currently registered students
+		function calc_price(intAmount) {
+<?php
+	if ($this->tstyle == 'chabadhebrewschool')
+	{
+?>
+			var intCost = 10;
+			var arrCosts = {
+				0 : 10,
+				51 : 9,
+				76 : 8,
+				101 : 6,
+				201 : 5,
+				501 : 4
+			};
+<?php
+	}
+	else
+	{
+?>
+			var intCost = 6;
+			var arrCosts = {
+				0 : 6,
+				100 : 5,
+				200 : 4,
+				300 : 3.50,
+				500 : 3
+			};
+<?php
+	}
+?>
+			for (var intAmount2 in arrCosts) {
+				if (intAmount >= intAmount2)
+					intCost = arrCosts[intAmount2];
+			}
+			return intCost;
+		}
+		$(".slider:last .fn_complete_order_nocc").click(function () {
+			$(".slider:last .fn_complete_order").trigger("click");
+		});
+		$(".slider:last .fn_complete_order").bind("click", function () {
+			$(".slider:last .processing_status").fadeOut();
+			$(".slider:last .ph_loading2").closest('.module').fadeIn();
+			var strUrl = '<?php echo $sn . "/users/studentregistration/register_users/true" . $strParamPath; ?>';
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $(".slider:last .ph_loading2").html('<?php print text("Loading..."); ?>').closest(".module").fadeIn(),
+				url : strUrl,
+				dataType : "text",
+				data: $('.slider:last .form2').serialize(),
+				success : function(strResponse) {
+					$(".slider:last .ph_loading2").closest('.module').fadeOut();
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$(".slider:last .processing_status:last-child").html('<?php print text("Reported an error"); ?>: VU-SR101-SDSDAW').fadeIn();
+						report({
+							'code' : 'VU-SR101-SDSDAW',
+							'location' : strUrl,
+							'message' : strResponse
+						});
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						$(".slider:last .processing_status:last-child").html('<?php print text("Reported an error"); ?>: VU-SR102-DFDEQQ').fadeIn();
+						report({
+							'code' : 'VU-SR102-DFDEQQ',
+							'location' : strUrl,
+							'message' : strResponse
+						});
+						return;
+					} else {
+
+						if (arrResponse["error"]) {
+							if (typeof(arrResponse["error"]) != "object") {
+								$(".slider:last .processing_status:last-child").html(arrResponse["error"]).fadeIn();
+							} else {
+								for (strField in arrResponse["error"])
+								{
+									$(".slider:last #" + strField).parent().parent().next().html(arrResponse["error"][strField]).fadeIn();
+								}
+							}
+						} else if (arrResponse["success"] == "true") {
+							$(".slider:last .module").fadeOut();
+							$(".slider:last .studentregistration_payment").fadeOut();
+							$(".slider:last .fn_complete_order_nocc").fadeOut();
+							$(".slider:last .studentregistration_success").fadeIn();
+							$(".slider:last .studentregistration_success .ph_confirmation_code").html(arrResponse["confirmation_code"]);
+							$(".slider:last .studentregistration_success .ph_amount_billed").html('$'+arrResponse["amount_billed"]);
+
+							$(".slider:last .ph_select_all").hide();
+						} else {
+							report({
+								'code' : 'VU-SR105-SDFFWR',
+								'location' : strUrl,
+								'message' : strResponse
+							});
+							$(".slider:last .processing_status:last-child").html('<?php print text("Reported an error"); ?>: VU-SR105-SDFFWR');
+						}
+					}
+				}
+			});
+		});
+
+		// dyn1 buttons
+		$(".slider:last .pl_price_confirmation").bind("click", function () {
+			if ($(this).hasClass("dyn1_button_select2")) {
+				$(this).find("input").removeAttr("checked");
+			} else {
+				$(this).find("input").attr("checked", "checked");
+			}
+			$(this).trigger("update");
+		}).bind("update", function () {
+			if ($(this).find("input").is(":checked") && !$(this).hasClass("dyn1_button_select2")) {
+				$(this).addClass("dyn1_button_select2");
+			} else if (!$(this).find("input").is(":checked") && $(this).hasClass("dyn1_button_select2")) {
+				$(this).removeClass("dyn1_button_select2");
+			}
+		});
+
+		$(".slider:last .dyn1_buttons input:[type=checkbox][checked]").closest("div").addClass("dyn1_button_select");
+		$(".slider:last .dyn1_buttons div").bind("click", function () {
+			if ($(this).hasClass("dyn1_button_select")) {
+				$(this).find("input").removeAttr("checked");
+				if ($(this).find("input").attr("class") == "ph_registration_fee")
+				{
+					$(".slider:last .dyn1_buttons input:checked")
+						.attr("checked", false)
+						.closest("div").trigger("update");
+				}
+			} else {
+				$(this).find("input").attr("checked", "checked");
+			}
+			$(this).trigger("update");
+			$(this).find("input").focus().trigger("tr_change");
+		}).bind("update", function () {
+			if ($(this).find("input").is(":checked") && !$(this).hasClass("dyn1_button_select")) {
+				$(this).addClass("dyn1_button_select");
+				$(this).find("input").trigger("tr_change");
+			} else if (!$(this).find("input").is(":checked") && $(this).hasClass("dyn1_button_select")) {
+				$(this).removeClass("dyn1_button_select");
+				$(this).find("input").trigger("tr_change");
+			}
+		});
+
+		var fn_price_change = function () {
+			var objSumTotal = $(".slider:last .sum_total .total_cost");
+			var objTotal = $(".slider:last .add_total_cost");
+			var intTotal = parseInt(objTotal .html());
+			$(".slider:last .displayed_amount").val(intTotal);
+			//$(".slider:last .studentregistration_payment .amount").html(intTotal);
+			var intTotalRegistrations = $(".slider:last .user_registration:[checked]").length;
+			$(".slider:last .sum_total .registration_count").html(intTotalRegistrations);
+
+			if (intTotal > 0 && $(".slider:last .studentregistration_payment").hasClass("hidden")) {
+				$(".slider:last .studentregistration_payment").fadeIn().removeClass("hidden");
+				$(".slider:last .studentregistration_payment .pl_price_confirmation input").attr("checked", false);
+			} else if (intTotal == 0 && !$(".slider:last .studentregistration_payment").hasClass("hidden")) {
+				$(".slider:last .studentregistration_payment").fadeOut().addClass("hidden");
+			}
+			if (!intTotalRegistrations)
+				$(".slider:last .fn_complete_order_nocc").fadeOut();
+			else if ($(".slider:last .studentregistration_payment").hasClass("hidden"))
+			{
+				if (intTotalRegistrations)
+					$(".slider:last .fn_complete_order_nocc").fadeIn();
+				else
+					$(".slider:last .fn_complete_order_nocc").fadeOut();
+			} else
+				$(".slider:last .fn_complete_order_nocc").fadeOut();
+		}
+
+		var fn_calculate_price = function () {
+
+		}
+
+		// Build the user list
+		var fn_generate_user_list = function (arrResponse)
+		{
+			//$.dumper(arrResponse);
+			if (!Object.keys(arrResponse["arrUsers"]).length)
+			{
+				$(".slider:last .ph_loading").html('<?php print text("No students found."); ?>').closest(".module").fadeIn()
+				$(".slider:last .ph_user_list").fadeOut();
+			} else {
+				$(".slider:last .ph_loading").closest(".module").fadeOut();
+				$(".slider:last .ph_user_list").fadeIn();
+			}
+
+			$(".slider:last .ph_user_list .row").each(function () {
+				if (!arrResponse["arrUsers"][$(this).data("user_id")])
+				{
+					$(this).find(".ph_options input:checked").each(function () {
+						var objSumTotal = $(".slider:last .sum_total .total_cost");
+						var intPrice = calc_price(intRegCount);
+						$(".slider:last .sum_total .registration_count").html(intRegCount);
+						objSumTotal.html(objSumTotal.html() * 1 - intPrice * 1);
+						fn_price_change();
+						$(".slider:last .add_credits_input").trigger('change');
+					});
+					$(this).remove();
+				}
+			});
+			$(".slider:last .add_credits_input").bind('change', function () {
+				// Additional credits to be purchased on top of the order
+				var intAddCredits = $(".slider:last .add_credits_input").val()*1;
+				// Total amount of users checked off for registration
+				var intTotalRegistrations = $(".slider:last .user_registration:[checked]").length;
+				// The number registrations for this order
+				var intRegNeeded = intAddCredits;
+				// total registrations not covered by the credits
+				var intNonCredits = intTotalRegistrations - intInitRegistrationCredits;
+				if (intNonCredits > 0)
+					intRegNeeded += intNonCredits;
+				// price per unit
+				var intPrice = calc_price(intRegNeeded);
+				var intTotal = intPrice * intRegNeeded;
+				$(".slider:last .credits_missing").html(intRegNeeded);
+				$(".slider:last .add_total_cost").html(intTotal);
+				$(".slider:last .studentregistration_payment .amount").html(intTotal);
+				fn_price_change();
+			});
+
+			for (var intUser in arrResponse["arrUsers"])
+			{
+				if ($('.slider:last .ph_user_list .user_' + intUser).length)
+					continue;
+				// Build row from template
+				var objRow = $('.slider:last .ph_user_list .template')
+					.clone()
+					.insertAfter('.slider:last .ph_user_list .template')
+					.removeClass("template")
+					.addClass("row")
+					.addClass("user_" + intUser)
+					.data("user_id", intUser);
+				$(objRow).find(".name_add_user_id").each(function () {
+					$(this).attr("name", $(this).attr("name") + intUser);
+				});
+				// Checkboxes
+				objRow.find(".dyn1_buttons input:[type=checkbox][checked]").closest("div").addClass("dyn1_button_select");
+
+				objRow.find(".dyn1_buttons div").bind("click", function () {
+					if ($(this).hasClass("dyn1_button_select")) {
+						$(this).find("input").removeAttr("checked");;
+						if ($(this).hasClass("ph_registration_fee")) {
+							$(this).closest("div").parent().find("input:checked").attr("checked", false).closest("div").trigger("update");
+						}
+					} else {
+						$(this).find("input").attr("checked", "checked");
+						if (!$(this).hasClass("ph_registration_fee")) {
+							$(this).closest("div").parent().find(".ph_registration_fee input:not(:checked)").attr("checked", true).closest("div").trigger("update");
+						}
+					}
+					$(this).trigger("update");
+				}).bind("update", function () {
+					if ($(this).find("input").is(":checked") && !$(this).hasClass("dyn1_button_select")) {
+						$(this).addClass("dyn1_button_select");
+						$(this).find("input").trigger("tr_change");
+					} else if (!$(this).find("input").is(":checked") && $(this).hasClass("dyn1_button_select")) {
+						$(this).removeClass("dyn1_button_select");
+						$(this).find("input").trigger("tr_change");
+					}
+
+				});
+				// Update feilds
+				objRow.find(".ph_student_name").html(arrResponse["arrUsers"][intUser]["first_name"] + " " + arrResponse["arrUsers"][intUser]["last_name"]);
+				if (!arrResponse["arrUsers"][intUser]["image_id"])
+					objRow.find(".ph_student_image").css({
+						"display" : "none"
+					});
+				else
+					objRow.find(".ph_student_image img").attr("src", "<?php print $sn . "/imgs/v/w/60/h/60/src/"; ?>" + arrResponse["arrUsers"][intUser]["image_id"]);
+				if (arrResponse["arrPermissions"][intUser]["registration_expiration"] <= <?php print time(); ?>)
+				{
+					objRow.find(".ph_student_registered").remove();
+					objRow.find(".ph_list_registered").remove();
+				} else { // is registered
+					objRow.find(".ph_registration_fee").remove();
+				}
+				objRow.find(".ph_options .add_on").each(function () {
+					if (
+						arrResponse["arrUserAddons"][intUser]
+						&& arrResponse["arrUserAddons"][intUser][$(this).val()]
+					) {
+						$(this).parent().addClass("dyn1_selected");
+						$(this).remove();
+					}
+				});
+
+				for (var intClass in arrResponse["arrUserClasses"][intUser])
+				{
+					objRow.find(".ph_classes").append("<p>" + arrResponse["arrClasses"][intClass]["custom_name1"] + "</p>");
+				}
+				// Row totals
+
+				objRow.find(".ph_options input").bind("tr_change", function (e, boolDontChange) {
+					var intPrize = $(this).val();
+					var intPrice = calc_price(intRegCount);
+					var strName = $(this).closest("div").find(".name").html()
+					var boolChecked = $(this).is(":checked");
+					var objUserTotal = $(this).closest(".row").find(".user_total");
+					var objSumTotal = $(".slider:last .sum_total .total_cost");
+					var intTotalRegistrations = $(".slider:last .user_registration:[checked]").length;
+					var intAddCredits = $(".slider:last .add_credits_input").val()*1;
+					var intNonCredits = intInitRegistrationCredits - intTotalRegistrations + intAddCredits;
+					if (intNonCredits < 0) {
+						intNonCredits = -intNonCredits;
+						intPrice = calc_price(intRegCount+intNonCredits);
+					}
+					if (!boolDontChange) {
+						if (boolChecked) {
+							objUserTotal.prepend('<p class="item_' + intPrize + '">- Registration</p>');
+							if (
+								$(this).hasClass("user_registration")
+								&& $(".slider:last .sum_total .registration_credits").html() > 0
+							) {
+								$(".slider:last .sum_total .registration_credits").html($(".slider:last .sum_total .registration_credits").html()-1);
+							} else {
+								objUserTotal.find(".sum").html(objUserTotal.find(".sum").html()*1 + intPrice*1);
+								objSumTotal.html(objSumTotal.html()*1 + intPrice*1);
+							}
+						} else {
+							objUserTotal.find(".item_" + intPrize).remove();
+							if (
+								$(this).hasClass("user_registration")
+								&& intTotalRegistrations < intInitRegistrationCredits
+							) {
+								$(".slider:last .sum_total .registration_credits").html($(".slider:last .sum_total .registration_credits").html()*1+1);
+							} else {
+								objUserTotal.find(".sum").html(objUserTotal.find(".sum").html()*1 - intPrice*1);
+								objSumTotal.html(objSumTotal.html()*1 - intPrice*1);
+							}
+						}
+					} else {
+						objSumTotal.html(objSumTotal.html()*1 - intPrice*1);
+					}
+					fn_price_change();
+					$(".slider:last .add_credits_input").trigger('change');
+				});
+			}
+		}
+
+		// Load the user data
+		var fn_update_user_list = function ()
+		{
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $(".slider:last .ph_loading").html('<?php print text("Loading..."); ?>').closest(".module").fadeIn(),
+				url : '<?php echo $sn . "/users/studentregistration/load_users/true" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('.slider:last .form1').serialize(),
+				success : function(strResponse) {
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$(".slider:last .ph_loading").html('<?php print text("Sorry, there was an error"); ?>: VU-SR101-SDSDAW');
+						$.dumper(strResponse);
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						$(".slider:last .ph_loading").html('<?php print text("Sorry, there was an error"); ?>: VU-SR102-DFDEQQ');
+						$.dumper(strResponse);
+						return;
+					} else {
+						if (arrResponse["error"]) {
+							$(".slider:last .ph_loading").html(arrResponse["error"]);
+						} else if (arrResponse["success"] == "true") {
+							fn_generate_user_list(arrResponse);
+						} else {
+							$(".slider:last .ph_loading").html('<?php print text("Sorry, there was an error"); ?>: VU-SR103-SDFFWR');
+						}
+					}
+				}
+			});
+		};
+		fn_update_user_list();
+		$(".slider:last .ph_filter_first_name").keyup(function () {
+			clearTimeout(objTimer);
+			objTimer = window.setTimeout(fn_update_user_list, 700);
+		});
+		$(".slider:last .ph_filter_last_name").keyup(function () {
+			clearTimeout(objTimer);
+			objTimer = window.setTimeout(fn_update_user_list, 700);
+		});
+		$(".slider:last .ph_filter_class_name").change(fn_update_user_list);
+		$(".slider:last .ph_select_all .dyn1_buttons input").bind("tr_change", function () {
+			if ($(this).hasClass("ph_registration_fee") && !$(this).is(":checked"))
+			{
+				$(".slider:last .row .ph_options input")
+					.attr("checked", false)
+					.closest("div").trigger("update");
+			}
+			else if (!$(this).hasClass("ph_registration_fee") && $(this).is(":checked"))
+			{
+				var strClass = $(this).attr("class");
+				var arrOptions = $(".slider:last .row");
+				for (var intItr=0; intItr!=Object.keys(arrOptions).length; intItr++)
+				{
+					if (
+						$(arrOptions[intItr]).find(".ph_options .ph_registration_fee input").is(":checked")
+						|| !$(arrOptions[intItr]).find(".ph_options .ph_registration_fee input").length
+					) {
+						$(arrOptions[intItr]).find(".ph_options ." + strClass + " input")
+							.attr("checked", true)
+							.closest("div").trigger("update");
+					}
+				}
+			}
+			else
+			{
+				$(".slider:last .row .ph_options ." + $(this).attr("class") + " input")
+					.attr("checked", $(this).is(":checked"))
+					.closest("div").trigger("update");
+			}
+		});
+		$('a.activate_credit').click(function (e) {
+			var node = $(this);
+			e.preventDefault();
+			if (!confirm("Are you sure you would like to activate these credits for this institution?"))
+				return;
+			var intAdminCreditId = node.closest('.credit_item').attr('admin_credit_id');
+			var strUrl = '<?php echo $sn . "/users/studentregistration/activate_credits/true" . $strParamPath; ?>';
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $(".slider:last .ph_loading").html('<?php print text("Loading..."); ?>').closest(".module").fadeIn(),
+				url : strUrl,
+				dataType : "text",
+				data: {
+					admin_credit_id : intAdminCreditId
+				},
+				success : function(strResponse) {
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						alert('<?php print text("Reported an error"); ?>: VU-SR103-f2f3f2f');
+						report({
+							'code' : 'VU-SR103-f2f3f2f',
+							'location' : strUrl,
+							'message' : strResponse
+						});
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						alert('<?php print text("Reported an error"); ?>: VU-SR104-3k3k22');
+						report({
+							'code' : 'VU-SR104-3k3k22',
+							'location' : strUrl,
+							'message' : strResponse
+						});
+						return;
+					} else {
+						slideRefresh();
+					}
+				}
+			});
+		});
+	});
+</script>
+<div class="slider">
+	<style type="text/css">
+	.rounded {
+		padding:3px;
+		border-radius: 5px 5px 5px 5px;
+	}
+	.dyn1_buttons {
+		padding-top:3px;
+		padding-left:6px;
+	}
+	.dyn1_buttons div {
+		margin: 2px;
+		padding: 6px;
+		border: 1px outset #EAEAEA;
+		display: inline;
+		cursor: default;
+		white-space: nowrap;
+		line-height: 30px;
+	}
+	.dyn1_button_select {
+		background-color: #DDD !important;
+		border: 1px inset #EAEAEA !important;
+	}
+	.dyn1_button_select2 {
+		background-color: #DDD !important;
+	}
+
+	#studentregistration .cost_per_campers.form .info .info {
+		font-size:10pt
+	}
+	#studentregistration .cost_per_campers.form .info .label.smaller {
+		width: 84px !important;
+	}
+	#studentregistration .cost_per_campers.form .info .label.smaller.more {
+		width: 60px !important;
+	}
+	#studentregistration .cost_per_campers.form .info .label.smaller.less {
+		width: 94px !important;
+	}
+
+	#studentregistration .cost_per_campers .module_content > .label {
+		width:100px;
+	}
+	#studentregistration .sum {
+		float: left;
+		font-size: 16px;
+		font-weight: bold;
+		line-height: 16px;
+		text-align: right;
+		width: 100px;
+	}
+	#studentregistration .sum.amount {
+		background-color: rgba(255, 255, 255, 0.9);
+		border: 1px solid #bbbbbb;
+		border-radius: 5px;
+		cursor: default;
+		margin: 1px 5px 1px 0;
+		padding: 6px;
+		text-align: left;
+	}
+	#studentregistration .table_labels {
+		font-size: 16px;
+		font-weight: bold;
+		line-height: 16px;
+	}
+	#studentregistration .pricing_options {
+		border: 1px solid #eeeeee;
+		display: inline-block;
+		padding: 3px 9px 3px 3px;
+	}
+	#studentregistration .pricing_options:hover {
+		background-color: rgba(0, 0, 0, 0.04);
+		border: 1px solid #aaa;
+		border-radius: 3px;
+		padding: 3px 9px 3px 3px;
+	}
+
+	</style>
+	<div class="col_title">
+		<span><?php print text('Register & Pay for [|Student|] Accounts'); ?></span>
+	</div>
+	<div class="col_content" id="studentregistration">
+		<form class="form1">
+			<!--div class="module form ph_filters">
+				<div class="module_content list">
+					<ul>
+						<li>
+							<h1><?php print text("Filters"); ?></h1>
+						</li>
+						<li>
+							<div style="display:inline;padding:4px"><?php print text("First Name"); ?>: </div>
+							<div style="display:inline;padding:4px">
+								<input class="rounded ph_filter_first_name" name="first_name" size="20" />
+							</div>
+							<div style="display:inline;padding:4px"><?php print text("Last Name"); ?>: </div>
+							<div style="display:inline;padding:4px">
+								<input class="rounded ph_filter_last_name" name="last_name" size="20" />
+							</div>
+							<div style="display:inline;padding:4px"><?php print text("[|Classes|]"); ?>: </div>
+							<div style="display:inline;padding:4px">
+								<select class="ph_filter_class_name" name="class_name" style="width:130px; padding: 5px">
+									<option><?php print text("All"); ?></option>
+<?php
+	foreach ($this->arrClasses as $objClasses)
+	{
+		print "<option value='" . $objClasses->class_id . "'>" . $objClasses->custom_name1 . "</option>";
+	}
+
+?>
+								</select>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div-->
+			<!--div class="module form ph_select_all">
+				<input type="hidden" class="displayed_amount" name="displayed_amount" value="" />
+				<div class="module_content" style="paddding-bottom:4px">
+					<ul>
+						<li>
+							<h1><?php print text("Select All"); ?></h1>
+						</li>
+						<li class="dyn1_buttons" style="padding-bottom: 6px">
+							<div><input type="checkbox" value="1" class="ph_registration_fee" /> <span><b><?php print text("Register"); ?></b></div>
+<?php
+	foreach ($this->arrPrizeAddOns as $objAddOn)
+	{
+?>
+							<div><input type="checkbox" value="1" class="add_on_<?php print $objAddOn->prize_id; ?>" /> <span><?php print $objAddOn->prize_name; ?></div>
+<?php
+	}
+?>
+						</li>
+					</ul>
+				</div>
+			</div-->
+			<div class="ph_select_all">
+				<div class="dyn1_buttons" style="padding-bottom:8px">
+					<div style="background-color:#eee;"><input type="checkbox" value="1" class="ph_registration_fee" /> <span><b><?php print text("Select All"); ?></b></div>
+				</div>
+			</div>
+		</form>
+		<form class="form2">
+			<input type="hidden" class="displayed_amount" name="displayed_amount" value="" />
+			<div class="module form">
+				<div class="module_content" style="padding:4px">
+					<h1 class="ph_loading"><?php print text("Loading..."); ?></h1>
+				</div>
+			</div>
+			<style type="text/css">
+			.ph_user_list {
+				display:none;
+			}
+			.ph_student {
+				line-height: 30px;
+			}
+			.ph_user_list li > div {
+				display: inline-block;
+				font-size: 12px;
+				border:1px outset black;
+				padding: 4px 10px 4px 10px;
+				vertical-align: top;
+			}
+			.fn_complete_order_nocc, .template {
+				display: none;
+			}
+			.row {
+				display: block;
+			}
+			.row > div, .template > div {
+				height: 130px;
+				/*height: 180px;*/
+				overflow-x: auto;
+			}
+			.ph_user_list li > div > span {
+				display: block;
+			}
+			.ph_user_list li > div > div {
+				display: block;
+			}
+			.ph_user_list .dyn1_buttons div {
+				padding: 1px;
+			}
+			.dyn1_selected {
+				background-color: #DDD !important;
+				border: 1px inset #EAEAEA !important;
+				padding: 0 7px 0 7px !important;
+			}
+			.user_total {
+				line-height: 16px;
+				overflow-y: hidden;
+			}
+			.user_total > p {
+				margin: 1px !important;
+			}
+			.sum_total {
+				padding-top: 20px !important;
+				font-size: 14pt !important;
+			}
+			.pl_price_confirmation {
+				cursor: default;
+			}
+			</style>
+			<div class="module form">
+				<style>
+					.credit_item {
+						padding:3px;
+						margin-bottom: 1px;
+					}
+					.credit_item span {
+						color:#333;
+						padding:0 9px;
+						display: inline-block;
+						border:1px solid rgba(0,0,0,0.1);
+					}
+					.credit_item a {
+						padding:0 6px;
+						display: inline-block;
+					}
+				</style>
+<?php
+	$arrCreditItems = array();
+	foreach ($this->arrOtherAdminCredits as $objAdminCredit)
+	{
+		if ($objAdminCredit->start_epoch < time() && $objAdminCredit->end_epoch > time())
+		{
+			$arrCreditItems[] = '<div class="credit_item" admin_credit_id="' . $objAdminCredit->admin_credit_id . '"><a href="#" class="activate_credit">Activate</a><span>' . $objAdminCredit->credit_amount . '</span> 2nd season students credits available</div>';
+		}
+	}
+	if ($this->intUserCredits || count($arrCreditItems))
+	{
+?>
+				<div class="module_content" style="padding:10px 4px 10px 4px">
+					<ul>
+<?php
+		if ($this->intUserCredits)
+		{
+?>
+						<div class="credit_item"><span><?php print $this->intUserCredits; ?></span> students credits available</div>
+<?php
+		}
+		print join("",$arrCreditItems);
+?>
+					</ul>
+				</div>
+<?php
+	}
+?>
+			</div>
+			<div class="module form ph_user_list">
+				<div class="module_content" style="padding:10px 4px 10px 4px">
+					<ul>
+						<li class="header">
+							<div style="width: 110px"><?php print text("[|Student|]"); ?></div>
+							<div style="width: 260px"><?php print text("Options"); ?></div>
+							<div style="width: 135px"><?php print text("Purchase Items"); ?></div>
+							<div style="width: 65px"><?php print text("[|Classes(s)|]"); ?></div>
+						</li>
+						<li class="template">
+							<div class="ph_student" style="width: 110px; text-align: center">
+								<span class="ph_student_name"></span>
+								<span class="ph_student_image"><img width="60" height="60" src="<?php $sn; ?>/imgs/v/src/226.gif/w/60/h/60" /></span>
+								<span class="ph_student_registered"></span>
+							</div>
+							<div class="ph_options dyn1_buttons" style="width: 260px">
+								<div class="ph_registration_fee"><input class="name_add_user_id user_registration" name="bl_registration_fee_0_" type="checkbox" value="1" /> <b><span class="name"><?php print text("Register [|Student|]"); ?></span></b></div>
+								<div class="ph_list_registered dyn1_selected"><b><?php print text("Registered"); ?></b></div>
+<?php
+	foreach ($this->arrPrizeAddOns as $objAddOn)
+	{
+?>
+								<div class="add_on_<?php print $objAddOn->prize_id; ?>"><input class="name_add_user_id add_on" name="bl_add_on_<?php print $objAddOn->prize_id; ?>_" type="checkbox" value="<?php print $objAddOn->prize_id; ?>" /> <span class="name"><?php print text($objAddOn->prize_name); ?></span> <b>($<span class="price"><?php print $objAddOn->prize_price; ?></b></span>)</div>
+<?php
+	}
+?>
+							</div>
+							<div class="user_total" style="width: 135px">
+
+							</div>
+							<div class="ph_classes" style="width: 65px"></div>
+						</li>
+						<li class="sum_total">
+							<style>
+								.reg_option {
+									display: inline-block;
+								}
+							</style>
+							<?php print text("Student Registrations"); ?>: <span class="registration_count">0</span><br />
+							-----------------------------<br />
+							<?php print text("Credits Remaining"); ?>: <span class="registration_credits"><?php print intval($this->intUserCredits); ?></span><br />
+							-----------------------------<br />
+							<?php print text("Sub Total"); ?>: $<span class="total_cost">0.00</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+<?php
+	if ($this->tstyle == 'chabadhebrewschool')
+	{
+?>
+			<div class="module form cost_per_campers">
+				<div class="module_content" style="padding:4px">
+					<div class="label">Price Scale</div>
+					<div class="info">
+						<table>
+							<tr>
+								<td>
+									<div class="label smaller more">Min 10</div>
+									<div class="info">
+										$100
+									</div>
+								</td>
+								<td>
+									<div class="label smaller">11 - 50</div>
+									<div class="info">
+										$10 / <?php print text('[|Student|]'); ?>
+									</div>
+								</td>
+								<td>
+									<div class="label smaller">51 - 75</div>
+									<div class="info">
+										$9 / <?php print text('[|Student|]'); ?>
+									</div>
+								</td>
+								<td>
+									<div class="label smaller">76 - 100</div>
+									<div class="info">
+										$8 / <?php print text('[|Student|]'); ?>
+									</div>
+								</td>
+								<td>
+									<div class="label smaller">101 - 200</div>
+									<div class="info">
+										$6 / <?php print text('[|Student|]'); ?>
+									</div>
+								</td>
+								<td>
+									<div class="label smaller">201 - 500</div>
+									<div class="info">
+										$5 / <?php print text('[|Student|]'); ?>
+									</div>
+								</td>
+								<td>
+									<div class="label smaller">501 +</div>
+									<div class="info">
+										$4 / <?php print text('[|Student|]'); ?>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+<?php
+	}
+?>
+			<div class="module form add_credits">
+				<div class="module_content" style="padding:10px 4px 10px 4px">
+					<p style="font-size:14px">
+						Add additional credits to your account:
+					</p>
+					<p>
+						<input name="add_credits_input" class="add_credits_input" value='0' style="width:40px;font-size:16px" /><br/>
+						<span class="add_credits_total" style="font-size:19px">
+							-----------------------------<br />
+							<?php print text("Purchase Credits"); ?>: <span class="credits_missing">0</span>
+							<br />-----------------------------<br />
+							<?php print text("Total Cost"); ?>: $<span class="add_total_cost">0</span>
+						</span>
+					</p>
+				</div>
+			</div>
+
+			<div class="fn_complete_order_nocc"><span><a class="button"><?php print text("Complete Order"); ?></a></span><br />&nbsp;</div>
+
+			<div class="module form hidden">
+				<div class="module_content" style="padding:4px">
+					<h1 class="ph_loading2"><?php print text("Loading..."); ?></h1>
+				</div>
+			</div>
+
+			<div class="studentregistration_payment hidden">
+					<h2><?php print text("Credit Card Information"); ?></h2>
+					<div class="module form">
+						<div class="module_content list">
+							<ul>
+								<li>
+									<span class="label"><?php print text("First Name"); ?>:</span>
+									<span class="input"><input autocomplete="off" type="text" name="creditcard_first_name" id="creditcard_first_name" value="" /></span>
+									<div class="clear"></div>
+								</li>
+								<div class="processing_status"></div>
+								<li>
+									<span class="label"><?php print text("Last Name"); ?>:</span>
+									<span class="input"><input autocomplete="off" type="text" name="creditcard_last_name" id="creditcard_last_name" value="" /></span>
+									<div class="clear"></div>
+								</li>
+								<div class="processing_status"></div>
+								<li>
+									<span class="label"><?php print text("Address"); ?>:</span>
+									<span class="input"><input autocomplete="off" type="text" name="creditcard_address" id="creditcard_address" value="" /></span>
+									<div class="clear"></div>
+								</li>
+								<div class="processing_status"></div>
+								<li>
+									<span class="label"><?php print text("State/Provice"); ?>:</span>
+									<span class="input"><input autocomplete="off" type="text" name="creditcard_state" id="creditcard_state" value="" /></span>
+									<div class="clear"></div>
+								</li>
+								<div class="processing_status"></div>
+								<li>
+									<span class="label"><?php print text("Zip/Postal Code"); ?>:</span>
+									<span class="input"><input autocomplete="off" type="text" name="creditcard_zip" id="creditcard_zip" class="required" value="" /></span>
+									<div class="clear"></div>
+								</li>
+								<div class="processing_status"></div>
+								<li>
+									<span class="label"><?php print text("Credit Card Number"); ?>:</span>
+									<span class="input"><input autocomplete="off" type="text" name="creditcard_number" id="creditcard_number" class="required" value="" /></span>
+									<div class="clear"></div>
+								</li>
+								<div class="processing_status"></div>
+								<li>
+									<span class="label"><?php print text("Expiry date"); ?>:</span>
+									<span class="input">
+										<select name="creditcard_expiration_month" id="creditcard_expiration_month">
+											<option selected><?php print text("PLEASE SELECT"); ?></option>
+<?php
+	for ($i = 1; $i <= 12; $i++)
+	{
+		echo "<option value='$i'>" . date("F", mktime(0, 0, 0, $i+1, 0, 0, 0)) . "</option>";
+	}
+?>
+										</select>
+										<select name="creditcard_expiration_year" id="creditcard_expiration_year">
+<?php
+	$year = date('Y')-1;
+	for($i=0; $i < 6; $i++)
+	{
+		$year++;
+?>
+											<option value="<?php echo $year;?>"<?php !$i ? " selected" : ""; ?>><?php echo $year;?></option>
+<?php
+	}
+?>
+										</select>
+									</span>
+									<div class="clear"></div>
+								</li>
+								<div class="processing_status"></div>
+								<li>
+									<span class="label"><?php print text("CCV:"); ?></span>
+									<span class="input"><input autocomplete="off" type="text" name="creditcard_ccv" id="creditcard_ccv" value="" class="required" width="50px"/></span>
+									<div class="clear"></div>
+								</li>
+								<div class="processing_status"></div>
+							</ul>
+						</div>
+					</div>
+					<h2><?php print text("Authorization"); ?></h2>
+					<div class="module pl_price_confirmation" style="padding:6px">
+						<div style="display:inline-block" width="40px"><input type="checkbox" id="confirm_order" name="confirm_order" value="1" /></div>
+						<div style="display:inline-block"><?php print text("I am authorizing mashpia.com to charge"); ?> $<span class="amount"></span> <?php print text("to my provided credit card above."); ?></div>
+					</div>
+					<div class="processing_status"></div>
+					<table cellpadding="4" cellspacing="4"><tr><td>&nbsp;</td><td width="60"><span><a class="button fn_complete_order"><?php print text("Complete Order"); ?></a></span></td></tr></table>
+					&nbsp;<br>&nbsp;
+			</div>
+			<div class="studentregistration_success hidden">
+				<h2><?php print text("Order Successful"); ?></h2>
+				<div class="module form">
+					<div class="module_content list textmsg">
+						<ul>
+							<li>
+								&nbsp;<br /><?php print text("Confirmation Code"); ?>: <span class="ph_confirmation_code"></span><br />
+								<?php print text("Amount billed"); ?>: <span class="ph_amount_billed"></span><br />
+								<?php print text("Your order was successful, thank you!"); ?><br />&nbsp;
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			&nbsp;
+		</form>
+	</div>
+</div>

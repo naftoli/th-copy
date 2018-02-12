@@ -1,0 +1,85 @@
+<?php
+include "config.phtml";
+include "application/views/scripts/includes/headers/kiosk_header.phtml";
+?>
+
+<body class="blue">
+
+    <div id="wrapper">
+		
+        <div id="header">
+			<?php include "application/views/scripts/includes/topbar.phtml"; ?>
+        </div>
+		
+        <div id="main">
+			
+            <div id="page_title">
+				Enrollment
+			</div>
+			
+            <div class="three_column padding_top">
+				
+				<div class="content">
+					
+                    <div id="slider">
+						
+						<ul class="enroll">
+							
+                            <li>
+								
+                                <div class="slider_title">
+									Mazal Tov!
+								</div>
+								
+                                <div class="scroll-pane">
+									
+                                    <form>
+										
+										<div class="mainbox">
+											<div class="col2_image">
+												<?//=linkImgFile($campaign_row['subject_gold_image_id'], 128, 128);?>
+											</div>
+											
+											<div class="col2_text">
+												You are now enrolled in the <?php echo $this->objCampaign->campaign_name;?> Campaign...
+												<br />
+												You can now begin your missions.
+											</div>
+											
+											<div class="clear">												
+											</div>
+											
+											<div class="button button_icons">
+												<div style="vertical-align:middle;">
+													<?//=linkImgFile($campaign_row['subject_black_image_id'],NULL,NULL," style='float:left;margin:20px 0 0 15px;'");?>
+													<a href="<?php echo $sn . '/kiosk/campaignmissions/campaign_id/' . $this->intCampaignId;?>"  style="padding-left:20px;">Current Missions</a>
+												</div>
+											</div>
+											
+										</div>
+										
+                                    </form>
+									
+                                </div>
+								
+                            </li>
+							
+						</ul>
+						
+                    </div>
+					
+				</div>
+				
+            </div>
+			
+        </div>
+		
+        <div id="footer">
+			<?php include "application/views/scripts/includes/bottombar.phtml"; ?>
+		</div>
+		
+    </div>
+	
+</body>
+
+<?php include "application/views/scripts/includes/footer.phtml"; ?>

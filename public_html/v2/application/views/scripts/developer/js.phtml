@@ -1,0 +1,32 @@
+<?php
+include "config.phtml";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Javascript / AJAX</span>
+	</div>
+	<div class="col_content">
+		<div class="module_collection">
+			<pre class="brush: js;">
+
+&nbsp;
+var arrPostParams = {
+	user_id : <?php print htmlspecialchars('<?php print $user_id; ?>'); ?> 
+};
+$.ajax({
+	type : "POST",
+	cache : false,
+	url : '<?php print htmlspecialchars('<?php print $sn; ?>'); ?>/controller/action',
+	dataType : "text",
+	data: arrPostParams,
+	success : function(strResponse) {
+
+	}
+});
+			</pre>
+		</div>
+	</div>
+</div>
+<script>
+SyntaxHighlighter.highlight();
+</script>

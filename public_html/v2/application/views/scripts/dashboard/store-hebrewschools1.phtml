@@ -1,0 +1,273 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+<script language="javascript">
+$(document).ready(function(){
+	$('#cardvalidate a.submit').click( function(e) {
+		e.preventDefault();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn; ?>/orders/show-order/',
+			dataType : "text",
+			data: {"serial" : $("#serial").val()},
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					$(".slider:last #processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+				} else {
+					$(".slider:last #processing_status").html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	});
+});
+</script>
+
+<div class="slider">
+
+	<div class="col_title">
+		<span><?php print text('Prizes'); ?></span>
+		<div class="title_help info" title="<?php print text("Create and edit prizes, and see what prizes your [|students|] have ordered. Prizes can either be created from scratch or from one of the templates we provide."); ?>"></div>
+	</div>
+
+	<div class="col_content">
+
+<?php
+	if($this->objRoles->isRole('Super Administrator'))
+	{
+?>
+		<h2>Add Prizes</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn . "/store/prize" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Add New T.H.H.Q. Prize"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h2>View Prizes</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn . "/store/prizelistexact" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View T.H.H.Q. Prizes"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/prizes/add_on_restricted/1/pre/Add+On/url/" . dblencode("store/prize" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View Add On Prizes"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/store/prizelistexact/is_active/0" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View Disabled Prizes"); ?></div>
+						</a>
+					</li>
+<?php
+	}
+	elseif ($this->objRoles->isAllowed('Network'))
+	{
+		if (!empty($this->institution_id)) {
+?>
+		<h2><?php print $this->objInstitution->name . text(' Prizes'); ?></h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn . "/store/prize" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Add New [|School|] Prizes"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/store/prizelistexact/host_prizes/off" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View [|School|] Prizes"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/store/prizelistexact/is_active/0" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View Disabled [|School|] Prizes"); ?></div>
+						</a>
+					</li>
+<?php
+		} else {
+?>
+		<h2>Network Prizes</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn . "/store/prize" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Add New Network Prizes"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/store/prizelistexact/host_prizes/off" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View Network Prizes"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/store/prizelistexact/is_active/0" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View Disabled Network Prizes"); ?></div>
+						</a>
+					</li>
+<?php
+		}
+	}
+	elseif ($this->objRoles->isAllowed('Institution Administrator'))
+	{
+?>
+		<!--h2>T.H.H.Q. Prizes</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn . "/store/prizeinstall" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Add / Remove T.H.H.Q. Add On Prizes"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div-->
+		<h2>Your Prizes</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/prizes/pre/template/institution_id/1/prize_type/Template/parent_prize_id/0/url/" . dblencode("store/prize" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Add New Prize from Template"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/store/prize" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Add New [|School|] Prizes"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/store/prizelistexact/host_prizes/off" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View [|School|] Prizes"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/store/prizelistexact/is_active/0" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View Disabled Prizes"); ?></div>
+						</a>
+					</li>
+<?php
+	}
+	elseif($this->objRoles->isRole('Teacher'))
+	{
+?>
+		<h2>Your Prizes</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/prizes/prize_type/Template/institution_id/1/pre/teacher%20template/url/" . dblencode("store/prize" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Add New Prize from Template"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/store/prize">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Add New Prizes"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/prizes/pre/teacher/url/" . dblencode("store/prize" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View My Prizes"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/prizes/is_active/0/pre/disabled+teacher/url/" . dblencode("store/prize" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View Disabled Prizes"); ?></div>
+						</a>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+<?php
+	if(
+		$this->objRoles->isRole('Teacher')
+		|| $this->objRoles->isRole('Institution Administrator')
+	) {
+		/*
+?>
+<script>
+function eKeyPress(evt)
+{
+var charCode = (evt.which) ? evt.which : event.keyCode
+// if not a digit or arrow key abort
+if ( charCode == 13) {
+$('#cardvalidate a.submit').trigger("click");
+}
+}
+</script>
+		<h2>Scan Store Vouchers</h2>
+		<!--Scan voucher -->
+		<div id="lists" class="module lists form">
+			<div class="module_content">
+				<ul id="cardvalidate">
+					<li>
+					<div class="input">
+						<input onkeydown="eKeyPress(event)" type="text" name="serial" id="serial" style="margin-left:10px;">
+					</div>
+					<a href="#" title="Save" class="button submit">Validate</a>
+					</li>
+				</ul>
+				<div class="message" id="processing_status"></div>
+			</div>
+		</div>
+		*/?>
+		<h2>View Orders</h2>
+		<!--View orders -->
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn . "/menu/classes/pre/order/url/" . dblencode("orders/ordersonline" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View Orders by [|Class|]"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/orders/ordersonline" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View All Orders"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

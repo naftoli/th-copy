@@ -1,0 +1,52 @@
+<?php include "config.phtml";
+	$strUrl = "";
+	if(isset($this->intHost))
+	{
+		$strUrl .="host_id/".$this->intHost ."/";
+	}
+	if(isset($this->intNetwork))
+	{
+		$strUrl .="network_id/" . $this->intNetwork ."/";
+	}
+	$status = ($this->strStatus == 'active') ? 'inactive' : 'active';
+?>
+
+<div class="slider">	
+	<div class="col_title">
+		<span>Packages List</span>
+	</div>	
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					
+<?php if(!$this->arrPackages): ?>
+					<li>
+							<div class="icon"></div>
+							<div class="title">There are no packages for this category</div>
+						</a>
+					</li>
+<?php endif ?>
+<?php
+			foreach ($this->arrPackages as $objPackages)
+			{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageedit/institution_id/<?php print $objPackages->institution_id; ?>/<?php print $strUrl ?>package_id/<?php print $objPackages->package_id?>">
+							<div class="icon"></div>
+							<div class="title">
+								<?php print $objPackages->name?>
+							<span style="text-align:right; width:300px; !important;">
+								[<?php print $objPackages->is_active ==1 ? "Active package":"Inactive package";?>]
+							</span>
+							</div>
+						</a>
+					</li>
+<?php
+			}
+?>				</ul>
+			</div>		
+	</div>
+	<!-- <div class="col_content"> -->	
+</div>
+<!-- <div class="slider"> -->

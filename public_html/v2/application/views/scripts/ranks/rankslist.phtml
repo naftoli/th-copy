@@ -1,0 +1,51 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+
+<div class="slider">
+	
+	<div class="col_title">
+		<span>Ranks List</span>
+	</div>
+	
+	<div class="col_content">
+
+<?php
+	if (count($this->objRanks) == 0)
+	{
+?>
+		<div class="module" style="padding:5px;">
+			There are no Ranks available to display.
+		</div>
+<?php
+	}
+	else
+	{
+?>
+			<div id="lists" class="module lists forms">				
+				<div class="module_content">					
+					<form name="rankslist" id="rankslist" method="post" action="">
+						<ul>
+<?php
+		foreach ($this->objRanks as $objRanks)
+		{
+?>							
+								<li>
+									<a class="link" href="<?php echo $sn . "/ranks/ranksedit/rank_id/" . $objRanks->rank_id . $strParamPath; ?>">
+										<div class="icon"></div>
+										<div class="title"><?php echo $objRanks->rank_title; ?></div>
+									</a>
+								</li>
+<?php
+		}
+?>							
+						</ul>
+					</form>
+				</div>
+			</div>		
+<?php
+	}
+?>
+	</div>
+</div>

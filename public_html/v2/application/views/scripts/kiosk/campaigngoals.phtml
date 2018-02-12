@@ -1,0 +1,72 @@
+<?php
+include "config.phtml";
+include "application/views/scripts/includes/headers/kiosk_header.phtml";
+?>
+
+<body class="blue">
+	
+	<div id="wrapper">
+		
+        <div id="header">
+          <?php include "application/views/scripts/includes/topbar.phtml"; ?>
+        </div>
+		
+		<div id="main">
+			
+			<div id="page_title">
+				<?php echo $this->objCampaign->campaign_name; ?>
+			</div>
+			
+			<!-- CAMPAIGN IMAGE -->
+			<div class="one_column padding_left campaign_main">
+				<div class="medalImage">
+					<img width="200" height="210" src="<?php echo $sn; ?>/kiosk/displaycampaignphoto/campaign_id/<?php echo $this->objCampaign->campaign_id;?>/rgb/g">
+				</div>
+				<?php echo $this->objCampaign->slogan; ?>
+			</div>
+			
+			<!-- CAMPAIGN DESCRIPTION -->
+			<div class="one_column padding_top">
+				<div class="goal">
+                	<div class="title icon_target">
+                    	Goal
+                    </div>
+                    <div class="text">
+                    	<?php echo $this->objCampaign->description; ?>
+                    </div>					
+				</div>
+			</div>
+				
+            <div class="one_column">
+					
+				<ul class="buttons button_icons">
+						
+					<li>
+						<a href="<?php echo $sn . '/kiosk/campaignoverview/campaign_id/' . $this->intCampaignId;?>" class="icon_ranks">Overview</a>
+					</li>
+						
+					<?php if ($this->intUserRegistered > 0): ?>
+						<li>
+							<a class="icon_back_to" href="<?php echo $sn . '/kiosk/campaignmissions/campaign_id/' . $this->intCampaignId;?>">View Current Missions</a>
+						</li>
+					<?php else : ?>
+						<li>
+							<a href="<?php echo $sn . '/kiosk/campaignenrollone/campaign_id/' . $this->intCampaignId; ?>" class="icon_enroll">Enroll</a>
+						</li>
+					<?php endif; ?>
+						
+					<li>
+						<a class="icon_medals" href="<?php echo $sn . '/kiosk/campaignmedals/campaign_id/' . $this->intCampaignId; ?>">Medals</a>
+					</li>
+						
+				</ul>
+				  
+            </div>
+				
+		</div>
+			
+	</div>
+	<!-- WRAPPER -->
+		
+</body>
+	

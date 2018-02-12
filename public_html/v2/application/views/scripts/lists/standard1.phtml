@@ -1,0 +1,278 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script language="javascript">
+	var arrFields = <?php print json_encode($this->arrFields); ?>;
+	var strHierarchyCol = "<?php print $this->strHierarchyCol; ?>";
+
+	function disablekeys(evt) {
+		var charCode = (evt.which) ? evt.which : event.keyCode
+		if (
+			charCode != 9 // tab
+			&& charCode != 13 // enter
+			&& charCode != 16 // shift
+			&& charCode != 38 // arrow
+			&& charCode != 39 // shift
+			&& charCode != 40 // shift
+			&& charCode != 37 // shift
+		)
+			return false;
+	}
+
+	function cellkeypress(evt) {
+		var charCode = (evt.which) ? evt.which : event.keyCode
+		if (
+			charCode == 9
+			|| charCode == 13
+		) {
+			list_process();
+			return false;
+		}
+	}
+
+	function lists_gen() {
+		// Load and validate source data
+		var objPrevSlider = $(".slider:last").prev();
+		var objTarget = $(objPrevSlider).find("#<?php print $this->strObjSrc; ?>");
+		var objContainer = $(".slider:last #list_container");
+		if (!objTarget.length)
+		{
+			objContainer.html("<?php print text("Sorry, there was an error"); ?>: VL-S101-A9D9SA");
+			return;
+		}
+		var objSourceInput = objTarget.find("input[type='hidden']");
+		if (!objSourceInput.length)
+		{
+			objContainer.html("<?php print text("Sorry, there was an error"); ?>: VL-S102-SD9DSA");
+			return;
+		}
+		var strSourceData = objSourceInput.val();
+		if (strSourceData.length < 2)
+		{
+			objContainer.html("<?php print text("Sorry, there was an error"); ?>: VL-S103-8S7DD7");
+			return;
+		}
+		try {
+			var arrResponse = jQuery.parseJSON(strSourceData);
+		} catch(e) {
+			objContainer.html("<?php print text("Sorry, there was an error"); ?>: VL-S104-3RR3RE");
+			$.dumper(strSourceData);
+			return;
+		}
+		if (typeof(arrResponse) != "object") {
+			objContainer.html("<?php print text("Sorry, there was an error"); ?>: VL-S105-SDF8BX");
+			return;
+		}
+		var strHTML = "";
+
+		strHTML += '<div id="list_header" class="header">';
+<?php
+		if ($this->boolLineNumbers)
+		{
+?>
+		strHTML += '<div class="header_cell cell_line_number"><span>&nbsp;</span></div>';
+<?php
+		}
+	foreach ($this->arrFields as $intColKey => $strFeildData)
+	{
+		list($strColumn, $strWidth) = preg_split("/ *: */", $strFeildData);
+		$strColumn = ucwords(preg_replace("/_+/", " ", $strColumn));
+?>
+		strHTML += '<div class="header_cell" style="width:<?php print $strWidth; ?>px !important"><span><?php print $strColumn; ?></span></div>';
+<?php
+	}
+?>
+		strHTML += '</div>'; // end of header
+		for (var intItr=0; intItr!=arrResponse.length+1; intItr++)
+		{
+			var boolNewRecord = arrResponse.length <= intItr ? 1 : 0;
+			strHTML += '<div id="row_' + intItr + '" class="list_row">';
+<?php
+	if ($this->boolLineNumbers)
+	{
+?>
+			strHTML += '	<div class="line_cell cell_line_number"><span>' + (intItr + 1) + '.</span></div>';
+<?php
+	}
+?>
+			for (var intItr2 in arrFields)
+			{
+				var arrFieldData = arrFields[intItr2].split(/:/);
+				var strCol = arrFieldData[0];
+				var strWidth = arrFieldData[1];
+				var strCellData = '';
+				if (arrResponse[intItr] && arrResponse[intItr][strCol])
+					strCellData = arrResponse[intItr][strCol];
+				if (strHierarchyCol == strCol)
+					strCellData = intItr;
+				strHTML += '	<div class="line_cell" style="width:' + strWidth + 'px !important"><input ' + (strHierarchyCol == strCol ? "onkeydown='return disablekeys(event)' " : "onkeydown='return cellkeypress(event)' ") + 'style="width:' + (strWidth - 6) + 'px !important" type="text" class="data_input_node" name="cell_' + intItr + '_' + intItr2 + '" value="' + strCellData + '" size="25" minlength="2" /></div>';
+			}
+			if (!boolNewRecord)
+			{
+				strHTML += '	<div class="line_cell"><a onclick="proc_action(\'delete\', ' + intItr + ')" href="#" title="Delete" class="button submit" id="delete">Delete</a></div>';
+				if (intItr) {
+					strHTML += '	<div class="line_cell"><a onclick="proc_action(\'up\', ' + intItr + ')" href="#" title="Move item up" class="button submit" id="up">Up</a></div>';
+				}
+			}
+			strHTML += '</div>';
+		}
+		objContainer.html(strHTML);
+		objContainer.find("input").bind("blur", list_process);
+	}
+
+	function proc_action(strAction, intRow)
+	{
+		var objPrevSlider = $(".slider:last").prev();
+		var objTarget = objPrevSlider.find("#<?php print $this->strObjSrc; ?>");
+		var objSourceInput = objTarget.find("input[type='hidden']");
+		var strSourceData = objSourceInput.val();
+		var arrResult = jQuery.parseJSON(strSourceData);
+		if (strAction == "delete")
+		{
+			if (arrResult[intRow])
+				arrResult.splice(intRow, 1);
+		}
+		else if (strAction == "up")
+		{
+			var objTemp = arrResult[intRow];
+			if (intRow == 1)
+			{
+				if (arrResult[intRow])
+					arrResult.splice(intRow, 1);
+				arrResult.unshift(objTemp);
+			}
+			else
+			{
+				var arrTempResult = arrResult.slice(0,intRow-1);
+				arrTempResult.push(objTemp);
+				if (arrResult[intRow])
+					arrResult.splice(intRow, 1);
+				for (var intItr=intRow-1; intItr<arrResult.length; intItr++)
+				{
+					arrTempResult.push(arrResult[intItr]);
+				}
+				arrResult = arrTempResult;
+			}
+		}
+
+
+
+		var strNewSerializedData = JSON.stringify(arrResult);
+		objSourceInput.val(strNewSerializedData);
+		objSourceInput.trigger('update');
+		lists_gen();
+		list_process();
+		objTarget.find(".title").html(objTarget.find(".title").html().replace(/[0-9]+/, arrResult.length));
+	}
+
+	function list_process()
+	{
+		var arrCells = $(".slider:last form").serializeArray();
+		var arrCellHash = [];
+		var arrDataModel = jQuery.parseJSON(decodeURIComponent($(".slider:last #datamodel").val()));
+		var objPrevSlider = $(".slider:last").prev();
+		var objTarget = objPrevSlider.find("#<?php print $this->strObjSrc; ?>");
+		var objSourceInput = objTarget.find("input[type='hidden']");
+		var strSourceData = objSourceInput.val();
+		var objContainer = $(".slider:last #list_container");
+		for (var intItr in arrCells)
+		{
+			var arrParsedName = arrCells[intItr].name.split(/_/);
+			if (!arrCellHash[arrParsedName[1]])
+				arrCellHash[arrParsedName[1]] = [];
+			arrCellHash[arrParsedName[1]][arrParsedName[2]] = arrCells[intItr];
+		}
+		var intRows = $(".slider:last .list_row").length;
+		var arrResult = jQuery.parseJSON(strSourceData);
+		for (var intItr=0; intItr!=intRows; intItr++)
+		{
+			// new item
+			var arrTemp = arrResult[intItr] ? arrResult[intItr] : arrDataModel;
+			var boolOmitNewRow = 1;
+			for (var intItr2 in arrFields)
+			{
+				var strCellData = arrCellHash[intItr][intItr2];
+				arrTemp[arrFields[intItr2].split(/:/)[0]] = strCellData.value;
+				if (strCellData.value.length && arrFields[intItr2].split(/:/)[0] != strHierarchyCol)
+					boolOmitNewRow = 0;
+			}
+			if (strHierarchyCol)
+				arrTemp[strHierarchyCol] = intItr;
+			if (!boolOmitNewRow)
+				arrResult[intItr] = arrTemp;
+		}
+		//$.dumper(arrResult);
+		// Send parsed data to source
+		var strNewSerializedData = JSON.stringify(arrResult);
+		objSourceInput.val(strNewSerializedData);
+		objSourceInput.trigger('update');
+		if (objContainer.find(".list_row:last input[type='text']:first").val().length)
+		{
+			lists_gen();
+			objContainer.find(".list_row:last input[type='text']:first").focus();
+			objTarget.find(".title").html(objTarget.find(".title").html().replace(/[0-9]+/, arrResult.length));
+		}
+	}
+</script>
+<div class="slider">
+	<input type="hidden" id="datamodel" value='<?php print $this->strDataModel; ?>' />
+	<style type="text/css">
+		.header_cell {
+			display: inline-block !important;
+		}
+		.header_cell span {
+			float:left !important;
+			padding-left:0px !important;
+		}
+		#list_container input {
+			height:21px;
+			font-size: 14pt;
+		}
+		#list_header, .row {
+			display: block;
+		}
+		#list_container span {
+			padding: 5px;
+			float:right;
+			font-size: 12pt;
+		}
+		#list_container .line_cell {
+			display: inline-block !important;
+			height:35px;
+			vertical-align: left;
+		}
+		.cell_line_number {
+			width: 30px;
+			text-align: right;
+		}
+		.header > .cell_line_number {
+			width: 32px !important;
+		}
+		.header > .header_cell {
+			padding-right:2px;
+		}
+	</style>
+	<div class="col_title">
+		<span><?php print $this->strTitle; ?></span>
+	</div>
+
+	<div class="col_content">
+		<div class="module">
+			<div class="module_content">
+				<form onsubmit="return false">
+					<ul>
+						<li>
+							<div id="list_container">
+								Sorry, there was an error: VL-S106-9DS8D8F
+							</div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	lists_gen();
+</script>

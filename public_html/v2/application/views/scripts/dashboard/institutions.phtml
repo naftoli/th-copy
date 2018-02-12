@@ -1,0 +1,89 @@
+<?php include "config.phtml"; ?>
+<?php include "parameters.phtml"; ?>
+<div class="slider">
+	<div class="col_title">
+			<span>Institutions</span>
+	</div>
+	<div class="col_content">
+		
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	if ($this->objRoles->isAllowed('Super Administrator'))
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/institutionshostlist">
+							<div class="icon"></div>
+							<div class="title">View Institutions by Hosts</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/institutionnetworks">
+							<div class="icon"></div>
+							<div class="title">View Institutions by Network</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/institutionslist">
+							<div class="icon"></div>
+							<div class="title">View All Institutions</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/institutionaddhosts">
+							<div class="icon"></div>
+							<div class="title">Add New Institution</div>
+						</a>
+					</li>
+<?php
+	}
+	elseif ($this->objRoles->isAllowed('Host Administrator'))
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/institutionnetworks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Institutions by Network</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/institutionslist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Institutions</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/institutionaddnetworks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New Institution</div>
+						</a>
+					</li>
+<?php
+	}
+	elseif ($this->objRoles->isAllowed('Network Administrator'))
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/institutionslist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Institutions</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/institutionadd">
+							<div class="icon"></div>
+							<div class="title">Add New Institution</div>
+						</a>
+					</li>
+					
+<?php
+}
+?>
+				</ul>
+			</div>
+		</div>
+		
+	</div>
+</div>

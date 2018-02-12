@@ -1,0 +1,74 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objSession = new Zend_Session_Namespace('user_session_data');
+	$objRoles = new Roles();
+	global $arrTemplateTypes;
+?>
+<div class="slider">
+
+	<div class="col_title">
+		<span>Campaigns</span>
+	</div>
+
+	<div class="col_content">
+		<h2>Preloaded Campaigns</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/campaigninstall">
+							<div class="icon"></div>
+							<div class="title">Install / Uninstall Preloaded Campaigns</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/campaignedit">
+							<div class="icon"></div>
+							<div class="title">View Your Installed Campaigns</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h2>Your Campaigns</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/campaignedit">
+							<div class="icon"></div>
+							<div class="title">Create New Campaign</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/campaignedit">
+							<div class="icon"></div>
+							<div class="title">View Your Campaigns</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/campaigns/is_active/0/url/<?php echo dblencode("campaigns/campaignedit/" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title">View Your Deactivated Campaigns</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h2>All Campaigns</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/campaignedit">
+							<div class="icon"></div>
+							<div class="title">View All Campaigns</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+	</div>
+</div>

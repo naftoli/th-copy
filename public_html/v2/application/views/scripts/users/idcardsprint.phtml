@@ -1,0 +1,246 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+
+	function dateToHebrewShortYear($date)
+	{
+		if(is_null($date)) return '';
+		@list($day, $month, $year, $year2) = mb_split(' ', dateToHebrew($date));
+		if(!empty($year2))
+		{
+		  $month = "$month $year";
+		}
+		$year = mb_substr($year, 3);
+		return "$day $month $year";
+	}
+	function dateToHebrew($date)
+	{
+		if(is_null($date))
+			return '';
+		else
+			return mb_convert_encoding(jdtojewish($date, true, CAL_JEWISH_ADD_GERESHAYIM), 'UTF-8', 'ISO-8859-8');
+	}
+	//covert yyyy-mm-dd to julian date
+	function dateToJD($date)
+	{
+		@list($year, $month, $day) = split('-', $date);
+		$jd = cal_to_jd(CAL_GREGORIAN, intval($month), intval($day), intval($year));
+		return $jd ? $jd : NULL;
+	}
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Print Rank Cards</title>
+		<style type="text/css">
+
+.card {
+  width: 3.5in;
+  /*height: 2.1in;*/
+  font-size: 2mm;
+  background-color: #C12222;
+  padding: 0px;
+  vertical-align: top;
+  /*margin: auto;*/
+  display:table-cell;
+}
+
+.card p {
+  margin-top: 0px;
+  padding-top: 0px;
+}
+
+.card .first {
+  padding-left: .04in;
+  padding-top: .02in;
+}
+
+.card .first h2 {
+  text-transform: uppercase;
+  padding: 0px;
+  margin: 0px;
+  font-weight: bold;
+  font-size: 8px;
+  line-height: .125in;
+  padding-bottom: .04in;
+}
+
+.card .logo {
+  vertical-align: bottom;
+}
+
+.card .logo img {
+  height: .75in;
+  padding:15px 0 0 0;
+}
+.card .photo {
+  padding-top: .02in;
+  padding-right: .04in;
+}
+
+.card .photo img {
+  height: 1in;
+  border: .03in solid #808080;
+  display: block;
+  float: right;
+}
+.cards {
+	width:672px;
+	margin:-0.1875in auto 0;
+	font-family:'Myriad Pro',Arial,sans-serif;
+}
+.cards .card {
+	width:3.5in;
+	height:2in;
+	text-align:center;
+	background:#fff;
+
+	width:306px;
+	height:162px;
+	padding:15px;
+	float:left;
+	font-size:24px;
+}
+.cards .card .container {
+	border:2px solid #000;
+	border-radius:10px;
+	-moz-border-radius:10px;
+	height:100%;
+}
+.cards .priveleges {
+	font-size:8px;
+	height:12px;
+}
+.cards .name {
+	height:30px;
+	margin-bottom:-33px;
+	margin-top:3px;
+	padding-left:8px;
+	text-align:left;
+	font-weight:bold;
+	color:#DDD !important;
+}
+.cards .signature {
+	font-size:8px;
+	text-align:right;
+	border-top:1px solid #000;
+	border-bottom:1.5px solid #000;
+	margin:1px 0 2px;
+	padding:2px 5px 0 5px;
+	height: 32px;
+}
+.cards .signature h2 {
+	font-size:16px;
+	margin:0;
+}
+.cards .photo {
+	float:right;
+	margin-right:5px;
+	padding:0;
+}
+.cards .photo img {
+	height:75px;
+	border:none;
+}
+.cards .logo {
+	float:left;
+	margin:-17px 10px;
+}
+.cards .logo img {
+	margin:5px 0;
+	width:55px;
+	height:55px;
+}
+.cards .institution {
+	font-size:8px;
+	margin-top:-15px;
+	text-align:right;
+}
+.cards .institution img {
+	float:right;
+	margin:5px;
+	width:55px;
+	height:55px;
+}
+.cards .institution h2 {
+	font-size:12px;
+	margin:0;
+}
+.cards .institution .box {
+	margin:5px 0 0;
+	float:right;
+}
+.cards .barcode {
+	font-size:9px;
+	border-top:1px solid #fff;
+	margin:1px;
+	padding-top:2px;
+}
+@media print {
+  body {
+    background-color: transparent;
+  }
+}
+.row {
+	display:table;
+}
+.page {
+	page-break-after:always;
+}
+		</style>
+	</head>
+	<body onLoad="print();">
+		<div class="cards id">
+<?php
+	if (isset($this->arrConfigOptions['system']['network_logo']))
+		$strNetworkLogo = $sn . '/imgs/v/src/' . $this->arrConfigOptions['system']['network_logo'];
+	else
+		$strNetworkLogo = $sn . '/imgs/v/src/' . $this->objInstitution->image_id;
+	$arrPages = array_chunk($this->arrUsers, 8);
+	foreach ($arrPages as $arrPage)
+	{
+		print "<div class='page'>";
+		$arrRows = array_chunk($arrPage, 2);
+		foreach ($arrRows as $arrCells)
+		{
+			print "<div class='row'>";
+			foreach ($arrCells as $objCell)
+			{
+				$strFirstName = !empty($objCell->hebrew_first_name) ? $objCell->hebrew_first_name : $objCell->first_name;
+				$strLastName = !empty($objCell->hebrew_last_name) ? $objCell->hebrew_last_name : $objCell->last_name;
+				$strFullName = $strFirstName . " " . $strLastName;
+				if (preg_match('/^.{1,60}\b/s', $strFullName, $match)) {
+					$strFullName=$match[0];
+				}
+?>
+			<div class="card">
+				<div class="container">
+					<div class="priveleges">This card entitles the cardholder to TH privileges</div>
+					<!--div class="name">ID CARD</div-->
+					<div class="signature">Authorized Signature<h2><?php echo $strFullName;?></h2></div>
+					<div class="barcode"><img src="<?php echo $sn; ?>/kiosk/get-barcode-legacy/serial/<?php print $objCell->bar_code; ?>" width="210" height="20" /><br /><?php print $objCell->bar_code; ?></div>
+					<div class="photo" style="float:left; padding-left:8px;overflow:hidden"><img src="<?php echo $sn; ?>/imgs/v/src/<?php echo $objCell->image_id; ?>" style="height:70px;width:auto;" /></div>
+					<!--div class="logo"><img src="<?php print $strNetworkLogo; ?>" /></div-->
+
+					<div class="institution">
+						<img src="<?php echo $sn . '/imgs/v/src/' . $this->objInstitution->image_id; ?>" style="width:50px; height:50px;" width="50" height="50" />
+						<div class="box">
+							<h2><?php print $this->objInstitution->name; ?></h2>
+							<p><?php print $this->objInstitution->city; ?>, <?php print $this->objInstitution->state;?></p>
+						</div>
+					</div>
+				</div>
+			</div>
+<?php
+			}
+			print "</div>";
+		}
+		print "</div>";
+	}
+?>
+		</div>
+	</body>
+</html>

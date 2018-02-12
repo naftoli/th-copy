@@ -1,0 +1,832 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$_sesh = new Zend_Session_Namespace('hebrewschools');
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php print text("Mashpia.com"); ?></title>
+
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.core1.5.1.js" type="text/javascript"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.ui.js" type="text/javascript"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.checkbox.js" type="text/javascript"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/easySlider1.7.js" type="text/javascript"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.scroll.js" type="text/javascript"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.ui.spinner.js" type="text/javascript"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/shadowbox2/shadowbox.js" type="text/javascript"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.keypad.js" type="text/javascript"></script>
+		<script type="text/javascript" src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.cookie.js"></script>
+		<script type="text/javascript" src="<?php echo $sn; ?>/js/back-end/admin/jquery.dump.js"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.tools.tabs.min.js" type="text/javascript"></script>
+
+		<script type="text/javascript">
+		$(document).ready(function()
+		{
+			$('input[type=checkbox]').checkbox();
+			$('.scroll-pane').jScrollPane({showArrows:true, scrollbarWidth: 42, arrowSize: 42});
+		});
+		</script>
+
+		<link href="<?php echo $sn; ?>/css/back-end/kiosk/jquery.spinner.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $sn; ?>/js/back-end/kiosk/shadowbox2/shadowbox.css" rel="stylesheet" type="text/css" />
+
+        <link rel="stylesheet" type="text/css" href="<?php echo $sn; ?>/css/back-end/kiosk/styles_reset.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $sn; ?>/css/back-end/kiosk/styles_kiosk.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $sn; ?>/css/back-end/kiosk/reset.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $sn; ?>/css/back-end/kiosk/style.css">
+
+        <link rel="stylesheet" type="text/css" href="<?php echo $sn; ?>/css/back-end/kiosk/jquery.checkbox.css" />
+		<link href="<?php echo $sn; ?>/css/back-end/kiosk/jquery.scroll.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $sn; ?>/css/back-end/kiosk/jquery.keypad.css" rel="stylesheet" type="text/css" />
+
+		<STYLE type="text/css">
+		.auction {text-align:center;}
+		#auction_container { background: url(<?php print $sn; ?>/images/back-end/kiosk/auction_bg_boxes.png) no-repeat; margin:10px 20px 0 22px; width:982px; height:488px;}
+
+		.prices, .categories { margin-bottom:10px; float:left; }
+		.price, .category { width:200px; height:48px; /*background:#CCC;*/ margin-top:10px;}
+		.pane.prizes { float:left; /*background:#CCC;*/ width:500px; height:445px; margin:-20px 0 10px 30px;}
+
+		#tabs { float:left; width:748px; margin:7px; /*padding:5px; background:#999; margin:10px 30px;*/}
+
+		.tabs {  margin:5px 0px 0px; width:200px; float:left;overflow:hidden; font-size:.75em;}
+
+		.tabs_main { width:190px; margin-top:3px; margin-left:8px;}
+		.tabs_main li{ float:left; font-size:.5em; /*margin-left:-5px;width:100px;*/ line-height:27px; }
+		.tabs_main a { width:93px; height:27px; display:block; border-bottom:2px solid #b3d3c1;}
+		.tabs_main a.current { background: url(<?php print $sn; ?>/images/back-end/kiosk/auction_tabs.png) no-repeat; border:none; height:29px;}
+		.tabs_main a.tab_cat { background-position:right;}
+
+		.pane_items { height:445px; }
+		.pane_item { width:100px; height:160px; margin:2px 0 0 2px; padding: 5px; font-size:.5em; font-weight:normal; overflow: hidden;}
+		.pane_item, .cart_item { cursor:pointer; }
+		.pane_item .badge { position:absolute; top:-1px; right:-3px; font-size:.95em; background:url(<?php print $sn; ?>/images/back-end/kiosk/cart_badge.png) no-repeat ; width:28px; height:28px; text-align:center; text-shadow:0 -1px 0 #5f801d; color:#709926; line-height:26px; padding-left:1px;}
+		.pane_item_image { width:100px; height:108px; background:url(<?php print $sn; ?>/images/back-end/kiosk/shadow_100.png) 0px 100px no-repeat; }
+		.pane_item_image img, .cart_item_image img, .prize_image img { display: block; background-color: white; }
+		.pane_item_title { }
+
+		.jScrollPaneContainer { margin-top:0;}
+
+		.overlay {
+			position: relative;
+			width:640px;
+			min-height:300px;
+			padding: 10px;
+			background-color:#333;
+			color: white;
+			background-image:url(<?php print $sn; ?>/images/back-end/kiosk/Camouflage-Background-Green.jpg);
+			background-position:50% 50%;
+			border:1px solid #666;
+
+			/* CSS3 styling for latest browsers*/
+			box-shadow:0 0 90px 5px #000;
+			-moz-box-shadow:0 0 90px 5px #000;
+			-webkit-box-shadow: 0 0 90px #000;
+			 display: block;
+		}
+		.contentWrap { color:#EEEEEE; text-shadow:0 -1px 0 #000000;}
+
+		.prize_overlay .pane_title { border-bottom:1px dotted #454545; }
+		.prize_text, .prize_bottom { margin-left: 310px; width: 330px; }
+		.prize_info { font-size:.8em; font-weight:normal; margin-top:5px; text-align:left;}
+		.prize_price { text-align:left; float: left; /*margin-top:10px;*/}
+		.prize_image { float:left;}
+		.prize_image img { display: block; }
+		.prize_bottom { position: absolute; bottom: 10px; font-size:.8em; border-top:1px solid #454545; padding-top:5px; }
+		.prize_bottom .input {float:right;}
+		.button_small {clear:right; text-align: right;}
+		.prize_price_total, .prize_price_left { font-size:.75em;}
+
+		.cart { float:left; width:200px; margin-left:9px; margin-top:20px; /*background:#CCC;*/ font-size:.8em;}
+		.cart_title { position:relative; margin-bottom:8px;}
+		.cart_items { margin: 0 5px; height:415px; font-size:.8em; font-weight:normal; text-align:left;}
+		.cart_items .cart_empty {  text-align:center;}
+		.cart_item { /*border-bottom:1px dotted #999;*/ height:53px; width:48px; margin-left:11px; margin-top:11px; float:left;background:url(<?php print $sn; ?>/images/back-end/kiosk/shadow_48.png) 0px 48px no-repeat;}
+		.cart_item_image {  position:relative;}
+		.cart_item .badge { position:absolute; top:-8px; right:-8px; font-size:.7em; background:url(<?php print $sn; ?>/images/back-end/kiosk/cart_badge.png) no-repeat ; width:28px; height:28px; text-align:center; text-shadow:0 -1px 0 #5f801d; color:#709926; line-height:26px; padding-left:1px;}
+		.cart_item_text {}
+		.cart_item_text div { margin-top:3px;}
+		.cart_item_name {}
+		.cart_item_price {font-size:.8em;}
+		.cart_total {}
+		.cart_checkout {
+
+		}
+
+		.button_small div, .tabs li, .button_small input {background:url(<?php print $sn; ?>/images/back-end/kiosk/buttons_small_bg.png) no-repeat top; width:142px; height:54px; font-size:.8em; float:left;}
+		.button_small div, .button_small input { float:none;}
+		.button_small div:hover, .tabs li:hover {background-position:bottom;}
+		.button_small div a, .tabs li a { width:100%; height:100%; padding-top:17px;}
+		.button_small input { border: none; color: white; cursor: pointer; }
+
+		.tabs .prices { margin-left:23px; height:425px;}
+		.tabs .prices li {background:url(<?php print $sn; ?>/images/back-end/kiosk/buttons_tiny_bg.png) no-repeat top; width:79px; }
+		.tabs .prices li:hover {background-position:bottom; }
+		.tabs .categories .scroll-pane { margin-left:5px; width:190px; height:425px; }
+		.tabs .categories .scroll-pane li {  }
+		.tabs .categories li { float:none; margin:0 auto -10px; }
+		.tabs li { margin-bottom:-10px; margin-top:0;}
+
+		.bottom { margin-left:100px; margin-top:20px;}
+		/*.ui-tabs .ui-tabs-hide {display:none !important;}*/
+		.cart_balance { float:left; margin-top:12px; margin-left:10px;}
+		.cart_pop_bottom { font-size:.8em; border-top:1px solid #454545; padding:0 5px; }
+
+		#checkout_overlay { }
+		#checkout_overlay .pane_title { border-bottom:1px dotted #454545; font-size:.85em; margin:10px; padding-bottom:5px;}
+		#checkout_overlay .pane_text { font-size:.75em; padding:0 80px;}
+		.prize_size{
+			padding:4px;
+		}
+		#backdrop {
+			position: absolute;
+			display: none;
+			background-color: black;
+			z-index: 49
+		}
+		</STYLE>
+
+		<script>
+		// u: <?php print $_sesh->user_id; ?> i: <?php print $_sesh->institution_id; ?>
+
+		function formatNumber( number, decimals, dec_point, thousands_sep ) {
+			var n = number, c = isNaN(decimals = Math.abs(decimals)) ? 0 : decimals;
+			var d = dec_point == undefined ? "." : dec_point;
+			var t = thousands_sep == undefined ? "," : thousands_sep, s = n < 0 ? "-" : "";
+			var i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
+
+			return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+		}
+
+		// Display the points the user has including the deductions from the cart
+		function get_available_points(intExculding) {
+			var intPoints = intUserPointsStatic;
+			for (intCartItem in arrCartItems)
+			{
+				var intItemPrizeId = arrCartItems[intCartItem]["prize_id"];
+				if (intItemPrizeId == intExculding)
+					continue;
+				intPoints -= arrPrizeDetails[intItemPrizeId]["objPrize"]["points"] * arrCartItems[intCartItem]["user_quantity"];
+			}
+			return intPoints;
+		}
+
+		// Display the points the user has including the deductions from the cart
+		function set_available_points(intExculding) {
+			arrCartItems = user_cart_prizes();
+			store_cart_set_cookie(arrCartItems);
+			var intPoints = get_available_points(intExculding);
+			intUserPoints = intPoints;
+			if (intPoints < 0)
+				$("#current_balance").css({
+					"color" : "#FF0000"
+				});
+			else
+				$("#current_balance").css({
+					"color" : "#FFF"
+				})
+			$("#current_balance").html(formatNumber(intPoints));
+		}
+
+		// Store the cart items in the cookies
+		function store_cart_set_cookie(arrCartItemsTemp) {
+			$.cookie("hebrewschools_store_cart", JSON.stringify(arrCartItemsTemp), {
+				expires: 1,
+				path: '/',
+				domain: '<?php print parse_url(WEB_ROOT, PHP_URL_HOST); ?>'
+			});
+		}
+
+		function open_shadow_message(strTitle, strContent) {
+			Shadowbox.open({
+				content: "<?php print $sn; ?>/kiosk01/shadowpoptemplate/title/" + encodeURIComponent(strTitle) + "/msg/" + encodeURIComponent(encodeURIComponent(strContent)),
+				player: 'iframe',
+				width: 780,
+				height: 440
+			});
+			return false;
+		}
+
+		// Load the cart prizes into an array
+		function user_cart_prizes() {
+			var arrCartObjs = $(".cart_item");
+			var arrResult = {};
+			for (var intCartItem=0;intCartItem!=arrCartObjs.length;intCartItem++)
+			{
+				var intQuantity = $(arrCartObjs[intCartItem]).find(".cart_quantity").val();
+				var intCartPrize = $(arrCartObjs[intCartItem]).find(".prize_id").val();
+				var strPrizeSize = $(arrCartObjs[intCartItem]).find(".prize_size").val();
+				if (intQuantity && intQuantity > 0)
+				{
+					arrResult["prize_id_" + intCartPrize] = {};
+					arrResult["prize_id_" + intCartPrize]["user_quantity"] = intQuantity;
+					arrResult["prize_id_" + intCartPrize]["prize_id"] = intCartPrize;
+					arrResult["prize_id_" + intCartPrize]["prize_size"] = strPrizeSize;
+				}
+			}
+			return arrResult;
+		}
+
+		function store_update_prizes() {
+			set_available_points();
+			if (Object.keys(arrCartItems).length) {
+				$(".cart_bottom_empty").css({
+					"display" : "none"
+				});
+				$(".cart_bottom_toggle_btns").delay(700).queue(function () {
+					$(this).dequeue().fadeIn();
+				});
+			}
+			else
+			{
+				$(".cart_bottom_toggle_btns").fadeOut();
+				$(".cart_bottom_empty").delay(600).queue(function () {
+					$(this).dequeue().fadeIn();
+				});
+			}
+		}
+
+		Shadowbox.init({
+			skipSetup: true,
+			players:    ["iframe"],
+			initialWidth:320,
+			initialHeight:30,
+			overlayOpacity:0.9
+		});
+
+		var intPrize = 0;
+		var intUserPointsStatic = <?php print $this->intLocalPoints; ?>;
+		var intUserPoints = <?php print $this->intLocalPoints; ?>;
+		var arrPrizeDetails = <?php print json_encode($this->arrPrizeDetails); ?>;
+		var arrCartItems = {};
+
+		$(document).ready(function() {
+			// Plugins
+			$.extend($.fn.jScrollPane.defaults, {showArrows:true, scrollbarWidth: 42, arrowSize: 42});
+			$('.scroll-pane').jScrollPane();
+			$('.keypad').keypad({buttonImage: '<?php echo $sn; ?>/images/front-end/kiosk/keypad_btn.jpg'});
+
+			store_update_prizes();
+
+			// Point category scollers
+			var itemSize = 44;
+			var intPointsCount = <?php print count($this->arrDistinctPoints); ?>;
+			var intNumberOfRows = Math.ceil(intPointsCount / 2) - 8;
+			if (intNumberOfRows < 0)
+				intNumberOfRows = 0;
+			var intMaxHeight = -(intNumberOfRows * itemSize);
+			if (intMaxHeight >= 0)
+			{
+				$("#btn_box").css("display", "none");
+			}
+			var intCurrentHeight = 0;
+			$("a#button_dn").click(function () {
+				var currentTop = intCurrentHeight - (itemSize * 2);
+				if (intCurrentHeight > intMaxHeight) {
+					$("#cat_box").animate({"top":currentTop});
+					intCurrentHeight = currentTop;
+				}
+			});
+			$("a#button_up").click(function () {
+				var currentTop = intCurrentHeight + (itemSize * 2);
+				if (intCurrentHeight != 0) {
+					$("#cat_box").animate({"top":currentTop});
+					intCurrentHeight = currentTop;
+				}
+			});
+
+			// Display the cart items in the checkout overlay //
+			$('#checkout_button').bind('click', function(event) {
+				$('#backdrop').css({
+					"top" : 0,
+					"left" : 0,
+					"height" : $('body').height(),
+					"width" : $('body').width(),
+				}).fadeTo('normal', 0.7);
+				$(".overlay").css({
+					"height":"400px"
+				}).fadeIn();
+				$("#checkout_overlay").fadeIn();
+				$('#overlay_parent').css({
+					"top" : Math.max(0, (($('body').height()-430)/2)) + 'px',
+					"display" : "block"
+				});
+			});
+
+			// Open prize view if the cart item is clicked
+			$('.cart_item').bind('click', function(event) {
+				$(".show_overlay #prize_" + $(this).find(".prize_id").val()).closest(".show_overlay").trigger("click");
+			});
+
+			// Open prize view
+			$('.show_overlay').bind('click', function(event) {
+				intPrize = $(this).find(".prize_id").val();
+				var intQuantity = $(this).find(".cart_quantity").val();
+				//alert(intQuantity);
+				var intPrizeCost = arrPrizeDetails[intPrize]["objPrize"]["points"];
+				$(this).find("#user_balance").html(intUserPoints - (intPrizeCost * intQuantity));
+				$("#prize_view_" + intPrize).fadeIn();
+				$('#overlay_parent').css({
+					"top" : Math.max(0, (($('body').height()-430)/2)) + 'px',
+					"display" : "block"
+				});
+				$(".overlay").css({
+						"height":"300px"
+					}).fadeIn();
+				$('#backdrop').css({
+					"top" : 0,
+					"left" : 0,
+					"height" : $('body').height(),
+					"width" : $('body').width(),
+				}).fadeTo('normal', 0.7);
+				$("#prize_view_" + intPrize).find(".quantity").focus().select().trigger("keyup");
+			});
+
+			// Close overlay
+			$('#close_overlay').bind('click', function(event) {
+				store_update_prizes();
+				$('#backdrop').fadeTo('normal', 0).queue(function () {
+					$(this).dequeue().css("display", "none");
+				});
+				$(".overlay").fadeOut();
+				if (intPrize)
+				{
+					$("#prize_view_" + intPrize).fadeOut();
+					$("#overlay_parent").fadeOut();
+					intPrize = 0;
+				}
+				else
+				{
+					$("#checkout_overlay").fadeOut();
+				}
+			});
+			// Prize view *add to cart*
+			$(".overlay_form").submit(function (e) {
+				e.preventDefault();
+				var intQuantity = parseInt($("#prize_view_" + intPrize).find(".quantity").val());
+				if (intQuantity > 0)
+				{
+					// Add cart item
+					$("#cart_item_" + intPrize).delay(700).queue(function () {
+						$(this).dequeue().fadeIn();
+					});
+
+					$("#prize_tm_" + intPrize).find(".badge").html(intQuantity).fadeIn();
+					$("#cart_item_" + intPrize).find(".cart_quantity").val(intQuantity);
+					$("#cart_item_" + intPrize).find(".prize_size").val($("#prize_view_" + intPrize).find(".prize_size").val());
+					$("#cart_item_" + intPrize).find(".badge").html(intQuantity).fadeIn();
+					$("#pane_item_" + intPrize).find(".badge").html(intQuantity);
+					$("#pane_item_" + intPrize).css({
+						"display" : "block"
+					});
+				}
+				else
+				{
+					// Remove cart item
+					$("#pane_item_" + intPrize).css({
+						"display" : "none"
+					});
+					$("#cart_item_" + intPrize).find(".badge").html(0);
+					$("#cart_item_" + intPrize).find(".cart_quantity").val(0);
+					$("#prize_tm_" + intPrize).find(".badge").html(0).delay(350).queue(function () {
+						$(this).dequeue().fadeOut();
+					});
+					$("#cart_item_" + intPrize).delay(800).queue(function () {
+						$(this).dequeue().fadeOut().queue(function () {
+							$(this).dequeue();
+						});
+
+					});
+				}
+				$('#close_overlay').trigger("click");
+				$("#keypad-div").fadeOut();
+				store_update_prizes();
+			});
+
+			// Prize view keypad keypress
+			$("#overlay_parent form .quantity").bind("keypress", function (e) {
+				var charCode = (e.which) ? e.which : e.keyCode;
+				if (charCode == 13)
+					return true;
+				if (charCode != 8 && (charCode < 48 || charCode > 57))
+				{
+					return false;
+				}
+				return true;
+			});
+
+			// Prize view keypad keyup
+			$("#overlay_parent form .quantity").bind("keyup", function (e) {
+				var objTop = $(this).closest(".prize_overlay");
+				var intPrize = objTop.find(".prize_id").val();
+				var intPoints = get_available_points(intPrize);
+				var intQuantity = $(this).val();
+				// Update stats
+				if (objTop.find(".one_per_user").val() == "1" && intQuantity > 1)
+				{
+					intQuantity = 1;
+					$(this).val(1).select().focus();
+					$(".one_per_user_text").animate({"color": "red"},"fast").queue(function () {
+						$(this).dequeue().animate({"color": "white"}, "fast");
+					});
+				}
+				objTop.find("#prize_cost_sum").html(intQuantity * parseInt(objTop.find("#prize_miles").html()));
+				objTop.find("#user_balance").html(intPoints - parseInt(objTop.find("#prize_cost_sum").html()));
+			});
+
+			// Empty cart
+			$("#empty_cart").bind("click", function () {
+				$.cookie("hebrewschools_store_cart", null, {
+					expires: 1,
+					path: '/',
+					domain: '<?php print parse_url(WEB_ROOT, PHP_URL_HOST); ?>'
+				});
+				$(".prize_overlay > .pane_item").css({
+					"display" : "none"
+				});
+				$(".cart_item > .badge").html(0);
+				$(".cart_item > .cart_quantity").val(0);
+				$(".show_overlay > .badge").html(0).fadeOut().queue(function () {
+					$(this).dequeue().css({
+						"display" : "none"
+					});
+					store_update_prizes();
+				});
+				$(".cart_item").fadeOut();
+			});
+
+			// Cart buy now
+			$('#cart_buynow').bind('click', function () {
+				$.ajax({
+					type : "POST",
+					cache : false,
+					url : '<?php print $sn . "/kiosk01/store/buynow/true" . $strParamPath; ?>',
+					dataType : "text",
+					data: "arrCartItems=" + encodeURIComponent(JSON.stringify(arrCartItems)),
+					success : function(strResponse) {
+						try {
+							var arrResponse = jQuery.parseJSON(strResponse);
+						} catch(e) {
+							$(".slider:last #processing_status").html('<?php print text("Sorry, there was an error"); ?>: VU-E101-3RR3RE');
+							alert(strResponse);
+							return;
+						}
+						if (typeof(arrResponse) != "object") {
+							$(".slider:last #processing_status").html('<?php print text("Sorry, there was an error"); ?>: VU-E102-SDF8BX');
+							return;
+						} else {
+							if (arrResponse["error"]) {
+								if (typeof(arrResponse["error"]) == "object")
+								{
+									for (var strKey in arrResponse["error"])
+									{
+										var intPrize = strKey.split(/_/).pop();
+										var strMsg = "<?php print text("There was an error!"); ?><br /><?php print text("Prize"); ?> \"" + arrPrizeDetails[intPrize]["objPrize"]["prize_name"] + "\": " + arrResponse["error"][strKey].join(" ") + " <?php print text("Please remove this prize to continue."); ?>";
+										open_shadow_message('<?php print text("Unsuccessful!"); ?>', strMsg);
+									}
+								}
+								else
+								{
+									open_shadow_message('<?php print text("Unsuccessful!"); ?>', arrResponse["error"]);
+								}
+							} else if (arrResponse["success"] == "true") {
+								$("#empty_cart").trigger("click");
+								$("#close_overlay").trigger("click");
+								var strMsg = '<?php print text("Your order was successful! Please choose one of the following options."); ?><br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<ul class="buttons button_icons" style="margin-left:40px">';
+								strMsg += '<li><a href="#" onclick="window.parent.location.href = \'<?php print $sn; ?>/kiosk01/store\';" class="icon_shop popout_btn"><?php print text("Store"); ?></a></li>';
+								strMsg += '<li><a href="#" onclick="window.parent.location.href = \'<?php print $sn; ?>/kiosk01/profile\';" class="icon_profile popout_btn"><?php print text("Home"); ?></a></li></ul>';
+								open_shadow_message('<?php print text("Order Successful!"); ?>', strMsg);
+								intUserPoints = intUserPointsStatic = arrResponse["intLocalPoints"];
+							} else {
+								alert("<?php print text("Sorry, there was an error"); ?>: VH-S103-SD89FD");
+								return;
+							}
+						}
+					}
+				});
+			});
+		});
+		</script>
+	</HEAD>
+	<body class="lgreen" id="main">
+
+<!-- OVERLAY START -->
+
+		<div id="overlay_parent" style="position:fixed; z-index:50; width:100%; display:none;">
+			<div class="overlay" id="prizes_overlay" style="margin: auto;">
+				<div class="close" id="close_overlay" style="z-index:1000"></div>
+				<form class="overlay_form">
+
+<?php
+	foreach ($this->arrPrizes as $objPrize)
+	{
+		$intCount = 0;
+		if (isset($this->arrStoreCart["prize_id_" . $objPrize->prize_id]))
+			$intCount = $this->arrStoreCart["prize_id_" . $objPrize->prize_id]->user_quantity;
+?>
+
+					<div class="prize_overlay" id="prize_view_<?php print  $objPrize->prize_id; ?>" style="display: none;">
+						<input type="hidden" class="prize_id" value="<?php print  $objPrize->prize_id; ?>">
+						<input type="hidden" class="one_per_user" value="<?php print  $objPrize->one_per_user; ?>">
+						<div class="prize_image">
+							<img src="<?php print $sn; ?>/imgs/v/src/<?php print $objPrize->image_id ? $objPrize->image_id : $this->objInstitution->image_id; ?>" width="300" height="300"  alt="">
+						</div>
+
+						<div class="prize_text">
+
+							<div class="pane_title" id="prize_name"><?php print text($objPrize->prize_name); ?>
+							</div>
+
+							<div class="prize_info"><?php print nl2br(stripcslashes(fixspecialchars(htmlentities(urldecode($objPrize->prize_description))))); ?></div>
+						</div>
+<?php
+		// one per user and user already has one
+		if ($objPrize->one_per_user == "1" && isset($this->arrOnePerUserUserPrizes[$objPrize->prize_id]))
+		{
+?>
+						<div class="prize_bottom" id="prize_bottom">
+							<div class="prize_price">
+								<?php print text("This prize is limited to one per student."); ?> <?php print text("You've already " . strtolower($this->arrOnePerUserUserPrizes[$objPrize->prize_id]->status) . " this prize."); ?>
+							</div>
+						</div>
+<?php
+		}
+		else
+		{
+?>
+						<div class="prize_bottom" id="prize_bottom">
+							<div class="prize_price">
+								<div class="prize_price_left"><?php print text("In Stock"); ?>:
+									<span><?php print $objPrize->prize_count; ?></span>
+								</div>
+								<div class="prize_price_miles"><?php print text("Miles Each"); ?>:
+									<span id="prize_miles"><?php print  $objPrize->points; ?></span>
+								</div>
+								<div class="prize_price_left"><?php print text("Total Cost"); ?>:
+									<span id="prize_cost_sum">0</span>
+								</div>
+								<div class="prize_price_left"><?php print text("Miles Left"); ?>:
+									<span id="user_balance"><?php print $this->intLocalPoints; ?></span>
+								</div>
+<?php
+			if ($objPrize->one_per_user == "1")
+			{
+?>
+								<div class="prize_price_left one_per_user_text"><?php print text("One Per User"); ?></div>
+<?php
+			}
+?>
+							</div>
+<?php
+			if (isset($this->arrPrizeSizes[$objPrize->prize_id]) && count($this->arrPrizeSizes[$objPrize->prize_id]))
+			{
+?>
+							<div class="button_small">
+								<table style="float:right">
+									<tr>
+										<td><?php print text("Size"); ?>:&nbsp;</td>
+										<td>
+											<select class="prize_size">
+<?php
+				foreach ($this->arrPrizeSizes[$objPrize->prize_id] as $objPrizeSize)
+				{
+					print "<option value='" . $objPrizeSize->prize_size . "'>" . $objPrizeSize->prize_size . "</option>";
+				}
+?>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</div>
+<?php
+			}
+?>
+							<div class="input">
+								<input type="text" class="prize_qty keypad quantity" value="<?php print $intCount; ?>" autocomplete="off" />
+							</div>
+							<div class="button_small">
+								<input name="add_to_cart" class="add_to_cart" type="submit" value="<?php print text("Add to Cart"); ?>" />
+							</div>
+						</div>
+<?php
+		}
+?>
+					</div>
+<?php
+	}
+?>
+					<div class="prize_overlay" id="checkout_overlay" style="display: none;">
+
+<?php
+
+	foreach ($this->arrPrizes as $objPrize)
+	{
+		$intCount = 0;
+		if (isset($this->arrStoreCart["prize_id_" . $objPrize->prize_id]))
+			$intCount = $this->arrStoreCart["prize_id_" . $objPrize->prize_id]->user_quantity;
+?>
+						<div class="pane_item" id="pane_item_<?php print $objPrize->prize_id; ?>" style='display:<?php print $intCount ? "block" : "none"; ?>;'>
+							<div class="pane_item_image">
+								<img src="<?php print $sn; ?>/imgs/v/src/<?php print $objPrize->image_id ? $objPrize->image_id : $this->objInstitution->image_id; ?>" width="100" height="100"  alt="">
+								<div class="badge"><?php print $intCount; ?></div>
+							</div>
+							<div class="pane_item_title">
+								<?php print text($objPrize->prize_name); ?>
+							</div>
+						</div>
+<?php
+	}
+?>
+						<div class="clear"></div>
+
+						<div class="button_small" style="position:absolute;bottom:10px">
+							<div>
+								<a href="#" class="cart_buynow" id="cart_buynow"><?php print text("Buy Now"); ?></a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div id="backdrop"></div>
+
+<!-- OVERLAY END -->
+
+		<div id="wrapper">
+			<div id="header">
+				<div class="org">
+					<div class="nav">
+						<ul>
+							<li class="icon_back"><a href="<?php print $sn; ?>/kiosk01/profile"><?php print text("Back"); ?></a></li>
+							<li class="icon_home"><a href="<?php print $sn; ?>/kiosk01/profile"><?php print text("Home"); ?></a></li>
+							<li class="icon_logout"><a href="<?php print $sn; ?>/kiosk01/index"><?php print text("Logout"); ?></a></li>
+						</ul>
+					</div>
+					<div class="org_photo">
+<?php
+	print "<img src='" . $sn . "/imgs/v/src/" . $this->objInstitution->image_id . "' WIDTH='100' HEIGHT='100' />";
+?>
+					</div>
+					<?php print text("Institution"); ?>: <?php print text($this->objInstitution->name); ?><br />
+					<?php print text("Name"); ?>: <?php print $this->objUser->first_name . " " . $this->objUser->last_name; ?><br />
+					<?php print text("Available Miles"); ?>: <span id="current_balance"><?php print text("Loading..."); ?></span>
+				</div>
+			</div>
+			<div id="main" class="auction">
+				<div id="page_title">
+					<?php print text("Store"); ?>
+				</div>
+				<div id="auction_container">
+					<div id="tabs">
+						<ul class="tabs_main">
+							<li>
+								<a class="tab_price" href="#"><?php print text("Prices"); ?></a>
+							</li>
+						</ul>
+						<div class="clear"></div>
+						<div class="tabs_pane">
+							<div class="tabs" style="height:360px;">
+								<ul class="prices tab" style="position:relative;" id="cat_box">
+<?php
+	foreach ($this->arrDistinctPoints as $intPrice => $intTotal)
+	{
+?>
+									<li class='price'>
+										<a href='#' onClick="$('.prizes .pane_items>div').hide(); $('#prize_points_<?php print $intPrice; ?>').show().parent().jScrollPane(); $('#overlay_parent input[name=prize_points]').val('<?php print $intPrice; ?>'); return false;"><?php print $intPrice; ?></a>
+									</li>
+<?php
+	}
+?>
+								</ul>
+							</div> <!-- tabs -->
+							<div style="position:absolute;left:37px;top:596px" id="btn_box"><a id="button_up" style="display:inline-block"><?php print text("Up"); ?></a><a id="button_dn" style="display:inline-block"><?php print text("Down"); ?></a></div>
+							<div class="pane prizes">
+								<div class="pane_items scroll-pane">
+
+									<!-- set up all hidden layers to be shown when price range picker is clicked -->
+<?php
+	$index = 0;
+	foreach ($this->arrDistinctPoints as $intPrice => $intTotal) {
+		$index++;
+?>
+
+									<div id='prize_points_<?php print $intPrice; ?>' style='display:<?php print ($index == 1) ? "block" : "none"; ?>;'>
+										<div class='pane_title'><?php print text("Prizes for"); ?> <?php print $intPrice; ?> <?php print text("Miles"); ?></div>
+
+<?php
+		foreach ($this->arrGroupedPrizes[$intPrice] as $objPrize)
+		{
+			$intCount = 0;
+			if (isset($this->arrStoreCart["prize_id_" . $objPrize->prize_id]))
+				$intCount = $this->arrStoreCart["prize_id_" . $objPrize->prize_id]->user_quantity;
+?>
+										<DIV id="prize_tm_<?php print $objPrize->prize_id; ?>">
+											<div class='pane_item show_overlay'>
+<?php
+			print "<div class='badge' style='" . (!$intCount ? "display:none;" : "") . "'>" . $intCount . "</div>";
+?>
+												<div class='pane_item_image' id="prize_<?php print $objPrize->prize_id; ?>">
+													<input type="hidden" class="prize_id" value="<?php print $objPrize->prize_id; ?>" />
+													<img src="<?php print $sn; ?>/imgs/v/src/<?php print $objPrize->image_id ? $objPrize->image_id : $this->objInstitution->image_id; ?>" width="100" height="100"  alt="">
+												</div>
+												<div class='pane_item_title'><?php print text($objPrize->prize_name); ?></div>
+											</div>
+										</DIV>
+<?php
+		}
+?>
+									</div>
+<?php
+	}
+?>
+
+								</div> <!-- pane_items scroll-pane -->
+							</div> <!-- pane prizes -->
+						</div> <!-- tabs_pane -->
+					</div> <!-- tabs -->
+					<div class="cart" id="cart_div">
+						<div class="cart_title">
+							<?php print text("Your Cart"); ?>
+						</div>
+
+						<div class="cart_items scroll-pane">
+							<div id="cart_items_div" style="margin-left:25px;">
+<?php
+	foreach ($this->arrPrizes as $objPrize)
+	{
+		$intCount = 0;
+		if (isset($this->arrStoreCart["prize_id_" . $objPrize->prize_id]))
+			$intCount = $this->arrStoreCart["prize_id_" . $objPrize->prize_id]->user_quantity;
+?>
+								<div class="cart_item" id="cart_item_<?php print $objPrize->prize_id; ?>" style="<?php print !$intCount ? "display:none;" : ""; ?>">
+									<input type="hidden" class="cart_quantity" name="cart_quantity_<?php print $objPrize->prize_id; ?>" value="<?php print $intCount; ?>" />
+									<input type="hidden" class="prize_id" value="<?php print $objPrize->prize_id; ?>" />
+									<input type="hidden" class="prize_size" value="<?php print @$this->arrStoreCart["prize_id_" . $objPrize->prize_id]->prize_size; ?>" />
+									<div class="cart_item_image" id="cart_item_image_<?php print $objPrize->prize_name; ?>">
+										<img src="<?php print $sn; ?>/imgs/v/src/<?php print $objPrize->image_id ? $objPrize->image_id : $this->objInstitution->image_id; ?>" width="48" height="48" alt="" />
+										<div class="badge" style='<?php print (!$intCount ? "display:none;" : ""); ?>'><?php print $intCount; ?></div>
+									</div>
+								</div>
+<?php
+	}
+?>
+							</div>
+
+							<div class="clear" id="clear"></div>
+
+							<div class="cart_bottom_empty" style="<?php print count($this->arrStoreCart) ? "display:none" : ""; ?>">
+								<div style="padding-top:10px;text-align: center">
+									<?php print text("Empty"); ?>
+								</div>
+							</div>
+
+							<div class="cart_bottom" style="position:absolute;bottom:30px">
+								<div style="padding-left:20px">
+									<div class="cart_bottom_toggle_btns" style="<?php print !count($this->arrStoreCart) ? "display:none" : ""; ?>">
+										<div class="cart_checkout button_small">
+											<div>
+												<a href="#" id="checkout_button"><?php print text("Checkout"); ?></a>
+											</div>
+										</div>
+										<div class="cart_checkout button_small">
+											<div>
+												<a href="#" id="empty_cart"><?php print text("Empty Cart"); ?></a>
+											</div>
+										</div>
+									</div>
+<?php
+	if ($this->arrConfigOptions["kiosk"]["printing"])
+	{
+?>
+									<div class="cart_checkout button_small">
+										<div>
+											<a href="<?php print $sn; ?>/kiosk01/storewithdraw"><?php print text("Withdraw"); ?></a>
+										</div>
+									</div>
+<?php
+	}
+?>
+								</div>
+							</div>
+
+					</div> <!-- cart -->
+
+					<div class="clear">
+					</div>
+
+				</div> <!-- auction_container -->
+
+			</div> <!-- main -->
+
+			<div id="footer">
+				<div class="footer_logo"></div>
+				<div class="footer_logout"></div>
+			</div>
+
+		</div> <!-- wrapper -->
+
+	</body>
+</html>

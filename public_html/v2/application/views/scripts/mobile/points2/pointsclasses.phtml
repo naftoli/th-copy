@@ -1,0 +1,33 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$strUrl = "";
+?>
+<div class="slider">
+	<div class="col_title">
+			<span>Classes</span>
+	</div>
+	<div class="col_content">
+		
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	foreach ($this->arrClasses as $objClass)
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/points/pointscampaigns<?php echo $strParamPath . "/class_id/" . $objClass->class_id; ?>">
+							<div class="icon"></div>
+							<div class="title">Grade: <?php echo $objClass->grade; ?> <?php echo $objClass->sub; ?> - <?php echo $objClass->class_name; ?></div>
+						</a>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+		
+	</div>
+</div>

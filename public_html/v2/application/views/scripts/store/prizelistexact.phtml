@@ -1,0 +1,59 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider" id="slider_prizeview">
+	<div class="col_title">
+		<span>Prize List</span>
+	</div>
+	<div class="col_content">
+<?php
+	include("uimods/sliderefresh.phtml");
+?>
+<?php
+	if (!count($this->arrPrizes))
+	{
+?>
+		<div class="module" style="padding:5px;">There are no prizes available to view.</div>
+<?php
+	}
+	else
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+		foreach ($this->arrPrizes as $arrResult)
+		{
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/store/prize/prize_id/" . $arrResult->prize_id . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">
+<?php
+			print $arrResult->prize_name;
+			if($arrResult->prize_count < 5){
+				echo "<br /><span style='color:red;'> [Low in stock: " . $arrResult->prize_count . " left]</span>";
+			}else{
+				echo "<br /><span style='color:green;'> [" . $arrResult->prize_count . " in stock]</span>";
+			}
+			if($arrResult->is_active == 0)
+			{
+				print "<span style='float:right; padding-left:5px;'> Inactive Prize</span>";
+			}
+						?>
+							</div>
+						</a>
+					</li>
+<?php
+		}
+?>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

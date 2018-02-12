@@ -1,0 +1,46 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objRoles = new Roles();
+?>
+
+<div class="slider">
+
+	<div class="col_title">
+		<span>Set up Achievement Cards</span>
+	</div>
+
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	if ($objRoles->isRole("Institution Administrator"))
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/campaigninstall<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Set up Achievement Card Subjects"); ?></div>
+						</a>
+					</li>
+<?php
+	}
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/incrementalscampaignlist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Manage Tasks"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/achievementcardeditor<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Print Achievement Cards"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,330 @@
+<?php 
+include "config.phtml";
+include "parameters.phtml";
+
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+	
+	if ($this->objRoles->isRole('Institution Administrator')){
+		$strUserMenuName = "User";		
+	}
+	else{
+		$strUserMenuName = "Users";		
+	}
+	if(isset($this->caption) && $this->caption == "bunks")
+	{
+		$strUserType = "Counselors";
+		$strCaption="bunks";
+	}
+	else{
+		$strUserType = "Teachers";
+		$strCaption="classes";
+	}
+?>
+
+<div class="slider">
+	<div class="col_title">
+		<span><?php echo $strUserMenuName; ?> Accounts</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+
+	if($this->objRoles->isAllowed('Super Administrator'))
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userhosts/">
+							<div class="icon"></div>
+							<div class="title">View Users by Host</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/usernetworks/">
+							<div class="icon"></div>
+							<div class="title">View Users by Network</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userinstitutions/">
+							<div class="icon"></div>
+							<div class="title">View Users by Institution</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userclasses/">
+							<div class="icon"></div>
+							<div class="title">View  <?php echo $strUserMenuName; ?> by Class</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userslist<?php echo $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Accounts</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userslist/usertype/super<?php echo $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Super Administrators</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userslist/usertype/host<?php echo $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Host Administrators</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userslist/usertype/network<?php echo $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Network Administrators</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userslist/usertype/institution<?php echo $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Institution Administrators</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userslist/usertype/teachers<?php echo $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Teachers</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userslist/usertype/students<?php echo $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Students</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/useradd">
+							<div class="icon"></div>
+							<div class="title">Add New <?php echo $strUserMenuName; ?> Accounts</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+					<a class="link" href="<?php echo $sn; ?>/administration/userimport<?php echo $strParamPath; ?>">
+						<div class="icon"></div>
+						<div class="title">Import new <?php echo $strUserMenuName; ?> Accounts</div>
+					</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/registerstudentshosts<?php echo $strParamPath; ?>">
+						  <div class="icon"></div>
+						  <div class="title">Register Students</div>
+						</a>
+					</li>
+<?php
+	}
+	elseif ($this->objRoles->isAllowed('Host Administrator'))
+	{
+?>
+					<li>
+					  <a class="link" href="<?php echo $sn; ?>/administration/usernetworks<?php echo $strParamPath; ?>">
+						<div class="icon"></div>
+						<div class="title">View Users by Network</div>
+					  </a>
+					</li>
+					<li>
+					  <a class="link" href="<?php echo $sn; ?>/administration/userinstitutions<?php echo $strParamPath; ?>">
+						<div class="icon"></div>
+						<div class="title">View Users by Institution</div>
+					  </a>
+					</li>
+					<li>
+					  <a class="link" href="<?php echo $sn; ?>/administration/userclasses<?php echo $strParamPath; ?>">
+						<div class="icon"></div>
+						<div class="title">View  <?php echo $strUserMenuName; ?> by Class</div>
+					  </a>
+					</li>
+					<li>
+					  <a class="link" href="<?php echo $sn; ?>/administration/userslist/usertype/teachers<?php echo $strParamPath; ?>">
+						<div class="icon"></div>
+						<div class="title">View All Teachers</div>
+					  </a>
+					</li>
+					<li>
+					  <a class="link" href="<?php echo $sn; ?>/administration/userslist/usertype/students<?php echo $strParamPath; ?>">
+						<div class="icon"></div>
+						<div class="title">View All Students</div>
+					  </a>
+					</li>
+					<li>
+					  <a class="link" href="<?php echo $sn; ?>/administration/useradd<?php echo $strParamPath; ?>">
+						  <div class="icon"></div>
+						  <div class="title">Add New <?php echo $strUserMenuName; ?> Accounts</div>
+					  </a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/registerstudentsnetworks<?php echo $strParamPath; ?>">
+						  <div class="icon"></div>
+						  <div class="title">Register Students</div>
+						</a>
+					</li>
+<?php
+	}
+	elseif ($this->objRoles->isAllowed('Network Administrator'))
+	{
+?>
+					<li>
+					  <a class="link" href="<?php echo $sn; ?>/administration/userinstitutions<?php echo $strParamPath; ?>">
+						<div class="icon"></div>
+						<div class="title">View Users by Institution</div>
+					  </a>
+					</li>
+					<li>
+					  <a class="link" href="<?php echo $sn; ?>/administration/userclasses<?php echo $strParamPath; ?>">
+						<div class="icon"></div>
+						<div class="title">View  <?php echo $strUserMenuName; ?> by Class</div>
+					  </a>
+					</li>
+					<li>
+					  <a class="link" href="<?php echo $sn; ?>/administration/userslist/usertype/teachers<?php echo $strParamPath; ?>">
+						<div class="icon"></div>
+						<div class="title">View All Teachers</div>
+					  </a>
+					</li>
+					<li>
+					  <a class="link" href="<?php echo $sn; ?>/administration/userslist/usertype/students<?php echo $strParamPath; ?>">
+						<div class="icon"></div>
+						<div class="title">View All Students</div>
+					  </a>
+					</li>
+					<li>
+					  <a class="link" href="<?php echo $sn; ?>/administration/useradd<?php echo $strParamPath; ?>">
+						  <div class="icon"></div>
+						  <div class="title">Add New <?php echo $strUserMenuName; ?> Accounts</div>
+					  </a>
+					</li>
+<?php
+	}
+	elseif($this->objRoles->isAllowed('Institution Administrator'))
+	{
+?>
+					</ul>
+			</div>
+		</div>
+		<h2>Administrative Staff</h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php print $sn ?>/administration/userslistre/usertypes/institutions<?php echo $strParamPath; ?>/caption/<?php echo $strCaption;?>">
+							<div class="icon"></div>
+							<div class="title">View Institution Administrators</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h2><?php echo $this->caption == "bunks" ? " Counselors" : " Teachers"; ?></h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userslistre/usertypes/teachers<?php echo $strParamPath; ?>">
+						  <div class="icon"></div>
+						  <div class="title">View All <?php echo $strUserType;?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/useradd/usertype/teachers<?php echo $strParamPath; ?>/caption/<?php echo $strCaption;?>">
+							<div class="icon"></div>
+							<div class="title">Add New <?php echo $strUserType;?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userclasses/usertypes/teachers,students<?php echo $strParamPath; ?>">
+						  <div class="icon"></div>
+						  <div class="title">View  <?php echo $this->caption == "bunks" ? " Counselors/Campers by bunk" : " Teachers/Students by class"; ?></div>
+						</a>
+					</li>
+					
+				</ul>
+			</div>
+		</div>
+		<h2><?php echo $this->caption == "bunks" ? " Campers" : " Students"; ?></h2>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul> 
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userslistre/usertypes/students<?php echo $strParamPath; ?>/caption/<?php echo $this->caption == "bunks" ? "Campers" : "Students"; ?>">
+						  <div class="icon"></div>
+						  <div class="title">View <?php echo $this->caption == "bunks" ? " campers" : " students"; ?> by name</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/useradd/usertype/students<?php echo $strParamPath; ?>/caption/<?php echo $strCaption;?>">
+						  <div class="icon"></div>
+						  <div class="title">Add New <?php echo $this->caption == "bunks" ? " Camper" : " Student"; ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userimport<?php echo $strParamPath; ?>/caption/<?php echo $strCaption;?>">
+							<div class="icon"></div>
+							<div class="title">Import New <?php echo $this->caption == "bunks" ? " Campers" : " Students"; ?> Accounts</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/registerstudentsclasses<?php echo $strParamPath; ?>/caption/<?php echo $strCaption;?>">
+						  <div class="icon"></div>
+						  <div class="title">Register <?php echo $this->caption == "bunks" ? " Campers" : " Students"; ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/bulk/students-editor<?php echo $strParamPath; ?>">
+						  <div class="icon"></div>
+						  <div class="title">Bulk <?php echo $this->caption == "bunks" ? "Camper" : "Student"; ?> Editor</div>
+						</a>
+					</li>
+<?php
+	}
+	elseif($this->objRoles->isAllowed('Teacher'))
+	{
+?>
+				</ul>
+			</div>
+		</div>
+
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/userslist/usertype/students<?php echo $strParamPath; ?>">
+						  <div class="icon"></div>
+						  <div class="title">View All Students</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,115 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+
+	//set target url that will be used for slideUrl() once image has been added/edited for this item
+	$URL = new Zend_Session_Namespace('targetUrl');
+	$URL->url = $sn . "/administration/profileeditor";
+?>
+<script language="Javascript">
+	$(document).ready(function () {
+		$('#slider_profileeditor form a.submit').click( function(e) {
+			e.preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $("#slider_profileeditor #profileedit_status").html('Loading...').fadeIn("slow"),
+				url : '<?php echo $sn . "/administration/profileeditor" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('#slider_profileeditor #form_profileedit').serialize(),
+				success : function(strResponse) {
+					if (strResponse.match(/^[0-9]+$/)) {
+						$("#slider_profileeditor #profileedit_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+					} else {
+						$("#slider_profileeditor #profileedit_status").html(strResponse).fadeIn("slow");
+					}
+				}
+			});
+		});
+		$('.button.show_preview').bind('click', function () {
+			$('li.show_preview_frame').removeClass('hidden');
+			$('li.show_preview_frame iframe').attr('src', '<?php print $sn . "/users/idcardshostprintcamps/user_ids/17056/institution_id/" . $this->objInstitution->institution_id; ?>/institution_name/' + $('#slider_profileeditor #institution_name').val());
+		});
+	});
+</script>
+<div class="slider" id="slider_profileeditor">
+	<div class="col_title">
+		<span>Institution Profile</span>
+	</div>
+
+	<div class="col_content camper">
+		<div class="module form editableText" id="lists-camper-info">
+			<div class="module_content list">
+				<form name="form_profileedit" id="form_profileedit" method="post" action="">
+					<ul>
+						<?php include('uimods/uploadmessage.phtml'); ?>
+						<li>
+							<h3>Dark institution logo:</h3>
+							<input type="hidden" name="image_id" id="usereditor_image_id" value="<?php print $this->objInstitution->image_id; ?>" />
+							<iframe src="<?php print $sn . "/imgs/smalluploader/current_image/" . $this->objInstitution->image_id; ?>/resultid/usereditor_image_id" width="100%" height="80" scrolling="no">
+								<p>Your browser does not support iframes.</p>
+							</iframe>
+						</li>
+						<li>
+							<h3>Light institution logo:</h3>
+							<input type="hidden" name="light_image_id" id="usereditor_image_id_light" value="<?php print $this->objInstitution->light_image_id; ?>" />
+							<iframe src="<?php print $sn . "/imgs/smalluploader/current_image/" . $this->objInstitution->light_image_id; ?>/resultid/usereditor_image_id_light" width="100%" height="80" scrolling="no">
+								<p>Your browser does not support iframes.</p>
+							</iframe>
+						</li>
+						<li>
+							<span class="label">Institution name:</span>
+							<div class="input"><input type="text" class="required" id="institution_name" name="institution_name" value="<?php echo stripslashes($this->objInstitution->name); ?>" /></div>
+						</li>
+						<li>
+							<span class="label">City:</span>
+							<div class="input"><input type="text" class="required" id="city" name="city" value="<?php echo stripslashes($this->objInstitution->city); ?>" /></div>
+						</li>
+						<li>
+							<span class="label">State:</span>
+							<div class="input"><input type="text" class="required" id="state" name="state" value="<?php echo stripslashes($this->objInstitution->state); ?>" /> <div class="button show_preview" style="padding:5px;">Id Card Preview</div></div>
+						</li>
+						<li class="show_preview_frame hidden">
+							<h3>Institution ID Card</h3>
+							<iframe src="<?php print $sn . "/users/idcardshostprintcamps/user_ids/17056/institution_id/" . $this->objInstitution->institution_id; ?>" width="360" height="231" scrolling="no">
+								<p>Your browser does not support iframes.</p>
+							</iframe>
+						</li>
+						<li>
+							<span class="label">Hebrew name:</span>
+							<div class="input"><input type="text" class="required" id="hebrew_name" name="hebrew_name" value="<?php echo stripslashes($this->objInstitution->hebrew_name); ?>" /></div>
+						</li>
+						<li>
+							<span class="label">Address:</span>
+							<div class="input"><input type="text" class="required" id="address" name="address" value="<?php echo stripslashes($this->objInstitution->address); ?>" /></div>
+						</li>
+						<li>
+							<span class="label">Zip/Postal Code:</span>
+							<div class="input"><input type="text" class="required" id="postal" name="postal" value="<?php echo stripslashes($this->objInstitution->postal); ?>" /></div>
+						</li>
+						<li>
+							<span class="label">Country:</span>
+							<div class="input"><input type="text" class="required" id="country" name="country" value="<?php echo stripslashes($this->objInstitution->country); ?>" /></div>
+						</li>
+						<li>
+							<span class="label">Phone:</span>
+							<div class="input"><input type="text" class="required" id="phone" name="phone" value="<?php echo stripslashes($this->objInstitution->phone); ?>" /></div>
+						</li>
+						<li>
+							<span class="label">Website:</span>
+							<div class="input"><input type="text" class="required" id="website" name="website" value="<?php echo stripslashes($this->objInstitution->website); ?>" /></div>
+						</li>
+						<div id="profileedit_status"></div>
+						<li>
+							<span>
+								<a href="#" title="Save" class="button submit">Save</a>
+							</span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+    </div>
+</div>

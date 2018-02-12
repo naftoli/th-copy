@@ -1,0 +1,24 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+<div class="slider">
+	<div class="col_title">
+		<span><?php print text("Announcements"); ?></span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php print $sn ?>/announcements/posteditor">
+							<div class="icon"></div>
+							<div class="title"><?php print text("New Post"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

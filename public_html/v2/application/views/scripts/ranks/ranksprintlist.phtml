@@ -1,0 +1,369 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+<script language="javascript">
+	var checkbox_select_group_1 = false;
+	var checkbox_select_group_2 = false;
+	var checkbox_select_group_3 = false;
+	
+	function updateChecked()
+	{
+		var updateMode = $("#updateMode1").val();		
+
+		if(updateMode=="Print"){
+			document.rankcards_print1.submit();
+			slideRefresh();
+			return;
+		}
+		if(updateMode=="SendtoTH"){
+			alert("Selected rank cards will be printed by your headqueaters");
+			document.rankcards_print1.submit();
+			slideRefresh();
+			return;
+		}
+		else{
+			alert ('You must select an update mode.');
+			return;
+		}
+	}
+	function updateReedemed()
+	{
+		var updateMode = $("#updateMode2").val();
+
+		if(updateMode=="Redeem"){
+			document.rankcards_print2.submit();
+			slideRefresh();
+			return;
+		}
+		else{
+			alert("You must select an update mode.");
+			return;
+		}
+	}
+	function toggleCheckboxes(group)
+	{
+		if(group=="group_1"){
+			field = document.rankcards_print1.user_rank_id;
+			if(checkbox_select_group_1){
+				checkbox_select_group_1 = false;
+				selected_status = false;
+				$("#group1_status").html("SELECT ALL");
+			}else{
+				checkbox_select_group_1 = true;
+				selected_status = true;
+				$("#group1_status").html("DESELECT ALL");
+			}
+		} else if(group=="group_2"){
+			field = document.rankcards_print2.user_rank_id;
+			if(checkbox_select_group_2){
+				checkbox_select_group_2 = false;
+				selected_status = false;
+				$("#group2_status").html("SELECT ALL");
+			}else{
+				checkbox_select_group_2 = true;
+				selected_status = true;
+				$("#group2_status").html("DESELECT ALL");
+			}
+		} else if(group=="group_3"){
+			field = document.rankcards_print3.user_rank_id;
+			if(checkbox_select_group_3){
+				checkbox_select_group_3 = false;
+				selected_status = false;
+				$("#group2_status").html("SELECT ALL");
+			}else{
+				checkbox_select_group_3 = true;
+				selected_status = true;
+				$("#group2_status").html("DESELECT ALL");
+			}
+		}
+		
+		for (i = 0; i < field.length; i++)
+			field[i].checked = selected_status ;
+	}
+	
+	function checkAll(field)
+	{
+		field = document.rankcards_print.user_id;
+		for (i = 0; i < field.length; i++)
+			field[i].checked = true ;
+	}
+	
+	function uncheckAll(field)
+	{
+		for (i = 0; i < field.length; i++)
+			field[i].checked = false ;
+	}
+</script>
+<div class="slider" id="rankcards_print">
+	<div class="col_title">
+		<span>
+			Print ID Cards
+		</span>
+	</div>	
+	<div class="col_content camper">
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+<?php
+    if(count($this->arrStudentRanks) == 0)
+    {
+        print "There are no Students with ranks.";
+    }
+?>
+				<form name="rankcards_print1" id="rankcards_print1" method="post" action="/ranks/ranksprint" target="_blank">
+					<ul>
+						<li><h1>Not Printed ID Cards</h1></li>
+						<li>
+							<div>
+								<input type="checkbox" name="checkAll1" id="checkAll1" value="" onClick="toggleCheckboxes('group_1')"><span id="group1_status">SELECT ALL</span>
+							</div>
+						</li>
+
+<?php
+	$i=0;
+	$arrAleadyShown = array();
+	foreach($this->arrStudentRanks as $objStudentRanks)
+	{
+		if (isset($arrAleadyShown[$objStudentRanks->user_id]))
+			continue;
+		else
+			$arrAleadyShown[$objStudentRanks->user_id] = 1;	
+		if($objStudentRanks->rank_status == 'not printed')
+		{
+			if($this->permission == "Super Administrator")
+			{
+				if($objStudentRanks->printed_by == "host")
+				{
+?>
+						<li>
+							<div>
+								<input type="checkbox" name="user_rank_id[<?php print $i; ?>]" id="user_rank_id" value="<?php print $objStudentRanks->user_rank_id; ?>">
+								<?php echo $objStudentRanks->first_name; ?> <?php echo $objStudentRanks->last_name; ?>
+								<span style="float:right; !important;">Printing was requested by a school</span>
+								<input type="hidden" name="user_id[]" id="user_id" value="<?php echo $objStudentRanks->user_id; ?>" />
+								<input type="hidden" name="institution_id[]" id="institution_id" value="<?php echo $objStudentRanks->institution_id; ?>" />
+								<input type="hidden" name="first_name[]" id="first_name" value="<?php echo $objStudentRanks->first_name; ?>" />
+								<input type="hidden" name="last_name[]" id="last_name" value="<?php echo $objStudentRanks->last_name; ?>" />
+								<input type="hidden" name="rank_title[]" id="rank_title" value="<?php echo $objStudentRanks->rank_title; ?>" />
+								<input type="hidden" name="school_name[]" id="school_name" value="<?php echo $objStudentRanks->name; ?>" />
+								<input type="hidden" name="address[]" id="address" value="<?php echo $objStudentRanks->address; ?>" />
+								<input type="hidden" name="city[]" id="city" value="<?php echo $objStudentRanks->city; ?>" />
+								<input type="hidden" name="state[]" id="state" value="<?php echo $objStudentRanks->state; ?>" />
+								<input type="hidden" name="class_id[]" id="class_id" value="<?php echo $objStudentRanks->class_id; ?>" />
+								<input type="hidden" name="rank_id[]" id="rank_id" value="<?php echo $objStudentRanks->rank_id; ?>" />
+							</div>
+							
+						</li>
+<?php
+				}
+			}
+			else
+			{
+				if($objStudentRanks->printed_by == "host")
+				{
+					$message = "<span style='float:right; !important;'>This rank card was sent to TH for printing</span>";
+				}
+				else{
+					$message="";
+				}
+?>
+						<li> <!-- <?php print $objStudentRanks->user_id; ?> -->
+							<div>
+								<input type="checkbox" name="user_rank_id[<?php print $i; ?>]" id="user_rank_id" value="<?php print $objStudentRanks->user_rank_id; ?>">
+								<?php echo $objStudentRanks->last_name; ?> <?php echo $objStudentRanks->first_name; ?> <?php echo isset($message) ? $message : ""; ?>
+								<input type="hidden" name="user_id[]" id="user_id" value="<?php echo $objStudentRanks->user_id; ?>" />
+								<input type="hidden" name="institution_id[]" id="institution_id" value="<?php echo $objStudentRanks->institution_id; ?>" />
+								<input type="hidden" name="first_name[]" id="first_name" value="<?php echo $objStudentRanks->first_name; ?>" />
+								<input type="hidden" name="last_name[]" id="last_name" value="<?php echo $objStudentRanks->last_name; ?>" />
+								<input type="hidden" name="rank_title[]" id="rank_title" value="<?php echo $objStudentRanks->rank_title; ?>" />
+								<input type="hidden" name="school_name[]" id="school_name" value="<?php echo $objStudentRanks->name; ?>" />
+								<input type="hidden" name="address[]" id="address" value="<?php echo $objStudentRanks->address; ?>" />
+								<input type="hidden" name="city[]" id="city" value="<?php echo $objStudentRanks->city; ?>" />
+								<input type="hidden" name="state[]" id="state" value="<?php echo $objStudentRanks->state; ?>" />
+								<input type="hidden" name="class_id[]" id="class_id" value="<?php echo $objStudentRanks->class_id; ?>" />
+								<input type="hidden" name="rank_id[]" id="rank_id" value="<?php echo $objStudentRanks->rank_id; ?>" />
+							</div>
+						</li>
+<?php
+			}
+			$i++;
+		}
+   }
+?>
+						<li>
+							<input type="hidden" name="card_type" id="card_type" value="temporary">
+							<input type="hidden" name="updateMode1" id="updateMode1" value="Print">
+							<span><a href="#" title="Save" class="button submit" onclick="updateChecked();">Print</a></span>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+		
+		<!-- Printed temporary cards -->
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form name="rankcards_print3" id="rankcards_print3" method="post" action="/ranks/ranksprint/mode/redeem" target="_blank">
+					<ul>
+						<li><h1>Printed ID Cards</h1></li>
+						<li>
+							<div>
+								<input type="checkbox" name="checkAll3" id="checkAll3" value="" onClick="toggleCheckboxes('group_3')"><span id="group3_status">SELECT ALL</span>
+							</div>
+						</li>
+<?php
+	$i=0;
+	$arrAleadyShown = array();
+	foreach($this->arrStudentRanks as $objStudentRanks)
+    {
+		if (isset($arrAleadyShown[$objStudentRanks->user_id]))
+			continue;
+		else
+			$arrAleadyShown[$objStudentRanks->user_id] = 1;	
+		if($objStudentRanks->rank_status == "printed")
+		{
+?>
+						<li>
+							<div>
+								<input type="checkbox" name="user_rank_id[<?php print $i; ?>]" id="user_rank_id" value="<?php print $objStudentRanks->user_rank_id; ?>">
+								<a class="link" href="<?php echo $sn . "/ranks/ranksprintedit/user_rank_id/" . $objStudentRanks->user_rank_id . $strParamPath; ?>">
+								<?php echo $objStudentRanks->first_name; ?> <?php echo $objStudentRanks->last_name; ?></a>
+								<?php /*<span style="float:right; !important;">This is a temporary card.</span>*/ ?>
+								<input type="hidden" name="user_id[]" id="user_id" value="<?php echo $objStudentRanks->user_id; ?>" />
+								<input type="hidden" name="institution_id[]" id="institution_id" value="<?php echo $objStudentRanks->institution_id; ?>" />
+								<input type="hidden" name="first_name[]" id="first_name" value="<?php echo $objStudentRanks->first_name; ?>" />
+								<input type="hidden" name="last_name[]" id="last_name" value="<?php echo $objStudentRanks->last_name; ?>" />
+								<input type="hidden" name="rank_title[]" id="rank_title" value="<?php echo $objStudentRanks->rank_title; ?>" />
+								<input type="hidden" name="school_name[]" id="school_name" value="<?php echo $objStudentRanks->name; ?>" />
+								<input type="hidden" name="address[]" id="address" value="<?php echo $objStudentRanks->address; ?>" />
+								<input type="hidden" name="city[]" id="city" value="<?php echo $objStudentRanks->city; ?>" />
+								<input type="hidden" name="state[]" id="state" value="<?php echo $objStudentRanks->state; ?>" />
+								<input type="hidden" name="class_id[]" id="class_id" value="<?php echo $objStudentRanks->class_id; ?>" />
+								<input type="hidden" name="rank_id[]" id="rank_id" value="<?php echo $objStudentRanks->rank_id; ?>" />
+							</div>
+						</li>
+<?php
+			$i++;
+		}
+    }
+?>
+						<li>
+							<input type="hidden" name="card_type" id="card_type" value="temporary">
+							<input type="hidden" name="updateMode1" id="updateMode1" value="Print">
+							<span><a href="#" title="Save" class="button submit" onclick="document.rankcards_print3.submit();">Print</a></span>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+<?php
+	if ($user_session_data->institution_type == "School")
+	{
+?>
+		<!-- Printed items -->
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form name="rankcards_print2" id="rankcards_print2" method="post" action="/ranks/ranksprint/mode/redeem" target="_blank">
+					<ul>
+						<li><h1>Printed ID Cards</h1></li>
+<?php	if($objStudentRanks->rank_status =="printed")
+		{
+?>
+						<li>
+							<div>
+								<input type="checkbox" name="checkAll2" id="checkAll2" value="" onClick="toggleCheckboxes('group_2')"><span id="group2_status">SELECT ALL</span>
+							</div>
+						</li>
+<?php
+		}
+		foreach($this->arrStudentRanks as $objStudentRanks)
+		{
+			if($objStudentRanks->rank_status =="printed")
+			{
+?>
+						<li>
+							<div>
+								<input type="checkbox" name="user_rank_id[<?php print $i; ?>]" id="user_rank_id" value="<?php print $objStudentRanks->user_rank_id; ?>">
+								<?php echo $objStudentRanks->first_name; ?> <?php echo $objStudentRanks->last_name; ?>
+								<input type="hidden" name="user_id[]" id="user_id" value="<?php echo $objStudentRanks->user_id; ?>" />
+								<input type="hidden" name="institution_id[]" id="institution_id" value="<?php echo $objStudentRanks->institution_id; ?>" />
+								<input type="hidden" name="first_name[]" id="first_name" value="<?php echo $objStudentRanks->first_name; ?>" />
+								<input type="hidden" name="last_name[]" id="last_name" value="<?php echo $objStudentRanks->last_name; ?>" />
+								<input type="hidden" name="rank_title[]" id="rank_title" value="<?php echo $objStudentRanks->rank_title; ?>" />
+								<input type="hidden" name="school_name[]" id="school_name" value="<?php echo $objStudentRanks->name; ?>" />
+								<input type="hidden" name="address[]" id="address" value="<?php echo $objStudentRanks->address; ?>" />
+								<input type="hidden" name="city[]" id="city" value="<?php echo $objStudentRanks->city; ?>" />
+								<input type="hidden" name="state[]" id="state" value="<?php echo $objStudentRanks->state; ?>" />
+								<input type="hidden" name="class_id[]" id="class_id" value="<?php echo $objStudentRanks->class_id; ?>" />
+								<input type="hidden" name="rank_id[]" id="rank_id" value="<?php echo $objStudentRanks->rank_id; ?>" />
+							</div>
+						</li>
+<?php
+				$i++;
+			}
+		}
+?>
+<?php	if($objStudentRanks->rank_status =="printed")
+		{
+?>
+						<li>
+							<div class="clear"></div>
+							<select class="select"  name="updateMode2" id="updateMode2">
+								<option value="">-- Select action --</option>
+								<option value="Redeem">Redeem</option>
+							</select>
+							<span><a href="#" title="Save" class="button submit" onclick="updateReedemed();">Redeem</a></span>								
+						</li>
+<?php
+		}
+?>
+					</ul>
+				</form>
+			</div>
+		</div>
+<?php
+	}
+	if ($user_session_data->institution_type == "School")
+	{
+?>
+		<!-- Redeemed items -->
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<ul>
+					<li><h1>Redeemed Rank Cards</h1></li>
+<?php
+		foreach($this->arrStudentRanks as $objStudentRanks)
+		{
+			if($objStudentRanks->rank_status =='redeemed')
+			{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn . "/ranks/ranksprintedit/user_rank_id/" . $objStudentRanks->user_rank_id . $strParamPath; ?>">
+							<?php echo $objStudentRanks->first_name; ?> <?php echo $objStudentRanks->last_name; ?>
+							<input type="hidden" name="user_rank_id[<?php print $objStudentRanks->user_id; ?>]" id="user_rank_id" value="<?php echo $objStudentRanks->user_rank_id; ?>" />
+							<input type="hidden" name="user_id[]" id="user_id" value="<?php echo $objStudentRanks->user_id; ?>" />
+							<input type="hidden" name="institution_id[]" id="institution_id" value="<?php echo $objStudentRanks->institution_id; ?>" />
+							<input type="hidden" name="first_name[]" id="first_name" value="<?php echo $objStudentRanks->first_name; ?>" />
+							<input type="hidden" name="last_name[]" id="last_name" value="<?php echo $objStudentRanks->last_name; ?>" />
+							<input type="hidden" name="rank_title[]" id="rank_title" value="<?php echo $objStudentRanks->rank_title; ?>" />
+							<input type="hidden" name="school_name[]" id="school_name" value="<?php echo $objStudentRanks->name; ?>" />
+							<input type="hidden" name="address[]" id="address" value="<?php echo $objStudentRanks->address; ?>" />
+							<input type="hidden" name="city[]" id="city" value="<?php echo $objStudentRanks->city; ?>" />
+							<input type="hidden" name="state[]" id="state" value="<?php echo $objStudentRanks->state; ?>" />
+							<input type="hidden" name="class_id[]" id="class_id" value="<?php echo $objStudentRanks->class_id; ?>" />
+							<input type="hidden" name="rank_id[]" id="rank_id" value="<?php echo $objStudentRanks->rank_id; ?>" />
+						</a>
+					</li>	
+<?php
+			}
+		}
+?>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

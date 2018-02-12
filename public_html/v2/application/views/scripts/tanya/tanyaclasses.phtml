@@ -1,0 +1,34 @@
+<?php 
+	include "config.phtml"; 
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Class List</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	if($this->arrClass)
+	{
+		foreach ($this->arrClass as $objClass) {
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/tanya/tanyalist/class_id/<?php print $objClass->class_id; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print $objClass->class_name; ?> - Grade: <?php print $objClass->grade; ?></div>
+						</a>
+					</li>
+<?php
+		}
+	}
+else
+{
+	echo 'There are no classes available to display.';
+}
+?>				</ul>
+			</div>
+		</div>
+	</div>
+</div>

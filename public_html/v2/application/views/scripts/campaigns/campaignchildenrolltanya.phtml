@@ -1,0 +1,301 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+
+	$currency = "";
+	if ($this->objPrize)
+		$currency = $this->objPrize->currency;
+?>
+
+<script>
+	var list_item = "";
+	var checklist = "";
+	var action = "";
+	var intChildEnrollCampaignId = 0;
+	var intChildEnrollAction = "";
+	$(document).ready(function() {
+	    $(".slider:last .checklist input:checked").parent().addClass("selected");
+	    $(".slider:last .checklist .checkbox-select.enroll").click(function(event) {
+			list_item = $(this).closest('li');
+			intChildEnrollCampaignId = list_item.attr("id");
+			intUserId = list_item.find(".user_id").val();
+			if (
+				$(this).hasClass("reset")
+			) {
+				if (!confirm('Are you sure you want to reset? All information will be deleted forever!'))
+					return;
+				$.ajax({
+					type : "GET",
+					cache : false,
+					start: $(".slider:last #processing_status").fadeOut("slow"),
+					url : '<?php print $sn;?>/campaigns/campaignchildenrolltanya/resetaction/' + intUserId + '/resetcampaign/' + intChildEnrollCampaignId,
+					dataType : "text",
+					success : function(response) {
+						if (!response.match(/^[0-9]+$/)) {
+							alert("Sorry, there was an error: VC-CCET101-23I33I");
+						}
+					}
+				});
+				$(this).fadeOut().queue(function () {
+					list_item.find("#lines_ahead_container").fadeOut().queue(function () {
+						$(this).html('<nobr><input type="text" class="lines_ahead" style="width:50px" value="0" />&nbsp;lines by heart</nobr>');
+						$(this).fadeIn();
+						$(this).dequeue();
+					});
+					$(this).dequeue();
+				});
+				return;
+			}
+			action = "enroll";
+			intChildEnrollAction = "enroll";
+			checklist = $(this).closest('.checklist');
+			$(this).closest('form').find("#lines_ahead").val(list_item.find(".lines_ahead").val());
+			$(this).closest('form').find("#ladder").val(list_item.find(".ladder_options").val());
+			childenroll(this);
+		});
+	    $(".slider:last .checklist .checkbox-deselect").click(function(event) {
+			action = "unenroll";
+			list_item = $(this).closest('li');
+			intChildEnrollCampaignId = list_item.attr("id");
+			intChildEnrollAction = "unenroll";
+			checklist = $(this).closest('.checklist');
+			childenroll(this);
+		});
+		$('.slider:last .enrollall').click(function () {
+			var intItr = 0;
+			$('.slider:last .checklist .checkbox:not(.checked)')
+				.closest('.checklist')
+				.find('.button.enroll:not(.reset)')
+				.each(function () {
+					var parent = this;
+					window.setTimeout(function () {
+						$(parent).trigger('click');
+					},intItr*600);
+					intItr++;
+				});
+		});
+		$('.slider:last .unenrollall').click(function () {
+			var intItr = 0;
+			$('.slider:last .checklist .checkbox.checked')
+				.closest('.checklist')
+				.find('.button.checkbox-deselect')
+				.each(function () {
+					var parent = this;
+					window.setTimeout(function () {
+						$(parent).trigger('click');
+					},intItr*600);
+					intItr++;
+				});
+		});
+	});
+	function childenroll(objThis) {
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider:last #processing_status").fadeOut("slow"),
+			url : '<?php print $sn;?>/campaigns/campaignchildenrolltanya/enrollaction/' + intChildEnrollAction + '/enrollcampaign/' + intChildEnrollCampaignId,
+			dataType : "text",
+			data: $(objThis).closest('form').serialize(),
+			success : function(response) {
+				//$.alert(response);
+				if (response.match(/^[0-9]+$/)) {
+					if (action == "enroll") {
+						$(checklist).addClass("selected");
+						$(checklist).find(":checkbox").attr("checked","checked").addClass('checked');
+						$(list_item).css({ backgroundColor: '#9fe194' }).delay(500).animate({'background-color': '#eee'}, 500, function(){$(this).css({'background-color':''})});
+						$(list_item).find('.progress').show().delay(500).fadeOut(500);
+						$(list_item).find(".enrollmentoptions").fadeOut("slow");
+					} else {
+						$(checklist).removeClass("selected");
+						$(checklist).find(":checkbox").removeAttr("checked").removeClass('checked');
+						$(list_item).css({ backgroundColor: '#e19494' }).delay(500).animate({'background-color': '#eee'}, 500, function(){$(this).css({'background-color':''})});
+						$(list_item).find('.progress').show().delay(500).fadeOut(500);
+						$(list_item).find(".enrollmentoptions").fadeIn("slow");
+					}
+				} else {
+					$(".slider:last #processing_status").html(response).fadeIn("slow");
+				}
+			}
+		});
+	}
+	$('.slider:last .pausing').click(function (e) {
+		e.preventDefault();
+		slideURL($(this).attr('href'));
+	});
+</script>
+
+<div class="slider">
+	<div class="col_title">
+		<span>Tanya Enrollment</span>
+	</div>
+	<div class="col_content camper">
+<?php
+	if (!count($this->arrCampaigns))
+	{
+?>
+	<div class="module">
+		<div class="module_content" style="margin:6px;">
+			It appears there are no campaigns available. Please contact your host administrator to resolve this issue.
+		</div>
+	</div>
+<?php
+	}
+	else if (!count($this->arrEnrollList))
+	{
+?>
+	<div class="module">
+		<div class="module_content" style="margin:6px;">
+			There are no children available to display. Please check the Awaiting Actions section of your
+			Profile to complete the steps required to get started.
+		</div>
+	</div>
+<?php
+	}
+	else
+	{
+?>
+	<div class="module">
+		<div class="module_content" style="margin:10px;">
+			To enroll child, please determine what his / her goal should be and how many lines he / she knows from the past. Once that is done click on “Enroll”.
+			<!--During a child’s break time from school (e.g. Pesach vacation), please click “unenroll” so that the system does not accumulate missions for that child. When child comes back to school click on “enroll” to continue from where he / she left off.-->
+		</div>
+	</div>
+	<div class="module lists">
+		<div class="module_content" style="margin:6px;">
+			<ul>
+			<li>
+				<a href="#" onclick="window.open('<?php print $sn . "/ladders/suggestedtanya"; ?>', 'Tanya Ladder Suggestions', 'menubar=0,resizable=0,location=0,status=0,scrollbars=0,height=600,width=600')">
+					<div class="icon"></div>
+					<div class="title">Click here for suggested quotas per grade</div>
+				</a>
+			</li>
+			</ul>
+		</div>
+	</div>
+<?php
+	}
+?>
+	<div class="module form" id="module-info">
+		<div class="module_content list" style="height:28px;padding:6px;">
+			<a class="button unenrollall" style="float:right" >
+				<span class="icon" style="background:url('/images/back-end/admin/icon_uninstall.png') no-repeat scroll 0 0 transparent"></span>unenroll all
+			</a>
+			<a class="button enrollall" style="float:right;margin-right: 4px" >
+				<span class="icon" style="background:url('/images/back-end/admin/icon_install.png') no-repeat scroll 0 0 transparent"></span>enroll all
+			</a>
+		</div>
+	</div>
+<?php
+	foreach ($this->arrEnrollList as $intUser => $arrCampaigns)
+	{
+		$objUser = $this->arrChildren[$intUser];
+?>
+		<div class="module form" id="module-info">
+				<div class="module_content list">
+					<ul>
+<?php
+		foreach ($arrCampaigns as $arrCampaignData)
+		{
+			$objCampaign = $arrCampaignData["objCampaign"];
+			if ($arrCampaignData["boolEnrolled"]) {
+				$selected = " selected ";
+				$checked = " checked ";
+			} else {
+				$selected = "";
+				$checked = "";
+			}
+?>
+						<li name="<?php print $objCampaign->campaign_id; ?>" id="<?php print $objCampaign->campaign_id; ?>">
+							<form>
+								<input type="hidden" class="user_id" name="user_id" value="<?php print $objUser->user_id; ?>" />
+								<input type="hidden" id="lines_ahead" name="lines_ahead" value="" />
+								<input type="hidden" id="ladder" name="ladder" value="" />
+								<span class="action">
+									<span class="checklist<?php print $selected; ?>">
+										<input type="checkbox" class="checkbox<?php print $checked; ?>">
+										<a class="button checkbox-select pausing" href="<?php print $sn . '/campaigns/pausemanager/campaign_id/' . $objCampaign->campaign_id . '/user_id/' . $objUser->user_id; ?>">
+											Pausing
+										</a>
+										<span class="install">
+											<a class="button checkbox-select enroll" href="#" >
+												<span class="icon"></span>enroll
+											</a>
+										</span>
+										<span class="uninstall">
+											<a class="button checkbox-select enroll reset" href="#" style="<?php print !$arrCampaignData['intLatest'] ? "display:none" : ""; ?>">
+												reset
+											</a>
+											<a name="a_unenroll" class="button checkbox-deselect" title="unenroll" href="#">
+												<span class="icon"></span>unenroll
+											</a>
+										</span>
+										<span class="progress">Progress</span>
+									</span>
+								</span>
+								<span class='icon bullet'></span>
+								<span class='label' style="margin-top:-15px;">
+									<span class='label title'></span> <?php print $objUser->first_name . " " . $objUser->last_name . " (" . $objUser->user_id . ")";
+			if ($objCampaign->campaign_type == "Book")
+			{
+?>
+									<span class='enrollmentoptions'<?php if ($arrCampaignData["boolEnrolled"]) print " style='display:none'"; ?>>
+									<nobr>Already knows: <span style="font-size:10pt">(write what you know well, missions will start after this)</span></nobr>
+									<div style="width: 300px" id="lines_ahead_container"><nobr>
+<?php
+				if ($arrCampaignData['intLatest'])
+				{
+?>
+											<input type="hidden" class="lines_ahead" value="<?php print $arrCampaignData['intLatest']; ?>" /><?php print $arrCampaignData['intLatest']; ?> lines by heart
+<?php
+				}
+				else
+				{
+?>
+											<input type="text" class="lines_ahead" style="width:50px" value="0" />&nbsp;lines by heart
+<?php
+				}
+?>
+									</nobr></div>
+									<nobr>Will learn <select class="ladder_options" onchange="$(this).parent().find('.week_lines_to_year').html($(this).find('option:selected').text()*52)">
+<?php
+				foreach ($arrCampaignData["arrLadders"] as $objLadder)
+				{
+					$strSelected = "";
+					if (@$arrCampaignData['objEnrollment']->ladder == $objLadder->ladder)
+						$strSelected = " SELECTED";
+					print "<option".$strSelected." value='" . $objLadder->ladder . "'>" . $objLadder->velocity . "</option>";
+				}
+?>
+									</select> new line(s) each week (<span class="week_lines_to_year"><?php
+				if (count($arrCampaignData["arrLadders"]))
+				{
+					$objLadder = reset($arrCampaignData["arrLadders"]);
+					print $objLadder->velocity * 52;
+				}
+				else
+				{
+					print 0;
+				}
+?></span> lines a year)</nobr>
+
+									</span>
+<?php
+			}
+?>
+								</span>
+								<div class='clear'></div>
+							</form>
+						</li>
+<?php
+		}
+?>
+					</ul>
+				</div>
+
+
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

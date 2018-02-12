@@ -1,0 +1,44 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span><?php text(print $this->strTitle); ?></span>
+	</div>
+	<div class="col_content">
+<?php
+	include("uimods/sliderefresh.phtml");
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	if (!count($this->arrList))
+	{
+?>
+					<li>
+						<div class="title"><?php print "Nothing to display."; ?></div>
+					</li>
+<?php
+	}
+	else
+	{
+		foreach ($this->arrList as $arrItem)
+		{
+?>
+					<li>
+						<a class="link" href="<?php echo (preg_match("/^http/", $arrItem['link']) ? "" : $sn) . (preg_match("/^\//", $arrItem['link']) ? "" : "/"). $arrItem['link']; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php echo $arrItem['text']; ?></div>
+						</a>
+					</li>
+<?php
+		}
+	}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

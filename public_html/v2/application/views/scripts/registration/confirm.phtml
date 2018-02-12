@@ -1,0 +1,438 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script language="javascript">
+var arrData = $('body').data("reg_data");
+var arrFeilds = {
+	"administrator_first_name" : ".slider:last #administrator_first_name",
+	"administrator_last_name" : ".slider:last #administrator_last_name",
+	"administrator_email" : ".slider:last #administrator_email",
+	"administrator_phone_number" : ".slider:last #administrator_phone_number",
+	"administrator_cell_phone" : ".slider:last #administrator_cell_phone",
+	"administrator_address" : ".slider:last #administrator_address",
+	"administrator_city" : ".slider:last #administrator_city",
+	"administrator_postal" : ".slider:last #administrator_postal",
+	"administrator_state" : ".slider:last #administrator_state",
+	"administrator_country" : ".slider:last #administrator_country",
+	"institution_image_id" : ".slider:last #institution_image_id",
+	"institution_name" : ".slider:last #institution_name",
+	"institution_email" : ".slider:last #institution_email",
+	"institution_phone" : ".slider:last #institution_phone",
+	"institution_website" : ".slider:last #institution_website",
+	//"kioskaccessories_regular" : ".slider:last #kioskaccessories_regular",
+	//"kioskaccessories_sponsored" : ".slider:last #kioskaccessories_sponsored",
+	//"kioskaccessories_rental" : ".slider:last #kioskaccessories_rental",
+	"kioskaccessories_scanner" : ".slider:last #kioskaccessories_scanner",
+	"kioskaccessories_handbook" : ".slider:last #kioskaccessories_handbook",
+	"billing_first_name" : ".slider:last #billing_first_name",
+	"billing_last_name" : ".slider:last #billing_last_name",
+	"billing_phone_number" : ".slider:last #billing_phone_number",
+	"billing_address" : ".slider:last #billing_address",
+	"billing_city" : ".slider:last #billing_city",
+	"billing_postal" : ".slider:last #billing_postal",
+	"billing_state" : ".slider:last #billing_state",
+	"billing_country" : ".slider:last #billing_country",
+	"shipping_first_name" : ".slider:last #shipping_first_name",
+	"shipping_last_name" : ".slider:last #shipping_last_name",
+	"shipping_phone_number" : ".slider:last #shipping_phone_number",
+	"shipping_address" : ".slider:last #shipping_address",
+	"shipping_city" : ".slider:last #shipping_city",
+	"shipping_postal" : ".slider:last #shipping_postal",
+	"shipping_state" : ".slider:last #shipping_state",
+	"shipping_country" : ".slider:last #shipping_country",
+	"creditcard_number" : ".slider:last #creditcard_number",
+	"creditcard_expiration_month" : ".slider:last #creditcard_expiration_month",
+	"creditcard_expiration_year" : ".slider:last #creditcard_expiration_year",
+	"creditcard_ccv" : ".slider:last #creditcard_ccv"
+};
+$(document).ready(function()
+{
+			var arrData = $('body').data("reg_data");
+	$('.slider:last form').keyup(function (e) {
+		var charCode = (e.which) ? e.which : e.keyCode;
+		if (charCode == 13) {
+			e.preventDefault();
+			if ($(this).find('.submit').length)
+				$(this).find('.submit').click();
+			else
+				$(this).submit();
+		}
+	});
+	for (strKey in arrFeilds)
+	{
+		if ($(arrFeilds[strKey]).length)
+			$(arrFeilds[strKey]).html(arrData[strKey]);
+	}
+	$(".slider:last #creditcard_expiry_date").html("Month: " + arrData["creditcard_expiration_month"] + " Year: " + arrData["creditcard_expiration_year"]);
+	var intAmount = kiosk_accessories_sum();
+	$(".slider:last #creditcard_to_be_charged").html(intAmount);
+	arrData.amount = intAmount;
+	$('.slider:last .submit').click(function(){
+		var arrData = $('body').data("reg_data");
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider:last #processing_status").html('Loading...').stop().css("display", "none").fadeIn(),
+			url : '<?php echo $sn; ?>/registration/confirm<?php print $strParamPath; ?>',
+			dataType : "text",
+			data: arrData,
+			success : function(strResponse) {
+				$(".slider:last #processing_status").fadeOut();
+				var arrResponse;
+				try
+				{
+					arrResponse = jQuery.parseJSON(strResponse);
+				}
+				catch (e)
+				{
+					alert("Sorry, there was an error: VR-C101-8SD7FD");
+					alert(strResponse);
+					return;
+				}
+				if (arrResponse.success == 'true') {
+					window.location.href = "<?php print $sn; ?>" + arrResponse.forward;
+				} else if (arrResponse.error) {
+					if (typeof arrResponse.error == 'object') {
+						var strMessage = '';
+						for (var strKey in Object.keys(arrResponse.error)) {
+							strMessage += arrResponse.error[strKey] + '<br/>';
+						}
+						$(".slider:last #processing_status").html(strMessage).fadeIn();
+					}
+					else
+						$(".slider:last #processing_status").html(arrResponse.error).fadeIn();
+				} else {
+					$(".slider:last #processing_status").html('Sorry, there was an error: VR-C103-xc0c12').fadeIn();
+				}
+			}
+		});
+	});
+});
+</script>
+<div class="slider">
+	<style type="text/css">
+		.input {
+			padding: 8px !important;
+		}
+	</style>
+	<div class="col_title"><span>Confirm Your Order</span></div>
+	<div class="col_content camper">
+		<div class="module message" style="text-align: left">
+			&nbsp;<br>Final step: Please confirm the details of your purchase.<br>&nbsp;
+		</div>
+		<h1>Administration Information</h1>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<ul>
+					<li>
+						<span class="label">First name:</span>
+						<span class="input" id="administrator_first_name"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Last name:</span>
+						<span class="input" id="administrator_last_name"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Email:</span>
+						<span class="input" id="administrator_email"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Phone number:</span>
+						<span class="input" id="administrator_phone_number"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Cell number:</span>
+						<span class="input" id="administrator_cell_phone"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Address:</span>
+						<span class="input" id="administrator_address"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">City:</span>
+						<span class="input" id="administrator_city"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Zip/Postal Code:</span>
+						<span class="input" id="administrator_postal"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">State:</span>
+						<span class="input" id="administrator_state"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Country:</span>
+						<span class="input" id="administrator_country"></span>
+						<div class="clear"></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h1>Institution Information</h1>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<ul>
+					<li>
+						<span class="label">Institution Name:</span>
+						<span class="input" id="institution_name"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Institution Phone:</span>
+						<span class="input" id="institution_phone"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Institution E-mail:</span>
+						<span class="input" id="institution_email"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Institution Website:</span>
+						<span class="input" id="institution_website"></span>
+						<div class="clear"></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h1>Billing Information</h1>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<ul>
+					<li>
+						<span class="label">First Name:</span>
+						<span class="input" id="billing_first_name"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Last Name:</span>
+						<span class="input" id="billing_last_name"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Phone Number:</span>
+						<span class="input" id="billing_phone_number"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Address:</span>
+						<span class="input" id="billing_address"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">City:</span>
+						<span class="input" id="billing_city"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Postal/Zip Code:</span>
+						<span class="input" id="billing_postal"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">State:</span>
+						<span class="input" id="billing_state"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Country:</span>
+						<span class="input" id="billing_country"></span>
+						<div class="clear"></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h1>Shipping Information</h1>
+		<div class="module form">
+			<div class="module_content list">
+				<ul>
+					<li>
+						<span class="label">First Name:</span>
+						<span class="input" id="shipping_first_name"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Last Name:</span>
+						<span class="input" id="shipping_last_name"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Phone Number:</span>
+						<span class="input" id="shipping_phone_number"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Address:</span>
+						<span class="input" id="shipping_address"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">City:</span>
+						<span class="input" id="shipping_city"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Postal/Zip Code:</span>
+						<span class="input" id="shipping_postal"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">State:</span>
+						<span class="input" id="shipping_state"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Country:</span>
+						<span class="input" id="shipping_country"></span>
+						<div class="clear"></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h1>Accessories Purchased</h1>
+		<!--div class="module form">
+			<div class="module_content list">
+				<ul>
+					<li>
+						<div class="label top">Purchase Kiosk</div>
+						<div class="info">Purchase an ATM style touch screen with built in scanner and give your campers a great experience etc.</div>
+					</li>
+					<li>
+						<div class="total">
+							<div class="amount label">$2500</div>
+							<div class="qty">
+								<span class="label">Quantity:</span>
+								<span class="input" id="kioskaccessories_regular"></span>
+							</div>
+						</div>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+		<div class="module form">
+			<div class="module_content list">
+				<ul>
+					<li>
+						<div class="label top" style="width:300px;">Purchase Pre-sponsored Kiosk</div>
+						<div class="info">
+							These Kiosks have a dedication and are subsidized to make it affordable for your camp
+							which will give your campers a great experience etc.
+						</div>
+					</li>
+					<li>
+						<div class="total">
+							<div class="amount label">$770</div>
+							<div class="qty">
+								<span class="label">Quantity:</span>
+								<span class="input" id="kioskaccessories_sponsored"></span>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module form">
+			<div class="module_content list">
+				<ul>
+
+					<li>
+						<div class="label top">Kiosk Summer Rental</div>
+						<div class="info">
+							Renting a kiosk is a great way to keep your costs down but still have the ability to give
+							your campers a great experience etc.<br />
+							$200 - rental fee<br />
+							$570 - deposit to be returned to you after returning the kiosk to us in original condition
+						</div>
+					</li>
+					<li>
+						<div class="total">
+							<div class="amount label">$770</div>
+							<div class="qty">
+								<span class="label">Quantity:</span>
+								<span class="input" id="kioskaccessories_rental"></span>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div-->
+		<div class="module form">
+			<div class="module_content list">
+				<ul>
+					<li>
+						<div class="label top">Scanner(s)</div>
+					</li>
+					<li>
+						<div class="total">
+							<div class="amount label">$50</div>
+							<div class="qty">
+								<span class="label">Quantity:</span>
+								<span class="input" id="kioskaccessories_scanner"></span>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="label top">Handbook(s)</div>
+					</li>
+					<li>
+						<div class="total">
+							<div class="amount label">$5</div>
+							<div class="qty">
+								<span class="label">Quantity:</span>
+								<span class="input" id="kioskaccessories_handbook"></span>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h1>Credit Card Information</h1>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<ul>
+					<li>
+						<span class="label">Credit Card number:</span>
+						<span class="input" id="creditcard_number"></span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">Expiry date:</span>
+						<span class="input" id="creditcard_expiry_date">Month: n/a Year: n/a</span>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<span class="label">CCV:</span>
+						<span class="input" id="creditcard_ccv"></span>
+						<div class="clear"></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h1>Authorization</h1>
+		<div class="module form">
+			<div class="module_content list">
+				<ul>
+					<div style="padding:4px">
+						Your card will now be charged $<span id="creditcard_to_be_charged"></span>
+					</div>
+					<div id="processing_status" style="padding:4px"></div>
+					<li>
+						<span><a title="Next" class="button submit">Confirm</a></span>
+						<div class="clear"></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

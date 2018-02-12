@@ -1,0 +1,76 @@
+<?php 
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script>
+	var slider = "#slider_scheduler_calendar";
+	$(document).ready(function() {
+		// Check for parameters from the previous slider form
+		var arrSliders = $(".slider_container").children();
+		var previousSliderForm = arrSliders[arrSliders.length-2];
+		var strUrlAppend = "";
+		if (
+			previousSliderForm
+			&& ($(previousSliderForm).attr("id")).match(/^r1_/)
+		) {
+			var objForm = $("#" + $(previousSliderForm).attr("id") + " form");
+			var strPost = objForm.serialize();
+			strUrlAppend += "/preview/true";
+		}
+		var strAjaxUrl = '<?php echo $sn . "/scheduler/calendar" . $strParamPath; ?>';
+		if ($("#scheduler_missionsscheduling_debug").attr("checked"))
+			strAjaxUrl += "/debug/1";
+		strAjaxUrl += strUrlAppend;
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(slider + " #processing_status").html('Loading...').fadeIn("slow"),
+			url : strAjaxUrl,
+			dataType : "text",
+			data: strPost,
+			success : function(strResponse) {
+				$(slider + " #processing_status").html('');
+				if ($("#scheduler_missionsscheduling_debug").attr("checked")) {
+					//alert(strResponse);
+					$(slider + " #processing_status").html("<pre>" + strResponse + "</pre>");
+				} else {
+					var Response;
+					try {
+						Response = jQuery.parseJSON(strResponse);
+					}
+					catch(e)
+					{
+						$(slider + " #processing_status").html("<pre>" + strResponse + "</pre>");
+						return;
+					}
+					init_dates(Response);
+				}
+			}
+		});
+	});
+	
+	function init_dates(arrEvent)
+	{
+		$('#slider_scheduler_calendar #calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay'
+			},
+			events: arrEvent
+		});
+	}
+</script>
+<div class="slider" id="slider_scheduler_calendar">
+	<div class="col_title">
+		<span>Scheduling Calendar</span>
+	</div>
+	<div class="col_content camper">
+		<div class="module lists" id="lists-camper-groups">
+			<div class="module_content">
+				<div id='processing_status' style='display:none'>loading...</div>
+				<div id='calendar'></div>
+			</div>
+		</div>
+	</div>
+</div>

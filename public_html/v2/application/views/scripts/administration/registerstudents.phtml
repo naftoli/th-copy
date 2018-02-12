@@ -1,0 +1,576 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+
+	if(isset($this->caption) && $this->caption == "bunks")
+	{
+		$strUserType = "Camper";
+	}
+	else{
+		$strUserType = "Student";
+	}
+	
+	$addonCounter=0;	
+	$i=0;
+	$grand_total=0;
+	$groupCounter=0;
+	
+?>
+<script language="javascript">
+function calculate_addon_fees()
+{
+	var intPrice = 0;
+	var intTotalAmount = 0;
+	var arrAddonPrices =  $('.addon_fee');	
+	$(".calcuserfees").text(0);
+	$("#grandtotaluserfees span").text(0);
+	var strDisabled = "";
+	for (var intKey=0; intKey != arrAddonPrices.length; intKey++)
+	{
+		var arrInputs = $(arrAddonPrices[intKey]).children();
+		strDisabled =  $(arrInputs[1]).attr("class");
+		if($(arrInputs[0]).attr("checked"))
+		{
+			intPrice = parseFloat($(arrInputs[1]).val()) + parseFloat($("#"+strDisabled).text());
+			$("#"+strDisabled).text(intPrice);
+			intTotalAmount += parseFloat($(arrInputs[1]).val());
+		}
+	}
+	$("#grandtotaluserfees span").text(intTotalAmount);
+	$("#grandtotaluserfees input").val(intTotalAmount);
+}
+function form_submit()
+{
+	if(!$("#cccardcheck").attr("checked"))
+	{
+		alert("You must accept charges that will be charged to your credit card!");
+		return;
+	}
+	$.ajax({
+		type : "POST",
+		cache : false,
+		start: $("#slider_registerstudents #processing_status").html('Loading...').fadeIn("slow"),
+		url : '<?php echo $sn; ?>/administration/registerstudents/caption/<?php print $this->caption;?>',
+		dataType : "text",
+		data: $('"#slider_registerstudents #registerstudents').serialize(),
+		success : function(response) {
+			alert(response);
+			if (response.match(/^[0-9]+$/)) {
+				$("#slider_registerstudents #processing_status").html("<?php print $strUserType;?>(s) were successfully signed up for addons").fadeIn("slow").delay(2000).fadeOut("slow");
+				slideRefresh();
+				
+			} else {
+				$("#slider_registerstudents #processing_status").html(response).fadeIn("slow");
+			}
+		}
+	});
+}
+
+$(function(){
+	$('.addon_fee input:checkbox').change(function(){
+		if ($(this).is(':checked')) {
+			$(this).parent().addClass('checked');
+		} else {
+			$(this).parent().removeClass('checked');
+		}
+		calculate_addon_fees();
+	}).change();
+	$('.module_buttons .select_all').click(function(){
+		$('.addons input:checkbox').attr('checked',true).change();
+	});
+	$('.module_buttons .select_none').click(function(){
+		$('.addons input:checkbox').attr('checked',false).change();
+	});
+	$("#registerStudentsCheckOptions input").click(function (objEvent){
+		$(
+			"." + $(objEvent.target).attr("class").replace(/^main_/, '')
+		)
+			.attr('checked',
+				$("." + $(objEvent.target).attr("class"))
+					.attr("checked")
+			);
+		calculate_addon_fees();
+	});
+});
+</script>
+<div class="slider" id="slider_registerstudents">
+	<div class="col_title">
+		<span>Register <?php print $strUserType == "Camper" ? "Campers" : "Students";?></span>
+	</div>
+	<div class="col_content">		
+<?php
+	if (count($this->arrStudents) == 0)
+	{
+?>
+		<div class="module message">
+			There are no <?php print $strUserType == "Camper" ? "campers" : "students";?> in this <?php print $strUserType == "Camper" ? "bunk" : "class";?>.
+		</div>
+<?php	
+	//}
+	//else if(count($this->arrAddons) == 0)
+	//{
+?>
+		<!--<div class="module" style="padding:5px; width:600px;">-->
+		<!--	You need to configure your addons first!-->
+		<!--</div>-->
+<?php
+	}
+	else
+	{
+?>
+	<div id="lists" class="module lists forms">
+		<div class="module_content">
+			<ul>
+				<h1><strong>Please read the following instructions before proceeding</strong></h1>		
+				<li>
+					In order to deselect an individual camper click on the checkmark.
+				</li>
+				<li>
+					Only campers that have been assigned to bunks will be listed here.
+				</li>
+			</ul>
+		</div>		
+	</div>
+	<div class="clear"></div>
+
+		<form name="registerstudents" class="form" id="registerstudents" method="post" action="">
+        <div class="module lists forms">
+            <div class="module_content">
+
+
+            <?php if (false): ?>
+				<table cellspacing="4" cellpadding="4" style="font-size: 12px;" class="list list_left" id="students_table" name="students_table">
+							<th style="width:30%; background-color: #078EB7;" id="registerStudentsCheckOptions">
+	<?php
+			foreach($this->arrAddons as $objSchoolAddons)
+			{
+				if($objSchoolAddons->package_item_type == 'add-on')
+				{	
+	?>
+								<input type="checkbox" class="main_<?php print str_replace(" ", "_", $objSchoolAddons->name); ?>_addon" name="checkAll<?php print $addonCounter; ?>" id="checkAll<?php print $addonCounter; ?>" value="" />
+								<input type="hidden" name="checkAll<?php print $addonCounter; ?>" id="checkAll<?php print $addonCounter; ?>" value="<?php print $objSchoolAddons->package_item_id; ?>" />
+								<span id="group<?php print $addonCounter; ?>_status"><?php print $objSchoolAddons->name;?></span><br />
+	<?php
+				}
+				$addonCounter++;
+			}
+	?>	
+							</th>
+							<th style="width:10%;  text-align:center; background-color: #078EB7;">
+								<span>Total</span>
+							</th>
+							<th style="width:10%;  text-align:center; background-color: #078EB7;">
+								<span>Current Total</span>
+							</th>
+							<th style="width:20%;  text-align:center; background-color: #078EB7;">
+								<span><?php print $strUserType == "Camper" ? "Camper" : "Student";?> Name</span>
+							</th>
+							<th style="width:10%;  text-align:center; background-color: #078EB7;">
+								<span>Platoon</span>
+							</th>
+							<th style="width:20%;  background-color: #078EB7;">
+								<span>Registration Fee (Optional, for your records only)</span>
+							</th>                        
+	<?php
+			foreach ($this->arrStudents as $objStudents)
+			{
+	?>
+							<tr style="border-bottom:1px dashed #000000; border-top:1px dashed #000000;">
+								<td style="width:20%;" id="checkAll<?php print $groupCounter;?>_group">
+	<?php	
+				foreach($this->arrStudentAddons[$objStudents->user_id] as $objAddons)
+				{
+					//var_dump($objAddons);
+					if(!empty($objAddons))
+					{
+						if($objAddons->pack_item_type == 'add-on')
+						{
+							if($objStudents->package_item_id != $objAddons->addon_id)
+							{
+								if($objAddons->is_mandatory == "yes")
+								{
+									$checked = "checked";
+									//print "<script language='javascript'>calculate_addon_fees();</script>";
+								}
+								else
+								{
+									$checked = "";
+								}
+								if($objAddons->name == "Store Module")
+								{
+	?>	
+									<span class="addon_fee">
+										<input type="checkbox" class="<?php print str_replace(" ", "_",$objAddons->name); ?>_addon" name="addons[]" id="<?php print str_replace(" ", "_",$objAddons->name); ?>" value="<?php print $objStudents->user_id."_".$objAddons->package_item_id."_".$objAddons->student_price."_".$objAddons->name; ?>"  <?php print $checked;?> onClick="calculate_addon_fees();" />
+										<input type="hidden" class="userfees_<?php print $i; ?>" name="<?php print str_replace(" ", "_",$objAddons->name);?>_fee" id="<?php print str_replace(" ", "_",$objAddons->name);?>_fee" value="<?php print $objAddons->student_price; ?>" />
+										<input type="hidden" name="user_id" id="user_id" value="<?php echo $objStudents->user_id; ?>" />
+										<input type="hidden" name="institution_id" id="institution_id" value="<?php echo $this->institution_id; ?>" />
+										<input type="hidden" name="package_item_id" id="package_item_id" value="<?php echo $objAddons->package_item_id; ?>" />
+										<input type="hidden" name="package_item_name" id="package_item_name" value="<?php echo $objAddons->name; ?>">
+										<input type="hidden" name="addon_price" id="addon_price" value="<?php echo $objAddons->student_price; ?>" />
+									</span>
+									<span>
+										<?php print $objAddons->name; ?> - <?php print "$" .$objAddons->student_price; ?>
+									</span>
+									<br />
+									<span class="label">Shirt Size:</span>
+									<span class="input">
+										<select name="shirt_size" class="select">
+										<option value="S">Small</option>
+										<option value="M">Medium</option>
+										<option value="XL">X-Large</option>
+										<option value="L">Large</option>
+										</select>
+									</span>
+									<div class="clear"></div>
+	<?php
+								}
+								else
+								{
+	?>
+							<!-- in the value field of a checkbox you need to put an id of an addon (package_item_id)-->								
+									<span class="addon_fee">
+										<input type="checkbox" class="<?php print str_replace(" ", "_",$objAddons->name); ?>_addon" name="addons[]" id="<?php print str_replace(" ", "_",$objAddons->name); ?>" value="<?php print $objStudents->user_id."_".$objAddons->package_item_id."_".$objAddons->student_price."_".$objAddons->name; ?>" <?php print $checked;?> onClick="calculate_addon_fees();" />
+										<input type="hidden" class="userfees_<?php print $i; ?>" name="<?php print str_replace(" ", "_",$objAddons->name);?>_fee" id="<?php print str_replace(" ", "_",$objAddons->name);?>_fee" value="<?php print $objAddons->student_price; ?>" />
+										<input type="hidden" name="user_id" id="user_id" value="<?php echo $objStudents->user_id; ?>" />
+										<input type="hidden" name="institution_id" id="institution_id" value="<?php echo $this->institution_id; ?>" />
+										<input type="hidden" name="package_item_id" id="package_item_id" value="<?php echo $objAddons->package_item_id; ?>" />
+										<input type="hidden" name="package_item_name" id="package_item_name" value="<?php echo $objAddons->name; ?>">
+										<input type="hidden" name="addon_price" id="addon_price" value="<?php echo $objAddons->student_price; ?>" />
+									</span>
+									<span>
+										<?php print $objAddons->name; ?> - <?php print "$" .$objAddons->student_price; ?>
+									</span><br />	
+	<?php
+								}
+							}
+						}
+					}
+					else
+					{
+						foreach($this->arrAddons as $objAddons)
+						{
+							if($objAddons->package_item_type == 'add-on')
+							{
+								if($objAddons->name == "Store Module")
+								{
+	?>	
+									<span class="addon_fee">
+										<input type="checkbox" class="<?php print str_replace(" ", "_",$objAddons->name); ?>_addon" name="addons[]" id="<?php print str_replace(" ", "_",$objAddons->name); ?>" value="<?php print $objStudents->user_id."_".$objAddons->package_item_id."_".$objAddons->student_price."_".$objAddons->name; ?>" <?php print $checked;?> onClick="calculate_addon_fees();" />
+										<input type="hidden" class="userfees_<?php print $i; ?>" name="<?php print str_replace(" ", "_",$objAddons->name);?>_fee" id="<?php print str_replace(" ", "_",$objAddons->name);?>_fee" value="<?php print $objAddons->student_price; ?>" />
+										<input type="hidden" name="user_id" id="user_id" value="<?php echo $objStudents->user_id; ?>" />
+										<input type="hidden" name="institution_id" id="institution_id" value="<?php echo $this->institution_id; ?>" />
+										<input type="hidden" name="package_item_id" id="package_item_id" value="<?php echo $objAddons->package_item_id; ?>" />
+										<input type="hidden" name="package_item_name" id="package_item_name" value="<?php echo $objAddons->name; ?>">
+										<input type="hidden" name="addon_price" id="addon_price" value="<?php echo $objAddons->student_price; ?>" />
+									</span>
+									<span>
+										<?php print $objAddons->name; ?> - <?php print "$" .$objAddons->student_price; ?>
+									</span>
+									<br />
+									<span class="label">Shirt Size:</span>
+									<span class="input">
+										<select name="shirt_size" class="select">
+										<option value="S">Small</option>
+										<option value="M">Medium</option>
+										<option value="XL">X-Large</option>
+										<option value="L">Large</option>
+										</select>
+									</span>
+									<div class="clear"></div>
+	<?php
+								}
+								else
+								{
+	?>
+							<!-- in the value field of a checkbox you need to put an id of an addon (package_item_id)-->								
+									<span class="addon_fee">
+										<input type="checkbox" class="<?php print str_replace(" ", "_",$objAddons->name); ?>_addon" name="addons[]" id="<?php print str_replace(" ", "_",$objAddons->name); ?>" value="<?php print $objStudents->user_id."_".$objAddons->package_item_id."_".$objAddons->student_price."_".$objAddons->name; ?>" <?php print $checked;?> onClick="calculate_addon_fees();" />
+										<input type="hidden" class="userfees_<?php print $i; ?>" name="<?php print str_replace(" ", "_",$objAddons->name);?>_fee" id="<?php print str_replace(" ", "_",$objAddons->name);?>_fee" value="<?php print $objAddons->student_price; ?>" />
+										<input type="hidden" name="user_id" id="user_id" value="<?php echo $objStudents->user_id; ?>" />
+										<input type="hidden" name="institution_id" id="institution_id" value="<?php echo $this->institution_id; ?>" />
+										<input type="hidden" name="package_item_id" id="package_item_id" value="<?php echo $objAddons->package_item_id; ?>" />
+										<input type="hidden" name="package_item_name" id="package_item_name" value="<?php echo $objAddons->name; ?>">
+										<input type="hidden" name="addon_price" id="addon_price" value="<?php echo $objAddons->student_price; ?>" />
+									</span>
+									<span>
+										<?php print $objAddons->name; ?> - <?php print "$" .$objAddons->student_price; ?>
+									</span><br />	
+	<?php
+								}
+							}
+						}
+					}
+				}
+	?>
+								</td>
+								<td style="width:10%; text-align:center;">
+									<span>
+	<?php
+										$intTotal=0;
+										if($objStudents->package_item_id != $objAddons->package_item_id)
+										{
+											print $intTotal += $objStudents->price;
+										}                             
+										$grand_total = $grand_total + $intTotal;
+	?>
+									</span>
+								</td >
+								<td style="width:10%; text-align:center;">
+									<span>$<input type="text" class="calcuserfees" id="userfees_<?php print $i; ?>" name="userfees_[<?php print $groupCounter; ?>]" value="" style="width:50px !important;" onkeydown="return false;"></span>
+								</td>
+								<td style="width:20%; text-align:center;">
+									<span>
+	<?php
+										print $objStudents->first_name ." " . $objStudents->last_name;
+	?>
+									</span>
+								</td>
+								<td style="width:20%; text-align:center;"></td>
+								<td style="width:20%;">
+									<span>$<input type="text" name="note" id="note" value="" style="width:50px !important;"></span>
+								</td>
+							</tr>
+	<?php
+				$i++;
+				$groupCounter++;
+			}
+		//}
+	?>             
+							<tr>
+								<td style="padding:5px;"><strong>Addons that <?php print $strUserType == "Camper" ? "campers" : "students";?> paid already: </strong></td>                           
+								<td id="grand_total_id" name="grand_total_id">
+	<?php
+									print "$ ".number_format($grand_total);
+	?>
+								</td>
+							</tr>
+							<tr>
+								<td style="padding:5px;"><strong>This amount will be charged to a credit card:</strong></td>
+								<td>
+									<span>
+										$<input type="text" id="grandtotaluserfees" name="grandtotaluserfees" value="" style="width:50px !important;" onkeydown="return false;">
+									</span>
+								</td>
+							</tr>
+						</table>
+			<? endif; //removing table ?> 
+
+
+
+
+				<ul>
+			
+<?php
+		foreach ($this->arrStudents as $objStudents)
+		{
+?>
+					<li id="checkAll<?php print $groupCounter;?>_group">
+						<div class="title">
+<?php
+							print $objStudents->first_name ." " . $objStudents->last_name;
+?>
+						</div>
+						<div class="addons">
+<?php	
+		    foreach($this->arrStudentAddons[$objStudents->user_id] as $objAddons)
+			{
+				//var_dump($objAddons);
+				if(!empty($objAddons))
+				{
+					if($objAddons->pack_item_type == 'add-on')
+					{
+						if($objStudents->package_item_id != $objAddons->pack_item_id)
+						{
+							if($objAddons->item_name == "Camp Registration")
+							{
+								$checked = "checked";
+								//print "<script language='javascript'>calculate_addon_fees();</script>";
+							}
+							else
+							{
+								$checked = "";
+							}
+							if($objAddons->item_name == "Store Module")
+							{
+?>	
+								<div class="addon_fee <?php print $checked;?>">
+									<input type="checkbox" class="<?php print str_replace(" ", "_",$objAddons->item_name); ?>_addon" name="addons[]" id="<?php print str_replace(" ", "_",$objAddons->item_name).'_'.$objStudents->user_id; ?>" value="<?php print $objStudents->user_id."_".$objAddons->pack_item_id."_".$objAddons->pack_item_price."_".$objAddons->item_name; ?>"  <?php print $checked;?> onClick="//calculate_addon_fees();" />
+									<input type="hidden" class="userfees_<?php print $i; ?>" name="<?php print str_replace(" ", "_",$objAddons->item_name);?>_fee" id="<?php print str_replace(" ", "_",$objAddons->item_name);?>_fee" value="<?php print $objAddons->pack_item_price; ?>" />
+									<input type="hidden" name="user_id" id="user_id" value="<?php echo $objStudents->user_id; ?>" />
+									<input type="hidden" name="institution_id" id="institution_id" value="<?php echo $this->institution_id; ?>" />
+									<input type="hidden" name="package_item_id" id="package_item_id" value="<?php echo $objAddons->pack_item_id; ?>" />
+									<input type="hidden" name="package_item_name" id="package_item_name" value="<?php echo $objAddons->item_name; ?>">
+									<input type="hidden" name="addon_price" id="addon_price" value="<?php echo $objAddons->pack_item_price; ?>" />
+									<label for="<?php print str_replace(" ", "_",$objAddons->item_name).'_'.$objStudents->user_id; ?>">
+										<?php print $objAddons->item_name; ?> - <?php print "$" .$objAddons->pack_item_price; ?>
+									</label>
+								</div>
+								
+                                				<span class="label">Shirt Size:</span>
+                                				<span class="input">
+									<select name="shirt_size" class="select">
+                                    					<option value="S">Small</option>
+                                    					<option value="M">Medium</option>
+                                   					<option value="XL">X-Large</option>
+                                    					<option value="L">Large</option>
+									</select>
+								</span>
+<?php
+							}
+							else
+							{
+?>
+						<!-- in the value field of a checkbox you need to put an id of an addon (package_item_id)-->								
+								<div class="addon_fee <?php print $checked;?>">
+									<input type="checkbox" class="<?php print str_replace(" ", "_",$objAddons->item_name); ?>_addon" name="addons[]" id="<?php print str_replace(" ", "_",$objAddons->item_name).'_'.$objStudents->user_id; ?>" value="<?php print $objStudents->user_id."_".$objAddons->pack_item_id."_".$objAddons->pack_item_price."_".$objAddons->item_name; ?>" <?php print $checked;?> onClick="//calculate_addon_fees();" />
+									<input type="hidden" class="userfees_<?php print $i; ?>" name="<?php print str_replace(" ", "_",$objAddons->item_name);?>_fee" id="<?php print str_replace(" ", "_",$objAddons->item_name);?>_fee" value="<?php print $objAddons->pack_item_price; ?>" />
+									<input type="hidden" name="user_id" id="user_id" value="<?php echo $objStudents->user_id; ?>" />
+									<input type="hidden" name="institution_id" id="institution_id" value="<?php echo $this->institution_id; ?>" />
+									<input type="hidden" name="package_item_id" id="package_item_id" value="<?php echo $objAddons->pack_item_id; ?>" />
+									<input type="hidden" name="package_item_name" id="package_item_name" value="<?php echo $objAddons->item_name; ?>">
+									<input type="hidden" name="addon_price" id="addon_price" value="<?php echo $objAddons->pack_item_price; ?>" />
+									<label for="<?php print str_replace(" ", "_",$objAddons->item_name).'_'.$objStudents->user_id; ?>">
+										<?php print $objAddons->item_name; ?> - <?php print "$" .$objAddons->pack_item_price; ?>
+									</label>	
+								</div>
+<?php
+							}
+						}
+					}
+				}
+				else
+				{
+					foreach($this->arrAddons as $objAddons)
+					{
+						if($objAddons->package_item_type == 'add-on')
+						{
+							if($objAddons->item_name == "Store Module")
+							{
+?>	
+								<div class="addon_fee <?php print $checked;?>">
+									<input type="checkbox" class="<?php print str_replace(" ", "_",$objAddons->item_name); ?>_addon" name="addons[]" id="<?php print str_replace(" ", "_",$objAddons->item_name).'_'.$objStudents->user_id; ?>" value="<?php print $objStudents->user_id."_".$objAddons->pack_item_id."_".$objAddons->pack_item_price."_".$objAddons->item_name; ?>" <?php print $checked;?> onClick="//calculate_addon_fees();" />
+									<input type="hidden" class="userfees_<?php print $i; ?>" name="<?php print str_replace(" ", "_",$objAddons->item_name);?>_fee" id="<?php print str_replace(" ", "_",$objAddons->item_name);?>_fee" value="<?php print $objAddons->pack_item_price; ?>" />
+									<input type="hidden" name="user_id" id="user_id" value="<?php echo $objStudents->user_id; ?>" />
+									<input type="hidden" name="institution_id" id="institution_id" value="<?php echo $this->institution_id; ?>" />
+									<input type="hidden" name="package_item_id" id="package_item_id" value="<?php echo $objAddons->pack_item_id; ?>" />
+									<input type="hidden" name="package_item_name" id="package_item_name" value="<?php echo $objAddons->item_name; ?>">
+									<input type="hidden" name="addon_price" id="addon_price" value="<?php echo $objAddons->pack_item_price; ?>" />
+									<label for="<?php print str_replace(" ", "_",$objAddons->item_name).'_'.$objStudents->user_id; ?>">
+										<?php print $objAddons->item_name; ?> - <?php print "$" .$objAddons->pack_item_price; ?>
+									</label>
+								</div>
+
+								<span class="label">Shirt Size:</span>
+								<span class="input">
+									<select name="shirt_size" class="select">
+										<option value="S">Small</option>
+										<option value="M">Medium</option>
+										<option value="XL">X-Large</option>
+										<option value="L">Large</option>
+									</select>
+								</span>
+<?php
+							}
+							else
+							{
+?>
+						<!-- in the value field of a checkbox you need to put an id of an addon (package_item_id)-->								
+								<div class="addon_fee <?php print $checked;?>">
+									<input type="checkbox" class="<?php print str_replace(" ", "_",$objAddons->item_name); ?>_addon" name="addons[]" id="<?php print str_replace(" ", "_",$objAddons->item_name).'_'.$objStudents->user_id; ?>" value="<?php print $objStudents->user_id."_".$objAddons->pack_item_id."_".$objAddons->pack_item_price."_".$objAddons->item_name; ?>" <?php print $checked;?> onClick="//calculate_addon_fees();" />
+									<input type="hidden" class="userfees_<?php print $i; ?>" name="<?php print str_replace(" ", "_",$objAddons->item_name);?>_fee" id="<?php print str_replace(" ", "_",$objAddons->item_name);?>_fee" value="<?php print $objAddons->pack_item_price; ?>" />
+									<input type="hidden" name="user_id" id="user_id" value="<?php echo $objStudents->user_id; ?>" />
+									<input type="hidden" name="institution_id" id="institution_id" value="<?php echo $this->institution_id; ?>" />
+									<input type="hidden" name="package_item_id" id="package_item_id" value="<?php echo $objAddons->package_item_id; ?>" />
+									<input type="hidden" name="package_item_name" id="package_item_name" value="<?php echo $objAddons->item_name; ?>">
+									<input type="hidden" name="addon_price" id="addon_price" value="<?php echo $objAddons->pack_item_price; ?>" />
+									<label for="<?php print str_replace(" ", "_",$objAddons->item_name).'_'.$objStudents->user_id; ?>">
+										<?php print $objAddons->item_name; ?> - <?php print "$" .$objAddons->pack_item_price; ?>
+									</label>
+								</div>
+<?php
+							}
+						}
+					}
+				}
+			}
+?>
+						</div>				
+<?php
+							$intTotal=0;
+							//if($objStudents->package_item_id != $objAddons->package_item_id)
+							//{
+								$intTotal += $objStudents->price;
+								if ($intTotal > 0) {
+?>
+						<div class="paid">Already Paid: $<?php echo $intTotal;?>
+						</div>
+<?php
+								}
+							//}                             
+							$grand_total = $grand_total + $intTotal;
+?>
+
+						<div class="total title">$<span class="calcuserfees" id="userfees_<?php print $i; ?>" name="userfees_[<?php print $groupCounter; ?>]" value="" style="width:50px !important;" onkeydown="return false;"></span></div>
+
+
+						<div class="total-2"><span>$<input type="text" name="note" id="note" value="" style="width:50px !important;"></span></div>
+
+					</li>
+<?php
+			$i++;
+			$groupCounter++;
+        }
+    //}
+?>             
+				</ul>
+			</div>
+		</div>
+		
+		<h2>Credit Card Approval</h2>
+        <div id="lists" class="module lists forms">
+            <div class="module_content">
+				<ul>
+<?php
+					if ($grand_total>0)
+					{
+?>
+					<li>
+						<div class="title"><?php print $strUserType == "Camper" ? "Campers" : "Students";?> paid already:</div>                           
+						<div id="grand_total_id" class="title total">
+<?php
+								print "$".number_format($grand_total);
+?>
+						</div>
+					</li>
+<?php
+					}
+?>
+					<li id="grandtotaluserfees">
+						<div class="title">Total to be charged to your credit card:</div>
+						
+						<div class="title total">$<span></span></div>
+						<input type="hidden" name="grandtotaluserfees" value="">
+						
+					</li>
+					<li>
+						<div class="title">
+							<input type="checkbox" name="cccardcheck" id="cccardcheck">
+							<label for="cccardcheck">	Please charge this to my credit card on file</span>
+						</div>								
+					</li>
+					<li>						
+						<a href="#" title="Save" class="button submit" onClick="form_submit();">Register <?php print $strUserType == "Camper" ? "Campers" : "Students";?></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div id="processing_status" class="module message"><?php if ($this->message){ echo $this->message . "<br>"; }?></div>
+
+
+		</form>	
+<?php
+	}
+?>
+	</div>
+</div>

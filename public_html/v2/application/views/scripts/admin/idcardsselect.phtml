@@ -1,0 +1,287 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<style>
+	<!--
+	.fn_print_locally,
+	.fn_printqr_locally {
+		padding:6px 10px;
+	}
+	#slider_idcards a.button {
+		margin-top:2px;
+	}
+	#slider_idcards .list_expand li:first-child {
+		border-top:medium none;
+	}
+	#slider_idcards .list_expand img {
+		border:1px solid #BBBBBB;
+		margin:2px;
+	}
+	#slider_idcards .generate {
+		padding:5px;
+	}
+	#slider_idcards .generate h3 {
+		line-height:1.6;
+		margin-bottom:15px;
+		text-align:center;
+	}
+	#slider_idcards .generate .button {
+		float:none;
+		margin:3px 250px;
+		text-align:center;
+		line-height:1;
+	}
+	#slider_idcards iframe.print_frame {
+		visibility: hidden;
+		position: absolute;
+		z-index: -1;
+	}
+	#slider_idcards .mailing p {
+		font-size: 16pt;
+	}
+	#slider_idcards .ph_bottom_status {
+		padding: 5px;
+		display:none;
+	}
+
+	#idcard_section2 {
+		display: none;
+	}
+	ul .list ul {
+		background-color: #ddd;
+		min-width: 200px;
+	}
+	.extrabox {
+		float: left;
+		font-size: 15px;
+		font-weight: bold;
+		min-height: 26px;
+		width: 90px;
+		padding:6px 10px 0 2px
+	}
+	.textmsg li {
+		font-size: 12pt !important;
+		line-height: 30px !important;
+		padding: 6px !important;
+	}
+	.processing_status_loading {
+		padding:3px;
+	}
+	#idcard_section2 div.lists li .title {
+		width: 180px;
+	}
+	#idcard_section2 div.lists li .title,
+	#idcard_section2 div.lists li .extrabox {
+		white-space:nowrap;
+		text-overflow:ellipsis;
+		overflow:hidden;
+	}
+	-->
+</style>
+<script>
+	// used in usersselect
+	var objUsersMenu = {};
+
+	function usersselect_callback() {
+		var arrUserIds = Object.keys(objUsersMenu.arrSelected);
+		var mixedAmount = arrUserIds.length;
+		if (!arrUserIds.length)
+			mixedAmount = "None";
+		$("#slider_idcards .lable_count span").html(mixedAmount);
+
+		if (arrUserIds) {
+			$("#slider_idcards #idcard_section2").fadeIn();
+		} else {
+			$("#slider_idcards #idcard_section2").fadeOut();
+		}
+
+		var strHtml = "";
+		if (!$("#slider_idcards #secondlist_header").length)
+		{
+			strHtml += '<li id="secondlist_header"><div class="title"><?php print text("Name"); ?></div>';
+			strHtml += '<div style="float:right;padding-top:2px">&nbsp;</div>';
+			strHtml += '<div class="extrabox" style="width:50px"><?php print text("Photo"); ?></div>';
+			strHtml += '<div class="extrabox" style="width:140px"><?php print text("[|Registered|]"); ?></div>';
+			strHtml += '<div class="extrabox"><?php print text("Printed"); ?></div>';
+			strHtml += '</li>';
+		}
+		$("#slider_idcards #idcard_section2 .removeable_selection_list ul li").remove();
+		for (var intUser in objUsersMenu.arrSelected)
+		{
+			var objUser = JSON.parse(objUsersMenu.arrSelected[intUser]);
+			strHtml += '<li id="selected_' + intUser + '"><div class="title">' + objUser.first_name + ' ' + objUser.last_name + '</div>';
+			strHtml += '<input type="hidden" class="user_id" value="' + intUser + '" />';
+			strHtml += '<div style="float:right;padding-top:2px"><span><a class="button fn_remove_selection"><?php print text("Remove Selection"); ?></a></span></div>';
+			strHtml += '<div class="extrabox" style="width:50px">' + (objUser.image_id ? 'Yes' : 'No') + '</div>';
+			strHtml += '<div class="extrabox" style="width:140px">' + objUser.registered + '</div>';
+			strHtml += '<div class="extrabox col_status">' + objUser.ordered + '</div>';
+			strHtml += '</li>';
+		}
+		$("#slider_idcards #idcard_section2 .removeable_selection_list ul").append(strHtml);
+
+		// Remove second list item
+		$("#slider_idcards .fn_remove_selection").bind("click", function () {
+			var objLi = $(this).closest("li");
+			var intUser = objLi.find(".user_id").val();
+
+			delete objUsersMenu.arrSelected[intUser];
+
+			objLi.fadeOut().queue(function () {
+				$(this).dequeue().remove();
+			});
+			var intUsers = Object.keys(objUsersMenu.arrSelected).length;
+			$("#slider_idcards .selected_user_count").html();
+			if (intUsers)
+				$("#slider_idcards #idcard_section2").fadeIn();
+			else
+			{
+				$("#slider_idcards #idcard_section2").fadeOut();
+			}
+			var arrUserIds = Object.keys(objUsersMenu.arrSelected);
+			mixedAmount = arrUserIds.length;
+			if (!arrUserIds.length)
+				mixedAmount = "None";
+			$("#slider_idcards .lable_count span").html(mixedAmount);
+		});
+	}
+</script>
+<div class="slider" id="slider_idcards">
+	<div class="col_title">
+		<span>Print ID Cards</span>
+	</div>
+	<div class="col_content">
+		<iframe name="print_frame" class="print_frame"></iframe>
+		<div class="module_content marking_missions">
+			<div class="module clearfix ph_print_instructions">
+				<div class="list_expand">
+					<ul>
+						<li>
+							<h3><span class="icon"></span>Print Instructions</h3>
+							<p><img src="<?php print bp; ?>/images/back-end/admin/Print-Dialog-Small-2.jpg" align="right" /><img src="<?php print bp; ?>/images/back-end/admin/Print-Dialog-Small-1.jpg" align="right" />
+								In your browser click 'File' then 'Page Setup...'</p>
+								<p>Step 1: Set the Orientation to Portrait</p>
+								<p>Step 2: Check 'Shrink to fit Page Width'</p>
+								<p>Step 3: In Options check 'Print Background (colors & images)'</p>
+								<p>Step 4: In the second tab set all Margins to 0.5 inches (All Sides)</p>
+								<p>Step 5: Set all Headers & Footers to Blank</p>
+								<p>Note: The browser will save these preferences for later use.</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="module form lists">
+				<div class="module_content list">
+					<ul>
+						<li id="idcardhostnav_users_li">
+							<input class="data_point" type="hidden" id="idcardhostnav_users" value="" />
+							<a class="link" href="<?php echo $sn; ?>/admin/usersselect/is_active/1/permission/missionsapp/url/<?php echo dblencode("admin/user" . $strParamPath) . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title">Users Selected</div>
+								<div class="lable_count" style="float:right;background-color:#fff;border:1px solid gray;margin:5px;padding:2px 12px 2px 12px;text-align:center;"><span>None</span> Selected</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div id="idcard_section1">
+				<form method="POST" target="_blank" action="<?php print bp;?>/admin/idcardshostprintcamps<?php print $strParamPath; ?>">
+					<input type="hidden" class="user_ids" name="user_ids" value="" />
+
+				</form>
+			</div>
+			<div id="idcard_section2">
+				<form>
+					<div class="module" id="module_accordion">
+						<div class="module_content list_expand numbered">
+							<ul>
+								<li>
+									<h3 id="awaiting_actions">
+										<span class="icon"></span> &nbsp;<span class="selected_user_count"></span> <?php print text("[|ID Cards(s)|] Selected"); ?>
+									</h3>
+									<p>
+										<div class="module form lists">
+											<div class="module_content list removeable_selection_list">
+												<ul></ul>
+											</div>
+										</div>
+									</p>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<table cellpadding="4" cellspacing="4">
+						<tr>
+							<td>&nbsp;</td>
+							<td width="60"><span><a class="button fn_printqr_locally"><?php print text("QR CODE ID CARDS"); ?></a></span></td>
+							<td>&nbsp;</td>
+							<td width="60"><span><a class="button fn_print_locally"><?php print text("BARCODE ID CARDS"); ?></a></span></td>
+						</tr>
+					</table>
+				</form>
+			<div class="module form lists" style="margin-top: 12px;">
+				<div class="module_content list">
+					<ul>
+						<li>
+							<span class="label">Order Status:</span>
+							<span class="input">
+								<span><a class="button ph_prize_sent"><?php print text("Mark Printing Complete"); ?></a></span>
+							</span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			</div>
+
+
+			<div class="ph_bottom_status"></div>
+		</div>
+	</div>
+</div>
+<script>
+$(function () {
+	$('.slider:last .ph_prize_sent').click(function () {
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider:last .ph_bottom_status").html("Loading...").fadeIn(),
+			url : '<?php echo $sn . "/admin/markprinted" . $strParamPath; ?>',
+			dataType : "text",
+			data: "user_ids=" + Object.keys(objUsersMenu.arrSelected).join(','),
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					alert("Sorry, there was an error: VU-IDCHN101-DF9GF9");
+					$.dumper(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					alert("Sorry, there was an error: VU-IDCHN102-DOPSDO");
+					$.dumper(strResponse);
+					return;
+				} else {
+					if (arrResponse["error"]) {
+						$(".slider:last .ph_bottom_status").html(arrResponse["error"]);
+					} else if (arrResponse["success"] == "true") {
+						$(".slider:last .ph_bottom_status").html("Success!").fadeOut();
+					}
+				}
+			}
+		});
+	});
+	$('#slider_idcards .fn_print_locally').bind("click", function () {
+		$("#slider_idcards #idcard_section1 .user_ids").val(Object.keys(objUsersMenu.arrSelected).join(","));
+		$("#slider_idcards #idcard_section1 form")
+			.attr("action", "<?php print bp;?>/admin/idcardshostprintcamps<?php print $strParamPath; ?>");
+		$("#slider_idcards #idcard_section1 form").submit();
+	});
+	$('#slider_idcards .fn_printqr_locally').bind("click", function () {
+		$("#slider_idcards #idcard_section1 .user_ids").val(Object.keys(objUsersMenu.arrSelected).join(","));
+		$("#slider_idcards #idcard_section1 form")
+			.attr("action", "<?php print bp;?>/admin/idcardshostprintcampsqr<?php print $strParamPath; ?>");
+		$("#slider_idcards #idcard_section1 form").submit();
+	});
+});
+</script>

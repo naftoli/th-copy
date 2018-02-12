@@ -1,0 +1,175 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+
+	$currency = "";
+	if ($this->objPrize)
+		$currency = $this->objPrize->currency;
+?>
+
+<script>
+	var list_item = "";
+	var checklist = "";
+	var action = "";
+	var intChildEnrollCampaignId = 0;
+	var intChildEnrollAction = "";
+	$(document).ready(function() {
+	    $(".slider:last .checklist input:checked").parent().addClass("selected");
+	    $(".slider:last .checklist .checkbox-select").click(function(event) {
+			action = "enroll";
+			intChildEnrollAction = "enroll";
+			list_item = $(this).closest('li');
+			intChildEnrollCampaignId = list_item.attr("id");
+			checklist = $(this).closest('.checklist');
+			
+			$(this).closest('form').find("#lines_ahead").val(list_item.find(".lines_ahead").val());
+			$(this).closest('form').find("#ladder").val(list_item.find(".ladder_options").val());
+			childenroll(this);
+		});
+	    $(".slider:last .checklist .checkbox-deselect").click(function(event) {
+			action = "unenroll";
+			list_item = $(this).closest('li');
+			intChildEnrollCampaignId = list_item.attr("id");
+			intChildEnrollAction = "unenroll";
+			checklist = $(this).closest('.checklist');
+			childenroll(this);
+		});
+	});
+	function childenroll(objThis) {
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider:last #processing_status").fadeOut("slow"),
+			url : '<?php print $sn;?>/campaigns/campaignchildenroll/enrollaction/' + intChildEnrollAction + '/enrollcampaign/' + intChildEnrollCampaignId,
+			dataType : "text",
+			data: $(objThis).closest('form').serialize(),
+			success : function(response) {
+				if (response.match(/^[0-9]+$/)) {
+					if (action == "enroll") {
+						$(checklist).addClass("selected");
+						$(checklist).find(":checkbox").attr("checked","checked");
+						$(list_item).css({ backgroundColor: '#9fe194' }).delay(500).animate({'background-color': '#eee'}, 500, function(){$(this).css({'background-color':''})});
+						$(list_item).find('.progress').show().delay(500).fadeOut(500);
+						$(list_item).find(".enrollmentoptions").fadeOut("slow");
+					} else {
+						$(checklist).removeClass("selected");
+						$(checklist).find(":checkbox").removeAttr("checked");
+						$(list_item).css({ backgroundColor: '#e19494' }).delay(500).animate({'background-color': '#eee'}, 500, function(){$(this).css({'background-color':''})});
+						$(list_item).find('.progress').show().delay(500).fadeOut(500);
+						$(list_item).find(".enrollmentoptions").fadeIn("slow");
+					}
+				} else {
+					$(".slider:last #processing_status").html(response).fadeIn("slow");
+				}
+			}
+		});
+			
+	}
+</script>
+
+<div class="slider">
+	<div class="col_title">
+		<span>Campaign Enrollment</span>
+	</div>
+	<div class="col_content camper">
+<?php
+	if (!count($this->arrCampaigns))
+	{
+?>
+	<div class="module">
+		<div class="module_content" style="margin:6px;">
+			It appears there are no campaigns available. Please contact your host administrator to resolve this issue.
+		</div>
+	</div>
+<?php
+	}
+	else if (!count($this->arrEnrollList))
+	{
+?>
+	<div class="module">
+		<div class="module_content" style="margin:6px;">
+			There are no children available to display. Please check the Awaiting Actions section of your
+			Profile to complete the steps required to get started.
+		</div>
+	</div>
+<?php
+	}
+	foreach ($this->arrEnrollList as $intUser => $arrCampaigns)
+	{
+		$objUser = $this->arrChildren[$intUser];
+?>
+		<div class="module form" id="module-info">
+			<form>
+				<input type="hidden" name="user_id" value="<?php print $objUser->user_id; ?>" />
+				<input type="hidden" id="lines_ahead" name="lines_ahead" value="" />
+				<input type="hidden" id="ladder" name="ladder" value="" />
+				<h1><?php print $objUser->first_name . " " . $objUser->last_name; ?></h1>
+				<div class="module_content list">
+					<ul>
+<?php
+		foreach ($arrCampaigns as $arrCampaignData)
+		{
+			$objCampaign = $arrCampaignData["objCampaign"];
+			if ($arrCampaignData["boolEnrolled"]) {
+				$selected = " selected ";
+				$checked = " checked ";
+			} else {
+				$selected = "";
+				$checked = "";
+			}
+?>
+						<li name="<?php print $objCampaign->campaign_id; ?>" id="<?php print $objCampaign->campaign_id; ?>">
+							<span class="action">
+								<span class="checklist<?php print $selected; ?>">
+									<input type="checkbox" class="checkbox<?php print $checked; ?>">
+									<span class="install">
+										<a class="button checkbox-select" href="#" >
+											<span class="icon"></span>enroll
+										</a>
+									</span>
+									<span class="uninstall">													
+										<a name="a_unenroll" class="button checkbox-deselect" title="unenroll" href="#">
+											<span class="icon"></span>unenroll
+										</a>
+									</span>
+									<span class="progress">Progress</span>
+								</span>
+						    </span>
+						    <span class='icon bullet'></span>
+						    <span class='label' style="margin-top:-15px;">
+								<span class='label title'><?php
+	print $objCampaign->campaign_type . " Campaign";
+?></span> <?php print $objCampaign->campaign_name; ?>
+<?php
+			if ($objCampaign->campaign_type == "Book")
+			{
+?>
+								<span class='enrollmentoptions'<?php if ($arrCampaignData["boolEnrolled"]) print " style='display:none'"; ?>>
+								<nobr>Lines per day: <select class="ladder_options">
+<?php
+				foreach ($arrCampaignData["arrLadders"] as $objLadder)
+				{
+					print "<option value='" . $objLadder->ladder . "'>Quota " . $objLadder->velocity . "</option>";
+				}
+?>
+								</select></nobr>
+								<nobr>Lines already known: <input type="text" class="lines_ahead" value="0" /></nobr>
+								</span>
+<?php
+			}
+?>
+							</span>
+						    <div class='clear'></div>
+						</li>
+<?php
+		}
+?>
+					</ul>
+				</div>
+			</form>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

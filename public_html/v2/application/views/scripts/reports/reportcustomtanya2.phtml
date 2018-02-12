@@ -1,0 +1,538 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script type="text/javascript">
+	$(document).ready(function() {
+		// Toggle checkbox
+		$(".slider:last .report_options input:[type=checkbox]:checked").closest("div").addClass("report_option_select");
+		$(".slider:last .report_options div").bind("click", function () {
+			if ($(this).hasClass("report_option_select")) {
+				$(this).removeClass("report_option_select");
+				$(this).find("input").removeAttr("checked");
+			} else {
+				$(this).addClass("report_option_select");
+				$(this).find("input").attr("checked", "checked");
+			}
+			$(this).find("input").focus();
+		});
+
+		if ($(".slider:last #date_range").attr('checked'))
+		{
+			$("#report_dates").fadeIn('slow');
+		}
+		$(".slider:last #date_range").focus(function () {
+			if ($(this).attr('checked'))
+				$('.slider:last #report_dates').fadeIn('slow');
+			else
+				$('.slider:last #report_dates').fadeOut('slow');
+		});
+
+
+		$(".slider:last #report_date_options #start_date").datepicker();
+		$(".slider:last #report_date_options #end_date").datepicker();
+
+		$(".slider:last #update_report").click(function () {
+			var strLocation;
+			var objTitle = $('.slider:last .col_title');
+			if (objTitle.hasClass('grade'))
+				strLocation = 'grade';
+			else if (objTitle.hasClass('school'))
+				strLocation = 'school';
+			else if (objTitle.hasClass('all'))
+				strLocation = 'all';
+			var strPath = "<?php print $sn; ?>/reports/reportcustomtanya2/report_type/" + strLocation;
+			strPath += '/date_range/' + $('#date_range:checked').length;
+			strPath += '/start_date/' + encodeURIComponent(encodeURIComponent($('.slider:last #start_date').val()));
+			strPath += '/end_date/' + encodeURIComponent(encodeURIComponent($('.slider:last #end_date').val()));
+			slideRefresh(strPath);
+		});
+	});
+</script>
+<div class="slider">
+<style>
+	.sheet .header {
+		font-weight:bold;
+	}
+	.sheet div {
+		display: inline-block;
+		padding: 3px;
+	}
+	.sheet p {
+		font-weight:bold;
+	}
+	.report_options {
+		padding-top:3px;
+		padding-left:6px;
+	}
+	.report_options div {
+		margin: 2px;
+		padding: 0px 6px 0px 6px;
+		border: 1px outset #EAEAEA;
+		display: inline;
+		cursor: default;
+		white-space: nowrap;
+		line-height: 30px;
+	}
+	.report_options table {
+		margin: 2px;
+		border: 1px ridge #DDD;
+		cursor: default;
+	}
+	.report_option_select {
+		background-color: #DDD;
+		border: 1px inset #EAEAEA !important;
+	}
+	.date {
+		padding:3px !important;
+	}
+	.title_module {
+		display:none;
+	}
+	.title_module div {
+		padding:4px !important;
+		text-align: center;
+	}
+	.only_printed {
+		display:none;
+	}
+@media print {
+	.header, .body_header_left, .body_header_right, .left_menu, .noprint, #nav, .col_title {
+		display: none !important;
+	}
+	#content {
+		overflow:visible !important;
+		background:none !important;
+		width:auto !important;
+	}
+	#wrapper, #content .slider, #content .slider_container, #content .col_content {
+		float:none !important;
+		width:auto !important;
+		height:auto !important;
+	}
+	#content .col_content {
+		padding:0 !important;
+	}
+	.col_title_bg {
+		background:none !important;
+		height:0 !important;
+		margin:0 !important;
+	}
+	div.module {
+		margin-right:0;
+	}
+	.slider_container  {
+		margin-left:0 !important;
+	}
+	.slider_container .slider {
+		display:none;
+	}
+	.slider_container .slider:last-child {
+		display:block;
+	}
+	.page-break {
+		display:block;
+		page-break-after: always;
+	}
+	.date_module {
+		display:none;
+	}
+	.title_module {
+		display:block !important;
+	}
+	.only_printed {
+		display:block !important;
+	}
+	.only_not_printed {
+		display:none !important;
+	}
+}
+</style>
+<?php
+	if ($this->strReportType == "grade")
+	{
+?>
+<style>
+	.sheet div {
+		display: inline-block;
+		padding: 3px;
+		width: 120px;
+	}
+</style>
+	<div class="col_title grade">
+		<span>Tanya Platoon Report</span>
+	</div>
+	<div class="col_content">
+<?php
+		$intStartDate = isset($this->arrParams["start_date"]) ? urldecode($this->arrParams["start_date"]) : date("m") . "/" . date("d") . "/" . (date("Y")-1);
+		$intEndDate = isset($this->arrParams["end_date"]) ? urldecode($this->arrParams["end_date"]) : date("m") . "/" . date("d") . "/" . date("Y");
+		$strJewishStart = jdtojewish(unixtojd(strtotime($intStartDate)));
+		$strJewishEnd = jdtojewish(unixtojd(strtotime($intEndDate)));
+?>
+		<div class="module date_module">
+			<div class="report_options" id="report_date_options">
+				<table>
+					<tr>
+						<td>
+							<div><span>Date:</span><input type="checkbox"<?php print @$this->arrParams["date_range"] ? " checked" : ""; ?> id="date_range" name="date_range" /></div>
+						</td>
+						<td id="report_dates" style="display:none">
+							&nbsp; Start: <input type="text" class="required date" id="start_date" name="start_date" value="<?php print $intStartDate; ?>" size="25" /> End: <input type="text" class="required date" id="end_date" name="end_date" value="<?php print $intEndDate; ?>" size="25" />
+						</td>
+						<td>
+							&nbsp;<div id="update_report"><span>Update Report</span></div>
+						</td>
+					</td>
+				</table>
+			</div>
+		</div>
+<?php
+		$intGoal = 0;
+		$intAccomplishment = 0;
+		$intLinesMissing = 0;
+		if (isset($this->arrReport["arrList"]))
+			foreach ($this->arrReport["arrList"] as $arrClass)
+			{
+				foreach ($arrClass as $arrData)
+				{
+					$intGoal += $arrData["goal"];
+					$intAccomplishment += $arrData["accomplished"];
+					$intLinesMissing += $arrData["goal"]-$arrData["accomplished"];
+				}
+			}
+?>
+		<div class="module lists only_not_printed">
+			<div class="module_content" style="margin:6px;">
+				<ul>
+					<li>
+						<h1>Report Dates - From: <?php print $intStartDate; ?> (<?php print $strJewishStart; ?>) To: <?php print $intEndDate; ?> (<?php print $strJewishEnd; ?>)</h1>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="lists" class="module only_not_printed">
+			<div class="sheet">
+				<ul>
+					<li class="header">
+						<div style="width:280px"></div>
+						<div>Base Goal</div>
+						<div>Base Accomplished</div>
+						<div>Base Lines Missing</div>
+					</li>
+					<li>
+						<div style="width:280px">Base Summary</div>
+						<div><?php print number_format($intGoal); ?></div>
+						<div><?php print number_format($intAccomplishment); ?></div>
+						<div><?php print number_format($intLinesMissing); ?></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+		if (isset($this->arrReport["arrList"]))
+			foreach ($this->arrReport["arrList"] as $strClassKey => $arrClass)
+			{
+				$intClass = $this->arrClassKeys[$strClassKey];
+				print '<div style="padding:4px;font-weight:bold">';
+				print 'Teacher: ' . @$this->objTeacherNames[$this->arrClassLegacyIds[$intClass]->legacy_id]['class_teacher'] . '<br />';
+				print 'Platoon: ' . $this->arrClasses[$intClass]->custom_name1;
+				print '</div>';
+?>
+		<div class="module title_module">
+			<div class="module_content">
+				Tanya Platoon Report
+			</div>
+		</div>
+		<div class="module lists only_printed">
+			<div class="module_content" style="margin:6px;">
+				<ul>
+					<li>
+						<h1>Report Dates - From: <?php print $intStartDate; ?> (<?php print $strJewishStart; ?>) To: <?php print $intEndDate; ?> (<?php print $strJewishEnd; ?>)</h1>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="lists" class="module only_printed">
+			<div class="sheet">
+				<ul>
+					<li class="header">
+						<div style="width:280px"></div>
+						<div>Base Goal</div>
+						<div>Base Accomplished</div>
+						<div>Base Lines Missing</div>
+					</li>
+					<li>
+						<div style="width:280px">Base Summary</div>
+						<div><?php print number_format($intGoal); ?></div>
+						<div><?php print number_format($intAccomplishment); ?></div>
+						<div><?php print number_format($intLinesMissing); ?></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="lists" class="module page-break">
+			<div class="sheet">
+				<ul>
+					<li class="header">
+						<div style="width:280px">Soldier</div>
+						<div>Soldier Goal</div>
+						<div>Soldier Accomplished</div>
+						<div>Lines Missing</div>
+					</li>
+<?php
+				foreach ($arrClass as $arrData)
+				{
+?>
+					<li class="<?php print $strClass;?>">
+						<div style="width:280px"><?php print $arrData["objUser"]->first_name . " " . $arrData["objUser"]->last_name; ?></div>
+						<div><?php print number_format($arrData["goal"]); ?></div>
+						<div><?php print number_format($arrData["accomplished"]); ?></div>
+						<div><?php print number_format($arrData["goal"]-$arrData["accomplished"]); ?></div>
+					</li>
+<?php
+				}
+?>
+				</ul>
+			</div>
+		</div>
+<?php
+			}
+?>
+				</ul>
+			</div>
+		</div>
+
+	</div>
+</div>
+<?php
+	}
+	else if ($this->strReportType == "school")
+	{
+?>
+<style>
+	.sheet div {
+		display: inline-block;
+		padding: 3px;
+		width: 120px;
+	}
+</style>
+	<div class="col_title school">
+		<span>Tanya Base Report</span>
+	</div>
+	<div class="col_content">
+		<div class="module title_module">
+			<div class="module_content">
+				Tanya Base Report
+			</div>
+		</div>
+<?php
+		$intStartDate = isset($this->arrParams["start_date"]) ? urldecode($this->arrParams["start_date"]) : date("m") . "/" . date("d") . "/" . (date("Y")-1);
+		$intEndDate = isset($this->arrParams["end_date"]) ? urldecode($this->arrParams["end_date"]) : date("m") . "/" . date("d") . "/" . date("Y");
+		$strJewishStart = jdtojewish(unixtojd(strtotime($intStartDate)));
+		$strJewishEnd = jdtojewish(unixtojd(strtotime($intEndDate)));
+?>
+		<div class="module lists">
+			<div class="module_content" style="margin:6px;">
+				<ul>
+					<li>
+						<h1>Report Dates - From: <?php print $intStartDate; ?> (<?php print $strJewishStart; ?>) To: <?php print $intEndDate; ?> (<?php print $strJewishEnd; ?>)</h1>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module date_module">
+			<div class="report_options" id="report_date_options">
+				<table>
+					<tr>
+						<td>
+							<div><span>Date:</span><input type="checkbox"<?php print @$this->arrParams["date_range"] ? " checked" : ""; ?> id="date_range" name="date_range" /></div>
+						</td>
+						<td id="report_dates" style="display:none">
+							&nbsp; Start: <input type="text" class="required date" id="start_date" name="start_date" value="<?php print $intStartDate; ?>" size="25" /> End: <input type="text" class="required date" id="end_date" name="end_date" value="<?php print $intEndDate; ?>" size="25" />
+						</td>
+						<td>
+							&nbsp;<div id="update_report"><span>Update Report</span></div>
+						</td>
+					</td>
+				</table>
+			</div>
+		</div>
+<?php
+		$intGoal = 0;
+		$intAccomplishment = 0;
+		$intLinesMissing = 0;
+		foreach ($this->arrReport["arrList"] as $arrData)
+		{
+			$intGoal += $arrData["grade_goal"];
+			$intAccomplishment += $arrData["grade_accomplished"];
+			$intLinesMissing += $arrData["grade_goal"]-$arrData["grade_accomplished"];
+		}
+?>
+		<div id="lists" class="module">
+			<div class="sheet">
+				<ul>
+					<li class="header">
+						<div style="width:280px"></div>
+						<div>Base Goal</div>
+						<div>Base Accomplished</div>
+						<div>Base Lines Missing</div>
+					</li>
+					<li>
+						<div style="width:280px">Base Summary</div>
+						<div><?php print number_format($intGoal); ?></div>
+						<div><?php print number_format($intAccomplishment); ?></div>
+						<div><?php print number_format($intLinesMissing); ?></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="lists" class="module">
+			<div class="sheet">
+				<ul>
+					<li class="header">
+						<div style="width:280px">Platoon</div>
+						<div>Platoon Goal</div>
+						<div>Platoon Accomplished</div>
+						<div>Lines Missing</div>
+					</li>
+<?php
+		foreach ($this->arrReport["arrList"] as $arrData)
+		{
+?>
+					<li class="<?php print $strClass;?>">
+						<div style="width:280px"><?php print $arrData["objClass"]->grade . " " . $arrData["objClass"]->sub; ?></div>
+						<div><?php print number_format($arrData["grade_goal"]); ?></div>
+						<div><?php print number_format($arrData["grade_accomplished"]); ?></div>
+						<div><?php print number_format($arrData["grade_goal"]-$arrData["grade_accomplished"]); ?></div>
+					</li>
+<?php
+		}
+?>
+				</ul>
+			</div>
+		</div>
+
+	</div>
+</div>
+<?php
+	}
+	else if ($this->strReportType == "all")
+	{
+?>
+<style>
+	.sheet div {
+		display: inline-block;
+		padding: 3px;
+		width: 110px;
+	}
+</style>
+	<div class="col_title all">
+		<span>Tanya Army Report</span>
+	</div>
+	<div class="col_content">
+<?php
+		$intStartDate = isset($this->arrParams["start_date"]) ? urldecode($this->arrParams["start_date"]) : date("m") . "/" . date("d") . "/" . (date("Y")-1);
+		$intEndDate = isset($this->arrParams["end_date"]) ? urldecode($this->arrParams["end_date"]) : date("m") . "/" . date("d") . "/" . date("Y");
+		$strJewishStart = jdtojewish(unixtojd(strtotime($intStartDate)));
+		$strJewishEnd = jdtojewish(unixtojd(strtotime($intEndDate)));
+?>
+		<div class="module title_module">
+			<div class="module_content">
+				Tanya Army Report
+			</div>
+		</div>
+		<div class="module lists">
+			<div class="module_content" style="margin:6px;">
+				<ul>
+					<li>
+						<h1>Report Dates - From: <?php print $intStartDate; ?> (<?php print $strJewishStart; ?>) To: <?php print $intEndDate; ?> (<?php print $strJewishEnd; ?>)</h1>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module date_module">
+			<div class="report_options" id="report_date_options">
+				<table>
+					<tr>
+						<td>
+							<div><span>Date:</span><input type="checkbox"<?php print @$this->arrParams["date_range"] ? " checked" : ""; ?> id="date_range" name="date_range" /></div>
+						</td>
+						<td id="report_dates" style="display:none">
+							&nbsp; Start: <input type="text" class="required date" id="start_date" name="start_date" value="<?php print $intStartDate; ?>" size="25" /> End: <input type="text" class="required date" id="end_date" name="end_date" value="<?php print $intEndDate; ?>" size="25" />
+						</td>
+						<td>
+							&nbsp;<div id="update_report"><span>Update Report</span></div>
+						</td>
+					</td>
+				</table>
+			</div>
+		</div>
+<?php
+		$intGoal = 0;
+		$intAccomplishment = 0;
+		$intLinesMissing = 0;
+		foreach ($this->arrReport["arrList"] as $arrData)
+		{
+			$intGoal += $arrData["goal"];
+			$intAccomplishment += $arrData["accomplished"];
+			$intLinesMissing += $arrData["goal"]-$arrData["accomplished"];
+		}
+?>
+		<div id="lists" class="module">
+			<div class="sheet">
+				<ul>
+					<li class="header">
+						<div style="width:280px"></div>
+						<div>Army Goal</div>
+						<div>Army Accomplished</div>
+						<div>Army Lines Missing</div>
+					</li>
+					<li>
+						<div style="width:280px">Army Summary</div>
+						<div><?php print number_format($intGoal); ?></div>
+						<div><?php print number_format($intAccomplishment); ?></div>
+						<div><?php print number_format($intLinesMissing); ?></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="lists" class="module">
+			<div class="sheet">
+				<ul>
+					<li class="header">
+						<div style="width:280px">Base Name</div>
+						<div>Base Goal</div>
+						<div>Base Accomplished</div>
+						<div>Base Lines Missing</div>
+					</li>
+<?php
+		$intItr = 0;
+		$intPage = 0;
+		foreach ($this->arrReport["arrList"] as $arrData)
+		{
+			$intItr++;
+			$strClass = "";
+			if ($intItr%13==0)
+			{
+				//print "<div class='page-break'></div>";
+				$strClass = 'page-break ';
+				$intPage++;
+			}
+?>
+					<li class="<?php print $strClass;?>">
+						<div style="width:280px"><?php print $arrData["institution_name"]; ?></div>
+						<div><?php print number_format($arrData["goal"]); ?></div>
+						<div><?php print number_format($arrData["accomplished"]); ?></div>
+						<div><?php print number_format($arrData["goal"]-$arrData["accomplished"]); ?></div>
+					</li>
+<?php
+		}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<?php
+	}
+?>

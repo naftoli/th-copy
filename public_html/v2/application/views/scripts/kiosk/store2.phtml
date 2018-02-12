@@ -1,0 +1,715 @@
+<?php
+include "config.phtml";
+include "headers/kiosk_header.phtml";
+$kiosk_user_session_data = new Zend_Session_Namespace('userInfo');
+
+function getCartItemQuantity($cartItems, $intPrizeId)
+{
+	$intQuantity = 0;
+
+	foreach ($cartItems as $cartItem) {
+		if ($cartItem->prize_id == $intPrizeId)
+		{
+			$intQuantity = $cartItem->quantity;
+			break;
+		}
+	}
+
+	echo $intQuantity;
+}
+?>
+
+	<script>
+		// u: <?php print $kiosk_user_session_data->user_id; ?> i: <?php print $kiosk_user_session_data->institution_id; ?>
+
+		function formatNumber( number, decimals, dec_point, thousands_sep ) {
+			var n = number, c = isNaN(decimals = Math.abs(decimals)) ? 0 : decimals;
+			var d = dec_point == undefined ? "." : dec_point;
+			var t = thousands_sep == undefined ? "," : thousands_sep, s = n < 0 ? "-" : "";
+			var i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
+
+			return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+		}
+
+		$(document).ready(function()
+		{
+			var prize_id = "";
+			var prize_view = "";
+			var prize_name = "";
+			var current_balance = <?=$this->current_balance;?>;
+			var items_in_cart = <?=count($this->arrCartItems)?>;
+
+			if(items_in_cart == 0){
+				$('#checkout').hide();
+			}
+
+			// When the save button is clicked the cart session variable needs to be updated //
+			$('#save_button').die().live('click',
+				function(event) {
+					// The quantity entered //
+					var quantity = $("#form_" + prize_id).find("input[name=quantity]").val();
+					if (quantity < 1)
+						quantity = 0;
+					var available_quantity = $("#prizes_overlay").find("#form_" + prize_id).find("input[name=available_quantity]").val();
+					//alert("qty: " + quantity + " available: " + available_quantity);
+					if(quantity > 0 ) $('#checkout').show();
+
+					// The points cost of the prize //
+					var prize_miles = $("#form_" + prize_id).find("span[name=prize_miles]").html();
+
+					// The cost of the purchase //
+					var cost = quantity * prize_miles;
+
+					// If the item is already in the cart then this is the quantity of the cart item //
+					var old_quantity = $("#prizes_overlay").find("#form_" + prize_id).find("input[name=hidden_quantity]").val();
+
+					// variable that will contain the difference between the   //
+					// quantity of the cart item and the new quantity enetered //
+					var difference = 0;
+
+					if (old_quantity == 0 && quantity == 0)
+					{
+						$('prize_view_' + prize_id).css('display', 'none');
+						$('#form_' + prize_id).css('display', 'none');
+						$('#overlay_parent').css('display', 'none');
+						$('#wrapper').fadeTo('normal', 1.0);
+
+					}
+					else
+					{
+						// If the item is already in the cart then we have to figure out how //
+						// many more can be purchased before the users balance is reached    //
+						if (quantity > old_quantity && old_quantity > 0)
+						{
+							difference = quantity - old_quantity;
+							var cost = difference * prize_miles;
+						}
+						else
+						{
+							var cost = quantity * prize_miles;
+						}
+
+						// If the cost is greater than the balance then a message is alerted //
+						if (cost > current_balance && quantity > old_quantity)
+						{
+							var max_items = Math.floor(current_balance / prize_miles);
+							if (max_items < 0)
+								max_items = 0;
+							var total_quantity = parseInt(old_quantity) + parseInt(max_items);
+							if (difference > 0 && max_items > 0)
+							{
+								$("#form_" + prize_id).find("input[name=quantity]").val(total_quantity);
+								alert("Your current balance only allows you to buy " + max_items + " more for a total of " + total_quantity);
+							}
+							else
+							{
+								$("#form_" + prize_id).find("input[name=quantity]").val(max_items);
+								alert("Your current balance only allows you to buy " + max_items);
+							}
+						}else if(parseInt(available_quantity) < parseInt(quantity)) {
+							alert("There are only " + available_quantity + " pieces of this item available available: " + available_quantity + " quantity: " + quantity);
+						}
+						else
+						{
+							var url = "/kiosk/addcartitem/prize_id/" + prize_id + "/quantity/" + quantity;
+
+							//************************************//
+							// Ajax call to update the cart items //
+							$.ajax({
+								type : "GET",
+								cache : false,
+								url : url,
+								dataType : "text",
+								success : function(response) {
+									alert(response);
+									if(response.indexOf("error")==0){
+										document.getElementById(prize_view).style.display = "none";
+										document.getElementById("overlay_parent").style.display = "none";
+										$('#wrapper').fadeTo('normal', 1.0);
+										if(items_in_cart == 0){
+											$('#checkout').hide();
+										}
+										alert("ERROR: "+response.substr(7, response.length - 7));
+									} else {
+										var split_location = response.indexOf("[SPLIT2]");
+										if (split_location > -1)
+										{
+											current_balance = response.substr(split_location + 8, response.length - (split_location));
+											current_balance -= <?php print $this->intPointsOffset; ?>;
+											var divs_info = response.substr(0, split_location - 1);
+											var split_location = divs_info.indexOf("[SPLIT1]");
+											var cart_items_div = divs_info.substr(0, split_location - 1);
+											var checkout_div = divs_info.substr(split_location + 8, response.length - (split_location));
+
+											$("#prizes_overlay").find("span[name=user_balance]").html(current_balance);
+											$("#prizes_overlay").find("#form_" + prize_id).find("input[name=quantity]").html(quantity);
+											$("#prizes_overlay").find("#form_" + prize_id).find("input[name=hidden_quantity]").val(quantity);
+
+											update_badge_quantity(quantity);
+											document.getElementById("cart_items_div").innerHTML = cart_items_div;
+											document.getElementById("checkout_div").innerHTML = checkout_div;
+											document.getElementById(prize_view).style.display = "none";
+											document.getElementById("overlay_parent").style.display = "none";
+											$('#wrapper').fadeTo('normal', 1.0);
+											myBalance = formatNumber(current_balance);
+											$('#current_balance').html(myBalance);
+										}
+										else
+										{
+											alert("Update not performed.");
+										}
+									}
+
+								}
+							});
+							// Ajax call to update the cart items //
+							//************************************//
+						}
+
+					}
+
+				}
+			);
+
+			// Make sure that only numeric values or a backspace is entered //
+			$('input[name=quantity]').keypress(function(e) {
+				var code = parseInt(e.keyCode ? e.keyCode : e.which);
+				if (code != 8 && (code < 48 || code > 57))
+				{
+					return false;
+				}
+			});
+			// Submit the form and call the storewithdrawAction //
+			$('#cart_buynow').die().live('click',
+				function(event) {
+					$('#cart_buynow_form').submit();
+				}
+			);
+
+			// Display the cart items in the checkout overlay //
+			$('#checkout_button').die().live('click',
+				function(event) {
+
+					prize_view = "";
+					$('#wrapper').fadeTo('normal', 0.3);
+					$(".overlay").css('display', 'block');
+					$(".checkout_overlay").css('display', 'block');
+					$('#overlay_parent').css("top", Math.max(0, (($('body').height()-450)/2)) + 'px').fadeIn('normal');
+				}
+			);
+
+			// Close the overlay //
+			$('#close_overlay').die().live('click',
+				function(event) {
+					if (prize_view != "")
+					{
+						document.getElementById(prize_view).style.display = "none";
+						document.getElementById("overlay_parent").style.display = "none";
+						$('#wrapper').fadeTo('normal', 1.0);
+					}
+					else
+					{
+						$("#checkout_overlay").css('display', 'none');
+						$(".overlay").css('display', 'none');
+						$('#wrapper').fadeTo('normal', 1.0);
+					}
+				}
+			);
+
+			// Open the overlay when the cart item is clicked //
+			$('.cart_item').die().live('click',
+				function(event) {
+					var info = $(this).attr('id').split('_');
+					prize_id = info[2];
+					prize_view = "prize_view_" + prize_id;
+					prize_name = $(this).attr('name');
+
+					$("#overlay_parent").css('display', 'block');
+					$(".overlay").css('display', 'block');
+
+					$('#wrapper').fadeTo('normal', 0.3);
+					$('#overlay_parent').css("top", Math.max(0, (($('body').height()-430)/2)) + 'px').fadeIn('normal');
+
+					document.getElementById("overlay_parent").style.display = "block";
+					document.getElementById(prize_view).style.display = "block";
+				}
+			);
+
+			// Open the overlay when the prize is clicked //
+			$('#show_overlay').die().live('click',
+				function(event) {
+					prize_id = $(this).parents('div').attr('id');
+					prize_view = "prize_view_" + prize_id;
+					//alert(prize_view)
+					prize_name = $("#" + prize_view).find('div[name=prize_name]').html();
+
+					if ($("div[name=" + prize_id + "]").find("div[name=badge]").size() > 0)
+					{
+						$("#form_" + prize_id).find("input[name=quantity]").val($("div[name=" + prize_id + "]").find("div[name=badge]").html());
+					}
+
+					$('#form_' + prize_id).css('display', 'block');
+					$("#overlay_parent").css('display', 'block');
+					$(".overlay").css('display', 'block');
+					$('#wrapper').fadeTo('normal', 0.3);
+					$('#overlay_parent').css("top", Math.max(0, (($('body').height()-430)/2)) + 'px').fadeIn('normal');
+					document.getElementById(prize_view).style.display = "block";
+				}
+			);
+
+			$.extend($.fn.jScrollPane.defaults, {showArrows:true, scrollbarWidth: 42, arrowSize: 42});
+			$('.scroll-pane').jScrollPane();
+			$('.keypad').keypad({buttonImage: '<?php echo $sn; ?>/images/front-end/kiosk/keypad_btn.jpg'});
+
+			function update_badge_quantity(quantity)
+			{
+				var prize_div = "div[name=" + prize_id + "]";
+
+				if ($(prize_div).find("div[name=badge]").size() > 0)
+				{
+					if (quantity > 0)
+					{
+						//var badge_div = $(prize_div).find("div[name=badge]");
+						$(prize_div).find("div[name=badge]").html(quantity);
+						$(prize_div).find("div[name=badge]").css('display', 'block');
+					}
+					else
+					{
+
+						$(prize_div).find("div[name=badge]").html("");
+						$(prize_div).find("div[name=badge]").css('display', 'none');
+					}
+				}
+				else
+				{
+					var badge_div = "<div class='badge' name='badge' id='badge'>" + quantity + "</div>";
+					var search_div = "div[name=pane_item_image_" + prize_id + "]";
+					$(prize_div).find(search_div).before(badge_div);
+				}
+			}
+
+		});
+	</script>
+
+	<STYLE type="text/css">
+		.auction {text-align:center;}
+		#auction_container { background: url(/images/back-end/kiosk/auction_bg_boxes.png) no-repeat; margin:10px 20px 0 22px; width:982px; height:488px;}
+
+		.prices, .categories { margin-bottom:10px; float:left; }
+		.price, .category { width:200px; height:48px; /*background:#CCC;*/ margin-top:10px;}
+		.pane.prizes { float:left; /*background:#CCC;*/ width:500px; height:445px; margin:-20px 0 10px 30px;}
+
+		#tabs { float:left; width:748px; margin:7px; /*padding:5px; background:#999; margin:10px 30px;*/}
+
+		.tabs {  margin:5px 0px 0px; width:200px; float:left;overflow:hidden; font-size:.75em;}
+
+		.tabs_main { width:190px; margin-top:3px; margin-left:8px;}
+		.tabs_main li{ float:left; font-size:.5em; /*margin-left:-5px;width:100px;*/ line-height:27px; }
+		.tabs_main a { width:93px; height:27px; display:block; border-bottom:2px solid #b3d3c1;}
+		.tabs_main a.current { background: url(/images/back-end/kiosk/auction_tabs.png) no-repeat; border:none; height:29px;}
+		.tabs_main a.tab_cat { background-position:right;}
+
+		.pane_items { height:445px; }
+		.pane_item { float:left; width:100px; height:160px; margin:2px 0 0 2px; padding: 5px; font-size:.5em; font-weight:normal; /*background:#666;*/ position:relative; overflow: hidden;}
+		.pane_item, .cart_item { cursor:pointer; }
+		.pane_item .badge { position:absolute; top:-1px; right:-3px; font-size:.95em; background:url(/images/back-end/kiosk/cart_badge.png) no-repeat ; width:28px; height:28px; text-align:center; text-shadow:0 -1px 0 #5f801d; color:#709926; line-height:26px; padding-left:1px;}
+		.pane_item_image { width:100px; height:108px; background:url(/images/back-end/kiosk/shadow_100.png) 0px 100px no-repeat; }
+		.pane_item_image img, .cart_item_image img, .prize_image img { display: block; background-color: white; }
+		.pane_item_title { }
+
+		.jScrollPaneContainer { margin-top:0;}
+
+		.overlay {
+			position: relative;
+			width:640px;
+			min-height:300px;
+			padding: 10px;
+			background-color:#333;
+			color: white;
+			background-image:url(/images/back-end/kiosk/Camouflage-Background-Green.jpg);
+			background-position:50% 50%;
+			/*border:1px solid #666;*/
+
+			/* CSS3 styling for latest browsers*/
+			-moz-box-shadow:0 0 90px 5px #000;
+			-webkit-box-shadow: 0 0 90px #000;
+			 display: block;
+		}
+
+		/* close button positioned on upper right corner
+		.overlay .close {
+			background-image:url(/images/back-end/kiosk/apple-close.png);
+			float: right;
+			margin:5px;
+			cursor:pointer;
+			height:28px;
+			width:28px;
+		}*/
+
+		.contentWrap { color:#EEEEEE; text-shadow:0 -1px 0 #000000;}
+
+		.prize_overlay .pane_title { border-bottom:1px dotted #454545; }
+		.prize_text, .prize_bottom { margin-left: 310px; width: 330px; }
+		.prize_info { font-size:.8em; font-weight:normal; margin-top:5px; text-align:left;}
+		.prize_price { text-align:left; float: left; /*margin-top:10px;*/}
+		.prize_image { float:left;}
+		.prize_image img { display: block; }
+		.prize_bottom { position: absolute; bottom: 10px; font-size:.8em; border-top:1px solid #454545; padding-top:5px; }
+		.prize_bottom .input {float:right;}
+		.button_small {clear:right; text-align: right;}
+		.prize_price_total, .prize_price_left { font-size:.75em;}
+
+		.cart { float:left; width:200px; margin-left:9px; margin-top:20px; /*background:#CCC;*/ font-size:.8em;}
+		.cart_title { position:relative; margin-bottom:8px;}
+		.cart_items { margin: 0 5px; height:415px; font-size:.8em; font-weight:normal; text-align:left;}
+		.cart_items .cart_empty {  text-align:center;}
+		.cart_item { /*border-bottom:1px dotted #999;*/ height:53px; width:48px; margin-left:11px; margin-top:11px; float:left;background:url(/images/back-end/kiosk/shadow_48.png) 0px 48px no-repeat;}
+		.cart_item_image {  position:relative;}
+		.cart_item .badge { position:absolute; top:-8px; right:-8px; font-size:.7em; background:url(/images/back-end/kiosk/cart_badge.png) no-repeat ; width:28px; height:28px; text-align:center; text-shadow:0 -1px 0 #5f801d; color:#709926; line-height:26px; padding-left:1px;}
+		.cart_item_text {}
+		.cart_item_text div { margin-top:3px;}
+		.cart_item_name {}
+		.cart_item_price {font-size:.8em;}
+		.cart_bottom {}
+		.cart_total {}
+		.cart_checkout {}
+
+		.button_small div, .tabs li, .button_small input {background:url(/images/back-end/kiosk/buttons_small_bg.png) no-repeat top; width:142px; height:54px; font-size:.8em; float:left;}
+		.button_small div, .button_small input { float:none;}
+		.button_small div:hover, .tabs li:hover {background-position:bottom;}
+		.button_small div a, .tabs li a { display:block; width:100%; height:100%; padding-top:17px;}
+		.button_small input { border: none; color: white; cursor: pointer; }
+
+		.tabs .prices { margin-left:23px; height:425px;}
+		.tabs .prices li {background:url(/images/back-end/kiosk/buttons_tiny_bg.png) no-repeat top; width:79px; }
+		.tabs .prices li:hover {background-position:bottom; }
+		.tabs .categories .scroll-pane { margin-left:5px; width:190px; height:425px; }
+		.tabs .categories .scroll-pane li {  }
+		.tabs .categories li { float:none; margin:0 auto -10px; }
+		.tabs li { margin-bottom:-10px; margin-top:0;}
+
+		.bottom { margin-left:100px; margin-top:20px;}
+		/*.ui-tabs .ui-tabs-hide {display:none !important;}*/
+		.cart_balance { float:left; margin-top:12px; margin-left:10px;}
+		.cart_pop_bottom { font-size:.8em; border-top:1px solid #454545; padding:0 5px; }
+
+		.checkout_overlay { }
+		.checkout_overlay .pane_title { border-bottom:1px dotted #454545; font-size:.85em; margin:10px; padding-bottom:5px;}
+		.checkout_overlay .pane_text { font-size:.75em; padding:0 80px;}
+	</STYLE>
+
+</HEAD>
+
+<body class="lgreen">
+
+	<div id="overlay_parent" style="position:fixed; z-index:50; width:100%; display:none; top:100px;">
+
+		<div class="overlay" name="prizes_overlay" id="prizes_overlay" style="margin: auto;">
+
+			<div class="close" id="close_overlay" style="z-index:1000"></div>
+
+			<!-- ****************************** PRIZE OVERLAY ****************************** -->
+			<? foreach ($this->arrPrizes as $objPrize) : ?>
+			<form action="/kiosk/store" method="post" name="form_<?= $objPrize->prize_id; ?>" id="form_<?= $objPrize->prize_id; ?>" accept-charset="UTF-8">
+
+				<input type="hidden" name="prize_price" id="prize_price" value="<?= $objPrize->points; ?>" />
+				<input type="hidden" name="available_quantity" id="available_quantity" value="<?= $objPrize->prize_count; ?>" />
+
+				<div class="prize_overlay" id="prize_view_<?= $objPrize->prize_id; ?>" style="display: none;">
+					<div class="prize_image">
+						<img src="<?=$sn;?>/images/show-image/image_id/<?=$objPrize->image_id;?>" width="300" height="300"  alt="">
+					</div>
+
+					<div class="prize_text">
+						<input type="hidden" name="prize_id" id="prize_id" value="<?= $objPrize->prize_id; ?>">
+
+						<div class="pane_title" name="prize_name" id="prize_name"><?= $objPrize->prize_name; ?>
+						</div>
+
+						<div class="prize_info"><?= $objPrize->prize_description; ?></div>
+					</div>
+
+					<div class="prize_bottom" name="prize_bottom" id="prize_bottom">
+						<div class="prize_price">
+							<div class="prize_price_miles">Miles Each:
+								<span name="prize_miles" id="prize_miles"><?= $objPrize->points; ?></span>
+							</div>
+							<!--<div class="prize_price_total">Total: <span>0</span></div>-->
+							<div class="prize_price_left">Miles Left:
+								<span name="user_balance" id="user_balance"><?=$this->current_balance;?></span>
+							</div>
+						</div>
+
+						<div class="input">
+							<input type="text" class="prize_qty keypad" name="quantity" value="<?//=getCartItemQuantity($this->arrCartItems, $objPrize->prize_id);?>">
+							<input type="hidden" name="hidden_quantity" id="hidden_quantity" value="<?=getCartItemQuantity($this->arrCartItems, $objPrize->prize_id);?>">
+						</div>
+
+						<div class="button_small">
+							<input name="save_button" id="save_button" type="button" value="Save">
+						</div>
+					</div>
+				</div>
+				<!-- prize_overlay -->
+			</form>
+			<? endforeach; ?>
+			<!-- ****************************** PRIZE OVERLAY ****************************** -->
+
+
+<!-- ****************************** CHECKOUT OVERLAY ****************************** -->
+				<div class='checkout_overlay' name='checkout_overlay' id='checkout_overlay' style='position:fixed; z-index:50; width:100%; display:none; top:100px;'>
+
+					<div name="checkout_div" id="checkout_div">
+						<? foreach ($this->arrCartItems as $cartItem) : ?>
+
+						<div class="pane_item" name="pane_item_<?=$cartItem->prize_id;?>" id="pane_item_<?=$cartItem->prize_id;?>">
+							<div class="pane_item_image">
+								<img src="<?=$sn;?>/images/show-image/image_id/<?=$objPrize->image_id;?>" width="100" height="100"  alt="">
+								<div class="badge" name="badge" id="badge"><?=$cartItem->quantity;?></div>
+							</div>
+							<div class="pane_item_title">
+								<?=$cartItem->prize_name;?>
+							</div>
+
+
+						</div>
+
+						<? endforeach; ?>
+					</div>
+
+					<div class="clear" name="clear" id="clear"></div>
+
+					<div class="button_small">
+						<form name="cart_buynow_form" id="cart_buynow_form" action="storewithdraw" method="post"  accept-charset="UTF-8">
+							<input type="hidden" name="action" value="insert">
+							<div>
+								<a href="#" class="cart_buynow" name="cart_buynow" id="cart_buynow">Buy Now</a>
+							</div>
+						</form>
+					</div>
+
+				</div>
+<!-- ****************************** CHECKOUT OVERLAY ****************************** -->
+
+			</div> <!-- overlay -->
+
+		</div> <!-- overlay_parent -->
+
+
+		<!--<div id="overlay_checkout" style="position:fixed; z-index:50; width:100%; display:none; top:100px;">
+		</div>-->
+
+
+		<div id="wrapper">
+
+<?php
+	if (!$kiosk_user_session_data->magic)
+	{
+		include "storeheader.phtml";
+	}
+	else
+	{
+?>
+			<div id="header">
+				<div class="org">
+					<div class="nav">
+						<ul>
+<?php
+		if ($_SERVER['REQUEST_URI'] != "/kiosk-main")
+		{
+?>
+							<li class="icon_back"><a href="#" onclick="javascript:history.back(); return false">Back</a></li>
+<?php
+		}
+?>
+							<li class="icon_home"><a href="<?php print WEB_ROOT; ?>kiosk-main/index">Home</a></li>
+							<li class="icon_logout"><a href="/kiosk-login/reset">Logout</a></li>
+						</ul>
+					</div>
+					<div class="org_photo">
+<?php
+		if ($this->objInstitution->image_id)
+		{
+			print "<img src='" . WEB_ROOT . "images/show-image/image_id/" . $this->objInstitution->image_id . "' WIDTH='100' HEIGHT='100' />";
+		}
+?>
+					</div>
+					Institution: <?php print $kiosk_user_session_data->institution_name; ?><br>
+					Name: <?php print $kiosk_user_session_data->first_name . " " . $kiosk_user_session_data->last_name; ?><br>
+					Available points: <span id="current_balance"><?=number_format($this->current_balance, 0);?> </span>
+				</div>
+			</div>
+<?php
+	}
+?>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var itemSize = 44;
+		var intNumberOfRows = Math.ceil(<?php print count($this->distinctPrizes); ?> / 2) - 8;
+		if (intNumberOfRows < 0)
+			intNumberOfRows = 0;
+		var intMaxHeight = -(intNumberOfRows * itemSize);
+		if (intMaxHeight >= 0)
+		{
+			$("#btn_box").css("display", "none");
+		}
+		var intCurrentHeight = 0;
+		$("a#button_dn").click(function () {
+			var currentTop = intCurrentHeight - (itemSize * 2);
+			if (intCurrentHeight > intMaxHeight) {
+				$("#cat_box").animate({"top":currentTop});
+				intCurrentHeight = currentTop;
+			}
+		});
+		$("a#button_up").click(function () {
+			var currentTop = intCurrentHeight + (itemSize * 2);
+			if (intCurrentHeight != 0) {
+				$("#cat_box").animate({"top":currentTop});
+				intCurrentHeight = currentTop;
+			}
+		});
+	 });
+</script>
+			<div id="main" class="auction">
+				<div id="page_title">
+					Store
+				</div>
+				<div id="auction_container">
+					<div id="tabs">
+						<ul class="tabs_main">
+							<li>
+								<a class="tab_price" href="#">Prices</a>
+							</li>
+						</ul>
+						<div class="clear">
+						</div>
+						<div class="tabs_pane">
+							<div class="tabs" style="height:360px;">
+								<!-- Price range picker -->
+								<ul class="prices tab" style="position:relative;" id="cat_box">
+<?php
+	foreach ($this->arrDistinctPoints as $intPrice => $intTotal)
+	{
+?>
+									<li class='price'>
+										<a href='#' onClick="$('.prizes .pane_items>div').hide(); $('#prize_points_<?php print $intPrice; ?>').show().parent().jScrollPane(); $('#overlay_parent input[name=prize_points]').val('<?php print $intPrice; ?>'); return false;"><?php print $intPrice; ?></a>
+									</li>
+<?php
+	}
+?>
+									</ul>
+							</div> <!-- tabs -->
+							<div style="position:absolute;left:37px;top:596px" id="btn_box"><a id="button_up" style="display:inline-block">Up</a><a id="button_dn" style="display:inline-block">Down</a></div>
+							<div class="pane prizes">
+								<div class="pane_items scroll-pane">
+
+									<!-- set up all hidden layers to be shown when price range picker is clicked -->
+<?php
+	$index = 0;
+	foreach ($this->arrDistinctPoints as $intPrice => $intTotal) {
+		$index++;
+		if ($index == 1)
+			$display="block";
+		else
+			$display="none";
+?>
+
+									<div id='prize_points_<?php print $intPrice; ?>' style='display:<?=$display;?>;'>
+										<div class='pane_title'>Prizes for <?php print $intPrice; ?> Miles</div>
+
+<?php
+		for($i=0; $i < count($this->arrGroupedPrizes[$intPrice]); $i++)
+		{
+			$prize_id = $this->arrGroupedPrizes[$intPrice][$i]->prize_id;
+			echo "<input type='hidden' name='PRIZE ID' value='" . $prize_id . "'>";
+?>
+										<DIV id="<?=$this->arrGroupedPrizes[$intPrice][$i]->prize_id;?>" name="<?=$this->arrGroupedPrizes[$intPrice][$i]->prize_id;?>">
+											<div class='pane_item' name="show_overlay" id="show_overlay">
+
+
+<?php
+			foreach ($this->arrCartItems as $cartItem) {
+				if ($cartItem->prize_id == $prize_id)
+				{
+					echo "<div class='badge' name='badge' id='badge'>" . $cartItem->quantity . "</div>";
+				}
+			}
+?>
+
+												<div class='pane_item_image' name="pane_item_image_<?= $this->arrGroupedPrizes[$intPrice][$i]->prize_id;?>" id="pane_item_image_<?= $this->arrGroupedPrizes[$intPrice][$i]->prize_id;?>">
+													<img src="<?=$sn;?>/images/show-image/image_id/<?=$this->arrGroupedPrizes[$intPrice][$i]->image_id;?>" width="100" height="100"  alt="">
+												</div>
+												<div class='pane_item_title'><?= $this->arrGroupedPrizes[$intPrice][$i]->prize_name; ?></div>
+											</div>
+										</DIV>
+<?php
+		}
+?>
+									</div>
+<?php
+	}
+?>
+
+							</div> <!-- pane_items scroll-pane -->
+							</div> <!-- pane prizes -->
+						</div> <!-- tabs_pane -->
+					</div> <!-- tabs -->
+
+					<div class="cart" name="cart_div" id="cart_div">
+						<div class="cart_title">
+							Your Cart
+						</div>
+
+						<div class="cart_items scroll-pane" name="cart_items" id="cart_items">
+
+<!-- ****************************** CART ITEMS ****************************** -->
+							<div name="cart_items_div" id="cart_items_div">
+								<? foreach ($this->arrCartItems as $cartItem) : ?>
+								<div class="cart_item" name="<?=$cartItem->prize_name;?>" id="cart_item_<?=$cartItem->prize_id;?>">
+									<div class="cart_item_image" name="cart_item_image_<?=$cartItem->prize_id;?>" id="cart_item_image_<?=$cartItem->prize_id;?>">
+										<img src="<?=$sn;?>/images/show-image/image_id/<?=$cartItem->image_id;?>" width="48" height="48" alt="">
+										<div class="badge" name="badge"><?=$cartItem->quantity;?></div>
+									</div>
+								</div>
+								<? endforeach; ?>
+							</div>
+<!-- ****************************** CART ITEMS ****************************** -->
+
+							<div class="clear" name="clear" id="clear">
+							</div>
+
+							<div class="cart_bottom">
+								<div class="cart_total"></div>
+								<div id="checkout">
+									<div class="cart_checkout button_small">
+										<div id="checkout">
+											<a href="#" name="checkout_button" id="checkout_button">Checkout</a>
+										</div>
+									</div>
+									<div class="cart_checkout button_small">
+										<div>
+											<a href="<?=$sn;?>/kiosk/empty-cart" name="reset_button" id="rese_button">Empty Cart</a>
+										</div>
+									</div>
+								</div>
+								<!--</form>-->
+							</div>
+
+					</div> <!-- cart -->
+
+					<div class="clear">
+					</div>
+
+				</div> <!-- auction_container -->
+
+			</div> <!-- main -->
+
+			<div id="footer">
+				<div class="footer_logo"></div>
+				<div class="footer_logout"></div>
+			</div>
+
+		</div> <!-- wrapper -->
+
+	</body>
+</html>

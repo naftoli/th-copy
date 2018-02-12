@@ -1,0 +1,350 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objUtilities = new Utilities();
+	//print "intLineEnd: " . $this->intLineEnd . " <br>\n";
+	//print "objBarBatLocation->line_number: " . @$this->objBarBatLocation->line_number . " <br>\n";
+	$intGoal = floor($this->intLineEnd > @$this->objBarBatLocation->line_number ? @$this->objBarBatLocation->line_number : $this->intLineEnd);
+	$strBarOrBat = $this->objUser->gender == "M" ? "Bar" : "Bas";
+
+?>
+			<div id="jquery_jplayer"></div>
+			<!--script type="text/javascript" src="scripts/jquery.jplayer.js"></script-->
+<script>
+	var boolEnrolled = <?php print !(!$this->objEnrollment); ?>;
+	$(document).ready(function() {
+		var army_level = $(".goal_army .meter_back").attr('rel');
+		if (boolEnrolled)
+			var my_level = $(".goal_my .meter_back").attr('rel');
+		var curr_army_num = parseFloat($(".goal_army .number").html().replace(/\,/g,''));
+		if (boolEnrolled)
+		{
+			var curr_my_num = parseFloat($(".goal_my .number").html().replace(/\,/g,''));
+			$(".meter_current .number").html('0');
+		}
+		if (boolEnrolled && $(".red .meter_back").attr('rel') > 95) { $('.red .meter_goal').hide();};
+		if ($(".green .meter_back").attr('rel') > 95) { $('.green .meter_goal').hide();};
+		$(".goal_army .meter_back").css({'top':'180px','height':'40px'}).animate({'opacity':1},500).animate({'top':(100-army_level)/100*180,'height':(army_level/100*180)+40},{duration:1500, step:function(now,pos){armystep(pos)}});
+		if (boolEnrolled)
+			$(".goal_my .meter_back").css({'top':'180px','height':'40px'}).animate({'opacity':1},800).animate({'top':(100-my_level)/100*180,'height':(my_level/100*180)+40},{duration:1500, step:function(now,pos){mystep(pos)}});
+		function armystep(n) {
+			var curr_nums = (n.pos*curr_army_num).toFixed(0) + '';
+			$(".goal_army .number").html(curr_nums.replace(/\B(?=(?:\d{3})+(?!\d))/g, ","));
+		}
+		function mystep(n) {
+			if (boolEnrolled) {
+				var curr_nums = (n.pos*curr_my_num).toFixed(2).replace(".00", "") + '';
+				$(".goal_my .number").html(curr_nums.replace(/\B(?=(?:\d{3})+(?!\d))/g, ","));
+			}
+		}
+	});
+</script>
+<style>
+	.campaign_main {
+		width:265px;
+	}
+	.campaign_score {
+		float:left;
+		margin-left:80px;
+		margin-top:0px;
+	}
+	.box_meter {
+		width:40px;
+		height:234px;
+		position:relative;
+		float:left;
+	}
+	.meter_cover {
+		width:40px;
+		height:234px;
+		background:url(<?php print $sn ?>/images/back-end/admin/termometer.png) -40px;
+		position:absolute;
+	}
+	.meter_back {
+		width:100px;
+		height:220px;
+		/*background:url(<?php print $sn ?>/images/back-end/admin/termometer.png) -80px 0 no-repeat;*/
+		position:absolute;
+		top:0px;
+		right:9px;
+		margin-top:7px;
+		overflow:hidden;
+	}
+	.meter_background {
+		width:22px;
+		height:270px;
+		/*background:url(<?php print $sn ?>/images/back-end/admin/termometer.png) -80px 0 no-repeat;*/
+		background:url(<?php print $sn ?>/images/back-end/admin/termometer.png) -102px 0 no-repeat;
+		float:right;
+	}
+	.meter_goal, .meter_current {
+		font-size:12px;
+		position:absolute;
+		right:32px;
+		text-align:right;
+		width:75px;
+		top:4px;
+	}
+	.meter_title {
+		font-size:16px;
+		position:absolute;
+		right:0px;
+		text-align:right;
+		width:160px;
+		bottom:-40px;
+	}
+	.meter_current {
+		right:23px;
+		background:url(<?php print $sn ?>/images/back-end/admin/meter_line.png) no-repeat top right;
+		padding:5px 7px;
+	}
+	.meter_lines {
+		font-size:10px;
+		font-weight:normal;
+	}
+	.goal_army {
+		margin-left:40px;
+	}
+	.goal_army .meter_cover {
+		/*background-position:-40px 0;*/
+	}
+	.goal_army .meter_back {
+		left:9px;
+	}
+	.goal_army .meter_background {
+		/*background-position:-102px 0;*/
+		float:left;
+	}
+	.goal_army .meter_goal {
+		left:32px;
+		text-align:left;
+	}
+	.goal_army .meter_title {
+		left:0px;
+		text-align:left;
+	}
+	.goal_army .meter_current {
+		left:23px;
+		text-align:left;
+		background:url(<?php print $sn ?>/images/back-end/admin/meter_line_2.png) no-repeat;
+	}
+
+	.campaign_score_box {
+		font-size:16px;
+		font-weight:normal;
+		float:left;
+		width:270px;
+		margin:40px 110px 0 0;
+		border:2px solid rgba(255,255,255,0.5);
+		border-radius:10px;
+		-moz-border-radius:10px;
+		-webkit-border-radius:10px;
+		background: rgba(255,255,255,0.2);
+	}
+	.campaign_score_box .section {
+		border-bottom:1px dotted  rgba(255,255,255,0.5);
+		margin-top:5px;
+	}
+	.campaign_score_box .section:last-child {
+		border-bottom:none;
+	}
+	.campaign_score_box p {
+		margin:0 10px 5px;
+	}
+	.campaign_score_box .amount {
+		float:right;
+	}
+
+</style>
+<?php
+	if ($this->strLastAction == "enrolled")
+	{
+?>
+	<script>
+	window.onload = function() {
+		Shadowbox.init({
+			skipSetup: true,
+			initialWidth:320,
+			initialHeight:30,
+			overlayOpacity:0.9
+		});
+		Shadowbox.open({
+			content:
+				'<div class="cardpop"><div id="wrapper"><div class="padding_left padding_top">'
+				+ '<div id="close_pop"><a onClick="window.location.replace(\'<?php print $sn; ?>/kiosk-main/view-campaign/campaign_id/<?php print $this->objCampaign->campaign_id . $strParamPath;?>\');">Close</a></div>'
+				+ '<div id="page_title">Congradulations!</div><div style="text-align:center; display:block;padding:10px;"><div style="text-align:center; display:block;padding:10px;">'
+				+ '<span style="font-family: Times New Roman sans-serif; font-size:20px; color: #fff;">'
+				+ 'You have succesfully enrolled to the Tanya campaign!</div></div></div></div>',
+			player:     "html",
+			width:      770,
+			height:     430
+		});
+		$("#sb-overlay").click(function () {
+			window.location.replace('<?php print $sn; ?>/kiosk-main/view-campaign/campaign_id/<?php print $this->objCampaign->campaign_id . $strParamPath;?>');
+		});
+	};
+	</script>
+<?php
+	}
+	else if ($this->strLastAction == "ladderchanged")
+	{
+?>
+	<script>
+	window.onload = function() {
+		Shadowbox.init({
+			skipSetup: true,
+			initialWidth:320,
+			initialHeight:30,
+			overlayOpacity:0.9
+		});
+		Shadowbox.open({
+			content:
+				'<div class="cardpop"><div id="wrapper"><div class="padding_left padding_top">'
+				+ '<div id="close_pop"><a onClick="window.location.replace(\'<?php print $sn; ?>/kiosk-main/view-campaign/campaign_id/<?php print $this->objCampaign->campaign_id . $strParamPath;?>\');">Close</a></div>'
+				+ '<div id="page_title">Ladder Changed</div><div style="text-align:center; display:block;padding:10px;"><div style="text-align:center; display:block;padding:10px;">'
+				+ '<span style="font-family: Times New Roman sans-serif; font-size:20px; color: #fff;">'
+				+ '<?php print $this->intOldLadder < $this->intLadderVelocity ? "Good job! " : ""; ?>'
+				+ 'You just changed your quota from <?php print $this->intOldLadder; ?> to '
+				+ '<?php print $this->intOldLadder < $this->intLadderVelocity ? "up to " : "down to "; ?>'
+				+ '<?php print $this->intLadderVelocity; ?> lines per week.</div></div></div></div>',
+			player:     "html",
+			width:      770,
+			height:     430
+		});
+		$("#sb-overlay").click(function () {
+			window.location.replace('<?php print $sn; ?>/kiosk-main/view-campaign/campaign_id/<?php print $this->objCampaign->campaign_id . $strParamPath;?>');
+		});
+	};
+	</script>
+<?php
+	}
+?>
+<div id="main">
+	<div id="page_title"><?php print $this->objCampaign->campaign_name;?> Campaign</div>
+	<div class="two_column">
+	<div class="one_column padding_left campaign_main">
+		<div class="medalImage medal_l"><a class="icon_medals" href="/kiosk-main/tanya-dedication/campaign_id/<?=$this->objCampaign->campaign_id . $strParamPath;?>">
+<?php
+	if ($this->objCampaign->image_largemed)
+		print "<IMG SRC='$sn/images/show-image/image_id/" . $this->objCampaign->image_largemed . "' width=\"203\" height=\"267\" alt=\"Dedicated in loving memory of Nosson Deitch OBM\" style=\"margin-top:-40px\" />";
+?>
+		</a></div>
+		<div class="blockquote">
+							</div>
+	</div>
+	<div class="one_column padding_top">
+		<div class="goal">
+			<div class="title icon_target">
+				Goal
+			</div>
+			<div class="text"><?php print $this->objCampaign->description; ?></div>
+		</div>
+
+	</div>
+	<div class="clear"></div>
+	<div class="campaign_score">
+<?php
+	if ($this->objEnrollment)
+	{
+?>
+		<div class="campaign_score_box">
+			<div class="section" style="text-align:center">
+				<b>My Goal</b>
+			</div>
+			<div class="section">
+				<p>
+					My <?php print strtolower($this->objSchedulingParams->frequency); ?>
+					quota: <span class="amount"><?php print $this->intLadderVelocity; ?>
+					Line<?php if ($this->intLadderVelocity != 1) print "s"; ?></span>
+				</p>
+				<p>By <?php print $this->intNextBirthdayAge; ?> years old:<span class="amount"><?php print $this->objNextEpochLocation->line_number; ?> Lines</span></p>
+				<p>By my <?php print $strBarOrBat; ?> mitzvah:<span class="amount"><?php print $this->objBarBatLocation->line_number; ?> Lines</span></p>
+
+			</div>
+			<div class="section" style="text-align:center">
+				<b>My Progress</b>
+			</div>
+			<div class="section">
+				<p>Lines learned so far:<span class="amount"><?php print floor($this->intLatestLine); ?></span>
+				<p>My weekly average:<span class="amount"><?php print $this->intWeeklyAvarage ? $this->intWeeklyAvarage : 0; ?> Lines</span>
+				<p>Mission status:<span class="amount"><?php
+		$intTotalPendingMissions = count($this->arrPendingMissions)-$this->intMarkWeeks-1;
+		$intTotalInvert = ($intTotalPendingMissions - ($intTotalPendingMissions * 2));
+		if ($intTotalPendingMissions == 1 || ($intTotalInvert==0 && $intTotalPendingMissions < 1))
+			print "Current";
+		else if ($intTotalPendingMissions < 1)
+			print $intTotalInvert . " " . ucfirst($objUtilities->FrequencyTextToSingular($this->objSchedulingParams->frequency)) . " ahead";
+		else
+			print ($intTotalPendingMissions - 1) . " " . ucfirst($objUtilities->FrequencyTextToSingular($this->objSchedulingParams->frequency)) . "s behind";
+	?></span>
+			</div>
+		</div>
+		<div class="box_meter goal_my">
+			<div class="meter_back" rel="<?php
+		$intCurrent = $this->intLatestLine;
+		if ($intCurrent)
+		{
+			$intPercentage = $intCurrent / ($intGoal / 100);
+			print round($intPercentage);
+		}
+		else
+			print 0;
+
+		$intArmyPercentage = !$this->arrArmy["goals"] ? 0 : $this->arrArmy["lines"] / ($this->arrArmy["goals"] / 100);
+
+?>"><!--Place the percentage that the meter should show in the 'rel' tag.-->
+				<div class="meter_current"><span class="number"><?php print number_format($this->intLatestLine); ?></span><div class="meter_lines">Lines Learned</div></div>
+				<div class="meter_background"></div>
+			</div>
+			<div class="meter_cover">
+				<div class="meter_goal"><?php print $intGoal; ?> &ndash;</div>
+				<div class="meter_title">My Goal<br><?php print date_milestone; ?></div>
+			</div>
+		</div>
+		<div class="box_meter goal_army">
+			<div class="meter_back" rel="<?php print $intArmyPercentage; ?>"><!--Place the percentage that the meter should show in the 'rel' tag.-->
+				<div class="meter_current"><span class="number"><?php print number_format($this->arrArmy["lines"]); ?></span><div class="meter_lines">Lines Learned</div></div>
+				<div class="meter_background"></div>
+			</div>
+			<div class="meter_cover">
+				<div class="meter_goal">&ndash; <?php print number_format($this->arrArmy["goals"]); ?></div>
+				<div class="meter_title">Armywide Goal<br><?php print date_milestone; ?></div>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+	</div>
+	<div class="one_column">
+		<ul class="buttons button_icons">
+<?php
+	if ($this->objEnrollment)
+	{
+?>
+			<li>
+				<a class="icon_medals" href="/kiosk-main/overview/campaign_id/<?=$this->objCampaign->campaign_id . $strParamPath;?>">Overview</a>
+			</li>
+			<li>
+				<a class="icon_back_to" href="/kiosk-main/simulator/campaign_id/<?=$this->objCampaign->campaign_id . $strParamPath;?>">Simulator</a>
+			</li>
+			<li>
+				<a class="icon_medals" href="/kiosk-main/medals/campaign_id/<?=$this->objCampaign->campaign_id . $strParamPath;?>">Medals</a>
+			</li>
+			<!--li>
+				<a class="icon_enroll" href="/kiosk-main/do-campaign-unenroll/campaign_id/<?=$this->objCampaign->campaign_id . $strParamPath;?>">Unenroll</a>
+			</li-->
+<?php
+	}
+	else
+	{
+?>
+			<li>
+				<a class="icon_enroll" href="/kiosk-main/campaign-enroll/campaign_id/<?=$this->objCampaign->campaign_id . $strParamPath;?>">Enroll</a>
+			</li>
+<?php
+	}
+?>
+							</ul>
+	</div>
+</div>

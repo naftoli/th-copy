@@ -1,0 +1,214 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$_sesh = new Zend_Session_Namespace('hebrewschools');
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Mashpia.com</title>
+
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.core1.5.1.js" type="text/javascript"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.ui.js" type="text/javascript"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.checkbox.js" type="text/javascript"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/easySlider1.7.js" type="text/javascript"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.scroll.js" type="text/javascript"></script>
+		<script type="text/javascript" src="<?php echo $sn; ?>/js/back-end/kiosk/jScrollPane.js"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.ui.spinner.js" type="text/javascript"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/shadowbox2/shadowbox.js" type="text/javascript"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.keypad.js" type="text/javascript"></script>
+		<script type="text/javascript" src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.cookie.js"></script>
+		<script type="text/javascript" src="<?php echo $sn; ?>/js/back-end/admin/jquery.dump.js"></script>
+		<script src="<?php echo $sn; ?>/js/back-end/kiosk/jquery.tools.tabs.min.js" type="text/javascript"></script>
+
+		<script type="text/javascript">
+		$(document).ready(function()
+		{
+			$('input[type=checkbox]').checkbox();
+			$('.scroll-pane').jScrollPane({showArrows:true, scrollbarWidth: 42, arrowSize: 42});
+		});
+		</script>
+
+		<link href="<?php echo $sn; ?>/css/back-end/kiosk/jquery.spinner.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $sn; ?>/js/back-end/kiosk/shadowbox2/shadowbox.css" rel="stylesheet" type="text/css" />
+
+        <link rel="stylesheet" type="text/css" href="<?php echo $sn; ?>/css/back-end/kiosk/styles_reset.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $sn; ?>/css/back-end/kiosk/styles_kiosk.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $sn; ?>/css/back-end/kiosk/reset.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $sn; ?>/css/back-end/kiosk/style.css">
+
+        <link rel="stylesheet" type="text/css" href="<?php echo $sn; ?>/css/back-end/kiosk/jquery.checkbox.css" />
+		<link href="<?php echo $sn; ?>/css/back-end/kiosk/jquery.scroll.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $sn; ?>/css/back-end/kiosk/jquery.keypad.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#slider").easySlider({
+			numeric: true,
+			controlsBefore:    '<div class="page_dots">',
+			controlsAfter:    '</div>'
+			});
+	});
+</script>
+<style type="text/css">
+			.alert_two {
+				position:relative; left:200px; width:200px; padding:8px; padding-left:65px; margin:8px auto; border:2px #CCC solid; text-align:center; font-size:15px; -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; background:url(../images/icon_alert.png) no-repeat 10px 10px;
+			}
+
+			iframe {
+			overflow-x: hidden;
+			overflow-y: scroll;
+			}
+		</style>
+
+		<script type="text/javascript">
+			var vouchers = 0;
+
+			$(document).ready(function(){
+				 $("a.icon_withdraw").click(function(event){
+					   $("div#print div").hide();
+						var index = $("a.icon_withdraw").index(this);
+					   $("div#print div").eq(index).show();
+
+					   $(this).parent().animate({ opacity: 0}, function() {
+							$(this).hide();
+							$(".card_withdraw").eq(index).animate({marginTop:'400px'},1000);
+					   });
+				 });
+			});
+
+			function fhide()
+			{
+				$("iframe#vouch").hide();
+				vouchers++;
+				var spans = document.getElementsByName("v");
+				for ( var i in spans )
+				{
+				   spans[i].innerHTML=vouchers;
+				}
+			}
+		</script>
+
+
+
+<body class="green">
+
+    <div id="wrapper">
+
+	<div id="header">
+		<div class="org">
+			<div class="nav">
+				<ul>
+					<li class="icon_back"><a href="<?php print $sn; ?>/hebrewschools/store"><?php print text("Back"); ?></a></li>
+					<li class="icon_home"><a href="<?php print $sn; ?>/hebrewschools/profile"><?php print text("Home"); ?></a></li>
+					<li class="icon_logout"><a href="/hebrewschools/index"><?php print text("Logout"); ?></a></li>
+				</ul>
+			</div>
+			<div class="org_photo">
+<?php
+	print "<img src='" . $sn . "/imgs/v/src/" . $this->objInstitution->image_id . "' WIDTH='100' HEIGHT='100' />";
+?>
+			</div>
+			<?php print text("Institution"); ?>: <?php print $this->objInstitution->name; ?><br />
+			<?php print text("Name"); ?>: <?php print $this->objUser->first_name . " " . $this->objUser->last_name; ?><br />
+			<?php print text("Available Miles"); ?>: <span id="current_balance"><?php print $this->current_balance; ?></span>
+		</div>
+	</div>
+
+	<div id="main">
+	    <div id="page_title">
+		Withdraw
+	    </div>
+
+	    <div class="three_column padding_top">
+
+		<div class="content ">
+
+		    <div id="slider">
+
+			<ul>
+<?php
+	foreach ($this->arrUserPrizes as $objUserPrize)
+	{
+?>
+
+				<li>
+					<div class="card_single">
+					    <div class="behind_card">
+						<?php print text("Your voucher has been<br /> sent to print."); ?>
+					    </div>
+
+					    <div class="card_shadow card_front_left card_withdraw">
+						<div id="receipt" class="card_front receipt">
+						    <div class="receipt_logo">
+						    </div>
+
+						    <div class="receipt_text">
+								<?php print $this->objInstitution->name;?>
+
+								<div class="receipt_title">
+									<?php print text("Store Voucher"); ?>
+								</div>
+
+								<?php print text("This voucher entitles"); ?>
+
+								<div class="receipt_name">
+									<?=$this->objUser->first_name;?> <?=$this->objUser->last_name;?>
+								</div>
+
+
+								<?php print text("to"); ?>
+
+								<div class="receipt_name">
+									<?php print $objUserPrize->quantity;?> X <?php print text($this->arrPrizes[$objUserPrize->prize_id]->prize_name);?>
+								</div>
+
+								<div class="receipt_small">
+									<?php print text("Print this voucher and present it to your base commander to redeem it for"); ?>
+									<?php print text($this->arrPrizes[$objUserPrize->prize_id]->prize_name);?>
+								</div>
+						    </div>
+
+						    <div class="receipt_school">
+							<?php print text("This voucher is only valid in"); ?>: <?php print text($this->objInstitution->name); ?>
+							<div class="strong">
+								<center><img src="<?php print $sn; ?>/kiosk/get-barcode-legacy/serial/<?php print $objUserPrize->serial; ?>" /></center>
+			<center><?php print $objUserPrize->serial; ?></center>
+
+							</div>
+						    </div> <!-- receipt_school -->
+					</div> <!-- card_front receipt -->
+					    </div> <!-- card_shadow card_front_left card_withdraw -->
+					    <div class="member_info"><div>
+						</div>
+					    </div>
+					    <div class="button button_icons">
+							<div class="bottom">
+								<a class="icon_withdraw" id="print_button-806" onclick='$("iframe#vouch").show(); document.getElementById("vouch").src="/kiosk/print-voucher/id/<?=$objUserPrize->user_prize_id;?>/description/<?=$objUserPrize->quantity;?><?=$this->arrPrizes[$objUserPrize->prize_id]->prize_name;?>";' href="#">
+									<?php print text("Print"); ?>
+								</a>
+							</div>
+					    </div>
+					</div>
+				</li>
+<?php
+	}
+?>
+			</ul>
+		    </div> <!-- slider-->
+		</div> <!-- content-->
+	    </div> <!-- three_column padding_top -->
+	</div> <!-- main -->
+	<div id="footer">
+	    <div class="footer_logo">
+            </div>
+            <div class="footer_logout">
+            </div>
+        </div>
+    </div> <!-- wrapper -->
+    <div id="print" style="display:block;">
+	<iframe style="display:none;" style="HEIGHT:1000px;"  WIDTH="1000" HEIGHT="1000" name="vouch" id="vouch"></iframe>
+    </div>
+</body>
+
+

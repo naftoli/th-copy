@@ -1,0 +1,106 @@
+<?php
+	include "public_header.phtml";
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+	<style>
+		.processing_status {
+			display: none;
+			padding: 4px 0 8px 8px;
+			color: red;
+			width: 500px;
+		}
+	</style>
+	<script language="javascript">
+	$(document).ready(function()
+	{
+		$('.slider:last form').keyup(function (e) {
+			var charCode = (e.which) ? e.which : e.keyCode;
+			if (charCode == 13) {
+				e.preventDefault();
+				if ($(this).find('.submit').length)
+					$(this).find('.submit').click();
+				else
+					$(this).submit();
+			}
+		});
+		$('.slider:last form a.submit').click( function(e) {
+			$(".slider:last .processing_status").fadeOut();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $(".slider:last #processing_status").html('Loading...').fadeIn(),
+				url : '<?php echo $sn . "/registration/reset" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('.slider:last form').serialize(),
+				success : function(strResponse) {
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$(".slider:last #processing_status").html('Sorry, there was an error: VU-E101-3RR3RE');
+						alert("Sorry, there was an error: VA-J101-3RR3RE");
+						alert(strResponse);
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						$(".slider:last #processing_status").html('Sorry, there was an error: VU-E102-SDF8BX');
+						alert("Sorry, there was an error: VA-J102-SDF8BX");
+						return;
+					} else {
+						$(".slider:last #processing_status").fadeOut();
+						if (arrResponse["error"]) {
+							if (typeof(arrResponse["error"]) != "object") {
+								$(".slider:last #processing_status").html(arrResponse["error"]);
+							} else {
+								for (strField in arrResponse["error"])
+								{
+									//alert($.dump($(".slider:last #" + strField).closest("li").html()));return;
+									$(".slider:last #" + strField).closest("li").next().html(arrResponse["error"][strField]).fadeIn();
+								}
+							}
+						} else if (arrResponse["success"] == "true") {
+							alert(123);
+						} else {
+							alert("Sorry, there was an error: VA-J103-DS7DDS");
+							//alert($.dump(arrResponse));
+						}
+					}
+				}
+			});
+		});
+	});
+	</script>
+</head>
+	<body>
+		<div id="wrapper">
+			<div id="nav">
+				<div class="col_title_bg"></div>
+
+				<div class="col_title">Menu</div>
+<?php
+	include "menus/menu_home_only.phtml";
+?>
+			</div>
+			<div id="content">
+				<div class="col_title_bg"></div>
+				<div class="slider_container">
+
+					<div class="slider" id="registration_administrator">
+						<div class="col_title"><span>Password Reset</span></div>
+						<div class="col_content camper">
+							<div class="module message" style="text-align: left">
+								<img src="<?php print $sn; ?>/images/back-end/admin/info.png" border="0" style="float: left" />
+								<div style="padding:8px">
+									Thank you. Your payment is being processed.<br />
+									Please check your email for the new password that was sent to you.<br />
+									Your confirmation code is: <b><?php print strtoupper($this->strConfirmationCode); ?></b><br />&nbsp;<br />
+									<span><a href="<?php print $sn . "/index/index" . $strParamPath; ?>" class="button">Login.</a></span><br />&nbsp;<br />&nbsp;
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

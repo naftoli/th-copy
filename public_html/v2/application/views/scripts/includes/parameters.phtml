@@ -1,0 +1,88 @@
+<?php
+$strParamPath = "";
+if (!empty($this->uid) && !is_array($this->uid))
+	$strParamPath .= "/uid/" . $this->uid;
+if (!empty($this->pt) && !is_array($this->pt))
+	$strParamPath .= "/pt/" . $this->pt;
+
+if (!empty($this->book_id) && !is_array($this->book_id))
+	$strParamPath .= "/book_id/" . $this->book_id;
+
+if (!empty($this->user_id) && !is_array($this->user_id))
+	$strParamPath .= "/user_id/" . $this->user_id;
+else if (!empty($this->intUser) && !is_array($this->intUser))
+	$strParamPath .= "/user_id/" . $this->intUser;
+
+if (!empty($this->is_active) && !is_array($this->is_active))
+	$strParamPath .= "/is_active/" . $this->is_active;
+if (!empty($this->is_registered) && !is_array($this->is_registered))
+	$strParamPath .= "/is_registered/" . $this->is_registered;
+if (!empty($this->permission) && !is_array($this->permission))
+	$strParamPath .= "/permission/" . $this->permission;
+if (!empty($this->url) && !is_array($this->url))
+	$strParamPath .= "/url/" . $this->url;
+
+
+if (!empty($this->host_id) && !is_array($this->host_id))
+	$strParamPath .= "/host_id/" . $this->host_id;
+else if (!empty($this->intHost) && !is_array($this->intHost))
+	$strParamPath .= "/host_id/" . $this->intHost;
+
+if (!empty($this->network_id) && !is_array($this->network_id))
+	$strParamPath .= "/network_id/" . $this->network_id;
+else if (!empty($this->intNetwork) && !is_array($this->intNetwork))
+	$strParamPath .= "/network_id/" . $this->intNetwork;
+
+if (!empty($this->institution_id) && !is_array($this->institution_id))
+	$strParamPath .= "/institution_id/" . $this->institution_id;
+else if (!empty($this->intInstitution) && !is_array($this->intInstitution))
+	$strParamPath .= "/institution_id/" . $this->intInstitution;
+
+if (!empty($this->campaign_id) && !is_array($this->campaign_id))
+	$strParamPath .= "/campaign_id/" . $this->campaign_id;
+else if (!empty($this->intCampaign) && !is_array($this->intCampaign))
+	$strParamPath .= "/campaign_id/" . $this->intCampaign;
+
+if (!empty($this->mission_id) && !is_array($this->mission_id))
+	$strParamPath .= "/mission_id/" . $this->mission_id;
+else if (!empty($this->intMission) && !is_array($this->intMission))
+	$strParamPath .= "/mission_id/" . $this->intMission;
+
+if (!empty($this->task_id) && !is_array($this->task_id))
+	$strParamPath .= "/task_id/" . $this->task_id;
+else if (!empty($this->intTask) && !is_array($this->intTask))
+	$strParamPath .= "/task_id/" . $this->intTask;
+
+if (!empty($this->class_id) && !is_array($this->class_id))
+	$strParamPath .= "/class_id/" . $this->class_id;
+else if (!empty($this->intClass) && !is_array($this->intClass))
+	$strParamPath .= "/class_id/" . $this->intClass;
+
+if (!empty($this->status) && !is_array($this->status))
+	$strParamPath .= "/status/" . $this->status;
+else if (!empty($this->strStatus) && !is_array($this->strStatus))
+	$strParamPath .= "/status/" . $this->strStatus;
+else if (!empty($this->boolStatus) && !is_array($this->boolStatus))
+	$strParamPath .= "/status/" . $this->boolStatus;
+
+if (!empty($this->usertypes) && !is_array($this->usertypes))
+	$strParamPath .= "/usertypes/" . $this->usertypes;
+if (!empty($this->user_type) && !is_array($this->user_type))
+	$strParamPath .= "/user_type/" . $this->user_type;
+
+if (!empty($this->tstyle) && !is_array($this->tstyle))
+	$strParamPath .= "/tstyle/" . $this->tstyle;
+if (!empty($this->_verbose) && !is_array($this->_verbose))
+	$strParamPath .= "/verbose/" . $this->_verbose;
+if (!empty($this->verbose) && !is_array($this->verbose))
+	$strParamPath .= "/verbose/" . $this->verbose;
+
+if (!empty($this->announcement_id) && !is_array($this->announcement_id))
+	$strParamPath .= "/announcement_id/" . $this->announcement_id;
+
+if (!empty($this->auth_card_order_id) && !is_array($this->auth_card_order_id))
+	$strParamPath .= "/auth_card_order_id/" . $this->auth_card_order_id;
+
+// keeping the old variable names to prevent redundent fixes
+$institution_string = $strParamPath;
+?>

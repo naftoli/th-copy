@@ -1,0 +1,379 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+$objSession = new Zend_Session_Namespace('user_session_data');
+$objRoles = new Roles();
+?>
+		<script>
+			var function_name;
+
+            $(document).ready(function() {
+
+				$('.editable').editable(function(value, settings) {
+						return(value);
+					},
+					{
+						indicator : '<img src="images/ajax-loader-sm.gif"/>',
+						submit:'<img onclick="hide_editable(this);" src="images/bullet_disk.png"/>',
+						onblur:'ignore',
+						width:'auto',
+						height:'auto',
+						style:'inherit',
+						tooltip: 'Click to edit...'
+					}
+				);
+
+                $(".checklist input:checked").parent().addClass("selected");
+
+				// ***** Assign a task to a group ***** //
+
+				$(".edit a, .edit_row input, .edit_row select").die().live('click',
+                    function(event) {
+                        event.preventDefault();
+                        $(this).parents('li').addClass("editing");
+                    }
+                );
+
+                $(".save a").die().live('click',
+                    function(event) {
+						var checklist = $(this).parents('.checklist');
+						var list_item = $(this).parents('li');
+						var id = $(list_item).attr("id");
+
+                        event.preventDefault();
+                        $(this).parents('li').removeClass("editing");
+
+						var task_name;
+						var points;
+						if (!id) {
+							var input_one = $(list_item).find('input').get(1);
+							task_name = input_one.value;
+							var input_two = $(list_item).find('input').get(2);
+							points = input_two.value;
+							function_name = "add_camp_task";
+						}
+						else {
+							var info = id.split("_");
+							var camp_task_id = info[1];
+							var input_one = $(list_item).find('input').get(0);
+							task_name = input_one.value;
+							var input_two = $(list_item).find('input').get(1);
+							points = input_two.value;
+							function_name = "update_task";
+						}
+						var school_type = $(list_item).find('select').get(0);
+						var strURL = '<?php echo $sn . "/incrementals/taskmanagerhost' + (id ? '/task/' + id : '') + '" . $strParamPath; ?>';
+						$.ajax({
+							type : "POST",
+							cache : false,
+							//start: $("#slider_bookeditor #loading_status").html('Loading...').fadeIn("slow"),
+							url : strURL,
+							dataType : "text",
+							data: {
+								"job" : function_name,
+								"task_name" : task_name,
+								"points" : points,
+								"school_type" : school_type.value
+							},
+							success : function(strResponse) {
+								if (strResponse == "saved") {
+									// Saved!
+								} else if (strResponse.match(/^(_?)[0-9]+$/)) {
+									var new_id = "cti_" + strResponse;
+									$(list_item).attr("id", new_id);
+									$(checklist).find(":checkbox").attr("id", strResponse);
+									window.parent.popout_change_total(1);
+									$(checklist).addClass("selected");
+									$(checklist).find(":checkbox").attr("checked","checked");
+								}
+								else
+								{
+									alert("Sorry, there was an error: VI-TM103-SD7FDD");
+									alert(strResponse);
+								}
+							}
+						});
+                    }
+                );
+
+				var fnDelete = function(objThis) {
+					var intItemId = $(objThis).parents('li').attr("id").split("_")[1];
+					if (!intItemId)
+					{
+						$(objThis).parents('li').slideUp();
+					}
+
+					var strURL = '<?php echo $sn . "/incrementals/taskmanagerhost/task/' + intItemId + '" . $strParamPath; ?>';
+					$.ajax({
+						type : "POST",
+						cache : false,
+						url : strURL,
+						dataType : "text",
+						data: {
+							"job" : "delete_task"
+						},
+						success : function(strResponse) {
+							if (strResponse == "1") {
+								$(objThis).parents('li').slideUp();
+								window.parent.popout_change_total(-1);
+							}
+							else
+							{
+								alert("Sorry, there was an error: VI-TM102-DG5Y5Y");
+								alert(strResponse);
+							}
+						}
+					});
+				};
+
+				$(".delete a").die().live('click', function (event) {event.preventDefault();fnDelete(this);});
+				$(".checklist .checkbox-deselect").die().live('click', function (event) {event.preventDefault();fnDelete(this);});
+
+                $("a.add_new_row").click(
+                    function(event) {
+                        event.preventDefault();
+						var add_row_li = $(this).parents('li');
+						var sample_row_data = $(this).parents('ul').find('.sample_row').html();
+						$(add_row_li).before(sample_row_data);
+						$(add_row_li).prev().find('input[type="text"]').first().click().val('').focus();
+						$(add_row_li).prev().find('select.select').resetSS();
+                    }
+                );
+
+				// Activate
+                $(".checklist .checkbox-select").die().live('click',
+                    function(event) {
+						var list_item = $(this).parents('li');
+						var checklist = $(this).parents('.checklist');
+						$(list_item).css({ backgroundColor: '#9fe194' }).delay(500).animate({'background-color': '#eee'}, 500, function(){$(this).css({'background-color':''})});
+						var intItemId = $(this).parents('li').attr("id").split("_")[1];
+						var strURL = '<?php echo $sn . "/incrementals/taskmanagerhost/task/' + intItemId + '" . $strParamPath; ?>';
+						var input_one = $(list_item).find('input').get(0);
+						var task_name = input_one.value;
+						var input_two = $(list_item).find('input').get(1);
+						var school_type = $(list_item).find('select').get(0);
+						var points = input_two.value;
+						$.ajax({
+							type : "POST",
+							cache : false,
+							url : strURL,
+							dataType : "text",
+							data: {
+								"job" : "install_host_task",
+								"task_name" : task_name,
+								"points" : points,
+								"school_type" : school_type.value
+							},
+							success : function(strResponse) {
+								if (strResponse.match(/^[0-9]+$/)) {
+									var new_id = "cti_" + strResponse;
+									$(list_item).attr("id", new_id);
+									$(checklist).removeClass("selected");
+									$(checklist).addClass("selected");
+									$(checklist).find(":checkbox").attr("checked","checked");
+									$(checklist).find(":checkbox").attr("id", strResponse);
+									window.parent.popout_change_total(1);
+								}
+								else
+								{
+									alert("Sorry, there was an error: VI-TM101-SDF7DD");
+									alert(strResponse);
+								}
+							}
+						});
+                    }
+                );
+
+				$('select.select').sSelect();
+            });
+			// <?php print $this->campaign_id; ?>
+		</script>
+
+			<div class="slider">
+                <div class="col_title"><?php print $this->objCampaign->campaign_name; ?></div>
+				<div class="col_content">
+					<div class="module">
+						<div class="module_content">
+							<div class="list">
+								<ul>
+<?php
+	if (count($this->arrTasks))
+	{
+		foreach ($this->arrTasks as $objTask)
+		{
+?>
+
+									<li id="cti_<?php print $objTask->task_id; ?>" class="edit_row">
+										<form>
+											<span class="icon bullet"></span>
+											<span class="label">
+												<span class="label title"><?php
+			if ($objTask->class_id > 0)
+			{
+				print "Teacher";
+			}
+			else if ($objTask->campaign_id == $this->campaign_id && $objTask->installed_task_id)
+			{
+				print "Host"; // installed
+			}
+			else if ($objTask->campaign_id == $this->campaign_id && !$objTask->installed_task_id)
+			{
+				print $objSession->institution_type;
+			}
+			else
+			{
+				print "Host"; // uninstalled
+			}
+?> Task</span>
+<?php
+			if ($objRoles->isRole("Teacher") && $objTask->class_id < 1)
+			{
+				print $objTask->task_name;
+			}
+			else
+			{
+				print '<input type="text" name="task" value="' . $objTask->task_name . '" />';
+			}
+?>
+											</span>
+											<span class="label points">
+												<span class="label title">Points</span>
+<?php
+			if ($objRoles->isRole("Teacher") && $objTask->class_id < 1)
+			{
+				print $objTask->points;
+			}
+			else
+			{
+				print '<input type="text" name="points" value="' . $objTask->points . '" />';
+			}
+?>
+											</span>
+<?php
+			if (!$objRoles->isRole("Teacher") || $objTask->class_id > 0)
+			{
+?>
+											<span class="label" style="margin-left:10px">
+												<span class="label title">School Type</span>
+												<select name="school_type">
+													<option value="">All</option>
+<?php
+				foreach ($arrTemplateTypes as $strName => $strKeyword)
+				{
+					print "<option value='" . $strKeyword . "'" . ($objTask->school_type == $strKeyword ? " selected" : "") . ">" . $strName . "</option>";
+				}
+?>
+												</select>
+											</span>
+											<span class="action">
+                                                <span class="checklist ">
+                                                    <input type="checkbox" id="<?php print $objTask->task_id; ?>" class="checkbox" <?php print $objTask->campaign_id == $this->campaign_id ? "checked " : ""; ?>/>
+                                                    <span class="activate">
+														<a href="#" title="Activate" class="buttonHover checkbox-select">
+															<span class="icon activate"></span>
+															Activate
+														</a>
+													</span>
+                                                    <span class="deactivate">
+														<a href="#" title="Deactivate" class="buttonHover checkbox-deselect">
+															<span class="icon deactivate"></span>
+															Deactivate
+														</a>
+													</span>
+                                                    <span class="edit">
+														<a href="#" title="Edit">
+															<span class="icon"></span>
+															Edit
+														</a>
+													</span>
+                                                    <span class="save">
+														<a href="#" title="Save">
+															<span class="icon"></span>
+															Save
+														</a>
+													</span>
+                                                    <span class="delete">
+														<a href="#" title="Delete">
+															<span class="icon"></span>
+															Delete
+														</a>
+													</span>
+                                                </span>
+											</span>
+<?php
+			}
+?>
+										</form>
+									</li>
+<?php
+		}
+	}
+?>
+									<!-- ********** ADD NEW TASK ********** -->
+									<li>
+										<span class="icon add"></span>
+										<span class="label"><a href="#" class="add_new_row">Add New Task</a></span>
+									</li>
+
+										<div class="sample_row">
+											<li class="edit_row">
+												<form>
+
+													<span class="action">
+														<span class="checklist">
+															<input type="checkbox" id="new_row" class="checkbox" checked />
+															<span class="activate"><a href="#" title="Activate" class="buttonHover checkbox-select"><span class="icon activate"></span>Activate</a></span>
+															<span class="deactivate"><a href="#" title="Deactivate" class="buttonHover checkbox-deselect"><span class="icon deactivate"></span>Deactivate</a></span>
+															<span class="edit"><a href="#" title="Edit"><span class="icon"></span>Edit</a></span>
+															<span class="save"><a href="#" title="Save"><span class="icon"></span>Save</a></span>
+															<span class="delete"><a href="#" title="Delete"><span class="icon"></span>Delete</a></span>
+															<span class="progress">Progress</span>
+														</span>
+													</span>
+
+
+													<span class="icon bullet">
+													</span>
+
+													<span class="label">
+														<span class="label title">Host Task</span>
+														<input type="text" name="task" value="Enter Name" />
+
+													</span>
+
+													<span class="label points">
+														<span class="label title">Points</span>
+														<input type="text" name="points" value="0" />
+													</span>
+
+													<span class="label" style="margin-left:10px">
+														<span class="label title">School Type</span>
+														<select name="school_type">
+															<option value="">All</option>
+<?php
+	foreach ($arrTemplateTypes as $strName => $strKeyword)
+	{
+		print "<option value='" . $strKeyword . "'>" . $strName . "</option>";
+	}
+?>
+														</select>
+													</span>
+												</form>
+											</li>
+
+
+									</div>
+									<!-- ********** ADD NEW TASK ********** -->
+
+								</ul>
+
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div> <!-- <div class="slider"> -->

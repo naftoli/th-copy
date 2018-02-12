@@ -1,0 +1,52 @@
+<?php
+	if(count($this->arrVouchers)==0){
+		echo "Nothing to print...";
+		exit;
+	}
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Voucher</title>
+<style type="text/css">
+.mainWrapper {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 16px;
+	height: 400px;
+	width: 300px;
+	padding:20px;
+	border: 1px dotted #999;
+	margin-left:auto;
+	margin-right:auto;
+}
+</style>
+</head>
+
+ <?php if($this->isPrinted){ ?>
+    <body onload="alert('<?=$this->msg;?>')">
+  <?php }else{ ?>
+    <body onLoad="print();">
+  <?php } ?>
+  
+	<?php foreach ($this->arrVouchers as $r) { ?>
+		<div class="mainWrapper" >
+			
+		  <div align="center"><?=$r->name;?> </div>
+		  <h1 align="center"><strong>Store Voucher </strong></h1>
+		  <hr />
+		  <p align="center">This voucher entitles <br />
+		  <em><strong><?=$r->first_name;?> <?=$r->last_name;?></strong></em><br />
+		  to</p>
+		  <h3 align="center"> <?=$r->prize_name;?></h3>
+		  <p>Print this voucher and present it to your base commander to redeem it.  </p>
+		  <p>This voucher is only valid in <em>school</em>.<br />
+		  </p>
+		  <img src="/kiosk/get-barcode-legacy/serial/<?=$r->serial;?>" />
+		  <br>
+			<center><?=$r->serial;?></center>
+		</div>
+		<div style="page-break-after:always"></div>
+	<? } ?>
+	</body>
+</html>

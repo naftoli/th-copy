@@ -1,0 +1,162 @@
+<?php
+	include "config.phtml";
+	include "headers/kiosk_header.phtml";
+	$kiosk_user_session_data = new Zend_Session_Namespace('kiosk_user_session_data');
+	$userInfo = new Zend_Session_Namespace("userInfo");
+?>
+<script type="text/javascript">
+	$(document).ready(function(){    
+		$("#slider").easySlider({
+			numeric: true, 
+			controlsBefore:    '<div class="page_dots">',
+			controlsAfter:    '</div>'
+			});
+	});  
+</script>
+<style type="text/css"> 
+			.alert_two {
+				position:relative; left:200px; width:200px; padding:8px; padding-left:65px; margin:8px auto; border:2px #CCC solid; text-align:center; font-size:15px; -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; background:url(../images/icon_alert.png) no-repeat 10px 10px;
+			}
+		
+			iframe { 
+			overflow-x: hidden; 
+			overflow-y: scroll; 
+			} 
+		</style> 
+
+		<script type="text/javascript">
+			var vouchers = 0;
+
+			$(document).ready(function(){	
+				 $("a.icon_withdraw").click(function(event){
+					   $("div#print div").hide();
+						var index = $("a.icon_withdraw").index(this);
+					   $("div#print div").eq(index).show();
+					   
+					   $(this).parent().animate({ opacity: 0}, function() {
+							$(this).hide();
+							$(".card_withdraw").eq(index).animate({marginTop:'400px'},1000);
+					   });
+				 });
+			});	
+			
+			function fhide()
+			{
+				$("iframe#vouch").hide();
+				vouchers++;
+				var spans = document.getElementsByName("v");
+				for ( var i in spans )
+				{
+				   spans[i].innerHTML=vouchers;
+				} 
+			}
+		</script>
+
+
+
+<body class="green">
+	
+    <div id="wrapper">
+	
+	<?php include "storeheader.phtml"; ?>	
+				
+	<div id="main">			
+	    <div id="page_title">
+		Withdraw
+	    </div>
+				
+	    <div class="three_column padding_top">
+				
+		<div class="content ">
+					
+		    <div id="slider">
+						
+			<ul>
+				<? foreach ($this->arrCheckedOutUserPrizes as $objCheckedOutUserPrize) : ?>
+					
+				<li>
+					<div class="card_single">
+					    <div class="behind_card">
+						Your voucher has been<br /> sent to print.
+					    </div>
+											
+					    <div class="card_shadow card_front_left card_withdraw">
+						<div id="receipt" class="card_front receipt">						
+						    <div class="receipt_logo">
+						    </div>
+													
+						    <div class="receipt_text">
+							<?=$userInfo->institution_name;?>
+													
+							<div class="receipt_title">
+							    Store Voucher
+							</div>
+														
+							This voucher entitles 
+														
+							<div class="receipt_name">
+							    <?=$userInfo->first_name;?> <?=$userInfo->last_name;?>
+							</div>
+	
+														
+							to
+														
+							<div class="receipt_name">
+								<?=$objCheckedOutUserPrize->quantity;?>
+								<?=$objCheckedOutUserPrize->prize_name;?>
+							</div>
+														
+							<div class="receipt_small">
+							    Print this voucher and present it to your base commander to redeem it for 
+							    <?=$objCheckedOutUserPrize->prize_name;?>													
+							</div>
+														
+						    </div> <!-- receipt_text -->
+												
+						    <div class="receipt_school">
+							This voucher is only valid in:<?=$userInfo->institution_name; ?>
+							<div class="strong">
+								<img src="/kiosk/get-barcode-legacy" />
+							
+							</div>
+						    </div> <!-- receipt_school -->
+					</div> <!-- card_front receipt -->
+					    </div> <!-- card_shadow card_front_left card_withdraw -->
+					    <div class="member_info"><div>
+						</div>
+					    </div>
+					    <div class="button button_icons">
+<?php
+	if (!isset($kiosk_user_session_data->disablePrinting) || !$kiosk_user_session_data->disablePrinting)
+	{
+?>
+						<div class="bottom">
+						<a class="icon_withdraw" id="print_button-806" onclick='$("iframe#vouch").show(); document.getElementById("vouch").src="/kiosk/print-voucher/id/<?=$objCheckedOutUserPrize->user_prize_id;?>/description/<?=$objCheckedOutUserPrize->quantity;?><?=$objCheckedOutUserPrize->prize_name;?>";' href="#">
+							Print
+						    </a>
+						</div>
+<?php
+	}
+?>
+					    </div>
+					</div>
+				</li>
+				<? endforeach; ?>
+			</ul>
+		    </div> <!-- slider-->
+		</div> <!-- content-->
+	    </div> <!-- three_column padding_top -->
+	</div> <!-- main -->
+	<div id="footer">
+	    <div class="footer_logo">
+            </div>
+            <div class="footer_logout">
+            </div>
+        </div>
+    </div> <!-- wrapper -->
+    <div id="print" style="display:block;">
+	<iframe style="display:none;" style="HEIGHT:1000px;"  WIDTH="1000" HEIGHT="1000" name="vouch" id="vouch"></iframe>		
+    </div>
+</body>
+
+

@@ -1,0 +1,186 @@
+<?php
+	include("config.phtml");
+?>
+
+<script>
+	$(document).ready(function()
+	{
+		$('#form_prize_rules a.submit').click( function(e) {
+			e.preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $("#processing_status_rules").html('Loading...').fadeIn("slow"),
+				url : '<?php print $sn . "/store/rules/prize_id/" . $this->intPrize . "/"; ?>',
+				dataType : "text",
+				data: $('#form_prize_rules').serialize(),
+				success : function(response) {
+					if (response.match(/^[0-9]+$/)) {
+						$("#processing_status_rules").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+					} else {
+						$("#processing_status_rules").html(response).fadeIn("slow");
+					}
+				}
+			});
+		});
+<?php
+	if (isset($this->intRule)) {
+?>
+		$('#remove_rule').click(function(e) {
+			e.preventDefault();
+			$.blockUI({ message: $('#question_remove_rule')});
+		});
+		$('#question_remove_rule #option1').click(function(e) {
+			e.preventDefault();
+			var strPath = "<?php echo $sn; ?>/store/rules/remove/" + document.form_prize_rules.rule_id.value;
+			$("#processing_status_rules").html('Loading...').fadeIn("slow");
+			$.get(strPath,
+				function(strResponse) {
+					if (!strResponse.match(/error|notice/i)) {
+						$("#processing_status_rules").html("Rule removed successfully.").fadeIn("slow").delay(1000).fadeOut("slow").delay(500, function () {
+							naviageBack();
+						});
+					} else {
+						$("#processing_status_rules").html(strResponse).fadeIn("slow");
+					}
+				}
+			);
+			$.unblockUI();
+		});
+		$('#question_remove_rule #option2').click(function(e) {
+			e.preventDefault();
+			$.unblockUI();
+		});
+<?php
+	}
+?>
+	});
+</script>
+
+<div class="slider">
+	<div class="col_title"><span><?php
+	if (isset($this->objRule)) {
+		print "Edit";
+	} else {
+		print "Add";
+	}
+?> Rules</span></div>
+	<div class="col_content camper">
+<?php
+	if (isset($this->intRule)) {
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a id="remove_rule" href="#">
+							<div class="title">Remove this rule</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+
+				<form name="form_prize_rules" id="form_prize_rules" method="post" action="">
+
+<?php
+	if (isset($this->intRule)) {
+?>
+					<input type="hidden" name="rule_id" id="rule_id" value="<?php print $this->intRule; ?>">
+<?php
+	} else {
+?>
+					<input type="hidden" name="institution_id" id="institution_id" value="<?php print $this->intInstitutionId; ?>">
+<?php
+	}
+?>
+					<ul>
+
+						<li>
+							<span class="label">Rule Type:</span>
+							<span class="input">
+								<select name="rule_type" class="select">
+<?php
+	$arrRuleTypes = array("Allow", "Deny");
+	foreach ($arrRuleTypes as $strValue) {
+		print "<option";
+		if (
+			isset($this->objRule)
+			&& $this->objRule->rule_type == $strValue
+		) {
+			print " selected";
+		}
+		print ">$strValue</option>";
+	}
+?>
+								</select>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Applies to:</span>
+							<span class="input">
+								<select name="applies_to" class="select">
+<?php
+	$arrRuleTypes = array(
+		"Background Type",
+		"Full Grade",
+		"Full Ladder",
+		"Specific Grade",
+		"Specific Ladder",
+		"Institution",
+		"Prize",
+		"User",
+		"Date Range",
+		"Date",
+		"Time Range",
+		"Time"
+	);
+	foreach ($arrRuleTypes as $strValue) {
+		print "<option";
+		if (
+			isset($this->objRule)
+			&& $this->objRule->rule_applies_to == $strValue
+		) {
+			print " selected";
+		}
+		print ">$strValue</option>";
+	}
+?>
+								</select>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Rules:</span>
+							<span class="input">
+								<textarea name="rules" class="input" style="width:400px"><?php if (isset($this->objRule)) print $this->objRule->rule; ?></textarea>
+							</span>
+							<div class="clear"></div>
+						</li>
+
+						<div id="processing_status_rules"><?php if ($this->message){ echo $this->message . "<br>"; }?></div>
+
+						<li>
+							<span>
+								<a href="#" title="Save" class="button submit">Save</a>
+							</span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</form>
+
+			</div>
+		</div>
+		<div id="question_remove_rule" class="question">
+			<p>Are you sure you would like to remove this rule?</p>
+			<p><a id="option1" class="button">Yes, remove it.</a></p>
+			<p><a id="option2" class="button">No, do <u>not</u> remove it.</a></p>
+		</div>
+	</div>
+</div>

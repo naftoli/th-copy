@@ -1,0 +1,121 @@
+<?php
+	include "public_header.phtml";
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+	<style>
+		.processing_status {
+			display: none;
+			padding: 4px 0 8px 8px;
+			color: red;
+			width: 500px;
+		}
+	</style>
+	<script language="javascript">
+	$(document).ready(function()
+	{
+		$('.slider:last form').keyup(function (e) {
+			var charCode = (e.which) ? e.which : e.keyCode;
+			if (charCode == 13) {
+				e.preventDefault();
+				if ($(this).find('.submit').length)
+					$(this).find('.submit').click();
+				else
+					$(this).submit();
+			}
+		});
+		$('.slider:last form a.submit').click(function () {
+			$('.slider:last form').trigger("submit");
+		});
+		$('.slider:last form').submit( function(e) {
+			e.preventDefault();
+			$(".slider:last .processing_status").hide();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $(".slider:last #processing_status").html('Loading...').fadeIn(),
+				url : '<?php echo $sn . "/registration/reset" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('.slider:last form').serialize(),
+				success : function(strResponse) {
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$(".slider:last #processing_status").html('Sorry, there was an error: VU-E101-3RR3RE');
+						alert("Sorry, there was an error: VA-J101-3RR3RE");
+						alert(strResponse);
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						$(".slider:last #processing_status").html('Sorry, there was an error: VU-E102-SDF8BX');
+						alert("Sorry, there was an error: VA-J102-SDF8BX");
+						return;
+					} else {
+						$(".slider:last #processing_status").hide();
+						if (arrResponse["error"]) {
+							if (typeof(arrResponse["error"]) != "object") {
+								$(".slider:last #processing_status").html(arrResponse["error"]);
+							} else {
+								for (strField in arrResponse["error"])
+								{
+									//alert($.dump($(".slider:last #" + strField).closest("li").html()));return;
+									$(".slider:last #" + strField).closest("li").next().html(arrResponse["error"][strField]).fadeIn();
+								}
+							}
+						} else if (arrResponse["success"] == "true") {
+							$(".slider:last #processing_status").html('Your password was reset. Check your email for our further instructions.<br/>Note: If you don\'t receive an email shortly please check your spam folder.').show();
+						} else {
+							alert("Sorry, there was an error: VA-J103-DS7DDS");
+							//alert($.dump(arrResponse));
+						}
+					}
+				}
+			});
+		});
+	});
+	</script>
+</head>
+	<body>
+		<div id="wrapper">
+			<div id="nav">
+				<div class="col_title_bg"></div>
+
+				<div class="col_title">Menu</div>
+<?php
+	include "menus/menu_password.phtml";
+?>
+			</div>
+			<div id="content">
+				<div class="col_title_bg"></div>
+				<div class="slider_container">
+
+					<div class="slider" id="registration_administrator">
+						<div class="col_title"><span>Password Reset</span></div>
+						<div class="col_content camper">
+							<div class="module message" style="text-align: left">
+								We will email you a new temporary password for you to be able to change your password next time you login.
+							</div>
+							<div class="module form" id="module-info">
+								<div class="module_content list">
+									<form>
+										<input type="hidden" id="registration_administrator_data" value="" />
+										<ul>
+											<li>
+												<span class="label">Email Address:</span>
+												<span class="input"><input autocomplete="off" type="text" class="required" id="email" name="email" value="" size="25" minlength="2" /></span>
+												<span style="float:left;padding:3px"><a href="#" title="Next" class="button submit">Send Password</a></span>
+												<div class="clear"></div>
+											</li>
+											<div class="processing_status"></div>
+											<div id="processing_status" style="padding:10px !important;"></div>
+										</ul>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

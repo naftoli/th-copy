@@ -1,0 +1,107 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span><?php print text("Setup"); ?></span>
+		<div class="title_help info" title="<?php print text("This page takes you through, step by step, how to properly set up your [|school|]. You will also use this page to make changes to your [|school's|] basic setup, such as new [|students|], new [|classes|], etc."); ?>"></div>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php print $sn ?>/administration/profileeditor<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Step 1: Set Up [|School|] Details and Logo"); ?></div>
+							<div class="help info" title="<?php print text("Provide your instituion information and school logo."); ?>"></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/grades/gradeseditor<?php print $strParamPath; ?>">
+						  <div class="icon"></div>
+						  <div class="title"><?php print text("Step 2: Add / Edit [|Classes|]"); ?></div>
+						  <div class="help info" title="<?php print text("Use [|classes|] to group your [|teachers|] and [|students|] together. After you create your [|classes|], you will be able to assign [|teachers|] and [|students|] to the correct [|class|] in the following setup steps."); ?>"></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/dashboard/addcampers<?php echo $strParamPath; ?>">
+						  <div class="icon"></div>
+						  <div class="title"><?php print text("Step 3: Add / Import [|Students|]"); ?></div>
+						  <div class="help info" title="<?php print text("Create [|students|] accounts by either manually entering each [|students|] information, or by importing a CSV file. For more details on CSV, see ‘Import [|Students|] from a List’ on the next page."); ?>"></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php print $sn ?>/users/editor/user_types/teacher/user_type/teacher<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Step 4: Add [|Teacher|] Accounts"); ?></div>
+							<div class="help info" title="<?php print text("[|Teachers|] have their own accounts and passwords, with which they can distribute [|points|] to [|students|] in their [|class|], and create [|class|] reports."); ?>"></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/classes/oneclassstudents<?php print $strParamPath; ?>">
+						  <div class="icon"></div>
+						  <div class="title"><?php print text("Step 5: Assign [|Students|] to [|Classes|]"); ?></div>
+						  <div class="help info" title="<?php print text("Once you assign your [|students|] to [|classes|], you can limit campaigns and prizes to only be accessible to certain [|classes|]."); ?>"></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php print $sn ?>/classes/classteachereditor/permission/Teacher<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Step 6: Assign [|Teachers|] to [|Classes|]"); ?></div>
+							<div class="help info" title="<?php print text("[|Teachers|], once assigned, will only have access to the [|students|] in their [|class(es)|]."); ?>"></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/users/studentregistration<?php echo $strParamPath; ?>">
+						  <div class="icon"></div>
+						  <div class="title"><?php print text("Step 7: Register [|Students|]"); ?></div>
+						  <div class="help info" title="<?php print text("You must register [|students|] accounts to activate key features, such as kiosks, campaigns, [|points|], etc."); ?>"></div>
+						</a>
+					</li>
+<?php
+		$arrListParams = array(
+			"data_source" => "/users/bulkimageupload",
+			/*"header" => "/users/bulkimageupload/display_view/true",
+			"params" => array(
+				"image_id" => array(
+					"",
+					0
+				)
+			)*/
+		);
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/lists/standard2/params/" . dblencode(json_encode($arrListParams)); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Step 8: Upload pictures of [|Students|]"); ?></div>
+							<div class="help info" title="<?php print text("[|Student|] pictures will show up on the [|students|] ID cards, and will also let you identify [|students|] on your system (in case you forget names). You will create ID cards in the next step."); ?>"></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php print $sn ?>/users/idcards<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Step 9: Create [|Student|] [|ID Cards|]"); ?></div>
+							<div class="help info" title="<?php print text("ID cards include your logo, a [|student|] picture (if you’ve uploaded one) and a bar code that your [|student|] can use to quickly access his/her account at a kiosk. You have the choice to either print out ID cards yourself or order them from our headquarters (we will ship them to you)."); ?>"></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php print $sn ?>/campaigns/incrementalscampaignlist<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Step 10: Setup [|Campaigns|]"); ?></div>
+							<div class="help info" title="<?php print text("Campaigns contain tasks that you can reward [|points|] for. (Clicking this button is the same as selecting ‘Campaigns’ in the left menu)."); ?>"></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php print $sn ?>/dashboard/store_hebrewschools1<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Step 11: Setup [|Prizes|]"); ?></div>
+							<div class="help info" title="<?php print text("[|Students|] can buy prizes with [|points|] they have earned. (Clicking this button is the same as selecting ‘Prizes’ in the left menu)."); ?>"></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

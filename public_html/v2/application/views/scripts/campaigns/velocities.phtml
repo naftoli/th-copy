@@ -1,0 +1,129 @@
+<?php 
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script>
+var slider = "#slider_campaign_velocities";
+$(document).ready(function()
+{
+	$(slider + ' #form a.submit').click( function(e) {
+		e.preventDefault();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(slider + " #processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn . "/campaigns/velocities" . $strParamPath; ?>',
+			dataType : "text",
+			data: $(slider + ' #form').serialize(),
+			success : function(response) {
+				if (response.match(/^[0-9]+$/)) {
+					$(slider + " #processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+				} else {
+					$(slider + " #processing_status").html(response).fadeIn("slow");
+				}
+			}
+		});
+	});
+});
+</script>
+<div class="slider" id="slider_campaign_velocities">
+	<div class="col_title"><span>Velocities</span></div>	
+	<div class="col_content camper">
+		<form id="form">
+			<table>
+				<tr>
+					<td valign="top">
+						<table>
+							<tr>
+								<td colspan="3">Grades:</td>
+							</tr>
+<?php
+	if (!count($this->arrGrades))
+	{
+?>
+							<tr>
+								<td colspan="3">There are no grades implemented.</td>
+							</tr>
+<?php
+	}
+	else
+	{
+		foreach ($this->arrGrades as $objGrade)
+		{
+?>
+							<tr>
+								<td><?php print $objGrade->grade_hierarchy; ?>.</td>
+								<td><?php print $objGrade->grade_name; ?></td>
+								<td><input type="text" name="grade_<?php print $objGrade->grade_hierarchy; ?>" value="<?php print round(@$this->arrGradeHash[$objGrade->grade_hierarchy]->velocity) == @$this->arrGradeHash[$objGrade->grade_hierarchy]->velocity ? @$this->arrGradeHash[$objGrade->grade_hierarchy]->velocity*1 : number_format(@$this->arrGradeHash[$objGrade->grade_hierarchy]->velocity, 2); ?>" /></td>
+							</tr>
+<?php
+		}
+	}
+?>
+						</table>
+					</td>
+					<td>&nbsp;</td>
+					<td valign="top">
+<?php
+	if ($this->objCampaign->ladder)
+	{
+?>
+						<table>
+							<tr>
+								<td colspan="2">Ladders:</td>
+							</tr>
+<?php
+		for ($intLadder=0; $intLadder!=$this->objCampaign->ladder; $intLadder++)
+		{
+?>
+							<tr>
+								<td>Ladder <?php print $intLadder+1; ?>:</td>
+								<td><input type="text" name="ladder_<?php print $intLadder; ?>" value="<?php print round(@$this->arrLadderHash[$intLadder]->velocity) == @$this->arrLadderHash[$intLadder]->velocity ? @$this->arrLadderHash[$intLadder]->velocity*1 : number_format(@$this->arrLadderHash[$intLadder]->velocity, 2); ?>" /></td>
+							</tr>
+<?php
+		}
+?>
+						</table>
+					</td>
+				</td>
+			</table>
+<?php
+	}
+?>
+			&nbsp;
+<?php
+	if (isset($this->objBook))
+	{
+?>
+			<table>
+				<tr>
+					<td>Book Measurement Unit:&nbsp;</td>
+					<td>
+						<select name="book_measurement">
+							<option></option>
+<?php
+		$arrBook = (array) $this->objBook;
+		$arrCols = array("Line Numbers", "Paragraphs", "Pages", "Chapters", "Volumes");
+		foreach ($arrCols as $strCol)
+		{
+			$strKey = strtolower(preg_replace("/ /", "_", $strCol) . "_enabled");
+			if ($arrBook[$strKey])
+				print "<option" . ($this->objMission->book_measurement == $strCol ? " selected" : "") . ">" . $strCol . "</option>";
+		}
+?>
+						</select>
+					</td>
+				</tr>
+			</table>
+<?php
+	}
+?>
+			&nbsp;
+			<div id="processing_status"></div>
+			<div>
+				<span><a href="#" title="Save" class="button submit">Save</a></span>							
+				<div class="clear"></div>
+			</div>
+		</form>
+	</div>
+</div>

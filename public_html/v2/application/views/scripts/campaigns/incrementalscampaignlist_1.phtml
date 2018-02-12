@@ -1,0 +1,219 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objSession = new Zend_Session_Namespace('user_session_data');
+	$objRoles = new Roles();
+	global $arrTemplateTypes;
+?>
+<script language="javascript">
+	var intCurrentCampaign = 0;
+	function current_popout(intCampaign)
+	{
+		intCurrentCampaign = intCampaign;
+	}
+	function popout_change_total(intValue)
+	{
+		var intTasks = $("#incremental_task_count_" + intCurrentCampaign).html().match(/^([,0-9]+)/)[1];
+		$("#incremental_task_count_" + intCurrentCampaign).html((intTasks * 1 + intValue * 1) + " Tasks")
+	}
+	$(document).ready(function () {
+		$(".slider:last .add_campaign .submit").click(function () {
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $(this).closest(".module_content").find(".processing_status").html('Loading...').fadeIn(),
+				url : '<?php echo $sn . "/campaigns/incrementalscampaignlist" . $strParamPath; ?>',
+				dataType : "text",
+				data: $(this).closest(".module_content form").serialize(),
+				success : function(strResponse) {
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$(this).closest(".module_content").find(".processing_status").html('Sorry, there was an error: VU-IDC101-SDF8DS');
+						$.alert(strResponse);
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						$(this).closest(".module_content").find(".processing_status").html('Sorry, there was an error: VU-IDC102-S9D9DD');
+						$.alert(strResponse);
+						return;
+					} else {
+						if (arrResponse["error"]) {
+							if (typeof(arrResponse["error"]) != "object") {
+
+								$(".slider:last .processing_status").html(arrResponse["error"]);
+							} else {
+								for (strField in arrResponse["error"])
+								{
+									//alert($.dump($(".slider:last #" + strField).closest("li").html()));return;
+									$(".slider:last #" + strField).closest("li").next().html(arrResponse["error"][strField]).fadeIn();
+								}
+							}
+						} else if (arrResponse["success"] == "true") {
+							$(this).closest(".module_content").find(".processing_status").fadeOut();
+							slideRefresh();
+
+						} else {
+							alert("Sorry, there was an error: VI-J103-99DS0S");
+							$.alert(strResponse);
+						}
+					}
+				}
+			});
+		});
+		$('.slider:last').bind('slide_back', function () {
+			slideRefresh();
+		});
+	});
+</script>
+<div class="slider">
+	<div class="col_title">
+		<span>Manage Campaigns</span>
+	</div>
+	<div class="col_content">
+<?
+	if (!$objRoles->isAllowed("Super Administrator"))
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li style="font-size:10pt;padding:6px;">
+						Add the campaigns you would like to give out points for (such as Davening, Learning, Sports, etc).
+						<br/>You can simply install preloaded campaigns and edit them to suit your institution or create your own.
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/campaigninstall">
+							<div class="icon"></div>
+							<div class="title">Install / Uninstall Preloaded Campaigns</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li style="font-size:10pt;padding:6px;">
+						 Create your own new campaign without using a template.
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	if ($objSession->template_style == "hebrewschool1")
+	{
+		if (1||$objRoles->isAllowed("Super Administrator"))
+		{
+?>
+		<div class="module form">
+			<div class="module_content list add_campaign">
+
+				<form>
+					<ul>
+						<li>
+							<h1>Create Your Own Campaign</h1>
+						</li>
+						<li>
+							<table style="margin-bottom:4px">
+								<tr>
+
+									<td><b>Campaign Name</b></td>
+									<td><b>&nbsp;</b></td>
+								</tr>
+								<tr>
+									<td><span class="input"><input type="text" id="campaign_name" name="campaign_name" value="" size="25" minlength="2" /></span></td>
+									<td style="padding-left: 4px"><span><a href="#" title="Save" class="button submit" id="add_grade">Create</a></span></td>
+								</tr>
+							</table>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+				</form>
+			</div>
+		</div>
+<?php
+		}
+	}
+?>
+		<h1>Active Campaigns</h1>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li style="font-size:10pt;padding:6px;">
+						 Add / Edit the tasks you would like to give out for each campaign (i.e for Learning you can give out points for coming on time and for learning well).
+					</li>
+					<li style="font-size:10pt;padding:6px;">
+						 Add a campaign logo which will show up on the students transaction history page when the user is awarded.
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="module-info" class="module">
+			<div class="module_content">
+				<div class="list missions">
+					<ul>
+						<li>
+							<h1>Edit Campaigns and Tasks</h1>
+						</li>
+<?php
+	foreach ($this->arrResults as $arrResult)
+	{
+		$intCampaignID = $arrResult["objCampaign"]->campaign_id;
+?>
+						<li>
+							<span class="action">
+								<span class="tasks">
+									<span>
+										<a onclick="current_popout(<?php print $intCampaignID; ?>);" class="button overlay" title="Tasks" href="<?php echo $sn . "/incrementals/taskmanager" . ($objRoles->isAllowed("Super Administrator") ? "host" : "") . "/campaign_id/" . $intCampaignID . $institution_string; ?>">
+											<span class="icon"></span><span id="incremental_task_count_<?php print $intCampaignID; ?>"><?php print $arrResult["intTaskCount"]; ?> Tasks</span>
+										</a>
+									</span>
+								</span>
+							</span>
+							<span class="action">
+								<span class="tasks">
+									<span>
+										<a href="<?php print $sn . "/campaigns/campaignedit/campaign_id/" . $intCampaignID . $strParamPath; ?>" class="button link">
+											Edit Campaign
+										</a>
+									</span>
+								</span>
+							</span>
+							<span class="icon bullet"></span>
+							<span class="label" style="width:200px;line-height:15px;margin-bottom:7px"><span class="label title"><?php
+		print !empty($arrResult["objCampaign"]->installed_campaign_id) ? "Installed Campaign" : "Creaed Campaign";
+		//print $arrResult["objCampaign"]->campaign_type;
+							?> </span><br><?php print $arrResult["objCampaign"]->campaign_name; ?></span>
+							<div class="clear"></div>
+						</li>
+<?php
+	}
+?>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/campaigns/is_active/0/url/<?php echo dblencode("campaigns/campaignedit/" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title">Deactivated Campaigns</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div> <!-- <div class="col_content"> -->
+</div> <!-- <div class="slider"> -->

@@ -1,0 +1,931 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	if (!@$this->boolAjax)
+	{
+?>
+<script>
+
+$(document).ready(function()
+{
+	// reset
+	$('#pointsgridclasstasks a.reset').click( function() {
+		$(".slider:last").trigger("ajax_grid_refresh");
+	});
+	// save grid data
+	$('#pointsgridclasstasks a.submit').click( function() {
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start : $(".slider:last #processing_status").html('Loading...').fadeIn("fast"),
+			url : $("#pointsgridclasstasks").data("url"),
+			data : {
+				'strDescription' : $('#pointsgridclasstasks .text_description').val(),
+				"save_all" : "true",
+				"arrFormData" : JSON.stringify($('#pointsgridclasstasks form').serializeArray())
+			},
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$(".slider:last #processing_status").html("<?php print text("Sorry, there was an error"); ?>: VP-CT101-as654d");
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$(".slider:last #processing_status").html("<?php print text("Sorry, there was an error"); ?>: VP-CT102-54h5hg");
+					$.alert(strResponse);
+					return;
+				}
+				else if (arrResponse["success"] == "true")
+				{
+					$(".slider:last #processing_status").html("<?php print text("Saved"); ?>").fadeOut("slow");
+				}
+				else
+				{
+					$(".slider:last #processing_status").html("<?php print text("Sorry, there was an error"); ?>: VP-CT103-f3f2ff");
+					$.alert(strResponse);
+					return;
+				}
+			}
+		});
+	});
+	// grid options slide back
+	$(".slider:last").bind("slide_back", function () {
+		if ($(".slider:last").data("campaign_tasks") != $("#pointsgridclasstasks #campaign_tasks").val())
+		{
+			$(".slider:last").data("campaign_tasks", $("#pointsgridclasstasks #campaign_tasks").val());
+			$.ajax({
+				type : "POST",
+				cache : false,
+				url : $("#pointsgridclasstasks").data("url"),
+				dataType : "text",
+				data: {
+					"campaign_tasks" : $("#pointsgridclasstasks #campaign_tasks").val()
+				},
+				success : function(strResponse) {
+					json_response(strResponse, {
+						success : function () {
+							$(".slider:last").trigger("ajax_grid_refresh");
+						},
+						fail : function () {
+
+						}
+					});
+				}
+			});
+			//$(".slider:last").trigger("update_cols");
+		}
+		else if ($(".slider:last").data("classes") != $("#pointsgridclasstasks #classes").val())
+		{
+			$.ajax({
+				type : "POST",
+				cache : false,
+				url : $("#pointsgridclasstasks").data("url"),
+				dataType : "text",
+				data: {
+					"classes" : $("#pointsgridclasstasks #classes").val()
+				},
+				success : function(strResponse) {
+					json_response(strResponse, {
+						success : function () {
+							$(".slider:last").trigger("ajax_grid_refresh");
+						},
+						fail : function () {
+
+						}
+					});
+				}
+			});
+		}
+	});
+	// gird refresh
+	$(".slider:last").bind("ajax_grid_refresh", function () {
+		$.ajax({
+			type : "GET",
+			cache : false,
+			url : $("#pointsgridclasstasks").data("url") + '/boolAjax/true',
+			dataType : "text",
+			success : function(strResponse) {
+				$(".slider:last .task_order").removeClass("selected");
+				$(".slider:last .ajax_grid_module").html(strResponse);
+				$(".slider:last").trigger("update_cols");
+			}
+		});
+	});
+	$(".slider:last").data("campaign_tasks", "<?php print @$this->arrConfig["admin"]["pointsclasstasks"]; ?>");
+	$(".slider:last").data("classes", "<?php print @$this->arrConfig["admin"]["classtasksclasses"]; ?>");
+	// process the grid objects
+	$(".slider:last").bind("update_cols", function () {
+		var strTasks = $(".slider:last").data("campaign_tasks");
+		var arrTasks = strTasks.split(/&/);
+		var arrTaskHash = {};
+		for (var intItr in arrTasks)
+		{
+			arrTaskHash[arrTasks[intItr].split(/=/)[0]] = 1;
+		}
+		// hide hidden tasks
+		var arrPods = ["header_task", "column_order", "fill_task", "row_task"];
+		for (var intItr2 in arrPods)
+		{
+			var arrTaskNames = $.makeArray($(this).find("." + arrPods[intItr2]));
+			for (var intItr in arrTaskNames)
+			{
+				var intTask = $(arrTaskNames[intItr]).attr("id").split(/_/)[2];
+				if (!arrTaskHash[intTask])
+				{
+					$(arrTaskNames[intItr]).addClass("hidden");
+					$(arrTaskNames[intItr]).find("input").val("");
+				}
+				else
+				{
+					$(arrTaskNames[intItr]).removeClass("hidden");
+				}
+			}
+		}
+		// row input keyup
+		$(this).find(".row_task input").unbind("contextmenu").bind("contextmenu", function (e) {
+			if ($(this).val()*1 == 0) {
+				$(this).val($(this).attr('points'));
+				return false;
+			}
+		});
+		$(this).find(".row_task input").unbind("keyup").bind("keyup", function () {
+			if ($(this).val().match(/[^0-9]+/))
+				$(this).val($(this).val().replace(/[^0-9]+/, ""));
+			if ($(this).val()!=""&&$(this).val()*1!==$(this).val())
+				$(this).val($(this).val()*1);
+			$(this).css({
+				color: 'black'
+			});
+			if ($(this).val() != 0) {
+				if ($(this).attr('min_points') != 0 && $(this).val()*1 < $(this).attr('min_points')) {
+					$(this).css({
+						color: 'red'
+					});
+				}
+				if ($(this).attr('max_points') != 0 && $(this).val()*1 > $(this).attr('max_points')) {
+					$(this).css({
+						color: 'red'
+					});
+				}
+			}
+		});
+		// fill blur
+		$(this).find(".row_task input").unbind("helper").bind('helper', function (e,strMessage) {
+			var objPos = $(this).position();
+			$('#point_grid_message').remove();
+			var objMessage = $("<div id='point_grid_message'></div>");
+			objMessage.css({
+				left: objPos.left + $(this).width(),
+				top: objPos.top + $(this).height(),
+				'background-color' : '#fff',
+				color : 'red',
+				padding : '3px 7px',
+				border : '1px solid red',
+				position : 'absolute',
+				'font-size' : '14pt'
+			});
+			objMessage.html(strMessage);
+			$(this).after(objMessage);
+			objMessage.delay(3000).queue(function () {
+				$(this).dequeue().fadeOut();
+			});
+		});
+		$(this).find(".row_task input").unbind("blur").bind("blur", function () {
+			if ($(this).val()*1!==$(this).val())
+				$(this).val($(this).val()*1);
+			if ($(this).val() != 0) {
+				if ($(this).attr('min_points') != 0 && $(this).val() < $(this).attr('min_points') * 1) {
+					$(this).val($(this).attr('orgvalue'));
+					$(this).trigger('helper', 'Point range accepted ' + $(this).attr('min_points') + ' - ' + $(this).attr('max_points'));
+				}
+				if ($(this).attr('max_points') != 0 && $(this).val() > $(this).attr('max_points') * 1) {
+					$(this).val($(this).attr('orgvalue'));
+					$(this).trigger('helper', 'Point range accepted ' + $(this).attr('min_points') + ' - ' + $(this).attr('max_points'));
+				}
+			}
+		});
+		// fill focus
+		$(this).find(".row_task input").unbind("click").bind("click", function () {
+			$(this).css({
+				color: '#000'
+			});
+			if ($(this).val() == 0) {
+				$(this).select();
+			}
+		});
+		$(this).find(".fill_task input").unbind("focus").bind("focus", function () {
+			var intTask = $(this).attr("name");
+			$(this).data("start_data", $.makeArray($(".slider:last").find(".row_task_" + intTask + " input").clone()));
+		});
+		// fill keyup
+		$(this).find(".fill_task input").unbind("keyup").bind("keyup", function () {
+			if ($(this).val().match(/[^0-9]+/))
+				$(this).val($(this).val().replace(/[^0-9]+/, ""));
+			if ($(this).val()!=""&&$(this).val()*1!==$(this).val())
+				$(this).val($(this).val()*1);
+			var intTask = $(this).attr("name");
+			if ($(this).val() == "")
+			{
+				var arrStartData = $(this).data("start_data");
+				var arrInputs = $.makeArray($(".slider:last").find(".row_task_" + intTask + " input"));
+				for (var intItr = 0; intItr != arrStartData.length; intItr++)
+				{
+					$(arrInputs[intItr]).val($(arrStartData[intItr]).val());
+				}
+			}
+			else
+				$(".slider:last").find(".row_task_" + intTask + " input").val($(this).val());
+		});
+		// fill blur
+		$(this).find(".fill_task input").unbind("blur").bind("blur", function () {
+			$(this).val("");
+		});
+		// custimize task order focus
+		$(this).find(".column_order input").focus(function () {
+			if ($(".slider:last").data("refReOrderTimeout"))
+				window.clearTimeout($(".slider:last").data("refReOrderTimeout"));
+		});
+		// custimize task order blur
+		$(this).find(".column_order input").unbind("blur").blur(function () {
+			// save on blur timeout
+			$(".slider:last").data("refReOrderTimeout", window.setTimeout(function () {
+				var arrValues = {};
+				var arrOrderCells = $.makeArray($(".slider:last").find(".column_order:not(.hidden) input"));
+				for (var intItr = 0; intItr != arrOrderCells.length; intItr++)
+				{
+					arrValues[$(arrOrderCells[intItr]).attr("name")] = $(arrOrderCells[intItr]).val();
+				}
+				$.ajax({
+					type : "POST",
+					cache : false,
+					url : $("#pointsgridclasstasks").data("url"),
+					dataType : "text",
+					data: {
+						"classtaskcolumnorder" : serialize(arrValues)
+					},
+					success : function(strResponse) {
+						json_response(strResponse, {
+							success : function () {
+								$(".slider:last .task_order").removeClass("selected");
+								$(".slider:last").trigger("ajax_grid_refresh");
+							},
+							fail : function () {
+
+							}
+						});
+					}
+				});
+			}, 800));
+			var arrOrderCells = $.makeArray($(".slider:last").find(".column_order:not(.hidden) input"));
+			//$.alert(arrValues);
+			// find the first missing iteration
+			for (var intFirstMissing=1; intFirstMissing!=arrOrderCells.length; intFirstMissing++)
+			{
+				var boolFound = 0;
+				for (var intItr=0; intItr!=arrOrderCells.length; intItr++)
+				{
+					if ($(arrOrderCells[intItr]).val() == intFirstMissing)
+					{
+						boolFound = 1;
+						break;
+					}
+				}
+				if (!boolFound)
+					break;
+			}
+			for (var intItr=0; intItr!=arrOrderCells.length; intItr++)
+			{
+				if (
+					$(this).attr("name") != $(arrOrderCells[intItr]).attr("name")
+					&& $(this).val() == $(arrOrderCells[intItr]).val()
+				)
+					$(arrOrderCells[intItr]).val(intFirstMissing);
+			}
+		});
+		/////
+		$('.slider:last .is_checkbox_button').bind('update', function () {
+			if (!$(this).parent().find('input').hasClass('checked')) {
+				$(this).parent().find('input').val($(this).parent().find('input').attr('offvalue'));
+				$(this).stop().animate({
+					'opacity' : 0.3,
+					'background-color' : '#EEEEEE'
+				});
+			} else {
+				$(this).parent().find('input').val($(this).parent().find('input').attr('onvalue'));
+				$(this).stop().animate({
+					'opacity' : 1,
+					'background-color' : '#fff'
+				});
+			}
+		});
+
+		$('.slider:last .is_checkbox_button').click(function () {
+			if ($(this).parent().find('input').hasClass('checked')) {
+				$(this).parent().find('input').removeClass('checked');
+			} else {
+				$(this).parent().find('input').addClass('checked');
+			}
+			$(this).trigger('update');
+		});
+		$('.slider:last .is_checkbox_button').trigger('update');
+		$('.slider:last .fill_task .is_checkbox_button').bind('update', function () {
+			var objInput = $(this).parent().find('input');
+			var allInputs = $('.row_task_'+objInput.attr('task_id')+' .is_checkbox_input');
+			if (objInput.hasClass('checked')) {
+				allInputs.addClass('checked');
+			} else {
+				allInputs.removeClass('checked');
+			}
+			$('.row_task_'+objInput.attr('task_id')+' .is_checkbox_button').trigger('update');
+		});
+		$('.slider:last .fill_task .is_checkbox_button').bind('mouseover', function () {
+			$(this).stop().animate({
+				'opacity' : $(this).parent().find('input').hasClass('checked') ? 1 : 0.3,
+				'background-color' : '#fff'
+			});
+		});
+		$('.slider:last .fill_task .is_checkbox_button').bind('mouseout', function () {
+
+			$(this).stop().animate({
+				'opacity' : 0,
+				'background-color' : '#EEEEEE'
+			});
+		});
+		$('.slider:last .fill_task .is_checkbox_button').stop().css({
+			opacity : 0
+		});
+	});
+	// date picker toggle
+	$(".slider:last .date_display").click(function () {
+		if ($(this).hasClass("edit_mode")) {
+			$(this).removeClass("edit_mode");
+			$(".slider:last .date_editor").fadeOut();
+		} else {
+			$(this).addClass("edit_mode");
+			$(".slider:last .date_editor").removeClass("hidden").fadeIn();
+			$(".slider:last .date_editor input.datepicker").focus();
+		}
+	});
+	// date picker blur
+	$(".slider:last .date_editor input.datepicker").blur(function () {
+		$(".slider:last .date_display").removeClass("edit_mode");
+		$(".slider:last .date_editor").fadeOut(function () {
+			$(this).addClass("hidden");
+		});
+	});
+	// date picker change
+	$(".slider:last .date_editor input.datepicker").change(function () {
+		if ($(this).val() == "<?php print date('m') . "/" . date("d") . "/" . date("Y"); ?>")
+			$(".slider:last .date_text").html("Today");
+		else if ($(this).val() == "<?php print date('m',strtotime("-1 day")) . "/" . date("d",strtotime("-1 day")) . "/" . date("Y",strtotime("-1 day")); ?>")
+			$(".slider:last .date_text").html("Yesterday");
+		else
+			$(".slider:last .date_text").html($(this).val());
+		// modify the base path url to hold date info
+		var strUrl = $(".slider:last").data("url");
+		strUrl = strUrl.replace(/\/class_tasks_date\/[^\/]+/, "");
+		strUrl += "/class_tasks_date/" + encodeURIComponent(encodeURIComponent($(this).val()));
+		$(".slider:last").data("url", strUrl).trigger("ajax_grid_refresh");
+	});
+	// open settings
+	$(".slider:last .page_settings_btn").click(function () {
+		$(".slider:last .page_settings li").fadeIn();
+		$(this).closest("li").hide();
+		$(".slider:last .close_settings").fadeIn();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : $("#pointsgridclasstasks").data("url"),
+			dataType : "text",
+			data: {
+				"classtasksettings" : 1
+			},
+			success : function(strResponse) {
+				json_response(strResponse, {
+					success : function () {
+
+					},
+					fail : function () {
+
+					}
+				});
+			}
+		});
+	});
+	// close settings
+	$(".slider:last .close_settings").click(function () {
+		$(".slider:last .page_settings li").hide();
+		$(this).hide();
+		$(".slider:last .page_settings_btn").fadeIn();
+		$(".slider:last .date_display").removeClass("edit_mode");
+		$(".slider:last .date_editor").addClass("hidden");
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : $("#pointsgridclasstasks").data("url"),
+			dataType : "text",
+			data: {
+				"classtasksettings" : 0
+			},
+			success : function(strResponse) {
+				json_response(strResponse, {
+					success : function () {
+
+					},
+					fail : function () {
+
+					}
+				});
+			}
+		});
+	});
+	// config task order menu click
+	$(".slider:last .task_order").click(function () {
+		if ($(this).hasClass("selected"))
+		{
+			$(this).removeClass("selected");
+			$(".slider:last .column_order_row").addClass("hidden");
+		} else {
+			$(this).addClass("selected");
+			$(".slider:last .column_order_row").removeClass("hidden");
+			var arrOrderCells = $.makeArray($(".slider:last .column_order:not(.hidden)"));
+			for (var intItr = 0; intItr != arrOrderCells.length; intItr++)
+			{
+				$(arrOrderCells[intItr]).find("input").val(intItr+1)
+			}
+			$(arrOrderCells[0]).find("input").focus();
+		}
+	});
+	$(".slider:last #checklist_campaigntasks").click(function () {
+		$(".slider:last .task_order").removeClass("selected");
+		$(".slider:last .column_order_row").addClass("hidden");
+	});
+	$(".slider:last .noinput").focus(function () {
+		if ($(this).hasClass('noinput')) {
+			$(this).html('').removeClass('noinput');
+		}
+	});
+
+<?php
+	if (@$this->arrConfig["admin"]["classtasksettings"])
+	{
+?>
+	//$(".slider:last .page_settings_btn").trigger("click");
+	$(".slider:last .page_settings li").fadeIn();
+	$(".slider:last .page_settings_btn").closest("li").hide();
+	$(".slider:last .close_settings").fadeIn();
+<?php
+	}
+?>
+
+
+	$(".slider:last").trigger("update_cols");
+	var fn_btn_click = function () {
+		if ($(this).hasClass("btn_select")) {
+			$(this).removeClass("btn_select");
+			$(this).find("input").removeAttr("checked");
+		} else {
+			$(this).addClass("btn_select");
+			$(this).find("input").attr("checked", "checked");
+			$(this).trigger("clicked");
+		}
+		$(this).find("input").focus();
+	};
+	$(".slider:last .btn").bind("mousedown", fn_btn_click).bind("mouseup", fn_btn_click);
+	$(".slider:last input.datepicker").datepicker();
+});
+</script>
+<div class="slider" id="pointsgridclasstasks">
+	<style>
+	<!--
+	.marking .names .task_names .cell {
+		border-top:none;
+	}
+	.marking .cell input {
+		border:none;
+		background:none;
+		height:40px;
+		font-size:20px;
+		text-align:center;
+		width:40px;
+	}
+	.marking .task_names .cell, .marking .task_names.row {
+		height:150px !important;
+	}
+	.marking .header_task span {
+		font-size: 12px;
+		line-height:12px !important;
+		margin-left:4px !important;
+		letter-spacing:1px;
+		height:140px !important;
+		width:140px !important;
+	}
+	.marking .header_task b {
+		font-weight: bold !important;
+		font-size: 14px;
+	}
+	.task_names span {
+		overflow: hidden;
+		padding-top: 6px;
+	}
+	.hidden {
+		display: none !important;
+	}
+	.btn {
+		margin: 2px;
+		padding: 2px 4px 2px 4px;
+		border: 1px outset #EAEAEA;
+		display: inline;
+		cursor: default;
+		white-space: nowrap;
+		line-height: 30px;
+	}
+	.btn_select {
+		background-color: #DDD;
+		border: 1px inset #EAEAEA !important;
+	}
+	.date_editor {
+		padding: 8px;
+	}
+	.date_editor td {
+		padding-right: 8px;
+	}
+	.date_editor td.text {
+		padding-top: 3px;
+	}
+	.date_editor input {
+		padding: 2px;
+	}
+	.page_settings li:not(:first-child), .close_settings {
+		display: none;
+	}
+	li.selected {
+		background-color:#D5D8DE;
+	}
+	.column_order_row {
+		background-color:#D5D8DE;
+	}
+	.page_settings li {
+		cursor: pointer;
+	}
+	.noinput {
+		color: gray;
+	}
+	.fill_task .is_checkbox_button {
+		opacity:0;
+	}
+	.mission_window {
+		width:100px;
+	}
+	#col_names.grade {
+		width:100px;
+	}
+	#col_names.grade .cell {
+		border-right: 1px solid #ddd;
+	}
+	@media print
+	{
+		#content {
+			/*overflow:visible !important;*/
+			background:none !important;
+			/*width:auto !important;*/
+			height:auto !important;
+		}
+		#wrapper, #content .slider,
+		#content .slider_container,
+		#content .col_content {
+			float:none !important;
+			width:auto !important;
+			height:auto !important;
+		}
+		#content .col_content {
+			padding:0 !important;
+		}
+		.col_title_bg {
+			background:none !important;
+			height:0 !important;
+			margin:0 !important;
+		}
+		div.module {
+			margin-right:0;
+		}
+		.slider_container  {
+			margin-left:0 !important;
+		}
+		.marking .task_names .cell, .marking .task_names.row {
+			height:148px !important;
+		}
+		.ajax_grid_module {
+			border:0px solid #000 !important;
+		}
+		.dont_print,
+		.marking .cell input,
+		.bottom_buttons,
+		#footer_links,
+		.module.settings {
+			display:none !important;
+		}
+		.header, .body_header_left, .body_header_right, .left_menu, .noprint, #nav, .col_title {
+			display: none !important;
+		}
+		.slider_container .slider {
+			display:none;
+		}
+		.slider_container .slider:last-child {
+			display:block;
+		}
+	}
+	-->
+	</style>
+	<div class="col_title">
+		<span><?php print text("Give [|Points|]"); ?></span>
+		<div class="title_help info" title="<?php print text("Below is a grid you can use to give [|points|] to [|students|] electronically, without having to create [|Point|] Cards. On the top of the page are various settings you can use to select which [|classes|] and tasks you want to see on the grid. Don’t forget to hit ‘Save’ when you’re done giving [|points|]! Or if you don’t want to save your changes, hit ‘Refresh’ to start fresh."); ?>"></div>
+	</div>
+	<div class="col_content">
+		<form>
+			<div class="module lists forms settings">
+				<div class="module_content page_settings">
+					<ul>
+						<li class="page_settings_btn">
+							<a>
+							  <div class="title">Expand Grid Settings</div>
+							</a>
+						</li>
+						<li>
+							<h3>Grid Settings</h3>
+						</li>
+						<li id="checklist_classes">
+							<input type="hidden" id="classes" name="classes" value="<?php print @$this->arrConfig["admin"]["classtasksclasses"]; ?>" />
+							<a class="link" href="<?php print $sn . "/checklist/classes/viewmessages/points_classtasks" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php
+		print text("Limited to [|Classes|]") . " (";
+		parse_str(@$this->arrConfig["admin"]["classtasksclasses"], $arrUserClasses);
+		if (
+			count($arrUserClasses) == count($this->arrClasses)
+			|| count($arrUserClasses) == 0
+		)
+			print text("All");
+		else
+			print count($arrUserClasses);
+?>)</div>
+							</a>
+						</li>
+						<div class="processing_status"></div>
+						<li id="checklist_campaigntasks">
+							<input type="hidden" id="campaign_tasks" name="campaign_tasks" value="<?php print @$this->arrConfig["admin"]["pointsclasstasks"]; ?>" />
+							<a class="link" href="<?php print $sn; ?>/checklist/campaigntasks/viewmessages/points_classtasks">
+							  <div class="icon"></div>
+							  <div class="title">Customize Campaign/Task Columns</div>
+							</a>
+						</li>
+						<div class="processing_status"></div>
+						<li class="task_order">
+							<a>
+								<div class="icon"></div>
+								<div class="title">Customize Task Order</div>
+							</a>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+				</div>
+				<div class="module_content close_settings">
+					<ul>
+						<li class="hidden"></li>
+						<li>
+							<a>
+							  <div class="title">Collapse Grid Settings</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="module_content">
+					<ul>
+						<li class="hidden"></li>
+						<li>
+							<a class="link" href="<?php print $sn; ?>/points/classtasksprint<?php print $strParamPath; ?>">
+							  <div class="icon"></div>
+							  <div class="title">Print This Grid</div>
+							</a>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+				</div>
+				<div class="module_content">
+					<ul>
+						<li class="hidden"></li>
+						<li>
+							<a>
+							  <div class="title date_display">Date: <span class="date_text">Today</span></div>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="module_content date_editor hidden">
+					<table>
+						<tr>
+							<td class="text">
+								Date:
+							</td>
+							<td>
+								<input type="text" class="required datepicker" value="<?php print date('m') . "/" . date("d") . "/" . date("Y"); ?>" size="25" />
+							</td>
+							<td>
+								<div class="btn" onclick="$('.slider:last input.datepicker').val('<?php print date('m') . "/" . date("d") . "/" . date("Y"); ?>').trigger('change');"><span>Today</span></div>
+								<div class="btn" onclick="$('.slider:last input.datepicker').val('<?php print date('m',strtotime("-1 day")) . "/" . date("d",strtotime("-1 day")) . "/" . date("Y",strtotime("-1 day")); ?>').trigger('change');"><span>Yesterday</span></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="module ajax_grid_module">
+<?php
+	} // boolAjax
+?>
+<script>
+	$(document).ready(function () {
+		$('.slider:last .set_x_width').css({
+			width: <?php print count($this->arrRows); ?> * 44
+		});
+	});
+</script>
+				<div class="module_conntent">
+					<div class="marking">
+						<div id="col_names" class="col names grade">
+							<div class="mission_name">
+								<div class="cell"><?php print text("[|Class|]"); ?></div>
+							</div>
+							<div class="row task_names">
+								<div class="cell"></div>
+							</div>
+							<div class="cell column_order_row hidden dont_print"><b>Column Order:</b></div>
+							<div class="cell dont_print"></div>
+<?php
+	foreach($this->arrOutResults as $arrOutResult)
+	{
+		$objUser = $arrOutResult['objUser'];
+		$arrUserClasses = $this->arrUserClasses[$objUser->user_id];
+		$arrClassNames = array();
+		foreach ($arrUserClasses as $objUserClass)
+		{
+			if (!isset($this->arrClasses[$objUserClass->class_id]))
+				continue;
+			$arrClassNames[] = $this->arrClasses[$objUserClass->class_id]->custom_name1;
+		}
+		print '<div class="cell" style="text-align:center">' . join(',', $arrClassNames) . '</div>';
+	}
+?>
+
+						</div>
+						<div id="col_names" class="col names">
+							<div class="mission_name">
+								<div class="cell"><?php print text("Student"); ?></div>
+							</div>
+							<div class="row task_names">
+								<div class="cell"></div>
+							</div>
+							<div class="cell column_order_row hidden dont_print"><b>Column Order:</b></div>
+							<div class="cell dont_print" style="text-align:left"><b>Auto Fill Down</b></div>
+<?php
+	foreach($this->arrOutResults as $arrOutResult)
+	{
+		$objUser = $arrOutResult['objUser'];
+?>
+							<div class="cell"><?php echo $objUser->first_name . " " . $objUser->last_name; ?></div>
+
+<?php
+	}
+?>
+
+						</div>
+							<div class="mission_container">
+								<div class="missions" style="overflow-x:auto;width:440px;">
+									<div class="col mission set_x_width">
+										<div class="row mission_name">
+											<div class="cell" style="text-align:left;padding-left:20px;border-width: 0">Campaigns</div>
+										</div>
+										<div class="row task_names">
+<?php
+	foreach ($this->arrRows as $arrItems)
+	{
+?>
+											<div class="cell header_task" id="header_task_<?php print $arrItems["objTask"]->task_id; ?>" task_id="<?php print $arrItems["objTask"]->task_id; ?>">
+												<span><a title="<?php print $arrItems["objCampaign"]->campaign_name; ?>" style="cursor:default;white-space:nowrap;"><b><?php print $arrItems["objCampaign"]->campaign_name; ?></b></a><br /><a title="<?php print $arrItems["objTask"]->task_name; ?>" style="cursor:default;color:#000;white-space:nowrap;"><?php print $arrItems["objTask"]->task_name; ?></a></span>
+											</div>
+<?php
+	}
+?>
+										</div>
+										<div id="mission_one_tasks">
+											<div class="row column_order_row hidden dont_print">
+<?php
+	foreach ($this->arrRows as $arrItems)
+	{
+?>
+												<div class="cell column_order" id="column_order_<?php print $arrItems["objTask"]->task_id; ?>">
+													<span>
+														<input size="5" type="text" name="<?php print $arrItems["objTask"]->task_id; ?>" />
+													</span>
+												</div>
+<?php
+	}
+?>
+											</div>
+											<div class="row dont_print">
+<?php
+	foreach ($this->arrRows as $arrItems)
+	{
+		if ($arrItems["objTask"]->is_checkbox)
+		{
+?>
+												<div class="cell fill_task dont_print" id="fill_task_<?php print $arrItems["objTask"]->task_id; ?>">
+													<span>
+														<div class="is_checkbox_button" style="opacity:0.3;font-size:14pt;text-align: center;padding:8px 0;border:1px solid rgba(0,0,0,0.3);cursor:pointer;"><?php print $arrItems["objTask"]->points; ?></div>
+														<input type="checkbox" checked="checked" task_id="<?php print $arrItems["objTask"]->task_id; ?>" />
+													</span>
+												</div>
+<?php
+		}
+		else
+		{
+?>
+												<div class="cell fill_task dont_print" id="fill_task_<?php print $arrItems["objTask"]->task_id; ?>">
+													<span>
+														<input size="5" type="text" name="<?php print $arrItems["objTask"]->task_id; ?>" value="" />
+													</span>
+												</div>
+<?php
+		}
+	}
+?>
+											</div>
+<?php
+	foreach ($this->arrOutResults as $arrOutResult)
+	{
+		$objUser = $arrOutResult['objUser'];
+?>
+											<div class="row">
+<?php
+		foreach ($this->arrRows as $arrItems)
+		{
+?>
+												<div class="cell row_task row_task_<?php print $arrItems["objTask"]->task_id; ?>" id="row_task_<?php print $arrItems["objTask"]->task_id . "_" . $objUser->user_id; ?>">
+													<span>
+<?php
+			if ($arrItems["objTask"]->is_checkbox)
+			{
+?>
+														<div class="is_checkbox_button dont_print" style="opacity:0.3;font-size:14pt;text-align: center;padding:8px 0;border:1px solid rgba(0,0,0,0.3);cursor:pointer;"><?php print $arrItems["objTask"]->points; ?></div>
+														<input class="dont_print is_checkbox_input <?php print isset($this->arrUserPointsHash[$objUser->user_id][$arrItems["objTask"]->task_id]) ? 'checked' : ''; ?>" type="checkbox" checked="checked" name="points_<?php print $arrItems["objTask"]->task_id . "_" . $objUser->user_id; ?>" onvalue="<?php print $arrItems["objTask"]->points; ?>" offvalue="" value="<?php print @$this->arrUserPointsHash[$objUser->user_id][$arrItems["objTask"]->task_id]->points; ?>" />
+<?php
+			}
+			else
+			{
+?>
+														<input size="5" type="text" points="<?php print $arrItems["objTask"]->points; ?>" min_points="<?php print $arrItems["objTask"]->min_points; ?>" max_points="<?php print $arrItems["objTask"]->max_points; ?>" name="points_<?php print $arrItems["objTask"]->task_id . "_" . $objUser->user_id; ?>" value="<?php print intval(@$this->arrUserPointsHash[$objUser->user_id][$arrItems["objTask"]->task_id]->points); ?>" orgvalue="<?php print intval(@$this->arrUserPointsHash[$objUser->user_id][$arrItems["objTask"]->task_id]->points); ?>" />
+<?php
+			}
+?>
+													</span>
+												</div>
+<?php
+		}
+?>
+											</div>
+<?php
+	}
+?>
+										</div>
+									</div>
+								</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+<?php
+	if (!@$this->boolAjax)
+	{
+?>
+			</div>
+			<!--div class="module_content" style="padding:0 2px 0 2px;">
+				<textarea class="text_description noinput" style="width:96%;border-radius:3px;-moz-border-radius:3px;padding:2px">Type a description</textarea>
+			</div-->
+			<div id="processing_status" style="margin-left:4px"></div>
+			<div style="height:50px;" class="bottom_buttons">
+				<span>
+					<a style="margin-left:4px" class="button submit" >Save</a>
+				</span>
+				<span>
+					<a style="margin-left:4px" class="button reset" >Refresh</a>
+				</span>
+			</div>
+
+
+		</form>
+	</div>
+</div>
+<?php
+	}
+?>

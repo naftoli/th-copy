@@ -1,0 +1,282 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objRoles = new Roles();
+?>
+<style>
+<!--
+.marking_list .select_box {
+	float:left;
+	margin:0 8px;
+}
+a.button {
+	padding:6px 10px;
+}
+.marking_list .button .label {
+	float:left;
+	text-indent:-9999em;
+}
+
+.marking {
+	color:#333333;
+	font-size:14px;
+	font-weight:bold;
+	line-height:14px;
+	font-family:"Myriad Pro",Arial,Helvetica,sans-serif;
+}
+.marking .row:first-child {
+	border-top:medium none;
+}
+.marking .row:last-child {
+	border-bottom:medium none;
+}
+.marking .row.top_row {
+	font-size:18px;
+	text-align:center;
+}
+.marking.tanya_mark .row {
+	clear:both;
+	font-size:14px;
+	min-height:30px;
+	height:auto;
+}
+
+.marking .row.top_row .cell {
+	min-height:30px;
+	padding-top:10px;
+}
+.marking.tanya_mark .row.top_row .cell {
+	min-height:0;
+	height:auto;
+	text-align:left;
+}
+.marking.tanya_mark .cell {
+	float:left;
+	margin-left:10px;
+	width:100px;
+	border:none;
+	height:auto;
+}
+.marking.tanya_mark .cell.name {
+	width:170px;
+}
+.marking.tanya_mark .cell.lines {
+	width:70px;
+}
+.marking.tanya_mark .cell.quota {
+	width:70px;
+}
+.marking.tanya_mark .cell.completed {
+	width:70px;
+}
+.marking.tanya_mark .row:not(.top_row) > .cell {
+	font-weight:normal;
+	min-height:0;
+	padding:6px 0;
+}
+.marking.tanya_mark .cell input {
+	background:none repeat scroll 0 0 #EEEEEE;
+	border:1px solid #BBBBBB;
+	margin:-2px 0;
+}
+.marking .row:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+* .marking .cell { zoom: 1; } /* IE6 */
+*:first-child+html .marking .cell { zoom: 1; } /* IE7 */
+
+-->
+</style>
+<script language="javascript">
+$(document).ready(function()
+{
+	$('#form_markinglist .submit').click( function(e) {
+		e.preventDefault();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#slider_markinglist #processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn . "/marking/markinglist" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('#form_markinglist').serialize(),
+			success : function(strResponse) {
+				slideRefresh("<?php echo $sn . "/marking/markinglist/resultdata/\" + strResponse + \"" . $strParamPath; ?>");
+			}
+		});
+	});
+});
+</script>
+<div class="slider" id="slider_markinglist">
+	<div class="col_title">
+		<span>Campaign Marking</span>
+	</div>
+	<div class="col_content">
+<?php
+if (!count($this->arrResults))
+{
+?>
+		<div class="module" style="padding:5px;"><?php print $objRoles->isRole("Parent") ? "You have no children" : "There are no students"; ?> enrolled into any campaigns. Once <?php print $objRoles->isRole("Parent") ? "your children" : "your students"; ?> are enrolled you will be able to mark their missions here. Click the Campaigns button on the left to start enrolling your <?php print $objRoles->isRole("Parent") ? "children" : "students"; ?>.</div>
+<?php
+}
+else
+{
+?>
+		<div class="module" style="padding:5px;">
+			* Goal Status reflects the chayols Bar/Bas Mitvzha goal.<br />
+			** Enter the total amount of lines the chayol knows now. <br />
+			Students with no goal, no birth-date or are not enrolled will not show in Marking.
+		</div>
+<?php
+include("uimods/sliderefresh.phtml");
+?>
+		<div class="body left marking_missions">
+			<form id="form_markinglist">
+				<DIV id="tasks_div">
+					<div class="marking tanya_mark module">
+						<div class="row top_row">
+							<div class="cell name">Student</div>
+							<div class="cell quota">Weekly Quota</div>
+							<div class="cell completed"><nobr>Goal Status *</nobr></div>
+							<div class="cell lines">Lines Due</div>
+							<div class="cell" style="width:110px">Status</div>
+							<div class="cell">Total Tested **</div>
+						</div>
+<?php
+	foreach ($this->arrResults as $arrUser)
+	{
+		//var_dump($arrUser["arrPendingMissions"]);exit;
+		//var_dump($arrUser);exit;
+		$intLinesOverDue = $arrUser["intPendingLines"];
+		$intLinesDue = $arrUser["intPending"];
+		if (!count($arrUser["arrPendingMissions"]))
+		{
+?>
+						<div class="row">
+							<div class="cell name"><?php print $arrUser["objUser"]->first_name . " " . $arrUser["objUser"]->last_name . " (" . $arrUser["objUser"]->user_id . ")"; ?></div>
+							<!-- weekly quota -->
+							<div class="cell"><a href="#" onclick="slideURL('<?php print $sn . "/administration/campaignladders/user_id/" . $arrUser["objUser"]->user_id . "/campaign_id/" . $this->campaign_id; ?>');"><?php print $arrUser["intLadderVelocity"]; ?> lines</a></div>
+							<!-- completed -->
+							<div class="cell"><?php print floor($arrUser["intLatestLine"]) . "/" . number_format(floor($arrUser["intGoal"])); ?> lines</div>
+<?php
+			if (floor($arrUser["intLatestLine"]) == $arrUser["intGoal"])
+			{
+?>
+								<div style="padding: 8px">Goal reached.</div>
+<?php
+			}
+			else
+			{
+?>
+								<div style="padding: 8px">No scheduling available.</div>
+<?php
+			}
+?>
+						</div>
+<?php
+			continue;
+		}
+?>
+						<div class="row">
+							<!-- name -->
+							<div class="cell name"><?php print $arrUser["objUser"]->first_name . " " . $arrUser["objUser"]->last_name . " (" . $arrUser["objUser"]->user_id . ")"; ?></div>
+							<!-- weekly quota -->
+							<div class="cell quota"><a href="#" onclick="slideURL('<?php print $sn . "/administration/campaignladders/user_id/" . $arrUser["objUser"]->user_id . "/campaign_id/" . $this->campaign_id; ?>');"><?php print $arrUser["intLadderVelocity"]; ?> lines</a></div>
+							<!-- completed -->
+							<div class="cell completed"><?php print floor($arrUser["intLatestLine"]) . "/" . floor($arrUser["intGoal"]); ?> lines</div>
+							<!-- lines due -->
+							<div class="cell lines"><?php
+		//var_dump($arrUser["arrPendingMissions"]);$arrParams["campaign_id"]
+		$intTotalPendingMissions = $arrUser["intPendingMissionsReal"];
+		//dumper($intTotalPendingMissions);
+		$intTotalInvert = ($intTotalPendingMissions - ($intTotalPendingMissions * 2));
+		if ($intTotalPendingMissions == 1)
+		{
+			$arrMission = current($arrUser["arrPendingMissions"]);
+			if ($intLinesOverDue >= 0)
+				$intLinesOverDue += $intTotalPendingMissions * $arrMission["velocity"];
+
+			if ($intLinesOverDue)// && ($arrMission["velocity"] - $intLinesOverDue))
+			{
+				if ($intLinesOverDue < 0)
+					$intLinesOverDue = $intTotalPendingMissions * $arrUser["intLadderVelocity"] + ($intTotalPendingMissions * $arrUser["intLadderVelocity"] + ceil($intLinesOverDue));
+				if ($intLinesOverDue < 0)
+				{
+					$intLinesOverDue2 = $intLinesOverDue;
+					//var_dump($intLinesOverDue);
+					$intLinesOverDue = $arrUser["intLatestLine"] + (!($intLinesOverDue < -1) ? $intLinesOverDue / 2 : $intLinesOverDue);
+					if ($arrUser["intLadderVelocity"] < 1)
+						$intLinesOverDue += $intLinesOverDue2;
+				}
+				//$intLinesDue = (floor($arrUser["intLatestLine"]) + $intLinesOverDue);
+				print ($arrUser["intLadderVelocity"]-($intLinesDue + ($arrUser["intLatestLine"] - $arrUser["intLatestMissionLineFraction"]))) . " lines due";
+			}
+			else
+				print "No lines due";
+		}
+		else if ($intTotalPendingMissions < 1)
+		{
+			if (!$arrUser["intLinesAhead"])
+			{
+				if ($intTotalInvert)
+					print $intTotalInvert . ' lines ahead';
+				else
+					print "No lines due";
+			}
+			else
+				print $arrUser["intLinesAhead"] . " lines ahead";
+		}
+		else
+		{
+			$intLinesOverDue -= $arrUser["intLadderVelocity"]*2;
+			$intLinesOverDue = floor($intLinesOverDue);
+			if (!$intLinesOverDue)
+				print "Current";
+			else
+				print $intLinesOverDue . " lines overdue";
+		}
+?></a></div>
+							<!-- status -->
+							<div class="cell" style="width:110px"><a href="#" onclick="slideURL('<?php print $sn . "/campaigns/pausemissions/user_id/" . $arrUser["objUser"]->user_id; ?>');">
+<?php
+		if ($arrUser['intMissionsAhead'] > 0)
+			print ($arrUser['intMissionsAhead']-1) . " " . ucfirst(FrequencyTextToSingular($this->objSchedulingParams->frequency)) . "(s) ahead";
+		else if ($intTotalPendingMissions < 2)
+			print "Current";
+		else
+			print ($intTotalPendingMissions - 1) . " " . ucfirst(FrequencyTextToSingular($this->objSchedulingParams->frequency)) . "(s) behind";
+?>
+							</a></div>
+							<!-- tested -->
+							<div class="cell"><?php print floor($arrUser["intLatestLine"]); ?> - <input type="text" size="4" value="" name="user_lines_<?php print $arrUser["objUser"]->user_id; ?>" /></div>
+						</div>
+<?php
+		if (isset($this->arrResultData[$arrUser["objUser"]->user_id]) && $this->arrResultData[$arrUser["objUser"]->user_id])
+		{
+?>
+						<div class="row">
+							<div style="padding: 6px; color: red">
+								You have attempted to mark this child <?php print $this->arrResultData[$arrUser["objUser"]->user_id]; ?> lines past the limit of 3 weeks ahead, you must raise his quota in order to enter more lines.
+							</div>
+						</div>
+<?php
+		}
+	}
+?>
+					</div>
+				</div>
+				<div style="clear:both; height:1px;"></div>
+				&nbsp;<br>
+				<div id="processing_status"></div>
+				<span><a href="#" title="Save" class="button submit" id="appoval_save">Save</a></span>
+			</form>
+		</div>
+<?php
+}
+?>
+	</div> <!-- <div class="col_content"> -->
+</div> <!-- <div class="slider"> -->

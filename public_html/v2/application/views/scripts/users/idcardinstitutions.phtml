@@ -1,0 +1,62 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span><?php print $this->boolCompletedOrders ? "Completed" : "Pending"; ?> Orders</span>
+	</div>
+
+	<div class="col_content">
+		<div id="idcard_section1">
+			<div class="module form lists">
+				<div class="module_content list">
+					<ul>
+<?php
+	if (!$this->boolCompletedOrders)
+	{
+?>
+						<li>
+							<a class="link" href="<?php echo $sn; ?>/users/idcardinstitutions/completed_orders/true">
+								<div class="icon"></div>
+								<div class="title">Completed Orders</div>
+							</a>
+						</li>
+<?php
+	}
+	if (!count($this->arrAuthCardOrders))
+	{
+?>
+					</ul>
+				</div>
+			</div>
+			<div class="module message">
+				There are currently no orders pending.
+			</div>
+<?php
+	}
+	foreach ($this->arrAuthCardOrders as $arrAuthCardOrders)
+	{
+?>
+						<li>
+							<a class="link" href="<?php print $sn . "/users/idcardhostnav/auth_card_order_id/" . $arrAuthCardOrders->auth_card_order_id . ($this->boolCompletedOrders ? "/completed_orders/true" : "") . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title" style="width:300px;"><?php print $arrAuthCardOrders->institution_name; ?></div>
+								<div class="lable_count" style="float:right;background-color:#fff;border:1px solid gray;margin:5px;padding:2px 12px 2px 12px;text-align:center;"><?php print $arrAuthCardOrders->created; ?></div>
+								<div class="lable_count" style="float:right;background-color:#fff;border:1px solid gray;margin:5px;padding:2px 12px 2px 12px;text-align:center;"><?php print count(explode(',', $arrAuthCardOrders->user_ids)); ?> Order(s)</div>
+							</a>
+						</li>
+<?php
+	}
+	if (count($this->arrAuthCardOrders))
+	{
+?>
+					</ul>
+				</div>
+			</div>
+<?php
+	}
+?>
+		</div>
+	</div>
+</div>

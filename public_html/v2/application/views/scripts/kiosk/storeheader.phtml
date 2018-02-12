@@ -1,0 +1,38 @@
+	<div id="header">
+	    <div class="org">
+			<div class="nav">
+				<ul>
+<?php
+	if ($this->user->magic == "true")
+	{
+?>
+					<li class="icon_home"><a href="<?php print $sn;?>/kiosk-main">Home</a></li>
+					<li class="icon_logout"><a href="<?php print $sn;?>/kiosk-login/reset">Logout</a></li>
+<?php
+	}
+	else
+	{
+?>
+					<li class="icon_back"><a href="<?=$sn;?>/kiosk/logout/" href="#">Back</a></li>
+					<li class="icon_home"><a href="<?=$sn;?>/kiosk/logout/">Home</a></li>
+					<li class="icon_logout"><a href="<?=$sn;?>/kiosk/logout/target/logout">Logout</a></li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+			<div class="org_photo">
+				<!--<img src="<?php echo $sn; ?>/kiosk/showimage/image_id/<?php echo $this->user->institution_image_id; ?>" height="100">-->
+				<!--<img src="http://www.mashpia.com/file_view.php?id=<?//=$userInfo->user_photo_id;?>" height="100" alt="My Shliach">-->
+			</div>
+            <br>
+			<?=$this->user->first_name;?> <?=$this->user->last_name;?>
+			<br />
+			<?=$this->user->institution_name;?>
+			<br />
+			Available points: <span id="current_balance"><?=number_format($this->current_balance, 0);?> </span>
+		</div>
+		<noscript>				
+            <p class="js_alert">Notice: You have javascript disabled.<br />Some parts of the site will not function without javascript.</p>
+		</noscript>	
+	</div>

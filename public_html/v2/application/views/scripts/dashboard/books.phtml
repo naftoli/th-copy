@@ -1,0 +1,29 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider" id='slider_grades'>
+	<div class="col_title">
+		<span><?php print text("Books"); ?></span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/books/bookeditor">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Add New Book"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/books/bookslist">
+							<div class="icon"></div>
+							<div class="title"><?php print text("View All Books"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

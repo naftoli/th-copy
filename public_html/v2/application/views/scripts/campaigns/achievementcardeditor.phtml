@@ -1,0 +1,368 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+?>
+<style type="text/css">
+.fronts, .backs {
+  margin:-.05in .125in;
+  page-break-after: always;
+}
+
+.fronts td, .backs td {
+  border: 1px dashed black;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  vertical-align: middle;
+  height: 2in;
+  width: 3.5in;
+}
+
+.fronts td td, .backs td td {
+  width: auto;
+  height: auto;
+  border: none;
+}
+
+@media print {
+  .fronts td, .backs td {
+	border: none;
+  }
+
+  hr {
+	display: none;
+  }
+}
+</style>
+<script language="javascript">
+
+$('#campaign_name').change(function() {
+	intCampaign = $('#campaign_name').val();
+	task_lookup(intCampaign);
+});
+
+function get_task_points(intTask)
+{
+	var strTargetUrl = '<?php echo $sn;?>/campaigns/achievementcardeditor/mode/gettaskpoints<?php print $strParamPath;?>/task_id/'+intTask;
+	$.ajax({
+	   type : "POST",
+	   cache : false,
+	   start: $("#processing_status").html("Getting points for the selected task...").fadeIn("slow").delay(2000).fadeOut("slow"),
+	   url : strTargetUrl,
+	   dataType : "text",
+	   data: { 'task_id' : intTask },
+	   success : function(response)
+	   {
+			var myArr = jQuery.parseJSON(response);
+			intPoints = myArr.points;
+			var number_of_miles = '<ul><li><span class="label">Number of miles:</span><span class="input"><input type="text" name="miles" id="miles" value="'+intPoints+'"></span><div class="clear"></div></li></ul>';
+			$("#slider_achievementcardeditor #number_of_miles").html(number_of_miles);
+	   }
+	});
+}
+function generic_card()
+{
+    $("#slider_achievementcardeditor #task_name").html("");
+	$("#slider_achievementcardeditor #description").html("");
+	$("#slider_achievementcardeditor #left_circle").html("");
+	$("#slider_achievementcardeditor #right_circle").html("");
+	$("#slider_achievementcardeditor #number_of_sheets").html("");
+	$("#slider_achievementcardeditor #button_go").html("");
+	var arrayNumberofSheets = new Array(1,2,3,4,5,6,7,8,9,10);
+	//var description ='<ul><li><span class="label">Description:</span><span class="input"><input type="text" name="task_description" id="task_description" value=""></span> This will be used as a name if you choose to save it as a template<div class="clear"></div></li></ul>';
+	var left_circle = '<ul><li><span class="label">Left circle:</span><span class="input"><input type="text" name="leftCircle" id="leftCircle" value=""></span><div class="clear"></div></li></ul>';
+	var right_circle = '<ul><li><span class="label">Right circle:</span><span class="input"><input type="text" name="rightCircle" id="rightCircle" value=""></span><div class="clear"></div></li></ul>';
+	var number_of_miles = '<ul><li><span class="label">Number of miles:</span><span class="input"><input type="text" name="miles" id="miles" value=""></span><div class="clear"></div></li></ul>';
+	var number_of_sheets = '<ul><li><span class="label">Number of sheets:</span><span class="input"><select class="select" name="sheet_number" id="sheet_number">';
+	for(intSheet in arrayNumberofSheets)
+	{
+		number_of_sheets+= '<option value="'+arrayNumberofSheets[intSheet]+'">'+arrayNumberofSheets[intSheet]+'</option>';
+	}
+	number_of_sheets+= '</select></span><div class="clear"></div></li></ul>';
+	var button_go = '<ul><li><span class="input"><input type="button" name="button_go" id="button_go" value="Print Achievement Cards" onClick="card_preview();"></span></li></ul>';
+	//$("#slider_achievementcardeditor #number_of_miles").html(number_of_miles);
+	$("#slider_achievementcardeditor #description").html(description);
+	//$("#slider_achievementcardeditor #left_circle").html(left_circle);
+	//$("#slider_achievementcardeditor #right_circle").html(right_circle);
+	$("#slider_achievementcardeditor #number_of_sheets").html(number_of_sheets);
+	$("#slider_achievementcardeditor #button_go").html(button_go);
+
+}
+function task_lookup(intCampaign)
+{
+    var strTargetUrl = '<?php echo $sn;?>/campaigns/achievementcardeditor/mode/gettasks<?php print $strParamPath;?>/campaign_id/'+intCampaign;
+
+    $.ajax({
+		type : "POST",
+		cache : false,
+        start: $("#processing_status").html("Getting tasks...").fadeIn("fast").delay(2000).fadeOut("slow"),
+		url : strTargetUrl,
+		dataType : "text",
+		data: { 'campaign_id' : intCampaign },
+		success : function(response)
+		{
+			if (response == "You have to create tasks first!")
+			{
+				$("#processing_status").stop();
+				$("#processing_status").fadeIn().html("There are no tasks available, <a href=\"#\" onclick=\"slideURL('<?php echo $sn;?>/campaigns/incrementalscampaignlist/')\">click here</a> to add some tasks.");
+				$("#slider_achievementcardeditor #task_name").html("");
+				$("#slider_achievementcardeditor #number_of_sheets").html("");
+				$("#slider_achievementcardeditor #button_go").html("");
+				return;
+			}
+			$("#processing_status").html("Loading complete...");
+            var myArr = jQuery.parseJSON(response);
+            //construct tasks select combo
+            var taskSelectCombo = '';
+			var array = myArr.tasks;
+			var arrayNumberofSheets = new Array(1,2,3,4,5,6,7,8,9,10,20,30,40,50,100);
+
+			var number_of_sheets = '<ul><li><span class="label">Number of sheets:</span><span class="input"><select class="select" name="sheet_number" id="sheet_number">';
+			for(intSheet in arrayNumberofSheets)
+			{
+				number_of_sheets+= '<option value="'+arrayNumberofSheets[intSheet]+'">'+arrayNumberofSheets[intSheet]+'</option>';
+			}
+			number_of_sheets+= '</select></span><div class="clear"></div></li></ul>';
+
+			taskSelectCombo = '<ul><li><span class="label">Task name:</span><span class="input">';
+			taskSelectCombo +='<select class="select" id="campaign_task">';
+			taskSelectCombo += '<option value="">--Select a Task--</option>';
+			for(element in array){
+				task_id = array[element].task_id;
+				task_name = array[element].task_name;
+				taskSelectCombo += '<option value="'+task_id+'">'+task_name+'</option>';
+			}
+			taskSelectCombo += '</select></span><div class="clear"></div></li></ul>';
+
+			var left_circle = '<ul><li><span class="label">Left circle:</span><span class="input"><input type="text" name="leftCircle" id="leftCircle" value=""></span><div class="clear"></div></li></ul>';
+            var right_circle = '<ul><li><span class="label">Right circle:</span><span class="input"><input type="text" name="rightCircle" id="rightCircle" value=""></span><div class="clear"></div></li></ul>';
+			//var description ='<ul><li><span class="label">Description:</span><span class="input"><input type="text" name="task_description" id="task_description" value=""></span><div class="clear"></div></li></ul>';
+            var button_go = '<ul><li><span class="input"><input type="button" name="button_go" id="button_go" value="Print Achievement Cards" onClick="card_preview();"></span><div class="clear"></div></li></ul>';
+			//$("#slider_achievementcardeditor #description").html(description);
+            $("#slider_achievementcardeditor #task_name").html(taskSelectCombo);
+			$('#campaign_task').change(function(){
+
+				$("#slider_achievementcardeditor #card_preview").html("");
+				$("#slider_achievementcardeditor #CardPreviewCombo").html("");
+				$("#slider_achievementcardeditor #button_print").html("");
+				$("#slider_achievementcardeditor #save_template").html("");
+				var intTask = $(this).val();
+				get_task_points(intTask);
+
+			});
+			//$("#slider_achievementcardeditor #left_circle").html(left_circle);
+			//$("#slider_achievementcardeditor #right_circle").html(left_circle);
+			$("#slider_achievementcardeditor #number_of_sheets").html(number_of_sheets);
+			$("#slider_achievementcardeditor #button_go").html(button_go);
+        }
+    });
+}
+function card_preview()
+{
+	if ($("#campaign_task").val() == "")
+	{
+		alert("You must select a task.");
+		return;
+	}
+	var intCampaign = $('#campaign_name').val();
+	var intTask = $('#campaign_task').val();
+	var intPoint = $('#miles').val();
+	var strDescription = $('#task_description').val();
+	//var strLeftCircle = $('#leftCircle').val();
+	//var strRightCircle = $('#rightCircle').val();
+	//alert(strDescription);
+	var strTaskName = '';
+	//if(strRadioButton == "generic")
+	//{
+	//	if(strDescription=='')
+	//	{
+	//		alert("Description cannot be empty");
+	//		return;
+	//	}
+	//}
+	if(intPoint==0 || intPoint=='')
+	{
+		alert("Sorry, you must enter miles");
+		return;
+	}
+	//var strRadioButton = $("input[name=achievement_card_type]:checked").val();
+
+	var strTargetUrl ='';
+	if(intTask > 0)
+	{
+		strTargetUrl = '<?php echo $sn;?>/campaigns/achievementcardeditor/mode/cardpreview<?php print $strParamPath;?>/campaign_id/'+intCampaign+'/task_id/'+intTask;
+	}
+	else{
+		strTargetUrl = '<?php echo $sn;?>/campaigns/achievementcardeditor/mode/cardpreview<?php print $strParamPath;?>/campaign_id/'+intCampaign;
+	}
+	 $.ajax({
+		type : "POST",
+		cache : false,
+        start: $("#processing_status2").html("Generating Achievement Cards...").fadeIn("slow").delay(2000).fadeOut("slow"),
+		url: strTargetUrl,
+		dataType : "text",
+		data: $('#form_achievement_card').serialize(),
+		success: function(response) {
+			var myArr = jQuery.parseJSON(response);
+			var arrayBarcode = myArr.barcode;
+			var arrayTaskName = myArr.task_name;
+			var arrayCampaignImage = myArr.campaign_image;
+
+			for(elementImageId in arrayCampaignImage)
+			{
+				intCampaignImage = arrayCampaignImage[elementImageId];
+			}
+
+			if(strDescription !="" && strDescription!="undefined"){
+				strTaskName = strDescription;
+			}
+			for (elementTaskName in arrayTaskName)
+			{
+				strTaskName = arrayTaskName[elementTaskName];
+			}
+
+			var arrayCampaignName = myArr.campaign_name;
+			for (elementCampaignName in arrayCampaignName)
+			{
+				strCampaignName = arrayCampaignName[elementCampaignName];
+			}
+			var CardPreviewCombo = '';
+			if(intTask >0)
+			{
+				CardPreviewCombo+='<input type="hidden" id="task_id" name="task_id" value="'+intTask+'">';
+			}
+			CardPreviewCombo+='<input type="hidden" id="campaign_id" name="campaign_id" value="'+intCampaign+'">';
+			CardPreviewCombo+='<input type="hidden" id="points" name="points" value="'+intPoint+'">';
+			CardPreviewCombo+='<input type="hidden" id="achievement" name="achievement" value="'+strTaskName+'">';
+			CardPreviewCombo+='<input type="hidden" id="campaign_image_id" name="campaign_image_id" value="'+intCampaignImage+'">';
+			//var lines = 5;
+			var columns = 2;
+			var counter=0;
+			for(intBarcode in arrayBarcode)
+			{
+				barcode = arrayBarcode[intBarcode];
+				CardPreviewCombo+='<input type="hidden" id="card_barcode" name="card_barcode['+counter+']" value="'+barcode+'">';
+				counter++;
+			}
+			CardPreviewCombo+='</table>';
+			//$('#card_preview').html("<h1>Achievement Card Preview</h1><br />");
+			$('#CardPreviewCombo').html(CardPreviewCombo);
+			//$('#button_print').html('<input type="button" name="card_print" id="card_print" value="Print Achievement Cards" onClick="print_cards();">');
+			//$('#save_template').html('<input type="button" name="savetemplate" id="savetemplate" value="Save as Template" onClick="save_template();">');
+			print_cards();
+		}
+	});
+}
+function print_cards()
+{
+	document.form_achievement_card_print.submit();
+}
+function save_template()
+{
+	$.ajax({
+		type : "POST",
+		cache : false,
+        start: $("#processing_status2").html("Saving as template...").fadeIn("slow").delay(2000).fadeOut("slow"),
+		url: '<?php echo $sn;?>/campaigns/achievementcardprint/mode/saveTemplate<?php echo $strParamPath;?>',
+		dataType : "text",
+		data: $('#form_achievement_card_print').serialize(),
+		success: function(response){
+			if (response.match(/^[0-9]+$/))
+			{
+				$("#processing_status3").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+			}
+			else
+			{
+				$("#processing_status3").html(response).fadeIn("slow");
+			}
+		}
+	});
+}
+</script>
+<div class="slider" id="slider_achievementcardeditor">
+	<div class="col_title">
+		<span>Point Card Printer</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<div style="padding: 5px 5px 5px 5px; font-size:10pt;">
+					Each card has your logo, the TH logo, campaign name, task name, the amount of points and a ONE TIME use bar code. (once the card is used it cannot be used again).
+					Please Note: To edit the campaign or task go to the "campaigns" tab on the left menu.
+				</div>
+			</div>
+		</div>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+                <ul>
+                    <li>
+                        <span class="label">Campaign name:</span>
+                        <span class="input">
+                            <select class="select" id="campaign_name">
+                                <option value="-1">--Select a Campaign--</option>
+<?php
+    foreach($this->arrCampaigns as $objCampaign)
+    {
+?>
+                                <option value="<?php print $objCampaign->campaign_id;?>"><?php print $objCampaign->campaign_name;?></option>
+<?php
+    }
+?>
+
+                            </select>
+                        </span>
+                        <div class="clear"></div>
+                    </li>
+					<!--<li>-->
+					<!--	<div id="radio_options">-->
+					<!--		<span id="radio_option_1"></span>-->
+					<!--		<span id="radio_option_2"></span>-->
+					<!--	</div>-->
+					<!--</li>-->
+					<li>
+						<div id="processing_status"></div>
+					</li>
+                </ul>
+            </div>
+        </div>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form name="form_achievement_card" id="form_achievement_card" method="post" action="">
+						<div class="task_name" id="task_name"></div>
+						<div class="description" id="description"></div>
+						<div class="number_of_miles" id="number_of_miles"></div>
+						<div class="left_circle" id="left_circle"></div>
+						<div class="right_circle" id="right_circle"></div>
+						<div class="number_of_sheets" id="number_of_sheets"></div>
+						<div class="button_go" id="button_go"></div>
+					<ul>
+						<li>
+							<div id="processing_status2"></div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div class="module form" id="module-info" style="display:none">
+			<div class="module_content list">
+				<form name="form_achievement_card_print" id="form_achievement_card_print" method="post" action="<?php print $sn;?>/campaigns/achievementcardprint<?php print $strParamPath;?>" target="_blank">
+
+					<div id="card_preview"></div>
+					<ul>
+						<li>
+							<span class="input"><div id="button_print"></div></span>
+							<span class="input"><div id="save_template"></div></span>
+						</li>
+					</ul>
+					<div id="CardPreviewCombo" style="text-align:center;"></div>
+					<br/>
+					<ul>
+						<li>
+							<span class="input"><div id="button_print"></div></span>
+							<span class="input"><div id="save_template"></div></span>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+    </div>
+</div>

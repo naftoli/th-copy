@@ -1,0 +1,222 @@
+<?php 
+include "config.phtml";
+include "parameters.phtml";	
+?>
+
+<div class="slider">
+	
+	<div class="col_title">
+		<span>Ranks</span>
+	</div>
+	
+	<div class="col_content">
+		
+		<div id="lists" class="module lists forms">
+			
+			<div class="module_content">
+				
+				<ul>
+					
+<?php if ($this->objRoles->isAllowed('Super Administrator'))
+{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/rankshosts">
+							<div class="icon"></div>
+							<div class="title">View Ranks by Hosts</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksnetworks">
+							<div class="icon"></div>
+							<div class="title">View Ranks by Networks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksinstitutions">
+							<div class="icon"></div>
+							<div class="title">View Ranks by Institutions</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/rankslist">
+							<div class="icon"></div>
+							<div class="title">View All Ranks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksaddhosts">
+							<div class="icon"></div>
+							<div class="title">Add New Rank</div>
+						</a>
+					</li>
+<?php
+}elseif ($this->objRoles->isAllowed('Host Administrator')) {
+?>
+					
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksnetworks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Ranks by Networks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksinstitutions<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Ranks by Institutions</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/rankslist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Ranks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksaddnetworks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New Rank</div>
+						</a>
+					</li>
+<?php
+}elseif ($this->objRoles->isAllowed('Network Administrator')){
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksinstitutions<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Ranks by Institutions</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/rankslist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Ranks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksaddinstitutions<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New Rank</div>
+						</a>
+					</li>
+<?php
+}elseif ($this->objRoles->isAllowed('Institution Administrator')) {
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/rankslist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Base Ranks</div>
+						</a>
+					</li>					
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksadd<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New Rank</div>
+						</a>
+					</li>			
+<?php } ?>
+				</ul>
+			</div>
+		</div>
+
+		
+		<div style="text-align:center; margin-left:auto !important; margin-right:auto !important;">Print Rank Cards</div>
+		
+		<div id="lists" class="module lists forms">			
+			<div class="module_content">				
+				<ul>
+<?php if ($this->objRoles->isAllowed('Super Administrator'))
+{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksprinthosts">
+							<div class="icon"></div>
+							<div class="title">Print Rank Cards By Hosts</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksprintnetworks">
+							<div class="icon"></div>
+							<div class="title">Print Rank Cards By Networks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksprintinstitutions">
+							<div class="icon"></div>
+							<div class="title">Print Rank Cards By Institutions</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksprintclasses">
+							<div class="icon"></div>
+							<div class="title">Print Rank Cards By Platoons</div>
+						</a>
+					</li>					
+<?php
+}elseif ($this->objRoles->isAllowed('Host Administrator')) {
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksprintnetworks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Print Rank Cards By Networks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksprintinstitutions<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Print Rank Cards By Institutions</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksprintclasses<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Print Rank Cards By Platoons</div>
+						</a>
+					</li>					
+<?php
+}elseif ($this->objRoles->isAllowed('Network Administrator')){
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksprintinstitutions<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Print Rank Cards By Institutions</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksprintclasses<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Print Rank Cards By Platoons</div>
+						</a>
+					</li>					
+<?php
+}elseif ($this->objRoles->isAllowed('Institution Administrator')) {
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksprintclasses<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Print Rank Cards By Platoons</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksprintranks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Print All Rank Cards</div>
+						</a>
+					</li>
+<?php
+}elseif ($this->objRoles->isAllowed('Teacher')) {
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/ranks/ranksprintlist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Print Rank Cards for my Platoon</div>
+						</a>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

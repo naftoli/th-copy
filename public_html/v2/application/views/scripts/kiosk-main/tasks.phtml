@@ -1,0 +1,76 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	
+	$objUtilities = new Utilities();
+?>
+<div id="page_title">Tasks</div>
+<div class="three_column padding_top">
+	<div class="content">
+		<div id="slider" id="kiosk_tasks">
+			<ul class="report">
+				<li>
+					<div class="slider_title"><?php print $this->objCampaign->campaign_name; ?></div>
+					<div class="scroll-pane">
+						<div class="boxes mainbox">
+							<div class="title">
+<?php
+	foreach ($this->arrSchedule["tasks"] as $objTask)
+	{
+		$objParshos = $objUtilities->epoch_parshos($this->arrSchedule["epoch"]);
+?>
+								<div class="question icon_book">
+									<p><?php print stripcslashes($objTask->line_data); ?></p>
+									<div class="mission_quota miles"><?php
+		if ($objParshos)
+		{
+			print "<span>" . $objParshos->name . "</span> <span>" . $objParshos->year . "</span>";
+		}
+		else
+		{
+			print date("M jS, Y", $this->arrSchedule["epoch"]);
+		}
+		print " ";
+		if ($objTask->line_number)
+			print "Line: " . $objTask->line_number . " ";
+		if ($objTask->paragraphs)
+			print "Paragraphs: " . $objTask->paragraphs . " ";
+		if ($objTask->pages)
+			print "Page: " . $objTask->pages . " ";
+		if ($objTask->chapters)
+			print "Chapter: " . $objTask->chapters . " ";
+		if ($objTask->volumes)
+			print "Volumes: " . $objTask->volumes . " ";
+?>
+									</div>
+									<!--div class='check_on'></div-->
+									<div class='clear'></div>
+								</div>
+<?php
+	}
+?>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<!--div class="button button_icons">
+				<div><a href="#" class="icon_save" onclick="document.form01.submit();">Submit</a></div>
+			</div-->
+		</div>
+	</div>
+</div>
+
+<!--div class="boxes mainbox mission_icon">
+							<div class="title">Tasks</div>
+								<div class="question">
+									<p><?php print $arrTask["task"]["object"]->task_name; ?></p>
+									<div class='mission_quota'><?php print date("M jS, Y", $arrTask["epoch"]); ?> to <?php print date("M jS, Y", $arrTask["end_epoch"]); ?> </div>
+									<div class='check_on'></div>
+									<div class='mission_complete'>150 Shabbos Mevorchim - 5.00 Miles</div> (<span>1-1</span>)
+									<div class='clear'></div>
+								</div>
+							</div>
+						</div-->
+						
+<!--font color="#FFF"><?php print $this->intBMTime; ?></font-->

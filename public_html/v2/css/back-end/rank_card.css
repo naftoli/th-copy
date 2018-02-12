@@ -1,0 +1,182 @@
+.card_sheet {
+  margin: auto;
+  page-break-after: always;
+  margin-bottom:15px;
+}
+
+.card {
+  width: 3.5in;
+  height: 2in;
+  font-size: 2mm;
+  position: relative;
+  padding: 0px;
+  vertical-align: top;
+  margin: auto;
+}
+
+.top {
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  height: .2in;
+  line-height: .2in;
+  font-size: 1.85mm;
+}
+
+.sig {
+  border-top: .03in solid #808080; /* default color */
+  height: .3in;
+  background-color: white;
+  text-align: right;
+  padding-right: .04in;
+}
+
+.card .sig h1 {
+  text-transform: uppercase;
+  padding: 0mm;
+  margin: 0mm;
+  font-weight: bold;
+  font-size: .1in;
+  line-height: .125in;
+  text-align:right;
+}
+
+.bg {
+  display: block;
+  position: absolute;
+  width: 3.375in;
+  height: 1.625in; /* 2.125 - .2 - .3 + .03 + .03 */
+  z-index: -1;
+}
+
+.card table {
+  width: 100%;
+}
+
+.card table td {
+  vertical-align: top;
+}
+
+.card p {
+  margin-top: 0px;
+  padding-top: 0px;
+}
+
+.card em {
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+.card .first {
+  padding-left: .04in;
+  padding-top: .02in;
+}
+
+.card .first h2 {
+  text-transform: uppercase;
+  padding: 0px;
+  margin: 0px;
+  font-weight: bold;
+  font-size: .1in;
+  line-height: .125in;
+  padding-bottom: .04in;
+}
+
+.card .logo {
+  vertical-align: bottom;
+}
+
+.card .logo img {
+  height: .75in;
+  padding-left: .04in;
+}
+
+.card .base {
+  padding: .02in 0px;
+  vertical-align: bottom;
+}
+
+.card .base p {
+  margin: 0px;
+  padding: 0px;
+  padding-top: .04in;
+}
+
+.card .base b {
+  text-transform: uppercase;
+  font-size: 2.5mm;
+}
+
+.card .photo {
+  padding-top: .02in;
+  padding-right: .04in;
+}
+
+.card .photo img {
+  height: 1in;
+  border: .03in solid #808080;
+  display: block;
+  float: right;
+}
+
+.card .code {
+  text-align: center;
+  font-size: .14in;
+  line-height: .14in;
+  margin-bottom: 0px;
+  width: 2.47in;
+  padding-left: .04in;
+  vertical-align: middle;
+  padding-top: .02in;
+}
+
+.card .code p {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+.card .code img {
+  width: 2.43in;
+  height: .25in;
+}
+
+.card .stats {
+  padding-top: .02in;
+  padding-right: .04in;
+}
+
+.card .stats p {
+  font-size: .08in;
+  line-height: .09in;
+  text-align: left;
+  font-weight: bold;
+  text-align: center;
+  margin: 0px;
+  padding: 0px;
+  padding-bottom: .04in;
+}
+
+@media print {
+  body {
+    background-color: transparent;
+  }
+
+  .card .bg {
+    display: none;
+  }
+
+  .top {
+    background-color: black;
+  }
+
+  .top {
+    visibility: hidden;
+  }
+  .sig {
+    border-color: transparent !important;
+    background-color: transparent !important;
+  }
+  .card_sheet {
+    margin-bottom:0;
+  }
+}

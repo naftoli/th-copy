@@ -1,0 +1,1368 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objSesh = new Zend_Session_Namespace('hebrewschools');
+?>
+<script src="<?php print WEB_ROOT; ?>js/back-end/php.js" type="text/javascript"></script>
+<script type="text/javascript">
+// u: <?php print $objSesh->user_id; ?>
+
+$(document).ready(function () {
+	$('.student_list_filter').keyup(function () {
+		KioskAnnouncementsApp.load_students_list({
+			strKeywords : $(this).val()
+		});
+	});
+	var refUserBoxTimeout = null;
+	var objFloatingUserImage = $('#user_floating_box');
+	objFloatingUserImage
+	.css({
+		'position' : 'absolute',
+		'padding' : 4,
+		'z-index' : 1001,
+		'background-color' : '#fff',
+		'border' : '1px solid #000'
+	})
+	.addClass('hidden')
+	.find('img')
+	.css({
+		width : 200,
+		height : 200
+	});
+	$('.students .bar.associate_campaigns').data('values', {});
+	$('.students .bar.associate_campaigns').click(function () {
+		$('body').addClass('noscroll');
+		$('#backdrop').fadeTo('normal', 0.7);
+		$("#campaign_list_pop .overlay").fadeIn();
+		$("#campaign_list_pop .overlay").css({
+			height: $(window).height()-60
+		});
+		window.setTimeout(function () {
+			$("#campaign_list_pop .students_list").addClass('hidden');
+			$("#campaign_list_pop .students_list").css({
+				'max-height' : $("#campaign_list_pop .students_list").parent().height()
+			});
+			$("#campaign_list_pop .students_list").removeClass('hidden');
+		}, 100);
+		$('#campaign_list_pop').css({
+			"top" : Math.max(0, ($('body,html').scrollTop() + 20)) + 'px',
+			"display" : "block"
+		});
+		$('#campaign_list_pop .students_list .student_row.down').removeClass('down');
+		if ($('.bar.associate_campaigns').attr('task_id'))
+			$("#campaign_list_pop .student_row.task_id_" + $('.bar.associate_campaigns').attr('task_id')).addClass('down');
+		else if ($('.bar.associate_campaigns').attr('campaign_id'))
+			$("#campaign_list_pop .student_row.campaign_id_" + $('.bar.associate_campaigns').attr('campaign_id')).addClass('down');
+	});
+	$('.associate_campaigns_clear').click(function () {
+		$('.associate_campaigns_clear').addClass('hidden');
+		$('.bar.associate_campaigns').html('Associate a campaign or task');
+		$('.bar.associate_campaigns').removeAttr('task_id');
+		$('.bar.associate_campaigns').removeAttr('campaign_id');
+		$('.bar.associate_campaigns').removeData('objTask');
+		$('.bar.associate_campaigns').removeData('objCampaign');
+	});
+	$('#campaign_list_pop .students_list .student_row:not(.header)').click(function (e) {
+		var parent = this;
+		var intCampaign = $(parent).attr('campaign_id');
+		var objTask = null;
+		var objCampaign = jQuery.parseJSON(base64_decode($(parent).attr('objCampaign')));
+		$('.bar.associate_campaigns').attr('campaign_id', objCampaign.campaign_id);
+		$('.bar.associate_campaigns').data('objCampaign', objCampaign);
+		$('.bar.associate_campaigns').removeAttr('task_id');
+		$('.bar.associate_campaigns').removeData('objTask');
+		if ($(parent).attr('objTask')) {
+			objTask = jQuery.parseJSON(base64_decode($(parent).attr('objTask')));
+			$('.bar.associate_campaigns').attr('task_id', objTask.task_id);
+			$('.bar.associate_campaigns').data('objTask', objTask);
+		}
+		$('.associate_campaigns_clear').removeClass('hidden');
+		$('#campaign_list_pop .students_list .student_row.down').removeClass('down');
+		if ($(parent).hasClass('down')) {
+			$(parent).removeClass('down');
+		} else {
+			$(parent).addClass('down');
+		}
+		$('.bar.associate_campaigns').addClass('displaying_item');
+		var intImage = objCampaign.image_id ? objCampaign.image_id : '0.gif';
+		if (objTask) {
+			$('.bar.associate_campaigns').html('<img src="<?php print $sn; ?>/imgs/v/src/' + intImage + '/w/22/h/22" style="float:left;margin-right:6px;margin-top:-2px" /> ' + objTask.task_name);
+		} else {
+			$('.bar.associate_campaigns').html('<img src="<?php print $sn; ?>/imgs/v/src/' + intImage + '/w/22/h/22" style="float:left;margin-right:6px;margin-top:-2px" /> ' + objCampaign.campaign_name);
+		}
+		$('#campaign_list_pop .close_overlay').trigger('click');
+	});
+	$('.students .bar.associate_students').data('values', {});
+	$('.students .bar.associate_students').click(function () {
+		$('body').addClass('noscroll');
+		$('#backdrop').fadeTo('normal', 0.7);
+		$("#student_list_pop .overlay").fadeIn();
+		$("#student_list_pop .overlay").css({
+			height: $(window).height()-60
+		});
+		window.setTimeout(function () {
+			$("#student_list_pop .students_list").addClass('hidden');
+			$("#student_list_pop .students_list").css({
+				height : $("#student_list_pop .students_list").parent().height()
+			});
+			$("#student_list_pop .students_list").removeClass('hidden');
+			//$.extend($.fn.jScrollPane.defaults, {showArrows:true, scrollbarWidth: 42, arrowSize: 42});
+			//$('.students_list').jScrollPane({showArrows:true, scrollbarWidth: 42, arrowSize: 42});
+			KioskAnnouncementsApp.load_students_list();
+		}, 100);
+		$('#student_list_pop').css({
+			"top" : Math.max(0, ($('body,html').scrollTop() + 20)) + 'px',
+			"display" : "block"
+		});
+	});
+	$('.close_overlay').bind('click', function(event) {
+		$('#backdrop').fadeTo('normal', 0).queue(function () {
+			$(this).dequeue().css("display", "none");
+		});
+		$(".overlay").fadeOut();
+		$('body').removeClass('noscroll');
+	});
+
+	// publish request
+	$('.create_new .publish').bind('click', function () {
+		var arrParams = {
+			'strItem' : 'save_new',
+			'strTitle' : $('.create_new input.headline').val(),
+			'arrStudents' : Object.keys($('.students .bar.associate_students').data('values')),
+			'strContent' : posteditor.getData(),
+			'intAnnouncement' : $('.create_new').attr('announcement_id'),
+			'intCampaign' : $('.bar.associate_campaigns').attr('campaign_id'),
+			'intTask' : $('.bar.associate_campaigns').attr('task_id')
+		};
+		$('.create_new .save_status').removeClass('hidden').html('Saving...');
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php print $sn . "/hebrewschools/announcements/ajax/true" . $strParamPath; ?>',
+			dataType : "text",
+			data: arrParams,
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$.alert(strResponse);
+					return;
+				} else {
+					if (arrResponse['error']) {
+						$('.create_new .save_status').removeClass('hidden').html(arrResponse['error']);
+						$('.create_new .save_status').stop().dequeue().delay(5000).queue(function () {
+							$(this).dequeue().addClass('hidden');
+						});
+					} else {
+						$('.create_new .save_status').removeClass('hidden').html('Saved.');
+						$('.create_new .save_status').stop().dequeue().delay(2000).queue(function () {
+							$(this).dequeue().addClass('hidden');
+						});
+						KioskAnnouncementsApp.fnLoadMesssage({
+							headline : $('.create_new input.headline').val(),
+							content : posteditor.getData(),
+							created : date('Y-m-d H:i:s'),
+							objCreatedBy : {
+								user_id : <?php print $objSesh->user_id; ?>,
+								first_name : "<?php print $objSesh->first_name; ?>",
+								last_name : "<?php print $objSesh->last_name; ?>",
+								image_id : "<?php print $objSesh->image_id; ?>"
+							},
+							arrAnnouncementsStudents : $('.students .bar.associate_students').data('values'),
+							campaign_id : $('.bar.associate_campaigns').attr('campaign_id'),
+							task_id : $('.bar.associate_campaigns').attr('task_id'),
+							objCampaign : $('.bar.associate_campaigns').data('objCampaign'),
+							objTask : $('.bar.associate_campaigns').data('objTask')
+						}, {
+							bottom_options : true
+						});
+					}
+				}
+			}
+		});
+	});
+	$('#message_display .cancel_publish').bind('click', function () {
+		$('.close_overlay').trigger('click');
+	});
+	$('#message_display .cancel_request').bind('click', function () {
+		if (!confirm("Are you sure you would like to remove your request to publish this announcement?"))
+			return;
+		$('.close_overlay').trigger('click');
+		var objAnnouncement = $('#message_display').data('objAnnouncement');
+		var arrParams = {
+			'strItem' : 'remove request',
+			announcement_id : objAnnouncement.announcement_id
+		};
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php print $sn . "/hebrewschools/announcements/ajax/true" . $strParamPath; ?>',
+			dataType : "text",
+			data: arrParams,
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$.alert(strResponse);
+					return;
+				} else {
+					if (arrResponse['error']) {
+
+					} else {
+						$('.close_overlay').trigger('click');
+						$('.one_column .select.submissions .left_menu').trigger('click');
+						//window.setTimeout(function () {
+							//alert('Submission canceled successfully.');
+						//},600);
+					}
+					//self.fnDrawList(arrResponse, strItem);
+				}
+			}
+		});
+	});
+	$('#message_display .confirm_publish').bind('click', function () {
+		if (!confirm("Are you sure you are ready to publish your announcement?"))
+			return;
+		$('.close_overlay').trigger('click');
+		var arrParams = {
+			'strItem' : 'request publish',
+			'strTitle' : $('.create_new input.headline').val(),
+			'arrStudents' : Object.keys($('.students .bar.associate_students').data('values')),
+			'strContent' : posteditor.getData(),
+			'intAnnouncement' : $('.create_new').attr('announcement_id'),
+			'strPublishLocation' : $(this).attr('publish_to'),
+			'intCampaign' : $('.bar.associate_campaigns').attr('campaign_id'),
+			'intTask' : $('.bar.associate_campaigns').attr('task_id')
+		};
+		$('.create_new .save_status').removeClass('hidden').html('Sending announcement...');
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php print $sn . "/hebrewschools/announcements/ajax/true" . $strParamPath; ?>',
+			dataType : "text",
+			data: arrParams,
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$.alert(strResponse);
+					return;
+				} else {
+					if (arrResponse['error']) {
+						$('.create_new .save_status').removeClass('hidden').html(arrResponse['error']);
+						$('.create_new .save_status').stop().dequeue().delay(5000).queue(function () {
+							$(this).dequeue().addClass('hidden');
+						});
+					} else {
+						$('.create_new .save_status').removeClass('hidden').html('Publish requested.');
+						$('.create_new .save_status').stop().dequeue().delay(2000).queue(function () {
+							$(this).dequeue().addClass('hidden');
+						});
+					}
+					//self.fnDrawList(arrResponse, strItem);
+				}
+			}
+		});
+	});
+
+	$('.create_new .trash').bind('click', function () {
+		if (!confirm("Are you sure you would like to move this announcement to your trash?"))
+			return;
+		var arrParams = {
+			'strItem' : 'move to trash',
+			'strTitle' : $('.create_new input.headline').val(),
+			'arrStudents' : Object.keys($('.students .bar.associate_students').data('values')),
+			'strContent' : posteditor.getData(),
+			'intAnnouncement' : $('.create_new').attr('announcement_id'),
+			'intCampaign' : $('.bar.associate_campaigns').attr('campaign_id'),
+			'intTask' : $('.bar.associate_campaigns').attr('task_id')
+		};
+		$('.create_new .save_status').removeClass('hidden').html('Moving to trash...');
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php print $sn . "/hebrewschools/announcements/ajax/true" . $strParamPath; ?>',
+			dataType : "text",
+			data: arrParams,
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$.alert(strResponse);
+					return;
+				} else {
+					if (arrResponse['error']) {
+						$('.create_new .save_status').removeClass('hidden').html(arrResponse['error']);
+						$('.create_new .save_status').stop().dequeue().delay(5000).queue(function () {
+							$(this).dequeue().addClass('hidden');
+						});
+					} else {
+						$('.create_new .save_status').removeClass('hidden').html('Moved to trash.');
+						$('.create_new .save_status').stop().dequeue().delay(2000).queue(function () {
+							$(this).dequeue().addClass('hidden');
+						});
+					}
+					//self.fnDrawList(arrResponse, strItem);
+				}
+			}
+		});
+	});
+
+	// save
+	$('.create_new .save').bind('click', function () {
+		var arrParams = {
+			'strItem' : 'save_new',
+			'strTitle' : $('.create_new input.headline').val(),
+			'arrStudents' : Object.keys($('.students .bar.associate_students').data('values')),
+			'intCampaign' : $('.bar.associate_campaigns').attr('campaign_id'),
+			'intTask' : $('.bar.associate_campaigns').attr('task_id'),
+			'strContent' : posteditor.getData(),
+			'intAnnouncement' : $('.create_new').attr('announcement_id')
+		};
+		$('.create_new .save_status').removeClass('hidden').html('Saving...');
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php print $sn . "/hebrewschools/announcements/ajax/true" . $strParamPath; ?>',
+			dataType : "text",
+			data: arrParams,
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$.alert(strResponse);
+					return;
+				} else {
+					if (arrResponse['error']) {
+						$('.create_new .save_status').removeClass('hidden').html(arrResponse['error']);
+						$('.create_new .save_status').stop().dequeue().delay(5000).queue(function () {
+							$(this).dequeue().addClass('hidden');
+						});
+					} else {
+						$('.create_new .save_status').removeClass('hidden').html('Saved.');
+						$('.create_new .save_status').stop().dequeue().delay(2000).queue(function () {
+							$(this).dequeue().addClass('hidden');
+						});
+						$('.one_column .select.edit')
+						.find('.left_menu')
+						.html($('.create_new input.headline').val());
+					}
+					//self.fnDrawList(arrResponse, strItem);
+				}
+			}
+		});
+	});
+
+	var posteditor;
+	$('.one_column .select:first .left_menu').trigger('click');
+	var KioskAnnouncementsApp = {
+		'arrMemory' : {
+			'arrTemplates' : {}
+		},
+		"arrGet" : <?php print json_encode($this->arrGet); ?>,
+		'fnInit' : function () {
+			var self = KioskAnnouncementsApp;
+			self.fnLoadTemplates();
+			$('.one_column .select .left_menu').click(function () {
+				var objSelect = $(this).parent();
+				var strItem = objSelect.attr('value');
+				if (strItem == 'edit')
+					return;
+				$('.one_column .select.edit').addClass('hidden')
+				$('.one_column .select.selected').removeClass('selected');
+				objSelect.addClass('selected');
+				$('.winner_display .title').html($(this).text());
+				if (strItem == 'create') {
+					$('.winner_display').addClass('hidden');
+					$('.winner_display.create_new').removeClass('hidden');
+					$('.create_new').attr('announcement_id', 'new');
+					$('input.headline').focus().val('');
+					posteditor.setData('');
+					$('.students .bar.associate_students .message_box span').html(0);
+					$('.students .bar.associate_students').data('values', {});
+					$('.bar.associate_campaigns').html('Associate a campaign or task');
+					$('.bar.associate_campaigns').removeAttr('task_id');
+					$('.bar.associate_campaigns').removeAttr('campaign_id');
+					$('.bar.associate_campaigns').removeAttr('objTask');
+					$('.bar.associate_campaigns').removeAttr('objCampaign');
+					$('.associate_campaigns_clear').addClass('hidden');
+
+				} else {
+					KioskAnnouncementsApp.fnLoadList(strItem);
+				}
+			});
+			$('.one_column .select .left_menu:first').trigger('click');
+			CKEDITOR.config.height = 220;
+			CKEDITOR.config.removePlugins = 'elementspath';
+			posteditor = CKEDITOR.appendTo($('.wysiwyg .pane')[0], null, "");
+			CKEDITOR.config.readOnly = false;
+			window.setTimeout(function () {
+				$('.cke_button__about').remove();
+			},1000);
+		},
+		'fnLoadTemplates' : function ()
+		{
+			var self = KioskAnnouncementsApp;
+			$('.template').each(function () {
+				var strTemplate = $(this).attr('template');
+				var objClone = $(this).clone(true);
+				objClone.removeClass('template');
+				self.arrMemory.arrTemplates[strTemplate] = objClone;
+				$(this).remove();
+			});
+		},
+		'fnLoadList' : function (strItem)
+		{
+			var self = KioskAnnouncementsApp;
+			$('.winner_display').addClass('hidden');
+			$('#list_pane .nothing_to_show').addClass('hidden');
+			$('.winner_display.messages_list').removeClass('hidden');
+			$('#list_pane > .row:not(.header):not(.header2)').remove();
+			$('.winner_display.messages_list .loading').removeClass('hidden');
+			var arrParams = {
+				'strItem' : strItem
+			};
+			$.ajax({
+				type : "POST",
+				cache : false,
+				url : '<?php print $sn . "/hebrewschools/announcements/ajax/true" . $strParamPath; ?>',
+				dataType : "text",
+				data: arrParams,
+				success : function(strResponse) {
+					$('.winner_display.messages_list .loading').addClass('hidden');
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$.alert(strResponse);
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						$.alert(strResponse);
+						return;
+					} else {
+						self.fnDrawList(arrResponse, strItem);
+					}
+				}
+			});
+		},
+		'fnDrawList' : function (arrList, strItem)
+		{
+			var self = KioskAnnouncementsApp;
+			$('#list_pane .header').addClass('hidden');
+			$('#list_pane .header2').addClass('hidden');
+			if (strItem == 'submissions')
+				$('#list_pane .header2').removeClass('hidden');
+			else
+				$('#list_pane .header').removeClass('hidden');
+			if (!arrList.length)
+				$('#list_pane .nothing_to_show').removeClass('hidden');
+			for (var intItr in arrList)
+			{
+				var objAnnouncement = arrList[intItr];
+				var objListItem;
+				if (strItem == 'submissions')
+					objListItem = $(self.arrMemory.arrTemplates['list_item2']).clone(true);
+				else
+					objListItem = $(self.arrMemory.arrTemplates['list_item']).clone(true);
+				objListItem.data('objAnnouncement', objAnnouncement);
+				objListItem.find('.created_by').html(objAnnouncement.objCreated.first_name + ' ' + objAnnouncement.objCreated.last_name);
+				objListItem.find('.date_created').html(objAnnouncement.strSmallDate);
+				objListItem.find('.title_message').html(objAnnouncement.headline);
+				if (strItem == 'submissions')
+					objListItem.find('.status').html(objAnnouncement.status);
+				$('#list_pane').append(objListItem);
+			}
+			if (strItem == 'posts' || strItem == 'trash') {
+				// load saved draft
+				$('#list_pane .row').click(function () {
+					$('.winner_display').addClass('hidden');
+					$('.winner_display.create_new').removeClass('hidden');
+					$('.create_new input.headline').focus();
+					var objAnnouncement = $(this).data('objAnnouncement');
+					$('.create_new input.headline').val(objAnnouncement.headline);
+					var strContent = objAnnouncement.content;
+					strContent = strContent.replace(/\|NEW_LINE\|/g, "\n");
+					posteditor.setData(strContent);
+					$('.one_column .select.selected').removeClass('selected');
+					$('.one_column .select.edit')
+					.removeClass('hidden')
+					.addClass('selected')
+					.find('.left_menu')
+					.html(objAnnouncement.headline);
+					$('.students .bar.associate_students').data('values', objAnnouncement.arrAnnouncementsStudents);
+					$('.bar.associate_campaigns').html('Associate a campaign or task');
+					$('.bar.associate_campaigns').removeAttr('task_id');
+					$('.bar.associate_campaigns').removeAttr('campaign_id');
+					$('.bar.associate_campaigns').removeData('objTask');
+					$('.bar.associate_campaigns').removeData('objCampaign');
+					if (objAnnouncement.task_id) {
+						$('.bar.associate_campaigns').attr('task_id', objAnnouncement.task_id);
+						$('.bar.associate_campaigns').data('objTask', objAnnouncement.objTask);
+						$('.associate_campaigns_clear').removeClass('hidden');
+					}
+					if (objAnnouncement.campaign_id) {
+						$('.bar.associate_campaigns').attr('campaign_id', objAnnouncement.campaign_id);
+						$('.bar.associate_campaigns').data('objCampaign', objAnnouncement.objCampaign);
+						$('.associate_campaigns_clear').removeClass('hidden');
+					}
+					$('.students .bar.associate_students .message_box span').html(Object.keys(objAnnouncement.arrAnnouncementsStudents).length);
+					$('.create_new').attr('announcement_id', objAnnouncement.announcement_id);
+					if (!!(objAnnouncement.task_id*1))
+						$("#campaign_list_pop .student_row.task_id_" + objAnnouncement.task_id).trigger('click');
+					else if (!!(objAnnouncement.campaign_id*1))
+						$("#campaign_list_pop .student_row.campaign_id_" + objAnnouncement.campaign_id).trigger('click');
+				});
+			} else {
+				$('#list_pane .row').click(function () {
+					var objAnnouncement = $(this).data('objAnnouncement');
+					var arrParams = {};
+					if (objAnnouncement.status == 'Publish Request')
+						arrParams.bottom_options2 = true;
+					self.fnLoadMesssage(objAnnouncement, arrParams);
+				});
+			}
+		},
+		"fnLoadMesssage" : function (objAnnouncement, arrParams)
+		{
+			if (!arrParams)
+				arrParams = {};
+			if (!arrParams.bottom_options)
+				$('#message_display .bottom_options').addClass('hidden');
+			else
+				$('#message_display .bottom_options').removeClass('hidden');
+			if (!arrParams.bottom_options2)
+				$('#message_display .bottom_options2').addClass('hidden');
+			else
+				$('#message_display .bottom_options2').removeClass('hidden');
+			$('#message_display .publish_location').html(objAnnouncement.class_id ? 'Class' : 'School');
+			$('body').addClass('noscroll');
+			$('#backdrop').fadeTo('normal', 0.7);
+			$("#message_display .overlay").fadeIn();
+			$("#message_display .overlay").css({
+				height: $(window).height()-60,
+				width: 900
+			});
+			// $('#message_display').data('objAnnouncement');
+			$('#message_display').css({
+				"top" : Math.max(0, ($('body,html').scrollTop() + 20)) + 'px',
+				"display" : "block"
+			})
+			.data('objAnnouncement', objAnnouncement);
+			$('#message_display .message_title_text').html(objAnnouncement.headline);
+			var strContent = '';
+
+			strContent += '<div class="message_header">';
+			strContent += '	<div class="message_created_by">By: <span>' + objAnnouncement.objCreatedBy.first_name + ' ' + objAnnouncement.objCreatedBy.last_name + '</span></div>';
+			strContent += '	<div class="message_date">' + objAnnouncement.created + '</div>';
+			strContent += '</div>';
+
+			if (objAnnouncement.objCampaign)
+			{
+				strContent += '<div class="message_header">';
+				strContent += '	<div class="message_campaign"><img src="<?php print $sn; ?>/imgs/v/src/' + objAnnouncement.objCampaign.image_id + '/w/25/h/25" /> <span>' + objAnnouncement.objCampaign.campaign_name + '</span>';
+				if (objAnnouncement.objTask)
+				{
+					strContent += ': ' + objAnnouncement.objTask.task_name;
+				}
+				strContent += '</div></div>';
+			}
+
+			if (Object.keys(objAnnouncement.arrAnnouncementsStudents).length)
+			{
+				strContent += '<div class="associated_users">';
+				for (var intUser in objAnnouncement.arrAnnouncementsStudents)
+				{
+					var objUser = objAnnouncement.arrAnnouncementsStudents[intUser];
+					var strImage = objUser.image_id;
+					if (!strImage)
+						strImage = '0.gif';
+					strContent += '	<div class="user_box" image_id="' + strImage + '"><div class="user_image"><img src="<?php print $sn; ?>/imgs/v/src/' + strImage + '/w/25/h/25" /></div><div class="user_name">' + objUser.first_name + ' ' + objUser.last_name + '</div></div>';
+				}
+				strContent += '</div>';
+			}
+			strContent += objAnnouncement.content.replace(/\|NEW_LINE\|/g, "\n");
+			$('#message_display .message_content').html(strContent);
+			$('#message_display .message_content').css({
+				'max-height' : 1
+			});
+			$('#message_display .message_content').css({
+				height : $('#message_display .message_content_parent').height() - 30,
+				'max-height' : $('#message_display .message_content_parent').height() - 30
+			});
+			var fnUserItemOver = function () {
+				var parent = $(this);
+				var strImage = parent.attr('image_id');
+				window.clearTimeout(refUserBoxTimeout);
+				refUserBoxTimeout = window.setTimeout(function () {
+					// open box
+					var objPos = parent.position();
+					objFloatingUserImage
+					.removeClass('hidden')
+					.css({
+						left : objPos.left,
+						top : objPos.top + 40
+					});
+					objFloatingUserImage.find('img').attr('src', '<?php print $sn; ?>/imgs/v/src/' + strImage + '/w/25/h/25');
+					objFloatingUserImage.find('img').attr('src', '<?php print $sn; ?>/imgs/v/src/' + strImage + '/w/200/h/200');
+				}, 100);
+			};
+			var fnUserItemOut = function () {
+				window.clearTimeout(refUserBoxTimeout);
+				refUserBoxTimeout = window.setTimeout(function () {
+					// close box
+					objFloatingUserImage
+					.addClass('hidden');
+				}, 200);
+			};
+
+			$('#message_display .user_box').mouseover(fnUserItemOver);
+			$('#message_display .user_box').mouseout(fnUserItemOut);
+			$('#user_floating_box').mouseover(function () {
+				window.clearTimeout(refUserBoxTimeout);
+			});
+			$('#user_floating_box').mouseout(fnUserItemOut);
+
+		},
+		'load_students_list' : function (arrParams) {
+			if (!arrParams)
+				arrParams = {};
+			arrParams.strItem = 'student_list';
+			$.ajax({
+				type : "POST",
+				cache : false,
+				url : '<?php print $sn . "/hebrewschools/announcements/ajax/true" . $strParamPath; ?>',
+				dataType : "text",
+				data: arrParams,
+				success : function(strResponse) {
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$.alert(strResponse);
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						$.alert(strResponse);
+						return;
+					} else {
+						$('#student_list_pop .student_row').remove();
+						$('#student_list_pop .students_list').scrollTop(0);
+						$('#student_list_pop .students_list_header').append('<div class="student_row header">'
+							+ '<div class="student_column" style="width:25px"></div>'
+							+ '<div class="student_column" style="width:200px"><?php print text('[|Class|]'); ?></div>'
+							+ '<div class="student_column" style="width:360px"><?php print text('[|Student|] Name'); ?></div>'
+							+ '</div>');
+						var arrValues = $('.students .bar.associate_students').data('values');
+						for (var intItr in arrResponse.arrUsers)
+						{
+							var objUser = arrResponse.arrUsers[intItr];
+							var domUser = $('<div class="student_row' + (arrValues[objUser.user_id] ? ' down' : '') + '" user_id="' + objUser.user_id + '">'
+								+ '<div class="student_column" style="width:25px"><img src="<?php print $sn; ?>/imgs/v/src/' + (objUser.image_id ? objUser.image_id : '0.gif') + '/w/25/h/25" /></div>'
+								+ '<div class="student_column" style="width:200px">' + objUser.strClassName + '</div>'
+								+ '<div class="student_column" style="width:360px">' + objUser.first_name + ' ' + objUser.last_name + '</div>'
+								+ '<div class="item_checked"></div>'
+								+ '</div>');
+							domUser.data('objUser', objUser);
+							$('#student_list_pop .students_list').append(domUser);
+						}
+						$('#student_list_pop .students_list .student_row:not(.header)').click(function (e) {
+							var parent = this;
+							var intUser = $(parent).attr('user_id');
+							var arrValues = $('.students .bar.associate_students').data('values');
+							if ($(parent).hasClass('down')) {
+								delete arrValues[intUser];
+								$(parent).removeClass('down');
+							} else {
+								arrValues[intUser] = $(parent).data('objUser');
+								$(parent).addClass('down');
+							}
+							$('.create_new .students .message_box span').html(Object.keys(arrValues).length);
+
+						});
+						$('.student_list_filter').focus();
+					}
+				}
+			});
+		}
+	};
+	KioskAnnouncementsApp.fnInit();
+});
+</script>
+<STYLE type="text/css">
+.noscroll {
+	overflow-y:hidden;
+}
+.associated_users {
+	margin-left:-1px;
+	height: 40px;
+}
+.overlay {
+	position: relative;
+	width:640px;
+	padding: 10px;
+	background-color:#333;
+	color: white;
+	background-image:url(<?php print $sn; ?>/images/back-end/kiosk/Camouflage-Background-Green.jpg);
+	background-position:50% 50%;
+	border:1px solid #666;
+
+	/* CSS3 styling for latest browsers*/
+	box-shadow:0 0 90px 5px #000;
+	-moz-box-shadow:0 0 90px 5px #000;
+	-webkit-box-shadow: 0 0 90px #000;
+}
+#backdrop {
+	position: absolute;
+	display: none;
+	background-color: black;
+	z-index: 998;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+}
+.selecton_box {
+	margin: 9px 3px 3px 3px;
+	text-align:center;
+	padding: 9px 3px 3px 3px;
+	border: 1px solid #fff;
+	background: rgba(255, 255, 255, 0.1);
+	cursor: pointer;
+}
+#list_pane, #create_pane {
+	margin: 8px 17px 0 15px;
+}
+#list_pane .row {
+	background: url("<?php print $sn . "/images/back-end/kiosk/bg_gradient_1.png"; ?>") repeat scroll 0 1px transparent;
+}
+#list_pane .row:not(.header):not(.header2):hover {
+	background-color:rgba(255,255,255,0.2);
+}
+#list_pane .cell {
+	height: 48px;
+	vertical-align: top;
+	font-weight: bold;
+	border-right: 1px solid rgba(255,255,255,0.2);
+	display:table-cell;
+	vertical-align:middle;
+	font-size: 12pt;
+
+}
+#list_pane .cell:first-child {
+	padding-right: 3px;
+}
+#list_pane .cell:first-child > div {
+	margin-left: 6px;
+}
+#list_pane .cell:last-child {
+	border-right: 0px;
+}
+#list_pane .cell div {
+	margin-left: 3px;
+	overflow: hidden;
+	width: inherit;
+	padding-top: 2px;
+	max-height:30px;
+}
+#list_pane .row.header2 .cell,
+#list_pane .row.header .cell {
+	height: 27px;
+	color: rgba(255,255,255,0.9);
+	font-weight:bold;
+}
+.template {
+	display: none;
+}
+.center {
+	text-align: center;
+}
+.hidden {
+	display: none !important;
+}
+.pagedisplay {
+	white-space:nowrap;
+}
+.left_menu {
+	background-color:rgba(255,255,255,0.2);
+	font-size:12pt;
+	padding:13px 12px 10px 12px;
+	cursor:pointer;
+	max-width:158px;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.select.selected .left_menu {
+	background-color:rgba(255,255,255,0.5);
+}
+.no_border.select {
+	border-bottom-width: 0;
+}
+.winner_display .title {
+	text-align: left;
+	padding-left: 30px;
+}
+.row.list_item,
+.row.list_item *,
+.row.list_item2,
+.row.list_item2 * {
+	cursor: pointer;
+}
+div.headline {
+	margin:3px 15px 0 15px;
+}
+input.headline {
+	width: 620px;
+	margin:4px 0 2px 0;
+	font-size: 14pt;
+	padding:5px;
+	min-height: 20px;
+}
+.students {
+	padding:10px 15px;
+	margin-right:3px;
+	color:rgba(0,0,0,0.8);
+	text-shadow: 0 -1px 0 #fff;
+	cursor:pointer;
+	margin-top:-5px;
+}
+.students .bar {
+	padding:10px 10px 6px 10px;
+	background-color: rgba(255,255,255,0.6);
+	cursor:pointer;
+	display:inline-block;
+	width:295px;
+	min-height: 22px;
+}
+.students .bar:not(:last-child) {
+	margin-right:2px;
+}
+.students .message_box {
+	float:right;
+	padding:5px 6px 3px 6px;
+	background-color:rgba(255,255,255,0.6);
+	border:1px solid rgba(0,0,0,0.9);
+	margin-top:-4px;
+	text-shadow:0 0 0;
+	font-size:12pt;
+	font-weight:normal;
+}
+.wysiwyg {
+	margin-top:-4px;
+	padding:0 18px 15px 15px;
+}
+#cke_bottom_detail,.cke_bottom {
+	display:none
+}
+.close.close_overlay {
+	margin-left:8px;
+	margin-top:14px;
+}
+.students_list {
+	overflow-y:scroll;
+}
+.student_row {
+	background-color:rgba(255,255,255,0.1);
+	font-size:12pt;
+	margin-bottom: 2px;
+	cursor:pointer;
+}
+.students_list_header .student_row {
+	background-color:rgba(255,255,255,0.2);
+}
+.student_row:hover {
+	background-color:rgba(255,255,255,0.2);
+}
+.student_column {
+	display:inline-block;
+	padding:6px;
+	vertical-align:middle;
+	height:25px;
+	line-height:25px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+}
+.student_column:not(.norightborder):not(:last-child):not(:first-child) {
+	border-right:2px solid rgba(0,0,0,0.15);
+}
+.special_column {
+	margin-bottom:-2px;
+	font-size:16pt;
+}
+.students_list .student_row.down {
+	background-color:rgba(255,255,255,0.3);
+}
+.students_list .student_row:not(.down) .item_checked {
+	display:none;
+}
+.students_list .student_row.down .item_checked {
+	float:right;
+	margin-left:-40px;
+	width:40px;
+	height:40px;
+	background-image:url(<?php print $sn; ?>/images/chk_on.png);
+	background-repeat:no-repeat;
+	background-position:center center;
+}
+.hidden {
+	display:none;
+}
+.save_status {
+	background-color:#E9EAE9;
+	color:#000;
+	position:absolute;
+	font-weight:bold;
+	width:624px;
+	margin-top:-43px;
+	padding:6px;
+	margin-left: 16px;
+	font-size:12pt;
+	text-shadow:none;
+}
+.nothing_to_show,
+.loading {
+	padding:18px 7px 14px 7px;
+	background-color:rgba(255,255,255,0.1);
+	color:#e6e6e6;
+	font-size:12pt;
+}
+#message_display .close.close_overlay {
+	margin-top:26px;
+	margin-right:22px;
+}
+#message_display .message_title {
+
+}
+#message_display .message_title_text {
+	width:100%;
+	background-color:rgba(255,255,255,0.97);
+	color:#111;
+	font-size:16pt;
+	vertical-align:middle;
+	padding:10px;
+	text-shadow:none;
+	font-weight:600;
+	overflow:hidden;
+	max-height:21px;
+	line-height:28px;
+
+}
+#message_display .message_content_parent {
+	vertical-align:top;
+	padding-right:30px;
+}
+#message_display .message_content {
+	overflow-y:scroll;
+	color:#000;
+	text-shadow:none;
+	font-size:12pt;
+	padding:15px;
+	background-color:rgba(255,255,255,0.99);
+	width:100%;
+	line-height:24px;
+	font-weight:normal;
+}
+#message_display .message_date {
+	float:left;
+	font-weight:bold;
+	color: #999;
+}
+#message_display .message_header {
+	height:30px;
+}
+#message_display .message_created_by {
+	color: #999;
+	float:right;
+	font-size:12pt;
+	font-weight:bold;
+}
+#message_display .message_created_by span {
+	font-weight:normal;
+}
+#message_display .user_box {
+	padding:2px;
+	border:1px solid #ccc;
+	background-color:#fff;
+	display:inline-block;
+	margin-right:2px;
+	vertical-align:top;
+	cursor:default;
+	white-space:nowrap;
+}
+#message_display .user_box .user_image {
+	vertical-align:top;
+	width:25px;
+	height:25px;
+	display:inline-block;
+	margin-top:1px;
+}
+#message_display .user_box .user_name {
+	vertical-align:top;
+	display:inline-block;
+	margin-left:3px;
+	padding-top:3px;
+	padding-left:2px;
+	padding-right:2px;
+	white-space:nowrap;
+}
+.message_campaign {
+	vertical-align: middle;
+	line-height: 28px;
+}
+.message_campaign img {
+	float:left;
+	margin-right:4px
+}
+.associate_campaigns_clear {
+	position:absolute;
+	padding:5px;
+	margin-left:282px;
+	margin-top:7px;
+	opacity:0.5;
+}
+.associate_campaigns_clear div {
+	background-image:url(<?php print $sn; ?>/images/Close-Delete-circle-16.png);
+	width:16px;
+	height:16px;
+}
+.associate_campaigns_clear:hover {
+	opacity:1;
+}
+.opacity_fix {
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility:    hidden;
+	-ms-backface-visibility:     hidden;
+}
+</STYLE>
+<form>
+<div id="message_display" style="position:absolute; width:100%; display: none; z-index:999">
+	<div class="overlay display_overlay" id="" style="margin: auto;padding-right:30px;padding-top:20px;">
+		<table border="0" height="100%" width="100%" style="margin-left:10px;">
+			<tr>
+				<td class="message_title" height="60" style="vertical-align:top;padding-right:24px;">
+					<div class="message_title_text">A worm welcome to the new forum! A worm welcome to the new forum! A worm welcome to the</div>
+				</td>
+				<td width="50" height="50" style="vertical-align:top">
+					<div class="close close_overlay" style="z-index:1000"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="message_content_parent">
+					<div class="message_content"></div>
+				</td>
+			</tr>
+			<tr class="bottom_options hidden">
+				<td colspan="2" height="50" style="vertical-align:top">
+					<div class="button_small" style="margin-left:12px;margin-top:12px;height:56px;">
+						<table border="0" width="100%">
+							<tr>
+								<td width="150" style="text-align:left">
+									<span>Publish to:</span>
+								</td>
+								<td style="text-align:left">
+									<div class="confirm_publish" publish_to="class">
+										<a style="cursor:pointer;">Class</a>
+									</div>
+									<div class="confirm_publish" publish_to="school">
+										<a style="cursor:pointer;">School</a>
+									</div>
+								</td>
+								<td style="text-align:right">
+									<div class="cancel_publish" style="float:right;margin-right:6px;">
+										<a style="cursor:pointer;">Cancel</a>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+			<tr class="bottom_options2 hidden">
+				<td colspan="2" height="50" style="vertical-align:top">
+					<div class="button_small" style="margin-left:12px;margin-top:12px;height:56px;">
+						<table border="0" width="100%">
+							<tr>
+								<td width="400" style="text-align:left">
+									Publish to <span class="publish_location">School</span>
+								</td>
+								<td>
+									<div class="cancel_request" style="float:right;margin-right:6px;">
+										<a style="cursor:pointer;">Remove</a>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<div id='user_floating_box'><img></div>
+	</div>
+</div>
+<div id="campaign_list_pop" style="position:absolute; width:100%; display: none; z-index:999">
+	<div class="overlay display_overlay" id="" style="margin: auto;">
+		<table border="0" height="100%" width="100%">
+			<tr>
+				<td height="50" style="vertical-align:top">
+					<div class="close close_overlay" style="z-index:1000"></div>
+					<input class="student_list_filter" style="padding:6px;width:580px;font-size:16px;" type="text" placeholder="Search for campaigns and tasks" />
+				</td>
+			</tr>
+			<tr>
+				<td height="37" style="vertical-align:top">
+					<div class="students_list_header">
+						<div class="student_row header">
+							<div class="student_column" style="width:25px"></div>
+							<div class="student_column" style="width:115px">Campaign</div>
+							<div class="student_column" style="width:455px">Task</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-algin:top">
+					<div class="students_list">
+<?php
+	foreach ($this->arrCampaigns as $objCampaign)
+	{
+?>
+						<div class="student_row campaign_id_<?php print $objCampaign->campaign_id; ?>" campaign_id="<?php print $objCampaign->campaign_id; ?>" objCampaign="<?php print base64_encode(json_encode($objCampaign)); ?>">
+							<div class="student_column" style="width:25px"><img src="<?php print $sn; ?>/imgs/v/w/25/h/25/src/<?php print !empty($objCampaign->image_id) ? $objCampaign->image_id : '0.gif'; ?>" /></div>
+							<div class="student_column special_column norightborder"><?php print $objCampaign->campaign_name; ?></div>
+							<div class="item_checked"></div>
+						</div>
+<?php
+		foreach ($this->arrTasks[$objCampaign->campaign_id] as $objTask)
+		{
+?>
+						<div class="student_row task_id_<?php print $objTask->task_id; ?>" task_id="<?php print $objTask->task_id; ?>" campaign_id="<?php print $objCampaign->campaign_id; ?>" objTask="<?php print base64_encode(json_encode(($objTask))); ?>" objCampaign="<?php print base64_encode(json_encode($objCampaign)); ?>">
+							<div class="student_column" style="width:25px;"><img src="<?php print $sn; ?>/imgs/v/w/25/h/25/src/<?php print !empty($objCampaign->image_id) ? $objCampaign->image_id : '0.gif'; ?>" /></div>
+							<div class="student_column" style="width:115px;color:#eee;"><?php print $objCampaign->campaign_name; ?></div>
+							<div class="student_column task_name norightborder" style="width:440px"><?php print $objTask->task_name; ?></div>
+							<div class="item_checked"></div>
+						</div>
+<?php
+		}
+	}
+?>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div id="student_list_pop" style="position:absolute; width:100%; display: none; z-index:999">
+	<div class="overlay display_overlay" id="" style="margin: auto;">
+		<table border="0" height="100%" width="100%">
+			<tr>
+				<td height="50" style="vertical-align:top">
+					<div class="close close_overlay" style="z-index:1000"></div>
+					<input class="student_list_filter" style="padding:6px;width:580px;font-size:16px;" type="text" placeholder="Search for students" />
+				</td>
+			</tr>
+			<tr>
+				<td height="37" style="vertical-align:top">
+					<div class="students_list_header"></div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-algin:top">
+					<div class="students_list"></div>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<div id="backdrop"></div>
+<div id="wrapper">
+	<div id="header">
+		<div class="org">
+			<div class="nav">
+				<ul>
+					<li class="icon_back"><a href="<?php print $sn; ?>/hebrewschools/profile"><?php print text("Back"); ?></a></li>
+					<li class="icon_home"><a href="<?php print $sn; ?>/hebrewschools/profile"><?php print text("Home"); ?></a></li>
+					<li class="icon_logout"><a href="<?php print $sn; ?>/hebrewschools/index"><?php print text("Logout"); ?></a></li>
+				</ul>
+			</div>
+			<div class="org_photo">
+				<IMG SRC='<?php print $sn . "/imgs/v/src/" . $this->objInstitution->image_id; ?>' WIDTH='100' HEIGHT='100' />
+			</div>
+			<?php print text("Institution"); ?>: <?php print text($this->objInstitution->name); ?><br />
+			<?php print text("Name"); ?>: <?php print $this->objUser->first_name . " " . $this->objUser->last_name; ?><br />
+			<?php print text("Total Miles"); ?>: <? print intval($this->intUserPointsTotal); ?>
+		</div>
+	</div>
+
+	<div id="main">
+		<div id="page_title">
+			<?php print text("Announcements"); ?>
+		</div>
+		<div class="winner_boxes">
+
+			<div class="one_column">
+				<div class="pane_title" style="padding-top: 8px"><?php print text("Your Menu"); ?></div>
+				<div value="school" class="select no_border school">
+					<div class="left_menu">School Feed</div>
+				</div>
+				<div value="network" class="select no_border network">
+					<div class="left_menu">Network Feed</div>
+				</div>
+				<div value="submissions" class="select submissions" style="height:45px;margin-bottom: 1px;">
+					<div class="left_menu">Submissions</div>
+				</div>
+				<div value="edit" class="select no_border edit hidden">
+					<div class="left_menu"></div>
+				</div>
+				<div value="create" class="select no_border create">
+					<div class="left_menu">Create New</div>
+				</div>
+				<div value="posts" class="select no_border posts">
+					<div class="left_menu">Saved Drafts</div>
+				</div>
+				<div value="trash" class="select no_border trash">
+					<div class="left_menu">Trash</div>
+				</div>
+			</div>
+			<div class="two_column">
+				<div class="winner_display create_new">
+					<!--div class="title">
+						&nbsp;
+					</div>
+					<div class="button_bar" style="height:54px;">
+
+						<br class="clear" />
+					</div-->
+					<div class="headline">
+						<input type="text" placeholder="Insert headline" value="" class="headline noinput" />
+					</div>
+					<div class="students">
+						<div class="associate_campaigns_clear opacity_fix hidden"><div></div></div>
+						<div class="bar associate_campaigns">Associate a campaign or task</div>
+						<div class="bar associate_students">Associate students<div class="message_box"><span>0</span> Students</div></div>
+					</div>
+					<div class="wysiwyg">
+						<div class="pane"></div>
+					</div>
+					<div class="save_status hidden">
+						Saving...
+					</div>
+					<div class="button_small" style="margin-top:-12px;margin-left:12px;height:56px;width:640px;display: inline-block">
+						<div class="save">
+							<a style="cursor:pointer;">Save</a>
+						</div>
+						<div class="publish">
+							<a style="cursor:pointer;">Publish</a>
+						</div>
+						<div class="trash" style="float:right">
+							<a style="cursor:pointer;">Trash</a>
+						</div>
+					</div>
+				</div>
+				<div class="winner_display messages_list">
+					<div class="title">
+						&nbsp;
+					</div>
+					<div class="button_bar">
+						<div class="sort_links button_small mini">
+							<div class="cssHide">
+								<a href="#">1</a>
+							</div>
+						</div>
+						<div id="pager" class="pager button_small mini">
+							<span class="table_info">
+								<span class="pagedisplay" id="pageDisplay"></span><br />
+								<span class="table_showing" id="table_showing"></span>
+							</span>
+
+							<div>
+								<a style="cursor:pointer;" class="prev"><</a>
+							</div>
+							<div>
+								<a style="cursor:pointer;" class="next">></a>
+							</div>
+						</div>
+						<br class="clear" />
+					</div>
+					<div id="list_pane">
+						<div class="header row" style="height:27px">
+							<div class="cell" style="width:368.5px;">
+								<div><?php print text("Headline"); ?></div>
+							</div>
+							<div class="cell center" style="width:130px;">
+								<div><?php print text("Author"); ?></div>
+							</div>
+							<div class="cell center" style="width:120px;">
+								<div><?php print text("Date"); ?></div>
+							</div>
+						</div>
+						<div class="template row list_item" template="list_item">
+							<div class="cell" style="width:368.5px;"><div class="title_message">&nbsp;</div></div>
+							<div class="cell center" style="width:130px;">
+								<div class="created_by"></div>
+							</div>
+							<div class="cell center" style="width:120px;">
+								<div class="date_created"></div>
+							</div>
+						</div>
+
+						<div class="header2 row hidden" style="height:27px">
+							<div class="cell" style="width:264.5px;">
+								<div><?php print text("Headline"); ?></div>
+							</div>
+							<div class="cell center" style="width:100px;">
+								<div class="status"><?php print text("Status"); ?></div>
+							</div>
+							<div class="cell center" style="width:130px;">
+								<div><?php print text("Author"); ?></div>
+							</div>
+							<div class="cell center" style="width:120px;">
+								<div><?php print text("Date"); ?></div>
+							</div>
+						</div>
+						<div class="template row list_item2" template="list_item2">
+							<div class="cell" style="width:264.5px;"><div class="title_message">&nbsp;</div></div>
+							<div class="cell center" style="width:100px;">
+								<div class="status"></div>
+							</div>
+							<div class="cell center" style="width:130px;">
+								<div class="created_by"></div>
+							</div>
+							<div class="cell center" style="width:120px;">
+								<div class="date_created"></div>
+							</div>
+						</div>
+						<div class="nothing_to_show hidden">Nothing to show</div>
+						<div class="loading hidden"><?php print text("Loading..."); ?></div>
+					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div id="footer">
+		<div class="footer_logo"></div>
+		<div class="footer_logout"></div>
+	</div>
+</div>
+</form>

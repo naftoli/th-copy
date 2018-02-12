@@ -1,0 +1,42 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objRoles = new Roles();
+?>
+<ul class="list_first">
+	<li class="list_parent"><a href="<?php print $sn . "/administration/profile" . $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_control.png" width="28" height="28" alt="Profile" /></span>Profile</a></li>
+	<ul class="list_second">
+<?php
+	if ($objRoles->isRole("Parent"))
+	{
+?>
+		<li><a href="<?php echo $sn . "/campaigns/campaignchildenrolltanya/campaign_id/1" . $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_enroll.png" width="22" height="22" alt="Enrollment" /></span>Enrollment</a></li>
+		<li><a href="<?php echo $sn . "/reports/viewreport/campaign_id/1" . $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Mission Sheets" /></span>Missions</a></li>
+		<li><a href="<?php echo $sn . "/ladders/quotas/campaign_id/1" . $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_points.png" width="22" height="22" alt="Quotas" /></span>Quotas</a></li>
+		<li><a href="<?php echo $sn . "/marking/markinglist/campaign_id/1" . $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_check.png" width="22" height="22" alt="Marking" /></span>Marking</a></li>
+<?php
+	}
+	else
+	{
+?>
+		<li><a href="<?php echo $sn . "/menu/classes/all/false/pre/campaign/url/" . dblencode("campaigns/campaignchildenrolltanya/campaign_id/1" . $strParamPath); ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_enroll.png" width="22" height="22" alt="Enrollment" /></span>Enrollment</a></li>
+		<li><a href="<?php echo $sn . "/menu/classes/all/false/pre/report/url/" . dblencode("reports/viewreport/campaign_id/1" . $strParamPath); ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Missions" /></span>Missions</a></li>
+		<li><a href="<?php echo $sn . "/menu/classes/all/false/pre/quota/url/" . dblencode("ladders/quotas/campaign_id/1" . $strParamPath); ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_points.png" width="22" height="22" alt="Quotas" /></span>Quotas</a></li>
+		<li><a href="<?php echo $sn . "/menu/classes/all/false/pre/marking/url/" . dblencode("marking/markinglist/campaign_id/1" . $strParamPath); ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_check.png" width="22" height="22" alt="Marking" /></span>Marking</a></li>
+		<li><a href="<?php echo $sn . "/campaigns/groupedpausing"; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_cal_small.png" width="22" height="22" alt="Pausing" /></span>Pausing</a></li>
+		<li><a href="<?php echo $sn . "/menu/classes/all/false/pre/campaign/url/" . dblencode("/campaigns/pausemissions" . $strParamPath); ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_cancel.png" width="22" height="22" alt="X Missions" /></span>X Missions</a></li>
+		<li><a href="<?php echo $sn . "/dashboard/reports"; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Reports" /></span>Reports</a></li>
+		<li><a href="<?php echo $sn . "/dashboard/tanyaresources" . $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Resources" /></span>Resources</a></li>
+<?php
+	}
+?>
+	</ul>
+	<li class="list_parent">
+		<a href="<?php echo $sn . "/logout/index/" . $strParamPath; ?>">
+			<span class="icon">
+				<img src="<?php echo $sn; ?>/images/back-end/admin/icon_door.png" width="28" height="28" alt="Logout" />
+			</span>
+			Back
+		</a>
+	</li>
+</ul>

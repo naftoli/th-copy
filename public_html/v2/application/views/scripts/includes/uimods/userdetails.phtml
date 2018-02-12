@@ -1,0 +1,12 @@
+<?php
+// Security warning: only include this places where the session has been validated
+$query = new QueryGen();
+$objUser = reset($query->users__select(array(
+	'user_id' => $intUser
+)));
+?>
+	<div class="module">
+		<div style="padding:6px">
+			Student: <?php print $objUser->first_name . " " . $objUser->last_name; ?>
+		</div>
+	</div>

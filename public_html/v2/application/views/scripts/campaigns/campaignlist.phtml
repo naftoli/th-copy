@@ -1,0 +1,52 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+
+<div class="slider">
+	
+	<div class="col_title">
+		<span>Campaign List</span>
+	</div>
+	
+	<div class="col_content">
+<?php
+	if (count($this->objCampaigns) == 0)
+	{
+?>
+		<div class="module" style="padding:5px;">
+			There are no Campaigns available to display.
+		</div>
+<?php
+	}
+	else
+	{
+?>
+			<div id="lists" class="module lists forms">
+				
+				<div class="module_content">
+					
+					<ul>
+<?php
+		foreach ($this->objCampaigns as $objCampaign)
+		{
+?>
+							<li>
+								<a class="link" href="<?php echo $sn . "/campaigns/campaignedit/campaign_id/" . $objCampaign->campaign_id . $strParamPath; ?>">
+									<div class="title"><?php print $objCampaign->campaign_name; ?></div>
+								</a>
+							</li>				
+<?php
+		}
+?>
+				
+					</ul>
+						
+				</div>
+				
+			</div>
+<?php
+	}
+?>
+	</div>
+</div>

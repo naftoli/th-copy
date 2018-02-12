@@ -1,0 +1,43 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+<div class="slider">
+	<div class="col_title">
+		<span><?php print text("Add [|Students|]"); ?></span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php print $sn ?>/users/editor/user_types/student/user_type/student<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Enter [|Students|] Manually"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php print $sn ?>/administration/importusers<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Import [|Students|] from a List"); ?></div>
+						</a>
+					</li>
+<?php
+	if (1||dev)
+	{
+?>
+					<li>
+						<a class="link" href="<?php print $sn ?>/administration/studenttransfer<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Transfer Between Institutions"); ?></div>
+						</a>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

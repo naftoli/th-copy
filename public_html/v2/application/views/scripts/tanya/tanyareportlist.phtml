@@ -1,0 +1,48 @@
+<?php 
+	include "config.phtml";
+	$strUrl = "";
+	if (isset($this->intClass))
+		$strUrl .= "class_id/" . $this->intClass . "/";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Users List</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	if (!$this->objRoles->isRole('Parent'))
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn . "/tanya/tanyareport/" . $strUrl; ?>">
+							<div class="icon"></div>
+							<div class="title">Select this class</div>
+						</a>
+					</li>
+<?php
+	}
+	if($this->arrUsers)
+	{
+		foreach ($this->arrUsers as $objUser) {
+?>
+					<li>
+						<a class="link" href="<?php echo $sn . "/tanya/tanyareport/" . $strUrl . "user_id/" . $objUser->user_id; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print $objUser->first_name; ?> <?php print $objUser->last_name; ?></div>
+						</a>
+					</li>
+<?php
+		}
+	}
+	else
+	{
+		echo 'There are no users available to display.';
+	}
+?>				</ul>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,256 @@
+<?php
+	$objLadderCurrent = current($this->arrLadderLines);
+	$intLastAge = 0;
+	if ($objLadderCurrent)
+		$intLastAge = end(array_keys($objLadderCurrent));
+?>
+<script type="text/javascript">
+	var arrLadders = <?php print json_encode($this->arrLadderLines); ?>;
+	var arrYearlyQuotas = <?php print json_encode($this->arrYearlyQuotas); ?>;
+	var intInProgress = <?php print count($this->arrInProgress); ?>;
+
+	var intYearsRemaining = 4;
+	var l = 1;
+	var y = 1;
+	var intCurrentLine = 0;
+	var intRemainingWeeks = 185;
+
+	$(document).ready(function(){
+		$("#spinner-ladder").change(function () {
+			l = $(this).val();
+			proc_ladder_details();
+		});
+		$("#spinner-year").change(function () {
+			y = $(this).val();
+			proc_ladder_details();
+		});
+		/*
+		$("#slider").easySlider({
+			numeric: true,
+			controlsBefore:	'<div class="page_dots">',
+			controlsAfter:	'</div>'
+		});
+		l = $("#spinner-ladder .active").index();
+		$("#spinner-ladder").spinner({
+			start:l
+		}).bind('spinchange', function(event, element, ui) {
+			//spin_change("l",ui.value);
+			l = ui.value;
+			proc_ladder_details();
+		});
+		$("#spinner-year").spinner({
+			start:y
+		}).bind('spinchange', function(event, element, ui) {
+			//spin_change("y",ui.value);
+			y = ui.value;
+			proc_ladder_details();
+		});
+		*/
+		proc_ladder_details();
+		$("form .submit").click(function (e) {
+			e.preventDefault();
+			//if (
+			//	!intInProgress
+			//	|| confirm("You currently have marked lines on the latest pending mission which need to be retested if your ladder is changed.\n\nAre you sure you would like to continue?")
+			//) {
+				$("form").submit();
+			//}
+
+		})
+	});
+
+	function proc_ladder_details() {
+		var intLadder = l;
+		if (intLadder < 0)
+			intLadder = 0;
+		var intYears = y;
+
+		var intLadderVelocity = $("#spinner-ladder").val();
+		var intAge = $("#spinner-year").val() * 1;
+		if (!arrLadders["ladder " + intLadderVelocity][intAge]) {
+			alert("Sorry, there was an error: VS-PLD101-8SDFDD");
+		}
+		$("#yearly_quota").html(quick_fraction(arrYearlyQuotas["ladder " + intLadderVelocity]) + " Line" + (arrYearlyQuotas["ladder " + intLadderVelocity] > 1 ? "s" : ""));
+		$("#weekly_quota").html(quick_fraction(intLadderVelocity) + " Line" + (intLadderVelocity > 1 ? "s" : ""));
+		$("#yearly_quota_2").html(quick_fraction(arrYearlyQuotas["ladder " + intLadderVelocity]) + " Line" + (arrYearlyQuotas["ladder " + intLadderVelocity] > 1 ? "s" : ""));
+		$("#ladder_age_total").html(quick_fraction(arrLadders["ladder " + intLadderVelocity][intAge]["line_number"]) + " Line" + (arrLadders["ladder " + intLadderVelocity][intAge]["line_number"] > 1 ? "s" : ""));
+
+		$("#ladder_complete_lines").html(arrLadders["ladder " + intLadderVelocity][<?php print $intLastAge; ?>]["line_number"]);
+		$("#ladder_complete_page").html(arrLadders["ladder " + intLadderVelocity][<?php print $intLastAge; ?>]["pages"]);
+		$("#ladder_complete_perek").html(arrLadders["ladder " + intLadderVelocity][<?php print $intLastAge; ?>]["chapters"]);
+
+		$("#ladder").val(intLadderVelocity);
+	}
+<?php
+	/*
+	function proc_ladder_details() {
+		var intLadder = l;
+		if (intLadder < 0)
+			intLadder = 0;
+		var intYears = y;
+
+		var arrLaddersObjs = $("#spinner-ladder option");
+		var arrAgeObjs = $("#spinner-year option");
+		var intLadderVelocity = $(arrLaddersObjs[intLadder]).attr("value");
+		if (arrAgeObjs.length < 2)
+			intYears = 0;
+		var intAge = $(arrAgeObjs[intYears]).html().match(/([0-9]+)$/)[1] * 1;
+		if (!arrLadders["ladder " + intLadderVelocity][intAge]) {
+			alert("Sorry, there was an error: VS-PLD101-8SDFDD");
+		}
+		$("#yearly_quota").html(quick_fraction(arrYearlyQuotas["ladder " + intLadderVelocity]) + " Line" + (arrYearlyQuotas["ladder " + intLadderVelocity] > 1 ? "s" : ""));
+		$("#weekly_quota").html(quick_fraction(intLadderVelocity) + " Line" + (intLadderVelocity > 1 ? "s" : ""));
+		$("#yearly_quota_2").html(quick_fraction(arrYearlyQuotas["ladder " + intLadderVelocity]) + " Line" + (arrYearlyQuotas["ladder " + intLadderVelocity] > 1 ? "s" : ""));
+		$("#ladder_age_total").html(quick_fraction(arrLadders["ladder " + intLadderVelocity][intAge]["line_number"]) + " Line" + (arrLadders["ladder " + intLadderVelocity][intAge]["line_number"] > 1 ? "s" : ""));
+
+		$("#ladder_complete_lines").html(arrLadders["ladder " + intLadderVelocity][<?php print $intLastAge; ?>]["line_number"]);
+		$("#ladder_complete_page").html(arrLadders["ladder " + intLadderVelocity][<?php print $intLastAge; ?>]["pages"]);
+		$("#ladder_complete_perek").html(arrLadders["ladder " + intLadderVelocity][<?php print $intLastAge; ?>]["chapters"]);
+
+		$("#ladder").val(intLadderVelocity);
+	}
+
+	 */
+?>
+
+	function quick_fraction(intVal)
+	{
+		var intFloor = Math.floor(intVal);
+		var intDecimal = intVal - intFloor;
+		var strResult = intFloor > 0 ? intFloor : "";
+		if (intDecimal == 0.25)
+			strResult += " &frac14;";
+		else if (intDecimal == 0.50)
+			strResult += " &frac12;";
+		else if (intDecimal == 0.75)
+			strResult += " &frac34;";
+		return strResult;
+	}
+</script>
+<style>
+	select {
+		padding:5px;
+	}
+</style>
+<form method="post">
+	<input type="hidden" name="ladder" id="ladder" />
+<div id="page_title">Tanya Baal Peh Campaign</div>
+<div class="three_column padding_top">
+	<div class="content">
+		<div id="slider">
+			<ul class="overview">
+				<li>
+					<div class="slider_title">Ladder Simulator</div>
+					<div class="mainbox ladder">
+						<div class="ladder_box">
+							<div class="ladder_info_box">
+								If you upgrade to:
+								<div class="vertical">
+									<div><select name="ladder" id="spinner-ladder">
+<?php
+	$intItr = 0;
+	$boolActive = 0;
+	foreach ($this->arrLadderLines as $intLadder => $arrLines)
+	{
+		$intLadder = preg_replace("/^ladder /", "", $intLadder);
+		$strSelected = '';
+		if (
+			($boolActive && $boolActive !== 2)
+			|| (!$boolActive && $intItr == count($this->arrLadderLines)-1)
+		) {
+			$strSelected = ' selected';
+			$boolActive=2;
+		}
+		print "<option value='$intLadder'".$strSelected.">" . quick_fraction($intLadder) . " line" . ($intLadder !== 1 ? "s" : "") . "</option>";
+		if (!$boolActive)
+			$boolActive = $intLadder == $this->intLadderVelocity;
+		$intItr++;
+	}
+?>
+									</select></div>
+<?php
+	/*
+								<div class="vertical">
+									<div id="spinner-ladder" class="v-spinner">
+<?php
+	$intItr = 0;
+	$boolActive = 0;
+	foreach ($this->arrLadderLines as $intLadder => $arrLines)
+	{
+		$intLadder = preg_replace("/^ladder /", "", $intLadder);
+		if ($boolActive || $intItr == count($this->arrLadderLines)-2)
+			print "<div value='$intLadder' class=\"active\">" . quick_fraction($intLadder) . " line" . ($intLadder !== 1 ? "s" : "") . "</div>";
+		else
+			print "<div value='$intLadder'>" . quick_fraction($intLadder) . " line" . ($intLadder !== 1 ? "s" : "") . "</div>";
+		$boolActive = ($intLadder == $this->intLadderVelocity);
+		$intItr++;
+	}
+?>
+									</div>
+								</div>
+<?php
+	 */
+?>
+								</div>
+								Your yearly quota will be:<br />
+								<div id="yearly_quota" class="ladder_info icon_book"></div>
+								Your weekly quota will be:<br />
+								<div id="weekly_quota" class="ladder_info icon_book"></div>
+							</div>
+						</div>
+						<div class="ladder_box">
+							<div class="ladder_info_box">
+								By the time you are:
+								<div class="vertical">
+									<div><select id="spinner-year">
+<?php
+	$arrAges = first($this->arrLadderLines);
+	array_pop($arrAges);
+	foreach ($arrAges as $intAge => $objLine)
+	{
+		print "<option value='$intAge'>Age $intAge</option>";
+	}
+	print "<option selected value='$intLastAge'>Age $intLastAge</option>";
+?>
+									</select></div>
+<?php
+/*
+	$arrAges = first($this->arrLadderLines);
+	array_pop($arrAges);
+	foreach ($arrAges as $intAge => $objLine)
+	{
+		print "<div>Age $intAge</div>";
+	}
+	print "<div class=\"active\">Age $intLastAge</div>";
+ *
+ */
+?>
+								</div>
+								Your yearly quota will be:<br />
+								<div id="yearly_quota_2" class="ladder_info icon_book"></div>
+								Your total will be:<br />
+								<div id="ladder_age_total" class="ladder_info icon_book"></div>
+							</div>
+						</div>
+						<div class="ladder_box_bottom">
+							<div class="ladder_box">
+								<nobr>
+									<div class="icon icon_finish"></div>
+									By age <?php print $intLastAge; ?> you will know:
+									<div class="ladder_text ladder_date">
+										Lines: <span id="ladder_complete_lines">1</span> Page: <span id="ladder_complete_page">2</span> Perek: <span id="ladder_complete_perek">3</span>
+									</div>
+								</nobr>
+							</div>
+						</div><br>&nbsp;<br>
+						<div class="submit" style="padding:8px 14px;border:1px solid rgba(0,0,0,0.5);background-color: rgba(255,255,255,0.5);display:inline-block;cursor:pointer;position:relative;z-index:10000;">Save</div>
+						<div class="ladder_box_bottom">
+
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div></div>
+</form>

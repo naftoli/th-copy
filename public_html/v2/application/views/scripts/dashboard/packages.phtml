@@ -1,0 +1,162 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Packages</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	if ($this->objRoles->isAllowed('Super Administrator'))
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packagehosts/">
+							<div class="icon"></div>
+							<div class="title">View Packages by Host</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageitemhosts/">
+							<div class="icon"></div>
+							<div class="title">View Package Items by Host</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packagenetworks/">
+							<div class="icon"></div>
+							<div class="title">View Packages by Networks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageitemnetworks/">
+							<div class="icon"></div>
+							<div class="title">View Package Items by Networks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packagelist/">
+							<div class="icon"></div>
+							<div class="title">View All Packages</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageitemslist/">
+							<div class="icon"></div>
+							<div class="title">View All Package items</div>
+						</a>
+					</li>						
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageaddhosts">
+							<div class="icon"></div>
+							<div class="title">Add New Package</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageitemaddhosts">
+							<div class="icon"></div>
+							<div class="title">Add New Package Item</div>
+						</a>
+					</li>	
+<?php
+	}
+	elseif ($this->objRoles->isAllowed('Host Administrator'))
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packagenetworks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Packages by Networks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageitemnetworks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View Package Items by Networks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packagelist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Packages</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageitemslist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Package items</div>
+						</a>
+					</li>						
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageaddnetworks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New Package</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageitemaddnetworks<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New Package Item</div>
+						</a>
+					</li>
+<?php
+	}
+	elseif ($this->objRoles->isAllowed('Network Administrator'))
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packagelist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Packages</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageitemslist<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">View All Package items</div>
+						</a>
+					</li>						
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageadd<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New Package</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageitemadd<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New Package Item</div>
+						</a>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>	
+		</div>
+<?php
+	if($this->permission == "Institution Administrator")
+	{
+?>
+		<div style="text-align:center; margin-left:auto !important; margin-right:auto !important;">Package Settings</div>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>			
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/packages/packageselect<?php echo $institution_string;?>">
+							<div class="icon"></div>
+							<div class="title">Package Configuration</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

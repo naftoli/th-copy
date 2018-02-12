@@ -1,0 +1,141 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+
+<script>
+	$(document).ready(function()
+	{
+		var list_item = "";
+		var instchecklist = "";
+		var action = "";
+
+		$(".slider:last .instchecklist input:checked").parent().addClass("selected");
+
+		$(".slider:last .instchecklist .checkbox-select").click(function(event) {
+			action = "install";
+			$(".slider:last #action").val("install");
+			list_item = $(this).parents('li');
+			$(".slider:last #template_id").val(list_item.attr("id"));
+			instchecklist = $(this).parents('.instchecklist');
+			$('.slider:last #submit_button').trigger('click');
+		});
+
+		$(".slider:last .instchecklist .checkbox-deselect").click(function(event) {
+			action = "uninstall";
+			$(".slider:last #action").val("uninstall");
+			list_item = $(this).parents('li');
+			$(".slider:last #campaign_id").val(list_item.attr("id"));
+			instchecklist = $(this).parents('.instchecklist');
+			$('.slider:last #submit_button').trigger('click');
+		});
+
+		$('.slider:last #submit_button').click(function(e) {
+			e.preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				//start: $("#processing_status").html('Loading...').fadeIn("slow"),
+				url : '<?php print $sn;?>/campaigns/campaigninstall<?php print $strParamPath; ?>',
+				dataType : "text",
+				data: $('.slider:last form').serialize(),
+				success : function(response) {
+					if (response.match(/^[0-9]+$/)) {
+						if (action == "install") {
+							$(list_item).attr("id", response);
+							$(list_item).attr("name", response);
+							$(instchecklist).addClass("selected");
+							$(instchecklist).find(":checkbox").attr("checked","checked");
+							$(list_item).css({ backgroundColor: '#9fe194' }).delay(500).animate({'background-color': '#eee'}, 500, function(){$(this).css({'background-color':''})});
+							$(list_item).find('.progress').show().delay(500).fadeOut(500);
+						} else {
+							$(list_item).attr("id", response);
+							$(list_item).attr("name", response);
+							$(instchecklist).removeClass("selected");
+							$(instchecklist).find(":checkbox").removeAttr("checked");
+							$(list_item).css({ backgroundColor: '#e19494' }).delay(500).animate({'background-color': '#eee'}, 500, function(){$(this).css({'background-color':''})});
+							$(list_item).find('.progress').show().delay(500).fadeOut(500);
+						}
+						//$("#processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+					} else {
+						$(".slider:last #processing_status").html(response).fadeIn("slow");
+					}
+				}
+			});
+		});
+	});
+</script>
+
+<div class="slider">
+	<div class="col_title">
+		<span>Install / Uninstall Preloaded Campaigns</span>
+	</div>
+	<div class="col_content camper">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li style="font-size:10pt;padding:6px;">
+						Add the campaigns you would like to give out points for (such as Davening, Learning, Sports etc.)
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form>
+					<input type="hidden" name="template_campaign_id" id="template_id" value="" />
+					<input type="hidden" name="campaign_id" id="campaign_id" value="" />
+					<input type="hidden" name="action" id="action" value="" />
+					<ul>
+<?php
+	foreach ($this->arrHostCampaigns as $objCampaign)
+	{
+		if (isset($this->arrInstalledCampaigns[$objCampaign->campaign_id])) {
+			$campaign_id = $this->arrInstalledCampaigns[$objCampaign->campaign_id]->campaign_id;
+			$selected = " selected ";
+			$checked = " checked ";
+		} else {
+			$campaign_id = $objCampaign->campaign_id;
+			$selected = "";
+			$checked = "";
+		}
+?>
+						<li name="<?php print $campaign_id; ?>" id="<?php print $campaign_id; ?>">
+							<span class="action">
+								<span class="instchecklist<?php print $selected; ?>">
+									<input type="checkbox" class="checkbox<?php print $checked; ?>">
+									<span class="install">
+										<a class="button checkbox-select">
+											<span class="icon"></span>Install
+										</a>
+									</span>
+									<span class="uninstall">
+										<a name="a_uninstall" class="button checkbox-deselect" title="Uninstall">
+											<span class="icon"></span>Uninstall
+										</a>
+									</span>
+									<span class="progress">Progress</span>
+								</span>
+						    </span>
+						    <span class='icon bullet'></span>
+						    <span class='label'>
+								<span class='label title'>Preloaded Campaign </span> <?php print $objCampaign->campaign_name; ?>
+							</span>
+						    <div class='clear'></div>
+						</li>
+<?php
+	}
+?>
+						<div id="processing_status"></div>
+						<li>
+							<span>
+								<a href="#" name="submit_button" id="submit_button" title="Save" class="button submit" style="display:none;">Save</a>
+							</span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+    			</form>
+			</div>
+		</div>
+	</div>
+</div>

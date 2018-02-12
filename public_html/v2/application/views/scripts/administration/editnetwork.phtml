@@ -1,0 +1,95 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script language="text/javascript">
+$(document).ready(function() {
+	$(this).delay(1).queue(function () {
+		$(this).dequeue();
+		$('.slider:last input:[type="checkbox"]').iphoneStyle({});
+		$(".slider:last input.datepicker").datepicker();
+	});
+ 	$("#editnetwork .button.save").bind('click', function () {
+		$('#editnetwork #processing_status').html('Saving...');
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php echo $sn; ?>/administration/editnetwork/network_save/true/network_id/<?php print $this->objNetwork->network_id; ?>',
+			dataType : "text",
+			data: $(this).closest("form").serialize(),
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$(this).closest(".module_content").find(".processing_status").html('Sorry, there was an error: VU-IDC101-SDF8DS');
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$(this).closest(".module_content").find(".processing_status").html('Sorry, there was an error: VU-IDC102-S9D9DD');
+					$.alert(arrResponse);
+					return;
+				} else {
+					if (arrResponse.success) {
+						$(".slider:last #processing_status").html('Success').fadeIn();
+					} else {
+						$(".slider:last #processing_status").html(arrResponse.error).fadeIn();
+						$.alert(arrResponse);
+					}
+				}
+			}
+		});
+	});
+});
+</script>
+<div class="slider" id="editnetwork">
+	<style type="text/css">
+		#editnetwork #processing_status {
+			padding:4px 10px;
+		}
+	</style>
+	<div class="col_title"><span>Network Editor</span></div>
+	<div class="col_content camper">
+		<form>
+			<h2 style="margin-top:-2px"><span style="font-weight:normal;">Network</span>&nbsp;&nbsp;<?php print $this->objNetwork->network_name; ?></h2>
+			<div class="module form lists">
+				<div class="module_content list">
+					<ul>
+						<li style="display: list-item;">
+							<h3>Edit Network Details</h3>
+						</li>
+<?php
+	$intNetworkLogo = empty($this->objNetwork->image_id) ? '0.gif' : $this->objNetwork->image_id;
+?>
+						<li>
+							<h3>Network Logo</h3>
+							<input type="hidden" name="image_id" id="network_image_id" value="<?php print $intNetworkLogo; ?>" />
+							<iframe src="<?php print $sn . "/imgs/smalluploader/current_image/" . $intNetworkLogo; ?>/resultid/network_image_id" width="100%" height="80" scrolling="no">
+								<p>Your browser does not support iframes.</p>
+							</iframe>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label">Network Name:</span>
+							<span class="input"><div style="padding-top:7px;padding-left:2px" class="required"><?php print $this->objNetwork->network_name; ?></div></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<h3>The network administrator must already be an institution administrator within the system.</h3>
+							<span class="label">Network Admin:</span>
+							<span class="input"><input type="text" value="<?php print @$this->objNetwork->network_email; ?>" class="required" name="email" value="0" minlength="2" /></span>
+							<div class="help info" title="Info"></div>
+						</li>
+						<div class="processing_status"></div>
+						<div id="processing_status"></div>
+						<li style="padding:8px">
+							<span><a class="button submit save">Save</a></span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

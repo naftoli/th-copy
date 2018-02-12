@@ -1,0 +1,143 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+
+	$strDivContainer = $this->strContainer;
+	$strHiddenInputName = $this->strHiddenInputName;
+?>
+<script type="text/javascript">
+var strZero = "<?php print ucwords($this->strZero); ?>";
+
+function row_toggle(objThis,boolProcessChange)
+{
+	$(objThis).find(":checkbox").attr("checked", !$(objThis).find(":checkbox").is(':checked'));
+	$(objThis).css("background-color", $(objThis).find(":checkbox").is(':checked') ? "#dadee6" : "#e8eaef");
+	if (boolProcessChange)
+		process_change();
+}
+function uncheckall(objThis)
+{
+	$(objThis).closest(".module_collection").find(":checkbox").attr("checked", false);
+	$(objThis).closest(".module_collection").find(".module table .row").css("background-color", "#e8eaef");
+	process_change();
+}
+function checkall(objThis)
+{
+	$(objThis).closest(".module_collection").find(":checkbox").attr("checked", true);
+	$(objThis).closest(".module_collection").find(".module table .row").css("background-color", "#dadee6");
+	process_change();
+}
+function process_change()
+{
+	//alert($(".slider:last form").serialize());
+	var prevSlider = $(".slider:last").prev();
+	var intSelected = $(".slider:last input:checkbox:checked").length;
+	var intTotal = <?php print count($this->arrList); ?>;
+	var strDisplayAmount = (intSelected == intTotal && intTotal != 0) ? "All" : intSelected;
+	if (strZero && strDisplayAmount < 1)
+		strDisplayAmount = strZero;
+	var objCountSpace = $(prevSlider).find("#<?php print $strDivContainer; ?> .lable_count span");
+	if (objCountSpace)
+		objCountSpace.html(strDisplayAmount);
+	else
+		$(prevSlider).find("#<?php print $strDivContainer; ?> .lable_count").html(strDisplayAmount);
+	var objDataPoint = $(prevSlider).find('#<?php print $strDivContainer; ?> #<?php print $strHiddenInputName; ?>');
+	if ($(".slider:last form").serialize() != objDataPoint.val())
+	{
+		objDataPoint.val($(".slider:last form").serialize()).trigger("change");
+	}
+}
+</script>
+<div class="slider">
+	<div class="col_title">
+		<span><?php print $this->strTitle; ?></span>
+	</div>
+	<div class="col_content">
+<?php
+	if (!count($this->arrList))
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<div style="padding: 5px 5px 5px 5px;">There are no users available.</div>
+			</div>
+		</div>
+<?php
+	}
+	else
+	{
+?>
+		<div class="module_collection">
+			<form>
+				<div style="margin-bottom:4px">
+					<table width="96%" cellpadding="4" cellspacing="4">
+						<tr>
+							<td>&nbsp;</td>
+							<td width="40"><span><a onclick="naviageBack();" class="button">Done</a></span></td>
+							<td width="6">&nbsp;</td>
+							<td width="30"><span><a onclick="checkall(this)" title="Check All" class="button">Check All</a></span></td>
+							<td width="6">&nbsp;</td>
+							<td width="60"><span><a onclick="uncheckall(this)" title="Uncheck All" class="button">Uncheck All</a></span></td>
+						</tr>
+					</table>
+				</div>
+				<div class='module' style='margin-bottom:6px !important'>
+					<table border='1' width='100%' style='margin-bottom:5px'>
+						<tr>
+							<td style='padding:4px'>&nbsp;</td>
+							<td><b>Name</b>&nbsp;</td>
+<?php
+		if (isset($this->arrColumns[0]))
+		{
+			foreach ($this->arrColumns[0] as $intKey => $strData)
+			{
+				if (isset($this->arrColumnNames[$intKey]))
+					print "<td width='" . $this->arrColumnNames[$intKey]["width"] . "'><b>" . $this->arrColumnNames[$intKey]["name"] . "</b>&nbsp;</td>";
+				else
+					print "<td>&nbsp;</td>";
+			}
+		}
+?>
+						</tr>
+<?php
+		$intRow = 0;
+		foreach ($this->arrList as $arrItem)
+		{
+?>
+				<tr class="row" style="background-color:#e8eaef; cursor:default;" onclick="row_toggle(this,1);">
+					<td width="30" style="padding:4px"><input type="checkbox" onclick="this.checked = this.checked ? 0 : 1;" name="<?php print $arrItem["value"]; ?>" value="1" /></td>
+					<td><?php print $arrItem["text"]; ?></td>
+<?php
+			if (isset($arrItem['columns']))
+			{
+				foreach ($arrItem['columns'] as $strColData)
+				{
+					print "<td>" . $strColData . "</td>";
+				}
+			}
+?>
+				</tr>
+<?php
+			$intRow++;
+		}
+?>
+				</table></div>
+				<div style="margin-bottom:4px"><div id="processing_status"></div><table width="98%" cellpadding="4" cellspacing="4"><tr><td>&nbsp;</td>
+							<td width="60"><span><a onclick="naviageBack();" class="button">Done</a></span></td></tr></table></div>
+			</form>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>
+<script type="text/javascript">
+var prevSlider = $(".slider:last").prev();
+var strSerializedData = $(prevSlider).find('#<?php print $strDivContainer; ?> #<?php print $strHiddenInputName; ?>').val();
+var arrSerializedData = strSerializedData.split(new RegExp("&"));
+for (intItr in arrSerializedData)
+{
+	var arrKeyVal = arrSerializedData[intItr].split(new RegExp(" *= *"));
+	row_toggle($('.slider:last form input[name="' + arrKeyVal[0] + '"]').closest(".row"), 0);
+}
+</script>

@@ -1,0 +1,144 @@
+<?php
+	include "public_header.phtml";
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<style>
+#footer_links a {
+	color:#555;
+}
+#footer_links {
+	width:1024px;
+	margin:0 auto;
+	height:30px;
+	padding:4px;
+	color:#555;
+}
+h2 {
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 8px;
+	padding:8px;
+	padding-bottom: 12px;
+}
+div.line {
+	border-bottom: 1px solid #ddd;
+	margin: 8px 0;
+	height:1px;
+}
+.promo td {
+	padding:4px;
+}
+.slider.widgets .module_content {
+	padding:10px;
+}
+.slider.widgets h2 {
+	background:url("/images/back-end/admin/line_indent.png") repeat-x scroll center bottom transparent;
+	margin-bottom: 8px;
+	margin-right: 25px;
+	margin-top: 20px;
+	padding-bottom: 4px;
+	position: relative;
+	text-align: center;
+	text-shadow: 0 1px 0 #EEEEEE;
+}
+.slider.widgets .widget_code {
+	width:100%;
+	height:80px;
+}
+</style>
+</head>
+<body>
+    <NOSCRIPT><P STYLE="color: red; font-size: larger;"><?php print text("Notice: You have javascript disabled. This site will not function without javascript."); ?></P></NOSCRIPT>
+	<div id="wrapper">
+    	<div id="nav">
+        	<div class="col_title_bg"></div>
+            <div class="col_title"><?php print text("Menu"); ?></div>
+            <ul class="list_first">
+                <li class="list_parent current"><a href="#"><img src="<?php print $sn; ?>/images/front-end/admin/icon_door_in.png" width="28" height="28" /><?php print text("Login"); ?></a></li>
+            </ul>
+        </div>
+        <div id="content">
+        	<div class="col_title_bg"></div>
+            <div class="slider_container">
+                <div class="slider widgets">
+                    <div class="col_title"><span><?php print text("Camp Widgets"); ?></span></div>
+                    <div class="col_content">
+						<div class="module">
+							<div class="module_content">
+								Please contact us if your widget does not look properly after you have paste the code to your website. We can help you with finding a simple solution.
+							</div>
+						</div>
+						<h2>No JavaScript</h2>
+						<div class="module">
+							<div class="module_content" style="width:700px;text-align: center;">
+<?php
+$strHtml = <<<EOD
+								<form action="$sn/hebrewschools/index/from_widget/ims_widget/exit_mode/close_window$strParamPath" method="get" target="_blank">
+									<div id="ims_camps_widget_01" class="ims_widget ims_camps_widget" style="text-align:center;background-position:0 -10px;line-height:30px;font-size:24px;height:170px;padding:20px;background-image: url($sn/images/kiosk_header-bg.png);">
+										<div style="text-align:left;margin:0 auto;width:502px;height:170px;background-image: url($sn/images/kiosk_login_scan.png);">
+											<div style="margin-top:107px;margin-left:144px;display:inline-block;">
+												<input style="border:none;font-size:24px;width:330px;background-color:transparent;" type="text" name="barcode" size=25 maxlength=20 autocomplete="off">
+											</div>
+										</div>
+									</div>
+								</form>
+EOD;
+print $strHtml;
+?>
+								<div style="padding:6px 0;">Copy & Paste the code below to add this widget (seen above) to your website.</div>
+								<textarea class="widget_code" onclick="this.select();" onfocus="this.select();"><?php print preg_replace('/[\n\r\t]+/', '', $strHtml); ?></textarea>
+							</div>
+						</div>
+						<h2>Smaller</h2>
+						<div class="module">
+							<div class="module_content" style="width:700px;text-align: center;">
+<?php
+$strHtml = <<<EOD
+								<form action="$sn/hebrewschools/index/from_widget/ims_widget/exit_mode/close_window$strParamPath" method="get" target="_blank">
+									<div id="ims_camps_widget_01" class="ims_widget ims_camps_widget" style="text-align:center;background-position:0 -40px;line-height:30px;font-size:24px;height:140px;padding:20px;background-image: url($sn/images/kiosk_header-bg.png);">
+										<div style="text-align:left;margin:0 auto;width:420px;height:146px;background-image: url($sn/images/kiosk_login_scan_smaller.png);">
+											<div style="margin-top:89px;margin-left:122px;display:inline-block;"><input style="border:none;font-size:20px;width:280px;background-color:transparent;" type="text" name="barcode" size="25" maxlength="20" autocomplete="off" /></div>
+										</div>
+									</div>
+								</form>
+EOD;
+print $strHtml;
+?>
+								<div style="padding:6px 0;">Copy & Paste the code below to add this widget (seen above) to your website.</div>
+								<textarea class="widget_code" onclick="this.select();" onfocus="this.select();"><?php print preg_replace('/[\n\r\t]+/', '', $strHtml); ?></textarea>
+							</div>
+						</div>
+						<h2>Very small</h2>
+						<div class="module">
+							<div class="module_content" style="width:428px;text-align: center;">
+<?php
+$strHtml = <<<EOD
+								<form action="$sn/hebrewschools/index/from_widget/ims_widget/exit_mode/close_window$strParamPath" method="get" target="_blank">
+									<div id="ims_camps_widget_01" class="ims_widget ims_camps_widget" style="text-align:center;background-position:0 -75px;line-height:30px;font-size:24px;height:100px;padding:20px;background-image: url($sn/images/kiosk_header-bg.png);">
+										<div style="text-align:center;margin:0 auto;width:420px;height:106px;background-position:-60px -40px;background-image: url($sn/images/kiosk_login_scan_smaller.png);">
+											<div style="margin-top:49px;margin-left:-32px;display:inline-block;"><input style="border:none;font-size:20px;width:260px;background-color:transparent;" type="text" name="barcode" size="25" maxlength="20" autocomplete="off" /></div>
+										</div>
+									</div>
+								</form>
+EOD;
+print $strHtml;
+?>
+								<div style="padding:6px 0;">Copy & Paste the code below to add this widget (seen above) to your website.</div>
+								<textarea class="widget_code" onclick="this.select();" onfocus="this.select();"><?php print preg_replace('/[\n\r\t]+/', '', $strHtml); ?></textarea>
+							</div>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div id="footer_links">
+		<div style="float:left;text-align:left;width:383px;margin:0 8px;"><a href="<?php print $sn; ?>/index/contact" class="overlay">Contact Us</a></div>
+		<div style="float:right;text-align:right;display:inline-block;margin:0 8px;width:383px;">Copyright © 2013 - mashpia.com</div>
+	</div>
+	<div id="overlay">
+		<div class="content"></div>
+	</div>
+</body>
+</html>

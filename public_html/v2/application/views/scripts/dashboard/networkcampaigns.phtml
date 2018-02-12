@@ -1,0 +1,30 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Network Campaigns</span>
+	</div>
+	<div class="col_content">
+		<div class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/incrementalscampaignlist<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">Networks Preloaded Campaigns</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/institutions/url/<?php echo dblencode("campaigns/incrementalscampaignlist" . $strParamPath); ?>">
+							<div class="icon"></div>
+							<div class="title">Browse Institution Campaigns</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

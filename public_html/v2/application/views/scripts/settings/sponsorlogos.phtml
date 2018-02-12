@@ -1,0 +1,206 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objUserSession = new Zend_Session_Namespace("user_session_data");
+?>
+<script type="text/javascript">
+	$(document).ready(function () {
+		$(this).delay(1).queue(function () {
+			$(this).dequeue();
+			$('.slider:last input[type=checkbox]').iphoneStyle({});
+			$('.slider:last .save_button').hide();
+		});
+		$('.slider:last .logo_previews .logo_preview_images img').bind('click', function () {
+			$('.slider:last .logo_previews .logo_preview_images img.down').removeClass('down');
+			$(this).addClass('down');
+
+			$('.slider:last iframe').attr('src', '<?php print $sn . "/imgs/smalluploader/current_image/0.gif"; ?>/resultid/sponsorlogos_logoimage');
+			var intImage = $(this).attr('name');
+			$('.slider:last .message1').addClass('hidden');
+			$('.slider:last .upload_box').removeClass('invisible');
+			$('.slider:last .upload_box .logo_name').html('Sponsor Logo ' + intImage);
+			$('.slider:last .upload_box .logo_key').val(intImage);
+		});
+		$('.slider:last form #sponsorlogos_logoimage').bind('updated', function () {
+			var objDownImage = $('.slider:last .logo_previews .logo_preview_images img.down');
+			var intImage = objDownImage.attr('name');
+			$('.slider:last .save_button').fadeIn();
+		});
+		$('.slider:last .save_button').bind('click', function () {
+			$('.slider:last .save_button').hide();
+			var objDownImage = $('.slider:last .logo_previews .logo_preview_images img.down');
+			var intImage = objDownImage.attr('name');
+			$('.slider:last .logo_previews .logo_preview_' + intImage).attr('src', '<?php print $sn; ?>/imgs/v/w/90/h/90/p/h/src/'+$('.slider:last form #sponsorlogos_logoimage').val());
+			$('.slider:last .upload_box').addClass('invisible');
+		});
+		// settings
+		var fn_process_event = function(e) {
+			var strFormName = $(this).closest("form").attr("name");
+			$(".slider:last ." + strFormName + " .processing_status").delay(2000).queue(function () {
+				$(this).dequeue().html('Loading...').fadeIn("slow");
+			});
+			$.ajax({
+				type : "POST",
+				cache : false,
+				url : '<?php echo $sn . "/settings/sponsorlogos/' + strFormName + '/true" . $strParamPath; ?>',
+				dataType : "text",
+				data: $(this).closest("form").serialize(),
+				success : function(strResponse) {
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$.alert(strResponse);
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						$.alert(strResponse);
+						return;
+					} else {
+
+					}
+					//if (!strResponse.match(/^[0-9]+$/)) {
+					//	$.alert(strResponse);
+					//}
+				}
+			});
+		}
+		$('.slider:last form input').change(fn_process_event);
+		$('.slider:last form select').change(fn_process_event);
+		$('.slider:last form input').bind("didchange", fn_process_event);
+
+		$('.slider:last form .submit').bind("click", function(e) {
+			var strFormName = $(this).closest("form").attr("name");
+			$(".slider:last ." + strFormName + " .processing_status").html('Loading...').fadeIn("fast");
+			$.ajax({
+				type : "POST",
+				cache : false,
+				url : '<?php echo $sn . "/settings/sponsorlogos/' + strFormName + '/true" . $strParamPath; ?>',
+				dataType : "text",
+				data: $(this).closest("form").serialize(),
+				success : function(strResponse) {
+					if (!strResponse.match(/^[0-9]+$/)) {
+						$.alert(strResponse);
+					}
+				}
+			});
+		});
+	});
+</script>
+<div class="slider">
+	<style>
+		.processing_status {
+			color: black;
+		}
+		.checkboxes td {
+			padding-left: 22px;
+			height: 40px;
+		}
+		.images_preview td {
+			text-align: center;
+		}
+		.images_preview img {
+			border:2px solid #EEEEEE;
+			cursor:pointer;
+		}
+		.images_preview img:hover {
+			border:2px solid #999;
+		}
+		.images_preview img.down {
+			border:2px solid #666 !important;
+		}
+		.invisible {
+			visibility: hidden;
+		}
+	</style>
+	<div class="col_title">
+		<span>Sponsor Logos</span>
+		<div class="title_help info" title="Add logos to the bottom of the kiosk login page."></div>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a target="_blank" href="<?php echo $sn; ?>/hebrewschools/index/tstyle/<?php print $this->tstyle; ?>/institution_id/<?php print $objUserSession->institution_id; ?>">
+						  <div class="icon"></div>
+						  <div class="title" style="width:660px"><?php print text("Open kiosk page in a new tab"); ?></div>
+						  <div class="help info" title="<?php print text("You can view the changes you have made to the kiosk by opening it in a new tab."); ?>"></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module lists forms logo_previews">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h1>Sponsor Logos</h1>
+					</li>
+					<li>
+						<form name="kiosk_logos" class="kiosk_logos">
+							<table border="0" height="120" width="100%" class="images_preview">
+								<tr class="checkboxes">
+									<td>
+										<input type="checkbox" name="kiosk_logos_on__logo_on_1" value="1"<?php print @$this->arrKioskLogos["kiosk_logos_on"]["logo_on_1"] ? " checked=\"checked\"" : ""; ?> />
+									</td>
+									<td>
+										<input type="checkbox" name="kiosk_logos_on__logo_on_2" value="1"<?php print @$this->arrKioskLogos["kiosk_logos_on"]["logo_on_2"] ? " checked=\"checked\"" : ""; ?> />
+									</td>
+									<td>
+										<input type="checkbox" name="kiosk_logos_on__logo_on_3" value="1"<?php print @$this->arrKioskLogos["kiosk_logos_on"]["logo_on_3"] ? " checked=\"checked\"" : ""; ?> />
+									</td>
+									<td>
+										<input type="checkbox" name="kiosk_logos_on__logo_on_4" value="1"<?php print @$this->arrKioskLogos["kiosk_logos_on"]["logo_on_4"] ? " checked=\"checked\"" : ""; ?> />
+									</td>
+									<td>
+										<input type="checkbox" name="kiosk_logos_on__logo_on_5" value="1"<?php print @$this->arrKioskLogos["kiosk_logos_on"]["logo_on_5"] ? " checked=\"checked\"" : ""; ?> />
+									</td>
+								</tr>
+								<tr class="logo_preview_images">
+									<td><img class="logo_preview_1" name="1" src="<?php $sn; ?>/imgs/v/src/<?php print @$this->arrKioskLogos["kiosk_logos"]["logo_1"]; ?>/w/90/h/90/p/h" width="90" height="90" /></td>
+									<td><img class="logo_preview_2" name="2" src="<?php $sn; ?>/imgs/v/src/<?php print @$this->arrKioskLogos["kiosk_logos"]["logo_2"]; ?>/w/90/h/90/p/h" width="90" height="90" /></td>
+									<td><img class="logo_preview_3" name="3" src="<?php $sn; ?>/imgs/v/src/<?php print @$this->arrKioskLogos["kiosk_logos"]["logo_3"]; ?>/w/90/h/90/p/h" width="90" height="90" /></td>
+									<td><img class="logo_preview_4" name="4" src="<?php $sn; ?>/imgs/v/src/<?php print @$this->arrKioskLogos["kiosk_logos"]["logo_4"]; ?>/w/90/h/90/p/h" width="90" height="90" /></td>
+									<td><img class="logo_preview_5" name="5" src="<?php $sn; ?>/imgs/v/src/<?php print @$this->arrKioskLogos["kiosk_logos"]["logo_5"]; ?>/w/90/h/90/p/h" width="90" height="90" /></td>
+								</td>
+							</table>
+						</form>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module lists forms message1">
+			<div class="module_content">
+				<ul>
+					<li style="font-size:10pt;padding:8px;">
+						Click on any of the above images to modify them. Set the indicator to ON for them to be visible in the kiosk.
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module lists forms upload_box invisible">
+			<div class="module_content">
+				<form name="logoimage">
+					<input type="hidden" class="logo_key" name="logo_key" valye="" />
+					<ul>
+<?php include('uimods/uploadmessage.phtml'); ?>
+						<li>
+							<h1 class="logo_name">Sponsor Logo 1</h1>
+							<input type="hidden" name="sponsorlogos__logoimage" id="sponsorlogos_logoimage" value="0.gif" />
+							<iframe src="<?php print $sn . "/imgs/smalluploader/current_image/0.gif"; ?>/resultid/sponsorlogos_logoimage" width="100%" height="80" scrolling="no">
+								<p>Your browser does not support iframes.</p>
+							</iframe>
+						</li>
+						<div class="processing_status" style="color: black;"></div>
+						<li class="save_button" style="padding-left:20px;padding-top:10px;height:40px">
+							<span>
+								<a href="#" title="Save" class="button submit">Save Changes</a>
+							</span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

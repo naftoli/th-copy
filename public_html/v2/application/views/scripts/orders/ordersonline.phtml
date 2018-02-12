@@ -1,0 +1,184 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace("user_session_data");
+	$arrCategories = array(
+		'Checked Out' => "Checked Out Prizes"
+	);
+?>
+<script>
+$(document).ready(function()
+{
+	$(".slider:last .print_button").click(function () {
+		slideRefresh("<?php print $sn; ?>/orders/ordersonline<?php print $strParamPath; ?>");
+	});
+});
+function orders_redeem(objForm)
+{
+	$.ajax({
+		type : "POST",
+		cache : false,
+		start: $(objForm).find("#processing_status").stop().fadeIn("slow"),
+		url : "<?php print $sn;?>/orders/ordersonline/order/redeem<?php print $strParamPath; ?>",
+		dataType : "text",
+		data: $(objForm).serialize(),
+		success : function(strResponse)
+		{
+			if (strResponse == "1")
+				slideRefresh("<?php print $sn; ?>/orders/ordersonline<?php print $strParamPath; ?>");
+		}
+	});
+}
+function row_toggle(objThis)
+{
+	$(objThis).find(":checkbox").attr("checked", !$(objThis).find(":checkbox").is(':checked'));
+	$(objThis).css("background-color", $(objThis).find(":checkbox").is(':checked') ? "#dadee6" : "#e8eaef");
+}
+function uncheckall(objThis)
+{
+	$(objThis).closest(".col_content").find(":checkbox").attr("checked", false);
+	$(objThis).closest(".col_content").find(".module table .row").css("background-color", "#e8eaef");
+}
+function checkall(objThis)
+{
+	$(objThis).closest(".col_content").find(":checkbox").attr("checked", true);
+	$(objThis).closest(".col_content").find(".module table .row").css("background-color", "#dadee6");
+}
+$('#slider_orderslist').bind('slide_back', function () {
+	slideRefresh();
+});
+$('#slider_orderslist .reverse_order_closed a').click(function () {
+	if (!$("#slider_orderslist input:checkbox:checked").length) {
+		alert("You must select a prize first to be able to reverse it.");
+		return;
+	}
+	$('#slider_orderslist .reverse_order_closed').addClass('hidden');
+	$('#slider_orderslist .reverse_order_opened').removeClass('hidden');
+	$('#slider_orderslist .reverse_order_opened.reason input').focus();
+
+});
+$('#slider_orderslist .reverse_order_opened.cancel a').click(function () {
+	$('#slider_orderslist .reverse_order_opened').addClass('hidden');
+	$('#slider_orderslist .reverse_order_closed').removeClass('hidden');
+});
+$('#slider_orderslist .reverse_order_opened.confirm a').click(function () {
+	if (!$("#slider_orderslist input:checkbox:checked").length) {
+		alert("You must select a prize first to be able to reverse it.");
+		return;
+	}
+	$.ajax({
+		type : "POST",
+		cache : false,
+		start: $("#processing_status").stop().fadeIn("slow"),
+		url : "<?php print $sn;?>/orders/ordersonline/order/reverse<?php print $strParamPath; ?>",
+		dataType : "text",
+		data: $('#slider_orderslist form').serialize(),
+		success : function(strResponse)
+		{
+			if (strResponse == "1")
+				slideRefresh("<?php print $sn; ?>/orders/ordersonline<?php print $strParamPath; ?>");
+			else
+				$.alert(strResponse);
+		}
+	});
+});
+</script>
+<div class="slider" id="slider_orderslist">
+	<div class="col_title">
+		<span>Prizes Ordered Online</span>
+	</div>
+	<div class="col_content">
+		<form>
+		<div style="margin-bottom:18px"><table cellpadding="4" cellspacing="4"><tr><td width="60"><span><a onclick="checkall(this)" class="button">Check All</a></span></td><td width="6">&nbsp;</td><td width="60"><span><a onclick="uncheckall(this)" class="button">Uncheck All</a></span></td></tr></table></div>
+<?php
+	foreach ($arrCategories as $strStatus => $strTitle)
+	{
+		if (
+			!isset($this->arrOrders[$strStatus])
+			|| !count($this->arrOrders[$strStatus])
+		) {
+?>
+		<div class="module" style="padding:5px;">
+			Nothing to display.
+		</div>
+<?php
+		}
+		else
+		{
+
+			foreach ($this->arrOrders[$strStatus] as $intClassHierarchy => $arrOrderClasses)
+			{
+				if (!isset($this->arrClasses[$intClassHierarchy]))
+					continue;
+				$objClass = $this->arrClasses[$intClassHierarchy];
+				$grade = $objClass->class_grade . (empty($objClass->class_sub) ? '' : '-' . $objClass->class_sub); 
+?>
+			<h1>Bunk: <?php print $grade; ?></h1>
+			<div class="module_collection" style="margin-top:15px;margin-bottom:15px;">
+					<div class='module' style='margin-bottom:6px !important'><table border='1' width='100%' style='margin-bottom:5px'>
+					<tr>
+						<td style='padding:4px'>&nbsp;</td>
+						<td><b>Date</b></td>
+						<td><b>Student</b></td>
+						<td><b>Prize</b></td>
+						<td><b>Size</b>&nbsp;</td>
+						<td><b><?php print text('[|Points|]'); ?></b>&nbsp;</td>
+						<td><b>Qty</b>&nbsp;</td>
+					</tr>
+<?php
+				foreach ($arrOrderClasses as $arrOrderData)
+				{
+?>
+					<tr class="row" style="background-color:#e8eaef; cursor:default;" onclick="row_toggle(this);">
+						<td width="30" style="padding:4px"><input type="checkbox" onclick="this.checked = this.checked ? 0 : 1;" name="<?php print $arrOrderData["objUserPrize"]->user_prize_id; ?>" value="1" /></td>
+						<td width="120"><?php
+					$strDate = $arrOrderData["objUserPrize"]->modified != '0000-00-00 00:00:00' ? $arrOrderData["objUserPrize"]->modified : $arrOrderData["objUserPrize"]->created;
+					$intDate = strtotime($strDate);
+					print date('n/j/y', $intDate);
+					print ' <font color="#444">' . date('G:i', $intDate) . "</font>";
+					?></td>
+						<td style="min-width: 160px;"><?php print $arrOrderData["objUser"]->first . " " . $arrOrderData["objUser"]->last; ?></td>
+						<td><?php print $arrOrderData["objPrize"]->prize_name; ?></td>
+						<td width="60"><?php print $arrOrderData["objUserPrize"]->prize_size; ?></td>
+						<td width="70"><?php print $arrOrderData["objUserPoint"]->points; ?></td>
+						<td width="30"><?php print $arrOrderData["objUserPrize"]->quantity; ?></td>
+					</tr>
+<?php
+				}
+?>
+					</table>
+					</div>
+			</div>
+<?php
+			}
+		}
+?>
+		<div style="margin-bottom:4px"><div id="processing_status"></div>
+			<table cellpadding="4" cellspacing="4">
+				<tr>
+					<td width="60"><span><a onclick="orders_redeem($(this).closest('form'));" href="#" class="button">Redeem</a></span></td><td width="6">&nbsp;</td>
+					<td width="60" class="reverse_order_closed"><span><a class="button">Reverse</a></span></td>
+					<td width="210" class="reverse_order_opened reason hidden"><input name="reverse_order_reason" placeholder="Reason for reverse" type="text" style="width:200px;font-size:12pt;" /></td>
+					<td width="60" class="reverse_order_opened hidden confirm"><span><a class="button">Confirm</a></span></td><td width="6">&nbsp;</td>
+					<td width="60" class="reverse_order_opened cancel hidden"><span><a class="button">Cancel</a></span></td><td width="6">&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+<?php
+	}
+?>
+		</form>
+		<div id="lists" class="module lists forms" style="margin-top: 20px;">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/orders/ordershistory<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">Redeemed Orders</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

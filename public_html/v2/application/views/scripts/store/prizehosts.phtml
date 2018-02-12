@@ -1,0 +1,65 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+
+<div class="slider" id="slider_prizehosts">
+	
+	<div class="col_title">
+		<span>Prize Hosts</span>
+	</div>
+	
+	<div class="col_content">
+<?php
+	if (count($this->arrHosts) == 0)
+	{
+?>
+		<div class="module" style="padding:5px;">
+			There are no hosts available to display.
+		</div>
+<?php
+	}
+	else
+	{
+?>
+			<div id="lists" class="module lists forms">
+				<div class="module_content">
+					<form name="campaignhosts" id="campaignhosts" method="post" action="">
+						<ul>
+<?php
+		if (count($this->arrHosts) > 1)
+		{
+?>
+							<li>
+								<a class="link" href="<?php print $sn . "/store/prizenetworks" . $strParamPath; ?>">
+									<div class="icon"></div>
+									<div class="title">> Skip to Network List</div>
+								</a>
+							</li>
+<?php
+		}
+		foreach ($this->arrHosts as $r)
+		{
+?>
+								<li>
+									<a class="link" href="<?php echo $sn . "/store/prizenetworks/host_id/" . $r->institution_id . $strParamPath; ?>">
+										<div class="icon"></div>
+										<div class="title"><?php echo $r->name; ?></div>
+									</a>
+								</li>
+<?php
+		}
+?>
+						</ul>
+						
+					</form>
+					
+				</div>
+				
+			</div>		
+<?
+	}
+?>
+	</div>
+	
+</div>

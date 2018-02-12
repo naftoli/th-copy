@@ -1,0 +1,133 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objUserSession = new Zend_Session_Namespace("user_session_data");
+?>
+<script language="javascript">
+$(document).ready(function()
+{
+	$(this).delay(1).queue(function () {
+		$(this).dequeue();
+		$('.slider:last input[type=checkbox]').iphoneStyle({});
+	});
+	var fn_process_event = function(e) {
+		var strFormName = $(this).closest("form").attr("name");
+		$(".slider:last ." + strFormName + " .processing_status").delay(2000).queue(function () {
+			$(this).dequeue().html('Loading...').fadeIn("slow");
+		});
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php echo $sn . "/dashboard/customizeachievementcards/' + strFormName + '/true" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('.slider:last .' + strFormName + ' form').serialize(),
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					$(".slider:last ." + strFormName + " .processing_status").dequeue().css({"display":"none"});
+				} else {
+					$(".slider:last ." + strFormName + " .processing_status").dequeue().html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	}
+	$('.slider:last form input').change(fn_process_event);
+	$('.slider:last form select').change(fn_process_event);
+	$('.slider:last form input').bind("didchange", fn_process_event);
+
+	$('.slider:last form .submit').bind("click", function(e) {
+		var strFormName = $(this).closest("form").attr("name");
+		$(".slider:last ." + strFormName + " .processing_status").html('Loading...').fadeIn("fast");
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php echo $sn . "/dashboard/customizeachievementcards/' + strFormName + '/true" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('.slider:last .' + strFormName + ' form').serialize(),
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					$(".slider:last ." + strFormName + " .processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+				} else {
+					$(".slider:last ." + strFormName + " .processing_status").html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	});
+	$('.slider:last form #achievementcards_achievementcardimage').bind('updated', function () {
+		//$.alert($(this).val());
+		$('.slider:last .preview_image').attr('src', '<?php print $sn; ?>/imgs/v/src/'+$(this).val());
+	});
+
+	// update preview updated
+});
+</script>
+<div class="slider">
+	<style>
+		.processing_status {
+			color: black;
+		}
+	</style>
+	<div class="col_title">
+		<span><?php print text("[|Point|] Cards"); ?></span>
+		<div class="title_help info" title="Access to various use_custom_image that affect your entire institution."></div>
+	</div>
+<?php
+//if (!isset($this->arrConfigOptions["achievementcards"]["achievementcardimage"]))
+//	$intImage = '3375159_3398.png';
+//else
+	$intImage = $this->arrConfigOptions["achievementcards"]["achievementcardimage"];
+?>
+	<div class="col_content">
+		<h2><?php print text("[|Point|] Card Image"); ?></h2>
+		<div class="module form use_custom_image">
+			<div class="module_content lists">
+				<form name="use_custom_image">
+					<ul>
+						<li>
+							<span class="label">Use Custom Image:</span>
+							<span class="input" style="margin: 4px 0px 0px 1px;">
+								<input type="checkbox" name="achievementcards__customimage" value="1"<?php print $this->arrConfigOptions["achievementcards"]["customimage"] ? " checked=\"checked\"" : ""; ?> />
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div class="module form preview">
+			<div class="module_content">
+				<ul>
+					<li>
+						<h3><?php print text("[|Point|] Card Image Preview"); ?></h3>
+						<div style="padding:8px 8px 2px 8px;margin-bottom: 5px;margin-top: 2px;border:1px solid black;background-color: #fff;display:inline-block;">
+							<img class="preview_image" src="<?php print $sn; ?>/imgs/v/src/<?php print $intImage; ?>" width="240" height="34" />
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module form achievementcardimage">
+			<div class="module_content">
+				<form name="achievementcardimage">
+					<ul>
+						<?php include('uimods/uploadmessage.phtml'); ?>
+						<li>
+							<h3><?php print text("[|Point|] Card Image Uploader"); ?></h3>
+							<input type="hidden" name="achievementcards__achievementcardimage" id="achievementcards_achievementcardimage" value="<?php print $intImage; ?>" />
+							<iframe src="<?php print $sn . "/imgs/smalluploader/current_image/" . $intImage; ?>/resultid/achievementcards_achievementcardimage" width="100%" height="80" scrolling="no">
+								<p>Your browser does not support iframes.</p>
+							</iframe>
+						</li>
+						<div class="processing_status" style="color: black;"></div>
+						<li>
+							<span>
+								<a href="#" title="Save" class="button submit">Save</a>
+							</span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

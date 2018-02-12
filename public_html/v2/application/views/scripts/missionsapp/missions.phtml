@@ -1,0 +1,644 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+$arrMedals = array(
+	"Yom%20Tov%20Champ%20Medal%20Back%20-%20White.png",
+	"Yom%20Tov%20Champ%20Medal%20Back%20-%20Red.png",
+	"Yom%20Tov%20Champ%20Medal%20Back%20-%20Orange.png",
+	"Yom%20Tov%20Champ%20Medal%20Back%20-%20Yellow.png",
+	"Yom%20Tov%20Champ%20Medal%20Back%20-%20Green.png",
+	"Yom%20Tov%20Champ%20Medal%20Back%20-%20Blue.png",
+	"Yom%20Tov%20Champ%20Medal%20Back%20-%20Purple.png",
+	"Yom%20Tov%20Champ%20Medal%20Back%20-%20Brown.png",
+	"Yom%20Tov%20Champ%20Medal%20Back%20-%20Gray.png",
+	"Yom%20Tov%20Champ%20Medal%20Back%20-%20Black.png"
+);
+$arrMarking = $this->arrMarking;
+$arrMissionCounts = array(
+	5,
+	15,
+	30,
+	50,
+	75,
+	105,
+	140,
+	180,
+	225
+);
+$intMarkingTotal = count($arrMarking);
+$intMission = 0;
+foreach ($arrMissionCounts as $intCount)
+{
+	if ($intMarkingTotal > $intCount)
+	{
+		$intMission++;
+	}
+}
+$intMissionsLeft = $arrMissionCounts[$intMission]-$intMarkingTotal;
+if ($intMissionsLeft == 0)
+{
+	$intMission++;
+	$intMissionsLeft = $arrMissionCounts[$intMission]-$intMarkingTotal;
+}
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="cache-control" content="public" />
+	<meta http-equiv="expires" content="1" />
+	<meta http-equiv="imagetoolbar" content="no" />
+	<meta http-equiv="content-language" content="en-US" />
+	<meta name="language" content="en"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+	<title>CKIDS - Missions</title>
+	<script type="text/javascript" src="<?php print js; ?>/missionsapp/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="<?php print js; ?>/missionsapp/missions.js"></script>
+	<link href="<?php print css; ?>/missionsapp/polyfills.css" media="screen" rel="stylesheet" type="text/css" />
+	<style>
+		@font-face{
+			font-family:Gotham;
+			src:url(<?php print bp; ?>/fonts/Gotham-Medium.otf) format("opentype")
+		}
+		@font-face{
+			font-family:OpenSans Light;
+			src:url(<?php print bp; ?>/fonts/OpenSans-Light.ttf) format("truetype")
+		}
+		@font-face{
+			font-family:OpenSans;
+			src:url(<?php print bp; ?>/fonts/OpenSans-Regular.ttf) format("truetype")
+		}
+		* {
+			font-family: Arial;
+		}
+		.position_at_top {
+			position: absolute;
+			top:0;
+			width:100%;
+		}
+		.main_margin {
+			border-radius:50px;
+			border-radius:5vw;
+			border:20px solid #fff;
+			border:2vw solid #fff;
+			padding:30px;
+			padding:3vw;
+			margin:0 70px 70px 70px;
+			margin:0 7vw 7vw 7vw;
+			min-height: 1200px;
+			background-color: #fff;
+			box-shadow:inset 0 0 30px rgba(0,0,0,0.18);
+			box-shadow:inset 0 0 3vw rgba(0,0,0,0.18);
+			text-align: center;
+		}
+		#top_banner {
+			padding:30px;
+			padding:3vw;
+			width:760px;
+			width:76vw;
+			height:auto;
+			margin-left:-30px;
+			margin-left:-3vw;
+		}
+
+		.student_info {
+			margin: 40px 0 40px 0;
+			margin: 4vw 0 4vw 0;
+			border-radius: 20px;
+			border-radius: 2vw;
+			height: 95px;
+			height: 9.5vw;
+			background-color: #0095da;
+			box-shadow:1px 1px 5px rgba(0,0,0,0.5);
+			box-shadow:1px 1px 0.5vw rgba(0,0,0,0.5);
+			text-align: left;
+			vertical-align: top;
+
+		}
+		.student_info .si_image {
+			width: 100px;
+			width: 10vw;
+			height: inherit;
+			display: inline-block;
+			vertical-align: top;
+		}
+		.student_info .si_image img {
+			width: inherit;
+			height: inherit;
+			border-top-left-radius: 20px;
+			border-top-left-radius: 2vw;
+			border-bottom-left-radius: 20px;
+			border-bottom-left-radius: 2vw;
+		}
+		.student_info .si_name {
+			vertical-align: top;
+			height: inherit;
+			display: inline-block;
+			line-height: 100px;
+			line-height: 10vw;
+			font-size: 40px;
+			font-size: 4vw;
+			padding-left: 25px;
+			padding-left: 2.5vw;
+			color: #fff;
+			text-transform: uppercase;
+			font-weight: bold;
+		}
+		.mission_headline {
+			font-size: 90px;
+			font-size: 9vw;
+			font-family: Gotham;
+			letter-spacing: -10px;
+			letter-spacing: -1vw;
+			line-height: 80px;
+			line-height: 8vw;
+			font-weight:900;
+			font-weight:90vw;
+			color:#ed1651;
+			padding-top: 40px;
+			padding-top: 4vw;
+			padding-bottom: 15px;
+			padding-bottom: 1.5vw;
+		}
+		.missions_list {
+			padding-left:3vw;
+		}
+		.mission_item {
+			display:inline-block;
+			margin:0px 20px;
+			margin:2vw 1vw 2vw 0;
+			vertical-align:top;
+			white-space:nowrap;
+		}
+		.mission_description {
+			width:200px;
+			width:20vw;
+			white-space:normal;
+		}
+		.mission_date {
+			width:200px;
+			width:20vw;
+			white-space:normal;
+			margin-top:8px;
+			margin-top:0.8vw;
+			font-weight:bold;
+		}
+		.mission_badge {
+			vertical-align:top;
+			display:inline-block;
+
+		}
+		.mission_item_border {
+
+			width:200px;
+			width:20vw;
+			height:200px;
+			height:20vw;
+			vertical-align:top;
+		}
+		.mission_item_ph {
+			display:inline-block;
+			margin-left:-200px;
+			margin-left:-20vw;
+			width:200px;
+			width:20vw;
+			height:200px;
+			height:20vw;
+			vertical-align:top;
+		}
+		.mission_item_mask {
+			border-radius:200px;
+			border-radius:20vw;
+			overflow:hidden;
+			width:168px;
+			width:16.8vw;
+			height:173px;
+			height:17.3vw;
+			margin-left:8px;
+			margin-left:0.8vw;
+			margin-top:15px;
+			margin-top:1.5vw;
+			vertical-align:top;
+		}
+		.mission_item_image {
+			width:220px;
+			width:22vw;
+			height:220px;
+			height:22vw;
+			margin-top:-24px;
+			margin-top:-2.4vw;
+			margin-left:-24px;
+			margin-left:-2.4vw;
+			vertical-align:top;
+		}
+		.mission_whiteout {
+			display:inline-block;
+			margin-left:-230px;
+			margin-left:-23vw;
+			background:rgba(255,255,255,0.6);
+			width:220px;
+			width:23vw;
+			height:210px;
+			height:23vw;
+
+		}
+		.mission_check_ph {
+			display:inline-block;
+			margin-left:-200px;
+			margin-left:-20vw;
+			width:200px;
+			width:20vw;
+			height:200px;
+			height:20vw;
+			vertical-align:top;
+		}
+		.mission_check_mark {
+			display:block;
+			vertical-align:top;
+			border:6px solid #ffcb08;
+			border:0.7vw solid #ffcb08;
+			background-color:#fff;
+			border-radius:80px;
+			border-radius:8vw;
+			width:38px;
+			width:3.8vw;
+			height:38px;
+			height:3.8vw;
+			margin-left:-6px;
+			margin-left:-0.6vw;
+			text-align:center;
+		}
+		.mission_check_mark .marked {
+			display:inline-block;
+			width:28px;
+			width:2.8vw;
+			height:28px;
+			height:2.8vw;
+			margin-top:5px;
+			margin-top:0.5vw;
+		}
+		.mission_check_mark.available {
+			cursor:pointer;
+		}
+		#bg_tiles {
+			display:block;
+			overflow:hidden;
+		}
+		#bg_tiles img {
+			display:block;
+			width:100vw;
+			height:auto;
+		}
+		#medal_list {
+			border-radius:1.7vw;
+			background-color:transparent;
+			padding: 1.2vw 0;
+			border:0.4vw solid #0095da;
+			line-height:4vw;
+			margin-top:15px;
+			margin-top:1.5vw;
+		}
+		#medal_list span {
+			white-space:nowrap;
+		}
+		#medal_list .medal_img {
+			width:6.4vw;
+			min-width:40px;
+			height:auto;
+		}
+		#medal_list .medal_img.faded {
+			opacity:0.5;
+		}
+		#current_medal {
+			padding-top: 3vw;
+		}
+		#current_medal .medal_img {
+			width:50vw;
+		}
+		#missing_missions_text {
+			font-size:2.5vw;
+			font-weight:bold;
+			white-space:nowrap;
+		}
+		.header {
+			text-align:right;
+			vertical-align:top;
+			padding:2vw 10vw;
+		}
+		.header .header_icon {
+			width:8vw;
+			text-align:center;
+			display:inline-block;
+			color:#fff;
+			vertical-align:top;
+			margin-right:1vw;
+			font-size:1.5vw;
+			line-height:1.7vw;
+			font-weight:bold;
+			text-decoration:none;
+		}
+		.header .header_icon img {
+			vertical-align:top;
+			width:7vw;
+			height:auto;
+		}
+		.hidden {
+			visibility:hidden;
+		}
+		.none {
+			display:none;
+		}
+		.ellipsis {
+		    overflow: hidden;
+		    white-space: nowrap;
+		    text-overflow: ellipsis;
+		}
+	</style>
+	<script>
+<?php
+	if (dev)
+	{
+		print "\n//" . $this->objUser->user_id . "\n\n";
+	}
+?>
+	var arrMissionCounts = <?php print json_encode($arrMissionCounts);?>;
+	var intMarkingTotal = <?php print json_encode($intMarkingTotal);?>;
+	var arrMedals = <?php print json_encode($arrMedals);?>;
+	$(function () {
+		$('.mission_check_mark').click(function (e) {
+			e.preventDefault();
+			var objItem = $(this).closest('.mission_item');
+			var intTask = objItem.attr('task_id');
+			$.ajax({
+				type : "POST",
+				cache : false,
+				url : "<?php print bp . "/missionsapp/missions/bc/" . $this->bc; ?>",
+				data : {
+					'task_id' : intTask,
+					'marked' : !objItem.find('.marked').hasClass('hidden') ? "1" : "0"
+				},
+				success : function(strResponse) {
+					//alert(strResponse);
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$.alert(strResponse);
+						alert("Unexpected error: MG23m3f3kw");
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						alert("Unexpected error: GDs3mo3k0w");
+						$.alert(strResponse);
+						return;
+					}
+					else if (arrResponse["success"])
+					{
+						var intMission = 0;
+						if (!arrResponse["bypass"]) {
+							if (arrResponse["unmark"])
+								intMarkingTotal--;
+							else
+								intMarkingTotal++;
+						}
+						for (var intKey in arrMissionCounts)
+						{
+							var intCount = arrMissionCounts[intKey];
+							if (intMarkingTotal > intCount)
+							{
+								intMission++;
+							}
+						}
+						var intMissionsLeft = arrMissionCounts[intMission]-intMarkingTotal;
+						if (intMissionsLeft == 0)
+						{
+							intMission++;
+							intMissionsLeft = arrMissionCounts[intMission]-intMarkingTotal;
+						}
+						$('#missing_missions_text span').text(intMissionsLeft);
+						$('#current_medal .medal_img').attr('src','http://mashpia.com/ckids/missions/images/' + arrMedals[intMission]);
+						$('.medal_img.medal_' + intMission).removeClass('faded');
+						while (intMission < 9)
+						{
+							intMission++;
+							$('.medal_img.medal_' + intMission).addClass('faded');
+						}
+
+						if (arrResponse["unmark"])
+							objItem.find('.marked').addClass('hidden');
+						else
+							objItem.find('.marked').removeClass('hidden');
+					}
+					else if (arrResponse["failure"])
+					{
+						alert(arrResponse["failure"]);
+					}
+					else
+					{
+						alert("Unexpected error: SDGdsoekfk32");
+						//$.alert(strResponse);
+						return;
+					}
+				}
+			});
+		});
+	});
+	</script>
+</head>
+<body>
+	<div id="bg_tiles">
+		<img src="<?php print images; ?>/missionsapp/background.jpg" />
+		<img src="<?php print images; ?>/missionsapp/background.jpg" />
+		<img src="<?php print images; ?>/missionsapp/background.jpg" />
+		<img src="<?php print images; ?>/missionsapp/background.jpg" />
+		<img src="<?php print images; ?>/missionsapp/background.jpg" />
+		<img src="<?php print images; ?>/missionsapp/background.jpg" />
+		<img src="<?php print images; ?>/missionsapp/background.jpg" />
+		<img src="<?php print images; ?>/missionsapp/background.jpg" />
+		<img src="<?php print images; ?>/missionsapp/background.jpg" />
+		<img src="<?php print images; ?>/missionsapp/background.jpg" />
+		<img src="<?php print images; ?>/missionsapp/background.jpg" />
+		<img src="<?php print images; ?>/missionsapp/background.jpg" />
+	</div>
+	<div class="position_at_top">
+		<div class="header">
+				<a class="header_icon" href="<?php print bp; ?>/missionsapp/register/bc/<?php print $this->objUser->bar_code; ?>">
+					<img src="http://mashpia.com/ckids/missions/images/edit_logo.png" />
+					<div>View/Edit Profile</div>
+				</a>
+				<!--a class="header_icon" href="#">
+					<img src="http://mashpia.com/ckids/missions/images/CKids_logo.png" />
+					<div>About the army</div>
+				</a-->
+				<a class="header_icon" href="<?php print bp; ?>/missionsapp/">
+					<img src="http://mashpia.com/ckids/missions/images/log_out_logo.png" />
+					<div>Log out</div>
+				</a>
+			</div>
+		<div class="main_margin">
+
+			<img id="top_banner" src="<?php print images; ?>/missionsapp/top_banner.png"  />
+
+			<div class="student_info">
+				<div class="si_image">
+					<img src="<?php print bp; ?>/imgs/v/w/100/h/95/src/<?php print empty($this->objUser->image_id) ? "0.gif" : $this->objUser->image_id; ?>" />
+				</div>
+				<div class="si_name ellipsis" style="width:60vw">
+<?php 
+	$strName = $this->objUser->first_name . " " . $this->objUser->last_name;
+	//$intNameMaxLen = 24; 
+	//$strName = strlen($strName) > $intNameMaxLen ? substr($strName,0,$intNameMaxLen)."..." : $strName; 
+	print $strName;
+?>
+				</div>
+			</div>
+
+
+<?php
+	// Custom way of viewing missions where it shows them by being marked (network: 2)
+	if ($this->boolShowMarkedOnly)
+	{
+		$strCurrentHoliday = "";
+		if (!count($this->arrMarking))
+		{
+			print "No marked missions yet.";
+		}
+		foreach ($this->arrMarking as $objMarking)
+		{
+			$objMission = $this->arrMissions[$objMarking->task_id];
+			//$boolDateActive = $objMission->start_date <= time();
+			//$boolExpired = $objMission->end_date <= time();
+			//$boolMarked = isset($arrMarking[$objMission->task_id]);
+			//$boolAvailable = !$boolMarked && !$boolExpired && $boolDateActive;
+
+			if ($strCurrentHoliday != $objMission->holiday_name)
+			{
+				if ($strCurrentHoliday != "")
+					print "</div>";
+?>
+
+			<div class="mission_headline">
+				<?php print $objMission->holiday_name; ?>
+			</div>
+			<div class="missions_list">
+<?php
+				$strCurrentHoliday = $objMission->holiday_name;
+			}
+
+?>
+				<div class="mission_item mission_item_<?php print $objMission->task_id; ?>" task_id="<?php print $objMission->task_id; ?>">
+					<div class="mission_badge">
+						<img class="mission_item_border" src="<?php print images; ?>/missionsapp/missioncircle.png" />
+						<div class="mission_item_ph">
+							<div class="mission_item_mask">
+								<img class="mission_item_image" src="//v2.mashpia.com/imgs/v/w/220/h/220/src/<?php print $objMission->image_id == "0" ? "0.gif" : $objMission->image_id; ?>" />
+							</div>
+						</div>
+					</div>
+					<div class="mission_check_ph">
+						<a href="#" class="mission_check_mark">
+							<img class="marked" src="/images/icon_check.png" />
+						</a>
+					</div>
+					<div class="mission_description">
+						<?php print $objMission->description; ?>
+					</div>
+					<div class="mission_date">
+						<?php print date("F j, Y, g:i a", datetime_to_timestamp($objMarking->created)); ?>
+					</div>
+				</div>
+				
+<?php
+		}
+	}
+	else
+	{ 
+		// Default way of viewing missions (network: 1)
+		$strCurrentHoliday = "";
+		foreach ($this->arrMissions as $objMission)
+		{
+			if ($objMission->task_id <= 89)
+				continue;
+			$boolDateActive = $objMission->start_date <= time();
+			$boolExpired = $objMission->end_date <= time();
+			$boolMarked = isset($arrMarking[$objMission->task_id]);
+			$boolAvailable = !$boolMarked && !$boolExpired && $boolDateActive;
+
+			if ($strCurrentHoliday != $objMission->holiday_name)
+			{
+				if ($strCurrentHoliday != "")
+					print "</div>";
+?>
+
+			<div class="mission_headline">
+				<?php print $objMission->holiday_name; ?>
+			</div>
+			<div class="missions_list">
+<?php
+				$strCurrentHoliday = $objMission->holiday_name;
+			}
+
+?>
+				<div class="mission_item mission_item_<?php print $objMission->task_id; ?>" task_id="<?php print $objMission->task_id; ?>">
+					<div class="mission_badge">
+						<img class="mission_item_border" src="<?php print images; ?>/missionsapp/missioncircle.png" />
+						<div class="mission_item_ph">
+							<div class="mission_item_mask">
+								<img class="mission_item_image" src="//v2.mashpia.com/imgs/v/w/220/h/220/src/<?php print $objMission->image_id == "0" ? "0.gif" : $objMission->image_id; ?>" />
+							</div>
+						</div>
+					</div>
+					<div class="mission_whiteout<?php if ($boolDateActive) print " hidden"; ?>">
+
+					</div>
+					<div class="mission_check_ph">
+						<a href="#" class="mission_check_mark<?php if ($boolDateActive) print " available"; if ($boolExpired) print " none"; ?>">
+							<img class="marked<?php if (!$boolMarked) print " hidden"; ?>" src="/images/icon_check.png" />
+						</a>
+					</div>
+					<div class="mission_description">
+						<?php print $objMission->description; ?>
+					</div>
+					<div class="mission_date">
+						<?php print $objMission->date_label; ?>
+					</div>
+				</div>
+<?php
+		}
+	}
+	if (count($this->arrMarking)) 
+		print "</div>";
+
+?>
+				<div id="current_medal">
+					<img class="medal_img" src="http://mashpia.com/ckids/missions/images/<?php print $arrMedals[$intMission]; ?>" />
+
+				</div>
+				<div id="medal_list">
+					<div id="missing_missions_text"><span><?php print $intMissionsLeft; ?></span> missions to your next medal!</div>
+					<span>
+						<img class="medal_0 medal_img" src="http://mashpia.com/ckids/missions/images/Yom%20Tov%20Champ%20Medal%20Back%20-%20White.png" />
+
+						<img class="medal_1 medal_img<?php if ($intMission < 1) print " faded"; ?>" src="http://mashpia.com/ckids/missions/images/Yom%20Tov%20Champ%20Medal%20Back%20-%20Red.png" />
+						<img class="medal_2 medal_img<?php if ($intMission < 2) print " faded"; ?>" src="http://mashpia.com/ckids/missions/images/Yom%20Tov%20Champ%20Medal%20Back%20-%20Orange.png" />
+						<img class="medal_3 medal_img<?php if ($intMission < 3) print " faded"; ?>" src="http://mashpia.com/ckids/missions/images/Yom%20Tov%20Champ%20Medal%20Back%20-%20Yellow.png" />
+						<img class="medal_4 medal_img<?php if ($intMission < 4) print " faded"; ?>" src="http://mashpia.com/ckids/missions/images/Yom%20Tov%20Champ%20Medal%20Back%20-%20Green.png" />
+					</span>
+					<span>
+						<img class="medal_5 medal_img<?php if ($intMission < 5) print " faded"; ?>" src="http://mashpia.com/ckids/missions/images/Yom%20Tov%20Champ%20Medal%20Back%20-%20Blue.png" />
+						<img class="medal_6 medal_img<?php if ($intMission < 6) print " faded"; ?>" src="http://mashpia.com/ckids/missions/images/Yom%20Tov%20Champ%20Medal%20Back%20-%20Purple.png" />
+						<img class="medal_7 medal_img<?php if ($intMission < 7) print " faded"; ?>" src="http://mashpia.com/ckids/missions/images/Yom%20Tov%20Champ%20Medal%20Back%20-%20Brown.png" />
+						<img class="medal_8 medal_img<?php if ($intMission < 8) print " faded"; ?>" src="http://mashpia.com/ckids/missions/images/Yom%20Tov%20Champ%20Medal%20Back%20-%20Gray.png" />
+						<img class="medal_9 medal_img<?php if ($intMission < 9) print " faded"; ?>" src="http://mashpia.com/ckids/missions/images/Yom%20Tov%20Champ%20Medal%20Back%20-%20Black.png" />
+					</span>
+
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>

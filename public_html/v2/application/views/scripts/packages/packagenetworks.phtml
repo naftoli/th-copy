@@ -1,0 +1,58 @@
+<?php include "config.phtml";
+	$strUrl = "";
+	if(isset($this->intHost))
+	{
+		$strUrl .= "host_id/".$this->intHost;
+	}
+	else
+	{
+		$strUrl .="";
+	}	
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Packages Networks</span>
+	</div>
+	<div class="col_content">		
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<form name="packagenetworks" id="packagenetworks" method="post" action="">
+					<ul>
+<?php if($this->arrNetworks)
+	{
+?>
+						<li>
+							<a class="link" href="<?php echo $sn; ?>/packages/packagelist/<?php print $strUrl; ?>">
+								<div class="icon"></div>
+								<div class="title">> Skip to Package List</div>
+							</a>
+						</li>
+					
+<?php
+					foreach ($this->arrNetworks as $objNetworks)
+					{
+?>
+						<li>
+							<a class="link" href="<?php echo $sn; ?>/packages/packagelist/network_id/<?php echo $objNetworks->institution_id; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php echo $objNetworks->name; ?></div>
+							</a>
+						</li>
+<?php		
+					}
+?>
+<?php
+	} else {
+?>
+						<li>
+							There are no networks for this host
+						</li>
+<?php
+	}
+?>
+					</ul>
+				</form>
+			</div>
+		</div>		
+	</div>
+</div>

@@ -1,0 +1,382 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script type="text/javascript">
+var reportlegacypoints = null;
+$(document).ready(function () {
+	var slider = $('.slider:last');
+
+	$(this).delay(1).queue(function () {
+		$(this).dequeue();
+		$('.slider:last input.icheck').iphoneStyle({});
+	});
+	$('.slider:last .accordion li h3').click(function() {
+		$(this).nextAll().slideToggle('fast');
+		$(this).parents('li').toggleClass('open');
+		//else if ($(this).closest('.accordion').find('.selected').length)
+		//	$(this).closest('.accordion').find('.select_icon').removeClass('hidden');
+	});
+	$(".slider:last .date").datepicker();
+	slider.find('.output_report').click(function () {
+		reportlegacypoints.load_report_data({});
+	});
+
+	reportlegacypoints = {
+		'buffer' : {},
+		'path' : '<?php print $sn . '/reports/reportlegacypoints' . $strParamPath; ?>',
+		'init' : function () {
+			var self = reportlegacypoints;
+			self.progress_bar(100);
+			self.li_template = slider.find('.li_template').clone(true);
+			slider.find('.li_template').remove();
+		},
+		'progress_bar' : function (intPercentage, boolAnimation) {
+			var intMaxWidth = slider.find('.bar_ridge').width()-2;
+			/*if (boolAnimation)
+				slider.find('.bar_progress').animate({
+					width : intMaxWidth/100*intPercentage
+				});
+			else*/
+				slider.find('.bar_progress').css({
+					width : intMaxWidth/100*intPercentage
+				});
+		},
+		'load_report_data' : function (arrParams) {
+			var self = reportlegacypoints;
+			if (!self)
+				return;
+			var intMaxPostSize = 30;
+			if (!arrParams.row_start)
+				arrParams.row_start = 0;
+			var arrPost = {
+				'start_date' : slider.find('.start_date').val(),
+				'start_date_on' : slider.find('.start_date_on:checked').length,
+				'end_date' : slider.find('.end_date').val(),
+				'end_date_on' : slider.find('.end_date_on:checked').length
+			};
+			if (!arrParams.started) {
+				self.user_ids = null;
+				slider.find('.bar_progress.waiting').removeClass('waiting');
+				self.progress_bar(0);
+				arrPost.process = 'user_ids';
+				slider.find('.bar_header').html("Starting");
+			}
+			if (self.user_ids) {
+				arrPost.process = 'points';
+				var arrSlice = self.user_ids.slice(arrParams.row_start, arrParams.row_start+intMaxPostSize);
+				if (!arrSlice)
+					return;
+				arrPost.user_ids = arrSlice;
+				slider.find('.bar_header').html("Loading Report...");
+			}
+			if (!arrPost.process)
+				return;
+			$.ajax({
+				type : "POST",
+				cache : false,
+				url : reportlegacypoints.path,
+				dataType : "text",
+				data: arrPost,
+				success : function(strResponse) {
+					var objError = $(".slider:last .error_status");
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						objError.html("Sorry, there was an error: VR-RLP106-1845g4").removeClass("hidden");
+						$.alert(strResponse);
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						objError.html("Sorry, there was an error: VR-RLP107-874446").removeClass("hidden");
+						$.alert(strResponse);
+						return;
+					} else {
+						if (arrResponse["error"]) {
+							objError.html(arrResponse["error"]).removeClass("hidden");
+						} else if (arrResponse["success"] == "true") {
+							if (arrResponse.user_ids) {
+								self.user_ids = arrResponse.user_ids;
+								arrParams.started = true;
+								self.load_report_data(arrParams);
+							} else {
+								arrParams.row_start += intMaxPostSize
+								$.extend(self.buffer,arrResponse.user_details);
+								if (self.user_ids.length <= arrParams.row_start)
+								{
+									slider.find('.bar_header').html("Report Complete");
+									self.progress_bar(100);
+									self.report_output(self.buffer);
+								} else {
+									self.progress_bar((arrParams.row_start/self.user_ids.length)*100,1);
+									self.load_report_data(arrParams);
+								}
+							}
+						} else {
+							objError.html("Sorry, there was an error: VR-RLP108-1h8gfs").removeClass("hidden");
+							$.alert(arrResponse);
+						}
+					}
+				}
+			});
+		},
+		'report_output' : function (arrRows) {
+			var self = reportlegacypoints;
+			var arrRowsHintArray = [];
+			for (var intKey in arrRows) {
+				arrRowsHintArray.push(arrRows[intKey]);
+			}
+			var arrRowsSorted = self.sortByKey(arrRowsHintArray, 'first_name');
+			arrRowsSorted = self.sortByKey(arrRowsSorted, !slider.find('.sort_points:checked').length ? 'class' : 'points');
+			if (slider.find('.sort_points:checked').length)
+				arrRowsSorted.reverse();
+			self.report_generate(arrRowsSorted);
+		},
+		'report_generate' : function (arrRows) {
+			var self = reportlegacypoints;
+			slider.find('.report_list li:not(.header)').remove();
+			for (var intRow in arrRows) {
+				var objData = arrRows[intRow];
+				var objRow = self.li_template.clone(true);
+				objRow.find('.user_id').html(objData.user_id);
+				objRow.find('.class').html(objData['class']);
+				objRow.find('.first_name').html(objData['first_name']);
+				objRow.find('.last_name').html(objData['last_name']);
+				objRow.find('.points').html(objData['points'], 2);
+				slider.find('.report_list').append(objRow);
+			}
+			slider.find('.report_output').removeClass('hidden');
+		},
+		'round' : function (intVal, intDecimal) {
+			if (!intDecimal)
+				return Math.round(intVal);
+			else {
+				intDecimal = Math.pow(10, intDecimal);
+			return Math.round(intVal*intDecimal) / intDecimal;
+			}
+		},
+		'sortByKey' : function (array, key) {
+			return array.sort(function(a, b) {
+				var x = a[key];
+				var y = b[key];
+
+				if (typeof x == "string")
+				{
+					x = x.toLowerCase();
+					y = y.toLowerCase();
+				}
+
+				return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+			});
+		}
+	};
+	reportlegacypoints.init();
+});
+</script>
+<div class="slider reportlegacypoints">
+	<style type="text/css">
+		.loading_bar {
+			position: relative;
+		}
+		.loading_bar .bar_ridge {
+			border:1px solid #000;
+			background-color: #fff;
+			display: inline-block;
+			width:280px;
+			height:25px;
+		}
+		.loading_bar .bar_ridge .bar_progress {
+			background-color: #777;
+			margin:1px;
+			height:23px;
+			width:0px;
+		}
+		.loading_bar .bar_ridge .bar_progress.waiting {
+			background-color: #eee;
+		}
+		.slider:last-child h4 {
+			padding:0 0 3px 6px;
+		}
+		.button {
+			float:none;
+			display: inline-block;
+		}
+
+		.header {
+			background-color:#666 !important;
+			-webkit-border-top-left-radius: 6px;
+			-webkit-border-top-right-radius: 6px;
+			-moz-border-radius-topleft: 6px;
+			-moz-border-radius-topright: 6px;
+			border-top-left-radius: 6px;
+			border-top-right-radius: 6px;
+			border: 1px solid #ccc;
+			color:#fff;
+			border-width: 1px 1px 0 1px;
+		}
+		li:not(.header) .title>div {
+			width: 190px;
+			overflow:hidden;
+			text-overflow:ellipsis;
+			white-space:nowrap;
+		}
+		div.lists li.header {
+			padding-bottom: 0;
+			padding-top: 0;
+		}
+		div.lists li.header .title:not(:last-child) {
+			border-right: 1px solid #777;
+		}
+		div.lists li:not(.header) .title:not(:last-child) {
+			border-right: 1px solid #ddd;
+		}
+		div.lists li .title:not(:first-child) {
+			padding-left: 8px;
+		}
+		div.lists li .title, div.lists li .content {
+			height:28px;
+		}
+		.report_output {
+			margin-top:10px;
+		}
+	@media print {
+		.header, .body_header_left, .body_header_right, .left_menu, .noprint, #nav, .col_title {
+			display: none !important;
+		}
+		#content {
+			overflow:visible !important;
+			background:none !important;
+			width:auto !important;
+		}
+		#wrapper, #content .slider, #content .slider_container, #content .col_content {
+			float:none !important;
+			width:auto !important;
+			height:auto !important;
+		}
+		#content .col_content {
+			padding:0 !important;
+		}
+		.col_title_bg {
+			background:none !important;
+			height:0 !important;
+			margin:0 !important;
+		}
+		div.module {
+			margin-right:0;
+		}
+		.slider_container  {
+			margin-left:0 !important;
+		}
+		.slider_container .slider {
+			display:none;
+		}
+		.slider_container .slider:last-child {
+			display:block;
+		}
+		.page-break {
+			page-break-after: always;
+		}
+		.more_options {
+			display:none;
+		}
+		.loading_bar {
+			display:none;
+		}
+		#footer_links {
+			visibility: hidden;
+		}
+	}
+	</style>
+	<div class="col_title">
+		<span>Store Balance</span>
+	</div>
+	<div class="col_content">
+		<div class="more_options">
+			<form class="report_options_form">
+				<div class="module accordion closed form settings">
+					<div class="module_content list_expand">
+						<ul>
+							<li class="">
+								<div class="select_icon hidden"></div>
+								<h3>
+									<span class="icon"></span> <div class="text" style="">Report Options</div>
+								</h3>
+								<p>
+									<div class="module lists collapsible options_menu">
+										<div class="module_content lists">
+											<ul>
+												<li>
+													<span class="label"><?php print text("Sort By [|Points|]"); ?>:</span>
+													<span class="input" style="margin: 4px 0px 0px 1px;">
+														<input type="checkbox" class="icheck sort_points" name="sort_points" value="1" />
+													</span>
+												</li>
+												<li>
+													<span class="label">Start Date:</span>
+													<span class="input">
+														<div style="float:left;margin: 4px 30px 0px 1px;">
+															<input type="checkbox" class="icheck start_date_on" name="start_date_on" value="1" />
+														</div>
+														<input style="padding-left:4px;width:160px" placeholder="MM/DD/YYYY" type="text" class="noinput required date start_date" name="start_date" />
+													</span>
+												</li>
+												<li>
+													<span class="label">End Date:</span>
+													<span class="input">
+														<div style="float:left;margin: 4px 30px 0px 1px;">
+															<input type="checkbox" class="icheck end_date_on" name="end_date_on" value="1" />
+														</div>
+														<input style="padding-left:4px;width:160px" placeholder="MM/DD/YYYY" type="text" class="noinput required date end_date" name="end_date" />
+													</span>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="error_status hidden"></div>
+		<div class="loading_bar">
+			<table border="0" width="97%" height="48">
+				<tr>
+					<td style="padding-left:15px;">
+						<a class="button output_report">Display Report</a>
+					</td>
+					<td width="400" style="text-align:center;" class="">
+						<div class="bar_header">
+							Not Started
+						</div>
+						<div class="bar_ridge">
+							<div class="bar_progress waiting"></div>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="report_output hidden">
+			<div class="module lists forms menu_list" id="lists">
+				<div class="module_content">
+					<ul class="report_list">
+						<li class="header">
+							<div class="title" style="width:120px"><div><div class="textwrapper">Grade<span class="ui-icon ui-icon-hidden"></span></div></div></div>
+							<div class="title" style="width:210px"><div><div class="textwrapper">First Name<span class="ui-icon ui-icon-hidden"></span></div></div></div>
+							<div class="title" style="width:210px"><div><div class="textwrapper">Last Name<span class="ui-icon ui-icon-hidden"></span></div></div></div>
+							<div class="title" style="width:100px"><div><div class="textwrapper">Store Balance<span class="ui-icon ui-icon-hidden"></span></div></div></div>
+						</li>
+						<li class="li_template">
+							<!--div class="title user_id" style="width:20px"><div></div></div-->
+							<div class="title class" style="width:120px"><div></div></div>
+							<div class="title first_name" style="width:210px"><div></div></div>
+							<div class="title last_name" style="width:210px"><div></div></div>
+							<div class="title points" style="width:100px"><div></div></div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,375 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script type="text/javascript">
+	function build_second_list()
+	{
+		var intClasses = Object.keys(allSelectedUsers).length;
+		$("#slider_groupedpausing .selected_user_count").html(intClasses);
+		if (intClasses)
+			$("#slider_groupedpausing #idcard_section2").fadeIn();
+		else
+		{
+			$("#slider_groupedpausing #idcard_section2").fadeOut();
+		}
+		var strHtml = "";
+		if (!$("#slider_groupedpausing #secondlist_header").length)
+		{
+			strHtml += '<li id="secondlist_header"><div class="title" style="width:260px"><?php print text("Name"); ?></div>';
+			strHtml += '<div style="float:right;padding-top:2px">&nbsp;</div>';
+			strHtml += '<div class="extrabox"><?php print text("[|Class|]"); ?></div>';
+			strHtml += '</li>';
+		}
+		for (var intUser in allSelectedUsers)
+		{
+			if ($("#slider_groupedpausing #selected_" + intUser).length)
+				$("#slider_groupedpausing #selected_" + intUser).remove();
+			var strFirstName = arrUsers[intUser]["first_name"];
+			var strLastName = arrUsers[intUser]["last_name"];
+			var arrClassIds = arrdUserClassIds[intUser];
+			var strClasses = "";
+			var intItr2 = 0;
+			for (var intItr in arrClassIds)
+			{
+				if (intItr2)
+					strClasses += ", ";
+				var intClass = arrClassIds[intItr];
+				strClasses += $.trim(arrClasses[intClass]["grade"] + " " + arrClasses[intClass]["sub"]);
+				intItr2++;
+			}
+			strHtml += '<li id="selected_' + intUser + '"><div class="title" style="width:260px">' + strFirstName + ' ' + strLastName + '</div>';
+			strHtml += '<input type="hidden" class="user_id" value="' + intUser + '" />';
+			strHtml += '<input type="hidden" class="class_ids" value="' + arrClassIds.join(",") + '" />';
+			strHtml += '<div style="float:right;padding-top:2px"><span><a class="button fn_remove_selection"><?php print text("Remove Selection"); ?></a></span></div>';
+			strHtml += '<div class="extrabox">' + strClasses + '</div>';
+			strHtml += '</li>';
+		}
+		$("#slider_groupedpausing #idcard_section2 .list ul").html(strHtml);
+		// Remove second list item
+		$("#slider_groupedpausing .fn_remove_selection").bind("click", function () {
+			var objLi = $(this).closest("li");
+			var arrClassIds = objLi.find(".class_ids").val().split(/,/);
+			var intUser = objLi.find(".user_id").val();
+			for (var intItr in arrClassIds)
+			{
+				var intClassId = arrClassIds[intItr];
+				var strDataPoint = $("#slider_groupedpausing #class_" +intClassId).val();
+				strDataPoint = strDataPoint.replace(new RegExp("&?" + intUser + "=1"), "");
+				strDataPoint = strDataPoint.replace(/^&/, "");
+				var arrDataPoints = strDataPoint.split(/&/);
+				$("#slider_groupedpausing #li_class_" + intClassId + " .lable_count span").html(strDataPoint.length ? arrDataPoints.length : "None");
+				$("#slider_groupedpausing #class_" +intClassId).val(strDataPoint);
+			}
+			delete allSelectedUsers[intUser];
+			objLi.fadeOut().queue(function () {
+				$(this).dequeue().remove();
+			});
+			var intClasses = Object.keys(allSelectedUsers).length;
+			$("#slider_groupedpausing .selected_user_count").html(intClasses);
+			if (intClasses)
+				$("#slider_groupedpausing #idcard_section2").fadeIn();
+			else
+			{
+				$("#slider_groupedpausing #idcard_section2").fadeOut();
+			}
+		});
+	}
+
+	var allSelectedUsers = {};
+	var arrUsers = <?php print json_encode($this->arrUsers); ?>;
+	var arrUserClasses = <?php print json_encode($this->arrUserClasses); ?>;
+	var arrClasses = <?php print json_encode($this->arrClasses); ?>;
+	var arrdUserClassIds = <?php print json_encode($this->arrdUserClassIds); ?>;
+	var arrClassStudents = <?php print json_encode($this->arrClassStudents); ?>;
+
+	$(document).ready(function () {
+		$('#slider_groupedpausing #module_accordion li h3').nextAll().hide();
+		$('#slider_groupedpausing #module_accordion li h3').click(function(){
+			$(this).nextAll().slideToggle('fast');
+			$(this).parents('li').toggleClass('open');
+		});
+		$('#slider_groupedpausing .add_pause').click(function () {
+			var arrParams = {};
+			arrParams.arrSelectedUsers = Object.keys(allSelectedUsers);
+			arrParams.strPostType = 'add_pause';
+			arrParams.pause_start = $('#slider_groupedpausing .pause_start').val();
+			arrParams.pause_end = $('#slider_groupedpausing .pause_end').val();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				url : '<?php print $sn . '/campaigns/groupedpausing' . $strParamPath; ?>',
+				dataType : "text",
+				data: arrParams,
+				success : function(strResponse) {
+					$(".slider:last .errors:not(.hidden)").addClass('hidden');
+					try {
+						var objResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$(".slider:last .main_status").html("Sorry, there was an error: VC-PM101-asd3f3").removeClass("hidden");
+						$.alert(strResponse);
+						return;
+					}
+					if (typeof(objResponse) != "object") {
+						$(".slider:last .main_status").html("Sorry, there was an error: VC-PM102-asdvfd").removeClass("hidden");
+						$.alert(strResponse);
+						return;
+					} else {
+						$(".slider:last .main_status").fadeOut();
+						if (objResponse["error"]) {
+							if (typeof(objResponse.error) == 'object') {
+
+								for (var strKey in objResponse.error)
+								{
+									$('.slider:last .' + strKey + '_error')
+										.html(objResponse.error[strKey])
+										.removeClass('hidden');
+								}
+							} else {
+								$(".slider:last .main_status").html(objResponse["error"]).removeClass("hidden");
+							}
+						} else if (objResponse["success"] == "true") {
+							$('.slider:last input.pause_start').val('');
+							$('.slider:last input.pause_end').val('');
+							$(".slider:last .main_status")
+								.html('Saved')
+								.removeClass("hidden")
+								.delay(1000)
+								.queue(function () {
+									$(this).dequeue().addClass('hidden');
+								});
+						} else {
+							$(".slider:last .main_status").html("Sorry, there was an error: VC-PM103-f3dd2a").removeClass("hidden");
+							$.alert(objResponse);
+						}
+					}
+				}
+			});
+		});
+
+		$("#slider_groupedpausing #idcard_section1 .data_point").bind("change", function (e) {
+			var arrDataPointObjects = $("#slider_groupedpausing #idcard_section1 .data_point");
+			allSelectedUsers = {};
+			for (var intItr=0; intItr!=arrDataPointObjects.length; intItr++)
+			{
+				var strSerializedData = $(arrDataPointObjects[intItr]).val();
+				var arrSerializedData = strSerializedData.split(new RegExp("&"));
+				for (intItr2 in arrSerializedData)
+				{
+					if (!arrSerializedData[intItr2].match(new RegExp("=")))
+						continue;
+					var arrKeyVal = arrSerializedData[intItr2].split(new RegExp(" *= *"));
+					allSelectedUsers[arrKeyVal[0]] = arrKeyVal[1];
+				}
+			}
+			build_second_list();
+		});
+		$("#slider_groupedpausing .fn_select_all_students").bind("click", function () {
+			for (var intItr in arrUserClasses)
+			{
+				if (!arrUsers[arrUserClasses[intItr]["user_id"]])
+					continue;
+				var objItem = $("#class_" + arrUserClasses[intItr]["class_id"]);
+				var strParam = objItem.val();
+				if (strParam.length)
+					strParam += "&";
+				strParam += arrUserClasses[intItr]["user_id"] + "=1";
+				objItem.val(strParam);
+				allSelectedUsers[arrUserClasses[intItr]["user_id"]] = 1;
+			}
+			for (var intClass in arrClassStudents)
+			{
+				if (!Object.keys(arrClassStudents[intClass]).length)
+					continue;
+				$("#li_class_" + intClass + " .lable_count span").html("All");
+			}
+			build_second_list();
+		});
+		$("#slider_groupedpausing .fn_reset_all_students").bind("click", function () {
+			for (var intItr in arrClasses)
+			{
+				var intClass = arrClasses[intItr]["class_id"];
+				if (!arrClassStudents[intClass] || !Object.keys(arrClassStudents[intClass]).length)
+					continue;
+				$("#slider_groupedpausing #class_" + intClass).val("");
+				$("#slider_groupedpausing #li_class_" + intClass + " .lable_count span").html("None");
+			}
+			$("#slider_groupedpausing #idcard_section2").fadeOut().queue(function () {
+				$(this).dequeue();
+				$("#slider_groupedpausing #idcard_section2 ul .list li").remove();
+			});
+		});
+		$('.slider:last .date.pause_start').datepicker({
+			changeMonth: true,
+			changeYear: true,
+			onClose: function( selectedDate ) {
+				$('.slider:last .date.pause_end').datepicker( "option", "minDate", selectedDate );
+			}
+		}).click(function (e) {
+			$(this).datepicker("show")
+		});
+		$('.slider:last .date.pause_end').datepicker({
+			changeMonth: true,
+			changeYear: true,
+			onClose: function( selectedDate ) {
+				$('.slider:last .date.pause_start').datepicker( "option", "maxDate", selectedDate );
+			}
+		}).click(function (e) {
+			$(this).datepicker("show")
+		});
+	});
+</script>
+<div class="slider" id="slider_groupedpausing">
+	<style type="text/css">
+		#idcard_section2, #idcard_section4 {
+			display: none;
+		}
+		ul .list ul {
+			background-color: #ddd;
+			min-width: 200px;
+		}
+		.extrabox {
+			float: left;
+			font-size: 15px;
+			font-weight: bold;
+			min-height: 26px;
+			width: 90px;
+			padding:6px 10px 0 2px
+		}
+		.textmsg li {
+			font-size: 12pt !important;
+			line-height: 30px !important;
+			padding: 6px !important;
+		}
+		.processing_status_loading {
+			padding:3px;
+		}
+		.report_options {
+			padding-top:3px;
+			padding-left:6px;
+		}
+		.report_options div {
+			margin: 2px;
+			padding: 0px 6px 0px 6px;
+			border: 1px outset #EAEAEA;
+			display: inline;
+			cursor: default;
+			white-space: nowrap;
+			line-height: 30px;
+		}
+		.report_options table {
+			margin: 2px;
+			border: 1px ridge #DDD;
+			cursor: default;
+		}
+		.report_option_select {
+			background-color: #DDD;
+			border: 1px inset #EAEAEA !important;
+		}
+		.date {
+			padding:3px !important;
+		}
+		.pause_module {
+			padding:6px 20px;
+		}
+		.pause_module td:not(:last-child) {
+			padding-right: 10px;
+		}
+		.pause_module input {
+			padding: 2px;
+			font-size:10pt;
+		}
+		.pause_module .header td {
+			text-shadow:2px 2px 2px rgba(0,0,0,0.3);
+		}
+	</style>
+	<div class="col_title">
+		<span>Grouped Pausing</span>
+	</div>
+
+	<div class="col_content">
+		<div id="idcard_section1">
+			<form method="POST" target="_blank" action="<?php print $sn . "/users/idcardsprint" . $strParamPath; ?>">
+				<h2>Student Selection</h2>
+				<input type="hidden" class="user_ids" name="user_ids" value="" />
+				<div style="margin-bottom:4px"><table width="96%" cellpadding="4" cellspacing="4"><tr><td>&nbsp;</td><td width="60"><span><a class="button fn_select_all_students">Select All Students</a></span></td><td width="6">&nbsp;</td><td width="60"><span><a class="button fn_reset_all_students">Reset All</a></span></td></tr></table></div>
+				<div class="module form lists">
+					<div class="module_content list">
+						<ul>
+<?php
+	if (!count($this->arrClasses))
+	{
+?>
+							<li>
+								<div class="title"><?php print text("Thre are no classes available."); ?></div>
+							</li>
+<?php
+	}
+	foreach ($this->arrClasses as $objClass)
+	{
+?>
+							<li id="li_class_<?php print $objClass->class_id; ?>">
+								<input type="hidden" class="class_id" value="<?php print $objClass->class_id; ?>"  />
+								<input class="data_point" type="hidden" id="class_<?php print $objClass->class_id; ?>" value="" />
+								<a class="link" href="<?php print $sn . "/checklist/users/permission/student/is_active/1/title/Students/zero/none/class_id/" . $objClass->class_id . "/container/li_class_" . $objClass->class_id . "/inputname/class_" . $objClass->class_id . $strParamPath; ?>">
+									<div class="icon"></div>
+									<div class="title">Class <?php print $objClass->grade . " " . $objClass->sub; ?></div>
+									<div class="lable_count" style="float:right;background-color:#fff;border:1px solid gray;margin:5px;padding:2px 12px 2px 12px;text-align:center;"><span><?php print isset($this->arrClassStudents[$objClass->class_id]) ? text("None") : ""; ?></span> <?php print text(isset($this->arrClassStudents[$objClass->class_id]) ? "Selected" : "Empty"); ?></div>
+								</a>
+							</li>
+<?php
+	}
+?>
+						</ul>
+					</div>
+				</div>
+			</form>
+			&nbsp;
+		</div>
+		<div id="idcard_section2">
+			<div class="module" id="module_accordion">
+				<div class="module_content list_expand numbered">
+					<ul>
+						<li>
+							<h3 id="awaiting_actions">
+								<span class="icon"></span> &nbsp;<span class="selected_user_count"></span> <?php print text("[|User(s)|] Selected"); ?>
+							</h3>
+							<p>
+								<div class="module form lists">
+									<div class="module_content list">
+										<ul></ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="module pause_module">
+				<form method="post" class="new_pause">
+					<table border="0" width="100%">
+						<tr>
+							<td width="120" align="center" style="text-shadow:2px 2px 2px rgba(0,0,0,0.3);">Add a Pause</td>
+							<td width="200">
+								Pause Start<br />
+								<input type="text" name="pause_start" class="pause_start date" name="pause_start" />
+								<div class="pause_start_error errors hidden"></div>
+							</td>
+							<td>
+								Pause End<br />
+								<input type="text" name="pause_end" class="pause_end date" name="pause_end" />
+								<div class="pause_end_error errors hidden"></div>
+							</td>
+							<td width="120">
+								<div class="button add_pause" style="float:right">Add New Pause</div>
+							</td>
+						</tr>
+					</table>
+					<div class="main_status hidden" style="padding:5px 15px;"></div>
+					<input type="submit" style="display:none;" />
+				</form>
+			</div>
+		</div>
+		&nbsp;
+	</div>
+</div>

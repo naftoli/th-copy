@@ -1,0 +1,81 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$strPermission = "";
+	if (isset($this->strPermission) && strlen($this->strPermission))
+		$strPermission = "/permission/" . $this->strPermission;
+?>
+<script language="javascript">
+	$(document).ready(function()
+	{
+		$('.slider:last .submit').click(function() {
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $(".slider:last #processing_status").html('<?php print text("Loading..."); ?>').fadeIn("slow"),
+				url : '<?php echo $sn . "/classes/classteachereditor" . $strPermission . $strParamPath; ?>',
+				dataType : "text",
+				data: $('.slider:last form').serialize(),
+				success : function(strResponse) {
+					if (strResponse == "1") {
+						$(".slider:last #processing_status").html("Saved.").fadeOut("slow");
+					} else {
+						$(".slider:last #processing_status").html(strResponse).fadeIn("slow");
+					}
+				}
+			});
+		});
+	});
+</script>
+<div class="slider">
+	<div class="col_title">
+		<span><?php print text('Assign [|' . $this->strPermission . "|] to [|Classes|]"); ?></span>
+	</div>
+	<div class="col_content">
+<?php
+	include("uimods/sliderefresh.phtml");
+?>
+		<form>
+			<div id="lists" class="module lists forms">
+				<div class="module_content">
+					<ul>
+<?php
+	if (!count($this->arrList))
+	{
+?>
+						<li>
+							<div class="icon"></div>
+							<div class="title"><?php print text("There are no [|classes|] are available."); ?></div>
+						</li>
+<?php
+	}
+	else
+	{
+		foreach ($this->arrList as $arrItem)
+		{
+?>
+						<li id="li_class_<?php print $arrItem["value"]; ?>">
+							<input type="hidden" name="class_<?php print $arrItem["value"]; ?>" id="class_<?php print $arrItem["value"]; ?>" value="<?php print @$this->arrEncodedClasses[$arrItem["value"]]; ?>" />
+							<a class="link" href="<?php print $sn . $arrItem["link"] . "/container/li_class_" . $arrItem["value"] . "/inputname/class_" . $arrItem["value"] .$strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php echo text('[|Class|]: ' . $arrItem['text']); ?></div>
+								<div class="lable_count" style="float:right;background-color:#fff;border:1px solid gray;margin:5px;padding:2px 12px 2px 12px;text-align:center;"><span><?php print $arrItem["count"]; ?></span></div>
+							</a>
+						</li>
+<?php
+		}
+?>
+						<li style="padding:8px 2px 8px 8px;">
+							<span><a href="#" class="button submit"><?php print text("Save"); ?></a></span>
+							<div class="clear"></div>
+						</li>
+						<div id="processing_status" style="padding:6px;display: none"></div>
+<?php
+	}
+?>
+					</ul>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

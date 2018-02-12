@@ -1,0 +1,1105 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script language="javascript">
+if (typeof $ != "undefined")
+{
+	$(document).ready(function() {
+		var objListsStandard3 = {
+			"arrParams" : {
+				"boolEditTamplte" : 0,
+				"objListContainer" : $(".slider:last .list_container"),
+				"arrLoadedData" : null,
+				"objTemplate" : {},
+				"intAutoRowCount" : 1,
+				"objLineNumberParams" : null,
+				"arrTimeoutHandle" : {
+					"image_preview_fadeout" : false,
+					"image_preview_fadeout2" : false,
+					"image_privew_failsafe" : false,
+					"keyup_trigger" : false
+				},
+				"arrData" : {}
+			},
+			"fn_new_row" : function () {
+				if (objListsStandard3.arrParams.arrLoadedData.arrConfigData.create_new) {
+					var objLatestRow = objListsStandard3.fn_generate_row(objListsStandard3.arrParams.arrLoadedData.arrConfigData.create_new.model, 1);
+					objLatestRow.addClass("fresh_row"); // a fresh row is a row that hasnt been affected yet
+					objLatestRow.addClass("dynamically_added");
+					objListsStandard3.fn_fix_hierarchy();
+					return objLatestRow;
+				}
+			},
+
+			"fn_list_validate" : function () {
+				var arrTables = objListsStandard3.arrParams.arrLoadedData.arrConfigData.tables;
+
+				var arrMissingFeildRows = {};
+				for (var strRequiredFeild in objListsStandard3.arrParams.arrRequiredData)
+				{
+					var arrRequiredFeilds = $.makeArray(objListsStandard3.arrParams.objListContainer.find(".data_" + strRequiredFeild));
+					arrRequiredFeilds.pop();
+					for (var intItr in arrRequiredFeilds)
+					{
+						var domRequiredFeild = arrRequiredFeilds[intItr];
+						var domRequiredInput = $(domRequiredFeild).find("input:[type='text']");
+						if (domRequiredInput.length && domRequiredInput.val().match(/^[ \t]*$/))
+						{
+							arrMissingFeildRows[intItr] = 1;
+						}
+					}
+				}
+				var arrRows = $.makeArray(objListsStandard3.arrParams.objListContainer.find(".list_row"));
+				if (Object.keys(arrMissingFeildRows).length) {
+					objListsStandard3.arrParams.objListContainer.find(".error_under").remove();
+					for (var intRow in arrMissingFeildRows)
+					{
+						var domDiv = $("<div></div>");
+						domDiv.addClass("error_under");
+						var domErrorListRow = $(arrRows[intRow]);
+						domErrorListRow.after(domDiv);
+						if (domErrorListRow.find(".line_number").length)
+							domDiv.css({
+								"padding-left" : parseInt(domErrorListRow.find(".line_number").css("width")) + 16
+							});
+						domDiv.fadeIn();
+						domDiv.html("<?php print text("Fill out all required feilds."); ?>");
+					}
+					return 0;
+				}
+
+				// Duplicates
+				var arrUniqueData = {};
+				for (var strTable in arrTables)
+				{
+					for (var strColumn in arrTables[strTable])
+					{
+						if (arrTables[strTable][strColumn].unique) {
+							arrUniqueData[arrTables[strTable][strColumn].data] = 1;
+						}
+					}
+				}
+
+				var arrDuplicateFeilds = {};
+				for (var strUniqueFeild in arrUniqueData)
+				{
+					var arrUniqueFeilds = $.makeArray(objListsStandard3.arrParams.objListContainer.find(".data_" + strUniqueFeild));
+					arrUniqueFeilds.pop();
+					for (var intItr in arrUniqueFeilds)
+					{
+						var domUniqueFeild = arrUniqueFeilds[intItr];
+						var domInput = $(domUniqueFeild).find("input:[type='text']");
+						var arrNameParams = domInput.attr("name").split(/:/);
+						var strCellName = arrNameParams[2];
+						if (!arrDuplicateFeilds[strCellName])
+							arrDuplicateFeilds[strCellName] = {};
+						if (!arrDuplicateFeilds[strCellName][domInput.val().toLowerCase()])
+							arrDuplicateFeilds[strCellName][domInput.val().toLowerCase()] = 0;
+						arrDuplicateFeilds[strCellName][domInput.val().toLowerCase()]++;
+					}
+				}
+				// remove items less than 1
+				for (var strFeildName in arrDuplicateFeilds)
+				{
+					for (var strValue in arrDuplicateFeilds[strFeildName])
+					{
+						if (arrDuplicateFeilds[strFeildName][strValue] < 2)
+							delete arrDuplicateFeilds[strFeildName][strValue];
+					}
+					if (!Object.keys(arrDuplicateFeilds[strFeildName]).length)
+						delete arrDuplicateFeilds[strFeildName];
+				}
+				var arrDuplicateFeildRows = {};
+				for (var strDuplicateFeild in arrDuplicateFeilds)
+				{
+					var arrRequiredFeilds = $.makeArray(objListsStandard3.arrParams.objListContainer.find(".data_" + strDuplicateFeild));
+					arrRequiredFeilds.pop();
+					for (var intItr in arrRequiredFeilds)
+					{
+						for (var strValue in arrDuplicateFeilds[strDuplicateFeild])
+						{
+							var domRequiredFeild = arrRequiredFeilds[intItr];
+							var domRequiredInput = $(domRequiredFeild).find("input:[type='text']");
+							if (domRequiredInput.val().toLowerCase() == strValue)
+							{
+								arrDuplicateFeildRows[intItr] = 1;
+							}
+						}
+					}
+				}
+				if (Object.keys(arrDuplicateFeildRows).length)
+				{
+					objListsStandard3.arrParams.objListContainer.find(".error_under").remove();
+					for (var intRow in arrDuplicateFeildRows)
+					{
+						var domDiv = $("<div></div>");
+						domDiv.addClass("error_under");
+						var domErrorListRow = $(arrRows[intRow]);
+						domErrorListRow.after(domDiv);
+						if (domErrorListRow.find(".line_number").length)
+							domDiv.css({
+								"padding-left" : parseInt(domErrorListRow.find(".line_number").css("width")) + 16
+							});
+						domDiv.fadeIn();
+						domDiv.html("<?php print text("Duplicate value found."); ?>");
+					}
+					return 0;
+				}
+				return 1;
+			},
+
+			"fn_list_save" : function () {
+				objListsStandard3.fn_list_data_update();
+				if (!objListsStandard3.fn_list_validate())
+					return 0;
+
+				$.ajax({
+					type : "POST",
+					cache : false,
+					start: $(".slider:last .processing_status").html('Loading...').fadeIn(),
+					url : '<?php echo $sn . "' + objListsStandard3.arrParams.arrConfigData.data_source + '" . $strParamPath; ?>',
+					dataType : "text",
+					data: {
+						'arrParams' : serialize(objListsStandard3.arrParams.arrConfigData),
+						'arrData' : serialize(objListsStandard3.arrParams.arrData),
+						'save' : 'true'
+					},
+					success : function(strResponse) {
+						objListsStandard3.arrParams.objListContainer.find(".error_under").remove();
+						try {
+							var arrResponse = jQuery.parseJSON(strResponse);
+						} catch(e) {
+							$(".slider:last .processing_status").html("<?php print text("Sorry, there was an error"); ?>: VL-S2101-33FSDS");
+							$.dumper(strResponse);
+							return;
+						}
+						if (!arrResponse || typeof(arrResponse) != "object") {
+							$(".slider:last .processing_status").html("<?php print text("Sorry, there was an error"); ?>: VL-S2102-FF94SF");
+							$.alert(strResponse);
+							return;
+						} else {
+							if (arrResponse["error"]) {
+								if (typeof(arrResponse["error"]) == "object") {
+									// go through each error, find the feilds and display the error
+									for (var strKey in arrResponse["error"])
+									{
+										var arrColumn = $.makeArray(objListsStandard3.arrParams.objListContainer.find(".data_" + strKey));
+										for (var intItr in arrColumn)
+										{
+											var domInput = $(arrColumn[intItr]).find("input");
+											if (domInput.length) {
+												for (var intItr2 in arrResponse["error"][strKey])
+												{
+													if (domInput.val() == arrResponse["error"][strKey][intItr2].value)
+													{
+														var domDiv = $("<div></div>");
+														domDiv.addClass("error_under");
+														var domErrorListRow = $(arrColumn[intItr]).closest(".list_row");
+														domErrorListRow.after(domDiv);
+														if (domErrorListRow.find(".line_number").length)
+															domDiv.css({
+																"padding-left" : parseInt(domErrorListRow.find(".line_number").css("width")) + 16
+															});
+														domDiv.fadeIn();
+														domDiv.html(arrResponse["error"][strKey][intItr2].message);
+													}
+												}
+											}
+										}
+									}
+								}
+								$(".slider:last .processing_status").html(arrResponse["error"]);
+								//$.alert(arrResponse);
+							} else if (arrResponse["success"] == "true") {
+								$(".slider:last .processing_status").html('Saved.').delay(2000).queue(function () {
+									$(this).dequeue().fadeOut();
+								});
+								if (objListsStandard3.arrParams.arrConfigData.onsave == "refresh")
+								{
+									slideRefresh();
+								}
+							} else {
+								alert("<?php print text("Sorry, there was an error"); ?>: VU-S2105-213FS2");
+								$.alert(arrResponse);
+							}
+						}
+					}
+				});
+			},
+
+			"fn_list_data_update" : function () {
+				var arrCurrentData = $(".slider:last form").serializeArray();
+				objListsStandard3.arrParams.arrData.tables = {};
+
+				for (var intItr in arrCurrentData)
+				{
+					var objCell = arrCurrentData[intItr];
+					if (!objCell.value.length)
+						continue;
+					var arrCellPosition = objCell.name.split(/:/);
+					if (!objListsStandard3.arrParams.arrData.tables[arrCellPosition[0]])
+						objListsStandard3.arrParams.arrData.tables[arrCellPosition[0]] = {};
+					if (!objListsStandard3.arrParams.arrData.tables[arrCellPosition[0]][arrCellPosition[1]])
+						objListsStandard3.arrParams.arrData.tables[arrCellPosition[0]][arrCellPosition[1]] = {};
+					objListsStandard3.arrParams.arrData.tables[arrCellPosition[0]][arrCellPosition[1]][arrCellPosition[2]] = objCell.value;
+				}
+				// purge last row if create new is enabled
+				if (objListsStandard3.arrParams.arrLoadedData.arrConfigData.create_new)
+				{
+					for (var strTable in objListsStandard3.arrParams.arrData.tables)
+					{
+						var arrKeys = Object.keys(objListsStandard3.arrParams.arrData.tables[strTable]);
+						var intLastKey = arrKeys[arrKeys.length-1];
+						delete objListsStandard3.arrParams.arrData.tables[strTable][intLastKey];
+					}
+				}
+				//$.alert(objListsStandard3.arrParams.arrData.tables);
+			},
+
+			"fn_trigger_new" : function (objThis) {
+				//objListsStandard3.fn_unbind_new_row_trigger(objLatestRow);
+				if (!objListsStandard3.arrParams.arrLoadedData.arrConfigData.create_new)
+					return;
+				// check if the row being edited is altered from its original form
+				var objContainer = $(objThis);
+				var arrRowColumns = $.makeArray(objContainer.find("div"));
+				var boolChangeFound = false;
+				for (var intItr in arrRowColumns)
+				{
+					var objInput = $(arrRowColumns[intItr]).find('input:[type="text"],[type="hidden"]');
+					if (objInput.length) {
+						var strInitValue = objInput.data("init_value");
+						if (!strInitValue)
+							strInitValue = "";
+						if (objInput.val() != strInitValue)
+						{
+							boolChangeFound = true;
+						}
+					}
+				}
+				var objLatestRow = objListsStandard3.arrParams.objListContainer.find(".list_row:last"); // get the last appended row
+				if (objContainer[0].className.match(/fresh_row/)) {
+					if (boolChangeFound && objLatestRow != objContainer) {
+						objLatestRow.removeClass("fresh_row");
+						var objNewLatestRow = objListsStandard3.fn_new_row();
+						objListsStandard3.fn_init_row(objNewLatestRow,1);
+						objLatestRow.find(".temp_hidden").removeClass("temp_hidden");
+					}
+				} else {
+					if (!boolChangeFound) {
+						objLatestRow.remove();
+						objContainer.addClass("fresh_row");
+						objListsStandard3.fn_bind_new_row_trigger(objContainer.prev());
+						objListsStandard3.arrParams.intAutoRowCount--;
+					} else {
+						objListsStandard3.fn_unbind_new_row_trigger(objContainer.prev());
+					}
+				}
+			},
+
+			// required for image preview mouseout
+			"fn_lost_focus" : function () {
+				var objImagePreview = $(objListsStandard3.arrParams.objListContainer).find(".input_image_preview");
+				if (!objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout"]) {
+					objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout"] = window.setTimeout(function () {
+						objImagePreview.fadeOut("fast");
+						objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout"] = false;
+					}, 200);
+				}
+			},
+
+			// create all bindings required for ui to function
+			"fn_init_ui" : function () {
+				var objImagePreview = $(objListsStandard3.arrParams.objListContainer).find(".input_image_preview");
+				var objClearBackground = $(objListsStandard3.arrParams.objListContainer).find(".clear_background");
+				var objImageUploader = $(objListsStandard3.arrParams.objListContainer).find(".input_image_uploader");
+				var objImageIdInput = $(objListsStandard3.arrParams.objListContainer).find("#listeditor_image_id");
+				var objSubmitButton = $(".slider:last").find(".listeditor_submit");
+				objSubmitButton.click(objListsStandard3.fn_list_save);
+				// create image preview tip to click to edit
+				objImagePreview.mouseover(function () {
+					if (objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout"])
+						window.clearTimeout(objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout"]);
+					objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout"] = false;
+					if (objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout2"])
+						window.clearTimeout(objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout2"]);
+					objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout2"] = false;
+					$(this).find("div").fadeIn('fast');
+				});
+				objImagePreview.mouseout(function () {
+					objListsStandard3.fn_lost_focus();
+					if (!objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout2"]) {
+						objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout2"] = window.setTimeout(function () {
+							objImagePreview.find("div").fadeOut('fast');
+							objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout2"] = false;
+						}, 200);
+					}
+				});
+				objImagePreview.find("img").load(function () {
+					$(this).css("visibility", "visible");
+				});
+				// upload new image
+				objImagePreview.click(function () {
+					if (objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout"])
+						window.clearTimeout(objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout"]);
+					objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout"] = false;
+					var objPosition = $(this).position();
+					objImageUploader.css({
+						"top" : objPosition.top,
+						"left" : objPosition.left
+					});
+					$(this).fadeOut();
+					objImageUploader.fadeIn();
+					objImageUploader.css({
+						"z-index" : 1000,
+						"visibility" : "visible"
+					});
+					// make the clear background fit to screen
+					objClearBackground.css({
+						"z-index" : 999,
+						"display" : "block",
+						"top" : 0,
+						"left" : 0,
+						"height" : $(document).height(),
+						"width" : $(document).width()
+					});
+					var objCurrentRow = $(objListsStandard3.arrParams.objListContainer).find(".row" + objImagePreview.find(".current_row").val()).parent();
+					var strImage = objCurrentRow.find(".input_image .image_id").val();
+					if (!strImage)
+						strImage = "0.gif";
+					$(".slider:last .list_container .input_image_uploader iframe")[0].contentWindow.fn_set_image(strImage);
+				});
+				objClearBackground.click(function () {
+					objClearBackground.css({
+						"display" : "none"
+					});
+					objImageUploader.fadeOut();
+				});
+				// handel when an image was uploaded
+				objImageIdInput.bind("updated", function () {
+					var objCurrentRow = $(objListsStandard3.arrParams.objListContainer).find(".row" + objImagePreview.find(".current_row").val()).parent();
+					objCurrentRow.find(".input_image img").attr("src", '<?php print $sn; ?>/imgs/v/src/' + $(this).val() + "/rand/" + Math.floor(Math.random()*1000000));
+					objCurrentRow.find(".input_image .image_id").val($(this).val());
+					objListsStandard3.fn_trigger_new(objCurrentRow);
+				});
+				var arrRows = $.makeArray(objListsStandard3.arrParams.objListContainer.find(".list_row"));
+				for (var intItr=0; intItr!=arrRows.length; intItr++)
+				{
+					objListsStandard3.fn_init_row(arrRows[intItr], intItr==arrRows.length-1);
+				};
+			},
+
+			// bind the events responsible inorder to trigger the function "fn_trigger_new"
+			"fn_unbind_new_row_trigger" : function (objContainer) {
+				$(objContainer).find('input:[type="checkbox"],[type="radio"]').unbind("click");
+				$(objContainer).find('input:[type="text"]').unbind("keyup");
+				$(objContainer).find('textarea').unbind("keyup");
+				$(objContainer).find('select').unbind("change");
+				$(objContainer).find('input:[type="text"]').unbind("change");
+			},
+
+			// bind the events required inorder to trigger the function "fn_trigger_new"
+			"fn_bind_new_row_trigger" : function (objContainer) {
+				$(objContainer).find('input:[type="checkbox"],[type="radio"]').bind("click", function () {
+					objListsStandard3.fn_trigger_new($(this).closest(".list_row"));
+				});
+				$(objContainer).find('input:[type="text"]').bind("keyup", function () {
+					window.clearInterval(objListsStandard3.arrParams.arrTimeoutHandle["keyup_trigger"]);
+					objListsStandard3.arrParams.arrTimeoutHandle["keyup_trigger"] = window.setTimeout(objListsStandard3.fn_trigger_new, 50, $(this).closest(".list_row"));
+				});
+				$(objContainer).find('textarea').bind("keyup", function () {
+					window.clearInterval(objListsStandard3.arrParams.arrTimeoutHandle["keyup_trigger"]);
+					objListsStandard3.arrParams.arrTimeoutHandle["keyup_trigger"] = window.setTimeout(objListsStandard3.fn_trigger_new, 50, $(this).closest(".list_row"));
+				});
+				$(objContainer).find('select').bind("change", function () {
+					objListsStandard3.fn_trigger_new($(this).closest(".list_row"));
+				});
+				$(objContainer).find('input:[type="text"]').bind("change", function () {
+					objListsStandard3.fn_trigger_new($(this).closest(".list_row"));
+				});
+			},
+
+			// create all bindings required for a row to function
+			"fn_init_row" : function (objContainer, boolLastRow) {
+				var objImageThumb = $(objContainer).find(".input_image");
+				var objImageUploader = $(objListsStandard3.arrParams.objListContainer).find(".input_image_uploader");
+				var objImagePreview = $(objListsStandard3.arrParams.objListContainer).find(".input_image_preview");
+				var objClearBackground = $(objListsStandard3.arrParams.objListContainer).find(".clear_background");
+				$(objContainer).find('.input_checkbox2 input').iphoneStyle({});
+				if (boolLastRow)
+					objListsStandard3.fn_bind_new_row_trigger(objContainer);
+				objImageThumb.mouseover(function () {
+					if (objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout"])
+						window.clearTimeout(objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout"]);
+					objListsStandard3.arrParams.arrTimeoutHandle["image_preview_fadeout"] = false;
+					objImagePreview.fadeIn("fast");
+					var objPos = $(this).position();
+					$(objImagePreview).css({
+						"top" : parseInt(objPos.top) + parseInt($(this).css("height"))+6,
+						"left" : parseInt(objPos.left) + parseInt($(this).css("width"))
+					});
+					if ($(this).find("img").attr("src") != objImagePreview.find("img").attr("src"))
+					{
+						objImagePreview.find("img").attr("src", $(this).find("img").attr("src"));
+						objImagePreview.find("img").css("visibility", "hidden");
+					}
+					objImagePreview.find(".current_row").val($(this).closest(".list_row").find(".row_name").val());
+
+				});
+				objImageThumb.mouseout(objListsStandard3.fn_lost_focus);
+				objImageThumb.click(function () {
+					var objPos = $(this).position();
+					objImageUploader.css({
+						"top" : parseInt(objPos.top) + parseInt($(this).css("height"))+6,
+						"left" : parseInt(objPos.left) + parseInt($(this).css("width")),
+						"z-index" : 1000,
+						"visibility" : "visible"
+					});
+					objImageUploader.fadeIn();
+					objImagePreview.fadeOut("fast");
+					// make the clear background fit to screen
+					objClearBackground.css({
+						"z-index" : 999,
+						"display" : "block",
+						"top" : 0,
+						"left" : 0,
+						"height" : $(document).height(),
+						"width" : $(document).width()
+					});
+					var objCurrentRow = $(this).closest(".list_row");
+					var strImage = objCurrentRow.find(".input_image .image_id").val();
+					if (!strImage)
+						strImage = "0.gif";
+					$(".slider:last .list_container .input_image_uploader iframe")[0].contentWindow.fn_set_image(strImage);
+				});
+			},
+
+			"fn_generate_rows" : function () {
+				var arrTables = objListsStandard3.arrParams.arrLoadedData.arrConfigData.tables;
+				var arrRequiredData = {};
+				for (var strTable in arrTables)
+				{
+					for (var strColumn in arrTables[strTable])
+					{
+						if (arrTables[strTable][strColumn].required) {
+							arrRequiredData[arrTables[strTable][strColumn].data] = 1;
+						}
+					}
+				}
+				objListsStandard3.arrParams.arrRequiredData = arrRequiredData;
+
+				if (!objListsStandard3.arrParams.arrLoadedData.arrConfigData || !arrTables) {
+					objListsStandard3.arrParams.objListContainer.html("<?php print text("Sorry, there was an error"); ?>: VL-S2101-FS4HH6");
+					return;
+				}
+
+				objListsStandard3.arrParams.objListContainer.html(""); // Start fresh
+				objListsStandard3.arrParams.objListContainer.append(objListsStandard3.arrParams.objTemplate.extra);
+				objListsStandard3.arrParams.objListContainer.append(objListsStandard3.arrParams.objTemplate.header.row_container);
+
+				// header row
+				for (var strTableName in arrTables)
+				{
+					var objTableParams = arrTables[strTableName];
+					// remove params that must be ignored
+					var arrIgnoredParams = ["_params","_addons", "_save_to"];
+					for (var intItr in arrIgnoredParams)
+					{
+						if (objTableParams[arrIgnoredParams[intItr]])
+							delete objTableParams[arrIgnoredParams[intItr]];
+					}
+
+					// line number
+					if (objTableParams._ln) {
+						objListsStandard3.arrParams.objLineNumberParams = objTableParams._ln;
+						delete objTableParams._ln;
+						var objNewCell = $(objListsStandard3.arrParams.objTemplate.header.columns["input_plaintext"]).clone();
+						objNewCell.css("width", 40);
+						objNewCell.find("span").html("&nbsp;");
+						objListsStandard3.arrParams.objListContainer.find(".list_header").append(objNewCell);
+					}
+
+					// create header
+					//$.alert(objTableParams);
+					for (var strColumnName in objTableParams)
+					{
+						var objColumn = objTableParams[strColumnName];
+						if (objColumn.hierarchy)
+						{
+							objListsStandard3.arrParams.strHierarchyColumn = objColumn.data;
+							objListsStandard3.arrParams.intHierarchyOffset = 0;
+							if (objColumn.hierarchy_offset)
+								objListsStandard3.arrParams.intHierarchyOffset = objColumn.hierarchy_offset;
+						}
+						var strColumnType = "input_" + (objColumn.input ? objColumn.input : "text");
+						//$.alert(objListsStandard3.arrParams.objTemplate.header.columns[strColumnType]);
+						var objNewCell = $(objListsStandard3.arrParams.objTemplate.header.columns[strColumnType]).clone();
+						if (objColumn.width)
+							objNewCell.css("width", objColumn.width);
+						objNewCell.find("span").html(strColumnName);
+						if (objColumn.no_header)
+							objNewCell.css({
+								"visibility" : "hidden"
+							});
+						if (!objColumn.no_header_render)
+							objListsStandard3.arrParams.objListContainer.find(".list_header").append(objNewCell);
+					}
+				}
+
+				// data rows
+				if (objListsStandard3.arrParams.arrLoadedData.arrRows.length) {
+					for (var intRow in objListsStandard3.arrParams.arrLoadedData.arrRows)
+					{
+						var objDataRow = objListsStandard3.arrParams.arrLoadedData.arrRows[intRow];
+						objListsStandard3.fn_generate_row(objDataRow);
+					}
+				}
+				else if (!objListsStandard3.arrParams.arrLoadedData.arrConfigData.create_new)
+				{
+					var objNewCell = objListsStandard3.arrParams.objListContainer.find(".no_data").clone();
+					objListsStandard3.arrParams.objListContainer.append(objNewCell);
+					objNewCell.fadeIn();
+				}
+
+				// create new row
+				objListsStandard3.fn_new_row();
+				objListsStandard3.fn_init_ui();
+				objListsStandard3.fn_fix_hierarchy();
+			},
+
+			"fn_generate_row" : function (objDataRow, boolPlaceHolder) {
+				objListsStandard3.arrParams.objListContainer.append($(objListsStandard3.arrParams.objTemplate.row.row_container).clone());
+				var objLatestRow = objListsStandard3.arrParams.objListContainer.children().last(); // get the last appended row
+				// add extra items found
+				objLatestRow.append($(objListsStandard3.arrParams.objTemplate.row.extra).clone());
+				// define the row number
+				objLatestRow.find(".row_name")
+					.removeClass("row1")
+					.addClass("row" + objListsStandard3.arrParams.intAutoRowCount)
+					.val(objListsStandard3.arrParams.intAutoRowCount);
+				// line numbers
+				if (objListsStandard3.arrParams.objLineNumberParams) {
+					var objNewCell = $(objListsStandard3.arrParams.objTemplate.row.columns["input_plaintext"]).clone();
+					objNewCell.css({
+						"width" : 40,
+						"text-align" : "right"
+					});
+					objNewCell.addClass("line_number");
+					objLatestRow.append(objNewCell);
+				}
+				// required columns
+				for (var strTableName in objListsStandard3.arrParams.arrLoadedData.arrConfigData.tables)
+				{
+					var objTableParams = objListsStandard3.arrParams.arrLoadedData.arrConfigData.tables[strTableName];
+					// store and remove keyword methods from column set
+					if (objTableParams._params) {
+						var arrQueryParams = objTableParams._params;
+						delete objTableParams._params;
+					}
+					if (objTableParams._ln) {
+						objListsStandard3.arrParams.objLineNumberParams = objTableParams._ln;
+						delete objTableParams._ln;
+					}
+
+					// this cell being created as a place holder to represent the existence of a row
+					var objNewCell = $(objListsStandard3.arrParams.objTemplate.row.columns["input_hidden"]).clone();
+					objNewCell
+						.attr("name", strTableName + ":" + objListsStandard3.arrParams.intAutoRowCount + ":_row_table")
+						.val(objListsStandard3.arrParams.intAutoRowCount);
+					objLatestRow.append(objNewCell);
+					for (var strColumnName in objTableParams)
+					{
+						var objColumn = objTableParams[strColumnName];
+						var strColumnType = "input_" + (objColumn.input ? objColumn.input : "text");
+						//$.alert(objListsStandard3.arrParams.objTemplate.header.columns[strColumnType]);
+						var objNewCell = $(objListsStandard3.arrParams.objTemplate.row.columns[strColumnType]).clone();
+						if (objColumn.name)
+							objNewCell.addClass("data_" + objColumn.name);
+						else if (objColumn.data)
+							objNewCell.addClass("data_" + objColumn.data);
+						if (objListsStandard3.arrParams.strHierarchyColumn && objColumn.data == objListsStandard3.arrParams.strHierarchyColumn)
+							objNewCell.addClass("hierarchy");
+
+						if (objColumn.input == "hidden") {
+							if (objColumn.value)
+								objNewCell.val(objColumn.value);
+							else
+								objNewCell.val(objDataRow[objColumn.data]);
+							var strColumn = objColumn.name ? objColumn.name : objColumn.data;
+							objNewCell.attr("name", strTableName+":"+objListsStandard3.arrParams.intAutoRowCount+":"+strColumn);
+							objLatestRow.append(objNewCell);
+							continue;
+						}
+
+						// logic for visible items
+						if (objColumn.width)
+							objNewCell.css("width", objColumn.width);
+						if (objColumn.bgcolor)
+							objNewCell.css("background-color", objColumn.bgcolor);
+
+						if (objDataRow[objColumn.data]) {
+							if (objColumn.input == "plaintext") {
+								objNewCell.find("span").html("");
+								if (objDataRow[objColumn.data])
+									objNewCell.find("span").html(objDataRow[objColumn.data]);
+								if (objColumn.prefix)
+									objNewCell.find("span").html(objColumn.prefix +""+ objNewCell.find("span").html());
+								if (objColumn.postfix)
+									objNewCell.find("span").html(objNewCell.find("span").html() +""+ objColumn.postfix);
+							} else if (objNewCell.find("input:[type='checkbox']").length) {
+								if (objDataRow[objColumn.data] == 1) {
+									objNewCell.find("input").attr("checked", "checked");
+								}
+								objNewCell.find("input").attr("value", "1");
+							} else if (objNewCell.find("input").length) {
+								if (objDataRow[objColumn.data]) {
+									objNewCell.find("input").val(objDataRow[objColumn.data]);
+								}
+
+							}
+							if (objColumn.input == "image") {
+								var strImage = objDataRow[objColumn.data];
+								if (!strImage)
+									strImage = "0.gif";
+								objNewCell.find("img").attr("src", "<?php print $sn; ?>/imgs/v/src/" + strImage + "/rand/" + Math.floor(Math.random()*1000000));
+							}
+						}
+						if (objColumn.value)
+							objNewCell.find("input").val(objColumn.value);
+						objNewCell.find("input").attr("name", strTableName+":"+objListsStandard3.arrParams.intAutoRowCount+":"+objColumn.data);
+						if (objColumn.name)
+							objNewCell.find("input").attr("name", strTableName+":"+objListsStandard3.arrParams.intAutoRowCount+":"+objColumn.name);
+						objNewCell.find("input").data("init_value", objNewCell.find("input").val());
+						objLatestRow.append(objNewCell);
+					}
+				}
+				// delete button
+				if (objListsStandard3.arrParams.arrLoadedData.arrConfigData.create_new) {
+					var objNewCell = $(objListsStandard3.arrParams.objTemplate.row.columns["input_delete"]).clone();
+					var fnDeleteClick = function () {
+						if ($(this).hasClass("inuse"))
+							return;
+						$(this).addClass("inuse").delay(250).queue(function () {
+							$(this).dequeue().html("Confirm");
+							$(this).parent().click(function () {
+								$(this)
+									.removeClass("inuse")
+									.html("Delete")
+									.unbind("keyup");
+								var domNextRow = $(this).closest(".list_row").next();
+								if (domNextRow.is(".error_under")) {
+									domNextRow.remove();
+								}
+								$(this).closest(".list_row").remove();
+								objListsStandard3.fn_fix_hierarchy();
+							});
+						});
+						$(this).delay(2000).queue(function () {
+							$(this)
+								.dequeue()
+								.removeClass("inuse")
+								.html("Delete")
+								.parent()
+								.unbind("click");
+						});
+					};
+					objNewCell.find(".button").click(fnDeleteClick);
+					objNewCell.find(".button").dblclick(function () {return false;});
+					objNewCell.find(".button").disableTextSelect();
+					if (boolPlaceHolder)
+						objNewCell.addClass("temp_hidden");
+					objLatestRow.append(objNewCell);
+				}
+				// move up
+				if (
+					objListsStandard3.arrParams.strHierarchyColumn
+					&& objListsStandard3.arrParams.intAutoRowCount > 1
+				) {
+					var objNewCell = $(objListsStandard3.arrParams.objTemplate.row.columns["input_up"]).clone();
+					objNewCell.find(".button").click(function () {
+						var domListRow = $(this).closest(".list_row");
+						domListRow.prev().before(domListRow);
+						objListsStandard3.fn_fix_hierarchy();
+					});
+					if (boolPlaceHolder)
+						objNewCell.addClass("temp_hidden");
+					objLatestRow.append(objNewCell);
+				}
+				objListsStandard3.arrParams.intAutoRowCount++;
+				return objLatestRow;
+			},
+
+			// manage all items related hierarchy
+			"fn_fix_hierarchy" : function () {
+				var arrListRows = $.makeArray(objListsStandard3.arrParams.objListContainer.find(".list_row"));
+				var intAutoRowCount = 1;
+				if ($(arrListRows[0]).find(".input_up").length)
+					$(arrListRows[1]).append($(arrListRows[0]).find(".input_up"));
+				for (var intItr in arrListRows)
+				{
+					var domRow = $(arrListRows[intItr]);
+					domRow.find(".hierarchy").val(intAutoRowCount - 1 + objListsStandard3.arrParams.intHierarchyOffset);
+					domRow.find(".line_number").html(intAutoRowCount + ".");
+					intAutoRowCount++;
+				}
+				//$.alert(arrListRows);
+			},
+
+			"fn_init_template" : function () {
+				// Load and parse the template
+				objListsStandard3.arrParams.objTemplate.row = {};
+				objListsStandard3.arrParams.objTemplate.header = {};
+				var arrTemplateSource = $.makeArray(objListsStandard3.arrParams.objListContainer.children().clone());
+
+				var objColumnData = arrTemplateSource.shift();
+				objListsStandard3.arrParams.objTemplate.header.row_container = $(objColumnData).clone();
+				var arrColumns = $(objListsStandard3.arrParams.objTemplate.header.row_container).children().clone();
+				$(objListsStandard3.arrParams.objTemplate.header.row_container).children().remove();
+
+				objListsStandard3.arrParams.objTemplate.header.columns = {};
+				for (var intItr in arrColumns) {
+					if (!arrColumns[intItr].className)
+						continue;
+					var arrMatched = arrColumns[intItr].className.match(/^(input_[^ ]+)/g);
+					if (!arrMatched)
+						continue;
+					var strPrimaryClass = arrMatched[0];
+					objListsStandard3.arrParams.objTemplate.header.columns[strPrimaryClass] = arrColumns[intItr];
+				}
+				//objListsStandard3.arrParams.objTemplate.header.columns
+				var objRowData = arrTemplateSource.shift();
+				objListsStandard3.arrParams.objTemplate.row.row_container = $(objRowData).clone();
+				var arrRowColumns = $(objListsStandard3.arrParams.objTemplate.row.row_container).children().clone();
+				$(objListsStandard3.arrParams.objTemplate.row.row_container).children().remove();
+
+				//var arrRowColumns = $($(arrTemplateSource.shift()).clone()[0]).children();
+				objListsStandard3.arrParams.objTemplate.row.columns = {};
+				for (var intItr in $.makeArray(arrRowColumns)) {
+					if (!arrRowColumns[intItr].className)
+						continue;
+					var arrMatched = arrRowColumns[intItr].className.match(/^(input_[^ ]+)/g);
+					if (arrMatched) {
+						var strPrimaryClass = arrMatched[0];
+						objListsStandard3.arrParams.objTemplate.row.columns[strPrimaryClass] = arrRowColumns[intItr];
+					} else {
+						// extract row extras for example .row_name
+						if (!objListsStandard3.arrParams.objTemplate.row.extra)
+							objListsStandard3.arrParams.objTemplate.row.extra = [];
+						objListsStandard3.arrParams.objTemplate.row.extra.push(arrRowColumns[intItr]);
+					}
+				}
+				objListsStandard3.arrParams.objTemplate.extra = arrTemplateSource;
+				//$.dumper(objListsStandard3.arrParams.objTemplate);
+			},
+
+			"fn_load_data" : function () {
+				// load the data required to build the rows
+				$(".slider:last .list_save").fadeOut();
+				$.ajax({
+					type : "POST",
+					cache : false,
+					start: objListsStandard3.arrParams.objListContainer.html('<div class="message"><?php print text("Loading..."); ?></div>').fadeIn(),
+					url : '<?php echo $sn . "' + objListsStandard3.arrParams.arrConfigData.data_source + '" . $strParamPath; ?>',
+					dataType : "text",
+					data: {
+						'arrParams' : serialize(objListsStandard3.arrParams.arrConfigData)
+					},
+					success : function(strResponse) {
+						try {
+							var arrResponse = jQuery.parseJSON(strResponse);
+						} catch(e) {
+							objListsStandard3.arrParams.objListContainer.html("<?php print text("Sorry, there was an error"); ?>: VL-S2101-2SF3T3");
+							if (is_dev)
+								objListsStandard3.arrParams.objListContainer.html(strResponse);
+							//$.alert(strResponse);
+							return;
+						}
+						if (typeof(arrResponse) != "object") {
+							objListsStandard3.arrParams.objListContainer.html("<?php print text("Sorry, there was an error"); ?>: VL-S2102-FF94SF");
+							if (is_dev)
+								objListsStandard3.arrParams.objListContainer.html(strResponse);
+							return;
+						} else {
+							if (arrResponse["error"]) {
+								objListsStandard3.arrParams.objListContainer.html(arrResponse["error"]);
+								$.alert(arrResponse);
+							} else if (arrResponse["success"] == "true") {
+								if (!arrResponse.arrConfigData) {
+									objListsStandard3.arrParams.objListContainer.html("Sorry, there was an error: VU-S2103-63YHHY");
+									$.alert(arrResponse);
+									return;
+								}
+								objListsStandard3.arrParams.arrConfigData = array_merge(objListsStandard3.arrParams.arrConfigData, arrResponse.arrConfigData);
+								if (!arrResponse.arrRows) {
+									objListsStandard3.arrParams.objListContainer.html("Sorry, there was an error: VU-S2104-66HFD2");
+									$.alert(arrResponse);
+									return;
+								}
+								if (objListsStandard3.arrParams.arrConfigData.title)
+									$(".slider:last .col_title span").html(objListsStandard3.arrParams.arrConfigData.title);
+								if (!objListsStandard3.arrParams.arrConfigData.data_source) {
+									objListsStandard3.arrParams.objListContainer.html("Sorry, there was an error: VU-S2106-9FSFF2");
+									return;
+								}
+
+								if (objListsStandard3.arrParams.arrConfigData.header) {
+									var objListHeader = objListsStandard3.arrParams.objListContainer
+										.closest(".module")
+										.parent()
+										.prepend("<div class='list_slider_header'></div>")
+										.find(".list_slider_header");
+									$.ajax({
+										type : "POST",
+										cache : false,
+										url : '<?php echo $sn . "' + objListsStandard3.arrParams.arrConfigData.header + '" . $strParamPath; ?>',
+										dataType : "text",
+										data: {'arrParams' : serialize(objListsStandard3.arrParams.arrConfigData)},
+										success : function(strResponse) {
+											objListHeader.html(strResponse);
+										}
+									});
+								}
+
+								if (objListsStandard3.arrParams.arrConfigData.header_text) {
+									$(".slider:last .header_content").fadeIn().find(".content_text").html(objListsStandard3.arrParams.arrConfigData.header_text);
+								}
+
+								$(".slider:last .list_save").fadeIn();
+
+								objListsStandard3.arrParams.arrLoadedData = arrResponse;
+								objListsStandard3.fn_generate_rows(arrResponse);
+							} else {
+								objListsStandard3.arrParams.objListContainer.html("<?php print text("Sorry, there was an error"); ?>: VU-S2105-213FS2");
+								$.alert(arrResponse);
+							}
+						}
+					}
+				});
+			},
+			"fn_init_slide" : function () {
+				objListsStandard3.arrParams.arrConfigData = <?php print json_encode($this->arrSourceParams); ?>;
+
+				// template edit mode
+				if (objListsStandard3.arrParams.arrConfigData.boolEditTamplte) {
+					objListsStandard3.fn_init_ui();
+					return;
+				}
+
+				if (!objListsStandard3.arrParams.arrConfigData.data_source) {
+					objListsStandard3.arrParams.objListContainer.html("<?php print text("Sorry, there was an error"); ?>: VU-S2106-9FSFF2");
+					return;
+				}
+
+				// load the template into a variable
+				objListsStandard3.fn_init_template();
+
+				// load the data and build the list
+				objListsStandard3.fn_load_data();
+			}
+		};
+		window.setTimeout(objListsStandard3.fn_init_slide, 1);
+	});
+}
+<?php
+	if (is_dev())
+	{
+?>
+if (typeof $ == "undefined")
+{
+	alert('<?php print $this->arrSourceParams["data_source"]; ?>');
+}
+<?php
+	}
+?>
+</script>
+<div class="slider">
+	<input type="hidden" id="datamodel" value='<?php print $this->strDataModel; ?>' />
+	<style type="text/css">
+		.list_container {
+			padding-bottom: 8px;
+			font-size: 12pt;
+		}
+		.list_container input[type=text] {
+			height:21px !important;
+			font-size: 14pt;
+		}
+		.list_container textarea {
+			height:24px;
+			font-size: 14pt;
+			padding: 2px;
+			resize:none;
+		}
+		.row_cell a {
+			float:none;
+		}
+		.header_cell, .row_cell {
+			padding: 5px;
+			font-size: 12pt;
+			display: inline-block;
+			height:28px;
+			border:0px solid black;
+			vertical-align: middle;
+			text-align: left;
+			line-height: 20px;
+		}
+		.list_header {
+			background-color: #555;
+			border-radius: 10px 10px 0 0;
+			color: #FFF;
+			margin-top:5px;
+			margin-bottom:8px;
+		}
+		.header_cell {
+			height:25px !important;
+		}
+		.list_container .alignright {
+			text-align: right;
+		}
+		.list_container span {
+			line-height: 32px;
+		}
+		.list_container .input_checkbox2.header_cell {
+			text-align: center;
+		}
+		.list_container .input_checkbox2.row_cell {
+			padding: 6px;
+		}
+		.list_container .input_checkbox2.row_cell span {
+			line-height: 20px;
+		}
+		.list_container .input_image img {
+			width:38px;
+			height:38px;
+			margin-left: 4px;
+			margin-top: -4px;
+			border: 1px solid white;
+		}
+		.list_container .input_image_preview {
+			border: 1px solid #555;
+			background-color: #FFF;
+			width:200px;
+			height:200px;
+			text-align: center;
+			position:absolute;
+			display:none;
+			cursor: default;
+		}
+		.list_container .input_image_preview div {
+			position:absolute;
+			top:10px;
+			left:17px;
+			border:1px solid white;
+			background-color: #333;
+			color:white;
+			padding:3px;
+			display:none;
+		}
+		.list_container .input_image_preview img {
+			width:194px;
+			height:194px;
+			margin-top: 3px;
+		}
+		.list_container .input_image_uploader {
+			position: absolute;
+			border: 1px solid #555;
+			padding: 3px;
+			background-color: #fff;
+			z-index: -1;
+			visibility:hidden;
+			width:550px;
+		}
+		.list_container .clear_background {
+			display: none;
+			position:absolute;
+		}
+		.list_container .list_row .input_plaintext {
+			line-height: 26px
+		}
+		.list_container .no_data {
+			background-color: #fff;
+			color: #000;
+			padding: 8px;
+			margin:2px;
+			display: none;
+		}
+		.processing_status {
+			color: #000;
+		}
+		.error_under {
+			color: #C12222;
+		}
+		.temp_hidden {
+			visibility: hidden;
+		}
+	</style>
+	<div class="col_title">
+		<span>List Editor</span>
+	</div>
+
+	<div class="col_content">
+		<div class="module header_content hidden">
+			<div class="module_content">
+				<ul>
+					<li style="font-size: 12pt; padding-top:16px;padding-bottom:16px;" class="content_text"></li>
+				</ul>
+			</div>
+		</div>
+		<div class="module">
+			<div class="module_content">
+				<ul>
+					<li style="padding: 0 5px 0 5px;">
+						<form onsubmit="return false">
+							<div class="list_container">
+								<div class="list_header">
+									<div style="width:30px" class="input_auto header_cell alignright text"><span>&nbsp;</span></div>
+									<div class="input_image header_cell" style="width:50px"><span>Image</span></div>
+									<div class="input_plaintext header_cell" style="width:80px"><span>Plain Text</span></div>
+									<div class="input_text header_cell" style="width:90px"><span>Text</span></div>
+									<div class="input_checkbox header_cell" style="width:70px"><span>Checkbox</span></div>
+									<div class="input_checkbox2 header_cell" style="width:90px"><span>Checkbox2</span></div>
+								</div>
+								<div class="list_row">
+									<input type="hidden" value="1" class="row1 row_name" />
+									<input class="input_hidden" type="hidden" />
+									<div class="input_auto row_cell alignright text" style="width:30px"><span>1</span></div>
+									<div class="input_image row_cell" style="width:50px">
+										<img src="<?php print $sn; ?>/imgs/v/src/0.gif" />
+										<input type="hidden" value="" class="image_id" />
+									</div>
+									<div class="input_plaintext row_cell" style="width:80px"><span>Sample</span></div>
+									<div class="input_text row_cell" style="width:90px"><input type="text" style="width:99%" /></div>
+									<div class="input_checkbox row_cell" style="width:70px"><input type="checkbox" style="width:99%" /></div>
+									<div class="input_checkbox2 row_cell" style="width:90px"><input type="checkbox" style="width:99%" /></div>
+									<div class="input_delete row_cell"><a class="button"><?php print text("Delete"); ?></a></div>
+									<div class="input_up row_cell"><a title="<?php print text("Move item up"); ?>" class="button"><?php print text("Up"); ?></a></div>
+								</div>
+								<!-- add new data here -->
+								<div class="no_data"><?php print text("There is nothing to show here."); ?></div>
+								<div class="input_image_preview">
+									<input type="hidden" class="current_row" />
+									<div><?php print text("Click to edit the image"); ?></div>
+									<span class="preview_image"><img src="<?php print $sn; ?>/imgs/v/src/0.gif" /></span>
+								</div>
+								<div class="input_image_uploader">
+									<input type="hidden" id="listeditor_image_id" value="" />
+									<iframe src="<?php print $sn; ?>/imgs/smalluploader/current_image/461.gif/resultid/listeditor_image_id" width="100%" height="80" scrolling="no">
+										<p><?php print text("Your browser does not support iframes."); ?></p>
+									</iframe>
+								</div>
+								<div class="clear_background">&nbsp;</div>
+							</div>
+
+						</form>
+					</li>
+					<li class="list_save" style="margin:4px; display:none;">
+						<div class="processing_status"></div>
+						<span>
+							<a class="button submit listeditor_submit"><?php print text("Save"); ?></a>
+						</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

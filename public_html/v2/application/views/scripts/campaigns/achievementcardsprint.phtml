@@ -1,0 +1,413 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objUserSession = new Zend_Session_Namespace("user_session_data");
+?>
+<script language="javascript">
+$(document).ready(function() {
+	var fnTitleClick = function () {
+		$(this).closest('.select_list').find('.selected').removeClass('selected').addClass('select');
+		$(this).closest('li').removeClass('select').addClass('selected');
+		$(this).closest('.accordion').find('h3').trigger('click')
+		.find('.text').html($(this).parent().find('.title.name').html());
+		//$(this).closest('.accordion').find('.select_icon').removeClass('hidden');
+		$(this).closest('.accordion').find('h3').removeClass('hidden');
+	};
+	$('.slider:last .accordion li h3').click(function(){
+		$(this).nextAll().slideToggle('fast');
+		if (!$(this).parents('li').hasClass('open'))
+			$(this).closest('.accordion').find('.select_icon').addClass('hidden');
+		else if ($(this).closest('.accordion').find('.selected').length)
+			$(this).closest('.accordion').find('.select_icon').removeClass('hidden');
+		$(this).parents('li').toggleClass('open');
+	});
+	$('.slider:last .select_list .title').click(function () {
+		if ($(this).closest('li').hasClass('header'))
+			return;
+		fnTitleClick.call(this);
+	});
+	$('.slider:last .campaign.accordion .title').click(function () {
+		if ($(this).closest('li').hasClass('header'))
+			return;
+		var intCampaign = $(this).attr('campaign_id');
+		$('.slider:last .task.accordion .list_item:not(.hidden)').addClass('hidden');
+		$('.slider:last .task.accordion .list_item.campaign_id_' + intCampaign).removeClass('hidden');
+		$('.slider:last .choose_task').removeClass('hidden');
+		if ($('.slider:last .task.accordion .selected').length)
+		{
+			$('.slider:last .task.accordion .selected').removeClass('selected');
+			if (!$('.slider:last .task.accordion .task_opener.open').length)
+				fnTitleClick.call($('.slider:last .task.accordion li.header .title:first')[0]);
+			$('.slider:last .choose_details').addClass('hidden');
+			$('.slider:last .task.accordion li h3 .text').html('Nothing Selected');
+			$('.slider:last .task.accordion li h3').addClass('hidden');
+		}
+	});
+	$('.slider:last .task.accordion .title').click(function () {
+		if ($(this).closest('li').hasClass('header'))
+			return;
+		$('.slider:last .choose_details').removeClass('hidden');
+		if ($('.slider:last .accordion.closed li h3').closest('li').hasClass('open')) {
+			$('.slider:last .accordion.closed li h3').nextAll().slideToggle(0);
+			$('.slider:last .accordion.closed li h3').closest('li').toggleClass('open');
+		}
+		var intPoints = $(this).closest('a').find('.title.points').attr('points_value');
+		var intLocked = $(this).closest('a').find('.title.locked').attr('locked_value');
+		if (intLocked == 1) {
+			$('.slider:last .choose_details input.points').attr('disabled','disabled');
+			$('.slider:last .locked_message').removeClass('force-hidden');
+		} else {
+			$('.slider:last .choose_details input.points').removeAttr('disabled');
+			$('.slider:last .locked_message').addClass('force-hidden');
+		}
+		$('.slider:last .choose_details input.points').val(intPoints);
+		$('.slider:last .choose_details input.points').attr('min_points', $(this).closest('li').attr('min_points'));
+		$('.slider:last .choose_details input.points').attr('max_points', $(this).closest('li').attr('max_points'));
+	});
+	$('.slider:last .choose_details input.points').blur(function () {
+		if ($(this).attr('min_points') != 0 && $(this).val()*1 < $(this).attr('min_points')) {
+			$(this).closest('.module').find('.processing_status').html('You cannot change the point value').fadeIn();
+		} else if ($(this).attr('max_points') != 0 && $(this).val()*1 > $(this).attr('max_points')) {
+			$(this).closest('.module').find('.processing_status').html('You cannot change the point value').fadeIn();
+		}
+
+	});
+	$('.slider:last .choose_details input.points').keyup(function (e) {
+		if ($(this).attr('min_points') != 0 && $(this).val()*1 < $(this).attr('min_points')) {
+			$(this).css({
+				color: 'red'
+			});
+			$(this).closest('.module').find('.processing_status').html('You cannot change the point value').fadeIn();
+		} else if ($(this).attr('max_points') != 0 && $(this).val()*1 > $(this).attr('max_points')) {
+			$(this).css({
+				color: 'red'
+			});
+			$(this).closest('.module').find('.processing_status').html('You cannot change the point value').fadeIn();
+		} else {
+			$(this).css({
+				color: '#000'
+			});
+			$(this).closest('.module').find('.processing_status').fadeOut();
+		}
+	});
+	$('.slider:last .button.load_cards').click(function () {
+		var objPoints = $('.slider:last .choose_details input.points');
+		if (
+			objPoints.attr('min_points') != 0 && objPoints.val()*1 < objPoints.attr('min_points')
+			|| objPoints.attr('max_points') != 0 && objPoints.val()*1 > objPoints.attr('max_points')
+		) {
+			//alert('Point range accepted ' + objPoints.attr('min_points') + ' - ' + objPoints.attr('max_points'));
+			alert('You cannot change the point value');
+			return;
+		}
+		var arrDataParams = {
+			intTask : $('.slider:last .choose_task .selected').attr('task_id'),
+			intPoints : $('.slider:last .choose_details input.points').val(),
+			intPageCount : $('.slider:last .choose_details input.sheets').val(),
+			intSubject : $('.slider:last .choose_task .selected').attr('campaign_id'),
+			strTask : $('.slider:last .choose_task .selected').attr('task')
+		};
+		var strUrl = '<?php print $sn; ?>/campaigns/achievementcardsprintoutput/dataparams/' + encodeURIComponent(JSON.stringify(arrDataParams));
+		window.open(strUrl, '_blank');
+	});
+	$('.slider:last .button.load_cards_qr').click(function () {
+		var objPoints = $('.slider:last .choose_details input.points');
+		if (
+			objPoints.attr('min_points') != 0 && objPoints.val()*1 < objPoints.attr('min_points')
+			|| objPoints.attr('max_points') != 0 && objPoints.val()*1 > objPoints.attr('max_points')
+		) {
+			alert('Point range accepted ' + objPoints.attr('min_points') + ' - ' + objPoints.attr('max_points'));
+			return;
+		}
+		var arrDataParams = {
+			intTask : $('.slider:last .choose_task .selected').attr('task_id'),
+			intPoints : $('.slider:last .choose_details input.points').val(),
+			intPageCount : $('.slider:last .choose_details input.sheets').val(),
+			intSubject : $('.slider:last .choose_task .selected').attr('campaign_id'), 
+			strTask : $('.slider:last .choose_task .selected').attr('task')
+		};
+		var strUrl = '<?php print $sn; ?>/campaigns/achievementcardsprintoutputqr/dataparams/' + encodeURIComponent(JSON.stringify(arrDataParams));
+		window.open(strUrl, '_blank');
+	});
+	$('.slider:last .button.load_link').click(function () {
+		var intTask = $('.slider:last .choose_task .selected').attr('task_id');
+		var intPoints = $('.slider:last .choose_details input.points').val();
+		var strUrl = "<?php print bp; ?>/campaigns/gencardlink/task_id/" + intTask + "/points/" + intPoints + "<?php print $strParamPath; ?>";
+		$(".slider:last .gen_link").val("Loading...");
+		$(".slider:last .generated_share_link").removeClass("hidden");
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : strUrl,
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$.alert(strResponse);
+					alert("Unexpected error: SDGj3qkals");
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					alert("Unexpected error: BCBMDls23f");
+					$.alert(strResponse);
+					return;
+				}
+				else if (arrResponse["success"] == "true")
+				{
+					var strSerial = arrResponse["serial"];
+					var strRes = arrResponse["res"];
+					var strLink = "<?php print bp; ?>/achievement/qrcard/res/" + strRes + "/h/" + strSerial;
+					$(".slider:last .gen_link").val(strLink);
+				}
+				else if (arrResponse.error)
+				{
+					$.alert(arrResponse);
+				}
+			}
+		});
+	});
+});
+</script>
+<div class="slider">
+	<style>
+		.slider:last-child h4 {
+			padding:0 0 3px 6px;
+		}
+		.slider:last-child h2.fix_line {
+			border-bottom:1px solid #bbb;
+		}
+		.slider:last-child .title {
+			width:100%;
+		}
+		.slider:last-child .select_list .selected {
+			background-color: #DADEE6;
+		}
+		.slider:last-child .text {
+			padding-left:4px;
+		}
+		.slider:last-child .select_icon {
+			width:17px;
+			height:17px;
+			position: relative;
+			float: right;
+			margin-top:7px;
+			margin-bottom:-24px;
+			background-image: url('<?php echo $sn . "/images/check.png"; ?>');
+			opacity:0.7;
+		}
+		.slider:last-child .module.lists {
+			margin-right:0;
+			margin-bottom:0;
+		}
+		.slider:last-child .locked_message {
+			display:inline-block;
+			padding:8px;
+			font-size:12pt;
+		}
+		.header {
+			background-color:#666 !important;
+			-webkit-border-top-left-radius: 6px;
+			-webkit-border-top-right-radius: 6px;
+			-moz-border-radius-topleft: 6px;
+			-moz-border-radius-topright: 6px;
+			border-top-left-radius: 6px;
+			border-top-right-radius: 6px;
+			border: 1px solid #ccc;
+			color:#fff;
+			border-width: 1px 1px 0 1px;
+		}
+		li:not(.header) .title>div {
+			width: 190px;
+			overflow:hidden;
+			text-overflow:ellipsis;
+			white-space:nowrap;
+		}
+		div.lists li.header {
+			padding-bottom: 0;
+			padding-top: 0;
+		}
+		div.lists li.header .title:not(:last-child) {
+			border-right: 1px solid #777;
+		}
+		div.lists li:not(.header) .title:not(:last-child) {
+			border-right: 1px solid #ddd;
+		}
+		div.lists li .title:not(:first-child) {
+			padding-left: 8px;
+		}
+		.slider:last-child .choose_details * {
+
+		}
+		.info.list_expand li:first-child {
+			border-top:medium none;
+		}
+		.info.list_expand img {
+			border:1px solid #BBBBBB;
+			margin:2px;
+		}
+	</style>
+	<div class="col_title">
+		<span><?php print text("[|Point|] Cards"); ?></span><div class="title_help info" title="<?php print text("[|Point|] Cards are given out for completing tasks, or at your discretion. You can print out cards that are associated with a particular campaign/task from this page by following the steps below.<br/>[|Points|] Cards can be scanned or entered manually to a [|students|] account to provide them with [|points|]. [|Students|] can do this themselves from Kiosk Mode, or you can do it for them by finding them in 'Users', and entering the correct information.<br/>Cards can only be used once. Once a card has been entered into one [|students|] account, it will no longer work for any [|student|]."); ?>"></div>
+	</div>
+	<div class="col_content">
+		<div class="choose_campaign">
+			<h4>Step 1. &nbsp;Select a campaign: &nbsp;<div class="help_icon info" title="<?php print text("Select which campaign you would like to create [|point|] cards for."); ?>"></div></h4>
+			<div class="module accordion campaign">
+				<div class="module_content list_expand numbere">
+					<ul>
+						<li class="open campaign_opener">
+							<div class="select_icon hidden"></div>
+							<h3 class="hidden" onmouseup="window.setTimeout(function () {$('#profileadmin .student_barcode').focus()}, 100);">
+								<span class="icon"></span> <span class="text">Nothing Selected</span>
+							</h3>
+							<p>
+								<div class="module lists">
+									<div class="module_content">
+										<ul class="select_list">
+											<li class="header">
+												<div class="title" style="width:500px">Campaign Name</div>
+												<div class="title" style="width:120px">Tasks</div>
+											</li>
+<?php
+	$boolNoCampaigns = true;
+	foreach ($this->arrCampaigns as $objCampaign)
+	{
+		if (!isset($this->arrTasksHash[$objCampaign->subject_id]))
+			continue;
+		$boolNoCampaigns = false;
+?>
+											<li>
+												<a>
+													<div style="width:500px" class="title name" class="campaign_item" campaign_id="<?php print $objCampaign->subject_id; ?>">
+														<?php print $objCampaign->subject_name; ?>
+													</div>
+													<div style="width:120px" class="title name" class="campaign_item" campaign_id="<?php print $objCampaign->subject_id; ?>">
+														<?php print count($this->arrTasksHash[$objCampaign->subject_id]); ?>
+													</div>
+												</a>
+											</li>
+<?php
+	}
+	if ($boolNoCampaigns)
+	{
+?>
+											<li>
+												<div style="padding:3px;font-size:12pt">Nothing to display</div>
+											</li>
+<?php
+	}
+?>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="choose_task hidden">
+			<h4>Step 2. &nbsp;Select a task: &nbsp;<div class="help_icon info" title="<?php print text("Select which task you would like to create [|points|] cards for. (Note: You must have a campaign selected in order to select a task)."); ?>"></div></h4>
+			<div class="module accordion task">
+				<div class="module_content list_expand numbere">
+					<ul>
+						<li class="open task_opener">
+							<div class="select_icon hidden"></div>
+							<h3 class="hidden" onmouseup="window.setTimeout(function () {$('#profileadmin .student_barcode').focus()}, 100);">
+								<span class="icon"></span> <span class="text">Nothing Selected</span>
+							</h3>
+							<p>
+								<div class="module lists">
+									<div class="module_content">
+										<ul class="select_list">
+											<li class="header">
+												<div class="title" style="width:400px">Task Name</div>
+												<div class="title" style="width:120px"><?php print text("[|Points|]"); ?></div>
+											</li>
+<?php
+	foreach ($this->arrTasks as $objTask)
+	{
+?>
+											<li min_points="<?php print $objTask->points;?>" max_points="<?php print $objTask->points;?>"
+											task_id="<?php print $objTask->achievement_task_id; ?>" class="list_item hidden campaign_id_<?php print $objTask->subject_id; ?>"
+											campaign_id="<?php print $objTask->subject_id; ?>"  
+											task="<?php print $objTask->task; ?>">
+												<a>
+													<div class="title name" style="width:400px">
+														<?php print $objTask->task; ?>
+													</div>
+													<div class="title points" points_value="<?php print $objTask->points;?>" style="width:120px"><?php print $objTask->points; ?></div>
+												</a>
+											</li>
+<?php
+	}
+?>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="choose_details hidden">
+			<h4><?php print text("Step 3. &nbsp;Choose how many [|points|] each card will be worth:"); ?> &nbsp;<div class="help_icon info" title="<?php print text("If the [|point|] value of the task you selected is unlocked, you can change the value of the [|point|] cards for that task. For instance, if a task is worth 9 [|points|], you can decide to give out cards worth 3 [|points|] each as campers complete stages of that task.<br/>To lock or unlock a task’s [|point|] value, click ‘Campaigns’ in the left-hand menu, and then ‘Edit Tasks’ for the campaign you want to change."); ?>"></div></h4>
+			<div class="module form">
+				<div class="module_content list">
+					<ul>
+						<li>
+							<span class="label" style="width:200px;"><?php print text("[|Points|] Per Card"); ?></span>
+							<span class="input"><input style="width:200px;" type="text" class="required points" name="points" value="<?php print $objTask->points; ?>" size="25" /></span>
+							<div class="locked_message force-hidden">Locked</div>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+				</div>
+			</div>
+			<h4>Step 4. &nbsp;Choose how many sheets you would like to print (10 cards per sheet): &nbsp;<div class="help_icon info" title="If you need more sheets later, you can always come back and print more."></div></h4>
+			<div class="module form">
+				<div class="module_content list">
+					<ul>
+						<li>
+							<span class="label" style="width:200px;">Number Of Sheets</span>
+							<span class="input"><input style="width:200px;" type="text" class="sheets required" name="sheets" value="1" size="25" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+					</ul>
+				</div>
+			</div>
+			<h4>Step 5. &nbsp;Check your print settings: &nbsp;<div class="help_icon info" title="In order to make sure your cards print properly, follow the instructions provided by clicking ‘Print Instructions’."></div></h4>
+			<div class="module accordion closed">
+				<div class="list_expand info">
+					<ul>
+						<li class="open">
+							<h3><span class="icon"></span>Print Instructions</h3>
+							<p style="display:block"><img src="http://v2.mashpia.com/images/back-end/admin/Print-Dialog-Small-2.jpg" align="right" /><img src="http://v2.mashpia.com/images/back-end/admin/Print-Dialog-Small-1.jpg" align="right" />
+							In your browser click 'File' then 'Page Setup...'</p>
+							<p>Step 1: Set the Orientation to Portrait</p>
+							<p>Step 2: Check 'Shrink to fit Page Width'</p>
+							<p>Step 3: In Options check 'Print Background (colors & images)'</p>
+							<p>Step 4: In the second tab set all Margins to 0.5 inches (All Sides)</p>
+							<p>Step 5: Set all Headers & Footers to Blank</p>
+							<p>Note: The browser will save these preferences for later use.</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<h4>Step 6. Ready to print: &nbsp;<div class="help_icon info" title="Clicking ‘Print All’ will bring up a new browser tab with your cards, and your computer’s print dialog box. Press print/ok and watch those cards fly out of the printer!"></div></h4>
+			<div class="processing_status"></div>
+			<a class="button load_cards">Print All (Barcode)</a>
+			<a class="button load_cards_qr" style="margin-left:6px;">Print All (QR)</a>
+			<!--<a class="button load_link" style="margin-left:6px;">Generate Share Link</a>-->
+
+			<div class="hidden generated_share_link" style="margin-top:40px;">
+				<input onfocus="this.select();" onclick="this.select();" ondblclick="window.open(this.value, '_blank');this.select();" class="gen_link" style="cursor:pointer; font-size: 12px;padding: 6px;width:530px;background-color: #eee;border:1px solid #999;border-radius:4px;" type="text" value="<?php print bp; ?>/achievement/qrcard/res/2/h/2ff3wdwfffwef4fefdfwewfefefg" />
+				<div style="padding: 6px 3px; max-width:600px; font-size: 10pt;">Each time anyone visits the above link a new achievement card is generated with the point value specified when the link was generated. Once a link is generated the card details are saved. If you wish to make any further changes make sure to generate a new link.</div>
+			</div>
+			<br/>&nbsp;<br/>&nbsp;<br/>&nbsp;
+		</div>
+	</div>
+</div>

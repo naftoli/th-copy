@@ -1,0 +1,57 @@
+<?php 
+	include "config.phtml";
+	
+	$strUrl = '';
+	if(isset($this->host_id)) $strUrl .= '/host_id/'.$this->host_id;
+	if(isset($this->network_id)) $strUrl .= '/network_id/'.$this->network_id;
+	if(isset($this->institution_id)) $strUrl .= '/institution_id/'.$this->institution_id;
+	
+?>
+<div class="slider" id='slider_gradesinstitutions'>
+	<div class="col_title">
+		<span>Institutions</span>
+	</div>
+	<div class="col_content">		
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<form name="listallinstitutions" id="listallinstitutions" method="post" action="">
+					<ul>
+						<li>
+							<a class="link" href="<?=$sn?>/grades/gradeseditor<?=$strUrl?>">
+								<div class="icon"></div>
+								<div class="title">> Skip to Add / Edit Grade</div>
+							</a>
+						</li>
+<?php				
+				if($this->arrInstitutions)
+				{		
+					foreach ($this->arrInstitutions as $value)
+					{		
+						echo '<li>
+								<a class="link" href="'.$sn.'/grades/gradeseditor'.$strUrl.'/institution_id/'.$value->institution_id.'">
+									<div class="icon"></div>
+									<div class="title">'.$value->name.'</div>
+								</a>
+							 </li>';
+					}
+				}
+				else
+				{
+					echo "There are no ";
+						if ($this->is_active == 'active') 
+						{
+							 echo "active";
+						} 
+						else
+						{ 
+							echo "inactive";
+						}
+						echo " institutions";
+				}
+?>
+					</ul>
+				</form>
+			</div>
+		</div>		
+	</div>
+</div>

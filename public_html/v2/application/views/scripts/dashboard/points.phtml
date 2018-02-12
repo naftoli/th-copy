@@ -1,0 +1,126 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+$user_session_data = new Zend_Session_NameSpace('user_session_data');
+?>
+<div class="slider">
+	<div class="col_title">
+			<span>Points</span>
+	</div>
+	<div class="col_content">		
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	if ($this->objInstitution->institution_type == "Camp")
+	{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/achievementcardeditor<?php echo $institution_string; ?>">
+							<div class="icon"></div>
+							<div class="title">Create Achievement Cards</div>
+						</a>
+					</li>
+<?php
+	}
+	else // not camp
+	{
+		if ($this->objRoles->isRole('Super Administrator'))
+		{
+?>				
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/points/pointsviewhosts">
+							<div class="icon"></div>
+							<div class="title">View Points by Host</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/points/pointsviewnetworks">
+							<div class="icon"></div>
+							<div class="title">View Points by Networks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/points/pointsviewinstitutions">
+							<div class="icon"></div>
+							<div class="title">View Points by Institution</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/points/pointsviewclasses">
+							<div class="icon"></div>
+							<div class="title">View Points by Classes</div>
+						</a>
+					</li>
+<?php
+		}
+		if ($this->objRoles->isRole('Host Administrator'))
+		{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/points/pointsviewnetworks<?=$strParamPath?>">
+							<div class="icon"></div>
+							<div class="title">View Points by Networks</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/points/pointsviewinstitutions<?=$strParamPath?>">
+							<div class="icon"></div>
+							<div class="title">View Points by Institution</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/points/pointsviewclasses<?=$strParamPath?>">
+							<div class="icon"></div>
+							<div class="title">View Points by Classes</div>
+						</a>
+					</li>
+					
+<?php
+		}
+		if ($this->objRoles->isRole('Network Administrator'))
+		{
+?>					
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/points/pointsviewinstitutions<?=$strParamPath?>">
+							<div class="icon"></div>
+							<div class="title">View Points by Institution</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/points/pointsviewclasses<?=$strParamPath?>">
+							<div class="icon"></div>
+							<div class="title">View Points by Classes</div>
+						</a>
+					</li>
+<?php
+		}
+		if ($this->objRoles->isRole('Institution Administrator'))
+		{
+?>					
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/points/pointsviewclasses<?=$strParamPath?>">
+							<div class="icon"></div>
+							<div class="title">View Points by Classes</div>
+						</a>
+					</li>
+<?php
+		}
+		if ($this->objRoles->isRole('Teacher'))
+		{	
+?>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/points/pointsclasses<?=$strParamPath?>">
+							<div class="icon"></div>
+							<div class="title">Points by Class</div>
+						</a>
+					</li>
+<?php
+		}
+	}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,497 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objSesh = new Zend_Session_Namespace('hebrewschools');
+?>
+<script type="text/javascript">
+$(document).ready(function () {
+	var KioskListApp = {
+		"arrPageData" : <?php print json_encode($this->arrResult); ?>,
+		"arrParams" : {
+			"display_type" : "all",
+			"campaign_type" : "all",
+			"items_per_page" : <?php print $this->intItemsPerPage; ?>,
+			"navigate_to" : 0
+		},
+		"fn_load_page" : function ()
+		{
+			var arrPost = KioskListApp.arrParams;
+			var arrLastRequest = KioskListApp.arrPageData;
+			// remove row data from postback
+			delete arrLastRequest.rows;
+			arrPost.arrPostBack = arrLastRequest;
+			arrPost.output = "json";
+			var strPageNumber = Math.ceil((KioskListApp.arrParams.navigate_to-1) / KioskListApp.arrParams.items_per_page)+1;
+			$("#pageDisplay").html("<?php print text("Loading Page"); ?> " + strPageNumber + " <?php print text("of"); ?> " + Math.ceil(KioskListApp.arrPageData.items_count / KioskListApp.arrParams.items_per_page) + "...");
+			//alert(KioskListApp.arrParams.navigate_to);
+			//$("#list_pane .loading").fadeIn();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				url : '<?php print $sn . "/kiosk01/transactionhistory" . $strParamPath; ?>',
+				dataType : "text",
+				data: arrPost,
+				success : function(strResponse) {
+					//$("#list_pane .loading").fadeOut();
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$(".slider:last #processing_status").html('<?php print text("Sorry, there was an error"); ?>: VHS-TH101-564262');
+						$.dumper(strResponse);
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						$(".slider:last #processing_status").html('<?php print text("Sorry, there was an error"); ?>: VHS-TH102-853235');
+						$.dumper(strResponse);
+						return;
+					} else {
+						if (arrResponse["error"]) {
+							$(".slider:last #processing_status").html('<?php print text("Sorry, there was an error"); ?>: VHS-TH103-414245');
+							$.alert(arrResponse);
+						} else {
+							//$.alert(arrResponse);
+							KioskListApp.arrParams.navigate_to = KioskListApp.arrPageData.first_row_number;
+							KioskListApp.arrPageData = arrResponse;
+							KioskListApp.fn_init_page();
+						}
+					}
+				}
+			});
+		},
+		"fn_init_page" : function () {
+			$("#list_pane").find(".row.cloned").remove();
+			var arrRows = KioskListApp.arrPageData.rows;
+			//$.dumper(KioskListApp.arrPageData);
+			var strPageNumber = Math.floor((KioskListApp.arrPageData.first_row_number-1) / KioskListApp.arrParams.items_per_page)+1;
+			$("#pageDisplay").html("<?php print text("Page"); ?> " + strPageNumber + " <?php print text("of"); ?> " + Math.ceil(KioskListApp.arrPageData.items_count / KioskListApp.arrParams.items_per_page));
+			$("#table_showing").html("<?php print text("Showing"); ?> " + KioskListApp.arrPageData.first_row_number + "-" + (KioskListApp.arrPageData.last_row_number-1) + " <?php print text("of"); ?> " + KioskListApp.arrPageData.items_count);
+			//$.alert(arrRows);
+			for (var strRowKey in arrRows)
+			{
+				if (arrRows[strRowKey].prize) {
+					var domRow = $("#list_pane .prize_purchase.template").clone();
+					$(domRow).css("display", "block");
+					$(domRow).removeClass("template");
+					$(domRow).addClass("cloned");
+					var strImage = arrRows[strRowKey].prize.image_id;
+					if (strImage == "0" || !strImage)
+						strImage = "<?php print $this->objInstitution->image_id; ?>";
+					$(domRow).find(".ph_prize_image img").attr("src", "<?php print $sn; ?>/imgs/v/src/" + strImage);
+					$(domRow).find(".ph_prize_name").html(arrRows[strRowKey].prize.prize_name);
+					$(domRow).find(".ph_transaction_date").html(arrRows[strRowKey].transaction_date);
+					$(domRow).find(".ph_transaction_time").html(arrRows[strRowKey].transaction_time);
+					$(domRow).find(".ph_prize_cost").html(arrRows[strRowKey].prize.points);
+					$(domRow).find(".ph_sum_cost").html(-(arrRows[strRowKey].user_point.points));
+					$(domRow).find(".ph_quantity").html(arrRows[strRowKey].user_prize.quantity);
+					$(domRow).find(".ph_store_miles").html(arrRows[strRowKey].store_points);
+					$(domRow).find(".ph_total_miles").html(arrRows[strRowKey].total_points);
+					$("#list_pane .loading").after(domRow);
+					//$.alert(arrRows[strRowKey]);
+				}
+				else if (arrRows[strRowKey].admin)
+				{
+					var domRow = $("#list_pane .admin_manual.template").clone();
+					$(domRow).css("display", "block");
+					$(domRow).removeClass("template");
+					$(domRow).addClass("cloned");
+					var strImage = ""; //arrRows[strRowKey].admin.image_id;
+					if (strImage == "" || !strImage)
+						strImage = "<?php print $this->objInstitution->image_id; ?>";
+					//$.alert(strImage);
+					$(domRow).find(".ph_admin_image img").attr("src", "<?php print $sn; ?>/imgs/v/src/" + strImage);
+					$(domRow).find(".ph_admin_name").html(arrRows[strRowKey].admin.first_name + " " + arrRows[strRowKey].admin.last_name);
+					$(domRow).find(".ph_transaction_date").html(arrRows[strRowKey].transaction_date);
+					$(domRow).find(".ph_transaction_time").html(arrRows[strRowKey].transaction_time);
+					// only say it was store miles if it was a deductions since adding is the same for both
+					if (arrRows[strRowKey].user_point.resource_name == "admin_users_manual_store" && arrRows[strRowKey].user_point.points < 0)
+						$(domRow).find(".ph_deduction_type").html("<?php print text("store"); ?>");
+					else
+						$(domRow).find(".ph_deduction_type").html("");
+					$(domRow).find(".ph_amount").html(arrRows[strRowKey].user_point.points < 0 ? -(arrRows[strRowKey].user_point.points) : arrRows[strRowKey].user_point.points);
+					if (arrRows[strRowKey].user_point.resource_name == "direct_transfer")
+						$(domRow).find(".ph_amout_type").html("<?php print text("In Class Award"); ?>");
+					else
+						$(domRow).find(".ph_amout_type").html("<?php print text("Manually"); ?>" + (arrRows[strRowKey].user_point.points < 0 ? "<?php print text("Deducted"); ?>" : "<?php print text("Awarded"); ?>"));
+					$(domRow).find(".ph_store_miles").html(arrRows[strRowKey].store_points);
+					$(domRow).find(".ph_total_miles").html(arrRows[strRowKey].total_points);
+					$("#list_pane .loading").after(domRow);
+				}
+				else if (arrRows[strRowKey].achievement_card)
+				{
+					var domRow = $("#list_pane .achievement_card.template").clone();
+					$(domRow).css("display", "block");
+					$(domRow).removeClass("template");
+					$(domRow).addClass("cloned");
+					var strImage = arrRows[strRowKey].campaign ? arrRows[strRowKey].campaign.image_id : "";
+					if (strImage == "" || !strImage)
+						strImage = "<?php print $this->objInstitution->image_id; ?>";
+					$(domRow).find(".ph_campaign_image img").attr("src", "<?php print $sn; ?>/imgs/v/src/" + strImage);
+					$(domRow).find(".ph_campaign_name").html(arrRows[strRowKey].campaign ? arrRows[strRowKey].campaign.campaign_name : "n/a");
+					$(domRow).find(".ph_task_name").html(arrRows[strRowKey].task ? arrRows[strRowKey].task.task_name : "n/a");
+					$(domRow).find(".ph_transaction_date").html(arrRows[strRowKey].transaction_date);
+					$(domRow).find(".ph_transaction_time").html(arrRows[strRowKey].transaction_time);
+					$(domRow).find(".ph_miles_awarded").html(arrRows[strRowKey].user_point.points < 0 ? -(arrRows[strRowKey].user_point.points) : arrRows[strRowKey].user_point.points);
+					$(domRow).find(".ph_store_miles").html(arrRows[strRowKey].store_points);
+					$(domRow).find(".ph_total_miles").html(arrRows[strRowKey].total_points);
+					$("#list_pane .loading").after(domRow);
+				}
+			}
+		},
+		"fn_init_ui" : function ()
+		{
+			KioskListApp.arrParams.navigate_to = KioskListApp.arrPageData.first_row_number;
+			$(".one_column .select a").click(function () {
+				$('#backdrop').fadeTo('normal', 0.7);
+				$(".overlay." + $(this).closest(".select").attr("id")).fadeIn();
+				$('#overlay_parent').css({
+					"top" : Math.max(0, (($('body').height()-430)/2)) + 'px',
+					"display" : "block"
+				});
+			});
+
+			$("#pager .next").click(function () {
+				if (parseInt(KioskListApp.arrPageData.first_row_number)+parseInt(KioskListApp.arrParams.items_per_page) <= KioskListApp.arrPageData.items_count)
+				{
+					KioskListApp.arrParams.navigate_to = parseInt(KioskListApp.arrPageData.first_row_number)+parseInt(KioskListApp.arrParams.items_per_page);
+					KioskListApp.fn_load_page();
+				}
+			});
+			$("#pager .prev").click(function () {
+				if (KioskListApp.arrPageData.first_row_number > KioskListApp.arrParams.items_per_page)
+				{
+					KioskListApp.arrParams.navigate_to = parseInt(KioskListApp.arrPageData.first_row_number)-parseInt(KioskListApp.arrParams.items_per_page);
+					KioskListApp.fn_load_page();
+				}
+			});
+
+			$('.close_overlay').bind('click', function(event) {
+				$('#backdrop').fadeTo('normal', 0).queue(function () {
+					$(this).dequeue().css("display", "none");
+				});
+				$(".overlay").fadeOut();
+			});
+
+			$(".selecton_box").mouseover(function () {
+				$(this).css({"background" : "rgba(255, 255, 255, 0.3)"});
+			});
+			$(".selecton_box").mouseout(function () {
+				$(this).css({"background" : "rgba(255, 255, 255, 0.1)"});
+			});
+			$(".overlay .selecton_box").click(function () {
+				var strOverlayType = $(this).closest(".overlay").attr("id").replace(/_overlay/, '');
+				$('#backdrop').fadeTo('normal', 0).queue(function () {
+					$(this).dequeue().css("display", "none");
+				});
+				$(".overlay").fadeOut();
+				$(".one_column ." + $(this).closest(".overlay").attr("id") + " .option").html($(this).html());
+				if (strOverlayType == "campaign_type" && $(this).attr("value") != "all") {
+					$(".one_column .display_type_overlay .option").html("<?php print text("Points"); ?>");
+					KioskListApp.arrParams["display_type"] = "points";
+				}
+				if (strOverlayType == "display_type") {
+					$(".one_column .campaign_type_overlay .option").html("<?php print text("All"); ?>");
+					KioskListApp.arrParams["campaign_type"] = "all";
+				}
+				KioskListApp.arrParams[strOverlayType] = $(this).attr("value");
+				KioskListApp.arrPageData.first_row_number = 1;
+				KioskListApp.arrParams.navigate_to = 1;
+				KioskListApp.fn_load_page();
+			});
+			// content already preloaded, build the page
+			KioskListApp.fn_init_page();
+		}
+	};
+	KioskListApp.fn_init_ui();
+});
+</script>
+<STYLE type="text/css">
+.overlay {
+	position: relative;
+	width:640px;
+	padding: 10px;
+	background-color:#333;
+	color: white;
+	background-image:url(<?php print $sn; ?>/images/back-end/kiosk/Camouflage-Background-Green.jpg);
+	background-position:50% 50%;
+	border:1px solid #666;
+
+	/* CSS3 styling for latest browsers*/
+	box-shadow:0 0 90px 5px #000;
+	-moz-box-shadow:0 0 90px 5px #000;
+	-webkit-box-shadow: 0 0 90px #000;
+}
+#backdrop {
+	position: absolute;
+	display: none;
+	background-color: black;
+	z-index: 998;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+}
+.selecton_box {
+	margin: 9px 3px 3px 3px;
+	text-align:center;
+	padding: 9px 3px 3px 3px;
+	border: 1px solid #fff;
+	background: rgba(255, 255, 255, 0.1);
+	cursor: pointer;
+}
+#list_pane {
+	margin: 8px 17px 0 15px;
+}
+#list_pane .row {
+	background: url("<?php print $sn . "/images/back-end/kiosk/bg_gradient_1.png"; ?>") repeat scroll 0 1px transparent;
+}
+#list_pane .cell {
+	height: 48px;
+	vertical-align: top;
+	font-weight: normal;
+	border-right: 1px solid rgba(255,255,255,0.2);
+	display:table-cell;
+	vertical-align:middle;
+	font-size: 12pt;
+	white-space:nowrap;
+}
+#list_pane .cell:first-child {
+	padding-right: 3px;
+}
+#list_pane .cell:last-child, #list_pane .row:not(.header) .cell:first-child {
+	border-right: 0px;
+}
+#list_pane .cell div {
+	margin-left: 3px;
+	white-space:nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: inherit;
+	padding-top: 2px;
+}
+#list_pane .row.header .cell {
+	height: 27px;
+	color: rgba(255,255,255,0.9);
+}
+.loading {
+	position:absolute;
+	vertical-align: top;
+	background-color: rgba(255,255,255,0.70);
+	padding: 3px;
+	z-index: 999;
+	width: 632px;
+	border-radius: 4px;
+	font-weight: normal;
+	color: rgba(0,0,0,0.65);
+}
+.loading div {
+	display:table-cell;
+	vertical-align:middle;
+	height: 44px
+}
+.loading div:first-child {
+	padding: 0 0 0 10px;
+}
+.loading div:not(:first-child) {
+	padding: 3px 0 0 10px;
+}
+.template {
+	display: none;
+}
+.center {
+	text-align: center;
+}
+.hidden {
+	display: none;
+}
+.prev, .next {
+	cursor:pointer;
+}
+</STYLE>
+<form>
+<div id="overlay_parent" style="position:absolute; width:100%; display: none; z-index:999">
+	<div class="overlay display_type_overlay" id="display_type_overlay" style="margin: auto;">
+		<div class="close close_overlay" style="z-index:1000"></div>
+		<div class="view_type">
+			<div style="width:100%;text-align:center;margin-bottom: 12px;"><?php print text("Display Types"); ?></div>
+			<div class="selecton_box" value="all"><?php print text("All"); ?></div>
+			<div class="selecton_box" value="purchases"><?php print text("Purchases"); ?></div>
+			<div class="selecton_box" value="points"><?php print text("Points"); ?></div>
+		</div>
+	</div>
+	<div class="overlay campaign_type_overlay" id="campaign_type_overlay" style="margin: auto;">
+		<div class="close close_overlay" style="z-index:1000"></div>
+		<div class="view_type">
+			<div style="width:100%;text-align:center;margin-bottom: 12px;"><?php print text("Campaigns"); ?></div>
+			<div class="selecton_box" value="all"><?php print text("All"); ?></div>
+<?php
+	foreach ($this->arrCampaigns as $objCampaign)
+	{
+		print '<div class="selecton_box" value="' . $objCampaign->campaign_id . '">' . text($objCampaign->campaign_name) . '</div>';
+	}
+?>
+		</div>
+	</div>
+</div>
+
+<div id="backdrop"></div>
+
+<div id="wrapper">
+	<div id="header">
+		<div class="org">
+			<div class="nav">
+				<ul>
+					<li class="icon_back"><a href="<?php print $sn; ?>/kiosk01/profile"><?php print text("Back"); ?></a></li>
+					<li class="icon_home"><a href="<?php print $sn; ?>/kiosk01/profile"><?php print text("Home"); ?></a></li>
+					<li class="icon_logout"><a href="<?php print $sn; ?>/kiosk01/index"><?php print text("Logout"); ?></a></li>
+				</ul>
+			</div>
+			<div class="org_photo">
+				<IMG SRC='<?php print $sn . "/imgs/v/src/" . $this->objInstitution->image_id; ?>' WIDTH='100' HEIGHT='100' />
+			</div>
+			<?php print text("Institution"); ?>: <?php print text($this->objInstitution->name); ?><br />
+			<?php print text("Name"); ?>: <?php print $this->objUser->first_name . " " . $this->objUser->last_name; ?><br />
+			<?php print text("Total Miles"); ?>: <? print intval($this->intUserPointsTotal); ?>
+		</div>
+	</div>
+
+	<div id="main">
+		<div id="page_title">
+			<?php print text("Transaction History"); ?>
+		</div>
+		<div class="winner_boxes">
+
+			<div class="one_column">
+				<div class="pane_title" style="padding-top: 8px"><?php print text("View Settings"); ?></div>
+				<div class="select display_type_overlay" id="display_type_overlay">
+					<div class="button_small mini">
+						<div>
+							<a href="#"><?php print text("Change"); ?></a>
+						</div>
+					</div>
+					<div class="title">
+						<?php print text("Type"); ?>
+					</div>
+					<div class="option"><?php print text("All"); ?></div>
+					<br class="clear" />
+				</div>
+				<div class="select campaign_type_overlay" id="campaign_type_overlay">
+					<div class="button_small mini">
+						<div>
+							<a href="#"><?php print text("Change"); ?></a>
+						</div>
+					</div>
+					<div class="title">
+						<?php print text("Campaign"); ?>
+					</div>
+					<div class="option"><?php print text("All"); ?></div>
+					<br class="clear" />
+				</div>
+			</div>
+			<div class="two_column">
+				<div class="winner_display">
+					<div class="title">
+						&nbsp;
+					</div>
+					<div class="button_bar">
+						<div class="sort_links button_small mini">
+							<div class="cssHide">
+								<a href="#">1</a>
+							</div>
+						</div>
+						<div id="pager" class="pager button_small mini">
+							<span class="table_info">
+								<span class="pagedisplay" id="pageDisplay"></span><br />
+								<span class="table_showing" id="table_showing"></span>
+							</span>
+
+							<div>
+								<a class="prev"><</a>
+							</div>
+							<div>
+								<a class="next">></a>
+							</div>
+						</div>
+						<br class="clear" />
+					</div>
+					<div id="list_pane">
+						<div class="header row" style="height:27px">
+							<div class="cell" style="width:418.5px;"><div>&nbsp;</div></div>
+							<div class="cell center" style="width:100px;">
+								<div><?php print text("Date"); ?></div>
+							</div>
+							<div class="cell center" style="width:100px;">
+								<div><?php print text("Balance"); ?></div>
+							</div>
+						</div>
+
+						<div class="loading hidden"><div><img src="<?php print $sn . "/images/back-end/kiosk/ajax-loader-black.gif"; ?>" /></div><div><span><?php print text("Loading..."); ?></span></div></div>
+
+						<div class="template row achievement_card">
+							<div class="cell" style="width:50px;">
+								<div><span class="ph_campaign_image"><IMG SRC='<?php print $sn . "/imgs/v/src/" . $this->objInstitution->image_id; ?>' WIDTH='48' HEIGHT='48' /></span></div>
+							</div>
+							<div class="cell" style="width:171px;">
+								<div><b><?php print text("Campaign / Task"); ?></b><br /><span class="ph_campaign_name">Head Counsilor</span><br /><span class="ph_task_name">Tefillah Dayschoo asdl asdasdsa</span></div>
+							</div>
+							<div class="cell center" style="width:191px;">
+								<div><b><span class="ph_"><?php print text("Achievement Card"); ?></span></b><br /><span class="ph_miles_awarded">5</span> <?php print text("miles awarded"); ?></div>
+							</div>
+							<div class="cell center" style="width:100px;">
+								<div><b><span class="ph_transaction_date"><?php print date("d M, Y"); ?></span><br /><span class="ph_transaction_time"><?php print date("h:i a"); ?></span></b></div>
+							</div>
+							<div class="cell center" style="width:100px;">
+								<div><?php print text("Store"); ?>:<span class="ph_store_miles">0</span><br /><?php print text("Total"); ?>: <span class="ph_total_miles"></span></div>
+							</div>
+						</div>
+
+						<div class="template row admin_manual">
+							<div class="cell" style="width:50px;">
+								<div><span class="ph_admin_image"><IMG SRC='<?php print $sn . "/imgs/v/src/" . $this->objInstitution->image_id; ?>' WIDTH='48' HEIGHT='48' /></span></div>
+							</div>
+							<div class="cell" style="width:171px;">
+								<div><b><span class="ph_"><?php print text("Commanding Officer"); ?></span></b><br /><span class="ph_admin_name">Andrew Dear</span></div>
+							</div>
+							<div class="cell center" style="width:191px;">
+								<div><b><span class="ph_amout_type"><?php print text("Deducted"); ?></span></b><br /> <span class="ph_amount">25</span> <span class="ph_deduction_type"></span> <?php print text("miles"); ?></div>
+							</div>
+							<div class="cell center" style="width:100px;">
+								<div><b><span class="ph_transaction_date"><?php print date("d M, Y"); ?></span><br /><span class="ph_transaction_time"><?php print date("h:i a"); ?></span></b></div>
+							</div>
+							<div class="cell center" style="width:100px;">
+								<div><?php print text("Store"); ?>:<span class="ph_store_miles">0</span><br /><?php print text("Total"); ?>: <span class="ph_total_miles"></span></div>
+							</div>
+						</div>
+
+						<div class="template row prize_purchase">
+							<div class="cell" style="width:50px;">
+								<div><span class="ph_prize_image"><IMG SRC='<?php print $sn . "/imgs/v/src/" . $this->objInstitution->image_id; ?>' WIDTH='48' HEIGHT='48' /></span></div>
+							</div>
+							<div class="cell" style="width:171px;">
+								<div><b><?php print text("Prize Purchase"); ?></b><br /><span class="ph_prize_name">Fresh Pear</span></div>
+							</div>
+							<div class="cell center" style="width:90px;">
+								<div><b><?php print text("Quantity"); ?></b><br /> <span class="ph_quantity">3</span></div>
+							</div>
+							<div class="cell center" style="width:97px;">
+								<div><b><?php print text("Cost"); ?></b><br /><span class="ph_sum_cost">9</span> <?php print text("miles"); ?></div>
+							</div>
+							<div class="cell center" style="width:100px;">
+								<div><b><span class="ph_transaction_date"><?php print date("d M, Y"); ?></span><br />
+										<span class="ph_transaction_time"><?php print date("h:i a"); ?></span></b></div>
+							</div>
+							<div class="cell center" style="width:100px;">
+								<div><?php print text("Store"); ?>:<span class="ph_store_miles">0</span><br /><?php print text("Total"); ?>: <span class="ph_total_miles"></span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div id="footer">
+		<div class="footer_logo"></div>
+		<div class="footer_logout"></div>
+	</div>
+</div>
+</form>

@@ -1,0 +1,119 @@
+<?php 
+include "config.phtml";
+include "parameters.phtml";
+?>
+<div class="slider">	
+	<div class="col_title">
+		<span>Achievement Card List</span>
+	</div>
+	<div class="col_content">
+<?php
+	if(empty($this->arrCardTemplates))
+	{
+?>
+	<div class="col_content">		
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<p>Sorry, you did not create any templates. Please go back to create achievement cards section.</p>
+			</div>
+		</div>
+	</div>
+</div>
+<?php
+	}
+?>		
+		<div style="text-align:center; margin-left:auto !important; margin-right:auto !important;">Generic Achievement Card Template</div>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form name="form_generic_card_template" id="form_generic_card_template" method="post" action="/campaigns/achievementcardtemplateprint/mode/generic" target="_blank">
+					<ul>
+						<li>
+							<span class="label">Select a template</span>
+							<span class="input">
+<?php
+						print '<select class="select" name="template_name" id="template_name">';
+						foreach($this->arrCardTemplates as $objCardTemplate)
+						{
+							if($objCardTemplate->task_id==0)
+							{
+								print '<option value="'.$objCardTemplate->achievement_card_id.'">'.$objCardTemplate->achievement.'</option>';	
+							}					
+						}
+						print '</select>';
+?>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Select number of sheets to print on:</span>
+							<span class="input">
+								<select class="select" name="sheet_number" id="sheet_number">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+									<option value="10">10</option>
+								</select>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<input type="submit" name="print" value="Print Achievement Cards">
+						</li>
+					</ul>
+				</form>
+			</div>
+        </div>
+		<div style="text-align:center; margin-left:auto !important; margin-right:auto !important;">Specific Achievement Card Template</div>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form name="form_specific_card_template" id="form_specific_card_template" method="post" action="/campaigns/achievementcardtemplateprint/mode/specific" target="_blank">
+					<ul>
+						<li>
+							<span class="label">Select a template</span>
+							<span class="input">
+<?php
+						print '<select class="select" name="template_name" id="template_name">';
+						foreach($this->arrCardTemplates as $objCardTemplate)
+						{
+							if($objCardTemplate->task_id!=0)
+							{
+								print '<option value="'.$objCardTemplate->achievement_card_id.'">'.$objCardTemplate->achievement.'</option>';
+								
+							}					
+						}
+						print '</select>';
+?>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Select number of sheets to print on:</span>
+							<span class="input">
+								<select class="select" name="sheet_number" id="sheet_number">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+									<option value="10">10</option>
+								</select>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<input type="submit" name="print" value="Print Achievement Cards">
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+    </div>
+</div>

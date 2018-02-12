@@ -1,0 +1,62 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+
+<script>
+	$(document).ready(function()
+	{
+		$('#form_categoryadd a.submit').click( function(e) {
+			e.preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $("#processing_status").html('Loading...').fadeIn("slow"),
+				url : '<?php echo $sn . "/images/imagecategoriesadd" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('#form_categoryadd').serialize(),
+				success : function(response) {
+					if (response.match(/^[0-9]+$/)) {
+						//$("#processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+						slideURL('images/imagecategorieslist');
+						//naviageBack(this);
+						//slideRefresh();
+						} else {
+						$("#processing_status").html(response).fadeIn("slow");
+					}
+				}
+			});
+		});
+	});
+</script>
+
+<div class="slider">
+	<div class="col_title"><span>Add New Image</span></div>	
+	<div class="col_content camper">
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				
+				<form name="form_categoryadd" id="form_categoryadd" method="post" action="">
+					
+					<input type="hidden" name="institution_id" id="institution_id" value="<?php print $this->institution_id; ?>" />
+					
+					<ul>
+						<li>
+							<span class="label">Category Name:</span>
+							<span class="input"><input type="text" class="required" id="category_name" name="category_name" value="<?php echo $this->category_name; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+
+						<li>
+							<div id="processing_status"><?php if ($this->message){ echo $this->message . "<br>"; }?></div>
+						</li>
+						<li>
+							<span><a href="#" title="Save" class="button submit">Save</a></span>							
+							<div class="clear"></div>							
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

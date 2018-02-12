@@ -1,0 +1,210 @@
+<?php 
+	include "config.phtml";
+	include "parameters.phtml";
+	$i=0;
+?>
+
+<style>
+<!--
+.marking .names .task_names .cell {
+	border-top:none;
+}
+.marking .cell input {
+	border:none;
+	background:none;
+	height:40px;
+	font-size:20px;
+	text-align:center;
+	width:40px;
+}
+.marking .autofill .cell input {
+	height:22px;
+}
+.marking .autofill .cell .fill {
+	/* cursor:pointer; */
+	height:16px;
+	width:16px;
+	/* background:url('/images/back-end/admin/icon_form_fill.png'); */
+	float:right;
+	margin:-2px 1px 0;
+}
+-->
+</style>
+
+
+	<div class="slider">
+		<div class="col_title"> <span>Add Points by Campaign</span> </div>
+		<div class="col_content" id="col_content">
+			<form name="formaddpoints11" id="formaddpoints11" method="post" action=''>
+			<div class="module" id="module-info">
+				<div class="module_conntent">
+					<div class="marking">
+						<div id="processing_status"></div>
+						<div id="col_names" class="col names">
+							<div class="mission_name">
+								<div class="cell">Students</div>
+							</div>
+							<div class="row task_names">
+								<div class="cell"></div>
+							</div>
+							<div class="cell"></div>
+						
+						<!-- GENERATE STUDENT NAMES -->
+						<?php foreach($this->arrUsers as $objUser): ?>
+							<div class="cell"><?php echo $objUser->first_name . " " . $objUser->last_name; ?></div>
+						<?php endforeach ?>
+						
+						</div>
+						<div class="mission_window">
+							<div class="mission_container">
+								<div class="missions" style="overflow-x:auto">
+									<div class="col mission">
+										<div class="row mission_name">
+											<div class="cell">Campaigns</div>
+										</div>
+										<div class="row task_names">
+									<?php foreach ($this->arrCampaigns as $objCampaign): ?>
+											<div class="cell"><span><?=$objCampaign->campaign_name?></span></div>
+									<?php endforeach ?>
+										</div>
+										<div id="mission_one_tasks">
+											
+											<div class="row autofill">
+												<?php foreach ($this->arrCampaigns as $objCampaign): ?>
+												
+												<div class="cell">
+													<span>
+														<input size="2" disabled type="text" id="dummy100" name="dummy100" value="" >
+														<input type="hidden" name="dummy200" id="dummy200" value="" />
+														<input type="hidden" name="dummy300" id="dummy300" value="" />
+													</span>
+													<div class="fill"></div>
+												</div>
+												<?php endforeach ?>
+											</div>
+											
+											
+												
+											<?php foreach ($this->arrUsers as $objUser): ?>
+											<div class="row">
+												<?php foreach ($this->arrCampaigns as $objCampaign): ?>
+												<?php $i++; ?>
+												<div class="cell">
+													<span>
+														<input size="5" disabled type="text" id="points_<?= $i ?>" name="points_<?= $i ?>" value="<?=$this->arrUserData[$objUser->user_id][$objCampaign->campaign_id];?>" >
+														<input type="hidden" name="user_id_<?= $i ?>" id="user_id_<?= $i ?>" value="<?=$objUser->user_id ?>" />
+														<input type="hidden" name="campaign_id_<?= $i ?>" id="campaign_id_<?= $i ?>" value="<?=$objCampaign->campaign_id ?>" />
+													</span>
+													<div class="fill"></div>
+												</div>
+												<?php endforeach ?>
+											</div>
+											<?php endforeach ?>
+											
+											
+											
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div>
+			<span>
+				<input type='hidden' name="arr_size" id="arr_size" value="<?=$i?>" />
+				<a href="#" title="Save" class="button submit" >Save</a>
+			</span>
+			<span>
+				<a href="<?php echo $sn; ?>/points/pointsviewtotal/class_id/<?php echo $this->class_id; ?>/institution_id/<?=$this->institution_id;?>" title="View Totals" class="button link" >View Totals</a>
+			</span>
+			</form>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ORIGINAL CODE STARTS
+<?php 
+	include "config.phtml";
+	$i=0;
+	
+?>
+
+<div class="slider">
+	<div class="col_title">
+		<span>View Points by Campaign</span>
+	</div>
+	<div class="col_content" id="col_content">
+		<div class="module" id="module-info">
+			<div class="module_conntent">
+				<div class="marking">
+					<div id="processing_status"></div>
+					<div id="col_names" class="col names">
+						<div class="mission_name">
+							<div class="cell">Campaigns</div>
+						</div>
+					<?php foreach($this->arrUsers as $objUser): ?>
+					
+						<div class="cell"><?php echo $objUser->first_name . " " . $objUser->last_name; ?></div>
+					<?php endforeach ?>
+
+					</div> 
+					<div class="mission_window">
+						<div class="mission_container">									
+							<div class="missions" style="overflow-x:auto">
+							<?php foreach ($this->arrCampaigns as $objCampaign): ?>
+								<div class="col mission" id="mission_one">
+									<div class="row mission_name" >
+										<div class="row task_names">
+											<div class="cell"><?php echo $objCampaign->campaign_name; ?></div>
+										</div>
+									</div>
+									<div id="mission_one_tasks">
+								<?php foreach ($this->arrUsers as $objUser): ?>
+								<?php $i++; ?>
+										<div class="row">
+											<div style="padding:10px">
+												<?=$this->arrUserData[$objUser->user_id][$objCampaign->campaign_id];?>
+											</div>
+										</div>
+								<?php endforeach ?>
+									</div>
+								</div>
+							<?php endforeach ?>																				
+							</div> 										
+						</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div> 
+		</div> 					
+		<span>
+		</span>
+	</div>
+</div>
+-->

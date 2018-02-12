@@ -1,0 +1,202 @@
+<?php 
+	include "config.phtml";
+	$intLinesDone = isset($objUser->lines_done) ? $objUser->lines_done : 0;
+	$intLinesOffset = isset($objUser->lines_offset) ? $objUser->lines_offset : 0;
+?>
+<script>
+var arrTanya = <?php print $this->strTanyaJSON; ?>;
+var arrMedals = {
+	1 : "White",
+	2 : "Red",
+	3 : "Orange",
+	4 : "Yellow",
+	5 : "Green",
+	6 : "Blue",
+	7 : "Purple",
+	8 : "Brown",
+	9 : "Gray",
+	10 : "Black"
+};
+
+$(document).ready(function()
+{
+	$('#backdatinglist a.submit').click( function(e) {
+		e.preventDefault();
+		var arrMissions = $("#backdatinglist .mission_limit");
+		var boolFail = 0;
+		for (var intItr = 0; intItr != arrMissions.length; intItr++)
+		{
+			var strId = $(arrMissions[intItr]).attr("id");
+			var intId = strId.replace(/mission_limit_/, "");
+			var intMissions = $("#user_mission_" + intId).val();
+			var intLimit = $(arrMissions[intItr]).val();
+			if (intMissions > intLimit)
+			{
+				boolFail = 1;
+			}
+		}
+		if (boolFail)
+		{
+			alert("You must adjust any students marked as 'Over' in the Medals column.");
+			return 0;
+		}
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#backdating_processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn; ?>/tanya/tanyabackdatinglist/',
+			dataType : "text",
+			data: $('#backdatinglist').serialize(),
+			success : function(response) {
+				alert(response);
+				$("#backdating_processing_status").html(response).fadeIn("slow");
+			}
+		});
+	});
+	$('.lines_editable').bind("keyup", function () {
+		var intId = this.id.replace(/_done/, '');
+		$("#" + intId).trigger("change");
+	});
+	$('.mission_limit').bind("change", function () {
+		var intId = this.id.replace(/mission_limit_/, '');
+		$("#user_" + intId).trigger("change");
+	});
+	$('.ladder_select').bind('change keyup', function (e) {
+		var strName = this.name;
+		var intLadder = this.value;
+		if (
+			strName.match(/^user_[0-9]+$/)
+		) {
+			var intUser = strName.replace(/^user_/, "");
+			if (intLadder != "")
+			{
+				var intLinesCompleted = $("#user_done_" + intUser).val();
+				var intLinesOffset = $("#user_offset_" + intUser).val();
+				if (
+					intLinesCompleted < 1
+				) {
+					$("#user_medal_" + intUser).html("");
+					return;
+					
+				}
+				var intLinesPerTask = Math.round(arrTanya["arrLadders"][intLadder]/416*100)/100;
+				//alert(intLinesCompleted + " / " + intLinesPerTask);
+				var intMissions = Math.floor(intLinesCompleted / intLinesPerTask);
+				$("#user_missions_" + intUser).html(intMissions);
+				$("#user_mission_" + intUser).val(intMissions);
+				var intMedal = 0;
+				for (var intItr=0; intItr!=11; intItr++)
+				{
+					if (arrTanya["arrMedalData"][intItr+1] >= intMissions)
+					{
+						intMedal = intItr + 1;
+						break;
+					}
+				}
+				if (intMissions > $("#mission_limit_" + intUser).val())
+				{
+					$("#user_mission_" + intUser).val(intMissions);
+					$("#user_medal_" + intUser).html("Over");
+					return;
+				}
+				$("#user_medal_" + intUser).html(arrMedals[intMedal]);
+			}
+			else
+			{
+				$("#user_mission_" + intUser).val("");
+				$("#user_medal_" + intUser).html("");
+			}
+		}
+	});
+});
+</script>
+<div class="slider">
+	<div class="col_title">
+		<span>Student Mission Backdate</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<form name="backdatinglist" id="backdatinglist">
+					<input type="hidden" name="is_post" value="true" />
+					<table>
+						<tr>
+							<td><b>&nbsp;Student</b></td>
+							<td><b>&nbsp;Limit</b></td>
+							<td><b>&nbsp;Lines Before</b></td>
+							<td><b>&nbsp;Lines After</b></td>
+							<td><b>&nbsp;Quota</b></td>
+							<td><b>&nbsp;Mission</b></td>
+							<td><b>&nbsp;Medal</b></td>
+							<td><b>&nbsp;DOB</b></td>
+						</tr>
+<?php
+	if($this->arrUsers)
+	{
+		foreach ($this->arrUsers as $objUser) {
+?>
+						<tr>
+							<td width="190">&nbsp;<?php print $objUser->first_name; ?> <?php print $objUser->last_name; ?></td>
+							<td>&nbsp;
+								<select class="mission_limit" id="mission_limit_<?php print $objUser->user_id; ?>">
+<?php
+			for ($intItr=1; $intItr!=61; $intItr++)
+			{
+				print "<option value='{$intItr}'>{$intItr}</option>";
+			}
+?>
+								</select>
+								<script>
+									$("#mission_limit_<?php print $objUser->user_id; ?>").attr("selectedIndex", 59);
+								</script>
+							</td>
+							<td>&nbsp;<input class="lines_editable" type="text" size="8" name="user_offset_<?php print $objUser->user_id; ?>" id="user_offset_<?php print $objUser->user_id; ?>" value="0" /></td>
+							<td>&nbsp;<input class="lines_editable" type="text" size="8" name="user_done_<?php print $objUser->user_id; ?>" id="user_done_<?php print $objUser->user_id; ?>" value="0" /></td>
+							<td>&nbsp;
+								<select class="ladder_select" name="user_<?php print $objUser->user_id; ?>" id="user_<?php print $objUser->user_id; ?>">
+									<option></option>
+									<option value="1"<?=$this->arrDOBList[$objUser->user_id]["quota"]==1?" selected":"";?>>0.15</option>
+									<option value="2"<?=$this->arrDOBList[$objUser->user_id]["quota"]==2?" selected":"";?>>0.30</option>
+									<option value="3"<?=$this->arrDOBList[$objUser->user_id]["quota"]==3?" selected":"";?>>0.39</option>
+									<option value="4"<?=$this->arrDOBList[$objUser->user_id]["quota"]==4?" selected":"";?>>0.56</option>
+									<option value="5"<?=$this->arrDOBList[$objUser->user_id]["quota"]==5?" selected":"";?>>0.69</option>
+									<option value="6"<?=$this->arrDOBList[$objUser->user_id]["quota"]==6?" selected":"";?>>0.82</option>
+									<option value="7"<?=$this->arrDOBList[$objUser->user_id]["quota"]==7?" selected":"";?>>1.01</option>
+									<option value="8"<?=$this->arrDOBList[$objUser->user_id]["quota"]==8?" selected":"";?>>1.13</option>
+									<option value="9"<?=$this->arrDOBList[$objUser->user_id]["quota"]==9?" selected":"";?>>1.27</option>
+									<option value="10"<?=$this->arrDOBList[$objUser->user_id]["quota"]==10?" selected":"";?>>1.40</option>
+									<option value="11"<?=$this->arrDOBList[$objUser->user_id]["quota"]==11?" selected":"";?>>1.49</option>
+									<option value="12"<?=$this->arrDOBList[$objUser->user_id]["quota"]==12?" selected":"";?>>1.69</option>
+									<option value="13"<?=$this->arrDOBList[$objUser->user_id]["quota"]==13?" selected":"";?>>1.89</option>
+									<option value="14"<?=$this->arrDOBList[$objUser->user_id]["quota"]==14?" selected":"";?>>2.04</option>
+									<option value="15"<?=$this->arrDOBList[$objUser->user_id]["quota"]==15?" selected":"";?>>2.16</option>
+									<option value="16"<?=$this->arrDOBList[$objUser->user_id]["quota"]==16?" selected":"";?>>2.52</option>
+									<option value="17"<?=$this->arrDOBList[$objUser->user_id]["quota"]==17?" selected":"";?>>3.59</option>
+									<option value="18"<?=$this->arrDOBList[$objUser->user_id]["quota"]==18?" selected":"";?>>5.27</option>
+									<option value="19"<?=$this->arrDOBList[$objUser->user_id]["quota"]==19?" selected":"";?>>7.02</option>
+									<option value="20"<?=$this->arrDOBList[$objUser->user_id]["quota"]==20?" selected":"";?>>9.06</option>
+								</select>
+							</td>
+							<td>&nbsp;<input readonly size="3" type="text" style="border:0px; cursor:default;" id="user_mission_<?php print $objUser->user_id; ?>" name="user_mission_<?php print $objUser->user_id; ?>" /></td>
+							<td>&nbsp;<span id="user_medal_<?php print $objUser->user_id; ?>"></span></td>
+							<td>&nbsp;<input size="8" type="text" name="user_medal_dob_<?php print $objUser->user_id; ?>" value="<?php print $this->arrDOBList[$objUser->user_id]["dob"]; ?>" /></td>
+						</tr>
+<?php
+		}
+	}
+	else
+	{
+		echo '<tr><td>There are no classes available to display.</td></tr>';
+	}
+?>
+					</table>
+					<div id="backdating_processing_status"></div>
+					<div>
+						<span><a href="#" title="Save" class="button submit">Save</a></span>							
+						<div class="clear"></div>							
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

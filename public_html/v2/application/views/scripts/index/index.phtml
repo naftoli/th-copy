@@ -1,0 +1,284 @@
+<?php
+	if (empty($this->tstyle))
+		$this->tstyle = "chabadhebrewschool";
+	include "public_header.phtml";
+	include "config.phtml";
+	include "parameters.phtml";
+	global $arrAppDetails;
+	$arrDetails = $arrAppDetails[$this->tstyle];
+?>
+<script type="text/javascript">
+var GLOBAL_SLIDES = {};
+$(document).ready(function()
+{
+	$('#email').focus();
+	$('#footer_links a').mouseover(function () {
+		$(this).css({
+			'color' : '#000'
+		});
+	});
+	$('#footer_links a').mouseout(function () {
+		$(this).css({
+			'color' : '#555'
+		});
+	});
+});
+</script>
+<style>
+#footer_links a {
+	color:#555;
+}
+#footer_links {
+	width:1024px;
+	margin:0 auto;
+	height:30px;
+	padding:4px;
+	color:#555;
+}
+h2 {
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 8px;
+	padding:8px;
+	padding-bottom: 12px;
+}
+div.line {
+	border-bottom: 1px solid #ddd;
+	margin: 8px 0;
+	height:1px;
+}
+.promo td {
+	padding:4px;
+}
+#nav ul.list_first li img {
+	margin-right: 15px;
+}
+</style>
+</head>
+
+<body>
+    <NOSCRIPT><P STYLE="color: red; font-size: larger;"><?php print text("Notice: You have javascript disabled. This site will not function without javascript."); ?></P></NOSCRIPT>
+	<div id="wrapper">
+    	<div id="nav">
+        	<div class="col_title_bg"></div>
+            <div class="col_title"><?php print text("Menu"); ?></div>
+            <ul class="list_first">
+				<li class="list_parent"><a href="#" onclick="window.location.href='<?php echo $sn;?>/registration/index2/tstyle/<?php print $this->tstyle; ?>';"><img src="<?php print $sn; ?>/images/front-end/admin/icon_school.png" width="28" height="28" /><?php print text("Register"); ?></a></li>
+                <li class="list_parent current"><a href="#"><img src="<?php print $sn; ?>/images/front-end/admin/icon_door_in.png" width="28" height="28" /><?php print text("Login"); ?></a></li>
+				<!--li class="list_parent"><a href="#" href="#" onclick="window.location.href='<?php echo $sn;?>/mobile';"><img src="<?php print $sn; ?>/images/MOBILE-APP-ICON-GREEN_300x300.png" width="28" height="28" /><?php print text("Mobile"); ?></a></li-->
+            </ul>
+        </div>
+        <div id="content">
+        	<div class="col_title_bg"></div>
+            <div class="slider_container">
+                <div class="slider">
+                    <div class="col_title"><span><?php print text("Welcome, " . $arrDetails['name']); ?></span></div>
+                    <div class="col_content">
+<?php
+	if (!preg_match('/Firefox.2[0-9]\.0/', $_SERVER['HTTP_USER_AGENT']))
+	{
+?>
+                        <div class="module message"><?php print text("This application will only function properly using the latest version of Firefox."); ?> <a href="http://www.mozilla.org/en-US/firefox/fx/#desktop"><?php print text("Get Firefox now."); ?></a></div>
+<?php
+	}
+	if ($arrDetails['default_institution_logo'])
+	{
+?>
+						<div class="module" style="padding-top:10px">
+							<table width="100%">
+								<tr>
+									<td width="20"></td>
+									<td width="160" style="text-align:center">
+										<img src="<?php print $sn . $arrDetails['default_institution_logo']; ?>/w/150" style="float:left" />
+									</td>
+									<td width="20"></td>
+									<td>
+										<?php print text('Finally, an online tool for the Jewish [|school|] of the 21st century.<br/> Take your [|school|] to the next level with this specialized tool.'); ?>
+									</td>
+								</tr>
+							</table>
+							<table width="100%" class="promo">
+								<tr>
+									<td colspan="2" align="center">
+										<div class="line"></div>
+										<a class="button fix" href="<?php echo $sn;?>/registration/index2/tstyle/<?php print $this->tstyle; ?>">Sign Up</a> <a class="button fix overlay" href="<?php print $sn; ?>/index/moreinfo<?php print $strParamPath; ?>">More Info</a>
+									</td>
+								</tr>
+							</table>
+						</div>
+<?php
+	}
+	else
+	{
+?>
+						<div class="module" style="">
+							<h2 style="font-size:14pt;"><?php print text('Running a [|school|]?'); ?></h2>
+							<div style="text-align:center;padding:6px 0">
+								<div style="font-size:12pt;width:500px;margin:0 auto;"><?php print text('Finally, an online tool for the Jewish [|school|] of the 21st century. Take your [|school|] to the next level with this specialized tool.'); ?></div>
+							</div>
+							<table width="100%" class="promo">
+								<tr>
+									<td colspan="2" align="center" height="40">
+										<b>Now, you can:</b>
+									</td>
+								</tr>
+								<tr style="background-color:#fff;">
+									<td width="50%" valign="top" align="center" style="padding:5px;">
+										Create Campaigns & Tasks<br/>
+										Track camper progress<br/>
+										Generate reports<br/>
+									</td>
+									<td width="50%" valign="top" align="center" style="padding:5px;">
+										Give out and deduct Points<br/>
+										Use our incredible Prize Store<br/>
+										And more!
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2" align="center">
+										<div class="line"></div>
+										<a class="button fix" href="<?php echo $sn;?>/registration/index2/tstyle/<?php print $this->tstyle; ?>">Sign Up</a> <a class="button fix overlay" href="<?php print $sn; ?>/index/moreinfo<?php print $strParamPath; ?>">More Info</a>
+									</td>
+								</tr>
+							</table>
+						</div>
+<?php
+	}
+?>
+
+
+
+
+
+
+						<h1><?php print text($arrDetails['name'] . " Login"); ?></h1>
+                        <div class="module" id="module-info">
+                            <div class="module_content">
+                                <div class="list form">
+                                	<div id="login_status_div"></div>
+									<form name="login" id="login" method="post" action="<?php echo $sn; ?>/login/index<?php print $strParamPath; ?>">
+                                        <ul>
+                                            <li>
+                                                <span class="label" style="margin-left:130px"><label for="email"><?php print text("Email"); ?></label></span>
+                                                <span class="input"><input type="text" name="email" id="email" maxlength="64" value=""></span>
+                                            </li>
+                                            <li>
+                                                <span class="label" style="margin-left:130px"><label for="password"><?php print text("Password"); ?></label></span>
+                                                <span class="input"><input type="password" name="password" id="password" maxlength="64" value=""></span>
+											</li>
+											<li>
+												<a style="margin-left: 130px;" href="<?php echo $sn;?>/registration/reset<?php print $strParamPath; ?>" class="inline_link"><b><?php print text("Forgot Your Password"); ?></b></a>
+											</li>
+                                            <li style="padding-left: 138px;">
+												<input type="submit" value="Login" class="button" onclick="mashpia_validate('#login_status_div','#login','<?php echo $sn; ?>/login/index<?php print $strParamPath; ?>');">
+                                                <input type="hidden" name="new_login">
+                                            </li>
+                                        </ul>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="module lists" id="module-info">
+                            <div class="module_content">
+                                <ul>
+									<li>
+                                        <a href="<?php echo $sn; ?>/hebrewschools/index<?php print $strParamPath; ?>" class="inline_link"><div class="name"><?php print text("Enter Kiosk Mode"); ?></div></a>
+									</li>
+                                </ul>
+                            </div>
+                        </div>
+<?php
+	if (empty($this->portal))
+	{
+		if (empty($this->tstyle))
+		{
+?>
+						<h1><?php print text("Links to our systems"); ?></h1>
+<?php
+		}
+		else
+		{
+?>
+						<h1><?php print text("Links to our other systems"); ?></h1>
+<?php
+		}
+?>
+
+                        <div class="module lists">
+                            <div class="module_content">
+                                <ul>
+<?php
+		if ($this->tstyle != "tzivoshashem")
+		{
+?>
+									<li>
+										<a href="<?php echo $sn; ?>/index/index/tstyle/tzivoshashem" class="inline_link"><div class="name"><?php print text("Tzivos Hashem"); ?></div></a>
+									</li>
+<?php
+		}
+		if ($this->tstyle != "chabadhebrewschool")
+		{
+?>
+									<li>
+										<a href="<?php echo $sn; ?>/index/index/tstyle/chabadhebrewschool" class="inline_link"><div class="name"><?php print text("Chabad Hebrew School"); ?></div></a>
+									</li>
+<?php
+		}
+		if ($this->tstyle != "hoo")
+		{
+?>
+									<li>
+										<a href="<?php echo $sn; ?>/index/index/tstyle/hoo" class="inline_link"><div class="name"><?php print text("HOO"); ?></div></a>
+									</li>
+<?php
+		}
+		if ($this->tstyle != "hebrewschool1")
+		{
+?>
+									<li>
+										<a href="<?php echo $sn; ?>/index/index/tstyle/hebrewschool1" class="inline_link"><div class="name"><?php print text("Camp Gan Israel"); ?></div></a>
+									</li>
+<?php
+		}
+		if ($this->tstyle != "releasedtime")
+		{
+?>
+									<li>
+										<a href="<?php echo $sn; ?>/index/index/tstyle/releasedtime" class="inline_link"><div class="name"><?php print text("Released Time"); ?></div></a>
+									</li>
+<?php
+		}
+		if ($this->tstyle != "friendshipcircle")
+		{
+?>
+									<li>
+										<a href="<?php echo $sn; ?>/index/index/tstyle/friendshipcircle" class="inline_link"><div class="name"><?php print text("Friendship Circle"); ?></div></a>
+									</li>
+<?php
+		}
+?>
+									<!--li>
+										<a href="http://mashpia.com/admin.php" class="inline_link"><div class="name"><?php print text("Chabad Schools"); ?></div></a>
+									</li-->
+                                </ul>
+                            </div>
+                        </div>
+<?php
+	}
+?>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div id="footer_links">
+		<div style="float:left;text-align:left;width:383px;margin:0 8px;"><a href="<?php print $sn; ?>/index/contact<?php print $strParamPath; ?>" class="overlay">Contact Us</a></div>
+		<div style="float:right;text-align:right;display:inline-block;margin:0 8px;width:383px;">Copyright © 2016 - mashpia.com</div>
+	</div>
+	<div id="overlay">
+		<div class="content"></div>
+	</div>
+</body>
+</html>

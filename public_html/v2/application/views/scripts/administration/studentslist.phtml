@@ -1,0 +1,49 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+?>
+
+<div class="slider">
+	
+	<div class="col_title">
+		<span>Teachers</span>
+	</div>
+	
+	<div class="col_content">
+		
+		<div id="lists" class="module lists forms">
+			
+			<div class="module_content">
+				
+				<ul>
+
+<?php if (count($this->students) > 0): ?>
+
+	<?php foreach($this->students as $student) : ?>
+	
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/administration/useredit/id/<?php echo $student->user_id; ?>">
+							<div class="icon"></div>
+							<div class="title">
+								<?php echo $student->last_name; ?>, <?php echo $student->first_name; ?>
+							</div>
+						</a>
+					</li>
+	<?php endforeach ?>
+
+<?php else : ?>
+					<li>
+						There are no Students
+					</li>
+<?php endif ?>
+
+				</ul>
+				
+			</div>
+			
+		</div>
+
+	</div>
+	
+</div>
+

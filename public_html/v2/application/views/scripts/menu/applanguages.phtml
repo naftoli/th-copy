@@ -1,0 +1,60 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<style>
+	.lable_count {
+		float:right;
+		background-color:#fff;
+		border:1px solid gray;
+		margin:5px;
+		padding:2px 12px 2px 12px;
+		text-align:center;
+	}
+</style>
+<div class="slider">
+	<div class="col_title">
+		<span><?php print text($this->strTitle); ?></span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+	if (!count($this->arrList))
+	{
+?>
+					<li>
+						<div class="icon"></div>
+						<div class="title"><?php print text("There are no languages available."); ?></div>
+					</li>
+<?php
+	}
+	else
+	{
+		foreach ($this->arrList as $arrItem)
+		{
+?>
+					<li>
+						<a class="link" href="<?php echo (preg_match("/^http/", $arrItem['link']) ? "" : $sn) . (preg_match("/^\//", $arrItem['link']) ? "" : "/"). $arrItem['link']; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php echo text($arrItem['text']); ?></div>
+<?php
+			if (isset($arrItem['count']))
+			{
+?>
+							<div class="lable_count"><?php echo $arrItem['count']; ?></div>
+<?php
+			}
+?>
+						</a>
+					</li>
+<?php
+		}
+	}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

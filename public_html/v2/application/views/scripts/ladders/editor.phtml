@@ -1,0 +1,421 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+
+	$intRows = 16;
+	$intColumns = $this->objCampaign->ladder; // Ladder
+?>
+<script type="text/javascript">
+var intRows = <?php print $intRows; ?>;
+var intColumns = <?php print $intColumns; ?>;
+var arrDropTimer = {};
+var intZTop = 1000;
+var intSliderWidth = 773;
+var arrGrades = <?php print json_encode($this->arrGrades); ?>;
+
+$(document).ready(function()
+{
+	$("#ladder_editor_processing_status").fadeOut();
+	$('#latter_editor a.submit').click( function(e) {
+		e.preventDefault();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#ladder_editor_processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn . "/ladders/editor" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('#latter_editor form').serialize(),
+			success : function(response) {
+				if (response == 1)
+					$("#ladder_editor_processing_status")
+						.stop()
+						.fadeOut(250, function () {
+							$(this).html("Save successful.")
+							.fadeOut(1000)
+							.fadeIn(500)
+							.delay(500)
+							.fadeOut(500, function () {
+								naviageBack();
+							});
+						});
+				else
+					$("#ladder_editor_processing_status").html(response).fadeIn("slow");
+			}
+		});
+	});
+	$("#latter_editor #selectable").find("td").click(function(e, intRecLevel /* = the recursion count */)
+	{
+		// If it's already selected, then unselect it
+		var boolOn;
+		if (
+			$(this).attr('class') == 'ladder_loading'
+			|| $(this).attr('class') == 'disabled'
+		)	return;
+
+		var strId = $(this).attr('id');
+		// Parse id
+		var arrParams = strId.match(/^grade_([^_]+)_ladder_(.+)/);
+		var Grade = arrParams[1];
+		var Ladder = arrParams[2];
+		if ($(this).attr('class') == 'selected')
+		{
+			if (
+				$(this).html() != "&nbsp;"
+				&& Grade != "all"
+				&& Ladder != "all"
+			) {
+				if (!confirm("Attention: It appears there is data saved in this cell.\n\nAre you sure you would like to remove this cell?"))
+					return;
+			}
+			$(this).removeClass("selected");
+			if (
+				Grade != "all"
+				&& Ladder != "all"
+			)
+				$(this).html("&nbsp;");
+			if ($("#ladders_editor_form #comment_" + $(this).attr("id")).length)
+				$("#ladders_editor_form #comment_" + $(this).attr("id")).remove();
+			ui_drop_out(this);
+			$("#s_"+$(this).attr('id')).remove();
+			boolOn = 0;
+			if (!intRecLevel)
+				$(this).trigger("mouseout");
+		}
+		else
+		{
+			// Otherwise, select it
+			$(this).addClass("selected");
+			$("#latter_editor form").append("<input type='hidden' name='s_" + strId + "' id='s_" + strId + "' value='on' />");
+			boolOn = 1;
+			if (!intRecLevel)
+				$(this).trigger("mouseover");
+		}
+		
+		// Optimize recursion
+		if (intRecLevel == 1 && !(Grade == "all" || Ladder == "all"))
+			return;
+		if (intRecLevel == 2)
+			return;
+		
+		// Validate and complete selections
+		ui_validate(boolOn, this, Grade, Ladder, intRecLevel);
+		
+		// Unselect select "select all" option if something gets selected with the "select all" feature on
+		if (!(Grade == "all" && Ladder == "all") && !intRecLevel)
+		{
+			$("#grade_all_ladder_all").removeClass("selected");
+		}
+	});
+<?php
+	if (isset($this->intTask))
+	{
+?>
+	$("#latter_editor #selectable").find("td")
+		.mouseover(function() {
+			if (($(this).attr("id")).match(/^grade_([0-9]+)_ladder_([0-9]+)$/) && $(this).attr('class') == 'selected') {
+				if (arrDropTimer["drop_" + $(this).attr("id")])
+				{
+					window.clearTimeout(arrDropTimer["drop_" + $(this).attr("id")]);
+				}
+				arrDropTimer["drop_" + $(this).attr("id")] = window.setTimeout(ui_drop_down, 1000, this);
+			}
+		})
+		.mouseout(function () {
+			if (($(this).attr("id")).match(/^grade_([0-9]+)_ladder_([0-9]+)$/) && $(this).attr('class') == 'selected') {
+				if (arrDropTimer["drop_" + $(this).attr("id")])
+				{
+					window.clearTimeout(arrDropTimer["drop_" + $(this).attr("id")]);
+					delete arrDropTimer["drop_" + $(this).attr("id")];
+				}
+				arrDropTimer["drop_" + $(this).attr("id")] = window.setTimeout(ui_drop_out, 1000, this);
+			}
+		});
+<?php
+	}
+	foreach ($this->arrLadders as $objLadder)
+	{
+?>
+		var objCell = $("#grade_<?php print $objLadder->grade; ?>_ladder_<?php print $objLadder->ladder; ?>");
+		ui_validate_switch(1, objCell, 1);
+		ui_set_comment("<?php print addslashes($objLadder->comment); ?>", "grade_<?php print $objLadder->grade; ?>_ladder_<?php print $objLadder->ladder; ?>");
+<?php
+	}
+?>
+});
+
+function ui_drop_down(objThis)
+{
+	if (
+		!$(objThis).length
+		|| $(objThis).attr("class") != "selected"
+	)
+		return;
+	delete arrDropTimer["drop_" + $(objThis).attr("id")];
+	// Clean up open states; fix for glitch that happens when you move your mouse around fast
+	for (intId in arrDropTimer)
+	{
+		window.clearTimeout(arrDropTimer[intId]);
+		if ($(objThis).attr("id") != arrDropTimer[intId])
+		{
+			if ($("#drop_" + arrDropTimer[intId]).length)
+			{
+				ui_drop_out($("#drop_" + arrDropTimer[intId]));
+			}
+			delete arrDropTimer[arrDropTimer[intId]];
+		}
+	}
+	// Positition 
+	var intHeight = parseInt($(objThis).css("height"));
+	var intWidth = parseInt($(objThis).css("width"));
+	var intTop = $(objThis).offset().top;
+	var intLeft = $(objThis).offset().left;
+	var intLeftOffset = Math.round(-($(".slider").parent().offset().left));
+	var intLeftLimit = intLeftOffset + intSliderWidth + (intWidth * 2); // I don't get this math but it seems to do the job
+	var intDropLeft = (intLeft + intLeftOffset);
+	// dont let the box overlap the left border
+	intDropLeft = intDropLeft < intLeftLimit ? intDropLeft : intLeftLimit;
+	$('#latter_editor').append(
+		'<textarea style="display:none" onkeyup="ui_drop_change(this)" class="overbox" id="drop_' + $(objThis).attr("id") + '"></textarea>'
+	);
+	if ($('#latter_editor #comment_' + $(objThis).attr("id")).length)
+	{
+		$('#latter_editor #drop_' + $(objThis).attr("id")).val($('#latter_editor #comment_' + $(objThis).attr("id")).val());
+	}
+	$('#latter_editor #drop_' + $(objThis).attr("id"))
+		.css({
+			"display" : "none",
+			"top" : intTop + intHeight + 1 + "px",
+			"left" : intDropLeft + "px",
+			"z-index" : intZTop++
+		})
+		.bind("mouseover", function () {
+			if (arrDropTimer["drop_" + $(objThis).attr("id")])
+				window.clearTimeout(arrDropTimer["drop_" + $(objThis).attr("id")]);
+			window.clearTimeout(arrDropTimer[$(objThis).attr("id")]);
+		})
+		.bind("mouseout", function () {
+			arrDropTimer[$(objThis).attr("id")] = window.setTimeout(ui_drop_out, 500, objThis);
+		})
+		.fadeIn()
+		.focus();
+}
+
+function ui_drop_change(objThis)
+{
+	var strId = $(objThis).attr("id");
+	var arrId = strId.split("_");
+	arrId.shift();
+	var strId = arrId.join("_");
+	ui_set_comment(objThis.value, strId);
+}
+
+function ui_set_comment(strVal, strId)
+{
+	if (!$("#comment_" + strId).length)
+	{
+		$('#ladders_editor_form').append("<input type='hidden' id='comment_" + strId + "' name='comment_" + strId + "' value='' />");
+	}
+	$("#comment_" + strId).val(strVal);
+	if ($("#" + strId).length)
+	{
+		if (strVal.length)
+		{
+			$("#" + strId).html("&#8226;");
+		}
+		else
+		{
+			$("#" + strId).html("&nbsp;");
+		}
+	}
+}
+
+function ui_drop_out(objThis)
+{
+	if ($(objThis).length)
+	{
+		var arrId = $(objThis).attr("id").split("_");
+		if (arrId[0] == "drop")
+		{
+			arrId.shift();
+			objThis = $("#" + arrId.join("_"));
+		}
+		$('#latter_editor #drop_' + $(objThis).attr("id")).fadeOut(function () {$(this).remove()});
+	}
+}
+
+function ui_validate(boolOn, objThis, Grade, Ladder, intRecLevel)
+{
+	
+	var strId = $(objThis).attr('id');
+	if (Grade == "all" && Ladder == "all")
+	{
+		var strClass = $(objThis).attr('class');
+		$(objThis).removeClass("selected");
+		$(objThis).addClass("ladder_loading");
+		window.setTimeout(ui_grid_select, 35, 1, 1, boolOn, objThis, strClass, intRecLevel);
+	}
+	// x select all
+	else if (Grade == "all" && Ladder != "all")
+	{
+		for (var intRow=1; intRow!=intRows+1; intRow++)
+		{
+			var objCell = $("#grade_" + intRow + "_ladder_" + Ladder);
+			ui_validate_switch(boolOn, objCell, intRecLevel);
+		}
+	}
+	// y select all
+	else if (Ladder == "all" && Grade != "all")
+	{
+		for (var intColumn=1; intColumn!=intColumns+1; intColumn++)
+		{
+			var objCell = $("#grade_" + Grade + "_ladder_" + intColumn)
+			ui_validate_switch(boolOn, objCell, intRecLevel);
+		}
+	}
+	
+	// Validate selections on x & y
+	for (var intRow=1; intRow!=intRows+1; intRow++)
+	{
+		var objCell = $("#grade_" + intRow + "_ladder_all");
+		if ($(objCell).attr('class') == 'selected')
+		{
+			for (var intColumn=1; intColumn!=intColumns+1; intColumn++)
+			{
+				var objCell = $("#grade_" + intRow + "_ladder_" + Ladder);
+				ui_validate_switch(1, objCell, intRecLevel);
+			}
+		}
+	}
+
+	for (var intColumn=1; intColumn!=intColumns+1; intColumn++)
+	{
+		var objCell = $("#grade_all_ladder_" + intColumn);
+		if ($(objCell).attr('class') == 'selected')
+		{
+			for (var intRow=1; intRow!=intRows+1; intRow++)
+			{
+				var objCell = $("#grade_" + Grade + "_ladder_" + intColumn);
+				ui_validate_switch(1, objCell, intRecLevel);
+			}
+		}
+	}
+}
+
+// Select a full column or row
+function ui_grid_select(boolGrade, boolLadder, boolOn, objThis, strClass, intRecLevel)
+{
+	$(objThis).removeClass("ladder_loading");
+	$(objThis).addClass(strClass);
+	if (boolGrade)
+	{
+		for (var intRow=1; intRow!=intRows+1; intRow++)
+		{
+			var objCell = $("#grade_" + intRow + "_ladder_all");
+			ui_validate_switch(boolOn, objCell, intRecLevel);
+		}
+	}
+	if (boolLadder)
+	{
+		for (var intColumn=1; intColumn!=intColumns+1; intColumn++)
+		{
+			var objCell = $("#grade_all_ladder_" + intColumn);
+			ui_validate_switch(boolOn, objCell, intRecLevel);
+		}
+	}
+}
+
+// Trigger switch event
+function ui_validate_switch(boolOn, objCell, intRecLevel)
+{
+	if ($(objCell).attr('class') == 'disabled')
+		return;
+	if (boolOn)
+	{
+		if ($(objCell).attr('class') != 'selected')
+			$(objCell).trigger("click", !intRecLevel ? 1 : intRecLevel + 1);
+	}
+	else
+	{
+		if ($(objCell).attr('class') == 'selected')
+			$(objCell).trigger("click", !intRecLevel ? 1 : intRecLevel + 1);
+	}
+}
+</script>
+<style>
+	#latter_editor #selectable { list-style-type: none; margin: 0; padding: 0; }
+	#latter_editor table { border: 1px solid #ffffff; }
+	#latter_editor table tr td { width:30px; border: 1px solid #ffffff; text-align: center; cursor:default; }
+	#latter_editor .selected { background: #F39814; color: white; }
+	#latter_editor .disabled { background: #eee; color: white; }
+	#latter_editor .ladder_loading { background: #C47909; color: white; }
+	#latter_editor .overbox { position: absolute; background: #EEE; border:1px solid black; width:300px; height:200px; }
+</style>
+<div class="slider">
+	<div class="col_title">
+			<span>Ladder Editor</span>
+	</div>
+	<div class="col_content" id="latter_editor">
+		<form name="ladders_editor" id="ladders_editor_form">
+			<div style="margin:0 4px 0 48px;">Ladder</div>
+			<div style="float:left;margin-right:3px">Grade</div>
+			<table id="selectable">
+				<tr>
+					<td id="grade_all_ladder_all">All</td>
+<?php
+	// Columns
+	for ($intColumn=1; $intColumn!=$intColumns+1; $intColumn++)
+	{
+?>
+
+					<td id="grade_all_ladder_<?php print $intColumn; ?>"><?php print $intColumn; ?></td>
+<?php
+	}
+	// Rows
+	//var_dump($this->arrGrades);
+	foreach ($this->arrGrades as $intRow => $objGrade)
+	{
+?>
+				<tr>
+<?php
+		for ($intColumn=0; $intColumn!=$intColumns+1; $intColumn++)
+		{
+			if ($intColumn == 0)
+			{
+?>
+					<td id="grade_<?php print $intRow+1; ?>_ladder_all"><?php print $objGrade->grade_name; ?></td>
+<?php
+			}
+			else
+			{
+				if (
+					isset($this->intTask)
+					&& !isset($this->arrDisabled[($intRow+1) . "_" . $intColumn])
+					&& count($this->arrDisabled)
+				) {
+?>
+					<td class="disabled" id="grade_<?php print $intRow+1; ?>_ladder_<?php print $intColumn; ?>">&nbsp;</td>
+<?php
+				}
+				else
+				{
+?>
+					<td id="grade_<?php print $intRow+1; ?>_ladder_<?php print $intColumn; ?>">&nbsp;</td>
+<?php
+				}
+			}
+		}
+?>
+				</tr>
+<?php
+	}
+?>
+			</table>
+		
+			<ul id="write"></ul>
+			&nbsp;<br>
+			<div id="ladder_editor_processing_status"><?php if ($this->message){ echo $this->message . "<br>"; }?></div>
+			<span><a href="#" title="Save" class="button submit">Save</a></span>							
+			<div class="clear"></div>
+		</form>
+	</div>
+</div>

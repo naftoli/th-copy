@@ -1,0 +1,164 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script>
+	$(document).ready(function(){
+		$("#slider").easySlider({
+			numeric: true, 
+			controlsBefore:	'<div class="page_dots">',
+			controlsAfter:	'</div>'
+		});
+		$(".campaign_list").tabs(".progress_list",{effect:'fade'});
+	});
+	$(window).load(function(){
+		sliderPage();
+	});	
+	function sliderPage() {
+		return false;
+	}
+</script>
+			
+<div id="page_title">
+	Medals
+</div>
+			
+<div class="three_column padding_top">
+				
+<div class="content">
+
+<div id="slider">
+	<ul>
+		<!-- WEEKLY PERIODS -->
+<?php
+	if (!count($this->arrPages))
+	{
+		print "<div style='text-align: center;position:absolute; padding: 64px'>There are no completed tasks to display.</div>";
+	}
+	// Campaign
+	foreach ($this->arrPages as $intPage => $arrPage)
+	{
+?>
+		<li class="mission_week">
+				
+			<div class="slider_title"><?php print date("F j, Y", $this->intOldestTask + ($intPage * 606876)); ?></div>
+			
+			<div class="campaign_list">	
+<?php
+		// Icon list
+		$arrFirstPage = first($this->arrPages);
+		foreach ($arrFirstPage as $arrCampaignData)
+		{
+			$objCampaign = $arrCampaignData["objCampaign"];
+?>
+				<div class="campaign"><img src="<?php print $sn; ?>/images/show-image/image_id/<?php print $objCampaign->image_smallmed; ?>" width="45" height="45"></div>
+<?php
+		}
+?>
+			</div>
+<?php
+		// Icon list
+		foreach ($arrPage as $intCampaign => $arrData)
+		{
+			$intSum = 0;
+			foreach ($arrData["arrWeekTasks"] as $intTask => $arrTaskData)
+			{
+				for ($intItr=1; $intItr!=9; $intItr++)
+				{
+					$intSum += $arrTaskData[$intItr]["count"];
+				}
+			}
+?>
+			<div class="progress_list">
+				<div class="scroll-pane">
+					<div class="mission">
+						
+						<div class="header clearfix">
+							<div class="title clearfix">
+								<div class="name"><?php print $arrData["objCampaign"]->campaign_name; ?></div>
+								<div class="info">Total: <?php print $intSum; ?></div>
+							</div>
+							
+							<div class="meter">
+								<input type="hidden" value="">
+								<div class="back" style="width:100%"> </div>
+								<div class="front"> </div>																								
+							</div>
+							
+							<div class="week">
+<?php
+			foreach (first($arrData["arrWeekTasks"]) as $intKey => $arrItem)
+			{
+				print $intKey;
+			}
+?>
+							</div>										
+						</div>
+						
+						<!-- tasks rows -->
+<?php
+			foreach ($arrData["arrWeekTasks"] as $intTask => $arrTaskData)
+			{
+				$objTask = $this->arrTasksBuffer[$intTask];
+				$intRowSum = 0;
+				for ($intItr=1; $intItr!=9; $intItr++)
+				{
+					$intRowSum += $arrTaskData[$intItr]["count"];
+				}
+				$objUserCampaign = reset($arrTaskData);
+				$objUserCampaign = @$objUserCampaign["objUserTask"];
+?>
+						<div class="task clearfix">	
+							<div class="title">
+								<div class="name"><?php print $objTask->task_name; ?></div>													
+								<div class="miles">Mission Task - <?php print intval(@$objUserCampaign->points_given); ?> Mile(s)</div>
+							</div>
+							<div class="day_progress" style="padding-left: 10px">
+								<?php print $arrTaskData[1]["count"]; ?>
+							</div>
+							<div class="day_progress" style="padding-left: 2px">
+								<?php print $arrTaskData[2]["count"]; ?>
+							</div>
+							<div class="day_progress">
+								<?php print $arrTaskData[3]["count"]; ?>
+							</div>
+							<div class="day_progress">
+								<?php print $arrTaskData[4]["count"]; ?>
+							</div>
+							<div class="day_progress">
+								<?php print $arrTaskData[5]["count"]; ?>
+							</div>
+							<div class="day_progress">
+								<?php print $arrTaskData[6]["count"]; ?>
+							</div>
+							<div class="day_progress">
+								<?php print $arrTaskData[7]["count"]; ?>
+							</div>
+							<div class="day_progress">
+								<?php print $arrTaskData[8]["count"]; ?>
+							</div>
+							<div class="miles_progress"> <?php print $intRowSum; ?></div>
+						</div>
+<?php
+			}
+?>
+						<!-- /tasks rows -->
+					</div>
+					<!-- /mission -->
+				</div>
+			</div>
+<?php
+		}
+?>
+			<!-- /campaign -->
+		</li>
+<?php
+	}
+?>
+	</ul>
+	
+</div> <!-- SLIDER -->
+
+</div> <!-- CONTENT -->
+
+</div> <!-- THREE COLUMN -->

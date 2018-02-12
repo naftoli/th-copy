@@ -1,0 +1,42 @@
+<?php
+	include "config.phtml";
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Prizes by <?php echo ($user_session_data->institution_type == "School" ? "Class" : "Bunk"); ?> </span>
+	</div>
+	<div class="col_content">
+
+<?php
+	if (!count($this->arrResult))
+	{
+?>
+		<div class="module message">There are no prizes available to view.</div>
+<?php
+	} else {
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+		foreach ($this->arrResult as $arrResult)
+		{
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/store/prize/prize_id/" . $arrResult->prize_id; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print $arrResult->prize_name; ?> </div>
+						</a>
+					</li>
+<?php
+		}
+?>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

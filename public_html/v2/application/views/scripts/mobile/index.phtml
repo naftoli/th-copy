@@ -1,0 +1,105 @@
+<?php
+	if (empty($this->tstyle))
+		$this->tstyle = "chabadhebrewschool";
+	include "public_header.phtml";
+	include "config.phtml";
+	include "parameters.phtml";
+	global $arrAppDetails;
+	$arrDetails = $arrAppDetails[$this->tstyle];
+?>
+<script type="text/javascript">
+var GLOBAL_SLIDES = {};
+$(document).ready(function()
+{
+	$('#email').focus();
+	$('#footer_links a').mouseover(function () {
+		$(this).css({
+			'color' : '#000'
+		});
+	});
+	$('#footer_links a').mouseout(function () {
+		$(this).css({
+			'color' : '#555'
+		});
+	});
+});
+</script>
+<style>
+#footer_links a {
+	color:#555;
+}
+#footer_links {
+	width:1024px;
+	margin:0 auto;
+	height:30px;
+	padding:4px;
+	color:#555;
+}
+h2 {
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 8px;
+	padding:8px;
+	padding-bottom: 12px;
+}
+div.line {
+	border-bottom: 1px solid #ddd;
+	margin: 8px 0;
+	height:1px;
+}
+.promo td {
+	padding:4px;
+}
+#nav ul.list_first li img {
+	margin-right: 15px;
+}
+</style>
+</head>
+
+<body>
+    <NOSCRIPT><P STYLE="color: red; font-size: larger;"><?php print text("Notice: You have javascript disabled. This site will not function without javascript."); ?></P></NOSCRIPT>
+	<div id="wrapper">
+    	<div id="nav">
+        	<div class="col_title_bg"></div>
+            <div class="col_title"><?php print text("Menu"); ?></div>
+            <ul class="list_first">
+				<li class="list_parent"><a href="#" onclick="window.location.href='<?php echo $sn;?>/registration/index2/tstyle/<?php print $this->tstyle; ?>';"><img src="<?php print $sn; ?>/images/front-end/admin/icon_school.png" width="28" height="28" /><?php print text("Register"); ?></a></li>
+                <li class="list_parent"><a href="#" onclick="window.location.href='<?php echo $sn;?>';"><img src="<?php print $sn; ?>/images/front-end/admin/icon_door_in.png" width="28" height="28" /><?php print text("Login"); ?></a></li>
+				<li class="list_parent current"><a href="#"><img src="<?php print $sn; ?>/images/MOBILE-APP-ICON-GREEN_300x300.png" width="28" height="28" /><?php print text("Mobile"); ?></a></li>
+            </ul>
+        </div>
+        <div id="content">
+        	<div class="col_title_bg"></div>
+            <div class="slider_container">
+                <div class="slider">
+                    <div class="col_title"><span><?php print text("Mashpia Online Scanner App"); ?></span></div>
+                    <div class="col_content">
+						<div class="module message" style="padding:20px;height:230px;vertical-align: top;font-size:14pt;line-height: 14pt">
+                            <div class="module_content" style="vertical-align: top">
+								<img src="<?php print $sn; ?>/images/Screen-Shot-2015-02-10-at-3.49.20-PM.png" style="width:auto;height:220px;vertical-align: top" />
+								<div style="padding-left:30px;margin-top: 60px;width:400px;display:inline-block;vertical-align: top">
+									Mashpia's online scanner can be used to scan ID cards and achievement cards directly from your phone. You will see your current store and total points increase as you scan each achievement card that you have been awarded.
+								</div>
+							</div>
+						</div>
+						<div class="module message" style="padding:100px 20px;line-height: 20pt">
+                            <div class="module_content">
+								Beta test our Barcode Scanner App now (only 100 copies available)<br/>
+								<a href="itms-services://?action=download-manifest&url=https://v2.mashpia.com/media/manifest.plist" style="font-size:20pt"><b>Download now</b></a><br/>(only works from IOS mobile device)
+							</div>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div id="footer_links">
+		<div style="float:left;text-align:left;width:90px;margin:0 8px;"><a href="<?php print $sn; ?>/index/contact<?php print $strParamPath; ?>" class="overlay">Contact Us</a></div>
+		<div style="float:left;text-align:left;width:383px;margin:0 8px;"><a href="<?php print $sn; ?>/mobile/privacy<?php print $strParamPath; ?>">Privacy Policy</a></div>
+		<div style="float:right;text-align:right;display:inline-block;margin:0 8px;width:383px;">Copyright © 2015 - mashpia.com</div>
+	</div>
+	<div id="overlay">
+		<div class="content"></div>
+	</div>
+</body>
+</html>

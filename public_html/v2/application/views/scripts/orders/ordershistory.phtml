@@ -1,0 +1,113 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace("user_session_data");
+	$arrCategories = array(
+		'Redeemed' => "Redeemed Prizes"
+	);
+?>
+<script>
+$(document).ready(function()
+{
+	$(".slider:last .print_button").click(function () {
+		slideRefresh("<?php print $sn; ?>/orders/ordershistory<?php print $strParamPath; ?>");
+	});
+});
+function orders_redeem(objForm)
+{
+	$.ajax({
+		type : "POST",
+		cache : false,
+		start: $(objForm).find("#processing_status").stop().fadeIn("slow"),
+		url : "<?php print $sn;?>/orders/ordershistory<?php print $strParamPath; ?>",
+		dataType : "text",
+		data: $(objForm).serialize(),
+		success : function(strResponse)
+		{
+			if (strResponse == "1")
+				slideRefresh("<?php print $sn; ?>/orders/ordershistory<?php print $strParamPath; ?>");
+		}
+	});
+}
+function row_toggle(objThis)
+{
+	$(objThis).find(":checkbox").attr("checked", !$(objThis).find(":checkbox").is(':checked'));
+	$(objThis).css("background-color", $(objThis).find(":checkbox").is(':checked') ? "#dadee6" : "#e8eaef");
+}
+function uncheckall(objThis)
+{
+	$(objThis).closest(".col_content").find(":checkbox").attr("checked", false);
+	$(objThis).closest(".col_content").find(".module table .row").css("background-color", "#e8eaef");
+}
+function checkall(objThis)
+{
+	$(objThis).closest(".col_content").find(":checkbox").attr("checked", true);
+	$(objThis).closest(".col_content").find(".module table .row").css("background-color", "#dadee6");
+}
+</script>
+<div class="slider" id="slider_orderslist">
+	<div class="col_title">
+		<span>Order History</span>
+	</div>
+	<div class="col_content">
+		<form>
+		<div style="margin-bottom:18px"><table cellpadding="4" cellspacing="4"><tr><td width="60"><span><a onclick="checkall(this)" href="#" title="Check All" class="button">Check All</a></span></td><td width="6">&nbsp;</td><td width="60"><span><a onclick="uncheckall(this)" href="#" title="Uncheck All" class="button">Uncheck All</a></span></td></tr></table></div>
+<?php
+	foreach ($arrCategories as $strStatus => $strTitle)
+	{
+		if (
+			!isset($this->arrOrders[$strStatus])
+			|| !count($this->arrOrders[$strStatus])
+		) {
+?>
+		<div class="module" style="padding:5px;">
+			Nothing to display.
+		</div>
+<?php
+		}
+		else
+		{
+?>
+			<div class="module_collection" style="margin-top:15px;margin-bottom:15px;">
+				<div class='module' style='margin-bottom:6px !important'><table border='1' width='100%' style='margin-bottom:5px'>
+					<tr>
+						<td style='padding:4px'>&nbsp;</td>
+						<td><b>Date</b></td>
+						<td><b>Student</b></td>
+						<td><b>Prize</b></td>
+						<td><b>Prize Size</b>&nbsp;</td>
+						<td><b><?php print text('[|Points|]'); ?></b>&nbsp;</td>
+						<td align='right'><b>Qty</b>&nbsp;</td>
+					</tr>
+<?php
+			foreach ($this->arrOrders[$strStatus] as $arrOrderData)
+			{
+?>
+					<tr class="row" style="background-color:#e8eaef; cursor:default;" onclick="row_toggle(this);">
+						<td width="30" style="padding:4px"><input type="checkbox" onclick="this.checked = this.checked ? 0 : 1;" name="<?php print $arrOrderData["objUserPrize"]->user_prize_id; ?>" value="1" /></td>
+						<td><?php print date('m/d/y h:i A', strtotime($arrOrderData["objUserPrize"]->modified)); ?></td>
+						<td><?php print $arrOrderData["objUser"]->first . " " . $arrOrderData["objUser"]->last; ?></td>
+						<td><?php print $arrOrderData["objPrize"]->prize_name; ?></td>
+						<td width="100"><?php print $arrOrderData["objUserPrize"]->prize_size; ?></td>
+						<td width="70"><?php print $arrOrderData["objUserPoint"]->points; ?></td>
+						<td width="30"><?php print $arrOrderData["objUserPrize"]->quantity; ?></td>
+					</tr>
+<?php
+			}
+?>
+
+					</table>
+				</div>
+			</div>
+<?php
+		}
+?>
+		<div style="margin-bottom:4px"><div id="processing_status"></div>
+			<table cellpadding="4" cellspacing="4"><tr><td width="60"><span><a onclick="orders_redeem($(this).closest('form'));" href="#" title="Redeem" class="button">Un-redeem</a></span></td><td width="6">&nbsp;</td></tr></table>
+		</div>
+<?php
+	}
+?>
+		</form>
+	</div>
+</div>

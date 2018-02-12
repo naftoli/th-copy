@@ -1,0 +1,97 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script type="text/javascript">
+function row_toggle(objThis,boolProcessChange)
+{
+	if ($(objThis).find(":checkbox").is(':checked') && !confirm('Are you sure you would like to remove this task?'))
+		return;
+	$(objThis).find(":checkbox").attr("checked", !$(objThis).find(":checkbox").is(':checked'));
+	$(objThis).css("background-color", $(objThis).find(":checkbox").is(':checked') ? "#dadee6" : "#e8eaef");
+	if (boolProcessChange)
+	{
+		$.ajax({
+			type : "POST",
+			cache : false,
+			data: {
+				'task_id' : $(objThis).attr('task_id'),
+				'is_checked' : $(objThis).find('input').is(':checked')
+			},
+			url : '<?php print $sn . "/campaigns/handbooks" . $strParamPath; ?>',
+			dataType : "text",
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$(".slider_storeprint #processing_status").html('Sorry, there was an error: VU-E103-3RR3RE');
+					alert("Sorry, there was an error: VC-HB101-sd3th5");
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$(".slider_storeprint #processing_status").html('Sorry, there was an error: VU-E104-SDF8BX');
+					alert("Sorry, there was an error: VC-HB102-fgf44h");
+					return;
+				} else {
+					$(".slider_storeprint #processing_status").fadeOut();
+					if (arrResponse["error"]) {
+						alert("Sorry, there was an error: VC-HB102-4g3gdf");
+					} else if (arrResponse["success"] == "true") {
+						$(objThis).find('.date_marked').html(arrResponse.date_marked);
+						$(objThis).find('.marked_by').html(arrResponse.marked_by);
+					}
+				}
+			}
+		});
+	}
+}
+</script>
+<div class="slider">
+	<div class="col_title">
+		<span><?php print $this->objStudent->first_name . ' ' . $this->objStudent->last_name; ?></span>
+	</div>
+	<div class="col_content">
+		<?php include 'uimods/sliderefresh.phtml'; ?>
+		<div class="module_collection">
+			<form>
+<?php
+	foreach ($this->arrCampaigns as $objCampaign)
+	{
+		if (!isset($this->arrTasks[$objCampaign->campaign_id]))
+			continue;
+?>
+				<div class='module' style='margin-bottom:20px !important'>
+					<table border='1' width='100%' style='margin-bottom:5px'>
+						<tr>
+							<td style='padding:4px'>&nbsp;</td>
+							<td><b><?php print $objCampaign->campaign_name; ?></b>&nbsp;</td>
+							<td width="160"><b>Date Marked</b></td>
+							<td width="220"><b>Marked By</b></td>
+						</tr>
+<?php
+		foreach ($this->arrTasks[$objCampaign->campaign_id] as $objTask)
+		{
+			$objUserCampaign = @$this->arrUserCampaigns[$objTask->campaign_id][$objTask->task_id][0];
+			$arrUserPoint = @$this->arrUserPoints[$objTask->campaign_id][$objTask->task_id][0];
+			$objAdmin = NULL;
+			if ($arrUserPoint)
+				$objAdmin = @$this->arrAdmins[$arrUserPoint->created_by];
+?>
+						<tr task_id="<?php print $objTask->task_id; ?>" class="row" style="background-color:<?php print $objUserCampaign ? "#dadee6" : "#e8eaef"; ?>; cursor:default;" onclick="row_toggle(this,1);">
+							<td width="30" style="padding:4px"><input type="checkbox"<?php print $objUserCampaign ? ' checked' : ''; ?> onclick="this.checked = this.checked ? 0 : 1;" name="<?php print $objTask->task_id; ?>" value="1" /></td>
+							<td><?php print $objTask->task_name; ?></td>
+							<td class="date_marked"><?php print $objUserCampaign ? $objUserCampaign->created : 'Not Marked'; ?></td>
+							<td class="marked_by"><?php print $objAdmin ? $objAdmin->first_name . ' ' . $objAdmin->last_name : 'Not Marked'; ?></td>
+						</tr>
+<?php
+		}
+?>
+					</table>
+				</div>
+<?php
+	}
+?>
+			</form>
+		</div>
+	</div>
+</div>

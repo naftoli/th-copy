@@ -1,0 +1,591 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Print Rank Cards</title>
+<style type="text/css">
+.card_sheet {
+  margin: auto;
+  page-break-after: always;
+  margin-bottom:15px;
+}
+
+.card {
+  width: 3.5in;
+  height: 2in;
+  font-size: 2mm;
+  background-color: #C12222;
+  position: relative;
+  padding: 0px;
+  vertical-align: top;
+  margin: auto;
+}
+
+.top {
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  height: .2in;
+  line-height: .2in;
+  font-size: 8px;
+}
+
+.sig {
+  border-top: .03in solid #808080; /* default color */
+  height: .3in;
+  background-color: white;
+  text-align: right;
+  padding-right: .04in;
+}
+
+.card .sig h1 {
+  text-transform: uppercase;
+  padding: 0mm;
+  margin: 0mm;
+  font-weight: bold;
+  font-size: 8px;
+  line-height: .125in;
+  text-align:right;
+}
+
+.bg {
+  display: block;
+  position: absolute;
+  width: 3.375in;
+  height: 1.625in; /* 2.125 - .2 - .3 + .03 + .03 */
+  z-index: -1;
+}
+
+.card table {
+  width: 100%;
+}
+
+.card table td {
+  vertical-align: top;
+}
+
+.card p {
+  margin-top: 0px;
+  padding-top: 0px;
+}
+
+.card em {
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+.card .first {
+  padding-left: .04in;
+  padding-top: .02in;
+}
+
+.card .first h2 {
+  text-transform: uppercase;
+  padding: 0px;
+  margin: 0px;
+  font-weight: bold;
+  font-size: 8px;
+  line-height: .125in;
+  padding-bottom: .04in;
+}
+
+.card .logo {
+  vertical-align: bottom;
+}
+
+.card .logo img {
+  height: .75in;
+  padding-left: .04in;
+}
+
+.card .base {
+  padding: .02in 0px;
+  vertical-align: bottom;
+}
+
+.card .base p {
+  margin: 0px;
+  padding: 0px;
+  padding-top: .04in;
+}
+
+.card .base b {
+  text-transform: uppercase;
+  font-size: 2.5mm;
+}
+
+.card .photo {
+  padding-top: .02in;
+  padding-right: .04in;
+}
+
+.card .photo img {
+  height: 1in;
+  border: .03in solid #808080;
+  display: block;
+  float: right;
+}
+
+.card .code {
+  text-align: center;
+  font-size: .14in;
+  line-height: .14in;
+  margin-bottom: 0px;
+  width: 2.47in;
+  padding-left: .04in;
+  vertical-align: middle;
+  padding-top: .02in;
+}
+
+.card .code p {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+.card .code img {
+  width: 2.43in;
+  height: .25in;
+}
+
+.card .stats {
+  padding-top: .02in;
+  padding-right: .04in;
+}
+
+.card .stats p {
+  font-size: .08in;
+  line-height: .09in;
+  text-align: left;
+  font-weight: bold;
+  text-align: center;
+  margin: 0px;
+  padding: 0px;
+  padding-bottom: .04in;
+}
+
+@media print {
+  body {
+    background-color: transparent;
+  }
+
+  .card .bg {
+    display: none;
+  }
+
+  .top {
+    background-color: black;
+  }
+
+  .top {
+    visibility: hidden;
+  }
+  .sig {
+    border-color: transparent !important;
+    background-color: transparent !important;
+  }
+  .card_sheet {
+    margin-bottom:0;
+  }
+}
+.mainWrapper{
+    border: 1px dotted #999;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+
+
+		.cards {
+			width:672px;
+			page-break-after:always;
+			margin:-0.1875in auto 0;
+			font-family:'Myriad Pro',Arial,sans-serif;
+		}
+		.cards .card {
+			width:3.5in;
+			height:2in;
+			text-align:center;
+			background:#fff;
+
+			width:306px;
+			height:162px;
+			padding:15px;
+			float:left;
+			font-size:24px;
+		}
+		.cards .card .container {
+			border:2px solid #000;
+			border-radius:10px;
+			-moz-border-radius:10px;
+			height:100%;
+		}
+
+		.cards .priveleges {
+			font-size:8px;
+		}
+		.cards .name {
+			height:30px;
+			margin-bottom:-33px;
+			margin-top:3px;
+			padding-left:8px;
+			text-align:left;
+			font-weight:bold;
+			color:#ddd;
+		}
+		.cards .signature {
+			font-size:8px;
+			text-align:right;
+			border-top:1px solid #000;
+			border-bottom:1px solid #000;
+			margin:1px 0 2px;
+			padding:2px 5px;
+		}
+		.cards .signature h2 {
+			font-size:16px;
+			margin:0;
+		}
+		.cards .photo {
+			float:right;
+			margin-right:5px;
+			padding:0;
+		}
+			.cards .photo img {
+				height:75px;
+				border:none;
+			}
+			
+		.cards .logo {
+			float:left;
+			margin:-17px 10px;
+		}
+			.cards .logo img {
+				margin:5px 0;
+				width:55px;
+				height:55px;
+			}
+		.cards .institution {
+			font-size:8px;
+			margin-top:-15px;
+			text-align:right;
+		}
+			.cards .institution img {
+				float:right;
+				margin:5px;
+				width:55px;
+				height:55px;
+			}
+			.cards .institution h2 {
+				font-size:12px;
+				margin:0;
+			}
+			.cards .institution .box {
+				margin:5px 0 0;
+				float:right;
+			}
+
+		.cards .barcode {
+			font-size:9px;
+		}
+
+
+</style>
+</head>
+
+<?php
+    if($this->isPrinted){
+?>
+    <body onload="alert('<?=$this->msg;?>')">
+<?php
+    }else{
+?>
+    <body onLoad="print();">
+<?php
+    }
+?>
+
+<?php
+	if (false): //Commented out for new camp design - Hirshy 6/22/2011
+?>
+
+<?php
+    function dateToHebrewShortYear($date)
+	{		
+		if(is_null($date)) return '';		
+		@list($day, $month, $year, $year2) = mb_split(' ', dateToHebrew($date));
+		if(!empty($year2))
+		{
+		  $month = "$month $year";
+		}
+		$year = mb_substr($year, 3);		
+		return "$day $month $year";
+	}
+	function dateToHebrew($date)
+	{
+		if(is_null($date))
+			return '';
+		else
+			return mb_convert_encoding(jdtojewish($date, true, CAL_JEWISH_ADD_GERESHAYIM), 'UTF-8', 'ISO-8859-8');
+	}
+	//covert yyyy-mm-dd to julian date
+	function dateToJD($date)
+	{
+		@list($year, $month, $day) = split('-', $date);
+		$jd = cal_to_jd(CAL_GREGORIAN, intval($month), intval($day), intval($year));
+		return $jd ? $jd : NULL;
+	}
+
+	if(count($this->arrStudentRanks)==0)
+    {
+		echo "Nothing to print...";
+		exit;
+	}
+?>
+    <div class="mainWrapper">
+<?php
+    if ($this->card_type == 'permanent')
+    {
+        $lines = 1;
+        $cols = 1;
+    }
+    else
+    {
+		$lines=5;
+		$cols=2;
+    }
+    $current_line = 0;
+    $current_col = 0;
+    foreach ($this->arrStudentRanks as $objStudentRanks)
+    {		
+		if ($current_col >= $cols)
+		{
+			echo "</tr>\n";
+			$current_col = 0;
+		}
+		
+		if ($current_col == 0)
+		{
+			if($current_line >= $lines)
+			{
+				echo "</table><hr class='noprint'>\n";
+				$current_line = 0;
+				$current_col = 0;
+			}			
+			if ($current_line == 0)
+			{
+				echo "<table class='card_sheet'>";
+			}				
+			$current_line++;
+				echo "<tr>";
+		}            
+		$current_col++;
+	//	continue;
+        if (empty($objStudentRanks->rank_color))
+        {
+            $objStudentRanks->rank_color = '#808080';
+        }
+				echo '<td class="card">';
+?>			
+						<div class="top" style="background-color: <?php print $objStudentRanks->rank_color;?>;">
+							<?php print "This card entitles the cardholder to TH privileges with the " . $objStudentRanks->rank_title . " rank";?>
+						</div>
+						
+						<div class="sig" style="border-color: <?php print $objStudentRanks->rank_color;?>;">
+<?php
+							print 'Authorized Signature';
+?>
+							<h1>
+								<em style="color: <?php print $objStudentRanks->rank_color; ?>;"><?php print $objStudentRanks->rank_title; ?></em>
+<?php
+							if(!empty($objStudentRanks->hebrew_first_name)){
+								print $objStudentRanks->hebrew_first_name;
+							} else{
+								print $objStudentRanks->first_name;
+							}
+							if(!empty($objStudentRanks->hebrew_last_name)){
+								print ' '. $objStudentRanks->hebrew_last_name;
+							} else {
+								print ' '.$objStudentRanks->last_name;
+							}
+?>
+							</h1>
+							<?php print 'SERIAL #'. $objStudentRanks->user_serial; ?>
+						</div>
+<?php
+						if(!empty($objStudentRanks->rank_image_1))
+						{
+?>
+							<img src="<?php echo $sn; ?>/images/show-image/image_id/<?php echo $objStudentRanks->rank_image_1; ?>" class="bg" width="50" height="50">
+<?php
+						} else{
+							print ""; 
+						}
+						
+?>
+						<div class="panel">
+							<table cellspacing="0" cellpadding="0">
+								<tr>
+									<td class="logo">
+<?php
+						if(!empty($objStudentRanks->image_id))
+						{
+?>
+							<img src="<?php echo $sn; ?>/images/show-image/image_id/<?php echo $objStudentRanks->image_id; ?>">
+<?php
+						}
+?>
+									</td>
+									<td class="base">
+										<p>
+											<?php print "Base";?> #<?php print $objStudentRanks->institution_id; ?><br />
+											<b><?php print $objStudentRanks->name; ?></b><br />
+											<?php print $objStudentRanks->city; ?>, <?php print $objStudentRanks->state;?>
+										</p>
+									</td>
+									<td class="photo">
+<?php
+										if($this->card_type == 'permanent' && !empty($objStudentRanks->user_image_id)) {
+?>
+											<img src="<?php echo $sn; ?>/images/show-image/image_id/<?php echo $objStudentRanks->user_image_id; ?> style="border-color:'<?php print $objStudentRanks->rank_color; ?>';" class="bg">
+<?php
+										}
+										else{
+											print "";
+										}
+?>
+									</td>
+								</tr>
+							</table>
+							<table>
+								<tr>
+									<td class="code">
+										<p><img src="/kiosk/get-barcode-legacy/serial/<?php print $objStudentRanks->bar_code; ?>" alt="" width="210" height="20"><br /><?php print $objStudentRanks->bar_code; ?></p>
+									</td>
+									<td class="stats">
+										<p>
+<?php
+										print "Member since";
+?>
+											<br />
+											<span dir="rtl">
+<?php
+											print dateToHebrewShortYear($objStudentRanks->user_start_date);
+?>
+											<input type="hidden" name="user_start_date" id="user_start_date" value="<?php echo dateToHebrewShortYear($objStudentRanks->user_start_date); ?>" />
+											</span>
+										</p>
+										<p>
+<?php											
+											$bdate=dateToJD($objStudentRanks->dob)+$objStudentRanks->dob_he_offset;											
+											if($bdate)
+											{
+												$cal = cal_from_jd($bdate, CAL_JEWISH);
+												$valid = "Valid until <br /><span dir='rtl'>" . dateToHebrewShortYear(cal_to_jd(CAL_JEWISH, 13, cal_days_in_month(CAL_JEWISH, 13, $cal['year']+13), $cal['year']+13)) . "</span>";
+											}
+											else
+											{
+												$valid = '';
+											}
+?>
+<?php
+											print $valid;
+?>
+										</p>
+									</td>
+								</tr>
+							</table>
+						</div>
+<?php
+	}
+?>		
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div style="page-break-after:always;"></div>
+
+<?php
+	endif;
+?>
+
+
+
+
+	<div class="cards id">
+<?php
+    include "config.phtml";
+	$strFirstName = $strLastName = "N/A";
+    foreach($this->arrStudentRanks as $objStudentRanks)
+    {
+		if(isset($objStudentRanks->hebrew_last_name) && $objStudentRanks->hebrew_first_name && $objStudentRanks->hebrew_first_name != "NULL")
+		{
+			$strFirstName = $objStudentRanks->hebrew_first_name;
+		} else{
+			$strFirstName = $objStudentRanks->first_name;
+		}
+		if(isset($objStudentRanks->hebrew_last_name) && $objStudentRanks->hebrew_last_name && $objStudentRanks->hebrew_last_name != "NULL")
+		{
+			$strLastName = $objStudentRanks->hebrew_last_name;
+		} else {
+			$strLastName = $objStudentRanks->last_name;
+		}
+
+?>
+
+		<div class="card">
+
+			<div class="container">
+
+				<div class="priveleges">This card entitles the cardholder to TH privileges</div>
+
+				<div class="name">ID CARD 5771</div>
+
+				<div class="signature">Authorized Signature<h2><?php echo $strFirstName . ' ' . $strLastName;?></h2></div>
+
+				<div class="barcode"><img src="<?php echo $sn; ?>/kiosk/get-barcode-legacy/serial/<?php print $objStudentRanks->bar_code; ?>" width="210" height="20"><?php print $objStudentRanks->bar_code; ?></div>
+
+<?php
+		if(1|| $this->card_type == 'permanent' && !empty($objStudentRanks->user_image_id))
+		{
+?>
+				<div class="photo" style="float:left; padding-left:8px"><img src="<?php echo $sn; ?>/images/show-image/image_id/<?php echo $objStudentRanks->user_image_id; ?> /></div>
+<?php
+		}
+?>
+
+				<div class="logo"><img src="<?php $sn; ?>/images/cth_logo_print.png" /></div>
+
+				<div class="institution">
+
+<?php
+		if(!empty($objStudentRanks->image_id))
+		{
+			$child_photo = $sn . '/images/show-image/image_id/' . $objStudentRanks->image_id;
+?>
+					<img src="<?php echo $child_photo; ?>" width="50" height="50" />
+<?php 
+		}
+?>
+					<div class="box">
+
+						<h2><?php print $objStudentRanks->name; ?></h2>
+
+						<p><?php print $objStudentRanks->city; ?>, <?php print $objStudentRanks->state;?></p>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+<?php
+    }
+?>
+	</div>
+
+
+
+
+	</body>
+</html>

@@ -1,0 +1,166 @@
+<?php
+include "config.phtml";
+include "application/views/scripts/includes/headers/kiosk_header.phtml";
+?>
+
+<script>
+	$(document).ready(function() {
+		$('.scroll-pane').jScrollPane({showArrows:true, scrollbarWidth: 42, arrowSize: 42});
+		$('input[type=checkbox]').checkbox();
+		$('.keypad').keypad({buttonImage: '<?php echo $sn; ?>/images/back-end/kiosk/keypad_btn.png'});
+		
+		$('.jquery-checkbox').click(function(e) {
+			
+			// This variable is necessary for the success portion of the ajax call since $(this) cannot be referenced there //
+			var jquery_checkbox = $(this);
+			
+			if ($(this).attr('class') == "jquery-checkbox")
+			{
+				$('#task_id').val($(this).attr('id'));
+				$('#perform').val('add');
+				var action = "add";
+				var new_class = "jquery-checkbox jquery-checkbox-checked";
+			}
+			else
+			{
+				$('#user_campaign_id').val($(this).attr('name'));	
+				$('#perform').val('remove');
+				var action = "remove";
+				var new_class = "jquery-checkbox";
+				
+			}
+					
+			$.ajax({
+				type : "POST",
+				cache : false,
+				url : '<?php echo $sn; ?>/kiosk/campaignmissiontasks',
+				dataType : "text",
+				data: $('#form').serialize(),
+				success : function(response) {
+					
+					if (action == "remove" && response != 1)
+					{
+						alert("Task not removed");
+					}
+					else if (action == "add" && isNaN(parseFloat(response)))
+					{
+						alert("Task not added");
+					}
+					else
+					{
+						$(jquery_checkbox).attr('class', new_class);
+						if (new_class == "jquery-checkbox jquery-checkbox-checked")
+							$(jquery_checkbox).attr('name', response);
+						
+					}
+				}
+			});
+			
+		});
+	});
+</script>
+
+<body class="blue">
+	
+	<div id="wrapper">
+		
+        <div id="header">
+          <?php include "application/views/scripts/includes/topbar.phtml"; ?>
+        </div>
+		
+		<div id="main">
+			
+			<div id="page_title">
+				Mission Tasks
+			</div>
+			
+			<div class="three_column padding_top">
+				
+				<div class="content">
+					
+					<div id="slider">
+						
+						<ul class="report">
+							
+							<li>
+								
+								<div class="slider_title">
+									<?php echo $this->strMissionName; ?>
+								</div>
+								
+								<div class="scroll-pane">
+
+									<form id="form" method="post" accept-charset="UTF-8">
+
+										<input type="hidden" name="perform" id="perform" value="">											
+										<input type="hidden" name="user_campaign_id" id="user_campaign_id" value="">
+										<input type="hidden" name="campaign_id" id="campaign_id" value="<?php echo $this->intCampaignId; ?>">
+										<input type="hidden" name="mission_id" id="mission_id" value="<?php echo $this->intMissionId; ?>">
+										<input type="hidden" name="task_id" id="task_id" value="">
+											
+										<div class="mainbox">
+																
+											<div class="boxes">
+											
+												<div class="title">
+													Mission Tasks
+												</div>
+													
+
+												<?php foreach ($this->objTasks as $objTask) : ?>
+							
+													<div style="padding-left: 5px;" class="question">
+														
+														<div class="checkbox">
+															
+															<?php if ($objTask->completed > 0) $class = "jquery-checkbox jquery-checkbox-checked"; else $class = "jquery-checkbox"; ?>
+																
+															<span class="<?php echo $class; ?>" name="<?php echo $objTask->completed; ?>" id="<?php echo $objTask->task_id;?>" style="-moz-user-select: none;">
+																<span class="mark">
+																	<img src="<?php echo $sn; ?>/images/empty.png">
+																</span>
+															</span>
+														</div>
+													
+														<p>
+															<?php echo $objTask->task_name; ?>
+															<br>
+															<br>
+															<?php if ($objTask->points > 0) : ?>
+																<?php echo $objTask->points; ?> miles for completing this task
+															<?php endif; ?>
+														</p>
+													
+													</div>
+												
+												<?php endforeach; ?>
+													
+											</div>
+										
+										</div>											
+											
+									</form>
+										
+								</div>
+									
+							</li>
+								
+						</ul>
+							
+					</div>
+						
+				</div>
+					
+			</div>
+				
+		</div>
+			
+		<div id="footer">
+			<div class="footer_logo"></div>
+			<div class="footer_logout"></div>
+		</div>
+			
+	</div>
+		
+</body>
+	

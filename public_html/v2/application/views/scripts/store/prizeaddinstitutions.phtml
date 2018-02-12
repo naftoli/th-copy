@@ -1,0 +1,88 @@
+<?php
+	include "config.phtml";
+	$strUrl = "";
+	if (isset($this->intHost))
+		$strUrl .= "host_id/" . $this->intHost . "/";
+	if (isset($this->intNetwork))
+		$strUrl .= "network_id/" . $this->intNetwork . "/";
+	if (isset($this->boolTemplate))
+		$strUrl .= "template/true/";
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Prize Institutions</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+<?php
+	if (!count($this->arrInstitutions))
+	{
+?>
+				<div class="module" style="padding:5px;">There are no institutions available to view.</div>
+<?php
+	}
+	else {
+?>
+				<form name="form" id="form" method="post" action="">
+					<ul>
+<?php
+		if (
+			isset($this->intNetwork)
+			&& $this->objRoles->isAllowed('Network Administrator')
+		) {
+			if (isset($this->boolTemplate))
+			{
+?>
+						<li>
+							<a class="link" href="<?php print $sn . "/store/prize/" . $strUrl; ?>">
+								<div class="icon"></div>
+								<div class="title">> Skip to Add Prizes </div>
+							</a>
+						</li>
+<?php
+				foreach ($this->arrInstitutions as $objInstitution)
+				{
+?>
+						<li>
+							<a class="link" href="<?php echo $sn; ?>/store/prizeaddclasses/<?php echo $strUrl . "institution_id/" . $objInstitution->institution_id; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php echo $objInstitution->name; ?></div>
+							</a>
+						</li>
+<?php
+				}
+			}
+			else
+			{ // boolTemplate == false
+?>
+						<li>
+							<a class="link" href="<?php print $sn . "/store/prize/" . $strUrl; ?>">
+								<div class="icon"></div>
+								<div class="title">> Skip to Add Prizes</div>
+							</a>
+						</li>
+<?php
+				foreach ($this->arrInstitutions as $objInstitution)
+				{
+?>
+						<li>
+							<a class="link" href="<?php echo $sn; ?>/store/prizeaddclasses/<?php echo $strUrl . "institution_id/" . $objInstitution->institution_id; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php echo $objInstitution->name; ?></div>
+							</a>
+						</li>
+<?php
+				}
+			}
+		}
+?>
+					</ul>
+				</form>
+<?php
+	}
+?>
+			</div>
+		</div>
+	</div>
+</div>

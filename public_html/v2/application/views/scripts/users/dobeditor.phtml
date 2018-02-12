@@ -1,0 +1,148 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objUserRoles = new Roles();
+	$objUserRoles->setRoles($this->arrUserTypes[$this->strUserTypeSelected]);
+	$objRoles = new Roles();
+?>
+<style>
+.processing_status {
+	display: none;
+	padding: 4px 0 8px 8px;
+	color: red;
+}
+.user_activation {
+	padding: 6px;
+	display: inline;
+	cursor: pointer;
+}
+</style>
+<script language="javascript">
+var boolUserEditorUnsaved = 0;
+$(document).ready(function()
+{
+	// Form submit
+	$('.slider:last form a.submit').click( function(e) {
+		$(".slider:last .processing_status").fadeOut();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider:last #processing_status").html('Loading...').fadeIn(),
+			url : '<?php echo $sn . "/users/dobeditor" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('.slider:last form').serialize(),
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					alert("Sorry, there was an error: VU-E101-3RR3RE");
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					alert("Sorry, there was an error: VU-E102-SDF8BX");
+					return;
+				} else {
+					$(".slider:last #processing_status").fadeOut();
+					if (arrResponse["error"]) {
+						if (typeof(arrResponse["error"]) != "object") {
+							$(".slider:last #processing_status").html(arrResponse["error"]);
+						} else {
+							for (strField in arrResponse["error"])
+							{
+								//alert($.dump($(".slider:last #" + strField).closest("li").html()));return;
+								$(".slider:last #" + strField).closest("li").next().html(arrResponse["error"][strField]).fadeIn();
+							}
+						}
+					} else if (arrResponse["success"] == "added") {
+						$(".slider:last #processing_status").html("<?php print ucwords(first($this->arrUserTypes)); ?> successfully added").fadeIn("slow").delay(2000).fadeOut("slow");
+						$(".slider:last #user_id").val(arrResponse["user_id"]);
+					} else if (arrResponse["success"] == "updated") {
+						$(".slider:last #processing_status").html("<?php print ucwords(first($this->arrUserTypes)); ?> successfully updated").fadeIn("slow").delay(2000).fadeOut("slow");
+					} else {
+						alert($.dump(arrResponse));
+					}
+				}
+			}
+		});
+	});
+});
+</script>
+<div class="slider">
+	<div class="col_title"><span><?php print ucwords(first($this->arrUserTypes)); ?> Editor</span></div>	
+	<div class="col_content camper">
+		<div class="module form" id="module-info">
+<?php
+	if (!count($this->arrUserTypes))
+	{
+?>
+			There are no user types available for modification or creation. Please contact your administrator to correct this issue.
+<?php
+	}
+	else if (!$objRoles->isAllowed($this->arrUserTypes[$this->strUserTypeSelected]))
+	{
+?>
+			You do not have access to edit a user of this permission level.
+<?php
+	}
+	else
+	{
+?>
+			<div class="module_content list">
+				<form>
+					<input type="hidden" id="user_id" name="user_id" value="<?php print intval(@$this->objUser->user_id); ?>" />
+					<ul>
+						<li>
+							<span class="label">User type:*</span>
+							<span class="input"><select style="padding: 6px; width:355px" name="user_type" id="user_type">
+<?php
+		foreach ($this->arrUserTypes as $strShorthand => $strPermission)
+		{
+?>
+								<option value="<?php print $strShorthand; ?>"<?php print $strShorthand == $this->strUserTypeSelected ? " selected" : ""; ?>><?php print $strPermission; ?></option>
+<?php
+		}
+?>
+							</select></span>
+							<div class="clear"></div>
+						</li>
+<?php
+		if ($objUserRoles->isRole("Student"))
+		{
+?>
+						<li>
+							<span class="label">Bar code:</span>
+							<span class="input"><div style="padding:6px 0 0 0"><?php echo @$this->objUser->bar_code; ?></div></span>
+							<div class="clear"></div>
+						</li>
+<?php
+		}
+?>
+						<li>
+							<span class="label">First name:*</span>
+							<span class="input"><div style="padding:6px 0 0 0"><?php echo @$this->objUser->first_name; ?></div></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label">Last name:*</span>
+							<span class="input"><div style="padding:6px 0 0 0"><?php echo @$this->objUser->last_name; ?></div></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Date of Birth:<small>(mm/dd/yyyy)</small>*</span>
+							<div class="input"><input type="text" class="required" id="dob" name="dob" value="<?php echo @$this->objUser->dob; ?>" /></div>
+						</li>
+						<div id="processing_status" style="padding:6px"></div>
+						<li>
+							<span><a href="#" title="Save" class="button submit">Save</a></span>							
+							<div class="clear"></div>							
+						</li>
+					</ul>
+				</form>
+			</div>
+<?php
+	}
+?>
+		</div>
+	</div>
+</div>

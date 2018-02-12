@@ -1,0 +1,81 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script>
+	$(function () {
+		$("#selNetworkName").change(function () {
+			//alert("<?php print bp; ?>/admin/missions/network_id/" + $(this).val() + "<?php print $strParamPath; ?>");
+			var strURL = "<?php print bp; ?>/admin/missions/network_id/" + $(this).val() + "<?php print $strParamPath; ?>";
+			slideRefresh(strURL);
+			$("#mainmenu_missions_a").attr("href", strURL);
+		});
+		$(".slider:last .button").click(function (e) {
+			e.preventDefault();
+		});
+	});
+</script>
+<div class="slider">
+	<style>
+		.title {
+			width:650px !important;
+		}
+	</style>
+	<div class="col_title"><span>MissionsApp Missions</span></div>
+
+	<div class="col_content">
+		<div style="height: 42px;padding:0 26px 3px 0">
+			<span style="float:right;"><a href="<?php print bp; ?>/admin/missionedit/network_id/<?php print $this->objCurrentNetwork->network_id . $strParamPath; ?>" onclick="slideURL(this.href)" class="button add_mission" style="margin-right:6px;">Add Mission</a><a onclick="slideRefresh()" class="button">Refresh</a></span>
+			<div>
+				Network:<br>
+				<select style="width:200px;" id="selNetworkName">
+<?php
+	foreach ($this->arrNetworks as $objNetwork)
+	{
+?>
+					<option <?php print $this->objCurrentNetwork->network_id == $objNetwork->network_id ? "selected" : ""; ?> value="<?php print $objNetwork->network_id; ?>"><?php print $objNetwork->network_name; ?></option>
+<?php
+	}
+?>
+				</select>
+			</div>
+			
+		</div>
+<?php
+	if (!count($this->arrMissions))
+	{
+?>
+		<div class="module" style="padding:5px;">There are no missions available to view.</div>
+<?php
+	}
+	else
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+		foreach ($this->arrMissions as $arrResult)
+		{
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/admin/missionedit/mission_id/" . $arrResult->task_id . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">
+<?php
+			print $arrResult->holiday_name . " - " . $arrResult->description;
+?>
+							</div>
+						</a>
+					</li>
+<?php
+		}
+?>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

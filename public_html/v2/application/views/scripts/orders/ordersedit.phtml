@@ -1,0 +1,98 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+
+<script language="javascript">
+
+function printDoc()
+{
+	document.form_reprint.submit();
+}
+	$(document).ready(function()
+	{
+		$('#slider_ordersedit #form1 a.submit').click( function(e) {
+			
+			printDoc();
+			return;
+		
+			//don't process this
+			e.preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $("#slider_ordersedit #processing_status").html('Loading...').fadeIn("slow"),
+				url : '<?php echo $sn . "/orders/ordersedit" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('#slider_ordersedit #form1').serialize(),
+				success : function(strResponse) {
+					if (strResponse.match(/^[0-9]+$/)) {
+						$("#slider_ordersedit #processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+					} else {
+						$("#slider_ordersedit #processing_status").html(strResponse).fadeIn("slow");
+					}
+				}
+			});
+		});
+	});
+</script>
+
+<div class="slider" id="slider_ordersedit">
+	
+	<div class="col_title">
+		<span>Update Order</span>
+	</div>
+	
+	<div class="col_content camper">
+		
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form name="form_reprint" id="form_reprint" method="post" action="/orders/ordersprint" target="_blank">
+					<input type="hidden" name="user_prize_id[]" id="user_prize_id[]" value="<?php echo $this->order->user_prize_id; ?>" />
+					<input type="hidden" name="description" id="description" value="<?php echo $this->order->prize_description; ?>" />
+					<input type="hidden" name="currency" id="currency" value="<?php echo $this->order->currency; ?>" />
+					<input type="hidden" name="price" id="price" value="<?php echo $this->order->prize_price; ?>" />
+					<input type="hidden" name="student_id" id="student_id" value="<?php echo $this->order->user_id; ?>" />
+					<ul>
+						<li>
+							<span class="label">Prize Name:</span>
+							<?php echo $this->order->prize_name; ?>	
+							<div class="clear"></div>
+						</li>
+						
+<?php if($this->order->status == "Redeemed") { ?>
+						<li>
+							This prize has already been redeemed
+						</li>
+<?php } else { ?>
+						<li>
+							<span class="label">Prize Status:</span>
+							<span class="input">
+								<select class="select" name="status" id="status">
+<?php
+		for($i=0; $i<count($this->arrTypes); $i++) {
+			print "<option value=\"" . $this->arrTypes[$i] . "\""
+				. (
+					$this->arrTypes[$i] == $this->order->status
+					? " selected"
+					: ""
+				) . ">" . $this->arrTypes[$i] . "</option>";
+		}
+?>
+								</select>
+							</span>
+							<div class="clear"></div>
+						</li>
+<?php } ?>
+						
+						<div id="processing_status"><?php if ($this->message) { echo $this->message . "<br>"; } ?></div>
+						<li>
+							<span><a href="#" title="" class="button" onclick="printDoc();">Re-print voucher</a></span>							
+							<div class="clear"></div>							
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

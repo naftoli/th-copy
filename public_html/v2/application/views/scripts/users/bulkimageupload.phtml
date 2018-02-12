@@ -1,0 +1,33 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+?>
+<div id="lists" class="module lists forms">
+	<div class="module_content">
+		<ul>
+<?php
+	$arrListParams = array(
+		"data_source" => "/users/bulkimageupload",
+		"params" => array(
+			"_NOT" => array(
+				"_OR" => TRUE,
+				"image_id" => array(
+					"",
+					0
+				),
+				"_IS_NULL" => array(
+					"image_id"
+				)
+			)
+		)
+	);
+?>
+			<li>
+				<a class="link" href="<?php print $sn . "/lists/standard2/params/" . dblencode(json_encode($arrListParams)); ?>">
+				  <div class="icon"></div>
+				  <div class="title"><?php print text("Saved [|Student|] Images"); ?></div>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>

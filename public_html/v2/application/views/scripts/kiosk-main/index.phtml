@@ -1,0 +1,108 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace('kiosk_user_session_data');
+	$objPoints = new Points();
+	$intUserPoints = $objPoints->user_points_sum(array(
+		"user_id" => $user_session_data->user_id
+	));
+?>
+<script>
+	function loadShadow(cardnum) {
+		// open a welcome message as soon as the window loads
+		Shadowbox.open({
+			content:    '<?php echo $sn;?>/kiosk-main/cardpop/card_id/' + cardnum.value,
+			player:     "iframe",
+			width:      770,
+			height:     430
+		});
+		cardnum.value='';
+		return false;
+	}
+	
+	function add_to_miles(intCardPoints)
+	{
+		document.getElementById("total_miles").innerHTML = document.getElementById("total_miles").innerHTML * 1 + intCardPoints;
+		document.getElementById("year_miles").innerHTML = document.getElementById("year_miles").innerHTML * 1 + intCardPoints;
+	}
+	
+	function control(intControl, intSerial)
+	{
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php echo $sn;?>/kiosk-main/cardpop/card_id/' + intSerial,
+			dataType : "text",
+			data: {'control' : intControl},
+			success : function(strResponse) {
+				eval(strResponse);
+			}
+		});
+	}
+</script>
+
+
+<div id="page_title">Welcome</div>
+	<div class="two_column">
+		<script language="javascript">
+			function add_to_miles (intValue)
+			{
+				$("#total_points").html($("#total_points").html() * 1 + intValue);
+			}
+		</script>
+		<div class="padding_top padding_left member_info_box">
+			<div class="member_photo">
+				<div class="member_photo_img">
+					<IMG SRC='<?php print WEB_ROOT . "images/show-image/image_id/" . $this->objUser->image_id; ?>' WIDTH='150' HEIGHT='150'  ALT='' />
+				</div>
+				<div class="member_photo_cover"></div>
+				<div class="member_badge"></div>
+			</div>
+			<div class="member_info">
+				<ul>
+					<li class="member_name"><?=$user_session_data->first_name?> <?=$user_session_data->last_name?></li>
+					<li><label>Bunk: </label> <span><?php //print $user_session_data->grade?> <?php print $user_session_data->sub?></span></li>
+					<li><label>Counselor:</label> <span><?=$user_session_data->teacher_name?></span></li>
+					<li><label>Bunk Average:</label> <span><?=$user_session_data->platoon_avg_points?></span></li>
+					<li><label>Base Average:</label> <span><?=$user_session_data->base_avg_points?></span></li>
+					<li><label>Total Miles:</label> <span id="total_points"><?php print intval($intUserPoints); ?></span></li>
+					<!--<li><label>5771 Miles:</label> <span></span></li>-->
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="padding_left">
+			<div class="scan_card">
+				<div class="scan_card_inside">
+						<form name="scancard" id="scancard" onSubmit="return loadShadow(this.scantext)">
+							Scanning Station<br>
+							<input name="scantext" id="scantext" type="text" autocomplete="off"  />
+						</form>
+						<script type="text/javascript">document.getElementById('scantext').focus();</script>
+					<div class="scan_card_cover"></div>
+				</div>
+			</div>
+			<div id="processing_status"></div>
+		</div>
+	</div>
+	<div class="one_column">
+		<ul class="buttons button_icons">
+			<li><a href="<?=WEB_ROOT?>kiosk-main/profile" class="icon_profile">Profile</a></li>
+			<li><a href="<?=WEB_ROOT?>kiosk/auto-login/uc/<?php print $user_session_data->bar_code; ?>/magic/true" class="icon_shop">Store</li>
+		</ul>
+	</div>
+	<script type="text/javascript">
+		//setInterval ( "scanFocus()", 1000 );
+		window.onkeydown = scanFocus;
+		function scanFocus() {
+			document.scancard.scantext.focus();
+		}
+		
+		Shadowbox.init({
+			skipSetup: true,
+			players:    ["iframe"],
+			initialWidth:320,
+			initialHeight:30,
+			overlayOpacity:0.8
+		});
+	</script>

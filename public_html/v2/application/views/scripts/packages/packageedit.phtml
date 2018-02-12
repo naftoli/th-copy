@@ -1,0 +1,205 @@
+<?php
+	include "config.phtml";
+?>
+
+<script language="javascript">
+	function calculate_fees()
+	{
+		var intPrice = 0;
+		var arrAddonPrices =  $('.addon_fee');	
+		$("#price").val(0);
+		for (var intKey=0; intKey != arrAddonPrices.length; intKey++)
+		{
+			var arrInputs = $(arrAddonPrices[intKey]).children();
+			if($(arrInputs[0]).attr("checked"))
+			{
+				intPrice = parseFloat($(arrInputs[1]).val()) + parseFloat($("#price").val());
+				$("#price").val(intPrice);
+			}
+		}
+		$("#price").val(intPrice);
+	}
+	$(document).ready(function()
+	{
+		
+		$('#form a.submit').click( function(e) {
+			e.preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $("#processing_status").html('Loading...').fadeIn("slow"),				
+				url : '<?php echo $sn; ?>/packages/packageedit/package_id/<?php print $this->arrPackages[0]->pack_id ?>',
+				dataType : "text",
+				data: $('#form').serialize(),
+				success : function(strResponse) {
+					if (strResponse.match(/^[0-9]+$/)) {
+						$("#processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+					} else {
+						$("#processing_status").html(strResponse).fadeIn("slow");
+					}
+				}
+			});
+		});
+		
+		$('#toggle_activation').click(function(e) {
+			$.blockUI({ message: $('#question')});
+		});
+		
+		// Activate / Deactivate
+		$('#question #option1').click(function(e) {
+			var strPath = "<?php echo $sn; ?>/administration/setstatus/id/<?php echo $this->arrPackages[0]->pack_id ?>/cat/packages/status/<?php
+				echo $this->arrPackages[0]->active_pack
+				? "deactivate"
+				: "activate"; 
+			?>";
+			$("#processing_status").html('Loading...').fadeIn("slow");
+			$.get(strPath, 
+				function(strResponse) {
+					if (!strResponse.match(/error|notice:/i)) {
+						$("#processing_status").html(strResponse).fadeIn("slow").delay(500).fadeOut("slow").delay(500, function () {
+							naviageBack($(".slider:last .slider_back"));
+						});
+					} else {
+						$("#processing_status").html(strResponse).fadeIn("slow");
+					}
+				}
+			);
+			e.preventDefault();
+			$.unblockUI();
+		});
+		
+		$('#question #option2').click(function(e) {
+			e.preventDefault();
+			$.unblockUI();
+		});
+		
+	});
+</script>
+
+<div class="slider">
+	
+	<div class="col_title">
+		<span>Edit Package</span>
+	</div>
+	
+	<div class="col_content camper">
+		<div class="module lists" id="lists-camper-groups">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a href="#" id="toggle_activation">
+							<div class="icon"></div>
+							<div class="title">
+							<?php
+								echo $this->arrPackages[0]->active_pack == 1
+								? "Deactivate"
+								: "Activate";
+							?> package</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form name="form" id="form" method="post" action="">
+					<ul>
+						<li>
+							<span class="label">Name:</span>
+							<span class="input"><input type="text" class="required" id="name" name="name" value="<?php echo $this->arrPackages[0]->name; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Description:</span>
+							<span class="input"><input type="text" class="required" id="description" name="description" value="<?php print $this->arrPackages[0]->description; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Price:</span>
+							<span class="input"><input type="text" class="required" id="price" name="price" value="<?php print $this->arrPackages[0]->price; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Currency:</span>
+							<span class="input"><input type="text" class="required" id="currency" name="currency" value="<?php print $this->arrPackages[0]->currency; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Discount price:</span>
+							<span class="input"><input type="text" class="required" id="discount_price" name="discount_price" value="<?php print $this->arrPackages[0]->discount_price; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						
+<?php
+				$counter=0;
+				foreach($this->arrItems as $objItem)
+				{
+					//print_r($this->arrPackages); //exit;
+					foreach($this->arrPackages as $key => $value)
+					{
+						if($this->arrPackages[$key]->package_item_id == $objItem->package_item_id)
+						{
+							$checked = "checked";
+							break;
+						}
+						else
+						{
+							$checked = "";
+						}						
+					}
+?>
+						<li>						
+							<input type="hidden" name="package_id[]" id="package_id" value="<?php print $this->arrPackages[0]->pack_id; ?>">
+							<span class="input" style="width: 300px !important;">
+								<span class="addon_fee">
+									<input type="checkbox" class="required" id="item_id" name="item_id[<?php print $counter; ?>]" value="<?php print $objItem->package_item_id; ?>" <?php print $checked; ?> onClick="calculate_fees();"/>
+									<input type="hidden" id="price" value="<?php print $objItem->price; ?>">
+									<?php print $objItem->name; ?> - $<?php print number_format($objItem->price);?> <?php print$objItem->currency; ?>
+									[<?php print $objItem->package_item_type; ?>]
+								</span>
+							</span>
+							<span class="label">Type:</span>
+							<span class="input">
+								<select class="select" name="type[<?php print $counter; ?>]" id="type">
+									<?php
+										$arrType = array('item','add-on');
+										foreach ($arrType as $strValue) {
+											print "<option>" . $strValue . "</option>";
+										}
+									?>
+								</select>
+							</span>
+							<div class="clear"></div>
+<?php
+					$counter++;
+				}
+?>
+						</li>
+						<div id="processing_status"><?php if ($this->message) { echo $this->message . "<br>"; } ?></div>
+						<li>
+							<span><a href="#" title="Save" class="button submit">Save</a></span>							
+							<div class="clear"></div>							
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div id="question">
+			<p>Are you sure you would like to <?php
+			echo $this->arrPackages[0]->active_pack
+			? "deactivate"
+			: "activate"; 
+		?> this package?</p>
+			<p><a id="option1" class="button">Yes, <?php
+			echo $this->arrPackages[0]->active_pack
+			? "deactivate"
+			: "activate"; 
+		?></a></p>
+			<p><a id="option2" class="button">No, do not <?php
+			echo $this->arrPackages[0]->active_pack
+			? "deactivate"
+			: "activate"; 
+		?></a></p>
+		</div>
+	</div>
+</div>

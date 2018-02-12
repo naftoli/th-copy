@@ -1,0 +1,469 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objUtilities = new Utilities();
+	$objRoles = new Roles();
+?>
+<div class="slider">
+	<style>
+	<!--
+	.infobox2 {
+		-moz-border-radius:10px 10px 10px 10px;
+		-moz-box-shadow:1px 1px #FFFFFF;
+		background-color:#EEEEEE;
+		border:1px solid #BBBBBB;
+		margin-bottom:30px;
+		margin-right:25px;
+		min-height:50px;
+		padding:5px 10px;
+	}
+	.marking_list .select_box {
+		float:left;
+		margin:0 8px;
+	}
+	a.button {
+		padding:6px 10px;
+	}
+	.marking_list .button.prev, .marking_list .button.next{
+		display:block;
+		float:left;
+		margin:3px 4px;
+		height:14px;
+	}
+	.marking_list .button.next {
+		float:right;
+	}
+	.marking_list .button.prev .icon, .infobox2 .button.next .icon {
+		float:left;
+		height:14px;
+		margin:0 -5px;
+		width:14px;
+	}
+	.marking_list .button.prev .icon {
+		background:url("<?php print $sn; ?>/images/back-end/admin/icon_control_left.png") no-repeat scroll 0 0 transparent;
+	}
+	.marking_list .button.next .icon {
+		background:url("<?php print $sn; ?>/images/back-end/admin/icon_control_right.png") no-repeat scroll 0 0 transparent;
+	}
+	.marking_list .button .label {
+		float:left;
+		text-indent:-9999em;
+	}
+
+
+	.list_expand li:first-child {
+		border-top:medium none;
+	}
+	.list_expand img {
+		border:1px solid #BBBBBB;
+		margin:2px;
+	}
+
+	.generate {
+		padding:5px;
+	}
+	.generate h3 {
+		line-height:1.6;
+		margin-bottom:15px;
+		text-align:center;
+	}
+
+
+	.generate .button {
+		float:none;
+		margin:3px 250px;
+		text-align:center;
+		line-height:1;
+	}
+	.marking_missions .print_header .marking {
+		position:relative;
+		font-weight:bold;
+	}
+	.marking_missions .print_header:not(.print_page_two) .marking {
+		min-height:78px;
+	}
+	.marking_missions .print_header .rank_image {
+		float:right;
+		padding:4px;
+		position:absolute;
+		right:0;
+	}
+	.marking_missions .print_header .user_image {
+		float:left;
+		overflow:hidden;
+		padding:4px 4px 4px 8px;
+		position:absolute;
+		text-align:center;
+		width:80px;
+	}
+
+	.marking_missions .print_header div.module p, .marking_missions .print_footer div.module p {
+		font-family:"Myriad Pro",Arial,Helvetica,sans-serif;
+		margin:4px 10px;
+		text-align:center;
+	}
+	.marking_missions .print_header:not(.print_page_two) .print_page {
+		font-size:12px;
+		position:absolute;
+		right:95px;
+	}
+	.marking_missions .print_name {
+		font-size:20px;
+		margin-bottom:5px;
+	}
+	.marking_missions .print_week {
+		font-size:18px;
+	}
+	.marking_missions .print_class {
+		float:left;
+		font-size:14px;
+		margin-left:100px !important;
+	}
+	.marking_missions .print_sig {
+		float:right;
+		font-size:14px;
+		margin-right:100px !important;
+	}
+
+	.tanya.module {
+		-moz-box-shadow:none;
+		background:none repeat scroll 0 0 #FFFFFF;
+		border:1px solid #000000;
+		margin-bottom:30px;
+		padding:1px 8px 8px 1px;
+		line-height:1;
+	}
+	.tanya .mission {
+		-moz-border-radius:8px 8px 8px 8px;
+		background:none repeat scroll 0 0 #FFFFFF;
+		border:1px solid #000000;
+		float:left;
+		font-size:70%;
+		height:59px;
+		margin:7px 0 0 7px;
+		text-align:center;
+		width:59px;
+	}
+	.tanya .mission .mission_number {
+		font-size:14px;
+		font-weight:bold;
+		margin-top:3px;
+	}
+	.tanya .mission .mission_date {
+		margin:3px 0;
+	}
+	.tanya .mission .mission_lines {
+		font-size:95%;
+		font-weight:bold;
+	}
+	.tanya.tanya_medal {
+		-moz-border-radius:8px 8px 8px 8px;
+		background:none repeat scroll 0 0 #A8A8A8;
+		margin:10px 0 0 7px;
+		padding:0;
+	}
+	.tanya.tanya_medal .box {
+		float:left;
+		height:30px;
+		margin-top:10px;
+		text-align:center;
+		width:45%;
+	}
+	.tanya.tanya_medal .medal {
+		margin:-5px 0 15px;
+		width:10%;
+	}
+
+	.check_on {
+		background: url("<?php print $sn; ?>/images/back-end/kiosk/check_circles.png") repeat scroll 0 0 transparent;
+		height: 28px;
+		width: 28px;
+	}
+	.check_off {
+		background: url("<?php print $sn; ?>/images/back-end/kiosk/check_circles.png") repeat scroll right center transparent;
+		height: 28px;
+		width: 28px;
+	}
+	.check_on, .check_off {
+		position:relative;
+		top:-67px;
+		left:41px;
+	}
+	.report_options {
+		padding-top:3px;
+		padding-left:6px;
+	}
+	.report_options div {
+		margin: 2px;
+		padding: 0px 6px 0px 6px;
+		border: 1px outset #EAEAEA;
+		display: inline;
+		cursor: default;
+		white-space: nowrap;
+		line-height: 30px;
+	}
+	.report_options table {
+		margin: 2px;
+		border: 1px ridge #DDD;
+		cursor: default;
+	}
+	.report_option_select {
+		background-color: #DDD;
+		border: 1px inset #EAEAEA !important;
+	}
+	.date {
+		padding:3px !important;
+	}
+	@media print {
+		.header, .body_header_left, .body_header_right, .left_menu, .noprint, #nav, .col_title {
+			display: none !important;
+		}
+		#content {
+			overflow:visible !important;
+			background:none !important;
+			width:auto !important;
+		}
+		#wrapper, #content .slider, #content .slider_container, #content .col_content {
+			float:none !important;
+			width:auto !important;
+			height:auto !important;
+		}
+		#content .col_content {
+			padding:0 !important;
+		}
+		.col_title_bg {
+			background:none !important;
+			height:0 !important;
+			margin:0 !important;
+		}
+		div.module {
+			margin-right:0;
+		}
+		.slider_container  {
+			margin-left:0 !important;
+		}
+		.slider_container .slider {
+			display:none;
+		}
+		.slider_container .slider:last-child {
+			display:block;
+		}
+		.page-break {
+			page-break-after: always;
+		}
+		.date_module {
+			display:none;
+		}
+	}
+	-->
+	</style>
+	<script>
+	$(document).ready(function()
+	{
+		$('.slider:last .module#module-alerts li h3').nextAll().hide();
+		$('.slider:last .module#module-alerts li h3').click(function(){
+			$(this).nextAll().slideToggle('fast');
+			$(this).parents('li').toggleClass('open');
+		});
+		$(".slider:last .report_options input:[type=checkbox]:checked").closest("div").addClass("report_option_select");
+		$(".slider:last .report_options div").bind("click", function () {
+			if ($(this).hasClass("report_option_select")) {
+				$(this).removeClass("report_option_select");
+				$(this).find("input").removeAttr("checked");
+			} else {
+				$(this).addClass("report_option_select");
+				$(this).find("input").attr("checked", "checked");
+			}
+			$(this).find("input").focus();
+		});
+
+		if ($(".slider:last #date_range").attr('checked'))
+		{
+			$("#report_dates").fadeIn('slow');
+		}
+		$(".slider:last #date_range").focus(function () {
+			if ($(this).attr('checked'))
+				$('.slider:last #report_dates').fadeIn('slow');
+			else
+				$('.slider:last #report_dates').fadeOut('slow');
+		});
+		$(".slider:last #update_report").click(function () {
+			var strPath = "<?php print $sn; ?>/reports/viewreport/campaign_id/1";
+			strPath += '/date_range/' + $('#date_range:checked').length;
+			strPath += '/start_date/' + encodeURIComponent(encodeURIComponent($('.slider:last #start_date').val()));
+			strPath += '/end_date/' + encodeURIComponent(encodeURIComponent($('.slider:last #end_date').val()));
+			slideRefresh(strPath);
+		});
+		$(".slider:last #start_date").datepicker();
+		$(".slider:last #end_date").datepicker();
+	});
+	</script>
+	<div class="col_title">
+		<span>Print Reports</span>
+	</div>
+	<div class="col_content">
+<?php
+		$intStartDate = isset($this->arrParams["start_date"]) ? urldecode($this->arrParams["start_date"]) : date("m") . "/" . date("d") . "/" . (date("Y")-1);
+		$intEndDate = isset($this->arrParams["end_date"]) ? urldecode($this->arrParams["end_date"]) : date("m") . "/" . date("d") . "/" . date("Y");
+?>
+		<div class="module date_module">
+			<div class="report_options" id="report_date_options">
+				<table>
+					<tr>
+						<td>
+							<div><span>Date:</span><input type="checkbox"<?php print @$this->arrParams["date_range"] ? " checked" : ""; ?> id="date_range" name="date_range" /></div>
+						</td>
+						<td id="report_dates" style="display:none">
+							&nbsp; Start: <input type="text" class="required date" id="start_date" name="start_date" value="<?php print $intStartDate; ?>" size="25" /> End: <input type="text" class="required date" id="end_date" name="end_date" value="<?php print $intEndDate; ?>" size="25" />
+						</td>
+						<td>
+							&nbsp;<div id="update_report"><span>Update Report</span></div>
+						</td>
+					</td>
+				</table>
+			</div>
+		</div>
+<?php
+	if (!count($this->arrReports))
+	{
+?>
+		<div class="module" style="padding:5px;"><?php print $objRoles->isRole("Parent") ? "You have no children" : "There are no students"; ?> enrolled into any campaigns. Once <?php print $objRoles->isRole("Parent") ? "your children" : "your students"; ?> are enrolled, their reprots will show here. Click the Campaigns button on the left to start enrolling your <?php print $objRoles->isRole("Parent") ? "children" : "students"; ?>.</div>
+<?php
+	}
+	else
+	{
+?>
+		<div class="module_content marking_missions">
+			<div class="noprint">
+				<div class="module clearfix generate">
+					<p>Generate Mission Sheets by filling in all the options above.</p>
+				</div>
+				<div class="module clearfix" id="module-alerts">
+					<div class="list_expand">
+						<ul>
+							<li>
+								<h3><span class="icon"></span>Print Instructions</h3>
+								<p><img src="<?php print $sn; ?>/images/back-end/admin/Print-Dialog-Small-2.jpg" align="right" /><img src="<?php print $sn; ?>/images/back-end/admin/Print-Dialog-Small-1.jpg" align="right" />
+									In your browser click 'File' then 'Page Setup...'</p>
+									<p>Step 1: Set the Orientation to Portrait</p>
+									<p>Step 2: Check 'Shrink to fit Page Width'</p>
+									<p>Step 3: In Options check 'Print Background (colors & images)'</p>
+									<p>Step 4: In the second tab set all Margins to 0.5 inches (All Sides)</p>
+									<p>Step 5: Set all Headers & Footers to Blank</p>
+									<p>Note: The browser will save these preferences for later use.</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="module clearfix generate">
+					<h3>Mission Sheets were generated<br/>(<?php print count($this->arrReports);?> Reports)</h3>
+					<p><a href="javascript:window.print()" class="button">Print</a></p>
+				</div>
+			</div>
+			<DIV id="tasks_div">
+<?php
+		foreach ($this->arrReports as $arrReport)
+		{
+			if (!count($arrReport["schedule"]))
+				continue;
+			$objLastSch = end($arrReport["schedule"]);
+			if (!count($objLastSch["missions"]))
+				continue;
+			$objLastMission = end($objLastSch["missions"]);
+			if (!count($objLastMission))
+				continue;
+			$intEndYearLine = end($objLastMission["tasks"])+$objLastMission['velocity'];
+?>
+			<div class="user_report_box page-break">
+				<div class="print_header">
+					<div class="marking module clearfix">
+						<div class="rank_image"><img src="<?php print WEB_ROOT . "images/show-image/image_id/" . $arrReport["objInstitution"]->image_id; ?>" height="70" /></div>
+						<div class="user_image"><img src="<?php print WEB_ROOT . "images/show-image/image_id/" . $arrReport["user"]->image_id; ?>" height="70" /></div>
+						<p class="print_page">&#1489;"&#1492;</p>
+						<p class="print_name"><?php print 'Grade: ' . @$arrReport["objClass"]->custom_name1 . ' - ' . $arrReport["user"]->first_name . " " . $arrReport["user"]->last_name . " - " . $arrReport["user"]->user_serial; ?></p>
+						<p class="print_week">My Tanya Schedule for <?php print date_hebrew_year; ?></p>
+						<p class="print_class">My <?php print $arrReport["objSchedulingParams"]->frequency . " Quota: " . $arrReport["ladder_velocity"] . " lines"; ?></p>
+						<p class="print_sig"><?php print date_milestone; ?> <?php print date_hebrew_year; ?>: <?php print floor($intEndYearLine); ?> lines</p>
+						<!--<p class="print_instructions">Fill out your mission sheet and review it with your commander, who will give you a campaign sticker for each mission you have completed.</p>-->
+					</div>
+				</div>
+<?php
+			foreach ($arrReport["schedule"] as $arrSchedule)
+			{
+?>
+				<div class="tanya module clearfix">
+					<div class="clearfix">
+<?php
+				foreach ($arrSchedule["missions"] as $arrMission)
+				{
+					$objParshos = $objUtilities->epoch_parshos($arrMission["epoch"]);
+?>
+						<div class="mission">
+							<div class="mission_number">#<?php print $arrMission["mission_number"];
+		//if (isset($arrReport["arrCurrentMissionHash"][$arrMission["epoch"]]))
+		//	print " D";
+?></div>
+<?php
+		if (!empty($objParshos->name))
+		{
+?>
+							<div><nobr><?php print $objParshos->name; ?></nobr></div>
+							<div class='mission_date'><?php print $objParshos->year; ?></div>
+<?php
+		}
+		else
+		{
+?>
+							<div><nobr>NA</nobr></div>
+							<div class='mission_date'><?php print date("n/j/Y", $arrMission["epoch"]); ?></div>
+<?php
+		}
+?>
+							<div class="mission_lines">Ln:<?php
+			// Show the line number the user is currently on
+			$intStartIncrement = reset($arrMission["tasks"]);
+			$intEndIncrement = end($arrMission["tasks"]);
+
+			$intFantomIncrement = $intStartIncrement + $arrMission["velocity"];
+			if ($intFantomIncrement > $intEndIncrement)
+			{
+				$intEndIncrement = $intFantomIncrement;
+			}
+
+			if ($intStartIncrement != $intEndIncrement)
+				$intStartIncrement = $intEndIncrement;
+
+			print $intStartIncrement;
+?></div>
+<?php
+		if ($arrReport["intLatestMission"] >= $arrMission["mission_number"]-1)
+			print "<div class='check_on'></div>";
+		else if (isset($arrReport["arrPendingHash"][$arrMission["epoch"]]))
+			print "<div class='check_off'></div>";
+?>
+						</div>
+<?php
+				}
+?>
+					</div>
+					<div class="tanya tanya_medal clearfix">
+						<div class="box"><?php print $arrSchedule["mission_count"]; ?> Missions</div>
+						<div class="box medal"><img src="<?php print "$sn/images/show-image/image_id/" . $arrSchedule["medal"]->medal_image_id; ?>" width="72" height="75" /></div>
+						<div class="box"><?php print $arrSchedule["medal"]->medal_name; ?></div>
+					</div>
+				</div>
+
+<?php
+			}
+?>
+			</div>
+<?php
+		}
+?>
+			</div>
+		</div> <!-- <div class="module_content"> -->
+<?php
+	}
+?>
+	</div> <!-- <div class="col_content"> -->
+</div> <!-- <div class="slider"> -->

@@ -1,0 +1,55 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Prizes by <?php echo ($user_session_data->institution_type == "School" ? "Classes" : "Bunks"); ?> </span>
+	</div>
+	<div class="col_content">
+
+<?php
+	if (!count($this->arrResult))
+	{
+?>
+		<div class="module message">There are no prizes available to view.</div>
+<?php
+	} else {
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+		foreach ($this->arrResult as $arrResult)
+		{
+?>
+					<li>
+						<a class="link" href="<?php print $sn . "/store/prizebyclass".$institution_string."/class_id/" . $arrResult->class_id; ?>">
+							<div class="icon"></div>
+<?php
+			if ($user_session_data->institution_type == "School")
+			{
+?>
+							<div class="title"><?php print "Grade: " . $arrResult->grade . " " . $arrResult->sub . " " . $arrResult->teacher; ?></div>
+<?php
+			}
+			else
+			{
+?>
+							<div class="title"><?php print "Bunk: " . $arrResult->sub . " " . $arrResult->teacher; ?></div>
+<?php
+			}
+?>
+					</li>
+<?php
+		}
+?>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

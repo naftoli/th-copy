@@ -1,0 +1,50 @@
+[devel]
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+bootstrap.path = "bootstrap.php"
+resources.frontController.controllerDirectory =  "/controllers"
+db.adapter = PDO_MYSQL
+db.params.host = mashpia.com
+db.params.username = mashpia_devel
+db.params.password = q65u7sZVsnGb
+db.params.dbname = mashpia_devel
+recaptcha_public = 6LdjXrwSAAAAACjcZRb1GnIFpTamr3a6XTUkYWZc
+recaptcha_private = 6LdjXrwSAAAAANGjeUUTcKeU7-Id5sq3bQAtocUX
+resources.layout.layout = "layout"
+resources.layout.layoutPath =  "/layouts/scripts"
+db.params.charset = "utf8"
+db.params.driver_options.1002 = "SET NAMES utf8"
+points.army_points.default = 1
+points.base_points.default = 1
+
+[production]
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+bootstrap.path = "bootstrap.php"
+resources.frontController.controllerDirectory =  "/controllers"
+db.adapter = PDO_MYSQL
+db.params.host = mashpia.com
+db.params.username = mashpia_prod
+db.params.password = 9mSawieHde7S
+db.params.dbname = mashpia_production
+db.params.charset = "utf8"
+db.params.driver_options.1002 = "SET NAMES utf8"
+points.army_points.default = 1
+points.base_points.default = 1
+
+[staging]
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+bootstrap.path = "bootstrap.php"
+resources.frontController.controllerDirectory =  "/controllers"
+db.adapter = PDO_MYSQL
+db.params.host = mashpia.com
+db.params.username = mashpia5_staging
+db.params.password = 1WkkzaQGm6lW
+db.params.dbname = mashpia5_staging
+db.params.charset = "utf8"
+points.army_points.default = 1
+points.base_points.default = 1
+db.params.driver_options.1002 = "SET NAMES utf8"
+points.army_points.default = 1
+points.base_points.default = 0

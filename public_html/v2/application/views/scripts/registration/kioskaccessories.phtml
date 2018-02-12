@@ -1,0 +1,410 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script language="javascript">
+$(document).ready(function()
+{
+	var objTimeout = false;
+	$('.slider:last form').keyup(function (e) {
+		var charCode = (e.which) ? e.which : e.keyCode;
+		if (charCode == 13) {
+			e.preventDefault();
+			if ($(this).find('.submit').length)
+				$(this).find('.submit').click();
+			else
+				$(this).submit();
+		}
+
+	});
+
+	var arrRegData = $('body').data("reg_data");
+	for (var strKey in arrRegData)
+	{
+		$(".slider:last #" + strKey).val(arrRegData[strKey]);
+	}
+	$('.slider:last .submit').click(function(){
+		var strURL = '<?php print $sn . "/registration/payment" . $strParamPath; ?>';
+		slideURL(strURL);
+	});
+
+	$("#registration_kioskaccessories input[type=text]").bind("keyup", function() {
+		var intTotal = kiosk_accessories_sum();
+		$("#kioskaccessories_total").html(intTotal);
+		window.clearTimeout(objTimeout);
+		objTimeout = window.setTimeout(function () {
+			var arrData = $('body').data("reg_data");
+			if (!arrData)
+				arrData = {};
+			var arrNewData = $('.slider:last form').serializeArray();
+			for (var intItr in arrNewData)
+			{
+				arrData[arrNewData[intItr]["name"]] = arrNewData[intItr]["value"];
+			}
+			$('body').data("reg_data", arrData);
+		}, 100);
+	});
+
+	var intTotal = kiosk_accessories_sum();
+	$("#kioskaccessories_total").html(intTotal);
+	$('.slider:last .xmin').change(function () {
+		if (!parseInt($(this).val()) || parseInt($(this).val()) < parseInt($(this).attr('min'))) {
+			$(this).val($(this).attr('min'));
+			$(this).trigger('keyup');
+
+		}
+	});
+	$('.slider:last #kioskaccessories_campers').keyup(function () {
+		var intVal = parseInt($(this).val());
+		if (intVal < 25 || !parseInt($(this).val()))
+			intVal = 25;
+		var intCost = 6;
+		var arrCosts = {
+			0 : 6,
+			100 : 5,
+			200 : 4,
+			300 : 3.50,
+			500 : 3
+		};
+		for (var intAmount in arrCosts) {
+			if (intVal >= intAmount)
+				intCost = arrCosts[intAmount];
+		}
+		if (intVal > 83 && intVal < 100) {
+			intCost = 5;
+			intVal = 100;
+		} else if (intVal > 160 && intVal < 200) {
+			intCost = 4;
+			intVal = 200;
+		} else if (intVal > 262 && intVal < 300) {
+			intCost = 3.5;
+			intVal = 300;
+		} else if (intVal > 428 && intVal < 500) {
+			intCost = 3;
+			intVal = 500;
+		}
+		$(this).attr('price', intCost);
+		$('.slider:last .campers.cost.amount').html('$'+intCost);
+		$('.slider:last .campers.total .sum.amount').html('$'+(intCost*intVal));
+		arrRegCalc[$(this).attr('name')] = (intCost*intVal);
+		var intTotal = kiosk_accessories_sum();
+		$("#kioskaccessories_total").html(intTotal);
+	});
+	$("#registration_kioskaccessories input[type=text]").trigger('keyup');
+});
+
+function kiosk_accessories_sum()
+{
+	var arrItems = $("#registration_kioskaccessories input[type=text].auto_calcuate");
+	for (var intItr=0; intItr!=arrItems.length; intItr++)
+	{
+		var objItem = arrItems[intItr];
+		var intAmount = $(objItem).val();
+		if ($(objItem).attr('min') > intAmount)
+			intAmount = $(objItem).attr('min');
+		if (!$(objItem).attr("price"))
+			continue;
+		var intVal = parseInt($(objItem).attr("price") * intAmount);
+		if (isNaN(intVal))
+		{
+			var arrIntFound = intAmount.match(/([$,\.0-9]+)/);
+			intAmount = arrIntFound[1] * 1;
+			$(objItem).val(intAmount);
+			intVal = parseInt($(objItem).attr("price") * intAmount);
+		}
+		//if (intAmount !== intAmount*1)
+		//	$(objItem).val(intAmount*1);
+		if (!isNaN(intVal))
+		{
+			if ($(objItem).attr('id') == 'kioskaccessories_scanner')
+			{
+				if (intAmount>0) {
+					intVal += Math.floor(((intAmount*1)-1) / 3) * 2.50;
+					intVal += 2.5;
+				}
+			}
+			if ($(objItem).attr('id') == 'kioskaccessories_handbook')
+			{
+				if (intAmount>0) {
+					intVal += Math.floor(((intAmount*1)-1) / 50) * 2.50;
+					intVal += 2.5;
+				}
+			}
+			arrRegCalc[$(objItem).attr('name')] = intVal;
+			$(objItem).closest('.table_labels').find('.sum.amount').html("$"+intVal);
+		}
+	}
+	var intTotal = 0;
+	for (var strName in arrRegCalc) {
+		intTotal += arrRegCalc[strName];
+	}
+	return intTotal;
+}
+</script>
+<div class="slider" id="registration_kioskaccessories">
+	<style>
+		#registration_kioskaccessories .cost_per_campers.form .label.smaller {
+			width:94px !important;
+		}
+		#registration_kioskaccessories .cost_per_campers.form .label.smaller.more {
+			width:80px !important;
+		}
+		#registration_kioskaccessories .cost_per_campers.form .label.smaller.less {
+			width:104px !important;
+		}
+		#registration_kioskaccessories .sum {
+			font-size:16px;
+			font-weight: bold;
+			text-align: right;
+			float:left;
+			line-height: 16px;
+			width:100px;
+		}
+		#registration_kioskaccessories .sum.amount {
+			border:1px solid #BBBBBB;
+			margin:1px 5px 1px 0;
+			padding:6px;
+			border-radius:5px;
+			background-color: rgba(255,255,255,0.9);
+			text-align: left;
+			cursor:default;
+		}
+		#registration_kioskaccessories .table_labels {
+			font-size:16px;
+			font-weight: bold;
+			line-height: 16px;
+		}
+	</style>
+	<div class="col_title"><span>Accessories & Fees</span></div>
+	<div class="col_content">
+		<!--div class="module form">
+			<div class="module_content list">
+				<ul>
+					<li>
+						<div class="label top">Kiosk usage</div>
+						<div class="info">Kiosks will be used by children to scan their ID cards, view their account,
+						scan achievement cards, get points and buy prizes in the store.</div>
+					</li>
+					<li>
+						<div class="label top">Disclaimer</div>
+						<div class="info">
+							Shipping is subject to change without notice.<br>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div-->
+		<form name="registration_kioskaccessories" id="registration_kioskaccessories" method="post" action="">
+			<!--div class="module form">
+				<div class="module_content list">
+					<ul>
+						<li>
+							<div class="label top">Purchase Kiosk</div>
+							<div class="info">Purchase an ATM style touch screen with built
+							in scanner and give your campers a great experience etc.
+							</div>
+						</li>
+						<li>
+							<div class="total">
+								<div class="amount label">$2500</div>
+								<div class="qty">
+									<span class="label">Quantity:</span>
+									<span class="input">
+										<input autocomplete="off" type="text" name="kioskaccessories_regular" id="kioskaccessories_regular" value="0" price="2500" onkeyup="this.value = parseInt(this.value) ? parseInt(this.value) : 0" />
+									</span>
+								</div>
+							</div>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+			<div class="module form">
+				<div class="module_content list">
+					<ul>
+						<li>
+							<div class="label top" style="width:300px;">Purchase Pre-sponsored Kiosk</div>
+							<div class="info">
+								These Kiosks have a dedication and are subsidized to make it affordable for your camp
+								which will give your campers a great experience etc.
+							</div>
+						</li>
+						<li>
+							<div class="total">
+								<div class="amount label">$770</div>
+								<div class="qty">
+									<span class="label">Quantity:</span>
+									<span class="input">
+										<input autocomplete="off" type="text" name="kioskaccessories_sponsored" id="kioskaccessories_sponsored" onkeyup="this.value = parseInt(this.value) ? parseInt(this.value) : 0" value="0" price="770" />
+									</span>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="module form">
+				<div class="module_content list">
+					<ul>
+						<li>
+							<div class="label top">Kiosk Summer Rental</div>
+							<div class="info">
+								Renting a kiosk is a great way to keep your costs down but still have the ability to give
+								your campers a great experience etc.<br />
+								$200 - rental fee<br />
+								$570 - deposit to be returned to you after returning the kiosk to us in original condition
+							</div>
+						</li>
+						<li>
+							<div class="total">
+								<div class="amount label">$770</div>
+								<div class="qty">
+									<span class="label">Quantity:</span>
+									<span class="input">
+										<input autocomplete="off" type="text" name="kioskaccessories_rental" id="kioskaccessories_rental" onkeyup="this.value = parseInt(this.value) ? parseInt(this.value) : 0" value="0" price="770" />
+									</span>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div-->
+			<div class="module form cost_per_campers">
+				<div class="module_content list">
+					<ul>
+						<li>
+							<div class="label top"><?php print text('[|Student|]'); ?></div>
+							<div class="info">
+								<?php print text('The minimum registration is 25 [|students|] for $150. Volume discounts are available, as detailed below.'); ?>
+							</div>
+						</li>
+						<li style="margin-bottom:6px">
+							<div class="label">Price Scale</div>
+							<div class="info">
+								<table>
+									<tr>
+										<td>
+											<div class="label smaller more">Min 25</div>
+											<div class="info">
+												$150
+											</div>
+										</td>
+										<td>
+											<div class="label smaller">26 - 99</div>
+											<div class="info">
+												$6 / <?php print text('[|Student|]'); ?>
+											</div>
+										</td>
+										<td>
+											<div class="label smaller">100 - 199</div>
+											<div class="info">
+												$5 / <?php print text('[|Student|]'); ?>
+											</div>
+										</td>
+										<td>
+											<div class="label smaller">200 - 299</div>
+											<div class="info">
+												$4 / <?php print text('[|Student|]'); ?>
+											</div>
+										</td>
+										<td>
+											<div class="label smaller less">300 - 499</div>
+											<div class="info">
+												$3.50 / <?php print text('[|Student|]'); ?>
+											</div>
+										</td>
+										<td>
+											<div class="label smaller">500 +</div>
+											<div class="info">
+												$3 / <?php print text('[|Student|]'); ?>
+											</div>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</li>
+						<li>
+							<div class="total campers">
+								<div class="campers cost amount label">$6</div>
+								<div class="qty">
+									<table width="500px" class="table_labels">
+										<tr>
+											<td width="25%">Quantity:</td>
+											<td width="25%"><span class="input"><input style="width:100px;" class="xmin" min="25" autocomplete="off" type="text" name="kioskaccessories_campers" id="kioskaccessories_campers" value="25" price="50" /></span></td>
+											<td width="25%" style="text-align:center">Cost:</td>
+											<td width="25%"><div class="label sum amount">NA</div></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="module form">
+				<div class="module_content list">
+					<ul>
+						<li>
+							<div class="label top">Scanners</div>
+							<div class="info">
+								In addition to your own computer, you will need a scanner, so that you and your <?php print text('[|campers|]'); ?> will be able to quickly scan bar-codes. Without a scanner, all codes must be entered manually.
+							</div>
+						</li>
+						<li>
+							<div class="total">
+								<div class="scanners cost amount label">$50</div>
+								<div class="qty">
+									<table width="500px" class="table_labels">
+										<tr>
+											<td width="25%">Quantity:</td>
+											<td width="25%"><span class="input"><input style="width:100px;" class="xmin auto_calcuate" min="0" autocomplete="off" type="text" name="kioskaccessories_scanner" id="kioskaccessories_scanner" value="0" price="50" /></span></td>
+											<td width="25%" style="text-align:center">Cost:</td>
+											<td width="25%"><div class="label sum amount">NA</div></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="label top">Handbooks</div>
+							<div class="info">
+								Info coming soon.
+							</div>
+						</li>
+						<li>
+							<div class="total">
+								<div class="handbooks cost amount label">$3</div>
+								<div class="qty">
+									<table width="500px" class="table_labels">
+										<tr>
+											<td width="25%">Quantity:</td>
+											<td width="25%"><span class="input"><input style="width:100px;" class="xmin auto_calcuate" min="0" autocomplete="off" type="text" name="kioskaccessories_handbook" id="kioskaccessories_handbook" value="0" price="3" /></span></td>
+											<td width="25%" style="text-align:center">Cost:</td>
+											<td width="25%"><div class="label sum amount">NA</div></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</li>
+						<li>
+							Please note: Handling fees will be charged ($2.50 for every 3 scanners and for every 50 handbooks). Shipping (if applicable) is also extra; arrangements for payment will be made directly via e-mail).
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="module form">
+				<div class="module_content list">
+					<ul>
+						<li>
+							<span class="amount label">Total: $<span id="kioskaccessories_total">0</span></span>
+						</li>
+						<div id="processing_status" style="padding:4px"></div>
+						<li>
+							<span><a href="#" title="Save" class="button submit">Next</a></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

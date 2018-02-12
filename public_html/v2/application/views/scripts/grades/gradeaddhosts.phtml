@@ -1,0 +1,52 @@
+<?php
+	include "config.phtml";
+	//include "pagination.phtml";
+	
+?>
+<script language="javascript">
+$('form a.submit').click( function(e)
+{
+	e.preventDefault();
+	$('form').submit();			
+});
+</script>
+<?php //echo '<div class="pages" style="text-align:center;">'. $this->objPaginator .'</div>'; ?>
+<div class="slider" id='slider_gradeaddhosts'>
+	<div class="col_title">
+			<span>Select a Host</span>
+	</div>
+	<div class="col_content">	
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+					<ul>			
+<?php 
+if ($this->all_hosts)
+{
+			echo '
+			<li>
+				<a class="link" href="'.$sn.'/grades/gradeaddnetworks'.'">
+				<div class="icon"></div>
+				<div class="title">> Skip to Network List</div>
+				</a>
+			</li>
+			';
+	foreach ($this->all_hosts as $value)
+	{		
+		echo '<li>
+				<a class="link" href="'.$sn.'/grades/gradeaddnetworks/host_id/'.$value->institution_id.'">
+				<div class="icon"></div>
+				<div class="title">'.$value->name.'</div>
+				</a>
+			</li>';
+			}	
+}
+else
+{
+	echo 'There are no Hosts';
+}
+?>	
+		</ul>
+		</div>
+	</div>
+</div>
+</div>

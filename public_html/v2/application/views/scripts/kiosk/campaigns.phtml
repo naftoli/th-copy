@@ -1,0 +1,44 @@
+<?php
+include "config.phtml";
+include "application/views/scripts/includes/headers/kiosk_header.phtml";
+?>
+
+<body class="blue">
+	
+	<div id="wrapper">
+		
+        <div id="header">
+          <?php include "application/views/scripts/includes/topbar.phtml"; ?>
+        </div>
+		
+		<div id="main">
+			
+            <div id="page_title">
+				Choose a Campaign
+            </div>
+			
+            <div>
+				
+                <div class="three_column">
+					
+					<ul class="buttons button_icons">
+						<?php foreach ($this->objCampaigns as $objCampaign) : ?>
+							<li style="vertical-align:middle;">	
+								<img style="height:40px; width:40px; float: left; margin: 20px 0pt 0pt 15px;" src="<?php echo $sn; ?>/kiosk/displaycampaignphoto/campaign_id/<?php echo $objCampaign->campaign_id;?>/rgb/b">
+								<a href="campaigngoals/campaign_id/<?php echo $objCampaign->campaign_id; ?>" style="padding-left:20px;">
+									<?php echo $objCampaign->campaign_name; ?>
+								</a>
+							</li>
+						<? endforeach; ?>
+					</ul>
+				  
+                </div>
+				
+            </div>
+			
+		</div>
+			
+	</div>
+		
+</body>
+	

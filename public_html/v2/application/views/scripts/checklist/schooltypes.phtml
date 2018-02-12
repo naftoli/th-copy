@@ -1,0 +1,96 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+
+	$strDivContainer = "checklist_schooltypes";
+	$strHiddenInputName = "school_types";
+?>
+<script>
+$(document).ready(function() {
+	var prevSlider = $(".slider:last").prev();
+	var strSerializedData = $(prevSlider).find('#<?php print $strDivContainer; ?> input[name="<?php print $strHiddenInputName; ?>"]').val();
+	var arrSerializedData = strSerializedData.split(new RegExp("&"));
+	for (intItr in arrSerializedData)
+	{
+		var arrKeyVal = arrSerializedData[intItr].split(new RegExp(" *= *"));
+		if (arrKeyVal[1] == "1")
+		{
+			row_toggle($('.slider:last form input[name="' + arrKeyVal[0] + '"]').closest(".row"));
+		}
+	}
+});
+function row_toggle(objThis)
+{
+	$(objThis).find(":checkbox").attr("checked", !$(objThis).find(":checkbox").is(':checked'));
+	$(objThis).css("background-color", $(objThis).find(":checkbox").is(':checked') ? "#dadee6" : "#e8eaef");
+	process_change();
+}
+function uncheckall(objThis)
+{
+	$(objThis).closest(".module_collection").find(":checkbox").attr("checked", false);
+	$(objThis).closest(".module_collection").find(".module table .row").css("background-color", "#e8eaef");
+	process_change();
+}
+function checkall(objThis)
+{
+	$(objThis).closest(".module_collection").find(":checkbox").attr("checked", true);
+	$(objThis).closest(".module_collection").find(".module table .row").css("background-color", "#dadee6");
+	process_change();
+}
+function process_change()
+{
+	//alert($(".slider:last form").serialize());
+	var prevSlider = $(".slider:last").prev();
+	var intSelected = $(".slider:last input:checkbox:checked").length;
+	var intTotal = <?php print count($this->arrList); ?>;
+	var strDisplayAmount = ((intSelected == intTotal || intSelected == 0) && intTotal != 0) ? "All" : intSelected;
+	var strNewLinkText = $(prevSlider).find("#<?php print $strDivContainer; ?> .title").html().replace(new RegExp("\\\([^\)]+\\\)"), "(" + (strDisplayAmount)  + ")");
+	$(prevSlider).find("#<?php print $strDivContainer; ?> .title").html(strNewLinkText);
+	$(prevSlider).find('#<?php print $strDivContainer; ?> input[name="<?php print $strHiddenInputName; ?>"]').val($(".slider:last form").serialize());
+}
+</script>
+<div class="slider">
+	<div class="col_title">
+		<span><?php print $this->strTitle; ?></span>
+	</div>
+	<div class="col_content">
+<?php
+	if (!count($this->arrList))
+	{
+?>
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<div style="padding: 5px 5px 5px 5px;">There are no school types are available.</div>
+			</div>
+		</div>
+<?php
+	}
+	else
+	{
+?>
+		<div class="module_collection">
+			<form>
+				<div style="margin-bottom:4px"><table width="96%" cellpadding="4" cellspacing="4"><tr><td>&nbsp;</td><td width="60"><span><a onclick="checkall(this)" href="#" title="Check All" class="button">Check All</a></span></td><td width="6">&nbsp;</td><td width="60"><span><a onclick="uncheckall(this)" href="#" title="Uncheck All" class="button">Uncheck All</a></span></td></tr></table></div>
+				<div class='module' style='margin-bottom:6px !important'><table border='1' width='100%' style='margin-bottom:5px'>
+				<tr><td style='padding:4px'>&nbsp;</td><td><b>School Type</b>&nbsp;</td></tr>
+<?php
+		foreach ($this->arrList as $arrItem)
+		{
+?>
+				<tr class="row" style="background-color:#e8eaef; cursor:default;" onclick="row_toggle(this);">
+					<td width="30" style="padding:4px"><input type="checkbox" onclick="this.checked = this.checked ? 0 : 1;" name="<?php print $arrItem["value"]; ?>" value="1" /></td>
+					<td><?php print $arrItem["text"]; ?></td>
+				</tr>
+<?php
+		}
+?>
+				</table></div>
+				<div style="margin-bottom:4px"><div id="processing_status"></div><table width="98%" cellpadding="4" cellspacing="4"><tr><td>&nbsp;</td>
+				<td width="60"><span><a onclick="naviageBack();" href="#" class="button">Done</a></span></td>
+			</form>
+		</div>
+<?php
+	}
+?>
+	</div>
+</div>

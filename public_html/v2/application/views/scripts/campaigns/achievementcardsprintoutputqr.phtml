@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Print Achievement Cards</title>
+        <style type="text/css">
+		.cards {
+			width:672px;
+			page-break-after:always;
+			font-family:'Myriad Pro',Arial,sans-serif;
+			margin:-0.1875in auto 0;
+		}
+		.cards .row {
+			display:table;
+			margin:-0.1875in auto 0;
+			margin-bottom: 8px;
+		}
+		.cards .card {
+			width:3.5in;
+			height:2in;
+			text-align:center;
+
+			width:306px;
+			height:162px;
+			padding:10px 15px 10px 15px;
+			display:table-cell;
+		}
+		.cards .card .container {
+			border:1px solid #000;
+			height:100%;
+		}
+
+		.cards .logo {
+			vertical-align: bottom;
+			height:75px;
+			margin-left:5px;
+			display: table-cell;
+		}
+		.cards .institution {
+			float:right;
+			margin-right:30px;
+		}
+		.cards .logo img,
+		.cards .institution img {
+			width:55px;
+			height:55px;
+			vertical-align: bottom;
+			margin-bottom: 5px;
+		}
+		.cards .clear {
+			clear:both;
+		}
+		.cards .title {
+			text-align: left;
+			padding-left: 5px;
+		}
+		.cards .title img {
+			width:282px;
+			height:auto;
+			margin-top:8px;
+		}
+
+		.cards .campaign {
+			/*clear:both;*/
+			font-weight:bold;
+			/*position:absolute;*/
+			margin-top:3px;
+		}
+
+		.cards .name {
+			font-size:12px;
+			height:15px;
+			margin-top: -2px;
+			font-style: italic;
+		}
+
+		.cards .barcode {
+			font-size:9px;
+			font-weight: bold;
+		}
+
+		/*.cards:first-child {
+			margin-top: 20px;
+		}*/
+		.card_info {
+			display:inline-block;
+			vertical-align: top;
+			width:190px;
+			padding-left:5px;
+		}
+		.card_qr {
+			display:inline-block;
+			vertical-align: top;
+			height:106px;
+			width:84px;
+			text-transform: uppercase;
+			text-align: center;
+		}
+		.cards .points {
+			font-size:9px;
+			text-align: center;
+			padding:2px;
+			margin-top:1px;
+			line-height:10px;
+		}
+		.cards .bc_cont {
+			margin-left:-12px;
+			text-align:center;
+			width:110px;
+		}
+		.cards .bc {
+			font-size:10px;
+			text-align: center;
+			margin-top:1px;
+		}
+		.qr_box {
+			border: 1px solid #000;
+			width:84px;
+			height:84px;
+			display: inline-block;
+		}
+        </style>
+    </head>
+    <body> <!--  onLoad="print();" -->
+		<div class="cards achievement">
+			<div class="row">
+<?php
+    include "config.phtml";
+    foreach($this->arrBarcodes as $intKey => $intBarcode)
+    {
+		if ($intKey && $intKey % 10 == 0)
+		{
+			if ($intKey && $intKey % 2 == 0)
+				print "
+					</div>
+				";
+			print "
+				</div><div class='cards achievement'>
+				";
+			if ($intKey && $intKey % 2 == 0)
+				print "
+					<div class='row'>
+				";
+		}
+		else if ($intKey && $intKey % 2 == 0)
+		{
+			print "
+				</div><div class='row'>
+				";
+		}
+?>
+		<div class="card">
+			<div class="container">
+<?php
+		if (!empty($this->arrConfigOptions['system']['network_logo']))
+			$strNetworkLogo = $sn . '/imgs/v/w/55/src/' . $this->arrConfigOptions['system']['network_logo'];
+		else if (!empty($this->objInstitution->image_id))
+			$strNetworkLogo = $sn . '/imgs/v/w/55/src/' . $this->objInstitution->image_id;
+		else if (!empty($this->objInstitution->logo))
+			$strNetworkLogo = "http://mashpia.com/schoolLogos/" . $this->objInstitution->logo;
+		else
+			$strNetworkLogo = $sn . '/imgs/v/w/55/src/0.gif';
+		$strImage = $this->arrAchievementCardConfig["achievementcards"]["achievementcardimage"];
+		if (empty($this->arrAchievementCardConfig["achievementcards"]["customimage"]))
+			$strImage = '9097371_14619.png';
+?>
+				<div class="title"><img src="<?php print $sn; ?>/imgs/v/src/<?php print $strImage; ?>" /></div>
+				<div style="text-align:left;">
+					<div class="card_info">
+						<div class="logo">
+							<!--
+							<img src="<?php echo $sn . '/imgs/v/w/140/h/140/p/h/src/' . $this->objInstitution->image_id; ?>" />
+							-->
+							<img src="<?=$strNetworkLogo?>" />
+						</div>
+						<div style="border-top:1px dashed #000;"></div>
+						<div class="campaign"><nobr><?php print $this->objCampaign->subject_name;; ?></nobr></div>
+						<div class="name"><?php print $this->strTask; ?></div>
+					</div>
+					<div class="card_qr">
+<?php
+		//if ($this->objInstitution->template_style == 'hoo')
+		if (0)
+		{
+?>
+						<div class="points"><?php print text($this->intPoints . ' hoos'); ?></div>
+<?php
+		}
+		else
+		{
+?>
+						<div class="points"><?php print text($this->intPoints . ' ' . ($this->intPoints == 1?'[|point|]':'[|points|]')); ?></div>
+<?php
+		}
+?>
+						<div class="qr_box">
+							<img style="margin:4px;" width="76" height="76" src="<?php print $sn . "/barcode/qr/code/" . $intBarcode; ?>" />
+						</div>
+						<div class="bc_cont">
+							<div class="bc">
+								<div class="barcode"><?php print $intBarcode; ?></div>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+<?php
+    }
+?>
+			</div>
+		</div>
+
+
+    </body>
+</html>

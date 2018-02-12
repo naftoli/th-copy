@@ -1,0 +1,14 @@
+[production]
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+bootstrap.path = "bootstrap.php"
+resources.frontController.controllerDirectory =  "/controllers"
+db.adapter = PDO_MYSQL
+db.params.host = localhost
+db.params.username = mashpia
+db.params.password = ShJ1uWcT89Ek6E
+db.params.dbname = pointsDB
+db.params.charset = "utf8"
+db.params.driver_options.1002 = "SET NAMES utf8"
+points.army_points.default = 1
+points.base_points.default = 1

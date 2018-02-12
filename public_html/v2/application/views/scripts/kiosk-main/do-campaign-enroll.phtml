@@ -1,0 +1,29 @@
+<?php $user_session_data = new Zend_Session_Namespace('kiosk_user_session_data'); ?>
+<div id="page_title">Enrollment</div>
+<div class="three_column padding_top">
+	<div class="content">
+		<div id="slider">
+			<ul class="enroll">
+				<li>
+					<div class="slider_title">Mazal Tov!</div>
+					<div class="scroll-pane">
+						<form>
+						<div class="mainbox">
+							<div class="col2_image"><IMG SRC='/file_view.php?id=3668045818' WIDTH='128' HEIGHT='128'  ALT='fatherson.png'></div>
+							<div class="col2_text">You are now enrolled in the <?=$this->objCampaign->campaign_name?> Campaign...<br />You can now begin your missions.
+							</div>
+							<div class="clear"></div>
+							<div class="button button_icons">
+								<div style="vertical-align:middle;">
+									<IMG SRC='/file_view.php?id=3516736538' style='float:left;margin:20px 0 0 15px;' ALT='iconc_fatherson.png'>
+									<a href="/kiosk-main/missions-by-campaign/campaign_id/<?=$this->objCampaign->campaign_id?>"  style="padding-left:20px;">Current Missions</a>
+								</div>
+							</div>
+						</div>
+						</form>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

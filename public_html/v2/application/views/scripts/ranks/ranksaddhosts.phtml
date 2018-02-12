@@ -1,0 +1,65 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+
+<div class="slider">
+	
+	<div class="col_title">
+		<span>Ranks Add Hosts</span>
+	</div>
+	
+	<div class="col_content">
+<?php
+	if (count($this->objHosts) == 0)
+	{
+?>
+		<div class="module" style="padding:5px;">
+			There are no hosts available to display.
+		</div>
+<?php
+	}
+	else
+	{
+?>
+			<div id="lists" class="module lists forms">
+				<div class="module_content">
+					<form name="ranksaddhosts" id="ranksaddhosts" method="post" action="">
+						<ul>
+<?php
+		if (count($this->objHosts) > 1)
+		{
+?>
+							<li>
+								<a class="link" href="<?php print $sn . "/ranks/ranksaddnetworks" . $strParamPath; ?>">
+									<div class="icon"></div>
+									<div class="title">> Skip to Network List</div>
+								</a>
+							</li>
+<?php
+		}
+		foreach ($this->objHosts as $objHost)
+		{
+?>
+								<li>
+									<a class="link" href="<?php echo $sn . "/ranks/ranksaddnetworks/host_id/" . $objHost->institution_id . $strParamPath; ?>">
+										<div class="icon"></div>
+										<div class="title"><?php echo $objHost->name; ?></div>
+									</a>
+								</li>
+<?php
+		}
+?>
+						</ul>
+						
+					</form>
+					
+				</div>
+				
+			</div>		
+<?php
+	}
+?>
+	</div>
+	
+</div>

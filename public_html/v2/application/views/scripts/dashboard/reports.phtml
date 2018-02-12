@@ -1,0 +1,35 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider" id='slider_grades'>
+	<div class="col_title">
+		<span>Reports</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn . "/reports/reportcustomtanya2/report_type/grade" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">Platoon Report</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/reports/reportcustomtanya2/report_type/school" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">Base Report</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn . "/reports/reportcustomtanya2/report_type/all" . $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">Army Report</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

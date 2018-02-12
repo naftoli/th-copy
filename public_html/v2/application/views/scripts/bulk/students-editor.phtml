@@ -1,0 +1,268 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<style>
+<!--
+	.bulk_options {
+		padding-top:3px;
+		padding-left:6px;
+	}
+	.bulk_options div {
+		margin: 2px;
+		padding: 0px 6px 0px 6px;
+		border: 1px outset #EAEAEA;
+		display: inline;
+		cursor: default;
+		white-space: nowrap;
+		line-height: 30px;
+	}
+	.bulk_options table {
+		margin: 2px;
+		border: 1px ridge #DDD;
+		cursor: default;
+	}
+	.bulk_option_select {
+		background-color: #DDD;
+		border: 1px inset #EAEAEA !important;
+	}
+	.bulk_top h1 {
+		padding: 2px 8px 2px 8px;
+		font-weight: bold;
+		text-align: left !important;
+	}
+	h3 {
+		padding: 2px 8px 2px 8px;
+		text-align: left !important;
+		font-size: 10pt;
+		font-weight: normal;
+	};
+	.bulk_top {
+		padding: 3px;
+	}
+	.bulk_top .processing_status {
+		padding: 4px;
+	}
+	
+	#bulk_table_output table {
+		font-size: 10pt;
+	}
+	#bulk_table_output td {
+		padding-left: 10px;
+		padding-right: 2px;
+	}
+	#bulk_table_output td:last {
+		padding-right: 10px !important;
+	}
+	.uploader_box {
+		
+	}
+-->
+</style>
+<script type="text/javascript">
+	var arrColumns = {
+		"first_name" : "First Name",
+		"last_name" : "Last Name",
+		"hebrew_first_name" : "Hebrew First Name",
+		"hebrew_last_name" : "Hebrew Last Name",
+		"gender" : "Gender",
+		"dob" : "DOB",
+		"address" : "Address",
+		"city" : "City",
+		"state" : "State",
+		"postal" : "Postal/Zip",
+		"country" : "Country",
+		"phone" : "Phone",
+		"is_active" : "Active",
+		"image_id" : "Image",
+		"bunk" : "Bunk"
+	};
+	var arrClasses = <?php print json_encode($this->arrClassesHash) ?>;
+	$(document).ready(function()
+	{
+		// Toggle checkbox
+		$(".bulk_options input:[type=checkbox][checked=true]").closest("div").addClass("bulk_option_select");
+		$(".bulk_options div").bind("click", function () {
+			if ($(this).hasClass("bulk_option_select")) {
+				$(this).removeClass("bulk_option_select");
+				$(this).find("input").attr("checked", "");
+			} else {
+				$(this).addClass("bulk_option_select");
+				$(this).find("input").attr("checked", "checked");
+			}
+			$(this).find("input").focus();
+		});
+		
+		$(".bulk_top .submit").bind("click", function () {
+			var strPath = '<?php echo $sn . "/bulk/students-editor/load_data/true"; ?>';
+			var strData = $("#bulk_options_form").serialize();
+			$("#bulk_table_output").html("").fadeOut("fast");
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $(".bulk_top .processing_status").html("Please wait...").fadeIn("slow"),
+				url : strPath,
+				data: strData,
+				success : function(strResponce) {
+					$(".bulk_top .processing_status").html("Loading Complete").delay(1000, function () {$(this).html("Please don't forget to save when you finish.");});
+					var arrResponce;
+					try {
+						arrResponce = jQuery.parseJSON(strResponce);
+					} catch (strError) {
+						alert("Sorry, there was an error: VR-RG101-SD8FDD");
+						alert("Error:\n" + strError);
+						return;
+					}
+					// Stop if there where no columns provided
+					if (Object.keys(arrResponce.arrPostParams).length == 0) {
+						$(".bulk_top .processing_status").html("There must be at least one column selected to generate a bulk.").fadeIn("slow");
+						return;
+					}
+					if (Object.keys(arrResponce.arrRowData).length == 0) {
+						$(".bulk_top .processing_status").html("Sorry, no results where found.").fadeIn("slow");
+						return;
+					}
+					
+					
+					var boolHeaderDone = 0;
+					var intItr = 1;
+					var strTable = "";
+					//strTable += "<h3>Please don't forget to save when you finish.</h3>";
+					strTable += "<table>";
+					//alert($.dump(arrResponce.arrRowData));
+					for (intUser in arrResponce.arrRowData) {
+						strTable += "<tr>";
+						
+						// header
+						if (!boolHeaderDone) {
+							strTable += "<td>&nbsp;</td>";
+							for (strColumn in arrResponce.arrRowData[intUser])
+							{
+								if (strColumn == "image_id") {
+									// No col needed
+								} else if (typeof(strColumn) == "string" || typeof(strColumn) == "number")
+									strTable += "<td style='background-color: #DDD'><b>" + arrColumns[strColumn] + "</b></td>";
+							}
+							strTable += "</tr><tr>";
+							boolHeaderDone = 1;
+						}
+						
+						// rows
+						strTable += "<td style='text-align:right'>" + intItr + ".</td>";
+						var boolChangeImage = 0;
+						var strImageName = "";
+						for (strColumn in arrResponce.arrRowData[intUser])
+						{
+							var strValue = arrResponce.arrRowData[intUser][strColumn];
+							if (strColumn == "image_id") {
+								strImageName = strValue;
+								boolChangeImage = 1;
+							} else if (strColumn == "is_active") {
+								strTable += "<td><select name='is_active_" + intUser + "'>";
+								strTable += "<option value='1' " + (strValue == "1" ? " selected" : "") + ">Active</option>";
+								strTable += "<option value='0' " + (strValue != "1" ? " selected" : "") + ">Inactive</option>";
+								strTable += "</select></td>";
+							} else if (strColumn == "gender") {
+								strTable += "<td><select name='gender_" + intUser + "'>";
+								strTable += "<option value=''>N/A</option>";
+								strTable += "<option value='m' " + (strValue == "m" ? " selected" : "") + ">Male</option>";
+								strTable += "<option value='f' " + (strValue == "f" ? " selected" : "") + ">Female</option>";
+								strTable += "</select></td>";
+							} else if (strColumn == "bunk") {
+								strTable += "<td><select name='bunk_" + intUser + "'>";
+								strTable += "<option value='0'>N/A</option>";
+								for (intBunkID in arrClasses) {
+									strTable += "<option value='" + intBunkID + "' " + (intBunkID == strValue ? " selected" : "") + ">" + arrClasses[intBunkID].sub + "</option>";
+								}
+								strTable += "</select></td>";
+							} else if (typeof(arrResponce.arrRowData[intUser][strColumn]) == "string" || typeof(arrResponce.arrRowData[intUser][strColumn]) == "number")
+								strTable += "<td><input type='text' name='" + strColumn + "_" + intUser + "' value='" + strValue + "' style='width:98%' /></td>";
+						}
+						strTable += "</tr>";
+						if (boolChangeImage) {
+							strTable += '<tr><td>&nbsp;</td><td style="background-color:#ccc;" class="uploader_box" colspan="' + (Object.keys(arrResponce.arrRowData[intUser]).length-1) + '"><iframe src="<?php echo $sn; ?>/imgs/smalluploader/current_image/' + strImageName + '/resultid/image_id_' + intUser + '" width="100%" height="60" scrolling="no"><p>Your browser does not support iframes.</p></iframe>';
+							strTable += '<input type="hidden" name="image_id_' + intUser + '" id="image_id_' + intUser + '" value="' + strImageName + '" /></td></tr>';
+						}
+						intItr++;
+					}
+					strTable += "</table>";
+					strTable += '<div style="display:none" class="processing_status2">Please wait...</div>';
+					strTable += '<div style="padding: 10px 6px 6px 6px; height:25px;"><span><a href="#" class="button submit" onclick="bulk_student_save();">Save</a></span></div>';
+					$("#bulk_table_output").html(strTable).fadeIn("slow");
+					//alert($.dump(arrResponce));
+				}
+			});
+		});
+	});
+	function bulk_student_save() {
+		var strPath = '<?php echo $sn . "/bulk/students-editor/save_data/true"; ?>';
+		var strData = $("#bulk_item_list").serialize();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".bulk_bottom .processing_status2").html("Please wait...").fadeIn("slow"),
+			url : strPath,
+			data: strData,
+			success : function(strResponce) {
+				if (strResponce == "1") {
+					$(".bulk_bottom .processing_status2").html("Save successful.").delay(3000).fadeOut("slow");
+					$(".bulk_top .processing_status").html("");
+				} else {
+					alert("Sorry, there was an error: VB-SE101-S92DFD");
+					alert(strResponce);
+				}
+			}
+		});
+	}
+</script>
+<div class="slider">
+	<div class="col_title">
+		<span>Bulk Editor</span>
+	</div>
+	<div class="col_content">
+		<form id="bulk_options_form">
+			<div class="module bulk_top" id="module-alerts">
+				<h1>Bunks:</h1>
+				<h3>Limit your results down to any specific bunks.</h3>
+				<div class="bulk_options">
+<?php
+	foreach ($this->arrClasses as $objClass)
+	{
+?>
+					<div><input type="checkbox" name="bulk_class_<?php print $objClass->class_id; ?>" value="<?php print $objClass->class_id; ?>" /> <span><?php print ucfirst($objClass->sub); ?></span>&nbsp;</div>
+<?php
+	}
+?>
+				</div>
+				<h1>User Data:</h1>
+				<h3>Specifiy which columns you would like to be displayed.</h3>
+				<div class="bulk_options">
+					<div><span>Bunk:</span><input type="checkbox" name="user_bunk" checked /></div>
+					<div><span>First/Last Name:</span><input type="checkbox" name="user_first_last" checked /></div>
+					<div><span>Hebrew First/Last Name:</span><input type="checkbox" name="user_first_last_hebrew" /></div>
+					<div><span>Gender:</span><input type="checkbox" name="user_gender" checked /></div>
+					<div><span>DOB:</span><input type="checkbox" name="user_dob" checked /></div>
+					<div><span>Address:</span><input type="checkbox" name="user_address" /></div>
+					<div><span>City:</span><input type="checkbox" name="user_city" /></div>
+					<div><span>State:</span><input type="checkbox" name="user_state" /></div>
+					<div><span>Postal/Zip:</span><input type="checkbox" name="user_postal_zip" /></div>
+					<div><span>Country:</span><input type="checkbox" name="user_country" /></div>
+					<div><span>Phone:</span><input type="checkbox" name="user_phone" /></div>
+					<div><span>Active:</span><input type="checkbox" name="user_active" checked /></div>
+					<div><span>Image:</span><input type="checkbox" name="user_image_id" /></div>
+				</div>
+				<div style="padding: 10px 6px 6px 6px; height:25px;">
+					<span>
+						<a href="#" class="button submit">Generate List</a>
+					</span>
+				</div>
+				<div style="display:none" class="processing_status">Please wait...</div>
+			</div>
+		</form>
+		<form id="bulk_item_list">
+			<div class="module bulk_bottom" id="bulk_table_output" style="padding: 5px; display:none">
+				
+			</div>
+		</form>
+	</div>
+</div>

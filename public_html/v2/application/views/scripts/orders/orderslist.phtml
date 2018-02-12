@@ -1,0 +1,384 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace("user_session_data");
+	$i=0;
+?>
+<script language="javascript">
+	
+	var checkbox_select_group_1 = false;
+	var checkbox_select_group_2 = false;
+	
+	function updateChecked()
+	{
+		var updateMode = $("#updateMode1").val();
+		if(updateMode == "Print")
+        {
+            document.form1.submit();
+            return;
+        }
+        else if(updateMode == ''){
+			alert ('You must select an update mode.');
+			return;
+		}
+		
+		//printChecked();
+		//return;
+		//preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $("#slider_orderslist #processing_status").html('Loading...').fadeIn("slow"),
+				url : '<?php echo $sn . "/orders/ordersedit" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('#slider_orderslist #form1').serialize(),
+				success : function(strResponse) {
+					if (strResponse.match(/^[0-9]+$/)) {
+						$("#slider_orderslist #processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+						slideRefresh();
+					} else {
+						$("#slider_orderslist #processing_status").html(strResponse).fadeIn("slow");
+						slideRefresh();
+					}
+				}
+			});
+	}
+	
+	function updatePrinted()
+	{
+		var updateMode = $("#updateMode2").val();
+		//alert(updateMode);
+		//return;
+		
+		if(updateMode == "Print")
+        {
+            document.form2.submit();
+            return;
+		}else if(updateMode == ''){
+			alert ('You must select an update mode.');
+			return;
+		}
+		
+		//printChecked();
+		//return;
+		//preventDefault();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#slider_orderslist #processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn . "/orders/ordersedit" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('#slider_orderslist #form2').serialize(),
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					$("#slider_orderslist #processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+					slideRefresh();
+				} else {
+					$("#slider_orderslist #processing_status").html(strResponse).fadeIn("slow");
+					slideRefresh();
+				}
+			}
+		});
+	}
+	
+	function toggleCheckboxes(group)
+	{
+		if(group=="group_1"){
+			field = document.form1.user_prize_id;
+			if(checkbox_select_group_1){
+				checkbox_select_group_1 = false;
+				selected_status = false;
+				$("#group1_status").html("SELECT ALL");
+			}else{
+				checkbox_select_group_1 = true;
+				selected_status = true;
+				$("#group1_status").html("DESELECT ALL");
+			}
+		} else if(group=="group_2"){
+			field = document.form2.user_prize_id;
+			if(checkbox_select_group_2){
+				checkbox_select_group_2 = false;
+				selected_status = false;
+				$("#group2_status").html("SELECT ALL");
+			}else{
+				checkbox_select_group_2 = true;
+				selected_status = true;
+				$("#group2_status").html("DESELECT ALL");
+			}
+		}
+		
+		for (i = 0; i < field.length; i++)
+			field[i].checked = selected_status ;
+	}
+	
+	function checkAll(field)
+	{
+		field = document.form1.user_prize_id;
+		for (i = 0; i < field.length; i++)
+			field[i].checked = true ;
+	}
+	
+	function uncheckAll(field)
+	{
+		for (i = 0; i < field.length; i++)
+			field[i].checked = false ;
+	}
+
+</script>	
+
+
+<div class="slider" id="slider_orderslist">
+	<div class="col_title">
+		<span>Orders List</span>
+	</div>
+	<div class="col_content">
+<?php
+	if (count($this->arrOrders) == 0 || count($this->arrCheckedOut) == 0)
+	{
+?>
+		<div class="module" style="padding:5px;">
+			There are no orders available to display.
+		</div>
+<?php
+	}
+	else
+	{
+        if(isset($this->mode) && $this->mode =="grouped")
+        {
+?>
+            
+<?php
+            foreach($this->arrClasses as $objClass)
+            {
+                print'<div id="lists" class="module lists forms">
+                        <div class="module_content">
+                            <ul>';
+				if ($user_session_data->institution_type == "School")
+				{
+					print '<h1>Grade: '.$objClass->grade .' '. $objClass->sub .'</h1>';
+				}
+				else
+				{
+					print '<h1>Bunk: '. $objClass->sub .'</h1>';
+				}
+                foreach ($this->arrOrders as $objOrder)
+                {
+                    if($objOrder->class_id == $objClass->class_id)
+                    {                      
+?>
+                                        <li>
+                                            <?php print $objOrder->prize_name; ?>
+                                            / Quantity: <?php print $objOrder->quantity; ?>
+                                            / Name: <?php print $objOrder->first_name . " " .$objOrder->last_name; ?>
+                                        </li>  
+<?php
+                    }
+                }
+                        print ' </ul>
+                        </div>
+                    </div>';
+            }
+            print '<input type="button" value="Print" onClick="window.print();">';
+        }
+        else
+        {
+			if (isset($this->arrCheckedOut["Checked Out"]) && count($this->arrCheckedOut["Checked Out"]))
+			{
+?>
+			<!-- Checked Out items -->
+			<form name="form1" id="form1" method="post" action="/orders/ordersprint" target="_blank">
+			<h2>Checked Out Vouchers</h2>
+			<div id="lists" class="module lists forms">
+				<div class="module_content">
+					<ul>
+						<li>
+							<div>
+								<input type="checkbox" name="checkAll1" id="checkAll1" value="" onClick="toggleCheckboxes('group_1')"><span id="group1_status">SELECT ALL</span>
+							</div>
+						</li>
+
+<?php
+				foreach($this->arrCheckedOut["Checked Out"] as $intClass => $arrOrders)
+				{
+					$objClass = @$this->arrCachedClasses[$intClass];
+					if ($objClass)
+					{
+						if ($user_session_data->institution_type == "School")
+						{
+							print "</ul></div></div><div id=\"lists\" class=\"module lists forms\"><div class=\"module_content\"><ul><li><h1>Grade: " . $objClass->grade . " " . $objClass->sub . "</h1></li>";
+						}
+						else
+						{
+							print "</ul></div></div><div id=\"lists\" class=\"module lists forms\"><div class=\"module_content\"><ul><li><h1>Bunk: " . $objClass->sub . "</h1></li>";
+						}
+					}
+					else
+					{
+						print "</ul></div></div><div id=\"lists\" class=\"module lists forms\"><div class=\"module_content\"><ul>";
+					}
+					foreach($arrOrders as $objOrder)
+					{
+?>
+						<li>
+							<div>
+								<input type="checkbox" name="user_prize_id[<?php echo $i;?>]" id="user_prize_id" value="<?php echo $objOrder->user_prize_id; ?>"><?php print $objOrder->first_name . " " .$objOrder->last_name; ?> / Prize: <?php print $objOrder->prize_name; ?> / Quantity: <?php print $objOrder->quantity; ?>
+								<input type="hidden" name="description[<?php echo $i;?>]" id="description" value="<?php echo $objOrder->prize_description; ?>">
+								<input type="hidden" name="prize_name[<?php echo $i;?>]" id="prize_name" value="<?php echo $objOrder->prize_name; ?>">
+								<input type="hidden" name="currency[<?php echo $i;?>]" id="currency" value="<?php echo $objOrder->currency; ?>">
+								<input type="hidden" name="price[<?php echo $i;?>]" id="price" value="<?php echo $objOrder->prize_price; ?>">
+								<input type="hidden" name="student_id[<?php echo $i;?>]" id="student_id" value="<?php echo $objOrder->user_id; ?>">
+								<input type="hidden" name="serial[<?php echo $i;?>]" id="serial" value="<?php echo $objOrder->serial; ?>">
+							</div>
+						</li>
+<?php
+						$i++;
+					}
+				}
+?>
+					</ul>
+				</div>
+			</div>
+			<div id="lists" class="module lists forms">
+				<div class="module_content">
+					<ul>
+						<li>
+							<div class="clear"></div>
+							<select class="select"  name="updateMode" id="updateMode1">
+								<option value="">-- Select action --</option>
+								<option value="Redeemed">Redeem</option>
+								<option value="Print">Print</option>
+							</select>
+							<span><a href="#" title="Save" class="button submit" onclick="updateChecked();">Go</a></span>								
+						</li>
+					</ul>
+				</div>
+			</div>
+			</form>
+<?php
+			}
+			if (isset($this->arrCheckedOut["Printed"]) && count($this->arrCheckedOut["Printed"]))
+			{
+?>
+			<!-- Printed items -->
+			<form name="form2" id="form2" method="post" action="/orders/ordersprint" target="_blank">
+			<h2>Printed Vouchers</h2>
+			<div id="lists" class="module lists forms">
+				<div class="module_content">
+					<ul>
+						<li>
+							<div>
+								<input type="checkbox" name="checkAll2" id="checkAll2" value="" onClick="toggleCheckboxes('group_2')"><span id="group2_status">SELECT ALL</span>
+							</div>
+						</li>
+<?php
+				foreach($this->arrCheckedOut["Printed"] as $intClass => $arrOrders)
+				{
+					$objClass = @$this->arrCachedClasses[$intClass];
+					if ($objClass)
+					{
+						if ($user_session_data->institution_type == "School")
+						{
+							print "</ul></div></div><div id=\"lists\" class=\"module lists forms\"><div class=\"module_content\"><ul><li><h1>Grade: " . $objClass->grade . " " . $objClass->sub . "</h1></li>";
+						}
+						else
+						{
+							print "</ul></div></div><div id=\"lists\" class=\"module lists forms\"><div class=\"module_content\"><ul><li><h1>Bunk: " . $objClass->sub . "</h1></li>";
+						}
+					}
+					else
+					{
+						print "</ul></div></div><div id=\"lists\" class=\"module lists forms\"><div class=\"module_content\"><ul>";
+					}
+					foreach($arrOrders as $objOrder)
+					{
+?>
+						<li>
+							<div>
+								<input type="checkbox" name="user_prize_id[<?php echo $i;?>]" id="user_prize_id" value="<?php echo $objOrder->user_prize_id; ?>"><?php print $objOrder->first_name . " " .$objOrder->last_name; ?> / Prize: <?php print $objOrder->prize_name; ?> / Quantity: <?php print $objOrder->quantity; ?>
+                                <input type="hidden" name="description[<?php echo $i;?>]" id="description" value="<?php echo $objOrder->prize_description; ?>">
+								<input type="hidden" name="prize_name[<?php echo $i;?>]" id="prize_name" value="<?php echo $objOrder->prize_name; ?>">
+								<input type="hidden" name="currency[<?php echo $i;?>]" id="currency" value="<?php echo $objOrder->currency; ?>">
+								<input type="hidden" name="price[<?php echo $i;?>]" id="price" value="<?php echo $objOrder->prize_price; ?>">
+								<input type="hidden" name="student_id[<?php echo $i;?>]" id="student_id" value="<?php echo $objOrder->user_id; ?>">
+								<input type="hidden" name="serial[<?php echo $i;?>]" id="serial" value="<?php echo $objOrder->serial; ?>">
+							</div>
+						</li>
+<?php
+						$i++;
+					}
+				}
+?>
+					</ul>
+				</div>
+			</div>
+			<div id="lists" class="module lists forms">
+				<div class="module_content">
+					<ul>
+						<li>
+							<div class="clear"></div>
+							<select class="select"  name="updateMode" id="updateMode2">
+								<option value="">-- Select action --</option>
+								<option value="Redeemed">Redeem</option>
+								<option value="Print">Print</option>
+							</select>
+							<span><a href="#" title="Save" class="button submit" onclick="updatePrinted();">Go</a></span>								
+						</li>
+					</ul>
+				</div>
+			</div>
+			</form>
+<?php
+			}
+			if (isset($this->arrCheckedOut["Redeemed"]) && count($this->arrCheckedOut["Redeemed"]))
+			{
+?>
+			<!-- Redeemed items -->
+			<h2>Redeemed Items</h2>
+			<div id="lists" class="module lists forms">
+				<div class="module_content">
+					<ul>
+<?php
+				$intRedeemedCount = 0;
+				foreach($this->arrCheckedOut["Redeemed"] as $intClass => $arrOrders)
+				{
+					if ($intRedeemedCount)
+						print "</ul></div></div><div id=\"lists\" class=\"module lists forms\"><div class=\"module_content\"><ul>";
+					$objClass = @$this->arrCachedClasses[$intClass];
+					if ($objClass)
+					{
+						if ($user_session_data->institution_type == "School")
+						{
+							print "<li><h1>Grade: " . $objClass->grade . " " . $objClass->sub . "</h1></li>";
+						}
+						else
+						{
+							print "<li><h1>Bunk: " . $objClass->sub . "</h1></li>";
+						}
+						
+					}
+					foreach($arrOrders as $objOrder)
+					{
+?>
+						<li>
+							<a class="link" href="<?php echo $sn . "/orders/ordersedit/order_id/" . $objOrder->user_prize_id . $strParamPath; ?>">
+								<div>
+                                    <?php print $objOrder->first_name . " " .$objOrder->last_name; ?> / Prize: <?php print $objOrder->prize_name; ?> / Quantity: <?php print $objOrder->quantity; ?>
+                                </div>
+							</a>
+						</li>	
+<?php
+						$i++;
+					}
+					$intRedeemedCount++;
+				}
+?>
+					</ul>
+				</div>
+			</div>
+<?php
+			}
+		}
+	}
+?>
+	</div>
+</div>

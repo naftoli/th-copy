@@ -1,0 +1,30 @@
+<div class="org">
+	
+    <div class="nav">
+        <ul>
+            <li class="icon_back">
+				<a href="#" onclick="javascript:history.back(); return false">Back</a>
+			</li>
+            <li class="icon_home">
+				<a href="../statement.php">Home</a>
+			</li>
+            <li class="icon_logout">
+				<a href="../logout.php?n=kiosk.php">Logout</a>
+			</li>
+        </ul>
+    </div>
+	
+	<div class="org_photo">
+		<?//=(!is_null($user_row['school_logo_id']) ? linkImgFile($user_row['school_logo_id'],100,100) : '');?>
+	</div>
+	
+    <!--Base: #<?//=$user_row['school_number']?>
+	
+	<br>-->
+	
+	<?php echo $this->user_data->institution->name; ?>
+	
+	<br>
+		
+	<?php echo $this->user_data->user->first_name . ' ' . $this->user_data->user->last_name; ?>
+</div>

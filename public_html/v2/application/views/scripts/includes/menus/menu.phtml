@@ -1,0 +1,181 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+$objRoles = new Roles();
+$objUserSession = new Zend_Session_Namespace("user_session_data");
+
+if ($objRoles->isRole('Parent'))
+{
+	$strUserMenu = "Student";
+}
+else
+{
+	$strUserMenu = "User";
+}
+?>
+
+<ul class="list_first">
+	<li class="list_parent"><a href="<?php print $sn; ?>/administration/profile"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_control.png" width="28" height="28" alt="Profile" /></span>Profile</a></li>
+	<ul class="list_second">
+
+<?php
+	if ($objRoles->isAllowed('Super Administrator'))
+	{
+?>
+<?php
+	//if (is_dev())
+	//{
+?>
+			<li><a href="<?php echo $sn; ?>/announcements/announcements<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_clipboard.png" width="22" height="22" /></span><?php print text("Announcements"); ?></a></li>
+<?php
+	//}
+?>
+			<!--li><a href="<?php echo $sn; ?>/content/navigation<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_form_fill.png" width="22" height="22" alt="Content" /></span>Content</a></li-->
+			<li><a href="<?php echo $sn; ?>/users/idcardinstitutions<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_rank_card.png" width="22" height="22" alt="ID Cards" /></span>ID Cards</a></li>
+			<!--li><a href="<?php echo $sn; ?>/grades/gradeseditor<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_classes2.png" width="22" height="22" alt="Classes" /></span>Classes</a></li-->
+			<li><a href="<?php echo $sn; ?>/campaigns/incrementalscampaignlist/institution_id/1<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Campaigns" /></span>Campaigns</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/store<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_shop.png" width="22" height="22" alt="Settings" /></span>Prizes</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/registrationorderslist<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_currency_dollar.png" width="22" height="22" alt="Registration Orders" /></span>Orders</a></li>
+<?php
+	if (dev)
+	{
+?>
+			<li><a href="<?php echo $sn; ?>/dashboard/networkadmins<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_group.png" width="22" height="22" alt="Network Admins" /></span>Network Admins</a></li>
+<?php
+	}
+?>
+
+<?php /*
+ *			<!--li><a href="<?php echo $sn; ?>/medals/medaleditor/campaign_id/1"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Settings" /></span>Tanya Medals</a></li-->
+			<li class="list_parent"><a href="#control"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_control.png" width="28" height="28" alt="Settings" /></span>Setup</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/books"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Book Library</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/institutionsnav"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Institutions</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/classes"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Classes</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/grades"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Grades</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/users"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_profile.png" width="22" height="22" alt="Settings" /></span><?php echo $strUserMenu; ?>s</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/packages"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_package.png" width="22" height="22" alt="Settings" /></span>Packages</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/campaigns"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Settings" /></span>Campaigns</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/points"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_points.png" width="22" height="22" alt="Settings" /></span>Points</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/ranks"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_rank_card.png" width="22" height="22" alt="Settings" /></span>Ranks</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/store"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_auction.png" width="22" height="22" alt="Settings" /></span>Prizes</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/marking"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Marking</a></li>
+			<li><a href="<?php echo $sn; ?>/ladders/editor/mission_id/1"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Tanya Scale</a></li>
+			<li><a href="<?php echo $sn; ?>/campaigns/velocities/campaign_id/1"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Tanya Velocities</a></li>
+*/
+	}
+	elseif ($objRoles->isAllowed('Host Administrator'))
+	{
+?>
+			<li class="list_parent"><a href="#control"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_control.png" width="28" height="28" alt="Settings" /></span>Setup</a></li>
+			<li><a href="<?php echo $sn; ?>/administration/profile<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_profile2.png" width="22" height="22" alt="Settings" /></span>Institution</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/networks<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Networks</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/institutions<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Institutions</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/classes<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Classes</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/users<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_profile.png" width="22" height="22" alt="Settings" /></span><?php echo $strUserMenu; ?>s</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/campaigns<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Settings" /></span>Campaigns</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/missions<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_check.png" width="22" height="22" alt="Settings" /></span>Missions</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/tasks<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_check.png" width="22" height="22" alt="Settings" /></span>Tasks</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/packages<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_package.png" width="22" height="22" alt="Settings" /></span>Packages</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/points<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_points.png" width="22" height="22" alt="Settings" /></span>Points</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/ranks<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_rank_card.png" width="22" height="22" alt="Settings" /></span>Ranks</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/store<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_auction.png" width="22" height="22" alt="Settings" /></span>Prizes</a></li>
+
+<?php
+	}
+	elseif ($objRoles->isAllowed('Network Administrator'))
+	{
+?>
+		    <li><a href="<?php echo $sn; ?>/dashboard/institutions<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Institutions</a></li>
+<?php
+	}
+	elseif ($objRoles->isAllowed('Institution Administrator'))
+	{
+		if($objUserSession->institution_type =='Camp')
+		{
+?>
+				<li><a href="<?php echo $sn; ?>/administration/profile<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_profile2.png" width="22" height="22" alt="Settings" /></span>Institution</a></li>
+				<li><a href="<?php echo $sn; ?>/dashboard/wizard<?php echo $institution_string; ?>/caption/bunks"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_wizard.png" width="22" height="22" alt="Settings" /></span>Setup Guide</a></li>
+				<li><a href="<?php echo $sn; ?>/administration/profileeditor<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_profile2.png" width="22" height="22" alt="Settings" /></span>Institution</a></li>
+				<li><a href="<?php echo $sn; ?>/classes/classlist<?php echo $institution_string; ?>/caption/bunks"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_bunk.png" width="22" height="22" alt="Settings" /></span>Bunks</a></li>
+				<li><a href="<?php echo $sn; ?>/dashboard/campaigns<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Settings" /></span>Campaigns</a></li>
+				<li><a href="<?php echo $sn; ?>/dashboard/users<?php echo $institution_string; ?>/caption/bunks"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_profile.png" width="22" height="22" alt="Settings" /></span><?php echo $strUserMenu; ?>s</a></li>
+				<li><a href="<?php echo $sn; ?>/ranks/ranksprintclasses/institution_id/<?php echo $objUserSession->institution_id; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_wizard.png" width="22" height="22" alt="Settings" /></span>ID Cards</a></li>
+				<li><a href="<?php echo $sn; ?>/campaigns/achievementcardeditor<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_points.png" width="22" height="22" alt="Settings" /></span>Point Cards</a></li>
+				<li><a href="<?php echo $sn; ?>/dashboard/store<?php echo $institution_string; ?>/caption/bunks"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_auction.png" width="22" height="22" alt="Settings" /></span>Prizes</a></li>
+				<li><a href="<?php echo $sn; ?>/reports/reportgenerator"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Reports" /></span>Reports</a></li>
+				<li><a href="<?php echo $sn; ?>/bulk/students-editor"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Reports" /></span>Bulk Editor</a></li>
+<?php
+		}
+		else
+		{
+?>
+				<li><a href="<?php echo $sn; ?>/administration/profile<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_profile2.png" width="22" height="22" alt="Settings" /></span>Institution</a></li>
+				<li><a href="<?php echo $sn; ?>/packages/storefront<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_shop.png" width="22" height="22" alt="Settings" /></span>Store</a></li>
+				<li><a href="<?php echo $sn; ?>/dashboard/campaigns<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Settings" /></span>Campaigns</a></li>
+				<li><a href="<?php echo $sn; ?>/campaigns/achievementcardeditor<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_points.png" width="22" height="22" alt="Settings" /></span>Point Cards</a></li>
+				<li><a href="<?php echo $sn; ?>/dashboard/wizard<?php echo $institution_string; ?>/caption/classes"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_wizard.png" width="22" height="22" alt="Settings" /></span>Setup Guide</a></li>
+				<li><a href="<?php echo $sn; ?>/dashboard/classes<?php echo $institution_string; ?>/caption/classes"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_classes2.png" width="22" height="22" alt="Settings" /></span>Classes</a></li>
+				<li><a href="<?php echo $sn; ?>/dashboard/users<?php echo $institution_string; ?>/caption/classes"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_profile.png" width="22" height="22" alt="Settings" /></span><?php echo $strUserMenu; ?>s</a></li>
+				<li><a href="<?php echo $sn; ?>/dashboard/ranks<?php echo $institution_string; ?>/caption/classes"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_rank_card.png" width="22" height="22" alt="Settings" /></span>Ranks</a></li>
+				<li><a href="<?php echo $sn; ?>/dashboard/points<?php echo $institution_string; ?>/caption/classes"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_points.png" width="22" height="22" alt="Settings" /></span>Points</a></li>
+				<li><a href="<?php echo $sn; ?>/dashboard/store<?php echo $institution_string; ?>/caption/classes"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_auction.png" width="22" height="22" alt="Settings" /></span>Prizes</a></li>
+				<li><a href="<?php echo $sn; ?>/dashboard/packages<?php echo $institution_string; ?>/caption/classes"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_package.png" width="22" height="22" alt="Settings" /></span>Packages</a></li>
+<?php
+		}
+	}
+	elseif ($objRoles->isAllowed('Teacher'))
+	{
+		if($objUserSession->institution_type == 'Camp')
+		{
+?>
+			<!--<li><a href="<?php echo $sn; ?>/ashboard/classes<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Classes</a></li>-->
+			<li><a href="<?php echo $sn; ?>/dashboard/points<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Points</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/store<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_auction.png" width="22" height="22" alt="Settings" /></span>Prizes</a></li>
+			<!--<li><a href="<?php echo $sn; ?>/dashboard/users<?php echo $institution_string; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_profile.png" width="22" height="22" alt="Settings" /></span><?php echo $strUserMenu; ?>s</a></li>-->
+<?php
+		}
+		else if($objUserSession->institution_type == 'School')
+		{
+			$objClasses = new Classes();
+			$objClass = reset($objClasses->_user_classes_select(array(
+				"user_id" => $objUserSession->user_id,
+				"class_role" => "Teacher"
+			)));
+			if ($objClass)
+			{
+?>
+			<li><a href="<?php echo $sn . "/menu/users/pre/student/permission/student/class_id/" . $objClass->class_id . "/url/" . dblencode("users/editor/user_type/student/user_types/student" . $strParamPath); ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_profile.png" width="22" height="22" alt="Students" /></span>Students</a></li>
+			<li><a href="<?php echo $sn . "/campaigns/campaignchildenroll" . $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Settings" /></span>Campaigns</a></li>
+			<li><a href="<?php echo $sn; ?>/dashboard/store"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_auction.png" width="22" height="22" alt="Prizes" /></span>Prizes</a></li>
+			<li><nobr><a href="<?php echo $sn; ?>/dashboard/campaigns_schoolstemplate1"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_points.png" width="22" height="22" alt="Achievement Cards" /></span>Achievement Cards</nobr></a></li>
+			<li><a href="<?php echo $sn . "/menu/campaigns/pre/marking/url/" . dblencode("marking/markinglist" . $strParamPath); ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_check.png" width="22" height="22" alt="Marking" /></span>Marking</a></li>
+			<li><a href="<?php echo $sn . "/menu/campaigns/pre/report/url/" . dblencode("reports/viewreport" . $strParamPath); ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Reports" /></span>Reports</a></li>
+<?php
+			}
+		}
+	}
+	elseif ($objRoles->isAllowed('Parent'))
+	{
+?>
+			<li><a href="<?php echo $sn; ?>/campaigns/campaignchildenroll"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Settings" /></span>Campaigns</a></li>
+			<li><a href="<?php echo $sn; ?>/marking/markingcampaigns"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_check.png" width="22" height="22" alt="Settings" /></span>Marking</a></li>
+			<li><a href="<?php echo $sn; ?>/reports/reportcampaigns"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_report.png" width="22" height="22" alt="Settings" /></span>Reports</a></li>
+<?php
+	}
+	else
+	{
+		// The permission was currupt
+?>
+			<li>Sorry, there was an error: VInc-Menu101-S7D6FD</li>
+<?php
+	}
+?>
+
+		</ul>
+
+	</li>
+	<li class="list_parent"><a href="<?php echo $sn; ?>/logout"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_door.png" width="28" height="28" alt="Logout" /></span>
+<?php
+	print $objUserSession->referer_url ? "Back" : "Logout";
+?></a></li>
+</ul>

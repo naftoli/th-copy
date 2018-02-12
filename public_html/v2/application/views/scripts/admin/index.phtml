@@ -1,0 +1,210 @@
+<?php
+	if (empty($this->tstyle))
+		$this->tstyle = "chabadhebrewschool";
+	include "config.phtml";
+	include "parameters.phtml";
+	include "public_header.phtml";
+	global $arrAppDetails;
+	$arrDetails = $arrAppDetails[$this->tstyle];
+?>
+<script type="text/javascript">
+var GLOBAL_SLIDES = {};
+$(document).ready(function()
+{
+	$('#email').focus();
+	$('#footer_links a').mouseover(function () {
+		$(this).css({
+			'color' : '#000'
+		});
+	});
+	$('#footer_links a').mouseout(function () {
+		$(this).css({
+			'color' : '#555'
+		});
+	});
+	$("#login").submit(function (e) {
+		function login_status(intSuccess, strMessage) {
+			var strClass = "loading";
+			if (intSuccess == 1)
+			{
+				strClass = "failure";
+			} else {
+				strClass = "success";
+			}
+			$("#login_status_div").html("<div class=\"" + strClass + "\"></div>");
+			$("#login_status_div div").html(strMessage);
+		}
+		e.preventDefault();
+		login_status(0, "Authenticating...");
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php echo $sn . "/admin/login"; ?>',
+			dataType : "text",
+			data: $('#login').serialize(),
+			success : function(strResponse) {
+				//alert(strResponse);
+				$(".slider:last .processing_status_loading").fadeOut();
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					login_status(1, "<?php print text("Sorry, there was an error"); ?>: VADMIN-AI101-sfj92f");
+					//$.dumper(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					login_status(1, "<?php print text("Sorry, there was an error"); ?>: VADMIN-AI102-vn2ina");
+					//$.dumper(strResponse);
+					return;
+				} else {
+					if (arrResponse["error"]) {
+						login_status(1, arrResponse["error"]);
+					} else if (arrResponse["success"]) {
+						login_status(2, "Authenticated. Redirecting...");
+						window.location.href="<?php print bp; ?>/admin/dashboard/uid/" + arrResponse["id"];
+					} else {
+						login_status(1, "<?php print text("Sorry, there was an error"); ?>: VADMIN-AI103-nfn2on");
+					}
+				}
+			}
+		});
+	});
+});
+</script>
+<style>
+#footer_links a {
+	color:#555;
+}
+#footer_links {
+	width:1024px;
+	margin:0 auto;
+	height:30px;
+	padding:4px;
+	color:#555;
+}
+h2 {
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 8px;
+	padding:8px;
+	padding-bottom: 12px;
+}
+div.line {
+	border-bottom: 1px solid #ddd;
+	margin: 8px 0;
+	height:1px;
+}
+.promo td {
+	padding:4px;
+}
+#nav ul.list_first li img {
+	margin-right: 15px;
+}
+</style>
+</head>
+
+<body>
+    <NOSCRIPT><P STYLE="color: red; font-size: larger;"><?php print text("Notice: You have javascript disabled. This site will not function without javascript."); ?></P></NOSCRIPT>
+	<div id="wrapper">
+    	<div id="nav">
+        	<div class="col_title_bg"></div>
+            <div class="col_title"><?php print text("Menu"); ?></div>
+            <ul class="list_first">
+                <li class="list_parent current"><a href="#"><img src="<?php print $sn; ?>/images/front-end/admin/icon_door_in.png" width="28" height="28" /><?php print text("Admin Login"); ?></a></li>
+            </ul>
+        </div>
+        <div id="content">
+        	<div class="col_title_bg"></div>
+            <div class="slider_container">
+                <div class="slider">
+                    <div class="col_title"><span><?php print text("Systems Administration"); ?></span></div>
+                    <div class="col_content">
+<?php
+	if (!preg_match('/Firefox.[2-9][0-9]\.0/', $_SERVER['HTTP_USER_AGENT']))
+	{
+?>
+                        <div class="module message"><?php print text("This application will only function properly using the latest version of Firefox."); ?> <a href="http://www.mozilla.org/en-US/firefox/fx/#desktop"><?php print text("Get Firefox now."); ?></a></div>
+<?php
+	}
+?>
+						<h1><?php print text("Admin Login"); ?></h1>
+                        <div class="module" id="module-info">
+                            <div class="module_content">
+                                <div class="list form">
+                                	<div id="login_status_div"></div>
+									<form name="login" id="login" method="post" action="<?php echo $sn; ?>/admin/login<?php print $strParamPath; ?>">
+                                        <ul>
+                                            <li>
+                                                <span class="label" style="margin-left:130px"><label for="username"><?php print text("Username"); ?></label></span>
+                                                <span class="input"><input type="text" name="username" id="username" maxlength="64" value=""></span>
+                                            </li>
+                                            <li>
+                                                <span class="label" style="margin-left:130px"><label for="password"><?php print text("Password"); ?></label></span>
+                                                <span class="input"><input type="password" name="password" id="password" maxlength="64" value=""></span>
+											</li>
+                                            <li style="padding-left: 138px;">
+												<input type="submit" value="Login" class="button" />
+                                            </li>
+                                        </ul>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+<?php
+	if (empty($this->portal))
+	{
+		if (empty($this->tstyle))
+		{
+?>
+						<h1><?php print text("Links to our systems"); ?></h1>
+<?php
+		}
+		else
+		{
+?>
+						<h1><?php print text("Links to our other systems"); ?></h1>
+<?php
+		}
+?>
+
+                        <div class="module lists">
+                            <div class="module_content">
+                                <ul>
+									<li>
+										<a href="<?php echo $sn; ?>/index/index/tstyle/tzivoshashem" class="inline_link"><div class="name"><?php print text("Tzivos Hashem"); ?></div></a>
+									</li>
+									<li>
+										<a href="<?php echo $sn; ?>/index/index/tstyle/chabadhebrewschool" class="inline_link"><div class="name"><?php print text("Chabad Hebrew School"); ?></div></a>
+									</li>
+									<li>
+										<a href="<?php echo $sn; ?>/index/index/tstyle/hoo" class="inline_link"><div class="name"><?php print text("HOO"); ?></div></a>
+									</li>
+									<li>
+										<a href="<?php echo $sn; ?>/index/index/tstyle/hebrewschool1" class="inline_link"><div class="name"><?php print text("Camp Gan Israel"); ?></div></a>
+									</li>
+									<li>
+										<a href="<?php echo $sn; ?>/index/index/tstyle/releasedtime" class="inline_link"><div class="name"><?php print text("Released Time"); ?></div></a>
+									</li>
+									<li>
+										<a href="<?php echo $sn; ?>/index/index/tstyle/friendshipcircle" class="inline_link"><div class="name"><?php print text("Friendship Circle"); ?></div></a>
+									</li>
+                                </ul>
+                            </div>
+                        </div>
+<?php
+	}
+?>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div id="footer_links">
+		<div style="float:right;text-align:right;display:inline-block;margin:0 8px;width:383px;">Copyright © 2016 - mashpia.com</div>
+	</div>
+	<div id="overlay">
+		<div class="content"></div>
+	</div>
+</body>
+</html>

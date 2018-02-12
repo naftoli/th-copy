@@ -1,0 +1,36 @@
+<?php 
+	include "config.phtml";
+	$strUrl = $sn . "/campaigns/campaignlist/";
+	if (isset($this->intHost))
+		$strUrl .= "host_id/" . $this->intHost . "/";
+	if (isset($this->intNetwork))
+		$strUrl .= "network_id/" . $this->intNetwork . "/";
+	if (isset($this->intInstitution))
+		$strUrl .= "institution_id/" . $this->intInstitution . "/";
+?>
+<div class="slider">
+	<div class="col_title">
+			<span>Campaign Status</span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $strUrl; ?>status/1">
+							<div class="icon"></div>
+							<div class="title">Active campaign</div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $strUrl; ?>status/0">
+							<div class="icon"></div>
+							<div class="title">Inactive campaign</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+	</div>
+</div>

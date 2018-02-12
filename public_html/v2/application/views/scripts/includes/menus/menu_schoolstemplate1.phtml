@@ -1,0 +1,40 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+$objUserSession = $this->objSession;
+?>
+
+<ul class="list_first">
+	<li class="list_parent"><a href="<?php print $sn; ?>/administration/profile<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_control.png" width="28" height="28" alt="Profile" /></span>Profile</a></li>
+	<ul class="list_second">
+		<li><a href="<?php print $sn; ?>/administration/profile<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/Teachers resources icon.jpg" width="28" height="28" alt="Resources" /></span>Resources</a></li>
+		<!--<li><nobr><a href="<?php echo $sn; ?>/dashboard/systemsettings<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Settings</nobr></a></li>-->
+		<!--<li><nobr><a href="<?php echo $sn; ?>/campaigns/incrementalscampaignlist<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Campaigns" /></span>Campaigns</nobr></a></li>-->
+		<?php if (! ($objUserSession->permission == 'Teacher' && $objUserSession->achievement == 0)) : ?>
+		<li><nobr><a href="<?php echo $sn; ?>/campaigns/achievementcardsprint<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_points.png" width="22" height="22" /></span><?php print text("Achievment Cards"); ?></nobr></a></li>
+		<?php endif; ?>
+		<li><a href="<?php echo $sn; ?>/points/classtasks/tasktype/daily<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_bonus.png" width="22" height="22" /></span><?php print text("Daily Missions"); ?></a></li>
+		<li><a href="<?php echo $sn; ?>/points/classtasks/tasktype/weekly<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_bonus.png" width="22" height="22" /></span><?php print text("Weekly Missions"); ?></a></li>
+		<li><a href="<?php echo $sn; ?>/points/classtasks/tasktype/tehillim<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_bonus.png" width="22" height="22" /></span><?php print text("Tehillim Missions"); ?></a></li>		
+		<li><a href="<?php echo $sn; ?>/points/classtasks/tasktype/special<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_bonus.png" width="22" height="22" /></span><?php print text("Special Missions"); ?></a></li>
+		<?php if (! ($objUserSession->permission == 'Teacher' && $objUserSession->store == 0)) : ?>
+		<li><a href="<?php echo $sn; ?>/dashboard/store<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_auction.png" width="22" height="22" alt="Settings" /></span>Prizes</a></li>
+		<?php endif; ?>
+		<!--<li><a href="<?php echo $sn; ?>/reports/reportlegacypoints<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_report.png" width="22" height="22" alt="Points Report" /></span>Store Balance</a></li>-->
+		<!--li><nobr><a href="<?php echo $sn; ?>/dashboard/users_schoolstemplate1<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_profile.png" width="22" height="22" alt="Settings" /></span>Teacher Accounts</nobr></a></li-->
+		<!--<li><a href="<?php echo $sn; ?>/reports/reportoptions<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_settings.png" width="22" height="22" alt="Settings" /></span>Reports</a></li>-->
+<?php
+//if (dev)
+//{
+?>
+		<!--<li><a href="<?php echo $sn; ?>/menu/users2/is_active/1/is_registered/1/permission/student/url/<?php echo dblencode("users/transactions" . $strParamPath); ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_report.png" width="22" height="22" alt="Transactions" /></span>Transactions</a></li>-->
+<?php
+//}
+?>
+	</ul>
+	<li class="list_parent"><a href="<?php echo $sn; ?>/logout/index<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_door.png" width="28" height="28" alt="Logout" /></span>
+<?php
+	//print $objUserSession->referer_url ? "Back" : "Logout";
+    print $objUserSession->permission == 'Teacher' ? "Logout" : "Back";
+?></a></li>
+</ul>

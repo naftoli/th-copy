@@ -1,0 +1,181 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+
+<script language="javascript">
+	$(document).ready(function()
+	{
+		$('#slider_campaignmedals #add_medal').click( function(e) {
+			e.preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $("#slider_campaignmedals #processing_status").html('Loading...').fadeIn("slow"),
+				url : '<?php echo $sn . "/medals/medaleditor" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('#slider_campaignmedals #form').serialize(),
+				success : function(strResponse) {
+					if (strResponse.match(/^[0-9]+$/)) {
+						$("#slider_campaignmedals #processing_status").fadeOut("slow");
+						ajax_medals();
+					} else {
+						$("#slider_campaignmedals #processing_status").html(strResponse).fadeIn("slow");
+					}
+				}
+			});
+		});
+		ajax_medals();
+	});
+
+	function ajax_action(strAction, intMedalId) {
+		$.ajax({
+			type : "GET",
+			cache : false,
+			start: $("#slider_campaignmedals #processing_status2").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn . "/medals/medaleditor" . $strParamPath; ?>/' + strAction + '/true/medal_id/' + intMedalId,
+			dataType : "text",
+			success : function(strResponse) {
+				//alert(strResponse);
+				if (strResponse.match(/^[0-9]+$/)) {
+					ajax_medals();
+				} else {
+					$("#slider_campaignmedals #processing_status2").html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	}
+
+	function popdeletequestion(intMedalId) {
+		$("#item_to_delete").val(intMedalId);
+		$.blockUI({ message: $('#medaleditor_question')});
+	}
+	$('#medaleditor_question #option1').click(function(e) {
+		e.preventDefault();
+		ajax_action("delete", $("#item_to_delete").val());
+		$.unblockUI();
+	});
+	$('#medaleditor_question #option2').click(function(e) {
+		e.preventDefault();
+		$.unblockUI();
+	});
+
+	function ajax_medals() {
+		$.ajax({
+			type : "GET",
+			cache : false,
+			start: $("#slider_campaignmedals #medal_list").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn . "/medals/medaleditor/ajax/true" . $strParamPath; ?>',
+			dataType : "text",
+			success : function(strResponse) {
+				var objTarget = $("#slider_campaignmedals #medal_list");
+				var arrResponse = jQuery.parseJSON(strResponse);
+				if (arrResponse.length) {
+					var strHTML = "<table>\n\t<tr>\n";
+					strHTML += "		<td>Primary Image</td>\n";
+					strHTML += "		<td>Secondary Image</td>\n";
+					strHTML += "		<td>Medal Name</td>\n";
+					strHTML += "		<td>Medal Value</td>\n";
+					strHTML += "		<td colspan='3'>&nbsp;</td>\n";
+					strHTML += "	</tr>\n";
+					for (var intItr=0; intItr!=arrResponse.length; intItr++) {
+						var intMedalId = arrResponse[intItr]["medal_id"];
+						var strRowName = intItr;
+						strHTML += "	<tr>\n";
+						strHTML += "		<input type='hidden' name='" + strRowName + "_medal_id' value='" + intMedalId + "' />\n";
+						strHTML += "		<td><input type='button' value='Primary Image' onclick=\"slideURL('<?php print $sn . "/images/imagecategorieslist/mode/callback/update/medals1/id/\" + intMedalId + \""; ?>');\" /></td>\n";
+						strHTML += "		<td><input type='button' value='Secondary Image' onclick=\"slideURL('<?php print $sn . "/images/imagecategorieslist/mode/callback/update/medals2/id/\" + intMedalId + \""; ?>');\" /></td>\n";
+						strHTML += "		<td><input size='25' type='text' name='" + strRowName + "_name' value='" + arrResponse[intItr]["medal_name"] + "' /></td>\n";
+						strHTML += "		<td><input size='25' type='text' name='" + strRowName + "_value' value='" + arrResponse[intItr]["medal_value"] + "' /></td>\n";
+						if (intItr) {
+							strHTML += "		<td><input type='button' value='Up' onclick='ajax_action(\"up\", " + intMedalId + ")' /></td>\n";
+						} else {
+							strHTML += "		<td>&nbsp;</td>";
+						}
+						if (intItr!=arrResponse.length-1) {
+							strHTML += "		<td><input type='button' value='Down' onclick='ajax_action(\"down\", " + intMedalId + ")' /></td>\n";
+						} else {
+							strHTML += "		<td>&nbsp;</td>";
+						}
+						strHTML += "		<td><input type='button' value='Delete' onclick='popdeletequestion(" + intMedalId + ");' /></td>\n";
+						strHTML += "	</tr>\n";
+					}
+					strHTML += "</table><hr>";
+					strHTML += '<div id="processing_status2"></div><span><a onclick="ajax_update();" href="#" title="Save" class="button submit">Save Changes</a></span><div class="clear"></div>';
+					$(objTarget).html(strHTML);
+				} else {
+					$(objTarget).html("There are no medals within this campaign for this institution.");
+				}
+			}
+		});
+	}
+
+	function ajax_update()
+	{
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#slider_campaignmedals #processing_status2").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn . "/medals/medaleditor/update/true" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('#slider_campaignmedals #form').serialize(),
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					$("#slider_campaignmedals #processing_status2").html(strResponse + " item(s) updated successfully.").fadeIn("slow").delay(2000).fadeOut("slow");
+				} else {
+					$("#slider_campaignmedals #processing_status2").html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	}
+</script>
+
+<div class="slider" id="slider_campaignmedals">
+
+	<div class="col_title">
+		<span>Add / Edit Medals</span>
+	</div>
+
+	<div class="col_content camper">
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+				<form name="form" id="form" method="post" action="">
+					<ul>
+						<li>
+							<h1>Add Medal</h1>
+						</li>
+						<li>
+							<span class="label">Medal name:</span>
+							<span class="input"><input type="text" class="required" id="medal_name" name="medal_name" value="" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label">Medal value:</span>
+							<span class="input"><input type="text" id="medal_value" name="medal_value" value=""  /></span>
+							<div class="clear"></div>
+						</li>
+						<div id="processing_status"><?php if ($this->message) { echo $this->message . "<br>"; } ?></div>
+						<li>
+							<span><a href="#" title="Save" class="button submit" id="add_medal">Add Medal</a></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<h1>List of Medals</h1>
+						</li>
+						<li>
+							<div id="medal_list">
+								Loading medals...
+							</div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div id="medaleditor_question" class="question">
+			<p>Are you sure you would like to delete?</p>
+			<p><a id="option1" class="button">Yes, delete it.</a></p>
+			<p><a id="option2" class="button">No, do <u>NOT</u> delete it.</a></p>
+		</div>
+		<intput type="hidden" id="item_to_delete" value="" />
+	</div>
+</div>

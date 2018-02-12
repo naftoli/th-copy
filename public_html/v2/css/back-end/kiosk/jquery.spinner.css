@@ -1,0 +1,21 @@
+.vertical { width:100px; height:42px; background:url(../../../images/back-end/kiosk/bg_spinner.png) bottom; position:relative; float:left; margin-left:48px; margin-top:20px;}
+.vertical .v-spinner {  background:none; width:100px; font-size:18px; text-shadow:none; height:42px; border:0;  color:#000; padding:0;  font-family:"Myriad Pro",Arial,Helvetica,sans-serif; text-align:center; font-weight:bold;}
+
+.vertical .ui-spinner {   margin:0; overflow:hidden;}
+.vertical .ui-spinner-box { line-height:38px;}
+.vertical .ui-spinner-listitem { height:42px;}
+.vertical .ui-spinner-down, .vertical .ui-spinner-up { text-indent:-9999px; width:42px; height:42px; background-image:url(../../../images/back-end/kiosk/scroll_btn.png); background-repeat: no-repeat; background-position:0 -42; border:0; padding:0; vertical-align:top; cursor:pointer; outline:none; display: inline-block; position:absolute; left:-42px; top:0;}
+.vertical .ui-spinner-up {  left:100px; background-position:0 0;}
+.vertical .ui-spinner-down { margin:0;}
+
+
+
+.spinner { background:url(../../../images/back-end/kiosk/bg_spinner.png); width:100px; height:42px; border:0;  color:#000; padding:0;  font-family:"Myriad Pro",Arial,Helvetica,sans-serif; text-align:center; font-size:35px; font-weight:bold; }
+
+.ui-spinner {margin-top:10px; margin-left:42px;}
+.ui-spinner-down, .ui-spinner-up { text-indent:-9999px; width:42px; height:42px; background-image:url(../../../images/back-end/kiosk/spinner_btn.png); background-repeat: no-repeat; background-position:0 0; border:0; padding:0; vertical-align:top; cursor:pointer; outline:none; display: inline-block;}
+.ui-spinner-down { margin-left:-184px; background-position:0 -42px;}
+
+
+.ui-spinner-down:hover { background-position:-42px -42px;}
+.ui-spinner-up:hover { background-position:-42px 0;}

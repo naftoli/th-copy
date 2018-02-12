@@ -1,0 +1,48 @@
+<?php
+	//var_dump($this->arrCampaigns);exit;
+	include "config.phtml";
+?>
+<div id="page_title">Choose a Campaign</div>
+	<div>
+		<div class="three_column">
+			<ul class="buttons button_icons">
+<?php
+	if(count($this->arrCampaigns))
+	{
+		foreach($this->arrCampaigns as $objResult){
+			if ($objResult->campaign_name != "Tanya") // $_SERVER["SERVER_NAME"] == "mashpia.icorpa.com" && 
+				continue;
+?>
+				<li style="vertical-align:middle;">
+<?php
+			if ($objResult->image_smallmed)
+			{
+				print "<IMG SRC='$sn/images/show-image/image_id/" . $objResult->image_smallmed . "' style='float:left;margin:20px 0 0 15px;' />";
+			}
+			if ($objResult->mission_type == "Incremental")
+			{
+?>
+				<a href="/kiosk-main/incrementals-progress/campaign_id/<?=$objResult->campaign_id?>" style="padding-left:20px;"><?=$objResult->campaign_name?></a>
+<?php
+			}
+			else
+			{
+?>
+				<a href="/kiosk-main/view-campaign/campaign_id/<?=$objResult->campaign_id?>" style="padding-left:20px;"><?=$objResult->campaign_name?></a>
+<?php
+			}
+?>
+				</li>
+<?php
+		}
+	} else{
+?>
+			    There are no campaigns available.
+<?php
+	}
+?>
+			</ul>
+		</div>
+	</div>
+</div>
+<!--font color="#FFF"><?php print $this->intBMTime; ?></font-->

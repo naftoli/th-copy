@@ -1,0 +1,172 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<style>
+<!--
+.marking_list .select_box {
+	float:left;
+	margin:0 8px;
+}
+a.button {
+	padding:6px 10px;
+}
+.marking_list .button .label {
+	float:left;
+	text-indent:-9999em;
+}
+.marking {
+	color:#333333;
+	font-size:14px;
+	font-weight:bold;
+	line-height:14px;
+	font-family:"Myriad Pro",Arial,Helvetica,sans-serif;
+}
+.marking .row:first-child {
+	border-top:medium none;
+}
+.marking .row:last-child {
+	border-bottom:medium none;
+}
+.marking .row.top_row {
+	font-size:18px;
+	text-align:center;
+}
+.marking.tanya_mark .row {
+	clear:both;
+	font-size:14px;
+	min-height:30px;
+	height:auto;
+}
+
+.marking .row.top_row .cell {
+	min-height:30px;
+	padding-top:10px;
+}
+.marking.tanya_mark .row.top_row .cell {
+	min-height:0;
+	height:auto;
+	text-align:left;
+}
+.marking.tanya_mark .cell {
+	float:left;
+	margin-left:10px;
+	width:100px;
+	border:none;
+	height:auto;
+}
+.marking.tanya_mark .cell.name {
+	width:170px;
+}
+.marking.tanya_mark .cell.status {
+	width:140px;
+}
+.marking.tanya_mark .cell.lines {
+	width:70px;
+}
+.marking.tanya_mark .cell.completed {
+	width:70px;
+}
+.marking.tanya_mark .row:not(.top_row) > .cell {
+	font-weight:normal;
+	min-height:0;
+	padding:6px 0;
+}
+.marking.tanya_mark .cell input {
+	background:none repeat scroll 0 0 #EEEEEE;
+	border:1px solid #BBBBBB;
+	margin:-2px 0;
+}
+.marking .row:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+* .marking .cell { zoom: 1; } /* IE6 */
+*:first-child+html .marking .cell { zoom: 1; } /* IE7 */
+-->
+</style>
+<script language="javascript">
+$(document).ready(function()
+{
+	$('#form_pausemissions .submit').click( function(e) {
+		e.preventDefault();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#slider_pausemissions .processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn . "/campaigns/pausemissions" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('#form_pausemissions').serialize(),
+			success : function(strResponse) {
+				var objError = $("#slider_pausemissions .processing_status");
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					objError.html(
+						"Sorry, there was an error: VC-PM101-d8ff8f"
+					).removeClass("hidden");
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					objError.html(
+						"Sorry, there was an error: VC-PM102-g0g1as"
+					).removeClass("hidden");
+					$.alert(strResponse);
+					return;
+				} else {
+					objError.html('Success').delay(1500).queue(function () {
+						slideRefresh("<?php echo $sn . "/campaigns/pausemissions" . $strParamPath; ?>");
+					});
+				}
+			}
+		});
+	});
+});
+</script>
+<div class="slider" id="slider_pausemissions">
+	<div class="col_title">
+		<span>Removing Missions</span>
+	</div>
+	<div class="col_content">
+<?php
+	include("uimods/sliderefresh.phtml");
+?>
+		<div class="module" style="padding:5px;">Enter the number of missions you would like to remove for each chayol.</div>
+		<div class="body left marking_missions">
+			<form id="form_pausemissions">
+				<div id="tasks_div">
+					<div class="marking tanya_mark module">
+						<div class="row top_row">
+							<div class="cell name">Student</div>
+							<div class="cell status">Lines Due</div>
+							<div class="cell status">Status</div>
+							<div class="cell">Remove</div>
+						</div>
+<?php
+	foreach ($this->arrResults as $arrUser)
+	{
+		//if ($arrUser['intOverdue'] < 1)
+		//	continue;
+?>
+						<div class="row">
+							<div class="cell name"><?php print $arrUser['objUser']->first_name . " " . $arrUser['objUser']->last_name; ?></div>
+							<div class="cell status"><?php print $arrUser['lines_due']; ?></div>
+							<div class="cell status"><a href="#" onclick="slideURL('<?php print $sn . "/campaigns/pausemanager/campaign_id/1/user_id/" . $arrUser["objUser"]->user_id; ?>');"><?php print $arrUser['user_status']; ?></a></div>
+							<div class="cell"><input onfocus="if (this.value==0) this.select();" type="text" size="4" value="0" name="user_missions_<?php print $arrUser["objUser"]->user_id; ?>" /> Missions</div>
+						</div>
+<?php
+	}
+?>
+					</div>
+				</div>
+				<div class="processing_status" style="color:#000"></div>
+				<span><a href="#" title="Remove Missions" class="button submit" id="appoval_save">Remove Missions</a></span>
+			</form>
+		</div>
+	</div>
+</div>

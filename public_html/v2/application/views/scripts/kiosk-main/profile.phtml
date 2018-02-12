@@ -1,0 +1,18 @@
+<?php $user_session_data = new Zend_Session_Namespace('kiosk_user_session_data'); ?>
+<div id="page_title">Profile</div>
+<div class="two_column">
+	<!-- RENDER USER INFO PORTLET -->
+	<?=$this->render('_portlets/user_info.phtml')?>
+	<div class="padding_left">
+	</div>
+</div>
+<!-- <div class="two_column"> -->
+<div class="one_column">
+	<ul class="buttons button_icons">
+		<li><a href="<?=WEB_ROOT?>kiosk-main/campaigns" class="icon_campaigns">Campaigns</a></li>
+		<li><a href="<?=WEB_ROOT?>kiosk-main/incrementals-progress" class="icon_campaigns">My Progress</a></li>
+		<!--<li><a href="prof_ranks.php" class="icon_ranks">Ranks</a></li>-->
+		<!--<li><a href="#" class="icon_mileage">Mileage</a></li -->
+		<!--<li><a href="../transactions.php">Transactions</a></li>-->
+	</ul>
+</div> <!-- one_column -->

@@ -1,0 +1,238 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script language="javascript">
+	$(document).ready(function()
+	{
+		$('.slider:last #add_field').click( function(e) {
+			e.preventDefault();
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $(".slider:last #processing_status").html('<?php print text("Loading..."); ?>').fadeIn("slow"),
+				url : '<?php echo $sn . "/settings/studentfields" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('.slider:last #add_module form').serialize(),
+				success : function(strResponse) {
+					if (strResponse.match(/^[0-9]+$/)) {
+						$(".slider:last #processing_status").fadeOut("slow");
+						ajax_studentfields();
+					} else {
+						$(".slider:last #processing_status").html(strResponse).fadeIn("slow");
+					}
+				}
+			});
+		});
+		ajax_studentfields();
+	});
+
+	function ajax_action(strAction, strFieldId) {
+		$.ajax({
+			type : "GET",
+			cache : false,
+			start: $(".slider:last #processing_status2").html('<?php print text("Loading..."); ?>').fadeIn("slow"),
+			url : '<?php echo $sn . "/settings/studentfields" . $strParamPath; ?>/' + strAction + '/true/field_id/' + strFieldId,
+			dataType : "text",
+			success : function(strResponse) {
+				if (strResponse.match(/^[0-9]+$/)) {
+					ajax_studentfields();
+				} else {
+					$(".slider:last #processing_status2").html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	}
+
+	function popdeletequestion(strFieldId) {
+		$(".slider:last #item_to_delete").val(strFieldId);
+		$.blockUI({ message: $('.slider:last #fieldeditor_question')});
+	}
+	$('.slider:last #fieldeditor_question #option1').click(function(e) {
+		e.preventDefault();
+		ajax_action("delete", $(".slider:last #item_to_delete").val());
+		$.unblockUI();
+	});
+	$('.slider:last #fieldeditor_question #option2').click(function(e) {
+		e.preventDefault();
+		$.unblockUI();
+	});
+
+	function ajax_studentfields() {
+		$.ajax({
+			type : "GET",
+			cache : false,
+			start: $(".slider:last #field_list").fadeIn("slow"),
+			url : '<?php echo $sn . "/settings/studentfields/ajax/true" . $strParamPath; ?>',
+			dataType : "text",
+			success : function(strResponse) {
+				var objTarget = $(".slider:last #field_list");
+				var arrResponse = jQuery.parseJSON(strResponse);
+				if (Object.keys(arrResponse).length) {
+					var strHTML = "<table>\n\t<tr>\n";
+					strHTML += "		<td><b><?php print text("Field Name"); ?></b></td>\n";
+					strHTML += "		<td><b><?php print text("Field Type"); ?></b></td>\n";
+					strHTML += "		<td colspan='3'>&nbsp;</td>\n";
+					strHTML += "	</tr>\n";
+					var intItr = 0;
+					for (var strFieldId in arrResponse)
+					{
+						var strRowName = intItr;
+						var objField = arrResponse[strFieldId];
+						strHTML += "	<tr>\n";
+						strHTML += "		<td><input type='hidden' name='" + strRowName + "_field_id' value='" + strFieldId + "' />";
+						strHTML += '			<span class="input"><input type="text" class="required" id="' + strRowName + '_name" name="' + strRowName + '_name" value="' + objField.field_name + '" size="25" minlength="2" /></span></td>';
+						strHTML += '		<td><span class="input"><select id="' + strRowName + '_type" name="' + strRowName + '_type" style="width:135px;padding:6px;margin-right: 5px;">';
+						strHTML += '		<option value="textbox"' + (objField.field_type == 'textbox' ? ' selected' : '') + '>Normal Text Box</option>';
+						strHTML += '		<option value="textarea"' + (objField.field_type == 'textarea' ? ' selected' : '') + '>Larger Text Box</option>';
+						//<input type="text" class="required" value="' + objField.field_type + '" size="5" minlength="1" style="width: 80px;" />
+						if (intItr) {
+							strHTML += '		</select></span></td><td><div class="button arrow" onclick="ajax_action(\'up\', ' + intItr + ')"><img src="/images/back-end/admin/arrow-up2.png" style="opacity:0.5" /></div></td>';
+						} else {
+							strHTML += "		<td>&nbsp;</td>";
+						}
+						if (intItr!=Object.keys(arrResponse).length-1) {
+							strHTML += '		<td><div class="button arrow" onclick="ajax_action(\'down\', ' + intItr + ')"><img src="/images/back-end/admin/arrow-down2.png" style="opacity:0.5" /></div></td>';
+						} else {
+							strHTML += "		<td>&nbsp;</td>";
+						}
+						strHTML += '		<td align="right" width="70">&nbsp;<span><a onclick="popdeletequestion(' + intItr + ');" style="display:inline !important;" href="#" class="button submit" id="delete"><?php print text("Delete"); ?></a></span></td>';
+						strHTML += "	</tr>\n";
+						strHTML += '	<tr class="processing_status"><td colspan="5"></td></tr>';
+						intItr++;
+					}
+					strHTML += "</table><hr>";
+					strHTML += '<div id="processing_status2"></div><span><a onclick="ajax_update();" href="#" title="<?php print text("Save"); ?>" class="button submit"><?php print text("Save Changes"); ?></a></span><div class="clear"></div>';
+					$(objTarget).html(strHTML);
+				} else {
+					$(objTarget).html("<?php print text("There are no [|fields|] yet."); ?>");
+				}
+			}
+		});
+	}
+
+	/*
+	* Save changes that were made to the list
+	*/
+	function ajax_update()
+	{
+		$(".slider:last .processing_status").fadeOut();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider:last #processing_status2").html('<?php print text("Loading..."); ?>').fadeIn("slow"),
+			url : '<?php echo $sn . "/settings/studentfields/update/true" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('.slider:last form.class_list').serialize(),
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$(".slider:last #processing_status2").html('<?php print text("Sorry, there was an error"); ?>: VU-E101-3RR3RE').fadeIn();
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$(".slider:last #processing_status2").html('<?php print text("Sorry, there was an error"); ?>: VU-E102-SDF8BX').fadeIn();
+					$.alert(arrResponse);
+					return;
+				} else {
+					$(".slider:last #processing_status2").fadeOut();
+					if (arrResponse["error"]) {
+						if (typeof(arrResponse["error"]) != "object") {
+							$(".slider:last #processing_status2").html(arrResponse["error"]).fadeIn();
+						} else {
+							for (var strField in arrResponse["error"])
+							{
+								$(".slider:last #" + strField).closest("tr").next().find("td").html(arrResponse["error"][strField]);
+								$(".slider:last #" + strField).closest("tr").next().fadeIn();
+							}
+						}
+					} else if (arrResponse["success"] == "true") {
+						$(".slider:last #processing_status2").html(arrResponse["count"] + " item(s) updated successfully.").fadeIn("slow").delay(2000).fadeOut("slow");
+						ajax_studentfields();
+					} else {
+						alert("<?php print text("Sorry, there was an error"); ?>: VA-J103-DS7DDS");
+						alert($.dump(arrResponse));
+					}
+				}
+			}
+		});
+	}
+</script>
+<div class="slider" id="studentfields">
+	<style>
+	#studentfields .processing_status {
+		display: none;
+	}
+	#studentfields .processing_status td {
+		padding: 4px 0 8px 8px;
+		color: red;
+		width: 500px;
+	}
+	#studentfields .arrow {
+		display:inline-block;
+		width:16px;
+		height:16px;
+		margin:3px;
+	}
+	</style>
+	<div class="col_title">
+		<span><?php print text("Add / Edit [|Student|] Fields"); ?></span><div class="title_help info" title="<?php print text("Manage the fields you are using when adding or editing [|students|] in your institution. Don’t forget to hit ‘Save’ when you’re done!"); ?>"></div>
+	</div>
+
+	<div class="col_content">
+		<div class="module form">
+			<div class="module_content list">
+				<form class="class_list">
+					<ul>
+						<li>
+							<h1><?php print text("My [|Student|] Fields"); ?></h1>
+						</li>
+						<li>
+							<div id="field_list">
+								<?php print text("Loading fields..."); ?>
+							</div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<h2><?php print text('Add a [|Student|] Field'); ?> &nbsp;<div class="help_icon info" title="<?php print text("Add fields to be able to capture new information about a user."); ?>"></div></h2>
+		<div class="module form">
+			<div class="module_content list" id="add_module">
+				<form>
+					<ul>
+						<li>
+							<table>
+								<tr>
+									<td><b><?php print text("Field Name"); ?></b></td>
+									<td colspan="2"><b><?php print text("Field Type"); ?></b></td>
+								</tr>
+								<tr>
+									<td><span class="input"><input class="studentfields_text_input" type="text" class="required" id="field_name" name="field_name" value="" size="25" minlength="2" /></span></td>
+									<td>
+										<span class="input">
+											<select style="width:135px;padding:6px;margin-right: 5px;" class="studentfields_text_input" class="required" id="field_type" name="field_type">
+												<option value="textbox">Normal Text Box</option>
+												<option value="textarea">Larger Text Box</option>
+											</select>
+										</span>
+									</td>
+									<td><span><a href="#" title="Save" class="button submit" id="add_field"><?php print text('Add [|Student|] Field'); ?></a></span></td>
+								</tr>
+							</table>
+						</li>
+						<div id="processing_status"><?php if ($this->message) { echo $this->message . "<br>"; } ?></div>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div id="fieldeditor_question" class="question">
+			<p><?php print text("Are you sure you would like to delete this [|student|] field?"); ?></p>
+			<p><a id="option1" class="button"><?php print text("Yes, delete it."); ?></a></p>
+			<p><a id="option2" class="button"><?php print text("No, do <u>NOT</u> delete it."); ?></a></p>
+		</div>
+		<intput type="hidden" id="item_to_delete" value="" />
+	</div>
+</div>

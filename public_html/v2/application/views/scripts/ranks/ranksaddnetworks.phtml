@@ -1,0 +1,73 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+
+<div class="slider">
+	<div class="col_title">
+		<span>Ranks Add Networks</span>
+	</div>
+	
+	<div class="col_content">
+		
+<?php
+	if (count($this->objNetworks) == 0)
+	{
+?>
+			<div class="module" style="padding:5px;">
+				There are no Networks available to display.
+			</div>
+<?php
+	}
+	else
+	{
+?>
+			<div id="lists" class="module lists forms">
+				
+				<div class="module_content">
+					
+					<form name="ranksaddnetworks" id="ranksaddnetworks" method="post" action="">
+						<ul>
+							
+<?php
+		if (count($this->objNetworks) > 0)
+		{
+?>
+							<li>
+								<a class="link" href="<?php echo $sn . "/ranks/ranksadd" . $strParamPath; ?>">
+									<div class="icon"></div>
+									<div class="title">Add New Rank</div>
+								</a>
+							</li>
+							<li>
+								<a class="link" href="<?php echo $sn . '/ranks/ranksaddinstitutions' . $strParamPath; ?>">
+									<div class="icon"></div>
+									<div class="title">> Skip to Institutions List</div>
+								</a>
+							</li>
+<?php
+		}
+?>
+								
+							
+								
+							<?php foreach ($this->objNetworks as $objNetwork) : ?>
+							<li>
+								<a class="link" href="<?php echo $sn . "/ranks/ranksinstitutions/network_id/" . $objNetwork->institution_id . $strParamPath; ?>">
+									<div class="icon"></div>
+									<div class="title"><?php echo $objNetwork->name; ?></div>
+								</a>
+							</li>						
+							<?php endforeach; ?>
+							
+						</ul>
+					</form>
+					
+				</div>
+				
+			</div>
+<?php
+	}
+?>
+	</div>
+</div>

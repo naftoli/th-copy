@@ -1,0 +1,454 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Report Output</title>
+		<link rel="stylesheet" type="text/css"	href="<?php print $sn; ?>/css/back-end/admin/styles.css" />
+		<style type="text/css">
+		<!--
+		body, div.module {
+			background-color: #fff;
+			border-radius:0;
+			border:0;
+		}
+		td {
+			vertical-align: top;
+		}
+		div.module {
+			margin:0;
+		}
+		.marking .task_names .cell span {
+			transform: rotate(-90deg);
+		}
+		.marking .names .task_names .cell {
+			border-top:none;
+		}
+		.marking .names .task_names .cell {
+			height:100%;
+		}
+		.marking .row.task_names {
+			height:150px !important;
+		}
+		.marking .cell.header_task {
+			height:149px;
+		}
+		.marking .col.mission {
+			border:0;
+		}
+		.marking .mission_window, .marking .missions {
+			width:300px;
+		}
+		.marking .mission_window, .marking .missions {
+			width:100%;
+		}
+
+		.marking .cell div {
+			border:none;
+			background:none;
+			height:40px;
+			font-size:12pt;
+			text-align:center;
+			line-height: 40px;
+			padding: 0 4px;
+		}
+		.marking .header_task span {
+			font-size: 12px;
+			line-height:12px !important;
+			margin-left:4px !important;
+			letter-spacing:1px;
+			height:140px !important;
+			width:140px !important;
+			text-align: left;
+		}
+		.marking .names > .cell {
+			height:40px;
+			padding-top: 0;
+			vertical-align: middle;
+		}
+		.marking .names > .cell p {
+			height:40px;
+			width:94px;
+			display: table-cell;
+			vertical-align: middle;
+		}
+		.marking .header_task b {
+			font-weight: bold !important;
+			font-size: 14px;
+		}
+		.task_names span {
+			overflow: hidden;
+			padding-top: 6px;
+		}
+		.task_names span.campaign {
+			left: 6px;
+			position: relative;
+		}
+		.task_names span.total {
+			margin-left: 4px;
+		}
+		.hidden {
+			display: none !important;
+		}
+		.btn {
+			margin: 2px;
+			padding: 2px 4px 2px 4px;
+			border: 1px outset #EAEAEA;
+			display: inline;
+			cursor: default;
+			white-space: nowrap;
+			line-height: 30px;
+		}
+		.btn_select {
+			background-color: #FFF;
+			border: 1px inset #EAEAEA !important;
+		}
+		.date_editor {
+			padding: 8px;
+		}
+		.date_editor td {
+			padding-right: 8px;
+		}
+		.date_editor td.text {
+			padding-top: 3px;
+		}
+		.date_editor input {
+			padding: 2px;
+		}
+		.page_settings li:not(:first-child), .close_settings {
+			display: none;
+		}
+		li.selected {
+			background-color:#D5D8DE;
+		}
+		.column_order_row {
+			background-color:#D5D8DE;
+		}
+		.page_settings li {
+			cursor: pointer;
+		}
+		.noinput {
+			color: gray;
+		}
+		.fill_task .is_checkbox_button {
+			opacity:0;
+		}
+		.mission_window {
+			width:400px !important;
+		}
+		#col_names.grade {
+			width:100px;
+		}
+		#col_names.grade .cell {
+			border-right: 1px solid #ddd;
+		}
+		.marking .col.names .row.task_names p {
+			margin:110px 0 0 0;
+			padding: 10px 0;
+			font-weight: bold;
+			font-size: 11pt;
+			border: 1px solid #BDC8D2;
+			border-width: 1px 1px 0 0;
+		}
+		.marking td:not(:first-child) .col.names .row.task_names p {
+			border-right-width:0;
+		}
+		@media screen {
+			.print_only {
+				display: none;
+			}
+			.module.ajax_grid_module:not(:last-child) #mission_one_tasks .row:last-child,
+			.module.ajax_grid_module:not(:last-child) #col_names .cell:last-child
+			{
+				border-bottom: 1px solid #BDC8D2;
+			}
+		}
+		.page-break {
+			page-break-after: always;
+		}
+		.extra_col {
+			border-right: 2px solid #BDC8D2 !important;
+		}
+		-->
+		</style>
+	</head>
+	<body>
+<?php
+
+	//foreach ($this->arrRows as $arrRows)
+	$arrRowSource = $this->arrRows;
+	$intItemsPerPage = 16;
+	$intPage = 0;
+	if (!count($arrRowSource))
+	{
+?>
+		<div style="text-align:left">Nothing to display</div>
+<?php
+	}
+	while (count($arrRowSource))
+	{
+		$intPage++;
+		$arrRows = array();
+		for ($intItr=0; $intItr!=$intItemsPerPage&&count($arrRowSource); $intItr++)
+		{
+			$arrRows[] = array_shift($arrRowSource);
+		}
+?>
+		<div class="module ajax_grid_module page-break">
+			<div class="module_conntent">
+				<div class="marking">
+					<table width="100%" cellspacing="0" cellpadding="0">
+						<tr>
+							<td width="100">
+								<div id="col_names" class="col names grade">
+									<div class="row task_names<?php print $intPage != 1 ? ' print_only' : ''; ?>">
+										<p><?php print text('[|Class|]'); ?></p>
+									</div>
+<?php
+		foreach ($arrRows as $arrRow)
+		{
+?>
+									<div class="cell" style="text-align:center;"><p style="margin-top:auto"><?php print $arrRow['class']; ?></p></div>
+<?php
+		}
+?>
+								</div>
+							</td>
+							<td width="140">
+								<div id="col_names" class="col names">
+									<div class="row task_names <?php print $intPage != 1 ? ' print_only' : ''; ?>">
+										<p><?php print text('[|Student|]'); ?></p>
+									</div>
+<?php
+		foreach ($arrRows as $arrRow)
+		{
+?>
+									<div class="cell"><p style="width:134px;"><?php print $arrRow['name']; ?></p></div>
+<?php
+		}
+?>
+								</div>
+							</td>
+							<td>
+								<div class="missions">
+									<div class="col mission" style="width:100%">
+										<div class="row task_names <?php print $intPage != 1 ? ' print_only' : ''; ?>">
+<?php
+		$arrExtraColumns = array(
+			'student_purchases' => 'Purchases',
+			'campaign_achievements' => 'Achievements',
+			'store_transactions' => 'Store Transactions',
+			'total_transactions' => 'Total Transactions',
+			'total_points' => 'Total Points',
+			'store_balance' => 'Store Balance'
+		);
+		foreach ($arrExtraColumns as $strParamKey => $strName)
+		{
+			if (!empty($this->arrParams[$strParamKey]))
+			{
+?>
+											<div class="cell header_task extra_col">
+												<span class="campaign"><nobr><b><?php print $strName; ?></b></nobr></span>
+											</div>
+<?php
+			}
+		}
+		if (!empty($this->arrParams['tasks']))
+		{
+			$objFirstRow = reset($arrRows);
+			$intLastCampaign = NULL;
+			foreach ($objFirstRow['arrCampaignItems'] as $intTask => $intPoints)
+			{
+				$objTask = $this->arrTasks[$intTask];
+				$objCampaign = $this->arrCampaigns[$objTask->campaign_id];
+				if (
+					!is_null($intLastCampaign)
+					&& $objCampaign->campaign_id != $intLastCampaign
+					&& isset($this->arrParams['campaign_totals'])
+				) {
+					$objLastCampaign = $this->arrCampaigns[$intLastCampaign];
+?>
+											<div class="cell header_task extra_col">
+												<span><nobr><b><?php print $objLastCampaign->campaign_name; ?></b></nobr><br /><nobr><b>Total<b/></nobr></span>
+											</div>
+<?php
+				}
+?>
+											<div class="cell header_task">
+												<span><nobr><b><?php print $objCampaign->campaign_name; ?></b></nobr><br /><nobr><?php print $objTask->task_name; ?></nobr></span>
+											</div>
+<?php
+				$intLastCampaign = $objCampaign->campaign_id;
+			}
+			if (isset($this->arrParams['campaign_totals']))
+			{
+?>
+											<div class="cell header_task extra_col">
+												<span><nobr><b><?php print $objCampaign->campaign_name; ?></b></nobr><br /><nobr><b>Total<b/></nobr></span>
+											</div>
+<?php
+			}
+			if (count($arrRow['arrCampaignItems']) > 1)
+			{
+?>
+											<div class="cell header_task" style="padding-left:6px;">
+												<span class="total"><nobr><b>Tasks Sum</b></nobr></span>
+											</div>
+<?php
+			}
+		}
+		else if (!empty($this->arrParams['campaigns']))
+		{
+			$objFirstRow = reset($arrRows);
+			foreach ($objFirstRow['arrCampaignItems'] as $intCampaign => $intPoints)
+			{
+				$objCampaign = $this->arrCampaigns[$intCampaign];
+?>
+											<div class="cell header_task">
+												<span class="campaign"><nobr><b><?php print $objCampaign->campaign_name; ?></b></nobr></span>
+											</div>
+<?php
+			}
+			if (count($arrRow['arrCampaignItems']) > 1)
+			{
+?>
+											<div class="cell header_task" style="padding-left:6px;">
+												<span class="total"><nobr><b>Campaigns Sum</b></nobr></span>
+											</div>
+<?php
+			}
+		}
+?>
+										</div>
+										<div id="mission_one_tasks">
+<?php
+		foreach ($arrRows as $arrRow)
+		{
+?>
+											<div class="row">
+<?php
+			$arrExtraColumns = array(
+				'student_purchases' => 'intStudentPurchases',
+				'campaign_achievements' => 'intAchievementSum',
+				'store_transactions' => 'intStoreTransaction',
+				'total_transactions' => 'intTotalTransaction',
+				/*'campaign_totals' => 'Campaign Totals',*/
+				'total_points' => 'intTotalPoints',
+				'store_balance' => 'intStoreBalance'
+			);
+			foreach ($arrExtraColumns as $strParamKey => $strName)
+			{
+				if (!empty($this->arrParams[$strParamKey]))
+				{
+?>
+												<div class="cell row_task extra_col">
+													<span>
+														<div><?php print $arrRow[$strName]; ?></div>
+													</span>
+												</div>
+<?php
+				}
+			}
+			if (
+				!empty($this->arrParams['tasks'])
+			) {
+				$intLastCampaign = NULL;
+				foreach ($arrRow['arrCampaignItems'] as $intTask => $intPoints)
+				{
+					$objTask = $this->arrTasks[$intTask];
+					$objCampaign = $this->arrCampaigns[$objTask->campaign_id];
+					$intCampaignTotal = $arrRow['arrCampaignTotals'][$objTask->campaign_id];
+					if (
+						!is_null($intLastCampaign)
+						&& $objCampaign->campaign_id != $intLastCampaign
+						&& isset($this->arrParams['campaign_totals'])
+					) {
+						$objLastCampaign = $this->arrCampaigns[$intLastCampaign];
+						$intCampaignTotal = $arrRow['arrCampaignTotals'][$objLastCampaign->campaign_id];
+?>
+												<div class="cell row_task extra_col">
+													<span>
+														<div><?php print $intCampaignTotal; ?></div>
+													</span>
+												</div>
+<?php
+					}
+?>
+												<div class="cell row_task">
+													<span>
+														<div><?php print $intPoints; ?></div>
+													</span>
+												</div>
+<?php
+					$intLastCampaign = $objCampaign->campaign_id;
+				}
+				if (isset($this->arrParams['campaign_totals']))
+				{
+					$intCampaignTotal = $arrRow['arrCampaignTotals'][$objCampaign->campaign_id];
+?>
+											<div class="cell row_task extra_col">
+												<span>
+													<div><?php print $intCampaignTotal; ?></div>
+												</span>
+											</div>
+<?php
+				}
+				if (count($arrRow['arrCampaignItems']) > 1)
+				{
+?>
+												<div class="cell row_task">
+													<span>
+														<div><?php print $arrRow['total']; ?></div>
+													</span>
+												</div>
+
+<?php
+				}
+			}
+			else if (!empty($this->arrParams['campaigns']))
+			{
+				foreach ($arrRow['arrCampaignItems'] as $intCampaign => $intPoints)
+				{
+					$objCampaign = $this->arrCampaigns[$intCampaign];
+?>
+												<div class="cell row_task">
+													<span>
+														<div><?php print $intPoints; ?></div>
+													</span>
+												</div>
+<?php
+				}
+				if (count($arrRow['arrCampaignItems']) > 1)
+				{
+?>
+												<div class="cell row_task">
+													<span>
+														<div><?php print $arrRow['total']; ?></div>
+													</span>
+												</div>
+<?php
+				}
+			}
+?>
+											</div>
+<?php
+		}
+?>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+<?php
+	}
+?>
+	</body>
+</html>

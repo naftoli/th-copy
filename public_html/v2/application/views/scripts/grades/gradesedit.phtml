@@ -1,0 +1,78 @@
+<?php
+	include "config.phtml";
+
+	$strUrl = '';
+	if(isset($this->host_id)) $strUrl .= '/host_id/'.$this->host_id;
+	if(isset($this->network_id)) $strUrl .= '/network_id/'.$this->network_id;
+	if(isset($this->institution_id)) $strUrl .= '/institution_id/'.$this->institution_id;
+	if(isset($this->grade_id)) $strUrl .= '/grade_id/'.$this->grade_id;
+
+	/*
+	What was the intention of this?
+
+	$host_id = $this->existing_institution[0]->host_id;
+	$network_id = $this->existing_institution[0]->institution_id;
+	*/
+?>
+<script language="javascript">
+$('#slider_gradesedit #editgrade a.submit').click( function(e)
+{
+	e.preventDefault();
+	$('#editgrade').submit();
+});
+$(document).ready(function()
+{
+
+	$("#editgrade").validate({
+		onsubmit: true,
+		rules:
+		{
+			name: { required: true },
+		},
+		messages:
+		{
+			name: "Please enter grade name",
+		},
+		submitHandler: function(form) {
+			$.ajax( {
+				type : "POST",
+				cache : false,
+				start: $("#processing_status").html('loading...'),
+				url : '<?php echo $sn; ?>/grades/gradesedit<?php echo $strUrl; ?>',
+				dataType : "text",
+				data: $('#editgrade').serialize(),
+				success : function(response) {
+					$("#processing_status").html(response);
+				}
+			});
+		}
+	});
+});
+</script>
+<div class="slider" id='slider_gradesedit'>
+	<div class="col_title">
+		<span>My Bunks</span>
+		<div class="title_help info" title="Manage your current bunks. You can rename bunks by writing a new name in the text box, change their order with  the up/down arrows, or delete them from your camp (any campers in a deleted bunk will revert to having no bunk assigned). The order of bunks will define how they show up in certain lists. Don’t forget to hit ‘Save’ when you’re done!"></div>
+	</div>
+	<div class="col_content camper">
+		<div class="module form" id="module-info"><h1>Edit Grade</h1>
+			<div class="module_content list">
+				<form name="editgrade" id="editgrade" method="post" action="">
+					<ul>
+						<input type="hidden" name="institution_id" id="institution_id" value="<?php echo $this->arrGrade->institution_id; ?>" />
+						<li>
+							<span class="label">Grade Name:</span>
+							<span class="input"><input type="text" name="name" id="name" value="<?=$this->arrGrade->grade_name?>" /></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span><a href="#" title="Save" class="button submit">Save</a></span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</form>
+			</div>
+			<div id="processing_status"><?php if ($this->message) { echo $this->message . "<br>"; } ?></div>
+		</div>
+	</div>
+</div>

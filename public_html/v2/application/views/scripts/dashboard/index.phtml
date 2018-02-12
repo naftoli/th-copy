@@ -1,0 +1,142 @@
+<?php
+	include "headers/dashboard_header.phtml";
+	include "config.phtml";
+	include "parameters.phtml";
+	$objSession = $this->objSession;
+	$objRoles = new Roles();
+?>
+<style>
+#footer_links a {
+	color:#555;
+}
+#footer_links {
+	width:1024px;
+	margin:0 auto;
+	height:30px;
+	padding:4px;
+	color:#555;
+}
+</style>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#nav li").click(function () {
+		$("#nav li").removeClass("current");
+		$(this).addClass("current");
+	});
+	$('#footer_links a').mouseover(function () {
+		$(this).css({
+			'color' : '#000'
+		});
+	});
+	$('#footer_links a').mouseout(function () {
+		$(this).css({
+			'color' : '#555'
+		});
+	});
+	slideRefresh("<?php echo $sn . "/administration/profile" . $strParamPath; ?>");
+<?php
+	// disable the dumper
+	if (!is_dev())
+	{
+		print '$.dumper = function(object) {};';
+		print '$.alert = function(object) {};';
+	}
+
+?>
+});
+<?php
+//print 'var is_dev = ' . is_dev() . ';';
+?>
+</script>
+<?php if (isset($_COOKIE['naftoli'])) : ?>
+<script src="https://global.localizecdn.com/localize.js"></script>
+
+<script>!function(a){if(!a.Localize){a.Localize={};for(var e=["translate","untranslate","phrase","initialize","translatePage","setLanguage","getLanguage","detectLanguage","getAvailableLanguages","untranslatePage","bootstrap","prefetch","on","off"],t=0;t<e.length;t++)a.Localize[e[t]]=function(){}}}(window);</script>
+
+<script>
+ Localize.initialize({
+  key: 'seqkv59qMeLU8',
+  rememberLanguage: true
+ });
+</script>
+<?php endif; ?>
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="nav">
+				<div class="col_title_bg"></div>
+
+				<div class="col_title">Menu</div>
+<!--
+				<div class="list_second"><form id="permissions_switch" method="post"><select name="switchuser" onchange="$('#permissions_switch').submit()" style="width:100%;padding: 4px;background-color:#d5d8de; font-family:'Myriad Pro', Arial, Helvetica, sans-serif; font-size:17px; line-height:20px;">
+<?php
+/*
+	foreach ($this->arrPermissions as $arrPermission)
+	{
+		if (!dev && $arrPermission["name"] == "Network Administrator")
+			continue;
+		$strSelected = ($objSession->permission_id == $arrPermission["value"]) ? " selected" : "";
+		if (isset($arrPermission["name"]))
+			print "<option value='" . $arrPermission["value"] . "'" . $strSelected . ">" . $arrPermission["name"] . "</option>";
+	}
+	*/
+?>
+				</select></form></div>
+-->
+<?php
+	if ($this->strSwitchMsg)
+	{
+		print '<div class="list_second">' . $this->strSwitchMsg . "</div>";
+	}
+	
+	if ($objSession->user_id == 7493)
+	{
+		include "menus/menu.phtml";
+	}
+	else if ($this->tstyle == 'school01')
+	{
+		include "menus/menu_hebrewschool1.phtml";
+	}
+	else if (in_array($this->tstyle, array(
+		"schoolstemplate1",
+		"tanyatemplate1",
+		"hebrewschool1",
+		"hebrewschool2",
+		"chabadhebrewschool"
+	))) {
+		if ("chabadhebrewschool" == $this->tstyle)
+			include "menus/menu_hebrewschool1.phtml";
+		else
+			include "menus/menu_" . $this->tstyle . ".phtml";
+	}
+	else
+	{
+		include "menus/menu_hebrewschool1.phtml";
+	}
+	//include "menus/menu_hebrewschool1.phtml";
+?>
+			</div>
+
+			<div id="content">
+				<div class="col_title_bg"></div>
+				<div class="slider_container">
+					<div class="slider">
+						<div class="col_title">
+								<span>Welcome to the Admin Dashboard</span>
+						</div>
+						<div class="col_content">
+							Loading...
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="footer_links">
+			<!--<div style="float:left;text-align:left;width:383px;margin:0 8px;"><a href="<?php print $sn; ?>/index/contact" class="overlay">Contact Us</a></div>-->
+			<div style="float:right;text-align:right;display:inline-block;margin:0 8px;width:383px;">Copyright © 2016 - mashpia.com</div>
+		</div>
+		<div id="overlay">
+			<div class="content"></div>
+		</div>
+	</body>
+</html>

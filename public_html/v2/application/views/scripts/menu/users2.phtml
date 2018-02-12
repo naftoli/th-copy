@@ -1,0 +1,298 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$arrPost = $this->arrPost;
+	$arrColumns = array(
+		array(
+			'title' => 'First Name',
+			'key' => 'first_name'
+		),
+		array(
+			'title' => 'Last Name',
+			'key' => 'last_name'
+		),
+		array(
+			'title' => text('[|Class|]'),
+			'key' => 'class_list'
+		)
+	);
+	if (!isset($arrPost['getter']))
+	{
+?>
+<script type="text/javascript">
+var objUsersMenu = {};
+</script>
+<?php
+	} // getter
+?>
+<script type="text/javascript">
+objUsersMenu.intPage = <?php print $this->intPage; ?>;
+objUsersMenu.intTotalPages = <?php print $this->intTotalPages; ?>;
+objUsersMenu.intTotalItems = <?php print $this->intTotalItems; ?>;
+objUsersMenu.intItemsPerPage = <?php print $this->intItemsPerPage; ?>;
+objUsersMenu.intFirstItem = <?php print $this->intFirstItem; ?>;
+objUsersMenu.intPageCount = <?php print $this->intPageCount; ?>;
+</script>
+<?php
+	if (!isset($arrPost['getter']))
+	{
+?>
+<script type="text/javascript">
+$(document).ready(function () {
+	function fnRefreshContent () {
+		var objSortOrder = $('.slider:last').data('arrSortOrder');
+		if (!objSortOrder)
+			objSortOrder = {};
+		var strSearchFilter = $('.slider:last .search_filter').val();
+		if ($('.slider:last .search_filter.noinput').length)
+			strSearchFilter = '';
+		var arrPostParams = {
+			'strSearchFilter' : strSearchFilter,
+			'strSortOrder' : json_encode(objSortOrder),
+			'page' : objUsersMenu.intPage,
+			'getter' : 'true'
+		};
+		if (objUsersMenu.objAjaxHandel)
+			objUsersMenu.objAjaxHandel.abort();
+		objUsersMenu.objAjaxHandel = $.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php print $sn . '/menu/users2' . $strParamPath; ?>',
+			dataType : "text",
+			data: arrPostParams,
+			success : function(strResponse) {
+				$('.slider:last .menu_list .module_content li:not(.header)').remove();
+				$('.slider:last .menu_list .module_content ul').append($(strResponse));
+				$(".slider:last .page_display").html("Page " + (objUsersMenu.intPage + 1) + " of " + objUsersMenu.intTotalPages);
+				$(".slider:last .strShowing").html((objUsersMenu.intFirstItem+(objUsersMenu.intTotalItems?1:0)) + '-' + (objUsersMenu.intFirstItem+objUsersMenu.intPageCount));
+				$(".slider:last .intTotalItems").html(objUsersMenu.intTotalItems);
+			}
+		});
+	}
+	function fnBinders (objScope) {
+		objScope.find('.search_filter').keyup(function () {
+			objUsersMenu.intPage = 0;
+			fnRefreshContent();
+		}).blur(function () {
+			if ($(this).val() == '')
+				$(this).addClass('noinput').val('Search Filter');
+		});
+		objScope.find('.button.refresh').click(function () {
+			$(".slider:last .page_display").html("Loading Page " + (objUsersMenu.intPage + 1) + " of " + objUsersMenu.intTotalPages + "...");
+			fnRefreshContent();
+		}).dblclick(function () {
+			slideRefresh();
+		});
+		objScope.find('.button.next').click(function () {
+			if (objUsersMenu.intTotalPages < objUsersMenu.intPage+2)
+				return;
+			objUsersMenu.intPage++;
+			$(".slider:last .page_display").html("Loading Page " + (objUsersMenu.intPage + 1) + " of " + objUsersMenu.intTotalPages + "...");
+			fnRefreshContent();
+		});
+		objScope.find('.button.prev').click(function () {
+			if (0 > objUsersMenu.intPage-1)
+				return;
+			objUsersMenu.intPage--;
+			$(".slider:last .page_display").html("Loading Page " + (objUsersMenu.intPage + 1) + " of " + objUsersMenu.intTotalPages + "...");
+			fnRefreshContent();
+		});
+		objScope.find('.header .textwrapper').click(function (e) {
+			var intColumn = $(this).closest('.title').index();
+			var arrIcons = {
+				'asc' : 'ui-icon-arrowthick-1-n',
+				'desc' : 'ui-icon-arrowthick-1-s',
+				'none' : 'ui-icon-hidden'
+			};
+			var arrOrder = ['none', 'desc', 'asc'];
+			var intOrderIndex = 0;
+			for (var intItr=0; intItr!=arrOrder.length; intItr++) {
+				if ($(this).hasClass('order_' + arrOrder[intItr])) {
+					intOrderIndex = intItr;
+				}
+			}
+			var strCurrent = arrOrder[intOrderIndex];
+			var intChangeTo = intOrderIndex+1<arrOrder.length?intOrderIndex+1:0;
+			var strChangeTo = arrOrder[intChangeTo];
+			if (arrIcons[strCurrent])
+				$(this).find('.ui-icon').removeClass(arrIcons[strCurrent]);
+			if (arrIcons[strChangeTo])
+				$(this).find('.ui-icon').addClass(arrIcons[strChangeTo]);
+			$(this).addClass('order_' + strChangeTo);
+			$(this).removeClass('order_' + strCurrent);
+			var arrSortOrder = $('.slider:last').data('arrSortOrder');
+			if (!arrSortOrder)
+				arrSortOrder = {};
+			if (arrSortOrder[intColumn])
+				delete arrSortOrder[intColumn];
+			if (strChangeTo != 'none')
+				arrSortOrder[intColumn] = strChangeTo;
+			$('.slider:last').data('arrSortOrder', arrSortOrder);
+			fnRefreshContent();
+		}).disableTextSelect();
+		objScope.find('input.noinput').focus(function () {
+			if ($(this).hasClass('noinput'))
+				$(this).val('').removeClass('noinput');
+		});
+	}
+	fnBinders($(".slider:last"));
+
+});
+</script>
+<div class="slider" id="users_menu">
+	<style type="text/css">
+		.header {
+			background-color:#666 !important;
+			-webkit-border-top-left-radius: 6px;
+			-webkit-border-top-right-radius: 6px;
+			-moz-border-radius-topleft: 6px;
+			-moz-border-radius-topright: 6px;
+			border-top-left-radius: 6px;
+			border-top-right-radius: 6px;
+			border: 1px solid #ccc;
+			color:#fff;
+			border-width: 1px 1px 0 1px;
+		}
+		.ui-icon {
+			float:right;
+			margin-left:2px;
+			margin-top:3px;
+		}
+		li:not(.header) .title>div {
+			width: 190px;
+			overflow:hidden;
+			text-overflow:ellipsis;
+			white-space:nowrap;
+		}
+		.textwrapper {
+			display:inline-block;
+			cursor:pointer;
+		}
+		input[type="text"] {
+			-webkit-border-radius: 3px;
+			-moz-border-radius: 3px;
+			border-radius: 3px;
+			border:1px solid #aaa;
+			font-size: 12pt;
+			margin:6px 2px;
+			width:400px;
+			padding:3px 3px;
+		}
+		.search_option {
+			padding:2px 6px 2px 2px;
+			border:1px solid #aaa;
+			display:inline-block;
+			-webkit-border-radius: 4px;
+			-moz-border-radius: 4px;
+			border-radius: 4px;
+		}
+		div.lists li.header {
+			padding-bottom: 0;
+			padding-top: 0;
+		}
+		div.lists li.header .title:not(:last-child) {
+			border-right: 1px solid #777;
+		}
+		div.lists li:not(.header) .title:not(:last-child) {
+			border-right: 1px solid #ddd;
+		}
+		div.lists li .title:not(:first-child) {
+			padding-left: 8px;
+		}
+		.currentpage {
+			font-size: 10pt;
+			line-height: 14px;
+			margin-bottom: -4px;
+			padding-right: 8px;
+		}
+		.button.fix {
+			display:inline-block;
+			float: none;
+		}
+		input.noinput {
+			color:#999;
+		}
+		#users_menu .title {
+			width:200px;
+		}
+	</style>
+	<div class="col_title">
+		<span><?php text(print $this->strTitle); ?></span>
+	</div>
+	<div class="col_content">
+		<table width="720">
+			<tr>
+				<td><input type="text" style="width:98%" class="noinput search_filter" value="Search Filter" /></td>
+				<td width="178" style="text-align:right">
+					<div class="currentpage">
+						<span class="page_display">Page 1 of <?php print $this->intTotalPages; ?></span><br/>
+						Showing <span class="strShowing"><?php print $this->intFirstItem+1; ?>-<?php print $this->intFirstItem+$this->intPageCount; ?></span> of <span class="intTotalItems"><?php print $this->intTotalItems; ?></span>
+					</div>
+				</td>
+				<td width="192" style="text-align:right">
+					<span><a class="fix button refresh">refresh</a></span>
+					<span><a class="fix button prev">Previous</a></span>
+					<span><a class="fix button next">Next</a></span>
+				</td>
+			</tr>
+		</table>
+		<div id="lists" class="module lists forms menu_list">
+			<div class="module_content">
+				<ul>
+					<li class="header">
+<?php
+			foreach ($arrColumns as $arrColumn)
+			{
+?>
+						<div class="title"><div><div class="textwrapper"><?php print $arrColumn['title']; ?><span class="ui-icon ui-icon-hidden"></span></div></div></div>
+<?php
+			}
+?>
+					</li>
+<?php
+	} // getter
+
+	if (count($this->arrList) == 0)
+	{
+?>
+					<li>
+						<div class="title"><?php print "There are no users are available."; ?></div>
+					</li>
+<?php
+	}
+	else
+	{
+		foreach ($this->arrList as $arrItem)
+		{
+?>
+					<li>
+						<a class="link" href="<?php echo $sn . $arrItem['strForwardTo']; ?>">
+<?php
+			foreach ($arrColumns as $arrColumn)
+			{
+				if (isset($arrItem[$arrColumn['key']]))
+				{
+?>
+							<div class="title"><div><?php echo $arrItem[$arrColumn['key']]; ?></div></div>
+<?php
+				}
+			}
+?>
+						</a>
+					</li>
+<?php
+		}
+	}
+?>
+<?php
+	if (!isset($arrPost['getter']))
+	{
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<?php
+	}
+?>

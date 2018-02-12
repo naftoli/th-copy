@@ -1,0 +1,54 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script type="text/javascript">
+	function sliderPage() {
+		return false;
+	}
+</script>
+
+<div id="page_title">Medals</div>
+<div class="three_column padding_top">
+	<div class="content">
+		<div id="slider">
+			<ul>
+				<li>
+					<div class='slider_title'><?php print $this->objCampaign->campaign_name; ?></div>
+					<div class='medalImage'>
+<?php
+	if ($this->objCampaign->image_largemed)
+		print "<IMG SRC='$sn/images/show-image/image_id/" . $this->objCampaign->image_largemed . "' style=\"margin-top:-40px\" width=\"203\" height=\"267\" alt=\"Dedicated in loving memory of Nosson Deitch OBM\" style=\"margin-top:-40px\" />";
+?>
+					</div>
+					<div class='medals'>
+<?php
+	$intMedalsSum = 0;
+	foreach ($this->arrMedals as $arrMedal)
+	{
+		$intMedalsSum += $arrMedal["medal"]->medal_value;
+		if ($intMedalsSum <= $this->intLatestMission)
+			print "<div class='active'>";
+		else
+			print "<div>";
+?>
+
+							<a href='<?php print WEB_ROOT . "kiosk-main/missions/medal/" . ($arrMedal["medal"]->medal_hierarchy + 1) . $strParamPath; ?>'><?php
+		if ($arrMedal["medal"]->medal_image_id)
+		{
+			print "<IMG alt='" . $arrMedal["medal"]->medal_name . "' SRC='$sn/images/show-image/image_id/" . $arrMedal["medal"]->medal_image_id . "' WIDTH='96' HEIGHT='100' />";
+		}
+		else
+			print $arrMedal["medal"]->medal_name;
+?></a>
+						</div>
+<?php
+	}
+?>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<!--font color="#FFF"><?php print $this->intBMTime; ?></font-->

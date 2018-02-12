@@ -1,0 +1,124 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+
+	function dateToHebrewShortYear($date)
+	{
+		if(is_null($date)) return '';
+		@list($day, $month, $year, $year2) = mb_split(' ', dateToHebrew($date));
+		if(!empty($year2))
+		{
+		  $month = "$month $year";
+		}
+		$year = mb_substr($year, 3);
+		return "$day $month $year";
+	}
+	function dateToHebrew($date)
+	{
+		if(is_null($date))
+			return '';
+		else
+			return mb_convert_encoding(jdtojewish($date, true, CAL_JEWISH_ADD_GERESHAYIM), 'UTF-8', 'ISO-8859-8');
+	}
+	//covert yyyy-mm-dd to julian date
+	function dateToJD($date)
+	{
+		@list($year, $month, $day) = split('-', $date);
+		$jd = cal_to_jd(CAL_GREGORIAN, intval($month), intval($day), intval($year));
+		return $jd ? $jd : NULL;
+	}
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Print ID Cards</title>
+
+		<script type="text/javascript" src="<?php print $sn; ?>/js/back-end/admin/jquery3.js"></script>
+		<script type="text/javascript" src="<?php print $sn; ?>/js/back-end/admin/jquery.dump.js"></script>
+		<style type="text/css">
+			* {
+				margin:0;
+				padding:0;
+				font-family:Impact, Charcoal, sans-serif;
+				color:#000;
+			}
+			.cards .card {
+
+			}
+			.page {
+				page-break-after:always;
+			}
+			@media print {
+			  body {
+				background-color: transparent;
+			  }
+			}
+		</style>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				var strImageId = '<?php echo $this->objInstitution->image_id; ?>';
+				if (strImageId == '') {
+					$('.logo_td').css({
+						display:'none'
+					});
+					$('.institution_name').css({
+						'max-width' : 159
+					});
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div class="cards">
+<?php
+	function wrap($fontSize, $fontFace, $string, $width){
+		$ret = "";
+		$arr = explode(' ', $string);
+
+		foreach ( $arr as $word ){
+		  $teststring = $ret.' '.$word;
+		  $testbox = imagettfbbox($fontSize, 0, $fontFace, $teststring);
+		 if ( $testbox[2] > $width ){
+		   $ret.=($ret==""?"":"\n").$word;
+		  } else {
+			$ret.=($ret==""?"":' ').$word;
+		  }
+		}
+
+		return $ret;
+	}
+	if (isset($this->arrConfigOptions['system']['network_logo']))
+		$strNetworkLogo = $sn . '/imgs/v/src/' . $this->arrConfigOptions['system']['network_logo'];
+	else
+		$strNetworkLogo = $sn . '/imgs/v/src/' . $this->objInstitution->image_id;
+	$arrPages = array_chunk($this->arrUsers, 1);
+	$intTopTextWidth = 100;
+	if (empty($this->objInstitution->image_id))
+		$intTopTextWidth = 180;
+	$arrWordWrap = preg_split('/\n/', wrap(11, SERVER_ROOT . 'impact.ttf', $this->objInstitution->name, $intTopTextWidth));
+	foreach ($arrPages as $arrPage)
+	{
+		print "<div class='page'>";
+		$arrRows = array_chunk($arrPage, 2);
+		foreach ($arrRows as $arrCells)
+		{
+			print "<div class='row'>";
+			foreach ($arrCells as $objCell)
+			{
+?>
+			<div class="card">
+				123
+			</div>
+<?php
+			}
+			print "</div>";
+		}
+		print "</div>";
+	}
+?>
+		</div>
+	</body>
+</html>

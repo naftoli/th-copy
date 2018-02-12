@@ -1,0 +1,244 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<div class="slider" id="taskmanager2">
+	<style>
+		.line_button {
+			padding:6px !important;
+		}
+		.module .list .icon {
+			margin-left:4px !important;
+		}
+	</style>
+	<div class="col_title">
+		<span>Tasks Manager</span>
+	</div>
+	<div class="col_content">
+		<div class="module">
+			<div class="module_content">
+				<div class="list">
+					<ul>
+<?php
+	if (count($this->arrTasks))
+	{
+		foreach ($this->arrTasks as $objTask)
+		{
+?>
+						<li id="cti_<?php print $objTask->task_id; ?>" class="edit_row">
+							<form>
+								<span class="icon bullet"></span>
+								<span class="label">
+								<span class="label title"><?php
+			if ($objTask->class_id > 0)
+			{
+				print "Teacher ";
+			}
+			else if ($objTask->campaign_id == $this->campaign_id && $objTask->installed_task_id)
+			{
+				print "Host "; // installed
+			}
+			else if ($objTask->campaign_id == $this->campaign_id && !$objTask->installed_task_id)
+			{
+				print "";
+			}
+			else
+			{
+				print "Host "; // uninstalled
+			}
+?><?php print $this->boolInactive ? 'Inactive ' : ''; ?>Task</span>
+<?php
+			if ($objRoles->isRole("Teacher") && $objTask->class_id < 1)
+			{
+				print $objTask->task_name;
+			}
+			else
+			{
+				print '<input type="text" name="task" value="' . $objTask->task_name . '" />';
+			}
+?>
+								</span>
+								<span class="label points">
+									<span class="label title">Points</span>
+<?php
+			if ($objRoles->isRole("Teacher") && $objTask->class_id < 1)
+			{
+				print $objTask->points;
+			}
+			else
+			{
+				print '<input type="text" name="points" value="' . $objTask->points . '" />';
+			}
+?>
+								</span>
+								<span class="label is_checkbox">
+									<span class="label title">Lock Grid Points</span>
+<?php
+			if ($objRoles->isRole("Teacher") && $objTask->class_id < 1)
+			{
+				print $objTask->is_checkbox ? 'Yes' : 'No';
+			}
+			else
+			{
+				print '<input class="is_checkbox" type="checkbox" name="is_checkbox" ' . ($objTask->is_checkbox ? 'checked="true"' : ''). ' />';
+			}
+?>
+								</span>
+								<span class="label is_locked">
+									<span class="label title">Lock Card Points</span>
+<?php
+			if ($objRoles->isRole("Teacher") && $objTask->class_id < 1)
+			{
+				print $objTask->is_locked ? 'Yes' : 'No';
+			}
+			else
+			{
+				print '<input class="is_locked" type="checkbox" name="is_locked" ' . ($objTask->is_locked ? 'checked="true"' : ''). ' />';
+			}
+?>
+								</span>
+<?php
+			if (!$objRoles->isRole("Teacher") || $objTask->class_id > 0)
+			{
+?>
+								<span class="action">
+									<span class="checklist ">
+										<input type="checkbox" id="<?php print $objTask->task_id; ?>" class="checkbox" <?php print $objTask->campaign_id == $this->campaign_id ? "checked " : ""; ?>/>
+<?php
+				if (!$this->boolInactive)
+				{
+?>
+										<span class="activate">
+											<a title="Activate" class="buttonHover checkbox-select">
+												<span class="icon activate"></span>
+												Activate
+											</a>
+										</span>
+										<span class="deactivate">
+											<a title="Deactivate" class="buttonHover checkbox-deselect">
+												<span class="icon deactivate"></span>
+												Deactivate
+											</a>
+										</span>
+										<span class="edit">
+											<a title="Edit">
+												<span class="icon"></span>
+												Edit
+											</a>
+										</span>
+										<span class="save">
+											<a title="Save">
+												<span class="icon"></span>
+												Save
+											</a>
+										</span>
+										<span class="delete">
+											<a title="Delete">
+												<span class="icon"></span>
+												Delete
+											</a>
+										</span>
+<?php
+				}
+				else
+				{
+?>
+										<span class="activate reactivate">
+											<a title="Reactivate" class="buttonHover">
+												<span class="icon activate"></span>
+												Reactivate
+											</a>
+										</span>
+<?php
+				}
+?>
+									</span>
+								</span>
+<?php
+			}
+?>
+							</form>
+						</li>
+<?php
+		}
+	}
+?>
+<?php
+	if (!$this->boolInactive)
+	{
+?>
+						<!-- ********** ADD NEW TASK ********** -->
+						<li class="line_button">
+							<span class="icon add"></span>
+							<span class="label"><a href="#" class="add_new_row">Add New Task</a></span>
+						</li>
+						<li class="line_button">
+							<span class="icon delete"></span>
+							<a class="link inactive_tasks" href="#">
+								<div class="icon"></div>
+								<div class="title"><span class="inactive_num"><?php print count($this->arrCampTasksInactive); ?></span> Inactive Task(s)</div>
+							</a>
+						</li>
+<?php
+	}
+	else
+	{
+?>
+						<li class="line_button" style="padding-left:26px">
+							<a class="link active_tasks" href="#">
+								<div class="icon"></div>
+								<div class="title"><span class="active_num"><?php print count($this->arrCampTasksInactive); ?></span> Active Task(s)</div>
+							</a>
+						</li>
+<?php
+	}
+?>
+
+						<div class="sample_row">
+							<li class="edit_row">
+								<form>
+
+									<span class="action">
+										<span class="checklist">
+											<input type="checkbox" id="new_row" class="checkbox" checked />
+											<span class="activate"><a href="#" title="Add" class="buttonHover checkbox-select"><span class="icon activate"></span>Activate</a></span>
+											<span class="deactivate"><a href="#" title="Remove" class="buttonHover checkbox-deselect"><span class="icon deactivate"></span>Deactivate</a></span>
+											<span class="edit"><a href="#" title="Edit"><span class="icon"></span>Edit</a></span>
+											<span class="save"><a href="#" title="Save"><span class="icon"></span>Save</a></span>
+											<span class="delete"><a href="#" title="Delete"><span class="icon"></span>Delete</a></span>
+											<span class="progress">Progress</span>
+										</span>
+									</span>
+
+
+									<span class="icon bullet">
+									</span>
+
+									<span class="label">
+										<span class="label title">Task</span>
+										<input type="text" name="task" value="Enter Name" />
+
+									</span>
+
+									<span class="label points">
+										<span class="label title">Points</span>
+										<input type="text" name="points" value="0" />
+									</span>
+									<span class="label is_checkbox" style="width:90px">
+										<span class="label title" style="width:90px">Lock Grid Points</span>
+										<input type="checkbox" name="checkbox" class="is_checkbox" value="0" />
+									</span>
+									<span class="label is_locked" style="width:90px">
+										<span class="label title">Lock Card Points</span>
+										<input type="checkbox" name="checkbox" class="is_locked" value="0" />
+									</span>
+								</form>
+							</li>
+						</div>
+						<!-- ********** ADD NEW TASK ********** -->
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

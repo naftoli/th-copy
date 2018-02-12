@@ -1,0 +1,49 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script language="javascript">
+function print()
+{
+    document.rankcards_reprint.submit();
+    return;
+}
+</script>
+<div class="slider" id="rankcards_reprint">
+	<div class="col_title">
+		<span>
+			Re-Print Rank Cards
+		</span>
+	</div>	
+	<div class="col_content camper">
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+<?php
+    foreach($this->arrStudentRanks as $objStudentRanks)
+    {
+        print "Re-print a rank card for this student <br />";
+        print $this->arrStudentRanks[0]->first_name ." " . $this->arrStudentRanks[0]->last_name ."<br />";
+?>
+                <form name="rankcards_reprint" id="rankcards_reprint" method="post" action="/ranks/ranksprint" target="_blank">
+                    <input type="hidden" name="user_rank_id[]" id="user_rank_id" value="<?php echo $objStudentRanks->user_rank_id; ?>" />
+                    <input type="hidden" name="institution_id[]" id="institution_id" value="<?php echo $objStudentRanks->institution_id; ?>" />
+                    <input type="hidden" name="first_name[]" id="first_name" value="<?php echo $objStudentRanks->first_name; ?>" />
+                    <input type="hidden" name="last_name[]" id="last_name" value="<?php echo $objStudentRanks->last_name; ?>" />
+                    <input type="hidden" name="rank_title[]" id="rank_title" value="<?php echo $objStudentRanks->rank_title; ?>" />
+                    <input type="hidden" name="school_name[]" id="school_name" value="<?php echo $objStudentRanks->name; ?>" />
+                    <input type="hidden" name="address[]" id="address" value="<?php echo $objStudentRanks->address; ?>" />
+                    <input type="hidden" name="city[]" id="city" value="<?php echo $objStudentRanks->city; ?>" />
+                    <input type="hidden" name="state[]" id="state" value="<?php echo $objStudentRanks->state; ?>" />
+                    <ul>
+                        <li>
+                            <span><a href="#" title="Save" class="button submit" onclick="print();">Print</a></span>
+                        </li>
+                    </ul>
+<?php
+    }
+?>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

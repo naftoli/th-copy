@@ -1,0 +1,53 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	if ($this->strViewMod)
+	{
+		require("classes_multiselect.phtml");
+	}
+	else
+	{
+?>
+<div class="slider">
+	<div class="col_title">
+		<span><?php print text($this->strTitle); ?></span>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+<?php
+		if (!count($this->arrList))
+		{
+?>
+				<li>
+					<div class="icon"></div>
+					<div class="title"><?php print text("There are no [|classes|] available."); ?></div>
+				</li>
+<?php
+		}
+		else
+		{
+			foreach ($this->arrList as $arrItem)
+			{
+?>
+					<li>
+						<a class="link" href="<?php echo (preg_match("/^http/", $arrItem['link']) ? "" : $sn) . (preg_match("/^\//", $arrItem['link']) ? "" : "/"). $arrItem['link']; ?>">
+							<div class="icon"></div>
+							<div class="title"><?php echo text("[|Class|]: " . $arrItem['text']); ?></div>
+
+							 
+						</a>
+					</li>
+<?php
+			}
+		}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<?php
+	}
+?>

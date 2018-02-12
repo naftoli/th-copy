@@ -1,0 +1,226 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$arrResult = $this->arrResult;
+?>
+<script type="text/javascript">
+$(document).ready(function () {
+	$(".slider:last .submit").click(function () {
+		$(".slider:last .processing_status").html('Loading..').fadeIn();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php print $sn . "/classes/oneclassstudents" . $strParamPath; ?>',
+			dataType : "text",
+			data: $(this).closest(".module_content").find("form").serialize(),
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$(".slider:last .processing_status").html('Sorry, there was an error: VU-E101-3RR3RE');
+					alert("Sorry, there was an error: VH-S101-SD9F8D");
+					alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$(".slider:last .processing_status").html('Sorry, there was an error: VU-E102-SDF8BX');
+					alert("Sorry, there was an error: VH-S102-F9F9FS");
+					return;
+				} else {
+					if (arrResponse["error"]) {
+						$(".slider:last .processing_status").html(arrResponse["error"]);
+					} else if (arrResponse["success"] == "true") {
+						$(".slider:last .processing_status").html("Saved.").delay(1000).queue(function () {
+							$(this).dequeue().fadeOut();
+						});
+					} else if (arrResponse["nothing_found"] == "true") {
+						loadShadow(mixBarCode);
+					}
+				}
+			}
+		});
+	});
+});
+</script>
+<div class="slider">
+	<input type="hidden" id="datamodel" value='<?php print $this->strDataModel; ?>' />
+	<style type="text/css">
+		.list_container {
+			padding-bottom: 8px;
+			font-size: 12pt;
+		}
+		.list_container input[type=text] {
+			height:21px !important;
+			font-size: 14pt;
+		}
+		.list_container textarea {
+			height:24px;
+			font-size: 14pt;
+			padding: 2px;
+			resize:none;
+		}
+		.row_cell a {
+			float:none;
+		}
+		.header_cell, .row_cell {
+			padding: 5px;
+			font-size: 12pt;
+			display: inline-block !important;
+			height:28px;
+			border:0px solid black;
+			vertical-align: middle;
+			text-align: left;
+			line-height: 20px;
+		}
+		.list_header {
+			background-color: #555;
+			border-radius: 10px 10px 0 0;
+			color: #FFF;
+			margin-top:5px;
+			margin-bottom:8px;
+		}
+		.header_cell {
+			height:25px !important;
+		}
+		.list_container .alignright {
+			text-align: right;
+		}
+		.list_container span {
+			line-height: 32px;
+		}
+		.list_container .input_checkbox2 {
+			padding: 6px;
+		}
+		.list_container .input_checkbox2 span {
+			line-height: 20px;
+		}
+		.list_container .input_image img {
+			width:38px;
+			height:38px;
+			margin-left: 4px;
+			margin-top: -4px;
+			border: 1px solid white;
+		}
+		.list_container .input_image_preview {
+			border: 1px solid #555;
+			background-color: #FFF;
+			width:200px;
+			height:200px;
+			text-align: center;
+			position:absolute;
+			display:none;
+			cursor: default;
+		}
+		.list_container .input_image_preview div {
+			position:absolute;
+			top:10px;
+			left:17px;
+			border:1px solid white;
+			background-color: #333;
+			color:white;
+			padding:3px;
+			display:none;
+		}
+		.list_container .input_image_preview img {
+			width:194px;
+			height:194px;
+			margin-top: 3px;
+		}
+		.list_container .input_image_uploader {
+			position: absolute;
+			border: 1px solid #555;
+			padding: 3px;
+			background-color: #fff;
+			z-index: -1;
+			visibility:hidden;
+			width:550px;
+		}
+		.list_container .clear_background {
+			display: none;
+			position:absolute;
+		}
+		.list_container .list_row .input_plaintext {
+			line-height: 26px;
+		}
+		.processing_status {
+			color: #000;
+		}
+	</style>
+	<div class="col_title">
+		<span><?php print text("[|School|] [|Classes|]"); ?></span>
+	</div>
+
+	<div class="col_content">
+		<div class="module">
+			<div class="module_content">
+				<ul>
+					<li style="padding: 0 5px 0 5px;">
+						<form onsubmit="return false">
+							<div class="list_container">
+								<div class="list_header">
+									<div style="width:30px" class="input_auto header_cell alignright text"><span>&nbsp;</span></div>
+									<div class="input_plaintext header_cell" style="width:180px"><span>First Name</span></div>
+									<div class="input_plaintext header_cell" style="width:150px"><span>Last Name</span></div>
+									<div class="input_text header_cell" style="width:120px"><span><?php print text('[|Class|]'); ?></span></div>
+								</div>
+<?php
+	$intRow = 1;
+	foreach ($arrResult["arrUsers"] as $objUser)
+	{
+?>
+								<div class="list_row">
+									<div class="input_auto row_cell alignright text" style="width:30px"><span><?php print $intRow; ?></span></div>
+									<div class="input_plaintext row_cell" style="width:180px"><span><?php print $objUser->first_name; ?></span></div>
+									<div class="input_plaintext row_cell" style="width:150px"><span><?php print $objUser->last_name; ?></span></div>
+									<div class="input_select row_cell" style="width:120px">
+										<select name="class_<?php print $objUser->user_id; ?>" style="width:99%">
+<?php
+		print "<option value='0'>None</option>";
+		foreach ($arrResult["arrClasses"] as $objClass)
+		{
+			$intClass = isset($arrResult["arrUserClasses"][$objUser->user_id]) ? $arrResult["arrUserClasses"][$objUser->user_id]->class_id : 0;
+			$strSelected = $objClass->class_id == $intClass ? " selected" : "";
+			print "<option" . $strSelected . " value='" . $objClass->class_id . "'>" . $objClass->custom_name1 . "</option>";
+		}
+?>
+										</select>
+									</div>
+								</div>
+<?php
+		$intRow++;
+	}
+?>
+								<div class="input_image_preview">
+									<input type="hidden" class="current_row" />
+									<div>Click to edit the image</div>
+									<span class="preview_image"><img src="http://v2.mashpia.com/imgs/v/src/0.gif" /></span>
+								</div>
+								<div class="input_image_uploader">
+									<input type="hidden" id="listeditor_image_id" value="" />
+									<iframe src="<?php print $sn; ?>/imgs/smalluploader/current_image/461.gif/resultid/listeditor_image_id" width="100%" height="80" scrolling="no">
+										<p>Your browser does not support iframes.</p>
+									</iframe>
+								</div>
+								<div class="clear_background">&nbsp;</div>
+							</div>
+
+						</form>
+					</li>
+<?php
+	if (count($arrResult["arrUsers"]))
+	{
+?>
+					<li class="list_save" style="margin:4px;">
+						<div class="processing_status"></div>
+						<span>
+							<a title="Save" class="button submit listeditor_submit">Save</a>
+						</span>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

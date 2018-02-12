@@ -1,0 +1,955 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	if (!$this->boolAjaxOutput)
+	{
+?>
+<script type="text/javascript">
+$(document).ready(function () {
+	var AdminUsersTransactions = {
+		"strUrl" : "<?php print $sn; ?>/content/contentmanager<?php print $strParamPath; ?>",
+		"intCurrentPage" : <?php print $this->intCurrentPage; ?>,
+		"intTotalPages" : <?php print $this->intTotalPages; ?>,
+		"arrPointSums" : <?php print json_encode($this->arrPointSums); ?>,
+		"objAjaxHandel" : false,
+		"boolAjaxLoading" : false,
+		"fnAjaxLoad" : function ()
+		{
+			return;
+			AdminUsersTransactions.boolAjaxLoading = true;
+			$(".slider:last .page_display").html("<?php print text("Loading Page"); ?> " + (AdminUsersTransactions.intCurrentPage + 1) + " <?php print text("of"); ?> " + AdminUsersTransactions.intTotalPages + "...");
+			if (AdminUsersTransactions.objAjaxHandel)
+				AdminUsersTransactions.objAjaxHandel.abort();
+			AdminUsersTransactions.strUrl = AdminUsersTransactions.strUrl.replace(/\/page\/[0-9]+/, '');
+			AdminUsersTransactions.strUrl += "/page/" + AdminUsersTransactions.intCurrentPage;
+			AdminUsersTransactions.strUrl = AdminUsersTransactions.strUrl.replace(/[\/ ]+$/, '');
+			AdminUsersTransactions.objAjaxHandel = $.ajax({
+				type : "GET",
+				cache : false,
+				url : AdminUsersTransactions.strUrl + '/ajax_output/true',
+				dataType : "text",
+				success : function(strResponse) {
+					AdminUsersTransactions.boolAjaxLoading = false;
+					var arrResponse = strResponse.split(/_____\[AJAX\]_____/);
+					if (arrResponse.length < 2)
+					{
+						$(".slider:last .main_transcations_list").html(strResponse);
+					}
+					else
+					{
+						$(".slider:last .main_transcations_list").html(arrResponse[0]);
+						try {
+							var arrData = jQuery.parseJSON(arrResponse[1]);
+						} catch(e) {
+							//$.alert(arrResponse[1]);
+							return;
+						}
+						if (typeof(arrData) != "object") {
+							//$.alert(arrData);
+							return;
+						} else {
+							AdminUsersTransactions.intTotalPages = arrData["intTotalPages"];
+							AdminUsersTransactions.arrPointSums = arrData["arrPointSums"];
+							$(".slider:last .intTotalItems").html(arrData["intTotalItems"]);
+							$(".slider:last .strShowing").html((AdminUsersTransactions.intCurrentPage*<?php print $this->intItemsPerPage; ?>+1) + "-" + (AdminUsersTransactions.intCurrentPage*<?php print $this->intItemsPerPage; ?>+arrData["intOutputCount"]));
+						}
+					}
+					$(".slider:last .page_display").html("<?php print text("Page"); ?> " + (AdminUsersTransactions.intCurrentPage + 1) + " <?php print text("of"); ?> " + AdminUsersTransactions.intTotalPages);
+					AdminUsersTransactions.fbInnerBind();
+				}
+			});
+		},
+		"fbInnerBind" : function () {
+			$(".slider:last .list_row:not(.skip)").click(function () {
+				if ($(this).hasClass("row_selected")) {
+					$(this).removeClass("row_selected");
+					$(this).nextAll(".reverse_transaction").first().hide();
+				} else {
+					$(".slider:last .list_row.row_selected").removeClass("row_selected");
+					$(".slider:last .reverse_transaction").hide();
+					//$(this).closest(".list_container").find(".reverse_transaction").hide();
+					$(this).addClass("row_selected");
+					$(this).nextAll(".reverse_transaction").first().fadeIn();
+					if ($(".slider:last .row_add_new").hasClass("fakehidden")) {
+						AdminUsersTransactions.method_row_add_new();
+					}
+				}
+			});
+			$(".slider:last .row_add_new .tabs span").click(function () {
+				$(".slider:last .row_add_new .displays").addClass("hidden");
+				$(".slider:last .row_add_new .display_" + $(this).attr("name")).removeClass("hidden");
+			});
+			// achievement card tab click
+			$(".slider:last .row_add_new .tabs .achievement_card").click(function () {
+				$('.slider:last .achievement_card_scan').focus();
+			});
+			$(".slider:last input.nums").keydown(function (e) {
+				if (e.shiftKey || e.ctrlKey || e.altKey) { // if shift, ctrl or alt keys held down
+					e.preventDefault();         // Prevent character input
+				} else {
+					var n = e.keyCode;
+					if (!((n == 8)              // backspace
+						|| (n == 46)                // delete
+						|| (n >= 35 && n <= 40)     // arrow keys/home/end
+						|| (n >= 48 && n <= 57)     // numbers on keyboard
+						|| (n >= 96 && n <= 105))   // number on keypad
+					) {
+						e.preventDefault();     // Prevent character input
+					}
+				}
+			});
+			$(".slider:last .row_add_new .selector_display").click(function () {
+				slideURL("<?php print $sn; ?>/checklist/prizes/user_id/<?php print $this->intUser; ?>/input_path/" + urlencode(".row_add_new .selector_display"));
+			});
+			// prize purchase
+			$(".slider:last .row_add_new .button.purchase").click(function () {
+				// Check if there is miles available
+				if (!$('.slider:last .row_add_new .prize_totals.over').hasClass("hidden"))
+				{
+					$('.slider:last .row_add_new .prize_totals.msg').removeClass("hidden").html("This user does not have enough miles for this purchase.");
+				}
+				// Check if there are prizes selected
+				else if ($('.slider:last .row_add_new .prize_totals.cost').hasClass("hidden"))
+				{
+					$('.slider:last .row_add_new .prize_totals.msg').removeClass("hidden").html("You have not selected any prizes to purchase.");
+				}
+				else
+				{
+					$('.slider:last .row_add_new .prize_totals.msg').removeClass("hidden").html("Loading...");
+					// Save the prize
+					var arrParams = {
+						"do" : "prize_purchase",
+						"strPrizes" : serialize(jQuery.parseJSON($(this).closest(".row_add_new").find(".selector_display_hidden").val()))
+					};
+					$.ajax({
+						type : "POST",
+						cache : false,
+						url : AdminUsersTransactions.strUrl,
+						dataType : "text",
+						data: arrParams,
+						success : function(strResponse) {
+							var objError = $(".slider:last .row_add_new .msg");
+							try {
+								var arrResponse = jQuery.parseJSON(strResponse);
+							} catch(e) {
+								objError.html("Sorry, there was an error: VU-T102-g84hg4").removeClass("hidden");
+								$.alert(strResponse);
+								return;
+							}
+							if (typeof(arrResponse) != "object") {
+								objError.html("Sorry, there was an error: VU-T103-87dhf6").removeClass("hidden");
+								$.alert(strResponse);
+								return;
+							} else {
+								if (arrResponse["error"]) {
+									objError.html(arrResponse["error"]).removeClass("hidden");
+								} else if (arrResponse["success"] == "true") {
+									AdminUsersTransactions.fnAjaxLoad();
+								} else {
+									objError.html("Sorry, there was an error: VU-T104-8h8gfs").removeClass("hidden");
+									$.alert(arrResponse);
+								}
+							}
+						}
+					});
+				}
+			});
+
+			// manual change save
+			$('.slider:last .display_manual_change .go').click(function () {
+				$('.slider:last .display_manual_change .reason.noinput').val("").removeClass("noinput");
+				$('.slider:last .display_manual_change .msg.bottom').removeClass("hidden").html("Loading...");
+				$('.slider:last .display_manual_change .msg.top:not(.hidden)').addClass("hidden");
+				// Save the manual change
+				var strTotalType = $('.slider:last .display_manual_change .total_type').val();
+				var strCalcType = $('.slider:last .display_manual_change .calc_type').val();
+				var intAmount = $('.slider:last .display_manual_change .amount').val();
+				if (!intAmount || intAmount < 1)
+				{
+					$(".slider:last .display_manual_change .msg.bottom").removeClass("hidden").html("You must provide the amount of miles to change.");
+					return;
+				}
+				if (strCalcType == "subtract")
+					intAmount = -intAmount;
+				var arrParams = {
+					"do" : "manual_change",
+					"strTotalType" : strTotalType,
+					"intAmount" : intAmount,
+					"strDescription" : $('.slider:last .display_manual_change .reason').val()
+				};
+				$.ajax({
+					type : "POST",
+					cache : false,
+					url : AdminUsersTransactions.strUrl,
+					dataType : "text",
+					data: arrParams,
+					success : function(strResponse) {
+						var objError = $(".slider:last .display_manual_change .msg.bottom");
+						try {
+							var arrResponse = jQuery.parseJSON(strResponse);
+						} catch(e) {
+							objError.html("Sorry, there was an error: VU-T106-1845g4").removeClass("hidden");
+							$.alert(strResponse);
+							return;
+						}
+						if (typeof(arrResponse) != "object") {
+							objError.html("Sorry, there was an error: VU-T107-874446").removeClass("hidden");
+							$.alert(strResponse);
+							return;
+						} else {
+							if (arrResponse["error"]) {
+								objError.html(arrResponse["error"]).removeClass("hidden");
+							} else if (arrResponse["success"] == "true") {
+								AdminUsersTransactions.fnAjaxLoad();
+							} else {
+								objError.html("Sorry, there was an error: VU-T108-1h8gfs").removeClass("hidden");
+								$.alert(arrResponse);
+							}
+						}
+					}
+				});
+			});
+
+			$(".slider:last .achievement_card_scan").keydown(function (e) {
+				if (e.keyCode == 13) {
+					$('.slider:last .display_achievement_card .go').trigger("click");
+				}
+			});
+
+			// achievement card save
+			$('.slider:last .display_achievement_card .go').click(function () {
+				$('.slider:last .display_achievement_card .msg').removeClass("hidden").html("Loading...");
+				// Save the manual change
+				var arrParams = {
+					"do" : "achievement_card",
+					"strCard" : $('.slider:last .display_achievement_card .achievement_card_scan').val()
+				};
+				$.ajax({
+					type : "POST",
+					cache : false,
+					url : AdminUsersTransactions.strUrl,
+					dataType : "text",
+					data: arrParams,
+					success : function(strResponse) {
+						var objError = $(".slider:last .display_achievement_card .msg");
+						try {
+							var arrResponse = jQuery.parseJSON(strResponse);
+						} catch(e) {
+							objError.html(
+								"Sorry, there was an error: VU-T106-1845g4"
+							).removeClass("hidden");
+							$.alert(strResponse);
+							return;
+						}
+						if (typeof(arrResponse) != "object") {
+							objError.html(
+								"Sorry, there was an error: VU-T107-874446"
+							).removeClass("hidden");
+							$.alert(strResponse);
+							return;
+						} else {
+							if (arrResponse["error"]) {
+								objError.html(arrResponse["error"]).removeClass("hidden");
+							} else if (arrResponse["success"] == "true") {
+								AdminUsersTransactions.fnAjaxLoad();
+							} else {
+								objError.html(
+									"Sorry, there was an error: VU-T108-1h8gfs"
+								).removeClass("hidden");
+								$.alert(arrResponse);
+							}
+						}
+					}
+				});
+			});
+
+			// calculate when a manual change goes under zero
+			var fn_manual_change = function () {
+				var intTotal = AdminUsersTransactions.arrPointSums.total;
+				var intStore = AdminUsersTransactions.arrPointSums.store;
+				var strTotalType = $('.slider:last .display_manual_change .total_type').val();
+				var strCalcType = $('.slider:last .display_manual_change .calc_type').val();
+				var boolStore = strTotalType.match(/store/);
+				var boolTotal = strTotalType.match(/total/);
+				var intAmount = $('.slider:last .display_manual_change .amount').val();
+				if (strCalcType == "subtract")
+					intAmount = -intAmount;
+				if (
+					(
+						boolStore
+						&& intStore >= 0
+						&& intStore + intAmount < 0
+					) || (
+						boolTotal
+						&& intTotal >= 0
+						&& intTotal + intAmount < 0
+					)
+				) {
+					$('.slider:last .display_manual_change .msg.top').removeClass("hidden").html("Warning: This student will be left with a negative balance.");
+				}
+				else
+					$('.slider:last .display_manual_change .msg.top:not(.hidden)').addClass("hidden")
+			};
+			// apply the above function
+			$('.slider:last .display_manual_change .amount').keyup(fn_manual_change);
+			$('.slider:last .display_manual_change .sselect').change(fn_manual_change);
+
+			var fn_cancel_tabs = function () {
+				$('.slider:last .row_add_new .selector_display_hidden').val("");
+				$('.slider:last .row_add_new .selector_display').html("0 Prizes Selected");
+				$('.slider:last .row_add_new .prize_totals').addClass("hidden");
+				AdminUsersTransactions.method_row_add_new();
+			};
+			$(".slider:last .row_add_new .button.cancel").click(fn_cancel_tabs);
+
+			// prize select input change
+			$(".slider:last .selector_display_hidden").change(function () {
+				$('.slider:last .row_add_new .prize_totals.msg').addClass("hidden");
+				var arrList = jQuery.parseJSON($(this).val());
+				var intTotal = 0;
+				var intUserPoints = AdminUsersTransactions.arrPointSums.store;
+				for (var intPrize in arrList)
+				{
+					if (arrList[intPrize].prize_id)
+					{
+						intTotal += arrList[intPrize].miles_total * arrList[intPrize].quantity;
+					}
+				}
+				// not displaying total after input update from slider
+				if (intTotal*1 != 0)
+					$(".slider.sub_slider1:last .prize_totals.cost").removeClass("hidden").find(".miles").html(intTotal);
+				else
+				{
+					$(".slider.sub_slider1:last .prize_totals").addClass("hidden");
+					return;
+				}
+				var intRemainder = intUserPoints - intTotal;
+				if (intRemainder < 0)
+				{
+					$(".slider.sub_slider1:last .prize_totals.over").removeClass("hidden").find(".miles").html(intRemainder.toString().replace(/-/,''));
+				}
+				else
+				{
+					$(".slider.sub_slider1:last .prize_totals.over").addClass("hidden");
+				}
+			});
+
+			// hack for selects cause the cant be hidden when slide loads
+			$(".slider:last .row_add_new").removeClass("hidden");
+			$(".slider:last select.sselect").sSelect();
+			$(".slider:last .row_add_new").addClass("hidden");
+			$(".slider:last .displays:not(:first)").addClass("hidden");
+
+		},
+		"fnOutterBind" : function () {
+			$(".slider:last .button.refresh").dblclick(function () {
+				slideRefresh();
+			});
+			$(".slider:last .button.refresh").click(function () {
+				AdminUsersTransactions.fnAjaxLoad();
+			});
+			$(".slider:last .button.next").click(function () {
+				if (AdminUsersTransactions.intTotalPages <= AdminUsersTransactions.intCurrentPage+1)
+					return;
+				AdminUsersTransactions.intCurrentPage++;
+				AdminUsersTransactions.fnAjaxLoad();
+			});
+			$(".slider:last .button.prev").click(function () {
+				if (0 > AdminUsersTransactions.intCurrentPage - 1)
+					return;
+				AdminUsersTransactions.intCurrentPage--;
+				AdminUsersTransactions.fnAjaxLoad();
+			});
+
+		},
+		"fnInit" : function () {
+			AdminUsersTransactions.fnOutterBind();
+			AdminUsersTransactions.fbInnerBind();
+		},
+		'method_row_add_new' : function () {
+			if ($(".slider:last .row_add_new").hasClass("fakehidden")) {
+				$(".slider:last .row_add_new").removeClass("fakehidden").hide();
+				$(".slider:last .row_add_new .msg:not(.hidden)").addClass("hidden");
+			} else {
+				$(".slider:last .row_add_new").addClass("fakehidden").fadeIn();
+			}
+		}
+	};
+	AdminUsersTransactions.fnInit();
+});
+</script>
+<div class="slider sub_slider1">
+	<input type="hidden" id="datamodel" value='<?php print $this->strDataModel; ?>' />
+	<style type="text/css">
+		.list_container {
+			padding-bottom: 8px;
+			font-size: 12pt;
+		}
+		.list_container input[type=text] {
+			height:21px !important;
+			font-size: 14pt;
+		}
+		.list_container textarea {
+			height:24px;
+			font-size: 14pt;
+			padding: 2px;
+			resize:none;
+		}
+		.row_cell a {
+			float:none;
+		}
+		.row_cell {
+			padding: 5px;
+			font-size: 12pt;
+			display: inline-block;
+			border:0px solid black;
+			vertical-align: middle;
+			text-align: left;
+		}
+		.row_cell * {
+			cursor: default;
+		}
+		.row_cell:not(:last-child) {
+			border-right:1px solid #fff !important;
+		}
+		.header_cell:not(:last-child) {
+			border-right:1px solid #bbb !important;
+		}
+		.header_cell {
+			padding: 5px;
+			font-size: 12pt;
+			display: inline-block;
+			/*height:28px;*/
+			border:0px solid black;
+			vertical-align: middle;
+			text-align: left;
+			/*line-height: 20px;*/
+		}
+		.list_header {
+			background-color: #555;
+			border-radius: 10px 10px 0 0;
+			color: #FFF;
+			margin-top:5px;
+			margin-bottom:8px;
+		}
+		.list_row {
+			border-bottom: 1px solid #fff;
+		}
+		.list_row.reversed {
+			background-color: #dadada !important;
+		}
+		.list_row.row_selected {
+			background-color: #dadada;
+			text-shadow: 0 1px 0 #FFFFFF;
+			background: url("/images/back-end/admin/bg_smallButton.png") repeat-x scroll 0 0 #D1D1D1;
+		}
+		.list_container .loading {
+			background-color: #ccc;
+			padding:2px 2px 2px 6px;
+			border-bottom: 1px solid #fff;
+			color:#333;
+			font-size:10pt;
+		}
+		.header_cell {
+			height:25px !important;
+			text-align: center;
+			line-height: 24px;
+		}
+		.list_container .alignright {
+			text-align: right;
+		}
+		.list_container span {
+			/*line-height: 32px;*/
+		}
+		.list_container .input_image img {
+			width:38px;
+			height:38px;
+			margin-left: 4px;
+			margin-top: -4px;
+			border: 1px solid white;
+		}
+		.list_container .no_data {
+			background-color: #fff;
+			color: #000;
+			padding: 8px;
+			margin:2px;
+			display: none;
+		}
+		.processing_status {
+			color: #000;
+		}
+		.error_under {
+			color: #C12222;
+		}
+		.temp_hidden {
+			visibility: hidden;
+		}
+		.center {
+			text-align: center !important;
+		}
+		.button {
+			margin-left: 4px;
+			float:right !important;
+		}
+		.currentpage {
+			display:inline-block;
+			font-size: 10pt;
+			line-height: 14px;
+			padding-right: 6px;
+		}
+	</style>
+	<div class="col_title">
+		<span><?php print $this->objUser->first_name . " " . $this->objUser->last_name; ?></span>
+	</div>
+
+	<div class="col_content">
+		<div style="height: 30px;padding:0 26px 3px 0;text-align:right">
+			<div class="currentpage">
+				<span class="page_display">Page <?php print $this->intCurrentPage+1; ?> of <?php print $this->intTotalPages; ?></span><br/>
+				Showing <span class="strShowing">1-7</span> of <span class="intTotalItems"><?php print $this->intTotalItems; ?></span>
+			</div>
+			<span><a class="button add" style="float:left !important">Add Transaction</a></span>
+			<span><a class="button refresh">Refresh</a></span>
+
+			<span><a class="button next">Next</a></span>
+			<span><a class="button prev">Previous</a></span>
+		</div>
+		<div class="module">
+			<div class="module_content">
+				<ul>
+					<li style="padding: 0 5px 0 5px;" class="main_transcations_list">
+<?php
+	} // ajax start
+?>
+						<form onsubmit="return false">
+							<div class="list_container">
+								<div class="list_header">
+									<div class="header_cell" style="width:450px"><span>Transactions</span></div>
+									<div class="header_cell" style="width:110px"><span>Date</span></div>
+									<div class="header_cell" style="width:80px"><span>Balance</span></div>
+								</div>
+								<!-- add new -->
+								<div class="row_add_new">
+									<div class="add_new_menu">
+										<div class="tabs">
+											<span class="selected" name="prize">Add Prize</span>
+											<span name="manual_change">Manual Change</span>
+											<span class="achievement_card" name="achievement_card">Achievement Card</span>
+										</div>
+										<!-- prize -->
+										<div class="displays display_prize">
+											<input type="hidden" class="selector_display_hidden" />
+											<div class="selector_display hidden">0 Prizes Selected</div><br />
+											<div class="prize_totals cost hidden">
+												Cost: <span class="miles">N/A</span> Miles
+											</div>
+											<div class="prize_totals over hidden">
+												Missing: <span class="miles">N/A</span> Miles
+											</div>
+											<div class="prize_totals msg hidden">
+												Sorry, there was an error: VU-T101-HM0N33
+											</div>
+											<a class="button purchase">Purchase Prize</a>
+											<a class="button cancel">Cancel</a>
+										</div>
+										<!-- manual -->
+										<div class="displays display_manual_change">
+											<div class="manual_change">
+												<div class="item">
+													<select class="total_type sselect">
+														<option value="store,total">TOTAL + STORE</option>
+														<option value="store">STORE ONLY</option>
+														<option value="total">TOTAL ONLY</option>
+													</select>
+												</div>
+												<div class="item">
+													<select class="calc_type sselect">
+														<option value="add">ADD</option>
+														<option value="subtract">SUBTRACT</option>
+													</select>
+												</div><br />
+												<div class="item" style="padding:4px 4px 4px;">
+													Miles:&nbsp;&nbsp;<input type="text" class="amount nums input" style="width:70px" />
+												</div>
+												<div class="msg top hidden">
+													Sorry, there was an error: VU-T105-578ADH
+												</div>
+												<div class="input_area" style="margin:5px 0 2px 0;">
+													<textarea class="reason input noinput">Provide a reason...</textarea>
+												</div>
+												<div class="msg bottom hidden">
+													Loading...
+												</div>
+											</div>
+											<a class="button go">Process Change</a>
+											<a class="button cancel">Cancel</a>
+										</div>
+										<!-- Achievement Card -->
+										<div class="displays display_achievement_card">
+											<input class="achievement_card_scan" style="float:none !important;width:350px" type="text" />
+											<div class="msg hidden">
+												Loading...
+											</div>
+											<div><a class="go button normal">Scan The Card</a></div>
+										</div>
+									</div>
+								</div>
+<?php
+	foreach ($this->arrResults as $arrItem)
+	{
+?>
+								<div class="list_row<?php
+		print isset($this->arrReversedTransactions[$arrItem["objUserPoint"]->user_point_id]) ? ' reversed skip':'';
+		print !empty($arrItem["objUserPoint"]->reversed_user_point_id) ? ' reversed skip':'';
+?>">
+									<input type="hidden" value="1" class="row1 row_name" />
+<?php
+		if ($arrItem["strRowType"] == "prize")
+		{
+			// is reversed
+			if (!empty($arrItem["objUserPoint"]->reversed_user_point_id))
+			{
+?>
+									<div class="row_cell">
+										<img src="<?php print $sn . "/imgs/v/src/" . $arrItem["objPrize"]->image_id; ?>" width="40" height="40" />
+									</div>
+									<div class="row_cell" style="width:180px">
+										<span>Prize Reversal<br /><?php print $arrItem["objPrize"]->prize_name; ?></span>
+									</div>
+									<div class="row_cell center" style="width:91px">
+										<span>Quantity<br /><?php print -$arrItem["objUserPrize"]->quantity; ?></span>
+									</div>
+									<div class="row_cell center" style="width:91px">
+										<span>Reversed<br /><?php print $arrItem["objPrize"]->points * $arrItem["objUserPrize"]->quantity; ?> miles</span>
+									</div>
+									<div class="row_cell center" style="width:110px">
+										<span><?php
+			if (empty($arrItem["objUserPoint"]->created))
+				print "Unknown";
+			else
+				print date("d M, Y", strtotime($arrItem["objUserPoint"]->created)) . "<br />" . date("h:i a", strtotime($arrItem["objUserPoint"]->created));
+?></span>
+									</div>
+									<div class="row_cell center" style="width:90px">
+										<span>Store: <?php print $arrItem["arrPointSums"]["store"]; ?><br />Total: <?php print $arrItem["arrPointSums"]["total"]; ?></span>
+									</div>
+
+<?php
+			}
+			// not reversed
+			else
+			{
+?>
+									<div class="row_cell">
+										<img src="<?php print $sn . "/imgs/v/src/" . $arrItem["objPrize"]->image_id; ?>" width="40" height="40" />
+									</div>
+									<div class="row_cell" style="width:180px">
+										<span>Prize Purchase<br /><?php print $arrItem["objPrize"]->prize_name; ?></span>
+									</div>
+									<div class="row_cell center" style="width:91px">
+										<span>Quantity<br /><?php print $arrItem["objUserPrize"]->quantity; ?></span>
+									</div>
+									<div class="row_cell center" style="width:91px">
+										<span>Cost<br /><?php print $arrItem["objPrize"]->points * $arrItem["objUserPrize"]->quantity; ?> miles</span>
+									</div>
+									<div class="row_cell center" style="width:110px">
+										<span><?php
+			if (empty($arrItem["objUserPoint"]->created))
+				print "Unknown";
+			else
+				print date("d M, Y", strtotime($arrItem["objUserPoint"]->created)) . "<br />" . date("h:i a", strtotime($arrItem["objUserPoint"]->created));
+?></span>
+									</div>
+									<div class="row_cell center" style="width:90px">
+										<span>Store: <?php print $arrItem["arrPointSums"]["store"]; ?><br />Total: <?php print $arrItem["arrPointSums"]["total"]; ?></span>
+									</div>
+
+<?php
+			}
+		}
+		// Achievement Card
+		else if ($arrItem["strRowType"] == "achievement_card")
+		{
+			// is reversed
+			if (!empty($arrItem["objUserPoint"]->reversed_user_point_id))
+			{
+?>
+									<div class="row_cell">
+										<img src="<?php print $sn . "/imgs/v/src/" . $arrItem["objCampaign"]->image_id; ?>" width="40" height="40" />
+									</div>
+									<div class="row_cell" style="width:180px">
+										<span><?php print $arrItem["objCampaign"]->campaign_name; ?><br /><?php print $arrItem["objTask"]->task_name; ?></span>
+									</div>
+									<div class="row_cell center" style="width:198px">
+										<span>Achievement Card<br /><?php print -$arrItem["objUserPoint"]->points; ?> miles reversed</span>
+									</div>
+									<div class="row_cell center" style="width:110px">
+										<span><?php
+				if (empty($arrItem["objUserPoint"]->created))
+					print "Unknown";
+				else
+					print date("d M, Y", strtotime($arrItem["objUserPoint"]->created)) . "<br />" . date("h:i a", strtotime($arrItem["objUserPoint"]->created));
+?></span>
+									</div>
+									<div class="row_cell center" style="width:90px">
+										<span>Store: <?php print $arrItem["arrPointSums"]["store"]; ?><br />Total: <?php print $arrItem["arrPointSums"]["total"]; ?></span>
+									</div>
+<?php
+			}
+			else
+			// Achievement Card not reversed
+			{
+?>
+									<div class="row_cell">
+										<img src="<?php print $sn . "/imgs/v/src/" . $arrItem["objCampaign"]->image_id; ?>" width="40" height="40" />
+									</div>
+									<div class="row_cell" style="width:180px">
+										<span><?php print $arrItem["objCampaign"]->campaign_name; ?><br /><?php print $arrItem["objTask"]->task_name; ?></span>
+									</div>
+									<div class="row_cell center" style="width:198px">
+										<span>Achievement Card<br /><?php print $arrItem["objUserPoint"]->points; ?> miles awarded</span>
+									</div>
+									<div class="row_cell center" style="width:110px">
+										<span><?php
+				if (empty($arrItem["objUserPoint"]->created))
+					print "Unknown";
+				else
+					print date("d M, Y", strtotime($arrItem["objUserPoint"]->created)) . "<br />" . date("h:i a", strtotime($arrItem["objUserPoint"]->created));
+?></span>
+									</div>
+									<div class="row_cell center" style="width:90px">
+										<span>Store: <?php print $arrItem["arrPointSums"]["store"]; ?><br />Total: <?php print $arrItem["arrPointSums"]["total"]; ?></span>
+									</div>
+<?php
+			}
+		}
+		else if ($arrItem["strRowType"] == "scratch_card")
+		{
+?>
+									<div class="row_cell">
+										<img src="<?php print $sn . "/imgs/v/src/" . $this->objInstitution->image_id; ?>" width="40" height="40" />
+									</div>
+									<div class="row_cell" style="width:180px">
+										<span>Scratch Card</span>
+									</div>
+									<div class="row_cell center" style="width:198px">
+										<span><?php print $arrItem["objUserPoint"]->points; ?> miles awarded</span>
+									</div>
+									<div class="row_cell center" style="width:110px">
+										<span><?php
+			if (empty($arrItem["objUserPoint"]->created))
+				print "Unknown";
+			else
+				print date("d M, Y", strtotime($arrItem["objUserPoint"]->created)) . "<br />" . date("h:i a", strtotime($arrItem["objUserPoint"]->created));
+?></span>
+									</div>
+									<div class="row_cell center" style="width:90px">
+										<span>Store: <?php print $arrItem["arrPointSums"]["store"]; ?><br />Total: <?php print $arrItem["arrPointSums"]["total"]; ?></span>
+									</div>
+<?php
+		}
+		// transfer
+		else if ($arrItem["strRowType"] == "transfer")
+		{
+			// is reversed
+			if (!empty($arrItem["objUserPoint"]->reversed_user_point_id))
+			{
+?>
+									<div class="row_cell">
+										<img src="<?php print $sn . "/imgs/v/src/" . $this->objInstitution->image_id; ?>" width="40" height="40" />
+									</div>
+									<div class="row_cell" style="width:180px">
+										<span>Commanding Officer<br /><?php print $arrItem["objAdmin"]->first_name . " " . $arrItem["objAdmin"]->last_name; ?></span>
+									</div>
+									<div class="row_cell center" style="width:198px">
+										<span><?php
+				if (
+					in_array($arrItem["objUserPoint"]->resource_name, array(
+						"admin_users_manual_store",
+						"admin_users_manual_total",
+						"admin_users_manual"
+					))
+				)
+					print ($arrItem["objUserPoint"]->points < 0 ? "Award" : "Deduction") . " Reversed";
+				else if ($arrItem["objUserPoint"]->resource_name == "direct_transfer")
+					print "In Class Award";
+				else
+					print "Unknown";
+?><br /><?php
+				if (preg_match("/^[^-]/", $arrItem["objUserPoint"]->points))
+					print "+";
+				print $arrItem["objUserPoint"]->points . " ";
+				if ($arrItem["objUserPoint"]->resource_name == "admin_users_manual_store")
+					print "store ";
+				else if ($arrItem["objUserPoint"]->resource_name == "admin_users_manual_total")
+					print "total ";
+				print "miles ";
+?></span>
+									</div>
+									<div class="row_cell center" style="width:110px">
+										<span><?php
+				if (empty($arrItem["objUserPoint"]->created))
+					print "Unknown";
+				else
+					print date("d M, Y", strtotime($arrItem["objUserPoint"]->created)) . "<br />" . date("h:i a", strtotime($arrItem["objUserPoint"]->created));
+?></span>
+									</div>
+									<div class="row_cell center" style="width:90px">
+										<span>Store: <?php print $arrItem["arrPointSums"]["store"]; ?><br />Total: <?php print $arrItem["arrPointSums"]["total"]; ?></span>
+									</div>
+<?php
+			}
+			else
+			// transfer not reversed
+			{
+?>
+									<div class="row_cell">
+										<img src="<?php print $sn . "/imgs/v/src/" . $this->objInstitution->image_id; ?>" width="40" height="40" />
+									</div>
+									<div class="row_cell" style="width:180px">
+										<span>Commanding Officer<br /><?php print $arrItem["objAdmin"]->first_name . " " . $arrItem["objAdmin"]->last_name; ?></span>
+									</div>
+									<div class="row_cell center" style="width:198px">
+										<span><?php
+				if (
+					in_array($arrItem["objUserPoint"]->resource_name, array(
+						"admin_users_manual_store",
+						"admin_users_manual_total",
+						"admin_users_manual"
+					))
+				)
+					print "Manually " . ($arrItem["objUserPoint"]->points < 0 ? "Deducted" : "Awarded");
+				else if ($arrItem["objUserPoint"]->resource_name == "direct_transfer")
+					print "In Class Award";
+				else
+					print "Unknown";
+?><br /><?php
+				if (preg_match("/^[^-]/", $arrItem["objUserPoint"]->points))
+					print "+";
+				print $arrItem["objUserPoint"]->points . " ";
+				if ($arrItem["objUserPoint"]->resource_name == "admin_users_manual_store")
+					print "store ";
+?>miles</span>
+									</div>
+									<div class="row_cell center" style="width:110px">
+										<span><?php
+				if (empty($arrItem["objUserPoint"]->created))
+					print "Unknown";
+				else
+					print date("d M, Y", strtotime($arrItem["objUserPoint"]->created)) . "<br />" . date("h:i a", strtotime($arrItem["objUserPoint"]->created));
+?></span>
+									</div>
+									<div class="row_cell center" style="width:90px">
+										<span>Store: <?php print $arrItem["arrPointSums"]["store"]; ?><br />Total: <?php print $arrItem["arrPointSums"]["total"]; ?></span>
+									</div>
+<?php
+			}
+		}
+		// unknown
+		else
+		{
+?>
+									<div class="row_cell">
+										<img src="<?php print $sn . "/images/icon_alert.png";?>" width="40" height="40" />
+									</div>
+									<div class="row_cell">
+<?php
+			dumper($arrItem["objUserPoint"],0,1);
+?>
+										Sorry, there was an error: VU-T101-G3AA21
+									</div>
+<?php
+		}
+?>
+								</div>
+<?php
+		// reversal details
+		if (isset($this->arrReversedTransactions[$arrItem["objUserPoint"]->user_point_id]))
+		{
+			// item has been reversed
+?>
+								<div class="history_item dark">
+									<div>Transaction #<?php print 10000000+$arrItem["objUserPoint"]->user_point_id; ?> was reversed by <?php print $arrItem["objAdmin"]->first_name; ?> <?php print $arrItem["objAdmin"]->last_name; ?> on <?php print date('d M, Y \a\t h:i a', strtotime($this->arrReversedTransactions[$arrItem["objUserPoint"]->user_point_id]->created)); ?>.
+<?php
+			if (!empty($this->arrReversedTransactions[$arrItem["objUserPoint"]->user_point_id]->description))
+			{
+?>
+									<br />Reverse reason: <?php print $this->arrReversedTransactions[$arrItem["objUserPoint"]->user_point_id]->description; ?>
+<?php
+			}
+			if (!empty($arrItem["objUserPoint"]->description))
+			{
+?>
+									<br />Original reason: <?php print $arrItem["objUserPoint"]->description; ?>
+<?php
+			}
+?>
+									</div>
+								</div>
+<?php
+		}
+		else if (!empty($arrItem["objUserPoint"]->reversed_user_point_id))
+		{
+?>
+								<div class="history_item dark">
+									<div>Reversal created by <?php print $arrItem["objAdmin"]->first_name; ?> <?php print $arrItem["objAdmin"]->last_name; ?> of a transaction #<?php print 10000000+$this->arrUserPoints[$arrItem["objUserPoint"]->reversed_user_point_id]->user_point_id; ?> made on <?php print date('d M, Y \a\t h:i a', strtotime($this->arrUserPoints[$arrItem["objUserPoint"]->reversed_user_point_id]->created)); ?>.
+<?php
+			if (!empty($arrItem["objUserPoint"]->description))
+			{
+?>
+									<br />Reason: <?php print $arrItem["objUserPoint"]->description; ?>
+<?php
+			}
+?>
+									</div>
+								</div>
+<?php
+		}
+		else if (!empty($arrItem["objUserPoint"]->description))
+		{
+?>
+								<div class="history_item">
+									<div>Reason: <?php print $arrItem["objUserPoint"]->description; ?></div>
+								</div>
+<?php
+		}
+		// reverse a transaction
+?>
+								<div class="reverse_transaction">
+									<input type="hidden" class="intUserPoint" value="<?php print $arrItem["objUserPoint"]->user_point_id; ?>" />
+									<div class="tabs">
+										<span class="selected">Reverse Transaction</span>
+									</div>
+									<div class="characters_remaining"><span>255</span> characters remaining</div>
+									<div class="error hidden"></div>
+									<div class="input_area">
+										<textarea class="input noinput strDescription">Provide a reason...</textarea>
+									</div>
+									<span><a class="button normal save">Process Transaction</a></span>
+									<span><a class="button normal cancel">Cancel</a></span>
+								</div>
+								<div class="loading hidden">
+									Loading...
+								</div>
+<?php
+
+	}
+?>
+								<!-- add new data here -->
+								<div class="no_data hidden"><?php print text("There are no items available."); ?></div>
+							</div>
+
+						</form>
+<?php
+	if (!$this->boolAjaxOutput)
+	{
+?>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<?php
+	}
+?>

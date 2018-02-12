@@ -1,0 +1,583 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script language="javascript">
+$(document).ready(function () {
+	var arrCheckItems = [
+		'summary_report',
+		'inclusive_query'
+	];
+	$(this).delay(1).queue(function () {
+		$(this).dequeue();
+		$('.slider:last input.icheck').iphoneStyle({});
+	});
+	$('.slider:last').bind('binder', function () {
+		$('.slider:last .accordion.single .title:not(.binder)').click(function() {
+			if ($(this).hasClass('options'))
+				return;
+			if ($(this).closest('li').hasClass('header'))
+				return;
+			$(this).closest('.accordion').find('.selected').removeClass('selected');
+			$(this).closest('.accordion').find('h3').trigger('click')
+			$(this).closest('.accordion').find('.select_icon').removeClass('hidden');
+		});
+		$('.slider:last .select_list .title:not(.binder)').click(function () {
+			if ($(this).hasClass('options'))
+				return;
+			if ($(this).closest('li').hasClass('header'))
+				return;
+			if (!$(this).closest('li.selected').length) {
+				$(this).closest('li').removeClass('select').addClass('selected');
+			} else {
+				$(this).closest('li').addClass('select').removeClass('selected');
+			}
+			$(this).closest('.accordion').find('h3 .text').html('');
+			$(this).closest('.accordion').find('h3').removeClass('hidden');
+		});
+		$('.slider:last .accordion .title').addClass('binder');
+	});
+	$('.slider:last').trigger('binder');
+	$(".slider:last .date").datepicker();
+	$('.slider:last .accordion li h3').click(function() {
+		$(this).nextAll().slideToggle('fast');
+		$(this).parents('li').toggleClass('open');
+		//else if ($(this).closest('.accordion').find('.selected').length)
+		//	$(this).closest('.accordion').find('.select_icon').removeClass('hidden');
+	});
+	window.setTimeout(function () {
+		$('.slider:last .sudo_hidden').removeClass("sudo_hidden").addClass("hidden");
+	},50);	
+	window.setTimeout(function () {
+		
+		$('.slider:last .accordion.closed li h3').each(function(){
+			$(this).nextAll().slideToggle(0);
+			//$(this).parents('li').toggleClass('open');
+		});
+	},1);
+	$('.slider:last .accordion:not(.single) .title').click(function() {
+		if ($(this).hasClass('options'))
+			return;
+		if ($(this).closest('.accordion').find('li.selected').length)
+			$(this).closest('.accordion').find('.select_icon').removeClass('hidden');
+		else
+			$(this).closest('.accordion').find('.select_icon').addClass('hidden');
+	});
+	$('.slider:last .accordion.networks .title').click(function() {
+		var arrSelected = $.makeArray($(this).closest('ul').find('.selected'));
+		var arrSelectedText = [];
+		var arrSelectedCampaigns = [];
+		$('.slider:last .mission_row').addClass("hidden");
+		for (var intItr = 0; intItr != arrSelected.length; intItr++)
+		{
+			arrSelectedText.push($(arrSelected[intItr]).find('.name').text().replace(/^[ \t]+/, '').replace(/[ \t]+$/, ''));
+			var intNetworkId = $(arrSelected[intItr]).attr('network_id');
+			arrSelectedCampaigns.push(intNetworkId);
+			$('.slider:last .mission_row.network_id_' + intNetworkId).removeClass("hidden");
+		}
+		$('.slider:last .accordion.networks .select_value').val(arrSelectedCampaigns.join(','));
+		if (arrSelected.length) {
+			$('.slider:last .output_buttons').removeClass('hidden');
+		} else
+			$('.slider:last .output_buttons').addClass('hidden');
+
+		if (arrSelectedText.length) {
+			$(this).closest('.accordion').find('h3 .text').text(arrSelectedText.join(', '));
+			if ($(this).closest('.accordion').find('h3 .text').width() > 600)
+			{
+				$(this).closest('.accordion').find('h3 .text').html(arrSelectedText.length + ' Networks Selected');
+			}
+		} else
+			$(this).closest('.accordion').find('h3 .text').html('Nothing Selected');
+	});
+	$('.slider:last .accordion.report_type .title').click(function() {
+		var arrSelected = $.makeArray($(this).closest('ul').find('.selected'));
+		var arrSelectedText = [];
+		for (var intItr = 0; intItr != arrSelected.length; intItr++)
+		{
+			arrSelectedText.push($(arrSelected[intItr]).find('.name').text().replace(/^[ \t]+/, '').replace(/[ \t]+$/, ''));
+		}
+		$('.slider:last .accordion.report_type .select_value').val(arrSelectedText.join(','));
+		if (arrSelectedText.length) {
+			$(this).closest('.accordion').find('h3 .text').html(arrSelectedText.join(', '));
+			if ($(this).closest('.accordion').find('h3 .text').width() > 600)
+			{
+				$(this).closest('.accordion').find('h3 .text').html(arrSelectedText.length + ' Report Selected');
+			}
+			$(".slider:last .main_report_options").removeClass("hidden");
+		} else {
+			$(this).closest('.accordion').find('h3 .text').html('Nothing Selected');
+			$(".slider:last .main_report_options").addClass("hidden");
+		}
+			
+	});
+	$('.slider:last .accordion.holidays .title').click(function() {
+		var arrSelected = $.makeArray($(this).closest('ul').find('.selected'));
+		var arrSelectedText = [];
+		var arrSelectedCampaigns = [];
+		for (var intItr = 0; intItr != arrSelected.length; intItr++)
+		{
+			arrSelectedText.push($(arrSelected[intItr]).find('.name').text().replace(/^[ \t]+/, '').replace(/[ \t]+$/, ''));
+			arrSelectedCampaigns.push($(arrSelected[intItr]).attr('item_value'));
+		}
+		$('.slider:last .accordion.holidays .select_value').val(arrSelectedCampaigns.join(','));
+
+		if (arrSelectedText.length) {
+			$(this).closest('.accordion').find('h3 .text').html(arrSelectedText.join(', '));
+			if ($(this).closest('.accordion').find('h3 .text').width() > 600)
+			{
+				$(this).closest('.accordion').find('h3 .text').html(arrSelectedText.length + ' Holidays Selected');
+			}
+		} else
+			$(this).closest('.accordion').find('h3 .text').html('Nothing Selected');
+	});
+	$('.slider:last .accordion.badges .title').click(function() {
+		var arrSelected = $.makeArray($(this).closest('ul').find('.selected'));
+		var arrSelectedText = [];
+		var arrSelectedCampaigns = [];
+		for (var intItr = 0; intItr != arrSelected.length; intItr++)
+		{
+			arrSelectedText.push($(arrSelected[intItr]).find('.name').text().replace(/^[ \t]+/, '').replace(/[ \t]+$/, ''));
+			arrSelectedCampaigns.push($(arrSelected[intItr]).attr('item_value'));
+		}
+		$('.slider:last .accordion.badges .select_value').val(arrSelectedCampaigns.join(','));
+
+		if (arrSelectedText.length) {
+			$(this).closest('.accordion').find('h3 .text').html(arrSelectedText.join(', '));
+			if ($(this).closest('.accordion').find('h3 .text').width() > 600)
+			{
+				$(this).closest('.accordion').find('h3 .text').html(arrSelectedText.length + ' Badges Selected');
+			}
+		} else
+			$(this).closest('.accordion').find('h3 .text').html('Nothing Selected');
+	});
+	$('.slider:last .output_report.button').click(function () {
+		var arrParams = $('.slider:last form').serializeObject();
+		//$.alert(arrParams);
+		window.open('<?php print bp; ?>/admin/missionappreportoutput/params/'+encodeURIComponent(encodeURIComponent(JSON.stringify(arrParams))) + "<?php print $strParamPath; ?>",'_blank');
+	});
+	$('.slider:last .noinput').focus(function () {
+		if (!$(this).hasClass('noinput'))
+			return;
+		$(this).attr('noinput_val', $(this).val());
+		$(this).removeClass('noinput').val('');
+	});
+	$('.slider:last .noinput').blur(function () {
+		var parent = this;
+		window.setTimeout(function () {
+			if (!$(parent).val().match(/^ *$/))
+				return;
+			$(parent).addClass('noinput').val($(parent).attr('noinput_val'));
+		}, 200);
+	});
+	// reset items
+	$('.slider:last .button.reset').click(function () {
+		$('.slider:last .accordion.report .select_icon').trigger('click');
+	});
+	$('.slider:last .accordion.report .select_icon').click(function (e) {
+		e.stopPropagation();
+		var objAccordion = $(this).closest('.accordion');
+		objAccordion.find('h3 .text').html('Load a saved report');
+		objAccordion.find('.selected').removeClass('selected').addClass('select');
+		if (objAccordion.find('.open').length)
+			objAccordion.find('h3').trigger('click')
+		objAccordion.find('.select_icon').addClass('hidden');
+		$('.slider:last input.report_name').val('').addClass('noinput');
+		$('.slider:last .accordion li.selected').each(function () {
+			$(this).find('.title:first').trigger('click');
+		});
+		$('.slider:last .start_date').val('').blur();
+		$('.slider:last .end_date').val('').blur();
+		for (var intItr=0; intItr!=arrCheckItems.length; intItr++) {
+			var strItem = arrCheckItems[intItr];
+			if ($('.slider:last .' + strItem).is(':checked'))
+				$('.slider:last .' + strItem).trigger('click');
+		}
+
+	});
+	$('.slider:last .select_icon').mouseover(function () {
+		$(this).addClass('deselect_icon');
+	}).mouseout(function () {
+		$(this).removeClass('deselect_icon');
+	}).click(function () {
+		var objAccordion = $(this).closest('.accordion');
+		objAccordion.find('li.selected').each(function () {
+			$(this).find('.title:first').trigger('click');
+		});
+	});
+});
+</script>
+<div class="slider">
+	<style>
+		.slider:last-child .button {
+			margin-right:3px;
+		}
+		.slider:last-child h4 {
+			padding:0 0 3px 6px;
+		}
+		.slider:last-child h2.fix_line {
+			border-bottom:1px solid #bbb;
+		}
+		.slider:last-child .title {
+			width:100%;
+		}
+		.slider:last-child .select_list .selected {
+			background-color: #DADEE6;
+		}
+		.slider:last-child .text {
+			padding-left:4px;
+			display:inline-block;
+			text-overflow:ellipsis;
+			overflow: hidden;
+			white-space:nowrap;
+		}
+		.slider:last-child .select_icon {
+			width:17px;
+			height:17px;
+			position: relative;
+			float: right;
+			margin-top:7px;
+			margin-bottom:-24px;
+			background-image: url('//v2.mashpia.com/images/check.png');
+			opacity:0.7;
+			background-repeat:no-repeat;
+			background-position:center;
+		}
+		.slider:last-child .deselect_icon {
+			background-image: url('//v2.mashpia.com/images/back-end/admin/x16.png');
+			cursor:pointer;
+		}
+		.slider:last-child .module.lists.collapsible {
+			margin-right:0;
+			margin-bottom:0;
+		}
+		.slider:last-child .locked_message {
+			display:inline-block;
+			padding:8px;
+			font-size:12pt;
+		}
+		.slider:last-child .header {
+			background-color:#666 !important;
+			-webkit-border-top-left-radius: 6px;
+			-webkit-border-top-right-radius: 6px;
+			-moz-border-radius-topleft: 6px;
+			-moz-border-radius-topright: 6px;
+			border-top-left-radius: 6px;
+			border-top-right-radius: 6px;
+			border: 1px solid #ccc;
+			color:#fff;
+			border-width: 1px 1px 0 1px;
+		}
+		.slider:last-child li:not(.header) .title>div {
+			width: 190px;
+			overflow:hidden;
+			text-overflow:ellipsis;
+			white-space:nowrap;
+		}
+		.slider:last-child div.lists li.header {
+			padding-bottom: 0;
+			padding-top: 0;
+		}
+		.slider:last-child div.lists li.header .title:not(:last-child) {
+			border-right: 1px solid #777;
+		}
+		.slider:last-child div.lists li:not(.header) .title:not(:last-child) {
+			border-right: 1px solid #ddd;
+		}
+		.slider:last-child div.lists li .title:not(:first-child) {
+			padding-left: 8px;
+		}
+		.slider:last-child .choose_details * {
+
+		}
+		.slider:last-child .info.list_expand li:first-child {
+			border-top:medium none;
+		}
+		.slider:last-child .info.list_expand img {
+			border:1px solid #BBBBBB;
+			margin:2px;
+		}
+		.slider:last-child .report_options {
+			padding-top:3px;
+			padding-left:6px;
+		}
+		.slider:last-child .report_options table {
+			margin: 2px;
+			border: 1px ridge #DDD;
+			cursor: default;
+		}
+		.slider:last-child .report_option_select {
+			background-color: #DDD;
+			border: 1px inset #EAEAEA !important;
+		}
+		.slider:last-child .date {
+			background:url("/images/back-end/admin/icon_cal_small.png") no-repeat scroll 96% 50% #FFFFFF !important;
+		}
+		.slider:last-child .noinput {
+			color:gray;
+		}
+		.slider:last-child .collapsible div.options {
+			cursor:default;
+		}
+		.slider:last-child .save_status {
+			padding:6px;
+		}
+		.truncate {
+			max-width: 110px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		.slider:last-child .report_type_item .help_icon {
+			width:16px !important;
+		}
+	</style>
+	<div class="col_title">
+		<span>Reports</span><div class="title_help info" title="Generate user and mission reports"></div>
+	</div>
+	<div class="col_content">
+		<form>
+		<div class="choose_reporttype">
+			<h4>Select report type: &nbsp;<div class="help_icon info" title="Choose a report type to select the type information you are looking for"></div></h4>
+			<div class="module accordion single report_type">
+				<input type="hidden" value="" name="report_type" class="select_value" />
+				<div class="module_content list_expand">
+					<ul>
+						<li class="">
+							<div class="select_icon hidden"></div>
+							<h3 class="">
+								<span class="icon"></span> <div class="text">Nothing Selected</div>
+							</h3>
+							<p>
+								<div class="module lists collapsible">
+									<div class="module_content">
+										<ul class="select_list">
+											<li class="header">
+												<div class="title">Report Type</div>
+											</li>
+											
+											<li class="report_type_users" report_type_name="report_type_users">
+												<a>
+													<div class="title name report_type_item" report_type_name="report_type_users">Users Report<div class="help_icon info" title="Generate a list of users using the criteria below"></div></div>
+													
+												</a>
+											</li>
+											<li class="report_type_user_missions" report_type_name="report_type_user_missions">
+												<a>
+													<div class="title name report_type_item" report_type_name="report_type_user_missions">User Missions Report<div class="help_icon info" title="Generate a list of missions using the criteria below"></div></div>
+												</a>
+											</li>
+											<!--li class="report_type_summary_report" report_type_name="report_type_summary_report">
+												<a>
+													<div class="title name report_type_item" report_type_name="report_type_summary_report">Summary Report<div class="help_icon info" title="Generate a report with various fields that summarize the data"></div></div>
+												</a>
+											</li-->
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="main_report_options sudo_hidden">
+		<div class="choose_networks">
+			<h4>Select networks: &nbsp;<div class="help_icon info" title="Only include users who were active in specific networks"></div></h4>
+			<div class="module accordion networks">
+				<input type="hidden" value="" name="networks" class="select_value" />
+				<div class="module_content list_expand">
+					<ul>
+						<li class="">
+							<div class="select_icon hidden"></div>
+							<h3 class="">
+								<span class="icon"></span> <div class="text">Nothing Selected</div>
+							</h3>
+							<p>
+								<div class="module lists collapsible">
+									<div class="module_content">
+										<ul class="select_list">
+											<li class="header">
+												<div class="title" style="width:510px">Network Name</div>
+												<div class="title" style="width:110px">Missions</div>
+											</li>
+<?php
+	foreach ($this->arrNetowrks as $objNetwork)
+	{
+?>
+											<li class="network_id_<?php print $objNetwork->network_id; ?>" network_id="<?php print $objNetwork->network_id; ?>">
+												<a>
+													<div style="width:510px" class="title name network_item" network_id="<?php print $objNetwork->network_id; ?>"><?php print $objNetwork->network_name; ?></div>
+													<div style="width:110px" class="title count network_item" network_id="<?php print $objNetwork->network_id; ?>"><?php print isset($this->arrMissions[$objNetwork->network_id]) ? count($this->arrMissions[$objNetwork->network_id]) : 0; ?></div>
+												</a>
+											</li>
+<?php
+	}
+?>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="choose_holidays output_buttons sudo_hidden">
+			<h4>Select holidays: &nbsp;<div class="help_icon info" title="Only include users who were active in specific holiday missions"></div></h4>
+			<div class="module accordion closed holidays">
+				<input type="hidden" value="" name="holidays" class="select_value" />
+				<div class="module_content list_expand">
+					<ul>
+						<li class="">
+							<div class="select_icon hidden"></div>
+							<h3 class="">
+								<span class="icon"></span> <div class="text">Nothing Selected</div>
+							</h3>
+							<p>
+								<div class="module lists collapsible">
+									<div class="module_content">
+										<ul class="select_list">
+											<li class="header">
+												<div class="title" style="width:510px">Holiday Name</div>
+												<div class="title" style="width:110px">Network</div>
+											</li>
+<?php
+	foreach ($this->arrHolidays as $intNetwork => $arrMissions)
+	{
+		foreach ($arrMissions as $objMission)
+		{
+?>
+											<li class="mission_row network_id_<?php print $objMission->network_id; ?>" item_value="<?php print $objMission->holiday_name; ?>">
+												<a>
+													<div style="width:510px" class="title name mission_item"><?php print $objMission->holiday_name; ?></div>
+													<div style="width:110px" class="title count mission_item truncate"><?php print $this->arrNetowrks[$objMission->network_id]->network_name; ?></div>
+												</a>
+											</li>
+<?php
+		}
+	}
+?>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="choose_badges output_buttons sudo_hidden">
+			<h4>Select badges: &nbsp;<div class="help_icon info" title="Only include users who were active in specific badges"></div></h4>
+			<div class="module accordion closed badges">
+				<input type="hidden" value="" name="badges" class="select_value" />
+				<div class="module_content list_expand">
+					<ul>
+						<li class="">
+							<div class="select_icon hidden"></div>
+							<h3 class="">
+								<span class="icon"></span> <div class="text">Nothing Selected</div>
+							</h3>
+							<p>
+								<div class="module lists collapsible">
+									<div class="module_content">
+										<ul class="select_list">
+											<li class="header">
+												<div class="title" style="width:510px">Badge Name</div>
+												<div class="title" style="width:110px">Network</div>
+											</li>
+<?php
+	foreach ($this->arrBadges as $intNetwork => $arrMissions)
+	{
+		foreach ($arrMissions as $objMission)
+		{
+?>
+											<li class="mission_row network_id_<?php print $objMission->network_id; ?>" item_value="<?php print $objMission->badge; ?>">
+												<a>
+													<div style="width:510px" class="title name mission_item"><?php print $objMission->badge; ?></div>
+													<div style="width:110px" class="title count mission_item truncate"><?php print $this->arrNetowrks[$objMission->network_id]->network_name; ?></div>
+												</a>
+											</li>
+<?php
+		}
+	}
+?>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="more_options">
+			<h4>Customize the report: &nbsp;<div class="help_icon info" title="Add additional criteria for the query to narrow down the results further."></div></h4>
+			<div class="module accordion form settings">
+				<div class="module_content list_expand">
+					<ul>
+						<li class="">
+							<div class="select_icon hidden"></div>
+							<h3>
+								<span class="icon"></span> <div class="text" style="">Output Options</div>
+							</h3>
+							<p>
+								<div class="module lists collapsible">
+									<div class="module_content lists">
+										<ul>
+											<li>
+												<span class="label">Inclusive query:</span>
+												<span class="input" style="margin: 4px 0px 0px 1px;">
+													<input type="checkbox" class="icheck inclusive_query" name="inclusive_query" value="1" />
+												</span>
+												<div class="help info" title="Inclusive queries use the AND operator rather than the OR when generating the results. This means that all things must be true in order to return a result as opposed to anything being true."></div>
+											</li>
+											<li>
+												<span class="label">Has ordered cards:</span>
+												<span class="input" style="margin: 4px 0px 0px 1px;">
+													<input type="checkbox" class="icheck ordered_cards" name="ordered_cards" value="1" />
+												</span>
+												<div class="help info" title="Only query users that have ordered cards already."></div>
+											</li>
+											<li>
+												<span class="label">Start Date:</span>
+												<span class="input">
+													<div style="float:left;margin: 4px 30px 0px 1px;">
+														<input type="checkbox" class="icheck start_date_on" name="start_date_on" value="1" />
+													</div>
+													<input style="padding-left:4px;width:160px" value="MM/DD/YYYY" type="text" class="noinput required date start_date" name="start_date" />
+												</span>
+												<div class="help info" title="Only show information that comes from a certain period of time."></div>
+											</li>
+											<li>
+												<span class="label">End Date:</span>
+												<span class="input">
+													<div style="float:left;margin: 4px 30px 0px 1px;">
+														<input type="checkbox" class="icheck end_date_on" name="end_date_on" value="1" />
+													</div>
+													<input style="padding-left:4px;width:160px" value="MM/DD/YYYY" type="text" class="noinput required date end_date" name="end_date" />
+												</span>
+												<div class="help info" title="Only show information that comes from a certain period of time."></div>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<a class="button output_report">Display Report</a>
+		<a class="button reset">Reset Report</a>
+		</div>
+		</form>
+		&nbsp;<br/>
+		&nbsp;<br/>
+		&nbsp;<br/>
+		&nbsp;<br/>
+		&nbsp;<br/>
+		&nbsp;
+	</div>
+</div>

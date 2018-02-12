@@ -1,0 +1,95 @@
+<?php
+	if ($this->boolURLError)
+	{
+?>
+There was an issue loading this from the URL provided.
+<?php
+	exit;
+	}
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Mobile ID Card</title>
+		<base href="http://mashpia.com/ckids/reg/" />
+		<link href="<?php print css; ?>/missionsapp/reg_style.css" type="text/css" rel="stylesheet" />
+
+        <link href="<?php print css; ?>/missionsapp/bootstrap.css" rel="stylesheet" type="text/css" />
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+        <link href="plugins/iCheck/all.css" rel="stylesheet" type="text/css" />
+        <link href="dist/css/Tsivot-Mobile.css" rel="stylesheet" type="text/css" />
+        <link href="dist/css/skins/skin-blue-Tsivot.css" rel="stylesheet" type="text/css" />
+
+		<link href="css/responsive.css" type="text/css" rel="stylesheet" />
+		<script src="js/jquery-1.9.1.min.js"></script>
+		<script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+		<style>
+			.login-box {
+				font-size: 18px;
+			}
+			.head {
+				font-size: 28px;
+				font-weight: bold;
+				text-align: center;
+				padding-top: 20px;
+			}
+			@media print {
+				.printnone {
+					display: none !important;
+				}
+			}
+			@media screen {
+				.printonly {
+					display: none;
+				}
+			}
+		</style>
+        <script>
+            $(document).ready( function() {
+            	$(".login").click( function() {
+            		window.location.href = "<?php print bp; ?>/missionsapp/missions/bc/<?php print $this->objUser->bar_code; ?>";
+            	});
+				$(".print").click(function () {
+					window.frames["ifidcard"].focus();
+					window.frames["ifidcard"].print();
+				});
+            });
+        </script>
+	</head>
+	<body>
+        <div class="container login-page">
+            <div style="padding-top:30px;">
+                <img style="max-width:140px;" src="<?php print bp;?>/imgs/v/w/140/src/4003836_15208.gif" class="img-responsive center-block">
+            </div>
+
+            <div style="padding-top:5px;text-align: center;font-size: 20px;font-weight: bold;">
+                    	ID CARD
+               </div>
+
+				<div class="logo" style="text-align:center;">
+					<iframe id="ifidcard" name="ifidcard" height="280" style="max-width: 362px; width: 100%; border:0;margin:0;padding:0;" src="<?php print bp; ?>/missionsapp/idcardqr/bc/<?php print $this->objUser->bar_code; ?>/code/<?php print $this->objUser->password; ?>"></iframe>
+				</div>
+
+                <div class="login-box" style="margin-top:0;">
+                    <div class="login-box-body">
+	                	Above is the ID Card associated with the account created for <span style="color:black;font-style: italic;"><?php print $this->objUser->first_name . " " . $this->objUser->last_name; ?></span>.
+						Print the ID Card and write down your bar code.
+						<br/>Right click or control click <a style="text-decoration:underline;" href="<?php print bp; ?>/missionsapp/card/bc/<?php print $this->objUser->bar_code; ?>/code/<?php print $this->objUser->password; ?>">this link</a> to add this page to your bookmarks.
+						<br /><br />
+						<div class="row" style="text-align:center;">
+							<div class="col-xs-6">
+                                <button class="btn btn-primary btn-block print"><b>PRINT</b></button>
+                            </div>
+							<div class="col-xs-6">
+								<button class="btn btn-primary btn-block login"><b>LOGIN</b></button>
+							</div>
+                        </div>
+	                </div>
+	        	</div>
+            </div>
+        </div>
+	</body>
+</html>

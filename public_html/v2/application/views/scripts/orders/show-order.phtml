@@ -1,0 +1,21 @@
+<style type="text/css">
+#navlist li
+{
+	display: inline;
+	list-style-type: none;
+	padding-right: 20px;
+}
+</style>
+
+<div ><?=$this->msg;?></div>
+
+<?php if($this->row){ ?>
+<?php	foreach($this->row as $r){ ?>
+<input type="hidden" name="serial" value="<?=$this->serial;?>" />
+		<?php if($r->status!="Redeemed") { ?>
+			<div style="border-top: dotted 1px #c0c0c0; padding:15px; font-size:14px; width: 90%; bottom:19px; text-align:right; " ><?=$r->description;?><span id="redeem"><a href="#" title="Save" class="button submit">Redeem</a></span></div>
+		<?php } else { ?>
+		<div style="border-top: dotted 1px #c0c0c0; padding:15px; font-size:14px; bottom:19px;" >This item has been already redeemed.</div>
+		<? } ?>
+<?php } ?>
+<? } ?>

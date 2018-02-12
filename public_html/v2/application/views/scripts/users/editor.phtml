@@ -1,0 +1,745 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$objUserRoles = new Roles();
+	$objRoles = new Roles();
+	$objUserRoles->setRoles($arrUserTypes[$this->strUserTypeSelected]);
+	$objUserSession = new Zend_Session_Namespace("user_session_data");
+?>
+<script language="javascript">
+var boolUserEditorUnsaved = 0;
+$(document).ready(function()
+{
+	$(this).delay(1).queue(function () {
+		$(this).dequeue();
+		$('.slider:last input:[type="checkbox"]').iphoneStyle({});
+	});
+	$('.slider:last').bind('slide_back', function () {
+		$.ajax({
+			type : "POST",
+			data : {},
+			cache : false,
+			url : '<?php echo $sn . "/users/editor/get_user_points/true" . $strParamPath; ?>',
+			dataType : "text",
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					alert("<?php print text("Sorry, there was an error"); ?>: VU-E107-SDFG34");
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					alert("<?php print text("Sorry, there was an error"); ?>: VU-E108-32ASF3");
+					$.alert(strResponse);
+					return;
+				} else {
+					if (arrResponse.success) {
+						$('.slider:last .store_balance_div').html(arrResponse.intPointsStore);
+						$('.slider:last .total_points_div').html(arrResponse.intPointsTotal);
+					}
+				}
+			}
+		});
+	});
+	/*$('.slider:last form').keyup(function (e) {
+		var charCode = (e.which) ? e.which : e.keyCode;
+		if (charCode == 13) {
+			e.preventDefault();
+			if ($(this).find('.submit.save').length)
+				$(this).find('.submit.save').click();
+			else
+				$(this).submit();
+		}
+	});*/
+	// Activate / Deactivate radios
+	$('.slider:last .user_activation').click(function () {
+		var boolActive = $(this).find("input").val() == "1";
+		$('.slider:last .user_activation input').attr('checked', false);
+		$('.slider:last .user_activation').css({
+			"border": "1px solid black",
+			"color": "black"
+		});
+		$(this).find("input").attr('checked', true);
+		$(this).css({
+			"border": "1px solid " + (boolActive ? "green" : "red"),
+			"color": boolActive ? "green" : "red"
+		});
+	});
+	$('.slider:last .user_activation input[checked=true]').trigger("click");
+	// Record if somethign changes
+	$('.slider:last input').change( function () {
+		boolUserEditorUnsaved = 1;
+	});
+	// Change user type
+	$(".slider:last #user_type").change(function () {
+		if (
+			!boolUserEditorUnsaved
+			|| (
+				boolUserEditorUnsaved
+				&& !confirm("<?php print text('There seems to be some unsaved fields. Your changes won\'t be stored if you don\'t save before changing the user type.\n\n Are you sure you would like to continue without saving?'); ?>")
+			)
+		) {
+			var strPath = '<?php echo $sn . '/users/editor/user_type_selected/\' + $(this).val() + \'' . $strParamPath; ?>';
+			slideRefresh(strPath);
+		}
+	});
+	// Form submit
+	$('.slider:last form a.submit.save').click( function(e) {
+		$(".slider:last .processing_status").fadeOut();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start : $(".slider:last #processing_status").html('Loading...').fadeIn(),
+			url : '<?php echo $sn . "/users/editor" . $strParamPath; ?>',
+			dataType : "text",
+			data : $('.slider:last form').serialize(),
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					alert("<?php print text("Sorry, there was an error"); ?>: VU-E101-3RR3RE");
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					alert("<?php print text("Sorry, there was an error"); ?>: VU-E102-SDF8BX");
+					$.alert(strResponse);
+					return;
+				} else {
+					$(".slider:last #processing_status").fadeOut();
+					if (arrResponse["error"]) {
+						if (typeof(arrResponse["error"]) != "object") {
+							$(".slider:last #processing_status").html(arrResponse["error"]).fadeIn();
+						} else {
+							for (strField in arrResponse["error"])
+							{
+								//alert($.dump($(".slider:last #" + strField).closest("li").html()));return;
+								$(".slider:last #" + strField).closest("li").next().html(arrResponse["error"][strField]).fadeIn();
+							}
+						}
+					} else if (arrResponse["success"] == "added") {
+						$(".slider:last #processing_status").html("<?php print text(preg_replace('/TEACHER/i', '[|Teacher|]', preg_replace('/STUDENT/i', '[|Student|]', ucwords(first($this->arrUserTypes))))); ?> successfully added").fadeIn("slow").delay(2000).fadeOut("slow");
+						$(".slider:last #user_id").val(arrResponse["user_id"]);
+						slideRefresh('<?php echo $sn . "/users/editor/just_added/true/user_id/' + arrResponse[\"user_id\"] + '" . $strParamPath; ?>');
+					} else if (arrResponse["success"] == "updated") {
+						$(".slider:last #processing_status").html("<?php print text(preg_replace('/TEACHER/i', '[|Teacher|]', preg_replace('/STUDENT/i', '[|Student|]', ucwords(first($this->arrUserTypes))))); ?> successfully updated").fadeIn("slow").delay(2000).fadeOut("slow");
+					} else if (arrResponse["success"] == "true") {
+						slideRefresh('<?php print $sn . "/users/editor" . $strParamPath; ?>');
+					} else {
+						$.alert(123);
+						$.alert(arrResponse);
+					}
+				}
+			}
+		});
+	});
+
+	$('.slider:last .ph_buy_prize').click(function () {
+		$(".slider:last .processing_status").fadeOut();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider:last .ph_buy_prize_loading").html('<?php print text("Loading..."); ?>').fadeIn("slow"),
+			url : '<?php print $sn . "/users/editor/buy_prize/true" . $strParamPath; ?>',
+			data: $('.slider:last form').serialize(),
+			dataType : "text",
+			success : function(strResponse) {
+				$(".slider:last .ph_buy_prize_loading").fadeOut();
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$(".slider:last #ph_buy_prize_loading").html('<?php print text("Sorry, there was an error"); ?>: VU-E103-3RR3RE');
+					alert("<?php print text("Sorry, there was an error"); ?>: VA-J101-3RR3RE");
+					$.dumper(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$(".slider:last #ph_buy_prize_loading").html('<?php print text("Sorry, there was an error"); ?>: VU-E104-SDF8BX');
+					alert("<?php print text("Sorry, there was an error"); ?>: VA-J102-SDF8BX");
+					$.dumper(strResponse);
+					return;
+				} else {
+					if (arrResponse["error"]) {
+						$(".slider:last .ph_buy_prize_loading").closest("li").next().html(arrResponse["error"]).fadeIn();
+					} else if (arrResponse["success"] == "true") {
+						slideRefresh('<?php print $sn . "/users/editor" . $strParamPath; ?>');
+					} else {
+						$.dumper(arrResponse);
+					}
+				}
+			}
+		});
+	});
+
+	$('.slider:last .ph_buy_prize_barcode').click(function () {
+		$(".slider:last .processing_status").fadeOut();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider:last .ph_buy_prize_barcode_loading").html('<?php print text("Loading..."); ?>').fadeIn("slow"),
+			url : '<?php print $sn . "/users/editor/buy_prize/true/barcode/true" . $strParamPath; ?>',
+			data: $('.slider:last form').serialize(),
+			dataType : "text",
+			success : function(strResponse) {
+				$(".slider:last .ph_buy_prize_barcode_loading").fadeOut();
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$(".slider:last #ph_buy_prize_barcode_loading").html('<?php print text("Sorry, there was an error"); ?>: VU-E103-3RR3RE');
+					alert("<?php print text("Sorry, there was an error"); ?>: VA-J101-3RR3RE");
+					$.dumper(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$(".slider:last #ph_buy_prize_barcode_loading").html('<?php print text("Sorry, there was an error"); ?>: VU-E104-SDF8BX');
+					alert("<?php print text("Sorry, there was an error"); ?>: VA-J102-SDF8BX");
+					$.dumper(strResponse);
+					return;
+				} else {
+					if (arrResponse["error"]) {
+						$(".slider:last .ph_buy_prize_barcode_loading").closest("li").next().html(arrResponse["error"]).fadeIn();
+					} else if (arrResponse["success"] == "true") {
+						slideRefresh('<?php print $sn . "/users/editor" . $strParamPath; ?>');
+					} else {
+						$.dumper(arrResponse);
+					}
+				}
+			}
+		});
+	});
+
+
+	$('.slider:last .ph_modify_points').click(function () {
+		$(".slider:last .processing_status").fadeOut();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider:last .ph_modify_points_loading").html('Loading...').fadeIn("slow"),
+			url : '<?php print $sn . "/users/editor/modify_points/true" . $strParamPath; ?>',
+			data: $('.slider:last form').serialize(),
+			dataType : "text",
+			success : function(strResponse) {
+				$(".slider:last .ph_modify_points_loading").fadeOut();
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$(".slider:last #ph_buy_prize_loading").html('<?php print text("Sorry, there was an error"); ?>: VU-E103-3RR3RE');
+					alert("<?php print text("Sorry, there was an error"); ?>: VA-J101-3RR3RE");
+					$.dumper(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$(".slider:last #ph_buy_prize_loading").html('<?php print text("Sorry, there was an error"); ?>: VU-E104-SDF8BX');
+					alert("<?php print text("Sorry, there was an error"); ?>: VA-J102-SDF8BX");
+					$.dumper(strResponse);
+					return;
+				} else {
+					if (arrResponse["error"]) {
+						$(".slider:last .ph_modify_points_loading").closest("li").next().html(arrResponse["error"]).fadeIn();
+					} else if (arrResponse["success"] == "true") {
+						slideRefresh('<?php print $sn . "/users/editor" . $strParamPath; ?>');
+					} else {
+						$.dumper(arrResponse);
+					}
+				}
+			}
+		});
+	});
+	$(".slider:last #delete_user_ui").find("input:[type='checkbox']").bind("didchange", function () {
+		$('#delete_user').css({'display':$(this).is(':checked') ? 'block' : 'none'})
+	});
+	$('#delete_user').click(function () {
+		$(".slider:last .processing_status").fadeOut();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider:last #processing_status").html('Loading...').fadeIn(),
+			url : '<?php echo $sn . "/users/editor" . $strParamPath; ?>',
+			dataType : "text",
+			data: {"delete_user" : true},
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$(".slider:last #processing_status").html("<?php print text("Sorry, there was an error"); ?>: VU-E101-3RR3RE");
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$(".slider:last #processing_status").html("<?php print text("Sorry, there was an error"); ?>: VU-E102-SDF8BX");
+					$.alert(strResponse);
+					return;
+				} else {
+					$(".slider:last #processing_status").fadeOut();
+					if (arrResponse["user_deleted"] == "true") {
+						$(".slider:last #processing_status").html("<?php print text("This user has been deleted permanently."); ?>").fadeIn("slow");
+					} else {
+						$.alert(arrResponse);
+					}
+				}
+			}
+		});
+	});
+	$('.slider:last a.searchbyemail').click(function () {
+		if (!$(this).hasClass('active')) {
+			$(this).addClass('active');
+			$('.slider:last li.searchbyemail').fadeIn();
+		} else {
+			$(this).removeClass('active');
+			$('.slider:last li.searchbyemail').fadeOut();
+		}
+	});
+	$('.slider:last .button.searchbyemail').click(function () {
+		$(".slider:last .loadingstatus.searchbyemail").html('Loading...').fadeIn();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '<?php echo $sn . "/users/editor" . $strParamPath; ?>',
+			dataType : "text",
+			data: {"searchbyemail" : $('.slider:last input.searchbyemail').val()},
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$(".slider:last .loadingstatus.searchbyemail").html("<?php print text("Sorry, there was an error"); ?>: VU-E105-s8d7fg");
+					$.alert(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$(".slider:last .loadingstatus.searchbyemail").html("<?php print text("Sorry, there was an error"); ?>: VU-E106-9fdh7d");
+					$.alert(strResponse);
+					return;
+				} else {
+					if (arrResponse.success == 'true') {
+						$(".slider:last .loadingstatus.searchbyemail").html('Association created');
+						if (arrResponse.teacher_id) {
+							slideRefresh('<?php echo $sn . "/users/editor/user_type/teacher/user_types/teacher/tstyle/" . $this->tstyle . "/institution_id/" . $this->institution_id . "/user_id/"; ?>' + arrResponse.teacher_id);
+						}
+					}
+				}
+			}
+		});
+	});
+});
+</script>
+<div class="slider">
+	<style type="text/css">
+		.processing_status {
+			display: none;
+			padding: 4px 0 8px 8px;
+			color: red;
+		}
+		.user_activation {
+			padding: 6px;
+			display: inline;
+			cursor: pointer;
+		}
+		.loadingstatus {
+			display: none;
+			padding: 4px 0 8px 8px;
+		}
+		.ph_buy_prize {
+			display: inline-block;
+			float: none;
+		}
+	</style>
+	<div class="col_title"><span><?php print text("[|" . ucwords(first($this->arrUserTypes)) . "|] Editor"); ?></span></div>
+	<div class="col_content camper">
+		<form>
+
+<?php
+	if (!count($this->arrUserTypes))
+	{
+?>
+			<?php print text("There are no user types available for modification or creation. Please contact your administrator to correct this issue."); ?>
+<?php
+	}
+	else if (
+		!isset($this->arrUserTypes[$this->strUserTypeSelected])
+		|| !$objRoles->isAllowed($this->arrUserTypes[$this->strUserTypeSelected])
+	) {
+?>
+			<?php print text("You do not have access to edit a user of this permission level."); ?>
+<?php
+	}
+	else
+	{
+?>
+			<div class="module form lists">
+				<div class="module_content list">
+					<input type="hidden" id="user_id" name="user_id" value="<?php print intval(@$this->objUser->user_id); ?>" />
+					<ul>
+<?php
+		if ($this->boolJustAdded)
+		{
+?>
+						<li>
+							<a onclick="slideRefresh('<?php echo $sn . "/users/editor/user_types/" . $this->user_type . "/user_type/" . $this->user_type . "/tstyle/" . $this->tstyle; ?>');">
+								<div class="icon"></div>
+								<div class="title"><?php print text("Add another [|" . ucwords(first($this->arrUserTypes)) . '|]'); ?></div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="module form lists">
+				<div class="module_content list">
+					<ul>
+<?php
+		}
+		if (
+			0 &&
+			$this->strUserTypeSelected == "teacher"
+			&& !$this->objUser
+		) {
+?>
+						<li>
+							<a class="link" href="<?php echo $sn . "/menu/users/pt/1/permission/admin/url/" . dblencode("/menu/classes/pre/teacher/url/" . dblencode("users/addteacherpermission")); ?>">
+								<div class="icon"></div>
+								<div class="title"><?php print text("Add an existing user as a [|teacher|]"); ?></div>
+							</a>
+						</li>
+<?php
+	if (dev)
+	{
+?>
+						<li>
+							<a class="searchbyemail">
+								<div class="title"><?php print text("Find a user using their email address"); ?></div>
+							</a>
+						</li>
+						<li style="padding:3px;display:none" class="searchbyemail">
+							<table border="0">
+								<tr>
+									<td width="40" style="padding-left:8px;font-size:12pt">Email: </td>
+									<td style="padding-left:4px"><input style="width:300px" type="text" class="input1 searchbyemail" /></td>
+									<td style="padding-left:8px"><div class="button searchbyemail"><?php print text('Add [|Teacher|]'); ?></div></td>
+								</tr>
+							</table>
+							<div class="loadingstatus searchbyemail"></div>
+						</li>
+<?php
+	}
+?>
+					</ul>
+				</div>
+			</div>
+			<div class="module form lists">
+				<div class="module_content list">
+					<ul>
+<?php
+		}
+		if ($objUserRoles->isRole("Student"))
+		{
+?>
+						<?php include('uimods/uploadmessage.phtml'); ?>
+						<li>
+							<h3><?php print text("User Image"); ?></h3>
+							<input type="hidden" name="image_id" id="usereditor_image_id" value="<?php print @$this->objUser->image_id; ?>" />
+							<iframe src="<?php print $sn . "/imgs/smalluploader/current_image/" . @$this->objUser->image_id; ?>/resultid/usereditor_image_id" width="100%" height="80" scrolling="no">
+								<p><?php print text("Your browser does not support iframes."); ?></p>
+							</iframe>
+						</li>
+<?php
+		}
+?>
+						<input type="hidden" name="user_type" value="<?php print $this->strUserTypeSelected; ?>" />
+<?php
+		if (isset($this->objUser) && $objUserRoles->isRole("Student"))
+		{
+?>
+						<li>
+							<a class="link" href="<?php print $sn . "/users/transactions/user_id/" . intval($this->objUser->user_id); ?>">
+								<div class="icon"></div>
+								<div class="title">Transaction Manager</div>
+							</a>
+						</li>
+<?php
+		}
+		if (
+			$objUserRoles->isRole("Teacher")
+		) {
+?>
+						<li id="checklist_classes">
+							<input type="hidden" id="classes" name="classes" value="<?php print @$this->strUserClasses; ?>" />
+							<a class="link" href="<?php print $sn . "/checklist/classes" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title"><?php print text("Assign to [|Classes|]"); ?> (<?php
+			if (count($this->arrUserClasses) == count($this->arrClasses))
+				print text("All");
+			else if (count($this->arrUserClasses) == 0)
+				print text("None");
+			else
+				print count($this->arrUserClasses);
+?>)</div>
+							</a>
+						</li>
+						<div class="processing_status"></div>
+<?php
+		} else if ($objUserRoles->isRole("Student")) {
+?>
+						<li id="checklist_classes">
+							<span class="label"><?php print text('[|Class|]'); ?>:</span>
+							<span class="input"><select style="padding:6px;" id="classes" name="classes">
+<?php
+			print '<option value=""' . (!count($this->arrUserClasses) ? ' selected' : '') . '>' . text('No [|Classes|]') . '</option>';
+			foreach ($this->arrClasses as $objClass) {
+				print '<option value="' . $objClass->class_id . '=1" ' . (isset($this->arrUserClasses[$objClass->class_id]) ? ' selected' : '') . '>' . $objClass->custom_name1 . '</option>';
+			}
+?>
+								</select></span>
+							<div class="clear"></div>
+						</li>
+<?php
+		}
+		if (
+			$objUserRoles->isRole("Student")
+			&& isset($this->objUser)
+		) {
+?>
+						<li>
+							<span class="label"><?php print text("Bar code"); ?>:</span>
+							<span class="input"><div style="padding:6px 0 0 0"><?php echo @$this->objUser->bar_code; ?></div></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label"><?php print text("Total [|Points|]"); ?>:</span>
+							<span class="input"><div style="padding:6px 0 0 0" class="total_points_div"><?php echo intval(@$this->intPointsTotal); ?></div></span>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<span class="label"><?php print text("Store Balance"); ?>:</span>
+							<span class="input"><div style="padding:6px 0 0 0" class="store_balance_div"><?php echo intval(@$this->intPointsStore); ?></div></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+<?php
+		}
+		if ($objUserSession->user_id == @$this->objUser->user_id)
+		{
+	?>
+						<li>
+							<a class="link" href="<?php echo $sn . "/administration/changepassword" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title">
+									<?php print text("Change your password"); ?>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="module form lists">
+				<div class="module_content list">
+					<ul>
+<?php
+		}
+		if ($objUserRoles->isRole("Student"))
+		{
+?>
+						<li>
+							<span class="label"><?php print text("Gender"); ?>:</span>
+							<div class="input"><select name="gender" id="gender" style="padding: 6px; width:100px">
+								<option></option>
+								<option<?php print @$this->objUser->gender == "M" ? " selected" : ""; ?>><?php print text("Male"); ?></option>
+								<option<?php print @$this->objUser->gender == "F" ? " selected" : ""; ?>><?php print text("Female"); ?></option>
+							</select></div>
+						</li>
+<?php
+		}
+?>
+						<li>
+							<span class="label"><?php print text("First name"); ?>:*</span>
+							<span class="input"><input type="text" class="required" id="first_name" name="first_name" value="<?php echo @$this->objUser->first_name; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label"><?php print text("Last name"); ?>:*</span>
+							<span class="input"><input type="text" class="required" id="last_name" name="last_name" value="<?php echo @$this->objUser->last_name; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+<?php
+		if ($objUserRoles->isAllowed("Parent"))
+		{
+?>
+						<li>
+							<span class="label"><?php print text("Email"); ?>:</span>
+							<span class="input"><input type="text" class="required" id="email" name="email" value="<?php echo @$this->objUser->email; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+<?php
+		}
+		if (
+			$this->tstyle == 'hoo'
+		) {
+?>
+						<li>
+							<span class="label"><?php print text("Student Email"); ?>:</span>
+							<span class="input"><input type="text" class="required" id="student_email" name="student_email" value="<?php echo @$this->objUser->student_email; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label"><?php print text("Home Phone"); ?>:</span>
+							<span class="input"><input type="text" class="required" id="phone" name="phone" value="<?php echo @$this->objUser->phone; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label"><?php print text("Cell Phone"); ?>:</span>
+							<span class="input"><input type="text" class="required" id="cell" name="cell" value="<?php echo @$this->objUser->cell; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+<?php
+		}
+		if ($objUserRoles->isRole("Student"))
+		{
+			$strUserFields = @$this->objUser->custom_fields;
+			if (empty($strUserFields))
+				$arrUserFields = array();
+			else
+				$arrUserFields = unserialize($strUserFields);
+			$strCustomFields = $this->objInstitution->custom_fields;
+			if (empty($strCustomFields))
+				$arrCustomFields = array();
+			else
+				$arrCustomFields = unserialize($strCustomFields);
+			$intFieldItr = 0;
+			foreach ($arrCustomFields as $arrFieldRow)
+			{
+				if ($arrFieldRow['field_type'] == 'textbox')
+				{
+?>
+						<li>
+							<span class="label"><?php print text($arrFieldRow['field_name']); ?>:</span>
+							<span class="input"><input type="text" class="required" id="custom_field_<?php print $intFieldItr; ?>" name="custom_field_<?php print $intFieldItr; ?>" value="<?php echo @$arrUserFields[$arrFieldRow['field_name']]['value']; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+<?php
+				} else {
+?>
+						<li>
+							<span class="label"><?php print text($arrFieldRow['field_name']); ?>:</span>
+							<span class="input">
+								<textarea class="required" id="custom_field_<?php print $intFieldItr; ?>" name="custom_field_<?php print $intFieldItr; ?>"><?php echo @$arrUserFields[$arrFieldRow['field_name']]['value']; ?></textarea>
+							</span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+<?php
+				}
+				$intFieldItr++;
+			}
+		}
+		if ($objUserRoles->isAllowed("Parent"))
+		{
+?>
+						<li>
+							<span class="label"><?php print text("Address"); ?>:</span>
+							<span class="input"><input type="text" class="required" id="address" name="address" value="<?php echo @$this->objUser->address; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label"><?php print text("City"); ?>:</span>
+							<span class="input"><input type="text" class="required" id="city" name="city" value="<?php echo @$this->objUser->city; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label"><?php print text("Zip/Postal Code"); ?>:</span>
+							<span class="input"><input type="text" class="required" id="postal" name="postal" value="<?php echo @$this->objUser->postal; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label"><?php print text("State"); ?>:</span>
+							<span class="input"><input type="text" class="required" id="state" name="state" value="<?php echo @$this->objUser->state; ?>" size="25" minlength="2" /></span>
+							<div class="clear"></div>
+						</li>
+						<div class="processing_status"></div>
+						<li>
+							<span class="label"><?php print text("Country"); ?>:</span>
+							<span class="input">
+<?php
+			$arrCountries = array('Select a country',"Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Central African Republic","Chad","Chile","China","Colombi","Comoros","Congo (Brazzaville)","Congo","Costa Rica","Cote d'Ivoire","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","East Timor (Timor Timur)","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Fiji","Finland","France","Gabon","Gambia, The","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Korea, North","Korea, South","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","Norway","Oman","Pakistan","Palau","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saint Kitts and Nevis","Saint Lucia","Saint Vincent","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia and Montenegro","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","Spain","Sri Lanka","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe");
+			if (isset($this->objUser) && strlen($this->objUser->country) && !in_array($this->objUser->country, $arrCountries))
+			{
+				// Country used to be a simple text input. Continue to support these values but inforce the new method on new users
+?>
+								<input type="text" class="required" id="country" name="country" value="" size="25" minlength="2" />
+<?php
+			} else {
+				// Country select dropdown
+?>
+								<select name="country" style="padding: 6px; width:355px">
+<?php
+				foreach ($arrCountries as $strCountry)
+				{
+?>
+									<option value="<?php print $strCountry; ?>" <?php print @$this->objUser->country == $strCountry ? " selected" : ""; ?>><?php print text($strCountry); ?></option>
+<?php
+				}
+?>
+								</select>
+<?php
+			}
+?>
+								</span>
+							<div class="clear"></div>
+						</li>
+<?php
+		}
+?>
+						<li>
+							<span class="label" style="padding:12px 0 5px 0;"><?php print text("User Status"); ?>:</span>
+							<span class="input" style="padding:6px 0 0 0;">
+								<div class="user_activation"><input <?php if (!isset($this->objUser) || $this->objUser->is_active == "1") print "checked='true' ";?>type="radio" name="is_active" value="1" /> Activated</div>
+								<div class="user_activation"><input <?php if (isset($this->objUser) && $this->objUser->is_active != "1") print "checked='true' ";?>type="radio" name="is_active" value="0" /> Deactivated</div>
+							</span>
+							<div class="clear"></div>
+						</li>
+<?php
+		if ($this->boolDeleteEnabled && $objUserRoles->isRole("Student"))
+		{
+?>
+						<li id="delete_user_ui">
+							<h3><?php print text("This user shows little activity and can be deleted if needed."); ?></h3>
+							<span class="label"><?php print text("Delete user"); ?>:</span>
+							<span class="input"><input type="checkbox" value="1" /></span>
+							<span id="delete_user" class="input" style="margin-left:10px;display:none"><span><a class="button submit delete"><?php print text("Delete User"); ?></a></span></span>
+							<div class="clear"></div>
+						</li>
+<?php
+		}
+		if (
+			!isset($this->objUser)
+			&&$objUserRoles->isRole("Teacher")
+		) {
+?>
+						<li>
+							<div style="padding:3px">Note: by clicking save, an e-mail will be sent automatically to the e-mail address you entered above, containing the counselor's user information and temporary password.</div>
+						</li>
+<?php
+		}
+?>
+						<div id="processing_status" style="padding:6px 6px 6px 10px; display:none"></div>
+						<li>
+							<span><a class="button submit save"><?php print text("Save"); ?></a></span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</div>
+<?php
+	}
+?>
+		</div>
+	</form>
+	</div>
+</div>

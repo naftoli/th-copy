@@ -1,0 +1,38 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+<div class="slider" id="slider_ordersedit">
+	
+	<div class="col_title">
+		<span>Ranks List</span>
+	</div>	
+	<div class="col_content camper">		
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+                <ul>
+<?php
+            if(count($this->arrRanks) == 0)
+            {
+                print "There are no " . ($user_session_data->institution_type == "School" ? "students" : "campers") . " in this " . ($user_session_data->institution_type == "School" ? "class" : "bunk");
+            }
+            else{
+                foreach($this->arrRanks as $objRanks)
+                {
+?>
+                    <li>
+                        <a class="link" href="<?php echo $sn . "/ranks/ranksprintlist/rank_id/" . $objRanks->rank_id . $strParamPath; ?>">
+                            <div class="icon"></div>
+                            <div class="title"><?php echo $objRanks->rank_title; ?></div>
+                        </a>
+                    </li>
+<?php
+                }  
+            }
+?>
+            </div>
+        </div>
+    </div>
+</div>

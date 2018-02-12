@@ -1,0 +1,583 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script type="text/javascript">
+	function build_second_list()
+	{
+		var intClasses = Object.keys(allSelectedUsers).length;
+		$("#slider_idcards .selected_user_count").html(intClasses);
+		if (intClasses)
+			$("#slider_idcards #idcard_section2").fadeIn();
+		else
+		{
+			$("#slider_idcards #idcard_section2").fadeOut();
+			$("#slider_idcards #idcard_section3").fadeOut();
+		}
+		var strHtml = "";
+		if (!$("#slider_idcards #secondlist_header").length)
+		{
+			strHtml += '<li id="secondlist_header"><div class="title"><?php print text("Name"); ?></div>';
+			strHtml += '<div style="float:right;padding-top:2px">&nbsp;</div>';
+			strHtml += '<div class="extrabox" style="width:140px"><?php print text("[|Bunks|]"); ?></div>';
+			strHtml += '<div class="extrabox"><?php print text("Status"); ?></div>';
+			strHtml += '</li>';
+		}
+		for (var intUser in allSelectedUsers)
+		{
+			if ($("#slider_idcards #selected_" + intUser).length)
+				$("#slider_idcards #selected_" + intUser).remove();
+			var strFirstName = arrUsers[intUser]["first_name"];
+			var strLastName = arrUsers[intUser]["last_name"];
+			var arrClassIds = arrdUserClassIds[intUser];
+			var strClasses = "";
+			var intItr2 = 0;
+			for (var intItr in arrClassIds)
+			{
+				if (intItr2)
+					strClasses += ", ";
+				var intClass = arrClassIds[intItr];
+				strClasses += $.trim(arrClasses[intClass]["grade"] + " " + arrClasses[intClass]["sub"]);
+				intItr2++;
+			}
+			var strStatus = arrCardStatus[intUser] ? arrCardStatus[intUser] : "<?php print text("not printed"); ?>";
+			strHtml += '<li id="selected_' + intUser + '"><div class="title">' + strFirstName + ' ' + strLastName + '</div>';
+			strHtml += '<input type="hidden" class="user_id" value="' + intUser + '" />';
+			strHtml += '<input type="hidden" class="class_ids" value="' + arrClassIds.join(",") + '" />';
+			strHtml += '<div style="float:right;padding-top:2px"><span><a class="button fn_remove_selection"><?php print text("Remove Selection"); ?></a></span></div>';
+			strHtml += '<div class="extrabox" style="width:140px">' + strClasses + '</div>';
+			strHtml += '<div class="extrabox col_status">' + strStatus + '</div>';
+			strHtml += '</li>';
+		}
+		$("#slider_idcards #idcard_section2 .list ul").html(strHtml);
+		$("#slider_idcards .ph_cost_per_card").html(intCostPerHostCard);
+		$("#slider_idcards .ph_order_quantity").html(Object.keys(allSelectedUsers).length);
+		$("#slider_idcards .ph_total_cost").html(Object.keys(allSelectedUsers).length * intCostPerHostCard);
+
+		// Remove second list item
+		$("#slider_idcards .fn_remove_selection").bind("click", function () {
+			var objLi = $(this).closest("li");
+			var arrClassIds = objLi.find(".class_ids").val().split(/,/);
+			var intUser = objLi.find(".user_id").val();
+			for (var intItr in arrClassIds)
+			{
+				var intClassId = arrClassIds[intItr];
+				var strDataPoint = $("#slider_idcards #class_" +intClassId).val();
+				strDataPoint = strDataPoint.replace(new RegExp("&?" + intUser + "=1"), "");
+				strDataPoint = strDataPoint.replace(/^&/, "");
+				var arrDataPoints = strDataPoint.split(/&/);
+				$("#slider_idcards #li_class_" + intClassId + " .lable_count span").html(strDataPoint.length ? arrDataPoints.length : "None");
+				$("#slider_idcards #class_" +intClassId).val(strDataPoint);
+			}
+			delete allSelectedUsers[intUser];
+			$("#slider_idcards .ph_order_quantity").html(Object.keys(allSelectedUsers).length);
+			$("#slider_idcards .ph_total_cost").html(Object.keys(allSelectedUsers).length * intCostPerHostCard);
+
+			objLi.fadeOut().queue(function () {
+				$(this).dequeue().remove();
+			});
+			var intClasses = Object.keys(allSelectedUsers).length;
+			$("#slider_idcards .selected_user_count").html(intClasses);
+			if (intClasses)
+				$("#slider_idcards #idcard_section2").fadeIn();
+			else
+			{
+				$("#slider_idcards #idcard_section2").fadeOut();
+				$("#slider_idcards #idcard_section3").fadeOut();
+			}
+		});
+	}
+	var arrUsersToPayFor = {};
+	var arrUsersForFree = {};
+	var allSelectedUsers = {};
+	var arrUsers = <?php print json_encode($this->arrUsers); ?>;
+	var arrUserClasses = <?php print json_encode($this->arrUserClasses); ?>;
+	var arrClasses = <?php print json_encode($this->arrClasses); ?>;
+	var arrdUserClassIds = <?php print json_encode($this->arrdUserClassIds); ?>;
+	var arrClassStudents = <?php print json_encode($this->arrClassStudents); ?>;
+	var arrCardStatus = <?php print json_encode($this->arrAuthCards); ?>;
+	var intCostPerHostCard = <?php print $this->intCostPerHostCard; ?>;
+
+	$('#slider_idcards #module_accordion li h3').nextAll().hide();
+	$('#slider_idcards #module_accordion li h3').click(function(){
+		$(this).nextAll().slideToggle('fast');
+		$(this).parents('li').toggleClass('open');
+	});
+
+	$("#slider_idcards #idcard_section1 .data_point").bind("change", function (e) {
+		var arrDataPointObjects = $("#slider_idcards #idcard_section1 .data_point");
+		allSelectedUsers = {};
+		for (var intItr=0; intItr!=arrDataPointObjects.length; intItr++)
+		{
+			var strSerializedData = $(arrDataPointObjects[intItr]).val();
+			var arrSerializedData = strSerializedData.split(new RegExp("&"));
+			for (intItr2 in arrSerializedData)
+			{
+				if (!arrSerializedData[intItr2].match(new RegExp("=")))
+					continue;
+				var arrKeyVal = arrSerializedData[intItr2].split(new RegExp(" *= *"));
+				allSelectedUsers[arrKeyVal[0]] = arrKeyVal[1];
+			}
+		}
+		build_second_list();
+	});
+	$("#slider_idcards .fn_select_all_students").bind("click", function () {
+		for (var intItr in arrUserClasses)
+		{
+			if (!arrUsers[arrUserClasses[intItr]["user_id"]])
+				continue;
+			var objItem = $("#class_" + arrUserClasses[intItr]["class_id"]);
+			var strParam = objItem.val();
+			if (strParam.length)
+				strParam += "&";
+			strParam += arrUserClasses[intItr]["user_id"] + "=1";
+			objItem.val(strParam);
+			allSelectedUsers[arrUserClasses[intItr]["user_id"]] = 1;
+		}
+		for (var intClass in arrClassStudents)
+		{
+			if (!Object.keys(arrClassStudents[intClass]).length)
+				continue;
+			$("#li_class_" + intClass + " .lable_count span").html("All");
+		}
+		build_second_list();
+	});
+	$("#slider_idcards .fn_reset_all_students").bind("click", function () {
+		for (var intItr in arrClasses)
+		{
+			var intClass = arrClasses[intItr]["class_id"];
+			if (!arrClassStudents[intClass] || !Object.keys(arrClassStudents[intClass]).length)
+				continue;
+			$("#slider_idcards #class_" + intClass).val("");
+			$("#slider_idcards #li_class_" + intClass + " .lable_count span").html("None");
+		}
+		$("#slider_idcards #idcard_section2").fadeOut().queue(function () {
+			$(this).dequeue();
+			$("#slider_idcards #idcard_section2 ul .list li").remove();
+		});
+		$("#slider_idcards #idcard_section3").fadeOut();
+	});
+
+	$('#slider_idcards .fn_print_locally').bind("click", function () {
+		$("#slider_idcards #idcard_section1 .user_ids").val(JSON.stringify(allSelectedUsers));
+		$("#slider_idcards #idcard_section1 form").submit();
+		$("#slider_idcards .col_status").html("printed");
+	});
+
+	$('#slider_idcards .fn_order_from_hq').bind("click", function () {
+		for (var intItr in allSelectedUsers) {
+			if (arrCardStatus[intItr] == 'host printed')
+				arrUsersToPayFor[intItr] = 1;
+			else
+				arrUsersForFree[intItr] = 1;
+		}
+		if (Object.keys(arrUsersForFree).length) {
+			$('.slider:last #idcard_section3 .user_ids').val(JSON.stringify(arrUsersForFree));
+			$.ajax({
+				type : "POST",
+				cache : false,
+				start: $(".slider:last .processing_status_loading").html('<?php print text("Loading..."); ?>').fadeIn(),
+				url : '<?php echo $sn . "/users/idcards" . $strParamPath; ?>',
+				dataType : "text",
+				data: $('.slider:last #idcard_section3 form').serialize(),
+				success : function(strResponse) {
+					try {
+						var arrResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$(".slider:last .processing_status_loading").html('<?php print text("Sorry, there was an error"); ?>: VU-IDC101-SDF8DS');
+						$.dumper(strResponse);
+						return;
+					}
+					if (typeof(arrResponse) != "object") {
+						$(".slider:last .processing_status_loading").html('<?php print text("Sorry, there was an error"); ?>: VU-IDC102-S9D9DD');
+						$.dumper(strResponse);
+						return;
+					} else {
+						if (arrResponse["error"]) {
+							if (typeof(arrResponse["error"]) != "object") {
+								$(".slider:last .processing_status_loading").html(arrResponse["error"]);
+							} else {
+								for (strField in arrResponse["error"])
+								{
+									//alert($.dump($(".slider:last #" + strField).closest("li").html()));return;
+									$(".slider:last #" + strField).closest("li").next().html(arrResponse["error"][strField]).fadeIn();
+								}
+							}
+						} else if (arrResponse["success"] == "true") {
+							if (Object.keys(arrUsersToPayFor).length) {
+								$('.slider:last #idcard_section3 .user_ids').val(JSON.stringify(arrUsersToPayFor));
+								$("#slider_idcards #idcard_section3").fadeIn();
+							} else {
+								$(".slider:last .processing_status_loading").fadeOut();
+								$("#idcard_section1").fadeOut();
+								$("#idcard_section2").fadeOut();
+								$("#idcard_section3").fadeOut();
+								$("#idcard_section4").fadeIn();
+								//$("#idcard_section4 .ph_confirmation_code").html(arrResponse["confirmation_code"]);
+								$("#slider_idcards .col_status").html("<?php print text("ordered"); ?>");
+							}
+						} else {
+							alert("<?php print text("Sorry, there was an error"); ?>: VI-J103-99DS0S");
+							//alert($.dump(arrResponse));
+						}
+					}
+				}
+			});
+		}
+	});
+
+	$('#slider_idcards .fn_complete_order').bind("click", function () {
+		$('.slider:last #idcard_section3 .user_ids').val(JSON.stringify(allSelectedUsers));
+		$(".slider:last .processing_status").fadeOut();
+		$(".slider:last .processing_loading_status").fadeOut();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $(".slider:last .processing_status_loading").html('<?php print text("Loading..."); ?>').fadeIn(),
+			url : '<?php echo $sn . "/users/idcards" . $strParamPath; ?>',
+			dataType : "text",
+			data: $('.slider:last #idcard_section3 form').serialize(),
+			success : function(strResponse) {
+				try {
+					var arrResponse = jQuery.parseJSON(strResponse);
+				} catch(e) {
+					$(".slider:last .processing_status_loading").html('<?php print text("Sorry, there was an error"); ?>: VU-IDC101-SDF8DS');
+					$.dumper(strResponse);
+					return;
+				}
+				if (typeof(arrResponse) != "object") {
+					$(".slider:last .processing_status_loading").html('<?php print text("Sorry, there was an error"); ?>: VU-IDC102-S9D9DD');
+					$.dumper(strResponse);
+					return;
+				} else {
+					if (arrResponse["error"]) {
+						if (typeof(arrResponse["error"]) != "object") {
+							$(".slider:last .processing_status_loading").html(arrResponse["error"]);
+						} else {
+							for (strField in arrResponse["error"])
+							{
+								//alert($.dump($(".slider:last #" + strField).closest("li").html()));return;
+								$(".slider:last #" + strField).closest("li").next().html(arrResponse["error"][strField]).fadeIn();
+							}
+						}
+					} else if (arrResponse["success"] == "true") {
+						$(".slider:last .processing_status_loading").fadeOut();
+						$("#idcard_section1").fadeOut();
+						$("#idcard_section2").fadeOut();
+						$("#idcard_section3").fadeOut();
+						$("#idcard_section4").fadeIn();
+						//$("#idcard_section4 .ph_confirmation_code").html(arrResponse["confirmation_code"]);
+						$("#slider_idcards .col_status").html("<?php print text("ordered"); ?>");
+					} else {
+						alert("<?php print text("Sorry, there was an error"); ?>: VI-J103-99DS0S");
+						//alert($.dump(arrResponse));
+					}
+				}
+			}
+		});
+	});
+</script>
+<div class="slider" id="slider_idcards">
+	<style type="text/css">
+		#idcard_section3, #idcard_section2, #idcard_section4 {
+			display: none;
+		}
+		ul .list ul {
+			background-color: #ddd;
+			min-width: 200px;
+		}
+		.extrabox {
+			float: left;
+			font-size: 15px;
+			font-weight: bold;
+			min-height: 26px;
+			width: 90px;
+			padding:6px 10px 0 2px
+		}
+		.textmsg li {
+			font-size: 12pt !important;
+			line-height: 30px !important;
+			padding: 6px !important;
+		}
+		.processing_status_loading {
+			padding:3px;
+		}
+		#idcard_section2 div.lists li .title {
+			width: 260px;
+		}
+	</style>
+	<div class="col_title">
+		<span><?php print text(($this->arrConfigData["user"]["ranking"] ? "Rank" : "ID") . " Cards"); ?></span>
+	</div>
+
+	<div class="col_content">
+<?php
+	//include("uimods/sliderefresh.phtml");
+?>
+		<div id="idcard_section1">
+<?php
+	if (count($this->arrAuthCardsOrdered))
+	{
+?>
+			<div class="module form">
+				<div class="module_content list textmsg">
+					<ul>
+						<li>
+							<?php print text("You currently have"); ?> <?php print count($this->arrAuthCardsOrdered); ?> <?php print text("order(s) pending."); ?>
+						</li>
+					</ul>
+				</div>
+			</div>
+<?php
+	}
+	if ($this->intUnassigned > 0)
+	{
+?>
+			<div class="module form lists">
+				<div class="module_content list textmsg">
+					<ul>
+						<li>
+							<div class="title">
+								<?php print text("There are currently"); ?> <?php print $this->intUnassigned; ?> <?php print text("user(s) that are not assigned to any classes."); ?>
+							</div>
+						</li>
+						<li>
+							<a class="link" href="<?php echo $sn; ?>/classes/oneclassstudents<?php print $strParamPath; ?>">
+							  <div class="icon"></div>
+							  <div class="title"><?php print text("Associate Campers With Bunks"); ?></div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+<?php
+	}
+?>
+			<form method="POST" target="_blank" action="<?php print $sn . "/users/idcardsprintcamps" . $strParamPath; ?>">
+				<h2>Camper Selection</h2>
+				<input type="hidden" class="user_ids" name="user_ids" value="" />
+				<div style="margin-bottom:4px"><table width="96%" cellpadding="4" cellspacing="4"><tr><td>&nbsp;</td><td width="60"><span><a class="button fn_select_all_students">Select All Campers</a></span></td><td width="6">&nbsp;</td><td width="60"><span><a class="button fn_reset_all_students">Reset All</a></span></td></tr></table></div>
+				<div class="module form lists">
+					<div class="module_content list">
+						<ul>
+<?php
+	if (!count($this->arrClasses))
+	{
+?>
+							<li>
+								<div class="title"><?php print text("Thre are no bunks available."); ?></div>
+							</li>
+<?php
+	}
+	foreach ($this->arrClasses as $objClass)
+	{
+?>
+							<li id="li_class_<?php print $objClass->class_id; ?>">
+								<input type="hidden" class="class_id" value="<?php print $objClass->class_id; ?>"  />
+								<input class="data_point" type="hidden" id="class_<?php print $objClass->class_id; ?>" value="" />
+								<a class="link" href="<?php print $sn . "/checklist/users/cols/auth_card_card_status/colnames/Card+Status:200/permission/student/is_active/1/zero/none/class_id/" . $objClass->class_id . "/container/li_class_" . $objClass->class_id . "/inputname/class_" . $objClass->class_id . $strParamPath; ?>">
+									<div class="icon"></div>
+									<div class="title">Bunk: <?php print $objClass->grade . " " . $objClass->sub; ?></div>
+									<div class="lable_count" style="float:right;background-color:#fff;border:1px solid gray;margin:5px;padding:2px 12px 2px 12px;text-align:center;"><span><?php print isset($this->arrClassStudents[$objClass->class_id]) ? text("None") : ""; ?></span> <?php print text(isset($this->arrClassStudents[$objClass->class_id]) ? "Selected" : "Empty"); ?></div>
+								</a>
+							</li>
+<?php
+	}
+?>
+						</ul>
+					</div>
+				</div>
+			</form>
+			&nbsp;
+		</div>
+		<div id="idcard_section2">
+			<form>
+				<div class="module" id="module_accordion">
+					<div class="module_content list_expand numbered">
+						<ul>
+							<li>
+								<h3 id="awaiting_actions">
+									<span class="icon"></span> &nbsp;<span class="selected_user_count"></span> <?php print text("[|Camper(s)|] Selected"); ?>
+								</h3>
+								<p>
+									<div class="module form lists">
+										<div class="module_content list">
+											<ul></ul>
+										</div>
+									</div>
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<table cellpadding="4" cellspacing="4"><tr><td>&nbsp;</td><td width="60"><span><a class="button fn_print_locally"><?php print text("Print Locally"); ?></a></span></td><td width="6">&nbsp;</td><td width="60"><span><a class="button fn_order_from_hq"><?php print text("Order from HQ"); ?></a></span></td></tr></table>
+			</form>
+		</div>
+		<div id="idcard_section3">
+			<form>
+				<input type="hidden" class="user_ids" name="user_ids" value="" />
+				<h2><?php print text("Order Information"); ?></h2>
+				<div class="module form">
+					<div class="module_content list textmsg">
+						<ul>
+							<li>
+								<b><?php print text("Cost Per Card"); ?>:</b> $<span class="ph_cost_per_card">8</span><br />
+								<b><?php print text("Order Quantity"); ?>:</b> <span class="ph_order_quantity">3</span><br />
+								<b><?php print text("Total Cost"); ?>:</b> $<span class="ph_total_cost">25</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+<?php
+	/*
+				<h2>Shipping Information</h2>
+				<div class="module form">
+					<div class="module_content list">
+						<ul>
+							<li>
+								<span class="label">Shipping Address:</span>
+								<span class="input"><input autocomplete="off" type="text" name="shipping_address" id="shipping_address" value="<?php print $this->objInstitution->address; ?>" /></span>
+								<div class="clear"></div>
+							</li>
+							<div class="processing_status"></div>
+							<li>
+								<span class="label">City:</span>
+								<span class="input"><input autocomplete="off" type="text" name="shipping_city" id="shipping_city" value="<?php print $this->objInstitution->city; ?>" /></span>
+								<div class="clear"></div>
+							</li>
+							<div class="processing_status"></div>
+							<li>
+								<span class="label">State/Province:</span>
+								<span class="input"><input autocomplete="off" type="text" name="shipping_state" id="shipping_state" value="<?php print $this->objInstitution->state; ?>" /></span>
+								<div class="clear"></div>
+							</li>
+							<div class="processing_status"></div>
+							<li>
+								<span class="label">Zip/Postal Code:</span>
+								<span class="input"><input autocomplete="off" type="text" name="shipping_postal" id="shipping_postal" value="<?php print $this->objInstitution->postal; ?>" /></span>
+								<div class="clear"></div>
+							</li>
+							<div class="processing_status"></div>
+							<li>
+								<span class="label">Country:</span>
+								<span class="input"><input autocomplete="off" type="text" name="shipping_country" id="shipping_country" value="<?php print $this->objInstitution->country; ?>" /></span>
+								<div class="clear"></div>
+							</li>
+							<div class="processing_status"></div>
+						</ul>
+					</div>
+				</div>
+	 *
+	 */
+?>
+				<div class="module form">
+					<div class="module_content list textmsg">
+						<ul>
+							<li>
+								<?php print text("The order will be mailed to the institution address."); ?>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<h2><?php print text("Credit Card Information"); ?></h2>
+				<div class="module form">
+					<div class="module_content list">
+						<ul>
+							<li>
+								<span class="label"><?php print text("First Name:"); ?></span>
+								<span class="input"><input autocomplete="off" type="text" name="creditcard_first_name" id="creditcard_first_name" value="" /></span>
+								<div class="clear"></div>
+							</li>
+							<div class="processing_status"></div>
+							<li>
+								<span class="label"><?php print text("Last Name:"); ?></span>
+								<span class="input"><input autocomplete="off" type="text" name="creditcard_last_name" id="creditcard_last_name" value="" /></span>
+								<div class="clear"></div>
+							</li>
+							<div class="processing_status"></div>
+							<li>
+								<span class="label"><?php print text("Card Type:"); ?></span>
+								<span class="input">
+									<select  name="creditcard_name" id="creditcard_name" class="select">
+<?php
+	foreach ($this->arrCardTypes as $strCardType)
+	{
+?>
+										<option value="<?php print $strCardType; ?>"><?php print $strCardType; ?></option>
+<?php
+	}
+?>
+									</select>
+								</span>
+								<div class="clear"></div>
+							</li>
+							<div class="processing_status"></div>
+							<li>
+								<span class="label"><?php print text("Credit Card number"); ?>:</span>
+								<span class="input"><input autocomplete="off" type="text" name="creditcard_number" id="creditcard_number" class="required" value="" /></span>
+								<div class="clear"></div>
+							</li>
+							<div class="processing_status"></div>
+							<li>
+								<span class="label"><?php print text("Expiry date"); ?>:</span>
+								<span class="input">
+									<select name="creditcard_expiration_month" id="creditcard_expiration_month" class="select">
+										<option selected><?php print text("PLEASE SELECT"); ?></option>
+<?php
+	for ($i = 1; $i <= 12; $i++)
+	{
+		echo "<option value='$i'>" . date("F", mktime(0, 0, 0, $i+1, 0, 0, 0)) . "</option>";
+	}
+?>
+									</select>
+									<select name="creditcard_expiration_year" id="creditcard_expiration_year" class="select">
+<?php
+	$year = date('Y')-1;
+	for($i=0; $i < 6; $i++)
+	{
+		$year++;
+?>
+										<option value="<?php echo $year;?>"<?php !$i ? " selected" : ""; ?>><?php echo $year;?></option>
+<?php
+	}
+?>
+									</select>
+								</span>
+								<div class="clear"></div>
+							</li>
+							<div class="processing_status"></div>
+							<li>
+								<span class="label"><?php print text("CCV"); ?>:</span>
+								<span class="input"><input autocomplete="off" type="text" name="creditcard_ccv" id="creditcard_ccv" value="" class="required" width="50px"/></span>
+								<div class="clear"></div>
+							</li>
+							<div class="processing_status"></div>
+						</ul>
+					</div>
+				</div>
+				<h2><?php print text("Authorization"); ?></h2>
+				<div class="module message" style="text-align:left">
+					<?php print text("By pressing the \"complete order\" button below you are authorizing mashpia.com to charge the specified amount to your credit card."); ?>
+				</div>
+				<table cellpadding="4" cellspacing="4"><tr><td>&nbsp;</td><td width="60"><span><a class="button fn_complete_order"><?php print text("Complete Order"); ?></a></span></td></tr></table>
+				&nbsp;<br>&nbsp;
+			</form>
+		</div>
+		<div class="processing_status_loading"></div>
+		<div id="idcard_section4">
+			<form>
+				<h2><?php print text("Order Successful"); ?></h2>
+				<div class="module form">
+					<div class="module_content list textmsg">
+						<ul>
+							<li>
+								<?php print text("Your order was successful and will be sent to you asap. Thank you!"); ?><br />&nbsp;
+							</li>
+						</ul>
+					</div>
+				</div>
+			</form>
+		</div>
+		&nbsp;
+	</div>
+</div>

@@ -1,0 +1,67 @@
+<?php
+include "config.phtml";
+include "parameters.phtml";
+$objSession = new Zend_Session_Namespace('user_session_data');
+?>
+
+<script type="text/javascript">
+$(document).ready(function () {
+	$("#nav li").click(function () {
+		$("#nav li").removeClass("current");
+		$(this).addClass("current");
+	});
+});
+</script>
+
+<?php
+	if ($this->objUser->email == "andyware@gmail.com")
+	{
+?>
+	<ul class="list_first">
+		<li class="list_parent current"><a href="<?php print $sn; ?>/admin/front<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_school.png" width="28" height="28" alt="Home" /></span>Home</a></li>
+		<ul class="list_second">
+			<li><a href="<?php print bp; ?>/admin/bulkimageuploader<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_rank_card.png" width="22" height="22" alt="ID Cards" /></span>Bulk Image Upload</a></li>
+		</ul>
+		<li class="list_parent">
+			<a href="#" onclick="window.location.href = '<?php echo $sn; ?>/admin/logout<?php print $strParamPath; ?>';">
+				<span class="icon">
+					<img src="<?php echo $sn; ?>/images/back-end/admin/icon_door.png" width="28" height="28" alt="Logout" />
+				</span>
+				Logout
+			</a>
+		</li>
+	</ul>
+<?php
+	}
+	else
+	{
+?>
+	<ul class="list_first">
+		<li class="list_parent current"><a href="<?php print $sn; ?>/admin/front<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_school.png" width="28" height="28" alt="Home" /></span>Home</a></li>
+		<ul class="list_second">
+			<li><a href="<?php print bp; ?>/admin/idcardsselect<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_rank_card.png" width="22" height="22" alt="ID Cards" /></span>ID Cards</a></li>
+		</ul>
+		<ul class="list_second">
+			<li><a href="<?php echo $sn; ?>/admin/usersmenu/is_active/1/permission/missionsapp/url/<?php echo dblencode("admin/user" . $strParamPath) . $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_profile.png" width="22" height="22" alt="Users" /></span>Users</a></li>
+		</ul>
+		<ul class="list_second">
+			<li><a id="mainmenu_missions_a" href="<?php print bp; ?>/admin/missions<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/icon_bonus.png" width="22" height="22" alt="Missions" /></span>Missions</a></li>
+		</ul>
+		<ul class="list_second">
+			<li><a href="<?php print bp; ?>/admin/missioncards<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_admin_medal.png" width="22" height="22" alt="Mission Cards" /></span>Mission Cards</a></li>
+		</ul>
+		<ul class="list_second">
+			<li><a href="<?php print bp; ?>/admin/missionappreport<?php print $strParamPath; ?>"><span class="icon"><img src="<?php echo $sn; ?>/images/back-end/admin/icon_report.png" width="22" height="22" alt="Reports" /></span>Reports</a></li>
+		</ul>
+		<li class="list_parent">
+			<a href="#" onclick="window.location.href = '<?php echo $sn; ?>/admin/logout<?php print $strParamPath; ?>';">
+				<span class="icon">
+					<img src="<?php echo $sn; ?>/images/back-end/admin/icon_door.png" width="28" height="28" alt="Logout" />
+				</span>
+				Logout
+			</a>
+		</li>
+	</ul>
+<?php
+	}
+?>

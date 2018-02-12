@@ -1,0 +1,228 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script type="text/javascript">
+	$(document).ready(function () {
+		$("#taskmanager3 a.link_noreset")
+		.live('click', function(event) {
+			event.preventDefault();
+			if (boolCancelClicks)
+				return;
+			slideForward(this);
+			boolCancelClicks = true;
+			window.setTimeout(function () {
+				boolCancelClicks = false;
+			}, 700);
+		});
+		$('.slider:last').bind('slide_back', function () {
+			if ($('#taskmanager3').attr('do_refresh') == 'true') {
+				$('#incrementalscampaignlist').attr('do_refresh', 'true');
+				slideRefresh();
+				$('#taskmanager3').removeAttr('do_refresh');
+			}
+		});
+	});
+</script>
+<div class="slider" id="taskmanager3">
+	<style type="text/css">
+		#taskmanager3 h4 {
+			padding:0 0 3px 6px;
+		}
+		#taskmanager3 li.header .title_help.info {
+			background-image: url('<?php echo $sn . "/images/1367282650_help-bw.png"; ?>');
+		}
+		#taskmanager3 h2.fix_line {
+			border-bottom:1px solid #bbb;
+		}
+		#taskmanager3 .select_list .selected {
+			background-color: #DADEE6;
+		}
+		#taskmanager3 .text {
+			padding-left:4px;
+		}
+		#taskmanager3 .select_icon {
+			width:17px;
+			height:17px;
+			position: relative;
+			float: right;
+			margin-top:7px;
+			margin-bottom:-24px;
+			background-image: url('<?php echo $sn . "/images/check.png"; ?>');
+			opacity:0.7;
+		}
+		#taskmanager3 .module_content .module.lists {
+			margin-right:0;
+			margin-bottom:0;
+		}
+		#taskmanager3 .locked_message {
+			display:inline-block;
+			padding:8px;
+			font-size:12pt;
+		}
+		.header {
+			background-color:#666 !important;
+			-webkit-border-top-left-radius: 6px;
+			-webkit-border-top-right-radius: 6px;
+			-moz-border-radius-topleft: 6px;
+			-moz-border-radius-topright: 6px;
+			border-top-left-radius: 6px;
+			border-top-right-radius: 6px;
+			border: 1px solid #ccc;
+			color:#fff;
+			border-width: 1px 1px 0 1px;
+		}
+		.module.task li:not(.header) .title>div {
+			width: 190px;
+			overflow:hidden;
+			text-overflow:ellipsis;
+			white-space:nowrap;
+		}
+		div.lists li.header {
+			padding-bottom: 0;
+			padding-top: 0;
+		}
+		.module.task div.lists li.header .title:not(:last-child) {
+			border-right: 1px solid #777;
+		}
+		.module.task div.lists li:not(.header) .title:not(:last-child) {
+			border-right: 1px solid #ddd;
+		}
+		#taskmanager3 .module_content .module.lists li .title:not(:first-child) {
+			padding-left: 8px;
+		}
+		#taskmanager3 .choose_details * {
+
+		}
+		.info.list_expand li:first-child {
+			border-top:medium none;
+		}
+		.info.list_expand img {
+			border:1px solid #BBBBBB;
+			margin:2px;
+		}
+	</style>
+	<div class="col_title">
+		<span>Manage Tasks</span>
+	</div>
+	<div class="col_content">
+		<h2 style="margin-top:-2px"><span style="font-weight:normal;">Campaign</span>&nbsp;&nbsp;<?php print $this->objCampaign->campaign_name; ?></h2>
+		<div class="module accordion task">
+			<div class="module_content list_expand numbere">
+				<ul>
+					<li class="open task_opener">
+						<div class="select_icon hidden"></div>
+						<h3 class="hidden" onmouseup="window.setTimeout(function () {$('#profileadmin .student_barcode').focus()}, 100);">
+							<span class="icon"></span> <span class="text">Nothing Selected</span>
+						</h3>
+						<p>
+							<div class="module lists">
+								<div class="module_content">
+									<ul class="select_list">
+<?php
+	$arrWidths = array(
+										282,
+										240,
+										106,
+										16
+	);
+	$intWidthSum = array_sum($arrWidths);
+?>
+										<li class="header">
+											<div class="title" style="width:<?php print $arrWidths[0]; ?>px">Task Name</div>
+											<div class="title" style="width:<?php print $arrWidths[1]; ?>px"><?php print text("Type"); ?></div>
+											<div class="title" style="width:<?php print $arrWidths[2]; ?>px"><?php print text("[|Points|]"); ?></div>
+											<div style="margin-top:8px;margin-right:-1px;width:<?php print $arrWidths[3]; ?>px" title="This page takes you through, step by step, how to properly set up your school. You will also use this page to make changes to your school's basic setup, such as new students, new classes, etc." class="title_help info"></div>
+										</li>
+<?php
+	if (!count($this->arrTasks))
+	{
+?>
+										<li>
+											<div class="title" style="width:<?php print $intWidthSum; ?>px">Nothing to display</div>
+										</li>
+<?php
+	}
+	else
+	{
+		foreach ($this->arrTasks as $objTask)
+		{
+			$arrTaskType = array();
+			if ($objTask->installed_task_id)
+				$arrTaskType[] = 'host';
+			if ($objTask->is_locked)
+				$arrTaskType[] = 'locked';
+			if ($objTask->is_checkbox)
+				$arrTaskType[] = 'checkbox';
+			if (!count($arrTaskType))
+				$arrTaskType[] = 'normal';
+
+?>
+										<li>
+											<a class="link_noreset" href="<?php print $sn; ?>/incrementals/taskedit/task_id/<?php print $objTask->task_id . $strParamPath; ?>">
+												<div class="title" style="width:<?php print $arrWidths[0]; ?>px"><?php print $objTask->task_name; ?></div>
+												<div class="title" style="width:<?php print $arrWidths[1]; ?>px"><?php print join(' ', $arrTaskType); ?></div>
+												<div class="title" style="width:<?php print $arrWidths[2]; ?>px"><?php print $objTask->points; ?></div>
+												<div style="margin-top:8px;width:<?php print $arrWidths[3]; ?>px" title="More info" class="title_help info"></div>
+											</a>
+										</li>
+<?php
+		}
+	}
+?>
+									</ul>
+								</div>
+							</div>
+						</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<h2>Add Tasks</h2>
+<?php
+	if (!$this->boolInactive)
+	{
+		if ($this->objCampaign->installed_campaign_id)
+		{
+?>
+		<div class="module lists forms" style="margin-top:-3px;margin-bottom:6px">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/incrementals/taskinstall<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">Install Host Tasks</div>
+							<div class="help info" title="<?php print text("Info"); ?>"></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+<?php
+		}
+?>
+		<div class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/incrementals/taskedit<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">Add New Task</div>
+							<div class="help info" title="<?php print text("Info"); ?>"></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/incrementals/taskmanager3/inactive/true<?php print $strParamPath; ?>">
+							<div class="icon"></div>
+							<div class="title">View Deactivated Tasks</div>
+							<div class="help info" title="<?php print text("Info"); ?>"></div>
+						</a>
+					</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,53 @@
+<?php
+  include "config.phtml";
+  include "parameters.phtml";
+  $user_session_data = new Zend_Session_Namespace("user_session_data");
+?>
+<div class="slider">
+  <div class="col_title">
+	<span>Class List</span>
+  </div>
+  <div class="col_content">
+<?php
+	if (count($this->arrClasses) > 0)
+	{
+?>
+	<div id="lists" class="module lists forms">
+		<div class="module_content">
+		  <ul>
+			   <li>
+				<a class="link" href="<?php echo $sn; ?>/bulk/students-editor">
+					<div class="icon"></div>
+					<div class="title">Skip to All Students</div>
+				</a>
+			</li>
+<?php
+	foreach ($this->arrClasses as $objClass)
+	{
+?>
+			<li>
+				<a class="link" href="<?php echo $sn; ?>/bulk/students-editor/class_id/<?php print $objClass->class_id; ?>">
+					<div class="icon"></div>
+<?php
+		if ($user_session_data->institution_type == "School")
+		{
+?>
+					<div class="title"><?php echo  "Class: " . $objClass->grade . " " . $objClass->sub; ?></div>
+<?php
+	}
+	else
+	{
+?>
+					<div class="title"><?php echo  "Bunk: " . $objClass->sub; ?></div>
+<?php
+	}
+?>
+				</a>
+			</li>
+<?php } ?>
+		</ul>
+	</div>
+	</div>
+<?php } ?>
+  </div>
+</div>

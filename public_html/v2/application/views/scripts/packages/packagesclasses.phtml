@@ -1,0 +1,164 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script language="javascript">
+var checkbox_select_group_1 = false;
+
+function toggleCheckboxes(group)
+{
+	if(group == "group_1")
+	{
+		field = document.packageclasses.class_id;
+		if(checkbox_select_group_1)
+		{
+			checkbox_select_group_1 = false;
+			selected_status = false;			
+			$("#group_status").html("SELECT ALL");
+			for (i = 0; i < field.length; i++)
+			{
+				field[i].checked = selected_status;				
+			}
+		}
+        else
+		{
+			checkbox_select_group_1 = true;
+			selected_status = true;
+			$("#group_status").html("DESELECT ALL");
+			for (i = 0; i < field.length; i++)
+			{
+				field[i].checked = selected_status;
+			}
+		}
+	}
+}
+$(document).ready(function()
+{
+	$('#packageclasses a.submit').click( function(e) {
+		e.preventDefault();
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#processing_status").html('Loading...').fadeIn("slow"),
+			url : '<?php echo $sn; ?>/packages/packagesclasses',
+			dataType : "text",
+			data: $('#packageclasses').serialize(),
+			success : function(response) {
+				if (response.match(/^[0-9]+$/)) {
+					$("#processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+                    slideRefresh();
+				} else {
+					$("#processing_status").html(response).fadeIn("slow");
+				}
+			}
+		});
+	});
+});
+function deleteClassAddon(addon_config_id)
+{
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#processing_status2").html('Loading...').fadeIn("slow"),            
+			url : '<?php echo $sn; ?>/packages/packagesclasses/mode/delete/addon_config_id/'+addon_config_id,
+			dataType : "text",
+			data: $('#slider_packageclasses #existingaddonconfiguration').serialize(),
+			success : function(response) {
+				if (response.match(/^[0-9]+$/)) {
+					$(" #processing_status2").html("Addon for this class was removed. It will no longer be available to students to purchase.").fadeIn("slow").delay(5000).fadeOut("slow");
+                    slideRefresh();
+				} else {
+					$("#processing_status2").html(response).fadeIn("slow");
+				}
+			}
+		});
+}
+
+
+</script>
+<div class="slider" id="slider_packageclasses">
+	<div class="col_title">
+		<span>
+			Package Configuration
+		</span>
+	</div>	
+	<div class="col_content camper">
+		<div class="module form" id="module-info">
+			<div class="module_content list">
+<?php
+                if(count($this->arrClasses) == 0)
+                {
+                    print "There are no Classes in this school.";
+                }
+?>
+                <form name="packageclasses" id="packageclasses" method="post" action="">
+					<ul>
+						<li><h1>Package Configuration</h1></li>
+						<li>
+							<div>
+								<input type="checkbox" name="checkAll" id="checkAll" value="" onClick="toggleCheckboxes('group_1')"><span id="group_status">SELECT ALL</span>
+							</div>
+						</li>
+<?php
+            $i=0;
+            foreach($this->arrClasses as $objClasses)
+            {
+?>
+                        <li>
+							<input type="checkbox" name="class_id[<?php print $i;?>]" id="class_id" value="<?php print $objClasses->class_id."_".$this->addon_id."_".$this->institution_id; ?>">
+							<?php echo "Grade: " .$objClasses->grade." ". $objClasses->sub ." ". $objClasses->teacher; ?>
+							<span style="float:right !important;" / >
+								<span> Is this addon mandatory :</span>
+								<span>
+									<select name="input_mandatory[<?php print $i;?>]" id="input_mandatory">
+										<option>Select</option>
+										<option value="yes">yes</option>
+										<option value="no">no</option>
+									</select>
+								</span>
+							</span>
+                        </li>
+<?php
+            $i++;
+            }
+?>
+                        <div id="processing_status"><?php if ($this->message){ echo $this->message . "<br>"; }?></div>
+						<li>
+							<span><a href="#" title="Save" class="button submit">Save</a></span>							
+							<div class="clear"></div>							
+						</li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+        <div class="module form" id="module-info">
+			<div class="module_content list">
+                <h1>Existing add-on configuration</h1>
+                <form name="existingaddonconfiguration" id="existingaddonconfiguration" action="" method="post" />
+                <ul>
+<?php
+                if(count($this->arrClassesAddonSettings) >0)
+                {
+                    foreach($this->arrClassesAddonSettings as $objClassesAddonSettings)
+                    {
+?>
+                        <li>
+                            <span class="label"><?php echo "Grade: " .$objClassesAddonSettings->grade." ". $objClassesAddonSettings->sub; ?></span>
+							<span style="flost:right; !important;"><?php print $objClassesAddonSettings->is_mandatory=="yes" ? "mandatory" : "optional"; ?></span>
+                            <span class="input" style="float:right !important;"><a href="#" title="DELETE" class="button submit" onclick="deleteClassAddon(<?php print $objClassesAddonSettings->addon_config_id; ?>);">DELETE</a></span>	
+						</li>
+                        
+<?php
+                    }
+                }
+                else{
+                    print "You did not configure this addon for you classes";
+                }
+?>
+                </ul>
+                <div id="processing_status2"><?php if ($this->message){ echo $this->message . "<br>"; }?></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

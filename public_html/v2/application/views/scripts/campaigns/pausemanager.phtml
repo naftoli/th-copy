@@ -1,0 +1,238 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+?>
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('#pausemanager .date.pause_start').datepicker({
+			changeMonth: true,
+			changeYear: true,
+			onClose: function( selectedDate ) {
+				$('#pausemanager .date.pause_end').datepicker( "option", "minDate", selectedDate );
+			}
+		}).click(function (e) {
+			$(this).datepicker("show")
+		});
+		$('#pausemanager .date.pause_end').datepicker({
+			changeMonth: true,
+			changeYear: true,
+			onClose: function( selectedDate ) {
+				$('#pausemanager .date.pause_start').datepicker( "option", "maxDate", selectedDate );
+			}
+		}).click(function (e) {
+			$(this).datepicker("show")
+		});
+		$('#pausemanager .add_pause').click(function () {
+			var arrParams = $('#pausemanager form.new_pause').serializeObject();
+			arrParams.strPostType = 'add_pause';
+			$.ajax({
+				type : "POST",
+				cache : false,
+				url : '<?php print $sn . '/campaigns/pausemanager' . $strParamPath; ?>',
+				dataType : "text",
+				data: arrParams,
+				success : function(strResponse) {
+					$("#pausemanager .errors:not(.hidden)").addClass('hidden');
+					try {
+						var objResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$("#pausemanager .main_status").html("Sorry, there was an error: VC-PM101-asd3f3").removeClass("hidden");
+						$.alert(strResponse);
+						return;
+					}
+					if (typeof(objResponse) != "object") {
+						$("#pausemanager .main_status").html("Sorry, there was an error: VC-PM102-asdvfd").removeClass("hidden");
+						$.alert(strResponse);
+						return;
+					} else {
+						$("#pausemanager .main_status").fadeOut();
+						if (objResponse["error"]) {
+							if (typeof(objResponse.error) == 'object') {
+
+								for (var strKey in objResponse.error)
+								{
+									$('#pausemanager .' + strKey + '_error')
+										.html(objResponse.error[strKey])
+										.removeClass('hidden');
+								}
+							} else {
+								$("#pausemanager .main_status").html(objResponse["error"]).removeClass("hidden");
+							}
+						} else if (objResponse["success"] == "true") {
+							$('#pausemanager input.pause_start').val('');
+							$('#pausemanager input.pause_end').val('');
+							$("#pausemanager .main_status")
+								.html('Saved')
+								.removeClass("hidden")
+								.delay(1000)
+								.queue(function () {
+									$(this).dequeue().addClass('hidden');
+									slideRefresh();
+								});
+						} else {
+							$("#pausemanager .main_status").html("Sorry, there was an error: VC-PM103-f3dd2a").removeClass("hidden");
+							$.alert(objResponse);
+						}
+					}
+				}
+			});
+		});
+		$('#pausemanager .remove_pause').click(function () {
+			var objRow = $(this).closest('.rows');
+			var intRow = objRow.attr('row_number');
+			if (!confirm('Are you sure you would remove row ' + intRow + '?'))
+				return;
+			var arrParams = {};
+			arrParams.intPausedId = objRow.attr('paused');
+			arrParams.intResumedId = objRow.attr('resumed');
+			arrParams.strPostType = 'remove_pause';
+			$.ajax({
+				type : "POST",
+				cache : false,
+				url : '<?php print $sn . '/campaigns/pausemanager' . $strParamPath; ?>',
+				dataType : "text",
+				data: arrParams,
+				success : function(strResponse) {
+					//$.alert(strResponse);
+					$("#pausemanager .errors:not(.hidden)").addClass('hidden');
+					try {
+						var objResponse = jQuery.parseJSON(strResponse);
+					} catch(e) {
+						$("#pausemanager .main_status").html("Sorry, there was an error: VC-PM101-asd3f3").removeClass("hidden");
+						$.alert(strResponse);
+						return;
+					}
+					if (typeof(objResponse) != "object") {
+						$("#pausemanager .main_status").html("Sorry, there was an error: VC-PM102-asdvfd").removeClass("hidden");
+						$.alert(strResponse);
+						return;
+					} else {
+						$("#pausemanager .main_status").fadeOut();
+						if (objResponse["error"]) {
+							if (typeof(objResponse.error) == 'object') {
+
+								for (var strKey in objResponse.error)
+								{
+									$('#pausemanager .' + strKey + '_error')
+										.html(objResponse.error[strKey])
+										.removeClass('hidden');
+								}
+							} else {
+								$("#pausemanager .main_status").html(objResponse["error"]).removeClass("hidden");
+							}
+						} else if (objResponse["success"] == "true") {
+							slideRefresh();
+						} else {
+							$("#pausemanager .main_status").html("Sorry, there was an error: VC-PM103-f3dd2a").removeClass("hidden");
+							$.alert(objResponse);
+						}
+					}
+				}
+			});
+		});
+		$('#pausemanager form').submit(function () {
+			$('#pausemanager .add_pause').trigger('click');
+		});
+	});
+</script>
+<div class="slider" id="pausemanager">
+	<style type="text/css">
+		#pausemanager .module {
+			padding:6px 20px;
+		}
+		#pausemanager td:not(:last-child) {
+			padding-right: 10px;
+		}
+		#pausemanager input {
+			padding: 2px;
+			font-size:10pt;
+		}
+		#pausemanager .header td {
+			text-shadow:2px 2px 2px rgba(0,0,0,0.3);
+		}
+		tr.rows:nth-child(even) {background: rgba(0,0,0,0.05)}
+	</style>
+	<div class="col_title">
+		<span>Pause Manager</span>
+	</div>
+	<div class="col_content">
+<?php
+	include("uimods/sliderefresh.phtml");
+		$intUser = $this->user_id;
+	// Security warning: only include this places where the session has been validated
+	$query = new QueryGen();
+	$objUser = first($query->users__select(array(
+		'user_id' => $intUser
+	)));
+?>
+	<div class="module">
+		<div style="padding:6px">
+			Student: <b><?php print $objUser->first_name . " " . $objUser->last_name; ?></b><br />&nbsp;<br />
+			Your Chayolims missions will start from when they enroll and continue up to the end of Grade 7.
+			If you would like to deactivate certain time periods from them, please use the dates selection to create a "pause" for that period of time.
+		</div>
+	</div
+		</div>
+		<div class="module">
+			<form method="post" class="new_pause">
+				<table border="0" width="100%">
+					<tr>
+						<td width="120" align="center" style="text-shadow:2px 2px 2px rgba(0,0,0,0.3);">Add a Pause</td>
+						<td width="200">
+							Pause Start<br />
+							<input type="text" name="pause_start" class="pause_start date" name="pause_start" />
+							<div class="pause_start_error errors hidden"></div>
+						</td>
+						<td>
+							Pause End<br />
+							<input type="text" name="pause_end" class="pause_end date" name="pause_end" />
+							<div class="pause_end_error errors hidden"></div>
+						</td>
+						<td width="120">
+							<div class="button add_pause" style="float:right">Add New Pause</div>
+						</td>
+					</tr>
+				</table>
+				<div class="main_status hidden" style="padding:5px 15px;"></div>
+				<input type="submit" style="display:none;" />
+			</form>
+		</div>
+		<div class="module">
+			<table border="0" width="100%">
+				<tr class="header">
+					<td></td>
+					<td></td>
+					<td>Pause Start</td>
+					<td>Pause End</td>
+					<td></td>
+				</tr>
+<?php
+	$intItr = 1;
+	foreach ($this->arrPauseResume as $intKey => $arrPauseResume)
+	{
+		if (count($arrPauseResume) != 2)
+			continue;
+?>
+				<tr row_number="<?php print $intItr; ?>" class="rows" paused="<?php print first($arrPauseResume['Paused'])->user_campaign_id; ?>" resumed="<?php print first($arrPauseResume['Resumed'])->user_campaign_id; ?>">
+					<td height="32" width="26" align="right"><?php print $intItr; ?>.</td>
+					<td width="10"></td>
+					<td width="120"><?php print date('M d, Y', first($arrPauseResume['Paused'])->schedule_date); ?></td>
+					<td><?php print date('M d, Y', first($arrPauseResume['Resumed'])->schedule_date); ?></td>
+					<td align="right"><div class="button remove_pause" style="float:right;">Remove Pause</div></td>
+				</tr>
+<?php
+		$intItr++;
+	}
+	if (!count($this->arrPauseResume))
+	{
+?>
+				<tr colspan="5">
+					<td>There are currently no items paused for this user.</td>
+				</tr>
+<?php
+	}
+?>
+			</table>
+		</div>
+	</div>
+</div>

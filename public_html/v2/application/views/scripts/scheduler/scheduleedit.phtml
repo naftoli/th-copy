@@ -1,0 +1,122 @@
+<?php 
+	include "config.phtml";
+	include "parameters.phtml";
+	var_dump($this->objParams);
+?>
+<script>
+$(document).ready(function()
+{
+	$('#r1_slider_scheduler_scheduleedit form a.submit').click( function(e) {
+		e.preventDefault();
+		var strAjaxPath = '<?php echo $sn . "/scheduler/scheduleedit" . $strParamPath; ?>';
+		$.ajax({
+			type : "POST",
+			cache : false,
+			start: $("#r1_slider_scheduler_scheduleedit #processing_status").html('Loading...').fadeIn("slow"),
+			url : strAjaxPath,
+			dataType : "text",
+			data: $('#r1_slider_scheduler_scheduleedit form').serialize(),
+			success : function(strResponse) {
+				if (strResponse == "1") {
+					$("#r1_slider_scheduler_scheduleedit #processing_status").html("Save successful.").fadeIn("slow").delay(2000).fadeOut("slow");
+				} else {
+					$("#r1_slider_scheduler_scheduleedit #processing_status").html(strResponse).fadeIn("slow");
+				}
+			}
+		});
+	});
+	$.mask.definitions['2']="[0-2]";
+	$.mask.definitions['6']="[0-5]";
+	$("#start_time").mask("29:69");
+});
+</script>
+<style>
+	#r1_slider_scheduler_scheduleedit #date_accordion div {
+		padding: 3px;
+	}
+</style>
+<div class="slider" id="r1_slider_scheduler_scheduleedit">
+	<div class="col_title"><span>Scheduling</span></div>	
+		<div class="col_content camper">
+			<!--div class="module lists" id="lists-camper-groups">
+				<div class="module_content">
+					<ul>
+						<li>
+							<a class="link" href="<?php print $sn . "/scheduler/calendar/dynamic/true" . $strParamPath; ?>">
+								<div class="icon"></div>
+								<div class="title">Preview on calendar</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div-->
+			<div class="module lists" id="lists-camper-groups" style="padding: 5px;">
+				<form>
+					<div style="padding: 5px;">
+						<input type="checkbox" id="scheduler_missionsscheduling_debug" name="scheduler_missionsscheduling_debug" unchecked />
+						<lable for="scheduler_missionsscheduling_debug">Debug mode</lable>
+					</div>
+					<div class="module_content" style="padding: 5px;">
+						Comma delimit the values
+						<div id="date_accordion">
+							<h3>Frequency</h3>
+							<div>
+								<select name="frequency">
+									<option<?php print @$this->objParams->frequency == "Yearly" ? " selected" : ""; ?>>Yearly</option>
+									<option<?php print @$this->objParams->frequency == "Monthly" ? " selected" : ""; ?>>Monthly</option>
+									<option<?php print @$this->objParams->frequency == "Weekly" ? " selected" : ""; ?>>Weekly</option>
+									<option<?php print @$this->objParams->frequency == "Daily" ? " selected" : ""; ?>>Daily</option>
+								</select>
+							</div>
+							<h3>Years (2010-2020)</h3>
+							<div>
+								<input type="text" name="years" value="<?php print @$this->objParams->years; ?>" size="40" />
+							</div>
+							<h3>Weeks in year (1-52)</h3>
+							<div>
+								<input type="text" name="weeks_in_year" value="<?php print @$this->objParams->weeks_in_year; ?>" size="40" />
+							</div>
+							<h3>Days in year (1-365)</h3>
+							<div>
+								<input type="text" name="days_in_year" value="<?php print @$this->objParams->days_in_year; ?>" size="40" />
+							</div>
+							<h3>Months (Jan-Dec)</h3>
+							<div>
+								<input type="text" name="months" value="<?php print @$this->objParams->months; ?>" size="40" />
+							</div>
+							<h3>Weeks in month (1-4)</h3>
+							<div>
+								<input type="text" name="weeks_in_month" value="<?php print @$this->objParams->weeks_in_month; ?>" size="40" />
+							</div>
+							<h3>Days in month (1-31)</h3>
+							<div>
+								<input type="text" name="days_in_month" value="<?php print @$this->objParams->days_in_month; ?>" size="40" />
+							</div>
+							<h3>Days of week (Sun-Sat)</h3>
+							<div>
+								<input type="text" name="days_of_week" value="<?php print @$this->objParams->days_of_week; ?>" size="40" />
+							</div>
+							<h3>Start time</h3>
+							<div>
+								<input type="text" name="start_time" id="start_time" value="<?php print @$this->objParams->start_time; ?>" size="40" />
+							</div>
+							<h3>Expiration (Miniutes 0-X); X being the number of minutes between repetitions of this schedule.<br>0 = Closed loop.</h3>
+							<div>
+								<input type="text" name="expiration" value="<?php print intval(@$this->objParams->expiration); ?>" size="40" />
+							</div>
+							<div id="processing_status"></div>
+							<div>
+								<span><a href="#" title="Save" class="button submit">Save</a></span>							
+								<div class="clear"></div>							
+							</div>
+						<!--
+							Coming soon:
+							Dynamic segments (morning,evening)
+							Calendar specific events (holidays)
+						-->
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

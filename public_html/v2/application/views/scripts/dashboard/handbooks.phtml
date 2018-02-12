@@ -1,0 +1,31 @@
+<?php
+	include "config.phtml";
+	include "parameters.phtml";
+	$user_session_data = new Zend_Session_Namespace('user_session_data');
+?>
+<div class="slider">
+	<div class="col_title">
+		<span>Handbook</span>
+		<div class="title_help info" title="Help text coming soon."></div>
+	</div>
+	<div class="col_content">
+		<div id="lists" class="module lists forms">
+			<div class="module_content">
+				<ul>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/menu/users2/pt/1/is_active/1/is_registered/1/permission/student/url/<?php echo dblencode('menu/campaigns/pre/Handbook/all/true/campaign_id/1320,1321,1322,1323/url/' . dblencode("campaigns/handbooks" . $strParamPath)); ?>">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Handbook Marking"); ?></div>
+						</a>
+					</li>
+					<li>
+						<a class="link" href="<?php echo $sn; ?>/campaigns/handbookachievementcards">
+							<div class="icon"></div>
+							<div class="title"><?php print text("Handbook [|Point|] Card Sets"); ?></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
