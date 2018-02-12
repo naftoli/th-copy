@@ -1,0 +1,5102 @@
+msgid ""
+msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-05-21 04:54-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin.php:9
+msgid "Admin Menu"
+msgstr ""
+
+#: admin.php:9 admin_auction.php:104 admin_auction_print.php:24
+#: admin_auction_run.php:110 admin_auction_winners.php:35
+#: admin_card_print.php:62 admin_chains.php:114 admin_class.php:90
+#: admin_date_tasks.php:144 admin_inst.php:79 admin_invite.php:23
+#: admin_label.php:74 admin_marks.php:58 admin_marks_hakhel.php:51
+#: admin_marks_wwtc.php:174 admin_medal.php:48 admin_message.php:27
+#: admin_mission.php:138 admin_mission_report.php:14 admin_participant.php:20
+#: admin_points_print.php:67 admin_points_school.php:43
+#: admin_points_templates.php:40 admin_print_pdf.php:214
+#: admin_prize_auction.php:92 admin_prize_store.php:84 admin_rank.php:79
+#: admin_report.php:91 admin_report_auction.php:37 admin_report_hakhel.php:57
+#: admin_report_wwtc.php:42 admin_reports.php:43 admin_role.php:67
+#: admin_school.php:135 admin_school_type.php:86 admin_stats.php:14
+#: admin_store.php:26 admin_subject.php:139 admin_tanya_goals.php:20
+#: admin_tanya_lines.php:22 admin_tanya_lines_print.php:9 admin_task.php:184
+#: admin_team.php:67 admin_todo_category.php:100 admin_todolist.php:64
+#: admin_track.php:65 admin_user.php:88 admin_user_auction.php:59
+#: admin_user_auction_bulk.php:37 admin_user_track.php:44
+#: admin_users_photo.php:36 admin_users_tanya.php:49 admin_users_track.php:51
+#: admin_view_chains.php:18 admin_view_date_tasks.php:20 admin_view_task.php:7
+#: auction.php:25 banner.php:13 banner2.php:6 dashboard.php:28 icalendar.php:7
+#: login.php:7 preferences.php:15 register.php:61 register_parent.php:74
+#: register_school.php:110 statement.php:31 store.php:37 tasks.php:54
+#: tasks_personal.php:69 tasks_school_type.php:14 tasks_tracks.php:29
+msgid "Tzivos Hashem Management System"
+msgstr ""
+
+#: admin.php:32 admin_auction.php:115 admin_auction_print.php:122
+#: admin_auction_run.php:120 admin_auction_winners.php:45
+#: admin_card_print.php:261 admin_chains.php:292 admin_class.php:100
+#: admin_date_tasks.php:400 admin_inst.php:89 admin_invite.php:33
+#: admin_label.php:84 admin_marks.php:115 admin_marks_hakhel.php:62
+#: admin_marks_wwtc.php:185 admin_medal.php:58 admin_message.php:37
+#: admin_mission.php:173 admin_mission_report.php:24 admin_participant.php:30
+#: admin_points_print.php:109 admin_points_school.php:72
+#: admin_points_templates.php:50 admin_print_pdf.php:224
+#: admin_prize_auction.php:102 admin_prize_store.php:94 admin_rank.php:89
+#: admin_report.php:102 admin_report_auction.php:141
+#: admin_report_hakhel.php:67 admin_report_wwtc.php:52 admin_reports.php:54
+#: admin_role.php:77 admin_school.php:145 admin_school_type.php:96
+#: admin_stats.php:24 admin_store.php:36 admin_subject.php:149
+#: admin_tanya_goals.php:30 admin_tanya_lines.php:32
+#: admin_tanya_lines_print.php:19 admin_task.php:236 admin_team.php:77
+#: admin_todo_category.php:110 admin_todolist.php:75 admin_track.php:75
+#: admin_user.php:98 admin_user_auction.php:89 admin_user_auction_bulk.php:47
+#: admin_user_track.php:54 admin_users_photo.php:46 admin_users_tanya.php:88
+#: admin_users_track.php:61 admin_view_chains.php:28
+#: admin_view_date_tasks.php:30 admin_view_task.php:22 dashboard.php:50
+#: statement.php:54
+msgid "Logout"
+msgstr ""
+
+#: admin.php:72 admin.php:310 admin_auction.php:112
+#: admin_auction_print.php:119 admin_auction_run.php:117
+#: admin_auction_winners.php:42 admin_card_print.php:258 admin_chains.php:289
+#: admin_class.php:97 admin_date_tasks.php:397 admin_inst.php:86
+#: admin_invite.php:30 admin_label.php:81 admin_marks.php:112
+#: admin_marks_hakhel.php:59 admin_marks_wwtc.php:182 admin_medal.php:55
+#: admin_message.php:34 admin_mission.php:170 admin_mission_report.php:21
+#: admin_participant.php:27 admin_points_print.php:106
+#: admin_points_school.php:69 admin_points_templates.php:47
+#: admin_print_pdf.php:221 admin_prize_auction.php:99 admin_prize_store.php:91
+#: admin_rank.php:86 admin_report.php:99 admin_report_auction.php:138
+#: admin_report_hakhel.php:64 admin_report_wwtc.php:49 admin_reports.php:51
+#: admin_role.php:74 admin_school.php:142 admin_school_type.php:93
+#: admin_stats.php:21 admin_store.php:33 admin_subject.php:146
+#: admin_tanya_goals.php:27 admin_tanya_lines.php:29
+#: admin_tanya_lines_print.php:16 admin_task.php:233 admin_team.php:74
+#: admin_todo_category.php:107 admin_todolist.php:72 admin_track.php:72
+#: admin_user.php:95 admin_user_auction.php:86 admin_user_auction_bulk.php:44
+#: admin_user_track.php:51 admin_users_photo.php:43 admin_users_tanya.php:85
+#: admin_users_track.php:58 admin_view_chains.php:25
+#: admin_view_date_tasks.php:27 admin_view_task.php:19
+msgid "Home page"
+msgstr ""
+
+#: admin.php:74
+msgid "My Dashboard for"
+msgstr ""
+
+#: admin.php:76
+msgid "Welcome, Commanding Officer"
+msgstr ""
+
+#: admin.php:77 admin.php:315 admin_todolist.php:91 admin_todolist.php:103
+#: admin_todolist.php:176
+msgid "of"
+msgstr ""
+
+#: admin.php:86
+msgid "Default Tzivos Hashem Type"
+msgstr ""
+
+#: admin.php:87
+msgid "Default Ladder"
+msgstr ""
+
+#: admin.php:110 admin.php:330
+msgid "My To-Do list"
+msgstr ""
+
+#: admin.php:115 admin.php:334 dashboard.php:104
+msgid "List only unfinished to-do items"
+msgstr ""
+
+#: admin.php:115 admin.php:334 dashboard.php:104
+msgid "List all to-do items"
+msgstr ""
+
+#: admin.php:121 admin.php:339 admin_todolist.php:122 admin_todolist.php:163
+#: dashboard.php:109
+msgid "Priority"
+msgstr ""
+
+#: admin.php:122 admin.php:340 admin_todolist.php:133 admin_todolist.php:165
+#: dashboard.php:110
+msgid "Due Date"
+msgstr ""
+
+#: admin.php:123 admin.php:341 admin.php:494 admin_chains.php:121
+#: admin_chains.php:489 admin_date_tasks.php:151 admin_date_tasks.php:605
+#: admin_label.php:96 admin_label.php:118 admin_points_templates.php:101
+#: admin_prize_auction.php:117 admin_prize_store.php:106 admin_report.php:647
+#: admin_todolist.php:121 admin_todolist.php:162 admin_view_chains.php:121
+#: admin_view_date_tasks.php:126 dashboard.php:111 statement.php:192
+#: tasks_personal.php:147 tasks_personal.php:183
+msgid "Description"
+msgstr ""
+
+#: admin.php:124 admin.php:342 dashboard.php:112
+msgid "View/Print"
+msgstr ""
+
+#: admin.php:125 admin.php:343 dashboard.php:113
+msgid "Complete"
+msgstr ""
+
+#: admin.php:135 admin_reports.php:43 admin_reports.php:57
+msgid "Reports"
+msgstr ""
+
+#: admin.php:136 admin.php:211 admin.php:376 dashboard.php:148
+#, php-format
+msgid "%d items"
+msgstr ""
+
+#: admin.php:153
+msgid "View and print Report"
+msgstr ""
+
+#: admin.php:155
+msgid "Not available for printing"
+msgstr ""
+
+#: admin.php:162 admin_reports.php:113
+msgid "Process Report"
+msgstr ""
+
+#: admin.php:167
+msgid "Mark as printed"
+msgstr ""
+
+#: admin.php:167
+msgid "Printed on"
+msgstr ""
+
+#: admin.php:167
+msgid "Unmark as printed"
+msgstr ""
+
+#: admin.php:171 admin.php:201 admin.php:366 dashboard.php:138 todo.php:70
+msgid "Mark as done"
+msgstr ""
+
+#: admin.php:171
+msgid "Processed on"
+msgstr ""
+
+#: admin.php:171 admin.php:201 admin.php:366 dashboard.php:138
+msgid "Unmark as done"
+msgstr ""
+
+#: admin.php:200 admin.php:365 dashboard.php:137
+msgid "View/Print File"
+msgstr ""
+
+#: admin.php:200 admin.php:365 admin_todolist.php:183 dashboard.php:137
+msgid "Goto Link"
+msgstr ""
+
+#: admin.php:201 admin.php:366 dashboard.php:138
+msgid "Marked on"
+msgstr ""
+
+#: admin.php:223
+msgid "This Todo is for your school only."
+msgstr ""
+
+#: admin.php:228
+msgid "My Management system"
+msgstr ""
+
+#: admin.php:235
+msgid "Tzivos Hashem Stats"
+msgstr ""
+
+#: admin.php:241 admin_print_pdf.php:116 admin_print_pdf.php:128
+#: admin_print_pdf.php:136 admin_report.php:286 admin_report.php:291
+#: admin_report.php:297 admin_report_hakhel.php:429
+#: admin_report_hakhel.php:435 admin_report_wwtc.php:437
+#: admin_report_wwtc.php:446 admin_todolist.php:99 admin_user.php:88
+#: admin_user.php:101 db.php:169
+msgid "Soldiers"
+msgstr ""
+
+#: admin.php:242 admin_points_school.php:52
+msgid "Total Points"
+msgstr ""
+
+#: admin.php:243
+msgid "Average Points"
+msgstr ""
+
+#: admin.php:244
+msgid "Tanya Lines Done"
+msgstr ""
+
+#: admin.php:245
+msgid "Tanya Pledges"
+msgstr ""
+
+#: admin.php:249
+msgid "All schools"
+msgstr ""
+
+#: admin.php:253 admin_invite.php:77 admin_marks_hakhel.php:161
+#: admin_marks_hakhel.php:222 admin_marks_wwtc.php:269
+#: admin_participant.php:95 admin_points_school.php:97
+#: admin_report_auction.php:274 admin_report_wwtc.php:271 admin_user.php:176
+#: admin_user.php:221 dashboard.php:55 statement.php:59
+msgid "Platoon"
+msgstr ""
+
+#: admin.php:253 admin_report.php:302
+msgid "Not in a platoon"
+msgstr ""
+
+#: admin.php:256 admin_participant.php:100 admin_report.php:300
+#: admin_user.php:191 admin_user.php:227
+msgid "Squad"
+msgstr ""
+
+#: admin.php:256
+msgid "Not in a squad"
+msgstr ""
+
+#: admin.php:281
+msgid "My Platoon"
+msgstr ""
+
+#: admin.php:315
+msgid "Welcome"
+msgstr ""
+
+#: admin.php:316
+msgid "My Soldier"
+msgstr ""
+
+#: admin.php:388 dashboard.php:160
+msgid "This Todo is for you only."
+msgstr ""
+
+#: admin.php:400
+#, php-format
+msgid "Card: %s granted to Soldier."
+msgstr ""
+
+#: admin.php:403
+msgid "Award Achievement Cards"
+msgstr ""
+
+#: admin.php:405
+msgid "Local (school) achievement cards"
+msgstr ""
+
+#: admin.php:410 admin_points_print.php:175
+msgid "Select Template"
+msgstr ""
+
+#: admin.php:412 admin_auction_print.php:208 admin_marks_wwtc.php:306
+#: admin_marks_wwtc.php:334 admin_points_print.php:152
+#: admin_points_print.php:177 admin_report_auction.php:314
+#: admin_report_wwtc.php:364 admin_stats.php:86 admin_user_auction.php:158
+#: admin_user_auction.php:163 admin_user_auction_bulk.php:119
+#: card_printer.php:55 statement.php:87
+msgid "Miles"
+msgstr ""
+
+#: admin.php:416 admin.php:436 admin.php:453 admin.php:475
+#: admin_auction.php:129 admin_auction_print.php:183 admin_auction_run.php:134
+#: admin_auction_winners.php:58 admin_card_print.php:297
+#: admin_card_print.php:350 admin_chains.php:309 admin_chains.php:327
+#: admin_class.php:112 admin_date_tasks.php:417 admin_date_tasks.php:435
+#: admin_invite.php:47 admin_invite.php:63 admin_marks.php:129
+#: admin_marks.php:184 admin_marks_hakhel.php:81 admin_marks_hakhel.php:107
+#: admin_marks_wwtc.php:204 admin_marks_wwtc.php:230 admin_mission.php:187
+#: admin_participant.php:53 admin_participant.php:81
+#: admin_points_print.php:166 admin_points_print.php:200
+#: admin_points_print.php:237 admin_points_print.php:274
+#: admin_points_print.php:309 admin_points_print.php:341
+#: admin_points_school.php:91 admin_print_pdf.php:242 admin_print_pdf.php:275
+#: admin_print_pdf.php:302 admin_report.php:117 admin_report.php:167
+#: admin_report_auction.php:174 admin_report_auction.php:210
+#: admin_report_hakhel.php:86 admin_report_hakhel.php:135
+#: admin_report_wwtc.php:83 admin_report_wwtc.php:109 admin_stats.php:42
+#: admin_stats.php:67 admin_store.php:49 admin_task.php:250 admin_team.php:90
+#: admin_user.php:112 admin_user.php:128 admin_user_auction.php:104
+#: admin_user_auction.php:134 admin_user_auction_bulk.php:63
+#: admin_user_auction_bulk.php:83 admin_users_photo.php:60
+#: admin_users_photo.php:76 admin_users_tanya.php:102
+#: admin_users_tanya.php:119 admin_users_track.php:75 admin_users_track.php:99
+#: admin_view_chains.php:43 admin_view_chains.php:61
+#: admin_view_date_tasks.php:45 admin_view_date_tasks.php:63 auction.php:78
+msgid "Go"
+msgstr ""
+
+#: admin.php:420
+msgid "Tanya in 5 minutes a day"
+msgstr ""
+
+#: admin.php:422
+msgid ""
+"Once a week print an achievement card for the amount of days your child "
+"learnt tanya ba'al peh for 5 minutes."
+msgstr ""
+
+#: admin.php:426 admin_points_print.php:290
+msgid "Tanya was learned for"
+msgstr ""
+
+#: admin.php:427 admin_points_print.php:291
+msgid "day"
+msgstr ""
+
+#: admin.php:427 admin.php:428 admin.php:429 admin.php:430 admin.php:431
+#: admin.php:432 admin.php:433 admin_points_print.php:291
+#: admin_points_print.php:292 admin_points_print.php:293
+#: admin_points_print.php:294 admin_points_print.php:295
+#: admin_points_print.php:296 admin_points_print.php:297
+msgid "miles"
+msgstr ""
+
+#: admin.php:428 admin.php:429 admin.php:430 admin.php:431 admin.php:432
+#: admin.php:433 admin_points_print.php:292 admin_points_print.php:293
+#: admin_points_print.php:294 admin_points_print.php:295
+#: admin_points_print.php:296 admin_points_print.php:297
+msgid "days"
+msgstr ""
+
+#: admin.php:433 admin_points_print.php:297
+msgid "Includes bonus"
+msgstr ""
+
+#: admin.php:440
+msgid "Tanya release cards"
+msgstr ""
+
+#: admin.php:442
+msgid ""
+"Along the way to earning each medal there are 4 checkpoints when your child "
+"will need to be tested on ALL THE TANYA HE KNOWS. Once he hits a check point "
+"he will no longer be able to scan more lines. Once you have tested him on "
+"EVERYTHING he knows and he can say it perfectly without any mistakes you can "
+"award him the tanya release card."
+msgstr ""
+
+#: admin.php:446 admin_points_print.php:325
+msgid "Medal stage/progress"
+msgstr ""
+
+#: admin.php:457
+msgid "Hakhel Cards"
+msgstr ""
+
+#: admin.php:459
+msgid ""
+"Once you child has completed his hakhel mission for server days you award "
+"him a hakhel mission card. If he did 4 out of the six hakhel tasks at least "
+"once during the seven days then he gets the bonus card."
+msgstr ""
+
+#: admin.php:464 admin_points_print.php:217 admin_points_print.php:254
+msgid "Select Mission"
+msgstr ""
+
+#: admin.php:470 admin_points_print.php:228 admin_points_print.php:265
+msgid "Cards with Bonus"
+msgstr ""
+
+#: admin.php:472 admin_auction.php:193 admin_date_tasks.php:151
+#: admin_date_tasks.php:615 admin_points_print.php:230
+#: admin_points_print.php:267
+msgid "Yes"
+msgstr ""
+
+#: admin.php:488
+msgid "Soldier's Miles Statement"
+msgstr ""
+
+#: admin.php:492 statement.php:190
+msgid "Posting Date"
+msgstr ""
+
+#: admin.php:493 admin_chains.php:195 admin_chains.php:458
+#: admin_date_tasks.php:225 admin_date_tasks.php:566 admin_mission.php:356
+#: admin_mission.php:382 admin_points_school.php:103
+#: admin_points_templates.php:97 admin_task.php:429 admin_user_track.php:70
+#: admin_users_track.php:116 admin_view_chains.php:98
+#: admin_view_date_tasks.php:99 admin_view_task.php:46 statement.php:191
+#: tasks_personal.php:171 tasks_personal.php:217 tasks_tracks.php:56
+msgid "Subject"
+msgstr ""
+
+#: admin.php:495 statement.php:193
+msgid "Points Earned"
+msgstr ""
+
+#: admin.php:496 statement.php:105 statement.php:194
+msgid "Balance"
+msgstr ""
+
+#: admin.php:509 statement.php:208
+msgid "No transactions for the time period selected."
+msgstr ""
+
+#: admin.php:514 statement.php:213
+msgid "Show"
+msgstr ""
+
+#: admin.php:515 statement.php:214
+msgid "Today"
+msgstr ""
+
+#: admin.php:516 statement.php:215
+msgid "This week"
+msgstr ""
+
+#: admin.php:517 statement.php:216
+msgid "Two weeks"
+msgstr ""
+
+#: admin.php:518 statement.php:217
+msgid "Four weeks"
+msgstr ""
+
+#: admin.php:519
+msgid "One Year"
+msgstr ""
+
+#: admin.php:532
+msgid "Overall Admin page"
+msgstr ""
+
+#: admin.php:544
+msgid "Tzivos Hashem army recruitment video"
+msgstr ""
+
+#: admin.php:547
+msgid "Watch"
+msgstr ""
+
+#: admin.php:547
+msgid "Download super high quality"
+msgstr ""
+
+#: admin.php:547
+msgid "Download high quality"
+msgstr ""
+
+#: admin.php:547
+msgid "Download low quality"
+msgstr ""
+
+#: admin.php:552
+msgid "Hakhel Slideshow"
+msgstr ""
+
+#: admin.php:554
+msgid "Download Hakhel Slideshow for Teachers"
+msgstr ""
+
+#: admin.php:561
+msgid "Login to my Tzivos Hashem shop"
+msgstr ""
+
+#: admin.php:575
+msgid "Log In"
+msgstr ""
+
+#: admin.php:579 register.php:61 register.php:178 register_parent.php:277
+msgid "Register"
+msgstr ""
+
+#: admin.php:580
+msgid "Forgot Password?"
+msgstr ""
+
+#: admin_auction.php:25
+msgid "Unable to add new auction, this date is already used."
+msgstr ""
+
+#: admin_auction.php:46
+msgid "Auction added"
+msgstr ""
+
+#: admin_auction.php:53
+msgid "Auction deleted"
+msgstr ""
+
+#: admin_auction.php:72
+msgid "Unable to edit auction, this date is already used."
+msgstr ""
+
+#: admin_auction.php:90
+msgid "Auction edited"
+msgstr ""
+
+#: admin_auction.php:104 admin_auction.php:118 admin_report_auction.php:37
+msgid "Auctions"
+msgstr ""
+
+#: admin_auction.php:124 admin_auction_run.php:129
+#: admin_auction_winners.php:53 admin_card_print.php:289 admin_class.php:108
+#: admin_invite.php:42 admin_marks.php:124 admin_marks_hakhel.php:76
+#: admin_marks_wwtc.php:199 admin_participant.php:39
+#: admin_points_print.php:139 admin_points_print.php:184
+#: admin_points_print.php:210 admin_points_print.php:247
+#: admin_points_print.php:284 admin_points_print.php:319
+#: admin_points_templates.php:65 admin_print_pdf.php:237 admin_report.php:112
+#: admin_report_auction.php:169 admin_report_hakhel.php:81
+#: admin_report_wwtc.php:78 admin_stats.php:37 admin_store.php:45
+#: admin_team.php:86 admin_user.php:107 admin_user_auction.php:99
+#: admin_user_auction_bulk.php:57 admin_users_photo.php:55
+#: admin_users_tanya.php:97 admin_users_track.php:70
+msgid "Select Institution"
+msgstr ""
+
+#: admin_auction.php:125 admin_auction_run.php:130
+#: admin_auction_winners.php:54 admin_user_auction_bulk.php:58
+msgid "Multi institution auctions"
+msgstr ""
+
+#: admin_auction.php:142 admin_auction.php:184
+msgid "Auction Date"
+msgstr ""
+
+#: admin_auction.php:143
+msgid "This is the cut-off date for points, not the date to run the auction."
+msgstr ""
+
+#: admin_auction.php:144 admin_auction.php:185
+msgid "Auction Run Date"
+msgstr ""
+
+#: admin_auction.php:145
+msgid "This is the auction date as displayed on forms."
+msgstr ""
+
+#: admin_auction.php:146
+msgid "Auction Message"
+msgstr ""
+
+#: admin_auction.php:147
+msgid "Displayed as-is, including HTML"
+msgstr ""
+
+#: admin_auction.php:148
+msgid "Maximum prize points"
+msgstr ""
+
+#: admin_auction.php:149
+msgid ""
+"Maximum points (most expensize item) that can be used on a prize for this "
+"auction. Leave blank for no limit."
+msgstr ""
+
+#: admin_auction.php:152
+msgid "Prizes"
+msgstr ""
+
+#: admin_auction.php:155 admin_auction_print.php:156 admin_auction_run.php:165
+#: admin_auction_run.php:186 admin_auction_winners.php:91
+#: admin_auction_winners.php:118 admin_inst.php:100 admin_inst.php:121
+#: admin_invite.php:79 admin_label.php:95 admin_label.php:117
+#: admin_medal.php:69 admin_medal.php:96 admin_mission.php:202
+#: admin_mission.php:383 admin_participant.php:97 admin_prize_auction.php:113
+#: admin_prize_auction.php:158 admin_prize_store.php:105
+#: admin_prize_store.php:141 admin_rank.php:100 admin_rank.php:134
+#: admin_reports.php:65 admin_reports.php:92 admin_role.php:95
+#: admin_role.php:110 admin_school.php:158 admin_school_type.php:107
+#: admin_school_type.php:136 admin_store.php:74 admin_subject.php:160
+#: admin_subject.php:254 admin_task.php:430 admin_team.php:109
+#: admin_team.php:121 admin_todo_category.php:118 admin_track.php:86
+#: admin_track.php:100 admin_user.php:223 tasks_ae.php:40
+#: tasks_personal.php:218
+msgid "Name"
+msgstr ""
+
+#: admin_auction.php:156 admin_auction_print.php:155 admin_chains.php:121
+#: admin_chains.php:491 admin_class.php:158 admin_date_tasks.php:151
+#: admin_date_tasks.php:607 admin_marks_hakhel.php:193
+#: admin_points_templates.php:79 admin_points_templates.php:98
+#: admin_prize_auction.php:119 admin_prize_auction.php:157
+#: admin_prize_store.php:108 admin_prize_store.php:142 admin_report.php:262
+#: admin_report.php:287 admin_report.php:292 admin_report.php:298
+#: admin_report.php:648 admin_school.php:242 admin_store.php:77
+#: admin_user.php:225 admin_view_chains.php:123 admin_view_date_tasks.php:128
+#: store.php:117
+msgid "Points"
+msgstr ""
+
+#: admin_auction.php:157
+msgid "Quantity Available"
+msgstr ""
+
+#: admin_auction.php:157
+msgid "Leave blank to use ratio"
+msgstr ""
+
+#: admin_auction.php:170 admin_class.php:139 admin_inst.php:108
+#: admin_label.php:104 admin_marks.php:305 admin_marks_hakhel.php:248
+#: admin_marks_wwtc.php:350 admin_medal.php:84 admin_message.php:50
+#: admin_mission.php:321 admin_mission.php:337 admin_mission.php:351
+#: admin_mission.php:368 admin_points_school.php:128
+#: admin_points_templates.php:83 admin_prize_auction.php:143
+#: admin_prize_store.php:128 admin_rank.php:117 admin_reports.php:78
+#: admin_role.php:96 admin_school.php:224 admin_school_type.php:123
+#: admin_subject.php:241 admin_tanya_lines.php:72 admin_task.php:301
+#: admin_team.php:110 admin_todolist.php:146 admin_track.php:87
+#: admin_user_track.php:106 admin_users_photo.php:99 admin_users_photo.php:110
+#: admin_users_tanya.php:201 admin_users_track.php:166 auction.php:129
+#: done.php:75 preferences.php:73 tasks_personal.php:203
+#: tasks_school_type.php:46 tasks_tracks.php:89
+msgid "Save"
+msgstr ""
+
+#: admin_auction.php:170 admin_class.php:139 admin_inst.php:108
+#: admin_label.php:104 admin_message.php:50 admin_points_templates.php:83
+#: admin_prize_auction.php:143 admin_prize_store.php:128 admin_rank.php:117
+#: admin_reports.php:78 admin_role.php:96 admin_school.php:224
+#: admin_school_type.php:123 admin_subject.php:241 admin_team.php:110
+#: admin_todo_category.php:126 admin_todolist.php:146 admin_track.php:87
+#: admin_user.php:207 tasks_personal.php:203
+msgid "Add new"
+msgstr ""
+
+#: admin_auction.php:174 admin_class.php:124 admin_inst.php:112
+#: admin_label.php:108 admin_medal.php:88 admin_message.php:54
+#: admin_mission.php:228 admin_mission.php:311 admin_mission.php:341
+#: admin_mission.php:372 admin_points_templates.php:87
+#: admin_prize_auction.php:147 admin_prize_store.php:132 admin_rank.php:121
+#: admin_reports.php:82 admin_role.php:100 admin_school.php:153
+#: admin_school_type.php:127 admin_subject.php:245 admin_task.php:260
+#: admin_task.php:291 admin_task.php:419 admin_team.php:102
+#: admin_todolist.php:150 admin_track.php:91 admin_user.php:136 done.php:75
+#: tasks_personal.php:166
+msgid "Cancel"
+msgstr ""
+
+#: admin_auction.php:179
+msgid "Add new Auction"
+msgstr ""
+
+#: admin_auction.php:183
+msgid "Ran?"
+msgstr ""
+
+#: admin_auction.php:186
+msgid "Max Prize Points"
+msgstr ""
+
+#: admin_auction.php:187 admin_prize_auction.php:129
+#: admin_prize_auction.php:162 admin_prize_store.php:112
+#: admin_prize_store.php:144 admin_school.php:238 admin_todolist.php:112
+msgid "Institution"
+msgstr ""
+
+#: admin_auction.php:198
+msgid "Edit Auction"
+msgstr ""
+
+#: admin_auction.php:198
+msgid "Can't edit"
+msgstr ""
+
+#: admin_auction.php:199
+msgid "Delete Auction"
+msgstr ""
+
+#: admin_auction.php:199
+msgid "Can't delete"
+msgstr ""
+
+#: admin_auction_print.php:24 admin_auction_print.php:126
+msgid "Print Auction Cards"
+msgstr ""
+
+#: admin_auction_print.php:147
+msgid ""
+"Can't find any active auctions; that have not run, and have a cut-off date "
+"before today."
+msgstr ""
+
+#: admin_auction_print.php:151
+msgid "Print auction cards"
+msgstr ""
+
+#: admin_auction_print.php:154
+msgid "Prize Number"
+msgstr ""
+
+#: admin_auction_print.php:158 admin_points_print.php:161
+#: admin_points_print.php:195 admin_points_print.php:232
+#: admin_points_print.php:304 admin_points_print.php:336
+msgid "# of sheets (10 cards per sheet)"
+msgstr ""
+
+#: admin_auction_print.php:159 admin_user_track.php:83 admin_user_track.php:86
+#: admin_users_track.php:130 admin_users_track.php:133
+msgid "Change All"
+msgstr ""
+
+#: admin_auction_print.php:190 admin_card_print.php:364
+#: admin_points_print.php:405 admin_report_auction.php:217
+#: admin_report_wwtc.php:135 statement.php:224
+msgid "Print"
+msgstr ""
+
+#: admin_auction_run.php:110 admin_auction_run.php:123 admin_inc.php:44
+msgid "Run Chinese Auction"
+msgstr ""
+
+#: admin_auction_run.php:141 admin_auction_winners.php:64
+#: admin_card_print.php:305 admin_class.php:118 admin_invite.php:53
+#: admin_marks.php:137 admin_marks_hakhel.php:88 admin_marks_wwtc.php:211
+#: admin_print_pdf.php:248 admin_report.php:125 admin_report_auction.php:182
+#: admin_report_hakhel.php:93 admin_report_wwtc.php:90 admin_stats.php:48
+#: admin_store.php:56 admin_team.php:96 admin_user.php:118
+#: admin_user_auction.php:111 admin_user_auction_bulk.php:70
+#: admin_users_photo.php:66 admin_users_tanya.php:108 admin_users_track.php:81
+msgid "Please select an Institution."
+msgstr ""
+
+#: admin_auction_run.php:148 admin_auction_winners.php:71
+#: admin_user_auction.php:128 admin_user_auction_bulk.php:77
+msgid "Auction"
+msgstr ""
+
+#: admin_auction_run.php:154 admin_auction_winners.php:77
+#: admin_user_auction.php:133 admin_user_auction_bulk.php:82 auction.php:74
+msgid "Multi schoool auction"
+msgstr ""
+
+#: admin_auction_run.php:155
+msgid "View entries"
+msgstr ""
+
+#: admin_auction_run.php:160 admin_auction_winners.php:84
+msgid "Winners"
+msgstr ""
+
+#: admin_auction_run.php:162 admin_auction_winners.php:88
+#: admin_auction_winners.php:113
+msgid "School #"
+msgstr ""
+
+#: admin_auction_run.php:163 admin_auction_winners.php:89
+#: admin_auction_winners.php:114 register_school.php:158
+msgid "School Name"
+msgstr ""
+
+#: admin_auction_run.php:164 admin_auction_winners.php:90
+#: admin_auction_winners.php:117 admin_class.php:131 admin_class.php:153
+#: admin_report.php:255 admin_report_hakhel.php:285 admin_store.php:73
+msgid "Grade"
+msgstr ""
+
+#: admin_auction_run.php:166 admin_auction_winners.php:86
+#: admin_auction_winners.php:115 statement.php:100
+msgid "Prize #"
+msgstr ""
+
+#: admin_auction_run.php:167 admin_auction_winners.php:87
+#: admin_auction_winners.php:116 admin_store.php:75 auction.php:109
+#: statement.php:101 store.php:85 store.php:116
+msgid "Prize"
+msgstr ""
+
+#: admin_auction_run.php:168 admin_auction_winners.php:92
+#: admin_auction_winners.php:119 admin_chains.php:121 admin_chains.php:505
+#: admin_date_tasks.php:151 admin_date_tasks.php:625 admin_marks_wwtc.php:307
+#: admin_marks_wwtc.php:335 admin_view_chains.php:127
+#: admin_view_date_tasks.php:132 statement.php:102
+msgid "Quantity"
+msgstr ""
+
+#: admin_auction_run.php:187 auction.php:110
+msgid "Tickets"
+msgstr ""
+
+#: admin_auction_run.php:188
+msgid "Distinct Users"
+msgstr ""
+
+#: admin_auction_run.php:189 admin_prize_auction.php:120
+#: admin_prize_auction.php:160
+msgid "Ratio"
+msgstr ""
+
+#: admin_auction_run.php:190
+msgid "Prizes to award"
+msgstr ""
+
+#: admin_auction_run.php:225
+msgid "Run auction"
+msgstr ""
+
+#: admin_auction_winners.php:35 admin_auction_winners.php:48
+msgid "View Chinese Auction Winners"
+msgstr ""
+
+#: admin_auction_winners.php:78
+msgid "View"
+msgstr ""
+
+#: admin_auction_winners.php:111 admin_user_auction_bulk.php:125
+msgid "Entries"
+msgstr ""
+
+#: admin_auth.php:44
+msgid "Please login"
+msgstr ""
+
+#: admin_auth.php:182 auth.php:75
+msgid "Login failed"
+msgstr ""
+
+#: admin_card_print.php:62 admin_card_print.php:265
+msgid "Soldier's Rank Cards"
+msgstr ""
+
+#: admin_card_print.php:291 admin_card_print.php:319 admin_card_print.php:327
+#: admin_card_print.php:334 admin_invite.php:59 admin_marks.php:149
+#: admin_marks_hakhel.php:96 admin_marks_hakhel.php:102
+#: admin_marks_wwtc.php:219 admin_marks_wwtc.php:225 admin_participant.php:40
+#: admin_participant.php:66 admin_points_templates.php:107
+#: admin_print_pdf.php:258 admin_print_pdf.php:264 admin_report.php:137
+#: admin_report.php:143 admin_report_auction.php:189
+#: admin_report_auction.php:195 admin_report_hakhel.php:113
+#: admin_report_hakhel.php:119 admin_report_wwtc.php:98
+#: admin_report_wwtc.php:104 admin_stats.php:57 admin_todolist.php:113
+#: admin_user.php:124 admin_user_auction.php:122 admin_users_photo.php:72
+#: admin_users_tanya.php:114 admin_users_track.php:87
+msgid "All"
+msgstr ""
+
+#: admin_card_print.php:318 admin_marks.php:148 admin_marks_hakhel.php:95
+#: admin_marks_wwtc.php:218 admin_participant.php:65 admin_report.php:136
+#: admin_report_auction.php:188 admin_report_hakhel.php:112
+#: admin_report_wwtc.php:97 admin_user_auction.php:121
+msgid "Show Platoon"
+msgstr ""
+
+#: admin_card_print.php:326 admin_marks_hakhel.php:101
+#: admin_marks_wwtc.php:224 admin_report.php:142 admin_report_auction.php:194
+#: admin_report_hakhel.php:118 admin_report_wwtc.php:103
+msgid "Show Soldier"
+msgstr ""
+
+#: admin_card_print.php:331
+msgid "Note: Only registered students"
+msgstr ""
+
+#: admin_card_print.php:333
+msgid "Limit to Rank"
+msgstr ""
+
+#: admin_card_print.php:339
+msgid "Card type"
+msgstr ""
+
+#: admin_card_print.php:340
+msgid "Temporary"
+msgstr ""
+
+#: admin_card_print.php:341
+msgid "Permanent"
+msgstr ""
+
+#: admin_card_print.php:342
+msgid "Show Rank"
+msgstr ""
+
+#: admin_card_print.php:343
+msgid "Current Only"
+msgstr ""
+
+#: admin_card_print.php:344
+msgid "Current and Previous"
+msgstr ""
+
+#: admin_card_print.php:345
+msgid "All possible ranks"
+msgstr ""
+
+#: admin_card_print.php:345
+msgid "For use with Limit to Rank, and printing cards in advance"
+msgstr ""
+
+#: admin_card_print.php:348
+msgid "Hide cards marked as printed"
+msgstr ""
+
+#: admin_card_print.php:348
+msgid "Not effective with choice: \"All possible ranks\""
+msgstr ""
+
+#: admin_card_print.php:359 admin_class.php:121 admin_invite.php:67
+#: admin_marks.php:140 admin_report.php:128 admin_team.php:99
+#: admin_user.php:132 admin_user_auction.php:114 admin_users_photo.php:81
+#: admin_users_tanya.php:124 admin_users_track.php:104
+msgid "Back to Institution list"
+msgstr ""
+
+#: admin_card_print.php:360 admin_invite.php:68 admin_marks.php:141
+#: admin_report.php:129 admin_user.php:133 admin_user_auction.php:115
+#: admin_users_photo.php:82 admin_users_tanya.php:125
+#: admin_users_track.php:105
+msgid "Back to Platoon list"
+msgstr ""
+
+#: admin_card_print.php:361 admin_class.php:145 admin_points_school.php:78
+#: admin_report.php:130 admin_user_track.php:59 admin_users_photo.php:83
+#: admin_users_tanya.php:126 admin_users_track.php:106
+msgid "Back to Soldier list"
+msgstr ""
+
+#: admin_card_print.php:373
+msgid "Mark Cards as Printed"
+msgstr ""
+
+#: admin_card_print.php:400
+#, php-format
+msgid "This card entitles the cardholder to TH privileges with the %s rank"
+msgstr ""
+
+#: admin_card_print.php:401
+msgid "Authorized Signature"
+msgstr ""
+
+#: admin_card_print.php:403
+msgid "SERIAL"
+msgstr ""
+
+#: admin_card_print.php:419 card_printer.php:23
+msgid "BASE"
+msgstr ""
+
+#: admin_card_print.php:441
+msgid "Member since"
+msgstr ""
+
+#: admin_card_print.php:447
+msgid "Valid until"
+msgstr ""
+
+#: admin_chains.php:67
+msgid "Chain items saved."
+msgstr ""
+
+#: admin_chains.php:87
+msgid "Chain items cloned."
+msgstr ""
+
+#: admin_chains.php:99 admin_date_tasks.php:130
+msgid "Goals cloned."
+msgstr ""
+
+#: admin_chains.php:114 admin_chains.php:295 admin_view_chains.php:31
+msgid "Chains"
+msgstr ""
+
+#: admin_chains.php:121 admin_chains.php:483 admin_chains.php:507
+#: admin_date_tasks.php:151 admin_date_tasks.php:599 admin_date_tasks.php:630
+msgid "Copy"
+msgstr ""
+
+#: admin_chains.php:121 admin_chains.php:484 admin_chains.php:508
+#: admin_date_tasks.php:151 admin_date_tasks.php:600 admin_date_tasks.php:631
+msgid "Move"
+msgstr ""
+
+#: admin_chains.php:121 admin_chains.php:485 admin_date_tasks.php:151
+#: admin_date_tasks.php:601 admin_marks_hakhel.php:233
+#: admin_marks_wwtc.php:336
+msgid "Delete"
+msgstr ""
+
+#: admin_chains.php:121 admin_chains.php:487 admin_date_tasks.php:151
+#: admin_date_tasks.php:603 admin_marks_wwtc.php:258 admin_mission.php:327
+#: admin_mission.php:357 admin_view_chains.php:119
+#: admin_view_date_tasks.php:124
+msgid "Task Name"
+msgstr ""
+
+#: admin_chains.php:121 admin_chains.php:493 admin_date_tasks.php:151
+#: admin_date_tasks.php:609 admin_view_chains.php:124
+#: admin_view_date_tasks.php:129
+msgid "Mandatory Reps"
+msgstr ""
+
+#: admin_chains.php:121 admin_chains.php:495 admin_date_tasks.php:151
+#: admin_date_tasks.php:611 admin_view_chains.php:125
+#: admin_view_date_tasks.php:130
+msgid "Optional Reps"
+msgstr ""
+
+#: admin_chains.php:121 admin_chains.php:497 admin_date_tasks.php:151
+#: admin_date_tasks.php:617 admin_view_chains.php:126
+#: admin_view_date_tasks.php:131
+msgid "Label"
+msgstr ""
+
+#: admin_chains.php:124 admin_chains.php:149 admin_chains.php:174
+#: admin_chains.php:479 admin_date_tasks.php:154 admin_date_tasks.php:179
+#: admin_date_tasks.php:204 admin_date_tasks.php:595
+msgid "Swap tasks"
+msgstr ""
+
+#: admin_chains.php:195 admin_chains.php:337 admin_chains.php:385
+#: admin_chains.php:460 admin_date_tasks.php:225 admin_date_tasks.php:445
+#: admin_date_tasks.php:492 admin_date_tasks.php:568
+#: admin_marks_hakhel.php:169 admin_marks_hakhel.php:230
+#: admin_marks_wwtc.php:300 admin_marks_wwtc.php:330 admin_user_track.php:71
+#: admin_users_tanya.php:137 admin_users_track.php:117
+#: admin_view_chains.php:71 admin_view_chains.php:98
+#: admin_view_date_tasks.php:73 admin_view_date_tasks.php:99
+#: tasks_tracks.php:58
+msgid "Ladder"
+msgstr ""
+
+#: admin_chains.php:195 admin_chains.php:338 admin_chains.php:392
+#: admin_chains.php:460 admin_date_tasks.php:225 admin_date_tasks.php:446
+#: admin_date_tasks.php:499 admin_date_tasks.php:568
+#: admin_marks_hakhel.php:169 admin_marks_hakhel.php:230
+#: admin_marks_wwtc.php:300 admin_marks_wwtc.php:330 admin_mission.php:260
+#: admin_task.php:336 admin_user_track.php:72 admin_users_tanya.php:138
+#: admin_users_track.php:118 admin_view_chains.php:72 admin_view_chains.php:98
+#: admin_view_date_tasks.php:74 admin_view_date_tasks.php:99
+#: admin_view_task.php:108 tasks_tracks.php:61
+msgid "Year"
+msgstr ""
+
+#: admin_chains.php:195 admin_chains.php:462 admin_date_tasks.php:225
+#: admin_date_tasks.php:570 admin_view_chains.php:109
+#: admin_view_date_tasks.php:110
+msgid "Mission name"
+msgstr ""
+
+#: admin_chains.php:195 admin_chains.php:464 admin_date_tasks.php:225
+#: admin_date_tasks.php:574 admin_view_chains.php:111
+#: admin_view_date_tasks.php:112
+msgid "Mission description"
+msgstr ""
+
+#: admin_chains.php:195 admin_chains.php:466 admin_date_tasks.php:225
+#: admin_date_tasks.php:582
+msgid "Number of tasks"
+msgstr ""
+
+#: admin_chains.php:195 admin_chains.php:468 admin_date_tasks.php:225
+#: admin_date_tasks.php:584
+msgid "Points Mandatory"
+msgstr ""
+
+#: admin_chains.php:195 admin_chains.php:470 admin_date_tasks.php:225
+#: admin_date_tasks.php:586
+msgid "Points Optional"
+msgstr ""
+
+#: admin_chains.php:195 admin_chains.php:472 admin_date_tasks.php:225
+#: admin_date_tasks.php:588
+msgid "Delete mission"
+msgstr ""
+
+#: admin_chains.php:195 admin_chains.php:473 admin_date_tasks.php:225
+#: admin_date_tasks.php:589
+msgid "Copy mission"
+msgstr ""
+
+#: admin_chains.php:195 admin_chains.php:517 admin_date_tasks.php:225
+#: admin_date_tasks.php:640
+msgid "Add task"
+msgstr ""
+
+#: admin_chains.php:204 admin_chains.php:221 admin_chains.php:452
+#: admin_date_tasks.php:234 admin_date_tasks.php:251 admin_date_tasks.php:559
+msgid "Swap the missions"
+msgstr ""
+
+#: admin_chains.php:303 admin_date_tasks.php:411 admin_view_chains.php:37
+#: admin_view_date_tasks.php:39
+msgid "Select School Type"
+msgstr ""
+
+#: admin_chains.php:314 admin_date_tasks.php:422 admin_view_chains.php:48
+#: admin_view_date_tasks.php:50
+msgid "Please select a School Type."
+msgstr ""
+
+#: admin_chains.php:320 admin_date_tasks.php:428 admin_mission.php:181
+#: admin_participant.php:47 admin_points_print.php:146
+#: admin_points_templates.php:73 admin_task.php:244 admin_users_track.php:92
+#: admin_view_chains.php:54 admin_view_date_tasks.php:56
+msgid "Select Subject"
+msgstr ""
+
+#: admin_chains.php:332 admin_date_tasks.php:440 admin_mission.php:192
+#: admin_task.php:255 admin_view_chains.php:66 admin_view_date_tasks.php:68
+msgid "Please select a Subject."
+msgstr ""
+
+#: admin_chains.php:351 admin_date_tasks.php:458 admin_mission.php:138
+#: admin_mission.php:176 admin_stats.php:97 admin_view_chains.php:85
+#: admin_view_date_tasks.php:86
+msgid "Missions"
+msgstr ""
+
+#: admin_chains.php:351 admin_date_tasks.php:458 admin_task.php:184
+#: admin_task.php:239 admin_view_chains.php:85 admin_view_date_tasks.php:86
+#: tasks.php:54 todo.php:54
+msgid "Tasks"
+msgstr ""
+
+#: admin_chains.php:360 admin_date_tasks.php:467 admin_view_chains.php:94
+#: admin_view_date_tasks.php:95
+msgid "Please select a ladder and year."
+msgstr ""
+
+#: admin_chains.php:378 admin_date_tasks.php:485
+msgid "Clone missions to"
+msgstr ""
+
+#: admin_chains.php:399 admin_date_tasks.php:506
+msgid "School Type"
+msgstr ""
+
+#: admin_chains.php:409 admin_date_tasks.php:516
+msgid "Select the missions you want to copy."
+msgstr ""
+
+#: admin_chains.php:432 admin_date_tasks.php:539 admin_report_wwtc.php:399
+msgid "Goals"
+msgstr ""
+
+#: admin_chains.php:444 admin_date_tasks.php:551
+msgid "Clone Missions"
+msgstr ""
+
+#: admin_chains.php:524 admin_date_tasks.php:647
+msgid "Add mission"
+msgstr ""
+
+#: admin_chains.php:532 admin_date_tasks.php:655
+msgid "Goal at Start of year"
+msgstr ""
+
+#: admin_chains.php:533 admin_date_tasks.php:656
+msgid "Goal at End of year"
+msgstr ""
+
+#: admin_class.php:39
+msgid "Unable to add new platoon, this grade-sub is already used."
+msgstr ""
+
+#: admin_class.php:45
+msgid "Platoon added"
+msgstr ""
+
+#: admin_class.php:52
+msgid "Platoon deleted"
+msgstr ""
+
+#: admin_class.php:69
+msgid "Unable to edit platoon, this grade-sub is already used."
+msgstr ""
+
+#: admin_class.php:75
+msgid "Platoon edited"
+msgstr ""
+
+#: admin_class.php:90 admin_class.php:103
+msgid "Platoons"
+msgstr ""
+
+#: admin_class.php:136 admin_class.php:154
+msgid "Sub"
+msgstr ""
+
+#: admin_class.php:137 admin_class.php:155 admin_report.php:256
+#: admin_report_auction.php:275 admin_report_hakhel.php:286
+#: admin_report_wwtc.php:272 dashboard.php:56 statement.php:60
+msgid "Teacher"
+msgstr ""
+
+#: admin_class.php:138 admin_class.php:156
+msgid "Default Year"
+msgstr ""
+
+#: admin_class.php:149
+msgid "Add new platoon"
+msgstr ""
+
+#: admin_class.php:157 admin_school.php:240
+msgid "# Soldiers"
+msgstr ""
+
+#: admin_class.php:178
+msgid "Edit Platoon Info"
+msgstr ""
+
+#: admin_class.php:179 admin_inst.php:131 admin_label.php:127
+#: admin_mission.php:398 admin_points_templates.php:114
+#: admin_prize_auction.php:176 admin_prize_store.php:155 admin_reports.php:115
+#: admin_role.php:119 admin_school.php:266 admin_school_type.php:146
+#: admin_subject.php:268 admin_task.php:450 admin_team.php:129
+#: admin_todolist.php:186 admin_track.php:108 admin_user.php:248
+#: tasks_personal.php:226
+msgid "Are you sure?"
+msgstr ""
+
+#: admin_class.php:179
+msgid "Delete Platoon"
+msgstr ""
+
+#: admin_class.php:179
+msgid "Can't delete, has soldiers"
+msgstr ""
+
+#: admin_class.php:180 admin_school.php:269
+msgid "Manage Soldiers"
+msgstr ""
+
+#: admin_class.php:181 admin_school.php:273
+msgid "Manage Soldier's Marks"
+msgstr ""
+
+#: admin_class.php:182 admin_inc.php:107 admin_school.php:274
+msgid "Manage Soldier's Auction Prizes"
+msgstr ""
+
+#: admin_class.php:183 admin_marks_hakhel.php:159 admin_marks_hakhel.php:220
+#: admin_marks_wwtc.php:267 admin_participant.php:115 admin_school.php:270
+#: admin_user.php:245
+msgid "Edit Soldier's ladders/years"
+msgstr ""
+
+#: admin_class.php:184 admin_school.php:271 admin_users_tanya.php:49
+#: admin_users_tanya.php:91
+msgid "Tanya Setup"
+msgstr ""
+
+#: admin_class.php:185 admin_inc.php:106 admin_school.php:272
+msgid "Manage multiple user's photos"
+msgstr ""
+
+#: admin_class.php:186 admin_inc.php:83 admin_invite.php:23
+#: admin_invite.php:36 admin_school.php:275
+msgid "Invite Parents"
+msgstr ""
+
+#: admin_class.php:187 admin_school.php:276
+msgid "Soldier Reports"
+msgstr ""
+
+#: admin_date_tasks.php:103
+msgid "Date Tasks saved."
+msgstr ""
+
+#: admin_date_tasks.php:118
+msgid "Date Tasks cloned."
+msgstr ""
+
+#: admin_date_tasks.php:144 admin_date_tasks.php:403
+msgid "Date Tasks"
+msgstr ""
+
+#: admin_date_tasks.php:151 admin_date_tasks.php:613
+msgid "Is Bonus"
+msgstr ""
+
+#: admin_date_tasks.php:151 admin_date_tasks.php:627
+msgid "Action Dates"
+msgstr ""
+
+#: admin_date_tasks.php:151 admin_date_tasks.php:366 admin_date_tasks.php:380
+#: admin_date_tasks.php:629
+msgid "dates set"
+msgstr ""
+
+#: admin_date_tasks.php:225 admin_date_tasks.php:572
+msgid "Mission number"
+msgstr ""
+
+#: admin_date_tasks.php:225 admin_date_tasks.php:576
+msgid "Mission Value"
+msgstr ""
+
+#: admin_date_tasks.php:225 admin_date_tasks.php:578
+#: admin_view_date_tasks.php:114 tasks_ae.php:56
+msgid "Start Date"
+msgstr ""
+
+#: admin_date_tasks.php:225 admin_date_tasks.php:580
+#: admin_view_date_tasks.php:116 tasks_ae.php:70
+msgid "End Date"
+msgstr ""
+
+#: admin_date_tasks.php:321
+msgid ""
+"The same mission number has been used more than once.\\nEach mission number "
+"must be unique, or blank."
+msgstr ""
+
+#: admin_date_tasks.php:569
+msgid "Mission Pos#"
+msgstr ""
+
+#: admin_inc.php:12
+msgid "Manage Tzivos Hashem Types"
+msgstr ""
+
+#: admin_inc.php:14
+msgid "Manage Institution types"
+msgstr ""
+
+#: admin_inc.php:17
+msgid "Manage Subjects"
+msgstr ""
+
+#: admin_inc.php:18
+msgid "Manage Ladders"
+msgstr ""
+
+#: admin_inc.php:19
+msgid "Manage Labels"
+msgstr ""
+
+#: admin_inc.php:20
+msgid "Manage Medals"
+msgstr ""
+
+#: admin_inc.php:21
+msgid "Manage Ranks"
+msgstr ""
+
+#: admin_inc.php:22 admin_subject.php:269
+msgid "Manage Chesbon Hanefesh Tasks"
+msgstr ""
+
+#: admin_inc.php:23
+msgid "Manage Chains"
+msgstr ""
+
+#: admin_inc.php:24
+msgid "Manage Date Tasks"
+msgstr ""
+
+#: admin_inc.php:25 admin_subject.php:270
+msgid "Manage Missions"
+msgstr ""
+
+#: admin_inc.php:27
+msgid "Manage Roles"
+msgstr ""
+
+#: admin_inc.php:29
+msgid "Manage Messages"
+msgstr ""
+
+#: admin_inc.php:30
+msgid "Manage Reports"
+msgstr ""
+
+#: admin_inc.php:31
+msgid "Manage Todo List"
+msgstr ""
+
+#: admin_inc.php:32
+msgid "Manage Todo Categories"
+msgstr ""
+
+#: admin_inc.php:33
+msgid "Enter Lines of Tanya"
+msgstr ""
+
+#: admin_inc.php:34
+msgid "Define Goals for Tanya Tracks"
+msgstr ""
+
+#: admin_inc.php:35 admin_inc.php:77 admin_points_print.php:67
+#: admin_points_print.php:113
+msgid "Print Achievement Cards"
+msgstr ""
+
+#: admin_inc.php:36 admin_inc.php:78
+msgid "Manage Achievement Card Templates"
+msgstr ""
+
+#: admin_inc.php:37 admin_inc.php:79
+msgid "Print Rank Cards"
+msgstr ""
+
+#: admin_inc.php:38 admin_inc.php:80
+msgid "Print Soldier's Files"
+msgstr ""
+
+#: admin_inc.php:39 admin_inc.php:81
+msgid "View Soldier's Stats"
+msgstr ""
+
+#: admin_inc.php:40
+msgid "View Mission Report/Stats"
+msgstr ""
+
+#: admin_inc.php:42
+msgid "Manage Chinese Auctions"
+msgstr ""
+
+#: admin_inc.php:43
+msgid "Manage Chinese Auction Prizes"
+msgstr ""
+
+#: admin_inc.php:45
+msgid "View Chinese Auction winners"
+msgstr ""
+
+#: admin_inc.php:46
+msgid "Assign Chinese Auction prizes in bulk"
+msgstr ""
+
+#: admin_inc.php:52 admin_view_task.php:7 admin_view_task.php:25
+msgid "View Missions and Tasks"
+msgstr ""
+
+#: admin_inc.php:53 admin_view_chains.php:18
+msgid "View Chains"
+msgstr ""
+
+#: admin_inc.php:54
+msgid "View Growth Plans"
+msgstr ""
+
+#: admin_inc.php:55
+msgid "Print Chinese Auction Prize Cards"
+msgstr ""
+
+#: admin_inc.php:56
+msgid "Print Tanya log sheet/bar-codes"
+msgstr ""
+
+#: admin_inc.php:60
+msgid "View Mission Participants"
+msgstr ""
+
+#: admin_inc.php:62
+msgid "Manage Store Prizes"
+msgstr ""
+
+#: admin_inc.php:63
+msgid "Manage Store Purchases"
+msgstr ""
+
+#: admin_inc.php:71
+msgid "Manage My Base"
+msgstr ""
+
+#: admin_inc.php:72
+msgid "Manage My Platoons"
+msgstr ""
+
+#: admin_inc.php:73
+msgid "Manage My Squads"
+msgstr ""
+
+#: admin_inc.php:74 admin_inc.php:88 admin_inc.php:94
+msgid "Manage My Soldiers"
+msgstr ""
+
+#: admin_inc.php:82
+msgid "View Mission/Report Stats"
+msgstr ""
+
+#: admin_inc.php:87
+msgid "Manage My Platoon"
+msgstr ""
+
+#: admin_inc.php:93
+msgid "Manage My Squad"
+msgstr ""
+
+#: admin_inc.php:99
+msgid "Manage My Soldier"
+msgstr ""
+
+#: admin_inc.php:100
+msgid "Manage Soldier's Achievement Points"
+msgstr ""
+
+#: admin_inc.php:104
+msgid "Manage My Soldier's Ladders/Years"
+msgstr ""
+
+#: admin_inc.php:105
+msgid "Manage My Soldier's Tanya Setup"
+msgstr ""
+
+#: admin_inst.php:20
+msgid "Unable to add new institution type, this name is already used."
+msgstr ""
+
+#: admin_inst.php:28
+msgid "Institution type added"
+msgstr ""
+
+#: admin_inst.php:35
+msgid "Institution type deleted"
+msgstr ""
+
+#: admin_inst.php:50
+msgid "Unable to edit institution type, this name is already used."
+msgstr ""
+
+#: admin_inst.php:61
+msgid "Institution type edited"
+msgstr ""
+
+#: admin_inst.php:79 admin_inst.php:92
+msgid "Institution Types"
+msgstr ""
+
+#: admin_inst.php:101 admin_school.php:187
+msgid "Logo"
+msgstr ""
+
+#: admin_inst.php:101 admin_label.php:97 admin_medal.php:70 admin_medal.php:77
+#: admin_prize_auction.php:136 admin_prize_store.php:121 admin_rank.php:102
+#: admin_rank.php:110 admin_school.php:187 admin_school.php:194
+#: admin_school.php:204 admin_subject.php:176 admin_todolist.php:134
+#: admin_user.php:154
+msgid "Maximum file size"
+msgstr ""
+
+#: admin_inst.php:103 admin_school.php:189
+msgid "Uploading a new logo will replace the old."
+msgstr ""
+
+#: admin_inst.php:104 admin_school.php:190
+msgid "Delete current logo"
+msgstr ""
+
+#: admin_inst.php:117
+msgid "Add new institution type"
+msgstr ""
+
+#: admin_inst.php:129
+msgid "Edit institution type"
+msgstr ""
+
+#: admin_inst.php:130
+msgid "Manage Institutions"
+msgstr ""
+
+#: admin_inst.php:131
+msgid "Delete institution type"
+msgstr ""
+
+#: admin_invite.php:14
+msgid "Parents Invited"
+msgstr ""
+
+#: admin_invite.php:58 admin_user.php:123 admin_users_photo.php:71
+#: admin_users_tanya.php:113 admin_users_track.php:86
+msgid "Show only Platoon"
+msgstr ""
+
+#: admin_invite.php:75
+msgid "Send Invite"
+msgstr ""
+
+#: admin_invite.php:76
+msgid "Open Invitations"
+msgstr ""
+
+#: admin_invite.php:78 admin_participant.php:96 admin_user.php:145
+#: admin_user.php:222 login.php:98 register_parent.php:140
+msgid "Username"
+msgstr ""
+
+#: admin_invite.php:80 admin_participant.php:98 admin_report.php:260
+#: admin_user.php:199 admin_user.php:224
+msgid "Serial #"
+msgstr ""
+
+#: admin_invite.php:81 admin_user.php:161
+msgid "Email"
+msgstr ""
+
+#: admin_invite.php:93 admin_participant.php:114 admin_user.php:244
+msgid "Edit Soldier Info"
+msgstr ""
+
+#: admin_invite.php:99
+msgid "Send"
+msgstr ""
+
+#: admin_label.php:20
+msgid "Unable to add new label, this name is already used."
+msgstr ""
+
+#: admin_label.php:28
+msgid "Label added"
+msgstr ""
+
+#: admin_label.php:35
+msgid "Label deleted"
+msgstr ""
+
+#: admin_label.php:50
+msgid "Unable to edit label, this name is already used."
+msgstr ""
+
+#: admin_label.php:61
+msgid "Label edited"
+msgstr ""
+
+#: admin_label.php:74 admin_label.php:87
+msgid "Labels"
+msgstr ""
+
+#: admin_label.php:97 admin_prize_auction.php:136 admin_prize_auction.php:159
+#: admin_prize_store.php:121 admin_rank.php:102 admin_rank.php:136
+#: admin_subject.php:176
+msgid "Image"
+msgstr ""
+
+#: admin_label.php:99 admin_medal.php:72 admin_medal.php:79
+#: admin_prize_auction.php:138 admin_prize_store.php:123 admin_rank.php:104
+#: admin_rank.php:112 admin_subject.php:178 admin_subject.php:208
+#: admin_subject.php:217 admin_subject.php:228
+msgid "Uploading a new image will replace the old."
+msgstr ""
+
+#: admin_label.php:100 admin_medal.php:73 admin_medal.php:80
+#: admin_prize_auction.php:139 admin_prize_store.php:124 admin_rank.php:105
+#: admin_rank.php:113 admin_subject.php:179 admin_subject.php:209
+#: admin_subject.php:218 admin_subject.php:229
+msgid "Delete current image"
+msgstr ""
+
+#: admin_label.php:113
+msgid "Add new Label"
+msgstr ""
+
+#: admin_label.php:126
+msgid "Edit Label"
+msgstr ""
+
+#: admin_label.php:127
+msgid "Delete Label"
+msgstr ""
+
+#: admin_marks.php:41
+msgid "Marks saved"
+msgstr ""
+
+#: admin_marks.php:58 admin_marks.php:118
+msgid "Marks"
+msgstr ""
+
+#: admin_marks.php:130 admin_report.php:118
+msgid ""
+"Note: Only tasks with an institution type matching this institution's "
+"institution type will be shown or calculated."
+msgstr ""
+
+#: admin_marks.php:159 admin_report.php:150 admin_reports.php:71
+#: admin_reports.php:94
+msgid "From"
+msgstr ""
+
+#: admin_marks.php:170 admin_report.php:151 admin_reports.php:72
+#: admin_reports.php:95
+msgid "To"
+msgstr ""
+
+#: admin_marks.php:181
+msgid "Show all tasks"
+msgstr ""
+
+#: admin_marks.php:182
+msgid "Group by Mission"
+msgstr ""
+
+#: admin_marks.php:189
+msgid "Please select a date range."
+msgstr ""
+
+#: admin_marks.php:283
+msgid "Duplicate of task already displayed."
+msgstr ""
+
+#: admin_marks.php:302
+msgid "No tasks for the selected institution, platoon, and date range."
+msgstr ""
+
+#: admin_marks_hakhel.php:51 admin_marks_hakhel.php:65
+#: admin_marks_wwtc.php:174 admin_marks_wwtc.php:188
+msgid "Date Tasks Marks"
+msgstr ""
+
+#: admin_marks_hakhel.php:72 admin_marks_wwtc.php:195
+#: admin_report_hakhel.php:77 admin_report_wwtc.php:74
+msgid "Effective Date"
+msgstr ""
+
+#: admin_marks_hakhel.php:124
+msgid "New entries"
+msgstr ""
+
+#: admin_marks_hakhel.php:128 admin_marks_hakhel.php:162
+#: admin_marks_hakhel.php:188 admin_marks_hakhel.php:223
+#: admin_marks_wwtc.php:253 admin_marks_wwtc.php:270
+#: admin_points_school.php:98
+msgid "Soldier Name"
+msgstr ""
+
+#: admin_marks_hakhel.php:131 admin_marks_hakhel.php:191
+#: admin_marks_wwtc.php:256
+msgid "Mission Name"
+msgstr ""
+
+#: admin_marks_hakhel.php:132 admin_marks_hakhel.php:192
+#: admin_marks_wwtc.php:257
+msgid "Ladder/Year"
+msgstr ""
+
+#: admin_marks_hakhel.php:133
+msgid "New Entry"
+msgstr ""
+
+#: admin_marks_hakhel.php:171 admin_marks_wwtc.php:311
+msgid "Completed"
+msgstr ""
+
+#: admin_marks_hakhel.php:173
+msgid "With bonus"
+msgstr ""
+
+#: admin_marks_hakhel.php:183
+msgid "Previous entries"
+msgstr ""
+
+#: admin_marks_hakhel.php:194
+msgid "Date"
+msgstr ""
+
+#: admin_marks_hakhel.php:195
+msgid "Existing Entry"
+msgstr ""
+
+#: admin_marks_hakhel.php:248 admin_marks_wwtc.php:350
+msgid ""
+"Note: Once a medal has been awarded for completing the missions it will not "
+"be revoked if the mission entry is subsequently removed."
+msgstr ""
+
+#: admin_marks_wwtc.php:247 admin_user_auction.php:210
+msgid "Total Soldiers"
+msgstr ""
+
+#: admin_marks_wwtc.php:247
+msgid "Total Entries"
+msgstr ""
+
+#: admin_marks_wwtc.php:259
+msgid "Previously Entered"
+msgstr ""
+
+#: admin_marks_wwtc.php:260
+msgid "Current Entry"
+msgstr ""
+
+#: admin_marks_wwtc.php:307 admin_marks_wwtc.php:335 admin_report.php:673
+msgid "Done"
+msgstr ""
+
+#: admin_marks_wwtc.php:329
+msgid "Mark awarded in different Ladder or Year"
+msgstr ""
+
+#: admin_medal.php:21
+msgid "Unable to edit medal, this name is already used."
+msgstr ""
+
+#: admin_medal.php:35
+msgid "Medal edited"
+msgstr ""
+
+#: admin_medal.php:48 admin_medal.php:61 admin_subject.php:187
+msgid "Medals"
+msgstr ""
+
+#: admin_medal.php:70 admin_medal.php:97 admin_subject.php:191
+#: admin_subject.php:206
+msgid "Image On"
+msgstr ""
+
+#: admin_medal.php:77 admin_medal.php:98 admin_subject.php:195
+#: admin_subject.php:226
+msgid "Image Off"
+msgstr ""
+
+#: admin_medal.php:107
+msgid "Edit Medal"
+msgstr ""
+
+#: admin_message.php:15
+msgid "Message edited"
+msgstr ""
+
+#: admin_message.php:27 admin_message.php:40
+msgid "Messages"
+msgstr ""
+
+#: admin_message.php:45
+msgid "Note: Messages are output as is, including any HTML."
+msgstr ""
+
+#: admin_message.php:49 admin_message.php:63 admin_tanya_lines.php:44
+msgid "Text"
+msgstr ""
+
+#: admin_message.php:61 admin_reports.php:66 admin_reports.php:93
+#: admin_role.php:89 admin_role.php:109 admin_subject.php:166
+#: admin_subject.php:256 admin_task.php:271
+msgid "Type"
+msgstr ""
+
+#: admin_message.php:68
+msgid "Edit Message"
+msgstr ""
+
+#: admin_mission.php:22
+msgid "Unable to add new mission, this name is already used."
+msgstr ""
+
+#: admin_mission.php:30
+msgid "Mission added"
+msgstr ""
+
+#: admin_mission.php:38
+msgid "Mission deleted"
+msgstr ""
+
+#: admin_mission.php:55
+msgid "Unable to edit mission, this name is already used."
+msgstr ""
+
+#: admin_mission.php:61
+msgid "Mission edited"
+msgstr ""
+
+#: admin_mission.php:90
+msgid "Mission Active edited"
+msgstr ""
+
+#: admin_mission.php:110
+msgid "Mission Tasks edited"
+msgstr ""
+
+#: admin_mission.php:124
+msgid "Mandatory requirements for Mission Tasks edited"
+msgstr ""
+
+#: admin_mission.php:203
+msgid "Points required"
+msgstr ""
+
+#: admin_mission.php:204
+msgid "Start Month"
+msgstr ""
+
+#: admin_mission.php:209
+msgid "Start Day"
+msgstr ""
+
+#: admin_mission.php:214
+msgid "End Month"
+msgstr ""
+
+#: admin_mission.php:219
+msgid "End Day"
+msgstr ""
+
+#: admin_mission.php:224 admin_task.php:284
+msgid "Save and edit Active"
+msgstr ""
+
+#: admin_mission.php:224 admin_task.php:284
+msgid "Add new and edit Active"
+msgstr ""
+
+#: admin_mission.php:242 admin_mission.php:307
+msgid "Save Active and edit Tasks"
+msgstr ""
+
+#: admin_mission.php:245
+msgid "Mission Active"
+msgstr ""
+
+#: admin_mission.php:251 admin_task.php:327
+msgid "Copy previous Tzivos Hashem Type"
+msgstr ""
+
+#: admin_mission.php:284 admin_mission.php:294 admin_mission.php:298
+#: admin_task.php:375 admin_task.php:393 admin_task.php:405
+msgid "Flip"
+msgstr ""
+
+#: admin_mission.php:314
+msgid "Mission Tasks"
+msgstr ""
+
+#: admin_mission.php:344
+msgid "Mission Mandatory requirements"
+msgstr ""
+
+#: admin_mission.php:355
+msgid "Mandatory requirements"
+msgstr ""
+
+#: admin_mission.php:378
+msgid "Add new Mission"
+msgstr ""
+
+#: admin_mission.php:394
+msgid "Edit Mission"
+msgstr ""
+
+#: admin_mission.php:395
+msgid "Edit Active for Mission"
+msgstr ""
+
+#: admin_mission.php:396
+msgid "Edit Tasks for Mission"
+msgstr ""
+
+#: admin_mission.php:397
+msgid "Edit Mandatory requirements for Mission Tasks"
+msgstr ""
+
+#: admin_mission.php:398
+msgid "Delete Mission"
+msgstr ""
+
+#: admin_mission_report.php:14 admin_mission_report.php:28
+#: admin_report_wwtc.php:178
+msgid "Mission Report"
+msgstr ""
+
+#: admin_mission_report.php:35 admin_todolist.php:95 db.php:153
+msgid "Schools"
+msgstr ""
+
+#: admin_mission_report.php:63 admin_mission_report.php:102
+msgid "Back"
+msgstr ""
+
+#: admin_mission_report.php:115
+msgid "Did Mission"
+msgstr ""
+
+#: admin_mission_report.php:145
+msgid "Tot:"
+msgstr ""
+
+#: admin_participant.php:20 admin_participant.php:33
+msgid "Mission Participants"
+msgstr ""
+
+#: admin_participant.php:57
+msgid "Please select an institution and a subject."
+msgstr ""
+
+#: admin_participant.php:74
+msgid "Show Mission"
+msgstr ""
+
+#: admin_participant.php:86
+msgid "Please choose a Mission."
+msgstr ""
+
+#: admin_participant.php:89
+msgid "Export Participants"
+msgstr ""
+
+#: admin_participant.php:99 admin_user.php:226
+msgid "Birthdate"
+msgstr ""
+
+#: admin_participant.php:116 admin_report.php:91 admin_report.php:105
+#: admin_report_hakhel.php:57 admin_report_wwtc.php:42
+#: admin_report_wwtc.php:57 admin_user.php:247
+msgid "Soldier Report"
+msgstr ""
+
+#: admin_participant.php:117 admin_user.php:249
+msgid "Act as Soldier"
+msgstr ""
+
+#: admin_points_print.php:134
+msgid "Print Local (school) achievement cards"
+msgstr ""
+
+#: admin_points_print.php:153 admin_points_templates.php:80
+#: admin_points_templates.php:99
+msgid "Left Circle"
+msgstr ""
+
+#: admin_points_print.php:154 admin_points_templates.php:81
+#: admin_points_templates.php:100
+msgid "Right Circle"
+msgstr ""
+
+#: admin_points_print.php:155 admin_points_templates.php:82
+msgid "(Left) Description"
+msgstr ""
+
+#: admin_points_print.php:156 admin_points_print.php:190
+#: admin_points_print.php:223 admin_points_print.php:260
+#: admin_points_print.php:299 admin_points_print.php:331
+msgid "Page type"
+msgstr ""
+
+#: admin_points_print.php:157 admin_points_print.php:191
+#: admin_points_print.php:224 admin_points_print.php:261
+#: admin_points_print.php:300 admin_points_print.php:332
+msgid "Fronts and backs"
+msgstr ""
+
+#: admin_points_print.php:158 admin_points_print.php:192
+#: admin_points_print.php:225 admin_points_print.php:262
+#: admin_points_print.php:301 admin_points_print.php:333
+msgid "Fronts only"
+msgstr ""
+
+#: admin_points_print.php:159 admin_points_print.php:193
+#: admin_points_print.php:226 admin_points_print.php:263
+#: admin_points_print.php:302 admin_points_print.php:334
+msgid "Backs only"
+msgstr ""
+
+#: admin_points_print.php:171
+msgid "Print Pre-Defined Local (school) achievement cards"
+msgstr ""
+
+#: admin_points_print.php:177 admin_points_templates.php:66
+msgid "All Schools"
+msgstr ""
+
+#: admin_points_print.php:183
+msgid ""
+"For templates made for &lt;All Schools&gt; please select which school to "
+"create these cards for. For templates made for a specific school this is "
+"ignored."
+msgstr ""
+
+#: admin_points_print.php:205
+msgid "Print Global (Tzivos Hashem HQ) achievement cards"
+msgstr ""
+
+#: admin_points_print.php:242
+msgid "Print a series of Global (Tzivos Hashem HQ) achievement cards"
+msgstr ""
+
+#: admin_points_print.php:257
+#, php-format
+msgid "%d cards"
+msgstr ""
+
+#: admin_points_print.php:269
+msgid "# of copies of series (will print the entire series this many times)"
+msgstr ""
+
+#: admin_points_print.php:279
+msgid "Print Tanya achievement cards"
+msgstr ""
+
+#: admin_points_print.php:314
+msgid "Print Tanya release cards"
+msgstr ""
+
+#: admin_points_print.php:354 admin_points_print.php:428
+#: admin_points_print.php:467
+msgid "Bonus"
+msgstr ""
+
+#: admin_points_print.php:357
+#, php-format
+msgid "Learned Tanya for %s days"
+msgstr ""
+
+#: admin_points_print.php:375 code_processor.php:79
+msgid "Checkpoint"
+msgstr ""
+
+#: admin_points_print.php:409
+msgid "Grant Card to Soldier"
+msgstr ""
+
+#: admin_points_print.php:409
+msgid "Store card in Soldier's inbox"
+msgstr ""
+
+#: admin_points_school.php:43 admin_points_school.php:75
+msgid "School Points"
+msgstr ""
+
+#: admin_points_school.php:56
+msgid "Warning: Over point limit."
+msgstr ""
+
+#: admin_points_school.php:100
+msgid "Over point limit, unable to save."
+msgstr ""
+
+#: admin_points_templates.php:40 admin_points_templates.php:53
+msgid "Achievement Card Templates"
+msgstr ""
+
+#: admin_points_templates.php:92
+msgid "Add new template"
+msgstr ""
+
+#: admin_points_templates.php:96 db.php:153
+msgid "School"
+msgstr ""
+
+#: admin_points_templates.php:113
+msgid "Edit template"
+msgstr ""
+
+#: admin_points_templates.php:114
+msgid "Delete template"
+msgstr ""
+
+#: admin_print_pdf.php:45 admin_print_pdf.php:101 admin_print_pdf.php:168
+#: admin_print_pdf.php:186
+msgid "Lines"
+msgstr ""
+
+#: admin_print_pdf.php:79
+msgid "Week"
+msgstr ""
+
+#: admin_print_pdf.php:79
+msgid "Goal Reached"
+msgstr ""
+
+#: admin_print_pdf.php:101
+msgid "Highest Medal Achieved"
+msgstr ""
+
+#: admin_print_pdf.php:101
+#, php-format
+msgid "%s Lines to earn %s medal"
+msgstr ""
+
+#: admin_print_pdf.php:107 admin_print_pdf.php:117 admin_print_pdf.php:129
+#: admin_print_pdf.php:137
+msgid "Tanya Mileage"
+msgstr ""
+
+#: admin_print_pdf.php:108 admin_print_pdf.php:118 admin_print_pdf.php:130
+#: admin_print_pdf.php:138
+msgid "Lines Learnt"
+msgstr ""
+
+#: admin_print_pdf.php:109 admin_print_pdf.php:119 admin_print_pdf.php:131
+#: admin_print_pdf.php:139 admin_stats.php:91 admin_users_tanya.php:144
+msgid "Pledges"
+msgstr ""
+
+#: admin_print_pdf.php:122 admin_report_auction.php:282
+#: admin_report_hakhel.php:290 admin_report_wwtc.php:274
+#: admin_report_wwtc.php:304 admin_user.php:179 admin_user.php:194
+#: admin_view_task.php:128 dashboard.php:57 statement.php:61
+msgid "N/A"
+msgstr ""
+
+#: admin_print_pdf.php:168
+msgid "NEW Lines"
+msgstr ""
+
+#: admin_print_pdf.php:168
+msgid "Goal Completed"
+msgstr ""
+
+#: admin_print_pdf.php:168
+msgid "Already Know"
+msgstr ""
+
+#: admin_print_pdf.php:168
+msgid "Yearly Goal"
+msgstr ""
+
+#: admin_print_pdf.php:168
+msgid "Weekly Goal"
+msgstr ""
+
+#: admin_print_pdf.php:204
+msgid "Certificate"
+msgstr ""
+
+#: admin_print_pdf.php:205 dashboard.php:199 statement.php:228
+msgid "Tanya Baal Peh Yearly Progress Chart"
+msgstr ""
+
+#: admin_print_pdf.php:206 dashboard.php:198 statement.php:226
+msgid "Tanya Baal Peh Weekly Quota Report"
+msgstr ""
+
+#: admin_print_pdf.php:207 statement.php:229
+msgid "Tanya Baal Peh Growth Planner"
+msgstr ""
+
+#: admin_print_pdf.php:214 admin_print_pdf.php:228
+msgid "Soldier's Printable Files"
+msgstr ""
+
+#: admin_print_pdf.php:257 admin_stats.php:56
+msgid "Choose Platoon"
+msgstr ""
+
+#: admin_print_pdf.php:263
+msgid "Choose Soldier"
+msgstr ""
+
+#: admin_print_pdf.php:270
+msgid "File to print"
+msgstr ""
+
+#: admin_print_pdf.php:286
+msgid "Week Number"
+msgstr ""
+
+#: admin_print_pdf.php:287
+msgid "Current Week"
+msgstr ""
+
+#: admin_print_pdf.php:288
+msgid "Previous Week"
+msgstr ""
+
+#: admin_prize_auction.php:23
+msgid "Unable to add new prize, this number is already used."
+msgstr ""
+
+#: admin_prize_auction.php:28 admin_prize_store.php:24
+msgid "Unable to add new prize, this name is already used."
+msgstr ""
+
+#: admin_prize_auction.php:36 admin_prize_store.php:32
+msgid "Prize added"
+msgstr ""
+
+#: admin_prize_auction.php:43 admin_prize_store.php:39
+msgid "Prize deleted"
+msgstr ""
+
+#: admin_prize_auction.php:62
+msgid "Unable to edit prize, this number is already used."
+msgstr ""
+
+#: admin_prize_auction.php:67 admin_prize_store.php:59
+msgid "Unable to edit prize, this name is already used."
+msgstr ""
+
+#: admin_prize_auction.php:78 admin_prize_store.php:70
+msgid "Prize edited"
+msgstr ""
+
+#: admin_prize_auction.php:92 admin_prize_auction.php:105 auction.php:25
+#: auction.php:64
+msgid "Chinese Auction Prizes"
+msgstr ""
+
+#: admin_prize_auction.php:115
+msgid "Number"
+msgstr ""
+
+#: admin_prize_auction.php:117 admin_prize_store.php:106
+msgid "Note: Output as is, including any HTML."
+msgstr ""
+
+#: admin_prize_auction.php:123 admin_prize_auction.php:161
+msgid "Min Grade"
+msgstr ""
+
+#: admin_prize_auction.php:130 admin_prize_store.php:114
+msgid "Multi institution prize"
+msgstr ""
+
+#: admin_prize_auction.php:152 admin_prize_store.php:137
+msgid "Add new Prize"
+msgstr ""
+
+#: admin_prize_auction.php:175 admin_prize_store.php:154
+msgid "Edit Prize"
+msgstr ""
+
+#: admin_prize_auction.php:176 admin_prize_store.php:155
+msgid "Delete Prize"
+msgstr ""
+
+#: admin_prize_store.php:84 admin_prize_store.php:97 store.php:37
+msgid "Store Prizes"
+msgstr ""
+
+#: admin_prize_store.php:109 admin_prize_store.php:143
+msgid "Prizes available"
+msgstr ""
+
+#: admin_prize_store.php:109
+msgid "Leave blank for unlimited"
+msgstr ""
+
+#: admin_rank.php:21
+msgid "Unable to add new rank, this name is already used."
+msgstr ""
+
+#: admin_rank.php:31
+msgid "Rank added"
+msgstr ""
+
+#: admin_rank.php:49
+msgid "Unable to edit rank, this name is already used."
+msgstr ""
+
+#: admin_rank.php:66
+msgid "Rank edited"
+msgstr ""
+
+#: admin_rank.php:79 admin_rank.php:92
+msgid "Ranks"
+msgstr ""
+
+#: admin_rank.php:101
+msgid ""
+"Medals required to reach the next rank (0 means the rank is automatically "
+"awarded)"
+msgstr ""
+
+#: admin_rank.php:109 admin_rank.php:137
+msgid "Color"
+msgstr ""
+
+#: admin_rank.php:109
+msgid "As color name or #nnnnnn"
+msgstr ""
+
+#: admin_rank.php:110 admin_rank.php:138
+msgid "Background Image"
+msgstr ""
+
+#: admin_rank.php:126
+msgid "Add new Rank"
+msgstr ""
+
+#: admin_rank.php:128
+msgid ""
+"Note: Ranks can't be deleted or have their order changed using the website, "
+"so please create them in the proper order."
+msgstr ""
+
+#: admin_rank.php:133
+msgid "#"
+msgstr ""
+
+#: admin_rank.php:135
+msgid "Total Medals required to reach this rank"
+msgstr ""
+
+#: admin_rank.php:149
+msgid "Edit Rank"
+msgstr ""
+
+#: admin_report.php:9 admin_report.php:56 admin_report.php:637
+msgid "No tasks."
+msgstr ""
+
+#: admin_report.php:26
+msgid "Dup"
+msgstr ""
+
+#: admin_report.php:249
+msgid "My Profile"
+msgstr ""
+
+#: admin_report.php:253
+msgid "Post Location #"
+msgstr ""
+
+#: admin_report.php:254
+msgid "Institution Name"
+msgstr ""
+
+#: admin_report.php:259
+msgid "Name of Soldier"
+msgstr ""
+
+#: admin_report.php:261 admin_report_auction.php:281
+#: admin_report_hakhel.php:289 admin_report_wwtc.php:269 admin_stats.php:104
+#: dashboard.php:53 statement.php:57
+msgid "Rank"
+msgstr ""
+
+#: admin_report.php:265
+msgid "Soldier Address"
+msgstr ""
+
+#: admin_report.php:277
+msgid "Statistics"
+msgstr ""
+
+#: admin_report.php:280 admin_report_hakhel.php:433 admin_report_wwtc.php:444
+msgid "Army Participation"
+msgstr ""
+
+#: admin_report.php:281
+msgid "Post Participation"
+msgstr ""
+
+#: admin_report.php:282
+msgid "Squad Participation"
+msgstr ""
+
+#: admin_report.php:288 admin_report.php:293 admin_report.php:299
+msgid "Average points"
+msgstr ""
+
+#: admin_report.php:595
+msgid "Date Limited Tasks"
+msgstr ""
+
+#: admin_report.php:639
+msgid ""
+"Please mark a box each time you complete the task. Boxes under 'Other' can "
+"be done on any date. Before turning in your paper please count how many "
+"times you marked the boxes (don't include tasks that were done previously) "
+"and enter the number in the Total column."
+msgstr ""
+
+#: admin_report.php:640
+msgid ""
+"You must complete the tasks at least the Mandatory number of times to "
+"complete the Mission, but you may do more (if available) for extra points."
+msgstr ""
+
+#: admin_report.php:641
+msgid ""
+"Each mission has a date range that it must be done within. If you didn't "
+"complete the mission this week, and the date range allows it, your marks "
+"will be remembered for next week. Even if you didn't complete the mission "
+"you will still get points for whatever you do."
+msgstr ""
+
+#: admin_report.php:645 admin_report_wwtc.php:331 admin_view_task.php:63
+msgid "Mission"
+msgstr ""
+
+#: admin_report.php:646 admin_view_task.php:80
+msgid "Task"
+msgstr ""
+
+#: admin_report.php:649
+msgid "Other"
+msgstr ""
+
+#: admin_report.php:653 auction.php:130
+msgid "Total"
+msgstr ""
+
+#: admin_report.php:671
+msgid "Mandatory"
+msgstr ""
+
+#: admin_report.php:672
+msgid "Optional"
+msgstr ""
+
+#: admin_report_auction.php:201
+msgid "Select Auction"
+msgstr ""
+
+#: admin_report_auction.php:207
+msgid "Hide non-registered soldiers?"
+msgstr ""
+
+#: admin_report_auction.php:208
+msgid "Hide soldiers with zero points?"
+msgstr ""
+
+#: admin_report_auction.php:243 admin_report_wwtc.php:255 admin_stats.php:84
+#: admin_stats.php:105 admin_users_photo.php:92 admin_users_tanya.php:135
+#: admin_users_track.php:115 db.php:169
+msgid "Soldier"
+msgstr ""
+
+#: admin_report_auction.php:243 admin_report_auction.php:258
+#: admin_report_wwtc.php:255 admin_report_wwtc.php:288
+msgid "Profile"
+msgstr ""
+
+#: admin_report_auction.php:258 admin_report_wwtc.php:288
+#: admin_report_wwtc.php:302 dashboard.php:38 statement.php:42
+msgid "Base"
+msgstr ""
+
+#: admin_report_auction.php:277 admin_report_hakhel.php:287
+#: admin_report_wwtc.php:270 dashboard.php:54 statement.php:58
+msgid "Serial"
+msgstr ""
+
+#: admin_report_auction.php:278 admin_report_hakhel.php:285
+msgid "Age"
+msgstr ""
+
+#: admin_report_auction.php:279 admin_report_hakhel.php:288
+#: admin_report_wwtc.php:273 admin_stats.php:103 dashboard.php:58
+#: statement.php:62
+msgid "Total Miles"
+msgstr ""
+
+#: admin_report_auction.php:282 admin_report_hakhel.php:290
+#: admin_report_wwtc.php:274 dashboard.php:57 statement.php:61
+msgid "Platoon Average"
+msgstr ""
+
+#: admin_report_auction.php:284 admin_report_hakhel.php:294
+msgid "TH Base"
+msgstr ""
+
+#: admin_report_auction.php:285 admin_report_hakhel.php:297 dashboard.php:39
+#: statement.php:43
+msgid "Base Mileage"
+msgstr ""
+
+#: admin_report_auction.php:292
+msgid "Instructions"
+msgstr ""
+
+#: admin_report_auction.php:294
+msgid ""
+"Fill in the amount of tickets per prize in the \"# tix\" box and the total "
+"miles needed in the \"Total mi.\" box."
+msgstr ""
+
+#: admin_report_auction.php:297
+msgid ""
+"If you accidentally put in more tickets than your mileage allows, your base "
+"will decide which prizes to remove."
+msgstr ""
+
+#: admin_report_auction.php:298
+#, php-format
+msgid ""
+"Your total includes miles earned through %s. Mileage earned after %1$s will "
+"be applied to the next auction."
+msgstr ""
+
+#: admin_report_auction.php:306
+msgid "# tix"
+msgstr ""
+
+#: admin_report_auction.php:306
+msgid "Total mi."
+msgstr ""
+
+#: admin_report_auction.php:306
+msgid "Prize#"
+msgstr ""
+
+#: admin_report_auction.php:306
+msgid "Prize description"
+msgstr ""
+
+#: admin_report_auction.php:316
+msgid "Sample prize"
+msgstr ""
+
+#: admin_report_auction.php:328
+msgid "Total miles used"
+msgstr ""
+
+#: admin_report_auction.php:330
+msgid "Mileage available<BR>for this auction"
+msgstr ""
+
+#: admin_report_hakhel.php:104
+msgid "Start Over"
+msgstr ""
+
+#: admin_report_hakhel.php:105
+msgid "Marked the following reports as printed:"
+msgstr ""
+
+#: admin_report_hakhel.php:125
+msgid "Which Mission"
+msgstr ""
+
+#: admin_report_hakhel.php:133
+msgid "Include reports that were already printed"
+msgstr ""
+
+#: admin_report_hakhel.php:139
+msgid "Hakhel Missions Printing Instructions"
+msgstr ""
+
+#: admin_report_hakhel.php:141
+msgid ""
+"<B>Current Mission Report:</B> Will print a current mission report for each "
+"soldier. (eg. for one soldier it will print mission report #1 and for "
+"another soldier it will print mission report #2)"
+msgstr ""
+
+#: admin_report_hakhel.php:144
+msgid ""
+"<B>Next Mission Report:</B> Will print the next mission report for each "
+"soldier. (This report will be helpful during school vacation - when soldiers "
+"will not be in school when they finish their current mission.)"
+msgstr ""
+
+#: admin_report_hakhel.php:147
+msgid ""
+"<B>IMPORTANT NOTE:</B> in order for this to work, after you print a report "
+"you MUST mark it as printed."
+msgstr ""
+
+#: admin_report_hakhel.php:156
+msgid ""
+"<B>VERY IMPORTANT:</B> after printing the PDF press back on the browser, and "
+"then press the 'mark these reports as printed' button and do <EM>NOT</EM> "
+"change any of the settings (Which Mission, Show Platoon, Include reports.., "
+"etc) above."
+msgstr ""
+
+#: admin_report_hakhel.php:159
+msgid ""
+"If you change the settings before pressing the mark button it will mark a "
+"<EM>different</EM> list of reports than what you printed!"
+msgstr ""
+
+#: admin_report_hakhel.php:162
+msgid ""
+"You don't have to mark the reports as printed if you don't want to, but if "
+"you do, make sure not to change the settings."
+msgstr ""
+
+#: admin_report_hakhel.php:284 admin_report_wwtc.php:429
+#, php-format
+msgid "%s miles needed to activate %s past miles for upcoming auction."
+msgstr ""
+
+#: admin_report_hakhel.php:295
+msgid "Base Name"
+msgstr ""
+
+#: admin_report_hakhel.php:296
+msgid "Officer"
+msgstr ""
+
+#: admin_report_hakhel.php:298 admin_report_wwtc.php:275 dashboard.php:40
+#: statement.php:44
+msgid "Base Average"
+msgstr ""
+
+#: admin_report_hakhel.php:299 admin_report_wwtc.php:276 dashboard.php:41
+#: statement.php:45
+msgid "Army Average"
+msgstr ""
+
+#: admin_report_hakhel.php:301
+msgid "Hakhel mission report"
+msgstr ""
+
+#: admin_report_hakhel.php:428 admin_report_wwtc.php:436
+msgid "Base Participation"
+msgstr ""
+
+#: admin_report_hakhel.php:430 admin_report_hakhel.php:436
+msgid "Tasks Completed"
+msgstr ""
+
+#: admin_report_hakhel.php:431 admin_report_hakhel.php:437
+msgid "Missions Completed"
+msgstr ""
+
+#: admin_report_hakhel.php:434 admin_report_wwtc.php:445
+msgid "Bases"
+msgstr ""
+
+#: admin_report_hakhel.php:440 admin_report_wwtc.php:243
+msgid "Missions to"
+msgstr ""
+
+#: admin_report_hakhel.php:440 admin_report_wwtc.php:243
+msgid "medal"
+msgstr ""
+
+#: admin_report_wwtc.php:42 admin_report_wwtc.php:57
+msgid "WWTC"
+msgstr ""
+
+#: admin_report_wwtc.php:177
+msgid "World-Wide Tehillim Club"
+msgstr ""
+
+#: admin_report_wwtc.php:181
+msgid "Mission Directives"
+msgstr ""
+
+#: admin_report_wwtc.php:206 admin_stats.php:92 admin_stats.php:98
+#: admin_subject.php:189
+msgid "Medal"
+msgstr ""
+
+#: admin_report_wwtc.php:206
+msgid "Awarded"
+msgstr ""
+
+#: admin_report_wwtc.php:206
+msgid "In Progress"
+msgstr ""
+
+#: admin_report_wwtc.php:210
+msgid "Mission Dates"
+msgstr ""
+
+#: admin_report_wwtc.php:219
+msgid "Primary Mission Objectives"
+msgstr ""
+
+#: admin_report_wwtc.php:231
+msgid "Best Way To Do It (Bonus Miles)"
+msgstr ""
+
+#: admin_report_wwtc.php:240
+msgid "WWTC Medal Progress Bar"
+msgstr ""
+
+#: admin_report_wwtc.php:282
+msgid "TH Army Boy"
+msgstr ""
+
+#: admin_report_wwtc.php:284
+msgid "TH Army Girl"
+msgstr ""
+
+#: admin_report_wwtc.php:301
+msgid "TH Base Number"
+msgstr ""
+
+#: admin_report_wwtc.php:303
+msgid "Total Base Mileage"
+msgstr ""
+
+#: admin_report_wwtc.php:304
+msgid "Average Platoon Participation"
+msgstr ""
+
+#: admin_report_wwtc.php:305
+msgid "Average Base Participation"
+msgstr ""
+
+#: admin_report_wwtc.php:306
+msgid "Average Army Participation"
+msgstr ""
+
+#: admin_report_wwtc.php:317
+msgid ""
+"...Saying the entire Tehillim on Shabbos Mevorchim is crucial for you, for "
+"your children and your children's children!"
+msgstr ""
+
+#: admin_report_wwtc.php:318
+msgid "HaYom Yom 25 Shevat"
+msgstr ""
+
+#: admin_report_wwtc.php:327
+msgid "Earn Miles"
+msgstr ""
+
+#: admin_report_wwtc.php:338
+msgid "Mileage"
+msgstr ""
+
+#: admin_report_wwtc.php:342 admin_report_wwtc.php:366
+#: admin_report_wwtc.php:367 admin_report_wwtc.php:379
+msgid "mi."
+msgstr ""
+
+#: admin_report_wwtc.php:353
+msgid "Did you complete the mission?"
+msgstr ""
+
+#: admin_report_wwtc.php:364
+msgid "Mile"
+msgstr ""
+
+#: admin_report_wwtc.php:366
+msgid "Quota"
+msgstr ""
+
+#: admin_report_wwtc.php:367
+msgid "each"
+msgstr ""
+
+#: admin_report_wwtc.php:393
+msgid "Message To Soldier"
+msgstr ""
+
+#: admin_report_wwtc.php:402
+msgid "My Goal for this year"
+msgstr ""
+
+#: admin_report_wwtc.php:404
+msgid "Year Start"
+msgstr ""
+
+#: admin_report_wwtc.php:404
+msgid "Year End"
+msgstr ""
+
+#: admin_report_wwtc.php:409
+msgid "My long term strategy"
+msgstr ""
+
+#: admin_report_wwtc.php:411
+msgid "By the end of 7th grade"
+msgstr ""
+
+#: admin_report_wwtc.php:418
+msgid "Parent's<BR>Signature"
+msgstr ""
+
+#: admin_report_wwtc.php:425
+msgid "Mileage Available<BR>for Chinese Auction"
+msgstr ""
+
+#: admin_report_wwtc.php:433
+msgid "Stats"
+msgstr ""
+
+#: admin_reports.php:16
+msgid "Report added"
+msgstr ""
+
+#: admin_reports.php:22
+msgid "Report deleted"
+msgstr ""
+
+#: admin_reports.php:73 admin_reports.php:91 admin_todolist.php:142
+#: admin_todolist.php:159
+msgid "Visibility"
+msgstr ""
+
+#: admin_reports.php:87
+msgid "Add new Report"
+msgstr ""
+
+#: admin_reports.php:96
+msgid "# Printed"
+msgstr ""
+
+#: admin_reports.php:97
+msgid "# Processed"
+msgstr ""
+
+#: admin_reports.php:112
+msgid "View Report"
+msgstr ""
+
+#: admin_reports.php:114
+msgid "Edit Report"
+msgstr ""
+
+#: admin_reports.php:115
+msgid "Delete Report"
+msgstr ""
+
+#: admin_role.php:20
+msgid "Unable to add new role, this name is already used."
+msgstr ""
+
+#: admin_role.php:26
+msgid "Role added"
+msgstr ""
+
+#: admin_role.php:33
+msgid "Role deleted"
+msgstr ""
+
+#: admin_role.php:48
+msgid "Unable to edit role, this name is already used."
+msgstr ""
+
+#: admin_role.php:54
+msgid "Role edited"
+msgstr ""
+
+#: admin_role.php:67 admin_role.php:80
+msgid "Roles"
+msgstr ""
+
+#: admin_role.php:105
+msgid "Add new Role"
+msgstr ""
+
+#: admin_role.php:118
+msgid "Edit Role"
+msgstr ""
+
+#: admin_role.php:119
+msgid "Delete Role"
+msgstr ""
+
+#: admin_school.php:32
+msgid "Unable to add new institution, this name is already used."
+msgstr ""
+
+#: admin_school.php:45
+msgid "Institution added"
+msgstr ""
+
+#: admin_school.php:55
+msgid "Institution deleted"
+msgstr ""
+
+#: admin_school.php:71
+msgid "Unable to edit institution, this name is already used."
+msgstr ""
+
+#: admin_school.php:92
+msgid "Institution edited"
+msgstr ""
+
+#: admin_school.php:135 admin_school.php:148
+msgid "Base Profile"
+msgstr ""
+
+#: admin_school.php:159
+msgid "Hebrew Name"
+msgstr ""
+
+#: admin_school.php:159 register_school.php:158 register_school.php:162
+msgid "This is how it will appear on school banner"
+msgstr ""
+
+#: admin_school.php:160 admin_school.php:239 admin_subject.php:161
+#: admin_subject.php:255 register_school.php:166
+msgid "Institution type"
+msgstr ""
+
+#: admin_school.php:165
+msgid "Default Tzivos Hashem Type for new students"
+msgstr ""
+
+#: admin_school.php:172 register_school.php:186
+msgid "Default Ladder for new students"
+msgstr ""
+
+#: admin_school.php:179 admin_user.php:200 register.php:150
+#: register_parent.php:238 register_school.php:275
+msgid "Address 1"
+msgstr ""
+
+#: admin_school.php:180 admin_user.php:201 register.php:154
+#: register_parent.php:242 register_school.php:279
+msgid "Address 2"
+msgstr ""
+
+#: admin_school.php:181 admin_school.php:246 admin_user.php:202
+#: register.php:158 register_parent.php:246 register_school.php:283
+msgid "City"
+msgstr ""
+
+#: admin_school.php:182 admin_user.php:203
+msgid "State/Province"
+msgstr ""
+
+#: admin_school.php:183 admin_user.php:204
+msgid "Zip/Postal code"
+msgstr ""
+
+#: admin_school.php:184 admin_school.php:244 admin_user.php:205
+#: register.php:170 register_parent.php:258 register_school.php:295
+msgid "Country"
+msgstr ""
+
+#: admin_school.php:185 admin_user.php:206 register.php:174
+msgid "Phone"
+msgstr ""
+
+#: admin_school.php:186
+msgid "Our school does not have a school logo"
+msgstr ""
+
+#: admin_school.php:187 admin_school.php:194
+msgid "PNG, GIF, or JPEG, but a transparent PNG is strongly recommended."
+msgstr ""
+
+#: admin_school.php:194
+msgid "Kiosk Logo"
+msgstr ""
+
+#: admin_school.php:196
+msgid "Uploading a new kiosk logo will replace the old."
+msgstr ""
+
+#: admin_school.php:197
+msgid "Delete current kiosk logo"
+msgstr ""
+
+#: admin_school.php:201 admin_todolist.php:134 admin_todolist.php:166
+msgid "File"
+msgstr ""
+
+#: admin_school.php:201
+msgid ""
+"Use this to upload a database of your students for us to import, or to send "
+"us other files."
+msgstr ""
+
+#: admin_school.php:206 admin_todolist.php:136
+msgid "Uploading a new file will replace the old."
+msgstr ""
+
+#: admin_school.php:207 admin_todolist.php:137
+msgid "Delete current file"
+msgstr ""
+
+#: admin_school.php:208
+msgid "Download current file"
+msgstr ""
+
+#: admin_school.php:210
+msgid "Our kiosks have printers"
+msgstr ""
+
+#: admin_school.php:213
+msgid "Settings"
+msgstr ""
+
+#: admin_school.php:217
+msgid "Home School."
+msgstr ""
+
+#: admin_school.php:220 register_school.php:316
+msgid "CC Number"
+msgstr ""
+
+#: admin_school.php:221 register_school.php:320
+msgid "Expires MM/YY"
+msgstr ""
+
+#: admin_school.php:222 register_school.php:324
+msgid "CVV"
+msgstr ""
+
+#: admin_school.php:232
+msgid "Export Institutions"
+msgstr ""
+
+#: admin_school.php:233
+msgid "Export Teachers"
+msgstr ""
+
+#: admin_school.php:234
+msgid "Add new institution"
+msgstr ""
+
+#: admin_school.php:241
+msgid "# Registered"
+msgstr ""
+
+#: admin_school.php:243
+msgid "Base #"
+msgstr ""
+
+#: admin_school.php:245 register.php:162 register_parent.php:250
+#: register_school.php:287
+msgid "State"
+msgstr ""
+
+#: admin_school.php:247
+msgid "Has file?"
+msgstr ""
+
+#: admin_school.php:263
+msgid "YES"
+msgstr ""
+
+#: admin_school.php:265
+msgid "Edit Institution Info"
+msgstr ""
+
+#: admin_school.php:266
+msgid "Delete Institution"
+msgstr ""
+
+#: admin_school.php:267
+msgid "Manage Platoons"
+msgstr ""
+
+#: admin_school.php:268
+msgid "Manage Squads"
+msgstr ""
+
+#: admin_school.php:281
+msgid "Totals"
+msgstr ""
+
+#: admin_school_type.php:22
+msgid "Unable to add new tzivos hashem type, this name is already used."
+msgstr ""
+
+#: admin_school_type.php:31
+msgid "Tzivos Hashem Type added"
+msgstr ""
+
+#: admin_school_type.php:37
+msgid "Tzivos Hashem Type deleted"
+msgstr ""
+
+#: admin_school_type.php:56
+msgid "Unable to edit school_type, this name is already used."
+msgstr ""
+
+#: admin_school_type.php:66
+msgid "Tzivos Hashem Type edited"
+msgstr ""
+
+#: admin_school_type.php:86 admin_school_type.php:99 admin_subject.php:171
+msgid "Tzivos Hashem Types"
+msgstr ""
+
+#: admin_school_type.php:108 admin_subject.php:139 admin_subject.php:152
+msgid "Subjects"
+msgstr ""
+
+#: admin_school_type.php:113 admin_school_type.php:137
+msgid "Setting"
+msgstr ""
+
+#: admin_school_type.php:116
+msgid "Fully managed by admins."
+msgstr ""
+
+#: admin_school_type.php:117
+msgid "Fully managed, but users can create personal tasks."
+msgstr ""
+
+#: admin_school_type.php:118
+msgid ""
+"Users can create personal tasks, and can control their ladder, year and "
+"tzivos hashem type."
+msgstr ""
+
+#: admin_school_type.php:119
+msgid "Only personal tasks will be used."
+msgstr ""
+
+#: admin_school_type.php:132
+msgid "Add new Tzivos Hashem Type"
+msgstr ""
+
+#: admin_school_type.php:145
+msgid "Edit Tzivos Hashem Type"
+msgstr ""
+
+#: admin_school_type.php:146
+msgid "Delete Tzivos Hashem Type"
+msgstr ""
+
+#: admin_stats.php:14 admin_stats.php:28
+msgid "Soldier's Statistics Report"
+msgstr ""
+
+#: admin_stats.php:90
+msgid "Lines of Tanya"
+msgstr ""
+
+#: admin_store.php:26 admin_store.php:39
+msgid "Manage Store purchases"
+msgstr ""
+
+#: admin_store.php:60
+msgid "Show only un-shipped prizes"
+msgstr ""
+
+#: admin_store.php:61
+msgid "Shipped prizes"
+msgstr ""
+
+#: admin_store.php:63
+msgid "Show prizes that were already shipped"
+msgstr ""
+
+#: admin_store.php:64
+msgid "Un-Shipped prizes"
+msgstr ""
+
+#: admin_store.php:76
+msgid "Purchase Date"
+msgstr ""
+
+#: admin_store.php:88
+msgid "Un-Mark as Shipped"
+msgstr ""
+
+#: admin_store.php:88
+msgid "Mark as Shipped"
+msgstr ""
+
+#: admin_store.php:93
+msgid "Multi-institution prize"
+msgstr ""
+
+#: admin_subject.php:24
+msgid ""
+"Unable to add new subject, this name/institution type pair is already used."
+msgstr ""
+
+#: admin_subject.php:39
+msgid "Subject added"
+msgstr ""
+
+#: admin_subject.php:52
+msgid "Subject deleted"
+msgstr ""
+
+#: admin_subject.php:74
+msgid ""
+"Unable to edit subject, this name/institution type pair is already used."
+msgstr ""
+
+#: admin_subject.php:123
+msgid "Subject edited"
+msgstr ""
+
+#: admin_subject.php:168 admin_subject.php:266 admin_task.php:274
+msgid "Show goals and history"
+msgstr ""
+
+#: admin_subject.php:190
+msgid "Mission Requirements"
+msgstr ""
+
+#: admin_subject.php:192 admin_subject.php:215
+msgid "Medal Photo"
+msgstr ""
+
+#: admin_subject.php:198
+msgid ""
+"Mission Requirements is required, if it's blank the medal does not exist for "
+"this subject. If zero it means the medal is automatically awarded."
+msgstr ""
+
+#: admin_subject.php:199 admin_users_photo.php:93
+msgid "Maximum individual file size"
+msgstr ""
+
+#: admin_subject.php:199 admin_users_photo.php:93
+msgid "Maximum total combined file size"
+msgstr ""
+
+#: admin_subject.php:203
+msgid "medal_name"
+msgstr ""
+
+#: admin_subject.php:238
+msgid ""
+"Once you add the subject, please go back and edit it to add information "
+"about the medals."
+msgstr ""
+
+#: admin_subject.php:250
+msgid "Add new Subject"
+msgstr ""
+
+#: admin_subject.php:267
+msgid "Edit Subject"
+msgstr ""
+
+#: admin_subject.php:268
+msgid "Delete Subject"
+msgstr ""
+
+#: admin_tanya_goals.php:20 admin_tanya_goals.php:33
+msgid "Tanya Goals"
+msgstr ""
+
+#: admin_tanya_lines.php:22 admin_tanya_lines.php:35 dashboard.php:200
+msgid "Tanya Lines"
+msgstr ""
+
+#: admin_tanya_lines.php:37
+msgid ""
+"Note: You only have to enter a Page # and Perek when it changes. If you "
+"leave it blank it will copy the entry above it when you save."
+msgstr ""
+
+#: admin_tanya_lines.php:41
+msgid "Line"
+msgstr ""
+
+#: admin_tanya_lines.php:42 admin_tanya_lines_print.php:29
+msgid "Page"
+msgstr ""
+
+#: admin_tanya_lines.php:43
+msgid "Perek"
+msgstr ""
+
+#: admin_tanya_lines_print.php:9 admin_tanya_lines_print.php:22
+msgid "Tanya Lines Print"
+msgstr ""
+
+#: admin_task.php:28
+msgid "Task added"
+msgstr ""
+
+#: admin_task.php:34
+msgid "Task deleted"
+msgstr ""
+
+#: admin_task.php:60
+msgid "Task edited"
+msgstr ""
+
+#: admin_task.php:88
+msgid "Task Active edited"
+msgstr ""
+
+#: admin_task.php:116
+msgid "Task Points edited"
+msgstr ""
+
+#: admin_task.php:142
+msgid "Task Descriptions edited"
+msgstr ""
+
+#: admin_task.php:169
+msgid "Task Quantities edited"
+msgstr ""
+
+#: admin_task.php:267
+msgid "Step 1 of 5"
+msgstr ""
+
+#: admin_task.php:279
+msgid "Quantity name"
+msgstr ""
+
+#: admin_task.php:280
+msgid ""
+"A quantity is a user defined field, which is simply a number that is "
+"totaled. The value of the quantity is set in the ladder/year grid. This "
+"defines the word to display when totaling for a soldier."
+msgstr ""
+
+#: admin_task.php:299 admin_task.php:317
+msgid "Step "
+msgstr ""
+
+#: admin_task.php:299 admin_task.php:317
+msgid "5"
+msgstr ""
+
+#: admin_task.php:299 admin_task.php:317
+msgid " of 5"
+msgstr ""
+
+#: admin_task.php:300
+msgid "This task has no quantity name defined, quantity grid skipped."
+msgstr ""
+
+#: admin_task.php:317
+msgid "3"
+msgstr ""
+
+#: admin_task.php:317
+msgid "4"
+msgstr ""
+
+#: admin_task.php:317
+msgid "2"
+msgstr ""
+
+#: admin_task.php:318 admin_task.php:415
+msgid "Save Points and edit Descriptions"
+msgstr ""
+
+#: admin_task.php:318 admin_task.php:415
+msgid "Save Descriptions and edit Quantity"
+msgstr ""
+
+#: admin_task.php:318 admin_task.php:415
+msgid "Save Quantity"
+msgstr ""
+
+#: admin_task.php:318 admin_task.php:415
+msgid "Save Active and edit Points"
+msgstr ""
+
+#: admin_task.php:321
+msgid "Task Points"
+msgstr ""
+
+#: admin_task.php:321
+msgid "Task Descriptions"
+msgstr ""
+
+#: admin_task.php:321
+msgid "Task Quantities"
+msgstr ""
+
+#: admin_task.php:321
+msgid "Task Active"
+msgstr ""
+
+#: admin_task.php:369 admin_task.php:371 admin_task.php:373 admin_task.php:387
+#: admin_task.php:389 admin_task.php:391 admin_task.php:399 admin_task.php:401
+#: admin_task.php:403
+msgid "Change"
+msgstr ""
+
+#: admin_task.php:425
+msgid "Add new Task"
+msgstr ""
+
+#: admin_task.php:443 tasks_personal.php:225
+msgid "Edit Task"
+msgstr ""
+
+#: admin_task.php:444
+msgid "Edit Active for Task"
+msgstr ""
+
+#: admin_task.php:445
+msgid "Edit Points for Task"
+msgstr ""
+
+#: admin_task.php:446
+msgid "Edit Descriptions for Task"
+msgstr ""
+
+#: admin_task.php:447
+msgid "Edit quantities for Task"
+msgstr ""
+
+#: admin_task.php:448
+msgid "Clone Task"
+msgstr ""
+
+#: admin_task.php:449
+msgid "Clone Task including grids"
+msgstr ""
+
+#: admin_task.php:450 tasks_personal.php:226
+msgid "Delete Task"
+msgstr ""
+
+#: admin_team.php:21
+msgid "Unable to add new squad, this name is already used."
+msgstr ""
+
+#: admin_team.php:27
+msgid "Squad added"
+msgstr ""
+
+#: admin_team.php:33
+msgid "Squad deleted"
+msgstr ""
+
+#: admin_team.php:48
+msgid "Unable to edit squad, this name is already used."
+msgstr ""
+
+#: admin_team.php:54
+msgid "Squad edited"
+msgstr ""
+
+#: admin_team.php:67 admin_team.php:80
+msgid "Squads"
+msgstr ""
+
+#: admin_team.php:117
+msgid "Add new squad"
+msgstr ""
+
+#: admin_team.php:128
+msgid "Edit Squad Info"
+msgstr ""
+
+#: admin_team.php:129
+msgid "Delete Squad"
+msgstr ""
+
+#: admin_todo_category.php:14 admin_todo_category.php:34
+msgid "Unable to save. This category already exists."
+msgstr ""
+
+#: admin_todo_category.php:18
+msgid "Category added."
+msgstr ""
+
+#: admin_todo_category.php:38
+msgid "Category edited."
+msgstr ""
+
+#: admin_todo_category.php:53 admin_todo_category.php:79
+msgid "Unable to save. This sub-category already exists in this category."
+msgstr ""
+
+#: admin_todo_category.php:57
+msgid "Sub-category added."
+msgstr ""
+
+#: admin_todo_category.php:83
+msgid "Sub-category edited."
+msgstr ""
+
+#: admin_todo_category.php:100 admin_todo_category.php:113
+msgid "To-do List Categories"
+msgstr ""
+
+#: admin_todo_category.php:133 admin_todo_category.php:142 admin_user.php:207
+msgid "Edit"
+msgstr ""
+
+#: admin_todo_category.php:134 admin_todo_category.php:143
+msgid "Can't delete has sub-categories"
+msgstr ""
+
+#: admin_todo_category.php:135
+msgid "Add new sub-category"
+msgstr ""
+
+#: admin_todolist.php:29
+msgid "To-do added"
+msgstr ""
+
+#: admin_todolist.php:36
+msgid "To-do deleted"
+msgstr ""
+
+#: admin_todolist.php:64 admin_todolist.php:78
+msgid "To-do List"
+msgstr ""
+
+#: admin_todolist.php:87 admin_todolist.php:160
+msgid "Recipient"
+msgstr ""
+
+#: admin_todolist.php:96 db.php:157
+msgid "Classes"
+msgstr ""
+
+#: admin_todolist.php:97 db.php:161
+msgid "Teams"
+msgstr ""
+
+#: admin_todolist.php:98 db.php:165
+msgid "Parents"
+msgstr ""
+
+#: admin_todolist.php:123
+msgid "Urgent"
+msgstr ""
+
+#: admin_todolist.php:124
+msgid "High"
+msgstr ""
+
+#: admin_todolist.php:125
+msgid "Medium"
+msgstr ""
+
+#: admin_todolist.php:126
+msgid "Low"
+msgstr ""
+
+#: admin_todolist.php:128 admin_todolist.php:164
+msgid "Category"
+msgstr ""
+
+#: admin_todolist.php:141 admin_todolist.php:167
+msgid "URL"
+msgstr ""
+
+#: admin_todolist.php:155
+msgid "Add new To-do"
+msgstr ""
+
+#: admin_todolist.php:161
+msgid "Sepcific Recipient"
+msgstr ""
+
+#: admin_todolist.php:168
+msgid "# Marked"
+msgstr ""
+
+#: admin_todolist.php:182
+msgid "View File"
+msgstr ""
+
+#: admin_todolist.php:185
+msgid "Edit To-do"
+msgstr ""
+
+#: admin_todolist.php:186
+msgid "Delete To-do"
+msgstr ""
+
+#: admin_track.php:19
+msgid "Unable to add new ladder, this name is already used."
+msgstr ""
+
+#: admin_track.php:25
+msgid "Ladder added"
+msgstr ""
+
+#: admin_track.php:31
+msgid "Ladder deleted"
+msgstr ""
+
+#: admin_track.php:46
+msgid "Unable to edit ladder, this name is already used."
+msgstr ""
+
+#: admin_track.php:52
+msgid "Ladder edited"
+msgstr ""
+
+#: admin_track.php:65 admin_track.php:78
+msgid "Ladders"
+msgstr ""
+
+#: admin_track.php:96
+msgid "Add new Ladder"
+msgstr ""
+
+#: admin_track.php:107
+msgid "Edit Ladder"
+msgstr ""
+
+#: admin_track.php:108
+msgid "Delete Ladder"
+msgstr ""
+
+#: admin_user.php:43
+msgid "Soldier added"
+msgstr ""
+
+#: admin_user.php:53
+msgid "Soldier deleted"
+msgstr ""
+
+#: admin_user.php:68
+msgid "Soldier edited"
+msgstr ""
+
+#: admin_user.php:138 preferences.php:38 register.php:91
+#: register_parent.php:177 register_school.php:144
+msgid "Passwords don't match."
+msgstr ""
+
+#: admin_user.php:146 preferences.php:62
+msgid "Enter a new password to change it"
+msgstr ""
+
+#: admin_user.php:147 login.php:102 preferences.php:65 register.php:118
+#: register_parent.php:144 register_parent.php:226 register_school.php:262
+msgid "Password"
+msgstr ""
+
+#: admin_user.php:148 preferences.php:69 register.php:122
+#: register_parent.php:230
+msgid "Password-again"
+msgstr ""
+
+#: admin_user.php:150 preferences.php:42 register.php:94
+#: register_parent.php:202 register_school.php:238
+msgid "First Name"
+msgstr ""
+
+#: admin_user.php:151 preferences.php:46 register.php:98
+#: register_parent.php:206 register_school.php:242
+msgid "Last Name"
+msgstr ""
+
+#: admin_user.php:152
+msgid "Hebrew First Name"
+msgstr ""
+
+#: admin_user.php:153
+msgid "Hebrew Last Name"
+msgstr ""
+
+#: admin_user.php:154
+msgid "Photo"
+msgstr ""
+
+#: admin_user.php:154 admin_users_photo.php:93
+msgid "Minimum size"
+msgstr ""
+
+#: admin_user.php:154 admin_users_photo.php:93
+#, php-format
+msgid ""
+"Larger is OK, the desired aspect ratio is: %s times as high, as it is wide"
+msgstr ""
+
+#: admin_user.php:156 admin_users_photo.php:94
+msgid "Uploading a new photo will replace the old."
+msgstr ""
+
+#: admin_user.php:157 admin_users_photo.php:102
+msgid "Delete current photo"
+msgstr ""
+
+#: admin_user.php:162
+msgid "Gender"
+msgstr ""
+
+#: admin_user.php:163
+msgid "Unknown"
+msgstr ""
+
+#: admin_user.php:164
+msgid "Male"
+msgstr ""
+
+#: admin_user.php:165
+msgid "Female"
+msgstr ""
+
+#: admin_user.php:167
+msgid "Date of birth"
+msgstr ""
+
+#: admin_user.php:168 preferences.php:50 register.php:106
+#: register_parent.php:214 register_school.php:250
+msgid "Language"
+msgstr ""
+
+#: admin_user.php:184 admin_view_task.php:29 tasks_school_type.php:40
+msgid "Tzivos Hashem Type"
+msgstr ""
+
+#: admin_user.php:215
+msgid "Add new user"
+msgstr ""
+
+#: admin_user.php:217
+msgid "Export Soldiers"
+msgstr ""
+
+#: admin_user.php:246
+msgid "Manage Soldier's School Points"
+msgstr ""
+
+#: admin_user.php:248
+msgid "Delete Soldier"
+msgstr ""
+
+#: admin_user_auction.php:29 admin_user_auction_bulk.php:23
+msgid "Soldier Auction Prizes saved"
+msgstr ""
+
+#: admin_user_auction.php:34
+msgid ""
+"WARNING Error saving Soldier Auction Prizes, please check. The soldier's "
+"entries have been redisplayed."
+msgstr ""
+
+#: admin_user_auction.php:59 admin_user_auction.php:92
+#: admin_user_auction_bulk.php:37 admin_user_auction_bulk.php:50
+msgid "Soldier Auction Prizes"
+msgstr ""
+
+#: admin_user_auction.php:139 admin_user_auction_bulk.php:90
+msgid "Please select an auction."
+msgstr ""
+
+#: admin_user_auction.php:152
+msgid ""
+"This soldier has no prizes available. Possible reassons are: not enough "
+"points for any prizes, the minimum grade necessary for the prizes, or the "
+"max prize points for this auction."
+msgstr ""
+
+#: admin_user_auction.php:175
+msgid "Points Avilable"
+msgstr ""
+
+#: admin_user_auction.php:176
+msgid "Points Used"
+msgstr ""
+
+#: admin_user_auction.php:177
+msgid "Points Left"
+msgstr ""
+
+#: admin_user_auction.php:180
+msgid "Save and edit selected soldier"
+msgstr ""
+
+#: admin_user_auction.php:180
+msgid "Unable to save, soldier has used too many points."
+msgstr ""
+
+#: admin_user_auction.php:186
+msgid "Next soldier"
+msgstr ""
+
+#: admin_user_auction.php:206
+msgid "Don't save, just edit selected soldier"
+msgstr ""
+
+#: admin_user_auction.php:210
+msgid "Total With Entries"
+msgstr ""
+
+#: admin_user_auction_bulk.php:93
+msgid "Point Histogram"
+msgstr ""
+
+#: admin_user_auction_bulk.php:96
+msgid ""
+"Height of bar is number of people with that many points left. Number under "
+"each bar is how many points they have left."
+msgstr ""
+
+#: admin_user_auction_bulk.php:108
+msgid "Number of Points"
+msgstr ""
+
+#: admin_user_auction_bulk.php:125
+msgid ""
+"This will enter the prize X number times, if the solider has enough points "
+"left."
+msgstr ""
+
+#: admin_user_auction_bulk.php:126
+msgid "Create an entry for each eligible soldier"
+msgstr ""
+
+#: admin_user_track.php:30 admin_users_tanya.php:30 admin_users_track.php:32
+msgid "Soldier's ladders edited"
+msgstr ""
+
+#: admin_user_track.php:44 admin_user_track.php:57 admin_users_track.php:51
+#: admin_users_track.php:64
+msgid "Soldier's Ladders/Years"
+msgstr ""
+
+#: admin_user_track.php:61
+#, php-format
+msgid "For: %s, %s %s"
+msgstr ""
+
+#: admin_user_track.php:75 admin_users_tanya.php:147 admin_users_track.php:122
+msgid "Change all"
+msgstr ""
+
+#: admin_user_track.php:78 admin_user_track.php:94 admin_users_track.php:125
+#: admin_users_track.php:148 tasks_tracks.php:77
+msgid "Subject Disabled"
+msgstr ""
+
+#: admin_users_photo.php:36 admin_users_photo.php:49
+msgid "Soldier's Photos"
+msgstr ""
+
+#: admin_users_photo.php:93
+msgid "New Photo"
+msgstr ""
+
+#: admin_users_photo.php:94
+msgid "Existing Photo"
+msgstr ""
+
+#: admin_users_photo.php:111 admin_users_tanya.php:202
+#: admin_users_track.php:167
+msgid "Undo Changes"
+msgstr ""
+
+#: admin_users_tanya.php:74
+msgid ""
+"Notice: Soldier has met or exceeded his goal for this year.\\n\\nConsider "
+"changing his ladder."
+msgstr ""
+
+#: admin_users_tanya.php:136
+msgid "Goal for this Year (lines)"
+msgstr ""
+
+#: admin_users_tanya.php:139
+msgid "Starting Date"
+msgstr ""
+
+#: admin_users_tanya.php:140
+msgid "Program Length"
+msgstr ""
+
+#: admin_users_tanya.php:140
+msgid "Leave blank if the soldier is not part of the program"
+msgstr ""
+
+#: admin_users_tanya.php:141
+msgid "Program Length Skip"
+msgstr ""
+
+#: admin_users_tanya.php:141
+msgid ""
+"If there is a break in the middle of the program, enter how long the break "
+"is. It's effective immediately, so enter the value only once the break "
+"begins."
+msgstr ""
+
+#: admin_users_tanya.php:142
+msgid "Before joining Tzivos Hashem soldier knew"
+msgstr ""
+
+#: admin_users_tanya.php:142
+msgid ""
+"How many lines the soldier learned before the program started. This will "
+"proportionally adjust the soldier's yearly goals."
+msgstr ""
+
+#: admin_users_tanya.php:143
+msgid "Total lines of Tanya soldier knows by heart"
+msgstr ""
+
+#: admin_users_tanya.php:143
+msgid ""
+"How many lines the soldier has learned in total, including before joining "
+"Tzivos Hashem. Usually this is changed by scanning a tanya card. This number "
+"MUST be larger than or equal to 'Before joining Tzivos Hashem soldier knew'."
+msgstr ""
+
+#: admin_users_tanya.php:159 admin_users_tanya.php:164
+#: admin_users_tanya.php:179 admin_users_tanya.php:183
+msgid "Weeks"
+msgstr ""
+
+#: admin_users_tanya.php:160 admin_users_tanya.php:165
+#: admin_users_tanya.php:180 admin_users_tanya.php:184
+msgid "Days"
+msgstr ""
+
+#: admin_users_tanya.php:187
+msgid ""
+"\"Before joining Tzivos Hashem soldier knew\" can not be greater than "
+"\"Total lines of Tanya soldier knows by heart\". Your entry has been "
+"adjusted.\\n\\nFirst increase \"Total lines of Tanya soldier knows by heart"
+"\", and then you can increase \"Before joining Tzivos Hashem soldier knew\"."
+msgstr ""
+
+#: admin_users_tanya.php:190
+msgid ""
+"\"Total lines of Tanya soldier knows by heart\" can not be less than "
+"\"Before joining Tzivos Hashem soldier knew\". Your entry has been adjusted."
+"\\n\\nFirst reduce \"Before joining Tzivos Hashem soldier knew\", and then "
+"you can reduce \"Total lines of Tanya soldier knows by heart\"."
+msgstr ""
+
+#: admin_users_tanya.php:198
+msgid ""
+"One (or more) soldiers have exceeded their tanya goals for this year.\\n"
+"\\nPlease review their ladder."
+msgstr ""
+
+#: admin_users_track.php:119
+msgid "Registered Date"
+msgstr ""
+
+#: admin_users_track.php:119
+msgid ""
+"You won't be able to print rank cards or reports for students who are not "
+"registered."
+msgstr ""
+
+#: admin_users_track.php:157
+msgid "Set Soldier's registration date to today"
+msgstr ""
+
+#: admin_view_date_tasks.php:20 admin_view_date_tasks.php:33
+msgid "Growth Plan"
+msgstr ""
+
+#: auction.php:18
+msgid "Prize choices saved."
+msgstr ""
+
+#: auction.php:66
+msgid "Choose auction"
+msgstr ""
+
+#: auction.php:111
+msgid "Points used"
+msgstr ""
+
+#: auth.php:46 code_processor.php:25
+#, php-format
+msgid "Code %s failed, must contain only numbers."
+msgstr ""
+
+#: auth.php:49
+#, php-format
+msgid "Code %s failed, was not 20 digits in length."
+msgstr ""
+
+#: auth.php:52
+#, php-format
+msgid ""
+"Code %s failed, does not appear to be a login card. Perhaps it's a point "
+"card."
+msgstr ""
+
+#: auth.php:72
+#, php-format
+msgid "Scan code %s not found."
+msgstr ""
+
+#: banner.php:14
+#, php-format
+msgid "Welcome %s acting as %s"
+msgstr ""
+
+#: banner.php:14
+msgid "Be Yourself"
+msgstr ""
+
+#: banner.php:14
+#, php-format
+msgid "Welcome %s"
+msgstr ""
+
+#: banner.php:14
+msgid "Sign out"
+msgstr ""
+
+#: banner.php:16 cal.php:35
+msgid "Previous"
+msgstr ""
+
+#: banner.php:18 cal.php:35
+msgid "Next"
+msgstr ""
+
+#: calendar.php:180
+msgid "day(s)"
+msgstr ""
+
+#: calendar.php:183
+msgid "week(s) on"
+msgstr ""
+
+#: calendar.php:185 lang.php:37 tasks_ae.php:108
+msgid "Sunday"
+msgstr ""
+
+#: calendar.php:186 lang.php:37 tasks_ae.php:109
+msgid "Monday"
+msgstr ""
+
+#: calendar.php:187 lang.php:37 tasks_ae.php:110
+msgid "Tuesday"
+msgstr ""
+
+#: calendar.php:188 lang.php:37 tasks_ae.php:112
+msgid "Wednesday"
+msgstr ""
+
+#: calendar.php:189 lang.php:37 tasks_ae.php:113
+msgid "Thursday"
+msgstr ""
+
+#: calendar.php:190 lang.php:37 tasks_ae.php:114
+msgid "Friday"
+msgstr ""
+
+#: calendar.php:191 lang.php:37 tasks_ae.php:116
+msgid "Shabbos"
+msgstr ""
+
+#: calendar.php:195
+msgid "month(s) on"
+msgstr ""
+
+#: calendar.php:201
+msgid "years on"
+msgstr ""
+
+#: card_printer.php:13
+msgid "Chayolei Tzivos Hashem"
+msgstr ""
+
+#: card_printer.php:14
+msgid "Achievement Card"
+msgstr ""
+
+#: card_printer.php:17
+msgid "This card is only valid in"
+msgstr ""
+
+#: card_printer.php:29
+msgid "This card expires"
+msgstr ""
+
+#: code_processor.php:8
+#, php-format
+msgid "Code %s could not be found, perhaps it was already used, or expired."
+msgstr ""
+
+#: code_processor.php:10
+#, php-format
+msgid ""
+"Code %s is from a different school, and can not be used by this account."
+msgstr ""
+
+#: code_processor.php:14
+#, php-format
+msgid ""
+"There was an error processing code %s. The subject it applies to could not "
+"be found."
+msgstr ""
+
+#: code_processor.php:16
+#, php-format
+msgid ""
+"Code %s could not be processed for this account. The subject \"%s\" is not "
+"applicable for this account."
+msgstr ""
+
+#: code_processor.php:47
+#, php-format
+msgid ""
+"Mission #%s for %s is not enabled for this account, and could not be "
+"processed."
+msgstr ""
+
+#: code_processor.php:49
+#, php-format
+msgid ""
+"You already completed mission #%s for %s-%s on: %s.<BR>Perhaps you were "
+"given a card with the wrong mission number."
+msgstr ""
+
+#: code_processor.php:67 code_processor.php:142
+msgid "Your account is not active for tanya."
+msgstr ""
+
+#: code_processor.php:69
+#, php-format
+msgid ""
+"You are not at the %%%d checkpoint, your next checkpoint should be the %%%d "
+"checkpoint."
+msgstr ""
+
+#: code_processor.php:86 code_processor.php:150
+#, php-format
+msgid "Unknown subcode %s"
+msgstr ""
+
+#: code_processor.php:88
+msgid "There is no auction currently active."
+msgstr ""
+
+#: code_processor.php:90
+#, php-format
+msgid "Unable to locate prize number %s in the active auction."
+msgstr ""
+
+#: code_processor.php:92
+msgid "This prize costs too many miles for the current auction."
+msgstr ""
+
+#: code_processor.php:94
+msgid "This prize is not available for your grade."
+msgstr ""
+
+#: code_processor.php:96
+#, php-format
+msgid ""
+"You don't have enough miles left for this prize.<BR><BR>You have %s miles in "
+"total available for this auction, and have spent %s miles so far on the "
+"currect auction."
+msgstr ""
+
+#: code_processor.php:105
+msgid ""
+"This is a login code, and can not be scanned here. Please logout first, and "
+"then use this code."
+msgstr ""
+
+#: code_processor.php:109 code_processor.php:156
+#, php-format
+msgid "Unknown type of scan code %s"
+msgstr ""
+
+#: code_processor.php:125
+msgid "Unable to find this line of tanya."
+msgstr ""
+
+#: code_processor.php:127
+msgid "Your account is not active for tanya, perhaps the program has ended."
+msgstr ""
+
+#: code_processor.php:129
+#, php-format
+msgid "You are not up to line %d. The last line you entered was line %d."
+msgstr ""
+
+#: code_processor.php:131
+#, php-format
+msgid ""
+"You can not enter any more lines of tanya until you get tested and scan the "
+"release card. You were last tested at the %d%% mark."
+msgstr ""
+
+#: code_processor.php:133
+#, php-format
+msgid ""
+"Mazal Tov, You have completed your yearly goal of %d lines. You can not scan "
+"any additional lines this year, so it is time to review your growth planner "
+"with your base commander."
+msgstr ""
+
+#: code_processor.php:162
+#, php-format
+msgid ""
+"Code %s failed, invalid number of digits. Perhaps the scanner did not get a "
+"good read."
+msgstr ""
+
+#: dashboard.php:28
+msgid "My Dashboard"
+msgstr ""
+
+#: dashboard.php:74
+msgid "Command Center"
+msgstr ""
+
+#: dashboard.php:75 dashboard.php:166
+msgid "Ammunition Depot"
+msgstr ""
+
+#: dashboard.php:76 dashboard.php:174
+msgid "Training Center"
+msgstr ""
+
+#: dashboard.php:77 dashboard.php:185
+msgid "Reporting Center"
+msgstr ""
+
+#: dashboard.php:78 dashboard.php:195
+msgid "Awards and Miles"
+msgstr ""
+
+#: dashboard.php:85
+msgid "Todo List"
+msgstr ""
+
+#: dashboard.php:189
+msgid "Temporary Rank Card"
+msgstr ""
+
+#: dashboard.php:197 statement.php:225
+msgid "Your current Hakhel Report"
+msgstr ""
+
+#: dashboard.php:201
+msgid "Chinese Auction Prize Cards"
+msgstr ""
+
+#: dashboard.php:202
+msgid "Auction Prize Entry Sheet"
+msgstr ""
+
+#: db.php:157
+msgid "Class"
+msgstr ""
+
+#: db.php:161
+msgid "Team"
+msgstr ""
+
+#: db.php:165
+msgid "Parent"
+msgstr ""
+
+#: db.php:215
+msgid "Medal Awarded"
+msgstr ""
+
+#: db.php:219
+msgid "Promoted to Rank"
+msgstr ""
+
+#: done.php:24
+msgid ""
+"You will lose your unsaved changes in the task you are editing.\\n\\n "
+"Continue?"
+msgstr ""
+
+#: done.php:34
+msgid "Completed Tasks"
+msgstr ""
+
+#: done.php:35
+#, php-format
+msgid "Days Points: %s"
+msgstr ""
+
+#: done.php:73
+msgid "Un-Mark as done"
+msgstr ""
+
+#: done.php:73
+msgid ""
+"If you unmark this task you will not have the same number of points if you "
+"re-mark it again\\n(because it's currently worth a different number of "
+"points).\\n\\nAre you sure?"
+msgstr ""
+
+#: done.php:73
+msgid ""
+"If you unmark this task you will NOT be able to re-mark it again\\n(because "
+"it no longer shows up in your Tasks list).\\n\\nAre you sure?"
+msgstr ""
+
+#: done.php:81
+msgid "You have no tasks."
+msgstr ""
+
+#: done.php:81
+msgid "Click Manage tasks to add some."
+msgstr ""
+
+#: file_save.php:6
+msgid "File is too large."
+msgstr ""
+
+#: file_save.php:10
+msgid "File was only partially uploaded."
+msgstr ""
+
+#: icalendar.php:7
+msgid "Calendar Date Picker"
+msgstr ""
+
+#: icalendar.php:31
+msgid "Clear"
+msgstr ""
+
+#: icalendar.php:34
+msgid "Close"
+msgstr ""
+
+#: lang.php:38
+msgid "Sun"
+msgstr ""
+
+#: lang.php:38
+msgid "Mon"
+msgstr ""
+
+#: lang.php:38
+msgid "Tue"
+msgstr ""
+
+#: lang.php:38
+msgid "Wed"
+msgstr ""
+
+#: lang.php:38
+msgid "Thu"
+msgstr ""
+
+#: lang.php:38
+msgid "Fri"
+msgstr ""
+
+#: lang.php:38
+msgid "Shab"
+msgstr ""
+
+#: login.php:7 login.php:107
+msgid "Login"
+msgstr ""
+
+#: login.php:63
+msgid "Chayolei Tzivos Hashem School Login"
+msgstr ""
+
+#: login.php:78
+msgid ""
+"Notice: You have javascript disabled. Some parts of the site will not "
+"function without javascript."
+msgstr ""
+
+#: login.php:112
+msgid "Scan Rank Card"
+msgstr ""
+
+#: login.php:120
+msgid "Welcome! Please scan your rank card"
+msgstr ""
+
+#: login.php:136 register_school.php:139
+msgid "Register your school"
+msgstr ""
+
+#: login.php:137
+msgid "About Us"
+msgstr ""
+
+#: login.php:143
+msgid "Enter Kiosk Mode"
+msgstr ""
+
+#: login.php:145
+msgid "Register for an account"
+msgstr ""
+
+#: menu.php:2 menu_tasks.php:2
+msgid "Home"
+msgstr ""
+
+#: menu.php:4
+#, php-format
+msgid "Total Points: %s"
+msgstr ""
+
+#: menu.php:10
+#, php-format
+msgid "Total %s Points: %s"
+msgstr ""
+
+#: menu.php:23
+#, php-format
+msgid "Squad Average Points: %s"
+msgstr ""
+
+#: menu.php:26
+msgid "Manage tasks"
+msgstr ""
+
+#: menu.php:28
+msgid "Chinese Auction prizes"
+msgstr ""
+
+#: menu.php:29
+msgid "Store prizes"
+msgstr ""
+
+#: menu.php:30 preferences.php:15 preferences.php:40
+msgid "Preferences"
+msgstr ""
+
+#: menu_tasks.php:5
+msgid "Manage Ladders and Years"
+msgstr ""
+
+#: menu_tasks.php:9 tasks_school_type.php:14 tasks_school_type.php:38
+msgid "Change Tzivos Hashem Type"
+msgstr ""
+
+#: menu_tasks.php:13
+msgid "Manage personal tasks"
+msgstr ""
+
+#: menu_tasks.php:17
+msgid "Manage task years"
+msgstr ""
+
+#: preferences.php:8
+msgid "Preferences saved."
+msgstr ""
+
+#: register.php:13 register_parent.php:39 register_school.php:68
+msgid "First name can not be blank."
+msgstr ""
+
+#: register.php:14 register_parent.php:40 register_school.php:69
+msgid "Last name can not be blank."
+msgstr ""
+
+#: register.php:16 register_parent.php:42 register_school.php:71
+msgid "Login name can not be blank."
+msgstr ""
+
+#: register.php:18 register_parent.php:44 register_school.php:73
+msgid "This login name has been taken. Please choose a different one."
+msgstr ""
+
+#: register.php:19 register_parent.php:45 register_school.php:74
+msgid "Invalid language."
+msgstr ""
+
+#: register.php:20 register_parent.php:46 register_school.php:75
+msgid "Password can not be blank."
+msgstr ""
+
+#: register.php:22
+msgid "Please pick an affiliation."
+msgstr ""
+
+#: register.php:24
+msgid "Invalid affiliation."
+msgstr ""
+
+#: register.php:26
+msgid "Please pick a background."
+msgstr ""
+
+#: register.php:28
+msgid "Invalid background."
+msgstr ""
+
+#: register.php:46
+msgid "You are now registered. Please login to continue."
+msgstr ""
+
+#: register.php:53 register_parent.php:65 register_school.php:98
+msgid "Please correct these errors and try again."
+msgstr ""
+
+#: register.php:89
+msgid "Register for a new account"
+msgstr ""
+
+#: register.php:102 register_parent.php:210 register_school.php:246
+msgid "Login Name"
+msgstr ""
+
+#: register.php:127
+msgid "Affiliation"
+msgstr ""
+
+#: register.php:130
+msgid "Please pick an affiliation"
+msgstr ""
+
+#: register.php:139
+msgid "Background"
+msgstr ""
+
+#: register.php:142
+msgid "Please pick a background"
+msgstr ""
+
+#: register.php:166 register_parent.php:254 register_school.php:291
+msgid "Postal code"
+msgstr ""
+
+#: register_parent.php:23
+msgid "Username or password was not correct. Please try again."
+msgstr ""
+
+#: register_parent.php:27
+#, php-format
+msgid "The invitation has been processed. Continue to your %sadmin%s page."
+msgstr ""
+
+#: register_parent.php:56
+msgid ""
+"You are now registered, and the invitation has been processed. Please login "
+"to continue."
+msgstr ""
+
+#: register_parent.php:74 register_parent.php:115 register_parent.php:131
+#: register_parent.php:171
+msgid "Accept Invitation"
+msgstr ""
+
+#: register_parent.php:107
+msgid "Enter invitation code"
+msgstr ""
+
+#: register_parent.php:108 register_parent.php:163
+msgid "Continue"
+msgstr ""
+
+#: register_parent.php:118 register_parent.php:134 register_parent.php:174
+#, php-format
+msgid "Accept an invitation for %s."
+msgstr ""
+
+#: register_parent.php:121
+msgid "Do you already have an account with Chayolei Tzivos Hashem?"
+msgstr ""
+
+#: register_parent.php:124
+msgid "Yes. I have an existing account."
+msgstr ""
+
+#: register_parent.php:126
+msgid "No, I would like to register for an account."
+msgstr ""
+
+#: register_parent.php:148 register_parent.php:180
+msgid "How do you know the student"
+msgstr ""
+
+#: register_parent.php:192 register_school.php:228
+msgid "Title"
+msgstr ""
+
+#: register_parent.php:234 register_school.php:270
+msgid "Email Address"
+msgstr ""
+
+#: register_parent.php:262 register_school.php:300
+msgid "Work Phone (+ext)"
+msgstr ""
+
+#: register_parent.php:266 register_school.php:304
+msgid "Home Phone"
+msgstr ""
+
+#: register_parent.php:270 register_school.php:308
+msgid "Mobile Phone"
+msgstr ""
+
+#: register_school.php:53
+msgid "Please pick an institution type."
+msgstr ""
+
+#: register_school.php:55
+msgid "Invalid institution type."
+msgstr ""
+
+#: register_school.php:57
+msgid "The school name can not be blank."
+msgstr ""
+
+#: register_school.php:59
+msgid ""
+"This school name has been taken for this institution type. Please choose a "
+"different name (or institution type)."
+msgstr ""
+
+#: register_school.php:61
+msgid "Please pick a default Tzivos Hashem type."
+msgstr ""
+
+#: register_school.php:63
+msgid "Invalid default Tzivos Hashem type."
+msgstr ""
+
+#: register_school.php:65
+msgid "Please pick a default Ladder."
+msgstr ""
+
+#: register_school.php:67
+msgid "Invalid default Ladder."
+msgstr ""
+
+#: register_school.php:76
+msgid "The credit card number you entered does not appear to be correct."
+msgstr ""
+
+#: register_school.php:77
+msgid "You must agree to the Student Registration Fee."
+msgstr ""
+
+#: register_school.php:90
+#, php-format
+msgid ""
+"<P>Dear %s,</P><P>Congratulations and welcome to the all NEW Chayolei Tzivos "
+"Hashem! There are just 2 more steps to complete before your account can be "
+"fully activated.</P><P>Please login and upload your school logo and "
+"database, your account has limited access and is pending approval for full "
+"access.</P>"
+msgstr ""
+
+#: register_school.php:110
+msgid "Register School"
+msgstr ""
+
+#: register_school.php:141
+msgid "School Brochure"
+msgstr ""
+
+#: register_school.php:147
+msgid "Agreement"
+msgstr ""
+
+#: register_school.php:150
+msgid "I agree"
+msgstr ""
+
+#: register_school.php:155
+msgid "School information"
+msgstr ""
+
+#: register_school.php:162
+msgid "School Name in Hebrew Letters"
+msgstr ""
+
+#: register_school.php:176
+msgid "Boys School/Girls School"
+msgstr ""
+
+#: register_school.php:196
+msgid "School Address 1"
+msgstr ""
+
+#: register_school.php:200
+msgid "School Address 2"
+msgstr ""
+
+#: register_school.php:204
+msgid "School City"
+msgstr ""
+
+#: register_school.php:208
+msgid "School State"
+msgstr ""
+
+#: register_school.php:212
+msgid "School Country"
+msgstr ""
+
+#: register_school.php:216
+msgid "School Postal code"
+msgstr ""
+
+#: register_school.php:220
+msgid "School Phone + Ext"
+msgstr ""
+
+#: register_school.php:225
+msgid "Program Director"
+msgstr ""
+
+#: register_school.php:266
+msgid "Re-enter Password"
+msgstr ""
+
+#: register_school.php:313
+msgid "School Registration Fee"
+msgstr ""
+
+#: register_school.php:329
+msgid "Student Registration"
+msgstr ""
+
+#: register_school.php:332
+msgid "Fee Agreement"
+msgstr ""
+
+#: register_school.php:333
+msgid ""
+"I agree to pay $36 per registered child<BR>within 30 days of registeration"
+msgstr ""
+
+#: register_school.php:336
+msgid "Register My School"
+msgstr ""
+
+#: statement.php:31
+msgid "Scan your Achievement or Prize card"
+msgstr ""
+
+#: statement.php:71
+msgid "Scan achievement or prize card"
+msgstr ""
+
+#: statement.php:79
+#, php-format
+msgid "Available balance remaining for this auction: %s"
+msgstr ""
+
+#: statement.php:92
+msgid "Your prize selection has been entered."
+msgstr ""
+
+#: statement.php:103
+msgid "Miles Each"
+msgstr ""
+
+#: statement.php:104
+msgid "Miles Total"
+msgstr ""
+
+#: statement.php:124
+#, php-format
+msgid ""
+"You have recorded that you learned line <B>%d</B> of tanya:<BR><B>%s</"
+"B><BR>From page %d, פרק %s"
+msgstr ""
+
+#: statement.php:127
+msgid ""
+"<DIV>Mazal Tov</DIV> You have completed your yearly goal. It is time to "
+"review your growth planner with your base commander."
+msgstr ""
+
+#: statement.php:129
+#, php-format
+msgid ""
+"You need to learn %s lines per week for the next %s weeks in order to reach "
+"this years goal of %s lines."
+msgstr ""
+
+#: statement.php:134
+#, php-format
+msgid "Your pledges have been increased<BR>from %s to %s."
+msgstr ""
+
+#: statement.php:145
+#, php-format
+msgid ""
+"<B>Mazal Tov on your achievement.</B><BR>You've earned<DIV>%d</DIV>Miles for "
+"%s."
+msgstr ""
+
+#: statement.php:149
+#, php-format
+msgid "And you have just been awarded the %s medal."
+msgstr ""
+
+#: statement.php:151
+#, php-format
+msgid "And you are %%%d of the way to the %s medal."
+msgstr ""
+
+#: statement.php:172
+msgid "Subject Medals"
+msgstr ""
+
+#: store.php:14
+msgid "Prize purchased."
+msgstr ""
+
+#: store.php:16
+msgid "Prize no longer available."
+msgstr ""
+
+#: store.php:26
+msgid "Prize un-purchased."
+msgstr ""
+
+#: store.php:74
+msgid "Points earned"
+msgstr ""
+
+#: store.php:74
+msgid "Points used so far"
+msgstr ""
+
+#: store.php:74
+msgid "Points left for purchases"
+msgstr ""
+
+#: store.php:83
+msgid "Available Store prizes"
+msgstr ""
+
+#: store.php:86
+msgid "Points needed"
+msgstr ""
+
+#: store.php:87
+msgid "Prizes left"
+msgstr ""
+
+#: store.php:101
+msgid "Not enough points"
+msgstr ""
+
+#: store.php:101
+msgid "Buy"
+msgstr ""
+
+#: store.php:114
+msgid "Unshipped prizes"
+msgstr ""
+
+#: store.php:124
+msgid "Un-Buy"
+msgstr ""
+
+#: tasks.php:33
+msgid "Marked task as done."
+msgstr ""
+
+#: tasks.php:37
+msgid "Marked task as not done."
+msgstr ""
+
+#: tasks.php:42
+msgid "Edited description of task."
+msgstr ""
+
+#: tasks_ae.php:44
+msgid "Repeat"
+msgstr ""
+
+#: tasks_ae.php:46
+msgid "Once"
+msgstr ""
+
+#: tasks_ae.php:47
+msgid "Daily"
+msgstr ""
+
+#: tasks_ae.php:48
+msgid "Weekly"
+msgstr ""
+
+#: tasks_ae.php:49
+msgid "Yearly"
+msgstr ""
+
+#: tasks_ae.php:51
+msgid "Monthly&nbsp;by&nbsp;Date"
+msgstr ""
+
+#: tasks_ae.php:52
+msgid "Monthly&nbsp;by&nbsp;Week"
+msgstr ""
+
+#: tasks_ae.php:87
+msgid "Every"
+msgstr ""
+
+#: tasks_ae.php:99
+msgid "On"
+msgstr ""
+
+#: tasks_ae.php:103
+msgid "ל will repeat on כט if the month is חסר"
+msgstr ""
+
+#: tasks_ae.php:106
+msgid "ל will repeat on the following א if the month is חסר that year"
+msgstr ""
+
+#: tasks_ae2.php:103
+#, php-format
+msgid "%s task(s) created."
+msgstr ""
+
+#: tasks_ae2.php:103
+#, php-format
+msgid "%s task(s) updated."
+msgstr ""
+
+#: tasks_ae2.php:103
+#, php-format
+msgid "%s task(s) deleted."
+msgstr ""
+
+#: tasks_personal.php:21
+msgid "Task deleted."
+msgstr ""
+
+#: tasks_personal.php:48
+msgid "Tasks added."
+msgstr ""
+
+#: tasks_personal.php:69
+msgid "Custom Tasks"
+msgstr ""
+
+#: tasks_personal.php:96 tasks_personal.php:211
+msgid "Add predefined tasks"
+msgstr ""
+
+#: tasks_personal.php:100
+msgid "Choose the tzivos hashem type"
+msgstr ""
+
+#: tasks_personal.php:110
+msgid "Choose the subject"
+msgstr ""
+
+#: tasks_personal.php:120
+msgid "Choose the ladder"
+msgstr ""
+
+#: tasks_personal.php:144
+msgid "Repeats every"
+msgstr ""
+
+#: tasks_personal.php:145
+msgid "Starting"
+msgstr ""
+
+#: tasks_personal.php:146
+msgid "Ending"
+msgstr ""
+
+#: tasks_personal.php:146
+msgid "No end date"
+msgstr ""
+
+#: tasks_personal.php:155
+msgid "Select all"
+msgstr ""
+
+#: tasks_personal.php:156
+msgid "Select none"
+msgstr ""
+
+#: tasks_personal.php:157
+msgid "Toggle"
+msgstr ""
+
+#: tasks_personal.php:158
+msgid "Add selected tasks"
+msgstr ""
+
+#: tasks_personal.php:180
+msgid "The list of subjects available depends on your tzivos hashem type."
+msgstr ""
+
+#: tasks_personal.php:187
+msgid "Years"
+msgstr ""
+
+#: tasks_personal.php:196
+msgid ""
+"A custom ladder will only show up if it's subject is enabled in 'Manage "
+"Ladders and Years', and, if the year selected there matches the years "
+"enabled in these checkboxes."
+msgstr ""
+
+#: tasks_personal.php:210
+msgid "Add a customized task"
+msgstr ""
+
+#: tasks_tracks.php:15
+msgid "Ladders and Years edited"
+msgstr ""
+
+#: tasks_tracks.php:29 tasks_tracks.php:54
+msgid "Ladders and Years"
+msgstr ""
+
+#: tasks_tracks.php:63
+msgid "Leave blank to disable the subject"
+msgstr ""
+
+#: todo.php:70
+msgid "This date is in the future.\\n\\nAre you sure?"
+msgstr ""
+
+#: todo.php:76
+msgid "No uncompleted tasks for this day."
+msgstr ""

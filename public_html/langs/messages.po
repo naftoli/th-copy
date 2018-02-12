@@ -1,0 +1,2174 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid	""
+msgstr	"Project-Id-Version: PACKAGE VERSION\n"
+	"Report-Msgid-Bugs-To: \n"
+	"POT-Creation-Date: 2008-06-12 07:06-0400\n"
+	"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+	"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+	"Language-Team: LANGUAGE <LL@li.org>\n"
+	"MIME-Version: 1.0\n"
+	"Content-Type: text/plain; charset=UTF-8\n"
+	"Content-Transfer-Encoding: 8bit\n"
+
+#: admin.php:8 admin_auction.php:84 admin_auction_run.php:37
+#: admin_auction_winners.php:19 admin_class.php:74 admin_marks.php:61
+#: admin_message.php:28 admin_mission.php:139 admin_participant.php:23
+#: admin_prize_auction.php:84 admin_prize_store.php:84 admin_report.php:92
+#: admin_school.php:93 admin_school_type.php:82 admin_store.php:29
+#: admin_subject.php:92 admin_task.php:185 admin_team.php:70
+#: admin_track.php:66 admin_user.php:65 admin_user_auction.php:67
+#: admin_user_track.php:45 admin_view_task.php:8 auction.php:25 banner.php:12
+#: banner2.php:6 login.php:8 preferences.php:16 register.php:50 store.php:38
+#: tasks.php:55 tasks_personal.php:69 tasks_school_type.php:15
+#: tasks_tracks.php:30
+msgid	"Daily Action Tracker"
+msgstr	""
+
+#: admin.php:29 admin_auction.php:92 admin_auction_run.php:45
+#: admin_auction_winners.php:27 admin_class.php:82 admin_inst.php:74
+#: admin_marks.php:116 admin_message.php:36 admin_mission.php:172
+#: admin_participant.php:31 admin_prize_auction.php:92
+#: admin_prize_store.php:92 admin_report.php:100 admin_school.php:101
+#: admin_school_type.php:90 admin_store.php:37 admin_subject.php:100
+#: admin_task.php:235 admin_team.php:78 admin_track.php:74 admin_user.php:73
+#: admin_user_auction.php:75 admin_user_track.php:53 admin_view_task.php:21
+msgid	"Back to user page"
+msgstr	""
+
+#: admin.php:35
+msgid	"Overall Admin page"
+msgstr	""
+
+#: admin.php:37
+msgid	"Manage Institutions"
+msgstr	""
+
+#: admin.php:38
+msgid	"Manage Tzivos Hashem Types"
+msgstr	""
+
+#: admin.php:40
+msgid	"Manage Institution types"
+msgstr	""
+
+#: admin.php:41
+msgid	"Manage Subjects"
+msgstr	""
+
+#: admin.php:42
+msgid	"Manage Tracks"
+msgstr	""
+
+#: admin.php:43 admin_subject.php:157
+msgid	"Manage Tasks"
+msgstr	""
+
+#: admin.php:44 admin_subject.php:158
+msgid	"Manage Missions"
+msgstr	""
+
+#: admin.php:46
+msgid	"Manage Messages"
+msgstr	""
+
+#: admin.php:58
+msgid	"Default Tzivos Hashem Type:"
+msgstr	""
+
+#: admin.php:59
+msgid	"Default track:"
+msgstr	""
+
+#: admin.php:60
+msgid	"Institution type:"
+msgstr	""
+
+#: admin.php:67
+msgid	"Students"
+msgstr	""
+
+#: admin.php:68 admin_user_auction.php:213
+msgid	"Total Points"
+msgstr	""
+
+#: admin.php:69
+msgid	"Average Points"
+msgstr	""
+
+#: admin.php:72
+msgid	"All schools"
+msgstr	""
+
+#: admin.php:72
+msgid	"This school"
+msgstr	""
+
+#: admin.php:72
+msgid	"Team: "
+msgstr	""
+
+#: admin.php:72 admin_report.php:310
+msgid	"Not in a team"
+msgstr	""
+
+#: admin.php:86
+msgid	"Edit Info"
+msgstr	""
+
+#: admin.php:88 admin_school.php:189
+msgid	"Manage Classes"
+msgstr	""
+
+#: admin.php:89 admin_school.php:190
+msgid	"Manage Teams"
+msgstr	""
+
+#: admin.php:91 admin_school.php:191
+msgid	"Manage Students"
+msgstr	""
+
+#: admin.php:92 admin_school.php:192
+msgid	"Manage Student's Marks"
+msgstr	""
+
+#: admin.php:93 admin_school.php:193
+msgid	"Manage Student's Auction Prizes"
+msgstr	""
+
+#: admin.php:94 admin_class.php:154 admin_school.php:194
+msgid	"Student Reports"
+msgstr	""
+
+#: admin.php:97
+msgid	"View Mission Participants"
+msgstr	""
+
+#: admin.php:98 admin_view_task.php:26
+msgid	"View Missions and Tasks"
+msgstr	""
+
+#: admin.php:100
+msgid	"Manage Chinese Auctions"
+msgstr	""
+
+#: admin.php:101
+msgid	"Manage Chinese Auction Prizes"
+msgstr	""
+
+#: admin.php:102 admin_auction_run.php:50
+msgid	"Run Chinese Auction"
+msgstr	""
+
+#: admin.php:103
+msgid	"View Chinese Auction winners"
+msgstr	""
+
+#: admin.php:105
+msgid	"Manage Store Prizes"
+msgstr	""
+
+#: admin.php:106
+msgid	"Manage Store Purchases"
+msgstr	""
+
+#: admin_auction.php:24
+msgid	"Unable to add new auction, this date is already used."
+msgstr	""
+
+#: admin_auction.php:31
+msgid	"Auction added"
+msgstr	""
+
+#: admin_auction.php:39
+msgid	"Auction deleted"
+msgstr	""
+
+#: admin_auction.php:58
+msgid	"Unable to edit auction, this date is already used."
+msgstr	""
+
+#: admin_auction.php:68
+msgid	"Auction edited"
+msgstr	""
+
+#: admin_auction.php:95 admin_auction_run.php:48 admin_auction_winners.php:30
+#: admin_class.php:85 admin_inst.php:77 admin_marks.php:119
+#: admin_message.php:39 admin_mission.php:175 admin_participant.php:34
+#: admin_prize_auction.php:95 admin_prize_store.php:95 admin_report.php:103
+#: admin_school.php:104 admin_school_type.php:93 admin_store.php:40
+#: admin_subject.php:103 admin_task.php:238 admin_team.php:81
+#: admin_track.php:77 admin_user.php:76 admin_user_auction.php:78
+#: admin_user_track.php:56 admin_view_task.php:24
+msgid	"Back to admin page"
+msgstr	""
+
+#: admin_auction.php:97
+msgid	"Auctions"
+msgstr	""
+
+#: admin_auction.php:102 admin_auction_run.php:55 admin_auction_winners.php:37
+#: admin_class.php:92 admin_marks.php:126 admin_participant.php:41
+#: admin_report.php:109 admin_store.php:47 admin_team.php:88 admin_user.php:83
+#: admin_user_auction.php:85
+msgid	"Select Institution:"
+msgstr	""
+
+#: admin_auction.php:103
+msgid	"Multi institution auctions"
+msgstr	""
+
+#: admin_auction.php:107 admin_auction_run.php:59 admin_auction_winners.php:41
+#: admin_class.php:96 admin_marks.php:131 admin_marks.php:186
+#: admin_mission.php:188 admin_participant.php:55 admin_participant.php:83
+#: admin_report.php:114 admin_report.php:183 admin_store.php:51
+#: admin_task.php:251 admin_team.php:92 admin_user.php:88 admin_user.php:104
+#: admin_user_auction.php:90 admin_user_auction.php:121 auction.php:79
+msgid	"Go"
+msgstr	""
+
+#: admin_auction.php:121 admin_auction.php:162
+msgid	"Auction Date"
+msgstr	""
+
+#: admin_auction.php:131
+msgid	"This is the cut-off date for points, not the date to run the auction."
+msgstr	""
+
+#: admin_auction.php:134
+msgid	"Prizes"
+msgstr	""
+
+#: admin_auction.php:137 admin_auction_run.php:88 admin_auction_run.php:105
+#: admin_auction_winners.php:70 admin_inst.php:101 admin_mission.php:384
+#: admin_participant.php:99 admin_prize_auction.php:105
+#: admin_prize_auction.php:138 admin_prize_store.php:105
+#: admin_prize_store.php:138 admin_report.php:527 admin_school.php:115
+#: admin_school_type.php:103 admin_school_type.php:132 admin_store.php:76
+#: admin_subject.php:113 admin_subject.php:142 admin_task.php:431
+#: admin_team.php:111 admin_team.php:123 admin_track.php:101
+#: admin_user.php:182 admin_user_auction.php:187 tasks_personal.php:219
+msgid	"Name"
+msgstr	""
+
+#: admin_auction.php:138 admin_prize_auction.php:108
+#: admin_prize_auction.php:139 admin_prize_store.php:108
+#: admin_prize_store.php:139 admin_report.php:270 admin_report.php:295
+#: admin_report.php:300 admin_report.php:306 admin_report.php:398
+#: admin_report.php:507 admin_store.php:79 admin_user_auction.php:167
+#: store.php:119
+msgid	"Points"
+msgstr	""
+
+#: admin_auction.php:149 admin_class.php:123 admin_inst.php:88
+#: admin_marks.php:307 admin_message.php:51 admin_mission.php:322
+#: admin_mission.php:338 admin_mission.php:352 admin_mission.php:369
+#: admin_prize_auction.php:125 admin_prize_store.php:125 admin_school.php:150
+#: admin_school_type.php:119 admin_subject.php:129 admin_task.php:302
+#: admin_team.php:112 admin_track.php:88 admin_user_auction.php:229
+#: admin_user_track.php:107 auction.php:130 done.php:75 preferences.php:75
+#: tasks_personal.php:204 tasks_school_type.php:48 tasks_tracks.php:91
+msgid	"Save"
+msgstr	""
+
+#: admin_auction.php:149 admin_class.php:123 admin_inst.php:88
+#: admin_message.php:51 admin_prize_auction.php:125 admin_prize_store.php:125
+#: admin_school.php:150 admin_school_type.php:119 admin_subject.php:129
+#: admin_team.php:112 admin_track.php:88 admin_user.php:168
+#: tasks_personal.php:204
+msgid	"Add new"
+msgstr	""
+
+#: admin_auction.php:153 admin_class.php:108 admin_inst.php:92
+#: admin_message.php:55 admin_mission.php:229 admin_mission.php:312
+#: admin_mission.php:342 admin_mission.php:373 admin_prize_auction.php:129
+#: admin_prize_store.php:129 admin_school.php:110 admin_school_type.php:123
+#: admin_subject.php:133 admin_task.php:261 admin_task.php:292
+#: admin_task.php:420 admin_team.php:104 admin_track.php:92 admin_user.php:112
+#: done.php:75 tasks_personal.php:167
+msgid	"Cancel"
+msgstr	""
+
+#: admin_auction.php:158
+msgid	"Add new Auction"
+msgstr	""
+
+#: admin_auction.php:163 admin_prize_auction.php:141 admin_prize_store.php:141
+#: admin_school.php:164
+msgid	"Institution"
+msgstr	""
+
+#: admin_auction.php:164
+msgid	"Ran?"
+msgstr	""
+
+#: admin_auction.php:172
+msgid	"Yes"
+msgstr	""
+
+#: admin_auction.php:173
+msgid	"Edit Auction"
+msgstr	""
+
+#: admin_auction.php:173
+msgid	"Can't edit"
+msgstr	""
+
+#: admin_auction.php:174
+msgid	"Delete Auction"
+msgstr	""
+
+#: admin_auction.php:174
+msgid	"Can't delete"
+msgstr	""
+
+#: admin_auction_run.php:66 admin_auction_winners.php:48 admin_class.php:102
+#: admin_marks.php:139 admin_report.php:122 admin_store.php:58
+#: admin_team.php:98 admin_user.php:94 admin_user_auction.php:97
+msgid	"Please select an Institution."
+msgstr	""
+
+#: admin_auction_run.php:73 admin_auction_winners.php:55 admin_report.php:174
+#: admin_user_auction.php:115
+msgid	"Auction:"
+msgstr	""
+
+#: admin_auction_run.php:79 admin_auction_winners.php:61
+#: admin_user_auction.php:120 auction.php:75
+msgid	"Multi schoool auction"
+msgstr	""
+
+#: admin_auction_run.php:80
+msgid	"View entries"
+msgstr	""
+
+#: admin_auction_run.php:85 admin_auction_winners.php:67
+msgid	"Winners"
+msgstr	""
+
+#: admin_auction_run.php:87 admin_auction_winners.php:69 admin_class.php:115
+#: admin_store.php:75
+msgid	"Grade"
+msgstr	""
+
+#: admin_auction_run.php:89 admin_auction_winners.php:71 admin_store.php:77
+#: auction.php:110 store.php:87 store.php:118
+msgid	"Prize"
+msgstr	""
+
+#: admin_auction_run.php:90 admin_auction_winners.php:72
+msgid	"Quantity"
+msgstr	""
+
+#: admin_auction_run.php:106 auction.php:111
+msgid	"Tickets"
+msgstr	""
+
+#: admin_auction_run.php:107 admin_prize_auction.php:109
+#: admin_prize_auction.php:140
+msgid	"Ratio"
+msgstr	""
+
+#: admin_auction_run.php:108
+msgid	"Prizes to award"
+msgstr	""
+
+#: admin_auction_run.php:133
+msgid	"Run auction"
+msgstr	""
+
+#: admin_auction_winners.php:32
+msgid	"View Chinese Auction Winners"
+msgstr	""
+
+#: admin_auction_winners.php:62
+msgid	"View"
+msgstr	""
+
+#: admin_class.php:23
+msgid	"Unable to add new class, this grade-sub is already used."
+msgstr	""
+
+#: admin_class.php:29
+msgid	"Class added"
+msgstr	""
+
+#: admin_class.php:35
+msgid	"Class deleted"
+msgstr	""
+
+#: admin_class.php:52
+msgid	"Unable to edit class, this grade-sub is already used."
+msgstr	""
+
+#: admin_class.php:58
+msgid	"Class edited"
+msgstr	""
+
+#: admin_class.php:87
+msgid	"Classes"
+msgstr	""
+
+#: admin_class.php:105 admin_marks.php:142 admin_report.php:125
+#: admin_team.php:101 admin_user.php:108 admin_user_auction.php:100
+msgid	"Back to Institution list"
+msgstr	""
+
+#: admin_class.php:120
+msgid	"Sub"
+msgstr	""
+
+#: admin_class.php:121 admin_class.php:135 admin_report.php:264
+msgid	"Teacher"
+msgstr	""
+
+#: admin_class.php:122 admin_class.php:136
+msgid	"Default Level"
+msgstr	""
+
+#: admin_class.php:130
+msgid	"Add new class"
+msgstr	""
+
+#: admin_class.php:134
+msgid	"Grade-Sub"
+msgstr	""
+
+#: admin_class.php:149
+msgid	"Edit Class Info"
+msgstr	""
+
+#: admin_class.php:150 admin_inst.php:109 admin_mission.php:399
+#: admin_prize_auction.php:152 admin_prize_store.php:152 admin_school.php:188
+#: admin_school_type.php:142 admin_subject.php:156 admin_task.php:451
+#: admin_team.php:131 admin_track.php:109 admin_user.php:203
+#: tasks_personal.php:227
+msgid	"Are you sure?"
+msgstr	""
+
+#: admin_class.php:150
+msgid	"Delete Class"
+msgstr	""
+
+#: admin_class.php:151
+msgid	"Manage Students/Users"
+msgstr	""
+
+#: admin_class.php:152
+msgid	"Manage Student's/User's Marks"
+msgstr	""
+
+#: admin_class.php:153
+msgid	"Manage Student's/User's Auction Prizes"
+msgstr	""
+
+#: admin_inst.php:19
+msgid	"Unable to add new institution type, this name is already used."
+msgstr	""
+
+#: admin_inst.php:25
+msgid	"Institution type added"
+msgstr	""
+
+#: admin_inst.php:31
+msgid	"Institution type deleted"
+msgstr	""
+
+#: admin_inst.php:46
+msgid	"Unable to edit institution type, this name is already used."
+msgstr	""
+
+#: admin_inst.php:52
+msgid	"Institution type edited"
+msgstr	""
+
+#: admin_inst.php:66
+msgid	"Daily Action tracker"
+msgstr	""
+
+#: admin_inst.php:79
+msgid	"Institution types"
+msgstr	""
+
+#: admin_inst.php:87 admin_mission.php:203 admin_track.php:87 tasks_ae.php:43
+msgid	"Name:"
+msgstr	""
+
+#: admin_inst.php:97
+msgid	"Add new institution type"
+msgstr	""
+
+#: admin_inst.php:108
+msgid	"Edit institution type"
+msgstr	""
+
+#: admin_inst.php:109
+msgid	"Delete institution type"
+msgstr	""
+
+#: admin_marks.php:42
+msgid	"Marks saved"
+msgstr	""
+
+#: admin_marks.php:121
+msgid	"Marks"
+msgstr	""
+
+#: admin_marks.php:132 admin_report.php:115
+msgid	"Note: Only tasks with an institution type matching this "
+	"institution's institution type will be shown or calculated."
+msgstr	""
+
+#: admin_marks.php:143 admin_report.php:126 admin_user.php:109
+#: admin_user_auction.php:101
+msgid	"Back to Class list"
+msgstr	""
+
+#: admin_marks.php:150 admin_participant.php:67 admin_report.php:134
+#: admin_user_auction.php:108
+msgid	"Show Class:"
+msgstr	""
+
+#: admin_marks.php:151 admin_participant.php:42 admin_participant.php:68
+#: admin_report.php:135 admin_report.php:141 admin_user.php:100
+#: admin_user_auction.php:109
+msgid	"All"
+msgstr	""
+
+#: admin_marks.php:161 admin_report.php:151
+msgid	"From:"
+msgstr	""
+
+#: admin_received_stats.php:154
+msgid	"Earned From:"
+msgstr	""
+
+#: admin_marks.php:172 admin_report.php:162
+msgid	"To:"
+msgstr	""
+
+#: admin_received_stats.php:156
+msgid	"Earned To:"
+msgstr	""
+
+#: admin_received_stats.php:164
+msgid    "Promoted From:"
+msgstr    ""
+
+#: admin_received_stats.php:166
+msgid    "Promoted To:"
+msgstr    ""
+
+#: admin_marks.php:183
+msgid	"Show all tasks"
+msgstr	""
+
+#: admin_marks.php:184
+msgid	"Group by Mission"
+msgstr	""
+
+#: admin_marks.php:191
+msgid	"Please select a date range."
+msgstr	""
+
+#: admin_marks.php:285 admin_report.php:480
+msgid	"Duplicate of task already displayed."
+msgstr	""
+
+#: admin_marks.php:304
+msgid	"No tasks for the selected institution, class, and date range."
+msgstr	""
+
+#: admin_message.php:15
+msgid	"Message edited"
+msgstr	""
+
+#: admin_message.php:41
+msgid	"Messages"
+msgstr	""
+
+#: admin_message.php:47
+msgid	"Note: Messages are output as is, including any HTML."
+msgstr	""
+
+#: admin_message.php:50 admin_message.php:64
+msgid	"Text"
+msgstr	""
+
+#: admin_message.php:62 admin_subject.php:119 admin_subject.php:144
+#: admin_task.php:272
+msgid	"Type"
+msgstr	""
+
+#: admin_message.php:69
+msgid	"Edit Message"
+msgstr	""
+
+#: admin_mission.php:22
+msgid	"Unable to add new mission, this name is already used."
+msgstr	""
+
+#: admin_mission.php:30
+msgid	"Mission added"
+msgstr	""
+
+#: admin_mission.php:38
+msgid	"Mission deleted"
+msgstr	""
+
+#: admin_mission.php:55
+msgid	"Unable to edit mission, this name is already used."
+msgstr	""
+
+#: admin_mission.php:61
+msgid	"Mission edited"
+msgstr	""
+
+#: admin_mission.php:90
+msgid	"Mission Active edited"
+msgstr	""
+
+#: admin_mission.php:110
+msgid	"Mission Tasks edited"
+msgstr	""
+
+#: admin_mission.php:124
+msgid	"Mandatory requirements for Mission Tasks edited"
+msgstr	""
+
+#: admin_mission.php:177 admin_report.php:367
+msgid	"Missions"
+msgstr	""
+
+#: admin_mission.php:182 admin_participant.php:49 admin_task.php:245
+msgid	"Select Subject:"
+msgstr	""
+
+#: admin_mission.php:193 admin_task.php:256
+msgid	"Please select a Subject."
+msgstr	""
+
+#: admin_mission.php:204
+msgid	"Points required:"
+msgstr	""
+
+#: admin_mission.php:205
+msgid	"Start Month:"
+msgstr	""
+
+#: admin_mission.php:210
+msgid	"Start Day:"
+msgstr	""
+
+#: admin_mission.php:215
+msgid	"End Month:"
+msgstr	""
+
+#: admin_mission.php:220
+msgid	"End Day:"
+msgstr	""
+
+#: admin_mission.php:225 admin_task.php:285
+msgid	"Save and edit Active"
+msgstr	""
+
+#: admin_mission.php:225 admin_task.php:285
+msgid	"Add new and edit Active"
+msgstr	""
+
+#: admin_mission.php:243 admin_mission.php:308
+msgid	"Save Active and edit Tasks"
+msgstr	""
+
+#: admin_mission.php:246
+msgid	"Mission Active"
+msgstr	""
+
+#: admin_mission.php:252 admin_task.php:328
+msgid	"Copy previous Tzivos Hashem Type"
+msgstr	""
+
+#: admin_mission.php:261 admin_task.php:337 admin_user_track.php:73
+#: admin_view_task.php:109 tasks_tracks.php:63
+msgid	"Level"
+msgstr	""
+
+#: admin_mission.php:285 admin_mission.php:295 admin_mission.php:299
+#: admin_task.php:376 admin_task.php:394 admin_task.php:406
+msgid	"Flip"
+msgstr	""
+
+#: admin_mission.php:315
+msgid	"Mission Tasks"
+msgstr	""
+
+#: admin_mission.php:328 admin_mission.php:358
+msgid	"Task Name"
+msgstr	""
+
+#: admin_mission.php:345
+msgid	"Mission Mandatory requirements"
+msgstr	""
+
+#: admin_mission.php:356
+msgid	"Mandatory requirements"
+msgstr	""
+
+#: admin_mission.php:357 admin_mission.php:383 admin_task.php:430
+#: admin_user_track.php:71 admin_view_task.php:47 tasks_personal.php:172
+#: tasks_personal.php:218 tasks_tracks.php:58
+msgid	"Subject"
+msgstr	""
+
+#: admin_mission.php:379
+msgid	"Add new Mission"
+msgstr	""
+
+#: admin_mission.php:395
+msgid	"Edit Mission"
+msgstr	""
+
+#: admin_mission.php:396
+msgid	"Edit Active for Mission"
+msgstr	""
+
+#: admin_mission.php:397
+msgid	"Edit Tasks for Mission"
+msgstr	""
+
+#: admin_mission.php:398
+msgid	"Edit Mandatory requirements for Mission Tasks"
+msgstr	""
+
+#: admin_mission.php:399
+msgid	"Delete Mission"
+msgstr	""
+
+#: admin_participant.php:36
+msgid	"Mission Participants"
+msgstr	""
+
+#: admin_participant.php:59
+msgid	"Please select an institution and a subject."
+msgstr	""
+
+#: admin_participant.php:76
+msgid	"Show Mission:"
+msgstr	""
+
+#: admin_participant.php:88
+msgid	"Please choose a Mission."
+msgstr	""
+
+#: admin_participant.php:91
+msgid	"Export Participants"
+msgstr	""
+
+#: admin_participant.php:97 admin_user.php:137 admin_user.php:180
+msgid	"Class"
+msgstr	""
+
+#: admin_participant.php:98 admin_user.php:121 admin_user.php:181
+msgid	"Username"
+msgstr	""
+
+#: admin_participant.php:100 admin_report.php:268 admin_user.php:160
+#: admin_user.php:183
+msgid	"Serial #"
+msgstr	""
+
+#: admin_participant.php:101 admin_user.php:184
+msgid	"Birthdate"
+msgstr	""
+
+#: admin_participant.php:102 admin_report.php:308 admin_user.php:152
+#: admin_user.php:185
+msgid	"Team"
+msgstr	""
+
+#: admin_participant.php:116 admin_user.php:200
+msgid	"Edit User Info"
+msgstr	""
+
+#: admin_participant.php:117 admin_user.php:201
+msgid	"Edit User's tracks/levels"
+msgstr	""
+
+#: admin_participant.php:118 admin_user.php:202
+msgid	"Student Report"
+msgstr	""
+
+#: admin_participant.php:119 admin_user.php:204
+msgid	"Act as User"
+msgstr	""
+
+#: admin_prize_auction.php:24 admin_prize_store.php:24
+msgid	"Unable to add new prize, this name is already used."
+msgstr	""
+
+#: admin_prize_auction.php:32 admin_prize_store.php:32
+msgid	"Prize added"
+msgstr	""
+
+#: admin_prize_auction.php:39 admin_prize_store.php:39
+msgid	"Prize deleted"
+msgstr	""
+
+#: admin_prize_auction.php:57 admin_prize_store.php:57
+msgid	"Unable to edit prize, this name is already used."
+msgstr	""
+
+#: admin_prize_auction.php:68 admin_prize_store.php:68
+msgid	"Prize edited"
+msgstr	""
+
+#: admin_prize_auction.php:97
+msgid	"Chinese Auction Prizes"
+msgstr	""
+
+#: admin_prize_auction.php:106 admin_prize_store.php:106 admin_report.php:397
+#: tasks_personal.php:148 tasks_personal.php:184
+msgid	"Description"
+msgstr	""
+
+#: admin_prize_auction.php:106 admin_prize_store.php:106
+msgid	"Note: Output as is, including any HTML."
+msgstr	""
+
+#: admin_prize_auction.php:111 admin_prize_store.php:111
+msgid	"Institution:"
+msgstr	""
+
+#: admin_prize_auction.php:112 admin_prize_store.php:112
+msgid	"Multi institution prize"
+msgstr	""
+
+#: admin_prize_auction.php:118 admin_prize_store.php:118
+msgid	"Image"
+msgstr	""
+
+#: admin_prize_auction.php:118 admin_prize_store.php:118 admin_school.php:143
+msgid	"Maximum file size"
+msgstr	""
+
+#: admin_prize_auction.php:120 admin_prize_store.php:120
+msgid	"Uploading a new image will replace the old."
+msgstr	""
+
+#: admin_prize_auction.php:121 admin_prize_store.php:121
+msgid	"Delete current image"
+msgstr	""
+
+#: admin_prize_auction.php:134 admin_prize_store.php:134
+msgid	"Add new Prize"
+msgstr	""
+
+#: admin_prize_auction.php:151 admin_prize_store.php:151
+msgid	"Edit Prize"
+msgstr	""
+
+#: admin_prize_auction.php:152 admin_prize_store.php:152
+msgid	"Delete Prize"
+msgstr	""
+
+#: admin_prize_store.php:97
+msgid	"Store Prizes"
+msgstr	""
+
+#: admin_prize_store.php:109 admin_prize_store.php:140
+msgid	"Prizes available"
+msgstr	""
+
+#: admin_prize_store.php:109
+msgid	"Leave blank for unlimited"
+msgstr	""
+
+#: admin_report.php:26
+msgid	"Dup"
+msgstr	""
+
+#: admin_report.php:56
+msgid	"No tasks."
+msgstr	""
+
+#: admin_report.php:105
+msgid	"User Report"
+msgstr	""
+
+#: admin_report.php:127 admin_user_track.php:60
+msgid	"Back to User list"
+msgstr	""
+
+#: admin_report.php:140
+msgid	"Show User:"
+msgstr	""
+
+#: admin_report.php:175
+msgid	"Don't include"
+msgstr	""
+
+#: admin_report.php:181
+msgid	"Show task dates:"
+msgstr	""
+
+#: admin_report.php:257
+msgid	"My Profile"
+msgstr	""
+
+#: admin_report.php:261
+msgid	"Post Location #"
+msgstr	""
+
+#: admin_report.php:262
+msgid	"Institution Name"
+msgstr	""
+
+#: admin_report.php:263
+msgid	"Grade:"
+msgstr	""
+
+#: admin_report.php:267
+msgid	"Name of Soldier"
+msgstr	""
+
+#: admin_report.php:269
+msgid	"Rank"
+msgstr	""
+
+#: admin_report.php:273
+msgid	"Soldier Address"
+msgstr	""
+
+#: admin_report.php:285
+msgid	"Statistics"
+msgstr	""
+
+#: admin_report.php:288
+msgid	"Army Participation"
+msgstr	""
+
+#: admin_report.php:289
+msgid	"Post Participation"
+msgstr	""
+
+#: admin_report.php:290
+msgid	"Team Participation"
+msgstr	""
+
+#: admin_report.php:294 admin_report.php:299 admin_report.php:305
+msgid	"Soldiers"
+msgstr	""
+
+#: admin_report.php:296 admin_report.php:301 admin_report.php:307
+msgid	"Average points"
+msgstr	""
+
+#: admin_report.php:347
+msgid	"Mission statistics"
+msgstr	""
+
+#: admin_report.php:395 admin_view_task.php:64
+msgid	"Mission"
+msgstr	""
+
+#: admin_report.php:396 admin_view_task.php:81
+msgid	"Task"
+msgstr	""
+
+#: admin_report.php:424
+msgid	"Notice: this task is a duplicate"
+msgstr	""
+
+#: admin_report.php:451
+msgid	"Summary"
+msgstr	""
+
+#: admin_report.php:452
+msgid	"Please count how many times you did each task, and fill in the boxes."
+msgstr	""
+
+#: admin_report.php:503
+msgid	"Auction Prizes"
+msgstr	""
+
+#: admin_report.php:536
+msgid	"# of entries"
+msgstr	""
+
+#: admin_report.php:542
+msgid	"History"
+msgstr	""
+
+#: admin_report.php:543
+msgid	"These are some of the tasks you did in the previous month."
+msgstr	""
+
+#: admin_report.php:563
+msgid	"Future Goals"
+msgstr	""
+
+#: admin_report.php:564
+msgid	"Short Term: Some of your upcoming tasks for next month."
+msgstr	""
+
+#: admin_report.php:587
+msgid	"Mid Term: If you went up a level, these would be some of your tasks."
+msgstr	""
+
+#: admin_report.php:612
+msgid	"Long Term: At level 10, these would be some of your tasks."
+msgstr	""
+
+#: admin_school.php:24
+msgid	"Unable to add new institution, this name is already used."
+msgstr	""
+
+#: admin_school.php:32
+msgid	"Institution added"
+msgstr	""
+
+#: admin_school.php:39
+msgid	"Institution deleted"
+msgstr	""
+
+#: admin_school.php:54
+msgid	"Unable to edit institution, this name is already used."
+msgstr	""
+
+#: admin_school.php:65
+msgid	"Institution edited"
+msgstr	""
+
+#: admin_school.php:106
+msgid	"Institutions"
+msgstr	""
+
+#: admin_school.php:116 admin_school.php:165 admin_subject.php:114
+#: admin_subject.php:143
+msgid	"Institution type"
+msgstr	""
+
+#: admin_school.php:121
+msgid	"Default Tzivos Hashem Type"
+msgstr	""
+
+#: admin_school.php:128
+msgid	"Default Track"
+msgstr	""
+
+#: admin_school.php:135 admin_school.php:166
+msgid	"Post #"
+msgstr	""
+
+#: admin_school.php:136 admin_user.php:161 register.php:140
+msgid	"Address 1"
+msgstr	""
+
+#: admin_school.php:137 admin_user.php:162 register.php:144
+msgid	"Address 2"
+msgstr	""
+
+#: admin_school.php:138 admin_school.php:169 admin_user.php:163
+#: register.php:148
+msgid	"City"
+msgstr	""
+
+#: admin_school.php:139 admin_user.php:164
+msgid	"State/Province"
+msgstr	""
+
+#: admin_school.php:140 admin_user.php:165
+msgid	"Zip/Postal code"
+msgstr	""
+
+#: admin_school.php:141 admin_school.php:167 admin_user.php:166
+#: register.php:160
+msgid	"Country"
+msgstr	""
+
+#: admin_school.php:142 admin_user.php:167 register.php:164
+msgid	"Phone"
+msgstr	""
+
+#: admin_school.php:143
+msgid	"Logo"
+msgstr	""
+
+#: admin_school.php:145
+msgid	"Uploading a new logo will replace the old."
+msgstr	""
+
+#: admin_school.php:146
+msgid	"Delete current logo"
+msgstr	""
+
+#: admin_school.php:158
+msgid	"Export Institutions"
+msgstr	""
+
+#: admin_school.php:159
+msgid	"Export Teachers"
+msgstr	""
+
+#: admin_school.php:160
+msgid	"Add new institution"
+msgstr	""
+
+#: admin_school.php:168 register.php:152
+msgid	"State"
+msgstr	""
+
+#: admin_school.php:187
+msgid	"Edit Institution Info"
+msgstr	""
+
+#: admin_school.php:188
+msgid	"Delete Institution"
+msgstr	""
+
+#: admin_school_type.php:22
+msgid	"Unable to add new tzivos hashem type, this name is already used."
+msgstr	""
+
+#: admin_school_type.php:31
+msgid	"Tzivos Hashem Type added"
+msgstr	""
+
+#: admin_school_type.php:37
+msgid	"Tzivos Hashem Type deleted"
+msgstr	""
+
+#: admin_school_type.php:56
+msgid	"Unable to edit school_type, this name is already used."
+msgstr	""
+
+#: admin_school_type.php:66
+msgid	"Tzivos Hashem Type edited"
+msgstr	""
+
+#: admin_school_type.php:95 admin_subject.php:124
+msgid	"Tzivos Hashem Types"
+msgstr	""
+
+#: admin_school_type.php:104 admin_subject.php:105
+msgid	"Subjects"
+msgstr	""
+
+#: admin_school_type.php:109 admin_school_type.php:133
+msgid	"Setting"
+msgstr	""
+
+#: admin_school_type.php:112
+msgid	"Fully managed by admins."
+msgstr	""
+
+#: admin_school_type.php:113
+msgid	"Fully managed, but users can create personal tasks."
+msgstr	""
+
+#: admin_school_type.php:114
+msgid	"Users can create personal tasks, and can control their track, level "
+	"and tzivos hashem type."
+msgstr	""
+
+#: admin_school_type.php:115
+msgid	"Only personal tasks will be used."
+msgstr	""
+
+#: admin_school_type.php:128
+msgid	"Add new Tzivos Hashem Type"
+msgstr	""
+
+#: admin_school_type.php:141
+msgid	"Edit Tzivos Hashem Type"
+msgstr	""
+
+#: admin_school_type.php:142
+msgid	"Delete Tzivos Hashem Type"
+msgstr	""
+
+#: admin_store.php:42
+msgid	"Manage Store purchases"
+msgstr	""
+
+#: admin_store.php:62
+msgid	"Show only un-shipped prizes"
+msgstr	""
+
+#: admin_store.php:63
+msgid	"Shipped prizes"
+msgstr	""
+
+#: admin_store.php:65
+msgid	"Show prizes that were already shipped"
+msgstr	""
+
+#: admin_store.php:66
+msgid	"Un-Shipped prizes"
+msgstr	""
+
+#: admin_store.php:78
+msgid	"Purchase Date"
+msgstr	""
+
+#: admin_store.php:90
+msgid	"Un-Mark as Shipped"
+msgstr	""
+
+#: admin_store.php:90
+msgid	"Mark as Shipped"
+msgstr	""
+
+#: admin_store.php:95
+msgid	"Multi-institution prize"
+msgstr	""
+
+#: admin_subject.php:23
+msgid	"Unable to add new subject, this name/institution type pair is "
+	"already used."
+msgstr	""
+
+#: admin_subject.php:36
+msgid	"Subject added"
+msgstr	""
+
+#: admin_subject.php:44
+msgid	"Subject deleted"
+msgstr	""
+
+#: admin_subject.php:65
+msgid	"Unable to edit subject, this name/institution type pair is already "
+	"used."
+msgstr	""
+
+#: admin_subject.php:75
+msgid	"Subject edited"
+msgstr	""
+
+#: admin_subject.php:121 admin_subject.php:154 admin_task.php:275
+msgid	"Show goals and history"
+msgstr	""
+
+#: admin_subject.php:138
+msgid	"Add new Subject"
+msgstr	""
+
+#: admin_subject.php:155
+msgid	"Edit Subject"
+msgstr	""
+
+#: admin_subject.php:156
+msgid	"Delete Subject"
+msgstr	""
+
+#: admin_task.php:28
+msgid	"Task added"
+msgstr	""
+
+#: admin_task.php:34
+msgid	"Task deleted"
+msgstr	""
+
+#: admin_task.php:60
+msgid	"Task edited"
+msgstr	""
+
+#: admin_task.php:88
+msgid	"Task Active edited"
+msgstr	""
+
+#: admin_task.php:116
+msgid	"Task Points edited"
+msgstr	""
+
+#: admin_task.php:142
+msgid	"Task Descriptions edited"
+msgstr	""
+
+#: admin_task.php:169
+msgid	"Task Quantities edited"
+msgstr	""
+
+#: admin_task.php:240 todo.php:54
+msgid	"Tasks"
+msgstr	""
+
+#: admin_task.php:268
+msgid	"Step 1 of 5"
+msgstr	""
+
+#: admin_task.php:280
+msgid	"Quantity name"
+msgstr	""
+
+#: admin_task.php:281
+msgid	"A quantity is a user defined field, which is simply a number that is "
+	"totaled. The value of the quantity is set in the track/level grid. "
+	"This defines the word to display when totaling for a user."
+msgstr	""
+
+#: admin_task.php:300 admin_task.php:318
+msgid	"Step "
+msgstr	""
+
+#: admin_task.php:300 admin_task.php:318
+msgid	"5"
+msgstr	""
+
+#: admin_task.php:300 admin_task.php:318
+msgid	" of 5"
+msgstr	""
+
+#: admin_task.php:301
+msgid	"This task has no quantity name defined, quantity grid skipped."
+msgstr	""
+
+#: admin_task.php:318
+msgid	"3"
+msgstr	""
+
+#: admin_task.php:318
+msgid	"4"
+msgstr	""
+
+#: admin_task.php:318
+msgid	"2"
+msgstr	""
+
+#: admin_task.php:319 admin_task.php:416
+msgid	"Save Points and edit Descriptions"
+msgstr	""
+
+#: admin_task.php:319 admin_task.php:416
+msgid	"Save Descriptions and edit Quantity"
+msgstr	""
+
+#: admin_task.php:319 admin_task.php:416
+msgid	"Save Quantity"
+msgstr	""
+
+#: admin_task.php:319 admin_task.php:416
+msgid	"Save Active and edit Points"
+msgstr	""
+
+#: admin_task.php:322
+msgid	"Task Points"
+msgstr	""
+
+#: admin_task.php:322
+msgid	"Task Descriptions"
+msgstr	""
+
+#: admin_task.php:322
+msgid	"Task Quantities"
+msgstr	""
+
+#: admin_task.php:322
+msgid	"Task Active"
+msgstr	""
+
+#: admin_task.php:370 admin_task.php:372 admin_task.php:374 admin_task.php:388
+#: admin_task.php:390 admin_task.php:392 admin_task.php:400 admin_task.php:402
+#: admin_task.php:404
+msgid	"Change"
+msgstr	""
+
+#: admin_task.php:426
+msgid	"Add new Task"
+msgstr	""
+
+#: admin_task.php:444 tasks_personal.php:226
+msgid	"Edit Task"
+msgstr	""
+
+#: admin_task.php:445
+msgid	"Edit Active for Task"
+msgstr	""
+
+#: admin_task.php:446
+msgid	"Edit Points for Task"
+msgstr	""
+
+#: admin_task.php:447
+msgid	"Edit Descriptions for Task"
+msgstr	""
+
+#: admin_task.php:448
+msgid	"Edit quantities for Task"
+msgstr	""
+
+#: admin_task.php:449
+msgid	"Clone Task"
+msgstr	""
+
+#: admin_task.php:450
+msgid	"Clone Task including grids"
+msgstr	""
+
+#: admin_task.php:451 tasks_personal.php:227
+msgid	"Delete Task"
+msgstr	""
+
+#: admin_team.php:21
+msgid	"Unable to add new team, this name is already used."
+msgstr	""
+
+#: admin_team.php:27
+msgid	"Team added"
+msgstr	""
+
+#: admin_team.php:33
+msgid	"Team deleted"
+msgstr	""
+
+#: admin_team.php:48
+msgid	"Unable to edit team, this name is already used."
+msgstr	""
+
+#: admin_team.php:54
+msgid	"Team edited"
+msgstr	""
+
+#: admin_team.php:83
+msgid	"teams"
+msgstr	""
+
+#: admin_team.php:119
+msgid	"Add new team"
+msgstr	""
+
+#: admin_team.php:130
+msgid	"Edit Team Info"
+msgstr	""
+
+#: admin_team.php:131
+msgid	"Delete Team"
+msgstr	""
+
+#: admin_track.php:19
+msgid	"Unable to add new track, this name is already used."
+msgstr	""
+
+#: admin_track.php:25
+msgid	"Track added"
+msgstr	""
+
+#: admin_track.php:31
+msgid	"Track deleted"
+msgstr	""
+
+#: admin_track.php:46
+msgid	"Unable to edit track, this name is already used."
+msgstr	""
+
+#: admin_track.php:52
+msgid	"Track edited"
+msgstr	""
+
+#: admin_track.php:79
+msgid	"Tracks"
+msgstr	""
+
+#: admin_track.php:97
+msgid	"Add new Track"
+msgstr	""
+
+#: admin_track.php:108
+msgid	"Edit Track"
+msgstr	""
+
+#: admin_track.php:109
+msgid	"Delete Track"
+msgstr	""
+
+#: admin_user.php:22
+msgid	"Unable to add new user, this username is already used."
+msgstr	""
+
+#: admin_user.php:32
+msgid	"User added"
+msgstr	""
+
+#: admin_user.php:39
+msgid	"User deleted"
+msgstr	""
+
+#: admin_user.php:49
+msgid	"User edited"
+msgstr	""
+
+#: admin_user.php:78
+msgid	"Users"
+msgstr	""
+
+#: admin_user.php:99
+msgid	"Show only Class:"
+msgstr	""
+
+#: admin_user.php:114
+msgid	"Please enter a password for this user."
+msgstr	""
+
+#: admin_user.php:114
+msgid	"Please enter a username for this user."
+msgstr	""
+
+#: admin_user.php:114 preferences.php:40 register.php:81
+msgid	"Passwords don't match."
+msgstr	""
+
+#: admin_user.php:122 preferences.php:64
+msgid	"Enter a new password to change it"
+msgstr	""
+
+#: admin_user.php:123 preferences.php:67 register.php:108
+msgid	"Password"
+msgstr	""
+
+#: admin_user.php:124 preferences.php:71 register.php:112
+msgid	"Password-again"
+msgstr	""
+
+#: admin_user.php:126 preferences.php:44 register.php:84
+msgid	"First Name"
+msgstr	""
+
+#: admin_user.php:127 preferences.php:48 register.php:88
+msgid	"Last Name"
+msgstr	""
+
+#: admin_user.php:128
+msgid	"Date of birth"
+msgstr	""
+
+#: admin_user.php:129 preferences.php:52 register.php:96
+msgid	"Language"
+msgstr	""
+
+#: admin_user.php:140 admin_user.php:155 admin_view_task.php:129
+msgid	"N/A"
+msgstr	""
+
+#: admin_user.php:145 admin_view_task.php:30 tasks_school_type.php:42
+msgid	"Tzivos Hashem Type"
+msgstr	""
+
+#: admin_user.php:168
+msgid	"Edit"
+msgstr	""
+
+#: admin_user.php:176
+msgid	"Add new user"
+msgstr	""
+
+#: admin_user.php:203
+msgid	"Delete User"
+msgstr	""
+
+#: admin_user_auction.php:50
+msgid	"User Auction Prizes saved"
+msgstr	""
+
+#: admin_user_auction.php:80
+msgid	"User Auction Prizes"
+msgstr	""
+
+#: admin_user_auction.php:126
+msgid	"Please select an auction."
+msgstr	""
+
+#: admin_user_auction.php:215
+msgid	"Points Used"
+msgstr	""
+
+#: admin_user_auction.php:216
+msgid	"Points Left"
+msgstr	""
+
+#: admin_user_auction.php:233
+msgid	"Either there are no users in this institution and class, or there "
+	"are no prizes in this auction."
+msgstr	""
+
+#: admin_user_track.php:30
+msgid	"User's tracks edited"
+msgstr	""
+
+#: admin_user_track.php:58
+msgid	"User's Tracks"
+msgstr	""
+
+#: admin_user_track.php:62
+#, php-format
+msgid	"For: %s, %s %s"
+msgstr	""
+
+#: admin_user_track.php:72 tasks_tracks.php:60
+msgid	"Track"
+msgstr	""
+
+#: admin_user_track.php:76
+msgid	"Change all:"
+msgstr	""
+
+#: admin_user_track.php:79 admin_user_track.php:95 tasks_tracks.php:79
+msgid	"Subject Disabled"
+msgstr	""
+
+#: admin_user_track.php:84 admin_user_track.php:87
+msgid	"Change All"
+msgstr	""
+
+#: auction.php:17
+msgid	"Prize choices saved."
+msgstr	""
+
+#: auction.php:65 menu.php:28
+msgid	"Chinese Auction prizes"
+msgstr	""
+
+#: auction.php:67
+msgid	"Choose auction:"
+msgstr	""
+
+#: auction.php:112
+msgid	"Points used"
+msgstr	""
+
+#: auction.php:131
+msgid	"Total"
+msgstr	""
+
+#: auth.php:32
+msgid	"Please login"
+msgstr	""
+
+#: auth.php:55
+msgid	"Login failed"
+msgstr	""
+
+#: banner.php:13
+#, php-format
+msgid	"Welcome %s acting as %s"
+msgstr	""
+
+#: banner.php:13
+msgid	"Be Yourself"
+msgstr	""
+
+#: banner.php:13
+#, php-format
+msgid	"Welcome %s"
+msgstr	""
+
+#: banner.php:13
+msgid	"Sign out"
+msgstr	""
+
+#: banner.php:15 cal.php:27
+msgid	"Previous"
+msgstr	""
+
+#: banner.php:17 cal.php:27
+msgid	"Next"
+msgstr	""
+
+#: calendar.php:120
+msgid	"day(s)"
+msgstr	""
+
+#: calendar.php:123
+msgid	"week(s) on"
+msgstr	""
+
+#: calendar.php:125 tasks_ae.php:111
+msgid	"Sunday"
+msgstr	""
+
+#: calendar.php:126 tasks_ae.php:112
+msgid	"Monday"
+msgstr	""
+
+#: calendar.php:127 tasks_ae.php:113
+msgid	"Tuesday"
+msgstr	""
+
+#: calendar.php:128 tasks_ae.php:115
+msgid	"Wednesday"
+msgstr	""
+
+#: calendar.php:129 tasks_ae.php:116
+msgid	"Thursday"
+msgstr	""
+
+#: calendar.php:130 tasks_ae.php:117
+msgid	"Friday"
+msgstr	""
+
+#: calendar.php:131 tasks_ae.php:119
+msgid	"Shabbos"
+msgstr	""
+
+#: calendar.php:135
+msgid	"month(s) on"
+msgstr	""
+
+#: calendar.php:141
+msgid	"years on"
+msgstr	""
+
+#: done.php:24
+msgid	"You will lose your unsaved changes in the task you are editing.\\n"
+	"\\n Continue?"
+msgstr	""
+
+#: done.php:34
+msgid	"Completed Tasks"
+msgstr	""
+
+#: done.php:35
+#, php-format
+msgid	"Days Points: %s"
+msgstr	""
+
+#: done.php:73
+msgid	"Un-Mark as done"
+msgstr	""
+
+#: done.php:73
+msgid	"If you unmark this task you will not have the same number of points "
+	"if you re-mark it again\\n(because it's currently worth a different "
+	"number of points).\\n\\nAre you sure?"
+msgstr	""
+
+#: done.php:73
+msgid	"If you unmark this task you will NOT be able to re-mark it again\\n"
+	"(because it no longer shows up in your Tasks list).\\n\\nAre you "
+	"sure?"
+msgstr	""
+
+#: done.php:81
+msgid	"You have no tasks."
+msgstr	""
+
+#: done.php:81
+msgid	"Click Manage tasks to add some."
+msgstr	""
+
+#: file_save.php:6
+msgid	"File is too large."
+msgstr	""
+
+#: file_save.php:10
+msgid	"File was only partially uploaded."
+msgstr	""
+
+#: login.php:38
+msgid	"Notice: You have javascript disabled. Some parts of the site will "
+	"not function without javascript."
+msgstr	""
+
+#: login.php:54
+msgid	"Username:"
+msgstr	""
+
+#: login.php:58
+msgid	"Password:"
+msgstr	""
+
+#: login.php:63
+msgid	"Login"
+msgstr	""
+
+#: login.php:72
+msgid	"Register for an account."
+msgstr	""
+
+#: menu.php:2 menu_tasks.php:2
+msgid	"Home"
+msgstr	""
+
+#: menu.php:4
+#, php-format
+msgid	"Total Points: %s"
+msgstr	""
+
+#: menu.php:10
+#, php-format
+msgid	"Total %s Points: %s"
+msgstr	""
+
+#: menu.php:23
+#, php-format
+msgid	"Team Average Points: %s"
+msgstr	""
+
+#: menu.php:26
+msgid	"Manage tasks"
+msgstr	""
+
+#: menu.php:29
+msgid	"Store prizes"
+msgstr	""
+
+#: menu.php:30 preferences.php:42
+msgid	"Preferences"
+msgstr	""
+
+#: menu.php:32
+msgid	"Admin"
+msgstr	""
+
+#: menu_tasks.php:5
+msgid	"Manage Tracks and Levels"
+msgstr	""
+
+#: menu_tasks.php:9 tasks_school_type.php:40
+msgid	"Change Tzivos Hashem Type"
+msgstr	""
+
+#: menu_tasks.php:13
+msgid	"Manage personal tasks"
+msgstr	""
+
+#: menu_tasks.php:17
+msgid	"Manage task levels"
+msgstr	""
+
+#: preferences.php:8
+msgid	"Preferences saved."
+msgstr	""
+
+#: register.php:13
+msgid	"First name can not be blank."
+msgstr	""
+
+#: register.php:14
+msgid	"Last name can not be blank."
+msgstr	""
+
+#: register.php:16
+msgid	"Login name can not be blank."
+msgstr	""
+
+#: register.php:18
+msgid	"This login name has been taken. Please choose a different one."
+msgstr	""
+
+#: register.php:19
+msgid	"Invalid language."
+msgstr	""
+
+#: register.php:20
+msgid	"Password can not be blank."
+msgstr	""
+
+#: register.php:22
+msgid	"Please pick an affiliation."
+msgstr	""
+
+#: register.php:24
+msgid	"Invalid affiliation."
+msgstr	""
+
+#: register.php:26
+msgid	"Please pick a background."
+msgstr	""
+
+#: register.php:28
+msgid	"Invalid background."
+msgstr	""
+
+#: register.php:34
+msgid	"You are now registered. Please login to continue."
+msgstr	""
+
+#: register.php:41
+msgid	"Please correct these errors and try again."
+msgstr	""
+
+#: register.php:79
+msgid	"Register for a new account"
+msgstr	""
+
+#: register.php:92
+msgid	"Login Name"
+msgstr	""
+
+#: register.php:117
+msgid	"Affiliation"
+msgstr	""
+
+#: register.php:120
+msgid	"Please pick an affiliation"
+msgstr	""
+
+#: register.php:129
+msgid	"Background"
+msgstr	""
+
+#: register.php:132
+msgid	"Please pick a background"
+msgstr	""
+
+#: register.php:156
+msgid	"Postal code"
+msgstr	""
+
+#: register.php:168
+msgid	"Register"
+msgstr	""
+
+#: store.php:14
+msgid	"Prize purchased."
+msgstr	""
+
+#: store.php:16
+msgid	"Prize no longer available."
+msgstr	""
+
+#: store.php:26
+msgid	"Prize un-purchased."
+msgstr	""
+
+#: store.php:76
+msgid	"Points earned"
+msgstr	""
+
+#: store.php:76
+msgid	"Points used so far"
+msgstr	""
+
+#: store.php:76
+msgid	"Points left for purchases"
+msgstr	""
+
+#: store.php:85
+msgid	"Available Store prizes"
+msgstr	""
+
+#: store.php:88
+msgid	"Points needed"
+msgstr	""
+
+#: store.php:89
+msgid	"Prizes left"
+msgstr	""
+
+#: store.php:103
+msgid	"Not enough points"
+msgstr	""
+
+#: store.php:103
+msgid	"Buy"
+msgstr	""
+
+#: store.php:116
+msgid	"Unshipped prizes"
+msgstr	""
+
+#: store.php:126
+msgid	"Un-Buy"
+msgstr	""
+
+#: tasks.php:33
+msgid	"Marked task as done."
+msgstr	""
+
+#: tasks.php:37
+msgid	"Marked task as not done."
+msgstr	""
+
+#: tasks.php:42
+msgid	"Edited description of task."
+msgstr	""
+
+#: tasks_ae.php:47
+msgid	"Repeat:"
+msgstr	""
+
+#: tasks_ae.php:49
+msgid	"Once"
+msgstr	""
+
+#: tasks_ae.php:50
+msgid	"Daily"
+msgstr	""
+
+#: tasks_ae.php:51
+msgid	"Weekly"
+msgstr	""
+
+#: tasks_ae.php:52
+msgid	"Yearly"
+msgstr	""
+
+#: tasks_ae.php:54
+msgid	"Monthly&nbsp;by&nbsp;Date"
+msgstr	""
+
+#: tasks_ae.php:55
+msgid	"Monthly&nbsp;by&nbsp;Week"
+msgstr	""
+
+#: tasks_ae.php:59
+msgid	"Start Date:"
+msgstr	""
+
+#: tasks_ae.php:73
+msgid	"End Date:"
+msgstr	""
+
+#: tasks_ae.php:90
+msgid	"Every:"
+msgstr	""
+
+#: tasks_ae.php:102
+msgid	"On:"
+msgstr	""
+
+#: tasks_ae.php:106
+msgid	"×œ will repeat on ×›×˜ if the month is ×—×¡×¨"
+msgstr	""
+
+#: tasks_ae.php:109
+msgid	"×œ will repeat on the following ×� if the month is ×—×¡×¨ that year"
+msgstr	""
+
+#: tasks_ae.php:127
+msgid	"Extra days:"
+msgstr	""
+
+#: tasks_ae.php:128
+msgid	"Additional days after the \"offical/real date\" that this task is "
+	"active for. Set to 0 to only occur on the real date, with no extra "
+	"days."
+msgstr	""
+
+#: tasks_ae.php:131
+msgid	"Repetitions:"
+msgstr	""
+
+#: tasks_ae.php:132
+msgid	"The number of times the task must be done during the extra days in "
+	"order to count as \"completed\". Set to 0 to disable the task. Set "
+	"to 1 if Extra days is set to 0. This number may not be greater than "
+	"Extra days plus 1."
+msgstr	""
+
+#: tasks_ae2.php:105
+#, php-format
+msgid	"%s task(s) created."
+msgstr	""
+
+#: tasks_ae2.php:105
+#, php-format
+msgid	"%s task(s) updated."
+msgstr	""
+
+#: tasks_ae2.php:105
+#, php-format
+msgid	"%s task(s) deleted."
+msgstr	""
+
+#: tasks_personal.php:20
+msgid	"Task deleted."
+msgstr	""
+
+#: tasks_personal.php:47
+msgid	"Tasks added."
+msgstr	""
+
+#: tasks_personal.php:97 tasks_personal.php:212
+msgid	"Add predefined tasks"
+msgstr	""
+
+#: tasks_personal.php:101
+msgid	"Choose the tzivos hashem type"
+msgstr	""
+
+#: tasks_personal.php:111
+msgid	"Choose the subject"
+msgstr	""
+
+#: tasks_personal.php:121
+msgid	"Choose the track"
+msgstr	""
+
+#: tasks_personal.php:145
+msgid	"Repeats every"
+msgstr	""
+
+#: tasks_personal.php:146
+msgid	"Starting"
+msgstr	""
+
+#: tasks_personal.php:147
+msgid	"Ending"
+msgstr	""
+
+#: tasks_personal.php:147
+msgid	"No end date"
+msgstr	""
+
+#: tasks_personal.php:156
+msgid	"Select all"
+msgstr	""
+
+#: tasks_personal.php:157
+msgid	"Select none"
+msgstr	""
+
+#: tasks_personal.php:158
+msgid	"Toggle"
+msgstr	""
+
+#: tasks_personal.php:159
+msgid	"Add selected tasks"
+msgstr	""
+
+#: tasks_personal.php:181
+msgid	"The list of subjects available depends on your tzivos hashem type."
+msgstr	""
+
+#: tasks_personal.php:188
+msgid	"Levels"
+msgstr	""
+
+#: tasks_personal.php:197
+msgid	"A custom task will only show up if it's subject is enabled in "
+	"'Manage Tracks and Levels', and, if the level selected there matches "
+	"the levels enabled in these checkboxes."
+msgstr	""
+
+#: tasks_personal.php:211
+msgid	"Add a customized task"
+msgstr	""
+
+#: tasks_tracks.php:15
+msgid	"Tracks and levels edited"
+msgstr	""
+
+#: tasks_tracks.php:56
+msgid	"Tracks and Levels"
+msgstr	""
+
+#: tasks_tracks.php:65
+msgid	"Leave blank to disable the subject"
+msgstr	""
+
+#: todo.php:70
+msgid	"Mark as done"
+msgstr	""
+
+#: todo.php:70
+msgid	"This date is in the future.\\n\\nAre you sure?"
+msgstr	""
+
+#: todo.php:76
+msgid	"No uncompleted tasks for this day."
+msgstr	""
