@@ -97,7 +97,7 @@ if(!$tehillim_school_id && count($schools) == 1){
                 </div>
             </div>
             <div class="options">
-                <input type="submit" class="button" value="Genrate Report"/>
+                <input type="submit" class="button" value="Generate Report"/>
             </div>
         </form>
         
