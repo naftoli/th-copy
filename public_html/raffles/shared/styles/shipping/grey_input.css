@@ -1,0 +1,39 @@
+select {
+    background: url(/images/bg_smallButton.png) repeat-x scroll 0 0 #e6e5e5;
+    border-color: #D3D3D3 #AAAAAA #888888;
+    padding: 4px 8px;
+    box-shadow: 0px 2px 2px #aaa;
+    transition: box-shadow .1s linear;
+}
+select:hover{
+    background-position: bottom;
+    border-color: #888888 #AAAAAA #D3D3D3;
+    cursor: pointer;
+}
+select:disabled {
+    box-shadow: 0px 2px 1px #aaa;
+    color: #888;
+    background: url(/images/bg_smallButton.png) repeat-x scroll 0 0 #e6e5e5;
+    cursor: initial;
+}
+select.hidden:disabled {
+    display: none;
+}
+
+#dropdowns, #options, #action-links{
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+input[type="date"] {
+    background: none;
+    border: none;
+    border-bottom: 1px solid;
+    font-family: "Myriad Pro", Arial, Helvetica, sans-serif;
+    vertical-align: middle;
+}
+
+select {
+    -moz-appearance: none;
+    text-overflow: '';
+}
