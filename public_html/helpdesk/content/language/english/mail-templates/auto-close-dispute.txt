@@ -1,0 +1,23 @@
+Auto Close Notification
+
+<-{separater}->
+
+Hello {NAME},
+
+Our system auto closes tickets after a set time if no further replies have been received as we assume the issue is resolved.
+
+The following dispute ticket has now been closed:
+
+{TICKET}
+
+This policy helps us maintain an efficient service as we can give priority to other issues.
+
+If you wish to re-open this dispute ticket with a new reply, please do so via your account area:
+{WEBSITE_URL}/?t={ID}
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME} Support Team
+{WEBSITE_URL}

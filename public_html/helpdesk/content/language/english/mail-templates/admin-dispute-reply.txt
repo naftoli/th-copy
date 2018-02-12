@@ -1,0 +1,25 @@
+Ticket reply
+
+<-{separater}->
+
+Hi {NAME},
+
+A reply has now been made to the following dispute:
+
+Dispute ID: #{TICKET}
+Subject: {SUBJECT}
+Department: {DEPT}
+Priority: {PRIORITY}
+Status: {STATUS}
+
+To view this dispute and/or add a new response, log in to your ticket portal at:
+{WEBSITE_URL}/?d={ID}
+
+Kind regards,
+
+<-{separater}->
+
+{SIGNATURE}
+
+{WEBSITE_NAME} Support Team
+{WEBSITE_URL}

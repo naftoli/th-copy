@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<msapi>
+  <api>ABC123-DEF345-GHI678</api>
+  <op>account</op>
+  <accounts>
+   <account>
+    <name>Joe Bloggs</name>
+    <email>email@example.com</email>
+    <password>test</password>
+    <timezone></timezone>
+	<ip>234.678.9.8</ip>
+	<language>english</language>
+    <notes><![CDATA[Laoreet a euismod et Nunc laoreet Lorem et pellentesque cursus augue. Nec ipsum leo facilisis Morbi wisi Cras dictumst quis diam Cum. Porta Nam Nunc fames nunc sed.]]></notes>
+   </account>
+   <account>
+    <name>Jane Doe</name>
+    <email>email2@example.com</email>
+    <password></password>
+    <timezone>US/Pacific</timezone>
+	<ip></ip>
+	<language>english</language>
+    <notes><![CDATA[Laoreet a euismod et Nunc laoreet Lorem et pellentesque cursus augue. Nec ipsum leo facilisis Morbi wisi Cras dictumst quis diam Cum. Porta Nam Nunc fames nunc sed.]]></notes>
+   </account>
+  </accounts>
+</msapi>

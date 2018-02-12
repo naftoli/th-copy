@@ -1,0 +1,6 @@
+TEMPLATES
+------------
+
+Any version prior to 3.1 is not compatible with the templates, due to the bootstrap change to 3.0.
+
+Future versions will always detail template changes.

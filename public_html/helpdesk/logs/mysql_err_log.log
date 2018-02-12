@@ -1,0 +1,6 @@
+MySQL Error on 2 February 2018 @ 07:20AM
+Code: 1030
+Error: Got error 28 from storage engine
+File: /home/mashpia/public_html/helpdesk/control/classes/class.fields.php
+Line: 77
+- - - - - - - - - - - - - - - - - - - - - - - -

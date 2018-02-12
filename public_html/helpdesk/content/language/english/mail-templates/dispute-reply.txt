@@ -1,0 +1,19 @@
+Dispute Notification
+
+<-{separater}->
+
+"{USER}" has made a reply to the following dispute:
+
+"{SUBJECT}"
+
+To view this dispute and add a reply, visit your account area:
+{WEBSITE_URL}/?d={ID}
+
+Please allow each person in the dispute to have his/her say and be patient while we resolve this issue.
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME}
+{WEBSITE_URL}

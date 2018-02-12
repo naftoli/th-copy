@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+	<meta charset="utf-8">
+    <title>Email Templates: Maian Support - Documentation</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="pages/css/bootstrap.css" type="text/css">
+	<link rel="stylesheet" href="pages/css/bootstrap-responsive.css" type="text/css">
+    <link rel="stylesheet" href="pages/css/theme.css" type="text/css">
+    <link rel="stylesheet" href="pages/css/font-awesome.css">
+
+	<script src="pages/js/jquery.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="pages/css/ms.css" type="text/css">
+    <script src="pages/js/ms-global.js" type="text/javascript"></script>
+	<!--[if lt IE 9]>
+    <script src="pages/js/html5.js"></script>
+    <![endif]-->
+
+    <link rel="SHORTCUT ICON" href="favicon.ico">
+  </head>
+
+  <!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+  <!--[if IE 7 ]> <body class="ie ie7"> <![endif]-->
+  <!--[if IE 8 ]> <body class="ie ie8"> <![endif]-->
+  <!--[if IE 9 ]> <body class="ie ie9"> <![endif]-->
+  <!--[if (gt IE 9)|!(IE)]><!-->
+  <body class="">
+  <!--<![endif]-->
+
+   <div class="navbar">
+        <div class="navbar-inner">
+                <script type="text/javascript" src="pages/js/header.js"></script>
+				<noscript>Please enable javascript to view header.</noscript>
+				<a class="brand" href="index.html" title="Maian Support: Documentation"><span class="first">Maian Support: Documentation</span></a>
+	    </div>
+    </div>
+
+  <div class="sidebar-nav">
+  <script type="text/javascript" src="pages/js/nav-menu.js"></script>
+  <noscript>Please enable javascript to view menu.</noscript>
+  </div>
+  <div class="content">
+
+  <div class="header">
+
+	<h1 class="page-title">Email Templates</h1>
+    <span class="clearfix"></span>
+
+  </div>
+
+  <ul class="breadcrumb">
+    <li>Installation <span class="divider">/</span></li>
+    <li class="active">Email Templates</li>
+  </ul>
+
+  <div class="container-fluid">
+
+   <div class="block">
+    <div class="block-body">
+     Information here relates to the email templates in Maian Support. For easy editing the email templates are all .txt files.
+    </div>
+   </div>
+
+   <div class="block">
+	 <p class="block-heading">Email Template Location</p>
+     <div class="block-body">
+	   All txt files are located at: <b>content/language/*lang*/mail-templates/*.txt</b>
+     </div>
+   </div>
+
+   <div class="block">
+	 <p class="block-heading">HTML &amp; Plain Text</p>
+     <div class="block-body">
+	   Maian Support sends out plain text and html formatted emails by default. To keep things nice and easy, a single template is used for both formats.
+     </div>
+   </div>
+
+   <div class="block">
+	 <p class="block-heading">Template Structure</p>
+     <div class="block-body">
+	   The format of a txt template is basically as follows:<br><br>
+	   HEADER<br>
+	   &lt;-{separater}-&gt;<br>
+	   CONTENT<br>
+	   &lt;-{separater}-&gt;<br>
+	   FOOTER<br><br>
+	   &lt;-{separater}-&gt; is used to separate the content as shown. 2 separaters MUST exist in each file.
+     </div>
+   </div>
+
+   <div class="block">
+	 <p class="block-heading">HTML WRAPPER</p>
+     <div class="block-body">
+	   For the HTML format, the txt files are wrapped in a HTML wrapper. This is located at: <b>content/language/*lang*/mail-templates/html-wrapper.html</b><br><br>
+	   Any links will be made clickable automatically and the data is split and added to the template via the {HEADER},{CONTENT} &amp; {FOOTER} vars which should NOT
+	   be removed.
+     </div>
+   </div>
+
+   <div class="block">
+	 <p class="block-heading">Variables in Email Templates</p>
+     <div class="block-body">
+	   Any variable between braces, eg: {code} must <b>NOT</b> be removed. These are auto parsed by the system.
+     </div>
+   </div>
+
+   <div class="block">
+	 <p class="block-heading">PHP Mailer</p>
+     <div class="block-body">
+	   Maian Support uses the <a href="https://github.com/Synchro/PHPMailer" onclick="window.open(this);return false">PHP Mailer</a> to send mail via <a href="settings.html">smtp</a>.<br><br>
+	   All mail ops can be found in the following location: <b>control/classes/mailer/*</b>
+     </div>
+   </div>
+
+   <div class="row-fluid">
+	<script type="text/javascript" src="pages/js/footer.js"></script>
+	<noscript>Please enable javascript to view footer.</noscript>
+   </div>
+
+  </div>
+
+  </div>
+  <script src="pages/js/plugins/jquery.bootstrap.js"></script>
+
+ </body>
+</html>

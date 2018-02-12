@@ -1,0 +1,20 @@
+Password Reset
+
+<-{separater}->
+
+Hi {NAME},
+
+As a security precaution your admin support team password has been reset at "{WEBSITE_NAME}".
+
+Account Email: {EMAIL}
+New password: {PASS}
+{WEBSITE_URL}/{ADMIN_FOLDER}/?p=login
+
+Please log in and update your password to something you can remember as soon as possible.
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME} Administrator
+{WEBSITE_URL}

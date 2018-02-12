@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+	<meta charset="utf-8">
+    <title>Settings: Maian Support - Documentation</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="pages/css/bootstrap.css" type="text/css">
+	<link rel="stylesheet" href="pages/css/bootstrap-responsive.css" type="text/css">
+    <link rel="stylesheet" href="pages/css/theme.css" type="text/css">
+    <link rel="stylesheet" href="pages/css/font-awesome.css">
+
+	<script src="pages/js/jquery.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="pages/css/ms.css" type="text/css">
+    <script src="pages/js/ms-global.js" type="text/javascript"></script>
+	<!--[if lt IE 9]>
+    <script src="pages/js/html5.js"></script>
+    <![endif]-->
+
+    <link rel="SHORTCUT ICON" href="favicon.ico">
+
+  </head>
+
+  <!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+  <!--[if IE 7 ]> <body class="ie ie7"> <![endif]-->
+  <!--[if IE 8 ]> <body class="ie ie8"> <![endif]-->
+  <!--[if IE 9 ]> <body class="ie ie9"> <![endif]-->
+  <!--[if (gt IE 9)|!(IE)]><!-->
+  <body class="">
+  <!--<![endif]-->
+
+   <div class="navbar">
+        <div class="navbar-inner">
+                <script type="text/javascript" src="pages/js/header.js"></script>
+				<noscript>Please enable javascript to view header.</noscript>
+				<a class="brand" href="index.html" title="Maian Support: Documentation"><span class="first">Maian Support: Documentation</span></a>
+	    </div>
+    </div>
+
+  <div class="sidebar-nav">
+  <script type="text/javascript" src="pages/js/nav-menu.js"></script>
+  <noscript>Please enable javascript to view menu.</noscript>
+  </div>
+  <div class="content">
+
+  <div class="header">
+
+	<h1 class="page-title">Settings</h1>
+    <span class="clearfix"></span>
+
+  </div>
+
+  <ul class="breadcrumb">
+    <li>Settings &amp; Tools <span class="divider">/</span></li>
+    <li class="active">Settings</li>
+  </ul>
+
+  <div class="container-fluid">
+
+   <div class="block">
+    <p class="block-heading">Overview</p>
+    <div class="block-body">
+     Enables updating of system settings. Please read carefully. Click example images to display full size version in new tab/window.
+    </div>
+   </div>
+
+   <div class="block">
+	 <p class="block-heading">Screenshot</p>
+     <div class="block-body">
+	   <a href="screenshots/54.jpg" onclick="window.open(this);return false"><img src="screenshots/54.jpg" class="screenshot" alt="Screenshot" title="Click for Fullsize"></a>
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Helpdesk Settings</p>
+     <div class="block-body">
+	   <span class="highlightText">Help Desk Name</span> - Enter name for help desk.<br><br>
+	   <span class="highlightText">HTTP Installation Path</span> - http installation path to your support folder as seen in your browser address bar. NO trailing slash.<br><br>
+	   Examples might be:<br><br>
+	   http://www.example.com (if installed in domain root)<br>
+	   http://www.example.com/helpdesk (if installed in folder, for example "helpdesk")<br><br>
+	   <span class="highlightText">Default Language</span> - Default system language. More info on the language options <a href="install_6.html">here</a>.<br><br>
+	   <span class="highlightText">Admin Folder Name</span> - You should change your admin folder name from "admin" to something unique, which can help with security. Change folder and enter new name here.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Language &amp; Template Sets</p>
+     <div class="block-body">
+	   This is applicable to visitor accounts only, not admin support team accounts, which always load from the default language. Here you`ll see an option for
+	   each <a href="install_6.html">language currently set</a> and you can specify which template sets load for each language. If none are set, they always load from the default set.<br><br>
+	   <a href="screenshots/55.jpg" onclick="window.open(this);return false"><img src="screenshots/55.jpg" class="screenshot" alt="Screenshot" title="Click for Fullsize"></a><br><br>
+	   Note that if <a href="imap.html">imap</a> or the <a href="api1.html">API</a> is being utilised, the system will always load from the default set unless you
+	   pass the language override with the data.<br><br>More info on the <a href="imap.html">imap</a> and <a href="api1.html">API</a> pages.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Account Settings</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable Create Account Option</span> - If enabled, visitor can create support account.<br><br>
+	   <span class="highlightText">Enable BB Code</span> - By default <a href="bb-code.html">BB Code</a> is always enabled for the admin support team. If enabled here, it is also enabled for visitors.<br><br>
+	   <span class="highlightText">Send Email Notification After Profile Update</span> - Do you wish to send email confirmation after a profile is updated by a visitor?<br><br>
+	   <span class="highlightText">Send Notification to Admin When New Account is Created Manually</span> - Do you wish to receive email notification if a visitor creates a new support account?<br><br>
+	   <span class="highlightText">Enable Entry Log For New Accounts</span> - By default, do you wish to enable the entry log for new accounts? Can be enabled/disabled later.<br><br>
+	   <span class="highlightText">Max Login Attempts / Ban Time (in Minutes)</span> - Do you wish to restrict the amount of login attempts? Can help prevent bots from auto posting and help with brute force attacks. 0 for no restriction. If set, you can also set a ban time, which must elapse before login is allowed again for the entered email address. This option
+	   does NOT use cookies, nor does it restrict by IP address. This feature may be enhanced in future versions.<br><br>
+	   <span class="highlightText">Minimum Length For Passwords</span> - Max length for passwords. Should be a high number. The shorter the password, the more vulnerable it is.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Auto Close</p>
+     <div class="block-body">
+	   <span class="highlightText">Email Notification for Auto Closed Tickets</span> - Do you wish to send email notification to visitors if the auto close routine closes a ticket? Note that only a single
+	   email is sent if the routine closes multiple tickets.<br><br>
+	   <span class="highlightText">Auto Close Duration</span> - Duration that must elapse for tickets to be auto closed. Note that only tickets awaiting a visitor response are closed. Any awaiting an admin response are always
+	   assumed open until a reply is made by the support staff.<br><br>
+	   <span class="highlightText">Run Now</span> - Click to run manually. You can also set this option to run as a <a href="install_3.html">cron job</a> or scheduled task.<br><br>
+	   File to run: <b>close-tickets.php</b><br><br>
+	   More info on Auto Close option <a href="auto-close.html">here</a>
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Ticket System</p>
+     <div class="block-body">
+	   <span class="highlightText">Visitors Must Be Logged In To Open Tickets</span> - If enabled, visitors must be logged in to create tickets. If not enabled, an account is created during the ticket creation process, but only if the "Enable Create Account Option" is enabled. Useful
+	   if you want to create accounts manually and only allow enabled accounts to start tickets.<br><br>
+	   <span class="highlightText">Enable Ticket History</span> - Enables ticket history. If enabled, history is displayed in admin below ticket detailing all ticket actions. Screenshot and info <a href="view-ticket.html">here</a>.<br><br>
+	   <span class="highlightText">Do NOT Send Notification(s) if Visitor Closes Ticket with Reply</span> - If visitor closes ticket with reply, do you still want the support team to receive email notification?<br><br>
+	   <span class="highlightText">Email Notification "From" Address</span> - From email header for tickets. From address visitors see in their mail program, which also defaults to the reply-to address.<br><br>
+	   <span class="highlightText">Email Notification "Reply-To" Address (Optional)</span> - Reply-to email header for tickets. If set, adds separate reply-to address. If blank, defaults to "from" address. This can be useful if you want replies to go to a certain mailbox if someone replies to ticket notifications. Note
+	   that if you are utilising the <a href="imap.html">imap</a> functions, the reply-to email will always be the reply-to address set for the <a href="imap.html">imap</a> account.<br><br>
+	   <span class="highlightText">Min Digits for Ticket Numbers</span> - Min digits for ticket numbers. If set to 0, no preceding zeros will be added.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Dispute System</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable Dispute System</span> - If set, the dispute system is enabled and additional dispute options will be seen in the admin
+	   area. Once a standard ticket is created, you have the option when viewing a ticket to change it to a dispute. Once this is done, you can give multiple visitors access to
+	   the same ticket. This is useful for example, for gaming websites that regularly have disputes between members. More on disputes <a href="disputes-rules.html">here</a>.<br><br>
+	   <span class="highlightText">After Each Visitor Response, Allow No Futher Replies Until Admin Has Responded</span> - This disables any further visitor replies until admin has responded. This can
+	   be useful if you find that some disputes turn into slanging matches between visitors. This overrides the post privileges.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Imap Settings</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable Imap Debug Log</span> - Do you wish to enable the imap debug log? Can be useful for identifying mail issues. If enabled, all imap
+	   operations are logged to the "logs" folder, which must be writeable.<br><br>
+	   <span class="highlightText">Include Attachments in Notification Emails (For tickets opened via Imap)</span> - When emails are replied to by a support team member, do you want to include ticket attachments in the notification email?<br><br>
+	   <span class="highlightText">Send Account Creation Notification When First Ticket is Opened via Imap</span> - When an initial ticket is sent via imap, do you want to send the account creation notification email?<br><br>
+	   <span class="highlightText">Imap Query String Parameter</span> - Imap url parameter. A custom param will prevent anyone from accessing your imap urls. When setting up any <a href="install_3.html">cron jobs</a>, make sure that you specify the correct
+	   new parameter.<br><br>
+	   <span class="highlightText">Ini Set Memory Override</span> - Will not be available on all servers. If set, will attempt to adjust memory limit (in megabytes). For advanced users only. eg: 100 = 100M<br><br>
+	   <span class="highlightText">Ini Set Timeout Override</span> - Will not be available on all servers. If set, will attempt to adjust timeout limit. For advanced users only.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">API Settings</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable API Debug Log</span> - Do you wish to enable the api debug log? Can be useful for identifying api issues. If enabled, all api
+	   operations are logged to the "logs" folder, which must be writeable.<br><br>
+	   <span class="highlightText">Enable XML Handler</span> - Enables the <a href="http://en.wikipedia.org/wiki/XML" onclick="window.open(this);return false">XML</a> callback options. At least one handler must be enabled.<br><br>
+	   <span class="highlightText">Enable JSON Handler</span> - Enabled the <a href="http://en.wikipedia.org/wiki/JSON" onclick="window.open(this);return false">JSON</a> callback options. The recommended option. At least one handler must be enabled.<br><br>
+	   <span class="highlightText">API Key</span> - Set API key. This ensures incoming data is valid. Enter custom random key or click <i class="icon-key"></i> to have the system randomnly generate one.<br><br>
+	   IMPORTANT:If you change the key later on, make sure your post operations all have the correct key.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Date/Time</p>
+     <div class="block-body">
+	   <span class="highlightText">PHP Date/Time Format</span> - Specify your preferred date/time display format. This takes any parameter supported by the PHP date function. More info <a href="http://www.php.net/manual/en/function.date.php" onclick="window.open(this);return false">here</a>.<br><br>
+	   <span class="highlightText">Default Timezone</span> - Specify default timezone.<br><br>
+	   <span class="highlightText">Javascript Calendar Start Day</span> - Specify start day of week. This is only for the pop up calendars. For example, UK would be Sunday.<br><br>
+	   <img src="screenshots/80.jpg" class="screenshot" alt="Screenshot" title="Screenshot"><br><br>
+	   <span class="highlightText">Javascript Calendar Date Format</span> - Specify date format for javascript calendar.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Attachments</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable Attachments</span> - If set, enables attachments. Restrictions may be in place in the free version.<br><br>
+	   <span class="highlightText">Rename Attachments</span> - When attachments are uploaded do you want to rename attachments? This can be a good idea as many people use foreign or invalid characters in file names that can cause file system issues.<br><br>
+	   <span class="highlightText">Allowable File Extensions</span> - Specify allowable extensions (with the period symbol) and pipe delimit. Example: <b>.jpg|.zip|.gif|.rar|.png|.pdf</b>. Note that ALL attachments should be scanned for viruses, regardless of file extension. No user file should be trusted!!!<br><br>
+	   <span class="highlightText">Max Size for Attachments (Bytes)</span> - Max size for attachments. 0 for no limit. Click "Choose" to select a pre-configured option or enter your own value.<br><br>
+	   <img src="screenshots/57.jpg" class="screenshot" alt="Screenshot" title="Screenshot" style="width:507px"><br><br>
+	   <span class="highlightText">Total Attachment Boxes</span> - Total attachment boxes, so the maximum files someone can upload per ticket. No restrictions for admin. Note that the free version may have restrictions.<br><br>
+	   <span class="highlightText">Server Path to Attachments Folder</span> - Server path (NOT HTTP) to preferred attachments folder. NO trailing slash. This can be anywhere on your server and MUST be writeable. If you click the <i class="icon-refresh"></i> icon the system will attempt to calculate the path assuming the folder is located in the "content" folder. If this is the case, change the "FOLDER_NAME_HERE" value to your own folder name.<br><br>
+	   Examples of how server paths might start:<br><br>
+	   /home/server/...(Linux)<br>
+	   C:\windows\...(Windows)<br><br>
+	   <span class="highlightText">HTTP Path to Attachments Folder</span> - HTTP path to preferred attachments folder. NO trailing slash.  This can be anywhere on your server and MUST be writeable. If you click the <i class="icon-refresh"></i> icon the system will attempt to calculate the path assuming the folder is located in the "content" folder. If this is the case, change the "FOLDER_NAME_HERE" value to your own folder name.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">F.A.Q</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable F.A.Q</span> - Enables FAQ system. This lets you add some frequently asked questions to the system.<br><br>
+	   <span class="highlightText">Enable Voting System</span> - Do you wish to enable voting system? This lets people vote on whether a question is helpful or not and is viewable in the adin control panel.<br><br>
+	   <span class="highlightText">Show Counts for Categories</span> - Do you want to show a count next to each category denoting how many questions are in that category?.<br><br>
+	   <span class="highlightText">Enable Multiple Votes</span> - If yes, people can vote multiple times. If not, a cookie is set to prevent further votes for a question. As cookies can easily be cleared, its generally pointless to try and prevent multiple votes, but this option will be useful to some.<br><br>
+	   <span class="highlightText">Rename Attachments</span> - When attachments are uploaded do you want to rename attachments? This can be a good idea if your files have foreign or invalid characters that can cause file system issues.<br><br>
+	   <span class="highlightText">Total Popular Questions</span> - Total popular questions to display on the main help desk frontend main page.<br><br>
+	   <span class="highlightText">Cookie Duration (in Days)</span> - If multiple votes are prevented via a cookie, specify how many days this cookie should remain active.<br><br>
+	   <span class="highlightText">Questions Per Page</span> - Total questions to display per page for the category view on the help desk front end when a FAQ category is clicked.<br><br>
+	   <span class="highlightText">Server Path to F.A.Q Attachments Folder</span> - Server path (NOT HTTP) to preferred F.A.Q attachments folder. NO trailing slash. This can be anywhere on your server and MUST be writeable. If you click the <i class="icon-refresh"></i> icon the system will attempt to calculate the path assuming the folder is located in the "content" folder. If this is the case, change the "FOLDER_NAME_HERE" value to your own folder name.<br><br>
+	   Examples of how server paths might start:<br><br>
+	   /home/server/...(Linux)<br>
+	   C:\windows\...(Windows)<br><br>
+	   <span class="highlightText">HTTP Path to F.A.Q Attachments Folder</span> - HTTP path to preferred attachments folder. NO trailing slash.  This can be anywhere on your server and MUST be writeable. If you click the <i class="icon-refresh"></i> icon the system will attempt to calculate the path assuming the folder is located in the "content" folder. If this is the case, change the "FOLDER_NAME_HERE" value to your own folder name.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">SMTP</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable Mail</span> - Enabled system mailer. If disabled, no emails will be sent. Note that SMTP MUST be used to ensure better mail delivery. Using a good mail server like <a href="http://mandrill.com/" onclick="window.open(this);return false">Mandrill</a> can ensure less messages get flagged as spam. Mandrill offer 12,000 emails for free each month. There are other
+	   paid options available, but for its pricing structure, Mandrill is hard to beat. Note that I am NOT in any way affiliated with Mandrill, its simply a recommendation.<br><br>
+     <div style="padding:10px;background:#ff9999;border:2px solid #555">
+       <b>IMPORTANT</b>: If you are using Gmail, DO NOT use your Gmail password. You MUST create an app specific password in your Google account and use that. Also,
+       ONLY use SSL if you have SSL installed. If you don`t, you should use TLS. For the Gmail port ONLY use 465 or 587.
+     </div><br>
+	   <span class="highlightText">Enable SMTP Debugging</span> - Do you wish to enable the smtp debug log? Can be useful for identifying mail issues. If enabled, all smtp
+	   operations are logged to the "logs" folder, which must be writeable.<br><br>
+	   <span class="highlightText">SMTP Host</span> - Your smtp host. Usually server address or IP address. Click the envelope icon to send a test email.<br><br>
+	   <span class="highlightText">SMTP Username</span> - Your smtp username if authentication is required. Usually email address.<br><br>
+	   <span class="highlightText">SMTP Password</span> - Your smtp password if authentication is required.<br><br>
+	   <span class="highlightText">SMTP Port / Security</span> - Smtp port and security option if a security option is enabled and required. Common mail ports are 25 &amp; 587 and 465 for SSL.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Status</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable Help Desk</span> - Enable or disable help desk.<br><br>
+	   <span class="highlightText">Offline Reason</span> - Enter reason for why the help desk is offline.<br><br>
+	   <span class="highlightText">Auto Enable on Date</span> - If disabled and you want to re-enable on specific date, use this option.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">reCaptcha</p>
+     <div class="block-body">
+	   The <a href="http://www.google.com/recaptcha" onclick="window.open(this);return false">reCaptcha service</a> is a free service from Google that can help prevent bots from auto posting to your ticket system.<br><br>
+	   <span class="highlightText">Disable if User is Logged In</span> - Do you wish to disable the captcha if a visitor is logged in?<br><br>
+	   <span class="highlightText">Public Key</span> - Enter reCaptcha API public key.<br><br>
+	   <span class="highlightText">Private Key</span> - Enter reCaptcha API private key.<br><br>
+	   <span class="highlightText">Language / Theme</span> - Select preferred language and theme. At the time of writing these docs only the options shown are available. If other languages/themes become available, add them to the following file: <b>admin/control/recaptcha.php</b>
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Logging</p>
+     <div class="block-body">
+	   <span class="highlightText">Max Entries to Keep for Account Entry Logs</span> - Max visitor logs to keep for <a href="log.html">entry log</a>. 0 for no limit.<br><br>
+	   <span class="highlightText">Max Entries to Keep for Staff Entry Logs</span> - Max support team logs to keep for <a href="log.html">entry log</a>. 0 for no limit.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Edit Footers (Commercial Licence ONLY)</p>
+     <div class="block-body">
+	   <span class="highlightText">Admin Footer</span> - If available, enter preferred admin footer text.<br><br>
+	   <span class="highlightText">Public Footer</span> - If available, enter preferred public footer text.
+     </div>
+    </div>
+
+   <div class="row-fluid">
+	<script type="text/javascript" src="pages/js/footer.js"></script>
+	<noscript>Please enable javascript to view footer.</noscript>
+   </div>
+
+  </div>
+
+  </div>
+  <script src="pages/js/plugins/jquery.bootstrap.js"></script>
+
+ </body>
+</html>

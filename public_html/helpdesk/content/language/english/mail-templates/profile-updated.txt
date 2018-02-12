@@ -1,0 +1,14 @@
+Profile Update Confirmation
+
+<-{separater}->
+
+Hello {NAME},
+
+This email confirms your recent profile update at "{WEBSITE_NAME}".
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME} Support Team
+{WEBSITE_URL}

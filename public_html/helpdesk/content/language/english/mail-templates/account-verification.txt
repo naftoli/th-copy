@@ -1,0 +1,17 @@
+Account Verification
+
+<-{separater}->
+
+Hi {NAME},
+
+Thank you for signing up for a support account at "{WEBSITE_NAME}".
+
+To complete signup verification, please click the following url:
+{LOGIN_URL}/?va={CODE}
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME} Support Team
+{WEBSITE_URL}

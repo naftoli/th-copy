@@ -1,0 +1,25 @@
+New Support Ticket
+
+<-{separater}->
+
+Hello {NAME},
+
+A new support ticket has been created for you at "{WEBSITE_NAME}".
+
+Subject: {TITLE}
+
+Please log into your account to view this ticket.
+
+{WEBSITE_URL}/?t={ID}
+
+If this ticket warrants a reply, please add one as soon as possible, thank you.
+
+Any questions, or problems, please let us know.
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME} Support Team
+{WEBSITE_URL}
+

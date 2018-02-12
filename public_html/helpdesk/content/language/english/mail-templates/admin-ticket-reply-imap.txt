@@ -1,0 +1,28 @@
+New Ticket Reply
+
+<-{separater}->
+
+{REPCOMMS}
+
+This reply was made to the following support ticket:
+
+Ticket ID: #{TICKET}
+Subject: {SUBJECT}
+Department: {DEPT}
+Priority: {PRIORITY}
+Status: {STATUS}
+
+To view your ticket and/or add a new response, log in to your ticket portal at:
+{WEBSITE_URL}/?t={ID}
+
+You may also reply to this email keeping the subject intact.
+
+Kind regards,
+
+------------------------------------
+{SIGNATURE}
+
+<-{separater}->
+
+{WEBSITE_NAME} Support Team
+{WEBSITE_URL}

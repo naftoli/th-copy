@@ -1,0 +1,33 @@
+New Support Ticket Created
+
+<-{separater}->
+
+Hi {NAME},
+
+The following support ticket has been created by "{ACC_NAME}":
+
+Ticket ID: #{TICKET}
+Subject: {SUBJECT}
+Department: {DEPT}
+Priority: {PRIORITY}
+
+Comments:
+-----------------
+
+{COMMENTS}
+
+Custom Fields:
+-----------------
+
+{CUSTOM}
+
+
+To respond to this ticket, log into your staff control panel:
+{WEBSITE_URL}/{ADMIN_FOLDER}/?ticket={ID}
+
+<-{separater}->
+
+{WEBSITE_NAME}
+{WEBSITE_URL}
+
+Visitors IP Address(es): {IP}

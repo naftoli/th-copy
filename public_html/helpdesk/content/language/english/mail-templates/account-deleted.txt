@@ -1,0 +1,18 @@
+Account Deleted
+
+<-{separater}->
+
+Hi {NAME},
+
+Due to no support tickets being opened, your support account at "{WEBSITE_NAME}" has been removed.
+
+We only like to keep active accounts in our system and don`t feel the need for unused accounts within a certain timeframe.
+
+If you would like to create a new account or open a ticket in the future, please do so via our website.
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME} Support Team
+{WEBSITE_URL}

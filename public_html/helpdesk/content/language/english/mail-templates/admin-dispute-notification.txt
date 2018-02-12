@@ -1,0 +1,27 @@
+Dispute Notification
+
+<-{separater}->
+
+Hello {NAME},
+
+This email confirms your ticket entitled "{TITLE}" is now in a dispute status.
+
+The following people are currently in the dispute with you:
+
+{PEOPLE}
+
+Please allow each person in the dispute to have his/her say and be patient while we resolve this issue.
+
+If you are receiving this email again, it could be that more people have been added to the dispute.
+
+To view this ticket or add a new response, log in to your ticket portal at:
+{WEBSITE_URL}/?d={ID}
+
+If you don`t see this dispute on log-in, please click "Open Disputes" from the menu.
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME} Support Team
+{WEBSITE_URL}

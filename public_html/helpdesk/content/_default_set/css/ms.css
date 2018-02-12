@@ -1,0 +1,588 @@
+/*
+  MSupport elements
+*/
+
+/* Container */
+
+.margin-top-container {
+  margin-top: 90px;
+}
+
+.colorchangeheader {
+  color: #555 !important;
+}
+
+.margin_right_20 {
+  margin-right: 20px;
+}
+
+.logoutdivarea {
+  background: url(../images/loading.gif) no-repeat 98% 50%;
+}
+
+.min-height-container {
+  min-height: 490px;
+}
+
+.rightmenubar {
+}
+
+.superbig {
+  font-size: 26px;
+}
+
+.nothing_to_see {
+  font-style:italic;
+}
+
+.margin-top-container-nonefixed {
+  margin-top: 28px;
+}
+
+.nodec {
+  text-decoration: none !important;
+}
+
+.indent_10 {
+  padding-left: 10px;
+}
+
+.margin_top_10 {
+  margin-top: 10px;
+}
+
+.margin_top_20 {
+  margin-top: 20px;
+}
+
+.restr_height_200 {
+  max-height: 200px;
+  overflow: auto;
+}
+
+#mscontainer {
+  padding-bottom: 50px;
+}
+
+.max_height_120 {
+  height: 120px;
+  overflow: auto;
+}
+
+.text_height_25 {
+  line-height: 25px;
+}
+
+.bbButtons {
+  margin-bottom: 5px;
+}
+
+.bbButtons button {
+  font-size: 11px;
+}
+
+.panel-heading .dropdown-menu {
+  max-height: 200px;
+  overflow: auto;
+}
+
+.panel-heading .dropdown-menu a {
+  font-size: 13px;
+}
+
+.msw-green {
+  color: #5CB85C;
+}
+
+.highlightPass {
+  color: #2E91A3;
+}
+
+.reporttotals td {
+  font-weight: bold;
+}
+
+/* FAQ */
+.mswfaqsublink div {
+  display: none;
+  padding-left:20px;
+  font-size: 12px;
+}
+
+.mswfaqcatlink i:hover {
+  color: #3393A3 !important;
+}
+
+.votefont {
+  font-size: 20px;
+}
+
+.votefont div span {
+  color:#2E91A3;
+}
+
+.votefont div i:hover {
+  color: #3393A3 !important;
+}
+
+.totalvotes {
+  border-top:1px dashed #ddd;
+  margin-top:20px;
+  padding-top: 10px;
+  font-style: italic;
+}
+
+/* Homescreen */
+.max_height_home {
+  max-height: 300px;
+  overflow: auto;
+}
+.hometicketarea {
+}
+.hometicketarea span {
+  display:block;
+  font-size: 12px;
+  margin-top:10px;
+}
+
+.quickText {
+  font-style: italic;
+  display: block;
+}
+
+
+/* Updating / updated */
+.updating {
+  background: #f9f9f9 url(../images/loading.gif) no-repeat 50% 50%;
+}
+
+.updated {
+  background-image: none;
+  background: #fff;
+}
+
+/* Tables */
+td select {
+  width: auto !important;
+}
+
+td .ticketStatusBar {
+  font-family: Arial, sans-serif;
+  display: block;
+  margin-top: 5px;
+  font-style: italic !important;
+  font-size: 11px;
+}
+
+.cursor_pointer {
+  cursor: pointer;
+}
+
+.mswitalics {
+  font-family: Arial, sans-serif;
+  font-style: italic !important;
+}
+
+/* Tabs */
+.mstabmenuarea .nav-tabs {
+  border-bottom: 2px solid #ddd;
+}
+
+.mstabmenuarea .nav-tabs .active a.dropdown-toggle {
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Forms */
+.form-group label {
+  font-weight: normal;
+}
+
+.form_box_margin_5 {
+  margin-top: 5px;
+}
+
+/* Pages */
+.pagesblock {
+  text-align: right;
+}
+
+.mswpages {
+  text-align: right;
+}
+
+.faqpages .mswpages {
+  text-align: left;
+}
+
+/* Buttons */
+.button_margin_right20 {
+  margin-right: 20px;
+}
+
+/* Nav Header */
+.msheader {
+  font-size: 17px;
+}
+
+.msheader a {
+  font-size: 17px;
+  color: #fff;
+}
+
+.msheader .msheaderright .dropdown-menu li a,.msheader .msheaderright .dropdown-menu li i {
+  color: #555;
+  font-size: 13px;
+}
+
+.msheader .msheaderrighta a {
+  margin-right:15px;
+}
+
+.msheader a.margin20 {
+  margin-left:15px;
+}
+
+.msheader .msheaderleft {
+  padding-top:5px;
+}
+
+.msheader .msheaderright .dropdown-menu li a {
+  color: #555;
+}
+
+.msheader .msheaderright button {
+  color: #fff !important;
+}
+
+.msheader .msheaderright a {
+  font-size: 14px;
+}
+
+@media only screen and (max-width: 991px) {
+  .msheader .msheaderright a i {
+    font-size: 18px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .msheader .msheaderright {
+    margin-top: 0;
+  }
+}
+
+@media only screen and (max-width: 370px) {
+  .msheader .msheaderright {
+    margin-top: 0;
+  }
+}
+
+.navbar {
+  background: #0089a1 url(../images/nav-bg.png);
+  color: #fff;
+  border: 0;
+  border-bottom: 3px solid #c0c0c0;
+  font-size: 13px;
+  padding: 10px 0 10px 0;
+}
+
+.navbar-default,
+.navbar-default {
+  border-radius: 0;
+}
+
+/* Other */
+
+.highlight {
+  font-weight: bold;
+}
+
+/* jQuery UI */
+.ui-datepicker-title select {
+  color: #555 !important;
+  font-weight: normal !important;
+}
+
+/* Footer */
+footer {
+  background: #F9F9F9 url(../images/bg.png);
+  margin-top: 10px;
+  font-size: 13px;
+  padding-top: 10px;
+  color: #444;
+  border-top: 2px solid #ddd;
+  height: 60px;
+  text-align: center;
+}
+
+footer a {
+  color: #444;
+}
+
+footer a:hover {
+  color: #888;
+  text-decoration: none;
+}
+
+.vcheckarea div {
+  padding: 30px 0 30px 0;
+}
+
+.vcheckarea span {
+  display: block;
+  margin-top: 10px;
+}
+
+/* Spinner */
+.overlaySpinner {
+  padding: 50px;
+  color: #555;
+}
+.overlaySpinner {
+  position: fixed;
+  z-index: 1000001;
+}
+.overlaySpinner {
+  text-indent: -100000px;
+  width: 100px;
+  border: 2px solid #C0C0C0;
+  height: 100px;
+  background: #fff url(../images/ibox/loading.gif) center center no-repeat;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  -ms-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.boxspinner {
+  background:url(../images/indicator.gif) no-repeat 98% 50%;
+}
+.areaspinner {
+  background:url(../images/loading.gif) no-repeat 50% 50%;
+}
+
+/* Tickets */
+.filetypes {
+  text-transform: uppercase;
+}
+
+.removereset {
+  background: #ff9999;
+  padding: 5px;
+  text-align: center;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.removereset a {
+  color: #fff;
+}
+
+.requiredfield {
+  color: #FF6861;
+  margin-left: 20px;
+}
+
+.ticketDate {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #66748f;
+}
+
+.ticketPriority {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.ticketStatusBarDispute {
+  display: block;
+  font-size: 11px;
+  font-style: italic;
+  margin-top: 10px;
+  color: #66748f;
+}
+
+.ticketsubject {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.mobilebreakpoint {
+  display: inline;
+}
+
+/* Boottrap overrides */
+span.label {
+  font-weight: normal !important;
+  font-size: 11px;
+}
+
+.panel {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.adminpanelfooter {
+  background: #FCF8E3 !important;
+  border-color: #FAEBCC !important;
+}
+
+.visitorpanelfooter {
+}
+
+/* Mobiles / Small screens ONLY */
+
+.mbtopleft {
+  padding-top:5px;
+}
+
+.smallscreen li a {
+  font-size: 13px;
+}
+
+@media only screen and (max-width:480px) {
+  footer {
+    font-size: 11px !important;
+  }
+
+  .panel-default .panel-heading {
+    text-align: center !important;
+  }
+
+  .panel-default .mswforceleftalign {
+    text-align: left !important;
+  }
+
+  .panel-default .left-align {
+    text-align: left !important;
+  }
+
+  .breadcrumb li {
+    display: none !important;
+  }
+
+  .breadcrumb > li + li:before {
+    padding: 0;
+    content: "";
+  }
+
+  .breadcrumb .active {
+    display: inline !important;
+  }
+
+  .center_dropdown {
+    left: auto !important;
+    right: -90% !important;
+  }
+
+  .center_dropdown:after {
+    left: auto !important;
+    right: 90% !important;
+  }
+
+  .graphbar div:nth-child(2) {
+    text-align: center !important;
+  }
+
+  .graphbar div:nth-child(2) span {
+    display: block;
+  }
+
+  .rightmostprofoption {
+    right: 0 !important;
+    left: auto !important;
+  }
+
+  .bbButtons span {
+    display: block;
+    margin: 5px 0 5px 0;
+  }
+
+  .mobilebreakpoint {
+    display: block;
+    margin-top: 10px;
+  }
+
+  .max_height_home {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .hideminiscreen {
+    display: none !important;
+  }
+
+  .printarticle {
+    text-align: left !important;
+    margin-top:10px;
+  }
+
+  .votefont {
+    font-size: 15px;
+  }
+
+  .mobilemenu {
+    text-align: center !important;
+  }
+
+  .logoutdivarea {
+    background: url(../images/loading.gif) no-repeat 98% 98%;
+  }
+
+  /* Prevents recaptcha overlap on small screens.. */
+  .g-recaptcha {
+    width: desired_width;
+    border-radius: 4px;
+    border-right: 1px solid #d8d8d8;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+}
+
+@media only screen and (max-width:326px) {
+  .verysmalladjustment {
+    right: auto !important;
+    left: 0 !important;
+  }
+}
+
+/* Full screen editor */
+.tx-editor-wrapper {
+  position: relative;
+}
+
+.tx-editor-wrapper .tx-editor.expanded {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 80%;
+  height: 80%;
+  z-index: 500;
+}
+
+.tx-editor-wrapper .tx-editor {
+  height: 150px;
+}
+
+.tx-editor-wrapper .tx-editor .tx-icon {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.tx-editor-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 2;
+  opacity: 0;
+}

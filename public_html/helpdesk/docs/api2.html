@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+	<meta charset="utf-8">
+    <title>API - Add Ticket (JSON): Maian Support - Documentation</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="pages/css/bootstrap.css" type="text/css">
+	<link rel="stylesheet" href="pages/css/bootstrap-responsive.css" type="text/css">
+    <link rel="stylesheet" href="pages/css/theme.css" type="text/css">
+    <link rel="stylesheet" href="pages/css/font-awesome.css">
+
+	<script src="pages/js/jquery.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="pages/css/ms.css" type="text/css">
+    <script src="pages/js/ms-global.js" type="text/javascript"></script>
+	<!--[if lt IE 9]>
+    <script src="pages/js/html5.js"></script>
+    <![endif]-->
+
+    <link rel="SHORTCUT ICON" href="favicon.ico">
+
+  </head>
+
+  <!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+  <!--[if IE 7 ]> <body class="ie ie7"> <![endif]-->
+  <!--[if IE 8 ]> <body class="ie ie8"> <![endif]-->
+  <!--[if IE 9 ]> <body class="ie ie9"> <![endif]-->
+  <!--[if (gt IE 9)|!(IE)]><!-->
+  <body class="">
+  <!--<![endif]-->
+
+   <div class="navbar">
+        <div class="navbar-inner">
+                <script type="text/javascript" src="pages/js/header.js"></script>
+				<noscript>Please enable javascript to view header.</noscript>
+				<a class="brand" href="index.html" title="Maian Support: Documentation"><span class="first">Maian Support: Documentation</span></a>
+	    </div>
+    </div>
+
+  <div class="sidebar-nav">
+  <script type="text/javascript" src="pages/js/nav-menu.js"></script>
+  <noscript>Please enable javascript to view menu.</noscript>
+  </div>
+  <div class="content">
+
+  <div class="header">
+
+	<h1 class="page-title">API - Add Ticket (JSON)</h1>
+    <span class="clearfix"></span>
+
+  </div>
+
+  <ul class="breadcrumb">
+    <li>API <span class="divider">/</span></li>
+    <li class="active">Add Ticket (JSON)</li>
+  </ul>
+
+  <div class="container-fluid">
+
+  <div class="block">
+    <p class="block-heading">Overview</p>
+    <div class="block-body">
+	 Enables ticket to be opened from remote website or application. Please read the information below carefully.
+    </div>
+  </div>
+
+  <div class="block">
+    <p class="block-heading">JSON Wrapper Structure</p>
+    <div class="block-body">
+	 Your json wrapper structure should look like the following:<br><br>
+
+	 {<br>
+	  "api" : "YOUR KEY",<br>
+      "op" : "ticket",<br>
+      "tickets" : { <span style="color:#5d781d">ticket data as shown below</span> }<br>
+     }<br><br>
+
+	 Op type is "ticket" and must NOT be changed. API key must be same as key in <a href="settings.html">settings</a>.
+    </div>
+   </div>
+
+   <div class="block">
+    <p class="block-heading">Ticket Data (Required)</p>
+    <div class="block-body">
+	 Multiple tickets are possible with each transmission. All tickets are a part of the "ticket" object. Custom field
+     data and attachments are supported, but are optional. Structure as follows for single ticket:<br><br>
+
+     "ticket" : {<br>
+     &nbsp;&nbsp;"attachments" : { <span style="color:#5d781d">Attachment data as shown below</span> },<br>
+     &nbsp;&nbsp;"comments" : "Comments",<br>
+	 &nbsp;&nbsp;"language" : "english",<br>
+     &nbsp;&nbsp;"customfields" : { <span style="color:#5d781d">Custom field data as shown below</span> },<br>
+     &nbsp;&nbsp;"dept" : "Dept ID number",<br>
+     &nbsp;&nbsp;"email" : "Persons Email",<br>
+     &nbsp;&nbsp;"name" : "Persons Name",<br>
+     &nbsp;&nbsp;"priority" : "ID as shown on <a href="levelsman.html">priority level page</a> and in screenshot below",<br>
+     &nbsp;&nbsp;"subject" : "Subject of ticket"<br>
+     }<br><br>
+
+	 Multiple entries are specified using the [] operator within the same "ticket" object. Example:<br><br>
+
+	 "ticket" : <b>[</b>{<br>
+     &nbsp;&nbsp;"attachments" : { <span style="color:#5d781d">Attachment data as shown below</span> },<br>
+     &nbsp;&nbsp;"comments" : "Comments",<br>
+	 &nbsp;&nbsp;"language" : "english",<br>
+     &nbsp;&nbsp;"customfields" : { <span style="color:#5d781d">Custom field data as shown below</span> },<br>
+     &nbsp;&nbsp;"dept" : "Dept ID number",<br>
+     &nbsp;&nbsp;"email" : "Persons Email",<br>
+     &nbsp;&nbsp;"name" : "Persons Name",<br>
+     &nbsp;&nbsp;"priority" : "ID as shown on <a href="levelsman.html">priority level page</a> and in screenshot below",<br>
+     &nbsp;&nbsp;"subject" : "Subject of ticket 1"<br>
+     },{<br>
+     &nbsp;&nbsp;"attachments" : { <span style="color:#5d781d">Attachment data as shown below</span> },<br>
+     &nbsp;&nbsp;"comments" : "Comments",<br>
+	 &nbsp;&nbsp;"language" : "english",<br>
+     &nbsp;&nbsp;"customfields" : { <span style="color:#5d781d">Custom field data as shown below</span> },<br>
+     &nbsp;&nbsp;"dept" : "Dept ID number",<br>
+     &nbsp;&nbsp;"email" : "Persons Email",<br>
+     &nbsp;&nbsp;"name" : "Persons Name",<br>
+     &nbsp;&nbsp;"priority" : "ID as shown on <a href="levelsman.html">priority level page</a> and in screenshot below",<br>
+     &nbsp;&nbsp;"subject" : "Subject of ticket 2"<br>
+     }<b>]</b><br><br>
+
+	 Priority level must be ID as shown on priority levels page in your settings. This may be a text value OR a numeric ID as shown in the following screenshot:<br><br>
+	 <a href="screenshots/86.jpg" onclick="window.open(this);return false"><img src="screenshots/86.jpg" class="screenshot" alt="Screenshot" title="Click for Fullsize"></a><br><br>
+	 Language is an optional tag and is only required if you are using the <a href="install_6.html">multi language</a> option. If an account exists already, the language will be taken from the account
+	 and the xml value will have no meaning. Its for new accounts only and sets their default language. No language specified will default to the main language in
+    </div>
+   </div>
+
+   <div class="block">
+    <p class="block-heading">Custom Field Data (Optional)</p>
+    <div class="block-body">
+	 Custom field data is also supported and is optional. Structure as follows:<br><br>
+
+     "customfields" : {<br>
+     &nbsp;&nbsp;"f1" : "Custom field ID 1 data",<br>
+     &nbsp;&nbsp;"f2" : "Custom field ID 2 data"<br>
+     }<br><br>
+
+	 Each field tag contains the ID number of the field as shown in the main screenshot <a href="fieldsman.html">here</a> prefixed with an 'f'. 'f1' for example would be custom field ID 1. If the ID doesn`t exist in the system, the field tag will be ignored.<br><br>
+
+     If the custom field value can be one of a number of specific options, the options you present to visitors in your application should mirror these.
+    </div>
+   </div>
+
+   <div class="block">
+    <p class="block-heading">Attachments (Optional)</p>
+    <div class="block-body">
+	 Multiple attachments are possible with each transmission. All attachments are a part of the "file" object. Attachment data must be <a href="http://en.wikipedia.org/wiki/Base64" onclick="window.open(this);return false">base64 encoded</a>. Structure for single attachment is:<br><br>
+
+     "file" : {<br>
+	 &nbsp;&nbsp;"data" : "Base64 encoded data for file",<br>
+	 &nbsp;&nbsp;"ext"  : "File extension: (jpg,pdf etc)"<br>
+   &nbsp;&nbsp;"name"  : "Optional file name: (myfile.pdf, apicture,jpg etc)"<br>
+     }<br><br>
+
+	 Multiple entries are specified using the [] operator within the same "file" object. Example:<br><br>
+
+	 "file" : <b>[</b>{<br>
+	 &nbsp;&nbsp;"data" : "Base64 encoded data for file",<br>
+	 &nbsp;&nbsp;"ext"  : "File extension: (jpg,pdf etc)"<br>
+   &nbsp;&nbsp;"name"  : "Optional file name: (myfile.pdf, apicture,jpg etc)"<br>
+     },{<br>
+	 &nbsp;&nbsp;"data" : "Base64 encoded data for file",<br>
+	 &nbsp;&nbsp;"ext"  : "File extension: (jpg,pdf etc)"<br>
+   &nbsp;&nbsp;"name"  : "Optional file name: (myfile.pdf, apicture,jpg etc)"<br>
+     }<b>]</b><br><br>
+
+	 The extension is not case sensitive. Same restrictions apply with attachments as with standard tickets. If restrictions are met, attachments are ignored. The "name" parameter is optional. This should ONLY be used if you are sure your files have unique file names!!!
+    </div>
+   </div>
+
+   <div class="block">
+    <p class="block-heading">JSON Response</p>
+    <div class="block-body">
+	 On successful transmission a json response is returned:<br><br>
+
+     {<br>
+	 &nbsp;&nbsp;"status"  : "OK",<br>
+     &nbsp;&nbsp;"message" : ""<br>
+     }<br><br>
+
+	 If an error occurs, the following is returned:<br><br>
+
+     {<br>
+	 &nbsp;&nbsp;"status"  : "ERROR",<br>
+     &nbsp;&nbsp;"message" : "Reason for error.."<br>
+     }<br><br>
+
+	 Your own application should deal with the response accordingly.
+    </div>
+   </div>
+
+   <div class="block">
+    <p class="block-heading">Example File</p>
+    <div class="block-body">
+     Click <a href="examples/add-ticket-example.json" onclick="window.open(this);return false">here</a> to view an example json file.<br>
+    </div>
+   </div>
+
+   <p>
+    <a href="api1.html"><i class="icon-chevron-left"></i> Return to API Overview</a>
+   </p>
+
+   <div class="row-fluid">
+	<script type="text/javascript" src="pages/js/footer.js"></script>
+	<noscript>Please enable javascript to view footer.</noscript>
+   </div>
+
+  </div>
+
+  </div>
+  <script src="pages/js/plugins/jquery.bootstrap.js"></script>
+
+ </body>
+</html>

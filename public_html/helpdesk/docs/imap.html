@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+	<meta charset="utf-8">
+    <title>Add Account: Maian Support - Documentation</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="pages/css/bootstrap.css" type="text/css">
+	<link rel="stylesheet" href="pages/css/bootstrap-responsive.css" type="text/css">
+    <link rel="stylesheet" href="pages/css/theme.css" type="text/css">
+    <link rel="stylesheet" href="pages/css/font-awesome.css">
+
+	<script src="pages/js/jquery.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="pages/css/ms.css" type="text/css">
+    <script src="pages/js/ms-global.js" type="text/javascript"></script>
+	<!--[if lt IE 9]>
+    <script src="pages/js/html5.js"></script>
+    <![endif]-->
+
+    <link rel="SHORTCUT ICON" href="favicon.ico">
+  </head>
+
+  <!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+  <!--[if IE 7 ]> <body class="ie ie7"> <![endif]-->
+  <!--[if IE 8 ]> <body class="ie ie8"> <![endif]-->
+  <!--[if IE 9 ]> <body class="ie ie9"> <![endif]-->
+  <!--[if (gt IE 9)|!(IE)]><!-->
+  <body class="">
+  <!--<![endif]-->
+
+   <div class="navbar">
+        <div class="navbar-inner">
+                <script type="text/javascript" src="pages/js/header.js"></script>
+				<noscript>Please enable javascript to view header.</noscript>
+				<a class="brand" href="index.html" title="Maian Support: Documentation"><span class="first">Maian Support: Documentation</span></a>
+	    </div>
+    </div>
+
+  <div class="sidebar-nav">
+  <script type="text/javascript" src="pages/js/nav-menu.js"></script>
+  <noscript>Please enable javascript to view menu.</noscript>
+  </div>
+  <div class="content">
+
+  <div class="header">
+
+	<h1 class="page-title">Add Account</h1>
+    <span class="clearfix"></span>
+
+  </div>
+
+  <ul class="breadcrumb">
+    <li>Imap Accounts <span class="divider">/</span></li>
+    <li class="active">Add Account</li>
+  </ul>
+
+  <div class="container-fluid">
+
+   <div class="block">
+    <p class="block-heading">Overview</p>
+    <div class="block-body">
+     Enables adding of imap account. Please read carefully. Click example images to display full size version in new tab/window.
+    </div>
+   </div>
+
+   <div class="block">
+	 <p class="block-heading">Screenshot</p>
+     <div class="block-body">
+	   <a href="screenshots/11.jpg" onclick="window.open(this);return false"><img src="screenshots/11.jpg" class="screenshot" alt="Screenshot" title="Click for Fullsize"></a>
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Mailbox - Main Options</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable Imap Account </span> - Enables imap account.<br><br>
+	   <span class="highlightText">Mailbox Host / Mailbox Port</span> - Mailbox host and port number. If you are unsure contact your mail provider.<br><br>
+	   <span class="highlightText">Mailbox User</span> - Mailbox username if authentication is required.<br><br>
+	   <span class="highlightText">Mailbox Password</span> - Mailbox password if authentication is required.<br><br>
+	   <span class="highlightText">Mailbox Folder Name</span> - Name of mailbox folder to read. MUST be correctly specified. Use the <i class="icon-folder-open"></i> icon to access the mailbox.
+	   If your details are correct, a folder list will appear like the following:<br><br>
+	   <a href="screenshots/12.jpg" onclick="window.open(this);return false"><img src="screenshots/12.jpg" class="screenshot" style="width:242px" alt="Screenshot" title="Click for Fullsize"></a><br><br>
+	   Click to select correct folder. If folders can`t be read check your mail structure. Failure to specify the correct folder will result in the mailbox fetching no emails.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Options</p>
+     <div class="block-body">
+	   <span class="highlightText">Accept Attachments </span> - Do you wish to accept attachments? If enabled, same restrictions apply as main tickets in the <a href="settings.html">settings</a>.<br><br>
+	   <span class="highlightText">Enable SSL </span> - If your mailbox is being accessed over SSL, enable this option.<br><br>
+	   <span class="highlightText">Mailbox Flags</span> - Specify mailbox flags. If you don`t understand this, <b>DO NOT</b> change anything. <span class="highlightTextWarning">Leaving this field blank can cause the mailbox to fail</span>.<br><br>"/novalidate-cert" will be fine for most mail accounts and this is the default. <a href="http://www.php.net/manual/en/function.imap-open.php" onclick="window.open(this);return false">More Info</a>.<br><br>
+	   <span class="highlightText">After Reading, Move Message to</span> - If you prefer to move mail read to another folder, specify folder. Same rules apply as for "Mailbox Folder Name" above. If folder is NOT specified, mail is deleted after being read.<br><br>
+	   <span class="highlightText">Maximum Messages to Fetch</span> - Max amount of messages to fetch per read. Useful if you wish to restrict the amount of messages coming in at any one time. Set to high number for no real restrictions.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Assign Preferences</p>
+     <div class="block-body">
+	   <span class="highlightText">Assign to Department</span> - Specify department to assign tickets to for this mailbox.<br><br>
+	   <span class="highlightText">Default Priority</span> - Specify default priority.<br><br>
+	   <span class="highlightText">Imap Reply-to Email Address</span> - Set imap reply-to address. This should always be the same as one of your imap mailboxes, so that replies get assigned to the same ticket when the mailbox is read. You can specify a different address
+	   if you prefer not to have messages go to the same imap folder.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Spam Filter</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable Spam Filter </span> - Enable spam filter for this mailbox. Can help detect imcoming spam. Adjust spam filter settings <a href="imapfilter.html">here</a>.<br><br>
+	   <span class="highlightText">Delete Spam Messages Immediately</span> - If this is enabled, any messages flagged as spam will be auto deleted after the mailbox has finished being read. If disabled, tickets get put on hold in <a href="spam.html">spam tickets</a>. It is recommended you do NOT enable
+	   this unless you are 100% sure the spam filter is effective as many false positives may result in valid tickets being deleted.<br><br>
+	   <span class="highlightText">If Deleting, Only Delete With Spam Score Greater Than or Equal To</span> - If you have enabled the deletion option you can delete only messages that have a certain spam score or higher. This can help prevent false positives from being deleted. See the <a href="imapfilter.html">spam filter</a> section for more information.
+     </div>
+    </div>
+
+   <div class="row-fluid">
+	<script type="text/javascript" src="pages/js/footer.js"></script>
+	<noscript>Please enable javascript to view footer.</noscript>
+   </div>
+
+  </div>
+
+  </div>
+  <script src="pages/js/plugins/jquery.bootstrap.js"></script>
+
+ </body>
+</html>

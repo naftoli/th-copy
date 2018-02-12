@@ -1,0 +1,23 @@
+New Ticket Created
+
+<-{separater}->
+
+Hello {NAME},
+
+This email confirms your new support ticket: #{TICKET}
+
+Subject: {SUBJECT}
+Department: {DEPT}
+Priority: {PRIORITY}
+
+Email notification will follow when this ticket has been updated by a member of staff.
+
+To view your tickets at any time log into your account portal:
+{WEBSITE_URL}/
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME}
+{WEBSITE_URL}

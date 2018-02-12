@@ -1,0 +1,27 @@
+Dispute Notification
+
+<-{separater}->
+
+Hello {NAME},
+
+A dispute has been opened against you by "{USER}" on "{WEBSITE_NAME}".
+
+It is vitally important you respond to this dispute to prevent suspension of your account.
+
+The dispute is entitled:
+
+"{TITLE}"
+
+Please allow each person in the dispute to have his/her say and be patient while we resolve this issue.
+
+Please log in to your support account to reply and add your comments:
+{WEBSITE_URL}/?d={ID}
+
+If you don`t see this dispute on log-in, please click "Open Disputes" from the menu.
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME} Support Team
+{WEBSITE_URL}

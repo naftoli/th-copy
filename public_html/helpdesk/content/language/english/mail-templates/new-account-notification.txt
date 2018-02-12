@@ -1,0 +1,18 @@
+New Account Active
+
+<-{separater}->
+
+The following support account has been activated:
+
+Name: {NAME}
+Email: {EMAIL}
+IP: {IP}
+
+This notification can be de-activated in your admin control panel.
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME} Support Team
+{WEBSITE_URL}

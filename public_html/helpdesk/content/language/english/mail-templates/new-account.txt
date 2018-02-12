@@ -1,0 +1,20 @@
+New Support Account
+
+<-{separater}->
+
+Hi {ACC_NAME},
+
+Your new support account at "{WEBSITE_NAME}" is now active.
+
+Account Email: {ACC_EMAIL}
+Account password: {PASS}
+{LOGIN_URL}
+
+Please ensure you update your account password to something you can remember.
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME} Support Team
+{WEBSITE_URL}

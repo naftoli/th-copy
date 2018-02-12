@@ -1,0 +1,23 @@
+Auto Close Notification
+
+<-{separater}->
+
+Hello {NAME},
+
+Our system auto closes tickets after a set time if no further replies have been received as we assume the issue is resolved.
+
+The following have now been closed:
+
+{TICKETS}
+
+This policy helps us maintain an efficient service as we can give priority to other issues.
+
+If you wish to re-open any of the above tickets with a new reply, please do so via your account area:
+{WEBSITE_URL}/
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME} Support Team
+{WEBSITE_URL}

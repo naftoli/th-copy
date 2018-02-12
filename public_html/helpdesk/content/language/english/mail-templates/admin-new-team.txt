@@ -1,0 +1,25 @@
+New Support Team Account
+
+<-{separater}->
+
+Hello {NAME},
+
+Welcome to the support team of "{WEBSITE_NAME}".
+
+An account has been set up for you with the following login details:
+
+{EMAIL}
+{PASSWORD}
+
+Please log in at the following url:
+
+{WEBSITE_URL}/{ADMIN_FOLDER}/
+
+We recommend you delete this email for security. Any problems let us know.
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME}
+{WEBSITE_URL}

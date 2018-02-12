@@ -1,0 +1,34 @@
+Ticket Reply
+
+<-{separater}->
+
+Hi {NAME},
+
+The following support ticket has been updated by "{ACC_NAME}":
+
+Ticket ID: #{TICKET}
+Subject: {SUBJECT}
+Department: {DEPT}
+Priority: {PRIORITY}
+Status: {STATUS}
+
+Comments:
+-----------------
+
+{COMMENTS}
+
+Custom Fields:
+-----------------
+
+{CUSTOM}
+
+
+To respond to this ticket, log in to your support administration centre:
+{WEBSITE_URL}/{ADMIN_FOLDER}/?ticket={TICKET}
+
+<-{separater}->
+
+{WEBSITE_NAME}
+{WEBSITE_URL}
+
+Visitors IP Address(es): {IP}

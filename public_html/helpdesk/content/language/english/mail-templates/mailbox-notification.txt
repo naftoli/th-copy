@@ -1,0 +1,19 @@
+Private Message Notification
+
+<-{separater}->
+
+Hi {NAME},
+
+"{SENDER}" has sent you a private message from "{WEBSITE_NAME}".
+
+To view this message, please log-in to your control panel.
+
+Administration Log-in:
+{WEBSITE_URL}/{ADMIN_FOLDER}/
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME}
+{WEBSITE_URL}

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    
+	<meta charset="utf-8">
+    <title>API - Add Account (XML): Maian Support - Documentation</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+	<link rel="stylesheet" href="pages/css/bootstrap.css" type="text/css">
+	<link rel="stylesheet" href="pages/css/bootstrap-responsive.css" type="text/css">
+    <link rel="stylesheet" href="pages/css/theme.css" type="text/css">
+    <link rel="stylesheet" href="pages/css/font-awesome.css">
+	
+	<script src="pages/js/jquery.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="pages/css/ms.css" type="text/css">
+    <script src="pages/js/ms-global.js" type="text/javascript"></script>
+	<!--[if lt IE 9]>
+    <script src="pages/js/html5.js"></script>
+    <![endif]-->
+
+    <link rel="SHORTCUT ICON" href="favicon.ico">
+  </head>
+
+  <!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+  <!--[if IE 7 ]> <body class="ie ie7"> <![endif]-->
+  <!--[if IE 8 ]> <body class="ie ie8"> <![endif]-->
+  <!--[if IE 9 ]> <body class="ie ie9"> <![endif]-->
+  <!--[if (gt IE 9)|!(IE)]><!--> 
+  <body class=""> 
+  <!--<![endif]-->
+    
+   <div class="navbar">
+        <div class="navbar-inner">
+                <script type="text/javascript" src="pages/js/header.js"></script>
+				<noscript>Please enable javascript to view header.</noscript>
+				<a class="brand" href="index.html" title="Maian Support: Documentation"><span class="first">Maian Support: Documentation</span></a>
+	    </div>
+    </div>
+    
+  <div class="sidebar-nav">
+  <script type="text/javascript" src="pages/js/nav-menu.js"></script>
+  <noscript>Please enable javascript to view menu.</noscript>
+  </div>
+  <div class="content">
+        
+  <div class="header">
+    
+	<h1 class="page-title">API - Add Account (XML)</h1>
+    <span class="clearfix"></span>
+  
+  </div>
+  
+  <ul class="breadcrumb">
+    <li>API <span class="divider">/</span></li>
+    <li class="active">Add Account (XML)</li>
+  </ul>
+        
+  <div class="container-fluid">
+   
+   <div class="block">
+    <p class="block-heading">Overview</p>
+    <div class="block-body">
+	 Enables an account to be created from remote website or application. Please read the information below carefully.
+    </div>
+   </div>
+   
+   <div class="block">
+    <p class="block-heading">XML Wrapper Structure</p>
+    <div class="block-body">
+	 Your xml wrapper structure should look like the following:<br><br>
+     
+	 &lt;?xml version="1.0" encoding="utf-8"?&gt;<br>
+     &lt;msapi&gt;<br>
+     &nbsp;&nbsp;&lt;api&gt;YOUR KEY&lt;/api&gt;<br>
+	 &nbsp;&nbsp;&lt;op&gt;account&lt;/op&gt;<br>
+     &nbsp;&nbsp;&lt;accounts&gt;<br>
+     &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5d781d">(account tags as shown below)</span><br>
+     &nbsp;&nbsp;&lt;/accounts&gt;<br>
+     &lt;/msapi&gt;<br><br>
+	 
+	 Op type is "account" and must NOT be changed. API key must be same as key in <a href="settings.html">settings</a>.
+    </div>
+   </div>
+   
+   <div class="block">
+    <p class="block-heading">Account Data</p>
+    <div class="block-body">
+	 Multiple accounts are possible with each transmission. Each account should be wrapper in &lt;account&gt;&lt;/account&gt; tags. Inside each tag set is the data related to the account. Structure as follows:<br><br>
+    
+     &lt;account&gt;<br>
+     &nbsp;&nbsp;&lt;name&gt;Name or alias&lt;/name&gt;<br>
+     &nbsp;&nbsp;&lt;email&gt;Email address&lt;/email&gt;<br>
+     &nbsp;&nbsp;&lt;password&gt;Password in raw format&lt;/password&gt;<br>
+     &nbsp;&nbsp;&lt;timezone&gt;Supported timezone&lt;/timezone&gt;<br>
+     &nbsp;&nbsp;&lt;ip&gt;IP address&lt;/ip&gt;<br>
+     &nbsp;&nbsp;&lt;language&gt;Supported language&lt;/language&gt;<br>
+     &nbsp;&nbsp;&lt;notes&gt;&lt;![CDATA[Optional notes]]&gt;&lt;/notes&gt; (Uses CDATA example)<br>
+     &lt;/account&gt;<br><br>
+    
+	 <b>Name/Email</b> - Required. Email must be unique and valid.<br>
+	 <b>Password</b> - Must be in raw format. It will be encoded by the system. Leave blank to auto generate a password.<br>
+	 <b>Timezone</b> - Must be valid timezone as set in the "control/timezones.php" file. Example: US/Pacific<br>
+	 <b>IP</b> - Leave blank if not known. Will be updated on first login.<br>
+	 <b>Language</b> - Must be supported language (english, german etc). If not, will revert to default <a href="settings.html">language</a>.<br>
+	 <b>Notes</b> - Optional backend notes
+	</div>
+   </div>
+   
+   <div class="block">
+    <p class="block-heading">XML Response</p>
+    <div class="block-body">
+	 On successful transmission an xml response is returned:<br><br>
+    
+     &lt;?xml version="1.0" encoding="utf-8"?&gt;<br>
+     &lt;msapi&gt;<br>
+     &nbsp;&nbsp;&lt;status&gt;OK&lt;/status&gt;<br>
+     &lt;/msapi&gt;<br><br>
+     
+	 If an error occurs, the following is returned:<br><br>
+    
+     &lt;?xml version="1.0" encoding="utf-8"?&gt;<br>
+     &lt;msapi&gt;<br>
+     &nbsp;&nbsp;&lt;status&gt;ERROR&lt;/status&gt;<br>
+     &nbsp;&nbsp;&lt;reason&gt;Reason for error..&lt;/reason&gt;<br>
+     &lt;/msapi&gt;<br><br>
+     
+	 Your own application should deal with the response accordingly.
+    </div>
+   </div>
+   
+   <div class="block">
+    <p class="block-heading">Example File</p>
+    <div class="block-body">
+     Click <a href="examples/add-account-example.xml" onclick="window.open(this);return false">here</a> to view an example xml file.<br>
+    </div>
+   </div>
+   
+   <p>
+    <a href="api1.html"><i class="icon-chevron-left"></i> Return to API Overview</a>
+   </p>
+   
+   <div class="row-fluid">
+	<script type="text/javascript" src="pages/js/footer.js"></script>
+	<noscript>Please enable javascript to view footer.</noscript>
+   </div>
+  
+  </div>
+
+  </div>
+  <script src="pages/js/plugins/jquery.bootstrap.js"></script>
+
+ </body>
+</html>

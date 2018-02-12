@@ -1,0 +1,21 @@
+New Support Tickets Assigned
+
+<-{separater}->
+
+Hi {NAME},
+
+The following support tickets have been assigned to you by "{ASSIGNEE}".
+
+{TICKETS}
+
+Please respond to these tickets as soon as possible, thank you.
+
+Administration Login:
+{WEBSITE_URL}/{ADMIN_FOLDER}/
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME}
+{WEBSITE_URL}

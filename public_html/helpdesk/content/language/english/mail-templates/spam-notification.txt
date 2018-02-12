@@ -1,0 +1,25 @@
+Spam Notification
+
+<-{separater}->
+
+Hi {NAME},
+
+The following support ticket has been created by "{ACC_NAME}", but has been flagged as SPAM by the imap spam filters.
+
+Subject: {SUBJECT}
+Department: {DEPT}
+Priority: {PRIORITY}
+
+No further data is shown for this ticket, as text from comments or custom fields (if genuinely spam) may prevent the notification from being delivered.
+
+To accept/view this ticket, log into your admin control panel and select "Ticket Management > Spam Tickets" from the left menu:
+{WEBSITE_URL}/{ADMIN_FOLDER}/
+
+If you find you are getting many false positives, please try adjusting the spam filter.
+
+<-{separater}->
+
+{WEBSITE_NAME}
+{WEBSITE_URL}
+
+Visitors IP Address(es): {IP}

@@ -1,0 +1,51 @@
+/*
+  Bootstrap theme overrides
+*/
+
+@font-face {
+  font-family: 'Muli';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Muli'), url(../fonts/muli.woff2) format('woff2'), url(../fonts/muli.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Muli';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Muli Italic'), local('Muli-Italic'), url(../fonts/muli-italic.woff2) format('woff2'), url(../fonts/muli-italic.woff) format('woff');
+}
+
+body {
+  font-family: "Muli", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  color: #777777;
+  background-color: #fcfcfc;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: "Muli", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.tooltip {
+  font-family: "Muli", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.popover {
+  font-family: "Muli", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.btn {
+  font-family: "Muli", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}

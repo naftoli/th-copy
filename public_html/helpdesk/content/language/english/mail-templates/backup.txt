@@ -1,0 +1,17 @@
+MYSQL DATABASE SCHEMATIC BACKUP
+ Helpdesk: {HELPDESK}
+ Date Created: {DATE_TIME}
+ Script: {SCRIPT} v{VERSION}
+
+<-{separater}->
+
+File enclosed:
+{FILE}
+
+Approx. File size:
+{SIZE}
+
+<-{separater}->
+
+{WEBSITE_NAME}
+{WEBSITE_URL}

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+	<meta charset="utf-8">
+    <title>Add Staff: Maian Support - Documentation</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="pages/css/bootstrap.css" type="text/css">
+	<link rel="stylesheet" href="pages/css/bootstrap-responsive.css" type="text/css">
+    <link rel="stylesheet" href="pages/css/theme.css" type="text/css">
+    <link rel="stylesheet" href="pages/css/font-awesome.css">
+
+	<script src="pages/js/jquery.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="pages/css/ms.css" type="text/css">
+    <script src="pages/js/ms-global.js" type="text/javascript"></script>
+	<!--[if lt IE 9]>
+    <script src="pages/js/html5.js"></script>
+    <![endif]-->
+
+    <link rel="SHORTCUT ICON" href="favicon.ico">
+  </head>
+
+  <!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+  <!--[if IE 7 ]> <body class="ie ie7"> <![endif]-->
+  <!--[if IE 8 ]> <body class="ie ie8"> <![endif]-->
+  <!--[if IE 9 ]> <body class="ie ie9"> <![endif]-->
+  <!--[if (gt IE 9)|!(IE)]><!-->
+  <body class="">
+  <!--<![endif]-->
+
+   <div class="navbar">
+        <div class="navbar-inner">
+                <script type="text/javascript" src="pages/js/header.js"></script>
+				<noscript>Please enable javascript to view header.</noscript>
+				<a class="brand" href="index.html" title="Maian Support: Documentation"><span class="first">Maian Support: Documentation</span></a>
+	    </div>
+    </div>
+
+  <div class="sidebar-nav">
+  <script type="text/javascript" src="pages/js/nav-menu.js"></script>
+  <noscript>Please enable javascript to view menu.</noscript>
+  </div>
+  <div class="content">
+
+  <div class="header">
+
+	<h1 class="page-title">Add Staff</h1>
+    <span class="clearfix"></span>
+
+  </div>
+
+  <ul class="breadcrumb">
+    <li>Support Team <span class="divider">/</span></li>
+    <li class="active">Add Staff</li>
+  </ul>
+
+  <div class="container-fluid">
+
+   <div class="block">
+    <p class="block-heading">Overview</p>
+    <div class="block-body">
+     Enables adding of new support staff. Please read carefully. Click example images to display full size version in new tab/window.
+    </div>
+   </div>
+
+   <div class="block">
+	 <p class="block-heading">Screenshot</p>
+     <div class="block-body">
+	   <a href="screenshots/38.jpg" onclick="window.open(this);return false"><img src="screenshots/38.jpg" class="screenshot" alt="Screenshot" title="Click for Fullsize"></a>
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Personal</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable Account</span> - If enabled, sets account status to active.<br><br>
+	   <span class="highlightText">Send Welcome Email</span> - If enabled, sends welcome email on account creation ONLY.<br><br>
+	   <span class="highlightText">Name/Alias</span> - Enter staff name or alias.<br><br>
+	   <span class="highlightText">Email Address</span> - Enter staff email. Must be unique.<br><br>
+	   <span class="highlightText">Login Password</span> - Enter account password. Click the <i class="icon-refresh"></i> icon to auto create password. Password generated will
+	   be shown. See the following screenshot:<br><br>
+	   <img src="screenshots/31.jpg" class="screenshot" alt="Screenshot" title="Screenshot"><br><br>
+	   When editing, leave blank for same password.<br><br>
+	   <span class="highlightText">Timezone</span> - Timezone for staff account. If not set, defaults to main timezone in <a href="settings.html">settings</a>.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Admin Access</p>
+     <div class="block-body">
+	   Use the checkboxes to determine which pages staff member can access. Clicking a main heading (in bold) will select/unselect all in that group. You should
+	   be careful when allowing access to certain pages. Ideally, pages such as the <a href="settings.html">settings</a> page, should be visible to the main admin (ID:1) only.<br><br>
+	   <span class="highlightText">Additional Page Rules (Comma delimit)</span> - If a page isn`t accessible after a checkbox has been checked (or if you create new
+	   admin pages), enter the the page param value here, comma delimited. The page param
+	   value is visible in the url and is after the "p" variable. For example, for the "Add Staff" page, the param is "team".<br><br>
+	   <img src="screenshots/39.jpg" class="screenshot" alt="Screenshot" title="Screenshot"><br><br>
+	   Any page params set will allow access to staff member.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Ticket Access</p>
+     <div class="block-body">
+	   <span class="highlightText">Departments</span> - If staff member has access to tickets in certain departments only, specify departments.<br><br>
+	   <span class="highlightText">View Assigned Tickets ONLY</span> - If enabled, staff member can view only tickets <a href="assign.html">assigned</a> to them.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Preferences</p>
+     <div class="block-body">
+	   <span class="highlightText">Has Ticket Notepad Access</span> - If enabled, staff member has access to ticket notepad for backend ticket notes.<br><br>
+	   <span class="highlightText">Enable Email Notifications</span> - If enabled, sends email notification if tickets are assigned or opened.<br><br>
+	   <span class="highlightText">Enable Entry Log</span> - If enabled, add date/time/ip stamp to <a href="log.html">entry log</a> on login.<br><br>
+	   <span class="highlightText">Can Merge Tickets</span> - If enabled, staff member can merge tickets.<br><br>
+	   <span class="highlightText">Can Update Profile</span> - If enabled, staff member can update their profile via the link on their homescreen/dashboard.<br><br>
+	   <img src="screenshots/40.jpg" class="screenshot" alt="Screenshot" title="Screenshot"><br><br>
+	   Note that for the main admin (ID:1), clicking this link shows the main <a href="team.html">staff edit</a> screen. Other staff have <a href="cp.html">minimal screen</a>.<br><br>
+	   <span class="highlightText">Can View Help Link to Documentation</span> - If enabled, can view docs link in header.<br><br>
+	   <img src="screenshots/41.jpg" class="screenshot" alt="Screenshot" title="Screenshot"><br><br>
+	   <span class="highlightText">Can View Ticket History</span> - If enabled, can view ticket history. Appears at bottom of ticket.<br><br>
+	   <span class="highlightText">Has Delete Privileges</span> - If enabled, has delete privileges on any page which staff member can view. This should be allowed cautiously.<br><br>
+	   <span class="highlightText">Can Edit Tickets</span> - If enabled, can edit ticket<br><br>
+	   <span class="highlightText">Can Edit Ticket Replies</span> - If enabled, can edit ticket replies.<br><br>
+	   <span class="highlightText">Ticket 'From' Name</span> - If staff member replies to ticket, or assigns ticket etc, this is the from name mail header. If not set, defaults to name/alias.<br><br>
+	   <span class="highlightText">Ticket 'From' Email Address</span> - If staff member replies to ticket, or assigns ticket etc, this is the from mail header. If not set, defaults to email address.<br><br>
+	   <span class="highlightText">Additional Notification Email Addresses</span> - Additional notification addresses for staff member, comma delimited. Optional.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Other Options - Mailbox</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable Mailbox System</span> - If enabled, staff member can access the internal <a href="mailbox.html">messaging system</a> via the header.<br><br>
+	   <img src="screenshots/42.jpg" class="screenshot" alt="Screenshot" title="Screenshot"><br><br>
+	   <span class="highlightText">Can Delete Messages in Mailbox</span> - If enabled, visitor can delete mailbox messages. Note that this is NOT reliant on the "Has Delete Privileges" being set to yes. This enables you to enable mailbox deleting ONLY if required.<br><br>
+	   <span class="highlightText">On Login, Go to Mailbox if at least 1 Unread Message in Inbox</span> - If enabled, visitor will be directed to mailbox if at least 1 unread message exists in the inbox on login.<br><br>
+	   <span class="highlightText">Send Message Notification to Recipient Email Address(es)</span> - If enabled, email notification is sent to staff member if other staff member sends mailbox message.<br><br>
+	   <span class="highlightText">Max Folders</span> - Maximum folders allowed. 0 for no limit.<br><br>
+	   <span class="highlightText">Auto Purge Messages in Bin Every X Days (includes Unread)</span> - If this is utilised, messages will be auto purged from staff mailbox after x amount of days. Useful to prevent database from keeping entries deemed too old. Enable
+	   cautiously, deleted messages cannot be recovered.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Other Options - Email Digest</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable Email Digest</span> - If enabled and <a href="email-digest.html">email digest</a> is being used, sends email notification to staff member of current tickets.<br><br>
+	   <span class="highlightText">Include Tickets Awaiting Assignment</span> - If enabled, also includes tickets waiting to be assigned.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Other Options - Signature</p>
+     <div class="block-body">
+	   <span class="highlightText">Display Signature in Emails</span> - If enabled (and signature exists), signature is included in email notifications to visitors.<br><br>
+	   <span class="highlightText">Signature (Optional - HTML not allowed)</span> - If set, displays at the bottom of all ticket replies. Signatures should not contain HTML and not be too
+	   distracting for visitors.
+     </div>
+    </div>
+
+	<div class="block">
+	 <p class="block-heading">Other Options - Notes</p>
+     <div class="block-body">
+	   Backend notes. Optional.
+     </div>
+    </div>
+
+   <div class="row-fluid">
+	<script type="text/javascript" src="pages/js/footer.js"></script>
+	<noscript>Please enable javascript to view footer.</noscript>
+   </div>
+
+  </div>
+
+  </div>
+  <script src="pages/js/plugins/jquery.bootstrap.js"></script>
+
+ </body>
+</html>

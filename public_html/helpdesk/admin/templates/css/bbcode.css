@@ -1,0 +1,202 @@
+/*
+  Stylesheet
+*/
+
+/* BB Code Examples */
+.body {
+  padding: 5px;
+  background: #eaeaea;
+}
+
+#bbcodeWrapper {
+  background: #fff;
+  padding: 5px;
+  border: 1px solid #d7d7d7;
+}
+
+#bbcodeWrapper h1,
+#bbcodeWrapper h2 {
+  background: #f6f6f6;
+  padding: 10px;
+  font-size: 13px;
+  color: #696969;
+  border: 1px solid #d7d7d7;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  -khtml-border-radius: 5px 5px 5px 5px;
+  -moz-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+}
+
+.bbWrapper {
+  border: 1px solid #E5E5E5;
+  margin: 5px 0 0 0;
+  padding: 5px;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  -khtml-border-radius: 5px 5px 5px 5px;
+  -moz-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+}
+
+#bbcodeWrapper .bbInfo {
+  border: 1px solid #E5E5E5;
+  margin-top: 5px;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  -khtml-border-radius: 5px 5px 5px 5px;
+  -moz-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+}
+
+#bbcodeWrapper .bbInfo p {
+  padding: 5px;
+}
+
+#bbcodeWrapper .bbWrapper {
+  margin: 5px 0 0 0;
+}
+
+#bbcodeWrapper .leftBB {
+  float: left;
+  width: 57%;
+}
+
+#bbcodeWrapper .middleBB {
+  float: left;
+  width: 2%;
+}
+
+#bbcodeWrapper .middleBB p {
+  padding: 5px;
+}
+
+#bbcodeWrapper .rightBB {
+  float: right;
+  width: 37%;
+}
+
+#bbcodeWrapper .leftBB p,
+#bbcodeWrapper .rightBB div {
+  padding: 5px;
+}
+
+#bbcodeWrapper .middleBB p {
+  padding: 5px;
+}
+
+#bbcodeWrapper .rightBB p {
+  padding: 5px;
+}
+
+#bbcodeWrapper .rightBB ul,
+#bbcodeWrapper .rightBB li {
+  margin-left: 5px;
+  padding-left: 5px;
+}
+
+/* BBCode Formatting */
+.bbBold {
+  font-weight: bold;
+}
+
+.bbUnderline {
+  text-decoration: underline;
+}
+
+.bbItalics {
+  font-style: italic;
+}
+
+.bbStrike {
+  text-decoration: line-through;
+}
+
+.bbDel {
+  text-decoration: line-through;
+  color: red;
+}
+
+.bbIns {
+  background: yellow;
+}
+
+.bbEm {
+  font-style: italic;
+  font-weight: bold;
+}
+
+.bbH1 {
+  font-weight: bold;
+  font-size: 22px;
+  margin: 5px 0 5px 0;
+}
+
+.bbH2 {
+  font-weight: bold;
+  font-size: 20px;
+  margin: 5px 0 5px 0;
+}
+
+.bbH3 {
+  font-weight: bold;
+  font-size: 18px;
+  margin: 5px 0 5px 0;
+}
+
+.bbH4 {
+  font-weight: bold;
+  font-size: 16px;
+  margin: 5px 0 5px 0;
+}
+
+.bbUl {
+  margin:5px 5px 5px 5px;
+  padding:0;
+}
+
+.bbUl li {
+  list-style: disc inside none !important;
+}
+
+.bbUlNumbered {
+  margin:5px 5px 5px 5px;
+  padding:0;
+}
+
+.bbUlNumbered li {
+  list-style: decimal inside none !important;
+}
+
+.bbUlAlpha {
+  margin:5px 5px 5px 5px;
+  padding:0;
+}
+
+.bbUlAlpha li {
+  list-style: lower-alpha inside none !important;
+}
+
+.bbUlUpperAlpha {
+  margin:5px 5px 5px 5px;
+  padding:0;
+}
+
+.bbUlUpperAlpha li {
+  list-style: upper-alpha inside none !important;
+}
+
+.bbLi {
+  padding: 2px;
+}
+
+.bbMailto {
+}
+
+.bbImg {
+  border: 0;
+}
+
+.bbUrl {
+}
+
+.bbDisplayImg {
+  max-width: 700px;
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    
+	<meta charset="utf-8">
+    <title>Imap Spam Filter: Maian Support - Documentation</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+	<link rel="stylesheet" href="pages/css/bootstrap.css" type="text/css">
+	<link rel="stylesheet" href="pages/css/bootstrap-responsive.css" type="text/css">
+    <link rel="stylesheet" href="pages/css/theme.css" type="text/css">
+    <link rel="stylesheet" href="pages/css/font-awesome.css">
+	
+	<script src="pages/js/jquery.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="pages/css/ms.css" type="text/css">
+    <script src="pages/js/ms-global.js" type="text/javascript"></script>
+	<!--[if lt IE 9]>
+    <script src="pages/js/html5.js"></script>
+    <![endif]-->
+
+    <link rel="SHORTCUT ICON" href="favicon.ico">
+  </head>
+
+  <!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+  <!--[if IE 7 ]> <body class="ie ie7"> <![endif]-->
+  <!--[if IE 8 ]> <body class="ie ie8"> <![endif]-->
+  <!--[if IE 9 ]> <body class="ie ie9"> <![endif]-->
+  <!--[if (gt IE 9)|!(IE)]><!--> 
+  <body class=""> 
+  <!--<![endif]-->
+    
+   <div class="navbar">
+        <div class="navbar-inner">
+                <script type="text/javascript" src="pages/js/header.js"></script>
+				<noscript>Please enable javascript to view header.</noscript>
+				<a class="brand" href="index.html" title="Maian Support: Documentation"><span class="first">Maian Support: Documentation</span></a>
+	    </div>
+    </div>
+    
+  <div class="sidebar-nav">
+  <script type="text/javascript" src="pages/js/nav-menu.js"></script>
+  <noscript>Please enable javascript to view menu.</noscript>
+  </div>
+  <div class="content">
+        
+  <div class="header">
+    
+	<h1 class="page-title">Imap Spam Filter</h1>
+    <span class="clearfix"></span>
+  
+  </div>
+  
+  <ul class="breadcrumb">
+    <li>Imap Accounts <span class="divider">/</span></li>
+    <li class="active">Imap Spam Filter</li>
+  </ul>
+        
+  <div class="container-fluid">
+   
+   <div class="block">
+    <p class="block-heading">Overview</p>
+    <div class="block-body">
+     Enables imap spam filter. Please read carefully. Click example images to display full size version in new tab/window.
+    </div>
+   </div>
+   
+   <div class="block">
+	 <p class="block-heading">Screenshot</p>
+     <div class="block-body">
+	   <a href="screenshots/13.jpg" onclick="window.open(this);return false"><img src="screenshots/13.jpg" class="screenshot" alt="Screenshot" title="Click for Fullsize"></a>
+     </div>
+    </div>
+	
+	<div class="block">
+	 <p class="block-heading">Understanding Spam Filter - Read First</p>
+     <div class="block-body">
+	   Before you change any spam filter settings, please click <a href="imapfilter2.html">here</a> to better understand the spam filter system.
+     </div>
+    </div>
+	
+	<div class="block">
+	 <p class="block-heading">Base Settings</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable Learning</span> - Enables learning filters. Will auto learn when tickets are accepted or rejected via <a href="spam.html">spam tickets</a> screen.<br><br>
+	   <span class="highlightText">Spam Relevancy Tokens</span> - This tells b8 how many tokens should be used to calculate the spamminess of a text. The default setting is 15 (integer). This seems to be a quite reasonable value. When using too many tokens, the filter will fail on texts filled with useless stuff or with passages from a newspaper, etc. not being very spammish.<br><br>
+	   <span class="highlightText">Spam Score Deviation</span> - This defines a minimum deviation from 0.5 that a token's rating must have to be considered when calculating the spamminess. Tokens with a rating closer to 0.5 than this value will simply be skipped. If you don't want to use this feature, set this to 0. Defaults to 0.5 (float).<br><br>
+	   <span class="highlightText">Gary Robinsons X Constant</span> - This is Gary Robinson's X constant. A completely unknown token will be rated with the value of "Gary Robinsons X Constant". The default 0.5 (float) seems to be quite reasonable, as we can't say if a token that also can't be rated by degeneration is good or bad. If you receive much more spam than ham or vice versa, you could change this setting accordingly.<br><br>
+	   <span class="highlightText">Gary Robinsons S Constant</span> - This is Gary Robinson's S constant. This is essentially the probability that the "Gary Robinsons S Constant" value is correct for a completely unknown token. It will also shift the probability of rarely seen tokens towards this value. The default is 0.3 (float).
+     </div>
+    </div>
+	
+	<div class="block">
+	 <p class="block-heading">Lexer Settings</p>
+     <div class="block-body">
+	   <span class="highlightText">Check Pure Numbers </span> - Should pure numbers also be considered?<br><br>
+	   <span class="highlightText">Check URIs (Uniform Resource Identifiers)</span> - Look for URIs?<br><br>
+	   <span class="highlightText">Extract HTML </span> - Extract HTML?<br><br>
+	   <span class="highlightText">Min Token Length</span> - The minimal length for a token to be considered when calculating the rating of a text.<br><br>
+	   <span class="highlightText">Max Token Length</span> - The maximum length for a token to be considered when calculating the rating of a text.
+     </div>
+    </div>
+	
+	<div class="block">
+	 <p class="block-heading">Degenerator Settings</p>
+     <div class="block-body">
+	   <span class="highlightText">Enable Multibyte Operations </span> - Use multibyte operations when searching for degenerated versions of an unknown token. When activating this, b8 needs PHP's mbstring module to work. <br><br>
+	   <span class="highlightText">Internal Encoding Set for Multibyte Operations</span> - Using multibyte operations will make the degenerator more effective for foreign characters. Specify your preferred encoding set. Options shown in the drop
+	   down will be the only ones supported by the server.
+     </div>
+    </div>
+	
+	<div class="block">
+	 <p class="block-heading">Learning Options - Add to Learning Filters</p>
+     <div class="block-body">
+	   <span class="highlightText">Enter Text Block (ie: Email Message Body)</span> - Enter message block to add to learning filters.<br><br>
+	   <span class="highlightText">Analyse &amp; Classify as Spam</span> - Use this option to classify entered text as spam.<br><br>
+	   <span class="highlightText">Analyse &amp; Classify as Ham</span> - Use this option to classify entered text as ham.
+	 </div>
+    </div>
+	
+	<div class="block">
+	 <p class="block-heading">Learning Options - Reset Learning Filters</p>
+     <div class="block-body">
+	   <span class="highlightText">Reset Learning Filters</span> - Deleted learning filters.<br><br>
+	   <span class="highlightText">Reset Filters Older Than X Days</span> - Only reset filters older than X days. It can be efficient to occasionally clear old
+	   learning filters and remove old entries from the db. 
+	 </div>
+    </div>
+	
+	<div class="block">
+	 <p class="block-heading">Learning Options - Skip Filters</p>
+     <div class="block-body">
+	   <span class="highlightText">Skip Filters - If match is found, message is always ignored and deleted. Comma delimit. Use cautiously.</span> - Any text entered here will automatically flag a message for deletion. This should be used with caution. Enter 
+	   multiple options separated with a comma.
+	 </div>
+    </div>
+	
+	<div class="block">
+	 <p class="block-heading">Imap Logs</p>
+     <div class="block-body">
+	   All operations of the imap filters are logged if enabled in the <a href="settings.html">settings</a> (Settings > General > Imap Settings). If you find something has been caught by the spam filters view the logs for
+	   more information.
+     </div>
+    </div>
+	
+	<div class="block">
+	 <p class="block-heading">Enable / Disable Spam Filter</p>
+     <div class="block-body">
+	   Spam filters are enabled /disabled per account. More info <a href="imap.html">here</a>.
+     </div>
+    </div>
+
+   <div class="row-fluid">
+	<script type="text/javascript" src="pages/js/footer.js"></script>
+	<noscript>Please enable javascript to view footer.</noscript>
+   </div>
+  
+  </div>
+
+  </div>
+  <script src="pages/js/plugins/jquery.bootstrap.js"></script>
+
+ </body>
+</html>

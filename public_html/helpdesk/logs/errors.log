@@ -1,0 +1,20 @@
+[Error Code: 8] Undefined property: customFieldManager::$SYS_BASE_HREF
+[Date/Time: 22 January 2018 @ 11:51AM]
+[Error on line 201 in file /home/mashpia/public_html/helpdesk/control/classes/class.fields.php]
+- - - - - - - - - - - - - - - - - - -
+[Error Code: 2] Cannot modify header information - headers already sent by (output started at /home/mashpia/public_html/helpdesk/control/classes/class.errors.php:108)
+[Date/Time: 22 January 2018 @ 11:51AM]
+[Error on line 6 in file /home/mashpia/public_html/helpdesk/control/classes/class.json.php]
+- - - - - - - - - - - - - - - - - - -
+[Error Code: 2] mysqli_query(): (HY000/1030): Got error 28 from storage engine
+[Date/Time: 2 February 2018 @ 07:20AM]
+[Error on line 77 in file /home/mashpia/public_html/helpdesk/control/classes/class.fields.php]
+- - - - - - - - - - - - - - - - - - -
+[Error Code: 2] mysqli_query(): (HY000/1030): Got error 28 from storage engine
+[Date/Time: 2 February 2018 @ 08:09AM]
+[Error on line 828 in file /home/mashpia/public_html/helpdesk/control/classes/class.tickets.php]
+- - - - - - - - - - - - - - - - - - -
+[Error Code: 2] mysqli_query(): (HY000/1030): Got error 28 from storage engine
+[Date/Time: 2 February 2018 @ 08:40AM]
+[Error on line 828 in file /home/mashpia/public_html/helpdesk/control/classes/class.tickets.php]
+- - - - - - - - - - - - - - - - - - -

@@ -1,0 +1,27 @@
+New Support Account
+
+<-{separater}->
+
+Hello {NAME},
+
+A new support account has been set up for you at "{WEBSITE_NAME}".
+
+Please log into your account with the following details:
+
+Email: {EMAIL}
+Password: {PASSWORD}
+{WEBSITE_URL}/?p=login
+
+Please update your password to something you can remember as soon as possible.
+
+This email should then be deleted for security reasons.
+
+Any questions, or problems, please let us know.
+
+Kind regards,
+
+<-{separater}->
+
+{WEBSITE_NAME} Support Team
+{WEBSITE_URL}
+
