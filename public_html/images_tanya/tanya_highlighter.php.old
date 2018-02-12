@@ -1,0 +1,67 @@
+<?php
+//Passed Vars
+$page = intval($_REQUEST["page"]);
+$start_line = floatval($_REQUEST["start_line"]);
+$start_pos = floatval($_REQUEST["start_pos"]);
+$lines = floatval($_REQUEST["lines"]);
+
+$top_zero = 245;	//top start line offset
+$lineh = 109;	//line height
+$marg = 230;	//side margin
+$page_width = 2550;	
+$number_marg = 70; // accomodate for the line numbers
+$real_line = $page_width - ($marg*2) - $number_marg;  //Used for line percentage calculations
+
+$img = @imagecreatefrompng("pages/pg_$page.png");
+if(!$img) {
+  header("HTTP/1.0 404 Not Found");
+  die("Unable to open page $page");
+}
+//Create grey highlight color
+$high = imagecolorallocatealpha($img, 210, 210, 210, 75);
+
+//Calculate ends
+$end_point = ( ($start_pos/100)+$start_line+$lines  );
+$end_line = floor($end_point) ;
+$end_pos = ($end_point - floor($end_point)) * 100;
+
+//Do the stuff!
+for($i=$start_line;$i<=$end_line;$i++){
+	if($i == $start_line && $i == $end_line)
+		highlight($img, $i, $start_pos, $end_pos);
+	elseif($i == $start_line)
+		highlight($img, $i, $start_pos, 100);
+	elseif($i == $end_line){
+		if($end_pos > 0)
+			highlight($img, $i, 0, $end_pos);
+	}
+	else
+		highlight($img, $i);
+}
+//highlight($img,27);
+//Set up header
+header("Content-Type: image/png");
+//Send image!
+imagepng($img);
+//print_r($end_pos);
+
+
+	function highlight($img, $line, $start = 0, $end = 100){
+		global $high, $lineh, $marg, $top_zero, $real_line, $page_width, $number_marg;
+		$roff = $real_line * ($start / 100);
+		$loff = $real_line * ( 1 - ($end / 100) );
+		imagefilledrectangle ( $img, 
+			($page_width - ($marg + $number_marg + $roff) ), $top_zero + (($line - 1) * $lineh) , 
+			($marg + $loff), $top_zero + (($line - 1) * $lineh) + $lineh, 
+			$high);
+			//imagefilledrectangle($img,100, $top_zero + (($line - 1) * $lineh), 300, $top_zero + (($line - 1) * $lineh) + $lineh, $high);
+			
+		if($start == 0){
+			imagefilledrectangle ( $img, 
+			($page_width - $marg - $number_marg), $top_zero + (($line-1) * $lineh) , 
+			($page_width - $marg), $top_zero + (($line - 1) * $lineh) + $lineh, 
+			$high);
+		}			
+	}
+
+?>
