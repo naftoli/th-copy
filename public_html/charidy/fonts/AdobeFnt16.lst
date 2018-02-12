@@ -1,0 +1,122 @@
+%!Adobe-FontList 1.16
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbGushpanka-Bold
+FamilyName:Fb Gushpanka
+StyleName:Bold
+FullName:FbGushpanka Bold
+MenuName:Fb Gushpanka
+StyleBits:2
+FamilyNameNative:
+StyleNameNative:Bold
+FullNameNative:
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Chana\Dropbox\CTH\Charidy\5777\Year of Tzivos Hashem Booklet\Charidy 5777 Postcard for personalization Folder\Document fonts\FbGushpanka-Bold.otf
+DataFormat:sfntData
+FileLength:48280
+FileModTime:1492780333
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,FbGushpanka Bold
+NameArray:0,Win,1,Fb Gushpanka
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Forza-Black
+FamilyName:Forza
+StyleName:Black
+FullName:Forza Black
+MenuName:Forza Black
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chana\Dropbox\CTH\Charidy\5777\Year of Tzivos Hashem Booklet\Charidy 5777 Postcard for personalization Folder\Document fonts\Forza-Black_0.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:60676
+FileModTime:1492780333
+WeightClass:450
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Forza Black
+NameArray:0,Win,1,Forza Black
+NameArray:0,Win,16,Forza
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Forza-Book
+FamilyName:Forza
+StyleName:Book
+FullName:Forza Book
+MenuName:Forza Book
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chana\Dropbox\CTH\Charidy\5777\Year of Tzivos Hashem Booklet\Charidy 5777 Postcard for personalization Folder\Document fonts\Forza-Book_0.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:57440
+FileModTime:1492780333
+WeightClass:325
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Forza Book
+NameArray:0,Win,1,Forza Book
+NameArray:0,Win,16,Forza
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:ProximaNovaSoft-Regular
+FamilyName:Proxima Nova Soft
+StyleName:Regular
+FullName:Proxima Nova Soft Regular
+MenuName:Proxima Nova Soft
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chana\Dropbox\CTH\Charidy\5777\Year of Tzivos Hashem Booklet\Charidy 5777 Postcard for personalization Folder\Document fonts\Mark Simonson - Proxima Nova Soft Regular_0.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:81156
+FileModTime:1414079400
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,Proxima Nova Soft Regular
+NameArray:0,Mac,4,Proxima Nova Soft Regular
+NameArray:0,Win,1,Proxima Nova Soft
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:ProximaNovaSoft-Bold
+FamilyName:Proxima Nova Soft
+StyleName:Bold
+FullName:ProximaNovaSoft-Bold
+MenuName:Proxima Nova Soft
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:C:\Users\Chana\Dropbox\CTH\Charidy\5777\Year of Tzivos Hashem Booklet\Charidy 5777 Postcard for personalization Folder\Document fonts\proxima-nova-soft-bold_0.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:44348
+FileModTime:1414077291
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,ProximaNovaSoft-Bold
+NameArray:0,Win,1,Proxima Nova Soft
+%EndFont
+
