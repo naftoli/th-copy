@@ -1,0 +1,56 @@
+.input_group input[type="text"],
+.input_group input[type="date"],
+.input_group input[type="file"],
+.input_group input[type="email"],
+.input_group select,
+.input_group textarea{
+    width: 94%;
+    padding: 3px;
+    margin: 2px;
+}
+.input_group input[type="file"]{
+    padding: 2px;
+    margin: 0px;
+    margin-top: 2px;
+}
+.input_group.input_full textarea {
+    width: 90%;
+    height: 100px;
+    margin: 1%;
+}
+.input_group {
+    display: inline-block;
+    vertical-align: top;
+    margin: 1%;
+}
+.input_group.input_full {
+    width: 100%;
+}
+.input_group.input_half {
+    width: 47%;
+}
+.input_group.input_third {
+width: 30%;
+}
+.input_group.input_quarter {
+    width: 22%;
+}
+
+.cc_form_error{
+    font-size: .7em;
+    color: #f11;
+}
+
+#logo_form_div, #logo_img_div {
+    display: inline-block;
+}
+
+#logo_img_div{
+    width: 24.5%;
+    text-align: center;
+}
+
+#logo_form_div{
+    width: 74.5%;
+    vertical-align: top;
+}

@@ -1,0 +1,22 @@
+.multiDropdown{display: inline-block;}
+.multiDropdown-main,.multiDropdown-options {margin: 0px;padding: 0px;}
+.multiDropdown ul {margin: -1px 0 0 0;}
+.multiDropdown li {text-align: left;}
+.multiDropdown-options {position: relative;}
+
+/*placehoder/selected text color*/
+.multiDropdown a,.multiDropdown a:visited {color: #444;font-size: 12px; text-align: left;}
+/*dropdown background/style*/
+.multiDropdown-main a {background: #e6e5e5;border-color: #D3D3D3 #AAAAAA #888888;padding: 4px 8px;box-shadow: 0px 2px 2px #aaa;
+    display: block; padding: 5px 20px 5px 10px; min-height: 1.2em;overflow: hidden;border: 0;width: 272px;
+}
+/*change the pointer for the dropdown*/
+.multiDropdown-main a span{cursor: pointer;display: inline-block;padding: 0 3px 2px 0;}
+
+/*the actual dropdown list styles*/
+.multiDropdown-options ul {background-color: #e6e5e5;display: none;left: 0px;
+    padding: 2px 15px 2px 5px;position: absolute;margin-top: 2px;width: 280px;
+    list-style: none;height: 100px;overflow: auto; z-index: 10;
+}
+/*float the font-awesome arrow over to the right side*/
+.multiDropdown i.fa {float: right;}

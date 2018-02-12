@@ -1,0 +1,29 @@
+/* set up the checkbox (container) */
+label.fancy-check-container {
+    /*position: relative;*/
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    text-align: left;
+}
+/* hide the ugly checkbox */
+label.fancy-check-container input {
+    display: none;
+}
+/* font-awsome spen */
+label.fancy-check-container span.fancy-check {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+/* plain box */
+label.fancy-check-container span.fancy-check:before {
+    content: "\f096";
+}
+/* box with check */
+label.fancy-check-container input:checked + span.fancy-check:before {
+    content: "\f046";
+}
