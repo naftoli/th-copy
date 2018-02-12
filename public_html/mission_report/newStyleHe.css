@@ -1,0 +1,492 @@
+@font-face {
+    font-family: "Adobe Hebrew";
+    src: url("fonts/AdobeHebrew-Regular_0.otf");
+}
+@font-face {
+    font-family: "Myriad Pro";
+    src: url("fonts/MyriadPro-Regular_1.otf");
+}
+@font-face {
+    font-family: "Myriad Pro Light";
+    src: url("fonts/MyriadPro-Light_0.otf");
+}
+@font-face {
+    font-family: "Myriad Pro Black";
+    src: url("fonts/MyriadPro-Black_0.otf");
+}
+@font-face {
+    font-family: "Myriad Pro Bold";
+    src: url("fonts/MyriadPro-Bold_1.otf");
+}
+@font-face {
+    font-family: "Myriad Pro It";
+    src: url("fonts/MyriadPro-It_1.otf");
+}
+@font-face {
+    font-family: "Myriad Pro Semibold";
+    src: url("fonts/MyriadPro-Semibold_1.otf");
+}
+@font-face {
+    font-family: "Myriad Pro Semibold Light";
+    src: url("fonts/MyriadPro-SemiboldIt_1.otf");
+}
+@font-face {
+    font-family: "FbLotus";
+    src: url("fonts/FbLotus-Regular.otf");
+}
+@font-face {
+    font-family: "FbLotus Black";
+    src: url("fonts/FbLotus-Black.otf");
+}
+@font-face {
+    font-family: "Gotham Condensed Black";
+    src: url("fonts/Gotham-Black.otf");
+}
+@font-face {
+    font-family: "Gotham Condensed Light";
+    src: url("fonts/GOTHAM-LIGHT.OTF");
+}
+
+.sb {
+	font-family: "Myriad Pro Semibold";
+}
+.b {
+	font-family: "Myriad Pro Black";
+}
+.i {
+	font-family: "Myriad Pro It";
+}
+.hebrew-text {
+	font-family:"FbLotus" Black;
+	font-size: 20px;
+}
+.hebrew {
+	font-family: "FbLotus";
+	font-size: 10px;
+	font-weight: bold;
+}
+.label {
+	font-family: "Gotham Condensed Light";
+	font-size: 22px;
+	padding-top: 2px;
+	padding-bottom: 6px;
+}
+.marking .label {
+	padding-top: 10px;
+}
+.short {
+	font-family: "Myriad Pro Light";
+	font-size: 14px;
+}
+.marking .short {
+	font-size: 18px;
+}
+.task, .mediumPicTask {
+	font-family: "Myriad Pro";
+	font-size: 9px;
+}
+.marking .task {
+	font-size: 10px;
+}
+
+body {
+	margin: 0;
+}
+
+.firstContainer {
+	width: 7in;
+	height: 9.5in;
+	margin: 0 auto;
+	min-height: 100%;
+	position: relative;
+	page-break-after: always;
+}
+.container {
+	width: 7in;
+	height: 9.5in;
+	margin: 0 auto;
+	min-height: 100%;
+	position: relative;
+	page-break-after: always;
+}
+.container:last-of-type {
+	page-break-after: avoid;
+}
+
+.header {
+	width: 100%;
+	height: 1in;
+	top: 20px;
+	margin-bottom: 10px;
+}
+.header .userImg {
+	float: right; 
+	padding-left: 5px;
+}
+.header .schoolLogo {
+	float: left;
+}
+.header .headerImg {
+	margin-top: -2px;
+	margin-bottom: -5px;
+}
+.header .title {
+	font-family: "Myriad Pro";
+	font-size: 10px;
+	line-height: 1;
+	vertical-align: text-top;
+	width: 90px;
+}
+
+.line {
+	border-top: 2px solid grey;
+	border-bottom: 2px solid grey;
+	text-align: center;
+	padding-bottom: 3px;
+}
+
+.marking {
+	width: 65%;
+	margin: auto;
+}
+
+.left {
+	width: 48%;
+	float: right;
+	margin-right: 10px;
+}
+
+.right {
+	width: 49%;
+	float: left;
+}
+
+.row {
+	text-align: right;
+	vertical-align: top;
+	line-height: 1.2;
+}
+
+.marking .row {
+	line-height: 1.4;
+}
+
+.rowImg {
+	float: right;
+	padding-top: 3px;
+	padding-left: 10px;
+	padding-bottom: 7px;
+}
+
+.marking .rowImg {
+	padding-bottom: 16px;
+}
+
+.mediumPic {
+	float: right;
+	padding-top: 3px;
+	padding-left: 10px;
+}
+.mediumPic img {
+	width: 80px;
+	height: 53px;
+}
+.mediumPicTask {
+	height: 44px;
+}
+
+.mandatoryImg {
+	float: left; 
+	width: 50px;
+}
+.mandatoryImg img {
+	height: 40px;
+	margin-right: 0px;
+}
+.firstColumn {
+	margin-left: -10px;
+}
+.secondColumn {
+	margin-left: -2px;
+}
+
+.short {
+	width: auto;
+}
+.focus {
+	float: left;
+}
+.focus img {
+	float: left;
+	padding-left: 10px;
+	width: 60px; 
+	height: 16px;
+}
+
+.checkboxDaily, .checkbox {
+	width: 24px; 
+	height: 24px; 
+	border: 1px solid #000; 
+	margin: 1px;
+	color: #33CC00; 
+	font-size: 12px; 
+	text-align: center;
+	cursor: pointer;
+}
+.checkbox {
+	float: left; 
+}
+.checkmark {
+	font-size: 14px;
+	position: relative; 
+}
+.checkboxDaily .checkmark {
+	top: 1px;
+}
+.checkbox .checkmark {
+	top: 3px;
+}
+.checkbox input {
+	border: none;
+	height: 22px;
+	vertical-align: bottom;
+	cursor: default;
+}
+
+.marking .checkboxDaily, .checkbox {
+	width: 28px;
+	height: 28px;
+}
+
+.footer {
+	clear: both;
+	width: 100%;
+	height: 1.1in;
+	bottom: 0;
+}
+.footer .footerImg {
+	margin-bottom: -14px;
+}
+
+.pageFooter {
+	clear: both;
+	height: 15px;
+	width: 98%;
+	margin: 0 auto; 
+	bottom: 0;
+    font-family: "Myriad Pro It";
+    font-size: 12px;
+    border: 1px solid black;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+.pageFooter .userName {
+	float: right;
+}
+.pageFooter .pageNum {
+	float: left;
+}
+.pageFooter .parsha {
+	font-family: "Myriad Pro It";
+    font-size: 12px; 
+    font-weight: bold;
+}
+.bottomFooter {
+	clear: both;
+	width: 100%;
+	margin: 0 auto; 
+	bottom: 0;
+    font-family: "Myriad Pro";
+    font-size: 10px;
+    height: 180px;
+    page-break-before: avoid;
+}
+.footerInfo { 
+	width: 65%;
+	text-align: center;
+	font-size: 12px;
+	margin-bottom: 10px;
+}
+
+.footerInfo .border {
+	border-bottom: 2px solid grey;
+}
+.footerInfo .review {
+	height: 30px;
+	border: 2px solid grey;
+	vertical-align: top;
+	font-size: 8px;
+}
+img.rank {
+	margin-right: -20px;
+	float: right;
+	margin-top: -5px;
+} 
+img.rankLogo {
+	float: left;
+	width: 180px;
+	margin-top: 10px;
+}
+
+.finalFooter {
+	margin-left: -0.3in;
+	margin-right: -0.3in;
+}
+.footer_info {
+    height: 55px;
+    width: 55px;
+    text-align: center;
+    float: right;
+    font-family: "Myriad Pro It";
+    font-size: 9px;
+    line-height: 1.2;
+}
+.footer_info img {
+    height: 55px;
+}
+
+.boxer .box {
+   text-align: left;
+   vertical-align: top;
+   width: 130px;
+}
+.boxer .box img {
+	float: right;
+	margin-left: -7px;
+	margin-right: 3px;
+}
+.boxer .cell .box {
+	display: table-cell;
+	padding: 10px;
+}
+
+#marking {
+	width: 750px;
+	border: 1px solid grey;
+	background-color: #F8F8F8;
+	margin: auto;
+	height: 42px;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	-moz-border-radius: 30px;
+    -webkit-border-radius: 30px;
+    border-radius: 30px;
+}
+
+#marking #outer {
+	margin-right: 30px;
+}
+
+#marking #outerParent {
+	margin-right: 190px;
+}
+
+#marking #outer > div {
+	width: auto;
+	height: 10px;
+	padding: 10px;
+	float: right;
+}
+
+#marking #outerParent > div {
+	width: auto;
+	height: 10px;
+	padding: 10px;
+	float: right;
+}
+
+#instructions {
+	width: 250px;
+	margin: auto; 
+	margin-top: -10px;
+	margin-bottom: 10px;
+	clear: both;
+}
+
+.arrow-left {
+	width: 0; 
+	height: 0; 
+	border-top: 8px solid transparent;
+	border-bottom: 8px solid transparent; 	
+	border-right: 8px solid #3090C7; 
+	float: left;
+	margin-right: 5px;
+	margin-top: 3px;
+	cursor: pointer;
+}
+
+.arrow-right {
+	width: 0; 
+	height: 0; 
+	border-top: 8px solid transparent;
+	border-bottom: 8px solid transparent; 	
+	border-left: 8px solid #3090C7; 
+	float: right;
+	margin-left: 5px;
+	margin-top: 3px;
+	cursor: pointer;
+}
+
+.marking .dailyBoxes {
+	margin-top: 3px;
+}
+
+.marking .dailyRow {
+	margin-top: 10px;
+}
+
+.marking .mediumPicTask {
+	height: auto;
+}
+
+#loading {
+	position: absolute;
+	top: 20%;
+	left: 36%;
+	background-color: white;
+}
+#loading img {
+	width: 150px;
+	height: 150px;
+}
+
+.extraSpace {
+	height: 60px;
+}
+
+.he .extraSpace {
+	height: 50px;
+}
+
+@media print {
+	.footer, .pageFooter {
+		display: block;
+	}
+	hr {
+		display: none;
+	}
+	#marking, #oldMissions {
+		display: none;
+	}
+	.noPrint {
+		display: none;
+	}
+}
+@media screen {
+	.footer, .pageFooter {
+		display: none;
+	}
+	hr {
+		display: block;
+		width: 100%;
+	}
+	#marking, #oldMissions {
+		display: block;
+	}
+	.noPrint {
+		display: block;
+	}
+}
