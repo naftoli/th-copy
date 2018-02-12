@@ -1,0 +1,14 @@
+h1 {
+    text-align: center;
+}
+
+pre ul {
+    margin: 0px;
+    line-height: 0px;
+}
+
+.form-check {
+    display: inline-block;
+    margin: 0 auto;
+    font-size: 1.4em;
+}
