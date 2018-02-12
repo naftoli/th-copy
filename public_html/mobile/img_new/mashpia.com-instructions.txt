@@ -1,0 +1,77 @@
+login page
+profile 1 Gray
+lock Gray
+square Blue
+square check Blue
+
+Parecnts Account Page
+Lock white
+Settings White (for edit)
+Circle + Blue
+News Green
+
+Edit Parent Profile
+Woman Gray
+Profile 1 Gray
+Mail Gray
+House Gray
+Location Gray
+Arrow Down Gray
+Arrow 3 Gray
+Flag Gray
+Phone Gray
+Lock Gray
+
+Child Account Page
+Lock white (for logout)
+Settings White (for edit)
+banner 2 green (change text to #004E22)
+Banner 1 orange
+Circle green
+Circle green solid
+
+edit child profile
+profile 1 gray
+Calendar gray
+school 2 gray
+Arrow 2 Gray
+Circle Check Blue
+Circle Blue
+Check Gray
+
+Marking Missions Page
+Square check green
+Square X Red
+Square Purple
+Check Purple
+Arrow 1 White
+
+Personalize Goals
+Arrow 1 White
+Square Check Purple
+Square Purple
+Arrow 1 Peach
+
+Achievements Page
+Circle Orange
+Circle Orange Solid
+Medals Orange (for medal board logo)
+Trophy Orange
+Acievements Orange
+Arrow 1 White
+Arrow 1 Blue
+
+Rewards
+Cart Red
+Arrow 1 White
+Store Red
+Ticket Red
+Scanner 1 Red
+Scanner 2 Red (actual scanning page)
+
+News Page
+News Green
+Boy Green
+Cake Green
+Ticket Green
+Promotions Green

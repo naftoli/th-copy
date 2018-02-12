@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Tzivos Hashem | Parents Account</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<link href="/mobile/reg/css/all.css?v=1.4" rel="stylesheet"/>
+		<noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
+		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
+		<noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+		<script src="js/all.js" defer></script>
+    <style>
+		img {max-width: 100%;}
+		.upload {display: none;}
+		.upload .ready {display: block;}
+		#fatherUpload {width: 200px;height: 300px;position: relative;display: none;}
+		.register-box .input-group .input-group-addon{border-radius: 5px;}
+		.register-box .has-feedback .form-control{width: 97%;}
+		.invalid-feedback {font-size: 2em;padding-left: 25px;color: red;line-height: 2;}
+		.register-box .form-group.invalid {border-color: red;}
+		@media screen and (max-width: 639px){
+			span.input-group-addon img {max-width: 60%;max-height: 40%;}
+			.invalid-feedback {font-size: 1.2em;}
+		}
+    </style>
+</head>
+  <body class="skin-blue sidebar-mini">
+    <div class="container parent-page" id="crop-avatar">
+			<div class="login-header">
+					<span class="span12">NEW PARENT ACCOUNT</span>
+			</div>
+
+			<form id="regForm" action="" method="post">
+				<div class="register-box">
+					<div class="register-box-body">
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="image-upload" id="crop-avatar-father">
+									<div class="avatar-view" title="Add Photo">
+										<picture>
+											<source srcset="img/webp/addphoto.webp" type="image/webp">
+											<img src="img/addphoto.png" alt="" class="img-people" id="img-father">
+										</picture>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="image-upload" id="crop-avatar-mother">
+									<picture>
+										<source srcset="img/webp/addphoto.webp" type="image/webp">
+										<img src="img/addphoto.png" alt="" class="img-people" id="img-father">
+									</picture>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<span style="color: red">Name, Number, Username and Password fields are mandatory. However, in order to receive things that your child wins (medals, prizes, etc.),
+								we need your complete address.</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group has-feedback" id="divfather">
+									<div class="input-group">
+										<span class="input-group-addon"><img src="/mobile/img_new/profile-1-color-gray-svg.svg"/></span>
+										<input id="father" name="father" type="text" class="form-control" placeholder="tatty" />
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group has-feedback" id="divmother">
+									<div class="input-group">
+										<span class="input-group-addon"><img src="/mobile/img_new/woman-color-gray-svg.svg" style="padding: 8%;"/></span>
+										<input id="mother" name="mother" type="text" class="form-control" placeholder="mommy" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group has-feedback" id="divlastname">
+									<div class="input-group">
+										<span class="input-group-addon"><img src="/mobile/img_new/profile-1-color-gray-svg.svg"/></span>
+										<input id="lastname" name="lastname" type="text" class="form-control" placeholder="Lastname" required/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group has-feedback" id="divemail">
+									<div class="input-group">
+										<span class="input-group-addon"><img src="/mobile/img_new/mail-color-gray-svg.svg"/></span>
+										<input id="email" name="parentsemail" type="email" class="form-control" placeholder="Your Email" data-error="Oops, that email address is invalid" required/>
+									</div>
+								</div>
+								<div class="invalid-feedback"></div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group has-feedback" id="divphone">
+									<div class="input-group">
+										<span class="input-group-addon"><img src="/mobile/img_new/phone-color-gray-svg.svg" style="padding: 8%;"/></span>
+										<input id="phone" name="phone" type="text" class="form-control" placeholder="Contact Number" required />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group has-feedback" id="divaddress">
+									<div class="input-group">
+										<span class="input-group-addon"><img src="/mobile/img_new/house-color-gray-svg.svg"/></span>
+										<input id="address" name="address" type="text" class="form-control" placeholder="Home Address"  required/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group has-feedback" id="divcity">
+									<div class="input-group">
+										<span class="input-group-addon"><img src="/mobile/img_new/location-color-gray-svg.svg" style="padding: 10%;"/></span>
+										<input id="city" name="city" type="text" class="form-control" placeholder="City" required/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group has-feedback" id="divstate">
+									<div class="input-group">
+										<span class="input-group-addon"><img src="/mobile/img_new/arrow-down-color-gray-svg.svg"/></span>
+										<input id="state" name="state" type="text" class="form-control" placeholder="State" required/>
+									</div>
+								</div>
+							</div>
+								<div class="col-xs-6">
+									<div class="form-group has-feedback" id="divzip">
+										<div class="input-group">
+											<span class="input-group-addon"><img src="/mobile/img_new/arrow-3-color-gray-svg.svg"/></span>
+											<input id="zip" name="zip" type="text" class="form-control" placeholder="Zip Code" required/>
+										</div>
+									</div>
+								</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group has-feedback" id="divcountry">
+									<div class="input-group">
+										<span class="input-group-addon"><img src="/mobile/img_new/flag-color-gray-svg.svg"/></span>
+										<input id="country" name="country" type="text" class="form-control" placeholder="Country" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group has-feedback" id="divfamily">
+									<div class="input-group">
+										<span class="input-group-addon"><img src="/mobile/img_new/profile-1-color-gray-svg.svg"/></span>
+										<input id="login" name="login" type="text" class="form-control" placeholder="Login" required/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group has-feedback" id="divnewpwd" >
+									<div class="input-group">
+										<span class="input-group-addon"><img src="/mobile/img_new/lock-color-gray-svg.svg"/></span>
+										<input id="pwd" name="pwd" type="password" data-minlength="6" class="form-control" placeholder="Password" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group has-feedback" id="divpnewwd2" >
+									<div class="input-group">
+										<span class="input-group-addon"><img src="/mobile/img_new/lock-color-gray-svg.svg"/></span>
+										<input id="repwd" name="repwd" type="password" class="form-control" data-match="#pwd" data-match-error="Whoops, these don't match" placeholder="Re-type Password" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<button type="submit" id="btn_create" class="btn btn-primary btn-block H8"><b>CREATE ACCOUNT</b></button>
+							</div><!-- /.col -->
+						</div>
+					</div><!-- /.form-box -->
+				</div><!-- /.register-box -->
+			</form>
+       
+    <!-- Cropping modal -->
+    <div class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <form class="avatar-form" action="crop.php" enctype="multipart/form-data" method="post">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title" id="avatar-modal-label">Change Avatar</h4>
+            </div>
+            <div class="modal-body">
+              <div class="avatar-body">
+
+                <!-- Upload image and data -->
+                <div class="avatar-upload">
+                  <input type="hidden" class="avatar-src" name="avatar_src">
+                  <input type="hidden" class="avatar-data" name="avatar_data">
+                  <label for="avatarInput">Local upload</label>
+                  <input type="file" class="avatar-input" id="avatarInput" name="avatar_file">
+                </div>
+
+				<div class="row avatar-btns">
+		<div class="col-md-9">
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" data-method="zoom" data-option="0.1" title="Zoom In">
+            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;zoom&quot;, 0.1)">
+              <span class="fa fa-search-plus"></span>
+            </span>
+          </button>
+          <button type="button" class="btn btn-primary" data-method="zoom" data-option="-0.1" title="Zoom Out">
+            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;zoom&quot;, -0.1)">
+              <span class="fa fa-search-minus"></span>
+            </span>
+          </button>
+        </div>
+
+                    <div class="btn-group">
+          <button type="button" class="btn btn-primary" data-method="rotate" data-option="-15" title="Rotate Left">
+            <span class="docs-tooltip" data-toggle="tooltip" title="">
+              <span class="fa fa-rotate-left"></span>
+            </span>
+          </button>
+          <button type="button" class="btn btn-primary" data-method="rotate" data-option="15" title="Rotate Right">
+            <span class="docs-tooltip" data-toggle="tooltip" title="">
+              <span class="fa fa-rotate-right"></span>
+            </span>
+          </button>
+                    </div>
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" data-method="reset" title="Reset">
+            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;reset&quot;)">
+              <span class="fa fa-refresh"></span>
+            </span>
+          </button>
+                    </div>
+                  </div>
+</div>
+                <!-- Crop and preview -->
+                <div class="row">
+                  <div class="col-md-9">
+                    <div class="avatar-wrapper"></div>
+                  </div>
+                <!--  <div class="col-md-3">
+                    <div class="avatar-preview preview-lg"></div>
+                    <div class="avatar-preview preview-md"></div>
+                    <div class="avatar-preview preview-sm"></div>
+                  </div> -->
+                </div>
+
+                <div class="row avatar-btns">
+                  <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary btn-block avatar-save">Done</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div> -->
+          </form>
+        </div>
+      </div>
+    </div><!-- /.modal -->
+	
+    </div><!-- wrapper  -->
+
+
+	<script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+        	$(document).ready( function() {
+        		//get info
+        		var admin = 
+        	    $(function () {
+        	        $('input').iCheck({
+        	            checkboxClass: 'icheckbox_square-aero',
+        	            radioClass: 'iradio_square-aero',
+        	            increaseArea: '20%' // optional
+        	        });
+        	    });
+        	    //$('#phone').inputmask("(999) 999-9999");  //static mask
+        	    //$('#zip').inputmask("99999");
+        	   
+        	    $('#country').val('USA');
+        	   
+        		$(".file-input-new").find("div.input-group").addClass('hide');
+        	});
+					
+					$("#email").keyup( function(event) {
+						if (/[a-zA-Z0-9-_ ]/.test(String.fromCharCode(event.keyCode)) || event.keyCode === 8) {
+								validateEmail();
+						}
+					});
+					
+					function validateEmail() {
+						var email = $("#email").val();
+						var email_error = $("#divemail + .invalid-feedback");
+						var email_container = $("#divemail");
+						// validate the email client side...
+						if (!email.match(/^[_.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z.-]+.)+[a-zA-Z]{2,6}$/i)) {
+							email_error.text("Invalid E-mail Address.");
+							email_container.addClass("invalid");
+							return false;
+						}
+						
+						$.post("ajax/validateEmail.php", {admin_id: Cookies.get('admin'), email: email}, function(response) {
+								response = JSON.parse(response);
+								if (!response.valid) {
+										email_error.text(response.message);
+										email_container.addClass("invalid");
+								} else {
+									email_error.text("");
+									email_container.removeClass("invalid");
+								}
+							});
+					}
+					
+					function isAlphabetic(sText) {
+						var ValidChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+						var IsAlphabetic=false;
+						var Char;			
+						for (i = 0; i < sText.length; i++){
+							Char = sText.charAt(i);
+							if (ValidChars.indexOf(Char) != -1){
+								IsAlphabetic = true;
+								break;
+							}
+						}
+						return IsAlphabetic;
+					}
+
+            $('#regForm').submit( function(e) {
+								e.preventDefault();
+                var pwd = $("#pwd").val();
+                var repwd = $("#repwd").val();
+                if (pwd != repwd) {
+                	alert('Your passwords do not match.');
+                	return false;
+                }
+                
+                var father = $("#father").val();
+                var mother = $("#mother").val();
+                var lastname = $("#lastname").val();
+                var email = $("#email").val();
+                var address = $("#address").val();
+                var city = $("#city").val();
+                var state = $("#state").val();
+                var zip = $("#zip").val();
+                var country = $("#country").val();
+                var phone = $("#phone").val();
+                var username = $("#login").val();
+                var fatherPic = $("#img-father").length ? $("#img-father").attr('src') : null;
+                var motherPic = $("#img-mother").length ? $("#img-mother").attr('src') : null;
+                
+                if (fatherPic == 'images/addphoto.png') fatherPic = null;
+                if (motherPic == 'images/addphoto.png') motherPic = null;
+                
+                /*
+                if (father == '' && mother == '') {
+                	alert("You must enter father's or mother's name.");
+                	return false;
+                }
+                */
+        				/*
+                if (lastname == '' || email == '' || address == '' || city == '' || state == '' || zip == '' 
+                	|| country == '' || phone == '' || username == '' || pwd == '') {
+            		alert('You must fill in all the fields.');
+            		*/
+        				if (lastname == '' || email == '' || phone == '' || username == '' || pwd == '') {
+        					alert('Not all mandatory fields have been filled out. Please fill out and try again.');
+        					return false;
+        				}
+								
+								if (father == '' && mother == '') {
+									alert("You must enter at least one parent's first name.");
+									return false;
+								}
+								
+								if ((father != '' && father.length < 3) || (mother != '' && mother.length < 3) || lastname.length < 3) {
+									alert("Names must contain at least 3 characters.");
+									return false;
+								}
+								
+								if (phone.length < 9 || isAlphabetic(phone)) {
+									alert("Contact number must be at least 9 digits and cannot contain alphabetic characters.");
+									return false;
+								}
+								
+								var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+								if (reg.test(email) != true) {
+									alert("Invalid email address.");
+									return false;
+								}
+            	/*
+            	if ( !$("#terms").is(":checked") ) {
+                	alert('You must agree to terms.');
+                	return false;
+                }
+                */
+                $.post('ajax/createParent.php', {
+                	father : father, 
+                	mother : mother, 
+                	fatherPic : fatherPic, 
+                	motherPic : motherPic,
+                	lastname : lastname, 
+                	email : email, 
+                	address : address, 
+                	city : city, 
+                	state : state, 
+                	zip : zip, 
+                	country : country, 
+                	phone : phone, 
+                	username : username, 
+                	pwd : pwd
+                }, function( success ) {
+                	if (success == -1) {
+                		alert('This username or email address is already being used. Please try again.');
+                		return;
+                	}
+                	else if (success == 1) {
+                		alert('Your account has been created. You can now login with your username / password.');
+                		window.location = "/mobile/reg";
+                	} else {
+                		alert('There was a problem creating a parent account. Please try again. If this problem persists please contact Tzivos Hashem.');
+                		return;
+                	}
+                });
+            });
+        });
+    </script>
+</body>
+</html>

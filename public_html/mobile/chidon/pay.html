@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Mobile Web Site</title>
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    	<link href="/mobile/reg/plugins/iCheck/all.css" rel="stylesheet" type="text/css" />
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/responsive.css" type="text/css" rel="stylesheet" />
+		<script src="js/jquery-1.9.1.min.js"></script>
+		<style>
+			.btn-primary {
+				background-color: #2b529e;
+    			border-color: #2b529e;
+			}
+			.control-label {
+				padding-top: 4%;
+			}
+			.check-accept span {
+				font-size: 18px;
+				line-height: normal;
+			}
+			#total {
+				color: red;
+				font-weight: bold;
+			}
+			#amount{
+				font-size: 1.1em;
+				font-weight: bold;
+				color: #000;
+			}
+			span.input-group-addon {
+				background: none;
+				font-size: 1.7em;
+			}
+			.form-control {
+				border-radius: 5px !important;
+				border: 1px solid #b1b1b1 !important;
+				margin: 3px;
+			}
+			.btn-primary.active, .btn-primary.focus, .btn-primary:active, .btn-primary:focus, .btn-primary:hover, .open>.dropdown-toggle.btn-primary {
+				background-color: #2b529e !important;
+			}
+			.login-box-body .form-group {
+				border: 0 !important;
+			}
+			@media (min-width: 640px) {
+				span.input-group-addon {
+					font-size: 2.5em;
+				}
+			}
+		</style>
+	</head>
+	<body>
+        <div class="container login-page">
+            <div class="login-header">
+                <span class="span12">Shabbaton Enrollment</span>
+            </div>
+            <div class="span12 body">
+				<div id="spinner"></div>
+				<!--
+                <div class="logo">
+                    <img src="chidon.jpg" style="max-width: 250px" class="img-responsive center-block">
+                </div>
+				-->
+                <div class="login-box">
+                    <div class="login-box-body">
+						<div class="row">
+							<div class="col-xs-12" style="font-size: 20px; padding: 20px; font-weight: bold;">		
+								The actual cost for each child is $250.
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-8" style="font-size: 20px; font-weight: bold;">
+								Please select how much you are able to pay for <span id="name"></span> to be able to participate in the Chidon Sabbaton.
+							</div>
+							<div class="col-sm-4">
+								<div class="input-group">
+									<!--<span class="input-group-addon"><span class="fa fa-usd"></span></span>-->
+									<select name="payment" id="payment" class="form-control" autofocus>
+									  <option value="136">$136</option>
+									  <option value="150">$150</option>
+									  <option value="200">$200</option>
+									  <option value="250" selected>$250</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12" style="font-size: 20px; padding: 20px; font-weight: bold;">		
+								<p>The Total that you are being charged: <span id="total"></span></p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-10" style="padding: 5px; padding-bottom: 0; margin-left: 30px;">
+	                          <label class="check-accept">
+	                              <input type="checkbox" name="sponsor" id="sponsor" class="minimal-red" /> 
+	                              <span>&nbsp;&nbsp;I would like to sponsor a child’s chidon trip.</span>
+	                          </label>
+	                      </div>
+						</div>
+						<div class="row sponsorInfo" style="display: none">
+							<div class="col-sm-9" style="font-size: 20px; padding: 20px; font-weight: bold;">
+								How many trips would you like to sponsor?
+							</div>
+							<div class="col-sm-3">
+							  <select class="form-control" name="trips" id="trips">
+								
+							  </select>
+							</div>
+						</div>
+                    	<div class="row">
+							<!--
+	                        <div class="col-xs-12">
+	                          <div class="form-group has-feedback" id="divcreditcard">
+	                            <select id="cardtype" name="cardtype" class="selectpicker show-tick form-control"  data-style="btn-default">
+	                                <option data-icon="fa fa-credit-card" selected disabled>&nbsp;&nbsp;Credit Card</option>
+	                                <option data-icon="fa fa-cc-amex">&nbsp;&nbsp;American Express</option>
+	                                <option data-icon="fa fa-cc-mastercard">&nbsp;&nbsp;Mastercard</option>
+	                                <option data-icon="fa fa-cc-visa">&nbsp;&nbsp;Visa Card</option>
+	                            </select>
+	                          </div>
+	                        </div>
+							-->
+	                        <div class="col-xs-12">
+	                             <div class="form-group has-feedback" id="divcardnumber">
+	                                <div class="input-group">
+	                                    <span class="input-group-addon"><span class="fa fa-credit-card"></span></span>
+	                                    <input id="cardnumber" name="cardnumber" type="text" class="form-control" placeholder="Card Number" required/>
+	                                </div>
+	                             </div>
+	                        </div>
+	                        <div class="col-xs-12">
+	                          <div class="form-group has-feedback" id="divcardexp">
+	                            <div class="input-group">
+	                                <span class="input-group-addon"><span class="fa fa-credit-card"></span></span>
+	                                <input id="expiration" name="expiration" type="text" class="form-control" placeholder="Expiration MMYY"  required/>
+	                            </div>
+	                          </div>
+	                        </div>
+	                        <div class="col-xs-12">
+	                          <div class="form-group has-feedback" id="divzip">
+	                            <div class="input-group">
+	                                <span class="input-group-addon"><span class="fa fa fa-map-marker"></span></span>
+	                                <input id="zip" name="zip" type="text" class="form-control" placeholder="Zip Code" required/>
+	                            </div>
+	                          </div>
+	                        </div>
+	                    </div>
+	                  <!--<div class="row">
+	                      <div class="col-xs-10" style="padding: 5px; padding-bottom: 0; margin-left: 30px;">
+	                          <label class="check-accept">
+	                              <input type="checkbox" name="accept" id="accept" class="minimal-red" /> 
+	                              <span>&nbsp;&nbsp;I understand that the cost per child is $250. Thanks to our sponsors and kind donors
+								  the cost has been reduced to $136.</span>
+	                          </label>
+	                      </div>
+	                  </div>-->
+					  <!--<div class="row">
+	                      <div class="col-xs-10" style="padding: 5px; padding-bottom: 0; margin-left: 30px;">
+	                          <label class="check-accept">
+	                              <input type="checkbox" name="waiver" id="waiver" class="minimal-red" /> 
+	                              <span>&nbsp;&nbsp;I understand that in order for my child to join the trips I will need to sign the trip waiver/s
+									and return to my Chidon Coordinator. 
+								  </span>
+	                          </label>
+	                      </div>
+	                  </div>-->
+					  <div class="row">
+	                      <div class="col-xs-10" style="padding: 5px; padding-bottom: 0; margin-left: 30px;">
+	                          <label class="check-accept">
+	                              <input type="checkbox" name="agree" id="agree" class="minimal-red" /> 
+	                              <span>&nbsp;&nbsp;I confirm that all the information is correct and I agree to being charged 
+								  $<span id="amount">136</span>.</span>
+	                          </label>
+	                      </div>
+	                  </div>
+	                  <div class="row">
+	                      <div class="col-xs-12">
+	                          <button type="submit" id="btn_create"  class="btn btn-primary btn-block H8">
+	                              <b>Pay</b>
+	                          </button>
+	                      </div><!-- /.col -->
+	                  </div>  
+                	</div>
+                </div>
+            </div>
+        </div>
+        <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+		<script src="/mobile/reg/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
+		<script type="text/javascript" src="../js/spin.js"></script>
+		<script src="js/js.cookie.js" type="text/javascript"></script>
+		
+        <script>
+            $(function() {
+    			$('input').iCheck({
+		            checkboxClass: 'icheckbox_square-blue',
+		            radioClass: 'iradio_square-blue',
+		            increaseArea: '20%' // optional
+		        });
+		        
+		        var url = decodeURI(location.toString());
+				var pos = url.indexOf('='); 
+				var str = url.substring( pos+1 );
+				var pos2 = str.indexOf('&');
+				var pos3 = str.indexOf('=');
+				var id = str.substring( 0, pos2 );
+				var name = str.substring( pos3+1 );
+				$("#name").text(name);
+				
+				var admin_id = Cookies.get('admin');
+				if (!admin_id) {
+					//location.href = "/mobile";
+				}
+				
+				$.post('/mobile/reg/ajax/checkAuth.php', { user_id : id, admin_id : admin_id }, function( success ) {
+					if (success == 0) {
+						//location.href = "/mobile";
+					}
+				});
+				
+				var year;
+				$.ajax({
+					type : "POST",
+					url : "ajax/getYear.php",
+					async : false, 
+					success : function( info ) {
+						year = info;
+					}
+				});
+				
+				// set amount
+				var amount;
+				recalc();
+				
+				var html = '';
+				for (var i = 1; i <= 10; i++) {
+					html += "<option value='" + i + "'>" + i + "</option>";
+				}
+				$("#trips").append(html);
+				
+				$("#payment").change( function() {
+					recalc();
+				});
+				
+				$("#sponsor").on('ifChecked', function() {
+					$(".sponsorInfo").show();
+					recalc();
+				});
+				
+				$("#sponsor").on('ifUnchecked', function() {
+					$(".sponsorInfo").hide();
+					recalc();
+				});
+				
+				$("#trips").change( function() {
+					recalc();
+				});
+				
+				function recalc() {
+					amount = parseInt($("#payment").val());
+					if ($("#sponsor:checked").length) {
+						var num = parseInt($("#trips").val());
+						amount += num * amount;
+					} 
+					$("#total").text('$' + amount);
+					$("#amount").text(amount);
+				}
+				
+				$("#btn_create").click( function() {
+					if (!$("#agree").is(":checked")) {
+			        	alert('You must indicate your agreement to the charge.');
+			        	return false;
+			        }
+			        
+			        var ccnum = $("#cardnumber").val();
+			        var exp = $("#expiration").val();
+			        var zip = $("#zip").val();
+			        
+			        if (ccnum == '' || exp == '' || zip == '') {
+			        	alert("All fields are required.");
+			        	return false;
+			        }
+					
+					var sponsor = 0;
+					if ($("#sponsor:checked").length) sponsor = 1;
+			        
+			        //$("#btn_create").attr('disabled', 'disabled');
+			        //alert(amount); return false;
+					$("#spinner").siblings('div').css('opacity',0.1);
+					var opts = {
+						lines: 10, // The number of lines to draw
+						length: 26, // The length of each line
+						width: 12, // The line thickness
+						radius: 26, // The radius of the inner circle
+						scale: 1, // Scales overall size of the spinner
+						corners: 1, // Corner roundness (0..1)
+						color: 'grey', // #rgb or #rrggbb or array of colors
+						opacity: 0.5, // Opacity of the lines
+						rotate: 0, // The rotation offset
+						direction: 1, // 1: clockwise, -1: counterclockwise
+						speed: 1, // Rounds per second
+						trail: 60, // Afterglow percentage
+						fps: 20, // Frames per second when using setTimeout() as a fallback for CSS
+						zIndex: 2e9, // The z-index (defaults to 2000000000)
+						className: 'spinner', // The CSS class to assign to the spinner
+						top: '50%', // Top position relative to parent
+						left: '50%', // Left position relative to parent
+						shadow: true, // Whether to render a shadow
+						hwaccel: true, // Whether to use hardware acceleration
+						position: 'absolute' // Element positioning
+					};
+					var target = document.getElementById('spinner');
+					new Spinner(opts).spin(target);
+			
+					$.post('ajax/processPayment.php', {
+						admin : admin_id, 
+						number : ccnum, 
+						expiry : exp, 
+						zip : zip, 
+						amount : amount, 
+						reg_id : id, 
+						year : year,
+						sponsor : sponsor, 
+						numTrips : parseInt($("#trips").val()),
+						sponsorBaseAmount : parseInt($("#payment").val())
+			        }, function( success ) {
+						$("#spinner").siblings('div').css('opacity',1);
+						$("#spinner").empty();
+			        	if ( success == 1 ) {
+							$("#btn_create").attr('disabled', 'disabled');
+							alert("Wait! Your enrollment is not yet confirmed. Your Chidon coordinator will be in touch with you to confirm that all of your information is correct.");
+							location.href = "https://mashpia.com/mobile";
+			        	} else {
+			        		alert( success );
+			        		return false;
+			        	}
+			        });	
+			    });		
+            });
+        </script>
+        <script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		  ga('create', 'UA-71974937-1', 'auto');
+		  ga('send', 'pageview');
+		</script>
+	</body>
+</html>

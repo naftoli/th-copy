@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+        <title>Mobile Web Site</title>
+        
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+		
+        <script src="js/modernizr-2.8.3.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/pushy.css">
+        <link rel="stylesheet" href="css/slick.css?v=1.3">
+        <link rel="stylesheet" href="css/app.css?v=1.6">
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
+        
+        <style>
+        	.mesechtos li {
+        		padding: 3px;
+        	}
+        	.mesechtos {
+        		padding-bottom: 20px;
+        	}
+        	.perokim {
+        		padding-right: 10px;
+        	}
+        </style>
+	</head>
+	<body class="page-goals" id="main">
+		
+	</body>
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/pushy.min.js"></script>
+    <script src="js/slick.min.js"></script>
+    <script src="js/script.js"></script>    
+	<script src="reg/js/js.cookie.js"></script>
+	<script>
+		var url = location.toString();
+		var pos = url.indexOf('='); 
+		var id = url.substring( pos+1 );
+		
+		$.post('markMBP.php', { user : id }, function( success ) {
+			$("#main").append( success );
+			
+			$(document).on('click', ".panel-heading", function() {
+				var c = $(this).parent().attr('class');
+				if (c.indexOf('open') > 0) {
+					$(this).parent().removeClass('open');
+					$(this).parent().find('.collapse').removeClass('in');
+				} else {
+					$(this).parent().addClass('open');
+					$(this).parent().find('.collapse').addClass('in');
+					$(this).parent().siblings().removeClass('open');
+					$(this).parent().siblings().find('.collapse').removeClass('in');
+				}
+				
+				var user = id;
+				var panel = $(this).parent().find(".panel-body");
+				var p = $(panel).find(".perokim");
+				if ($(p).html() == '') {
+					var mesechto = $(panel).attr('id');
+					
+					$.post('../ajax/getPerokim.php', { mesechto : mesechto, user : user, getLearned : true }, function( reply ) { 
+						var info = $.parseJSON( reply );
+						var perokim = info[0];
+						var learned = info[1];
+		
+						var html = "<input type='checkbox' class='entireM' /> Entire מסכת <br />\
+								<input type='checkbox' name='mesecthoAtOnce' class='mesechtoAtOnce' /> בבת אחת<br />";
+						for (var perek in perokim) {
+							html += "<br /><div id='perek:" + perek + "'> \
+								<input type='checkbox' class='perek' /> פרק " + he[perek];
+							html += "<br /><input type='checkbox' name='perekAtOnce|" + perek + "' class='perekAtOnce' /> בבת אחת";
+							html += "<br /><table><tr><th>Mishna</th><th>Lines Learned</th></tr>";
+							for (var mishna in perokim[perek]) {
+								html += "<tr><td><input type='checkbox' class='mishna'";
+								if (learned[perek][mishna]) {
+									html += " checked";
+								}
+								html += " /> " + he[mishna] + " </td><td>\
+									<input name='" + perek + ':' + mishna + "' class='lines' type='text' size='2'";
+								if (learned[perek][mishna]) {
+									html += " value='" + learned[perek][mishna] + "'";
+								}
+								html += " /> (" + perokim[perek][mishna] + ")\
+									<span style='visibility:hidden'>" + perokim[perek][mishna] + "</span></td></tr>";
+							}
+							html += "</table></div>";
+						}
+						$(p).empty();
+						$(p).append(html);
+		
+						$(".entireM").click( function() {
+							if ($(this).is(":checked")) {
+								var checked = true;
+							} else {
+								var checked = false;
+							}
+							$(this).parent().find('.perek').attr('checked', checked);
+							$(this).parent().find('.mishna').attr('checked', checked);
+							$(this).parent().find('.mishna').trigger('click');
+							$(this).parent().find('.mishna').attr('checked', checked);
+						});
+						
+						$(".mesechtoAtOnce").click( function() {
+							var elem = $(this).parent().find('#entireM');
+							if (!elem.is(":checked")) {
+								return false;
+							}
+						});
+						
+						$(".perekAtOnce").click( function() {
+							var elem = $(this).parent().find('.perek');
+							if (!elem.is(":checked")) {
+								return false;
+							}
+						});
+						
+						$(".perek").click( function() {
+							if ($(this).is(":checked")) {
+								var checked = true;
+							} else {
+								var checked = false;
+							}
+							$(this).parent().find('.mishna').attr('checked', checked);
+							$(this).parent().find('.mishna').trigger('click');
+							$(this).parent().find('.mishna').attr('checked', checked);
+							
+							if (!checked) {
+								//make sure mesechto is 'unchecked'
+								$(this).parent().parent().find('#entireM').attr('checked', false);
+								$(this).parent().parent().find('#mesechtoAtOnce').attr('checked', false);
+							}
+						});
+						
+						$(".mishna").click( function() {
+							if ($(this).is(":checked")) {
+								var lines = $(this).parent().next().find('span').text().trim();
+								if ( $(this).parent().next().find('.lines').val() == '' )
+									$(this).parent().next().find('.lines').val(lines);
+								//make sure perek is also checked
+								$(this).parent().parent().parent().parent().parent().find('.perek').attr('checked', true);
+							} else {
+								$(this).parent().next().find('.lines').val('');
+								//make sure perek and mesechto are 'unchecked'
+								$(this).parent().parent().parent().parent().parent().find('.perek').attr('checked', false);
+								$(this).parent().parent().parent().parent().parent().find('.perekAtOnce').attr('checked', false);
+								$(this).parent().parent().parent().parent().parent().parent().find('#entireM').attr('checked', false);
+								$(this).parent().parent().parent().parent().parent().parent().find('#mesechtoAtOnce').attr('checked', false);
+							}	
+						});
+					});
+				}
+			});
+		});
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-71974937-1', 'auto');
+	  ga('send', 'pageview');
+	</script>
+</html>

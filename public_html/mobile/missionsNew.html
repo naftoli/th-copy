@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Tzivos Hashem | Mark Missions</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+		<style type="text/css">
+			@charset "UTF-8";html{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}body{margin:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}@-ms-viewport{width:device-width}body,html{overflow-x:hidden;height:100%}body{background:#fff;font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;padding-bottom:100px;background-size:cover;background-attachment:fixed}
+		</style>
+		<link rel="stylesheet" href="/mobile/css/lib/animate.css">
+		<link rel="preload" href="css/all.css?v=1.6" as="style" onload="this.rel='stylesheet'">
+		<noscript><link rel="stylesheet" href="css/all.css?v=1.3" as="style" onload="this.rel='stylesheet'"></noscript>
+		<link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="preload" type="text/css" as="style" onload="this.rel='stylesheet'">
+        <noscript><link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css"></noscript>
+		<script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
+		<script src="js/all.js" defer></script>
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+		
+		<link rel="stylesheet" href="css/bug_report.css"/>
+		
+        <style>
+			.list-unstyled{padding-right: 0px;}
+/*			Text inputs*/
+        	.textInput { border: 1px solid #5e1c77;border-radius: 5px;position: absolute;right: 15px;font-size: 12px;max-width: 36px;color: #000;font-weight: bold;padding: 5px;}
+/*			Mandatory star marks*/
+			.mandStar {color: red;right: auto !important;padding-right: 5px;float: left !important;position: relative !important;}
+			.he .mandStar {color: red; padding-left: 5px;float: right !important; right: 0px !important;}
+/*			Panel headings*/
+			.panel-heading {cursor: pointer;}
+/*			Back and forward buttons*/
+			button.slick-prev, button.slick-next {background: none;border: none;color: #fff;font-size: 1em;}
+			/* For Firefox */
+			input[type='number'] {-moz-appearance:textfield;}
+			/* Webkit browsers like Safari and Chrome */
+			input[type=number]::-webkit-inner-spin-button,
+			input[type=number]::-webkit-outer-spin-button {
+				-webkit-appearance: none;margin: 0;
+			}
+/*			Top navigation/action buttons */
+			div#navigation-buttons{max-width: 500px; margin: 0 auto;}
+/*			Longer text in missions (prevent from going into checkbox)*/
+			.page-missions .rowImg{height: 60px;padding-left: 0px;}
+			.page-missions .he .rowImg{padding-left: 10px;margin-right: 0px;}
+			.long{max-width: 90%; font-size: 1.6em; /*min-height: 44px; */padding-left: 60px;}
+			.mediumPic + .checkbox .long{padding-left: 130px;}
+			.he .long {max-width: 80%;padding-left: 0px; padding-right: 25px;}
+			.he .mediumPic + .checkbox .long{padding-left: 0px; padding-right: 132px;}
+/*			Change the padding to margins for Firefox support*/
+			.content{margin-bottom: 100px;}
+			body#main{padding-bottom: 0px;}
+/*			Dropdown Animations */
+			.collapse{display: block;visibility: visible;height: 0px;overflow:hidden;}.collapse.in{display:block;overflow:hidden;max-height:fit-content;max-height: -moz-fit-content;}
+/*			The tasks */
+			.task{min-height: 58px; margin-bottom: 5px;}
+			li.task:last-child{margin-bottom: 0px;}
+			.task.daily{min-height: 65px; height: 22%;}
+			.mediumPic{margin-bottom: 10px;margin-top: 7px;display: inline-block;} .rowImg{margin-bottom: 5px;}
+			.collapse{height: 0px;overflow:hidden;}.collapse.in{display:block;overflow:hidden;max-height:fit-content;max-height: -moz-fit-content;}
+			.he .task{margin-right: 2%;}
+/*			Daily checkboxes */
+			.page-missions .checkboxDaily{border: none;}
+			.dMark .unchecked, .dMark .checked, .unavilable-box{height: 24px; width: 24px;display: inline-block;}
+			.dMark .unchecked{background: url("https://mashpia.com/mobile/img_new/square-color-purple-svg.svg");}
+			.dMark .checked{background: url("https://mashpia.com/mobile/img_new/square-check-color-green-svg.svg");}
+			.unavilable-box{background: url("https://mashpia.com/mobile/img_new/square-x-color-red-svg.svg");}
+/*			Non-Daily checkboxes*/
+			label.checkbox .box {border: none;background: url(https://mashpia.com/mobile/img_new/square-color-purple-svg.svg);height: 30px;width: 30px;}
+			label.checkbox span.check {margin-right: 10px;}
+			label.checkbox input[type=checkbox]:checked~.check,label.checkbox input[type=checkbox]:checked~.box, label.checkbox .check, label.checkbox .box{transform: none;transition: none;}
+			label.checkbox span.circle{display: none;}
+			label.checkbox span.check {margin-right: 0px;border: none;background: url(https://mashpia.com/mobile/img_new/square-check-color-green-svg.svg);height: 30px;width: 30px;top: 0px;}
+			.he label.checkbox .box, .he label.checkbox .check {right: 0px; top: 0px;}
+			.he .actions{position: relative; width: 45px;float: left;}
+			.he label.checkbox span:not(.tehillim){position: absolute;}
+/*			Dropdown arrows*/
+			i.glyphicon.glyphicon-chevron-right, i.glyphicon.glyphicon-chevron-left {background: url("https://mashpia.com/mobile/img_new/arrow-1-color-white-svg.svg");width: 10px;height: 15px;background-repeat: no-repeat;}
+			i.glyphicon.glyphicon-chevron-right:before, i.glyphicon.glyphicon-chevron-left:before{content: "";}
+/*			New style dropdown arrows on the hebrew site need to point the other way*/
+			.he .panel.panel-default .panel-heading i {margin-left: 8px; transform: rotate(180deg);}
+			.he .panel.panel-default.open > .panel-heading i {transform: rotate(90deg);}
+/*			Cleaner dropdowns*/
+			.panel.panel-default .panel-heading{background: #5e1c77;font-weight: 400;}
+			.container>.navbar-header{margin-left: 0px;}
+/*			Some modal Styles*/
+			.modal-header {border-top-left-radius: 4px;border-top-right-radius: 4px;background: #5e1c77; color: #fff;}
+			.modal-header span, .modal-header{color: #fff;}
+			.modal-header .close{opacity: 1;font-size: 2em;width: 20px;font-weight: 100;}
+/*			On small screens push the date selector down and let the buttons take up the full row*/
+			@media(max-width: 532px){.task{margin-bottom: 10px;}.long{font-size: 1.3em;}}
+/*			Weekly navigation buttons*/
+			.parsha-navigator {margin-top: -10px;margin-bottom: 10px;transition: transform .15s;}
+			.parsha-navigator img{height: 15px;margin: 3px;}
+			#previous.parsha-navigator img{transform: rotate(180deg);}
+			#previous.parsha-navigator{float: left;}
+			#next.parsha-navigator{float: right;}
+			.parsha-navigator:hover{transform: scale(1.2);cursor: pointer;color: #fff;}
+/*			Button hover effects*/
+			#printLink:hover, #backLink:hover{text-decoration: none;}
+			.btn.btn-danger{transition: transform .1s}
+			.btn.btn-danger:hover{transform: scale(1.05)}
+/*			New arrow icons for daily slider*/
+			.slick-slider img {height: 18px;margin-top: -5px;}
+			.slick-prev img{transform: rotate(180deg);}
+/*			Special shamai space reduction*/
+			.panel-body {padding-bottom: 10px;}
+/*			Also from shamai, new icon for the hint*/
+			.page-missions .navbar-header:before{background: url("/mobile/img_new/swipe-color-peach-svg.svg") no-repeat center center;  background-size: 30%;}
+			@media(max-width: 580px) {
+				.page-missions .navbar-header:before{background-size: 50%;}
+			}
+/*			Also from shamai, add some space for the weekly checkboxes*/
+			.dailyBoxes table {display: inline-table;}
+			.page-missions .mandatoryImg {display: inline-block;}
+			.page-missions .mandatoryImg img{margin-top: -20px;}
+/*			Reposition it all on mobile*/
+			@media(max-width: 767px) {
+				.long {min-height: 36px;}
+				.dailyBoxes {min-height: 40px;}
+				.dailyBoxes table {float: right; margin-top: 5px; margin-bottom: 5px;}
+				.page-missions .mandatoryImg{float: right; width: 40px;}
+				.page-missions .mandatoryImg img {margin-top: 0px;}
+				
+				.page-missions .he .mandatoryImg{float: left; width: 40px;}
+				.he .dailyBoxes table{float: left; margin-left: 6px;}
+			}
+			@media(min-width: 768px) {
+				.dailyBoxes{padding-left: 60px;padding-bottom: 7px; margin-bottom: 3px;}
+				.mediumPic ~ .dailyBoxes {padding-left: 130px;}
+			}
+			.dailyBoxes td {padding-right: 2px;}
+			.he .dailyBoxes td {padding-right: 0px; padding-left: 2px;}
+			.dailyBoxesLine {clear: both;border: 1px solid #eee;}
+        </style>
+	</head>
+	<body class="page-missions" id="main">
+		<div id="spinner"></div>
+	</body>
+<!--	The help modal (hardocoded in HTML?)-->
+	<div class="modal fade" tabindex="-1" role="dialog" id="myModal" style="display: none">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><img src="img_new/x-color-white-svg.svg"/></button>
+					<h4 class="modal-title">Mission Marking Instructions</h4>
+				</div>
+				<div class="modal-body">
+					<p style="font-size: 1.2em;border-bottom: 1px solid #ccc;">
+						<strong>Visual Guide</strong>
+					</p>
+					<p><img src="https://mashpia.com/mobile/img_new/square-color-purple-svg.svg" height="25" width="25"/> - Mission is not marked</p>
+					<p><img src="https://mashpia.com/mobile/img_new/square-check-color-green-svg.svg" height="25" width="25"/> - Mission is marked</p>
+					<p>
+						<img src="https://mashpia.com/mobile/img_new/square-color-purple-svg.svg" height="25" width="25"/>
+						<span style="color: grey;margin-left: -20px;font-size: 16px;margin-right: 10px;">T</span>
+						- Mission is later in the week (day is in grey).
+					</p>
+					<p><img src="https://mashpia.com/mobile/img_new/square-x-color-red-svg.svg" height="25" width="25"/> - Mission is unavailable</p>
+					
+					<p style="font-size: 1.2em;border-bottom: 1px solid #ccc;">
+						<strong>Weekly Marking View</strong>
+					</p>
+					<p>Please note that the "Weekly Marking View" is the <em>only</em> marking view available on <em><strong>desktops</strong></em></p>
+					<ol>
+						<li>Each page starts on <em><strong>Friday</strong></em> and end on <em><strong>Thursday</strong></em>.</li>
+						<li>Daily tasks start with <em><strong>Friday</strong></em> on the <em><strong>left for English</strong></em> and on the <em><strong>right for Yiddish</strong></em> and are laid out in one row.</li>
+						<li>The <em><strong>parsha</strong></em> on the top of the page refers to the <em><strong>shabbos</strong></em> that occurs at the <em><strong>start</strong></em> of each weekly cycle.</li>
+						<li>You can only go up to <em><strong>3 weeks back</strong></em>. If you need to mark dates older then this please contact your Base Commander</li>
+					</ol>
+					
+					<p style="font-size: 1.2em;border-bottom: 1px solid #ccc;">
+						<strong>Mission Printing</strong>
+					</p>
+					<p>Please note that printing is the <em>only</em> available on the <em><strong>desktops</strong></em></p>
+					<p>Please follow the <em><strong>instructions</strong></em> on the top of the <em><strong>printing page</strong></em> before printing out the mission sheets</p>
+					
+					<p style="font-size: 1.2em;border-bottom: 1px solid #ccc;">
+						<strong>Technical Support</strong>
+					</p>
+					<p>If you encounter any issues that are technical in nature, please send an email to <a href="mailto:bugs@tzivoshashem.org">bugs@tzivoshashem.org</a> with the following information:</p>
+					<ol>
+						<li>Your <em><strong>username</strong></em></li>
+						<li>Your <em><strong>child's serial number</strong></em> (found in the top left corner of their profile page).</li>
+						<li>The <em><strong>marking date</strong></em> on which you are encountering this issue.</li>
+						<li>A <em><strong>detailed and clear</strong></em> description of the issue.</li>
+					</ol>
+					<p>Please note that it may take more than 24hrs for an investigation to occur and a response sent out.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal" style="background-color: #5e1c77;border-color:#834999;">Close</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>'); // load up jquery if it is not already loaded</script>
+	<script src="js/Swipe.js"></script>
+	<script>
+        document.addEventListener("DOMContentLoaded", function() {
+			$( function() {
+				//(new Swipe('.item')).onLeft(function() { alert('You swiped left.') }).run(); // TODO allow swiping
+				var url = location.toString();
+				var pos = url.indexOf('='); 
+				var id = url.substring( pos+1 );
+				var str = id;
+				// get the date from the URL
+				var d = id.indexOf('&d');
+				if (d > 0) {
+					id = id.substring( 0, d );
+				}
+				// make sure that the user is logged in
+				$.post('reg/ajax/checkAuth.php', { user_id : id, admin_id : Cookies.get('admin') }, function( success ) {
+					if (success === "0") {
+						window.location = "/mobile";
+					}
+				});
+				// update the missions for the user_id...
+				$.post('reg/ajax/updateMissions.php', { user_id : id });
+				// options for the loading spinner....
+				var opts = {
+					lines: 8, 		// The number of lines to draw
+					length: 26, 	// The length of each line
+					width: 12, 		// The line thickness
+					radius: 26, 	// The radius of the inner circle
+					scale: 0.75, 	// Scales overall size of the spinner
+					corners: 1, 	// Corner roundness (0..1)
+					color: '#888', 	// #rgb or #rrggbb or array of colors
+					opacity: 0.25, 	// Opacity of the lines
+					rotate: 0, 		// The rotation offset
+					direction: 1, 	// 1: clockwise-1: counterclockwise
+					speed: 1.1, 	// Rounds per second
+					trail: 60, 		// Afterglow percentage
+					fps: 20, 		// Frames per second when using setTimeout() as a fallback for CSS
+					zIndex: 2e9, 	// The z-index (defaults to 2000000000)
+					className: 'spinner', // The CSS class to assign to the spinner
+					top: '50%', 	// Top position relative to parent
+					left: '50%', 	// Left position relative to parent
+					shadow: false, 	// Whether to render a shadow
+					hwaccel: true, 	// Whether to use hardware acceleration
+					position: 'absolute' // Element positioning
+				};
+				var target = document.getElementById('spinner');
+				new Spinner(opts).spin(target);
+				
+				// use regex to determine desktop or mobile
+				var desktop = $(window).width() > 767; // all devices this small are mobile. As well as the folowing regex
+				if (/Android|webOS|iPhone|iPod|iPad|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)){ // look for common mobile names in userAgent
+					desktop = false;
+				}
+				console.log({"desktop": desktop});
+				// should we render the daily page?
+				var daily = (!desktop && Cookies.get('marking') != "weekly") || Cookies.get('marking') == "daily";
+				// load up the mission page...
+				$.get('getMissionPage.php?id=' + str + "&daily=" + daily + "&desktop=" + desktop, function( html ) {
+					$("#spinner").empty(); // clear the spinner...
+					$("#main").append( html ); // load up the html into the page...
+					$("#main").addClass("animated fadeIn");
+					// if the language is set to 2 (yiddish) in the html
+					if (lang == 2) {
+						$(".container").eq(1).addClass('he'); // add a he class to the page
+						$(".container.he").attr('dir', 'rtl'); // set the text direction to the other direction...
+						$(".personalImg").css({"right": "2%"}); // move the profile photo over a bit...
+					} else {
+						$(".personalImg").css({"left": "2%"}); // move the profile image a but from the edge...
+					}
+					// setup the links on the bottom of the page
+					$("#missionsLink").attr('href', 'missionsNew.html?id=' + id);
+					$("#goalsLink").attr('href', 'goalsNew.html?id=' + id + "&v=2");
+					$("#rankLink").attr('href', 'reg/rank.html?id=' + id);
+					$("#storeLink").attr('href', 'store/index.html?id=' + id);
+					// load up the users profile photo...
+					$.post('/mobile/reg/ajax/getPhoto.php', { user_id : id }, function( success ) {
+						var info = $.parseJSON( success ); // get the info from the response...
+						var html = '<a href="reg/medals/index.html?id=' + id +'">'; // setup the a tag...
+						// add the image based on the way the user's image is stored...
+						if (info.mobile_pic) html += '<img id="userImg" src="https://mashpia.com/mobile/reg/' + info.mobile_pic + '">';
+						else if (info.thumb) html += '<img id="userImg" src="https://mashpia.com/thumbs/' + info.thumb + '">';
+						else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' + info.photo + '">';
+						// close the a tag
+						html += '</a>';
+						$(".personalImg").append( html );
+					}); // end the user image
+				}); // end the AJAX loading of the Missions Page
+			}); // end anynomus function
+		}); // end on page loaded listener
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-71974937-1', 'auto');
+	  ga('send', 'pageview');
+	</script>
+</html>

@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css?family=Gochi+Hand');
+/*Eliminate the padding around the background image....*/
+.rank-medal-modal .modal-body{
+    padding: 0px;
+}
+/*set the background image, padding, border-radius and animations*/
+.rank-medal-modal .cong-box{
+    padding: 25px;
+    background-image: url(/mobile/img_new/background.jpg);
+    background-size: 100%;
+    background-position: center center;
+    text-align: center;
+    animation: cong-box-background 10s infinite;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    font-family: 'Gochi Hand', cursive!important;
+}
+/*set the "Mazel Tov!" text to have a specific style...*/
+.rank-medal-modal .cong-text{
+    max-width: 100%; margin: auto;
+    font-size: 3.5em; /* determine the size of the animation */
+    height: 100px; transition: .25s ease-in-out;
+}
+/*Animate the imgs*/
+.rank-medal-modal .cong-box .rbn img{
+    animation: cong-box-rbn 3s alternate;
+}
+.rank-medal-modal .cong-box .rbn img.rbn-close{
+    animation: cong-box-rbn-reverse 2s;
+}
+.rank-medal-modal .cong-box .rank img{
+    animation: cong-box-rank 3s alternate;
+}
+.rank-medal-modal .cong-box .rbn, .rank-medal-modal .cong-box .rank {
+    animation: cong-box-img-pulse 1.5s;
+    animation-iteration-count: 4;
+    animation-delay: 3s;
+}
+.rank-medal-modal .cong-box .rbn.no-animate, .rank-medal-modal .cong-box .rank.no-animate {
+    animation-play-state: paused;
+}
+/*Image Animations*/
+@keyframes cong-box-rbn{
+    0%{max-width: 0px;padding:0px;}
+    100%{max-width: 280px;}
+}
+@keyframes cong-box-rbn-reverse{
+    0%{max-width: 280px;padding: 30px 30px 80px 30px; /* top, right, bottom, left */}
+    100%{max-width: 0px;}
+}
+@keyframes cong-box-rbn-small-reverse{
+    0%{max-width: 200px;padding: 22px 22px 55px 22px; /* top, right, bottom, left */}
+    100%{max-width: 0px;}
+}
+@keyframes cong-box-rbn-small{
+    0%{max-width: 0px;padding:0px;}
+    100%{max-width: 200px}
+}
+@keyframes cong-box-rank{
+    0%{max-width: 0px;}
+    100%{max-width: 125px}
+}
+@keyframes cong-box-img-pulse{
+    0%{transform: scale(1)}
+    50%{transform: scale(.55)}
+    100%{transform: scale(1)}
+}
+/* animation */
+@keyframes textAnim {
+  0% {font-size: 1em; color: black;}
+  10% {font-size: 1.2em; color: red;}
+  40% {font-size: .9em; color: black;}
+  100% {font-size: 1em; color: black;}
+}
+/*Webkit version of said text animation*/
+@-webkit-keyframes textAnim {
+  0% {font-size: 1em; color: black;}
+  10% {font-size: 1.2em; color: red;}
+  40% {font-size: .9em; color: black;}
+  100% {font-size: 1em; color: black;}
+}
+
+.cong-text span{
+  font-family: Helvetica, Arial;
+  font-weight: 900;
+  animation: textAnim 2s ease infinite;
+  -webkit-animation: textAnim 2s ease infinite;
+}
+
+/*Detailed medal/rank award*/
+.cong-box p{font-size: 24px;}
+
+/* Medal Ribbions */
+/*.rbn, .rbn img{*/
+/*    transition: .25s ease-in-out;*/
+/*}*/
+
+.rank-medal-modal .cong-box .rbn img{
+    width: 280px;
+    margin: auto;
+    background-image:url(/mobile/img_new/medal-ribbon-color-purple-svg.svg);
+    background-size:contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    padding: 30px 30px 80px 30px; /* top, right, bottom, left */
+}
+
+.rank-medal-modal .cong-box .rbn img.rbn-close{
+    max-width: 0px;
+    padding: 0px;
+}
+
+@media(max-width: 500px){
+    .rank-medal-modal .cong-box .rbn img {
+        animation: cong-box-rbn-small 3s alternate;
+        width: 200px;
+        padding: 22px 22px 55px 22px;
+    }
+    .rank-medal-modal .cong-box .rbn img.rbn-close{
+        animation: cong-box-rbn-small-reverse 2s;
+    }
+}
+
+.rank img {
+    max-width: 125px;
+}
+
+/*Responsive elements...*/
+@media (max-width: 480px) {
+    .rank-medal-modal .cong-text{
+        font-size: 2.5em;
+        height: 70px;
+    }
+}
+
+@media (max-width: 350px) {
+    .rank-medal-modal .cong-text{
+        font-size: 1.8em;
+        height: 50px;
+    }
+}
+
+/* Text animation Delays */
+#l2 {
+  animation-delay: .1s;
+  -webkit-animation-delay: .1s;
+}
+#l3 {
+  animation-delay: .2s;
+  -webkit-animation-delay: .2s;
+}
+#l4 {
+  animation-delay: .3s;
+  -webkit-animation-delay: .3s;
+}
+#l5 {
+  animation-delay: .4s;
+  -webkit-animation-delay: .4s;
+}
+
+#l6 {
+  animation-delay: .5s;
+  -webkit-animation-delay: .5s;
+}
+#l7,
+#l8,
+#l9 {
+  animation-delay: .6s;
+  -webkit-animation-delay: .6s;
+}

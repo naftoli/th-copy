@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>Jetpack - Mobile Template</title>
+    <meta content="IE=edge" http-equiv="x-ua-compatible">
+    <meta content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Raleway:300,400,700' rel='stylesheet' type='text/css'>
+
+    <!-- Icons -->
+    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" media="all" rel="stylesheet" type="text/css">
+
+    <!-- Styles -->
+    <link href="css/keyframes.css" rel="stylesheet" type="text/css">
+    <link href="css/materialize.min.css" rel="stylesheet" type="text/css">
+    <link href="css/swiper.css" rel="stylesheet" type="text/css">
+    <link href="css/swipebox.min.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+
+    </script>
+</head>
+
+  <body>
+    <div id="main"> <!-- Main Container -->
+
+      <!-- Toolbar -->
+      <div id="toolbar" class="primary-color">
+        <div class="title">Soldier {Name}</div>
+      </div>
+      <!-- End of Toolbar -->
+      
+      <!-- Page Contents -->
+      <div class="page animated fadeinright">
+        
+        <!-- Hero Header -->
+        <div class="hero-header animated fadein">
+          <!-- Slider -->         
+          <div class="swiper-container slider">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <img src="img/product3.jpg" alt="" class="img">
+              </div>
+              <div class="swiper-slide">
+                <img src="img/product.jpg" alt="" class="img">
+              </div>
+            </div>
+          </div>
+          <!-- End of Slider -->
+
+          <!-- Floating Action Button -->
+          <div class="floating-button animated bouncein delay-3">
+            <a href="checkout2.html" class="btn-floating btn-large waves-effect waves-light accent-color btn z-depth-1">
+              <i class="ion-ios-cart"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Product Title -->
+        <div class="center-align p-20">
+          <h3 class="m-0" class="pTitle"></h3>
+          <h4 class="miles"></h4>
+        </div>
+
+      </div> 
+      <!-- End of Page Contents -->
+
+    </div><!-- End of Main Container -->
+    
+    
+    <script src="js/jquery-2.1.0.min.js"></script>
+    <script src="js/jquery.swipebox.min.js"></script>   
+    <script src="js/materialize.min.js"></script> 
+    <script src="js/swiper.min.js"></script>  
+    <script src="js/jquery.mixitup.min.js"></script>
+    <script src="js/masonry.min.js"></script>
+    <script src="js/chart.min.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="/mobile/reg/js/js.cookie.js"></script>
+    
+    <script>
+        var url = location.toString();
+        var pos = url.indexOf('='); 
+        var id = url.substring( pos+1 );
+        
+        var p = id.indexOf('&');
+        var prize = 0;
+        if (p > 0) {
+            var temp = id.substring( p+1 );
+            id = id.substring( 0, p );
+            
+            var tPos = temp.indexOf('=');
+            prize = parseInt( temp.substring( tPos+1 ) );
+        }
+        
+        $.post('/mobile/reg/ajax/checkAuth.php', { user_id : id, admin_id : Cookies.get('admin') }, function( success ) {
+            if (success == 0) {
+                window.location = "/mobile";
+            }
+        });
+        
+        //get user info
+        $.post('ajax/getUserInfo.php', { user : id }, function( success ) {
+            var user = $.parseJSON( success );
+            $(".title").text(user.rank + ' ' + user.name);
+        });
+        
+        $.post('ajax/getPrize.php', { id : prize }, function( success ) {
+           var prize = $.parseJSON( success );
+           $(".img").attr('src', "http://mashpia.com/file_view.php?id=" + prize.prize_image_id);
+           $(".pTitle").append("<strong>" + prize.prize_name + "</strong>");
+           $(".miles").append(prize.prize_points + ' points'); 
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,177 @@
+.mb-25 {
+    margin-bottom: 25px;
+}
+.product.light {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border: 5px solid #ffffff;
+    max-width: 263px;
+    margin: 5px auto 10px;
+    overflow: hidden;
+    position: relative;
+    background-color: #ffffff;
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+.figure-hover-overlay {
+    position: relative;
+    overflow: hidden;
+}
+.figure-hover-overlay .figure-href {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 5;
+}
+.product.light .product-new {
+    position: absolute;
+    font-size: 14px;
+    z-index: 5;
+    height: 38px;
+    text-align: center;
+    line-height: 28px;
+    left: -25px;
+    top: -8px;
+    color: #ffffff;
+    background-color: #5eb22d;
+    width: 70px;
+    padding-top: 10px;
+    -webkit-transform: rotate(-45deg) scale(1) skew(0deg) translate(0);
+    -moz-transform: rotate(-45deg) scale(1) skew(0deg) translate(0);
+    -o-transform: rotate(-45deg) scale(1) skew(0deg) translate(0);
+    -ms-transform: rotate(-45deg) scale(1) skew(0deg) translate(0);
+    transform: rotate(-45deg) scale(1) skew(0deg) translate(0);
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+.product.light .product-sale {
+    position: absolute;
+    font-size: 14px;
+    z-index: 6;
+    height: 50px;
+    width: 50px;
+    -webkit-border-radius: 40px !important;
+    -moz-border-radius: 40px !important;
+    border-radius: 40px !important;
+    text-align: center;
+    padding: 10px;
+    right: 3px;
+    top: 3px;
+    line-height: 13px;
+    color: #eb2c33;
+    border: 1px solid rgba(235, 44, 51, 0.5);
+    background-color: rgba(255, 255, 255, 0.9);
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+.product.light .product-caption {
+    text-align: left;
+    position: relative;
+    padding: 10px 10px 5px 10px;
+    background-color: #ffffff;
+}
+.product.light .product-caption .block-name {
+    display: inline-block;
+    margin-right: 50px;
+}
+.product.light .product-caption .product-cart {
+    color: #ffffff;
+    display: inline-block;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.product.light .product-caption .product-name {
+    font-size: 14px;
+    padding: 0 0 5px;
+    display: block;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-family: 'Raleway', sans-serif;
+    color: #0e0e0e;
+}
+.product.light .product-caption .product-price {
+    color: rgba(14, 14, 14, 0.9);
+    font-size: 15px;
+    margin: 0;
+}
+p {
+    color: #555;
+    font-family: "PTSans";
+}
+.product.light .product-caption .product-price span {
+    color: rgba(14, 14, 14, 0.5);
+    font-size: 13px;
+    text-decoration: line-through;
+}
+.product.light .product-caption .product-cart {
+    color: #ffffff;
+    display: inline-block;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.product.light .product-caption .product-cart a {
+    display: inline-block;
+    font-size: 19px;
+    color: #eb2c33;
+    -webkit-backface-visibility: hidden;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    line-height: 40px;
+    border: 1px solid rgba(235, 44, 51, 0.5);
+}
+.fa {
+    display: inline-block;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.figure-hover-overlay img {
+    position: relative;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+    margin: auto;
+}
+.media .fa {
+    margin-top: -10px;
+    margin-right: 10px;
+}
+.itemImage {
+    max-width: 100px;
+}
+.update {
+    font-size: 14px;
+    color: red;
+    cursor: pointer;
+}
+.del {
+    color: #428bca;
+    cursor: pointer;
+}
+.fa-shopping-cart {
+    cursor: pointer;
+}

@@ -1,0 +1,19 @@
+body#main {
+    position: relative;
+}
+
+.bug-report {
+    position: absolute;
+    height: 33px;
+    width: 33px;
+    right: 2%;
+    top: 1.5%;
+}
+
+.he.bug-report {
+    left: 1%;
+}
+
+.bug-report:hover{
+    cursor: pointer;
+}

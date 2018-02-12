@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tzivos Hashem | Medal Board</title>
+<style type="text/css">
+	html{font-family:sans-serif}body{margin:0}a{background-color:transparent}img{border:0}table{border-spacing:0;border-collapse:collapse}td{padding:0}*{box-sizing:border-box}::after,::before{box-sizing:border-box}html{font-size:10px}body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}img{vertical-align:middle}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}table{background-color:transparent}.container::after,.container::before{display:table;content:' '}.container::after{clear:both}a{color:#3c8dbc}body{margin:0;padding:0;font-size:12px}.container{width:100%;margin:0 auto;display:table;padding:0}.span12{width:100%;float:left}.span3{width:25%;float:left}.footer{text-align:center;border-top-width:2px;border-top-style:solid;border-top-color:#9f9f9f;display:table;width:100%}.footer .span3{background-color:#e6e6e6}.footer .span3 span{padding:5px;color:grey;font-size:20px;font-family:font1}.footer .menu-item{width:130px;height:100px;margin:0 auto}.footer .span3 img{width:80px}.footer .span3.active{background-image:-webkit-linear-gradient(top,#e9e9e9,#b7b8b9);background-position:initial initial;background-repeat:initial initial}.header-yellow{width:100%;background-color:#f68829}.header-yellow table{font-size:80px;font-family:font3;color:#fff}@media screen and (max-width:1024px){.container{width:100%;margin:0;padding:0;border:0 solid #9f9f9f;border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:0}.footer{border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:0}}@media screen and (max-width:900px){.footer .menu-item{width:120px;height:100px}.footer .span3 img{width:80px}.header-yellow table{font-size:60px}}@media screen and (max-width:767px){.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}.footer .span3 span{font-size:14px}.header-yellow table{font-size:40px}}@media screen and (max-width:639px){.footer .menu-item{width:100px;height:60px}.footer .span3 img{width:50px}.footer .span3 span{font-size:12px}.header-yellow table{font-size:40px}}@media screen and (max-width:479px){.footer .menu-item{width:60px;height:40px}.footer .span3 img{width:30px}.footer .span3 span{font-size:8px}.header-yellow table{font-size:30px}}body{background-color:#fcfcfc}/*@media screen and (-webkit-min-device-pixel-ratio:0){html{margin-left:1px}}*/
+</style>
+<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
+        <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+<script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
+<script src="js/all.js" defer></script>
+	<script defer src="https://mashpia.com/mobile/js/spin.js"></script>
+	<!--    Bug Report code -->
+    <link rel="stylesheet" href="/mobile/css/bug_report.css"/>
+    <script src="/mobile/js/bug_report.js?v=2.0" defer></script>
+<style>
+	@font-face {
+		font-family: 'digi';
+		src: url('font/DS-DIGIB.TTF');
+	}
+	
+    body {margin-bottom: 100px;}
+	@media(max-width:650px){body {margin-bottom: 55px;}}
+	
+    #gold {
+    	padding-top: 4%;
+    }
+    #gold img {
+    	width: 26%;
+    	height: 26%;
+    	margin-left: 10%;
+    	margin-right: 10%;
+    }
+    #backs img {
+    	opacity: 0.3;
+    }
+    #userImg {
+	    border-radius: 50%;
+	    width: 100%;
+	    height: 100%;
+	    border: 2px solid #31559f;
+	}
+	.personalImg {
+		width: 50px;
+		height: 50px;
+		left: 1%;
+		top: 1%;
+		border-radius: 50%;
+		position: absolute;
+	}
+	
+	.panel-heading {
+		background-color: #f68829 !important;
+		border: none;
+		font-size: 20px;
+	}
+	.panel a {
+		color: white;
+	}
+	.panel a:hover, a:active, a:visited, a:link {
+		text-decoration: none;
+	}
+	
+	.medalInfo {
+		float: right;
+		width: 70%;
+		padding-top: 1%;
+	}
+	
+	.progress {
+		margin-bottom: 5px !important;
+	}
+	
+	.progressText {
+		position: absolute;
+	    display: block;
+	    width: 95%;
+	    color: black;
+	    text-align: center;
+	    font-family: 'digi';
+	    font-size: 14px;
+	}
+	
+	.progress .text {
+		font-family: 'digi';
+		color: #fff;
+		font-weight: normal;
+	}
+	
+	.progressMedalText {
+		position: absolute;
+	    width: 60%;
+	    color: black;
+	    text-align: center;
+	    font-family: 'digi';
+	    font-size: 14px;
+	    font-weight: normal;
+	}
+	
+	i.glyphicon {
+		transition: transform .3s ease-in-out;
+		transition: -moz-transform .3s ease-in-out;
+		transition: -webkit-transform .3s ease-in-out;
+	}
+	
+	hr {
+		margin: 10px 0 !important;
+	}
+	
+	.levelText {
+		font-weight: bold !important;
+		margin: 0 auto;
+		line-height: 1.1;
+		font-size: 24px !important;
+		width: 95%;
+	}
+	
+	.l-3 {
+		margin: 10px auto;
+		width: 100%;
+	}
+	.l-3 .medal{
+		width: 40%;
+	}
+	
+	@media screen and (max-width: 1024px) {
+		.levelText {
+			line-height: 1;
+			font-size: 24px !important;
+		}
+		.l-3 .medal{
+			width: 50%;
+		}
+	}
+	
+	@media screen and (max-width: 900px) {
+		.levelText {
+			line-height: 1;
+			font-size: 20px !important;
+		}
+		.l-3 .medal{
+			width: 45%;
+		}
+	}
+	
+	@media screen and (max-width: 767px) {
+		.levelText {
+			line-height: 0.9;
+			font-size: 18px !important;
+		}
+		.l-3 .medal{
+			width: 45%;
+		}
+	}
+	
+	@media screen and (max-width: 639px) {
+		.levelText {
+			line-height: 0.9;
+			font-size: 16px !important;
+		}
+		.l-3 .medal{
+			width: 45%;
+		}
+	}
+	
+	@media screen and (max-width: 479px) {
+		.levelText {
+			line-height: 0.9;
+			font-size: 14px !important;
+		}
+		.medalInfo span {
+			font-size: 16px !important;
+		}
+		.l-3 .medal{
+			width: 49%;
+		}
+	}
+	
+	.header-yellow #page-title{
+		    font-size: 25px;
+			font-weight: 700;
+			color: #fff;
+			text-align: center;
+			width: auto;
+			display: block;
+			padding: 5px 0px;
+			transition: .25s;
+	}
+	@media (min-width: 525px){
+		.header-yellow #page-title{font-size: 40px;padding: 10px 0px;}
+	}
+	.header-yellow{min-height: 48px;}
+</style>
+</head>
+<body class="rank-page">
+<div class="header-yellow" style="position: relative">
+    <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
+        <span id="page-title">MY MEDAL BOARD</span>
+    </div>
+</div>
+
+<div class="personalImg"></div>
+<div class="bug-report">
+	<img src="/mobile/img_new/report-bug-white-svg.svg" data-category="Medal Board" alt="bug-report" />
+</div>
+
+<div class="container">
+    <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 100px">
+		<div class="span12 body">
+			<div class="span12 footer media-group subMenu" style="width: 100%;">
+                <a href="" id="rankMenu">
+                    <div class="span3" style="width:50%">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/trophy-color-orange-svg.svg">
+                            </div>
+                            <div class="span12">
+                                <span>Rank Board</span> 
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="" id="medalMenu">
+                    <div class="span3 active" style="width:50%">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/medals-color-orange-svg.svg">
+                            </div>
+                            <div class="span12">
+                                <span>Medal Board</span> 
+                            </div>
+                        </div>
+                    </div>
+                </a>
+				<!--
+                <a onclick="alert('Stay tuned for winners.')" id="auctionMenu">
+	                <div class="span3" style="width:33.3%">
+	                    <div class="menu-item">
+	                        <div class="span12">
+	                            <img src="/mobile/reg/icons/Ticket.gif">
+	                        </div>
+	                        <div class="span12">
+	                            <span>Auction</span>
+	                        </div>
+	                    </div>
+	                </div>
+	            </a>
+				-->
+            </div>
+		</div>
+        <div class="span12 body">                               
+            <div id="medals"></div>
+        </div>
+    </div>
+	<div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
+		<div class="span12 footer">
+			<div class="span3">
+                <a href="/mobile/reg/parent_detail.html" id="mainLink">
+                    <div class="menu-item">
+                        <div class="span12">
+                            <img src="/mobile/img_new/boy-color-green-svg.svg">
+                        </div>
+                        <div class="span12">
+                            <span>Accounts</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        <!--
+            <div class="span3">
+                <a href="#" id="goalsLink">
+                <div class="menu-item">
+                    <div class="span12">
+                        <img src="images/menu3.png">
+                    </div>
+                    <div class="span12">
+                        <span>Goals</span>
+                    </div>
+                </div>
+                </a>
+            </div>
+        -->
+            <div class="span3">
+                <a href="#" id="missionsLink">
+                <div class="menu-item">
+                    <div class="span12">
+                        <img src="/mobile/img_new/square-check-color-purple-svg.svg">
+                    </div>
+                    <div class="span12">
+                        <span>Missions</span>
+                    </div>
+                </div>
+                </a>
+            </div>
+            <div class="span3 active">
+                <a href="#" id="rankLink">
+                <div class="menu-item">
+                    <div class="span12">
+                        <img src="/mobile/img_new/achievements-color-orange-svg.svg">
+                    </div>
+                    <div class="span12">
+                        <span>Achievements</span>
+                    </div>
+                </div>
+                </a>
+            </div>
+            <div class="span3">
+                <a href="#" id="storeLink">
+                <div class="menu-item">
+                    <div class="span12">
+                        <img src="/mobile/img_new/cart-color-red-svg.svg">
+                    </div>
+                    <div class="span12">
+                        <span>Rewards</span>
+                    </div>
+                </div>
+                </a>
+            </div>
+		</div>
+	</div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+		$(document).ready(function() {
+		   
+		    var url = location.toString();
+			var pos = url.indexOf('='); 
+			var id = url.substring( pos+1 );
+			
+			$.post('ajax/checkAuth.php', { user_id : id, admin_id : Cookies.get('admin') }, function( success ) {
+				if (success === "0") {
+					window.location = "/mobile";
+				}
+			});
+			
+			$.post('/mobile/reg/ajax/getPhoto.php', { user_id : id }, function( success ) {
+                var info = $.parseJSON( success );
+                var html = '<a href="/mobile/reg/medals/index.html?id=' + id +'">';
+                if (info.mobile_pic) html += '<img id="userImg" src="https://mashpia.com/mobile/reg/' + info.mobile_pic + '">';
+                else if (info.thumb) html += '<img id="userImg" src="https://mashpia.com/thumbs/' + info.thumb + '">';
+                else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' + info.photo + '">';
+                html += '</a>';
+                $(".personalImg").append( html );
+				// set the USER ID for bug reports
+                $(".bug-report img").data("user_id", id);
+            });
+			
+			$("#missionsLink").attr('href', '../missionsNew.html?id=' + id);
+			$("#goalsLink").attr('href', '../goalsNew.html?id=' + id);
+			$("#rankLink").attr('href', 'rank.html?id=' + id);
+			$("#storeLink").attr('href', '../store/index.html?id=' + id);
+			
+			$("#rankMenu").attr('href', 'rank.html?id=' + id);
+			$("#auctionMenu").attr('href', '../auction/category2.html?id=' + id);
+			
+			var medalInfo = {
+		        1 : 'black', 
+		        2 : 'red', 
+		        3 : 'orange', 
+		        4 : 'yellow', 
+		        5 : 'green', 
+		        6 : 'blue', 
+		        7 : 'purple', 
+		        8 : 'brown', 
+		        9 : 'grey', 
+		        10 : 'black'
+		    };
+		    
+		    $.post('medals/ajax/getMedalInfo.php', { user_id : id }, function( success ) {
+		        var medals = $.parseJSON( success );
+		        
+		        var html = '';
+		        for (var i in medals) {
+		            var medal = medals[i];
+		            if (i % 3 == 0 && i < 10) {
+		                //if (i == 9) {
+		                //    html += '</div></div><div class="span12 mt2"><div class="l-4">';
+		                //} else {
+		                    html += '</div></div><div class="span12"><div class="l-3">';
+		                //}
+		            }
+		            //if (i > 8) {
+		            //    html += '<div class="span3" style="text-align: center;">';
+		            //} else {
+		                html += '<div class="span4" style="text-align: center;">';
+		            //}
+		            html += '<a href="medals3.html?id=' + id + '&subject=' + medal.id + '">';
+		            if (medal.photo != '')
+		                html += '<img class="medal" src="https://mashpia.com/file_view.php?id=' + medal.photo + '">';
+		            else 
+		                html += '<img class="medal" src="https://mashpia.com/kiosk/images/medals/holder.png">';
+		            html += '</a><div class="medal-sub" style="background-image: url(images/bot-caption.png);">\
+		                            <div style="display: table;width: 100%;"><span>' + medal.name + '</span></div>\
+		                        </div>\
+		                        <span>' + medal.left + ' to Level ' + medal.next + '</span>\
+		                    </div>';
+		        }
+				//html += '<div class="span12"><div class="l-3">'; // add another spacer to prevent the "X to Level Y" text being blocked by bottom bar
+		        html += '</div></div>';
+		        $("#medals").append( html );
+		        //$(".medal-sub").eq(i).next('span').attr('color', medalInfo[i+1]);
+		    });
+		});
+	});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-71974937-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+    	<meta charset="utf-8">
+        <title>Mobile Web Site</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="/mobile/css/lib/animate.css">
+<style type="text/css">
+	@charset "UTF-8";html{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}body{margin:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}@-ms-viewport{width:device-width}body,html{overflow-x:hidden;height:100%}body{background:#fff;font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;padding-bottom:100px;background-size:cover;background-attachment:fixed}
+	a#back-link {color: #fff;padding: 8px;border-radius: 5px;display: inline-block;background: #5e1c77;} a#back-link:hover {text-decoration: none}
+</style>
+<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="preload" type="text/css" as="style" onload="this.rel='stylesheet'">
+        <noscript><link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css"></noscript>
+<script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
+<script src="js/all.js" defer></script>
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+		
+        <style>
+			.page-goals .task{font-size: 13px;margin-bottom: 8px;}
+			.page-goals li b {vertical-align: top;}
+			.page-goals li label {margin-bottom: 0px;margin-right: 5px;}
+			.page-goals .he li label {margin-bottom: 0px;margin-right: 0px;margin-left: 5px;}
+        	.save {
+        		float: right;
+				margin-top: 10px;
+        	}
+        	.alert {
+        		margin-bottom: 0;
+        	}
+        	.info {
+        		padding: 2%;
+        		margin-top: 5px;
+        		margin-bottom: 7px;
+        		font-weight: bold;
+        		line-height: 1.1;
+        	}
+        	.info2 {
+        		padding: 2%;
+        		font-weight: bold;
+        		line-height: 1.1;
+        		margin-bottom: -10px;
+        	}
+			.panel-heading {
+				cursor: pointer;
+			}
+			#password-protect{
+				display: none;
+				flex-direction: column;
+				justify-content: center;
+				height: 100vh;
+				max-width: 80%;
+				text-align: center;
+				margin: 0 auto;
+			}
+			#password-protect img {
+				max-height: 20px;
+			}
+			.input-group {
+				padding: 10px 0px;
+				margin: 0 auto;
+			}
+			.collapse{display:block;visibility:visible;height:0px;overflow:hidden;}
+			label#remember {vertical-align: top;}
+			#remember input[type=checkbox] {display: none}
+            #remember-check {background: url("/mobile/img_new/square-color-blue-sm.png"); background-size:cover; height: 20px;width: 20px;display:inline-block;}
+            #remember input[type=checkbox]:checked + #remember-check {background: url("/mobile/img_new/square-check-color-blue-sm.png"); background-size:cover; }
+			
+			label.checkbox-label input{display: none}
+			label.checkbox-label .checkbox-display{width: 20px; height: 20px; background: url("//mashpia.com/mobile/img_new/square-color-purple-svg.svg");display: inline-block;}
+			label.checkbox-label input:checked + .checkbox-display{width: 20px; height: 20px; background: url("//mashpia.com/mobile/img_new/square-check-color-green-svg.svg");display: inline-block;}
+        
+			.alert-warning {border-top-left-radius: 0px;border-top-right-radius: 0px;}
+			.panel.panel-default .panel-heading{margin-bottom: 0px;}
+			.panel.panel-default.open .panel-heading{border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;}
+			
+			i.glyphicon.glyphicon-chevron-right, i.glyphicon.glyphicon-chevron-left {background: url("//mashpia.com/mobile/img_new/arrow-1-color-white-svg.svg");width: 10px;height: 15px;background-repeat: no-repeat;}
+			i.glyphicon.glyphicon-chevron-right:before, i.glyphicon.glyphicon-chevron-left:before{content: "";}
+			
+			.he .panel.panel-default .panel-heading i {margin-left: 8px; transform: rotate(180deg);}
+			.he .panel.panel-default.open > .panel-heading i {transform: rotate(90deg);}
+			
+			.panel.panel-default .panel-heading{
+				background: #5e1c77;
+				font-weight: 400;
+			}
+		</style>
+    </head>
+		
+    <body class="page-goals" id="main">
+    	<div id="spinner"></div>
+		<div id="password-protect">
+			<h1>Please enter your password to unlock this feature</h1>
+			<form id="password-protect-form">
+				<div class="input-group">
+					<span class="input-group-addon"><img src="/mobile/img_new/lock-color-gray-sm.png"/></span></span>
+					<input id="password" type="password" class="form-control" placeholder="Password" required>
+				</div>
+				<div class="input-group">
+					<label id="remember">
+						<input type="checkbox">
+						<span id="remember-check"/>
+					</label>
+					<span> Remember on this device</span>
+				</div>
+				<span class="btn btn-default" id="go-back">Go back</span>
+				<input class="btn btn-default" type="submit" value="Submit"/>
+			</form>
+		</div>
+    </body>
+
+	<script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+			$( function() {
+				var url = location.toString();
+				var pos = url.indexOf('id='); 
+				var id = url.substring( pos+3 );
+				var str = id.split("&")[0];
+				var version = id.split("&")[1] ? "&" + id.split("&")[1] : "";
+				
+				var d = id.indexOf('&');
+				if (d > 0) {
+					id = id.substring( 0, d );
+				}
+				
+                if (!Cookies.get('kiosk')) {
+                    $.post('reg/ajax/checkAuth.php', { user_id : id, admin_id : Cookies.get('admin') }, function( success ) {
+                        if (success === "0") {
+                            window.location = "/mobile";
+                        }
+                    });
+                } else {
+					if (!Cookies.get('user')) {
+						location.href = "/mobile/kiosk";
+					}
+				}
+				
+				var opts = {
+					lines: 8, 		// The number of lines to draw
+					length: 26, 	// The length of each line
+					width: 12, 		// The line thickness
+					radius: 26, 	// The radius of the inner circle
+					scale: .75, 		// Scales overall size of the spinner
+					corners: 1, 	// Corner roundness (0..1)
+					color: '#888', 	// #rgb or #rrggbb or array of colors
+					opacity: 0.25, 	// Opacity of the lines
+					rotate: 0, 		// The rotation offset
+					direction: 1, 	// 1: clockwise-1: counterclockwise
+					speed: 1.1, 		// Rounds per second
+					trail: 60, 		// Afterglow percentage
+					fps: 20, 		// Frames per second when using setTimeout() as a fallback for CSS
+					zIndex: 2e9, 	// The z-index (defaults to 2000000000)
+					className: 'spinner', // The CSS class to assign to the spinner
+					top: '50%', 	// Top position relative to parent
+					left: '50%', 	// Left position relative to parent
+					shadow: false, 	// Whether to render a shadow
+					hwaccel: true, 	// Whether to use hardware acceleration
+					position: 'absolute' // Element positioning
+				};
+				var target = document.getElementById('spinner');
+				/*
+				var p = 1;
+				setTimeout( function() {
+					$("#progress").circularloader({
+						progressPercent: p++
+					});
+				}, 500);
+				*/
+				if (localStorage.getItem("remember_me")) {
+					var spinner = new Spinner(opts).spin(target);
+                    getGoalsPage();
+                } else if(localStorage.getItem("check_pass")) {
+				//} else {
+					$("#password-protect").css({"display": "flex"});
+					$("#go-back").click(function(){window.location="/mobile/missionsNew.html?id="+id;});
+					$("#password-protect form").submit(function(event){
+						event.preventDefault();
+						var pwd = $("#password-protect #password").val();
+						$.post("reg/ajax/checkPassword.php", {admin_id: Cookies.get('admin'), pwd: pwd}, function(data){
+							if (data === "1") {
+                                if ($("#remember input")[0].checked) {
+									localStorage.setItem("remember_me", true);
+								} // remember if they want us to not ask again
+								// show the spinner
+								$("#password-protect").css({"display": "none"});
+								var target = document.getElementById('spinner');
+								var spinner = new Spinner(opts).spin(target);
+								// and get the goals page
+								getGoalsPage();
+                            } else { // incorrect password
+								alert("Incorrect Password");
+								$("#password-protect #password").val(""); // clear the password form
+							}
+						});
+					});
+				} else {
+					var spinner = new Spinner(opts).spin(target);
+					getGoalsPage();
+				}
+				// TODO, password protect this
+				
+				// function to get the goals page
+				function getGoalsPage() {
+					$.ajax({
+						type : "GET",
+						url: 'getGoalsPage.php?id=' + str + version, 
+						xhrFields: {
+							onprogress: function( e ) {
+								if (e.lengthComputable) {
+									console.log("Loaded " + Number( (e.loaded / e.total * 100)) + "%");
+								}
+								else {
+									console.log("Length not computable.");
+								}
+							}
+						},
+						success: function( html ) {
+							$("#main").empty();
+							$("#main").append( html );
+							$("#main").addClass("animated fadeIn");
+							
+							if (lang == 2) {
+								$(".container").addClass('he');
+								$(".container").attr('dir', 'rtl');
+							}
+							
+							$("#missionsLink").attr('href', '/mobile/missionsNew.html?id=' + id);
+							$("#rankLink").attr('href', '/mobile/reg/rank.html?id=' + id);
+							$("#storeLink").attr('href', '/mobile/store/index.html?id=' + id);
+							$("#goalsLink").parent().addClass('active');
+                            
+                            if (Cookies.get('kiosk') && Cookies.get('user')) {
+                                // disable account menu item
+                                $("#mainLink").attr('href', '');
+                            }
+				
+							$(document).on('click', ".panel-heading", function() {
+								var c = $(this).parent().attr('class');
+								if (c.indexOf('open') > 0) {
+									$(this).parent().removeClass('open');
+									$(this).parent().find('.collapse').removeClass('in');
+								} else {
+									$(this).parent().addClass('open');
+									$(this).parent().find('.collapse').addClass('in');
+									$(this).parent().siblings().removeClass('open');
+									$(this).parent().siblings().find('.collapse').removeClass('in');
+								}
+							});
+							$.post('/mobile/reg/ajax/getPhoto.php', { user_id : id }, function( success ) {
+								var info = $.parseJSON( success );
+								var html = '<a href="/mobile/reg/medals/index.html?id=' + id +'">';
+								if (info.mobile_pic) html += '<img id="userImg" src="https://mashpia.com/mobile/reg/' + info.mobile_pic + '">';
+								else if (info.thumb) html += '<img id="userImg" src="https://mashpia.com/thumbs/' + info.thumb + '">';
+								else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' + info.photo + '">';
+								html += '</a>';
+								$(".personalImg").append( html );
+							});
+						}
+					});
+                }
+				/*
+				$.get('getGoalsPage.php?id=' + str, function( html ) {
+					$("#main").empty();
+					$("#main").append( html );
+					$(".panel").click( function() {
+						var c = $(this).attr('class');
+						if (c.indexOf('open') > 0) {
+							$(this).removeClass('open');
+							$(this).find('.collapse').removeClass('in');
+						} else {
+							$(this).addClass('open');
+							$(this).find('.collapse').addClass('in');
+						}
+					});
+					$.post('/mobile/reg/ajax/getPhoto.php', { user_id : id }, function( photo ) {
+						if (photo) $(".personalImg").append( '<img id="userImg" src="../../../file_view.php?id=' + photo + '">' );
+					});
+				});
+				*/
+			});
+		});
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-71974937-1', 'auto');
+	  ga('send', 'pageview');
+	</script>
+</html>		

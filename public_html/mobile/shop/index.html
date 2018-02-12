@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+        <title>Mobile Store</title>
+        
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+		
+        <script src="js/modernizr-2.8.3.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/pushy.css">
+        <link rel="stylesheet" href="css/slick.css?v=1.3">
+        <link rel="stylesheet" href="css/app.css?v=1.6">
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
+	</head>
+	<body class="page-goals">
+        <header class="navbar" id="top" role="banner">
+            <div class="container">
+                <div class="navbar-header">
+                    <h1>My Store</h1>
+                </div>
+            </div>
+        </header>
+        
+		<div style="padding: 1%;">
+			<iframe src="/blog/shop" style="position: absolute; height: 100%; width: 98%; border: none"></iframe>
+		</div>
+
+	</body>
+	<script src="js/jquery-1.7.1.min.js"></script>
+	<script src="../reg/js/js.cookie.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var admin = Cookies.get('admin');
+			if (!admin) {
+				window.location = "/mobile/index.html";
+			}
+			$.post('ajax/check_wc_user.php', { admin : admin }, function( error ) {
+				if (error != 0) {
+					alert(error);
+				}
+			});
+		});
+	</script>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Mobile Web Site</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style type="text/css">
+	@charset "UTF-8";html{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}body{margin:0}a{background-color:transparent}img{border:0}table{border-spacing:0;border-collapse:collapse}td{padding:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}img{vertical-align:middle}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}table{background-color:transparent}.container:after,.container:before{display:table;content:" "}.container:after{clear:both}@-ms-viewport{width:device-width}body{margin:0;padding:0;font-size:12px}.container{width:100%;margin:0 auto;display:table;padding:0}.span12{width:100%;float:left}.span3{width:25%;float:left}.footer{text-align:center;border-top:2px solid #9f9f9f;display:table;max-width:1014px;width:100%}.footer .span3{background-color:#e6e6e6}.footer .span3 span{padding:5px;color:grey;font-size:20px;font-family:font1}.footer .menu-item{width:130px;height:100px;margin:0 auto}.footer .span3 img{width:80px}.footer .span3.active{background-color:#999;background-repeat:repeat-x;background:-webkit-gradient(linear,0 0,0 100%,from(#b7b8b9),to(#e9e9e9));background:-webkit-linear-gradient(top,#e9e9e9,#b7b8B9);background:-moz-linear-gradient(top,#e9e9e9,#b7b8B9);background:-ms-linear-gradient(top,#e9e9e9,#b7b8B9);background:-o-linear-gradient(top,#e9e9e9,#b7b8B9)}.header-green{width:100%;background-color:#72bf44;background-repeat:repeat}.t-news span{font-size:80px;font-family:font4;color:#fff;line-height:120px}td.t-news{width:100px}.container .body{float:left;border:5px solid #ccc;border-top:0 solid transparent}.footer.media-group .span3{background-color:#fff}.footer.media-group .span3.active{background-repeat:repeat-x;background:-webkit-gradient(linear,0 0,0 100%,from(#fff),to(#ececec));background:-webkit-linear-gradient(top,#fff,#ececec);background:-moz-linear-gradient(top,#fff,#ececec);background:-ms-linear-gradient(top,#fff,#ececec);background:-o-linear-gradient(top,#fff,#ececec);background-color:#f0f0f0}.footer.media-group{margin-top:0;border-top:0 solid transparent;border-bottom:5px solid #ccc}.footer.media-group .menu-item{padding:10px 0}@media screen and (max-width:1024px){.container{width:100%;margin:0;padding:0;border:0 solid #9f9f9f;border-radius:0}.footer{border-radius:0}.container .body{border:0 solid #ccc}}@media screen and (max-width:900px){.footer .menu-item{width:120px;height:100px}.footer .span3 img{width:80px}.t-news span{line-height:100px}.container{display:block}}@media screen and (max-width:767px){.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}.footer .span3 span{font-size:14px}.t-news span{font-size:60px;line-height:70px}.footer.media-group .span3 img{width:70px}}@media screen and (max-width:639px){.footer .menu-item{width:100px;height:60px}.footer .span3 img{width:50px}.footer .span3 span{font-size:12px}body{margin-bottom:80px!important}.t-news span{font-size:50px;line-height:57px}.footer,.footer.media-group{border-width:3px}.footer.media-group .span3 img{width:60px}}@media screen and (max-width:479px){.footer .menu-item{width:60px;height:40px}.footer .span3 img{width:38px}.footer .span3 span{font-size:10px}body{margin-bottom:60px!important}.t-news span{font-size:38px;line-height:42px}.footer,.footer.media-group{border-width:2px}.footer.media-group .span3 img{width:46px}}.container .body {background-image: url(images/news/star.png);}
+	
+</style>
+<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+<script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
+<script src="js/all.js" defer></script>
+    <style>
+		.footer.media-group .menu-item {padding: 0px;}
+        .disabled {opacity: 0.4;}
+        .more-link {color: #72bf44;font-weight: bold;}
+        #wpContent img {max-width: 100%;height: auto;}
+		.b-t-description span img{float: none;}
+		.aligncenter {display:block;border: none;margin: auto;}
+		.alignright {float: right;margin-left: 15px;margin-right: 0;}
+		.b-t-title {text-align: center;}
+		video {max-width: 100%;}
+/*		Show the stories in a collapsed state*/
+		.story {max-height: 600px;overflow: hidden;transition: max-height 1s ease-in-out;position: relative;}
+/*		Show more button*/
+		span.show_more {
+			position: absolute;bottom: 0;left: 0;width: 100%;display: inline-block;text-align: center;padding: 15px;
+			background: linear-gradient(rgba(255,255,255,0.3), #ccc);font-size: 1.9em;color: #3155a1;font-family: font3;
+		}
+		span.show_more:hover{cursor: pointer;}
+		
+		#wpContent{
+			width: 94%;
+			float: left;
+			margin: 3%;
+		}
+		iframe {
+			max-width: 100%;
+		}
+		#logged-in-footer, #myshliach-footer, #logged-out-footer{
+			position: fixed;bottom: 0px;z-index: 9999; display: none;
+		}
+		@media screen and (min-width: 640px){
+			#wpContent{margin-bottom: 100px;}
+			.span12.wrap1 {margin-bottom: 8px;}
+			#buttons .btn.btn-success{font-size: 1.8em;}
+		}
+		@media screen and (max-width: 639px) {
+			#buttons{margin-top: 20px;}
+		}
+    </style>
+</head>
+<body class="news">
+<div class="header-green" style="position: relative">
+    <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
+        <table style="width: 100%;">
+            <tr>
+            	<td class="t-news" style="text-align: center;">
+            		<span class="span12">TZIVOS HASHEM NEWS</span>
+            	</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="container">
+    <div class="span12" style="max-width:1014px; width:100%;margin:0 auto;float:none;">
+		<div class="body span12">
+			<div class="span12 footer media-group" style="width: 100%;">
+                <a href="index.html">
+	                <div class="span3 active">
+	                    <div class="menu-item">
+	                        <div class="span12">
+                                <img src="/mobile/img_new/news-color-green-svg.svg" alt="">
+	                        </div>
+	                        <div class="span12">
+	                            <span>News</span> 
+	                        </div>
+	                    </div>
+	                </div>
+	            </a>
+                <a href="birthdays.html">
+	                <div class="span3">
+	                    <div class="menu-item">
+	                        <div class="span12">
+                                <img src="/mobile/img_new/cake-color-green-svg.svg" alt="">
+	                        </div>
+	                        <div class="span12">
+	                            <span>Birthdays</span>
+	                        </div>
+	                    </div>
+	                </div>
+                </a>
+                <a href="winners.html">
+	                <div class="span3">
+	                    <div class="menu-item">
+	                        <div class="span12">
+                                <img src="/mobile/img_new/ticket-color-green-svg.svg" alt="">
+	                        </div>
+	                        <div class="span12">
+	                            <span>Winners</span>
+	                        </div>
+	                    </div>
+	                </div>
+	            </a>
+	            <a href="promotions.html">
+	                <div class="span3">
+	                    <div class="menu-item">
+	                        <div class="span12">
+                                <img src="/mobile/img_new/promotions-color-green-svg.svg" alt="">
+	                        </div>
+	                        <div class="span12">
+	                            <span>Promotions</span>
+	                        </div>
+	                    </div>
+	                </div>
+	            </a>
+            </div>
+			
+			<div class="span12 wrap1" style="margin-bottom: 0px;">
+				<div style="width: 90%; margin: 2% 5%">
+					<div class="b-t-title">
+						<span>Click <a href="https://www.dropbox.com/sh/hu0z982m185jmjs/AAD2OeaKpE5fZQlVxdhJQ26Ia?dl=0" target="_blank">here</a> to access the <i>Hachayols</i> of each week!</span>
+					</div>
+				</div>
+			</div>
+            
+            <div id="wpContent">
+			<!--
+				<div class="span12 wrap1" style="">
+					<div style="width : 90%; margin : 2% 5%;" >
+						<div class="b-t-title">
+							<span>Pirkei Avos</span>
+						</div>
+						<div class="b-t-description">
+							<span>The Mishna’s timeless wisdom comes alive.</span>
+						</div>
+						<div class="b-m-main">
+							<img class="img-responsive" src="images/news/content1.png" />
+						</div>
+					</div>
+					<div class="comment" style="background-color:#ddd;">
+						<div class="comment-body">
+							<div class="mr-150">
+								<img src="images/news/comment.png" style="">
+								<span style="margin : 0px 5px;">10</span>
+								<span>comments</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				-->
+				
+			</div>
+        </div>
+        
+        <div class="span12 bottomNav" id="logged-in-footer">
+            <div class="span12 footer">
+                <div class="span3 active" style="width: 100%">
+                	<a href="/mobile/reg/">
+	                    <div class="menu-item">
+	                        <div class="span12">
+                                <img src="/mobile/img_new/boy-color-green-svg.svg" alt="">
+	                        </div>
+	                        <div class="span12">
+	                            <span>Accounts</span>
+	                        </div>
+	                    </div>
+	                </a>
+                </div>
+			</div>
+		</div>
+		
+		<div class="span12 bottomNav" id="logged-out-footer">
+            <div class="span12 footer">
+                <div class="span3 active" style="width: 100%">
+                	<a href="/mobile/reg/">
+	                    <div class="menu-item">
+	                        <div class="span12">
+                                <img src="/mobile/img_new/boy-color-green-svg.svg" alt="">
+	                        </div>
+	                        <div class="span12">
+	                            <span>Log In</span>
+	                        </div>
+	                    </div>
+	                </a>
+                </div>
+			</div>
+		</div>
+		
+		<div class="span12 bottomNav" id="myshliach-footer">
+			<div class="span12 footer">
+				<div class="span3 active" style="width: 50%">
+					<a href="/mobile/reg/">
+						<div class="menu-item">
+							<div class="span12">
+								<img src="/mobile/img_new/boy-color-green-svg.svg" alt="">
+							</div>
+							<div class="span12">
+								<span>Accounts</span>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="span3" style="width: 50%">
+					<a href="tweets.html">
+						<div class="menu-item">
+							<div class="span12">
+								<img src="http://2.bp.blogspot.com/-YjlZkTqARhU/VvovkV2cjfI/AAAAAAAAF0M/MYFsc3lnU2Mo6M7W0sN9VR89pjC9uIFDg/s1600-r/Twitter-icon.png.png">
+							</div>
+							<div class="span12">
+								<span>Tweets</span>
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+    </div>
+</div>
+	<script>
+		//new UISearch( document.getElementById( 'sb-search' ) );
+	</script>
+	<script src="js/js.cookie.js"></script>
+	<script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+			var page = 1;
+			var url = window.location.href.toString();
+			
+			var pos = url.indexOf('p='); 
+			if (pos > 0) {
+				var p1 = url.indexOf('=');
+				page = url.substring( p1+1, p1+2 );
+			}
+			
+			var search = '';
+			var pos2 = url.indexOf('search=');
+			if (pos2 > 0) {
+				var p2 = url.indexOf('=');
+				search = url.substring( p2+1 );
+			}
+			
+			var postID = 0;
+			var pos3 = url.indexOf('pid=');
+			if (pos3 > 0) {
+				var p3 = url.indexOf('=');
+				postID = url.substring( p3+1 );
+			}
+			
+			var admin = Cookies.get('admin');
+			if (!admin) {
+				$("#logged-out-footer").css({"display": "block"});
+			} else {
+				$("#logged-in-footer").css({"display": "block"});
+			}
+			
+			if (Cookies.get('shliach') && admin) {
+				var shliach = Cookies.get('shliach');
+				if (shliach == 1) {
+					$("#logged-in-footer").css({"display": "none"});
+					$("#my-shliach-footer").css({"display": "block"});
+					//$(".bottomNav").empty();
+					//$(".bottomNav").append( html );
+				}
+			} else if (admin) {
+				$.post('ajax/checkMyShliach.php', { admin : admin }, function( isShliach ) {
+					Cookies.set('shliach', isShliach ? 1 : 0);
+					if (isShliach > 0) {
+						$("#logged-in-footer").css({"display": "none"});
+						$("#my-shliach-footer").css({"display": "block"});
+					}
+				});
+			}
+			
+			$.post('ajax/getPosts.php', { page : page, search : search, postID : postID }, function( success ) {
+				var info = $.parseJSON( success );
+				var pageInfo = info['pageInfo'];
+				var page = parseInt( pageInfo['page'] );
+				var total = parseInt( pageInfo['total'] );
+				var posts = info['data'];
+				var html = '';
+				if (posts.length) {
+					for (var p in posts) {
+						html += '<div class="span12 wrap1 story">';
+						html += '<div style="width : 90%; margin : 2% 5%;">';
+						html += '<div class="b-t-title">';
+						html += '<span>' + posts[p]['title'] + '</span>';
+						html += '</div><div class="b-t-description">';
+						html += '<span>' + posts[p]['content'].replace(/http:/g, 'https:') + '</span>';
+						html += '</div><br />';
+						if (posts[p]['images'].length) {
+							html += '<div class="b-m-main">';
+							for (var i in posts[p]['images']) {
+								html += '<img class="img-responsive" src="' + posts[p]['images'][i][0].replace(/http:/g, 'https:') + '" /><br />';
+							}
+							html += '</div>';
+						}
+						html += '<span class="show_more">Show More</span>';
+						//var d = new Date( posts[p]['posted'] );
+						//html += '<div style="font-size: 10px; font-style: italic; clear: both;">Posted: ' + d.toDateString() + '</div>';
+						html += '</div></div><div style="clear: both"></div>';
+						if (p < (posts.length-1)) {
+							html += '<hr style="width: 50%; border: 1px solid #72bf44; margin-top: 20px;" />';
+						} else {
+							if (page == 1 && total == 1) {} 
+							else {
+								html += '<div id="buttons">';
+								if (page != 1) {
+									html += '<a href="index.html?p=' + (page - 1) + '" class="btn btn-success pull-left" role="button"><< Previous</a>';
+								}
+								if (page != total) {
+									html += '<a href="index.html?p=' + (page + 1) + '" class="btn btn-success pull-right" role="button">Next >></a>';
+								}
+								html += '</div>';
+							}
+						}
+					}
+				} else {
+					html += '<div class="span12 wrap1">';
+					html += '<div style="width : 90%; margin : 2% 5%;">';
+					html += '<div class="b-t-description">';
+					html += '<span>No Posts match your search criteria.</span>';
+					html += '</div></div></div>';
+				}
+				
+				if (postID) {
+					html += '<br /><div align="center"><a href="index.html"><button type="button" class="btn btn-success">Back</button></a></div>';
+				}
+				
+				$("#wpContent").append( html );
+				setTimeout(function(){
+					$.each($(".story"), function(index, story){
+						if(!(story.scrollHeight > $(story).height())){
+							$(story).find(".show_more").hide();
+						};
+					});
+				}, 1000);
+				
+				// set the on click funciton for the show_more buttons
+				$("span.show_more").click(function(event){
+					var story = $(event.target).parent().parent();
+					var show_more = $(event.target)
+					
+					if (show_more.text() == "Show More") {
+                        story.css({"max-height": story[0].scrollHeight});
+						show_more.text("Show Less");
+                    } else {
+						story.css({"max-height": "600px"});
+						show_more.text("Show More");
+					}
+				});
+			});
+			
+			$(document).on('click', '.more-link', function(e) {
+				e.preventDefault();
+				var link = $(this).attr('href');
+				var pos1 = link.indexOf('?');
+				var pos2 = link.indexOf('#');
+				var id = link.substring((pos1+3), pos2);
+				window.location.href = "index.html?pid=" + id;
+			});
+		});
+	</script>
+<!-- Google Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-112476624-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Mobile Web Site</title>
+		<link href="/mobile/reg/css/all.css?v=1.4" rel="stylesheet"/>
+		<noscript><link rel="stylesheet" href="css/all.css?v=1.1" as="style" onload="this.rel='stylesheet'"></noscript>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
+        <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+		<script src="js/all.js" defer></script>
+		<style>
+		#logOff img, #settings img, #addChild img{height: 30px; width: 30px;}
+		#logOff div {float: left;}
+		#settings div {float: right;}
+		.row.parent_names{margin:5px 0px;}
+		.row.add_child{margin:10px;}
+		
+		.btn-info {background-color: #5bc0de !important;border-color: #46b8da !important;}
+		
+		.chidonRegInfo {font-size: 18px;color: red;font-style: italic}
+		
+		#bh{
+			text-align: center;font-size: 1.5em;position: absolute;top: 5px;
+			width: 100%;color: rgba(255,255,255,.6);font-family:font1;
+			display: inline-block; text-align: center;
+		}
+		.page5 .chilrens{margin-bottom: 10px;}
+		.page5 .chilrens .row{
+			margin-bottom: 10px;
+		}
+		.img-img, .img-people{
+			border-color: #fff;
+		}
+/*		Remove this to make it take up the whole page*/
+		.page5 > .span12.body {max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 0px}
+		
+		@media screen and (min-width: 600px) {.bottomSpace {height: 125px;}}
+		
+		@media screen and (max-width: 639px) {
+			.chidonRegInfo {font-size: 15px;}
+		}
+		@media screen and (max-width: 600px) {
+			#logOff img, #settings img, #addChild img{height: 20px; width: 20px;}
+			.bottomSpace {height: 75px;}
+		}
+		@media screen and (max-width: 479px) {
+			.chidonRegInfo {font-size: 12px;}
+		}
+	</style>
+	</head>
+	<body>
+		<div class="container page5">
+			<div id="bh">ב"ה</div>
+			<div class="span12 body" style="">
+				<div class="header">
+					<div class="row">
+						<div class="col-xs-6">
+                            <a href="#" id="logOff">
+                                <div><img src="/mobile/img_new/lock-color-white-svg.svg"/></div>
+                                <div style="margin-left:10px"><span class="lb-ico">log out</span></div>
+                            </a>
+						</div>
+						<div class="col-xs-6" align="right" id="settings">
+                            <a href="edit_profile.html">
+							    <div><img src="/mobile/img_new/settings-color-white-svg.svg"/></div>
+							    <div style="margin-right:10px;"><span class="lb-ico">edit</span></div>
+                            </a>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-1"></div>
+						<div class="col-xs-4" align="center">
+							<img src="img/father-2.png" alt="" class="avatar img-people" id="father">
+						</div>
+						<div class="col-xs-2"></div>
+						<div class="col-xs-4" align="center">
+							<img src="img/mother-2.png" alt="" class="avatar img-people" id="mother">
+						</div>
+					</div>
+					<div class="row parent_names">
+						<div class="col-xs-6" align="center">
+							<div class="profile-name father"></div>
+						</div>
+						<div class="col-xs-6" align="center">
+							<div class="profile-name mother"></div>
+						</div>
+					</div>
+				</div>
+				<div class="row add_child">
+					<div class="col-xs-6">
+                        <a href="addchild2.html" id="addChild">
+						    <div style="float:left"><div class="ico-wrapper">
+					          <img src="/mobile/img_new/circle-+-color-blue-svg.svg" alt="" class="ico-add-child">
+						    </div></div>
+						    <div style="float:left"><span class="lb-add-child">&nbsp;add child</span></div>
+                        </a>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="chilrens" id="children">
+							<script id="childrenTpl" type="text/x-handlebars-template">
+								{{#each children}}
+									<div class="row" id="r{{@key}}">
+										<div class="col-xs-12">
+											<table width="100%" style="margin-left:-10px">
+												<tr>
+													<td width="33.3%" valign="top">
+														<div class="avatar-container img-people" align="center" style="position:relative">
+															<!--<a href="medals/index.html?id={{@key}}">-->
+															{{#if this.needsReg}}
+																{{#if this.allowRemove}}
+																{{else}}
+																	<a href="#">
+																{{/if}}
+															{{else}}
+																{{#if this.chayolei}}
+																	<a href="medals/index.html?id={{@key}}">
+																{{/if}}
+															{{/if}}
+															{{#if this.mobile_pic}}
+																<img src="{{mobile_pic}}" class="children-avatar">
+															{{else}}
+																{{#if this.photo}}
+																	{{#if this.thumb}} 
+																	<img src="/thumbs/{{thumb}}" class="children-avatar">
+																	{{else}}
+																	<img src="../../file_view.php?id={{photo}}" class="children-avatar">
+																	{{/if}}
+																{{else}}
+																<img src="images/profile-photo-default.jpg" class="children-avatar">
+																{{/if}}
+															{{/if}}
+															<img src="images/rankImgs/{{rankOrd}}.png" class="children-mark">
+															<!--</a>-->
+															{{#if this.needsReg}}
+																{{#if this.allowRemove}}
+																{{else}}
+																	</a>
+																{{/if}}
+															{{else}}
+																{{#if this.chayolei}}
+																	</a>
+																{{/if}}
+															{{/if}}
+														</div>
+													</td>
+													<td style="padding-left:10px" id="{{@key}}">
+														<div class="childrens-content">
+															{{#if this.needsReg}}
+																{{#if this.allowRemove}}
+																{{else}}
+																	<a href="#">
+																{{/if}}
+															{{else}}
+																{{#if this.chayolei}}
+																	<a href="medals/index.html?id={{@key}}">
+																{{/if}}
+															{{/if}}
+																<div class="childrens-content-h1"><b>{{rank}}</b> {{first}} {{last}}</div>
+																<div class="childrens-content-h2">{{school}} - {{city}}</div>
+															{{#if this.needsReg}}
+																{{#if this.allowRemove}}
+																{{else}}
+																	</a>
+																{{/if}}
+															{{else}}
+																{{#if this.chayolei}}
+																	</a>
+																{{/if}}
+															{{/if}}
+															{{#if this.needsReg}}
+																<div style="margin:10px 0px">
+																	{{#if this.schoolRegistered}}
+																		{{#if this.schoolTypeRegistered}}
+																			<button class="btn btn-primary re_register">Register Tzivos Hashem <span class="year"></span></button>
+																		{{/if}}
+																	{{/if}}
+																</div>
+															{{/if}}
+															
+															{{#if this.chidonRegistered}}
+																<div style="margin:10px 0px">
+																	<div class="chidonRegInfo">Registered for Chidon</div>
+																	{{#if this.shabbatonRegistered}}
+																		{{#if this.shabbatonConfirmed}}
+																			<div class="chidonRegInfo" style="color: #17771c">Chidon Shabbaton Enrolled</div>
+																		{{else}}
+																			<div class="chidonRegInfo">Chidon Shabbaton Pending Enrollment</div>
+																			{{#if this.shabbatonEdit}}
+																				<div style="margin: 10px 0px">
+																					<button class="btn btn-danger editEnrollment">Edit Enrollment</button>
+																				</div>
+																			{{/if}}
+																		{{/if}}
+																	{{else}}
+																		{{#if this.enrollShabbaton}}
+																			<div style="margin:10px 0px">
+																				<button class="btn btn-danger enroll">Enroll for Chidon Shabbaton</button>
+																			</div> 
+																		{{/if}}
+																	{{/if}}
+																	<!--<div style="margin:10px 0px">
+																		<button class="btn btn-primary editChidon">Edit Sweater Size</button>
+																	</div>-->
+																</div>
+															{{/if}}
+															
+															{{#if this.chidon}}
+																{{#if this.chidonRegistered}}
+																{{else}}
+																	<div style="margin:10px 0px">
+																		<button class="btn btn-primary chidon">Register Chidon <span class="year"></span></button>
+																	</div>
+																{{/if}}
+															{{/if}}
+															
+															{{#if this.allowRemove}}
+															<a href="#" class="del">
+																<div style="margin:10px 0px">
+																	<span class="glyphicon glyphicon-trash"></span>
+																	<span class="ln-delete"><b>REMOVE FROM ACCOUNT</b></span>
+																</div>
+															</a>
+															{{/if}}
+															
+															{{#if this.showStory}}
+																<div style="margin:10px 0px">
+																	<a href="https://docs.google.com/a/tzivoshashem.org/forms/d/1fhls5odH69pWlzpp3RGtSfVCg_G9heh0VjOqHl44Mug/edit">Rebbe Story Contest</a>
+																</div>
+																<div style="margin:10px 0px">
+																	<button class="btn btn-primary story">Rebbe Story Contest</button>
+																</div>
+															{{/if}}
+															<!--
+															{{#if this.shabbaton}}
+																{{#if this.schoolChapReg}}
+																	<div style="margin:10px 0px">
+																		<button class="btn btn-primary noSchoolShabbaton">Shabbaton Enrollment</button>
+																	</div>
+																{{else}}
+																	<div style="margin:10px 0px">
+																		<button class="btn btn-primary shabbaton">Shabbaton Enrollment</button>
+																	</div>
+																{{/if}}
+															{{/if}}
+															{{#if this.shabbatonEdit}}
+																<div style="margin:10px 0px">
+																	<button class="btn btn-primary shabbatonEdit">Edit Shabbaton Enrollment</button>
+																</div>
+															{{/if}}
+															{{#if this.chidon}}
+																<div style="margin:10px 0px">
+																	<button class="btn btn-primary chidon">Register Chidon </button>
+																</div>
+															{{/if}}
+
+															{{#if this.chidonRegistered}}
+																<div style="margin:10px 0px">
+																	<button class="btn btn-info chidon">Edit Chidon </button>
+																</div>
+															{{/if}}
+															-->
+														</div>
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
+								{{/each}}
+							</script>
+						</div>
+					</div>
+				</div>
+				
+				<div class="bottomSpace"></div>
+				<!--
+				<div id="popModal" class="modal fade" role="dialog">
+				  <div class="modal-dialog modal-sm">
+				
+				    <div class="modal-content">
+				    	<form action="addchild.php" method="post" id="popup">
+				      		<div class="modal-body">
+				      			Has the child that you are adding ever been in Tzivos Hashem?<br />
+				      			<input type="radio" class="thAdded" name="childAdded" value="1" /> Yes<br />
+				      			<input type="radio" class="thAdded" name="childAdded" value="0" /> No
+				      		</div>
+				      		<div class="modal-footer">
+						        <button class="btn btn-default" name="submit">Continue</button>
+				      		</div>
+				      	</form>		
+				  	</div>
+				  	
+				  </div>
+				</div>
+				-->
+				<div class="span12" style="position: fixed;bottom: 0px;z-index: 9999;max-width: 1024px;">
+		            <div class="span12 footer">
+		                <div class="span3" style="width: 100%">
+		                	<a href="/mobile/news?v=3">
+			                    <div class="menu-item">
+			                        <div class="span12">
+										<picture>
+											<img src="/mobile/img_new/news-color-green-svg.svg" alt="news"/>
+										</picture>
+			                        </div>
+			                        <div class="span12">
+			                            <span>News</span>
+			                        </div>
+			                    </div>
+			                </a>
+		                </div>
+		            </div>
+		        </div>
+        
+			</div>	
+		</div>
+		<script>
+            document.addEventListener("DOMContentLoaded", function() {
+				function setSwiper() {
+					$("#children .row").each( function() {
+						var h = new Hammer( this );
+						var id = $(this).find("table td:last-child").attr('id');
+						var registered = $(this).find(".btn.btn-primary.re_register").length === 0; // make sure there is no register button
+						h.on("swipe", function() {
+							if (registered) {
+                                location.href = "medals/index.html?id=" + id;
+                            }
+						});
+					});
+				}
+				$( function() {
+					var admin = Cookies.get('admin');
+					if (!admin) {
+						window.location = "index.html";
+					}
+
+					// remove any shipping cookies
+					Cookies.remove('shipping');
+					Cookies.remove('shipOpt');
+					Cookies.remove('destination');
+					
+					var year;
+					$.ajax({
+						type : "POST",
+						url : "/mobile/chidon/ajax/getYear.php",
+						async : false, 
+						success : function( info ) {
+							year = info;
+						}
+					});
+					
+					var childrenToRegister = [];
+					$.post('ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
+						if ( success == -1 ) {
+							window.location = "index.html";
+						} else {
+							var data = $.parseJSON( success );
+							var parent = data.parent;
+							var children = data.children;
+							
+							var father = parent.father;
+							var mother = parent.mother;
+							
+							if (father)
+								$(".father").text(father.toUpperCase());
+							if (mother)
+								$(".mother").text(mother.toUpperCase());
+							
+							var fatherPic = parent.fatherPic;
+							var motherPic = parent.motherPic;
+							
+							if (fatherPic != '' && fatherPic != null) {
+								$("#father").attr('src', fatherPic);
+							}
+							var w = $("#father").width();
+							//var newW = w * 1.1;
+							//$("#father").width( newW );
+							//$("#father").height( newW );
+							
+							if (motherPic != '' && motherPic != null) {
+								$("#mother").attr('src', motherPic);
+							}
+							//$("#mother").width( newW );
+							//$("#mother").height( newW );
+							
+							//set auction button link
+							//for (var c in children) {
+							//	$("#auction").attr('href', '/mobile/auction/category2.html?id=' + c);
+							//	break;
+							//}
+							
+							// sepearate registered and un-registered
+							var registred_children = {};
+							var unregistered_children = {};
+							
+							for (var c in children) {
+								var child = children[c];
+								if (child.needsReg && child.schoolRegistered && child.schoolTypeRegistered) {
+									unregistered_children[c] = child;
+									childrenToRegister.push({
+										id : c,
+										reg : 0,
+										reviewed : 0,
+										anash : child.anashkinder,
+										shliach : child.myshliach
+									});
+								} else {
+									registred_children[c] = child;
+								}
+							}
+							
+							Cookies.set('toRegister', childrenToRegister);
+							
+							//// append the unregistered kids to the end of the registered one by modifying the array
+							//registred_children.push.apply(registred_children, unregistered_children);
+							
+							// Grab the template script
+							var tplScript = $("#childrenTpl").html();
+						
+							// Compile the template
+							var tpl = Handlebars.compile( tplScript );
+	
+							// Pass our data to the template
+							var registered_html = tpl( { children : registred_children } );
+							var unregistered_html = tpl({ children: unregistered_children });
+							// put the registered kids first
+							var html = registered_html + unregistered_html;
+							
+							// Add the compiled html to the page
+							$(".chilrens").append( html );
+							
+							setSwiper();
+							
+							$(".year").text(year);
+						}
+					});
+					
+					$.post('ajax/checkAdminInfo.php', { admin : admin, onlyEmail: true }, function( result ) {
+						result = JSON.parse(result);
+						if (!result.success && !localStorage.getItem('email_notified')) {
+							localStorage.setItem('email_notified', true);
+							location.href = "edit_profile.html";
+						}
+					});
+					
+			    	$(document).on('click', ".re_register", function() {
+						//var info = $(this).attr('class');
+						//if (info.indexOf('schoolNotRegistered') != -1) {
+						//	alert("The school for this child has not yet registered. You will only be able to register once the school registers.");
+						//	return false;
+						//}
+				    	var id = $(this).parent().parent().parent().attr('id');
+				        location.href = "reg.html?child=" + id;
+				    });
+				    
+				    $(document).on('click', '.del', function() {
+				    	var del = confirm('Are you sure you want to delete this child from your profile?');
+				    	//alert( del );
+				    	if ( del ) {
+				    		var id = $(this).parent().parent().attr('id');
+				    		$.post('ajax/delChild.php', { child : id, parent : admin }, function( success ) {
+				    			if ( success ) {
+				    				alert('This child has been removed from your profile.');
+				    				location.href = "parent_detail.html";
+				    			} else {
+				    				alert('There was an error deleting your child from your profile.');
+				    			}
+				    		});
+				    	}
+				    });
+
+					$(document).on('click', '.shabbaton', function() {
+						var id = $(this).parent().parent().parent().attr('id');
+						location.href = "/mobile/chidon/index2.html?id=" + id;
+					});
+					
+					//$(document).on('click', '.shabbatonEdit', function() {
+					//	var id = $(this).parent().parent().parent().attr('id');
+					//	location.href = "/mobile/chidon/edit.html?id=" + id;
+					//});
+					
+					$(document).on('click', '.noSchoolShabbaton', function() {
+						alert('Your base has not yet opened registration. Please be in touch with your school for more info.');
+					});
+					
+					$(document).on('click', '.story', function() {
+						location.href = "https://docs.google.com/a/tzivoshashem.org/forms/d/1fhls5odH69pWlzpp3RGtSfVCg_G9heh0VjOqHl44Mug/edit";
+					});
+					
+					$(document).on('click', '.editChidon', function() {
+						var id = $(this).parent().parent().parent().parent().attr('id');
+						location.href = "/mobile/chidon/edit.html?id=" + id;
+					});
+					
+					$(document).on('click', '.enroll', function() {
+						var id = $(this).parent().parent().parent().parent().attr('id');
+						location.href = "/mobile/chidon/shabbaton.html?id=" + id;
+					});
+					
+					$(document).on('click', '.editEnrollment', function() {
+						var id = $(this).parent().parent().parent().parent().attr('id');
+						location.href = "/mobile/chidon/edit.html?id=" + id;
+					});
+					
+					$(document).on('click', '.chidon', function() {
+						var id = $(this).parent().parent().parent().attr('id');
+						var shliach = false;
+						// if it's a myshliach child then we need to send them elsewhere
+						var list = Cookies.getJSON('toRegister');
+						for (var l in list) {
+							if (l.id == id) {
+								if (l.shliach == 1) {
+									shliach = true;
+									alert("To register for the chidon please visit myshliach.com/chidon");
+									break;
+								}
+							}
+						}
+						if (!shliach) location.href = "/mobile/chidon/index.html?id=" + id;
+					});
+					
+					/*
+					$(document).on('click', '.chidonEdit', function() {
+						var id = $(this).parent().parent().parent().attr('id');
+						location.href = "/mobile/chidon/index.html?id=" + id + "&edit=1";
+					});
+				    */
+				    $("#logOff").click( function() {
+				    	//Cookies.set('isconnected', 'false', { expires : -1 });
+						//Cookies.remove('isconnected');
+						//Cookies.set('admin', '0', { expires: -1 });
+						//Cookies.remove('admin', { path: '/mobile/reg' });
+						//Cookies.set('admin', '0', { expires: -1 });
+						//Cookies.set('admin_id', '0', { expires: -1 });
+						Cookies.remove('admin', { path: '/' });
+						Cookies.remove('admin_id', { path: '/' });
+						var allCookies = Cookies.getJSON();
+						for (var c in allCookies) {
+							Cookies.remove(c, { path: '/' });
+						}
+						window.location = "/mobile/reg/";
+					});
+					
+					$("#addChild").click( function() {
+						//$("#popModal").modal();
+					});
+					
+					$("#popup").submit( function() {
+						var answer = $(".thAdded");
+						var submit = false;
+						$(answer).each( function() {
+							if ($(this).is(":checked")) {
+								submit = true;
+								return;
+							}
+						});
+						if (submit) {
+							return true;
+						} else {
+							alert('You must choose "Yes" or "No"');
+							return false;
+						}
+					});
+					
+					/*
+					$(".btn.submit").click( function() {
+						var answer = ($(this).text());
+						$("#popModal").modal('hide');
+						if (answer == 'Yes') {
+							document.location.href = 'https://mashpia.com/mobile/reg/addchild.html';
+						} else if (answer == 'No') {
+							//location.href = ;
+						}
+					});
+					*/
+			    });
+			});
+		</script>
+		<script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		  ga('create', 'UA-71974937-1', 'auto');
+		  ga('send', 'pageview');
+		</script>
+	</body>
+</html>

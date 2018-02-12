@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Mobile Web Site</title>
+        <style type="text/css">
+            html{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}body{margin:0}a{background-color:transparent}img{border:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}img{vertical-align:middle}ul{margin-top:0;margin-bottom:10px}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}.container:after,.container:before{display:table;content:" "}.container:after{clear:both}@-ms-viewport{width:device-width}.sky-carousel{width:100%;height:360px;position:relative;border:1px solid #e7e7e7;background:#f5f5f5;overflow:hidden;margin:0 auto}.sky-carousel .sky-carousel-container{position:relative;list-style-type:none;float:left;margin:0;padding:0}.sky-carousel .sky-carousel-container li{position:absolute;border:0}.sky-carousel .sky-carousel-container li img{display:block;border:0;max-width:none!important}body{margin:0;padding:0}.container{width:1024px;margin:0 auto;display:table;border-radius:10px}.header{background-color:#105023;height:320px}.span12{width:100%;float:left}.span3{width:25%;float:left}.span4{width:33.33333%;float:left}.mt1{margin-top:10px}.header .title{color:#ffc100;font-family:font1-bold}.header .descr{color:#fff;font-family:font1}.header-setting span{font-size:18px;color:rgba(255,255,255,.6);margin:15px;line-height:35px;font-family:font1}.header-edit{float:right}.header-edit span{font-size:18px;color:rgba(255,255,255,.6);margin:15px;line-height:37px;font-family:font1}.header .top-left-space{margin-left:70px;float:left}.top-left-space img{width:170px}.header .top-right-space{margin-right:70px;float:left}.top-right-space img{width:170px}.header-top{padding:10px}.header .top-center{margin-top:-20px}.body .caption{text-align:center;background-size:100% 100%}.body .caption span{font-size:70px;color:#dfd835;line-height:100px;font-family:font1}.body .medal-label{text-align:center;background-size:100% 100%}.body .medal-label span{font-size:30px;color:#fff;line-height:60px;font-family:font1}.footer{max-width:1024px;text-align:center;border-top:2px solid #9f9f9f;display:table;float:none}.footer .span3{background-color:#e6e6e6}.footer .span3 span{padding:5px;color:grey;font-size:18px;font-family:font1}.footer .menu-item{width:120px;height:80px;margin:0 auto}.footer .span3 img{width:60px;vertical-align:text-bottom}.slider img{width:26px}.footer .span3.active{background-color:#999;background-repeat:repeat-x;background:-webkit-gradient(linear,0 0,0 100%,from(#b7b8b9),to(#e9e9e9));background:-webkit-linear-gradient(top,#e9e9e9,#b7b8B9);background:-moz-linear-gradient(top,#e9e9e9,#b7b8B9);background:-ms-linear-gradient(top,#e9e9e9,#b7b8B9);background:-o-linear-gradient(top,#e9e9e9,#b7b8B9)}@media screen and (max-width:1024px){.container{width:100%;margin:0;padding:0}.footer{border-radius:0}}@media screen and (max-width:900px){.header .title{font-size:22px}.header .descr{font-size:21px}.body .caption span{font-size:60px;line-height:80px}.body .medal-label span{font-size:26px;line-height:50px}.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}}@media screen and (max-width:767px){.header{height:330px}.header .top-left-space{margin-left:30px}.top-left-space img{width:130px}.header .top-right-space{margin-right:30px}.top-right-space img{width:110px}.header .title{font-size:22px}.header .descr{font-size:21px}.body .caption span{font-size:50px;line-height:60px}.body .medal-label span{font-size:22px;line-height:40px}.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}.footer .span3 span{font-size:18px}.slider img{width:24px}}@media screen and (max-width:639px){.header-edit,.header-setting{height:30px}.header-edit span,.header-setting span{font-size:18px;margin:10px;line-height:30px}.header-edit img{width:37px}.header{height:270px}.header .top-left-space{margin-left:10px}.top-left-space img{width:100px}.header .top-right-space{margin-right:10px}.top-right-space img{width:85px}.top-center img{width:160px}.header .title{font-size:18px}.header .descr{font-size:17px}.body .caption span{font-size:40px;line-height:50px}.body .medal-label span{font-size:22px;line-height:40px}.footer .menu-item{width:110px;height:60px}.footer .span3 img{width:50px}.footer .span3 span{font-size:16px}.slider img{width:20px}}@media screen and (max-width:479px){.header-top{padding:5px 15px}.top-left-space .span12,.top-right-space .span12{line-height:12px}.header-edit,.header-setting{height:20px}.mt1{margin-top:10px}.header-edit span,.header-setting span{font-size:10px;margin:5px;line-height:22px}.header-setting img{width:18px}.header-edit img{width:20px}.header{height:170px}.header .top-left-space{margin-left:11px}.top-left-space img{width:70px}.header .top-right-space{margin-right:11px}.top-right-space img{width:60px}.top-center img{width:120px}.header .title{font-size:11px}.header .descr{font-size:11px}.body .caption span{font-size:30px;line-height:38px}.body .medal-label span{font-size:18px;line-height:30px}.footer .menu-item{width:70px;height:40px}.footer .span3 img{width:30px}.footer .span3 span{font-size:8px}}
+        </style>
+        <link rel="preload" href="css/all.css?v=1.1" as="style" onload="this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
+        <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+        <script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
+		<script src="../js/all.js" defer></script>
+
+    	<style>
+			@media(min-width:640px){.header-edit{min-width: 120px;}}
+			@media(min-width:460px){.header-setting{min-width: 120px;}}
+			.sky-carousel .sky-carousel-container li img{display: none;}
+			.sky-carousel .sky-carousel-container li img.sc-image{display: block;}
+			#userImg {
+			    border-radius: 50%;
+			    border: 2px solid #31559f;
+			    margin-left: 5%;
+			}
+			@media (min-width:  750px){
+				#userImg {width: 250px;height: 250px;}
+			}
+			@media (min-width:  600px) and (max-width:  749px){
+				#userImg {width: 200px;height: 200px;}
+			}
+			@media (max-width:  450px){
+				#userImg {width: 120px;height: 120px;}
+			}
+			.personalImg {
+				border-radius: 50%; 
+				display: block;
+				text-align: center;
+			}
+			.top-center {margin: auto;}
+			.body .caption {background-image: url("/mobile/img_new/banner-3-color-green-svg.svg"); margin-bottom: 10px;}
+            .body .medal-label {
+                background-image: url("/mobile/img_new/banner-4-color-green-svg.svg");
+                text-align: center;
+                background-size: 100% 100%;
+            }
+            .body .medal-label span {
+                display: inline-block;
+				color: #004E22;
+            }
+            .body .caption span {color: #004E22;}
+            .slider img.active {content: url("/mobile/img_new/circle-color-green-solid-svg.svg");}
+			@media(min-width: 767px) and (max-width: 900px) {
+				.header .top-right-space{margin-right: 20px;}
+				.header .top-left-space{margin-left: 20px;}
+			}
+			@media(min-width: 901px) {
+				.header .top-right-space .span12, .header .top-left-space .span12{
+					font-size: 22px;
+				}
+			}
+			@media (max-width: 479px){.mt1{margin-top: 15px;}.header-top{margin-top: 5px;}
+			@media (min-width: 479px) and (max-width: 767px){.mt1{margin-top: 30px;}}
+		</style>
+	</head>
+	<body>
+        <div class="container">
+            <div class="header">
+                <div class="span12 row">
+                    <div class="header-top">
+                        <div class="header-setting col-xs-4" id="logOff">
+                        	<!--
+                        	<a href="#" id="logOff">
+                                <div style="float:left;"><span class="glyphicon glyphicon-lock"></span></div>
+                                <div style="float:left;margin-left:10px"><span class="lb-ico">log off</span></div>
+                            </a>
+                           -->
+                            <img src="/mobile/img_new/lock-color-white-svg.svg" style="float:left;max-height:40px;max-width:40px;">
+                            <div style="float: left;">
+                                <span>log off</span>
+                            </div>
+                        </div>
+						
+                        <div class="header-edit col-xs-4">
+                            <div style="float: left;">
+                                <span>edit</span>
+                            </div>
+                            <img src="/mobile/img_new/settings-color-white-svg.svg" style="float:left;max-height:40px;max-width:40px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="span12 mt1">
+                    <div class="span4">
+                        <div class="top-left-space">
+                            <div class="span12">
+                              <picture>
+                                    <source srcset="images/webp/th.webp" type="image/webp">
+                                    <img id="item0" src="images/th.png" alt="">
+                              </picture>
+                            </div>
+                            <div class="span12" style="margin-top: 10px;">
+                                <span class="title" id="rank"></span>
+                            </div>
+                            <div class="span12">
+                                <span class="descr" id="name"></span>
+                            </div>
+							<div class="span12">
+								<span class="title">Serial:</span>
+                                <span class="descr" id="serial"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span4 top-center">
+                    	<div class="personalImg">
+                    		<img id="userImg" src="">
+                    	</div>
+                    </div>
+                    <div class="span4" style="text-align: right;">
+                        <div class="top-right-space">
+                            <div class="span12">
+                                <img id="logo" src="">
+                            </div>
+                            <div class="span12" style="margin-top: 10px;">
+                                <span class="title">Commander:<br></span>
+                                <span class="descr" id="teacher"></span>
+                            </div>
+							<div class="span12">
+                                <span class="title">Platoon:</span>
+                                <span class="descr" id="grade"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="span12 body" style="margin-bottom: 120px;">
+                <div class="span12" style="margin-top:10px;">
+                    <div class="caption">
+                        <span class="points"></span>
+                    </div>
+                </div>
+                <a id="carouselLink" href="rank.html">
+	                <div class="sky-carousel" style="width: 96%;margin: 0px 2%">
+	                    <div class="sky-carousel-wrapper">
+	                        <ul class="sky-carousel-container">
+	                            <li>
+                                  <picture>
+                                        <source srcset="images/webp/trophits/1.webp" type="image/webp">
+                                        <img id="item0" src="images/trophits/1.png" alt="">
+                                  </picture>
+	                            </li>
+	                            <li>
+                                  <picture>
+                                        <source srcset="images/webp/trophits/2.webp" type="image/webp">
+                                        <img id="item0" src="images/trophits/2.png" alt="">
+                                  </picture>
+	                            </li>
+	                            <li>
+                                  <picture>
+                                        <source srcset="images/webp/trophits/3.webp" type="image/webp">
+                                        <img id="item0" src="images/trophits/3.png" alt="">
+                                  </picture>
+	                            </li>
+	                            <li>
+                                  <picture>
+                                        <source srcset="images/webp/trophits/4.webp" type="image/webp">
+                                        <img id="item0" src="images/trophits/4.png" alt="">
+                                  </picture>
+	                            </li>
+	                            <li>
+                                  <picture>
+                                        <source srcset="images/webp/trophits/5.webp" type="image/webp">
+                                        <img id="item0" src="images/trophits/5.png" alt="">
+                                  </picture>
+	                            </li>
+	                            <li>
+                                  <picture>
+                                        <source srcset="images/webp/trophits/6.webp" type="image/webp">
+                                        <img id="item0" src="images/trophits/6.png" alt="">
+                                  </picture>
+	                            </li>
+	                            <li>
+                                  <picture>
+                                        <source srcset="images/webp/trophits/7.webp" type="image/webp">
+                                        <img id="item0" src="images/trophits/7.png" alt="">
+                                  </picture>
+	                            </li>
+	                            <li>
+                                  <picture>
+                                        <source srcset="images/webp/trophits/8.webp" type="image/webp">
+                                        <img id="item0" src="images/trophits/8.png" alt="">
+                                  </picture>
+	                            </li>
+	                            <li>
+                                  <picture>
+                                        <source srcset="images/webp/trophits/9.webp" type="image/webp">
+                                        <img id="item0" src="images/trophits/9.png" alt="">
+                                  </picture>
+	                            </li>
+	                            <li>
+                                  <picture>
+                                        <source srcset="images/webp/trophits/10.webp" type="image/webp">
+                                        <img id="item0" src="images/trophits/10.png" alt="">
+                                  </picture>
+	                            </li>
+	                            <li>
+                                  <picture>
+                                        <source srcset="images/webp/trophits/11.webp" type="image/webp">
+                                        <img id="item0" src="images/trophits/11.png" alt="">
+                                  </picture>
+	                            </li>
+	                            <li>
+                                  <picture>
+                                        <source srcset="images/webp/trophits/12.webp" type="image/webp">
+                                        <img id="item0" src="images/trophits/12.png" alt="">
+                                  </picture>
+	                            </li>
+	                            <li>
+                                  <picture>
+                                        <source srcset="images/webp/trophits/13.webp" type="image/webp">
+                                        <img id="item0" src="images/trophits/13.png" alt="">
+                                  </picture>
+	                            </li>
+	                            <li>
+                                  <picture>
+                                        <source srcset="images/webp/trophits/14.webp" type="image/webp">
+                                        <img id="item0" src="images/trophits/14.png" alt="">
+                                  </picture>
+	                            </li>
+	                        </ul>
+	                    </div>
+	                </div>
+                </a>
+                <div class="span12 slider" style="margin-top:10px;text-align: center;">
+					<img id="item0" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item1" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item2" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item3" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item4" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item5" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item6" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item7" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item8" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item9" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item10" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item11" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item12" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item13" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+                </div>
+                <div class="span12" style="margin-top:30px;">
+                    <div class="medal-label">
+                        <span>MEDALS</span>
+                    </div>
+                </div>
+                               
+                <div id="medals"></div>
+                
+                <!--
+                <div class="span12">
+                    <div class="l-3">
+                        <div class="span4" style="text-align: center;">
+                            <img class="medal" src="images/medals/Tefilla.jpg">
+                            <div class="medal-sub" style="background-image: url(images/bot-caption.png);">
+                                <div style="display: table;width: 100%;"><span>TEFILA</span></div>
+                            </div>
+                            <span>3 to brown</span>
+                        </div>
+                        <div class="span4" style="text-align: center;">
+                            <img class="medal" src="images/medals/WWTC.jpg">
+                            <div class="medal-sub" style="background-image: url(images/bot-caption.png);">
+                                <div style="display: table;width: 100%;"><span>WWTC</span></div>
+                            </div>
+                            <span>3 to black</span>
+                        </div>
+                        <div class="span4" style="text-align: center;">
+                            <img class="medal" src="images/medals/Yomei.jpg">
+                            <div class="medal-sub" style="background-image: url(images/bot-caption.png);">
+                                <div style="display: table;width: 100%;"><span>YOMEI DIPAGRA</span></div>
+                            </div>
+                            <span>3 to yellow</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span12 mt2">
+                    <div class="l-4">
+                        <div class="span3" style="text-align: center;">
+                            <img class="medal" src="images/medals/Hiskashrus.jpg">
+                            <div class="medal-sub" style="background-image: url(images/bot-caption.png);">
+                                <div style="display: table;width: 100%;"><span>HISKASHRUS</span></div>
+                            </div>
+                            <span>3 to yellow</span>
+                        </div>
+                        <div class="span3" style="text-align: center;">
+                            <img class="medal" src="images/medals/Mivtzoim.jpg">
+                            <div class="medal-sub" style="background-image: url(images/bot-caption.png);">
+                                <div style="display: table;width: 100%;"><span>MIVTZOYIM</span></div>
+                            </div>
+                            <span>3 to yellow</span>
+                        </div>
+                        <div class="span3" style="text-align: center;">
+                            <img class="medal" src="images/medals/Avos.jpg">
+                            <div class="medal-sub" style="background-image: url(images/bot-caption.png);">
+                                <div style="display: table;width: 100%;"><span>AVOS UBONIM</span></div>
+                            </div>
+                            <span>3 to yellow</span>
+                        </div>
+                        <div class="span3" style="text-align: center;">
+                            <img class="medal" src="images/medals/Brias.jpg">
+                            <div class="medal-sub" style="background-image: url(images/bot-caption.png);">
+                                <div style="display: table;width: 100%;"><span>BRIAS HAGUF</span></div>
+                            </div>
+                            <span>3 to yellow</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            -->
+            <div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
+                <div class="span12 footer">
+        		<div class="span3 active">
+					<a href="../parent_detail.html" id="mainLink">
+						<div class="menu-item">
+							<div class="span12">
+								<img src="/mobile/img_new/boy-color-green-svg.svg">
+							</div>
+							<div class="span12">
+								<span>Accounts</span>
+							</div>
+						</div>
+					</a>
+				</div>
+                    <div class="span3">
+						<a href="#" id="missionsLink">
+						<div class="menu-item">
+							<div class="span12">
+								<img src="/mobile/img_new/square-check-color-purple-svg.svg">
+							</div>
+							<div class="span12">
+								<span>Missions</span>
+							</div>
+						</div>
+						</a>
+					</div>
+					<div class="span3">
+						<a href="#" id="rankLink">
+						<div class="menu-item">
+							<div class="span12">
+								<img src="/mobile/img_new/achievements-color-orange-svg.svg">
+							</div>
+							<div class="span12">
+								<span>Achievements</span>
+							</div>
+						</div>
+						</a>
+					</div>
+					<div class="span3">
+						<a href="#" id="storeLink">
+						<div class="menu-item">
+							<div class="span12">
+								<img src="/mobile/img_new/cart-color-red-svg.svg">
+							</div>
+							<div class="span12">
+								<span>Rewards</span>
+							</div>
+						</div>
+						</a>
+					</div>
+                </div>
+            </div>
+            
+        </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            var carousel = "";
+            var loop = 0;
+            function isiPhone(){
+                return (
+                        (navigator.platform.indexOf("iPhone") != -1) ||
+                                (navigator.platform.indexOf("iPod") != -1)
+                        );
+            }
+            $(document).ready(function(){
+
+                $(".footer .span3").click(function(){
+                    $(".footer .span3").each(function(){
+                        $(this).removeClass("active");
+                    });
+                    if($(this).hasClass("active") == "active"){
+                        $(this).addClass("active");
+                    }
+                });
+                
+            });
+            $(window).load(function(){
+                $( ".sky-carousel" ).unbind();
+                $(".slider img").click(function(){
+					var item_id = $(this).attr("id");
+					var from_id = 0;
+                    $(".slider img").each(function(){
+						if ($(this).attr('class') == "active") {
+							from_id = parseInt($(this).attr("id").replace("item","")) + 1;
+						}
+                        $(this).removeClass("active");
+                    });
+
+                    $("#item"+item_id).addClass("active");
+                    item_id = item_id.replace("item","");
+					var duration = Math.abs(parseInt(item_id)+1 - from_id); // one duration unit for each medal it needs to pass
+                    if(item_id == "0"){
+                        carousel.select(0, duration); // go to the first element
+                    }else{
+                        carousel.select(parseInt(item_id), duration); // or go to the selected item
+                    }
+                    console.log(parseInt(item_id)+1);
+
+                });
+                if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                }
+            });
+            
+            var url = location.toString();
+    		var pos = url.indexOf('='); 
+    		var id = url.substring( pos+1 );
+            
+            $(function() {
+            	var admin_id = Cookies.get('admin');
+    			$.post('https://mashpia.com/mobile/reg/ajax/checkAuth.php', { user_id : id, admin_id : admin_id }, function( success ) {
+    				if (success == 0) {
+    					window.location = "/mobile";
+    				}
+    			});
+    			
+    			$("#logOff").click( function() {
+    				//Cookies.set('isconnected', 'false');
+    				//Cookies.remove('isconnected');
+    				//Cookies.set('admin', '0');
+    				//Cookies.remove('admin', { path: '/mobile/reg' });
+    				//Cookies.set('admin', '0');
+    				//Cookies.remove('admin', { path: '/' });
+    				//Cookies.set('admin_id', '0');
+    				Cookies.remove('admin', { path: '/' });
+    				Cookies.remove('admin_id', { path: '/' });
+    				window.location = "/mobile/reg/";
+    			});
+    		});
+    		
+    		$("#carouselLink").attr('href', '../rank.html?id=' + id);
+    		$("#missionsLink").attr('href', '../../missionsNew.html?id=' + id);
+    		$("#goalsLink").attr('href', '../../goalsNew.html?id=' + id);
+    		$("#rankLink").attr('href', '../rank.html?id=' + id);
+    		$("#storeLink").attr('href', '../../store/index.html?id=' + id);
+    		//$("#storeLink").attr('href', '/mobile/store/index.html?id=' + id + '&v=2');
+
+    		$.post('ajax/getPoints.php', { user_id : id }, function( success ) {
+    			//alert( success );
+    			$(".points").append(success + ' miles');
+    			$("#points").val( success );
+    			
+    			/*
+    			$.post('ajax/login.php', { user_id : id, points : success }, function( diff ) {
+    				if (diff > 0) {
+    					alert("Mazal Tov, you earned an extra " + diff + " points since your last visit to this page.");
+    				}
+    			});
+    			*/
+    		});
+    		
+    		$.post('ajax/getUserInfo.php', { user_id : id }, function( success ) {
+    			var user = $.parseJSON( success );
+    			
+    			var grade = user.class_grade;
+    			if (user.class_sub) grade += '-' + user.class_sub;
+    			
+    			$("#rank").text( user.rank_name );
+    			$("#name").text( user.first + ' ' + user.last );
+				$("#serial").text( user.user_serial );
+    			$("#grade").text( grade );
+    			$("#teacher").text( user.class_teacher );
+    			
+    			if (user.mobile_pic) {
+    				$("#userImg").attr('src', '../' + user.mobile_pic);
+    			} else if (user.thumb) {
+    				$("#userImg").attr('src', 'https://mashpia.com/thumbs/' + user.thumb);
+    			} else if (user.user_photo_id) {
+    				$("#userImg").attr('src', 'https://mashpia.com/file_view.php?id=' + user.user_photo_id);
+    			} else {
+    				$("#userImg").attr('src', 'https://mashpia.com/mobile/reg/images/profile-photo-default.jpg');
+    			}
+    			
+    			if (user.logo) {
+    				$("#logo").attr('src', 'https://mashpia.com/schoolLogos/' + user.logo);
+    			} else {
+    				$("#logo").attr('src', 'https://mashpia.com/schoolLogos/TH-Blank Logo.gif');
+    			}
+    			
+    			var rank = parseInt( user.rank_ord ) - 1;
+    			if (rank > 8) rank = 8;
+    			var isiPhone = navigator.userAgent.toLowerCase().indexOf("iphone");
+                var isiPad = navigator.userAgent.toLowerCase().indexOf("ipad");
+                var isiPod = navigator.userAgent.toLowerCase().indexOf("ipod");
+
+                //if (isiPhone > -1) {
+    	        $(".sky-carousel-container li img").css({"width":"100px","height":"180px"});
+    	        $(".sky-carousel").css("height","200px");
+    	        setTimeout( function() {
+    	            $( function() {
+    	            	/*
+    	                carousel = $('.sky-carousel').carousel({
+    	                    itemWidth: 100,
+    	                    itemHeight: 180,
+    	                    distance: 40,
+    	                    startIndex: 0,
+    	                    autoSlideshowDelay: 1,
+    	                    loop : false,
+    	                    selectedItemDistance: 0,
+    	                    selectedItemZoomFactor: 1,
+    	                    unselectedItemZoomFactor: 0.7,
+    	                    unselectedItemAlpha: 0.2,
+    	                    topMargin: 10,
+    	                    preload:true,
+    	                    showPreloader:true,
+    	                    navigationButtonsVisible: false,
+    	                    gradientStartPoint: 0.5,
+    	                    gradientEndPoint: 1,
+    	                    reflectionDistance:100,
+    	                    gradientOverlayColor: "#f5f5f5",
+    	                    gradientOverlaySize: 0,
+    	                    slideSpeed: 1,
+    	                    enableMouseWheel : false,
+    	                    selectByClick: false
+    	                });
+    	                */
+    	                carousel = $('.sky-carousel').carousel({
+    	                    itemWidth: 100,
+    	                    itemHeight: 180,
+    	                    distance: 40,
+    	                    startIndex: 0,
+    	                    autoSlideshowDelay: 1,
+    	                    loop : false,
+    	                    selectedItemDistance: 20,
+    	                    selectedItemZoomFactor: 1,
+    	                    unselectedItemZoomFactor: 0.7,
+    	                    unselectedItemAlpha: 0.2,
+    	                    topMargin: 10,
+    	                    preload:true,
+    	                    showPreloader:true,
+    	                    navigationButtonsVisible: false,
+    	                    gradientStartPoint: 0.5,
+    	                    gradientEndPoint: 1,
+    	                    reflectionDistance:100,
+    	                    gradientOverlayColor: "#f5f5f5",
+    	                    gradientOverlaySize: 100,
+    	                    slideSpeed: 1,
+    	                    enableMouseWheel : false,
+    	                    selectByClick: false
+    	                });
+    	                carousel.startAutoSlideshow();
+    	
+    	                carousel.on('itemSelected.sc', function(evt) {
+    	                    var item = evt.item.index();
+    	                    if (item == 1 && rank == 0) { // go back to the first element if the user is a private
+    	                    	carousel.selectPrevious(1);
+    	                    	carousel.stopAutoSlideshow();
+    	                    	return;
+    	                    }
+    	                    var next_item = parseInt(item) + 1;
+    	                    $(".slider img").each(function(){
+    	                        $(this).removeClass("active");
+    	                    });
+							
+    	                    $(".slider img:nth-child("+next_item+")").addClass("active");
+    	                    
+    	                    $(".real").attr('style', 'opacity: 0.3');
+    	                    $("#" + next_item).find(".real").attr('style', 'opacity: 1');
+    	                    
+    	                    if (item == rank){
+    	                    	$(".medalPic").attr('style', 'opacity: 1');
+    	                        carousel.stopAutoSlideshow();
+    	                        loop ++;
+    	                    } else {
+    	                        if(loop == 0){
+    	                            carousel.startAutoSlideshow();
+    	                        }else{
+    	                            carousel.stopAutoSlideshow();
+    	                        }
+    	                    }
+    	                });
+    	            });
+    	        }, 1000);
+    	    /*
+    	    }
+    	    else if(isiPad > -1)
+    	    {
+    	        $(".sky-carousel-container li img").css({"width":"200px","height":"320px"});
+    	        setTimeout( function() {
+    	            $( function() {
+    	                carousel = $('.sky-carousel').carousel({
+    	                    itemWidth: 200,
+    	                    itemHeight: 360,
+    	                    distance: 80,
+    	                    startIndex: 0,
+    	                    autoSlideshowDelay: 1,
+    	                    loop : false,
+    	                    selectedItemDistance: 20,
+    	                    selectedItemZoomFactor: 1,
+    	                    unselectedItemZoomFactor: 0.7,
+    	                    unselectedItemAlpha: 0.2,
+    	                    topMargin: 10,
+    	                    preload:true,
+    	                    showPreloader:true,
+    	                    navigationButtonsVisible: false,
+    	                    gradientStartPoint: 0.5,
+    	                    gradientEndPoint: 1,
+    	                    reflectionDistance:100,
+    	                    gradientOverlayColor: "#f5f5f5",
+    	                    gradientOverlaySize: 100,
+    	                    slideSpeed: 1,
+    	                    enableMouseWheel : false,
+    	                    selectByClick: false
+    	                });
+    	                carousel.startAutoSlideshow();
+    	
+    	                carousel.on('itemSelected.sc', function(evt) {
+    	                    var item = evt.item.index();
+    	                    if (item == 1 && rank == 0) {
+    	                    	carousel.selectPrevious(1);
+    	                    	carousel.stopAutoSlideshow();
+    	                    	return;
+    	                    }
+    	                    var next_item = parseInt(item) + 1;
+    	                    $(".slider img").each(function(){
+    	                        $(this).removeClass("active");
+    	                    });
+    	                    $(".slider img:nth-child("+next_item+")").addClass("active");
+    	                    
+    	                    $(".real").attr('style', 'opacity: 0.3');
+    	                    $("#" + next_item).find(".real").attr('style', 'opacity: 1');
+    	                    
+    	                    if (item == rank){
+    	                    	$(".medalPic").attr('style', 'opacity: 1');
+    	                        carousel.stopAutoSlideshow();
+    	                        loop ++;
+    	                    }else{
+    	                        if(loop == 0){
+    	                            carousel.startAutoSlideshow();
+    	                        }else{
+    	                            carousel.stopAutoSlideshow();
+    	                        }
+    	                    }
+    	                });
+    	            });
+    	        }, 1000);
+    	    }
+    	    else
+    	    {
+    	        $(".sky-carousel-container li img").css({"width":"100px","height":"180px"});
+    	        $(".sky-carousel").css("height","200px");
+    	        setTimeout( function() {
+    	            $( function() {
+    	                carousel = $('.sky-carousel').carousel({
+    	                    itemWidth: 100,
+    	                    itemHeight: 180,
+    	                    distance: 80,
+    	                    startIndex: 0,
+    	                    autoSlideshowDelay: 1,
+    	                    loop : false,
+    	                    selectedItemDistance: 20,
+    	                    selectedItemZoomFactor: 1,
+    	                    unselectedItemZoomFactor: 0.7,
+    	                    unselectedItemAlpha: 0.2,
+    	                    topMargin: 10,
+    	                    preload:true,
+    	                    showPreloader:true,
+    	                    navigationButtonsVisible: false,
+    	                    gradientStartPoint: 0.5,
+    	                    gradientEndPoint: 1,
+    	                    reflectionDistance:100,
+    	                    gradientOverlayColor: "#f5f5f5",
+    	                    gradientOverlaySize: 100,
+    	                    slideSpeed: 1,
+    	                    enableMouseWheel : false,
+    	                    selectByClick: false
+    	                });
+    	                carousel.startAutoSlideshow();
+    	
+    	                carousel.on('itemSelected.sc', function(evt) {
+    	                    var item = evt.item.index();
+    	                    if (item == 1 && rank == 0) {
+    	                    	carousel.selectPrevious(1);
+    	                    	carousel.stopAutoSlideshow();
+    	                    	return;
+    	                    }
+    	                    
+    	                    var next_item = parseInt(item) + 1;
+    	                    $(".slider img").each(function(){
+    	                        $(this).removeClass("active");
+    	                    });
+    	                    $(".slider img:nth-child("+next_item+")").addClass("active");
+    	                    
+    	                    $(".real").attr('style', 'opacity: 0.3');
+    	                    $("#" + next_item).find(".real").attr('style', 'opacity: 1');
+    						
+    	                    if (item == rank){
+    	                    	$(".medalPic").attr('style', 'opacity: 1');
+    	                    	for (var i = 0; i < item; i++) {
+    	                    		$(".rankLogo").eq(i).attr('style', 'opacity: 1');
+    	                    	}
+    	                        carousel.stopAutoSlideshow();
+    	                        loop++;
+    	                    }else{
+    	                        console.log(loop);
+    	                        if(loop == 0){
+    	                            carousel.startAutoSlideshow();
+    	                        }else{
+    	                            carousel.stopAutoSlideshow();
+    	                        }
+    	                    }
+    	                });
+    	
+    	            });
+    	        }, 1000);
+    	    }
+    	    */
+    		});
+    		
+    		$(".header-edit").click( function() {
+    			window.location = '/mobile/reg/re_register.html?child=' + id + '&e=1';
+    		});
+    		
+    		var medalInfo = {
+    			1 : 'black', 
+    			2 : 'red', 
+    			3 : 'orange', 
+    			4 : 'yellow', 
+    			5 : 'green', 
+    			6 : 'blue', 
+    			7 : 'purple', 
+    			8 : 'brown', 
+    			9 : 'grey', 
+    			10 : 'black'
+    		};
+    		
+    		$.post('ajax/getMedalInfo.php', { user_id : id }, function( success ) {
+    			var medals = $.parseJSON( success );
+    			
+    			var html = '<div>';
+    			for (var i in medals) {
+    				var medal = medals[i];
+    				if (i % 3 == 0 && i < 10) {
+    					//if (i == 9) {
+    					//    html += '</div></div><div class="span12 mt2"><div class="l-4">';
+    					//} else {
+    						html += '</div></div><div class="span12"><div class="l-3">';
+    					//}
+    				}
+    				//if (i > 8) {
+    				//    html += '<div class="span3" style="text-align: center;">';
+    				//} else {
+    					html += '<div class="span4" style="text-align: center;">';
+    				//}
+    				html += '<a href="https://mashpia.com/mobile/reg/medals3.html?id=' + id + '&subject=' + medal.id + '">';
+    				if (medal.photo != '')
+    					html += '<img class="medal" src="https://mashpia.com/file_view.php?id=' + medal.photo + '">';
+    				else 
+    					html += '<img class="medal" src="https://mashpia.com/kiosk/images/medals/holder.png">';
+    				html += '</a><div class="medal-sub" style="background-image: url(images/bot-caption.png);">\
+    								<div style="display: table;width: 100%;"><span>' + medal.name + '</span></div>\
+    							</div>\
+    							<span>' + medal.left + ' to Level ' + medal.next + '</span>\
+    						</div>';
+    			}
+    			html += '</div></div>';
+    			$("#medals").append( html );
+    		    //$(".medal-sub").eq(i).next('span').attr('color', medalInfo[i+1]);
+            });
+		});
+    </script>
+    <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-71974937-1', 'auto');
+	  ga('send', 'pageview');
+	</script>
+	</div></body>
+</html>

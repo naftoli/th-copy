@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Re Registration</title>
+      <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<style type="text/css">
+	html{font-family:sans-serif}body{margin:0}img{border:0}button,input,select{margin:0;font-family:inherit;font-size:inherit;font-style:inherit;font-variant:inherit;font-weight:inherit;line-height:inherit;color:inherit}button{overflow:visible}button,select{text-transform:none}button{-webkit-appearance:button}input{line-height:normal}input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0}table{border-spacing:0;border-collapse:collapse}td{padding:0}.glyphicon{position:relative;top:1px;display:inline-block;font-family:'Glyphicons Halflings';font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased}.glyphicon-user::before{content:'\e008'}.glyphicon-calendar::before{content:'\e109'}*{box-sizing:border-box}::after,::before{box-sizing:border-box}html{font-size:10px}body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}button,input,select{font-family:inherit;font-size:inherit;line-height:inherit}img{vertical-align:middle}h4{font-family:inherit;font-weight:500;line-height:1.1;color:inherit}h4{margin-top:10px;margin-bottom:10px}h4{font-size:18px}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}.row{margin-right:-15px;margin-left:-15px}.col-md-3,.col-md-9,.col-xs-12{position:relative;min-height:1px;padding-right:15px;padding-left:15px}.col-xs-12{float:left}.col-xs-12{width:100%}table{background-color:transparent}label{display:inline-block;max-width:100%;margin-bottom:5px;font-weight:700}input[type=checkbox],input[type=radio]{margin:4px 0 0;line-height:normal}input[type=file]{display:block}.form-control{display:block;width:100%;height:34px;padding:6px 12px;font-size:14px;line-height:1.42857143;color:#555;background-color:#fff;background-image:none;border:1px solid #ccc;border-top-left-radius:4px;border-top-right-radius:4px;border-bottom-right-radius:4px;border-bottom-left-radius:4px;-webkit-box-shadow:rgba(0,0,0,.0745098) 0 1px 1px inset;box-shadow:rgba(0,0,0,.0745098) 0 1px 1px inset}.form-control::-webkit-input-placeholder{color:#999}.form-group{margin-bottom:5px}.has-feedback{position:relative}.has-feedback .form-control{padding-right:42.5px}.btn{display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;background-image:none;border:1px solid transparent;border-top-left-radius:4px;border-top-right-radius:4px;border-bottom-right-radius:4px;border-bottom-left-radius:4px}.btn-primary{color:#fff;background-color:rgba(2,6,56,0);border-color:#fff}.btn-block{display:block;width:100%}.fade{opacity:0}.btn-group{position:relative;display:inline-block;vertical-align:middle}.btn-group>.btn{position:relative;float:left}.btn-group .btn+.btn{margin-left:-1px}.btn-group>.btn:first-child{margin-left:0}.btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle){border-top-right-radius:0;border-bottom-right-radius:0}.btn-group>.btn:last-child:not(:first-child){border-top-left-radius:0;border-bottom-left-radius:0}.input-group{position:relative;display:table;border-collapse:separate}.input-group .form-control{position:relative;z-index:2;float:left;width:100%;margin-bottom:0}.input-group .form-control,.input-group-addon{display:table-cell}.input-group-addon{width:1%;white-space:nowrap;vertical-align:middle}.input-group-addon{padding:6px 12px;font-size:14px;font-weight:400;line-height:1;color:#555;text-align:center;background-color:#eee;border:1px solid #ccc;border-top-left-radius:4px;border-top-right-radius:4px;border-bottom-right-radius:4px;border-bottom-left-radius:4px}.input-group-addon:first-child{border-top-right-radius:0;border-bottom-right-radius:0}.input-group-addon:first-child{border-right-width:0}.input-group .form-control:last-child{border-top-left-radius:0;border-bottom-left-radius:0}.close{float:right;font-size:21px;font-weight:700;line-height:1;color:#000;text-shadow:#fff 0 1px 0;opacity:.2}button.close{-webkit-appearance:none;padding:0;border:0;background-position:0 0;background-repeat:initial initial}.container::after,.container::before,.row::after,.row::before{display:table;content:' '}.container::after,.row::after{clear:both}.fa{display:inline-block;font-style:normal;font-variant:normal;font-weight:400;line-height:1;font-family:FontAwesome;font-size:inherit;text-rendering:auto;-webkit-font-smoothing:antialiased}.fa-search-plus::before{content:'\f00e'}.fa-search-minus::before{content:'\f010'}.fa-rotate-right::before{content:'\f01e'}.fa-refresh::before{content:'\f021'}.fa-rotate-left::before{content:'\f0e2'}.fa-angle-double-down::before{content:'\f103'}.fa-university::before{content:'\f19c'}h4{font-family:'Source Sans Pro',sans-serif}.form-control{box-shadow:none;border-color:#d2d6de;border-top-left-radius:0!important;border-top-right-radius:0!important;border-bottom-right-radius:0!important;border-bottom-left-radius:0!important}.form-control::-webkit-input-placeholder{color:#bbb}.form-control:not(select){-webkit-appearance:none}.input-group .input-group-addon{border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:0;border-color:#d2d6de;background-color:#fff}.btn{border-top-left-radius:3px;border-top-right-radius:3px;border-bottom-right-radius:3px;border-bottom-left-radius:3px;-webkit-box-shadow:none;box-shadow:none;border:1px solid transparent}.btn-primary{background-color:#2b529e;border-color:#2b529e}.register-box{width:360px;margin:3% auto}@media (max-width:768px){.register-box{width:90%;margin-top:20px}}.register-box-body{background-color:#fff;border-top-width:0;color:#666;border-top-left-radius:10px;border-top-right-radius:10px;border-bottom-right-radius:10px;border-bottom-left-radius:10px;background-position:initial initial;background-repeat:initial initial}.no-border{border:0!important}.img-people{z-index:5;height:90px;width:90px;border-top-left-radius:50%;border-top-right-radius:50%;border-bottom-right-radius:50%;border-bottom-left-radius:50%;border:1px solid #000;margin-left:auto;margin-right:auto;display:block;margin-bottom:10px}.image-upload{margin-left:auto;margin-right:auto}body{margin:0;padding:0;font-size:12px}.container{width:100%;margin:0 auto;display:table;padding:0}.span12{width:100%;float:left}.login-header{background-color:#2c539e;height:80px}.login-header span{font-size:48px;color:#fff;font-family:font1;font-weight:700;text-align:center;line-height:80px}.input-group .input-group-addon{width:100px;border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:0;border-color:transparent}input.form-control:not(:focus){border:0 solid transparent}.register-box{width:500px;margin:30px auto}.img-people{z-index:5;width:160px;height:160px;border-top-left-radius:50%;border-top-right-radius:50%;border-bottom-right-radius:50%;border-bottom-left-radius:50%;border-color:#aaa;margin-left:auto;margin-right:auto;display:block}.register-box .form-group{border-top-left-radius:5px;border-top-right-radius:5px;border-bottom-right-radius:5px;border-bottom-left-radius:5px;border:2px solid #b1b1b1;height:80px}.register-box .fa,.register-box .glyphicon{font-size:30px}.register-box .form-control{height:76px;border-color:transparent;font-size:30px;font-family:font1}.register-box .input-group-addon{color:#4d4e4e}.register-box .form-group{margin-bottom:5px}.register-box .input-group{width:100%}.register-box .input-group .input-group-addon{width:60px;border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:0;border-color:transparent}.register-box .remember{height:40px;margin-top:10px;margin-bottom:10px;font-weight:400;padding-left:40px;font-size:20px;font-family:font3}.register-box .agree-terms{font-size:26px}.register-page .register-box .remember{margin-top:0;padding-left:20px}.register-page .agree-terms{margin-left:10px;text-align:left;font-size:22px;line-height:1.2}@media screen and (max-width:1024px){.container{width:100%;margin:0;padding:0;border:0 solid #9f9f9f;border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:0}.login-header{border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:0}}@media screen and (max-width:639px){.login-header{height:50px}.login-header span{height:50px;font-size:30px;line-height:50px}.input-group .input-group-addon{width:60px}.register-box{width:270px;margin:30px auto}.img-people{width:110px;height:110px;border-top-left-radius:50%;border-top-right-radius:50%;border-bottom-right-radius:50%;border-bottom-left-radius:50%}.register-box .form-group{border-top-left-radius:5px;border-top-right-radius:5px;border-bottom-right-radius:5px;border-bottom-left-radius:5px;border:2px solid #b1b1b1;height:50px}.register-box .fa,.register-box .glyphicon{font-size:22px}.register-box .form-control{height:46px;font-size:22px}.register-box .remember{height:40px;margin-top:20px;padding-left:40px;font-size:20px}.register-box .form-group{margin-bottom:5px}.register-box .has-feedback .form-control{padding-right:32px}.register-box .form-control{padding:0}.register-box .input-group-addon{padding:6px 8px}.register-box .input-group{width:100%}.register-box .input-group .input-group-addon{width:40px;border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:0;border-color:transparent}.register-box .remember{height:40px;margin-top:0;padding-left:10px;font-size:20px}.register-box .agree-terms{font-size:16px;line-height:1.2}.register-page .register-box .remember{padding-left:12px}.register-page .agree-terms{font-size:16px;line-height:1.2}}@media screen and (max-width:479px){.login-header{height:50px}.login-header span{height:50px;font-size:30px;line-height:50px}.input-group .input-group-addon{width:40px;padding:0}.register-box{margin:10px auto}.img-people{width:90px;height:90px;border-top-left-radius:50%;border-top-right-radius:50%;border-bottom-right-radius:50%;border-bottom-left-radius:50%}.register-box .form-group{border-top-left-radius:5px;border-top-right-radius:5px;border-bottom-right-radius:5px;border-bottom-left-radius:5px;border:2px solid #b1b1b1;height:40px}.register-box .fa,.register-box .glyphicon{font-size:17px}.register-box .form-control{height:36px;font-size:12px}.register-box .remember{height:30px;margin-top:10px;padding-left:10px;font-size:17px}.register-box .form-group{margin-bottom:5px}.register-box .has-feedback .form-control{padding-right:32px}.register-box .input-group .input-group-addon{width:40px}.register-box .remember{height:30px;padding-left:10px;font-size:17px}.register-box .agree-terms{font-size:12px;line-height:1.2;text-align:left}}select.selectpicker{display:none!important}body{background-color:#fcfcfc}.avatar-view{display:block;height:100%;width:100%;border:3px solid #fff;border-top-left-radius:5px;border-top-right-radius:5px;border-bottom-right-radius:5px;border-bottom-left-radius:5px;overflow:hidden;margin-right:auto;margin-left:auto}.avatar-body{padding-right:15px;padding-left:15px}.avatar-upload{overflow:hidden}.avatar-upload label{display:block;float:left;clear:left;width:100px}.avatar-upload input{display:block;margin-left:110px}.avatar-wrapper{height:100%;width:100%;margin-top:15px;box-shadow:rgba(0,0,0,.247059) 0 0 5px inset;background-color:#fff;overflow:hidden}.avatar-btns{margin-top:30px;margin-bottom:15px}.avatar-btns .btn-group{margin-right:5px}@media screen and (-webkit-min-device-pixel-ratio:0){html{margin-left:1px}}
+</style>
+<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
+        <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+<script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
+<script src="js/all.js" defer></script>
+      <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+      <style>
+    img {
+      max-width: 100%;
+    }
+    	.upload {
+    		display: none;
+    	}
+    	.upload .ready {
+    		display: block;
+    	}
+    	#fatherUpload {
+    		width: 200px;
+				height: 300px;
+				position: relative;
+				display: none;
+    	} 
+    .cropper-view-box,
+    .cropper-face {
+      /*border-radius: 50%;*/
+    }
+    </style>
+</head>
+<body class="skin-blue sidebar-mini">
+<div class="container register-page parent-page" id="crop-avatar">
+  <div class="login-header">
+      <span class="span12 titler">REGISTRATION 5778</span>
+  </div>
+  <form id="regForm" action="" method="post">
+  <div class="register-box">
+      <div class="register-box-body">
+        	<!--<script id="childTpl" type="text/x-handlebars-template">-->
+		      <div class="row">
+		          <div class="col-xs-12">
+	              	<div onclick="clearFileInput()" class="image-upload" id="crop-avatar-father">
+							<div class="avatar-view" title="Add Photo">
+                <img src="img/addphoto.png" alt="" class="img-people" id="imgchild">
+							</div>
+                        </div>
+                        <!--
+	                  <label for="imagechild" style="display: inline;">
+	                      <img id="imgchild" src="images/profile-photo-default.jpg" class="img-people"  data-toggle="tooltip" title="Click here to load child's picture" />
+	                  </label>
+	                  <input id="imagechild" name="image" type="file" multiple class="file-loading" >
+	                  -->
+	              </div>
+		      </div>
+		      <div class="row">
+		          <div class="col-xs-12">
+		              <div class="form-group no-border" style="text-align: center;margin-bottom: -10px;">
+		                  <div style="display: inline-block">
+		                      <label style="float: left">
+		                          <input type="radio" name="gender" class="flat-red gender" value="m">
+		                          Boy
+		                      </label>
+		                      &nbsp;&nbsp;
+		                      <label style="float: right">
+		                          <input type="radio" name="gender" class="flat-red gender" value="f">
+		                          Girl
+		                      </label>
+		                  </div>
+		              </div>
+		          </div>
+	      	  </div>
+		      <div class="row">
+		          <div class="col-xs-12">
+		              <div class="form-group has-feedback" id="divfirstname">
+		                  <div class="input-group">
+		                      <span class="input-group-addon"><span class="glyphicon glyphicon-user "></span></span>
+		                      <input id="firstname" name="firstname" type="text" class="form-control" placeholder="first name" required>
+		                  </div>
+		                  <!--<span class="glyphicon form-control-feedback" aria-hidden="true"></span>-->
+		                  <!--<span class="help-block with-errors"></span>-->
+		
+		              </div>
+		          </div>
+		      </div>
+		      <div class="row">
+		          <div class="col-xs-12">
+		              <div class="form-group has-feedback" id="divlastname">
+		                  <div class="input-group">
+		                      <span class="input-group-addon"><span class="glyphicon glyphicon-user "></span></span>
+		                      <input id="lastname" name="lastname" type="text" class="form-control" placeholder="last name" required>
+		                  </div>
+		                  <!--<span class="glyphicon form-control-feedback" aria-hidden="true"></span>-->
+		                  <!--<span class="help-block with-errors"></span>-->
+		
+		              </div>
+		          </div>
+		      </div>
+		      <div class="row">
+		          <div class="col-xs-12">
+		              <div class="form-group has-feedback" id="divenname">
+		                  <div class="input-group">
+		                      <span class="input-group-addon"><span class="glyphicon glyphicon-user "></span></span>
+		                      <input id="fhname" name="fhname" type="text" class="form-control keyboardInput" placeholder="first name hebrew letters" required>
+		                  </div>
+		                  <!--<span class="glyphicon form-control-feedback" aria-hidden="true"></span>-->
+		                  <!--<span class="help-block with-errors"></span>-->
+		
+		              </div>
+		          </div>
+		      </div>
+		      <div class="row">
+		          <div class="col-xs-12">
+		              <div class="form-group has-feedback" id="divenname">
+		                  <div class="input-group">
+		                      <span class="input-group-addon"><span class="glyphicon glyphicon-user "></span></span>
+		                      <input id="lhname" name="lhname" type="text" class="form-control keyboardInput" placeholder="last name hebrew letters" required>
+		                  </div>
+		                  <!--<span class="glyphicon form-control-feedback" aria-hidden="true"></span>-->
+		                  <!--<span class="help-block with-errors"></span>-->
+		
+		              </div>
+		          </div>
+		      </div>
+		      <div class="row">
+		          <div class="col-xs-12">
+		              <div class="form-group has-feedback" id="divdob">
+		                  <div class="input-group">
+		                      <span class="input-group-addon"><span class="glyphicon glyphicon-calendar "></span></span>
+		                      <input type="text" class="form-control" id="dob" placeholder="English Date of Birth" required>
+		                  </div>
+		              </div>
+		          </div>
+		      </div>
+			
+		      <div class="row newOnly">
+	            <div class="col-xs-12">
+	                <div class="form-group no-border remember" style="height: auto;">
+	                    <table>
+	                        <tr>
+	                            <td><input type="checkbox" class="flat-red" id="noSchool"></td>
+	                            <td><label class="agree-terms">&nbsp; My school is not registered as <br> an official Tzivos Hashem base</label></td>
+	                        </tr>
+	                    </table>
+	                </div>
+	            </div>
+	          </div>
+
+		      <div class="row">
+		          <div class="col-xs-12">
+		              <div class="form-group has-feedback" id="divschool">
+		                  <div class="input-group">
+		                      <span class="input-group-addon"><span class="fa fa-university "></span></span>
+		                      <select id="school" name="school" class="selectpicker show-tick form-control" data-style="btn-default" placeholder="School" required disabled>
+		                      </select>
+		                  </div>
+		              </div>
+		          </div>
+		      </div>
+		      <div class="row">
+		          <div class="col-xs-12">
+		              <div class="form-group has-feedback" id="divclass">
+		                  <div class="input-group">
+		                      <span class="input-group-addon"><span class="fa fa-angle-double-down"></span></span>
+		                      <select id="classe" name="classe" class="selectpicker show-tick form-control" data-style="btn-default">
+		                      </select>
+		                  </div>
+		              </div>
+		          </div>
+		      </div>
+		      
+		      
+		      <div class="row">
+		      	<div class="col-xs-12">
+		              <div class="form-group has-feedback" id="divclass">
+		                  <div class="input-group">
+		                      <span class="input-group-addon"><span class="fa fa-angle-double-down"></span></span>
+		                      <select id="lang" name="lang" class="selectpicker show-tick form-control" data-style="btn-default" required>
+		                      	<option value="1" selected>English Missions</option>
+		                      	<option value="2">Yiddish Missions</option>
+		                      </select>
+		                  </div>
+		              </div>
+		          </div>
+		      </div>
+					
+					<div class="row reg">
+							<div class="col-xs-12">
+									<div class="no-border">
+											<br>
+											<input type="checkbox" class="flat-red terms">
+											<span class="infoText">&nbsp;I have reviewed the above information and confirm that it is correct.</span>
+											<br><br>
+											<!--
+											<input type="radio" class="flat-red" name="info" value="1" />
+											<span class="infoText">&nbsp;I would like to register <span class="flname"></span> in Chayolei Tzivos Hashem 5778.</span>
+											<br /><br />
+											-->
+											<input type="checkbox" class="flat-red" name="info" value="2">
+											<span class="infoText">&nbsp;I would like to register <span class="flname"></span> at a later time.</span>
+											<br><br>
+											<!--
+											<input type="radio" class="flat-red" name="info" value="3" />
+											<span class="infoText">&nbsp;Please remove <span class="flname"></span> from my account.</span>
+											<br /><br />
+											-->
+									</div>
+							</div><!-- /.col -->
+					</div>
+		
+					<div class="row">
+							<div class="col-xs-12">
+									<button type="submit" id="btn_create" class="btn btn-primary btn-block H8">
+											<b>REGISTER NEXT CHILD</b>
+									</button>
+							</div><!-- /.col -->
+					</div>
+		        
+		     <!--</script>-->
+    </div><!-- /.form-box -->
+    </div><!-- /.register-box -->
+   </form>
+   
+   <!-- Cropping modal -->
+    <div class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <form class="avatar-form" action="crop.php" enctype="multipart/form-data" method="post">
+            <div class="modal-header">
+              <button onclick="clearFileInput()" type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title" id="avatar-modal-label">Change Avatar</h4>
+            </div>
+            <div class="modal-body">
+              <div class="avatar-body">
+
+                <!-- Upload image and data -->
+                <div class="avatar-upload">
+                  <input type="hidden" class="avatar-src" name="avatar_src">
+                  <input type="hidden" class="avatar-data" name="avatar_data">
+                  <label for="avatarInput">Local upload</label>
+                  <input type="file" class="avatar-input" id="avatarInput" name="avatar_file">
+                </div>
+
+				<div class="row avatar-btns">
+		<div class="col-md-9">
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" data-method="zoom" data-option="0.1" title="Zoom In">
+            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;zoom&quot;, 0.1)">
+              <span class="fa fa-search-plus"></span>
+            </span>
+          </button>
+          <button type="button" class="btn btn-primary" data-method="zoom" data-option="-0.1" title="Zoom Out">
+            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;zoom&quot;, -0.1)">
+              <span class="fa fa-search-minus"></span>
+            </span>
+          </button>
+        </div>
+
+                    <div class="btn-group">
+          <button type="button" class="btn btn-primary" data-method="rotate" data-option="-15" title="Rotate Left">
+            <span class="docs-tooltip" data-toggle="tooltip" title="">
+              <span class="fa fa-rotate-left"></span>
+            </span>
+          </button>
+          <button type="button" class="btn btn-primary" data-method="rotate" data-option="15" title="Rotate Right">
+            <span class="docs-tooltip" data-toggle="tooltip" title="">
+              <span class="fa fa-rotate-right"></span>
+            </span>
+          </button>
+                    </div>
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" data-method="reset" title="Reset">
+            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;reset&quot;)">
+              <span class="fa fa-refresh"></span>
+            </span>
+          </button>
+                    </div>
+                  </div>
+</div>
+                <!-- Crop and preview -->
+                <div class="row">
+                  <div class="col-md-9">
+                    <div class="avatar-wrapper"></div>
+                  </div>
+                <!--  <div class="col-md-3">
+                    <div class="avatar-preview preview-lg"></div>
+                    <div class="avatar-preview preview-md"></div>
+                    <div class="avatar-preview preview-sm"></div>
+                  </div> -->
+                </div>
+
+                <div class="row avatar-btns">
+                  <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary btn-block avatar-save">Done</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div> -->
+          </form>
+        </div>
+      </div>
+    </div><!-- /.modal -->
+    
+	</div><!-- wrapper  -->
+
+
+<script>
+	var cookies_all = "";
+	var cookie_admin = "";
+	var cookie__ga = "";
+	var cookie__gid = "";
+	
+	function findGetParameter(parameterName) {
+		var result = null,
+			tmp = [];
+		var items = location.search.substr(1).split("&");
+		for (var index = 0; index < items.length; index++) {
+			tmp = items[index].split("===");
+			if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+		}
+		return result;
+	}
+	
+	function findCookieParameter(allCookies, parameterName) {
+		var result = null,
+			tmp = [];
+		var items = allCookies.substr(1).split("; ");
+		for (var index = 0; index < items.length; index++) {
+			tmp = items[index].split("=");
+			if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+		}
+		return result;
+	}
+		
+    document.addEventListener("DOMContentLoaded", function(event) {
+	
+		$(document).ready( function(){
+			cookies_all = findGetParameter("cookies");
+			if (cookies_all) {
+				cookie_admin = findCookieParameter(cookies_all, "admin");
+				cookie__ga = findCookieParameter(cookies_all, "_ga");
+				cookie__gid = findCookieParameter(cookies_all, "_gid");
+				Cookies.set('admin', cookie_admin);
+				Cookies.set('_ga', cookie__ga);
+				Cookies.set('_gid', cookie__gid);
+			}
+		});
+				
+		function setNameUpper( str ) {
+			var arr = str.split(" ");
+			var newStr = '';
+			var last = arr.length - 1;
+			for (var a in arr) {
+					var temp = arr[a];
+					var s = temp[0].toUpperCase();
+					newStr += s;
+					var other = temp.substring(1);
+					newStr += other;
+					if (a < last) newStr += ' ';
+			}
+			return newStr;
+		}
+		
+		var url = location.toString();
+		var pos = url.indexOf('='); 
+		var pos2, id;
+		
+		if (pos == -1) {
+			//new registration
+			$(".titler").text('NEW REGISTRATION');
+			$("#btn_create").html("<b>SIGN UP</b>");
+			$(".reg").hide();
+		} else {
+			$(".newOnly").hide();
+			id = url.substring( pos+1 );
+			pos2 = id.indexOf('&');
+			if (pos2 !== -1) {
+				//edit profile
+				$(".titler").text('EDIT PROFILE');
+				$("#btn_create").html("<b>UPDATE</b>");
+				$(".reg").hide();
+				id = id.substr(0, pos2);
+			}
+		}
+				
+	    $( function () {
+	        $('input').iCheck({
+	            checkboxClass: 'icheckbox_square-red',
+	            radioClass: 'iradio_square-red',
+	            increaseArea: '20%' // optional
+	        });
+	        
+	        $('#dob').datetimepicker();
+			$('#dob').data("DateTimePicker").format('MM/DD/YYYY');
+			$('#dob').data("DateTimePicker").options({ 
+				showClose : true 
+			});
+	        
+			if ( id > 0 ) {
+				$.post('ajax/getUser.php', { user : id }, function( success ) {
+					if ( success == 0 ) {
+						window.location = "parent_detail.html";
+					} else {
+						var info = $.parseJSON( success );
+						
+						if (info.mobile_pic != null) {
+							$("#imgchild").attr('src', info.mobile_pic);
+						} else if (info.thumb !== null) {
+							$("#imgchild").attr('src', 'http://mashpia.com/thumbs/' + info.thumb);
+						} else {
+							$("#imgchild").attr('src', 'http://mashpia.com/file_view.php?id=' + info.user_photo_id);
+						}
+							
+						$(".gender").each( function() {
+							if ($(this).val().toUpperCase() == info.gender) {
+								$(this).iCheck('check');
+							}
+						});
+						
+						$("#firstname").val( setNameUpper( info.first ) );
+						$("#lastname").val( setNameUpper( info.last ) );
+						$("#fhname").val( info.first_he );
+						$("#lhname").val( info.last_he );
+						$(".flname").text( setNameUpper( info.first + ' ' + info.last ) );
+						
+						var dobArr = info.dob.split("-");
+						var dob = dobArr[1] + '/' + dobArr[2] + '/' + dobArr[0];
+						$("#dob").val( dob );
+											
+						$("#address").val( info.user_address1 );
+						$("#city").val( info.user_city );
+						$("#state").val( info.user_state );
+						$("#zip").val( info.user_postal );
+						var lang = parseInt( info.lang_id );
+						$("#lang option[value='" + lang + "']").attr('selected', true);
+						
+						$.post('ajax/getSchools.php', function( success ) {
+							var schools = $.parseJSON( success );
+							var html = "";
+							for ( var i in schools ) {
+								for ( var s in schools[i] ) {
+									if ( s == info.school_id ) {
+										html += "<option value='" + s + "' selected>" + schools[i][s] + "</option>";
+									} else {
+										html += "<option value='" + s + "'>" + schools[i][s] + "</option>";
+									}
+								}
+							}
+							$("#school").empty();
+							$("#school").append( html );
+							$("#school").selectpicker('refresh');
+							var school = $("#school").val();
+							if (school != 61 && school != 269) $("#classe").parent().parent().parent().parent().hide();
+						});
+						
+						$.post('ajax/getGrades.php', { school : info.school_id }, function( success ) {
+							var grades = $.parseJSON( success );
+							var html = "";
+							for ( var g in grades ) {
+								if ( g == info.class_id ) {
+									html += "<option value='" + g + "' selected>" + grades[g] + "</option>";
+								} else {
+									html += "<option value='" + g + "'>" + grades[g] + "</option>";
+								}
+							}
+							$("#classe").empty();
+							$("#classe").append( html );
+							$("#classe").selectpicker('refresh');
+						});
+					}
+				});
+			} else {
+				$.post('ajax/getSchools.php', function( success ) {
+					var schools = $.parseJSON( success );
+					var html = "<option value='0'>Select School</option>";
+					for ( var i in schools ) {
+						for ( var s in schools[i] ) {
+							html += "<option value='" + s + "'>" + schools[i][s] + "</option>";
+						}
+					}
+					$("#school").empty();
+					$("#school").append( html );
+					$("#school").selectpicker('refresh');
+					
+					$("#classe").empty();
+					$("#classe").append( "<option value='0'>Select Class</option>" );
+					$("#classe").selectpicker('refresh');
+					/*
+					$.post('ajax/getGrades.php', { school : $("#school").val() }, function( success ) {
+						var grades = $.parseJSON( success );
+						var html = "<option value='0'>Select Class</option>";
+						for ( var g in grades ) {
+							html += "<option value='" + g + "'>" + grades[g] + "</option>";
+						}
+						$("#classe").empty();
+						$("#classe").append( html );
+						$("#classe").selectpicker('refresh');
+					});
+					*/
+				});
+			}
+			
+			$(document).on('change', '#school', function() {
+				var school = $(this).val();
+				if (school > 0) {
+					$.post('ajax/getGrades.php', { school : school }, function( success ) {
+						var grades = $.parseJSON( success );
+						var html = "";
+						for ( var g in grades ) {
+							html += "<option value='" + g + "'>" + grades[g] + "</option>";
+						}
+						$("#classe").empty();
+						$("#classe").append( html );
+						$("#classe").selectpicker('refresh');
+						if (school != 61 && school != 269) $("#classe").parent().parent().parent().parent().hide();
+						else $("#classe").parent().parent().parent().parent().show();
+					});
+				} else {
+					$("#classe").empty();
+					$("#classe").append( "<option value='0'>Select Class</option>" );
+					$("#classe").selectpicker('refresh');
+					$("#classe").parent().parent().parent().parent().hide();
+				}
+			});
+			
+			if (pos == -1) {
+				$(".newOnly .remember input").on('ifChecked', function() {
+					alert('You will be assigned to the school called "Anash Kinder".');
+					$("#school").val('269').change();
+					$("#school").attr('disabled', true);
+				});	
+				$(".newOnly .remember input").on('ifUnchecked', function() {
+					$("#school").attr('disabled', false);
+				});
+			}					
+	    });
+			
+			var admin = Cookies.get('admin');
+			
+			var dest = 0;
+			$.post('ajax/getAdminCountry.php', { admin : admin }, function(success) {
+				dest = parseInt(success);
+			});
+
+	    $('#regForm').submit( function(e) {
+	    	e.preventDefault();
+	    	var gender = 0;
+	    	$(".gender").each( function() {
+	    		if ($(this).is(":checked")) {
+	    			gender = $(this).val();
+	    		}
+	    	});
+				if (gender == 0) {
+					alert("You need to choose 'boy' or 'girl'.");
+					return false;
+				}
+				var fname = $("#firstname").val();
+				var lname = $("#lastname").val();
+				var fhname = $("#fhname").val();
+				var lhname = $("#lhname").val();
+				var address = $("#address").val();
+				var city = $("#city").val();
+				var state = $("#state").val();
+				var zip = $("#zip").val();
+				var school = $("#school").val();
+				var grade = $("#classe").val();
+				var dob = $("#dob").val();
+				var photo = $("#imgchild").attr('src');
+				if (photo == 'images/addphoto.png') {
+					photo = null;
+					//alert('You need to upload a photo.');
+					//return false;
+				}
+				var lang = $("#lang").val();
+				/*
+				var ch = p.indexOf('=');
+				if (ch != -1) {
+					var photo = p.substring(ch + 1);
+				} else {
+					var photo = null;
+				}
+				*/
+	        
+	      //if (fname == '' || lname == '' || fhname == '' || school == '0' || grade == '0' || dob == '') {
+	      if (fname == '' || lname == '' || fhname == '' || lhname == '' || school == '0' || dob == '') {
+	    		alert('You must have all fields filled out.');
+	    		return false;
+	    	}
+				
+				if (fname.length < 3 || lname.length < 3 || fhname.length < 3 || lhname < 3) {
+					alert("Names cannot be less than 3 characters.");
+					return false;
+				}
+				
+				var hef = encodeURI(fhname);
+				var hel = encodeURI(lhname);
+				if (hef.indexOf('%') == -1 || hel.indexOf('%') == -1) {
+					alert("Hebrew first name and last name must be in hebrew characters.");
+					return false;
+				}
+				
+				if (pos != -1 && pos2 == -1) {
+					var terms = $(".terms").is(":checked");
+					if (!terms) {
+						alert('You must confirm that the information is correct.');
+						return false;
+					}
+					
+					var reg = 1;
+					if ($(".reg input").not(".terms").is(":checked")) reg = 0;
+					/*
+					$(".reg input").not(".terms").each( function() {
+							if ($(this).is(":checked")) {
+								reg = $(this).val();
+								return;
+							}
+					});
+					
+					if (reg == 0) {
+						alert('You must choose whether you are registering this child or not.');
+						return false;
+					}
+				
+					if (reg == 3) {
+						var conf = confirm('Are you sure you want to remove this child from your account?');
+						if (conf) {
+							$.post('ajax/delFromAdmin.php', { admin : admin, child : id }, function( success ) {
+								if (success == 0) {
+									alert('Removed from account.');
+								}
+							});
+						}
+					}
+					*/
+				
+					if (pos2 == -1) {
+						var children = Cookies.getJSON('toRegister');
+						for (var c in children) {
+							var child = children[c];
+							if (child.id == id) {
+								child.reg = reg;
+								child.reviewed = 1;
+								break;
+							}
+						}
+						Cookies.set('toRegister', children);
+						//alert(JSON.stringify(children)); return;
+					}
+				}
+	    	
+	    	update();
+	    	
+	    	function update() {
+		        if (pos == -1) { //new registration
+		        	$.post('ajax/newUser.php', {
+		        		admin : admin, 
+			        	first : fname, 
+			        	last : lname, 
+			        	firsthe : fhname, 
+			        	lasthe : lhname,
+			        	school_id : school, 
+			        	class_id : grade, 
+			        	dob : dob, 
+			        	gender : gender, 
+			        	photo : photo, 
+			        	lang : lang 
+			        }, function( success ) {
+			        	var userID = parseInt(success);
+			        	if ( userID ) {
+			        		alert('New Soldier Created.');
+			        		window.location = "child-commit.html?child=" + userID;
+			        	} else {
+			        		alert('There was an error creating a new registration.');
+			        		return false;
+			        	}
+			        });
+		        } else { //re-registration
+			        $.post('ajax/updateUser.php', {
+			        	user_id : id,
+			        	fname : fname, 
+			        	last : lname, 
+			        	fhname : fhname, 
+			        	lhname : lhname, 
+			        	school : school,
+								grade : grade, 
+			        	dob : dob, 
+			        	gender : gender, 
+			        	photo : photo, 
+			        	lang : lang 
+			        }, function( success ) {
+			        	var result = parseInt(success);
+			        	if ( !result ) {
+			        		alert("There was an error updating your child's information.");
+			        	} 
+			        	if (pos2 == -1) {
+									// figure out where to go from here
+									checkReg();
+									//location.href = checkReg();
+			        	} else {
+			        		if (success) {
+								if (window.location.href.indexOf("===") > -1) {
+									window.close();
+								}
+								else 
+									location.href = "/mobile/reg/medals/index.html?id=" + id;
+							}
+			        	}
+			        });
+						}
+				}
+				
+				function findGetParameter(parameterName) {
+					var result = null,
+						tmp = [];
+					var items = location.search.substr(1).split("&");
+					for (var index = 0; index < items.length; index++) {
+						tmp = items[index].split("===");
+						if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+					}
+					return result;
+				}
+				
+				function checkReg() {
+					var children = Cookies.getJSON('toRegister');
+					var register = false;
+					var url = '';
+					var toRegister = [];
+					for (var c in children) {
+						var child = children[c];
+						if (!child.reviewed) {
+							location.href = "re_register.html?child=" + child.id;
+							return;
+						}
+						if (child.reg) {
+							register = true;
+							toRegister.push(child.id);
+						}
+					}
+					if (!register && url == '') {
+						location.href = "parent_detail.html";
+						return;
+					}
+					// find out if we have myshliach or anashkinder children
+					checkMyShliach(toRegister);
+				}
+				
+				function checkMyShliach(toRegister) {
+					var url;
+					$.post('ajax/checkMyShliach.php', { admin : admin, toRegister : toRegister }, function( success ) {
+						var info = $.parseJSON(success);
+						url = "https://mashpia.com/mobile/reg/fee.html?child=" + id;
+						for (var i in info) {
+							var num = info[i];
+							if (i == 61 && dest > 1) {
+								Cookies.set('myshliach', dest);
+								url = "feeShliach.html";
+								break;
+							} else if (i == 269) {
+								Cookies.set('anashkinder', num);
+								url = "feeAnash.html";
+								break;
+							}
+						}
+						//alert(url);
+						location.href = url;
+						return;
+					});
+				}
+	    });
+    });
+	
+	function clearFileInput() {
+		document.getElementById("avatarInput").value = "";
+		document.getElementById("avatarForm").reset();
+		clearInputFile(document.getElementById("avatarInput"));
+	}
+	
+	function clearInputFile(f){
+        if(f.value){
+            try{
+                f.value = ''; //for IE11, latest Chrome/Firefox/Opera...
+            }catch(err){
+            }
+            if(f.value){ //for IE5 ~ IE10
+                var form = document.createElement('form'), ref = f.nextSibling;
+                form.appendChild(f);
+                form.reset();
+                ref.parentNode.insertBefore(f,ref);
+            }
+        }
+    }
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-71974937-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>

@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Mobile Web Site</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style type="text/css">
+    html{font-family:sans-serif}body{margin:0}a{background-color:transparent}b{font-weight:700}img{border:0}table{border-spacing:0;border-collapse:collapse}td{padding:0}*{box-sizing:border-box}::after,::before{box-sizing:border-box}html{font-size:10px}body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}img{vertical-align:middle}ul{margin-top:0;margin-bottom:10px}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}table{background-color:transparent}.well{min-height:20px;padding:19px;margin-bottom:20px;background-color:#f5f5f5;border:1px solid #e3e3e3;border-top-left-radius:4px;border-top-right-radius:4px;border-bottom-right-radius:4px;border-bottom-left-radius:4px;-webkit-box-shadow:rgba(0,0,0,.0470588) 0 1px 1px inset;box-shadow:rgba(0,0,0,.0470588) 0 1px 1px inset}.well-sm{padding:9px;border-top-left-radius:3px;border-top-right-radius:3px;border-bottom-right-radius:3px;border-bottom-left-radius:3px}.container::after,.container::before{display:table;content:' '}.container::after{clear:both}a{color:#3c8dbc}body{margin:0;padding:0;font-size:12px}.container{width:100%;margin:0 auto;display:table;padding:0}.span12{width:100%;float:left}.span3{width:25%;float:left}.l-4{width:100%;margin-top:30px}.footer{text-align:center;border-top-width:2px;border-top-style:solid;border-top-color:#9f9f9f;display:table;width:100%}.footer .span3{background-color:#e6e6e6}.footer .span3 span{padding:5px;color:grey;font-size:20px;font-family:font1}.footer .menu-item{width:130px;height:100px;margin:0 auto}.footer .span3 img{width:80px}.slider img{width:26px}.footer .span3.active{background-image:-webkit-linear-gradient(top,#e9e9e9,#b7b8b9);background-position:initial initial;background-repeat:initial initial}.header-yellow{width:100%;background-color:#f68829}.header-yellow table{font-size:80px;font-family:font3;color:#fff}.rank-page .caption-general{font-size:40px;text-align:center;color:#2c58ba;font-family:font1-bold;line-height:60px}@media screen and (max-width:1024px){.container{width:100%;margin:0;padding:0;border:0 solid #9f9f9f;border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:0}.footer{border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:0}}@media screen and (max-width:900px){.footer .menu-item{width:120px;height:100px}.footer .span3 img{width:80px}.header-yellow table{font-size:60px}.rank-page .caption-general{font-size:30px;line-height:50px}}@media screen and (max-width:767px){.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}.footer .span3 span{font-size:14px}.slider img{width:24px}.header-yellow table{font-size:40px}.rank-page .caption-general{font-size:25px;line-height:50px}}@media screen and (max-width:639px){.footer .menu-item{width:100px;height:60px}.footer .span3 img{width:50px}.footer .span3 span{font-size:12px}.slider img{width:20px}.header-yellow table{font-size:40px}.rank-page .caption-general{font-size:20px;line-height:40px}.rank-page .l-4{margin-top:15px}}@media screen and (max-width:479px){.footer .menu-item{width:60px;height:40px}.footer .span3 img{width:30px}.footer .span3 span{font-size:8px}.header-yellow table{font-size:30px}.rank-page .caption-general{font-size:17px;line-height:34px}}body{background-color:#fcfcfc}/*@media screen and (-webkit-min-device-pixel-ratio:0){html{margin-left:1px}}*/.sky-carousel{width:100%;height:360px;position:relative;border:1px solid #e7e7e7;background-color:#f5f5f5;overflow:hidden;margin:0 auto;background-position:initial initial;background-repeat:initial initial}.sky-carousel .sky-carousel-container{position:relative;list-style-type:none;float:left;margin:0;padding:0}.sky-carousel .sky-carousel-container li{position:absolute;border:0}.sky-carousel .sky-carousel-container li img{display:block;border:0;max-width:none!important}
+</style>
+    <link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+    <script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
+    <script src="js/all.js" defer></script>
+<!--    Bug Report code -->
+    <link rel="stylesheet" href="/mobile/css/bug_report.css"/>
+    <script src="/mobile/js/bug_report.js?v=2.0" defer></script>
+    
+    <style>
+        body{margin-bottom: 120px;}
+        .awarded {
+            position: relative;
+            top: -160px;
+            text-align: center;
+            z-index: 99;
+            font-size: 36px;
+            font-weight: bold;
+            background-color: #666666;
+            -webkit-background-clip: text;
+            -moz-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: rgba(255,255,255,0.5) 0px 3px 3px;
+        }
+        .medal {
+            opacity: 0.3;
+        }
+        #userImg {
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            border: 2px solid #31559f;
+        }
+        .personalImg {
+            width: 50px;
+            height: 50px;
+            left: 1%;
+            top: 1%;
+            border-radius: 50%;
+            position: absolute;
+        }
+        
+        @font-face {
+            font-family: 'digi';
+            src: url('font/DS-DIGIB.TTF');
+        }
+        
+        .rankLogo {
+            width: 70% !important;
+        }
+        
+        .rankName {
+            font-weight: bold;
+            margin: 0 auto;
+            line-height: 1.1;
+            font-size: 22px;
+            width: 95%;
+        }
+        
+        @media screen and (max-width: 1024px) {
+            .rankName {
+                line-height: 1;
+                font-size: 18px;
+            }
+        }
+        
+        @media screen and (max-width: 900px) {
+            .rankName {
+                line-height: 1;
+                font-size: 16px;
+            }
+        }
+        
+        @media screen and (max-width: 767px) {
+            .rankName {
+                line-height: 0.9;
+                font-size: 14px;
+            }
+        }
+        
+        @media screen and (max-width: 639px) {
+            .rankName {
+                line-height: 0.9;
+                font-size: 12px;
+            }
+        }
+        
+        @media screen and (max-width: 479px) {
+            .rankName {
+                line-height: 0.9;
+                font-size: 10px;
+            }
+        }
+        .header-yellow #page-title{
+            font-size: 25px;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            width: auto;
+            display: block;
+            padding: 5px 0px;
+            transition: .25s;
+        }
+        @media (min-width: 525px){
+            .header-yellow #page-title{font-size: 40px;padding: 10px 0px;}
+        }
+        .sky-carousel .sky-carousel-container li img{display: none;}
+        .sky-carousel .sky-carousel-container li img.sc-image{display: block;}
+        .header-yellow{min-height: 48px;}
+    </style>
+</head>
+<body class="rank-page">
+<div class="header-yellow" style="position: relative">
+    <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
+        <span id="page-title">MY RANK BOARD</span>
+    </div>
+</div>
+
+<div class="personalImg"></div>
+<div class="bug-report">
+	<img src="/mobile/img_new/report-bug-white-svg.svg" data-category="Rank Board" alt="bug-report" />
+</div>
+
+<div class="container">
+    <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 100px">
+        <div class="span12 body">
+            <div class="span12 footer media-group subMenu" style="width: 100%;">
+                <a href="" id="rankMenu">
+                    <div class="span3 active" style="width:50%">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/trophy-color-orange-svg.svg">
+                            </div>
+                            <div class="span12">
+                                <span>Rank Board</span> 
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="" id="medalMenu">
+                    <div class="span3" style="width:50%">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/medals-color-orange-svg.svg">
+                            </div>
+                            <div class="span12">
+                                <span>Medal Board</span> 
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="span12 body">
+            <div class="span12">
+                <div class="caption-general">
+                    <span></span>
+                </div>
+            </div>
+            <div class="sky-carousel" style="width: 96%;margin: 0px 2%">
+                <div class="sky-carousel-wrapper">
+                    <ul class="sky-carousel-container">
+                        <li>
+                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/1.png" alt="">
+                        </li>
+                        <li>
+                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/2.png" alt="">
+                        </li>
+                        <li>
+                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/3.png" alt="">
+                        </li>
+                        <li>
+                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/4.png" alt="">
+                        </li>
+                        <li>
+                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/5.png" alt="">
+                        </li>
+                        <li>
+                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/6.png" alt="">
+                        </li>
+                        <li>
+                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/7.png" alt="">
+                        </li>
+                        <li>
+                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/8.png" alt="">
+                        </li>
+                        <li>
+                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/9.png" alt="">
+                        </li>
+                        <li>
+                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/10.png" alt="">
+                        </li>
+                        <li>
+                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/11.png" alt="">
+                        </li>
+                        <li>
+                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/12.png" alt="">
+                        </li>
+                        <li>
+                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/13.png" alt="">
+                        </li>
+                        <li>
+                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/14.png" alt="">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="span12 slider" style="margin-top:10px;text-align: center;">
+                <img id="item0" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+                <img id="item1" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+                <img id="item2" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+                <img id="item3" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+                <img id="item4" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+                <img id="item5" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+                <img id="item6" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+                <img id="item7" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+                <img id="item8" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+                <img id="item9" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+                <img id="item10" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+                <img id="item11" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+                <img id="item12" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+                <img id="item13" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+            </div>
+            <div style="clear: both; margin-bottom: 10px;"></div>
+            
+            <div class="well well-sm" style="margin: 0 auto; width: 75%">
+                    Start as a private and after earning 3 medals of any color or campaign you will be promoted to a Sergeant. 
+                    Keep earning medals and rising in rank. Can <b>YOU</b> become a <b>GENERAL WITH MANY STARS?</b>
+            </div>
+
+            <div style="float: left;width: 90%;margin: 0px 5%;">
+                <div class="l-4" id="ranks">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
+        <div class="span12 footer">
+            <div class="span3">
+                <a href="parent_detail.html" id="mainLink">
+                    <div class="menu-item">
+                        <div class="span12">
+                            <img src="/mobile/img_new/boy-color-green-svg.svg">
+                        </div>
+                        <div class="span12">
+                            <span>Accounts</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="span3">
+                <a href="#" id="missionsLink">
+                <div class="menu-item">
+                    <div class="span12">
+                        <img src="/mobile/img_new/square-check-color-purple-svg.svg">
+                    </div>
+                    <div class="span12">
+                        <span>Missions</span>
+                    </div>
+                </div>
+                </a>
+            </div>
+            <div class="span3 active">
+                <a href="#" id="rankLink">
+                <div class="menu-item">
+                    <div class="span12">
+                        <img src="/mobile/img_new/achievements-color-orange-svg.svg">
+                    </div>
+                    <div class="span12">
+                        <span>Achievements</span>
+                    </div>
+                </div>
+                </a>
+            </div>
+            <div class="span3">
+                <a href="#" id="storeLink">
+                <div class="menu-item">
+                    <div class="span12">
+                        <img src="/mobile/img_new/cart-color-red-svg.svg">
+                    </div>
+                    <div class="span12">
+                        <span>Rewards</span>
+                    </div>
+                </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+        var carousel = "";
+        var loop = 0;
+        function isiPhone(){
+            return (
+                    (navigator.platform.indexOf("iPhone") != -1) ||
+                            (navigator.platform.indexOf("iPod") != -1)
+                    );
+        }
+        $(document).ready(function(){
+
+            $(".footer .span3").click(function(){
+                $(".footer .span3").each(function(){
+                    $(this).removeClass("active");
+                });
+                if($(this).hasClass("active") == "active"){
+                    $(this).addClass("active");
+                }
+            });
+            
+            $.post('ajax/getPhoto.php', { user_id : id }, function( success ) {
+                var info = $.parseJSON( success );
+                var html = '<a href="medals/index.html?id=' + id +'">';
+                if (info.mobile_pic) html += '<img id="userImg" src="https://mashpia.com/mobile/reg/' + info.mobile_pic + '">';
+                else if (info.thumb) html += '<img id="userImg" src="https://mashpia.com/thumbs/' + info.thumb + '">';
+                else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' + info.photo + '">';
+                html += '</a>';
+                $(".personalImg").append( html );
+                // set the USER ID for bug reports
+                $(".bug-report img").data("user_id", id);
+            });
+            
+        });
+        $(window).load(function(){
+            $( ".sky-carousel" ).unbind();
+            $(".slider img").click(function(){
+                var item_id = $(this).attr("id");
+                var from_id = 0;
+                $(".slider img").each(function(){
+                    var element  = $(this);
+                    if (element.attr('class') == "active") {
+                        from_id = parseInt(element.attr("id").replace("item","")) + 1;
+                    }
+                    $(this).removeClass("active");
+                });
+                $("#item"+item_id).addClass("active");
+                item_id = item_id.replace("item","");
+                var duration = Math.abs(parseInt(item_id)+1 - from_id); // one duration unit for each medal it needs to pass
+                if(item_id == "0"){
+                    carousel.select(0, duration);
+                }else{
+                    carousel.select(parseInt(item_id), duration); // index and an ever increasing duration
+                }
+                console.log(parseInt(item_id)+1);
+            });
+            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) { // on mobile
+            }
+        });
+            
+        var url = location.toString();
+        var pos = url.indexOf('='); 
+        var id = url.substring( pos+1 );
+        
+        $.post('ajax/checkAuth.php', { user_id : id, admin_id : Cookies.get('admin') }, function( success ) {
+            if (success == 0) {
+                window.location = "/mobile";
+            }
+        });
+        
+        $("#missionsLink").attr('href', '../missionsNew.html?id=' + id);
+        $("#goalsLink").attr('href', '../goalsNew.html?id=' + id);
+        $("#rankLink").attr('href', 'rank.html?id=' + id);
+        $("#storeLink").attr('href', '../store/index.html?id=' + id);
+        
+        $("#subMenu li").each( function() {
+            var link = $(this).find('a');
+            var href = link.attr('href');
+            link.attr('href', href + '?id=' + id);
+        });
+        
+        $("#medalMenu").attr('href', 'medals4.html?id=' + id);
+        //$("#auctionMenu").attr('href', '/mobile/auction/category2.html?id=' + id);
+        
+        var rank;
+        $.post('ajax/getRank.php', { user : id }, function( success ) {
+            var user = $.parseJSON( success );
+            var rank = parseInt( user.rank ) - 1;
+            
+            var needed = parseInt( user.medalsNeeded );
+            var done = parseInt( user.totalMedals );
+            var medals = user.medals;
+            var num = medals.length;
+            //var show = needed - done;
+            //var empty = needed - show;
+            var medalsInfo = user.medalsInfo;
+            
+            var ranks = {
+                1 : 'Private', 
+                2 : 'Sergeant',
+                3 : 'Sergeant Major', 
+                4 : 'Second Lieutenant', 
+                5 : 'First Lieutenant', 
+                6 : 'Captain', 
+                7 : 'Major', 
+                8 : 'Colonel', 
+                9 : 'General', 
+                10 : '1* General', 
+                11 : '2* General', 
+                12 : '3* General', 
+                13 : '4* General', 
+                14 : '5* General'
+            }
+
+            var html = "";
+            var start = 0;
+            for (var j = 1; j < 15; j++) {
+                var end = parseInt(medalsInfo[j+1]);
+                if (j == 14) end = 133;
+                
+                html += '<div id="' + j + '">';
+                html += '<div class="span4" style="text-align: center; width: 19%;">&nbsp;<br />';
+                html += '<div class="rankName">' + ranks[j] + '</div>';
+                html += '<img class="medal real rankLogo" src="images/ranklogos/' + j + '.png" /></div>';
+                var k = 1;
+                for (var i = start; i < end; i++) {
+                    if (j > 5 && k % 6 == 0) {
+                        html += '<div class="span4 xtra" style="text-align: center; width: 19%;"><img class="medal" src="images/ranklogos/' + j + '.png" style="opacity: 0" /></div>';
+                        k++;
+                    }
+                    html += '<div class="span4" style="text-align: center; width: 15%;">';
+                    html += (i+1) + '<br />';
+                    if (i < num) {
+                        if (medals[i].subject == 106) {
+                            html += '<img class="medal real medalPic" src="../../../file_view.php?id=' + medals[i].photo + '" /></div>';
+                        } else {
+                            html += '<a href="medals3.html?id=' + id + '&subject=' + medals[i].subject + '"><img class="medal real medalPic" src="../../../file_view.php?id=' + medals[i].photo + '" /></a></div>';
+                        }
+                    }
+                    else html += '<img class="medal" src="../../../kiosk/images/medals/holder.png" /></div>';
+                    k++;
+                }
+                html += '</div><div style="clear: both"></div><hr style="width: 50%;" />';
+                start = end;
+            }
+            
+            $("#ranks").append( html );
+            
+            var top = rank + 1;
+            for (var j = 1; j <= top; j++) {
+                $("#" + j).find('.real').attr('style', 'opacity: 1');
+            }
+            
+            var height = $(".medalPic:first-child").height();
+            $(".addHeight").each( function(i, v) {
+                if (i > 2) {
+                    if (i < 8) {
+                        $(this).height(height + 'px');
+                    } else {
+                        $(this).height((height * 2) + 'px');
+                    }
+                }
+            });
+            
+            /*
+            var html = "";
+            for (var i = 0; i < num; i++) {
+                html += '<div class="span3" style="text-align: center;">\
+                            <img class="medal" src="../../../file_view.php?id=' + medals[i].photo + '">\
+                            <div class="awarded">' + medals[i].awarded + '</div>\
+                        </div>';
+            }
+            */
+            /*
+            for (var j = 0; j < empty; j++) {
+                html += '<div class="span3" style="text-align: center;">\
+                            <img class="medal" src="images/holder.png">\
+                        </div>';
+            }
+            */  
+            
+            var isiPhone = navigator.userAgent.toLowerCase().indexOf("iphone");
+            var isiPad = navigator.userAgent.toLowerCase().indexOf("ipad");
+            var isiPod = navigator.userAgent.toLowerCase().indexOf("ipod");
+        
+            //if (isiPhone > -1) {
+                $(".sky-carousel-container li img").css({"width":"100px","height":"180px"});
+                $(".sky-carousel").css("height","200px");
+                setTimeout( function() {
+                    $( function() {
+                        /*
+                        carousel = $('.sky-carousel').carousel({
+                            itemWidth: 100,
+                            itemHeight: 180,
+                            distance: 40,
+                            startIndex: 0,
+                            autoSlideshowDelay: 1,
+                            loop : false,
+                            selectedItemDistance: 0,
+                            selectedItemZoomFactor: 1,
+                            unselectedItemZoomFactor: 0.7,
+                            unselectedItemAlpha: 0.2,
+                            topMargin: 10,
+                            preload:true,
+                            showPreloader:true,
+                            navigationButtonsVisible: false,
+                            gradientStartPoint: 0.5,
+                            gradientEndPoint: 1,
+                            reflectionDistance:100,
+                            gradientOverlayColor: "#f5f5f5",
+                            gradientOverlaySize: 0,
+                            slideSpeed: 1,
+                            enableMouseWheel : false,
+                            selectByClick: false
+                        });
+                        */
+                        carousel = $('.sky-carousel').carousel({
+                            itemWidth: 100,
+                            itemHeight: 180,
+                            distance: 40,
+                            startIndex: 0,
+                            autoSlideshowDelay: 1,
+                            loop : false,
+                            selectedItemDistance: 20,
+                            selectedItemZoomFactor: 1,
+                            unselectedItemZoomFactor: 0.7,
+                            unselectedItemAlpha: 0.2,
+                            topMargin: 10,
+                            preload:true,
+                            showPreloader:true,
+                            navigationButtonsVisible: false,
+                            gradientStartPoint: 0.5,
+                            gradientEndPoint: 1,
+                            reflectionDistance:100,
+                            gradientOverlayColor: "#f5f5f5",
+                            gradientOverlaySize: 100,
+                            slideSpeed: 1,
+                            enableMouseWheel : false,
+                            selectByClick: false
+                        });
+                        carousel.startAutoSlideshow();
+        
+                        carousel.on('itemSelected.sc', function(evt) {
+                            var item = evt.item.index();
+                            if (item == 1 && rank == 0) { // go back to the first medal if the user's rank is 0
+                                carousel.selectPrevious(1);
+                                carousel.stopAutoSlideshow();
+                                return;
+                            }
+                            
+                            var next_item = parseInt(item) + 1;
+                            $(".slider img").each(function(){
+                                $(this).removeClass("active");
+                            });
+                            $(".slider img:nth-child("+next_item+")").addClass("active");
+                                                
+                            if (item == rank){
+                                carousel.stopAutoSlideshow();
+                                loop ++;
+                            } else {
+                                if(loop == 0){
+                                    carousel.startAutoSlideshow();
+                                }else{
+                                    carousel.stopAutoSlideshow();
+                                }
+                            }
+                        });
+                    });
+                }, 1000);
+            /*
+            }
+            else if(isiPad > -1)
+            {
+                $(".sky-carousel-container li img").css({"width":"200px","height":"320px"});
+                setTimeout( function() {
+                    $( function() {
+                        carousel = $('.sky-carousel').carousel({
+                            itemWidth: 200,
+                            itemHeight: 360,
+                            distance: 80,
+                            startIndex: 0,
+                            autoSlideshowDelay: 1,
+                            loop : false,
+                            selectedItemDistance: 20,
+                            selectedItemZoomFactor: 1,
+                            unselectedItemZoomFactor: 0.7,
+                            unselectedItemAlpha: 0.2,
+                            topMargin: 10,
+                            preload:true,
+                            showPreloader:true,
+                            navigationButtonsVisible: false,
+                            gradientStartPoint: 0.5,
+                            gradientEndPoint: 1,
+                            reflectionDistance:100,
+                            gradientOverlayColor: "#f5f5f5",
+                            gradientOverlaySize: 100,
+                            slideSpeed: 1,
+                            enableMouseWheel : false,
+                            selectByClick: false
+                        });
+                        carousel.startAutoSlideshow();
+        
+                        carousel.on('itemSelected.sc', function(evt) {
+                            var item = evt.item.index();
+                            if (item == 1 && rank == 0) {
+                                carousel.selectPrevious(1);
+                                carousel.stopAutoSlideshow();
+                                return;
+                            }
+                            var next_item = parseInt(item) + 1;
+                            $(".slider img").each(function(){
+                                $(this).removeClass("active");
+                            });
+                            $(".slider img:nth-child("+next_item+")").addClass("active");
+                            
+                            $(".real").attr('style', 'opacity: 0.3');
+                            $("#" + next_item).find(".real").attr('style', 'opacity: 1');
+                            
+                            if (item == rank){
+                                $(".medalPic").attr('style', 'opacity: 1');
+                                carousel.stopAutoSlideshow();
+                                loop ++;
+                            }else{
+                                if(loop == 0){
+                                    carousel.startAutoSlideshow();
+                                }else{
+                                    carousel.stopAutoSlideshow();
+                                }
+                            }
+                        });
+                    });
+                }, 1000);
+            }
+            else
+            {
+                $(".sky-carousel-container li img").css({"width":"100px","height":"180px"});
+                $(".sky-carousel").css("height","200px");
+                setTimeout( function() {
+                    $( function() {
+                        carousel = $('.sky-carousel').carousel({
+                            itemWidth: 100,
+                            itemHeight: 180,
+                            distance: 80,
+                            startIndex: 0,
+                            autoSlideshowDelay: 1,
+                            loop : false,
+                            selectedItemDistance: 20,
+                            selectedItemZoomFactor: 1,
+                            unselectedItemZoomFactor: 0.7,
+                            unselectedItemAlpha: 0.2,
+                            topMargin: 10,
+                            preload:true,
+                            showPreloader:true,
+                            navigationButtonsVisible: false,
+                            gradientStartPoint: 0.5,
+                            gradientEndPoint: 1,
+                            reflectionDistance:100,
+                            gradientOverlayColor: "#f5f5f5",
+                            gradientOverlaySize: 100,
+                            slideSpeed: 1,
+                            enableMouseWheel : false,
+                            selectByClick: false
+                        });
+                        carousel.startAutoSlideshow();
+        
+                        carousel.on('itemSelected.sc', function(evt) {
+                            var item = evt.item.index();
+                            if (item == 1 && rank == 0) {
+                                carousel.selectPrevious(1);
+                                carousel.stopAutoSlideshow();
+                                return;
+                            }
+                            
+                            var next_item = parseInt(item) + 1;
+                            $(".slider img").each(function(){
+                                $(this).removeClass("active");
+                            });
+                            $(".slider img:nth-child("+next_item+")").addClass("active");
+                            
+                            $(".real").attr('style', 'opacity: 0.3');
+                            $("#" + next_item).find(".real").attr('style', 'opacity: 1');
+                            
+                            if (item == rank){
+                                $(".medalPic").attr('style', 'opacity: 1');
+                                for (var i = 0; i < item; i++) {
+                                    $(".rankLogo").eq(i).attr('style', 'opacity: 1');
+                                }
+                                carousel.stopAutoSlideshow();
+                                loop++;
+                            }else{
+                                console.log(loop);
+                                if(loop == 0){
+                                    carousel.startAutoSlideshow();
+                                }else{
+                                    carousel.stopAutoSlideshow();
+                                }
+                            }
+                        });
+        
+                    });
+                }, 1000);
+            }
+            */
+        });
+    });
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-71974937-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>
