@@ -1,0 +1,5 @@
+<script src="http://www.google.com/jsapi"></script>
+<script>
+	// Load jQuery
+	  google.load("jquery", "1.4.2");
+</script>

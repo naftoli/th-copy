@@ -1,0 +1,130 @@
+/* Copyright Ariel Shkedi 2007-2010 */
+body {
+  background-image: url(images/registration_bg.png);
+}
+
+h1 {
+  font-size: 125%;
+  font-weight: normal;
+  padding: 0px;
+  margin: 4px 0px;
+}
+
+input[type=radio] {
+  vertical-align: top;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: 2px #df73ff solid;
+}
+
+.registration_banner {
+  background-image: url(images/registration_banner_bg.png);
+  padding: 60px 5% 0px;
+}
+
+.registration_banner input {
+  border: none;
+  background-color: transparent;
+  color: #0065B2;
+  font-weight: bold;
+  padding: 0px;
+  margin: 0px;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+}
+
+.registration_banner input:hover {
+  border-bottom: 1px solid black;
+}
+
+.registration_tail {
+  background-color: #7f7f7f;
+  padding: 1.5em 5%;
+  text-align: center;
+}
+
+.progress {
+  width: 100%;
+  border: 2px solid #63e49e;
+  border-bottom-width: 1px;
+  background-image: url(images/registration_progress_bg.png);
+  table-layout: fixed;
+  height: 86px;
+}
+
+.progress td {
+  padding: 0px 1em;
+  color: #1cb765;
+  font-weight: bold;
+}
+
+.progress td span {
+  font-weight: normal;
+  font-size: 75%;
+}
+
+.progress td.current {
+  border: 4px outset red;
+}
+
+.body {
+  border: 2px solid #63e49e;
+  border-top-width: 1px;
+  margin: 0px 5%;
+  background-color: white;
+  padding: 0px 20px;
+}
+
+.form table {
+  width: auto;
+  margin: auto;
+  min-width: 75%;
+}
+
+.form table th {
+  padding: .5em 1em;
+  background-color: #e9f5e8;
+  border: 1px solid #d3e9d2;
+  font-weight: normal;
+}
+
+.form table td {
+  padding: 0px 50px;
+}
+
+.form table caption {
+  font-size: 100%;
+  font-weight: normal;
+  padding: 40px 0px 6px;
+}
+
+.form_left table caption {
+  text-align: left;
+}
+
+.form_right table caption {
+  text-align: right;
+}
+
+.form p {
+  margin: 10px 0px;
+}
+
+.package table {
+  margin-top: .5em;
+  width: 100%;
+}
+
+.package table tr {
+  border: 1px solid #d3e9d2;
+}
+
+.package table tr td {
+  padding-top: 1em;
+}
+
+.package table tr td li {
+  padding-top: .5em;
+  clear: both;
+}

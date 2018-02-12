@@ -1,0 +1,99 @@
+
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400,700|Open+Sans+Condensed:300);
+
+.achos .print_only {
+    display:block; 
+	font-family: 'Open Sans', 'Yanone Kaffeesatz', sans-serif;
+	font-weight:300;
+}
+.achos .print_only * {
+    background:none;
+	border:none;
+	box-shadow:none;
+}
+.achos .print_only .print_individual { background:#f9b093; border-radius:20px; padding:10px; margin-top:57px; text-transform:uppercase; }
+.achos .print_only #weekly_div { float:right; width:39%; }
+.achos .print_only #daily_div, .achos .print_only #daily_div + .page { float:left; width:60%; }
+.achos .print_only .marking { font-family: 'Open Sans Condensed', 'Yanone Kaffeesatz', sans-serif; border:4px solid #fff; color:#fff; padding:3px 15px; border-radius:0; margin-bottom:7px; background:none; font-weight:normal; }
+.achos .print_only .marking.dontsplit { page-break-inside:avoid; }
+.achos .print_only .marking .row { clear:both; border:none; text-transform:none; }
+.achos .print_only .marking .row:after { content:''; display: table; clear:both; }
+.achos .print_only .marking .row.top_row { min-height:0; margin: -3px -15px 3px; padding: 3px 15px; font-family: 'Open Sans', sans-serif; font-weight:bold;   }
+.achos .print_only .marking .row.top_row .cell { text-align:left; color:#f5ed44; padding-top:2px; padding-bottom:0; }
+.achos .print_only .marking .top_row .days .cell { text-align:center; }
+.achos .print_only .marking .row:not(.top_row) > .cell { padding:0; display:table-cell; vertical-align:middle; height:33px; font-size:10px; }
+.achos .print_only .marking .row:not(.top_row) > .cell img { float: left; margin:-3px; margin-right:0; }
+.achos .print_only .marking .row.master { min-height:0; border-top:1px solid; text-transform:inherit; padding-top:2px; }
+.achos .print_only .marking .row.master > .cell { font-size:14px; }
+.achos .print_only .marking .row.top_row + .row.master { border:0; }
+.achos .print_only .marking .row:not(.master):not(.top_row) > .cell { padding-left:5px; }
+.achos .print_only .marking .days .cell { border:none; width:18px; height:18px; padding:4px; }
+.achos .print_individual .cell { color: black; }
+.achos .print_only .marking .cell.checkbox { background:none; }
+.achos .print_only .marking .cell.checkbox span, .achos .print_only .marking .cell.text_input input { background:#fff; width:100%; height:100%; margin:0; border: 1px solid black;/*box-shadow:1px -1px 0 rgba(0,0,0,0.2); border:1px solid rgba(0,0,0,0.2);*/  }
+.achos .print_only .marking .cell.checked.checkbox span { background:#fff url(../images/icon_med_check.png) no-repeat center center; background-size:50% 50%; }
+/*.achos .print_only #daily_div .marking .cell.checkbox:after { content: ''; color: #ccc; top: -19px; position: relative; padding: 5px; }
+.achos .print_only #daily_div .marking .cell.checkbox:nth-child(1):after { content: 'S'; }
+.achos .print_only #daily_div .marking .cell.checkbox:nth-child(2):after { content: 'M'; }
+.achos .print_only #daily_div .marking .cell.checkbox:nth-child(3):after { content: 'T'; }
+.achos .print_only #daily_div .marking .cell.checkbox:nth-child(4):after { content: 'W'; }
+.achos .print_only #daily_div .marking .cell.checkbox:nth-child(5):after { content: 'T'; }
+.achos .print_only #daily_div .marking .cell.checkbox:nth-child(6):after { content: 'F'; }*/
+.achos .print_only .marking .cell.text_input input { float:right; font-family: 'Open Sans Condensed', 'Yanone Kaffeesatz', sans-serif; font-size:inherit; width:38px; }
+.achos .print_only .marking .campaign_logo { margin:0; }
+.achos .print_only .print_header .marking { background:#ef3f47; padding:7px; border:4px solid #fff; margin-bottom:7px; }
+.achos .print_only .print_header .bh { float:right; font-size:10px; margin:-4px; }
+/*.achos .print_only .print_header .title:before, .achos .print_only .print_header .title:after { content:''; position:absolute; width:14px; height:14px; background:#fff; transform:rotate(45deg); -ms-transform:rotate(45deg); -webkit-transform:rotate(45deg); box-shadow:1px -1px 0 rgba(0,0,0,0.2); top:30%; left:14px; }
+.achos .print_only .print_header .title:after { left:auto; right:14px; }*/
+.achos .print_only .print_header .logo { /*width:33%;*/ width:50%; margin:0 auto; position:relative; height:70px; }
+.achos .print_only .print_header .logo img { max-width:100%; height:auto;}
+.achos .print_only .print_header .user_image { float:none; padding:0; width:100px; max-height:110px; border:4px solid #f9b093; top:-40px; left:55px; }
+.achos .print_only .print_header .user_image img { max-width:100%; height:auto; }
+.achos .print_only .print_header .user_level { position:absolute; top:26px; right:30px; text-align:right; font-size:18px; line-height:1.3; width:150px; }
+.achos .print_only .print_header .user_level .num { font-weight:bold; }
+/*.achos .print_only .print_header .user_level img { max-width:50px; height:auto; position:absolute; top:-13px; right:-57px; }*/
+.achos .print_only .print_header .title { clear:both; padding:0 50px; }
+.achos .print_only .print_header .title img { max-width:100%; height:auto;}
+.achos .print_only .print_header .user_display { float:left; margin:0 1%; width:35%; }
+.achos .print_only .print_header .user_display.grade { width:12%; }
+.achos .print_only .print_header .user_display span { /*display:inline-block; width:20%; display:table-cell; vertical-align:middle;*/ margin:4px 6px 0 0; font-size:12px; float:left;  }
+.achos .print_only .print_header .user_display .display { font-family: 'Open Sans', 'chesstype', sans-serif;  /*color:#fff; background:#424243; padding:3px 4px; font-size:24px; text-transform:lowercase; box-shadow:1px -1px 0 rgba(0,0,0,0.2);*/ font-weight:bold; text-transform:none; font-size:16px; }
+
+
+.dedication {
+    font-family:"Myriad Pro",Arial,Helvetica,sans-serif;
+    font-size: 15px;
+    text-align: center;
+}
+.footer_sticker {
+    width: 550px;
+    margin: 0 auto;
+}
+.footer_info {
+    height: 50px;
+    width: 50px;
+    font-size: 6px;
+    text-align: center;
+    float: left;
+}
+.footer_info img {
+    height: 40px;
+}
+
+@media print {
+	@page { size:portrait; margin:.25in; }
+	#wrapper > div#content, #wrapper > div#content { float:none; }
+	.achos .print_only { height:auto !important; }
+	.achos .print_only .print_individual { background:none; box-sizing:border-box; page-break-after:always; margin:0; padding-top:67px; }
+	.achos .print_only .print_individual:last-child { page-break-after:auto; }
+	.achos .print_only .marking.module { border-color:#999; color:#000; margin-bottom:4px; }
+	.achos .print_only .marking .row.top_row { background:#999; border-radius:0; }
+	.achos .print_only .marking .row.top_row .cell 	{ color:#fff; }	
+	.achos .print_only .marking .row.master { border-color:#ccc; }
+	.achos .print_only .marking .cell { border:none; }
+	.achos .print_only .marking .cell.checkbox span,
+	.achos .print_only .marking .cell.text_input input,
+	.achos .print_only .marking .cell.checked.checkbox span { background-color:#ccc; }
+	.achos .print_only .print_header .marking { background:#aaa; border-color:#999; margin-bottom:7px; }
+	.achos .print_only .print_header .user_image { border-color:#999; }
+}

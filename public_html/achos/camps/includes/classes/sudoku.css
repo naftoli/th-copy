@@ -1,0 +1,421 @@
+.input {background: #ffffcc; color: #000000 ;font-weight: normal;}
+.smallstyle { font-family: verdana, sans-serif; font-size: 8pt; }
+.smallstyleAN { font-family: "arial narrow", sans-serif; font-size: 9pt; }
+.SButton { border-top:#ff7777 2px solid; border-left:#ff7777 2px solid; border-right:#990000 2px solid; border-bottom:#990000 2px solid;
+	background-color:#ff2222; font-family: "arial", sans-serif; font-size: 8pt; color:white;font-weight:bold; }
+.BButton { border-top:#5555ff 2px solid; border-left:#5555ff 2px solid; border-right:#000099 2px solid; border-bottom:#000099 2px solid;
+	background-color:#2222ff; font-family: "arial", sans-serif; font-size: 8pt; color:white;font-weight:bold; }
+.GButton { border-top:#999999 2px solid; border-left:#999999 2px solid; border-right:#222222 2px solid; border-bottom:#222222 2px solid;
+	background-color:#555555; font-family: "arial", sans-serif; font-size: 8pt; color:white;font-weight:bold; }
+.YButton { border-top:#ffff00 2px solid; border-left:#ffff00 2px solid; border-right:#666622 2px solid; border-bottom:#666622 2px solid;
+	background-color:#ffcc33; font-family: "arial", sans-serif; font-size: 8pt; color:black;font-weight:bold; }
+.GrnButton { border-top:#55ff55 2px solid; border-left:#55ff55 2px solid; border-right:#009900 2px solid; border-bottom:#009900 2px solid;
+	background-color:#22cc22; font-family: "arial", sans-serif; font-size: 8pt; color:white;font-weight:bold; }
+.SNote {
+	font-family: arial, sans-serif;
+	font-size: 8pt;
+}
+textarea {
+	font-family: "courier new", verdana, arial, sans-serif;
+	font-size: 8pt;
+	border-bottom: 1px solid #000000;
+	border-top: 1px solid #000000;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+	background: #ddeeff;
+}
+.OuterT {
+	font-family:verdana, arial, sans-serif;
+	font-size: 8pt;
+	background: #ddeeff;
+	border-bottom: 1px solid #bbbbbb;
+	border-top: 1px solid #bbbbbb;
+	border-left: 1px solid #bbbbbb;
+	border-right: 1px solid #bbbbbb;
+}
+.OuterJ {
+	font-family:verdana, arial, sans-serif;
+	font-size: 8pt;
+	background: #eeeedd;
+	border-bottom: 1px solid #04349c;
+	border-top: 1px solid #04349c;
+	border-left: 1px solid #04349c;
+	border-right: 1px solid #04349c;
+}
+.InnerT {
+	font-family:verdana, arial, sans-serif;
+	font-size: 8pt;
+	color: black;
+	border-bottom: 1px solid #888888;
+	border-top: 1px solid #888888;
+	border-left: 1px solid #888888;
+	border-right: 1px solid #888888;
+	width:44px;
+	height:44px;
+	text-align:center;
+}
+.InnerT6x6 {
+	font-family:verdana, arial, sans-serif;
+	font-size: 10pt;
+	color: black;
+	border-bottom: 1px solid #000000;
+	border-top: 1px solid #000000;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+	width:54px;
+	height:54px;
+	text-align:center;
+}
+.InnerTDone {
+	font-family:verdana,sans-serif;
+	font-size: 12pt;
+	background: #ffffff;
+	color:#000000;
+	border-top: 1px solid #000000;
+	border-right: 1px solid #000000;
+	width:24px;
+	height:24px;
+	text-align:center;
+}
+.InnerTDone2 {
+	font-family:verdana,sans-serif;
+	font-size: 12pt;
+	color: #0000FF;
+	background: #ffffff;
+	border-top: 1px solid #000000;
+	border-right: 1px solid #000000;
+	width:24px;
+	height:24px;
+	text-align:center;
+}
+.DC {
+	width:20px;
+	height:20px;
+	margin:0px;
+	background: #555555;
+}
+.CC {
+	width:20px;
+	height:20px;	
+	background: #ccffcc;
+	font-family:verdana, arial, sans-serif;
+	font-size: 9pt;
+	font-weight: bold;
+	text-align:center;
+	margin:0px;
+	color: #000000;
+}
+.CC2 {
+	width:40px;
+	height:40px;
+	background: #ffffff;
+}
+.cager {
+	width:3px;
+	height:20px;
+	background-color: rgb(0,0,0);
+}
+.cageb {
+	width:20px;
+	height:3px;
+	background-color: rgb(0,0,0);
+}
+.CG1 {
+	font-family:verdana, arial, sans-serif;
+	font-size: 8pt;
+	font-weight: bold;
+	border: 0px solid #ccffcc;
+	background: transparent;
+	width:20px;
+	height:19px;
+	text-align:center;
+	margin-right:0px;
+	margin-bottom:0px;
+}
+.CG2 {
+	font-family:verdana, arial, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	border: 0px solid #ccffcc;
+	background: transparent;
+	width:38px;
+	height:30px;
+	text-align:center;
+	margin-right:0px;
+	margin-bottom:0px;
+}
+.DE1 {
+	font-family:verdana, arial, sans-serif;
+	font-size: 9pt;
+	font-weight: bold;
+	border: 0px transparent;
+	background: #ffcccc;
+	width:20px;
+	height:18px;
+	text-align:center;
+	vertical-align:middle;
+	margin-right:2px;
+	margin-bottom:0px;
+}
+.DE2 {
+	font-family:verdana, arial, sans-serif;
+	font-size: 9pt;
+	font-weight: bold;
+	border: 0px transparent;
+	background: #ccffcc;
+	width:20px;
+	height:18px;
+	text-align:center;
+	vertical-align:middle;
+	margin-right:2px;
+	margin-bottom:0px;
+}
+.DE3 {
+	font-family:verdana, arial, sans-serif;
+	font-size: 9pt;
+	font-weight: bold;
+	border: 0px transparent;
+	background: #ccccff;
+	width:20px;
+	height:18px;
+	text-align:center;
+	vertical-align:middle;
+	margin-right:2px;
+	margin-bottom:0px;
+}
+.DE4 {
+	font-family:verdana, arial, sans-serif;
+	font-size: 9pt;
+	font-weight: bold;
+	border: 0px transparent;
+	background: #ffffcc;
+	width:20px;
+	height:18px;
+	text-align:center;
+	vertical-align:middle;
+	margin-right:2px;
+	margin-bottom:0px;
+}
+.KKS {
+	width:25px;
+	height:20px;	
+	background: #ccffcc;
+	font-family:verdana, arial, sans-serif;
+	font-size: 8pt;
+	font-weight: normal;
+	text-align:center;
+	margin:0px;
+	color: #000000;
+}
+.KKS6x6 {
+	width:35px;
+	height:30px;	
+	background: #ccffcc;
+	font-family:verdana, arial, sans-serif;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align:center;
+	margin:0px;
+	color: #000000;
+}
+.KKC {
+	width:50px;
+	height:40px;
+	background: #ffffff;
+}
+.KKI {
+	font-family:verdana, arial, sans-serif;
+	font-size: 16pt;
+	font-weight: normal;
+	border: 0px solid #ccffcc;
+	background: transparent;
+	width:48px;
+	height:30px;
+	text-align:center;
+	margin-right:0px;
+	margin-bottom:0px;
+}
+
+.iput {
+	font-family:verdana, arial, sans-serif;
+	font-size: 8pt;
+	font-weight: bold;
+	border-bottom: 1px solid #000000;
+	border-top: 1px solid #000000;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+	background: #bbccdd;
+	width:40px;
+	text-align:center;
+}
+.iput2 {
+	font-family: Helvetica, arial, verdana, sans-serif;
+	font-size: 8pt;
+	font-weight: bold;
+	color: #000000;
+	border-bottom: 1px solid #000000;
+	border-top: 1px solid #000000;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+	background: #ffffff;
+	width:40px;
+	height:22px;
+	text-align:center;
+}
+.xcoords {
+	font-family:verdana, arial, sans-serif;
+	font-size: 8pt;
+	color: #888888;
+	text-align:center;
+}
+.ycoords {
+	font-family:verdana, arial, sans-serif;
+	font-size: 8pt;
+	color: #888888;
+	text-align:center;
+	vertical-align:middle;
+	height:44px;
+}
+.ycoords6x6 {
+	font-family:verdana, arial, sans-serif;
+	font-size: 8pt;
+	color: #888888;
+	text-align:center;
+	vertical-align:middle;
+	height:54px;
+}
+.coords {
+	font-family:verdana, arial, sans-serif;
+	font-size: 8pt;
+	color: #888888;
+	text-align:center;
+}
+.tiny0 {
+	font-family:verdana, arial, sans-serif;
+	font-size: 8pt;
+	color: #000000;
+	text-align:center;
+	width:14px;
+}
+.tiny1 {
+	font-family:verdana, arial, sans-serif;	font-size: 8pt; text-align:center; width:14px;
+	color: #000000;
+	background-color: #ff8888;
+}
+.tiny2 {
+	font-family:verdana, arial, sans-serif;	font-size: 8pt; text-align:center; width:14px;
+	color: #000000;
+	background-color: #88ff88;
+}
+.tiny3 {
+	font-family:verdana, arial, sans-serif;	font-size: 8pt; text-align:center; width:14px;
+	color: #000000;
+	background-color: #ffff88;
+}
+.tiny4 {
+	font-family:verdana, arial, sans-serif;	font-size: 8pt; text-align:center; width:14px;
+	color: #000000;
+	background-color: #8888ff;
+}
+.tiny5 {
+	font-family:verdana, arial, sans-serif;	font-size: 8pt; text-align:center; width:14px;
+	color: #000000;
+	background-color: #88ffff;
+}
+.tiny6 {
+	font-family:verdana, arial, sans-serif;	font-size: 8pt; text-align:center; width:14px;
+	color: #000000;
+	background-color: #ff88ff;
+}
+.tiny7 {
+	font-family:verdana, arial, sans-serif;	font-size: 8pt; text-align:center; width:14px;
+	color: #000000;
+	background-color: #FFBBCC;
+}
+.tiny8 {
+	font-family:verdana, arial, sans-serif;	font-size: 8pt; text-align:center; width:14px;
+	color: #000000;
+	background-color: #CCCC66;
+}
+.tiny9 {
+	font-family:verdana, arial, sans-serif;	font-size: 8pt; text-align:center; width:14px;
+	color: #000000;
+	background-color: #FF6600;
+}
+.fsh
+{
+	color: #ff0000;
+	background-color: #FFFF00;
+}
+.fshON
+{
+	color: #000000;
+	background-color: #77ff77;
+}
+.fshOFF
+{
+	color: #000000;
+	background-color: #ff7777;
+}
+.fshGrn
+{
+	color: #000000;
+	background-color: #77ff77;
+}
+.fshBlu
+{
+	color: #000000;
+	background-color: #7777ff;
+}
+
+table.candtb
+{
+	border-spacing:0px;
+	align:center;
+	empty-cells:show;
+	border-collapse:collapse;
+	table-layout: fixed;
+	width:36px;
+	height:36px;
+}
+table.candtb td
+{
+	padding:0 1 0 3;
+	font-size:8pt;
+	font-family: verdana;
+	color:#000000;
+}
+.KillerTB {
+font-family:verdana;
+font-size: 10pt;
+font-weight: bold;
+color: black;
+border: 1px solid #aaaaaa;
+width:25px;
+height:25px;
+text-align:center;
+}
+.KillerTR {
+font-family:verdana;
+font-size: 10pt;
+font-weight: bold;
+color: red;
+border: 1px solid #aaaaaa;
+width:25px;
+height:25px;
+text-align:center;
+}
+.sovlistA {
+	background-color: #222222;
+}
+.sovlistB {
+	background-color: #333333;
+}
+.sovcb {
+	margin-top: -2px; 
+	margin-bottom: -2px;
+}
+#tt {position:absolute; display:block; background:url(images/tt_left.gif) top left no-repeat}
+#tttop {display:block; height:5px; margin-left:5px; background:url(images/tt_top.gif) top right no-repeat; overflow:hidden}
+#ttcont {display:block; padding:2px 12px 3px 7px; margin-left:5px; background:#666; color:#FFF}
+#ttbot {display:block; height:5px; margin-left:5px; background:url(images/tt_bottom.gif) top right no-repeat; overflow:hidden}

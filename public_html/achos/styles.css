@@ -1,0 +1,1037 @@
+/*Copyright Ariel Shkedi 2007-2010*/
+body {
+  background-color: #e0f3d2;
+  font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  padding: 0px;
+  margin: 0px;
+}
+
+a:link, a:visited, .link_button {
+  color: #0065b2;
+  text-decoration: none;
+}
+
+a:hover, .link_button:hover {
+  text-decoration: underline;
+}
+
+.link_button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+a img {
+  border: none;
+}
+
+input, select, textarea {
+  background-color: #fdf8ea;
+  border: 1px #3d523c solid;
+  margin-bottom: 3px;
+}
+
+.nobr {
+  white-space: nowrap;
+}
+
+.list thead tr {
+  background-color: #fdf8ea;
+}
+
+#worktable .list thead tr {
+  background-color: blue;
+  background-image: url(images/Camouflage-Background-Blue.png);
+  background-position: center center;
+}
+
+.list td, .list th {
+  border-bottom: 1px solid #cccccc;
+  padding: 15px;
+}
+
+.list table a, .list table a:visited {
+  text-decoration: underline;
+  color: #1c1c1c;
+}
+
+.list_left th {
+  text-align: left;
+}
+
+.list_righ th {
+  text-align: right;
+}
+
+.header img {
+  display: block;
+}
+
+.header .middle {
+  position: relative;
+  top: -50px;
+  text-align: center;
+  margin: auto;
+  width: 100px;
+}
+
+.header .left {
+  margin: -2px;
+  position: relative;
+  float: left;
+  background-color: #e0f3d2;
+}
+
+.header .right {
+  margin: -2px;
+  position: relative;
+  float: right;
+  background-color: #e0f3d2;
+}
+
+/* banner.php */
+
+.banner {
+  padding: 0px 10px 5px 10px;
+  background-image: url(images/banner-bg.gif);
+  background-repeat: repeat-x;
+}
+
+.banner .rebbe {
+  text-align: center;
+  width: 180px;
+}
+
+.banner .rebbe img {
+}
+
+.banner .left {
+  float: left;
+}
+
+.banner .right {
+  float: right;
+}
+
+.banner .middle {
+  text-align: center;
+  padding-top: 14px;
+}
+
+.banner .middle h1 {
+  color: #169fe7;
+  font-size: 300%;
+  margin: 8px;
+  padding: 0px;
+}
+
+.banner .middle h2 {
+  font-size: 180%;
+  margin: 5px;
+  padding: 0px;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+.banner .middle h2 a {
+  background-color: #00a5f4;
+  border: 1px solid black;
+  padding: 3px;
+  font-size: 50%;
+  color: black;
+  vertical-align: 25%;
+}
+
+.banner .middle h3 {
+  color: #75ad3d;
+  font-weight: normal;
+  font-size: 150%;
+  margin: 5px;
+  padding: 0px;
+}
+
+/* cal.php */
+
+.cal caption {
+  color: #75ad3d;
+}
+
+.cal td {
+  text-align: center;
+  font-size: 135%;
+  border: 1px solid white;
+  width: 1em;
+}
+
+.cal th {
+  border: 1px solid #75ad3d;
+}
+
+.cal td a, .cal td a:visited {
+  color: black;
+}
+
+.cal .picked_day {
+  font-weight: bold;
+  border: 1px solid black;
+}
+
+.cal .enabled_day {
+  background-color: yellow;
+  border: 1px solid black;
+}
+
+.cal .today {
+  border: 1px solid red;
+}
+
+.body {
+  margin: 0px 10px 10px 10px;
+  clear: both;
+}
+
+.body table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.body .split td {
+  vertical-align: top;
+  padding-top: 5px;
+  border: 1px solid #468db7;
+}
+
+.body table .special {
+  text-align: center;
+  background-color: #00a5f4;
+  font-size: 130%;
+  font-weight: normal;
+  padding: 5px 2px;
+}
+
+.body table .tasks {
+  width: 1px;
+}
+
+.body tbody .tasks {
+  padding-bottom: 5px;
+  background-color: #cbeaff;
+}
+
+.body tbody .middle {
+  background-color: #f0f9ff;
+}
+
+.body table .menu {
+  width: 230px;
+}
+
+.body tbody .menu {
+  background-color: #cbeaff;
+}
+
+.body tbody .menu ul {
+  padding: 0px;
+  margin: 4px 0px;
+}
+
+.body tbody .menu li {
+  list-style-type: none;
+  background-color: #e1f5ff;
+  padding: 1em 20px;
+  margin: 20px 0px;
+  font-weight: bold;
+  font-size: 115%;
+}
+
+/* reset previous css, child selector would be useful */
+.body .split td td {
+  border: none;
+}
+
+.body .message {
+  font-size: 150%;
+  font-weight: bold;
+  text-align: center;
+  background-color: red;
+  margin: 5px;
+  width: auto;
+}
+
+/* todo.php */
+
+.todo h1 {
+  text-align: center;
+  margin: auto;
+  padding: 0px;
+  font-size: 150%;
+}
+
+.todo table {
+  margin-top: 10px;
+  width: 200px;
+}
+
+.todo th {
+  background-color: #e1f5ff;
+  padding: 8px 0px;
+}
+
+.todo td {
+  background-color: #cbeaff;
+}
+
+.todo .left th {
+  text-align: left;
+  padding-left: 5px;
+}
+
+.todo .right th {
+  text-align: right;
+  padding-right: 5px;
+}
+
+.todo .left td {
+  padding-left: 15px;
+}
+
+.todo .right td {
+  padding-right: 15px;
+}
+
+.todo .arrow {
+  width: 1px;
+  font-size: 125%;
+}
+
+/* done */
+
+.done h1 {
+  text-align: center;
+  margin: auto;
+  padding: 0px;
+  font-size: 150%;
+}
+
+.done h2 {
+  text-align: center;
+  margin: auto;
+  padding: 0px;
+  font-size: 120%;
+}
+
+.done .message_box {
+  font-size: 125%;
+  margin-top: 2em;
+}
+
+.done table {
+  width: 100%;
+}
+
+.done th {
+  font-size: 150%;
+  vertical-align: top;
+  width: 1em;
+}
+
+.done .row1 {
+  background-color: #d3d3d3;
+}
+
+.done .row2 {
+  background-color: yellow;
+}
+
+.done table {
+  border-collapse: collapse;
+}
+
+.done td {
+  vertical-align: top;
+}
+
+/* tasks_ae */
+
+.tasks_ae {
+  margin: 10px 10px;
+}
+
+.tasks_ae caption {
+  font-size: 150%;
+  font-weight: bold;
+}
+
+.tasks_ae table {
+  width: 100%;
+}
+
+.tasks_ae th {
+  width: 1em;
+  white-space: nowrap;
+}
+
+.tasks_ae_left th {
+  text-align: left;
+}
+
+.tasks_ae_right th {
+  text-align: left;
+}
+
+.tasks_ae .name {
+  padding-bottom: 4px;
+}
+
+.form table, .form p, .form h3 {
+  margin: 10px 10px;
+}
+
+.form table {
+  width: 100%;
+}
+
+.form caption, .form h2 {
+  font-size: 150%;
+  font-weight: bold;
+  text-align: center;
+  margin: 0px;
+}
+
+.form_left th {
+  text-align: left;
+}
+
+.form_right th {
+  text-align: right;
+}
+
+.preferences .pass_change {
+  font-weight: normal;
+  font-size: 75%;
+}
+
+.form_left .end {
+  text-align: right;
+  padding-right: 1em;
+}
+
+.form_right .end {
+  text-align: left;
+  padding-left: 1em;
+}
+
+/* register.php */
+
+.register form, .register form div {
+  display: inline;
+}
+
+.register .message {
+  background-color: transparent;
+  color: red;
+  font-size: 100%;
+}
+
+.register .form_left .message {
+  text-align: left;
+}
+
+.register .form_right .message {
+  text-align: right;
+}
+
+
+.buttons {
+  line-height: 300%;
+  white-space: nowrap;
+  overflow: auto;
+  margin: 0px 6px;
+}
+
+.buttons a {
+  border: 5px outset #e1f5ff;
+  background-color: #cbeaff;
+  padding: 2px;
+}
+
+.buttons a:hover {
+  border: 5px inset #e1f5ff;
+}
+
+.body .split td .dashed_lines tr {
+  border-bottom: 1px dashed black;
+}
+
+.body .split td .lines tr {
+  border-bottom: 1px solid black;
+}
+
+.body .split td .dashed_lines .bottom, .body .split td .lines .bottom {
+  border-bottom: none;
+}
+
+.body .split td .dashed_lines th, .body .split td .lines th {
+  padding-top: .5em;
+}
+
+.body .split td .dashed_lines .wall {
+  border-left: 1px dashed black;
+  padding-left: .3em;
+}
+
+.body .split td .lines .wall {
+  border-left: 1px solid black;
+  padding-left: .3em;
+}
+
+.center_spans {
+  text-align: center;
+}
+
+.center_spans span {
+  white-space: nowrap;
+}
+
+.hover {
+  color: black !important;
+}
+
+.hover .box {
+  background-color: #f0f9ff;
+  position: absolute;
+  left: 2em;
+  top: 1.2em;
+  border: 1px solid #468db7;
+  padding: 2px;
+  display: none;
+}
+
+.hover:hover {
+  position: relative;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.hover:hover .box {
+  display: block;
+  font-weight: normal;
+}
+
+.center_box {
+  float: left;
+  position: relative;
+  text-align: center;
+  left: 50%;
+}
+
+.center_box div {
+  position: relative;
+  right: 50%;
+  border: 1px solid black;
+  padding: 5px;
+}
+
+body.kiosk, body.dashboard {
+  margin: 0px;
+  padding: 0px;
+  background-color: #ffcc00;
+  color: white;
+}
+
+.print_mode body.dashboard h1 {
+  display: none;
+}
+
+.kiosk table, .dashboard table {
+  margin: auto;
+  border-collapse: collapse;
+}
+
+.kiosk p {
+  text-align: center;
+}
+
+#kiosk_header {
+  background-image: url('images/kiosk_header.jpg');
+  background-repeat: repeat-x;
+  height: 140px;
+  font-size: 23px;
+  text-shadow: 1px 1px 4px #000000;
+  padding: 0px 5px;
+}
+
+#kiosk_header p {
+  margin: 0px;
+  padding: 15px;
+  text-align: left;
+}
+
+#kiosk_header img {
+  height: 100px;
+  margin: 20px 10px;
+  float: left;
+}
+
+#header {
+  background-image: url('images/kiosk_header-bg.png');
+  background-repeat: repeat-x;
+  height: 173px;
+}
+
+.print_mode #header {
+  display: none;
+}
+
+#header div {
+  width: 935px;
+  background-image: url('images/kiosk_header.png');
+  background-repeat: no-repeat;
+  margin: auto;
+  height: 100%;
+}
+
+#header p {
+  text-align: right;
+  margin: 0px;
+  padding-top: 23px;
+}
+
+#header img {
+  height: 100px;
+  margin: 23px 10px;
+  float: right;
+}
+
+.kiosk a, .dashboard a, .kiosk .link_button, .dashboard .link_button {
+  text-decoration: none;
+  font-weight: bold;
+  line-height: 40px;
+  padding: 7px 0px;
+}
+
+.kiosk a:link, .kiosk a:visited, .kiosk .link_button {
+  color: #8ead3e;
+}
+
+.kiosk a:hover, .kiosk a:active, .kiosk .link_button:hover {
+  color: #ffcc00;
+}
+
+.dashboard a:link, .dashboard a:visited, .dashboard .link_button {
+  color: green;
+}
+
+.dashboard a:hover, .dashboard a:active, .dashboard .link_button:hover {
+  color: white;
+}
+
+#body {
+  padding: 6px 0px;
+  background-color: black;
+  color: #ffcc00;
+}
+
+.kiosk #body {
+  background-image: url('images/Camouflage-Background-Green.jpg');
+  padding: 0px;
+}
+
+.kiosk #body #page_title {
+  height: 57px;
+  background-image: url(images/kiosk_page_title.png);
+  text-align: center;
+  color:#eeeeee;
+  line-height: 40px;
+  font-size: 30px;
+}
+
+.kiosk .body_left #buttons {
+  float: right;
+}
+
+.kiosk .body_right #buttons {
+  float: left;
+}
+
+.kiosk #buttons {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+  font-size: 30px;
+}
+
+.kiosk #buttons li {
+  width: 280px;
+  height: 80px;
+  background-image: url(images/kiosk_buttons_bg.png);
+  padding: 12px 20px;
+}
+
+.kiosk #buttons li:hover {
+  background-position: 0 -120px;
+}
+
+.kiosk #buttons li a {
+  width: 280px;
+  height: 80px;
+  padding: 0px 10px;
+  display: table-cell;
+  vertical-align: middle;
+  text-decoration: none;
+  color: #eeeeee;
+}
+
+.kiosk #buttons li a img {
+  vertical-align: middle;
+}
+
+.kiosk .body_right #buttons li a img {
+  margin-left: 10px;
+}
+
+.kiosk .body_left #buttons li a img {
+  margin-right: 10px;
+}
+
+.kiosk #buttons li .deposit_circle {
+  width: 45px;
+  height: 45px;
+  display: block;
+  background: url(images/deposit_circle.png);
+  color: #FFFFFF;
+  font-size: 25px;
+  margin: -90px 0 0 250px;
+  line-height: 40px;
+  text-align: center;
+}
+
+.kiosk #body.login {
+  background-image: url('images/kiosk_login-bg.jpg');
+  background-repeat: no-repeat;
+  background-position: top center;
+  height: 394px;
+  text-align: center;
+}
+
+
+
+.kiosk .login div {
+  background-image: url('images/kiosk_login_scan.png');
+  background-repeat: no-repeat;
+  background-position: top center;
+  position: relative;
+  width: 357px; /* 502 - 144; */
+  margin: auto;
+  margin-top: 0px;
+  padding-top: 107px;
+  left: -185px;
+  padding-left: 145px;
+  text-align: left;
+}
+
+.kiosk .login div input {
+  line-height: 30px;
+}
+
+.kiosk .login div p {
+  background-color: black;
+  margin: 0px;
+}
+
+.kiosk #body.dayschool{
+  background-image: url('images/kiosk_login-bg-no-Rebbe.jpg');
+  background-repeat: no-repeat;
+  background-position: top center;
+  height: 394px;
+  text-align: center;
+}
+.kiosk .dayschool div {
+  background-image: url('images/kiosk_login_scan.png');
+  background-repeat: no-repeat;
+  background-position: top center;
+  position: relative;
+  width: 357px; /* 502 - 144; */
+  margin: auto;
+  margin-top: 0px;
+  padding-top: 107px;
+  left: -185px;
+  padding-left: 145px;
+  text-align: left;
+}
+
+.kiosk .dayschool div input {
+  line-height: 30px;
+}
+
+.kiosk .dayschool div p {
+  background-color: black;
+  margin: 0px;
+}
+
+
+#body .rank {
+  height: 170px;
+  margin: 0px 15px;
+}
+
+#body .photo {
+  text-align: center;
+  vertical-align: top;
+}
+
+#body .photo img {
+  height: 170px;
+  border: 8px solid #8ead3e;
+  -webkit-border-radius: .06in;
+  -moz-border-radius: .06in;
+  border-radius: .06in;
+}
+
+#body .photo .rank {
+  width: 100px;
+  height: auto;
+  border: none;
+  position: absolute;
+  margin-top: 100px;
+}
+
+#body.body_left .photo .rank {
+  margin-left: -50px;
+}
+
+#body.body_right .photo .rank {
+  margin-right: -50px;
+}
+
+#body.body_left .member_info {
+ padding-left: 60px;
+}
+
+#body.body_right .member_info {
+ padding-right: 60px;
+}
+
+.member_info {
+  font-size: 13px;
+  width: 320px;
+  line-height: 27px;
+  text-transform: uppercase;
+  color: white;
+}
+
+.member_info b {
+  font-size: 22px;
+  text-transform: none;
+}
+
+.member_info h3 {
+  font-size: 22px;
+  border-bottom: 1px dotted #ffffff;
+  margin: 0px;
+  padding: 0px;
+  text-transform: none;
+}
+
+#body em {
+  font-size: 200%;
+  font-style: normal;
+}
+
+#body em b {
+  color: #8ead3e;
+}
+
+.kiosk .transactions, .dashboard #worktable, #no_scan {
+  background-color: #ffffce;
+  -webkit-border-radius: .06in;
+  -moz-border-radius: .06in;
+  border-radius: .06in;
+  text-align: center;
+  color: black;
+}
+
+.print_mode .dashboard #user_display {
+  display: none;
+}
+
+.kiosk #scan div {
+  background-image: url('images/kiosk_scan.png');
+  background-repeat: no-repeat;
+  background-position: 0px 40px;
+  width: 540px;
+  height: 120px;
+  margin: auto;
+  font-size: 30px;
+  color: white;
+  text-align: center;
+  padding-top: 120px;
+}
+
+.kiosk #scan input {
+  line-height: 30px;
+}
+
+.kiosk .login input {
+  margin-bottom: 15px;
+  width: 330px;
+  border: none;
+  background-color: transparent;
+  font-size: 24px;
+}
+
+.kiosk .dayschool input {
+  margin-bottom: 15px;
+  width: 330px;
+  border: none;
+  background-color: transparent;
+  font-size: 24px;
+}
+
+#code_popup table.card {
+  float: left;
+  margin: 0px 1em;
+  line-height: auto;
+}
+
+table.card td {
+  background-color: #def7d6;
+  color: black;
+  height: 200px;
+  border: 1px dashed black;
+}
+
+table.card td table td {
+  border: none;
+  height: auto;
+}
+
+.dashboard table.card th {
+  padding-top: 1em;
+}
+
+.dashboard table.card td td {
+  border: none;
+  height: auto;
+}
+
+.kiosk #scan p {
+  margin: 0px;
+  padding: 0px .5em;
+}
+
+#black_cover {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-color: black;
+  opacity: 0.7;
+  -moz-opacity: 0.7;
+  filter: alpha(opacity=70);
+  z-index: 100;
+}
+
+#code_popup {
+  min-height: 200px;
+  width: 60%;
+  margin: 5% 20%;
+  position: absolute;
+  overflow: auto;
+  background-color: white;
+  color: black;
+  opacity: 1;
+  -moz-opacity: 1;
+  filter: alpha(opacity=100);
+  z-index: 110;
+  padding: 10px;
+}
+
+#code_popup div.message {
+  font-size: 24px;
+}
+
+#code_popup div.message b {
+  color: #8cad42;
+}
+
+#code_popup div.message div {
+  font-size: 60px;
+  font-weight: bold;
+}
+
+.kiosk #footer {
+  background-image: url('images/kiosk_footer-bg.png');
+  background-color: #ffcc00;
+  background-repeat: repeat-x;
+}
+
+.transactions {
+}
+
+.transactions th {
+  padding: 2px .5em;
+  text-align: <?=$align_start?>;
+  background-color: #e8efbd;
+}
+
+.transactions td {
+  padding: 2px .5em;
+}
+
+.transactions tr.even td {
+  background-color: #fff6aa;
+}
+
+.dashboard #worktable>div {
+  background-position: center center;
+  padding: 15px 0px;
+  color: white;
+}
+
+.print_mode .dashboard #worktable>div {
+  padding: 0px;
+}
+
+.print_mode #worktable>div h3 {
+  display: none;
+}
+
+.dashboard #worktable #tabs {
+  width: 100%;
+}
+
+.dashboard #worktable #tabs th {
+  background-position: center center;
+  padding: 15px;
+  color: white;
+}
+
+@media print {
+  body {
+    border: none;
+    margin: 0px;
+  }
+
+  #worktable>div {
+    background-image: none !important;
+    color: black;
+  }
+
+  .dashboard #worktable #tabs {
+    display: none;
+  }
+
+  .kiosk #scan, .dashboard #worktable, body.dashboard, #body {
+    background-color: transparent;
+    color: black;
+  }
+
+  #body {
+    padding: 0px;
+  }
+
+  .noprint {
+    display: none;
+  }
+}

@@ -1,0 +1,202 @@
+<? if(isset($_COOKIE['kiosk_machine']) && isset($admin_auth)) header('Location: http' . (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 's' : '') . "://{$_SERVER['HTTP_HOST']}" . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/') . '/kiosk.php'); ?>
+<? $username = agr($_COOKIE, 'username_default'); ?>
+<?
+if(!isset($login_query_string)) {
+  $login_query_string = http_build_query($_GET, NULL, '&amp;');
+  if(!is_null($login_query_string) && $login_query_string !== '') $login_query_string = '?' . $login_query_string;
+}
+?>
+
+<?php if (isset($admin_auth))  { ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--<meta http-equiv="X-UA-Compatible" content="chrome=1">-->
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<title>Hachayal Kiosk - Admin</title>
+<link rel="alternate" media="print" href="index.php">
+<link href="http://mashpia.com/CampMotivationalSystem-legacy-june-20-2010/dev/presentation/styles/reset.css" rel="stylesheet" type="text/css" />
+<link href="http://mashpia.com/CampMotivationalSystem-legacy-june-20-2010/dev/presentation/styles/styles.css" rel="stylesheet" type="text/css" />
+<link href="http://mashpia.com/CampMotivationalSystem-legacy-june-20-2010/dev/presentation/styles/print.css" rel="stylesheet" type="text/css" media="print" />
+<!--[if lt IE 8]>
+<link href="http://mashpia.com/CampMotivationalSystem-legacy-june-20-2010/dev/presentation/styles/style_ie.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+<script src="http://cdn.jquerytools.org/1.2.2/jquery.tools.min.js"></script>
+<!--[if lt IE 9]>
+<script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+<![endif]-->
+<script>
+	$(function() {
+		$("#contact_us").overlay({top: '40%', target: '#overlay', closeOnClick: true, mask: { color: '#fff', loadSpeed: 200, opacity: 0.5 }});
+		$('#username').focus();
+	});
+</script>
+<!--Copyright Ariel Shkedi 2007-2010-->
+</head>
+
+<body>
+	<div id="wrapper">
+    	<div id="nav">
+        	<div class="col_title_bg"></div>
+            <div class="col_title">Menu</div>
+            <ul class="list_first">
+                <li class="list_parent"><a href="#dashboard"><img src="images/icon_dashboard.png" width="22" height="22" alt="Login" /> Login</a></li>
+            </ul>
+        </div>
+        <div id="content">
+        	<div class="col_title_bg"></div>
+            <div class="slider_container">
+                <div class="slider">
+                    <div class="col_title"><span>Welcome</span></div>
+                    <div class="col_content">
+
+                        <p>This website will only function properly using Firefox 3.0 and higher. Click <a href="http://www.getfirefox.com/">here</a> to download Firefox.</p> 
+                        <h1>Chayolei Tzivos Hashem School and Camp Login</h1> 
+                         
+                         
+                        <div style="text-align: center;"> 
+                            <noscript><p style="color: red; font-size: larger;">Notice: You have javascript disabled. Some parts of the site will not function without javascript.</p></noscript> 
+                        </div> 
+ 
+			<? if(isset($admin_auth)) { ?>                            
+                        <div class="module" id="module-info">
+                            <h1>Login</h1>
+                            <div class="module_content">
+                                <div class="list">
+                                    <form action="" method="post" accept-charset="UTF-8" name="login"> 
+                                        <ul>
+                                            <li>
+                                                <span class="icon bullet"></span>
+                                                <span class="label"><label for="username">Username</label></span><input type="text" name="login_username" id="username" size=64 maxlength=64 value="">
+                                                <div class="clear"></div>
+                                            </li>
+                                            <li>
+                                                <span class="icon bullet"></span>
+                                                <span class="label"><label for="password">Password</label></span><input type="password" name="login_password" id="password" size=64 maxlength=64 value="">
+                                                <div class="clear"></div>
+                                            </li>
+                                            <li>
+                                                <input type="submit" value="Login" class="button"> 
+                                                <input type="hidden" name="new_login"> 
+                                                <div class="clear"></div>
+                                            </li>
+                                        </ul>
+                                    </form> 
+                                </div>
+                            </div>
+                        </div>
+			<?php } else { ?>
+				<br /><br />
+				<FORM action="" method="post" accept-charset="UTF-8" name="login">
+				<LABEL for="user_code"><?=T_('Scan Rank Card')?>:</LABEL>
+				<INPUT type="text" name="user_code" id="user_code" size=25 maxlength=20 autocomplete="off">
+				<br /><br />
+				<?= $login_message ?>
+				<INPUT TYPE="hidden" NAME="new_login">
+				<?= form_build_input(array_diff_key($_POST, array('login_username' => '', 'login_password' => '', 'user_code' => ''))) ?>
+				</FORM>
+				<SCRIPT type="text/javascript">
+				document.forms['login'].elements['<?=!isset($admin_auth) ? 'user_code' : (!$username ? 'login_username' : 'login_password') ?>'].focus();
+				<?=!isset($admin_auth) ? 'setInterval("document.forms[\'login\'].elements[\'user_code\'].focus();", 1000);' : ''?>
+				</SCRIPT>
+			<?php } ?>
+
+                        <div class="module" id="module-info">
+                            <div class="module_content">
+                                <ol>
+                                    <li>
+                                        <p><a href="register_school.php">New schools: Register your school as a Tzivos Hashem Base</a></p>
+                                        <p><a href="register_camp.php">Camps: Register your camp as a Tzivos Hashem Base</a></p>
+                                        <p>Existing schools: Please login to register.</p>
+                                        <!--<p><a href="school_brouchure.pdf">About Us</a></p>--> 
+                                        <p><a href="#" id="contact_us">Contact Us</a></p>
+                                        <p><a href="statement.php">Enter Kiosk Mode</a></p> 
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="overlay" class="narrow">
+    	<div class="content">
+            <div class="module" id="module-info">
+                <div class="module_content">
+                    <p>For more information, please contact:<br>
+                    Rochie Pink<br>
+                    at 718-907-8884<br>
+                    or <a href='ma&#105;lto&#58;CT%48&#64;T%7&#65;ivosHas&#104;em&#46;org'>CTH&#64;Tzi&#118;osH&#97;she&#109;&#46;o&#114;g</a></p>
+                </div>
+            </div>
+        </div>
+
+<?php } else { ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<HTML DIR="LTR">
+<HEAD>
+<LINK href="../styles.css" rel="stylesheet" type="text/css">
+<TITLE>Login - Tzivos Hashem Management System</TITLE>
+</HEAD>
+<BODY class="kiosk">
+<DIV id="header"><DIV></DIV></DIV>
+
+<DIV STYLE="text-align: center;">
+<NOSCRIPT><P STYLE="color: red; font-size: larger;">Notice: You have javascript disabled. Some parts of the site will not function without javascript.</P></NOSCRIPT>
+<!--
+<FORM action="" method="post" accept-charset="UTF-8">
+<DIV>
+<INPUT type="submit" value="English">
+<INPUT type="hidden" name="login_lang" value="en">
+</DIV>
+</FORM>
+<FORM action="" method="post" accept-charset="UTF-8">
+<DIV>
+<INPUT type="submit" value="עברית">
+<INPUT type="hidden" name="login_lang" value="he">
+</DIV>
+</FORM>
+<FORM action="" method="post" accept-charset="UTF-8">
+<DIV>
+<INPUT type="submit" value="יידיש">
+<INPUT type="hidden" name="login_lang" value="yi">
+</DIV>
+</FORM>
+<BR>
+-->
+<FORM action="" method="post" accept-charset="UTF-8" name="login">
+<DIV id="body" class="login">
+<DIV>
+<INPUT type="text" name="user_code" id="user_code" title="<\?=T_('Welcome! Please scan your rank card')?>" size=25 maxlength=20 autocomplete="off">
+<BR><BR>
+<P></P>
+</DIV>
+</DIV>
+<DIV>
+<INPUT TYPE="hidden" NAME="new_login">
+</DIV>
+</FORM>
+<SCRIPT type="text/javascript">
+document.forms['login'].elements['user_code'].focus();
+setInterval("document.forms['login'].elements['user_code'].focus();", 1000);</SCRIPT>
+<P style="text-align: center;">
+<!--
+  <P>
+   <A HREF="register.php">Register for an account.</A>
+  </P>
+-->
+  <DIV id="footer">&nbsp;</DIV>
+</DIV>
+</BODY>
+</HTML>
+
+</body>
+</body>
+</html>
+<?php } ?>
+</body>
+</html>

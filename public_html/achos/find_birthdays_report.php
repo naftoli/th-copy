@@ -1,0 +1,223 @@
+<?
+$admin_auth = array('school'); 
+require('header.php');
+require_once('calendar.php');
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+
+    <HEAD>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Birthday Report</title>
+        <link href="admin_styles.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="scripts/jquery-1.8.3.js"></script>
+        <SCRIPT type="text/javascript" src="icalendar.js"></SCRIPT>
+        <script type="text/javascript">
+        	$( function() { 
+        		$(".add").click( function() { 
+        			var user_id = $(this).find('input[type=checkbox]').attr('name');
+        			//alert( user_id );	      			
+        			if ( $(this).find('input').is(':checked') ) {
+        				//run script to add one to hebrew dob
+        				$.post( 'ajax/hebrewDateAdd.php', {user_id : user_id}, function(data){
+        					//alert( data );
+        					location.reload();
+        				});
+        			}        			
+        		});
+        		
+        		$(".subtract").click( function() { 
+        			var user_id = $(this).find('input[type=checkbox]').attr('name');
+        			//alert( user_id );
+        			if ( $(this).find('input').is(':checked') ) {
+        				//run script to subtract one from hebrew dob
+        				$.post( 'ajax/hebrewDateSubtract.php', {user_id : user_id}, function(data){
+        					//alert( data );
+        					location.reload();
+        				});
+        			}        			
+        		});
+                
+                $("input[name=submit]").click( function() {
+                	if ( !$(".dob").is(":checked") ) {
+                		alert('You must at least choose one birthday type.\nPlease try again.');
+                		return false;
+                	}
+                });
+        	});
+        </script>
+        <style type='text/css'>
+            table {
+                font-size: 12px;
+            }
+            th, td {
+                padding: 3px 10px;
+            }
+            fieldset {
+                border: 1px solid white;
+                padding: 10px;
+                padding-top: 0px;
+                -moz-border-radius: 10px;
+                -webkit-border-radius: 10px;
+                border-radius: 10px;
+                line-height: 1.5;
+            }
+            legend {
+                margin-left: 20px;
+                padding: 5px;
+                color: purple;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+            @media print {
+                .no-print {
+                    display: none;
+                }
+            }
+        </style>
+    </HEAD>
+
+    <BODY>
+        <? include('admin_header.php'); ?>
+        <h1>Birthday Report</h1>
+        <? 
+        if ( !isset( $_POST['submit'] ) ) {
+        ?>
+        <form action="find_birthdays_report.php" method="post">
+        	<fieldset>
+        		<legend>
+        			Select Birthday Type
+        		</legend>
+        		<input type="radio" name="dob" value="he" class="dob" checked="checked" /> Hebrew Birthday<br />
+        		<input type="radio" name="dob" value="en" class="dob" /> English Birthday
+        	</fieldset>
+        	<fieldset>
+                <legend>
+                    Select Dates
+                </legend>
+                <span class='dates'>
+                    <INPUT type="hidden" name="start_date" value="<?=unixtojd()?>">
+                    <LABEL>
+                        From: 
+                        <INPUT type="text" name="start_date_disp" READONLY value="<?=es(dateToHebrew(unixtojd()))?>" onClick="getDate(this.form, 'start_date', true);"/>
+                    </LABEL>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <INPUT type="hidden" name="end_date" value="<?=unixtojd()+30?>">
+                    <LABEL>
+                        To: 
+                        <INPUT type="text" name="end_date_disp" READONLY value="<?=es(dateToHebrew(unixtojd()+30))?>" onClick="getDate(this.form, 'end_date', true);"/>
+                    </LABEL>
+                </span>
+        	</fieldset>
+        	<div align='center'>
+                <br /><input type="submit" name="submit" value="Submit" />
+            </div>
+        </form>
+        <?	
+        } else {
+        	/*
+			echo "<pre>";
+			print_r( $_POST );
+			echo "</pre>";
+			*/
+        
+	        require_once 'class.adminSchools.php';
+	        require_once 'class.schoolsUsers.php';         
+	       
+	        $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+	        $schools = $as->getSchools();
+	        $schoolsUsers = array();
+	        
+	        foreach ( $schools as $id => $school ) {
+	            $s = new SchoolsUsers( $id );
+				//get all users and filter out correct ones
+				$users = $s->getUsers();
+				$temp = array();
+				$dob = array();
+				foreach ( $users as $user ) {
+					if ( empty( $user['dob'] ) )
+						continue;
+					
+					//find out what day birthday is in current year
+					//english dob is in format yy-mm-dd
+					$arrDOB = explode( '-', $user['dob'] );					
+					$yy = date('Y');
+					$en_birthday = gregoriantojd( $arrDOB[1], $arrDOB[2], $yy );
+					$user['en_dob'] = $en_birthday;
+					
+					//check if hebrew dob should be one day further
+					if ( $user['dob_he_offset'] ) {
+	                	//add one to dob
+	                    $date = new DateTime( $user['dob'] );
+						$date->add( new DateInterval( 'P1D' ) );
+						$newDate = $date->format( 'Y-m-d' );
+						$arrDOB = explode('-', $newDate);
+	                }
+					
+					$jd = gregoriantojd($arrDOB[1], $arrDOB[2], $arrDOB[0]);
+					$jewish = jdtojewish($jd);
+                    $arrJewish = explode('/', $jewish);
+                    $hMonth = $arrJewish[0];
+                    $hDay = $arrJewish[1];
+                    $jewishNow = jdtojewish(unixtojd());
+                    $arrJewishNow = explode('/', $jewishNow);
+                    $hYear = $arrJewishNow[2];						
+                    $he_birthday = jewishtojd($hMonth, $hDay, $hYear);
+					$user['he_dob'] = $he_birthday;
+					
+					if ( $_POST['dob'] == 'en' ) {
+						if ( $en_birthday >= $_POST['start_date'] && $en_birthday <= $_POST['end_date'] ) {
+							$temp[] = $user;
+							$dob[] = $user['en_dob'];
+						}
+					} else if ( $_POST['dob'] == 'he' ) {
+						if ( $he_birthday >= $_POST['start_date'] && $he_birthday <= $_POST['end_date'] ) {
+							$temp[] = $user;
+							$dob[] = $user['he_dob'];
+						}
+					}
+				}
+				array_multisort( $dob, SORT_ASC, $temp );
+	            $schoolsUsers[$id] = $temp;
+	        }
+	        
+	        foreach ( $schoolsUsers as $school => $users ) {
+	            echo "<h2>" . $schools[$school] . "</h2>";
+	            echo "<table>";
+	            echo "<tr><th>Grade</th><th>First Name</th><th>Last Name</th>";
+				echo "<th>First Hebrew Name</th><th>Last Hebrew Name</th>";
+	            if ( $_POST['dob'] == 'en' )
+	            	echo "<th>English DOB</th>";
+	            if ( $_POST['dob'] == 'he' )
+	            	echo "<th>Hebrew DOB</th>";
+				/*
+	            echo "<th>Add Day to Hebrew DOB</th>";
+	            echo "<th>Subtract Day from Hebrew DOB</th>";
+				 * 
+				 */
+	            echo "</tr>";
+	            foreach ( $users as $user ) {
+	                echo "<tr><td>" . $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] ) . 
+	                    "</td><td>" . $user['first'] . "</td><td>" . $user['last'] . "</td><td>" . 
+	                    $user['first_he'] . "</td><td>" . $user['last_he'] . "</td>";
+					if ( $_POST['dob'] == 'en' )
+						echo "<td>" . $user['dob'] . "</td>";
+					if ( $_POST['dob'] == 'he' )
+						echo "<td>" . $user['dob_he'] . "</td>";
+					/*
+					if ( !empty( $user['dob_he'] ) ) {
+		           		echo "<td class='add'>" . 
+		                    "<input type='checkbox' name='" . $user['user_id'] . "' /></td><td class='subtract'>
+		                    <input type='checkbox' name='" . $user['user_id'] . "' /></td>";
+		            }
+					 * 
+					 */
+	                echo "</tr>";
+	            }
+	            echo "</table><br />";
+	        }
+	    }
+        ?>
+    </body>
+</html>
