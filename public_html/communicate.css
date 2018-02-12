@@ -1,0 +1,31 @@
+fieldset {
+    border: 1px solid white;
+    padding: 10px;
+    padding-top: 0px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+}
+legend {
+    margin-left: 20px;
+    padding: 5px;
+    color: purple;
+}
+table {
+    font-size: 12px;
+}
+th, td {
+    padding: 3px 10px;
+}
+.page-break {
+	page-break-after: always;
+}
+.letters .letter{
+	font-size: 14px;
+}
+@media print {
+	.no-print {
+		display: none;
+	}
+}

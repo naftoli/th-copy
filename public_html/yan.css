@@ -1,0 +1,82 @@
+p {
+    font-size: 32px;
+}
+table {
+    font-size: 11px;
+}
+th, td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #C0C0C0;
+    border-right: 1px solid #C0C0C0;
+}
+td:first-child, th:first-child {
+	border-left: 1px solid #C0C0C0;
+}
+tr:first-child {
+	border-top: 1px solid #C0C0C0;
+}
+@media print{
+    .no-print {
+    	display: none;
+    }
+}
+#countdown {
+	margin: auto;
+	font-size: 60px;
+	padding-top: 54px;
+	font-family: strumpf-std, sans-serif;
+}
+.page-break {
+	page-break-after: always;
+}
+.nishmas {
+	font-size: 12px;
+	margin: auto;
+}
+.top {
+	font-family: strumpf-std, sans-serif;
+	font-size: 50px;
+	padding-bottom: 30px;
+	padding-top: 50px;
+}
+.army {
+	padding-top: 10;
+	padding-bottom: 10px;
+}
+.mainYan {
+	text-align: center;
+}
+.mainYan td:first-child {
+	text-align: left;
+}
+.mainYan table {
+	margin: auto;
+}
+.loading {
+	text-align: center;
+}
+th.school {
+	width: 100px;
+}
+.thermometer1 {
+	float: left;
+	margin-right: -110px;
+	margin-left: -60px;
+	position: relative;
+}
+.thermometer2 {
+	float: right;
+	margin-right: -60px;
+	margin-left: -90px;
+	position: relative;
+}
+.thermLabel {
+	margin-top: 10px;
+	font-size: 20px;
+	margin-left: 5px;
+}
+.thermLabel2 {
+	margin-top: 10px;
+	font-size: 20px;
+	margin-left: 5px;
+}

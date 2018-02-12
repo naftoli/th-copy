@@ -1,0 +1,157 @@
+<?php
+include("check_admin_id.php");
+
+// ***** GET THE ADMIN AND SCHOOL INFO ***** //
+include("db.php");
+include("camps/includes/classes/admin.php");
+include("camps/includes/classes/user.php");
+$sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
+$query = mysql_query($sql);
+$row = mysql_fetch_assoc($query);
+$admin = new admin($row);
+$admin->get_children();
+$admin->get_sponsors();
+// ***** GET THE ADMIN AND SCHOOL INFO ***** //
+
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" dir="<?=$dir?>">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=8" />
+		<title>Registration Wizard - Tzivos Hashem Management System</title>
+		<link rel="alternate" media="print" href="index.php">
+		<link href="admin_styles.css" rel="stylesheet" type="text/css" />
+		<script src="camps/scripts/jquery.tools.min.js"></script>
+		<script>
+			$(function() {
+				$("#nav").height($("#content").height());
+			});
+		</script>
+		<!--Copyright Ariel Shkedi 2007-2010-->
+	</head>
+
+	<body>
+	
+		<NOSCRIPT>
+			<P STYLE="color: red; font-size: larger;">Notice: You have javascript disabled. Some parts of the site will not function without javascript.</P>
+		</NOSCRIPT>
+		
+		<div id="wrapper">
+		
+			<div id="nav" class="wizard">
+			
+				<div class="col_title_bg"></div>
+				
+				<div class="col_title">Menu</div>
+				<? include("register_parent_menu.php"); ?>				
+			</div>
+			
+			<div id="content">
+				<div class="col_title_bg"></div>
+				
+				<div class="slider_container">
+				
+					<div class="slider">
+					
+						<div class="col_title"></div>
+						
+						<div class="col_content">
+						
+							<h1>Parent Registration</h1>
+	 
+							<form action="http://www.mashpia.com" method="post" accept-charset="UTF-8" name="login"> 
+							
+								<h2>Summary</h2> 
+								
+								<div class="module" id="module-info">
+								
+									<div class="module_content">
+									
+										<div class="lists form">
+											<ul>											
+												<!-- ***** REGISTERED CHILDREN ***** -->
+												<? for ($cno = 0; $cno < count($admin->children); $cno++) : ?>
+												<? $child = $admin->children[$cno]; ?>
+												<??>
+												<li>
+													<span class="photo"><img src="images/generic_user_small.png" width="32" height="32" /></span>
+													<span class="label large"><?=$child->first;?> <?=$child->last;?></span>
+													<div class="box">
+														<div class="role">Grade <?=$child->school_class->class_grade;?> - <?=$child->school_class->class_grade->class_teacher;?></div>
+														<div class="info"><?=$child->school_name;?></div>
+													</div>
+													<span class="label price">Registered $<?=$child->user_registration_fee;?></span>
+												</li>
+												<? endfor; ?>
+												<!-- ***** REGISTERED CHILDREN ***** -->												
+											</ul>
+										</div>
+									
+									</div>
+									
+								</div>
+								
+								<div class="module" id="module-info">
+								
+									<div class="module_content">
+									
+										<div class="lists form">
+											<ul>											
+												<!-- ***** SPONSORED CHILDREN ***** -->
+												<? for ($sno = 0; $sno < count($admin->sponsors); $sno++) : ?>
+												<? $sponsor = $admin->sponsors[$sno]; ?>
+												<? if ($sponsor->is_regular == true) { $fee = 36; } else { $fee = 50; } ?>
+												<li>
+													<span class="photo"><img src="images/generic_user_small.png" width="32" height="32" /></span>
+													<span class="label large"><?=$sponsor["name"];?></span>
+													<div class="box">
+														<div class="role">&nbsp;</div>
+														<div class="info">&nbsp;</div>
+													</div>
+													<span class="label price">Sponsored $<?=number_format($fee, 2, '.', '');?></span>
+												</li>
+												<? endfor; ?>
+												<!-- ***** SPONSORED CHILDREN ***** -->												
+											</ul>
+										</div>
+										
+									</div>
+									
+								</div>
+								
+								<h2>Thank You</h2>
+								
+								<div class="module" id="module-info">
+									<div class="module_content">
+										<div class="lists form">
+											<ul>
+												<li>
+													<div class="box">
+														<h4>Thank you for registering your child/ren in the Tzivos Hashem 5771 Program.</h4>
+													</div>
+												</li>
+												<li>
+													<input type="submit" value="Go Home" class="button"> 
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</form> 
+							
+						</div>
+						
+					</div>
+					
+				</div>
+				
+			</div>
+			
+		</div>
+
+	</body>
+	
+</html>

@@ -1,0 +1,609 @@
+/*Copyright Ariel Shkedi 2007-2010*/
+body {
+  font-size: 10pt;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  margin: 0px;
+  padding: 0px;
+}
+
+a, a:visited {
+  text-decoration: none;
+  font-weight: bold;
+  color: #3d523c;
+}
+
+a:hover {
+  color:#EBBD34;
+}
+
+input[type=submit] {
+  cursor: pointer;
+}
+
+.header {
+  background-color: #e0f3d2;
+  padding: 0px .5em;
+}
+
+.body_header_left {
+  margin-top: 2px;
+  width: 48%;
+  text-align: center;
+  float: left;
+}
+
+.body_header_right {
+  margin-top: 2px;
+  width: 48%;
+  text-align: center;
+  float: right;
+}
+
+.left_menu {
+  clear: both;
+  font-size: 200%;
+}
+
+.left_menu_overlay {
+  position: absolute;
+  background-color: white;
+  border: 1px solid black;
+  padding: 4px;
+  font-size: 50%;
+}
+
+.icalendar {
+  position: absolute;
+  width: 190px;
+  height: 255px;
+  bottom: 0px;
+  background-color: white;
+}
+
+.icalendar2 {
+  position: absolute;
+  width: 190px;
+  height: 255px;
+  top: 1em;
+  right: 0px;
+  background-color: white;
+}
+
+.page {
+/*   page-break-before: always; */
+  page-break-after: always;
+/*   width: 14in; */
+}
+
+.layout td {
+  padding: .06in .1in;
+}
+
+.title {
+  text-align: center;
+  padding: .1in 0px;
+}
+
+h1 {
+  font-size: 17pt;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+h1 img, h2 img {
+  width: 2.25in;
+}
+
+h2 {
+  font-size: 12pt;
+  margin: 0px;
+  padding: 0px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+h3 {
+  margin: 0px;
+  padding: 0px;
+  font-size: 10pt;
+  font-weight: bold;
+}
+
+.bsd {
+  font-size: 8pt;
+}
+
+.box, .box_dark {
+  border: .03in solid #c9c8c9;
+  -webkit-border-radius: .08in;
+  -moz-border-radius: .08in;
+  border-radius: .08in;
+  padding: .1in;
+}
+
+.box {
+  border-color: #939394;
+  background-color: white;
+}
+
+.box_dark {
+  background-color: #c9c8c9;
+}
+
+.directives {
+  padding: 0px;
+}
+
+.directives_img {
+  width: .51in;
+  padding-left: .1in; /* adjust for RTL when RTL medals */
+}
+
+.directives_title {
+  text-transform: uppercase;
+  font-size: 10pt;
+  font-weight: bold;
+  white-space: nowrap;
+  border-bottom: 1px solid white;
+  padding: .02in 0px;
+}
+
+.directives_title img {
+  vertical-align: middle;
+}
+
+.directives_title_img {
+  width: 1.75in;
+  padding: 0px .06in;
+}
+
+.directives_tasks .box {
+  margin-bottom: .05in;
+}
+
+.directives_task_tr {
+  height: .2in;
+}
+
+.directives_tasks .directives_task_td {
+  padding: 0px .05in .1in .05in;
+  text-align: center;
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+.directives_task_td img {
+  height: .4in;
+  margin-top: -.2in;
+}
+
+.directives_task_td div {
+  font-size: 8.5pt;
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+.directives_task img {
+  width: .25in;
+  vertical-align: middle;
+}
+
+.directives_tasks_left .directives_task img {
+  float: left;
+  padding-right: .04in;
+}
+
+.directives_tasks_right .directives_task img {
+  float: right;
+  padding-left: .04in;
+}
+
+.directives_tasks ol {
+  list-style-position: inside;
+  margin: 0px;
+  padding: 0px;
+  font-size: 7pt;
+}
+
+.directives_tasks ol li {
+  padding-bottom: .5em;
+}
+
+.medals {
+  width: .61in;
+  text-align: center;
+}
+
+.medals img {
+  width: .69in;
+}
+
+.medals_left {
+  float: left;
+}
+
+.medals_right {
+  float: right;
+}
+
+.medals_left img {
+  margin-left: -.08in;
+}
+
+.medals_right img {
+  margin-right: -.1in;
+}
+
+.directives_tasks {
+  padding: .05in;
+}
+
+.directives_tasks h3 {
+  padding: .05in 0px;
+}
+
+.directives_tasks h3 img {
+  height: .15in;
+  width: auto;
+}
+
+.directives_tasks_left {
+  margin-left: .61in;
+  border-left: 1px solid white;
+}
+
+.directives_tasks_right {
+  margin-right: .61in;
+  border-right: 1px solid white;
+}
+
+.dates {
+  font-size: 10pt;
+  font-weight: bold;
+}
+
+.dates span {
+  font-size: 14pt;
+  white-space: nowrap;
+}
+
+.dates img {
+  width: .25in;
+  vertical-align: middle;
+}
+
+.dates div {
+  margin-left: .3in;
+}
+
+.dates_left img {
+  float: left;
+}
+
+.dates_right img {
+  float: right;
+}
+
+.medal {
+  font-size: 8pt;
+}
+
+.medal_img {
+  width: .3in;
+}
+
+.medal img {
+  height: .3in;
+}
+
+.directives_tasks_left .medal_img {
+  float: left;
+}
+
+.directives_tasks_right .medal_img {
+  float: right;
+}
+
+.directives_tasks_left .medal div {
+  margin-left: .3in;
+}
+
+.directives_tasks_right .medal div {
+  margin-right: .3in;
+}
+
+.soldier_left .title, .soldier_left .bars, .base_left .title, .base_left .bars {
+  float: left;
+}
+
+.soldier_right .title, .soldier_right .bars, .base_right .title, .base_right .bars {
+  float: right;
+}
+
+.soldier .title, .soldier .bars, .soldier .det, .base .title, .base .bars, .base .det {
+  height: 125pt;
+}
+
+.soldier .title, .base .title {
+  text-align: center;
+  font-size: 10pt;
+  line-height: 10pt;
+  font-weight: bold;
+  text-transform: uppercase;
+  width: .6in;
+}
+
+.base .title span {
+  font-size: 17pt;
+  line-height: 17pt;
+}
+
+.soldier img, .base img {
+  width: .58in;
+}
+
+.bars {
+  width: .1in;
+}
+
+.bars_on, .bars_off {
+  height: 10pt;
+}
+
+.bars_on {
+  border-left: .1in solid #c9c8c9;
+}
+
+.soldier_left .det, .base_left .det {
+  margin-left: .95in;
+}
+
+.soldier_right .det, .base_right .det {
+  margin-right: .95in;
+}
+
+.det {
+  font-size: 9pt;
+}
+
+.det .name {
+  font-size: 150%;
+}
+
+.det em, .name em {
+  font-weight: bold;
+  color: #676668;
+  font-style: normal;
+}
+
+.hayom {
+  font-size: 9pt;
+}
+
+.army_kid {
+  position: relative;
+}
+
+.army_kid img {
+  width: .7in;
+  position: absolute;
+  top: 0px;
+  right: .6in;
+}
+
+.message_title {
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-size: 10pt;
+  font-weight: bold;
+}
+
+.message_title img {
+  vertical-align: middle;
+}
+
+.message_title_img {
+  width: 1.4in;
+}
+
+.missions {
+  padding: 0px;
+  width: 100%;
+}
+
+.missions td, .missions th {
+  border: 1px solid #939394;
+}
+
+.missions thead td, .missions thead th {
+  border-bottom: 3px solid #939394;
+  border-top: none;
+}
+
+.missions thead {
+  font-size: 6pt;
+}
+
+.missions .title {
+  font-size: 14pt;
+  text-transform: uppercase;
+}
+
+.missions tfoot td, .missions tfoot th {
+  border-top: 3px solid #939394;
+  border-bottom: none;
+}
+
+.missions_left .title, .missions_right .corner, .missions_left .description, .missions_right .label {
+  border-left: none;
+}
+
+.missions_right .title, .missions_left .corner, .missions_right .description, .missions_left .label {
+  border-right: none;
+}
+
+.missions thead .current {
+  background-color: black;
+  color: white;
+}
+
+.missions tbody .current, .missions tfoot .current {
+  background-color: #ecebeb;
+}
+
+.missions tbody th {
+  text-align: center;
+  font-size: 8pt;
+}
+
+.missions tbody td {
+  text-align: center;
+  font-size: 8pt;
+  color: #939394;
+  font-weight: bold;
+}
+
+.missions tbody .current .quantity, .missions tbody .current .points {
+  visibility: hidden;
+}
+
+.missions tbody td .quantity {
+  font-size: 11pt;
+}
+
+.missions .label {
+  font-size: 6pt;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.missions .label img {
+  width: .25in;
+}
+
+.missions_left tbody th, .missions_left .title {
+  text-align: left;
+}
+
+.missions_right tbody th, .missions_right .title {
+  text-align: right;
+}
+
+.missions td, .missions th {
+  padding: .05in;
+}
+
+.missions .title img {
+  height: 16pt;
+  padding-left: .15in;
+}
+
+.missions tfoot td {
+  font-size: 7pt;
+  font-weight: bold;
+  text-align: center;
+}
+
+.goals_title, .stats_title {
+  font-size: 12pt;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.goals_title img, .stats_title img {
+  width: .41in;
+}
+
+.goals_left .goals_title, .stats_left .stats_title {
+  float: left;
+  padding-right: .2in;
+}
+
+.goals_right .goals_title, .stats_right .stats_title {
+  float: right;
+  padding-left: .2in;
+}
+
+.goals_left .goals {
+  margin-left: .61in;
+}
+
+.goals_right .goals {
+  margin-right: .61in;
+}
+
+.goals span {
+  font-weight: bold;
+}
+
+.goals div {
+  font-size: 75%;
+}
+
+.total {
+  margin-bottom: .12in;
+}
+
+.parents {
+  margin-top: .12in;
+}
+
+.stats {
+  font-size: 8pt;
+}
+
+.stats_left .stats {
+  margin-left: .61in;
+}
+
+.stats_right .stats {
+  margin-right: .61in;
+}
+
+.stats_left .stats div {
+  float: left;
+}
+
+.stats_right .stats div {
+  float: right;
+}
+
+.stats div {
+  width: 49%;
+  padding: 0px .5%;
+}
+
+.parents, .total {
+  font-size: 11pt;
+  line-height: 12pt;
+}
+
+.parents img, .total img {
+  height: 24pt;
+  padding: 0px 4pt;
+}
+
+.parents img {
+  margin-top: -16pt;
+  padding-bottom: 16pt;
+  padding-right: 8pt;
+}
+
+.parents_left img, .total_left img, .total_left .total_text, .total_right .total_num {
+  float: left;
+}
+
+.parents_right img, .total_right img, .total_right .total_text, .total_left .total_num {
+  float: right;
+}
+
+.total_num {
+  font-size: 24pt;
+  line-height: 24pt;
+}
+
+@media print {
+  .noprint, .body_header_left, .body_header_right, .left_menu {
+    display: none;
+  }
+}

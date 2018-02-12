@@ -1,0 +1,52 @@
+<?
+function addFile($file, $missing = NULL) {
+  switch($file['error']) {
+    case UPLOAD_ERR_INI_SIZE:
+    case UPLOAD_ERR_FORM_SIZE:
+      echo T_('File is too large.');
+      exit;
+      break;
+    case UPLOAD_ERR_PARTIAL:
+      echo T_('File was only partially uploaded.');
+      exit;
+      break;
+    case UPLOAD_ERR_NO_FILE:
+      return $missing;
+      break;
+    case UPLOAD_ERR_OK:
+      if(is_uploaded_file($file['tmp_name'])) {
+        if(mysql_result(mq("SELECT GET_LOCK('files', 30)"),0) != 1) {
+          trigger_error('could not get lock', E_USER_ERROR);
+        }
+        $count = 0;
+        do {
+          if($count++ > 100000) trigger_error('could not get ID', E_USER_ERROR);
+          $id = mysql_result(mq('SELECT FLOOR(RAND() * 4294967295)'),0);
+        } while(mysql_result(mq("SELECT COUNT(*) FROM files WHERE file_id = $id"),0) != 0);
+        //investigate LOAD_FILE
+        mq("INSERT INTO files (file_id, file_name, file_content_type, file_data) VALUES ($id, " . ms($file['name']) . ', ' . ms(mime_content_type($file['tmp_name'])) . ', ' . ms(file_get_contents($file['tmp_name'])) . ')');
+
+        mq("SELECT RELEASE_LOCK('files')");
+
+        return $id;
+      } else {
+        trigger_error('not uploaded file', E_USER_ERROR);
+      }
+      break;
+    default:
+      trigger_error("file upload error #{$file['error']}", E_USER_ERROR);
+      break;
+  }
+}
+
+function linkImgFile($id, $width=NULL, $height=NULL, $extra = '') {
+  $row = mysql_fetch_assoc(mqu("SELECT file_name FROM files WHERE file_id = $id"));
+  if(!is_null($width)) $width = "WIDTH='$width'";
+  if(!is_null($height)) $height = "HEIGHT='$height'";
+  return "<IMG SRC='file_view.php?id=$id' $width $height $extra ALT='" . es($row['file_name']) . "'>";
+}
+
+function maxFileSize() {
+  return min(min(maxUploadSize(), maxDBquery()/2), units2bytes(ini_get('memory_limit'))/4-units2bytes('4M')); //not exactly accurate - you need to account for the size of the rest of the query, but unless the file is all nulls, it is good enough due to the /2
+}
+?>

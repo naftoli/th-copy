@@ -1,0 +1,174 @@
+<?php
+
+
+
+if (isset($_POST["action"])) {
+	$action = $_POST["action"];
+	
+	if ($action == "add") {
+		$sql = "INSERT INTO admins SET ";
+	}
+	else {
+		$sql = "UPDATE INTO admins SET ";
+	}
+}
+?>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" dir="<?=$dir?>">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=8" />
+		<title><?=T_('Registration Wizard'), ' - ', T_('Tzivos Hashem Management System')?></title>
+		<link rel="alternate" media="print" href="index.php">
+		<link href="admin_styles.css" rel="stylesheet" type="text/css" />
+		<script src="camps/scripts/jquery.tools.min.js"></script>
+		<script src="scripts/jquery.placeholder.js"></script>
+		<script>
+			$(function() {
+				$('input').placeholder();
+				$('.barcode_row').not(':first').hide();
+				$('span.add_barcode').click(function(){
+					$(this).fadeOut();
+					$(this).parent().next().slideDown();
+				});
+				$("#nav").height($("#content").height());
+			});
+		</script>
+		<!--Copyright Ariel Shkedi 2007-2010-->
+	</head>
+
+	<body>
+		<NOSCRIPT><P STYLE="color: red; font-size: larger;">Notice: You have javascript disabled. Some parts of the site will not function without javascript.</P></NOSCRIPT>
+		<div id="wrapper">
+			<div id="nav" class="wizard">
+				<div class="col_title_bg"></div>
+				<div class="col_title">Menu</div>
+				<ul class="list_first">
+					<li class="list_parent"><a href="#"><img src="images/icon_door_in.png" width="28" height="28" alt="Login" />Parent Registration</a></li>
+					<li class="list_parent current"><a href="#"><img src="images/icon_door_in.png" width="28" height="28" alt="Login" />Add Children</a></li>
+					<li class="list_parent"><a href="#"><img src="images/icon_door_in.png" width="28" height="28" alt="Login" />Child Registration</a></li>
+					<li class="list_parent"><a href="#"><img src="images/icon_door_in.png" width="28" height="28" alt="Login" />Checkout</a></li>
+					<li class="list_parent"><a href="#"><img src="images/icon_door_in.png" width="28" height="28" alt="Login" />Summary</a></li>
+				</ul>
+			</div>
+			<div id="content">
+				<div class="col_title_bg"></div>
+				<div class="slider_container">
+					<div class="slider">
+						<div class="col_title"></div>
+						<div class="col_content">
+						<h1>Parent Registration</h1>
+	 
+							<form action="" method="post" accept-charset="UTF-8" name="login"> 
+							<h2>Children associated with this account</h2> 
+							<div class="module" id="module-info">
+								<div class="module_content">
+									<div class="lists form">
+									  <ul>
+										  <li>
+											  <span class="photo"><img src="images/generic_user_small.png" width="32" height="32" /></span>
+											  <span class="label large">Menachem Mendel Samstein</span>
+											  <div class="box">
+												<div class="role">Grade 7 - Rabbi Shmishoni</div>
+												<div class="info">Oholei Torah</div>
+											  </div>
+										  </li>
+										  <li>
+											  <span class="photo"><img src="images/generic_user_small.png" width="32" height="32" /></span>
+											  <span class="label large">Barry Samstein</span>
+											  <div class="box">
+												<div class="role">Grade 4 - Rabbi Huffstater</div>
+												<div class="info">Beis Kollel Torah</div>
+											  </div>
+										  </li>
+										  <li>
+											  <span class="photo"><img src="images/generic_user_small.png" width="32" height="32" /></span>
+											  <span class="label large">Mindy Samstein</span>
+											  <div class="box">
+												<div class="role">Grade 3 - Morah Burburger</div>
+												<div class="info">Bnos Hatorah</div>
+											  </div>
+										  </li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<h2>Associate children with this account</h2> 
+							<div class="module" id="module-info">
+								<div class="module_content">
+									<div class="lists form">
+										<ul>
+											<li>
+												<span class="box"><p class="input">Please enter the 20 digit barcode number.</p></span>
+											</li>
+											<li id="barcode-1" class="barcode_row">
+												<span class="label"><label for="barcode-1">Barcode</label></span>
+												<span class="input"><input name="barcode-1" type="text" /></span>
+												<span class="add_barcode"></span>
+											</li>
+											<li id="barcode-2" class="barcode_row">
+												<span class="label"><label for="barcode-2">Barcode</label></span>
+												<span class="input"><input name="barcode-2" type="text" /></span>
+												<span class="add_barcode"></span>
+											</li>
+											<li id="barcode-3" class="barcode_row">
+												<span class="label"><label for="barcode-3">Barcode</label></span>
+												<span class="input"><input name="barcode-3" type="text" /></span>
+												<span class="add_barcode"></span>
+											</li>
+											<li id="barcode-4" class="barcode_row">
+												<span class="label"><label for="barcode-4">Barcode</label></span>
+												<span class="input"><input name="barcode-4" type="text" /></span>
+												<span class="add_barcode"></span>
+											</li>
+											<li id="barcode-5" class="barcode_row">
+												<span class="label"><label for="barcode-5">Barcode</label></span>
+												<span class="input"><input name="barcode-5" type="text" /></span>
+												<span class="add_barcode"></span>
+											</li>
+											<li id="barcode-6" class="barcode_row">
+												<span class="label"><label for="barcode-6">Barcode</label></span>
+												<span class="input"><input name="barcode-6" type="text" /></span>
+												<span class="add_barcode"></span>
+											</li>
+											<li id="barcode-7" class="barcode_row">
+												<span class="label"><label for="barcode-7">Barcode</label></span>
+												<span class="input"><input name="barcode-7" type="text" /></span>
+												<span class="add_barcode"></span>
+											</li>
+											<li id="barcode-8" class="barcode_row">
+												<span class="label"><label for="barcode-8">Barcode</label></span>
+												<span class="input"><input name="barcode-8" type="text" /></span>
+												<span class="add_barcode"></span>
+											</li>
+											<li id="barcode-9" class="barcode_row">
+												<span class="label"><label for="barcode-9">Barcode</label></span>
+												<span class="input"><input name="barcode-9" type="text" /></span>
+												<span class="add_barcode"></span>
+											</li>
+											<li id="barcode-10" class="barcode_row">
+												<span class="label"><label for="barcode-10">Barcode</label></span>
+												<span class="input"><input name="barcode-10" type="text" /></span>
+												<span class="add_barcode"></span>
+											</li>
+											<li>
+												<input type="submit" value="Continue" class="button"> 
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							</form> 
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+	
+</html>

@@ -1,0 +1,124 @@
+<?php
+$admin_auth = array('school');
+require 'header.php';
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link href="admin_styles.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Teachers</title>
+<style>
+table {
+	width: 100%;
+}
+th, td {
+	border: 1px solid black;
+	vertical-align: text-top;
+	padding: 6px;
+    font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+<? include('admin_header.php');?>
+<h1>Teacher Logins</h1>
+<?
+$teachers = array();
+require_once 'class.adminSchools.php';       
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$schools = $as->getSchools();
+foreach ($schools as $id => $school) {
+    $sql = "select class_id, class_grade, class_sub, email, cell, class_teacher 
+			from classes
+			where school_id = " . $id . "
+			and class_era = 0
+			order by class_grade, class_sub";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $sql2 = "select a.* from admins a 
+                join admin_auths aa using (admin_id)
+                where aa.id = " . $row['class_id'] . " and aa.auth = 'class'";
+        $result2 = mysql_query($sql2);
+        $row2 = mysql_fetch_assoc($result2);
+        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+        $row2['email'] = empty($row2['admin_email']) ? $row['email'] : $row2['admin_email'];
+        $row2['cell'] = empty($row2['admin_phone_mobile']) ? $row['cell'] : $row2['admin_phone_mobile'];
+		$row2['last'] = empty($row2['last']) ? $row['class_teacher'] : $row2['last'];
+		$id = $row2['admin_id'];
+		if (!$id) $id = 'class' . $row['class_id'];
+        $teachers[$school][$id][$grade] = $row2;
+    }    
+}
+
+foreach ($teachers as $school => $info) {
+    ?>
+    <table>
+        <caption><?=$school?></caption>
+        <tr>
+            <th>Teacher</th>
+            <th>Grade</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Email</th>
+            <th>Cell Phone</th>
+			<th></th>
+        </tr>
+        <?
+        foreach ($info as $class_id => $other) {
+			foreach ($other as $grade => $row) {
+				echo "<tr id=" . $class_id . "><td><input type='text' size=14' class='name' value='" . $row['last'] . "' /></td><td>" .
+					$grade . "</td><td><input type='text' size='6' class='username' value='" . $row['username'] . "' /></td>
+					<td><input type='text' size='6' class='password' value='" . $row['password'] . "' /></td><td>" .
+					"<input type='text' size='18' class='email' value='" . $row['email'] . "' /></td><td>" .
+					"<input type='text' size='10' class='cell' value='" . $row['cell'] . "' /></td><td><button>update</button></td></tr>";
+			}
+		}
+        ?>
+    </table>
+	<p></p>
+<? } ?>
+</body>
+<script>
+	$(function() {
+		$("button").click(function() {
+			var tr = $(this).parent().parent();
+			var id = $(tr).attr('id');
+			var username = $(tr).find('input.username').val().trim();
+			var password = $(tr).find('input.password').val().trim();
+			var name = $(tr).find('input.name').val().trim();
+			var email = $(tr).find('input.email').val().trim();
+			var cell = $(tr).find('input.cell').val().trim();
+			var class_id;
+			if (id.indexOf('class') != -1) {
+				class_id = id.substring(5);
+			} else {
+				class_id = 0;
+			}
+			
+			if (username == '' || password == '' || name == '' || email == '' || cell == '') {
+				alert('You must have all fields filled.')
+				return false;
+			}
+			
+			$.post('ajax/updateTeacher.php', {
+				id : id,
+				username : username,
+				password : password,
+				class_id : class_id,
+				name : name,
+				email : email,
+				cell : cell
+			}, function( success ) {
+				if (parseInt(success) == 0) {
+					alert('Updated.');
+				} else {
+					alert(success);
+				}
+			});
+		});
+	});
+</script>
+</html>
+

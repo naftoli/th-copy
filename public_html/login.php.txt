@@ -1,0 +1,161 @@
+<? if(isset($_COOKIE['kiosk_machine']) && isset($admin_auth)) header('Location: http' . (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 's' : '') . "://{$_SERVER['HTTP_HOST']}" . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/') . '/kiosk.php'); ?>
+<? $username = agr($_COOKIE, 'username_default'); ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<HTML DIR="<?=$dir?>">
+<HEAD>
+<LINK href="<?=isset($admin_auth) ? 'admin_' : ''?>styles.css" rel="stylesheet" type="text/css">
+<TITLE><?=T_('Login'), ' - ', T_('Tzivos Hashem Management System')?></TITLE>
+<? if(isset($admin_auth)): ?>
+<STYLE type="text/css">
+body {
+  background-color: #e0f3d2;
+  margin: 10px;
+  margin-top: 55px;
+}
+
+.body {
+  border-bottom: 1px solid black;
+}
+
+form, form div {
+  display: inline;
+}
+
+table, table caption {
+  margin: auto;
+}
+
+table caption {
+  font-size: 150%;
+}
+
+.left th {
+  text-align: left;
+}
+
+.right th {
+  text-align: right;
+}
+
+h1 {
+  text-align: center;
+  font-weight: normal;
+}
+</STYLE>
+<? endif; ?>
+<?if(strpos($_SERVER['SCRIPT_NAME'], '/ds/') !== FALSE || strpos($_SERVER['SCRIPT_NAME'], '/nr/') !== FALSE):?>
+<STYLE type="text/css">
+.kiosk #body.login {
+  background-image: none;
+}
+</STYLE>
+<?endif;?>
+<!--Copyright Ariel Shkedi 2007-2010-->
+</HEAD>
+<BODY class="kiosk">
+<? if(isset($admin_auth)): ?>
+<DIV class="header" style="text-align: center;">
+<BR>
+<IMG src="images/header.gif" width="100" height="100" alt="World Wide Tehillim Club">
+
+</DIV>
+<DIV class="body">
+<? if(isset($admin_auth)): ?>
+  <P style="text-align: center;">This website will only function properly using Firefox 3.0 and higher. Click <A HREF="http://www.getfirefox.com/">here</A> to download Firefox.</P>
+  <H1><?=T_('Chayolei Tzivos Hashem School Login')?></H1>
+<? else: ?>
+<? endif; ?>
+
+<? else: ?>
+<DIV id="header"><DIV></DIV></DIV>
+<? endif; ?>
+
+<?
+if(!isset($login_query_string)) {
+  $login_query_string = http_build_query($_GET, NULL, '&amp;');
+  if(!is_null($login_query_string) && $login_query_string !== '') $login_query_string = '?' . $login_query_string;
+}
+?>
+<DIV STYLE="text-align: center;">
+<NOSCRIPT><P STYLE="color: red; font-size: larger;"><?=T_('Notice: You have javascript disabled. Some parts of the site will not function without javascript.')?></P></NOSCRIPT>
+<!--
+<? foreach($langs as $lang_id => $lang_name): ?>
+<FORM action="<?=$login_query_string?>" method="post" accept-charset="UTF-8">
+<DIV>
+<INPUT type="submit" value="<?=es($lang_name)?>">
+<INPUT type="hidden" name="login_lang" value="<?=es($lang_id)?>">
+<?= form_build_input(array_diff_key($_POST, array('login_username' => '', 'login_password' => '', 'user_code' => '', 'login_lang' => ''))) ?>
+</DIV>
+</FORM>
+<? endforeach; ?>
+<BR>
+-->
+<FORM action="<?=$login_query_string?>" method="post" accept-charset="UTF-8" name="login">
+<? if(isset($admin_auth)): ?>
+<TABLE CLASS="<?= $align_start ?>">
+<CAPTION><?= $login_message ?></CAPTION>
+<? if(isset($admin_auth)): ?>
+<TR>
+<TH><LABEL for="username"><?=T_('Username')?>:</LABEL></TH>
+<TD><INPUT type="text" name="login_username" id="username" size=64 maxlength=64 value="<?=es($username)?>"></TD>
+</TR>
+<TR>
+<TH><LABEL for="password"><?=T_('Password')?>:</LABEL></TH>
+<TD><INPUT type="password" name="login_password" id="password" size=64 maxlength=64 value=""></TD>
+</TR>
+<TR>
+<TD COLSPAN=2 STYLE="text-align: center;">
+  <INPUT type="submit" value="<?=T_('Login')?>">
+</TD>
+</TR>
+<? else: ?>
+<TR>
+<TH><LABEL for="user_code"><?=T_('Scan Rank Card')?>:</LABEL></TH>
+<TD><INPUT type="text" name="user_code" id="user_code" size=25 maxlength=20 autocomplete="off"></TD>
+</TR>
+<? endif; ?>
+</TABLE>
+<? else: ?>
+<DIV id="body" class="login">
+<DIV>
+<INPUT type="text" name="user_code" id="user_code" title="<\?=T_('Welcome! Please scan your rank card')?>" size=25 maxlength=20 autocomplete="off">
+<BR><BR>
+<P><?= $login_message ?></P>
+</DIV>
+</DIV>
+<? endif; ?>
+<DIV>
+<INPUT TYPE="hidden" NAME="new_login">
+<?= form_build_input(array_diff_key($_POST, array('login_username' => '', 'login_password' => '', 'user_code' => ''))) ?>
+</DIV>
+</FORM>
+<SCRIPT type="text/javascript">
+document.forms['login'].elements['<?=!isset($admin_auth) ? 'user_code' : (!$username ? 'login_username' : 'login_password') ?>'].focus();
+<?=!isset($admin_auth) ? 'setInterval("document.forms[\'login\'].elements[\'user_code\'].focus();", 1000);' : ''?>
+</SCRIPT>
+<P style="text-align: center;">
+<? if(isset($admin_auth)): ?>
+  <A HREF="register_school.php"><?=T_("New schools: Register your school as Tzivos Hashem Base")?></A><BR><BR>
+  <!--<A HREF="register_camp.php"><?//=T_("New camps: Register your camp as Tzivos Hashem Base")?></A><BR><BR>-->
+  <?=T_('Existing schools: Please login to register.')?><BR><BR>
+<!--   <A HREF="school_brouchure.pdf"><?=T_('About Us')?></A><BR><BR> -->
+  <A HREF="#" onClick="document.getElementById('contact').style.display = document.getElementById('contact').style.display ? '' : 'none'; return false;">Contact Us</A>
+</P>
+  <DIV id="contact" style="border: 1px solid black; width: 25em; margin: auto; margin-bottom: 1em;">For more information, please contact:<BR>Rochie Pink<BR>at 718-907-8884<BR>or <A href='ma&#105;lto&#58;CT%48&#64;T%7&#65;ivosHas&#104;em&#46;org'>CTH&#64;Tzi&#118;osH&#97;she&#109;&#46;o&#114;g</A></DIV>
+  <SCRIPT type="text/javascript">document.getElementById('contact').style.display = 'none';</SCRIPT>
+<P>
+  <A HREF="kiosk.php"><?=T_('Enter Kiosk Mode')?></A>
+</P>
+</DIV>
+<? else: ?>
+<!--
+  <P>
+   <A HREF="register.php"><?=T_("Register for an account")?>.</A>
+  </P>
+-->
+  <DIV id="footer">&nbsp;</DIV>
+<? endif; ?>
+</DIV>
+</BODY>
+</HTML>

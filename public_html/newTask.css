@@ -1,0 +1,52 @@
+fieldset {
+    border: 1px solid white;
+    padding: 10px;
+    padding-top: 0px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+legend {
+    margin-left: 20px;
+    padding: 5px;
+    color: purple;
+}
+form {
+    font-size: 14px;
+}
+form > p:first-of-type {
+    padding-top: 10px;
+}
+legend {
+    font-size: 16px;
+}
+.parshos {
+    width: 25%;
+    float: left;
+}
+.grades {
+    width: 20%;
+    float: left;
+}
+.children {
+    width: 20%;
+    float: left;
+}
+.module {
+	display: block;
+}
+table {
+    font-size: 11px;
+}
+th, td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #C0C0C0;
+    border-right: 1px solid #C0C0C0;
+}
+td:first-child, th:first-child {
+	border-left: 1px solid #C0C0C0;
+}
+tr:first-child {
+	border-top: 1px solid #C0C0C0;
+}
+

@@ -1,0 +1,111 @@
+//Copyright Ariel Shkedi 2007-2010
+function shRepeat(repeat, id) {
+  switch(repeat) {
+    case 'once':
+      document.getElementById('tasks_' + id + '_end_date_tr').style.display = 'none';
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_day]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_month]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_year]'].disabled = true;
+      document.getElementById('tasks_' + id + '_every_tr').style.display = 'none';
+      document.forms['tasks'].elements['tasks[' + id + '][every]'].disabled = true;
+      document.getElementById('tasks_' + id + '_on_tr').style.display = 'none';
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_day]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_month]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_sunday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_monday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_tuesday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_wednesday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_thursday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_friday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_shabbos]'].disabled = true;
+      break;
+    case 'daily':
+      document.getElementById('tasks_' + id + '_end_date_tr').style.display = '';
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_day]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_month]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_year]'].disabled = false;
+      document.getElementById('tasks_' + id + '_every_tr').style.display = '';
+      document.forms['tasks'].elements['tasks[' + id + '][every]'].disabled = false;
+      document.getElementById('tasks_' + id + '_on_tr').style.display = 'none';
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_day]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_month]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_sunday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_monday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_tuesday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_wednesday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_thursday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_friday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_shabbos]'].disabled = true;
+      break;
+    case 'weekly':
+      document.getElementById('tasks_' + id + '_end_date_tr').style.display = '';
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_day]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_month]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_year]'].disabled = false;
+      document.getElementById('tasks_' + id + '_every_tr').style.display = '';
+      document.forms['tasks'].elements['tasks[' + id + '][every]'].disabled = false;
+      document.getElementById('tasks_' + id + '_on_tr').style.display = '';
+      document.getElementById('tasks_' + id + '_on_weekdays').style.display = '';
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_day]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_day]'].style.display = 'none';
+      document.getElementById('tasks_' + id + '_on_date_day_chaser').style.display = 'none';
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_month]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_month]'].style.display = 'none';
+      document.getElementById('tasks_' + id + '_on_date_month_chaser').style.display = 'none';
+      document.forms['tasks'].elements['tasks[' + id + '][on_sunday]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][on_monday]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][on_tuesday]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][on_wednesday]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][on_thursday]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][on_friday]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][on_shabbos]'].disabled = false;
+      break;
+    case 'monthly_date':
+      document.getElementById('tasks_' + id + '_end_date_tr').style.display = '';
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_day]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_month]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_year]'].disabled = false;
+      document.getElementById('tasks_' + id + '_every_tr').style.display = '';
+      document.forms['tasks'].elements['tasks[' + id + '][every]'].disabled = false;
+      document.getElementById('tasks_' + id + '_on_tr').style.display = '';
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_day]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_day]'].style.display = '';
+      document.getElementById('tasks_' + id + '_on_date_day_chaser').style.display = '';
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_month]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_month]'].style.display = 'none';
+      document.getElementById('tasks_' + id + '_on_date_month_chaser').style.display = 'none';
+      document.getElementById('tasks_' + id + '_on_weekdays').style.display = 'none';
+      document.forms['tasks'].elements['tasks[' + id + '][on_sunday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_monday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_tuesday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_wednesday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_thursday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_friday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_shabbos]'].disabled = true;
+      break;
+    case 'yearly':
+      document.getElementById('tasks_' + id + '_end_date_tr').style.display = '';
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_day]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_month]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][end_date_year]'].disabled = false;
+      document.getElementById('tasks_' + id + '_every_tr').style.display = '';
+      document.forms['tasks'].elements['tasks[' + id + '][every]'].disabled = false;
+      document.getElementById('tasks_' + id + '_on_tr').style.display = '';
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_day]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_day]'].style.display = '';
+      document.getElementById('tasks_' + id + '_on_date_day_chaser').style.display = 'none';
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_month]'].disabled = false;
+      document.forms['tasks'].elements['tasks[' + id + '][on_date_month]'].style.display = '';
+      document.getElementById('tasks_' + id + '_on_date_month_chaser').style.display = '';
+      document.getElementById('tasks_' + id + '_on_weekdays').style.display = 'none';
+      document.forms['tasks'].elements['tasks[' + id + '][on_sunday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_monday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_tuesday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_wednesday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_thursday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_friday]'].disabled = true;
+      document.forms['tasks'].elements['tasks[' + id + '][on_shabbos]'].disabled = true;
+      break;
+  }
+  document.getElementById('tasks_' + id + '_every_period').innerHTML=every[repeat];
+}

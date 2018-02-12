@@ -1,0 +1,1004 @@
+@charset "utf-8";
+/* CSS Document */
+
+html, body {
+	width:100%; height:100%;
+}
+body {
+	background:#000000; text-align:center; font-family:"Myriad Pro", Arial, Helvetica, sans-serif; font-weight:bold; font-size:30px;
+}
+#wrapper {
+	width: 1024px; height:768px; margin:0 auto; background-position:0 0px; text-align: left; text-shadow: 0px -1px 0px #000; position:relative;
+	color:#eee;
+
+}
+#header {
+	height: 140px; background:url(../images/header.jpg); font-size:23px; text-shadow: 1px 1px 4px #000;
+}
+#main {
+	 
+}
+#main #page_title {
+	height:57px; background:url(../images/page_title.png); text-align:center; color:#eee; line-height:40px;
+}
+#footer {
+	width:984px; height:80px; bottom:0; position:absolute; left:0;
+}
+#print {display:none;}
+
+
+.yellow #wrapper {
+	background-image: url(../images/bg_yellow.jpg);
+}
+.green #wrapper {
+	background-image: url(../images/bg_green.jpg);
+}
+.lgreen #wrapper {
+	background-image: url(../images/bg_lgreen.jpg);
+}
+.blue #wrapper {
+	background-image: url(../images/bg_blue.jpg);
+}
+.orange #wrapper {
+	background-image: url(../images/bg_orange.jpg);
+}
+.red #wrapper {
+	background-image: url(../images/bg_red.jpg);
+}
+
+a {
+	color:#FFF; text-decoration:none;
+}
+.alert {
+	width:75%; padding:15px; background:#FFCC00; border:1px red solid; color:red; margin:0 auto; text-align:center; z-index:999; position:absolute; top:30px; left:112px; line-height:30px; font-weight:normal;
+}
+.nav {
+	float:right;
+}
+.nav ul li a {
+	width:64px; height:64px;
+	display:block;
+}
+.nav ul li {
+	width:64px; height:64px;
+	float:left;
+	text-indent:-9999px;
+	margin:25px 10px;
+}
+.nav ul li.icon_back {background:url(../images/icon_back.png);}
+.nav ul li.icon_home {background:url(../images/icon_home.png);}
+.nav ul li.icon_logout {background:url(../images/icon_logout.png);}
+
+.cardpop, .cardpop #wrapper {
+	width:770px;
+	height:430px;
+	background: url(../images/content_cover.png);
+	text-align:center;
+}
+#close_pop a {
+	text-indent:-9999px;
+	width:60px; height:60px;
+	float:right;
+	margin-right:23px;
+	background:url(../images/button_close.png);
+	display:block;
+	cursor:pointer;
+}
+
+
+.org {
+	padding:15px 30px; line-height:30px;
+}
+.org img {
+	float:left; margin-right:15px;
+}
+
+
+.one_column {
+	width:333px; float:left;	
+}
+.two_column {
+	width:683px; float:left;
+}
+.three_column {
+	padding:0 32px;
+}
+.padding_top {
+	padding-top:20px;	
+}
+.padding_left {
+	padding-left:20px;	
+}
+.clear {
+	clear:both;	
+}
+
+
+/*.page_numbers {
+	display: inline-table;
+	margin-left:20px;
+}
+.page_numbers li {
+	width:35px;
+	height:35px;
+	float:left;
+	font-size:25px;
+	line-height:32px;
+}
+.page_numbers li.active {
+	background:url(../images/page_number.png);
+}
+*/
+
+.buttons {
+	text-align:center;
+}
+.buttons li, .button div {
+	width:280px;
+	height:80px;
+	background:url(../images/buttons_bg.png);
+	margin:0 auto;
+	margin-bottom:-20px;
+	padding:20px;
+	font-size:30px;
+}
+.buttons li:hover, .button div:hover {
+	background-position:0 -120px;
+}
+.buttons li a, .button div a {
+	text-decoration:none;
+	width:280px;
+	height:80px;
+	display: table-cell;
+	color:#eee;
+	vertical-align:middle;
+}
+.button div.bottom {
+	position:absolute;
+	bottom:40px;
+	right:0;
+}
+.buttons span.badge {
+	width:45px;
+	height:45px;
+	display:block;
+	background:url(../images/badge.png);
+	color:#FFF;
+	font-size:25px;
+	margin:-90px 0 0 250px;
+	line-height:40px;
+}
+.button_icons li a, .button_icons div a {
+	width:200px;
+	padding-left:80px;
+	text-align:left;
+}
+
+
+
+.checkboxes {
+	line-height:35px;
+	margin:0 10px;
+	text-align:left;
+}
+.checkboxes div {
+	margin:8px;
+	border-bottom:1px dotted #fff;
+}
+.checkboxes input {
+	display:none;
+}
+.checkboxes a {
+	width:48px; height:40px;
+	display:block;
+	background-image:url(../images/icon_checks.png);
+	/*border:3px solid #6C3;*/
+	float:left;
+	margin:0 10px;
+}
+.checkboxes a:hover, .checkboxes .checked a {
+	background-position: bottom;
+}
+
+#button_register {
+	display:none;
+}
+#button_register.show {
+	display:block;
+}
+
+
+
+
+/********---Welcome Page*****/
+.member_info_box {
+	margin:0 auto;
+	padding-left:80px;
+}
+.member_photo {
+	float:left;
+}
+.member_photo_img {
+	width:150px; height:150px;
+	margin:19px;
+	float:left;
+	text-align:center;
+}
+.member_photo_img img {
+	margin:0 auto;
+}
+.member_photo_cover {
+	width:192px;
+	height:192px;
+	display:block;
+	background:url(../images/member_photo_cover.png) no-repeat;
+	position:relative;
+	padding-right:35px;
+}
+.member_info {
+	font-size:22px;
+	width:320px;
+	line-height:27px;
+	float:left;
+}
+.member_info li {
+}
+.member_info li label {
+	font-size:13px;
+	text-transform: uppercase;
+}
+.member_info li.member_name {
+	
+	border-bottom:1px dotted #fff;
+}
+.member_badge {
+	width:100px;
+	height:100px;
+	position:absolute;
+	margin-top:-80px;
+	margin-left:120px;
+}
+
+
+.scan_card {
+	width:540px;
+	height:200px;
+	display:block;
+	background:url(../images/scan_cover.png);
+	position:relative;
+	margin:30px auto;
+	text-align:center;
+}
+.scan_card input {
+	width:320px;
+	height:30px;
+	border:2px solid #000;
+	margin:10px 0;
+	color:#000;
+	font-size:25px;
+	font-weight:bold;
+	padding:2px;
+	text-align:center;
+}
+.scan_card_inside {
+	padding-top:70px;	
+}
+
+
+
+#sb-body {background-color: transparent; border:none;}
+#sb-loading, #sb-nav a {display:none;}
+
+.cardpop #page_title {	background:none; margin:60px 0 10px;}
+
+.card_box {
+	background:url(../images/card_back.png);
+	width:368px; height:217px;
+	margin:0 auto;
+	text-align:left;
+}
+.card_box img {
+	margin:3px 0 0 5px;
+}
+
+ul.button_icons {margin:auto;}
+
+
+.button_icons li {float:left;}
+
+
+ul.button_icons li a.icon_profile {background:url(../images/icon_profile.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_deposit {background:url(../images/icon_deposit.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_withdraw {background:url(../images/icon_withdraw.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_campaigns {background:url(../images/icon_campaign.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_wall {background:url(../images/icon_wall.png) no-repeat 17px 18px;}
+
+ul.button_icons li a.icon_ranks {background:url(../images/icon_ranks.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_medals {background:url(../images/icon_medals.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_mileage {background:url(../images/icon_wall.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_missions {background:url(../images/icon_wall.png) no-repeat 17px 18px;}
+
+div.button_icons div a.icon_deposit {background:url(../images/icon_deposit.png) no-repeat 17px 18px;}
+div.button_icons div a.icon_withdraw {background:url(../images/icon_print.png) no-repeat 17px 18px;}
+
+
+ul.button_icons li a.icon_aleph {background:url(../images/iconc_aleph.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_chitas {background:url(../images/iconc_chitas.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_father {background:url(../images/iconc_fatherson.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_footsteps {background:url(../images/iconc_footsteps.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_gemara {background:url(../images/iconc_gemorah.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_hiskashrus {background:url(../images/iconc_hiskashrus.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_hiskashrus {background:url(../images/iconc_test.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_mashpia {background:url(../images/iconc_mashpia.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_mishnayos {background:url(../images/iconc_mishnayos.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_mivtzoim {background:url(../images/iconc_mivtzoim.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_moshiach {background:url(../images/iconc_moshiach.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_niggunim {background:url(../images/iconc_nigunim.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_tanya {background:url(../images/iconc_tanya.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_tefilla {background:url(../images/iconc_tefillah.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_tehillim {background:url(../images/iconc_tehillim.png) no-repeat 17px 18px;}
+ul.button_icons li a.icon_yom {background:url(../images/iconc_yom.png) no-repeat 17px 18px;}
+
+ul li.medal_aleph .medalImage {background:url(../images/medals/aleph.png)}
+ul li.medal_chitas .medalImage {background:url(../images/medals/chitas.png)}
+ul li.medal_father .medalImage {background:url(../images/medals/fatherson.png)}
+ul li.medal_footsteps .medalImage {background:url(../images/medals/footsteps.png)}
+ul li.medal_gemara .medalImage {background:url(../images/medals/gemorah.png)}
+ul li.medal_hiskashrus .medalImage {background:url(../images/medals/hiskashrus.png)}
+ul li.medal_mashpia .medalImage {background:url(../images/medals/mashpia.png)}
+ul li.medal_mishnayos .medalImage {background:url(../images/medals/mishnayos.png)}
+ul li.medal_mivtzoim .medalImage {background:url(../images/medals/mivtzoim.png)}
+ul li.medal_moshiach .medalImage {background:url(../images/medals/moshiach.png)}
+ul li.medal_niggunim .medalImage {background:url(../images/medals/nigunim.png)}
+ul li.medal_tanya .medalImage {background:url(../images/medals/tanya.png)}
+ul li.medal_tefilla .medalImage {background:url(../images/medals/tefillah.png)}
+ul li.medal_tehillim .medalImage {background:url(../images/medals/tehillim.png)}
+ul li.medal_yom .medalImage {background:url(../images/medals/yom.png)}
+
+ul li.rank_1 .rankImage {background:url(../images/ranksgold/1.png)}
+ul li.rank_2 .rankImage {background:url(../images/ranksgold/2.png)}
+ul li.rank_3 .rankImage {background:url(../images/ranksgold/3.png)}
+ul li.rank_4 .rankImage {background:url(../images/ranksgold/4.png)}
+ul li.rank_5 .rankImage {background:url(../images/ranksgold/5.png)}
+ul li.rank_6 .rankImage {background:url(../images/ranksgold/6.png)}
+ul li.rank_7 .rankImage {background:url(../images/ranksgold/7.png)}
+ul li.rank_8 .rankImage {background:url(../images/ranksgold/8.png)}
+ul li.rank_9 .rankImage {background:url(../images/ranksgold/9.png)}
+ul li.rank_10 .rankImage {background:url(../images/ranksgold/10.png)}
+ul li.rank_11 .rankImage {background:url(../images/ranksgold/11.png)}
+ul li.rank_12 .rankImage {background:url(../images/ranksgold/12.png)}
+ul li.rank_13 .rankImage {background:url(../images/ranksgold/13.png)}
+ul li.rank_14 .rankImage {background:url(../images/ranksgold/14.png)}
+
+ul li .medals {width:450px; height:300px; float:left;}
+ul li .medals div {width:96px; height:100px; float:left; margin:10px 0 0 15px; opacity:.2;}
+ul li .medals div a {width:96px; height:100px; display: block;}
+ul li .medals div.active {opacity:1;}
+ul.ranks li .medals {width:510px;}
+ul.ranks li .medals div {margin:0 0 0 5px; opacity:1;}
+ul.ranks li .medals .medal {background:url(../images/medals/holder.png); opacity:.4;}
+
+ul li.medal_aleph .medals .medal1, .medal11 {background:url(../images/medals/aleph/elements-1.png)}
+ul li.medal_aleph .medals .medal2, .medal12 {background:url(../images/medals/aleph/elements-2.png)}
+ul li.medal_aleph .medals .medal3, .medal13 {background:url(../images/medals/aleph/elements-3.png)}
+ul li.medal_aleph .medals .medal4, .medal14 {background:url(../images/medals/aleph/elements-4.png)}
+ul li.medal_aleph .medals .medal5, .medal15 {background:url(../images/medals/aleph/elements-5.png)}
+ul li.medal_aleph .medals .medal6, .medal16 {background:url(../images/medals/aleph/elements-6.png)}
+ul li.medal_aleph .medals .medal7, .medal17 {background:url(../images/medals/aleph/elements-7.png)}
+ul li.medal_aleph .medals .medal8, .medal18 {background:url(../images/medals/aleph/elements-8.png)}
+ul li.medal_aleph .medals .medal9, .medal19 {background:url(../images/medals/aleph/elements-9.png)}
+ul li.medal_aleph .medals .medal10, .medal110 {background:url(../images/medals/aleph/elements-10.png)}
+
+ul li.medal_chitas .medals .medal1, .medal21 {background:url(../images/medals/chitas/elements-1.png)}
+ul li.medal_chitas .medals .medal2, .medal22 {background:url(../images/medals/chitas/elements-2.png)}
+ul li.medal_chitas .medals .medal3, .medal23 {background:url(../images/medals/chitas/elements-3.png)}
+ul li.medal_chitas .medals .medal4, .medal24 {background:url(../images/medals/chitas/elements-4.png)}
+ul li.medal_chitas .medals .medal5, .medal25 {background:url(../images/medals/chitas/elements-5.png)}
+ul li.medal_chitas .medals .medal6, .medal26 {background:url(../images/medals/chitas/elements-6.png)}
+ul li.medal_chitas .medals .medal7, .medal27 {background:url(../images/medals/chitas/elements-7.png)}
+ul li.medal_chitas .medals .medal8, .medal28 {background:url(../images/medals/chitas/elements-8.png)}
+ul li.medal_chitas .medals .medal9, .medal29 {background:url(../images/medals/chitas/elements-9.png)}
+ul li.medal_chitas .medals .medal10, .medal210 {background:url(../images/medals/chitas/elements-10.png)}
+
+ul li.medal_father .medals .medal1, .medal31 {background:url(../images/medals/father/elements-1.png)}
+ul li.medal_father .medals .medal2, .medal32 {background:url(../images/medals/father/elements-2.png)}
+ul li.medal_father .medals .medal3, .medal33 {background:url(../images/medals/father/elements-3.png)}
+ul li.medal_father .medals .medal4, .medal34 {background:url(../images/medals/father/elements-4.png)}
+ul li.medal_father .medals .medal5, .medal35 {background:url(../images/medals/father/elements-5.png)}
+ul li.medal_father .medals .medal6, .medal36 {background:url(../images/medals/father/elements-6.png)}
+ul li.medal_father .medals .medal7, .medal37 {background:url(../images/medals/father/elements-7.png)}
+ul li.medal_father .medals .medal8, .medal38 {background:url(../images/medals/father/elements-8.png)}
+ul li.medal_father .medals .medal9, .medal39 {background:url(../images/medals/father/elements-9.png)}
+ul li.medal_father .medals .medal10, .medal310 {background:url(../images/medals/father/elements-10.png)}
+
+ul li.medal_footsteps .medals .medal1, .medal41 {background:url(../images/medals/footsteps/elements-1.png)}
+ul li.medal_footsteps .medals .medal2, .medal42 {background:url(../images/medals/footsteps/elements-2.png)}
+ul li.medal_footsteps .medals .medal3, .medal43 {background:url(../images/medals/footsteps/elements-3.png)}
+ul li.medal_footsteps .medals .medal4, .medal44 {background:url(../images/medals/footsteps/elements-4.png)}
+ul li.medal_footsteps .medals .medal5, .medal45 {background:url(../images/medals/footsteps/elements-5.png)}
+ul li.medal_footsteps .medals .medal6, .medal46 {background:url(../images/medals/footsteps/elements-6.png)}
+ul li.medal_footsteps .medals .medal7, .medal47 {background:url(../images/medals/footsteps/elements-7.png)}
+ul li.medal_footsteps .medals .medal8, .medal48 {background:url(../images/medals/footsteps/elements-8.png)}
+ul li.medal_footsteps .medals .medal9, .medal49 {background:url(../images/medals/footsteps/elements-9.png)}
+ul li.medal_footsteps .medals .medal10, .medal410 {background:url(../images/medals/footsteps/elements-10.png)}
+
+ul li.medal_gemara .medals .medal1, .medal51 {background:url(../images/medals/gemara/elements-1.png)}
+ul li.medal_gemara .medals .medal2, .medal52 {background:url(../images/medals/gemara/elements-2.png)}
+ul li.medal_gemara .medals .medal3, .medal53 {background:url(../images/medals/gemara/elements-3.png)}
+ul li.medal_gemara .medals .medal4, .medal54 {background:url(../images/medals/gemara/elements-4.png)}
+ul li.medal_gemara .medals .medal5, .medal55 {background:url(../images/medals/gemara/elements-5.png)}
+ul li.medal_gemara .medals .medal6, .medal56 {background:url(../images/medals/gemara/elements-6.png)}
+ul li.medal_gemara .medals .medal7, .medal57 {background:url(../images/medals/gemara/elements-7.png)}
+ul li.medal_gemara .medals .medal8, .medal58 {background:url(../images/medals/gemara/elements-8.png)}
+ul li.medal_gemara .medals .medal9, .medal59 {background:url(../images/medals/gemara/elements-9.png)}
+ul li.medal_gemara .medals .medal10, .medal510 {background:url(../images/medals/gemara/elements-10.png)}
+
+ul li.medal_hiskashrus .medals .medal1, .medal61 {background:url(../images/medals/hiskashrus/elements-1.png)}
+ul li.medal_hiskashrus .medals .medal2, .medal62 {background:url(../images/medals/hiskashrus/elements-2.png)}
+ul li.medal_hiskashrus .medals .medal3, .medal63 {background:url(../images/medals/hiskashrus/elements-3.png)}
+ul li.medal_hiskashrus .medals .medal4, .medal64 {background:url(../images/medals/hiskashrus/elements-4.png)}
+ul li.medal_hiskashrus .medals .medal5, .medal65 {background:url(../images/medals/hiskashrus/elements-5.png)}
+ul li.medal_hiskashrus .medals .medal6, .medal66 {background:url(../images/medals/hiskashrus/elements-6.png)}
+ul li.medal_hiskashrus .medals .medal7, .medal67 {background:url(../images/medals/hiskashrus/elements-7.png)}
+ul li.medal_hiskashrus .medals .medal8, .medal68 {background:url(../images/medals/hiskashrus/elements-8.png)}
+ul li.medal_hiskashrus .medals .medal9, .medal69 {background:url(../images/medals/hiskashrus/elements-9.png)}
+ul li.medal_hiskashrus .medals .medal10, .medal610 {background:url(../images/medals/hiskashrus/elements-10.png)}
+
+ul li.medal_mashpia .medals .medal1, .medal71 {background:url(../images/medals/mashpia/elements-1.png)}
+ul li.medal_mashpia .medals .medal2, .medal72 {background:url(../images/medals/mashpia/elements-2.png)}
+ul li.medal_mashpia .medals .medal3, .medal73 {background:url(../images/medals/mashpia/elements-3.png)}
+ul li.medal_mashpia .medals .medal4, .medal74 {background:url(../images/medals/mashpia/elements-4.png)}
+ul li.medal_mashpia .medals .medal5, .medal75 {background:url(../images/medals/mashpia/elements-5.png)}
+ul li.medal_mashpia .medals .medal6, .medal76 {background:url(../images/medals/mashpia/elements-6.png)}
+ul li.medal_mashpia .medals .medal7, .medal77 {background:url(../images/medals/mashpia/elements-7.png)}
+ul li.medal_mashpia .medals .medal8, .medal78 {background:url(../images/medals/mashpia/elements-8.png)}
+ul li.medal_mashpia .medals .medal9, .medal79 {background:url(../images/medals/mashpia/elements-9.png)}
+ul li.medal_mashpia .medals .medal10, .medal710 {background:url(../images/medals/mashpia/elements-10.png)}
+
+ul li.medal_mishnayos .medals .medal1, .medal81 {background:url(../images/medals/mishnayos/elements-1.png)}
+ul li.medal_mishnayos .medals .medal2, .medal82 {background:url(../images/medals/mishnayos/elements-2.png)}
+ul li.medal_mishnayos .medals .medal3, .medal83 {background:url(../images/medals/mishnayos/elements-3.png)}
+ul li.medal_mishnayos .medals .medal4, .medal84 {background:url(../images/medals/mishnayos/elements-4.png)}
+ul li.medal_mishnayos .medals .medal5, .medal85 {background:url(../images/medals/mishnayos/elements-5.png)}
+ul li.medal_mishnayos .medals .medal6, .medal86 {background:url(../images/medals/mishnayos/elements-6.png)}
+ul li.medal_mishnayos .medals .medal7, .medal87 {background:url(../images/medals/mishnayos/elements-7.png)}
+ul li.medal_mishnayos .medals .medal8, .medal88 {background:url(../images/medals/mishnayos/elements-8.png)}
+ul li.medal_mishnayos .medals .medal9, .medal89 {background:url(../images/medals/mishnayos/elements-9.png)}
+ul li.medal_mishnayos .medals .medal10, .medal810 {background:url(../images/medals/mishnayos/elements-10.png)}
+
+ul li.medal_mivtzoim .medals .medal1, .medal91 {background:url(../images/medals/mivtzoim/elements-1.png)}
+ul li.medal_mivtzoim .medals .medal2, .medal92 {background:url(../images/medals/mivtzoim/elements-2.png)}
+ul li.medal_mivtzoim .medals .medal3, .medal93 {background:url(../images/medals/mivtzoim/elements-3.png)}
+ul li.medal_mivtzoim .medals .medal4, .medal94 {background:url(../images/medals/mivtzoim/elements-4.png)}
+ul li.medal_mivtzoim .medals .medal5, .medal95 {background:url(../images/medals/mivtzoim/elements-5.png)}
+ul li.medal_mivtzoim .medals .medal6, .medal96 {background:url(../images/medals/mivtzoim/elements-6.png)}
+ul li.medal_mivtzoim .medals .medal7, .medal97 {background:url(../images/medals/mivtzoim/elements-7.png)}
+ul li.medal_mivtzoim .medals .medal8, .medal98 {background:url(../images/medals/mivtzoim/elements-8.png)}
+ul li.medal_mivtzoim .medals .medal9, .medal99 {background:url(../images/medals/mivtzoim/elements-9.png)}
+ul li.medal_mivtzoim .medals .medal10, .medal910 {background:url(../images/medals/mivtzoim/elements-10.png)}
+
+ul li.medal_moshiach .medals .medal1, .medal101 {background:url(../images/medals/moshiach/elements-1.png)}
+ul li.medal_moshiach .medals .medal2, .medal102 {background:url(../images/medals/moshiach/elements-2.png)}
+ul li.medal_moshiach .medals .medal3, .medal103 {background:url(../images/medals/moshiach/elements-3.png)}
+ul li.medal_moshiach .medals .medal4, .medal104 {background:url(../images/medals/moshiach/elements-4.png)}
+ul li.medal_moshiach .medals .medal5, .medal105 {background:url(../images/medals/moshiach/elements-5.png)}
+ul li.medal_moshiach .medals .medal6, .medal106 {background:url(../images/medals/moshiach/elements-6.png)}
+ul li.medal_moshiach .medals .medal7, .medal107 {background:url(../images/medals/moshiach/elements-7.png)}
+ul li.medal_moshiach .medals .medal8, .medal108 {background:url(../images/medals/moshiach/elements-8.png)}
+ul li.medal_moshiach .medals .medal9, .medal109 {background:url(../images/medals/moshiach/elements-9.png)}
+ul li.medal_moshiach .medals .medal10, .medal1010 {background:url(../images/medals/moshiach/elements-10.png)}
+
+ul li.medal_niggunim .medals .medal1, .medal111 {background:url(../images/medals/niggunim/elements-1.png)}
+ul li.medal_niggunim .medals .medal2, .medal112 {background:url(../images/medals/niggunim/elements-2.png)}
+ul li.medal_niggunim .medals .medal3, .medal113 {background:url(../images/medals/niggunim/elements-3.png)}
+ul li.medal_niggunim .medals .medal4, .medal114 {background:url(../images/medals/niggunim/elements-4.png)}
+ul li.medal_niggunim .medals .medal5, .medal115 {background:url(../images/medals/niggunim/elements-5.png)}
+ul li.medal_niggunim .medals .medal6, .medal116 {background:url(../images/medals/niggunim/elements-6.png)}
+ul li.medal_niggunim .medals .medal7, .medal117 {background:url(../images/medals/niggunim/elements-7.png)}
+ul li.medal_niggunim .medals .medal8, .medal118 {background:url(../images/medals/niggunim/elements-8.png)}
+ul li.medal_niggunim .medals .medal9, .medal119 {background:url(../images/medals/niggunim/elements-9.png)}
+ul li.medal_niggunim .medals .medal10, .medal1110 {background:url(../images/medals/niggunim/elements-10.png)}
+
+ul li.medal_tanya .medals .medal1, .medal121 {background:url(../images/medals/tanya/elements-1.png)}
+ul li.medal_tanya .medals .medal2, .medal122 {background:url(../images/medals/tanya/elements-2.png)}
+ul li.medal_tanya .medals .medal3, .medal123 {background:url(../images/medals/tanya/elements-3.png)}
+ul li.medal_tanya .medals .medal4, .medal124 {background:url(../images/medals/tanya/elements-4.png)}
+ul li.medal_tanya .medals .medal5, .medal125 {background:url(../images/medals/tanya/elements-5.png)}
+ul li.medal_tanya .medals .medal6, .medal126 {background:url(../images/medals/tanya/elements-6.png)}
+ul li.medal_tanya .medals .medal7, .medal127 {background:url(../images/medals/tanya/elements-7.png)}
+ul li.medal_tanya .medals .medal8, .medal128 {background:url(../images/medals/tanya/elements-8.png)}
+ul li.medal_tanya .medals .medal9, .medal129 {background:url(../images/medals/tanya/elements-9.png)}
+ul li.medal_tanya .medals .medal10, .medal1210 {background:url(../images/medals/tanya/elements-10.png)}
+
+ul li.medal_tefilla .medals .medal1, .medal131 {background:url(../images/medals/tefilla/elements-1.png)}
+ul li.medal_tefilla .medals .medal2, .medal132 {background:url(../images/medals/tefilla/elements-2.png)}
+ul li.medal_tefilla .medals .medal3, .medal133 {background:url(../images/medals/tefilla/elements-3.png)}
+ul li.medal_tefilla .medals .medal4, .medal134 {background:url(../images/medals/tefilla/elements-4.png)}
+ul li.medal_tefilla .medals .medal5, .medal135 {background:url(../images/medals/tefilla/elements-5.png)}
+ul li.medal_tefilla .medals .medal6, .medal136 {background:url(../images/medals/tefilla/elements-6.png)}
+ul li.medal_tefilla .medals .medal7, .medal137 {background:url(../images/medals/tefilla/elements-7.png)}
+ul li.medal_tefilla .medals .medal8, .medal138 {background:url(../images/medals/tefilla/elements-8.png)}
+ul li.medal_tefilla .medals .medal9, .medal139 {background:url(../images/medals/tefilla/elements-9.png)}
+ul li.medal_tefilla .medals .medal10, .medal1310 {background:url(../images/medals/tefilla/elements-10.png)}
+
+ul li.medal_tehillim .medals .medal1, .medal141 {background:url(../images/medals/tehillim/elements-1.png)}
+ul li.medal_tehillim .medals .medal2, .medal142 {background:url(../images/medals/tehillim/elements-2.png)}
+ul li.medal_tehillim .medals .medal3, .medal143 {background:url(../images/medals/tehillim/elements-3.png)}
+ul li.medal_tehillim .medals .medal4, .medal144 {background:url(../images/medals/tehillim/elements-4.png)}
+ul li.medal_tehillim .medals .medal5, .medal145 {background:url(../images/medals/tehillim/elements-5.png)}
+ul li.medal_tehillim .medals .medal6, .medal146 {background:url(../images/medals/tehillim/elements-6.png)}
+ul li.medal_tehillim .medals .medal7, .medal147 {background:url(../images/medals/tehillim/elements-7.png)}
+ul li.medal_tehillim .medals .medal8, .medal148 {background:url(../images/medals/tehillim/elements-8.png)}
+ul li.medal_tehillim .medals .medal9, .medal149 {background:url(../images/medals/tehillim/elements-9.png)}
+ul li.medal_tehillim .medals .medal10, .medal1410 {background:url(../images/medals/tehillim/elements-10.png)}
+
+ul li.medal_yom .medals .medal1, .medal151 {background:url(../images/medals/yom/elements-1.png)}
+ul li.medal_yom .medals .medal2, .medal152 {background:url(../images/medals/yom/elements-2.png)}
+ul li.medal_yom .medals .medal3, .medal153 {background:url(../images/medals/yom/elements-3.png)}
+ul li.medal_yom .medals .medal4, .medal154 {background:url(../images/medals/yom/elements-4.png)}
+ul li.medal_yom .medals .medal5, .medal155 {background:url(../images/medals/yom/elements-5.png)}
+ul li.medal_yom .medals .medal6, .medal156 {background:url(../images/medals/yom/elements-6.png)}
+ul li.medal_yom .medals .medal7, .medal157 {background:url(../images/medals/yom/elements-7.png)}
+ul li.medal_yom .medals .medal8, .medal158 {background:url(../images/medals/yom/elements-8.png)}
+ul li.medal_yom .medals .medal9, .medal159 {background:url(../images/medals/yom/elements-9.png)}
+ul li.medal_yom .medals .medal10, .medal1510 {background:url(../images/medals/yom/elements-10.png)}
+
+ul.missions .mission_boxes, ul.tasks .task_boxes {width:711px; height:350px;}
+#slider ul.missions li, #slider ul.tasks li {margin:20px 0; height:410px;}
+.slider_box {margin:0 32px 0 27px; padding:20px 0; text-align:center;}
+ul.missions li .medalImage {width:96px; height:100px; margin:-20px 0 0 0px; opacity:1; position:absolute; z-index:999;}
+
+ul.missions .mission_boxes .mission {width:68px; height:68px; opacity:1; background: url(../images/mission_box.png); margin:0 0 0 0; padding:10px; position:relative; float:left; font-size:18px; }
+ul.missions .mission_boxes .inactive {opacity:.3; }
+ul.missions .mission_boxes .empty {visibility:hidden; }
+ul.missions .mission_boxes .mission .number {font-size:18px; margin-top:8px; }
+ul.missions .mission_boxes .mission .date {font-size:12px;}
+ul.missions .mission_boxes .mission .meter {position: absolute; bottom:5px; background-image:url(../images/mission_meter.png); background-position:100% 0 ; background-repeat:no-repeat; width:50px; height:6px; margin:0 9px 11px; opacity:1;}
+ul.missions .mission_boxes .mission .check_on {position: absolute; /*background:url(../images/badge_check.png);*/ top:0; right:5px; width:28px; height:28px; line-height:23px; font-size:15px;}
+ul.missions .mission_boxes .mission .check_off {position: absolute; /*background:url(../images/badge_check.png) right;*/ top:0; right:5px; width:28px; height:28px;}
+ul.missions .mission_boxes .mission a {position: absolute; top:5px; left:5px; width:78px; height:78px; display:block}
+ul.missions .mission_boxes .button_back a {font-size:15px; font-weight:normal; padding:15px 0;}
+
+ul.missions span.badge {
+	width:35px;
+	height:35px;
+	display:block;
+	background:url(../images/page_number.png);
+	color:#FFF;
+	font-size:15px;
+	margin:-5px 0 0 65px;
+	line-height:30px;
+	font-size:.55em;
+	
+}
+
+
+ul.tasks .task_group {
+	background:url(../images/bg_carbon.png) top repeat-x; font-size:.7em; -moz-border-radius:12px; -webkit-border-radius:12px; margin:0 10px; clear:both;
+}
+ul.tasks .title {
+	margin:10px 0 0;
+}
+/*ul.tasks .icon {
+	background:url(../images/icon_tasks.png); width:48px; height:48px; float:left; margin:20px 10px 0;
+}*/
+ul.tasks .task {
+	font-size:.8em; font-weight:normal; text-align:left; line-height:28px; margin:0 15px; border-bottom:1px dotted #6587a5; margin-bottom:1px; padding-left:8px;
+}
+.check_on { 
+	background:url(../images/check_circles.png); width:28px; height:28px;
+}
+.check_off {
+	background:url(../images/check_circles.png) right; width:28px; height:28px;	
+}
+ul.tasks .check_on, ul.tasks .check_off {
+	float:right; margin-right:5px;
+}
+ul.tasks .miles {
+	width:75px; float:right; text-align:right; margin-right:15px;
+}
+
+
+.slider_title {
+	margin-bottom:10px;	
+	border-bottom:1px dotted #597791;
+}
+.medalImage {
+	width:200px; height:210px;
+	float:left;
+	margin:50px 20px 0;
+}
+.rankImage {
+	width:200px; height:162px;
+	float:left;
+}
+
+
+.rank_info {
+	width:240px;
+	float:left;
+	margin:50px 0;
+}
+
+/********---Deposit Page*****/
+.button_dir {
+	background-image:url(../images/next_buttons.png);
+	width:64px;
+	height:64px;
+	margin-top:183px;
+}
+.button_next {
+}
+.button_prev {
+	background-position:-64px 0;	
+}
+.button_next:hover {
+	background-position:0 -128px;	
+}
+.button_prev:hover {
+	background-position:-64px -128px;	
+}
+.button_next_disabled {
+	background-position:0 -64px;
+}
+.button_prev_disabled {
+	background-position:-64px -64px;
+}
+li.button_dir a {
+	width:64px;
+	height:64px;
+	display:block;
+	text-indent:-9999px;
+}
+
+/*.three_column li {
+	float:left;
+}*/
+.three_column .content {
+	width:770px;
+	height:430px;
+	background: url(../images/content_cover.png);
+	margin:0 auto;
+	position:relative;
+}
+.three_column .content #slider {
+}
+.three_column .content .card_single {
+	margin:0 auto;
+	text-align:center;
+	font-size:24px;
+	height:390px;
+	position:relative;
+}
+.three_column .content .card_single p {
+	margin:10px auto;
+}
+.card_box {
+}
+.card_shadow {
+	width:350px; height:210px;
+	background:url(../images/card_shadow.png) bottom no-repeat;
+	float:left;
+	margin-bottom:10px;
+}
+.card_front, .card_back {
+	background:#fefefe;
+	color:#333;
+	text-shadow:none;
+	font-size:12px;
+	font-weight:normal;
+	height:150px;
+	padding:25px;
+}
+.card_front table {
+	margin:auto;
+}
+.card_front p {
+	margin:10px auto;
+}
+.card_front td {
+	text-align:left;
+	padding:0 8px;
+}
+.card_front_left {
+	margin-right:10px;
+}
+.card_front .border, .card_back .border {
+  border: .03in solid black !important;
+  -webkit-border-radius: .04in;
+  -moz-border-radius: .04in;
+  border-radius: .04in;
+  padding:10px 0;
+}
+.card_front .circle, .card_back .circle {
+  border: .03in solid black !important;
+  -webkit-border-radius: .2in;
+  -moz-border-radius: .2in;
+  border-radius: .2in;
+  line-height: 18px;
+  width: 18px;
+  margin: auto !important;
+  font-weight: bold;
+  text-align: center;
+}
+.card_back td {
+  height: auto;
+}
+.card_back div  {
+	position:relative;
+}
+.card_back div td div {
+  height: auto;
+  margin: 0px;
+  padding: 0px;
+}
+.card_back .barcode {
+	padding:8px 0;
+}
+.card_back .points {
+  position: absolute;
+  width: 2.875in; /* 3.375 - 2 * .25 */
+  margin: 0px;
+  padding: 0px;
+  font: 11px bold;
+  line-height: .2in;
+  bottom: -.13in; /* line-height/2 + border */
+  height: auto;
+  text-transform: uppercase;
+}
+.card_back table {
+  margin: auto;
+}
+.card_back .points td div {
+  height: auto;
+  margin: 0px;
+  padding: 0px .1in;
+  background-color: #e0f3d2;
+}
+
+.card_withdraw {
+	height:370px;
+	margin:0 20px 0 10px;
+}
+.card_withdraw .card_front {
+	height:310px;
+}
+
+
+
+#slider .buttons  {
+	position:absolute;
+	top:230px;
+	left:580px;
+	height:121px;
+
+/*	float:right;
+*/}
+#slider .buttons div.icon_deposit {
+	width:126px;
+	height:121px;
+	background-image:url(../images/button_deposit.png);
+	padding:0;
+	text-indent:-9999px;
+}
+.card_single .buttons div:hover {
+	background-position:right;
+}
+.card_single .buttons div a {
+	height:121px;
+}
+
+.card_single .member_info label {
+	display:block;
+}
+.card_single .member_info span {
+	font-size:120%;
+}
+.card_single .member_info div {
+	padding-bottom:10px;
+	margin-bottom:10px;
+	border-bottom:1px dotted #fff;
+}
+
+
+
+
+
+/********---Profile Page*****/
+
+.rank_badges {
+	margin:20px 0 0 40px;	
+}
+
+.rank_badges ul.rank_top {
+	margin-left:14px;
+}
+.rank_badges ul.rank_top li {
+	width:75px; height:75px;
+	background-image:url(../images/rankBadges1.png);
+	text-indent:-9999px;
+	float:left;
+}
+.rank_badges ul.rank_bot li {
+	width:104px; height:92px;
+	background-image:url(../images/rankBadges2.png);
+	text-indent:-9999px;
+	float:left;
+}
+
+.rank_badges ul li.rank1 {background-position:0 0;}
+.rank_badges ul li.rank2 {background-position:0 -75px;}
+.rank_badges ul li.rank3 {background-position:0 -150px;}
+.rank_badges ul li.rank4 {background-position:0 -225px;}
+.rank_badges ul li.rank5 {background-position:0 -300px;}
+.rank_badges ul li.rank6 {background-position:0 -375px;}
+.rank_badges ul li.rank7 {background-position:0 -450px;}
+.rank_badges ul li.rank8 {background-position:0 -525px;}
+
+.rank_badges ul li.rank9 {background-position:0 0;}
+.rank_badges ul li.rank10 {background-position:0 -92px;}
+.rank_badges ul li.rank11 {background-position:0 -184px;}
+.rank_badges ul li.rank12 {background-position:0 -276px;}
+.rank_badges ul li.rank13 {background-position:0 -368px;}
+.rank_badges ul li.rank14 {background-position:0 -460px;}
+
+
+
+.rank_badges ul li.currentrank1 {background-position:-75px 0;}
+.rank_badges ul li.currentrank2 {background-position:-75px -75px;}
+.rank_badges ul li.currentrank3 {background-position:-75px -150px;}
+.rank_badges ul li.currentrank4 {background-position:-75px -225px;}
+.rank_badges ul li.currentrank5 {background-position:-75px -300px;}
+.rank_badges ul li.currentrank6 {background-position:-75px -375px;}
+.rank_badges ul li.currentrank7 {background-position:-75px -450px;}
+.rank_badges ul li.currentrank8 {background-position:-75px -525px;}
+
+.rank_badges ul li.currentrank9 {background-position:-104px 0;}
+.rank_badges ul li.currentrank10 {background-position:-104px -92px;}
+.rank_badges ul li.currentrank11 {background-position:-104px -184px;}
+.rank_badges ul li.currentrank12 {background-position:-104px -276px;}
+.rank_badges ul li.currentrank13 {background-position:-104px -368px;}
+.rank_badges ul li.currentrank14 {background-position:-104px -460px;}
+
+
+
+/********---End Profile Page*****/
+
+
+
+/* Easy Slider */
+
+	#slider ul, #slider li{
+		margin:0;
+		padding:0;
+		list-style:none;
+		}
+	#slider { 
+		margin:0 32px 0 27px;
+	}
+	#slider li{ 
+		/* 
+			define width and height of list item (slide)
+			entire slider area will adjust according to the parameters provided here
+		*/ 
+		width:710px;
+		height:390px;
+		overflow:hidden;
+		margin:30px 0;
+		text-align:center;
+		}	
+	#prevBtn, #nextBtn{ 
+		display:block;
+		width:64px;
+		height:64px;
+		position:absolute;
+		left:-290px;
+		top:-270px;
+		z-index:1000;
+		overflow:hidden;
+		text-indent:-9999px;
+		background-image:url(../images/next_buttons.png);	
+		background-position:-64px -64px;	
+		}	
+	#nextBtn{ 
+		left:585px;
+		background-position:0 -64px;	
+		}														
+	#prevBtn a, #nextBtn a{  
+		display:block;
+		position:relative;
+		width:64px;
+		height:64px;
+		background-image:url(../images/next_buttons.png);
+		background-position:-64px -128px;	
+		}	
+	#nextBtn a{ 
+		background-position:0 -128px;	
+		}	
+	#prevBtn a:hover{  
+		background-position:-64px 0px;	
+		}	
+	#nextBtn a:hover{  
+		background-position:0 0px ;	
+		}	
+	#upBtn, #dnBtn{ 
+		display:block;
+		width:64px;
+		height:64px;
+		position:absolute;
+		left:0px;
+		top:0px;
+		z-index:1000;
+		overflow:hidden;
+		text-indent:-9999px;
+		background-image:url(../images/next_buttons.png);	
+		background-position:-64px -64px;	
+		}	
+	#dnBtn{ 
+		left:74px;
+		background-position:0 -64px;	
+		}														
+	#upBtn a, #dnBtn a{  
+		display:block;
+		position:relative;
+		width:64px;
+		height:64px;
+		background-image:url(../images/next_buttons.png);
+		background-position:-64px -128px;	
+		}	
+	#dnBtn a{ 
+		background-position:0 -128px;	
+		}	
+	#upBtn a:hover{  
+		background-position:-64px 0px;	
+		}	
+	#dnBtn a:hover{  
+		background-position:0 0px ;	
+		}	
+	.button_box {
+		position:relative;
+		width:138px;
+		margin:20px auto;
+	}
+/*////Easy Slider */
+.page_dots {
+	width:360px; height:16px;
+	background-image: url(../images/page_dots_bg.png);
+	margin:0 auto;
+	text-align:center;
+	position:relative;
+}
+ol#controls {
+	margin:0 auto;
+	text-align:center;
+	display:inline-block;
+	margin-top:2px;
+}
+ol#controls li {
+	text-indent:-9999px;
+	width:16px; height:11px;
+	background-image: url(../images/page_dots.png);
+	cursor:pointer;
+	float:left;
+	margin:0 4px;
+}
+ol#controls li.current {
+	background-position:right;
+}
+
+
+
+
+
+
+
+.footer_logo {
+	background:url(../images/cth_logo.png);
+	width:113px;
+	height:70px;
+	float:left;
+	margin-left:15px;
+}
+.footer_logout {
+		
+}

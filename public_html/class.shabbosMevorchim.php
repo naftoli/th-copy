@@ -1,0 +1,1701 @@
+<?
+class ShabbosMevorchim {
+    
+    private $dates;
+    private $rDates;
+    private $showDone;
+	private $rDatesPlusPrevious;
+	private $rDatesAll;
+    
+    private $school_id;
+    private $school_name;
+    private $classes;
+    
+    private $tasks;
+    private $armyResults;
+    private $armyDoneResults;
+    private $schoolResults;
+    private $schoolDoneResults;
+    private $classResults; 
+    private $classDoneResults;
+    private $accomplished;
+    
+    private $armySchoolsResults;
+    private $armySchoolsDoneResults;
+    private $armyResultsOrdered;
+    private $accomplishedRows;
+    private $accomplishedKapitelach;
+    private $accomplishedMinutes;
+    
+    private $pieKapitelach;
+    private $pieMinutes;
+    
+    private $db;
+	
+	private $users;
+	private $usersResults;
+	private $usersDoneResults;
+	
+	private $students;
+	private $studentResults;
+	private $studentDoneResults;
+	
+	private $months;
+	private $heMonths;
+	
+	private $totalUsers;
+	private $schools;
+	private $doneQuotas;
+	private $participated;
+	private $numRegistered;
+	
+	private $accomplishedOnly;
+	private $debug;
+        
+    public function __construct($year = 5778) {
+        //set db handle
+        require_once 'class.db.php';
+        $this->db = DB::getInstance();
+        //$sm1 = calculateSM(5776);
+        //$sm2 = calculateSM(5777);
+		
+		$sm = calculateSM($year);
+		//echo "<pre>";
+		$this->months = array(
+			0	=>	'Tishrei',
+            1   =>  'Cheshvon', 
+            2   =>  'Kisleiv', 
+            3   =>  'Teves', 
+            4   =>  'Shevat', 
+            5   =>  'Adar', 
+            6   =>  'Adar II', 
+            7   =>  'Nissan',  
+            8   =>  'Iyar', 
+            9   =>  'Sivan', 
+            10  =>  'Tamuz', 
+            11  =>  'Av', 
+            12  =>  'Elul' 
+        );
+		/*
+        $this->dates = array(
+        	$this->months[12]	=> $sm1[12], 
+        	$this->months[13]	=> $sm1[13]
+		);
+		*/
+        foreach ($sm as $k => $v) {
+            //if ($k == 12) break;
+            if ($sm[6] != $sm[7]) {
+                if ($k == 5) {
+                    $this->dates['Adar I'] = $v;
+                    continue;
+                } 
+            } else {
+				if ($k == 6) continue;
+			}
+            $this->dates[$this->months[$k]] = $v;
+        }
+		//print_r($this->dates);
+		//echo "</pre>";
+		// tasks array was modified to point to grid id instead of short name to account for multiple langauges
+        $this->tasks = array(
+            'Kapitelach'  	=>  8001,
+            'Minutes'   	=>  8002 
+        );
+        $this->accomplished = array();
+        $this->rDates = array();
+        $this->showDone = array();
+		$this->users = array();
+		$this->usersResults = array();
+		$this->usersDoneResults = array();
+		$this->students = array();
+		$this->studentResults = array();
+		$this->studentDoneResults = array();
+		
+		$this->heMonths = array(
+            0  =>  'תשרי',
+            1   =>  'חשון', 
+            2   =>  'כסלו', 
+            3   =>  'טבת', 
+            4   =>  'שבט', 
+            5   =>  'אדר', 
+            6   =>  'אדר ב', 
+            7   =>  'ניסן',  
+            8   =>  'אייר', 
+		    9   =>  'סיון', 
+            10  =>  'תמוז', 
+            11  =>  'אב', 
+            12  =>  'אלול' 
+        );
+        
+		$this->accomplishedOnly = false;
+		$this->debug = false;
+    }
+	
+	public function setAccomplishedOnly() {
+		$this->accomplishedOnly = true;
+	}
+	
+	public function setDebug() {
+	    $this->debug = true;
+	}
+
+	public function getHebrewMonth($key) {
+		$index = array_search($key, $this->months);
+		return $this->heMonths[$index];
+	}
+    
+    public function getTasks() {
+        return $this->tasks;
+    }
+    
+    public function getKeys() {
+        return array_keys( $this->tasks );
+    }
+    
+    public function setReportDates($date = 0) {
+    	$today = unixtojd();
+        if ($date > 0) {
+        	$month = array_search($date, $this->dates);
+			$this->rDates[$month] = $date;
+			$this->showDone[] = $date;
+        } else {
+        	$dates = array();
+	        foreach ( $this->dates as $month => $date ) {
+	            //echo $today . " : " . $month . "-" . $date . "<br />";
+	            $dates[$month] = $date;
+	            if ( $today < ($date + 28) ) {
+	                //if it's just before shabbos mevorchim don't show done data
+	                if ( $today >= $date ) {
+	                    $this->showDone[] = $date;
+	                }
+	                break; //end looping by current shabbos mevorchim date
+	            } else {
+	                $this->showDone[] = $date;
+	            }
+	        }
+			$d = end($dates);
+			$month = key($dates);
+			$this->rDates[$month] = $d;
+			prev($dates);
+			$this->rDatesPlusPrevious[key($dates)] = current($dates);
+			$this->rDatesPlusPrevious[$month] = $d;
+			foreach ($dates as $month => $date) {
+				$this->rDatesAll[$month] = $date;
+			}
+		}
+    }
+    
+    public function getReportDates() {
+        return $this->rDates;
+    }
+	
+	public function getReportDatesPlusPrevious() {
+		return $this->rDatesPlusPrevious;				
+	}
+	
+	public function getReportDatesAll() {
+		return $this->rDatesAll;
+	}
+    
+    public function setArmyResults() {
+        
+        $sql1 = "SELECT sum( dt.quantity ) AS total
+                FROM date_tasks dt
+                JOIN date_tasks_missions dtm
+                USING ( date_tasks_mission_id )
+                JOIN user_tracks ut
+                USING ( track_id,
+                LEVEL , subject_id )
+                JOIN users u
+                USING ( user_id ) 
+                JOIN schools s 
+                USING (school_id) 
+                JOIN classes c 
+                USING (class_id) 
+                WHERE ut.subject_id =1
+                AND dtm.start_date = ? 
+                AND dtm.end_date = ? 
+                AND dt.grid_id = ?  
+                AND dtm.school_type_id = u.school_type_id
+                AND u.user_registered > 0
+                AND ut.enrolled =1 
+                AND s.school_era is null 
+                AND c.class_era = 0
+				AND u.user_id = ut.user_id
+				AND u.lang_id = dtm.lang_id";
+                        
+        $stmt1 = $this->db->prepare( $sql1 );
+        /*                
+        $sql2 = "SELECT sum( dt.done_qty ) AS total
+                FROM date_tasks_marks dt
+                JOIN date_tasks
+                USING ( date_task_id )
+                JOIN date_tasks_missions dtm
+                USING ( date_tasks_mission_id )
+                JOIN users u 
+                USING ( user_id ) 
+                JOIN user_tracks ut
+                USING ( subject_id, level, track_id ) 
+                JOIN schools s 
+                USING (school_id) 
+                JOIN classes c 
+                USING (class_id) 
+                WHERE dtm.subject_id =1
+                AND dtm.start_date = ? 
+                AND dtm.end_date = ? 
+                AND date_tasks.grid_id = ? 
+                AND dtm.school_type_id = u.school_type_id
+                AND u.user_registered >0 
+                AND ut.enrolled =1 
+                AND s.school_era is null 
+                AND c.class_era = 0
+				AND u.user_id = ut.user_id
+				AND u.lang_id = dtm.lang_id";
+        */        
+        $sql2 = "SELECT sum( dtm.done_qty ) AS total 
+                from date_tasks_marks dtm 
+                join date_tasks dt using (date_task_id) 
+                join date_tasks_missions dtmm using (date_tasks_mission_id) 
+                where dtmm.start_date = ?
+                and dtmm.end_date = ?
+                and dt.grid_id = ?";
+        
+        $stmt2 = $this->db->prepare( $sql2 );
+		
+		//$sqlQuota = "select sum( tb.quota ) as total
+		//			from tehillim_backups tb
+		//			where tb.sm_date = ?
+		//			and tb.grid_id = ?";
+		//$stmtQuota = $this->db->prepare( $sqlQuota );
+        
+        $sqlBackup = "SELECT sum( tb.done_qty ) AS total
+                    FROM tehillim_backups tb 
+                    WHERE tb.sm_date = ? 
+                    AND tb.grid_id = ?";
+        $stmtBackup = $this->db->prepare( $sqlBackup );
+        foreach ( $this->rDates as $month => $date ) {
+            
+            foreach ( $this->tasks as $key => $task ) {
+            	           	
+            	if ($key == 'Minutes') continue;
+				
+				// figure out if we are getting results from backup table or not
+//				$stmtQuota->execute( array( $date, $task ) );
+//				$rowQuota = $stmtQuota->fetch( PDO::FETCH_ASSOC );
+//				if ($rowQuota['total'] > 0) {
+//                    $this->armyResults[$key][$date] = $rowQuota['total'];
+//				} else {
+                    if ($this->debug) echo "Before army wide quotas: " . time() . "<br />";
+					$stmt1->execute( array( $date, $date, $task ) );
+					if ($this->debug) echo "After army wide quotas: " . time() . "<br />";
+					$row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
+					$this->armyResults[$key][$date] = $row1['total'];
+				//}
+                
+                // figure out if we are getting results from backup table or not
+                $stmtBackup->execute( array( $date, $task ) );
+                $rowBackup = $stmtBackup->fetch( PDO::FETCH_ASSOC );
+                if ($this->debug) {
+                    echo "<pre>"; print_r($rowBackup); echo "</pre>";
+                }
+				
+                if ($rowBackup['total'] > 0) {
+                    $this->armyDoneResults[$key][$date] = $rowBackup['total'];
+                } else {
+                    $stmt2->execute( array( $date, $date, $task ) );
+                    $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
+                    $this->armyDoneResults[$key][$date] = $row2['total'];
+                }
+				
+            }            
+        }
+    }
+    
+    public function getArmyResults() {
+        return $this->armyResults;
+    }
+    
+    public function getArmyDoneResults() {
+        return $this->armyDoneResults;
+    }
+    
+    public function setSchool( $id ) {
+        $this->school_id = $id;
+        $sql = "select school_name from schools where school_id = " . $this->school_id;
+        foreach ( $this->db->query( $sql ) as $row )
+            $this->school_name = $row['school_name'];
+    }
+    
+    public function getSchoolID() {
+        return $this->school_id;
+    }
+    
+    public function getSchoolName() {
+        return $this->school_name;
+    }
+    
+    public function setSchoolResults( $id, $minutes = false ) {
+        
+        $sql1 = "SELECT sum( dt.quantity ) AS total
+                FROM date_tasks dt
+                JOIN date_tasks_missions dtm
+                USING ( date_tasks_mission_id )
+                JOIN user_tracks ut
+                USING ( track_id,
+                LEVEL , subject_id) 
+                JOIN users u
+                USING ( user_id )
+                JOIN classes c ON ( c.class_id = u.class_id )
+                WHERE u.school_id = ?  
+                AND ut.subject_id =1
+                AND dtm.start_date = ? 
+                AND dtm.end_date = ? 
+                AND dt.grid_id = ?  
+                AND dtm.school_type_id = u.school_type_id
+                AND u.user_registered >0 
+                and c.class_era = 0 
+                AND ut.enrolled = 1
+				AND u.user_id = ut.user_id
+				AND u.lang_id = dtm.lang_id";
+                
+        $stmt1 = $this->db->prepare( $sql1 );
+        /*
+        $sql2 = "SELECT sum( dtm.done_qty ) AS total
+                FROM users u
+                JOIN (
+                date_tasks_marks dtm, date_tasks dt, date_tasks_missions dtmm
+                ) ON ( dtm.user_id = u.user_id
+                AND dt.date_task_id = dtm.date_task_id
+                AND dtmm.date_tasks_mission_id = dt.date_tasks_mission_id
+                AND dtmm.start_date = ? 
+                AND dtmm.end_date = ? 
+                AND dt.grid_id = ?  )
+				JOIN user_tracks ut using (subject_id, track_id, level) 
+                WHERE u.school_id = ?  
+                AND u.user_registered > 0
+				AND u.user_id = ut.user_id
+				AND u.lang_id = dtmm.lang_id";
+		*/
+        /*
+		$sql2 = "SELECT sum( dtm.done_qty ) AS total
+                FROM users u
+                JOIN (
+                date_tasks_marks dtm, date_tasks dt, date_tasks_missions dtmm
+                ) ON ( dtm.user_id = u.user_id
+                AND dt.date_task_id = dtm.date_task_id
+                AND dtmm.date_tasks_mission_id = dt.date_tasks_mission_id
+                AND dtmm.start_date = ? 
+                AND dtmm.end_date = ? 
+                AND dt.grid_id = ?  )
+				JOIN user_tracks ut using (subject_id, track_id, level) 
+                WHERE u.school_id = ?  
+                AND u.user_registered > 0
+				AND u.user_id = ut.user_id";
+        */        
+        $sql2 = "SELECT sum( dtm.done_qty ) AS total 
+                from date_tasks_marks dtm 
+                join date_tasks dt using (date_task_id) 
+                join date_tasks_missions dtmm using (date_tasks_mission_id) 
+                join users u using (user_id) 
+                where dtmm.start_date = ?
+                and dtmm.end_date = ?
+                and dt.grid_id = ?
+                and u.school_id = ?";
+				
+        
+        $stmt2 = $this->db->prepare( $sql2 );
+		
+		//$sqlQuota = "select sum( tb.quota ) as total
+		//			from tehillim_backups tb
+		//			JOIN users u using ( user_id ) 
+		//			where tb.sm_date = ?
+		//			and tb.grid_id = ?
+		//			and u.school_id = ?";
+		//$stmtQuota = $this->db->prepare( $sqlQuota );
+        
+        $sqlBackup = "SELECT sum( tb.done_qty ) AS total
+                    FROM tehillim_backups tb
+                    JOIN users u using ( user_id ) 
+                    WHERE tb.sm_date = ? 
+                    AND tb.grid_id = ?
+                    AND u.school_id = ?";
+        $stmtBackup = $this->db->prepare( $sqlBackup );
+                
+        foreach ( $this->rDates as $month => $date ) {
+            
+            foreach ( $this->tasks as $key => $task ) {
+                	
+                if (!$minutes && $key == 'Minutes') continue;
+                
+				// figure out if we are getting results from backup table or not
+//				$stmtQuota->execute( array( $date, $task, $id ) );
+//				$rowQuota = $stmtQuota->fetch( PDO::FETCH_ASSOC );
+//				if ($rowQuota['total'] > 0) {
+//                    $this->schoolResults[$key][$date] = $rowQuota['total'];
+//				} else {
+					$stmt1->execute( array( $id, $date, $date, $task ) );
+					$row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
+					$this->schoolResults[$key][$date] = $row1['total'];
+				//}
+                
+                // figure out if we are getting results from backup table or not
+                $stmtBackup->execute( array( $date, $task, $id ) );
+                $rowBackup = $stmtBackup->fetch( PDO::FETCH_ASSOC );
+                if ($rowBackup['total'] > 0) {
+                    $this->schoolDoneResults[$key][$date] = $rowBackup['total'];
+                } else {
+                    $stmt2->execute( array( $date, $date, $task, $id ) );
+                    $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
+                    $this->schoolDoneResults[$key][$date] = $row2['total'];
+                }
+            }            
+        }
+    }
+
+    public function setASR( $date, $col = false ) {
+        $sql = "select school_id, school_name from schools 
+                join school_subjects s using (school_id) 
+                where school_era is null 
+                and s.subject_id = 1 
+                and school_id not in (82)";
+		if ($col) $sql .= " and col_show = 1";
+        $sql .= " order by school_name";
+        foreach ( $this->db->query( $sql ) as $row ) {
+            $this->setArmyDoneSchoolsResults( $row['school_id'], $date );
+            $this->setArmySchoolsResults( $row['school_id'], $date );
+			$this->schools[$row['school_id']] = $row['school_name'];
+        }
+		$this->setArmyResultsOrdered();
+        $this->setAccomplishedRows();
+    }
+	
+	public function getSchools() {
+		return $this->schools;      
+	}
+	
+    private function setArmySchoolsResults( $id, $date ) {
+                
+        $sql1 = "SELECT sum( dt.quantity ) AS total 
+                FROM date_tasks dt
+                JOIN date_tasks_missions dtm
+                USING ( date_tasks_mission_id )
+                JOIN user_tracks ut
+                USING ( track_id,
+                LEVEL , subject_id) 
+                JOIN users u
+                USING ( user_id )
+                JOIN classes c ON ( c.class_id = u.class_id )
+                WHERE u.school_id = ?     
+                AND ut.subject_id =1
+                AND dtm.start_date = ?  
+                AND dtm.end_date = ?  
+                AND dt.grid_id = ?   
+                AND dtm.school_type_id = u.school_type_id
+                AND u.user_registered >0
+                AND ut.enrolled =1
+				AND u.user_id = ut.user_id
+				AND u.lang_id = dtm.lang_id"; 
+                    
+        $stmt1 = $this->db->prepare( $sql1 );
+		
+		//$sqlQuota = "select sum( tb.quota ) as total
+		//			from tehillim_backups tb
+		//			JOIN users u using ( user_id ) 
+		//			where tb.sm_date = ?
+		//			and tb.grid_id = ?
+		//			and u.school_id = ?";
+		//$stmtQuota = $this->db->prepare( $sqlQuota );
+		
+        foreach ( $this->tasks as $key => $task ) {
+        	//if ($key == 'Minutes') continue;
+			// figure out if we are getting results from backup table or not
+			//$stmtQuota->execute( array( $date, $task, $id ) );
+			//$rowQuota = $stmtQuota->fetch( PDO::FETCH_ASSOC );
+			//if ($rowQuota['total'] > 0) {
+			//	$this->armySchoolsResults[$key][$id] = $rowQuota['total'];
+			//} else {
+				$stmt1->execute( array( $id, $date, $date, $task ) );
+				$row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
+				$this->armySchoolsResults[$key][$id] = $row1['total'];
+			//}
+        }
+		
+		$sql2 = "select count(*) as total from users u 
+				join user_tracks ut using (user_id) 
+				where school_id = " . $id . "  
+				and user_registered > 0 
+				and ut.subject_id = 1 
+				and ut.enrolled = 1";
+		$stmt2 = $this->db->query( $sql2 );
+		$row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
+		$this->totalUsers[$id] = $row2['total'];
+		if (!isset($this->totalUsers[$id])) $this->totalUsers[$id] = 0;
+    }
+    
+    private function setArmyDoneSchoolsResults( $id, $date ) {
+        /*
+        $sql2 = "SELECT sum( dtm.done_qty ) AS total 
+                FROM date_tasks_marks dtm 
+                JOIN users u 
+                USING (user_id) 
+                JOIN date_tasks dt 
+                USING (date_task_id) 
+                JOIN date_tasks_missions dtmm 
+                USING ( date_tasks_mission_id )
+				JOIN user_tracks ut using (subject_id, track_id, level) 
+                WHERE u.school_id = ?     
+                AND dtmm.subject_id =1
+                AND dtmm.start_date = ?  
+                AND dtmm.end_date = ?  
+                AND dt.grid_id = ?   
+                AND dtmm.school_type_id = u.school_type_id
+				AND u.user_id = ut.user_id
+				AND u.lang_id = dtmm.lang_id";
+		*/
+        /*
+		$sql2 = "SELECT sum( dtm.done_qty ) AS total 
+                FROM date_tasks_marks dtm 
+                JOIN users u 
+                USING (user_id) 
+                JOIN date_tasks dt 
+                USING (date_task_id) 
+                JOIN date_tasks_missions dtmm 
+                USING ( date_tasks_mission_id )
+				JOIN user_tracks ut using (subject_id, track_id, level) 
+                WHERE u.school_id = ?     
+                AND dtmm.subject_id =1
+                AND dtmm.start_date = ?  
+                AND dtmm.end_date = ?  
+                AND dt.grid_id = ?   
+                AND dtmm.school_type_id = u.school_type_id
+				AND u.user_id = ut.user_id";
+        */        
+        $sql2 = "SELECT sum( dtm.done_qty ) AS total 
+                from date_tasks_marks dtm 
+                join date_tasks dt using (date_task_id) 
+                join date_tasks_missions dtmm using (date_tasks_mission_id) 
+                join users u using (user_id) 
+                where u.school_id = ? 
+                and dtmm.start_date = ?
+                and dtmm.end_date = ?
+                and dt.grid_id = ?";
+                        
+        $stmt2 = $this->db->prepare( $sql2 );
+        
+        $sqlBackup = "SELECT sum( tb.done_qty ) AS total
+                    FROM tehillim_backups tb
+                    JOIN users u using ( user_id ) 
+                    WHERE tb.sm_date = ? 
+                    AND tb.grid_id = ?
+                    AND u.school_id = ?";
+        $stmtBackup = $this->db->prepare( $sqlBackup );
+        
+        foreach ( $this->tasks as $key => $task ) {
+            //echo "ID: " . $id . " Date: " . $date . " Task: " . $task . "<br />" . $sql2 . "<br />"; 
+            //if ($key == 'Minutes') continue;
+            
+            // figure out if we are getting results from backup table or not
+            $stmtBackup->execute( array( $date, $task, $id ) );
+            $rowBackup = $stmtBackup->fetch( PDO::FETCH_ASSOC );
+            if ($rowBackup['total'] > 0) {
+                $this->armySchoolsDoneResults[$key][$id] = $rowBackup['total'];
+            } else {
+                $stmt2->execute( array( $id, $date, $date, $task ) );
+                $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
+                $this->armySchoolsDoneResults[$key][$id] = $row2['total'];
+            }
+        }
+    }
+    
+    private function setArmyResultsOrdered() {
+        foreach ( $this->armySchoolsResults as $key => $info ) {
+            foreach ( $info as $id => $total ) {
+                if ( $this->armySchoolsResults[$key][$id] == 0 ) continue; 
+                $this->armyResultsOrdered[$key][$id] = 
+                    round( ($this->armySchoolsDoneResults[$key][$id] / $this->armySchoolsResults[$key][$id]) * 100, 1 );
+            }
+            //sort array
+            arsort( $this->armyResultsOrdered[$key] );
+        }
+    }
+    
+    private function setAccomplishedRows() {
+        foreach ( $this->armyResultsOrdered as $key => $info ) {
+            foreach ( $info as $id => $value ) {
+                if ( $id == 61 ) continue; 
+				$name = $this->schools[$id];
+                $this->accomplishedRows[$key][$name][$this->armySchoolsResults[$key][$id]] = 
+                    is_null( $this->armySchoolsDoneResults[$key][$id] ) ? 0 : 
+                        (int)$this->armySchoolsDoneResults[$key][$id];
+            }
+            if ( $key == 'Kapitelach' ) {
+                $this->accomplishedKapitelach = $this->accomplishedRows[$key];
+                $this->pieKapitelach = $this->armySchoolsResults[$key];
+            } else if ( $key == 'Minutes' ) {
+                $this->accomplishedMinutes = $this->accomplishedRows[$key];
+                $this->pieMinutes = $this->armySchoolsResults[$key];
+            }            
+        }
+    }
+    
+    public function getAccomplishedKapitelach() {
+        return $this->accomplishedKapitelach;
+    }
+    
+    public function getAccomplishedMinutes() {
+        return $this->accomplishedMinutes;
+    }
+    
+    public function getPieKapitelach() {
+        $temp = array();
+        foreach ( $this->pieKapitelach as $id => $value ) {
+            $this->setSchool($id);
+            $name = $this->getSchoolName();
+            $temp[$name] = $value;
+        } 
+        return $temp;
+    }
+    
+    public function getPieMinutes() {
+        return $this->pieMinutes;
+    }
+    
+    public function getArmyResultsOrdered() {
+        return $this->armyResultsOrdered;
+    }
+    
+    public function getSchoolResults() {
+        return $this->schoolResults;
+    }
+    
+    public function getSchoolDoneResults() {
+        return $this->schoolDoneResults;
+    }
+    
+    public function setClasses($sid = 0) {
+		$this->classes = array();
+        $sql = "SELECT DISTINCT c . *
+                FROM classes c
+                JOIN schools s
+                USING ( school_id )
+                JOIN users u
+                USING ( class_id )
+                WHERE u.user_registered >0
+                AND c.class_era =0";
+		if ($sid) {
+			$sql .= " and s.school_id = " . $sid;
+		} else {
+			$sql .= " and s.school_id = " . $this->school_id;
+		}
+		$sql .= " ORDER BY c.class_grade, c.class_sub";
+		//echo $sql . "<br />";
+        foreach ( $this->db->query( $sql ) as $row ) {
+            $this->classes[$row['class_id']]['grade'] = 
+                $row['class_sub'] == "" ? $row['class_grade'] : $row['class_grade'] . '-' . $row['class_sub'];
+            $this->classes[$row['class_id']]['teacher'] = $row['class_teacher'];
+        }
+    }
+	
+	public function setWhatsappClasses($gender) {
+		$this->classes = array();
+		$gradeInfo = array();
+		$grades = array('Pre1a','1','2','3','4','5','6','7','8');
+		foreach ($grades as $grade) {
+			$sql = "SELECT DISTINCT c . *
+					FROM classes c
+					JOIN users u
+					USING ( class_id )
+					JOIN schools s
+					ON ( s.school_id = u.school_id )
+					WHERE u.user_registered > 0 
+					AND c.class_era = 0
+					AND c.class_grade = '" . $grade . "'
+					AND c.class_gender = '" . $gender . "' 
+					AND u.school_id not in (82)
+					AND s.tehillim = 1 
+					ORDER BY c.class_grade, c.class_sub ";
+			//echo $sql . "<br />";
+			foreach ( $this->db->query( $sql ) as $row ) {
+				$this->classes[$row['class_id']]['grade'] = 
+					$row['class_sub'] == "" ? $row['class_grade'] : $row['class_grade'] . '-' . $row['class_sub'];
+				$this->classes[$row['class_id']]['teacher'] = $row['class_teacher'];
+				$gradeInfo[$grade][] = $row['class_id'];
+			}
+			$sql2 = "select c.class_id, count(u.user_id) as total from users u 
+					join user_tracks ut using (user_id)
+					join classes c on c.class_id = u.class_id 
+					where c.class_grade = '" . $grade . "'  
+					and u.user_registered > 0 
+					and ut.subject_id = 1 
+					and ut.enrolled = 1
+					group by c.class_id";
+			foreach ( $this->db->query( $sql2 ) as $row2 ) {
+				$this->totalUsers[$row2['class_id']] = $row2['total'];
+				if (!isset($this->totalUsers[$row2['class_id']])) $this->totalUsers[$row2['class_id']] = 0;
+			}
+		}
+		return $gradeInfo;
+	}
+    
+    public function setClassResults($setClasses = true) {
+        
+        if ($setClasses) $this->setClasses(); 
+        
+        $sql1 = "SELECT sum( dt.quantity ) AS total
+                FROM date_tasks dt
+                JOIN date_tasks_missions dtm
+                USING ( date_tasks_mission_id )
+                JOIN user_tracks ut
+                USING ( track_id,
+                LEVEL , subject_id )
+                JOIN users u
+                USING ( user_id )
+                JOIN classes c ON ( c.class_id = u.class_id )
+                WHERE u.class_id = ?  
+                AND ut.subject_id =1
+                AND dtm.start_date = ? 
+                AND dtm.end_date = ? 
+                AND dt.grid_id = ? 
+                AND dtm.school_type_id = u.school_type_id
+                AND u.user_registered >0
+                AND ut.enrolled =1
+				AND u.user_id = ut.user_id
+				AND u.lang_id = dtm.lang_id";
+				
+        $stmt1 = $this->db->prepare( $sql1 );
+        /*
+        $sql2 = "SELECT sum( dtm.done_qty ) AS total
+                FROM classes c, users u
+                JOIN (
+                date_tasks_marks dtm, date_tasks dt, date_tasks_missions dtmm
+                ) ON ( dtm.user_id = u.user_id
+                AND dt.date_task_id = dtm.date_task_id
+                AND dtmm.date_tasks_mission_id = dt.date_tasks_mission_id
+                AND dtmm.start_date = ? 
+                AND dtmm.end_date = ? 
+                AND dt.grid_id = ? )
+				JOIN user_tracks ut using (subject_id, track_id, level) 
+                WHERE u.class_id = c.class_id
+                AND c.class_id = ?  
+                AND u.user_registered >0
+				AND u.user_id = ut.user_id
+				AND dtmm.lang_id = u.lang_id";
+        */
+        /*
+		$sql2 = "SELECT sum( dtm.done_qty ) AS total
+                FROM classes c, users u
+                JOIN (
+                date_tasks_marks dtm, date_tasks dt, date_tasks_missions dtmm
+                ) ON ( dtm.user_id = u.user_id
+                AND dt.date_task_id = dtm.date_task_id
+                AND dtmm.date_tasks_mission_id = dt.date_tasks_mission_id
+                AND dtmm.start_date = ? 
+                AND dtmm.end_date = ? 
+                AND dt.grid_id = ? )
+				JOIN user_tracks ut using (subject_id, track_id, level) 
+                WHERE u.class_id = c.class_id
+                AND c.class_id = ?  
+                AND u.user_registered >0
+				AND u.user_id = ut.user_id";
+        */        
+        $sql2 = "SELECT sum( dtm.done_qty ) AS total 
+                from date_tasks_marks dtm 
+                join date_tasks dt using (date_task_id) 
+                join date_tasks_missions dtmm using (date_tasks_mission_id) 
+                join users u using (user_id) 
+                join classes c using (class_id) 
+                where dtmm.start_date = ?
+                and dtmm.end_date = ?
+                and dt.grid_id = ?  
+                and c.class_id = ?  
+                and u.user_registered > 0";
+				
+        $stmt2 = $this->db->prepare( $sql2 );
+		
+		//$sqlQuota = "select sum( tb.quota ) as total
+		//			from tehillim_backups tb
+		//			JOIN users u using ( user_id ) 
+		//			where tb.sm_date = ?
+		//			and tb.grid_id = ?
+		//			and u.class_id = ?";
+		//$stmtQuota = $this->db->prepare( $sqlQuota );
+        
+        $sqlBackup = "SELECT sum( tb.done_qty ) AS total
+                    FROM tehillim_backups tb
+                    JOIN users u using ( user_id ) 
+                    WHERE tb.sm_date = ? 
+                    AND tb.grid_id = ?
+                    AND u.class_id = ?";
+        $stmtBackup = $this->db->prepare( $sqlBackup );
+
+        foreach ( $this->rDates as $month => $date ) {
+			
+            foreach ( $this->tasks as $key => $task ) {
+            	
+                if ($setClasses && $key == 'Minutes') continue;
+                    
+                foreach ( $this->classes as $class => $info ) {
+					// figure out if we are getting results from backup table or not
+					//$stmtQuota->execute( array( $date, $task, $class ) );
+					//$rowQuota = $stmtQuota->fetch( PDO::FETCH_ASSOC );
+					//if ($rowQuota['total'] > 0) {
+					//	$this->classResults[$key][$date][$class] = $rowQuota['total'];
+					//} else {
+						$stmt1->execute( array( $class, $date, $date, $task ) );
+						$row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
+						$this->classResults[$key][$date][$class] = $row1['total'];
+					//}
+                    
+					if (!$this->accomplishedOnly) {
+                        // figure out if we are getting results from backup table or not
+                        $stmtBackup->execute( array( $date, $task, $class ) );
+                        $rowBackup = $stmtBackup->fetch( PDO::FETCH_ASSOC );
+                        if ($rowBackup['total'] > 0) {
+                            $this->classDoneResults[$key][$date][$class] = $rowBackup['total'];
+                        } else {
+                            $stmt2->execute( array( $date, $date, $task, $class ) );
+                            $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
+                            $this->classDoneResults[$key][$date][$class] = $row2['total'];
+                        }
+						
+						//find out which classes accomplished their goals
+						if ( $this->classDoneResults[$key][$date][$class] >= $this->classResults[$key][$date][$class] ) {
+							$this->accomplished[$key][$date][$info['grade']] = $info['teacher'];
+						}
+                    }
+                }
+            }            
+        }
+    }
+	
+	public function setWhatsappStudentResults( $class_id ) {
+		$qry = "select * from users where class_id = $class_id and user_registered > 0 order by last, first";
+		$stmt = $this->db->query($qry);
+		$users[$class_id] = $stmt->fetchAll();
+				
+		$sql1 = "SELECT dt.quantity AS total, dt.date_task_id 
+                FROM date_tasks dt
+                JOIN date_tasks_missions dtm
+                USING ( date_tasks_mission_id )
+                JOIN user_tracks ut
+                USING ( track_id,
+                LEVEL , subject_id )
+                WHERE dtm.subject_id =1
+                AND dtm.start_date = ? 
+                AND dtm.end_date = ? 
+                AND dt.grid_id = ? 
+                AND dtm.school_type_id = ?
+                AND ut.user_id = ?
+				AND dtm.lang_id = ? 
+                AND ut.enrolled =1";                   
+        $stmt1 = $this->db->prepare( $sql1 );
+ 
+		$sql2 = "select dtm.done_qty as total 
+				from date_tasks_marks dtm
+				join date_tasks dt using (date_task_id)
+				join date_tasks_missions dtmm using (date_tasks_mission_id) 
+				where dtm.user_id = ? 
+				and dtmm.start_date = ? 
+				and dtmm.end_date = ? 
+				and dt.grid_id = ?";
+        $stmt2 = $this->db->prepare( $sql2 );
+		
+		//$sqlQuota = "select sum( tb.quota ) as total
+		//			from tehillim_backups tb
+		//			where tb.sm_date = ?
+		//			and tb.grid_id = ?
+		//			and tb.user_id = ?";
+		//$stmtQuota = $this->db->prepare( $sqlQuota );
+        
+        $sqlBackup = "SELECT sum( tb.done_qty ) AS total
+                    FROM tehillim_backups tb
+                    WHERE tb.sm_date = ? 
+                    AND tb.grid_id = ?
+                    AND tb.user_id = ?";
+        $stmtBackup = $this->db->prepare( $sqlBackup );
+        		
+		foreach ( $this->rDates as $month => $date ) {
+			            
+	        foreach ( $this->tasks as $key => $task ) {
+	        		
+	        	if ($key == 'Minutes') continue;
+				
+				$this->doneQuotas[$key][$class_id] = 0;
+				$this->participated[$key][$class_id] = 0;
+	                
+	            foreach ( $users as $class => $info ) {
+											            		
+	            	foreach ($info as $user) {
+	            		
+						// figure out if we are getting results from backup table or not
+						//$stmtQuota->execute( array( $date, $task, $user['user_id'] ) );
+						//$rowQuota = $stmtQuota->fetch( PDO::FETCH_ASSOC );
+						//if ($rowQuota['total'] > 0) {
+						//	$this->studentResults[$date][$class][$user['user_id']][$key] = $rowQuota['total'];
+						//	$row1['total'] = $rowQuota['total']; // needed for later checking
+						//} else {                               
+							$stmt1->execute( array( $date, $date, $task, $user['school_type_id'], $user['user_id'], $user['lang_id'] ) );
+							$row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
+							$this->studentResults[$date][$class][$user['user_id']][$key] = $row1['total'];
+						//}
+                        
+                        // figure out if we are getting results from backup table or not
+                        $stmtBackup->execute( array( $date, $task, $user['user_id'] ) );
+                        $rowBackup = $stmtBackup->fetch( PDO::FETCH_ASSOC );
+                        if ($rowBackup['total'] > 0) {
+                            $total = $rowBackup['total'];
+                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $rowBackup['total'];
+                        } else {
+                            $stmt2->execute( array( $user['user_id'], $date, $date, $task ) );
+                            $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
+                            $total = $row2['total'];
+                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
+                        }
+						
+						if ($total > 0) {
+							$this->participated[$key][$class_id]++;
+							if ($total >= $row1['total']) {
+								$this->doneQuotas[$key][$class_id]++;
+							}
+						}
+	                }
+				}				
+			}
+		}
+	}
+	
+	public function getDoneQuotas() {
+		return $this->doneQuotas;
+	}
+	
+	public function getTotalUsers() {
+		return $this->totalUsers;
+	}
+	
+	public function getClasses() {
+		return $this->classes;
+	}
+    
+    public function getClassResults() {
+        return $this->classResults;
+    }
+    
+    public function getClassDoneResults() {
+        return $this->classDoneResults;
+    }
+    
+    public function getAccomplished() {
+        return $this->accomplished;
+    }
+    
+    public function showDone( $date ) {
+        if ( in_array( $date, $this->showDone ) ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+	/*
+	public function setUsersResults() {
+		
+		$sql1 = "SELECT sum( dt.quantity ) AS total 
+                FROM date_tasks dt
+                JOIN date_tasks_missions dtm
+                USING ( date_tasks_mission_id )
+                JOIN user_tracks ut
+                USING ( track_id,
+                LEVEL , subject_id )
+                WHERE dtm.subject_id =1 
+                AND dtm.start_date = ? 
+                AND dtm.end_date = ? 
+                AND dt.grid_id = ? 
+                AND dtm.school_type_id = ? 
+				AND dtm.lang_id = ? 
+                and ut.user_id = ? 
+                AND ut.enrolled =1";
+                    
+        $stmt1 = $this->db->prepare( $sql1 );
+        
+        $sql2 = "SELECT sum( dtm.done_qty ) AS total
+                FROM users u 
+                JOIN (
+                date_tasks_marks dtm, date_tasks dt, date_tasks_missions dtmm
+                ) ON ( dtm.user_id = u.user_id
+                AND dt.date_task_id = dtm.date_task_id
+                AND dtmm.date_tasks_mission_id = dt.date_tasks_mission_id
+                AND dtmm.start_date = ? 
+                AND dtmm.end_date = ? 
+                AND dt.grid_id = ? )
+                WHERE u.user_id = ?";
+                    
+        $stmt2 = $this->db->prepare( $sql2 );
+        
+        if (empty($this->classes)) {
+        	$this->setClasses();
+        }
+        
+        $users = array();
+		foreach ($this->classes as $id => $info) {			
+			$stmt = $this->db->query("select * from users where class_id = $id and user_registered > 0 order by last, first");
+			$users[$id] = $stmt->fetchAll();
+		}
+		
+		foreach ($users as $class => $info) {
+			foreach ($info as $user) {
+				$this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
+			}
+		}
+		
+        foreach ( $this->rDates as $month => $date ) {
+            
+            foreach ( $this->tasks as $key => $task ) {
+            		
+            	if ($key == 'Minutes') continue;
+                    
+                foreach ( $users as $class => $info ) {
+                		
+                	foreach ($info as $user) {
+                		                               
+	                    $stmt1->execute( array( $date, $date, $task, $user['school_type_id'], $user['lang_id'], $user['user_id'] ) );
+	                    $row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
+	                    $this->usersResults[$class][$user['user_id']][$date][$key] = $row1['total'];
+	                                       
+	                    $stmt2->execute( array( $date, $date, $task, $user['user_id'] ) );
+	                    $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
+	                    $this->usersDoneResults[$class][$user['user_id']][$date][$key] = $row2['total'];
+	                    
+	                }
+	                
+				}
+				
+			}
+			
+		}
+		
+	}
+
+	public function getUsersResults() {
+		return $this->usersResults;
+	}
+	
+	public function getUsersDoneResults() {
+		return $this->usersDoneResults;
+	}
+	*/
+	public function setStudentResults($sid = 0) {
+				
+		$sql1 = "SELECT dt.quantity AS total, dt.date_task_id 
+                FROM date_tasks dt
+                JOIN date_tasks_missions dtm
+                USING ( date_tasks_mission_id )
+                JOIN user_tracks ut
+                USING ( track_id,
+                LEVEL , subject_id )
+                WHERE dtm.subject_id =1
+                AND dtm.start_date = ? 
+                AND dtm.end_date = ? 
+                AND dt.grid_id = ? 
+                AND dtm.school_type_id = ?
+                AND ut.user_id = ?
+				AND dtm.lang_id = ? 
+                AND ut.enrolled =1";
+                    
+        $stmt1 = $this->db->prepare( $sql1 );
+        /*
+        $sql2 = "SELECT sum( dtm.done_qty ) AS total
+                FROM users u 
+                JOIN (
+                date_tasks_marks dtm, date_tasks dt, date_tasks_missions dtmm
+                ) ON ( dtm.user_id = u.user_id
+                AND dt.date_task_id = dtm.date_task_id
+                AND dtmm.date_tasks_mission_id = dt.date_tasks_mission_id 
+                AND dtmm.start_date = ? 
+                AND dtmm.end_date = ? 
+                AND dt.short_name = ? )
+                WHERE u.user_id = ? ";
+        */
+		$sql2 = "select dtm.done_qty as total 
+				from date_tasks_marks dtm
+				join date_tasks dt using (date_task_id)
+				join date_tasks_missions dtmm using (date_tasks_mission_id) 
+				where dtm.user_id = ? 
+				and dtmm.start_date = ? 
+				and dtmm.end_date = ? 
+				and dt.grid_id = ? 
+				and dtmm.subject_id = 1";
+		/*		
+		$sql2 = "SELECT sum( dtm.done_qty ) AS total
+                FROM users u 
+                JOIN (
+                date_tasks_marks dtm, date_tasks dt, date_tasks_missions dtmm
+                ) ON ( dtm.user_id = u.user_id
+                AND dt.date_task_id = dtm.date_task_id
+                AND dtmm.date_tasks_mission_id = dt.date_tasks_mission_id
+                AND dtmm.start_date = ? 
+                AND dtmm.end_date = ? 
+                AND dt.grid_id = ? )
+                WHERE u.user_id = ?";
+		*/
+		
+        $stmt2 = $this->db->prepare( $sql2 );
+		
+		//$sqlQuota = "select sum( quota ) as total
+		//			from tehillim_backups 
+		//			where sm_date = ?
+		//			and grid_id = ?
+		//			and user_id = ?";
+		//$stmtQuota = $this->db->prepare( $sqlQuota );
+        
+        $sqlBackup = "SELECT sum( done_qty ) AS total
+                    FROM tehillim_backups 
+                    WHERE sm_date = ? 
+                    AND grid_id = ?
+                    AND user_id = ?";
+        $stmtBackup = $this->db->prepare( $sqlBackup );
+        
+		if ($sid) {
+			$this->classes = array();
+			$this->setClasses($sid);
+		} else if (empty($this->classes)) {
+        	$this->setClasses($sid);
+        }
+		
+		if (!$sid) $sid = $this->school_id;
+        
+        $users = array();
+		foreach ($this->classes as $id => $info) {			
+			$stmt = $this->db->query("select * from users where class_id = $id and user_registered > 0 order by last, first");
+			$users[$id] = $stmt->fetchAll();
+		}
+		
+		foreach ($users as $class => $info) {
+			foreach ($info as $user) {
+				$this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
+			}
+		}
+		
+		//if ($sid == 11) echo "<pre>"; print_r($users); echo "</pre>";
+		foreach ( $this->rDates as $month => $date ) {
+			            
+	        foreach ( $this->tasks as $key => $task ) {
+	        		
+	        	if ($key == 'Minutes') continue;
+				
+				$this->doneQuotas[$key][$sid] = 0;
+				$this->participated[$key][$sid] = 0;
+	                
+	            foreach ( $users as $class => $info ) {
+					
+					//if ($sid == 176) echo $month . ":" . $date . ":" . $key . ":" . $sid . ":" . count($info) . "<br />";
+						            		
+	            	foreach ($info as $user) {
+	            		
+						// figure out if we are getting results from backup table or not
+						//$stmtQuota->execute( array( $date, $task, $user['user_id'] ) );
+						//$rowQuota = $stmtQuota->fetch( PDO::FETCH_ASSOC );
+						//if ($rowQuota['total'] > 0) {
+						//	$this->studentResults[$date][$class][$user['user_id']][$key] = $rowQuota['total'];
+						//	$row1['total'] = $rowQuota['total']; // needed for later checking
+						//} else {                                 
+							$stmt1->execute( array( $date, $date, $task, $user['school_type_id'], $user['user_id'], $user['lang_id'] ) );
+							$row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
+							$this->studentResults[$date][$class][$user['user_id']][$key] = $row1['total'];
+						//}
+	                                       
+	                    //$stmt2->execute( array( $date, $date, $task, $user['user_id'] ) );
+                        // figure out if we are getting results from backup table or not
+                        $stmtBackup->execute( array( $date, $task, $user['user_id'] ) );
+                        $rowBackup = $stmtBackup->fetch( PDO::FETCH_ASSOC );
+                        if ($rowBackup['total'] > 0) {
+                            $total = $rowBackup['total'];
+                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $rowBackup['total'];
+                        } else {
+                            $stmt2->execute( array( $user['user_id'], $date, $date, $task ) );
+                            if ($sid == 176 && $user['user_id'] == 17267) {
+                                //echo "<pre>"; print_r($stmt2); echo "</pre>";
+                            }
+                            $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
+                            $total = $row2['total'];
+                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
+                        }
+						
+						if ($sid) {
+							//if ($sid == 176 && $user['user_id'] == 17267) echo $user['user_id'] . ":" . $row1['total'] . "-" . $row2['total'] . "<br />";
+							if ($total > 0) {
+								$this->participated[$key][$sid]++;
+								if ($total >= $row1['total']) {
+									$this->doneQuotas[$key][$sid]++;
+								}
+							}
+						}
+						
+						//if (!$sid) echo $user['user_id'] . ":" . $row1['total'] . "-" . $row2['total'] . "<br />"; 
+						
+	                }
+	                
+				}
+								
+			}
+		}
+	}
+
+	public function getStudentResults() {
+		return $this->studentResults;
+	}
+	
+	public function getStudentDoneResults() {
+		return $this->studentDoneResults;
+	}
+	
+    public function generateArmyTable( $month, $date ) {
+        ?>
+        
+        <table>
+            <tr>
+                <th>Army Wide Goal</th>
+                <? if ( $this->showDone( $date ) ) { ?>
+                <th>Army Wide Accomplishment</th>
+                <? } ?>
+            </tr>
+ 
+        <? foreach ( $this->tasks as $key => $task ) { 
+        	if ($key == 'Minutes') continue; ?>            
+            <tr>
+                <td><?=number_format( $this->armyResults[$key][$date] )?> <?=$key?></td>
+                <? if ( $this->showDone( $date ) ) { ?>
+                <td><?=number_format( $this->armyDoneResults[$key][$date] )?> <?=$key?></td>
+                <? } ?>
+            </tr>
+        <? } ?>
+        </table>
+        
+        <?
+    }
+    
+    public function generateBaseTable( $month, $date ) {
+        ?>
+        
+        <table>
+            <tr>
+                <th>Base Goal</th>
+                <? if ( $this->showDone( $date ) ) { ?>
+                <th>Base Accomplishment</th>
+                <? } ?>
+            </tr>
+            
+       <? foreach ( $this->tasks as $key => $task ) { 
+       		if ($key == 'Minutes') continue; ?> 
+            <tr>
+                <td><?=number_format( $this->schoolResults[$key][$date])?> <?=$key?></td>
+                <? if ( $this->showDone( $date ) ) { ?>
+                <td><?=number_format( $this->schoolDoneResults[$key][$date])?> <?=$key?></td>
+                <? } ?>
+            </tr>
+        <? } ?>
+        </table>
+        
+        <?
+    }
+    
+    public function generateSummary( $month, $date ) {
+    	$first = true;
+        ?>
+        
+        <table>
+            <tr>
+                <th>Platoon</th>
+                <th>Teacher</th>
+                <th>Platoon Goal</th>
+                <? if ($this->showDone( $date )) { ?>
+                <th>Platoon Accomplishment</th>
+                <th>More than Goal</th>
+                <th>Less than Goal</th>
+                <? } ?>
+            </tr>
+            
+        <? foreach ( $this->classes as $class_id => $class ) { ?>   
+        	
+        	<?
+        	$grade = substr($class['grade'], 0, 1);
+			$sub = substr($class['grade'], 2);
+        	if ($this->school_id == 54 && $grade == 4 && $sub == 420 && $first) {
+        		$first = false;
+        		?>
+        		</table>
+        		<br /><br />
+        		<div class="page-break"></div>
+	        	<table>
+	            <tr>
+	                <th>Platoon</th>
+	                <th>Teacher</th>
+	                <th>Platoon Goal</th>
+	                <? if ($this->showDone( $date )) { ?>
+	                <th>Platoon Accomplishment</th>
+	                <th>More than Goal</th>
+	                <th>Less than Goal</th>
+	                <? } ?>
+	            </tr>
+        		<?
+        	}
+        	?>
+            
+            <? foreach ( $this->tasks as $key => $task ) { 
+            	if ($key == 'Minutes') continue; ?>
+            
+                <tr>
+                    <td><?=$class['grade']?></td>
+                    <td><?=$class['teacher']?></td>        
+                    <td><?=number_format( $this->classResults[$key][$date][$class_id] )?> <?=$key?></td>
+                    <? if ($this->showDone( $date )) { ?>
+                        <td><?=number_format( $this->classDoneResults[$key][$date][$class_id] )?> <?=$key?></td>
+                        <? if ( $this->classDoneResults[$key][$date][$class_id] > $this->classResults[$key][$date][$class_id] ) { ?>
+                        <td><?=( $this->classDoneResults[$key][$date][$class_id]-$this->classResults[$key][$date][$class_id] )?> <?=$key?></td>
+                        <td>&nbsp;</td>    
+                        <? } else if ( $this->classDoneResults[$key][$date][$class_id] < $this->classResults[$key][$date][$class_id] ) { ?>
+                        <td>&nbsp;</td>
+                        <td><?=( $this->classResults[$key][$date][$class_id]-$this->classDoneResults[$key][$date][$class_id] )?> <?=$key?></td>
+                        <? } else { ?>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>    
+                        <? } ?>
+                    <? } ?>
+                </tr>
+                
+            <? } ?>
+            
+        <? } ?>
+        
+        </table>
+        <?
+    }
+	
+	public function generateClassSummary( $month, $date ) {
+        ?>
+        
+        <table>
+            <tr>
+                <th>Platoon</th>
+                <th>Teacher</th>
+                <th>Platoon Goal</th>
+            </tr>
+            
+        <? foreach ( $this->classes as $class_id => $class ) { ?>   
+        	
+        	<?
+        	$grade = substr($class['grade'], 0, 1);
+			$sub = substr($class['grade'], 2);
+        	?>
+            
+            <? foreach ( $this->tasks as $key => $task ) { 
+            	if ($key == 'Minutes') continue; ?>
+            
+                <tr>
+                    <td><?=$class['grade']?></td>
+                    <td><?=$class['teacher']?></td>        
+                    <td><?=number_format( $this->classResults[$key][$date][$class_id] )?> <?=$key?></td>
+                </tr>
+                
+            <? } ?>
+            
+        <? } ?>
+        
+        </table>
+        <?
+    }
+
+    public function generateReport() {
+        
+        foreach ( $this->classes as $class_id => $class ) {
+        ?>
+               
+            <div class='hayomYom'>
+			    <p align="right"> ×”×™×•×� ×™×•×� - ×›"×” ×©×‘×˜ </p>
+			    <p align="right"> 
+			    ×’Ö¼×•Ö¹×žÖµ×¨ ×–Ö·×™×™×Ÿ ×“×¢Ö¶×� ×ªÖ¼Ö°×”Ö´×œÖ¼Ö´×™×� ×©×�Ö·×‘Ö¼Ö¸×ª ×žÖ°×‘Ö¸×¨Ö°×›Ö´×™×� - ×“×�Ö¸×¡ ×“×�Ö·×¨×£ ×ž×¢Ö¶×Ÿ ×�Ö¸×¤Ö¼×”Ö´×™×˜×¢Ö¶×Ÿ, ×“×�Ö¸×¡ ×�Ö´×™×– × ×•Ö¹×’Öµ×¢Ö· ×�Ö´×™×”×�, ×–Ö·×™×™× ×¢Ö¶ ×§Ö´×™× Ö°×“×¢Ö¶×¨ ×�×•Ö¼×Ÿ ×§Ö´×™× Ö°×“×¡ ×§Ö´×™× Ö°×“×¢Ö¶×¨
+			    </p>    
+			    <p>
+			        "One should be careful to say Tehillim everyday and to say the whole Tehillim on Shabbos Mevorchim.
+			        These things are important for every person, his children and grandchildren."
+			    </p>
+		    </div>
+		    
+		    <div>            
+	            Base name: <?=$this->school_name?><br />
+	            Platoon: <?=$class['grade']?><br />
+	            Teacher: <?=$class['teacher']?><br />
+	        </div>
+	        <br />
+	                    
+            <? 
+            $date = end($this->rDates);
+			$month = key($this->rDates);
+		    $this->generateBaseTable( $month, $date );
+		    $this->generateArmyTable( $month, $date );
+		    ?>
+            <br />
+                                    
+            <p align='center' style='font-size: 54px'>×©×‘×ª ×ž×‘×¨×›×™×� <?=$this->getHebrewMonth($month)?></p>
+            <table>
+                
+            <? if ( $this->showDone ( $date ) ) { ?>
+                <tr>
+                    <th>Our Platoon Goal</th>
+                    <th>Our Platoon Accomplishment</th>
+                    <th>Our Base Goal</th>
+                    <th>Our Base Accomplishment</th>
+                    <th>Army Wide Goal</th>
+                    <th>Army Wide Accomplishment</th>
+                </tr>
+                
+                <? foreach ( $this->tasks as $key => $task ) { 
+                	if ($key == 'Minutes') continue; ?>
+                        <tr>
+                            <td><?=number_format( $this->classResults[$key][$date][$class_id] )?> <?=$key?></td>
+                            <td><?=number_format( $this->classDoneResults[$key][$date][$class_id] )?> <?=$key?></td>
+                            <td><?=number_format( $this->schoolResults[$key][$date] )?> <?=$key?></td>
+                            <td><?=number_format( $this->schoolDoneResults[$key][$date] )?> <?=$key?></td>
+                            <td><?=number_format( $this->armyResults[$key][$date] )?> <?=$key?></td>
+                            <td><?=number_format( $this->armyDoneResults[$key][$date] )?> <?=$key?></td>
+                        </tr>
+                 <? }
+                } else { 
+             ?> 
+                <tr>
+                    <th>Our Platoon Goal</th>
+                    <th>Our Base Goal</th>
+                    <th>Army Wide Goal</th>
+                </tr>
+                
+                <? foreach ( $this->tasks as $key => $task ) { 
+                	if ($key == 'Minutes') continue; ?>
+                    <tr>
+                        <td><?=number_format( $this->classResults[$key][$date][$class_id] )?> <?=$key?></td>
+                        <td><?=number_format( $this->schoolResults[$key][$date] )?> <?=$key?></td>
+                        <td><?=number_format( $this->armyResults[$key][$date] )?> <?=$key?></td>
+                    </tr>
+                <? 
+                    }
+                } 
+            ?>
+
+            </table>
+            <br />
+           	<div class="page-break"></div>
+     <? }
+    }
+
+    public function generateAccomplishedReport() {
+    	 
+        if ( !empty( $this->accomplished ) ) {
+        
+            $keys = array_keys( $this->tasks ); 
+            ?>
+            
+            <h2>Platoons that accomplished their goals</h2>
+            
+            <? foreach ( $keys as $key ) {
+            	
+            	if ($key == 'Minutes') continue;  
+                
+                if ( !empty( $this->accomplished[$key] ) ) {
+                                    
+                    if ( $key == 'Kapitelach' ) 
+                        echo "<div style='float: left'>";
+                    else 
+                        echo "<div style='float: right'>";
+                    
+                    echo "<p><b>" . $key . "</b></p>";
+                    
+                    foreach ( $this->rDates as $month => $date ) { 
+                        if ( array_key_exists( $date, $this->accomplished[$key] ) ) { ?> 
+                            <p>Shabbos Mevorchim <?=$month?></p>
+                            <table>
+                                <tr>
+                                    <th>Grade</th>
+                                    <th>Teacher</th>
+                                </tr>
+                                <? foreach ( $this->accomplished[$key][$date] as $grade => $teacher ) { ?>
+                                    <tr>
+                                        <td><?=$grade?></td>
+                                        <td><?=$teacher?></td>
+                                    </tr>
+                                <? } ?>
+                            </table>
+                            <br />
+                        <? }
+                    } 
+                    
+                    echo "</div>";
+                    
+                }
+            }
+        }
+    }
+
+    public function generateArmyAccomplishedReport() {
+        foreach ( $this->armyResultsOrdered as $key => $results ) {
+            echo "<h3>" . $key . "</h3>";  
+        ?> 
+            <br />
+            <table>
+                <tr>
+                    <th>School Name</th>
+                    <th>Goal</th>
+                    <th>Accomplished</th>
+					<th>More Than Goal</th>
+                    <th>Less Than Goal</th>
+                </tr>
+                <?
+                    foreach ( $results as $id => $total ) {
+                        //$this->setSchool( $id );
+						//$this->setStudentResults($id);
+                        $goal = $this->armySchoolsResults[$key][$id]; 
+                        $done = $this->armySchoolsDoneResults[$key][$id];
+                        echo "<tr><td>" . $this->schools[$id] . "</td><td>" . $goal . 
+                                "</td><td>" . $done . " <span class='percent'>(" . 
+                                $this->armyResultsOrdered[$key][$id] . "%)</span></td>";
+                        if ( $done > $goal ) {
+                            echo "<td>" . ($done - $goal) . "</td><td>&nbsp;</td></tr>";
+                        } else if ( $goal > $done ) {
+                            echo "<td>&nbsp;</td><td>" . ($goal - $done) . "</td></tr>";
+                        } else {
+                            echo "<td>&nbsp;</td><td>&nbsp;</td></tr>";
+                        }
+                    }
+                ?>
+            </table>
+            <br />
+            <div class='page-break'></div>
+            <?
+        }
+		//echo "<pre>"; print_r($this->fulfilledQuotas); echo "</pre>"; exit;
+    }
+	
+	public function generateHQReport($debug = false) {
+        foreach ( $this->armyResultsOrdered as $key => $results ) {
+			if ($key == 'Minutes') continue;
+			
+			// figure out order based on percent of done quotas
+			$ordered = array();
+			foreach ( $results as $id => $total ) {
+				$quota = round($this->doneQuotas[$key][$id] / $this->totalUsers[$id] * 100.00, 2);
+				$ordered[$id] = $quota;
+			}
+			arsort($ordered);
+			if ($debug) {
+				echo "<pre>"; print_r($ordered); echo "</pre>"; exit;
+			}
+			
+            echo "<h3>" . $key . "</h3>";  
+        ?> 
+            <br />
+            <table>
+                <tr>
+                    <th>School Name</th>
+					<th># Chayolim Registered for Tehillim</th>
+                    <th>Goal</th>
+                    <th>Accomplished</th>
+					<th>Percentage of Chayolim Participated</th>
+					<th>Percentage of Chayolim Completed their Quota</th>
+                    <th>Average Kapitelach per Chayol</th>
+					<th>Average Minutes per Chayol</th>
+                </tr>
+                <?
+                    foreach ( $ordered as $id => $quota ) {
+						//$this->setStudentResults($id);
+                        $goal = $this->armySchoolsResults[$key][$id]; 
+                        $done = $this->armySchoolsDoneResults[$key][$id] ? $this->armySchoolsDoneResults[$key][$id] : 0;
+						$minutesDone = $this->armySchoolsDoneResults['Minutes'][$id] ? $this->armySchoolsDoneResults['Minutes'][$id] : 0;
+                        echo "<tr><td>" . $this->schools[$id] . "</td><td>" . $this->totalUsers[$id] . "</td><td>" . 
+								$goal . "</td><td>" . $done . " <span class='percent'>(" . 
+                                $this->armyResultsOrdered[$key][$id] . "%)</span></td><td>" .
+								round($this->participated[$key][$id] / $this->totalUsers[$id] * 100.00) . "%</td><td>" .
+								$quota . "%</td><td>" .
+								round($done / $this->totalUsers[$id]) . "</td><td>" .
+								round($minutesDone / $this->totalUsers[$id]) . "</td></tr>";;
+                    }
+                ?>
+            </table>
+            <br />
+            <div class='page-break'></div>
+            <?
+        }
+		//echo "<pre>"; print_r($this->fulfilledQuotas); echo "</pre>"; exit;
+    }
+
+	public function generateUsersReport() {
+		foreach ($this->usersResults as $class => $users) {
+			foreach ($users as $user => $other) {
+				echo "<h2>" . $this->classes[$class]['grade'] . ' - ' . $this->users[$user] . "</h2>";
+				echo "<div align='center'>";
+				foreach ($other as $date => $info) {
+					echo "<div class='user'>";
+					echo array_search($date, $this->dates) . "<br />";
+					echo "<table>";
+					echo "<tr><th>Goal</th><th>Accomplishment</th></tr>";
+					foreach ($info as $task => $total) {
+						echo "<tr><td>" . $total . ' ' . $task . "</td><td>" . 
+						(isset($this->usersDoneResults[$class][$user][$date][$task]) ? 
+							$this->usersDoneResults[$class][$user][$date][$task] . ' ' . $task : ' ') . 
+						"</td></tr>";
+					}
+					echo "</table></div>";
+				}
+				echo "<div style='clear: both'></div></div>";
+				echo "<div class='page-break'></div>";
+			}
+		}
+	}
+	
+	public function generateStudentReport() {
+		//echo "<pre>"; print_r($this->studentResults); echo "</pre>"; 
+		//echo "<pre>"; print_r($this->studentDoneResults); echo "</pre>"; return;
+		foreach ($this->studentResults as $date => $info) {
+			foreach ($info as $class => $users) {
+				$totals = array();
+				echo "<h2>" . $this->school_name . ' ' . $this->classes[$class]['grade'] . "</h2>";
+				echo "<div align='center'>";
+				echo $this->getHebrewMonth(array_search($date, $this->dates)) . "<br />";
+				echo "<table>";
+				echo "<tr><th>Chayol</th><th>Goal</th><th>Accomplishment</th></tr>";
+				foreach ($users as $user => $info) {
+					echo "<tr><td>" . $this->users[$user] . "</td>";
+					foreach ($info as $task => $total) {
+						if (isset($totals[$task]['goal'])) {
+							$totals[$task]['goal'] += $total;
+						} else {
+							$totals[$task]['goal'] = $total;
+						}
+						echo "<td>" . $total . ' ' . $task . "</td><td>";
+						if (isset($this->studentDoneResults[$date][$class][$user][$task])) {
+							echo $this->studentDoneResults[$date][$class][$user][$task] . ' ' . $task;
+							if (isset($totals[$task]['done'])) {
+								$totals[$task]['done'] += $this->studentDoneResults[$date][$class][$user][$task];
+							} else {
+								$totals[$task]['done'] = $this->studentDoneResults[$date][$class][$user][$task];
+							}
+						} else {
+							echo "0 " . $task;
+							if (isset($totals[$task]['done'])) {
+								$totals[$task]['done'] += 0;
+							} else {
+								$totals[$task]['done'] = 0;
+							}
+							echo "&nbsp;";
+						}
+						echo "</td>";
+					}
+					echo "</tr>"; 
+				}
+				echo "<tr><td align='right'>Totals:</td>";
+				foreach ($totals as $task) {
+					echo "<td>" . $task['goal'] . "</td><td>" . $task['done'] . "</td>";
+				} 
+				echo "</tr>";
+				echo "</table></div>";
+				echo "<div class='page-break'></div>";
+			}
+		}
+	}
+}
+?>

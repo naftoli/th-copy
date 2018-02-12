@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src='scripts/jquery.min.js'></script>
+        <script>
+            $( function() {
+                var date = 2457956;
+                for (; date <= 2458021; date++) {
+                    $.post('fix_marks_hack.php', { date : date });
+                }
+            });
+        </script>
+    </head>
+</html>
