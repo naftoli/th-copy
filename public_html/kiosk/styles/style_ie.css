@@ -1,0 +1,16 @@
+@charset "utf-8";
+/* CSS Document */
+
+.member_photo_cover {
+	left:-188px;
+	margin-right:-178px;
+}
+
+.scan_card {
+	top:25px;
+}
+
+.clear {height:5px;}
+.three_column .content .card_single {
+	position: static;
+}

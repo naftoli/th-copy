@@ -1,0 +1,66 @@
+<?php include("includes/header.php"); ?>
+
+<body class="red">
+    <div id="wrapper">
+        <div id="header">
+          <?php include("includes/topbar.php"); ?>
+      </div>
+        <div id="main">
+            <div id="page_title">Profile</div>
+            <div class="two_column">
+            	<div class="padding_top padding_left member_info_box">
+                	<div class="member_photo">
+                        <div class="member_photo_img"><img src="images/memberPhotos/placeholder.jpg" width="150" height="150" /></div>
+                        <div class="member_photo_cover"></div>
+                    </div>
+                    <div class="member_info">
+                    	<ul>
+                        	<li class="member_name">Menachem Mendel Finkelstein</li>
+                        	<li><label>Rank:</label> <span>Private</span></li>
+                        	<li><label>Serial #:</label> <span>7737435</span></li>
+                        	<li><label>Platoon:</label> <span>Pre-school 1</span></li>
+                        	<li><label>Teacher:</label> <span>Test</span></li>
+                        	<li><label>Platoon Average:</label> <span>58.85</span></li>
+                        	<li><label>Base Average:</label> <span>4514.82</span></li>
+                        	<li><label>Total Miles:</label> <span>235.40</span></li>
+                        </ul>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="rank_badges">
+                    <ul class="rank_top">
+                        <li class="rank1">Private</li>
+                        <li class="rank2">Private</li>
+                        <li class="rank3">Private</li>
+                        <li class="rank4 ">Private</li>
+                        <li class="rank5">Private</li>
+                        <li class="rank6">Private</li>
+                        <li class="rank7">Private</li>
+                        <li class="rank8">Private</li>
+                    </ul>
+                    <ul class="rank_bot">
+                        <li class="rank9">Private</li>
+                        <li class="rank10">Private</li>
+                        <li class="currentrank11">Private</li>
+                        <li class="rank12">Private</li>
+                        <li class="rank13">Private</li>
+                        <li class="rank14">Private</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="one_column">
+              <ul class="buttons button_icons">
+                    <li><a href="#" class="icon_ranks">Ranks</a></li>
+                    <li><a href="prof_medals.php" class="icon_medals">Medals</a></li>
+                    <li><a href="#" class="icon_mileage">Mileage</a></li>
+                    <li><a href="#" class="icon_missions">Upcoming Missions</a></li>
+              </ul>
+            </div>
+        </div>
+        <div id="footer">
+			<?php include("includes/bottombar.php"); ?>
+      </div>
+    </div>
+</body>
+
+<?php include("includes/footer.php"); ?>
