@@ -1,0 +1,25 @@
+#action-links div.button, .action-links div.button{
+    text-align: center;
+    background: #e6e5e5;
+    padding: 1%;
+    margin: 1%;
+    display: inline-block;
+    min-width: 28%;
+    vertical-align: middle;
+    border-radius: 3px;
+    box-shadow: 1px 3px 10px #777;
+    transition: all .1s ease-in-out;
+    color: #000;
+}
+#action-links div.button:hover, .action-links div.button:hover{
+    box-shadow: 1px 2px 5px #555;
+    transform: scale(0.95);
+}
+#action-links span.link-text, .action-links span.link-text {
+    vertical-align: top;
+    margin-top: 10px;
+    display: inline-block;
+}
+#action-links, .action-links{
+    text-align: center;
+}

@@ -1,0 +1,82 @@
+.options{
+    text-align:center;
+    margin: 10px 0px;
+    padding-bottom: 10px;
+}
+.options a{
+    display: inline-block;
+}
+span.option_space {
+    padding: 15px;
+} 
+table {
+    width: 100%;
+}
+td, th{
+    padding: 8px;
+    min-width: 75px;
+}
+thead th {
+    text-align: center;
+}
+table#totals th, #tracking_numbers th {
+    text-align: left;
+}
+input[type="date"] {
+    background: none;
+    border: none;
+    border-bottom: 1px solid;
+    font-family: "Myriad Pro", Arial, Helvetica, sans-serif;
+    vertical-align: middle;
+}
+label.sorting-order input:checked + span.fancy-check:before {
+    content: "\f15e"
+}
+label.sorting-order span.fancy-check:before {
+    content: "\f15d"
+}
+.toggles {
+    border-bottom: 1px solid #bbb;
+    padding: 5px;
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+}
+
+div#tracking_numbers a, a.get_tracking_numbers {
+    display: inline-block;
+    color: #000;
+}
+div#tracking_numbers {
+    margin: 5px;
+}
+div#tracking_numbers input[type="text"] {
+    background: #d5d8de;
+    padding: 5px;
+    border-radius: 3px;
+}
+tr.heading th {
+    padding-top: 20px;
+}
+
+a.get_tracking_numbers{
+    transition: transform .25s ease-in-out;
+}
+a.get_tracking_numbers:hover{
+    transform: scale(1.15);
+}
+
+tr {
+    border-bottom: 1px solid #bbb;
+}
+
+.report_dates {
+    text-align: center;
+}
+
+.shipment_dropdown i:hover {cursor: pointer;transform: scale(1.2);}
+
+.shipment_dropdown i {transition: .1s;float: right;    font-size: 1.2em;    padding-top: 5px;}
+
+td.shipment_dropdown {min-width: 120px;}
+
+select.shipments_select{width: 80%;}

@@ -1,0 +1,65 @@
+.page-break {
+    page-break-after: always;
+}
+h2.details{
+    margin-bottom: 3px;
+    border-bottom: 1px solid;
+    padding-bottom: 2px;
+}
+h3 {
+    font-size: 1.2em;
+    margin: .4em .5em;
+    font-weight: normal;
+}
+.quarter {
+    min-width: 10%;
+    display: inline-block;
+    vertical-align: top;
+}
+body {
+    max-width: 780px;
+    margin: 0 auto;
+}
+img {
+    border-radius: 5px;
+    width:50px;
+}
+th {
+    text-align: left;
+}
+td-img{
+    width: 60px;
+}
+td.spacer {
+    margin: 0px 12px;
+    border-right: 1px solid;
+    display: inline-block;
+    height: 30px;
+}
+th.grand_total {
+    font-size: 1.3em;
+}
+.shipping_details {
+    width: 90%;
+}
+span.checkbox-new{
+    font-size: 1.6em;
+    margin-right: 3%;
+}
+span.checkbox {
+    display: inline-block;
+    border: 1px solid;
+    height: 15px;
+    width: 15px;
+    margin-right: 10px;
+}
+div.shipping_box {
+    display: inline-block;
+    width: 30%;
+    margin: 1%;
+}
+div.shipping_inner_box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

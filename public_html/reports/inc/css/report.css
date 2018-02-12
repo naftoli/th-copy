@@ -1,0 +1,27 @@
+.options{
+    text-align: center;
+}
+
+input[type='text']{
+    border: none;
+    background: none;
+    border-bottom: 1px solid;
+    font-size: 1.1em;
+}
+
+a.button{
+    display: inline-block;
+}
+
+table{
+    width: 100%;
+}
+
+div#msg, div#error {
+    text-align: center;
+    padding: 10px;
+}
+
+div#error {
+    color: red;
+}
