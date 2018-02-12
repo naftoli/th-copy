@@ -1,0 +1,12 @@
+﻿Cheder Lubavitch Morristown Boys	2		Rabbi Witkes	Bendet	Levi			Male	2005-08-03	"27 Tamuz, 5765"	10 Deborah Dr.			NJ		USA	(570) 420-8655	shternicm@yahoo.com	Chabad
+Cheder Lubavitch Morristown Boys	2		Rabbi Witkes	Grossbaum	Berel			Male	2005-03-02	"21 Adar I, 5765"	61 N. Ashby			NJ		USA	(973) 597-0656	toba@fcnj.com	Chabad
+Cheder Lubavitch Morristown Boys	2		Rabbi Witkes	Herson	Nechemia			Male			3054 Valley Rd.			NJ		USA	(908) 604-6731	mherson@aol.com	Chabad
+Cheder Lubavitch Morristown Boys	2		Rabbi Witkes	Kornfeld	Yisroel			Male	2004-11-19	"7 Kislev, 5765"	4 Shackamaxon Terrace			NJ		USA	(908) 735-8202	rachel@jewishhunterdon.com	Chabad
+Cheder Lubavitch Morristown Boys	2		Rabbi Witkes	Kotler	Binyomin			Male	2005-08-22	"17 Av, 5765"	7 Kissel Lane			NJ		USA	(973) 889-1113	doverpedsbrc@yahoo.com	Chabad
+Cheder Lubavitch Morristown Boys	2		Rabbi Witkes	Krinsky	Shlomo			Male	2004-12-31	"20 Teves, 5765"	22 New Amwell Rd			NJ		USA	(908) 866-0008	miriam@myjewishcenter.org	Chabad
+Cheder Lubavitch Morristown Boys	2		Rabbi Witkes	Lubin	Mendel			Male	2005-07-03	"26 Sivan, 5765"	1 Ser Del Dr.			NJ		USA	(973) 402-2447	aharonalubin@hotmail.com	Chabad
+Cheder Lubavitch Morristown Boys	2		Rabbi Witkes	Moully	Sholi			Male	2005-07-10	"3 Tamuz, 5765"	74 Monarch Circle			NJ		USA	(908) 350-3426	bmoully@gmail.com	Chabad
+Cheder Lubavitch Morristown Boys	2		Rabbi Witkes	Rosenblum	Moshe			Male	2004-10-15	"30 Tishrei, 5765"	4 Colonial Woods Drive			NJ		USA	(973) 731-8565	chavir@fcnj.com	Chabad
+Cheder Lubavitch Morristown Boys	2		Rabbi Witkes	Shmotkin	Boruch			Male			15 Francis Ave.			NJ		USA	(203) 359-1700	malya@friendshipct.com	Chabad
+Cheder Lubavitch Morristown Boys	2		Rabbi Witkes	Susskind	Mendel			Male	2004-09-29	"14 Tishrei, 5765"	24 Tikvah Way			NJ		USA	(973) 267-5004	simasusskind@gmail.com	Chabad
+Cheder Lubavitch Morristown Boys	2		Rabbi Witkes	Wagner	Zalman			Male	2004-12-03	"21 Kislev, 5765"	32 Knollwood Dr.			NJ		USA	(973) 889-1765	rabbiwagner@aol.com	Chabad

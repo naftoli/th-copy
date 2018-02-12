@@ -1,0 +1,74 @@
+Bais Chaya Mushka IA,1,,Morah Chanie ,Bass,Shterna,שטערנא ,בס,f,2\21\05,,406 Lilac Ln,,Postville,IA,52162,USA,563 864 7169,,Chabad
+Bais Chaya Mushka IA,1,,Morah Chanie ,Brandwien,Gitty,גיטי,ברנדוויין,F,04\18\04,,PO box 1035,,Postville,IA,52162,USA,563 864 3627,,Chabad
+Bais Chaya Mushka IA,1,,Morah Chanie ,Gerlitz,Mally,מלי,גרליץ,F,10\11\05,,322 Lybrand St,,Postville,IA,52162,USA,563 864 7676,,Frum
+Bais Chaya Mushka IA,1,,Morah Chanie ,Schimmel,Sara'le,שרה'לה,שימל,F,11\02\05,,PO box 1118,,Postville,IA,52162,USA,563 864 7672,,Chabad
+Bais Chaya Mushka IA,2,,Morah M Brandwien,Frimmerman,Mushka,מושקא,פרימרמן,F,07\12\04,,204 E Military Rd,,Postville,IA,52162,USA,563 864 3574,,Chabad
+Bais Chaya Mushka IA,2,,Morah M Brandwien,Malik,Yochi,יוכי,מליק,F,12\25\04,,PO box 457 ,,Postville,IA,52162,USA,563 864 3555,,Chabad
+Bais Chaya Mushka IA,2,,Morah M Brandwien,Meor,Tani,תניא,מאור,F,07\13\04,,PO box 1183,,Postville,IA,52162,USA,563 864 6068,,Chabad
+Bais Chaya Mushka IA,2,,Morah M Brandwien,Yerushalmi,Leah,לאה,ירושלמי,F,02\27\04,,408 Lilac Ln,,Postville,IA,52162,USA,563 864 6012,,Chabad
+Bais Chaya Mushka IA,2,,Morah M Brandwien,Wilhelm,Chasi,חסי,וילהלם,F,09\26\04,,PO box 1242,,Postville,IA,52162,USA,563 864 3427,,Chabad
+Bais Chaya Mushka IA,3,,Mrs. D Cheruty,Hecht,Yael,יעל,העכט,F,08\15\03,,PO box 566,,Postville,IA,52162,USA,563 864 3238,,Chabad
+Bais Chaya Mushka IA,3,,Mrs. D Cheruty,Spitzer,Racheli,רחלי,שפיצר,F,07\05\03,,PO box 229 Oak Dr.,,Postville,IA,52162,USA,563 864 3420,,Chabad
+Bais Chaya Mushka IA,3,,Mrs. D Cheruty,Shachar,Devory,דבורי,שחר,F,06\22\03,,PO box 857,,Postville,IA,52162,USA,563 864 3305,,Chabad
+Bais Chaya Mushka IA,3,,Mrs. D Cheruty,Yehuda,Mussie,מוסי,יהודה,F,05\03\03,,PO box 1172,,Postville,IA,52162,USA,563 864 3078,,Chabad
+Bais Chaya Mushka IA,3,,Mrs. D Cheruty,Yehuda,Shterni,שטערני,יהודה,F,05\03\03,,PO box 1172,,Postville,IA,52162,USA,563 864 3078,,Chabad
+Bais Chaya Mushka IA,3,,Mrs. D Cheruty,Brandwien,Rivka,רבקהל'ה,ברנדוויין,F,11\05\02,,PO box 1172,,Postville,IA,52162,USA,563 864 3627,,Chabad
+Bais Chaya Mushka IA,3,,Mrs. D Cheruty,Malik,Shoshi,שושי,מליק,F,11\16\02,,PO box 457,,Postville,IA,52162,USA,563 864 3555,,Frum
+Bais Chaya Mushka IA,4,,Mrs. Y Spitzer,Amar,Mazal,מזל,עמאר,F,09\09\01,,PO box 905,,Postville,IA,52162,USA,563 864 7282,,Chabad
+Bais Chaya Mushka IA,4,,Mrs. Y Spitzer,Gourarie,Baila,ביילא,גורארי,F,04\23\02,,PO box 612,,Postville,IA,52162,USA,563 864 7428,,Chabad
+Bais Chaya Mushka IA,4,,Mrs. Y Spitzer,Klien,Mussie,מוסי,קליין,F,09\15\02,,523 Lilac Ln #8  ,,Postville,IA,52162,USA,563 864 7077,,Chabad
+Bais Chaya Mushka IA,4,,Mrs. Y Spitzer,Lefkovitch,Perele,פערעל,לפקוביץ,F,09\05\02,,PO box 322,,Postville,IA,52162,USA,563 864 3872,,Chabad
+Bais Chaya Mushka IA,4,,Mrs. Y Spitzer,Mahr,Rochel,רחל,מאור,F,10\05\02,,PO box 1183,,Postville,IA,52162,USA,563 864 6068,,Chabad
+Bais Chaya Mushka IA,4,,Mrs. Y Spitzer,Malanis,Hindy,הינדי,מלניש,F,06\13\02,,PO box 1238,,Postville,IA,52162,USA,563 864 3077,,Chabad
+Bais Chaya Mushka IA,4,,Mrs. Y Spitzer,Roth,Mindy,מינדי,ראטה,F,07\07\02,,PO box 853,,Postville,IA,52162,USA,563 864 3268,,Frum
+Bais Chaya Mushka IA,4,,Mrs. Y Spitzer,Rubashkin,Mushka,מושקא,רובשקין,F,04\09\02,,PO box 1007,,Postville,IA,52162,USA,563 864 3044,,Chabad
+Bais Chaya Mushka IA,5,,Mrs. R Hecht,Shachar,Chana,חני,שחר,F,10\26\01,,PO box 857,,Postville,IA,52162,USA,563 864 3305,,Chabad
+Bais Chaya Mushka IA,5,,Mrs. R Hecht,Schimmel,Devorah,דבורה,שימל,F,05\14\01,,PO box 1118,,Postville,IA,52162,USA,563 864 7672,,Chabad
+Bais Chaya Mushka IA,5,,Mrs. R Hecht,Bass,Nechama Dina,נחמה דינה ,בס,F,10\30\01,,406 Lilac Ln,,Postville,IA,52162,USA,563 864 7169,,Chabad
+Bais Chaya Mushka IA,5,,Mrs. R Hecht,Lederman,Chasha,חאשא,לדרמן,F,11\14\00,,534 WTilden ,,Postville,IA,52162,USA,563 864 7795,,Chabad
+Bais Chaya Mushka IA,5,,Mrs. R Hecht,Yerushalmi,Chana,חנה,ירושלמי,F,02\27\01,,408 Lilac Ln,,Postville,IA,52162,USA,563 864 6012,,Chabad
+Bais Chaya Mushka IA,6,,Mrs. M C Lefkovitch,Amar,Brocha,ברכה,עמאר,F,09\07\99,,PO box 905,,Postville,IA,52162,USA,563 864 7282,,Chabad
+Bais Chaya Mushka IA,6,,Mrs. M C Lefkovitch,Hecht,Sarit,שרית,העכט,F,04\30\00,,PO box 566,,Postville,IA,52162,USA,563 864 3238,,Chabad
+Bais Chaya Mushka IA,6,,Mrs. M C Lefkovitch,Goldenberg,Sara Adar,שרה אדר,גולדנברג,F,02\20\00,,PO box 177,,Postville,IA,52162,USA,563 864 7911,,Chabad
+Bais Chaya Mushka IA,7,,Mrs. M C Lefkovitch,Gourarie,Sara Feiga,שרה פייגא,גורארי,F,08\25\99,,PO box 612,,Postville,IA,52162,USA,563 864 7428,,Chabad
+Bais Chaya Mushka IA,7,,Mrs. M C Lefkovitch,Schimmel,Chanie,חני,שימל,F,08\15\99,,PO box 1118,,Postville,IA,52162,USA,563 864 7672,,Chabad
+Bais Chaya Mushka IA,7,,Mrs. M C Lefkovitch,Amar,Rivka,רבקה,עמאר,F,03\04\99,,PO box 905,,Postville,IA,52162,USA,563 864 7282,,Chabad
+Bais Chaya Mushka IA,7,,Mrs. M C Lefkovitch,Mahr,Zeesy,זיסי,מאור,F,04\13\99,,PO box 1183,,Postville,IA,52162,USA,563 864 6068,,Chabad
+Cheder Oholei Menachem,,B,Morah M Rosner,Benshimon,Hershy,העשל,בן שמעון,M,09\18\06,,617 W Post St.,,Postville,IA,52162,USA,563 864 3476,,Chabad
+Cheder Oholei Menachem,,B,Morah M Rosner,Gourarie,Yirmiyahu,ירמיהו,גורארי,M,06\15\06,,PO box 612,,Postville,IA,52162,USA,563 864 7428,,Chabad
+Cheder Oholei Menachem,,B,Morah M Rosner,Vogel,Mendel,מענדל,וואגעל,M,,,PO box 97,,Postville,IA,52162,USA,563 864 7578,,Chabad
+Cheder Oholei Menachem,,B,Morah M Rosner,Levin,Mendel,מענדל,לוין,M,06\18\06,,331 W Tilden St,,Postville,IA,52162,USA,563 864 3200,,Chabad
+Cheder Oholei Menachem,,B,Morah M Rosner,Levin,Yosele,יוסלע,לוין,M,06\18\06,,331 W Tilden St,,Postville,IA,52162,USA,563 864 3200,,Chabad
+Cheder Oholei Menachem,,B,Morah M Rosner,Mahr,Avremi,אברמי,מאור,M,06\12\06,,PO box 1183,,Postville,IA,52162,USA,563 864 6068,,Chabad
+Cheder Oholei Menachem,1,B,Rabbi Raices,Goldenberg,Yossi,יוסי,גולדנברג,M,,,PO box 177,,Postville,IA,52162,USA,563 864 7911,,Chabad
+Cheder Oholei Menachem,1,B,Rabbi Raices,Wilhelm,Shneur,שניאור זלמן,וילהלם,M,11\26\05,,PO box 1242,,Postville,IA,52162,USA,563 864 3427,,Chabad
+Cheder Oholei Menachem,1,B,Rabbi Raices,Cheruty,Avremi,אברמי,חרותי,M,12\06\05,,406 Sherri St ,,Postville,IA,52162,USA,563 864 3483,,Chabad
+Cheder Oholei Menachem,1,B,Rabbi Raices,Yehuda,Hershmelach,הערשמיילאך,יהודה,M,5\29\05,,PO box 1172,,Postville,IA,52162,USA,563 864 3078,,Chabad
+Cheder Oholei Menachem,1,B,Rabbi Raices,Fried,Yossi,יוסי,פריד,M,10\8\05,,PO box 1181,,Postville,IA,52162,USA,563 864 7141,,Frum
+Cheder Oholei Menachem,1,B,Rabbi Raices,Rubashkin,Mendel,מענדל,רובשקין,M,09\03\05,,PO box 285,,Postville,IA,52162,USA,563 864 3011,,Chabad
+Cheder Oholei Menachem,2,B,Rabbi Lipsker,Abrahams,Sholom Ber,שלום בער,אברהמס,M,07\21\04,,423 W Tilden St,,Postville,IA,52162,USA,563 864 3861,,Chabad
+Cheder Oholei Menachem,2,B,Rabbi Lipsker,Benshimon,Moshe,משה,בן שמעון,M,10\21\04,,617 W Post St,,Postville,IA,52162,USA,563 864 3476,,Chabad
+Cheder Oholei Menachem,2,B,Rabbi Lipsker,Goldenberg,Meir,מאיר,גולדנברג,M,,,PO box 177,,Postville,IA,52162,USA,563 864 7911,,Chabad
+Cheder Oholei Menachem,2,B,Rabbi Lipsker,Ginter,David,דוד,גינטר,M,06\17\04,,PO box 394,,Postville,IA,52162,USA,563 864 3023,,Chabad
+Cheder Oholei Menachem,2,B,Rabbi Lipsker,Malanis,Mordechai,מרדכי,מלינש,M,02\26\04,,269 E Williams St,,Postville,IA,52162,USA,563 864 3077,,Chabad
+Cheder Oholei Menachem,2,B,Rabbi Lipsker,Amar,Oded,עודד,עמר,M,11\06\03,,PO box 905,,Postville,IA,52162,USA,563 864 7282,,Chabad
+Cheder Oholei Menachem,2,B,Rabbi Lipsker,Klien,Levi,לוי,קליין,M,09\25\04,,PO box 63,,Postville,IA,52162,USA,563 864 7077,,Chabad
+Cheder Oholei Menachem,2,B,Rabbi Lipsker,Rubashkin,Yossi,יוסי,רובשקין,M,09\04\04,,PO box 1007,,Postville,IA,52162,USA,563 864 3044,,Chabad
+Cheder Oholei Menachem,3,B,Rabbi Wilhelm,Bass,Chaim,חיים,בס ,M,05\08\03,,406 Lilac Ln,,Postville,IA,52162,USA,563 864 7169,,Chabad
+Cheder Oholei Menachem,3,B,Rabbi Wilhelm,Benshimon,Mendel,מנחם מענדל,בן שמעון,M,07\19\03,,617 W Post St,,Postville,IA,52162,USA,563 864 3476,,Chabad
+Cheder Oholei Menachem,3,B,Rabbi Wilhelm,Goldenberg,Shimon,שמעון,גולדנברג,M,,,PO box 177,,Postville,IA,52162,USA,563 864 7911,,Chabad
+Cheder Oholei Menachem,3,B,Rabbi Wilhelm,Fisher,Eli Chaim,אליהו חיים,פישער,M,04\11\06,,PO box 34,,Postville,IA,52162,USA,563 864 7851,,Chabad
+Cheder Oholei Menachem,3,B,Rabbi Wilhelm,Schimmel,Menachem Mendel,מנחם מענדל,שימעל,M,08\25\03,,PO box 1118,,Postville,IA,52162,USA,563 864 7672,,Chabad
+Cheder Oholei Menachem,4,B,Rabbi Wilhelm,Abrahams,Avram Yitzchak,אברהם יצחק,אברהמס,M,01\21\02,,423 W Tilden St,,Postville,IA,52162,USA,563 864 3861,,Chabad
+Cheder Oholei Menachem,4,B,Rabbi Wilhelm,Yerushalmi,Sholom David,שלום דוד,ירושלמי,M,07\18\02,,408 Lilac Ln,,Postville,IA,52162,USA,563 864 6012,,Chabad
+Cheder Oholei Menachem,5,B,Rabbi Wilhelm,Mahr,Binyamin,בנימין רפאל,מאור,M,04\23\01,,PO box 1183,,Postville,IA,52162,USA,563 864 6068,,Chabad
+Cheder Oholei Menachem,6,B,Rabbi Vogel,Bass,Shloimy,שלומי,בס,M,04\28\00,,406 Lilac Ln ,,Postville,IA,52162,USA,563 864 7169,,Chabad
+Cheder Oholei Menachem,6,B,Rabbi Vogel,Brandwien,Shmelka,שמעלקא,ברנדוויין,M,04\23\00,,PO box 1035,,Postville,IA,52162,USA,563 864 3627,,Chabad
+Cheder Oholei Menachem,6,B,Rabbi Vogel,Klien,Menachem Mendel,מנחם מענדל,קליין,M,08\30\00,,PO box 63,,Postville,IA,52162,USA,563 864 3603,,Chabad
+Cheder Oholei Menachem,6,B,Rabbi Vogel,Rubashkin,Uziel,עוזיאל,רובשקין,M,04\26\00,,PO box 1007,,Postville,IA,52162,USA,563 864 3044,,Chabad
+Cheder Oholei Menachem,6,B,Rabbi Vogel,Shachar,Mendy,מנחם מענדל,שחר,M,05\11\00,,PO box 857,,Postville,IA,52162,USA,563 864 3305,,Chabad
+Cheder Oholei Menachem,7,B,Rabbi Vogel,Abrahams,Shmulik,שמוליק,אברהמס,M,09\14\99,,423 W Tilden St,,Postville,IA,52162,USA,563 864 3861,,Chabad
+Cheder Oholei Menachem,7,B,Rabbi Vogel,Bass,Levi,לויק,בס,M,09\04\98,,406 Lilac Ln,,Postville,IA,52162,USA,563 864 7169,,Chabad
+Cheder Oholei Menachem,7,B,Rabbi Vogel,Hecht,Yonason,יונתן,העכט,M,03\26\99,,PO box 566,,Postville,IA,52162,USA,563 864 3238,,Chabad
+Cheder Oholei Menachem,7,B,Rabbi Vogel,Malanis,Levi Yitzchak,לוי יצחק,מלינש,M,03\25\99,,269 E Williams St,,Postville,IA,52162,USA,563 864 3077,,Chabad
+Cheder Oholei Menachem,7,B,Rabbi Vogel,Fisher,Menachem Mendel,מנחם מענדל,פישער,M,05\17\99,,PO box 34,,Postville,IA,52162,USA,563 864 7851,,Chabad

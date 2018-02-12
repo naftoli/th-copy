@@ -1,0 +1,45 @@
+﻿Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Albukerk	Menucha Rochel			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Baumgarten	Brocha			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Berns	Leah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Brown	Chana			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Eckhaus	Chaya Henna			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Fischer	Chaya Sora			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Fishbein	Devorah Leah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Junik	Rivkah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Kokin	Roza			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Naparstek	Batya			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Nimni	Penina Hodaya			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Odel	Chaya			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Rosenfeld	Rivkah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Schapiro	Rivkah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Schachar	Devorah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Swimmer	Miriam			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Taichman	Chaya Mushka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Telsner	Cheyenna			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Tovshteyn	Aidel			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Viener	Chaya			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Wilschanski	Chayka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Zarchi	Devorah Leah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Bar Chaim	Nechama Dina			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Cohen	Sarah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Duato	Rivkah Baila			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Dubrowski	Chaya Mushka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Friedman	Esther Malka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Friedman	Elka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Gellis	Tamar			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Glick	Devorah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Gorkin	Musya			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Groisman	Malka Bayla			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Hershkop	Chaya Esther			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Lebovic	Malka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Lesches	Chana Leah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Morozow	Esther			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Morozow	Leah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Moss	Malka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Palace	Mushka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Perl	Pessa Devorah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Roytman	Nechama Dina			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Smetana	Chaya			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Spielman	Chana Malka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Yadger	Shira Chana			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Zalmanov	Sara			F	2003-01-01										chabad

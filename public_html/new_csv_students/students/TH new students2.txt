@@ -1,0 +1,15 @@
+﻿Cheder Chabad of Philadelphia	1		Mrs. Lipsker	Coplon	Ephraim			male											chabad
+Cheder Chabad of Philadelphia	1		Mrs. Lipsker	Gerber	Sarah			female											chabad
+Cheder Chabad of Philadelphia	1		Mrs. Lipsker	Gurevitz	Faigel			female											chabad
+Cheder Chabad of Philadelphia	1		Mrs. Lipsker	Gurevitz	Sholom			male											chabad
+Cheder Chabad of Philadelphia	1		Mrs. Lipsker	Goldman	Levi			male											chabad
+Cheder Chabad of Philadelphia	1		Mrs. Lipsker	Haskelevich	Srolli			male											chabad
+Cheder Chabad of Philadelphia	1		Mrs. Lipsker	Kantor	Mendel			male											chabad
+Cheder Chabad of Philadelphia	1		Mrs. Lipsker	Kaplan	Moishe			male											chabad
+Cheder Chabad of Philadelphia	1		Mrs. Lipsker	Lipsker	Hudi			female											chabad
+Cheder Chabad of Philadelphia	1		Mrs. Lipsker	Sherman	Chana			female											chabad
+Cheder Chabad of Philadelphia	2		Mrs. Lowenstein	Goldshmid	Meishe			male											chabad
+Cheder Chabad of Philadelphia	4		Rabbi Bronstein	Goldshmid	Mendi			male											chabad
+Cheder Chabad of Philadelphia	5		Mrs. Gerber	Goldshmid	Chani			female											chabad
+Cheder Chabad of Philadelphia	6		Rabbi Gurevitz	Meadvin	Daniel			male											chabad
+Cheder Chabad of Philadelphia	6		Mrs. Gurevitz	Goldshmid	Chaya			female											chabad

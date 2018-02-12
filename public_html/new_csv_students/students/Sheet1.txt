@@ -1,0 +1,25 @@
+Cheder Menachem Cincinnati ,1.00,,Levy,Kalmanson,Chaya Rochel,חי' רחל,קלמנסון,F,7/15/2005 0:00:00,8 Tammuz,2420 Twigwood Ln,,Cincinnati,OH,45237.00,USA,5133515513,chana643@hotmail.com,chabad
+Cheder Menachem Cincinnati ,1.00,,Levy,Majeski,Chaya,חי' ,מאיעסקי,F,8/5/2005 0:00:00,29 Tamuz,7170 Elbrook Ave,,Cincinnati,OH,45237.00,USA,5133513006,lakymaj@gmail.com,chabad
+Cheder Menachem Cincinnati ,1.00,,Levy,Simpson,Musia,מוסיא,סימפסאן,F,12/29/2005 0:00:00,28 Kislev,7685 Elbrook Ave.,,Cincinnati,OH,45237.00,USA,5136312316,tziporahsimpson@gmail.com,chabad
+Cheder Menachem Cincinnati ,1.00,,Levy,Manory,Yocheved,יוכבד,מנורי,F,,,,,Cincinnati,OH,45237.00,USA,,,chabad
+Cheder Menachem Cincinnati ,1.00,,Fuss,Gonzalez,Mendel,מענדל,,M,1/5/2006 0:00:00,5 Teves,7715 Elbrook Ave,,Cincinnati,OH,45237.00,USA,321.437.4689,brinaesther@hotmail.com,chabad
+Cheder Menachem Cincinnati ,1.00,,Fuss,Cohen,Levi,לוי,כהן,M,10/2/2005 0:00:00,28 Elul,9370 Lansford dr.,,Cincinnati,OH,45237.00,USA,513.509.5645,cpoah1@gmail.com,chabad
+Cheder Menachem Cincinnati ,1.00,,Fuss,Karasik,Yossi,יסי,קרסיק,M,,,7285 elbrook Ave.,,Cincinnati,OH,45237.00,USA,5133512233,ekarasik@yahoo.com,chabad
+Cheder Menachem Cincinnati ,2.00,,Horvitz,Kalmanson,Bracha,ברכה,קלמנסון,F,8/16/2004 0:00:00,29 Av,4894 White Blossom Blvd,,Mason,OH,45040.00,USA,513.659.2850,rochel@jdiscovery.com,chabad
+Cheder Menachem Cincinnati ,2.00,,Horvitz,Majeski,Chaya,חי',מאיעסקי,F,8/7/2004 0:00:00,20 Av,7610 Elbrook Ave,,Cincinnati,OH,45237.00,USA,5137319976,dinamajeski@earthlink.net,chabad
+Cheder Menachem Cincinnati ,2.00,,Horvitz,Levy,Chaya,חי',לוי,F,5/30/2004 0:00:00,10 Sivan,2515 Twigwood Ln,,Cincinnati,OH,45237.00,USA,5135310077,shternielevy@bellsouth.net,chabad
+Cheder Menachem Cincinnati ,2.00,,Horvitz,Simpson,Chana,חנה,סימפסאן,F,1/22/2004 0:00:00,28 Teves,7685 Elbrook Ave.,,Cincinnati,OH,45237.00,USA,5136312316,tziporahsimpson@gmail.com,chabad
+Cheder Menachem Cincinnati ,2.00,,Horvitz,Karasik,Faigy,פייגי,קרסיק,F,,,7285 Elbrook Ave.,,Cincinnati,OH,45237.00,USA,5133512233,ekarasik@yahoo.com,chabad
+Cheder Menachem Cincinnati ,3.00,,Zfatman,Goffstein,Aaron,אהרן,גאפשטיין,M,11/14/2002 0:00:00,9 Kislev,6680 Elbrook Ave,,Cincinnati,OH,45237.00,USA,513.477.8640,yedidabasya@gmail.com,chabad
+Cheder Menachem Cincinnati ,3.00,,Zfatman,Majeski,Mendel,מענדל,מאיעסקי,M,7/11/2003 0:00:00,11 Tamuz,7170 Elbrook Ave,,Cincinnati,OH,45237.00,USA,5133513006,lakymaj@gmail.com,chabad
+Cheder Menachem Cincinnati ,3.00,,Zfatman,Levy,Menachem,מנחם,לוי,M,9/11/2002 0:00:00,6 Tishrei,2515 Twigwood Ln,,Cincinnati,OH,45237.00,USA,5135310077,shternielevy@bellsouth.net,chabad
+Cheder Menachem Cincinnati ,3.00,,Zfatman,Weller,Shais,שת,וועלער,M,5/19/2003 0:00:00,17 Iyar,3533 Amberacres Dr,,Cincinnati,OH,45237.00,USA,513.985.0404,aravaweller@aol.com,chabad
+Cheder Menachem Cincinnati ,4.00,,Bass,Majeski,Sheva,שבע,מאיעסקי,F,4/12/2002 0:00:00,1 Iyar,7610 Elbrook Ave,,Cincinnati,OH,45237.00,USA,5137319976,dinamajeski@earthlink.net,chabad
+Cheder Menachem Cincinnati ,4.00,,Bass,Kalmanson,Chaya Fraida,חי' פריידא,קלמנסון,F,2/4/2002 0:00:00,22 Shvat,4894 White Blossom Blvd,,Mason,OH,45040.00,USA,513.659.2850,rochel@jdiscovery.com,chabad
+Cheder Menachem Cincinnati ,4.00,,Bass,Manory,Tzipporah,צפורה,מנורי,F,,,,,Cincinnati,OH,45237.00,USA,,,chabad
+Cheder Menachem Cincinnati ,5.00,,Bass,Weller,Tsippa,ציפה,וועלער,F,2/11/2001 0:00:00,18 Shvat,3533 Amberacres Dr,,Cincinnati,OH,45237.00,USA,513.985.0404,aravaweller@aol.com,chabad
+Cheder Menachem Cincinnati ,6.00,,Kinn,Levy,Rivky,רבקי,לוי,F,4/28/2000 0:00:00,23 Nissan,2515 Twigwood Ln,,Cincinnati,OH,45237.00,USA,5135310077,shternielevy@bellsouth.net,chabad
+Cheder Menachem Cincinnati ,6.00,,Kinn,Kalmanson,Chana Shaina,חנה שיינא,קלמנסון,F,6/27/2000 0:00:00,24 Sivan,7256 Laurel Oak Ln,,Cincinnati,OH,45237.00,USA,513.531.0071,devoramendy@yahoo.com,chabad
+Cheder Menachem Cincinnati ,6.00,,Kinn,Majeski,Mushka,מושקא,מאיעסקי,F,10/18/2000 0:00:00,19 Tishrei,7610 Elbrook Ave,,Cincinnati,OH,45237.00,USA,5137319976,dinamajeski@earthlink.net,chabad
+Cheder Menachem Cincinnati ,7.00,,Kinn,Kalmanson,Esther Miriam,אסתר מרים,קלמנסון,F,11/23/1999 0:00:00,14 Kislev,4894 White Blossom Blvd,,Mason,OH,45040.00,USA,513.659.2850,rochel@jdiscovery.com,chabad
+Cheder Menachem Cincinnati ,7.00,,Kinn,Majeski,Chana,חנה,מאיעסקי,F,6/11/1999 0:00:00,27 Sivan,7610 Elbrook Ave,,Cincinnati,OH,45237.00,USA,5137319976,dinamajeski@earthlink.net,chabad

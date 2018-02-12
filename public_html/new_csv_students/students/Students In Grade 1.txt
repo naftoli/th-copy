@@ -1,0 +1,13 @@
+﻿Cheder Morristown	1		Mrs. Tybkeh Spalter	Baumgarten	Menucha			Female	2006-02-28	"30 Shevat,5766"	58 Cherokee Ave		Rockaway	NJ	7866	USA			Chabad
+Cheder Morristown	1		Mrs. Tybkeh Spalter	Blesofsky	Mendel			Male			193 South Ave.		Fanwood	NJ	7023	USA			Chabad
+Cheder Morristown	1		Mrs. Tybkeh Spalter	Dick	Rochele			Female	2006-02-09	"11 Shevat,5766"	13 Tikvah Way		Morristown	NJ	7960	USA			Chabad
+Cheder Morristown	1		Mrs. Tybkeh Spalter	Eisenberg	Shaina Perel			Female	2006-05-10	"21 Iyar,5766"	175 Indiana Street		Maplewood	NJ	7040	USA			Chabad
+Cheder Morristown	1		Mrs. Tybkeh Spalter	Finver	Yosef			Male	2006-02-01	"3 Shevat,5766"	70 Lexington Ave.		Edison	NJ	8817	USA			Chabad
+Cheder Morristown	1		Mrs. Tybkeh Spalter	Goldberg	Shneur			Male	2006-01-08	"8 Teves,5766"	10 Kissel Lane		Morristown	NJ	7960	USA			Chabad
+Cheder Morristown	1		Mrs. Tybkeh Spalter	Neiman	Mendel			Male	2005-07-22	"15 Tamuz,5765"	5 Dunn RD.Apt #1		West Orange	NJ	7052	USA			Chabad
+Cheder Morristown	1		Mrs. Tybkeh Spalter	Perlow	Malka			Female	2006-02-23	"25 Shevat,5766"	115 Sussex Ave		Morristown	NJ	7960	USA			Chabad
+Cheder Morristown	1		Mrs. Tybkeh Spalter	Piekarsky	Mendel			Male	2006-03-27	"27 Adar,5766"	10 Hillside Terrace		Morristown	NJ	7960	USA			Chabad
+Cheder Morristown	1		Mrs. Tybkeh Spalter	Pollen	Sender			Male	2006-01-03	"3 Teves,5766"	10 Netherton Terrace		Morristown	NJ	7960	USA			Chabad
+Cheder Morristown	1		Mrs. Tybkeh Spalter	Rosenblum	Mushka			Female	2006-02-01	"3 Shevat,5766"	4 Colonial Woods Drive		West Orange	NJ	7052	USA			Chabad
+Cheder Morristown	1		Mrs. Tybkeh Spalter	Shusterman	Tzvi			Male	2005-10-28	"25 Tishrei,5766"	6 Rehoboth RD. 		Flanders	NJ	7836	USA			Chabad
+Cheder Morristown	1		Mrs. Tybkeh Spalter	Volfman	Chaim			Male	2005-05-04	"25 Niasan,5765"	27 Tikvah Way		Morristown	NJ	7960	USA			Chabad

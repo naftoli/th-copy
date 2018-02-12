@@ -1,0 +1,13 @@
+﻿Cheder At The Ohel	7	7	Rabbi Kramer	Geisinsky	Mendel			M											Chabad
+Cheder At The Ohel	4		Rabbi Scherder	Geisinsky	shuey			m											Chabad
+Cheder At The Ohel	2		Mussie Goldschmid	Geisinsky	Bentzi			m											Chabad
+Cheder At The Ohel	7	7	Rabbi Kramer	Goldschmid	Memke			m											Chabad
+Cheder At The Ohel	3		Rabbi Paris	Goldschmid	Meishe			m											Chabad
+Cheder At The Ohel	4		Rabbi Scherder	Hassine	Raphael			m											Chabad
+Cheder At The Ohel	2		Mussie Goldschmid	Hassine	Menachem			m											Chabad
+Cheder At The Ohel	7	7	Rabbi Kramer	Heller	Mochum Tzvi			m											Chabad
+Cheder At The Ohel	Pre1a		Esthy Narboni	Lieberman	Yankel			m											Chabad
+Cheder At The Ohel	4		Rabbi Scherder	Shmotkin	Shea			m											Chabad
+Cheder At The Ohel	7	7	Rabbi Kramer	Stein	Naftali			m											Chabad
+Cheder At The Ohel	7	7	Rabbi Kramer	Wolowik	Binyomin			m											Chabad
+Cheder At The Ohel	4		Rabbi Scherder	Wolowik	Yerachmiel			m											Chabad

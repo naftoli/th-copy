@@ -1,0 +1,10 @@
+﻿Beis Chaya Mushka - CH	7		Morah Pevzner	Bitterman	Sarah	שרה 	ביטערמאן	Female	08/09/1999	כ'ז  אלול  תשנ'ט									Chabad
+Beis Chaya Mushka - CH	7		Morah Pevzner	Blau	Menucha R.	רחל 	בלוי	Female	07/05/1999	כ'ב  אייר  תשנ'ט									Chabad
+Beis Chaya Mushka - CH	7		Morah Pevzner	Flint	Shprintza	שפרינצא 	פלינט	Female	14/12/1998	כ'ו  כסלו  תשנ'ט									Chabad
+Beis Chaya Mushka - CH	7		Morah Pevzner	Goldshmid	Simi	סימא 	גולדשמיד	Female	14/05/1999	כ'ח  אייר  תשנ'ט									Chabad
+Beis Chaya Mushka - CH	7		Morah Pevzner	Hendel	Mushka	מושקא 	הענדל	Female	23/07/1999	י  אב  תשנ'ט									Chabad
+Beis Chaya Mushka - CH	7		Morah Pevzner	Korn	Liba	ליבא 	קארן	Female	30/04/1999	י'ד  אייר  תשנ'ט									Chabad
+Beis Chaya Mushka - CH	7		Morah Pevzner	Plotkin	Chana Devorah	חנה דבורה 	פלאטקין	Female	02/09/1999	כ'ב  אלול  תשנ'ט									Chabad
+Beis Chaya Mushka - CH	7		Morah Pevzner	Squire	Nechama	נחמה 	סקווייער	Female	04/11/1998	ט'ו  מרחשון  תשנ'ט									Chabad
+Beis Chaya Mushka - CH	7		Morah Pevzner	Stone	Ester	אסתר 	סטאון	Female	16/11/1999	ז  כסלו  תש'ס									Chabad
+Beis Chaya Mushka - CH	7		Morah Pevzner	Zalmanov	Chaya Mushka	חי' מושקא 	זלמנוב	Female	27/05/1999	י'ב  סיון  תשנ'ט									Chabad

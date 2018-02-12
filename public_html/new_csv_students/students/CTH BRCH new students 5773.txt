@@ -1,0 +1,233 @@
+﻿Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Benarroch	Simcha Leah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Berghoff	Chaya Mushka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Bluming	Aidel			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Brook	Shaina			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Chaddad	Chana			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Chein	Rivkah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Cousin	Chaya			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Gansburg	Batsheva			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Gohnmardi	Chana			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Goldshmid	Tonya			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Heller	Mirel			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Heller	Yehudis			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Koniarski	Chaya Sora			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Lipskier	Chaya Mushka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Lipszyc	Devorah Leah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Magen	Leah Rivkah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Moya	Chaya Mushka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Okonov	Shifra Nechama			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Osdoba	Sara			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Sasonkin	Rochel			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Wolowik	Chana			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-420	Mrs. Vechter	Zirkind	Rochel			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Andrusier	Michla			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Dalfin	Rivkah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Donin	Esti			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Feiglin	Aliza			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Fischer	Sara			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Halon	Shoshana			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Heber	Nechama Devorah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Helman	Esti			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Holtzberg	Zissy			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Khutoretsky	Feiga			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Kirschenbaum	Liba			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Leiter	Hadassa			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Niassof	Rishe			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Raskin	Batsheva			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Salek	Chanie			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Schaffran	Esther Malka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Segal	Gittel Tova			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Tewel	Miriam			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Werner	Leah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Wilhelm	Freidy			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Weinbaum	Chaya Mushka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-418	Mrs. Zarchi	Zalmanov	Brocha			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Avtzon	Menucha Rochel			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Baram	Yehudis			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Brown	Chaya Sara			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Cole	Hinda			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Gratzman	Esther			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Gurevitch	Shterna			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Haberman	Chana			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Heber	Shaindel			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Kievman	Malka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Lieberman	Zelda			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Lipskier	Chana			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Martinez	Eliana			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Morozow	Miriam			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Piekarski	Shterna Sarah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Pinson	Rivkah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Rabia	Simcha Chana			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Raymond	Chevi			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Rieber	Raizel			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Schapiro	Chaya Mushka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Sirota	Rivky			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Vaisfiche	Fraidy			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Wolowik	Necha			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-423	Ms. Stolik	Zarchi	Sarala			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Albukerk	Menucha Rochel			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Baumgarten	Brocha			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Berns	Leah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Brown	Chana			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Eckhaus	Chaya Henna			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Fischer	Chaya Sora			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Fishbein	Devorah Leah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Junik	Rivkah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Kokin	Roza			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Naparstek	Batya			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Nimni	Penina Hodaya			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Odel	Chaya			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Rosenfeld	Rivkah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Schapiro	Rivkah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Schachar	Devorah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Swimmer	Miriam			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Taichman	Chaya Mushka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Telsner	Cheyenna			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Tovshteyn	Aidel			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Viener	Chaya			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Wilschanski	Chayka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-422	Mrs. Levin	Zarchi	Devorah Leah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Bar Chaim	Nechama Dina			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Cohen	Sarah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Duato	Rivkah Baila			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Dubrowski	Chaya Mushka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Friedman	Esther Malka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Friedman	Elka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Gellis	Tamar			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Glick	Devorah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Gorkin	Musya			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Groisman	Malka Bayla			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Hershkop	Chaya Esther			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Lebovic	Malka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Lesches	Chana Leah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Morozow	Esther			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Morozow	Leah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Moss	Malka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Palace	Mushka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Perl	Pessa Devorah			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Roytman	Nechama Dina			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Smetana	Chaya			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Spielman	Chana Malka			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Yadger	Shira Chana			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	4	4-421	Ms. Wolvovsky	Zalmanov	Sara			F	2003-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Alroy	Mussie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Blachman	Chava			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Borisute	Shoshana			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Borochov	Chana			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Citron	Cherri			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Futerfas	Hadassa			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Gribov	Daniella			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Kopstein	Rosie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Korn	Chana			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Lerman	Rikkie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Levine	Sara'le			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Levy	Sara'le			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Nachmanson	Chaya Mushka			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	New	Mussia			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Niassof	Esther			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Raitport	Liba			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Raskin	Doba			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Russel	Kaila			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Shapiro	Mimi			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Sheinfeld	Rosie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Tal	Sarah			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Tenenbaum	Devorah			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Toby	Ron Rachel			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-318	Mrs. Langsam	Weiszner	Sarah			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Belinsky	Chana			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Chanin	Chaya Mushka			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Dubov	Ceita			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Eckhaus	Devorah			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Ezagui	Zoey			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Ezagui	Shira			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Farron	Nechama Dina			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Fogel	Devora'le			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Futerfas	Miri			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Goldshmidt	Chaya			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Greenberg	Chava			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Greenberg	Chaykie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Greene	Mashie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Katzen	Hinda			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Kaye	Shira			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Kreiselman	Dinie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Laine	Esti			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Lipsidge	Raizel			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Mochkin	Henya			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Okounev	Rika			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Sirota	Faygie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Spielman	Aidel			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Tamir	Elisha			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-317	Ms. Raskin	Tessler	Perel			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Belinitzky	Rivka			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Borohov	Chana			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Dorn	Ellah			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Eidelman	Shaina Sonia			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Farkash	Shternie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Friend	Miriam Raizel			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Futerfas	Malka			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Geisinsky	Chanie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Heller	Michali			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Kushnersky	Chaya			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Levin	Shternie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Liberow	Menucha			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Paltiel	Shaina			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Perlow	Malky			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Reinitz	Chaya Mushka			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Shechter	Mirel			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Sirota	Zelda			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Sossonkin	Shaina			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Steinmetz	Mushky			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Vaisfiche	Shaina			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Wilhelm	Toby			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Winner	Mussia			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-314	Ms. Goldstein	Zibell	Tova			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Backer	Chana			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Barber	Mushka			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Ben Shushan	Hodaya			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Brickman	Doba			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Fakiro	Hodaya			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Feldman	Esther			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Ghonmardi	Menucha Rochel			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Gorodetzky	Sara			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Katz	Batya			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Lipsh	Rosie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Lishner	Gitty			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Nussbaum	Leah			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Rogatzki	Sophie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Rosenberg	Goldie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Rutman	Soshie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Segal	Esther			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Shapiro	Nechama			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Skoblo	Mera			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Skoblo	Tzivia			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Smetana	Rikki			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Sorkin	Chavie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Sossover	Goldie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Sufrin	Chana			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-316	Ms. Avtzon	Weicz	Sara			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Avtzon	Leah			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Barber	Chava Necha			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Barber	Sasha Vita			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Belinitzky	Rosie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Bronstein	Cheyenna			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Butman	Chana			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Dechter	Chana			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Felberman	Chaya Mushka			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Freeman	Goldie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Gansburg	Chaya Mushka			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Garelik	Shterna Sara			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Glick	Raizel			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Gordon	Leeba			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Greenberg	Bina Basya			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Hecht	Sarah Rivkah			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Keller	Shaina			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Kornblit	Golda Leah			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Kosofsky	Cheyenna			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Levin	Chana Rivka			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Mahatuf	Chaya Mushka			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Paltiel	Risha			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Raskin	Malka			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Rimler	Bryna			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Schmerling	Rochel			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Sufrin	Sossie			F	2004-01-01										chabad
+Beis Rivkah Crown Heights	3	3-315	Mrs. Wolf	Weisman	Segal Slovka Tzipora			F	2004-01-01										chabad

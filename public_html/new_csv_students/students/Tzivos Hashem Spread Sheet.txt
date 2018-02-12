@@ -1,0 +1,84 @@
+﻿1	G	Mrs. Niasoff	Abel	Devorah Baila	דבורה ביילא	אבל	GIRL	8/23/06		10 Buena Vista Road	Suffern	NY	10901	USA	8453620479	michaelabel18@yahoo.com	Chabad
+1	G	Mrs. Niasoff	Cohen	Mimi	מימי	כהן	GIRL	10/3/06		66 Suzanne Drive Apt 1	Spring Valley	NY	10977	USA	8452905724	dalyacohen@sbcglobal.net	Chabad
+1	G	Mrs. Niasoff	Farkas	Yitty	יטי	פארקאש	GIRL	1/23/07		28 First Avenue	Monroe	NY	10950	USA	8457832035	berta2035@hotmail.com	Chabad
+1	G	Mrs. Niasoff	Goldsmith	Shaina	שיינא	גאלדשמיד	GIRL	8/16/06		184 Kearsing Pkwy	Monsey	NY	10952	USA	8454451943	mimiak@aol.com	Chabad
+1	G	Mrs. Niasoff	Goldstein	Hindy	הינדי	גאלדשטיין	GIRL	2/13/06		6 Tokay Lane	Monsey	NY	10952	USA	8453999903	zalman@emailzalman.com	Chabad
+1	G	Mrs. Niasoff	Greenberg	Zlaty	זלאטי	גרינבערג	GIRL	7/19/06		285 Seven Springs Rd.	Monroe	NY	10950	USA	8457810125	tbygrnbrg@yahoo.com	Chabad
+1	G	Mrs. Niasoff	Holtsberg	Chavie	חוה	הלצברג	GIRL	5/12/06		1 Patriot Drive	Monsey	NY	10952	USA	8456948518	saraholtsberg@gmail.com	Chabad
+1	G	Mrs. Niasoff	Klimovitsky	Tzilya	ציליה	קלימיוויטסקי	GIRL	12/17/06		79 Regina Rd.	Monsey	NY	10952	USA	8455174752	grishe@yahoo.com	Chabad
+1	G	Mrs. Niasoff	Labkowski	Zeldy	זעלדי	לאבקאווסקי	GIRL	3/21/06		11 Orchard Rd.	Briarcliff	NY	10510	USA	9149232522	silbylab@yahoo.com	Chabad
+1	G	Mrs. Niasoff	Litzman	Chana	חנה	ליצמאן	GIRL	4/15/06		57 E. Concord Drive	Monsey	NY	10952	USA	8453646770	rabbidoc@aol.com	Chabad
+1	G	Mrs. Niasoff	Marrus	Chana	חנה	מאראס	GIRL	8/14/06		12A Fairway Oval	New Hempstead	NY	10977	USA	8453542107	rachelmarrus@gmail.com	Chabad
+1	G	Mrs. Niasoff	Polinger	Bayla	ביילא	פאלינ'גער	GIRL	1/8/06		10 W. Fessler Drive	Monsey	NY	10952	USA	8455170708	yuttypolinger@gmail.com	Chabad
+1	G	Mrs. Niasoff	Scheiner	Chava	חוה	שיינער	GIRL	1/10/06		5 Dunhill Ln	Monsey	NY	10952	USA		sholom@sbswireless.com	Chabad
+1	G	Mrs. Niasoff	Simpson	Toba	טובא	טובא סימפסאן	GIRL	7/12/06		30 S. Monsey Road	Airmont	NY	10952	USA	8453711596	Lakeysimpson@gmail.com	Chabad
+1	G	Mrs. Niasoff	Zaltzman	Esther	אסתר	זאלטצמאן	GIRL	11/5/06		16-26 Alder Terrace	Fair Lawn	NJ	07410	USA	2017733295	mezaltzman@optonline.net	Chabad
+2	G	Mrs. Oster	Bamberger	Bracha	ברכה	באמבערגער	GIRL	7/7/05		3 Roble Road	Suffern	NY	10901	USA	8453622082	atbamberger@verizon.net	Chabad
+2	G	Mrs. Oster	Kolt	Liba	ליבא	קאלט	GIRL	2/18/05		88 South Gate Drive	Spring Valley	NY	10977	USA	8453542205	tzipk88@gmail.com	Chabad
+2	G	Mrs. Oster	Konikov	Batsheva	בת שבע	קאניקאוו	GIRL	1/19/05		808 Abbott Blvd.	Fort Lee	NJ	07024	USA	2018401674	rabbi@chabadfortlee.com	Chabad
+2	G	Mrs. Oster	Landa	Chana	חנה	לאנדא	GIRL	8/25/05		160-A Kearsing Parkway	Monsey	NY	10952	USA	8453528071	mmlanda@gmail.com	Chabad
+2	G	Mrs. Oster	Levine	Bina Gittel	בינה גיטל	לעבין	GIRL	9/7/05		244 Elm Avenue	Teaneck	NJ	07666	USA	2018363770	ylevine@deloitte.com	Chabad
+2	G	Mrs. Oster	Oliver	Hadassah	הדסה	אליבער	GIRL	2/15/05		7 Ash Lawn Avenue	New Hempstead	NY	10977	USA	8453646789	shevyoliver@gmail.com	Chabad
+2	G	Mrs. Oster	Rimler	Shira Bryna	שירא בריינא	רימלער	GIRL	3/31/05		1 Spring Rock Place	New Hempstead	NY	10977	USA	8456783342	shrimler@gmail.com	Chabad
+2	G	Mrs. Oster	Shtaygrud	Yocheved Toba	יוכבד טובא	שטייגארד	GIRL	4/23/05		9 Whisper Ln.	Suffern	NY	10901	USA	8453573571	avrahamsarah@msn.com	Chabad
+2	G	Mrs. Oster	Simon	Rivkah	רבקה	סיימאן	GIRL	8/29/05		541 N Forest Ave.	Teaneck	NJ	07666	USA	2018010503	rabbisimon@aol.com	Chabad
+2	G	Mrs. Oster	Zeiler	Hadassah	הדסה	זיילער	GIRL	10/30/05		22 Concord Drive	Monsey	NY	10952	USA	8453541560	mendelzeiler@gmail.com	Chabad
+3	G	Mrs. Weber	Crane	Rachel Leah	רחל לאה	קריין	GIRL	2/10/04		24 Bond Street	Passaic	NJ	07055	USA	9732490014	ayeletcrane@gmail.com	Chabad
+3	G	Mrs. Weber	Goldberger	Miriam	מרים	גאלבערגער	GIRL	7/8/03		4 Suzanne Dr	Spring Valley	NY	10977	USA	8453522232		Chabad
+3	G	Mrs. Weber	Greenwald	Devorah Leah	דבורה לאה	גרינוואלד	GIRL	5/3/04		11 Ash Street	Monsey	NY	10952	USA	8453621374	leighcolby@gmail.com	Chabad
+3	G	Mrs. Weber	Grossbaum	Leeba	ליבא	גראסבוים	GIRL	8/23/04		310 South Drive	Paramus	NJ	07652	USA	2012627172	zeesy@bcfriendship.com	Chabad
+3	G	Mrs. Weber	Gurkov	Breina Leah	בריינא לאה	גורקאוו	GIRL	5/20/04		1 Iroquois Trail	Monsey	NY	10952	USA	8453563093	egurkov@gmail.com	Chabad
+3	G	Mrs. Weber	Polinger	Leah	לאה	פאלינ'גער	GIRL	2/25/04		10 W. Fessler Drive	Monsey	NY	10952	USA	8455170708	yuttypolinger@gmail.com	Chabad
+3	G	Mrs. Weber	Rosenbluh	Mili	מילי	ראזענבלוי	GIRL	12/23/04		39 Fessler Drive	Spring Valley	NY	10977	USA	8456948280	hrosenbluh@gmail.com	Chabad
+3	G	Mrs. Weber	Scheiner	Devorah Chana	דבורה חנה	שיינער	GIRL	6/13/04		5 Dunhill Ln	Monsey	NY	10952	USA		sholom@sbswireless.com	Chabad
+3	G	Mrs. Weber	Schwartz	Rosie	רוזי	שווארץ	GIRL	11/11/04		45 First Avenue	Monroe	NY	10950	USA	8457740859	binarayim@gmail.com	Chabad
+3	G	Mrs. Weber	Simon	Esther	אסתר	סיימאן	GIRL	11/26/04		541 N Forest Ave.	Teaneck	NJ	07666	USA	2018010503	rabbisimon@aol.com	Chabad
+4	G	Mrs. Holtsberg	Friedman	Aliza	אליזא	פרידמאן	GIRL	2/28/03		14 White Birch Drive	Pomona	NY	10970	USA	8453622461	mendyleverton@hotmail.com	Chabad
+4	G	Mrs. Holtsberg	Grossbaum	Chana	חנה	גראסבוים	GIRL	2/15/03		310 South Drive	Paramus	NJ	07652	USA	2012627172	zeesy@bcfriendship.com	Chabad
+4	G	Mrs. Holtsberg	Gurkov	Sonya		גורקאוו	GIRL	9/19/03		194 Ratzer Road	Wayne	NJ	07470	USA	9736945379	mgurv@optonline.net	Chabad
+4	G	Mrs. Holtsberg	Landa	Tila Baila	טילא ביילא	לאנדא	GIRL	6/5/03		160-A Kearsing Parkway	Monsey	NY	10952	USA	8453528071	mmlanda@gmail.com	Chabad
+4	G	Mrs. Holtsberg	Schild	Chana	חנה	שילד	GIRL	10/6/03		19 N. Southgate Drive	Spring Valley	NY	10977	USA	8453546173	tovah6@yahoo.com	Chabad
+4	G	Mrs. Holtsberg	Sears	Rivka	רבקה	סירס	GIRL	1/4/03		74 Regina Road	Monsey	NY	10952	USA	8452906366	y.s.sears@gmail.com	Chabad
+4	G	Mrs. Holtsberg	Shain	Sossi	סוסי	שיין	GIRL	12/17/03		26 Harold Street	Tenafly	NJ	07670	USA	2018169386	RabbiShain@chabadlubavitch.org	Chabad
+4	G	Mrs. Holtsberg	Wolowik	Henya	העניא	וואלאוויק	GIRL	1/11/03		104 S. Southgate Drive	Spring Valley	NY	10977	USA	8453561546	awolowik@chedermonsey.org	Chabad
+4	G	Mrs. Holtsberg	Zeiler	Basya	בתי'ה	זיילער	GIRL	4/1/03		22 Concord Drive	Monsey	NY	10952	USA	8453541560	mendelzeiler@gmail.com	Chabad
+5	G	Mrs. Hendel	Freundlich	Tova	טובה	פריינדליך	GIRL	9/5/02		14 Voyager Court	Monsey	NY	10952	USA	8453540042	namfreundlich@yahoo.com	Chabad
+5	G	Mrs. Hendel	Greenwald	Menucha	מנוחה	גרינוואלד	GIRL	1/19/02		11 Ash Street	Monsey	NY	10952	USA	8453621374	leighcolby@gmail.com	Chabad
+5	G	Mrs. Hendel	Kaplan	Rivkah	רבקה	קפלן	GIRL	3/18/02		4 Fawn Lane	Suffern	NY	10901	USA	8456640830	rashimom@gmail.com	Chabad
+5	G	Mrs. Hendel	Labkowski	Ita	איטא	לאבקאווסקי	GIRL	2/21/03		11 Orchard Rd.	Briarcliff	NY	10510	USA	9149232522	silbylab@yahoo.com	Chabad
+5	G	Mrs. Hendel	Schaeffer	Shterna Sara	שטערנא שרה	שייפער	GIRL	11/9/01		8 Dunhill Lane	Monsey	NY	10952	USA	8452901967	leibschaeffer@gmail.com	Chabad
+5	G	Mrs. Hendel	Simon	Shaina	שיינא	סיימאן	GIRL	9/11/02		541 N Forest Ave.	Teaneck	NJ	07666	USA	2018010503	rabbisimon@aol.com	Chabad
+5	G	Mrs. Hendel	Stuart	Sarah Frieda	שרה פריידא	סטאורט	GIRL	11/8/02		245 Kearsing Parkway	Monsey	NY	10952	USA	8454063960	yankydini@optonline.net	Chabad
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	
+																	

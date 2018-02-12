@@ -1,0 +1,44 @@
+﻿Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Abramowitz	Menachem Mendel			Male		13 Nissan 2006									Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Bogomilsky	Schneur Zalman 			Male											Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Borenstein	Menachem Mendel			Male											Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Burston	Yossi			Male		14 Adar 2006									Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Cohen	Levi			Male		11 Tishrei 2006									Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Goodfriend	Hirsch Ber			Male		28 Av 2006									Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Greenwald	Menachem Mendel			Male		2 Sivan 2006									Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Grossbaum	Lazer			Male		4 Tishrei 2006									Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Jordan	Schneur Zalman 			Male											Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Korer	Levi Yitzchak			Male											Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Plotkin	Yaakov Yitzchok			Male		26 Elul 2006									Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Rimler	Shaul Eliyahu			Male											Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Sabol	Aron Dov			Male		2 Nissan 2006									Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Schechter	Hizkiyahu Emanuel			Male		22 Tevas 2006									Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Simon	Michel			Male		4 Tevas 2006									Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Touger	Shneur Zalman			Male		18 Tevas 2006									Chabad
+Cheder Chabad of Monsey	1	B	Rabbi Rosenberg	Weber 	Mendel			Male		9 Nissan 2006									Chabad
+Cheder Chabad of Monsey	2	B	Rabbi Silverstein	Farkas	Yossi			Male		22 Adar 2005									Chabad
+Cheder Chabad of Monsey	2	B	Rabbi Silverstein	Goldsmith 	Zalmy			Male		28 Tevas 2005									Chabad
+Cheder Chabad of Monsey	2	B	Rabbi Silverstein	Kaplan	Aryeh Leib			Male		11 Av 2005									Chabad
+Cheder Chabad of Monsey	2	B	Rabbi Silverstein	Lewis	Yosef Yitzchok			Male		6 Cheshvon 2005									Chabad
+Cheder Chabad of Monsey	2	B	Rabbi Silverstein	Litzman	Reuven			Male		3 Nissan 2005									Chabad
+Cheder Chabad of Monsey	2	B	Rabbi Silverstein	Plotkin	Shmuel			Male		2 Iyar 2005									Chabad
+Cheder Chabad of Monsey	2	B	Rabbi Silverstein	Sears	Pinchas			Male		30 Tishrei 2005									Chabad
+Cheder Chabad of Monsey	2	B	Rabbi Silverstein	Silverman	Yisroel			Male											Chabad
+Cheder Chabad of Monsey	5	B	Rabbi Silber	Burston	Duvy			Male		27 Tishrei 2002									Chabad
+Cheder Chabad of Monsey	5	B	Rabbi Silber	Kolt	Yosef Yitzchok			Male		9 Tamuz 2002									Chabad
+Cheder Chabad of Monsey	6	B	Rabbi Simpson	Gray	Binyomin Zev			Male		23 Adar 2001									Chabad
+Cheder Chabad of Monsey	6	B	Rabbi Simpson	Konikov	Yehoshua			Male		28 Av 2001									Chabad
+Cheder Chabad of Monsey	6	B	Rabbi Simpson	Rimler	Imanuel			Male		27 Av 2001									Chabad
+Cheder Chabad of Monsey	6	B	Rabbi Simpson	Rosenbluh	Eli			Male		27 Tishrei 2001									Chabad
+Cheder Chabad of Monsey	6	B	Rabbi Simpson	Shemtov	Menachem Mendel			Male		25 Av 2001									Chabad
+Cheder Chabad of Monsey	6	B	Rabbi Simpson	Silverstein	Avrohom Mordechai			Male		27 Adar 2001									Chabad
+Cheder Chabad of Monsey	7	B	Rabbi Blotner	Amsel 	Sholom			Male		24 Adar Bais 2001									Chabad
+Cheder Chabad of Monsey	7	B	Rabbi Blotner	Cohen	Menachem Mendel			Male		3 Tevas 2001									Chabad
+Cheder Chabad of Monsey	7	B	Rabbi Blotner	Dickel	Shmuel Dovid			Male		6 Tevas 2001									Chabad
+Cheder Chabad of Monsey	7	B	Rabbi Blotner	Gleyzer	Shlomo			Male		24 Chesvon 2001									Chabad
+Cheder Chabad of Monsey	7	B	Rabbi Blotner	Keller	Yehuda			Male		28 Tamuz 2001									Chabad
+Cheder Chabad of Monsey	7	B	Rabbi Blotner	Polter	Yitzchak			Male		24 Elul 2001									Chabad
+Cheder Chabad of Monsey	7	B	Rabbi Blotner	Rosenbluh	Gedaliah			Male		30 Nissan 2001									Chabad
+Cheder Chabad of Monsey	7	B	Rabbi Blotner	Schaeffer	Menachem Mendel			Male		22 Adar Bais 2001									Chabad
+Cheder Chabad of Monsey	7	B	Rabbi Blotner	Schwartz	Yossi			Male											Chabad
+Cheder Chabad of Monsey	7	B	Rabbi Blotner	Simon	Eli			Male		12 Tishrei 2001									Chabad
+Cheder Chabad of Monsey	7	B	Rabbi Blotner	Stein	Avaraham Yitzchok			Male											Chabad

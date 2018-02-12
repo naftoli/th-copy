@@ -1,0 +1,50 @@
+﻿Chabad Youth Club	6	Girls ג	C.M. Freedman	Cohen	Malka	ברכה מלכה	כהן	F	23/05/1998	"27 Iyar, 5758"	3802 Bendemeer	Cleveland Heights	OH	44118	USA	H: (216) 370-6176	hershnatash@yahoo.com	Chabad
+Chabad Youth Club	 3	Girls ב	Batsheva Chaikin	Cohen	Pesie	פעסל שרה	כהן	F	15/11/2001	"29 Cheshvan, 5762"	3802 Bendemeer	Cleveland Heights	OH	44118	USA	H: (216) 370-6176	hershnatash@yahoo.com	Chabad
+Chabad Youth Club	1	Boys א	Mickey Zegart	Cohen	Shloimie	שלמה חיים	כהן	M	22/09/2005	"18 Elul, 5765"	3802 Bendemeer	Cleveland Heights	OH	44118	USA	H: (216) 370-6176	hershnatash@yahoo.com	Chabad
+Chabad Youth Club	1	Girls א	Nava Witkes	Cohen	Yehudit Channa	יהודית חנה	כהן	F			600 San Moritz	Akron	OH	44333	USA	H: (216) 370-6176	mazalc770@gmail.com	Chabad
+Chabad Youth Club	7	Boys ג	Rabbi Shmuli Friedman	Dubow	Yossi	יוסף	דובאוו	M	28/03/2011	11 Nisan	23515 E. Silsby Rd.	Beachwood	OH	44122	USA	H:(216)382-3689	ndubow@hotmail.com	Frum
+Chabad Youth Club	6	Girls ג	C.M. Freedman	DuBow	Abby	אביגיל	דובאוו	F	Nov. 9	23 Cheshvan	23515 E. Silsby Rd.	Beachwood	OH	44122	USA	H:(216)382-3689	ndubow@hotmail.com	Frum
+Chabad Youth Club	7	Boys ג	Rabbi Shmuli Friedman	Eleff	Akiva	עקיבא ברוך	אלף	M	15/03/1999	"27 Adar, 5759"	2411 Blossom	Beachwood	OH	44122	USA	216-831-4699	acedoc@gmail.com	Chabad
+Chabad Youth Club	4	Boys ג	Rabbi Shmuli Friedman	Eleff	Gavriel	גבריאל איתן	אלף	M	13/02/2002	"1 Adar, 5762"	2411 Blossom	Beachwood	OH	44122	USA	216-831-4700	acedoc@gmail.com	Chabad
+Chabad Youth Club	5	Boys ג	Rabbi Shmuli Friedman	Evenchik 	Solly	בצלאל שמחה	אבנצ'יק	M	03/09/2001	"15 Elul, 5761"	2526 Lafayette	University Heights	OH	44118	USA	H: 216-291-1356	courtneyevenchik@gmail.com 	Chabad
+Chabad Youth Club	3	Girls ב	Batsheva Chaikin	Evenchik 	Shayna	שיינא	אבנצ'יק	F	25/03/2003	"21 Adar II, 5763"	2526 Lafayette	University Heights	OH	44118	USA	H: 216-291-1356	courtneyevenchik@gmail.com 	Chabad
+Chabad Youth Club	1 	Boys א	Mickey Zegart	Evenchik 	Zacharia	זכרי'	אבנצ'יק	M	13/01/2006	"13 Teves, 5766"	2526 Lafayette	University Heights	OH	44118	USA	H: 216-291-1356	courtneyevenchik@gmail.com 	Chabad
+Chabad Youth Club	2	Boys ב	Chaim Sasonkin	Goldstein	Mendel	מנחם מענדל	גולדשטיין	M	09/07/2003	"9 Tamuz, 5763"	2480 Deborah	Beachwood	OH	44122	USA	H: (845) 558-1529	ohiokosher@roadrunner.com	Chabad
+Chabad Youth Club	6	Girls ג	C.M. Freedman	Goldstein	Chana	חנה	גולדשטיין	F	17/09/1999	"7 Tishrei, 5760"	2480 Deborah	Beachwood	OH	44122	USA	H: (845) 558-1529	ohiokosher@roadrunner.com	Chabad
+Chabad Youth Club	1	Girls א	Nava Witkes	Goodman	Oriyah	אורי'	גולדשטיין	F	26/08/2004	"9 Elul, 5764"	4297 University Pkwy	University Heights	OH	44118	USA	C1: (216) 288-7219	jude1011@gmail.com	Frum
+Chabad Youth Club	1	Girls א	Nava Witkes	Greenberg	Leah	נחמה לאה	גרינברג	F	04/09/2005	30 Av	29640 Cannon Road	Solon	OH	44139	USA	H: (440) 498-1637	miriam@solonchabad.com	Chabad
+Chabad Youth Club	6	Girls ג	C.M. Freedman	Greenberg	Simi	סימא רחל	גרינברג	F	"Oct. 9, 2000"	10 Tishrei	29640 Cannon Road	Solon	OH	44139	USA	H: (440) 498-1637	miriam@solonchabad.com	Chabad
+Chabad Youth Club	2	Boys ב	Chaim SasonkinGreenberg	Greenberg	Mayer	מאיר שלמה	גרינברג	M	18/11/2003	23 Cheshvan	29640 Cannon Road	Solon	OH	44139	USA	H: (440) 498-1637	miriam@solonchabad.com	Chabad
+Chabad Youth Club	2	Boys ב	Chaim Sasonkin	Greenberg	Menny	מנחם מענדל	גרינברג	M	27/04/2003	25 Kislev	3383 Blanche Ave	Cleveland Heights	OH	44118	USA	H: (216) 870-4527	leibi@hotmail.com	Chabad
+Chabad Youth Club	3	Girls ב	Batsheva Chaikin	Hoen	Sara	שרה	הוען	F	23/12/2002	"18 Teves, 5763"	3416 Superior Park	University Heights	OH	44118	USA	H: (216) 371-7782	franhoen@gmail.com	Chabad
+Chabad Youth Club	6	Girls ג	C.M. Freedman	Hoen	Adena	עדינה	הוען	F	22/01/2001	"27 Teves, 5761"	3416 Superior Park	University Heights	OH	44118	USA	H: (216) 371-7782	franhoen@gmail.com	Chabad
+Chabad Youth Club	1 	Boys א	Mickey Zegart	Hoen	Mendy	מנחם מענדל	הוען	M	06/06/2005	"28 Iyar, 5765"	3416 Superior Park	University Heights	OH	44118	USA	H: (216) 371-7782	franhoen@gmail.com	Chabad
+Chabad Youth Club	6	Girls ג	C.M. Freedman	Hoen	Raizy	רייזל	הוען	F	08/12/1999	"29 Kislev, 5760"	3416 Superior Park	University Heights	OH	44118	USA	H: (216) 371-7782	franhoen@gmail.com	Chabad
+Chabad Youth Club	1	Boys א	Mickey Zegart	Isaacs	Avi	אברהם מיכאל	אייזיקס	M	30/12/2005	"29 Kislev, 5766"	23789 Wendover Drive	Beachwood	OH	44122	USA	H: (216) 471-8033	tova444@aol.com	Chabad
+Chabad Youth Club	3	Girls ב	Batsheva Chaikin	Isaacs	Rivca	רבקה לאה	אייזיקס	F	18/11/2003		23789 Wendover Drive	Beachwood	OH	44122	USA	H: (216) 471-8033	tova444@aol.com	Chabad
+Chabad Youth Club	6	Girls ג	C.M. Freedman	Jacobs	Pessel Leah	פעסל לאה	דזייקאבס	F	10/09/1999	"29 Elul, 5759"	3555 Berkeley	Cleveland Heights	OH	44118	USA	H: (216) 321-6937	hemda.jacobs@yahoo.com	Chabad
+Chabad Youth Club	5	Boys ג	Rabbi Shmuli Friedman	Jacobs	Yossi	יוסף הלוי	דזייקאבס	M	09/08/2002	"1 Elul, 5762"	3555 Berkeley	Cleveland Heights	OH	44118	USA	H: (216) 321-6937	hemda.jacobs@yahoo.com	Chabad
+Chabad Youth Club	1 	Boys א	Mickey Zegart	Jacobs	Levi	לוי הלוי	דזייקאבס	M	19/06/2005	"12 Sivan, 5765"	3555 Berkeley	Cleveland Heights	OH	44118	USA	H: (216) 321-6937	hemda.jacobs@yahoo.com	Chabad
+Chabad Youth Club	7	Boys ג	Rabbi Shmuli Friedman	Kadosh	Nir	ניר יצחק	קדוש	M	7/28/200	25 Tammuz	2234 Halcyon Rd. 	Beachwood	OH	44122	USA	216-382-5315	duduint@live.com	Chabaf
+Chabad Youth Club	1	Girls א	Nava Witkes	Kessler 	Avigail	אביגיל	קעסלער	F	10/10/2005	"7 Tishrei, 5766"	4286 University Pkwy	University Heights	OH	44118	USA	H: 216-373-3666	shaynakessler@hotmail.com	Chabad
+Chabad Youth Club	6	Girls ג	C.M. Freedman	Kottler	Ariella	אריאלה אסתר	קוטלר	F	12/02/2000	"6 Adar I, 5760"	23315 Ranch	Beachwood	OH	44122	USA	H:2162979186	marcelakottler@aol.com	Chabad
+Chabad Youth Club	7	Boys ג	Rabbi Shmuli Friedman	Kutner	Binyamin	בנימין משה ליב	קוטנר	M	19/05/1999	"4 Sivan, 5759"	2340 Twickenham	Beachwood	OH	44122	USA	H: (216) 292-1445	hkutner@menorahpark.org	Chabad
+Chabad Youth Club	2	Boys ב	Chaim Sasonkin	Marozov	Shmuli	שמואל	מרוזוב	M	08/10/2003	"12 Tishrei, 5764"	2559 Rubyvale 	University Heights	OH	44118	USA	H: (216) 292-1445	estie@friendscleveland.com	Chabad
+Chabad Youth Club	1	Girls א	Nava Witkes	Marozov	Chana	חנה	מרוזוב	F	17/05/2006	"19 Iyar, 5766"	2559 Rubyvale 	University Heights	OH	44118	USA	H: 216 381 4854	estie@friendscleveland.com	Chabad
+Chabad Youth Club	6	Girls ג	C.M. Freedman	Offenberg	Mushkie	מזל חי' מושקא	אופנברג	F	15/03/2000	5 Nisan		Cleveland Heights	OH	44118	USA			Chabad
+Chabad Youth Club	7	Boys ג	Rabbi Shmuli Friedman	Pearlmutter	Pesach Aaron	פסח אהרן	פרלמוטער	M	08/05/2001	15 Iyar	3628 Berkeley Rd.	Cleveland Heights	OH	44118	USA	216-471-8017	cpearl.pharmd@sbcglobal.com	Chabad
+Chabad Youth Club	1	Girls א	Nava Witkes	Pearlmutter	Channah	חנה	פרלמוטער	F	11/10/2003	16 Tishrei	3629 Berkeley Rd.	Cleveland Heights	OH	44118	USA	216-471-8018	cpearl.pharmd@sbcglobal.com	Chabad
+Chabad Youth Club	1	Girls א	Nava Witkes	Pearlmutter	Kayla	קיילא	פרלמוטער	F	29/07/2005	22 Tammuz	3630 Berkeley Rd.	Cleveland Heights	OH	44118	USA	216-471-8019	cpearl.pharmd@sbcglobal.com	Chabad
+Chabad Youth Club	7	Boys ג	Rabbi Shmuli Friedman	Rashidi	Pinchas Chaim	פנחס חיים	רשידי											Chabad
+Chabad Youth Club	5	Boys ג	Rabbi Shmuli Friedman	Sasonkin	Meir	מאיר שלמה	ששונקין	M	07/08/2000	18 Av	599 Pebble Beach Drive	Akron	OH	44333	USA	(330) 867-6798	kailasasonkin@gmail.com	Chabad
+Chabad Youth Club	4	Boys ג	Rabbi Shmuli Friedman	Sasonkin	Ari	ישראל ארי' ליב	ששונקין	M	9/1/	24 Elul	599 Pebble Beach Drive	Akron	OH	44333	USA	(330) 867-6799	kailasasonkin@gmail.com	Chabad
+Chabad Youth Club	2	Boys ב	Chaim Sasonkin	Sasonkin	Yossi	יוסף	ששונקין	M	5/24/	3 Nissan	599 Pebble Beach Drive	Akron	OH	44333	USA	(330) 867-6800	kailasasonkin@gmail.com	Chabad
+Chabad Youth Club	3	Girls ב	Batsheva Chaikin	Sasonkin	Chana	חנה	ששונקין	F	30/08/2011	7-8 Elul	599 Pebble Beach Drive	Akron	OH	44333	USA	(330) 867-6801	kailasasonkin@gmail.com	Chabad
+Chabad Youth Club	6	Girls ג	C.M. Freedman	Schlossberg	Devorah 	דבורה לאה	שלאסבערג	F	05/04/2000	29 Adar II	3509 Berkeley Rd.	Cleveland Heights	OH	44118	USA	216-320-1051	rlrms@yahoo.com	Chabad
+Chabad Youth Club	6	Girls ג	C.M. Freedman	Schlossberg	Tzipora	מרים צפורה	שלאסבערג	F	3.25.99	8 Nissan	3510 Berkeley Rd.	Cleveland Heights	OH	44118	USA	216-320-1052	rlrms@yahoo.com	Chabad
+Chabad Youth Club	1	Girls א	Nava Witkes	Schlossberg	Chaya Rivka	חי' רבקה	שלאסבערג	F	27/04/2005	18 Nissan	3511 Berkeley Rd.	Cleveland Heights	OH	44118	USA	216-320-1053	rlrms@yahoo.com	Chabad
+Chabad Youth Club	7	Boys ג	Rabbi Shmuli Friedman	Waxman	Albert	אברהם אלברט	וואקסמאן	M	Nov/13/1998	25 Cheshvan	25085 Penshurst	Beachwood	OH	44122	USA	(216) 591-0409	waxmanl@waxmancpg.com	Chabad
+Chabad Youth Club	7	Boys ג	Rabbi Shmuli Friedman	Waxman	Aaron	אהרן יעקב	וואקסמאן	M	28/03/2000	24 Adar II	25086 Penshurst	Beachwood	OH	44122	USA	(216) 591-0409	waxmanl@waxmancpg.com	Chabad
+Chabad Youth Club	3	Girls ב	Batsheva Chaikin	Wilks	Devorah Leah	דבורה לאה	ווילקס	F	08/02/2001	16 Shvat	3690 Severn	Cleveland Heights	OH	44118	USA	H: (216) 397-8996	jpwilks@yahoo.com	Chabad
+Chabad Youth Club	7	Boys ג	Rabbi Shmuli Friedman	Wilks	Baruch	ברוך יצחק	ווילקס	M	07/12/1998	18 Kislev	3691 Severn	Cleveland Heights	OH	44119	USA	H: (216) 397-8997	jpwilks@yahoo.com	Chabad
+Chabad Youth Club	1	Girls א	Nava Witkes	Witkes	Estie	אסתר רבקה	וויטקעס	F	07/11/2005	"5 Cheshvan, 5766"	2601 Milton	University Heights	OH	44118	USA	H: (508) 317-7656	gtcater@aol.com	Chabad

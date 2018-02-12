@@ -1,0 +1,19 @@
+﻿Lubavitch Boys School 	4		Rabbi Labkowski	AUSTIN	Levi			MALE	2003-09-22										Chabad
+Lubavitch Boys School 	4		Rabbi Labkowski	GARBARCHIK	Zalmi			MALE	2004-02-18										Chabad
+Lubavitch Boys School 	4		Rabbi Labkowski	KAHN	Eli			MALE	2003-12-27										Chabad
+Lubavitch Boys School 	4		Rabbi Labkowski	POTASH	Levi			MALE	2003-09-09										Chabad
+Lubavitch Boys School 	5		Rabbi Hackner	CYPRYS	Zev 			MALE	2003-06-26										Chabad
+Lubavitch Boys School 	5		Rabbi Hackner	HOLTZZBERG	Mendel			MALE	2002-05-11										Chabad
+Lubavitch Boys School 	5		Rabbi Hackner	VOGEL	Nechemia			MALE	2002-07-16										Chabad
+Lubavitch Boys School 	5		Rabbi Hackner	ZAVDI	Mendel			MALE	2003-03-21										Chabad
+Lubavitch Boys School 	5		Rabbi Hackner	ZILBERMAN	Natanel			MALE	2003-04-18										Chabad
+Lubavitch Boys School 	6		Rabbi Schwei	KESELMAN	Yisrolik			MALE	2002-05-13										Chabad
+Lubavitch Boys School 	6		Rabbi Schwei	POTASH	Chaim			MALE	2002-01-06										Chabad
+Lubavitch Boys School 	6		Rabbi Schwei	PRUSS	Koppel			MALE	2002-07-11										Chabad
+Lubavitch Boys School 	6		Rabbi Schwei	ZAVDI	Yossele			MALE	2001-08-25										Chabad
+Lubavitch Boys School 	7		Rabbi Sudak	COHEN	Tzemach			MALE	2001-08-23										Chabad
+Lubavitch Boys School 	7		Rabbi Sudak	LABKOWSKI	Nochum			MALE	2001-01-20										Chabad
+Lubavitch Boys School 	7		Rabbi Sudak	MOSES	Avrohom Yisroel			MALE	2000-07-08										Chabad
+Lubavitch Boys School 	7		Rabbi Sudak	VOGEL	Yechiel			MALE	2000-09-04										Chabad
+Lubavitch Boys School 	7		Rabbi Sudak	COHEN	Shloime			MALE	2001-08-23										Chabad
+Lubavitch Boys School 	7		Rabbi Sudak	BOUZNAH	Mendel			MALE	2001-01-28										Chabad

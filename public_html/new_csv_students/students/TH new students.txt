@@ -1,0 +1,15 @@
+﻿Cheder Chabad of Philadelphia	1	1:0	Mrs. Lipsker	Coplon	Ephraim			male											chabad
+Cheder Chabad of Philadelphia	1	1:0	Mrs. Lipsker	Gerber	Sarah			female											chabad
+Cheder Chabad of Philadelphia	1	1:0	Mrs. Lipsker	Gurevitz	Faigel			female											chabad
+Cheder Chabad of Philadelphia	1	1:0	Mrs. Lipsker	Gurevitz	Sholom			male											chabad
+Cheder Chabad of Philadelphia	1	1:0	Mrs. Lipsker	Goldman	Levi			male											chabad
+Cheder Chabad of Philadelphia	1	1:0	Mrs. Lipsker	Haskelevich	Srolli			male											chabad
+Cheder Chabad of Philadelphia	1	1:0	Mrs. Lipsker	Kantor	Mendel			male											chabad
+Cheder Chabad of Philadelphia	1	1:0	Mrs. Lipsker	Kaplan	Moishe			male											chabad
+Cheder Chabad of Philadelphia	1	1:0	Mrs. Lipsker	Lipsker	Hudi			female											chabad
+Cheder Chabad of Philadelphia	1	1:0	Mrs. Lipsker	Sherman	Chana			female											chabad
+Cheder Chabad of Philadelphia	2	2:0	Mrs. Lowenstein	Goldshmid	Meishe			male											chabad
+Cheder Chabad of Philadelphia	3	3:4 boys	Rabbi Bronstein	Goldshmid	Mendi			male											chabad
+Cheder Chabad of Philadelphia	4	4:5 girls	Mrs. Gerber	Goldshmid	Chani			female											chabad
+Cheder Chabad of Philadelphia	6	6:7 boys	Rabbi Gurevitz	Meadvin	Daniel			male											chabad
+Cheder Chabad of Philadelphia	6	6:8 girls	Mrs. Gurevitz	Goldshmid	Chaya			female											chabad

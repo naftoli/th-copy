@@ -1,0 +1,17 @@
+﻿Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Chein	Chana	חנה	חיין	GIRL	09/21/01		5 Auburn Court	Monsey	NY	10952	USA	8455172291	thecheins@msn.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Drizin	Bella	ביילא	דריזין	GIRL	12/17/01		100 Overlook Drive	Wood Cliff Lake	NJ	07677	USA	2015051673	hindyd@aol.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Farkas	Sarah	שרה	פארקאש	GIRL	09/07/01		28 First Avenue	Monroe	NY	10950	USA	8457832035	berta2035@hotmail.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Grossbaum	Chaya	חי'	גראסבוים	GIRL	12/07/01		310 South Drive	Paramus	NJ	07652	USA	2012627172	zeesy@bcfriendship.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Hecht	Brocha Chana Miriam	חנה מרים	העכט	GIRL	01/01/06		364 Route 306	Monsey	NY	10952	USA	8452621389	totaltext@gmail.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Kagan	Nechama	נחמה	קאגען	GIRL	10/04/00		5 W. Fessler Drive	Monsey	NY	10952	USA		mkagan0@gmail.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Kolodny	Sarah Rivkah	שרה רבקה	קאלאדני	GIRL	03/27/01		6 Charlotte Drive	Spring Valley	NY	10977	USA	8453623625	shmariah@msn.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Labkowski	Mushka	מושקא	לאבקאווסקי	GIRL	06/10/01		11 Orchard Rd.	Briarcliff	NY	10510	USA	9149232522	silbylab@yahoo.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Lewis	Chaya	חי'	לואיס	GIRL	10/16/01		93 Old Tappan Road	Old Tappan	NJ	07675	USA	2017672007	morahdevora@gmail.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Marmulszteyn	Shayna	שיינא	מארמולשטיין	GIRL	12/05/00		647 Union Road	New Hempstead	NY	10977	USA	8453623612	marmulszteyn@netzero.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Polinger	Chana	חנה	פאלינ'גער	GIRL	11/30/02		10 W. Fessler Drive	Monsey	NY	10952	USA	8455170708	yuttypolinger@gmail.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Rubashkin	Menucha Rochel	מנוחה	רובאשקין	GIRL	05/05/01		96 South Gate Dr	Spring Valley	NY	10977	USA	3193274154	rebbitachon@gmail.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Shemtov	Chaya Mushka	חי' מושקא	שם-טוב	GIRL	08/14/01		4555 Henry Hudson Pkwy ag3	Bronx	NY	10471	USA	7185492118	sorahshmtv@gmail.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Steinmetz	Menucha Rochel	מנוחה רחל	שטיינמעטץ	GIRL	01/21/01		35 Park Avenue	Monsey	NY	10952	USA	8453526477	yoetz@optonline.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Teitelbaum	Mushka	מושקא	טייטעלבוים	GIRL	03/09/01		1195 Van Nest Ave.	Morris Park	NY	10461	USA	7188870777	zalmantamar@gmail.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Weber	Rishy	רישי	וועבער	GIRL	10/09/02		7 Galileo Court	Suffern	NY	10901	USA	8453620613	ewebs7@aol.com	Chabad
+Cheder Chabad of Monsey	6	G	Mrs. Sandhaus	Wolowik	Miriam	מרים	וואלאוויק	GIRL	06/07/01		104 S. Southgate Drive	Spring Valley	NY	10977	USA	8453561546	awolowik@chedermonsey.org	Chabad

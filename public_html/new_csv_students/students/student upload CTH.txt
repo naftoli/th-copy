@@ -1,0 +1,102 @@
+﻿Hebrew Academy	1	1A	Morah Eliefja	andrusier	Sarah esther			Female											chabad
+Hebrew Academy	1	1A	Morah Eliefja	denburg	Rashi			Female											chabad
+Hebrew Academy	1	1A	Morah Eliefja	gancz	Mushky			Female											chabad
+Hebrew Academy	1	1A	Morah Eliefja	Biston	Aliza			Female											chabad
+Hebrew Academy	1	1A	Morah Eliefja	goldsmith	Miriam			Female											chabad
+Hebrew Academy	1	1A	Morah Eliefja	hertzel	Mussie			Female											chabad
+Hebrew Academy	1	1A	Morah Eliefja	levitin	Mirel			Female											chabad
+Hebrew Academy	1	1A	Morah Eliefja	liberow	Menucha esther			Female											chabad
+Hebrew Academy	1	1A	Morah Eliefja	stolik	Miriam chaya			Female											chabad
+Hebrew Academy	1	1A	Morah Eliefja	Salazar	Michal			Female											chabad
+Hebrew Academy	1	B	Morah Bartfield	barash	Nochum			Male											chabad
+Hebrew Academy	1	B	Morah Bartfield	cohen	Sholom Dovber			Male											chabad
+Hebrew Academy	1	B	Morah Bartfield	croitoru	Levi			Male											chabad
+Hebrew Academy	1	B	Morah Bartfield	friedman	Levi yitchak			Male											chabad
+Hebrew Academy	1	B	Morah Bartfield	hecht	Nachmi			Male											chabad
+Hebrew Academy	1	B	Morah Bartfield	runyan	Mendel			Male											chabad
+Hebrew Academy	1	B	Morah Bartfield	Jimenez	Netanel			Male											frum
+Hebrew Academy	2	A	Morah Friedman	Bronstein	Chaya			Female											chabad
+Hebrew Academy	2	A	Morah Friedman	Brook	Chaya Mushka			Female											chabad
+Hebrew Academy	2	A	Morah Friedman	Brownstein	Bryna			Female											chabad
+Hebrew Academy	2	A	Morah Friedman	bushel	Shevy			Female											chabad
+Hebrew Academy	2	A	Morah Friedman	myer-smith	Hindy			Female											chabad
+Hebrew Academy	2	A	Morah Friedman	New	Chera			Female											chabad
+Hebrew Academy	2	A	Morah Friedman	Weiss	Nechama dina			Female											chabad
+Hebrew Academy	2	B	Morah Friedman	Bitton	Yair			Male											frum
+Hebrew Academy	2	B	Morah Friedman	friedman	Coby			Male											chabad
+Hebrew Academy	2	B	Morah Friedman	gurary	Shneur zalman			Male											chabad
+Hebrew Academy	2	B	Morah Friedman	kaplan	Chaim			Male											chabad
+Hebrew Academy	2	B	Morah Friedman	levi	Ethan			Male											frum
+Hebrew Academy	2	B	Morah Friedman	marrus	Mendel			Male											chabad
+Hebrew Academy	2	B	Morah Friedman	rabin	dovber			Male											chabad
+Hebrew Academy	2	B	Morah Friedman	rosenfeld	Dovi			Male											chabad
+Hebrew Academy	2	B	Morah Friedman	runyan	Sefi			Male											chabad
+Hebrew Academy	2	B	Morah Friedman	stolik	Avraham boruch			Male											chabad
+Hebrew Academy	3	A	Morah Andrusier	barashi	rina tehila			Female											frum
+Hebrew Academy	3	A	Morah Andrusier	Brook	Yocheved			Female											chabad
+Hebrew Academy	3	A	Morah Andrusier	denburg	Kayza Rochel			Female											chabad
+Hebrew Academy	3	A	Morah Andrusier	Jian	Rachel			Female											frum
+Hebrew Academy	3	A	Morah Andrusier	levitin	Rivka			Female											chabad
+Hebrew Academy	3	A	Morah Andrusier	Peres	Maya			Female											frum
+Hebrew Academy	3	A	Morah Andrusier	schurder	Kayla			Female											chabad
+Hebrew Academy	3	A	Morah Andrusier	Sheinberger	Lieba			Female											chabad
+Hebrew Academy	3	B	Morah Scheinberger	cohen	JJ			Male											chabad
+Hebrew Academy	3	B	Morah Scheinberger	Friedman	Shalom Dovber			Male											chabad
+Hebrew Academy	3	B	Morah Scheinberger	gancz	Mendel			Male											chabad
+Hebrew Academy	3	B	Morah Scheinberger	hirsh	Levi			Male											chabad
+Hebrew Academy	3	B	Morah Scheinberger	myer-smith	Mendel			Male											chabad
+Hebrew Academy	3	B	Morah Scheinberger	Posner	Sholom			Male											chabad
+Hebrew Academy	3	B	Morah Scheinberger	rubin	Yitchak			Male											chabad
+Hebrew Academy	3	B	Morah Scheinberger	Salazar	Nadav			Male											chabad
+Hebrew Academy	3	B	Morah Scheinberger	scheiner	mendel			Male											chabad
+Hebrew Academy	4	A	Morah Shusterman	barash	Chana			Female											chabad
+Hebrew Academy	4	A	Morah Shusterman	runyan	Esti			Female											chabad
+Hebrew Academy	4	A	Morah Shusterman	stolik	Rivka			Female											chabad
+Hebrew Academy	4	B	Rabbi Granat	croitoru	Menachem			Male											chabad
+Hebrew Academy	4	B	Rabbi Granat	Friedman	Shmuel			Male											chabad
+Hebrew Academy	4	B	Rabbi Granat	goldsmith	Levi yitchak			Male											chabad
+Hebrew Academy	4	B	Rabbi Granat	Jalusi	Avraham Aryeh Yisroel			Male											chabad
+Hebrew Academy	4	B	Rabbi Granat	Kagan	Mendel			Male											chabad
+Hebrew Academy	4	B	Rabbi Granat	Levin	Benny			Male											chabad
+Hebrew Academy	4	B	Rabbi Granat	liberow	Menachem mendel			Male											chabad
+Hebrew Academy	4	B	Rabbi Granat	rosenfeld	Eli			Male											chabad
+Hebrew Academy	4	B	Rabbi Granat	Weiss	Mendel			Male											chabad
+Hebrew Academy	5	A	Morah Liberow	bushel	Nechami			Female											chabad
+Hebrew Academy	5	A	Morah Liberow	Croitoru	Rochel			Female											chabad
+Hebrew Academy	5	A	Morah Liberow	muskal	tzippa			Female											chabad
+Hebrew Academy	5	A	Morah Liberow	new	Sara Nechama			Female											chabad
+Hebrew Academy	5	A	Morah Liberow	Peres	meital			Female											frum
+Hebrew Academy	5	A	Morah Liberow	teboul	Aliza			Female											frum
+Hebrew Academy	5	A	Morah Liberow	uminer	Mushka			Female											chabad
+Hebrew Academy	5	B	Rabbi Lichy	goldsmith	Simcha hirsh			Male											chabad
+Hebrew Academy	5	B	Rabbi Lichy	Hirsh	Yaakov			Male											chabad
+Hebrew Academy	5	B	Rabbi Lichy	kaplan	shraga			Male											chabad
+Hebrew Academy	5	B	Rabbi Lichy	popper	Yossi			Male											chabad
+Hebrew Academy	5	B	Rabbi Lichy	pshemesh	Levi			Male											chabad
+Hebrew Academy	5	B	Rabbi Lichy	rabin	ari			Male											chabad
+Hebrew Academy	5	B	Rabbi Lichy	schurder	Eliezer			Male											chabad
+Hebrew Academy	5	B	Rabbi Lichy	stolik	Menachem mendel			Male											chabad
+Hebrew Academy	5	B	Rabbi Lichy	sufrin	Chaim			Male											chabad
+Hebrew Academy	5	B	Rabbi Lichy	teitelbaum	Daniel			Male											chabad
+Hebrew Academy	6	A	Morah Slavaticki	liberow	Miriam maryasha			Female											chabad
+Hebrew Academy	6	A	Morah Slavaticki	myer-smith	Yehudis			Female											chabad
+Hebrew Academy	6	A	Morah Slavaticki	Posner	Chana			Female											chabad
+Hebrew Academy	6	A	Morah Slavaticki	teboul	Yehudit			Female											frum
+Hebrew Academy	6	B	Rabbi Brownstein	Denburg	Avrom			Male											chabad
+Hebrew Academy	6	B	Rabbi Brownstein	Jian	Michael			Male											frum
+Hebrew Academy	6	B	Rabbi Brownstein	Scheiner	uziel			Male											chabad
+Hebrew Academy	6	B	Rabbi Brownstein	sheinberger	Moshe			Male											chabad
+Hebrew Academy	7	A	Morah Granat	Baron	Rivky			Female											chabad
+Hebrew Academy	7	A	Morah Granat	Brandwein	Tovah			Female											frum
+Hebrew Academy	7	A	Morah Granat	croitoru	Sarah			Female											chabad
+Hebrew Academy	7	A	Morah Granat	engel	Chaya itta			Female											chabad
+Hebrew Academy	7	A	Morah Granat	Lilienthal	Tamar			Female											chabad
+Hebrew Academy	7	B	Rabbi Granat	denburg	Mendel			Male											chabad
+Hebrew Academy	7	B	Rabbi Granat	friedman	Shlomo Zev			Male											chabad
+Hebrew Academy	7	B	Rabbi Granat	hecht	Shmuel			Male											chabad
+Hebrew Academy	7	B	Rabbi Granat	Jalusi	yehuda levi yitchak			Male											chabad
+Hebrew Academy	7	B	Rabbi Granat	Jian	Yehuda			Male											frum
+Hebrew Academy	7	B	Rabbi Granat	kaplan	yaakov			Male											chabad
+Hebrew Academy	7	B	Rabbi Granat	wiesel	Azi			Male											frum
+Hebrew Academy	8	A	Morah Denburg	pshemesh	yael			Female											chabad
+Hebrew Academy	8	B	Rabbi Brownstein	Posner	Yosef			Male											chabad

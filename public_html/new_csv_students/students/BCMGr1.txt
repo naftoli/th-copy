@@ -1,0 +1,16 @@
+﻿Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Borodkin	Rivka	רבקה 	באראדקין	Female	20/01/2005	י'א  שבט  תשס'ה									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Bukher	Chaya Mushka	חי' מושקא	 בוכער	Female	05/11/2005	ג  מרחשון  תשס'ו									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Cohen	Sheyna	שיינא	 כהן	Female	27/04/2005	י'א  ניסן  תשס'ה									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Dahne	Sarah Yetta	שרה יעטא	 דהן	Female	02/03/2005	כ'א  אדר  תשס'ה									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Gubnitsky	Chaya Mushka	מוסי	 גובניטסקי	Female	09/03/2005	כ'ח  אדר  תשס'ה									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Hillel	Chana	חנה 	הלל	Female	12/06/2005	ה  סיון  תשס'ה									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Liani	Chaya Mushka	חי' מושקא	 ליאני	Female	28/04/2005	י'ט  ניסן  תשס'ז									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Linkov	Brocha Tova	ברכה טובה	 לינקוב	Female	20/09/2005	ט'ז  אלול  תשס'ה									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Plotkin	Malkie	מלכי	 פלאטקין	Female	03/09/2005	כ'ט  אב  תשס'ה									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Rainiz	Feiga	פייגי	 רייניץ	Female	11/05/2005	ב  אייר  תשס'ה									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Rapoport	Shterna Sara	שטערני	 רפופורט	Female	24/11/2004	י'א  כסלו  תשס'ה									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Rodal	Shterna Sarah	שטערנא שרה	 ראדל	Female	04/10/2005	ב  תשרי  תשס'ו									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Segall	Shterna	שטערנא	 סגל	Female	17/11/2004	ה  כסלו  תשס'ה									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Shemesh	Chedva	חדוה	 שמש	Female	17/08/2005	י'ב  אב  תשס'ה									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Shuchat	Esther Brocha Lifsha	אסתר ברכה ליפשא	 שוחאט	Female	23/03/2005	י'ג  אדר ב  תשס'ה									Chabad
+Beis Chaya Mushka - CH	1		Devorah Leah Hellinger	Stone	Sara	שרה	 סטאון	Female	14/03/2005	ג  אדר ב  תשס'ה									Chabad
