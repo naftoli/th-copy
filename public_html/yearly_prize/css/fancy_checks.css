@@ -1,0 +1,73 @@
+/* set up the checkbox (container) */
+label.fancy-check-container {
+    /*position: relative;*/
+    display: inline-block;
+    height: 1em;
+}
+/* hide the ugly checkbox */
+label.fancy-check-container input {
+    display: none;
+}
+/* font-awsome spen */
+label.fancy-check-container span.fancy-check {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+/* plain box */
+label.fancy-check-container span.fancy-check:before {
+    content: "\f096";
+}
+/* box with check */
+label.fancy-check-container input:checked + span.fancy-check:before {
+    content: "\f046";
+}
+
+/* set up the label (container) */
+label.slider-container {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 1em;
+}
+/* hide the ugly checkbox */
+label.slider-container input {
+    display: none;
+}
+/* grey container */
+label.slider-container span.slider-span {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #bbb;
+    transition: .3s;
+    width: 40px;
+    height: 21px;
+    border-radius: 30px;
+}
+/* The white dot */
+label.slider-container span.slider-span:before {
+    position: absolute;
+    content: "";
+    height: 15px;
+    width: 15px;
+    left: 4px;
+    background-color: white;
+    transition: .3s;
+    top: 3px;
+    border-radius: 50%;
+}
+/* change the background color when the input is checked */
+label.slider-container input:checked + .slider-span {
+    background-color: #888;
+}
+/* Move the white dot */
+label.slider-container input:checked + .slider-span:before {
+    transform: translateX(18px); // move it to the other side
+}

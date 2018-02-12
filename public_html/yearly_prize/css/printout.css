@@ -1,0 +1,41 @@
+h1{
+    text-align: center;
+}
+
+.page_break{
+    page-break-after: always;
+}
+
+body > h3{
+    text-align: center;
+}
+span.checkbox {
+    display: inline-block;
+    border: 1px solid;
+    height: 20%;
+    width: 20%;
+    max-height: 15px;
+    max-width: 15px;
+    margin-right: 10px;
+}
+.shipping_box h3 {
+    display: inline-block;
+    font-size: 15px;
+    width: 90%;
+    margin: 3px 0px;
+}
+div.shipping_box {
+    display: inline-block;
+    width: 22%;
+    margin: 1%;
+}
+div.shipping_inner_box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+body {
+    max-width: 900px;
+    margin: 0 auto;
+}
