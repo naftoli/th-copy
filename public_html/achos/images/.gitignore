@@ -1,0 +1,5 @@
+# do not keep track of all the staff photos
+/staff/*
+
+# not sure what this large zip file is...
+/mashpia.zip
