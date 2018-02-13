@@ -52,7 +52,7 @@ $schools = $as->getSchools();
         <br/>
         <div class="options">
             <a class="button" id="generate_report"><i class="fa fa-refresh" aria-hidden="true"></i> Generate Report</a>
-            <a class="button" id="generate_csv"><i class="fa fa-save" aria-hidden="true"></i> Export to CSV (Coming Soon)</a>
+            <a class="button" id="generate_csv"><i class="fa fa-save" aria-hidden="true"></i> Export to CSV (Excel)</a>
         </div>
         
         <div id="report"></div>
