@@ -77,16 +77,16 @@ if (!empty($action)) { switch($action) {
 				   . gri('school_makeup_id') . ' school_makeup_id, ' . ms($school_settings) . ' school_settings, '
 				   . ms(gr('school_gender')) . ' school_gender, NULL school_logo_id, NULL school_logo_kiosk_id, '
 				   . gri('school_no_logo', 0) . ' school_no_logo, NULL school_file_id, '
-				   .  ms(gr('address1')) . ' school_address1, ' .  ms(gr('address2')) . ' school_address2, '
-				   .  ms(gr('city')) . ' school_city, ' .  ms(gr('state')) . ' school_state, '
-				   .  ms(gr('postal')) . ' school_postal, ' .  ms(gr('country')) . ' school_country, '
-				   .  ms(gr('phone')) . ' school_phone, ' .  ms(gr('cc_number')) . ' cc_number, ' .  ms(gr('cc_exp')) . ' cc_exp, '
-				   .  ms(gr('cc_cvv')) . ' cc_cvv, ' . gri('kiosk_print', 0) . ' kiosk_print, '
-				   .  ms(gr('shipping_method')) . ' shipping_method, ' . ms(gr('shipping_first')) . ' shipping_first, '
-				   .  ms(gr('shipping_last')) . ' shipping_last, ' .  ms(gr('shipping_address1')) . ' shipping_address1, '
-				   .  ms(gr('shipping_address2')) . ' shipping_address2, ' .  ms(gr('shipping_city')) . ' shipping_city, '
-				   .  ms(gr('shipping_state')) . ' shipping_state, ' .  ms(gr('shipping_postal')) . ' shipping_postal, '
-				   .  ms(gr('shipping_country')) . ' shipping_country, ' .  ms(gr('shipping_phone')) . ' shipping_phone');
+				   . ms(gr('address1')) . ' school_address1, ' .  ms(gr('address2')) . ' school_address2, '
+				   . ms(gr('city')) . ' school_city, ' .  ms(gr('state')) . ' school_state, '
+				   . ms(gr('postal')) . ' school_postal, ' .  ms(gr('country')) . ' school_country, '
+				   . ms(gr('phone')) . ' school_phone, ' .  ms(gr('cc_number')) . ' cc_number, ' .  ms(gr('cc_exp')) . ' cc_exp, '
+				   . ms(gr('cc_cvv')) . ' cc_cvv, ' . gri('kiosk_print', 0) . ' kiosk_print, '
+				   . ms(gr('shipping_method')) . ' shipping_method, ' . ms(gr('shipping_first')) . ' shipping_first, '
+				   . ms(gr('shipping_last')) . ' shipping_last, ' .  ms(gr('shipping_address1')) . ' shipping_address1, '
+				   . ms(gr('shipping_address2')) . ' shipping_address2, ' .  ms(gr('shipping_city')) . ' shipping_city, '
+				   . ms(gr('shipping_state')) . ' shipping_state, ' .  ms(gr('shipping_postal')) . ' shipping_postal, '
+				   . ms(gr('shipping_country')) . ' shipping_country, ' .  ms(gr('shipping_phone')) . ' shipping_phone');
       $edit_row = mysql_fetch_assoc($result); // set the result to the current row on the editing table
       $action = 'add'; // and revert to add
     } else { // if this is a genuine new organization
