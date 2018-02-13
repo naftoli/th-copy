@@ -21,7 +21,7 @@ $schools = $as->getSchools();
 
 if($debug) echo "</pre>";
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -42,7 +42,7 @@ if($debug) echo "</pre>";
         <h1>Created Students Report</h1>
         <? /******************* SHOW THE SCHOOLS DROPDOWN *********************/ ?>
         <? if(count($schools) == 1) {?>
-            <select id="school_id" name="school_id" class="hidden"  disabled>
+            <select id="school_id" name="school_id" class="hidden" disabled>
                 <option value="<?=array_keys($schools)[0]?>"><?=array_values($schools)[0]?></option>
             </select>
         <?} else {?>
@@ -71,7 +71,7 @@ if($debug) echo "</pre>";
         
         <div class="options">
             <a class="button" id="generate_report"><i class="fa fa-refresh" aria-hidden="true"></i> Generate Report</a>
-            <a class="button" id="generate_csv"><i class="fa fa-save" aria-hidden="true"></i> Export to CSV (Coming Soon)</a>
+            <a class="button" id="generate_csv"><i class="fa fa-save" aria-hidden="true"></i> Export to CSV</a>
         </div>
         
         <div id="report"></div>
