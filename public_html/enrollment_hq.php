@@ -192,11 +192,11 @@ foreach ($schools as $sid => $schoolName) {
             }
         });
         
-        $(".confirmEnrollment").click( function() {
+        $(".edit").change( function() {
             var id = $(this).parent().parent().attr('id');
             var val = $(this).is(":checked") ? 1 : 0;
-            $.post('ajax/updateChidon.php', { id : id, field : 'confirmed', val : val }, function( error ) {
-                if (parseInt(error) !== 0) {
+            $.post('ajax/updateChidon.php', { id : id, field : 'allow_edit', val : val }, function( error ) {
+                if (parseInt(error) != 0) {
                     alert('Error updating.');
                 }
             });
