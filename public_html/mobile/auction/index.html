@@ -15,9 +15,6 @@
 <script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
 <script src="js/all.js" defer></script>
     <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
-		<!--    Bug Report code -->
-		<link rel="stylesheet" href="/mobile/css/bug_report.css"/>
-		<script src="/mobile/js/bug_report.js?v=2.0" defer></script>
 		<style>
 			.subMenu {
                 border-top: none !important;
@@ -39,7 +36,7 @@
 	<body class="page-goals">
         <header class="navbar" id="top" role="banner">
 			<div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
-				<span id="page-title">Auction</span>
+				<span id="page-title">AUCTION</span>
 			</div>
         </header>
 		
@@ -86,13 +83,30 @@
             <div class="content">
         
                 <div class="personalImg"></div>
-				<div class="bug-report">
-					<img src="/mobile/img_new/report-bug-white-svg.svg" data-category="Auction" alt="bug-report" />
-				</div>
 				
 				<div class="alert alert-warning" role="alert" dir="ltr">
 					Coming Soon ...
 				</div>
+				<!--
+				<div class="alert alert-warning" role="alert" dir="ltr" style="color: red; margin-top: 20px;">
+					<b>After adding a prize in your Auction cart, be sure to click "SAVE" at the very bottom of your cart (in the cart page).</b>
+				</div>
+                
+                <div class="alert alert-warning" role="alert" dir="ltr">
+                    <div class="media">
+                        <div class="pull-right">
+                            (<span id="cartQty">0</span>)<i class="fa fa-shopping-cart fa-4x"></i>
+                        </div>
+                        <div class="media-body">
+                            <span class="balance"></span>
+                        </div>
+                    </div>
+                </div>
+        
+                <div id="main">
+                    
+                </div>
+				-->
             </div>
         </div>
         
@@ -181,9 +195,194 @@
                 else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' + info.photo + '">';
                 html += '</a>';
                 $(".personalImg").append( html );
-				// set the USER ID for bug reports
-                $(".bug-report img").data("user_id", user);
             });
+            /*
+            var bal = 0;
+            var cart = [];
+            var cartQty = 0;
+            var totalPrice = 0;
+            var originalBal = 0;
+    		var auction_id = 77;
+            
+            $.post('ajax/getBalance.php', { admin : admin, user : user, auction : auction_id }, function( success ) {
+                var info = $.parseJSON(success);
+                var html = "Total Miles Earned: " + info.tpoints;
+                html += "<br />Total Miles Earned this Year: " + info.earned;
+                html += "<br />Available Auction Miles: <span id='balance'>" + info.available + "</span>";
+                $(".balance").html(html);
+                originalBal = info.available;
+    			initCart();
+            });
+            
+            $.post('ajax/getPrizes.php', { admin : admin, user : user, auction : auction_id }, function( success ) {
+                var prizes = $.parseJSON(success);
+                
+                var html = '';
+    			var itr = 0;
+                for (var amount in prizes) {
+                    html += '<div class="panel panel-default">\
+                                <div class="panel-heading"><i class="glyphicon glyphicon-chevron-right"></i>' +  amount +  ' Point Prizes</div>' +                        
+                                '<div class="collapse"><div class="panel-body"><div class="row">';
+                    for (var p in prizes[amount]) {
+    					var prize = prizes[amount][p];
+                        html += '<div class="col-xs-12 col-sm-6 col-md-4 text-center mb-25"><article class="product light" id=' + prize.prize_id + '>' +
+                                '<figure class="figure-hover-overlay">' +                                                                      
+                                    '<a href="#" class="figure-href"></a>\
+                                    <img class="img-responsive" src="https://mashpia.com/file_view.php?id=' + prize.prize_image_id + '" alt="" title="">\
+                                </figure>\
+                                <div class="product-caption">\
+                                    <div class="block-name">\
+                                        <a href="#" class="product-name">' + prize.prize_name + '</a>\
+                                        <p class="product-price">' + prize.prize_points + ' Point(s)</p>\
+    									<p class="onePerUser">' + prize.available + ' available.</p>\
+                                    </div>\
+                                    <div class="product-cart" id="' +
+    									prize.prize_id + ':' + prize.prize_points + ':' +	prize.prize_image_id + ':' + prize.prize_name + '">\
+                                        <a href="#"><i class="fa fa-shopping-cart"></i> </a>\
+    									<br /><div style="color: #333; margin-top: 5px;"><span class="cartNum">0</span> in cart</div>\
+    								</div>\
+    							</div></article></div>';
+                    }
+                    html += '</div></div></div></div>';
+                }
+                
+                $("#main").append(html);
+                
+                $(".product-cart a").hover(
+                    function() {
+                        $(this).css('background-color', '#eb2c33');
+                        $(this).find('.fa').css('color', '#fff');
+                    },
+                    function() {
+                        $(this).css('background-color', '#fff');
+                        $(this).find('.fa').css('color', '#eb2c33');
+                    }
+                );
+            });
+            
+            $(document).on('click', ".panel-heading", function() {
+    			//$(this).parent().find(".collapse").collapse('toggle');
+                var c = $(this).parent().attr('class');
+                if (c.indexOf('open') > 0) {
+                    $(this).parent().removeClass('open');
+                    $(this).parent().find('.collapse').removeClass('in');
+                } else {
+                    $(this).parent().addClass('open');
+                    $(this).parent().find('.collapse').addClass('in');
+                    $(this).parent().siblings().removeClass('open');
+                    $(this).parent().siblings().find('.collapse').removeClass('in');
+                }
+            });
+            
+            function initCart() {
+    			if (!window.localStorage) {
+    				// need to update browser so that sessionStorage will work
+    				alert("You need to update your browser to the latest version in order for this site to work properly.");
+    			} else {
+    				if (sessionStorage.getItem('cartLoaded') && localStorage.getItem('auctionCart' + user)) {
+    					cart = JSON.parse( localStorage.getItem('auctionCart' + user) );
+    					for (var c in cart) {
+    						var item = cart[c];
+    						cartQty += item.qty;
+    						totalPrice += item.qty * item.price;
+    						$("#" + item.prize).find('.cartNum').text(item.qty);
+    					}
+    					$("#cartQty").text(cartQty);
+    					calcBalance();
+    				} else {
+    					$.post('ajax/getTickets.php', { user : user, auction : auction_id }, function( data ) {
+    						var info = $.parseJSON(data);
+    						for (var i in info) {
+    							var item = info[i];
+    							var id = parseInt(item.prize_id);
+    							var name = item.prize_name;
+    							var price = parseInt(item.prize_points);
+    							var qty = parseInt(item.quantity);
+    							var img = item.prize_image_id;
+    							cart.push({
+    								prize : id,
+    								name : name, 
+    								price : price,
+    								image : img, 
+    								qty : qty
+    							});
+    							//alert(qty);
+    							cartQty += qty;
+    							totalPrice += qty * price;
+    							$("#" + id).find('.cartNum').text(qty);
+    						}
+    						//alert(cartQty);
+    						localStorage.setItem('auctionCart' + user, JSON.stringify( cart ));
+    						sessionStorage.setItem('cartLoaded', 1);
+    						$("#cartQty").text(cartQty);
+    						calcBalance();
+    					});
+    				}
+    			}
+            }
+            
+            function calcBalance() {
+                bal = originalBal - totalPrice;
+                $("#balance").text(bal);
+            }
+            
+            $(document).on('click', '.product-cart', function() {
+                // get prize id and add to cart
+                var prizeInfo = $(this).attr('id');
+                var info = prizeInfo.split(':');
+                var id = parseInt(info[0]);
+                var price = parseInt(info[1]);
+    			var image = info[2];
+    			var prizeName = info[3];
+                var found = false;
+                
+                // see if user has enough points for this
+                var curBal = parseInt($("#balance").text());
+                if (curBal - price < 0) {
+                    alert('You do not have enough miles to add this prize.');
+                    return false;
+                }
+                
+                for (var c in cart) {
+                    var item = cart[c];
+                    // see if item exists
+                    if (item.prize == id) {
+    					found = true;
+                        item.qty++;
+                        totalPrice += item.price;
+    					$("#" + id).find('.cartNum').text(item.qty);
+                        break;
+                    }
+                }
+                
+                if (!found) {
+    				cart.push({
+    				   prize : id,
+    				   name : prizeName, 
+    				   price : price,
+    				   image : image, 
+    				   qty : 1
+    				});
+    				totalPrice += price;
+    				$("#" + id).find('.cartNum').text('1');
+                }
+                
+                cartQty++;
+    			if (!window.localStorage) {
+    				// need to update browser so that sessionStorage will work
+    				alert("You need to update your browser to the latest version in order for this feature to work.");
+    			} else {
+    				localStorage.setItem('auctionCart' + user, JSON.stringify( cart ));
+    			}
+                $("#cartQty").text(cartQty);
+                
+                calcBalance();
+            });
+    		
+    		$(".fa-shopping-cart").click( function() {
+    			location.href = "cart.html?id=" + user;
+            });
+            */
     	});
     </script>
 </html>
