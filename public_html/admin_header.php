@@ -688,7 +688,8 @@ $role_id = $row["role_id"];
 						
 					<ul class='list_second'>
                         <!--<li><a href="/uploadChidonFile.php">Upload File for Chidon</a></li>-->
-						<li><a href="/chidon_report.php">Registered for Chidon</a></li>
+						<!--<li><a href="/chidon_report.php">Registered for Chidon</a></li>-->
+						<li><a href="/reports/chidon/shabbaton_enrollment.php">Shabbaton Enrolled Report</a></li>
 						<li><a href="/chidon_tests.php">Enter Chidon Test Marks</a></li>
 						<li><a href="/chidon_school_reg.php">Enroll Chaperones</a></li>
 						<?php if ($admin_user['auth'] == 'super') : ?>
