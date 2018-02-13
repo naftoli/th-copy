@@ -35,10 +35,11 @@ if (intval($chidon_reg_id)) {
 		$sql = "update th_chidon  
 				set paid = " . $amount . ",
 				date_paid = now(),
-				paid_by = ". $admin_id . ",
-				parent_id = " . $admin_id . ", 
-				approval = '" . implode(';', $response_array) . "' 
-				where th_chidon_id = " . intval($chidon_reg_id);
+				approval = '" . implode(';', $response_array) . "'";
+		if ($admin_id) {
+			$sql .= ", paid_by = ". $admin_id . ", parent_id = " . $admin_id;
+		}
+		$sql .= " where th_chidon_id = " . intval($chidon_reg_id);
 		//echo $sql;
 		if (!@mysql_query( $sql )) {
 			$to = "naftolir@gmail.com";
