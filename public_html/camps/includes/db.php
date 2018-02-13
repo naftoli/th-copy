@@ -3,8 +3,9 @@
 //db
 //global $link = null;
 // old pass = eZauPhy9CEqEdYDT
+include $_SERVER['DOCUMENT_ROOT']."/../includes/globals.php";
 
-$link = mysql_connect('localhost', 'mashpia', 'ShJ1uWcT89Ek6E') or trigger_error_server('Failed to connect to mysql', E_USER_ERROR);
+$link = mysql_connect('localhost', $global_db_user, $global_db_pass) or trigger_error_server('Failed to connect to mysql', E_USER_ERROR);
 mysql_query('SET NAMES utf8');
 mysql_query('SET CHARACTER_SET utf8');
 mysql_select_db('mashpiadb') or trigger_error_server('Failed to select db', E_USER_ERROR);
