@@ -47,7 +47,7 @@ $schools = array(
 	80  => 770,
 	264 => 770,
 	328 => 85.59
-);			
+);
  
 if (in_array($school_id, array_keys($schools))) {
 	$total += $schools[$school_id];
@@ -81,7 +81,7 @@ while ($row = mysql_fetch_assoc($query)) {
 $confirmation = "";
 $message = "";
 
-$sql = "select * from schools where school_id = " . $school_id;
+$sql = "SELECT * FROM schools WHERE school_id = " . $school_id;
 $result2 = mysql_query($sql);
 $row2 = mysql_fetch_assoc($result2);
 
@@ -128,14 +128,13 @@ $year = GlobalSettings::getRegistrationYear();
 				
 				// on click of return button
 				$("#return_to_main_menu_button").click(function(){ 
-				    <? if ( $h_school ) { ?>	
-                                        var str = "admin_setup_guide_hschool.php?school_id=" + school_id;
-                                    <? } else { ?>
-                                        var str = "admin_setup_guide.php?school_id=" + school_id;
-                                    <? } ?>
-                                    window.location = str;
-				}); 			
-				
+					<? if ( $h_school ) { ?>	
+						var str = "admin_setup_guide_hschool.php?school_id=" + school_id;
+					<? } else { ?>
+						var str = "admin_setup_guide.php?school_id=" + school_id;
+					<? } ?>
+					window.location = str;
+				});
 
 				// randomize amount for testing
 				$("#point").click(function(){ 
@@ -145,97 +144,81 @@ $year = GlobalSettings::getRegistrationYear();
 				
 			});   // end of document.ready
 			
-				var confirmation = "<?=$confirmation;?>";
+			var confirmation = "<?=$confirmation;?>";
+			
+			$(function() {
+				$("#nav").height($("#content").height());
+			});
+			
+			// check them checkboxes
+			function check_checkboxes() {
+				if (document.getElementById("ccaccept").checked == false) {
+					document.getElementById("ccaccept").focus();
+					alert("You must agree to accept the charges.");
+					return false;
+				}
+				else if (document.getElementById("ccaccept2").checked == false) {
+					document.getElementById("ccaccept2").focus();
+					alert("You must agree to accept the charges for any future purchases and student registrations.");
+					return false;
+				}
+				else {
+					return true;
+				}				
+			}
+			
+			// display message
+			// function display_message() {
+				// if (confirmation != "") {
+					// alert(confirmation);
+						// window.location = "http://mashpia.com/admin.php";
+				// }
+			// }
 				
-				$(function() {
-					$("#nav").height($("#content").height());
+			function submit_transaction_to_creditcard_processing() {
+				// cast the json into a post params list
+				var dataToSend = $.param({
+					school_id: <?=$row2['school_id'];?>,
+					description: "school registration for: " + '<?=$row2['school_name'];?>',
+					amount: $('#trans_total').val(),
+					customer_profile_id: <?=$row2['authorize_customer_profile_id'];?>,
+					payment_profile_id: <?=$row2['authorize_payment_profile_id'];?>
 				});
 				
-				// check them checkboxes
-				function check_checkboxes() {
-					if (document.getElementById("ccaccept").checked == false) {
-						document.getElementById("ccaccept").focus();
-						alert("You must agree to accept the charges.");
-						return false;
-					}
-					else if (document.getElementById("ccaccept2").checked == false) {
-						document.getElementById("ccaccept2").focus();
-						alert("You must agree to accept the charges for any future purchases and student registrations.");
-						return false;
-					}
-					else {
-						return true;
-					}				
-				}
-				
-				// display message
-				// function display_message() {
-					// if (confirmation != "") {
-						// alert(confirmation);
-							// window.location = "http://mashpia.com/admin.php";
-					// }
-				// }
-				
-			// submit transaction to credit card processor
-			function submit_transaction_to_creditcard_processing() {
-				
-				var dataToSend =  
-					"cc_first_name=" +  '<?=$row2['cc_first'];?>' +
-					"&cc_last_name=" +  '<?=$row2['cc_last'];?>' +
-					"&school_id="    +  '<?=$row2['school_id'];?>' +
-					"&email="        +  '<?=$admin->admin_email;?>' +
-					"&cc_amount=" 	 +  $('#trans_total').val() +
-					"&cc_address="   +  '<?=$row2['cc_address'];?>' +
-					"&cc_state="  	 +  '<?=$row2['cc_state'];?>' +
-					"&cc_zip="  	 +  '<?=$row2['cc_zip'];?>' +
-					"&cc_description="	+  "school registration for: " + '<?=$row2['school_name'];?>' + 
-					"&ccnum="  		 +  '<?=$row2['cc_number'];?>' + 
-					"&ccexp="  		 +  '<?=$row2['cc_exp'];?>' + 
-					"&cccvv="  		 +  '<?=$row2['cc_cvv'];?>'  ;			
-					
-				$.ajax({
-				  url: 'register_authorize_net.php',
-				  type: "GET",
-				  data: dataToSend,
-				  success: function(data) {
-						//alert(data);
-						var info = data.split("\n");
-						var success = info[0];
-						
-						if (success == "1") {
-                                                //if (true) {
-							$('#cc_response').html(""+
-								"<li><h2>" + info[1] +   "</li></h2>" +
-								"<li><h2>Transaction ID:" + info[2] + "</li></h2>" +
-								"<li><h2>Authorization Code:" + info[3]  + "</li></h2>" +
-								"<li><h2>Amount:"+ info[4]  + "</li></h2>" +
-								"<li><h2>You may want to print this page for your records</li></h2>" );	
-								$("#return_to_main_menu_button").show();
-								$("#submit_button").hide();	
-		
-								var function_name = "set_school_era";
-								var parameters = school_id;
-								var url = "camps/includes/edit_functions.php?function_name=" + function_name + "&parameters=" + parameters;								
-								//alert(url);
-								$.get(url, function(success) {
-									//alert(success);
-								});
-								
-								//update school to be enrolled in all appropriate campaigns
-								$.post('ajax/enrollIntoCampaigns.php', {type : 'school', id : school_id});
-								
-								// send email to office
-								$.post('ajax/sendEmail.php', { school : school_id });
+				$.post(
+					"/ajax/authorize/charge_card.php",
+					dataToSend,
+					function(data) { // on a sucessfull hit this function is called
+						data = JSON.parse(data); // parse the result to json
+						// add || sid == 82 to allow the test account access
+						if(data.success) { // if the charge was sucessfull{
+							console.log(data.response); // log out the transaction response
+							// generate the response and show it in the correct box
+							var response  = data.response.transactionResponse.messages[0]; // load the correct section of the response
+							var message = response.description + " (" + response.code + ")"; // format the text
+							$('#cc_response').html(message + "<br/>") ; // show the user the response
+							$("#return_to_main_menu_button").show();
+							$("#submit_button").hide();
+
+							var url = "camps/includes/edit_functions.php?function_name=set_school_era&parameters=" + school_id;								
+							//alert(url);
+							$.get(url, function(success) {
+								//alert(success);
+							});
+							
+							//update school to be enrolled in all appropriate campaigns
+							$.post('ajax/enrollIntoCampaigns.php', {type : 'school', id : school_id});
+							
+							// send email to office
+							$.post('ajax/sendEmail.php', { school : school_id });
+							
+						} else { // alert the user that the charge has failed.
+							$('#cc_response').html("Credit Card Error: " + data.response + "<br/>Please Try Again.") ; // show the user the error					
 						}
-						else {						
-							$('#cc_response').html(""+
-								"<li><h2>" + info[1] +   "</li></h2>");						
-							alert(info[0] + '\nPlease try again.');
-						}
-				  }
-				});		
+					}
+				);
 				return false;
-			} // end of: submit_transaction_to_creditcard_processing		
+			} // end of: submit_transaction_to_creditcard_processing
 		</script>
 	</head>
 
@@ -341,20 +324,18 @@ $year = GlobalSettings::getRegistrationYear();
 												<li>
 													<input type="button" id='submit_button' value="Submit" class="button"> 
 												</li>
-												</div>
-												</div>
-												</div>
-												<div class="module" id="module-info">
-												<div class="module_content">
-												<div class="lists form">												
-												<ul>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="module" id="module-info">
+									<div class="module_content">
+										<div class="lists form">
+											<ul>
 												<li>          
 													<div id='cc_response'>&nbsp;</div>
 													<input type="button" id='return_to_main_menu_button' value="Proceed to Setup Guide" class="button"> 
 												</li>
-												</ul>
-												
-												
 											</ul>
 										</div>										
 									</div>									

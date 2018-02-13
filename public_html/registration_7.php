@@ -7,6 +7,12 @@ $h_school = $_SESSION['hschool'];
 include("db.php");
 include("check_admin_id.php");
 
+require_once('classes/authorize/CustomerProfile.php');
+use \classes\authorize\CustomerProfile;
+
+require_once('classes/authorize/PaymentProfile.php');
+use \classes\authorize\PaymentProfile;
+
 $next_page = "false";
 
 // ***** GET THE ADMIN INFO ***** //
@@ -23,6 +29,24 @@ $school_id = $admin->school_id;
 $message = "";
 $update_done = false;
 
+// ***** GET PAYMENT INFO ***** //
+$authorize_school_ids = mysql_query(
+	"SELECT authorize_customer_profile_id as customer_id, authorize_payment_profile_id as payment_id "
+	." FROM schools WHERE school_id = ".$admin->school_id
+);
+// load the info from the DBS
+$authorize_school_ids = mysql_fetch_assoc($authorize_school_ids); // fetch the results from the DBS
+$customer_id 	= $authorize_school_ids['customer_id'];
+$payment_id 	= $authorize_school_ids['payment_id'];
+
+if($customer_id) {
+	$customer_profile = new CustomerProfile($customer_id);
+	$payment_profile = $customer_profile->paymentProfiles[0];
+	$cc = $customer_profile->paymentProfiles[0]["payment"]["creditCard"]; // get the CC info from the API response....
+} else {
+	$cc = false;
+}
+
 if (isset($_POST['action'])) {
 	$action = $_POST['action'];
 	
@@ -31,28 +55,71 @@ if (isset($_POST['action'])) {
 	}
 	
 	if ($action == "update_credit_card") {
-		$sql = "UPDATE schools SET 		
-		cc_first 	='" . clean_character($_POST['cc_first_name']) . "', 
-		cc_last 	='" . clean_character($_POST['cc_last_name']) . "', 
-		cc_address 	='" . clean_character($_POST['cc_address']) . "', 
-		cc_state 	='" . clean_character($_POST['cc_state']) . "', 
-		cc_zip 		='" . clean_character($_POST['cc_zip']) . "', 	
-		cc_number	='" . clean_character($_POST['cc_number']) . "', 
-		cc_exp		='" . clean_character($_POST['cc_exp']) . "', 
-		cc_cvv		='" . clean_character($_POST['cc_cvv']) . "',
-		accounting_name = '" . mysql_real_escape_string($_POST['contact_name']) . "',
-		accounting_number = '" . mysql_real_escape_string($_POST['contact_number']) . "',
-		accounting_email = '" . mysql_real_escape_string($_POST['contact_email']) . "' 
-		WHERE school_id=" . $admin->school_id;
+		$sql = "UPDATE schools SET "
+			."cc_first 		='" . clean_character($_POST['cc_first_name']) . "', "
+			."cc_last 		='" . clean_character($_POST['cc_last_name']) . "', "
+			."cc_address 	='" . clean_character($_POST['cc_address']) . "', "
+			."cc_state 		='" . clean_character($_POST['cc_state']) . "', "
+			."cc_zip 		='" . clean_character($_POST['cc_zip']) . "', "
+			."accounting_name = '" . mysql_real_escape_string($_POST['contact_name']) . "', "
+			."accounting_number = '" . mysql_real_escape_string($_POST['contact_number']) . "', "
+			."accounting_email = '" . mysql_real_escape_string($_POST['contact_email']) . "' "
+			."WHERE school_id=" . $admin->school_id;
 		$query = mysql_query($sql);
+		// create the bill to array
+		$billto = [
+			"address" => clean_character($_POST['cc_address']),
+			"state" => clean_character($_POST['cc_state']),
+			"zip" => clean_character($_POST['cc_zip'])
+		];
 		
+		// make sure the DBS was updated....
 		if (!$query) {
 			$message = "<span style='color:red;'>Update not performed. Please try again.</span>";			
 		}
 		else {
 			$next_page = "true";
 		}
-	}
+		// check if we have payment info on file....
+		if ($customer_id && $authorize_school_ids['payment_id']) {
+			// update the payment profile on file:
+			$payment_profile = new PaymentProfile($payment_id, $customer_id);
+			$payment_profile->cardNumber 		= clean_character($_POST['cc_number']);
+			$payment_profile->expirationDate 	= clean_character($_POST['cc_exp']);
+			$payment_profile->cardCode 			= clean_character($_POST['cc_cvv']);
+			$payment_profile->billTo = $billto;
+			// submit the updated info and check for errors....
+			$errors = $payment_profile->update();
+			
+			if ($errors) {
+				$errorCode = $errors['messages']['message'][0]['code'];
+				$errorText = $errors['messages']['message'][0]['text'];
+				$message = "<span style='color:red;'>Credit Card Error ($errorCode): $errorText</span>";
+				$next_page = "false";
+			}
+		} else { // if we do not have an authorize account on record...
+			$payment_profile = PaymentProfile::createBasicArray(
+				clean_character($_POST['cc_number']),
+				clean_character($_POST['cc_exp']),
+				clean_character($_POST['cc_cvv']),
+			$billto, true);
+
+			// get the email from the admin
+			// create the payment profile
+			$customer_profile = CustomerProfile::create("CTH_".$admin->school_id, $admin->admin_email, $admin->first . " " . $admin->last, $payment_profile);
+			//// if it is a valid payment profile, update the system. (only bad case is a duplicate which then returns an array)
+			if ($customer_profile instanceof CustomerProfile) {
+				// insert the ids into the system....
+				mysql_query("UPDATE schools SET authorize_customer_profile_id = ". $customer_profile->customerProfileId .
+							", authorize_payment_profile_id = " . $customer_profile->paymentProfiles[0]["customerPaymentProfileId"] .
+							" WHERE school_id = $id"
+				);
+			} else {
+				$message = "<span style='color:red;'>Credit Card Information Invalid</span>";
+				$next_page = "false";
+			}
+		} // end CC updating conditions....
+	} // end if the action is update_cc_info...
 }
 else {
 	header("https://www.mashpia.com/registration.php");
@@ -86,7 +153,7 @@ function clean_character($string)
 		<!--<script type="text/javascript" src="http://jzaefferer.github.com/jquery-validation/jquery.validate.js"></script>-->
 		<script src="camps/scripts/jquery.tools.min.js"></script>		
 		
-		<script>		
+		<script>
 			var next_page = "<?=$next_page;?>";
 			var admin_id = <?=$admin_id;?>;
 			var school_id = <?=$school_id;?>;
@@ -351,15 +418,24 @@ function clean_character($string)
 												</li>
 												<li>
 													<span class="label"><label for="ccnum">Credit Card Number</label></span>
-													<span class="input"><input id="ccnum" class="required creditcard" name="cc_number" type="text"   value="<?=$row['cc_number']?>" /></span>
+													<span class="input">
+														<input id="ccnum" class="required creditcard" name="cc_number" type="text" placeholder="<?=$cc ? $cc['cardNumber'] : ""?>"
+															value="<?= isset($_POST['cc_number']) ? $_POST['cc_number'] : ""?>"/>
+													</span>
 												</li>
 												<li>
 													<span class="label"><label for="ccexp">Expiry Date<br>(format MMYY)</label></span>
-													<span class="input"><input id="ccexp" class="required digits" name="cc_exp" type="text"   value="<?=$row['cc_exp']?>" /></span>
+													<span class="input">
+														<input id="ccexp" class="required digits" name="cc_exp" type="text" placeholder="<?=$cc ? $cc['expirationDate'] : ""?>"
+															value="<?= isset($_POST['cc_exp']) ? $_POST['cc_exp'] : ""?>"/>
+													</span>
 												</li>
 												<li>
 													<span class="label"><label for="cccvv">CVV<br>on back of card</label></span>
-													<span class="input"><input id="cc_cvv" class="required digits" name="cc_cvv" type="text"   value="<?=$row['cc_cvv']?>" /></span>
+													<span class="input">
+														<input id="cc_cvv" class="required digits" name="cc_cvv" type="text" placeholder = "XXX"
+															value="<?= isset($_POST['cc_cvv']) ? $_POST['cc_cvv'] : ""?>"/>
+													</span>
 												</li>
 											</ul>
 											</div> 
