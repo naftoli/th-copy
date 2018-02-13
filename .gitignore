@@ -38,7 +38,7 @@ vendor/
 /youfile.txt
 /.zshrc
 /.gitconfig
-
+.git-credentials
 # composer folders
 /.cache/*
 /.config/*

@@ -21,7 +21,7 @@ $school_id = mysql_real_escape_string($_POST['school_id']);
 
 /***************** LOAD DATA **********************/
 $users_query = mysql_query(
-    "SELECT u.first, u.last, u.first_he, u.last_he, u.user_id "
+    "SELECT u.first, u.last, u.first_he, u.last_he, u.user_id, "
     ." th.host, th.host_address1, th.host_address2, th.between_streets, th.host_number, "
     ." a.admin_phone_mobile, a.admin_phone_mobile2 "
     ." FROM th_chidon th "
@@ -36,24 +36,35 @@ while($row = mysql_fetch_assoc($users_query)){
 }
 
 /***************** RENDER REPORT **********************/
-if($debug) echo "</pre>";?>
-<table>
-    <thead>
-        <th>Name</th><th>Hebrew Name</th><th>Host</th><th>Father Cell</th><th>Mother Cell</th>
-    </thead>
-    <tbody>
-        <? foreach($users as $user) {?>
-        <tr class="users">
-            <td><?=$user['first'] . " " . $user['last']?></td>
-            <td><?=$user['first_he'] . " " . $user['last_he']?></td>
-            <td>
-                Host: <?=$user['host']?> <br/>
-                <?=$user['host_address1'] . " " . $user['host_address2']?>. <br/>
-                Cross Streets: <?=$user['between_streets']?>
-            </td>
-            <td><?=$user['admin_phone_mobile']?></td>
-            <td><?=$user['admin_phone_mobile2']?></td>
-        </tr>
-        <?}?>
-    </tbody>
-</table>
+if($debug) echo "</pre>";
+
+if (count($users) > 0) { ?>
+    <table>
+        <thead>
+            <th>Name</th><th>Hebrew Name</th><th>Host</th><th>Father Cell</th><th>Mother Cell</th>
+        </thead>
+        <tbody>
+            <? foreach($users as $user) {?>
+            <tr class="users">
+                <td><?=$user['first'] . " " . $user['last']?></td>
+                <td><?=$user['first_he'] . " " . $user['last_he']?></td>
+                <td>
+                    Host: <?=$user['host']?> <br/>
+                    <?=$user['host_address1'] . " " . $user['host_address2']?>. <br/>
+                    Cross Streets: <?=$user['between_streets']?>
+                </td>
+                <td><?=$user['admin_phone_mobile']?></td>
+                <td><?=$user['admin_phone_mobile2']?></td>
+            </tr>
+            <?}?>
+        </tbody>
+    </table>
+<? } else { // if there are no students found... ?>
+    <div class="no-report">
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        <h2>No Enrolled Students Found</h2>
+        <p>
+            Click <a href="/enrollment.php">here</a> to begin the enrollment process....
+        </p>
+    </div> 
+<? } ?>
