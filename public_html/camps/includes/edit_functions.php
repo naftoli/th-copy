@@ -28,8 +28,8 @@ function set_school_era($parameters) {
 	if ($query) {				
 		return "true";
 	}
-	else {		
-		return "false";	
+	else {
+		return "false";
 	}
 }
 
