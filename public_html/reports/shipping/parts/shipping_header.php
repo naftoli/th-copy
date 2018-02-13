@@ -1,4 +1,4 @@
-<?php
+<?php $debug = false;
 /***************** DEBUGGING **********************/
 if ($_GET['debug']) {
     error_reporting(E_ALL);
