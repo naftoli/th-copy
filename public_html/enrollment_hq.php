@@ -17,12 +17,13 @@ $year = GlobalSettings::getChidonYear();
 
 $userInfo = array();
 foreach ($schools as $sid => $schoolName) {
-    $sql = "SELECT tc.*, u.first, u.last, c.* 
-            FROM th_chidon tc 
-            JOIN users u using (user_id)
-            JOIN classes c on u.class_id = c.class_id
-            WHERE tc.year = " . $year . "
-            AND u.school_id = " . $sid;
+    $sql = "SELECT tc.*, u.first, u.last, c.* "
+            ." FROM th_chidon tc "
+            ." JOIN users u using (user_id) "
+            ." JOIN classes c on u.class_id = c.class_id "
+            ." WHERE tc.year = " . $year . " "
+            ." AND u.school_id = " . $sid . " "
+            ." AND tc.deleted = 0 "; // only deleted kids
     $sql .= " order by class_grade, class_sub, tc.school_rep desc, u.last, u.first";
     echo "<input type='hidden' name='sql' value=\"" . $sql . "\" />";
     $result = mysql_query($sql) or die($sql . "<br />" . mysql_error());

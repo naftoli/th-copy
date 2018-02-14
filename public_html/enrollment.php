@@ -18,7 +18,8 @@ foreach ($schools as $sid => $schoolName) {
             ."JOIN classes c ON u.class_id = c.class_id "
             ."WHERE tc.year = " . $year . " "
             ."AND tc.contestant = 1 "
-            ."AND u.school_id = " . $sid . " ";
+            ."AND u.school_id = " . $sid . " "
+            ."AND tc.deleted = 0 "; // only deleted kids
     $sql .= "ORDER BY class_grade, class_sub, tc.school_rep desc, u.last, u.first";
     //echo "<input type='hidden' name='sql' value=\"" . $sql . "\" />";
     $result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
@@ -74,6 +75,7 @@ foreach ($schools as $sid => $schoolName) {
 
     <BODY>
         <? include('admin_header.php'); ?>
+        <?php include($_SERVER['DOCUMENT_ROOT']."/chidon_passwords.php"); ?>
         <h1>Shabbaton Eligibility</h1>
  
         <?php foreach ($userInfo as $sid => $info) { ?>
