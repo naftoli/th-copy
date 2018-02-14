@@ -81,7 +81,7 @@ $year = GlobalSettings::getChidonYear();
                     
                 <?php
                 foreach ($chaps as $chap) { ?>
-                    <tr id="<?=$chap['th_chidon_chap_id']?>"></tr>
+                    <tr id="<?=$chap['th_chidon_chap_id']?>">
                         <td><?=$chap['first_name']?></td>
                         <td><?=$chap['last_name']?></td>
                         <td><?=$chap['email']?></td>
