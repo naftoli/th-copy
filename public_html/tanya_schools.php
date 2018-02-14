@@ -1,5 +1,11 @@
 <?php
-require_once(dirname(__FILE__).'/db.php');
+$admin_auth = array('school'); 
+require_once(dirname(__FILE__).'/header.php');
+
+// only superusers can use this page
+if($admin_user['auth'] != 'super') {
+	header("Location: /admin.php");
+}
 
 require 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
@@ -80,31 +86,64 @@ while ($row = mysql_fetch_assoc($schools_query)) {
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>BP School Report</title>
 		<style>
+			body{ margin: 0px; }
+			h2.header{text-align: center;background: #03A9F4;margin: 0px;padding: 15px;color: #fff;font-size: 2em;margin-bottom: 15px;}
 			body, table {
 				font-family: sans-serif;
 				font-size: 12px;
+				width: 100%;
+			}
+			table{
+				max-width: 1200px;
+				margin: 0 auto;
+			}
+			table#newSchool {
+				width: 300px;
 			}
 			th, td {
 				padding: 3px;
 			}
+			#bpTable {
+				border-spacing: 0px;
+			}
 			#bpTable input {
 				width: 50px;
+				margin: 0 auto;
+				display: block;
+				background: none;
+				border: none;
+				border-bottom: 1px solid #000;
+				text-align: center;
+			}
+			#bpTable tr:nth-child(even) {background: #EEE}
+			#bpTable tr:nth-child(odd) {background: #FFF}
+			
+			button.save_row {
+				background: #03A9F4;
+				border: 1px solid #2196F3;
+				border-radius: 5px;
+				padding: 3px 8px;
+				color: #fff;
+				transition: .1s ease-in-out;
+			}
+			button.save_row:hover {
+				transform: scale(1.1);
+				cursor: pointer;
 			}
 		</style>
 	</head>
 	
 	<body>
-		<h2>BP School Report</h2>
+		<h2 class="header">BP School Report</h2>
 		
 		<?php if (isset($msg)) : ?>
-		<p style="color: red">
+		<p style="color: red; text-align: center;">
 			<?=$msg?>
 		</p>
 		<?php endif; ?>
-		
-		<hr />
+
 		<form action="tanya_schools.php" method="post" id="newSchool">
-			<table>
+			<table id="newSchool">
 				<tr>
 					<td>New School Name:</td>
 					<td><input type="text" name="newSchool" required /></td>
@@ -127,18 +166,29 @@ while ($row = mysql_fetch_assoc($schools_query)) {
 		<hr />
 		<table id="bpTable">
 			<tr>
+				<th>School ID</th>
 				<th>School</th>
 				<th>Tanya Lines</th>
 				<th>Mishna Lines</th>
+				<th>Number Of Students</th>
+				<th>Actions</th>
 			</tr>
 			<?php
 			foreach ($schools as $id => $name) {
 				$tanya = 0;
 				$mishna = 0;
-				$sql = "SELECT * FROM bp_school_summary WHERE campaign_id IN ($tanyaCampaign, $mishnaCampaign) AND school_id = " . $id;
-				$result = mysql_query($sql);
+				$child_count = 0;
+				
+				$result = mysql_query(
+					" SELECT bpu.campaign_id, bpu.num_lines, bpu.child_count " // select the campaign and the number of lines
+					." FROM users u JOIN bp_user_summary bpu USING (user_id) " // from the bp_user_summary table (joined from users...)
+					." WHERE bpu.campaign_id IN ($tanyaCampaign, $mishnaCampaign) " // where the campaign is in the current campaigns
+					." AND u.school_id = '$id' AND u.class_id IS NULL " // and they are in the same school with NO GRADE!
+					." AND u.first = 'Tanya'" // and the first name is tanya.... (perhaps we should say the child count is greater then 1?)
+				);
 				if (mysql_num_rows($result) > 0) {
 					while ($row = mysql_fetch_assoc($result)) {
+						$child_count = $row['child_count']; // just keep updating this...
 						if ($row['campaign_id'] == $tanyaCampaign) {
 							$tanya = $row['num_lines'];
 						} else if ($row['campaign_id'] == $mishnaCampaign) {
@@ -147,13 +197,20 @@ while ($row = mysql_fetch_assoc($schools_query)) {
 					}
 				}
 				?>
-				<tr id="id">
+				<tr id="<?=$id?>">
+					<td><?=$id?></td>
 					<td><?=$name?></td>
 					<td>
-						<input type="text" class="tanya" value="<?=$tanya?>" />
+						<input type="number" class="tanya" value="<?=$tanya?>" />
 					</td>
 					<td>
-						<input type="text" class="mishna" value="<?=$mishna?>" />
+						<input type="number" class="mishna" value="<?=$mishna?>" />
+					</td>
+					<td>
+						<input type="number" class="child_count" value="<?=$child_count?>" />
+					</td>
+					<td>
+						<button class="save_row">Save</button>
 					</td>
 				</tr>
 			<? } // end foreach school ?>
@@ -177,28 +234,46 @@ while ($row = mysql_fetch_assoc($schools_query)) {
 		var mishna = <?=$mishnaCampaign?>;
 		
 		$(function() {
-			$(".tanya").keyup( function() {
-				var val = $(this).val();
-				var id = $(this).parent().parent().attr('id');
-				$.post('ajax/updateBalPehCampaign.php', {
-					id: tanya,
-					val: val,
-					school : id,
-					table : 'lines_learned',
-					updateSummary : 1
+			$("button.save_row").click(function(event) {
+				var row = $(event.target).parent().parent(); // get the row that we are in.
+				// get the info from the row
+				
+				var data = {
+					school_id:		row.attr("id"),
+					tanya:			row.find(".tanya").val(),
+					mishna: 		row.find(".mishna").val(),
+					tanya_campaign:	<?=$tanyaCampaign?>,
+					mishna_campaign:<?=$mishnaCampaign?>,
+					child_count: 	row.find(".child_count").val()
+				};
+				
+				$.post("ajax/updateBpSchoolMarks.php", data, function(success){
+					debugger;
 				});
+				
 			});
-			$(".mishna").keyup( function() {
-				var val = $(this).val();
-				var id = $(this).parent().parent().attr('id');
-				$.post('ajax/updateBalPehCampaign.php', {
-					id: mishna,
-					val: val,
-					school : id,
-					table : 'lines_learned',
-					updateSummary : 1
-				});
-			});
+			//$(".tanya").keyup( function() {
+			//	var val = $(this).val();
+			//	var id = $(this).parent().parent().attr('id');
+			//	$.post('ajax/updateBalPehCampaign.php', {
+			//		id: tanya,
+			//		val: val,
+			//		school : id,
+			//		table : 'lines_learned',
+			//		updateSummary : 1
+			//	});
+			//});
+			//$(".mishna").keyup( function() {
+			//	var val = $(this).val();
+			//	var id = $(this).parent().parent().attr('id');
+			//	$.post('ajax/updateBalPehCampaign.php', {
+			//		id: mishna,
+			//		val: val,
+			//		school : id,
+			//		table : 'lines_learned',
+			//		updateSummary : 1
+			//	});
+			//});
 		});
 	</script>
 </html>
