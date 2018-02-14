@@ -70,7 +70,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Grades / Learning Registered Report</span>
                 </div>
             </a>
-            <a href="shabbaton_enrollment_report.php<?=$debug ? "?debug=true": "";?>">
+            <a href="shabbaton_enrollment.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="tickets"/>
                     <span class="link-text">Shabbaton Enrollment Report</span>
