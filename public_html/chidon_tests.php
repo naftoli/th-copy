@@ -148,9 +148,9 @@ foreach ($schools as $id => $school) {
         <h1>Enter Chidon Test Results</h1>
         
         <? //if ($admin_user['auth'] == 'super') { ?>
-        <p style="font-size: 16px; font-weight: bold; color: red;">
+<!--        <p style="font-size: 16px; font-weight: bold; color: red;">
             <i>Please Set/Refresh your Shabbaton Eligibility and School Representatives once all 3 test grades have been entered</i>
-        </p>
+        </p>-->
         <? //} // end if user is superuser ?>
         
         <? if ($admin_user['auth'] == 'super') { ?>
@@ -172,10 +172,10 @@ foreach ($schools as $id => $school) {
         <?php if (count($schools) == 1) : ?>
         
             <? //if ($admin_user['auth'] == 'super') { ?>
-                <p id="refresh_options">
+                <!--<p id="refresh_options">
                     <a class="button" id='setContestants'>Set/Refresh Shabbaton Eligibility</a>
                     <a class="button" id='setReps'>Set/Refresh School Representatives</a>
-                </p>
+                </p>-->
                 <hr/>
             <? //} ?>
 

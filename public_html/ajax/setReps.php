@@ -38,7 +38,7 @@ foreach ($students as $row) {
 //echo "<pre>"; print_r( $marks ); echo "</pre>";
 
 foreach ($marks as $grade => $more) {
-    krsort($marks[$school]);
+    krsort($marks[$grade]);
 }
 //echo "<pre>"; print_r($marks); echo "</pre>"; 
 $i = 1;
