@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Mobile Web Site</title>
+		<title>Tzivos Hashem | Chidon Enrollment</title>
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
         <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
@@ -109,7 +109,7 @@
 								<div class="row">
 								    <label class="control-label col-sm-2" for="book">Book:</label>
 								    <div class="col-sm-10">
-										<select class="form-control name="book" id="book" disabled>
+										<select class="form-control" name="book" id="book" disabled>
 											<option value="1">1</option>
 											<option value="2">2</option>
 											<option value="3">3</option>
@@ -129,7 +129,7 @@
 								<div class="row">
 								    <label class="control-label col-sm-2" for="size">Sweater Size:</label>
 								    <div class="col-sm-10">
-								      <select class="form-control" name="size" id="size" required disabled>
+								      <select class="form-control" name="size" id="size" required>
 										<option value="0">Please Choose</option>
 										<option value="children s">Children S (6 - 8)</option>
 										<option value="children m">Children M (8 - 10)</option>
@@ -384,6 +384,10 @@
 				if (!admin_id) {
 					location.href = "/mobile";
 				}
+				
+				if (admin_id == "UWdRMVFrc3hoQjRHSzcvMWNiMUlGZz09") { // temporary special book excemption for ohrMenachem, IF YOU SEE THIS PLEASE DELETE
+                    $("#book").attr("disabled", false);
+                }
 				
 				$.post('/mobile/reg/ajax/checkAuth.php', { user_id : id, admin_id : admin_id }, function( success ) {
 					if (success == 0) {
