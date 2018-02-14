@@ -57,13 +57,13 @@ class CropAvatar {
             $this -> extension = $extension;
             $this -> setDst();
           } else {
-             $this -> msg = 'Failed to save file';
+             $this -> msg = 'Failed to save file. Please check for file corruption.';
           }
         } else {
-          $this -> msg = 'Please upload image with the following types: JPG, PNG, GIF';
+          $this -> msg = 'Please upload image with the following types: JPG, JPEG, PNG, GIF';
         }
       } else {
-        $this -> msg = 'Please upload image file';
+        $this -> msg = 'Please upload an image file (JPG, JPEG, PNG or GIF).';
       }
     } else {
       $this -> msg = $this -> codeToMessage($errorCode);
@@ -81,7 +81,7 @@ class CropAvatar {
           $src_img = imagecreatefromgif($src);
           break;
 
-        case IMAGETYPE_JPEG:
+        case 	IMAGETYPE_JPEG:
           $src_img = imagecreatefromjpeg($src);
           break;
 
@@ -91,7 +91,7 @@ class CropAvatar {
       }
 
       if (!$src_img) {
-        $this -> msg = "Failed to read the image file";
+        $this -> msg = "Failed to read the image file, Image is corrupted.";
         return;
       }
 
@@ -217,7 +217,7 @@ $crop = new CropAvatar(
 $response = array(
   'state'  => 200,
   'message' => $crop -> getMsg(),
-  'result' => $crop -> getResult()
+  'result' => $crop -> getMsg() ? false : $crop -> getResult()
 );
 
 echo json_encode($response);
