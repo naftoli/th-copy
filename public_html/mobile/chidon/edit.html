@@ -413,6 +413,10 @@
 					location.href = "/mobile";
 				}
 				
+				if (admin_id == "UWdRMVFrc3hoQjRHSzcvMWNiMUlGZz09") { // temporary special book excemption for ohrMenachem, IF YOU SEE THIS PLEASE DELETE
+                    $("#book").attr("disabled", false);
+                }
+				
 				$.post('/mobile/reg/ajax/checkAuth.php', { user_id : id, admin_id : admin_id }, function( success ) {
 					if (success == 0) {
 						location.href = "/mobile";
