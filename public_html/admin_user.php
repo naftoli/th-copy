@@ -452,8 +452,18 @@ if(!empty($action)) {
                         yan = " . $yan . " 
                         where user_id = " . gri('user_id', -1);
                 mq($sqlAdd);
+				
+				// update the th_chidon table when the users grade is changed...
+				if(gri('class_id', -1) != -1){ // if we have a class ID
+					$class_grade_query = mysql_query("SELECT class_grade FROM classes WHERE class_id=".gri('class_id', -1)." AND class_grade IN ('4', '5', '6', '7', '8');");
+					// if there is a valid grade update the chidon table...
+					if(mysql_num_rows($class_grade_query) > 0) {
+						$grade = mysql_fetch_assoc($class_grade_query)['class_grade'];
+						mq("UPDATE th_chidon SET grade='$grade' WHERE user_id = ".gri('user_id', -1));
+					}
+				}
 
-				if ($mobile_pic && $mobile_pic != 'NULL') mq("update users set mobile_pic = '" . $mobile_pic . "' where user_id = " . gri('user_id', -1));
+				if (isset($mobile_pic) && $mobile_pic && $mobile_pic != 'NULL') mq("update users set mobile_pic = '" . $mobile_pic . "' where user_id = " . gri('user_id', -1));
 
 				// if dob changed, add birthday mission/task
 				if ($dobChanged) {
