@@ -22,10 +22,12 @@ $school_id = mysql_real_escape_string($_POST['school_id']);
 /***************** LOAD DATA **********************/
 $users_query = mysql_query(
     "SELECT u.first, u.last, u.first_he, u.last_he, u.user_id, "
-    ." th.host, th.host_address1, th.host_address2, th.between_streets, th.host_number, "
+    ." c.class_grade, c.class_sub, "
+    ." th.host, th.host_address1, th.host_address2, th.between_streets, th.host_number, th.allergies, "
     ." a.admin_phone_mobile, a.admin_phone_mobile2 "
     ." FROM th_chidon th "
     ." JOIN users u USING (user_id) "
+    ." JOIN classes c USING (class_id) "
     ." JOIN admins a ON parent_id = admin_id "
     ." WHERE th.date_paid IS NOT NULL AND th.school_id = $school_id AND th.year = $year" 
 );
@@ -41,13 +43,14 @@ if($debug) echo "</pre>";
 if (count($users) > 0) { ?>
     <table>
         <thead>
-            <th>Name</th><th>Hebrew Name</th><th>Host</th><th>Father Cell</th><th>Mother Cell</th>
+            <th>Name</th><th>Hebrew Name</th><th>Grade</th><th>Host</th><th>Father Cell</th><th>Mother Cell</th><th>Allergies</th>
         </thead>
         <tbody>
             <? foreach($users as $user) {?>
             <tr class="users">
                 <td><?=$user['first'] . " " . $user['last']?></td>
                 <td><?=$user['first_he'] . " " . $user['last_he']?></td>
+                <td><?=$user['class_grade'] . ($user['class_sub'] ? " - " . $user['class_sub'] : "")?></td>
                 <td>
                     Host: <?=$user['host']?> <br/>
                     <?=$user['host_address1'] . " " . $user['host_address2']?>. <br/>
@@ -55,6 +58,7 @@ if (count($users) > 0) { ?>
                 </td>
                 <td><?=$user['admin_phone_mobile']?></td>
                 <td><?=$user['admin_phone_mobile2']?></td>
+                <td><?=$user['allergies']?></td>
             </tr>
             <?}?>
         </tbody>
