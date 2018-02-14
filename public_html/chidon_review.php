@@ -67,6 +67,7 @@ foreach ($schools as $id => $school) {
 
     <BODY>
         <? include('admin_header.php'); ?>
+        <?php include($_SERVER['DOCUMENT_ROOT']."/chidon_passwords.php"); // require a password to use this page... ?>
         <h1 class="noPrint">Child Chidon Info</h1>
         
         <h3 class="noPrint">

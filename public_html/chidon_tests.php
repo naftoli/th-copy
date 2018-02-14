@@ -135,16 +135,12 @@ foreach ($schools as $id => $school) {
             input#submit_marks_button {margin: 0 auto;display: block;}
             a#next_page{float: right;}
             a#prev_page{float: left;}
-            <?php if ($admin_user['auth'] != 'super' || ($admin_user['auth'] == 'super' && isset($_POST['school']))) { ?>
-                .col_content{
-                    display: none;
-                }
-            <?php } ?>
         </style>
     </head>
 
     <body>
         <? include('admin_header.php'); ?>
+        <?php include($_SERVER['DOCUMENT_ROOT']."/chidon_passwords.php"); ?>
         <h1>Enter Chidon Test Results</h1>
         
         <? //if ($admin_user['auth'] == 'super') { ?>
@@ -327,40 +323,6 @@ foreach ($schools as $id => $school) {
             <?php if (isset($_POST['school'])) { // if the school is set in the post request then update the school variable ?>
                 school = <?=$_POST['school']?>;
             <?php } ?>
-            
-            var schools = [176,54,30,106,2];
-            var passwords = {
-                176 : 'laky',
-                54 : 'cth792ep',
-                30 : 'Chaimke10',
-                106 : 'Toronto',
-                2 : '8650'
-            }; // hardcoded passwords!!!!
-            var show = true;
-            <?php if ($admin_user['auth'] == 'super') { ?>
-                var password = prompt("Please enter the password to access this page."); // ask them to enter a password
-                if ('chidonvaad78' != password) { // if the password does not match
-                    show = false;
-                    alert('You have no permission to access this page. Redirecting you to the homepage'); // llet them know 
-                    location.href = 'admin.php';
-                }
-            <? } else { ?>
-                for (var s in schools) { // for each school with a hardcoded password
-                    if (schools[s] == school) { // if the current school is one of these schools
-                        var password = prompt("Please enter the password to access this page."); // ask them to enter a password
-                        if (passwords[school] != password) { // if the password does not match
-                            show = false;
-                            alert('You have no permission to access this page. Redirecting you to the homepage'); // llet them know 
-                            location.href = 'admin.php';
-                        }
-                    }
-                }
-            <? } ?>
-            
-            // show the page...
-            if(show) {
-                $(".col_content").show();
-            }
             
             /***************** ON CLICK LISTENERS ***************/
             // allow a user to remove from chidon

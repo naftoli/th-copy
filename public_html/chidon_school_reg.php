@@ -43,6 +43,7 @@ $year = GlobalSettings::getChidonYear();
 
     <body>
         <? include('admin_header.php'); ?>
+        <?php include($_SERVER['DOCUMENT_ROOT']."/chidon_passwords.php"); // require a password to use this page... ?>
         <h1>Register Chidon Chaperones</h1>
         
         <p style="font-size: 16px; font-weight: bold; color: red;">
