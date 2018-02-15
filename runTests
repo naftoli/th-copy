@@ -7,7 +7,7 @@ echo ""
 
 echo "Authorize.net API Integraiton"
 cd public_html/classes/authorize/
-vendor/bin/phpunit tests/.
+~/vendor/bin/phpunit tests/.
 
 echo ""
 echo "Cleaning up...."
