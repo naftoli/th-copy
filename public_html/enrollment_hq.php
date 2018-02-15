@@ -80,12 +80,22 @@ foreach ($schools as $sid => $schoolName) {
                 margin: 0 0 0 0;
                 background-image: none;
             }
+            .options {
+                text-align: center;
+            }
+            a.button{
+                display: inline-block;
+            }
         </style>
     </HEAD>
 
     <BODY>
         <? include('admin_header.php'); ?>
         <h1>Shabbaton Eligibility</h1>
+        
+        <div class="options">
+            <a class="button">Export to CSV (Excel/LibreOffice/Google Sheets)</a>
+        </div>
  
         <?php foreach ($userInfo as $sid => $info) : ?>
             <table class="tests">
@@ -125,7 +135,7 @@ foreach ($schools as $sid => $schoolName) {
                                 $curGrade = $grade;
                             }
                             
-                            echo "<tr id=" . $chidon_id . "><td>" . $grade . "</td><td>" . $name . "</td><td>" . number_format($avg1, 2) . "</td><td>";
+                            echo "<tr id=" . $chidon_id . " class='student'><td>" . $grade . "</td><td>" . $name . "</td><td>" . number_format($avg1, 2) . "</td><td>";
                             echo "<input type='checkbox' class='contestant' ";
                             if ($tests['contestant']) echo "checked ";
                             echo " /></td><td>";
@@ -202,5 +212,35 @@ foreach ($schools as $sid => $schoolName) {
                 }
             });
         });
+        
+        $("#generate_csv").click(genrate_csv);
+        
+        function genrate_csv() {
+            var rows = []; // the rows for the csv export
+            var csvContent = "School,Grade,Name,Avg Part 1,Avg Part 2,Avg All,Eligibility,Enrolled\n"; //"Serial,First,Last,Grade,# Created\n"; // the baisc csv file
+            var universalBOM = "\uFEFF";
+
+            $.each($(".tests"), function(school_index, school) {
+                var school_name = $(school).find("> caption").text();
+                $.each($(school).find("tr.student"), function(student_index, student_row) {
+                    var csv_row = [school_name];
+                    csv_row.push('"' + $(student_row).find("td")[0].innerText + '\t"'); // add the grade
+                    csv_row.push('"' + $(student_row).find("td")[1].innerText + '\t"'); // add the name
+                    csv_row.push('"' + $(student_row).find("td")[2].innerText + '\t"'); // add the avg for the first test
+                    csv_row.push('"' + $(student_row).find("td")[4].innerText + '\t"'); // add the avg for the second test
+                    csv_row.push('"' + $(student_row).find("td")[5].innerText + '\t"'); // add the avg for all tests
+                    csv_row.push('"' + $(student_row).find("td")[7].innerText + '\t"'); // add the eligibility status
+                    csv_row.push('"' + $(student_row).find("td")[9].innerText + '\t"'); // add when they are enrolled
+                    
+                    csvContent += csv_row.join(",") + "\n";
+                });
+            });
+
+            var hiddenElement = document.createElement('a');
+            hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURIComponent(universalBOM+csvContent); // set the data
+            hiddenElement.target = '_blank'; // in a new tab
+            hiddenElement.download = 'shbbaton-eligibility.csv'; // with this file_name
+            hiddenElement.click(); // and click it
+        }
     </script>
 </html>
