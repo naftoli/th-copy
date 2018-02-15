@@ -109,8 +109,6 @@ class CustomerProfile {
         // set the data and execute the request
         $api->setPostData($api_array);
         
-        print_r($api);
-        
         $api_data = $api->execute();
         // If it is sucessfull (the API call);
         if ($api_data && $api_data['messages']['resultCode'] == Constants::RESPONSE_OK || array_key_exists("customerProfileId", $api_data)) {
