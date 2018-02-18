@@ -54,6 +54,17 @@ class GradeCreation
                         //echo $sql . "<br />";
                         if (!mysql_query($sql)) {
                             $this->errors[] = $sql . "<br />" . mysql_error();
+                        } else {
+                            // update admin_auths table with new class id
+                            $old_id = $row['class_id'];
+                            $new_id = mysql_insert_id();
+                            $sql = "update admin_auths
+                                    set id = " . $new_id . "
+                                    where id = " . $old_id . "
+                                    and auth = 'class'";
+                            if (!mysql_query( $sql )) {
+                                $this->errors[] = $sql . "<br />" . mysql_error();
+                            }
                         }
                     }
                 }
