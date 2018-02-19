@@ -24,6 +24,7 @@ foreach ($schools as $id => $school) {
         ."and aa.auth = 'user' "
         ."and tc.contestant = 1 "
         ."and tc.can_enroll = 1 "
+        ."and tc.date_paid is not null "
         ."and u.school_id = " . $id;
     if (isset($_GET['id'])) $sql .= " and tc.th_chidon_id = " . $_GET['id'];
     $sql .= " order by class_grade, class_sub, u.last, u.first";
@@ -93,8 +94,8 @@ foreach ($schools as $id => $school) {
                 echo "Hebrew Last Name: " . $user['last_he'] . "<br />";
                 echo "Book: " . $user['book'] . "<br />";
                 echo "Gender: " . $user['gender'] . "<br />";
-                echo "Avg Part 1: ";
-                echo number_format(($user['test1a'] + $user['test2a'] + $user['test3a']) / 3, 2) . "<br />";
+                //echo "Avg Part 1: ";
+                //echo number_format(($user['test1a'] + $user['test2a'] + $user['test3a']) / 3, 2) . "<br />";
                 echo "Test Language: ";
                 if ($user['test_lang'] == 'en') echo "english<br />";
                 else if ($user['test_lang'] == 'yi') echo "yiddish<br />";
