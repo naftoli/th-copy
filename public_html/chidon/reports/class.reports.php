@@ -308,7 +308,7 @@ class Reports
         $this->checkAvg = true;
     }
     
-    public function createSQL($data, $root = 'th_chidon', $gender = false, $limit = false)
+    public function createSQL($data, $root = 'th_chidon', $gender = false, $limit = false, $chidonType = '')
     {
         if (!empty($data)) {
             // build tables / columns
@@ -369,6 +369,10 @@ class Reports
                 }
             }
             $sql .= " where " . $this->aliases[$root] . ".year = " . $this->year;
+            
+            if ($root == 'th_chidon_chaps' && $chidonType) {
+                $sql .= " and tcc.chidon_type = '" . $chidonType . "'";
+            }
 
             if ($gender) $sql .= " and u.gender = '" . $gender . "'";
             if ($limit) {

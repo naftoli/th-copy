@@ -91,12 +91,14 @@ if (isset($_POST['submit'])) {
     $data = array();
 	$gender = false;
 	$limit = false;
+	$chidonType = '';
 	$byAvg = array();
 	foreach ($_POST as $k => $v) {
         if ($k == 'submit') break;
 		if ($k == 'year') $year = mysql_real_escape_string(intval($v));
 		else if ($k == 'gender') $gender = mysql_real_escape_string($v);
 		else if ($k == 'limitTo') $limit = mysql_real_escape_string($v);
+		else if ($k == 'chidon_type') $chidonType = mysql_real_escape_string($v);
         else $data[] = mysql_real_escape_string($k);
     }
     
@@ -139,8 +141,8 @@ if (isset($_POST['submit'])) {
 	else $root = 'th_chidon';
 	
 	//echo $root; exit;
-		
-    if ($sql = $r->createSQL($data, $root, $gender, $limit)) {
+	
+    if ($sql = $r->createSQL($data, $root, $gender, $limit, $chidonType)) {
 		echo "<input type='hidden' name='sql' value=\"" . $sql . "\" />";
 		echo "<input type='hidden' name='root' value='" . $root . "' />";
 		$result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
@@ -349,6 +351,11 @@ if (isset($_POST['submit'])) {
 							<td><input type="test" name="avgHigh" size = 3 /></td>
 						</tr>
 					</table>					 
+				</fieldset>
+				<fieldset>
+					<legend>Limit Chaperone To (Only works when choosing Chaperone Info ONLY)</legend>
+					<input type="radio" name="chidon_type" value='boys'> Boys Chidon<br />
+					<input type="radio" name="chidon_type" value='girls'> Girls Chidon<br />
 				</fieldset>
 				<div style="clear: both"></div>
 				<input type="submit" name="submit" value="Create Report" />

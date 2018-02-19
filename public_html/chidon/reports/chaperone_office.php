@@ -1,17 +1,16 @@
-<?
-echo 'needs updating';
-exit;
-
+<?php
+//echo 'needs updating';
+//exit;
 require '../../db.php';
 require 'vars.php';
 
 $info = array();
-$sql = "select * from th_chidon_schools ts
-		join th_chidon_chaps tc using (school_id)
-		join schools s on s.school_id = ts.school_id 
-		where ts.year = " . $year . "
-		and ts.school_id not in (82) 
+$sql = "select * from th_chidon_chaps tc
+		join schools s on s.school_id = tc.school_id 
+		where tc.year = " . $year . "
+		and tc.school_id not in (82) 
 		order by school_name";
+//echo $sql;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
 	$info[] = $row;
@@ -51,10 +50,11 @@ while ($row = mysql_fetch_assoc($result)) {
 				<th>Sweater Size</th>
 				<th>Full Trip</th>
 				<th>Chidon Ticket</th>
+				<th>Chidon Attending</th>
 			</tr>
 			<?
 			foreach ($info as $row) {
-				echo "<tr><td class='schoolID'>" . $row['th_chidon_chap_id'] . "</td><td>" . $row['school_name'] . "</td><td>" . $row['name'] .
+				echo "<tr id=" . $row['th_chidon_chap_id'] . "><td class='schoolID'>" . $row['th_chidon_chap_id'] . "</td><td>" . $row['school_name'] . "</td><td>" . $row['name'] .
 				"</td><td>" . $row['phone'] . "</td><td>" . $row['email'] . "</td><td>";
 				if (!$row['sweater']) echo 'NO';
 				else echo 'YES';
@@ -65,7 +65,15 @@ while ($row = mysql_fetch_assoc($result)) {
 				else echo 'NO';
 				echo "</td><td><input type='checkbox' class='ticket' ";
 				if ($row['ticket']) echo "checked ";
-				echo "/></td></tr>";
+				echo "/></td><td>";
+				echo "<select name='type' class='chidon_type'><option value='0'>Choose one</option>";
+				echo "<option value='boys'";
+				if ($row['chidon_type'] == 'boys') echo " selected";
+				echo ">Boys Chidon</option>";
+				echo "<option value='girls'";
+				if ($row['chidon_type'] == 'girls') echo " selected";
+				echo ">Girls Chidon</option>";
+				echo "</td></tr>";
 			}
 			?>
 		</table>
@@ -82,6 +90,18 @@ while ($row = mysql_fetch_assoc($result)) {
 						alert('Error updating.');
 					}
 				});
+			});
+			
+			$(".chidon_type").change( function() {
+				var id = $(this).parent().parent().attr('id');
+				var val = $(this).val();
+				if (val) {
+					$.post('ajax/updateChidonType.php', { id : id, val : val }, function( error ) {
+						if (parseInt(error) == 1) {
+							alert('Error updating.');
+						}
+					});
+				}
 			});
 		});
 	</script>
