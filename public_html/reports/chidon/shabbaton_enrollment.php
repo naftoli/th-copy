@@ -21,6 +21,10 @@ $schools = $as->getSchools();
         <style>
             th, td {
                 padding: 5px;
+                font-size: 12px;
+            }
+            tr {
+                border-bottom: 1px solid #888;
             }
             #report { margin-top: 15px; }
             .no-report {text-align: center;}
