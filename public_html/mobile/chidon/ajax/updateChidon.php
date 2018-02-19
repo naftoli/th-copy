@@ -35,7 +35,7 @@ if (intval($permission) == 1) {
 } else if (intval($permission) == 2) {
     $sql_chidon .= ", walk_day = 1, walk_night = 0";
 } else if (intval($permission) == 3) {
-    $sql_chidon .= ", walk_night = 1, walk_day = 0";
+    $sql_chidon .= ", walk_night = 1, walk_day = 1";
 }
 $sql_chidon .= " WHERE user_id = " . intval($user) . " AND year = " . intval($year);
 
