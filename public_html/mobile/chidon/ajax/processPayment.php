@@ -32,10 +32,10 @@ if (intval($chidon_reg_id)) {
 			$sponsor = $amount - $baseAmount;
 			$amount = $baseAmount;
 		}
-		$sql = "update th_chidon  
-				set paid = " . $amount . ",
-				date_paid = now(),
-				approval = '" . implode(';', $response_array) . "'";
+		$sql = "UPDATE th_chidon "
+			." set paid = " . $amount . ", "
+			." date_paid = now(), "
+			." approval = '" . implode(';', $response_array) . "'";
 		if ($admin_id) {
 			$sql .= ", paid_by = ". $admin_id . ", parent_id = " . $admin_id;
 		}
@@ -52,11 +52,11 @@ if (intval($chidon_reg_id)) {
 		if ($sponsor) {
 			$admin_id = $row['admin_id'];
 			$numTrips = $sponsor % $baseAmount;
-			$sql = "insert into th_chidon_sponsors
-					set num_trips = " . $numTrips . ",
-					amount = " . $amount . ",
-					approval = '" . implode(';', $response_array) . "', 
-					sponsor = " . $admin_id;
+			$sql = "INSERT into th_chidon_sponsors "
+				." SET num_trips = " . $numTrips . ", "
+				." amount = " . $amount . ", "
+				." approval = '" . implode(';', $response_array) . "', "
+				." sponsor = " . $admin_id;
 			mysql_query($sql);
 		}
 		
