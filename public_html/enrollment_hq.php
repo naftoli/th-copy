@@ -23,7 +23,7 @@ foreach ($schools as $sid => $schoolName) {
             ." JOIN classes c on u.class_id = c.class_id "
             ." WHERE tc.year = " . $year . " "
             ." AND u.school_id = " . $sid . " "
-            ." AND tc.deleted = 0 "; // only deleted kids
+            ." AND tc.deleted = 0 "; // only not deleted kids
     $sql .= " order by class_grade, class_sub, tc.school_rep desc, u.last, u.first";
     echo "<input type='hidden' name='sql' value=\"" . $sql . "\" />";
     $result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
@@ -46,6 +46,7 @@ foreach ($schools as $sid => $schoolName) {
             'contestant'  => $row['contestant'],
             'rep' => $row['school_rep'],
             'enrolled' => $row['date_paid'],
+            'can_enroll' => $row['can_enroll'],
             'edit'  => $row['allow_edit']
         );
     }
@@ -94,7 +95,7 @@ foreach ($schools as $sid => $schoolName) {
         <h1>Shabbaton Eligibility</h1>
         
         <div class="options">
-            <a class="button">Export to CSV (Excel/LibreOffice/Google Sheets)</a>
+            <a class="button" id="generate_csv">Export to CSV (Excel/LibreOffice/Google Sheets)</a>
         </div>
  
         <?php foreach ($userInfo as $sid => $info) : ?>
@@ -146,7 +147,9 @@ foreach ($schools as $sid => $schoolName) {
                             if ($tests['rep']) echo "Representative";
                             else if ($tests['contestant']) echo "Contestant";
                             echo "</td><td>";
-                            echo "<input type='checkbox' class='activate' /></td><td>";
+                            echo "<input type='checkbox' class='activate'";
+                            if ($tests['can_enroll']) echo "checked ";
+                            echo " /></td><td>";
                             if ($tests['enrolled']) echo $tests['enrolled'];
                             echo "</td><td>";
                             echo "<input type='checkbox' class='edit' ";
@@ -190,7 +193,7 @@ foreach ($schools as $sid => $schoolName) {
             var id = $(this).parent().parent().attr('id');
             var val = $(this).is(":checked") ? 1 : 0;
             if (val) {
-                $.post('ajax/activateEnrollment.php', { id : id }, function( success ) {
+                $.post('ajax/activateEnrollment.php', { id : id, can_enroll: val }, function( success ) {
                     response = JSON.parse( success );
                     if(!response.chap) {
                         alert('It appears that you have not setup any Chaperones yet!. Redirecting you to Chaperones page.');
