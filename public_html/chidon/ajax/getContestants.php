@@ -7,7 +7,7 @@ $contestants = array();
 $sql = "select tc.user_id, first, last from th_chidon tc 
 		join users u using (user_id)  
 		where tc.year = " . $year . "
-		and tc.shabbaton = 1 
+		and tc.contestant = 1 
 		and u.gender = '" . strtoupper($gender) . "' 
 		order by u.last, u.first"; 
 $result = mysql_query($sql);

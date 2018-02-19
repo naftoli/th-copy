@@ -3,8 +3,9 @@ if ((empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off') || $_SERVER['SERVE
     header("Location: https://mashpia.com/chidon/purchase_tickets.php");
 }
 require '../db.php';
+require '../class.globalSettings.php';
 
-$year = 5777;
+$year = GlobalSettings::getChidonYear();
 $totalTickets = 0;
 
 $max = array(
@@ -22,7 +23,8 @@ $max = array(
 	'gg100'	=>	38
 );
 
-$soldOut = array('g10','g18','m10','m18','m36','m50','m100','gg10','gg18','gg36','gg50','gg100');
+//$soldOut = array('m10','m18','m36','m50','m100','g10','g18','gg10','gg18','gg36','gg50','gg100');
+$soldOut = array();
 
 $maxTotal = 0;
 foreach ($max as $field => $amount) {
@@ -54,7 +56,7 @@ $totalTickets += $row['total'];
 
 $sql = "select sum(ggqty) as total from chidon 
 		where year = " . $year . " 
-		and gqty > 0";
+		and ggqty > 0";
 $result = mysql_query($sql);
 $row = mysql_fetch_assoc($result);
 $totalTickets += $row['total'];
@@ -467,14 +469,14 @@ body,td,th {
 					<br /><br />
 				</div>
 			<?php endif; ?>
-		<!--
+		
 		<div align="center">
 			<img class="ticketImg" src="images/Chidon-Tickets-1.jpg" width="200" />
 			<img class="ticketImg" src="images/Chidon-Tickets-2.jpg" width="200" />
 			<img class="ticketImg" src="images/Chidon-Tickets-3.jpg" width="200" />
 			
 		</div>
-		-->
+		
 		<!--
 		<div>
 			<fieldset>
@@ -482,12 +484,13 @@ body,td,th {
 				Not Yet Available for Purchase
 			</fieldset>
 		</div>
-		-->
+		
 		<div style="color: red; font-size: 16px; font-weight: bold;">
-			<!--Disclaimer: This site is optimized for Desktop use. It may not work properly on mobile devices.-->
+			Disclaimer: This site is optimized for Desktop use. It may not work properly on mobile devices.
 			We are currently sold out! You can watch the rally live at http://www.chabad.org/chidon.
 			<br /><br />
 		</div>
+        -->
 		<div>
 			<fieldset>
 				<legend>Chidon Info</legend>
@@ -754,7 +757,7 @@ body,td,th {
 						Ticket Prices are in U.S. dollars. There will be separate seating for men and women.<br />
 						No refunds. For questions email <a href="mailto:chidon@tzivoshashem.org">chidon@tzivoshashem.org</a>.
 					</p>
-					<input type='submit' name='submit' value='submit' id='submit' tabindex="40" />
+					<input type='submit' name='submit' value='submit' id='submit' tabindex="40" disabled />
 				</div>
 			</form>
 		</div>
