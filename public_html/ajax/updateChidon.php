@@ -7,18 +7,18 @@ $id = mysql_real_escape_string($_POST['id']);
 $checked = mysql_real_escape_string(intval($_POST['val']));
 $field = mysql_real_escape_string($_POST['field']);
 
-$sql = "update th_chidon set " . $field . " = " . $checked . " where th_chidon_id = " . $id;
+$sql = "UPDATE th_chidon set " . $field . " = " . $checked . " WHERE th_chidon_id = " . $id;
 if (mysql_query($sql)) {
     echo 0;
     // if confirming enrollment, send email to parents
     if ($field == 'confirmed' && $checked) {
-        $parentSql = "select admin_email from admins a
-                    join admin_auths aa using (admin_id)
-                    join th_chidon tc on tc.user_id = aa.id
-                    where aa.role_id = 1
-                    and aa.auth = 'user'
-                    and tc.th_chidon_id = " . $id . " 
-                    and tc.year = " . $year;
+        $parentSql = "SELECT admin_email FROM admins a "
+            ." JOIN admin_auths aa USING (admin_id) "
+            ." JOIN th_chidon tc ON tc.user_id = aa.id "
+            ." WHERE aa.role_id = 1 "
+            ." AND aa.auth = 'user' "
+            ." AND tc.th_chidon_id = " . $id . " "
+            ." AND tc.year = " . $year ." ";
         $parentRes = mysql_query( $parentSql );
         $parentRow = mysql_fetch_assoc( $parentRes );
         
