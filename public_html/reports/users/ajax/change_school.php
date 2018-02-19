@@ -71,6 +71,10 @@ function generate_report(){
 
 // move the child to a different school
 function move_child(){
+    // get the current chidon year...
+    require ($_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php');
+    $year = GlobalSettings::getChidonYear();
+    
     $user_id    = mysql_real_escape_string($_POST['user_id']);
     $school_id  = mysql_real_escape_string($_POST['school_id']);
     $class_id   = mysql_real_escape_string($_POST['class_id']);
@@ -79,7 +83,34 @@ function move_child(){
         render_json_error("Invalid Options");
     }
     
-    $move_query = mysql_query("UPDATE users SET school_id = '$school_id', class_id = '$class_id' WHERE user_id = '$user_id'");
+    $move_query = mysql_query(
+        "UPDATE users SET school_id = '$school_id', class_id = '$class_id' WHERE user_id = '$user_id'"
+    );
+    
+    $chidon_check_query = mysql_query(
+        "SELECT * FROM th_chidon WHERE user_id = '$user_id' AND year = '$year'"
+    );
+    // if the child is not in the chidon
+    if(mysql_num_rows($chidon_check_query) > 0) {
+        $chion_user = mysql_fetch_assoc($chidon_check_query); // get the chidon user...
+        // fetch the grade from the dbs
+        $grade = mysql_result(mysql_query(
+            "SELECT class_grade FROM classes WHERE class_id = '$class_id'"
+        ), 0)['class_grade'];
+        
+        $chidon_sql = "UPDATE th_chidon SET school_id = '$school_id' WHERE th_chidon_id = ".$chion_user['th_chidon_id'];
+        
+        if($grade >= 4 && $grade <= 8) {
+            $book = $grade - 3; // 4th grade has book 1, 5th has book 2...
+            $chidon_sql = "UPDATE th_chidon SET grade='$grade', book='$book', school_id = '$school_id' WHERE th_chidon_id = ".$chion_user['th_chidon_id'];
+        } // end if they are in the correct grades...
+        
+        $chidon_query = mysql_query($chidon_sql);
+        
+        echo json_encode(["success" => !!$chidon_query]);
+        die();
+    } // end if user is in the chidon
     
     echo json_encode(["success" => !!$move_query]);
+    die();
 }
