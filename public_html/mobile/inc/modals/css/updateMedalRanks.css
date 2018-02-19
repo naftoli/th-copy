@@ -1,4 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Gochi+Hand');
+/* @font-face kit by Fonts2u (http://www.fonts2u.com) */
+@font-face {
+    font-family:"Hebrew Script";
+    src:url("/mobile/fonts/hebrew-script.eot?") format("eot"),
+        url("/mobile/fonts/hebrew-script.woff") format("woff"),
+        url("/mobile/fonts/hebrew-script.ttf") format("truetype"),
+        url("/mobile/fonts/hebrew-script.svg#ShalomScript") format("svg");
+    font-weight:normal;
+    font-style:normal;
+}
 /*Eliminate the padding around the background image....*/
 .rank-medal-modal .modal-body{
     padding: 0px;
@@ -10,16 +20,25 @@
     background-size: 100%;
     background-position: center center;
     text-align: center;
-    animation: cong-box-background 10s infinite;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
     font-family: 'Gochi Hand', cursive!important;
+}
+
+.rank-medal-modal .cong-box.animate {
+    animation: cong-box-background 5.5s linear infinite;
+}
+
+.rank-medal-modal .cong-box .he-text{
+    font-family: "Hebrew Script";
+    font-weight: bold;
 }
 /*set the "Mazel Tov!" text to have a specific style...*/
 .rank-medal-modal .cong-text{
     max-width: 100%; margin: auto;
     font-size: 3.5em; /* determine the size of the animation */
-    height: 100px; transition: .25s ease-in-out;
+    transition: .25s ease-in-out;
+    animation-iteration-count: 3; /* pulse 4 times... */
 }
 /*Animate the imgs*/
 .rank-medal-modal .cong-box .rbn img{
@@ -65,26 +84,13 @@
     50%{transform: scale(.55)}
     100%{transform: scale(1)}
 }
-/* animation */
-@keyframes textAnim {
-  0% {font-size: 1em; color: black;}
-  10% {font-size: 1.2em; color: red;}
-  40% {font-size: .9em; color: black;}
-  100% {font-size: 1em; color: black;}
-}
-/*Webkit version of said text animation*/
-@-webkit-keyframes textAnim {
-  0% {font-size: 1em; color: black;}
-  10% {font-size: 1.2em; color: red;}
-  40% {font-size: .9em; color: black;}
-  100% {font-size: 1em; color: black;}
-}
 
-.cong-text span{
-  font-family: Helvetica, Arial;
-  font-weight: 900;
-  animation: textAnim 2s ease infinite;
-  -webkit-animation: textAnim 2s ease infinite;
+@keyframes cong-box-background{
+    0%      {background-position: 50% 50%;}
+    25%     {background-position: calc(50% - 5px) calc(50% + 15px);}
+    50%     {background-position: calc(50% + 10px) calc(50% + 10px);}
+    75%     {background-position: calc(50% + 5px) calc(50% - 15px);}
+    100%    {background-position: 50% 50%;}
 }
 
 /*Detailed medal/rank award*/
@@ -124,47 +130,30 @@
 .rank img {
     max-width: 125px;
 }
+/* Sharing Buttons... */
+.rank-medal-modal #share{display: none;}
 
-/*Responsive elements...*/
-@media (max-width: 480px) {
+.rank-medal-modal #share h2{font-size: 2em;}
+.rank-medal-modal #share a:hover{text-decoration: none;}
+.rank-medal-modal #share i {font-size: 2.5em;margin: 8px;}
+/* Brand colors...*/
+i.fa.fa-whatsapp {color: #128C7E;}
+i.fa.fa-envelope {color: black;}
+i.fa.fa-twitter  {color: #1DA1F2;}
+i.fa.fa-facebook {color: #3B5998;}
+
+/* Responsive Scaling for small text... */
+@media (max-width: 579px) {
+    .rank-medal-modal .cong-text{
+        font-size: 3em;
+    }
+}
+
+@media (max-width: 449px) {
     .rank-medal-modal .cong-text{
         font-size: 2.5em;
-        height: 70px;
     }
-}
-
-@media (max-width: 350px) {
-    .rank-medal-modal .cong-text{
-        font-size: 1.8em;
-        height: 50px;
+    .cong-box p {
+        font-size: 1.4em;
     }
-}
-
-/* Text animation Delays */
-#l2 {
-  animation-delay: .1s;
-  -webkit-animation-delay: .1s;
-}
-#l3 {
-  animation-delay: .2s;
-  -webkit-animation-delay: .2s;
-}
-#l4 {
-  animation-delay: .3s;
-  -webkit-animation-delay: .3s;
-}
-#l5 {
-  animation-delay: .4s;
-  -webkit-animation-delay: .4s;
-}
-
-#l6 {
-  animation-delay: .5s;
-  -webkit-animation-delay: .5s;
-}
-#l7,
-#l8,
-#l9 {
-  animation-delay: .6s;
-  -webkit-animation-delay: .6s;
 }
