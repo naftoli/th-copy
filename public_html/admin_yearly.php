@@ -1,33 +1,37 @@
 <?php
 ini_set('display_errors',1);
 $admin_auth = array(); 
-require('header.php'); 
+require('header.php');
+require 'class.globalSettings.php';
+$year = GlobalSettings::getRegistrationYear();
+$year--;
 
-$date = cal_from_jd(unixtojd(), CAL_JEWISH);
+//$date = cal_from_jd(unixtojd(), CAL_JEWISH);
 $schools = implode(',', array_merge(array(-1), array_filter(gra('school_id'), 'is_numeric')));
 
 if (gr('class_era')) {
-	mq("UPDATE classes SET class_era = $date[year] WHERE class_era = 0 AND school_id IN ($schools)");
+	mq("UPDATE classes SET class_era = " . $year . " WHERE class_era = 0 AND school_id IN ($schools)");
 	
 	// automatically create new classes based on last years classes
 	require_once 'class.gradeCreation.php';
 	$g = new GradeCreation( $schools );
+	$msg = '';
 	if (!$g->createGrades()) {
 		$msg = "Error creating new classes for new year.";
 	}
 	
-	$message = sprintf(T_('%d classes marked as year %d.'), mysql_affected_rows(), $date['year']);
+	$message = sprintf(T_('%d classes marked as year %d.'), mysql_affected_rows(), $year);
 	if ($msg) $message .= "<br />" . $msg;
 }  
 elseif (gr('school_era')) {
 	mq("UPDATE schools SET 
-				school_era = $date[year],
+				school_era = " . $year . ",
 				package_id = NULL,
 				add_on_one  = 0,  
 				add_on_two  = 0				
 				WHERE school_era IS NULL AND school_id IN ($schools)");
 				
-	$message = sprintf(T_('%d schools marked as year %d.'), mysql_affected_rows(), $date['year']);
+	$message = sprintf(T_('%d schools marked as year %d.'), mysql_affected_rows(), $year);
 } 
 elseif (gr('user_registered')) {	
 	mq("UPDATE users SET 	user_registered = NULL, 
