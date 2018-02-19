@@ -95,9 +95,9 @@ while ( $row = mysql_fetch_assoc($result) ) {
 		$children[$row['user_id']]['shabbatonRegistered'] = 0;
 		$children[$row['user_id']]['shabbatonEdit'] = 0;
 		$children[$row['user_id']]['shabbatonConfirmed'] = 0;
-		$cSql = "select * from th_chidon 
-				where year = " . $year . "
-				and user_id = " . $row['user_id'];
+		$cSql = "SELECT * FROM th_chidon "
+			." WHERE year = " . $year . " "
+			." AND user_id = " . $row['user_id'];
 		$cRes = mysql_query($cSql);
 		if (mysql_num_rows($cRes) > 0) {
 			$cRow = mysql_fetch_assoc($cRes);
@@ -107,7 +107,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 				// make sure school indicated that child should enroll for shabbaton
 				if ($cRow['can_enroll']) {
 					// make sure school is registered to chidon
-					$chapSql = "select * from th_chidon_schools where school_id = " . $row['school_id'] . " and year = " . $year . " and registered = 1";
+					$chapSql = "SELECT * FROM th_chidon_schools WHERE school_id = " . $row['school_id'] . " AND year = " . $year . " AND registered = 1";
 					$chapRes = mysql_query( $chapSql );
 					if (mysql_num_rows($chapRes) > 0) {
 						$children[$row['user_id']]['enrollShabbaton'] = 1;
