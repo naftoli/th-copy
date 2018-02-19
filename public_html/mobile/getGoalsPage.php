@@ -3,13 +3,13 @@ require_once '../db.php';
 $user_id = mysql_real_escape_string( $_GET['id'] );
 $version = mysql_real_escape_string( $_GET['v'] );
 
-$sql = "select first, last, user_photo_id, lang_id, ut.track_id, ut.level from users u 
-		join user_tracks ut using (user_id)	
+$sql = "select first, last, user_photo_id, lang_id, ut.track_id, ut.level from users u
+		join user_tracks ut using (user_id)
 		where user_id = " . $user_id . " ".
 		"ORDER BY ut.subject_id LIMIT 1"; // order by the subject id to get the first one available (preferably 1 if available)
 
 //if($user_id == 26755 || $user_id == 22309) echo $sql;
-		
+
 $result = mysql_query($sql);
 $row = mysql_fetch_assoc($result);
 $photo = $row['user_photo_id'];
@@ -24,7 +24,7 @@ $heMonth = $heDate[0];
 if ($heMonth == 13) $month = 1;
 else $month = $heMonth++;
 
-$qry = "select qty, minutes from tehillim_ladders where ladder = " . $ladder . " and age = " . $level . " and month = " . $month;
+$qry = "SELECT qty, minutes FROM tehillim_ladders WHERE ladder = " . $ladder . " and age = " . $level . " and month = " . $month;
 $res = mysql_query($qry);
 $r = mysql_fetch_assoc($res);
 
@@ -41,7 +41,7 @@ $dates['start'] = 2458006;
 
 $start = $dates['start'];
 $end = $dates['end'];
-			
+
 require '../class.tasksCustomizationNew.php';
 $tc = new TasksCustomizationNew;
 $both = $tc->getCampaignsForChild( $user_id );
@@ -102,7 +102,7 @@ foreach ($sm as $val) {
 			<input type="button" id="expandAll" class="btn btn-danger btn-sm" value="Expand All" style="background-color: #5e1c77;border-color:#834999;" />
 		</div>
     	-->
-		
+
 		<?php if (isset($_GET['naftoli'])) : ?>
 			<div class="panel panel-default">
         	<div id="spinner"></div>
@@ -114,7 +114,7 @@ foreach ($sm as $val) {
         		<? endif; ?>
         		<!--<div class="pull-right small points"><?=$points?> Points Needed</div>-->
         	</div>
-        
+
         	<div class="collapse">
         		<div class='alert alert-warning' role='alert' dir="ltr">
 					<div class='media'>
@@ -133,9 +133,9 @@ foreach ($sm as $val) {
             </div>
         </div>
 		<?php endif; ?>
-		
+
     	<? foreach ( $campaigns as $id => $campaign ) : ?>
-    
+
             <div class="panel panel-default">
             	<div id="spinner"></div>
             	<div class="panel-heading">
@@ -146,7 +146,7 @@ foreach ($sm as $val) {
             		<? endif; ?>
             		<!--<div class="pull-right small points"><?=$points?> Points Needed</div>-->
             	</div>
-            
+
             	<div class="collapse">
             		<? if ($id != 99) : ?>
             		<div class='alert alert-warning' role='alert' dir="ltr">
@@ -176,23 +176,23 @@ foreach ($sm as $val) {
 						</div>
 					</div>
 					<div class="info2" dir="ltr">
-						Choose the <?=$campaign?> tasks for <?=$first?>'s missions. <!--The task with a <span style='color:red'>*</span> 
+						Choose the <?=$campaign?> tasks for <?=$first?>'s missions. <!--The task with a <span style='color:red'>*</span>
 						is the one that needs to be done to complete a mission.-->
 					</div>
 					<? endif; ?>
                     <div class="panel-body" id="<?=$id?>">
-                    	
-                    	<ul class="list-unstyled tasks"></ul>		                        		
-                    	
+
+                    	<ul class="list-unstyled tasks"></ul>
+
                     </div>
                 </div>
             </div>
-            
+
     	<? endforeach; ?>
-                    
+
     </div>
 </div>
- 
+
 <? include 'inc/footer.php' ?>
 
 <? include 'inc/foot.php' ?>
@@ -201,9 +201,9 @@ foreach ($sm as $val) {
 	//$( function() {
 		//$(".form-group").hide();
 		var url = location.toString();
-		var pos = url.indexOf('='); 
+		var pos = url.indexOf('=');
 		var id = url.substring( pos+1 );
-		
+
 		var pos2 = id.indexOf('&');
 		if (pos2 > 0) {
 			id = id.substring( 0, pos2 );
@@ -215,18 +215,18 @@ foreach ($sm as $val) {
 			}
 		});
 		*/
-			
+
 		$("#expandAll").click( function() {
 			$('.panel').trigger('click');
 			//$(this).parent().parent().parent().find('.panel-heading').trigger('click');
 		});
-		
+
 		var lang = <?=$lang == 2 ? 2 : 1?>;
-		
+
 		$(".panel").click( function() {
 			var container = this;
 			var campaign = $(this).find('.panel-body').attr('id');
-			
+
 			if ($(this).find('.tasks').html() == '') {
 				var opts = {
 					lines: 8, 		// The number of lines to draw
@@ -252,15 +252,15 @@ foreach ($sm as $val) {
 				};
 				var target = document.getElementById('spinner');
 				new Spinner(opts).spin(target);
-				
+
 				$.ajax({
-					type : "GET", 
+					type : "GET",
 					url : '../ajax/getTasks.php<?=$version ? "?v=$version" : ""?>',
 					data : {
 						subject : campaign,
-						user : <?=$user_id?>, 
+						user : <?=$user_id?>,
 						start : <?=$start?>,
-						end : <?=$end?>, 
+						end : <?=$end?>,
 						lang : lang
 					},
 					success : function( data ) {
@@ -285,22 +285,22 @@ foreach ($sm as $val) {
 									str += ' checked ';
 								}
 								str += "/><span class='checkbox-display'></span></label> <b>" + cat + " ";
-								
+
 								<? if ($version == "2") { // version 2. use the mandatory array to determine it's status?>
 									if(data.mandatory[cat]){
 										str += "<span style='color:red'>*</span>";
 									}
 								<?} else { // version 1. Throw a million rockets at the server to determine the status.... ?>
 									$.ajax({
-										type : "POST", 
-										url : "reg/ajax/getMandCat.php", 
-										async : false, 
+										type : "POST",
+										url : "reg/ajax/getMandCat.php",
+										async : false,
 										data : {
-											subject : campaign, 
-											cat : cat, 
-											year : <?=$year?>, 
-											lang : <?=$lang?> 
-										}, 
+											subject : campaign,
+											cat : cat,
+											year : <?=$year?>,
+											lang : <?=$lang?>
+										},
 										success : function( info ) {
 											var mission = $.parseJSON( info );
 											if (mission) {
@@ -309,7 +309,7 @@ foreach ($sm as $val) {
 										}
 									});
 								<?} ?>
-		                        
+
 								str += "</b></li><div class='task'>";
 								<? if ($version == "2") { // version 2: use .tasks (where the tasks are)?>
 								for ( var task in data.tasks[cat][enrolled] ) {
@@ -341,22 +341,22 @@ foreach ($sm as $val) {
 						}
 						if (lang == 2) str += '<br />';
 						str += "<p><button class='btn btn-danger btn-sm save' style='background-color : #5e1c77;border-color:#834999;'>Save</button></p>";
-		                
+
 						var campaign_dom_object = $("#" + campaign);
 						campaign_dom_object.find("ul").append(str);
-						
+
 						var height = campaign_dom_object.parent()[0].scrollHeight;
-						
+
 						campaign_dom_object.parent().data("max-height", height);
-						
+
 						campaign_dom_object.parent().css({"height": height}); // expand the box down via transition....
-						
+
 		                if (lang == 2) {
 		                	$("#" + campaign).find("ul").css('padding-right', '0px');
 		                }
 		                $("#spinner").empty();
-	                
-		                $(".category").click( function(e) { 
+
+		                $(".category").click( function(e) {
 		                    //e.preventDefault();
 		                    var val = decodeURI($(this).val());
 		                    var checked = $(this).is(":checked");
@@ -367,7 +367,7 @@ foreach ($sm as $val) {
 				});
 			}
 		});
-		
+
 		$(document).on('click', ".panel-heading", function() {
 			var c = $(this).parent().attr('class');
 			var height = $(this).parent().find('.collapse').data().maxHeight;
@@ -376,39 +376,39 @@ foreach ($sm as $val) {
 					var parent = $(this).parent();
 					$(this).parent().find('.collapse').css({"height": '0px'});
 				} else {
-				
+
 					$(this).parent().find('.collapse').css({"height": $(this).parent().find('.collapse').data().maxHeight + "px"});
 					$(this).parent().siblings().find('.collapse').css({"height": '0px'});
 				}
 			}
 		});
-		
+
         var tasks = [];
         var tasksAdded = [];
 
         //function to use for updating any of the above arrays
-        function updateArray(name, checked, val) {  
+        function updateArray(name, checked, val) {
         	var found = false;
             for (i = 0; i < name.length; i++) {
                 if (name[i] == val) {
                     found = true;
                     break;
                 }
-            } 
-            if (checked) { 
-				if (found)  
+            }
+            if (checked) {
+				if (found)
                     name.splice( i, 1 );
-            } else { 
+            } else {
                 if (!found)
                     name.push(val);
             }
         }
-        
+
         $(document).on("click", ".save", function() {
         	var panel = $(this).parent().parent().parent().parent().parent();
         	$(panel).removeClass('open');
 			$(panel).find('.collapse').removeClass('in');
-			
+
 			var id = $(this).attr('id');
 			if (id == 'save') { //mishna saving
 				var arr = [];
@@ -425,14 +425,14 @@ foreach ($sm as $val) {
 					}
 				});
 			} else {
-				$.post('../ajax/customize.php', { 
-					tasks : tasks, 
-					tasksAdded : tasksAdded, 
-					user : <?=$user_id?>, 
-					start : <?=$start?>,  
+				$.post('../ajax/customize.php', {
+					tasks : tasks,
+					tasksAdded : tasksAdded,
+					user : <?=$user_id?>,
+					start : <?=$start?>,
 					end : <?=$end?>,
 					lang : <?=$lang?>
-				}, function( data ) { 
+				}, function( data ) {
 					//alert( data );
 					//alert( "Saved." );
 					//history.go(0);
@@ -441,7 +441,7 @@ foreach ($sm as $val) {
 				});
 			}
         });
-        
+
         $(document).on("change", ".userLevel", function() {
         	var id = <?=$user_id?>;
 			var level = $(this).val();
