@@ -283,6 +283,26 @@ $role_id = $row["role_id"];
 							<li><a href="/chidon_tests.php">Enter Chidon Test Marks</a></li>
 						</ul>
 					<? } ?>
+					
+					<li class="list_parent<?=isset($ui_type) && $ui_type == 'programs' ? ' current' : ''?>">
+						<a href="#" title="programs"><div><span class="icon"><img height="28" width="28" alt="Chidon" src="/images/chidon.png"></span><?=T_('Chidon')?></div></a>
+					</li>
+						
+					<ul class='list_second'>
+                        <!--<li><a href="/uploadChidonFile.php">Upload File for Chidon</a></li>-->
+						<!--<li><a href="/chidon_report.php">Registered for Chidon</a></li>-->
+						<li><a href="/reports/chidon/shabbaton_enrollment.php">Shabbaton Enrolled Report</a></li>
+						<li><a href="/chidon_tests.php">Enter Chidon Test Marks</a></li>
+						<li><a href="/chidon_school_reg.php">Enroll Chaperones</a></li>
+						<?php if ($admin_user['auth'] == 'super') : ?>
+						<li><a href="/enrollment_hq.php">Activate Enrollment HQ</a></li>
+						<?php else : ?>
+						<li><a href="/enrollment.php">Activate Enrollment</a></li>
+						<?php endif; ?>
+						<li><a href="/review_enrollment.php">Review Enrollment</a></li>
+						<li><a href="/chidon_review.php">Print Enrollment Info</a></li>
+					</ul>
+					
 					<li class="list_parent<?=isset($ui_type) && $ui_type == 'info' ? ' current' : ''?>">
 						<a href="#" title="campaigns"><div><span class="icon"><img height="28" width="28" alt="campaigns" src="/images/parentIcons/Campaigns.gif"></span><?=T_('Campaigns')?></div></a>
 					</li>
