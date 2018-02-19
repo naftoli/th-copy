@@ -45,6 +45,12 @@
 				font-family: font3;
 				line-height: 1.2;
 			}
+			@media (min-width: 768px) {
+				label.control-label.col-sm-2.join-label{
+					text-align: center;
+					font-size: 2em;
+				}
+			}
 		</style>
 	</head>
 	<body>
@@ -207,6 +213,8 @@
 										<option value='adult 7'>Adult 7</option>
 										<option value='adult 8'>Adult 8</option>
 										<option value='adult 9'>Adult 9</option>
+										<option value='adult 10'>Adult 10</option>
+										<option value='adult 11'>Adult 11</option>
 								      </select>
 								    </div>
 								</div>
@@ -316,7 +324,8 @@
 											<input type="radio" name="accInfo" class="minimal-red accInfo" value="1" />
 										</div>-->
 										The address where my child will be staying in Crown Heights during the Shabbaton is:
-										<br />(If you live in Crown Heights please provide your home address)
+										<br />(If you live in Crown Heights please provide your home address)<br />
+										Walking groups will be arranged withing the Schenectady- Nostrand, Sterling Place- East NY radius.
 									</div>
 								</div>
 								<div id="accomodations">
@@ -336,11 +345,20 @@
 									    </div>
 									</div>
 									<div class="row">
-									    <label class="control-label col-sm-2" for="addr3">Cross Streets:</label>
-									    <div class="col-sm-10">
-									      <input type="text" class="form-control" id="addr3" placeholder="Cross Streets" required />
+									    <label class="control-label col-sm-12" for="addr3">
+											<h3 style="margin-top: 0px;">Cross Streets:</h3>
+										</label>
+									</div>
+									<div class="row">
+									    <div class="col-sm-5">
+									      <input type="text" class="form-control" id="addr3" placeholder="Cross Streets 1" required />
+									    </div>
+										<label class="control-label col-sm-2 join-label" for="addr4">And</label>
+									    <div class="col-sm-5">
+									      <input type="text" class="form-control" id="addr4" placeholder="Cross Streets 2" required />
 									    </div>
 									</div>
+									<br />
 									<div class="row">
 									    <label class="control-label col-sm-2" for="chphone">Crown Heights Phone Number:</label>
 									    <div class="col-sm-10">
@@ -464,8 +482,13 @@
 						if (chidon.host) $("#chfamily").val(chidon.host);
 						if (chidon.host_address1) $("#addr1").val(chidon.host_address1);
 						if (chidon.host_address2) $("#addr2").val(chidon.host_address2);
-						if (chidon.between_streets) $("#addr3").val(chidon.between_streets);
 						if (chidon.host_number) $("#chphone").val(chidon.host_number);
+						
+						if (chidon.between_streets) {
+							var streets = chidon.between_streets.split(" and ");
+							$("#addr3").val(streets[0]);
+							$("#addr4").val(streets[1]);
+						}
 						
 						if (!!chidon.allergies) {
 							$(".allerg").eq(1).iCheck('check');
@@ -588,7 +611,7 @@
 					var host = $("#chfamily").val().trim();
 					var hostAddr1 = $("#addr1").val().trim();
 					var hostAddr2 = $("#addr2").val().trim();
-					var betStreets = $("#addr3").val().trim();
+					var betStreets = $("#addr3").val().trim() + " and " + $("#addr4").val().trim();
 					var hostPhone = $("#chphone").val().trim();
 					
 					if (host == '' || hostAddr1 == '' || hostAddr2 == '' || betStreets == '' || hostPhone == '') {

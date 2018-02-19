@@ -272,18 +272,18 @@
 				
 				$("#btn_create").click( function() {
 					if (!$("#agree").is(":checked")) {
-			        	alert('You must indicate your agreement to the charge.');
-			        	return false;
-			        }
-			        
-			        var ccnum = $("#cardnumber").val();
-			        var exp = $("#expiration").val();
-			        var zip = $("#zip").val();
-			        
-			        if (ccnum == '' || exp == '' || zip == '') {
-			        	alert("All fields are required.");
-			        	return false;
-			        }
+						alert('You must indicate your agreement to the charge.');
+						return false;
+					}
+					
+					var ccnum = $("#cardnumber").val();
+					var exp = $("#expiration").val();
+					var zip = $("#zip").val();
+					
+					if (ccnum == '' || exp == '' || zip == '') {
+						alert("All fields are required.");
+						return false;
+					}
 					
 					var sponsor = 0;
 					if ($("#sponsor:checked").length) sponsor = 1;
