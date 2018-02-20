@@ -49,8 +49,9 @@ while ($row = mysql_fetch_assoc($result)) {
 				<th>Sweater</th>
 				<th>Sweater Size</th>
 				<th>Full Trip</th>
-				<th>Chidon Ticket</th>
+				<!--<th>Chidon Ticket</th>-->
 				<th>Chidon Attending</th>
+				<th></th>
 			</tr>
 			<?
 			foreach ($info as $row) {
@@ -63,9 +64,10 @@ while ($row = mysql_fetch_assoc($result)) {
 				echo "</td><td>";
 				if ($row['full_program']) echo 'YES';
 				else echo 'NO';
-				echo "</td><td><input type='checkbox' class='ticket' ";
-				if ($row['ticket']) echo "checked ";
-				echo "/></td><td>";
+				echo "</td><td>";
+				//echo "<input type='checkbox' class='ticket' ";
+				//if ($row['ticket']) echo "checked ";
+				//echo "/></td><td>";
 				echo "<select name='type' class='chidon_type'><option value='0'>Choose one</option>";
 				echo "<option value='boys'";
 				if ($row['chidon_type'] == 'boys') echo " selected";
@@ -73,7 +75,7 @@ while ($row = mysql_fetch_assoc($result)) {
 				echo "<option value='girls'";
 				if ($row['chidon_type'] == 'girls') echo " selected";
 				echo ">Girls Chidon</option>";
-				echo "</td></tr>";
+				echo "</td><td><button class='delete'>delete</button></tr>";
 			}
 			?>
 		</table>
@@ -99,6 +101,21 @@ while ($row = mysql_fetch_assoc($result)) {
 					$.post('ajax/updateChidonType.php', { id : id, val : val }, function( error ) {
 						if (parseInt(error) == 1) {
 							alert('Error updating.');
+						}
+					});
+				}
+			});
+			
+			$(".delete").click( function() {
+				var id = $(this).parent().parent().attr('id');
+				var conf = confirm('Are you sure you want to delete this chaperone?');
+				if (conf) {
+					$.post('ajax/deleteChap.php', { id : id }, function( error ) {
+						if (parseInt(error) > 0) {
+							console.log( error );
+							alert('Error deleting.');
+						} else {
+							location.href = 'chaperone_office.php';
 						}
 					});
 				}
