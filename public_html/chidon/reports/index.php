@@ -96,7 +96,7 @@ if (isset($_POST['submit'])) {
 	foreach ($_POST as $k => $v) {
         if ($k == 'submit') break;
 		if ($k == 'year') $year = mysql_real_escape_string(intval($v));
-		else if ($k == 'gender') $gender = mysql_real_escape_string($v);
+		else if ($k == 'genderLimit') $gender = mysql_real_escape_string($v);
 		else if ($k == 'limitTo') $limit = mysql_real_escape_string($v);
 		else if ($k == 'chidon_type') $chidonType = mysql_real_escape_string($v);
         else $data[] = mysql_real_escape_string($k);
@@ -327,8 +327,8 @@ if (isset($_POST['submit'])) {
 				</fieldset>
 				<fieldset>
 					<legend>Gender</legend>
-					<input type="radio" name="gender" value='F' /> Girls<br />
-					<input type="radio" name="gender" value='M' /> Boys<br />
+					<input type="radio" name="genderLimit" value='F' /> Girls<br />
+					<input type="radio" name="genderLimit" value='M' /> Boys<br />
 				</fieldset>
 				<fieldset>
 					<legend>Limit to</legend>
