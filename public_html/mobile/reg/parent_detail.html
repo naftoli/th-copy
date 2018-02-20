@@ -6,7 +6,7 @@
 		<title>Mobile Web Site</title>
 		<link href="/mobile/reg/css/all.css?v=1.4" rel="stylesheet"/>
 		<noscript><link rel="stylesheet" href="css/all.css?v=1.1" as="style" onload="this.rel='stylesheet'"></noscript>
-        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet';">
         <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
 		<script src="js/all.js" defer></script>
 		<style>
@@ -15,11 +15,11 @@
 		#settings div {float: right;}
 		.row.parent_names{margin:5px 0px;}
 		.row.add_child{margin:10px;}
-		
+
 		.btn-info {background-color: #5bc0de !important;border-color: #46b8da !important;}
-		
+
 		.chidonRegInfo {font-size: 18px;color: red;font-style: italic}
-		
+
 		#bh{
 			text-align: center;font-size: 1.5em;position: absolute;top: 5px;
 			width: 100%;color: rgba(255,255,255,.6);font-family:font1;
@@ -34,9 +34,9 @@
 		}
 /*		Remove this to make it take up the whole page*/
 		.page5 > .span12.body {max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 0px}
-		
+
 		@media screen and (min-width: 600px) {.bottomSpace {height: 125px;}}
-		
+
 		@media screen and (max-width: 639px) {
 			.chidonRegInfo {font-size: 15px;}
 		}
@@ -97,7 +97,7 @@
                         </a>
 					</div>
 				</div>
-				
+
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="chilrens" id="children">
@@ -124,7 +124,7 @@
 																<img src="{{mobile_pic}}" class="children-avatar">
 															{{else}}
 																{{#if this.photo}}
-																	{{#if this.thumb}} 
+																	{{#if this.thumb}}
 																	<img src="/thumbs/{{thumb}}" class="children-avatar">
 																	{{else}}
 																	<img src="../../file_view.php?id={{photo}}" class="children-avatar">
@@ -180,7 +180,7 @@
 																	{{/if}}
 																</div>
 															{{/if}}
-															
+
 															{{#if this.chidonRegistered}}
 																<div style="margin:10px 0px">
 																	<div class="chidonRegInfo">Registered for Chidon</div>
@@ -197,9 +197,9 @@
 																		{{/if}}
 																	{{else}}
 																		{{#if this.enrollShabbaton}}
-																			<div style="margin:10px 0px">
+<!--																			<div style="margin:10px 0px">
 																				<button class="btn btn-danger enroll">Enroll for Chidon Shabbaton</button>
-																			</div> 
+																			</div> -->
 																		{{/if}}
 																	{{/if}}
 																	<!--<div style="margin:10px 0px">
@@ -207,16 +207,16 @@
 																	</div>-->
 																</div>
 															{{/if}}
-															
+
 															{{#if this.chidon}}
 																{{#if this.chidonRegistered}}
 																{{else}}
-																	<div style="margin:10px 0px">
+<!--																	<div style="margin:10px 0px">
 																		<button class="btn btn-primary chidon">Register Chidon <span class="year"></span></button>
-																	</div>
+																	</div>-->
 																{{/if}}
 															{{/if}}
-															
+
 															{{#if this.allowRemove}}
 															<a href="#" class="del">
 																<div style="margin:10px 0px">
@@ -225,7 +225,7 @@
 																</div>
 															</a>
 															{{/if}}
-															
+
 															{{#if this.showStory}}
 																<div style="margin:10px 0px">
 																	<a href="https://docs.google.com/a/tzivoshashem.org/forms/d/1fhls5odH69pWlzpp3RGtSfVCg_G9heh0VjOqHl44Mug/edit">Rebbe Story Contest</a>
@@ -274,12 +274,12 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<div class="bottomSpace"></div>
 				<!--
 				<div id="popModal" class="modal fade" role="dialog">
 				  <div class="modal-dialog modal-sm">
-				
+
 				    <div class="modal-content">
 				    	<form action="addchild.php" method="post" id="popup">
 				      		<div class="modal-body">
@@ -290,9 +290,9 @@
 				      		<div class="modal-footer">
 						        <button class="btn btn-default" name="submit">Continue</button>
 				      		</div>
-				      	</form>		
+				      	</form>
 				  	</div>
-				  	
+
 				  </div>
 				</div>
 				-->
@@ -314,8 +314,8 @@
 		                </div>
 		            </div>
 		        </div>
-        
-			</div>	
+
+			</div>
 		</div>
 		<script>
             document.addEventListener("DOMContentLoaded", function() {
@@ -341,17 +341,17 @@
 					Cookies.remove('shipping');
 					Cookies.remove('shipOpt');
 					Cookies.remove('destination');
-					
+
 					var year;
 					$.ajax({
 						type : "POST",
 						url : "/mobile/chidon/ajax/getYear.php",
-						async : false, 
+						async : false,
 						success : function( info ) {
 							year = info;
 						}
 					});
-					
+
 					var childrenToRegister = [];
 					$.post('ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
 						if ( success == -1 ) {
@@ -360,18 +360,18 @@
 							var data = $.parseJSON( success );
 							var parent = data.parent;
 							var children = data.children;
-							
+
 							var father = parent.father;
 							var mother = parent.mother;
-							
+
 							if (father)
 								$(".father").text(father.toUpperCase());
 							if (mother)
 								$(".mother").text(mother.toUpperCase());
-							
+
 							var fatherPic = parent.fatherPic;
 							var motherPic = parent.motherPic;
-							
+
 							if (fatherPic != '' && fatherPic != null) {
 								$("#father").attr('src', fatherPic);
 							}
@@ -379,23 +379,23 @@
 							//var newW = w * 1.1;
 							//$("#father").width( newW );
 							//$("#father").height( newW );
-							
+
 							if (motherPic != '' && motherPic != null) {
 								$("#mother").attr('src', motherPic);
 							}
 							//$("#mother").width( newW );
 							//$("#mother").height( newW );
-							
+
 							//set auction button link
 							//for (var c in children) {
 							//	$("#auction").attr('href', '/mobile/auction/category2.html?id=' + c);
 							//	break;
 							//}
-							
+
 							// sepearate registered and un-registered
 							var registred_children = {};
 							var unregistered_children = {};
-							
+
 							for (var c in children) {
 								var child = children[c];
 								if (child.needsReg && child.schoolRegistered && child.schoolTypeRegistered) {
@@ -411,33 +411,33 @@
 									registred_children[c] = child;
 								}
 							}
-							
+
 							Cookies.set('toRegister', childrenToRegister);
-							
+
 							//// append the unregistered kids to the end of the registered one by modifying the array
 							//registred_children.push.apply(registred_children, unregistered_children);
-							
+
 							// Grab the template script
 							var tplScript = $("#childrenTpl").html();
-						
+
 							// Compile the template
 							var tpl = Handlebars.compile( tplScript );
-	
+
 							// Pass our data to the template
 							var registered_html = tpl( { children : registred_children } );
 							var unregistered_html = tpl({ children: unregistered_children });
 							// put the registered kids first
 							var html = registered_html + unregistered_html;
-							
+
 							// Add the compiled html to the page
 							$(".chilrens").append( html );
-							
+
 							setSwiper();
-							
+
 							$(".year").text(year);
 						}
 					});
-					
+
 					$.post('ajax/checkAdminInfo.php', { admin : admin, onlyEmail: true }, function( result ) {
 						result = JSON.parse(result);
 						if (!result.success && !localStorage.getItem('email_notified')) {
@@ -445,7 +445,7 @@
 							location.href = "edit_profile.html";
 						}
 					});
-					
+
 			    	$(document).on('click', ".re_register", function() {
 						//var info = $(this).attr('class');
 						//if (info.indexOf('schoolNotRegistered') != -1) {
@@ -455,7 +455,7 @@
 				    	var id = $(this).parent().parent().parent().attr('id');
 				        location.href = "reg.html?child=" + id;
 				    });
-				    
+
 				    $(document).on('click', '.del', function() {
 				    	var del = confirm('Are you sure you want to delete this child from your profile?');
 				    	//alert( del );
@@ -476,35 +476,35 @@
 						var id = $(this).parent().parent().parent().attr('id');
 						location.href = "/mobile/chidon/index2.html?id=" + id;
 					});
-					
+
 					//$(document).on('click', '.shabbatonEdit', function() {
 					//	var id = $(this).parent().parent().parent().attr('id');
 					//	location.href = "/mobile/chidon/edit.html?id=" + id;
 					//});
-					
+
 					$(document).on('click', '.noSchoolShabbaton', function() {
 						alert('Your base has not yet opened registration. Please be in touch with your school for more info.');
 					});
-					
+
 					$(document).on('click', '.story', function() {
 						location.href = "https://docs.google.com/a/tzivoshashem.org/forms/d/1fhls5odH69pWlzpp3RGtSfVCg_G9heh0VjOqHl44Mug/edit";
 					});
-					
+
 					$(document).on('click', '.editChidon', function() {
 						var id = $(this).parent().parent().parent().parent().attr('id');
 						location.href = "/mobile/chidon/edit.html?id=" + id;
 					});
-					
+
 					$(document).on('click', '.enroll', function() {
 						var id = $(this).parent().parent().parent().parent().attr('id');
 						location.href = "/mobile/chidon/shabbaton.html?id=" + id;
 					});
-					
+
 					$(document).on('click', '.editEnrollment', function() {
 						var id = $(this).parent().parent().parent().parent().attr('id');
 						location.href = "/mobile/chidon/edit.html?id=" + id;
 					});
-					
+
 					$(document).on('click', '.chidon', function() {
 						var id = $(this).parent().parent().parent().attr('id');
 						var shliach = false;
@@ -521,7 +521,7 @@
 						}
 						if (!shliach) location.href = "/mobile/chidon/index.html?id=" + id;
 					});
-					
+
 					/*
 					$(document).on('click', '.chidonEdit', function() {
 						var id = $(this).parent().parent().parent().attr('id');
@@ -543,11 +543,11 @@
 						}
 						window.location = "/mobile/reg/";
 					});
-					
+
 					$("#addChild").click( function() {
 						//$("#popModal").modal();
 					});
-					
+
 					$("#popup").submit( function() {
 						var answer = $(".thAdded");
 						var submit = false;
@@ -564,7 +564,7 @@
 							return false;
 						}
 					});
-					
+
 					/*
 					$(".btn.submit").click( function() {
 						var answer = ($(this).text());
