@@ -5,7 +5,7 @@ require '../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 // get campaigns for current year
-$sql = "select * from line_campaigns where year = " . $year;
+$sql = "SELECT * FROM line_campaigns WHERE year = " . $year;
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
 	$campaigns[$row['id']] = strtolower( $row['type'] );
@@ -16,13 +16,13 @@ $info = array();
 if (isset($_GET['grade'])) {
 	$byGrade = true;
 	$grade = mysql_real_escape_string( $_GET['grade'] );
-	$sql = "select c.*, s.school_name from classes c
-			join schools s using (school_id)
-			where class_era = 0 
-			and s.school_era is null
-			and s.tanya = 1 
-			and class_grade = '" . $grade . "' 
-			order by class_grade, class_sub, school_name";
+	$sql = "SELECT c.*, s.school_name FROM classes c
+			JOIN schools s USING (school_id)
+			WHERE class_era = 0
+			AND s.school_era is null
+			AND s.tanya = 1
+			AND class_grade = '" . $grade . "'
+			ORDER BY class_grade, class_sub, school_name";
 	$result = mysql_query( $sql );
 	while ($row = mysql_fetch_assoc( $result )) {
 		$info[$row['class_id']] = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']) . " : " . $row['school_name'];
@@ -30,7 +30,7 @@ if (isset($_GET['grade'])) {
 	//echo "<pre>"; print_r( $grades ); echo "</pre>";
 } else {
 	//$sql = "select school_id, school_name from schools where school_era is null and school_id not in (247,66,79,198,199,82,240,241,255,265,269,272,286) order by school_name";
-	$sql = "select school_id, school_name from schools where school_era is null and tanya = 1 order by school_name";
+	$sql = "SELECT school_id, school_name FROM schools WHERE school_era IS NULL AND tanya = 1 ORDER BY school_name";
 	$result = mysql_query($sql);
 	while ($row = mysql_fetch_assoc($result)) {
 		$info[$row['school_id']] = $row['school_name'];
@@ -39,8 +39,8 @@ if (isset($_GET['grade'])) {
 
 $regInfo = array();
 foreach ($info as $id => $desc) {
-	if (isset($_GET['grade'])) $rSql = "select count(*) as total from users where class_id = $id and (user_registered > 0 or yan = 1)";
-	else $rSql = "select count(*) as total from users where school_id = $id and (user_registered > 0 or yan = 1)";
+	if (isset($_GET['grade'])) $rSql = "SELECT count(*) AS total FORM users WHERE class_id = $id AND (user_registered > 0 OR yan = 1)";
+	else $rSql = "SELECT count(*) AS total FROM users WHERE school_id = $id AND (user_registered > 0 OR yan = 1)";
 	$rResult = mysql_query($rSql);
 	$rRow = mysql_fetch_assoc($rResult);
 	$registered = $rRow['total'];
@@ -50,7 +50,8 @@ foreach ($info as $id => $desc) {
 
 require_once '../class.bpSummary.php';
 //require_once '../class.balPehCampaign.php';
-$results = array();
+$results = [];
+$child_count = [];
 foreach ($campaigns as $id => $campaign) {
 	//$bp = BalPehCampaign::getInstance( $id );
 	if ($byGrade) $bps = new BpSummary( $id, 'class' );
@@ -60,6 +61,11 @@ foreach ($campaigns as $id => $campaign) {
 	foreach ($info as $id => $desc) {
 		//$pledged = $bp->getTotalPledged( 'school', $school_id );
 		$learned = $bps->getSummary( $id );
+		$child_count[$id] = $bps->getChildCount( $id ); // get the total number of kids for the campaign...
+
+		// use the regInfo number if it is higher...
+		$child_count[$id] = $regInfo[$id] > $child_count[$id] ? $regInfo[$id] : $child_count[$id];
+
 		if ($learned == '') $learned = 0;
 		if ($learned == 0) continue;
 		//$results[$campaign]['pledged'][$school_id] = $pledged;
@@ -68,6 +74,8 @@ foreach ($campaigns as $id => $campaign) {
 		$grandTotal[$campaign]['learned'] += $results[$campaign]['learned'][$id];
 	}
 }
+
+//echo "<pre>"; print_r([$child_count, $regInfo]); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -108,7 +116,7 @@ foreach ($campaigns as $id => $campaign) {
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-	    
+
     <style>
     	#wrapper {
     		width: 70%;
@@ -179,8 +187,8 @@ foreach ($campaigns as $id => $campaign) {
 			background-color: #3c763d !important;
 			border-color: #3c763d !important;
 		}
-		table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
-			content: " \25B4\25BE" 
+		table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
+			content: " \25B4\25BE"
 		}
     </style>
     <link rel="stylesheet" href="../countdown/TimeCircles/inc/TimeCircles.css" />
@@ -192,7 +200,7 @@ foreach ($campaigns as $id => $campaign) {
 	    <canvas class="demo" height="400px" width="350px"></canvas>
 	    <div class="thermLabel">תניא</div>
 	</div>
-    	
+
 	<div class="thermometer2">
 	    <canvas class="demo2" height="400px" width="350px"></canvas>
 	    <div class="thermLabel">משנה</div>
@@ -221,7 +229,7 @@ foreach ($campaigns as $id => $campaign) {
                         <div class="clearfix"></div>
                     </div>
                     <div class="panel-heading">
-                        <div class="row">                           
+                        <div class="row">
                             <div class="col-xs-12 text-center">
                                 <div class="huge">
                                 	<?=number_format($grandTotal['tanya']['pledged'])?>
@@ -232,7 +240,7 @@ foreach ($campaigns as $id => $campaign) {
                     </div>
                 </div>
             </div>
-           
+
             <div class="col-lg-3 col-md-6 col-xs-6">
                 <div class="panel panel-red">
                 	<div class="panel-footer">
@@ -310,7 +318,7 @@ foreach ($campaigns as $id => $campaign) {
             <div class="col-lg-12 col-md-12 col-xs-12">
             	<div id="DateCountdown" data-date="2015-03-30 19:51:00" style="width: 500px; height: 125px; padding: 0px; box-sizing: border-box; background-color: #E0E8EF"></div>
             </div>
-            <!-- /.col-lg-12 
+            <!-- /.col-lg-12
         </div>
         -->
 		<div class="row">
@@ -324,7 +332,7 @@ foreach ($campaigns as $id => $campaign) {
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="row">
         	<div class="col-lg-6 col-md-12 col-xs-12">
 				<div class="alert alert-success" align="center">
@@ -341,7 +349,7 @@ foreach ($campaigns as $id => $campaign) {
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="row">
         	<div class="col-lg-12 col-md-12 col-xs-12">
 				Show By: <a href="index.php">School</a><br />
@@ -357,10 +365,10 @@ foreach ($campaigns as $id => $campaign) {
 				</select>
 			</div>
 		</div>
-			
+
         <div class="row">
         	<div class="col-lg-12 col-md-12 col-xs-12">
-	       		<div class="table-responsive">       
+	       		<div class="table-responsive">
 			        <table class="table table-striped table-bordered table-hover sortable">
 			        	<thead>
 					    	<tr>
@@ -381,7 +389,7 @@ foreach ($campaigns as $id => $campaign) {
 							//$data[$school]['mishnaP'] = isset($results['mishna']['pledged'][$id]) ? $results['mishna']['pledged'][$id] : 0;
 							$data[$desc]['mishnaL'] = isset($results['mishna']['learned'][$id]) ? $results['mishna']['learned'][$id] : 0;
 				    	}
-						
+
 						//echo "<pre>"; print_r( $data ); echo "</pre>"; exit;
 						$totals = array();
 						foreach ($data as $desc => $details) {
@@ -390,52 +398,57 @@ foreach ($campaigns as $id => $campaign) {
 							}
 							break;
 						}
-						
+
 						// figure out default sort
 						$sorted = array();
 						foreach ($data as $desc => $details) {
 							$k = array_search($desc, $info);
-							$avg = $details['tanyaL'] ? floor($details['tanyaL'] / $regInfo[$k]) : 0;
+							$avg = $details['tanyaL'] ? floor($details['tanyaL'] / $child_count[$k]) : 0;
 							$sorted[$desc] = $avg;
 						}
-						arsort( $sorted );						
-						
-						foreach ($sorted as $desc => $avg) { 
+						arsort( $sorted );
+
+						foreach ($sorted as $desc => $avg) {
 				    	//foreach ($data as $desc => $details) {
 							// get school/class id
 							$k = array_search($desc, $info);
-							if ($byGrade) echo "<tr><td><a href='soldierDetails.php?class_id=" . $k . "'>" . $desc . "</a></td>";
-				    		else echo "<tr><td><a href='platoonDetails.php?school_id=" . $k . "'>" . $desc . "</a></td>";
-				    		foreach ($data[$desc] as $key => $value) {
-				    			$totals[$key] += $value;
-								echo "<td>";
-								if ($value) echo number_format($value);
-								else echo "n/a";
-								echo "</td><td>";
-								if ($value) echo number_format(floor($value / $regInfo[$k]));
-								else echo "n/a";
-								echo "</td>";
-							}
-							echo "</tr>";
-				    	}
-						?>
+							?>
+							<tr>
+								<td>
+									<? if ($byGrade) { ?>
+										<a href='soldierDetails.php?class_id=<?=$k?>'><?=$desc?></a>
+									<? } else { ?>
+										<a href='platoonDetails.php?school_id=<?=$k?>'><?=$desc?></a>
+									<? } ?>
+								</td>
+							<? foreach ($data[$desc] as $key => $value) {
+				    			$totals[$key] += $value; ?>
+								<td>
+									<?= $value ? number_format($value) : "n/a"?>
+								</td>
+								<td>
+									<?= $value ? number_format(floor($value / $child_count[$k])) : "n/a"?>
+								</td>
+							<? } // end foreach campaign... ?>
+							</tr>
+				    	<? } // end foreach school... ?>
 						</tbody>
 						<tfoot>
-						<?					
-						echo "<tr><th align='right'>Totals</th>";
-						foreach ($totals as $key => $value) {
-							echo "<th>" . number_format($value) . "</th>";
-							echo "<th></th>";
-						}
-						echo "</tr>";
-						
-						echo "<tr><th colspan='6' style='text-align: center'>";
-						?>
-						
-						תניא בעל פה לע״נ התמים נתן נטע בן הרה"ח ר' זלמן יודא דייטש ע"ה
-						<br />
-						משניות בעל פה לע"נ זאב ארי' ע"ה בן יבלט"א הרה"ח ר' שניאור זלמן שי' גליק
-						</th></tr></tfoot>
+							<tr>
+								<th align='right'>Totals</th>
+								<? foreach ($totals as $key => $value) { ?>
+									<th><?=number_format($value)?></th>
+									<th></th>
+								<? } // end for each totals... ?>
+							</tr>
+							<tr>
+								<th colspan='6' style='text-align: center'>
+									תניא בעל פה לע״נ התמים נתן נטע בן הרה"ח ר' זלמן יודא דייטש ע"ה
+									<br />
+									משניות בעל פה לע"נ זאב ארי' ע"ה בן יבלט"א הרה"ח ר' שניאור זלמן שי' גליק
+								</th>
+							</tr>
+						</tfoot>
 				    </table>
 				</div>
 			</div>
@@ -448,7 +461,7 @@ foreach ($campaigns as $id => $campaign) {
 
     <!-- Bootstrap Core JavaScript -->
     <script src="admin2/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	
+
     <!-- Metis Menu Plugin JavaScript -->
     <script src="admin2/bower_components/metisMenu/dist/metisMenu.min.js"></script>
 
@@ -459,24 +472,24 @@ foreach ($campaigns as $id => $campaign) {
 
     <!-- Custom Theme JavaScript -->
     <script src="admin2/dist/js/sb-admin-2.js"></script>
-    
+
     <script type='text/javascript' src='../jsthermometer/thermometer.js'></script>
 	<script type='text/javascript' src='../jsthermometer/jquery.thermometer.js'></script>
 	<script type="text/javascript" src="../countdown/TimeCircles/inc/TimeCircles.js"></script>
-	
+
 	<script src="/js/sortable.js"></script>
-	
+
 	<script>
 		/*
 		var w = $('.demo').width();
 	    var h = $('.demo').height();
-	
+
 	    $('.demo').thermometer({
 	        w: w,
 	        h: h,
 	        color: {
 	            label: 'rgba(255, 255, 255, 1)',
-	            tickLabel: 'rgba(255, 0, 0, 1)' 
+	            tickLabel: 'rgba(255, 0, 0, 1)'
 	        },
 	        centerTicks: true,
 	        majorTicks: 1,
@@ -488,10 +501,10 @@ foreach ($campaigns as $id => $campaign) {
 	        scaleTickWidth: 0.1,
 	        unitsLabel: ""
 	    });
-		
+
 		var total = <?=$grandTotal['tanya']['learned']?>;
 	    $('.demo').thermometer('setValue', parseInt(total));
-	    
+
 	    $('.demo2').thermometer({
 	        w: w,
 	        h: h,
@@ -509,19 +522,19 @@ foreach ($campaigns as $id => $campaign) {
 	        scaleTickWidth: 0.1,
 	        unitsLabel: ""
 	    });
-		
+
 		var total = <?=$grandTotal['mishna']['learned']?>;
 	    $('.demo2').thermometer('setValue', parseInt(total));
 	    */
 	    $("#DateCountdown").TimeCircles();
-		
+
 		$("#grade").change( function() {
 			var val = $(this).val();
 			if (val > 0) {
 				location.href="index.php?grade=" + val;
 			}
 		});
-		
+
 		$(function() {
 			$("#defaultSort").click();
 		});
