@@ -50,8 +50,8 @@ cgi-bin
 
 # raffles - ignore the logs and images
 /raffles/tasks/logs/
-/raffles/tasks/img/
-/raffles/tasks/thumb/
+/raffles/img/
+/raffles/thumb/
 
 # general files we do not want in the codebase...
 error_log
