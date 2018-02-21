@@ -7,8 +7,10 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/header.php';
 
 /***************** IMPORTS **********************/
 require_once(dirname(__FILE__).'/../classes/Raffle.php');
+require_once(dirname(__FILE__).'/../classes/Prize.php');
 // namespace fixing
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
+use raffles\weekly\Prize as Prize; // use the raffle from its namespace
 
 /***************** GET POST DATA *********************/
 // get the type from the post request
@@ -33,6 +35,17 @@ $raffles = Raffle::loadAll($filter);
 <select name="raffle_id" id="raffle_id">
     <option value="" disabled selected >Select a Raffle</option>
     <? foreach($raffles as $raffle){ // render an option for each raffle?>
+        <?
+        // show prize name next to weekly raffles
+        if ($raffle->type == "weekly") {
+            $prizes = $raffle->get_prizes();
+            if ($prizes) {
+                foreach($prizes as $prize) {
+                    $raffle->name .= " (" . $prize->name . ")";
+                }
+            }
+        }
+        ?>
         <option value="<?=$raffle->raffle_id?>"><?=$raffle->name?></option>
     <?}?>
 </select>

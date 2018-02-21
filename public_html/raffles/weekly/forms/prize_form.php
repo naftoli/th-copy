@@ -191,12 +191,13 @@ if($debug) echo "</pre>"; // end debugging preformatting
             /*********** DEBUGGING **********************/
             //if($debug){echo "<pre>";print_r($prize->raffles);echo "</pre>";} // in debug mode show the prize objects
             /*********** GET ALL THE RAFFLES **********************/
-            $raffles = Raffle::loadAll("where type='".$prize->type_of_prize."'"); // only load prizes of this type ?>
+            $raffles = Raffle::loadAll("WHERE type='".$prize->type_of_prize."' AND date_ran IS NULL"); // only load prizes of this type ?>
             
             <h2>Raffles</h2>
             <p>
                 <strong>Please check off the raffles you would like this prize to be included in.</strong><br/>
-                (Note that a specific raffle might have already hit it's 100 prize limit with another prize)
+                <strong>Note:</strong> You can only have one prize per raffle.<br/>
+                <strong>Note:</strong> Raffles that have already run are now hidden from this list.
             </p>
             
             <table id="raffles">

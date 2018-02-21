@@ -16,8 +16,10 @@ if ($admin_user['auth'] != 'super') {
 }
 /***************** IMPORTS **********************/
 require_once(dirname(__FILE__).'/../classes/Raffle.php');
+require_once(dirname(__FILE__).'/../classes/Prize.php');
 require_once(dirname(__FILE__).'/../functions.php');
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
+use raffles\weekly\Prize as Prize; // use the raffle from its namespace
 
 $filter = "";
 
@@ -34,13 +36,24 @@ $raffles = Raffle::loadAll($filter);
 <table>
     <thead>
         <tr>
-            <th>Name</th><th>Type</th><th>Run Date</th><th>Starts On</th><th>Ends On</th><th>Ran On</th><th>Actions</th>
+            <th>Name</th><th>Prizes</th><th>Type</th><th>Run Date</th><th>Starts On</th><th>Ends On</th><th>Ran On</th><th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        <? foreach($raffles as $raffle) { // generate a row for each raffle?>
+        <? foreach($raffles as $raffle) { // generate a row for each raffle
+            $raffle->get_prizes();?>
             <tr>
                 <td><?=$raffle->name?></td>
+                <td><? if($raffle->type == "weekly" && count($raffle->prizes) > 0) {
+                    foreach($raffle->prizes as $prize) {?>
+                        <a href="https://mashpia.com/raffles/weekly/forms/prize_form.php?action=edit&prize_id=<?=$prize->prize_id?>"><?=$prize->name?></a><br/>
+                    <? }
+                } elseif ($raffle->type == "weekly" && count($raffle->prizes) == 0) {
+                    echo "N/A";
+                } elseif ($raffle->type == "monthly" ) {
+                    echo count($raffle->prizes)." prizes set";
+                }
+                ?></td>
                 <td><?=$raffle->type?></td>
                 <td><?=$raffle->run_date->format('m/d/Y')?></td>
                 <td><?=formatJdToDate($raffle->start_date, "m/d/Y")?></td>
