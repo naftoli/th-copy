@@ -104,15 +104,15 @@ while ( $row = mysql_fetch_assoc($result) ) {
 			if ($cRow['deleted'] == 0) {
 				$children[$row['user_id']]['chidonRegistered'] = 1;
 				$children[$row['user_id']]['allowRemove'] = 0;
-				// make sure school indicated that child should enroll for shabbaton
-				//if ($cRow['can_enroll']) {
-				//	// make sure school is registered to chidon
-				//	$chapSql = "SELECT * FROM th_chidon_schools WHERE school_id = " . $row['school_id'] . " AND year = " . $year . " AND registered = 1";
-				//	$chapRes = mysql_query( $chapSql );
-				//	if (mysql_num_rows($chapRes) > 0) {
-				//		$children[$row['user_id']]['enrollShabbaton'] = 1;
-				//	} 
-				//}
+				// make sure school indicated that child should enroll for shabbaton 
+				if ($cRow['can_enroll'] && in_array($row['user_id'], [18175, 15027, 14415, 22605, 22604, 54197, 3644, 53778, 54256, 14440, 14497, 14504, 26671, 3644])) { // allow one-off user registration...
+					// make sure school is registered to chidon
+					$chapSql = "SELECT * FROM th_chidon_schools WHERE school_id = " . $row['school_id'] . " AND year = " . $year . " AND registered = 1";
+					$chapRes = mysql_query( $chapSql );
+					if (mysql_num_rows($chapRes) > 0) {
+						$children[$row['user_id']]['enrollShabbaton'] = 1;
+					} 
+				}
 			}
 			if ($cRow['allow_edit']) {
 				$children[$row['user_id']]['shabbatonEdit'] = 1;
