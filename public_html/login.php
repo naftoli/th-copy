@@ -274,7 +274,7 @@ if (isset($admin_auth))
 													<li>
 														<input type="submit" value="Login" class="button"> 
 														<input type="hidden" name="new_login">
-														<input type="hidden" name="fromMobile" value="<?=$_GET['fromMobile'] ? 1 : 0;?>" >
+														<input type="hidden" name="fromMobile" value="<?=isset($_GET['fromMobile']) ? 1 : 0;?>" >
 														<div class="clear"></div>
 													</li>
 												</ul>
