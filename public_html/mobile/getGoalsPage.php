@@ -261,7 +261,8 @@ foreach ($sm as $val) {
 						user : <?=$user_id?>,
 						start : <?=$start?>,
 						end : <?=$end?>,
-						lang : lang
+						lang : lang,
+						parent : Cookies.get('admin'),
 					},
 					success : function( data ) {
 						var data = $.parseJSON( data );
