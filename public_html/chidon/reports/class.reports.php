@@ -118,19 +118,19 @@ class Reports
             ),
             'chap_acc_name' =>  array(
                 'table'     =>  'th_chidon_chaps',
-                'column'    =>  'acc_name',
+                'column'    =>  'acc_name as chap_acc_name',
             ),
             'chap_acc_addr' =>  array(
                 'table'     =>  'th_chidon_chaps',
-                'column'    =>  'acc_address',
+                'column'    =>  'acc_address as chap_acc_addr',
             ),
             'chap_acc_phone'=>  array(
                 'table'     =>  'th_chidon_chaps',
-                'column'    =>  'acc_phone',
+                'column'    =>  'acc_phone as chap_acc_phone',
             ),
             'chap_vehicle'  =>  array(
                 'table'     =>  'th_chidon_chaps',
-                'column'    =>  'vehicle',
+                'column'    =>  'vehicle as chap_vehicle',
             ),
             'chap_school'   =>  array(
                 'table'     =>  'schools',
@@ -319,7 +319,7 @@ class Reports
                     $tables[$table][] = $this->fields[$field]['column'];
                 } 
             }
-            //echo "<pre>"; print_r($tables); echo "</pre>"; 
+            //echo "<pre>"; print_r($tables); echo "</pre>";
             
             $sql = "select ";
             foreach ($tables as $table => $other) {
@@ -368,6 +368,14 @@ class Reports
                         break;
                 }
             }
+            
+            // if limiting to gender, ensure we have the join to users table
+            if ($root == 'th_chidon' && $gender) {
+                if (! array_key_exists( 'users', $tables )) {
+                    $sql .= " join users u on u.user_id = tc.user_id";
+                }
+            }
+            
             $sql .= " where " . $this->aliases[$root] . ".year = " . $this->year;
             
             if ($root == 'th_chidon_chaps' && $chidonType) {
