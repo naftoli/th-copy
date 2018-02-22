@@ -3,12 +3,14 @@ ini_set('display_errors',1);
 require_once '../../db.php';
 $admins = array();
 $children = array();
-$sql = "select a.*, tc.*, u.first as ufirst, u.last as ulast    
+$sql = "select a.*, tc.*, u.first as ufirst, u.last as ulast, s.school_name     
         from th_chidon tc
-        join users u using (user_id) 
+        join users u using (user_id)
+        join schools s on tc.school_id = s.school_id  
         join admin_auths aa on (aa.id = tc.user_id) 
         join admins a using (admin_id)
-        where tc.shabbaton = 1";
+        where tc.year = 5778
+        and tc.date_paid > 0";
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
     $admins[$row['admin_id']] = $row;
@@ -61,9 +63,10 @@ while ($row = mysql_fetch_assoc( $result )) {
             <thead>
                 <tr>
                     <th>Parent Name</th>
+                    <th>Parent Address</th>
                     <th>Parent Email</th>
                     <th>Parent Number</th>
-                    <th>Children / Marks</th>
+                    <th style="width: 160px;">Children / Marks</th>
                     <th>Assigned To</th>
                     <th>Pledged</th>
                     <th>Donated</th>
@@ -97,7 +100,10 @@ while ($row = mysql_fetch_assoc( $result )) {
                     } else {
                         if (isset($_GET['filter']) && $_GET['filter'] > 0) continue;
                     }
-                    echo "<tr id=" . $admin_id . "><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>" . $admin['admin_email'] . "</td><td>";
+                    $address = $admin['admin_address1'] . "<br />" . $admin['admin_city'] . ", " . $admin['admin_state'] . "<br />" .
+                        $admin['admin_postal'] . "<br />" . $admin['admin_country'];
+                    echo "<tr id=" . $admin_id . "><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>" . $address . "</td><td>" .
+                        $admin['admin_email'] . "</td><td>";
                     echo "Cell 1: " . $admin['admin_phone_mobile'] . "<br />";
                     echo "Cell 2: " . $admin['admin_phone_mobile2'] . "<br />";
                     echo "Work: " . $admin['admin_phone_work'] . "<br />";
@@ -105,6 +111,7 @@ while ($row = mysql_fetch_assoc( $result )) {
                     $i = 1;
                     foreach ($children[$admin_id] as $child) {
                         echo "Child: " . $child['ufirst'] . "<br />";
+                        echo "School: " . $child['school_name'] . "<br />";
                         echo "Avg Part 1: " . number_format(($child['test1a'] + $child['test2a'] + $child['test3a']) / 3, 2) . "<br />";
                         echo "Avg Part 2: " . number_format(($child['test1b'] + $child['test2b'] + $child['test3b']) / 3, 2);
                         if (count($children[$admin_id]) > $i++) echo  "<br /><br />";
