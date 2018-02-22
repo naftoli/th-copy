@@ -8,6 +8,7 @@ class TasksCustomizationNew {
     private $id;
     private $schoolType;
     private $school_id;
+	private $parent_id; // the parent ID to load the i
     private $d;
 	private $debug;
 
@@ -18,6 +19,7 @@ class TasksCustomizationNew {
         $this->id = null;
         $this->schoolType = null;
         $this->school_id = null;
+		$this->parent_id = null;
 		$this->lang = 1;
     }
     
@@ -72,6 +74,16 @@ class TasksCustomizationNew {
 		$this->schoolType = "(2,3,12,13)";
         $this->school_id = $id;
     }
+	
+	public function setParentID( $parent_id, $encrypted = true ) {
+		// if we get an encrypted parent ID, first decrypt it, then use it...
+		if($encrypted) {
+			require_once ($_SERVER['DOCUMENT_ROOT'].'/mobile/reg/ajax/encrypt.php');
+			$parent_id = encrypt_decrypt( 'decrypt', $parent_id ); // decrypt the parent id
+		}
+		
+		$this->parent_id = mysql_real_escape_string( $parent_id );
+	}
     
     //for parent accounts
     public function getCampaignsForChild( $user, $not_enrolled = false ) {
@@ -375,19 +387,21 @@ class TasksCustomizationNew {
         if ( $subject_id == 40 ) $orderBy = " order by IFNULL(dt.yd_cat_num, 10000), dt.cat_ord_new, dtm.level, dtm.school_type_id, dt.name";
         
         if ( $this->type == 'user' ) {
-			$sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on from date_tasks dt 
-                    join date_tasks_missions dtm using (date_tasks_mission_id) 
-                    join user_tracks ut using (subject_id, level, track_id) 
-                    join users u using (user_id) 
-                    where ut.user_id = $this->id
-					and ut.enrolled = 1 
-                    and dtm.subject_id = " . $subject_id . " 
-                    and dtm.school_type_id = u.school_type_id 
-                    and dtm.start_date >= $this->start 
-                    and dtm.end_date <= $this->end 
-                    and (dtm.created_by_school is null or dtm.created_by_school = $this->school_id) 
-                    and u.user_registered > 0 
-                    and dtm.lang_id = " . $this->lang;
+			$sql = "SELECT distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on "
+				." FROM date_tasks dt "
+                ." JOIN date_tasks_missions dtm USING (date_tasks_mission_id) "
+				." JOIN user_tracks ut USING (subject_id, level, track_id) "
+				." JOIN users u USING (user_id) "
+				." WHERE ut.user_id = $this->id "
+				." AND ut.enrolled = 1 "
+				." AND dtm.subject_id = " . $subject_id . " "
+				." AND dtm.school_type_id = u.school_type_id "
+				." AND dtm.start_date >= $this->start "
+				." AND dtm.end_date <= $this->end "
+				." AND (dtm.created_by_school IS NULL or dtm.created_by_school = $this->school_id) "
+				." AND (dtm.created_by_parent IS NULL OR dtm.created_by_parent = '$this->parent_id') "
+				." AND u.user_registered > 0 "
+				." and dtm.lang_id = " . $this->lang. " ";
 			//if ($this->id == 5548)echo $sql;
         } else if ($this->type == 'class') {
             $users = $this->getUsersInGrade($this->id);
