@@ -24,6 +24,12 @@ $tc->setStart( $start );
 $tc->setEnd( $end );
 $tc->setType( $user, $class, $school );
 $tc->setLang( $lang );
+
+// check if the parent is set and if so update the parent_id of the tc object
+if (isset($_GET['parent'])) {
+    $tc->setParentID($_GET['parent']);
+};
+
 $tasks = $tc->getTasks( $id, $debug );
 
 if($version == "2") {
@@ -35,7 +41,7 @@ if($version == "2") {
         $result = mysql_query( $sql );
         $mandatory[$cat] = mysql_num_rows($result) > 0;
     }
-    echo json_encode(["tasks" => $tasks, "mandatory" => $mandatory]); die();
+    echo json_encode(["tasks" => $tasks, "mandatory" => $mandatory, "parent" => $_GET['parent']]); die();
 }
 
 echo json_encode($tasks);
