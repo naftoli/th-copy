@@ -649,8 +649,8 @@ $class_result = mq($qry);
 						alert('Incorrect dob.');
 						return false;
 					}
-					var age = (new Date().getFullYear() - arrDob[0]);
-					if (age > 14) {
+					var age = (new Date() - new Date(dob)) / 31536000000; // 31,536,000,000 milliseconds in a year....
+					if (age >= 15) { // make sure they are less then 15.
 						alert('Only children 14 and under are eligible to be enrolled in tzivos hashem.');
 						return false;
 					}
