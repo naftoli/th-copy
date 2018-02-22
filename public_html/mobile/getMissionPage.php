@@ -643,12 +643,11 @@ $he_chars = array(
 														if (strtolower($label) == 'shabbos mevorchim' || $label == 'שבת מברכים') {
 															if ($shabbos_task->short_name == 'Tehillim Quota' || 
 																$shabbos_task->short_name == 'תהילים קוואטע') {
-																echo "Quota: <b><span class='tQty tehillim'>" . $shabbos_task->quantity . "</span></b> kap.";
+																echo "<div class='quota'>Quota: <b><span class='tQty tehillim'>" . $shabbos_task->quantity . "</span></b> kap.</div>";
 															} else if ($shabbos_task->short_name == 'Tehillim Minutes' || 
 																		$shabbos_task->short_name == 'תהילים מינוטן') {
-																echo "Quota: <b><span class='tMin tehillim'>" . $shabbos_task->quantity . "</span></b> min.";
+																echo "<div class='quota'>Quota: <b><span class='tMin tehillim'>" . $shabbos_task->quantity . "</span></b> min.</div>";
 															}
-															echo "<br />";
 														}
 														?>
 														<div class="long">
