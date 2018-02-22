@@ -73,6 +73,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Medals Earned By Year</span>
                 </div>
             </a>
+            <a href="missing_medals.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/file_view.php?id=1054359804" height="32" alt="tickets"/>
+                    <span class="link-text">Missing Medals Printout Report</span>
+                </div>
+            </a>
         </div>
         <?} // end admin only links ?>
         </div>
