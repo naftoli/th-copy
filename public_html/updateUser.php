@@ -14,17 +14,17 @@ require_once('classes/rank_updater.php');
 $mupdater = new medal_updater();
 $rupdater = new rank_updater();
 
-$users = array();
+//$users = array();
+//$sql = "select * from date_tasks_marks dtm
+//        join date_tasks dt using (date_task_id) 
+//        where dt.grid_id = 8001
+//        and dtm.mark_date = 2458076";
+//$result = mysql_query( $sql );
+//while ($row = mysql_fetch_assoc( $result )) {
+//    $users[] = $row['user_id'];
+//}
 
-$sql = "select * from date_tasks_marks dtm
-        join date_tasks dt using (date_task_id) 
-        where dt.grid_id = 8001
-        and dtm.mark_date = 2458076";
-$result = mysql_query( $sql );
-while ($row = mysql_fetch_assoc( $result )) {
-    $users[] = $row['user_id'];
-}
-
+$users = array(13238);
 foreach ($users as $user) {
     $mupdater->update_medal_two($user);
     $rupdater->update_rank_two($user);
