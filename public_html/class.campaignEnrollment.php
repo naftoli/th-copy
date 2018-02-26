@@ -8,10 +8,10 @@ class CampaignEnrollment {
     
     private $campaigns = array(
         'chabad' => array(
-            1,4,12,13,15,16,21,27,40,41,42,45,90,100
+            1,  4,  12, 13, 15, 16, 21, 27, 40, 41, 42, 45, 90,             100 #=> 12, 13, 40
         ),
         'frum' => array(
-            1,4,15,16,93,92,21,27,94,41,42,45,90,100
+            1,  4,          15, 16, 21, 27,     41, 42, 45, 90, 92, 93, 94, 100 #=> 92, 93, 94
         )
     );
     
@@ -19,8 +19,23 @@ class CampaignEnrollment {
         $this->user_id = $user_id;
     }
     
+    public function getEligibleCampaigns($school_type_id = false) {
+        // if the school type id is not provided load it up from the user...
+        if(!$school_type_id && $this->user_id){
+            $school_type_id_query = mysql_query("SELECT school_type_id FROM users WHERE user_id = " . $this->user_id);
+            $school_type_id = mysql_fetch_assoc($school_type_id_query)['school_type_id'];
+        }
+        
+        switch ($school_type_id) {
+            case 12: case 13: // 12 and 13 are just frum
+                return $this->campaigns['frum'];
+            case 2: case 3: default: // 2 and 3 and others are chabad
+                return $this->campaigns['chabad'];
+        }
+    }
+    
     public function setType() {
-        $sql = "select * from users where user_id = " . $this->user_id;
+        $sql = "SELECT * FROM users WHERE user_id = " . $this->user_id;
         $result = mysql_query($sql);
         $row = mysql_fetch_assoc($result);
         $this->userInfo = $row;
@@ -62,13 +77,13 @@ class CampaignEnrollment {
     private function resetTracks() {
         switch ($this->type) {
             case 'chabad':
-                $sql = "delete from user_tracks where subject_id in (92,93,94) and user_id = " . $this->user_id;
+                $sql = "DELETE FROM user_tracks WHERE subject_id in (92,93,94) AND user_id = " . $this->user_id;
                 break;
             case 'frum':
-                $sql = "delete from user_tracks where subject_id in (12,13,40) and user_id = " . $this->user_id;
+                $sql = "DELETE FROM user_tracks WHERE subject_id in (12,13,40) AND user_id = " . $this->user_id;
                 break;
         }
-        //echo $sql . "<br />";
+        //echo $sql . "<br />"; die();
         return mysql_query($sql);
     }
     
