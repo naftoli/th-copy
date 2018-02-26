@@ -36,6 +36,7 @@ cgi-bin
 /yan/
 /youtrack/
 /v2/stats
+/chidon/attendance/db-seeder/vendor
 
 # ignore v2 images
 /v2/images/imgsrepo
