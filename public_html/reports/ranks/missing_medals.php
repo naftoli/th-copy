@@ -18,7 +18,7 @@ if ($admin_user['auth'] != 'super') {
 $subjects_list = [];
 $subjects_list_query = mysql_query(
      " SELECT subject_id, subject_name FROM subjects "
-    ." WHERE subject_id IN (45, 27, 4, 90, 21, 16, 13, 40, 12, 41, 100, 1)"
+    ." WHERE subject_id IN (45, 27, 4, 90, 21, 16, 13, 40, 12, 41, 100, 1, 92, 93, 94)"
     ." ORDER BY subject_name"
 );
 while($subject = mysql_fetch_assoc($subjects_list_query)){

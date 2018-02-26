@@ -58,7 +58,7 @@ $user_query = mysql_query(
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Tzivos Hashem | Rank Reports Home Page</title>
+        <title>Tzivos Hashem | Missing Medal Letters</title>
         <style>
             .page-break {page-break-after: always;}
             p.large{font-size: 1.3em;line-height: 1.4;}
@@ -92,10 +92,11 @@ $user_query = mysql_query(
                 <p>Dear <?=$user['first']?> <?=$user['last']?>,</p>
                 
                 <p>
-                    This year, chayolim have earned more medals than ever before--324,090,459!
-                    So many medals have been earned that Tzivos Hashem Headquarters can't keep up--we've run out of medals!
+                    This year, you have earned more medals than ever before--a total of 51,913.
+                    So many medals have been earned that here at Tzivos Hashem Headquarters we can't keep up--we've actually run out of medals.
                     New ones are being created right now at our factories in China, and then they'll travel to Headquarters on a huge freight ship.
-                    Once they arrive, they'll be mailed to your school right away. Thanks for your patience, and keep on bringing Moshiach with all of your missions.
+                    Once they arrive, they'll be mailed to your school right away.
+                    Thanks for your patience, and keep on bringing Moshiach with all of your missions.
                 </p>
                 
                 <p>- Rabbi Shimmy Weinbaum</p>

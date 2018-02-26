@@ -1,6 +1,6 @@
-<?php
+<?php $debug = false;
 /***************** DEBUGGING **********************/
-if ($_GET['debug']) {
+if (isset($_GET['debug'])) {
     error_reporting(E_ALL);
     ini_set("display_errors", 1);
     $debug = true; // set debug to true
@@ -19,7 +19,7 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
 if($debug) echo "</pre>";?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html">
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -131,6 +131,12 @@ if($debug) echo "</pre>";?>
                     <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="This action will only print items that where/are marked as shipped"></i>
                 </a>
             </span>
+            <span class="option_space">
+                <a class="button" id="print_letters" href="medal_letter_printout.php" target="_blank">
+                    <i class="fa fa-print" aria-hidden="true"></i> Print Missing Medal Letters
+                    <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="This will print a letter for all children who's medals where not shipped"></i>
+                </a>
+            </span>
         </div>
         
         <hr style="display: block;"/>
@@ -154,6 +160,21 @@ if($debug) echo "</pre>";?>
                 sort_desc: $("input#sort-desc")[0].checked
             };
         }
+        $( "#print_letters" ).click( function(event) {
+            event.preventDefault(); // prevent the browser from opening the link
+            
+            var data = {
+                shipping_status: "shipped",
+                shipments: {
+                    medals: true
+                },
+                report_dates: $("#report_dates")[0].checked ? "current" : "previous"
+            };
+            // set the data as the get params and open in new tab.
+            var params = $.param(data);// paramaratize the data from the generated report
+            var url = event.target.href + "?" + (debug ? "debug=true&" : "") + params; // genearate the url
+            window.open(url, '_blank'); // open it in a new tab
+        });
         </script>
         <script src="../js/shipments.js?v=1.1"></script>
         <script src="../js/report.js?v=1.1.7"></script>

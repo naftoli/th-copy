@@ -127,7 +127,6 @@ $hachayols = [];
 if($shipments['hachayols']) {
     require_once(dirname(__FILE__)."/../functions/get_hachayols.php");
     $hachayols = get_hachayols($school_id, $greg_start, $greg_end);
-    //if($debug) print_r($hachayols);
 }
 
 /***************** GET THE USERS **********************/
