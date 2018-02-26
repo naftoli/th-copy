@@ -41,15 +41,15 @@ $sql = "update users set
 		user_photo_id = '$photo'";
  *
  */
- $sql = "update users set 
-		first = '$first', 
-		last = '$last', 
-		first_he = '$firstHe', 
-		last_he = '$lastHe',
-		he_name = '$firstHe $lastHe', 
-		school_id = $school,
-		dob = '$dob', 
-		lang_id = " . $lang;
+ $sql = "UPDATE users SET " 
+	." first = '$first', "
+	." last = '$last', "
+	." first_he = '$firstHe', "
+	." last_he = '$lastHe', "
+	." he_name = '$firstHe $lastHe', "
+	." school_id = $school, "
+	." dob = '$dob', "
+	." lang_id = " . $lang;
 if ($grade > 0) {
 	$sql .= ", class_id = $grade";
 }
