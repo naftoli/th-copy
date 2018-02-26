@@ -1,12 +1,6 @@
 
 RewriteEngine on
 
-# php -- BEGIN cPanel-generated handler, do not edit
-# NOTE this account's php is controlled via FPM and the vhost, this is a place holder.
-# Do not edit. This next line is to support the cPanel php wrapper (php_cli).
-# AddType application/x-httpd-ea-php54 .php .phtml
-# php -- END cPanel-generated handler, do not edit
-
 # prevent caching on the server side
 <FilesMatch "\.(html|htm|js|css|php)>
   FileETag None
@@ -17,3 +11,9 @@ RewriteEngine on
      Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
   </ifModule>
 </filesMatch>
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# NOTE this account's php is controlled via FPM and the vhost, this is a place holder.
+# Do not edit. This next line is to support the cPanel php wrapper (php_cli).
+# AddType application/x-httpd-ea-php54 .php .phtml
+# php -- END cPanel-generated handler, do not edit
