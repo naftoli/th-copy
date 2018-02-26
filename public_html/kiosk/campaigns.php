@@ -1,4 +1,8 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+// load the campaignEnrollment information.
+require_once($_SERVER['DOCUMENT_ROOT']."/class.campaignEnrollment.php");
 
 include_once ("../header.php");
 require_once('../file_save.php');
@@ -21,11 +25,23 @@ WHERE user_id = {$user['user_id']}
 ORDER BY class_grade, class_sub, last, first
 "));
 
-$subjects_result = mq("SELECT subjects.subject_id, subject_name, subject_type, subjects.subject_black_image_id
-FROM subjects
-JOIN school_subjects ON (subjects.subject_id = school_subjects.subject_id AND school_id = {$user_row['school_id']})
-WHERE subject_type NOT IN ('school_points', 'home_points')
-ORDER BY subject_name");
+// load the subjects that the user can enroll in.
+$campaign_enrollment = new CampaignEnrollment($user['user_id']);
+$subject_ids = $campaign_enrollment->getEligibleCampaigns();
+
+//$subjects_result = mq("SELECT subjects.subject_id, subject_name, subject_type, subjects.subject_black_image_id
+//FROM subjects
+//JOIN school_subjects ON (subjects.subject_id = school_subjects.subject_id AND school_id = {$user_row['school_id']})
+//WHERE subject_type NOT IN ('school_points', 'home_points')
+//ORDER BY subject_name");
+
+$subjects_result = mq(
+	 " SELECT subjects.subject_id, subject_name, subject_type, subjects.subject_black_image_id"
+	." FROM subjects "
+	." WHERE subject_id IN (" . implode(", ", $subject_ids) . ") "
+	." ORDER BY ISNULL(subject_black_image_id), subject_name;"
+);
+
 /*SELECT subjects.subject_id, subjects.subject_name, subjects.subject_black_image_id
 FROM school_subjects, subjects
 WHERE
