@@ -732,65 +732,65 @@
 						//alert(JSON.stringify(children)); return;
 					}
 				}
-	    	
-	    	update();
-	    	
-	    	function update() {
-		        if (pos == -1) { //new registration
-		        	$.post('ajax/newUser.php', {
-		        		admin : admin, 
-			        	first : fname, 
-			        	last : lname, 
-			        	firsthe : fhname, 
-			        	lasthe : lhname,
-			        	school_id : school, 
-			        	class_id : grade, 
-			        	dob : dob, 
-			        	gender : gender, 
-			        	photo : photo, 
-			        	lang : lang 
-			        }, function( success ) {
-			        	var userID = parseInt(success);
-			        	if ( userID ) {
-			        		alert('New Soldier Created.');
-			        		window.location = "child-commit.html?child=" + userID;
-			        	} else {
-			        		alert('There was an error creating a new registration.');
-			        		return false;
-			        	}
-			        });
-		        } else { //re-registration
-			        $.post('ajax/updateUser.php', {
-			        	user_id : id,
-			        	fname : fname, 
-			        	last : lname, 
-			        	fhname : fhname, 
-			        	lhname : lhname, 
-			        	school : school,
+				
+				update();
+				
+				function update() {
+						if (pos == -1) { //new registration
+							$.post('ajax/newUser.php', {
+								admin : admin, 
+								first : fname, 
+								last : lname, 
+								firsthe : fhname, 
+								lasthe : lhname,
+								school_id : school, 
+								class_id : grade, 
+								dob : dob, 
+								gender : gender, 
+								photo : photo, 
+								lang : lang 
+							}, function( success ) {
+								var userID = parseInt(success);
+								if ( userID ) {
+									alert('New Soldier Created.');
+									window.location = "child-commit.html?child=" + userID;
+								} else {
+									alert('There was an error creating a new registration.');
+									return false;
+								}
+							});
+						} else { //re-registration
+							$.post('ajax/updateUser.php', {
+								user_id : id,
+								fname : fname, 
+								last : lname, 
+								fhname : fhname, 
+								lhname : lhname, 
+								school : school,
 								grade : grade, 
-			        	dob : dob, 
-			        	gender : gender, 
-			        	photo : photo, 
-			        	lang : lang 
-			        }, function( success ) {
-			        	var result = parseInt(success);
-			        	if ( !result ) {
-			        		alert("There was an error updating your child's information.");
-			        	} 
-			        	if (pos2 == -1) {
+								dob : dob, 
+								gender : gender, 
+								photo : photo, 
+								lang : lang 
+							}, function( success ) {
+								var result = parseInt(success);
+								if ( !result ) {
+									alert("There was an error updating your child's information.");
+								} 
+								if (pos2 == -1) {
 									// figure out where to go from here
 									checkReg();
 									//location.href = checkReg();
-			        	} else {
-			        		if (success) {
+								} else {
+									if (success) {
 								if (window.location.href.indexOf("===") > -1) {
 									window.close();
 								}
 								else 
 									location.href = "/mobile/reg/medals/index.html?id=" + id;
 							}
-			        	}
-			        });
+								}
+							});
 						}
 				}
 				
