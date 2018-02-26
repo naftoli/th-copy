@@ -76,6 +76,7 @@ function weekly_raffle($raffle){
     /************************** ROUND ONE: GIVE ALL THE SCHOOLS THEIR QUOTA **************************/
     foreach($schools as $school_id => $user_ids) { // for each school
         for($i = 0; $i < $school_limits[$school_id]; $i++){
+            if(count($user_ids) == 0) continue; // skip the loop if the school is out of eligible winners... (e.g. if one is a sibling...)
             $user = $user_ids[array_rand($user_ids)];   // get a random id from the array of user arrays (keys)
             $draw_num++; // count up the drawing
             
