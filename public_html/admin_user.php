@@ -843,7 +843,8 @@ $class_result = mq($qry);
 										<LABEL>
 											*<?=T_('Date of birth')?>
 											<BR>
-											<INPUT TYPE="date" NAME="dob" id="dob" VALUE="<?=$edit_row['dob']?>" MAXLENGTH="10" onChange="if(this.value != '') {var str = this.value.replace(/\D/g, '')+'00000000'; this.value = str.substring(0, 4) + '-' + str.substring(4, 6) + '-' +  str.substring(6, 8);}"> (YYYY-MM-DD)
+											<INPUT TYPE="date" NAME="dob" id="dob" VALUE="<?=$edit_row['dob']?>" MAXLENGTH="10" onChange="if(this.value != '') {var str = this.value.replace(/\D/g, '')+'00000000'; this.value = str.substring(0, 4) + '-' + str.substring(4, 6) + '-' +  str.substring(6, 8);}"> <br/>
+											(YYYY-MM-DD if you do not see a date selector or 'mm/dd/yyyy')
 										</LABEL>
 
 										<BR>
