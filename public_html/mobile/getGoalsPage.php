@@ -1,12 +1,14 @@
 <?
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 require_once '../db.php';
-$user_id = mysql_real_escape_string( $_GET['id'] );
-$version = mysql_real_escape_string( $_GET['v'] );
+$user_id = mysql_real_escape_string( $_GET['id'] ); // get the user id
+$version = mysql_real_escape_string( $_GET['v'] ); // get the version of the API
 
-$sql = "select first, last, user_photo_id, lang_id, ut.track_id, ut.level from users u
-		join user_tracks ut using (user_id)
-		where user_id = " . $user_id . " ".
-		"ORDER BY ut.subject_id LIMIT 1"; // order by the subject id to get the first one available (preferably 1 if available)
+$sql = "select first, last, user_photo_id, lang_id, ut.track_id, ut.level, u.allow_parent_tasks, u.parent_marking from users u "
+		."join user_tracks ut using (user_id) "
+		."where user_id = " . $user_id . " "
+		."ORDER BY ut.subject_id LIMIT 1"; // order by the subject id to get the first one available (preferably 1 if available)
 
 //if($user_id == 26755 || $user_id == 22309) echo $sql;
 
@@ -17,6 +19,7 @@ $first = $row['first'];
 $lang = $row['lang_id'] ? $row['lang_id'] : 1;
 $ladder = $row['track_id'];
 $level = $row['level'];
+$allow_parent_tasks = $row['allow_parent_tasks'] == '1' && $row['parent_marking'] == "1" ? true : false;
 
 // find out current hebrew month
 $heDate = jdtojewish(unixtojd());
@@ -24,7 +27,7 @@ $heMonth = $heDate[0];
 if ($heMonth == 13) $month = 1;
 else $month = $heMonth++;
 
-$qry = "SELECT qty, minutes FROM tehillim_ladders WHERE ladder = " . $ladder . " and age = " . $level . " and month = " . $month;
+$qry = "select qty, minutes from tehillim_ladders where ladder = " . $ladder . " and age = " . $level . " and month = " . $month;
 $res = mysql_query($qry);
 $r = mysql_fetch_assoc($res);
 
@@ -79,6 +82,12 @@ foreach ($sm as $val) {
 		break;
 	}
 }
+
+/**************** GET THE CAMPAIGNS THE USER IS ELIGIBLE FOR ********************/
+require_once(dirname(__FILE__)."/inc/functions/getCampaigns.php");
+// show the button if the user has unenrolled campaigns or has no campaigns...
+$has_campaigns = count(getCampaigns($user_id, false)) > 0 || count($campaigns) == 0;
+
 ?>
 <header class="navbar" id="top" role="banner">
     <div class="container">
@@ -89,13 +98,29 @@ foreach ($sm as $val) {
 </header>
 
 <div class="personalImg"></div>
+<div class="bug-report">
+	<img src="/mobile/img_new/report-bug-white-svg.svg" data-user_id="<?=$user_id?>" data-category="Marking Missions" alt="bug-report" />
+</div>
 
 <div class="container">
     <div class="content">
-		<a id="back-link" href="missionsNew.html?id=<?=$user_id?>">
-			<img src="img_new/arrow-1-color-white-svg.svg" style="height: 20px; width: 20px;padding: 2px;<?if ($lang == 1) {?>transform: rotateY(180deg);<?}?>"/>
-			Go back to marking missions
-		</a>
+		<div class="link-container">
+			<a id="back-link" href="missionsNew.html?id=<?=$user_id?>">
+				<img src="img_new/arrow-1-color-white-svg.svg" style="<?if ($lang == 1) {?>transform: rotateY(180deg);<?}?>"/>
+				Mark Missions
+			</a>
+			<? if ($allow_parent_tasks) { // make sure that the school allows the parents to create a custom task before showing the modal ?>
+				<a id="create-link" data-toggle="modal" data-target="#customTaskModal" href="#" style="text-decoration: none">
+					Create custom task
+				</a>
+			<? } ?>
+			<? if ($has_campaigns) { ?>
+				<a id="campaign-link" data-toggle="modal" data-target="#enrollCampaignModal" href="#" style="text-decoration: none">
+					Enroll in Campaign
+				</a>
+			<? } ?>
+		</div>
+
     	<div class="info" dir="ltr">Personalize the tasks that you would like to see for <?=$first?>'s missions.</div>
     	<!--
     	<div class="text-left" style="margin-bottom: 20px;">
@@ -139,11 +164,7 @@ foreach ($sm as $val) {
             <div class="panel panel-default">
             	<div id="spinner"></div>
             	<div class="panel-heading">
-            		<? if ($lang == 2) : ?>
-            			<i class="glyphicon glyphicon-chevron-left"></i> <?=$campaign?>
-            		<? else : ?>
-            			<i class="glyphicon glyphicon-chevron-right"></i> <?=$campaign?>
-            		<? endif; ?>
+            		<i class="glyphicon glyphicon-chevron-left"></i> <?=$campaign?>
             		<!--<div class="pull-right small points"><?=$points?> Points Needed</div>-->
             	</div>
 
@@ -182,6 +203,8 @@ foreach ($sm as $val) {
 					<? endif; ?>
                     <div class="panel-body" id="<?=$id?>">
 
+						<div class="panel-spinner" style="direction: ltr;"></div>
+
                     	<ul class="list-unstyled tasks"></ul>
 
                     </div>
@@ -192,6 +215,14 @@ foreach ($sm as $val) {
 
     </div>
 </div>
+
+<? // allow parents to create custom tasks if the school allows it
+if($allow_parent_tasks){
+	include 'inc/modals/customTask.php';
+}
+// allow parents to enroll children in campaigns
+include 'inc/modals/enrollChild.php';
+?>
 
 <? include 'inc/footer.php' ?>
 
@@ -222,18 +253,18 @@ foreach ($sm as $val) {
 		});
 
 		var lang = <?=$lang == 2 ? 2 : 1?>;
-
+		// when a panel is opened....
 		$(".panel").click( function() {
 			var container = this;
 			var campaign = $(this).find('.panel-body').attr('id');
-
-			if ($(this).find('.tasks').html() == '') {
+			// if there is no tasks preloaded....
+			if ($(this).find('.tasks').html() === '' && $(this).find('.panel-spinner').html() === '') {
 				var opts = {
 					lines: 8, 		// The number of lines to draw
 					length: 26, 	// The length of each line
 					width: 12, 		// The line thickness
 					radius: 26, 	// The radius of the inner circle
-					scale: .75, 		// Scales overall size of the spinner
+					scale: 0.75, 		// Scales overall size of the spinner
 					corners: 1, 	// Corner roundness (0..1)
 					color: '#888', 	// #rgb or #rrggbb or array of colors
 					opacity: 0.25, 	// Opacity of the lines
@@ -248,78 +279,45 @@ foreach ($sm as $val) {
 					left: '50%', 	// Left position relative to parent
 					shadow: false, 	// Whether to render a shadow
 					hwaccel: true, 	// Whether to use hardware acceleration
-					position: 'absolute' // Element positioning
+					position: 'relative' // Element positioning
 				};
-				var target = document.getElementById('spinner');
+				$(this).find(".panel-spinner").css({"height": "150px"});
+				var target = $(this).find(".panel-spinner")[0];
+				//var target = document.getElementById('spinner');
 				new Spinner(opts).spin(target);
+
+				$(this).find('.collapse').css({"height": $(this).find('.collapse')[0].scrollHeight}); // dropdown and show the spinner...
+				$(this).siblings().find('.collapse').css({"height": '0px'}); // colpase any other open dropdowns...
 
 				$.ajax({
 					type : "GET",
-					url : '../ajax/getTasks.php<?=$version ? "?v=$version" : ""?>',
-					data : {
-						subject : campaign,
-						user : <?=$user_id?>,
-						start : <?=$start?>,
-						end : <?=$end?>,
-						lang : lang,
-						parent : Cookies.get('admin'),
-					},
+					url : '../ajax/getTasks.php?v=2',
+					data : {subject : campaign,	user : <?=$user_id?>,	start : <?=$start?>,	end : <?=$end?>,	lang : lang},
 					success : function( data ) {
-						var data = $.parseJSON( data );
-						if ( data.length == 0 ) {
+						data = $.parseJSON( data ); // cast tje data to JSON
+						if ( data.length === 0 ) {
 							$(container).find('.collapse').html('<div class="info2">No Tasks Found.<br /><br /><br /></div>');
-							$("#spinner").empty();
-							return;
+							$("#spinner").empty(); // remove the spinner....
+							return; // end the ajax call...
 						}
-						var str = "";
-						<? if ($version == "2") { ?>
+						var str = ""; // the html to populate the dropdown with
 						for ( var cat in data.tasks ) {
 							for ( var enrolled in data.tasks[cat] ) {
-						<?} else {?>
-						for ( var cat in data ) {
-							for ( var enrolled in data[cat] ) {
-						<?} ?>
-						//for ( var cat in data ) {
-							//for ( var enrolled in data[cat] ) {
 								str += "<li><label class='checkbox-label'><input name='tasks[]' type='checkbox' class='category' value=\"" + campaign + "|" + encodeURI(cat) + "\"";
 								if ( enrolled == '1' ) {
 									str += ' checked ';
 								}
 								str += "/><span class='checkbox-display'></span></label> <b>" + cat + " ";
-
-								<? if ($version == "2") { // version 2. use the mandatory array to determine it's status?>
-									if(data.mandatory[cat]){
-										str += "<span style='color:red'>*</span>";
-									}
-								<?} else { // version 1. Throw a million rockets at the server to determine the status.... ?>
-									$.ajax({
-										type : "POST",
-										url : "reg/ajax/getMandCat.php",
-										async : false,
-										data : {
-											subject : campaign,
-											cat : cat,
-											year : <?=$year?>,
-											lang : <?=$lang?>
-										},
-										success : function( info ) {
-											var mission = $.parseJSON( info );
-											if (mission) {
-												str += "<span style='color:red'>*</span>";
-											}
-										}
-									});
-								<?} ?>
-
-								str += "</b></li><div class='task'>";
-								<? if ($version == "2") { // version 2: use .tasks (where the tasks are)?>
-								for ( var task in data.tasks[cat][enrolled] ) {
-								<?} else { // version 1: tasks are the high level object?>
-								for ( var task in data[cat][enrolled] ) {
-								<?} ?>
-									 str += task + "<br />";
+								// if the option is mandatory....
+								if(data.mandatory[cat]){
+									str += "<span style='color:red'>*</span>";
 								}
-								var showTehillim = <?=$showTehillimQuota?>;
+								str += "</b></li><div class='task'>";
+								// for each task in the tasks....
+								for ( var task in data.tasks[cat][enrolled] ) {
+									 str += task + "<br />"; // add the task and add a line break....
+								}
+								var showTehillim = <?=$showTehillimQuota?>; // should we show the tehillim quota
 								if (showTehillim && campaign == 1 && (cat.indexOf('קוואטא') != -1 || cat.indexOf('Quota') != -1)) {
 									str += "<span class='age' id='<?=$level?>'></span>";
 									str += "<div><br /><i><b>This feature (to change ladders) is only available the week before Shabbos Mevorchim.</b></i>";
@@ -340,24 +338,26 @@ foreach ($sm as $val) {
 								str += "</div>";
 							}
 						}
-						if (lang == 2) str += '<br />';
-						str += "<p><button class='btn btn-danger btn-sm save' style='background-color : #5e1c77;border-color:#834999;'>Save</button></p>";
-
+						if (lang == 2) str += '<br />'; // extra space on hebrew browsers....
+						str += "<p><button class='btn btn-danger btn-sm save' style='background-color : #5e1c77;border-color:#834999;'>Save</button></p>"; // add the save button....
+		                // append the campaign to the page....
 						var campaign_dom_object = $("#" + campaign);
 						campaign_dom_object.find("ul").append(str);
 
+						$(".panel-spinner").empty(); // remove the spinner....
+						$(".panel-spinner").css({"height": "0"});
+
+						// get the height of the dropdown....
 						var height = campaign_dom_object.parent()[0].scrollHeight;
-
-						campaign_dom_object.parent().data("max-height", height);
-
+						//campaign_dom_object.parent().data("max-height", height); // set that to the max-data....
 						campaign_dom_object.parent().css({"height": height}); // expand the box down via transition....
-
+						campaign_dom_object.parent().parent().siblings().find('.collapse').css({"height": '0px'}); // hide the other ones if they are open....
+						// if we are using hebrew remove any padding on the right.....
 		                if (lang == 2) {
 		                	$("#" + campaign).find("ul").css('padding-right', '0px');
 		                }
-		                $("#spinner").empty();
 
-		                $(".category").click( function(e) {
+		                $(".category").click( function() {
 		                    //e.preventDefault();
 		                    var val = decodeURI($(this).val());
 		                    var checked = $(this).is(":checked");
@@ -366,21 +366,6 @@ foreach ($sm as $val) {
 		                });
 					}
 				});
-			}
-		});
-
-		$(document).on('click', ".panel-heading", function() {
-			var c = $(this).parent().attr('class');
-			var height = $(this).parent().find('.collapse').data().maxHeight;
-			if (height) { // if the height was set.... (then the ajax call is done)
-				if (c.indexOf('open') > 0) {
-					var parent = $(this).parent();
-					$(this).parent().find('.collapse').css({"height": '0px'});
-				} else {
-
-					$(this).parent().find('.collapse').css({"height": $(this).parent().find('.collapse').data().maxHeight + "px"});
-					$(this).parent().siblings().find('.collapse').css({"height": '0px'});
-				}
 			}
 		});
 
@@ -404,11 +389,13 @@ foreach ($sm as $val) {
                     name.push(val);
             }
         }
-
+        // save updates to the tasks....
         $(document).on("click", ".save", function() {
         	var panel = $(this).parent().parent().parent().parent().parent();
-        	$(panel).removeClass('open');
+
+			$(panel).removeClass('open');
 			$(panel).find('.collapse').removeClass('in');
+			$(panel).find('.collapse').css({"height": "0px"});
 
 			var id = $(this).attr('id');
 			if (id == 'save') { //mishna saving
@@ -434,15 +421,14 @@ foreach ($sm as $val) {
 					end : <?=$end?>,
 					lang : <?=$lang?>
 				}, function( data ) {
-					//alert( data );
-					//alert( "Saved." );
+					//alert( "Customized Tasks Saved." );
 					//history.go(0);
 					//window.location = 'goals.php';
 					//window.location.href = "goalsNew.html";
 				});
 			}
         });
-
+        // change levels....
         $(document).on("change", ".userLevel", function() {
         	var id = <?=$user_id?>;
 			var level = $(this).val();
@@ -457,3 +443,4 @@ foreach ($sm as $val) {
 		});
 	//});
 </script>
+<script src="js/bug_report.js"></script>

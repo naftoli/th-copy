@@ -1,0 +1,21 @@
+/*child checkboxes...*/
+#customTaskModal span.child{display: inline-block; width: 31.8%;margin: 0px .5% 5px;}
+/*parsha checkboxes*/
+#customTaskModal span.parsha{display: inline-block; width: 24%;float: right;margin: 0px .5% 5px;text-align: right;}
+
+#customTaskModal .form-control {color: #000;font-weight: 500;}
+
+@media (max-width: 550px){
+    #customTaskModal span.parsha{width: 32%;}
+    #customTaskModal span.child{width: 48%;}
+}
+@media (max-width: 450px){
+    #customTaskModal span.parsha{width: 49%;}
+}
+
+/*Move the checkboxes up a bit...*/
+#customTaskModal .checkbox-display{margin-bottom: -5px;}
+
+#customTaskModal input#toggleParshos {margin-bottom: 20px; }
+
+#customTaskModal legend {margin-bottom: 5px;}

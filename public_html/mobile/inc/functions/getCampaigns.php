@@ -1,28 +1,11 @@
 <?php
+require_once($_SERVER['DOCUMENT_ROOT']."/class.campaignEnrollment.php");
 // returns an array of campaigns (set $all to false for only unenrolled campaigns)
 function getCampaigns($user_id, $all = true){
-    // internal static information...
-    $default_campaigns = array(
-        'chabad' => array(
-            1,4,12,13,15,16,21,27,40,41,42,45,90,100
-        ),
-        'frum' => array(
-            1,4,15,16,93,92,21,27,94,41,42,45,90,100
-        )
-    );
-    // get the school type and gender for the student
-    $student_info = mysql_fetch_assoc(mysql_query("SELECT school_type_id, gender FROM users WHERE user_id = $user_id"));
-    $school_type_id = $student_info['school_type_id'];
-    $gender = $student_info['gender'];
     
-    switch ($school_type_id) {
-        case 12: case 13: // 12 and 13 are just frum
-            $default_campaigns = $default_campaigns['frum'];
-            break;
-        case 2: case 3: default: // 2 and 3 and others are chabad
-            $default_campaigns = $default_campaigns['chabad'];
-            break;
-    }
+    $campaign_enrollment = new CampaignEnrollment($user_id);
+    // get the campaigns from the static array....
+    $default_campaigns = $campaign_enrollment->getEligibleCampaigns();
     
     if($all){
         return $default_campaigns;

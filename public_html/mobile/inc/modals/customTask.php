@@ -80,12 +80,12 @@ while ($label = mysql_fetch_assoc($labels_query)) {
                     
                     <div class="form-group">
                         <label for="shortName" class="control-label">Task Title: (Example: 'Modeh Ani'):</label>
-                        <input name="shortName" size="30" id="shortName" type="text" class="form-control" placeholder="Modeh Ani" required value="Test">
+                        <input name="shortName" size="30" id="shortName" type="text" class="form-control" placeholder="Modeh Ani" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="name" class="control-label">Task Details: (Example: 'I did my quota of volunteer hours').</label>
-                        <input type='text' name='name' size='80' id='name' class="form-control" placeholder="I did my quota of volunteer hours" required value="Test"/>
+                        <input type='text' name='name' size='80' id='name' class="form-control" placeholder="I did my quota of volunteer hours" required/>
                     </div>
                     
                     <div class="form-group">
@@ -102,15 +102,15 @@ while ($label = mysql_fetch_assoc($labels_query)) {
                         <legend style="width: auto;border-bottom: 0px;padding: 0px 10px;">Children</legend>
                         <?
                         foreach ($admin->children as $child) {
-                            if($child->allow_parent_tasks) {?>
+                            if($child->allow_parent_tasks) { ?>
                                 <span class="child lang_<?=$child->lang_id?>">
                                     <label class="checkbox-label">
-                                        <input type='checkbox' class='mission' name='children[]' value='<?=$child->user_id?>' checked />
+                                        <input type='checkbox' class='mission' name='children[]' value='<?=$child->user_id?>' />
                                         <span class='checkbox-display'></span>
                                         <strong><?=$child->first?></strong>
                                     </label>
                                 </span>
-                            <?} // make sure that the child is allowed to create custom tasks....
+                            <? } // make sure that the child is allowed to create custom tasks....
 		                } // end foreach child?>
                     </fieldset>
                     
@@ -125,7 +125,7 @@ while ($label = mysql_fetch_assoc($labels_query)) {
                             <span class="parsha">
                                 <label class="checkbox-label">
                                     <strong><?=$name?></strong>
-                                    <input type='checkbox' class='mission' name='parshos[]' value='<?=$details['id']?>' checked />
+                                    <input type='checkbox' class='mission' name='parshos[]' value='<?=$details['id']?>' />
                                     <span class='checkbox-display'></span>
                                 </label>
                             </span>
