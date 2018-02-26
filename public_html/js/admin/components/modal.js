@@ -9,7 +9,7 @@ var modal = function(element) {
         modal_element.css({"visibility": "visible"});
         modal_element.css({"opacity": "1"});
         
-        modal_element.find(".close").click(hide);
+        //modal_element.find(".close").click(hide);
     };
     
     var hide = function() {
