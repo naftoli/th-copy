@@ -96,8 +96,8 @@ var report = {
         // set the url and open it
         var params = $.param(data);// paramaratize the data from the generated report
         var url = event.target.href + "?" + (debug ? "debug=true&" : "") + params; // genearate the url
-        var win = window.open(url, '_blank'); // open it in a new tab
-        win.focus(); // open the new window
+        window.open(url, '_blank'); // open it in a new tab
+        //win.focus(); // open the new window
     },
     // ajax call when the shipping toggles are checked
     toggle_shipped: function(event) {
