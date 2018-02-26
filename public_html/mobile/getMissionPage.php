@@ -314,7 +314,7 @@ $he_chars = array(
 						<input type="button" class="btn btn-danger btn-sm" value="Personalize" style="background-color: #5e1c77;border-color:#834999;" />
 					</a>
 				</div>
-				<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal" style="background-color: #5e1c77;border-color:#834999;margin: 0 5px;">
+				<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal" style="background-color: #5e1c77;border-color:#834999;margin: 0 5px;width: 75px;">
 					Help
 				</button>
 			</div>
