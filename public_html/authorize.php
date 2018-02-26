@@ -1,1 +1,1 @@
-<? require_once '../includes/authorize.php'; ?>
+<? require_once dirname(__FILE__).'/../includes/authorize.php'; ?>
