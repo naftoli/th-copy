@@ -4,7 +4,7 @@
 //global $link = null;
 // old pass = eZauPhy9CEqEdYDT
 // old pass = ShJ1uWcT89Ek6E
-require dirname(__FILE__) . '/../includes/globals.php'; // import the global files...
+require $_SERVER['DOCUMENT_ROOT'] . '/../includes/globals.php'; // import the global files...
 $link = mysql_connect($global_db_host.":3306", $global_db_user, $global_db_pass) or trigger_error_server('Failed to connect to mysql', E_USER_ERROR);
 mysql_query('SET NAMES utf8');
 mysql_query('SET CHARACTER_SET utf8');
