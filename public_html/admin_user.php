@@ -45,7 +45,7 @@ function clean(&$value) {
 clean($_POST);
 
 $langs = array();
-$langSql = "select * from languages";
+$langSql = "SELECT * FROM languages";
 $langRes = mysql_query($langSql);
 while ($langRow = mysql_fetch_assoc($langRes)) {
 	$langs[$langRow['lang_id']] = $langRow['language'];
