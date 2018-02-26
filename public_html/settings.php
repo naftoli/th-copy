@@ -213,6 +213,11 @@ if (isset($_GET['school_id'])) {
 <!--		Custom Parent Tasks-->
 		<fieldset id="customParentTasks">
         	<legend>Custom Parent Tasks</legend>
+			<p>
+				<strong>Disclaimer:</strong> These settings control the custom tasks that parents will be able to create from their parent accounts in the coming weeks.
+				This setting does <strong><em>not control tasks that are created by you or HQ</em></strong>. Even if they are disabled by default.
+			</p>
+			<br/>
         	Please select one of the following filters:<br />
         	<input type="radio" name="customParentTasksChoice" class="customParentTasksChoice" value="school"> 
     		Entire School
