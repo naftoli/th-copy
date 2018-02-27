@@ -3,7 +3,7 @@ require_once(dirname(__FILE__)."/../classes/Shipment.php"); // load up the shipm
 require_once ($_SERVER["DOCUMENT_ROOT"].'/class.globalSettings.php'); // require the global settings class
 require_once(dirname(__FILE__)."/get_parshos.php"); // import the get_parshos function...
 
-/******************** GET_GIFTS() FUNCTION ********************/
+/******************** get_hachayols() FUNCTION ********************/
 /*
  * This function wraps the get_winners_dates function and normalizes the data for the unified shipping report
  * Normalizaition pattern
@@ -81,10 +81,11 @@ function get_hachayol_shipping($school_id, $parsha_id = false){
 
 function get_extra_hachayols($school_id, $current_amount=false){
     $extras = [
-        54 => $current_amount ? ($current_amount > 580 ? -($current_amount - 580) : abs($current_amount - 580) ) : 580, // wants 580 (550 before 1/3/2018) in each shipment. no matter what
-        58 => 45,
-        84 => 75,
+        54  => $current_amount ? ($current_amount > 580 ? -($current_amount - 580) : abs($current_amount - 580) ) : 580, // wants 580 (550 before 1/3/2018) in each shipment. no matter what
+        58  => 45,
+        84  => 75,
         265 => 2,
+        9   => 20 # requested by Ester Zachar via Email to bugs@tzivoshashem.org on 2/27/2018
     ];
     return isset($extras[$school_id]) ? $extras[$school_id] : 0; // return the extras or 0
 }
