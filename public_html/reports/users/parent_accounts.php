@@ -37,7 +37,26 @@ if ($admin_user['auth'] != 'super') {
             .half {width: 45%;display: inline-block;}
             .parent {text-align: center;margin: 15px;}
             .parent_input {text-align: center;display: inline-block;padding: 5px;}
-            .child {display: inline-block;width: 50%;}
+            .child {display: inline-block; width: 44%;padding: 3%;}
+            button.button {
+                padding: 6px; 10px;
+                background: url("/images/bg_smallButton.png") repeat-x scroll 0 0 #D1D1D1;
+                border: 1px solid;
+                border-color: #D3D3D3 #AAAAAA #888888;
+                color: #222222;
+                font-weight: normal;
+                font-size: 13.33px;
+                font-family: "Trebuchet MS",Arial,Helvetica,sans-serif;
+                text-shadow: 0 1px 0 #FFFFFF;
+                white-space: nowrap;
+                width: auto;
+                cursor: pointer;
+                margin: 3px 0;
+            }
+            button.button:hover, button.button:focus {
+                background-position: bottom;
+                border-color: #888888 #AAAAAA #D3D3D3;
+            }
         </style>
     </head>
     <body>
@@ -77,7 +96,7 @@ if ($admin_user['auth'] != 'super') {
         
         <div class="options">
             <span class="option_space">
-                <a class="button" id="generate"><i class="fa fa-refresh" aria-hidden="true"></i> Generate / Refresh Report</a>
+                <button class="button" id="generate"><i class="fa fa-refresh" aria-hidden="true"></i> Generate / Refresh Report</button>
             </span>
         </div>
         
@@ -172,7 +191,7 @@ if ($admin_user['auth'] != 'super') {
                     return html;
                 }
                 
-                $("a#generate").click(generateReport);
+                $("#generate").click(generateReport);
             });
         </script>
     </body>
