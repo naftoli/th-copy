@@ -94,9 +94,9 @@ function move_child(){
     if(mysql_num_rows($chidon_check_query) > 0) {
         $chion_user = mysql_fetch_assoc($chidon_check_query); // get the chidon user...
         // fetch the grade from the dbs
-        $grade = mysql_result(mysql_query(
+        $grade = mysql_fetch_assoc( mysql_query(
             "SELECT class_grade FROM classes WHERE class_id = '$class_id'"
-        ), 0)['class_grade'];
+        ) )['class_grade'];
         
         $chidon_sql = "UPDATE th_chidon SET school_id = '$school_id' WHERE th_chidon_id = ".$chion_user['th_chidon_id'];
         
