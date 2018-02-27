@@ -82,7 +82,7 @@ function generate_report(){
     }
     
     if(count($response['parents']) == 0) {
-        echo_json_error("Could not find Parent Account");
+        render_json_error("Could not find Parent Account");
     }
     
     echo json_encode($response);
