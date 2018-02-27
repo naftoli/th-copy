@@ -1,4 +1,4 @@
-<?php
+<?php $debug = false;
 /***************** DEBUGGING **********************/
 // enable debuging
 if ($_GET['debug']) {

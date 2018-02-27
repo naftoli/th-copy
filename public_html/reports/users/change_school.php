@@ -67,18 +67,6 @@ if ($admin_user['auth'] != 'super') {
             </label>
         </div>
         
-        <!--<div class="options">
-            <div class="row">
-                <i class="fa fa-university" aria-hidden="true"></i> School: 
-                <select id="school_id" name="school_id">
-                    <option value="" selected disabled>Please Select A School</option>
-                    <? foreach($schools as $school_id => $school_name){?>
-                        <option value="<?=$school_id?>"><?=$school_name?></option>
-                    <?}?>
-                </select>
-            </div>
-        </div>-->
-        
         <div class="options">
             <span class="option_space">
                 <a class="button" id="generate"><i class="fa fa-refresh" aria-hidden="true"></i> Generate / Refresh Report</a>
