@@ -437,15 +437,17 @@ body,td,th {
     		<div class="row_8">
    		       
 			  
-               	
-               
+               	<h2>
+                    Coming soon...
+                </h2>
+        <?php if (1 == 2) : ?>       
 		<div class='my'>
 			
 			<?php if (isset($msg) || (isset($errors) && !empty($errors))) : ?>
 			
 			<div class='top'>
 			
-			<? 
+			<?php 
 			if (isset($msg)) {
 				echo "<div class='errors'>";
 				echo $msg;
@@ -763,6 +765,8 @@ body,td,th {
 		</div>
 		
 		<?php endif; ?>
+        
+        <?php endif; ?>
 		
        </div> 
 	  
