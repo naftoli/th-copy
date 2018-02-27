@@ -44,7 +44,7 @@ function generate_report(){
     
     // load admin from the DBS
     $parent_query = mysql_query(
-        "SELECT a.admin_id, a.username, a.father, a.mother, a.admin_address1, a.admin_city, "
+        "SELECT a.admin_id, a.username, a.password, a.father, a.mother, a.admin_address1, a.admin_city, "
         ."a.admin_state, a.admin_postal, a.admin_country, a.admin_email, a.admin_phone_mobile, "
         ."a.last FROM admins a WHERE $limit;" // search by username or admin_id
     );

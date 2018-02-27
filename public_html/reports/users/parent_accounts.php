@@ -127,22 +127,37 @@ if ($admin_user['auth'] != 'super') {
                 function renderParent(parent) {
                     var html = "<div class='parent'>";
                     html    +=  "<h2>Parent ID: "+(parent.admin_id ? parent.admin_id : "")+"</h2>";
+                    
+                    html    +=  "<div class='parent_input'>";
+                    html    +=      "<strong>Username: </strong>";
+                    html    +=      "<input type='text' disabled id='username' value='"+ (parent.username ? parent.username : "") +"'/>";
+                    html    +=  "</div>";
+                    
+                    html    +=  "<div class='parent_input'>";
+                    html    +=      "<strong>Password: </strong>";
+                    html    +=      "<input type='text' disabled id='password' value='"+ (parent.password ? parent.password : "") +"'/>";
+                    html    +=  "</div>";
+                    
                     html    +=  "<div class='parent_input'>";
                     html    +=      "<strong>Tatty: </strong>";
-                    html    +=      "<input type='text' id='tatty' value='"+ (parent.tatty ? parent.tatty : "") +"'/>";
+                    html    +=      "<input type='text' disabled id='tatty' value='"+ (parent.tatty ? parent.tatty : "") +"'/>";
                     html    +=  "</div>";
+                    
                     html    +=  "<div class='parent_input'>";
                     html    +=      "<strong>Mommy: </strong>";
-                    html    +=      "<input type='text' id='mommy' value='"+ (parent.mommy ? parent.mommy : "") +"'/>";
+                    html    +=      "<input type='text' disabled id='mommy' value='"+ (parent.mommy ? parent.mommy : "") +"'/>";
                     html    +=  "</div>";
+                    
                     html    +=  "<div class='parent_input'>";
                     html    +=      "<strong>E-Mail: </strong>";
-                    html    +=      "<input type='text' id='email' value='"+ (parent.admin_email ? parent.admin_email : "") +"'/>";
+                    html    +=      "<input type='text' disabled id='email' value='"+ (parent.admin_email ? parent.admin_email : "") +"'/>";
                     html    +=  "</div>";
+                    
                     html    +=  "<div class='parent_input'>";
                     html    +=      "<strong>Cell Phone: </strong>";
-                    html    +=      "<input type='text' id='admin_phone_mobile' value='"+ (parent.admin_phone_mobile ? parent.admin_phone_mobile : "") +"'/>";
+                    html    +=      "<input type='text' disabled id='admin_phone_mobile' value='"+ (parent.admin_phone_mobile ? parent.admin_phone_mobile : "") +"'/>";
                     html    +=  "</div>";
+                    
                     html    +=  "<h3>Children: (" + parent.children.length + "/" + (parent.children.length + parent.other_children) +")</h3>";
                     html    +=  "<div class='children'>";
                     for(var i = 0; i < parent.children.length; i++){
