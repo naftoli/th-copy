@@ -56,7 +56,9 @@ if (count($chaps) > 0) { ?>
             <th>Phone</th>
             <th>Full Program</th>
             <th>Sweater Size</th>
-            <th></th>
+            <?php if ($admin_user['auth'] == "super") {?>
+                <th></th>
+            <?php } ?>
         </thead>
         <tbody>
         <? foreach($chaps as $chap) {?>
@@ -70,10 +72,13 @@ if (count($chaps) > 0) { ?>
                 <td><?=$chap['phone']?></td>
                 <td><?=$chap['full_program'] ? 'yes' : 'no';?></td>
                 <td><?=$chap['sweater_size']?></td>
+                <?php if ($admin_user['auth'] == "super") {?>
                 <td>
                     <a href='#' class='button edit' data-chap_id="<?=$chap['th_chidon_chap_id']?>">edit</a>
                     <a href='#' class='button delete' data-chap_id="<?=$chap['th_chidon_chap_id']?>">delete</a>
                 </td>
+                <?php } ?>
+                
             </tr>
         <?} // end foreach chap.. ?>
         </tbody>
