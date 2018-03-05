@@ -301,20 +301,17 @@ $he_chars = array(
 			<div id="buttons" style="text-align: center;">
 				<div id="rightButtons" style="float: <?=$alignmentRight?>; text-align:<?=$alignmentRight?>;">
 					<?require_once 'reg/ajax/encrypt.php';?>
-					<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="background-color: #5e1c77;border-color:#834999;<?=$desktop ? "display: none" : ""?>" />
+					<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=$desktop ? "display: none" : ""?>" />
 					<a id="printLink" href="https://mashpia.com/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
-						<input type="button" class="btn btn-danger btn-sm" value="Print Missions" style="background-color: #5e1c77;border-color:#834999;" />
+						<input type="button" class="btn btn-danger btn-sm" value="Print Missions" />
 					</a>
-					<!--<a id="backLink" href="<?=$mobileURL?>reg/medals/index.html?id=<?=$user->user_id?>">
-						<input type="button" class="btn btn-danger btn-sm" value="Back" style="background-color:#5e1c77;border-color:#834999;margin: 0 5px;"/>
-					</a>&nbsp;-->
 				</div>
 				<div id="leftButtons" style="float: <?=$alignmentLeft?>; text-align:<?=$alignmentLeft?>;">
 					<a id="goalsLink" href="" style="float: <?=$alignmentLeft?>">
-						<input type="button" class="btn btn-danger btn-sm" value="Personalize" style="background-color: #5e1c77;border-color:#834999;" />
+						<input type="button" class="btn btn-danger btn-sm" value="Personalize" />
 					</a>
 				</div>
-				<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal" style="background-color: #5e1c77;border-color:#834999;margin: 0 5px;width: 75px;">
+				<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal" style="margin: 0 5px;">
 					Help
 				</button>
 			</div>
@@ -385,7 +382,6 @@ $he_chars = array(
 												<label class="checkbox" <?= !$daily ? "style='padding-right:0px;'": "";?> >
 													<?if ($daily) {?>
 														<div class="actions">
-															<input type="hidden" value="<?print_r($date_task_mark);?>"/>
 															<input type="checkbox" class="box-check daily <? if ($checked) echo "pre-checked" ?>" 
 																value="<?=$date_task_mark->date_task_id;?>:<?=$date_task_mark->mark_date;?>" 
 																<? if ($checked) echo "checked" ?> />
@@ -1181,7 +1177,7 @@ $he_chars = array(
 							//only allow going back up to two weeks
 							var today = <?=floor(unixtojd())?>;
 							var start = <?=$start?>;
-							if ((today - start) < 21) {
+							if ((today - start) < 18) {
 								//reload page with mission dates of the previous week
 								var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + <?=$start - 1?>;
 								window.location.href = url;
