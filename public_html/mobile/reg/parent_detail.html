@@ -113,7 +113,7 @@
 															{{#if this.needsReg}}
 																{{#if this.allowRemove}}
 																{{else}}
-																	<a href="#">
+																	<a href="medals/index.html?id={{@key}}">
 																{{/if}}
 															{{else}}
 																{{#if this.chayolei}}
@@ -152,7 +152,7 @@
 															{{#if this.needsReg}}
 																{{#if this.allowRemove}}
 																{{else}}
-																	<a href="#">
+																	<a href="medals/index.html?id={{@key}}">
 																{{/if}}
 															{{else}}
 																{{#if this.chayolei}}
@@ -323,11 +323,8 @@
 					$("#children .row").each( function() {
 						var h = new Hammer( this );
 						var id = $(this).find("table td:last-child").attr('id');
-						var registered = $(this).find(".btn.btn-primary.re_register").length === 0; // make sure there is no register button
 						h.on("swipe", function() {
-							if (registered) {
-                                location.href = "medals/index.html?id=" + id;
-                            }
+                            location.href = "medals/index.html?id=" + id;
 						});
 					});
 				}
@@ -398,7 +395,7 @@
 							
 							for (var c in children) {
 								var child = children[c];
-								if (child.needsReg && child.schoolRegistered && child.schoolTypeRegistered) {
+								if (child.schoolRegistered && child.schoolTypeRegistered && !child.user_registered) {
 									unregistered_children[c] = child;
 									childrenToRegister.push({
 										id : c,
@@ -413,9 +410,6 @@
 							}
 							
 							Cookies.set('toRegister', childrenToRegister);
-							
-							//// append the unregistered kids to the end of the registered one by modifying the array
-							//registred_children.push.apply(registred_children, unregistered_children);
 							
 							// Grab the template script
 							var tplScript = $("#childrenTpl").html();

@@ -34,6 +34,8 @@
     	height: 26%;
     	margin-left: 10%;
     	margin-right: 10%;
+		min-height: 90px;
+		transition: 1s ease-in;
     }
     #backs img {
     	opacity: 0.3;
@@ -377,7 +379,7 @@
 				45 : 'cheshbon Hanefesh.png', 
 				90 : 'chitas.png', 
 				100 : 'brias haguf.png', 
-			}
+			};
 			
 			var subjects = [];
 			for (var g in golds) subjects.push( g );
@@ -402,13 +404,13 @@
 			
 			var elem = document.getElementById('gold');
 			var h = new Hammer(elem);
-			h.on("swiperight", function( evt ) {
+			h.on("swiperight", function() {
 				var s;
 				if (subject > 1) s = subjects[index-1];
 				else s = subjects[subjects.length-1];
 				location.href = "medals3.html?id=" + id + "&subject=" + s;
 			});
-			h.on("swipeleft", function( evt ) {
+			h.on("swipeleft", function() {
 				var s;
 				if (subject < 100) s = subjects[index+1];
 				else s = subjects[0];
@@ -470,7 +472,7 @@
 							//var src = $(".medal").eq(medalOrd-1).attr('src');
 							//$("#gold img").attr('src', src);
 							$.post('ajax/getMedalPic.php', { medal : medalOrd, subject : subject }, function( success ) {
-								$("#gold img.medal").attr('src', '../../../../file_view.php?id=' + success);
+								$("#gold img.medal").attr('src', '/file_view.php?id=' + success);
 							});
 						} else {
 							$("#gold img.medal").attr('src', 'images/backs/goldLogos/' + golds[subject]);
