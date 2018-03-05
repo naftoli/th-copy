@@ -33,19 +33,21 @@ while ( $row = mysql_fetch_assoc($result) ) {
 
 $children = array();
 //need to have multiple result rows to get highest rank
-$sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, c.class_grade, u.user_id, u.first, u.last, u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, 
-		r.rank_ord, r.rank_name, r.rank_image_id from users u 
-		join schools s using (school_id)
-		left join classes c on c.class_id = u.class_id 
-		left join rank_marks rm using (user_id) 
-		left join ranks r using (rank_ord) 
-		where u.user_id in (" . implode(',', $users) . ")
-		order by (CASE WHEN u.user_registered IS NULL then 1 ELSE 0 END), user_id, rank_ord";
+$sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, c.class_grade, u.user_id, u.first, u.last, "
+	." u.first_he, u.last_he, u.lang_id, "
+	." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, r.rank_ord, r.rank_name, r.rank_image_id "
+	." FROM users u "
+	." JOIN schools s USING (school_id) "
+	." LEFT JOIN classes c ON c.class_id = u.class_id "
+	." LEFT JOIN rank_marks rm USING (user_id) "
+	." LEFT JOIN ranks r USING (rank_ord) "
+	." WHERE u.user_id IN (" . implode(',', $users) . ") "
+	." ORDER BY user_id, rank_ord";
 //echo $sql;
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc($result) ) {
-	$children[$row['user_id']]['first'] 	= $row['first'];
-	$children[$row['user_id']]['last']  	= $row['last'];
+	$children[$row['user_id']]['first'] 	= $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
+	$children[$row['user_id']]['last']  	= $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
 	$children[$row['user_id']]['school'] 	= $row['school_name'];
 	$children[$row['user_id']]['city'] 		= $row['school_city'];
 	$children[$row['user_id']]['photo'] 	= empty( $row['user_photo_id'] ) ? null : $row['user_photo_id'];
@@ -62,7 +64,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 	$children[$row['user_id']]['chidon'] = intval($row['class_grade']) > 3 ? 1 : 0;
 	$children[$row['user_id']]['chidonRegistered'] = 0;
 	$children[$row['user_id']]['chayolei'] = 1;
-	//$children[$row['user_id']]['user_registered'] = $row['user_registered'];
+	$children[$row['user_id']]['user_registered'] = $row['user_registered'];
 	
 	// after Nov 8, 2017 registration is closed
 	if (unixtojd() > 2458067 && !in_array($row['school_id'], array(61,269))) $children[$row['user_id']]['chidon'] = 0;
@@ -88,7 +90,6 @@ while ( $row = mysql_fetch_assoc($result) ) {
 		// make sure beis rivka ch for 7/8 grades don't show registration button
 		if ($row['school_id'] == 54 && in_array($row['class_grade'], array(7,8))) {
 			$children[$row['user_id']]['needsReg'] = 0;
-			$children[$row['user_id']]['chayolei'] = 0;
 		}
 		
 		$children[$row['user_id']]['enrollShabbaton'] = 0;
@@ -105,7 +106,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 				$children[$row['user_id']]['chidonRegistered'] = 1;
 				$children[$row['user_id']]['allowRemove'] = 0;
 				// make sure school indicated that child should enroll for shabbaton 
-				if ($cRow['can_enroll'] && in_array($row['user_id'], [14415, 25304, 19047, 13979, 10434])) { // allow one-off user registration...
+				if ($cRow['can_enroll'] && false) { // chidon registration is closed.
 					// make sure school is registered to chidon
 					$chapSql = "SELECT * FROM th_chidon_schools WHERE school_id = " . $row['school_id'] . " AND year = " . $year . " AND registered = 1";
 					$chapRes = mysql_query( $chapSql );
