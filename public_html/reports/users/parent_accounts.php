@@ -63,7 +63,7 @@ if ($admin_user['auth'] != 'super') {
         <? // load the admin UI and JQuery 1.4
             include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php');
         ?>
-        <h1>Manage Parent Accounts</h1>
+        <h1>Search Parent Accounts</h1>
         
         <!--<strong>Please note that this page <em>will not work in Internet Explorer</em>. If you are using Internet Explorer please use Chrome/Firefox/Safari/Edge for this page</strong>-->
         

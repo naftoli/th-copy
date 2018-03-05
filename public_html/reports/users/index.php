@@ -123,8 +123,17 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
-        <?} // end admin only links ?>
+        
+        <h2>Parents</h2>
+        <div id="action-links">
+            <a href="parent_accounts.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <span class="link-text">Search Parent Accounts</span>
+                </div>
+            </a>
         </div>
+        <?} // end admin only links ?>
         
     </body>
 </html>

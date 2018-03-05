@@ -72,7 +72,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="users/<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_profile.png" height="32" alt="tickets"/>
-                    <span class="link-text">Users</span>
+                    <span class="link-text">Users / Parents</span>
                 </div>
             </a>
             <a href="stickers/<?=$debug ? "?debug=true": "";?>">
