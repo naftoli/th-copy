@@ -1,0 +1,64 @@
+.l-3.medal_row {
+    margin: 10px auto;
+    width: 100%;
+}
+
+.l-3 .medal{
+    width: 40%;
+}
+
+@media screen and (max-width: 1024px) {
+    .levelText {
+        line-height: 1;
+        font-size: 24px !important;
+    }
+    .l-3 .medal{
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .levelText {
+        line-height: 1;
+        font-size: 20px !important;
+    }
+    .l-3 .medal{
+        width: 45%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .levelText {
+        line-height: 0.9;
+        font-size: 18px !important;
+    }
+    .l-3 .medal{
+        width: 45%;
+    }
+}
+
+@media screen and (max-width: 639px) {
+    .levelText {
+        line-height: 0.9;
+        font-size: 16px !important;
+    }
+    .l-3 .medal{
+        width: 45%;
+    }
+}
+
+@media screen and (max-width: 479px) {
+    .levelText {
+        line-height: 0.9;
+        font-size: 14px !important;
+    }
+    .medalInfo span {
+        font-size: 16px !important;
+    }
+    .l-3 .medal{
+        width: 49%;
+    }
+    .l-3 .medal-sub {
+        margin-top: -4px;
+    }
+}

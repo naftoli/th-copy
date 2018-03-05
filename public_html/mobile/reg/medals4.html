@@ -16,6 +16,7 @@
 	<script defer src="https://mashpia.com/mobile/js/spin.js"></script>
 	<!--    Bug Report code -->
     <link rel="stylesheet" href="/mobile/css/bug_report.css"/>
+	<link rel="stylesheet" href="/mobile/reg/css/medal-board.css"/>
     <script src="/mobile/js/bug_report.js?v=2.0" defer></script>
 <style>
 	@font-face {
@@ -118,68 +119,7 @@
 		font-size: 24px !important;
 		width: 95%;
 	}
-	
-	.l-3 {
-		margin: 10px auto;
-		width: 100%;
-	}
-	.l-3 .medal{
-		width: 40%;
-	}
-	
-	@media screen and (max-width: 1024px) {
-		.levelText {
-			line-height: 1;
-			font-size: 24px !important;
-		}
-		.l-3 .medal{
-			width: 50%;
-		}
-	}
-	
-	@media screen and (max-width: 900px) {
-		.levelText {
-			line-height: 1;
-			font-size: 20px !important;
-		}
-		.l-3 .medal{
-			width: 45%;
-		}
-	}
-	
-	@media screen and (max-width: 767px) {
-		.levelText {
-			line-height: 0.9;
-			font-size: 18px !important;
-		}
-		.l-3 .medal{
-			width: 45%;
-		}
-	}
-	
-	@media screen and (max-width: 639px) {
-		.levelText {
-			line-height: 0.9;
-			font-size: 16px !important;
-		}
-		.l-3 .medal{
-			width: 45%;
-		}
-	}
-	
-	@media screen and (max-width: 479px) {
-		.levelText {
-			line-height: 0.9;
-			font-size: 14px !important;
-		}
-		.medalInfo span {
-			font-size: 16px !important;
-		}
-		.l-3 .medal{
-			width: 49%;
-		}
-	}
-	
+
 	.header-yellow #page-title{
 		    font-size: 25px;
 			font-weight: 700;
@@ -236,20 +176,6 @@
                         </div>
                     </div>
                 </a>
-				<!--
-                <a onclick="alert('Stay tuned for winners.')" id="auctionMenu">
-	                <div class="span3" style="width:33.3%">
-	                    <div class="menu-item">
-	                        <div class="span12">
-	                            <img src="/mobile/reg/icons/Ticket.gif">
-	                        </div>
-	                        <div class="span12">
-	                            <span>Auction</span>
-	                        </div>
-	                    </div>
-	                </div>
-	            </a>
-				-->
             </div>
 		</div>
         <div class="span12 body">                               
@@ -270,20 +196,6 @@
                     </div>
                 </a>
             </div>
-        <!--
-            <div class="span3">
-                <a href="#" id="goalsLink">
-                <div class="menu-item">
-                    <div class="span12">
-                        <img src="images/menu3.png">
-                    </div>
-                    <div class="span12">
-                        <span>Goals</span>
-                    </div>
-                </div>
-                </a>
-            </div>
-        -->
             <div class="span3">
                 <a href="#" id="missionsLink">
                 <div class="menu-item">
@@ -324,7 +236,7 @@
 	</div>
 </div>
 <script>
-    document.addEventListener("DOMContentLoaded", function(event) {
+    document.addEventListener("DOMContentLoaded", function() {
 		$(document).ready(function() {
 		   
 		    var url = location.toString();
@@ -380,7 +292,7 @@
 		                //if (i == 9) {
 		                //    html += '</div></div><div class="span12 mt2"><div class="l-4">';
 		                //} else {
-		                    html += '</div></div><div class="span12"><div class="l-3">';
+		                    html += '</div></div><div class="span12"><div class="l-3 medal_row">';
 		                //}
 		            }
 		            //if (i > 8) {
