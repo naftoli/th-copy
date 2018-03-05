@@ -124,6 +124,10 @@ class Reports
                 'table'     =>  'th_chidon_chaps',
                 'column'    =>  'acc_address as chap_acc_addr',
             ),
+            'chap_acc_cross_st' =>  array(
+                'table'     =>  'th_chidon_chaps',
+                'column'    =>  'acc_cross_st as chap_acc_cross_st',
+            ),
             'chap_acc_phone'=>  array(
                 'table'     =>  'th_chidon_chaps',
                 'column'    =>  'acc_phone as chap_acc_phone',

@@ -73,6 +73,7 @@ $info = array(
 		'chap_sweater'	=>	'Chap Sweater Size',
 		'chap_acc_name'	=>	'Chap Accomodation Name',
 		'chap_acc_addr'	=>	'Chap Accomodation Address',
+		'chap_acc_cross_st'	=>	'Chap Accomodation Cross Streets',
 		'chap_acc_phone'=>	'Chap Accomodation Number',
 		'chap_vehicle'	=>	'Chap Vehicle',
 		'chap_school'	=>	'Chap School',
