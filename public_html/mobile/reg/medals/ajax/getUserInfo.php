@@ -1,17 +1,18 @@
-<?
+<?php
 chdir('../../../../');
 require 'db.php';
 $user_id = mysql_real_escape_string( $_POST['user_id'] );
 
-$sql = "select u.first, u.last, u.user_serial, u.mobile_pic, u.user_photo_id, t.thumb, c.class_id, c.class_grade, c.class_sub, c.class_teacher, r.rank_ord, r.rank_name, s.logo  
-		from users u 
-		join schools s using (school_id) 
-		join classes c on c.class_id = u.class_id  
-		join rank_marks using (user_id) 
-		join ranks r using (rank_ord) 
-		left join thumbs t on t.file_id = u.user_photo_id 
-		where u.user_id = " . $user_id . "
-		order by rank_ord desc limit 1";
+$sql = "SELECT u.first, u.last, u.first_he, u.last_he, u.lang_id, u.user_serial, u.mobile_pic, u.user_photo_id, t.thumb, "
+    ." c.class_id, c.class_grade, c.class_sub, c.class_teacher, r.rank_ord, r.rank_name, s.logo, s.logo_2, u.gender "
+	." FROM users u "
+	." JOIN schools s USING (school_id) "
+	." JOIN classes c ON c.class_id = u.class_id "
+	." JOIN rank_marks USING (user_id) "
+	." JOIN ranks r USING (rank_ord) "
+	." LEFT JOIN thumbs t ON t.file_id = u.user_photo_id "
+	." WHERE u.user_id = " . $user_id . " "
+	." ORDER BY rank_ord DESC LIMIT 1";
         
 //echo $sql;
 $result = mysql_query($sql);
