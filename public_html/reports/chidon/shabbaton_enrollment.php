@@ -29,6 +29,7 @@ $schools = $as->getSchools();
             #report { margin-top: 15px; }
             .no-report {text-align: center;}
             .no-report > .fa {font-size: 3em;}
+            span.host_info_item {display: inline-block;}
         </style>
     </head>
     <body>
@@ -85,14 +86,20 @@ $schools = $as->getSchools();
                 
                 function generate_csv() {
                     var rows = []; // the rows for the csv export
-                    var csvContent = ""; //"Serial,First,Last,Grade,# Created\n"; // the baisc csv file
+                    var csvContent = "Grade,Name,Hebrew Name,Host Name,Host Address,Host Cross Streets,Host Phone,Father Cell,Mother Cell,Allergies,Walk (day),Walk (night)\n"; //"Serial,First,Last,Grade,# Created\n"; // the baisc csv file
                     var universalBOM = "\uFEFF";
                     // TODO add headers
-                    $.each($("tr"), function(index, item) {
-                        item = $(item); // cast to jquery;
+                    $.each($("tr"), function(index, tr) {
+                        tr = $(tr); // cast to jquery;
                         var row = [];
-                        $.each(item.find("th, td"), function(index, item) {
-                            row.push('"' + $.trim($(item).text().replace(/\s\s+/g, ' ')) + '\t"'); // reduce extra whitespace and trim the remaing stuff...
+                        $.each(tr.find("td"), function(index, td) {
+                            if ($(td).hasClass( "host_info" )) {
+                                $.each($(td).find("span.host_info_item"), function( index, info_item ){
+                                     row.push('"' + $.trim($(info_item).text().replace(/\s\s+/g, ' ')) + '\t"'); // reduce extra whitespace and trim the remaing stuff...
+                                });
+                            } else {
+                                row.push('"' + $.trim($(td).text().replace(/\s\s+/g, ' ')) + '\t"'); // reduce extra whitespace and trim the remaing stuff...
+                            }
                         });
                         rows.push(row); // add the row to the csv export
                         row = row.join(",");

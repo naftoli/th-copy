@@ -52,11 +52,19 @@ if (count($users) > 0) { ?>
                 <td><?=$user['class_grade'] . ($user['class_sub'] ? " - " . $user['class_sub'] : "")?></td>
                 <td><?=$user['first'] . " " . $user['last']?></td>
                 <td><?=$user['first_he'] . " " . $user['last_he']?></td>
-                <td>
-                    Host: <?=$user['host']?> <br/>
-                    <?=$user['host_address1'] . " " . $user['host_address2']?>. <br/>
-                    Cross Streets: <?=$user['between_streets']?>. <br/>
-                    Phone number: <?=$user['host_number']?>
+                <td class="host_info">
+                    <span class="host_info_item">
+                        Host: <?=$user['host']?>
+                    </span>
+                    <span class="host_info_item">
+                        <?=$user['host_address1'] . " " . $user['host_address2']?>.
+                    </span>
+                    <span class="host_info_item">
+                        Cross Streets: <?=$user['between_streets']?>.
+                    </span>
+                    <span class="host_info_item">
+                        Phone number: <?=$user['host_number']?>
+                    </span>
                 </td>
                 <td><?=$user['admin_phone_mobile']?></td>
                 <td><?=$user['admin_phone_mobile2']?></td>
