@@ -1,6 +1,6 @@
 <?php
-//header("Location: purchase_tickets.php");
-//exit;
+header("Location: https://chidon.ticketspice.com/international-chidon-sefer-hamitzvos");
+exit;
 ?>
 <!DOCTYPE html>
 <html>
