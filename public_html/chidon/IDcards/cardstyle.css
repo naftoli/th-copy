@@ -1,0 +1,177 @@
+@font-face {
+    font-family: gotham;
+    src: url('fonts/GOTHAM-BOOK.OTF');
+}
+@font-face {
+    font-family: gotham-med;
+    src: url('fonts/GOTHAM-MEDIUM.OTF');
+}
+@font-face {
+    font-family: heb;
+    src: url('fonts/FbReforma-Medium.otf');
+}
+.card {
+    width: 4.5in;
+    height : 5.5in;
+    margin: auto;
+    text-align: center;
+    font-family: gotham;
+}
+
+.card.back {
+    position: relative;
+}
+
+.topSec {
+    width: 4.25in;
+    height: 1in;
+    text-align: center;
+    vertical-align: middle;
+    margin: auto;
+    font-size: 24pt;
+    padding-top: 10px;
+}
+.grade4 {
+    background-color: #120941;
+    color: #FFF;
+}
+.grade5 {
+    background-color: #00270a;
+    color: #FFF;
+}
+.grade6 {
+    background-color: #e89221;
+    color: #FFF;
+}
+.grade7 {
+    background-color: #febe10;
+    color: #FFF;
+}
+.grade8 {
+    background-color: #382151;
+    color: #FFF;
+}
+.personal {
+    height: 0.7in;
+    margin-top: 20px;
+    font-size: 14pt;
+}
+.name {
+    color: #7e0000;
+    font-family: gotham-med;
+    font-size: 14pt;
+}
+.team, .bunk, .grade {
+    border: 5px groove #7e0000;
+    padding: 5px;
+    width: 1.2in;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.team {
+    float: left;
+    margin-left: .75in;
+    height: 38px;
+}
+.teamName {
+    font-family: heb;
+    font-size: 16px;
+}
+.bunk {
+    float: right;
+    margin-right: .75in;
+    height: 38px;
+}
+.grade {
+    width: 1.2in;
+    margin: auto;
+    clear: both;
+    margin-bottom: 20px;
+}
+.bottomSec {
+    width: 4.25in;
+    height: 0.5in;
+    margin: auto;
+    font-size: 14pt;
+    padding-top: 10px;
+}
+.back .topSec {
+/*    width: 3.25in;*/
+    height: 0.35in;
+    font-size: 14pt;
+}
+.back .middle {
+    width: 4in;
+    height: 2in;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 9.5pt;
+    text-align: left;
+}
+.back .host {
+    float: left;
+    margin-left: 0.65in;
+    width: 1.75in;
+}
+.back .emerg {
+    float: right;
+    width: 1.6in;
+}
+.back .info {
+    height: 1in;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: gotham-med;
+    font-size: 9.5pt;
+    margin-bottom: 15px;
+}
+.back .title  {
+    font-family: gotham-med;
+    font-size: 9.5pt;
+    color: #5c1e2d;
+}
+.back .title.inline  {
+    display: inline-block
+}
+.back .bus {
+    float: left;
+    width: 1.35in;
+    margin-left: 0.6in;
+}
+.back .bus .desc {
+    font-family: gotham;
+}
+.back .other {
+    float: right;
+    width: 1.35in;
+    margin-right: 0.6in;
+}
+.back .other, .back .bus {
+    border: 5px groove #5c1e2d;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+@media print {    
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+/* last minute styles. TODO MOVE!!! */
+h2.no-print {
+    text-align: center;
+    border: 2px dashed #333;
+    width: 150px;
+    margin: 10px auto;
+}
+
+.chidon_img {
+    width: 306px;
+    height: 105px;
+}
+
+img.force_bottom {
+    position: absolute;
+    bottom: 0px;
+    left: 14px;
+}
