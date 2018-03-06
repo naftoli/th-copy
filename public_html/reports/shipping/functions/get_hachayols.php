@@ -82,13 +82,35 @@ function get_hachayol_shipping($school_id, $parsha_id = false){
 function get_extra_hachayols($school_id, $current_amount=false){
     $extras = [
         # Beis Rivkah Crown Heights => dynamically compute totals to enforce desired total of 580
-        54  => $current_amount ? ($current_amount > 580 ? -($current_amount - 580) : abs($current_amount - 580) ) : 580, // wants 580 (550 before 1/3/2018) in each shipment. no matter what
+        54  => reduce_to_total($current_amount, 580), // wants 580 (550 before 1/3/2018) in each shipment. no matter what
+        3   => reduce_to_total($current_amount, 110), // 
         58  => 45,  # YTTL-Montreal
         84  => 75,  # Torah Day School of Houston
         265 => 2,   # Lubavitch Girls London
         9   => 20   # Lubavitcher Yeshiva, Crown Heights => requested by Ester Zachar via Email to bugs@tzivoshashem.org on 2/27/2018
     ];
     return isset($extras[$school_id]) ? $extras[$school_id] : 0; // return the extras or 0
+}
+
+/*
+ * function reduce_to_total
+ *
+ * calculates number needed to transform one number to another using addtion only.
+ *
+ * $amount => the amount that we wish to reduce
+ * $total => the amount we want it to become
+ *
+ * returns => number required to add to $amount to make it $total
+ *
+ */
+function reduce_to_total($amount, $total) {
+    // return the total if the amount is falsy
+    if(!$amount) return $total;
+    // if the amount is greater then the total return the - number needed to reduce it to the total
+    if ( $amount > $total )
+        return -($amount - $total);
+    // return the difference between the amount and the total
+    return abs( $amount - $total );
 }
 
 function mark_hachayol($qty, $school_id, $parsha_id){

@@ -101,12 +101,10 @@ $types = array(
                 Total Teachers: <?=$school['teachers']?><br />
                 Total Registered children: <?=$school['total']?><br />
                 <?php
-                if ( $id === 54 ) { // Beis Rivkah only wants the total specified in this file.
-                    $total = get_extra_hachayols($id);
-                } else if ($id === 162) { // Bais Chaya Mushka LA does not want chayoleis for teachers....
-                    $total = $school['total'] + get_extra_hachayols($id);
+                if ($id === 162) { // Bais Chaya Mushka LA does not want chayoleis for teachers....
+                    $total = $school['total'] + get_extra_hachayols($id, $school['total']);
                 } else { // for all other schools add the extras to the total
-                    $total = $school['teachers'] + $school['total'] + get_extra_hachayols($id); 
+                    $total = $school['teachers'] + $school['total'] + get_extra_hachayols($id, $school['teachers'] + $school['total']); 
                 }
                 ?>
                 Total: <?=$total?><br />
