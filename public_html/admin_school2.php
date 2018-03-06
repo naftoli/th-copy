@@ -1,8 +1,8 @@
 <? $debug = false;
 // enable debuging
 if ($_GET['debug']) {
-    //error_reporting(E_ALL);
-    //ini_set("display_errors", 1);
+    error_reporting(E_ALL);
+    ini_set("display_errors", 1);
     $debug = true; // set debug to true
 	//define("AUTHORIZE_NET_SANDBOX", true);
 }
@@ -94,14 +94,16 @@ if (!empty($action)) { switch($action) {
 			$edit_row = mysql_fetch_assoc($result); // set the result to the current row on the editing table
 			$action = 'add'; // and revert to add
 		} else { // if this is a genuine new organization
-			//$school_logo_id = 'NULL'; // there is no logo by default
-			//if(isset($_FILES['logo'])) $school_logo_id = addFile($_FILES['logo'], $school_logo_id); // if one was provided, then save it and get the ID
-			// School kosik logo form removed
-			//$school_logo_kiosk_id = 'NULL'; // same with the koisk logo
-			//if(isset($_FILES['logo_kiosk'])) $school_logo_kiosk_id = addFile($_FILES['logo_kiosk'], $school_logo_kiosk_id);
-			// removed from form below. See backup for implamentation.
-			//$school_file_id = 'NULL'; // resetting it to null?
-			//if(isset($_FILES['file'])) $school_file_id = addFile($_FILES['file'], $school_file_id);
+			$logo = false; $logo_2 = false;
+			if( isset($_FILES['logo']) ) {
+				$logo = saveFile($_FILES['logo'], "schoolLogos/", $name . "_logo");
+				$logo = $logo ? str_replace("schoolLogos/", "", $logo) : false; // remove the folder from the name as it will be added by whatever is accessing the file.
+			}
+			
+			if( isset($_FILES['logo_2']) ) {
+				$logo_2 = saveFile($_FILES['logo_2'], "schoolLogos/", $name . "_logo_2");
+				$logo_2 = $logo_2 ? str_replace("schoolLogos/", "", $logo_2) : false; // remove the folder from the name as it will be added by whatever is accessing the file.
+			}
 			
 			// removed school_logo_kiosk_id and $school_file_id from insert query
 			mq('INSERT INTO schools SET school_name = ' . ms($name)

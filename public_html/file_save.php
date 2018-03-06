@@ -77,15 +77,24 @@ function addFile($file, $missing = NULL) {
 	}
 }
 
+/*
+ * 	@method boolean saveFile( $file, $target, $file_name[, $missing])
+ *
+ * 	@param file $file 			=> the file object that was uploaded
+ * 	@param string $target 		=> directory in which we would like to upload the file
+ * 	@param string $file_name 	=> the name of the file in said directory
+ *	@param any $missing			=> item to return if $file is missing.
+ *
+ */
 function saveFile( $file, $target, $file_name, $missing = false ) {
-	switch($file['error']) {
-		
+	switch($file['error']) { // make sure the file has no errors...
+		// file too large...
 		case UPLOAD_ERR_INI_SIZE:
 		case UPLOAD_ERR_FORM_SIZE:
 			echo T_('File is too large. Please go back and try again.');
 			exit;
 		break;
-	
+		// not fully uploaded...
 		case UPLOAD_ERR_PARTIAL:
 			echo T_('File was only partially uploaded. Please go back and try again.');
 			exit;
