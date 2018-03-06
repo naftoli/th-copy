@@ -301,6 +301,10 @@ $role_id = $row["role_id"];
 						<?php endif; ?>
 						<li><a href="/review_enrollment.php">Review Enrollment</a></li>
 						<li><a href="/chidon_review.php">Print Enrollment Info</a></li>
+						<?php if ($admin_user['auth'] == 'super') : ?>
+						<li><a href="/chidon/IDcards/">	Generate ID Cards	</a></li>
+						<li><a href="/chidon/upload/">	Upload Spreadsheets	</a></li>
+						<?php endif; ?>
 					</ul>
 					
 					<li class="list_parent<?=isset($ui_type) && $ui_type == 'info' ? ' current' : ''?>">
@@ -719,6 +723,10 @@ $role_id = $row["role_id"];
 						<?php endif; ?>
 						<li><a href="/review_enrollment.php">Review Enrollment</a></li>
 						<li><a href="/chidon_review.php">Print Enrollment Info</a></li>
+						<?php if ($admin_user['auth'] == 'super') : ?>
+						<li><a href="/chidon/IDcards/">	Generate ID Cards	</a></li>
+						<li><a href="/chidon/upload/">	Upload Spreadsheets	</a></li>
+						<?php endif; ?>
 					</ul>
 
 					<li class="list_parent<?=isset($ui_type) && $ui_type == 'reports' ? ' current' : ''?>">
