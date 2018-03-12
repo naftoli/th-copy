@@ -86,10 +86,28 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Chidon Uploading</span>
                 </div>
             </a>
+            <a href="/chidon/upload/<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/v2/images/back-end/admin/icon_install.png" height="32" alt="tickets"/>
+                    <span class="link-text">Chidon Sheets Uploading</span>
+                </div>
+            </a>
             <a href="register_user.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/mobile/img_new/boy-color-green-svg.svg" height="32" alt="users"/>
                     <span class="link-text">Register User</span>
+                </div>
+            </a>
+            <a href="staff.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/mobile/img_new/boy-color-green-svg.svg" height="32" alt="users"/>
+                    <span class="link-text">Attendance Staff</span>
+                </div>
+            </a>
+            <a href="walking_groups.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/mobile/img_new/boy-color-green-svg.svg" height="32" alt="users"/>
+                    <span class="link-text">Walking Groups</span>
                 </div>
             </a>
         </div>

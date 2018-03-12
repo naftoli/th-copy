@@ -19,7 +19,12 @@ if ($admin_user['auth'] != 'super') {
 <!--        Nice quick icons... -->
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         <style>
-            div#register, #student-info, div#t_shirt_update{display: none;}
+            div#register, #student-info, div#t_shirt_update, div#update_host_box { display: none; }
+            .option.half {
+                width: 48%;
+                display: inline-block;
+            }
+            .option{padding: 5px;}
         </style>
     </head>
     <body>
@@ -34,6 +39,11 @@ if ($admin_user['auth'] != 'super') {
                 Serial Number:
             </label>
             <input type="text" name="user_serial" id="user_serial" />
+            OR
+            <label for="chidon_id">
+                Chidon ID:
+            </label>
+            <input type="text" name="chidon_id" id="chidon_id" />
             <a id="user_load" class="button">
                 <i class="fa fa-spinner" aria-hidden="true"></i>
                 Load Info
@@ -114,15 +124,48 @@ if ($admin_user['auth'] != 'super') {
             </div>
         </div>
         
+        <div id="update_host_box">
+            <h2>Update Host Information</h2>
+            
+            <form id="update_host_form">
+                <div class="option half">
+                    <input type="hidden" name="th_chidon_id" id="th_chidon_id"/>
+                    
+                    <label for="host">Family Name: </label>
+                    <input type="text" id="host" name="host" />
+                </div>
+                <div class="option half">
+                    <label for="host_number">Phone Number: </label>
+                    <input type="text" id="host_number" name="host_number" />
+                </div>
+                <div class="option half">
+                    <label for="host_address1">House Number: </label>
+                    <input type="text" id="host_address1" name="host_address1" />
+                </div>
+                <div class="option half">
+                    <label for="host_address2">House Street: </label>
+                    <input type="text" id="host_address2" name="host_address2" />
+                </div>
+                <div class="option">
+                    <label for="between_streets">Cross Streets (e.g. Crown and Kingston): </label>
+                    <input type="text" id="between_streets" name="between_streets" style="width: 390px;"/>
+                </div>
+                
+                <input type="submit" value="update" id="update_host_submit" />
+            </form>
+        </div>
+        
         <script>
             $(document).ready(function(){
                 $('#user_load').click(function(){
                     $("#student-info").hide();
                     $("div#register").hide();
+                    $("div#update_host_box").hide();
                     $("div#t_shirt_update").hide();
                     // parse the data
                     var data = {
-                        user_serial: $("#user_serial").val()
+                        user_serial: $("#user_serial").val(),
+                        chidon_id: $("#chidon_id").val()
                     };
                     // submit the request...
                     $.post("ajax/get_user.php", data, function(response){
@@ -153,6 +196,17 @@ if ($admin_user['auth'] != 'super') {
                         } else {
                             $("#error").text("Chayolim in the Chidon must have a parent account");
                         } // end client side validations
+                        
+                        if (user.date_paid) {
+                            $("form#update_host_form input#th_chidon_id").val(user.th_chidon_id);
+                            $("form#update_host_form input#host").val(user.host);
+                            $("form#update_host_form input#host_number").val(user.host_number);
+                            $("form#update_host_form input#host_address1").val(user.host_address1);
+                            $("form#update_host_form input#host_address2").val(user.host_address2);
+                            $("form#update_host_form input#between_streets").val(user.between_streets);
+                            $("#update_host_submit").val("Update");
+                            $("div#update_host_box").show();
+                        }
                     }); // and ajax response
                 }); // end user_load
                 
@@ -192,6 +246,27 @@ if ($admin_user['auth'] != 'super') {
                         } // clear the error message if request was good...
                     }); // and AJAX request
                 }); // end registration
+                
+                $("form#update_host_form").submit( function( event ){
+                    event.preventDefault();
+                    $("#update_host_submit").val("Updating....");
+                    
+                    var data = {};
+                    $.each($(event.target).serializeArray(), function(index, field) {
+                        data[field.name] = field.value;
+                    });
+                    
+                    $.post("ajax/update_user_host.php", data, function( response ) {
+                        response = JSON.parse(response);
+                        if ( !response.success ) {
+                            alert(response.error);
+                            $("#update_host_submit").val("Update Failed. Try again.");
+                        }
+                        else {
+                            $("#update_host_submit").val("Updated!");
+                        }
+                    });
+                });
             }); // end on document load
         </script>
     </body>
