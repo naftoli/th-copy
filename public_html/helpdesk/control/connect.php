@@ -1,5 +1,5 @@
 <?php
-require '/home/mashpia/includes/globals.php';
+require $_SERVER['DOCUMENT_ROOT'].'/../includes/globals.php';
 /*==============================================================================================
   DATABASE CONNECTION PARAMETERS
   ==============================
@@ -13,7 +13,7 @@ require '/home/mashpia/includes/globals.php';
 
 ================================================================================================*/
 
-define('DB_HOST', 'localhost');
+define('DB_HOST', $global_db_host);
 define('DB_USER', $global_db_user);
 define('DB_PASS', $global_db_pass);
 define('DB_NAME', 'tickets');

@@ -1,9 +1,9 @@
 <?php
-// redirect to http if using https
-if (!isset($_SERVER['HTTPS'])) {
-	$url = "https://mashpia.com" . $_SERVER['PHP_SELF'] . "?" . $_SERVER['argv'][0];
-	header("Location: $url");
-}
+// redirect to https if using http
+// if (!isset($_SERVER['HTTPS'])) {
+// 	$url = "https://". $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . "?" . $_SERVER['argv'][0];
+// 	header("Location: $url");
+// }
 // start the session for something
 session_start();
 

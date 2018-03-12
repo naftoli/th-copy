@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 if (!$_COOKIE['admin_id']) {
 	$page = '/home.php';
 	header('Location: http' . (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 's' : '') . "://{$_SERVER['HTTP_HOST']}" . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/') . $page);
@@ -8,7 +10,8 @@ else {
 }
 
 if(isset($_POST["prize_name"])) {
-	$link = mysql_connect('localhost', 'mashpia', 'eZauPhy9CEqEdYDT') || trigger_error_server('Failed to connect to mysql.', E_USER_ERROR);
+	require $_SERVER['DOCUMENT_ROOT'] . '/../includes/globals.php'; // import the global files...
+	$link = mysql_connect($global_db_host.":3306", $global_db_user, $global_db_pass) or trigger_error_server('Failed to connect to mysql', E_USER_ERROR);
 	mysql_query('SET NAMES utf8');
 	mysql_query('SET CHARACTER_SET utf8');
 	mysql_select_db('mashpia') || trigger_error_server('Failed to select db.', E_USER_ERROR);

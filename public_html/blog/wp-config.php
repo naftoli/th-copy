@@ -16,7 +16,7 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-require '/home/mashpia/includes/globals.php';
+require $_SERVER['DOCUMENT_ROOT'].'/../includes/globals.php';
 define('DB_NAME', 'wp');
 
 /** MySQL database username */
@@ -26,7 +26,7 @@ define('DB_USER', $global_db_user);
 define('DB_PASSWORD', $global_db_pass);
 
 /** MySQL hostname */
-define('DB_HOST', 'localhost');
+define('DB_HOST', $global_db_host);
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8mb4');
