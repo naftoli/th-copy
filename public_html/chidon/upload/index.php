@@ -22,6 +22,9 @@ $year = GlobalSettings::getChidonYear();
                 font-weight: bold;
                 display: inline-block;
             }
+            hr {
+                display: block;
+            }
         </style>
     </head>
     
@@ -34,27 +37,64 @@ $year = GlobalSettings::getChidonYear();
         </p>
         
         <form action="id_cards.php" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="upload"/>
             <label for="id_cards">ID Cards: </label>
             <input type="file" name="id_cards" id="id_cards" accept=".csv" />
             <input type="submit" value="Sync with CSV file" />
         </form>
-        
         <br/>
         
+        <form action="id_cards.php" method="post" accept-charset="UTF-8">
+            <input type="hidden" name="action" value="generate"/>
+            <strong>Download ID Cards Template (with data): </strong>
+            <select name="gender">
+                <option value="M">Boys Chidon</option>
+                <option value="G">Girls Chidon</option>
+            </select>
+            <input type="submit" value="Download CSV File" />
+        </form>
+        
+        <hr/>
+        
         <form action="bunks.php" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="upload"/>
             <label for="bunks">Bunks: </label>
             <input type="file" name="bunks" id="bunks" accept=".csv" />
             <input type="submit" value="Sync with CSV file" />
         </form>
-        
         <br/>
         
+        <form action="bunks.php" method="post" accept-charset="UTF-8">
+            <input type="hidden" name="action" value="generate"/>
+            <strong>Download ID Cards Template (with data): </strong>
+            <select name="gender">
+                <option value="boys">Boys Chidon</option>
+                <option value="girls">Girls Chidon</option>
+            </select>
+            <input type="submit" value="Download CSV File" />
+        </form>
+        
+        <hr/>
+        
         <form action="chaperones.php" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="upload"/>
             <label for="chaperones">Chaperones: </label>
             <input type="file" name="chaperones" id="chaperones" accept=".csv" />
             <input type="submit" value="Sync with CSV file" />
         </form>
-        <br/><br/>
+        <br/>
+        
+        <form action="chaperones.php" method="post" accept-charset="UTF-8">
+            <input type="hidden" name="action" value="generate"/>
+            <strong>Download ID Cards Template (with data): </strong>
+            <select name="gender">
+                <option value="boys">Boys Chidon</option>
+                <option value="girls">Girls Chidon</option>
+            </select>
+            <input type="submit" value="Download CSV File" />
+        </form>
+        
+        <hr/>
         
         <a href="../IDcards/" class="button">Generate ID Cards Here</a>
     </body>
