@@ -714,6 +714,7 @@ $role_id = $row["role_id"];
                         <!--<li><a href="/uploadChidonFile.php">Upload File for Chidon</a></li>-->
 						<!--<li><a href="/chidon_report.php">Registered for Chidon</a></li>-->
 						<li><a href="/reports/chidon/shabbaton_enrollment.php">Shabbaton Enrolled Report</a></li>
+						<li><a href="/reports/chidon/walking_groups.php">Shabbaton Walking Report</a></li>
 						<li><a href="/chidon_tests.php">Enter Chidon Test Marks</a></li>
 						<li><a href="/chidon_school_reg.php">Enroll Chaperones</a></li>
 						<?php if ($admin_user['auth'] == 'super') : ?>
@@ -726,6 +727,7 @@ $role_id = $row["role_id"];
 						<?php if ($admin_user['auth'] == 'super') : ?>
 						<li><a href="/chidon/IDcards/">	Generate ID Cards	</a></li>
 						<li><a href="/chidon/upload/">	Upload Spreadsheets	</a></li>
+						<li><a href="/reports/chidon/"> Chidon Office Reports </a></li>
 						<?php endif; ?>
 					</ul>
 
