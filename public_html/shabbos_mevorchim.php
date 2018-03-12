@@ -59,8 +59,8 @@ tr, th, td {
 
 <body>
 <? 
-require_once 'admin_header.php';
-require_once 'class.shabbosMevorchim.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/admin_header.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/class.shabbosMevorchim.php';
 
 $sm = new ShabbosMevorchim();
 $sm->setReportDates($_GET['date']);
@@ -80,12 +80,12 @@ $sm->setArmyResults();
     </div>
     
     <div align='center'>
-        <input type='button' value='Print' onclick='window.print()'>
+        <input type='button' value='Print' onclick='window.print();'>
     </div>
 </div>
 <br />
 <? 
-require_once 'class.adminSchools.php';      
+require_once $_SERVER['DOCUMENT_ROOT'].'/class.adminSchools.php';      
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $ids = $as->getSchools();
 
@@ -101,17 +101,16 @@ foreach ( $ids as $id => $name ) {
     <p align='center' style='font-size: 54px'>שבת מברכים <?=$sm->getHebrewMonth($key)?></p>
     
     <div class='main' align="center">
-	    <? $sm->generateSummary( $key, $date ) ?>
-	    <br />
-	    <br />
-	    <?     
-		echo "<div style='float: right'>";
-	    $sm->generateArmyTable( $key, $date );
-		echo "</div>";
-		echo "<div style='float: left'>";
-		$sm->generateBaseTable( $key, $date );
-		echo "</div>";
-	    ?>
+	    <?php $sm->generateSummary( $key, $date ) ?>
+	    <br /><br />
+		
+		<div style='float: right;'>
+			<?php $sm->generateArmyTable( $key, $date ); ?>
+		</div>
+		
+		<div style='float: left;'>
+			<?php $sm->generateBaseTable( $key, $date ); ?>
+		</div>
    </div>
 
     <div class="page-break"></div>
