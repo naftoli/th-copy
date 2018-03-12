@@ -1,4 +1,4 @@
-<?php
+<?php $debug = false;
 // enable debuging
 if ($_GET['debug']) {
     error_reporting(E_ALL);
@@ -14,7 +14,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 //    header("Location: /raffles/shared/forms/eligible_form.php");
 //}
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -47,6 +47,13 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 <div class="button">
                     <img src="/images/parentIcons/logout.gif" height="32" alt="tickets"/>
                     <span class="link-text">Base Commander Logins</span>
+                </div>
+            </a>
+            
+            <a href="/admin_school_logos.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/mobile/img_new/default-boys-school-logo.png" height="32" alt="tickets"/>
+                    <span class="link-text">Base Logos</span>
                 </div>
             </a>
         </div>
