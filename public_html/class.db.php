@@ -4,7 +4,7 @@ class DB extends PDO {
     
     public function __construct() {
         require dirname(__FILE__).'/../includes/globals.php';
-        $dsn =  'mysql:dbname=mashpiadb;host=localhost';
+        $dsn =  'mysql:dbname=mashpiadb;host=' . $global_db_host . ';port=3306';
         $user = $global_db_user;
         $pass = $global_db_pass;
         $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'');
