@@ -31,8 +31,8 @@ $headers = ['Chidon ID', 'First Name', 'Last Name', 'Hebrew First Name',
             'Hebrew Last Name', 'Book', 'Grade', 'Walking Zone',
             'Walk Alone',   'Host Name',    'Host Phone Number',    'Host  Address Number',
             'Host Street Name', 'Host Cross Street 1',  'Host Cross Street 2', 'Team Name',
-            'Bunk Number',  'Thursday Buses ',  'Friday Buses #',
-            'Bowling Lane', 'Test Table', 'Workshop #',   'Sunday- School Bus'];
+            'Bunk Number',  'Thursday Buses ',  'Friday Buses #', 'Bowling Lane',
+            'Test Table', 'Workshop #',   'Sunday- School Bus', 'Certificate ID'];
             
 foreach($upload[0] as $index => $header) {
     if ($headers[$index] !== $header) {
@@ -69,7 +69,8 @@ foreach($upload as $index => $row) {
         'tc.bowling_lane'   => $row[19],
         'tc.test_table'     => $row[20],
         'tc.workshop_number'=> $row[21],
-        'tc.double_decker'  => $row[22]
+        'tc.double_decker'  => $row[22],
+        'cert_number'       => $row[23]
     ];
     $updates[$row[0]] = $update_info;
 }
