@@ -21,7 +21,9 @@ class Reports
             'users'                 =>  'u',
             'admins'                =>  'a',
             'th_chidon_teams'       =>  'tct',
-            'th_chidon_bunks'       =>  'tcb'
+            'th_chidon_bunks'       =>  'tcb',
+            'th_chidon_walking_bunks'  =>  'tcwb',
+            'th_chidon_walking_chaperones' => 'tcwc'
         );
         $this->fields = array(
             'chidon_id'     =>  array(
@@ -64,6 +66,14 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  array('host', 'host_address1', 'host_address2')
             ),
+            'host_name' =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'host as host_name'
+            ),
+            'host_number' =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'host_number'
+            ),
             'between_streets'   =>  array(
                 'table'     =>  'th_chidon',
                 'column'    =>  'between_streets'
@@ -87,6 +97,10 @@ class Reports
             'walking'   =>  array(
                 'table'     =>  'th_chidon',
                 'column'    =>  array('walk_day', 'walk_night')
+            ),
+            'walking_zone'   =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'walking_zone'
             ),
             'winner_type'   =>  array(
                 'table'     =>  'th_chidon',
@@ -139,6 +153,10 @@ class Reports
             'chap_school'   =>  array(
                 'table'     =>  'schools',
                 'column'    =>  'school_name as chap_school'
+            ),
+            'chap_walking_zone'   =>  array(
+                'table'     =>  'th_chidon_chaps',
+                'column'    =>  'walking_zone as chap_walking_zone'
             ),
             'bunk'      =>  array(
                 'table'     =>  'th_chidon',
@@ -256,6 +274,8 @@ class Reports
                 'table'     =>  'th_chidon_teams',
                 'column'    =>  'team'
             ),
+            
+            
             'bunk_name'      =>  array(
                 'table'     =>  'th_chidon_bunks',
                 'column'    =>  'bunk_name'
@@ -268,10 +288,57 @@ class Reports
                 'table'     =>  'th_chidon_bunks',
                 'column'    =>  'c_number as bunk_c_number'
             ),
+            'bunk_c_coach_bus'  =>  array(
+                'table'     =>  'th_chidon_bunks',
+                'column'    =>  'c_coach_bus as bunk_c_coach_bus'
+            ),
+            'bunk_c_school_bus'  =>  array(
+                'table'     =>  'th_chidon_bunks',
+                'column'    =>  'c_school_bus as bunk_c_school_bus'
+            ),
+            'bunk_c_double_decker'  =>  array(
+                'table'     =>  'th_chidon_bunks',
+                'column'    =>  'c_double_decker as bunk_c_double_decker'
+            ),
+            'bunk_grade'  =>  array(
+                'table'     =>  'th_chidon_bunks',
+                'column'    =>  'grade as bunk_grade'
+            ),
+            'bunk_walking_zone'  =>  array(
+                'table'     =>  'th_chidon_bunks',
+                'column'    =>  'walking_zone as bunk_walking_zone'
+            ),
+            'bunk_host_name'  =>  array(
+                'table'     =>  'th_chidon_bunks',
+                'column'    =>  'host_name as bunk_host_name'
+            ),
+            'bunk_host_address1'  =>  array(
+                'table'     =>  'th_chidon_bunks',
+                'column'    =>  'host_address1 as bunk_host_address1'
+            ),
+            'bunk_host_address2'  =>  array(
+                'table'     =>  'th_chidon_bunks',
+                'column'    =>  'host_address2 as bunk_host_address2'
+            ),
+            'bunk_host_between_strets'  =>  array(
+                'table'     =>  'th_chidon_bunks',
+                'column'    =>  'host_between_strets as bunk_host_between_strets'
+            ),
+            'bunk_chidon_type'  =>  array(
+                'table'     =>  'th_chidon_bunks',
+                'column'    =>  'chidon_type as bunk_chidon_type'
+            ),
+            
+            
             'test_table'    =>  array(
                 'table'     =>  'th_chidon',
                 'column'    =>  'test_table'
             ),
+            'test_lang'    =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'test_lang'
+            ),
+            
             'bowling_lane'  =>  array(
                 'table'     =>  'th_chidon',
                 'column'    =>  'bowling_lane'
@@ -303,6 +370,36 @@ class Reports
             'seat_number'   =>  array(
                 'table'     =>  'th_chidon',
                 'column'    =>  'seat_number'
+            ),
+            'workshop_number'   =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'workshop_number'
+            ),
+            
+            'walking_counselor_name' => array (
+                'table'     => 'th_chidon_walking_bunks',
+                'column'    =>  'counselor as walking_counselor_name'
+            ),
+            'walking_counselor_number' => array (
+                'table'     => 'th_chidon_walking_bunks',
+                'column'    =>  'c_number as walking_counselor_number'
+            ),
+            'walking_counselor_zone' => array (
+                'table'     => 'th_chidon_walking_bunks',
+                'column'    =>  'walking_zone as walking_counselor_zone'
+            ),
+            
+            'walking_chaperone_name' => array (
+                'table'     => 'th_chidon_walking_chaperones',
+                'column'    =>  'name as walking_chaperone_name'
+            ),
+            'walking_chaperone_number' => array (
+                'table'     => 'th_chidon_walking_chaperones',
+                'column'    =>  'phone as walking_chaperone_number'
+            ),
+            'walking_chaperone_zone' => array (
+                'table'     => 'th_chidon_walking_chaperones',
+                'column'    =>  'walking_zone as walking_chaperone_zone'
             )
         );
     }
@@ -354,7 +451,7 @@ class Reports
                                 $sql .= " join admins a on a.admin_id = tc.parent_id";
                                 break;
                             case 'th_chidon_chaps':
-                                $sql .= " left join th_chidon_chaps tcc on tcc.school_id = tc.school_id";
+                                $sql .= " left join th_chidon_chaps tcc on tcc.school_id = tc.school_id and tcc.year = '" . $this->year . "' ";
                                 break;
                             case 'th_chidon_sponsors':
                                 $sql .= " left join th_chidon_sponsors tcs on tcs.sponsor = tc.paid_by";
@@ -364,6 +461,12 @@ class Reports
                                 break;
                             case 'th_chidon_bunks':
                                 $sql .= " left join th_chidon_bunks tcb on tcb.bunk_id = tc.bunk_id";
+                                break;
+                            case 'th_chidon_walking_bunks':
+                                $sql .= " left join th_chidon_bunks tcwb on tcwb.walking_zone = tc.walking_zone";
+                                break;
+                            case 'th_chidon_walking_chaperones':
+                                $sql .= " left join th_chidon_chaps tcwc on tcwc.walking_zone = tc.walking_zone COLLATE utf8_unicode_ci";
                                 break;
                         }
                         break;

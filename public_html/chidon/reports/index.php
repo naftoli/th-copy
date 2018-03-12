@@ -21,6 +21,8 @@ $info = array(
 		'grade'			=>	'Grade',
 		'school'		=>	'School',
 		'accomodations'	=>	'Accomodation Info',
+		'host_name'		=>	'Host Name',
+		'host_number'		=>	'Host Number',
 		'between_streets'	=>	'Cross Streets',
 		'admin_city'	=>	'City', 
 		'admin_state'	=>	'State', 
@@ -30,8 +32,9 @@ $info = array(
 		'shoe_size'		=>	'Shoe Size',
 		'winner_type'	=>	'Contestant / School Rep.',
 		'walking'		=>	'Walk Alone',
-		'bus'			=>	'Bus Number',
-		'seat'			=>	'Seat Number',
+		'walking_zone'	=>	'Walking Zone',
+		//'bus'			=>	'Bus Number',
+		//'seat'			=>	'Seat Number',
 		//'medal'			=>	'Medal Info',
 		//'plaque'		=>	'Plaque Info',
 		'test1a'		=>	'Test 1 Part 1',
@@ -45,14 +48,16 @@ $info = array(
 		'history'		=>	'Number of years attended Chidon',
 		'team'			=>	'Team',
 		'test_table'	=>	'Test Table',
+		'test_lang'		=>	'Test Language',
 		'bowling_lane'	=>	'Bowling Lane',
+		'workshop_number'	=>	'Workshop Number',
 		'dropoff_bus'	=>	'Dropoff Bus',
 		'dropoff_seat'	=>	'Dropoff Seat',
-		'coach_bus'		=>	'Coach Bus',
-		'school_bus'	=>	'School Bus',
-		'double_decker'	=>	'Double Decker Bus',
-		'seat_type'		=>	'Seat Type',
-		'seat_number'	=>	'Seat Number',
+		'coach_bus'		=>	'Thursday Bus',
+		'school_bus'	=>	'Friday Bus',
+		'double_decker'	=>	'Sunday Bus',
+		//'seat_type'		=>	'Seat Type',
+		//'seat_number'	=>	'Seat Number',
 		'date_paid'		=>	'Enrolled',
 		'paid'			=>	'Amount Paid'
 	),
@@ -77,11 +82,34 @@ $info = array(
 		'chap_acc_phone'=>	'Chap Accomodation Number',
 		'chap_vehicle'	=>	'Chap Vehicle',
 		'chap_school'	=>	'Chap School',
+		'chap_walking_zone'	=>	'Chap Walking Zone',
 	),
 	'Bunk Info'		=>	array(
 		'bunk_name'				=>	'Bunk Name',
-		'bunk_counselor'		=>	'Bunk Counselor',
-		'bunk_c_number' 		=> 	'Bunk Counselor Number'
+		'bunk_counselor'		=>	'Counselor',
+		'bunk_c_number' 		=> 	'Counselor Number',
+		'bunk_c_coach_bus'		=> 	'Bunk Thursday Bus',
+		'bunk_c_school_bus'		=> 	'Bunk Friday Bus',
+		'bunk_c_double_decker'	=> 	'Bunk Sunday Bus',
+		//'bunk_grade'			=>	'Bunk Grade',
+		'bunk_walking_zone'		=>	'Bunk Walking Zone',
+		'bunk_host_name'		=>	'Counselor Host Name',
+		'bunk_host_address1'	=>	'Counselor Host Address Number',
+		'bunk_host_address2'	=>	'Counselor Host Address Street',
+		'bunk_host_between_strets'	=>	'Counselor Host Cross Streets',
+		'bunk_chidon_type'		=>	'Bunk Chidon Type',
+	),
+	
+	'Walking Counselor (BETA)'		=>	array(
+		'walking_counselor_name'	=> 'Walking Counselor Name',
+		'walking_counselor_number'	=> 'Walking Counselor Number',
+		'walking_counselor_zone'	=> 'Walking Counselor Zone',
+	),
+	
+	'Walking Chaperone (BETA)'		=>	array(
+		'walking_chaperone_name'	=> 'Walking Chaperone Name',
+		'walking_chaperone_number'	=> 'Walking Chaperone Number',
+		'walking_chaperone_zone'	=> 'Walking Chaperone Zone',
 	)
 );
 
@@ -232,7 +260,7 @@ if (isset($_POST['submit'])) {
 				<tbody>
 					<?php
 					$totals = array();
-					foreach ($report as $row) {
+					foreach ($report as $index => $row) {
 						echo "<tr>";
 						foreach ($data as $column) {
 							if (!array_key_exists($column, $lookup)) {
@@ -333,10 +361,10 @@ if (isset($_POST['submit'])) {
 				</fieldset>
 				<fieldset>
 					<legend>Limit to</legend>
-					<input type="radio" name="limitTo" value='contestant' /> Contestant / Representative<br />
-					<input type="radio" name="limitTo" value='activated' /> Shabbaton Enrollment Activated<br />
+<!--					<input type="radio" name="limitTo" value='contestant' /> Contestant / Representative<br />
+					<input type="radio" name="limitTo" value='activated' /> Shabbaton Enrollment Activated<br />-->
 					<input type="radio" name="limitTo" value='paid' /> Shabbaton Paid<br />
-					<input type="radio" name="limitTo" value='confirmed' /> Shabbaton Confirmed
+<!--					<input type="radio" name="limitTo" value='confirmed' /> Shabbaton Confirmed-->
 				</fieldset>
 				<fieldset style="margin-top: -20px;">
 					<legend>Mark Avg</legend>
