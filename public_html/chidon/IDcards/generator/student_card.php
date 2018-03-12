@@ -164,7 +164,7 @@ function student_card($student, $year = 5778) { // default to 5778 for now.... ?
         </div>
         <div style="clear: both"></div>
         <img src="award-ceremony.png" />
-        <div style="page-break-after: always"></div>
     </div>
+    <div style="page-break-after: always"></div>
     <hr class="no-print"/>
 <?php } // endfunciton student_card ?>
