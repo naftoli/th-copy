@@ -60,7 +60,8 @@ Makefile
 .ftpquota
 cookiefile
 awstats*
-
+*.xls
+*.xlsx
 # bower files should be ignored as they can and should be re-pulled
 bower_components
 
