@@ -53,13 +53,17 @@ $sql = "update users set
 if ($grade > 0) {
 	$sql .= ", class_id = $grade";
 }
+// update the gender and the school type ID
 if ($gender == 'm' || $gender == 'f') {
 	$sql .= ", gender = '" . $gender . "'";
+	$school_type_id = $gender == 'm' ? 2 : 3;
+	$sql .= ", school_type_id = '$school_type_id'";
 }
+
 if (strpos($photo, "img/") !== false) {
 	$sql .= ", mobile_pic = '" . $photo . "'";
 }
-$sql .= " where user_id = " . $user_id;
+$sql .= " WHERE user_id = " . $user_id;
 $success = mysql_query( $sql );
 
 //need to run birthday mission creator if dob changed

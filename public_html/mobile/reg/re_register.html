@@ -221,10 +221,10 @@
 		      <div class="row">
 		      	<div class="col-xs-12">
 		              <div class="form-group has-feedback" id="divclass">
-		                  <div class="input-group">
+		                  <div class="input-group" id="lang_select">
 		                      <span class="input-group-addon"><img src="/mobile/img_new/arrow-2-color-gray-svg.svg"/></span>
 		                      <select id="lang" name="lang" class="selectpicker show-tick form-control" data-style="btn-default" required>
-		                      	<option value="1" selected>English Missions</option>
+		                      	<option value="1">English Missions</option>
 		                      	<option value="2">Yiddish Missions</option>
 		                      </select>
 		                  </div>
@@ -517,6 +517,12 @@
 						$("#zip").val( info.user_postal );
 						var lang = parseInt( info.lang_id );
 						$("#lang option[value='" + lang + "']").attr('selected', true);
+						// unselect all the lang options....
+						$("#lang_select li").removeClass("selected");
+						$("#lang_select li[data-original-index='" + (lang - 1) + "']").addClass("selected"); // select the correct one based on it's index.
+						$("#lang_select button span.filter-option").text( // update the text for the dropdown...
+							$("#lang_select li[data-original-index='" + (lang - 1) + "']").text() // set it to the value of the selected item...
+						);
 						
 						$.post('ajax/getSchools.php', function( success ) {
 							var schools = $.parseJSON( success );
@@ -667,7 +673,7 @@
 				*/
 	        
 	      //if (fname == '' || lname == '' || fhname == '' || school == '0' || grade == '0' || dob == '') {
-	      if (fname == '' || lname == '' || fhname == '' || lhname == '' || school == '0' || dob == '') {
+	      if (fname === '' || lname === '' || fhname === '' || lhname === '' || school === '0' || dob === '') {
 	    		alert('You must have all fields filled out.');
 	    		return false;
 	    	}
@@ -762,7 +768,7 @@
 						} else { //re-registration
 							$.post('ajax/updateUser.php', {
 								user_id : id,
-								fname : fname, 
+								fname : fname,
 								last : lname, 
 								fhname : fhname, 
 								lhname : lhname, 

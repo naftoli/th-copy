@@ -106,7 +106,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 				$children[$row['user_id']]['chidonRegistered'] = 1;
 				$children[$row['user_id']]['allowRemove'] = 0;
 				// make sure school indicated that child should enroll for shabbaton 
-				if ($cRow['can_enroll'] && false) { // chidon registration is closed.
+				if ($cRow['can_enroll'] && in_array($row['user_id'], [15661, 19373])) { // chidon registration is closed.
 					// make sure school is registered to chidon
 					$chapSql = "SELECT * FROM th_chidon_schools WHERE school_id = " . $row['school_id'] . " AND year = " . $year . " AND registered = 1";
 					$chapRes = mysql_query( $chapSql );
