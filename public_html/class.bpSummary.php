@@ -22,7 +22,7 @@ class BpSummary {
 		switch ($this->type) {
 			case 'school':
 			case 'class':
-				$sql = "select user_id from users where {$this->type}_id = " . mysql_real_escape_string($id);
+				$sql = "SELECT user_id FROM users WHERE {$this->type}_id = " . mysql_real_escape_string($id);
 				$result = mysql_query($sql);
 				while ($row = mysql_fetch_assoc($result)) {
 					$users[] = $row['user_id'];
