@@ -1,0 +1,153 @@
+.login-page {
+    width: 80%;
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.login-page div#invalid-login {
+    width: 180px;
+    margin: 5px auto 15px;
+    padding: 15px;
+    background: #ff7979;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1.2em;
+    font-family: helvetica;
+    font-weight: bold;
+    display: none;
+}
+
+p.title, .login-page .control {
+    text-align: center;
+}
+
+#app .logo{
+    width: 150px;
+    display: inline-block;
+    margin: 10px 0px 0px 10px;
+}
+
+#app .title {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 16px;
+    margin-left: 16px;
+    color: #fff;
+}
+
+#app section.header {
+    text-align: center;
+    background: #686de0;
+    padding: 10px;
+    padding-top: 15px;
+    position: relative;
+    transition: .25s;
+}
+
+div#logout {
+    text-align: left;
+    color: #fff;
+    position: absolute;
+    right: 10px;
+    top: 8px;
+}
+div#logout:hover{
+    cursor: pointer;
+    transform: scale(.9);
+}
+
+#app section#dropdown {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+#app #user-info-box h2 {
+    text-align: center;
+    font-size: 1.6em;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+#app .name {
+    margin-bottom: 10px;
+    max-width: 70%;
+    display: inline-block;
+    margin-left: 3%;
+    padding-right: 2%;
+}
+
+#app label {
+    width: 100%;
+    display: inline-block;
+    padding: 8px;
+    vertical-align: middle;
+}
+
+#app label span.checkbox {
+    display: inline-block;
+    font-family: Font Awesome\ 5 Free;
+    font-size: 1.6em;
+    color: #4834d4;
+}
+
+#app label .box {
+    padding: 2%;
+}
+
+#app label.child .user-info, #app label.chap .chap-info {
+    width: 50%;
+    display: inline-block;
+}
+
+#app label input[type='checkbox'] {
+    display: none;
+}
+
+#app label span.checkbox:before {
+    content: "\f0c8";
+}
+
+#app label input:checked + span.checkbox:before {
+    content: "\f14a";
+}
+
+#app .child .child-marked {
+    float: right; width: 200px;
+}
+
+#app label .box .info {
+    width: 50%;
+    display: inline-block;
+    float: right;
+    padding-left: 3%;
+    padding-bottom: 3%;
+    border-left: 1px solid;
+}
+
+#app .child .host-info {
+    border-top: 1px solid;
+}
+
+#app .child .host-info br.break-sm {
+    display: none;
+}
+
+@media(min-width: 800px) {
+    #app label {
+        width: 50%;
+        display: inline-block;
+        padding: 8px;
+    }
+}
+
+@media(max-width: 650px) {
+    #app .child .host-info br.break-sm {
+        display: block;
+    }
+}
+
+.clearfix {
+    clear: both;
+}

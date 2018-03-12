@@ -1,0 +1,16 @@
+{
+  "short_name": "Chidon Walking Groups",
+  "name": "Chidon Walking Groups",
+  "icons": [
+    {
+      "src": "/images/Chidon-Logo.jpg",
+      "sizes": "250x250",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/chidon/attendance/",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "orientation": "portrait"
+}
