@@ -11,6 +11,7 @@ $sql = "SELECT s.school_name, u.gender, tc.size, COUNT(*) AS total FROM th_chido
     ." JOIN schools s ON tc.school_id = s.school_id "
     ." WHERE tc.year = '$year' AND s.test_school='0' "
 	." AND date_paid IS NOT NULL "
+	." AND u.gender = 'M' "
 	." GROUP BY school_name, gender, size "
     ." ORDER BY school_name, gender, grade, last, first, size";
 
