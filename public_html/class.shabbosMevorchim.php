@@ -1084,21 +1084,20 @@ class ShabbosMevorchim {
 	*/
 	public function setStudentResults($sid = 0) {
 				
-		$sql1 = "SELECT dt.quantity AS total, dt.date_task_id 
-                FROM date_tasks dt
-                JOIN date_tasks_missions dtm
-                USING ( date_tasks_mission_id )
-                JOIN user_tracks ut
-                USING ( track_id,
-                LEVEL , subject_id )
-                WHERE dtm.subject_id =1
-                AND dtm.start_date = ? 
-                AND dtm.end_date = ? 
-                AND dt.grid_id = ? 
-                AND dtm.school_type_id = ?
-                AND ut.user_id = ?
-				AND dtm.lang_id = ? 
-                AND ut.enrolled =1";
+		$sql1 = "SELECT dt.quantity AS total, dt.date_task_id "
+            ." FROM date_tasks dt "
+            ." JOIN date_tasks_missions dtm "
+            ." USING ( date_tasks_mission_id ) "
+            ." JOIN user_tracks ut "
+            ." USING ( track_id, level, subject_id ) "
+            ." WHERE dtm.subject_id = 1 "
+            ." AND dtm.start_date = ? "
+            ." AND dtm.end_date = ? "
+            ." AND dt.grid_id = ? "
+            ." AND dtm.school_type_id = ? "
+            ." AND ut.user_id = ? "
+			." AND dtm.lang_id = ? "
+            ." AND ut.enrolled =1";
                     
         $stmt1 = $this->db->prepare( $sql1 );
         /*
