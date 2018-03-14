@@ -292,7 +292,7 @@ include 'inc/modals/enrollChild.php';
 				$.ajax({
 					type : "GET",
 					url : '../ajax/getTasks.php?v=2',
-					data : {subject : campaign,	user : <?=$user_id?>,	start : <?=$start?>,	end : <?=$end?>,	lang : lang},
+					data : {subject : campaign,	user : <?=$user_id?>,	start : <?=$start?>,	end : <?=$end?>,	lang : lang,	parent: Cookies.get('admin')},
 					success : function( data ) {
 						data = $.parseJSON( data ); // cast tje data to JSON
 						if ( data.length === 0 ) {
