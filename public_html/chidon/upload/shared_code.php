@@ -12,9 +12,11 @@ require_once ( $_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php' );
 $year = GlobalSettings::getChidonYear();
 
 $teams = [];
+$teams_by_id = [];
 $team_query = mysql_query("SELECT * FROM th_chidon_teams;");
 while($team = mysql_fetch_assoc($team_query)){
     $teams[$team['team']] = $team['team_id'];
+    $teams_by_id[$team['team_id']] = $team['team'];
 }
 
 // FUNCTIONS
@@ -41,7 +43,7 @@ function create_columns( $info ) { // $info is an array of columns and unescaped
         if( !!$value ) array_push($colunms, " $column = '$value' ");
     }
     
-    print_r($colunms);
+    //print_r($colunms);
     
     return $colunms;
 }
