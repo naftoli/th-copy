@@ -184,7 +184,7 @@ elseif (count($admin->schools) > 0)
             <? if ($school_id > 0) : ?>
 	            <div class="noprint">
 	            	<div class"module">
-	            		<a href="date_tasks_print.php">Take me back to the OLD STYLE mission sheets for printing!</a><br />
+	            		<!--<a href="date_tasks_print.php">Take me back to the OLD STYLE mission sheets for printing!</a><br />-->
         				Click <a href="settings.php?admin_id=<?=$admin->admin_id?>&school_id=<?=$school_id?>">here</a> to change mission settings</a>
 	            	</div>
 	                <div class="module clearfix generate">
@@ -288,7 +288,7 @@ elseif (count($admin->schools) > 0)
                         </a>
                         
                         <select name="date_list" class="sSelect">
-                            <option value="1">Rosh Hashana 5778</option>
+                            <option value="1">Pesach 5778</option>
                         </select>
                         
                         <a class="next button">

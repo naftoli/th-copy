@@ -13,9 +13,9 @@ if (isset($_GET['school'])) {
 	exit;
 }
 
-// rosh hashana 5778
-$dates['start'] = array( 2458012, 2458019 );
-$dates['end'] = array( 2458018, 2458025 );
+// pesach 5778
+$dates['start'] = array( 2458201, 2458208, 2458215 );
+$dates['end'] = array( 2458207, 2458214, 2458221 );
 ?>
 <!DOCTYPE html>
 <html>
