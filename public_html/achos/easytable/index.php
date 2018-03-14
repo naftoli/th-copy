@@ -54,11 +54,12 @@ $sql = "select * from users u
         and u.school_id = " . $admin_user['auths']['school'][0];
 if (!$allClasses) $sql .= " and u.class_id in (" . implode(',', $grades) . ")";
 $sql .= " order by class_grade, class_sub, last, first";
+//echo $sql; exit;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $users[] = $row['user_id'];
 }
-//echo "<pre>"; print_r($users); echo "</pre>";
+//echo "<pre>"; print_r($users); echo "</pre>"; exit;
 if (count($users)) {
     $userInfo = array();
     $sql = "select u.user_id, u.first, u.last, c.class_grade, c.class_sub, ut.subject_id 
@@ -70,6 +71,7 @@ if (count($users)) {
     while ($row = mysql_fetch_assoc($result)) {
         $userInfo[$row['user_id']]['name'] = $row['first'] . ' ' . $row['last'];
         $userInfo[$row['user_id']]['class'] = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+        $subject = 0;
         switch ($row['subject_id']) {
             case 2:
                 $subject = "Hoo";
@@ -81,7 +83,7 @@ if (count($users)) {
                 $subject = "Personal";
                 break;
         }
-        if (!isset($subject)) continue;
+        if (!$subject) continue;
         $userInfo[$row['user_id']]['subject'] = $subject;
     }
     
@@ -112,7 +114,7 @@ if (count($users)) {
             }
         }
     }
-    //echo "<pre>"; print_r($info); echo "</pre>";
+    //echo "<pre>"; print_r($info); echo "</pre>"; exit;
     $showTotals = $_POST['totals'];
 } else {
     echo "There are no students that match your criteria.";
