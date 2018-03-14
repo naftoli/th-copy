@@ -62,6 +62,8 @@ cookiefile
 awstats*
 *.xls
 *.xlsx
+*.csv
+
 # bower files should be ignored as they can and should be re-pulled
 bower_components
 
