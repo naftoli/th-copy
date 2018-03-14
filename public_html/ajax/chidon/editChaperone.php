@@ -9,7 +9,7 @@ $school_id          = clean_post_param("school_id");
 require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
 $year = GlobalSettings::getChidonYear();
 
-$fields = ['school_id', 'first_name', 'last_name', 'phone', 'email', 'dob', 'acc_name', 'acc_address', 'acc_cross_st', 'acc_phone', 'vehicle', 'sweater_size'];
+$fields = ['school_id', 'first_name', 'last_name', 'phone', 'email', 'dob', 'chidon_type', 'acc_name', 'acc_address', 'acc_cross_st', 'acc_phone', 'vehicle', 'sweater_size'];
 
 $sql_data = [];
 // go through each feild and add it to the dataset...

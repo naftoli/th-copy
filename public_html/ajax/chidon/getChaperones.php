@@ -47,6 +47,7 @@ if($debug) echo "</pre>";
 if (count($chaps) > 0) { ?>
     <table>
         <thead>
+            <th>Chap ID</th>
             <? if (!$school_id) { ?>
                 <th>School</th>
             <? } ?>
@@ -63,6 +64,7 @@ if (count($chaps) > 0) { ?>
         <tbody>
         <? foreach($chaps as $chap) {?>
             <tr id="<?=$chap['th_chidon_chap_id']?>">
+                <td><?=$chap['th_chidon_chap_id']?></td>
                 <? if (!$school_id) { ?>
                     <td><?=$chap['school_name']?></td>
                 <? } ?>

@@ -66,6 +66,7 @@ $(document).ready(function(){
         $("#chap_modal select.s_size").val(chap.sweater_size ? chap.sweater_size : "");
         // disable the sweater size if none was selected/paid for.
         $("#chap_modal select.s_size").attr("disabled", !chap.sweater_size);
+        $("#chap_modal select.chidon_type").val(chap.chidon_type);
         // update the Accomidation info...
         $("#chap_modal input#accName").val(chap.acc_name);
         $("#chap_modal input#accAddress").val(chap.acc_address);
@@ -150,6 +151,7 @@ $(document).ready(function(){
             phone:          $("input#number").val(),
             email:          $("#chap_modal input#email").val(),
             dob:            $("#chap_modal input#dob").val(),
+            chidon_type:    $("select#chidon_type").val(),
             acc_name:       $("#chap_modal input#accName").val(),
             acc_address:    $("#chap_modal input#accAddress").val(),
             acc_cross_st:   $("#chap_modal input#accCrossSt").val(),
