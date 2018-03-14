@@ -13,10 +13,10 @@ $schools = $as->getSchools();
         <title>Tzivos Hashem | Chidon Reports | Shabbaton enrollment</title>
         <link href="/admin_styles.css" rel="stylesheet" type="text/css">
         <link href="../inc/css/report.css" rel="stylesheet" type="text/css">
-<!--        Rotating Spinner, grey dropdowns and fancy checkboxes... -->
+<!--    Rotating Spinner, grey dropdowns and fancy checkboxes... -->
         <link href="/styles/admin/loader.css" rel="stylesheet" type="text/css"/>
         <link href="/styles/admin/grey_select.css" rel="stylesheet" type="text/css"/>
-<!--        Nice quick icons... -->
+<!--    Nice quick icons... -->
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         <style>
             th, td {
