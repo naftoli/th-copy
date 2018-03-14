@@ -26,7 +26,7 @@ define( 'SHELL_USER', trim( shell_exec( 'whoami' ) ) );
  *
  * @var string
  */
-define('SECRET_ACCESS_TOKEN', DEPLOYMENT_ACCESS_TOKEN); // use the token defined in ~/includes/globals.php
+define('SECRET_ACCESS_TOKEN', $deployment_access_token); // use the token defined in ~/includes/globals.php
 /**
  * The address of the remote Git repository that contains the code that's being
  * deployed.

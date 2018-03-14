@@ -8,4 +8,4 @@ $global_db_user = 'mashpia_cth';
 $global_db_pass = 'UlqKsfnTUq2A';
 
 // Deployment Tokens
-define( "DEPLOYMENT_ACCESS_TOKEN", "RwP'2*yN)k**Q^&w,9>x" );
+$deployment_access_token = "183HXNi6q4Zcl7z0Z8uiJrEgihkklnsz";
