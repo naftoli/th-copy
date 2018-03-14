@@ -70,23 +70,24 @@ function chap_card($chaperone, $year = 5778) { ?>
                 Shmirah: 718-221-0303<br />
                 <br />
                 
-                <div class="title">Walking Counselors</div>
+                <!--<div class="title">Walking Counselors</div>-->
                 <?php
-                $walking_bunk_query = mysql_query(
-                    "SELECT * FROM th_chidon_bunks WHERE walking_zone = '" . $chaperone['walking_zone'] . "' AND year = '$year' ORDER BY counselor"
-                );
-                while ($walking_bunk = mysql_fetch_assoc($walking_bunk_query)) {
-                    echo $walking_bunk['counselor'] ? $walking_bunk['counselor'] . "<br />" : "";
-                    echo $walking_bunk['bunk_name'] ? "Bunk: " . $walking_bunk['bunk_name'] . "<br />" : "";
-                    echo $walking_bunk['c_number']  ? $walking_bunk['c_number']  . "<br />" : "";
-                    echo "<br />";
-                } ?>
+                //$walking_bunk_query = mysql_query(
+                //    "SELECT * FROM th_chidon_bunks WHERE walking_zone = '" . $chaperone['walking_zone']
+                //    . "' AND year = '$year' AND chidon_type = '".  $chaperone['chidon_type'] ."' ORDER BY counselor"
+                //);
+                //while ($walking_bunk = mysql_fetch_assoc($walking_bunk_query)) {
+                //    echo $walking_bunk['counselor'] ? $walking_bunk['counselor'] . "<br />" : "";
+                //    echo $walking_bunk['bunk_name'] ? "Bunk: " . $walking_bunk['bunk_name'] . "<br />" : "";
+                //    echo $walking_bunk['c_number']  ? $walking_bunk['c_number']  . "<br />" : "";
+                //    echo "<br />";
+                //} ?>
             </div>
         </div>
         <div style="clear: both"></div>
 
         <img src="award-ceremony.png" class="force_bottom"/>
-        <div style="page-break-after: always"></div>
     </div>
+    <div style="page-break-after: always"></div>
     <hr class="no-print"/>
 <?php } // endfunciton student_card ?>

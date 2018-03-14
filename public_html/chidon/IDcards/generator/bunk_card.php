@@ -71,7 +71,8 @@ function bunk_card($bunk, $year = 5778) { ?>
                 <div class="title">Walking Chaperones</div>
                 <?php
                 $walking_bunk_query = mysql_query(
-                    "SELECT * FROM th_chidon_chaps WHERE walking_zone = '" . $bunk['walking_zone'] . "' AND year = '$year'"
+                    "SELECT * FROM th_chidon_chaps WHERE walking_zone = '" . $bunk['walking_zone'] .
+                    "' AND year = '$year' AND chidon_type = '".  $chaperone['chidon_type'] ."' "
                 );
                 while ($walking_bunk = mysql_fetch_assoc($walking_bunk_query)) {
                     echo $walking_bunk['name']   ? $walking_bunk['name']   . "<br />" : "";
@@ -94,7 +95,8 @@ function bunk_card($bunk, $year = 5778) { ?>
         <div style="clear: both"></div>
 
         <img src="award-ceremony.png" class="force_bottom"/>
-        <div style="page-break-after: always"></div>
+       
     </div>
+    <div style="page-break-after: always"></div>
     <hr class="no-print"/>
 <?php } // endfunciton student_card ?>

@@ -33,6 +33,7 @@ while( $mark = mysql_fetch_assoc( $user_marks_query ) ) {
 }
 
 /***************** LOAD ZONES **********************/
+$chidon_type = $gender == "M" ? "boys" : "girls";
 $zones = [];
 $zone_users_query = mysql_query(
      " SELECT u.first, u.last, tc.th_chidon_id, tc.walking_zone, tc.host, tc.host_address1, tc.host_address2, "
@@ -56,6 +57,7 @@ $zone_chaperones_query = mysql_query(
     ." JOIN schools s USING (school_id) "
     ." WHERE year = '$year' "  // imit to the current year.
     ." AND walking_zone >= $start AND walking_zone <= $end"         // limit to the selected zones...
+    ." AND chidon_type = '$chidon_type' "
     ." ORDER BY walking_zone, name "
 );
 
@@ -69,6 +71,7 @@ if($admin_user['auth'] === "super") {
         " SELECT bunk_id, walking_zone, counselor, c_number, host_name, host_address1, host_address2, host_between_streets from th_chidon_bunks "
        ." WHERE year = '$year' "  // imit to the current year.
        ." AND walking_zone >= $start AND walking_zone <= $end"         // limit to the selected zones...
+       ." AND chidon_type = '$chidon_type' "
        ." ORDER BY walking_zone, counselor "
    );
    

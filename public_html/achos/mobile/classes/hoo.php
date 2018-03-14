@@ -53,7 +53,7 @@ class Hoo {
             while ($row = mysql_fetch_assoc($result)) {
 				if ($row['quantity'] > 0) {
 					$points = floor($row['total'] / 60);
-					if ($this-isFC) {
+					if ($this->isFC) {
 						$points *= 10;
 					}
 				} else {

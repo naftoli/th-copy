@@ -182,6 +182,16 @@ $year = GlobalSettings::getChidonYear();
                         </label>
                     </div>
                     
+                    <div class="input_group input_half">
+                        <label>
+                            Chidon Type Size<br/>
+                            <select name="chidon_type" class="chidon_type">
+                                <option value="boys"> Boys </option>
+                                <option value="girls">Girls</option>
+                            </select>
+                        </label>
+                    </div>
+                    
                     <h3>Accomodation Info</h3>
                     <div class="input_group input_half">
                         <label>

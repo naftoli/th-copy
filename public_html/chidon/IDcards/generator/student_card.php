@@ -54,6 +54,7 @@ function student_card($student, $year = 5778) { // default to 5778 for now.... ?
         </div>
         
         <div class="bottomSec grade<?=$student['grade']?> bottomText">
+            <?= $student['cert_number']?>
             <?php // TODO: show the xth year of the chidon that the child is in. ?>
         </div>
     </div>
@@ -79,15 +80,17 @@ function student_card($student, $year = 5778) { // default to 5778 for now.... ?
                 
                 <?php // load the first chaperone from the school and show him here....
                 $chaperone_query = mysql_query(
-                    "SELECT * FROM th_chidon_chaps WHERE school_id = " . $student['school_id'] . " AND year = '$year' LIMIT 1"
+                    "SELECT * FROM th_chidon_chaps WHERE school_id = " . $student['school_id']
+                    . " AND chidon_type = '" . ($student['gender'] == "M" ? "boys" : "girls") . "' "
+                    . " AND year = '$year' LIMIT 1"
                 );
                 $chap = mysql_fetch_assoc($chaperone_query); ?>
                 <?= $chap['name'];  ?><br />
                 <?= $chap['phone']; ?><br />
                 
-                <div class="title">Counselor</div>
-                <?=$student['counselor'];?><br />
-                <?=$student['c_number'];?><br />
+                <!--<div class="title">Counselor</div>-->
+                <?//$student['counselor'];?><!--<br />-->
+                <?//$student['c_number'];?><br />
                 
                 <div class="title">Headquarters</div>
                 718-907-8884<br/>
@@ -116,19 +119,23 @@ function student_card($student, $year = 5778) { // default to 5778 for now.... ?
                 
                 <?php if($student['walking_zone'] != "65") { ?>
                 
-                    <div class="title">Walking Counselor</div>
+                    <!--<div class="title">Walking Counselor</div>-->
                     <?php
-                    $walking_bunk_query = mysql_query(
-                        "SELECT * FROM th_chidon_bunks WHERE walking_zone = '" . $student['walking_zone'] . "' AND year = '$year' LIMIT 1"
-                    );
-                    $walking_bunk = mysql_fetch_assoc($walking_bunk_query);?>
-                    <?=$walking_bunk['counselor'];  ?><br />
-                    <?=$walking_bunk['c_number'];   ?><br />
-                
+                    //$walking_bunk_query = mysql_query(
+                    //    "SELECT * FROM th_chidon_bunks WHERE walking_zone = '" . $student['walking_zone'] . "' "
+                    //    . " AND chidon_type = '" . ($student['gender'] == "M" ? "boys" : "girls") . "' "
+                    //    . " AND year = '$year' LIMIT 1"
+                    //);
+                    //$walking_bunk = mysql_fetch_assoc($walking_bunk_query);?>
+                    <?//$walking_bunk['counselor'];  ?><!--<br />-->
+                    <?//$walking_bunk['c_number'];   ?><!--<br />-->
+                    <br/>
                     <div class="title">Walking Chaperone</div>
                     <?php
                     $walking_chap_query = mysql_query(
-                        "SELECT * FROM th_chidon_chaps WHERE walking_zone = '" . $student['walking_zone'] . "' AND year = '$year' LIMIT 1"
+                        "SELECT * FROM th_chidon_chaps WHERE walking_zone = '" . $student['walking_zone'] . "' "
+                        . " AND chidon_type = '" . ($student['gender'] == "M" ? "boys" : "girls") . "' "
+                        . " AND year = '$year' LIMIT 1"
                     );
                     $walking_chap = mysql_fetch_assoc($walking_chap_query);?>
                     <?=$walking_chap['name'];?><br />
@@ -143,16 +150,16 @@ function student_card($student, $year = 5778) { // default to 5778 for now.... ?
                 <div class="desc">
                     Thursday Bus    <b>#<?=$student['coach_bus']?></b><br />
                     Friday Bus      <b>#<?=$student['school_bus']?></b><br />
-                    Sunday Bus      <b>#<?=$student['double_decker']?></b><br />
+                    <!--Sunday Bus      <b>#<?//$student['double_decker']?></b><br />-->
                 </div>
             </div>
             
             <div class="other">
-                <div class="title">Test Table</div>
+                <div class="title <?= $student['grade'] < 6 ? "" : "inline"?>">Test Table</div>
                 #<?= $student['test_table'] ?><br />
                 
                 <div class="title inline">Bowling Lane</div>
-                <?php if ($student['grade'] < 6) echo "<br/>"; // grade 4 and 5 do not have a workshop, so add some space to be nice. ?>
+                <?php // if ($student['grade'] < 6) echo "<br/>"; // grade 4 and 5 do not have a workshop, so add some space to be nice. ?>
                 #<?= $student['bowling_lane'] ?>
                 
                 <?php

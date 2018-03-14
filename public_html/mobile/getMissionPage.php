@@ -83,7 +83,7 @@ if (!isset($_GET['d'])) { // if the date was not provided
 	$end = $start + 6; // the ending is the start date plus 6
 	// check if we need to change start / end
 	// there seems to be some type of discrepancy between the unixtojd and date('w') return values
-	$sql = "select * from parshos where start = " . $start;
+	$sql = "SELECT * FROM parshos WHERE start = " . $start;
 	$result = mysql_query($sql);
 	if (mysql_num_rows($result) == 0) {
 		$start++;
@@ -101,7 +101,7 @@ if (!isset($_GET['d'])) { // if the date was not provided
 		$end = $jd;
 		$start = $end - 6;
 	}
-	//echo $start . "-" . $end; exit;
+//echo $start . "-" . $end; exit;
 }
 /********************** CREATE AN ARRAY OF THE HEBREW DATES **********************/
 $temp = $start;

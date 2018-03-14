@@ -684,9 +684,8 @@ $role_id = $row["role_id"];
 						<li><a href="summer_report.php"><?=T_('Mark Summer/Tishrei Missions')?></a>
 						-->
                         <li><a href="/print_missions2.php"><?=T_('Print Missions')?></a>
-						<!--
-                        <li><a href="/print_missionsYT.php"><?=T_('Print Rosh Hashana Missions')?></a>
-						<li><a href="/print_missionsYT2.php"><?=T_('Print Yom Kippur / Succos Missions')?></a>
+                        <li><a href="/print_missionsYT.php"><?=T_('Print Pesach Missions')?></a>
+						<!--<li><a href="/print_missionsYT2.php"><?=T_('Print Yom Kippur / Succos Missions')?></a>-->
                         <!--<li><a href="/print_missions_summer.php"><?=T_('Print Summer Missions')?></a>-->
                         <li><a href="/mark_missions2.php"><?=T_('Mark Missions')?></a>
                         <li><a href="/sefer_hamitzvos.php"><?=T_('Mark Yahadus')?></a>

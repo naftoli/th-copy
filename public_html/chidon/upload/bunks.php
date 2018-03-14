@@ -133,15 +133,15 @@ if( $_POST['action'] == "generate" ) {
     
     foreach( $inserts as $info ) {
         $insert_sql = "INSERT INTO th_chidon_bunks SET ";
-        print_r($info);
+        //print_r($info);
         $columns = create_columns( $info );
         $insert_sql .= implode(", ", $columns);
         $insert_sql .= ", year='$year'";
         
-        $status = mysql_query($update_sql);
+        $status = mysql_query($insert_sql);
         
         if(!$status){
-            echo $update_sql."\n";
+            echo $insert_sql."\n";
             echo "Create new bunk - Failed. Please double check Sheet and/or contact programming department.... \n";
         }
     }

@@ -2,7 +2,9 @@
 //echo "Needs update for this report.";
 //exit;
 
-require '../../db.php';
+$admin_auth = array('school'); 
+require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
+
 require 'vars.php';
 
 $info = [];

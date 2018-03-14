@@ -88,6 +88,7 @@ function createChpaerones($chaperones, $year) {
         $email          = mysql_real_escape_string($chaperone['email']);
         $phone          = mysql_real_escape_string($chaperone['phone']);
         $dob            = mysql_real_escape_string($chaperone['dob']);
+        $chidon_type    = mysql_real_escape_string($chaperone['chidon_type']);
         $vehicle        = intval(mysql_real_escape_string($chaperone['vehicle']));
         $sweater        = intval(mysql_real_escape_string($chaperone['sweater']));
         $full_program   = intval(mysql_real_escape_string($chaperone['full_program']));
