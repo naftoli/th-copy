@@ -6,3 +6,6 @@ $global_db_host = strpos($_SERVER['HTTP_HOST'], "192.168.") === false ? // use t
 // DBS credentials
 $global_db_user = 'mashpia_cth';
 $global_db_pass = 'UlqKsfnTUq2A';
+
+// Deployment Tokens
+define( "DEPLOYMENT_ACCESS_TOKEN", "RwP'2*yN)k**Q^&w,9>x" );
