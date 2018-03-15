@@ -47,3 +47,4 @@ vendor/
 composer.lock
 error_log
 .ftpquota
+.vscode
