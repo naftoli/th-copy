@@ -1,15 +1,17 @@
 <?php
 class TehillimBackup {
-    private $dates;
+    public $dates;
+
     private $date;
     private $marks;
     private $year;
     private $errors;
     
     public function __construct() {
-        require_once '../class.globalSettings.php';
+        require_once(dirname(__FILE__).'/../class.globalSettings.php');
         $this->year = GlobalSettings::getCurrentYear();
         $this->dates = array(
+            0, 0, // no dates provided for the first two months
             2458091,
             2458122,
             2458142,
