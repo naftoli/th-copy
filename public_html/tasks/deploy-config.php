@@ -34,7 +34,7 @@ define('SECRET_ACCESS_TOKEN', $deployment_access_token); // use the token define
  *
  * @var string
  */
-define('REMOTE_REPOSITORY', 'https://github.com/naftoli/mashpia.com.git'); // use SSH for access to the private repository....
+define('REMOTE_REPOSITORY', 'git@github.com:naftoli/mashpia.com.git'); // use SSH for access to the private repository....
 /**
  * The branch that's being deployed.
  * Must be present in the remote repository.
