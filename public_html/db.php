@@ -1,5 +1,5 @@
 <?php
-// date_default_timezone_set ( "America/New_York" ); // set the default timezone to avoid error warnings...
+date_default_timezone_set ( "UTC" ); // set the default timezone to avoid error warnings...
 //db
 //global $link = null;
 // old pass = eZauPhy9CEqEdYDT
