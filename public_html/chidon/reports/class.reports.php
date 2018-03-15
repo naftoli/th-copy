@@ -250,6 +250,11 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  'paid'
             ),
+            'cert_number'   =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'cert_number'
+            ),
+            
             'date_paid'   =>  array(
                 'table'     =>  'th_chidon',
                 'column'    =>  'date_paid'
