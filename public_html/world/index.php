@@ -39,7 +39,7 @@ if (isset($_GET['grade'])) {
 
 $regInfo = array();
 foreach ($info as $id => $desc) {
-	if (isset($_GET['grade'])) $rSql = "SELECT count(*) AS total FORM users WHERE class_id = $id AND (user_registered > 0 OR yan = 1)";
+	if (isset($_GET['grade'])) $rSql = "SELECT count(*) AS total FROM users WHERE class_id = $id AND (user_registered > 0 OR yan = 1)";
 	else $rSql = "SELECT count(*) AS total FROM users WHERE school_id = $id AND (user_registered > 0 OR yan = 1)";
 	$rResult = mysql_query($rSql);
 	$rRow = mysql_fetch_assoc($rResult);
