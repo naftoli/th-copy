@@ -34,13 +34,17 @@ if( $type === "student" ) {
     $info_sql = "SELECT * FROM th_chidon_chaps chaps "
         ." JOIN schools USING (school_id) "
         ." WHERE year = '$year' "
-        .($gender  ? " AND chidon_type = '" . ($gender == "M" ? "boys" : "girls" )."' "  : ""); // limit by gender (if applicalble);
+        ." AND walking_zone >= 1 AND walking_zone <= 34 "
+        .($gender  ? " AND chidon_type = '" . ($gender == "M" ? "boys" : "girls" )."' "  : "") // limit by gender (if applicalble);
+        ." ORDER BY walking_zone";
+        
 // Get the bunk....
 } else if ( $type === "bunk" ) {
     require_once(dirname(__FILE__)."/generator/bunk_card.php");
     $info_sql = "SELECT * FROM th_chidon_bunks bunks "
         ." WHERE year = '$year' "
-        .($gender  ? " AND chidon_type = '" . ($gender == "M" ? "boys" : "girls" )."' "  : ""); // limit by gender (if applicalble);
+        .($gender  ? " AND chidon_type = '" . ($gender == "M" ? "boys" : "girls" )."' "  : "")  // limit by gender (if applicalble);
+        ." ORDER BY bunk_name";
 }
 
 if ( $type === "custom" ) {
