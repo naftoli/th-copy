@@ -88,11 +88,10 @@ $schools = $as->getSchools();
             
             <label for="bus_code">Bus Code: <input type="text" name="bus_code"/> </label>-->
             
-            <label for="chap_chidon_type">Chaperone Marking: 
-                <select name="chap_chidon_type"/>
-                    <option value="">None</option>
-                    <option value="girls">Girls</option>
+            <label for="chidon_type">Chidon Type: 
+                <select name="chidon_type"/>
                     <option value="boys">Boys</option>
+                    <option value="girls">Girls</option>
                 </select>
             </label>
             <br/>
@@ -104,6 +103,18 @@ $schools = $as->getSchools();
         
         <br/><br/>
         <div class="options">
+            Sort By:
+            <select id="sort_by">
+                <option value="name">Name</option>
+                <option value="walking_zone">Walking Zone</option>
+            </select>
+            Limit To:
+            <select id="chidon_type_limit">
+                <option value="">None</option>
+                <option value="boys">Boys</option>
+                <option value="girls">Girls</option>
+            </select>
+            <br/>
             <a class="button" id="generate_report"><i class="fa fa-refresh" aria-hidden="true"></i> Generate Report</a>
         </div>
         
@@ -118,15 +129,15 @@ $schools = $as->getSchools();
                 
                 function generate_report() {
                     $("#report").html("<div class='loader'></div>");
-                    var school_id = $("select#school_id").val();
                     
-                    if (school_id === ""){
-                        alert("Please select a school"); return false;
-                    }
+                    var data = {
+                        sort_by: $("select#sort_by").val(),
+                        chidon_type_limit: $("select#chidon_type_limit").val()
+                    };
                     
-                    $.post("ajax/get_staff.php", {school_id: school_id}, function(data){
+                    $.post("ajax/get_staff.php", data, function(data){
                         $("#report").html(data);
-                        $("#report input[type='text']").keyup(updateStaff);
+                        $("#report input[type='text'], #report input[type='number']").keyup(updateStaff);
                         $("#report select").change(updateStaff);
                     });
                 }
