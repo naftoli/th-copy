@@ -1179,12 +1179,6 @@ class ShabbosMevorchim {
                             }
                             $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
                             $total = $row2['total'];
-                            if($total > 0) {
-                                echo "<pre>";
-                                print_r( array_search( $date, array_values( $this->dates ) ) );
-                                print_r( [ $date, $task, $user['user_id'], $user['first'], $user['last'], $total ] );
-                                echo "</pre>";
-                            }
                             $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
                         }
 						
