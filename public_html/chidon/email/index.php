@@ -26,14 +26,14 @@ $sql = "select admin_email from admins a
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
     $email = $row['admin_email'];
-    if (filter_var($email, FILTER_VALIDATE_EMAIL)) { // if valid email address add to array or email addresses
+    if (filter_var($email, FILTER_VALIDATE_EMAIL)) { // if valid email address add to array of email addresses
         $emails[] = $email;
     }
 }
-echo "<pre>"; print_r( $emails ); echo "</pre>"; exit;
+//echo "<pre>"; print_r( $emails ); echo "</pre>"; exit;
 
 $sent = 0;
-$startEmailNum = 990; // first 989 already sent
+$startEmailNum = 4; // first 5 is bogus
 $total = count( $emails );
 for ($i = $startEmailNum; $i < $total; $i++) {
     $to = $emails[$i];
