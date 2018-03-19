@@ -50,12 +50,12 @@ function bunk_card($bunk, $year = 5778) { ?>
         
         <div class="middle">
             <div class="host">
-                <?php // Host ?>
-                <div class="title">Host</div>
-                <?=$bunk['host_name']?> Family,<br/>
-                <?=$bunk['host_address1'] . " " . $bunk['host_address2']?><br/>
-                <small><?= $bunk['host_between_streets'] ?></small><br />
-                
+                <?php if( $bunk['host_name'] ) { // Host ?>
+                    <div class="title">Host</div>
+                    <?=$bunk['host_name']?> Family,<br/>
+                    <?=$bunk['host_address1'] . " " . $bunk['host_address2']?><br/>
+                    <small><?= $bunk['host_between_streets'] ?></small><br />
+                <?php } ?>
                 <br />
                 
                 <div class="title">Headquarters</div>
@@ -67,31 +67,35 @@ function bunk_card($bunk, $year = 5778) { ?>
                 Police / Fire: 911<br />
                 Shmirah: 718-221-0303<br />
                 <br />
-                
-                <div class="title">Walking Chaperones</div>
-                <?php
-                $walking_bunk_query = mysql_query(
-                    "SELECT * FROM th_chidon_chaps WHERE walking_zone = '" . $bunk['walking_zone'] .
-                    "' AND year = '$year' AND chidon_type = '".  $chaperone['chidon_type'] ."' "
-                );
-                while ($walking_bunk = mysql_fetch_assoc($walking_bunk_query)) {
-                    echo $walking_bunk['name']   ? $walking_bunk['name']   . "<br />" : "";
-                    echo $walking_bunk['phone']  ? $walking_bunk['phone']  . "<br />" : "";
-                    echo "<br />";
+                <?php if( $bunk['walking_zone'] ) { ?>
+                    <div class="title">Walking Chaperones</div>
+                    <?php
+                    $walking_bunk_query = mysql_query(
+                        "SELECT * FROM th_chidon_chaps WHERE walking_zone = '" . $bunk['walking_zone'] .
+                        "' AND year = '$year' AND chidon_type = '".  $bunk['chidon_type'] ."' "
+                    );
+                    while ($walking_bunk = mysql_fetch_assoc($walking_bunk_query)) {
+                        echo $walking_bunk['name']   ? $walking_bunk['name']   . "<br />" : "";
+                        echo $walking_bunk['phone']  ? $walking_bunk['phone']  . "<br />" : "";
+                        echo "<br />";
+                    }
                 } ?>
+                
             </div>
         </div>
         
-        <div class="info">
-            <div class="bus">
-                <div class="title">Bus Numbers</div>
-                <div class="desc">
-                    Thursday Bus    <b>#<?=$bunk['c_coach_bus']?></b><br />
-                    Friday Bus      <b>#<?=$bunk['c_school_bus']?></b><br />
-                    Sunday Bus      <b>#<?=$bunk['c_double_decker']?></b><br />
+        <?php if( $bunk['c_school_bus'] || $bunk['c_coach_bus'] || $bunk['c_double_decker'] ) { ?>
+            <div class="info">
+                <div class="bus">
+                    <div class="title">Bus Numbers</div>
+                    <div class="desc">
+                        Thursday Bus    <b>#<?=$bunk['c_coach_bus']?></b><br />
+                        Friday Bus      <b>#<?=$bunk['c_school_bus']?></b><br />
+                        Sunday Bus      <b>#<?=$bunk['c_double_decker']?></b><br />
+                    </div>
                 </div>
             </div>
-        </div>
+        <?php } ?>
         <div style="clear: both"></div>
 
         <img src="award-ceremony.png" class="force_bottom"/>

@@ -1,6 +1,9 @@
 <?php
 include(dirname(__FILE__)."/../../inc/header.php");
 
+require_once ( $_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php' );
+$year = GlobalSettings::getChidonYear();
+
 if ($admin_user['auth'] != 'super') {
     render_json_error("CH-ZONE-EDIT-0101: Invalid Permissions");
 }
@@ -29,6 +32,16 @@ $update_query = mysql_query($update_sql);
 
 if(!$update_query){
     render_json_error("CH-ZONE-EDIT-0112: Could not update Walking Zone. Please contact support for more information.", $update_sql);
+}
+
+// if there is a chap, attempt to update their login info
+if( $type === "chap" ) {
+    $update_login_query = mysql_query(
+         " UPDATE th_chidon_staff tcs "
+        ." JOIN th_chidon_chaps tcc ON tcs.name = tcc.name AND tcs.year = tcc.year "
+        ." SET tcs.walking_zone=tcc.walking_zone "
+        ." WHERE tcc.year='$year' AND tcc.th_chidon_chap_id='$id' "
+    );
 }
 
 echo json_encode([
