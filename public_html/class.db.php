@@ -1,4 +1,16 @@
 <?php
+/** 
+ * DB class, extends PDO
+ * Singleton wrapper for DBS connection.
+ * 
+ * @method __construct()
+ *      creates new database connection
+ * 
+ * @method getInstance()
+ *      returns or creates a new instance of the DBS connection (returns an instance of self....)
+ * 
+ */ 
+
 class DB extends PDO {
     private static $_instance = null;
     

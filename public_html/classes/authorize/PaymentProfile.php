@@ -3,8 +3,8 @@
 namespace classes\authorize;
 
 // load the custom authorization tools for the Authorize.net API
-require_once('Auth.php');
-require_once('AuthorizeAPIRequest.php');
+require_once( dirname(__FILE__).'/Auth.php' );
+require_once( dirname(__FILE__).'/AuthorizeAPIRequest.php' );
 
 use classes\authorize;
 use includes\authorize\AuthorizeConstants as Constants;

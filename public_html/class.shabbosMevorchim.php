@@ -50,95 +50,79 @@ class ShabbosMevorchim {
 	private $numRegistered;
 	
 	private $accomplishedOnly;
-	private $debug;
+    private $debug;
+    private $backup;
         
     public function __construct($year = 5778) {
-        //set db handle
-        require_once 'class.db.php';
+        require_once( $_SERVER['DOCUMENT_ROOT'] . "/tehillim_backups/class.tehillimBackup.php" ); // load the backups class
+        $this->backup = new TehillimBackup();
+
+        // load the DBS connection....
+        require_once('class.db.php');
         $this->db = DB::getInstance();
-        //$sm1 = calculateSM(5776);
-        //$sm2 = calculateSM(5777);
-		
-		$sm = calculateSM($year);
-		//echo "<pre>";
+        // cacluate the shabbos mevorchim dates (julian dates) for a given year.
+        $sm = calculateSM( $year ); // calculateSM is defined in ~/public_html/db.php#887
+
+		// transalate the numbers into names of the months....
 		$this->months = array(
-			0	=>	'Tishrei',
-            1   =>  'Cheshvon', 
-            2   =>  'Kisleiv', 
-            3   =>  'Teves', 
-            4   =>  'Shevat', 
-            5   =>  'Adar', 
-            6   =>  'Adar II', 
-            7   =>  'Nissan',  
-            8   =>  'Iyar', 
-            9   =>  'Sivan', 
-            10  =>  'Tamuz', 
-            11  =>  'Av', 
+            0	=>	'Tishrei',  1   =>  'Cheshvon', 2   =>  'Kisleiv',  3   =>  'Teves',    
+            4   =>  'Shevat',   5   =>  'Adar',     6   =>  'Adar II',  7   =>  'Nissan',   
+            8   =>  'Iyar',     9   =>  'Sivan',    10  =>  'Tamuz',    11  =>  'Av', 
             12  =>  'Elul' 
         );
-		/*
-        $this->dates = array(
-        	$this->months[12]	=> $sm1[12], 
-        	$this->months[13]	=> $sm1[13]
-		);
-		*/
-        foreach ($sm as $k => $v) {
-            //if ($k == 12) break;
-            if ($sm[6] != $sm[7]) {
-                if ($k == 5) {
-                    $this->dates['Adar I'] = $v;
-                    continue;
-                } 
-            } else {
-				if ($k == 6) continue;
+        $this->heMonths = array(
+            0  =>  'תשרי',      1   =>  'חשון',     2   =>  'כסלו',     3   =>  'טבת', 
+            4   =>  'שבט',      5   =>  'אדר',      6   =>  'אדר ב',    7   =>  'ניסן',  
+            8   =>  'אייר',     9   =>  'סיון',     10  =>  'תמוז',     11  =>  'אב', 
+            12  =>  'אלול' 
+        );
+
+        // go through all of the sm dates...
+        foreach ($sm as $index => $sm_date) {
+            // if this is not a leap year (months 6 and 7 are different...)
+            if ( $sm[6] != $sm[7] && $index == 5 ) { // and we are on Adar...
+                $this->dates['Adar I'] = $sm_date; // set Adar to Adar I
+                continue; // go to the next month...
+            } else if ( $sm[6] == $sm[7] && $index == 6 ) { // if the two are the same and we are up to number 6...
+                continue; // just skip it..
 			}
-            $this->dates[$this->months[$k]] = $v;
+            $this->dates[$this->months[$index]] = $sm_date;
         }
-		//print_r($this->dates);
-		//echo "</pre>";
+
 		// tasks array was modified to point to grid id instead of short name to account for multiple langauges
         $this->tasks = array(
             'Kapitelach'  	=>  8001,
             'Minutes'   	=>  8002 
         );
-        $this->accomplished = array();
-        $this->rDates = array();
-        $this->showDone = array();
-		$this->users = array();
-		$this->usersResults = array();
-		$this->usersDoneResults = array();
-		$this->students = array();
-		$this->studentResults = array();
-		$this->studentDoneResults = array();
-		
-		$this->heMonths = array(
-            0  =>  'תשרי',
-            1   =>  'חשון', 
-            2   =>  'כסלו', 
-            3   =>  'טבת', 
-            4   =>  'שבט', 
-            5   =>  'אדר', 
-            6   =>  'אדר ב', 
-            7   =>  'ניסן',  
-            8   =>  'אייר', 
-		    9   =>  'סיון', 
-            10  =>  'תמוז', 
-            11  =>  'אב', 
-            12  =>  'אלול' 
-        );
-        
+
+        // set the following variables to empty arrays...
+        $this->accomplished         = array();
+        $this->rDates               = array();
+        $this->showDone             = array();
+		$this->users                = array();
+		$this->usersResults         = array();
+		$this->usersDoneResults     = array();
+		$this->students             = array();
+		$this->studentResults       = array();
+		$this->studentDoneResults   = array();
+        // set the following variables to false by default..
 		$this->accomplishedOnly = false;
 		$this->debug = false;
     }
-	
+
 	public function setAccomplishedOnly() {
 		$this->accomplishedOnly = true;
 	}
 	
 	public function setDebug() {
 	    $this->debug = true;
-	}
-
+    }
+    /**
+     * getHebrewMonth
+     *
+     * @param string $key English name of month.
+     * @return string
+     */
 	public function getHebrewMonth($key) {
 		$index = array_search($key, $this->months);
 		return $this->heMonths[$index];
@@ -151,39 +135,53 @@ class ShabbosMevorchim {
     public function getKeys() {
         return array_keys( $this->tasks );
     }
-    
-    public function setReportDates($date = 0) {
-    	$today = unixtojd();
+
+    /**
+     * setReportDates
+     *
+     * @param integer $date Julian date to create the reports for.
+     * @return void
+     */
+    public function setReportDates( $date = 0 ) {
+        $today = unixtojd(); // get the curent unix date..
+        // if a date was passed in...
         if ($date > 0) {
-        	$month = array_search($date, $this->dates);
-			$this->rDates[$month] = $date;
-			$this->showDone[] = $date;
+            $month = array_search($date, $this->dates); // get the name of the month.
+            // TODO figure out where these are being used.
+			$this->rDates[$month] = $date; // set the date for this month to the internal rDates array.
+			$this->showDone[] = $date; // add the date to the showDone array.
+        // if no date was passed in.
         } else {
         	$dates = array();
 	        foreach ( $this->dates as $month => $date ) {
 	            //echo $today . " : " . $month . "-" . $date . "<br />";
-	            $dates[$month] = $date;
-	            if ( $today < ($date + 28) ) {
-	                //if it's just before shabbos mevorchim don't show done data
+	            $dates[$month] = $date; // add the date to the function's date array
+	            if ( $today < ( $date + 28 ) ) { // if the date is less then one month before today:
+	                // if it's just before shabbos mevorchim don't show done data
 	                if ( $today >= $date ) {
 	                    $this->showDone[] = $date;
 	                }
 	                break; //end looping by current shabbos mevorchim date
 	            } else {
-	                $this->showDone[] = $date;
+	                $this->showDone[] = $date; // add the date to the dates array.
 	            }
-	        }
+            }
+            // get the last date
 			$d = end($dates);
-			$month = key($dates);
-			$this->rDates[$month] = $d;
-			prev($dates);
+            $month = key($dates); // and the month
+            // update the rdates array
+            $this->rDates[$month] = $d;
+            // go back one in the dates array.
+            prev($dates);
+            // set rDatesPlusPrevious to match the previous months version of rDates
 			$this->rDatesPlusPrevious[key($dates)] = current($dates);
-			$this->rDatesPlusPrevious[$month] = $d;
+            $this->rDatesPlusPrevious[$month] = $d;
+            // add all of them to the array rDatesAll
 			foreach ($dates as $month => $date) {
 				$this->rDatesAll[$month] = $date;
 			}
-		}
-    }
+		} // end if no date was provided.
+    } // end function setReportDates( $date )
     
     public function getReportDates() {
         return $this->rDates;
@@ -198,85 +196,55 @@ class ShabbosMevorchim {
 	}
     
     public function setArmyResults() {
-        
+        // select the total tehillim marks for each kid in each campaign
         $sql1 = "SELECT sum( dt.quantity ) AS total
-                FROM date_tasks dt
-                JOIN date_tasks_missions dtm
-                USING ( date_tasks_mission_id )
-                JOIN user_tracks ut
-                USING ( track_id,
-                LEVEL , subject_id )
-                JOIN users u
-                USING ( user_id ) 
-                JOIN schools s 
-                USING (school_id) 
-                JOIN classes c 
-                USING (class_id) 
-                WHERE ut.subject_id =1
-                AND dtm.start_date = ? 
-                AND dtm.end_date = ? 
-                AND dt.grid_id = ?  
-                AND dtm.school_type_id = u.school_type_id
-                AND u.user_registered > 0
-                AND ut.enrolled =1 
-                AND s.school_era is null 
-                AND c.class_era = 0
-				AND u.user_id = ut.user_id
-				AND u.lang_id = dtm.lang_id";
-                        
+            FROM date_tasks dt
+            JOIN date_tasks_missions dtm USING ( date_tasks_mission_id )
+            JOIN user_tracks ut USING ( track_id, LEVEL, subject_id )
+            JOIN users u USING ( user_id ) 
+            JOIN schools s USING (school_id) 
+            JOIN classes c USING (class_id) 
+            WHERE ut.subject_id = 1
+            AND ut.enrolled = 1
+            AND dtm.start_date = ?
+            AND dtm.end_date = ?
+            AND dtm.school_type_id = u.school_type_id
+            AND dt.grid_id = ?
+            AND s.school_era is null
+            AND c.class_era = 0
+            AND u.user_registered > 0
+			AND u.user_id = ut.user_id
+			AND u.lang_id = dtm.lang_id";
         $stmt1 = $this->db->prepare( $sql1 );
-        /*                
-        $sql2 = "SELECT sum( dt.done_qty ) AS total
-                FROM date_tasks_marks dt
-                JOIN date_tasks
-                USING ( date_task_id )
-                JOIN date_tasks_missions dtm
-                USING ( date_tasks_mission_id )
-                JOIN users u 
-                USING ( user_id ) 
-                JOIN user_tracks ut
-                USING ( subject_id, level, track_id ) 
-                JOIN schools s 
-                USING (school_id) 
-                JOIN classes c 
-                USING (class_id) 
-                WHERE dtm.subject_id =1
-                AND dtm.start_date = ? 
-                AND dtm.end_date = ? 
-                AND date_tasks.grid_id = ? 
-                AND dtm.school_type_id = u.school_type_id
-                AND u.user_registered >0 
-                AND ut.enrolled =1 
-                AND s.school_era is null 
-                AND c.class_era = 0
-				AND u.user_id = ut.user_id
-				AND u.lang_id = dtm.lang_id";
-        */        
-        $sql2 = "SELECT sum( dtm.done_qty ) AS total 
-                from date_tasks_marks dtm 
-                join date_tasks dt using (date_task_id) 
-                join date_tasks_missions dtmm using (date_tasks_mission_id) 
-                where dtmm.start_date = ?
-                and dtmm.end_date = ?
-                and dt.grid_id = ?";
         
+        // select the total done from date_tasks_missions for this mission in general
+        $sql2 = "SELECT sum( dtm.done_qty ) AS total 
+                FROM date_tasks_marks dtm 
+                JOIN date_tasks dt USING (date_task_id) 
+                JOIN date_tasks_missions dtmm USING (date_tasks_mission_id) 
+                WHERE dtmm.start_date = ?
+                AND dtmm.end_date = ?
+                AND dt.grid_id = ?";
         $stmt2 = $this->db->prepare( $sql2 );
 		
 		//$sqlQuota = "select sum( tb.quota ) as total
 		//			from tehillim_backups tb
 		//			where tb.sm_date = ?
 		//			and tb.grid_id = ?";
-		//$stmtQuota = $this->db->prepare( $sqlQuota );
+        //$stmtQuota = $this->db->prepare( $sqlQuota );
         
+        // select the totals from the backup table ( pre-deadline )
         $sqlBackup = "SELECT sum( tb.done_qty ) AS total
                     FROM tehillim_backups tb 
                     WHERE tb.sm_date = ? 
                     AND tb.grid_id = ?";
         $stmtBackup = $this->db->prepare( $sqlBackup );
+
+        // for each date that we are generating this report for
         foreach ( $this->rDates as $month => $date ) {
-            
+            // for each task (defined on line 89)
             foreach ( $this->tasks as $key => $task ) {
-            	           	
+                // skip the minutes task
             	if ($key == 'Minutes') continue;
 				
 				// figure out if we are getting results from backup table or not
@@ -298,15 +266,15 @@ class ShabbosMevorchim {
                 if ($this->debug) {
                     echo "<pre>"; print_r($rowBackup); echo "</pre>";
                 }
-				
-                if ($rowBackup['total'] > 0) {
+
+				// if there is info in the backup table use that.
+                if ( $rowBackup['total'] > 0 ) {
                     $this->armyDoneResults[$key][$date] = $rowBackup['total'];
-                } else {
+                } else { // otherwise, generate the report and pull up the results.
                     $stmt2->execute( array( $date, $date, $task ) );
                     $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
                     $this->armyDoneResults[$key][$date] = $row2['total'];
                 }
-				
             }            
         }
     }
@@ -321,7 +289,7 @@ class ShabbosMevorchim {
     
     public function setSchool( $id ) {
         $this->school_id = $id;
-        $sql = "select school_name from schools where school_id = " . $this->school_id;
+        $sql = "SELECT school_name FROM schools WHERE school_id = " . $this->school_id;
         foreach ( $this->db->query( $sql ) as $row )
             $this->school_name = $row['school_name'];
     }
@@ -424,7 +392,7 @@ class ShabbosMevorchim {
         foreach ( $this->rDates as $month => $date ) {
             
             foreach ( $this->tasks as $key => $task ) {
-                	
+                
                 if (!$minutes && $key == 'Minutes') continue;
                 
 				// figure out if we are getting results from backup table or not
@@ -1084,44 +1052,32 @@ class ShabbosMevorchim {
 	*/
 	public function setStudentResults($sid = 0) {
 				
-		$sql1 = "SELECT dt.quantity AS total, dt.date_task_id "
-            ." FROM date_tasks dt "
-            ." JOIN date_tasks_missions dtm "
-            ." USING ( date_tasks_mission_id ) "
-            ." JOIN user_tracks ut "
-            ." USING ( track_id, level, subject_id ) "
-            ." WHERE dtm.subject_id = 1 "
-            ." AND dtm.start_date = ? "
-            ." AND dtm.end_date = ? "
-            ." AND dt.grid_id = ? "
-            ." AND dtm.school_type_id = ? "
-            ." AND ut.user_id = ? "
-			." AND dtm.lang_id = ? "
-            ." AND ut.enrolled =1";
+		$sql1 = "SELECT dt.quantity AS total, dt.date_task_id
+            FROM date_tasks dt
+            JOIN date_tasks_missions dtm
+            USING ( date_tasks_mission_id )
+            JOIN user_tracks ut
+            USING ( track_id, level, subject_id )
+            WHERE dtm.subject_id = 1
+            AND dtm.start_date = ?
+            AND dtm.end_date = ?
+            AND dt.grid_id = ?
+            AND dtm.school_type_id = ?
+            AND ut.user_id = ?
+		    AND dtm.lang_id = ?
+            AND ut.enrolled =1";
                     
         $stmt1 = $this->db->prepare( $sql1 );
-        /*
-        $sql2 = "SELECT sum( dtm.done_qty ) AS total
-                FROM users u 
-                JOIN (
-                date_tasks_marks dtm, date_tasks dt, date_tasks_missions dtmm
-                ) ON ( dtm.user_id = u.user_id
-                AND dt.date_task_id = dtm.date_task_id
-                AND dtmm.date_tasks_mission_id = dt.date_tasks_mission_id 
-                AND dtmm.start_date = ? 
-                AND dtmm.end_date = ? 
-                AND dt.short_name = ? )
-                WHERE u.user_id = ? ";
-        */
-		$sql2 = "select dtm.done_qty as total 
-				from date_tasks_marks dtm
-				join date_tasks dt using (date_task_id)
-				join date_tasks_missions dtmm using (date_tasks_mission_id) 
-				where dtm.user_id = ? 
-				and dtmm.start_date = ? 
-				and dtmm.end_date = ? 
-				and dt.grid_id = ? 
-				and dtmm.subject_id = 1";
+
+		$sql2 = "SELECT dtm.done_qty AS total 
+				FROM date_tasks_marks dtm
+				JOIN date_tasks dt USING (date_task_id)
+				JOIN date_tasks_missions dtmm USING (date_tasks_mission_id) 
+				WHERE dtm.user_id = ? 
+				AND dtmm.start_date = ? 
+				AND dtmm.end_date = ? 
+				AND dt.grid_id = ? 
+				AND dtmm.subject_id = 1";
 		/*		
 		$sql2 = "SELECT sum( dtm.done_qty ) AS total
                 FROM users u 
@@ -1146,24 +1102,24 @@ class ShabbosMevorchim {
 		//$stmtQuota = $this->db->prepare( $sqlQuota );
         
         $sqlBackup = "SELECT sum( done_qty ) AS total
-                    FROM tehillim_backups 
-                    WHERE sm_date = ? 
-                    AND grid_id = ?
-                    AND user_id = ?";
+            FROM tehillim_backups 
+            WHERE sm_date = ? 
+            AND grid_id = ?
+            AND user_id = ?";
         $stmtBackup = $this->db->prepare( $sqlBackup );
         
-		if ($sid) {
+		if ( $sid ) {
 			$this->classes = array();
-			$this->setClasses($sid);
-		} else if (empty($this->classes)) {
-        	$this->setClasses($sid);
+			$this->setClasses( $sid );
+		} else if ( empty( $this->classes ) ) {
+        	$this->setClasses( $sid );
         }
 		
-		if (!$sid) $sid = $this->school_id;
+		if ( !$sid ) $sid = $this->school_id;
         
         $users = array();
 		foreach ($this->classes as $id => $info) {			
-			$stmt = $this->db->query("select * from users where class_id = $id and user_registered > 0 order by last, first");
+			$stmt = $this->db->query("SELECT * FROM users WHERE class_id = $id AND user_registered > 0 ORDER BY last, first");
 			$users[$id] = $stmt->fetchAll();
 		}
 		
@@ -1173,20 +1129,19 @@ class ShabbosMevorchim {
 			}
 		}
 		
-		//if ($sid == 11) echo "<pre>"; print_r($users); echo "</pre>";
+		// for each report date
 		foreach ( $this->rDates as $month => $date ) {
-			            
+			// for each task     
 	        foreach ( $this->tasks as $key => $task ) {
-	        		
+	        	// skip task #2
 	        	if ($key == 'Minutes') continue;
 				
 				$this->doneQuotas[$key][$sid] = 0;
 				$this->participated[$key][$sid] = 0;
-	                
+	            // for each class
 	            foreach ( $users as $class => $info ) {
-					
 					//if ($sid == 176) echo $month . ":" . $date . ":" . $key . ":" . $sid . ":" . count($info) . "<br />";
-						            		
+					// for each user in the class.
 	            	foreach ($info as $user) {
 	            		
 						// figure out if we are getting results from backup table or not
@@ -1205,7 +1160,16 @@ class ShabbosMevorchim {
                         // figure out if we are getting results from backup table or not
                         $stmtBackup->execute( array( $date, $task, $user['user_id'] ) );
                         $rowBackup = $stmtBackup->fetch( PDO::FETCH_ASSOC );
-                        if ($rowBackup['total'] > 0) {
+
+                        $backupDateIndex = array_search( $date, array_values( $this->dates ) ); // get the index for the backup (offset by 2 months for 5778)
+                        
+                        if ( isset( $this->backup->dates[$backupDateIndex] ) ) {
+                            $backupRan = $this->backup->dates[$backupDateIndex] < unixtojd();
+                        } else {
+                            $backupRan = false;
+                        }
+
+                        if ($rowBackup['total'] > 0 || $backupRan) { // or we are after the date of the backup.
                             $total = $rowBackup['total'];
                             $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $rowBackup['total'];
                         } else {
