@@ -2,7 +2,7 @@
     text-align: center;
 }
 
-input[type='text']{
+input[type='text'], input[type='number']{
     border: none;
     background: none;
     border-bottom: 1px solid;

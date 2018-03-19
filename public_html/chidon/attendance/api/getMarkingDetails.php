@@ -11,23 +11,46 @@ $year = GlobalSettings::getChidonYear();
 require_once( $_SERVER['DOCUMENT_ROOT'].'/mobile/reg/ajax/encrypt.php' );
 $login = encrypt_decrypt('decrypt', $_POST['login']);
 if(!$login) render_json_error("Invalid Login");
+
 // get the user
 $user_query = mysql_query("SELECT walking_zone, door_number, chap_chidon_type FROM th_chidon_staff WHERE staff_id = '$login' LIMIT 1;"); // get the users info
-if(!$user_query || mysql_num_rows($user_query) == 0)  render_json_error("Invalid Login");
+
+if(!$user_query || mysql_num_rows($user_query) == 0)
+    render_json_error("Invalid Login");
+
 $user = mysql_fetch_assoc($user_query);
 
 // get the TIME ID
 $time_id = isset($_POST['time_id']) ? clean_post_param('time_id') : render_json_error("Invalid Request");
 // get the type of info to pull
-$type_query = mysql_query("SELECT att_type FROM th_chidon_attendance_times WHERE att_time_id = '$time_id' LIMIT 1;"); // get the users info
-if(!$type_query || mysql_num_rows($type_query) == 0)  render_json_error("Invalid Request", "SELECT type FROM th_chidon_attendance_times WHERE att_time_id = '$time_id' LIMIT 1;");
-$type = mysql_fetch_assoc($type_query)['att_type'];
+$type_query = mysql_query("SELECT att_type, gender FROM th_chidon_attendance_times WHERE att_time_id = '$time_id' LIMIT 1;"); // get the users info
+
+if(!$type_query || mysql_num_rows($type_query) == 0)
+    render_json_error("Invalid Request", "SELECT type FROM th_chidon_attendance_times WHERE att_time_id = '$time_id' LIMIT 1;");
+
+$result = mysql_fetch_assoc($type_query);
+$type = $result['att_type'];
+$gender = $result['gender'];
+
+// limit by gender
+if( $gender == "B" )
+    $gender_limit = "";
+else
+    $gender_limit = " AND u.gender = '$gender' ";
+
 // array to store the marks in
 $marks = [];
 
 if( $type == 'walk' ) {
     $child_list = [];
-    $grade_limit = $time_id == "31" ? " AND tc.grade <= '5' " : "";
+    
+    $grade_limit = "";
+    if ( in_array( $time_id, ["31", "35"] ) ) {
+        $grade_limit = " AND tc.grade <= '5' ";
+    } elseif ( in_array( $time_id, ["36"] ) ) {
+        $grade_limit = " AND tc.walk_day = 0 ";
+    }
+
     $child_list_query = mysql_query(
          " SELECT school_name, first, last, tc.th_chidon_id, user_serial, user_id, walking_zone, "
         ." host, host_address1, host_address2, between_streets, host_number, tcam.marked "
@@ -36,7 +59,7 @@ if( $type == 'walk' ) {
         ." JOIN users u USING (user_id) "
         ." LEFT JOIN th_chidon_attendance_marks tcam ON tcam.th_chidon_id = tc.th_chidon_id AND tcam.att_time_id = '$time_id' "
         ." WHERE year = '$year' AND walking_zone = '". $user['walking_zone'] ."' "
-        .$grade_limit
+        . $grade_limit . $gender_limit
         ." ORDER BY between_streets, host_address1, host_address2, first, last; "
     );
     while( $child = mysql_fetch_assoc($child_list_query) ) {
@@ -73,24 +96,24 @@ if( $type == 'walk' ) {
 //    $marks = $child_list;
 //}
 
-if( $type == 'chap' ) {
-    
-    $chap_list = [];
-    $chap_list_query = mysql_query(
-          " SELECT th_chidon_chap_id, name, phone, email, chidon_type, school_name, walking_zone, tcam.marked "
-         ." FROM th_chidon_chaps tcc"
-         ." JOIN schools s USING (school_id) "
-         ." LEFT JOIN th_chidon_attendance_marks tcam ON tcam.th_chidon_id = tcc.th_chidon_chap_id AND tcam.att_time_id = '$time_id' "
-         ." WHERE year='$year' AND chidon_type='" . $user['chap_chidon_type'] . "'"
-         ." ORDER BY last_name, first_name "
-    );
-    
-    while( $child = mysql_fetch_assoc($chap_list_query) ) {
-        $chap_list[] = $child;
-    }
-    
-    $marks = $chap_list;
-}
+//if( $type == 'chap' ) {
+//    
+//    $chap_list = [];
+//    $chap_list_query = mysql_query(
+//          " SELECT th_chidon_chap_id, name, phone, email, chidon_type, school_name, walking_zone, tcam.marked "
+//         ." FROM th_chidon_chaps tcc"
+//         ." JOIN schools s USING (school_id) "
+//         ." LEFT JOIN th_chidon_attendance_marks tcam ON tcam.th_chidon_id = tcc.th_chidon_chap_id AND tcam.att_time_id = '$time_id' "
+//         ." WHERE year='$year' AND chidon_type='" . $user['chap_chidon_type'] . "'"
+//         ." ORDER BY last_name, first_name "
+//    );
+//    
+//    while( $child = mysql_fetch_assoc($chap_list_query) ) {
+//        $chap_list[] = $child;
+//    }
+//    
+//    $marks = $chap_list;
+//}
 
 echo json_encode([
     "success"   => true,
