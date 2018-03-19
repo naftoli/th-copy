@@ -18,8 +18,12 @@ use raffles\weekly\Prize as Prize;
                     <td><img src="<?=$prize->thumbnail;?>"/></td>
                     <td><?=$prize->qty?></td>
                     <td>
-                        <a href="/raffles/weekly/forms/prize_form.php?action=edit&prize_id=<?=$prize->prize_id?>">
+                        <a href="/raffles/weekly/forms/prize_form.php?action=edit&prize_id=<?=$prize->prize_id?>" class="button" >
                             View/Edit
+                        </a>
+                        <a class="button" id="change_prize" 
+                            data-raffle_id="<?=$raffle->raffle_id?>" data-prize_id="<?=$prize->prize_id?>">
+                            Change Prize
                         </a>
                     </td>
                 </tr>

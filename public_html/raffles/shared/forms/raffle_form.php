@@ -133,9 +133,14 @@ if($debug) echo "</pre>"; // end debugging preformatting
         <title>Tzivos Hashem | Raffles</title>
         <link href="/admin_styles.css" rel="stylesheet" type="text/css">
         <link href="/styles/admin/forms.css" rel="stylesheet" type="text/css">
+        <link href="/styles/admin/modal.css" rel="stylesheet" type="text/css">
         <link href="/raffles/shared/styles/form_style.css?v=1.1" rel="stylesheet" type="text/css">
         <link href="/styles/admin/grey_select.css?v=1.1" rel="stylesheet" type="text/css">
-        <style>.action-links{margin-bottom: 15px}tr td:first-child{white-space: normal}</style>
+        <style>
+            .action-links{margin-bottom: 15px}tr td:first-child{white-space: normal}
+            .modal-content{ margin: 5% auto; } div#clearfix { clear: both; }
+            .modal-raffle-option {padding: 10px; border-bottom: 1px solid #aaa;} .modal-raffle-option img {float: left;} .modal-raffle-option a.button.change_prize_item {float: right;}
+        </style>
     </head>
     <body>
         <? include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php'); // load the basic UI ?>
@@ -222,6 +227,8 @@ if($debug) echo "</pre>"; // end debugging preformatting
                 });
             </script>
         <?}?>
+        <script src="/js/admin/components/modal.js"></script>
+        <script src="/raffles/weekly/js/change_prize.js"></script>
     </body>
 </html>
 
