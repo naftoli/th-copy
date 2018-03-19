@@ -23,7 +23,7 @@ class getWinners{
         // just return false if input is invalid
         if(!($start && $end)) return false;
         // add the time to the end to include kids registered on that date
-        $filter = "date_ran >= '$start' AND date_ran <= '$end 24:59:59' ";
+        $filter = "date_ran >= '$start' AND date_ran <= '$end 23:59:59' ";
         if($type) $filter .= " AND raffles.type = '$type' ";
         if($school_id) $filter .= " AND users.school_id = '$school_id'";
         if($shipping_filter) $filter .= " AND $shipping_filter";
