@@ -1,7 +1,3 @@
-<?php
-header("Location: https://chidon.ticketspice.com/international-chidon-sefer-hamitzvos");
-exit;
-?>
 <!DOCTYPE html>
 <html>
 <head>
