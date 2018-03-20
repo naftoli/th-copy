@@ -19,7 +19,7 @@ $mishna_bulk_query = mysql_query(
     FROM mishnos
     JOIN sedorim USING (seder_id)
     JOIN mesechtos USING (mesechto_id)
-    ORDER BY sedorim.seder_id, mesechto , perek , mishna"
+    ORDER BY sedorim.seder_id, mesechtos.mesechto_id , perek , mishna"
 );
 
 $mishna_info = []; $seder_names = []; $mesechto_names = [];
