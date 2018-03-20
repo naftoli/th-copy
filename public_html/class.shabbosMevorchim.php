@@ -110,7 +110,7 @@ class ShabbosMevorchim {
 		$this->debug = false;
     }
 
-    private function getBackupRan( $date ){
+    public function getBackupRan( $date ){
         $backupDateIndex = array_search( $date, array_values( $this->dates ) );
 
         // if there is an index, check if it is set. Otherwise just return false
