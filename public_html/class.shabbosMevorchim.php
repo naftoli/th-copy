@@ -112,6 +112,7 @@ class ShabbosMevorchim {
 
     private function getBackupRan( $date ){
         $backupDateIndex = array_search( $date, array_values( $this->dates ) );
+
         // if there is an index, check if it is set. Otherwise just return false
         if ( $backupDateIndex === false ) return false;
         // if we have a date at this index, make sure it is before today
@@ -165,8 +166,8 @@ class ShabbosMevorchim {
         } else {
         	$dates = array();
 	        foreach ( $this->dates as $month => $date ) {
-	            //echo $today . " : " . $month . "-" . $date . "<br />";
-	            $dates[$month] = $date; // add the date to the function's date array
+                //echo $today . " : " . $month . "-" . $date . "<br />";
+                $dates[$month] = $date; // add the date to the function's date array if we have a backup
 	            if ( $today < ( $date + 28 ) ) { // if the date is less then one month before today:
 	                // if it's just before shabbos mevorchim don't show done data
 	                if ( $today >= $date ) {
@@ -752,7 +753,7 @@ class ShabbosMevorchim {
 				
         $stmt1 = $this->db->prepare( $sql1 );
         
-        $sql2 = "SELECT sum( dtm.done_qty ) AS total 
+        $sql2 = "SELECT sum( dtm.done_qty ) AS total
                 FROM date_tasks_marks dtm 
                 JOIN date_tasks dt USING (date_task_id) 
                 JOIN date_tasks_missions dtmm USING (date_tasks_mission_id) 
@@ -804,7 +805,9 @@ class ShabbosMevorchim {
                         // figure out if we are getting results from backup table or not
                         $stmtBackup->execute( array( $date, $task, $class ) );
                         $rowBackup = $stmtBackup->fetch( PDO::FETCH_ASSOC );
-                        if ($rowBackup['total'] > 0) {
+                        $backupRan = $this->getBackupRan( $date );
+
+                        if ( $rowBackup['total'] > 0 || $backupRan ) {
                             $this->classDoneResults[$key][$date][$class] = $rowBackup['total'];
                         } else {
                             $stmt2->execute( array( $date, $date, $task, $class ) );
