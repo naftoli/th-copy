@@ -58,7 +58,7 @@ class ShabbosMevorchim {
         $this->backup = new TehillimBackup();
 
         // load the DBS connection....
-        require_once('class.db.php');
+        require_once( dirname(__FILE__) . '/class.db.php' );
         $this->db = DB::getInstance();
         // cacluate the shabbos mevorchim dates (julian dates) for a given year.
         $sm = calculateSM( $year ); // calculateSM is defined in ~/public_html/db.php#887
@@ -108,6 +108,17 @@ class ShabbosMevorchim {
         // set the following variables to false by default..
 		$this->accomplishedOnly = false;
 		$this->debug = false;
+    }
+
+    private function getBackupRan( $date ){
+        $backupDateIndex = array_search( $date, array_values( $this->dates ) );
+        // if there is an index, check if it is set. Otherwise just return false
+        if ( $backupDateIndex === false ) return false;
+        // if we have a date at this index, make sure it is before today
+        if ( isset( $this->backup->dates[$backupDateIndex] ) )
+            return $this->backup->dates[$backupDateIndex] < unixtojd();
+        // by default we did not run the backup
+        return false;
     }
 
 	public function setAccomplishedOnly() {
@@ -663,11 +674,20 @@ class ShabbosMevorchim {
             $this->classes[$row['class_id']]['teacher'] = $row['class_teacher'];
         }
     }
-	
+    
+    /**
+     * $sm->setWhatsappClasses
+     * 
+     * sets the interal classes array and returns a list of class_id's sorted by grade
+     *
+     * @param string $gender
+     * @return array
+     */
 	public function setWhatsappClasses($gender) {
-		$this->classes = array();
-		$gradeInfo = array();
-		$grades = array('Pre1a','1','2','3','4','5','6','7','8');
+		$this->classes = [];
+		$gradeInfo = [];
+        $grades = ['Pre1a','1','2','3','4','5','6','7','8']; // all the grades we support for this report
+        // for each grade get the class info
 		foreach ($grades as $grade) {
 			$sql = "SELECT DISTINCT c . *
 					FROM classes c
@@ -679,24 +699,28 @@ class ShabbosMevorchim {
 					AND c.class_era = 0
 					AND c.class_grade = '" . $grade . "'
 					AND c.class_gender = '" . $gender . "' 
-					AND u.school_id not in (82)
+					AND u.school_id NOT IN (82)
 					AND s.tehillim = 1 
 					ORDER BY c.class_grade, c.class_sub ";
 			//echo $sql . "<br />";
 			foreach ( $this->db->query( $sql ) as $row ) {
+                // set the interal class datastructure to have the grade and teacher below the class_id..
 				$this->classes[$row['class_id']]['grade'] = 
 					$row['class_sub'] == "" ? $row['class_grade'] : $row['class_grade'] . '-' . $row['class_sub'];
-				$this->classes[$row['class_id']]['teacher'] = $row['class_teacher'];
+                $this->classes[$row['class_id']]['teacher'] = $row['class_teacher'];
+                // add the class id to the grade info
 				$gradeInfo[$grade][] = $row['class_id'];
-			}
-			$sql2 = "select c.class_id, count(u.user_id) as total from users u 
-					join user_tracks ut using (user_id)
-					join classes c on c.class_id = u.class_id 
-					where c.class_grade = '" . $grade . "'  
-					and u.user_registered > 0 
-					and ut.subject_id = 1 
-					and ut.enrolled = 1
-					group by c.class_id";
+            }
+            // count the number of kids in each class
+			$sql2 = "SELECT c.class_id, count(u.user_id) AS total FROM users u 
+					JOIN user_tracks ut USING (user_id)
+					JOIN classes c ON c.class_id = u.class_id 
+                    WHERE c.class_grade = '" . $grade . "'
+                    AND c.class_gender = '" . $gender . "'  
+					AND u.user_registered > 0 
+					AND ut.subject_id = 1 
+					AND ut.enrolled = 1
+					GROUP BY c.class_id";
 			foreach ( $this->db->query( $sql2 ) as $row2 ) {
 				$this->totalUsers[$row2['class_id']] = $row2['total'];
 				if (!isset($this->totalUsers[$row2['class_id']])) $this->totalUsers[$row2['class_id']] = 0;
@@ -705,22 +729,18 @@ class ShabbosMevorchim {
 		return $gradeInfo;
 	}
     
-    public function setClassResults($setClasses = true) {
-        
+    public function setClassResults( $setClasses = true ) {
+        // determine if we should set the interal classes array as well
         if ($setClasses) $this->setClasses(); 
         
         $sql1 = "SELECT sum( dt.quantity ) AS total
                 FROM date_tasks dt
-                JOIN date_tasks_missions dtm
-                USING ( date_tasks_mission_id )
-                JOIN user_tracks ut
-                USING ( track_id,
-                LEVEL , subject_id )
-                JOIN users u
-                USING ( user_id )
+                JOIN date_tasks_missions dtm USING ( date_tasks_mission_id )
+                JOIN user_tracks ut USING ( track_id, LEVEL , subject_id )
+                JOIN users u USING ( user_id )
                 JOIN classes c ON ( c.class_id = u.class_id )
                 WHERE u.class_id = ?  
-                AND ut.subject_id =1
+                AND ut.subject_id = 1
                 AND dtm.start_date = ? 
                 AND dtm.end_date = ? 
                 AND dt.grid_id = ? 
@@ -731,52 +751,18 @@ class ShabbosMevorchim {
 				AND u.lang_id = dtm.lang_id";
 				
         $stmt1 = $this->db->prepare( $sql1 );
-        /*
-        $sql2 = "SELECT sum( dtm.done_qty ) AS total
-                FROM classes c, users u
-                JOIN (
-                date_tasks_marks dtm, date_tasks dt, date_tasks_missions dtmm
-                ) ON ( dtm.user_id = u.user_id
-                AND dt.date_task_id = dtm.date_task_id
-                AND dtmm.date_tasks_mission_id = dt.date_tasks_mission_id
-                AND dtmm.start_date = ? 
-                AND dtmm.end_date = ? 
-                AND dt.grid_id = ? )
-				JOIN user_tracks ut using (subject_id, track_id, level) 
-                WHERE u.class_id = c.class_id
-                AND c.class_id = ?  
-                AND u.user_registered >0
-				AND u.user_id = ut.user_id
-				AND dtmm.lang_id = u.lang_id";
-        */
-        /*
-		$sql2 = "SELECT sum( dtm.done_qty ) AS total
-                FROM classes c, users u
-                JOIN (
-                date_tasks_marks dtm, date_tasks dt, date_tasks_missions dtmm
-                ) ON ( dtm.user_id = u.user_id
-                AND dt.date_task_id = dtm.date_task_id
-                AND dtmm.date_tasks_mission_id = dt.date_tasks_mission_id
-                AND dtmm.start_date = ? 
-                AND dtmm.end_date = ? 
-                AND dt.grid_id = ? )
-				JOIN user_tracks ut using (subject_id, track_id, level) 
-                WHERE u.class_id = c.class_id
-                AND c.class_id = ?  
-                AND u.user_registered >0
-				AND u.user_id = ut.user_id";
-        */        
+        
         $sql2 = "SELECT sum( dtm.done_qty ) AS total 
-                from date_tasks_marks dtm 
-                join date_tasks dt using (date_task_id) 
-                join date_tasks_missions dtmm using (date_tasks_mission_id) 
-                join users u using (user_id) 
-                join classes c using (class_id) 
-                where dtmm.start_date = ?
-                and dtmm.end_date = ?
-                and dt.grid_id = ?  
-                and c.class_id = ?  
-                and u.user_registered > 0";
+                FROM date_tasks_marks dtm 
+                JOIN date_tasks dt USING (date_task_id) 
+                JOIN date_tasks_missions dtmm USING (date_tasks_mission_id) 
+                JOIN users u USING (user_id) 
+                JOIN classes c USING (class_id) 
+                WHERE dtmm.start_date = ?
+                AND dtmm.end_date = ?
+                AND dt.grid_id = ?  
+                AND c.class_id = ?  
+                AND u.user_registered > 0";
 				
         $stmt2 = $this->db->prepare( $sql2 );
 		
@@ -799,7 +785,7 @@ class ShabbosMevorchim {
         foreach ( $this->rDates as $month => $date ) {
 			
             foreach ( $this->tasks as $key => $task ) {
-            	
+            	// do not do the minutes task ( only task #1 )
                 if ($setClasses && $key == 'Minutes') continue;
                     
                 foreach ( $this->classes as $class => $info ) {
@@ -813,8 +799,8 @@ class ShabbosMevorchim {
 						$row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
 						$this->classResults[$key][$date][$class] = $row1['total'];
 					//}
-                    
-					if (!$this->accomplishedOnly) {
+                    // if we do not want to only show what was done but also show the totals
+					if ( !$this->accomplishedOnly ) {
                         // figure out if we are getting results from backup table or not
                         $stmtBackup->execute( array( $date, $task, $class ) );
                         $rowBackup = $stmtBackup->fetch( PDO::FETCH_ASSOC );
@@ -963,93 +949,7 @@ class ShabbosMevorchim {
             return false;
         }
     }
-	/*
-	public function setUsersResults() {
-		
-		$sql1 = "SELECT sum( dt.quantity ) AS total 
-                FROM date_tasks dt
-                JOIN date_tasks_missions dtm
-                USING ( date_tasks_mission_id )
-                JOIN user_tracks ut
-                USING ( track_id,
-                LEVEL , subject_id )
-                WHERE dtm.subject_id =1 
-                AND dtm.start_date = ? 
-                AND dtm.end_date = ? 
-                AND dt.grid_id = ? 
-                AND dtm.school_type_id = ? 
-				AND dtm.lang_id = ? 
-                and ut.user_id = ? 
-                AND ut.enrolled =1";
-                    
-        $stmt1 = $this->db->prepare( $sql1 );
-        
-        $sql2 = "SELECT sum( dtm.done_qty ) AS total
-                FROM users u 
-                JOIN (
-                date_tasks_marks dtm, date_tasks dt, date_tasks_missions dtmm
-                ) ON ( dtm.user_id = u.user_id
-                AND dt.date_task_id = dtm.date_task_id
-                AND dtmm.date_tasks_mission_id = dt.date_tasks_mission_id
-                AND dtmm.start_date = ? 
-                AND dtmm.end_date = ? 
-                AND dt.grid_id = ? )
-                WHERE u.user_id = ?";
-                    
-        $stmt2 = $this->db->prepare( $sql2 );
-        
-        if (empty($this->classes)) {
-        	$this->setClasses();
-        }
-        
-        $users = array();
-		foreach ($this->classes as $id => $info) {			
-			$stmt = $this->db->query("select * from users where class_id = $id and user_registered > 0 order by last, first");
-			$users[$id] = $stmt->fetchAll();
-		}
-		
-		foreach ($users as $class => $info) {
-			foreach ($info as $user) {
-				$this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
-			}
-		}
-		
-        foreach ( $this->rDates as $month => $date ) {
-            
-            foreach ( $this->tasks as $key => $task ) {
-            		
-            	if ($key == 'Minutes') continue;
-                    
-                foreach ( $users as $class => $info ) {
-                		
-                	foreach ($info as $user) {
-                		                               
-	                    $stmt1->execute( array( $date, $date, $task, $user['school_type_id'], $user['lang_id'], $user['user_id'] ) );
-	                    $row1 = $stmt1->fetch( PDO::FETCH_ASSOC );
-	                    $this->usersResults[$class][$user['user_id']][$date][$key] = $row1['total'];
-	                                       
-	                    $stmt2->execute( array( $date, $date, $task, $user['user_id'] ) );
-	                    $row2 = $stmt2->fetch( PDO::FETCH_ASSOC );
-	                    $this->usersDoneResults[$class][$user['user_id']][$date][$key] = $row2['total'];
-	                    
-	                }
-	                
-				}
-				
-			}
-			
-		}
-		
-	}
-
-	public function getUsersResults() {
-		return $this->usersResults;
-	}
 	
-	public function getUsersDoneResults() {
-		return $this->usersDoneResults;
-	}
-	*/
 	public function setStudentResults($sid = 0) {
 				
 		$sql1 = "SELECT dt.quantity AS total, dt.date_task_id
@@ -1160,14 +1060,8 @@ class ShabbosMevorchim {
                         // figure out if we are getting results from backup table or not
                         $stmtBackup->execute( array( $date, $task, $user['user_id'] ) );
                         $rowBackup = $stmtBackup->fetch( PDO::FETCH_ASSOC );
-
-                        $backupDateIndex = array_search( $date, array_values( $this->dates ) ); // get the index for the backup (offset by 2 months for 5778)
-                        
-                        if ( isset( $this->backup->dates[$backupDateIndex] ) ) {
-                            $backupRan = $this->backup->dates[$backupDateIndex] < unixtojd();
-                        } else {
-                            $backupRan = false;
-                        }
+                        // check if we have run the backup for this date
+                        $backupRan = $this->getBackupRan( $date );
 
                         if ($rowBackup['total'] > 0 || $backupRan) { // or we are after the date of the backup.
                             $total = $rowBackup['total'];
