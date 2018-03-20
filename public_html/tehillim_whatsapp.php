@@ -70,21 +70,27 @@ require_once( dirname(__FILE__) . '/whatsapp.php' );
                     <?php
                     $totals = array();
                     $indx = 0;
-                    foreach ($info as $id => $percent) {
-                        echo "<tr><td>" . ($indx+1) . "</td><td class='left'>" . $schoolInfo[$id] . "</td><td class='left'>" . $classes[$id]['teacher'] . "</td><td>" .
-                            $totalUsers[$id] . "</td><td>" . $percent . "%</td><td>" . $goal['Kapitelach'][$date][$id] . "</td><td>" .
-                            (empty($done['Kapitelach'][$date][$id]) ? 0 : $done['Kapitelach'][$date][$id]) . "</td><td>" .
-                            $goal['Minutes'][$date][$id] . "</td><td>" .
-                            (empty($done['Minutes'][$date][$id]) ? 0 : $done['Minutes'][$date][$id]) . "</td></tr>";
-                            
-                        if (!$indx) {
+                    foreach ($info as $id => $percent) { ?>
+                        <tr>
+                            <td> <?= $indx + 1 ?></td>
+                            <td class='left'><?=$schoolInfo[$id]?></td>
+                            <td class='left'><?=$classes[$id]['teacher']?></td>
+                            <td><?=$totalUsers[$id]?></td>
+                            <td><?=$percent?>%</td>
+                            <td><?=$goal['Kapitelach'][$date][$id]?></td>
+                            <td><?=empty( $done['Kapitelach'][$date][$id] ) ? 0 : $done['Kapitelach'][$date][$id];?></td>
+                            <td><?=$goal['Minutes'][$date][$id]?></td>
+                            <td><?=empty( $done['Minutes'][ $date ][ $id ] ) ? 0 : $done['Minutes'][ $date ][ $id ]?></td>
+                        </tr>
+                    <?php
+                        if (!$indx) { // for the first row, initialize the totals
                             $totals['numUsers'] = $totalUsers[$id];
                             $totals['quota'] = $doneQuotas['Kapitelach'][$id];
                             $totals['goalK'] = $goal['Kapitelach'][$date][$id];
                             $totals['goalM'] = $goal['Minutes'][$date][$id];
                             $totals['doneK'] = $done['Kapitelach'][$date][$id];
                             $totals['doneM'] = $done['Minutes'][$date][$id];
-                        } else {
+                        } else { // for the rest add the amounts to the totals
                             $totals['numUsers'] += $totalUsers[$id];
                             $totals['quota'] += $doneQuotas['Kapitelach'][$id];
                             $totals['goalK'] += $goal['Kapitelach'][$date][$id];
@@ -93,12 +99,16 @@ require_once( dirname(__FILE__) . '/whatsapp.php' );
                             $totals['doneM'] += $done['Minutes'][$date][$id];
                         }
                         $indx++;
-                    }
-                    echo "<tr><th colspan='3'>Totals</th><th>" . number_format($totals['numUsers']) . "</th><th>" .
-                        number_format((($totals['quota'] / $totals['numUsers']) * 100.00), 2) . "%</th><th>" . number_format($totals['goalK']) .
-                        "</th><th>" . number_format($totals['doneK']) . "</th><th>" . number_format($totals['goalM']) . "</th><th>" .
-                        number_format($totals['doneM']) . "</th></tr>";
-                    ?>
+                    } ?>
+                    <tr>
+                        <th colspan='3'>Totals</th>
+                        <th><?= number_format( $totals['numUsers'] ) ?></th>
+                        <th><?= number_format( ( ( $totals['quota'] / $totals['numUsers'] ) * 100.00 ), 2)?>%</th>
+                        <th><?= number_format($totals['goalK'])?></th>
+                        <th><?= number_format($totals['doneK'])?></th>
+                        <th><?= number_format($totals['goalM'])?></th>
+                        <th><?= number_format($totals['doneM'])?></th>
+                    </tr>
                 </table>
                 <img src='/images/whatsapp/WWTC-Bottom.png' />
                 <div class="pageBreak"><br /></div>
