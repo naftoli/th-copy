@@ -1,7 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 ini_set('max_execution_time', 500);
-require 'whatsapp.php';
+require_once( dirname(__FILE__) . '/whatsapp.php' );
 ?>
 <!DOCTYPE html>
 <html>
