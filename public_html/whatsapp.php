@@ -1,16 +1,18 @@
 <?php
-require_once 'db.php';
-require_once 'class.shabbosMevorchim.php';
+require_once( $_SERVER['DOCUMENT_ROOT'] . '/db.php' );
+require_once( $_SERVER['DOCUMENT_ROOT'] . '/class.shabbosMevorchim.php' );
 $sm = new ShabbosMevorchim();
 
 if (isset($_POST['submit'])) {
-    $sm->setReportDates($_POST['date']);
+    $sm->setReportDates( $_POST['date'] );
     $reportDates = $sm->getReportDates();
-    $date = end($reportDates);
-    
-    $gender = $_POST['gender'];
-    $gradeInfo = $sm->setWhatsappClasses($gender);
-    $sm->setClassResults(false);
+    $date = end( $reportDates ); // the last date of the report dates is the date we want to generate
+    // get the gender that we want to generate the report for
+    $gender = mysql_real_escape_string( $_POST['gender'] );
+    // fetch all the classes and sort them by grade
+    $gradeInfo = $sm->setWhatsappClasses( $gender );
+    // set the totals for each class
+    $sm->setClassResults( false );
     $classes = $sm->getClasses();
     $goal = $sm->getClassResults();
     $done = $sm->getClassDoneResults();
