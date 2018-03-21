@@ -91,7 +91,7 @@ var updateMedalRanks = function(){
             modal.find(".rbn").html('<img src="/file_view.php?id='+details.photo+'">'); // add the image...
             modal.find("#details").html(" You have earned a <strong>" + details.medal + " " + details.name + "</strong> Medal! " );
             
-            updateSocialMedia("Mazel Tov! "+first_name + " " + last_name + "has heared a "+ details.medal + " " + details.name + " medal from Tzivos Hashem!" );
+            updateSocialMedia("Mazel Tov! "+first_name + " " + last_name + "has earned a "+ details.medal + " " + details.name + " medal from Tzivos Hashem!" );
             
             modal.modal('show'); // show the modal
         });
