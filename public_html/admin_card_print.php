@@ -18,7 +18,7 @@ if ($admin_user['auth'] == 'super') {
 	);
 	
 	while ($no_rank = mysql_fetch_row($blank_ranks_query)) {
-		$create_private_sql = "INSERT into rank_marks (rank_ord, user_id, date_promoted) values(1, $rowP[0], " . unixtojd() . ")";
+		$create_private_sql = "INSERT into rank_marks (rank_ord, user_id, date_promoted) values(1, $no_rank[0], " . unixtojd() . ")";
 		//echo $create_private_sql . "<br />";
 		mysql_query($create_private_sql);
 	}
@@ -268,8 +268,8 @@ $query1 = mysql_query($sql1);
 					if ($admin_user['auth'] == 'super' || count($admin_user['auths']['school']) != 1) {
 						// get the schools that the logged in user has access to...
 						$school_result = mq(
-							'SELECT school_id, school_name FROM schools' 
-							. ($admin_user['auth'] != 'super' ? ' WHERE school_id IN (' . implode(',', $admin_user['auths']['school'] ) . ')' : '') 
+							'SELECT school_id, school_name FROM schools WHERE test_school=0' 
+							. ($admin_user['auth'] != 'super' ? ' AND school_id IN (' . implode(',', $admin_user['auths']['school'] ) . ')' : '') 
 							. ' ORDER BY school_name'
 						);?>
 
