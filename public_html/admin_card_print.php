@@ -268,8 +268,8 @@ $query1 = mysql_query($sql1);
 					if ($admin_user['auth'] == 'super' || count($admin_user['auths']['school']) != 1) {
 						// get the schools that the logged in user has access to...
 						$school_result = mq(
-							'SELECT school_id, school_name FROM schools' 
-							. ($admin_user['auth'] != 'super' ? ' WHERE school_id IN (' . implode(',', $admin_user['auths']['school'] ) . ')' : '') 
+							'SELECT school_id, school_name FROM schools WHERE test_school=0' 
+							. ($admin_user['auth'] != 'super' ? ' AND school_id IN (' . implode(',', $admin_user['auths']['school'] ) . ')' : '') 
 							. ' ORDER BY school_name'
 						);?>
 
