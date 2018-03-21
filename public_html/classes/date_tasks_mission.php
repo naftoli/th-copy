@@ -58,20 +58,20 @@ class date_tasks_mission {
 		
 		$daily_tasks = array();
 
-		$sql = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
-		$sql = $sql . "FROM date_tasks AS dt ";
-		$sql = $sql . "JOIN labels AS l USING (label_id) ";
-		$sql = $sql . "JOIN frequencies AS f USING (frequency_id) ";
-		$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
-		$sql = $sql . "WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
-		$sql = $sql . " AND f.frequency_name = \"Daily\" ";
+		$sql  = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
+		$sql .= "FROM date_tasks AS dt ";
+		$sql .= "JOIN labels AS l USING (label_id) ";
+		$sql .= "JOIN frequencies AS f USING (frequency_id) ";
+		$sql .= "JOIN frequency_periods AS fp USING (frequency_period_id) ";
+		$sql .= "WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
+		$sql .= " AND f.frequency_name = \"Daily\" ";
 		if ($start_date >= 2457641) $sql .= "and dt.mission_marking = 1 ";
-		//$sql = $sql . "ORDER BY f.frequency_id, fp.frequency_period_id, dt.sequence_number";
-		//$sql = $sql . "ORDER BY dt.ord, dt.label_ord";
-		$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
+		//$sql .= "ORDER BY f.frequency_id, fp.frequency_period_id, dt.sequence_number";
+		//$sql .= "ORDER BY dt.ord, dt.label_ord";
+		$sql .= "ORDER BY dt.label_ord, dt.grid_id";
 		//echo "<input type='hidden' name='SQL TWO' value='" . $sql . "'>\n";
 		//if ($user_id == 51364){ echo $sql . "<br />" ; exit;}
-		
+
 		$query = mysql_query($sql);
         $d = new Defaults($user_id);
 		while ($row = mysql_fetch_assoc($query)) {
@@ -86,9 +86,10 @@ class date_tasks_mission {
 				if ( $row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
 				if ( $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
 			}
-            if ($row['name'] == 'I said קריאת שמע before the זמן.') continue;
+			
+            if ( $row['name'] == 'I said קריאת שמע before the זמן.' ) continue;
             
-			if (!empty($this->tasks)) {
+			if ( !empty($this->tasks )) {
 				if (!in_array($row['name'], $this->tasks)) continue;
 			}
 			
