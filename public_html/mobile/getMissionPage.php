@@ -289,7 +289,7 @@ $he_chars = array(
 
 <div class="personalImg"></div> <? //div to load the users image into ?>
 <div class="bug-report">
-	<img src="/mobile/img_new/report-bug-white-svg.svg" data-user_id="<?=$user_id?>" data-category="Marking Missions" alt="bug-report" />
+	<img src="/mobile/img_new/tools-color-white-svg.svg" data-user_id="<?=$user_id?>" data-category="Marking Missions" alt="bug-report" />
 </div>
 
 <div class="container">

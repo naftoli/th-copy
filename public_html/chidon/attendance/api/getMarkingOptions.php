@@ -7,11 +7,10 @@ require_once(dirname(__FILE__)."/functions/header.php");
 require_once ( $_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php' );
 $year = GlobalSettings::getChidonYear();
 
-function get_times($type, $date) {
+function get_times($type, $gender) {
     $times = [];
     $times_query = mysql_query(
-        "SELECT * FROM th_chidon_attendance_times WHERE att_type = '$type' "
-        //." AND att_time <= '$date'"
+        "SELECT * FROM th_chidon_attendance_times WHERE att_type = '$type' AND archived = 0 AND gender = '$gender'"
     );
     while( $time_entry = mysql_fetch_assoc($times_query) ) {
         $times[] = [
@@ -29,22 +28,23 @@ require_once( $_SERVER['DOCUMENT_ROOT'].'/mobile/reg/ajax/encrypt.php' );
 $login = encrypt_decrypt('decrypt', $_POST['login']);
 if(!$login) render_json_error("Invalid Login", $_POST);
 
-$user_query = mysql_query("SELECT walking_zone, chap_chidon_type FROM th_chidon_staff WHERE staff_id = '$login' LIMIT 1;"); // get the users info
+$user_query = mysql_query("SELECT walking_zone, chidon_type FROM th_chidon_staff WHERE staff_id = '$login' LIMIT 1;"); // get the users info
 
 if(!$user_query || mysql_num_rows($user_query) == 0)  render_json_error("Invalid Login");
 
 $user = mysql_fetch_assoc($user_query);
+$user_gender = $user['chidon_type'] == "boys" ? "M" : "F";
 
 $times = [];    $marks = [];
 
 if( $user['walking_zone'] ) {
-    $walking_times = get_times('walk', date('Y-m-d'));
+    $walking_times = get_times('walk', $user_gender);
     
     $times = array_merge($times, $walking_times);
 }
 
 if( $user['chap_chidon_type'] ) {
-    $chap_times = get_times('chap', date('Y-m-d'));
+    $chap_times = get_times('chap', $user_gender);
     $times = array_merge($times, $chap_times);
 }
 

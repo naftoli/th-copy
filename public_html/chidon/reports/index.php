@@ -59,7 +59,8 @@ $info = array(
 		//'seat_type'		=>	'Seat Type',
 		//'seat_number'	=>	'Seat Number',
 		'date_paid'		=>	'Enrolled',
-		'paid'			=>	'Amount Paid'
+		'paid'			=>	'Amount Paid',
+		'cert_number'	=>  'Certificate Code'
 	),
 	'Parent Info'	=>	array(
 		'parent_id'		=>	'Admin ID',
