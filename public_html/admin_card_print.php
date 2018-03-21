@@ -18,7 +18,7 @@ if ($admin_user['auth'] == 'super') {
 	);
 	
 	while ($no_rank = mysql_fetch_row($blank_ranks_query)) {
-		$create_private_sql = "INSERT into rank_marks (rank_ord, user_id, date_promoted) values(1, $rowP[0], " . unixtojd() . ")";
+		$create_private_sql = "INSERT into rank_marks (rank_ord, user_id, date_promoted) values(1, $no_rank[0], " . unixtojd() . ")";
 		//echo $create_private_sql . "<br />";
 		mysql_query($create_private_sql);
 	}
