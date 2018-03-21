@@ -26,7 +26,7 @@ class TaskExceptions {
             if (mysql_num_rows($result) == 0) {
                 return true;
             }
-            
+
             $sql = "SELECT * FROM school_task_exceptions WHERE school_id = " . $schoolID . 
             " AND date_task_id = " . $taskID; 
             $result = mysql_query( $sql );
@@ -48,8 +48,8 @@ class TaskExceptions {
         }
 
         //find out if user has exception
-        $sql = "select * from user_task_exceptions where user_id = " . $userID . 
-        " and date_task_id = " . $taskID;
+        $sql = "SELECT * FROM user_task_exceptions WHERE user_id = " . $userID . 
+        " AND date_task_id = " . $taskID;
         $result = mysql_query( $sql );
         $numRows = mysql_num_rows( $result );
         if ( $numRows > 0 ) {
