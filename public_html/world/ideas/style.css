@@ -10,8 +10,13 @@ section {
     padding: 2% 0px;
 }
 
-section h2, h5.card-title {
+h5.card-title {
     color: #fff;
+    font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+}
+
+.col-centered {
+    margin: 0 auto;
 }
 
 /****************** NAVBAR STYLES ******************/
@@ -65,9 +70,9 @@ iframe#rebbeVideo {
 }
 
 /****************** ARMY WIDE TALLY STYLES ******************/
-.army-totals {
+/* .army-totals {
     background: #2196F3;
-}
+} */
 .army-totals .row > div {
     margin-top: 2%;
 }
@@ -90,9 +95,9 @@ iframe#rebbeVideo {
 }
 
 /****************** DOWNLOAD LINK STYLES ******************/
-.join-us {
+/* .join-us {
     background: #673AB7;
-}
+} */
 .join-us .row > div {
     margin-top: 2%;
 }
@@ -107,8 +112,11 @@ iframe#rebbeVideo {
 }
 
 /****************** TABLE STYLES ******************/
-.amount-table {
+/* .amount-table {
     background: #4CAF50;
+} */
+div#grade_dropdown_row {
+    margin: 20px 0px;
 }
 
 /****************** FOOTER STYLES ******************/
@@ -117,6 +125,11 @@ footer {
     color: #fff;
     text-align: center;
     padding: 3%;
+}
+@media (max-width: 600px) {
+    footer {
+        padding: 5%;
+    }
 }
 
 /****************** Card Colors (Green, Blue and Red) ******************/
