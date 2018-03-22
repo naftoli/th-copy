@@ -11,7 +11,7 @@ if( !$school_id ) render_json_error("Inavlid Paramaters");
 
 // only delete the school if they are not chayolei and are tanya
 $delete_query = mysql_query(
-    "DELETE FROM schools WHERE school_id='$school_id' AND chayolei = 0 AND tanya = 1;"
+    "UPDATE schools SET tanya = 0 WHERE school_id='$school_id' AND chayolei = 0 AND tanya = 1;"
 );
 
 if ( !$delete_query ){
