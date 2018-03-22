@@ -89,6 +89,10 @@ body,td,th {
 				
                 <h4>Videos</h4>
 				<div class="indent">
+                    <iframe src="https://player.vimeo.com/video/261015763" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                    <br/>
+                    <iframe src="https://player.vimeo.com/video/261060327" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                    <br/>
 					<iframe src="https://player.vimeo.com/video/210522039" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					<br />
 					<iframe src="https://player.vimeo.com/video/209330084" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>

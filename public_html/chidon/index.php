@@ -42,6 +42,9 @@ body,td,th {
 	padding: 5px 10px;
 	display: inline;
 }
+.col-md-9.content-top {
+    text-align: center;
+}
 </style>
 <script src="js/easyResponsiveTabs.js" type="text/javascript"></script>
 		    <script type="text/javascript">
@@ -214,19 +217,16 @@ body,td,th {
 		</div>
 		<!--//sreen-gallery-cursual-->
 		</div>
-			
+		<iframe src="https://player.vimeo.com/video/261015763" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        <br/><br/>
+        <iframe src="https://player.vimeo.com/video/261060327" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        <br/><br/>
 		</div>
-			<!---->
-			
-			<!---->
-			
-			<!---->
 	</div>
-	<!---->
-		<!---->
-	
+
 		<div class="clearfix"></div>
-		</div>
+        </div>
+
 	</div>
 	
 	<div class="archives-top">
