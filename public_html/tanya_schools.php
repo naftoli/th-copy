@@ -118,7 +118,7 @@ while ($row = mysql_fetch_assoc($schools_query)) {
 			#bpTable tr:nth-child(even) {background: #EEE}
 			#bpTable tr:nth-child(odd) {background: #FFF}
 			
-			button.save_row {
+			button.save_row, button.delete_row {
 				background: #03A9F4;
 				border: 1px solid #2196F3;
 				border-radius: 5px;
@@ -126,10 +126,18 @@ while ($row = mysql_fetch_assoc($schools_query)) {
 				color: #fff;
 				transition: .1s ease-in-out;
 			}
-			button.save_row:hover {
+			button.save_row:hover, button.delete_row:hover {
 				transform: scale(1.1);
 				cursor: pointer;
 			}
+			button.delete_row {
+				background: #F44336;
+				border-color: #D32F2F;
+			}
+			@media (min-width: 1015px) {
+				button.delete_row { float: right; }
+			}
+			td.actions { max-width: 80px; }
 		</style>
 	</head>
 	
@@ -209,8 +217,9 @@ while ($row = mysql_fetch_assoc($schools_query)) {
 					<td>
 						<input type="number" class="child_count" value="<?=$child_count?>" />
 					</td>
-					<td>
+					<td class="actions">
 						<button class="save_row">Save</button>
+						<button class="delete_row">Delete</button>
 					</td>
 				</tr>
 			<? } // end foreach school ?>
@@ -247,33 +256,34 @@ while ($row = mysql_fetch_assoc($schools_query)) {
 					child_count: 	row.find(".child_count").val()
 				};
 				
-				$.post("ajax/updateBpSchoolMarks.php", data, function(success){
-					debugger;
+				$.post("ajax/updateBpSchoolMarks.php", data, function( response ){
+					response = JSON.parse( response );
+					if ( !response.success ) { 
+						alert( response.error );
+					}
 				});
 				
 			});
-			//$(".tanya").keyup( function() {
-			//	var val = $(this).val();
-			//	var id = $(this).parent().parent().attr('id');
-			//	$.post('ajax/updateBalPehCampaign.php', {
-			//		id: tanya,
-			//		val: val,
-			//		school : id,
-			//		table : 'lines_learned',
-			//		updateSummary : 1
-			//	});
-			//});
-			//$(".mishna").keyup( function() {
-			//	var val = $(this).val();
-			//	var id = $(this).parent().parent().attr('id');
-			//	$.post('ajax/updateBalPehCampaign.php', {
-			//		id: mishna,
-			//		val: val,
-			//		school : id,
-			//		table : 'lines_learned',
-			//		updateSummary : 1
-			//	});
-			//});
+
+			$("button.delete_row").click( function( event ) {
+				// get the text from the first two columns in the table
+				var school_id =  $( $(event.target).parent().siblings()[0]).text();
+				var school_name = $( $(event.target).parent().siblings()[1]).text();
+				// make sure that they know what they are doing
+				if ( !confirm( "Please confirm that you want to delete " + school_name + " (#" + school_id + ")?" ) )
+					return false;
+				// delete the school
+				$.post("/ajax/tanya/deleteTanyaSchool.php", { school_id: school_id }, function( response ) {
+					response = JSON.parse( response );
+					if ( response.success ) {
+						$( event.target ).parent().parent().remove(); // delete the row from the table
+					} else if( response.error ) {
+						alert( response.error);
+					} else {
+						alert( "Unknown Error. Please refresh the page" );
+					}
+				});
+			});
 		});
 	</script>
 </html>
