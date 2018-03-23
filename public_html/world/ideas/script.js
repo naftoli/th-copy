@@ -71,7 +71,8 @@ $( document ).ready( function(){
             html += '</tbody>';
             html += '<tfoot><tr>';
             html += '<th>Total:</th>';
-            html += '<th></th><th></th><th></th><th></th>';
+            html += '<th></th><th></th>';
+            if ( postData.level !== 3 ) html += '<th></th><th></th>';
             html += '</tfoot></table>';
             // stop the spinner
             $("button#refresh-table .fa-sync").removeClass( "fa-spin" )
@@ -107,6 +108,8 @@ $( document ).ready( function(){
     // calculate the totals for all the rows and update the footer.
     // use this function to update main numbers as well if we decide to do so
     function totalRow( row, data, start, end, display ) {
+        mishna_index = $( row ).find("th").length == 3 ? 2 : 3; // get the correct column for the mishna
+
         var api = this.api(), data;
 
         var intVal = function ( i ) {
@@ -132,12 +135,12 @@ $( document ).ready( function(){
 
         // calcuate the mishna totals
         total.mishna = api
-            .column( 3 ).data()
+            .column( mishna_index ).data()
             .reduce( function (a, b) {
                 return intVal(a) + intVal(b);
             }, 0 );
         pageTotal.mishna = api
-            .column( 3, { page: 'current'} ).data()
+            .column( mishna_index, { page: 'current'} ).data()
             .reduce( function (a, b) {
                 return intVal(a) + intVal(b);
             }, 0 );
@@ -146,7 +149,7 @@ $( document ).ready( function(){
         $( api.column( 1 ).footer() ).html(
             pageTotal.tanya + ( pageTotal.tanya !== total.tanya ? ' / ' + total.tanya : "" )
         );
-        $( api.column( 3 ).footer() ).html(
+        $( api.column( mishna_index ).footer() ).html(
             pageTotal.mishna + ( pageTotal.mishna !== total.mishna ? ' / ' + total.mishna : "" )
         );
 
