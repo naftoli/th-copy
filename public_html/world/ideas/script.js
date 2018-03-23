@@ -1,19 +1,21 @@
 // on page load
 $( document ).ready( function(){
-    loadTotals(); // load the totals for the top of the page
-
     loadTable( false );
+    setInterval( loadTable, 300000); // refresh the table every 3 seconds
     // reload the table when the link at the top of the page changes
-    $( window ).on( 'hashchange', loadTable );
+    $( window ).on( 'hashchange', loadTable ); // refresh the table when the hash changes
     $("select#grade_dropdown").change( refreshTable );
     // clear the table on the page
     $("button#refresh-table").click( refreshTable );
 
     function refreshTable() {
-        if ( window.location.hash == "" ) {
-            loadTable();
-        } else {
-            window.location.hash = "";
+        // get the current grade
+        var current_grade = $("select#grade_dropdown").val();
+        // if we are on the current grade
+        if ( window.location.hash.replace("#", "") == current_grade ) {
+            loadTable(); // load the table
+        } else { // otherwise, change the hash and trigger a reload
+            window.location.hash = current_grade;
         }
     }
 
@@ -26,7 +28,8 @@ $( document ).ready( function(){
         }
 
         if ( hash_params.length === 1 ) {
-            postData.grade = $("select#grade_dropdown").val();
+            postData.grade = hash_params[0] ? hash_params[0] : $("select#grade_dropdown").val();
+            $("select#grade_dropdown").val( postData.grade );
         } else if ( hash_params.length === 2 ) {
             postData.level  = parseInt ( hash_params[0] )
             postData.id     = hash_params[1]
@@ -88,23 +91,6 @@ $( document ).ready( function(){
         });
     }
 
-    // load and render the totals
-    function loadTotals( duration ) {
-        duration = duration ? parseInt( duration ) : 2; // set the default duration to 2
-
-        $.get( 'api/getTotals.php', function( response ){
-            response = JSON.parse( response );
-            // countup the grand total
-            var grand_total = parseInt( $("#grand_total").text() );
-            new CountUp("grand_total",  grand_total,  response.campaigns.total,  0, duration).start();
-            // countup the tanya total
-            var tanya_total = parseInt( $("#tanya_total").text() );
-            new CountUp("tanya_total",  tanya_total,  response.campaigns.tanya,  0, duration).start();
-            // countup the mishna total
-            var mishna_total = parseInt( $("#mishna_total").text() );
-            new CountUp("mishna_total", mishna_total, response.campaigns.mishna, 0, duration).start();
-        } );
-    }
     // calculate the totals for all the rows and update the footer.
     // use this function to update main numbers as well if we decide to do so
     function totalRow( row, data, start, end, display ) {
@@ -153,6 +139,23 @@ $( document ).ready( function(){
             pageTotal.mishna + ( pageTotal.mishna !== total.mishna ? ' / ' + total.mishna : "" )
         );
 
-        // update page top totals here with modified loadTotals function
+        // update the totals on the top of the page
+        total.total = total.tanya + total.mishna;
+        updateTotals(total)
+    }
+
+    // load and render the totals
+    function updateTotals( totals, duration ) {
+        duration = duration ? parseInt( duration ) : 2; // set the default duration to 2
+
+        // countup the grand total
+        var grand_total = parseInt( $("#grand_total").text() );
+        new CountUp("grand_total",  grand_total,  totals.total,  0, duration).start();
+        // countup the tanya total
+        var tanya_total = parseInt( $("#tanya_total").text() );
+        new CountUp("tanya_total",  tanya_total,  totals.tanya,  0, duration).start();
+        // countup the mishna total
+        var mishna_total = parseInt( $("#mishna_total").text() );
+        new CountUp("mishna_total", mishna_total, totals.mishna, 0, duration).start();
     }
 });
