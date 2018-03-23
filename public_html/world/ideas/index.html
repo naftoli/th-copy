@@ -7,8 +7,13 @@
     <title>The Rebbe's Birthday Gift</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- dataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" />
+    <!-- Fontawesome 5 -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js" integrity="sha384-SlE991lGASHoBfWbelyBPLsUlwY1GwNDJo3jSJO04KZ33K2bwfV9YBauFfnzvynJ" crossorigin="anonymous"></script>
+    <!-- Source Sans Pro font -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+    <!-- Custom styles for the page -->
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -41,7 +46,7 @@
                             <span>תניא בעל פה + משניות בעל פה</span>
                         </h5>
                         <div class="card-body">
-                            <h5 class="card-title" id="grand_total">327,579</h5>
+                            <h5 class="card-title" id="grand_total">0</h5>
                         </div>
                     </div>
                 </div>
@@ -51,7 +56,7 @@
                                 <span>תניא בעל פה</span>
                         </h5>
                         <div class="card-body">
-                            <h5 class="card-title" id="tanya_total">224,624</h5>
+                            <h5 class="card-title" id="tanya_total">0</h5>
                         </div>
                     </div>
                 </div>
@@ -61,7 +66,7 @@
                             <span>משניות בעל פה</span>
                         </h5>
                         <div class="card-body">
-                            <h5 class="card-title" id="mishna_total">103,437</h5>
+                            <h5 class="card-title" id="mishna_total">0</h5>
                         </div>
                     </div>
                 </div>
@@ -118,22 +123,29 @@
             </div>
             <div class="row" id="grade_dropdown_row">
                 <div class="col-8 col-md-6 col-centered">
-                    <select class="form-control form-control-lg" id="grade_dropdown">
-                        <option value="">All Grades</option>
-                        <option value="Pre1a">Pre1-A</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                    </select>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" id="refresh-table" type="button">
+                                <i class="fas fa-sync"></i>
+                            </button>
+                        </div>
+                        <select class="form-control form-control-lg" id="grade_dropdown">
+                            <option value="">All Grades</option>
+                            <option value="Pre1a">Pre1-A</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -167,13 +179,5 @@
     <script src="countUp.js"></script>
     <!-- Script to run our code on page load -->
     <script src="script.js"></script>
-    <script>
-        $(document).ready( function() {
-            new CountUp("grand_total", 0, 327579, 0, 3).start();
-            new CountUp("tanya_total", 0, 224624, 0, 3).start();
-            new CountUp("mishna_total", 0, 103437, 0, 3).start();
-        });
-        
-    </script>
 </body>
 </html>
