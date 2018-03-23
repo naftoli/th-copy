@@ -63,11 +63,6 @@ iframe#rebbeVideo {
     z-index: 0;
     transition: margin-top .25s linear;
 }
-@media( min-width: 700px ) {
-    iframe#rebbeVideo {
-        margin-top: 0px;
-    }
-}
 
 /****************** ARMY WIDE TALLY STYLES ******************/
 /* .army-totals {
@@ -129,6 +124,9 @@ footer {
 @media (max-width: 600px) {
     footer {
         padding: 5%;
+    }
+    section {
+        padding: 5% 0px;
     }
 }
 
