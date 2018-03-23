@@ -1,21 +1,35 @@
 // on page load
 $( document ).ready( function(){
-    loadTable( false, true );
-    // event listeners
-    $("select#grade_dropdown").change( loadTable );
+    loadTotals(); // load the totals for the top of the page
+
+    loadTable( false );
+    // reload the table when the link at the top of the page changes
+    $( window ).on( 'hashchange', loadTable );
+    $("select#grade_dropdown").change( refreshTable );
+    // clear the table on the page
+    $("button#refresh-table").click( refreshTable );
+
+    function refreshTable() {
+        if ( window.location.hash == "" ) {
+            loadTable();
+        } else {
+            window.location.hash = "";
+        }
+    }
 
     // load and render the table from the server
-    function loadTable( event, setTotals ) {
+    function loadTable( event ) {
+        $("button#refresh-table .fa-sync").addClass( "fa-spin" )
+        var hash_params = window.location.hash.replace("#", "").split("-");
         var postData = {
             level: 1
         }
 
-        if ( event && event.target.dataset.level ) {
-            postData.level      = event.target.dataset.level;
-            postData.school_id  = event.target.dataset.school_id;
-            postData.class_id   = event.target.dataset.class_id;
-        } else if ( event && event.target.value ) {
-            postData.grade = event.target.value;
+        if ( hash_params.length === 1 ) {
+            postData.grade = $("select#grade_dropdown").val();
+        } else if ( hash_params.length === 2 ) {
+            postData.level  = parseInt ( hash_params[0] )
+            postData.id     = hash_params[1]
         }
 
         $.post("api/getLines.php", postData, function( response ) {
@@ -25,34 +39,117 @@ $( document ).ready( function(){
             html += '<thead><tr>'
             html += '<th class="school">Name</th>';
             html += '<th>Lines of<br />תניא בעל פה</th>';
-            html += '<th id="defaultSort">Avg per Child</th>';
+            html += ( postData.level !== 3 ? '<th id="defaultSort">Avg per Child</th>' : "" );
             html += '<th>Lines of<br />משניות בעל פה</th>';
-            html += '<th>Avg per Child</th>';
+            html += ( postData.level !== 3 ? '<th>Avg per Child</th>' : "" );
             html += '</tr></thead>';
             html += '<tbody>';
             // render each row
             for( var index = 0; index < response.length; index ++) {
                 var row = response[index];
+                var nextLevel =  postData.grade ? 3 : parseInt( postData.level ) + 1;
 
                 html += "<tr>";
+                html +=     '<td>'
 
-                html += '<td>' + row.name + '</td>';
-                html += '<td>' + row.campaigns.tanya.learned + '</td>';
-                html += '<td>' + row.campaigns.tanya.avg + '</td>';
-                html += '<td>' + row.campaigns.mishna.learned + '</td>';
-                html += '<td>' + row.campaigns.mishna.avg + '</td>';
-
+                if ( postData.level < 3 && !row.lastLevel ) {
+                    html +=         '<a class="id_link" href="#' + nextLevel + '-' + row.id  + '" >'
+                    html +=             row.name
+                    html +=         '</a>';
+                } else {
+                    html +=     row.name
+                }
+                
+                html +=     '</td>';
+                html +=     '<td>' + row.campaigns.tanya.learned + '</td>';
+                html +=     row.campaigns.tanya.avg !== undefined ? '<td>' + row.campaigns.tanya.avg + '</td>' : "";
+                html +=     '<td>' + row.campaigns.mishna.learned + '</td>';
+                html +=     row.campaigns.mishna.avg !== undefined ? '<td>' + row.campaigns.mishna.avg + '</td>' : "";
                 html += "</tr>";
             }
             // close the table
             html += '</tbody>';
-            html += '</table>';
-
+            html += '<tfoot><tr>';
+            html += '<th>Total:</th>';
+            html += '<th></th><th></th><th></th><th></th>';
+            html += '</tfoot></table>';
+            // stop the spinner
+            $("button#refresh-table .fa-sync").removeClass( "fa-spin" )
+            // add the html to the page
             $("#report").html( html );
+            // setup the datatable
             $('#report-table').DataTable({
-                "order": [[ 2, "desc" ]],
-                "language": { "decimal": "," }
+                "order": [[ ( postData.level !== 3 ? 2 : 1 ), "desc" ]],
+                "language": { "decimal": "," },
+                "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
+                "footerCallback": totalRow
             } );
         });
+    }
+
+    // load and render the totals
+    function loadTotals( duration ) {
+        duration = duration ? parseInt( duration ) : 2; // set the default duration to 2
+
+        $.get( 'api/getTotals.php', function( response ){
+            response = JSON.parse( response );
+            // countup the grand total
+            var grand_total = parseInt( $("#grand_total").text() );
+            new CountUp("grand_total",  grand_total,  response.campaigns.total,  0, duration).start();
+            // countup the tanya total
+            var tanya_total = parseInt( $("#tanya_total").text() );
+            new CountUp("tanya_total",  tanya_total,  response.campaigns.tanya,  0, duration).start();
+            // countup the mishna total
+            var mishna_total = parseInt( $("#mishna_total").text() );
+            new CountUp("mishna_total", mishna_total, response.campaigns.mishna, 0, duration).start();
+        } );
+    }
+    // calculate the totals for all the rows and update the footer.
+    // use this function to update main numbers as well if we decide to do so
+    function totalRow( row, data, start, end, display ) {
+        var api = this.api(), data;
+
+        var intVal = function ( i ) {
+            return typeof i === 'string' ?
+                i.replace(/[\$,]/g, '')*1 :
+                typeof i === 'number' ?
+                    i : 0;
+        };
+        // objects to store the totals in
+        total = {}; pageTotal = {};
+
+        // calcuate the tanya totals
+        total.tanya = api
+            .column( 1 ).data()
+            .reduce( function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0 );
+        pageTotal.tanya = api
+            .column( 1, { page: 'current'} ).data()
+            .reduce( function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0 );
+
+        // calcuate the mishna totals
+        total.mishna = api
+            .column( 3 ).data()
+            .reduce( function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0 );
+        pageTotal.mishna = api
+            .column( 3, { page: 'current'} ).data()
+            .reduce( function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0 );
+
+        // update the footer
+        $( api.column( 1 ).footer() ).html(
+            pageTotal.tanya + ( pageTotal.tanya !== total.tanya ? ' / ' + total.tanya : "" )
+        );
+        $( api.column( 3 ).footer() ).html(
+            pageTotal.mishna + ( pageTotal.mishna !== total.mishna ? ' / ' + total.mishna : "" )
+        );
+
+        // update page top totals here with modified loadTotals function
     }
 });
