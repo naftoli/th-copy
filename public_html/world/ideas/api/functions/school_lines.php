@@ -15,8 +15,6 @@ function school_lines( $campaigns, $grade ) {
     $ids = [];
     $info = [];
 
-    $results = [];
-
     // load the 
     if ( $grade ) {
         $query = mysql_query(
@@ -35,15 +33,18 @@ function school_lines( $campaigns, $grade ) {
         }
     } else {
         $query = mysql_query(
-            "SELECT school_id, school_name, chayolei FROM schools 
-            WHERE school_era IS NULL AND tanya = 1 
-            ORDER BY school_name"
+            "SELECT school_id, school_name, chayolei, COUNT(*) as classes FROM schools s
+            LEFT JOIN classes c USING (school_id) 
+            WHERE s.school_era IS NULL AND tanya = 1
+            GROUP BY s.school_id
+            ORDER BY s.school_name"
         );
         while ( $school = mysql_fetch_assoc( $query ) ) {
             $info[] = [
                 "id"    => $school['school_id'],
                 "name"  => $school['school_name'],
-                "chayolei" => $school['chayolei']
+                "chayolei" => $school['chayolei'],
+                "classes" => $school['classes']
             ];
             $ids[] = $school['school_id'];
         }
@@ -71,9 +72,12 @@ function school_lines( $campaigns, $grade ) {
             if ( $child_count == 0 ) continue;
             
             $lineInfo[$id][$campaign]['learned'] = $learned;
-            $lineInfo[$id][$campaign]['avg'] = $learned > 0 &&  $child_count > 0 ? floor( $learned / $child_count ) : 0;
+            $lineInfo[$id][$campaign]['avg'] = $learned > 0 ? floor( $learned / $child_count ) : 0;
         }
     }
+
+    $results = [];
+
     // format the data for the result
     foreach( $info as $row ) {
         // make sure we have info to send
@@ -83,7 +87,8 @@ function school_lines( $campaigns, $grade ) {
         $results[] = [
             'id' => $row['id'],
             'name' => $row['name'],
-            'campaigns' => $lines
+            'campaigns' => $lines,
+            'lastLevel' => isset($row['classes']) && $row['classes'] == 1
         ];
     }
 
