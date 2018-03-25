@@ -58,10 +58,19 @@ $( document ).ready( function(){
 
                 if ( postData.level < 3 && !row.lastLevel ) {
                     html +=         '<a class="id_link" href="#' + nextLevel + '-' + row.id  + '" >'
-                    html +=             row.name
+                    // add the logo for the first row
+                    if ( postData.level == 1 ){
+                        html += "<img class='school_logo' alt='school_logo' src='//mashpia.com/schoolLogos/" + 
+                            ( row.logo ? row.logo : "_logo.png" ) + "'/>"
+                    }
+                    html +=             '<span class="school_name">' + row.name + '</span>';
                     html +=         '</a>';
                 } else {
-                    html +=     row.name
+                    if ( postData.level == 1 ){
+                        html += "<img class='school_logo' alt='school_logo' src='//mashpia.com/schoolLogos/" + 
+                            ( row.logo ? row.logo : "_logo.png" ) + "'/>"
+                    }
+                    html += '<span class="school_name">' + row.name + '</span>';
                 }
                 
                 html +=     '</td>';
@@ -80,8 +89,8 @@ $( document ).ready( function(){
             html += '</tbody>';
             html += '<tfoot><tr>';
             html += '<th>Total:</th>';
-            html += '<th></th><th></th>';
-            if ( postData.level !== 3 ) html += '<th></th><th></th>';
+            html += '<th></th><th></th><th></th>';
+            if ( postData.level !== 3 ) html += '<th></th><th></th><th></th>';
             html += '</tfoot></table>';
             // stop the spinner
             $("button#refresh-table .fa-sync").removeClass( "fa-spin" )
@@ -89,7 +98,7 @@ $( document ).ready( function(){
             $("#report").html( html );
             // setup the datatable
             var reportTable = $('#report-table').DataTable({
-                "order": [[ ( postData.level !== 3 ? 2 : 1 ), "desc" ]],
+                "order": [[ ( postData.level !== 3 ? 3 : 2 ), "desc" ]],
                 "language": { "decimal": "," },
                 "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
                 "footerCallback": totalRow
@@ -106,7 +115,7 @@ $( document ).ready( function(){
     // calculate the totals for all the rows and update the footer.
     // use this function to update main numbers as well if we decide to do so
     function totalRow( row, data, start, end, display ) {
-        mishna_index = $( row ).find("th").length == 3 ? 3 : 4; // get the correct column for the mishna
+        mishna_index = $( row ).find("th").length == 4 ? 3 : 4; // get the correct column for the mishna
 
         var api = this.api(), data;
 

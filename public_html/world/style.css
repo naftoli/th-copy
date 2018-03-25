@@ -19,6 +19,10 @@ h5.card-title {
     margin: 0 auto;
 }
 
+header {
+    margin-top: 80px;
+}
+
 /****************** NAVBAR STYLES ******************/
 nav {
     z-index: 1;
@@ -46,6 +50,9 @@ nav {
     }
     .navbar-dark .navbar-title {
         font-size: 1.4em;
+    }
+    header {
+        margin-top: 60px;
     }
 }
 @media (max-width: 400px) {
@@ -112,6 +119,30 @@ iframe#rebbeVideo {
 } */
 div#grade_dropdown_row {
     margin: 20px 0px;
+}
+
+span.school_name {
+    display: inline-block;
+    width: 80%;
+    vertical-align: middle;
+    padding-left: 10px;
+}
+img.school_logo {
+    display: inline-block;
+    width: 20%;
+}
+
+@media ( max-width: 992px ) {
+    img.school_logo {
+        width: 80%;
+        margin-left: 10%;
+    }
+    span.school_name {
+        display: inline-block;
+        width: 100%;
+        padding-left: 0px;
+        padding-top: 14px;
+    }
 }
 
 /****************** FOOTER STYLES ******************/
