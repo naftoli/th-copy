@@ -96,6 +96,7 @@ function school_lines( $campaigns, $grade ) {
             'name' => $row['name'],
             'campaigns' => $lines,
             'lastLevel' => isset($row['classes']) && $row['classes'] == 1,
+            'logo'  => $row['logo'],
             'child_count' => $row['child_count']
         ];
     }
