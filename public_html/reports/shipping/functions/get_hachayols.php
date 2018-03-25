@@ -82,11 +82,11 @@ function get_hachayol_shipping($school_id, $parsha_id = false){
 function get_extra_hachayols($school_id, $current_amount=false){
     $extras = [
         # Beis Rivkah Crown Heights => dynamically compute totals to enforce desired total of 580
-        54  => reduce_to_total($current_amount, 580), // wants 580 (550 before 1/3/2018) in each shipment. no matter what
+        54  => reduce_to_total($current_amount, 580),  // wants 580 (550 before 1/3/2018) in each shipment. no matter what
         3   => reduce_to_total($current_amount, 110), // 
+        265 => reduce_to_total($current_amount, 65), // Lubavitch Girls London requested only 65 via email to shipping@tzivoshashem.org
         58  => 45,  # YTTL-Montreal
         84  => 75,  # Torah Day School of Houston
-        265 => 2,   # Lubavitch Girls London
         9   => 20   # Lubavitcher Yeshiva, Crown Heights => requested by Ester Zachar via Email to bugs@tzivoshashem.org on 2/27/2018
     ];
     return isset($extras[$school_id]) ? $extras[$school_id] : 0; // return the extras or 0

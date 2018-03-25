@@ -161,13 +161,13 @@ $( document ).ready( function(){
         duration = duration ? parseInt( duration ) : 2; // set the default duration to 2
 
         // countup the grand total
-        var grand_total = parseInt( $("#grand_total").text() );
+        var grand_total = parseInt( $("#grand_total").text().replace(",", "") );
         new CountUp("grand_total",  grand_total,  totals.total,  0, duration).start();
         // countup the tanya total
-        var tanya_total = parseInt( $("#tanya_total").text() );
+        var tanya_total = parseInt( $("#tanya_total").text().replace(",", "") );
         new CountUp("tanya_total",  tanya_total,  totals.tanya,  0, duration).start();
         // countup the mishna total
-        var mishna_total = parseInt( $("#mishna_total").text() );
+        var mishna_total = parseInt( $("#mishna_total").text().replace(",", "") );
         new CountUp("mishna_total", mishna_total, totals.mishna, 0, duration).start();
     }
 });
