@@ -18,7 +18,7 @@ function school_lines( $campaigns, $grade ) {
     // load the 
     if ( $grade ) {
         $query = mysql_query(
-            "SELECT c.class_id, c.class_grade, c.class_sub, s.school_name FROM classes c
+            "SELECT c.class_id, c.class_grade, c.class_sub, s.school_name, s.logo FROM classes c
             JOIN schools s USING (school_id)
             WHERE class_era = 0 AND s.school_era is null AND s.tanya = 1
             AND class_grade = '" . $grade . "'
@@ -27,13 +27,15 @@ function school_lines( $campaigns, $grade ) {
         while ( $class = mysql_fetch_assoc( $query ) ) {
             $info[] = [
                 "id"    => $class['class_id'],
-                "name"  => $class['class_grade'] . ( empty( $class['class_sub'] ) ? '' : '-' . $class['class_sub'] ) . " : " . $class['school_name']
+                "name"  => $class['class_grade'] . ( empty( $class['class_sub'] ) ? '' : '-' . $class['class_sub'] ) . " : " . $class['school_name'],
+                "logo"  => $class['logo'], 
+                "child_count" => 0
             ];
             $ids[] = $class['class_id'];
         }
     } else {
         $query = mysql_query(
-            "SELECT school_id, school_name, chayolei, COUNT(*) as classes FROM schools s
+            "SELECT school_id, school_name, chayolei, logo, COUNT(*) as classes FROM schools s
             LEFT JOIN classes c USING (school_id) 
             WHERE s.school_era IS NULL AND tanya = 1
             GROUP BY s.school_id
@@ -43,8 +45,10 @@ function school_lines( $campaigns, $grade ) {
             $info[] = [
                 "id"    => $school['school_id'],
                 "name"  => $school['school_name'],
+                "logo"  => $school['logo'],
                 "chayolei" => $school['chayolei'],
-                "classes" => $school['classes']
+                "classes" => $school['classes'],
+                "child_count" => 0
             ];
             $ids[] = $school['school_id'];
         }
@@ -57,9 +61,8 @@ function school_lines( $campaigns, $grade ) {
     foreach ($campaigns as $id => $campaign) {
         // create the BpSummary that we need.
         $bps = new BpSummary( $id, $grade ? 'class' : 'school' );
-        $grandTotal[$campaign]['learned'] = 0;
 
-        foreach ( $info as $row ) {
+        foreach ( $info as &$row ) {
             $id = $row['id'];
             $learned = intval( $bps->getSummary( $id ) );
 
@@ -68,8 +71,12 @@ function school_lines( $campaigns, $grade ) {
             } else {
                 $child_count = isset($regInfo[$id]) ? $regInfo[$id] : 0;
             }
+            // convert to number
+            $child_count = intval( $child_count );
+
             // make sure we have kids in the class/school
             if ( $child_count == 0 ) continue;
+            else $row['child_count'] = $child_count;
             
             $lineInfo[$id][$campaign]['learned'] = $learned;
             $lineInfo[$id][$campaign]['avg'] = $learned > 0 ? floor( $learned / $child_count ) : 0;
@@ -88,7 +95,8 @@ function school_lines( $campaigns, $grade ) {
             'id' => $row['id'],
             'name' => $row['name'],
             'campaigns' => $lines,
-            'lastLevel' => isset($row['classes']) && $row['classes'] == 1
+            'lastLevel' => isset($row['classes']) && $row['classes'] == 1,
+            'child_count' => $row['child_count']
         ];
     }
 
