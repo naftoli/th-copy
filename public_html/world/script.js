@@ -39,12 +39,13 @@ $( document ).ready( function(){
             response = JSON.parse( response );
             // setup the table head
             var html = '<table id="report-table" class="table table-striped table-bordered table-hover sortable style="width:100%"">';
-            html += '<thead><tr>'
+            html += '<thead><tr><th></th>'
             html += '<th class="school">Name</th>';
             html += '<th>Lines of<br />תניא בעל פה</th>';
-            html += ( postData.level !== 3 ? '<th id="defaultSort">Avg per Child</th>' : "" );
+            html += ( postData.level !== 3 ? '<th id="defaultSort">Avg תניא Lines</th>' : "" );
             html += '<th>Lines of<br />משניות בעל פה</th>';
-            html += ( postData.level !== 3 ? '<th>Avg per Child</th>' : "" );
+            html += ( postData.level !== 3 ? '<th>Avg משניות Lines</th>' : "" );
+            html += ( postData.level !== 3 ? '<th>Avg Total Lines</th>' : "" );
             html += '</tr></thead>';
             html += '<tbody>';
             // render each row
@@ -53,7 +54,7 @@ $( document ).ready( function(){
                 var nextLevel =  postData.grade ? 3 : parseInt( postData.level ) + 1;
 
                 html += "<tr>";
-                html +=     '<td>'
+                html +=     '<th></td><td>'
 
                 if ( postData.level < 3 && !row.lastLevel ) {
                     html +=         '<a class="id_link" href="#' + nextLevel + '-' + row.id  + '" >'
@@ -68,6 +69,11 @@ $( document ).ready( function(){
                 html +=     row.campaigns.tanya.avg !== undefined ? '<td>' + row.campaigns.tanya.avg + '</td>' : "";
                 html +=     '<td>' + row.campaigns.mishna.learned + '</td>';
                 html +=     row.campaigns.mishna.avg !== undefined ? '<td>' + row.campaigns.mishna.avg + '</td>' : "";
+                html +=     postData.level !== 3  ? '<td>' + 
+                                Math.floor( 
+                                    (row.campaigns.tanya.learned + row.campaigns.mishna.learned) / row.child_count 
+                                ) +
+                            '</td>' : "";
                 html += "</tr>";
             }
             // close the table
@@ -82,19 +88,25 @@ $( document ).ready( function(){
             // add the html to the page
             $("#report").html( html );
             // setup the datatable
-            $('#report-table').DataTable({
+            var reportTable = $('#report-table').DataTable({
                 "order": [[ ( postData.level !== 3 ? 2 : 1 ), "desc" ]],
                 "language": { "decimal": "," },
                 "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
                 "footerCallback": totalRow
             } );
+            // show index column as per docs here: https://datatables.net/examples/api/counter_columns.html
+            reportTable.on( 'order.dt search.dt', function () {
+                reportTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                    cell.innerHTML = i + 1;
+                } );
+            } ).draw();
         });
     }
 
     // calculate the totals for all the rows and update the footer.
     // use this function to update main numbers as well if we decide to do so
     function totalRow( row, data, start, end, display ) {
-        mishna_index = $( row ).find("th").length == 3 ? 2 : 3; // get the correct column for the mishna
+        mishna_index = $( row ).find("th").length == 3 ? 3 : 4; // get the correct column for the mishna
 
         var api = this.api(), data;
 
@@ -109,12 +121,12 @@ $( document ).ready( function(){
 
         // calcuate the tanya totals
         total.tanya = api
-            .column( 1 ).data()
+            .column( 2 ).data()
             .reduce( function (a, b) {
                 return intVal(a) + intVal(b);
             }, 0 );
         pageTotal.tanya = api
-            .column( 1, { page: 'current'} ).data()
+            .column( 2, { page: 'current'} ).data()
             .reduce( function (a, b) {
                 return intVal(a) + intVal(b);
             }, 0 );
@@ -132,7 +144,7 @@ $( document ).ready( function(){
             }, 0 );
 
         // update the footer
-        $( api.column( 1 ).footer() ).html(
+        $( api.column( 2 ).footer() ).html(
             pageTotal.tanya + ( pageTotal.tanya !== total.tanya ? ' / ' + total.tanya : "" )
         );
         $( api.column( mishna_index ).footer() ).html(
