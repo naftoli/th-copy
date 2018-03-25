@@ -91,30 +91,8 @@ body,td,th {
 			<script language="javascript" type="text/javascript" src="http://embed.chabad.org/multimedia/mediaplayer/embedded/embed.js.asp?aid=3294668&width=auto&height=auto"></script>
 		</div>
 		-->
-		<div class="number">
-			<!--
-			<div style="font-size: 18px;">
-				Updating our website for Chidon 5778! Stay tuned.
-			</div>
-			-->
-			<!--
-			<div class="span_8">
-				<div class="row_8">
-					<div class="hs-responsive-embed-youtube">
-						<iframe src="https://player.vimeo.com/video/232404316?autoplay=1" width="785" height="441" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-					</div>
-				</div>
-			</div>
-		-->
-		</div>
 			
 					<div class="gallery">
-			
-				      	<div class="bases"><strong style="font-size: 30px; color: #22418e;">Participating Tzivos Hashem Bases
-</strong></div>   
-
-<br />
-			
 		<!-- requried-jsfiles-for owl -->
 		<link href="css/owl.carousel.css" rel="stylesheet">
 		<script src="js/owl.carousel.js"></script>
@@ -131,7 +109,14 @@ body,td,th {
 				});
 			</script>
 		<!-- //requried-jsfiles-for owl -->
-			<!-- start content_slider -->
+            <!-- start content_slider -->
+        <div class="bases"><strong style="font-size: 30px; color: #22418e;">5778 Videos</strong></div>   
+
+        <iframe src="https://player.vimeo.com/video/261015763" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        <br/><br/>
+        <iframe src="https://player.vimeo.com/video/261060327" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        <br/><br/>
+        <div class="bases"><strong style="font-size: 30px; color: #22418e;">Participating Tzivos Hashem Bases</strong></div>   
 		<div id="owl-demo" class="owl-carousel  ">
         
 			<div class="item g1 ">
@@ -217,10 +202,7 @@ body,td,th {
 		</div>
 		<!--//sreen-gallery-cursual-->
 		</div>
-		<iframe src="https://player.vimeo.com/video/261015763" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-        <br/><br/>
-        <iframe src="https://player.vimeo.com/video/261060327" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-        <br/><br/>
+		
 		</div>
 	</div>
 
