@@ -78,11 +78,14 @@ $( document ).ready( function(){
                 html +=     row.campaigns.tanya.avg !== undefined ? '<td>' + row.campaigns.tanya.avg + '</td>' : "";
                 html +=     '<td>' + row.campaigns.mishna.learned + '</td>';
                 html +=     row.campaigns.mishna.avg !== undefined ? '<td>' + row.campaigns.mishna.avg + '</td>' : "";
-                html +=     postData.level !== 3  ? '<td>' + 
-                                Math.floor( 
-                                    (row.campaigns.tanya.learned + row.campaigns.mishna.learned) / row.child_count 
-                                ) +
-                            '</td>' : "";
+                // if the level is not 3, calculate and render the total average for both tanya and mishna combined
+                if ( postData.level !== 3 ) {
+                    html += '<td>';
+                    html += Math.floor( 
+                        ( row.campaigns.tanya.learned + row.campaigns.mishna.learned ) / row.child_count 
+                    );
+                    html += '</td>';
+                }
                 html += "</tr>";
             }
             // close the table
