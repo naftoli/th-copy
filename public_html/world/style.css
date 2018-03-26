@@ -23,6 +23,10 @@ header {
     margin-top: 80px;
 }
 
+.navbar-brand {
+    margin-right: 0rem;
+}
+
 /****************** NAVBAR STYLES ******************/
 nav {
     z-index: 1;
@@ -32,9 +36,40 @@ nav {
     width: 50px;
     transition: .25s ease-in-out;
 }
-#navbar-logo:hover {
-    transform: scale(.95);
+#navbar-logo:hover, .navbar-share:hover {
+    transform: scale(.8);
+    cursor: pointer;
 }
+
+.navbar-share {
+    transition: .1s ease-in-out;
+    font-size: 2em;
+}
+
+.navbar-share svg {
+    color: #fff;
+}
+
+div#social-dropdown {
+    right: 0;
+    left: auto;
+    min-width: 6rem;
+}
+
+div#social-dropdown a.dropdown-item {
+    font-size: 2em; text-align: center;
+    transition: .25s ease-in-out;
+}
+div#social-dropdown a.dropdown-item:hover{
+    transform: scale( .8 );
+    background: none;
+}
+
+.fa-whatsapp { color: #128C7E; }
+.fa-twitter { color: #1DA1F2; }
+.fa-facebook-square { color: #3b5998; }
+.fa-google-plus { color: #dd4b39 }
+
 /* Text in the center of the navigation bar */
 .navbar-dark .navbar-title {
     font-size: 2em;
@@ -43,7 +78,7 @@ nav {
     text-align: center;
     transition: font-size .25s linear;
 }
-@media (max-width: 540px) {
+@media (max-width: 600px) {
     #navbar-logo {
         height: 40px;
         width: 40px;
@@ -55,9 +90,15 @@ nav {
         margin-top: 60px;
     }
 }
-@media (max-width: 400px) {
+@media (max-width: 440px) {
     .navbar-dark .navbar-title {
-        font-size: 1.25em;
+        font-size: 1.05em;
+    }
+}
+
+@media (max-width: 360px) {
+    .navbar-dark .navbar-title {
+        font-size: .9em;
     }
 }
 
@@ -141,7 +182,8 @@ img.school_logo {
         display: inline-block;
         width: 100%;
         padding-left: 0px;
-        padding-top: 14px;
+        padding-top: 18px;
+        text-align: center;
     }
 }
 
