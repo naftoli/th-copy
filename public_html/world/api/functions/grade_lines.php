@@ -35,7 +35,8 @@ function grade_lines( $campaigns, $school_id ){
 
     // set and return the results
     $results = [];
-    foreach( $grades as $grade ) {
+    // add the & becuase PHP is insane...
+    foreach( $grades as &$grade ) {
         // make sure we have info to send
         if( !isset( $lineInfo[ $grade['class_id'] ] ) ) continue;
 
