@@ -86,7 +86,8 @@ function school_lines( $campaigns, $grade ) {
     $results = [];
 
     // format the data for the result
-    foreach( $info as $row ) {
+    // DO NOT REMOVE THE & it prevents the last one from being incorrect
+    foreach( $info as &$row ) {
         // make sure we have info to send
         if( !isset( $lineInfo[ $row['id'] ] ) ) continue;
 
