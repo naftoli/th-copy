@@ -1,5 +1,5 @@
 <?php
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/class.bpSummary.php' );
+require_once( dirname(__FILE__) . '/../../../class.bpSummary.php' );
 require_once( dirname(__FILE__) . "/get_reg_info.php" );
 /**
  * school_lines

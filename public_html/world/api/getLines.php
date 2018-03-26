@@ -1,7 +1,7 @@
 <?php
 ini_set('display_errors',1);
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/db.php' );
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php' );
+require_once( dirname(__FILE__) . '/../../db.php' );
+require_once( dirname(__FILE__) . '/../../class.globalSettings.php' );
 
 $year = GlobalSettings::getChidonYear();
 

@@ -1,5 +1,5 @@
 <?php
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/class.bpSummary.php' );
+require_once( dirname(__FILE__) . '/../../../class.bpSummary.php' );
 
 function student_lines( $campaigns, $class_id ){
     // load the users for the classs
