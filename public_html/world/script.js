@@ -1,12 +1,20 @@
+var gtag; // make sure gtag is a defined variable
 // on page load
 $( document ).ready( function(){
     loadTable( false );
     setInterval( loadTable, 300000); // refresh the table every 3 seconds
     // reload the table when the link at the top of the page changes
-    $( window ).on( 'hashchange', loadTable ); // refresh the table when the hash changes
+    $( window ).on( 'hashchange', function() {
+        gtag('config', 'UA-116474327-1', {'page_path': '/' + window.location.hash });
+        loadTable();
+    }); // refresh the table when the hash changes
     $("select#grade_dropdown").change( refreshTable );
     // clear the table on the page
     $("button#refresh-table").click( refreshTable );
+    // log a share event in google anylytics
+    $("#social-dropdown-link").click( function(){
+        gtag('event', 'share');
+    });
 
     function refreshTable() {
         // get the current grade
@@ -21,25 +29,25 @@ $( document ).ready( function(){
 
     // load and render the table from the server
     function loadTable( event ) {
-        $("button#refresh-table .fa-sync").addClass( "fa-spin" )
+        $("button#refresh-table .fa-sync").addClass( "fa-spin" );
         var hash_params = window.location.hash.replace("#", "").split("-");
         var postData = {
             level: 1
-        }
+        };
 
         if ( hash_params.length === 1 ) {
             postData.grade = hash_params[0] ? hash_params[0] : $("select#grade_dropdown").val();
             $("select#grade_dropdown").val( postData.grade );
         } else if ( hash_params.length === 2 ) {
-            postData.level  = parseInt ( hash_params[0] )
-            postData.id     = hash_params[1]
+            postData.level  = parseInt ( hash_params[0] );
+            postData.id     = hash_params[1];
         }
 
         $.post("api/getLines.php", postData, function( response ) {
             response = JSON.parse( response );
             // setup the table head
             var html = '<table id="report-table" class="table table-striped table-bordered table-hover sortable style="width:100%"">';
-            html += '<thead><tr><th></th>'
+            html += '<thead><tr><th></th>';
             html += '<th class="school">Name</th>';
             html += '<th>Lines of<br />תניא בעל פה</th>';
             html += ( postData.level !== 3 ? '<th id="defaultSort">Avg תניא Lines</th>' : "" );
@@ -54,21 +62,21 @@ $( document ).ready( function(){
                 var nextLevel =  postData.grade ? 3 : parseInt( postData.level ) + 1;
 
                 html += "<tr>";
-                html +=     '<th></td><td>'
+                html +=     '<th></td><td>';
 
                 if ( postData.level < 3 && !row.lastLevel ) {
-                    html +=         '<a class="id_link" href="#' + nextLevel + '-' + row.id  + '" >'
+                    html +=         '<a class="id_link" href="#' + nextLevel + '-' + row.id  + '" >';
                     // add the logo for the first row
                     if ( postData.level == 1 ){
                         html += "<img class='school_logo' alt='school_logo' src='//mashpia.com/schoolLogos/" + 
-                            ( row.logo ? row.logo : "_logo.png" ) + "'/>"
+                            ( row.logo ? row.logo : "_logo.png" ) + "'/>";
                     }
                     html +=             '<span class="school_name">' + row.name + '</span>';
                     html +=         '</a>';
                 } else {
                     if ( postData.level == 1 ){
                         html += "<img class='school_logo' alt='school_logo' src='//mashpia.com/schoolLogos/" + 
-                            ( row.logo ? row.logo : "_logo.png" ) + "'/>"
+                            ( row.logo ? row.logo : "_logo.png" ) + "'/>";
                     }
                     html += '<span class="school_name">' + row.name + '</span>';
                 }
@@ -96,7 +104,7 @@ $( document ).ready( function(){
             if ( postData.level !== 3 ) html += '<th></th><th></th><th></th>';
             html += '</tfoot></table>';
             // stop the spinner
-            $("button#refresh-table .fa-sync").removeClass( "fa-spin" )
+            $("button#refresh-table .fa-sync").removeClass( "fa-spin" );
             // add the html to the page
             $("#report").html( html );
             // setup the datatable
@@ -165,7 +173,7 @@ $( document ).ready( function(){
 
         // update the totals on the top of the page
         total.total = total.tanya + total.mishna;
-        updateTotals(total)
+        updateTotals(total);
     }
 
     // load and render the totals
