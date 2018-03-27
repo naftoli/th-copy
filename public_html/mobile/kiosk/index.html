@@ -10,70 +10,7 @@
 		<script>
 			!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);
 		</script>
-        <style>
-			body {
-				padding-bottom: 0px;
-			}
-			header.navbar {
-				background-color: rgb(255, 26, 26);
-			}
-			.navbar {
-				margin-bottom: 0 !important;
-			}
-			.logo {
-				max-width: 450px;
-				padding: 50px;
-				margin: auto;
-			}
-			.img-responsive {
-				display: block;
-				max-width: 100%;
-				height: auto;
-			}
-			/* barcode scanner image */
-			.innerImg {
-				/* Location of the image */
-				background-image: url("../img_new/scanner-2-color-red-svg.svg");
-				/* Background image is centered vertically and horizontally at all times */
-				background-position: top;
-				/* Background image doesn't tile */
-				background-repeat: no-repeat;
-			}
-			.innerImg p {
-				max-width: 70%;
-				padding-top: 100px;
-			}
-			/* barcode and text inputs */
-			.content {
-				max-width: 500px;
-				margin: auto;
-			}
-
-			/* barcode quaggajs scanner styles */
-			#barcode_scanner.viewport {
-				position: relative;
-				max-width: 200px;
-			}
-
-			#barcode_scanner.viewport > canvas, #barcode_scanner.viewport > video {
-				max-width: 100%;
-				width: 100%;
-			}
-
-			canvas.drawing, canvas.drawingBuffer {
-				position: absolute;
-				left: 0;
-				top: 0;
-			}
-
-			/* non-scanner UI */
-			#manual_scanner {
-				display: none;
-			}
-			#scanner {
-				max-width: 200px;
-			}
-        </style>
+        <link rel="stylesheet" href="css/main.css"/>
 	</head>
 	<body class="page-goals">
         <header class="navbar" id="top" role="banner">
@@ -93,19 +30,18 @@
 				<div id="main" class="alert alert-warning">
 						<div align="center">
 							<!--<img class="img-responsive" src="/kiosk/images/scan_cover.png" /><br />-->
-							<div class="innerImg">
+							<div class="innerImg" id="manual_scanner">
 								<p>Scan in your ID Card.</p>
-								<div id="barcode_scanner" class="viewport"></div>
-								<div class="form-group" id="manual_scanner">
+								<div class="form-group">
 									<form name="cardForm" id="cardForm">
 										<input type="text" class="form-control" id="scanner" name="scanner" placeholder="ID Card Number" autocomplete="off" autofocus />
 									</form>
 								</div>
 								<span id="error_message"></span>
-							</div>
-							<!--<button type="submit" id="scan" class="btn btn-danger">Submit</button>-->
-							<div style="clear:both"></div>
-						</div>
+                            </div>
+                            <div id="barcode_scanner" class="viewport"></div>
+                            <div style="clear:both"></div>
+                        </div>
 					</div>
 				</div>
 			</div>
@@ -114,101 +50,5 @@
 	</body>
 	<script src="../reg/js/all.js"></script>
 	<script src="lib/quagga.min.js"></script>
-    <script>
-        $(document).ready( function() {
-	        var url = location.href.toString();
-			
-			function checkNumber( card ) {
-				if (card.length == 20) {
-	                $.post('api/checkID.php', { card : card }, function( res ) {
-	                    var response = $.parseJSON( res );
-						if (response.success) {
-							location.href = "/mobile/reg/medals/index.html?id=" + response.user_id;
-						} else {
-							alert(response.body);	
-						}
-	                });
-	            } else {
-	                alert('Card must be 20 digits.');
-	            }
-			}
-			
-			$("#cardForm").submit( function(e) {
-				e.preventDefault();
-				var card = $("#scanner").val();
-				checkNumber( card );
-				return false;
-			});
-			
-	        $("#scan").click( function() {
-	            var card = $("#scanner").val();
-				checkNumber( card );
-	        });
-			
-			Quagga.init({
-				inputStream: {
-					name : "Live",
-					type : "LiveStream",
-					target: "#barcode_scanner",
-					constraints: {
-						width: {min: 640},
-						height: {min: 480},
-						aspectRatio: {min: 1, max: 100},
-						facingMode: "environment" // or user
-					}
-				},
-				locator: {
-					patchSize: "large",
-					halfSample: true
-				},
-				numOfWorkers: 4,
-				decoder: {
-					readers : ["code_128_reader"]
-				},
-				locate: true,
-				multiple: true
-			}, function(error) {
-				if ( error ) {
-					// TODO: allow the user to enter their barcode manually if we cannot scan it
-					console.error( error );
-					$("#barcode_scanner").hide();
-					$("#manual_scanner").show();
-					return;
-				}
-				console.log( "Quagga JS initialized. Ready to start Scanning Cards" );
-				Quagga.start();
-			});
-			// callback to run whenever a code is scanned
-			var test = function(data){ 
-				console.log( data.codeResult.code );
-			}
-
-			Quagga.onDetected(test);
-
-			// show a box when scanning the barcode...
-			Quagga.onProcessed(function(result) {
-				var drawingCtx = Quagga.canvas.ctx.overlay,
-					drawingCanvas = Quagga.canvas.dom.overlay;
-
-				if (result) {
-					if (result.boxes) {
-						drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
-						result.boxes.filter(function (box) {
-							return box !== result.box;
-						}).forEach(function (box) {
-							Quagga.ImageDebug.drawPath(box, {x: 0, y: 1}, drawingCtx, {color: "green", lineWidth: 2});
-						});
-					}
-
-					if (result.box) {
-						Quagga.ImageDebug.drawPath(result.box, {x: 0, y: 1}, drawingCtx, {color: "#00F", lineWidth: 2});
-					}
-
-					if (result.codeResult && result.codeResult.code) {
-						Quagga.ImageDebug.drawPath(result.line, {x: 'x', y: 'y'}, drawingCtx, {color: 'red', lineWidth: 3});
-					}
-				}
-			});
-	    });
-    </script>
+    <script src="js/login.js"></script>
 </html>
