@@ -20,7 +20,7 @@ header.navbar {
 /* barcode scanner image */
 .innerImg {
     /* Location of the image */
-    background-image: url("../img_new/scanner-2-color-red-svg.svg");
+    background-image: url("/mobile/img_new/scanner-2-color-red-svg.svg");
     /* Background image is centered vertically and horizontally at all times */
     background-position: top;
     /* Background image doesn't tile */
