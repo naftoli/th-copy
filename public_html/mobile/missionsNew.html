@@ -17,19 +17,17 @@
 		<script src="js/all.js" defer></script>
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
-		
 		<link rel="stylesheet" href="css/bug_report.css"/>
-		
         <style>
 			.list-unstyled{padding-right: 0px;}
-/*			Text inputs*/
+            /* Text inputs*/
         	.textInput { border: 1px solid #5e1c77;border-radius: 5px;position: absolute;right: 15px;font-size: 12px;max-width: 36px;color: #000;font-weight: bold;padding: 5px;}
-/*			Mandatory star marks*/
+            /* Mandatory star marks*/
 			.mandStar {color: red;right: auto !important;padding-right: 5px;float: left !important;position: relative !important;}
 			.he .mandStar {color: red; padding-left: 5px;float: right !important; right: 0px !important;}
-/*			Panel headings*/
+            /* Panel headings*/
 			.panel-heading {cursor: pointer;}
-/*			Back and forward buttons*/
+            /* Back and forward buttons*/
 			button.slick-prev, button.slick-next {background: none;border: none;color: #fff;font-size: 1em;}
 			/* For Firefox */
 			input[type='number'] {-moz-appearance:textfield;}
@@ -38,34 +36,34 @@
 			input[type=number]::-webkit-outer-spin-button {
 				-webkit-appearance: none;margin: 0;
 			}
-/*			Top navigation/action buttons */
+            /* Top navigation/action buttons */
 			div#navigation-buttons{max-width: 500px; margin: 0 auto;}
-/*			Longer text in missions (prevent from going into checkbox)*/
+            /* Longer text in missions (prevent from going into checkbox)*/
 			.page-missions .rowImg{height: 60px;padding-left: 0px;}
 			.page-missions .he .rowImg{padding-left: 10px;margin-right: 0px;}
 			.long{max-width: 90%; font-size: 1.6em; /*min-height: 44px; */padding-left: 60px;}
 			.mediumPic + .checkbox .long{padding-left: 130px;}
 			.he .long {max-width: 80%;padding-left: 0px; padding-right: 25px;}
 			.he .mediumPic + .checkbox .long{padding-left: 0px; padding-right: 132px;}
-/*			Change the padding to margins for Firefox support*/
+            /* Change the padding to margins for Firefox support*/
 			.content{margin-bottom: 100px;}
 			body#main{padding-bottom: 0px;}
-/*			Dropdown Animations */
+            /* Dropdown Animations */
 			.collapse{display: block;visibility: visible;height: 0px;overflow:hidden;}.collapse.in{display:block;overflow:hidden;max-height:fit-content;max-height: -moz-fit-content;}
-/*			The tasks */
+            /* The tasks */
 			.task{min-height: 58px; margin-bottom: 5px;}
 			li.task:last-child{margin-bottom: 0px;}
 			.task.daily{min-height: 65px; height: 22%;}
 			.mediumPic{margin-bottom: 10px;margin-top: 7px;display: inline-block;} .rowImg{margin-bottom: 5px;}
 			.collapse{height: 0px;overflow:hidden;}.collapse.in{display:block;overflow:hidden;max-height:fit-content;max-height: -moz-fit-content;}
 			.he .task{margin-right: 2%;}
-/*			Daily checkboxes */
+            /* Daily checkboxes */
 			.page-missions .checkboxDaily{border: none;}
 			.dMark .unchecked, .dMark .checked, .unavilable-box{height: 24px; width: 24px;display: inline-block;}
 			.dMark .unchecked{background: url("/mobile/img_new/square-color-purple-svg.svg");}
 			.dMark .checked{background: url("/mobile/img_new/square-check-color-green-svg.svg");}
 			.unavilable-box{background: url("/mobile/img_new/square-x-color-red-svg.svg");}
-/*			Non-Daily checkboxes*/
+            /* Non-Daily checkboxes*/
 			label.checkbox .box {border: none;background: url("/mobile/img_new/square-color-purple-svg.svg");height: 30px;width: 30px;}
 			label.checkbox span.check {margin-right: 10px;}
 			label.checkbox input[type=checkbox]:checked~.check,label.checkbox input[type=checkbox]:checked~.box, label.checkbox .check, label.checkbox .box{transform: none;transition: none;}
@@ -74,48 +72,48 @@
 			.he label.checkbox .box, .he label.checkbox .check {right: 0px; top: 0px;}
 			.he .actions{position: relative; width: 45px;float: left;}
 			.he label.checkbox span:not(.tehillim){position: absolute;}
-/*			Dropdown arrows*/
+            /* Dropdown arrows*/
 			i.glyphicon.glyphicon-chevron-right, i.glyphicon.glyphicon-chevron-left {background: url("/mobile/img_new/arrow-1-color-white-svg.svg");width: 10px;height: 15px;background-repeat: no-repeat;}
 			i.glyphicon.glyphicon-chevron-right:before, i.glyphicon.glyphicon-chevron-left:before{content: "";}
-/*			New style dropdown arrows on the hebrew site need to point the other way*/
+            /* New style dropdown arrows on the hebrew site need to point the other way*/
 			.he .panel.panel-default .panel-heading i {margin-left: 8px; transform: rotate(180deg);}
 			.he .panel.panel-default.open > .panel-heading i {transform: rotate(90deg);}
-/*			Cleaner dropdowns*/
+            /* Cleaner dropdowns*/
 			.panel.panel-default .panel-heading{background: #5e1c77;font-weight: 400;}
 			.container>.navbar-header{margin-left: 0px;}
-/*			Some modal Styles*/
+            /* Some modal Styles*/
 			.modal-header {border-top-left-radius: 4px;border-top-right-radius: 4px;background: #5e1c77; color: #fff;}
 			.modal-header span, .modal-header{color: #fff;}
 			.modal-header .close{opacity: 1;font-size: 2em;width: 20px;font-weight: 100;}
-/*			On small screens push the date selector down and let the buttons take up the full row*/
+            /* On small screens push the date selector down and let the buttons take up the full row*/
 			@media(max-width: 532px){.task{margin-bottom: 10px;}.long{font-size: 1.3em;}}
-/*			Weekly navigation buttons*/
+            /* Weekly navigation buttons*/
 			.parsha-navigator {margin-top: -10px;margin-bottom: 10px;transition: transform .15s;}
 			.parsha-navigator img{height: 15px;margin: 3px;}
 			#previous.parsha-navigator img{transform: rotate(180deg);}
 			#previous.parsha-navigator{float: left;}
 			#next.parsha-navigator{float: right;}
 			.parsha-navigator:hover{transform: scale(1.2);cursor: pointer;color: #fff;}
-/*			Button hover effects*/
+            /* Button hover effects*/
 			#printLink:hover, #backLink:hover{text-decoration: none;}
 			.btn.btn-danger{transition: transform .1s;background-color: #5e1c77;border-color:#834999;}
 			.btn.btn-danger.btn-sm{width: 100px;}
 			.btn.btn-danger:hover{transform: scale(1.05)}
-/*			New arrow icons for daily slider*/
+            /* New arrow icons for daily slider*/
 			.slick-slider img {height: 18px;margin-top: -5px;}
 			.slick-prev img{transform: rotate(180deg);}
-/*			Special shamai space reduction*/
+            /* Special shamai space reduction*/
 			.panel-body {padding-bottom: 10px;}
-/*			Also from shamai, new icon for the hint*/
+            /* Also from shamai, new icon for the hint*/
 			.page-missions .navbar-header:before{background: url("/mobile/img_new/swipe-color-peach-svg.svg") no-repeat center center;  background-size: 30%;}
 			@media(max-width: 580px) {
 				.page-missions .navbar-header:before{background-size: 50%;}
 			}
-/*			Also from shamai, add some space for the weekly checkboxes*/
+            /* Also from shamai, add some space for the weekly checkboxes*/
 			.dailyBoxes table {display: inline-table;}
 			.page-missions .mandatoryImg {display: inline-block;}
 			.page-missions .mandatoryImg img{margin-top: -20px;}
-/*			Reposition it all on mobile*/
+            /* Reposition it all on mobile*/
 			@media(max-width: 767px) {
 				.long {min-height: 36px;}
 				.dailyBoxes {min-height: 40px;}
@@ -199,13 +197,13 @@
 	</div><!-- /.modal -->
 
     <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>'); // load up jquery if it is not already loaded</script>
-	<script>
+    <script src="/mobile/js/authenticate.js" defer></script>
+    <script>
         document.addEventListener("DOMContentLoaded", function() {
 			$( function() {
 				//(new Swipe('.item')).onLeft(function() { alert('You swiped left.') }).run(); // TODO allow swiping
 				var url = location.toString();
-				var pos = url.indexOf('='); 
-				var id = url.substring( pos+1 );
+				var id = url.substring( url.indexOf('=') + 1 );
 				var str = id;
 				// get the date from the URL
 				var d = id.indexOf('&d');
@@ -213,11 +211,7 @@
 					id = id.substring( 0, d );
 				}
 				// make sure that the user is logged in
-				$.post('reg/ajax/checkAuth.php', { user_id : id, admin_id : Cookies.get('admin') }, function( success ) {
-					if (success === "0") {
-						window.location = "/mobile";
-					}
-				});
+				authenticate( id );
 				// update the missions for the user_id...
 				$.post('reg/ajax/updateMissions.php', { user_id : id });
 				// options for the loading spinner....
@@ -256,9 +250,15 @@
 				var daily = (!desktop && Cookies.get('marking') != "weekly") || Cookies.get('marking') == "daily";
 				// load up the mission page...
 				$.get('getMissionPage.php?id=' + str + "&daily=" + daily + "&desktop=" + desktop, function( html ) {
-					$("#spinner").empty(); // clear the spinner...
-					$("#main").append( html ); // load up the html into the page...
-					$("#main").addClass("animated fadeIn");
+                    $("#spinner").empty(); // clear the spinner...
+                    $("#main").append( html ); // load up the html into the page...
+                    $("#main").addClass("animated fadeIn");
+                    // hide the personalize button for kids
+                    if( localStorage.getItem( "login" ) == "user" ){
+                        $( "#buttons > #leftButtons" ).hide();
+                        $( "#buttons > button").css( "float", lang == 1 ? "left" : "right" ); // move the help button to where the personalize button was
+                        $( "#mainLink a" ).attr('href', 'reg/medals/?id=' + id);
+                    }
 					// if the language is set to 2 (yiddish) in the html
 					if (lang == 2) {
 						$(".container").eq(1).addClass('he'); // add a he class to the page
@@ -267,7 +267,7 @@
 					} else {
 						$(".personalImg").css({"left": "2%"}); // move the profile image a but from the edge...
 					}
-					// setup the links on the bottom of the page
+                    // setup the links on the bottom of the page
 					$("#missionsLink").attr('href', 'missionsNew.html?id=' + id);
 					$("#goalsLink").attr('href', 'goalsNew.html?id=' + id + "&v=2");
 					$("#rankLink").attr('href', 'reg/rank.html?id=' + id);
