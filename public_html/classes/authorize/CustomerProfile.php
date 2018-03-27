@@ -5,8 +5,8 @@ use classes\authorize;
 use \Datetime;
 
 // load the custom authorization tools for the Authorize.net API
-require_once('Auth.php'); // loads the constants class in this namespace as well
-require_once('AuthorizeAPIRequest.php');
+require_once( dirname(__FILE__).'/Auth.php' ); // loads the constants class in this namespace as well
+require_once( dirname(__FILE__).'/AuthorizeAPIRequest.php' );
 
 use includes\authorize\AuthorizeConstants as Constants;
 

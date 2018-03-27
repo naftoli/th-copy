@@ -76,7 +76,7 @@ var updateMedalRanks = function(){
     function showMedalModal(medal_info, user_id) {
         hideRank(); // get rid of the rank if it was open...
         // get the current info from the user (all the juicy details...)
-        $.post("//mashpia.com/mobile/reg/medals/ajax/getMedalInfo.php", {user_id: user_id}, function(data){
+        $.post("/mobile/reg/medals/ajax/getMedalInfo.php", {user_id: user_id}, function(data){
             data = JSON.parse(data);
             var details = false;
             for (var item = 0; item < data.length; item++) {
@@ -88,10 +88,10 @@ var updateMedalRanks = function(){
             // show the modal...
             modal.find("#award-type").text("Medal");
             modal.find(".rbn").css({"display": "block"}); // show the medals...
-            modal.find(".rbn").html('<img src="https://mashpia.com/file_view.php?id='+details.photo+'">'); // add the image...
+            modal.find(".rbn").html('<img src="/file_view.php?id='+details.photo+'">'); // add the image...
             modal.find("#details").html(" You have earned a <strong>" + details.medal + " " + details.name + "</strong> Medal! " );
             
-            updateSocialMedia("Mazel Tov! "+first_name + " " + last_name + "has heared a "+ details.medal + " " + details.name + " medal from Tzivos Hashem!" );
+            updateSocialMedia("Mazel Tov! "+first_name + " " + last_name + " has earned a "+ details.medal + " " + details.name + " medal from Tzivos Hashem!" );
             
             modal.modal('show'); // show the modal
         });
@@ -103,7 +103,7 @@ var updateMedalRanks = function(){
         // update the info and show the modal..
         modal.find("#award-type").text("Rank");
         modal.find(".rank").css({"display": "block"});
-        modal.find(".rank").html('<img src="//mashpia.com/mobile/reg/medals/images/trophits/'+rank_info.rank_ord+'.png" alt="">');
+        modal.find(".rank").html('<img src="/mobile/reg/medals/images/trophits/'+rank_info.rank_ord+'.png" alt="">');
         modal.find("#details").html("You have been promoted to the rank of <strong>" + rank_names[rank_info.rank_ord] + "</strong>");
         
         updateSocialMedia("Mazel Tov! "+ first_name + " " + last_name + " has been promoted to the rank of "+ rank_names[rank_info.rank_ord] + " in Tzivos Hashem!" );
@@ -117,12 +117,12 @@ var updateMedalRanks = function(){
         }
         // if we are on mobile...
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-            modal.find("#share .fa-whatsapp").parent().attr("href", "whatsapp://send?text="+message); // use the whatsapp mobile link...
+            modal.find("#share .fa-whatsapp").parent().attr("href", "https://api.whatsapp.com/send?text=" + message); // use the whatsapp mobile link...
         } else {
-            modal.find("#share .fa-whatsapp").parent().attr("href", "https://web.whatsapp.com/send?text="+message); // use the whatsapp browser link...
+            modal.find("#share .fa-whatsapp").parent().attr("href", "https://web.whatsapp.com/send?text=" + message); // use the whatsapp browser link...
         }
-        modal.find("#share .fa-envelope").parent().attr("href", "mailto:?subject=Tzivos Hashem Nachas!&body="+message);
-        modal.find("#share .fa-twitter").parent().attr("href", "https://twitter.com/intent/tweet?text="+message);
+        modal.find("#share .fa-envelope").parent().attr("href", "mailto:?subject=Tzivos Hashem Nachas!&body=" + message);
+        modal.find("#share .fa-twitter").parent().attr("href", "https://twitter.com/intent/tweet?text=" + message);
     }
     
     // hide the medal details...

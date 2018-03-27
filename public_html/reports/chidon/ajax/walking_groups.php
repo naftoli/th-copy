@@ -23,21 +23,24 @@ $start = mysql_real_escape_string($_POST['start']);
 $end  = mysql_real_escape_string($_POST['end']);
 
 /***************** LOAD MARKS **********************/
-$attendence_times = [31, 32, 33];
+$chidon_type = $gender == "M" ? "boys" : "girls";
+$attendence_times = [
+    'girls' => [31, 32, 33],
+    'boys' => [35, 36, 37]
+];
 $user_marks = [];
 $user_marks_query = mysql_query(
-    " SELECT * FROM th_chidon_attendance_marks WHERE att_time_id IN (" .implode(", ", $attendence_times) . ") "
+    " SELECT * FROM th_chidon_attendance_marks WHERE att_time_id IN (" .implode(", ", $attendence_times[$chidon_type]) . ") "
 );
 while( $mark = mysql_fetch_assoc( $user_marks_query ) ) {
     $user_marks[$mark['att_time_id']][$mark['th_chidon_id']] = $mark['marked'];
 }
 
 /***************** LOAD ZONES **********************/
-$chidon_type = $gender == "M" ? "boys" : "girls";
 $zones = [];
 $zone_users_query = mysql_query(
      " SELECT u.first, u.last, tc.th_chidon_id, tc.walking_zone, tc.host, tc.host_address1, tc.host_address2, "
-    ." tc.host_number, tc.between_streets, a.admin_phone_mobile AS parent_number, s.school_name, tc.grade "
+    ." tc.host_number, tc.between_streets, a.admin_phone_mobile AS parent_number, s.school_name, tc.grade, tc.walk_day, u.gender "
     ." FROM th_chidon tc "
     ." JOIN schools s USING (school_id) JOIN users u USING (user_id) "
     ." LEFT JOIN admin_auths aa ON aa.id = u.user_id LEFT JOIN admins a USING (admin_id) "
@@ -176,14 +179,21 @@ if (count($zones) > 0) {
                     <td><?= $user['parent_number'] ?></td>
                     <td>
                     <?php
-                    if( $user['grade'] <= 5 ) {
-                        echo isset($user_marks[$attendence_times[0]][$user['th_chidon_id']]) ? "✔" : "X";
-                    } else {
+                    if( $user['grade'] > 5 ) {
                         echo "N/A";
+                    } else {
+                        echo isset($user_marks[$attendence_times[$chidon_type][0]][$user['th_chidon_id']]) ? "✔" : "X";
                     }?>
                     </td>
-                    <td><?= isset($user_marks[$attendence_times[1]][$user['th_chidon_id']]) ? "✔" : "X"?></td>
-                    <td><?= isset($user_marks[$attendence_times[2]][$user['th_chidon_id']]) ? "✔" : "X"?></td>
+                    <td>
+                    <?php
+                    if ( $user['gender'] == "M" && $user['walk_day'] == 1 ) {
+                        echo "N/A";
+                    } else {
+                        echo isset($user_marks[$attendence_times[$chidon_type][1]][$user['th_chidon_id']]) ? "✔" : "X";
+                    }?>
+                    </td>
+                    <td><?= isset($user_marks[$attendence_times[$chidon_type][2]][$user['th_chidon_id']]) ? "✔" : "X"?></td>
                     <?php if($admin_user['auth'] === "super") { ?>
                     <td class="no-print">
                         <a data-type="user" data-id="<?=$user['th_chidon_id']?>" class="button move">Move</a>

@@ -26,7 +26,7 @@ if($type !== "" && $ran_only) {
     $filter .= "WHERE date_ran IS NOT NULL ";
 }
 
-$filter .= "ORDER BY run_date, type";
+$filter .= "ORDER BY run_date DESC, type";
 
 $raffles = Raffle::loadAll($filter);
 

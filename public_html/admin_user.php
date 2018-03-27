@@ -1,24 +1,26 @@
 <?php
-ini_set('display_errors',1);
+ini_set('display_errors', 1);
 
 define("USES_WORDPRESS", true); // do not connect to the tickets DBS
 
-$admin_auth = array('school');
-require('header.php');
-require_once('file_save.php');
-require_once('calendar.php');
-$ui_type = 'school';
-require_once('admin_ui.php');
+$admin_auth = array( 'school' );
+require( dirname(__FILE__) . '/header.php' );
+require_once( dirname(__FILE__) . '/file_save.php' );
+require_once( dirname(__FILE__) . '/calendar.php' );
 
-$action = gr('action');
-assure_id_school('school_id');
-$school_id = gri('school_id', -1);
-$class_id = gri('class_id', -1);
+// import the UI
+$ui_type = 'school';
+require_once( dirname(__FILE__) . '/admin_ui.php' );
+
+$action = gr( 'action' );
+assure_id_school( 'school_id' );
+$school_id = gri( 'school_id', -1 );
+$class_id = gri( 'class_id', -1 );
 $edit_row = false;
 
 //check for hebrew schools
 $h_school = false;
-$sql = "select inst_id from schools where school_id = " . $school_id;
+$sql = "SELECT inst_id FROM schools WHERE school_id = " . $school_id;
 $res = mysql_query( $sql );
 $row = mysql_fetch_assoc( $res );
 $inst_id = $row['inst_id'];
@@ -557,7 +559,8 @@ $class_result = mq($qry);
 
 	<HEAD>
 		<TITLE><?=$action == 'add' ? T_('Add Soldier') : ($action == 'edit' ? T_('Edit Soldier') : T_('View Soldiers')), ' - ', T_('Tzivos Hashem Management System')?></TITLE>
-		<LINK href="admin_styles.css" rel="stylesheet" type="text/css">
+		<link href="admin_styles.css" rel="stylesheet" type="text/css" />
+		<link href="styles/admin/grey_select.css" rel="stylesheet" type="text/css" />
 		<style>
 		<!--
 		.photo {float:right;}
@@ -726,25 +729,28 @@ $class_result = mq($qry);
 
 				<H1><?=T_('Base Management')?></H1>
 
-				<? if ($admin_user['auth'] == 'super' || count($admin_user['auths']['school']) != 1) : ?>
-					<? $sql = 'SELECT school_id, school_name, inst_name FROM schools JOIN institutions USING (inst_id)' . ($admin_user['auth'] != 'super' ? ' WHERE school_id IN (' . implode(',', $admin_user['auths']['school']) . ')' : '') . ' ORDER BY inst_name, school_name'; ?>
+				<?php // show a list of schools if we have options
+				if ($admin_user['auth'] == 'super' || count($admin_user['auths']['school']) != 1) { ?>
+					<? $sql = 'SELECT school_id, school_name, inst_name FROM schools JOIN institutions USING (inst_id) WHERE test_school = 0 ' . ($admin_user['auth'] != 'super' ? ' AND school_id IN (' . implode(',', $admin_user['auths']['school']) . ')' : '') . ' ORDER BY inst_name, school_name'; ?>
 					<? $school_result = mq($sql); ?>
-					<FORM action="admin_user.php" method="get" accept-charset="UTF-8">
-						<P>
-							<LABEL>
+					<form action="admin_user.php" method="get" accept-charset="UTF-8">
+						<p>
+							<label>
 								<?=T_('Select Institution')?>:
-								<SELECT name="school_id">
+								<select name="school_id">
 									<option value="0">All Schools</option>
-									<? while($school_row = mysql_fetch_assoc($school_result)) : ?>
-									<OPTION value="<?=$school_row['school_id']?>" <?=$school_row['school_id'] == $school_id ? 'SELECTED' : ''?>><?=es($school_row['inst_name'])?> - <?=es($school_row['school_name'])?></OPTION>
-									<?endwhile;?>
-								</SELECT>
-							</LABEL>
-							<INPUT type="hidden" name="action" value="edit<?//=$action?>">
-							<INPUT class="submit" type="submit" value="<?=T_('Go')?>">
-						</P>
-					</FORM>
-				<?endif;?>
+									<? while($school_row = mysql_fetch_assoc($school_result)) { ?>
+										<option value="<?=$school_row['school_id']?>" <?=$school_row['school_id'] == $school_id ? 'selected' : ''?>>
+											<?=es($school_row['inst_name'])?> - <?=es($school_row['school_name'])?>
+										</option>
+									<? } ?>
+								</select>
+							</label>
+							<input type="hidden" name="action" value="edit<?//=$action?>" />
+							<input class="submit" type="submit" value="<?=T_('Go')?>" />
+						</p>
+					</form>
+				<?php } // end if we are a superuser / have more schools ?>
 
 				<? if ($school_id == -1) : ?>
 					<?=T_('Please select an Institution.')?>
@@ -1148,9 +1154,18 @@ $class_result = mq($qry);
 												</SELECT>
 											</LABEL>
 
-											<LABEL><?=T_('Show only registered users')?>: <INPUT type="checkbox" name="search_user_registered" value="1" <?=$search_user_registered ? 'CHECKED': ''?>></LABEL>
-											<LABEL><?=T_('Show only unregistered users')?>: <INPUT type="checkbox" name="search_user_unregistered" value="1" <?=$search_user_unregistered ? 'CHECKED': ''?>></LABEL>
-											<INPUT class="submit" type="submit" value="<?=T_('Go')?>">
+											<br/>
+
+											<label>
+												<?=T_('Show only registered users')?>:
+												<INPUT type="checkbox" name="search_user_registered" value="1" <?=$search_user_registered ? 'checked': '';?> />
+											</label>
+											<br/>
+											<label>
+												<?=T_('Show only unregistered users')?>: 
+												<input type="checkbox" name="search_user_unregistered" value="1" <?=$search_user_unregistered ? 'checked': '';?>>
+											</label>
+											<input class="submit" type="submit" value="<?=T_('Go')?>">
 										</P>
 									</FORM>
 								</DIV>

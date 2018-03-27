@@ -727,6 +727,11 @@ function add_mark($parameters, $update = true)
 	// if tehillim kapitelach make sure not more than 150
 	if ($grid_id == 8001) {
 		if ($user_mark > 150) $user_mark = 150;
+    }
+    
+    // if tehillim minutes make sure not more than 770
+	if ($grid_id == 8002) {
+		if ( $user_mark > 770 ) $user_mark = 770;
 	}
 
 	//// get start and end date for checking marks

@@ -13,14 +13,14 @@ $seperate_genders = isset($_POST['single_list']) ? false : true;
 
 // if no single raffle was given, get all of them
 if(!$raffle_id && $_GET['v'] == 2){
-    $raffle_query = mysql_query("SELECT r.*, (SELECT COUNT(*) FROM raffles WHERE type=r.type AND date_ran < r.date_ran) + 1 raffle_num "
+    $raffle_query = mysql_query("SELECT r.* "
                                 ."FROM raffles r WHERE show_on_mobile = 1 "
                                 ." ORDER BY date_ran DESC, type "
-                                .(isset($_GET['latest']) ? "LIMIT 2 " : "LIMIT 10 "));
+                                .(isset($_GET['latest']) ? "LIMIT 1 " : "LIMIT 10 "));
     $raffles = [];
     while($raffle_info = mysql_fetch_assoc($raffle_query)){
         $raffle = Raffle::loadFromRow($raffle_info);
-        $raffle->raffle_number = $raffle_info['raffle_num'];
+        // $raffle->raffle_number = $raffle_info['raffle_num'];
         $raffles[] = $raffle;
     }
 } elseif(!$raffle_id) {
@@ -48,7 +48,7 @@ foreach($raffles as $raffle){
                        "raffle_type" => $raffle->type,
                        "raffle_from" => $raffle_from,
                        "raffle_to" => $raffle_to,
-                       "raffle_number" => $raffle->raffle_number,
+                    //    "raffle_number" => $raffle->raffle_number,
                        "winners" => $winners_info]; // add the info to the array
 }
 

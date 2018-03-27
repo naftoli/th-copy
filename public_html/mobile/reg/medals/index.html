@@ -15,6 +15,8 @@
     	<style>
 			.sky-carousel .sky-carousel-container li img{ display: none; }
 			.sky-carousel .sky-carousel-container li img.sc-image{ display: block; }
+			.sky-carousel.sc-no-select { border: none; background: none; border-radius: 11px; }
+			.sky-carousel { height: 200px; }
 			#userImg {
 			    border-radius: 50%;
 			    border: 2px solid #31559f;
@@ -101,7 +103,7 @@
                     <div class="span4">
                         <div class="top-left-space">
                             <div class="span12">
-                                <img id="item0" src="images/th.png" alt="">
+                                <img id="item0" src="/mobile/img_new/TH%20Logo-colorful-svg.svg" alt="">
                             </div>
                             <div class="span12" style="margin-top: 10px;">
                                 <span class="title" id="rank"></span>
@@ -167,20 +169,20 @@
 	                </div>
                 </a>
                 <div class="span12 slider" style="margin-top:10px;text-align: center;">
-					<img id="item0" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item1" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item2" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item3" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item4" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item5" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item6" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item7" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item8" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item9" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item10" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item11" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item12" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item13" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item0" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item1" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item2" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item3" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item4" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item5" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item6" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item7" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item8" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item9" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item10" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item11" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item12" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item13" src="/mobile/img_new/circle-color-green-svg.svg">
                 </div>
                 <div class="span12" style="margin-top:30px;">
                     <div class="medal-label">
@@ -319,25 +321,25 @@
     			if (user.mobile_pic) {
     				$("#userImg").attr('src', '../' + user.mobile_pic);
     			} else if (user.thumb) {
-    				$("#userImg").attr('src', 'https://mashpia.com/thumbs/' + user.thumb);
+    				$("#userImg").attr('src', '/thumbs/' + user.thumb);
     			} else if (user.user_photo_id) {
-    				$("#userImg").attr('src', 'https://mashpia.com/file_view.php?id=' + user.user_photo_id);
+    				$("#userImg").attr('src', '/file_view.php?id=' + user.user_photo_id);
     			} else {
-    				$("#userImg").attr('src', 'https://mashpia.com/mobile/reg/images/profile-photo-default.jpg');
+    				$("#userImg").attr('src', '/mobile/reg/images/profile-photo-default.jpg');
     			}
     			if (user.logo && (!user.logo_2 || user.gender === "M")) {
-    				$("#logo").attr('src', 'https://mashpia.com/schoolLogos/' + user.logo);
+    				$("#logo").attr('src', '/schoolLogos/' + user.logo);
     			} else if(user.logo_2) {
-					$("#logo").attr('src', 'https://mashpia.com/schoolLogos/' + user.logo_2);
+					$("#logo").attr('src', '/schoolLogos/' + user.logo_2);
 				} else {
-    				$("#logo").attr('src', 'https://mashpia.com/schoolLogos/TH-Blank Logo.gif');
+    				$("#logo").attr('src', '/schoolLogos/TH-Blank Logo.gif');
     			}
     			
     			var rank = parseInt( user.rank_ord ) - 1;
     			if (rank > 8) rank = 8;
 
     	        $(".sky-carousel-container li img").css({"width":"100px","height":"180px"});
-    	        $(".sky-carousel").css("height","200px");
+    	        $(".sky-carousel").css( { "width" : "100%", "margin" : "0px" } );
     	        setTimeout( function() {
     	            $( function() {
     	                carousel = $('.sky-carousel').carousel({
@@ -358,8 +360,7 @@
     	                    gradientStartPoint: 0.5,
     	                    gradientEndPoint: 1,
     	                    reflectionDistance:100,
-    	                    gradientOverlayColor: "#f5f5f5",
-    	                    gradientOverlaySize: 100,
+    	                    gradientOverlaySize: 0,
     	                    slideSpeed: 1,
     	                    enableMouseWheel : false,
     	                    selectByClick: false
@@ -415,11 +416,11 @@
 
     				html += '<div class="span4 medal_row_item" style="text-align: center;">';
 
-    				html += '<a href="https://mashpia.com/mobile/reg/medals3.html?id=' + id + '&subject=' + medal.id + '">';
+    				html += '<a href="/mobile/reg/medals3.html?id=' + id + '&subject=' + medal.id + '">';
     				if (medal.photo != '')
-    					html += '<img class="medal" src="https://mashpia.com/file_view.php?id=' + medal.photo + '">';
+    					html += '<img class="medal" src="/file_view.php?id=' + medal.photo + '">';
     				else 
-    					html += '<img class="medal" src="https://mashpia.com/kiosk/images/medals/holder.png">';
+    					html += '<img class="medal" src="/kiosk/images/medals/holder.png">';
     				html += '</a><div class="medal-sub" style="background-image: url(images/bot-caption.png);">\
     								<div style="display: table;width: 100%;"><span>' + medal.name + '</span></div>\
     							</div>\

@@ -3,11 +3,7 @@ namespace classes\authorize;
 
 use classes\authorize;
 
-if ($_SERVER["DOCUMENT_ROOT"]){
-    require_once($_SERVER["DOCUMENT_ROOT"] . '/../includes/authorize_constants.php');
-} else {
-    require_once("../../../includes/authorize_constants.php");
-}
+require_once( dirname(__FILE__) . "/../../../includes/authorize_constants.php" );
 
 use includes\authorize\AuthorizeConstants as Constants;
 

@@ -336,22 +336,21 @@ class user {
 		else
 			$sql = "SELECT ut.* FROM user_tracks AS ut JOIN subjects AS s USING (subject_id) WHERE ut.user_id=" . $this->user_id . " and ut.enrolled = 1 AND ut.subject_id=" . $subject_id . " ORDER BY s.subject_ord";
 		
-		//echo "<input type='hidden' name='UserTrack' value='$sql'>";
 		$query = mysql_query($sql);
 		
-		if($printing_mode && !$this->print_parent_tasks){
+		if ( $printing_mode && !$this->print_parent_tasks ) {
 			$print_custom_parent_tasks = false;
 		} else {
 			$print_custom_parent_tasks = true;
 		}
 		
-		while ($row = mysql_fetch_assoc($query)) 
-		{
+		while ($row = mysql_fetch_assoc( $query ) ) {
 			if ($row["level"] > 0 && $row["track_id"] > 0) {
 				$user_track = new user_track($row);
 				$user_track->get_subject_info();
 				//if (!empty($tasks)) $user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang);
 				$user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks);
+
 				array_push($this->user_tracks, $user_track);
 				
 				if ($row['subject_id'] == 1) {

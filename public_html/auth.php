@@ -3,39 +3,40 @@ $user = array();
 $lang = agr($_POST, 'login_lang', agr($_COOKIE, 'lang'));
 if(isset($_POST['login_lang'])) setcookie('lang', $lang, time()+90*24*60*60, '/');
 require('lang.php');
+// make sure that check_auth does not exist yeat
 if(!function_exists('check_auth')) {
-function check_auth($user_id, $auth) {
-  global $user, $login_message, $lang;
+  function check_auth($user_id, $auth) {
+    global $user, $login_message, $lang;
 
-  if($user_id && !empty($auth)) {
+    if($user_id && !empty($auth)) {
 
-	$sql = "SELECT username, user_code, school_type_setting, password, first, last, lang, school_type_id, IFNULL(school_id, -1) school_id, school_settings, inst_id, IFNULL(team_id, -1) team_id, IFNULL(class_id, -1) class_id, users.camp_id, IF(user_registered IS NULL, 0, 1) user_registered FROM users LEFT JOIN schools USING (school_id) LEFT JOIN school_types USING (school_type_id) WHERE user_id=" . $user_id;
-	$result = mysql_query($sql) or die('Query failed ' . $sql);
-    if($row = mysql_fetch_assoc($result)) {
-      if($auth == hash_hmac('ripemd128', strtolower($row['username']).$row['password'].$row['user_code'], '2c9e328c5710ded701e7b3bad70eeea6')) {
-        $user['username'] = $row['username'];
-        $user['settings'] = $row['school_type_setting'];
-        $user['user_id'] = $user_id;
-        $user['first'] = $row['first'];
-        $user['last'] = $row['last'];
-        $user['display'] = ($row['first'] ? $row['first'] . ' ' . $row['last'] : $row['username']);
-        $user['lang'] = $lang = $row['lang'];
-        $user['school_type_id'] = $row['school_type_id'];
-        $user['school_id'] = $row['school_id'];
-        $user['school_settings'] = explode(',', $row['school_settings']);
-        $user['inst_id'] = $row['inst_id'];
-        $user['team_id'] = $row['team_id'];
-        $user['class_id'] = $row['class_id'];
-        $user['registered'] = $row['user_registered'];
-				$user['camp_id'] = $row['camp_id'];
-        return true;
+    $sql = "SELECT username, user_code, school_type_setting, password, first, last, lang, school_type_id, IFNULL(school_id, -1) school_id, school_settings, inst_id, IFNULL(team_id, -1) team_id, IFNULL(class_id, -1) class_id, users.camp_id, IF(user_registered IS NULL, 0, 1) user_registered FROM users LEFT JOIN schools USING (school_id) LEFT JOIN school_types USING (school_type_id) WHERE user_id=" . $user_id;
+    $result = mysql_query($sql) or die('Query failed ' . $sql);
+      if($row = mysql_fetch_assoc($result)) {
+        if($auth == hash_hmac('ripemd128', strtolower($row['username']).$row['password'].$row['user_code'], '2c9e328c5710ded701e7b3bad70eeea6')) {
+          $user['username'] = $row['username'];
+          $user['settings'] = $row['school_type_setting'];
+          $user['user_id'] = $user_id;
+          $user['first'] = $row['first'];
+          $user['last'] = $row['last'];
+          $user['display'] = ($row['first'] ? $row['first'] . ' ' . $row['last'] : $row['username']);
+          $user['lang'] = $lang = $row['lang'];
+          $user['school_type_id'] = $row['school_type_id'];
+          $user['school_id'] = $row['school_id'];
+          $user['school_settings'] = explode(',', $row['school_settings']);
+          $user['inst_id'] = $row['inst_id'];
+          $user['team_id'] = $row['team_id'];
+          $user['class_id'] = $row['class_id'];
+          $user['registered'] = $row['user_registered'];
+          $user['camp_id'] = $row['camp_id'];
+          return true;
+        }
       }
     }
+    $login_message = '';
+    return false;
   }
-  $login_message = '';
-  return false;
-}
-}
+} // end if function exists
 
 if(!function_exists('check_login')) {
 function check_login() {

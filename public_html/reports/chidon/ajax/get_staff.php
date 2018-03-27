@@ -16,9 +16,14 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
 $year = GlobalSettings::getChidonYear();
 
+$order_by = mysql_real_escape_string($_POST['sort_by']);
+$chidon_type_limit = mysql_real_escape_string($_POST['chidon_type_limit']);
+
 /***************** LOAD DATA **********************/
 $users_query = mysql_query(
-    "SELECT * FROM th_chidon_staff WHERE year = '$year' ORDER BY name;"
+    "SELECT * FROM th_chidon_staff WHERE year = '$year' "
+    .( $chidon_type_limit ? " AND chidon_type='$chidon_type_limit' " : "")
+    ." ORDER BY $order_by;"
 );
 
 $users = [];
@@ -31,7 +36,7 @@ if($debug) echo "</pre>";?>
 
 <table>
     <thead>
-        <th>Name</th><th>Username</th><th>Password</th><th>Walking Zone</th><!--<th>Door Number</th><th>Bus Code</th>--><th>Chaperone Marking</th>
+        <th>Name</th><th>Username</th><th>Password</th><th>Walking Zone</th><!--<th>Door Number</th><th>Bus Code</th>--><th>Chidon Type</th>
     </thead>
     <tbody>
         <? foreach($users as $user) {?>
@@ -46,7 +51,7 @@ if($debug) echo "</pre>";?>
                 <input type="text" data-staff_id="<?=$user['staff_id']?>" data-column="password" value="<?=$user['password']?>"/>
             </td>
             <td>
-                <input type="text" data-staff_id="<?=$user['staff_id']?>" data-column="walking_zone" value="<?=$user['walking_zone']?>"/>
+                <input type="number" data-staff_id="<?=$user['staff_id']?>" data-column="walking_zone" value="<?=$user['walking_zone']?>"/>
             </td>
             <!--<td>
                 <select data-staff_id="<?=$user['staff_id']?>" data-column="door_number" value="<?=$user['door_number']?>">
@@ -67,10 +72,9 @@ if($debug) echo "</pre>";?>
                 <input type="text" data-staff_id="<?=$user['staff_id']?>" data-column="bus_code" value="<?=$user['bus_code']?>"/>
             </td>-->
             <td>
-                <select data-staff_id="<?=$user['staff_id']?>" data-column="chap_chidon_type" value="<?=$user['chap_chidon_type']?>">
-                    <option value="">None</option>
-                    <option value="girls" <?=$user['chap_chidon_type'] == "girls" ? "selected" : ""?>>Girls</option>
-                    <option value="boys"  <?=$user['chap_chidon_type'] == "boys"  ? "selected" : ""?>>Boys </option>
+                <select data-staff_id="<?=$user['staff_id']?>" data-column="chidon_type" value="<?=$user['chidon_type']?>">
+                    <option value="girls" <?=$user['chidon_type'] == "girls" ? "selected" : ""?>>Girls</option>
+                    <option value="boys"  <?=$user['chidon_type'] == "boys"  ? "selected" : ""?>>Boys </option>
                 </select>
             </td>
         </tr>

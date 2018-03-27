@@ -41,7 +41,7 @@ if($start_date){ // if we have a start date
 $end_date = get_param('end_date');
 if($end_date){ // if we have an end date
     $end_date = new DateTime($end_date);
-    $end_date = $end_date->format("Y-m-d 24:59:59"); // format it for mysql
+    $end_date = $end_date->format("Y-m-d 23:59:59"); // format it for mysql
 }
 // if we are on the medals and rank cards we want to use the predetermined report dates
 $report_dates = get_param('report_dates');
@@ -74,7 +74,6 @@ $prizes = [];
 if($shipments['raffles_weekly']){
     require_once(dirname(__FILE__)."/../functions/get_prizes.php");
     $prizes = get_prizes($start_date, $end_date, $shipping_status, $school_id, "weekly");
-    //if($debug) print_r($prizes);
 }
 if($shipments['raffles_monthly']){
     require_once(dirname(__FILE__)."/../functions/get_prizes.php");
@@ -89,8 +88,6 @@ if($shipments['raffles_monthly']){
     }
 }
 
-//if($debug) print_r($prizes);
-
 /***************** GET THE GIFT SHIPMENTS **********************/
 $gifts = [];
 if($shipments['gifts']){
@@ -104,7 +101,6 @@ if($shipments['gifts']){
             $gifts['staff'][$gift_school_id]     = $tmp['staff'][$gift_school_id];
         }
     }
-    //if($debug) print_r([$gifts, $school_id]);
 }
 
 /***************** GET THE RANK CARD SHIPMENTS **********************/
@@ -112,7 +108,6 @@ $ranks = [];
 if($shipments['ranks']) {
     require_once(dirname(__FILE__)."/../functions/get_ranks.php");
     $ranks = get_ranks($school_id, $greg_start, $greg_end, $debug);
-    //if($debug) print_r($ranks);
 }
 
 /***************** GET THE MEDAL SHIPMENTS **********************/
@@ -120,7 +115,6 @@ $medals = [];
 if($shipments['medals']) {
     require_once(dirname(__FILE__)."/../functions/get_medals.php");
     $medals = get_medals($school_id, $greg_start, $greg_end, $debug);
-    //if($debug) print_r($medals);
 }
 
 $hachayols = [];
