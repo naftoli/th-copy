@@ -26,7 +26,7 @@ if ( mysql_num_rows( $user_query ) ) { // ID card exists
         $response['user_id'] = $user_id;
         
         // encrypt user id
-        require_once( dirname(__FILE__).'/../reg/ajax/encrypt.php' );
+        require_once( dirname(__FILE__).'/../../reg/ajax/encrypt.php' );
         $encrypted = encrypt_decrypt('encrypt', $user_id);
         // set some cookies in the browser (does this work via AJAX?)
         if ( !isset( $_COOKIE['user'] ) )
