@@ -62,20 +62,20 @@
 /*			Daily checkboxes */
 			.page-missions .checkboxDaily{border: none;}
 			.dMark .unchecked, .dMark .checked, .unavilable-box{height: 24px; width: 24px;display: inline-block;}
-			.dMark .unchecked{background: url("https://mashpia.com/mobile/img_new/square-color-purple-svg.svg");}
-			.dMark .checked{background: url("https://mashpia.com/mobile/img_new/square-check-color-green-svg.svg");}
-			.unavilable-box{background: url("https://mashpia.com/mobile/img_new/square-x-color-red-svg.svg");}
+			.dMark .unchecked{background: url("/mobile/img_new/square-color-purple-svg.svg");}
+			.dMark .checked{background: url("/mobile/img_new/square-check-color-green-svg.svg");}
+			.unavilable-box{background: url("/mobile/img_new/square-x-color-red-svg.svg");}
 /*			Non-Daily checkboxes*/
-			label.checkbox .box {border: none;background: url(https://mashpia.com/mobile/img_new/square-color-purple-svg.svg);height: 30px;width: 30px;}
+			label.checkbox .box {border: none;background: url("/mobile/img_new/square-color-purple-svg.svg");height: 30px;width: 30px;}
 			label.checkbox span.check {margin-right: 10px;}
 			label.checkbox input[type=checkbox]:checked~.check,label.checkbox input[type=checkbox]:checked~.box, label.checkbox .check, label.checkbox .box{transform: none;transition: none;}
 			label.checkbox span.circle{display: none;}
-			label.checkbox span.check {margin-right: 0px;border: none;background: url(https://mashpia.com/mobile/img_new/square-check-color-green-svg.svg);height: 30px;width: 30px;top: 0px;}
+			label.checkbox span.check {margin-right: 0px;border: none;background: url("/mobile/img_new/square-check-color-green-svg.svg");height: 30px;width: 30px;top: 0px;}
 			.he label.checkbox .box, .he label.checkbox .check {right: 0px; top: 0px;}
 			.he .actions{position: relative; width: 45px;float: left;}
 			.he label.checkbox span:not(.tehillim){position: absolute;}
 /*			Dropdown arrows*/
-			i.glyphicon.glyphicon-chevron-right, i.glyphicon.glyphicon-chevron-left {background: url("https://mashpia.com/mobile/img_new/arrow-1-color-white-svg.svg");width: 10px;height: 15px;background-repeat: no-repeat;}
+			i.glyphicon.glyphicon-chevron-right, i.glyphicon.glyphicon-chevron-left {background: url("/mobile/img_new/arrow-1-color-white-svg.svg");width: 10px;height: 15px;background-repeat: no-repeat;}
 			i.glyphicon.glyphicon-chevron-right:before, i.glyphicon.glyphicon-chevron-left:before{content: "";}
 /*			New style dropdown arrows on the hebrew site need to point the other way*/
 			.he .panel.panel-default .panel-heading i {margin-left: 8px; transform: rotate(180deg);}
@@ -153,14 +153,14 @@
 					<p style="font-size: 1.2em;border-bottom: 1px solid #ccc;">
 						<strong>Visual Guide</strong>
 					</p>
-					<p><img src="https://mashpia.com/mobile/img_new/square-color-purple-svg.svg" height="25" width="25"/> - Mission is not marked</p>
-					<p><img src="https://mashpia.com/mobile/img_new/square-check-color-green-svg.svg" height="25" width="25"/> - Mission is marked</p>
+					<p><img src="/mobile/img_new/square-color-purple-svg.svg" height="25" width="25"/> - Mission is not marked</p>
+					<p><img src="/mobile/img_new/square-check-color-green-svg.svg" height="25" width="25"/> - Mission is marked</p>
 					<p>
-						<img src="https://mashpia.com/mobile/img_new/square-color-purple-svg.svg" height="25" width="25"/>
+						<img src="/mobile/img_new/square-color-purple-svg.svg" height="25" width="25"/>
 						<span style="color: grey;margin-left: -20px;font-size: 16px;margin-right: 10px;">T</span>
 						- Mission is later in the week (day is in grey).
 					</p>
-					<p><img src="https://mashpia.com/mobile/img_new/square-x-color-red-svg.svg" height="25" width="25"/> - Mission is unavailable</p>
+					<p><img src="/mobile/img_new/square-x-color-red-svg.svg" height="25" width="25"/> - Mission is unavailable</p>
 					
 					<p style="font-size: 1.2em;border-bottom: 1px solid #ccc;">
 						<strong>Weekly Marking View</strong>
@@ -277,9 +277,9 @@
 						var info = $.parseJSON( success ); // get the info from the response...
 						var html = '<a href="reg/medals/index.html?id=' + id +'">'; // setup the a tag...
 						// add the image based on the way the user's image is stored...
-						if (info.mobile_pic) html += '<img id="userImg" src="https://mashpia.com/mobile/reg/' + info.mobile_pic + '">';
-						else if (info.thumb) html += '<img id="userImg" src="https://mashpia.com/thumbs/' + info.thumb + '">';
-						else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' + info.photo + '">';
+						if (info.mobile_pic) html += '<img id="userImg" src="/mobile/reg/' + info.mobile_pic + '">';
+						else if (info.thumb) html += '<img id="userImg" src="/thumbs/' + info.thumb + '">';
+						else if (info.photo) html += '<img id="userImg" src="/file_view.php?id=' + info.photo + '">';
 						// close the a tag
 						html += '</a>';
 						$(".personalImg").append( html );

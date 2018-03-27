@@ -302,7 +302,7 @@ $he_chars = array(
 				<div id="rightButtons" style="float: <?=$alignmentRight?>; text-align:<?=$alignmentRight?>;">
 					<?php require_once dirname(__FILE__) . '/reg/ajax/encrypt.php';?>
 					<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=$desktop ? "display: none" : ""?>" />
-					<a id="printLink" href="https://mashpia.com/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
+					<a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
 						<input type="button" class="btn btn-danger btn-sm" value="Print Missions" />
 					</a>
 				</div>
