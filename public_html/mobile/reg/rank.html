@@ -97,6 +97,7 @@
         .sky-carousel .sky-carousel-container li img.sc-image{ display: block; }
         .sky-carousel.sc-no-select { border: none; background: none; border-radius: 11px; }
         .sky-carousel { height: 200px; }
+        .slider img.active { background: url("/mobile/img_new/circle-color-orange-solid-svg.svg"); }
         .header-yellow{min-height: 48px;}
 
         /* redesigned rank board (new icons, fix some bugs) */
@@ -207,20 +208,20 @@
                 </div>
             </div>
             <div class="span12 slider" style="margin-top:10px;text-align: center;">
-                <img id="item0" src="/mobile/reg/medals/images/circle.png">
-                <img id="item1" src="/mobile/reg/medals/images/circle.png">
-                <img id="item2" src="/mobile/reg/medals/images/circle.png">
-                <img id="item3" src="/mobile/reg/medals/images/circle.png">
-                <img id="item4" src="/mobile/reg/medals/images/circle.png">
-                <img id="item5" src="/mobile/reg/medals/images/circle.png">
-                <img id="item6" src="/mobile/reg/medals/images/circle.png">
-                <img id="item7" src="/mobile/reg/medals/images/circle.png">
-                <img id="item8" src="/mobile/reg/medals/images/circle.png">
-                <img id="item9" src="/mobile/reg/medals/images/circle.png">
-                <img id="item10" src="/mobile/reg/medals/images/circle.png">
-                <img id="item11" src="/mobile/reg/medals/images/circle.png">
-                <img id="item12" src="/mobile/reg/medals/images/circle.png">
-                <img id="item13" src="/mobile/reg/medals/images/circle.png">
+                <img id="item0" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item1" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item2" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item3" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item4" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item5" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item6" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item7" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item8" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item9" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item10" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item11" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item12" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item13" src="/mobile/img_new/circle-color-orange-svg.svg">
             </div>
             <div style="clear: both; margin-bottom: 10px;"></div>
             
@@ -289,6 +290,7 @@
         </div>
     </div>
 </div>
+<script src="/mobile/js/authenticate.js" defer></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) {
         var carousel = "";
@@ -350,15 +352,14 @@
         });
             
         var url = location.toString();
-        var pos = url.indexOf('='); 
-        var id = url.substring( pos+1 );
+        var id = url.substring( url.indexOf('=') + 1 );
         
-        $.post('ajax/checkAuth.php', { user_id : id, admin_id : Cookies.get('admin') }, function( success ) {
-            if (success == 0) {
-                window.location = "/mobile";
-            }
-        });
+        authenticate( id );
         
+        if( localStorage.getItem("login") == "user" ){
+            $( "#mainLink" ).attr('href', '/mobile/reg/medals/?id=' + id);
+        }
+
         $("#missionsLink").attr('href', '../missionsNew.html?id=' + id);
         $("#goalsLink").attr('href', '../goalsNew.html?id=' + id);
         $("#rankLink").attr('href', 'rank.html?id=' + id);
@@ -481,36 +482,41 @@
                         slideSpeed: 1,
                         enableMouseWheel : false,
                         selectByClick: false
-                    });
-                    carousel.startAutoSlideshow();
-    
+                    }); // end options
+                    carousel.startAutoSlideshow(); // autmatically start the slideshow
+                    // when an item is selected...
                     carousel.on('itemSelected.sc', function(evt) {
-                        var item = evt.item.index();
-                        if (item == 1 && rank == 0) { // go back to the first medal if the user's rank is 0
-                            carousel.selectPrevious(1);
-                            carousel.stopAutoSlideshow();
+                        var item = evt.item.index(); // get the index
+                        if ( item == 1 && rank == 0 ) { // go back to the first element if the user is a private
+                            carousel.selectPrevious( 1 );
+                            carousel.stopAutoSlideshow( );
                             return;
                         }
-                        
+                        // get the next item and remove the active class from the circle
                         var next_item = parseInt(item) + 1;
                         $(".slider img").each(function(){
                             $(this).removeClass("active");
                         });
+                        // update the correct dot to be active
                         $(".slider img:nth-child("+next_item+")").addClass("active");
-                                            
+                        // set the rest of the images to be faded out a bit
+                        $(".real").attr('style', 'opacity: 0.3');
+                        $("#" + next_item).find(".real").attr('style', 'opacity: 1');
+                        // if we have hit the rank
                         if (item == rank){
-                            carousel.stopAutoSlideshow();
-                            loop ++;
+                            $(".medalPic").attr('style', 'opacity: 1');
+                            carousel.stopAutoSlideshow(); // stop
+                            loop++; // increment the loop
                         } else {
-                            if(loop == 0){
+                            if( loop == 0 ) { // if the loop is 0 then start the slideshow
                                 carousel.startAutoSlideshow();
-                            }else{
+                            } else { // otherwise just end it
                                 carousel.stopAutoSlideshow();
-                            }
-                        }
-                    });
-                });
-            }, 1000);
+                            } // end if loop is/is not 0
+                        } // end if the item is the users rank, or not
+                    }); // end on item in slideshow is selected
+                }); // end jquery wraped function
+            }, 1000); // end settimeout
         });
     });
 </script>
