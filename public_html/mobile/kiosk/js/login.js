@@ -9,8 +9,9 @@ $(document).ready( function() {
                 var response = $.parseJSON( res );
                 if (response.success) {
                     // set the localstorage keys to note that it is a user and not an admin logged in
-                    localStorage.setItem( "login", "child" );
+                    localStorage.setItem( "login", "user" );
                     localStorage.setItem( "id", response.user_id );
+                    localStorage.setItem( "kiosk", true );
                     // redirect to the users profile page
                     location.href = "/mobile/reg/medals/index.html?id=" + response.user_id;
                 } else {
