@@ -57,6 +57,11 @@ $( document ).ready( function() {
         Cookies.remove('user', { path: '/' }); // log off from the mobile site ( kiosk )
         localStorage.removeItem( "login" );// forget the login type
 
-        window.location = "/mobile/reg/";
+        if ( localStorage.getItem( "kiosk" ) ) {
+            localStorage.removeItem( "kiosk" );
+            window.location = "/mobile/kiosk/";
+        } else {
+            window.location = "/mobile/reg/";
+        }
     });
 })
