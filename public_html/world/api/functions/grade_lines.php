@@ -19,14 +19,14 @@ function grade_lines( $campaigns, $school_id ){
     foreach ($campaigns as $id => $campaign) {
         $bps = new BpSummary( $id, 'class' );
 
-        foreach ( $grades as &$grade ) {
+        foreach ( $grades as $index => $grade ) {
             $learned = intval( $bps->getSummary( $grade['class_id'] ) );
 
             $child_count = isset( $regInfo[ $grade['class_id'] ] ) ? $regInfo[ $grade['class_id'] ] : 0;
             // cast to a number
             $child_count = intval( $child_count );
             if ( $child_count == 0 ) continue;
-            $grade['child_count'] = $child_count;
+            $grades[$index]['child_count'] = $child_count;
 
             $lineInfo[ $grade['class_id'] ][$campaign]['learned'] = $learned;
             $lineInfo[ $grade['class_id'] ][$campaign]['avg'] = $learned > 0 ? floor( $learned / $child_count ) : 0;
@@ -35,8 +35,7 @@ function grade_lines( $campaigns, $school_id ){
 
     // set and return the results
     $results = [];
-    // add the & becuase PHP is insane...
-    foreach( $grades as &$grade ) {
+    foreach( $grades as $grade ) {
         // make sure we have info to send
         if( !isset( $lineInfo[ $grade['class_id'] ] ) ) continue;
 
