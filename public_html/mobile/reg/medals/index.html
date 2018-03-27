@@ -278,7 +278,8 @@
             if( localStorage.getItem( "login" ) == "user" ){
                 $("#mainLink").attr('href', "/mobile/news");
                 $("#mainLink img").attr('src', "/mobile/img_new/news-color-green-svg.svg");
-                $("#mainLink .menu-item #main-title").text("News")
+                $("#mainLink .menu-item #main-title").text("News");
+                $(".header-edit").hide(); // no editing
             }
     		
     		$("#carouselLink").attr('href', '../rank.html?id=' + id);
