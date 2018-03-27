@@ -250,8 +250,11 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 			tanyaCampaign:  <?=$tanyaCampaign?>,
     		mishnaCampaign: <?=$mishnaCampaign?>
 		}
+		// after yud alef nissan disable all entries
+		$("button").attr('disabled', true);
+		$("input").attr('disabled', true);
 	</script>
-	<script src="/js/admin/components/modal.js"></script>
-	<script src="/js/admin/editSoldierLines2.js"></script>
+	<!--<script src="/js/admin/components/modal.js"></script>
+	<script src="/js/admin/editSoldierLines2.js"></script>-->
 	</body>
 </html>
