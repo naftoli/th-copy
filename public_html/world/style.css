@@ -162,6 +162,9 @@ iframe#rebbeVideo {
 /* .amount-table {
     background: #4CAF50;
 } */
+h2.small {
+    font-size: 1.3em;
+}
 div#grade_dropdown_row {
     margin: 20px 0px;
 }
