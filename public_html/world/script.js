@@ -27,6 +27,20 @@ $( document ).ready( function(){
         }
     }
 
+    function getColor( total ) {
+        if (total <= 0 ) {
+            return ""; // no color
+        } else if ( total <= 29 ) {
+            return "red";
+        } else if ( total <= 49 ) {
+            return "bronze";
+        } else if ( total <= 99) {
+            return "silver";
+        } else {
+            return "gold";
+        }
+    }
+
     // load and render the table from the server
     function loadTable( event ) {
         $("button#refresh-table .fa-sync").addClass( "fa-spin" );
@@ -80,12 +94,15 @@ $( document ).ready( function(){
                     }
                     html += '<span class="school_name">' + row.name + '</span>';
                 }
-                
+                // get the averages
+                var tanya_avg = row.campaigns.tanya.avg;
+                var mishna_avg = row.campaigns.mishna.avg;
+
                 html +=     '</td>';
                 html +=     '<td>' + row.campaigns.tanya.learned + '</td>';
-                html +=     row.campaigns.tanya.avg !== undefined ? '<td>' + row.campaigns.tanya.avg + '</td>' : "";
+                html +=     tanya_avg !== undefined ? '<td class="' + getColor( tanya_avg ) + '">' + tanya_avg + '</td>' : "";
                 html +=     '<td>' + row.campaigns.mishna.learned + '</td>';
-                html +=     row.campaigns.mishna.avg !== undefined ? '<td>' + row.campaigns.mishna.avg + '</td>' : "";
+                html +=     mishna_avg !== undefined ? '<td class="' + getColor( mishna_avg ) + '">' + mishna_avg + '</td>' : "";
                 // if the level is not 3, calculate and render the total average for both tanya and mishna combined
                 if ( postData.level !== 3 ) {
                     html += '<td>';

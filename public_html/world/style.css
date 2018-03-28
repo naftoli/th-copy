@@ -173,6 +173,11 @@ img.school_logo {
     width: 20%;
 }
 
+td.red { background-color: red; }
+td.bronze { background: #cd7f32; }
+td.gold { background-color: gold; }
+td.silver { background: silver; }
+
 @media ( max-width: 992px ) {
     img.school_logo {
         width: 80%;
