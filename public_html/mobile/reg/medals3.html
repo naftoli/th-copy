@@ -250,20 +250,6 @@
 				</div>
 			</a>
 		</div>
-	<!--
-		<div class="span3">
-			<a href="#" id="goalsLink">
-			<div class="menu-item">
-				<div class="span12">
-					<img src="images/menu3.png">
-				</div>
-				<div class="span12">
-					<span>Goals</span>
-				</div>
-			</div>
-			</a>
-		</div>
-	-->
 		<div class="span3">
 			<a href="#" id="missionsLink">
 			<div class="menu-item">
@@ -303,6 +289,7 @@
 	</div>
 </div>
 </div>
+<script src="/mobile/js/authenticate.js" defer></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) {
 		$(document).ready(function() {
@@ -314,8 +301,7 @@
 		    
 		    var url = location.toString();
 			var pos = url.indexOf('='); 
-			var id = url.substring( pos+1 );
-			
+            var id = url.substring( pos+1 );
 			var s = id.indexOf('&');
 			var subject = 0;
 			if (s > 0) {
@@ -324,13 +310,13 @@
 				
 				var tPos = temp.indexOf('=');
 				subject = parseInt( temp.substring( tPos+1 ) );
-			}
-			
-			$.post('ajax/checkAuth.php', { user_id : id, admin_id : Cookies.get('admin') }, function( success ) {
-				if (success === "0") {
-					window.location = "/mobile";
-				}
-			});
+            }
+
+            authenticate( id );
+        
+            if( localStorage.getItem("login") == "user" ){
+                $( "#mainLink" ).attr('href', '/mobile/reg/medals/?id=' + id);
+            }
 			
 			$.post('ajax/getPhoto.php', { user_id : id }, function( success ) {
 				var info = $.parseJSON( success );

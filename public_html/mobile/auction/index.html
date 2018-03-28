@@ -164,7 +164,8 @@
 				</div>
 			</div>
 		</div>
-	</body>
+    </body>
+    <script src="/mobile/js/authenticate.js" defer></script>
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {
             var url = location.href.toString();
@@ -176,10 +177,10 @@
     			user = user.substring(0, p);
     		}
     		
-    		var admin = Cookies.get('admin');
-    		if (!admin) {
-    			window.location = "index.html";
-    		}
+    		authenticate( user );
+            if( localStorage.getItem("login") == "user" ){
+                $( "#mainLink" ).attr('href', '/mobile/reg/medals/?id=' + user);
+            }
     			
     		$("#missionsLink").attr('href', '../missionsNew.html?id=' + user);
     		$("#goalsLink").attr('href', '../goalsNew.html?id=' + user);

@@ -803,7 +803,7 @@ $he_chars = array(
 
 <div style="position: fixed;width: 100%;bottom:0px; z-index: 1000;">
     <div class="span12 footer">
-		<div class="span3">
+		<div class="span3" id="mainLink">
 			<? 
 			if (isset($_GET['app'])) echo "<a href='/reg/parent_detail.html'>"; 
 			else echo "<a href='".$mobileURL."reg/parent_detail.html'>";
