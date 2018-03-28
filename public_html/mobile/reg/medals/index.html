@@ -32,7 +32,9 @@
             }
             .body .caption span {color: #004E22;}
             .slider img.active {background: url("/mobile/img_new/circle-color-green-solid-svg.svg"); content: url("/mobile/img_new/circle-color-green-solid-svg.svg");}
-/*			MEDIA QUERIES */
+            .l-3 div.medal-sub { background-image: url("/mobile/img_new/banner-1-color-orange-svg.svg"); background-size: cover; }
+            .l-3 .medal-sub span { margin-top: 15px; }
+            /*			MEDIA QUERIES */
 			@media(min-width: 767px) and (max-width: 900px) {
 				.header .top-right-space{margin-right: 20px;}
 				.header .top-left-space{margin-left: 20px;}
@@ -413,7 +415,7 @@
     					html += '<img class="medal" src="/file_view.php?id=' + medal.photo + '">';
     				else 
     					html += '<img class="medal" src="/kiosk/images/medals/holder.png">';
-    				html += '</a><div class="medal-sub" style="background-image: url(images/bot-caption.png);">\
+    				html += '</a><div class="medal-sub">\
     								<div style="display: table;width: 100%;"><span>' + medal.name + '</span></div>\
     							</div>\
     							<span>' + medal.left + ' to Level ' + medal.next + '</span>\
