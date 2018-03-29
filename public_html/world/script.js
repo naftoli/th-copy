@@ -27,6 +27,20 @@ $( document ).ready( function(){
         }
     }
 
+    function getColor( total ) {
+        if (total <= 0 ) {
+            return ""; // no color
+        } else if ( total <= 29 ) {
+            return "red";
+        } else if ( total <= 49 ) {
+            return "bronze";
+        } else if ( total <= 99) {
+            return "silver";
+        } else {
+            return "gold";
+        }
+    }
+
     // load and render the table from the server
     function loadTable( event ) {
         $("button#refresh-table .fa-sync").addClass( "fa-spin" );
@@ -62,33 +76,33 @@ $( document ).ready( function(){
                 var nextLevel =  postData.grade ? 3 : parseInt( postData.level ) + 1;
 
                 html += "<tr>";
-                html +=     '<th></td><td>';
+                html +=     '<td class="first">';
+                if ( postData.level == 1 ){
+                    html += "<img class='school_logo' alt='school_logo' src='//mashpia.com/schoolLogos/" + 
+                        ( row.logo ? row.logo : "_logo.png" ) + "'/>";
+                }
+                html += '<span class="number"></span>';
+                html += '</td><td>';
 
                 if ( postData.level < 3 && !row.lastLevel ) {
                     html +=         '<a class="id_link" href="#' + nextLevel + '-' + row.id  + '" >';
-                    // add the logo for the first row
-                    if ( postData.level == 1 ){
-                        html += "<img class='school_logo' alt='school_logo' src='//mashpia.com/schoolLogos/" + 
-                            ( row.logo ? row.logo : "_logo.png" ) + "'/>";
-                    }
                     html +=             '<span class="school_name">' + row.name + '</span>';
                     html +=         '</a>';
                 } else {
-                    if ( postData.level == 1 ){
-                        html += "<img class='school_logo' alt='school_logo' src='//mashpia.com/schoolLogos/" + 
-                            ( row.logo ? row.logo : "_logo.png" ) + "'/>";
-                    }
                     html += '<span class="school_name">' + row.name + '</span>';
                 }
-                
+                // get the averages
+                var tanya_avg = row.campaigns.tanya.avg;
+                var mishna_avg = row.campaigns.mishna.avg;
+
                 html +=     '</td>';
-                html +=     '<td>' + row.campaigns.tanya.learned + '</td>';
-                html +=     row.campaigns.tanya.avg !== undefined ? '<td>' + row.campaigns.tanya.avg + '</td>' : "";
-                html +=     '<td>' + row.campaigns.mishna.learned + '</td>';
-                html +=     row.campaigns.mishna.avg !== undefined ? '<td>' + row.campaigns.mishna.avg + '</td>' : "";
+                html +=     '<td class="total">' + row.campaigns.tanya.learned + '</td>';
+                html +=     tanya_avg !== undefined ? '<td class="total ' + getColor( tanya_avg ) + '">' + tanya_avg + '</td>' : "";
+                html +=     '<td class="total">' + row.campaigns.mishna.learned + '</td>';
+                html +=     mishna_avg !== undefined ? '<td class="total ' + getColor( mishna_avg ) + '">' + mishna_avg + '</td>' : "";
                 // if the level is not 3, calculate and render the total average for both tanya and mishna combined
                 if ( postData.level !== 3 ) {
-                    html += '<td>';
+                    html += '<td class="total">';
                     html += Math.floor( 
                         ( row.campaigns.tanya.learned + row.campaigns.mishna.learned ) / row.child_count 
                     );
@@ -117,7 +131,7 @@ $( document ).ready( function(){
             // show index column as per docs here: https://datatables.net/examples/api/counter_columns.html
             reportTable.on( 'order.dt search.dt', function () {
                 reportTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-                    cell.innerHTML = i + 1;
+                    $( cell ).find( ".number" ).html( i + 1 );
                 } );
             } ).draw();
         });
