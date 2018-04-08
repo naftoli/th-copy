@@ -406,6 +406,7 @@
 
             var html = "";
             var start = 0;
+            var showRankAfterSlideShow = true;
             for (var j = 1; j < 15; j++) {
                 var end = parseInt( medalsInfo[j+1] );
                 if (j == 14) end = 133; // 5 star general ending
@@ -413,7 +414,9 @@
                 html += '<div id="' + j + '">';
                 html +=     '<div class="rank-logo">';
                 html +=         '<div class="rankName">' + ranks[j] + '</div>';
-                html +=         '<img class="medal real rankLogo" src="/mobile/img_new/ranks/' + j + '.svg" />';
+                html +=         '<img class="medal real rankLogo ' + (
+                    showRankAfterSlideShow ? "rankLogoEarned" : ""
+                ) + '" src="/mobile/img_new/ranks/' + j + '.svg" />';
                 html +=     '</div>';
                 html +=     '<div class="rank-medals">';
                 // for each medal show a icon
@@ -428,9 +431,10 @@
                             html +=     '<img class="medal real medalPic" src="../../../file_view.php?id=' + medals[i].photo + '" />';
                             html += '</a>';
                         }
+                    } else {
+                        html += '<img class="medal" src="../../../kiosk/images/medals/holder.png" />';
+                        showRankAfterSlideShow = false;
                     }
-                    else html += '<img class="medal" src="../../../kiosk/images/medals/holder.png" />';
-                    
                     html += '</div>';
                 }
                 html += '</div>';
@@ -498,13 +502,13 @@
                             $(this).removeClass("active");
                         });
                         // update the correct dot to be active
-                        $(".slider img:nth-child("+next_item+")").addClass("active");
+                        $(".slider img:nth-child(" + next_item + ")").addClass("active");
                         // set the rest of the images to be faded out a bit
-                        $(".real").attr('style', 'opacity: 0.3');
+                        $(".real").attr('style', 'opacity: 0.8');
                         $("#" + next_item).find(".real").attr('style', 'opacity: 1');
                         // if we have hit the rank
                         if (item == rank){
-                            $(".medalPic").attr('style', 'opacity: 1');
+                            $(".medalPic, .rankLogoEarned").attr('style', 'opacity: 1');
                             carousel.stopAutoSlideshow(); // stop
                             loop++; // increment the loop
                         } else {
