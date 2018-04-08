@@ -53,16 +53,17 @@ function school_lines( $campaigns, $grade ) {
             $ids[] = $school['school_id'];
         }
     }
-
     // arrays for generating the results
     $regInfo = get_reg_info( $ids, !!$grade );
     $lineInfo = [];
 
-    foreach ($campaigns as $id => $campaign) {
+    foreach ($campaigns as $campaign_id => $campaign) {
         // create the BpSummary that we need.
-        $bps = new BpSummary( $id, $grade ? 'class' : 'school' );
+        $bps = new BpSummary( $campaign_id, $grade ? 'class' : 'school' );
 
-        foreach ( $info as &$row ) {
+        foreach ( $info as $index => $row ) {
+            if ( !isset( $row['id'] ) ) continue;
+
             $id = $row['id'];
             $learned = intval( $bps->getSummary( $id ) );
 
@@ -76,7 +77,7 @@ function school_lines( $campaigns, $grade ) {
 
             // make sure we have kids in the class/school
             if ( $child_count == 0 ) continue;
-            else $row['child_count'] = $child_count;
+            else $info[$index]['child_count'] = $child_count;
             
             $lineInfo[$id][$campaign]['learned'] = $learned;
             $lineInfo[$id][$campaign]['avg'] = $learned > 0 ? floor( $learned / $child_count ) : 0;
@@ -87,9 +88,9 @@ function school_lines( $campaigns, $grade ) {
 
     // format the data for the result
     // DO NOT REMOVE THE & it prevents the last one from being incorrect
-    foreach( $info as &$row ) {
+    foreach( $info as $row ) {
         // make sure we have info to send
-        if( !isset( $lineInfo[ $row['id'] ] ) ) continue;
+        if( !isset( $row['id'] ) || !isset( $lineInfo[ $row['id'] ] ) ) continue;
 
         $lines = $lineInfo[ $row['id'] ];
         $results[] = [
