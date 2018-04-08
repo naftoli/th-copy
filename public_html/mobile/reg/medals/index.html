@@ -57,20 +57,33 @@
 				.header{height: 300px;}
 			}
 			@media( min-width: 640px ){ .header-edit{min-width: 120px;} }
-			@media (min-width:  600px) and (max-width: 749px){
+            @media (min-width:  600px) and (max-width: 749px){
 				#userImg {width: 200px; height: 200px;}
-			}
+            }
 			@media( min-width: 460px ){
 				.header-setting{ min-width: 120px; }
-			}
+            }
+            @media (max-width: 639px) {
+                .l-3 .medal-sub span {
+                    margin-top: 10px;
+                    padding: 3px;
+                }
+            }
 			@media ( max-width: 479px ) {
 				.mt1{ margin-top: 15px; }
 				.header-top{ margin-top: 5px; }
-				.header { height: 180px; }
+                .header { height: 180px; }
+                
+                .l-3 .medal-sub span {
+                    margin-top: 7px;
+                    padding: 3px;
+                    font-size: 1em;
+                }
+                .l-3 div.medal-sub { background-size: 100% 100%; }
 			}
 			@media (max-width:  450px){
 				#userImg {width: 120px;height: 120px;}
-			}
+            }
 		</style>
 	</head>
 	<body>
