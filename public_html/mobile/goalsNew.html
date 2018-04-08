@@ -27,7 +27,7 @@
 			.page-goals .task{font-size: 13px;margin-bottom: 8px;}
 			.page-goals li b {vertical-align: top;}
 			.page-goals li label {margin-bottom: 0px;margin-right: 5px;}
-			.page-goals .he li label {margin-bottom: 0px;margin-right: 0px;margin-left: 5px;}float: right;margin-top: 10px;}
+			.page-goals .he li label {margin-bottom: 0px;margin-right: 0px;margin-left: 5px; float: right; margin-top: 10px; }
 /*        	Other more genearal stylss...*/
 			.alert {margin-bottom: 0;}
         	.info {padding: 2%;margin-top: 5px;margin-bottom: 7px;font-weight: bold;line-height: 1.1; clear: both;}
@@ -57,24 +57,28 @@
 /*			Links on top of page...*/
 			a#back-link, a#create-link, a#campaign-link, button.enroll {color: #fff;padding: 8px;border-radius: 5px;display: inline-block;background: #5e1c77; transition: .1s;}
 			a#back-link:hover, a#create-link:hover {text-decoration: none}
-			a#create-link, a#campaign-link, .he a#back-link{float: right; margin-left: 10px;} .he a#create-link, .he a#campaign-link, a#back-link{float: left; margin-left: 0px; margin-right: 10px;}
-			a#back-link img{height: 20px; width: 20px;padding: 2px;}
+            a#create-link, .he a#back-link{float: right;} 
+            .he a#create-link, a#back-link{float: left;}
+            a#back-link img{height: 20px; width: 20px;padding: 2px;}
+            
+            .navbar-header { min-height: 48px; }
+            .page-goals header.navbar h1 { height: auto; font-size: 40px; padding: 16.5px 0px; margin: 0px; }
+            
 			@media (max-width: 415px){
 				a#back-link, a#create-link, a#campaign-link{font-size: .9em;}
 				a#back-link img{height: 15px; width: 15px;padding: 1px;}
 				.link-container{margin-left: -10px; margin-right: -10px;}
 			}
-			@media (max-width: 385px){
-				a#back-link, a#create-link, a#campaign-link{font-size: .87em;}
-			}
 			@media (max-width: 556px){
 				a#back-link, .he a#back-link,
 				a#create-link, .he a#create-link,
 				a#campaign-link, .he a#campaign-link{
-					float: none; margin-top: 10px; margin-left: 0px;
+					float: none; margin-left: 0px;
 				}
 				a#back-link, .he a#back-link {display: inline-block;margin-top: -10px; margin-right: 0px;}
-				a#back-link img, .he a#back-link img{display: none;}
+                a#back-link img, .he a#back-link img{display: none;}
+                
+                .page-goals header.navbar h1 { font-size: 30px; padding-top: 8px; padding-bottom: 5px; }
 			}
 		</style>
     </head>
