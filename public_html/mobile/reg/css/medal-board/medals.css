@@ -131,9 +131,10 @@ img.medal-img {
     }
 }
 
-@media ( min-width: 780px ) {
+@media ( min-width: 768px ) {
     .medal-board .medal {
         width: 25%;
+        padding: 1% 2%;
     }
 }
 
