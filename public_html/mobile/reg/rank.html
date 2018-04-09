@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Mobile Web Site</title>
+    <title>Tzivos Hashem | Rank Board</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style type="text/css">
     html{font-family:sans-serif}body{margin:0}a{background-color:transparent}b{font-weight:700}img{border:0}table{border-spacing:0;border-collapse:collapse}td{padding:0}*{box-sizing:border-box}::after,::before{box-sizing:border-box}html{font-size:10px}body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}img{vertical-align:middle}ul{margin-top:0;margin-bottom:10px}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}table{background-color:transparent}.well{min-height:20px;padding:19px;margin-bottom:20px;background-color:#f5f5f5;border:1px solid #e3e3e3;border-top-left-radius:4px;border-top-right-radius:4px;border-bottom-right-radius:4px;border-bottom-left-radius:4px;-webkit-box-shadow:rgba(0,0,0,.0470588) 0 1px 1px inset;box-shadow:rgba(0,0,0,.0470588) 0 1px 1px inset}.well-sm{padding:9px;border-top-left-radius:3px;border-top-right-radius:3px;border-bottom-right-radius:3px;border-bottom-left-radius:3px}.container::after,.container::before{display:table;content:' '}.container::after{clear:both}a{color:#3c8dbc}body{margin:0;padding:0;font-size:12px}.container{width:100%;margin:0 auto;display:table;padding:0}.span12{width:100%;float:left}.span3{width:25%;float:left}.l-4{width:100%;margin-top:30px}.footer{text-align:center;border-top-width:2px;border-top-style:solid;border-top-color:#9f9f9f;display:table;width:100%}.footer .span3{background-color:#e6e6e6}.footer .span3 span{padding:5px;color:grey;font-size:20px;font-family:font1}.footer .menu-item{width:130px;height:100px;margin:0 auto}.footer .span3 img{width:80px}.slider img{width:26px}.footer .span3.active{background-image:-webkit-linear-gradient(top,#e9e9e9,#b7b8b9);background-position:initial initial;background-repeat:initial initial}.header-yellow{width:100%;background-color:#f68829}.header-yellow table{font-size:80px;font-family:font3;color:#fff}.rank-page .caption-general{font-size:40px;text-align:center;color:#2c58ba;font-family:font1-bold;line-height:60px}@media screen and (max-width:1024px){.container{width:100%;margin:0;padding:0;border:0 solid #9f9f9f;border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:0}.footer{border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:0}}@media screen and (max-width:900px){.footer .menu-item{width:120px;height:100px}.footer .span3 img{width:80px}.header-yellow table{font-size:60px}.rank-page .caption-general{font-size:30px;line-height:50px}}@media screen and (max-width:767px){.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}.footer .span3 span{font-size:14px}.slider img{width:24px}.header-yellow table{font-size:40px}.rank-page .caption-general{font-size:25px;line-height:50px}}@media screen and (max-width:639px){.footer .menu-item{width:100px;height:60px}.footer .span3 img{width:50px}.footer .span3 span{font-size:12px}.slider img{width:20px}.header-yellow table{font-size:40px}.rank-page .caption-general{font-size:20px;line-height:40px}.rank-page .l-4{margin-top:15px}}@media screen and (max-width:479px){.footer .menu-item{width:60px;height:40px}.footer .span3 img{width:30px}.footer .span3 span{font-size:8px}.header-yellow table{font-size:30px}.rank-page .caption-general{font-size:17px;line-height:34px}}body{background-color:#fcfcfc}/*@media screen and (-webkit-min-device-pixel-ratio:0){html{margin-left:1px}}*/.sky-carousel{width:100%;height:360px;position:relative;border:1px solid #e7e7e7;background-color:#f5f5f5;overflow:hidden;margin:0 auto;background-position:initial initial;background-repeat:initial initial}.sky-carousel .sky-carousel-container{position:relative;list-style-type:none;float:left;margin:0;padding:0}.sky-carousel .sky-carousel-container li{position:absolute;border:0}.sky-carousel .sky-carousel-container li img{display:block;border:0;max-width:none!important}
@@ -19,8 +19,11 @@
     
     <style>
         body{margin-bottom: 120px;}
-        .medal {
+        .medal, .medal.real.rankLogo  {
             opacity: 0.3;
+        }
+        .medal.real, .medal.real.rankLogo.rankLogoEarned {
+            opacity: 1;
         }
         #userImg {
             border-radius: 50%; width: 100%; height: 100%; border: 2px solid #31559f;
@@ -445,9 +448,6 @@
             $("#ranks").append( html );
             
             var top = rank + 1;
-            for (var j = 1; j <= top; j++) {
-                $("#" + j).find('.real').attr('style', 'opacity: 1');
-            }
             
             var height = $(".medalPic:first-child").height();
             $(".addHeight").each( function(i, v) {
@@ -503,12 +503,8 @@
                         });
                         // update the correct dot to be active
                         $(".slider img:nth-child(" + next_item + ")").addClass("active");
-                        // set the rest of the images to be faded out a bit
-                        $(".real").attr('style', 'opacity: 0.8');
-                        $("#" + next_item).find(".real").attr('style', 'opacity: 1');
                         // if we have hit the rank
                         if (item == rank){
-                            $(".medalPic, .rankLogoEarned").attr('style', 'opacity: 1');
                             carousel.stopAutoSlideshow(); // stop
                             loop++; // increment the loop
                         } else {
