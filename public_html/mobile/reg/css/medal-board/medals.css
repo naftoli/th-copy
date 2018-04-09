@@ -1,0 +1,144 @@
+@font-face {
+	font-family: digi;
+	src: url(/mobile/reg/font/DS-DIGIB.TTF);
+}
+
+.medal-board {
+    max-width: 994px;
+    margin: 0 auto;
+}
+
+.medal-board .medal {
+    width: 33%;
+    text-align: center;
+    display: inline-block;
+    padding: 2%;
+}
+
+img.medal-img {
+    width: 70%;
+}
+
+.medal-board .medal-subject {
+    background-image: url(/mobile/img_new/banner-1-color-orange-svg.svg);
+    background-size: 100% 100%;
+    height: 30px;
+    margin-top: -20px;
+    line-height: 35px;
+    position: relative;
+    transition: .25s;
+    font-size: 1.2em;
+}
+
+.medal-board .medal-subject span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    color: #fff;
+    font-family: font1, "Times New Roman";
+}
+
+.medal-board .medal-status {
+    position: relative;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+.medal-board .progress-bar {
+    background-color: #f39c12;
+    height: 100%;
+    background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    animation-name: progress-bar-slide;
+    animation-duration: 2.5s;
+}
+
+/* colors for all the coming ranks */
+.medal-board .progress-bar.white {
+    background-color: #e0e0e0;
+}
+.medal-board .progress-bar.red {
+    background-color: #ef5350;
+}
+.medal-board .progress-bar.orange {
+    background-color: #ffa726;
+}
+.medal-board .progress-bar.yellow {
+    background-color: #ffee58;
+}
+.medal-board .progress-bar.green {
+    background-color: #9ccc65;
+}
+.medal-board .progress-bar.blue {
+    background-color: #29b6f6;
+}
+.medal-board .progress-bar.purple {
+    background-color: #ab47bc;
+}
+.medal-board .progress-bar.brown {
+    background-color: #a1887f;
+}
+.medal-board .progress-bar.grey {
+    background-color: #b0bec5;
+}
+.medal-board .progress-bar.black {
+    background-color: #616161;
+}
+.medal-board .progress-bar.bronze {
+    background-color: #bcaaa4;
+}
+
+.medal-status span {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: 0px;    
+    font-family: digi, monospace;
+    font-size: 1.1em;
+}
+
+@keyframes progress-bar-slide {
+    from {max-width: 0%;}
+    to {max-width: 100%;}
+}
+
+@media ( max-width: 322px ) {
+    .medal-board .medal-subject {
+        font-size: 1em;
+    }
+}
+
+/* Scale for Desktop */
+@media ( min-width: 524px ) {
+    .medal-board .medal-subject {
+        height: 40px;
+        margin-top: -25px;
+        line-height: 45px;
+        font-size: 1.4em;
+    }
+}
+
+@media ( min-width: 680px ) {
+    .medal-board .medal-subject {
+        height: 50px;
+        margin-top: -30px;
+        line-height: 55px;
+        font-size: 1.6em;
+    }
+
+    .medal-status.progress {
+        height: 25px;
+        font-size: 1.25em;
+    }
+}
+
+@media ( min-width: 780px ) {
+    .medal-board .medal {
+        width: 25%;
+    }
+}
+
+@media ( min-width: 900px ) {
+    .medal-board .medal-subject {
+        font-size: 2em;
+    }
+}
