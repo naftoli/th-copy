@@ -54,7 +54,7 @@ img.medal-img {
 
 /* colors for all the coming ranks */
 .medal-board .progress-bar.white {
-    background-color: #e0e0e0;
+    background-color: #bbbbbb;
 }
 .medal-board .progress-bar.red {
     background-color: #ef5350;
@@ -63,7 +63,7 @@ img.medal-img {
     background-color: #ffa726;
 }
 .medal-board .progress-bar.yellow {
-    background-color: #ffee58;
+    background-color: #fdd835;
 }
 .medal-board .progress-bar.green {
     background-color: #9ccc65;
