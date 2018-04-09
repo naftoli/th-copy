@@ -19,36 +19,14 @@
     
     <style>
         body{margin-bottom: 120px;}
-        .awarded {
-            position: relative;
-            top: -160px;
-            text-align: center;
-            z-index: 99;
-            font-size: 36px;
-            font-weight: bold;
-            background-color: #666666;
-            -webkit-background-clip: text;
-            -moz-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: rgba(255,255,255,0.5) 0px 3px 3px;
-        }
         .medal {
             opacity: 0.3;
         }
         #userImg {
-            border-radius: 50%;
-            width: 100%;
-            height: 100%;
-            border: 2px solid #31559f;
+            border-radius: 50%; width: 100%; height: 100%; border: 2px solid #31559f;
         }
         .personalImg {
-            width: 50px;
-            height: 50px;
-            left: 1%;
-            top: 1%;
-            border-radius: 50%;
-            position: absolute;
+            width: 50px; height: 50px; left: 1%; top: 1%; border-radius: 50%; position: absolute;
         }
         
         @font-face {
@@ -115,9 +93,22 @@
         @media (min-width: 525px){
             .header-yellow #page-title{font-size: 40px;padding: 10px 0px;}
         }
-        .sky-carousel .sky-carousel-container li img{display: none;}
-        .sky-carousel .sky-carousel-container li img.sc-image{display: block;}
+        .sky-carousel .sky-carousel-container li img{ display: none; }
+        .sky-carousel .sky-carousel-container li img.sc-image{ display: block; }
+        .sky-carousel.sc-no-select { border: none; background: none; border-radius: 11px; }
+        .sky-carousel { height: 200px; }
+        .slider img.active { background: url("/mobile/img_new/circle-color-orange-solid-svg.svg"); }
         .header-yellow{min-height: 48px;}
+
+        /* redesigned rank board (new icons, fix some bugs) */
+        .rank-logo { width: 18%; display: inline-block; vertical-align: top; text-align: center; margin-top: 10px;}
+        .rank-medals { width: 82%; display: inline-block; }
+        .rank-medal {display: inline-block; text-align: center; width: 18.3%;}
+        @media( max-width: 450px) {
+            .rank-logo { width: 28%; margin-top: 5px; }
+            .rank-medals { width: 72%; }
+            .rank-medal { width: 25%; }
+        }
     </style>
 </head>
 <body class="rank-page">
@@ -129,7 +120,7 @@
 
 <div class="personalImg"></div>
 <div class="bug-report">
-	<img src="/mobile/img_new/report-bug-white-svg.svg" data-category="Rank Board" alt="bug-report" />
+	<img src="/mobile/img_new/tools-color-white-svg.svg" data-category="Rank Board" alt="bug-report" />
 </div>
 
 <div class="container">
@@ -172,65 +163,65 @@
                 <div class="sky-carousel-wrapper">
                     <ul class="sky-carousel-container">
                         <li>
-                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/1.png" alt="">
+                            <img src="/mobile/reg/medals/images/trophits/1.png" alt="">
                         </li>
                         <li>
-                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/2.png" alt="">
+                            <img src="/mobile/reg/medals/images/trophits/2.png" alt="">
                         </li>
                         <li>
-                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/3.png" alt="">
+                            <img src="/mobile/reg/medals/images/trophits/3.png" alt="">
                         </li>
                         <li>
-                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/4.png" alt="">
+                            <img src="/mobile/reg/medals/images/trophits/4.png" alt="">
                         </li>
                         <li>
-                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/5.png" alt="">
+                            <img src="/mobile/reg/medals/images/trophits/5.png" alt="">
                         </li>
                         <li>
-                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/6.png" alt="">
+                            <img src="/mobile/reg/medals/images/trophits/6.png" alt="">
                         </li>
                         <li>
-                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/7.png" alt="">
+                            <img src="/mobile/reg/medals/images/trophits/7.png" alt="">
                         </li>
                         <li>
-                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/8.png" alt="">
+                            <img src="/mobile/reg/medals/images/trophits/8.png" alt="">
                         </li>
                         <li>
-                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/9.png" alt="">
+                            <img src="/mobile/reg/medals/images/trophits/9.png" alt="">
                         </li>
                         <li>
-                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/10.png" alt="">
+                            <img src="/mobile/reg/medals/images/trophits/10.png" alt="">
                         </li>
                         <li>
-                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/11.png" alt="">
+                            <img src="/mobile/reg/medals/images/trophits/11.png" alt="">
                         </li>
                         <li>
-                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/12.png" alt="">
+                            <img src="/mobile/reg/medals/images/trophits/12.png" alt="">
                         </li>
                         <li>
-                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/13.png" alt="">
+                            <img src="/mobile/reg/medals/images/trophits/13.png" alt="">
                         </li>
                         <li>
-                            <img src="https://mashpia.com/mobile/reg/medals/images/trophits/14.png" alt="">
+                            <img src="/mobile/reg/medals/images/trophits/14.png" alt="">
                         </li>
                     </ul>
                 </div>
             </div>
             <div class="span12 slider" style="margin-top:10px;text-align: center;">
-                <img id="item0" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
-                <img id="item1" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
-                <img id="item2" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
-                <img id="item3" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
-                <img id="item4" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
-                <img id="item5" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
-                <img id="item6" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
-                <img id="item7" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
-                <img id="item8" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
-                <img id="item9" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
-                <img id="item10" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
-                <img id="item11" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
-                <img id="item12" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
-                <img id="item13" src="https://mashpia.com/mobile/reg/medals/images/circle.png">
+                <img id="item0" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item1" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item2" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item3" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item4" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item5" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item6" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item7" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item8" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item9" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item10" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item11" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item12" src="/mobile/img_new/circle-color-orange-svg.svg">
+                <img id="item13" src="/mobile/img_new/circle-color-orange-svg.svg">
             </div>
             <div style="clear: both; margin-bottom: 10px;"></div>
             
@@ -299,15 +290,16 @@
         </div>
     </div>
 </div>
+<script src="/mobile/js/authenticate.js" defer></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) {
         var carousel = "";
         var loop = 0;
         function isiPhone(){
             return (
-                    (navigator.platform.indexOf("iPhone") != -1) ||
-                            (navigator.platform.indexOf("iPod") != -1)
-                    );
+                (navigator.platform.indexOf("iPhone") != -1) ||
+                (navigator.platform.indexOf("iPod") != -1)
+            );
         }
         $(document).ready(function(){
 
@@ -323,9 +315,9 @@
             $.post('ajax/getPhoto.php', { user_id : id }, function( success ) {
                 var info = $.parseJSON( success );
                 var html = '<a href="medals/index.html?id=' + id +'">';
-                if (info.mobile_pic) html += '<img id="userImg" src="https://mashpia.com/mobile/reg/' + info.mobile_pic + '">';
-                else if (info.thumb) html += '<img id="userImg" src="https://mashpia.com/thumbs/' + info.thumb + '">';
-                else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' + info.photo + '">';
+                if (info.mobile_pic) html += '<img id="userImg" src="/mobile/reg/' + info.mobile_pic + '">';
+                else if (info.thumb) html += '<img id="userImg" src="/thumbs/' + info.thumb + '">';
+                else if (info.photo) html += '<img id="userImg" src="/file_view.php?id=' + info.photo + '">';
                 html += '</a>';
                 $(".personalImg").append( html );
                 // set the USER ID for bug reports
@@ -360,15 +352,14 @@
         });
             
         var url = location.toString();
-        var pos = url.indexOf('='); 
-        var id = url.substring( pos+1 );
+        var id = url.substring( url.indexOf('=') + 1 );
         
-        $.post('ajax/checkAuth.php', { user_id : id, admin_id : Cookies.get('admin') }, function( success ) {
-            if (success == 0) {
-                window.location = "/mobile";
-            }
-        });
+        authenticate( id );
         
+        if( localStorage.getItem("login") == "user" ){
+            $( "#mainLink" ).attr('href', '/mobile/reg/medals/?id=' + id);
+        }
+
         $("#missionsLink").attr('href', '../missionsNew.html?id=' + id);
         $("#goalsLink").attr('href', '../goalsNew.html?id=' + id);
         $("#rankLink").attr('href', 'rank.html?id=' + id);
@@ -416,32 +407,34 @@
             var html = "";
             var start = 0;
             for (var j = 1; j < 15; j++) {
-                var end = parseInt(medalsInfo[j+1]);
-                if (j == 14) end = 133;
+                var end = parseInt( medalsInfo[j+1] );
+                if (j == 14) end = 133; // 5 star general ending
                 
                 html += '<div id="' + j + '">';
-                html += '<div class="span4" style="text-align: center; width: 19%;">&nbsp;<br />';
-                html += '<div class="rankName">' + ranks[j] + '</div>';
-                html += '<img class="medal real rankLogo" src="images/ranklogos/' + j + '.png" /></div>';
-                var k = 1;
+                html +=     '<div class="rank-logo">';
+                html +=         '<div class="rankName">' + ranks[j] + '</div>';
+                html +=         '<img class="medal real rankLogo" src="/mobile/img_new/ranks/' + j + '.svg" />';
+                html +=     '</div>';
+                html +=     '<div class="rank-medals">';
+                // for each medal show a icon
                 for (var i = start; i < end; i++) {
-                    if (j > 5 && k % 6 == 0) {
-                        html += '<div class="span4 xtra" style="text-align: center; width: 19%;"><img class="medal" src="images/ranklogos/' + j + '.png" style="opacity: 0" /></div>';
-                        k++;
-                    }
-                    html += '<div class="span4" style="text-align: center; width: 15%;">';
-                    html += (i+1) + '<br />';
-                    if (i < num) {
-                        if (medals[i].subject == 106) {
-                            html += '<img class="medal real medalPic" src="../../../file_view.php?id=' + medals[i].photo + '" /></div>';
+                    html += '<div class="rank-medal">';
+                    html += ( i + 1 ) + '<br />'; // print the medal number
+                    if ( i < num ) {
+                        if ( medals[i].subject == 106 ) {
+                            html += '<img class="medal real medalPic" src="../../../file_view.php?id=' + medals[i].photo + '" />';
                         } else {
-                            html += '<a href="medals3.html?id=' + id + '&subject=' + medals[i].subject + '"><img class="medal real medalPic" src="../../../file_view.php?id=' + medals[i].photo + '" /></a></div>';
+                            html += '<a href="medals3.html?id=' + id + '&subject=' + medals[i].subject + '">';
+                            html +=     '<img class="medal real medalPic" src="../../../file_view.php?id=' + medals[i].photo + '" />';
+                            html += '</a>';
                         }
                     }
-                    else html += '<img class="medal" src="../../../kiosk/images/medals/holder.png" /></div>';
-                    k++;
+                    else html += '<img class="medal" src="../../../kiosk/images/medals/holder.png" />';
+                    
+                    html += '</div>';
                 }
-                html += '</div><div style="clear: both"></div><hr style="width: 50%;" />';
+                html += '</div>';
+                html += '</div><hr style="width: 90%;" />';
                 start = end;
             }
             
@@ -463,245 +456,67 @@
                 }
             });
             
-            /*
-            var html = "";
-            for (var i = 0; i < num; i++) {
-                html += '<div class="span3" style="text-align: center;">\
-                            <img class="medal" src="../../../file_view.php?id=' + medals[i].photo + '">\
-                            <div class="awarded">' + medals[i].awarded + '</div>\
-                        </div>';
-            }
-            */
-            /*
-            for (var j = 0; j < empty; j++) {
-                html += '<div class="span3" style="text-align: center;">\
-                            <img class="medal" src="images/holder.png">\
-                        </div>';
-            }
-            */  
-            
-            var isiPhone = navigator.userAgent.toLowerCase().indexOf("iphone");
-            var isiPad = navigator.userAgent.toLowerCase().indexOf("ipad");
-            var isiPod = navigator.userAgent.toLowerCase().indexOf("ipod");
-        
-            //if (isiPhone > -1) {
-                $(".sky-carousel-container li img").css({"width":"100px","height":"180px"});
-                $(".sky-carousel").css("height","200px");
-                setTimeout( function() {
-                    $( function() {
-                        /*
-                        carousel = $('.sky-carousel').carousel({
-                            itemWidth: 100,
-                            itemHeight: 180,
-                            distance: 40,
-                            startIndex: 0,
-                            autoSlideshowDelay: 1,
-                            loop : false,
-                            selectedItemDistance: 0,
-                            selectedItemZoomFactor: 1,
-                            unselectedItemZoomFactor: 0.7,
-                            unselectedItemAlpha: 0.2,
-                            topMargin: 10,
-                            preload:true,
-                            showPreloader:true,
-                            navigationButtonsVisible: false,
-                            gradientStartPoint: 0.5,
-                            gradientEndPoint: 1,
-                            reflectionDistance:100,
-                            gradientOverlayColor: "#f5f5f5",
-                            gradientOverlaySize: 0,
-                            slideSpeed: 1,
-                            enableMouseWheel : false,
-                            selectByClick: false
+            $(".sky-carousel-container li img").css({"width":"100px","height":"180px"});
+            $(".sky-carousel").css( { "width" : "100%", "margin" : "0px" } );
+            setTimeout( function() {
+                $( function() {
+                    carousel = $('.sky-carousel').carousel({
+                        itemWidth: 100,
+                        itemHeight: 180,
+                        distance: 40,
+                        startIndex: 0,
+                        autoSlideshowDelay: 1,
+                        loop : false,
+                        selectedItemDistance: 20,
+                        selectedItemZoomFactor: 1,
+                        unselectedItemZoomFactor: 0.7,
+                        unselectedItemAlpha: 0.2,
+                        topMargin: 10,
+                        preload:true,
+                        showPreloader:true,
+                        navigationButtonsVisible: false,
+                        gradientStartPoint: 0.5,
+                        gradientEndPoint: 1,
+                        reflectionDistance:100,
+                        gradientOverlaySize: 0,
+                        slideSpeed: 1,
+                        enableMouseWheel : false,
+                        selectByClick: false
+                    }); // end options
+                    carousel.startAutoSlideshow(); // autmatically start the slideshow
+                    // when an item is selected...
+                    carousel.on('itemSelected.sc', function(evt) {
+                        var item = evt.item.index(); // get the index
+                        if ( item == 1 && rank == 0 ) { // go back to the first element if the user is a private
+                            carousel.selectPrevious( 1 );
+                            carousel.stopAutoSlideshow( );
+                            return;
+                        }
+                        // get the next item and remove the active class from the circle
+                        var next_item = parseInt(item) + 1;
+                        $(".slider img").each(function(){
+                            $(this).removeClass("active");
                         });
-                        */
-                        carousel = $('.sky-carousel').carousel({
-                            itemWidth: 100,
-                            itemHeight: 180,
-                            distance: 40,
-                            startIndex: 0,
-                            autoSlideshowDelay: 1,
-                            loop : false,
-                            selectedItemDistance: 20,
-                            selectedItemZoomFactor: 1,
-                            unselectedItemZoomFactor: 0.7,
-                            unselectedItemAlpha: 0.2,
-                            topMargin: 10,
-                            preload:true,
-                            showPreloader:true,
-                            navigationButtonsVisible: false,
-                            gradientStartPoint: 0.5,
-                            gradientEndPoint: 1,
-                            reflectionDistance:100,
-                            gradientOverlayColor: "#f5f5f5",
-                            gradientOverlaySize: 100,
-                            slideSpeed: 1,
-                            enableMouseWheel : false,
-                            selectByClick: false
-                        });
-                        carousel.startAutoSlideshow();
-        
-                        carousel.on('itemSelected.sc', function(evt) {
-                            var item = evt.item.index();
-                            if (item == 1 && rank == 0) { // go back to the first medal if the user's rank is 0
-                                carousel.selectPrevious(1);
+                        // update the correct dot to be active
+                        $(".slider img:nth-child("+next_item+")").addClass("active");
+                        // set the rest of the images to be faded out a bit
+                        $(".real").attr('style', 'opacity: 0.3');
+                        $("#" + next_item).find(".real").attr('style', 'opacity: 1');
+                        // if we have hit the rank
+                        if (item == rank){
+                            $(".medalPic").attr('style', 'opacity: 1');
+                            carousel.stopAutoSlideshow(); // stop
+                            loop++; // increment the loop
+                        } else {
+                            if( loop == 0 ) { // if the loop is 0 then start the slideshow
+                                carousel.startAutoSlideshow();
+                            } else { // otherwise just end it
                                 carousel.stopAutoSlideshow();
-                                return;
-                            }
-                            
-                            var next_item = parseInt(item) + 1;
-                            $(".slider img").each(function(){
-                                $(this).removeClass("active");
-                            });
-                            $(".slider img:nth-child("+next_item+")").addClass("active");
-                                                
-                            if (item == rank){
-                                carousel.stopAutoSlideshow();
-                                loop ++;
-                            } else {
-                                if(loop == 0){
-                                    carousel.startAutoSlideshow();
-                                }else{
-                                    carousel.stopAutoSlideshow();
-                                }
-                            }
-                        });
-                    });
-                }, 1000);
-            /*
-            }
-            else if(isiPad > -1)
-            {
-                $(".sky-carousel-container li img").css({"width":"200px","height":"320px"});
-                setTimeout( function() {
-                    $( function() {
-                        carousel = $('.sky-carousel').carousel({
-                            itemWidth: 200,
-                            itemHeight: 360,
-                            distance: 80,
-                            startIndex: 0,
-                            autoSlideshowDelay: 1,
-                            loop : false,
-                            selectedItemDistance: 20,
-                            selectedItemZoomFactor: 1,
-                            unselectedItemZoomFactor: 0.7,
-                            unselectedItemAlpha: 0.2,
-                            topMargin: 10,
-                            preload:true,
-                            showPreloader:true,
-                            navigationButtonsVisible: false,
-                            gradientStartPoint: 0.5,
-                            gradientEndPoint: 1,
-                            reflectionDistance:100,
-                            gradientOverlayColor: "#f5f5f5",
-                            gradientOverlaySize: 100,
-                            slideSpeed: 1,
-                            enableMouseWheel : false,
-                            selectByClick: false
-                        });
-                        carousel.startAutoSlideshow();
-        
-                        carousel.on('itemSelected.sc', function(evt) {
-                            var item = evt.item.index();
-                            if (item == 1 && rank == 0) {
-                                carousel.selectPrevious(1);
-                                carousel.stopAutoSlideshow();
-                                return;
-                            }
-                            var next_item = parseInt(item) + 1;
-                            $(".slider img").each(function(){
-                                $(this).removeClass("active");
-                            });
-                            $(".slider img:nth-child("+next_item+")").addClass("active");
-                            
-                            $(".real").attr('style', 'opacity: 0.3');
-                            $("#" + next_item).find(".real").attr('style', 'opacity: 1');
-                            
-                            if (item == rank){
-                                $(".medalPic").attr('style', 'opacity: 1');
-                                carousel.stopAutoSlideshow();
-                                loop ++;
-                            }else{
-                                if(loop == 0){
-                                    carousel.startAutoSlideshow();
-                                }else{
-                                    carousel.stopAutoSlideshow();
-                                }
-                            }
-                        });
-                    });
-                }, 1000);
-            }
-            else
-            {
-                $(".sky-carousel-container li img").css({"width":"100px","height":"180px"});
-                $(".sky-carousel").css("height","200px");
-                setTimeout( function() {
-                    $( function() {
-                        carousel = $('.sky-carousel').carousel({
-                            itemWidth: 100,
-                            itemHeight: 180,
-                            distance: 80,
-                            startIndex: 0,
-                            autoSlideshowDelay: 1,
-                            loop : false,
-                            selectedItemDistance: 20,
-                            selectedItemZoomFactor: 1,
-                            unselectedItemZoomFactor: 0.7,
-                            unselectedItemAlpha: 0.2,
-                            topMargin: 10,
-                            preload:true,
-                            showPreloader:true,
-                            navigationButtonsVisible: false,
-                            gradientStartPoint: 0.5,
-                            gradientEndPoint: 1,
-                            reflectionDistance:100,
-                            gradientOverlayColor: "#f5f5f5",
-                            gradientOverlaySize: 100,
-                            slideSpeed: 1,
-                            enableMouseWheel : false,
-                            selectByClick: false
-                        });
-                        carousel.startAutoSlideshow();
-        
-                        carousel.on('itemSelected.sc', function(evt) {
-                            var item = evt.item.index();
-                            if (item == 1 && rank == 0) {
-                                carousel.selectPrevious(1);
-                                carousel.stopAutoSlideshow();
-                                return;
-                            }
-                            
-                            var next_item = parseInt(item) + 1;
-                            $(".slider img").each(function(){
-                                $(this).removeClass("active");
-                            });
-                            $(".slider img:nth-child("+next_item+")").addClass("active");
-                            
-                            $(".real").attr('style', 'opacity: 0.3');
-                            $("#" + next_item).find(".real").attr('style', 'opacity: 1');
-                            
-                            if (item == rank){
-                                $(".medalPic").attr('style', 'opacity: 1');
-                                for (var i = 0; i < item; i++) {
-                                    $(".rankLogo").eq(i).attr('style', 'opacity: 1');
-                                }
-                                carousel.stopAutoSlideshow();
-                                loop++;
-                            }else{
-                                console.log(loop);
-                                if(loop == 0){
-                                    carousel.startAutoSlideshow();
-                                }else{
-                                    carousel.stopAutoSlideshow();
-                                }
-                            }
-                        });
-        
-                    });
-                }, 1000);
-            }
-            */
+                            } // end if loop is/is not 0
+                        } // end if the item is the users rank, or not
+                    }); // end on item in slideshow is selected
+                }); // end jquery wraped function
+            }, 1000); // end settimeout
         });
     });
 </script>

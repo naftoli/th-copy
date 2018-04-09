@@ -115,7 +115,7 @@
 		
 		<div class="personalImg"></div>
 		<div class="bug-report">
-			<img src="/mobile/img_new/report-bug-white-svg.svg" data-category="Store" alt="bug-report" />
+			<img src="/mobile/img_new/tools-color-white-svg.svg" data-category="Store" alt="bug-report" />
 		</div>
         
         <div class="container">
@@ -191,9 +191,8 @@
 			</div>
 		</div>
 	</body>
-	
-	
-    
+
+    <script src="/mobile/js/authenticate.js" defer></script>
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {
             var url = location.href.toString();
@@ -212,10 +211,11 @@
     			user = user.substring(0,pos2);
     		} 
     		
-    		var admin = Cookies.get('admin');
-    		if (!admin) {
-    			window.location = "index.html";
-    		}
+            authenticate( user );
+        
+            if( localStorage.getItem("login") == "user" ){
+                $( "#mainLink" ).attr('href', '/mobile/reg/medals/?id=' + user);
+            }
 			
 			$("#missionsLink").attr('href', '../missionsNew.html?id=' + user);
 			$("#goalsLink").attr('href', '../goalsNew.html?id=' + user);
@@ -241,7 +241,7 @@
             var totalPrice = 0;
             var originalBal = 0;
             
-            $.post('ajax/getBalance.php', { admin : admin, user : user }, function( success ) {
+            $.post('ajax/getBalance.php', { user : user }, function( success ) {
                 var info = $.parseJSON(success);
     			var html = "Total Miles Earned: " + info.tpoints;
                 html += "<br />Total Miles Earned this Year: " + info.earned;
@@ -252,7 +252,7 @@
                 calcBalance();
             });
             
-            $.post('ajax/getPrizes.php', { admin : admin, user : user }, function( success ) {
+            $.post('ajax/getPrizes.php', { user : user }, function( success ) {
                 var prizes = $.parseJSON(success);
                 
                 var html = '';

@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Mobile Web Site</title>
+		<title>Tzivos Hashem Homepage</title>
 		<link href="/mobile/reg/css/all.css?v=1.4" rel="stylesheet"/>
 		<noscript><link rel="stylesheet" href="css/all.css?v=1.1" as="style" onload="this.rel='stylesheet'"></noscript>
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
@@ -16,6 +16,7 @@
 		.row.parent_names{margin:5px 0px;}
 		.row.add_child{margin:10px;}
 		
+		.button-spacing { margin-top: 8px; }
 		.btn-info {background-color: #5bc0de !important;border-color: #46b8da !important;}
 		
 		.chidonRegInfo {font-size: 18px;color: red;font-style: italic}
@@ -33,7 +34,13 @@
 			border-color: #fff;
 		}
 /*		Remove this to make it take up the whole page*/
-		.page5 > .span12.body {max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 0px}
+        .page5 > .span12.body {max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 0px}
+        /* New shamai changes, 4/8/2018 */
+        .page5 .header {
+            background-image: url("/mobile/img_new/star-background-color-green-svg.svg");
+            background-size: 40%;
+        }
+        .page5 .lb-ico { color: #fff }
 		
 		@media screen and (min-width: 600px) {.bottomSpace {height: 125px;}}
 		
@@ -133,7 +140,7 @@
 																<img src="images/profile-photo-default.jpg" class="children-avatar">
 																{{/if}}
 															{{/if}}
-															<img src="images/rankImgs/{{rankOrd}}.png" class="children-mark">
+															<img src="/mobile/img_new/ranks/{{rankOrd}}.svg" class="children-mark">
 															<!--</a>-->
 															{{#if this.needsReg}}
 																{{#if this.allowRemove}}
@@ -172,7 +179,7 @@
 																{{/if}}
 															{{/if}}
 															{{#if this.needsReg}}
-																<div style="margin:10px 0px">
+																<div class="button-spacing">
 																	{{#if this.schoolRegistered}}
 																		{{#if this.schoolTypeRegistered}}
 																			<button class="btn btn-primary re_register">Register Tzivos Hashem <span class="year"></span></button>
@@ -182,7 +189,7 @@
 															{{/if}}
 															
 															{{#if this.chidonRegistered}}
-																<div style="margin:10px 0px">
+																<div class="button-spacing">
 																	<div class="chidonRegInfo">Registered for Chidon</div>
 																	{{#if this.shabbatonRegistered}}
 																		{{#if this.shabbatonConfirmed}}
@@ -197,7 +204,7 @@
 																		{{/if}}
 																	{{else}}
 																		{{#if this.enrollShabbaton}}
-																			<div style="margin:10px 0px">
+																			<div class="button-spacing">
 																				<button class="btn btn-danger enroll">Enroll for Chidon Shabbaton</button>
 																			</div>
 																		{{/if}}
@@ -211,7 +218,7 @@
 															{{#if this.chidon}}
 																{{#if this.chidonRegistered}}
 																{{else}}
-																	<div style="margin:10px 0px">
+																	<div class="button-spacing">
 																		<button class="btn btn-primary chidon">Register Chidon <span class="year"></span></button>
 																	</div>
 																{{/if}}
@@ -219,7 +226,7 @@
 															
 															{{#if this.allowRemove}}
 															<a href="#" class="del">
-																<div style="margin:10px 0px">
+																<div class="button-spacing">
 																	<span class="glyphicon glyphicon-trash"></span>
 																	<span class="ln-delete"><b>REMOVE FROM ACCOUNT</b></span>
 																</div>

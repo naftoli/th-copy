@@ -2,7 +2,7 @@
 //echo "We are working on some upgrades. Please check again later. Sorry for the inconvenience.";
 //exit;
 $days_of_week = array("F", "ש", "S", "M", "T", "W", "T");
-$mobileURL = "/".explode("/", $_SERVER[REQUEST_URI])[1]."/"; // get if we are in /mobile/ or /mobileDev/
+$mobileURL = "/".explode("/", $_SERVER['REQUEST_URI'])[1]."/"; // get if we are in /mobile/ or /mobileDev/
 $daily = isset($_GET['daily']) && $_GET['daily']  == "true" ? true : false; // Get if we should render the daily view or not
 $desktop = isset($_GET['desktop']) && $_GET['desktop']  == "true" ? true : false; // Get if we are on a desktop or not
 if($desktop) $daily = false; // only show the weekly view on the desktop...
@@ -289,7 +289,7 @@ $he_chars = array(
 
 <div class="personalImg"></div> <? //div to load the users image into ?>
 <div class="bug-report">
-	<img src="/mobile/img_new/report-bug-white-svg.svg" data-user_id="<?=$user_id?>" data-category="Marking Missions" alt="bug-report" />
+	<img src="/mobile/img_new/tools-color-white-svg.svg" data-user_id="<?=$user_id?>" data-category="Marking Missions" alt="bug-report" />
 </div>
 
 <div class="container">
@@ -300,9 +300,9 @@ $he_chars = array(
 			<? $alignmentLeft  = $lang == 2 ? "right" : "left"; // swich left to right for hebrew ?>
 			<div id="buttons" style="text-align: center;">
 				<div id="rightButtons" style="float: <?=$alignmentRight?>; text-align:<?=$alignmentRight?>;">
-					<?require_once 'reg/ajax/encrypt.php';?>
+					<?php require_once dirname(__FILE__) . '/reg/ajax/encrypt.php';?>
 					<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=$desktop ? "display: none" : ""?>" />
-					<a id="printLink" href="https://mashpia.com/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
+					<a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
 						<input type="button" class="btn btn-danger btn-sm" value="Print Missions" />
 					</a>
 				</div>
@@ -353,12 +353,12 @@ $he_chars = array(
 								for ($j = 0; $j < $numDaily; $j++) { // for each task
 									if ($user->daily_tasks[$j]->label_name == $label) { // make sure that the label fits the label that we are showing.....
 										$daily_task = $user->daily_tasks[$j]; // get the daily task
-										$date_task_mark = $daily_task->date_task_marks[$from-1]; // and get the mark for todays date <= does not work if the mission starts later in the week...
+										$date_task_mark = $daily_task->date_task_marks[ $from - 1 ]; // and get the mark for todays date <= does not work if the mission starts later in the week...
 										
 										// if the total count of the missions is less then 7 (does not cover the full week) AND the first one does not start at the beginning of the week....
 										if($daily && count($daily_task->date_task_marks) < 7 && $daily_task->date_task_marks[0]->mark_date != $start){ // if there are less then 7 date_task_marks and the first one is not the first date....
 											foreach($daily_task->date_task_marks as $task){ // go through each task
-												if($task->mark_date == $start + ($from -1 )){ // if the mark date is the date we are generating....
+												if($task->mark_date == $start + ($from - 1 )){ // if the mark date is the date we are generating....
 													$date_task_mark = $task; break;
 												} else {
 													$date_task_mark = false;
@@ -803,7 +803,7 @@ $he_chars = array(
 
 <div style="position: fixed;width: 100%;bottom:0px; z-index: 1000;">
     <div class="span12 footer">
-		<div class="span3">
+		<div class="span3" id="mainLink">
 			<? 
 			if (isset($_GET['app'])) echo "<a href='/reg/parent_detail.html'>"; 
 			else echo "<a href='".$mobileURL."reg/parent_detail.html'>";
@@ -857,7 +857,7 @@ $he_chars = array(
     </div>
 </div>
 
-<? include ("inc/modals/updateMedalRanks.php"); ?>
+<?php include ("inc/modals/updateMedalRanks.php"); ?>
 
 <style>
 	.slick-prev, .slick-next {
@@ -875,12 +875,7 @@ $he_chars = array(
 	}
 	.slick-next {
 		right: 0px;
-	/* Hide the buttons on smaller screens */
-	/*@media screen and (min-width: 767px) {*/
-	/*	.slick-prev, .slick-next {*/
-	/*		visibility: hidden;*/
-	/*	}*/
-	/*}*/
+	}
 </style>
 
 <script src="/js/utils/browser_detect.js"></script>

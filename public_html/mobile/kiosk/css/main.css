@@ -1,0 +1,59 @@
+body {
+    padding-bottom: 0px;
+}
+header.navbar {
+    background-color: rgb(255, 26, 26);
+}
+.navbar {
+    margin-bottom: 0 !important;
+}
+.logo {
+    max-width: 450px;
+    padding: 50px;
+    margin: auto;
+}
+.img-responsive {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+/* barcode scanner image */
+.innerImg {
+    /* Location of the image */
+    background-image: url("/mobile/img_new/scanner-2-color-red-svg.svg");
+    /* Background image is centered vertically and horizontally at all times */
+    background-position: top;
+    /* Background image doesn't tile */
+    background-repeat: no-repeat;
+}
+.innerImg p {
+    max-width: 70%;
+    padding-top: 100px;
+}
+/* barcode and text inputs */
+.content {
+    max-width: 500px;
+    margin: auto;
+}
+
+/* barcode quaggajs scanner styles */
+#barcode_scanner.viewport {
+    position: relative;
+    display: none;
+}
+
+#barcode_scanner.viewport > canvas, #barcode_scanner.viewport > video {
+    max-width: 100%;
+    width: 100%;
+}
+
+canvas.drawing, canvas.drawingBuffer {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* non-scanner UI */
+#scanner {
+    max-width: 200px;
+}

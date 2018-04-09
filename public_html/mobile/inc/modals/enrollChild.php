@@ -78,12 +78,12 @@ $campaigns = getCampaigns($user_id, false);
             $.post("ajax/enrollChild.php", {subject_id: subject_id, user_id: <?=$user_id?>}, function(data){
                 data = JSON.parse(data);
                 if (!data.success) {
-                    alert("Sorry, it seems that we could not enroll <?=$first?> in this campaign. Please try again later.");
+                    alert("Sorry, it seems that we could not enroll <?= addslashes( $first )?> in this campaign. Please try again later.");
                 } else {
                     var campaign = $(event.target).parent();
                     var campaign_name = campaign.find("h3").text();
                     campaign.html("<div class='alert alert-success'>"+
-                                  "You have successfully enrolled <?=$first?> in "+campaign_name+"!<br/>"+
+                                  "You have successfully enrolled <?= addslashes( $first ) ?> in " + campaign_name + "!<br/>" +
                                   "Please refresh the page to customize his tasks.</div>");
                     
                 }

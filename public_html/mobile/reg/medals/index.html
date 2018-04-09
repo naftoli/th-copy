@@ -5,28 +5,23 @@
 		<meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Tzivos Hashem | User Home Page</title>
-        <link rel="preload" href="css/all.css?v=1.1" as="style" onload="this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
-        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
-        <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+        <link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet">
         <script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
 		<script src="../js/all.js" defer></script>
 		<link rel="stylesheet" href="/mobile/reg/css/medal-board.css"/>
     	<style>
+            .header { background-image: url("/mobile/img_new/star-background-color-green-svg.svg"); }
+            .header-edit span, .header-setting span { color: #fff; }
+            /* carosel */
 			.sky-carousel .sky-carousel-container li img{ display: none; }
 			.sky-carousel .sky-carousel-container li img.sc-image{ display: block; }
-			#userImg {
-			    border-radius: 50%;
-			    border: 2px solid #31559f;
-			    margin-left: 5%;
-			}
-			
-			.personalImg {
-				border-radius: 50%; 
-				display: block;
-				text-align: center;
-			}
-			.top-center {margin: auto;}
+			.sky-carousel.sc-no-select { border: none; background: none; border-radius: 11px; }
+            .sky-carousel { height: 200px; }
+            /* page header */
+			#userImg { border-radius: 50%; border: 2px solid #31559f; margin-left: 5%; }
+			.personalImg { border-radius: 50%;  display: block; text-align: center; }
+            .top-center {margin: auto;}
 			.body .caption {background-image: url("/mobile/img_new/banner-3-color-green-svg.svg"); margin-bottom: 10px;}
             .body .medal-label {
                 background-image: url("/mobile/img_new/banner-4-color-green-svg.svg");
@@ -38,8 +33,10 @@
 				color: #004E22;
             }
             .body .caption span {color: #004E22;}
-            .slider img.active {content: url("/mobile/img_new/circle-color-green-solid-svg.svg");}
-/*			MEDIA QUERIES */
+            .slider img.active {background: url("/mobile/img_new/circle-color-green-solid-svg.svg"); content: url("/mobile/img_new/circle-color-green-solid-svg.svg");}
+            .l-3 div.medal-sub { background-image: url("/mobile/img_new/banner-1-color-orange-svg.svg"); background-size: cover; }
+            .l-3 .medal-sub span { margin-top: 15px; }
+            /*			MEDIA QUERIES */
 			@media(min-width: 767px) and (max-width: 900px) {
 				.header .top-right-space{margin-right: 20px;}
 				.header .top-left-space{margin-left: 20px;}
@@ -49,7 +46,6 @@
 					font-size: 22px;
 				}
 			}
-			
 			@media (min-width: 479px) and (max-width: 767px){
 				.mt1{ margin-top: 30px; }
 			}
@@ -61,20 +57,33 @@
 				.header{height: 300px;}
 			}
 			@media( min-width: 640px ){ .header-edit{min-width: 120px;} }
-			@media (min-width:  600px) and (max-width: 749px){
+            @media (min-width:  600px) and (max-width: 749px){
 				#userImg {width: 200px; height: 200px;}
-			}
+            }
 			@media( min-width: 460px ){
 				.header-setting{ min-width: 120px; }
-			}
+            }
+            @media (max-width: 639px) {
+                .l-3 .medal-sub span {
+                    margin-top: 10px;
+                    padding: 3px;
+                }
+            }
 			@media ( max-width: 479px ) {
 				.mt1{ margin-top: 15px; }
 				.header-top{ margin-top: 5px; }
-				.header { height: 180px; }
+                .header { height: 180px; }
+                
+                .l-3 .medal-sub span {
+                    margin-top: 7px;
+                    padding: 3px;
+                    font-size: 1em;
+                }
+                .l-3 div.medal-sub { background-size: 100% 100%; }
 			}
 			@media (max-width:  450px){
 				#userImg {width: 120px;height: 120px;}
-			}
+            }
 		</style>
 	</head>
 	<body>
@@ -85,7 +94,7 @@
                         <div class="header-setting col-xs-4" id="logOff">
                             <img src="/mobile/img_new/lock-color-white-svg.svg" style="float:left;max-height:40px;max-width:40px;">
                             <div style="float: left;">
-                                <span>log off</span>
+                                <span>log out</span>
                             </div>
                         </div>
 						
@@ -101,7 +110,7 @@
                     <div class="span4">
                         <div class="top-left-space">
                             <div class="span12">
-                                <img id="item0" src="images/th.png" alt="">
+                                <img id="item0" src="/mobile/img_new/TH%20Logo-colorful-svg.svg" alt="">
                             </div>
                             <div class="span12" style="margin-top: 10px;">
                                 <span class="title" id="rank"></span>
@@ -167,20 +176,20 @@
 	                </div>
                 </a>
                 <div class="span12 slider" style="margin-top:10px;text-align: center;">
-					<img id="item0" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item1" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item2" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item3" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item4" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item5" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item6" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item7" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item8" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item9" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item10" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item11" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item12" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
-					<img id="item13" src="https://mashpia.com/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item0" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item1" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item2" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item3" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item4" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item5" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item6" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item7" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item8" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item9" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item10" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item11" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item12" src="/mobile/img_new/circle-color-green-svg.svg">
+					<img id="item13" src="/mobile/img_new/circle-color-green-svg.svg">
                 </div>
                 <div class="span12" style="margin-top:30px;">
                     <div class="medal-label">
@@ -193,14 +202,14 @@
 		
 			<div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
 				<div class="span12 footer">
-					<div class="span3 active">
+					<div class="span3">
 						<a href="../parent_detail.html" id="mainLink">
 							<div class="menu-item">
 								<div class="span12">
 									<img src="/mobile/img_new/boy-color-green-svg.svg">
 								</div>
 								<div class="span12">
-									<span>Accounts</span>
+									<span id="main-title">Accounts</span>
 								</div>
 							</div>
 						</a>
@@ -243,7 +252,9 @@
 					</div>
 				</div>
 			</div>
-		</div>
+        </div>
+        <!-- misc javascript functions that are not in all.js -->
+        <script src="/mobile/js/authenticate.js" defer></script>
 		<script>
         document.addEventListener("DOMContentLoaded", function(event) {
             var carousel = "";
@@ -251,6 +262,7 @@
 
             $(window).load(function(){
                 $( ".sky-carousel" ).unbind();
+                // when an items dot is clicked, send the carosel to that item
                 $( ".slider img" ).click( function() {
 					var item_id = $( this ).attr( "id" );
 					var from_id = 0;
@@ -272,72 +284,70 @@
                 });
                 //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
                 //}
-            });
-            
+            }); // end on window load
+
+            // get the ID of the current user
             var url = location.toString();
-    		var pos = url.indexOf( '=' ); 
-    		var id = url.substring( pos+1 );
-            
-            $(function() {
-            	var admin_id = Cookies.get('admin');
-    			$.post('/mobile/reg/ajax/checkAuth.php', { user_id : id, admin_id : admin_id }, function( success ) {
-    				if (success === "0") {
-    					window.location = "/mobile";
-    				}
-    			});
-    			
-    			$("#logOff").click( function() {
-    				Cookies.remove('admin', { path: '/' });
-    				Cookies.remove('admin_id', { path: '/' });
-    				window.location = "/mobile/reg/";
-    			});
-    		});
+            var id = url.substring( url.indexOf( '=' ) + 1 );
+            // authenticate the user with authenticate.js
+            authenticate( id );
+            // update the UI for children over parents
+            if( localStorage.getItem( "login" ) == "user" ){
+                $("#mainLink").attr('href', "/mobile/news");
+                $("#mainLink img").attr('src', "/mobile/img_new/news-color-green-svg.svg");
+                $("#mainLink .menu-item #main-title").text("News");
+                $(".header-edit").hide(); // no editing
+            }
     		
     		$("#carouselLink").attr('href', '../rank.html?id=' + id);
     		$("#missionsLink").attr('href', '../../missionsNew.html?id=' + id);
     		$("#goalsLink").attr('href', '../../goalsNew.html?id=' + id);
     		$("#rankLink").attr('href', '../rank.html?id=' + id);
-    		$("#storeLink").attr('href', '../../store/index.html?id=' + id);
-
+            $("#storeLink").attr('href', '../../store/index.html?id=' + id);
+            
+            // set the Miles total
     		$.post('ajax/getPoints.php', { user_id : id }, function( success ) {
     			$(".points").append(success + ' miles');
     			$("#points").val( success );
     		});
-    		
+            
+            // get the user's information and update the UI
     		$.post('ajax/getUserInfo.php', { user_id : id }, function( success ) {
     			var user = $.parseJSON( success );
-    			
+    			// get the users grade
     			var grade = user.class_grade;
     			if (user.class_sub) grade += '-' + user.class_sub;
-    			
+    			// update the information on the page
     			$("#rank").text( user.rank_name );
     			$("#name").text( user.lang_id === "2" ? user.first_he + ' ' + user.last_he : user.first + ' ' + user.last );
 				$("#serial").text( user.user_serial );
     			$("#grade").text( grade );
     			$("#teacher").text( user.class_teacher );
-    			
+    			// set the users profile picture
     			if (user.mobile_pic) {
     				$("#userImg").attr('src', '../' + user.mobile_pic);
     			} else if (user.thumb) {
-    				$("#userImg").attr('src', 'https://mashpia.com/thumbs/' + user.thumb);
+    				$("#userImg").attr('src', '/thumbs/' + user.thumb);
     			} else if (user.user_photo_id) {
-    				$("#userImg").attr('src', 'https://mashpia.com/file_view.php?id=' + user.user_photo_id);
+    				$("#userImg").attr('src', '/file_view.php?id=' + user.user_photo_id);
     			} else {
-    				$("#userImg").attr('src', 'https://mashpia.com/mobile/reg/images/profile-photo-default.jpg');
-    			}
+    				$("#userImg").attr('src', '/mobile/reg/images/profile-photo-default.jpg');
+                }
+                // set the school logo
     			if (user.logo && (!user.logo_2 || user.gender === "M")) {
-    				$("#logo").attr('src', 'https://mashpia.com/schoolLogos/' + user.logo);
+    				$("#logo").attr('src', '/schoolLogos/' + user.logo);
     			} else if(user.logo_2) {
-					$("#logo").attr('src', 'https://mashpia.com/schoolLogos/' + user.logo_2);
+					$("#logo").attr('src', '/schoolLogos/' + user.logo_2);
 				} else {
-    				$("#logo").attr('src', 'https://mashpia.com/schoolLogos/TH-Blank Logo.gif');
+    				$("#logo").attr('src', '/schoolLogos/TH-Blank Logo.gif');
     			}
-    			
+    			// get the rank for the user
     			var rank = parseInt( user.rank_ord ) - 1;
-    			if (rank > 8) rank = 8;
-
-    	        $(".sky-carousel-container li img").css({"width":"100px","height":"180px"});
-    	        $(".sky-carousel").css("height","200px");
+                if (rank > 8) rank = 8;
+                // set the images to be the correct size
+    	        $(".sky-carousel-container li img").css( { "width" : "100px" , "height" : "180px" } );
+                $(".sky-carousel").css( { "width" : "100%", "margin" : "0px" } );
+                // setup the carosel in 1 second
     	        setTimeout( function() {
     	            $( function() {
     	                carousel = $('.sky-carousel').carousel({
@@ -358,51 +368,51 @@
     	                    gradientStartPoint: 0.5,
     	                    gradientEndPoint: 1,
     	                    reflectionDistance:100,
-    	                    gradientOverlayColor: "#f5f5f5",
-    	                    gradientOverlaySize: 100,
+    	                    gradientOverlaySize: 0,
     	                    slideSpeed: 1,
     	                    enableMouseWheel : false,
     	                    selectByClick: false
-    	                });
-    	                carousel.startAutoSlideshow();
-    	
+    	                }); // end options
+                        carousel.startAutoSlideshow(); // autmatically start the slideshow
+                        // when an item is selected...
     	                carousel.on('itemSelected.sc', function(evt) {
-    	                    var item = evt.item.index();
-    	                    if (item == 1 && rank == 0) { // go back to the first element if the user is a private
-    	                    	carousel.selectPrevious(1);
-    	                    	carousel.stopAutoSlideshow();
+    	                    var item = evt.item.index(); // get the index
+    	                    if ( item == 1 && rank == 0 ) { // go back to the first element if the user is a private
+    	                    	carousel.selectPrevious( 1 );
+    	                    	carousel.stopAutoSlideshow( );
     	                    	return;
-    	                    }
-    	                    var next_item = parseInt(item) + 1;
+                            }
+                            // get the next item and remove the active class from the circle
+                            var next_item = parseInt(item) + 1;
     	                    $(".slider img").each(function(){
     	                        $(this).removeClass("active");
     	                    });
-							
+							// update the correct dot to be active
     	                    $(".slider img:nth-child("+next_item+")").addClass("active");
-    	                    
+    	                    // set the rest of the images to be faded out a bit
     	                    $(".real").attr('style', 'opacity: 0.3');
     	                    $("#" + next_item).find(".real").attr('style', 'opacity: 1');
-    	                    
+    	                    // if we have hit the rank
     	                    if (item == rank){
     	                    	$(".medalPic").attr('style', 'opacity: 1');
-    	                        carousel.stopAutoSlideshow();
-    	                        loop ++;
+    	                        carousel.stopAutoSlideshow(); // stop
+    	                        loop++; // increment the loop
     	                    } else {
-    	                        if( loop == 0 ) {
+    	                        if( loop == 0 ) { // if the loop is 0 then start the slideshow
     	                            carousel.startAutoSlideshow();
-    	                        } else {
+    	                        } else { // otherwise just end it
     	                            carousel.stopAutoSlideshow();
-    	                        }
-    	                    }
-    	                });
-    	            });
-    	        }, 1000);
-    		});
-    		
+    	                        } // end if loop is/is not 0
+    	                    } // end if the item is the users rank, or not
+    	                }); // end on item in slideshow is selected
+    	            }); // end jquery wraped function
+    	        }, 1000); // end settimeout
+    		}); // finish updating the users information
+    		// setup the edting link
     		$(".header-edit").click( function() {
     			window.location = '/mobile/reg/re_register.html?child=' + id + '&e=1';
     		});
-    		
+    		// get the medal info for the user
     		$.post('ajax/getMedalInfo.php', { user_id : id }, function( success ) {
     			var medals = $.parseJSON( success );
     			
@@ -415,12 +425,12 @@
 
     				html += '<div class="span4 medal_row_item" style="text-align: center;">';
 
-    				html += '<a href="https://mashpia.com/mobile/reg/medals3.html?id=' + id + '&subject=' + medal.id + '">';
+    				html += '<a href="/mobile/reg/medals3.html?id=' + id + '&subject=' + medal.id + '">';
     				if (medal.photo != '')
-    					html += '<img class="medal" src="https://mashpia.com/file_view.php?id=' + medal.photo + '">';
+    					html += '<img class="medal" src="/file_view.php?id=' + medal.photo + '">';
     				else 
-    					html += '<img class="medal" src="https://mashpia.com/kiosk/images/medals/holder.png">';
-    				html += '</a><div class="medal-sub" style="background-image: url(images/bot-caption.png);">\
+    					html += '<img class="medal" src="/kiosk/images/medals/holder.png">';
+    				html += '</a><div class="medal-sub">\
     								<div style="display: table;width: 100%;"><span>' + medal.name + '</span></div>\
     							</div>\
     							<span>' + medal.left + ' to Level ' + medal.next + '</span>\

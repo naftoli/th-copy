@@ -136,7 +136,7 @@ $types = array(
                 Total Teachers: <?=$school['teachers']?><br />
                 Total Registered children: <?=$school['total']?><br />
                 <?php
-                if ( $id === 54 ) $total = get_extra_hachayols($id); // Beis Rivkah only wants the total specified in this file.
+                if ( in_array($id,  [54, 265] ) ) $total = get_extra_hachayols($id); // Beis Rivkah only wants the total specified in this file.
                 else if ($id != 162) $total = $school['teachers'] + $school['total'] + get_extra_hachayols($id); // for all other schools add the extras to the total
                 else $total = $school['total'] + get_extra_hachayols($id);
                 ?>

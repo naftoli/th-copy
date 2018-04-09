@@ -129,11 +129,29 @@
 			display: block;
 			padding: 5px 0px;
 			transition: .25s;
-	}
+    }
+    
+    .header-yellow{min-height: 48px;}
+    .l-3 div.medal-sub { background-image: url("/mobile/img_new/banner-1-color-orange-svg.svg"); background-size: cover; }
+    .l-3 .medal-sub span { margin-top: 15px; }
+    
 	@media (min-width: 525px){
 		.header-yellow #page-title{font-size: 40px;padding: 10px 0px;}
-	}
-	.header-yellow{min-height: 48px;}
+    }
+    @media (max-width: 639px) {
+        .l-3 .medal-sub span {
+            margin-top: 10px;
+            padding: 3px;
+        }
+    }
+    @media (max-width: 479px) {
+        .l-3 .medal-sub span {
+            margin-top: 7px;
+            padding: 3px;
+            font-size: 1em;
+        }
+        .l-3 div.medal-sub { background-size: 100% 100%; }
+    }
 </style>
 </head>
 <body class="rank-page">
@@ -145,7 +163,7 @@
 
 <div class="personalImg"></div>
 <div class="bug-report">
-	<img src="/mobile/img_new/report-bug-white-svg.svg" data-category="Medal Board" alt="bug-report" />
+	<img src="/mobile/img_new/tools-color-white-svg.svg" data-category="Medal Board" alt="bug-report" />
 </div>
 
 <div class="container">
@@ -235,6 +253,7 @@
 		</div>
 	</div>
 </div>
+<script src="/mobile/js/authenticate.js" defer></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
 		$(document).ready(function() {
@@ -243,11 +262,11 @@
 			var pos = url.indexOf('='); 
 			var id = url.substring( pos+1 );
 			
-			$.post('ajax/checkAuth.php', { user_id : id, admin_id : Cookies.get('admin') }, function( success ) {
-				if (success === "0") {
-					window.location = "/mobile";
-				}
-			});
+			authenticate( id );
+        
+            if( localStorage.getItem("login") == "user" ){
+                $( "#mainLink" ).attr('href', '/mobile/reg/medals/?id=' + id);
+            };
 			
 			$.post('/mobile/reg/ajax/getPhoto.php', { user_id : id }, function( success ) {
                 var info = $.parseJSON( success );
@@ -305,7 +324,7 @@
 		                html += '<img class="medal" src="https://mashpia.com/file_view.php?id=' + medal.photo + '">';
 		            else 
 		                html += '<img class="medal" src="https://mashpia.com/kiosk/images/medals/holder.png">';
-		            html += '</a><div class="medal-sub" style="background-image: url(images/bot-caption.png);">\
+		            html += '</a><div class="medal-sub">\
 		                            <div style="display: table;width: 100%;"><span>' + medal.name + '</span></div>\
 		                        </div>\
 		                        <span>' + medal.left + ' to Level ' + medal.next + '</span>\
