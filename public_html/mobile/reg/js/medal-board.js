@@ -102,7 +102,7 @@ Medal.prototype.render = function() {
     if ( this.next - 1 < this.colors.length ) {
         html +=     '<span>' + ( this.needed - this.total ) + " to " + this.getColor( false ) + '</span>';
     } else {
-        html +=     '<span>Campaign Compleate!</span>';
+        html +=     '<span>Complete!</span>';
     }
 
     html +=     '</div>';
