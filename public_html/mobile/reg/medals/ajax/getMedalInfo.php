@@ -1,6 +1,6 @@
 <?
 // load up the database
-require '../../../../db.php';
+require_once( dirname(__FILE__) . '/../../../../db.php' );
 $user = mysql_real_escape_string( $_POST['user_id'] );
 
 // figure out which subjects we are showing
@@ -10,7 +10,7 @@ $c->setType();
 $subjects = $c->getCampaigns();
 
 $subjectNames = array();
-$sql = "select subject_id, subject_name from subjects where subject_id in (" . implode(',', $subjects) . ")";
+$sql = "SELECT subject_id, subject_name FROM subjects WHERE subject_id IN (" . implode( ',', $subjects ) . ")";
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
 	$name = $row['subject_name'];
@@ -48,10 +48,10 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 		    $total += $newTotal[$barcode];		
 	}
 	*/
-    $sql2 = "select medal_name, missions_required, profile_photo_id from medals_subjects 
-             join medals using (medal_ord)    
-             where subject_id = " . $subject . " 
-             order by medal_ord"; 
+    $sql2 = "SELECT medal_name, missions_required, profile_photo_id FROM medals_subjects 
+             JOIN medals USING (medal_ord)    
+             WHERE subject_id = " . $subject . " 
+             ORDER BY medal_ord"; 
     //echo $sql2 . "<br />"; 
     $result2 = mysql_query( $sql2 );
     $needed = 0;
@@ -69,13 +69,17 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         		$missions[$subject] = array(
 	            	'medal'	=>	"None", 
 	            	'photo'	=>	"", 
-	            	'left'	=>	$needed - $total
+                    'left'	=>	$needed - $total,
+                    'total' =>  $total,
+                    'needed' => $needed
 				);
         	} else {
 	            $missions[$subject] = array(
 	            	'medal'	=>	$tempMedals[$ctr-1], 
 	            	'photo'	=>	$tempMedalPics[$ctr-1], 
-	            	'left'	=>	$needed - $total
+                    'left'	=>	$needed - $total,
+                    'total' =>  $total,
+                    'needed' => $needed
 				);
 			}
             break;
@@ -118,7 +122,9 @@ foreach ( $subjects as $subject ) {
 			'name'	=>	$subjectNames[$subject], 
 			'medal'	=>	$medal, 
 			'photo'	=>	$photo, 
-			'left'	=>	$left, 
+            'left'	=>	$left,
+            'total'	=>	intval( $mission['total'] ), 
+            'needed'=>	$mission['needed'], 
 			'next'	=>	($key === false ? 1 : ++$key)
 		);
     } else {
@@ -127,7 +133,9 @@ foreach ( $subjects as $subject ) {
 			'name'	=>	$subjectNames[$subject], 
 			'medal'	=>	"None", 
 			'photo'	=>	"", 
-			'left'	=>	(int)$medal_subjects[$subject]['left'],
+            'left'	=>	(int)$medal_subjects[$subject]['left'],
+            'total'	=>	0, 
+            'needed'=>	0,
 			'next'	=>	1
 		);
     }
