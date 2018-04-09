@@ -19,13 +19,13 @@ $campaignLogos = array(
 
 $start = 2457277;
 $end = 2457661;
-$user_id = $_POST['user'];
-$id = $_POST['id'];
+$user_id = mysql_real_escape_string( $_POST['user'] );
+$id = mysql_real_escape_string( $_POST['id'] );
 
-$sql = "select first, last, user_photo_id, lang_id, ut.track_id, ut.level from users u 
-		join user_tracks ut using (user_id)	
-		where ut.subject_id = 1 
-		and user_id = " . $user_id;
+$sql = "SELECT first, last, user_photo_id, lang_id, ut.track_id, ut.level FROM users u 
+		JOIN user_tracks ut USING (user_id)	
+		WHERE ut.subject_id = 1 
+		AND user_id = " . $user_id;
 $result = mysql_query($sql);
 $row = mysql_fetch_assoc($result);
 $photo = $row['user_photo_id'];
@@ -34,13 +34,13 @@ $lang = $row['lang_id'];
 $ladder = $row['track_id'];
 $level = $row['level'];
 
-$qry = "select qty, minutes from tehillim_ladders where ladder = " . $ladder . " and age = " . $level;
+$qry = "SELECT qty, minutes FROM tehillim_ladders WHERE ladder = " . $ladder . " AND age = " . $level;
 $res = mysql_query($qry);
 $r = mysql_fetch_assoc($res);
 
 $year = 5776;
 
-$sql = "select * from subjects where subject_id = " . $id;
+$sql = "SELECT * FROM subjects WHERE subject_id = " . $id;
 $result = mysql_query($sql);
 $row = mysql_fetch_assoc($result);
 ?>
@@ -89,11 +89,11 @@ You can earn one sefer Hamitzvos mission each week by <b>learning the daily shiu
 						break;
 					case 27:
 						$str = "<b>Tanya Baal Peh</b><br />
-You can earn one tanya baal peh mission each week, by <b>learning tanya ball peh for 5 minutes a day</b> at least five out of seven times throughout the week.";
+You can earn one tanya baal peh mission each week, by <b>learning tanya baal peh for 5 minutes a day</b> at least five out of seven times throughout the week.";
 						break;
 					case 40:
 						$str = "<b>Yomei Depagra Mission</b><br /> 
-You can earn one Yomei depagra mission each specail day of the year, by <b>completing all the mandatory task on that days mission</b>.";
+You can earn one Yomei depagra mission each special day of the year, by <b>completing all the mandatory tasks on that days mission</b>.";
 						break;
 					case 41:
 						$str = "<b>Avos Ubonim Mission</b><br /> 
@@ -109,7 +109,7 @@ You can earn up to one chitas mission each week, by <b>saying the daily Tehillim
 						break;
 					case 100:
 						$str = "<b>Brias Haguf Mission</b><br /> 
-You can earn one brias haguf mission each week by being on bed on time at least five out of seven times throughout the week.";
+You can earn one brias haguf mission each week by being in bed on time at least five out of seven times throughout the week.";
 						break;
         		}
 				echo $str;
