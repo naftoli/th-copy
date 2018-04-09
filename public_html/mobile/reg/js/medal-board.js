@@ -67,8 +67,11 @@ function Medal( config ) {
     ]
 }
 
-Medal.prototype.getColor = function() {
+Medal.prototype.getColor = function( current ) {
     var index = this.next - 1;
+    if ( current && index >= 1 ) {
+        index -= 1;
+    }
     if ( index < this.colors.length ) {
         return this.colors[index];
     } else {
@@ -88,16 +91,16 @@ Medal.prototype.render = function() {
 
     var html = "<div class='medal'>";
     html +=     '<a href="' + this.url + '">';
-    html +=         '<img class="medal-img ' + ( this.animate ? "tada animated" : "" ) + '" src="' + this.picture + '" />';
+    html +=         '<img class="medal-img ' + ( this.animate ? "bounceIn animated" : "" ) + '" src="' + this.picture + '" />';
     html +=     '</a>';
     html +=     '<div class="medal-subject">';
     html +=         '<span>' + this.subject + '</span>';
     html +=     '</div>';
     html +=     '<div class="medal-status progress">';
-    html +=         '<div class="progress-bar ' + this.getColor( this.next - 1 ).toLowerCase() + '" role="progressbar" style="width: ' + status_width + '%;"></div>';
+    html +=         '<div class="progress-bar ' + this.getColor( true ).toLowerCase() + '" role="progressbar" style="width: ' + status_width + '%;"></div>';
 
     if ( this.next - 1 < this.colors.length ) {
-        html +=     '<span>' + ( this.needed - this.total ) + " to " + this.getColor( this.next - 1 ) + '</span>';
+        html +=     '<span>' + ( this.needed - this.total ) + " to " + this.getColor( false ) + '</span>';
     } else {
         html +=     '<span>Campaign Compleate!</span>';
     }
