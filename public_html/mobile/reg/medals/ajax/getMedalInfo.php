@@ -140,7 +140,7 @@ foreach ( $subjects as $subject ) {
 			'photo'	=>	"", 
             'left'	=>	(int)$medal_subjects[$subject]['left'],
             'total'	=>	0, 
-            'needed'=>	0,
+            'needed'=>	(int)$medal_subjects[$subject]['left'],
 			'next'	=>	1
 		);
     }

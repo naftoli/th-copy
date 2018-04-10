@@ -87,7 +87,10 @@ Medal.prototype.getColor = function( current ) {
  * returns the standard medal for the Medals based on the config passed to the constructor.
  */
 Medal.prototype.render = function() {
-    var status_width =  ( this.total - this.base_amount ) / ( this.needed - this.base_amount ) * 100;
+    if ( this.total > 0 )
+        var status_width =  ( this.total - this.base_amount ) / ( this.needed - this.base_amount ) * 100;
+    else
+        status_width = 0;
 
     var html = "<div class='medal'>";
     html +=     '<a href="' + this.url + '">';
