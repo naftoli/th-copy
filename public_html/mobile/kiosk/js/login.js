@@ -42,17 +42,17 @@ $(document).ready( function() {
             type : "LiveStream",
             target: "#barcode_scanner",
             constraints: {
-                width: {min: 840},
-                height: {min: 480},
+                width: {min: 640, ideal: 1280, max: 1920},
+                height: {min: 480, ideal: 720, max: 1280},
                 aspectRatio: {min: 1, max: 100},
                 facingMode: "environment" // or user
             }
         },
         locator: {
-            patchSize: "large",
+            patchSize: "medium",
             halfSample: true
         },
-        numOfWorkers: 4,
+        numOfWorkers: 2,
         decoder: {
             readers : ["code_128_reader"]
         },
@@ -62,10 +62,12 @@ $(document).ready( function() {
         if ( error ) {
             // TODO: allow the user to enter their barcode manually if we cannot scan it
             console.error( error );
+            $("#barcode_scanner").hide();
             return;
         } else {
             $("#manual_scanner").hide();
             $("#barcode_scanner").show();
+            $(".container.body").addClass("shrink");
         }
         console.log( "Quagga JS initialized. Ready to start Scanning Cards" );
         Quagga.start();
