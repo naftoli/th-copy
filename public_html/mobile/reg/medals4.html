@@ -16,14 +16,10 @@
 	<script defer src="https://mashpia.com/mobile/js/spin.js"></script>
 	<!--    Bug Report code -->
     <link rel="stylesheet" href="/mobile/css/bug_report.css"/>
-	<link rel="stylesheet" href="/mobile/reg/css/medal-board.css"/>
+    <link rel="stylesheet" href="/mobile/css/lib/animate.css"/>
+	<link rel="stylesheet" href="/mobile/reg/css/medal-board/medals.css"/>
     <script src="/mobile/js/bug_report.js?v=2.0" defer></script>
 <style>
-	@font-face {
-		font-family: 'digi';
-		src: url('font/DS-DIGIB.TTF');
-	}
-	
     body {margin-bottom: 100px;}
 	@media(max-width:650px){body {margin-bottom: 55px;}}
 	
@@ -121,36 +117,20 @@
 	}
 
 	.header-yellow #page-title{
-		    font-size: 25px;
-			font-weight: 700;
-			color: #fff;
-			text-align: center;
-			width: auto;
-			display: block;
-			padding: 5px 0px;
-			transition: .25s;
+        font-size: 25px;
+        font-weight: 700;
+        color: #fff;
+        text-align: center;
+        width: auto;
+        display: block;
+        padding: 5px 0px;
+        transition: .25s;
     }
     
     .header-yellow{min-height: 48px;}
-    .l-3 div.medal-sub { background-image: url("/mobile/img_new/banner-1-color-orange-svg.svg"); background-size: cover; }
-    .l-3 .medal-sub span { margin-top: 15px; }
     
 	@media (min-width: 525px){
 		.header-yellow #page-title{font-size: 40px;padding: 10px 0px;}
-    }
-    @media (max-width: 639px) {
-        .l-3 .medal-sub span {
-            margin-top: 10px;
-            padding: 3px;
-        }
-    }
-    @media (max-width: 479px) {
-        .l-3 .medal-sub span {
-            margin-top: 7px;
-            padding: 3px;
-            font-size: 1em;
-        }
-        .l-3 div.medal-sub { background-size: 100% 100%; }
     }
 </style>
 </head>
@@ -254,6 +234,7 @@
 	</div>
 </div>
 <script src="/mobile/js/authenticate.js" defer></script>
+<script src="/mobile/reg/js/medal-board.js" defer></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
 		$(document).ready(function() {
@@ -288,53 +269,8 @@
 			$("#rankMenu").attr('href', 'rank.html?id=' + id);
 			$("#auctionMenu").attr('href', '../auction/category2.html?id=' + id);
 			
-			var medalInfo = {
-		        1 : 'black', 
-		        2 : 'red', 
-		        3 : 'orange', 
-		        4 : 'yellow', 
-		        5 : 'green', 
-		        6 : 'blue', 
-		        7 : 'purple', 
-		        8 : 'brown', 
-		        9 : 'grey', 
-		        10 : 'black'
-		    };
-		    
-		    $.post('medals/ajax/getMedalInfo.php', { user_id : id }, function( success ) {
-		        var medals = $.parseJSON( success );
-		        
-		        var html = '';
-		        for (var i in medals) {
-		            var medal = medals[i];
-		            if (i % 3 == 0 && i < 10) {
-		                //if (i == 9) {
-		                //    html += '</div></div><div class="span12 mt2"><div class="l-4">';
-		                //} else {
-		                    html += '</div></div><div class="span12"><div class="l-3 medal_row">';
-		                //}
-		            }
-		            //if (i > 8) {
-		            //    html += '<div class="span3" style="text-align: center;">';
-		            //} else {
-		                html += '<div class="span4" style="text-align: center;">';
-		            //}
-		            html += '<a href="medals3.html?id=' + id + '&subject=' + medal.id + '">';
-		            if (medal.photo != '')
-		                html += '<img class="medal" src="https://mashpia.com/file_view.php?id=' + medal.photo + '">';
-		            else 
-		                html += '<img class="medal" src="https://mashpia.com/kiosk/images/medals/holder.png">';
-		            html += '</a><div class="medal-sub">\
-		                            <div style="display: table;width: 100%;"><span>' + medal.name + '</span></div>\
-		                        </div>\
-		                        <span>' + medal.left + ' to Level ' + medal.next + '</span>\
-		                    </div>';
-		        }
-				//html += '<div class="span12"><div class="l-3">'; // add another spacer to prevent the "X to Level Y" text being blocked by bottom bar
-		        html += '</div></div>';
-		        $("#medals").append( html );
-		        //$(".medal-sub").eq(i).next('span').attr('color', medalInfo[i+1]);
-		    });
+            // get the medal info for the user
+            medal_board( "#medals", id );
 		});
 	});
 </script>
