@@ -11,6 +11,9 @@ header.navbar {
 .navbar {
     margin-bottom: 0 !important;
 }
+header#top {
+    height: 10vh;
+}
 .logo {
     width: 80px;
     display: inline-block;
@@ -23,7 +26,14 @@ header.navbar {
 }
 .container.body.shrink {
     padding: 0px;
-    margin-top: 0px;
+    margin: 0px;
+}
+.container.body.shrink .content {
+    max-width: none;
+}
+.container.body.shrink div#main {
+    padding: 0px;
+    margin-bottom: 0px;
 }
 .img-responsive {
     display: block;
@@ -48,15 +58,19 @@ header.navbar {
     max-width: 500px;
     margin: auto;
 }
-
+div#barcode_scanner.show {
+    height: 90vh;
+    width: 100vw;
+}
 /* barcode quaggajs scanner styles */
 #barcode_scanner.viewport {
     position: relative;
 }
-
 #barcode_scanner.viewport > canvas, #barcode_scanner.viewport > video {
-    max-width: 100%;
     width: 100%;
+    height: 100%;
+    -o-object-fit: initial;
+    object-fit: initial;
 }
 
 canvas.drawing, canvas.drawingBuffer {
