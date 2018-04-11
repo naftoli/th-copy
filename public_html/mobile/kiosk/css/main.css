@@ -6,6 +6,7 @@ body {
 nav {
     background-color: rgb(255, 26, 26);
     height: 10vh;
+    z-index: 100;
 }
 .navbar-title {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -56,6 +57,7 @@ canvas.drawingBuffer, #barcode_scanner, video {
     height: 100%;
     -o-object-fit: cover;
     object-fit: cover;
+    z-index: 1;
 }
 
 #barcode_scanner {
