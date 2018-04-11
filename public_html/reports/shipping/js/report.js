@@ -49,14 +49,35 @@ var report = {
                 } else {
                     disabled = !$(td).parent().find(".shipped_toggle")[0].checked;
                 }
-                $(td).html(shipments.render_shipments(shipment_list, disabled, td.dataset.shipment_id) + add_button);
+                $(td).html(
+                    shipments.render_shipments(shipment_list, disabled, td.dataset.shipment_id) + add_button
+                );
                 $(td).find("i.fa.fa-plus").click(function(event){
                     var school_id = $(event.target).parent().parent().parent().parent().parent()[0].dataset.school_id;
                     shipment_modal.show({}, school_id); // show a blank modal...
                 });
             }); // end foreach .shipment_dropdown
+            // render bulk shipment selector
             $(school_table).find(".shipments_select").change(shipments.update_shipment);
+
+            $(school_table).find( ".bulk-shipment-select" ).html(
+                shipments.render_shipments(shipment_list, false, "")
+            );
+            $(school_table).find( ".bulk-shipment-select .shipments_select" ).change( report.bulk_shipment_select )
         }); // end get_shipments callback
+    },
+
+    bulk_shipment_select: function( event ) {
+        var dropdowns = $(event.target).parent().parent().parent().parent().find("td .shipments_select");
+        $.each( dropdowns, function( index, dropdown ) {
+            if ( 
+                !(event.target.value === dropdown.value) &&
+                $(dropdown).parent().parent().find(".shipped_toggle")[0].checked
+            ) {
+                dropdown.value = event.target.value
+                $(dropdown).change();
+            }
+        })
     },
     
     generate_report: function() {

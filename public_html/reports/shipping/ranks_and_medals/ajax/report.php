@@ -26,6 +26,10 @@ foreach($schools as $school_id => $school_name) {
                 <span class="slider-span"></span>
             </label>
         </div>
+        <div class="toggle-3rd">
+            Shipment (All):
+            <div class="bulk-shipment-select"></div>
+        </div>
     </div>
     <? } // end if admin us superperuser ?>
     

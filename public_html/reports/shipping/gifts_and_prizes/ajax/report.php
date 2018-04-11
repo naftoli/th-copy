@@ -39,9 +39,10 @@ foreach($schools as $school_id => $school_name) {
         </div>
         
         <? if ($admin_user['auth'] == 'super') : ?>
-<!--        <div class="toggle-3rd">
-            Bulk Shipment Select (Coming Soon)
-        </div>-->
+       <div class="toggle-3rd">
+            Shipment (All):
+            <div class="bulk-shipment-select"></div>
+        </div>
         <? endif; ?>
     </div>
 <!--    Generated report.... -->
