@@ -1,19 +1,22 @@
 // check the number as a user posts it
 function checkNumber( cardNumber ) {
-    if ( cardNumber.length !== 20 ) return false;
-
-    function login( response ) {
-        response = $.parseJSON( response );
-        if ( !response.success ) showError( response.body );
-        // log the user in
-        localStorage.setItem( "login", "user" );
-        localStorage.setItem( "id", response.user_id );
-        localStorage.setItem( "kiosk", true );
-        // and redirect to their profile page
-        location.href = "/mobile/reg/medals/index.html?id=" + response.user_id;
+    if ( cardNumber.length == 20 ) {
+        $.post( 'api/checkID.php', { card : card }, login );
+    } else {
+        console.error( "Invalid Size: ", cardNumber );
     }
-    // make the post request
-    $.post( 'api/checkID.php', { card : card }, login );
+}
+
+// login the user based on the response
+function login( response ) {
+    response = $.parseJSON( response );
+    if ( !response.success ) showError( response.body );
+    // log the user in
+    localStorage.setItem( "login", "user" );
+    localStorage.setItem( "id", response.user_id );
+    localStorage.setItem( "kiosk", true );
+    // and redirect to their profile page
+    location.href = "/mobile/reg/medals/index.html?id=" + response.user_id;
 }
 
 // show errors to the user in a nice, async way
