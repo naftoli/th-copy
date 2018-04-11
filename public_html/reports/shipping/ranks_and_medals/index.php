@@ -39,6 +39,9 @@ if($debug) echo "</pre>";?>
             .options label.slider-container span.slider-span:before{content: "\f0a8"; font-size: 1.4em; background: none; color: #fff;top: 1.5px;left:3px;}
             .options label.slider-container input:checked + .slider-span:before{content: "\f0a9"; }
         </style>
+        <style>
+            .toggle-3rd {width: 49%;display: inline-block;}
+        </style>
     </head>
     <body>
         <? include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php'); ?>
