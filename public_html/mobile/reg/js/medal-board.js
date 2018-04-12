@@ -23,7 +23,7 @@ function medal_board( target, user_id ) {
                 var medal = response[index];
                 // create a new medal and render it on the page
                 html += new Medal({
-                    subject: medal.name,    url:    ("/mobile/reg/medals3.html?id=" + medal.id ),
+                    subject: medal.name,    url:    ("/mobile/reg/medals3.html?id=" + user_id + '&subject=' + medal.id ),
                     picture: medal.photo ? ( "/file_view.php?id=" + medal.photo ) : "/kiosk/images/medals/holder.png",
                     animate: medal.photo ? true : false,    base_amount: medal.base_amount,
                     needed: medal.needed,   total:  medal.total,    next: medal.next
