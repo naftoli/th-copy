@@ -1,53 +1,46 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-        <title>Tzivos Hashem Kiosk</title>
-		<link rel="stylesheet" href="../css/all.css"/>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700"/>
-		<script>
-			!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);
-		</script>
-        <link rel="stylesheet" href="css/main.css"/>
-	</head>
-	<body class="page-goals">
-        <header class="navbar" id="top" role="banner">
-            <div class="container">
-				<div class="logo">
-					<img src="/mobile/img_new/TH Logo-colorful-svg.svg">
-				</div>
-                <div class="header">
-                    <h1>School Kiosk</h1>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tzivos Hashem Kiosk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand">
+            <img src="/mobile/img_new/TH%20Logo-colorful-svg.svg" id="navbar-logo" alt="" height="50" width="50">
+        </a>
+        <span class="navbar-text navbar-title mx-auto">
+            Tzivos Hashem Kiosk
+        </span>
+    </nav>
+
+    <section class="barcode-scanner">
+        <div class="flex">
+            <div class="manual" id="manual-scanner">
+                <div class="alert alert-warning">
+                    <div class="scanner-background">
+                        <h2>Enter the digits underneath the barcode on your ID card</h2>
+
+                        <form name="cardForm" id="cardForm">
+                            <input type="text" class="form-control" id="scanner" name="scanner" placeholder="ID Card Number" autocomplete="off" autofocus />
+                        </form>
+                    </div>
                 </div>
             </div>
-        </header>
-		
-		<div class="container body">
-			<div class="content">                
-				<div id="main" class="alert alert-warning">
-						<div align="center">
-							<!--<img class="img-responsive" src="/kiosk/images/scan_cover.png" /><br />-->
-							<div class="innerImg" id="manual_scanner">
-								<p>Scan in your ID Card.</p>
-								<div class="form-group">
-									<form name="cardForm" id="cardForm">
-										<input type="text" class="form-control" id="scanner" name="scanner" placeholder="ID Card Number" autocomplete="off" autofocus />
-									</form>
-								</div>
-								<span id="error_message"></span>
-                            </div>
-                            <div id="barcode_scanner" class="viewport"></div>
-                            <div style="clear:both"></div>
-                        </div>
-					</div>
-				</div>
-			</div>
-		</div>
+            <div id="barcode_scanner" class="viewport"></div>
+        </div>
+    </section>
+    <div class="clearfix"></div>
 
-	</body>
-	<script src="../reg/js/all.js"></script>
-	<script src="lib/quagga.min.js"></script>
-    <script src="js/login.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <script src="lib/quagga.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
 </html>
