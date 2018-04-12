@@ -1,7 +1,5 @@
 <?php 
 session_start();
-ini_set('display_errors',1);
-
 if ( !isset( $_SESSION['hschool'] ) ) 
     header( "Location: admin.php" );
 $h_school = $_SESSION['hschool'];
