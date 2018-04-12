@@ -1,7 +1,7 @@
 // check the number as a user posts it
 function checkNumber( cardNumber ) {
     if ( cardNumber.length == 20 ) {
-        $.post( 'api/checkID.php', { card : card }, login );
+        $.post( 'api/checkID.php', { card : cardNumber }, login );
     } else {
         console.error( "Invalid Size: ", cardNumber );
     }
