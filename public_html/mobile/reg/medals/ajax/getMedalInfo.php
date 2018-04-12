@@ -20,7 +20,7 @@ while ($row = mysql_fetch_assoc( $result )) {
 	} else if ($row['subject_id'] == 27) {
 		$name = "תניא";
 	}
-	$subjectNames[$row[subject_id]] = $name;
+	$subjectNames[$row['subject_id']] = $name;
 }
 // get the missions
 $missions = array();
