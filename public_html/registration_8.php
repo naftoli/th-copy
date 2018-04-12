@@ -84,7 +84,7 @@ $message = "";
 $sql = "SELECT * FROM schools WHERE school_id = " . $school_id;
 $result2 = mysql_query($sql);
 $row2 = mysql_fetch_assoc($result2);
-echo "<pre>"; print_r($row2); echo "</pre>";
+//echo "<pre>"; print_r($row2); echo "</pre>";
 
 // make sure there's an authorize profile created
 if (empty($row2['authorize_customer_profile_id']) || empty($row2['authorize_payment_profile_id'])) {
