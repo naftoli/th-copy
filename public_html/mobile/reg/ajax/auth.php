@@ -1,13 +1,17 @@
 <?php
-require '../../../db.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+require_once (dirname(__FILE__) . '/../../../db.php' );
 // start the session for Helpdesk login
 session_start();
 
 $username = mysql_real_escape_string($_POST['username']);
 $password = mysql_real_escape_string($_POST['password']);
 
-$sql = "select admin_id, admin_email from admins where username = '" . $username . "' and password = '" . $password . "'";
-$result = mysql_query($sql);
+$result = mysql_query(
+    "SELECT admin_id, admin_email FROM admins WHERE username = '" . $username . 
+    "' AND password = '" . $password . "'"
+);
 
 if (mysql_num_rows($result) > 0) {
 	$row = mysql_fetch_assoc($result);
@@ -24,7 +28,7 @@ if (mysql_num_rows($result) > 0) {
 	}
 	
 	// encrypt admin id
-	require 'encrypt.php';
+	require( dirname(__FILE__) . '/encrypt.php' );
 	echo encrypt_decrypt('encrypt', $admin);
 } else {
 	echo 0;

@@ -1,132 +1,46 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-        <title>Mobile Store</title>
-<style type="text/css">
-	@charset "UTF-8";html{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}body{margin:0}header{display:block}a{background-color:transparent}h1{margin:.67em 0;font-size:2em}img{border:0}button,input{margin:0;font:inherit;color:inherit}button{overflow:visible}button{text-transform:none}button{-webkit-appearance:button}button::-moz-focus-inner,input::-moz-focus-inner{padding:0;border:0}input{line-height:normal}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}button,input{font-family:inherit;font-size:inherit;line-height:inherit}a{color:#428bca;text-decoration:none}img{vertical-align:middle}h1{font-family:inherit;font-weight:500;line-height:1.1;color:inherit}h1{margin-top:20px;margin-bottom:10px}h1{font-size:36px}p{margin:0 0 10px}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}.form-control{display:block;width:100%;height:34px;padding:6px 12px;font-size:14px;line-height:1.42857143;color:#555;background-color:#fff;background-image:none;border:1px solid #ccc;border-radius:4px;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075);box-shadow:inset 0 1px 1px rgba(0,0,0,.075)}.form-control::-moz-placeholder{color:#999;opacity:1}.form-control:-ms-input-placeholder{color:#999}.form-control::-webkit-input-placeholder{color:#999}.form-group{margin-bottom:15px}.btn{display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;background-image:none;border:1px solid transparent;border-radius:4px}.btn-danger{color:#fff;background-color:#d9534f;border-color:#d43f3a}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}.container>.navbar-header{margin-right:-15px;margin-left:-15px}.alert{padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px}.alert-warning{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc}.container:after,.container:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before{display:table;content:" "}.container:after,.navbar-header:after,.navbar:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden;height:100%}body{background:#fff;font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;padding-bottom:100px;background-size:cover;background-attachment:fixed}h1{font-weight:300}h1{font-size:24px}header.navbar{background:#ff1a1a}.page-goals header.navbar h1{font-size:40px;font-weight:700;color:#fff;text-align:center;width:auto;display:block;margin:15px auto}.span12{width:100%;float:left}.span3{width:25%;float:left}.footer{max-width:1140px;text-align:center;border-top:2px solid #9f9f9f;display:table;margin-left:auto;margin-right:auto;float:none}.footer .span3{background-color:#e6e6e6}.footer .span3 span{padding:5px;color:grey;font-size:18px;font-family:font1}.footer .menu-item{width:120px;height:80px;margin:0 auto}.footer .span3 img{width:60px;vertical-align:text-bottom}.footer .span3.active{background-color:#999;background-repeat:repeat-x;background:-webkit-gradient(linear,0 0,0 100%,from(#b7b8b9),to(#e9e9e9));background:-webkit-linear-gradient(top,#e9e9e9,#b7b8B9);background:-moz-linear-gradient(top,#e9e9e9,#b7b8B9);background:-ms-linear-gradient(top,#e9e9e9,#b7b8B9);background:-o-linear-gradient(top,#e9e9e9,#b7b8B9)}@media screen and (max-width:1024px){.footer{border-radius:0}}@media screen and (max-width:900px){.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}}@media screen and (max-width:767px){.footer .menu-item{width:120px;height:80px}.footer .span3 img{width:60px}.footer .span3 span{font-size:18px}}@media screen and (max-width:639px){.footer .menu-item{width:110px;height:60px}.footer .span3 img{width:50px}.footer .span3 span{font-size:16px}}@media screen and (max-width:479px){.footer .menu-item{width:70px;height:40px}.footer .span3 img{width:30px}.footer .span3 span{font-size:8px}}.personalImg{width:50px;height:50px;left:1%;top:1%;border-radius:50%;position:absolute}p{color:#555;font-family:PTSans}
-</style>
-<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
-        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
-        <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
-<script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
-<script src="/mobile/reg/js/all.js" defer></script>
-        <style>
-			.innerImg {
-				/* Location of the image */
-				background-image: url("../img_new/scanner-2-color-red-svg.svg");
-				
-				/* Background image is centered vertically and horizontally at all times */
-				background-position: center center;
-				
-				/* Background image doesn't tile */
-				background-repeat: no-repeat;
-				
-				height: 200px;
-			}
-			.navbar {
-				margin-bottom: 0 !important;
-			}
-            .subMenu {
-                border-top: none !important;
-                top: -20px;
-            }
-			#scanner {
-				max-width: 200px;
-			}
-			.innerImg p {
-				max-width: 70%;
-				padding-top: 100px;
-			}
-			.logo {
-				max-width: 450px;
-				padding: 30px;
-				margin: auto;
-			}
-			.img-responsive {
-				display: block;
-				max-width: 100%;
-				height: auto;
-			}
-			.content {
-				max-width: 500px;
-				margin: auto;
-			}
-        </style>
-	</head>
-	<body class="page-goals">
-        <header class="navbar" id="top" role="banner">
-            <div class="container">
-                <div class="navbar-header">
-                    <h1>School Kiosk</h1>
-                </div>
-            </div>
-        </header>
-		
-		<div class="container">
-			<div class="logo">
-				<picture>
-					  <source srcset="/mobile/reg/img/webp/Tzivos_Hashem_Logo.webp" type="image/webp">
-					  <img src="/mobile/reg/img/Tzivos_Hashem_Logo_2.png" alt="" class="img-responsive center-block">
-				</picture>
-			</div>
-		</div>
-		
-        <div class="container">
-            <div class="content">                
-                <div id="main" class="alert alert-warning">
-                    <div align="center">
-                        <!--<img class="img-responsive" src="/kiosk/images/scan_cover.png" /><br />-->
-						<div class="innerImg">
-							<p>Scan in your ID Card.</p>
-							<div class="form-group">
-								<form name="cardForm" id="cardForm">
-									<input type="text" class="form-control" id="scanner" name="scanner" placeholder="ID Card Number" autocomplete="off" autofocus />
-								</form>
-							</div>
-						</div>
-                        <!--<button type="submit" id="scan" class="btn btn-danger">Submit</button>-->
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tzivos Hashem Kiosk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand">
+            <img src="/mobile/img_new/TH%20Logo-colorful-svg.svg" id="navbar-logo" alt="" height="50" width="50">
+        </a>
+        <span class="navbar-text navbar-title mx-auto">
+            Tzivos Hashem Kiosk
+        </span>
+    </nav>
+
+    <section class="barcode-scanner">
+        <div class="flex">
+            <div class="manual" id="manual-scanner">
+                <div class="alert alert-warning">
+                    <div class="scanner-background">
+                        <h2>Enter the digits underneath the barcode on your ID card</h2>
+
+                        <form name="cardForm" id="cardForm">
+                            <input type="text" class="form-control" id="scanner" name="scanner" placeholder="ID Card Number" autocomplete="off" autofocus />
+                        </form>
                     </div>
                 </div>
             </div>
+            <div id="barcode_scanner" class="viewport"></div>
         </div>
-        
-	</body>
-    <script>
-        document.addEventListener("DOMContentLoaded", function(event) {
-	        var url = location.href.toString();
-	        var pos = url.indexOf('='); 
-	        var user = url.substring(pos+1);
-			
-			function checkNumber( card ) {
-				if (card.length == 20) {
-	                $.post('checkID.php', { card : card }, function( res ) {
-	                    var response = $.parseJSON( res );
-						if (response.success) {
-							location.href = "/mobile/reg/medals/index.html?id=" + response.body;
-						} else {
-							alert(response.body);	
-						}
-	                });
-	            } else {
-	                alert('Card must be 20 digits.');
-	            }
-			}
-			
-			$("#cardForm").submit( function(e) {
-				e.preventDefault();
-				var card = $("#scanner").val();
-				checkNumber( card );
-				return false;
-			});
-			
-	        $("#scan").click( function() {
-	            var card = $("#scanner").val();
-				checkNumber( card );
-	        });
-	    });
-    </script>
+    </section>
+    <div class="clearfix"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <script src="lib/quagga.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
 </html>

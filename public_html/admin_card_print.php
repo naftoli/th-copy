@@ -18,7 +18,7 @@ if ($admin_user['auth'] == 'super') {
 	);
 	
 	while ($no_rank = mysql_fetch_row($blank_ranks_query)) {
-		$create_private_sql = "INSERT into rank_marks (rank_ord, user_id, date_promoted) values(1, $rowP[0], " . unixtojd() . ")";
+		$create_private_sql = "INSERT into rank_marks (rank_ord, user_id, date_promoted) values(1, $no_rank[0], " . unixtojd() . ")";
 		//echo $create_private_sql . "<br />";
 		mysql_query($create_private_sql);
 	}
@@ -412,7 +412,7 @@ $query1 = mysql_query($sql1);
 					if($admin_user['auth'] == 'super') { ?>
 						<label>
 							<?=T_('Hide cards marked as printed')?>: 
-							<input type="checkbox" name="hide_printed" value="1" <?=$hide_printed ? ' checked' : ''?>>
+							<input type="checkbox" name="hide_printed" value="1" checked>
 						</label>
 						(<?=T_('Not effective with choice: "All possible ranks"')?>)
 						<br/>
@@ -466,7 +466,7 @@ $query1 = mysql_query($sql1);
 					<input type="button" value="<?=T_('Print')?>" onClick="print();">
 				</p>
 			
-				<form action="admin_card_print.php" method="post" accept-charset="UTF-8">
+				<form action="admin_card_print.php" method="post" accept-charset="UTF-8" id="mark-printed">
 					<?php // make sure we have a superuser on our hands
 					if (!empty($admin_user) && $admin_user['auth'] == 'super') { ?>
 						<p class="noprint" style="text-align: center;">
@@ -476,7 +476,10 @@ $query1 = mysql_query($sql1);
 							<input type="hidden" name="rank_ord" 		value="<?=$rank_ord?>"	/>
 							<input type="hidden" name="type" 				value="<?=$card_type?>"	/>
 							<input type="submit" value="<?=T_('Mark Cards as Printed')?>"		/>
-						</P>
+                        </p>
+                        <p class="noprint" style="text-align: center;">
+                            <input type="checkbox" id="toggle-printed" checked /> Toggle All
+                        </p>
 					<?php } // end superuser only form
 					// default to line 0, column 0
 					$line=0; $col=0;
@@ -627,14 +630,30 @@ $query1 = mysql_query($sql1);
 	</body>
 	
 	<script>
-		$(".selection").click( function() {
-			if (!$(this).is(":checked")) {
-				$(this).parent().addClass('skipCard');
-				$(this).val('0');
+		$(".selection").change( function( event ) {
+            var target = $( event.target );
+			if (!target.is(":checked")) {
+				target.parent().addClass('skipCard');
+				target.val('0');
 			} else {
-				$(this).parent().removeClass('skipCard');
-				$(this).val('1');
+				target.parent().removeClass('skipCard');
+				target.val('1');
 			}
-		});
+        });
+        // add confirmation dialog
+        $("#mark-printed").submit( function ( event ) {
+            if ( !confirm( "Are you sure you wish to mark all these cards as printed?" ) ) {
+                event.preventDefault();
+            }
+        });
+        // toggle all the cards as printed/not printed
+        $("#toggle-printed").change( function ( event ) { // when the master toggle is changed
+            $.each( $("input.selection"), function(index, input) { // for each of the cards
+                if( !input.checked == event.target.checked ) { // if the input does not match the master toggle
+                    input.checked = event.target.checked;
+                    $( input ).change(); // trigger the code on line 633
+                }
+            })
+        });
 	</script>
 </html>

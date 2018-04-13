@@ -132,7 +132,7 @@ class user_track
 		// if ($this->subject_id == 41 && $this->user_id == 51364) echo $sql . "<br />";
 		//if($this->subject_id == 45) echo "<input type='hidden' name='SQL ONE' value='" . $sql . "'>";
                 
-        include_once 'class.defaults.php';
+        include_once dirname(__FILE__) . '/../class.defaults.php';
 		$d = new Defaults($this->user_id);
                 
 		$query = mysql_query($sql);
@@ -166,7 +166,6 @@ class user_track
 					
                     // ***** Daily Tasks *****//
         			$daily_tasks = $date_tasks_mission->get_daily_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
-        			//echo "<input type='hidden' name='4) DATE_TASK_MISSION_ID - END DATE' value='" . $date_tasks_mission->date_tasks_mission_id . "->" . $date_tasks_mission->end_date . "'>\n";
         			for ($dtno = 0; $dtno < count($daily_tasks); $dtno++) {
         				array_push($this->daily_tasks, $daily_tasks[$dtno]);
         			}

@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Title -->
+    <title>The Rebbe's Birthday Gift</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- dataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" />
+    <!-- Fontawesome 5 -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js" integrity="sha384-SlE991lGASHoBfWbelyBPLsUlwY1GwNDJo3jSJO04KZ33K2bwfV9YBauFfnzvynJ" crossorigin="anonymous"></script>
+    <!-- Source Sans Pro font -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+    <!-- Custom styles for the page -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <a class="navbar-brand" href="//tzivoshashem.org">
+            <img src="//mashpia.com/mobile/img_new/TH%20Logo-colorful-svg.svg" id="navbar-logo" alt="">
+        </a>
+        <span class="navbar-text navbar-title mx-auto">
+            The Rebbe's Birthday Present
+        </span>
+        <a class="navbar-brand navbar-share" id="social-dropdown-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="far fa-share-square"></i>
+        </a>
+
+        <div class="dropdown-menu" id="social-dropdown" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" target="_blank" href="http://api.whatsapp.com/send?text=See%20the%20amazing%20gift%20the%20Chayolim%20gave%20the%20Rebbe%20for%20his%20116th%20birthday%20at%20ourBirthdayGift.com">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            <a class="dropdown-item" target="_blank" href="https://twitter.com/home?status=See%20the%20amazing%20gift%20the%20Chayolim%20gave%20the%20Rebbe%20for%20his%20116th%20birthday%20at%20ourBirthdayGift.com">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a class="dropdown-item" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=OurBirthdayGift.com">
+                <i class="fab fa-facebook-square"></i>
+            </a>
+            <a class="dropdown-item" target="_blank" href="https://plus.google.com/share?url=OurBirthdayGift.com">
+                <i class="fab fa-google-plus"></i>
+            </a>
+        </div>
+    </nav>
+    <header>
+        <div class="embed-responsive embed-responsive-4by3">
+            <iframe id="rebbeVideo" src="https://player.vimeo.com/video/207512639" width="640" height="433"
+                webkitallowfullscreen mozallowfullscreen allowfullscreen>
+            </iframe>
+        </div>
+    </header>
+    <section class="army-totals">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="container-title">We present, a birthday gift from chayolim all over the world!</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-green">
+                        <h5 class="card-header">
+                            <span>תניא בעל פה + משניות בעל פה</span>
+                        </h5>
+                        <div class="card-body">
+                            <h5 class="card-title" id="grand_total">0</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card card-blue">
+                        <h5 class="card-header">
+                                <span>תניא בעל פה</span>
+                        </h5>
+                        <div class="card-body">
+                            <h5 class="card-title" id="tanya_total">0</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card card-red">
+                        <h5 class="card-header">
+                            <span>משניות בעל פה</span>
+                        </h5>
+                        <div class="card-body">
+                            <h5 class="card-title" id="mishna_total">0</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr>
+
+    <section class="amount-table">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="container-title small">See what everyone contributed to make this happen</h2>
+                </div>
+            </div>
+            <div class="row" id="grade_dropdown_row">
+                <div class="col-8 col-md-6 col-centered">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" id="refresh-table" type="button">
+                                <i class="fas fa-sync"></i>
+                            </button>
+                        </div>
+                        <select class="form-control form-control-lg" id="grade_dropdown">
+                            <option value="">All Grades</option>
+                            <option value="Pre1a">Pre1-A</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 no-padding">
+                    <div id="report" class="table-responsive"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr>
+
+    <section class="join-us">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="container-title">Download the resources you need</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="card card-blue">
+                        <h5 class="card-header">
+                            <span>תניא בעל פה</span>
+                        </h5>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="https://www.dropbox.com/sh/uoeb0cv5op8h4t5/AAD3JOzVP2VE3_sdKdYpaCLla?dl=0" target="_blank">Click Here</a>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card card-red">
+                        <h5 class="card-header">
+                            <span>משניות בעל פה</span>
+                        </h5>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="https://www.dropbox.com/sh/dt9siuwih6v6vv9/AACr8VM0ocKWDMdCQth3MTD-a?dl=0" target="_blank">Click Here</a>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    תניא בעל פה לע״נ התמים נתן נטע בן הרה"ח ר' זלמן יודא דייטש ע"ה
+                    <br /> <br />
+                    משניות בעל פה לע"נ זאב ארי' ע"ה בן יבלט"א הרה"ח ר' שניאור זלמן שי' גליק
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Javascript -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Table Sorting JS -->
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Countup animation -->
+    <script src="countUp.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-116474327-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'UA-116474327-1');
+    </script>
+    <!-- Script to run our code on page load -->
+    <script src="script.js"></script>
+</body>
+</html>

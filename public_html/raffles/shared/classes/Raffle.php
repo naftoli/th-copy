@@ -348,7 +348,7 @@ class Raffle {
      *
      * returns an array of all the winners ($this->winner_info);
      */
-    public function get_winner_info($school_id = false, $separate_genders = true, $sorting="school"){ // defaults
+    public function get_winner_info($school_id = false, $separate_genders = true, $sorting="school", $shipping = true){ // defaults
         $this->winner_info = []; // create the flat array
         if($separate_genders) $this->winner_info = ["boys" => [], "girls" => []]; // create the boys/girls structure
         
@@ -410,7 +410,14 @@ class Raffle {
                 'user_id'       => $row['user_id'],
                 'hachayol_name' => $row['hachayol_name'], 
                 'grade' => $row['class_grade'] . ($row['class_sub'] ? " - " .$row['class_sub'] : ""),
-                'address' => ['street' => $row['admin_address1'], 'city' => $row['admin_city'], 'state' => $row['admin_state'], 'zip' => $row['admin_postal'], 'country' => $row['admin_country']]
+            ];
+
+            if ( $shipping ) $data['address'] = [
+                'street' => $row['admin_address1'], 
+                'city' => $row['admin_city'], 
+                'state' => $row['admin_state'], 
+                'zip' => $row['admin_postal'], 
+                'country' => $row['admin_country']
             ];
             
             // sort it into the correct subsection (gender)

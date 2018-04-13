@@ -23,7 +23,7 @@
 		
 		#bh{
 			text-align: center;font-size: 1.5em;position: absolute;top: 5px;
-			width: 100%;color: rgba(255,255,255,.6);font-family:font1;
+			width: 100%;color: #fff;font-family:font1;
 			display: inline-block; text-align: center;
 		}
 		.page5 .chilrens{margin-bottom: 10px;}
@@ -34,7 +34,13 @@
 			border-color: #fff;
 		}
 /*		Remove this to make it take up the whole page*/
-		.page5 > .span12.body {max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 0px}
+        .page5 > .span12.body {max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 0px}
+        /* New shamai changes, 4/8/2018 */
+        .page5 .header {
+            background-image: url("/mobile/img_new/star-background-color-green-svg.svg");
+            background-size: cover;
+        }
+        .page5 .lb-ico { color: #fff }
 		
 		@media screen and (min-width: 600px) {.bottomSpace {height: 125px;}}
 		
@@ -134,7 +140,7 @@
 																<img src="images/profile-photo-default.jpg" class="children-avatar">
 																{{/if}}
 															{{/if}}
-															<img src="images/rankImgs/{{rankOrd}}.png" class="children-mark">
+															<img src="/mobile/img_new/ranks/{{rankOrd}}.svg" class="children-mark">
 															<!--</a>-->
 															{{#if this.needsReg}}
 																{{#if this.allowRemove}}
