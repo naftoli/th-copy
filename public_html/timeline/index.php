@@ -2,17 +2,28 @@
 $info = array(
   'May 2017'   =>  array(
       "Medal Board Visual Update",
-      "Visual Progress Reports on Mobile / App",
+      "Visual Progress Reports (All Campaigns) on Mobile Site / App",
       "Leader Board",
   ),
   'June 2017'  =>  array(
       "Mobile Kiosk",
+      "Adding Mission Stickers to Medal Board",
+      "Visual Progress Reports (Per Campaign) on Mobile Site / App",
+      "Visual Progress Reports (Per Task) on Mobile Site / App",
   ),
   'September 2017' =>  array(
-    
+      "Speed Optimizations to site",
+      "Updating Missing Mission Pictures",
+      "Attendance Module for Teachers",
+      "Daily Chitas Integration",
+      "Points Grid for Teachers",
+      "Mission Sheets Barcodes",
+      "Personalized Student Reports",
   ),
   'November 2017'  =>  array(
-    
+      "Integration with Chabad.org for content / videos",
+      "Updated Wordpress to allow audio / video uploads",
+      "Comments / Likes on Wordpress ???",
   ),
   'December 2017'  =>  array(
     
