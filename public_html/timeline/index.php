@@ -10,6 +10,7 @@ $info = array(
       "Adding Mission Stickers to Medal Board",
       "Visual Progress Reports (Per Campaign) on Mobile Site / App",
       "Visual Progress Reports (Per Task) on Mobile Site / App",
+      "Show raffle eligibility on Student Account",
   ),
   'September 2017' =>  array(
       "Speed Optimizations to site",
@@ -19,6 +20,7 @@ $info = array(
       "Points Grid for Teachers",
       "Mission Sheets Barcodes",
       "Personalized Student Reports",
+      "Reporting Engine for Base Commanders",
   ),
   'November 2017'  =>  array(
       "Integration with Chabad.org for content / videos",
