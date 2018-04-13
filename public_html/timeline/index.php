@@ -1,0 +1,120 @@
+<?php
+$info = array(
+  'May 2017'   =>  array(
+      "Medal Board Visual Update",
+      "Visual Progress Reports on Mobile / App",
+      "Leader Board",
+  ),
+  'June 2017'  =>  array(
+      "Mobile Kiosk",
+  ),
+  'September 2017' =>  array(
+    
+  ),
+  'November 2017'  =>  array(
+    
+  ),
+  'December 2017'  =>  array(
+    
+  ),
+  'January 2018'  =>  array(
+    
+  ),
+  'February 2018' =>  array(
+    
+  ),
+  'March 2018'  =>  array(
+    
+  )
+);
+?>
+<!DOCTYPE html>
+<html >
+<head>
+  <!-- Site made with Mobirise Website Builder v4.6.6, https://mobirise.com -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Mobirise v4.6.6, mobirise.com">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <link rel="shortcut icon" href="assets/images/logo2.png" type="image/x-icon">
+  <meta name="description" content="Website Maker Description">
+  <title>Page 1</title>
+  <link rel="stylesheet" href="assets/web/assets/mobirise-icons/mobirise-icons.css">
+  <link rel="stylesheet" href="assets/tether/tether.min.css">
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css">
+  <link rel="stylesheet" href="assets/theme/css/style.css">
+  <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
+  
+  
+  
+</head>
+<body>
+  <section class="timeline2 cid-qP7jIIOVOn" id="timeline2-q">
+
+    
+
+    <div class="mbr-overlay" style="opacity: 0.9; background-color: rgb(178, 204, 210);">
+    </div>
+
+    <div class="container align-center">
+        <h2 class="mbr-section-title pb-3 mbr-fonts-style display-2">
+            Mashpia Updates Timeline
+        </h2>
+        <h3 class="mbr-section-subtitle pb-5 mbr-fonts-style display-5">
+            A timeline of proposed updates to the current mashpia system
+        </h3>
+        
+        <?php
+        // alternate between left aligned and right aligned
+        $i = 1;
+        // do not show line on last div
+        $j = 1;
+        $last = count($info);
+        foreach ($info as $month => $list) {
+          if ($i == 1) $class = "";
+          else if ($i == 2) $class = "reverse";
+          if ($j < $last) $class2 = "separline";
+          else $class2 = "";
+          ?>
+
+          <div class="row timeline-element <?=$class?> <?=$class2?>">
+             <span class="iconsBackground">
+                 <span class="mbri-responsive mbr-iconfont"></span>
+             </span>
+             <div class="col-xs-12 col-md-6 align-left">
+                 <div class="timeline-text-content">
+                     <h4 class="mbr-timeline-title pb-3 mbr-fonts-style display-5">
+                         <?=$month?>
+                     </h4>
+                     <p class="mbr-timeline-text mbr-fonts-style display-7">
+                         <ul>
+                            <?php foreach ($list as $item) : ?>
+                            <li><?=$item?></li>
+                            <?php endforeach; ?>
+                         </ul>
+                     </p>
+                 </div>
+             </div>
+         </div>
+         
+         <?php
+         $i++;
+         if ($i > 2) $i = 1;
+         $j++;
+        } ?>
+    </div>
+</section>
+
+
+  <section class="engine"><a href="https://mobirise.ws/o">free mobile website builder</a></section><script src="assets/web/assets/jquery/jquery.min.js"></script>
+  <script src="assets/popper/popper.min.js"></script>
+  <script src="assets/tether/tether.min.js"></script>
+  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+  <script src="assets/smoothscroll/smooth-scroll.js"></script>
+  <script src="assets/theme/js/script.js"></script>
+  
+  
+</body>
+</html>
