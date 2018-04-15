@@ -1,18 +1,18 @@
 <?php
 $info = array(
-  'May 2017'   =>  array(
+  'May 2018'   =>  array(
       "Medal Board Visual Update",
       "Visual Progress Reports (All Campaigns) on Mobile Site / App",
       "Leader Board",
   ),
-  'June 2017'  =>  array(
+  'June 2018'  =>  array(
       "Mobile Kiosk",
       "Adding Mission Stickers to Medal Board",
       "Visual Progress Reports (Per Campaign) on Mobile Site / App",
       "Visual Progress Reports (Per Task) on Mobile Site / App",
       "Show raffle eligibility on Student Account",
   ),
-  'September 2017' =>  array(
+  'September 2018' =>  array(
       "Speed Optimizations to site",
       "Updating Missing Mission Pictures",
       "Attendance Module for Teachers",
@@ -22,21 +22,21 @@ $info = array(
       "Personalized Student Reports",
       "Reporting Engine for Base Commanders",
   ),
-  'November 2017'  =>  array(
+  'November 2018'  =>  array(
       "Integration with Chabad.org for content / videos",
       "Updated Wordpress to allow audio / video uploads",
       "Comments / Likes on Wordpress ???",
   ),
-  'December 2017'  =>  array(
+  'December 2018'  =>  array(
     
   ),
-  'January 2018'  =>  array(
+  'January 2019'  =>  array(
     
   ),
-  'February 2018' =>  array(
+  'February 2019' =>  array(
     
   ),
-  'March 2018'  =>  array(
+  'March 2019'  =>  array(
     
   )
 );
