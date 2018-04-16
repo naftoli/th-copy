@@ -154,6 +154,20 @@ while ( $row = mysql_fetch_assoc($result) ) {
 		$children[$row['user_id']]['thumb']	= $pRow['thumb'];
 	}
 	
+	// get number of days that tasks were done
+	$sqlTasks = "select date_task_id from date_tasks_marks
+				where user_id = " . $row['user_id'] . "
+				and mark_date >= 2458012
+				group by mark_date";
+	$resultTasks = mysql_query($sqlTasks);
+	$numTasks = mysql_num_rows($resultTasks);
+	if ($numTasks >= 160) {
+		$children[$row['user_id']]['auctionInfo'] = '160 days of tasks completed - eligible for yearly raffle';
+	} else {
+		$children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . " days of tasks to enter the yearly raffle";
+	}
+	
+	
 	//if ($row['user_id'] == 26598) {
 	//	$children[$row['user_id']]['chidonShow'] = 1;
 	//}
