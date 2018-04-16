@@ -9,6 +9,9 @@ require 'encrypt.php';
 $admin = encrypt_decrypt('decrypt', $admin);
 
 require 'regFeeSchools.php';
+require_once( dirname(__FILE__) . '/../../../raffles/yearly/classes/YearlyRaffle.php') ;
+use raffles\yearly\YearlyRaffle as YearlyRaffle; // use the raffle class from its namespace
+$yearly_raffle = new YearlyRaffle();
 
 //setup json array of information to pass back to parent_detail page
 $info = array();
@@ -157,12 +160,10 @@ while ( $row = mysql_fetch_assoc($result) ) {
 	
 	// get number of days that tasks were done
 	if ($row['user_registered']) {
-		$sqlTasks = "select date_task_id from date_tasks_marks
-					where user_id = " . $row['user_id'] . "
-					and mark_date >= 2458012
-					group by mark_date";
-		$resultTasks = mysql_query($sqlTasks);
-		$numTasks = mysql_num_rows($resultTasks);
+        // set the eligibility for the user and get it back
+        $yearly_raffle->set_user_eligibility( $row['user_id'] );
+        $numTasks = $yearly_raffle->eligibility[ $row['user_id'] ];
+        // send them a message with how many days left/done
 		if ($numTasks >= 160) {
 			$children[$row['user_id']]['auctionInfo'] = '160 days of tasks completed - eligible for yearly raffle';
 		} else {
