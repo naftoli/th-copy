@@ -94,7 +94,7 @@ $(document).ready(function(){
         });
     } // end toggle checkbox
     
-    function toggleDistributed() {
+    function toggleDistributed( event ) {
         var checked = event.target.checked;
         var params = {id: event.target.dataset.id, mark: checked, type: "user"};
         
