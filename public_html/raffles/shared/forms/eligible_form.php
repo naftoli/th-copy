@@ -10,7 +10,6 @@ require($_SERVER["DOCUMENT_ROOT"].'/header.php');
 
 /***************** EXTERNAL DEPENDENCIES **********************/
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/class.schoolsUsers.php';
 // load the required files
 require_once(dirname(__FILE__).'/../classes/Raffle.php');
 
