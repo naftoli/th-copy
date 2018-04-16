@@ -1,4 +1,5 @@
 
+RewriteEngine on
 
 # prevent caching on the server side
 <FilesMatch "\.(html|htm|js|css|php)>

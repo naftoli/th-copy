@@ -57,7 +57,7 @@ $( document ).ready( function() {
         Cookies.remove('user', { path: '/' }); // log off from the mobile site ( kiosk )
         localStorage.removeItem( "login" );// forget the login type
 
-        if ( JSON.parse(localStorage.getItem( "kiosk" )) ) {
+        if ( localStorage.getItem( "kiosk" ) ) {
             localStorage.removeItem( "kiosk" );
             window.location = "/mobile/kiosk/";
         } else {
