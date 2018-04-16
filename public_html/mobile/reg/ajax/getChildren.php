@@ -168,8 +168,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 		} else {
 			$children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . " days of tasks to enter the yearly raffle";
 		}
-	}
-	
+	}	
 	
 	//if ($row['user_id'] == 26598) {
 	//	$children[$row['user_id']]['chidonShow'] = 1;
