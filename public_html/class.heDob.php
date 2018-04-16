@@ -62,7 +62,7 @@ class HeDob {
 	}
 	
 	private function syncToWp() {
-		require_once 'class.globalSettings.php';
+		require_once( dirname(__FILE__) . '/class.globalSettings.php' );
 		$year = GlobalSettings::getBirthdayYear();
 		$sql = "select s.school_name, u.first, u.last, u.gender, d.*
 				from he_dob d
