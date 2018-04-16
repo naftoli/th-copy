@@ -40,6 +40,12 @@ $schools = $as->getSchools();
             box-shadow: 0px 2px 8px #555;
             cursor: pointer;
         }
+        select.hidden {
+            display: none;
+        }
+        td:last-child, th:last-child {
+            text-align: center;
+        }
         div.dropdowns {
             text-align: center;
             margin-bottom: 10px;
