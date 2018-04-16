@@ -5,25 +5,16 @@ require_once 'yearly_prize/classes/TotalWeeklyTasks.php';
 
 // get all registered users
 $users = array();
-$sql = "select u.user_id, u.first, u.last, s.school_name, c.class_grade, c.class_sub
+$sql = "select u.user_id, u.first, u.last, s.school_name, c.class_grade, c.class_sub, count(yg.user_id) as total 
         from users u
         join schools s using (school_id)
         join classes c on c.class_id = u.class_id
-        where u.user_registered > 0
-        and user_id not in (
-            select distinct user_id from user_yearly_gift
-        )
+        join user_yearly_gift yg using (user_id)
+        group by user_id 
         order by school_name, class_grade, class_sub, last, first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $users[$row['user_id']] = $row;
-}
-
-foreach ($users as $user_id => $info) {
-    $t = new TotalWeeklyTasks($user_id, unixtojd());
-    $t->get_week_dates();
-    $total = $t->total_weeks_with_task();
-    $users[$user_id]['total'] = $total;
 }
 //echo "<pre>"; print_r($users); echo "</pre>";
 ?>
