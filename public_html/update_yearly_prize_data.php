@@ -18,8 +18,6 @@ function update($start, $end, $user_id) {
         ."and dtmarks.mark_date >= $start and dtmarks.mark_date <= $end "
         ."group by dtmarks.date_task_id";
         
-    //if($this->user_id == 50628) echo $sql."<br/><br/>";
-
     $query = mysql_query($sql);
     while ($row = mysql_fetch_assoc($query)){
         if ($row['total'] >= 1 && // if the amount of rows is equal to what is needed (covers daily tasks)
@@ -30,11 +28,19 @@ function update($start, $end, $user_id) {
     }
 }
 
+$users = array();
+$sql = "select user_id from users where user_registered > 0";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $users[] = $row['user_id'];
+}
+
 foreach ($parshos as $parsha) {
     foreach ($users as $user_id) {
         echo "updating $user_id from $start to $end<br />";
         update($parsha['start'], $parsha['end'], $user_id);
         sleep(0.5);
     }
+    echo "Sleeping<br /><br />";
     sleep(1);
 }
