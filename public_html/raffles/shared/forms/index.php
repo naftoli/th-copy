@@ -38,7 +38,13 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="eligible_form.php">
                 <div class="button">
                     <img src="/images/icon_profile.png" height="32" alt="tickets"/>
-                    <span class="link-text">Eligible Students</span>
+                    <span class="link-text">Eligible Students (Weekly/Monthly)</span>
+                </div>
+            </a>
+            <a href="../../yearly/eligibility_report.php">
+                <div class="button">
+                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
+                    <span class="link-text">Eligible Students (Yearly)</span>
                 </div>
             </a>
             <a href="winners_form.php">
@@ -47,13 +53,6 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Winners</span>
                 </div>
             </a>
-            <br/>
-<!--             <a href="../shipping/"> -->
-<!--                 <div class="button"> -->
-<!--                     <img src="/images/icon_report.png" height="32" alt="tickets"/> -->
-<!--                     <span class="link-text">Shipping Report</span> -->
-<!--                 </div> -->
-<!--             </a> -->
         </div>
         <?if ($admin_user['auth'] == 'super') {?>
             <h2>Administration Forms</h2>
