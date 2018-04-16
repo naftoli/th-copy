@@ -23,6 +23,8 @@ $query = mysql_query(
     ." JOIN users USING (user_id) "
     ." WHERE start_date >= $cutoff;"
 );
+
+echo mysql_num_rows( $query ) . " Children with birthdays after April 15 2019<br/><br/>";
 // go through each user and update them
 while( $row = mysql_fetch_assoc( $query ) ){
     $user_id = $row['user_id'];
