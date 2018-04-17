@@ -66,7 +66,7 @@ foreach ($users as $user_id => $info) {
                 } else {
                     $num = 12 - $info['total'];
                     echo $num . " weeks left to eligibility";
-                    $grandtotals[$num]++;
+                    $grandtotals[$info['total']]++;
                 }
                 echo "</td></tr>";
             }
