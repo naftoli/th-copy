@@ -21,7 +21,8 @@ $query = mysql_query(
     ." FROM birthdays "
     ." JOIN date_tasks_missions USING (date_tasks_mission_id) "
     ." JOIN users USING (user_id) "
-    ." WHERE start_date >= $cutoff;"
+    ." WHERE start_date >= $cutoff "
+    ." AND user_registered IS NOT NULL;"
 );
 
 echo mysql_num_rows( $query ) . " Children with birthdays after April 15 2019<br/><br/>";
