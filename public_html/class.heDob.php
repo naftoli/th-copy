@@ -20,7 +20,7 @@ class HeDob {
 		if ($this->addOne) $date->add(new DateInterval('P1D'));
 		$newDate = $date->format( 'Y-m-d' );
 		$arrDOB = explode('-', $newDate); 
-			
+		
 		// find out hebrew birthday
 		if (intval($arrDOB[0]) <= 2017 && intval($arrDOB[0]) >= 2003) {
 			$jd = gregoriantojd($arrDOB[1], $arrDOB[2], $arrDOB[0]);
@@ -53,8 +53,8 @@ class HeDob {
 				$sql = "insert into he_dob values($user_id, $hMonth, $hDay, $hYear, $bornInLeap, 0)";
 			}
 			if ( $this->debug ) echo $sql . "<br />";
-			mysql_query($sql);
-		
+            mysql_query($sql);
+            if ( $this->debug ) echo "Sync to wordpress... ";
 			$this->syncToWp();
 		} else {
 			echo $arrDOB[0] . '-' . $arrDOB[1] . '-' . $arrDOB[2] . "<br />";
@@ -106,10 +106,9 @@ class HeDob {
 			//echo "<pre>"; print_r($arrPost); echo "</pre>";
 			
 			// change db to wp
-			mysql_select_db('wp');
-
-			require_once dirname(__FILE__)."/blog/wp-blog-header.php";
-			
+            mysql_select_db('wp');
+            
+			// require_once dirname(__FILE__)."/blog/wp-blog-header.php";
 			//$id = wp_insert_post( $arrPost['post'] );
 			//if ($id) {
 			//	//echo $id . "<br />";
@@ -140,7 +139,7 @@ class HeDob {
 			//	mysql_query($sqlUpdate);
 			//}
 			// change db back to mashpiadb
-			mysql_select_db('mashpiadb');
+            mysql_select_db('mashpiadb');
 		}
 	}
 }
