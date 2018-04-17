@@ -10,33 +10,39 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="/mobile/css/bug_report.css"/>
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar">
-        <div class="navbar-brand personalImg"></div>
+        <!-- <div class="navbar-brand personalImg"></div> -->
         <span class="navbar-text navbar-title mx-auto">
             Leaderboard
         </span>
     </nav>
 
+    <div class="personalImg"></div>
+    <div class="bug-report">
+        <img src="/mobile/img_new/tools-color-white-svg.svg" data-category="Medal Board" alt="bug-report" />
+    </div>
+
     <section id="top-nav">
         <div class="row nav-row">
             <div class="col-4">
-                <a href="../reg/rank.html">
+                <a href="../reg/rank.html" id="rankBoardLink">
                     <img src="/mobile/img_new/trophy-color-orange-svg.svg">
                     <span>Rank Board</span>
                 </a>
             </div>
             <div class="col-4">
-                <a href="../reg/medals4.html">
+                <a href="../reg/medals4.html" id="medalBoardLink">
                     <img src="/mobile/img_new/medals-color-orange-svg.svg">
                     <span>Medal Board</span>
                 </a>
             </div>
             <div class="col-4 active">
-                <a href="">
+                <a href="" id="leaderBoardLink">
                     <img src="/mobile/img_new/achievements-color-orange-svg.svg">
                     <span>Leaderboard</span>
                 </a>
@@ -45,9 +51,70 @@
     </section>
 
     <section id="filters">
-
+        <div class="filter">
+            <span class="filter-title">
+                <i class="fas fa-globe"></i> Location:
+            </span>
+            <div class="filter-options">
+                <label class="filter-option">
+                    <input type="radio" name="location" id="location" value="army" checked/>
+                    <span>Army</span>
+                </label>
+                <label class="filter-option">
+                    <input type="radio" name="location" id="location" value="city"/>
+                    <span>City</span>
+                </label>
+                <label class="filter-option">
+                    <input type="radio" name="location" id="location" value="base"/>
+                    <span>Base</span>
+                </label>
+            </div>
+        </div>
+        <div class="filter">
+            <span class="filter-title">
+                <i class="fas fa-users"></i> Gender:
+            </span>
+            <div class="filter-options">
+                <label class="filter-option">
+                    <input type="radio" name="gender" id="gender" value="" checked/>
+                    <span>All</span>
+                </label>
+                <label class="filter-option">
+                    <input type="radio" name="gender" id="gender" value="M"/>
+                    <span>Boys</span>
+                </label>
+                <label class="filter-option">
+                    <input type="radio" name="gender" id="gender" value="F"/>
+                    <span>Girls</span>
+                </label>
+            </div>
+        </div>
+        <div class="filter">
+            <span class="filter-title">
+                <i class="fas fa-trophy"></i> Rank:
+            </span>
+            <div class="filter-options">
+                <select class="form-control" id="rank">
+                    <option value="">All Ranks</option>
+                    <option value="1">Private</option>
+                    <option value="2">Sergeant</option>
+                    <option value="3">Sergeant Major</option>
+                    <option value="4">Second Lieutenant</option>
+                    <option value="5">First Lieutenant</option>
+                    <option value="6">Captain</option>
+                    <option value="7">Major</option>
+                    <option value="8">Colonel</option>
+                    <option value="9">General</option>
+                    <option value="10">1* General</option>
+                    <option value="11">2* General</option>
+                    <option value="12">3* General</option>
+                    <option value="13">4* General</option>
+                    <option value="14">5* General</option>
+                </select>
+            </div>
+        </div>
     </section>
-
+    
     <section id="leaderboard">
 
     </section>
@@ -86,6 +153,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
     <!-- Our JavaScript code -->
+    <script src="/mobile/js/js.cookie.js"></script>
+    <script src="/mobile/js/authenticate.js"></script>
     <script src="main.js"></script>
+    <script src="js/leaderboard.js"></script>
+    <!-- Google Anylitics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-71974937-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} 
+        gtag('js', new Date()); gtag('config', 'UA-71974937-1');
+    </script>
 </body>
 </html>
