@@ -3,6 +3,12 @@ require 'db.php';
 require 'class.parshos.php';
 $parshos = Parshos::getParshos(5778);
 
+if (isset($_POST['limit'])) {
+    $limit = $_POST['limit'] * 100;
+} else {
+    $limit = 0;
+}
+
 function update($start, $end, $user_id) {
     $sql = "SELECT * FROM user_yearly_gift WHERE user_id = " . $user_id . " AND start_date = $start AND end_date = $end"; // check if there is a mark for this user on this week
     $query = mysql_query($sql);
@@ -23,24 +29,23 @@ function update($start, $end, $user_id) {
         if ($row['total'] >= 1 && // if the amount of rows is equal to what is needed (covers daily tasks)
             ($row['quantity'] ? $row['done_qty'] >= $row['quantity'] : true)){ // make sure that the quanity is good (covers non daily tasks)
             $sql = "INSERT INTO user_yearly_gift (user_id, start_date, end_date, marked) VALUES ('".$user_id."', '$start', '$end', 1)";
-            mysql_query($sql);
+            if (mysql_query($sql)) echo "Inserted row into user_yearly_gift for " . $user_id . "<br />";
         }
     }
 }
 
 $users = array();
-$sql = "select user_id from users where user_registered > 0";
+$sql = "select user_id from users where user_registered > 0 limit $limit, 100";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $users[] = $row['user_id'];
 }
 
 foreach ($parshos as $parsha) {
+    if ($parsha['start'] > unixtojd()) break;
     foreach ($users as $user_id) {
-        echo "updating $user_id from $start to $end<br />";
+        echo "updating $user_id from $parsha[start] to $parsha[end]<br />";
         update($parsha['start'], $parsha['end'], $user_id);
-        sleep(0.5);
     }
-    echo "Sleeping<br /><br />";
-    sleep(1);
+    sleep(0.5);
 }

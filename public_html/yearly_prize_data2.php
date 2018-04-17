@@ -74,6 +74,7 @@ while ($row = mysql_fetch_assoc($result)) {
             $totalUsers = 0;
             foreach ($grandtotals as $num => $total) {
                 if ($num) echo "<tr><td>" . $num . "</td><td>" . $total . "</td></tr>";
+                //echo "<tr><td>" . $num . "</td><td>" . $total . "</td></tr>";
                 $totalUsers += $total;
             }
             ?>
