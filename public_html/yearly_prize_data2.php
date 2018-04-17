@@ -1,22 +1,31 @@
 <?php
 ini_set('display_errors',1);
 require_once 'db.php';
-require_once 'yearly_prize/classes/TotalWeeklyTasks.php';
 
 // get all registered users
-$users = array();
-$sql = "select u.user_id, u.first, u.last, s.school_name, c.class_grade, c.class_sub, count(yg.user_id) as total 
+$sql = "select u.user_id, u.first, u.last, s.school_name, c.class_grade, c.class_sub  
         from users u
         join schools s using (school_id)
         join classes c on c.class_id = u.class_id
-        join user_yearly_gift yg using (user_id)
-        group by user_id 
+        where u.user_registered > 0 
         order by school_name, class_grade, class_sub, last, first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $users[$row['user_id']] = $row;
 }
-//echo "<pre>"; print_r($users); echo "</pre>";
+
+// get number of weeks missions done
+foreach ($users as $user_id => $info) {
+    $sql = "select count(*) as total from user_yearly_gift where user_id = " . $user_id;
+    $result = mysql_query($sql);
+    if (mysql_num_rows($result)) {
+        $row = mysql_fetch_assoc($result);
+        $users[$user_id]['total'] = $row['total'];
+    } else {
+        $users[$user_id]['total'] = 0;
+    }
+}
+//echo "<pre>"; print_r($users); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
@@ -47,7 +56,7 @@ while ($row = mysql_fetch_assoc($result)) {
             for ($i = 0; $i < 13; $i++) {
                 $grandtotals[$i] = 0;
             }
-            foreach ($users as $info) {
+            foreach ($users as $user_id => $info) {
                 $name = $info['first'] . ' ' . $info['last'];
                 $grade = $info['class_grade'] . (empty($info['class_sub']) ? '' : '-' . $info['class_sub']);
                 echo "<tr><td>" . $info['school_name'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>" . $info['total'] . "</td><td>";
@@ -57,7 +66,7 @@ while ($row = mysql_fetch_assoc($result)) {
                 } else {
                     $num = 12 - $info['total'];
                     echo $num . " weeks left to eligibility";
-                    $grandtotals[$num]++;
+                    $grandtotals[$info['total']]++;
                 }
                 echo "</td></tr>";
             }
@@ -73,8 +82,8 @@ while ($row = mysql_fetch_assoc($result)) {
             <?php
             $totalUsers = 0;
             foreach ($grandtotals as $num => $total) {
-                if ($num) echo "<tr><td>" . $num . "</td><td>" . $total . "</td></tr>";
-                //echo "<tr><td>" . $num . "</td><td>" . $total . "</td></tr>";
+                //if ($num) echo "<tr><td>" . $num . "</td><td>" . $total . "</td></tr>";
+                echo "<tr><td>" . $num . "</td><td>" . $total . "</td></tr>";
                 $totalUsers += $total;
             }
             ?>
