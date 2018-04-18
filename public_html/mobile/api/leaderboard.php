@@ -11,12 +11,17 @@ $rank       = post_param( 'rank' );
 // and make sure everything is submitted
 if ( !$user_id || !$location || $gender === false || $rank === false )
     render_json_error( "Invalid Request" );
-
+// get the ID of the selected location
 if ( $location === "base" ) {
     $school_id_query = mysql_query( 
         "SELECT school_id FROM users WHERE user_id = '$user_id'"
     );
     $school_id = mysql_fetch_assoc( $school_id_query )['school_id']; // get the school ID
+} else if ( $location === "base" ) {
+    $class_id_query = mysql_query( 
+        "SELECT class_id FROM users WHERE user_id = '$user_id'"
+    );
+    $class_id = mysql_fetch_assoc( $class_id_query )['class_id']; // get the school ID
 }
 
 $leaderboard_sql = 
@@ -29,8 +34,11 @@ if ( $gender )
     $leaderboard_sql .= " AND u.gender = '$gender' ";
 if ( $rank )
     $leaderboard_sql .= " AND rm.rank = '$rank' ";
+// filter by location
 if ( $location === "base" )
     $leaderboard_sql .= " AND u.school_id = '$school_id' ";
+else if ( $location === "platoon" )
+    $leaderboard_sql .= " AND u.class_id = '$class_id' ";
 // sort and limit
 $leaderboard_sql .= " ORDER BY rank DESC, medal_count DESC, mission_count DESC, date_promoted DESC LIMIT 100;";
 
