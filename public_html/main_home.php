@@ -811,7 +811,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 	<div>
     	<img src="homeIcons/Commander Meeting.gif" />
 	    <div class="inner">
-	    	<h3>Chidon & Teves Meeting</h3>
+	    	<h3>Iyar Meeting</h3>
 			<li>Click <a href="https://www.anymeeting.com/WebConference/RecordingDefault.aspx?c_psrid=E957DD8787493C">here</a> for Iyar Recording</li>
 			<li>Click <a href="https://docs.google.com/document/d/16qs4MYpHFzoVhHnY-vYR1Eg-iU1cu4uRzLdfbIGuwTE/edit?usp=sharing">here</a> for Iyar Notes</li>
 			<li>Click <a href="https://drive.google.com/drive/folders/0B0VZvvLwWxVhQ1pIMVJhc2t4Nkk?usp=sharing">here</a> for the Base Commander Manuals</li>
