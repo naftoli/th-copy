@@ -92,7 +92,7 @@ img#userImg {
 .filter-title {
     display: inline-block;
     font-size: 1.2em;
-    margin-right: 1em;
+    margin-right: .5em;
 }
 .filter-options {
     display: inline-flex;
@@ -100,7 +100,7 @@ img#userImg {
 }
 .filter-option > span {
     border: 1px solid #ccc;
-    padding: 6px 22px;
+    padding: 6px 10px;
     background: #fff;
     transition: .25s;
     display: inline-block;
@@ -122,6 +122,11 @@ img#userImg {
 }
 input[type="radio"] {
     display: none;
+}
+@media screen and (min-width: 400px) {
+    .filter-option > span {
+        padding: 6px 17px;
+    }
 }
 @media screen and (min-width: 479px) {
     .filter-option > span {
