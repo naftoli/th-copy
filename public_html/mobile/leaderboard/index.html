@@ -51,72 +51,88 @@
     </section>
 
     <section id="filters">
-        <div class="filter">
-            <span class="filter-title">
-                <i class="fas fa-globe"></i> Location:
-            </span>
-            <div class="filter-options">
-                <label class="filter-option">
-                    <input type="radio" name="location" id="location" value="army" checked/>
-                    <span>Army</span>
-                </label>
-                <label class="filter-option">
-                    <input type="radio" name="location" id="location" value="city"/>
-                    <span>City</span>
-                </label>
-                <label class="filter-option">
-                    <input type="radio" name="location" id="location" value="base"/>
-                    <span>Base</span>
-                </label>
-            </div>
-        </div>
-        <div class="filter">
-            <span class="filter-title">
-                <i class="fas fa-users"></i> Gender:
-            </span>
-            <div class="filter-options">
-                <label class="filter-option">
-                    <input type="radio" name="gender" id="gender" value="" checked/>
-                    <span>All</span>
-                </label>
-                <label class="filter-option">
-                    <input type="radio" name="gender" id="gender" value="M"/>
-                    <span>Boys</span>
-                </label>
-                <label class="filter-option">
-                    <input type="radio" name="gender" id="gender" value="F"/>
-                    <span>Girls</span>
-                </label>
-            </div>
-        </div>
-        <div class="filter">
-            <span class="filter-title">
-                <i class="fas fa-trophy"></i> Rank:
-            </span>
-            <div class="filter-options">
-                <select class="form-control" id="rank">
-                    <option value="">All Ranks</option>
-                    <option value="1">Private</option>
-                    <option value="2">Sergeant</option>
-                    <option value="3">Sergeant Major</option>
-                    <option value="4">Second Lieutenant</option>
-                    <option value="5">First Lieutenant</option>
-                    <option value="6">Captain</option>
-                    <option value="7">Major</option>
-                    <option value="8">Colonel</option>
-                    <option value="9">General</option>
-                    <option value="10">1* General</option>
-                    <option value="11">2* General</option>
-                    <option value="12">3* General</option>
-                    <option value="13">4* General</option>
-                    <option value="14">5* General</option>
-                </select>
+        <button type="button" class="btn btn-branding" data-toggle="modal" data-target="#filtersModalContainer">
+            Filter Leaderboard
+        </button>
+        <div class="modal fade" id="filtersModalContainer" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Filter Leaderboard</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="filter">
+                            <span class="filter-title">
+                                <i class="fas fa-globe"></i> Location:
+                            </span>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="radio" name="location" id="location" value="army" checked/>
+                                    <span>Army</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="radio" name="location" id="location" value="city"/>
+                                    <span>City</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="radio" name="location" id="location" value="base"/>
+                                    <span>Base</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="filter">
+                            <span class="filter-title">
+                                <i class="fas fa-users"></i> Gender:
+                            </span>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="radio" name="gender" id="gender" value="" checked/>
+                                    <span>All</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="radio" name="gender" id="gender" value="M"/>
+                                    <span>Boys</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="radio" name="gender" id="gender" value="F"/>
+                                    <span>Girls</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="filter">
+                            <span class="filter-title">
+                                <i class="fas fa-trophy"></i> Rank:
+                            </span>
+                            <div class="filter-options">
+                                <select class="form-control" id="rank">
+                                    <option value="">All Ranks</option>
+                                    <option value="1">Private</option>
+                                    <option value="2">Sergeant</option>
+                                    <option value="3">Sergeant Major</option>
+                                    <option value="4">Second Lieutenant</option>
+                                    <option value="5">First Lieutenant</option>
+                                    <option value="6">Captain</option>
+                                    <option value="7">Major</option>
+                                    <option value="8">Colonel</option>
+                                    <option value="9">General</option>
+                                    <option value="10">1* General</option>
+                                    <option value="11">2* General</option>
+                                    <option value="12">3* General</option>
+                                    <option value="13">4* General</option>
+                                    <option value="14">5* General</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
     
     <section id="leaderboard">
-
     </section>
 
     <footer>
