@@ -12,6 +12,13 @@ $rank       = post_param( 'rank' );
 if ( !$user_id || !$location || $gender === false || $rank === false )
     render_json_error( "Invalid Request" );
 
+if ( $location === "base" ) {
+    $school_id_query = mysql_query( 
+        "SELECT school_id FROM users WHERE user_id = '$user_id'"
+    );
+    $school_id = mysql_fetch_assoc( $school_id_query )['school_id']; // get the school ID
+}
+
 $leaderboard_sql = 
      " SELECT first, last, rank, medal_count, mission_count FROM users u "
     ." JOIN (SELECT user_id, MAX(rank_ord) AS rank, date_promoted FROM rank_marks GROUP BY user_id) rm USING (user_id) "
@@ -21,7 +28,9 @@ $leaderboard_sql =
 if ( $gender )
     $leaderboard_sql .= " AND u.gender = '$gender' ";
 if ( $rank )
-    $leaderboard_sql .= " AND rank = '$rank' ";
+    $leaderboard_sql .= " AND rm.rank = '$rank' ";
+if ( $location === "base" )
+    $leaderboard_sql .= " AND u.school_id = '$school_id' ";
 // sort and limit
 $leaderboard_sql .= " ORDER BY rank DESC, medal_count DESC, mission_count DESC, date_promoted DESC LIMIT 100;";
 
