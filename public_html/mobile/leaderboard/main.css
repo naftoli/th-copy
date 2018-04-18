@@ -70,6 +70,7 @@ select#rank {
     border-radius: 50%;
     position: absolute;
     transition: .25s;
+    z-index: 10;
 }
 .personalImg:hover {
     transform: scale(1.2);
