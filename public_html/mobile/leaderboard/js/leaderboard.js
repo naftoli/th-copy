@@ -6,6 +6,7 @@ $( document ).ready(function() {
     $("input#location, input#gender, select#rank").change( getLeaderBoard );
     // parse the data and get the leaderboard
     function getLeaderBoard() {
+        $("#leaderboard").html("<div class='loader'></div>"); // clear the leaderboard
         var postData = {
             location:   $("input#location:checked").val(),
             gender:     $("input#gender:checked").val(),
@@ -17,7 +18,19 @@ $( document ).ready(function() {
     }
     // render the leaderboard onto the page
     function renderLeaderBoard( response ) {
-        console.log( "renderLeaderBoard => ", response );
-        // TODO: Render LeaderBoard
+        $("#leaderboard").html(""); // clear the leaderboard
+        response.data.forEach( function( user, index ) {
+            $("#leaderboard").append( renderUser( user, index + 1 ) );
+        });
+    }
+
+    function renderUser ( user, position ) {
+        var html = '<div class="user">';
+        html +=     '<img src="/mobile/img_new/ranks/' + user.rank + '.svg" alt="' + user.rank + '" />';
+        html +=     '<h1>#' + position + ': ' + user.first + ' ' + user.last + '</h1>'
+        html +=     '<div class="medal_count">' + user.medal_count + ' Medals</div>'
+        html +=     '<div class="mission_count">' + user.mission_count.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' Missions</div>'
+        html +=    '</div>';
+        return html;
     }
 }); // end on page load anynomus function
