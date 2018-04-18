@@ -1,6 +1,10 @@
+/* Branding color */
+.modal-header, nav.navbar, .btn-branding {
+    background-color: #f68829;
+    color: #ffffff;
+}
 /* Navbar */
 nav.navbar {
-    background-color: #f68829;
     padding: 1.5%;
 }
 nav.navbar .navbar-title {
@@ -82,9 +86,7 @@ img#userImg {
 }
 /* Filter options */
 #filters {
-    margin-top: 10px;
-}
-.filter {
+    margin-top: 5px;
     text-align: center;
 }
 .filter-title {
@@ -127,11 +129,37 @@ input[type="radio"] {
     }
 }
 /* Leaderboard */
-
-/* Footer */
+.modal-header {
+    border-radius: 3.5px;
+}
 section#leaderboard {
     margin-bottom: 91px;
+    text-align: center;
 }
+.user {
+    max-width: 100%;
+    display: inline-block;
+    padding: 2%;
+    margin: 2%;
+    box-shadow: -2px 3px 10px #ccc;
+}
+.user > h1, .user > img, .user > div {
+    display: inline-block;
+}
+.user > img {
+    width: 20%;
+    vertical-align: top;
+}
+.user > h1 {
+    width: 75%;
+    font-size: 2em;
+    margin-bottom: 0px;
+    vertical-align: middle;
+}
+.user > div {
+    width: 40%;
+}
+/* Footer */
 footer {
     position: fixed;    width: 100%;    bottom: 0;
     border-top: 2px solid #9f9f9f;
