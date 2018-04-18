@@ -51,4 +51,4 @@
     var first_name  = "<?= addslashes( $user->first )?>";
     var last_name   = "<?= addslashes( $user->last )?>";
 </script>
-<script src="js/updateMedalRanks.js"></script>
+<script src="js/updateMedalRanks.js?v=2.0"></script>
