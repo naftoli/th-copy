@@ -17,7 +17,7 @@ if ( $location === "base" ) {
         "SELECT school_id FROM users WHERE user_id = '$user_id'"
     );
     $school_id = mysql_fetch_assoc( $school_id_query )['school_id']; // get the school ID
-} else if ( $location === "base" ) {
+} else if ( $location === "platoon" ) {
     $class_id_query = mysql_query( 
         "SELECT class_id FROM users WHERE user_id = '$user_id'"
     );
