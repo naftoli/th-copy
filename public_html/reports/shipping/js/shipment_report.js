@@ -49,6 +49,22 @@ var shipment_report = function(){ // encapsulate this function and return the re
             end_date: $("input#end_date").val(),
         };
     }
+
+    function mark_status ( event ) {
+        var postData = {
+            shipment_id: event.target.dataset.shipment_id, // get the shipment id
+            status:      event.target.value // get the status of the shipment
+        };
+
+        if ( postData.status === "in transit" ){
+            postData.date_shipped = (new Date).toLocaleString();
+        };
+
+        $.post("../ajax/shipment.php", postData, function(data){
+            console.log(postData, data);
+            generate_report();
+        });
+    }
     
     function mark_shipped(event) {
         var shipment_id = event.target.dataset.shipment_id; // get the shipment id
@@ -64,16 +80,7 @@ var shipment_report = function(){ // encapsulate this function and return the re
     function mark_delivered(event) {
         var shipment_id = event.target.dataset.shipment_id;
         
-        $.post("../ajax/shipment.php", {shipment_id: shipment_id, delivered: true}, function(data){
-            console.log(data);
-            generate_report();
-        });
-    }
-    
-    function mark_archived(event) {
-        var shipment_id = event.target.dataset.shipment_id;
-        
-        $.post("../ajax/shipment.php", {shipment_id: shipment_id, archived: true}, function(data){
+        $.post("../ajax/shipment.php", {shipment_id: shipment_id, status: 'delivered'}, function(data){
             console.log(data);
             generate_report();
         });
@@ -83,9 +90,8 @@ var shipment_report = function(){ // encapsulate this function and return the re
         $("#shipments_report").html("<div class='loader'></div>");
         $.post("ajax/report.php"+(debug ? "?debug=true" : ""), get_report_options(), function(data){
             $("#shipments_report").html(data);
-            $(".shipped").click(mark_shipped);
             $(".delivered").click(mark_delivered);
-            $(".archived").click(mark_archived);
+            $( ".status_dropdown" ).change( mark_status );
         });
     }
     // expose the public functions....

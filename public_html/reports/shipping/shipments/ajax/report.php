@@ -20,10 +20,14 @@ use shipping\Shipment;
 $school_id = isset($_POST['school_id']) ? mysql_real_escape_string($_POST['school_id']) : false;
 // get the status options
 $status = []; // get the status options
-$status['planned']      = isset($_POST['status']['planned'])    ? $_POST['status']['planned']       == "true" : false;
-$status['archived']     = isset($_POST['status']['archived'])   ? $_POST['status']['archived']      == "true" : false;
-$status['delivered']    = isset($_POST['status']['delivered'])  ? $_POST['status']['delivered']     == "true" : false;
-$status['in_transit']   = isset($_POST['status']['in_transit']) ? $_POST['status']['in_transit']    == "true" : false;
+if ( isset( $_POST['status']['planned'] ) && $_POST['status']['planned'] == "true" )
+    $status['planned'] = true;
+if ( isset( $_POST['status']['in_transit'] ) && $_POST['status']['in_transit'] == "true" )
+    $status['in transit'] = true;
+if ( isset( $_POST['status']['delivered'] ) && $_POST['status']['delivered'] == "true" )
+    $status['delivered'] = true;
+if ( isset( $_POST['status']['archived'] ) && $_POST['status']['archived'] == "true" )
+    $status['archived'] = true;
 // get the dates....
 $start_date = isset($_POST['start_date']) && $_POST['start_date'] ? new DateTime($_POST['start_date']) : false;
 $end_date = isset($_POST['end_date']) && $_POST['end_date'] ? new DateTime($_POST['end_date']." 23:59:59") : false; // add 23:59:59 in order to include the end date....
@@ -36,18 +40,18 @@ if($start_date) $filter[] = "(date_shipped > '".$start_date->format('Y-m-d H:i:s
 // and before the end date
 if($end_date) $filter[] = "(date_shipped < '".$end_date->format('Y-m-d H:i:s').($status['planned'] ? "' OR date_shipped IS NULL)" : "')"); // if we are showing planned shipments then blank date_shipped should be included
 // filter based on the shipping status...
-if(!$status['planned']) $filter[] = "date_shipped IS NOT NULL";
-if(!$status['delivered']) $filter[] = "delivered = 0";
-if(!$status['archived']) $filter[] = "archived = 0";
-if(!$status['in_transit']) $filter[] = "(date_shipped IS NULL OR delivered != 0)";
+if( count( array_keys($status) ) !== 4 ) $filter[] = "status IN ('" . implode( "', '", array_keys( $status) ) . "')";
 // combine all the filters into one SQL line
 $filter = "WHERE ".implode(" AND ", $filter);
 // and use it to load the shipments
 
-if ($debug) echo $filter;
-if ($debug) echo "<pre>";
-if($debug) print_r($_POST);
-if ($debug) echo "</pre>";
+if ($debug) {
+    echo $filter;
+    echo "<pre>";
+    print_r($_POST);
+    print_r($status);
+    echo "</pre>";
+}
 
 /***************** LOAD SHIPMENTS **********************/
 $shipments = Shipment::loadAll($filter);
@@ -75,21 +79,28 @@ $shipments = Shipment::loadAll($filter);
                 
                 <td><?=$shipment->date_shipped ? $shipment->date_shipped->format("m/d/y") : "TBD" ?></td>
                 <td><a href="detail.php?id=<?=$shipment->shipment_id?>"><?=$shipment->get_detail_count()?></a></td>
-                <td><?=$shipment->get_status()?></td>
-                <td>
-                <? if ($admin_user['auth'] == 'super' && !$shipment->date_shipped) {?>
-                    <a class="button shipped" data-shipment_id="<?=$shipment->shipment_id?>">
-                        <i class="fa fa-truck" aria-hidden="true"></i> In Transit
-                    </a>
-                <?} if ($shipment->date_shipped && !$shipment->delivered) {?>
-                    <a class="button delivered" data-shipment_id="<?=$shipment->shipment_id?>">
-                        <i class="fa fa-archive" aria-hidden="true"></i> Delivered
-                    </a>
-                <?} if ($shipment->delivered && !$shipment->archived && $admin_user['auth'] == 'super') {?>
-                    <a class="button archived" data-shipment_id="<?=$shipment->shipment_id?>">
-                        <i class="fa fa fa-file-archive-o" aria-hidden="true"></i> Archive
-                    </a>
-                <?} ?>
+                <td><?=ucwords( $shipment->get_status() )?></td>
+                <td><?php
+                    if ( $admin_user['auth'] == 'super' ) { ?>
+                    <select class="status_dropdown" data-shipment_id="<?=$shipment->shipment_id?>">
+                        <option value="planned" disabled <?= $shipment->get_status() == "planned" ? "selected" : "" ?>>
+                            Planned
+                        </option>
+                        <option value="in transit" <?= $shipment->get_status() == "in transit" ? "selected" : "" ?>>
+                            In Transit
+                        </option>
+                        <option value="delivered" <?= $shipment->get_status() == "delivered" ? "selected" : "" ?>>
+                            Delivered
+                        </option>
+                        <option value="archived" <?= $shipment->get_status() == "archived" ? "selected" : "" ?>>
+                            Archived
+                        </option>
+                    </select>
+                <?php } else if ( $shipment->status == 'in transit' ) { ?>
+                        <a class="button delivered" data-shipment_id="<?=$shipment->shipment_id?>">
+                            <i class="fa fa-archive" aria-hidden="true"></i> Delivered
+                        </a>
+                <?php } ?>
                 </td>
             </tr>
         <?} // end foreach shipment ?>
