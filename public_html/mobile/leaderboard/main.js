@@ -18,11 +18,11 @@ function setNavLinks( id ) {
         $( "#mainLink" ).attr('href', '/mobile/reg/medals/?id=' + id);
     };
     $("#missionsLink").attr('href', '/mobile/missionsNew.html?id=' + id);
-    $("#rankLink").attr('href', '/mobile/reg/rank.html?id=' + id);
+    $("#rankLink").attr('href', 'rank.html?id=' + id);
     $("#storeLink").attr('href', '/mobile/store/index.html?id=' + id);
     // set the links on the top of the page
-    $("#rankBoardLink").attr('href', '/mobile/reg/rank.html?id=' + id);
-    $("#medalBoardLink").attr('href', '/mobile/reg/medals4.html?id=' + id);
+    $("#rankBoardLink").attr('href', 'rank.html?id=' + id);
+    $("#medalBoardLink").attr('href', 'medals.html?id=' + id);
     $("#leaderBoardLink").attr('href', '/mobile/leaderboard/?id=' + id);
     // setup the ID in the bug reporting tool
     $(".bug-report img").data("user_id", id);
