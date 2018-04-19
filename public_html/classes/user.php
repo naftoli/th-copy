@@ -163,7 +163,7 @@ class user {
 	
 	public function get_school() {
 		if ($this->school_id > 0) {
-			require_once("school.php");
+			require_once( dirname(__FILE__) . "/school.php" );
 			$sql = "SELECT * FROM schools WHERE school_id=" . $this->school_id;
 			$query = mysql_query($sql);
 			$row = mysql_fetch_assoc($query);
@@ -286,7 +286,42 @@ class user {
 			$school_class = new school_class($row);
 			$this->school_class = $school_class;
 		}
-	}
+    }
+
+    /**
+     * get_profile_picture
+     * 
+     * Returns a absoulte link to the users profile picture.
+     * Note: for mashpia.com, link will begin with /
+     *
+     * @return string
+     */
+    public function get_profile_picture() {
+        if ( $this->mobile_pic ) {
+            return "/mobile/reg/" . $this->mobile_pic;
+        } else if ( $this->user_photo_id ) {
+            return "file_view.php?id=" . $this->user_photo_id;
+        } else {
+            return "/mobile/img_new/boy-color-green-svg.svg";
+        }
+    }
+
+    /**
+     * get_address
+     * 
+     * Returns a formatted user address.
+     *
+     * @param string $newline newline character to break address on
+     * @return string
+     */
+    public function get_address( $newline = "<br/>" )
+    {
+        $address  = $this->user_address1 . $newline;
+        if ($this->user_address2) $address .= $this->user_address2 . $newline;
+        $address .= $this->user_city . ", " . $this->user_state . " " . $this->user_postal;
+        
+        return $address;
+    }
 	
 	public function get_parent() {
 		$this->parent_id = 0;
@@ -566,7 +601,15 @@ class user {
 			$this->class_grade = $row['class_grade'];
 			$this->class_sub = $row['class_sub'];
 		}
-	}
+    }
+    
+    function get_grade()
+    {
+        $grade = $this->class_grade;
+        if ( $this->class_sub ) $grade .= " - " . $this->class_sub;
+
+        return $grade;
+    }
 	
 	function set_class($row)
 	{
