@@ -8,6 +8,7 @@ $user_id    = post_param( 'user_id' );
 $gender     = post_param( 'gender' );
 $location   = post_param( 'location' );
 $rank       = post_param( 'rank' );
+$offset     = post_param( 'offset' );
 // and make sure everything is submitted
 if ( !$user_id || !$location || $gender === false || $rank === false )
     render_json_error( "Invalid Request" );
@@ -54,7 +55,7 @@ foreach( $leaderboard as $index => $user ) {
 }
 
 render_json_response([
-    "leaderboard" => array_slice($leaderboard, 0, 24),
+    "leaderboard" => array_slice($leaderboard, intval($offset), 25),
     "user_location" => $user_location,
     "total" => count( $leaderboard )
 ]);
