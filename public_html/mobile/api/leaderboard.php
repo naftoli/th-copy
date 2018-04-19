@@ -40,7 +40,7 @@ if ( $location === "base" )
 else if ( $location === "platoon" )
     $leaderboard_sql .= " AND u.class_id = '$class_id' ";
 // sort and limit
-$leaderboard_sql .= " ORDER BY rank DESC, medal_count DESC, mission_count DESC, date_promoted DESC LIMIT 100;";
+$leaderboard_sql .= " ORDER BY rank DESC, medal_count DESC, mission_count DESC, date_promoted DESC LIMIT 102;";
 
 $leaderboard_query = mysql_query( $leaderboard_sql );
 $leaderboard = fetch_results_assoc( $leaderboard_query ); // get the results
