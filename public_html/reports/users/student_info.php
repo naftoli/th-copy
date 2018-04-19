@@ -6,7 +6,7 @@ if ($_GET['debug']) {
 }
 /***************** AUTHENTICATION **********************/
 $admin_auth = array('school'); 
-require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
+require_once(dirname(__FILE__).'/../../header.php');
 ?>
 <!DOCTYPE html>
 <html>
@@ -19,6 +19,9 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
     <link href="/styles/admin/loader.css" rel="stylesheet" type="text/css"/>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <style>
+    .options {
+        text-align: center;
+    }
     input#serial_number {
         margin-bottom: 0px;
         background: none;
@@ -27,11 +30,40 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         padding: 2px;
         font-size: 1.2em;
     }
+    div.photo {
+        display: inline-block; float: right; position: relative;
+    }
+    img.rank {
+        height: 90px;
+        position: absolute;
+        bottom: -30px;
+        right: -25px;
+    }
+    img.profile_picture {
+        height: 175px;
+        border-radius: 15px;
+        border: 2px solid;
+    }
+    .info {
+        display: inline-block;
+        width: 50%;
+        vertical-align: top;
+        border-top: 1px solid #888;
+        padding: 5px;
+    }
+    .primary_info .info {
+        width: 285px;
+    }
+    .primary_info h3 {
+        font-size: 1.2em;
+        margin-bottom: 5px;
+        display: inline-block;
+    }
     </style>
 </head>
 <body>
     <?php // load the admin UI and JQuery 1.4
-        include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php');
+        include(dirname(__FILE__).'/../../admin_header.php');
     ?>
     <h1>Student Report</h1>
     <div class="options">
