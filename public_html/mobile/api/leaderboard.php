@@ -25,7 +25,7 @@ if ( $location === "base" ) {
 }
 
 $leaderboard_sql = 
-     " SELECT first, last, rank, medal_count, mission_count FROM users u "
+     " SELECT user_id, first, last, rank, medal_count, mission_count FROM users u "
     ." JOIN (SELECT user_id, MAX(rank_ord) AS rank, date_promoted FROM rank_marks GROUP BY user_id) rm USING (user_id) "
     ." JOIN (SELECT user_id, COUNT(*) AS medal_count FROM medal_marks GROUP BY user_id) mm USING (user_id) "
     ." JOIN (SELECT user_id, COUNT(*) AS mission_count FROM date_tasks_mission_marks GROUP BY user_id) dtmm USING (user_id) "
@@ -40,9 +40,21 @@ if ( $location === "base" )
 else if ( $location === "platoon" )
     $leaderboard_sql .= " AND u.class_id = '$class_id' ";
 // sort and limit
-$leaderboard_sql .= " ORDER BY rank DESC, medal_count DESC, mission_count DESC, date_promoted DESC LIMIT 102;";
+$leaderboard_sql .= " ORDER BY rank DESC, medal_count DESC, mission_count DESC, date_promoted DESC;";
 
 $leaderboard_query = mysql_query( $leaderboard_sql );
 $leaderboard = fetch_results_assoc( $leaderboard_query ); // get the results
 
-render_json_response( $leaderboard );
+$user_location = 0;
+foreach( $leaderboard as $index => $user ) {
+    if ( $user['user_id'] === $user_id ) {
+        $user_location = $index + 1;
+        break;
+    }   
+}
+
+render_json_response([
+    "leaderboard" => array_slice($leaderboard, 0, 24),
+    "user_location" => $user_location,
+    "total" => count( $leaderboard )
+]);

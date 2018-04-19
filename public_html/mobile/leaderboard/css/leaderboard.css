@@ -1,8 +1,17 @@
 /* Filter options */
 #filters {
-    margin-top: 5px;
+    margin-top: 7px;
     margin-bottom: 5px;
     text-align: center;
+}
+h2#user_position {
+    margin: 0 2%;
+    margin-top: 1%;
+    margin-bottom: 0px;
+    padding: 1% 2%;
+    font-size: 1.4em;
+    border-bottom: 1px solid #ccc;
+    transition: font-size .25s ease-in-out;
 }
 .filter-title {
     display: inline-block;
@@ -61,9 +70,8 @@ section#leaderboard {
     display: inline-block;
     padding: 2%;
     margin: 1% 2%;
-    box-shadow: -2px 3px 10px #ccc;
-    border-radius: 5px;
-    vertical-align: middle;
+    vertical-align: bottom;
+    border-bottom: 1px solid #ccc;
 }
 .user > img, .user div {
     display: inline-block;
@@ -73,7 +81,7 @@ section#leaderboard {
     vertical-align: top;
 }
 .user h1.position {
-    font-size: 2em;
+    font-size: 1.5em;
     margin-bottom: 0px;
     vertical-align: middle;
     font-family: monospace;
@@ -95,13 +103,18 @@ section#leaderboard {
 @media ( min-width: 630px ) {
     .user {
         width: 48%;
-        margin: .5%;
+        margin: 0% .5%;
+    }
+    h2#user_position {
+        font-size: 1.7em;
     }
 }
 
 @media (min-width: 1200px) {
     .user {
         width: 28%;
-        margin: .5%;
+    }
+    h2#user_position {
+        font-size: 2em;
     }
 }
