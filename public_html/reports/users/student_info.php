@@ -41,18 +41,22 @@ require_once(dirname(__FILE__).'/../../header.php');
     }
     img.profile_picture {
         height: 175px;
+        max-width: 200px;
         border-radius: 15px;
         border: 2px solid;
     }
     .info {
         display: inline-block;
-        width: 50%;
+        width: 48%;
         vertical-align: top;
         border-top: 1px solid #888;
         padding: 5px;
     }
+    .info-3rd {
+        width: 31.5%;
+    }
     .primary_info .info {
-        width: 285px;
+        width: 39%;
     }
     .primary_info h3 {
         font-size: 1.2em;
