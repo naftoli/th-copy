@@ -26,7 +26,7 @@ $( document ).ready(function() {
     }
 
     function renderUser ( user, position ) {
-        var animated = position < 13 ? "animated bounceIn" : "";
+        var animated = position < 13 ? "animated fadeIn" : "";
 
         var html = '<div class="user ' + animated + '">';
         html +=     '<img src="/mobile/img_new/ranks/' + user.rank + '.svg" alt="' + user.rank + '" />';
