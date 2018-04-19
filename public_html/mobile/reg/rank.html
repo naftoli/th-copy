@@ -130,8 +130,20 @@
     <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 100px">
         <div class="span12 body">
             <div class="span12 footer media-group subMenu" style="width: 100%;">
+                <a href="" id="leaderMenu">
+                    <div class="span3" style="width: 33%;">
+                        <div class="menu-item">
+                            <div class="span12">
+                                <img src="/mobile/img_new/achievements-color-orange-svg.svg">
+                            </div>
+                            <div class="span12">
+                                <span>Leaderboard</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
                 <a href="" id="rankMenu">
-                    <div class="span3 active" style="width:50%">
+                    <div class="span3 active" style="width: 33%;">
                         <div class="menu-item">
                             <div class="span12">
                                 <img src="/mobile/img_new/trophy-color-orange-svg.svg">
@@ -143,7 +155,7 @@
                     </div>
                 </a>
                 <a href="" id="medalMenu">
-                    <div class="span3" style="width:50%">
+                    <div class="span3" style="width: 33%;">
                         <div class="menu-item">
                             <div class="span12">
                                 <img src="/mobile/img_new/medals-color-orange-svg.svg">
@@ -375,6 +387,7 @@
         });
         
         $("#medalMenu").attr('href', 'medals4.html?id=' + id);
+        $("#leaderMenu").attr('href', '../leaderboard/?id=' + id);
         //$("#auctionMenu").attr('href', '/mobile/auction/category2.html?id=' + id);
         
         var rank;
