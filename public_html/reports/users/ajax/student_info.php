@@ -3,6 +3,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 /***************** IMPORTS **********************/
 require_once(dirname(__FILE__).'/../../../classes/user.php');
+require_once(dirname(__FILE__).'/../../../calendar.php');
 
 /***************** AUTHENTICATION **********************/
 $admin_auth = array('school'); 
@@ -34,6 +35,7 @@ $user = new user( mysql_fetch_assoc( $user_query ) );
 $user->get_school();
 $user->get_class();
 $user->get_rank();
+$user->get_medals(0, $user->user_start_date, unixtojd(), 0);
 /***************** RENDER REPORT **********************/
 ?>
 <h2><?= $user->first; ?> <?= $user->last; ?> - <?= $user->user_serial ?></h2>
@@ -84,7 +86,25 @@ $user->get_rank();
         <h3><?= $user->get_grade(); ?></h3>
     </div>
 </div>
-<div class="info">
-    <span class="title">Address:</span><br/>
-    <h3><?= $user->get_address(); ?></h3>
+<div class="other_info">
+    <div class="info">
+        <span class="title">Address:</span>
+        <h3><?= $user->get_address(); ?></h3>
+    </div>
+    <div class="info">
+        <span class="title">Member Since:</span>
+        <h3><?= dateToHebrew($user->user_start_date); ?></h3>
+    </div>
+    <div class="info info-3rd">
+        <span class="title">Mission Type:</span>
+        <h3><?= $user->get_mission_type(); ?></h3>
+    </div>
+    <div class="info info-3rd">
+        <span class="title">Language:</span>
+        <h3><?= $user->lang; ?></h3>
+    </div>
+    <div class="info info-3rd">
+        <span class="title">Chayolei Soldier:</span>
+        <h3><?= $user->is_chayolei() ? "Yes" : "No"; ?></h3>
+    </div>
 </div>
