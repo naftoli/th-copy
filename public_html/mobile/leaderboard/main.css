@@ -29,6 +29,10 @@ nav.navbar .navbar-title {
     background: #e6e6e6; text-align: center;
     margin: 0px; line-height: .96;
 }
+.nav-row a {
+    display: inline-block;
+    width: 100%;
+}
 .nav-row a:hover {
     text-decoration: none;
 }

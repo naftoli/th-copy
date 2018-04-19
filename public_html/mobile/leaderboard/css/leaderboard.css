@@ -60,28 +60,48 @@ section#leaderboard {
     width: 95%;
     display: inline-block;
     padding: 2%;
-    margin: 2%;
+    margin: 1% 2%;
     box-shadow: -2px 3px 10px #ccc;
+    border-radius: 5px;
+    vertical-align: middle;
 }
-.user > h1, .user > img, .user > div {
+.user > img, .user div {
     display: inline-block;
 }
 .user > img {
     width: 20%;
     vertical-align: top;
 }
-.user > h1 {
-    width: 75%;
+.user h1.position {
     font-size: 2em;
     margin-bottom: 0px;
     vertical-align: middle;
+    font-family: monospace;
 }
-.user > div {
-    width: 40%;
+.user h2.name {
+    font-size: 1.15em;
+    margin-bottom: 0px;
+    vertical-align: middle;
+    text-transform: capitalize;
 }
-@media ( min-width: 1100px ) {
+.user div.user_info {
+    width: 78%;
+    padding: 0% 2%;
+}
+.medal_count, .mission_count {
+    width: 50%;
+    margin-top: 5px;
+}
+@media ( min-width: 630px ) {
     .user {
         width: 48%;
+        margin: .5%;
+    }
+}
+
+@media (min-width: 1000px) {
+    .user {
+        width: 28%;
         margin: .5%;
     }
 }

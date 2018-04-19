@@ -26,11 +26,16 @@ $( document ).ready(function() {
     }
 
     function renderUser ( user, position ) {
-        var html = '<div class="user animated jackInTheBox">';
+        var animated = position < 13 ? "animated bounceIn" : "";
+
+        var html = '<div class="user ' + animated + '">';
         html +=     '<img src="/mobile/img_new/ranks/' + user.rank + '.svg" alt="' + user.rank + '" />';
-        html +=     '<h1>#' + position + ': ' + user.first + ' ' + user.last + '</h1>'
-        html +=     '<div class="medal_count">' + user.medal_count + ' Medals</div>'
-        html +=     '<div class="mission_count">' + user.mission_count.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' Missions</div>'
+        html +=     '<div class="user_info">';
+        html +=         '<h1 class="position">#' + position + '</h1>';
+        html +=         '<h2 class="name">'+ user.first.toLowerCase() + ' ' + user.last.toLowerCase() + '</h2>'
+        html +=         '<div class="medal_count">' + user.medal_count + ' Medals</div>'
+        html +=         '<div class="mission_count">' + user.mission_count.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' Missions</div>'
+        html +=     '</div>';
         html +=    '</div>';
         return html;
     }
