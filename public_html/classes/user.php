@@ -322,6 +322,39 @@ class user {
         
         return $address;
     }
+    /**
+     * get_mission_type
+     * 
+     * Returns the mission type from the school_type_id
+     *
+     * @return string
+     */
+    public function get_mission_type()
+    {
+        if ( in_array( $this->school_type_id, [ 2, 3 ] ) )
+            return "chabad";
+        else if ( in_array( $this->school_type_id, [ 12, 13 ] ) )
+            return "frum";
+        else
+            return "n/a";
+    }
+
+    /**
+     * get_chayolei
+     * 
+     * Returns true if chidon and yan are both false
+     *
+     * @return string
+     */
+    public function is_chayolei()
+    {
+        $query = mysql_query(
+            "SELECT chidon, yan FROM users WHERE user_id = " . $this->user_id . ";"
+        );
+        $row = mysql_fetch_assoc( $query );
+        
+        return $row['chidon'] == 0 && $row['yan'] == 0;
+    }
 	
 	public function get_parent() {
 		$this->parent_id = 0;
