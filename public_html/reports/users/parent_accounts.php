@@ -100,7 +100,7 @@ if ($admin_user['auth'] != 'super') {
             </span>
         </div>
         
-        <hr style="display: block;"/>
+        <hr style="display: block;">
         
         <div id="parent_report">
             
