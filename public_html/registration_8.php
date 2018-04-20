@@ -1,5 +1,5 @@
 <?php 
-session_start(); 
+session_start();
 if ( !isset( $_SESSION['hschool'] ) ) 
     header( "Location: admin.php" );
 $h_school = $_SESSION['hschool'];
@@ -84,6 +84,13 @@ $message = "";
 $sql = "SELECT * FROM schools WHERE school_id = " . $school_id;
 $result2 = mysql_query($sql);
 $row2 = mysql_fetch_assoc($result2);
+//echo "<pre>"; print_r($row2); echo "</pre>";
+
+// make sure there's an authorize profile created
+if (empty($row2['authorize_customer_profile_id']) || empty($row2['authorize_payment_profile_id'])) {
+    header("Location: registration_7.php");
+    exit;
+}
 
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
