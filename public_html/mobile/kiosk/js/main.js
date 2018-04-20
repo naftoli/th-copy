@@ -10,7 +10,7 @@ function checkNumber( cardNumber ) {
 // login the user based on the response
 function login( response ) {
     response = $.parseJSON( response );
-    if ( !response.success ) showError( response.body );
+    if ( !response.success ) return showError( response.body );
     // log the user in
     localStorage.setItem( "login", "user" );
     localStorage.setItem( "id", response.user_id );
@@ -21,7 +21,9 @@ function login( response ) {
 
 // show errors to the user in a nice, async way
 function showError( error ) {
-    console.error( error );
+    $('#errorModal .modal-body p').text( error );
+    $('#errorModal').modal('show');
+    return false;
 };
 
 // show a box when the user scans the code
@@ -65,7 +67,17 @@ Quagga.init({
     if ( error ) {
         showError( "Sorry, it seems we cannot scan cards on your device. Please enter in the card number by hand." );
         $("#barcode_scanner").hide();
-        $("#manual_scanner").show(); // show the manual scanner
+        $("#manual-scanner").show(); // show the manual scanner
+        // setup the listener
+        $("#manual-scanner #scanner").keyup( function( event ) {
+            if ( event.target.value.match(/^3{1}\d{19}$/) ) {
+                checkNumber( event.target.value );
+            } else if ( event.target.value.length === 20 ) {
+                showError( "Please enter a valid barcode" );
+            } else if ( event.target.value.length > 20) {
+                event.target.value = event.target.value.slice(0, 20);
+            }
+        })
     } else {
         console.log( "Quagga JS initialized. Ready to start Scanning Cards" );
         Quagga.start();

@@ -70,6 +70,15 @@ canvas.drawingBuffer {
     top: 0;
 }
 
+.modal-header {
+    background: rgb(255, 26, 26);
+    color: #fff;
+}
+.close {
+    color: #fff;
+    opacity: .9;
+}
+
 @media ( max-width: 1000px ){
     nav {
         height: 15vh;
