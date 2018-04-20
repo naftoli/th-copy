@@ -38,6 +38,7 @@ $user->get_rank();
 $user->get_medals(0, $user->user_start_date, unixtojd(), 0);
 /***************** RENDER REPORT **********************/
 ?>
+<input type="hidden" id="user_id" value="<?= $user->user_id; ?>"/>
 <h2><?= $user->first; ?> <?= $user->last; ?> - <?= $user->user_serial ?></h2>
 <div class="photo">
     <img src="//mashpia.com/<?= $user->get_profile_picture(); ?>" alt="profile_picture" class="profile_picture" />
@@ -106,5 +107,9 @@ $user->get_medals(0, $user->user_start_date, unixtojd(), 0);
     <div class="info info-3rd">
         <span class="title">Chayolei Soldier:</span>
         <h3><?= $user->is_chayolei() ? "Yes" : "No"; ?></h3>
+    </div>
+    <h2>Medal Board</h2>
+    <div id="medal-board">
+        <div class="loader"></div>
     </div>
 </div>

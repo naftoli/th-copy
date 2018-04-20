@@ -17,6 +17,7 @@ require_once(dirname(__FILE__).'/../../header.php');
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link href="/admin_styles.css" rel="stylesheet" type="text/css"/>
     <link href="/styles/admin/loader.css" rel="stylesheet" type="text/css"/>
+    <link href="/mobile/reg/css/medal-board/medals.css" rel="stylesheet" type="text/css"/>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <style>
     .options {
@@ -40,7 +41,7 @@ require_once(dirname(__FILE__).'/../../header.php');
         right: -25px;
     }
     img.profile_picture {
-        height: 175px;
+        max-height: 175px;
         max-width: 200px;
         border-radius: 15px;
         border: 2px solid;
@@ -56,12 +57,36 @@ require_once(dirname(__FILE__).'/../../header.php');
         width: 31.5%;
     }
     .primary_info .info {
-        width: 39%;
+        width: 34%;
     }
     .primary_info h3 {
         font-size: 1.2em;
         margin-bottom: 5px;
         display: inline-block;
+    }
+    #medal-board {
+        text-align: center;
+    }
+    .medal-status.progress {
+        height: 25px;width: 100%;text-indent: 0px;background: #fff;
+        display: inline-block;padding: 0px;margin: 0px;float: none;
+    }
+    .medal-board .medal-subject span {
+        font-size: .8em;
+    }
+    .progress-bar {
+        border-radius: 10px;
+    }
+    @media print {
+        .medal-board .medal {
+            width: 20.3%;
+            padding-bottom: 5px;
+            padding-top: 5px;
+        }
+        .medal-status.progress {
+            margin-top: 5px;
+            border: 1px solid;
+        }
     }
     </style>
 </head>
@@ -69,8 +94,8 @@ require_once(dirname(__FILE__).'/../../header.php');
     <?php // load the admin UI and JQuery 1.4
         include(dirname(__FILE__).'/../../admin_header.php');
     ?>
-    <h1>Student Report</h1>
-    <div class="options">
+    <h1 class="noprint">Student Report</h1>
+    <div class="options noprint">
         <label for="serial_number">Enter Serial Number or Barcode</label>
         <input type="text" id="serial_number" />
         <a class="button" id="generate">Submit</a>
@@ -79,6 +104,7 @@ require_once(dirname(__FILE__).'/../../header.php');
     <hr style="display: block;">
     <div id="report"></div>
 
+    <script src="/mobile/reg/js/medal-board.js"></script>
     <script>
     $( "a#generate" ).click( generate_report );
 
@@ -98,6 +124,7 @@ require_once(dirname(__FILE__).'/../../header.php');
 
         $.post( "ajax/student_info.php", postData, function( report ) {
             $( "div#report" ).html( report );
+            medal_board("#medal-board", $("#user_id").val());
         });
     }
     </script>
