@@ -60,7 +60,7 @@ $user_id = mysql_real_escape_string( $_GET['id'] );
 
 /********************** GET THE CURRENT PARSHA **********************/
 $curParsha = array();
-if (!isset($_GET['d'])) { // if the date was not provided
+if (!isset($_GET['d']) || intval($_GET['d']) < unixtojd() - 21) { // if the date was not provided or it is older then 21 days ago (3 weeks)
 	//get todays day
 	$jd = floor(unixtojd());
 	$today = intval(date('w', jdtounix($jd))); //sunday starts 0
