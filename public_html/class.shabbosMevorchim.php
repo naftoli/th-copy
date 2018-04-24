@@ -117,7 +117,7 @@ class ShabbosMevorchim {
         if ( $backupDateIndex === false ) return false;
         // if we have a date at this index, make sure it is before today
         if ( isset( $this->backup->dates[$backupDateIndex] ) )
-            return $this->backup->dates[$backupDateIndex] < unixtojd();
+            return $this->backup->dates[$backupDateIndex] <= unixtojd();
         // by default we did not run the backup
         return false;
     }
