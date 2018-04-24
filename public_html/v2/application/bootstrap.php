@@ -83,7 +83,7 @@ Zend_Db_Table::setDefaultAdapter($db);
 Zend_Registry::set('db', $db);
 
 require '/home/mashpia/includes/globals.php';
-$link = mysql_connect('localhost', $global_db_user, $global_db_pass);
+$link = mysql_connect($global_db_host.':3306', $global_db_user, $global_db_pass);
  
 $frontController = Zend_Controller_Front::getInstance();
 $frontController->throwExceptions(true);
