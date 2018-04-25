@@ -4,7 +4,7 @@ ini_set("display_errors", 1);
 
 /***************** AUTHENTICATION **********************/
 $admin_auth = array('school'); 
-require_once( dirname(__FILE__).'/../../..//header.php' );
+require_once( dirname(__FILE__).'/../../../header.php' );
 // load the required files
 require_once( dirname(__FILE__).'/../../../class.schoolsUsers.php' );
 require_once( dirname(__FILE__).'/../classes/YearlyRaffle.php' );
