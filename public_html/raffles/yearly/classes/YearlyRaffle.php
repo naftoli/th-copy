@@ -12,6 +12,7 @@ use \DBAdapter;
 use raffles\shared\Constants as Constants; // was created later and has correct namespace
 
 class YearlyRaffle {
+    private $DAY_COUNT = 160;
     private $db_conn;
     private $dates;
     
@@ -37,6 +38,8 @@ class YearlyRaffle {
         $this->eligibility = [];
         while ( $row = $eligibility_query->fetch_assoc() ) {
             $this->eligibility[$row['user_id']] = $row['days'];
+            if ( intval($row['days']) > $this->DAY_COUNT )
+                $this->cacheUser( $row['user_id'], $row['days'] );
         }
         return $this->eligibility;
     }
@@ -52,8 +55,45 @@ class YearlyRaffle {
         // load all the eligible users
         while ( $row = $eligibility_query->fetch_assoc() ) {
             $this->eligibility[$row['user_id']] = $row['days'];
+            // cache the user if they are eligible
+            if ( intval($row['days']) > $this->DAY_COUNT )
+                $this->cacheUser( $row['user_id'], $row['days'] );
         }
         return $this->eligibility;
+    }
+
+    public function get_eligible_users( $realtime = false ) {
+        // generate the SQL to run
+        if ( $realtime )
+            $users_sql = "SELECT user_id, user_serial, school_name, first, last, COUNT(DISTINCT (mark_date)) AS days "
+                ." FROM date_tasks_marks JOIN users USING (user_id) JOIN schools USING (school_id) "
+                ." WHERE mark_date > " . $this->dates['start'] . " "
+                ." AND mark_date < " . $this->dates['end'] . " "
+                ." GROUP BY user_id "
+                ." HAVING days >= " . $this->DAY_COUNT . " "
+                ." ORDER BY school_name, last, first ";
+        else
+            $users_sql = "SELECT user_id, user_serial, school_name, first, last, days "
+                ." FROM user_yearly_raffle JOIN users USING (user_id) JOIN schools USING (school_id) "
+                ." WHERE days >= " . $this->DAY_COUNT . " "
+                ." ORDER BY school_name, last, first, days ";
+
+        $users_query = $this->db_conn->query( $users_sql );
+
+        $eligible_users = [];
+        while( $row = $users_query->fetch_assoc() ) {
+            $eligible_users[] = $row;
+            if( $realtime )
+                $this->cacheUser( $row['user_id'], $row['days'] );
+        }
+        return $eligible_users;
+    }
+
+    private function cacheUser( $user_id, $days ){
+        return $this->db_conn->query(
+             "INSERT INTO user_yearly_raffle (user_id, days) "
+            ." VALUES('$user_id', '$days') ON DUPLICATE KEY UPDATE days='$days'"
+        );
     }
 
     public function getStart() {
