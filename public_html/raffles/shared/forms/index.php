@@ -91,6 +91,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                         <span class="link-text">Video Winners</span>
                     </div>
                 </a>
+                <a href="../../yearly/eligibility_report.php">
+                    <div class="button">
+                        <img src="/images/icon_profile.png" height="32" alt="tickets"/>
+                        <span class="link-text">Eligible Students HQ (Yearly)</span>
+                    </div>
+                </a>
             </div>
         <?} // end admin only links ?>
         </div>
