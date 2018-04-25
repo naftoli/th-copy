@@ -602,10 +602,12 @@ class PointsController extends Zend_Controller_Action
             );
             $arrConfigResult = array();
             $arrConfigResult["admin"]["pointsclass{$taskType}tasks"] = $strAllGrids;
-            $objConfig->save($arrConfigResult, $arrNewConfigParams);
-            // reload them from the DBS
-            // echo "<pre>"; print_r( $arrConfigParams ); die();
-            $this->view->arrConfig = $arrConfig = $objConfig->load($arrConfigParams);
+            if ( count( array_keys($arrTasks) ) > 0 ) {
+                $objConfig->save($arrConfigResult, $arrNewConfigParams);
+                // reload them from the DBS
+                // echo "<pre>"; print_r( $arrConfigParams ); die();
+                $this->view->arrConfig = $arrConfig = $objConfig->load($arrConfigParams);
+            }
         }
         // set the grid for the page to display
         $grid = array();
