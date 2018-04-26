@@ -84,7 +84,8 @@ class user {
 	public $has_won_big_prize;
 	public $has_won;
 	public $no_of_tickets;
-	public $big_prizes_won;
+    public $big_prizes_won;
+    public $prizes_won = [];
 
 	public $class_grade;
 	public $class_sub;
@@ -354,6 +355,41 @@ class user {
         $row = mysql_fetch_assoc( $query );
         
         return $row['chidon'] == 0 && $row['yan'] == 0;
+    }
+
+    /**
+     * get_prizes_won
+     * 
+     * Returns array of prizes won
+     *
+     * @return array
+     */
+    public function get_prizes_won()
+    {
+        $query = mysql_query(
+             " SELECT rw.raffle_id, rw.prize_id, shipped, r.name as raffle_name, r.date_ran, r.type, "
+            ." p.name as prize_name_weekly, p.thumbnail, pa.prize_name, pa.prize_image_id "
+            ." FROM raffle_winners rw "
+            ." JOIN raffles r using (raffle_id) "
+            ." LEFT JOIN prizes p on rw.prize_id = p.prize_id and r.type='weekly' "
+            ." LEFT JOIN prizes_auction pa on rw.prize_id = pa.prize_id and r.type='monthly' "
+            ." WHERE user_id = ".$this->user_id.";"
+        );
+        while( $row = mysql_fetch_assoc( $query ) ){
+            $prize_won = [
+                "raffle_id" => $row['raffle_id'],   "prize_id" => $row['prize_id'],
+                "shipped"   => $row['shipped'],     "raffle_name" => $row['raffle_name'],
+            ];
+            if ( $row['type'] == "weekly" ){
+                $prize_won['prize_name'] = $row['prize_name_weekly'];
+                $prize_won['picture']    = $row['thumbnail'];
+            } else {
+                $prize_won['prize_name'] = $row['prize_name'];
+                $prize_won['picture']    = "/file_view.php?id=" . $row['prize_image_id'];
+            }
+            $this->prizes_won[] = $prize_won;
+        }
+        return $this->prizes_won;
     }
 	
 	public function get_parent() {
