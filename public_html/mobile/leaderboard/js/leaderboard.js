@@ -3,7 +3,7 @@ var findGetParameter; // requires findGetParameter to be loaded first...
 $( document ).ready(function() {
     getLeaderBoard( 0 );
     // setup event listeners for when an option is changed
-    $("input#location, input#gender, select#rank").change( function() {
+    $('#filtersModalContainer').on('hidden.bs.modal', function() {
         getLeaderBoard( 0 ); // get a new leaderboard
     });
 }); // end on page load anynomus function
@@ -14,7 +14,7 @@ function getLeaderBoard( offset ) {
         $("#user_position, #leaderboard").html( "" );
     }
     // show the loading dots
-    $("#leaderboard #load-more").remove();
+    $("#leaderboard #load-more-box").remove();
     $("#leaderboard").append("<div class='loader bottom'></div>");
     // setup the post request
     var postData = {
@@ -56,7 +56,7 @@ function renderLeaderBoard( data, offset ) {
         offset + data.leaderboard.length < data.total
     ) {
         $("#leaderboard").append(
-            '<button class="btn btn-branding" id="load-more">Load More</button>'
+            '<div id="load-more-box"><button class="btn btn-branding" id="load-more">Load More</button></div>'
         );
         $("#load-more").click( function() {
             getLeaderBoard( $(".user").length ); // load the next 25 users
