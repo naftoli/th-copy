@@ -3,6 +3,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 /***************** IMPORTS **********************/
 require_once(dirname(__FILE__).'/../../../classes/user.php');
+require_once(dirname(__FILE__).'/../../../classes/admin.php');
 require_once(dirname(__FILE__).'/../../../calendar.php');
 
 /***************** AUTHENTICATION **********************/
@@ -36,6 +37,8 @@ $user->get_school();
 $user->get_class();
 $user->get_rank();
 $user->get_medals(0, $user->user_start_date, unixtojd(), 0);
+$user->get_childs_parent();
+$user->get_prizes_won();
 /***************** RENDER REPORT **********************/
 ?>
 <input type="hidden" id="user_id" value="<?= $user->user_id; ?>"/>
@@ -59,9 +62,9 @@ $user->get_medals(0, $user->user_start_date, unixtojd(), 0);
         <h3><?= $user->rank_name; ?></h3>
     </div>
     <div class="info">
-        <span class="title">Gender / DOB:</span>
+        <span class="title">DOB:</span>
         <br/>
-        <h3><?= $user->gender; ?> / <?= $user->dob ?></h3>
+        <h3 style="font-size: 1em;"><?= $user->dob ?> / <?= $user->dob_he ?></h3>
     </div>
     <div class="info">
         <span class="title">Serial Number:</span><br/>
@@ -75,9 +78,13 @@ $user->get_medals(0, $user->user_start_date, unixtojd(), 0);
         <span class="title">Base:</span>
         <h3>
         <?php
-            echo $user->school->school_name;
-            if ( $admin_user['auth'] === "super" )
-                echo " ( ID: " . $user->school->school_id . " )";
+            if ( $user->school ) {
+                echo $user->school->school_name;
+                if ( $admin_user['auth'] === "super" )
+                    echo " ( ID: " . $user->school->school_id . " )";
+            } else {
+                echo "No Base";
+            }
         ?>
         </h3>
     </div>
@@ -96,20 +103,79 @@ $user->get_medals(0, $user->user_start_date, unixtojd(), 0);
         <span class="title">Member Since:</span>
         <h3><?= dateToHebrew($user->user_start_date); ?></h3>
     </div>
-    <div class="info info-3rd">
+    <div class="info info-quarter">
         <span class="title">Mission Type:</span>
         <h3><?= $user->get_mission_type(); ?></h3>
     </div>
-    <div class="info info-3rd">
+    <div class="info info-quarter">
         <span class="title">Language:</span>
         <h3><?= $user->lang; ?></h3>
     </div>
-    <div class="info info-3rd">
+    <div class="info info-quarter">
+        <span class="title">Gender:</span>
+        <h3><?= $user->gender; ?></h3>
+    </div>
+    <div class="info info-quarter">
         <span class="title">Chayolei Soldier:</span>
         <h3><?= $user->is_chayolei() ? "Yes" : "No"; ?></h3>
     </div>
-    <h2>Medal Board</h2>
-    <div id="medal-board">
-        <div class="loader"></div>
+    <div class="info">
+        <h2>Parent Account (#<?= $user->childs_parent->admin_id ?>)</h2>
+        <div class="inner-info">
+            <span class="title">Username:</span>
+            <h3><?=$user->childs_parent->username?></h3>
+        </div>
+        <div class="inner-info">
+            <span class="title">Password:</span>
+            <h3><?=$user->childs_parent->password?></h3>
+        </div>
+        <div style="padding: 0px 5px 5px;">
+            <span class="title">Name:</span>
+            <h3>
+                <?php
+                if ($user->childs_parent->first) 
+                    echo $user->childs_parent->title . " " 
+                    . $user->childs_parent->first . " " 
+                    . $user->childs_parent->last;
+                else 
+                    echo "N/A"?>
+            </h3>
+        </div>
+        <div class="inner-info">
+            <span class="title">Phone:</span>
+            <h3><?=$user->childs_parent->admin_phone_mobile?></h3>
+        </div>
+        <div class="inner-info">
+            <span class="title">E-mail:</span>
+            <h3><?=$user->childs_parent->admin_email?></h3>
+        </div>
+    </div>
+    <div class="info">
+        <h2>Prizes Won</h2>
+        <?php 
+        if ( count($user->prizes_won) > 0) {
+            foreach( $user->prizes_won as $prize ) { ?>
+            <div class="prize">
+                <img src="//mashpia.com<?= $prize['picture'] ?>" alt="<?= $prize['prize_name'] ?>" />
+                <span><?= $prize['prize_name'] ?> in <?= $prize['raffle_name'] ?></span>
+            </div>
+        <?php 
+            } 
+        } else { ?>
+            No Prizes Won Yet <i class="fa fa-frown-o" aria-hidden="true"></i>
+        <?php } ?>
+    </div>
+    <div class="info">
+        <h2>Medal Board</h2>
+        <div id="medal-board">
+            <div class="loader"></div>
+        </div>
+    </div>
+    <div class="info">
+        <h2>Rank Board</h2>
+        <div id="rank-board">
+            <!-- <div class="loader"></div> -->
+            Coming Soon....
+        </div>
     </div>
 </div>

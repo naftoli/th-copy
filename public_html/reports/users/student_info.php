@@ -24,59 +24,49 @@ require_once(dirname(__FILE__).'/../../header.php');
         text-align: center;
     }
     input#serial_number {
-        margin-bottom: 0px;
-        background: none;
-        border: none;
-        border-bottom: 1px solid;
-        padding: 2px;
-        font-size: 1.2em;
+        margin-bottom: 0px;background: none;
+        border: none;border-bottom: 1px solid;
+        padding: 2px;font-size: 1.2em;
     }
+    /* user info */
     div.photo {
         display: inline-block; float: right; position: relative;
     }
     img.rank {
-        height: 90px;
-        position: absolute;
-        bottom: -30px;
-        right: -25px;
+        height: 90px;position: absolute;bottom: -30px;right: -25px;
     }
     img.profile_picture {
-        max-height: 175px;
-        max-width: 200px;
-        border-radius: 15px;
-        border: 2px solid;
+        max-height: 175px;max-width: 200px;border-radius: 15px;border: 2px solid;
     }
+    /* page info */
     .info {
-        display: inline-block;
-        width: 48%;
-        vertical-align: top;
-        border-top: 1px solid #888;
-        padding: 5px;
+        display: inline-block;width: 48%;padding: 5px;
+        vertical-align: top;border-top: 1px solid #888;
     }
-    .info-3rd {
-        width: 31.5%;
+    .inner-info {
+        width: 49%; display: inline-block;  box-sizing: border-box; padding: 0px 5px 5px;
+        word-wrap: break-word;
     }
-    .primary_info .info {
-        width: 34%;
-    }
-    .primary_info h3 {
-        font-size: 1.2em;
-        margin-bottom: 5px;
-        display: inline-block;
-    }
-    #medal-board {
-        text-align: center;
-    }
+    .info-3rd {width: 31.5%;}
+    .info-quarter {width: 23%;}
+    .primary_info .info {width: 34%;}
+    .primary_info h3 {font-size: 1.2em;margin-bottom: 5px;display: inline-block;}
+    /* prizes section */
+    .prize { box-sizing: border-box; padding: 5px; }
+    .prize img { max-height: 50px; }
+    .prize span { display: inline-block; vertical-align: top; margin-top: 15px; }
+    /* medal board */
+    #medal-board {text-align: center;}
     .medal-status.progress {
         height: 25px;width: 100%;text-indent: 0px;background: #fff;
         display: inline-block;padding: 0px;margin: 0px;float: none;
     }
-    .medal-board .medal-subject span {
-        font-size: .8em;
-    }
-    .progress-bar {
-        border-radius: 10px;
-    }
+    .medal-board .medal-subject {height: auto;line-height: 25px;margin-top: -20px;}
+    .medal-board .medal-subject span {font-size: .4em;}
+    .medal-status span {font-size: 12px;top: 2px;}
+    .medal-status.progress {height: 16px;}
+    .progress-bar { border-radius: 10px;}
+    /* changes when printing this report */
     @media print {
         .medal-board .medal {
             width: 20.3%;
@@ -87,6 +77,7 @@ require_once(dirname(__FILE__).'/../../header.php');
             margin-top: 5px;
             border: 1px solid;
         }
+        img.rank{ right: -15px; }
     }
     </style>
 </head>
@@ -101,7 +92,7 @@ require_once(dirname(__FILE__).'/../../header.php');
         <a class="button" id="generate">Submit</a>
     </div>
 
-    <hr style="display: block;">
+    <hr style="display: block;" class="noprint">
     <div id="report"></div>
 
     <script src="/mobile/reg/js/medal-board.js"></script>
@@ -124,7 +115,7 @@ require_once(dirname(__FILE__).'/../../header.php');
 
         $.post( "ajax/student_info.php", postData, function( report ) {
             $( "div#report" ).html( report );
-            medal_board("#medal-board", $("#user_id").val());
+            medal_board("#medal-board", $("#user_id").val(), false);
         });
     }
     </script>
