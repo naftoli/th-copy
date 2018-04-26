@@ -174,8 +174,7 @@ $user->get_prizes_won();
     <div class="info">
         <h2>Rank Board</h2>
         <div id="rank-board">
-            <!-- <div class="loader"></div> -->
-            Coming Soon....
+            <div class="loader"></div>
         </div>
     </div>
 </div>

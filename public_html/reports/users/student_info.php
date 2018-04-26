@@ -66,6 +66,14 @@ require_once(dirname(__FILE__).'/../../header.php');
     .medal-status span {font-size: 12px;top: 2px;}
     .medal-status.progress {height: 16px;}
     .progress-bar { border-radius: 10px;}
+    .rank-logo {
+        display: inline-block;text-align: center;width: 30%;
+    }
+    .rank-logo img {width: 75px;}
+    .rank_name, span.rank-medal-number {display: block;font-size: .6em;}
+    .rank-medals {display: inline-block;vertical-align: top;width: 70%;}
+    .rank-medal {display: inline-block;text-align: center;padding: 2px;}
+    .rank-medal img {width: 44px;}
     /* changes when printing this report */
     @media print {
         .medal-board .medal {
@@ -96,6 +104,7 @@ require_once(dirname(__FILE__).'/../../header.php');
     <div id="report"></div>
 
     <script src="/mobile/reg/js/medal-board.js"></script>
+    <script src="/mobile/reg/js/rank-board.js"></script>
     <script>
     $( "a#generate" ).click( generate_report );
 
@@ -116,6 +125,7 @@ require_once(dirname(__FILE__).'/../../header.php');
         $.post( "ajax/student_info.php", postData, function( report ) {
             $( "div#report" ).html( report );
             medal_board("#medal-board", $("#user_id").val(), false);
+            rank_board("#rank-board", $("#user_id").val(), false )
         });
     }
     </script>
