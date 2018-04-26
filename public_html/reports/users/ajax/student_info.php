@@ -99,9 +99,13 @@ $user->get_prizes_won();
         <span class="title">Address:</span>
         <h3><?= $user->get_address(); ?></h3>
     </div>
-    <div class="info">
+    <div class="info info-quarter">
         <span class="title">Member Since:</span>
         <h3><?= dateToHebrew($user->user_start_date); ?></h3>
+    </div>
+    <div class="info info-quarter">
+        <span class="title">Registered</span>
+        <h3><?= $user->user_registered ? $user->user_registered : "N/A" ?></h3>
     </div>
     <div class="info info-quarter">
         <span class="title">Mission Type:</span>
