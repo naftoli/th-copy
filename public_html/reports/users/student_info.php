@@ -66,11 +66,17 @@ require_once(dirname(__FILE__).'/../../header.php');
     .medal-status span {font-size: 12px;top: 2px;}
     .medal-status.progress {height: 16px;}
     .progress-bar { border-radius: 10px;}
+    /* rank board */
+    .rank-board > div { 
+        position: relative; display: flex; align-items: center; padding: 5px 0px; border-bottom: 1px solid; 
+    }
     .rank-logo {
         display: inline-block;text-align: center;width: 30%;
     }
     .rank-logo img {width: 75px;}
-    .rank_name, span.rank-medal-number {display: block;font-size: .6em;}
+    .rank_promoted, span.rank-medal-number { font-size: .6em; display: block; }
+    .rank_promoted { margin-top: 4px; }
+    .rank_name { font-size: .8em; }
     .rank-medals {display: inline-block;vertical-align: top;width: 70%;}
     .rank-medal {display: inline-block;text-align: center;padding: 2px;}
     .rank-medal img {width: 44px;}
