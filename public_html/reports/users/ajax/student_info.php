@@ -117,7 +117,7 @@ $user->get_prizes_won();
     </div>
     <div class="info info-quarter">
         <span class="title">Gender:</span>
-        <h3><?= $user->gender; ?></h3>
+        <h3><?= $user->gender === "M" ? "Boy" : "Girl"; ?></h3>
     </div>
     <div class="info info-quarter">
         <span class="title">Chayolei Soldier:</span>
