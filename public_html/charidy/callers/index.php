@@ -53,7 +53,7 @@ $callers = Caller::LoadAll();
             <strong>To assign callers: </strong><br/>
             1. Please select the donors you wish to assign by checking the checkbox next to their name.<br/>
             2. Then select the caller you wish to assign to them via the dropdown.<br/>
-            3. Press the "Assign Caller" button and wait for the confirmation prompt.<br/>
+            3. Press the "Assign Caller" button and wait for the caller names to update.<br/>
         </p>
 
         <div class="options">
