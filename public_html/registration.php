@@ -266,7 +266,7 @@ $h_school = $_SESSION['hschool'];
 
 	<body onload="check_next_page();">
 		
-		<FORM name="registration_form_two" method="post" action="https://mashpia.com/registration_2.php">
+		<FORM name="registration_form_two" method="post" action="https://<?=$_SERVER['SERVER_NAME']?>/registration_2.php">
 			<input type="hidden" name="admin_id" value="">
 			<input type="hidden" name="school_id" value="">
 			<input type="hidden" name="hschool" value="" />

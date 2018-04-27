@@ -29,7 +29,14 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         <p style="text-align: center">
             Please click <a href="https://docs.google.com/document/d/1FKrfoxTUTORwW9lO3Kx0mUY9wVeCBFCn0noQzVoj4q8/edit?usp=sharing">here</a> for the Rewards Manual
         </p>-->
-        
+        <div id="action-links">
+            <a href="student_info.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/images/icon_profile.png" height="32" alt="profile"/>
+                    <span class="link-text">Student Info By Serial Number / Barcode</span>
+                </div>
+            </a>
+        </div>
         <!--<h2>Forms and Reports</h2>-->
         <?if ($admin_user['auth'] == 'super') {?>
         <h2>Reports</h2>
