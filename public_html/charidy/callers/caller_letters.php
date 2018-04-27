@@ -100,7 +100,7 @@ $callers = Caller::LoadAll();
                 <div class="mailing_address">
                     <span>Mailing Address:</span>
                     __________________________________________________________<br/>
-                    <span>City:</span>____________________
+                    <span>City:</span>_____________________________
                     <span>State:</span>__ __
                     <span>Zip</span>__ __ __ __ __
                 </div>
