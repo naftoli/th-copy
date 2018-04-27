@@ -30,7 +30,7 @@ function rank_board( target, user_id, url ) {
         for ( var i = 0; i < parseInt(data.medalsInfo[ parseInt(data.rank) + 1 ]); i++ ) {
             if ( i === parseInt( data.medalsInfo[ rank_index ] ) ) {
                 html += rank_index > 1 ? "</div></div>" : ""; // close the last render_rank
-                html += render_rank( rank_index );
+                html += render_rank( rank_index, data.ranksPromoted[ rank_index ] );
                 rank_index += 1;
             }
             if ( data.medals.length > i) {
@@ -44,7 +44,7 @@ function rank_board( target, user_id, url ) {
     }
 
     
-    function render_rank ( rank_ord ) {
+    function render_rank ( rank_ord, rank_promoted ) {
         var rank_names = [
             '', 'Private', 'Sergeant', 'Sergeant Major', 'Second Lieutenant', 'First Lieutenant', 'Captain', 
             'Major', 'Colonel', 'General', '1* General', '2* General', '3* General', '4* General', '5* General'
@@ -53,6 +53,7 @@ function rank_board( target, user_id, url ) {
         var html = '<div id="' + rank_ord + '">';
         html    +=  '<div class="rank-logo">';
         html    +=      '<div class="rank_name">' + rank_names[rank_ord] + '</div>';
+        html    +=      '<div class="rank_promoted">(' + rank_promoted + ')</div>';
         html    +=      '<img src="/mobile/img_new/ranks/' + rank_ord + '.svg" alt="' + rank_names[rank_ord] + '"/>';
         html    +=  '</div><div class="rank-medals">';
         return html;
