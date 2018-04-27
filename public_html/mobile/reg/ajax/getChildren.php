@@ -147,7 +147,8 @@ while ( $row = mysql_fetch_assoc($result) ) {
 	*/
 	//if (in_array($row['school_id'], $showRegister)) {
 	//	$children[$row['user_id']]['needsReg'] = 1;
-	//}	
+	//}
+	
 	$pSql = "select thumb from thumbs t 
 			join users u on u.user_photo_id = t.file_id 
 			where u.user_id = " . $row['user_id'];

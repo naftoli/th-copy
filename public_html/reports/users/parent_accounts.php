@@ -29,7 +29,7 @@ if ($admin_user['auth'] != 'super') {
             table {width: 100%;}
             td, th{padding: 4px 8px;font-size: 12px;}
             label.fancy-check-container {width: 20%;display: inline-block;text-align: center;margin: 15px;}
-            input[type="text"] {background: none;border: none;border-bottom: 1px solid;font-size: 14px;padding: 2px;}
+            input[type="text"] {background: none;border: none;border-bottom: 1px solid;padding: 2px;}
             tr, th, td {border: 1px dashed black;padding: 6px;}
             .school {width: 200px;}
             .grade {width: 50px;}
@@ -100,7 +100,7 @@ if ($admin_user['auth'] != 'super') {
             </span>
         </div>
         
-        <hr style="display: block;"/>
+        <hr style="display: block;">
         
         <div id="parent_report">
             
