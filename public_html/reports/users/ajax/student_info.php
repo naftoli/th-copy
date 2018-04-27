@@ -27,10 +27,24 @@ if (
 } else { // bad input
     echo "Please enter a valid serial number or digit barcode."; die();
 }
+
+// make sure that schools can only see children in their school
+if ( $admin_user['auth'] !== "super" ) {
+    require_once dirname(__FILE__).'/../../../class.adminSchools.php';
+    $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+    $schools = $as->getSchools();
+    $user_filter .= " AND school_id IN ('" . implode( "', '", array_keys ($schools) ) . "') ";
+}
+
 // load the user from the database
 $user_query = mysql_query(
     "SELECT * FROM users WHERE $user_filter;"
 );
+
+if ( mysql_num_rows( $user_query ) === 0 ) {
+    echo "Could not find soldier with provided serial number / barcode"; die();
+}
+
 $user = new user( mysql_fetch_assoc( $user_query ) );
 
 $user->get_school();
@@ -82,9 +96,8 @@ $user->get_prizes_won();
         <span class="title">Base:</span>
         <h3>
         <?php // create link for superusers to edit schools 
-        if ( $admin_user['auth'] == "super" && $user->school ) { 
-            // mashpia.com in link becuase it does not work on superuser accounts in firefox without it :-( ?>
-            <a href="//mashpia.com/admin_school2.php?admin_id=<?= $admin_user['admin_id'] ?>&school_id=<?= $user->school->school_id ?>&action=edit" target="_blank">
+        if ( $admin_user['auth'] == "super" && $user->school ) { ?>
+            <a href="/admin_school2.php?admin_id=<?= $admin_user['admin_id'] ?>&school_id=<?= $user->school->school_id ?>&action=edit" target="_blank">
         <?php } // end opening a tag
         // make sure the user has a school. and if so show the information
         if ( $user->school ) {
