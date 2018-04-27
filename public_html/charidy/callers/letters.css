@@ -2,6 +2,7 @@
     width: 8.5in;
     height: 11in;
     page-break-after: always;
+    margin: 0 auto;
 }
 
 .caller-title-page {
