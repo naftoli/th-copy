@@ -113,6 +113,11 @@ require_once(dirname(__FILE__).'/../../header.php');
     <script src="/mobile/reg/js/rank-board.js"></script>
     <script>
     $( "a#generate" ).click( generate_report );
+    $( "input#serial_number" ).keydown( function( event ) {
+        if ( event.keyCode === 13 || event.keyCode === 9 ) {
+            generate_report();
+        }
+    })
 
     function generate_report() {
         var serial_number = $( "input#serial_number" ).val();
