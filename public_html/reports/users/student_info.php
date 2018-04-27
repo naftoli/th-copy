@@ -26,7 +26,7 @@ require_once(dirname(__FILE__).'/../../header.php');
     input#serial_number {
         margin-bottom: 0px;background: none;
         border: none;border-bottom: 1px solid;
-        padding: 2px;font-size: 1.2em;
+        padding: 2px;font-size: 1.2em;width: 12em;
     }
     /* user info */
     div.photo {
