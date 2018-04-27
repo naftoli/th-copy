@@ -47,14 +47,14 @@ $callers = Caller::LoadAll();
             <div class="donor-info">
                 <div class="donated">
                     <span id="donate-5776">
-                        <i class="fas fa-<?= $donor->donatedIn( "5776" ) ? "check" : "times"; ?>"></i>
+                        <i class="fas fa-<?= $donor->getDonated( "5776" ) ? "check" : "times"; ?>"></i>
                         Donated in 5776
-                        <?= $donor->donatedIn( "5776" ) ? "($" . $donor->donations["5776"]["donation"] . ")" : "" ?>
+                        <?= $donor->getDonated( "5776" ) ? "( $" . $donor->donations["5776"]["donation"] . " )" : "" ?>
                     </span>
                     <span id="donate-5777">
-                        <i class="fas fa-<?= $donor->donatedIn( "5777" ) ? "check" : "times"; ?>"></i>
+                        <i class="fas fa-<?= $donor->getDonated( "5777" ) ? "check" : "times"; ?>"></i>
                         Donated in 5777
-                        <?= $donor->donatedIn( "5777" ) ? "($" . $donor->donations["5777"]["donation"] . ")" : "" ?>
+                        <?= $donor->getDonated( "5777" ) ? "( $" . $donor->donations["5777"]["donation"] . " )" : "" ?>
                     </span>
                     <span id="<?=$year?>">
                         <i class="fas fa-<?= $donor->onShabbaton( $year ) ? "check" : "times"; ?>"></i>

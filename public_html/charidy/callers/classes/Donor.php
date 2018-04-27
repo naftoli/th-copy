@@ -1,4 +1,5 @@
-<?php
+<?php // dependencies
+require_once( dirname(__FILE__) . "/Caller.php" );
 
 class Donor {
 
@@ -16,6 +17,7 @@ class Donor {
     public $email;
 
     public $donations = [];
+    public $caller;
 
     private $on_shabbaton_cache = false;
 
@@ -45,12 +47,32 @@ class Donor {
     }
 
     /**
+     * ::LoadAll
+     * 
+     * returns array containing all donors
+     *
+     * @return array[ Donor ]
+     */
+    public static function LoadAll() {
+        $donors = [];
+
+        $query = mysql_query(
+            "SELECT * FROM charidy_donors ORDER BY first_name, last_name;"
+        );
+        while ( $row = mysql_fetch_assoc( $query ) ){
+            $donors[] = self::LoadFromRow( $row );
+        }
+
+        return $donors;
+    }
+
+    /**
      * ::loadFromRow function
      * 
-     * Creates and returns a Caller instance from a DBS row
+     * Creates and returns a Donor instance from a DBS row
      *
      * @param array $row
-     * @return Caller
+     * @return Donor
      */
     public static function LoadFromRow( $row ){
         $instance = new self(); // create instance to return
@@ -86,28 +108,30 @@ class Donor {
     }
 
     /**
-     * donatedIn
+     * getDonated
      * 
      * Check if a donor donated in a given year
      *
      * @param string $year
      * @return boolean
      */
-    public function donatedIn( $year ) {
-        $year = mysql_real_escape_string( $year );
+    public function getDonated( $year = false ) {
+        if ( $year )
+            $year = mysql_real_escape_string( $year );
         // pull from cache if we can
         if ( isset( $this->donations[ $year ] ) )
             return true;
 
         $query = mysql_query(
-             " SELECT donation, with_matching, donation_date FROM charidy "
+             " SELECT donation, with_matching, donation_date, year FROM charidy "
             ." WHERE ( email = '". $this->email ."' OR phone = '" . $this->phone . "')"
-            ." AND year = $year;"
+            .( $year ? " AND year = $year;" : ";" )
         );
         // return true or false depending on if we have any information
         if ( mysql_num_rows( $query ) > 0 ){
-            $row = mysql_fetch_assoc( $query );
-            $this->donations[ $year ] = $row;
+            while ( $row = mysql_fetch_assoc( $query ) ){
+                $this->donations[ $row['year'] ] = $row;
+            }
             return true;
         };
         return false;
@@ -139,5 +163,23 @@ class Donor {
         $this->on_shabbaton_cache = mysql_fetch_assoc( $query )['total'];
 
         return $this->on_shabbaton_cache;
+    }
+
+    public function getCaller( $year ) {
+        $year = mysql_real_escape_string( $year );
+
+        $query = mysql_query(
+             " SELECT charidy_callers.* FROM charidy_callers "
+            ." JOIN charidy_donors_callers USING (charidy_caller_id) "
+            ." WHERE donor_id = '" . $this->donor_id ."' "
+            ." AND year = '" . $year . "' LIMIT 1;"
+        );
+
+        if ( mysql_num_rows( $query ) > 0 ){
+            $row = mysql_fetch_assoc( $query );
+            $this->caller = Caller::LoadFromRow( $row );
+            return true;
+        };
+        return false;
     }
 }
