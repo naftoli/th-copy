@@ -42,7 +42,11 @@ $user->get_prizes_won();
 /***************** RENDER REPORT **********************/
 ?>
 <input type="hidden" id="user_id" value="<?= $user->user_id; ?>"/>
-<h2><?= $user->first; ?> <?= $user->last; ?> - <?= $user->user_serial ?></h2>
+<h2>
+    <a href="/admin_user.php?action=edit&user_id=<?= $user->user_id . ($user->school ? "&school_id=".$user->school->school_id : "") ?>" target="_blank">
+        <?= $user->first; ?> <?= $user->last; ?> - <?= $user->user_serial ?>
+    </a>
+</h2>
 <div class="photo">
     <img src="//mashpia.com/<?= $user->get_profile_picture(); ?>" alt="profile_picture" class="profile_picture" />
     <img class="rank" src="/mobile/img_new/ranks/<?= $user->rank_ord; ?>.svg" alt="<?= $user->rank_name; ?>"/>
@@ -77,15 +81,19 @@ $user->get_prizes_won();
     <div class="info">
         <span class="title">Base:</span>
         <h3>
-        <?php
-            if ( $user->school ) {
-                echo $user->school->school_name;
-                if ( $admin_user['auth'] === "super" )
-                    echo " ( ID: " . $user->school->school_id . " )";
-            } else {
-                echo "No Base";
-            }
-        ?>
+        <?php // create link for superusers to edit schools 
+        if ( $admin_user['auth'] == "super" && $user->school ) { 
+            // mashpia.com in link becuase it does not work on superuser accounts in firefox without it :-( ?>
+            <a href="//mashpia.com/admin_school2.php?admin_id=<?= $admin_user['admin_id'] ?>&school_id=<?= $user->school->school_id ?>&action=edit" target="_blank">
+        <?php } // end opening a tag
+        // make sure the user has a school. and if so show the information
+        if ( $user->school ) {
+            echo $user->school->school_name;
+            if ( $admin_user['auth'] === "super" )
+                echo " ( ID: " . $user->school->school_id . " )</a>"; // close the tag for superusers
+        } else {
+            echo "No Base";
+        } ?>
         </h3>
     </div>
     <div class="info">
