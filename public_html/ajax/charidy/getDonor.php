@@ -38,7 +38,7 @@ if ($key == 'cth5778!') {
         
         $info['children'] = array();
         if ($parent_id) {
-            $sql2 = "select u.user_id, u.first, u.last, s.school_name, u.mobile_pic, s.school_name, 
+            $sql2 = "select u.user_id, u.first, u.last, u.school_id, s.school_name, u.mobile_pic 
                     from users u
                     join admin_auths aa on aa.id = u.user_id
                     join admins a using (admin_id)
@@ -47,17 +47,17 @@ if ($key == 'cth5778!') {
             while ($row2 = mysql_fetch_assoc($result2)) {
                 $info['children'][] = array(
                     'user_id'       =>  $result2['user_id'],
-                    'first_name'    =>  $result2['first'],
-                    'last_name'     =>  $result2['last'],
+                    'name'          =>  $result2['first'] . ' ' . $result2['last'],
                     'school'        =>  $result2['school_name'],
-                    'picture'       =>  $result2['mobile_pic']
+                    'school_id'     =>  $result2['school_id'], 
+                    'picture'       =>  'https://mashpia.com/' . $result2['mobile_pic']
                 );
             }
         }
         
         $info['donor_id'] = $donor_id;
         $info['parent_id'] = $parent_id;
-        $info['phone'] = $phone;
+        $info['phone_number'] = $phone;
         $info['address'] = $address;
         $info['donation_info'] = array(
             'last_yr'   =>  0,
@@ -69,10 +69,8 @@ if ($key == 'cth5778!') {
             'parent_id' =>  0,
             'phone'     =>  '',
             'address'   =>  '',
-            'donation_info' =>  array(
-                'last_yr'   =>  0,
-                'this_yr'   =>  0
-            ),
+            'donation_last_yr'   =>  0,
+            'donation_this_yr'   =>  0,
             'children'  =>  array()
         );
     }

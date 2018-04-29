@@ -70,6 +70,8 @@ function showAdminInfo( $admin ) {
     echo "Admin ID: " . $admin['admin_id'] . "<br />";
     echo "Name: " . $admin['first'] . ' ' . $admin['last'] . "<br />";
     echo "Address: " . $admin['admin_address1'] . "<br />" . $admin['admin_city'] . ', ' . $admin['state'] . ' ' . $admin['zip'] . "<br />" . $admin['country'] . "<br />";
+    echo "Email: " . $admin['admin_email'] . "<br />";
+    echo "Numbers: " . $admin['phone1'] . "<br />" . $admin['phone2'] . "<br />" . $admin['phone3'] . "<br />" . $admin['phone4'] . "<br />";
     echo "</div>";
 }
 ?>
