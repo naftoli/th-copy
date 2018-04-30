@@ -32,22 +32,40 @@ $callers = Caller::LoadAll();
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Tzivos Hashem | Raffles Home Page</title>
-        <link href="/admin_styles.css" rel="stylesheet" type="text/css">
-        <link href="/styles/admin/grey_select.css" rel="stylesheet" type="text/css">
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.css"/>
         <style>
-            .options { text-align: center; margin-bottom: 5px;}
-            a.button { display: inline-block; }
-            table { width: 100%; }
-            td, th { padding: 4px 8px; font-size: 14px; border: 1px solid #aaa; word-wrap: break-word; max-width: 70px; }
+            body {
+                padding: 50px;
+            }
+            h1, .options, p {
+                text-align: center;
+            }
+            select#caller_id { max-width: 500px; display: inline-block; text-transform: capitalize;}
+            .options { margin-bottom: 15px; }
+            tbody tr:hover {
+                cursor: pointer;
+            }
+            /* fancy checkboxes */
+            label.fancy-check-container {display: inline-block;height: 1em;font-size: 25px;}
+            label.fancy-check-container input {display: none;}
+            label.fancy-check-container span.fancy-check { 
+                display: inline-block; font: normal normal normal 14px/1 Font Awesome\ 5 Free; font-size: inherit;
+                text-rendering: auto; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+            }
+            /* plain box */
+            label.fancy-check-container span.fancy-check:before { content: "\f0c8"; }
+            /* box with check */
+            label.fancy-check-container input:checked + span.fancy-check:before { content: "\f14a"; }
         </style>
     </head>
     <body>
-        <? // load the admin UI and JQuery 1.4
-            include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php');
-        ?>
-        <h1>Charidy Callers</h1>
+        <h1>Charidy Caller Papers Form</h1>
         <p>
-            To print the callers papers: Please press the "Print Caller Papers" button below.
+            <strong>To print the callers papers:</strong><br/>
+            Please press the "Print Caller Papers" button below. Please note that they will be grouped by caller with a title page for each one.
         </p>
         <p>
             <strong>To assign callers: </strong><br/>
@@ -57,13 +75,13 @@ $callers = Caller::LoadAll();
         </p>
 
         <div class="options">
-            <a class="button" href="caller_letters.php" target="_blank">
+            <a class="btn btn-info" href="caller_letters.php" target="_blank">
                 Print Caller Papers
             </a>
         </div>
         <hr style="display: block">
         <div class="options">
-            <select id="caller_id">
+            <select id="caller_id" class="form-control">
             <?php
                 foreach( $callers as $caller ) { ?>
                     <option value="<?= $caller->charidy_caller_id ?>">
@@ -71,17 +89,17 @@ $callers = Caller::LoadAll();
                     </option>
                 <? } ?>
             </select>
-            <a class="button" id="assign">
+            <a class="btn btn-success" id="assign" href="#">
                 Assign Caller
             </a>
         </div>
 
         <div class="assign_callers">
-            <table>
-                <thead>
+            <table class="table table-striped table-bordered table-hover">
+                <thead class="thead-dark">
                     <tr>
                         <th></th><th>Name</th><th>Address</th><th>Zip</th><th>Country</th>
-                        <th>Phone</th><th>E-mail</th><th>Donations</th><th>Caller</th>
+                        <th>Phone</th><th>E-mail</th><th>Donations</th><th>Shabbaton</th><th>Caller</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,7 +108,10 @@ $callers = Caller::LoadAll();
                     $donor->getDonated(); ?>
                     <tr>
                         <td>
-                            <input class="donor-select" type="checkbox" data-donor_id="<?= $donor->donor_id ?>"/>
+                            <label class="fancy-check-container">
+                                <input class="donor-select" type="checkbox" data-donor_id="<?= $donor->donor_id ?>"/>
+                                <span class="fancy-check"></span>
+                            </label>
                         </td>
                         <td><?= $donor->fullName(); ?></td>
                         <td><?= $donor->address; ?></td>
@@ -98,39 +119,33 @@ $callers = Caller::LoadAll();
                         <td><?= $donor->country; ?></td>
                         <td><?= $donor->phoneNumber(); ?></td>
                         <td><?= $donor->email; ?></td>
-                        <td><?= implode( ", ", array_keys( $donor->donations ) ); ?></td>
-                        <td class="caller"><?= $donor->getCaller( $year ) ? $donor->caller->fullName() : "N/A"; ?></td>
+                        <td>
+                        <?php
+                            foreach( $donor->donations as $donation_year => $donation ){
+                                echo $donation_year . " ($" . $donation['amount'] . ")<br/>";
+                            }
+                        ?>
+                        </td>
+                        <td>
+                        <?php
+                            foreach( $donor->onShabbaton( $year ) as $child ){
+                                echo $child['first'] . "<br/>";
+                            }
+                        ?>
+                        </td>
+                        <td class="caller" id="donor-caller-<?= $donor->donor_id ?>">
+                            <?= $donor->getCaller( $year ) ? $donor->caller->fullName() : "N/A"; ?>
+                        </td>
                     </tr>
                 <? } ?>
                 </tbody>
             </table>
         </div>
-        <script>
-            $("#assign").click( function() {
 
-                var caller_id = $("#caller_id").val();
-                var caller_name = $("option[value='"+ caller_id + "']").text().trim();
-
-                var donor_checkboxes = $("input.donor-select:checked");
-                var donors = [];
-
-                $.each( donor_checkboxes, function( index, input ) {
-                    donors.push( input.dataset.donor_id );
-                });
-
-                var postData = { 
-                    caller_id: caller_id,
-                    donor_ids: donors
-                }
-                
-                $.post( "ajax/assignCaller.php", postData, function( response ){
-                    $.each( donor_checkboxes, function( index, input ) {
-                        input.checked = false;
-                        $( input ).parent().parent().find(".caller").text( caller_name );
-                    });
-                });
-
-            });
-        </script>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.js"></script>
+        <script type="text/javascript" src="index.js"></script>
     </body>
 </html>

@@ -28,7 +28,7 @@ h1.donor-name {
     min-width: 100px;
 }
 
-.donor-status, .donor-amount, .donor-info {
+.donor-status, .donor-amount {
     padding: .1in .8in;
 }
 .donor-amount {
@@ -67,6 +67,10 @@ h2.heading {
 
 .donated span {
     flex-grow: 1;
+}
+
+.donor-info span {
+    padding: 2%;
 }
 
 .mailing_address, .email_address {
