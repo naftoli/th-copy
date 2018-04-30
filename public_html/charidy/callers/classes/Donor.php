@@ -88,12 +88,12 @@ class Donor {
     /**
      * fullName
      * 
-     * returns the Donors full name
+     * returns the Donors full name in lower case
      *
      * @return string
      */
     public function fullName() {
-        return $this->first_name . " " . $this->last_name;
+        return strtolower( $this->first_name . " " . $this->last_name );
     }
 
     /**

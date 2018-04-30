@@ -99,11 +99,11 @@ class Caller {
     /**
      * fullName
      * 
-     * returns the Donors full name
+     * returns the Donors full name in lower case
      *
      * @return string
      */
     public function fullName() {
-        return $this->first . " " . $this->last;
+        return strtolower( $this->first . " " . $this->last );
     }
 }
