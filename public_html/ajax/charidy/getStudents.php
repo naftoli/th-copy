@@ -1,5 +1,9 @@
 <?php
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: GET,HEAD,OPTIONS,POST,PUT");
+header("Access-Control-Allow-Headers: Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+
 require '../../db.php';
 
 $key = mysql_real_escape_string($_POST['key']);
@@ -37,8 +41,8 @@ if ($key == 'cth5778!') {
                 'first'     => $row['first'],
                 'last'      => $row['last'],
                 'grade'     => $grade,
-                'thumb'     => $row['thumb'],
-                'pic'       => $row['mobile_pic'],
+                'thumb'     => 'https://mashpia.com/mobile/reg/thumbs/' . $row['thumb'],
+                'pic'       => 'https://mashpia.com/mobile/reg/' . $row['mobile_pic'],
                 'rank'      => $ranks[$rank]
             );
         }
