@@ -11,13 +11,20 @@ function getAdmins() {
     // if multiple accounts with same email has children associated with it, choose most recent one
     
     $donors = array();
-    $admins = array();
+    $admins = array();    
     $sql = "select * from admins where admin_email is not null";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc( $result )) {
         // make sure email is valid
         $email = $row['admin_email'];
-        if (filter_var($email, FILTER_VALIDATE_EMAIL)) $admins[$row['admin_email']][] = $row;
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // make sure email isn't already in database
+            $sql2 = "select * from donors where email = '" . $email . "'";
+            $result2 = mysql_query( $sql2 );
+            if (mysql_num_rows( $result2 ) == 0) {
+                $admins[$email][] = $row;
+            }
+        }
     }
 
     foreach ($admins as $email => $rows) {
@@ -91,10 +98,10 @@ function createDonorFromAdmin( $admin ) {
     $sql = "insert IGNORE into charidy_donors
             set first_name = '" . $admin['first'] . "',
             last_name = '" . $admin['last'] . "',
-            address = \"" . $admin['admin_address1'] . "\"
+            address = \"" . $admin['admin_address1'] . "\",
             city = '" . $admin['admin_city'] . "',
             state = '" . $admin['admin_state'] . "',
-            zip = '" . $admin['admin_zip'] . "',
+            zip = '" . $admin['admin_postal'] . "',
             country = '" . $admin['admin_country'] . "',
             phone = '" . $phone . "',
             email = '" . trim($admin['admin_email']) . "',

@@ -90,6 +90,7 @@ function showAdminInfo( $admin ) {
     <body>
         <table>
             <tr>
+                <th>Line Number</th>
                 <th>Email</th>
                 <th>First Name</th>
                 <th>Last Name</th>
@@ -108,10 +109,11 @@ function showAdminInfo( $admin ) {
                 <th>Connect to Parent ID</th>
             </tr>
             <?php
+            $i = 1;
             $lastEmail = '';
             foreach ($info as $email => $other) {
                 foreach ($other as $row) {
-                    echo "<tr><td>" . $email . "</td><td>" . $row['fname'] . "</td><td>" . $row['lname'] . "</td><td>" . $row['phone'] . "</td><td>" . $row['address'] .
+                    echo "<tr><td>" . $i++ . "</td><td>" . $email . "</td><td>" . $row['fname'] . "</td><td>" . $row['lname'] . "</td><td>" . $row['phone'] . "</td><td>" . $row['address'] .
                         "</td><td>" . $row['city'] . "</td><td>" . $row['state'] . "</td><td>" . $row['zip'] . "</td><td>" . $row['country'] . "</td><td>" . $row['donation'] .
                         "</td><td>" . $row['year'] . "</td><td>";
                     if ($admin = matchByEmail($email)) {
