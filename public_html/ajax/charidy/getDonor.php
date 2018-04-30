@@ -19,8 +19,7 @@ Last Name
 Picture (url link to picture)
 School 
 */
-header('Content-Type: application/json');
-require_once( dirname(__FILE__) . '/../../db.php' );
+include_once(dirname(__FILE__) . "/header.php");
 
 $key = mysql_real_escape_string( $_POST['key'] );
 
