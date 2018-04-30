@@ -37,46 +37,52 @@ while( $row = mysql_fetch_assoc( $users_query ) ){
     <link rel="stylesheet" type="text/css" href="letters.css" />
 </head>
 <body>
+    <button class="no-print" id="print">Print Letters</button>
     <?php foreach( $users as $school_id => $school_users ) { ?>
         <div class="letter title-page">
             <h1><?= $schools[ $school_id ]; ?></h1>
             <h2><?= count( $school_users ); ?> Children Letters</h2>
         </div>
-        <?php foreach( $school_users as $user ){ ?>
-            <div class="letter">
-                <p>Dear Mummy and Tatty,</p>
+        <div class="letters">
+            <?php foreach( $school_users as $user ){ ?>
+                <div class="letter">
+                    <p>Dear Mummy and Tatty,</p>
 
-                <p>Today I have the chance to get a dollar from the Rebbe.</p>
-                
-                <p>It's as simple as 1.2.3.</p>
-                
-                <p>1. Login in to charidy.com/TH</p>
-                
-                <p>2. Press donate</p>
-                
-                <p>3. Enter <?= $user['admin_email'] ?> (your Tzivos Hashem E-mail)</p>
-                
-                <p>
-                    When I donate at least $5 I will be entered into a raffle to win a Rebbe Dollar.<br/>
-                    I really want to win it more then anything else.
-                </p>
-                
-                <p>I could also get more tickets in the raffle if people donate in my honor.</p>
-                
-                <p>
-                    Could we please make a video of us telling our friends and family what Tzivos Hashem does for us. 
-                    I am sure if they realize the impact Tzivos Hashem is having they would donate, after all we will bring Moishiach and everyone wants to have a part in that.
-                </p>
+                    <p>Today I have the chance to get a dollar from the Rebbe.</p>
+                    
+                    <p>It's as simple as 1.2.3.</p>
+                    
+                    <p>1. Login in to charidy.com/TH</p>
+                    
+                    <p>2. Press donate</p>
+                    
+                    <p>3. Enter <?= $user['admin_email'] ?> (your Tzivos Hashem E-mail)</p>
+                    
+                    <p>
+                        When I donate at least $5 I will be entered into a raffle to win a Rebbe Dollar.<br/>
+                        I really want to win it more then anything else.
+                    </p>
+                    
+                    <p>I could also get more tickets in the raffle if people donate in my honor.</p>
+                    
+                    <p>
+                        Could we please make a video of us telling our friends and family what Tzivos Hashem does for us. 
+                        I am sure if they realize the impact Tzivos Hashem is having they would donate, after all we will bring Moishiach and everyone wants to have a part in that.
+                    </p>
 
-                <p>Thank you so much,</p>
+                    <p>Thank you so much,</p>
 
-                <p><?= $user['first'] ?> <?= $user['last'] ?></p>
-                <p>
-                    <?= $user['class_grade'] ?> <?= $user['class_sub'] ?><br/>
-                    <?= $user['school_name'] ?>
-                </p>
-            </div>
-        <?php } ?>
+                    <p><?= $user['first'] ?> <?= $user['last'] ?></p>
+                    <p>
+                        <?= $user['class_grade'] ?> <?= $user['class_sub'] ?><br/>
+                        <?= $user['school_name'] ?>
+                    </p>
+                </div>
+            <?php } ?>
+        </div>
     <?php } ?>
+    <script>
+        document.querySelector("#print").onclick = function() { window.print(); }
+    </script>
 </body>
 </html>

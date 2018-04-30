@@ -1,7 +1,7 @@
 /* make it take up a full regular page */
 .letter {
     width: 8.5in;
-    height: 11in;
+    height: 10.11in;
     page-break-after: always;
     margin: 0 auto;
 }
@@ -11,4 +11,23 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+}
+
+button#print {
+    margin: 0 auto;
+    display: block;
+    background: #fff;
+    padding: 5px 8px;
+    border-radius: 5px;
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+@media print {
+    .no-print{
+        visibility: hidden;
+        display: none;
+    }
 }
