@@ -122,8 +122,8 @@ class Donor {
             return true;
 
         $query = mysql_query(
-             " SELECT donation as amount, donation_date, year FROM charidy "
-            ." WHERE ( email = '". $this->email ."' OR phone = '" . $this->phone . "')"
+             " SELECT amount, donation_date, year FROM charidy_donations "
+            ." WHERE donor_id = '" . $this->donor_id . "'"
             .( $year ? " AND year = $year;" : ";" )
         );
         // return true or false depending on if we have any information
