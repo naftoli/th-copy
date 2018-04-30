@@ -122,9 +122,10 @@ class Donor {
             return true;
 
         $query = mysql_query(
-             " SELECT amount, donation_date, year FROM charidy_donations "
+             " SELECT SUM(amount) as amount, donation_date, year FROM charidy_donations "
             ." WHERE donor_id = '" . $this->donor_id . "'"
-            .( $year ? " AND year = $year;" : ";" )
+            .( $year ? " AND year = $year" : "" )
+            ." GROUP BY donor_id, year;"
         );
         // return true or false depending on if we have any information
         if ( mysql_num_rows( $query ) > 0 ){
