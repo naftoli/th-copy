@@ -49,16 +49,28 @@ $callers = Caller::LoadAll();
                     <span id="donate-5776">
                         <i class="fas fa-<?= $donor->getDonated( "5776" ) ? "check" : "times"; ?>"></i>
                         Donated in 5776
-                        <?= $donor->getDonated( "5776" ) ? "( $" . $donor->donations["5776"]["donation"] . " )" : "" ?>
+                        <?= $donor->getDonated( "5776" ) ? "( $" . $donor->donations["5776"]["amount"] . " )" : "" ?>
                     </span>
                     <span id="donate-5777">
                         <i class="fas fa-<?= $donor->getDonated( "5777" ) ? "check" : "times"; ?>"></i>
                         Donated in 5777
-                        <?= $donor->getDonated( "5777" ) ? "( $" . $donor->donations["5777"]["donation"] . " )" : "" ?>
+                        <?= $donor->getDonated( "5777" ) ? "( $" . $donor->donations["5777"]["amount"] . " )" : "" ?>
                     </span>
                     <span id="<?=$year?>">
-                        <i class="fas fa-<?= $donor->onShabbaton( $year ) ? "check" : "times"; ?>"></i>
-                        <?= $donor->onShabbaton( $year ) ?> Children on <?= $year ?> Shabbaton
+                        <?php if( count( $donor->onShabbaton( $year ) ) > 0 ) { ?>
+                            <i class="fas fa-check"></i> Children on <?= $year ?> Shabbaton: 
+                            <?php // list all the kids first names, comma seperated
+                                echo implode(
+                                    ", ",
+                                    array_map( 
+                                        function ( $child ) { return $child['first']; }, 
+                                        $donor->onShabbaton( $year ) 
+                                    )
+                                );
+                            ?>
+                        <?php } else { ?>
+                            <i class="fas fa-times"></i> No Children on <?= $year ?> Shabbaton.
+                        <?php } ?>
                     </span>
                 </div>
             </div>

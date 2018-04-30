@@ -17,9 +17,8 @@ class Donor {
     public $email;
 
     public $donations = [];
+    public $on_shabbaton = [];
     public $caller;
-
-    private $on_shabbaton_cache = false;
 
     /** STATIC FUNCTIONS */
     /**
@@ -123,7 +122,7 @@ class Donor {
             return true;
 
         $query = mysql_query(
-             " SELECT donation, with_matching, donation_date, year FROM charidy "
+             " SELECT donation as amount, donation_date, year FROM charidy "
             ." WHERE ( email = '". $this->email ."' OR phone = '" . $this->phone . "')"
             .( $year ? " AND year = $year;" : ";" )
         );
@@ -148,21 +147,24 @@ class Donor {
     public function onShabbaton( $year ) {
         $year = mysql_real_escape_string( $year );
         // return from the cache if we can
-        if ( $this->on_shabbaton_cache !== false )
-            return $this->on_shabbaton_cache;
+        if ( isset( $this->on_shabbaton[ $year ] ) )
+            return $this->on_shabbaton[ $year ];
+        // set this year to an empty array.
+        $this->on_shabbaton[ $year ] = [];
         
         $query = mysql_query(
-             " SELECT COUNT(*) as total FROM th_chidon "
+             " SELECT first, last FROM th_chidon "
             ." JOIN users USING (user_id) "
             ." JOIN admin_auths ON id = user_id AND auth = 'user' "
             ." WHERE admin_id = '" . $this->parent_admin_id . "' "
             ." AND year = '$year' "
             ." AND date_paid IS NOT NULL; "
         );
+        while ( $row = mysql_fetch_assoc( $query ) ) {
+            $this->on_shabbaton[ $year ][] = $row;
+        }
 
-        $this->on_shabbaton_cache = mysql_fetch_assoc( $query )['total'];
-
-        return $this->on_shabbaton_cache;
+        return $this->on_shabbaton[ $year ];
     }
 
     public function getCaller( $year ) {
