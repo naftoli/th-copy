@@ -1,5 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: *");
+header('Content-Type: application/json');
 require '../../db.php';
 
 $key = mysql_real_escape_string($_POST['key']);
