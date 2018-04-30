@@ -46,7 +46,8 @@ while( $row = mysql_fetch_assoc( $users_query ) ){
         <div class="letters">
             <?php foreach( $school_users as $user ){ ?>
                 <div class="letter">
-                    <p>Dear Mummy and Tatty,</p>
+                    <p style="text-align: center;">B"H</p>
+                    <p>Dear Mommy and Tatty,</p>
 
                     <p>Today I have the chance to get a dollar from the Rebbe.</p>
                     
