@@ -1,6 +1,5 @@
 <?php
-header('Content-Type: application/json');
-require '../../db.php';
+include_once(dirname(__FILE__) . "/header.php");
 
 $key = mysql_real_escape_string($_POST['key']);
 if ($key == 'cth5778!') {
