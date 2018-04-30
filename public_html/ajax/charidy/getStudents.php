@@ -1,31 +1,29 @@
 <?php
-header('Content-Type: application/json');
+include_once(dirname(__FILE__) . "/header.php");
 
-require '../../db.php';
+$key = mysql_real_escape_string( $_POST['key'] );
 
-$key = mysql_real_escape_string($_POST['key']);
 if ($key == 'cth5778!') {
     
-    $students = array();
-    $name = mysql_real_escape_string($_POST['name']);
-    $school_id = mysql_real_escape_string($_POST['id']);
+    $students = [];
+    $name = mysql_real_escape_string( $_POST['name'] );
+    $school_id = mysql_real_escape_string( $_POST['school_id'] );
     
     if (strlen($name) > 2) {
         //get ranks
-        $ranks = array();
-        $sql = "select rank_ord, rank_name from ranks";
+        $ranks = [];
+        $sql = "SELECT rank_ord, rank_name FROM ranks";
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
             $ranks[$row['rank_ord']] = $row['rank_name'];
         }
         
-        $sql = "select u.user_id, u.first, u.last, u.user_serial, c.class_grade, c.class_sub, u.mobile_pic, t.thumb   
-                from users u 
-                join classes c on u.class_id = c.class_id
-                left join thumbs t on u.user_photo_id = t.file_id 
-                where u.school_id = " . $school_id . "
-                and u.last like '" . $name . "%'  
-                order by u.last, u.first, c.class_grade, c.class_sub";
+        $sql = "SELECT u.user_id, u.first, u.last, u.user_serial, c.class_grade, c.class_sub, u.mobile_pic, t.thumb "
+            ." FROM users u JOIN classes c on u.class_id = c.class_id "
+            ." LEFT JOIN thumbs t on u.user_photo_id = t.file_id "
+            ." WHERE u.school_id = " . $school_id . " "
+            ." AND u.last like '" . $name . "%' "
+            ." ORDER BY u.last, u.first, c.class_grade, c.class_sub";
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
             $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
