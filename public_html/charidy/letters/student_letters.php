@@ -75,7 +75,12 @@ while( $row = mysql_fetch_assoc( $users_query ) ){
 
                     <p><?= $user['first'] ?> <?= $user['last'] ?></p>
                     <p>
-                        <?= $user['class_grade'] ?> <?= $user['class_sub'] ?><br/>
+                        <?php
+                            if ( intval($user['class_grade']) > 0 ) {
+                                echo "Grade ";
+                            }
+                        ?>
+                        <?= $user['class_grade'] ?> <?= $user['class_sub'] ? " - " . $user['class_sub'] : "" ?><br/>
                         <?= $user['school_name'] ?>
                     </p>
                 </div>
