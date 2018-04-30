@@ -106,3 +106,6 @@ hakhel/*.png
 /mobile2/
 /mobileDev/
 /xcart5/
+
+# ignore attachments in HelpDesk
+/helpdesk/content/attachments/*
