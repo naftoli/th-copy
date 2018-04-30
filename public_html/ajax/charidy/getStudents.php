@@ -3,7 +3,7 @@ header("Access-Control-Allow-Origin: *");
 require '../../db.php';
 
 $key = mysql_real_escape_string($_POST['key']);
-if ($key == 'th5776') {
+if ($key == 'cth5778!') {
     
     $students = array();
     $name = mysql_real_escape_string($_POST['name']);
