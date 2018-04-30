@@ -38,7 +38,7 @@ $callers = Caller::LoadAll();
             .options { text-align: center; margin-bottom: 5px;}
             a.button { display: inline-block; }
             table { width: 100%; }
-            td, th { padding: 4px 8px; font-size: 14px; border: 1px solid #aaa; word-wrap: break-word; max-width: 170px; }
+            td, th { padding: 4px 8px; font-size: 14px; border: 1px solid #aaa; word-wrap: break-word; max-width: 70px; }
         </style>
     </head>
     <body>
