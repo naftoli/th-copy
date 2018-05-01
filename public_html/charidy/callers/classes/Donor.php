@@ -130,6 +130,7 @@ class Donor {
         // return true or false depending on if we have any information
         if ( mysql_num_rows( $query ) > 0 ){
             while ( $row = mysql_fetch_assoc( $query ) ){
+                $row['amount'] = intval( $row['amount'] );
                 $this->donations[ $row['year'] ] = $row;
             }
             return true;

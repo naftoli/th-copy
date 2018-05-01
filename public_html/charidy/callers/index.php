@@ -43,10 +43,13 @@ $callers = Caller::LoadAll();
             h1, .options, p {
                 text-align: center;
             }
-            select#caller_id { max-width: 500px; display: inline-block; text-transform: capitalize;}
+            select#caller_id, select#print_caller_id { max-width: 500px; display: inline-block; text-transform: capitalize;}
             .options { margin-bottom: 15px; }
             tbody tr:hover {
                 cursor: pointer;
+            }
+            td:nth-child(2), td:last-child {
+                text-transform: capitalize;
             }
             /* fancy checkboxes */
             label.fancy-check-container {display: inline-block;height: 1em;font-size: 25px;}
@@ -75,7 +78,16 @@ $callers = Caller::LoadAll();
         </p>
 
         <div class="options">
-            <a class="btn btn-info" href="caller_letters.php" target="_blank">
+            <select id="print_caller_id" class="form-control">
+                <option value="">All Callers</option>
+            <?php
+                foreach( $callers as $caller ) { ?>
+                    <option value="<?= $caller->charidy_caller_id ?>">
+                        <?= $caller->fullName(); ?>
+                    </option>
+            <?php } ?>
+            </select>
+            <a class="btn btn-info" href="caller_letters.php" id="print_caller_letters" target="_blank">
                 Print Caller Papers
             </a>
         </div>
@@ -99,7 +111,8 @@ $callers = Caller::LoadAll();
                 <thead class="thead-dark">
                     <tr>
                         <th></th><th>Name</th><th>Address</th><th>Zip</th><th>Country</th>
-                        <th>Phone</th><th>E-mail</th><th>Donations</th><th>Shabbaton</th><th>Caller</th>
+                        <th>Phone</th><th>E-mail</th><th>5776</th><th>5777</th><th>5778</th>
+                        <th>Shabbaton</th><th>Caller</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -119,13 +132,9 @@ $callers = Caller::LoadAll();
                         <td><?= $donor->country; ?></td>
                         <td><?= $donor->phoneNumber(); ?></td>
                         <td><?= $donor->email; ?></td>
-                        <td>
-                        <?php
-                            foreach( $donor->donations as $donation_year => $donation ){
-                                echo $donation_year . " ($" . $donation['amount'] . ")<br/>";
-                            }
-                        ?>
-                        </td>
+                        <td>$<?= isset( $donor->donations['5776'] ) ? $donor->donations['5776']['amount'] : 0 ?></td>
+                        <td>$<?= isset( $donor->donations['5777'] ) ? $donor->donations['5777']['amount'] : 0 ?></td>
+                        <td>$<?= isset( $donor->donations['5778'] ) ? $donor->donations['5778']['amount'] : 0 ?></td>
                         <td>
                         <?php
                             foreach( $donor->onShabbaton( $year ) as $child ){

@@ -42,3 +42,13 @@ $("#assign").click( function() {
     });
 
 });
+
+$("#print_caller_letters").click( function() {
+    var print_caller_id = $("#print_caller_id").val();
+
+    if ( print_caller_id ) {
+        event.target.href = "caller_letters.php" + "?id=" + print_caller_id;
+    } else {
+        event.target.href = "caller_letters.php"
+    }
+})
