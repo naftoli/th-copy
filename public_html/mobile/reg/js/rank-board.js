@@ -50,7 +50,7 @@ function rank_board( target, user_id, url ) {
             'Major', 'Colonel', 'General', '1* General', '2* General', '3* General', '4* General', '5* General'
         ];
 
-        var html = '<div id="' + rank_ord + '">';
+        var html = '<div id="rank-' + rank_ord + '">';
         html    +=  '<div class="rank-logo">';
         html    +=      '<div class="rank_name">' + rank_names[rank_ord] + '</div>';
         html    +=      '<div class="rank_promoted">(' + rank_promoted + ')</div>';

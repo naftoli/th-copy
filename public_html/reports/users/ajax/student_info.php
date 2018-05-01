@@ -56,6 +56,22 @@ $user->get_childs_parent();
 $user->get_prizes_won();
 // load this years chidon info
 $th_chidon = $user->get_chidon_info( GlobalSettings::getChidonYear() );
+// get the info for tanya
+$tanya_info_query = mysql_query(
+     " SELECT date_tasks.quantity, date_tasks_marks.done_qty, "
+    ." date_tasks.description, date_tasks_missions.mission_description "
+    ." FROM user_tracks JOIN users USING ( user_id ) "
+    ." JOIN date_tasks_missions USING ( subject_id, track_id, level, school_type_id, lang_id ) "
+    ." JOIN date_tasks USING ( date_tasks_mission_id ) "
+    ." LEFT JOIN date_tasks_marks USING ( user_id, date_task_id ) "
+    ." WHERE users.user_id = '" . $user->user_id . "' AND user_tracks.subject_id = 1 AND grid_id = 8001 "
+    ." AND start_date > " . GlobalSettings::getCurYearDates()['start'] . " "
+);
+
+$tanya_info = [];
+while( $row = mysql_fetch_assoc( $tanya_info_query ) )
+    $tanya_info[] = $row;
+//** Load Tanya information */
 /***************** RENDER REPORT **********************/
 ?>
 <input type="hidden" id="user_id" value="<?= $user->user_id; ?>"/>
@@ -258,12 +274,32 @@ $th_chidon = $user->get_chidon_info( GlobalSettings::getChidonYear() );
         </div>
     <?php } ?>
     <div class="info">
+        <h2>Tanya Bal Peh</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Month</th><th>Quota</th><th>Compleated</th>
+                </tr>
+            </thead> 
+            <tbody>
+                <?php foreach( $tanya_info as $tanya ){ ?>
+                    <tr>
+                        <td><?= $tanya['mission_description'] ?></td>
+                        <td><?= $tanya['quantity'] ?></td>
+                        <td><?= $tanya['done_qty'] ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+            <!-- $tanya_info -->
+        </table>
+    </div>
+    <div class="info">
         <h2>Medal Board</h2>
         <div id="medal-board">
             <div class="loader"></div>
         </div>
     </div>
-    <div class="info">
+    <div>
         <h2>Rank Board</h2>
         <div id="rank-board">
             <div class="loader"></div>
