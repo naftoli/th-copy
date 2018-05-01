@@ -443,11 +443,11 @@ class PointsController extends Zend_Controller_Action
 			),
 			"user_id" => $this->_user_session_data->user_id,
 			"institution_id" => $this->_user_session_data->institution_id,
-			//'_NOHOST' => 1
+			'_NOHOST' => 1
 		);
 		$this->view->boolAjax = isset($arrParams["boolAjax"]);
-		$this->view->arrConfig = $arrConfig = $objConfig->load($arrConfigParams);
-		//echo "<pre>"; print_r($arrConfigParams); print_r($arrConfig); echo "</pre>"; exit; 
+        $this->view->arrConfig = $arrConfig = $objConfig->load($arrConfigParams);
+        // echo "<pre>"; print_r($arrConfigParams); print_r($arrConfig); echo "</pre>"; exit; 
 		$arrUserClassParams = array(
 			'class_role' => 'Student'
 		);
@@ -558,20 +558,6 @@ class PointsController extends Zend_Controller_Action
 		
 		//dumper($arrCampaigns,1,1);
 		
-		$grid = array();
-		if ($taskType == 'tehillim') {
-			$grid = array(8001,8002);
-		} else {
-			if (isset($arrConfig["admin"]["pointsclass{$taskType}tasks"]))
-			{
-				$arrInfo = explode('&', $arrConfig["admin"]["pointsclass{$taskType}tasks"]);
-				foreach ($arrInfo as $strTasks) {
-					$arrTasks = explode('=', $strTasks);
-					$grid[] = $arrTasks[0];
-				}
-			} 
-		}
-		//dumper($grid,1,1);
 		//if ($role->isRole("Teacher") && $this->_user_session_data->institution_id == ) dumper($grid,1,1);
 		$day = date('w', $intStartPoint);
 		$start = unixtojd($intStartPoint);
@@ -603,7 +589,41 @@ class PointsController extends Zend_Controller_Action
 		//dumper($arrLadders,1,1);
 		//dumper($start,1,1);
 		$this->view->arrTasks = $arrTasks = array_hash("grid_id", $objTasks->getMashpiaTasks($taskType, $arrCampaigns, $start, $end, true, $arrLadders));
-		$arrTasksHash = array_hash("subject_id", "grid_id", $arrTasks);
+        $arrTasksHash = array_hash("subject_id", "grid_id", $arrTasks);
+        // If we do not have any settings for this user. Get all the options and set that to be the options
+        if (empty($arrConfig))
+        {
+            $strAllGrids = implode( "=1&", array_keys($arrTasks) ) . "=1";
+            $arrNewConfigParams = array(
+                "set" => "admin",
+                "key" => "pointsclass{$taskType}tasks",
+                "user_id" => $this->_user_session_data->user_id,
+                "institution_id" => $this->_user_session_data->institution_id
+            );
+            $arrConfigResult = array();
+            $arrConfigResult["admin"]["pointsclass{$taskType}tasks"] = $strAllGrids;
+            if ( count( array_keys($arrTasks) ) > 0 ) {
+                $objConfig->save($arrConfigResult, $arrNewConfigParams);
+                // reload them from the DBS
+                // echo "<pre>"; print_r( $arrConfigParams ); die();
+                $this->view->arrConfig = $arrConfig = $objConfig->load($arrConfigParams);
+            }
+        }
+        // set the grid for the page to display
+        $grid = array();
+		if ($taskType == 'tehillim') {
+			$grid = array(8001,8002);
+		} else {
+			if (isset($arrConfig["admin"]["pointsclass{$taskType}tasks"]))
+			{
+				$arrInfo = explode('&', $arrConfig["admin"]["pointsclass{$taskType}tasks"]);
+				foreach ($arrInfo as $strTasks) {
+					$arrTasks = explode('=', $strTasks);
+					$grid[] = $arrTasks[0];
+				}
+			} 
+		}
+		//dumper($grid,1,1);
 		//dumper($arrTasksHash,1,1);
 		// remove all campaign/tasks not selected by admin to show on points grid
 		foreach ($arrCampaigns as $intCampaign => $objCampaign)

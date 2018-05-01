@@ -575,145 +575,143 @@ $(document).ready(function()
 </script>
 <div class="slider" id="pointsgridclasstasks">
 	<style>
-	<!--
-	.marking .names .task_names .cell {
-		border-top:none;
-	}
-	.marking .cell input {
-		border:none;
-		background:none;
-		height:40px;
-		font-size:20px;
-		text-align:center;
-		width:40px;
-	}
-	.marking .task_names .cell, .marking .task_names.row {
-		height:150px !important;
-	}
-	.marking .header_task span {
-		font-size: 12px;
-		line-height:12px !important;
-		margin-left:4px !important;
-		letter-spacing:1px;
-		height:140px !important;
-		width:140px !important;
-	}
-	.marking .header_task b {
-		font-weight: bold !important;
-		font-size: 14px;
-	}
-	.task_names span {
-		overflow: hidden;
-		padding-top: 6px;
-	}
-	.hidden {
-		display: none !important;
-	}
-	.btn {
-		margin: 2px;
-		padding: 2px 4px 2px 4px;
-		border: 1px outset #EAEAEA;
-		display: inline;
-		cursor: default;
-		white-space: nowrap;
-		line-height: 30px;
-	}
-	.btn_select {
-		background-color: #DDD;
-		border: 1px inset #EAEAEA !important;
-	}
-	.date_editor {
-		padding: 8px;
-	}
-	.date_editor td {
-		padding-right: 8px;
-	}
-	.date_editor td.text {
-		padding-top: 3px;
-	}
-	.date_editor input {
-		padding: 2px;
-	}
-	.page_settings li:not(:first-child), .close_settings {
-		display: none;
-	}
-	li.selected {
-		background-color:#D5D8DE;
-	}
-	.column_order_row {
-		background-color:#D5D8DE;
-	}
-	.page_settings li {
-		cursor: pointer;
-	}
-	.noinput {
-		color: gray;
-	}
-	.fill_task .is_checkbox_button {
-		opacity:0;
-	}
-	.mission_window {
-		width:100px;
-	}
-	#col_names.grade {
-		width:100px;
-	}
-	#col_names.grade .cell {
-		border-right: 1px solid #ddd;
-	}
-	@media print
-	{
-		#content {
-			/*overflow:visible !important;*/
-			background:none !important;
-			/*width:auto !important;*/
-			height:auto !important;
-		}
-		#wrapper, #content .slider,
-		#content .slider_container,
-		#content .col_content {
-			float:none !important;
-			width:auto !important;
-			height:auto !important;
-		}
-		#content .col_content {
-			padding:0 !important;
-		}
-		.col_title_bg {
-			background:none !important;
-			height:0 !important;
-			margin:0 !important;
-		}
-		div.module {
-			margin-right:0;
-		}
-		.slider_container  {
-			margin-left:0 !important;
-		}
-		.marking .task_names .cell, .marking .task_names.row {
-			height:148px !important;
-		}
-		.ajax_grid_module {
-			border:0px solid #000 !important;
-		}
-		.dont_print,
-		.marking .cell input,
-		.bottom_buttons,
-		#footer_links,
-		.module.settings {
-			display:none !important;
-		}
-		.header, .body_header_left, .body_header_right, .left_menu, .noprint, #nav, .col_title {
-			display: none !important;
-		}
-		.slider_container .slider {
-			display:none;
-		}
-		.slider_container .slider:last-child {
-			display:block;
-		}
-	}
-	-->
+        .marking .names .task_names .cell {
+            border-top:none;
+        }
+        .marking .cell input {
+            border:none;
+            background:none;
+            height:40px;
+            font-size:20px;
+            text-align:center;
+            width:40px;
+        }
+        .marking .task_names .cell, .marking .task_names.row {
+            height:150px !important;
+        }
+        .marking .header_task span {
+            font-size: 12px;
+            line-height:12px !important;
+            margin-left:4px !important;
+            letter-spacing:1px;
+            height:140px !important;
+            width:140px !important;
+        }
+        .marking .header_task b {
+            font-weight: bold !important;
+            font-size: 14px;
+        }
+        .task_names span {
+            overflow: hidden;
+            padding-top: 6px;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .btn {
+            margin: 2px;
+            padding: 2px 4px 2px 4px;
+            border: 1px outset #EAEAEA;
+            display: inline;
+            cursor: default;
+            white-space: nowrap;
+            line-height: 30px;
+        }
+        .btn_select {
+            background-color: #DDD;
+            border: 1px inset #EAEAEA !important;
+        }
+        .date_editor {
+            padding: 8px;
+        }
+        .date_editor td {
+            padding-right: 8px;
+        }
+        .date_editor td.text {
+            padding-top: 3px;
+        }
+        .date_editor input {
+            padding: 2px;
+        }
+        .page_settings li:not(:first-child), .close_settings {
+            display: none;
+        }
+        li.selected {
+            background-color:#D5D8DE;
+        }
+        .column_order_row {
+            background-color:#D5D8DE;
+        }
+        .page_settings li {
+            cursor: pointer;
+        }
+        .noinput {
+            color: gray;
+        }
+        .fill_task .is_checkbox_button {
+            opacity:0;
+        }
+        .mission_window {
+            width:100px;
+        }
+        #col_names.grade {
+            width:100px;
+        }
+        #col_names.grade .cell {
+            border-right: 1px solid #ddd;
+        }
+        @media print
+        {
+            #content {
+                /*overflow:visible !important;*/
+                background:none !important;
+                /*width:auto !important;*/
+                height:auto !important;
+            }
+            #wrapper, #content .slider,
+            #content .slider_container,
+            #content .col_content {
+                float:none !important;
+                width:auto !important;
+                height:auto !important;
+            }
+            #content .col_content {
+                padding:0 !important;
+            }
+            .col_title_bg {
+                background:none !important;
+                height:0 !important;
+                margin:0 !important;
+            }
+            div.module {
+                margin-right:0;
+            }
+            .slider_container  {
+                margin-left:0 !important;
+            }
+            .marking .task_names .cell, .marking .task_names.row {
+                height:148px !important;
+            }
+            .ajax_grid_module {
+                border:0px solid #000 !important;
+            }
+            .dont_print,
+            .marking .cell input,
+            .bottom_buttons,
+            #footer_links,
+            .module.settings {
+                display:none !important;
+            }
+            .header, .body_header_left, .body_header_right, .left_menu, .noprint, #nav, .col_title {
+                display: none !important;
+            }
+            .slider_container .slider {
+                display:none;
+            }
+            .slider_container .slider:last-child {
+                display:block;
+            }
+        }
 	</style>
 	<div class="col_title">
 		<span><?php print text("Give [|Points|]"); ?></span>
@@ -905,19 +903,16 @@ $(document).ready(function()
 							</div>
 							<div class="cell column_order_row hidden dont_print"><b>Column Order:</b></div>
 							<div class="cell dont_print" style="text-align:left"><b>Auto Fill Down</b></div>
-<?php
-	foreach($this->arrOutResults as $arrOutResult)
-	{
-		$objUser = $arrOutResult['objUser'];
-?>
-							<div class="cell"><?php echo $objUser->first . " " . $objUser->last; ?></div>
-
-<?php
-	}
-?>
-
+                            <?php
+                                foreach($this->arrOutResults as $arrOutResult)
+                                {
+                                    $objUser = $arrOutResult['objUser'];
+                            ?>
+                                <div class="cell"><?php echo $objUser->first . " " . $objUser->last; ?></div>
+                            <?php
+                                }
+                            ?>
 						</div>
-						
 							<div class="mission_container">
 								<div class="missions" style="overflow-x:auto;width:440px;">
 									<div class="col mission set_x_width">
