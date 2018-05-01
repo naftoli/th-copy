@@ -138,12 +138,12 @@
 		else if (!empty($this->objInstitution->logo)) 
 		{
 ?>
-			<div class="logo"><img src="http://mashpia.com/mission_report/schoolLogos/<?=$this->objInstitution->logo?>" /></div>
+			<div class="logo"><img src="//mashpia.com/schoolLogos/<?=$this->objInstitution->logo?>" /></div>
 <?php
 		}
 		else if (!empty($this->objInstitution->school_logo_id))
 		{
-			echo "<div class='logo'><img src='http://mashpia.com/file_view.php?id=" . $this->objInstitution->school_logo_id . "' /></div>";
+			echo "<div class='logo'><img src='//mashpia.com/file_view.php?id=" . $this->objInstitution->school_logo_id . "' /></div>";
 		}
 		else
 		{
@@ -183,7 +183,7 @@
 		if (array_key_exists($this->objCampaign->subject_id, $campaignLogos))
 		{
 ?>
-		<div class="institution"><img src="http://mashpia.com/mission_report/campaignLogos/<?=$campaignLogos[$this->objCampaign->subject_id]?>" /></div>
+		<div class="institution"><img src="//mashpia.com/mission_report/campaignLogos/<?=$campaignLogos[$this->objCampaign->subject_id]?>" /></div>
 <?php
 		} else {
 ?>
