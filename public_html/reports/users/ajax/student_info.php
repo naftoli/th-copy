@@ -284,7 +284,7 @@ while( $row = mysql_fetch_assoc( $tanya_info_query ) )
             <tbody>
                 <?php foreach( $tanya_info as $tanya ){ ?>
                     <tr>
-                        <td><?= $tanya['mission_description'] ?></td>
+                        <td><?= str_replace("שבת מברכים ", "", $tanya['mission_description']) ?></td>
                         <td><?= $tanya['quantity'] ?></td>
                         <td><?= $tanya['done_qty'] ?></td>
                     </tr>
