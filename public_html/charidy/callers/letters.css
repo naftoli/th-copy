@@ -18,7 +18,7 @@
     border-bottom: 1px solid;
 }
 
-h1.donor-name {
+h1.donor-name, .caller-name, .header {
     text-transform: capitalize;
 }
 
