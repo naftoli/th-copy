@@ -68,7 +68,9 @@ $callers = Caller::LoadAll();
         <h1>Charidy Caller Papers Form</h1>
         <p>
             <strong>To print the callers papers:</strong><br/>
-            Please press the "Print Caller Papers" button below. Please note that they will be grouped by caller with a title page for each one.
+            1. Select the Callers you wish to print (or All Callers)<br/>
+            2. Press the "Print Caller Papers" button below.<br/><br/>
+            Please note that they will be grouped by caller with a title page for each one.
         </p>
         <p>
             <strong>To assign callers: </strong><br/>
