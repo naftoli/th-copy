@@ -1,25 +1,43 @@
-$('table').DataTable({
-    "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ]
-});
 
-$("tbody tr").click( function( event ) {
+function loadTable( caller_id ) {
+    var caller_id = $("#caller_id").val();
+    $("#donor-table").html('<div class="loader"></div>');
+    
+    $.post( "ajax/caller_table.php", { caller_id: caller_id }, function( response ){
+        $("#donor-table").html( response );
+        // use datatables
+        $('#donor-table table').DataTable({
+            "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ]
+        });
+
+        $("tbody tr").click( clickRow );
+    });
+}
+
+function clickRow( event ) {
     var checkbox;
-
+    // get the correct scope
     if ( $( event.target ).prop( "tagName" ) === "TD" ) {
         checkbox = $( event.target ).parent().find( "input[type='checkbox']" )[0];
     } else if ( $( event.target ).prop( "tagName" ) === "TD" ) {
         checkbox = $( event.target ).find( "input[type='checkbox']" )[0];
     }
-
+    // and update the checkbox
     if ( checkbox ) {
         checkbox.checked = !checkbox.checked;
-    }
-    
-});
+    }  
+};
 
+// assign a caller
 $("#assign").click( function() {
 
     var caller_id = $("#caller_id").val();
+
+    if ( !caller_id || caller_id === "-1" ){
+        $("#invalid-caller").modal('show')
+        return false;
+    }
+
     var caller_name = $("#caller_id option[value='"+ caller_id + "']").text().trim();
 
     var donor_checkboxes = $("input.donor-select:checked");
@@ -43,6 +61,7 @@ $("#assign").click( function() {
 
 });
 
+// print the caller letters
 $("#print_caller_letters").click( function() {
     var print_caller_id = $("#print_caller_id").val();
 
@@ -51,4 +70,8 @@ $("#print_caller_letters").click( function() {
     } else {
         event.target.href = "caller_letters.php"
     }
+});
+
+$("#load-table").click( function( event ) {
+    loadTable();
 })
