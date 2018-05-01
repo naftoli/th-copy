@@ -64,6 +64,7 @@ if (!isset($menu_type))
             <li></li><br />   
             <li><a href="isserRanks.php">Isser's Rank Summary Report</a></li>
             <LI><A HREF="medals_summary_report.php"><?=T_('Medals Packing List')?></A>
+			<li><a href="shimmy_rank_report.php">Rank Report by Grade</a></li>
             <li></li><br />      
             <li><a href="hachayol_report.php"><?=T_('Hachayol Report')?></A>
             <li><a href="hachayol_report_details.php">Hachayol Report Details</a></li>
