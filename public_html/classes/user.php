@@ -356,6 +356,22 @@ class user {
         
         return $row['chidon'] == 0 && $row['yan'] == 0;
     }
+    
+    /**
+     * Undocumented get_chidon_info
+     *
+     * @return array
+     */
+    public function get_chidon_info( $year )
+    {   // make sure the year is here
+        if ( $year ) $year = mysql_real_escape_string( $year );
+        else return false;
+        // load all the chidon info...
+        $query = mysql_query(
+            "SELECT * FROM th_chidon WHERE year = '$year' AND user_id = '" . $this->user_id . "'"
+        );
+        return mysql_fetch_assoc( $query );
+    }
 
     /**
      * get_prizes_won

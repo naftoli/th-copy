@@ -5,6 +5,7 @@ ini_set("display_errors", 1);
 require_once(dirname(__FILE__).'/../../../classes/user.php');
 require_once(dirname(__FILE__).'/../../../classes/admin.php');
 require_once(dirname(__FILE__).'/../../../calendar.php');
+require_once(dirname(__FILE__).'/../../../class.globalSettings.php');
 
 /***************** AUTHENTICATION **********************/
 $admin_auth = array('school'); 
@@ -53,6 +54,8 @@ $user->get_rank();
 $user->get_medals(0, $user->user_start_date, unixtojd(), 0);
 $user->get_childs_parent();
 $user->get_prizes_won();
+// load this years chidon info
+$th_chidon = $user->get_chidon_info( GlobalSettings::getChidonYear() );
 /***************** RENDER REPORT **********************/
 ?>
 <input type="hidden" id="user_id" value="<?= $user->user_id; ?>"/>
@@ -142,7 +145,6 @@ $user->get_prizes_won();
     </div>
     <div class="info info-quarter">
         <span class="title">Chayolei Soldier:</span>
-        <h3><?= $user->is_chayolei() ? "Yes" : "No"; ?></h3>
     </div>
     <div class="info">
         <h2>Parent Account (#<?= $user->childs_parent->admin_id ?>)</h2>
@@ -190,6 +192,71 @@ $user->get_prizes_won();
             No Prizes Won Yet <i class="fa fa-frown-o" aria-hidden="true"></i>
         <?php } ?>
     </div>
+    <?php if ( $th_chidon ) {?>
+        <div>
+            <h2>Chidon Info (ID: <?= $th_chidon['th_chidon_id'] ?>)</h2>
+            <div class="info centered">
+                <span class="title">Test Scores</span>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>1a</th><th>1b</th><th>2a</th><th>2b</th><th>3a</th><th>3b</th>
+                        </tr>
+                        <tr>
+                            <td><?= $th_chidon['test1a'] ?></td><td><?= $th_chidon['test1b'] ?></td>
+                            <td><?= $th_chidon['test2a'] ?></td><td><?= $th_chidon['test2b'] ?></td>
+                            <td><?= $th_chidon['test3a'] ?></td><td><?= $th_chidon['test3b'] ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="info">
+                <div class="inner-info">
+                    <span class="title">Contestant:</span>
+                    <h3><?= $th_chidon['contestant'] ? "Yes" : "No" ?></h3>
+                </div>
+                <div class="inner-info">
+                    <span class="title">Representative:</span>
+                    <h3><?= $th_chidon['school_rep'] ? "Yes" : "No" ?></h3>
+                </div>
+                <div class="inner-info">
+                    <span class="title">Amount Paid:</span>
+                    <h3>$<?= $th_chidon['paid'] ?></h3>
+                </div>
+                <div class="inner-info">
+                    <span class="title">Grade / Book:</span>
+                    <h3><?= $th_chidon['grade'] ?> / <?= $th_chidon['book'] ?></h3>
+                </div>
+            </div>
+            <div class="info">
+                <span class="title">Shabbaton Host</span>
+                <h3>
+                    <?= $th_chidon['host'] ?> Family<br/>
+                    <?= $th_chidon['host_address1'] ?> <?= $th_chidon['host_address2'] ?><br/>
+                    Btw. <?= $th_chidon['between_streets'] ?><br/>
+                    <?= $th_chidon['host_number'] ?><br/>
+                </h3>
+            </div>
+            <div class="info">
+                <div class="inner-info">
+                    <span class="title">Shoe Size:</span>
+                    <h3><?= $th_chidon['shoe_size']?></h3>
+                </div>
+                <div class="inner-info">
+                    <span class="title">T-Shirt Size:</span>
+                    <h3>$<?= $th_chidon['size'] ?></h3>
+                </div>
+                <div class="inner-info">
+                    <span class="title">Walking Zone:</span>
+                    <h3><?= $th_chidon['walking_zone']?></h3>
+                </div>
+                <div class="inner-info">
+                    <span class="title">Test Language:</span>
+                    <h3><?= $th_chidon['test_lang'] ?></h3>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
     <div class="info">
         <h2>Medal Board</h2>
         <div id="medal-board">

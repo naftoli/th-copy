@@ -20,6 +20,14 @@ require_once(dirname(__FILE__).'/../../header.php');
     <link href="/mobile/reg/css/medal-board/medals.css" rel="stylesheet" type="text/css"/>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <style>
+    table {
+        width: 100%;
+        margin-top: 4px;
+    }
+    th, td {
+        border: 1px solid #888;
+        padding: 4px 8px;
+    }
     .options {
         text-align: center;
     }
@@ -54,7 +62,11 @@ require_once(dirname(__FILE__).'/../../header.php');
     /* prizes section */
     .prize { box-sizing: border-box; padding: 5px; }
     .prize img { max-height: 50px; }
-    .prize span { display: inline-block; vertical-align: top; margin-top: 15px; }
+    .prize span {
+        display: inline-block; vertical-align: top; margin-top: 15px; max-width: 80%; margin-left: 2.5%;
+    }
+    /* Chidon section */
+    .centered { text-align: center; }
     /* medal board */
     #medal-board {text-align: center;}
     .medal-status.progress {
