@@ -20,7 +20,7 @@ $("tbody tr").click( function( event ) {
 $("#assign").click( function() {
 
     var caller_id = $("#caller_id").val();
-    var caller_name = $("option[value='"+ caller_id + "']").text().trim();
+    var caller_name = $("#caller_id option[value='"+ caller_id + "']").text().trim();
 
     var donor_checkboxes = $("input.donor-select:checked");
     var donors = [];
