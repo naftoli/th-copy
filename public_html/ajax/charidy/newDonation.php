@@ -1,0 +1,37 @@
+<?php
+ini_set('display_errors',1);
+include_once(dirname(__FILE__) . "/header.php");
+
+require dirname(__FILE__) . "/../../class.globalSettings.php";
+$year = GlobalSettings::getCurrentYear();
+
+$donor_id = mysql_real_escape_string( $_POST['donor_id'] );
+$donation_amount = mysql_real_escape_string( $_POST['current_amount'] );
+$date = mysql_real_escape_string( $_POST['date_time'] );
+$user_id = isset($_POST['dedication_user_id']) && $_POST['dedication_user_id'] > 0 ?  mysql_real_escape_string( $_POST['dedication_user_id'] ) : 0;
+
+$sql = "insert into charidy_donations
+        set donor_id = " . $donor_id . ",
+        year = " . $year . ",
+        amount = " . $donation_amount . ",
+        donation_date = '" . $date . "',
+        user_id = " . $user_id;
+mysql_query( $sql );
+
+$children = $_POST['children'];
+if (!empty($children)) {
+    foreach ($children as $child) {
+        if ($child['amount']) {
+            $user_id = mysql_real_escape_string( $child['user_id'] );
+            $amount = mysql_real_escape_string( $child['amount'] );
+            $sql = "insert into charidy_donations
+                    set donor_id = " . $donor_id . ",
+                    year = " . $year . ",
+                    amount = " . $amount . ",
+                    donation_date = '" . $date . "',
+                    user_id = " . $user_id . ",
+                    child_only_donation = 1";
+            mysql_query( $sql );
+        }
+    }
+}
