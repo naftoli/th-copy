@@ -1,29 +1,6 @@
 <?php
-ini_set('display_errors', 1);
 $admin_auth = array('school'); 
 require('header.php');
-
-function getMedals( $user, $rank ) {
-	//find out total number of medals earned
-	$sql = "select count(*) as total from medal_marks where user_id = " . $user;
-	$result = mysql_query($sql);
-	$row = mysql_fetch_assoc($result);
-	$numMedals = $row['total'];
-	
-	//find out number of medals earned above rank
-	$info = array();
-	$sql = "select rank_ord, medals_required from ranks where rank_ord in (" . $rank . ',' . ($rank+1) . ") order by rank_ord";
-	$result = mysql_query($sql);
-	while ($row = mysql_fetch_assoc($result)) {
-		$info[$row['rank_ord']] = $row['medals_required'];
-	}
-		
-	return array(
-		//'total'	=>	$info[$rank+1] - $info[$rank],
-		//'done'	=>	$numMedals - $info[$rank]
-		'needed'	=>	$info[$rank+1] - $numMedals
-	);
-}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
@@ -33,6 +10,9 @@ function getMedals( $user, $rank ) {
         <title>Rank Report</title>
         <link href="admin_styles.css" rel="stylesheet" type="text/css">
         <style type='text/css'>
+			body {
+				-webkit-print-color-adjust: exact;
+			}
             p {
                 font-size: 12px;
             }
@@ -100,7 +80,8 @@ function getMedals( $user, $rank ) {
 			    border: 1px solid grey;
             }
             .fill {
-			    background-color: red;
+			    /*background-color: red !important;*/
+				box-shadow: inset 0 0 0 1000px red;
 			}
 			.image {
 				width: 50px;
@@ -108,19 +89,33 @@ function getMedals( $user, $rank ) {
 				border-radius: 50%;
 			}
         </style> 
-        <script type="text/javascript" src="scripts/jquery-1.8.3.js"></script>       
+        <script type="text/javascript" src="scripts/jquery-1.8.3.js"></script>
+		<script>
+			function print_report() {
+				//alert("Please note that Microsoft Edge does NOT support printing medals at the moment. Please use Chrome or Firefox if you can.\n\n"+
+				//	  "If you are using Internet Explorer please go to 'Page Setup' and enable 'Print Background Colors and Images'");
+                window.print();
+            }
+		</script>
     </HEAD>
 
     <BODY>
         <? include('admin_header.php'); ?>
         <h1 class="no-print">Rank Report</h1>
-		
+        
+        <div align='center' class='no-print'>
+            <input type='button' value='Print' onclick='print_report()' />
+        </div>
         <? 
         require_once 'class.adminSchools.php';      
         $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
         $schools = $as->getSchools();        
         $users = array();
+		$medals = array();
+		$thumbs = array();
+		$images = array();
         $grandTotals = array();
+        $sum = 0;
         
         //get rank names
         $rankNames = array();
@@ -131,92 +126,59 @@ function getMedals( $user, $rank ) {
         }
         
         //default sort method
-        $orderBy = " order by s.school_name, c.class_grade, c.class_sub, u.gender, u.last, u.first, rm.rank_ord";
-        
-		$userIDs = array();
+        $orderBy = " order by s.school_name, c.class_grade, c.class_sub, u.last, u.first, rm.rank_ord";
         foreach ( $schools as $id => $school ) {        
-            $sql = "select s.school_name, u.user_id, u.last, u.first, u.gender, c.class_grade, c.class_sub, rm.rank_ord 
+            $sql = "select s.school_name, u.user_id, u.last, u.first, c.class_grade, c.class_sub, rm.rank_ord  
                     from rank_marks rm 
                     join users u using ( user_id ) 
                     join classes c on (c.class_id = u.class_id) 
                     join schools s on (s.school_id = u.school_id) 
-                    where u.user_registered > 0
-					and rm.rank_ord >= 8 
+                    where u.user_registered > 0 
                     and u.school_id = $id $orderBy";
             //echo $sql;
             
-            $result = mysql_query( $sql ) or die( mysql_error() );
+            $result = mysql_query( $sql );
             while ( $row = mysql_fetch_assoc( $result ) ) {
                 $grade = $row['class_grade'] . ( empty( $row['class_sub'] ) ? '' : '-' . $row['class_sub'] ); 
                 $userName = $row['first'] . ' ' . $row['last'];
-                $users[$row['school_name']][$grade][$row['gender']][$userName] = $row['rank_ord'];
-				$userIDs[$row['school_name']][$grade][$row['gender']][$userName] = $row['user_id'];
+                $users[$row['school_name']][$grade][$userName] = $row['rank_ord'];
             }                   
         }
-		
-        //sort by rank
-		$temp = array(); 
-		foreach ( $users as $school => $info ) {
-			foreach ( $info as $grade => $more ) {
-				foreach ( $more as $gender => $user ) {
-					foreach ( $user as $name => $rank ) {
-						$temp[$school][$rank][$grade][$gender][$name] = 1;
-					}
-				}
-			}
-			ksort( $temp[$school] );
-		}
-		unset( $users );
-		$users = $temp;
-		//echo "<pre>"; print_r( $users ); echo "</pre>";
+         
+        //display info
+        foreach( $users as $school => $info ) {
+            $totals = array();              
+            foreach ( $info as $grade => $user ) {
+                echo "<h2>" . $school . ' - ' . $grade . "</h2>";
+                echo "<table>";
+                echo "<tr><th>Student</th><th>Rank</th></tr>";
+                foreach ( $user as $name => $rank ) {
+                    echo "<tr><td>" . $name . "</td><td>" . $rankNames[$rank] . "</td></tr>";
+                    if ( isset( $totals[$rank] ) ) 
+                        $totals[$rank]++;
+                    else 
+                        $totals[$rank] = 1;
+                    if ( isset( $grandTotals[$rank] ) ) 
+                        $grandTotals[$rank]++;
+                    else 
+                        $grandTotals[$rank] = 1;
+                    $sum++;
+                }
+                echo "</table>";
+                echo "<div class='page-break'></div>";
+            }
+            
+            ksort( $totals );
+            echo "<h2>" . $school . " Totals</h2>";
+            echo "<table>";
+            echo "<tr><th>Rank</th><th>Total</th></tr>";
+            foreach ( $totals as $rank => $total ) {
+                echo "<tr><td>" . $rankNames[$rank] . "</td><td>" . $total . "</td></tr>";
+            }
+            echo "</table>";
+            echo "<div class='page-break'></div>";
+        }
         
-		/*
-		$totals = array(); 
-        foreach( $users as $school => $info ) {             
-			foreach ( $info as $rank => $other ) {
-				foreach ( $other as $grade => $more ) {
-					foreach ( $more as $gender => $name ) {					
-						if ( isset( $totals[$school][$rank][$grade][$gender] ) ) 
-							$totals[$school][$rank][$grade][$gender]++;
-						else 
-							$totals[$school][$rank][$grade][$gender] = 1;
-						/*
-						if ( isset( $grandTotals[$grade][$gender][$rank] ) ) 
-							$grandTotals[$grade][$gender][$rank]++;
-						else 
-							$grandTotals[$grade][$gender][$rank] = 1;
-						*/
-						/*
-					}
-				}
-			}
-		}
-		*/	
-		echo "<table>";
-		echo "<tr><th>User ID</th><th>School</th><th>Student</th><th>Rank</th><th>Grade</th><th>Gender</th><th>Medals Left to General</th></tr>";
-		foreach ( $users as $school => $info ) {
-			foreach ( $info as $rank => $other ) {
-				foreach ( $other as $grade => $more ) {
-					foreach ( $more as $gender => $other ) {
-						foreach ( $other as $name => $total ) {
-							echo "<tr><td>" . $userIDs[$school][$grade][$gender][$name] . "</td><td>" . $school . "</td><td>" . $name . "</td><td>" . $rankNames[$rank] .
-								"</td><td>" . $grade . "</td><td>" . $gender . "</td>";
-							if ($rank == 8) {
-								$medals = getMedals( $userIDs[$school][$grade][$gender][$name], $rank );
-								echo "<td>" . $medals['needed'] . "</td>";
-							} else {
-								echo "<td></td>";
-							}
-							echo "</tr>";
-						}
-					}
-				}
-			}
-		}
-		echo "</table>";
-            //echo "<div class='page-break'></div>";
-			//echo "<pre>"; print_r( $totals ); echo "</pre>";
-        /*
         if ( $admin->auth == 'super' ) {
             ksort( $grandTotals ); 
             echo "<h2>Grand Totals</h2>";
@@ -227,7 +189,7 @@ function getMedals( $user, $rank ) {
             }
             echo "</table>";
         }
-        */
+        //echo "Sum: " . $sum;
         ?>
     </body>
 </html>
