@@ -7,23 +7,8 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 if ( $admin_user['auth'] !== "super" ){
     echo "Invalid Account Permissions. HQ account only"; die();
 }
-// load the current year
-require_once(dirname(__FILE__).'/../../class.globalSettings.php');
-$year = GlobalSettings::getCurrentYear(); 
 // load the classes
-require_once( dirname(__FILE__) . "/classes/Donor.php" );
 require_once( dirname(__FILE__) . "/classes/Caller.php" );
-
-$donors = [];
-$donors_query = mysql_query(
-    " SELECT charidy_donors.* FROM charidy_donors WHERE needs_call = 1 OR parent_admin_id IN ( "
-        ." SELECT admin_id FROM th_chidon JOIN users USING (user_id) JOIN admin_auths ON auth='user' "
-        ." AND id = user_id WHERE date_paid IS NOT NULL "
-    .") ORDER BY first_name, last_name;"
-);
-while ( $row = mysql_fetch_assoc( $donors_query ) ){
-    $donors[] = Donor::LoadFromRow( $row );
-}
 
 $callers = Caller::LoadAll();
 ?>
@@ -36,12 +21,19 @@ $callers = Caller::LoadAll();
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/styles/admin/loader.css"/>
         <style>
             body {
                 padding: 50px;
             }
             h1, .options, p {
                 text-align: center;
+            }
+            .loader {
+                border-top: 1.1em solid rgba(128, 128, 128, 0.2);
+                border-bottom: 1.1em solid rgba(128, 128, 128, 0.2);
+                border-right: 1.1em solid rgba(128, 128, 128, 0.2);
+                border-left: 1.1em solid #000;
             }
             select#caller_id, select#print_caller_id { max-width: 500px; display: inline-block; text-transform: capitalize;}
             .options { margin-bottom: 15px; }
@@ -74,9 +66,10 @@ $callers = Caller::LoadAll();
         </p>
         <p>
             <strong>To assign callers: </strong><br/>
-            1. Please select the donors you wish to assign by checking the checkbox next to their name.<br/>
-            2. Then select the caller you wish to assign to them via the dropdown.<br/>
-            3. Press the "Assign Caller" button and wait for the caller names to update.<br/>
+            1. Select the caller you wish to see from the bottom dropdown and press the "Load Caller Table" button below.<br/>
+            2. Select the donors you wish to assign by checking the checkbox next to their name.<br/>
+            3. Then select the caller you wish to assign to them via the dropdown you used in step 1 (bottom).<br/>
+            4. Press the "Assign Caller" button and wait for the caller names to update.<br/>
         </p>
 
         <div class="options">
@@ -96,61 +89,37 @@ $callers = Caller::LoadAll();
         <hr style="display: block">
         <div class="options">
             <select id="caller_id" class="form-control">
+                <option value="">All Callers</option>
+                <option value="-1">N/A</option>
             <?php
                 foreach( $callers as $caller ) { ?>
-                    <option value="<?= $caller->charidy_caller_id ?>">
-                        <?= $caller->fullName(); ?>
-                    </option>
+                    <option value="<?= $caller->charidy_caller_id ?>"><?= $caller->fullName(); ?></option>
                 <? } ?>
             </select>
+            <a class="btn btn-primary" id="load-table" href="#">
+                Load Caller Table
+            </a>
             <a class="btn btn-success" id="assign" href="#">
                 Assign Caller
             </a>
         </div>
 
-        <div class="assign_callers">
-            <table class="table table-striped table-bordered table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th></th><th>Name</th><th>Address</th><th>Zip</th><th>Country</th>
-                        <th>Phone</th><th>E-mail</th><th>5776</th><th>5777</th><th>5778</th>
-                        <th>Shabbaton</th><th>Caller</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php
-                foreach( $donors as $donor ) { 
-                    $donor->getDonated(); ?>
-                    <tr>
-                        <td>
-                            <label class="fancy-check-container">
-                                <input class="donor-select" type="checkbox" data-donor_id="<?= $donor->donor_id ?>"/>
-                                <span class="fancy-check"></span>
-                            </label>
-                        </td>
-                        <td><?= $donor->fullName(); ?></td>
-                        <td><?= $donor->address; ?></td>
-                        <td><?= $donor->zip; ?></td>
-                        <td><?= $donor->country; ?></td>
-                        <td><?= $donor->phoneNumber(); ?></td>
-                        <td><?= $donor->email; ?></td>
-                        <td>$<?= isset( $donor->donations['5776'] ) ? $donor->donations['5776']['amount'] : 0 ?></td>
-                        <td>$<?= isset( $donor->donations['5777'] ) ? $donor->donations['5777']['amount'] : 0 ?></td>
-                        <td>$<?= isset( $donor->donations['5778'] ) ? $donor->donations['5778']['amount'] : 0 ?></td>
-                        <td>
-                        <?php
-                            foreach( $donor->onShabbaton( $year ) as $child ){
-                                echo $child['first'] . "<br/>";
-                            }
-                        ?>
-                        </td>
-                        <td class="caller" id="donor-caller-<?= $donor->donor_id ?>">
-                            <?= $donor->getCaller( $year ) ? $donor->caller->fullName() : "N/A"; ?>
-                        </td>
-                    </tr>
-                <? } ?>
-                </tbody>
-            </table>
+        <div id="donor-table"></div>
+
+        <div class="modal fade" id="invalid-caller" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Caller Error</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        You cannot assign someone to N/A or All Callers at the moment. We apologize for the inconvenice.
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
