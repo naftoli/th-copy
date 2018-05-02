@@ -72,7 +72,7 @@ function build_json( $row ) {
                 'name'          =>  $row2['first'] . ' ' . $row2['last'],
                 'school'        =>  $row2['school_name'],
                 'school_id'     =>  $row2['school_id'], 
-                'picture'       =>  'https://mashpia.com/mobile/reg/' . $row2['mobile_pic']
+                'picture'       =>  "https://mashpia.com/mobile/reg/" . $row2['mobile_pic']
             );
         }
     }
