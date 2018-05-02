@@ -12,10 +12,14 @@ require_once(dirname(__FILE__).'/../../class.globalSettings.php');
 $year = GlobalSettings::getCurrentYear(); 
 // load the list of callers ( sorted by name )
 require_once( dirname(__FILE__) . "/classes/Caller.php" );
+require_once( dirname(__FILE__) . "/classes/NoCaller.php" );
 
 // if we only want to print one caller
 if( isset( $_GET['id'] ) && $_GET['id'] ){
-    $caller = Caller::Load( $_GET['id'] );
+    if ( $_GET['id'] == "-1" )
+        $caller = new NoCaller;
+    else
+        $caller = Caller::Load( $_GET['id'] );
     $callers = [ $caller ]; //cast to array
 } else { // or just get everyone
     $callers = Caller::LoadAll();
