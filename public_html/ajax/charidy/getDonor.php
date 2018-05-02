@@ -54,6 +54,7 @@ function build_json( $row ) {
     $parent_id = $row['parent_admin_id'];
     $phone = $row['phone'];
     $address = $row['address'];
+    $name = $row['first_name'] . ' ' . $row['last_name'];
     
     $response['children'] = array();
     if ($parent_id) {
@@ -84,8 +85,9 @@ function build_json( $row ) {
     $response['parent_id'] = $parent_id;
     $response['phone_number'] = $phone;
     $response['address'] = $address;
+    $response['name'] = $name;
 
-    // figure out which rank was done for last yr
+    // figure out which rank was done for last yr 
     // show next rank for this yr
     $rankDone = 0;
     if ($donation_row['total']) {

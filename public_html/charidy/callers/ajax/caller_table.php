@@ -39,7 +39,7 @@ while ( $row = mysql_fetch_assoc( $donors_query ) ){
         <thead class="thead-dark">
             <tr>
                 <th></th><th>Name</th><th>Address</th><th>Zip</th><th>Country</th>
-                <th>Phone</th><th>E-mail</th><th>5776</th><th>5777</th><th>5778</th>
+                <th>Phone</th><th>New Phone</th><th>E-mail</th><th>5776</th><th>5777</th><th>5778</th>
                 <th>Shabbaton</th><th>Caller</th>
             </tr>
         </thead>
@@ -59,6 +59,7 @@ while ( $row = mysql_fetch_assoc( $donors_query ) ){
                 <td><?= $donor->zip; ?></td>
                 <td><?= $donor->country; ?></td>
                 <td><?= $donor->phoneNumber(); ?></td>
+                <td><?= $donor->mashpiaPhoneNumber(); ?></td>
                 <td><?= $donor->email; ?></td>
                 <td>$<?= isset( $donor->donations['5776'] ) ? $donor->donations['5776']['amount'] : 0 ?></td>
                 <td>$<?= isset( $donor->donations['5777'] ) ? $donor->donations['5777']['amount'] : 0 ?></td>

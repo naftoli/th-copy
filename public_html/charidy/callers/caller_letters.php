@@ -48,7 +48,7 @@ if( isset( $_GET['id'] ) && $_GET['id'] ){
                 Caller: <?= $caller->fullName(); ?>
             </div>
             <h1 class="donor-name"><?= $donor->fullName(); ?></h1>
-            <h1 class="donor-number"><?= $donor->phoneNumber(); ?></h1>
+            <h1 class="donor-number"><?= $donor->phone ? $donor->phoneNumber() : $donor->mashpiaPhoneNumber(); ?></h1>
 
             <h2 class="heading">Donor Information</h2>
             <div class="donor-info">
