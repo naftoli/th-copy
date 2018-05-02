@@ -59,6 +59,17 @@ class Donor {
             "SELECT * FROM charidy_donors ORDER BY first_name, last_name;"
         );
         while ( $row = mysql_fetch_assoc( $query ) ){
+            // if there's no phone number, see if it's connected to parent account and get phone from parent account
+            if ( empty( $row['phone'] ) ) {
+                if ( !empty( $row['parent_admin_id'] ) ) {
+                    $parent_id = $row['parent_admin_id'];
+                    $parent_sql = "select * from admins where admin_id = " . $parent_id;
+                    $parent_result = mysql_query( $parent_sql );
+                    $parent_row = mysql_fetch_assoc( $parent_result );
+                    $row['phone'] = $parent_row['phone3'] ? $parent_row['phone3'] : ( $parent_row['phone4'] ? $parent_row['phone4'] : (
+                                    $parent_row['phone1'] ? $parent_row['phone1'] : ( $parent_row['phone2'] ? $parent_row['phone2'] : '' ) ) );
+                }
+            }
             $donors[] = self::LoadFromRow( $row );
         }
 
