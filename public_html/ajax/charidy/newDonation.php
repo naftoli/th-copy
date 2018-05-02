@@ -5,6 +5,8 @@ include_once(dirname(__FILE__) . "/header.php");
 require dirname(__FILE__) . "/../../class.globalSettings.php";
 $year = GlobalSettings::getCurrentYear();
 
+//print_r( json_encode( $_POST ) );
+
 $donor_id = mysql_real_escape_string( $_POST['donor_id'] );
 $donation_amount = mysql_real_escape_string( $_POST['current_amount'] );
 $date = mysql_real_escape_string( $_POST['date_time'] );
@@ -16,7 +18,13 @@ $sql = "insert into charidy_donations
         amount = " . $donation_amount . ",
         donation_date = '" . $date . "',
         user_id = " . $user_id;
-mysql_query( $sql );
+if (mysql_query( $sql )) {
+    $response['success'] = true;
+} else {
+    $response['success'] = false;
+    $response['error'] = mysql_error() . "<br />" . $sql;
+}
+//echo json_encode($response);
 
 $children = $_POST['children'];
 if (!empty($children)) {
