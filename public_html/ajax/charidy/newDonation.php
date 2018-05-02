@@ -7,7 +7,7 @@ $year = GlobalSettings::getCurrentYear();
 //echo json_encode( $_POST );
 
 $donor_id = mysql_real_escape_string( $_POST['donor_id'] );
-$donation_amount = mysql_real_escape_string( $_POST['current_amount'] );
+$donation_amount = mysql_real_escape_string( $_POST['amount'] );
 $date = mysql_real_escape_string( $_POST['date_time'] );
 $user_serial = isset($_POST['dedication_user_id']) && $_POST['dedication_user_id'] > 0 ?  mysql_real_escape_string( $_POST['dedication_user_id'] ) : 0;
 
