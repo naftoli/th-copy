@@ -161,6 +161,7 @@ while( $row = mysql_fetch_assoc( $tanya_info_query ) )
     </div>
     <div class="info info-quarter">
         <span class="title">Chayolei Soldier:</span>
+        <h3><?= $user->is_chayolei() ? "Yes" : "No"; ?></h3>
     </div>
     <div class="info">
         <h2>Parent Account (#<?= $user->childs_parent->admin_id ?>)</h2>

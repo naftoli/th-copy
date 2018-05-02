@@ -358,7 +358,7 @@ class user {
     }
     
     /**
-     * Undocumented get_chidon_info
+     * get_chidon_info
      *
      * @return array
      */
