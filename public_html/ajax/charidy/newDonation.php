@@ -9,7 +9,17 @@ $year = GlobalSettings::getCurrentYear();
 $donor_id = mysql_real_escape_string( $_POST['donor_id'] );
 $donation_amount = mysql_real_escape_string( $_POST['current_amount'] );
 $date = mysql_real_escape_string( $_POST['date_time'] );
-$user_id = isset($_POST['dedication_user_id']) && $_POST['dedication_user_id'] > 0 ?  mysql_real_escape_string( $_POST['dedication_user_id'] ) : 0;
+$user_serial = isset($_POST['dedication_user_id']) && $_POST['dedication_user_id'] > 0 ?  mysql_real_escape_string( $_POST['dedication_user_id'] ) : 0;
+
+// get user_id
+if ($user_serial > 0) {
+    $sql = "select user_id from users where user_serial = " . $user_serial;
+    $result = mysql_query( $sql );
+    $row = mysql_fetch_assoc( $result );
+    $user_id = $row['user_id'];
+} else {
+    $user_id = 0;
+}
 
 if ($donor_id > 0) {
     $sql = "insert into charidy_donations
