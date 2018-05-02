@@ -58,7 +58,7 @@ function build_json( $row ) {
     
     $response['children'] = array();
     if ($parent_id) {
-        $sql2 = "select u.user_id, u.first, u.last, u.school_id, s.school_name, u.mobile_pic 
+        $sql2 = "select u.user_id, u.first, u.last, u.school_id, s.school_name, u.mobile_pic, u.user_photo_id  
                 from users u
                 join schools s using (school_id) 
                 join admin_auths aa on aa.id = u.user_id
@@ -67,12 +67,17 @@ function build_json( $row ) {
                 and a.admin_id = " . $parent_id;
         $result2 = mysql_query($sql2);
         while ($row2 = mysql_fetch_assoc($result2)) {
+            if ( empty( $row2['mobile_pic'] ) ) {
+                $pic = "https://mashpia.com/file_view.php?id=" . $row2['user_photo_id'];
+            } else {
+                $pic = "https://mashpia.com/mobile/reg/" . $row2['mobile_pic'];
+            }
             $response['children'][] = array(
                 'user_id'       =>  $row2['user_id'],
                 'name'          =>  $row2['first'] . ' ' . $row2['last'],
                 'school'        =>  $row2['school_name'],
                 'school_id'     =>  $row2['school_id'], 
-                'picture'       =>  "https://mashpia.com/mobile/reg/" . $row2['mobile_pic']
+                'picture'       =>  $pic
             );
         }
     }
