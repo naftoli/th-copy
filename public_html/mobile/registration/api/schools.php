@@ -7,7 +7,6 @@ if ( $_SERVER['REQUEST_METHOD'] == "GET" ) {
         " SELECT school_id as id, school_name as name FROM schools "
        ." WHERE chayolei = 1 AND test_school = 0 " // make sure we only get chayolei schools
        ." AND school_era IS NULL " // who are registered for this year
-       ." AND school_id NOT IN ( 269, 61 ) " // exclude Anash Kinder and MyShliach
        ." ORDER BY school_name;" // alphabetically
     );
 
