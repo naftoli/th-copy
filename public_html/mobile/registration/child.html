@@ -11,7 +11,7 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/main.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="loader.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/mobile/css/lib/animate.css" />
 </head>
 <body>
     <header>
@@ -22,8 +22,7 @@
             <div class="container">
                 <div class="row" id="welcome-message" >
                     <div class="col-12">
-                        <h1>Welcome To Tzivos Hashem</h1>
-                        <h2>Is your childs school* registered as a Tzivos Hashem base?</h2>
+                        <h2>Is your child in a Tzivos Hashem Base?*</h2>
                     </div>
                 </div>
                 <div class="row" id="welcome-buttons">
@@ -34,30 +33,34 @@
                         <button class="navigation-button btn btn-lg btn-danger" data-id="no-th-base">No</button>
                     </div>
                 </div>
-                <p class="subtext">*MyShliach is not counted as a school. If your child is in MyShliach please press "No"</p>
+                <p class="subtext">
+                    *Base refers to your child's school.<br/><br/>
+                    If your child is in <strong>MyShliach</strong>, please press <strong>"No"</strong>.<br/><br/>
+                    <strong>If you do not know:</strong> Please press "Yes" and look for your school in the first dropdown. If you do not see it there please press the "My child is not in a Base" button on the top of the page.
+                </p>
             </div>
         </section>
         
-        <section id="th-base">
+        <section id="th-base" class="animated fadeIn">
             <div class="container">
                 <div class="row">
                     <div class="col-12 centered">
                         <a class="navigation-button btn btn-info" data-id="no-th-base" href="#">
-                            My child does not have a Base or is in MyShliach
+                            My child is not in a Base
                         </a>
                     </div>
                 </div>
                 <form id="th-base-child" class="child-form">
                     <div class="row">
                         <div class="col-12">
-                            <label for="class_id">
+                            <label for="th-school_id">
                                 Base ( School )
                             </label>
                             <div class="input-group">
                                 <span class="input-group-btn">
                                     <img src="/mobile/img_new/school-2-color-gray-svg.svg" width="75" />  
                                 </span>
-                                <select class="form-control form-control-lg" id="school_id" name="school_id" required>
+                                <select class="form-control form-control-lg" id="th-school_id" name="school_id" required>
                                     <option value="" selected disabled>Base (School)</option>
                                 </select>
                             </div>
@@ -65,14 +68,14 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <label for="class_id">
+                            <label for="th-class_id">
                                 Platton ( Class / Grade )
                             </label>
                             <div class="input-group">
                                 <span class="input-group-btn">
                                     <img src="/mobile/img_new/arrow-down-color-gray-svg.svg" width="75" />  
                                 </span>
-                                <select class="form-control form-control-lg" id="class_id" name="class_id" required>
+                                <select class="form-control form-control-lg" id="th-class_id" name="class_id" required>
                                     <option value="" selected disabled>Platton ( Class / Grade )</option>
                                 </select>
                             </div>
@@ -80,14 +83,14 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <label for="class_id">
+                            <label for="last">
                                 Last Name
                             </label>
                             <div class="input-group">
                                 <span class="input-group-btn">
                                     <img src="/mobile/img_new/profile-1-color-gray-svg.svg" width="75" />  
                                 </span>
-                                <select class="form-control form-control-lg" id="last" name="last" required>
+                                <select class="form-control form-control-lg" id="th-last" name="last" required>
                                     <option value="" selected disabled>Last Name</option>
                                 </select>
                             </div>
@@ -95,14 +98,14 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <label for="class_id">
+                            <label for="th-dob">
                                 English Date of Birth
                             </label>
                             <div class="input-group">
                                 <span class="input-group-btn">
                                     <img src="/mobile/img_new/calendar-color-gray-svg.svg" width="75" />  
                                 </span>
-                                <input type="date" class="form-control" id="dob" name="dob" placeholder="English Birthday" required>
+                                <input type="date" class="form-control" id="th-dob" name="dob" placeholder="English Birthday" required>
                             </div>
                         </div>
                     </div>
@@ -111,21 +114,183 @@
                             <input type="submit" class="btn btn-primary" value="Add Child" />
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <a href="/mobile/" class="btn btn-primary">Cancel</a>
+                        </div>
+                    </div>
                 </form>
             </div>
         </section>
         
-        <section id="no-th-base">
+        <section id="no-th-base" class="animated fadeIn">
             <div class="container">
                 <div class="row">
                     <div class="col-12 centered">
                         <a class="navigation-button btn btn-info" data-id="th-base" href="#">
-                            My child does have a base.
+                            My child is already in a Base
                         </a>
                     </div>
                 </div>
+                <form id="no-th-base-child" class="child-form">
+                    <div class="row">
+                        <div class="col-12 col-xl-6">
+                            <label for="no-th-school_id">
+                                Base ( School )
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/school-2-color-gray-svg.svg" width="75" />  
+                                </span>
+                                <select class="form-control form-control-lg" id="no-th-school_id" name="school_id" required>
+                                    <option value="269">Anash Kinder (No Base)</option>
+                                    <option value="61" >MyShliach</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <label for="no-th-class_id">
+                                Platton ( Class / Grade )
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/arrow-down-color-gray-svg.svg" width="75" />  
+                                </span>
+                                <select class="form-control form-control-lg" id="no-th-class_id" name="class_id" required>
+                                    <option value="" selected disabled>Platton ( Class / Grade )</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 centered">
+                            <input type="hidden" id="mobile_pic" name="mobile_pic" required/>
+                            <img src="//mashpia.com/mobile/reg/images/addphoto.png" alt="profile" id="user-img"/>
+                        </div>
+                    </div>
+                    <div class="row centered">
+                        <div class="col-4 offset-2">
+                            <label class="radio-label">
+                                <input type="radio" id="gender" name="gender" value="M"/>
+                                <span class="radio"></span>
+                            </label>
+                            <span>Boy</span>
+                        </div>
+                        <div class="col-4">
+                            <label class="radio-label">
+                                <input type="radio" id="gender" name="gender" value="F"/>
+                                <span class="radio"></span>
+                            </label>
+                            <span>Girl</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="first">Name</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" placeholder="First Name" id="first" name="first" required>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" placeholder="Last Name"  id="last"  name="last"  required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="first_he">Hebrew Name</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" placeholder="First Name" id="first_he" name="first_he" required>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" placeholder="Last Name"  id="last_he"  name="last_he"  required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-xl-6">
+                            <label for="no-th-dob">
+                                English Date of Birth
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/calendar-color-gray-svg.svg" width="75" />  
+                                </span>
+                                <input type="date" class="form-control" id="no-th-dob" name="dob" placeholder="English Birthday" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <label for="lang_id">
+                                Mission Language
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/arrow-2-color-gray-svg.svg" width="75" />  
+                                </span>
+                                <select class="form-control form-control-lg" id="lang_id" name="lang_id" required>
+                                    <option value="1">English</option>
+                                    <option value="2">Yiddish</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="submit" class="btn btn-primary" value="Add Child" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <a href="/mobile/" class="btn btn-primary">Cancel</a>
+                        </div>
+                    </div>
+                </form>
             </div>
         </section>
+
+        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Error</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body centered">
+                        <svg id="circle-compleate" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                            <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
+                            <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+                        </svg>
+                        <p id="success">Your child has been added to your account!</p>
+                        <div class="alert alert-success" id="fee-paid" role="alert">
+                            The registration fee has already been paid for through your child’s school, so no additional payment is needed.<br/><br/>
+                            Wishing you lots of Nachas as you watch your child grow as a Chayol in Tzivos Hashem.
+                        </div>
+                        <div class="alert alert-info" id="fee-not-paid" role="alert">
+                            Please note that you still need to register your child from the homepage.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">One More Child</button>
+                        <a class="btn btn-success" href="/mobile/reg/parent_detail.html">I'm Done</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
 
@@ -134,6 +299,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
     <!-- Our JavaScript files -->
+    <script src="/mobile/js/js.cookie.js"></script>
     <script src="/mobile/js/authenticate.js"></script>
     <script src="js/child.js"></script>
 </body>
