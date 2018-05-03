@@ -67,7 +67,7 @@ class platton implements JsonSerializable {
      */
     public function getUsers() {
         $users_query = mysql_query(
-            "SELECT * FROM users WHERE class_id = '" . $this->class_id . "';"
+            "SELECT * FROM users WHERE class_id = '" . $this->class_id . "' ORDER BY last, first;"
         );
         while( $row = mysql_fetch_assoc( $users_query ) ){
             // $this->users[] = new user( $row ); // create a new user and add him to our array
