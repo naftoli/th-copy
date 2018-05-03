@@ -60,13 +60,21 @@ button.navigation-button {
     text-align: center; padding: 15px 0px;
 }
 
-#welcome, #no-th-base {
+#th-base, #no-th-base {
     display: none;
 }
 
-form.child-form {
-    max-width: 500px;
-    margin: 10px auto 0px;
+form.child-form, #welcome {
+    margin: 10px auto;
+}
+
+#welcome {
+    max-width: 600px;
+    height: calc( 100vh - 150px );
+    max-height: 700px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .input-group-btn img {
@@ -75,16 +83,120 @@ form.child-form {
     border-top-left-radius: 0.3rem; border-bottom-left-radius: 0.3rem;
 }
 
-.child-form select, .child-form input {
-    height: calc( 2px + 4rem ) !important;
-    font-size: 1.5em;
+.input-group select, .input-group input {
     border-left: 0px;
 }
 
-.child-form .row {
+.child-form select, .child-form input, .child-form a.btn {
+    height: calc( 2px + 4rem ) !important;
+    font-size: 1.5em;
+}
+
+@media( max-width: 440px ){
+    .child-form select, .child-form input, .child-form a.btn {
+        height: calc( 2px + 2.5rem ) !important;
+        font-size: 1em;
+    }
+    .input-group-btn img {
+        max-height: calc( 2px + 2.5rem );
+        padding: 10%;
+        width: 60px !important;
+    }
+}
+
+.child-form .row, .child-form .col-xl-6 {
     margin-bottom: 10px;
 }
 
-.child-form input[type="submit"]{
+.child-form input[type="submit"], .child-form a.btn {
     width: 100%;
+}
+
+.child-form a.btn {
+    display: flex; align-items: center; justify-content: center;
+}
+
+img#user-img {
+    border-radius: 50%;
+    border: 1px solid;
+    max-height: 125px;
+    max-width: 125px;
+}
+
+.radio-label input[type='radio'] { display: none; }
+.radio-label span.radio {
+    background: url("/mobile/img_new/circle-color-blue-svg.svg"); background-size:cover; 
+    height: 25px;width: 25px;display:inline-block;transition: transform .1s;
+}
+.radio-label input:checked + span.radio {
+    background: url("/mobile/img_new/circle-check-color-svg.svg"); background-size:cover; 
+}
+.radio-label input:hover + span.radio {
+    cursor: pointer;
+}
+.radio-label + span {
+    vertical-align: top;
+}
+
+#errorModal .modal-header {
+    background: #dc3545;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    color: #fff;
+}
+#errorModal .close {
+    color: #fff;
+    opacity: .8;
+}
+#errorModal .close:hover {
+    color: #fff;
+    opacity: 1;
+}
+
+
+/* animated circle */
+.path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 0;
+}
+.path.circle {
+    -webkit-animation: dash 0.9s ease-in-out;
+    animation: dash 0.9s ease-in-out;
+}
+.path.check {
+    stroke-dashoffset: -100;
+    -webkit-animation: dash-check 0.9s 0.35s ease-in-out forwards;
+    animation: dash-check 0.9s 0.35s ease-in-out forwards;
+}
+
+svg#circle-compleate{
+    max-width: 75px;
+}
+
+#successModal div.alert {
+    display: none;
+}
+
+p#success {
+    margin-top: 10px;
+    color: #73af55;
+    font-size: 1.3em;
+}
+
+/* animate the checkmark */
+@-webkit-keyframes dash {
+    0% { stroke-dashoffset: 1000; }
+    100% { stroke-dashoffset: 0; }
+}
+@keyframes dash {
+    0% { stroke-dashoffset: 1000; }
+    100% { stroke-dashoffset: 0; }
+}
+@-webkit-keyframes dash-check {
+    0% { stroke-dashoffset: -100; }
+    100% { stroke-dashoffset: 900; }
+}
+@keyframes dash-check {
+    0% { stroke-dashoffset: -100; }
+    100% { stroke-dashoffset: 900; }
 }
