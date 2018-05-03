@@ -1,10 +1,27 @@
 // wrap all our logic inside childApp
 var childApp = function(){
+    // run these functions when we open the page
+    loadSchools();
+    
+    // define the state
+    var state = {
+        current_page_id: "#"
+    };
 
+    // event listeners
     $( ".navigation-button" ).click( function( event ) {
         showPage( event.target.dataset.id );
     });
 
+    $( "#school_id" ).change( function( event ) {
+        loadClasses( event.target.value );
+    });
+
+    $( "#class_id" ).change( function( event ) {
+        loadUsers( event.target.value );
+    });
+
+    // internal functions ( re-used or seperated code called above )
     function showPage( id ){
         $("#pages > section").hide();
         $("#pages > section#" + id).show();
@@ -15,11 +32,25 @@ var childApp = function(){
             renderDropdown( "school_id", response.data );
         });
     };
-    loadSchools();
 
     function loadClasses( school_id ){
         $.get( "api/classes.php", { 'school_id': school_id }, function( response ) {
             renderDropdown( "class_id", response.data );
+        });
+    }
+
+    function loadUsers( class_id ){
+        $.get( "api/classes.php", { 'class_id': class_id }, function( response ) {
+            // clean the data coming over the wire
+            var names = [];
+            response.data.users.forEach( function( user ){
+                names.push({
+                    "id": user.last,
+                    "name": user.last
+                });
+            });
+            
+            renderDropdown( "last", names );
         });
     }
 
@@ -34,6 +65,7 @@ var childApp = function(){
         $( "select#" + id ).html( html );
     }
 
+    // expose the following
     return {
         loadClasses: loadClasses
     }
