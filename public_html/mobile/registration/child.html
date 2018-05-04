@@ -195,10 +195,10 @@
                             <label for="first_he">Hebrew Name</label>
                         </div>
                         <div class="col-6">
-                            <input type="text" class="form-control" placeholder="First Name" id="first_he" name="first_he" required>
+                            <input type="text" class="form-control" placeholder="שם פרטי" id="first_he" name="first_he" required dir="rtl" />
                         </div>
                         <div class="col-6">
-                            <input type="text" class="form-control" placeholder="Last Name"  id="last_he"  name="last_he"  required>
+                            <input type="text" class="form-control" placeholder="שם משפחה"  id="last_he"  name="last_he"  required dir="rtl" />
                         </div>
                     </div>
 
@@ -293,6 +293,8 @@
     <!-- Our JavaScript files -->
     <script src="/mobile/js/js.cookie.js"></script>
     <script src="/mobile/js/authenticate.js"></script>
+    <script src="lib/hebrew-keyboard/hebrew-keyboard.js"></script>
+    <script> hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right places </script>
     <script src="js/child.js"></script>
 </body>
 </html>
