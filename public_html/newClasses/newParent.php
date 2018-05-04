@@ -55,8 +55,8 @@ class NewParent extends BaseParent {
 		$to = $this->data['admin_email'];
 		$subject = "Your new account with Chayolei Tzivos Hashem.";
 		$html = "Hi!<br /><br />
-A parent account has been created for your child/ren in Chayolei Tzivos Hashem.<br /><br />
-With it, you’ll able to mark you children’s missions daily, straight from any smartphone (or computer). You’ll also be able to check in on their progress reports, personalize their growth, and stay up-to-date on Tzivos Hashem news from bases around the world.  
+A parent account has been created for your child (or children) in Chayolei Tzivos Hashem.<br /><br />
+With it, you’ll able to mark your children’s missions daily, straight from any smartphone (or computer). You will also be able to check in on their progress reports, personalize their growth, and stay up-to-date on Tzivos Hashem news from bases around the world.  
 <br /><br />
 Darchei Hachassidus will come alive in your home as managing your kids’ Chayolei Tzivos Hashem accounts becomes easier than ever. Help your young soldier reach the greatest heights in Hashem’s army. 
 <br /><br />
