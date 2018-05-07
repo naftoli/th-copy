@@ -25,6 +25,7 @@ header {
 
 header, .btn-primary{
     background-color: #2c539e; color: #fff;
+    border-color: #2c419e;
 }
 
 header #title {
@@ -138,6 +139,49 @@ img#user-img {
     vertical-align: top;
 }
 
+/* CropperModal */
+/* Limit image width to avoid overflow the container */
+img {
+    max-width: 100%; /* This rule is very important, please do not ignore this! */
+    max-height: 100%;
+}
+input[type="file"] {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+input[type="file"] + label {
+    font-size: 1.5em; text-align: center; padding: 5px;
+    display: block; margin: 0 auto; max-width: 250px;
+    background: #2c539e; color: #fff; transition: .25s;
+}
+input[type="file"]:focus + label,
+input[type="file"] + label:hover {
+    background-color: #223f75;
+    transform: scale(.9);
+    cursor: pointer;
+}
+
+#cropper-image-container{ 
+    display: none; 
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.control-buttons { display: flex }
+.control-buttons .btn { 
+    flex-grow: 1; 
+    border-top-left-radius: 0px; border-top-right-radius: 0px;
+}
+.cropper-container { 
+    border: 1px solid #223f75; width: 100% !important;
+    border-top-left-radius: 5px; border-top-right-radius: 5px;
+}
+
+/* Error Modal */
 #errorModal .modal-header {
     background: #dc3545;
     border-top-left-radius: 3px;
@@ -199,10 +243,4 @@ p#success {
 @keyframes dash-check {
     0% { stroke-dashoffset: -100; }
     100% { stroke-dashoffset: 900; }
-}
-
-/* Cropper */
-/* Limit image width to avoid overflow the container */
-img {
-    max-width: 100%; /* This rule is very important, please do not ignore this! */
 }
