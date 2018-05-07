@@ -6,27 +6,24 @@
 }
 /* Page header */
 header {
-    display: flex; height: 80px;
+    display: flex; height: 76px;
 }
 header #title {
     font-size: 48px; font-family: font1; font-weight: 700; 
     text-align: center; color: #fff;
     flex-grow: 1; padding-top: 5px;
 }
+@media ( max-width: 524px ){
+    header {
+        height: 45px;
+    }
+    header #title {
+        font-size: 25px;
+    }
+}
 /* Branding */
 header, .btn-primary{
     background-color: #2c539e; color: #fff; border-color: #2c419e;
-}
-/* CSS to make the pages work */
-#pages {
-    padding-top: 10px;
-}
-button.navigation-button {
-    padding: 3% 15%;
-    font-size: 1.5em;
-}
-#th-base, #no-th-base {
-    display: none;
 }
 /* Welcome page */
 #welcome, div#welcome-buttons {
@@ -49,6 +46,17 @@ form.child-form, #welcome {
 #welcome {
     max-width: 600px; height: calc( 100vh - 150px ); max-height: 700px;
     display: flex; justify-content: center; align-items: center;
+}
+/* CSS to make the pages work */
+#pages {
+    padding-top: 10px;
+}
+button.navigation-button {
+    padding: 3% 15%;
+    font-size: 1.5em;
+}
+#welcome, #no-th-base {
+    display: none;
 }
 /* Input styles */
 .input-group-btn img {
