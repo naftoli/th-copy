@@ -196,6 +196,9 @@ input[type="file"] + label:hover {
     color: #fff;
     opacity: 1;
 }
+#errorModal .modal-body{
+    text-align: center; font-size: 1.5em;
+}
 
 
 /* animated circle */
