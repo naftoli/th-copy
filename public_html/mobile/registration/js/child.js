@@ -126,5 +126,14 @@ var childApp = function(){
         if ( !postData.dob.match(/^\d{4}-(0[1-9]|1[0-2])-([0-3][0-9])$/) ){
             return showError( "Please enter a valid Date of Birth (YYYY-MM-DD)" );
         }
+
+        if( !postData.gender ){
+            return showError( "Please select your child's Gender." );
+        }
+
+        $.post("api/user.php", postData, function( response ){
+            console.log( response );
+            debugger;
+        })
     }
 }();
