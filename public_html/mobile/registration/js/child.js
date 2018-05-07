@@ -2,13 +2,17 @@
 var childApp = function(){
     // run these functions when we open the page
     loadSchools();
+    // start up the cropper image_upload library
+    image_upload( {}, onImageUploaded );
+    // use the hebrew keyboard on the given inputs
+    hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right places 
     
     // define the state
     var state = {
         preface: "th-"
     };
 
-    // event listeners
+    /************************ EVENTS ************************/
     $( ".navigation-button" ).click( function( event ) {
         showPage( event.target.dataset.id );
     });
@@ -24,7 +28,7 @@ var childApp = function(){
     $( "#th-base-child" ).submit( registerChild );
     $( "#no-th-base-child" ).submit( createChild );
 
-    // internal functions ( re-used or seperated code called above )
+    /************************ PAGES ************************/
     // change the page (section)
     function showPage( id ){
         state.preface = id.replace("base", "");
@@ -75,6 +79,8 @@ var childApp = function(){
         // only update selects
         $( "select#" + state.preface + id ).html( html );
     }
+
+    /************************ FORMS ************************/
     // convert the form to a JSON object
     function formToJSON( form ){
         var json = {};
@@ -83,7 +89,11 @@ var childApp = function(){
         })
         return json;
     }
-
+    // handle what to do when an image is uploaded
+    function onImageUploaded( data ){
+        $("#user-img").attr("src", data.location );
+        $("#mobile_pic").val( data.filename );
+    }
     // register a existing child
     function registerChild( event ) {
         event.preventDefault();
