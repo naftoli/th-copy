@@ -200,3 +200,9 @@ p#success {
     0% { stroke-dashoffset: -100; }
     100% { stroke-dashoffset: 900; }
 }
+
+/* Cropper */
+/* Limit image width to avoid overflow the container */
+img {
+    max-width: 100%; /* This rule is very important, please do not ignore this! */
+}
