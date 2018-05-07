@@ -35,7 +35,10 @@ $result = move_uploaded_file($file['tmp_name'], $target_file);
 if ( !$result )
     render_json_error( "Failed to save file. Please check for file corruption." );
 // show the response
-render_json_response( "/mashpia/mobile/reg/$file_name" );
+render_json_response([
+    "location" => "/mobile/reg/$file_name",
+    "filename" => $file_name
+]);
 
 /**
  * codeToMessage
