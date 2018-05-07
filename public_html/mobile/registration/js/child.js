@@ -84,13 +84,6 @@ var childApp = function(){
         return json;
     }
 
-    // show an error message
-    function showError( message ){
-        $("#errorModal .modal-body").text( message );
-        $("#errorModal").modal('show');
-        return false;
-    }
-
     // register a existing child
     function registerChild( event ) {
         event.preventDefault();
