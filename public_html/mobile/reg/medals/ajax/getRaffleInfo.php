@@ -15,9 +15,9 @@ function checkYearly( $user_id ) {
 	
 	// send them a message with how many days left/done
 	if ($numTasks >= 160) {
-		$msg = '160 days of tasks completed - eligible for yearly raffle';
+		$msg = "<span style='color: #004E22'>Eligible for end of year raffle</span>";
 	} else {
-		$msg = (160 - intval($numTasks)) . " days of tasks needed to enter the yearly raffle";
+		$msg = (160 - intval($numTasks)) . " days of tasks needed for end of year raffle";
 	}
 	return $msg;
 }
@@ -49,9 +49,9 @@ function checkMonthly( $user_id, $dates ) {
 	}
 	
 	if ($total == $required) {
-		$msg = "Eligible for this month's raffle";
+		$msg = "<span style='color: #004E22'>Eligible for " . $dates['name'] . " raffle</span>";
 	} else {
-		$msg = ($required - $total) . " days of tasks needed for this month's raffle";
+		$msg = ($required - $total) . " days of tasks needed for " . $dates['name'] . " raffle";
 	}
 	return $msg;
 }
@@ -76,9 +76,9 @@ function checkWeekly( $user_id ) {
 	}
 	
 	if ($total == $required) {
-		$msg = "Eligible for this week's raffle";
+		$msg = "<span style='color: #004E22'>Eligible for פרשת " .  $dates['name'] . " raffle</span>";
 	} else {
-		$msg = ($required - $total) . " days of tasks needed for this week's raffle";
+		$msg = ($required - $total) . " days of tasks needed for " .  $dates['name'] . " raffle";
 	}
 	return $msg;
 }
@@ -99,7 +99,7 @@ function checkDaily( $user_id, $dates ) {
 
 function getDates( $type ) {
 	$today = unixtojd();
-	$sql = "select start_date, end_date from raffles
+	$sql = "select start_date, end_date, name from raffles
 			where type = '" . $type . "'
 			and start_date <= " . $today . "
 			and end_date >= " . $today;
@@ -107,7 +107,8 @@ function getDates( $type ) {
 	$row = mysql_fetch_assoc($result);
 	return array(
 		'start'	=>	$row['start_date'],
-		'end'	=>	$row['end_date']
+        'end'	=>	$row['end_date'], 
+        'name'  =>  $row['name']
 	);
 }
 
@@ -115,5 +116,5 @@ function getDates( $type ) {
 $yearly = checkYearly( $user );
 $monthly = checkMonthly( $user );
 $weekly = checkWeekly( $user );
-echo $yearly . "<br />" . $monthly . "<br />" . $weekly;
+echo $weekly . "<br />" . $monthly . "<br />" . $yearly;
 ?>
