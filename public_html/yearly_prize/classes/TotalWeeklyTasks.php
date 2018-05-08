@@ -74,9 +74,9 @@ class TotalWeeklyTasks {
         return $total_weeks;
     }
     // check if a single week has a task
-    public function week_has_task($start, $end, $realtime = false){
+    public function week_has_task($start, $end, $realtime = false, $deleting = false){
 
-        if ( !$realtime ) {
+        if ( !$deleting ) {
             // check if they are marked in teh yearly gift table
             $sql = "SELECT * FROM user_yearly_gift WHERE user_id = " . $this->user_id . " AND start_date = $start AND end_date = $end"; // check if there is a mark for this user on this week
             $query = mysql_query($sql);
@@ -84,7 +84,8 @@ class TotalWeeklyTasks {
                 $row = mysql_fetch_assoc($query);
                 if ($row['marked'] == 1) return true; // if it is set to one, then return true otherwise keep checking the marks
             }
-            return false; // we did not find it above. do not look further
+            if ( !$realtime )
+                return false; // we did not find it above. do not look further
         }
         
         // check if there is any marks during the week period
@@ -130,7 +131,7 @@ class TotalWeeklyTasks {
      * @param [type] $mark_date
      * @return void
      */
-    public static function updateUser( $user_id, $mark_date ){
+    public static function updateUser( $user_id, $mark_date, $deleting = false ){
         $current_parsha_query = mysql_query(
             "SELECT * FROM parshos WHERE start <= '$mark_date' AND end >= '$mark_date' ORDER BY end DESC LIMIT 1;"
         );
@@ -138,7 +139,7 @@ class TotalWeeklyTasks {
 
         $instance = new self( $user_id, $current_parsha['end'] );
         
-        return $instance->week_has_task( $current_parsha['start'], $current_parsha['end'], true );
+        return $instance->week_has_task( $current_parsha['start'], $current_parsha['end'], true, $deleting );
     }
 }
 

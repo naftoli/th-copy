@@ -95,8 +95,8 @@ function delete_task_mark($parameters) {
 			*/
         }
         // update the user for the yearly gift
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
-        
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date, true );
+
 		return 1;
 	}
 	else {
@@ -158,7 +158,7 @@ function delete_daily_task_mark2($parameters) {
 	
 	if ($query) {
         // update the user for the yearly gift
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date, true );
         echo 0;
     } else {
         echo 1;

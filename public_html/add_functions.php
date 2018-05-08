@@ -348,9 +348,9 @@ function add_task_mark($parameters, $update = true) {
 			//if ($user_id == 50689) echo "checking mission completion...";
 			check_mission_completion($user_id, $subject_id, $date_tasks_mission_id, $mark_date, $update);
         }
-        
+
         // update the users information in the user_yearly_gift table
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date, false );
 
 		return json_encode(true);
 	}
@@ -625,7 +625,7 @@ function add_daily_task_mark2($parameters, $update = true)
         echo 0;
         
         // update the users information in the user_yearly_gift table
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date, false );
 	}
 	else
 	{
