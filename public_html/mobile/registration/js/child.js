@@ -110,8 +110,10 @@ var childApp = function(){
             // show the user if the fee is paid for
             if ( response.data.tuition ){
                 $( "#tuition-paid" ).show();
+                $( "#fee-not-paid" ).hide();
             } else {
                 $( "#tuition-paid" ).hide();
+                $( "#fee-not-paid" ).show();
             }
 
             $('#successModal').modal('show');
@@ -132,8 +134,13 @@ var childApp = function(){
         }
 
         $.post("api/user.php", postData, function( response ){
-            console.log( response );
-            debugger;
-        })
+            if( response.success ){
+                $( "#tuition-paid" ).hide();
+                $( "#fee-not-paid" ).show();         
+                $( '#successModal' ).modal('show');
+            } else {
+                showError( response.error );
+            }
+        });
     }
 }();
