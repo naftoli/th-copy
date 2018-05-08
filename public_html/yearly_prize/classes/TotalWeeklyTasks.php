@@ -52,18 +52,29 @@ class TotalWeeklyTasks {
         }
     }
     // count all the weeks with a task since October 20 2017 (default start date)
-    public function total_weeks_with_task(){
+    public function total_weeks_with_task( $realtime = false ){
         $total_weeks = 0; // start with no weeks with tasks
-        // get the user
-        foreach($this->week_dates as $week_dates){
-            if($this->week_has_task($week_dates["start"], $week_dates["end"])){ // get the parts of the week by their start and end keys
-                $total_weeks += 1; // another week has tasks marked for it
-            }
-        };
+        // realtime or cached....
+        if ( $realtime ){
+            foreach($this->week_dates as $week_dates){
+                if( $this->week_has_task( $week_dates["start"], $week_dates["end"], true ) ){ // get the parts of the week by their start and end keys
+                    $total_weeks += 1; // another week has tasks marked for it
+                }
+            };
+        } else { // pull results from the cache table ( do not calculate the information )
+            $total_weeks_query = mysql_query(
+                 " SELECT COUNT(*) as total FROM user_yearly_gift WHERE start_date >= '" . $this->week_dates[0]['start'] ."' "
+                ." AND end_date <= '" . end( $this->week_dates )["end"] . "' "
+                ." AND user_id = '" . $this->user_id . "' "
+                ." AND marked = 1 "
+            );
+            $total_weeks = mysql_fetch_assoc( $total_weeks_query )['total'];
+        }
+        
         return $total_weeks;
     }
     // check if a single week has a task
-    public function week_has_task($start, $end){
+    public function week_has_task($start, $end, $realtime = false){
         // check if they are marked in teh yearly gift table
         $sql = "SELECT * FROM user_yearly_gift WHERE user_id = " . $this->user_id . " AND start_date = $start AND end_date = $end"; // check if there is a mark for this user on this week
         $query = mysql_query($sql);
@@ -71,6 +82,9 @@ class TotalWeeklyTasks {
             $row = mysql_fetch_assoc($query);
             if ($row['marked'] == 1) return true; // if it is set to one, then return true otherwise keep checking the marks
         }
+        if ( !$realtime )
+            return false; // we did not find it above. do not look further
+
         // check if there is any marks during the week period
         $sql = "select dtmarks.date_task_id, count(*) as 'total', dtmarks.done_qty, dt.needed, dt.quantity from user_tracks ut "
             ."join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id "
