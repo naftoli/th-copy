@@ -32,14 +32,14 @@ function create_user( $admin_id ){
     );
     $user->setLang( $lang_id );
 
-    // if( !$user->create() ){
-    //     render_json_error(
-    //         "Could not create user due to unknown server error. "
-    //         ."Please email bugs@tzivoshashem.com with the details of the child you wished to create."
-    //     );
-    // } else {
-    //     render_json_success([
-    //         "user_id" => $user->getUserID()
-    //     ]);
-    // }
+    if( !$user->create() ){
+        render_json_error(
+            "Could not create user due to unknown server error. "
+            ."Please email bugs@tzivoshashem.com with the details of the child you wished to create."
+        );
+    } else {
+        render_json_response([
+            "user_id" => $user->getUserID()
+        ]);
+    }
 }
