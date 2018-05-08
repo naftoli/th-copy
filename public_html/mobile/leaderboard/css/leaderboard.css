@@ -23,7 +23,7 @@ h2#user_position {
     vertical-align: middle;
 }
 .filter-option > span {
-    border: 1px solid #ccc;
+    border: 1px solid #f68829;
     padding: 6px 10px;
     background: #fff;
     transition: .25s;
@@ -31,18 +31,18 @@ h2#user_position {
 }
 .filter-option > span:hover{
     cursor: pointer;
-    background: -webkit-linear-gradient(top,#e9e9e9,#b7b8B9);
+    background: -webkit-linear-gradient(top,#ffcb9d,#f68829);
 }
 .filter-option > input[type="radio"]:checked ~ span {
-    background: -webkit-linear-gradient(top,#e9e9e9,#b7b8B9);
+    background: -webkit-linear-gradient(top,#ffcb9d,#f68829);
 }
 .filter-option:first-child > span {
-    border-bottom-left-radius: 15px;
-    border-top-left-radius: 15px;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
 }
 .filter-option:last-child > span {
-    border-bottom-right-radius: 15px;
-    border-top-right-radius: 15px;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
 }
 input[type="radio"] {
     display: none;
@@ -59,7 +59,11 @@ input[type="radio"] {
 }
 /* Leaderboard */
 .modal-header {
-    border-radius: 3.5px;
+    border-top-right-radius: 3.5px;
+    border-top-left-radius: 3.5px;
+}
+.modal-content{
+    border: none;
 }
 section#leaderboard {
     margin-bottom: 91px;

@@ -52,6 +52,10 @@ nav.navbar .navbar-title {
 select#rank {
     border-radius: 15px;
 }
+.btn.focus, .btn:focus {
+    box-shadow: none;
+}
+
 @media screen and (min-width: 479px) {
     .nav-row img {
         height: 60px;   width: 60px; margin-bottom: 0px;
