@@ -2,11 +2,33 @@
 include_once( dirname(__FILE__) . "/header.php" );
 include_once( dirname(__FILE__) . "/../../../newClasses/newSoldier.php" );
 include_once( dirname(__FILE__) . "/../../../classes/admin.php" );
+include_once( dirname(__FILE__) . "/../../../classes/user.php" );
 
 // POST / creates new user
+// POST /?user_id=<id> updates user
 if ( $_SERVER['REQUEST_METHOD'] == "POST" ) {
-    // and create the user
-    create_user( $admin_id );
+    $user_id = mysql_real_escape_string( $_GET['user_id'] );
+    if ( !$user_id )
+        create_user( $admin_id );
+// GET / returns all users the admin has access to.
+} else if ( $_SERVER['REQUEST_METHOD'] == "GET" ) {
+    index( $admin_id ); // run the index funciton
+}
+
+function index( $admin_id ){
+    $users_query = mysql_query(
+         " SELECT users.* FROM users "
+        ." JOIN admin_auths ON auth='user' AND id=user_id "
+        ." WHERE admin_id='$admin_id' "
+    );
+    $users = fetch_results_assoc( $users_query );
+
+    foreach( $users as $index => $user_row ){
+        $user = new user( $user_row );
+        $users[ $index ] = $user;
+    }
+
+    render_json_response( $users );
 }
 
 function create_user( $admin_id ){

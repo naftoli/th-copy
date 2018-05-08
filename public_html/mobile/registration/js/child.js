@@ -133,7 +133,7 @@ var childApp = function(){
             return showError( "Please select your child's Gender." );
         }
 
-        $.post("api/user.php", postData, function( response ){
+        $.post("api/users.php", postData, function( response ){
             if( response.success ){
                 $( "#tuition-paid" ).hide();
                 $( "#fee-not-paid" ).show();         
