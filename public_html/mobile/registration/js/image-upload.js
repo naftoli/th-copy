@@ -69,7 +69,7 @@ var image_upload = function( options, uploadCallback ) {
 
             $( state.modal + " #cropper-image-container " ).hide();
             $( state.modal + " #cropper-image-loader " ).show();
-            debugger;
+            
             $.ajax('api/tasks/uploadProfilePicture.php', {
                 method: "POST",
                 data: formData,
