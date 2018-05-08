@@ -10,3 +10,13 @@ function showError( message ){
     $("#errorModal").modal('show');
     return false;
 }
+
+function handleAPIResponse( callback ){
+    return function( response ){
+        if ( !response.success ){
+            showError( response.error );
+        } else {
+            callback( response.data );
+        }
+    }
+}
