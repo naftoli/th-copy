@@ -35,6 +35,15 @@
             }
             .body .caption span {color: #004E22;}
             .slider img.active {background: url("/mobile/img_new/circle-color-green-solid-svg.svg"); content: url("/mobile/img_new/circle-color-green-solid-svg.svg");}
+			
+			#raffleInfo {
+				font-size: 18px;
+				color: red;
+				font-style: italic;
+				text-align: center;
+				padding-top: 8px;
+			}
+			
             /*			MEDIA QUERIES */
 			@media(min-width: 767px) and (max-width: 900px) {
 				.header .top-right-space{margin-right: 20px;}
@@ -54,6 +63,7 @@
 			@media screen and (max-width: 639px){
 				#userImg {width: 160px;height: 160px;}
 				.header{height: 300px;}
+				#raffleInfo {font-size: 15px;}
 			}
 			@media( min-width: 640px ){ .header-edit{min-width: 120px;} }
             @media (min-width:  600px) and (max-width: 749px){
@@ -66,6 +76,7 @@
 				.mt1{ margin-top: 15px; }
 				.header-top{ margin-top: 5px; }
                 .header { height: 180px; }
+				#raffleInfo {font-size: 12px;}
 			}
 			@media (max-width:  450px){
 				#userImg {width: 120px;height: 120px;}
@@ -175,13 +186,21 @@
 					<img id="item12" src="/mobile/img_new/circle-color-green-svg.svg">
 					<img id="item13" src="/mobile/img_new/circle-color-green-svg.svg">
                 </div>
+				
+				<div class="span12" style="margin-top:15px;">
+                    <div class="medal-label">
+                        <span>RAFFLE INFO</span>
+                    </div>
+                </div>
+				<div id="raffleInfo" class="clearfix"></div>
+				
                 <div class="span12" style="margin-top:15px;">
                     <div class="medal-label">
                         <span>MEDALS</span>
                     </div>
                 </div>
-                               
                 <div id="medals" class="clearfix"></div>
+				
 			</div>
 		
 			<div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
@@ -293,6 +312,11 @@
     			$(".points").append(success + ' miles');
     			$("#points").val( success );
     		});
+			
+			// get raffle eligibility info
+			$.post('ajax/getRaffleInfo.php', { user_id : id }, function( success ) {
+				$("#raffleInfo").append( success );
+			});
             
             // get the user's information and update the UI
     		$.post('ajax/getUserInfo.php', { user_id : id }, function( success ) {

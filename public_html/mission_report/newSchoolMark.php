@@ -164,7 +164,7 @@ if (isset($_GET['he']) && $_GET['he'] == 1) {
 		<div style="clear: both"></div>
 		
 		<div align="center" style="margin: auto; padding-top: -20px; padding-bottom: 20px;">
-			OR Enter User ID: <input type="text" name="userLookup" id="userLookup" />
+			OR Enter Serial Number: <input type="text" name="userLookup" id="userLookup" />
 			<button id="changeUser">GO</button>
 		</div>
 		
@@ -204,6 +204,12 @@ if (isset($_GET['he']) && $_GET['he'] == 1) {
 	<script src="../scripts/functions.js"></script>
 	<script src="../jquery.js"></script>
 	<script>
+        $( "#userLookup" ).keydown( function( event ){
+            if ( event.keyCode === 13 && event.target.value != "" ) {
+                $("#changeUser").click();
+            }
+        });
+
 		$( function() {
 			$("#changeUser").click( function() {
 				var user = $("#userLookup").val();
@@ -211,15 +217,16 @@ if (isset($_GET['he']) && $_GET['he'] == 1) {
 					$.post('getUserInfo.php', { user : user }, function( success ) {
 						var info = $.parseJSON( success );
 						var school = info.school;
-						var grade = info.grade;
+                        var grade = info.grade;
+                        var user_id = info.user;
 						var start = <?=$_GET['start']?>;
 						var end = <?=$_GET['end']?>;
 						var cols = 1;
-						var str = "newSchoolMark.php?user=" + user + "&school=" + school + "&grade=" + grade + "&start=" + start + "&end=" + end + "&col=" + cols;
+						var str = "newSchoolMark.php?user=" + user_id + "&school=" + school + "&grade=" + grade + "&start=" + start + "&end=" + end + "&col=" + cols;
 						if(school == <?=$school_id?> || <?=$admin_user['auth'] == "super" ? "true" : "false";?>) {
 							window.location = str;
 						} else {
-							alert("Invalid User ID");
+							alert("Invalid Serial Number");
 						}
 					});
 				}
