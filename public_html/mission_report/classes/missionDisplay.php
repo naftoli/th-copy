@@ -280,7 +280,7 @@ abstract class MissionDisplay {
 										echo $user->first . ' ' . $user->last;
 									}
 								}
-								echo " (" . $user->user_id . ")";
+								echo " (" . $user->user_serial . ")";
 								?>
 							</span>
 		    			</td>
