@@ -1,6 +1,7 @@
 <?php
 ini_set('display_errors', 1);
-require_once 'db.php';
+require_once dirname(__FILE__) . '/db.php';
+require_once dirname(__FILE__) . '/yearly_prize/classes/TotalWeeklyTasks.php';
 
 //var_dump($_GET);
 $function_name = $_GET['function_name'];
@@ -346,7 +347,10 @@ function add_task_mark($parameters, $update = true) {
 		if ($mandatory > 0 && $update) {
 			//if ($user_id == 50689) echo "checking mission completion...";
 			check_mission_completion($user_id, $subject_id, $date_tasks_mission_id, $mark_date, $update);
-		}
+        }
+        
+        // update the users information in the user_yearly_gift table
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 
 		return json_encode(true);
 	}
@@ -521,7 +525,7 @@ function add_daily_task_mark2($parameters, $update = true)
 {
 	$user_id = $parameters[0];
 	$date_task_id = $parameters[1];
-	$mark_date = $parameters[2];
+    $mark_date = $parameters[2];
 
 	require_once("classes/rank_updater.php");
 	require_once("classes/medal_updater.php");
@@ -561,10 +565,6 @@ function add_daily_task_mark2($parameters, $update = true)
 				and user_id = " . $user_id . "
 				and mark_date = " . $mark_date;
 	}
-	//if ($user_id == 8273) {
-		//echo $sql;
-		//exit;
-	//}
 	$result = mysql_query($sql);
 	if (mysql_num_rows($result) > 0) {
 		echo 0; // it's already been marked
@@ -621,9 +621,11 @@ function add_daily_task_mark2($parameters, $update = true)
 			// ***** If all of the daily tasks have been completed then we need to see if the mission has been completed ***** //
 
 		}
-		// ***** If the task is mandatory then we need to see if all of the daily tasks have been completed ***** //
-
-		echo 0;
+        // ***** If the task is mandatory then we need to see if all of the daily tasks have been completed ***** //
+        echo 0;
+        
+        // update the users information in the user_yearly_gift table
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 	}
 	else
 	{

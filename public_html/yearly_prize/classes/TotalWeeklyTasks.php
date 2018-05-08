@@ -75,16 +75,18 @@ class TotalWeeklyTasks {
     }
     // check if a single week has a task
     public function week_has_task($start, $end, $realtime = false){
-        // check if they are marked in teh yearly gift table
-        $sql = "SELECT * FROM user_yearly_gift WHERE user_id = " . $this->user_id . " AND start_date = $start AND end_date = $end"; // check if there is a mark for this user on this week
-        $query = mysql_query($sql);
-        if (mysql_num_rows($query) > 0 ) { // if we have an entry in the table
-            $row = mysql_fetch_assoc($query);
-            if ($row['marked'] == 1) return true; // if it is set to one, then return true otherwise keep checking the marks
-        }
-        if ( !$realtime )
-            return false; // we did not find it above. do not look further
 
+        if ( !$realtime ) {
+            // check if they are marked in teh yearly gift table
+            $sql = "SELECT * FROM user_yearly_gift WHERE user_id = " . $this->user_id . " AND start_date = $start AND end_date = $end"; // check if there is a mark for this user on this week
+            $query = mysql_query($sql);
+            if (mysql_num_rows($query) > 0) { // if we have an entry in the table
+                $row = mysql_fetch_assoc($query);
+                if ($row['marked'] == 1) return true; // if it is set to one, then return true otherwise keep checking the marks
+            }
+            return false; // we did not find it above. do not look further
+        }
+        
         // check if there is any marks during the week period
         $sql = "select dtmarks.date_task_id, count(*) as 'total', dtmarks.done_qty, dt.needed, dt.quantity from user_tracks ut "
             ."join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id "
@@ -99,16 +101,44 @@ class TotalWeeklyTasks {
         while ($row = mysql_fetch_assoc($query)){
             if ($row['total'] >= 1 && // if the amount of rows is equal to what is needed (covers daily tasks)
                 ($row['quantity'] ? $row['done_qty'] >= $row['quantity'] : true)){ // make sure that the quanity is good (covers non daily tasks)
-                $this->mark_week_task($start, $end);
+                $this->mark_week_task( $start, $end );
                 return true; // we have a vaid task for the week
             }
         }
+        $this->clear_week_task( $start, $end ); // delete it if it is blank
         return false;
     }
     // insert a row into the user_yearly_gift table
-    private function mark_week_task($start, $end){
+    private function mark_week_task( $start, $end ){
         $sql = "INSERT INTO user_yearly_gift (user_id, start_date, end_date, marked) VALUES ('".$this->user_id."', '$start', '$end', 1)";
         return mysql_query($sql);
+    }
+
+    public function clear_week_task( $start, $end ) {
+        return mysql_query(
+             " DELETE FROM user_yearly_gift WHERE user_id = '" . $this->user_id . "' "
+            ." AND start_date = '$start' AND end_date = '$end' " 
+        );
+    }
+
+    /**
+     * updateUser
+     * 
+     * static funciton that creates an instance under the hood and updates the cache
+     *
+     * @param [type] $user_id
+     * @param [type] $mark_date
+     * @return void
+     */
+    public static function updateUser( $user_id, $mark_date ){
+        $current_parsha_query = mysql_query(
+            "SELECT * FROM parshos WHERE start <= '$mark_date' AND end >= '$mark_date' ORDER BY end DESC LIMIT 1;"
+        );
+        $current_parsha = mysql_fetch_assoc( $current_parsha_query );
+
+        $instance = new self( $user_id, $current_parsha['end'] );
+        
+        return $instance->week_has_task( $current_parsha['start'], $current_parsha['end'], true );
     }
 }
 

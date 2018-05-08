@@ -31,4 +31,4 @@ while( $user = mysql_fetch_assoc( $users_query ) ){
 }
 $time_end = microtime(true);
 
-echo "\n\nUpdated $user_count users in " . ($time_end - $time_start)/60 . "Min";
+echo "\n\nUpdated $user_count users in " . ($time_end - $time_start)/60 . " Minutes\n\n";
