@@ -1,0 +1,33 @@
+/* Welcome page */
+#welcome, div#welcome-buttons {
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+div#welcome-message, div#welcome-buttons, .centered {
+    text-align: center;
+}
+div#welcome-message h1, div#welcome-message h2 {
+    margin-bottom: 15px;
+}
+.subtext {
+    color: #888; font-size: .8em;
+    text-align: center; padding: 15px 0px;
+}
+form.child-form, #welcome {
+    margin: 10px auto;
+}
+#welcome {
+    max-width: 600px; height: calc( 100vh - 150px ); max-height: 700px;
+    display: flex; justify-content: center; align-items: center;
+}
+/* CSS to make the pages work */
+#pages {
+    padding-top: 10px;
+}
+button.navigation-button {
+    padding: 3% 15%;
+    font-size: 1.5em;
+}
+#welcome, #no-th-base {
+    display: none;
+}
