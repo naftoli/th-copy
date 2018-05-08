@@ -92,14 +92,14 @@ $has_campaigns = count(getCampaigns($user_id, false)) > 0 || count($campaigns) =
 <header class="navbar" id="top" role="banner">
     <div class="container">
         <div class="navbar-header">
-        	<h1>My Goals</h1>
+        	<h1>MY GOALS</h1>
         </div>
     </div>
 </header>
 
 <div class="personalImg"></div>
 <div class="bug-report">
-	<img src="/mobile/img_new/report-bug-white-svg.svg" data-user_id="<?=$user_id?>" data-category="Marking Missions" alt="bug-report" />
+	<img src="/mobile/img_new/tools-color-white-svg.svg" data-user_id="<?=$user_id?>" data-category="Marking Missions" alt="bug-report" />
 </div>
 
 <div class="container">
@@ -108,15 +108,15 @@ $has_campaigns = count(getCampaigns($user_id, false)) > 0 || count($campaigns) =
 			<a id="back-link" href="missionsNew.html?id=<?=$user_id?>">
 				<img src="img_new/arrow-1-color-white-svg.svg" style="<?if ($lang == 1) {?>transform: rotateY(180deg);<?}?>"/>
 				Mark Missions
-			</a>
-			<? if ($allow_parent_tasks) { // make sure that the school allows the parents to create a custom task before showing the modal ?>
-				<a id="create-link" data-toggle="modal" data-target="#customTaskModal" href="#" style="text-decoration: none">
-					Create custom task
-				</a>
-			<? } ?>
-			<? if ($has_campaigns) { ?>
+            </a>
+            <? if ($has_campaigns) { ?>
 				<a id="campaign-link" data-toggle="modal" data-target="#enrollCampaignModal" href="#" style="text-decoration: none">
 					Enroll in Campaign
+				</a>
+			<? } ?>
+			<? if ($allow_parent_tasks) { // make sure that the school allows the parents to create a custom task before showing the modal ?>
+				<a id="create-link" data-toggle="modal" data-target="#customTaskModal" href="#" style="text-decoration: none">
+					Add Custom Task
 				</a>
 			<? } ?>
 		</div>

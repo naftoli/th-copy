@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="scripts/jquery-1.8.3.js"></script>
+        <script>
+            var id = setInterval(update, 250);
+            var i = 31;
+            var end = i + 5;
+            function update() {
+                $.post('update_yearly_prize_data.php', { limit : i });
+                if (++i == end) clearInterval(id);
+            }
+        </script>
+    </head>
+</html>

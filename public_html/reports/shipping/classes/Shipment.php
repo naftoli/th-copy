@@ -17,8 +17,7 @@ class Shipment {
     public $date_shipped; // the date that it was shipped
     // value created by DB. just allow access....
     public $date_created; // the date that the shipment was created
-    public $delivered = false;
-    public $archived = false;
+    public $status;
     
     public $description;
     
@@ -91,8 +90,7 @@ class Shipment {
             if ($value instanceof DateTime){ // if a DateTime object was passed in
                 $value = $value->format("Y-m-d H:i:s"); // formatted to YYYY-MM-DD HH:MM:SS for mysql database
             }
-            if($key == "delivered") $value = $value ? "1" : "0"; // set delivered to 1 or 0
-            if($key == "archived") $value = $value ? "1" : "0"; // set delivered to 1 or 0
+            if($prop == "status") $value = in_array($value, []) ? $value : 'planned'; // set status to planned by default
             // set the instance property to the value. Good place to throw errors on bad input
             array_push($insert_column_keys, $prop);
             array_push($insert_column_values, "'$value'");
@@ -128,8 +126,7 @@ class Shipment {
         $instance->name = $row_assoc['name'];
         $instance->date_shipped = $row_assoc['date_shipped'] ? new DateTime($row_assoc['date_shipped']) : $row_assoc['date_shipped']; // if it was shipped then set the variable to a DateTime instance. else, just tie it to the row value
         $instance->date_created = new DateTime($row_assoc['date_created']);
-        $instance->delivered = $row_assoc['delivered'] == "0" ? false : true;
-        $instance->archived = $row_assoc['archived'] == "0" ? false : true;
+        $instance->status = $row_assoc['status'];
         $instance->description = $row_assoc['description'];
         // return the created instance
         return $instance;
@@ -178,11 +175,12 @@ class Shipment {
         if(isset($props['name']) && $props['name']) $this->name = $props['name']; // might be blank...
         if(isset($props['description']) && $props['description']) $this->description = $props['description']; // might be blank...
         if(isset($props['date_shipped'])) $this->date_shipped = $props['date_shipped'];
-        if(isset($props['delivered'])) $this->delivered = $props['delivered'];
-        if(isset($props['archived'])) $this->archived = $props['archived'];
+        if(isset($props['status'])) $this->status = $props['status'];
         
-        $sql = "UPDATE ".self::$table_name." SET name=\"".$this->name."\", date_shipped='".$this->date_shipped->format("Y-m-d H:i:s").
-                "', delivered=".($this->delivered ? "1" : "0").", archived=".($this->archived ? "1" : "0").", description=\"".$this->description."\" WHERE shipment_id=".$this->shipment_id;
+        $sql = "UPDATE ".self::$table_name." SET name=\"".$this->name."\", ";
+        if ( $this->date_shipped ) 
+            $sql .= " date_shipped='".$this->date_shipped->format("Y-m-d H:i:s") ."', ";
+        $sql .= " status='". $this->status . "', description=\"".$this->description."\" WHERE shipment_id=".$this->shipment_id;
                 
         //echo $sql;
         return !!$this->db->query($sql);
@@ -264,7 +262,7 @@ class Shipment {
     }
     
     public function get_status(){
-        return $this->delivered ? "Delivered" : ($this->date_shipped ? "In Transit" : "Planned");
+        return $this->status;
     }
     
     public function get_tracking_numbers(){

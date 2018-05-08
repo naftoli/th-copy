@@ -48,7 +48,7 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 <link href="inc/modals/css/updateMedalRanks.css?v=1.3.2" rel="stylesheet"/>
 <script>
-    var first_name  = "<?=$user->first?>";
-    var last_name   = "<?=$user->last?>";
+    var first_name  = "<?= addslashes( $user->first )?>";
+    var last_name   = "<?= addslashes( $user->last )?>";
 </script>
-<script src="js/updateMedalRanks.js"></script>
+<script src="js/updateMedalRanks.js?v=2.0"></script>

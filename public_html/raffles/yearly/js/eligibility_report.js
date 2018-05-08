@@ -1,0 +1,13 @@
+$( document ).ready( function() {
+    generate_report();
+});
+// set the button to work
+$("#generate").click( generate_report );
+// get the report from the server and display it
+function generate_report() {
+    var school_id = $("select#school_id").val();
+    $("#eligible_table").html( "<div class='loader'></div>" );
+    $.post( "ajax/eligibility_report_table.php", { school_id: school_id }, function( table ) {
+        $("#eligible_table").html( table );
+    });
+}

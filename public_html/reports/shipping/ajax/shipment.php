@@ -19,12 +19,11 @@ $status = ['success' => false, 'error' => "Under Development"];
 
 $shipment_id = isset($_POST['shipment_id']) ? mysql_real_escape_string($_POST['shipment_id']) : false;
 
-$name = mysql_real_escape_string($_POST['name']);
-$school_id = mysql_real_escape_string($_POST['school_id']);
+$name = isset( $_POST['name'] ) ? mysql_real_escape_string($_POST['name']) : false;
+$school_id = isset( $_POST['school_id'] ) ? mysql_real_escape_string($_POST['school_id']) : false;
 $date_shipped = isset($_POST['date_shipped']) ?  mysql_real_escape_string($_POST['date_shipped']) : false;
 $description = isset($_POST['description']) ? mysql_real_escape_string($_POST['description']) : false;
-$delivered = isset($_POST['delivered']) ? $_POST['delivered'] == "true" : false;
-$archived = isset($_POST['archived']) ? $_POST['archived'] == "true" : false;
+$shipment_status = isset($_POST['status']) && $_POST['status'] !== "" ? $_POST['status'] : false;
 
 if(!$name && !$shipment_id) {
     $status['error'] = "Invalid Paramaters";
@@ -35,8 +34,7 @@ $props = ['name' => $name, 'school_id' => $school_id];
 
 if($description) $props['description'] = $description;
 if($date_shipped) $props["date_shipped"] = new DateTime($date_shipped);
-if($delivered) $props['delivered'] = $delivered;
-if($archived) $props['archived'] = $archived;
+if($shipment_status) $props['status'] = $shipment_status;
 
 if(!$shipment_id){ // if a shipment_id was not passed in
     $result = Shipment::create($props); // create a shipment row in the database

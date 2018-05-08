@@ -37,9 +37,8 @@
 		min-height: 90px;
 		transition: 1s ease-in;
     }
-    #backs img {
-    	opacity: 0.3;
-    }
+    #backs img { opacity: 0.3; }
+    #backs img.media-object { opacity: 1; }
     #userImg {
 	    border-radius: 50%;
 	    width: 100%;
@@ -183,6 +182,7 @@
 	}
 	img.menu.left {transform: rotate(180deg);}
 /*	Dropdown arrows*/
+    i.glyphicon.glyphicon-chevron-right { margin-right: 8px; }
 	i.glyphicon.glyphicon-chevron-right, i.glyphicon.glyphicon-chevron-left {background: url("https://mashpia.com/mobile/img_new/arrow-1-color-white-svg.svg");width: 10px;height: 15px;background-repeat: no-repeat;}
 	i.glyphicon.glyphicon-chevron-right:before, i.glyphicon.glyphicon-chevron-left:before{content: "";}
 </style>
@@ -196,7 +196,7 @@
 
 <div class="personalImg"></div>
 <div class="bug-report">
-	<img src="/mobile/img_new/report-bug-white-svg.svg" data-category="Medal Board" alt="bug-report" />
+	<img src="/mobile/img_new/tools-color-white-svg.svg" data-category="Medal Board" alt="bug-report" />
 </div>
 
 <div class="container">
@@ -250,20 +250,6 @@
 				</div>
 			</a>
 		</div>
-	<!--
-		<div class="span3">
-			<a href="#" id="goalsLink">
-			<div class="menu-item">
-				<div class="span12">
-					<img src="images/menu3.png">
-				</div>
-				<div class="span12">
-					<span>Goals</span>
-				</div>
-			</div>
-			</a>
-		</div>
-	-->
 		<div class="span3">
 			<a href="#" id="missionsLink">
 			<div class="menu-item">
@@ -303,6 +289,7 @@
 	</div>
 </div>
 </div>
+<script src="/mobile/js/authenticate.js" defer></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) {
 		$(document).ready(function() {
@@ -314,8 +301,7 @@
 		    
 		    var url = location.toString();
 			var pos = url.indexOf('='); 
-			var id = url.substring( pos+1 );
-			
+            var id = url.substring( pos+1 );
 			var s = id.indexOf('&');
 			var subject = 0;
 			if (s > 0) {
@@ -324,13 +310,13 @@
 				
 				var tPos = temp.indexOf('=');
 				subject = parseInt( temp.substring( tPos+1 ) );
-			}
-			
-			$.post('ajax/checkAuth.php', { user_id : id, admin_id : Cookies.get('admin') }, function( success ) {
-				if (success === "0") {
-					window.location = "/mobile";
-				}
-			});
+            }
+
+            authenticate( id );
+        
+            if( localStorage.getItem("login") == "user" ){
+                $( "#mainLink" ).attr('href', '/mobile/reg/medals/?id=' + id);
+            }
 			
 			$.post('ajax/getPhoto.php', { user_id : id }, function( success ) {
 				var info = $.parseJSON( success );
@@ -500,7 +486,7 @@
 						else 
 							var num = 0;
 						//var html = '<div style="float: left;width: 80%;margin-left: 10%; margin-top: 5%; margin-bottom: 0">';
-						var html = '<div style="margin: 4% 2% 0 2%"><div class="progress"><div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="' + info.total + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + num + '%"><span class="progressText">' + info.total + ' / ' + end + ' missions to Level 10</span></div></div></div>';
+						var html = '<div style="margin: 4% 2% 0 2%"><div class="progress"><div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="' + info.total + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + num + '%"><span class="progressText">' + info.total + ' / ' + end + ' missions to Level 11</span></div></div></div>';
 						$("#gold").after( html );
 						
 						var medals = info.medals;

@@ -84,7 +84,8 @@ class user {
 	public $has_won_big_prize;
 	public $has_won;
 	public $no_of_tickets;
-	public $big_prizes_won;
+    public $big_prizes_won;
+    public $prizes_won = [];
 
 	public $class_grade;
 	public $class_sub;
@@ -163,7 +164,7 @@ class user {
 	
 	public function get_school() {
 		if ($this->school_id > 0) {
-			require_once("school.php");
+			require_once( dirname(__FILE__) . "/school.php" );
 			$sql = "SELECT * FROM schools WHERE school_id=" . $this->school_id;
 			$query = mysql_query($sql);
 			$row = mysql_fetch_assoc($query);
@@ -286,7 +287,126 @@ class user {
 			$school_class = new school_class($row);
 			$this->school_class = $school_class;
 		}
-	}
+    }
+
+    /**
+     * get_profile_picture
+     * 
+     * Returns a absoulte link to the users profile picture.
+     * Note: for mashpia.com, link will begin with /
+     *
+     * @return string
+     */
+    public function get_profile_picture() {
+        if ( $this->mobile_pic ) {
+            return "/mobile/reg/" . $this->mobile_pic;
+        } else if ( $this->user_photo_id ) {
+            return "file_view.php?id=" . $this->user_photo_id;
+        } else {
+            return "/mobile/img_new/boy-color-green-svg.svg";
+        }
+    }
+
+    /**
+     * get_address
+     * 
+     * Returns a formatted user address.
+     *
+     * @param string $newline newline character to break address on
+     * @return string
+     */
+    public function get_address( $newline = "<br/>" )
+    {
+        $address  = $this->user_address1 . $newline;
+        if ($this->user_address2) $address .= $this->user_address2 . $newline;
+        $address .= $this->user_city . ", " . $this->user_state . " " . $this->user_postal;
+        
+        return $address;
+    }
+    /**
+     * get_mission_type
+     * 
+     * Returns the mission type from the school_type_id
+     *
+     * @return string
+     */
+    public function get_mission_type()
+    {
+        if ( in_array( $this->school_type_id, [ 2, 3 ] ) )
+            return "chabad";
+        else if ( in_array( $this->school_type_id, [ 12, 13 ] ) )
+            return "frum";
+        else
+            return "n/a";
+    }
+
+    /**
+     * get_chayolei
+     * 
+     * Returns true if chidon and yan are both false
+     *
+     * @return string
+     */
+    public function is_chayolei()
+    {
+        $query = mysql_query(
+            "SELECT chidon, yan FROM users WHERE user_id = " . $this->user_id . ";"
+        );
+        $row = mysql_fetch_assoc( $query );
+        
+        return $row['chidon'] == 0 && $row['yan'] == 0;
+    }
+    
+    /**
+     * get_chidon_info
+     *
+     * @return array
+     */
+    public function get_chidon_info( $year )
+    {   // make sure the year is here
+        if ( $year ) $year = mysql_real_escape_string( $year );
+        else return false;
+        // load all the chidon info...
+        $query = mysql_query(
+            "SELECT * FROM th_chidon WHERE year = '$year' AND user_id = '" . $this->user_id . "'"
+        );
+        return mysql_fetch_assoc( $query );
+    }
+
+    /**
+     * get_prizes_won
+     * 
+     * Returns array of prizes won
+     *
+     * @return array
+     */
+    public function get_prizes_won()
+    {
+        $query = mysql_query(
+             " SELECT rw.raffle_id, rw.prize_id, shipped, r.name as raffle_name, r.date_ran, r.type, "
+            ." p.name as prize_name_weekly, p.thumbnail, pa.prize_name, pa.prize_image_id "
+            ." FROM raffle_winners rw "
+            ." JOIN raffles r using (raffle_id) "
+            ." LEFT JOIN prizes p on rw.prize_id = p.prize_id and r.type='weekly' "
+            ." LEFT JOIN prizes_auction pa on rw.prize_id = pa.prize_id and r.type='monthly' "
+            ." WHERE user_id = ".$this->user_id.";"
+        );
+        while( $row = mysql_fetch_assoc( $query ) ){
+            $prize_won = [
+                "raffle_id" => $row['raffle_id'],   "prize_id" => $row['prize_id'],
+                "shipped"   => $row['shipped'],     "raffle_name" => $row['raffle_name'],
+            ];
+            if ( $row['type'] == "weekly" ){
+                $prize_won['prize_name'] = $row['prize_name_weekly'];
+                $prize_won['picture']    = $row['thumbnail'];
+            } else {
+                $prize_won['prize_name'] = $row['prize_name'];
+                $prize_won['picture']    = "/file_view.php?id=" . $row['prize_image_id'];
+            }
+            $this->prizes_won[] = $prize_won;
+        }
+        return $this->prizes_won;
+    }
 	
 	public function get_parent() {
 		$this->parent_id = 0;
@@ -336,22 +456,21 @@ class user {
 		else
 			$sql = "SELECT ut.* FROM user_tracks AS ut JOIN subjects AS s USING (subject_id) WHERE ut.user_id=" . $this->user_id . " and ut.enrolled = 1 AND ut.subject_id=" . $subject_id . " ORDER BY s.subject_ord";
 		
-		//echo "<input type='hidden' name='UserTrack' value='$sql'>";
 		$query = mysql_query($sql);
 		
-		if($printing_mode && !$this->print_parent_tasks){
+		if ( $printing_mode && !$this->print_parent_tasks ) {
 			$print_custom_parent_tasks = false;
 		} else {
 			$print_custom_parent_tasks = true;
 		}
 		
-		while ($row = mysql_fetch_assoc($query)) 
-		{
+		while ($row = mysql_fetch_assoc( $query ) ) {
 			if ($row["level"] > 0 && $row["track_id"] > 0) {
 				$user_track = new user_track($row);
 				$user_track->get_subject_info();
 				//if (!empty($tasks)) $user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang);
 				$user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks);
+
 				array_push($this->user_tracks, $user_track);
 				
 				if ($row['subject_id'] == 1) {
@@ -567,7 +686,15 @@ class user {
 			$this->class_grade = $row['class_grade'];
 			$this->class_sub = $row['class_sub'];
 		}
-	}
+    }
+    
+    function get_grade()
+    {
+        $grade = $this->class_grade;
+        if ( $this->class_sub ) $grade .= " - " . $this->class_sub;
+
+        return $grade;
+    }
 	
 	function set_class($row)
 	{

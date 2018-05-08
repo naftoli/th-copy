@@ -1,0 +1,258 @@
+/****************** UTILITY STYLES ******************/
+h2.container-title {
+    text-align: center;
+    margin: 2%;
+    margin-top: 0px;
+    text-transform: capitalize;
+}
+
+section {
+    padding: 2% 0px;
+}
+
+h5.card-title {
+    color: #fff;
+    font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+}
+
+.col-centered {
+    margin: 0 auto;
+}
+
+header {
+    margin-top: 80px;
+}
+
+.navbar-brand {
+    margin-right: 0rem;
+}
+
+@media (min-width: 576px) and ( max-width: 767px ) {
+    .container { max-width: 100%; }
+}
+
+/****************** NAVBAR STYLES ******************/
+nav {
+    z-index: 1;
+}
+#navbar-logo {
+    height: 50px;
+    width: 50px;
+    transition: .25s ease-in-out;
+}
+#navbar-logo:hover, .navbar-share:hover {
+    transform: scale(.8);
+    cursor: pointer;
+}
+
+.navbar-share {
+    transition: .1s ease-in-out;
+    font-size: 2em;
+}
+
+.navbar-share svg {
+    color: #fff;
+}
+
+div#social-dropdown {
+    right: 0;
+    left: auto;
+    min-width: 6rem;
+}
+
+div#social-dropdown a.dropdown-item {
+    font-size: 2em; text-align: center;
+    transition: .25s ease-in-out;
+}
+div#social-dropdown a.dropdown-item:hover{
+    transform: scale( .8 );
+    background: none;
+}
+
+.fa-whatsapp { color: #128C7E; }
+.fa-twitter { color: #1DA1F2; }
+.fa-facebook-square { color: #3b5998; }
+.fa-google-plus { color: #dd4b39 }
+
+/* Text in the center of the navigation bar */
+.navbar-dark .navbar-title {
+    font-size: 2em;
+    font-weight: bold;
+    color: rgba(255,255,255,1);
+    text-align: center;
+    transition: font-size .25s linear;
+}
+@media (max-width: 600px) {
+    #navbar-logo {
+        height: 40px;
+        width: 40px;
+    }
+    .navbar-dark .navbar-title {
+        font-size: 1.4em;
+    }
+    header {
+        margin-top: 60px;
+    }
+}
+@media (max-width: 440px) {
+    .navbar-dark .navbar-title {
+        font-size: 1.05em;
+    }
+}
+
+@media (max-width: 360px) {
+    .navbar-dark .navbar-title {
+        font-size: .9em;
+    }
+}
+
+/****************** REBBE VIDEO STYLES ******************/
+.embed-responsive.embed-responsive-4by3, iframe#rebbeVideo {
+    max-height: 525px;
+}
+iframe#rebbeVideo {
+    background: #000;
+    z-index: 0;
+    transition: margin-top .25s linear;
+}
+
+/****************** ARMY WIDE TALLY STYLES ******************/
+/* .army-totals {
+    background: #2196F3;
+} */
+.army-totals .row > div {
+    margin-top: 2%;
+}
+@media (min-width: 768px ) {
+    .army-totals h5.card-title {
+        font-size: 3em;
+    }
+}
+.army-totals .col-6 {
+    padding: 2%;
+}
+
+.army-totals h5.card-header, .join-us h5.card-header {
+    padding: 1rem;
+}
+@media (max-width: 400px) {
+    .army-totals h5.card-header, .join-us h5.card-header  {
+        padding: .5rem;
+    }
+}
+
+/****************** DOWNLOAD LINK STYLES ******************/
+/* .join-us {
+    background: #673AB7;
+} */
+.join-us .row > div {
+    margin-top: 2%;
+}
+.join-us a {
+    color: #fff;
+    transition: font-size .1s linear;
+}
+.join-us a:hover {
+    text-decoration: none;
+    font-style: italic;
+    font-size: .9em;
+}
+
+/****************** TABLE STYLES ******************/
+/* .amount-table {
+    background: #4CAF50;
+} */
+h2.small {
+    font-size: 1.3em;
+}
+div#grade_dropdown_row {
+    margin: 20px 0px;
+}
+
+span.school_name {
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+}
+td.first{
+    min-width: 90px;
+}
+img.school_logo {
+    display: inline-block;
+    width: 50%;
+    float: right;
+}
+
+td.total {
+    font-size: 1.3em;
+    text-align: center;
+}
+
+div#report-table_wrapper, div.no-padding { padding: 0px;}
+
+td.red { background-color: #ff413b; }
+td.bronze { background: #e36700; }
+td.gold { background-color: #ffcf40; }
+td.silver { background: silver; }
+
+@media ( max-width: 992px ) {
+    td.first{
+        min-width: auto;
+    }
+    img.school_logo {
+        width: 100%;
+        float: none;
+    }
+    span.number {
+        text-align: center;
+        width: 100%;
+        display: inline-block;
+        font-size: 1.5em;
+        padding-top: 15px;
+    }
+}
+
+/****************** FOOTER STYLES ******************/
+footer {
+    background: #2f2f2f;
+    color: #fff;
+    text-align: center;
+    padding: 3%;
+}
+@media (max-width: 600px) {
+    footer {
+        padding: 5%;
+    }
+    .card-body {
+        padding: .8rem;
+    }
+}
+
+/****************** Card Colors (Green, Blue and Red) ******************/
+h5.card-header, h5.card-title {
+    text-align: center;
+}
+h5.card-title {
+    font-size: 2em;
+    margin-bottom: 0px;
+}
+.card-green {
+    border-color: #3c763d !important;
+}
+.card-green .card-body {
+    background: #3c763d !important;
+}
+
+.card-blue {
+    border-color: #337ab7 !important;
+}
+.card-blue .card-body {
+    background: #337ab7 !important;
+}
+
+.card-red {
+    border-color: #d9534f !important;
+}
+.card-red .card-body {
+    background: #d9534f !important;
+}

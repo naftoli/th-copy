@@ -27,7 +27,7 @@ th, td {
 <table border="1" cellspacing="1" style="font-size:12px">
 <tr>
 <th>Parent Info</th>
-<th>Email</th>
+<th>Address</th>
 <th>Children</th>
 <? if ($admin_user['auth'] == 'super' || $admin_user['admin_id'] == 60) : ?>
 <th>School</th>
@@ -58,8 +58,10 @@ $result = mysql_query($sql) or die(mysql_error());
 //echo mysql_num_rows($result);
 
 $total = 0;
+$number = 1;
 while ($row = mysql_fetch_assoc($result)) {
 	$total++;
+	$address = $row['admin_address1'] . "<br />" . $row['admin_city'] . ", " . $row['admin_state'] . " " . $row['admin_postal'] . "<br />" . $row['admin_country'];
 	echo "
 	<tr><td>
 	<strong>Parent Account ID: $row[admin_id]</strong><br />
@@ -70,7 +72,7 @@ while ($row = mysql_fetch_assoc($result)) {
 	Email: $row[admin_email]<br />
 	Cell: $row[admin_phone_mobile]<br />
 	Cell 2: $row[admin_phone_mobile2]
-	</td><td>$row[admin_email]</td>";
+	</td><td>$address</td>";
 	
 	$sql2 = "select u.first, u.last, u.user_serial, s.school_name 
 			from users u, admin_auths aa, schools s  

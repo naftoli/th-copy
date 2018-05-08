@@ -1,5 +1,6 @@
 <?php
 require '../../../db.php';
+$CHIDON_ACTIVE = false; // change to activate chidon
 
 $admin = mysql_real_escape_string( $_POST['admin'] );
 $year = mysql_real_escape_string( $_POST['year'] );
@@ -8,6 +9,9 @@ require 'encrypt.php';
 $admin = encrypt_decrypt('decrypt', $admin);
 
 require 'regFeeSchools.php';
+require_once( dirname(__FILE__) . '/../../../raffles/yearly/classes/YearlyRaffle.php') ;
+use raffles\yearly\YearlyRaffle as YearlyRaffle; // use the raffle class from its namespace
+$yearly_raffle = new YearlyRaffle();
 
 //setup json array of information to pass back to parent_detail page
 $info = array();
@@ -61,7 +65,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 	$children[$row['user_id']]['schoolTypeRegistered'] = $row['reg_type'] > 0 ? 1 : 0;
 	$children[$row['user_id']]['anashkinder'] = $row['school_id'] == 269 ? 1 : 0;
 	$children[$row['user_id']]['myshliach'] = $row['school_id'] == 61 ? 1 : 0;
-	$children[$row['user_id']]['chidon'] = intval($row['class_grade']) > 3 ? 1 : 0;
+	$children[$row['user_id']]['chidon'] = $CHIDON_ACTIVE && intval($row['class_grade']) > 3 ? 1 : 0;
 	$children[$row['user_id']]['chidonRegistered'] = 0;
 	$children[$row['user_id']]['chayolei'] = 1;
 	$children[$row['user_id']]['user_registered'] = $row['user_registered'];
@@ -106,7 +110,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 				$children[$row['user_id']]['chidonRegistered'] = 1;
 				$children[$row['user_id']]['allowRemove'] = 0;
 				// make sure school indicated that child should enroll for shabbaton 
-				if ($cRow['can_enroll'] && in_array($row['user_id'], [15661, 19373])) { // chidon registration is closed.
+				if ($cRow['can_enroll'] && in_array($row['user_id'], [])) { // chidon registration is closed.
 					// make sure school is registered to chidon
 					$chapSql = "SELECT * FROM th_chidon_schools WHERE school_id = " . $row['school_id'] . " AND year = " . $year . " AND registered = 1";
 					$chapRes = mysql_query( $chapSql );
@@ -143,7 +147,8 @@ while ( $row = mysql_fetch_assoc($result) ) {
 	*/
 	//if (in_array($row['school_id'], $showRegister)) {
 	//	$children[$row['user_id']]['needsReg'] = 1;
-	//}	
+	//}
+	
 	$pSql = "select thumb from thumbs t 
 			join users u on u.user_photo_id = t.file_id 
 			where u.user_id = " . $row['user_id'];
@@ -152,6 +157,20 @@ while ( $row = mysql_fetch_assoc($result) ) {
 		$pRow = mysql_fetch_assoc($pRes);
 		$children[$row['user_id']]['thumb']	= $pRow['thumb'];
 	}
+	
+	// get number of days that tasks were done
+	if ($row['user_registered']) {
+        // set the eligibility for the user and get it back
+        $yearly_raffle->set_user_eligibility( $row['user_id'] );
+        $numTasks = $yearly_raffle->eligibility[ $row['user_id'] ];
+        // send them a message with how many days left/done
+		if ($numTasks >= 160) {
+			$children[$row['user_id']]['auctionInfo'] = '160 days of tasks completed - eligible for yearly raffle';
+		} else {
+			$children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . " days of tasks to enter the yearly raffle";
+		}
+	}
+	
 	
 	//if ($row['user_id'] == 26598) {
 	//	$children[$row['user_id']]['chidonShow'] = 1;

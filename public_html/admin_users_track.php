@@ -7,34 +7,40 @@ if ($_GET['debug']) {
 }
 /********************** AUTHENTICATION ******************/
 $admin_auth = array('school');
-require 'header.php';
+require( dirname(__FILE__) . '/header.php' );
 
 $ui_type = 'programs';
-require_once('admin_ui.php');
-require_once('calendar.php');
-$action = gr('action');
+require_once( dirname(__FILE__) . '/admin_ui.php' );
+require_once( dirname(__FILE__) . '/calendar.php' );
+$action = gr( 'action' );
 assure_id_school('school_id');
+// GET/POST paramaters
 $school_id = gri('school_id', -1);
 $class_id = gri('class_id', -1);
 $subject_id = gri('subject_id', -1);
 
-if(!empty($action)) switch($action) {
+/********************** UPDATE THE SYSTEM ******************/
+if( !empty($action) ) switch($action) {
 	case 'save':
-		$result = mq("SELECT users.user_id FROM users LEFT JOIN classes USING (school_id, class_id) WHERE user_registered IS NOT NULL AND school_id = $school_id" . ($class_id != -1 ? " AND class_id = $class_id" : ''));
-		$tracks = gra('tracks');
-		$start_dates = gra('user_start_date');
-		while($row = mysql_fetch_assoc($result)) {
-			if(isset($tracks[$row['user_id']])) {
-				foreach($tracks[$row['user_id']] as $subject_id => $data) {
-					$subject_id = intval($subject_id);
-					$track = intval($data['track']) + 2;
+		$result = mq(
+             " SELECT users.user_id FROM users LEFT JOIN classes USING (school_id, class_id) "
+            ." WHERE user_registered IS NOT NULL AND school_id = $school_id " . 
+            ( $class_id != -1 ? " AND class_id = $class_id " : '') 
+        );
+        $tracks = gra( 'tracks' ); // get the tracks from the GET/POST headers
+        // get the start dates for the user
+		$start_dates = gra( 'user_start_date' );
+		while ( $row = mysql_fetch_assoc( $result ) ) {
+			if ( isset( $tracks[ $row[ 'user_id' ] ] ) ) {
+				foreach( $tracks[ $row['user_id'] ] as $subject_id => $data ) {
+					$subject_id = intval( $subject_id );
+					$track = intval( $data['track'] ) + 2;
 					//$level = max(6, min(intval($data['level']), 14));
 					if($data['track'] == -1) {
 						mq("DELETE FROM user_tracks WHERE user_id = {$row['user_id']} AND subject_id = $subject_id");
 					} else {
 						mq("INSERT INTO user_tracks SET user_id = {$row['user_id']}, subject_id = $subject_id, track_id = $track ON DUPLICATE KEY UPDATE track_id = $track");
 					}
-//					echo("DELETE FROM user_tracks USING user_tracks LEFT JOIN school_type_subjects ON (user_tracks.subject_id = school_type_subjects.subject_id AND school_type_subjects.school_type_id = {$user_row['school_type_id']}) WHERE user_id = $user_id AND school_type_subjects.subject_id IS NULL");
 				}
 			}
 		}
@@ -50,7 +56,7 @@ $tracks_result 		= mq("SELECT track_id, track_name FROM tracks ORDER BY track_na
 $subjects_result	= mq("SELECT subject_name, subject_id, inst_name FROM subjects LEFT JOIN institutions USING (inst_id) WHERE subject_type NOT IN ('school_points', 'home_points') ORDER BY subject_name, subject_id");
 
 $edit_result = false;
-if (isset($_GET['show']) && $_GET['show'] == 'form') {
+if (isset($_GETPOST['show']) && $_GETPOST['show'] == 'form') {
 	$edit_result = mq("SELECT users.user_id, users.first, users.last, users.username, user_start_date, class_grade, class_sub, institutions.inst_name, subjects.subject_name, subjects.subject_id, user_tracks.track_id, user_tracks.level, user_tracks.enrolled FROM users JOIN subjects ON (subject_type NOT IN ('school_points', 'home_points', 'Tanya')) JOIN school_type_subjects USING (subject_id, school_type_id) LEFT JOIN classes USING (school_id, class_id) LEFT JOIN user_tracks USING (subject_id, user_id) LEFT JOIN institutions USING (inst_id) WHERE user_registered IS NOT NULL AND school_id = $school_id" . ($class_id != -1 ? " AND class_id = $class_id" : '') . ($subject_id != -1 ? " AND subject_id = $subject_id" : '') . ($admin_user['auth'] != 'super' ? ' AND institutions.inst_id IN (' . implode(',', $admin_user['inst_ids']) . ')' : '') . ' ORDER BY classes.class_grade, classes.class_sub, users.last, users.first, users.username, institutions.inst_name, subjects.subject_name');
 }
 
@@ -100,7 +106,7 @@ foreach ($sm as $val) {
 				<h1><?=T_('Campaigns')?></h1>
 				<?if($admin_user['auth'] == 'super' || count($admin_user['auths']['school']) != 1) { ?>
 					<? $school_result = mq('SELECT school_id, school_name, inst_name FROM schools JOIN institutions USING (inst_id)' . ($admin_user['auth'] != 'super' ? ' WHERE school_id IN (' . implode(',', $admin_user['auths']['school']) . ')' : '') . ' ORDER BY inst_name, school_name'); ?>
-					<form action="admin_users_track.php" method="get" accept-charset="UTF-8">
+					<form action="admin_users_track.php" method="GET" accept-charset="UTF-8">
 						<p>
 							<label><?=T_('Select Institution')?>:
 								<select name="school_id">
@@ -130,7 +136,7 @@ foreach ($sm as $val) {
 						<div class="content">
 							<div class="infobox2">
 								<h2><?=T_("Soldier's Ladders/Years")?></h2>
-								<form action="admin_users_track.php" method="get" accept-charset="UTF-8">
+								<form action="admin_users_track.php" method="GET" accept-charset="UTF-8">
 									<p>
 										<input type="hidden" name="school_id" value="<?=$school_id?>">
 										<label><?=T_('Show only Platoon')?>:
@@ -148,7 +154,7 @@ foreach ($sm as $val) {
 							</div>
 	
 							<?if($edit_result) { ?>
-								<form>
+								<form action="admin_users_track.php" method="POST">
 								<?php if ($showTehillimQuota) { ?>
 									<p>
 										<input type="submit" value="<?=T_('Save')?>">

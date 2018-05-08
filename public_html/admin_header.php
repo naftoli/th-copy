@@ -241,15 +241,6 @@ $bpOnly = [ 82 ];
 								<li><a href="/yud_alef_nissan_choose.php">Yud Alef Nissan Reports</a></li>
 							</ul>
 						</li>
-						<li>
-							<a href="#">Mishna Bal Peh</a>
-							<ul>
-								<li><a href="/assign_mishnos.php">Assign Mesechtos</a></li>
-								<li><a href="/mark_mishnos.php">Group Marking</a></li>
-								<li><a href="/mark_mishnos_single.php">Individual Marking</a></li>
-								<li><a href="/mishna_report.php">Reports</a></li>
-							</ul>
-						</li>
 					</ul>
 
 		<?php 	} else { // Regular Schools get the following menu
@@ -567,16 +558,6 @@ $bpOnly = [ 82 ];
 									<li><a href="/tehillim_quotas.php">Check Your Tehillim Quotas</a></li>
 									<li><a href="/admin_users_track.php">Change Tehillim Ladder/Quota</a></li>
 									<li><a href="https://vimeo.com/195384916">Shabbos Mevorchim Tutorial Video</a></li>
-								</ul>
-							</li>
-							<li>
-								<a href="#">Mishna Bal Peh</a>
-								<ul>
-									<!--<li><a href="mishna_settings.php">Setup Points Per Line</a></li>-->
-									<li><a href="/assign_mishnos.php">Assign Mesechtos</a></li>
-									<li><a href="/mark_mishnos.php">Group Marking</a></li>
-									<li><a href="/mark_mishnos_single.php">Individual Marking</a></li>
-									<li><a href="/mishna_report.php">Reports</a></li>
 								</ul>
 							</li>
 						</ul>

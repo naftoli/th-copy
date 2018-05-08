@@ -104,7 +104,7 @@
 				
                 <div class="personalImg"></div>
 				<div class="bug-report">
-					<img src="/mobile/img_new/report-bug-white-svg.svg" data-category="Scanning" alt="bug-report" />
+					<img src="/mobile/img_new/tools-color-white-svg.svg" data-category="Scanning" alt="bug-report" />
 				</div>
                 
                 <div id="main" class="alert alert-warning">
@@ -176,17 +176,18 @@
 				</div>
 			</div>
 		</div>
-	</body>
+    </body>
+    <script src="/mobile/js/authenticate.js" defer></script>
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {
 	        var url = location.href.toString();
 	        var pos = url.indexOf('='); 
 	        var user = url.substring(pos+1);
 			
-			var admin = Cookies.get('admin');
-			if (!admin) {
-				window.location = "index.html";
-			}
+			authenticate( user );
+            if( localStorage.getItem("login") == "user" ){
+                $( "#mainLink" ).attr('href', '/mobile/reg/medals/?id=' + user);
+            }
 				
 			$("#missionsLink").attr('href', '../missionsNew.html?id=' + user);
 			$("#goalsLink").attr('href', '../goalsNew.html?id=' + user);
@@ -210,7 +211,7 @@
 	        $("#scan").click( function() {
 	            var card = $("#scanner").val();
 	            if (card.length == 20) {
-	                $.post('ajax/checkCard.php', { admin : admin, user : user, card : card }, function( success ) {
+	                $.post('ajax/checkCard.php', { admin : Cookies.get("admin"), user : user, card : card }, function( success ) {
 	                    alert(success);
 	                });
 	            } else {

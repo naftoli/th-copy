@@ -1,0 +1,1 @@
+<?php header( "Location: student_letters.php "); ?>

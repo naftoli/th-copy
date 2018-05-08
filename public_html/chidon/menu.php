@@ -8,7 +8,7 @@
                    <div class="caption">
 					<h3 class="navi"><a href="index.php">Home </a> </h3>	
                     <h3 class="cinema travel"><a href="chidonoverview.php">Overview</a></h3>
-					<h3 class="cinema travel"><a href="purchase_tickets.php">Event Tickets</a></h3>
+					<!-- <h3 class="cinema travel"><a href="purchase_tickets.php">Event Tickets</a></h3> -->
 					<h3 class="cinema travel"><a href="registration.php">Registration</a></h3>
 					<h3 class="cinema travel"><a href="ordering.php">Textbooks</a></h3>
 					<h3 class="cinema travel"><a href="learning.php">Studying</a></h3>
