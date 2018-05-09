@@ -3,8 +3,9 @@ var findGetParameter; // requires findGetParameter to be loaded first...
 $( document ).ready(function() {
     getLeaderBoard( 0 );
     // setup event listeners for when an option is changed
-    $('#filtersModalContainer').on('hidden.bs.modal', function() {
+    $("#update-leaderboard").click( function() {
         getLeaderBoard( 0 ); // get a new leaderboard
+        $('#filtersModalContainer').modal('hide');
     });
 }); // end on page load anynomus function
 
@@ -42,13 +43,22 @@ function renderLeaderBoard( data, offset ) {
         );
     }
     var html = "";
-    data.leaderboard.forEach( function( user, index ) {
-        html += renderUser( 
-            user,   offset,
-            index + offset + 1,
-            data.user_location
-        );
-    });
+    if ( data.leaderboard.length == 0 ){
+        html = '<div class="container">' +
+                    '<div class="alert alert-branding">' + 
+                        '<strong>No soldiers found.</strong><br/>Please adjust your filters.' +
+                    '</div>' +
+                '</div>';
+    } else {
+        data.leaderboard.forEach( function( user, index ) {
+            html += renderUser( 
+                user,   offset,
+                index + offset + 1,
+                data.user_location
+            );
+        });
+    }
+    
     $("#leaderboard").append( html );
 
     if ( 

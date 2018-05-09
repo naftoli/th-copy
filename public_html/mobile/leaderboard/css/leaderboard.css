@@ -13,6 +13,9 @@ h2#user_position {
     border-bottom: 1px solid #ccc;
     transition: font-size .25s ease-in-out;
 }
+.filter > button {
+    margin-top: 20px;
+}
 .filter-title {
     display: inline-block;
     font-size: 1.2em;
@@ -124,4 +127,11 @@ div#load-more-box {
     h2#user_position {
         font-size: 2em;
     }
+}
+
+.alert-branding{
+    background-color: #f68829;
+    color: #fff; font-size: 1.2em;
+    width: 80%; max-width: 400px;
+    margin: 10% auto;
 }
