@@ -57,7 +57,22 @@ $subjects_result	= mq("SELECT subject_name, subject_id, inst_name FROM subjects 
 
 $edit_result = false;
 if (isset($_GETPOST['show']) && $_GETPOST['show'] == 'form') {
-	$edit_result = mq("SELECT users.user_id, users.first, users.last, users.username, user_start_date, class_grade, class_sub, institutions.inst_name, subjects.subject_name, subjects.subject_id, user_tracks.track_id, user_tracks.level, user_tracks.enrolled FROM users JOIN subjects ON (subject_type NOT IN ('school_points', 'home_points', 'Tanya')) JOIN school_type_subjects USING (subject_id, school_type_id) LEFT JOIN classes USING (school_id, class_id) LEFT JOIN user_tracks USING (subject_id, user_id) LEFT JOIN institutions USING (inst_id) WHERE user_registered IS NOT NULL AND school_id = $school_id" . ($class_id != -1 ? " AND class_id = $class_id" : '') . ($subject_id != -1 ? " AND subject_id = $subject_id" : '') . ($admin_user['auth'] != 'super' ? ' AND institutions.inst_id IN (' . implode(',', $admin_user['inst_ids']) . ')' : '') . ' ORDER BY classes.class_grade, classes.class_sub, users.last, users.first, users.username, institutions.inst_name, subjects.subject_name');
+	$edit_result = mq(
+         " SELECT users.user_id, users.first, users.last, users.username, user_start_date, "
+        ." class_grade, class_sub, institutions.inst_name, subjects.subject_name, subjects.subject_id, "
+        ." user_tracks.track_id, user_tracks.level, user_tracks.enrolled FROM users "
+        ." JOIN subjects ON (subject_type NOT IN ('school_points', 'home_points', 'Tanya')) "
+        ." JOIN school_type_subjects USING (subject_id, school_type_id) "
+        ." LEFT JOIN classes USING (school_id, class_id) "
+        ." LEFT JOIN user_tracks USING (subject_id, user_id) "
+        ." LEFT JOIN institutions USING (inst_id) "
+        ." WHERE user_registered IS NOT NULL AND school_id = $school_id" 
+        . ($class_id != -1 ? " AND class_id = $class_id" : '') 
+        . ($subject_id != -1 ? " AND subject_id = $subject_id" : '') 
+        . ($admin_user['auth'] != 'super' ? ' AND institutions.inst_id IN (' . implode(',', $admin_user['inst_ids']) . ')' : '') 
+        .' ORDER BY classes.class_grade, classes.class_sub, users.last, users.first, users.username, ' 
+        ." institutions.inst_name, subjects.subject_name;"
+    );
 }
 
 // find out if we are in the week prior to shabbos mevorchim
