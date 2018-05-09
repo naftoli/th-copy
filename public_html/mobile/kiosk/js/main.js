@@ -1,5 +1,6 @@
 // on page load
-setupScanner( "environment" );
+var QuaggaMode = "environment";
+setupScanner( QuaggaMode );
 
 Quagga.onDetected( function( data ) {
     if ( !checkNumber( data.codeResult.code ) ) {
@@ -105,7 +106,8 @@ function showCameraButton(){
     .then( function(devices){
         if( devices.length == 2 ){
             $("#flip-camera").show().click( function() {
-                setupScanner( "user" );
+                QuaggaMode = QuaggaMode == "user" ? "environment" : "user";
+                setupScanner( QuaggaMode );
             });
         }
     });
