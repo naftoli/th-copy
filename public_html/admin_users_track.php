@@ -66,7 +66,7 @@ if (isset($_GETPOST['show']) && $_GETPOST['show'] == 'form') {
         ." LEFT JOIN classes USING (school_id, class_id) "
         ." LEFT JOIN user_tracks USING (subject_id, user_id) "
         ." LEFT JOIN institutions USING (inst_id) "
-        ." WHERE user_registered IS NOT NULL AND school_id = $school_id" 
+        ." WHERE user_registered IS NOT NULL AND school_id = $school_id " 
         . ($class_id != -1 ? " AND class_id = $class_id" : '') 
         . ($subject_id != -1 ? " AND subject_id = $subject_id" : '') 
         . ($admin_user['auth'] != 'super' ? ' AND institutions.inst_id IN (' . implode(',', $admin_user['inst_ids']) . ')' : '') 
@@ -234,7 +234,7 @@ foreach ($sm as $val) {
 													if ($month == 13) $month = 1;
 													else $month++;
 													
-													$sqlTrack = "SELECT * FROM user_tracks WHERE subject_id = 1 AND user_id = " . $row['user_id'];
+													$sqlTrack = "SELECT * FROM user_tracks WHERE subject_id = 1 AND enrolled = 1 AND user_id = " . $row['user_id'];
 													$resultTrack = mysql_query($sqlTrack);
 													$rowTrack = mysql_fetch_assoc($resultTrack);
 													
@@ -253,7 +253,7 @@ foreach ($sm as $val) {
 															<? while($track_row = mysql_fetch_assoc($tracks_result)) { ?>
 																<? if ($track_row['track_name'] == 6) break; ?>
 																<? if ($track_row['track_name'] == 10) continue; ?>
-																<option value="<?=$track_row['track_id']?>" <?=$track_row['track_id'] == ($row['track_id']-2) ? 'SELECTED' : ''?>><?=es($track_row['track_name'])?></option>
+																<option value="<?=$track_row['track_id']?>" <?=$track_row['track_id'] == ($rowTrack['track_id']-2) ? 'SELECTED' : ''?>><?=es($track_row['track_name'])?></option>
 															<? } // end while loop?>
 															<? mysql_data_seek($tracks_result, 0); ?>
 														</select>
