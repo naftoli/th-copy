@@ -1,3 +1,14 @@
+// on page load
+setupScanner( "environment" );
+
+Quagga.onDetected( function( data ) {
+    if ( !checkNumber( data.codeResult.code ) ) {
+        showError( "Sorry, it seems we could not read the card properly. Please try another angle." )
+    }
+});
+
+Quagga.onProcessed( showScanningBox );
+
 // check the number as a user posts it
 function checkNumber( cardNumber ) {
     if ( cardNumber.length == 20 ) {
@@ -40,54 +51,62 @@ function showScanningBox( result ) {
     }
 }
 
-// initialize Quagga JS with the follwing settings and setup the event listeners
-Quagga.init({
-    inputStream: {
-        name : "Live",
-        type : "LiveStream",
-        target: "#barcode_scanner",
-        constraints: {
-            width: {min: 640, ideal: 1280, max: 1920},
-            height: {min: 480, ideal: 720, max: 1280},
-            aspectRatio: {min: 1, max: 100},
-            facingMode: "environment" // or user
-        }
-    },
-    locator: {
-        patchSize: "medium",
-        halfSample: true
-    },
-    numOfWorkers: 2,
-    decoder: {
-        readers : ["code_128_reader"]
-    },
-    locate: true,
-    multiple: true
-}, function ( error ) {
-    if ( error ) {
-        showError( "Sorry, it seems we cannot scan cards on your device. Please enter in the card number by hand." );
-        $("#barcode_scanner").hide();
-        $("#manual-scanner").show(); // show the manual scanner
-        // setup the listener
-        $("#manual-scanner #scanner").keyup( function( event ) {
-            if ( event.target.value.match(/^3{1}\d{19}$/) ) {
-                checkNumber( event.target.value );
-            } else if ( event.target.value.length === 20 ) {
-                showError( "Please enter a valid barcode" );
-            } else if ( event.target.value.length > 20) {
-                event.target.value = event.target.value.slice(0, 20);
+function setupScanner( mode ){
+    mode = mode ? mode : "environment"; // or user
+    var config = {
+        inputStream: {
+            name : "Live",  type : "LiveStream",    target: "#barcode_scanner",
+            constraints: {
+                width: {min: 640, ideal: 1280, max: 1920},
+                height: {min: 480, ideal: 720, max: 1280},
+                aspectRatio: {min: 1, max: 100},
+                facingMode: mode // or user
             }
-        })
-    } else {
-        console.log( "Quagga JS initialized. Ready to start Scanning Cards" );
-        Quagga.start();
-    }
-});
+        },
+        locator: {
+            patchSize: "medium",
+            halfSample: true
+        },
+        numOfWorkers: navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 2, // assume dual core
+        decoder: {
+            readers : ["code_128_reader"]
+        },
+        locate: true,
+        multiple: true
+    };
 
-Quagga.onDetected( function( data ) {
-    if ( !checkNumber( data.codeResult.code ) ) {
-        showError( "Sorry, it seems we could not read the card properly. Please try another angle." )
+    var setup = function( error ){
+        if ( error ) {
+            showError( "Sorry, it seems we cannot scan cards on your device. Please enter in the card number by hand." );
+            $("#barcode_scanner").hide();
+            $("#manual-scanner").show(); // show the manual scanner
+            // setup the listener
+            $("#manual-scanner #scanner").keyup( function( event ) {
+                if ( event.target.value.match(/^3{1}\d{19}$/) ) {
+                    checkNumber( event.target.value );
+                } else if ( event.target.value.length === 20 ) {
+                    showError( "Please enter a valid barcode" );
+                } else if ( event.target.value.length > 20) {
+                    event.target.value = event.target.value.slice(0, 20);
+                }
+            })
+        } else {
+            showCameraButton();
+            console.log( "Quagga JS initialized. Ready to start Scanning Cards" );
+            Quagga.start();
+        }
     }
-});
 
-Quagga.onProcessed( showScanningBox );
+    Quagga.init( config, setup );
+}
+
+function showCameraButton(){
+    Quagga.CameraAccess.enumerateVideoDevices()
+    .then( function(devices){
+        if( devices.length == 2 ){
+            $("#flip-camera").show().click( function() {
+                setupScanner( "user" );
+            });
+        }
+    });
+}
