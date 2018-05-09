@@ -1,6 +1,7 @@
 // on page load
 var QuaggaMode = "environment";
 setupScanner( QuaggaMode );
+$("#flip-camera").click( changeCamera );
 
 Quagga.onDetected( function( data ) {
     if ( !checkNumber( data.codeResult.code ) ) {
@@ -9,6 +10,11 @@ Quagga.onDetected( function( data ) {
 });
 
 Quagga.onProcessed( showScanningBox );
+
+function changeCamera(){
+    QuaggaMode = QuaggaMode == "user" ? "environment" : "user";
+    setupScanner( QuaggaMode );
+}
 
 // check the number as a user posts it
 function checkNumber( cardNumber ) {
@@ -105,10 +111,7 @@ function showCameraButton(){
     Quagga.CameraAccess.enumerateVideoDevices()
     .then( function(devices){
         if( devices.length == 2 ){
-            $("#flip-camera").show().click( function() {
-                QuaggaMode = QuaggaMode == "user" ? "environment" : "user";
-                setupScanner( QuaggaMode );
-            });
+            $("#flip-camera").show();
         }
     });
 }
