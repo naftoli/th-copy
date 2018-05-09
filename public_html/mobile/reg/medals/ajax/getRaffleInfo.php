@@ -22,7 +22,7 @@ function checkYearly( $user_id ) {
 	return $msg;
 }
 
-function checkMonthly( $user_id, $dates ) {
+function checkMonthly( $user_id ) {
 	// find out current dates
 	$dates = getDates( 'monthly' );
 	$total = checkDaily( $user_id, $dates );
@@ -84,16 +84,15 @@ function checkWeekly( $user_id ) {
 }
 
 function checkDaily( $user_id, $dates ) {
-	$daily_sql = 'select count(*) as total from (select dtmarks.mark_date from user_tracks ut'.
+	$daily_sql = 'select dtmarks.mark_date from user_tracks ut'.
 				' join date_tasks_missions dtm on ut.level = dtm.level and ut.track_id = dtm.track_id and ut.subject_id = dtm.subject_id'.
 				' join date_tasks dt using (date_tasks_mission_id) join date_tasks_marks dtmarks using (date_task_id)'.
 				' where dtmarks.user_id = '.$user_id.' and ut.user_id = '.$user_id. ' and dt.daily_task = 1'.
-				' and dtmarks.mark_date >= '. $dates['start_date'] .' and dtmarks.mark_date <= ' . $dates['end_date'] .
-				' group by dtmarks.mark_date)';
-	//if($log) echo $daily_sql."\n"; // if you want to debug...
+				' and dtmarks.mark_date >= '. $dates['start'] .' and dtmarks.mark_date <= ' . $dates['end'] .
+				' group by dtmarks.mark_date';
+	//echo $daily_sql."\n"; // if you want to debug...
 	$daily_query = mysql_query($daily_sql); // run the query
-	$daily_row = mysql_fetch_assoc($daily_query); // get the row
-	$total = $daily_row['total']; // get the value in the defined total field
+	$total = mysql_num_rows( $daily_query ); // get the number of marks
 	return $total;
 }
 
