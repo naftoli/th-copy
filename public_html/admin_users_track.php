@@ -35,11 +35,11 @@ if( !empty($action) ) switch($action) {
 				foreach( $tracks[ $row['user_id'] ] as $subject_id => $data ) {
 					$subject_id = intval( $subject_id );
 					$track = intval( $data['track'] ) + 2;
-					//$level = max(6, min(intval($data['level']), 14));
+					$level = max(6, min(intval($data['level']), 14));
 					if($data['track'] == -1) {
 						mq("DELETE FROM user_tracks WHERE user_id = {$row['user_id']} AND subject_id = $subject_id");
 					} else {
-						mq("INSERT INTO user_tracks SET user_id = {$row['user_id']}, subject_id = $subject_id, track_id = $track ON DUPLICATE KEY UPDATE track_id = $track");
+						mq("INSERT INTO user_tracks SET user_id = {$row['user_id']}, subject_id = $subject_id, track_id = $track, level = $level ON DUPLICATE KEY UPDATE track_id = $track");
 					}
 				}
 			}
@@ -240,7 +240,12 @@ foreach ($sm as $val) {
 													
 													$sqlInfo = "SELECT * FROM tehillim_ladders WHERE ladder = " . $rowTrack['track_id'] . " AND age = " . $rowTrack['level'] . " AND month = " . $month;
 													$resultInfo = mysql_query($sqlInfo);
-													$rowInfo = mysql_fetch_assoc($resultInfo);
+                                                    $rowInfo = mysql_fetch_assoc($resultInfo);
+                                                    
+                                                    $level_query = mysql_query(
+                                                        "SELECT level FROM user_tracks WHERE user_id = '".$row['user_id']."' AND level IS NOT NULL LIMIT 1"
+                                                    );
+                                                    $level = mysql_num_rows($level_query) ? mysql_fetch_assoc( $level_query )['level'] : 6;
 													?>
 													<td>
 														<select name="tracks[<?=$row['user_id']?>][<?=$row['subject_id']?>][track]" <?php if (!$showTehillimQuota) echo "disabled"?>>
@@ -256,10 +261,10 @@ foreach ($sm as $val) {
 														<div style="font-size: 12px;">
 															Kapitelach: <?=$rowInfo['kapitelach']?><br />
 															Minutes: <?=$rowInfo['minutes']?><br />
-															Year/Age: <?=$rowTrack['level']?>
+															Year/Age: <?=$level?>
 														</div>
 													</td>
-													<input type="hidden" name="tracks[<?=$row['user_id']?>][<?=$row['subject_id']?>][level]" value="<?=es($row['level'])?>" />
+													<input type="hidden" name="tracks[<?=$row['user_id']?>][<?=$row['subject_id']?>][level]" value="<?=es($level)?>" />
 												</tr>
 											<? } ?>
 										</table>
