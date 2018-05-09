@@ -37,7 +37,7 @@ if( !empty($action) ) switch($action) {
 					$track = intval( $data['track'] ) + 2;
 					$level = max(6, min(intval($data['level']), 14));
 					if($data['track'] == -1) {
-						mq("DELETE FROM user_tracks WHERE user_id = {$row['user_id']} AND subject_id = $subject_id");
+						mq("UPDATE user_tracks SET enrolled = 0 WHERE user_id = {$row['user_id']} AND subject_id = $subject_id");
 					} else {
 						mq("INSERT INTO user_tracks SET user_id = {$row['user_id']}, subject_id = $subject_id, track_id = $track, level = $level ON DUPLICATE KEY UPDATE track_id = $track");
 					}
