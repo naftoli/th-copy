@@ -74,6 +74,7 @@ if($debug) echo "</pre>";
                 <i class="fa fa-university" aria-hidden="true"></i> School: 
                 <select id="school_id" name="school_id">
                     <option value="">All Schools</option>
+                    <option value="82">A Academy</option>
                     <? foreach($schools as $school_id => $school_name){?>
                         <option value="<?=$school_id?>"><?=$school_name?></option>
                     <?}?>

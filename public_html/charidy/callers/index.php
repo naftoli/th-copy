@@ -75,6 +75,7 @@ $callers = Caller::LoadAll();
         <div class="options">
             <select id="print_caller_id" class="form-control">
                 <option value="">All Callers</option>
+                <option value="-1">N/A</option>
             <?php
                 foreach( $callers as $caller ) { ?>
                     <option value="<?= $caller->charidy_caller_id ?>">

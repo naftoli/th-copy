@@ -15,6 +15,7 @@ class YearlyRaffle {
     private $DAY_COUNT = 160;
     private $db_conn;
     private $dates;
+    private $deadline = 2458243; // May 4 2018
     
     public $eligibility;
 
@@ -30,7 +31,7 @@ class YearlyRaffle {
              " SELECT user_id, COUNT( DISTINCT(mark_date) ) as days "
             ." FROM date_tasks_marks JOIN users USING (user_id) "
             ." WHERE mark_date > " . $this->dates['start'] . " "
-            ." AND mark_date < " . $this->dates['end'] . " "
+            ." AND mark_date < " . $this->deadline . " "
             ." AND school_id = '$school_id' "
             ." GROUP BY user_id;"
         );
@@ -49,7 +50,7 @@ class YearlyRaffle {
              " SELECT user_id, COUNT( DISTINCT(mark_date) ) as days "
             ." FROM date_tasks_marks JOIN users USING (user_id) "
             ." WHERE mark_date > " . $this->dates['start'] . " "
-            ." AND mark_date < " . $this->dates['end'] . " "
+            ." AND mark_date < " . $this->deadline . " "
             ." AND user_id = '$user_id' "
         );
         // load all the eligible users
@@ -62,13 +63,14 @@ class YearlyRaffle {
         return $this->eligibility;
     }
 
-    public function get_eligible_users( $realtime = false ) {
+    public function get_eligible_users( $realtime = false, $school_id = false ) {
         // generate the SQL to run
         if ( $realtime )
             $users_sql = "SELECT user_id, user_serial, school_name, first, last, COUNT(DISTINCT (mark_date)) AS days "
                 ." FROM date_tasks_marks JOIN users USING (user_id) JOIN schools USING (school_id) "
                 ." WHERE mark_date > " . $this->dates['start'] . " "
-                ." AND mark_date < " . $this->dates['end'] . " "
+                ." AND mark_date < " . $this->deadline . " "
+                .( $school_id ? " AND users.school_id = '$school_id' " : "" ) // limit to school if provided
                 ." GROUP BY user_id "
                 ." HAVING days >= " . $this->DAY_COUNT . " "
                 ." ORDER BY school_name, last, first ";
@@ -76,6 +78,7 @@ class YearlyRaffle {
             $users_sql = "SELECT user_id, user_serial, school_name, first, last, days "
                 ." FROM user_yearly_raffle JOIN users USING (user_id) JOIN schools USING (school_id) "
                 ." WHERE days >= " . $this->DAY_COUNT . " "
+                .( $school_id ? " AND users.school_id = '$school_id' " : "" ) // limit to school if provided
                 ." ORDER BY school_name, last, first, days ";
 
         $users_query = $this->db_conn->query( $users_sql );
@@ -101,6 +104,6 @@ class YearlyRaffle {
     }
 
     public function getEnd() {
-        return $this->dates['end'];
+        return $this->deadline;
     }
 }
