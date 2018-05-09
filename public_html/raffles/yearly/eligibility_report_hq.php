@@ -57,7 +57,7 @@ $schools = $as->getSchools();
         RealTime <?= $admin_user['auth'] !== "super" ? "( get a coffee and take a nap slow )" : "(slow)" ?>
     </div>
     <div class="options">
-        <input type="hidden" id="school_id" value="<?= count($schools) == 1 ? array_keys($schools)[0] : "" ?>" />
+        <input type="hidden" id="school_id" value="<?= $admin_user['auth'] !== "super" ? array_keys($schools)[0] : "" ?>" />
         <a class="button" id="generate"><i class="fa fa-refresh" aria-hidden="true"></i> Generate/Refresh Report</a>
     </div>
 
