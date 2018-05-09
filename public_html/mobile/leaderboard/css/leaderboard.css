@@ -135,3 +135,7 @@ div#load-more-box {
     width: 80%; max-width: 400px;
     margin: 10% auto;
 }
+
+.modal-footer {
+    justify-content: center;
+}
