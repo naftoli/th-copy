@@ -4,9 +4,11 @@ img {
 #step-1, #step-2, #step-3 {
     display: none;
 }
+#pages{
+    margin-top: 15px;
+}
 /* Welcome page */
 section#welcome-message {
-    margin-top: 5%;
     text-align: center;
 }
 section#welcome-message ol {
@@ -16,14 +18,13 @@ section#welcome-message ol li {
     line-height: 1.3; margin-bottom: 10px;
 }
 /* Step 1 */
-#step-1 div#children {
+#step-1 div#content {
     text-align: center; display: none;
 }
 
 #step-1 .child {
     display: inline-block;
     padding: 15px;
-    width: 50%;
 }
 
 #step-1 .child img {

@@ -33,12 +33,15 @@ var registrationApp = function() {
             } else {
                 var html = "";
                 state.users.forEach( function( user ){
-                    html += '<div class="child">' + 
-                                '<img src="/mobile/reg/' + user.mobile_pic + '" />' + 
+                    html += '<div class="child col-6">' + 
+                                '<img src="/mobile/reg/' + user.mobile_pic + '" />' +
+                                '<p class="name">' + user.first + " " + user.last + '</p>' +
+                                '<p class="reg_cost">' + user.reg_fee + '</p>' +
                             '</div>';
                 });
                 $("#step-1 .spinner").hide();
-                $("#step-1 #children").append( html ).show();
+                $("#content").show();
+                $("#step-1 #children").append( html );
             }
         }));
     }
