@@ -5,13 +5,21 @@
 var registrationApp = function() {
     // default state of application
     var state = {
-        users: [],
-        current_user_index: 0
+        users: [], // the users we are registering
+        current_user_index: 0 // the current user we are confirming
     }
     // initialization functions
-    loadUsers();
+    $("button#start").click( renderStep1 );
 
-    function loadUsers(){
+    /******************** Rendering Functions ********************/
+    function showPage( id ){
+        $( "#pages section").hide();
+        $( "#pages section#" + id ).show();
+    }
+
+    function renderStep1(){
+        showPage("step-1");
+        
         $.get( "api/users.php", handleAPIResponse( function( users ) {
             // throw out any registered users
             users.forEach( function( user ) {
@@ -19,16 +27,23 @@ var registrationApp = function() {
                     state.users.push( user );
                 }
             });
-            // render the first step with the list of children
-            renderStep1();
+            // skip to step 2
+            if ( state.users.length == 1 && false ){
+                renderStep2();
+            } else {
+                var html = "";
+                state.users.forEach( function( user ){
+                    html += '<div class="child">' + 
+                                '<img src="/mobile/reg/' + user.mobile_pic + '" />' + 
+                            '</div>';
+                });
+                $("#step-1 .spinner").hide();
+                $("#step-1 #children").append( html ).show();
+            }
         }));
     }
 
-    function renderStep1(){
-        if ( state.users.length == 1 ){
-            // go straight to step 2
-        } else {
-            // show a list of kids to pick from
-        }
+    function renderStep2(){
+        showPage("step-2");
     }
 }();

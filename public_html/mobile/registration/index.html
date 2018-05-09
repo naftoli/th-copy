@@ -18,18 +18,51 @@
     <link rel="stylesheet" type="text/css" href="css/spinner.css" />
     <link rel="stylesheet" type="text/css" href="css/image-upload.css" />
     <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
 </head>
 <body>
     <header>
         <span id="title">Registration</span>
     </header>
+    <div id="pages">
+        <section id="welcome-message">
+            <div class="container">
+                <h5>Welcome to the Registration Process!</h5>
+                <p>There are 3 steps to the registration proccess.</p>
+                <p>
+                    <ol>
+                        <li>Select the children you wish to register. Please note that this step may be skipped if you only have one child</li>
+                        <li>Update and confirm the information for each child.</li>
+                        <li>Select an existing payment method or add a new one.</li>
+                    </ol>
+                </p>
+                <div class="row">
+                    <div class="col-12">
+                        <button id="start" class="btn btn-primary">Begin Registration</button>
+                    </div>
+                </div>
+            </div>
+        </section> 
 
-    <section id="step-1">
-        <div class="spinner">
-            <div class="double-bounce1"></div>
-            <div class="double-bounce2"></div>
-        </div>
-    </section>
+        <section id="step-1">
+            <div class="spinner">
+                <div class="double-bounce1"></div>
+                <div class="double-bounce2"></div>
+            </div>
+
+            <div id="children">
+                <h4>Select Children</h4>
+            </div>
+        </section>
+
+        <section id="step-2">
+
+        </section>
+
+        <section id="step-3">
+            
+        </section>
+    </div>
 
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">

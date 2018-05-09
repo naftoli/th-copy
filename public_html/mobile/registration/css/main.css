@@ -35,17 +35,20 @@ header, .btn-primary{
 .input-group select, .input-group input {
     border-left: 0px;
 }
-.child-form select, .child-form input, .child-form a.btn {
+form {
+    margin: 10px auto;
+}
+form select, form input, form a.btn {
     height: calc( 2px + 4rem ) !important;
     font-size: 1.5em;
 }
-.child-form .row, .child-form .col-xl-6 {
+form .row, form .col-xl-6 {
     margin-bottom: 10px;
 }
-.child-form input[type="submit"], .child-form a.btn {
+form input[type="submit"], form a.btn {
     width: 100%;
 }
-.child-form a.btn {
+form a.btn {
     display: flex; align-items: center; justify-content: center;
 }
 img#user-img {
@@ -56,7 +59,7 @@ img#user-img {
 }
 /* Resize the form on mobile */
 @media( max-width: 440px ){
-    .child-form select, .child-form input, .child-form a.btn {
+    form select, form input, form a.btn {
         height: calc( 2px + 2.5rem ) !important;
         font-size: 1em;
     }
