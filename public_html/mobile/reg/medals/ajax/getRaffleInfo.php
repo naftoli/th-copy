@@ -75,7 +75,7 @@ function checkWeekly( $user_id ) {
 		}
 	}
 	
-	if ($total == $required) {
+	if ($total >= $required) {
 		$msg = "<span style='color: #004E22'>Eligible for פרשת " .  $dates['name'] . " raffle</span>";
 	} else {
 		$msg = ($required - $total) . " days of tasks needed for " .  $dates['name'] . " raffle";
