@@ -21,6 +21,7 @@ $yearly_raffle = new YearlyRaffle();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Yearly Prize Printout</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Pangolin" rel="stylesheet">
     <style>
         body {
             margin: 0px;
@@ -37,7 +38,7 @@ $yearly_raffle = new YearlyRaffle();
         .page-generated {
             background: #4f1853;
             color: #fff;
-            font-family: cursive;
+            font-family: 'Pangolin', cursive;
             text-align: center;
             padding: 25px 15px;
             box-sizing: border-box;
