@@ -33,14 +33,14 @@
     <div id="pages">
         <section id="welcome-message">
             <div class="container">
-                <h5>Welcome to the Registration Process!</h5>
+                <h2>Welcome to the Registration Process!</h2>
                 <p>There are 3 steps to the registration proccess.</p>
                 <p><strong>1. </strong>Select the children you wish to register. Please note that this step may be skipped if you only have one child</p>
                 <p><strong>2. </strong>Update and confirm the information for each child.</p>
                 <p><strong>3. </strong>Select an existing payment method or add a new one.</p>
                 <div class="row">
                     <div class="col-12">
-                        <button id="start" class="btn btn-primary">Begin Registration</button>
+                        <button id="start-step-1" class="btn btn-primary">Begin Registration</button>
                     </div>
                 </div>
             </div>
@@ -53,26 +53,133 @@
             </div>
 
             <div class="content animated fadeIn">
-                <h4>Select Children</h4>
+                <h3>Select Children</h3>
                 <div class="container">
                     <div class="row">
                         <div id="children"></div>
                     </div>
                     <div class="row spaced">
-                        <div class="col-12">
-                            <button id="start-step-2" class="btn btn-primary">Confirm Information</button>
+                        <div class="col-12 right">
+                            <button id="start-step-2" class="btn btn-primary">
+                                Confirm Information &nbsp;<i class="fas fa-arrow-right"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="step-2">
-
+        <section id="step-2" class="animated fadeIn">
+            <div class="container">
+                <form id="update-user">
+                    <input type="hidden" id="user_id" name="user_id" />
+                    <div class="row">
+                        <div class="col-12 centered">
+                            <input type="hidden" id="mobile_pic" name="mobile_pic" required/>
+                            <img src="//mashpia.com/mobile/reg/images/addphoto.png" alt="profile" id="user-img" data-toggle="modal" data-target="#cropperModal"/>
+                        </div>
+                    </div>
+                    <div class="row centered">
+                        <div class="col-4 offset-2 col-md-3 offset-md-3 col-xl-2 offset-xl-4">
+                            <label class="radio-label">
+                                <input type="radio" id="gender" name="gender" value="M"/>
+                                <span class="radio"></span>
+                            </label>
+                            <span>Boy</span>
+                        </div>
+                        <div class="col-4 col-md-3 col-xl-2">
+                            <label class="radio-label">
+                                <input type="radio" id="gender" name="gender" value="F"/>
+                                <span class="radio"></span>
+                            </label>
+                            <span>Girl</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="first">Name</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" placeholder="First Name" id="first" name="first" required>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" placeholder="Last Name"  id="last"  name="last"  required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="first_he">Hebrew Name</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" placeholder="שם פרטי" id="first_he" name="first_he" required dir="rtl" />
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" placeholder="שם משפחה"  id="last_he"  name="last_he"  required dir="rtl" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-xl-6">
+                            <label for="no-th-dob">
+                                English Date of Birth
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/calendar-color-gray-svg.svg" width="75" /> 
+                                </span>
+                                <input type="date" class="form-control" id="dob" name="dob" placeholder="English Birthday" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <label for="lang_id">
+                                Mission Language
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <img src="/mobile/img_new/arrow-2-color-gray-svg.svg" width="75" style="padding: 15%;" />  
+                                </span>
+                                <select class="form-control form-control-lg" id="lang_id" name="lang_id" required>
+                                    <option value="1">English</option>
+                                    <option value="2">Yiddish</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <strong>By pressing the button below I affirm that I have reviewed the above information and found it to be correct.</strong>
+                        </div>
+                    </div>
+                    <div class="row spaced">
+                        <div class="col-12">
+                            <input type="submit" class="btn btn-primary" value="Confirm" />
+                        </div>
+                    </div>
+                </form>
+                <div class="row spaced">
+                    <div class="col-6 left">
+                        <button id="start-step-1" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> &nbsp;Select Children
+                        </button>
+                    </div>
+                    <div class="col-6 right">
+                        <button id="start-step-3" class="btn btn-primary">
+                            Payment &nbsp;<i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <section id="step-3">
-            
+        <section id="step-3" class="animated fadeIn">
+            <div class="container">
+                <div class="row spaced">
+                    <div class="col-12 left">
+                        <button id="start-step-2" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> &nbsp;Confirm Information
+                        </button>
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
 
