@@ -58,7 +58,7 @@
                     <div class="row">
                         <div id="children"></div>
                     </div>
-                    <div class="row spaced">
+                    <div class="row spaced navigation">
                         <div class="col-12 right">
                             <button id="start-step-2" class="btn btn-primary">
                                 Confirm Information &nbsp;<i class="fas fa-arrow-right"></i>
@@ -149,21 +149,16 @@
                             <strong>By pressing the button below I affirm that I have reviewed the above information and found it to be correct.</strong>
                         </div>
                     </div>
-                    <div class="row spaced">
+                    <div class="row">
                         <div class="col-12">
                             <input type="submit" class="btn btn-primary" value="Confirm" />
                         </div>
                     </div>
                 </form>
-                <div class="row spaced">
-                    <div class="col-6 left">
+                <div class="row spaced navigation">
+                    <div class="col-12 left">
                         <button id="start-step-1" class="btn btn-primary">
                             <i class="fas fa-arrow-left"></i> &nbsp;Select Children
-                        </button>
-                    </div>
-                    <div class="col-6 right">
-                        <button id="start-step-3" class="btn btn-primary">
-                            Payment &nbsp;<i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
                 </div>
@@ -172,7 +167,7 @@
 
         <section id="step-3" class="animated fadeIn">
             <div class="container">
-                <div class="row spaced">
+                <div class="row spaced navigation">
                     <div class="col-12 left">
                         <button id="start-step-2" class="btn btn-primary">
                             <i class="fas fa-arrow-left"></i> &nbsp;Confirm Information
@@ -181,6 +176,63 @@
                 </div>
             </div>
         </section>
+    </div>
+
+    <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>
+                        Upload Profile Picture
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <img src="/mobile/img_new/x-color-white-svg.svg" width="16" height="16" />
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="cropper-image-upload">
+                        <input type="file" name="profile" id="profile" accept=".png,.jpg,.jpeg"/>
+                        <label for="profile">
+                            <i class="fas fa-camera"></i>
+                            Choose a picture
+                        </label>
+                    </div>
+                    <div id="cropper-image-container">
+                        <img id="cropper-image">
+                        <div class="control-buttons btn-group">
+                            <button type="button" class="btn btn-primary" id="cropper-rotate-left">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary" id="cropper-rotate-right">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary" id="cropper-zoom-in">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary" id="cropper-zoom-out">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary" id="cropper-scale-x">
+                                <i class="fas fa-arrows-alt-h"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary" id="cropper-scale-y">
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="cropper-image-loader">
+                        <div class="spinner">
+                            <div class="double-bounce1"></div>
+                            <div class="double-bounce2"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="submit-image">Upload</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
