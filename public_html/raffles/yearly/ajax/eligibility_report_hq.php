@@ -28,7 +28,7 @@ $users = $yearly_raffle->get_eligible_users( $realtime, $school_id );
             <?php if (!$school_id) { ?>
                 <th>School</th>
             <?php } ?> 
-            <th>Serial #</th><th>Last</th><th>First</th><th>Days Compleated</th>
+            <th>Grade</th><th>Serial #</th><th>Last</th><th>First</th><th>Days Compleated</th>
         </tr>
     </thead>
     <tbody>
@@ -39,6 +39,7 @@ $users = $yearly_raffle->get_eligible_users( $realtime, $school_id );
                 <?php if (!$school_id) { ?>
                     <td><?= $user['school_name'] ?></td>
                 <?php } ?> 
+                <td><?= $user['class_grade']." ".$user['class_sub'] ?></td>
                 <td><?= $user['user_serial'] ?></td>
                 <td><?= $user['last'] ?></td>
                 <td><?= $user['first'] ?></td>
