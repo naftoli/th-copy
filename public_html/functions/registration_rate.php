@@ -28,13 +28,13 @@ function registration_rate( $user_id ){
 
     // get the schools registration type
     $school_info_query = mysql_query(
-        "SELECT reg_type, school_id FROM users JOIN schools USING (school_id) WHERE user_id = '$user_id'"
+        "SELECT reg_type, users.school_id FROM users JOIN schools USING (school_id) WHERE user_id = '$user_id'"
     );
     $school_info = mysql_fetch_assoc($school_info_query);
     $school_id  = $school_info['school_id'];
 
     // SPECIAL SCHOOLS
-    if ( in_array( $discount_schools, $school_id ) ) {
+    if ( in_array( $school_id, array_keys( $discount_schools ) ) ) {
         return $discount_schools[ $school_id ];
     }
 
