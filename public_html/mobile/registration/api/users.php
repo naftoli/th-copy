@@ -25,7 +25,18 @@ function index( $admin_id ){
 
     foreach( $users as $index => $user_row ){
         $user = new user( $user_row );
-        $users[ $index ] = $user;
+        // limit what we send the client
+        $users[ $index ] = [
+            'user_id'   => $user->user_id,  'user_code' => $user->user_code,
+            'first'     => $user->first,    'last'      => $user->last,
+            'first_he'  => $user->first_he, 'last_he'   => $user->last_he,
+            'lang_id'   => $user->lang,     'gender'    => $user->gender,
+            'school_id' => $user->school_id,'class_id'  => $user->class_id,
+            'profile_picture'   => $user->get_profile_picture(),
+            'user_registered'   => $user->user_registered,
+            'user_serial'       => $user->user_serial ,
+            'registration_fee'  => $user->get_registration_fee()
+        ];
     }
 
     render_json_response( $users );
