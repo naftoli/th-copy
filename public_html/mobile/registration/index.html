@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <!-- Cropper -->
@@ -22,20 +22,22 @@
 </head>
 <body>
     <header>
+        <a href="/mobile/reg/parent_detail.html" class="logout" id="logOff">
+            logout&nbsp;<i class="fas fa-lock"></i>
+        </a>
         <span id="title">Registration</span>
+        <a href="/mobile/reg/parent_detail.html" class="home">
+            <i class="fas fa-home"></i>&nbsp;home
+        </a>
     </header>
     <div id="pages">
         <section id="welcome-message">
             <div class="container">
                 <h5>Welcome to the Registration Process!</h5>
                 <p>There are 3 steps to the registration proccess.</p>
-                <p>
-                    <ol>
-                        <li>Select the children you wish to register. Please note that this step may be skipped if you only have one child</li>
-                        <li>Update and confirm the information for each child.</li>
-                        <li>Select an existing payment method or add a new one.</li>
-                    </ol>
-                </p>
+                <p><strong>1. </strong>Select the children you wish to register. Please note that this step may be skipped if you only have one child</p>
+                <p><strong>2. </strong>Update and confirm the information for each child.</p>
+                <p><strong>3. </strong>Select an existing payment method or add a new one.</p>
                 <div class="row">
                     <div class="col-12">
                         <button id="start" class="btn btn-primary">Begin Registration</button>
@@ -44,20 +46,24 @@
             </div>
         </section> 
 
-        <section id="step-1">
+        <section id="step-1" class="animated fadeIn">
             <div class="spinner">
                 <div class="double-bounce1"></div>
                 <div class="double-bounce2"></div>
             </div>
 
-            <div id="content">
+            <div class="content animated fadeIn">
                 <h4>Select Children</h4>
                 <div class="container">
                     <div class="row">
                         <div id="children"></div>
                     </div>
+                    <div class="row spaced">
+                        <div class="col-12">
+                            <button id="start-step-2" class="btn btn-primary">Confirm Information</button>
+                        </div>
+                    </div>
                 </div>
-                
             </div>
         </section>
 

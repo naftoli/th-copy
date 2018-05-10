@@ -1,3 +1,4 @@
+.centered { text-align: center; }
 /* Custom fonts */
 @font-face {
     font-family:font1;
@@ -14,8 +15,17 @@ header #title {
     flex-grow: 1; padding-top: 5px;
     text-transform: uppercase;
 }
+header a.home, header a.logout {
+    color: #fff;
+    display: flex; align-items: center;
+    position: absolute; right: 2%;
+    height: 76px;
+}
+header a.logout {
+    left: 2%;
+}
 @media ( max-width: 524px ){
-    header {
+    header, header a.home, header a.logout {
         height: 45px;
     }
     header #title {
