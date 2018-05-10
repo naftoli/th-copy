@@ -10,11 +10,14 @@ if ( $_SERVER['REQUEST_METHOD'] == "POST" ) {
     $user_id = mysql_real_escape_string( $_GET['user_id'] );
     if ( !$user_id )
         create_user( $admin_id );
+    else
+        update_user( $user_id );
 // GET / returns all users the admin has access to.
 } else if ( $_SERVER['REQUEST_METHOD'] == "GET" ) {
     index( $admin_id ); // run the index funciton
 }
 
+// GET /
 function index( $admin_id ){
     $users_query = mysql_query(
          " SELECT users.* FROM users "
@@ -30,9 +33,9 @@ function index( $admin_id ){
             'user_id'   => $user->user_id,  'user_code' => $user->user_code,
             'first'     => $user->first,    'last'      => $user->last,
             'first_he'  => $user->first_he, 'last_he'   => $user->last_he,
-            'lang_id'   => $user->lang_id,     'gender'    => $user->gender,
+            'lang_id'   => $user->lang_id,  'gender'    => $user->gender,
             'school_id' => $user->school_id,'class_id'  => $user->class_id,
-            'dob'       => $user->dob,
+            'dob'       => $user->dob,      'mobile_pic'=> $user->mobile_pic,
             'profile_picture'   => $user->get_profile_picture(),
             'user_registered'   => $user->user_registered,
             'user_serial'       => $user->user_serial ,
@@ -43,6 +46,7 @@ function index( $admin_id ){
     render_json_response( $users );
 }
 
+// POST /
 function create_user( $admin_id ){
     // clean all post params
     foreach( $_POST as $key => $value )
@@ -76,4 +80,29 @@ function create_user( $admin_id ){
             "user_id" => $user->getUserID()
         ]);
     }
+}
+
+// POST /?user_id=
+function update_user( $user_id ){
+    // filter POST paramaters
+    $keys = [ 'mobile_pic', 'gender', 'first', 'last', 'first_he', 'last_he', 'dob', 'lang_id' ];
+    foreach( $_POST as $key => $value ) {
+        if ( isset( $keys[$key] ) ) $_POST[$key] = post_param( $key );
+        else unset( $_POST['key'] );
+    }
+    // update the keys with the posted values
+    $updates = [];
+    foreach( $keys as $key ){
+        if ( isset($_POST[$key]) ) $updates[] = "$key = '" . $_POST[$key] . "'";
+    }
+    // make sure that there is something to update
+    if ( count( $updates ) == 0)
+        render_json_error( "Nothing to update" );
+    // run the update
+    $update_query = mysql_query(
+        "UPDATE users SET " . implode( ", ", $updates ) . " WHERE user_id = '$user_id'"
+    );
+    // respond if it suceeds
+    if ( !$update_query ) render_json_error( "Server Error" );
+    render_json_response( false );
 }
