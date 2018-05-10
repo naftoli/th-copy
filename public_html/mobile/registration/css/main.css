@@ -48,7 +48,10 @@ header, .btn-primary{
 form {
     margin: 10px auto;
 }
-form select, form input, form a.btn {
+form select.form-control, 
+form input.form-control, 
+form input.btn, 
+form a.btn {
     height: calc( 2px + 4rem ) !important;
     font-size: 1.5em;
 }
@@ -64,12 +67,14 @@ form a.btn {
 img#user-img {
     border-radius: 50%;
     border: 1px solid;
-    max-height: 125px;
-    max-width: 125px;
+    height: 125px;  width: 125px;
 }
 /* Resize the form on mobile */
 @media( max-width: 440px ){
-    form select, form input, form a.btn {
+    form select.form-control, 
+    form input.form-control, 
+    form input.btn, 
+    form a.btn {
         height: calc( 2px + 2.5rem ) !important;
         font-size: 1em;
     }
