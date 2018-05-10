@@ -304,7 +304,7 @@ class user {
         if ( $this->mobile_pic ) {
             return "/mobile/reg/" . $this->mobile_pic;
         } else if ( $this->user_photo_id ) {
-            return "file_view.php?id=" . $this->user_photo_id;
+            return "/file_view.php?id=" . $this->user_photo_id;
         } else {
             return "/mobile/img_new/boy-color-green-svg.svg";
         }
