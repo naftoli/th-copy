@@ -9,20 +9,15 @@ use raffles\shared\Constants as Constants;
 
 // setup some functions for checking weekly/monthly/yearly raffle eligibility
 function checkYearly( $user_id ) {
-	$sql = "select * from user_yearly_raffle 
-			where user_id = " . $user_id;
-	$result = mysql_query( $sql );
-	$numTasks = 0;
-	if (mysql_num_rows( $result )) {
-		$row = mysql_fetch_assoc( $result );
-		$numTasks = $row['days'];
-	}
+    $yearly_raffle = new YearlyRaffle;
+    
+    $num_days = $yearly_raffle->set_user_eligibility( $user_id )[ $user_id ];
 	
 	// send them a message with how many days left/done
-	if ($numTasks >= 160) {
+	if ( $num_days >= $yearly_raffle->getDayCount() ) {
 		$msg = "<span style='color: #004E22'>Eligible for end of year raffle</span>";
 	} else {
-		$msg = (160 - intval($numTasks)) . " days of tasks needed for end of year raffle";
+		$msg = ( $yearly_raffle->getDayCount() - intval( $num_days ) ) . " days of tasks needed for end of year raffle";
 	}
 	return $msg;
 }
