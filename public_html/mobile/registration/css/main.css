@@ -43,7 +43,7 @@ header, .btn-primary{
     border: 1px solid #ccc; border-right: 0px; 
     border-top-left-radius: 0.3rem; border-bottom-left-radius: 0.3rem;
 }
-.input-group select, .input-group input {
+.input-group select:not(:first-child), .input-group input:not(:first-child) {
     border-left: 0px;
 }
 form {
@@ -51,8 +51,7 @@ form {
 }
 form select.form-control, 
 form input.form-control, 
-form input.btn, 
-form a.btn,
+form .btn,
 .navigation .btn {
     height: calc( 2px + 4rem ) !important;
     font-size: 1.5em;
@@ -75,8 +74,7 @@ img#user-img {
 @media( max-width: 440px ){
     form select.form-control, 
     form input.form-control, 
-    form input.btn, 
-    form a.btn,
+    form .btn,
     .navigation .btn {
         height: calc( 2px + 2.5rem ) !important;
         font-size: 1em;
