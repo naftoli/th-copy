@@ -99,7 +99,7 @@ var image_upload = function( options, uploadCallback ) {
      */
     function closeAndShowError( error ){
         $( state.modal ).modal('hide');
-        showError( response.error );
+        showError( error );
     }
 
     /**
