@@ -19,6 +19,16 @@ $tehillim_info_query = mysql_query(
     ." WHERE grid_id IN ( 8001, 8002 ) AND mark_date >= " . $dates['start']
 );
 
+$tehillim_mission_query = mysql_query(
+     " SELECT COUNT(*) AS total FROM date_tasks_mission_marks WHERE subject_id = 1 "
+    ." AND mark_date >= " . $dates['start']
+);
+
+$tehillim_medal_query = mysql_query(
+    " SELECT COUNT(*) AS total FROM medal_marks WHERE subject_id = 1 "
+   ." AND date_awarded >= " . $dates['start']
+);
+
 // go through all the marks and get the following stats
 $total_kapitalach = 0;
 $kapitalach = [];
@@ -26,10 +36,29 @@ $kapitalach = [];
 $total_minutes = 0;
 $minutes = [];
 
+$total_missions = mysql_fetch_assoc( $tehillim_mission_query )['total'];
+$total_medals   = mysql_fetch_assoc( $tehillim_medal_query   )['total'];
+
 $chayolim = [];
 
+$sm = calculateSM( GlobalSettings::getCurrentYear() );
+
+function getSM( $date, $sm ){
+    $months = [
+        'Tishrei', 'Cheshvon', 'Kislev', 'Teves', 'Shevat', 
+        'Adar', 'Nissan', 'Iyar', 'Sivan', 'Tammuz', 'Av', 'Elul'
+    ];
+
+    foreach( $sm as $index => $sm_date ){
+        if ( $sm_date > $date ) return $months[ $index ];
+    }
+    return end( $months );
+}
+
 while( $tehillim_info = mysql_fetch_assoc( $tehillim_info_query ) ) {
-    $tehillim_info['mark_date'] = jdtojewish( $tehillim_info['mark_date'] );
+    // $tehillim_info['mark_date'] = jdtojewish( $tehillim_info['mark_date'] );
+    $tehillim_info['mark_date'] = getSM( $tehillim_info['mark_date'], $sm );
+
     if ( $tehillim_info['grid_id'] == '8001' ){
         $total_kapitalach += $tehillim_info['quantity'];
         if ( isset( $kapitalach[ $tehillim_info['mark_date'] ] ) )
@@ -53,4 +82,6 @@ echo json_encode([
     "minutes" => $minutes,
     "total_minutes" => $total_minutes,
     "total_chayolim" => count($chayolim),
+    "total_missions" => $total_missions,
+    "total_medals"   => $total_medals
 ]);

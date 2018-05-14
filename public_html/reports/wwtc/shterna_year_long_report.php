@@ -76,6 +76,24 @@ if ($admin_user['auth'] != 'super') {
             </div>
         </div>
         <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Missions</h5>
+                        <p class="card-text total" id="total_missions"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Medals</h5>
+                        <p class="card-text total" id="total_medals"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
@@ -100,6 +118,8 @@ if ($admin_user['auth'] != 'super') {
             new CountUp("total_kapitalach", 0, response.total_kapitalach, 0, 2.5, options).start();
             new CountUp("total_minutes", 0, response.total_minutes, 0, 2.5, options).start();
             new CountUp("total_chayolim", 0, response.total_chayolim, 0, 2.5, options).start();
+            new CountUp("total_missions", 0, response.total_missions, 0, 2.5, options).start();
+            new CountUp("total_medals", 0, response.total_medals, 0, 2.5, options).start();
 
             new Chart( $("#myChart"), {
                 type: 'bar',
