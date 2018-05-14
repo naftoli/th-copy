@@ -199,7 +199,9 @@ if (isset($_POST['submit'])) {
 								$arrValues = explode(':', $val);
 								foreach ($arrValues as $value) {
 									$arrTemp = explode(',', $value);
-									$year = $arrTemp[0] == 13 ? 5777 : 5778; 
+                                    // this causes problems b/c the beginning of the yr tasks relate to previous yr and end or yr tasks refer to next yr
+									$year = $arrTemp[0] == 13 ? 5777 : 5778;
+                                    //$year = 5778; 
 									$jd = jewishtojd($arrTemp[0], $arrTemp[1], $year);
                     				$arrStart[] = $jd;
 									$startDate = $arrStart[0];
@@ -291,8 +293,10 @@ if (isset($_POST['submit'])) {
                 // set the start date from the array if it is full and $startDate is empty
                 if (isset($arrStart) && !empty($arrStart) && empty($startDate)) {
                     $year = in_array($arrStart[0], array(12,13)) ? 5777 : 5778;
+                    //$year = 5778;
                     $startDate = jewishtojd($arrStart[0], $arrStart[1], $year);
                     $year = in_array($arrEnd[0], array(12,13)) ? 5777 : 5778;
+                    //$year = 5778;
                     $endDate = jewishtojd($arrEnd[0], $arrEnd[1], $year);
                 }
                 
