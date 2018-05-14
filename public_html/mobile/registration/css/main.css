@@ -23,6 +23,7 @@ header a.home, header a.logout {
 }
 header a.logout {
     left: 2%;
+    width: 50px;
 }
 @media ( max-width: 524px ){
     header, header a.home, header a.logout {
@@ -75,7 +76,8 @@ img#user-img {
     form select.form-control, 
     form input.form-control, 
     form input.btn, 
-    form a.btn {
+    form a.btn,
+    .navigation .btn {
         height: calc( 2px + 2.5rem ) !important;
         font-size: 1em;
     }
