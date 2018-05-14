@@ -64,40 +64,19 @@ var registrationApp = function() {
                 return true;
             }
         }
-        // fetch the children and render the page.
-        $.get( "api/users.php", handleAPIResponse( function( users ) {
+        page1.getUsers( function( users ){
             state.users = [];
-            // throw out any registered users
             users.forEach( function( user ) {
-                if( !user.user_registered ){
-                    state.users.push( user );
-                }
+                if( !user.user_registered ) state.users.push( user );
             });
-            // skip to step 2
-            if ( state.users.length == 1 ){
+            if ( state.users.length == 1 ) {
                 if ( !update_only ) renderStep2();
             } else {
-                var html = "";
-                state.users.forEach( function( user ){
-                    html += 
-                    '<div class="child col-12 col-lg-6" id="child-' + user.user_id + '"><label>' +
-                        '<div class="row">' +
-                            '<div class="col-4">' +
-                                '<img src="' + user.profile_picture + '" />' +
-                            '</div><div class="col-6">' +
-                                '<p class="name">' + user.first + " " + user.last + '</p>' +
-                                '<p class="reg_cost">$' + user.registration_fee + '</p>' +
-                            '</div><div class="col-2">' +
-                                '<input type="checkbox" data-user_id="' + user.user_id + '" />' +
-                                '<span class="checkbox"></span>' +
-                            '</div>' +
-                        '</div>' +
-                    '</label></div>';
-                });
+                var html = page1.render( state.users );
                 toggleLoading( 1, false );
                 $("#step-1 #children").html( html );
             }
-        }));
+        });
     }
 
     /**
@@ -133,6 +112,11 @@ var registrationApp = function() {
         showPage("step-2");
     }
 
+    /**
+     * renderStep3
+     * 
+     * function to render the payments page
+     */
     function renderStep3(){
         showPage("step-3");
     }
