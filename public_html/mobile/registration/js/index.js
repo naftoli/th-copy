@@ -171,8 +171,11 @@ var registrationApp = function() {
         $("img#user-img, #child-" + user_id + " img").attr( "src", data.location );
         
         $.post("api/users.php?user_id=" + user_id, { mobile_pic: data.filename }, function( response ){
-            if ( !response.success )
+            if ( !response.success ){
                 showError( "Could not update Profile Picture. We will try again when pressing Confirm.");
+            } else {
+                renderStep1( true );
+            }
         });
     }
 
