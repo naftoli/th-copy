@@ -1,13 +1,16 @@
 /**
  * JS file for /mobile/registration/
  */
+$("#successModal").on('hidden.bs.modal', function( event ) { window.location = "/mobile/reg/parent_detail.html" } );
+$('[data-toggle="popover"]').popover()
 // run this code when loading script and expose functions under registrationApp
 var registrationApp = function() {
     // default state of application
     var state = {
         users: [], // the users we are registering
         selected_users: [], // users selected in step-1
-        selected_user_index: 0 // the current user we are confirming
+        selected_user_index: 0, // the current user we are confirming
+        shipping_charges: 0
     }
     // initialization functions
     hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right places
@@ -16,6 +19,8 @@ var registrationApp = function() {
     $("button#start-step-2").click( renderStep2 );
     $("button#start-step-3").click( renderStep3 );
     $("#step-2 form").submit( updateUser );
+    $("#step-3 form").submit( updateShipping );
+    $("#step-4 form").submit( page4.submit );
 
     /******************** Rendering Functions ********************/
     /**
@@ -118,7 +123,29 @@ var registrationApp = function() {
      * function to render the payments page
      */
     function renderStep3(){
+        // setup page
+        toggleLoading( 3, true );
         showPage("step-3");
+
+        state.shipping_charges = 0;
+        var school_ids = state.selected_users.map( function( user ) { return user.school_id } );
+
+        // load shipping charges from API
+        $.post( "api/tasks/shippingCost.php", { school_ids: school_ids }, function( response ){
+            // if we have no shipping charges, then just skip to payments
+            if ( !response.data ) return renderStep4();
+
+            response.data.forEach( function(rate) { 
+                $("#shipping-type-" + rate.type).text("$" + rate.rate) 
+            });
+
+            toggleLoading( 3, false );
+        });
+    }
+
+    function renderStep4(){
+        page4.render( state );
+        showPage("step-4");
     }
 
     /**
@@ -199,5 +226,15 @@ var registrationApp = function() {
             state.selected_user_index += 1;
             showUser( state.selected_users[ state.selected_user_index ] );
         }
+    }
+
+    function updateShipping( event ){
+        event.preventDefault();
+        // update the shipping charges
+        var selected_type = $("#shipping-type:checked").val();
+        state.shipping_charges = parseInt(
+            $("#shipping-type-"+selected_type).text().replace( /^\D+/g, '')
+        );
+        renderStep4();
     }
 }();
