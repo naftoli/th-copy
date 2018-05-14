@@ -51,7 +51,8 @@ form {
 form select.form-control, 
 form input.form-control, 
 form input.btn, 
-form a.btn {
+form a.btn,
+.navigation .btn {
     height: calc( 2px + 4rem ) !important;
     font-size: 1.5em;
 }

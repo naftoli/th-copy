@@ -2,7 +2,7 @@
 img {
     max-width: 100%;
 }
-.row.spaced { margin-top: 5%; margin-bottom: 5%; }
+.row.spaced { margin-bottom: 5%; }
 .row.spaced .left { text-align: left; }
 .row.spaced .right { text-align: right; }
 .row.spaced .btn { width: 100%; }
