@@ -812,8 +812,18 @@ $class_result = mq($qry);
 
 
 										<? if ($action=='edit') : ?>
-										<?=T_('Serial #')?><BR><SPAN style="font-size: 125%; font-weight: bold;"><?=es($edit_row['user_serial'])?></SPAN><BR>
-										<?=T_('Barcode #')?><BR><SPAN style="font-size: 125%; font-weight: bold;">3<?=es($edit_row['user_code'])?></SPAN><BR>
+                                        <?=T_('Serial #')?><BR>
+                                        <SPAN style="font-size: 125%; font-weight: bold;">
+                                            <a href="/reports/users/student_info.php?serial=<?=$edit_row['user_serial']?>" target="_blank">
+                                                <?=es($edit_row['user_serial'])?>
+                                            </a>
+                                        </SPAN><BR>
+                                        <?=T_('Barcode #')?><BR>
+                                        <SPAN style="font-size: 125%; font-weight: bold;">
+                                            <a href="/reports/users/student_info.php?serial=3<?=$edit_row['user_code']?>" target="_blank">
+                                                3<?=es($edit_row['user_code'])?>
+                                            </a>
+                                        </SPAN><BR>
 										<? endif; ?>
 
 										<LABEL>*<?=T_('First Name')?><BR><INPUT TYPE="text" NAME="first" id="fname" VALUE="<?=es($edit_row['first'])?>" MAXLENGTH="128"></LABEL><BR>
