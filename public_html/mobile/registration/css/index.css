@@ -82,7 +82,9 @@ input:checked + span.checkbox:before {
 div#cc-card {
     margin: 5% auto 2%;
 }
-
+.total-row {
+    font-size: 1.2em;
+}
 /** pulled from https://www.codeply.com/go/dHX2pDOcIz/bootstrap-4-credit-card-form */
 .input-group-addon {background-color: transparent;border-left: 0;}
 .cc-number.identified {background-repeat: no-repeat;background-position-y: 3px;background-position-x: 99%;}
