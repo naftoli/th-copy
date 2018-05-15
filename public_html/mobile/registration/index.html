@@ -291,6 +291,11 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="zip" class="control-label mb-1">Zip / Postal Code</label>
+                                <input id="zip" name="zip" type="tel" class="form-control" required="" placeholder="XXXXX" maxlength="12">
+                                <span class="invalid-feedback">Enter a valid zip / postal code</span>
+                            </div>
                             <div class="row spaced">
                                 <div class="col-12">
                                     <button id="payment-button" class="btn btn-success">
@@ -396,6 +401,7 @@
                             <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
                         </svg>
                         <p id="success">Your child has been registered!</p>
+                        <div class="alert alert-danger" id="error-message"></div>
                     </div>
                     <div class="modal-footer">
                         <a class="btn btn-primary" href="/mobile/reg/parent_detail.html">Close</a>
