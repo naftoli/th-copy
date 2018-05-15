@@ -58,7 +58,7 @@ class PaymentProfile {
      * default (optional) => should this card be set as the default card on the account.
      *
      */
-    public static function create($cardNumber, $exparation, $code, $customerProfileId, $billToArray = null, $default=false, $live = true, $api = null) {
+    public static function create($cardNumber, $exparation, $code, $customerProfileId, $billToArray = null, $default=false, $live = false, $api = null) {
         $auth = new Auth(); // create a new auth for the staic context
         if (!$api){$api = new AuthorizeAPIRequest();} // create a new $api object if not passed in
         // create the basic array
