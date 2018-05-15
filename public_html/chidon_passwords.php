@@ -43,7 +43,7 @@ if (isset($admin_user)) { // this whole page requres admin_user to be set in adv
                 if ('chidonvaad78' != password) { // if the password does not match
                     show = false;
                     alert('You have no permission to access this page. Redirecting you to the homepage'); // llet them know 
-                    location.href = 'admin.php';
+                    location.href = '/admin.php';
                 }
             <? } else { // otherwise each school must use it's hardcoded password... ?>
                 for (var s in schools) { // for each school with a hardcoded password
@@ -52,7 +52,7 @@ if (isset($admin_user)) { // this whole page requres admin_user to be set in adv
                         if (passwords[school] != password) { // if the password does not match
                             show = false;
                             alert('You have no permission to access this page. Redirecting you to the homepage'); // llet them know 
-                            location.href = 'admin.php';
+                            location.href = '/admin.php';
                         }
                     }
                 }
