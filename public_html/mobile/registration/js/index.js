@@ -11,7 +11,6 @@ var registrationApp = function() {
         users: [], // the users we are registering
         selected_users: [], // users selected in step-1
         selected_user_index: 0, // the current user we are confirming
-        shipping_type: 1,
         shipping_charges: 0
     }
     // initialization functions
@@ -248,7 +247,7 @@ var registrationApp = function() {
         event.preventDefault();
         // update the shipping charges
         var selected_type = $("#shipping-type:checked").val();
-        state.shipping_type = selected_type;
+        $("#selected-shipping-type").val( selected_type );
         state.shipping_charges = parseInt(
             $("#shipping-type-"+selected_type).text().replace( /^\D+/g, '')
         );
