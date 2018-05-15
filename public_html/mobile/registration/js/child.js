@@ -81,14 +81,6 @@ var childApp = function(){
     }
 
     /************************ FORMS ************************/
-    // convert the form to a JSON object
-    function formToJSON( form ){
-        var json = {};
-        $(event.target).serializeArray().forEach( function( input ) {
-            json[ input.name ] = input.value;
-        })
-        return json;
-    }
     // handle what to do when an image is uploaded
     function onImageUploaded( data ){
         $("#user-img").attr("src", data.location );

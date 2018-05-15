@@ -20,3 +20,12 @@ function handleAPIResponse( callback ){
         }
     }
 }
+
+// convert the form to a JSON object
+function formToJSON( form ){
+    var json = {};
+    $(event.target).serializeArray().forEach( function( input ) {
+        json[ input.name ] = input.value;
+    })
+    return json;
+}
