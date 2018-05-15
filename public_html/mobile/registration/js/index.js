@@ -1,6 +1,7 @@
 /**
  * JS file for /mobile/registration/
  */
+var page1;  var page4; // objects we are expecting to be loaded
 $("#successModal").on('hidden.bs.modal', function( event ) { window.location = "/mobile/reg/parent_detail.html" } );
 $('[data-toggle="popover"]').popover()
 // run this code when loading script and expose functions under registrationApp
@@ -228,6 +229,13 @@ var registrationApp = function() {
         }
     }
 
+    /**
+     * updateShipping
+     * 
+     * updates the shipping value in the state and moves on to step 4
+     * 
+     * @param {event} event 
+     */
     function updateShipping( event ){
         event.preventDefault();
         // update the shipping charges
