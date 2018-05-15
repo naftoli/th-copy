@@ -1,5 +1,11 @@
 var page4 = function(){
 
+    $("#test").click( function() {
+        $("#cc-number").val( "4111 1111 1111 1111" );
+        $("#cc-exp").val("12 / 15");
+        $("#x_card_code").val("535");
+    })
+
     function render( state ){
         $("#charges").html("");
 
@@ -7,7 +13,7 @@ var page4 = function(){
         // add all the users
         state.selected_users.forEach( user => {
             $("#charges").append( '<div class="row">' +
-                '<div class="col-10">' + user.first + " " + user.last + '</div>' +
+                '<div class="col-10">' + user.first + " " + user.last + ' Registration</div>' +
                 '<div class="col-2 reg_cost">$' + user.registration_fee + '</div>'
             + "</div>" );
             total += user.registration_fee;
@@ -29,22 +35,7 @@ var page4 = function(){
         $("#total").val( total );
     }
 
-    function submit( event ){
-        event.preventDefault();
-        // validate form 
-        event.target.checkValidity();
-        $( event.target ).addClass('was-validated');
-        // show loading
-        $("#payment-button").html('<i class="fas fa-circle-notch fa-spin fa-2x"></i>')
-        // submit the payment info
-        debugger;
-        // update the button
-        $("#payment-button").html('Pay And Register');
-        $("#successModal").modal('show');
-    }
-
     return {
-        render: render,
-        submit: submit
+        render: render
     }
 }();
