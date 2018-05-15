@@ -14,9 +14,9 @@ $dates = GlobalSettings::getCurYearDates();
 
 // 8001 = quota, 8002 = minutes
 $tehillim_info_query = mysql_query(
-     "SELECT grid_id, done_qty as quantity, user_id, mark_date "
+     "SELECT grid_id, done_qty as quantity, user_id, sm_date as mark_date "
     ." FROM tehillim_backups "
-    ." WHERE grid_id IN ( 8001, 8002 ) AND mark_date >= " . $dates['start']
+    ." WHERE grid_id IN ( 8001, 8002 ) AND sm_date >= " . $dates['start']
 );
 
 $tehillim_mission_query = mysql_query(
@@ -45,12 +45,12 @@ $sm = calculateSM( GlobalSettings::getCurrentYear() );
 
 function getSM( $date, $sm ){
     $months = [
-        'Tishrei', 'Cheshvon', 'Kislev', 'Teves', 'Shevat', 
-        'Adar', 'Nissan', 'Iyar', 'Sivan', 'Tammuz', 'Av', 'Elul'
+        'Tishrei', 'Cheshvon', 'Kislev', 'Teves', 'Shevat', 'Adar I',
+        'Adar II', 'Nissan', 'Iyar', 'Sivan', 'Tammuz', 'Av', 'Elul'
     ];
 
     foreach( $sm as $index => $sm_date ){
-        if ( $sm_date > $date ) return $months[ $index ];
+        if ( $sm_date > $date ) return $months[ $index - 1 ];
     }
     return end( $months );
 }
@@ -59,13 +59,13 @@ while( $tehillim_info = mysql_fetch_assoc( $tehillim_info_query ) ) {
     // $tehillim_info['mark_date'] = jdtojewish( $tehillim_info['mark_date'] );
     $tehillim_info['mark_date'] = getSM( $tehillim_info['mark_date'], $sm );
 
-    if ( $tehillim_info['grid_id'] == '8001' ){
+    if ( $tehillim_info['grid_id'] == '8001' && $tehillim_info['quantity'] <= 150 ){
         $total_kapitalach += $tehillim_info['quantity'];
         if ( isset( $kapitalach[ $tehillim_info['mark_date'] ] ) )
             $kapitalach[ $tehillim_info['mark_date'] ] += $tehillim_info['quantity'];
         else
             $kapitalach[ $tehillim_info['mark_date'] ] = $tehillim_info['quantity'];
-    } else if ( $tehillim_info['grid_id'] == '8002' ){
+    } else if ( $tehillim_info['grid_id'] == '8002' && $tehillim_info['quantity'] <= 240 ){
         $total_minutes += $tehillim_info['quantity'];
         if ( isset( $minutes[ $tehillim_info['mark_date'] ] ) )
             $minutes[ $tehillim_info['mark_date'] ] += $tehillim_info['quantity'];
