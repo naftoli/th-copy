@@ -21,7 +21,7 @@ var registrationApp = function() {
     $("button#start-step-3").click( renderStep3 );
     $("#step-2 form").submit( updateUser );
     $("#step-3 form").submit( updateShipping );
-    $("#step-4 form").submit( page4.submit );
+    $("#step-4 form").submit( registerUser );
 
     /******************** Rendering Functions ********************/
     /**
@@ -252,5 +252,38 @@ var registrationApp = function() {
             $("#shipping-type-"+selected_type).text().replace( /^\D+/g, '')
         );
         renderStep4();
+    }
+
+    /**
+     * registerUser
+     * 
+     * process the payment and register the user
+     * 
+     * @param {event} event 
+     */
+    function registerUser( event ){
+        event.preventDefault();
+        // validate form 
+        event.target.checkValidity();
+        $( event.target ).addClass('was-validated');
+        // show loading
+        $("#payment-button").html('<i class="fas fa-circle-notch fa-spin fa-2x"></i>')
+        // submit the payment info
+        var postData = formToJSON( event.target ); // function in main.js
+        // remove whitespace
+        postData["cc-number"] = postData["cc-number"].replace(/ /g, '');
+        postData["cc-exp"] = postData["cc-exp"].replace(/ /g, '');
+        postData["x_card_code"] = postData["x_card_code"].replace(/ /g, '');
+
+        postData.users = state.selected_users;
+        postData.shipping_charges = state.shipping_charges;
+
+        $.post( "api/tasks/register.php", postData, function( response ) {
+            $("#payment-button").html('Pay And Register'); // update the button
+            if ( !response.success ) return showError( response.error );
+            $("#successModal").modal('show');
+            
+            if ( response.data ) showError( response.data );
+        });
     }
 }();
