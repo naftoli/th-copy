@@ -12,14 +12,14 @@
  */
 
 if (isset($admin_user)) { // this whole page requres admin_user to be set in advance (user must be logged in...) ?>
-    <style>
-        <?php if ($admin_user['auth'] != 'super' || ($admin_user['auth'] == 'super' && isset($_POST['school']))) { // if this is a school or a school was selected by a superuser... ?>
-/*            Hide all content on the page...*/
+    <?php if ($admin_user['auth'] != 'super' || ($admin_user['auth'] == 'super' && isset($_POST['school']))) { // if this is a school or a school was selected by a superuser... ?>
+        <style>
+            /* Hide all content on the page...*/
             .col_content{
                 display: none;
             }
-        <?php } ?>
-    </style>
+        </style>
+    <?php } ?>
     
     <script>
         $(document).ready(function(){
@@ -59,7 +59,7 @@ if (isset($admin_user)) { // this whole page requres admin_user to be set in adv
             <? } ?>
             
             // show the page...
-            if(show) {
+            if( show ) {
                 $(".col_content").show();
             }
         });
