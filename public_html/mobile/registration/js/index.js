@@ -11,6 +11,7 @@ var registrationApp = function() {
         users: [], // the users we are registering
         selected_users: [], // users selected in step-1
         selected_user_index: 0, // the current user we are confirming
+        shipping_type: 1,
         shipping_charges: 0
     }
     // initialization functions
@@ -200,6 +201,13 @@ var registrationApp = function() {
      */
     function updateUser( event ){
         event.preventDefault();
+
+        if ( $(event.target).find( "#media" )[0].checked ){
+            $(event.target).find( "#media" )[0].checked = false;
+        } else {
+            return showError( "You must indicate your acceptance of participation in Tzivos Hashem Media." )
+        }
+
         var postData = {};  var user_changed = false;
         var selected_user = state.selected_users[ state.selected_user_index ];
         selected_user.confirmed = true;
@@ -240,6 +248,7 @@ var registrationApp = function() {
         event.preventDefault();
         // update the shipping charges
         var selected_type = $("#shipping-type:checked").val();
+        state.shipping_type = selected_type;
         state.shipping_charges = parseInt(
             $("#shipping-type-"+selected_type).text().replace( /^\D+/g, '')
         );
