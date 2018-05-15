@@ -22,7 +22,7 @@ var page4 = function(){
         }
 
         $("#charges").append( '<div class="row total-row">' +
-            '<div class="col-10">Total</div>' +
+            '<div class="col-10"><strong>Total</strong></div>' +
             '<div class="col-2 reg_cost">$' + total + '</div>'
         + "</div>" );
 
