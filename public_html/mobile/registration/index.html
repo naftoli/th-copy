@@ -38,9 +38,9 @@
                 <p><strong>1. </strong>Select the children you wish to register. Please note that this step may be skipped if you only have one child</p>
                 <p><strong>2. </strong>Update and confirm the information for each child.</p>
                 <p><strong>3. </strong>Select an existing payment method or add a new one.</p>
-                <div class="row navigation">
+                <div class="row spaced navigation">
                     <div class="col-12">
-                        <button id="start-step-1" class="btn btn-primary">Begin Registration</button>
+                        <button id="start-step-1" class="btn btn-success">Begin Registration</button>
                     </div>
                 </div>
             </div>
@@ -164,7 +164,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <input type="submit" class="btn btn-primary" value="Confirm" />
+                            <input type="submit" class="btn btn-success" value="Confirm" />
                         </div>
                     </div>
                 </form>
@@ -225,7 +225,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <input type="submit" class="btn btn-primary" value="Confirm Shipping"/>
+                            <input type="submit" class="btn btn-success" value="Confirm Shipping"/>
                         </div>
                     </div>
                 </form>
@@ -243,13 +243,12 @@
             <div class="container">
                 <h2>Checkout</h2>
                 <div id="charges"></div>
-                <div class="row" id="total"></div>
-                
                 <div class="card col-12 col-md-10 col-lg-8 col-xl-6" id="cc-card">
                     <div class="card-body">
                         <h5 class="card-title">Payment Method</h5><hr>
                         <form id="payment">
                             <input type="hidden" id="total" name="total" />
+                            <input type="hidden" id="selected-shipping-type" name="shipping-type" />
                             <div class="form-group text-center">
                                 <ul class="list-inline">
                                     <!-- 
@@ -258,7 +257,7 @@
                                     <li class="list-inline-item"><i class="fab fa-cc-amex fa-2x"></i></li>
                                     <li class="list-inline-item"><i class="fab fa-cc-discover fa-2x"></i></li>
                                     -->
-                                    <li class="list-inline-item"><img src="img/visa.svg" height="22" /></li>
+                                    <li class="list-inline-item"><img src="img/visa.svg" id="test" height="22" /></li>
                                     <li class="list-inline-item"><img src="img/mastercard.svg" height="36" /></li>
                                     <li class="list-inline-item"><img src="img/amex.svg" height="40" /></li>
                                     <li class="list-inline-item"><img src="img/discover.svg" height="32" /></li>
@@ -294,7 +293,7 @@
                             </div>
                             <div class="row spaced">
                                 <div class="col-12">
-                                    <button id="payment-button" class="btn btn-primary">
+                                    <button id="payment-button" class="btn btn-success">
                                         Pay And Register
                                     </button>
                                 </div>
