@@ -41,12 +41,11 @@ if (isset($_POST['submit'])) {
     }
     //echo "<pre>"; print_r( $users ); echo "</pre>"; exit;
     $fromAction = mysql_real_escape_string( $_POST['fromAction'] );
-    if ($fromAction == 'store') {
+    if ($action == -1 && $fromAction == 'store') {
         $resource = 'transaction_manager_store';
     } else {
         $resource = 'admin_users_manual';
     }
-
     
     $success = true;
     mysql_query('set autocommit=0');
@@ -151,9 +150,12 @@ if (isset($_POST['submit'])) {
                 <input type="radio" name="action" value="1" class="action" /> Add<br />
                 <input type="radio" name="action" value="-1" class="action" /> Subtract<br />
                 <input type="text" name="points" placeholder="Points" id="points" />
-                <h2>From</h2>
-                <input type="radio" name="fromAction" value="both" checked /> Store & Auction<br />
-                <input type="radio" name="fromAction" value="store" /> Store ONLY<br /><br />
+                <div id="fromAction" style="display: none">
+                    <h2>From (ONLY WHEN SUBTRACTING)</h2>
+                    <input type="radio" name="fromAction" value="both" checked /> Store & Auction<br />
+                    <input type="radio" name="fromAction" value="store" /> Store ONLY
+                </div>
+                <br /><br />
                 <input type="submit" name="submit" value="submit" id="submit" />
             </div>
         </form>
@@ -197,6 +199,15 @@ if (isset($_POST['submit'])) {
                     $("#user").empty();
                     $("#user").append("<option value='0'>Select Child</option>");
                 });
+            });
+
+            $(".action").click( function() {
+                var val = $(this).val();
+                if (val < 0) {
+                    $("#fromAction").show();
+                } else {
+                    $("#fromAction").hide();
+                }
             });
             
             $("#submit").click( function() {
