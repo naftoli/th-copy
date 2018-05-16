@@ -33,6 +33,8 @@ class Raffle {
     // private variables
     private $db_conn; // database connection object
     
+    public $hebrew_dates = [];
+    
     // ************************
     // constructors
     // ************************
@@ -504,6 +506,26 @@ class Raffle {
             return true; // and return true
         }
         return false; // something did not work
+    }
+
+    /**
+     * $raffle->get_hebrew_dates
+     *
+     * sets the hebrew_dates array
+     * 
+     * @return array
+     */
+    public function get_hebrew_dates(){
+        $raffle_from = explode(' ', iconv('WINDOWS-1255', 'UTF-8', jdtojewish($this->start_date, true, CAL_JEWISH_ADD_GERESHAYIM)));
+        $raffle_from = $raffle_from[0] . ' ' . $raffle_from[1];
+
+        $raffle_to = explode(' ', iconv('WINDOWS-1255', 'UTF-8', jdtojewish($this->end_date, true, CAL_JEWISH_ADD_GERESHAYIM)));
+        $raffle_to = $raffle_to[0] . ' ' . $raffle_to[1];
+
+        return $this->hebrew_dates = [
+            "from"  => $raffle_from,
+            "to"    => $raffle_to
+        ];
     }
 }
 
