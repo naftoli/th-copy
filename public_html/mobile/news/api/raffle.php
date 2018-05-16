@@ -1,7 +1,7 @@
 <?php
 include_once( dirname(__FILE__) . "/header.php" );
-require_once( dirname(__FILE__) . "/../../raffles/shared/classes/Raffle.php" );
-require_once( dirname(__FILE__) . "/../../raffles/shared/classes/Prize.php" );
+require_once( dirname(__FILE__) . "/../../../raffles/shared/classes/Raffle.php" );
+require_once( dirname(__FILE__) . "/../../../raffles/shared/classes/Prize.php" );
 
 use \raffles\weekly\Raffle as Raffle;
 
