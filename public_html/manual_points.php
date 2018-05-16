@@ -40,6 +40,13 @@ if (isset($_POST['submit'])) {
         $users[] = $user;
     }
     //echo "<pre>"; print_r( $users ); echo "</pre>"; exit;
+    $fromAction = mysql_real_escape_string( $_POST['fromAction'] );
+    if ($fromAction == 'store') {
+        $resource = 'transaction_manager_store';
+    } else {
+        $resource = 'admin_users_manual';
+    }
+
     
     $success = true;
     mysql_query('set autocommit=0');
@@ -51,7 +58,7 @@ if (isset($_POST['submit'])) {
                 class_id = " . $grade . ",
                 points = " . $points . ",
                 created = now(),  
-                resource_name = 'admin_users_manual'";
+                resource_name = '" . $resource . "'";
         if (!mysql_query($sql)) {
             $success = false;
             break;
@@ -80,6 +87,9 @@ if (isset($_POST['submit'])) {
             .msg {
                 color: red;
                 padding-bottom: 20px;
+            }
+            h2 {
+                width: 40%;
             }
         </style>
     </head>
@@ -137,9 +147,13 @@ if (isset($_POST['submit'])) {
             <br />
             
             <div id="action" style="display: none">
+                <h2>Action</h2>
                 <input type="radio" name="action" value="1" class="action" /> Add<br />
                 <input type="radio" name="action" value="-1" class="action" /> Subtract<br />
-                <input type="text" name="points" placeholder="Points" id="points" /><br /><br />
+                <input type="text" name="points" placeholder="Points" id="points" />
+                <h2>From</h2>
+                <input type="radio" name="fromAction" value="both" checked /> Store & Auction<br />
+                <input type="radio" name="fromAction" value="store" /> Store ONLY<br /><br />
                 <input type="submit" name="submit" value="submit" id="submit" />
             </div>
         </form>
