@@ -40,5 +40,12 @@ class GlobalSettings {
         $row = mysql_fetch_assoc($result);
         return $row['val'];
     }
+
+    public static function getCharidyYear() {
+        $sql = "select `val` from global_settings where `key` = 'charidy_year'";
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        return $row['val'];
+    }
 }
 ?>
