@@ -11,7 +11,7 @@
     <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
     <script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
     <script src="js/all.js" defer></script>
-
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <style>
         .footer.media-group .menu-item {padding: 0px;}
         #wpContent{width: 94%;float: left;margin: 3%;}
@@ -21,18 +21,29 @@
         .mazalTov {font-size: 26px; padding-top: 10px; text-align: center; color: #3155a1; line-height: 1.1;}
         .heDate {padding: 10px;font-size: 25px;width: auto;font-style: italic;text-align: center;}
         .b-t-description span {font-size: 1.8em;}
-        .date {border-bottom: 2px solid #ddd;clear: both;}
+        .bottom-border{ border-bottom: 2px solid #ddd;clear: both; }
+        .date {text-align: center;font-size: 1.5em;}
         .raffle{padding-bottom: 10%;}
         .image{background-position: center; background-size: cover;border-radius: 5px;height: 8vh;width: 8vh;}
         .winner .image {float: left;margin: 0 15px 0 5px;}
         .weekly-raffle .image {margin: 5px auto; display: inline-block;}
-        .weekly-raffle {text-align: center;font-size: 2em;}
-        .weekly-raffle > p { display: inline-block; vertical-align: top; margin-top: 35px; margin-right: 10px; }
+        .weekly-raffle { display: flex; align-items: center; }
+        .weekly-raffle > p { display: inline-block; padding: 10px 15px 0px; font-size: 1.5em; font-style: italic; }
         .raffle-info{width: 49%;display: inline-block;text-align: center;font-size: 2em;margin-top: 10px;}
         /* Glyph, by Harry Roberts */
         hr.style-eight {overflow: visible; /* For IE */padding: 0;border: none;border-top: medium double #333;color: #333;text-align: center;width: 90%;}
         hr.style-eight:after {content: "§";display: inline-block;position: relative;top: -0.7em;font-size: 1.5em;padding: 0 0.25em;background: white;font-family: Helvetica;font-style: italic;}
         .loader {border-left: 1.1em solid #ccc;}
+        .winners { margin-top: 15px; }
+        .boys, .girls { display: inline-block; width: 50%; vertical-align: top; padding: 0px 2%; }
+        .boys { border-right: 1px solid #ccc; }
+        .girls { border-left: 1px solid #ccc; margin-left: -1px; }
+
+        div#raffle-navigation { display: flex; }
+        div#previous, div#next { flex-grow: 1; padding: 5px 15px; }   
+        div#next { text-align: right; }
+        #raffle-navigation a { color: #000; font-size: 1.3em; text-transform: capitalize; }
+        hr.new-prize { height: 1px; margin: 5px; border-top: 1px solid #ddd; }
     </style>
 
 </head>
@@ -50,9 +61,6 @@
     </div>
     <div class="container">
         <div class="span12" style="max-width:1014px; width:100%;margin:0 auto;float:none;">
-
-        <!--<div class="span12 body">-->
-
             <div class="body span12">
                 <div class="span12 footer media-group" style="width: 100%;">
                     <a href="index.html">
@@ -105,20 +113,25 @@
 
                 <div id="wpContent">
                     <div class="span12 wrap1">
-                        <div class="heDate">
-                            Raffle Winners
+                        <div class="heDate">Raffle Winners</div>
+                        <div class="bottom-border"></div>
+                        <div id="raffle-navigation">
+                            <div id="previous">
+                                <i class="fas fa-arrow-left"></i>
+                                <a>previous</a>
+                            </div>
+                            <div id="next">
+                                <a>next</a>
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
                         </div>
-                        <div class="date">
-                            
-                        </div>
-                        <div style="padding: 20px; height: 400px;" id="raffles" align="center">
+                        <div class="bottom-border"></div>
+                        <div style="min-height: 400px;" id="raffles">
                             <div class="loader"></div>
-                            <p id="loading-status">Loading Winners....</p>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div class="span12 bottomNav">
                 <div class="span12 footer" id="logged-in-footer">
                     <div class="span3 active" style="width: 100%">
@@ -178,144 +191,6 @@
         </div>
     </div>
     <script src="js/js.cookie.js"></script>
-    <script>
-document.addEventListener("DOMContentLoaded", function(event) {
-    var admin = Cookies.get('admin');
-    var user = Cookies.get('user');
-
-    if (!admin && !user) {
-        $("#logged-out-footer").css({"display": "block"});
-    } else {
-        $("#logged-in-footer").css({"display": "block"});
-    }
-
-    if( user && localStorage.getItem( "login" ) == "user" ){
-        $("#logged-in-footer #main-title").text( "My Account" );
-        $("#logged-in-footer a").attr('href', "/mobile/reg/medals/?id=" + localStorage.getItem( 'id' ));
-    }
-    
-    if (Cookies.get('shliach') && admin) {
-        var shliach = Cookies.get('shliach');
-        if (shliach == 1) {
-            $("#logged-in-footer").css({"display": "none"});
-            $("#my-shliach-footer").css({"display": "block"});
-            //$(".bottomNav").empty();
-            //$(".bottomNav").append( html );
-        }
-    } else if (admin) {
-        $.post('ajax/checkMyShliach.php', { admin : admin }, function( isShliach ) {
-            Cookies.set('shliach', isShliach ? 1 : 0);
-            if (isShliach > 0) {
-                $("#logged-in-footer").css({"display": "none"});
-                $("#my-shliach-footer").css({"display": "block"});
-            }
-        });
-    }
-/*
-    $.post('ajax/getRaffles.php', function( success ) {
-        var html = '';
-        var raffles = $.parseJSON( success );
-        html += '<select name="raffles">';
-        for (var r in raffles) {
-            html += '<option value="' + r + '">' + raffles[r] + '</option>';
-        }
-        html += '</select><br /><br />';
-        html += '<button class="btn btn-success show">Show Winners</button>';
-        
-        //html = "<span style='font-size: 22px;'>Stay Tuned...</span>";
-        $("#raffles").append( html );
-        
-        $(".show").click( function() {
-            var id = $("#raffles select").val();
-            window.location.href = 'winners.html?raffle=' + id;
-        });
-    });
-
-    var url = location.toString();
-    var pos = url.indexOf('='); 
-    var id = url.substring( pos+1 );
-*/
-/****************************** LOAD RAFFLE WINNERS ******************************/
-
-    $.getJSON("/raffles/shared/ajax/get_raffle_winners.php?v=2&latest=true", render_raffles); // render the latest raffle...
-    $.getJSON("/raffles/shared/ajax/get_raffle_winners.php?v=2", render_raffles); // load up the rest
-
-    function render_raffles(data) {
-        var raffles = data;
-        
-        // define the template object that we will use to render
-        var winner_renderer = function(winner, show_image){
-            this.winner = winner;
-            this.show_image = show_image;
-        };
-        winner_renderer.prototype.render = function(){
-            var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-            var pic_src = w > 850 ? this.winner.prize_picture.full : this.winner.prize_picture.thumb ;
-            
-            var html = '<div class="user winner">';
-            if(this.show_image) { html += '<div class="image" style="background-image: url(' + pic_src + ')" alt="picture of prize"></div>'; }
-            html += '<div class="b-t-description"> ';
-            html += '<span><span class="rank">' + this.winner.rank + '</span><br />' + this.winner.name + '</span> ';
-            html += '</div><div> <span class="school">' + this.winner.school + '</span><br/>';
-            html += '<span class="grade">Grade: ' + this.winner.grade + '</span></div> ';
-            html += '<div style="font-size: 11px; color: #3155a1"> ';
-            if(this.show_image) {html += 'Prize: ' + this.winner.prize_name;}
-            html += '</div></div><br />';
-            return html;
-        };
-        
-        $("#loading-status").text("Rendering raffles...");
-        
-        var html = '<div class="span12 wrap1">'; // the initial content to render on the page
-        
-        // render each raffle
-        for(var i = 0; i < raffles.length; i++){
-            // get the raffle from the array
-            var raffle = raffles[i];
-            // console.log(raffle);
-            var weekly = raffle.raffle_type == "weekly";
-            // assemble the frame for the content
-            html += '<div class="raffle">';
-            html += i > 0 ? '<hr class="style-eight"/>' : '<div class="heDate">Raffle Winners</div>';
-            html += '<div class="heDate">' + raffle.raffle_from + " - " + raffle.raffle_to + '</div><div class="date"></div>';
-            if (weekly) {
-                var prize = raffle.winners.boys[0] ? raffle.winners.boys[0] : raffle.winners.girls[0];
-                if (prize !== undefined) {
-                    var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-                    var pic_src = w > 850 ? prize.prize_picture.full : prize.prize_picture.thumb ;
-                    html += '<div class="weekly-raffle"><p>Prize Won: ' + prize.prize_name + '</p><div class="image" style="background-image: url(\'' + encodeURI(pic_src) + '\')" alt="picture of prize"></div></div>';
-                } else {
-                    html += '<div class="weekly-raffle"><p>Prize Won: N/A</p></div>';
-                }
-            }
-            html += '<div class="date"></div><div class="mazalTov">!מזל טוב</div>';
-            html += '<div style="width : 90%; margin : 2% 5%;">';
-            html += '<div style="float: left; width: 48%;">';
-            html += '<div class="b-t-title"><span>Boys</span></div>';
-            // render the boys
-            for (var index = 0; index < raffle.winners.boys.length; index++) {
-                html += new winner_renderer(raffle.winners.boys[index], !weekly).render();
-            }
-            // render the top for the girls
-            html += '</div>';
-            html += '<div style="float: right; width: 48%;">';
-            html += '<div class="b-t-title"><span>Girls</span></div>';
-
-            for (index = 0; index < raffle.winners.girls.length; index++) {
-                html += new winner_renderer(raffle.winners.girls[index], !weekly).render();
-            }
-            
-            // close all the divs
-            html += '</div></div></div><div style="clear: both"></div>';
-        }
-        // empty the content and fill it with the new data
-        if (raffles.length > 0) { // make sure we actually have data to put here
-            html += '<div class="footer-spacing"></div></div>';
-            $("#wpContent").empty();
-            $("#wpContent").append( html );
-        }
-    }
-});
-</script>
+    <script src="js/raffles.js"></script>
 </body>
 </html>
