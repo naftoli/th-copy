@@ -243,7 +243,7 @@ if($from <> '')
 	
 	$sql = "SELECT "
 		. "s.school_name, "
-		. "s.nickname, "
+		. "s.hachayol_name as nickname, "
 		. "u.first, "
 		. "u.last, "    
 		. "k.rank_name, "
