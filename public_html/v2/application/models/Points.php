@@ -166,7 +166,7 @@ class Points
 					and institution_id = " . $arrParams["institution_id"] . "
 					and created >= '" . $sqlDate . "' 
 					and resource_name not in ('store', 'transaction_manager_store')";
-		if ($arrParams["institution_id"] == 176) $strSql .= " and points > 0"; // they only use subtraction of points for their internal store
+		if (in_array( $arrParams["institution_id"], array(30,176) )) $strSql .= " and points > 0"; // they only use subtraction of points for their internal store
 		$arrResult = first($this->_db->fetchAll($strSql));
 		return floor($arrResult->total);
 	}
