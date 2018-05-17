@@ -22,6 +22,10 @@ $user_query = mysql_query(
 
 if ( !$user_query || mysql_num_rows( $user_query ) == 0 )
     render_json_error( "Child Not Found. This is likely due to an incorrect Date of Birth" );
+else if ( mysql_num_rows( $user_query ) > 1 )
+    render_json_error(
+        "Multiple children found. Please contact your Base Commander or bugs@tzivoshashem.org with the information you entered."
+    );
 
 $user = mysql_fetch_assoc( $user_query );
 $user_id = $user['user_id'];
