@@ -32,7 +32,27 @@ var page4 = function(){
     }
 
     function validateCardInput( event ) {
-        debugger;
+        var cardInput = $("#cc-number");
+        cardInput.removeClass( "visa mastercard amex discover" );
+        $("#x_card_code").attr("placeholder", "XXX" );
+
+        // make sure they only enter numbers
+        if ( !event.key.match(/[0-9]/) ){
+            event.target.value = event.target.value.replace( /[^0-9 ]/g, '' );
+        }
+
+        var cardNumber = event.target.value.replace(/\D/g, '');
+        // regex taken from: https://www.regular-expressions.info/creditcard.html
+        if ( cardNumber.match( /^4[0-9]{12}(?:[0-9]{3})?$/g ) ) {
+            cardInput.addClass( "visa" );
+        } else if ( cardNumber.match( /^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$/g ) ) {
+            cardInput.addClass( "mastercard" );
+        } else if ( cardNumber.match( /^3[47][0-9]{13}$/g ) ) {
+            cardInput.addClass( "amex" );
+            $("#x_card_code").attr("placeholder", "XXXX" );
+        } else if ( cardNumber.match( /^6(?:011|5[0-9]{2})[0-9]{12}$/g ) ){
+            cardInput.addClass( "discover" );
+        }
     }
 
     function updateNewCard( event ){

@@ -18,12 +18,13 @@ var registrationApp = function() {
     hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right places
     image_upload( {}, onImageUploaded );
     renderStep1();
-    
+
     $("button#start-step-2").click( renderStep2 );
     $("button#start-step-3").click( renderStep3 );
     $("#step-2 form").submit( updateUser );
     $("#step-3 form").submit( updateShipping );
     $("#step-4 form").submit( registerUser );
+    $("#step-4 #cc-number").keyup( page4.validateCardInput );
 
     /******************** Rendering Functions ********************/
     /**
