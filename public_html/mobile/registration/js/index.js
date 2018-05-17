@@ -104,7 +104,8 @@ var registrationApp = function() {
         }
         // if we only have one user he is selected by default
         if ( state.users.length == 1 ){
-            var user = Object.assign( { confirmed: false }, state.users[0] );
+            var user = state.users[0];
+            user.confirmed = false;
             state.selected_users.push( user );
             $("#step-2 .navigation").hide();
         // add the selected users to state.selected_users
@@ -219,7 +220,7 @@ var registrationApp = function() {
         $( event.target ).serializeArray().forEach( function( item ) {
             if ( selected_user[ item.name ] !== item.value ) {
                 user_changed = true;
-                postData = Object.assign( { [item.name]: item.value }, postData );
+                postData[ item.name ] = item.value;
             }
         });
         // only post an update if we have information that has changed

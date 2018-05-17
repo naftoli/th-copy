@@ -7,7 +7,7 @@ var page4 = function(){
 
         var total = 0;
         // add all the users
-        state.selected_users.forEach( user => {
+        state.selected_users.forEach( function(user) {
             $("#charges").append( '<div class="row">' +
                 '<div class="col-10">' + user.first + " " + user.last + ' Registration</div>' +
                 '<div class="col-2 reg_cost">$' + user.registration_fee + '</div>'
