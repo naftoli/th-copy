@@ -11,12 +11,14 @@ var registrationApp = function() {
         users: [], // the users we are registering
         selected_users: [], // users selected in step-1
         selected_user_index: 0, // the current user we are confirming
-        shipping_charges: 0
+        shipping_charges: 0,
+        shipping_type: 1
     }
     // initialization functions
     hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right places
     image_upload( {}, onImageUploaded );
-    $("button#start-step-1").click( renderStep1 );
+    renderStep1();
+    
     $("button#start-step-2").click( renderStep2 );
     $("button#start-step-3").click( renderStep3 );
     $("#step-2 form").submit( updateUser );
@@ -128,7 +130,7 @@ var registrationApp = function() {
         toggleLoading( 3, true );
         showPage("step-3");
 
-        state.shipping_charges = 0;
+        state.shipping_charges = 0; state.shipping_type = 1;
         var school_ids = state.selected_users.map( function( user ) { return user.school_id } );
 
         // load shipping charges from API
@@ -248,6 +250,7 @@ var registrationApp = function() {
         // update the shipping charges
         var selected_type = $("#shipping-type:checked").val();
         $("#selected-shipping-type").val( selected_type );
+        state.shipping_type = selected_type;
         state.shipping_charges = parseInt(
             $("#shipping-type-"+selected_type).text().replace( /^\D+/g, '')
         );
@@ -263,9 +266,6 @@ var registrationApp = function() {
      */
     function registerUser( event ){
         event.preventDefault();
-        // validate form 
-        event.target.checkValidity();
-        $( event.target ).addClass('was-validated');
         // show loading
         $("#payment-button").html('<i class="fas fa-circle-notch fa-spin fa-2x"></i>')
         // submit the payment info
@@ -275,8 +275,15 @@ var registrationApp = function() {
         postData["cc-exp"] = postData["cc-exp"].replace(/ /g, '');
         postData["x_card_code"] = postData["x_card_code"].replace(/ /g, '');
 
+        // validate form 
+        if ( postData["cc-number"] ) {
+            event.target.checkValidity();
+            $( event.target ).addClass('was-validated');
+        }
+
         postData.users = state.selected_users;
         postData.shipping_charges = state.shipping_charges;
+        postData.shipping_type = state.shipping_type;
 
         $.post( "api/tasks/register.php", postData, function( response ) {
             $("#payment-button").html('Pay And Register'); // update the button
