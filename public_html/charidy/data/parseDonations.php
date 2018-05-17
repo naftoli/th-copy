@@ -10,9 +10,9 @@ while ($row = mysql_fetch_assoc( $result )) {
     $info[] = $row;
 }
 
-function parse( $data, $info ) {
+function parse( $info, $data ) {
     $donation = json_decode( $data );
-    $p = new ParseDonation( $donation, $info );
+    $p = new ParseDonation( $info, $donation );
     $p->createDonation();
 }
 ?>
@@ -25,12 +25,16 @@ function parse( $data, $info ) {
         <pre>
         <?php
         $totalNum = count( $info );
-        for ($i = 0; $i < $totalNum; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             // get json object from charidy_temp_data 
-            $sql = "select * from charidy_temp_data where id = " . $info[$i]['relation_id'];
-            $result = mysql_query( $sql );
-            $row = mysql_fetch_assoc( $result );
-            parse( $row['data'], (object)$info[$i] );
+            if ($info[$i]['relation_id'] > 0) {
+                $sql = "select * from charidy_temp_data where id = " . $info[$i]['relation_id'];
+                $result = mysql_query( $sql );
+                $row = mysql_fetch_assoc( $result );
+                parse( (object)$info[$i], $row['data'] );
+            } else {
+                parse( (object)$info[$i] );
+            }
             echo "<hr />";
         }
         ?>
