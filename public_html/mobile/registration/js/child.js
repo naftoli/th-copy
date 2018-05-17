@@ -1,4 +1,8 @@
 // wrap all our logic inside childApp
+if ( !checkDateInput() ) {
+    $('#th-dob, #no-th-dob').datepicker({ format: "yyyy-mm-dd" });
+}
+
 var childApp = function(){
     // run these functions when we open the page
     loadSchools();
