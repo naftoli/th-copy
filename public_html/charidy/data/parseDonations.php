@@ -10,9 +10,13 @@ while ($row = mysql_fetch_assoc( $result )) {
     $info[] = $row;
 }
 
-function parse( $info, $data ) {
-    $donation = json_decode( $data );
-    $p = new ParseDonation( $info, $donation );
+function parse( $info, $data = array() ) {
+    if ( !empty( $data ) ) {
+        $donation = json_decode( $data );
+        $p = new ParseDonation( $info, $donation );
+    } else {
+        $p = new ParseDonation( $info );
+    }
     $p->createDonation();
 }
 ?>

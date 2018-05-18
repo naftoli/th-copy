@@ -16,17 +16,16 @@ class ParseDonation
     }
 
     public function createDonation() {
-        $donor_id = 0;
+        echo "<pre>"; print_r( $this->info ); echo "</pre>";
         echo "<pre>"; print_r( $this->donation ); echo "</pre>";
         
-        if (isset( $this->donation->donor_id ) && $this->donation->donor_id > 0) {
-            $donor_id = mysql_real_escape_string( $this->donation->donor_id );
-        } else if ( isset( $this->donation->children ) && !empty( $this->donation->children ) ) {
-            $donor_id = $this->findDonorFromChildren();
+        if ( !empty( $this->donation ) && $this->donation->donor_id == 0 
+            && isset( $this->donation->children ) && !empty( $this->donation->children ) ) {
+            $this->findDonorFromChildren();
         }
 
-        if ($donor_id > 0) {
-            $this->createFromDonorID( $donor_id );
+        if ( isset( $this->donation->donor_id ) && $this->donation->donor_id > 0 ) {
+            $this->createFromDonorID();
         } else {
             $this->createFromInfo();
         }
@@ -56,57 +55,59 @@ class ParseDonation
 
     private function findDonorFromChildren() {
         // if we have children amounts, see if we can find parent id / donor id
-        $donor_id = 0;
-        $parent_id = 0;
         if ( isset( $this->donation->children ) && !empty( $this->donation->children ) ) {
             foreach ($this->donation->children as $child) {
-                if ($child->amount > 0) {
-                    // see if we can find the user id / parent id with the info that we have
-                    $user_id = $child->user_id;
-                    if (is_numeric( $user_id )) {
-                        // if we have a valid user id then we can find parent id 
-                        if ($parent_id = $this->findParentByUserID( $user_id )) {
-                            break;
-                        }
+                // see if we can find the user id / parent id with the info that we have
+                $user_id = $child->user_id;
+                if (is_numeric( $user_id )) {
+                    // if we have a valid user id then we can find parent id 
+                    if ($this->findParentByUserID( $user_id )) {
+                        // make sure we have the donor id based on the parent id
+                         $this->findDonorByParentID();
+                        // fix email of donor id to match email of current donor / donation
+                        $this->fixParentDonor();
+                        break;
                     }
-                    
-                    // if we don't have any user_ids
-                    // break up name into last name, first name
+                }
+                
+                // if we don't have a user_id check by name and school
+                // break up name into last name, first name
+                if ( $child->school_id && $child->name ) {
                     $school_id = $child->school_id;
                     $name = $this->getFirstLast( $child->name );
                     $first_name = $name['first'];
                     $last_name = $name['last'];
-                    if ($parent_id = $this->findParentByChildName( $first_name, $last_name, $school_id )) {
+                    if ($this->findParentByChildName( $first_name, $last_name, $school_id )) {
+                        // make sure we have the donor id based on the parent id
+                        $this->findDonorByParentID();
+                        // fix email of donor id to match email of current donor / donation
+                        $this->fixParentDonor();
                         break;
                     }
-
+                } else if ( $child->picture ) {
                     // then try by picture
                     $picture = $child->picture;
-                    if ($parent_id = $this->findParentByUserPicture( $picture )) {
+                    if ($this->findParentByUserPicture( $picture )) {
+                        // make sure we have the donor id based on the parent id
+                        $this->findDonorByParentID();
+                        // fix email of donor id to match email of current donor / donation
+                        $this->fixParentDonor();
                         break;
                     }
                 }
             }
         }
-
-        if ($parent_id > 0) {
-            $donor_id = $this->fixParentDonor( $parent_id, $email );
-        }
-
-        return $donor_id;
     }
 
-    private function createFromDonorID( $donor_id ) {
+    private function createFromDonorID() {
+        $donor_id = mysql_real_escape_string( $this->donation->donor_id );
         $parent_id = mysql_real_escape_string( $this->donation->parent_id );
         $amount = mysql_real_escape_string( $this->donation->amount );
         $dedication_name = isset( $this->donation->dedication_name ) ? mysql_real_escape_string( $this->donation->dedication_name ) : '';
         $dedication_text = isset( $this->donation->dedication_text ) ? mysql_real_escape_string( $this->donation->dedication_text ) : '';
         $dedication_user_id = isset( $this->donation->dedication_user_id ) ? mysql_real_escape_string( $this->donation->dedication_user_id ) : 0;
         $donation_date = mysql_real_escape_string( $this->donation->date_time );
-        // fix donation date for correct format for mysql
-        $pos = strpos( $donation_date, '.' );
-        $date = substr( $donation_date, 0, $pos );
-        $donation_date = str_replace( 'T', ' ', $date );
+        $donation_date = $this->extractDate();
 
         // find out if children have user_id and amount so that we can make separate donation entry for them 
         // if not, update amount to total amount given and only make one donation entry
@@ -115,23 +116,10 @@ class ParseDonation
         $children_with_amounts = 0;
         $children = $this->donation->children;
         if (!empty( $children )) {
-            foreach ($children as $child) {
-                if (isset( $child->user_id )) {
-                    $user_id = mysql_real_escape_string( $child->user_id );
-                    if (!is_numeric( $user_id )) {
-                        echo "Missing User ID: " . $user_id . "<br /><br />";
-                        echo "<pre>"; print_r( $child ); echo "</pre>";
-                        $children_donations = false;
-                        break;
-                    } else {
-                        // keep track of how many children have an amount given for him / her
-                        if ($child->amount > 0) {
-                            $children_with_amounts++;
-                        }
-                    }
-                } else {
-                    $children_donations = false;
-                    break;
+            foreach ($children as $child) {                    
+                // keep track of how many children have an amount given for him / her
+                if ($child->amount > 0) {
+                    $children_with_amounts++;
                 }
             }                
         } else {
@@ -198,7 +186,6 @@ class ParseDonation
     }
 
     private function createFromInfo() {
-        echo "<pre>"; print_r( $this->info ); echo "</pre>";
         // create donor profile from info
         // separate first name from last name
         $name = $this->getFirstLast( $this->info->name );
@@ -215,6 +202,7 @@ class ParseDonation
 
         // we can't create a donor if no email or invalid email is given
         if ($email && filter_var($email, FILTER_VALIDATE_EMAIL) !== false) {
+            $donor_id = 0;
 
             // check if email already exists in donor database and use that id
             $sql = "select donor_id from charidy_donors where email = '" . $this->info->email . "'";
@@ -240,22 +228,28 @@ class ParseDonation
             }
 
             // find out user_id if we were given a serial number
-            if ($dedication_user_id > 0) {
-                $sql = "select user_id from users where user_serial = " . $dedication_user_id;
+            $user_id = 0;
+            if (isset( $this->info->dedication_user_id ) && $this->info->dedication_user_id > 0) {
+                $sql = "select user_id from users where user_serial = " . mysql_real_escape_string( $this->info->dedication_user_id );
                 $result = mysql_query( $sql );
                 if (mysql_num_rows( $result ) > 0) {
                     $row = mysql_fetch_assoc( $result );
-                    $dedication_user_id = $row['user_id'];
+                    $user_id = $row['user_id'];
                 }
             }
 
             // now add donation
+            $amount = mysql_real_escape_string( $this->info->donation_amount );
+            $dedication_name = isset( $this->donation->dedication_name ) ? mysql_real_escape_string( $this->donation->dedication_name ) : '';
+            $dedication_text = isset( $this->donation->dedication_text ) ? mysql_real_escape_string( $this->donation->dedication_text ) : '';
+            $donation_date = $this->extractDate();
+            
             $sql = "insert into charidy_donations 
                     set donor_id = " . $donor_id . ", 
                     year = " . $this->year . ", 
                     amount = " . $amount . ", 
                     donation_date = '" . $donation_date . "', 
-                    user_id = " . $dedication_user_id . ", 
+                    user_id = " . $user_id . ", 
                     dedication_name = '" . addslashes( $dedication_name ) . "', 
                     dedication_text = '" . addslashes( $dedication_text ) . "', 
                     child_only_donation = 0";
@@ -290,43 +284,41 @@ class ParseDonation
     }
 
     private function findParentByUserID( $user_id ) {
-        $parent_id = 0;
         $sql = "select admin_id from admin_auths where auth = 'user' and id = " . mysql_real_escape_string( $user_id );
         $result = mysql_query( $sql );
         if (mysql_num_rows( $result ) > 0) {
             $row = mysql_fetch_assoc( $result );
-            $parent_id = $row['admin_id'];
+            $this->donation->parent_id = $row['admin_id'];
+            return true;
         }
-        return $parent_id;
+        return false;
     }
 
     private function findParentByChildName( $first_name, $last_name, $school_id ) {
-        $parent_id = 0;
         // first try by using first name, last name, and school id
         $sql = "select user_id from users 
                 where last ='" . mysql_real_escape_string( $last_name ) . "' and first = '" . mysql_real_escape_string( $first_name ) . "'";
         if ($school_id > 0) $sql .= " and school_id = " . mysql_real_escape_string( $school_id );
-        $result = mysql_query( $result );
+        $result = mysql_query( $sql );
         // see if we have any results and that there's only one result
         $numRows = mysql_num_rows( $result );
         if ($numRows == 1) {
             $row = mysql_fetch_assoc( $result );
             $user_id = $row['user_id'];
-            $parent_id = $this->findParentID( $user_id );
+            return $this->findParentByUserID( $user_id );
         }
-        return $parent_id;
+        return false;
     }
 
     private function findParentByUserPicture( $user_id ) {
-        $parent_id = 0;
         
-        return $parent_id;
+        return false;
     }
 
-    private function fixParentDonor( $parent_id, $email ) {
-        $donor_id = 0;
+    private function fixParentDonor() {
         // find out email that we have on file and update it to this email in admins as well as donors
-        $sql = "select admin_email from admin where admin_id = " . $parent_id;
+        $sql = "select admin_email from admins where admin_id = " . $this->donation->parent_id;
+        echo $sql . "<br />";
         $result = mysql_query( $sql );
         if ($row = mysql_fetch_assoc( $result )) {
             $oldEmail = $row['admin_email'];
@@ -335,14 +327,35 @@ class ParseDonation
             $sql = "select * from charidy_donors where email = '" . $oldEmail . "'";
             $result = mysql_query( $sql );
             if ($row = mysql_fetch_assoc( $result )) {
-                if ($parent_id == $row['parent_admin_id']) {
-                    $donor_id = $row['donor_id'];
-                    $sql = "update charidy_donors set email = '" . $email . "' where donor_id = " . $donor_id;
-                    mysql_query( $sql );
+                if ($this->donation->parent_id == $row['parent_admin_id']) {
+                    $this->donation->donor_id = $row['donor_id'];
+                    $sql = "update charidy_donors set email = '" . $this->info->email . "' where donor_id = " . $this->donation->donor_id;
+                    echo $sql . "<br />";
+                    //mysql_query( $sql );
                 }
             }
         }
-        return $donor_id;
+    }
+
+    private function findDonorByParentID() {
+        $sql = "select donor_id from charidy_donors where parent_admin_id = " . mysql_real_escape_string( $this->donation->parent_id );
+        $result = mysql_query( $sql );
+        if ($row = mysql_fetch_assoc( $result )) {
+            $this->donation->donor_id = $row['donor_id'];
+        }
+    }
+
+    private function extractDate() {
+        
+        if ( $this->info->donation_date > 0 || isset( $this->donation->date_time ) ) {
+            $date_to_parse = $this->info->donation_date > 0 ? $this->info->donation_date : $this->donation->date_time;
+            $pos = strpos( $date_to_parse, '.' );
+            $date = substr( $date_to_parse, 0, $pos );
+            $donation_date = str_replace( 'T', ' ', $date );
+        } else {
+            $donation_date = $this->info->donation_date;
+        }
+        return mysql_real_escape_string( $donation_date );
     }
 }
 ?>
