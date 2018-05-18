@@ -16,7 +16,7 @@ $from = dateToJd( $_POST['from'] );
 $to = dateToJd( $_POST['to'] );
 
 $rank_promotions_query = mysql_query(
-     " SELECT s.school_name, s.hachayol_name, u.first, u.last, "
+     " SELECT s.school_name, s.hachayol_name, u.first, u.last, u.mobile_pic, u.user_photo_id, "
     ." r.rank_name, rm.rank_ord FROM rank_marks rm "
     ." JOIN users u USING ( user_id ) "
     ." JOIN ranks r USING ( rank_ord ) "
@@ -78,10 +78,18 @@ $totals_query = mysql_query(
             $first = mb_substr( $first, 0, 1 );
         }
 
-        echo $first . " " . ucwords(strtolower($promotion['last'])) . "<br />";
+        if ($promotion['rank_ord'] >= $cutoff ) {
+            echo "<img class='profile' src='" . ( 
+                $promotion['mobile_pic'] ? 
+                "//mashpia.com/mobile/reg/" . $promotion['mobile_pic'] :
+                ( $promotion['user_photo_id'] ? "/file_view.php?id=" . $promotion['user_photo_id'] : "/mobile/reg/images/profile-photo-default.jpg" ) 
+            ) . "' />";
+        }
+
+        echo "<span class='name'>" . $first . " " . ucwords(strtolower($promotion['last'])) . "</span><br />";
 
         if ($promotion['rank_ord'] >= $cutoff ) {
-            echo "<span class='school'>$school_name</span><br />";
+            echo "<span class='school'>$school_name</span><div class='clearfix'></div>";
         }
     }
     ?>

@@ -21,6 +21,8 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             span.school {font-weight: bold; margin-bottom: 4px; display: inline-block;}
             span.school.top { margin-top: 4px; margin-bottom: 0px;}
             a.btn.button { display: inline-block; margin-bottom: 15px; }
+            img.profile { height: 35px; width: 35px; float: left; margin-right: 10px; }
+            .clearfix { clear: both; margin-bottom: 3px; }
         </style>
     </head>
     <body>
