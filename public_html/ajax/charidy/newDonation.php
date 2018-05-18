@@ -22,18 +22,20 @@ if ($user_serial > 0) {
 }
 
 if ($donor_id > 0) {
-    $sql = "insert into charidy_donations
-            set donor_id = " . $donor_id . ",
-            year = " . $year . ",
-            amount = " . $donation_amount . ",
-            donation_date = '" . $date . "',
-            user_id = " . $user_id;
-    $response['query'] = $sql;
-    if (mysql_query( $sql )) {
-        $response['success'] = true;
-    } else {
-        $response['success'] = false;
-        $response['error'] = mysql_error();
+    if ( $donation_amount ) {
+        $sql = "insert into charidy_donations
+                set donor_id = " . $donor_id . ",
+                year = " . $year . ",
+                amount = " . $donation_amount . ",
+                donation_date = '" . $date . "',
+                user_id = " . $user_id;
+        $response['query'] = $sql;
+        if (mysql_query( $sql )) {
+            $response['success'] = true;
+        } else {
+            $response['success'] = false;
+            $response['error'] = mysql_error();
+        }
     }
     //echo json_encode( $response );
     

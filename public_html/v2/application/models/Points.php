@@ -83,7 +83,8 @@ class Points
 		
 		$strSql = "select sum(points) as total from user_points
 					where user_id = " . $arrParams["user_id"] . "
-					and institution_id = " . $arrParams["institution_id"];
+					and institution_id = " . $arrParams["institution_id"] . "
+					and points > 0"; // make sure we don't take off subtracted points
 		if (intval($arrParams['start_date']) > 0) {
 			$strDate = jdtogregorian( $arrParams['start_date'] );
 			$arrDate = explode('/', $strDate);
@@ -165,6 +166,7 @@ class Points
 					and institution_id = " . $arrParams["institution_id"] . "
 					and created >= '" . $sqlDate . "' 
 					and resource_name not in ('store', 'transaction_manager_store')";
+		if (in_array( $arrParams["institution_id"], array(30,176) )) $strSql .= " and points > 0"; // they only use subtraction of points for their internal store
 		$arrResult = first($this->_db->fetchAll($strSql));
 		return floor($arrResult->total);
 	}

@@ -97,7 +97,7 @@ if ($admin_auth[0] == 'school') {
             if ( isset( $_POST['school'] ) ) {
                 echo "<input type='hidden' name='school' value=" . $_POST['school'] . " />";
             }
-            echo "<input type='submit' value='go' name='submit' disabled />";
+            echo "<input type='submit' value='go' name='submit' />";
             echo "</form>";
        
         } else {

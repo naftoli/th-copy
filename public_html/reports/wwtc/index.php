@@ -86,6 +86,15 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
+        <h2>Special Reports</h2>
+        <div id="action-links">
+            <a href="shterna_year_long_report.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <span class="link-text">Annual report - temporary</span>
+                </div>
+            </a>
+        </div>
         <?} // end admin only links ?>
         </div>
         

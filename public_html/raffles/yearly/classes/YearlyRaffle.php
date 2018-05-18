@@ -116,6 +116,7 @@ class YearlyRaffle {
                 ." FROM user_yearly_raffle JOIN users USING (user_id) "
                 ." JOIN schools USING (school_id) JOIN classes USING (class_id) "
                 ." WHERE days >= " . $this->DAY_COUNT . " "
+                ." AND year = " . $this->year . " "
                 .( $school_id ? " AND users.school_id = '$school_id' " : "" ) // limit to school if provided
                 ." ORDER BY school_name, class_grade, class_sub, last, first, days ";
 
