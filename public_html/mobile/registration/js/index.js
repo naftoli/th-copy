@@ -21,6 +21,7 @@ var registrationApp = function() {
     image_upload( {}, onImageUploaded );
     renderStep1();
 
+    $("button#start-step-1").click( renderStep1 );
     $("button#start-step-2").click( renderStep2 );
     $("button#start-step-3").click( renderStep3 );
     $("#step-2 form").submit( updateUser );
