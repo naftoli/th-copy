@@ -20,7 +20,17 @@ function checkYearly( $user_id ) {
     $quota = $yearly_raffle->getDayCount();
     $num_days = $yearly_raffle->set_user_eligibility( $user_id )[ $user_id ];
     
-    return formatRaffleInfo( $num_days, $quota, "end of year" );
+    $raffle_info = formatRaffleInfo( $num_days, $quota, "end of year" );
+
+    if ( $yearly_raffle->getEnd() < unixtojd() && $num_days < $quota ) {
+        return [
+            "percent_done" => $raffle_info[ "percent_done" ], 
+            "msg" => "Yearly Raffle Deadline Passed ($num_days / $quota days completed)",
+            'missed-deadline' => true
+        ];
+    } else {
+        return $raffle_info;
+    }
 }
 
 /**
@@ -118,7 +128,7 @@ function formatRaffleInfo( $total, $required, $raffle_name ){
 		$msg = ( $required - intval( $total ) ) . " days of tasks needed for $raffle_name raffle";
     }
 
-	return [ "percent_done" => $percent_done, "msg" => $msg ];
+	return [ "percent_done" => $percent_done, "msg" => $msg, 'missed-deadline' => false ];
 }
 
 function getDates( $type ) {
@@ -149,7 +159,7 @@ $weekly = checkWeekly( $user );
     <div class="progress-bar" role="progressbar" style="width: <?= $monthly['percent_done']?>%;"></div>
     <span ><?= $monthly['msg'] ?></span>
 </div>
-<div class="progress <?= $yearly['percent_done'] == 100 ? "compleate" : ""?>">
+<div class="progress <?= $yearly['percent_done'] == 100 ? "compleate" : ""?> <?= $yearly['missed-deadline'] ? "missed-deadline" : ""?>">
     <div class="progress-bar" role="progressbar" style="width: <?= $yearly['percent_done']?>%;"></div>
     <span ><?= $yearly['msg'] ?></span>
 </div>
