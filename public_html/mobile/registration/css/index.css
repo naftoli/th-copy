@@ -36,16 +36,6 @@ section#welcome-message { text-align: center; }
     display: flex; align-items: center;
 }
 
-/* FontAwesome Checkboxes */
-input[type="checkbox"]{ display: none; }
-span.checkbox {
-    display: inline-block;  color: #2c539e;
-    text-rendering: auto; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-    font-family: Font Awesome\ 5 Free; font-size: 2em;
-}
-span.checkbox:before { content: "\f0c8"; }
-input:checked + span.checkbox:before { content: "\f14a"; }
-
 #charges .row { border-bottom: 1px solid #ccc; margin: 1%; padding: 2%; }
 
 div#cc-card { margin: 5% auto 2%; }

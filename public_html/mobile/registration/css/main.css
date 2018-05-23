@@ -37,6 +37,9 @@ header a.logout {
 header, .btn-primary{
     background-color: #2c539e; color: #fff; border-color: #2c419e;
 }
+.btn.btn-danger {
+    background-color: #ff1a1a; color: #fff; border-color: #ff1a1a;
+}
 /* Input styles */
 .input-group-btn img {
     padding: 20%; height: 100%; max-height: calc( 2px + 4rem );
@@ -85,16 +88,22 @@ img#user-img {
         width: 60px !important;
     }
 }
-/* Branded Radio labels */
-.radio-label input[type='radio'] { display: none; }
-.radio-label span.radio {
+/* Branded Radios and Checkboxes */
+.radio-label input[type='radio'], input[type="checkbox"] { display: none; }
+.radio-label span.radio, span.checkbox {
     background: url("/mobile/img_new/circle-color-blue-svg.svg"); background-size:cover; 
     height: 25px;width: 25px;display:inline-block;transition: transform .1s;
 }
 .radio-label input:checked + span.radio {
     background: url("/mobile/img_new/circle-check-color-svg.svg"); background-size:cover; 
 }
-.radio-label input:hover + span.radio {
+span.checkbox {
+    background: url("/mobile/img_new/square-color-blue-svg.svg");
+}
+input:checked + span.checkbox {
+    background: url("/mobile/img_new/square-check-color-blue-svg.svg"); background-size:cover;
+}
+.radio-label input:hover + span.radio, input:hover + span.checkbox {
     cursor: pointer;
 }
 .radio-label + span {
@@ -103,7 +112,7 @@ img#user-img {
 
 /* Error Modal */
 #errorModal .modal-header {
-    background: #dc3545;
+    background: #ff1a1a;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
     color: #fff;
