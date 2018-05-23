@@ -78,7 +78,6 @@ function downloadImages() {
             to = ( to.getMonth() + 1 ) + "-" + ( to.getDate() + 1);
 
             a.download = "general_profiles_" + from + "_to_" + to ;
-            debugger;
             a.href = URL.createObjectURL(content);
             a.innerHTML = "Download Full Profile Images"
         });
