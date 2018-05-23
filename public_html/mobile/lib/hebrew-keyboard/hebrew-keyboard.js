@@ -11,7 +11,7 @@ var hebrew_keyboard = function(){
     // function to replace keys when typing
     function onKeyPressed( event ){
         // get the character
-        var character = String.fromCharCode(event.keyCode).toLowerCase(); // get the typed character
+        var character = String.fromCharCode(event.which).toLowerCase(); // get the typed character
         // if we have a letter to replace it...
         if( keys[ character ] ){
             event.target.value = event.target.value + keys[ character ];
