@@ -10,17 +10,20 @@ var hebrew_keyboard = function(){
     }
     // function to replace keys when typing
     function onKeyPressed( event ){
+        var characters = event.target.value.split("");
         // get the character
-        var character = String.fromCharCode(event.which).toLowerCase(); // get the typed character
+        $.each( characters, function( index, character ){
+            if( keys[ character ] ){
+                characters[index] =  keys[ character ];
+            };
+        });
+        event.target.value = characters.join("");
         // if we have a letter to replace it...
-        if( keys[ character ] ){
-            event.target.value = event.target.value + keys[ character ];
-            event.preventDefault(); // do not add the typed letter
-        };
+        event.preventDefault(); // do not add the typed letter
     }
     // funciton to attach to ids
     function attachInput( id ){
-        $( id ).keydown( onKeyPressed );
+        $( id ).keyup( onKeyPressed );
     }
     // public functions
     return {
