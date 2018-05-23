@@ -10,7 +10,7 @@ $admin_auth = array('school');
 require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 
 if ($admin_user['auth'] != 'super') {
-    header("Location: /raffles/shared/forms/eligible_form.php");
+    header("Location: /reports/");
 }
 
 /***************** IMPORTS **********************/

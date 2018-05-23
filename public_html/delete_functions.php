@@ -1,5 +1,6 @@
 <?php
-include ("db.php");
+include ( dirname(__FILE__) . "/db.php" );
+require_once( dirname(__FILE__) . '/yearly_prize/classes/TotalWeeklyTasks.php' );
 
 $function_name = $_GET['function_name'];
 $parameters = $_GET['parameters'];
@@ -92,7 +93,10 @@ function delete_task_mark($parameters) {
 				return 1;
 			}
 			*/
-		}
+        }
+        // update the user for the yearly gift
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date, true );
+
 		return 1;
 	}
 	else {
@@ -152,18 +156,13 @@ function delete_daily_task_mark2($parameters) {
 	$sql = "DELETE FROM date_tasks_mission_marks WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;
 	$query = mysql_query($sql);
 	
-	if ($query) echo 0;
-	else echo 1;
-	/*
-	require_once("classes/rank_updater.php");
-	require_once("classes/medal_updater.php");
-	
-	$medal_updater = new medal_updater();
-	$medal_updater->update_medal_two($user_id);
-			
-	$rank_updater = new rank_updater();
-	$rank_updater->update_rank_two($user_id);
-	*/
+	if ($query) {
+        // update the user for the yearly gift
+        TotalWeeklyTasks::updateUser( $user_id, $mark_date, true );
+        echo 0;
+    } else {
+        echo 1;
+    }
 }
 
 function delete_mark($parameters) {
@@ -176,62 +175,6 @@ function delete_mark($parameters) {
 	$num = mysql_num_rows($result);
 	
 	if ($num > 0) {
-		/*
-		//get info for sm
-		$row = mysql_fetch_assoc($result);
-		$value = $row['done_qty'];
-		$task_name = $row['name'];
-		$date_tasks_mission_id = $row['date_tasks_mission_id'];
-		
-		$sql = "select subject_id, start_date from date_tasks_missions where date_tasks_mission_id = " . $date_tasks_mission_id;
-		$result = mysql_query($sql);
-		$row = mysql_fetch_assoc($result);
-		$subject_id = $row['subject_id'];
-		$date = $row['start_date'];
-		
-		if ($subject_id == 1) {
-			//get school and class ids
-			$sql = "select school_id, class_id from users where user_id = " . $user_id;
-			$result = mysql_query($sql);
-			$row = mysql_fetch_assoc($result);
-			$school_id = $row['school_id'];
-			$class_id = $row['class_id'];
-			
-			if (strpos($task_name, 'minutes')) {
-				$task = 'Minutes';
-			} else if (strpos($task_name, 'Kapitlach')) {
-				$task = 'Kapitelach';
-			} else {
-				break;		 	
-		 	}
-
- 			//update army, school, class
-			mysql_query("set autocommit=0");
-			mysql_query("begin");
-			$success = false;
-			$sql = "update sm set accomplished = accomplished - $value 
-					where date = $date and type = 'army' and task = '$task'";
-			if (mysql_query($sql)) {
-				$sql = "update sm set accomplished = accomplished - $value 
-						where date = $date and type = 'school' and type_id = $school_id 
-						and task = '$task'";
-				if (mysql_query($sql)) {
-					$sql = "update sm set accomplished = accomplished - $value 
-							where date = $date and type = 'class' and type_id = $class_id 
-							and task = '$task'";
-					if (mysql_query($sql)) {
-						$success = true;
-					}
-				}
-			}
-			if ($success) {
-				mysql_query("commit");
-			} else {
-				mysql_query("rollback");
-			}
-			mysql_query("set autocommit=1");
-		}
-		*/
 		$sql = "DELETE FROM date_tasks_marks WHERE date_task_id=" . $date_task_id . " AND user_id=" . $user_id . " AND mark_date=" . $mark_date;
 		$query = mysql_query($sql);
 		$deleted = false;
@@ -254,7 +197,7 @@ function delete_mark($parameters) {
 				}
 			} else {
 				$deleted = true;
-			}
+            }
 		}
 		
 		if ($deleted)

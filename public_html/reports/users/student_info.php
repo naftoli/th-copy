@@ -7,6 +7,8 @@ if ($_GET['debug']) {
 /***************** AUTHENTICATION **********************/
 $admin_auth = array('school'); 
 require_once(dirname(__FILE__).'/../../header.php');
+
+$serial = isset( $_GET['serial'] ) && $_GET['serial'] ? htmlspecialchars( $_GET['serial'] ) : false;
 ?>
 <!DOCTYPE html>
 <html>
@@ -20,6 +22,14 @@ require_once(dirname(__FILE__).'/../../header.php');
     <link href="/mobile/reg/css/medal-board/medals.css" rel="stylesheet" type="text/css"/>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <style>
+    table {
+        width: 100%;
+        margin-top: 4px;
+    }
+    th, td {
+        border: 1px solid #888;
+        padding: 4px 8px;
+    }
     .options {
         text-align: center;
     }
@@ -54,7 +64,11 @@ require_once(dirname(__FILE__).'/../../header.php');
     /* prizes section */
     .prize { box-sizing: border-box; padding: 5px; }
     .prize img { max-height: 50px; }
-    .prize span { display: inline-block; vertical-align: top; margin-top: 15px; }
+    .prize span {
+        display: inline-block; vertical-align: top; margin-top: 15px; max-width: 80%; margin-left: 2.5%;
+    }
+    /* Chidon section */
+    .centered { text-align: center; }
     /* medal board */
     #medal-board {text-align: center;}
     .medal-status.progress {
@@ -68,18 +82,18 @@ require_once(dirname(__FILE__).'/../../header.php');
     .progress-bar { border-radius: 10px;}
     /* rank board */
     .rank-board > div { 
-        position: relative; display: flex; align-items: center; padding: 5px 0px; border-bottom: 1px solid; 
+        position: relative; display: flex; align-items: center; padding: 5px 0px 0px; border-bottom: 1px solid; 
     }
     .rank-logo {
-        display: inline-block;text-align: center;width: 30%;
+        display: inline-block;text-align: center;width: 15%;
     }
     .rank-logo img {width: 75px;}
     .rank_promoted, span.rank-medal-number { font-size: .6em; display: block; }
     .rank_promoted { margin-top: 4px; }
     .rank_name { font-size: .8em; }
-    .rank-medals {display: inline-block;vertical-align: top;width: 70%;}
+    .rank-medals {display: inline-block;vertical-align: top;width: 85%;}
     .rank-medal {display: inline-block;text-align: center;padding: 2px;}
-    .rank-medal img {width: 44px;}
+    .rank-medal img {width: 54px;}
     /* changes when printing this report */
     @media print {
         .medal-board .medal {
@@ -102,7 +116,7 @@ require_once(dirname(__FILE__).'/../../header.php');
     <h1 class="noprint">Student Report</h1>
     <div class="options noprint">
         <label for="serial_number">Enter Serial Number or Barcode</label>
-        <input type="text" id="serial_number" />
+        <input type="text" id="serial_number" <?= $serial ? "value='$serial'" : "" ?> />
         <a class="button" id="generate">Submit</a>
     </div>
 
@@ -112,33 +126,37 @@ require_once(dirname(__FILE__).'/../../header.php');
     <script src="/mobile/reg/js/medal-board.js"></script>
     <script src="/mobile/reg/js/rank-board.js"></script>
     <script>
-    $( "a#generate" ).click( generate_report );
-    $( "input#serial_number" ).keydown( function( event ) {
-        if ( event.keyCode === 13 || event.keyCode === 9 ) {
-            generate_report();
-        }
-    })
+        // generate on page load
+        if ( $( "input#serial_number" ).val() !== "" ) generate_report();
+        // enable buttons to generate report
+        $( "a#generate" ).click( generate_report );
+        // enable pressing tab or enter to generate the report
+        $( "input#serial_number" ).keydown( function( event ) {
+            if ( event.keyCode === 13 || event.keyCode === 9 ) {
+                generate_report();
+            }
+        })
+        // generate the report
+        function generate_report() {
+            var serial_number = $( "input#serial_number" ).val();
+            var postData = {};
+            // determine if the input is valid
+            if ( serial_number.match(/7{2}\d{4,5}/) ) { // all serial numbers start with 2 7's and are 6-7 digits long
+                postData.serial_number = serial_number;
+            } else if ( serial_number.match(/3{1}\d{19}/) ) {
+                postData.barcode = serial_number;
+            } else {
+                $( "div#report" ).html( "Please enter a valid serial number or digit barcode." );
+                return false;
+            }
+            $( "div#report" ).html( "<div class='loader'></div>" );
 
-    function generate_report() {
-        var serial_number = $( "input#serial_number" ).val();
-        var postData = {};
-        // determine if the input is valid
-        if ( serial_number.match(/7{2}\d{4,5}/) ) { // all serial numbers start with 2 7's and are 6-7 digits long
-            postData.serial_number = serial_number;
-        } else if ( serial_number.match(/3{1}\d{19}/) ) {
-            postData.barcode = serial_number;
-        } else {
-            $( "div#report" ).html( "Please enter a valid serial number or digit barcode." );
-            return false;
+            $.post( "ajax/student_info.php", postData, function( report ) {
+                $( "div#report" ).html( report );
+                medal_board("#medal-board", $("#user_id").val(), false);
+                rank_board("#rank-board", $("#user_id").val(), false )
+            });
         }
-        $( "div#report" ).html( "<div class='loader'></div>" );
-
-        $.post( "ajax/student_info.php", postData, function( report ) {
-            $( "div#report" ).html( report );
-            medal_board("#medal-board", $("#user_id").val(), false);
-            rank_board("#rank-board", $("#user_id").val(), false )
-        });
-    }
     </script>
 </body>
 </html>

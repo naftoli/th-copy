@@ -64,22 +64,22 @@
             .navbar-header { min-height: 48px; }
             .page-goals header.navbar h1 { height: auto; font-size: 40px; padding: 16.5px 0px; margin: 0px; }
             
-			@media (max-width: 415px){
-				a#back-link, a#create-link, a#campaign-link{font-size: .9em;}
-				a#back-link img{height: 15px; width: 15px;padding: 1px;}
-				.link-container{margin-left: -10px; margin-right: -10px;}
-			}
 			@media (max-width: 556px){
-				a#back-link, .he a#back-link,
-				a#create-link, .he a#create-link,
-				a#campaign-link, .he a#campaign-link{
-					float: none; margin-left: 0px;
-				}
-				a#back-link, .he a#back-link {display: inline-block;margin-top: -10px; margin-right: 0px;}
                 a#back-link img, .he a#back-link img{display: none;}
-                
                 .page-goals header.navbar h1 { font-size: 30px; padding-top: 8px; padding-bottom: 5px; }
 			}
+            @media (max-width: 415px){
+				a#back-link, a#create-link, a#campaign-link{font-size: .9em;}
+				a#back-link img{height: 15px; width: 15px;padding: 1px;}
+			}
+            @media ( max-width: 370px ) {
+                a#back-link, .he a#back-link,
+				a#create-link, .he a#create-link,
+				a#campaign-link, .he a#campaign-link{
+					float: none; margin-left: 0px; margin: 5px;
+				}
+				a#back-link, .he a#back-link {display: inline-block;margin-top: -10px; margin-right: 0px;}
+            }
 		</style>
     </head>
 		

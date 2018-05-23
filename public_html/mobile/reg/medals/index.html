@@ -35,6 +35,30 @@
             }
             .body .caption span {color: #004E22;}
             .slider img.active {background: url("/mobile/img_new/circle-color-green-solid-svg.svg"); content: url("/mobile/img_new/circle-color-green-solid-svg.svg");}
+			
+			#raffleInfo {
+				font-size: 20px;
+                font-style: italic; text-align: center; padding-top: 8px;
+                margin: 0 auto; padding: 10px 5px 0px;
+			}
+            #raffleInfo .progress {
+                margin-bottom: 5px; height: 35px; position: relative;
+            }
+            #raffleInfo .progress-bar {
+                background-color: #f39c12;
+                height: 100%;
+                background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+                animation-name: progress-bar-slide;
+                animation-duration: 2.5s;
+            }
+            #raffleInfo .progress > span {
+                padding-top: 3px; display: inline-block; font-style: normal;
+                position: absolute; top: 0; right: 0; left: 0; color: #000; font-weight: bold;
+            }
+            #raffleInfo .compleate .progress-bar { background-color: #004E22; }
+            #raffleInfo .compleate span { color: #fff; }
+            #raffleInfo .missed-deadline .progress-bar { background-color: #ef5350; }
+			
             /*			MEDIA QUERIES */
 			@media(min-width: 767px) and (max-width: 900px) {
 				.header .top-right-space{margin-right: 20px;}
@@ -54,6 +78,8 @@
 			@media screen and (max-width: 639px){
 				#userImg {width: 160px;height: 160px;}
 				.header{height: 300px;}
+				#raffleInfo {font-size: 16px;}
+                #raffleInfo .progress { height: 28px; };
 			}
 			@media( min-width: 640px ){ .header-edit{min-width: 120px;} }
             @media (min-width:  600px) and (max-width: 749px){
@@ -66,9 +92,14 @@
 				.mt1{ margin-top: 15px; }
 				.header-top{ margin-top: 5px; }
                 .header { height: 180px; }
+				#raffleInfo {font-size: 14px;}
+                #raffleInfo .progress { height: 25px; };
 			}
 			@media (max-width:  450px){
 				#userImg {width: 120px;height: 120px;}
+            }
+            @media (max-width:  420px){
+				.hide-small { display: none; }
             }
 		</style>
 	</head>
@@ -175,13 +206,21 @@
 					<img id="item12" src="/mobile/img_new/circle-color-green-svg.svg">
 					<img id="item13" src="/mobile/img_new/circle-color-green-svg.svg">
                 </div>
+				
+				<div class="span12" style="margin-top:15px;">
+                    <div class="medal-label">
+                        <span>RAFFLE INFO</span>
+                    </div>
+                </div>
+				<div id="raffleInfo" class="clearfix"></div>
+				
                 <div class="span12" style="margin-top:15px;">
                     <div class="medal-label">
                         <span>MEDALS</span>
                     </div>
                 </div>
-                               
                 <div id="medals" class="clearfix"></div>
+				
 			</div>
 		
 			<div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
@@ -293,6 +332,11 @@
     			$(".points").append(success + ' miles');
     			$("#points").val( success );
     		});
+			
+			// get raffle eligibility info
+			$.post('ajax/getRaffleInfo.php', { user_id : id }, function( response ) {
+				$("#raffleInfo").append( response );
+			});
             
             // get the user's information and update the UI
     		$.post('ajax/getUserInfo.php', { user_id : id }, function( success ) {

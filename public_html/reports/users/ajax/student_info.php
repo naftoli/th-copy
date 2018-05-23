@@ -5,6 +5,7 @@ ini_set("display_errors", 1);
 require_once(dirname(__FILE__).'/../../../classes/user.php');
 require_once(dirname(__FILE__).'/../../../classes/admin.php');
 require_once(dirname(__FILE__).'/../../../calendar.php');
+require_once(dirname(__FILE__).'/../../../class.globalSettings.php');
 
 /***************** AUTHENTICATION **********************/
 $admin_auth = array('school'); 
@@ -53,7 +54,26 @@ $user->get_rank();
 $user->get_medals(0, $user->user_start_date, unixtojd(), 0);
 $user->get_childs_parent();
 $user->get_prizes_won();
+// load this years chidon info
+$th_chidon = $user->get_chidon_info( GlobalSettings::getChidonYear() );
+// get the info for tanya
+$tanya_info_query = mysql_query(
+     " SELECT date_tasks.quantity, date_tasks_marks.done_qty, "
+    ." date_tasks.description, date_tasks_missions.mission_description "
+    ." FROM user_tracks JOIN users USING ( user_id ) "
+    ." JOIN date_tasks_missions USING ( subject_id, track_id, level, school_type_id, lang_id ) "
+    ." JOIN date_tasks USING ( date_tasks_mission_id ) "
+    ." LEFT JOIN date_tasks_marks USING ( user_id, date_task_id ) "
+    ." WHERE users.user_id = '" . $user->user_id . "' AND user_tracks.subject_id = 1 AND grid_id = 8001 "
+    ." AND start_date > " . GlobalSettings::getCurYearDates()['start'] . " "
+);
+
+$tanya_info = [];
+while( $row = mysql_fetch_assoc( $tanya_info_query ) )
+    $tanya_info[] = $row;
+//** Load Tanya information */
 /***************** RENDER REPORT **********************/
+if ( $th_chidon ) include( dirname(__FILE__) . "/../../../chidon_passwords.php" );
 ?>
 <input type="hidden" id="user_id" value="<?= $user->user_id; ?>"/>
 <h2>
@@ -190,13 +210,98 @@ $user->get_prizes_won();
             No Prizes Won Yet <i class="fa fa-frown-o" aria-hidden="true"></i>
         <?php } ?>
     </div>
+    <?php if ( $th_chidon ) {?>
+        <div>
+            <h2>Chidon Info (ID: <?= $th_chidon['th_chidon_id'] ?>)</h2>
+            <div class="info centered">
+                <span class="title">Test Scores</span>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>1a</th><th>1b</th><th>2a</th><th>2b</th><th>3a</th><th>3b</th>
+                        </tr>
+                        <tr>
+                            <td><?= $th_chidon['test1a'] ?></td><td><?= $th_chidon['test1b'] ?></td>
+                            <td><?= $th_chidon['test2a'] ?></td><td><?= $th_chidon['test2b'] ?></td>
+                            <td><?= $th_chidon['test3a'] ?></td><td><?= $th_chidon['test3b'] ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="info">
+                <div class="inner-info">
+                    <span class="title">Contestant:</span>
+                    <h3><?= $th_chidon['contestant'] ? "Yes" : "No" ?></h3>
+                </div>
+                <div class="inner-info">
+                    <span class="title">Representative:</span>
+                    <h3><?= $th_chidon['school_rep'] ? "Yes" : "No" ?></h3>
+                </div>
+                <div class="inner-info">
+                    <span class="title">Amount Paid:</span>
+                    <h3>$<?= $th_chidon['paid'] ?></h3>
+                </div>
+                <div class="inner-info">
+                    <span class="title">Grade / Book:</span>
+                    <h3><?= $th_chidon['grade'] ?> / <?= $th_chidon['book'] ?></h3>
+                </div>
+            </div>
+            <div class="info">
+                <span class="title">Shabbaton Host</span>
+                <h3>
+                    <?= $th_chidon['host'] ?> Family<br/>
+                    <?= $th_chidon['host_address1'] ?> <?= $th_chidon['host_address2'] ?><br/>
+                    Btw. <?= $th_chidon['between_streets'] ?><br/>
+                    <?= $th_chidon['host_number'] ?><br/>
+                </h3>
+            </div>
+            <div class="info">
+                <div class="inner-info">
+                    <span class="title">Shoe Size:</span>
+                    <h3><?= $th_chidon['shoe_size']?></h3>
+                </div>
+                <div class="inner-info">
+                    <span class="title">T-Shirt Size:</span>
+                    <h3><?= $th_chidon['size'] ?></h3>
+                </div>
+                <div class="inner-info">
+                    <span class="title">Walking Zone:</span>
+                    <h3><?= $th_chidon['walking_zone']?></h3>
+                </div>
+                <div class="inner-info">
+                    <span class="title">Test Language:</span>
+                    <h3><?= $th_chidon['test_lang'] ?></h3>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+    <div class="info">
+        <h2>Tanya Bal Peh</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Month</th><th>Quota</th><th>Compleated</th>
+                </tr>
+            </thead> 
+            <tbody>
+                <?php foreach( $tanya_info as $tanya ){ ?>
+                    <tr>
+                        <td><?= str_replace("שבת מברכים ", "", $tanya['mission_description']) ?></td>
+                        <td><?= $tanya['quantity'] ?></td>
+                        <td><?= $tanya['done_qty'] ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+            <!-- $tanya_info -->
+        </table>
+    </div>
     <div class="info">
         <h2>Medal Board</h2>
         <div id="medal-board">
             <div class="loader"></div>
         </div>
     </div>
-    <div class="info">
+    <div>
         <h2>Rank Board</h2>
         <div id="rank-board">
             <div class="loader"></div>

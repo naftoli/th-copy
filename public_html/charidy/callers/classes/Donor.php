@@ -15,6 +15,7 @@ class Donor {
     public $country;
     public $phone;
     public $email;
+    public $mashpiaPhone;
 
     public $donations = [];
     public $on_shabbaton = [];
@@ -66,7 +67,7 @@ class Donor {
                     $parent_sql = "select * from admins where admin_id = " . $parent_id;
                     $parent_result = mysql_query( $parent_sql );
                     $parent_row = mysql_fetch_assoc( $parent_result );
-                    $row['phone'] = $parent_row['phone3'] ? $parent_row['phone3'] : ( $parent_row['phone4'] ? $parent_row['phone4'] : (
+                    $row['mashpiaPhone'] = $parent_row['phone3'] ? $parent_row['phone3'] : ( $parent_row['phone4'] ? $parent_row['phone4'] : (
                                     $parent_row['phone1'] ? $parent_row['phone1'] : ( $parent_row['phone2'] ? $parent_row['phone2'] : '' ) ) );
                 }
             }
@@ -115,6 +116,17 @@ class Donor {
      */
     public function phoneNumber() {
         return preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $this->phone). "\n";
+    }
+    
+    /**
+     * mashpiaPhoneNumber
+     * 
+     * returns a formatted version of their mashpia phone number
+     *
+     * @return string
+     */
+    public function mashpiaPhoneNumber() {
+        return preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $this->mashpiaPhone). "\n";
     }
 
     /**
@@ -180,6 +192,14 @@ class Donor {
         return $this->on_shabbaton[ $year ];
     }
 
+    /**
+     * getCaller
+     * 
+     * sets $this->caller to the caller for the given year.
+     *
+     * @param string $year
+     * @return boolean
+     */
     public function getCaller( $year ) {
         $year = mysql_real_escape_string( $year );
 

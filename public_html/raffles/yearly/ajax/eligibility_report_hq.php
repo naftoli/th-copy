@@ -4,10 +4,6 @@ ini_set("display_errors", 1);
 /***************** AUTHENTICATION **********************/
 $admin_auth = array('school'); 
 require_once( dirname(__FILE__).'/../../../header.php' );
-// superusers only
-if ( $admin_user['auth'] !== "super" ) {
-    echo "Invalid Account Permissions"; die();
-}
 
 /***************** LOAD YEARLY RAFFLE CLASS **********************/
 require_once( dirname(__FILE__).'/../classes/YearlyRaffle.php' );
@@ -15,15 +11,24 @@ use raffles\yearly\YearlyRaffle as YearlyRaffle; // use the raffle class from it
 $yearly_raffle = new YearlyRaffle();
 
 $realtime = isset($_POST['report_type']) ? $_POST['report_type'] === "realtime" : false;
+$school_id = isset($_POST['school_id']) ? mysql_real_escape_string( $_POST['school_id'] ) : false;
 
-$users = $yearly_raffle->get_eligible_users( $realtime );
+// superusers only
+if ( $admin_user['auth'] !== "super" && !$school_id ) {
+    echo "Invalid Account Permissions"; die();
+}
+
+$users = $yearly_raffle->get_eligible_users( $realtime, $school_id );
 
 ?>
 <h2><?= count($users) ?> Eligible Users</h2>
 <table>
     <thead>
         <tr>
-            <th>School</th><th>Serial #</th><th>Last</th><th>First</th><th>Days Compleated</th>
+            <?php if (!$school_id) { ?>
+                <th>School</th>
+            <?php } ?> 
+            <th>Grade</th><th>Serial #</th><th>Last</th><th>First</th><th>Days Compleated</th>
         </tr>
     </thead>
     <tbody>
@@ -31,7 +36,10 @@ $users = $yearly_raffle->get_eligible_users( $realtime );
         foreach( $users as $user ){ 
             ?>
             <tr>
-                <td><?= $user['school_name'] ?></td>
+                <?php if (!$school_id) { ?>
+                    <td><?= $user['school_name'] ?></td>
+                <?php } ?> 
+                <td><?= $user['class_grade']." ".$user['class_sub'] ?></td>
                 <td><?= $user['user_serial'] ?></td>
                 <td><?= $user['last'] ?></td>
                 <td><?= $user['first'] ?></td>
