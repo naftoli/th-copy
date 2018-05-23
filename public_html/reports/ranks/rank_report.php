@@ -23,6 +23,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             a.btn.button { display: inline-block; margin-bottom: 15px; }
             img.profile { height: 35px; width: 35px; float: left; margin-right: 10px; }
             .clearfix { clear: both; margin-bottom: 3px; }
+            div#totals, div#breakdown { background: #fff; padding: 15px; }
         </style>
     </head>
     <body>
@@ -41,6 +42,6 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         <div id="report"></div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
         <script src="js/jszip.min.js"></script>
-        <script src="js/rank_report.js?v=2.0"></script>
+        <script src="js/rank_report.js?v=3.0"></script>
     </body>
 </html>
