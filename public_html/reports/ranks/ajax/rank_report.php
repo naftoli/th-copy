@@ -82,15 +82,14 @@ $totals_query = mysql_query(
 
         // show images for generals
         if ($promotion['rank_ord'] == $cutoff ) {
-            echo "<img class='profile' height='35' width='35' src='" . ( 
-                $promotion['mobile_pic'] ? 
-                "//mashpia.com/mobile/reg/" . $promotion['mobile_pic'] :
-                ( $promotion['user_photo_id'] ? "/file_view.php?id=" . $promotion['user_photo_id'] : "/mobile/reg/images/profile-photo-default.jpg" ) 
-            ) . "' data-name='$name'"
-            ."/>";
+            echo "<span class='name profile' data-profile='" . 
+                ( $promotion['mobile_pic'] ? 
+                    "//mashpia.com/mobile/reg/" . $promotion['mobile_pic'] :
+                    ( $promotion['user_photo_id'] ? "/file_view.php?id=" . $promotion['user_photo_id'] : "/mobile/reg/images/profile-photo-default.jpg" )
+                ) . "'>$name</span><br />";
+        } else {
+            echo "<span class='name'>$name</span><br />";
         }
-
-        echo "<span class='name'>$name</span><br />";
 
         if ($promotion['rank_ord'] >= $cutoff ) {
             echo "<span class='school'>$school_name</span><div class='clearfix'></div>";

@@ -36,15 +36,16 @@ function downloadImages() {
     var a = document.querySelector("#zip-images");
     // find all profile pictures on the page
     var urls = [];
-    $.each( $("#breakdown img.profile"), function( index, img ) {
-        var name = img.dataset.name;
+    $.each( $("#breakdown span.profile"), function( index, span ) {
+        var img = span.dataset.profile;
+        var name = span.innerText.split(" ").join("_");
         // add the extension
-        if ( img.src.match("mobile/reg/img") ) {
-            name += "." + img.src.split(".").slice(-1)[0];
+        if ( img.match("mobile/reg/img") ) {
+            name += "." + img.split(".").slice(-1)[0];
         } else {
             name += ".jpg"
         }
-        urls.push( { src: img.src, name: name } );
+        urls.push( { src: img, name: name } );
     });
     // load the url into the zip folder
     function request( url ){
@@ -79,7 +80,7 @@ function downloadImages() {
 
             a.download = "general_profiles_" + from + "_to_" + to ;
             a.href = URL.createObjectURL(content);
-            a.innerHTML = "Download Full Profile Images"
+            a.innerHTML = "Download General Profile Images (Zip)"
         });
     })
 }
