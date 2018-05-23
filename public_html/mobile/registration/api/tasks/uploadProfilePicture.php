@@ -34,6 +34,8 @@ $result = move_uploaded_file($file['tmp_name'], $target_file);
 
 if ( !$result )
     render_json_error( "Failed to save file. Please check for file corruption." );
+// limit to 500x500px
+shrink_image( $target_file );
 // show the response
 render_json_response([
     "location" => "/mobile/reg/$file_name",
@@ -75,4 +77,39 @@ function codeToMessage( $code ) {
  */
 function getDestination( $id, $extension ) {
     return "img/$id." . date('YmdHis') . $extension;
+}
+
+/**
+ * shrink_image
+ *
+ * @param string $target_file path to target file
+ * @param int $size the size we want the image to become
+ * @return boolean
+ */
+function shrink_image( $target_file, $size = 500 ) {
+    try {
+        $image = new Imagick( $target_file );
+        $image->scaleImage( $size, 0 ); // compress the image down to a smaller size...
+
+        // attempt to fix the rotation
+		try {
+			if ( in_array( exif_imagetype( $target_file ), [ IMAGETYPE_JPEG, IMAGETYPE_TIFF_II, IMAGETYPE_TIFF_MM ] ) && exif_read_data( $target_file )) {
+				$exif = @exif_read_data( $target_file ); // read the data
+				$orientation = $exif['Orientation']; // get the orientation
+				if($orientation){ // this will only run if orientation is set which can only happen if $_POST['action'] is set to fix
+					switch($orientation) {  
+						case 3: $image->rotateimage("#FFF", 180); $thumb->rotateimage("#FFF", 180); break; // upside down
+						case 6: $image->rotateimage("#FFF", 90); $thumb->rotateimage("#FFF", 90); break; // rotate 90 degrees CW
+						case 8: $image->rotateimage("#FFF", -90); $thumb->rotateimage("#FFF", -90);break; // rotate 90 degrees CCW
+					}
+				}
+			}
+		} catch (ImagickException $e) {} // rotation not fixed. do nothing about it.
+		
+        $image->writeImage( $target_file ); // write the file...
+        
+        return true;
+    } catch (ImagickException $e) {
+		return false;
+	} // the image was not uploaded/cropped correctly.
 }
