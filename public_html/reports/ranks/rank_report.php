@@ -40,6 +40,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         <hr>
         <div id="report"></div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-        <script src="js/rank_report.js"></script>
+        <script src="js/jszip.min.js"></script>
+        <script src="js/rank_report.js?v=2.0"></script>
     </body>
 </html>
