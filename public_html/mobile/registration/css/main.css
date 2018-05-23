@@ -39,7 +39,7 @@ header, .btn-primary{
 }
 /* Input styles */
 .input-group-btn img {
-    padding: 15%; height: 100%; max-height: calc( 2px + 4rem );
+    padding: 20%; height: 100%; max-height: calc( 2px + 4rem );
     border: 1px solid #ccc; border-right: 0px; 
     border-top-left-radius: 0.3rem; border-bottom-left-radius: 0.3rem;
 }
@@ -81,7 +81,7 @@ img#user-img {
     }
     .input-group-btn img {
         max-height: calc( 2px + 2.5rem );
-        padding: 10%;
+        padding: 15%;
         width: 60px !important;
     }
 }
