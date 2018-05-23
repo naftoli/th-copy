@@ -143,7 +143,7 @@ foreach ( $_POST['users'] as $user ){
     }
 
     if ( in_array( $school_id, [ '269', '61' ] ) ){
-        $special_registration_ids[] = $user_id;
+        $special_registration_ids[ $school_id ][] = $user_id;
     }
 
     try {
@@ -160,19 +160,21 @@ foreach ( $_POST['users'] as $user ){
 }
 
 if ( count( $special_registration_ids ) > 0 ) {
-    $special_registration_sql = 
-        " INSERT INTO registration SET "
-        ." description = '$description' "
-        ." approval = '$responseString' "
-        ." year = '$year' "
-        ." school_id = '$school_id' "
-        ." admin_id = '$admin_id' "
-        ." ship_option = '$shipping_type' "
-        ." ship_dest = '$shipping_destination' "
-        ." users = '" . implode( ",", $special_registration_ids ) . "' ";
-    $special_registration_query = mysql_query( $special_registration_sql );
+    foreach( $special_registration_ids as $school_id => $user_ids ) {
+        $special_registration_sql = 
+            " INSERT INTO registration SET "
+            ." description = '$description', "
+            ." approval = '$responseString', "
+            ." year = '$year', "
+            ." school_id = '$school_id', "
+            ." admin_id = '$admin_id', "
+            ." ship_option = '$shipping_type', "
+            ." ship_dest = '$shipping_destination', "
+            ." users = '" . implode( ",", $user_ids ) . "' ";
+        $special_registration_query = mysql_query( $special_registration_sql );
 
-    if ( !$special_registration_query ) $errors[] = "Could not sync with registration table\nSQL: " . $special_registration_sql;
+        if ( !$special_registration_query ) $errors[] = "Could not sync with registration table\nSQL: " . $special_registration_sql;
+    }
 }
 
 
