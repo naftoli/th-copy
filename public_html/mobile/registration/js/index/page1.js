@@ -22,14 +22,7 @@ var page1 = function(){
         return html;
     }
 
-    function getUsers( callback ) {
-        $.get( "api/users.php", handleAPIResponse( function( users ) {
-            callback( users );
-        }));
-    }
-
     return {
-        render: render,
-        getUsers: getUsers
+        render: render
     }
 }();

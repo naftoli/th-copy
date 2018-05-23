@@ -59,6 +59,18 @@ var registrationApp = function() {
         }
     }
 
+    function getUsers( callback ){
+        $.get( "api/users.php", handleAPIResponse( function( users ) {
+            state.users = [];
+            users.forEach( function( user ) {
+                if( !user.user_registered ) state.users.push( user );
+            });
+            if ( callback ) {
+                callback( state.users );
+            }
+        }));
+    }
+
     /**
      * renderStep1
      * 
@@ -67,24 +79,13 @@ var registrationApp = function() {
      * 
      * @param { boolean } update_only
      */
-    function renderStep1( update_only ){
-        if ( typeof update_only === "object" ) update_only = false;
-        if ( !update_only ) {
-            showPage("step-1");
-            // if we already got the children. do not do it again.
-            if ( $("#step-1 #children").html() != "" ) {
-                return true;
-            }
-        }
-        page1.getUsers( function( users ){
-            state.users = [];
-            users.forEach( function( user ) {
-                if( !user.user_registered ) state.users.push( user );
-            });
-            if ( state.users.length == 1 ) {
-                if ( !update_only ) renderStep2();
+    function renderStep1( ){
+        showPage("step-1");
+        getUsers( function( users ){
+            if ( users.length == 1 ) {
+                renderStep2();
             } else {
-                var html = page1.render( state.users );
+                var html = page1.render( users );
                 toggleLoading( 1, false );
                 $("#step-1 #children").html( html );
             }
@@ -193,7 +194,7 @@ var registrationApp = function() {
             if ( !response.success ){
                 showError( "Could not update Profile Picture. We will try again when pressing Confirm.");
             } else {
-                renderStep1( true );
+                getUsers();
             }
         });
     }
@@ -230,7 +231,7 @@ var registrationApp = function() {
                 if ( !response.success ) {
                     showError( "Could not update your child. We move on to the next one for now" );
                 } else {
-                    renderStep1( true );
+                    getUsers();
                 }
             });
         }
@@ -297,5 +298,9 @@ var registrationApp = function() {
             
             if ( response.data ) showError( response.data );
         });
+    }
+
+    return {
+        getState: () => { return state }
     }
 }();
