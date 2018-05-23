@@ -49,6 +49,7 @@ $totals_query = mysql_query(
 </div>
 <h2>Breakdown</h2>
 <a data-clipboard-target="#breakdown" class="btn button">Copy to clipboard</a>
+<a id="zip-images" class="btn button">Generating Download....</a>
 <div id="breakdown">
     <?php
     $prev_rank = "";
@@ -77,16 +78,19 @@ $totals_query = mysql_query(
         } else if ( $promotion['rank_ord'] < $cutoff ) {
             $first = mb_substr( $first, 0, 1 );
         }
+        $name = $first . " " . ucwords(strtolower($promotion['last']));
 
-        if ($promotion['rank_ord'] >= $cutoff ) {
+        // show images for generals
+        if ($promotion['rank_ord'] == $cutoff ) {
             echo "<img class='profile' height='35' width='35' src='" . ( 
                 $promotion['mobile_pic'] ? 
                 "//mashpia.com/mobile/reg/" . $promotion['mobile_pic'] :
                 ( $promotion['user_photo_id'] ? "/file_view.php?id=" . $promotion['user_photo_id'] : "/mobile/reg/images/profile-photo-default.jpg" ) 
-            ) . "' />";
+            ) . "' data-name='$name'"
+            ."/>";
         }
 
-        echo "<span class='name'>" . $first . " " . ucwords(strtolower($promotion['last'])) . "</span><br />";
+        echo "<span class='name'>$name</span><br />";
 
         if ($promotion['rank_ord'] >= $cutoff ) {
             echo "<span class='school'>$school_name</span><div class='clearfix'></div>";
