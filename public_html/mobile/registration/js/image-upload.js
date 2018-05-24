@@ -126,13 +126,27 @@ var image_upload = function( options, uploadCallback ) {
     function zoomOut() {
         $( state.image ).cropper( "zoom", -0.1 );
     }
+
     function scaleX() {
-        var scale = $( state.image ).cropper( "getData" ).scaleX > 0 ? -1 : 1;
-        $( state.image ).cropper( "scaleX", scale );
+        var data = $( state.image ).cropper( "getData" );
+        if ( ( data.rotate >= 0 && data.rotate < 90 ) || ( data.rotate >= 180 && data.rotate < 270 ) ){
+            var scale = data.scaleX > 0 ? -1 : 1;
+            $( state.image ).cropper( "scaleX", scale );
+        } else {
+            var scale = data.scaleY > 0 ? -1 : 1;
+            $( state.image ).cropper( "scaleY", scale );
+        } 
     }
+    
     function scaleY() {
-        var scale = $( state.image ).cropper( "getData" ).scaleY > 0 ? -1 : 1;
-        $( state.image ).cropper( "scaleY", scale );
+        var data = $( state.image ).cropper( "getData" );
+        if ( ( data.rotate >= 0 && data.rotate < 90 ) || ( data.rotate >= 180 && data.rotate < 270 ) ){
+            var scale = data.scaleY > 0 ? -1 : 1;
+            $( state.image ).cropper( "scaleY", scale );
+        } else {
+            var scale = data.scaleX > 0 ? -1 : 1;
+            $( state.image ).cropper( "scaleX", scale );
+        }
     }
 
 }; // execute the funciton to run code above
