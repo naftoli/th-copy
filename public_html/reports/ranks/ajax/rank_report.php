@@ -16,7 +16,7 @@ $from = dateToJd( $_POST['from'] );
 $to = dateToJd( $_POST['to'] );
 
 $rank_promotions_query = mysql_query(
-     " SELECT s.school_name, s.hachayol_name, u.first, u.last, u.mobile_pic, u.user_photo_id, "
+     " SELECT s.school_name, s.hachayol_name, u.first, u.last, u.user_serial, u.mobile_pic, u.user_photo_id, "
     ." r.rank_name, rm.rank_ord FROM rank_marks rm "
     ." JOIN users u USING ( user_id ) "
     ." JOIN ranks r USING ( rank_ord ) "
@@ -82,13 +82,14 @@ $totals_query = mysql_query(
 
         // show images for generals
         if ($promotion['rank_ord'] == $cutoff ) {
-            echo "<span class='name profile' data-profile='" . 
+            echo "<a class='name profile' data-profile='" . 
                 ( $promotion['mobile_pic'] ? 
                     "//mashpia.com/mobile/reg/" . $promotion['mobile_pic'] :
                     ( $promotion['user_photo_id'] ? "/file_view.php?id=" . $promotion['user_photo_id'] : "/mobile/reg/images/profile-photo-default.jpg" )
-                ) . "'>$name</span><br />";
+                ) . "' href='/reports/users/student_info.php?serial=" . $promotion['user_serial'] . "' "
+                . " target='_blank' rel='noopener noreferrer'>$name</a><br />";
         } else {
-            echo "<span class='name'>$name</span><br />";
+            echo "<a class='name' href='/reports/users/student_info.php?serial=" . $promotion['user_serial'] . "' rel='noopener noreferrer'>$name</a><br />";
         }
 
         if ($promotion['rank_ord'] >= $cutoff ) {
