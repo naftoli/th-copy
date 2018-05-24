@@ -1,4 +1,8 @@
 <?php
+header("HTTP/1.1 301 Moved Permanently"); 
+header("Location: /reports/ranks/rank_report.php"); 
+
+die();
 //  student rank report - upgrades
 $admin_auth = array(); 	
 require('header.php'); 
