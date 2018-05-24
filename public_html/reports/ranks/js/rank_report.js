@@ -36,9 +36,9 @@ function downloadImages() {
     var a = document.querySelector("#zip-images");
     // find all profile pictures on the page
     var urls = [];
-    $.each( $("#breakdown span.profile"), function( index, span ) {
-        var img = span.dataset.profile;
-        var name = span.innerText.split(" ").join("_");
+    $.each( $("#breakdown a.profile"), function( index, profile ) {
+        var img = profile.dataset.profile;
+        var name = ( index + 1 ) + "_" + profile.innerText.split(" ").join("_");
         // add the extension
         if ( img.match("mobile/reg/img") ) {
             name += "." + img.split(".").slice(-1)[0];
