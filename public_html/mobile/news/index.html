@@ -243,7 +243,7 @@
             
             var url_params = getJsonFromUrl();
             
-            var page = url_params.p;
+            var page = url_params.p ? url_params.p : "1";
             var postID = url_params.pid;
             var search = url_params.search;
 			
