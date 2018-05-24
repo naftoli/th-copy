@@ -89,7 +89,7 @@ $totals_query = mysql_query(
                 ) . "' href='/reports/users/student_info.php?serial=" . $promotion['user_serial'] . "' "
                 . " target='_blank' rel='noopener noreferrer'>$name</a><br />";
         } else {
-            echo "<a class='name' href='/reports/users/student_info.php?serial=" . $promotion['user_serial'] . "' rel='noopener noreferrer'>$name</a><br />";
+            echo "<a class='name' href='/reports/users/student_info.php?serial=" . $promotion['user_serial'] . "' target='_blank' rel='noopener noreferrer'>$name</a><br />";
         }
 
         if ($promotion['rank_ord'] >= $cutoff ) {
