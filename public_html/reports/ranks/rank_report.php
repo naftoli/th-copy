@@ -25,7 +25,6 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             .clearfix { clear: both; margin-bottom: 3px; }
             div#totals, div#breakdown { background: #fff; padding: 15px; }
             a.name {color: #000;font-weight: normal;}
-            a.name:hover { text-decoration: underline; }
         </style>
     </head>
     <body>
