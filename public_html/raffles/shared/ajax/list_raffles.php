@@ -16,6 +16,7 @@ use raffles\weekly\Prize as Prize; // use the raffle from its namespace
 // get the type from the post request
 $type = mysql_real_escape_string($_POST['type']);
 $ran_only = $_POST['ran_only'] == "true" ? true : false;
+$all = isset( $_POST['all'] ) && $_POST['all'] == "true" ? true : false;
 
 $filter = ""; // sorting
 // load all the raffles
@@ -34,6 +35,10 @@ $raffles = Raffle::loadAll($filter);
 ?>
 <select name="raffle_id" id="raffle_id">
     <option value="" disabled selected >Select a Raffle</option>
+    <?php if ( $all ) { ?>
+        <option value="">All Raffles</option>
+    <?php } ?>
+    
     <? foreach($raffles as $raffle){ // render an option for each raffle?>
         <?
         // show prize name next to weekly raffles

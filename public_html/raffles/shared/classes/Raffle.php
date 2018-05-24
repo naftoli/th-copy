@@ -350,7 +350,7 @@ class Raffle {
      *
      * returns an array of all the winners ($this->winner_info);
      */
-    public function get_winner_info($school_id = false, $separate_genders = true, $sorting="school", $shipping = true){ // defaults
+    public function get_winner_info($school_id = false, $separate_genders = true, $sorting="school"){ // defaults
         $this->winner_info = []; // create the flat array
         if($separate_genders) $this->winner_info = ["boys" => [], "girls" => []]; // create the boys/girls structure
         
@@ -414,7 +414,7 @@ class Raffle {
                 'grade' => $row['class_grade'] . ($row['class_sub'] ? " - " .$row['class_sub'] : ""),
             ];
 
-            if ( $shipping ) $data['address'] = [
+            $data['address'] = [
                 'street' => $row['admin_address1'], 
                 'city' => $row['admin_city'], 
                 'state' => $row['admin_state'], 
