@@ -44,6 +44,11 @@ switch($params[0]){
         $status['success'] = getWinners::mark_winner_shipped($_POST['checked'], $params[1], $params[2], $params[3]);
         $status['error'] = "Sorry, it seems that we could not update your raffle winnings shipping status at this time. Please try again later.";
         break;
+    case 'auction':
+        include(dirname(__FILE__)."/../functions/get_auctions.php");
+        $status['success'] = mark_auction($checked, $params[1], $params[2], $params[3]);
+        $status['error'] = "Sorry, it seems that we could not update your auction winnings shipping status at this time. Please try again later.";
+        break;
     default:
         $status['error'] = "Unknown mark type";
 }
