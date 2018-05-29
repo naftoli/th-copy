@@ -189,6 +189,10 @@
     		}
             
             $(document).on('click', '.update', function() {
+                // after deadline alert and return
+				alert('We are sorry but the auction deadline has past. You can no longer put in tickets for the auction.');
+				return false;
+
                 var key = parseInt($(this).parent().parent().attr('id'));
                 var val = parseInt($(this).parent().find('input').val());
                 var item = cart[key];
@@ -207,6 +211,10 @@
             });
             
             $(document).on('click', '.del', function() {
+                // after deadline alert and return
+				alert('We are sorry but the auction deadline has past. You can no longer put in tickets for the auction.');
+				return false;
+
                 var key = parseInt($(this).parent().parent().attr('id'));
                 cart.splice(key,1);
                 calcBalance();
@@ -222,6 +230,9 @@
             });
             
             $("#purchase").click( function() {
+                // after deadline alert and return
+				alert('We are sorry but the auction deadline has past. You can no longer put in tickets for the auction.');
+				return false;
     			/*
     			if (!cart.length) {
     				alert('You have nothing left in your cart!');
