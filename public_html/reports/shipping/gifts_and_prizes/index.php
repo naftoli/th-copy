@@ -76,10 +76,16 @@ if($debug) echo "</pre>";?>
                         <input id="raffles_monthly" type="checkbox" checked/> <span class="fancy-check"></span>
                     </label> <i class="fa fa-ticket" aria-hidden="true"></i> Monthly Raffles
                 </span>
+                <br/>
                 <span class="option_space">
                     <label class="fancy-check-container">
-                        <input id="gifts" type="checkbox" checked/> <span class="fancy-check"></span>
+                        <input id="gifts" type="checkbox" /> <span class="fancy-check"></span>
                     </label> <i class="fa fa-book" aria-hidden="true"></i> Tehillims
+                </span>
+                <span class="option_space">
+                    <label class="fancy-check-container">
+                        <input id="auctions" type="checkbox" checked/> <span class="fancy-check"></span>
+                    </label> <i class="fa fa-ticket" aria-hidden="true"></i> Auctions
                 </span>
             </span>
         </div>
@@ -151,7 +157,8 @@ if($debug) echo "</pre>";?>
                 shipments: {
                     raffles_weekly: $("input#raffles_weekly")[0].checked,
                     raffles_monthly: $("input#raffles_monthly")[0].checked,
-                    gifts: $("input#gifts")[0].checked
+                    gifts: $("input#gifts")[0].checked,
+                    auctions: $("input#auctions")[0].checked
                 },
                 shipping_status: $("select#shipping-status").val(),
                 start_date: $("input#start_date").val(),
