@@ -24,7 +24,14 @@ function getChildren() {
         // find out how many auction points are available
         //$p = new Points( $user_id );
         //$points = $p->getAuctionPoints( 2458007 );
-        $points = floor(mysql_result(mq(totalMarks("WHERE user_id = $user_id and mark_date >= 2458007")), 0));
+        $sqlPoints = "select SUM(mark_points) points FROM date_tasks_marks WHERE user_id = $user_id and mark_date >= 2458007";
+        $resultPoints = mysql_query( $sqlPoints );
+        if (mysql_num_rows( $resultPoints ) > 0) {
+            $rowPoints = mysql_fetch_assoc( $resultPoints );
+            $points = floor($rowPoints['points']);
+        } else {
+            $points = 0;
+        }
         $users[$user_id] = $points;
     }
     return $users;
@@ -42,14 +49,16 @@ function giveTickets( $children ) {
                         prize_id = " . $prize_id . ", 
                         auction_id = " . $auction_id . ", 
                         quantity = 1";
-                echo $sql . "<br />";
+                //echo $sql . "<br />";
+                mysql_query( $sql ) or die( mysql_error() );
                 $points -= 50; // each prize is worth 50 points
                 if ($points < 50) break; // make sure we still have enough points for next prize
             }
         } 
     }
+    echo "Done.";
 }
 
 $children = getChildren();
-echo "<pre>"; print_r( $children ); echo "</pre>"; exit;
+//echo "<pre>"; print_r( $children ); echo "</pre>"; exit;
 giveTickets( $children );
