@@ -32,6 +32,7 @@ $shipments['gifts'] = get_param('shipments')['gifts'] == "true" ? true : false;
 $shipments['ranks'] = get_param('shipments')['ranks'] == "true" ? true : false;
 $shipments['medals'] = get_param('shipments')['medals'] == "true" ? true : false;
 $shipments['hachayols'] = get_param('shipments')['hachayols'] == "true" ? true : false;
+$shipments['auctions'] = get_param('shipments')['auctions'] == "true" ? true : false;
 /***************** HANDLE DATES **********************/
 $start_date = get_param('start_date');
 if($start_date){ // if we have a start date
@@ -121,6 +122,12 @@ $hachayols = [];
 if($shipments['hachayols']) {
     require_once(dirname(__FILE__)."/../functions/get_hachayols.php");
     $hachayols = get_hachayols($school_id, $greg_start, $greg_end);
+}
+
+$auctions = [];
+if ( $shipments['auctions'] ){
+    require_once(dirname(__FILE__)."/../functions/get_auctions.php");
+    $auctions = get_auctions($greg_start, $greg_end, $school_id);
 }
 
 /***************** GET THE USERS **********************/
