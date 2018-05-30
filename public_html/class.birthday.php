@@ -155,14 +155,16 @@ class Birthday {
                     $description = 'Yom Holedes Mission';
                     
                     $date = jewishtojd($hMonth, $hDay, $this->year);
-                    if ( $date > 2458373 ) {
+                    if ( $date > 2458633 ) {
                         mail(
                             "bugs@tzivoshashem.org", "Error: Invalid Birthday Dates", 
                             json_encode([
                                 "date" => $date,
                                 "jewishtojd" => [ $hMonth, $hDay, $this->year ],
                                 "user_id" => $user_id,
-                                "mission" => $mission
+                                "mission" => $mission,
+                                "server" => $_SERVER,
+                                "request" => $_REQUEST
                             ])
                         );
                     }

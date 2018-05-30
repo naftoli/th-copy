@@ -143,17 +143,6 @@ class BirthdayYi {
                     $description = 'יום הולדת';
                     
                     $date = jewishtojd($hMonth, $hDay, $this->year);
-                    if ( $date > 2458373 ) {
-                        mail(
-                            "bugs@tzivoshashem.org", "Error: Invalid Birthday Dates", 
-                            json_encode([
-                                "date" => $date,
-                                "jewishtojd" => [ $hMonth, $hDay, $this->year ],
-                                "user_id" => $user_id,
-                                "mission" => $mission
-                            ])
-                        );
-                    }
 	                $t->setDates( $date, $date );
 
 	                if ( $t->createMission( $mission, $description ) ) {
