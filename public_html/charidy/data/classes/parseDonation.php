@@ -106,7 +106,6 @@ class ParseDonation
         $dedication_name = isset( $this->donation->dedication_name ) ? mysql_real_escape_string( $this->donation->dedication_name ) : '';
         $dedication_text = isset( $this->donation->dedication_text ) ? mysql_real_escape_string( $this->donation->dedication_text ) : '';
         $dedication_user_id = isset( $this->donation->dedication_user_id ) ? mysql_real_escape_string( $this->donation->dedication_user_id ) : 0;
-        $donation_date = mysql_real_escape_string( $this->donation->date_time );
         $donation_date = $this->extractDate();
 
         // find out if children have user_id and amount so that we can make separate donation entry for them 
@@ -310,15 +309,22 @@ class ParseDonation
         return false;
     }
 
-    private function findParentByUserPicture( $user_id ) {
-        
+    private function findParentByUserPicture( $picture ) {
+        // find out if picture is a thumb or a mobile pic
+        if ($pos = strpos('/thumbs/', $picture) !== false) {
+            $mobile_pic = substr($picture, $pos);
+            echo $mobile_pic . "<br />";
+        } else if ($pos = strpos('/reg/', $picture) !== false) {
+            $thumb = substr($picture, $pos);
+            echo $thumb;
+        }
         return false;
     }
 
     private function fixParentDonor() {
         // find out email that we have on file and update it to this email in admins as well as donors
         $sql = "select admin_email from admins where admin_id = " . $this->donation->parent_id;
-        echo $sql . "<br />";
+        //echo $sql . "<br />";
         $result = mysql_query( $sql );
         if ($row = mysql_fetch_assoc( $result )) {
             $oldEmail = $row['admin_email'];
@@ -353,7 +359,7 @@ class ParseDonation
             $date = substr( $date_to_parse, 0, $pos );
             $donation_date = str_replace( 'T', ' ', $date );
         } else {
-            $donation_date = $this->info->donation_date;
+            $donation_date = '2018-05-01 00:00:00';
         }
         return mysql_real_escape_string( $donation_date );
     }
