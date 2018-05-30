@@ -122,7 +122,7 @@ if (isset($_POST['action'])) {
 	} // end if the action is update_cc_info...
 }
 else {
-	header("/registration.php");
+	//header("/registration.php");
 }
 
 include("classes/school.php");
