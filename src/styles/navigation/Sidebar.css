@@ -14,31 +14,39 @@
 }
 
 #sidebar.active {
-  min-width: 80px;
-  max-width: 80px;
+  min-width: 90px;
+  max-width: 90px;
   text-align: center;
 }
 
 /* Links in the sidebar */
+#sidebar ul {
+  list-style: none;
+  padding-left: 0px;
+}
 #sidebar ul li a {
   text-align: left;
   padding: 10px;
   font-size: 1.1em;
   display: block;
+  position: relative;
 }
 #sidebar.active ul li a {
-  padding: 20px 10px;
+  padding: 10px 10px 20px;
   text-align: center;
-  font-size: 0.95em;
+  font-size: 0.65em;
 }
 /* Images / Icons in the sidebar */
 #sidebar img {
   margin-right: .5em;
 }
-#sidebar.active img {
+
+#sidebar.active img,
+#sidebar.active i {
   display: block;
-  font-size: 1.8em;
+  font-size: 3.5em;
   margin: 0 auto 5px;
+  width: 40px;
 }
 /* styles for second level elements */
 #sidebar ul.components li > div a {
@@ -69,15 +77,16 @@
 #sidebar ul.components {
   padding: 20px 0;
 }
-#sidebar.active ul.components {
-  padding: 0 0 20px 0;
-}
 
 #sidebar ul li a:hover, #sidebar ul li a.open {
   background: #2c539e !important;
 }
 
-/* invert the design on mobile */
+/* Desktop Design */
+@media ( min-width: 768px ){
+  
+}
+/* Mobile Design */
 @media (max-width: 768px) {
   #sidebar {
       margin-left: -250px;
@@ -85,4 +94,46 @@
   #sidebar.active {
       margin-left: 0;
   }
+}
+
+/* Sidebar dropdowns */
+#sidebar a.dropdown:before {
+  content: "\f0d7";
+  transition: .25s;
+
+  display: block;
+  position: absolute;
+  right: 20px;
+
+  font-family: Font Awesome\ 5 Free;
+  font-weight: 900;
+  font-style: normal;
+  font-variant: normal;
+
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: auto;
+}
+
+#sidebar.active a.dropdown:before {
+  top: auto;
+  bottom: 5px;
+  right: 50%;
+  transform: translateX(50%);
+}
+
+#sidebar a.dropdown.open:before{
+  transform: rotate(180deg);
+}
+#sidebar.active a.dropdown.open:before{
+  transform: rotate(180deg) translateX(-50%);
+}
+
+/* Custom Scrollbar */
+#sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+ 
+#sidebar::-webkit-scrollbar-thumb {
+  background: #000; 
 }
