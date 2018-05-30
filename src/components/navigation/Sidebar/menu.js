@@ -11,7 +11,7 @@ const menu = [
     path: '/admin.php'
   },
   {
-    label: 'Manage Base',
+    label: 'Base Managment',
     icon: <img src={`${LEGACY_URL}/images/icon_dashboard.png`} alt="base-managment"/>,
     children: [
       {
@@ -48,7 +48,18 @@ const menu = [
         label: "Staff"
       },
       {
-        label: "Base"
+        label: "Base",
+        children: [
+          {
+            label: 'View / Edit'
+          },
+          {
+            label: 'Settings'
+          },
+          {
+            label: 'Transactions'
+          }
+        ]
       }
     ]
   } // end Base Managment
