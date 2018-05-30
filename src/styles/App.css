@@ -1,5 +1,12 @@
-.App {
-  text-align: center;
+#App {
+  display: flex;
+  align-items: stretch;
+}
+
+#App > #content {
+  width: 100%;
+  max-height: 100vh;
+  overflow: auto;
 }
 
 .App-logo {
