@@ -19,15 +19,17 @@ class SidebarItem extends Component {
     let children = false;
     // this is a menu
     if ( this.props.item.children ) {
-      children = this.props.item.children.map( child => <SidebarItem item={ child } />)
+      children = this.props.item.children.map( (child, index) => <SidebarItem item={ child } key={index} />)
       return (
         <li>
-          <a onClick={ this.toggle } className={ this.state.collapse ? "open" : "" }>
+          <a onClick={ this.toggle } className={`dropdown ${ this.state.collapse ? "open" : "" }` }>
             { this.props.item.icon }
             <span>{ this.props.item.label }</span>
           </a>
           <Collapse isOpen={ this.state.collapse }>
-            { children }
+            <ul>
+              { children }
+            </ul>
           </Collapse>
         </li>
       )
