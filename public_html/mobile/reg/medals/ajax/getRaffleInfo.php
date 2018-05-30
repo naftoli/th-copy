@@ -43,7 +43,9 @@ function checkYearly( $user_id ) {
  */
 function checkMonthly( $user_id ) {
 	// find out current dates
-	$dates = getDates( 'monthly' );
+    $dates = getDates( 'monthly' );
+    if ( $dates === false ) return false;
+
 	$total = checkDaily( $user_id, $dates );
 	$required = Constants::get_monthly_task_requirment();
 	
@@ -72,7 +74,9 @@ function checkMonthly( $user_id ) {
 
 function checkWeekly( $user_id ) {
 	// find out current dates
-	$dates = getDates( 'weekly' );
+    $dates = getDates( 'weekly' );
+    if ( $dates === false ) return false;
+
 	$total = checkDaily( $user_id, $dates );
 	$required = Constants::get_weekly_task_requirment();
 	
@@ -136,8 +140,9 @@ function getDates( $type ) {
 	$sql = "SELECT start_date, end_date, name FROM raffles
 			WHERE type = '" . $type . "'
 			AND start_date <= " . $today . "
-			AND end_date >= " . $today;
-	$result = mysql_query($sql);
+            AND end_date >= " . $today;
+    $result = mysql_query($sql);
+    if ( mysql_num_rows( $result ) == 0 ) return false;
 	$row = mysql_fetch_assoc($result);
 	return array(
 		'start'	=>	$row['start_date'],
@@ -150,15 +155,19 @@ function getDates( $type ) {
 $yearly = checkYearly( $user );
 $monthly = checkMonthly( $user );
 $weekly = checkWeekly( $user );
-?>
+
+if ( $weekly ) { ?>
 <div class="progress <?= $weekly['percent_done'] == 100 ? "compleate" : ""?>">
     <div class="progress-bar" role="progressbar" style="width: <?= $weekly['percent_done']?>%;"></div>
     <span ><?= $weekly['msg'] ?></span>
 </div>
+<? }
+if ( $monthly ) { ?>
 <div class="progress <?= $monthly['percent_done'] == 100 ? "compleate" : ""?>">
     <div class="progress-bar" role="progressbar" style="width: <?= $monthly['percent_done']?>%;"></div>
     <span ><?= $monthly['msg'] ?></span>
 </div>
+<? } ?>
 <div class="progress <?= $yearly['percent_done'] == 100 ? "compleate" : ""?> <?= $yearly['missed-deadline'] ? "missed-deadline" : ""?>">
     <div class="progress-bar" role="progressbar" style="width: <?= $yearly['percent_done']?>%;"></div>
     <span ><?= $yearly['msg'] ?></span>
