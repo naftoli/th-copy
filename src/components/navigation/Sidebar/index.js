@@ -11,7 +11,7 @@ class Sidebar extends Component {
   }
 
   render() {
-    const menu = this.state.menu.map( item => <SidebarItem item={ item } /> )
+    const menu = this.state.menu.map( ( item, index ) => <SidebarItem item={item} key={index} /> )
     return (
       <div id="sidebar" className="active">
         <ul className="list-unstyled components">
