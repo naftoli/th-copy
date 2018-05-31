@@ -7,13 +7,15 @@ class App extends Component {
   state = { active: false }
 
   toggle = () => {
-    this.setState({
-      active: !this.state.active
-    });
+    if ( window.innerWidth <= 1024 ) {
+      this.setState({
+        active: !this.state.active
+      });
+    }
   }
 
   componentDidMount() {
-    if ( window.innerWidth > 768 ) {
+    if ( window.innerWidth > 768 &&  window.innerWidth <= 1024 ) {
       this.setState({ active: true });
     }
   }
