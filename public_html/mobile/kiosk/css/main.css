@@ -11,6 +11,10 @@ nav {
     min-height: 10vh;
     z-index: 100;
 }
+nav.navbar {
+    position: fixed;
+    width: 100%;
+}
 .navbar-title {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 2.3em;
@@ -118,6 +122,7 @@ canvas.drawingBuffer {
     }
     .alert {
         height: 100%;
+        padding-top: 20vh;
     }
 
     .navbar-title {
