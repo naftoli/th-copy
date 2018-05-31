@@ -7,14 +7,12 @@ $primary-color-hover: #2c539e;
 
 // Sidebar
 #sidebar {
-  span {
-    transition: none;
-  }
   // Define the size
   min-width: 270px;
   max-width: 270px;
   height: 100vh;
   overflow: auto; // scroll the sidebar independent of the content
+  scroll-behavior: smooth;
   // Sidebar Theme and Transitions
   font-family: 'Poppins', sans-serif;
   background: $primary-color;
@@ -70,6 +68,7 @@ $primary-color-hover: #2c539e;
     -moz-user-select: none; /* mozilla browsers */
     -khtml-user-select: none; /* webkit (konqueror) browsers */
     -ms-user-select: none; /* IE10+ */
+    user-select: none;
   }
   // open links
   a:hover, a.open, a:focus {
