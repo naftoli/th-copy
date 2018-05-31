@@ -49,7 +49,7 @@ $sql .= "s.school_name, c.class_sub, c.class_grade, u.last, u.first";
 $result = mysql_query( $sql );
 ?>
 <p>
-	Order by: <a href="winners.php?order=1">School</a> | <a href="winners.php?order=2">Prize</a>
+	Order by: <a href="winners3.php?order=1">School</a> | <a href="winners3.php?order=2">Prize</a>
 </p>
 <?
 $i = 0;
