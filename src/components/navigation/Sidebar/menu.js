@@ -84,6 +84,60 @@ const getMenu = () => {
       label: 'Shipping Reports',  legacy: true, path: '/reports/shipping',
       icon: <img src={`${LEGACY_URL}/images/icon_report.png`} alt="shipping-reports"/>
     },
+    {
+      label: "Campaigns",
+      icon: <img src={`${LEGACY_URL}/images/parentIcons/Campaigns.gif`} alt="Campaigns" />,
+      children: [
+        { label: 'Tanya', 
+          children: [
+            { label: 'Individual Marking', legacy: true, path: '/editSoldierLines2.php' },
+            { label: 'Yud Aleph Nissan Reports', legacy: true, path: '/yud_alef_nissan_choose.php' },
+          ]
+        },
+        { label: 'Tehillim', 
+          children: [
+            { label: 'Mark Shabbos Mevorchim Tehillim', legacy: true, path: '/mark_tehillim2.php' },
+            { label: 'Shabbos Mevorchim Report', legacy: true, path: '/choose_sm_report.php' },
+            { label: 'Check Your Tehillim Quotas', legacy: true, path: '/tehillim_quotas.php' },
+            { label: 'Change Tehillim Ladder/Quota', legacy: true, path: '/admin_users_track.php' },
+            { label: 'Shabbos Mevorchim Tutorial Video', legacy: false, path: 'https://vimeo.com/195384916' },
+          ]
+        }
+      ]
+    },
+    {
+      label: "Rally",
+      icon: <img src={`${LEGACY_URL}/images/parentIcons/Rally.gif`} alt="Rally" />,
+      children: [
+        { label: 'Promotion Picture Report', legacy: true, path: '/promotion_report.php' },
+        { label: 'Teacher\'s Medal Ceremony Report', legacy: true, path: '/medal_rank_ceremony3.php' },
+        { label: 'Raffle Winners', legacy: true, path: '/raffles/shared/forms/winners_form.php' }
+      ]
+    },
+    {
+      label: 'Raffles',  legacy: true, path: '/raffles/',
+      icon: <img src={`${LEGACY_URL}/images/icon_auction.png`} alt="Raffles"/>
+    },
+    {
+      label: 'Yearly Prize',  legacy: true, path: '/yearly_prize/reports/',
+      icon: <img src={`${LEGACY_URL}/images/icon_auction.png`} alt="Yearly Prize"/>
+    },
+    {
+      label: 'Setup Guide',  legacy: true, path: '/admin_setup_guide.php',
+      icon: <img src={`${LEGACY_URL}/images/icon_wizard.png`} alt="Setup Guide"/>
+    },
+    {
+      label: 'Mileage Program',
+      icon: <img src={`${LEGACY_URL}/images/icon_auction.png`} alt="Miliage Program"/>
+    },
+    {
+      label: 'Support', legacy: true, path: '/helpdesk/?p=open',
+      icon: <img src={`${LEGACY_URL}/images/parentIcons/support icon.gif`} alt="Support"/>
+    },
+    {
+      label: 'Logout', legacy: true, path: '/logout.php',
+      icon: <img src={`${LEGACY_URL}/images/parentIcons/logout.gif`} alt="Logout"/>
+    },
   ]
 } // end getMenu function
 
