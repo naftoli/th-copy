@@ -1,24 +1,6 @@
-import React, { Component } from 'react';
-import SidebarItem from './SidebarItem';
-import menu from './menu';
-import 'styles/navigation/Sidebar.css';
+import Sidebar from './Sidebar.jsx';
+export { default as getMenu } from './menu';
 
-class Sidebar extends Component {
-  constructor( props ){
-    super( props );
-    this.state = { menu }
-  }
-
-  render() {
-    const menu = this.state.menu.map( ( item, index ) => <SidebarItem item={item} key={index} /> )
-    return (
-      <div id="sidebar" className="active">
-        <ul className="list-unstyled components">
-          { menu }
-        </ul>
-      </div>
-    )
-  }
-}
-
+// default is the component
 export default Sidebar;
+
