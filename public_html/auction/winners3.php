@@ -20,6 +20,7 @@
 	<body>
 <?
 require_once '../db.php';
+$auction_id = 79; 
 /*
 $sql = "select s.school_name, u.user_id, u.first, u.last, p.prize_name, c.class_grade, c.class_sub  
         from auction_winners aw 
@@ -37,7 +38,7 @@ $sql = "select s.school_name, u.user_id, u.first, u.last, p.prize_id, p.prize_na
         left join schools s on (u.school_id = s.school_id) 
         join prizes_auction p using (prize_id) 
         left join classes c on c.class_id = u.class_id 
-        where aw.auction_id = 77
+        where aw.auction_id = " . $auction_id . " 
 		and u.school_id != 82 
 		order by ";
 if (isset($_GET['order']) && $_GET['order'] == 2) {
