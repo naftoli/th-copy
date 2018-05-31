@@ -5,8 +5,6 @@ import SidebarDropdown from './SidebarDropdown';
 class SidebarItem extends Component {
 
   render(){
-    let children = false;
-    
     // This is a dropdown
     if ( this.props.item.children ) {
       return <SidebarDropdown { ...this.props.item } />;
