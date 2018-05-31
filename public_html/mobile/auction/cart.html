@@ -30,7 +30,8 @@
                 <div class="personalImg"></div>
 				
 				<div class="alert alert-warning" role="alert" dir="ltr" style="color: red">
-					<b>After adding a prize in your Auction cart, be sure to click "SAVE" at the very bottom of your cart.</b>
+                    <b>After ADDING a prize in your Auction cart, be sure to click "SAVE" at the very bottom of your cart.</b><br />
+                    <b>After UPDATING the quantities, be sure to click "UPDATE" & then "SAVE".</b>
 				</div>
                 
                 <div class="alert alert-warning" role="alert" dir="ltr">
@@ -91,7 +92,8 @@
         
 	</body>
 
-    
+    <script src="/mobile/js/authenticate.js" defer></script>
+    <script src="/mobile/reg/js/handlebars.js" defer></script>
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {
             var url = location.href.toString();
@@ -102,16 +104,13 @@
     			var p = user.indexOf('#');
     			user = user.substring(0, p);
     		}
+            
+            authenticate( user );
+            if( localStorage.getItem("login") == "user" ){
+                $( "#mainLink" ).attr('href', '/mobile/reg/medals/?id=' + user);
+            }
     		
-			if (!Cookies.get('kiosk')) {
-				var admin = Cookies.get('admin');
-				if (!admin) {
-					window.location = "index.html";
-				}
-			} else {
-				if (!Cookies.get('user')) {
-					location.href = "/mobile/kiosk";
-				}
+			if (Cookies.get('kiosk')) {
 				// disable account menu item
 				$("#mainLink").attr('href', '');
 			}
@@ -129,9 +128,9 @@
             var bal = 0;
             var cart = [];
             var originalBal = 0;
-    		var auction_id = 77;
+    		var auction_id = 79;
             
-            $.post('ajax/getBalance.php', { admin : admin, user : user, auction : auction_id }, function( success ) {
+            $.post('ajax/getBalance.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
                 var info = $.parseJSON(success);
                 html = "Total Miles Earned: " + info.earned;
                 html += "<br />Available Auction Miles: <span id='balance'>" + info.available + "</span>";
@@ -190,6 +189,10 @@
     		}
             
             $(document).on('click', '.update', function() {
+                // after deadline alert and return
+				alert('We are sorry but the auction deadline has past. You can no longer put in tickets for the auction.');
+				return false;
+
                 var key = parseInt($(this).parent().parent().attr('id'));
                 var val = parseInt($(this).parent().find('input').val());
                 var item = cart[key];
@@ -208,6 +211,10 @@
             });
             
             $(document).on('click', '.del', function() {
+                // after deadline alert and return
+				alert('We are sorry but the auction deadline has past. You can no longer put in tickets for the auction.');
+				return false;
+
                 var key = parseInt($(this).parent().parent().attr('id'));
                 cart.splice(key,1);
                 calcBalance();
@@ -223,6 +230,9 @@
             });
             
             $("#purchase").click( function() {
+                // after deadline alert and return
+				alert('We are sorry but the auction deadline has past. You can no longer put in tickets for the auction.');
+				return false;
     			/*
     			if (!cart.length) {
     				alert('You have nothing left in your cart!');
@@ -231,7 +241,7 @@
     			}
     			*/
     			//alert('Not ready yet.');
-                $.post('ajax/purchaseTickets.php', { admin : admin, cart : JSON.stringify(cart), user : user, auction : auction_id }, function( error ) {
+                $.post('ajax/purchaseTickets.php', { admin : Cookies.get('admin'), cart : JSON.stringify(cart), user : user, auction : auction_id }, function( error ) {
                     if (error == 0) {
                         //alert('Your purchase has been successful.');
     					localStorage.removeItem('auctionCart' + user);

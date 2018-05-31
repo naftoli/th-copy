@@ -23,7 +23,7 @@
 		
 		#bh{
 			text-align: center;font-size: 1.5em;position: absolute;top: 5px;
-			width: 100%;color: rgba(255,255,255,.6);font-family:font1;
+			width: 100%;color: #fff;font-family:font1;
 			display: inline-block; text-align: center;
 		}
 		.page5 .chilrens{margin-bottom: 10px;}
@@ -38,7 +38,7 @@
         /* New shamai changes, 4/8/2018 */
         .page5 .header {
             background-image: url("/mobile/img_new/star-background-color-green-svg.svg");
-            background-size: 40%;
+            background-size: cover;
         }
         .page5 .lb-ico { color: #fff }
 		
@@ -187,7 +187,7 @@
 																	{{/if}}
 																</div>
 															{{/if}}
-															
+															<!--
 															{{#if this.chidonRegistered}}
 																<div class="button-spacing">
 																	<div class="chidonRegInfo">Registered for Chidon</div>
@@ -211,7 +211,7 @@
 																	{{/if}}
 																	<!--<div style="margin:10px 0px">
 																		<button class="btn btn-primary editChidon">Edit Sweater Size</button>
-																	</div>-->
+																	</div>
 																</div>
 															{{/if}}
 															
@@ -224,6 +224,12 @@
 																{{/if}}
 															{{/if}}
 															
+															{{#if this.auctionInfo}}
+																<div class="chidonRegInfo">
+																	{{this.auctionInfo}}
+																</div>
+															{{/if}}
+															-->
 															{{#if this.allowRemove}}
 															<a href="#" class="del">
 																<div class="button-spacing">

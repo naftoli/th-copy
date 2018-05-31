@@ -1,28 +1,29 @@
 <!DOCTYPE html>
-
 <html>
 	<head>
 		<meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Tzivos Hashem | User Home Page</title>
+        <title>Tzivos Hashem | User Home Page</title>
         <link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'">
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet">
         <script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
-		<script src="../js/all.js" defer></script>
-		<link rel="stylesheet" href="/mobile/reg/css/medal-board.css"/>
+        <script src="../js/all.js" defer></script>
+        <link rel="stylesheet" href="/mobile/reg/css/medal-board/medals.css"/>
+        <link rel="stylesheet" href="/mobile/css/lib/animate.css"/>
     	<style>
-            .header { background-image: url("/mobile/img_new/star-background-color-green-svg.svg"); }
+            .header { background-image: url("/mobile/img_new/star-background-color-green-svg.svg"); background-size: cover; }
             .header-edit span, .header-setting span { color: #fff; }
+            .clearfix { clear: both; }
             /* carosel */
-			.sky-carousel .sky-carousel-container li img{ display: none; }
-			.sky-carousel .sky-carousel-container li img.sc-image{ display: block; }
-			.sky-carousel.sc-no-select { border: none; background: none; border-radius: 11px; }
+            .sky-carousel .sky-carousel-container li img{ display: none; }
+            .sky-carousel .sky-carousel-container li img.sc-image{ display: block; }
+            .sky-carousel.sc-no-select { border: none; background: none; border-radius: 11px; }
             .sky-carousel { height: 200px; }
             /* page header */
-			#userImg { border-radius: 50%; border: 2px solid #31559f; margin-left: 5%; }
-			.personalImg { border-radius: 50%;  display: block; text-align: center; }
+            #userImg { border-radius: 50%; border: 2px solid #31559f; margin-left: 5%; }
+            .personalImg { border-radius: 50%;  display: block; text-align: center; }
             .top-center {margin: auto;}
-			.body .caption {background-image: url("/mobile/img_new/banner-3-color-green-svg.svg"); margin-bottom: 10px;}
+            .body .caption {background-image: url("/mobile/img_new/banner-3-color-green-svg.svg"); margin-bottom: 10px;}
             .body .medal-label {
                 background-image: url("/mobile/img_new/banner-4-color-green-svg.svg");
                 text-align: center;
@@ -30,12 +31,34 @@
             }
             .body .medal-label span {
                 display: inline-block;
-				color: #004E22;
+                color: #004E22;
             }
             .body .caption span {color: #004E22;}
             .slider img.active {background: url("/mobile/img_new/circle-color-green-solid-svg.svg"); content: url("/mobile/img_new/circle-color-green-solid-svg.svg");}
-            .l-3 div.medal-sub { background-image: url("/mobile/img_new/banner-1-color-orange-svg.svg"); background-size: cover; }
-            .l-3 .medal-sub span { margin-top: 15px; }
+			
+			#raffleInfo {
+				font-size: 20px;
+                font-style: italic; text-align: center; padding-top: 8px;
+                margin: 0 auto; padding: 10px 5px 0px;
+			}
+            #raffleInfo .progress {
+                margin-bottom: 5px; height: 35px; position: relative;
+            }
+            #raffleInfo .progress-bar {
+                background-color: #f39c12;
+                height: 100%;
+                background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+                animation-name: progress-bar-slide;
+                animation-duration: 2.5s;
+            }
+            #raffleInfo .progress > span {
+                padding-top: 3px; display: inline-block; font-style: normal;
+                position: absolute; top: 0; right: 0; left: 0; color: #000; font-weight: bold;
+            }
+            #raffleInfo .compleate .progress-bar { background-color: #004E22; }
+            #raffleInfo .compleate span { color: #fff; }
+            #raffleInfo .missed-deadline .progress-bar { background-color: #ef5350; }
+			
             /*			MEDIA QUERIES */
 			@media(min-width: 767px) and (max-width: 900px) {
 				.header .top-right-space{margin-right: 20px;}
@@ -55,6 +78,8 @@
 			@media screen and (max-width: 639px){
 				#userImg {width: 160px;height: 160px;}
 				.header{height: 300px;}
+				#raffleInfo {font-size: 16px;}
+                #raffleInfo .progress { height: 28px; };
 			}
 			@media( min-width: 640px ){ .header-edit{min-width: 120px;} }
             @media (min-width:  600px) and (max-width: 749px){
@@ -63,26 +88,18 @@
 			@media( min-width: 460px ){
 				.header-setting{ min-width: 130px; }
             }
-            @media (max-width: 639px) {
-                .l-3 .medal-sub span {
-                    margin-top: 10px;
-                    padding: 3px;
-                }
-            }
 			@media ( max-width: 479px ) {
 				.mt1{ margin-top: 15px; }
 				.header-top{ margin-top: 5px; }
                 .header { height: 180px; }
-                
-                .l-3 .medal-sub span {
-                    margin-top: 7px;
-                    padding: 3px;
-                    font-size: 1em;
-                }
-                .l-3 div.medal-sub { background-size: 100% 100%; }
+				#raffleInfo {font-size: 14px;}
+                #raffleInfo .progress { height: 25px; };
 			}
 			@media (max-width:  450px){
 				#userImg {width: 120px;height: 120px;}
+            }
+            @media (max-width:  420px){
+				.hide-small { display: none; }
             }
 		</style>
 	</head>
@@ -97,7 +114,6 @@
                                 <span>log out</span>
                             </div>
                         </div>
-						
                         <div class="header-edit col-xs-4">
                             <div style="float: left;">
                                 <span>edit</span>
@@ -143,7 +159,6 @@
                                 <span class="descr" id="grade"></span>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -191,13 +206,21 @@
 					<img id="item12" src="/mobile/img_new/circle-color-green-svg.svg">
 					<img id="item13" src="/mobile/img_new/circle-color-green-svg.svg">
                 </div>
-                <div class="span12" style="margin-top:30px;">
+				
+				<div class="span12" style="margin-top:15px;">
+                    <div class="medal-label">
+                        <span>RAFFLE INFO</span>
+                    </div>
+                </div>
+				<div id="raffleInfo" class="clearfix"></div>
+				
+                <div class="span12" style="margin-top:15px;">
                     <div class="medal-label">
                         <span>MEDALS</span>
                     </div>
                 </div>
-                               
-                <div id="medals"></div>
+                <div id="medals" class="clearfix"></div>
+				
 			</div>
 		
 			<div class="span12" style="position: fixed;width: 100%;bottom:0px;z-index:9999;">
@@ -255,6 +278,7 @@
         </div>
         <!-- misc javascript functions that are not in all.js -->
         <script src="/mobile/js/authenticate.js" defer></script>
+        <script src="/mobile/reg/js/medal-board.js" defer></script>
 		<script>
         document.addEventListener("DOMContentLoaded", function(event) {
             var carousel = "";
@@ -282,8 +306,6 @@
                         carousel.select(parseInt(item_id), duration); // or go to the selected item
                     }
                 });
-                //if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-                //}
             }); // end on window load
 
             // get the ID of the current user
@@ -310,6 +332,11 @@
     			$(".points").append(success + ' miles');
     			$("#points").val( success );
     		});
+			
+			// get raffle eligibility info
+			$.post('ajax/getRaffleInfo.php', { user_id : id }, function( response ) {
+				$("#raffleInfo").append( response );
+			});
             
             // get the user's information and update the UI
     		$.post('ajax/getUserInfo.php', { user_id : id }, function( success ) {
@@ -412,33 +439,8 @@
     		$(".header-edit").click( function() {
     			window.location = '/mobile/reg/re_register.html?child=' + id + '&e=1';
     		});
-    		// get the medal info for the user
-    		$.post('ajax/getMedalInfo.php', { user_id : id }, function( success ) {
-    			var medals = $.parseJSON( success );
-    			
-    			var html = '<div>';
-    			for (var i in medals) {
-    				var medal = medals[i];
-    				if (i % 3 == 0 && i < 10) {
-    					html += '</div></div><div class="span12"><div class="l-3 medal_row">';
-    				}
-
-    				html += '<div class="span4 medal_row_item" style="text-align: center;">';
-
-    				html += '<a href="/mobile/reg/medals3.html?id=' + id + '&subject=' + medal.id + '">';
-    				if (medal.photo != '')
-    					html += '<img class="medal" src="/file_view.php?id=' + medal.photo + '">';
-    				else 
-    					html += '<img class="medal" src="/kiosk/images/medals/holder.png">';
-    				html += '</a><div class="medal-sub">\
-    								<div style="display: table;width: 100%;"><span>' + medal.name + '</span></div>\
-    							</div>\
-    							<span>' + medal.left + ' to Level ' + medal.next + '</span>\
-    						</div>';
-    			}
-    			html += '</div></div>';
-    			$("#medals").append( html );
-            });
+            // get the medal info for the user
+            medal_board( "#medals", id );
 		});
 		</script>
 		<script>

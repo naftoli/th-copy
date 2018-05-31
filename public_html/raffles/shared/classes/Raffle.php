@@ -33,6 +33,8 @@ class Raffle {
     // private variables
     private $db_conn; // database connection object
     
+    public $hebrew_dates = [];
+    
     // ************************
     // constructors
     // ************************
@@ -348,7 +350,7 @@ class Raffle {
      *
      * returns an array of all the winners ($this->winner_info);
      */
-    public function get_winner_info($school_id = false, $separate_genders = true, $sorting="school", $shipping = true){ // defaults
+    public function get_winner_info($school_id = false, $separate_genders = true, $sorting="school"){ // defaults
         $this->winner_info = []; // create the flat array
         if($separate_genders) $this->winner_info = ["boys" => [], "girls" => []]; // create the boys/girls structure
         
@@ -412,7 +414,7 @@ class Raffle {
                 'grade' => $row['class_grade'] . ($row['class_sub'] ? " - " .$row['class_sub'] : ""),
             ];
 
-            if ( $shipping ) $data['address'] = [
+            $data['address'] = [
                 'street' => $row['admin_address1'], 
                 'city' => $row['admin_city'], 
                 'state' => $row['admin_state'], 
@@ -504,6 +506,26 @@ class Raffle {
             return true; // and return true
         }
         return false; // something did not work
+    }
+
+    /**
+     * $raffle->get_hebrew_dates
+     *
+     * sets the hebrew_dates array
+     * 
+     * @return array
+     */
+    public function get_hebrew_dates(){
+        $raffle_from = explode(' ', iconv('WINDOWS-1255', 'UTF-8', jdtojewish($this->start_date, true, CAL_JEWISH_ADD_GERESHAYIM)));
+        $raffle_from = $raffle_from[0] . ' ' . $raffle_from[1];
+
+        $raffle_to = explode(' ', iconv('WINDOWS-1255', 'UTF-8', jdtojewish($this->end_date, true, CAL_JEWISH_ADD_GERESHAYIM)));
+        $raffle_to = $raffle_to[0] . ' ' . $raffle_to[1];
+
+        return $this->hebrew_dates = [
+            "from"  => $raffle_from,
+            "to"    => $raffle_to
+        ];
     }
 }
 

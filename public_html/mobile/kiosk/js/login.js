@@ -45,6 +45,12 @@ $(document).ready( function() {
                 width: {min: 640, ideal: 1280, max: 1920},
                 height: {min: 480, ideal: 720, max: 1280},
                 aspectRatio: {min: 1, max: 100},
+                area: {
+                    top: "0%",
+                    right: "0%",
+                    left: "0%",
+                    bottom: "0%"
+                },
                 facingMode: "environment" // or user
             }
         },
@@ -67,6 +73,7 @@ $(document).ready( function() {
         } else {
             $("#manual_scanner").hide();
             $("#barcode_scanner").show();
+            $("#barcode_scanner").addClass("show");
             $(".container.body").addClass("shrink");
         }
         console.log( "Quagga JS initialized. Ready to start Scanning Cards" );

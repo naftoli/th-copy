@@ -193,7 +193,7 @@ function getMedals( $user, $rank ) {
 		}
 		*/	
 		echo "<table>";
-		echo "<tr><User ID</th><th>School</th><th>Student</th><th>Rank</th><th>Grade</th><th>Gender</th><th>Medals Left to General</th></tr>";
+		echo "<tr><th>User ID</th><th>School</th><th>Student</th><th>Rank</th><th>Grade</th><th>Gender</th><th>Medals Left to General</th></tr>";
 		foreach ( $users as $school => $info ) {
 			foreach ( $info as $rank => $other ) {
 				foreach ( $other as $grade => $more ) {

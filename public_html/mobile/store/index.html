@@ -245,7 +245,7 @@
                 var info = $.parseJSON(success);
     			var html = "Total Miles Earned: " + info.tpoints;
                 html += "<br />Total Miles Earned this Year: " + info.earned;
-                html += "<br />Available Miles: <span id='balance'>" + info.available + "</span>";
+                html += "<br />Available <strong>Store</strong> Miles: <span id='balance'>" + info.available + "</span>";
                 $(".balance").html(html);
                 originalBal = info.available;
                 initCart();

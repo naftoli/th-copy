@@ -4,7 +4,7 @@ include(dirname(__FILE__)."/../parts/printout_rendering_functions.php");
 
 // calculate the totals for a single school....
 function claculate_shipping_totals($school_id, $shipping_status){
-    global $prizes; global $gifts;  $totals = [];
+    global $prizes; global $gifts; global $auctions; $totals = [];
     // add the student shipments....
     foreach($gifts['students'][$school_id] as $user_id => $shipments) {
         foreach(filter_shipping_status($shipments, $shipping_status) as $shipment) { // filter the shipments based on the shipping status...
@@ -19,6 +19,11 @@ function claculate_shipping_totals($school_id, $shipping_status){
     }
     // add the staff shipments
     foreach($gifts['staff'][$school_id] as $shipments) {
+        foreach(filter_shipping_status($shipments, $shipping_status) as $shipment) { // filter the shipments based on the shipping status...
+            isset($totals[$shipment['item']]) ? $totals[$shipment['item']] += 1 : $totals[$shipment['item']] = 1; // update the totals...
+        }
+    }
+    foreach($auctions[$school_id] as $user_id => $shipments) {
         foreach(filter_shipping_status($shipments, $shipping_status) as $shipment) { // filter the shipments based on the shipping status...
             isset($totals[$shipment['item']]) ? $totals[$shipment['item']] += 1 : $totals[$shipment['item']] = 1; // update the totals...
         }
@@ -54,6 +59,7 @@ foreach($schools as $school_id => $school_name) {
     // get the prizes, gifts, medals and ranks for this school
     $school_prizes = isset($prizes[$school_id]) ? $prizes[$school_id] : [];
     $school_students_gifts = isset($gifts['students'][$school_id]) ? $gifts['students'][$school_id] : [];
+    $school_auctions = isset($auctions[$school_id]) ? $auctions[$school_id] : [];
     // get the school specific info from the database
     $totals = claculate_shipping_totals($school_id, $shipping_status);
     $school = get_school_shipping_info($school_id); $admin = get_school_admin($school_id);
@@ -89,6 +95,7 @@ foreach($schools as $school_id => $school_name) {
         // merge all the shipments together
         if(isset($school_prizes[$user['user_id']])) $user_shipments = array_merge($user_shipments, $school_prizes[$user['user_id']]);
         if(isset($school_students_gifts[$user['user_id']])) $user_shipments = array_merge($user_shipments, $school_students_gifts[$user['user_id']]);
+        if(isset($school_auctions[$user['user_id']])) $user_shipments = array_merge($user_shipments, $school_auctions[$user['user_id']]);
         // sort them based on ascending or decending order
         if ($order == "DESC"){$user_shipments = array_reverse($user_shipments);}
         // filter according to the shipping status

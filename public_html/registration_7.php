@@ -39,7 +39,7 @@ $authorize_school_ids = mysql_fetch_assoc($authorize_school_ids); // fetch the r
 $customer_id 	= $authorize_school_ids['customer_id'];
 $payment_id 	= $authorize_school_ids['payment_id'];
 
-if($customer_id) {
+if( $customer_id ) {
 	$customer_profile = new CustomerProfile($customer_id);
 	$payment_profile = $customer_profile->paymentProfiles[0];
 	$cc = $customer_profile->paymentProfiles[0]["payment"]["creditCard"]; // get the CC info from the API response....
@@ -81,7 +81,7 @@ if (isset($_POST['action'])) {
 			$next_page = "true";
 		}
 		// check if we have payment info on file....
-		if ($customer_id && $authorize_school_ids['payment_id']) {
+		if ($customer_id && $authorize_school_ids['payment_id'] && !preg_match("/^X{4}[0-9]{4}$/", $_POST['cc_number']) ) {
 			// update the payment profile on file:
 			$payment_profile = new PaymentProfile($payment_id, $customer_id);
 			$payment_profile->cardNumber 		= clean_character($_POST['cc_number']);
@@ -97,7 +97,7 @@ if (isset($_POST['action'])) {
 				$message = "<span style='color:red;'>Credit Card Error ($errorCode): $errorText</span>";
 				$next_page = "false";
 			}
-		} else { // if we do not have an authorize account on record...
+		} else if ( !preg_match("/^X{4}[0-9]{4}$/", $_POST['cc_number']) ) { // if we do not have an authorize account on record...
 			$payment_profile = PaymentProfile::createBasicArray(
 				clean_character($_POST['cc_number']),
 				clean_character($_POST['cc_exp']),
@@ -112,17 +112,17 @@ if (isset($_POST['action'])) {
 				// insert the ids into the system....
 				mysql_query("UPDATE schools SET authorize_customer_profile_id = ". $customer_profile->customerProfileId .
 							", authorize_payment_profile_id = " . $customer_profile->paymentProfiles[0]["customerPaymentProfileId"] .
-							" WHERE school_id = $id"
+							" WHERE school_id = $admin->school_id"
 				);
 			} else {
-				$message = "<span style='color:red;'>Credit Card Information Invalid</span>";
+                $message = "<span style='color:red;'>" . $customer_profile['message'] . "</span>";
 				$next_page = "false";
 			}
 		} // end CC updating conditions....
 	} // end if the action is update_cc_info...
 }
 else {
-	header("https://www.mashpia.com/registration.php");
+	//header("/registration.php");
 }
 
 include("classes/school.php");
@@ -208,53 +208,54 @@ function clean_character($string)
 					document.getElementById("cc_first_name").focus();
 					alert("You must enter First Name as it appears on credit card");
 					return false;					
-					}
+				}
 				else if ($("#cc_last_name").val() == "") {
 					document.getElementById("cc_last_name").focus();
 					alert("You must enter Last Name as it appears on credit card");
 					return false;					
-					}
+				}
 				else if ($("#cc_address").val() == "") {
 					document.getElementById("cc_address").focus();
 					alert("You must enter Address.");
 					return false;					
-					}
+				}
 				else if ($("#cc_state").val() == "") {
 					document.getElementById("cc_state").focus();
 					alert("You must enter State/Province code.");
 					return false;					
-					}
+				}
 				else if ($("#cc_zip").val() == "") {
 					document.getElementById("cc_zip").focus();
 					alert("You must enter Zip/Postal Code.");
 					return false;					
-					}
+				}
 				else if ($("#ccnum").val() == "") {
 					document.getElementById("ccnum").focus();
 					alert("You must enter Valid Credit Card Number.");
 					return false;					
-					}
-				else if(IsNumeric($("#ccnum").val()) == false) {
+                }
+                // make sure it is a number or the pre-filled info
+				else if(IsNumeric($("#ccnum").val()) == false && !$("#ccnum").val().match(/^X{4}[0-9]{4}$/)) {
 					document.getElementById("ccnum").focus();
 					alert("Credit Card Must be Numeric.");
-					return false;					
-					}
+					return false;
+				}
 				else if ($("#ccexp").val() == "") {
 					document.getElementById("ccexp").focus();
 					alert("You must enter Valid Credit Card Expiry Date.");
 					return false;					
-					}			
-				else if(IsNumeric($("#ccexp").val()) == false) {
+				}			
+				else if(IsNumeric($("#ccexp").val()) == false && !$("#ccexp").val().match(/^X{4}$/) ) {
 					document.getElementById("ccexp").focus();
 					alert("Expiry date must be numeric (format MMYY).");
 					return false;					
-					}
-				else if ($("#cc_cvv").val() == "") {
+				}
+				else if ($("#cc_cvv").val() == "" && !$("#ccexp").val().match(/^X{4}$/) ) {
 					document.getElementById("cc_cvv").focus();
 					alert("CVV must be entered.");
 					return false;					
-					}			
-				else if(IsNumeric($("#cc_cvv").val()) == false) {
+				}			
+				else if(IsNumeric($("#cc_cvv").val()) == false && !$("#ccexp").val().match(/^X{4}$/) ) {
 					document.getElementById("cc_cvv").focus();
 					alert("CVV must be numeric.");
 					return false;					
@@ -420,14 +421,14 @@ function clean_character($string)
 													<span class="label"><label for="ccnum">Credit Card Number</label></span>
 													<span class="input">
 														<input id="ccnum" class="required creditcard" name="cc_number" type="text" placeholder="<?=$cc ? $cc['cardNumber'] : ""?>"
-															value="<?= isset($_POST['cc_number']) ? $_POST['cc_number'] : ""?>"/>
+															value="<?= isset($_POST['cc_number']) ? $_POST['cc_number'] : ( $cc ? $cc['cardNumber'] : "" )?>"/>
 													</span>
 												</li>
 												<li>
 													<span class="label"><label for="ccexp">Expiry Date<br>(format MMYY)</label></span>
 													<span class="input">
 														<input id="ccexp" class="required digits" name="cc_exp" type="text" placeholder="<?=$cc ? $cc['expirationDate'] : ""?>"
-															value="<?= isset($_POST['cc_exp']) ? $_POST['cc_exp'] : ""?>"/>
+															value="<?= isset($_POST['cc_exp']) ? $_POST['cc_exp'] : ( $cc ? $cc['expirationDate'] : "" )?>"/>
 													</span>
 												</li>
 												<li>

@@ -9,6 +9,9 @@ require 'encrypt.php';
 $admin = encrypt_decrypt('decrypt', $admin);
 
 require 'regFeeSchools.php';
+require_once( dirname(__FILE__) . '/../../../raffles/yearly/classes/YearlyRaffle.php') ;
+use raffles\yearly\YearlyRaffle as YearlyRaffle; // use the raffle class from its namespace
+$yearly_raffle = new YearlyRaffle();
 
 //setup json array of information to pass back to parent_detail page
 $info = array();
@@ -144,7 +147,8 @@ while ( $row = mysql_fetch_assoc($result) ) {
 	*/
 	//if (in_array($row['school_id'], $showRegister)) {
 	//	$children[$row['user_id']]['needsReg'] = 1;
-	//}	
+	//}
+	
 	$pSql = "select thumb from thumbs t 
 			join users u on u.user_photo_id = t.file_id 
 			where u.user_id = " . $row['user_id'];
@@ -153,6 +157,20 @@ while ( $row = mysql_fetch_assoc($result) ) {
 		$pRow = mysql_fetch_assoc($pRes);
 		$children[$row['user_id']]['thumb']	= $pRow['thumb'];
 	}
+	
+	// get number of days that tasks were done
+	if ($row['user_registered']) {
+        // set the eligibility for the user and get it back
+        $yearly_raffle->set_user_eligibility( $row['user_id'] );
+        $numTasks = $yearly_raffle->eligibility[ $row['user_id'] ];
+        // send them a message with how many days left/done
+		if ($numTasks >= 160) {
+			$children[$row['user_id']]['auctionInfo'] = '160 days of tasks completed - eligible for yearly raffle';
+		} else {
+			$children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . " days of tasks to enter the yearly raffle";
+		}
+	}
+	
 	
 	//if ($row['user_id'] == 26598) {
 	//	$children[$row['user_id']]['chidonShow'] = 1;

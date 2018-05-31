@@ -280,7 +280,7 @@ abstract class MissionDisplay {
 										echo $user->first . ' ' . $user->last;
 									}
 								}
-								echo " (" . $user->user_id . ")";
+								echo " (" . $user->user_serial . ")";
 								?>
 							</span>
 		    			</td>
@@ -295,7 +295,7 @@ abstract class MissionDisplay {
 									<span style='font-size: 16px;'>and following week</span> &#10022; 
 									<?=$this->heDates[0]?> - <?=$this->heDates[6]?></span>
 							<? } else if ($this->dateDisplay == 2) { ?>
-								<b><?=date('M j', (jdtounix($this->start+1))) . ' - ' . date('M j, Y', (jdtounix($this->end+1)))?></b>
+								<b><?=date('M j', (jdtounix($this->start))) . ' - ' . date('M j, Y', (jdtounix($this->end)))?></b>
 								<span class="hebrew-text"> &#10022; פרשת <?=$this->parsha?> &#10022; <?=$this->heDates[0]?> - <?=$this->heDates[6]?></span>
 							<? } ?>
 							</span></td>

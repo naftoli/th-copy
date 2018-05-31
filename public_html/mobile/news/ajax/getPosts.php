@@ -1,7 +1,7 @@
 <?
 require "../../../blog/wp-blog-header.php";
 
-$paged = $_POST['page'];
+$paged = isset( $_POST['page'] ) && $_POST['page'] ? $_POST['page'] : false;
 $postsPerPage = 10;
 
 $search = false;
@@ -12,7 +12,7 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
 	  'paged'          => $paged, 
 	  's'			   => trim($_POST['search'])
 	);
-} else if (isset($_POST['postID']) && !empty($_POST['postID'])) {
+} else if ( isset( $_POST['postID'] ) && !empty( $_POST['postID'] ) ) {
 	$vars = array(
 		'p'	=>	(int)$_POST['postID']
 	);
@@ -51,7 +51,7 @@ foreach ($posts as $post) {
   	*/
   	$images = array();
 	setup_postdata( $post );
-	$content = $_POST['postID'] ? $post->post_content : get_the_content();
+	$content = isset( $_POST['postID'] ) && !empty( $_POST['postID'] ) ? $post->post_content : get_the_content();
 	
 	$data[] = array(
 		'title' 	=> 	$post->post_title, 

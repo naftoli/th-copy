@@ -50,13 +50,13 @@ define('http', secure ? "https" : "http");
 define("IMAGE_UPLOADER_DIRECTORY", "/home/mashpia/public_html/v2/images/uploads");
 define("IMAGE_UPLOADER_URL", "//mashpia.com/v2/images/uploads");
 //define("DEV_ENV", "staging");
-define("DEV_ENV", "production");
-define("bp", "https://mashpia.com/v2");
+define("DEV_ENV", strpos($_SERVER['HTTP_HOST'], "mashpia.com") === false ? "staging" : "production");
+define("bp", "/v2");
 define("images", bp . "/images");
 define("imgs", bp . "/imgs/v");
 define("js", bp . "/js");
 define("css", bp . "/css");
-define("WEB_ROOT", "//mashpia.com/v2");
+define("WEB_ROOT", "/v2");
 define("SERVER_ROOT", "/home/mashpia/public_html/v2/");
 define("MASTER_PASSWORD_X32G0SS8P", "9CXVC9h39tASDSt4h8ta4K9");
 define("capture_start_date", mktime(0, 0, 0, 1, 6, 2013)); // school year start date

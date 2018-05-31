@@ -16,9 +16,9 @@ if (isset($_GET['school'])) {
 	exit;
 }
 
-//summer 5777
-$start = 2457928;
-$end = 2458004;
+//summer 5778
+$start = 2458285;
+$end = 2458347;
 
 $dates = array();
 do {

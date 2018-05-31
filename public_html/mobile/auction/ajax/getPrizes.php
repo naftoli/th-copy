@@ -22,9 +22,7 @@ if (mysql_num_rows($result) > 0) {
     $sql = "select p.prize_id, p.prize_name, p.prize_points, p.prize_image_id, ap.available 
             from prizes_auction p
             join auction_prizes ap using (prize_id)
-            where available > 0
-            and p.archived = 0 
-            and ap.auction_id = " . $auction;
+            where ap.auction_id = " . $auction;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $prizes[$row['prize_points']][] = $row;

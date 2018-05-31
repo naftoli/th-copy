@@ -7,16 +7,24 @@ require_once( dirname(__FILE__).'/../classes/Raffle.php' );
 // namespace fixing
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
 
-$shipping = false;
+// enforce admins only
 if ( isset( $_COOKIE['admin_id'] ) ){
     $is_parent_query = mysql_query(
         "SELECT auth FROM admin_auths WHERE auth != 'user' AND admin_id = " . mysql_escape_string( $_COOKIE['admin_id'] ) . ";"
     );
-    $shipping = mysql_num_rows( $is_parent_query ) > 0;
+    if ( mysql_num_rows( $is_parent_query ) === 0 ){
+        http_response_code( 401 );
+        echo json_encode( [ "success" => false, "msg" => "Invalid Credentials" ] ); 
+        die();
+    };
+} else {
+    http_response_code( 401 );
+    echo json_encode( [ "success" => false, "msg" => "Invalid Credentials" ] ); 
+    die();
 }
 
 $school_id = isset($_POST['school_id']) ? $_POST['school_id'] : false;
-$raffle_id = isset($_POST['raffle_id'])? $_POST['raffle_id'] : false;
+$raffle_id = isset($_POST['raffle_id']) ? $_POST['raffle_id'] : false;
 $seperate_genders = isset($_POST['single_list']) ? false : true;
 
 // if no single raffle was given, get all of them
@@ -42,7 +50,7 @@ $return_array = [];
 $sorting = isset($_POST['sorting']) ? $_POST['sorting'] : "name";
 // for each raffle
 foreach($raffles as $raffle){
-    $winners_info = $raffle->get_winner_info($school_id, $seperate_genders, $sorting, $shipping); // get the winners for the school (if given, will be false and all the schools will be returned otherwise)
+    $winners_info = $raffle->get_winner_info($school_id, $seperate_genders, $sorting); // get the winners for the school (if given, will be false and all the schools will be returned otherwise)
     $raffle_from = explode(' ', iconv('WINDOWS-1255', 'UTF-8', jdtojewish($raffle->start_date, true, CAL_JEWISH_ADD_GERESHAYIM)));
     $raffle_from = $raffle_from[0] . ' ' . $raffle_from[1];
     

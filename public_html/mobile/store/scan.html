@@ -211,7 +211,7 @@
 	        $("#scan").click( function() {
 	            var card = $("#scanner").val();
 	            if (card.length == 20) {
-	                $.post('ajax/checkCard.php', { admin : admin, user : user, card : card }, function( success ) {
+	                $.post('ajax/checkCard.php', { admin : Cookies.get("admin"), user : user, card : card }, function( success ) {
 	                    alert(success);
 	                });
 	            } else {

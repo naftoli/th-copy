@@ -17,8 +17,7 @@ class Shipment {
     public $date_shipped; // the date that it was shipped
     // value created by DB. just allow access....
     public $date_created; // the date that the shipment was created
-    public $delivered = false;
-    public $archived = false;
+    public $status;
     
     public $description;
     
@@ -91,8 +90,7 @@ class Shipment {
             if ($value instanceof DateTime){ // if a DateTime object was passed in
                 $value = $value->format("Y-m-d H:i:s"); // formatted to YYYY-MM-DD HH:MM:SS for mysql database
             }
-            if($key == "delivered") $value = $value ? "1" : "0"; // set delivered to 1 or 0
-            if($key == "archived") $value = $value ? "1" : "0"; // set delivered to 1 or 0
+            if($prop == "status") $value = in_array($value, []) ? $value : 'planned'; // set status to planned by default
             // set the instance property to the value. Good place to throw errors on bad input
             array_push($insert_column_keys, $prop);
             array_push($insert_column_values, "'$value'");
@@ -128,8 +126,7 @@ class Shipment {
         $instance->name = $row_assoc['name'];
         $instance->date_shipped = $row_assoc['date_shipped'] ? new DateTime($row_assoc['date_shipped']) : $row_assoc['date_shipped']; // if it was shipped then set the variable to a DateTime instance. else, just tie it to the row value
         $instance->date_created = new DateTime($row_assoc['date_created']);
-        $instance->delivered = $row_assoc['delivered'] == "0" ? false : true;
-        $instance->archived = $row_assoc['archived'] == "0" ? false : true;
+        $instance->status = $row_assoc['status'];
         $instance->description = $row_assoc['description'];
         // return the created instance
         return $instance;
@@ -145,7 +142,9 @@ class Shipment {
         $item = $this->parseAjax($ajax); // parse the ajax info
         // if this is an hachayol
         if($item == "hachayol"){
-            return $this->mark_hachayol($ajax);
+            return $this->mark_hachayol( $ajax );
+        } else if( $item == "auction" ){
+            return $this->mark_auction($ajax);
         }
         // make sure it is array....
         if(!is_array($item) || !$this->shipment_id) return false;
@@ -169,8 +168,19 @@ class Shipment {
     
     private function mark_hachayol($ajax){
         $params = explode(":", $ajax);
-        
-        return !!$this->db->query("UPDATE hachayol_shipping SET shipment_id=".$this->shipment_id." WHERE school_id = ".$params[1]. " AND parsha_id = ". $params[2]);
+        return !!$this->db->query(
+            "UPDATE hachayol_shipping SET shipment_id=".$this->shipment_id." WHERE school_id = ".$params[1]. " AND parsha_id = ". $params[2]
+        );
+    }
+
+    private function mark_auction($ajax){
+        $params = explode(":", $ajax);
+        return !!$this->db->query(
+             " UPDATE auction_winners SET shipment_id=" . $this->shipment_id 
+            ." WHERE user_id = " . $params[1]
+            ." AND auction_id = ". $params[2]
+            ." AND prize_id = ". $params[3]
+        );
     }
     
     
@@ -178,11 +188,12 @@ class Shipment {
         if(isset($props['name']) && $props['name']) $this->name = $props['name']; // might be blank...
         if(isset($props['description']) && $props['description']) $this->description = $props['description']; // might be blank...
         if(isset($props['date_shipped'])) $this->date_shipped = $props['date_shipped'];
-        if(isset($props['delivered'])) $this->delivered = $props['delivered'];
-        if(isset($props['archived'])) $this->archived = $props['archived'];
+        if(isset($props['status'])) $this->status = $props['status'];
         
-        $sql = "UPDATE ".self::$table_name." SET name=\"".$this->name."\", date_shipped='".$this->date_shipped->format("Y-m-d H:i:s").
-                "', delivered=".($this->delivered ? "1" : "0").", archived=".($this->archived ? "1" : "0").", description=\"".$this->description."\" WHERE shipment_id=".$this->shipment_id;
+        $sql = "UPDATE ".self::$table_name." SET name=\"".$this->name."\", ";
+        if ( $this->date_shipped ) 
+            $sql .= " date_shipped='".$this->date_shipped->format("Y-m-d H:i:s") ."', ";
+        $sql .= " status='". $this->status . "', description=\"".$this->description."\" WHERE shipment_id=".$this->shipment_id;
                 
         //echo $sql;
         return !!$this->db->query($sql);
@@ -231,13 +242,15 @@ class Shipment {
             ."JOIN prizes ON raffle_winners.prize_id = prizes.prize_id ";
         /*************************** HACHAYOLS (VERSION 2.0) *********************/
         $sql .= "UNION SELECT hs.shipment_id, school_name as name, CONCAT(hs.qty, ' Hachayols For ', parshos.name) as item "
-            ."FROM hachayol_shipping hs JOIN schools USING (school_id) JOIN parshos ON hs.parsha_id = parshos.id";
-        
+            ."FROM hachayol_shipping hs JOIN schools USING (school_id) JOIN parshos ON hs.parsha_id = parshos.id " ;
+        /*************************** HACHAYOLS (VERSION 2.0) *********************/
+        $sql .= "UNION SELECT aw.shipment_id, CONCAT(u.last, ', ', u.first) as name, p.prize_name as item "
+            ."FROM auction_winners aw JOIN users u USING (user_id) JOIN prizes_auction p using(prize_id) ";
         /*************************** FILTERS *********************/
         $sql .= ") AS SQ WHERE shipment_id = ".$this->shipment_id." ";
         /*************************** SORTING *********************/
         $sql .= "ORDER BY name, item ";
-        
+
         // if($_GET['debug']) echo $sql;
         
         $query = $this->db->query($sql);
@@ -264,7 +277,7 @@ class Shipment {
     }
     
     public function get_status(){
-        return $this->delivered ? "Delivered" : ($this->date_shipped ? "In Transit" : "Planned");
+        return $this->status;
     }
     
     public function get_tracking_numbers(){
@@ -314,6 +327,8 @@ class Shipment {
                 break;
             case 'hachayol': // uses hachayol:<type>:<id>
                 $item = "hachayol"; break;
+            case 'auction': // uses hachayol:<type>:<id>
+                $item = "auction"; break;
             default:
                 $item = false;
         }
