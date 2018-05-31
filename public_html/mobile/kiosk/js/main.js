@@ -1,6 +1,16 @@
 // on page load
 setupScanner( "environment" );
 $("#toggle-manual").click( toggleManual );
+// detect the info on the scanner input
+$("#manual-scanner #scanner").keyup( function( event ) {
+    if ( event.target.value.match(/^3{1}\d{19}$/) ) {
+        checkNumber( event.target.value );
+    } else if ( event.target.value.length === 20 ) {
+        showError( "Please enter a valid barcode" );
+    } else if ( event.target.value.length > 20) {
+        event.target.value = event.target.value.slice(0, 20);
+    }
+})
 
 Quagga.onDetected( function( data ) {
     if ( !checkNumber( data.codeResult.code ) ) {
@@ -83,15 +93,6 @@ function setupScanner( mode ){
             $("#barcode_scanner").hide();
             $("#manual-scanner").show(); // show the manual scanner
             // setup the listener
-            $("#manual-scanner #scanner").keyup( function( event ) {
-                if ( event.target.value.match(/^3{1}\d{19}$/) ) {
-                    checkNumber( event.target.value );
-                } else if ( event.target.value.length === 20 ) {
-                    showError( "Please enter a valid barcode" );
-                } else if ( event.target.value.length > 20) {
-                    event.target.value = event.target.value.slice(0, 20);
-                }
-            })
         } else {
             $("#toggle-manual").show();
             console.log( "Quagga JS initialized. Ready to start Scanning Cards" );
