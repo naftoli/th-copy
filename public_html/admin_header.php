@@ -372,12 +372,13 @@ $bpOnly = [ 82 ];
 							<li>
 								<a href="#"><?=T_('Students (Soldiers)')?></a>
 								<ul>
-									<li><a href="/admin_user.php<?=$url_id?>"><?=T_('View / Edit')?></a></li>
+                                    <li><a href="/admin_user.php<?=$url_id?>"><?=T_('View / Edit')?></a></li>
 									<li><a href="/admin_user.php<?=$url_id2?>action=add"><?=T_('Add Individual')?></a></li>
 									<li><a href="/admin_school_file.php<?=$url_id?>"><?=T_('Upload School or Class List')?></a></li>
 									<li><a href="/admin_users_photo.php<?=$url_id?>"><?=T_("Upload Photos")?></a></li>
 									<li><a href="/admin_users_register.php<?=$url_id?>"><?=T_("Registration")?></a></li> 
-									<li><a href="/admin_card_print.php<?=$url_id?>"><?=T_('Print Rank Cards')?></a></li>
+                                    <li><a href="/admin_card_print.php<?=$url_id?>"><?=T_('Print Rank Cards')?></a></li>
+                                    <li><a href="/reports/users/student_info.php"><?=T_('Search By Serial / Barcode')?></a></li>
 									<li><a href="/add_missions.php"><?=T_('Update Soldier\'s Missions')?></a></li>
 									<li><a href="/add_medals.php"><?=T_('Update Soldier\'s Medals')?></a></li>
 								</ul>
@@ -425,9 +426,9 @@ $bpOnly = [ 82 ];
 						<ul class='list_second'>
 							<!--<li><a href="summer_report.php"><?=T_('Mark Summer/Tishrei Missions')?></a>-->
 							<li><a href="/print_missions2.php"><?=T_('Print Missions')?></a>
-							<li><a href="/print_missionsYT.php"><?=T_('Print Pesach Missions')?></a>
+							<!-- <li><a href="/print_missionsYT.php"><?=T_('Print Pesach Missions')?></a> -->
 							<!--<li><a href="/print_missionsYT2.php"><?=T_('Print Yom Kippur / Succos Missions')?></a>-->
-							<!--<li><a href="/print_missions_summer.php"><?=T_('Print Summer Missions')?></a>-->
+							<li><a href="/print_missions_summer.php"><?=T_('Print Summer Missions')?></a>
 							<li><a href="/mark_missions2.php"><?=T_('Mark Missions')?></a>
 							<li><a href="/sefer_hamitzvos.php"><?=T_('Mark Yahadus')?></a>
 							<li><a href="/task_customization.php">Personalize Your Missions</a></li>

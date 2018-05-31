@@ -84,10 +84,10 @@
         
                 <div class="personalImg"></div>
 				
-				<div class="alert alert-warning" role="alert" dir="ltr">
+				<!-- <div class="alert alert-warning" role="alert" dir="ltr">
 					Coming Soon ...
-				</div>
-				<!--
+				</div> -->
+
 				<div class="alert alert-warning" role="alert" dir="ltr" style="color: red; margin-top: 20px;">
 					<b>After adding a prize in your Auction cart, be sure to click "SAVE" at the very bottom of your cart (in the cart page).</b>
 				</div>
@@ -106,8 +106,8 @@
                 <div id="main">
                     
                 </div>
-				-->
-            </div>
+
+			</div>
         </div>
         
 		<div id="spinner"></div>
@@ -197,15 +197,15 @@
                 html += '</a>';
                 $(".personalImg").append( html );
             });
-            /*
+            
             var bal = 0;
             var cart = [];
             var cartQty = 0;
             var totalPrice = 0;
             var originalBal = 0;
-    		var auction_id = 77;
+    		var auction_id = 79;
             
-            $.post('ajax/getBalance.php', { admin : admin, user : user, auction : auction_id }, function( success ) {
+            $.post('ajax/getBalance.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
                 var info = $.parseJSON(success);
                 var html = "Total Miles Earned: " + info.tpoints;
                 html += "<br />Total Miles Earned this Year: " + info.earned;
@@ -215,7 +215,7 @@
     			initCart();
             });
             
-            $.post('ajax/getPrizes.php', { admin : admin, user : user, auction : auction_id }, function( success ) {
+            $.post('ajax/getPrizes.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
                 var prizes = $.parseJSON(success);
                 
                 var html = '';
@@ -328,6 +328,10 @@
             }
             
             $(document).on('click', '.product-cart', function() {
+				// after deadline alert and return
+				alert('We are sorry but the auction deadline has past. You can no longer put in tickets for the auction.');
+				return false;
+				
                 // get prize id and add to cart
                 var prizeInfo = $(this).attr('id');
                 var info = prizeInfo.split(':');
@@ -383,7 +387,7 @@
     		$(".fa-shopping-cart").click( function() {
     			location.href = "cart.html?id=" + user;
             });
-            */
+            
     	});
     </script>
 </html>

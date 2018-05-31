@@ -58,7 +58,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Ranks Earned By Year</span>
                 </div>
             </a>
-            <a href="/student_rank_report.php<?=$debug ? "?debug=true": "";?>">
+            <a href="rank_report.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/mobile/img_new/calendar-color-gray-svg.svg" height="32" alt="tickets"/>
                     <span class="link-text">Ranks Earned Between Dates</span>

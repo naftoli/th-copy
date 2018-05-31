@@ -26,6 +26,11 @@ $months = array(
 	11	=>	'Av', 
 	12	=>	'Elul'
 );
+// if plain yr change adar 1 to adar and remove adar 2
+if ($sm[6] == $sm[7]) {
+	unset($sm[6]);
+	$months[5] = 'Adar';
+}
 
 if (isset($_POST['submit'])) {
 	//echo 'here'; exit;

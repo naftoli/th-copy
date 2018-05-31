@@ -39,7 +39,7 @@ $authorize_school_ids = mysql_fetch_assoc($authorize_school_ids); // fetch the r
 $customer_id 	= $authorize_school_ids['customer_id'];
 $payment_id 	= $authorize_school_ids['payment_id'];
 
-if($customer_id) {
+if( $customer_id ) {
 	$customer_profile = new CustomerProfile($customer_id);
 	$payment_profile = $customer_profile->paymentProfiles[0];
 	$cc = $customer_profile->paymentProfiles[0]["payment"]["creditCard"]; // get the CC info from the API response....
@@ -112,17 +112,17 @@ if (isset($_POST['action'])) {
 				// insert the ids into the system....
 				mysql_query("UPDATE schools SET authorize_customer_profile_id = ". $customer_profile->customerProfileId .
 							", authorize_payment_profile_id = " . $customer_profile->paymentProfiles[0]["customerPaymentProfileId"] .
-							" WHERE school_id = $id"
+							" WHERE school_id = $admin->school_id"
 				);
 			} else {
-				$message = "<span style='color:red;'>Credit Card Information Invalid</span>";
+                $message = "<span style='color:red;'>" . $customer_profile['message'] . "</span>";
 				$next_page = "false";
 			}
 		} // end CC updating conditions....
 	} // end if the action is update_cc_info...
 }
 else {
-	header("https://www.mashpia.com/registration.php");
+	//header("/registration.php");
 }
 
 include("classes/school.php");

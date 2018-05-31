@@ -228,29 +228,24 @@
 	</script>
 	<script src="js/js.cookie.js"></script>
 	<script>
+        function getJsonFromUrl() {
+            var query = location.search.substr(1);
+            var result = {};
+            query.split("&").forEach(function(part) {
+                var item = part.split("=");
+                result[item[0]] = decodeURIComponent(item[1]);
+            });
+            return result;
+        }
         document.addEventListener("DOMContentLoaded", function(event) {
 			var page = 1;
 			var url = window.location.href.toString();
-			
-			var pos = url.indexOf('p='); 
-			if (pos > 0) {
-				var p1 = url.indexOf('=');
-				page = url.substring( p1+1, p1+2 );
-			}
-			
-			var search = '';
-			var pos2 = url.indexOf('search=');
-			if (pos2 > 0) {
-				var p2 = url.indexOf('=');
-				search = url.substring( p2+1 );
-			}
-			
-			var postID = 0;
-			var pos3 = url.indexOf('pid=');
-			if (pos3 > 0) {
-				var p3 = url.indexOf('=');
-				postID = url.substring( p3+1 );
-			}
+            
+            var url_params = getJsonFromUrl();
+            
+            var page = url_params.p ? url_params.p : "1";
+            var postID = url_params.pid;
+            var search = url_params.search;
 			
             var admin = Cookies.get('admin');
             var user = Cookies.get('user');

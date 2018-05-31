@@ -1,4 +1,4 @@
-<?php
+<?php $debug = false;
 // enable debuging
 if ($_GET['debug']) {
     error_reporting(E_ALL);
@@ -83,6 +83,15 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="tickets"/>
                     <span class="link-text">View Ladders</span>
+                </div>
+            </a>
+        </div>
+        <h2>Special Reports</h2>
+        <div id="action-links">
+            <a href="shterna_year_long_report.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <span class="link-text">Annual report - temporary</span>
                 </div>
             </a>
         </div>

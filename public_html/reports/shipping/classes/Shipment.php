@@ -142,7 +142,9 @@ class Shipment {
         $item = $this->parseAjax($ajax); // parse the ajax info
         // if this is an hachayol
         if($item == "hachayol"){
-            return $this->mark_hachayol($ajax);
+            return $this->mark_hachayol( $ajax );
+        } else if( $item == "auction" ){
+            return $this->mark_auction($ajax);
         }
         // make sure it is array....
         if(!is_array($item) || !$this->shipment_id) return false;
@@ -166,8 +168,19 @@ class Shipment {
     
     private function mark_hachayol($ajax){
         $params = explode(":", $ajax);
-        
-        return !!$this->db->query("UPDATE hachayol_shipping SET shipment_id=".$this->shipment_id." WHERE school_id = ".$params[1]. " AND parsha_id = ". $params[2]);
+        return !!$this->db->query(
+            "UPDATE hachayol_shipping SET shipment_id=".$this->shipment_id." WHERE school_id = ".$params[1]. " AND parsha_id = ". $params[2]
+        );
+    }
+
+    private function mark_auction($ajax){
+        $params = explode(":", $ajax);
+        return !!$this->db->query(
+             " UPDATE auction_winners SET shipment_id=" . $this->shipment_id 
+            ." WHERE user_id = " . $params[1]
+            ." AND auction_id = ". $params[2]
+            ." AND prize_id = ". $params[3]
+        );
     }
     
     
@@ -229,13 +242,15 @@ class Shipment {
             ."JOIN prizes ON raffle_winners.prize_id = prizes.prize_id ";
         /*************************** HACHAYOLS (VERSION 2.0) *********************/
         $sql .= "UNION SELECT hs.shipment_id, school_name as name, CONCAT(hs.qty, ' Hachayols For ', parshos.name) as item "
-            ."FROM hachayol_shipping hs JOIN schools USING (school_id) JOIN parshos ON hs.parsha_id = parshos.id";
-        
+            ."FROM hachayol_shipping hs JOIN schools USING (school_id) JOIN parshos ON hs.parsha_id = parshos.id " ;
+        /*************************** HACHAYOLS (VERSION 2.0) *********************/
+        $sql .= "UNION SELECT aw.shipment_id, CONCAT(u.last, ', ', u.first) as name, p.prize_name as item "
+            ."FROM auction_winners aw JOIN users u USING (user_id) JOIN prizes_auction p using(prize_id) ";
         /*************************** FILTERS *********************/
         $sql .= ") AS SQ WHERE shipment_id = ".$this->shipment_id." ";
         /*************************** SORTING *********************/
         $sql .= "ORDER BY name, item ";
-        
+
         // if($_GET['debug']) echo $sql;
         
         $query = $this->db->query($sql);
@@ -312,6 +327,8 @@ class Shipment {
                 break;
             case 'hachayol': // uses hachayol:<type>:<id>
                 $item = "hachayol"; break;
+            case 'auction': // uses hachayol:<type>:<id>
+                $item = "auction"; break;
             default:
                 $item = false;
         }

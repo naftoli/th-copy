@@ -7,24 +7,45 @@ require_once( dirname(__FILE__) . '/../../../../raffles/shared/classes/Constants
 use raffles\yearly\YearlyRaffle as YearlyRaffle; // use the raffle class from its namespace
 use raffles\shared\Constants as Constants;
 
-// setup some functions for checking weekly/monthly/yearly raffle eligibility
+/**
+ * checkYearly
+ * 
+ * returns the percent_done and msg for the user_id passed in
+ *
+ * @param string $user_id
+ * @return array
+ */
 function checkYearly( $user_id ) {
-	$yearly_raffle = new YearlyRaffle();
-	$yearly_raffle->set_user_eligibility( $user_id );
-	$numTasks = $yearly_raffle->eligibility[ $user_id ];
-	
-	// send them a message with how many days left/done
-	if ($numTasks >= 160) {
-		$msg = "<span style='color: #004E22'>Eligible for end of year raffle</span>";
-	} else {
-		$msg = (160 - intval($numTasks)) . " days of tasks needed for end of year raffle";
-	}
-	return $msg;
+    $yearly_raffle = new YearlyRaffle;
+    $quota = $yearly_raffle->getDayCount();
+    $num_days = $yearly_raffle->set_user_eligibility( $user_id )[ $user_id ];
+    
+    $raffle_info = formatRaffleInfo( $num_days, $quota, "end of year" );
+
+    if ( $yearly_raffle->getEnd() < unixtojd() && $num_days < $quota ) {
+        return [
+            "percent_done" => $raffle_info[ "percent_done" ], 
+            "msg" => "Yearly Raffle Deadline Passed ($num_days / $quota<span class='hide-small'> days completed</span>)",
+            'missed-deadline' => true
+        ];
+    } else {
+        return $raffle_info;
+    }
 }
 
+/**
+ * checkMonthly
+ *
+ * returns the percent_done and msg for the user_id passed in
+ *
+ * @param string $user_id
+ * @return array
+ */
 function checkMonthly( $user_id ) {
 	// find out current dates
-	$dates = getDates( 'monthly' );
+    $dates = getDates( 'monthly' );
+    if ( $dates === false ) return false;
+
 	$total = checkDaily( $user_id, $dates );
 	$required = Constants::get_monthly_task_requirment();
 	
@@ -46,19 +67,16 @@ function checkMonthly( $user_id ) {
 			$start_date = $end_date + 1; // go to the next day for the next start date
 			$end_date = $start_date + 6; // get the end date for the first week			
 		}
-	}
-	
-	if ($total == $required) {
-		$msg = "<span style='color: #004E22'>Eligible for " . $dates['name'] . " raffle</span>";
-	} else {
-		$msg = ($required - $total) . " days of tasks needed for " . $dates['name'] . " raffle";
-	}
-	return $msg;
+    }
+    
+    return formatRaffleInfo( $total, $required, $dates['name'] );
 }
 
 function checkWeekly( $user_id ) {
 	// find out current dates
-	$dates = getDates( 'weekly' );
+    $dates = getDates( 'weekly' );
+    if ( $dates === false ) return false;
+
 	$total = checkDaily( $user_id, $dates );
 	$required = Constants::get_weekly_task_requirment();
 	
@@ -75,12 +93,7 @@ function checkWeekly( $user_id ) {
 		}
 	}
 	
-	if ($total == $required) {
-		$msg = "<span style='color: #004E22'>Eligible for פרשת " .  $dates['name'] . " raffle</span>";
-	} else {
-		$msg = ($required - $total) . " days of tasks needed for " .  $dates['name'] . " raffle";
-	}
-	return $msg;
+	return formatRaffleInfo( $total, $required, $dates['name'] );
 }
 
 function checkDaily( $user_id, $dates ) {
@@ -96,13 +109,40 @@ function checkDaily( $user_id, $dates ) {
 	return $total;
 }
 
+/**
+ * formatRaffleInfo
+ * 
+ * formats the information for each of the raffles
+ *
+ * @param number $total
+ * @param number $required
+ * @param string $raffle_name
+ * @return void
+ */
+function formatRaffleInfo( $total, $required, $raffle_name ){
+    if ( $total > 0 )
+        $percent_done = $total > $required ? 100 : ( $total / $required ) * 100;
+    else
+        $percent_done = 0;
+
+	// send them a message with how many days left/done
+	if ( $total >= $required ) {
+		$msg = "Eligible for $raffle_name raffle";
+	} else {
+		$msg = ( $required - intval( $total ) ) . " days of tasks needed for $raffle_name raffle";
+    }
+
+	return [ "percent_done" => $percent_done, "msg" => $msg, 'missed-deadline' => false ];
+}
+
 function getDates( $type ) {
 	$today = unixtojd();
-	$sql = "select start_date, end_date, name from raffles
-			where type = '" . $type . "'
-			and start_date <= " . $today . "
-			and end_date >= " . $today;
-	$result = mysql_query($sql);
+	$sql = "SELECT start_date, end_date, name FROM raffles
+			WHERE type = '" . $type . "'
+			AND start_date <= " . $today . "
+            AND end_date >= " . $today;
+    $result = mysql_query($sql);
+    if ( mysql_num_rows( $result ) == 0 ) return false;
 	$row = mysql_fetch_assoc($result);
 	return array(
 		'start'	=>	$row['start_date'],
@@ -115,5 +155,20 @@ function getDates( $type ) {
 $yearly = checkYearly( $user );
 $monthly = checkMonthly( $user );
 $weekly = checkWeekly( $user );
-echo $weekly . "<br />" . $monthly . "<br />" . $yearly;
-?>
+
+if ( $weekly ) { ?>
+<div class="progress <?= $weekly['percent_done'] == 100 ? "compleate" : ""?>">
+    <div class="progress-bar" role="progressbar" style="width: <?= $weekly['percent_done']?>%;"></div>
+    <span ><?= $weekly['msg'] ?></span>
+</div>
+<? }
+if ( $monthly ) { ?>
+<div class="progress <?= $monthly['percent_done'] == 100 ? "compleate" : ""?>">
+    <div class="progress-bar" role="progressbar" style="width: <?= $monthly['percent_done']?>%;"></div>
+    <span ><?= $monthly['msg'] ?></span>
+</div>
+<? } ?>
+<div class="progress <?= $yearly['percent_done'] == 100 ? "compleate" : ""?> <?= $yearly['missed-deadline'] ? "missed-deadline" : ""?>">
+    <div class="progress-bar" role="progressbar" style="width: <?= $yearly['percent_done']?>%;"></div>
+    <span ><?= $yearly['msg'] ?></span>
+</div>

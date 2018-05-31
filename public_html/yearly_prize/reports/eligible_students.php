@@ -46,7 +46,7 @@ if($debug) echo "</pre>";
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Tzivos Hashem | Yearly Prize Eligibility Report</title>
+        <title>Tzivos Hashem | Yearly Gift Eligibility Report</title>
         <link href="/admin_styles.css" rel="stylesheet" type="text/css">
         <link href="/styles/admin/loader.css" rel="stylesheet" type="text/css">
         <link href="../css/grey_select.css" rel="stylesheet" type="text/css">

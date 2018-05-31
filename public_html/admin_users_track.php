@@ -35,11 +35,11 @@ if( !empty($action) ) switch($action) {
 				foreach( $tracks[ $row['user_id'] ] as $subject_id => $data ) {
 					$subject_id = intval( $subject_id );
 					$track = intval( $data['track'] ) + 2;
-					//$level = max(6, min(intval($data['level']), 14));
+					$level = max(6, min(intval($data['level']), 14));
 					if($data['track'] == -1) {
-						mq("DELETE FROM user_tracks WHERE user_id = {$row['user_id']} AND subject_id = $subject_id");
+						mq("UPDATE user_tracks SET enrolled = 0 WHERE user_id = {$row['user_id']} AND subject_id = $subject_id");
 					} else {
-						mq("INSERT INTO user_tracks SET user_id = {$row['user_id']}, subject_id = $subject_id, track_id = $track ON DUPLICATE KEY UPDATE track_id = $track");
+						mq("INSERT INTO user_tracks SET user_id = {$row['user_id']}, subject_id = $subject_id, track_id = $track, level = $level ON DUPLICATE KEY UPDATE track_id = $track");
 					}
 				}
 			}
@@ -57,7 +57,22 @@ $subjects_result	= mq("SELECT subject_name, subject_id, inst_name FROM subjects 
 
 $edit_result = false;
 if (isset($_GETPOST['show']) && $_GETPOST['show'] == 'form') {
-	$edit_result = mq("SELECT users.user_id, users.first, users.last, users.username, user_start_date, class_grade, class_sub, institutions.inst_name, subjects.subject_name, subjects.subject_id, user_tracks.track_id, user_tracks.level, user_tracks.enrolled FROM users JOIN subjects ON (subject_type NOT IN ('school_points', 'home_points', 'Tanya')) JOIN school_type_subjects USING (subject_id, school_type_id) LEFT JOIN classes USING (school_id, class_id) LEFT JOIN user_tracks USING (subject_id, user_id) LEFT JOIN institutions USING (inst_id) WHERE user_registered IS NOT NULL AND school_id = $school_id" . ($class_id != -1 ? " AND class_id = $class_id" : '') . ($subject_id != -1 ? " AND subject_id = $subject_id" : '') . ($admin_user['auth'] != 'super' ? ' AND institutions.inst_id IN (' . implode(',', $admin_user['inst_ids']) . ')' : '') . ' ORDER BY classes.class_grade, classes.class_sub, users.last, users.first, users.username, institutions.inst_name, subjects.subject_name');
+	$edit_result = mq(
+         " SELECT users.user_id, users.first, users.last, users.username, user_start_date, "
+        ." class_grade, class_sub, institutions.inst_name, subjects.subject_name, subjects.subject_id, "
+        ." user_tracks.track_id, user_tracks.level, user_tracks.enrolled FROM users "
+        ." JOIN subjects ON (subject_type NOT IN ('school_points', 'home_points', 'Tanya')) "
+        ." JOIN school_type_subjects USING (subject_id, school_type_id) "
+        ." LEFT JOIN classes USING (school_id, class_id) "
+        ." LEFT JOIN user_tracks USING (subject_id, user_id) "
+        ." LEFT JOIN institutions USING (inst_id) "
+        ." WHERE user_registered IS NOT NULL AND school_id = $school_id " 
+        . ($class_id != -1 ? " AND class_id = $class_id" : '') 
+        . ($subject_id != -1 ? " AND subject_id = $subject_id" : '') 
+        . ($admin_user['auth'] != 'super' ? ' AND institutions.inst_id IN (' . implode(',', $admin_user['inst_ids']) . ')' : '') 
+        .' ORDER BY classes.class_grade, classes.class_sub, users.last, users.first, users.username, ' 
+        ." institutions.inst_name, subjects.subject_name;"
+    );
 }
 
 // find out if we are in the week prior to shabbos mevorchim
@@ -219,13 +234,18 @@ foreach ($sm as $val) {
 													if ($month == 13) $month = 1;
 													else $month++;
 													
-													$sqlTrack = "SELECT * FROM user_tracks WHERE subject_id = 1 AND user_id = " . $row['user_id'];
+													$sqlTrack = "SELECT * FROM user_tracks WHERE subject_id = 1 AND enrolled = 1 AND user_id = " . $row['user_id'];
 													$resultTrack = mysql_query($sqlTrack);
 													$rowTrack = mysql_fetch_assoc($resultTrack);
 													
 													$sqlInfo = "SELECT * FROM tehillim_ladders WHERE ladder = " . $rowTrack['track_id'] . " AND age = " . $rowTrack['level'] . " AND month = " . $month;
 													$resultInfo = mysql_query($sqlInfo);
-													$rowInfo = mysql_fetch_assoc($resultInfo);
+                                                    $rowInfo = mysql_fetch_assoc($resultInfo);
+                                                    
+                                                    $level_query = mysql_query(
+                                                        "SELECT level FROM user_tracks WHERE user_id = '".$row['user_id']."' AND level IS NOT NULL LIMIT 1"
+                                                    );
+                                                    $level = mysql_num_rows($level_query) ? mysql_fetch_assoc( $level_query )['level'] : 6;
 													?>
 													<td>
 														<select name="tracks[<?=$row['user_id']?>][<?=$row['subject_id']?>][track]" <?php if (!$showTehillimQuota) echo "disabled"?>>
@@ -233,7 +253,7 @@ foreach ($sm as $val) {
 															<? while($track_row = mysql_fetch_assoc($tracks_result)) { ?>
 																<? if ($track_row['track_name'] == 6) break; ?>
 																<? if ($track_row['track_name'] == 10) continue; ?>
-																<option value="<?=$track_row['track_id']?>" <?=$track_row['track_id'] == ($row['track_id']-2) ? 'SELECTED' : ''?>><?=es($track_row['track_name'])?></option>
+																<option value="<?=$track_row['track_id']?>" <?=$track_row['track_id'] == ($rowTrack['track_id']-2) ? 'SELECTED' : ''?>><?=es($track_row['track_name'])?></option>
 															<? } // end while loop?>
 															<? mysql_data_seek($tracks_result, 0); ?>
 														</select>
@@ -241,10 +261,10 @@ foreach ($sm as $val) {
 														<div style="font-size: 12px;">
 															Kapitelach: <?=$rowInfo['kapitelach']?><br />
 															Minutes: <?=$rowInfo['minutes']?><br />
-															Year/Age: <?=$rowTrack['level']?>
+															Year/Age: <?=$level?>
 														</div>
 													</td>
-													<input type="hidden" name="tracks[<?=$row['user_id']?>][<?=$row['subject_id']?>][level]" value="<?=es($row['level'])?>" />
+													<input type="hidden" name="tracks[<?=$row['user_id']?>][<?=$row['subject_id']?>][level]" value="<?=es($level)?>" />
 												</tr>
 											<? } ?>
 										</table>

@@ -192,6 +192,14 @@ class Donor {
         return $this->on_shabbaton[ $year ];
     }
 
+    /**
+     * getCaller
+     * 
+     * sets $this->caller to the caller for the given year.
+     *
+     * @param string $year
+     * @return boolean
+     */
     public function getCaller( $year ) {
         $year = mysql_real_escape_string( $year );
 

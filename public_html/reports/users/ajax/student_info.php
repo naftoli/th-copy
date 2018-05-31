@@ -73,6 +73,7 @@ while( $row = mysql_fetch_assoc( $tanya_info_query ) )
     $tanya_info[] = $row;
 //** Load Tanya information */
 /***************** RENDER REPORT **********************/
+if ( $th_chidon ) include( dirname(__FILE__) . "/../../../chidon_passwords.php" );
 ?>
 <input type="hidden" id="user_id" value="<?= $user->user_id; ?>"/>
 <h2>
@@ -261,7 +262,7 @@ while( $row = mysql_fetch_assoc( $tanya_info_query ) )
                 </div>
                 <div class="inner-info">
                     <span class="title">T-Shirt Size:</span>
-                    <h3>$<?= $th_chidon['size'] ?></h3>
+                    <h3><?= $th_chidon['size'] ?></h3>
                 </div>
                 <div class="inner-info">
                     <span class="title">Walking Zone:</span>

@@ -6,10 +6,15 @@ ini_set("display_errors", 1);
 $admin_auth = array('school'); 
 require_once( dirname(__FILE__).'/../../header.php' );
 
-if ( $admin_user['auth'] !== "super" ) {
-    header( "Location: /raffles/yearly/eligibility_report.php");
-}
+// if ( $admin_user['auth'] !== "super" ) {
+//     header( "Location: /raffles/yearly/eligibility_report.php");
+// }
+/***************** EXTERNAL DEPENDENCIES **********************/
+require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
 
+// load the schools
+$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+$schools = $as->getSchools();
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,7 +36,7 @@ if ( $admin_user['auth'] !== "super" ) {
 </head>
 <body>
     <?php include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php'); ?>
-    <h1>Yearly Raffle: Eligible Students HQ</h1>
+    <h1>Yearly Raffle: All Eligible Students</h1>
     <p class="info">
         This report will generate a list and total of all eligible students in the current yearly raffle in the same way that the raffle script would.<br/><br/>
         Please note that there are <strong>two types of reports:</strong>
@@ -42,16 +47,17 @@ if ( $admin_user['auth'] !== "super" ) {
     <p class="info">
         <strong>Cached:</strong> This report will display the cached information from the last time the system generated a realtime report.
             This report is updated if you generate a RealTime report on this page and very night in the background.
-            Please note that it also updates a single school whenever the base commander generates their own eligibility report.
+            This report also updates every time a <a href="eligibility_report.php">full school eligibility report</a> is generated.
     </p>
     <div class="options">
         <span class="option-title">Report Type: </span>
         <input type="radio" id="report_type" name="report_type" value="cached" checked/> 
         Cached ( faster )
         <input type="radio" id="report_type" name="report_type" value="realtime"/> 
-        RealTime ( get a coffee and take a nap slow )
+        RealTime <?= $admin_user['auth'] !== "super" ? "( get a coffee and take a nap slow )" : "(slow)" ?>
     </div>
     <div class="options">
+        <input type="hidden" id="school_id" value="<?= $admin_user['auth'] !== "super" ? array_keys($schools)[0] : "" ?>" />
         <a class="button" id="generate"><i class="fa fa-refresh" aria-hidden="true"></i> Generate/Refresh Report</a>
     </div>
 
@@ -65,7 +71,8 @@ if ( $admin_user['auth'] !== "super" ) {
                 generating_report = true;
                 $("#eligible_table").html("<div class='loader'></div>");
                 var postData = {
-                    report_type: $("input#report_type:checked").val()
+                    report_type: $("input#report_type:checked").val(),
+                    school_id: $("input#school_id").val()
                 };
                 $.post("ajax/eligibility_report_hq.php", postData, function( response ){
                     $("#eligible_table").html( response );

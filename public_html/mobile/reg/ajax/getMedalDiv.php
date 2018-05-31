@@ -68,7 +68,7 @@ $row = mysql_fetch_assoc($result);
 						break;
 					case 4:
 						$str = "<b>Teffila Mission</b><br />
-You can earn up to one teffila mission each week, by <b>davening on shabbos in shul</b>.";
+You can earn up to one teffila mission each week, by <b>davening in shul on shabbos </b>.";
 						break;
 					case 12:
 						$str = "<b>Mivtzoim</b><br />
@@ -101,7 +101,7 @@ You can earn up to one avos ubonim mission each week, by <b>learning with a pare
 						break;
 					case 45:
 						$str = "<b>Cheshbon Hanefesh Mission</b><br /> 
-You can earn up to one cheshbon hanefesh each week, by <b>saying krias shema from a siddur</b> at least five out of seven time throughout the week.";
+You can earn up to one cheshbon hanefesh mission each week, by <b>saying krias shema from a siddur</b> at least five out of seven times throughout the week.";
 						break;
 					case 90:
 						$str = "<b>Chitas Mission</b><br />
