@@ -13,6 +13,7 @@ $primary-color-hover: #2c539e;
   height: 100vh;
   overflow: auto; // scroll the sidebar independent of the content
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
   // Sidebar Theme and Transitions
   font-family: 'Poppins', sans-serif;
   background: $primary-color;
