@@ -99,7 +99,7 @@
 /* Sidebar dropdowns */
 #sidebar a.dropdown:before {
   content: "\f0d7";
-  transition: .25s;
+  transition: transform .25s;
 
   display: block;
   position: absolute;
