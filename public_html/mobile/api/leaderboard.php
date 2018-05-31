@@ -54,8 +54,14 @@ foreach( $leaderboard as $index => $user ) {
     }   
 }
 
+$total = count( $leaderboard );
+// Shimmy requested that we play with the numbers:
+if ( $location === "army" && ( !$rank || $rank == 1 ) ) {
+    $total += $gender ? 500 : 1000;
+}
+
 render_json_response([
     "leaderboard" => array_slice($leaderboard, intval($offset), 25),
     "user_location" => $user_location,
-    "total" => count( $leaderboard )
+    "total" => $total
 ]);

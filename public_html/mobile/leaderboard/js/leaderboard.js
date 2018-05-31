@@ -81,6 +81,12 @@ var leaderboardApp = function(){
                     " out of " + formatNumber( data.total ) + 
                 "</div>"
             );
+        } else {
+            $("#user_position").html(
+                "<div class='animated fadeIn'>" + 
+                    formatNumber( data.total ) + " Soldiers!" + 
+                "</div>"
+            );
         }
         var html = "";
         if ( data.leaderboard.length == 0 ){
