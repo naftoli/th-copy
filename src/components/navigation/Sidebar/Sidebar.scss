@@ -1,0 +1,131 @@
+/* Google Fonts */
+@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700");
+// Variables
+$primary-color: #3e6dc4;
+$primary-color-dark: #335eac;
+$primary-color-hover: #2c539e;
+
+// Sidebar
+#sidebar {
+  // Define the size
+  min-width: 270px;
+  max-width: 270px;
+  height: 100vh;
+  overflow: auto; // scroll the sidebar independent of the content
+  scroll-behavior: smooth;
+  // Sidebar Theme and Transitions
+  font-family: 'Poppins', sans-serif;
+  background: $primary-color;
+  color: #fff;
+  transition: all 0.3s;
+  // keep the text and images a little separate.
+  img, i {
+    margin-right: .5em;
+    max-height: 28px;
+  }
+  // top level navigation
+  ul.components {
+    padding: 20px 0;
+    // second level items
+    li > div {
+      a {
+        font-size: 0.9em;
+        padding-left: 30px;
+        background: $primary-color-dark;
+      }
+      a:hover, a:focus {
+        color: $primary-color-dark !important;
+        background: #fff;
+      }
+      // third level components ( and all further levels )
+      li > div a {
+        font-size: 0.8em;
+        padding-left: 60px;
+      }
+    }
+  }
+  // all navigation levels
+  ul {
+    list-style: none;
+    padding-left: 0px;
+    // Links in the sidebar
+    li a {
+      text-align: left;
+      padding: 10px;
+      font-size: 1.1em;
+      display: block;
+      position: relative; // this is used for the arrow icons
+    }
+  }
+  // links
+  a, a:hover, a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+    cursor: pointer;
+    // prevent selection on double
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+    user-select: none;
+  }
+  // open links
+  a:hover, a.open, a:focus {
+    background: $primary-color-hover;
+  }
+
+  a.dropdown::before {
+    // position
+    display: block;
+    position: absolute;
+    right: 20px;
+    // font
+    font-family: Font Awesome\ 5 Free;
+    font-weight: 900;
+    font-style: normal;
+    font-variant: normal;
+    // content
+    content: "\f0d7";
+    transition: transform .25s;
+    // rendering
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: auto;
+  }
+  // rotate the icon when a dropdown is opened
+  a.dropdown.open:before{
+    transform: rotate(180deg);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1025px) {
+  #sidebar {
+    margin-left: -270px;
+  }
+  #sidebar.active {
+    margin-left: 0px;
+  }
+}
+
+/* Mobile Design */
+@media (max-width: 768px) {
+  #sidebar {
+      margin-left: -270px;
+      position: absolute;
+      z-index: 999;
+  }
+  #sidebar.active {
+      margin-left: 0;
+  }
+}
+
+/* Custom Scrollbar (Chrome) */
+#sidebar::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+ 
+#sidebar::-webkit-scrollbar-thumb {
+  background: #000; 
+}
