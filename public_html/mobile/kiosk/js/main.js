@@ -1,7 +1,6 @@
 // on page load
-var QuaggaMode = "environment";
-setupScanner( QuaggaMode );
-$("#flip-camera").click( changeCamera );
+setupScanner( "environment" );
+$("#toggle-manual").click( toggleManual );
 
 Quagga.onDetected( function( data ) {
     if ( !checkNumber( data.codeResult.code ) ) {
@@ -10,11 +9,6 @@ Quagga.onDetected( function( data ) {
 });
 
 Quagga.onProcessed( showScanningBox );
-
-function changeCamera(){
-    QuaggaMode = QuaggaMode == "user" ? "environment" : "user";
-    setupScanner( QuaggaMode );
-}
 
 // check the number as a user posts it
 function checkNumber( cardNumber ) {
@@ -58,6 +52,7 @@ function showScanningBox( result ) {
     }
 }
 
+// setup the quaggajs scanner
 function setupScanner( mode ){
     mode = mode ? mode : "environment"; // or user
     var config = {
@@ -98,7 +93,7 @@ function setupScanner( mode ){
                 }
             })
         } else {
-            showCameraButton();
+            $("#toggle-manual").show();
             console.log( "Quagga JS initialized. Ready to start Scanning Cards" );
             Quagga.start();
         }
@@ -107,11 +102,14 @@ function setupScanner( mode ){
     Quagga.init( config, setup );
 }
 
-function showCameraButton(){
-    Quagga.CameraAccess.enumerateVideoDevices()
-    .then( function(devices){
-        if( devices.length == 2 ){
-            $("#flip-camera").show();
-        }
-    });
+function toggleManual( event ){
+    if ( $("#manual-scanner").is(":visible") ){
+        $("#toggle-manual img").attr("src", "/mobile/img_new/scanner-2-color-red-svg.svg" );
+        $("#manual-scanner").hide();
+        $("#barcode_scanner").show();
+    } else {
+        $("#toggle-manual img").attr("src", "/mobile/img_new/scanner-1-color-red-svg.svg");
+        $("#manual-scanner").show();
+        $("#barcode_scanner").hide();
+    }
 }
