@@ -591,6 +591,14 @@ $bpOnly = [ 82 ];
 								</span>
 							</a>
 						</li>
+
+						<li>
+							<a href="/auction/winners3.php">
+								<span class="icon">
+									<img src="/images/icon_auction.png" width="28" height="28" />Auction Winners
+								</span>
+							</a>
+						</li>
 						
 						<!--****************************************************-->
 						<!-- ***** If the school is using the camp system ***** -->
