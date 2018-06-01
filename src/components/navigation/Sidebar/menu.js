@@ -76,8 +76,32 @@ const getMenu = () => {
       label: "Reports",
       icon: <img src={`${LEGACY_URL}/images/icon_report.png`} alt="Reports" />,
       children: [
-        { label: 'Add Achievement Task', legacy: true, path: '/newAchievementTasks.php' },
-        { label: 'Add / Subtract Points', legacy: true, path: '/manual_points.php' },
+        { label: 'Registered Report', legacy: true, path: '/registered_report.php' },
+        { label: 'Parents Report', legacy: true, path: '/parent_report.php' },
+        { label: 'Not Yet Registered Report', legacy: true, path: '/non_registered_report.php' },
+        { label: 'Barcodes Report', legacy: true, path: '/barcodes_report.php' },
+        { label: 'Miles Report', legacy: true, path: '/miles.php' },
+        { label: 'Auction Miles Report', legacy: true, path: '/auctionMiles.php' },
+        { label: 'Missions Done Report', legacy: true, path: '/missions_report.php' },
+        { label: "Stickers",
+          children: [
+            { label: 'Total Stickers Earned', legacy: true, path: '/stickers_report.php'  },
+            { label: 'Total Stickers Earned By Date', legacy: true, path: '/stickers_report_by_week.php'  },
+            { label: 'Total Stickers Earned By Child', legacy: true, path: '/stickers_report_by_child.php'  }
+          ]
+        },
+        { label: "Birthdays",
+          children: [
+            { label: 'Birthday Report', legacy: true, path: '/names_report.php'  },
+            { label: 'Birthdays By Date Range', legacy: true, path: '/find_birthdays_report.php'  }
+          ]
+        },
+        { label: "Ranks / Medals",
+          children: [
+            { label: 'Rank Report', legacy: true, path: '/rank_report.php'  },
+            { label: 'Mark Ranks / Medals as Received', legacy: true, path: '/admin_received_stats.php'  },
+          ]
+        }
       ]
     },
     {
