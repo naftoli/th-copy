@@ -10,7 +10,7 @@ $primary-color-hover: #2c539e;
   // Define the size
   min-width: 270px;
   max-width: 270px;
-  height: 100vh;
+  height: calc( 100vh - 58px );
   overflow: auto; // scroll the sidebar independent of the content
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
@@ -26,7 +26,7 @@ $primary-color-hover: #2c539e;
   }
   // top level navigation
   ul.components {
-    padding: 20px 0;
+    padding: 0 0 20px 0;
     // second level items
     li > div {
       a {
@@ -52,7 +52,7 @@ $primary-color-hover: #2c539e;
     // Links in the sidebar
     li a {
       text-align: left;
-      padding: 10px;
+      padding: 15px 10px;
       font-size: 1.1em;
       display: block;
       position: relative; // this is used for the arrow icons
@@ -98,6 +98,11 @@ $primary-color-hover: #2c539e;
   a.dropdown.open:before{
     transform: rotate(180deg);
   }
+}
+
+// Handle expanded navbar
+@media( min-width: 1025px ){
+  #sidebar { height: calc( 100vh - 72px ); }
 }
 
 @media (min-width: 768px) and (max-width: 1025px) {

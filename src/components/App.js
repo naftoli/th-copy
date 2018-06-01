@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Sidebar, { getMenu } from 'components/navigation/Sidebar';
-import logo from 'img/logo.svg';
+import Navbar from 'components/navigation/Navbar';
 import 'styles/App.css';
 
 class App extends Component {
@@ -22,17 +22,11 @@ class App extends Component {
 
   render() {
     return (
-      <div id="App">
-        <Sidebar menu={ getMenu() } active={ this.state.active } />
-        <div id="content">
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h1 className="App-title">Welcome to React</h1>
-          </header>
-          <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
-          </p>
-          <button style={ { float: "right" } } onClick={ this.toggle }>Toggle</button>
+      <div id="wrapper">
+        <Navbar onClick={ this.toggle } />
+        <div id="App">
+          <Sidebar menu={ getMenu() } active={ this.state.active } />
+          <div id="content"></div>
         </div>
       </div>
     );
