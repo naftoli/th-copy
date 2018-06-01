@@ -1,0 +1,46 @@
+/* Google Fonts */
+@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700");
+// Variables
+$primary-color: #3e6dc4;
+$primary-color-dark: #335eac;
+$primary-color-hover: #2c539e;
+
+#mashpia-navbar{
+  font-family: 'Poppins', sans-serif;
+  background-color: $primary-color-dark;
+  color: #fff;
+
+  .navbar-brand {
+
+    img {
+      height: 46px;
+      transition: all .3s;
+    }
+
+    span {
+      margin-left: .5em;
+      font-size: 1.3em;
+      vertical-align: middle;
+    }
+  }
+}
+
+@media( max-width: 1024px ){
+
+  #mashpia-navbar {
+    .navbar-brand {
+      img {
+        height: 26px;
+
+        &:hover {
+          transform: scale(1.2);
+          cursor: pointer;
+        }
+      }
+
+      span {
+        font-size: 1em;
+      }
+    }
+  } 
+}
