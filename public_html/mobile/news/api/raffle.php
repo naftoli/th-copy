@@ -4,9 +4,6 @@ include_once( dirname(__FILE__) . "/classes/Auction.php" );
 require_once( dirname(__FILE__) . "/../../../raffles/shared/classes/Raffle.php" );
 require_once( dirname(__FILE__) . "/../../../raffles/shared/classes/Prize.php" );
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 use \raffles\weekly\Raffle as Raffle;
 
 if ( $_SERVER['REQUEST_METHOD'] == "GET" ) {
