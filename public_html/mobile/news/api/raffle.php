@@ -25,7 +25,7 @@ if ( $_SERVER['REQUEST_METHOD'] == "GET" ) {
  */
 function getRaffle( $raffle_id ){
     // load the latest raffle id
-    if ( $raffle_id == 0 ) {
+    if ( $raffle_id == '0' ) {
         $raffle_query = mysql_query(
             "SELECT raffle_id AS id, name COLLATE utf8_general_ci as name, date_ran, type FROM raffles WHERE show_on_mobile = 1 "
             ."UNION "
