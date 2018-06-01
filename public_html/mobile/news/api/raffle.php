@@ -1,7 +1,11 @@
 <?php
 include_once( dirname(__FILE__) . "/header.php" );
+include_once( dirname(__FILE__) . "/classes/Auction.php" );
 require_once( dirname(__FILE__) . "/../../../raffles/shared/classes/Raffle.php" );
 require_once( dirname(__FILE__) . "/../../../raffles/shared/classes/Prize.php" );
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 use \raffles\weekly\Raffle as Raffle;
 
@@ -20,11 +24,21 @@ if ( $_SERVER['REQUEST_METHOD'] == "GET" ) {
  * @return void
  */
 function getRaffle( $raffle_id ){
+    // load the latest raffle id
     if ( $raffle_id == 0 ) {
-        $raffle_query = mysql_query( 
-            "SELECT * FROM raffles WHERE show_on_mobile = 1 ORDER BY date_ran DESC, type DESC LIMIT 1;"
+        $raffle_query = mysql_query(
+            "SELECT raffle_id AS id, name COLLATE utf8_general_ci as name, date_ran, type FROM raffles WHERE show_on_mobile = 1 "
+            ."UNION "
+            ."SELECT CONCAT('a', auction_id) AS id, auction_name COLLATE utf8_general_ci AS name, show_mobile AS date_ran, 'auction' as type "
+            ."FROM auctions WHERE show_mobile < NOW() "
+            ."ORDER BY date_ran DESC, type ASC LIMIT 1"
         );
-        $raffle = Raffle::loadFromRow( mysql_fetch_assoc( $raffle_query ) );
+        $raffle_query = mysql_fetch_assoc( $raffle_query );
+        $raffle_id = $raffle_query['id'];
+    } 
+    // load the raffle based on the id
+    if ( substr( $raffle_id, 0, 1) == 'a') {
+        $raffle = new Auction( substr( $raffle_id, 1, strlen( $raffle_id ) ) );
     } else {
         $raffle = Raffle::load( $raffle_id );
     }
@@ -35,7 +49,11 @@ function getRaffle( $raffle_id ){
 
     // get the next and previos ID's
     $raffle_ids_query = mysql_query(
-        "SELECT raffle_id, name FROM raffles WHERE show_on_mobile = 1 ORDER BY date_ran DESC, type DESC"
+        "SELECT raffle_id AS id, name COLLATE utf8_general_ci as name, date_ran, type FROM raffles WHERE show_on_mobile = 1 "
+        ."UNION "
+        ."SELECT CONCAT('a', auction_id) AS id, auction_name COLLATE utf8_general_ci AS name, show_mobile AS date_ran, 'auction' as type "
+        ."FROM auctions WHERE show_mobile < NOW() "
+        ."ORDER BY date_ran DESC, type ASC"
     );
     // variables to keep track of where we are
     $previous_raffle = false;
@@ -45,9 +63,9 @@ function getRaffle( $raffle_id ){
         if ( $found_raffle ) { // if the last row was the current raffle
             $previous_raffle = $row; break; // this must be the raffle before it
         // if this raffle is not the current raffle and we have not seen the current raffle yet
-        } else if ( $raffle->raffle_id !== $row['raffle_id'] ) {
+        } else if ( $raffle->raffle_id !== $row['id'] ) {
             $next_raffle = $row; // then this must be an upcoming raffle
-        } else if ( $raffle->raffle_id === $row['raffle_id'] ) { // if it is the current raffle.
+        } else if ( $raffle->raffle_id === $row['id'] ) { // if it is the current raffle.
             $found_raffle = true; // mark that we have seen it.
         }
     }
