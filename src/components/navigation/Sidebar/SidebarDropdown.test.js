@@ -42,7 +42,7 @@ describe("SidebarDropdown", () => {
 
   describe("props", () => {
 
-    describe("w.children", () => {
+    describe(".children", () => {
 
       it("has default value ([])", () => {
         expect( sidebarDropdown().props().children ).toEqual( [] );
