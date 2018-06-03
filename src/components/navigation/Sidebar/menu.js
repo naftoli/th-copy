@@ -1,8 +1,6 @@
 import React from 'react';
 
-// url to use when navigating to older pages
-export const LEGACY_URL = process.env.NODE_ENV === "production" ? "//mashpia.com" : "//test.mashpia.com";
-
+import { LEGACY_URL } from 'components/constants';
 // generate the menu for now
 const getMenu = () => {
   return [

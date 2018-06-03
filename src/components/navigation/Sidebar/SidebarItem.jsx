@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { LEGACY_URL } from './menu';
+import { LEGACY_URL } from 'components/constants';
 import SidebarDropdown from './SidebarDropdown';
 
 class SidebarItem extends Component {
