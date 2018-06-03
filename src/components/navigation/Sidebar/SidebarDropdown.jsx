@@ -17,7 +17,7 @@ class SidebarDropdown extends Component {
 
   render(){
     const children = this.props.children.map(
-      (child, index) => <SidebarItem item={ child } key={index} />
+      (child, index) => <SidebarItem { ...child } key={index} />
     )
 
     return (

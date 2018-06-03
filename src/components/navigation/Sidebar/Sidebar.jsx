@@ -7,7 +7,7 @@ class Sidebar extends Component {
   render() {
     // create the menu of items
     const menu = this.props.menu.map(
-      ( item, index ) => <SidebarItem item={item} key={index} level={1} />
+      ( item, index ) => <SidebarItem {...item} key={index} />
     )
 
     const active = this.props.active ? "active" : "";
