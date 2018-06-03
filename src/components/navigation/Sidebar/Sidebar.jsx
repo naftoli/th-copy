@@ -10,7 +10,7 @@ class Sidebar extends Component {
       ( item, index ) => <SidebarItem item={item} key={index} level={1} />
     )
 
-    const active = this.props.active ? "active " : "";
+    const active = this.props.active ? "active" : "";
 
     return (
       <div id="sidebar" className={`${active}`} >
@@ -23,7 +23,13 @@ class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
-  menu: PropTypes.array.isRequired
+  menu: PropTypes.array.isRequired,
+  active: PropTypes.bool
+}
+
+Sidebar.defaultProps = {
+  menu: [],
+  active: false
 }
 
 export default Sidebar;

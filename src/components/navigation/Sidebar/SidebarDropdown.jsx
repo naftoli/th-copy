@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Collapse } from 'reactstrap';
 import SidebarItem from './SidebarItem';
 
@@ -33,6 +34,21 @@ class SidebarDropdown extends Component {
       </li>
     )
   }
+}
+
+SidebarDropdown.propTypes = {
+  children: PropTypes.array.isRequired,
+  icon: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.element,
+  ]),
+  label: PropTypes.string.isRequired
+}
+
+SidebarDropdown.defaultProps = {
+  children: [],
+  icon: false,
+  label: ""
 }
 
 export default SidebarDropdown;
