@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import Sidebar from './Sidebar';
-import SidebarItem from './SidebarItem';
+import Sidebar from '../Sidebar';
+import SidebarItem from '../SidebarItem';
 
 describe("Sidebar", () => {
   // BOILERPLATE

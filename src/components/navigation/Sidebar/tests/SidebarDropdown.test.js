@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import SidebarDropdown from './SidebarDropdown';
-import SidebarItem from './SidebarItem';
+import SidebarDropdown from '../SidebarDropdown';
+import SidebarItem from '../SidebarItem';
 import { Collapse } from 'reactstrap';
 
 describe("SidebarDropdown", () => {
