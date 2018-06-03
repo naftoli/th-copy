@@ -11,36 +11,69 @@ $primary-color-hover: #2c539e;
   color: #fff;
 
   .navbar-brand {
-
+    transition: all .3s;
     img {
       height: 46px;
       transition: all .3s;
     }
-
     span {
       margin-left: .5em;
       font-size: 1.3em;
       vertical-align: middle;
+      transition: all .3s;
+    }
+  }
+
+  #navbar-title {
+    font-size: 1.7em;
+  }
+
+  #navbar-menu {
+    a {
+      color: #fff;
+      display: inline-block;
+      transition: .3s;
+      
+      span {
+        vertical-align: middle;
+      }
+
+      &:hover {
+        text-decoration: none;
+        cursor: pointer;
+        transform: scale(1.1);
+      }
+    }
+    img {
+      display: inline-block;
+      width: 25px;
+      margin-right: 5px;
     }
   }
 }
 
 @media( max-width: 1024px ){
-
   #mashpia-navbar {
     .navbar-brand {
+      &:hover {
+        transform: scale(1.15);
+        cursor: pointer;
+      }
       img {
         height: 26px;
-
-        &:hover {
-          transform: scale(1.2);
-          cursor: pointer;
-        }
       }
-
       span {
         font-size: 1em;
       }
     }
-  } 
+    #navbar-title {
+      font-size: 1.2em;
+    }
+  }
+}
+
+@media( max-width: 680px ) {
+  #navbar-title {
+    display: none;
+  }
 }
