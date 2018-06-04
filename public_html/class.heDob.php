@@ -39,7 +39,7 @@ class HeDob {
 			
 			$user_id = $this->user_id;
 			//find out if we are inserting or updating
-			$sql = "select * from he_dob where user_id = " . $user_id;
+			$sql = "SELECT * FROM he_dob WHERE user_id = " . $user_id;
 			$result = mysql_query($sql);
 			if (mysql_num_rows($result) > 0) {
 				$sql = "update he_dob 
@@ -52,12 +52,12 @@ class HeDob {
 			} else {
 				$sql = "insert into he_dob values($user_id, $hMonth, $hDay, $hYear, $bornInLeap, 0)";
 			}
-			if ( $this->debug ) echo $sql . "<br />";
+			// if ( $this->debug ) echo $sql . "<br />";
             mysql_query($sql);
-            if ( $this->debug ) echo "Sync to wordpress... ";
+            // if ( $this->debug ) echo "Sync to wordpress... ";
 			$this->syncToWp();
 		} else {
-			echo $arrDOB[0] . '-' . $arrDOB[1] . '-' . $arrDOB[2] . "<br />";
+			// echo $arrDOB[0] . '-' . $arrDOB[1] . '-' . $arrDOB[2] . "<br />";
 		}
 	}
 	

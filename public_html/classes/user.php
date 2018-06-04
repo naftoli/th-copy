@@ -47,7 +47,11 @@ class user {
 	public $member_points = array();
 	public $groups = array();
 	public $parent_id;
-	public $childs_parent;
+    public $childs_parent;
+    
+    // CUSTOM TASKS //
+	public $allow_parent_tasks;
+    public $print_parent_tasks;
 	
 	public $user_tracks = array();
 		
@@ -110,10 +114,9 @@ class user {
 	public $mobile_pic;
 	
 	public $allowPersonalization;
-	
-	// Settings for Custom Tasks
-	public $allow_parent_tasks;
-	public $print_parent_tasks;
+    
+    // REGISTRATION //
+    public $registration_fee = false;
 	
 	function __construct($row){
 		$this->user_id = $row['user_id'];
@@ -301,7 +304,7 @@ class user {
         if ( $this->mobile_pic ) {
             return "/mobile/reg/" . $this->mobile_pic;
         } else if ( $this->user_photo_id ) {
-            return "file_view.php?id=" . $this->user_photo_id;
+            return "/file_view.php?id=" . $this->user_photo_id;
         } else {
             return "/mobile/img_new/boy-color-green-svg.svg";
         }
@@ -406,6 +409,18 @@ class user {
             $this->prizes_won[] = $prize_won;
         }
         return $this->prizes_won;
+    }
+    
+    /**
+     * get_registration_fee
+     *
+     * Gets the registration fee for the user object using the registration_rate function
+     * 
+     * @return number
+     */
+    public function get_registration_fee(){
+        require_once( dirname(__FILE__) . "/../functions/registration_rate.php" );
+        return $this->registration_fee = registration_rate( $this->user_id );
     }
 	
 	public function get_parent() {

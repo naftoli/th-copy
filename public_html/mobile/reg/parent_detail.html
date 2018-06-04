@@ -96,7 +96,7 @@
 				</div>
 				<div class="row add_child">
 					<div class="col-xs-6">
-                        <a href="addchild2.html" id="addChild">
+                        <a href="/mobile/registration/child.html" id="addChild">
 						    <div style="float:left"><div class="ico-wrapper">
 					          <img src="/mobile/img_new/circle-+-color-blue-svg.svg" alt="" class="ico-add-child">
 						    </div></div>
@@ -460,7 +460,7 @@
 						//	return false;
 						//}
 				    	var id = $(this).parent().parent().parent().attr('id');
-				        location.href = "reg.html?child=" + id;
+				        location.href = "/mobile/registration/?user_id=" + id;
 				    });
 				    
 				    $(document).on('click', '.del', function() {
