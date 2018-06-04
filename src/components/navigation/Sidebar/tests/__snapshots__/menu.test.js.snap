@@ -1,0 +1,831 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getMenu returns the expected array for BC's 1`] = `
+Array [
+  Object {
+    "icon": <img
+      alt="home"
+      src="//test.mashpia.com/images/icon_admin_home.png"
+/>,
+    "label": "Home",
+    "legacy": true,
+    "path": "/admin.php",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "label": "View / Edit",
+          },
+          Object {
+            "label": "Registration",
+          },
+          Object {
+            "label": "Rank Cards",
+          },
+          Object {
+            "label": "Update Missions",
+            "legacy": true,
+            "path": "/add_missions.php",
+          },
+          Object {
+            "label": "Update Medals",
+            "legacy": true,
+            "path": "/add_medals.php",
+          },
+        ],
+        "label": "Soldiers",
+      },
+      Object {
+        "label": "Plattons",
+      },
+      Object {
+        "label": "Parents",
+      },
+      Object {
+        "label": "Staff",
+      },
+      Object {
+        "children": Array [
+          Object {
+            "label": "View / Edit",
+          },
+          Object {
+            "label": "Settings",
+          },
+          Object {
+            "label": "Transactions",
+          },
+        ],
+        "label": "Base",
+      },
+    ],
+    "icon": <img
+      alt="base-managment"
+      src="//test.mashpia.com/images/icon_dashboard.png"
+/>,
+    "label": "Base Managment",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "label": "Print Missions",
+        "legacy": true,
+        "path": "/print_missions2.php",
+      },
+      Object {
+        "label": "Print Summer Missions",
+        "legacy": true,
+        "path": "/print_missions_summer.php",
+      },
+      Object {
+        "label": "Mark Missions",
+        "legacy": true,
+        "path": "/mark_missions2.php",
+      },
+      Object {
+        "label": "Mark Yahadus",
+        "legacy": true,
+        "path": "/sefer_hamitzvos.php",
+      },
+      Object {
+        "label": "Personalize Your Missions",
+        "legacy": true,
+        "path": "/task_customization.php",
+      },
+      Object {
+        "label": "Add Tasks",
+        "legacy": true,
+        "path": "/newTask.php",
+      },
+      Object {
+        "label": "Teachers Mission Checklist",
+        "legacy": true,
+        "path": "/mission_sheets_checklist.php",
+      },
+      Object {
+        "label": "Missions Accomplished Report",
+        "legacy": true,
+        "path": "/missions_report.php",
+      },
+    ],
+    "icon": <img
+      alt="Missions"
+      src="//test.mashpia.com/images/icon_admin_medal.png"
+/>,
+    "label": "Missions",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "label": "Add Achievement Task",
+        "legacy": true,
+        "path": "/newAchievementTasks.php",
+      },
+      Object {
+        "label": "Add / Subtract Points",
+        "legacy": true,
+        "path": "/manual_points.php",
+      },
+    ],
+    "icon": <img
+      alt="Achievement Cards"
+      src="//test.mashpia.com/images/icon_auction.png"
+/>,
+    "label": "Achievement Cards",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "label": "Shabbaton Enrolled Report",
+        "legacy": true,
+        "path": "/reports/chidon/shabbaton_enrollment.php",
+      },
+      Object {
+        "label": "Shabbaton Walking Report",
+        "legacy": true,
+        "path": "/reports/chidon/walking_groups.php",
+      },
+      Object {
+        "label": "Enter Chidon Test Marks",
+        "legacy": true,
+        "path": "/chidon_tests.php",
+      },
+      Object {
+        "label": "Enroll Chaperones",
+        "legacy": true,
+        "path": "/chidon_school_reg.php",
+      },
+      Object {
+        "label": "Activate Enrollment",
+        "legacy": true,
+        "path": "/enrollment.php",
+      },
+      Object {
+        "label": "Review Enrollment",
+        "legacy": true,
+        "path": "/review_enrollment.php",
+      },
+      Object {
+        "label": "Print Enrollment Info",
+        "legacy": true,
+        "path": "/chidon_review.php",
+      },
+    ],
+    "icon": <img
+      alt="Chidon"
+      src="//test.mashpia.com/images/chidon.png"
+/>,
+    "label": "Chidon",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "label": "Registered Report",
+        "legacy": true,
+        "path": "/registered_report.php",
+      },
+      Object {
+        "label": "Parents Report",
+        "legacy": true,
+        "path": "/parent_report.php",
+      },
+      Object {
+        "label": "Not Yet Registered Report",
+        "legacy": true,
+        "path": "/non_registered_report.php",
+      },
+      Object {
+        "label": "Barcodes Report",
+        "legacy": true,
+        "path": "/barcodes_report.php",
+      },
+      Object {
+        "label": "Miles Report",
+        "legacy": true,
+        "path": "/miles.php",
+      },
+      Object {
+        "label": "Auction Miles Report",
+        "legacy": true,
+        "path": "/auctionMiles.php",
+      },
+      Object {
+        "label": "Missions Done Report",
+        "legacy": true,
+        "path": "/missions_report.php",
+      },
+      Object {
+        "children": Array [
+          Object {
+            "label": "Total Stickers Earned",
+            "legacy": true,
+            "path": "/stickers_report.php",
+          },
+          Object {
+            "label": "Total Stickers Earned By Date",
+            "legacy": true,
+            "path": "/stickers_report_by_week.php",
+          },
+          Object {
+            "label": "Total Stickers Earned By Child",
+            "legacy": true,
+            "path": "/stickers_report_by_child.php",
+          },
+        ],
+        "label": "Stickers",
+      },
+      Object {
+        "children": Array [
+          Object {
+            "label": "Birthday Report",
+            "legacy": true,
+            "path": "/names_report.php",
+          },
+          Object {
+            "label": "Birthdays By Date Range",
+            "legacy": true,
+            "path": "/find_birthdays_report.php",
+          },
+        ],
+        "label": "Birthdays",
+      },
+      Object {
+        "children": Array [
+          Object {
+            "label": "Rank Report",
+            "legacy": true,
+            "path": "/rank_report.php",
+          },
+          Object {
+            "label": "Mark Ranks / Medals as Received",
+            "legacy": true,
+            "path": "/admin_received_stats.php",
+          },
+        ],
+        "label": "Ranks / Medals",
+      },
+    ],
+    "icon": <img
+      alt="Reports"
+      src="//test.mashpia.com/images/icon_report.png"
+/>,
+    "label": "Reports",
+  },
+  Object {
+    "icon": <img
+      alt="shipping-reports"
+      src="//test.mashpia.com/images/icon_report.png"
+/>,
+    "label": "Shipping Reports",
+    "legacy": true,
+    "path": "/reports/shipping",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "label": "Individual Marking",
+            "legacy": true,
+            "path": "/editSoldierLines2.php",
+          },
+          Object {
+            "label": "Yud Aleph Nissan Reports",
+            "legacy": true,
+            "path": "/yud_alef_nissan_choose.php",
+          },
+        ],
+        "label": "Tanya",
+      },
+      Object {
+        "children": Array [
+          Object {
+            "label": "Mark Shabbos Mevorchim Tehillim",
+            "legacy": true,
+            "path": "/mark_tehillim2.php",
+          },
+          Object {
+            "label": "Shabbos Mevorchim Report",
+            "legacy": true,
+            "path": "/choose_sm_report.php",
+          },
+          Object {
+            "label": "Check Your Tehillim Quotas",
+            "legacy": true,
+            "path": "/tehillim_quotas.php",
+          },
+          Object {
+            "label": "Change Tehillim Ladder/Quota",
+            "legacy": true,
+            "path": "/admin_users_track.php",
+          },
+          Object {
+            "label": "Shabbos Mevorchim Tutorial Video",
+            "legacy": false,
+            "path": "https://vimeo.com/195384916",
+          },
+        ],
+        "label": "Tehillim",
+      },
+    ],
+    "icon": <img
+      alt="Campaigns"
+      src="//test.mashpia.com/images/parentIcons/Campaigns.gif"
+/>,
+    "label": "Campaigns",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "label": "Promotion Picture Report",
+        "legacy": true,
+        "path": "/promotion_report.php",
+      },
+      Object {
+        "label": "Teacher's Medal Ceremony Report",
+        "legacy": true,
+        "path": "/medal_rank_ceremony3.php",
+      },
+      Object {
+        "label": "Raffle Winners",
+        "legacy": true,
+        "path": "/raffles/shared/forms/winners_form.php",
+      },
+    ],
+    "icon": <img
+      alt="Rally"
+      src="//test.mashpia.com/images/parentIcons/Rally.gif"
+/>,
+    "label": "Rally",
+  },
+  Object {
+    "icon": <img
+      alt="Raffles"
+      src="//test.mashpia.com/images/icon_auction.png"
+/>,
+    "label": "Raffles",
+    "legacy": true,
+    "path": "/raffles/",
+  },
+  Object {
+    "icon": <img
+      alt="Yearly Prize"
+      src="//test.mashpia.com/images/icon_auction.png"
+/>,
+    "label": "Yearly Prize",
+    "legacy": true,
+    "path": "/yearly_prize/reports/",
+  },
+  Object {
+    "icon": <img
+      alt="Setup Guide"
+      src="//test.mashpia.com/images/icon_wizard.png"
+/>,
+    "label": "Setup Guide",
+    "legacy": true,
+    "path": "/admin_setup_guide.php",
+  },
+  Object {
+    "icon": <img
+      alt="Miliage Program"
+      src="//test.mashpia.com/images/icon_auction.png"
+/>,
+    "label": "Mileage Program",
+  },
+  Object {
+    "icon": <img
+      alt="Support"
+      src="//test.mashpia.com/images/parentIcons/support icon.gif"
+/>,
+    "label": "Support",
+    "legacy": true,
+    "path": "/helpdesk/?p=open",
+  },
+  Object {
+    "icon": <img
+      alt="Logout"
+      src="//test.mashpia.com/images/parentIcons/logout.gif"
+/>,
+    "label": "Logout",
+    "legacy": true,
+    "path": "/logout.php",
+  },
+]
+`;
+
+exports[`getMenu returns the expected array for HQ 1`] = `
+Array [
+  Object {
+    "icon": <img
+      alt="home"
+      src="//test.mashpia.com/images/icon_admin_home.png"
+/>,
+    "label": "Home",
+    "legacy": true,
+    "path": "/admin.php",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "label": "View / Edit",
+          },
+          Object {
+            "label": "Registration",
+          },
+          Object {
+            "label": "Rank Cards",
+          },
+          Object {
+            "label": "Update Missions",
+            "legacy": true,
+            "path": "/add_missions.php",
+          },
+          Object {
+            "label": "Update Medals",
+            "legacy": true,
+            "path": "/add_medals.php",
+          },
+        ],
+        "label": "Soldiers",
+      },
+      Object {
+        "label": "Plattons",
+      },
+      Object {
+        "label": "Parents",
+      },
+      Object {
+        "label": "Staff",
+      },
+      Object {
+        "children": Array [
+          Object {
+            "label": "View / Edit",
+          },
+          Object {
+            "label": "Settings",
+          },
+          Object {
+            "label": "Transactions",
+          },
+        ],
+        "label": "Base",
+      },
+    ],
+    "icon": <img
+      alt="base-managment"
+      src="//test.mashpia.com/images/icon_dashboard.png"
+/>,
+    "label": "Base Managment",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "label": "Print Missions",
+        "legacy": true,
+        "path": "/print_missions2.php",
+      },
+      Object {
+        "label": "Print Summer Missions",
+        "legacy": true,
+        "path": "/print_missions_summer.php",
+      },
+      Object {
+        "label": "Mark Missions",
+        "legacy": true,
+        "path": "/mark_missions2.php",
+      },
+      Object {
+        "label": "Mark Yahadus",
+        "legacy": true,
+        "path": "/sefer_hamitzvos.php",
+      },
+      Object {
+        "label": "Personalize Your Missions",
+        "legacy": true,
+        "path": "/task_customization.php",
+      },
+      Object {
+        "label": "Add Tasks",
+        "legacy": true,
+        "path": "/newTask.php",
+      },
+      Object {
+        "label": "Teachers Mission Checklist",
+        "legacy": true,
+        "path": "/mission_sheets_checklist.php",
+      },
+      Object {
+        "label": "Missions Accomplished Report",
+        "legacy": true,
+        "path": "/missions_report.php",
+      },
+    ],
+    "icon": <img
+      alt="Missions"
+      src="//test.mashpia.com/images/icon_admin_medal.png"
+/>,
+    "label": "Missions",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "label": "Add Achievement Task",
+        "legacy": true,
+        "path": "/newAchievementTasks.php",
+      },
+      Object {
+        "label": "Add / Subtract Points",
+        "legacy": true,
+        "path": "/manual_points.php",
+      },
+    ],
+    "icon": <img
+      alt="Achievement Cards"
+      src="//test.mashpia.com/images/icon_auction.png"
+/>,
+    "label": "Achievement Cards",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "label": "Shabbaton Enrolled Report",
+        "legacy": true,
+        "path": "/reports/chidon/shabbaton_enrollment.php",
+      },
+      Object {
+        "label": "Shabbaton Walking Report",
+        "legacy": true,
+        "path": "/reports/chidon/walking_groups.php",
+      },
+      Object {
+        "label": "Enter Chidon Test Marks",
+        "legacy": true,
+        "path": "/chidon_tests.php",
+      },
+      Object {
+        "label": "Enroll Chaperones",
+        "legacy": true,
+        "path": "/chidon_school_reg.php",
+      },
+      Object {
+        "label": "Activate Enrollment",
+        "legacy": true,
+        "path": "/enrollment.php",
+      },
+      Object {
+        "label": "Review Enrollment",
+        "legacy": true,
+        "path": "/review_enrollment.php",
+      },
+      Object {
+        "label": "Print Enrollment Info",
+        "legacy": true,
+        "path": "/chidon_review.php",
+      },
+    ],
+    "icon": <img
+      alt="Chidon"
+      src="//test.mashpia.com/images/chidon.png"
+/>,
+    "label": "Chidon",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "label": "Registered Report",
+        "legacy": true,
+        "path": "/registered_report.php",
+      },
+      Object {
+        "label": "Parents Report",
+        "legacy": true,
+        "path": "/parent_report.php",
+      },
+      Object {
+        "label": "Not Yet Registered Report",
+        "legacy": true,
+        "path": "/non_registered_report.php",
+      },
+      Object {
+        "label": "Barcodes Report",
+        "legacy": true,
+        "path": "/barcodes_report.php",
+      },
+      Object {
+        "label": "Miles Report",
+        "legacy": true,
+        "path": "/miles.php",
+      },
+      Object {
+        "label": "Auction Miles Report",
+        "legacy": true,
+        "path": "/auctionMiles.php",
+      },
+      Object {
+        "label": "Missions Done Report",
+        "legacy": true,
+        "path": "/missions_report.php",
+      },
+      Object {
+        "children": Array [
+          Object {
+            "label": "Total Stickers Earned",
+            "legacy": true,
+            "path": "/stickers_report.php",
+          },
+          Object {
+            "label": "Total Stickers Earned By Date",
+            "legacy": true,
+            "path": "/stickers_report_by_week.php",
+          },
+          Object {
+            "label": "Total Stickers Earned By Child",
+            "legacy": true,
+            "path": "/stickers_report_by_child.php",
+          },
+        ],
+        "label": "Stickers",
+      },
+      Object {
+        "children": Array [
+          Object {
+            "label": "Birthday Report",
+            "legacy": true,
+            "path": "/names_report.php",
+          },
+          Object {
+            "label": "Birthdays By Date Range",
+            "legacy": true,
+            "path": "/find_birthdays_report.php",
+          },
+        ],
+        "label": "Birthdays",
+      },
+      Object {
+        "children": Array [
+          Object {
+            "label": "Rank Report",
+            "legacy": true,
+            "path": "/rank_report.php",
+          },
+          Object {
+            "label": "Mark Ranks / Medals as Received",
+            "legacy": true,
+            "path": "/admin_received_stats.php",
+          },
+        ],
+        "label": "Ranks / Medals",
+      },
+    ],
+    "icon": <img
+      alt="Reports"
+      src="//test.mashpia.com/images/icon_report.png"
+/>,
+    "label": "Reports",
+  },
+  Object {
+    "icon": <img
+      alt="shipping-reports"
+      src="//test.mashpia.com/images/icon_report.png"
+/>,
+    "label": "Shipping Reports",
+    "legacy": true,
+    "path": "/reports/shipping",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "label": "Individual Marking",
+            "legacy": true,
+            "path": "/editSoldierLines2.php",
+          },
+          Object {
+            "label": "Yud Aleph Nissan Reports",
+            "legacy": true,
+            "path": "/yud_alef_nissan_choose.php",
+          },
+        ],
+        "label": "Tanya",
+      },
+      Object {
+        "children": Array [
+          Object {
+            "label": "Mark Shabbos Mevorchim Tehillim",
+            "legacy": true,
+            "path": "/mark_tehillim2.php",
+          },
+          Object {
+            "label": "Shabbos Mevorchim Report",
+            "legacy": true,
+            "path": "/choose_sm_report.php",
+          },
+          Object {
+            "label": "Check Your Tehillim Quotas",
+            "legacy": true,
+            "path": "/tehillim_quotas.php",
+          },
+          Object {
+            "label": "Change Tehillim Ladder/Quota",
+            "legacy": true,
+            "path": "/admin_users_track.php",
+          },
+          Object {
+            "label": "Shabbos Mevorchim Tutorial Video",
+            "legacy": false,
+            "path": "https://vimeo.com/195384916",
+          },
+        ],
+        "label": "Tehillim",
+      },
+    ],
+    "icon": <img
+      alt="Campaigns"
+      src="//test.mashpia.com/images/parentIcons/Campaigns.gif"
+/>,
+    "label": "Campaigns",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "label": "Promotion Picture Report",
+        "legacy": true,
+        "path": "/promotion_report.php",
+      },
+      Object {
+        "label": "Teacher's Medal Ceremony Report",
+        "legacy": true,
+        "path": "/medal_rank_ceremony3.php",
+      },
+      Object {
+        "label": "Raffle Winners",
+        "legacy": true,
+        "path": "/raffles/shared/forms/winners_form.php",
+      },
+    ],
+    "icon": <img
+      alt="Rally"
+      src="//test.mashpia.com/images/parentIcons/Rally.gif"
+/>,
+    "label": "Rally",
+  },
+  Object {
+    "icon": <img
+      alt="Raffles"
+      src="//test.mashpia.com/images/icon_auction.png"
+/>,
+    "label": "Raffles",
+    "legacy": true,
+    "path": "/raffles/",
+  },
+  Object {
+    "icon": <img
+      alt="Yearly Prize"
+      src="//test.mashpia.com/images/icon_auction.png"
+/>,
+    "label": "Yearly Prize",
+    "legacy": true,
+    "path": "/yearly_prize/reports/",
+  },
+  Object {
+    "icon": <img
+      alt="Setup Guide"
+      src="//test.mashpia.com/images/icon_wizard.png"
+/>,
+    "label": "Setup Guide",
+    "legacy": true,
+    "path": "/admin_setup_guide.php",
+  },
+  Object {
+    "icon": <img
+      alt="Miliage Program"
+      src="//test.mashpia.com/images/icon_auction.png"
+/>,
+    "label": "Mileage Program",
+  },
+  Object {
+    "icon": <img
+      alt="Support"
+      src="//test.mashpia.com/images/parentIcons/support icon.gif"
+/>,
+    "label": "Support",
+    "legacy": true,
+    "path": "/helpdesk/?p=open",
+  },
+  Object {
+    "icon": <img
+      alt="Logout"
+      src="//test.mashpia.com/images/parentIcons/logout.gif"
+/>,
+    "label": "Logout",
+    "legacy": true,
+    "path": "/logout.php",
+  },
+]
+`;
