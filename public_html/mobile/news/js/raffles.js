@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 $("#raffle-navigation #previous").show();
                 $("#raffle-navigation #previous a")
                     .text( data.previous.name )
-                    .data("raffle_id", data.previous.raffle_id);
+                    .data("raffle_id", data.previous.id);
             } else {
                 $("#raffle-navigation #previous").hide();
             }
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 $("#raffle-navigation #next").show();
                 $("#raffle-navigation #next a")
                     .text( data.next.name )
-                    .data("raffle_id", data.next.raffle_id);
+                    .data("raffle_id", data.next.id);
             } else {
                 $("#raffle-navigation #next").hide();
             }

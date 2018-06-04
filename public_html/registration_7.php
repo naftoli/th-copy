@@ -47,6 +47,12 @@ if( $customer_id ) {
 	$cc = false;
 }
 
+include("classes/school.php");
+$sql = "SELECT * FROM schools WHERE school_id=" . $admin->school_id;
+$query = mysql_query($sql);
+$row = mysql_fetch_assoc($query);
+$school = new school($row);
+
 if (isset($_POST['action'])) {
 	$action = $_POST['action'];
 	
@@ -106,7 +112,7 @@ if (isset($_POST['action'])) {
 
 			// get the email from the admin
 			// create the payment profile
-			$customer_profile = CustomerProfile::create("CTH_".$admin->school_id, $admin->admin_email, $admin->first . " " . $admin->last, $payment_profile);
+			$customer_profile = CustomerProfile::create("CTH_".$admin->school_id, $admin->admin_email, $school->school_name, $payment_profile);
 			//// if it is a valid payment profile, update the system. (only bad case is a duplicate which then returns an array)
 			if ($customer_profile instanceof CustomerProfile) {
 				// insert the ids into the system....
@@ -124,12 +130,6 @@ if (isset($_POST['action'])) {
 else {
 	//header("/registration.php");
 }
-
-include("classes/school.php");
-$sql = "SELECT * FROM schools WHERE school_id=" . $admin->school_id;
-$query = mysql_query($sql);
-$row = mysql_fetch_assoc($query);
-$school = new school($row);
 
 // remove all but alpha numeric & spaces, dot
 function clean_character($string)

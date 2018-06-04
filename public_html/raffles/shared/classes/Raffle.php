@@ -350,7 +350,7 @@ class Raffle {
      *
      * returns an array of all the winners ($this->winner_info);
      */
-    public function get_winner_info($school_id = false, $separate_genders = true, $sorting="school"){ // defaults
+    public function get_winner_info($school_id = false, $separate_genders = true, $sorting="school", $shipping_info = true){ // defaults
         $this->winner_info = []; // create the flat array
         if($separate_genders) $this->winner_info = ["boys" => [], "girls" => []]; // create the boys/girls structure
         
@@ -387,7 +387,7 @@ class Raffle {
         // for every winner
         while($row = mysql_fetch_assoc($query)){
             // get the rank of the winner from the database
-            $rank_sql = "select rank_name from ranks where rank_ord = (select max(rank_ord) from rank_marks where user_id = " . $row['user_id'] . ")";
+            $rank_sql = "SELECT rank_name FROM ranks WHERE rank_ord = (SELECT max(rank_ord) FROM rank_marks WHERE user_id = " . $row['user_id'] . ")";
             $rank_result = mysql_query($rank_sql);
             $rank_row = mysql_fetch_assoc($rank_result);
             
@@ -414,13 +414,15 @@ class Raffle {
                 'grade' => $row['class_grade'] . ($row['class_sub'] ? " - " .$row['class_sub'] : ""),
             ];
 
-            $data['address'] = [
-                'street' => $row['admin_address1'], 
-                'city' => $row['admin_city'], 
-                'state' => $row['admin_state'], 
-                'zip' => $row['admin_postal'], 
-                'country' => $row['admin_country']
-            ];
+            if ( $shipping_info ) {
+                $data['address'] = [
+                    'street' => $row['admin_address1'], 
+                    'city' => $row['admin_city'], 
+                    'state' => $row['admin_state'], 
+                    'zip' => $row['admin_postal'], 
+                    'country' => $row['admin_country']
+                ];
+            }
             
             // sort it into the correct subsection (gender)
             if($separate_genders && $row['gender'] == "M"){
