@@ -109,7 +109,7 @@ function toggleManual( event ){
         $("#manual-scanner").hide();
         $("#barcode_scanner").show();
     } else {
-        $("#toggle-manual img").attr("src", "/mobile/img_new/scanner-1-color-red-svg.svg");
+        $("#toggle-manual img").attr("src", "/mobile/img_new/camera-color-red-svg.svg");
         $("#manual-scanner").show();
         $("#barcode_scanner").hide();
     }
