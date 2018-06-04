@@ -1,9 +1,44 @@
 import React from 'react';
-
+// constants
 import { LEGACY_URL } from 'components/constants';
-// generate the menu for now
-const getMenu = () => {
-  return [
+const DEFAULT_USER_TYPES = [ 'HQ', 'BC' ];
+
+/**
+ * filterItem
+ * 
+ * Callback function used for getMenu
+ * 
+ * @param {object} item Object from getMenu array, Tests agains children and user_types keys
+ * @param {string} user_type The type of user (e.g. HQ or BC) that we are filtering the menu for
+ * @param {Array} defaults Array of defaults in the event that the item does not have a user_types array
+ */
+export const filterItem = ( item, user_type, defaults ) => {
+  // apply to children
+  if ( item.children ) {
+    item = Object.assign( {}, item, 
+      { children: item.children.filter( child => filterItem( child, user_type, defaults ) ) }
+    );
+  }
+  // // override the defaults
+  if ( item.user_types ){
+    return item.user_types.indexOf( user_type ) > -1 ? item : false;
+  }
+  // // return if it is in the default array
+  return defaults.indexOf( user_type ) > -1 ? item : false;
+}
+
+/**
+ * getMenu
+ * 
+ * returns an array for the user_type provided to get their sidebar menu
+ * 
+ * @param {string} user_type The type of user to get the menu for 
+ */
+const getMenu = ( user_type ) => {
+  // Default to BC
+  user_type = user_type || "BC";
+  // Define the shape of the menu
+  const menu = [
     {
       label: 'Home',  legacy: true, path: '/admin.php',
       icon: <img src={`${LEGACY_URL}/images/icon_admin_home.png`} alt="home"/>
@@ -160,7 +195,11 @@ const getMenu = () => {
       label: 'Logout', legacy: true, path: '/logout.php',
       icon: <img src={`${LEGACY_URL}/images/parentIcons/logout.gif`} alt="Logout"/>
     },
-  ]
+  ];
+
+  // filter the menu and return it
+  return menu.filter( item => filterItem( item, user_type, DEFAULT_USER_TYPES ) );
 } // end getMenu function
 
+// export getMenu by default
 export default getMenu;
