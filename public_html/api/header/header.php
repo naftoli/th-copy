@@ -4,11 +4,17 @@ if ( isset( $_GET['debug'] ) ) {
     ini_set('display_errors', 1);
 }
 
-// include composer dependancies and custom scripts
+date_default_timezone_set( 'UTC' );
 define( "API_ROOT", __DIR__ . '/..' );
+
+// include composer dependancies and custom scripts
 require_once( API_ROOT . "/vendor/autoload.php" ); // composer install must be run
 include_once( __DIR__ . "/json-functions.php" );
+include_once( __DIR__ . "/rest-router.php" );
 include_once( __DIR__ . "/db.php" );
+
+// GlobalSettings
+include_once( __DIR__ . '/../../class.globalSettings.php');
 
 // set headers
 header('Access-Control-Allow-Origin: *'); // CORS
