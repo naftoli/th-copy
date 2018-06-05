@@ -11,7 +11,6 @@ class PlattonRouter {
             $school = School::find( $_GET['school_id'] );
             $plattons = $school->plattons;
         } catch ( Exception $e ) {
-            print_r( $e );
             json_error( "Server Error: Could not load plattons", false, 500 );
         }
 
