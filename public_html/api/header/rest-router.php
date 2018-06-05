@@ -10,24 +10,34 @@ function rest_router( $router ){
     }
 
     if ( $_SERVER['REQUEST_METHOD'] == "GET" ) {
-        if ( $id ) {
+        
+        if ( $id && method_exists( $router, 'show' ) ) {
             return $router->show( $id );
-        } else {
+        } else if ( method_exists( $router, 'index' ) ) {
             return $router->index();
         }
+
     } else if ( $_SERVER['REQUEST_METHOD'] == "POST" ) {
-        if ( $id ) {
+        
+        if ( $id && method_exists( $router, 'update' ) ) {
             return $router->update( $id );
-        } else {
+        } else if ( method_exists( $router, 'create' ) ) {
             return $router->create();
         }
-    } else if ( $_SERVER['REQUEST_METHOD'] == "DELETE" && $id ) {
+
+    } else if ( $_SERVER['REQUEST_METHOD'] == "DELETE" && $id && method_exists( $router, 'destroy' ) ) {
+        
         return $router->destroy( $id );
+
     } else if ( $_GET['action'] && method_exists( $router, $_GET['action']) ) {
+        
         return $router->{ $_GET['action'] }( $id );
+    
     }
+    http_response_code( 404 );
 }
 
+// interface to note that all functions are implamented
 interface RestRouter {
     public function index();
     public function show( $id );
