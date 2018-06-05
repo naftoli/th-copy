@@ -23,15 +23,19 @@ $year = GlobalSettings::getRegistrationYear();
     <link href="/styles/admin/grey_select.css" rel="stylesheet" type="text/css"/>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <style>
-        div#wrapper { width: 1051px; }
-        #content .col_content { padding: 10px; }
-        #content .slider, #content { width: 800px; }
-        th, td { padding: 4px 8px; font-size: 14px; min-width: 50px; max-width: 120px; }
+        div#wrapper { width: 1101px; }
+        #content .col_content { padding: 20px 10px; }
+        #content .slider, #content { width: 850px; }
+        th, td { padding: 4px 8px; font-size: 14px; max-width: 120px; }
+        td.saved { padding-right: 0px; }
+        td:last-child { padding: 4px 0px; }
         input[type="date"] { width: 128px; background: none; border: none; border-bottom: 1px solid; }
         input[type="date"]:disabled { color: #888; }
         input[type="number"] { width: 80px; border: none; border-bottom: 1px solid; background: none; }
         .info { padding: 10px; background: #ccc; margin-bottom: 15px; }
         ol { list-style: decimal; margin-left: 15px; padding: 5px; }
+        button.button { transition: .25s; }
+        button.button:focus, button.button:hover, select:focus { transform: scale( 1.1 ) }
     </style>
 </head>
 <body>
