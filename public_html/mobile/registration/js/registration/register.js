@@ -72,6 +72,10 @@ var registrationApp = function() {
         templates.showUser( state.selected_users[0], 0 );
         showSection('step-2');
     }
+
+    function step3() {
+        
+    }
     
     /*********************** FORM HANDLERS ***********************/
     function confirmUser( event ) {
