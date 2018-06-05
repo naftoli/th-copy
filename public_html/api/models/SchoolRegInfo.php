@@ -17,6 +17,13 @@ class SchoolRegInfo extends ActiveRecord\Model implements JsonSerializable {
             $this->errors->add('registration_deadline', 'must be present on guaranteed bases');
     }
 
+    public static function getDefault( $school_id, $year ) {
+        return new self([
+            'school_id' => $school_id, 'year' => $year, 'type' => 3,
+            'fee' => 770, 'balance' => 0, 'early_bird' => new DateTime( '2018-09-07 00:00:00' )
+        ]);
+    }
+
     /**
      * jsonSerialize
      * 
