@@ -1,3 +1,10 @@
+// let the API know we are coming from the mobile site
+$.ajaxSetup({
+    beforeSend: function (xhr) {
+       xhr.setRequestHeader("mobile","true");        
+    }
+});
+
 /**
  * showError
  * 
@@ -38,4 +45,16 @@ function checkDateInput() {
     input.setAttribute('value', notADateValue); 
 
     return (input.value !== notADateValue);
+}
+
+function APIRequest( type, url, data, callback ) {
+    $.ajax({
+        url: url,
+        type: type,
+        data: data,
+        success: handleAPIResponse( callback ),
+        error: function( xhr ) { 
+            handleAPIResponse( callback )( xhr.responseJSON );
+        }
+    });
 }

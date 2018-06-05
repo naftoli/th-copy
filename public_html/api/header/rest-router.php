@@ -29,10 +29,10 @@ function rest_router( $router ){
         
         return $router->destroy( $id );
 
-    } else if ( $_GET['action'] && method_exists( $router, $_GET['action']) ) {
-        
-        return $router->{ $_GET['action'] }( $id );
+    } 
     
+    if ( $_GET['action'] && method_exists( $router, $_GET['action']) ) {
+        return $router->{ $_GET['action'] }( $id );
     }
     http_response_code( 404 );
 }
