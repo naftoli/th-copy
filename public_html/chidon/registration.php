@@ -88,12 +88,12 @@ body,td,th {
 				
                 <h4>Dates:</h4>
                 <div class="indent">
-                    Starts Wednesday, Tes Vov Elul (September 6). Only parents can register their children for Chidon, schools cannot register chayolim.
+					Chidon Registration Begins: Wednesday, Chai Elul (Aug 29). Only parents can register their children for Chidon, schools cannot register chayolim.
                 </div>
                 <br />
 				
 				<div class="indent">
-                    Registration closes on Wednesday, Yud Tes Cheshvan (November 8). Once registration closes, no new applications will be accepted.
+					Chidon Registration Ends: Tuesday, Zayin Cheshvan (Oct 16). Once registration closes, no new applications will be accepted.
                 </div>
 				<br />
 				<!--

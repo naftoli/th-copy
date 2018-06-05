@@ -94,15 +94,16 @@ body,td,th {
                 
                 <h4>Dates:</h4>
 				<div class="indent">
-                    Girls’ Shabbaton: Thursday, Chof Alef Adar (March 8) – Sunday, Chof Daled Adar (March 11)<br />
-                    Boys’ Shabbaton: Thursday, Chof Ches Adar (March 15) – Sunday, Beis Nissan (March 18)
-                </div>
-                <br />
+					Girls Chidon: Thursday, Chof Aleph Adar Beis (March 28) -Sunday Chof Daled Adar Beis (March 31)<br />
+					Boys Chidon: Thursday, Chof Ches Adar Beis (April 4) - SundayBeis Nissan (April 7)
+				</div>
+				<br />
                 
                 <h4>Registration Deadline</h4>
                 <div class="indent">
-                    Shabbaton Registration opens on <span style="font-weight: bold">Sunday, Chof Vov Shvat (February 11)</span>. Registration and payment information must be
-                    submitted before <span style="font-weight: bold">Monday, Daled adar (February 19) at 11:59 p.m.</span> We apologize in advance that there will be no exceptions. 
+					Shabbaton Enrollment Opens: <span style="font-weight: bold">Wednesday, Ches Adar Aleph  (Feb 13)</span>.<br />
+					Shabbaton Enrollment Closes: <span style="font-weight: bold">Tuesday, Yud Daled Adar Aleph (Feb 19)</span>.<br /> 
+					Registration and payment information must be submitted by then. We apologize in advance that there will be no exceptions. 
                 </div>
                 <br />
                 
