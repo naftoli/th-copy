@@ -54,11 +54,7 @@ class BirthdayYi {
     }
     
     private function setUsers() {
-        $sql = "select user_id from users where dob > 0 and school_type_id in (2,3) order by user_id desc";
-        $result = mysql_query( $sql );
-        while ( $row = mysql_fetch_assoc( $result ) ) {
-            $this->users[] = $row['user_id'];
-        }
+        $this->users = [];
     }
 
     public function setBirthday() {
