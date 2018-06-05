@@ -7,19 +7,20 @@ var registration_info = function(){
 
     $.get( '/api/registration/school_registration.php', function( response ){
         state.schools = response.data;
-        renderSchoolsTable()
+        renderTable()
     });
 
-    function renderSchoolsTable(){
+    function renderTable(){
         var year = $("#year").val() || 5779;
         
         var html = '<table><tbody>';
-        html += '<tr><th>Base Name</th><th>Type</th><th>Fee</th><th>Balance</th><th>Deadline</th><th>Early Bird</th></tr>'
+        html += '<tr><th>Base Name</th><th>Type</th><th>Fee</th><th>Balance</th><th>Deadline</th><th>Early Bird</th><th>Saved</th></tr>'
         state.schools.forEach( function( school ) {
             // if we do not have one, set the defaults
             var reg_info = 
                 school.school_reg_infos.find( function(info) { return info.year == year } ) || 
-                { school_reg_info_id: 0, type: 0, fee: 770, balance: 0, reg_deadline: '', early_bird: '' };
+                { school_reg_info_id: 0, type: 0, fee: 770, balance: 0, 
+                    reg_deadline: '', early_bird: '2018-09-07', defaults: true };
             // render the row
             html += '<tr data-school_reg_info_id="' + reg_info.school_reg_info_id + '" data-school_id="' + school.school_id + '">'
             html += '<td>' + school.school_name + '</td>';
@@ -30,14 +31,18 @@ var registration_info = function(){
             html += '<td>' + formatDate(reg_info.reg_deadline, 'reg_deadline', reg_info.type != 2) + '</td>';
             html += '<td>' + formatDate(reg_info.early_bird, 'early_bird') + '</td>';
 
-            html += '<td><a class="button save-row">Save</a></td>';
+            html += '<td class="saved">' + ( reg_info.defaults ? "No" : "Yes" ) + '</td>';
 
-            html += '</tr>'
+            html += '<td><button class="button save-row">Save</button></td>';
+
+            html += '</tr>';
         });
 
         html += '</tbody></table>';
         $("#report").html( html );
         $("select[name='type']").change( toggleDeadline );
+        $("#report input").change( toggleSaved );
+        $("#report .save-row").click( saveRow );
     }
 
     function formatDate( date, name, disabled ){
@@ -66,6 +71,46 @@ var registration_info = function(){
         $(event.target).parent().parent().find(
             'input[name="reg_deadline"]"'
         )[0].disabled = event.target.value != '2';
+        $(event.target).parent().parent().find( 'td.saved' ).text("No");
+    }
+
+    function toggleSaved( event ){
+        $(event.target).parent().parent().find( 'td.saved' ).text("No");
+    }
+
+    function saveRow( event ){
+        $(event.target).text( "Saving..." );
+        var row = $(event.target).parent().parent();
+        var id = row[0].dataset.school_reg_info_id;
+
+        var postData = {
+            school_id: row[0].dataset.school_id,
+            type:   row.find( 'select[name="type"]' ).val(),
+            fee:   row.find( 'input[name="fee"]' ).val(),
+            balance:   row.find( 'input[name="balance"]' ).val(),
+            reg_deadline:   row.find( 'input[name="reg_deadline"]' ).val(),
+            early_bird:   row.find( 'input[name="early_bird"]' ).val(),
+        }
+
+        var url = "/api/registration/school_registration.php";
+        url = id == '0' ? url : url + '?id=' + id;
+
+        function handleResponse( response ){
+            $(event.target).text( "Save" );
+            if( !response.success ) {
+                return alert( response.msg + '\n\n' + response.data.join('\n') )
+            }
+            row.find( 'td.saved' ).text("Yes");
+            row[0].dataset.school_reg_info_id = response.data.school_reg_info_id;
+        }
+
+        $.ajax({
+            url: url, 
+            type: 'post',
+            data: postData, 
+            success: handleResponse,
+            error: function( xhr ) { handleResponse( JSON.parse( xhr.response ) ) }
+        });
     }
 
     return {
