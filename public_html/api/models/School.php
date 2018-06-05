@@ -1,7 +1,7 @@
 <?php
 class School extends ActiveRecord\Model implements JsonSerializable {
     // relationships
-    static $has_many = [ ['school_reg_infos'] ];
+    static $has_many = [ ['school_reg_infos'], [ 'plattons' ] ];
 
 
     // ******************************* SERIALIZERS *******************************
