@@ -42,7 +42,7 @@
                 <p><strong>3. </strong>Select an existing payment method or add a new one.</p>
                 <div class="row spaced navigation">
                     <div class="col-12">
-                        <button id="start-step-1" class="btn btn-primary">Begin Registration</button>
+                        <button class="btn btn-primary start-step-1">Begin Registration</button>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
                     </div>
                     <div class="row spaced navigation">
                         <div class="col-12 right">
-                            <button id="start-step-2" class="btn btn-primary">
+                            <button class="btn btn-primary start-step-2">
                                 Confirm Information &nbsp;<i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
@@ -75,6 +75,7 @@
             <div class="container">
                 <form id="update-user">
                     <input type="hidden" id="user_id" name="user_id" />
+                    <input type="hidden" id="current_index" />
                     <div class="row">
                         <div class="col-12 centered">
                             <input type="hidden" id="mobile_pic" name="mobile_pic" required/>
@@ -95,6 +96,16 @@
                                 <span class="radio"></span>
                             </label>
                             <span>Girl</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="first">School</label>
+                            <input type="text" disabled class="form-control" placeholder="N / A" id="school_name">
+                        </div>
+                        <div class="col-6">
+                            <label for="first">Class / Grade</label>
+                            <input type="text" disabled class="form-control" placeholder="N / A"  id="class_name">
                         </div>
                     </div>
                     <div class="row">
@@ -172,7 +183,7 @@
                 </form>
                 <div class="row spaced navigation">
                     <div class="col-12 left">
-                        <button id="start-step-1" class="btn btn-primary">
+                        <button class="btn btn-primary start-step-1">
                             <i class="fas fa-arrow-left"></i> &nbsp;Select Children
                         </button>
                     </div>
@@ -233,7 +244,7 @@
                 </form>
                 <div class="row spaced navigation">
                     <div class="col-12 left">
-                        <button id="start-step-2" class="btn btn-primary">
+                        <button class="btn btn-primary start-step-2">
                             <i class="fas fa-arrow-left"></i> &nbsp;Confirm Information
                         </button>
                     </div>
@@ -325,7 +336,7 @@
 
                 <div class="row spaced navigation">
                     <div class="col-12 right">
-                        <button id="start-step-2" class="btn btn-primary">
+                        <button class="btn btn-primary start-step-2">
                             <i class="fas fa-arrow-left"></i> &nbsp;Confirm Information
                         </button>
                     </div>
@@ -443,6 +454,8 @@
         <script src="/mobile/js/authenticate.js"></script>
         <script src="../lib/hebrew-keyboard/hebrew-keyboard.js"></script>
         <script src="js/image-upload.js"></script>
+        <!-- Polyfill's -->
+        <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
         <!-- scripts for each page -->
         <!-- <script src="js/index/page1.js"></script>
         <script src="js/index/page4.js"></script> -->

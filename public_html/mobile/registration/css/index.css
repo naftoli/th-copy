@@ -16,8 +16,9 @@ div.content { display: none; }
 section#welcome-message { text-align: center; }
 /* Step 1 */
 #step-1 .child {
-    display: inline-block; padding: 15px; border-bottom: 1px solid #ccc;
+    display: inline-block; padding: 15px; border-bottom: 1px solid #ccc; vertical-align: bottom;
 }
+#step-1 .child:last-child { border-bottom: none; }
 /* fix the rows not taking up the full width */
 #step-1 .child label, #step-1 #children { width: 100%; }
 
@@ -30,7 +31,7 @@ section#welcome-message { text-align: center; }
 
 #step-1 .child .name { font-size: 1.6em; }
 
-.reg_cost, .shipping_cost { font-size: 1.2em; font-weight: bolder; }
+.reg_cost, .shipping_cost { font-size: 1em; font-weight: bolder; }
 
 #step-1 .child .col-2 {
     display: flex; align-items: center;
