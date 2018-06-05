@@ -1,11 +1,11 @@
 <?php
 class Platton extends ActiveRecord\Model implements JsonSerializable {
     static $table_name = 'classes';
+    // relationships
+    static $belongs_to = [ [ 'school' ] ];
+    static $has_many = [ [ 'users' ] ];
 
-    static $belongs_to = [
-        [ 'school' ],
-    ];
-
+    // ******************************* HELPER FUNCTIONS *******************************
     public function name() {
         return $this->class_grade . ( $this->class_sub ? ' - ' . $this->class_sub : '' );
     }
