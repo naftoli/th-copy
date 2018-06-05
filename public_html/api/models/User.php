@@ -2,7 +2,7 @@
 class User extends ActiveRecord\Model implements JsonSerializable {
     // relationships
     static $belongs_to = [
-        [ 'school' ], [ 'platton' ]
+        [ 'school' ], [ 'platton', 'foreign_key' => 'class_id' ]
     ];
 
     // ******************************* SERIALIZERS *******************************
@@ -29,7 +29,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
             'only' => [ 'user_serial', 'first', 'last' ],
             'include' => [ 
                 'school' => [ 'only' => [ 'school_id', 'school_name' ] ],
-                'platton' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ], 'methods' => [ 'name' ] ]
+                'platton' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]
             ]
         ]);
     }
