@@ -3,7 +3,7 @@ class Platton extends ActiveRecord\Model implements JsonSerializable {
     static $table_name = 'classes';
     // relationships
     static $belongs_to = [ [ 'school' ] ];
-    static $has_many = [ [ 'users' ] ];
+    static $has_many = [ [ 'users', 'foreign_key' => 'class_id' ] ];
 
     // ******************************* HELPER FUNCTIONS *******************************
     public function name() {
