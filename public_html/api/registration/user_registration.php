@@ -9,34 +9,17 @@ class UserRegistrationRouter {
         return count( $current_user->getAuthIds('user') ) > 0;
     }
 
+    // get all the users that the parent has, serialized for the registration pages.
     public function getUsers(){
         global $current_user;   global $pdo;
         // load all his user id's
         $user_ids = $current_user->getAuthIds( 'user' );
-        $year = GlobalSettings::getRegistrationYear();
-        // limit to the ones we care about
-        $register_ids_query = $pdo->prepare(
-            "SELECT u.user_id, user_reg_id, th_chidon_id FROM users u "
-            ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = :year "
-            ."LEFT JOIN th_chidon tc ON tc.user_id = u.user_id AND tc.year = :year "
-            ."WHERE ( user_reg_id IS NULL OR th_chidon_id IS NULL ) "
-            ."AND u.user_id IN ( " . implode( ", ", $user_ids ) . " )"
-        );
-        $register_ids_query->execute([ ':year' => $year ]);
-        
-        // sort that data into useable chunks
-        $registration_info = [];
-        $user_ids = [];
-        foreach( $register_ids_query->fetchAll() as $row ){
-            $registration_info[ $row['user_id'] ] = $row;
-            $user_ids[] = $row['user_id'];
-        };
-        
+
+        // get all the users information
         $users = User::find( $user_ids );
 
         json_response([
-            "registration_info" => $registration_info, 
-            "users" => $users 
+            "users" => $this->serializeUsers( $users )
         ]);
     }
 
@@ -46,6 +29,22 @@ class UserRegistrationRouter {
 
     public function registerUsers(){
 
+    }
+
+    private function serializeUsers( $users ) {
+        return array_map( function( $user ) {
+            return $user->to_array([
+                'only'  => [
+                    'user_id', 'user_code', 'first', 'last', 'first_he', 'last_he',
+                    'lang_id', 'gender', 'dob', 'mobile_pic', 'user_registered', 'user_serial',
+                ],
+                'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture' ],
+                'include' => [ 
+                    'school' => [ 'only' => [ 'school_id', 'school_name' ] ],
+                    'platton' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]
+                ]
+            ]);
+        }, $users );
     }
 }
 
