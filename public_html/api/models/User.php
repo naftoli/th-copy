@@ -65,6 +65,71 @@ class User extends ActiveRecord\Model implements JsonSerializable {
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
         return $result;
     }
+    /**
+     * registerChayolei
+     * 
+     * registers the user for Tzivos Hashem and returns an array of errors
+     *
+     * @param int $admin_id
+     * @param string $year
+     * @param int $amount
+     * @return array
+     */
+    public function registerChayolei( $admin_id, $year, $amount ){
+        global $pdo;
+        $errors = [];
+        // Insert into user_registration
+        $reg_query = $pdo->prepare(
+            "INSERT INTO user_registration (user_id, admin_id, year, reg_date, paid, school_id) VALUES (?, ?, ?, NOW(), ?, ?)"
+        );
+        if( !$reg_query->execute([ $this->user_id, $admin_id, $year, $amount, $this->school_id ]) )
+            $errors[] = "Could not insert into user_registration.";
+        // update feilds to mark registered
+        $this->user_registered = new \Datetime();
+        if( !$this->user_start_date) $this->user_start_date = unixtojd();
+        $this->save();
+        // make sure we have at least one rank
+        $rank_query = $pdo->prepare( "SELECT * FROM rank_marks WHERE user_id = ?" );
+        $rank_query->execute([ $this->user_id ]);
+        if( $rank_query->rowCount() == 0 ){
+            if ( !$pdo->prepare(
+                    "INSERT INTO rank_marks (rank_ord, user_id, date_promoted) VALUES (1, ?, ?) "
+                )->execute([ $this->user_id, unixtojd() ])
+            ) $errors[] = "Could not insert into rank_marks.";
+        }
+        // create campaigns and birthday missions
+        $this->enrollInCampaigns();
+        $this->setupBirthdayMissions();
+
+        return $errors;
+    }
+
+    public function registerChidon( $year, $parent_id = 0 ){
+        global $pdo;
+
+        $chidon_query = $pdo->prepare(
+            "INSERT INTO th_chidon (year, school_id, user_id, parent_id) VALUES (?, ?, ?, ?)"
+        );
+        return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $parent_id ] );
+    }
+
+    // ******************************* SETUP WITH EXTERNAL CODE *******************************
+    private function enrollInCampaigns() {
+        require_once( __DIR__ . '/../../class.campaignEnrollment.php');
+        try {
+            $c = new CampaignEnrollment($this->user_id);
+            $c->enroll();
+        } catch (EnrollmentException $e) {}
+    }
+    private function setupBirthdayMissions(){
+        require_once( __DIR__ . '/../../class.birthday.php' );
+        require_once( __DIR__ . '/../../class.birthdayYi.php' );
+        require_once( __DIR__ . '/../../class.heDob.php' );
+        // run the functions
+        $b = new Birthday( $this->user_id );      @$b->setBirthday();
+        $bi = new BirthdayYi( $this->user_id );   @$bi->setBirthday();
+        $hdob = new HeDob( $this->user_id );      @$hdob->setHeDob();
+    }
 
     // ******************************* SERIALIZERS *******************************
     /**
