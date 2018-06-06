@@ -1,4 +1,6 @@
 <?php
+// This class uses the Authorize.net gateway
+
 class Admin extends ActiveRecord\Model implements JsonSerializable {
     static $before_create = ['createHelpdeskAccount'];
     // relationships 
@@ -14,7 +16,8 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     ];
     // prop mapping
     static $alias_attribute = [ 'email' => 'admin_email' ];
-
+    // internalCaches
+    private $customer_profile;
     // SERIALIZERS
     public function jsonSerialize() {
         return $this->to_array([
@@ -75,6 +78,33 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         // not HQ
         $auth_types = $this->getAuthTypes();
         if ( in_array( 'school', $auth_types ) ) return 'BC';
+    }
+
+    /**
+     * shippingZone
+     * 
+     * Returns shipping zone (1, 2 or 3)
+     *
+     * @return int
+     */
+    public function shippingZone(){
+        if ( $this->admin_country == '' || $this->admin_country == 'USA' )
+            return 1;
+        else if ( $this->admin_country == 'Canada' )
+            return 2;
+        return 3;
+    }
+
+    //********************************** PAYMENTS **********************************/
+    public function customerProfile(){
+        if ( $this->customer_profile instanceof CustomerProfile )
+            return $this->customer_profile;
+        if( !$this->authorize_customer_profile_id )
+            return false;
+        // load the required classes
+        return $this->customer_profile = new classes\authorize\CustomerProfile(
+            $this->authorize_customer_profile_id
+        );
     }
 
     // OTHER
