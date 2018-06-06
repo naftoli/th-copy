@@ -6,13 +6,17 @@ if ( isset( $_GET['debug'] ) ) {
 
 date_default_timezone_set( 'UTC' );
 define( "API_ROOT", __DIR__ . '/..' );
+// TODO set to false in production
+define("AUTHORIZE_NET_SANDBOX", true);
 
 // include composer dependancies and custom scripts
 require_once( API_ROOT . "/vendor/autoload.php" ); // composer install must be run
 include_once( __DIR__ . "/json-functions.php" );
 include_once( __DIR__ . "/rest-router.php" );
 include_once( __DIR__ . "/db.php" );
-
+// Import Authorize.net API functions into global space to be used in models
+require_once( dirname(__FILE__) . "/../../classes/authorize/CustomerProfile.php" );
+require_once( dirname(__FILE__) . "/../../classes/authorize/PaymentProfile.php" );
 // GlobalSettings
 include_once( __DIR__ . '/../../class.globalSettings.php');
 
