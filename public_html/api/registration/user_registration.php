@@ -24,8 +24,19 @@ class UserRegistrationRouter {
     }
 
     public function getShipping(){
+        global $current_user; global $pdo;
 
-    }
+        $school_ids = $_POST[ 'school_ids' ];
+        $schools_with_shipping = [
+            '269', // Anash Kinder
+        ];
+
+        $zone = $current_user->shippingZone();
+        $child_count = 0;
+        foreach( $school_ids as $school_id ){
+            if ( in_array( $school_id, $schools_with_shipping ) )
+                $child_count += 1;
+        }
 
         $query = $pdo->prepare(
             "SELECT type, rate FROM shipping_rates WHERE zone=? AND child_count=?;"
@@ -61,7 +72,117 @@ class UserRegistrationRouter {
     }
 
     public function registerUsers(){
+        global $current_user; global $pdo;
 
+        /******************************** SETUP ********************************/
+        $payment_info = $_POST['payment'];
+        $registrations = $_POST['registrations'];
+        $shipping_info = $_POST['shipping'];
+        $shipping_charges = intval($shipping_info['shipping_charges']);
+        // get all the users that we are registering
+        $user_ids = [];
+        foreach( $registrations as $info ){
+            if( !in_array( $info['user_id'], $user_ids ) ) $user_ids[] = $info['user_id'];
+        }
+        // get all the user models
+        $users = User::find( $user_ids );
+        if ( !is_array( $users ) ) $users = [ $users ]; // force an array, even if it is just one user
+        
+        // setup the variables we will need later
+        $user_serials = array_map( function( $user ){ return $user->user_serial; }, $users);
+        $year = GlobalSettings::getRegistrationYear();
+        $description = "User Registration for $year: " . implode( ", ", $user_serials );
+        
+        /******************************** PAYMENT ********************************/
+        $customer_profile = $current_user->customerProfile();
+        
+        // if we where given a payment profile
+        if ( $customer_profile && $payment_info['payment_profile'] ){
+            $payment_profile_id = $payment_info['payment_profile'];
+        // if we have a customer profile, but they want to add a card
+        } else if ( $customer_profile && $payment_info['cc-number'] ){
+            $payment_profile = classes\authorize\PaymentProfile::create(
+                $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code'],
+                $current_user->authorize_customer_profile_id
+            );
+            if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
+                render_json_error( $payment_profile['messages']['message'][0]['text'] );
+            $payment_profile_id = $payment_profile->customerPaymentProfileId;
+
+        // if we do not have a customer profile, but do have a CC to create one...
+        } else if ( !$customer_profile && $payment_info['cc-number'] ){
+            $payment_profile = classes\authorize\PaymentProfile::createBasicArray(
+                $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code']
+            );
+            $customer_profile = $current_user->customerProfile( $payment_profile );
+            // if we fail to create the customer profile, then return the error
+            if ( !($customer_profile instanceof classes\authorize\CustomerProfile) )
+                render_json_error( $customer_profile["message"] );
+            if ( count( $customer_profile->paymentProfiles ) == 0 )
+                render_json_error( "Invalid Payment Method" );
+            $payment_profile_id = $customer_profile->paymentProfiles[0]['customerPaymentProfileId'];
+        } else {
+            json_error( "Payment Error" );
+        }
+
+        // Let the user know if the transaction fails
+        $payment_response = $customer_profile->chargeCard(
+            intval($payment_info['total']), $payment_profile_id, null, null, $description
+        );
+        if ( !is_array( $payment_response ) ) render_json_error( $payment_response );
+        $transaction_query = $pdo->prepare(
+            "INSERT INTO transactions (trans_date, admin_id, description, amount, reg_amount, ship_amount, zip, users_registered, response) "
+            ."VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)"
+        );
+        $transaction_query->execute([
+            $current_user->admin_id, $description, $payment_info['total'], 
+            ( intval($payment_info['total']) - $shipping_charges ), $shipping_charges,
+            $current_user->admin_postal, implode( ', ', $user_ids ),
+            json_encode( $payment_response )
+        ]);
+
+        // register all the users...
+        $errors = [];   $registration_table_users = [];
+        foreach ( $users as $user ) {
+            $user_errors = [];
+            foreach( $registrations as $registration ){
+                if ( !$user->user_id == $registration['user_id'] ) continue;
+                // Chayolei Registration
+                if ( $registration['registration_type'] == 'chayolei' ) {
+                    array_merge( $user_errors, $user->registerChayolei(
+                        $current_user->admin_id, $year, $registration['paid']
+                    ) );
+                    if ( in_array( $user->school_id, [ '269', '61' ] ) )
+                        $registration_table_users[ $user->school_id ][] = $user->user_id;
+                // Chidon Registration
+                } else if ( $registration['registration_type'] == 'chidon' ) {
+                    if ( !$user->registerChidon( $year, $current_user->admin_id ) )
+                        $user_errors[] = "Could not register ".$user->user_id." for chidon";
+                }
+            }
+            if ( count( $user_errors ) > 0 ) 
+                $errors[$user->user_id] = $user_errors;
+        };
+
+        // insert into special myshliach/anash kinder table
+        if( count($registration_table_users) > 0 ){
+            $registration_table_query = $pdo->prepare(
+                "INSERT INTO registration (description, approval, year, school_id, "
+                ."admin_id, ship_option, ship_dest, users) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+            );
+            foreach( $registration_table_users as $school_id => $user_ids ){
+                $registration_table_query->execute([
+                    $description, json_encode( $payment_response ), $year, $school_id,
+                    $current_user->admin_id, $shipping_info['shipping_type'], 
+                    $current_user->admin_country, implode( ', ', $user_ids )
+                ]);
+            }
+        }
+
+        if ( count( $errors ) > 0 )
+            mail( "bugs@tzivoshashem.org", "Mobile Registration Error(s)", print_r( $errors ) );
+        
+        json_response( false );
     }
 
     private function serializeUsers( $users ) {
