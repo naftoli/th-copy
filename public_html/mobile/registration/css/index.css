@@ -38,7 +38,7 @@ section#welcome-message { text-align: center; }
 }
 
 #charges .row { border-bottom: 1px solid #ccc; margin: 1%; padding: 2%; }
-
+#charges .col-10 { font-size: .8em; padding-left: 5px; }
 div#cc-card { margin: 0% auto 2%; }
 .total-row { font-size: 1.2em; }
 div#new-card { border-top: 1px solid #ccc; padding-top: 10px; }
