@@ -25,7 +25,7 @@ var registrationApp = function() {
     // form handlers
     $("#step-2 form").submit( confirmUser );
     $("#step-3 form").submit( confirmShipping );
-    $("#step-4 form").submit( registerUsers );
+    $("#step-4 form").submit( registerUsersHandler );
     $("#step-4 #cc-number").keyup( validateCardInput );
     image_upload( {}, onImageUploaded );
     // run the first step
@@ -36,7 +36,7 @@ var registrationApp = function() {
     function step1() {
         showSection( "step-1" );
         toggleLoading( "step-1", true );
-        state.users = [];
+        state.users = [];   state.cart = [];
 
         getUsers().then( function( users ){ 
             if( users.length === 1 ) return step2();
@@ -78,6 +78,7 @@ var registrationApp = function() {
         showSection('step-2');
     }
 
+    // select shipping options
     function step3() {
         toggleLoading( 'step-3', true );
         showSection('step-3');
@@ -94,6 +95,7 @@ var registrationApp = function() {
         });
     }
     
+    // cart / payment information
     function step4() {
         showSection("step-4");
         templates.renderCheckout( state.cart );
@@ -148,7 +150,8 @@ var registrationApp = function() {
                 meta: {
                     type: 'registration',
                     user_id: selected_user.user_id,
-                    registration_type: 'chayolei'
+                    registration_type: 'chayolei',
+                    paid: selected_user.registrationRates.chayolei,
                 }
             });
         } 
@@ -159,7 +162,8 @@ var registrationApp = function() {
                 meta: {
                     type: 'registration',
                     user_id: selected_user.user_id,
-                    registration_type: 'chidon'
+                    registration_type: 'chidon',
+                    paid: selected_user.registrationRates.chidon
                 }
             });
         }
@@ -201,25 +205,28 @@ var registrationApp = function() {
         return step4();
     }
 
-    function registerUsers( event ){
+    function registerUsersHandler( event ){
         event.preventDefault();
         var postData = {};
         // show loading
         $("#payment-button").html('<i class="fas fa-circle-notch fa-spin fa-2x"></i>');
-        postData.payments = formToJSON( event.target );
+        postData.payment = formToJSON( event.target );
         // sanitize input
-        postData.payments["cc-number"] = postData.payments["cc-number"].replace(/ /g, '');
-        postData.payments["cc-exp"] = postData.payments["cc-exp"].replace(/ /g, '');
-        postData.payments["x_card_code"] = postData.payments["x_card_code"].replace(/ /g, '');
+        postData.payment["cc-number"] = postData.payment["cc-number"].replace(/ /g, '');
+        postData.payment["cc-exp"] = postData.payment["cc-exp"].replace(/ /g, '');
+        postData.payment["x_card_code"] = postData.payment["x_card_code"].replace(/ /g, '');
         // validate form 
-        if ( postData.payments["cc-number"] ) {
+        if ( postData.payment["cc-number"] ) {
             event.target.checkValidity();
             $( event.target ).addClass('was-validated');
         }
-        postData.registrations = state.cart;
+        var cart_details = state.cart.map( function(item){ return item.meta } );
+        postData.registrations = cart_details.filter( function( item ) { return item.type == 'registration' } );
+        postData.shipping = cart_details.find( function( item ) { return item.type == 'shipping' } );
+        postData.shipping = postData.shipping || { shipping_charges: 0, shipping_type: 0 };
+
         registerUsers( postData ).then( function( response ){
-            console.log( state );
-            debugger;
+            $("#successModal").modal('show');
         })
     }
 
@@ -303,7 +310,7 @@ var registrationApp = function() {
 
     function registerUsers( postData ){
         return new Promise( function( resolve, reject ){
-            APIRequest( 'GET', api_url + '?action=registerUsers', postData, resolve);
+            APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve);
         });
     }
 
@@ -378,6 +385,7 @@ var templates = function(){
         },
         renderCheckout: function( cart ){
             var total = cart.reduce( function( total, item ) { return total + item.price }, 0 );
+            $("#charges").html('');
             // add each item
             cart.forEach( function( item ){
                 $("#charges").append( '<div class="row">' +

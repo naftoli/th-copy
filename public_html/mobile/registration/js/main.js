@@ -15,6 +15,7 @@ $.ajaxSetup({
 function showError( message ){
     $("#errorModal .modal-body").text( message );
     $("#errorModal").modal('show');
+    $("#payment-button").html('Pay And Register');
     return false;
 }
 
