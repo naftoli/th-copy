@@ -17,13 +17,18 @@ var registrationApp = function() {
         cart: [], // items that the user is paying for
         shipping_type: 1 // 1 or 2
     }
+    var registration_year = 5779;
     // navigation buttons
     $(".start-step-1").click( step1 );
     $(".start-step-2").click( step2 );
 
     // form handlers
     $("#step-2 form").submit( confirmUser );
-
+    $("#step-3 form").submit( confirmShipping );
+    $("#step-4 form").submit( registerUsers );
+    $("#step-4 #cc-number").keyup( validateCardInput );
+    image_upload( {}, onImageUploaded );
+    // run the first step
     step1();
 
     /*********************** CODE TO GUIDE USER THROUGH STEPS ***********************/
@@ -74,9 +79,39 @@ var registrationApp = function() {
     }
 
     function step3() {
-        
+        toggleLoading( 'step-3', true );
+        showSection('step-3');
+
+        state.shipping_type = 1;
+        getShipping(
+            state.selected_users.map( function( user ) { return user.school.school_id } )
+        ).then( function( response ){
+            if( !response ) return step4(); // skip straight to step 4
+            response.forEach( function( rate ) { 
+                $("#shipping-type-" + rate.type).text("$" + rate.rate) 
+            });
+            toggleLoading( 'step-3', false );
+        });
     }
     
+    function step4() {
+        showSection("step-4");
+        templates.renderCheckout( state.cart );
+
+        toggleLoading( 'payment', true );
+        getPaymentProfiles().then( function( payment_profiles ){
+            if ( !payment_profiles || payment_profiles.length === 0 ){
+                templates.toggleNewCard( true );
+                $("#card-on-file").hide();
+            } else {
+                templates.toggleNewCard( false );
+                $("#card-on-file").show();
+                templates.renderPaymentOptions( payment_profiles );
+            }
+            toggleLoading( 'payment', false );
+        })
+    }
+
     /*********************** FORM HANDLERS ***********************/
     function confirmUser( event ) {
         event.preventDefault();
@@ -96,21 +131,96 @@ var registrationApp = function() {
         if( user_changed ){
             updateUser( selected_user.user_id, postData );
         }
-        // TODO, detect and validate the charges accepted.
+        // Detect and validate the charges accepted.
+        selected_charges = {
+            chayolei: $('#chayolei-registration input')[0].checked,
+            chidon: $('#chidon-registration input')[0].checked
+        }
+        if ( selected_charges.chayolei === false && selected_charges.chidon === false ){
+            return showError(
+                'You must indicate your acceptance of at least one of the registration charges.'
+            );
+        } 
+        if ( selected_charges.chayolei ) {
+            state.cart.push({
+                description: 'Tzivos Hashem '+registration_year+' Registration for ' + selected_user.first,
+                price: selected_user.registrationRates.chayolei,
+                meta: {
+                    type: 'registration',
+                    user_id: selected_user.user_id,
+                    registration_type: 'chayolei'
+                }
+            });
+        } 
+        if ( selected_charges.chidon ) {
+            state.cart.push({
+                description: 'Chidon '+registration_year+' Registration and Book for ' + selected_user.first,
+                price: selected_user.registrationRates.chidon,
+                meta: {
+                    type: 'registration',
+                    user_id: selected_user.user_id,
+                    registration_type: 'chidon'
+                }
+            });
+        }
+        
         // validate that they have accepted to be used in media campaigns
         if ( $(event.target).find( "#media" )[0].checked ){
             $(event.target).find( "#media" )[0].checked = false;
         } else {
             return showError( "You must indicate your acceptance of participation in Tzivos Hashem Media." )
         }
+
         current_index += 1;
         if ( state.selected_users.length <= current_index ){
             step3();
         } else {
-            $("#current_index").val( current_index );
-            templates.showUser( state.selected_users[ current_index ] );
+            templates.showUser( state.selected_users[ current_index ], current_index );
         }
-        debugger;
+    }
+
+    function confirmShipping( event ){
+        event.preventDefault();
+
+        var selected_type = $("#shipping-type:checked").val();
+        $("#selected-shipping-type").val( selected_type );
+        state.shipping_type = selected_type;
+        
+        var shipping_charges = parseInt(
+            $("#shipping-type-"+selected_type).text().replace( /^\D+/g, '')
+        );
+        state.cart.push({
+            description: 'Prepaid Shipping',
+            price: shipping_charges,
+            meta: {
+                type: 'shipping',
+                shipping_type: selected_type,
+                shipping_charges: shipping_charges
+            }
+        });
+        return step4();
+    }
+
+    function registerUsers( event ){
+        event.preventDefault();
+        var postData = {};
+        // show loading
+        $("#payment-button").html('<i class="fas fa-circle-notch fa-spin fa-2x"></i>');
+        postData.payments = formToJSON( event.target );
+        // sanitize input
+        postData.payments["cc-number"] = postData.payments["cc-number"].replace(/ /g, '');
+        postData.payments["cc-exp"] = postData.payments["cc-exp"].replace(/ /g, '');
+        postData.payments["x_card_code"] = postData.payments["x_card_code"].replace(/ /g, '');
+        // validate form 
+        if ( postData.payments["cc-number"] ) {
+            event.target.checkValidity();
+            $( event.target ).addClass('was-validated');
+        }
+        postData.registrations = state.cart;
+        registerUsers( postData ).then( function( response ){
+            console.log( state );
+            debugger;
+        })
     }
 
     /*********************** HELPER FUNCTIONS ***********************/
@@ -128,6 +238,27 @@ var registrationApp = function() {
         } else {
             $( id + " .spinner").show();
             $( id + " .content").hide();
+        }
+    }
+    // Auto-detect credit card type
+    function validateCardInput( event ){
+        var cardInput = $("#cc-number");
+        cardInput.removeClass( "visa mastercard amex discover" );
+        $("#x_card_code").attr("placeholder", "XXX" );
+        // digits only
+        if ( !event.key.match(/[0-9]/) )
+            event.target.value = event.target.value.replace( /[^0-9 ]/g, '' );
+        // decect card type from: https://www.regular-expressions.info/creditcard.html
+        var cardNumber = event.target.value.replace(/\D/g, '');
+        if ( cardNumber.match( /^4[0-9]{12}(?:[0-9]{3})?$/g ) ) {
+            cardInput.addClass( "visa" );
+        } else if ( cardNumber.match( /^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$/g ) ) {
+            cardInput.addClass( "mastercard" );
+        } else if ( cardNumber.match( /^3[47][0-9]{13}$/g ) ) {
+            cardInput.addClass( "amex" );
+            $("#x_card_code").attr("placeholder", "XXXX" );
+        } else if ( cardNumber.match( /^6(?:011|5[0-9]{2})[0-9]{12}$/g ) ){
+            cardInput.addClass( "discover" );
         }
     }
 
@@ -155,6 +286,46 @@ var registrationApp = function() {
                 }
                 resolve( response );
             });
+        });
+    }
+
+    function getShipping( school_ids ){
+        return new Promise( function( resolve, reject ){
+            APIRequest( 'POST', api_url + '?action=getShipping', { school_ids: school_ids }, resolve);
+        });
+    }
+
+    function getPaymentProfiles(){
+        return new Promise( function( resolve, reject ){
+            APIRequest( 'GET', '/api/payments/profiles.php', {}, resolve);
+        });
+    }
+
+    function registerUsers( postData ){
+        return new Promise( function( resolve, reject ){
+            APIRequest( 'GET', api_url + '?action=registerUsers', postData, resolve);
+        });
+    }
+
+    /**
+     * onImageUploaded
+     * 
+     * callback for when image is uploaded to server.
+     * 
+     * updates the UI and form ( steps 1 and 2 ) and attempts to update the users profile picture
+     * 
+     * @param {object} data 
+     */
+    function onImageUploaded( data ){
+        var user_id = $( "#step-2 form #user_id" ).val();
+        
+        $("input#mobile_pic").val( data.filename );
+        $("img#user-img, #child-" + user_id + " img").attr( "src", data.location );
+        
+        $.post("api/users.php?user_id=" + user_id, { mobile_pic: data.filename }, function( response ){
+            if ( !response.success ){
+                showError( "Could not update Profile Picture. We will try again when pressing 'Confirm'.");
+            };
         });
     }
 }();
@@ -186,12 +357,77 @@ var templates = function(){
             $( '#step-2 form #gender[value=\'' + user.gender + '\']')[0].checked = true;
             $( '#step-2 form #school_name' ).val( user.school.school_name );
             $( '#step-2 form #class_name' ).val( user.platton.class_grade + ' ' + user.platton.class_sub );
-
+            // setup the index state
             $( '#step-2 form #current_index' ).val( index );
-            
+            // fill out the input feilds
             $( '#step-2 form #first' ).val( user.first );       $( '#step-2 form #last' ).val( user.last );
             $( '#step-2 form #first_he' ).val( user.first_he ); $( '#step-2 form #last_he' ).val( user.last_he );
-            $( '#step-2 form #lang_id' ).val( user.lang_id );   $( '#step-2 form #dob' ).val( user.dob.split("T")[0] );
+            $( '#step-2 form #lang_id' ).val( user.lang_id );   $( '#step-2 form #dob' ).val( user.dob );
+            // setup the payment options - chayolei
+            templates.toggleRates( user, 'chayolei' );
+            templates.toggleRates( user, 'chidon' );
+        },
+        toggleRates: function( user, rateType ){
+            $( '#step-2 form #' + rateType + '-registration input' )[0].checked = false;
+            if( user.registrationStatus[ rateType ] === false ){
+                $( '#step-2 form #' + rateType + '-registration' ).show(); 
+                $( '#step-2 form #' + rateType + '-cost' ).text( user.registrationRates[ rateType ] );
+            } else {
+                $( '#step-2 form #' + rateType + '-registration').hide();
+            }
+        },
+        renderCheckout: function( cart ){
+            var total = cart.reduce( function( total, item ) { return total + item.price }, 0 );
+            // add each item
+            cart.forEach( function( item ){
+                $("#charges").append( '<div class="row">' +
+                    '<div class="col-10">' + item.description + '</div>' +
+                    '<div class="col-2 reg_cost">$' + item.price + '</div>'
+                + "</div>" );
+            });
+            // add the total row
+            $("#charges").append( '<div class="row total-row">' +
+                '<div class="col-9 col-md-10"><strong>Total Balance:</strong></div>' +
+                '<div class="col-3 col-md-2 reg_cost">$' + total + '</div>'
+            + "</div>" );
+            $("#total").val( total );
+        },
+        toggleNewCard: function( required ){
+            if ( required ) $("#new-card").show();
+            else $("#new-card").hide();
+
+            $.each( $("#new-card input"), function( index, input ){
+                input.required = required;
+            });
+        },
+        renderPaymentOptions: function( payment_profiles ){
+            var html = '';
+            payment_profiles.forEach( function( payment, index ){
+                var cc = payment.payment.creditCard;
+                html += 
+                '<div class="payment-option cc-number identified ' + cc.cardType.toLowerCase() + '">' +
+                    '<label class="radio-label">' +
+                        '<input type="radio" id="payment_profile" name="payment_profile" value="' + 
+                            payment.customerPaymentProfileId + '"' + 
+                            ( index === 0 ? "checked" : "" ) + '/>' +
+                        '<span class="radio"></span>' +
+                    '</label>&nbsp;' +
+                    '<span>' + cc.cardType + ' ending in ' + cc.cardNumber.slice( 4 ) + '</span>' +
+                '</div>';
+            });
+            html +=
+            '<div class="payment-option">' + 
+                '<label class="radio-label">' + 
+                    '<input type="radio" id="payment_profile" name="payment_profile" value=""/>' +
+                    '<span class="radio"></span>' + 
+                '</label>&nbsp;' + 
+                '<span>New Card</span>' +
+            '</div>';
+
+            $("#card-on-file").html( html );
+            $("input#payment_profile").change( function( event ){
+                templates.toggleNewCard( !event.target.value );
+            });
         }
     }
 }();
