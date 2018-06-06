@@ -96,12 +96,35 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     }
 
     //********************************** PAYMENTS **********************************/
-    public function customerProfile(){
-        if ( $this->customer_profile instanceof CustomerProfile )
+    /**
+     * customerProfile
+     * 
+     * Attmpts to return customer profile from API, if not found returns false
+     * If optional $payment_profile array provided it will attempt to create a payment profile and return it.
+     *  If it encounters an error while preforming creation it will return the array from the API
+     *
+     * @param array $payment_profile
+     * @return CustomerProfile/boolean/array
+     */
+    public function customerProfile( $payment_profile = false ){
+        // if it is in the cache, return it
+        if ( $this->customer_profile instanceof classes\authorize\CustomerProfile )
             return $this->customer_profile;
-        if( !$this->authorize_customer_profile_id )
+        // if we do not have one and have not been given a payment profile - return false
+        if( !$this->authorize_customer_profile_id && !$payment_profile ) {
             return false;
-        // load the required classes
+        // if we do not have one and have been given a payment profile - create one
+        } else if ( !$this->authorize_customer_profile_id && $payment_profile ) {
+            $this->customer_profile = classes\authorize\CustomerProfile::create(
+                "cth_admin_".$this->admin_id, $this->admin_email, false, $payment_profile
+            );
+            if ( !$this->customer_profile instanceof classes\authorize\CustomerProfile )
+                return $this->customer_profile; // return the bad array
+            $this->authorize_customer_profile_id = $this->customer_profile->customerProfileId;
+            $this->save();
+            return $this->customer_profile;
+        }
+        // if we have one just return it
         return $this->customer_profile = new classes\authorize\CustomerProfile(
             $this->authorize_customer_profile_id
         );
