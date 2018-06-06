@@ -31,7 +31,7 @@ function rest_router( $router ){
 
     } 
     
-    if ( $_GET['action'] && method_exists( $router, $_GET['action']) ) {
+    if ( isset( $_GET['action'] ) && $_GET['action'] && method_exists( $router, $_GET['action']) ) {
         return $router->{ $_GET['action'] }( $id );
     }
     http_response_code( 404 );
