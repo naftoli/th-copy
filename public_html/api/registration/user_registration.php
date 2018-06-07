@@ -28,9 +28,13 @@ class UserRegistrationRouter {
             "users" => $this->serializeUsers( $available_users )
         ]);
     }
-
+    // return shipping price for users submitted
     public function getShipping(){
         global $current_user; global $pdo;
+
+        if( !isset( $_POST[ 'school_ids' ] ) ){
+            json_response( false );
+        }
 
         $school_ids = $_POST[ 'school_ids' ];
         $schools_with_shipping = [
@@ -76,7 +80,7 @@ class UserRegistrationRouter {
             json_response( $query->fetchAll() );
         } 
     }
-
+    // charge the card and register the users
     public function registerUsers(){
         global $current_user; global $pdo;
 
@@ -112,7 +116,7 @@ class UserRegistrationRouter {
                 $current_user->authorize_customer_profile_id
             );
             if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
-                render_json_error( $payment_profile['messages']['message'][0]['text'] );
+                json_error( $payment_profile['messages']['message'][0]['text'] );
             $payment_profile_id = $payment_profile->customerPaymentProfileId;
 
         // if we do not have a customer profile, but do have a CC to create one...
@@ -123,9 +127,9 @@ class UserRegistrationRouter {
             $customer_profile = $current_user->customerProfile( $payment_profile );
             // if we fail to create the customer profile, then return the error
             if ( !($customer_profile instanceof classes\authorize\CustomerProfile) )
-                render_json_error( $customer_profile["message"] );
+                json_error( $customer_profile["message"] );
             if ( count( $customer_profile->paymentProfiles ) == 0 )
-                render_json_error( "Invalid Payment Method" );
+                json_error( "Invalid Payment Method" );
             $payment_profile_id = $customer_profile->paymentProfiles[0]['customerPaymentProfileId'];
         } else {
             json_error( "Payment Error" );
@@ -135,7 +139,7 @@ class UserRegistrationRouter {
         $payment_response = $customer_profile->chargeCard(
             intval($payment_info['total']), $payment_profile_id, null, null, $description
         );
-        if ( !is_array( $payment_response ) ) render_json_error( $payment_response );
+        if ( !is_array( $payment_response ) ) json_error( $payment_response );
         $transaction_query = $pdo->prepare(
             "INSERT INTO transactions (trans_date, admin_id, description, amount, reg_amount, ship_amount, zip, users_registered, response) "
             ."VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -152,7 +156,7 @@ class UserRegistrationRouter {
         foreach ( $users as $user ) {
             $user_errors = [];
             foreach( $registrations as $registration ){
-                if ( !$user->user_id == $registration['user_id'] ) continue;
+                if ( !($user->user_id == $registration['user_id']) ) continue;
                 // Chayolei Registration
                 if ( $registration['registration_type'] == 'chayolei' ) {
                     array_merge( $user_errors, $user->registerChayolei(
@@ -162,7 +166,7 @@ class UserRegistrationRouter {
                         $registration_table_users[ $user->school_id ][] = $user->user_id;
                 // Chidon Registration
                 } else if ( $registration['registration_type'] == 'chidon' ) {
-                    if ( !$user->registerChidon( $year, $current_user->admin_id ) )
+                    if ( !$user->registerChidon( $year, $registration['size'], $current_user->admin_id ) )
                         $user_errors[] = "Could not register ".$user->user_id." for chidon";
                 }
             }
@@ -186,11 +190,12 @@ class UserRegistrationRouter {
         }
 
         if ( count( $errors ) > 0 )
-            mail( "bugs@tzivoshashem.org", "Mobile Registration Error(s)", print_r( $errors ) );
+            mail( "bugs@tzivoshashem.org", "Mobile Registration Error(s)", json_encode( $errors ) );
         
         json_response( false );
     }
 
+    // serializer for getUsers()
     private function serializeUsers( $users ) {
         return array_map( function( $user ) {
             return $user->to_array([
