@@ -5,7 +5,7 @@ var registration_info = function(){
 
     var state = { schools: [] };
 
-    $.get( '/api/registration/school_registration.php', function( response ){
+    $.get( '/api/registration/school_configuration.php', function( response ){
         state.schools = response.data;
         renderTable()
     });
@@ -92,7 +92,7 @@ var registration_info = function(){
             early_bird:   row.find( 'input[name="early_bird"]' ).val(),
         }
 
-        var url = "/api/registration/school_registration.php";
+        var url = "/api/registration/school_configuration.php";
         url = id == '0' ? url : url + '?id=' + id;
 
         function handleResponse( response ){
