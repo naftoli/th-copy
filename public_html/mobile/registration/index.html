@@ -129,13 +129,13 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <label for="first_he">Hebrew Name ( optional )</label>
+                            <label for="first_he">Hebrew Name</label>
                         </div>
                         <div class="col-6">
-                            <input type="text" class="form-control" placeholder="שם פרטי" id="first_he" name="first_he" dir="rtl" />
+                            <input type="text" class="form-control" placeholder="שם פרטי" id="first_he" name="first_he" dir="rtl" required/>
                         </div>
                         <div class="col-6">
-                            <input type="text" class="form-control" placeholder="שם משפחה"  id="last_he"  name="last_he" dir="rtl" />
+                            <input type="text" class="form-control" placeholder="שם משפחה"  id="last_he"  name="last_he" dir="rtl" required/>
                         </div>
                     </div>
                     <div class="row">
@@ -465,10 +465,12 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body centered">
-                    <svg id="circle-compleate" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
-                        <circle class="path circle" fill="none" stroke="#2c539e" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
-                        <polyline class="path check" fill="none" stroke="#2c539e" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
-                    </svg>
+                    <div id="circle-compleate-container">
+                        <svg id="circle-compleate" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                            <circle class="path circle" fill="none" stroke="#2c539e" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
+                            <polyline class="path check" fill="none" stroke="#2c539e" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+                        </svg>
+                    </div>
                     <p id="success" class="primary">Your child has been registered!</p>
                     <div class="alert alert-danger" id="error-message"></div>
                 </div>
@@ -498,6 +500,7 @@
         <script src="js/image-upload.js"></script>
         <!-- Polyfill's -->
         <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
+        <script src="lib/polyfills.js"></script>
         <!-- scripts for each page -->
         <!-- <script src="js/index/page1.js"></script>
         <script src="js/index/page4.js"></script> -->

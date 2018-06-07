@@ -1,12 +1,13 @@
 /* utilities */
 img { max-width: 100%; }
+#step-2 label{ width: 100%; }
 /* navigation */
 .row.spaced { margin-bottom: 5%; }
 .row.spaced .left { text-align: left; }
 .row.spaced .right { text-align: right; }
 .row.spaced .btn { width: 100%; }
 /* hide the steps by default */
-#welcome-message, #step-2, #step-3, #step-4 {
+#no-children, #welcome-message, #step-2, #step-3, #step-4 {
     display: none;
 }
 /* add some space to the top of the page */
