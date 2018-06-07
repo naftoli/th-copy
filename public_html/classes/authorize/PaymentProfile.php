@@ -158,7 +158,7 @@ class PaymentProfile {
             $cc = $api_data['paymentProfile']['payment']['creditCard'];
             $this->cardNumber = $cc['cardNumber'];
             $this->expirationDate = $cc["expirationDate"];
-            $this->cardType = $cc['cardType'];
+            $this->cardType = isset( $cc['cardType'] ) ? $cc['cardType'] : 'N/A';
             if(array_key_exists('billTo', $api_data['paymentProfile'])){
                 $this->billTo = $api_data['paymentProfile']['billTo'];
             }
