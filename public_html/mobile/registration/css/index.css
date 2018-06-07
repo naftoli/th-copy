@@ -1,6 +1,6 @@
 /* utilities */
 img { max-width: 100%; }
-#step-2 label{ width: 100%; }
+#step-2 form > label { width: 100%; }
 /* navigation */
 .row.spaced { margin-bottom: 5%; }
 .row.spaced .left { text-align: left; }

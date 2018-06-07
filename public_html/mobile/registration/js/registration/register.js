@@ -19,6 +19,7 @@ var registrationApp = function() {
     // navigation buttons
     $(".start-step-1").click( step1 );
     $(".start-step-2").click( step2 );
+    $(".start-step-3").click( step3 );
 
     // form handlers
     $("#step-2 form").submit( confirmUser );
@@ -38,7 +39,7 @@ var registrationApp = function() {
     function step1() {
         showSection( "step-1" );
         toggleLoading( "step-1", true );
-        state.users = [];   state.cart = [];
+        state.users = [];
 
         getUsers().then( function( users ){ 
             if( users.length === 0 ) return noChildren();
@@ -56,7 +57,7 @@ var registrationApp = function() {
 
     // confirm users
     function step2() {
-        state.selected_users = [];
+        state.selected_users = [];  state.cart = [];
         // make sure that we have at least one user
         if ( state.users.length > 1 && $('#step-1 #children input:checked').length === 0 ) {
             return showError( 'Please select at least one child' );
@@ -85,6 +86,8 @@ var registrationApp = function() {
     function step3() {
         toggleLoading( 'step-3', true );
         showSection('step-3');
+        // remove any shipping items from the cart
+        state.cart = state.cart.filter( function(item) { return item.meta.type != 'shipping' } );
 
         state.shipping_type = 1;
         chayolei_user_ids = state.cart.map( function( item ){ 
@@ -248,9 +251,18 @@ var registrationApp = function() {
     /*********************** HELPER FUNCTIONS ***********************/
     // navigate to a specific section
     function showSection( id ){
+        window.location.hash = "#" + id;
         $( "#pages section" ).hide();
         $( "#pages section#" + id ).show();
     }
+    $(window).bind('hashchange', function() {
+        if( $("section" + window.location.hash ).css('display') == 'none' ){
+            if ( window.location.hash == '#step-1' ) return step1();
+            if ( window.location.hash == '#step-2' ) return step2();
+            if ( window.location.hash == '#step-3' ) return step3();
+            if ( window.location.hash == '#step-4' ) return step4();
+        }
+    });
     // toggle the loading dot
     function toggleLoading( id, loading ){
         id = "#" + id;
