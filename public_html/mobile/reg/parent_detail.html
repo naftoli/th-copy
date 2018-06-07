@@ -10,56 +10,57 @@
         <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
 		<script src="js/all.js" defer></script>
 		<style>
-		#logOff img, #settings img, #addChild img{height: 30px; width: 30px;}
-		#logOff div {float: left;}
-		#settings div {float: right;}
-		.row.parent_names{margin:5px 0px;}
-		.row.add_child{margin:10px;}
-		
-		.button-spacing { margin-top: 8px; }
-		.btn-info {background-color: #5bc0de !important;border-color: #46b8da !important;}
-		
-		.chidonRegInfo {font-size: 18px;color: red;font-style: italic}
-		
-		#bh{
-			text-align: center;font-size: 1.5em;position: absolute;top: 5px;
-			width: 100%;color: #fff;font-family:font1;
-			display: inline-block; text-align: center;
-		}
-		.page5 .chilrens{margin-bottom: 10px;}
-		.page5 .chilrens .row{
-			margin-bottom: 10px;
-		}
-		.img-img, .img-people{
-			border-color: #fff;
-		}
-/*		Remove this to make it take up the whole page*/
-        .page5 > .span12.body {max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 0px}
-        /* New shamai changes, 4/8/2018 */
-        .page5 .header {
-            background-image: url("/mobile/img_new/star-background-color-green-svg.svg");
-            background-size: cover;
-        }
-        .page5 .lb-ico { color: #fff }
-		
-		@media screen and (min-width: 600px) {.bottomSpace {height: 125px;}}
-		
-		@media screen and (max-width: 639px) {
-			.chidonRegInfo {font-size: 15px;}
-		}
-		@media screen and (max-width: 600px) {
-			#logOff img, #settings img, #addChild img{height: 20px; width: 20px;}
-			.bottomSpace {height: 75px;}
-		}
-		@media screen and (max-width: 479px) {
-			.chidonRegInfo {font-size: 12px;}
-		}
-	</style>
+            span.red { color: red; }
+            #logOff img, #settings img, #addChild img{height: 30px; width: 30px;}
+            #logOff div {float: left;}
+            #settings div {float: right;}
+            .row.parent_names{margin:5px 0px;}
+            .row.add_child{margin:10px;}
+            
+            .button-spacing { margin-top: 8px; }
+            .btn-info {background-color: #5bc0de !important;border-color: #46b8da !important;}
+            
+            .chidonRegInfo {font-size: 18px;color: red;font-style: italic}
+            
+            #bh{
+                text-align: center;font-size: 1.5em;position: absolute;top: 5px;
+                width: 100%;color: #fff;font-family:font1;
+                display: inline-block; text-align: center;
+            }
+            .page5 .chilrens{margin-bottom: 10px;}
+            .page5 .chilrens .row{
+                margin-bottom: 10px;
+            }
+            .img-img, .img-people{
+                border-color: #fff;
+            }
+    /*		Remove this to make it take up the whole page*/
+            .page5 > .span12.body {max-width:1024px;width:100%;margin:0 auto;float:none;margin-bottom: 0px}
+            /* New shamai changes, 4/8/2018 */
+            .page5 .header {
+                background-image: url("/mobile/img_new/star-background-color-green-svg.svg");
+                background-size: cover;
+            }
+            .page5 .lb-ico { color: #fff }
+            
+            @media screen and (min-width: 600px) {.bottomSpace {height: 125px;}}
+            
+            @media screen and (max-width: 639px) {
+                .chidonRegInfo {font-size: 15px;}
+            }
+            @media screen and (max-width: 600px) {
+                #logOff img, #settings img, #addChild img{height: 20px; width: 20px;}
+                .bottomSpace {height: 75px;}
+            }
+            @media screen and (max-width: 479px) {
+                .chidonRegInfo {font-size: 12px;}
+            }
+        </style>
 	</head>
 	<body>
 		<div class="container page5">
 			<div id="bh">ב"ה</div>
-			<div class="span12 body" style="">
+			<div class="span12 body">
 				<div class="header">
 					<div class="row">
 						<div class="col-xs-6">
@@ -97,10 +98,14 @@
 				<div class="row add_child">
 					<div class="col-xs-6">
                         <a href="/mobile/registration/child.html" id="addChild">
-						    <div style="float:left"><div class="ico-wrapper">
-					          <img src="/mobile/img_new/circle-+-color-blue-svg.svg" alt="" class="ico-add-child">
-						    </div></div>
-						    <div style="float:left"><span class="lb-add-child">&nbsp;add child</span></div>
+						    <div style="float:left">
+                                <div class="ico-wrapper">
+					                <img src="/mobile/img_new/circle-+-color-blue-svg.svg" alt="" class="ico-add-child">
+                                </div>
+                            </div>
+						    <div style="float:left">
+                                <span class="lb-add-child">&nbsp;add child</span>
+                            </div>
                         </a>
 					</div>
 				</div>
@@ -182,7 +187,18 @@
 																<div class="button-spacing">
 																	{{#if this.schoolRegistered}}
 																		{{#if this.schoolTypeRegistered}}
-																			<button class="btn btn-primary re_register">Register Tzivos Hashem <span class="year"></span></button>
+																			<button class="btn btn-primary re_register">Pre-Register
+                                                                                {{#if this.reg_types.chayolei }}
+                                                                                    Tzivos Hashem 
+                                                                                {{else}}
+                                                                                    {{#if this.reg_types.chidon }}
+                                                                                        Chidon
+                                                                                    {{/if}}
+                                                                                {{/if}}
+                                                                                5779
+                                                                            </button>
+                                                                        {{else}}
+                                                                            <span class="red">Sorry, this child's school is not setup for 5779 registration yet.</span>
 																		{{/if}}
 																	{{/if}}
 																</div>
@@ -332,7 +348,8 @@
 		</div>
 		<script>
             document.addEventListener("DOMContentLoaded", function() {
-				function setSwiper() {
+				// allow parents to swipe to open a child's account.
+                function setSwiper() {
 					$("#children .row").each( function() {
 						var h = new Hammer( this );
 						var id = $(this).find("table td:last-child").attr('id');
@@ -341,250 +358,245 @@
 						});
 					});
 				}
-				$( function() {
-					var admin = Cookies.get('admin');
-					if (!admin) {
-						window.location = "index.html";
-					}
 
-					// remove any shipping cookies
-					Cookies.remove('shipping');
-					Cookies.remove('shipOpt');
-					Cookies.remove('destination');
-					
-					var year;
-					$.ajax({
-						type : "POST",
-						url : "/mobile/chidon/ajax/getYear.php",
-						async : false, 
-						success : function( info ) {
-							year = info;
-						}
-					});
-					
-					var childrenToRegister = [];
-					$.post('ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
-						if ( success == -1 ) {
-							window.location = "index.html";
-						} else {
-							var data = $.parseJSON( success );
-							var parent = data.parent;
-							var children = data.children;
-							
-							var father = parent.father;
-							var mother = parent.mother;
-							
-							if (father)
-								$(".father").text(father.toUpperCase());
-							if (mother)
-								$(".mother").text(mother.toUpperCase());
-							
-							var fatherPic = parent.fatherPic;
-							var motherPic = parent.motherPic;
-							
-							if (fatherPic != '' && fatherPic != null) {
-								$("#father").attr('src', fatherPic);
-							}
-							var w = $("#father").width();
-							//var newW = w * 1.1;
-							//$("#father").width( newW );
-							//$("#father").height( newW );
-							
-							if (motherPic != '' && motherPic != null) {
-								$("#mother").attr('src', motherPic);
-							}
-							//$("#mother").width( newW );
-							//$("#mother").height( newW );
-							
-							//set auction button link
-							//for (var c in children) {
-							//	$("#auction").attr('href', '/mobile/auction/category2.html?id=' + c);
-							//	break;
-							//}
-							
-							// sepearate registered and un-registered
-							var registred_children = {};
-							var unregistered_children = {};
-							
-							for (var c in children) {
-								var child = children[c];
-								if (child.schoolRegistered && child.schoolTypeRegistered && !child.user_registered) {
-									unregistered_children[c] = child;
-									childrenToRegister.push({
-										id : c,
-										reg : 0,
-										reviewed : 0,
-										anash : child.anashkinder,
-										shliach : child.myshliach
-									});
-								} else {
-									registred_children[c] = child;
-								}
-							}
-							
-							Cookies.set('toRegister', childrenToRegister);
-							
-							// Grab the template script
-							var tplScript = $("#childrenTpl").html();
-						
-							// Compile the template
-							var tpl = Handlebars.compile( tplScript );
-	
-							// Pass our data to the template
-							var registered_html = tpl( { children : registred_children } );
-							var unregistered_html = tpl({ children: unregistered_children });
-							// put the registered kids first
-							var html = registered_html + unregistered_html;
-							
-							// Add the compiled html to the page
-							$(".chilrens").append( html );
-							
-							setSwiper();
-							
-							$(".year").text(year);
-						}
-					});
-					
-					$.post('ajax/checkAdminInfo.php', { admin : admin, onlyEmail: true }, function( result ) {
-						result = JSON.parse(result);
-						if (!result.success && !localStorage.getItem('email_notified')) {
-							localStorage.setItem('email_notified', true);
-							location.href = "edit_profile.html";
-						}
-					});
-					
-			    	$(document).on('click', ".re_register", function() {
-						//var info = $(this).attr('class');
-						//if (info.indexOf('schoolNotRegistered') != -1) {
-						//	alert("The school for this child has not yet registered. You will only be able to register once the school registers.");
-						//	return false;
-						//}
-				    	var id = $(this).parent().parent().parent().attr('id');
-				        location.href = "/mobile/registration/?user_id=" + id;
-				    });
-				    
-				    $(document).on('click', '.del', function() {
-				    	var del = confirm('Are you sure you want to delete this child from your profile?');
-				    	//alert( del );
-				    	if ( del ) {
-				    		var id = $(this).parent().parent().attr('id');
-				    		$.post('ajax/delChild.php', { child : id, parent : admin }, function( success ) {
-				    			if ( success ) {
-				    				alert('This child has been removed from your profile.');
-				    				location.href = "parent_detail.html";
-				    			} else {
-				    				alert('There was an error deleting your child from your profile.');
-				    			}
-				    		});
-				    	}
-				    });
+                // make sure we have a cookie
+                var admin = Cookies.get('admin');
+                if (!admin) { window.location = "index.html"; }
 
-					$(document).on('click', '.shabbaton', function() {
-						var id = $(this).parent().parent().parent().attr('id');
-						location.href = "/mobile/chidon/index2.html?id=" + id;
-					});
-					
-					//$(document).on('click', '.shabbatonEdit', function() {
-					//	var id = $(this).parent().parent().parent().attr('id');
-					//	location.href = "/mobile/chidon/edit.html?id=" + id;
-					//});
-					
-					$(document).on('click', '.noSchoolShabbaton', function() {
-						alert('Your base has not yet opened registration. Please be in touch with your school for more info.');
-					});
-					
-					$(document).on('click', '.story', function() {
-						location.href = "https://docs.google.com/a/tzivoshashem.org/forms/d/1fhls5odH69pWlzpp3RGtSfVCg_G9heh0VjOqHl44Mug/edit";
-					});
-					
-					$(document).on('click', '.editChidon', function() {
-						var id = $(this).parent().parent().parent().parent().attr('id');
-						location.href = "/mobile/chidon/edit.html?id=" + id;
-					});
-					
-					$(document).on('click', '.enroll', function() {
-						var id = $(this).parent().parent().parent().parent().attr('id');
-						location.href = "/mobile/chidon/shabbaton.html?id=" + id;
-					});
-					
-					$(document).on('click', '.editEnrollment', function() {
-						var id = $(this).parent().parent().parent().parent().attr('id');
-						location.href = "/mobile/chidon/edit.html?id=" + id;
-					});
-					
-					$(document).on('click', '.chidon', function() {
-						var id = $(this).parent().parent().parent().attr('id');
-						var shliach = false;
-						// if it's a myshliach child then we need to send them elsewhere
-						var list = Cookies.getJSON('toRegister');
-						for (var l in list) {
-							if (l.id == id) {
-								if (l.shliach == 1) {
-									shliach = true;
-									alert("To register for the chidon please visit myshliach.com/chidon");
-									break;
-								}
-							}
-						}
-						if (!shliach) location.href = "/mobile/chidon/index.html?id=" + id;
-					});
-					
-					/*
-					$(document).on('click', '.chidonEdit', function() {
-						var id = $(this).parent().parent().parent().attr('id');
-						location.href = "/mobile/chidon/index.html?id=" + id + "&edit=1";
-					});
-				    */
-				    $("#logOff").click( function() {
-				    	//Cookies.set('isconnected', 'false', { expires : -1 });
-						//Cookies.remove('isconnected');
-						//Cookies.set('admin', '0', { expires: -1 });
-						//Cookies.remove('admin', { path: '/mobile/reg' });
-						//Cookies.set('admin', '0', { expires: -1 });
-						//Cookies.set('admin_id', '0', { expires: -1 });
-						Cookies.remove('admin', { path: '/' });
-						Cookies.remove('admin_id', { path: '/' });
-						var allCookies = Cookies.getJSON();
-						for (var c in allCookies) {
-							Cookies.remove(c, { path: '/' });
-						}
-						window.location = "/mobile/reg/";
-					});
-					
-					$("#addChild").click( function() {
-						//$("#popModal").modal();
-					});
-					
-					$("#popup").submit( function() {
-						var answer = $(".thAdded");
-						var submit = false;
-						$(answer).each( function() {
-							if ($(this).is(":checked")) {
-								submit = true;
-								return;
-							}
-						});
-						if (submit) {
-							return true;
-						} else {
-							alert('You must choose "Yes" or "No"');
-							return false;
-						}
-					});
-					
-					/*
-					$(".btn.submit").click( function() {
-						var answer = ($(this).text());
-						$("#popModal").modal('hide');
-						if (answer == 'Yes') {
-							document.location.href = 'https://mashpia.com/mobile/reg/addchild.html';
-						} else if (answer == 'No') {
-							//location.href = ;
-						}
-					});
-					*/
-			    });
-			});
+                // remove any shipping cookies
+                Cookies.remove('shipping');
+                Cookies.remove('shipOpt');
+                Cookies.remove('destination');
+                
+                // get the current year
+                var year;
+                $.ajax({ type: "POST", url: "/mobile/chidon/ajax/getYear.php", async: false, 
+                    success: function( info ) { year = info; }
+                });
+                
+                // load children
+                var childrenToRegister = [];
+                $.post('ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
+                    if ( success == -1 ) {
+                        window.location = "index.html";
+                    } else {
+                        var data = $.parseJSON( success );
+                        var parent = data.parent;
+                        var children = data.children;
+                        
+                        var father = parent.father;
+                        var mother = parent.mother;
+                        
+                        if (father)
+                            $(".father").text(father.toUpperCase());
+                        if (mother)
+                            $(".mother").text(mother.toUpperCase());
+                        
+                        var fatherPic = parent.fatherPic;
+                        var motherPic = parent.motherPic;
+                        
+                        if (fatherPic != '' && fatherPic != null) {
+                            $("#father").attr('src', fatherPic);
+                        }
+                        var w = $("#father").width();
+                        //var newW = w * 1.1;
+                        //$("#father").width( newW );
+                        //$("#father").height( newW );
+                        
+                        if (motherPic != '' && motherPic != null) {
+                            $("#mother").attr('src', motherPic);
+                        }
+                        //$("#mother").width( newW );
+                        //$("#mother").height( newW );
+                        
+                        //set auction button link
+                        //for (var c in children) {
+                        //	$("#auction").attr('href', '/mobile/auction/category2.html?id=' + c);
+                        //	break;
+                        //}
+                        
+                        // sepearate registered and un-registered
+                        var registred_children = {};
+                        var unregistered_children = {};
+                        
+                        for (var c in children) {
+                            var child = children[c];
+                            if (child.schoolRegistered && child.schoolTypeRegistered && !child.user_registered) {
+                                unregistered_children[c] = child;
+                                childrenToRegister.push({
+                                    id : c,
+                                    reg : 0,
+                                    reviewed : 0,
+                                    anash : child.anashkinder,
+                                    shliach : child.myshliach
+                                });
+                            } else {
+                                registred_children[c] = child;
+                            }
+                        }
+                        
+                        Cookies.set('toRegister', childrenToRegister);
+                        
+                        // Grab the template script
+                        var tplScript = $("#childrenTpl").html();
+                    
+                        // Compile the template
+                        var tpl = Handlebars.compile( tplScript );
+
+                        // Pass our data to the template
+                        var registered_html = tpl( { children : registred_children } );
+                        var unregistered_html = tpl({ children: unregistered_children });
+                        // put the registered kids first
+                        var html = registered_html + unregistered_html;
+                        
+                        // Add the compiled html to the page
+                        $(".chilrens").append( html );
+                        
+                        setSwiper();
+                        
+                        $(".year").text(year);
+                    }
+                });
+                
+                $.post('ajax/checkAdminInfo.php', { admin : admin, onlyEmail: true }, function( result ) {
+                    result = JSON.parse(result);
+                    if (!result.success && !localStorage.getItem('email_notified')) {
+                        localStorage.setItem('email_notified', true);
+                        location.href = "edit_profile.html";
+                    }
+                });
+                
+                $(document).on('click', ".re_register", function() {
+                    //var info = $(this).attr('class');
+                    //if (info.indexOf('schoolNotRegistered') != -1) {
+                    //	alert("The school for this child has not yet registered. You will only be able to register once the school registers.");
+                    //	return false;
+                    //}
+                    var id = $(this).parent().parent().parent().attr('id');
+                    location.href = "/mobile/registration/?user_id=" + id;
+                });
+                
+                $(document).on('click', '.del', function() {
+                    var del = confirm('Are you sure you want to delete this child from your profile?');
+                    //alert( del );
+                    if ( del ) {
+                        var id = $(this).parent().parent().attr('id');
+                        $.post('ajax/delChild.php', { child : id, parent : admin }, function( success ) {
+                            if ( success ) {
+                                alert('This child has been removed from your profile.');
+                                location.href = "parent_detail.html";
+                            } else {
+                                alert('There was an error deleting your child from your profile.');
+                            }
+                        });
+                    }
+                });
+
+                $(document).on('click', '.shabbaton', function() {
+                    var id = $(this).parent().parent().parent().attr('id');
+                    location.href = "/mobile/chidon/index2.html?id=" + id;
+                });
+                
+                //$(document).on('click', '.shabbatonEdit', function() {
+                //	var id = $(this).parent().parent().parent().attr('id');
+                //	location.href = "/mobile/chidon/edit.html?id=" + id;
+                //});
+                
+                $(document).on('click', '.noSchoolShabbaton', function() {
+                    alert('Your base has not yet opened registration. Please be in touch with your school for more info.');
+                });
+                
+                $(document).on('click', '.story', function() {
+                    location.href = "https://docs.google.com/a/tzivoshashem.org/forms/d/1fhls5odH69pWlzpp3RGtSfVCg_G9heh0VjOqHl44Mug/edit";
+                });
+                
+                $(document).on('click', '.editChidon', function() {
+                    var id = $(this).parent().parent().parent().parent().attr('id');
+                    location.href = "/mobile/chidon/edit.html?id=" + id;
+                });
+                
+                $(document).on('click', '.enroll', function() {
+                    var id = $(this).parent().parent().parent().parent().attr('id');
+                    location.href = "/mobile/chidon/shabbaton.html?id=" + id;
+                });
+                
+                $(document).on('click', '.editEnrollment', function() {
+                    var id = $(this).parent().parent().parent().parent().attr('id');
+                    location.href = "/mobile/chidon/edit.html?id=" + id;
+                });
+                
+                $(document).on('click', '.chidon', function() {
+                    var id = $(this).parent().parent().parent().attr('id');
+                    var shliach = false;
+                    // if it's a myshliach child then we need to send them elsewhere
+                    var list = Cookies.getJSON('toRegister');
+                    for (var l in list) {
+                        if (l.id == id) {
+                            if (l.shliach == 1) {
+                                shliach = true;
+                                alert("To register for the chidon please visit myshliach.com/chidon");
+                                break;
+                            }
+                        }
+                    }
+                    if (!shliach) location.href = "/mobile/chidon/index.html?id=" + id;
+                });
+                
+                /*
+                $(document).on('click', '.chidonEdit', function() {
+                    var id = $(this).parent().parent().parent().attr('id');
+                    location.href = "/mobile/chidon/index.html?id=" + id + "&edit=1";
+                });
+                */
+                $("#logOff").click( function() {
+                    //Cookies.set('isconnected', 'false', { expires : -1 });
+                    //Cookies.remove('isconnected');
+                    //Cookies.set('admin', '0', { expires: -1 });
+                    //Cookies.remove('admin', { path: '/mobile/reg' });
+                    //Cookies.set('admin', '0', { expires: -1 });
+                    //Cookies.set('admin_id', '0', { expires: -1 });
+                    Cookies.remove('admin', { path: '/' });
+                    Cookies.remove('admin_id', { path: '/' });
+                    var allCookies = Cookies.getJSON();
+                    for (var c in allCookies) {
+                        Cookies.remove(c, { path: '/' });
+                    }
+                    window.location = "/mobile/reg/";
+                });
+                
+                $("#addChild").click( function() {
+                    //$("#popModal").modal();
+                });
+                
+                $("#popup").submit( function() {
+                    var answer = $(".thAdded");
+                    var submit = false;
+                    $(answer).each( function() {
+                        if ($(this).is(":checked")) {
+                            submit = true;
+                            return;
+                        }
+                    });
+                    if (submit) {
+                        return true;
+                    } else {
+                        alert('You must choose "Yes" or "No"');
+                        return false;
+                    }
+                });
+                
+                /*
+                $(".btn.submit").click( function() {
+                    var answer = ($(this).text());
+                    $("#popModal").modal('hide');
+                    if (answer == 'Yes') {
+                        document.location.href = 'https://mashpia.com/mobile/reg/addchild.html';
+                    } else if (answer == 'No') {
+                        //location.href = ;
+                    }
+                });
+                */
+            });
 		</script>
 		<script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
