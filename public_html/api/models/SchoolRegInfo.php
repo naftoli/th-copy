@@ -7,6 +7,7 @@ class SchoolRegInfo extends ActiveRecord\Model implements JsonSerializable {
         [ ['school_id', 'year'], 'message' => '- duplicate record' ]
     ];
     
+    public $default = false;
     /**
      * validate() ( custom validation )
      *
@@ -18,10 +19,12 @@ class SchoolRegInfo extends ActiveRecord\Model implements JsonSerializable {
     }
 
     public static function getDefault( $school_id, $year ) {
-        return new self([
+        $instance = new self([
             'school_id' => $school_id, 'year' => $year, 'type' => 3,
             'fee' => 770, 'balance' => 0, 'early_bird' => new DateTime( '2018-09-07 00:00:00' )
         ]);
+        $instance->default = true;
+        return $instance;
     }
 
     /**
