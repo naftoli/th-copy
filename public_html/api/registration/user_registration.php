@@ -18,8 +18,14 @@ class UserRegistrationRouter {
         // get all the users information
         $users = User::find( $user_ids );
 
+        $available_users = [];
+        foreach( $users as $user ){
+            if ( $user->school->getRegInfo()->default ) continue;
+            $available_users[] = $user;
+        }
+
         json_response([
-            "users" => $this->serializeUsers( $users )
+            "users" => $this->serializeUsers( $available_users )
         ]);
     }
 
