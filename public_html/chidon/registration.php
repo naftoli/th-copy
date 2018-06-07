@@ -88,7 +88,7 @@ body,td,th {
 				
                 <h4>Dates:</h4>
                 <div class="indent">
-					Chidon Registration Begins: Wednesday, Chai Elul (Aug 29). Only parents can register their children for Chidon, schools cannot register chayolim.
+					Chidon Registration Begins: Tuesday, Yud Elul (Aug 21). Only parents can register their children for Chidon, schools cannot register chayolim.
                 </div>
                 <br />
 				
