@@ -37,6 +37,7 @@ var registrationApp = function() {
     
     // select users
     function step1() {
+        window.location.hash = 'step-1';
         showSection( "step-1" );
         toggleLoading( "step-1", true );
         state.users = [];
@@ -57,9 +58,10 @@ var registrationApp = function() {
 
     // confirm users
     function step2() {
-        state.selected_users = [];  state.cart = [];
+        window.location.hash = 'step-2';
+        state.selected_users = [];
         // make sure that we have at least one user
-        if ( state.users.length > 1 && $('#step-1 #children input:checked').length === 0 ) {
+        if ( state.users.length === 0 || $('#step-1 #children input:checked').length === 0 ) {
             return showError( 'Please select at least one child' );
         }
         // determine if the navigation should show
@@ -84,11 +86,11 @@ var registrationApp = function() {
 
     // select shipping options
     function step3() {
+        if( state.selected_users.length === 0 ) return step1();
+        window.location.hash = 'step-3';
         toggleLoading( 'step-3', true );
         showSection('step-3');
         // remove any shipping items from the cart
-        state.cart = state.cart.filter( function(item) { return item.meta.type != 'shipping' } );
-
         state.shipping_type = 1;
         chayolei_user_ids = state.cart.map( function( item ){ 
             return item.meta.registration_type !== 'chayolei' || item.meta.user_id
@@ -112,6 +114,8 @@ var registrationApp = function() {
     
     // cart / payment information
     function step4() {
+        if( state.selected_users.length === 0 ) return step1();
+        window.location.hash = 'step-4';
         showSection("step-4");
         templates.renderCheckout( state.cart );
 
@@ -165,7 +169,9 @@ var registrationApp = function() {
         } else {
             return showError( "You must indicate your acceptance of participation in Tzivos Hashem Media." )
         }
-
+        // remove the user if we had him before...
+        state.cart = state.cart.filter( function(item) { return item.meta.user_id != selected_user.user_id } );
+        // and re-add him to the cart
         if ( selected_charges.chayolei ) {
             state.cart.push({
                 description: 'Tzivos Hashem '+registration_year+' Registration for ' + selected_user.first,
@@ -203,7 +209,9 @@ var registrationApp = function() {
 
     function confirmShipping( event ){
         event.preventDefault();
-
+        // remove any old shipping items from the cart
+        state.cart = state.cart.filter( function(item) { return item.meta.type != 'shipping' } );
+        
         var selected_type = $("#shipping-type:checked").val();
         $("#selected-shipping-type").val( selected_type );
         state.shipping_type = selected_type;
@@ -251,17 +259,21 @@ var registrationApp = function() {
     /*********************** HELPER FUNCTIONS ***********************/
     // navigate to a specific section
     function showSection( id ){
-        window.location.hash = "#" + id;
         $( "#pages section" ).hide();
         $( "#pages section#" + id ).show();
     }
     $(window).bind('hashchange', function() {
-        if( $("section" + window.location.hash ).css('display') == 'none' ){
-            if ( window.location.hash == '#step-1' ) return step1();
-            if ( window.location.hash == '#step-2' ) return step2();
-            if ( window.location.hash == '#step-3' ) return step3();
-            if ( window.location.hash == '#step-4' ) return step4();
-        }
+        // support sub-routing in step-2
+        if ( window.location.hash.match(/^#step-2-[0-9]/g) ) {
+            var index = parseInt(window.location.hash.split('-')[2]);
+            templates.showUser( state.selected_users[index], index );
+            if( $("section#step-2" ).css('display') == 'none' ) showSection( 'step-2' );
+        } else if( $("section" + window.location.hash ).css('display') == 'none' ){
+            if ( window.location.hash === '#step-1' ) return step1();
+            if ( window.location.hash === '#step-2' ) return step2();
+            if ( window.location.hash === '#step-3' ) return step3();
+            if ( window.location.hash === '#step-4' ) return step4();
+        } else if( window.location.hash === '#step-2' ) return step2();
     });
     // toggle the loading dot
     function toggleLoading( id, loading ){
@@ -385,6 +397,7 @@ var templates = function(){
             '</label></div>';
         },
         showUser: function( user, index ){
+            if( index > 0 ) window.location.hash = 'step-2-' + index;
             $( '#step-2 form #user_id' ).val( user.user_id );
             $( '#step-2 form #mobile_pic' ).val( user.mobile_pic );
             $( '#step-2 form #mobile_pic + img' ).attr( 'src', user.profilePicture );
