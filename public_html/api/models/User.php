@@ -104,13 +104,13 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         return $errors;
     }
 
-    public function registerChidon( $year, $parent_id = 0 ){
+    public function registerChidon( $year, $size, $parent_id = 0 ){
         global $pdo;
 
         $chidon_query = $pdo->prepare(
-            "INSERT INTO th_chidon (year, school_id, user_id, parent_id) VALUES (?, ?, ?, ?)"
+            "INSERT INTO th_chidon (year, school_id, user_id, size, parent_id) VALUES (?, ?, ?, ?, ?)"
         );
-        return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $parent_id ] );
+        return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $parent_id ] );
     }
 
     // ******************************* SETUP WITH EXTERNAL CODE *******************************
@@ -141,8 +141,15 @@ class User extends ActiveRecord\Model implements JsonSerializable {
      */
     public function jsonSerialize(){
         return $this->to_array([
+            'only' => [
+                'user_id', 'user_serial', 'first', 'last', 'first_he', 'last_he', 'lang_id', 'dob',
+                'school_type_id', 'user_address1', 'user_address2', 'user_city', 'user_state',
+                'user_postal', 'user_country', 'gender', 'user_start_date', 'user_registered',
+                'chayolei', 'yan', 'chidon', 'allow_parent_tasks', 'print_parent_tasks', 'mobile_pic'
+            ],
+            'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture' ],
             'include' => [ 
-                'school' => [ 'only' => [ 'school_id', 'school_name' ] ],
+                'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ] ],
                 'platton' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]
             ]
         ]);
