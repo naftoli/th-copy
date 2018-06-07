@@ -32,6 +32,10 @@ var registrationApp = function() {
     step1();
 
     /*********************** CODE TO GUIDE USER THROUGH STEPS ***********************/
+    function noChildren(){
+        showSection('no-children')
+    }
+    
     // select users
     function step1() {
         showSection( "step-1" );
@@ -39,6 +43,7 @@ var registrationApp = function() {
         state.users = [];   state.cart = [];
 
         getUsers().then( function( users ){ 
+            if( users.length === 0 ) return noChildren();
             if( users.length === 1 ) return step2();
 
             var html = '';
@@ -84,8 +89,17 @@ var registrationApp = function() {
         showSection('step-3');
 
         state.shipping_type = 1;
+        chayolei_user_ids = state.cart.map( function( item ){ 
+            return item.meta.registration_type !== 'chayolei' || item.meta.user_id
+        });
         getShipping(
-            state.selected_users.map( function( user ) { return user.school.school_id } )
+            // limit to kids registering for Tzivos Hashem
+            state.selected_users.filter( function ( user ){
+                return user.registrationStatus.chayolei === false && chayolei_user_ids.includes( user.user_id );
+            // and just get their school ids
+            }).map( function( user ) { 
+                return user.school.school_id;
+            })
         ).then( function( response ){
             if( !response ) return step4(); // skip straight to step 4
             response.forEach( function( rate ) { 
@@ -143,6 +157,14 @@ var registrationApp = function() {
                 'You must indicate your acceptance of at least one of the registration charges.'
             );
         } 
+
+        // validate that they have accepted to be used in media campaigns
+        if ( $(event.target).find( "#media" )[0].checked ){
+            $(event.target).find( "#media" )[0].checked = false;
+        } else {
+            return showError( "You must indicate your acceptance of participation in Tzivos Hashem Media." )
+        }
+
         if ( selected_charges.chayolei ) {
             state.cart.push({
                 description: 'Tzivos Hashem '+registration_year+' Registration for ' + selected_user.first,
@@ -151,7 +173,7 @@ var registrationApp = function() {
                     type: 'registration',
                     user_id: selected_user.user_id,
                     registration_type: 'chayolei',
-                    paid: selected_user.registrationRates.chayolei,
+                    paid: selected_user.registrationRates.chayolei
                 }
             });
         } 
@@ -163,16 +185,10 @@ var registrationApp = function() {
                     type: 'registration',
                     user_id: selected_user.user_id,
                     registration_type: 'chidon',
-                    paid: selected_user.registrationRates.chidon
+                    paid: selected_user.registrationRates.chidon,
+                    size: $("select#chidon-sweater-size").val()
                 }
             });
-        }
-        
-        // validate that they have accepted to be used in media campaigns
-        if ( $(event.target).find( "#media" )[0].checked ){
-            $(event.target).find( "#media" )[0].checked = false;
-        } else {
-            return showError( "You must indicate your acceptance of participation in Tzivos Hashem Media." )
         }
 
         current_index += 1;
@@ -180,6 +196,7 @@ var registrationApp = function() {
             step3();
         } else {
             templates.showUser( state.selected_users[ current_index ], current_index );
+            $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to the top of the page
         }
     }
 
@@ -412,6 +429,7 @@ var templates = function(){
             var html = '';
             payment_profiles.forEach( function( payment, index ){
                 var cc = payment.payment.creditCard;
+                cc.cardType = cc.cardType || "Unknown";
                 html += 
                 '<div class="payment-option cc-number identified ' + cc.cardType.toLowerCase() + '">' +
                     '<label class="radio-label">' +
