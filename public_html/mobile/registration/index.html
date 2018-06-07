@@ -33,6 +33,14 @@
         </a>
     </header>
     <div id="pages">
+        <section id="no-children" class="animated fadeIn">
+            <div class="container">
+                <h2>No Children To Register</h2>
+                <p>It seems that all your children who are eligible have been registered.</p>
+                <p>Press the 'Home' button in the upper right corner to go back to your homepage.</p>
+            </div>
+        </section>
+
         <section id="welcome-message">
             <div class="container">
                 <h2>Welcome to the Registration Process!</h2>
@@ -180,7 +188,19 @@
                             <div class="col-10 col-md-11">
                                 <strong>
                                     I wish to register for the World Wide Chidon, receive a brand new instruciton book and pay the book fee of $<span id="chidon-cost"></span>
-                                </strong>
+                                </strong><br/>
+                                <label>Chidon Sweater Size:</label>
+                                <select class="form-control" id="chidon-sweater-size">
+                                    <option value="children xs">Children XS</option>
+                                    <option value="children s">Children S</option>
+                                    <option value="children m">Children M</option>
+                                    <option value="children l">Children L</option>
+                                    <option value="children xl">Children XL</option>
+                                    <option value="adult s">Adult S</option>
+                                    <option value="adult m">Adult M</option>
+                                    <option value="adult l">Adult L</option>
+                                    <option value="adult xl">Adult XL</option>
+                                </select>
                             </div>
                         </div>
                     </label>
