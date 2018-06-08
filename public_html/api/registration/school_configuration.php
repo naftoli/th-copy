@@ -29,8 +29,9 @@ class SchoolRegistrationRouter implements RestRouter {
     }
 
     function create() {
+        $year = isset( $_POST['year'] ) ? $_POST['year'] : GlobalSettings::getRegistrationYear();
         $schoolRegInfo = new SchoolRegInfo([
-            'school_id' => $_POST['school_id'], 'year' => GlobalSettings::getRegistrationYear(),
+            'school_id' => $_POST['school_id'], 'year' => $year,
             'type'  => $_POST['type'],  'fee' => $_POST['fee'],
             'balance' => $_POST['balance'], 'early_bird' => $_POST['early_bird']
         ]);

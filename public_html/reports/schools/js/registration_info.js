@@ -5,10 +5,16 @@ var registration_info = function(){
 
     var state = { schools: [] };
 
-    $.get( '/api/registration/school_configuration.php', function( response ){
-        state.schools = response.data;
-        renderTable()
-    });
+    function loadTable(){
+        $('#report').html('<div class="loader"></div>');
+        $.get( '/api/registration/school_configuration.php', function( response ){
+            state.schools = response.data;
+            renderTable();
+        });
+    }
+
+    loadTable();
+    $('#year').change(loadTable);
 
     function renderTable(){
         var year = $("#year").val() || 5779;
@@ -82,8 +88,10 @@ var registration_info = function(){
         $(event.target).text( "Saving..." );
         var row = $(event.target).parent().parent();
         var id = row[0].dataset.school_reg_info_id;
+        var year = $("#year").val() || 5779;
 
         var postData = {
+            year: year,
             school_id: row[0].dataset.school_id,
             type:   row.find( 'select[name="type"]' ).val(),
             fee:   row.find( 'input[name="fee"]' ).val(),

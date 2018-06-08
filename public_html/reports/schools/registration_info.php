@@ -43,10 +43,13 @@ $year = GlobalSettings::getRegistrationYear();
         include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php');
     ?>
     <h1>School Registration Settings</h1>
-    <input type="hidden" id="year" value="<?=$year?>" />
+    
 
     <div class="info">
-        <h3>School Registration Settings for <?=$year?></h3><br/>
+        <h3>School Registration Settings for <select id="year" value="<?=$year?>">
+            <option value="<?=$year?>"><?=$year?></option>
+            <option value="<?=$year + 1?>"><?=$year + 1?></option>
+        </select></h3><br/>
         <h4>Settings Explained:</h4><br/>
         <strong>Type:</strong>
         <ol>
