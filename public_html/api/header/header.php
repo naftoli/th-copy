@@ -52,6 +52,12 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
     }
 
     $current_user = $admin_id ? Admin::find( $admin_id ) : false;
+    
+    // Return 401 Unauthorized if we cannot login user
+    if ( !$current_user ){
+        http_response_code( 401 ); die();
+    }
+        
 } else {
     $current_user = false;
 }
