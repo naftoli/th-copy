@@ -1,13 +1,14 @@
 import reducer, { initialState } from './reducer';
+import { actions } from './actions';
 
 describe( 'initialState', () => {
   
-  it(`has a key 'login' set to 'false'`, () => {
-    expect( initialState.login ).toBe( false );
+  it(`has a key 'tokens' set to '{}'`, () => {
+    expect( initialState.tokens ).toEqual( {} );
   });
 
-  it(`has a key 'current_user' set to 'false'`, () => {
-    expect( initialState.current_user ).toBe( false );
+  it(`has a key 'current_user' set to '{}'`, () => {
+    expect( initialState.current_user ).toEqual( {} );
   });
 
   it(`has a key 'loading' set to 'false'`, () => {
@@ -24,4 +25,28 @@ describe( 'reducer', () => {
   it( 'returns the initial state', () => {
     expect( reducer(undefined, {}) ).toEqual( initialState );
   });
+
+  it(`actions.setErrors: updates state.errors`, () => {
+    expect( reducer(initialState, actions.setErrors("Test")).errors ).toEqual(["Test"]);
+    expect( initialState.errors ).toEqual( [] );
+  });
+
+  it(`actions.loading: updates state.loading`, () => {
+    expect( reducer(initialState, actions.loading(true)).loading ).toBe( true );
+    expect( initialState.loading ).toBe( false );
+  });
+
+  it(`actions.tokens: updates state.tokens`, () => {
+    expect(
+      reducer(initialState, actions.tokens( 'legacy', 'mobile')).tokens 
+    ).toEqual( { legacy: 'legacy', mobile: 'mobile' } );
+    expect( initialState.tokens ).toEqual( {} );
+  });
+
+  it(`actions.setUser: updates state.current_user`, () => {
+    const user = { foo: 'bar' };
+    expect( reducer(initialState, actions.setUser( user )).current_user ).toEqual( user );
+    expect( initialState.current_user ).toEqual( {} );
+  });
+
 })

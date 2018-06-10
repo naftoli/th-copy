@@ -1,12 +1,31 @@
+import { types } from './actions';
+
 export const initialState = {
-  login: false,
-  current_user: false,
+  current_user: {},
   loading: false,
-  errors: []
+  errors: [],
+  tokens: {}
 };
 
 export default ( state = initialState, action ) => {
   switch ( action.type ) {
-    default: return state; 
+    case types.SET_ERRORS:
+      return Object.assign({}, state, {
+        errors: action.payload
+      });
+    case types.SET_LOADING:
+      return Object.assign({}, state, {
+        loading: action.payload
+      });
+    case types.SET_TOKENS:
+      return Object.assign({}, state, {
+        tokens: action.payload
+      });
+    case types.SET_USER:
+      return Object.assign({}, state, {
+        current_user: action.payload
+      });
+    default:
+      return state; 
   }
 }
