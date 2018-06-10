@@ -14,7 +14,7 @@ export const actions = {
   loading: loading => {
     return {
       type: types.SET_LOADING,
-      payload: { loading }
+      payload: loading
     }
   },
 
@@ -23,7 +23,7 @@ export const actions = {
     errors = Array.isArray( errors ) ? errors : [ errors ];
     return {
       type: types.SET_ERRORS,
-      payload: { errors }
+      payload: errors
     }
   },
 
@@ -37,7 +37,7 @@ export const actions = {
   setUser: user => {
     return {
       type: types.SET_USER,
-      payload: { user }
+      payload: user
     }
   }
 }
@@ -46,9 +46,15 @@ export const operations = {
   login: ( username, password ) => {
     return dispatch => {
       dispatch( actions.loading( true ) );
-      API.post('/auth/login.php', { username, password })
+      return API.post('/auth/login.php', { username, password })
         .then( response => {
-
+          dispatch( actions.loading( false ) );
+          if ( response.success ) {
+            dispatch( actions.tokens( response.legacy, response.mobile ));
+            dispatch( actions.setUser( response.user ));
+          } else {
+            dispatch( actions.setErrors( response.error ) );
+          }
         })
         .catch( error => {
           dispatch( actions.loading( false ) );

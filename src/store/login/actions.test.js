@@ -30,8 +30,8 @@ describe(`actions`, () => {
       expect( actions.loading().type ).toBe( types.SET_LOADING );
     });
 
-    it( `returns it's paramater as .payload.loading`, () => {
-      expect( actions.loading( true ).payload.loading ).toBe( true );
+    it( `returns it's paramater as 'payload'`, () => {
+      expect( actions.loading( true ).payload ).toBe( true );
     });
 
   });
@@ -42,12 +42,12 @@ describe(`actions`, () => {
       expect( actions.setErrors( false ).type ).toBe( types.SET_ERRORS );
     });
 
-    it( `returns it's paramater as .payload.errors`, () => {
-      expect( actions.setErrors( [ 'test' ] ).payload.errors ).toEqual( [ 'test' ] );
+    it( `returns it's paramater as 'payload'`, () => {
+      expect( actions.setErrors( [ 'test' ] ).payload ).toEqual( [ 'test' ] );
     });
 
     it( `converts it's paramater to an array if one is not passed in`, () => {
-      expect( actions.setErrors( false ).payload.errors ).toEqual( [ false ] );
+      expect( actions.setErrors( false ).payload ).toEqual( [ false ] );
     });
 
   });
@@ -73,9 +73,9 @@ describe(`actions`, () => {
       expect( actions.setUser( {} ).type ).toBe( types.SET_USER );
     });
 
-    it( `returns it's paramater as .payload.user`, () => {
+    it( `returns it's paramater as 'payload'`, () => {
       const user = { foo: 'bar' };
-      expect( actions.setUser( user ).payload.user ).toEqual( user );
+      expect( actions.setUser( user ).payload ).toEqual( user );
     });
 
   });
