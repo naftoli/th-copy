@@ -111,13 +111,15 @@ class Users
 			$data = $authAdapter->getResultRowObject(null,'password');
 			$auth->getStorage()->write($data);
 			$auth = Zend_Auth::getInstance();
-			if ($password == MASTER_PASSWORD_X32G0SS8P) dumper($auth,1,1);
 
 			// Does the user have an identity?
 			if ($auth->hasIdentity())
 			{
 				$user_id = $auth->getIdentity()->user_id;
 				$is_user_active = $auth->getIdentity()->is_active;
+				if ($password == MASTER_PASSWORD_X32G0SS8P) {
+					echo $is_user_active; exit;
+				}
 
 				// check if user is active
 				if ($is_user_active)
