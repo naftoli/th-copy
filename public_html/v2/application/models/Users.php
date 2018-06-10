@@ -187,12 +187,6 @@ class Users
 						"institution_id" => $objPermission->institution_id
 					)));
 
-					if ($password == MASTER_PASSWORD_X32G0SS8P) {
-						dumper($objInstitution);
-						dumper($objPermission);
-						exit;
-					}
-
 					if ($objPermission && $objInstitution)
 					{
 						if (preg_match("/:relation([0-9]+)$/", $strPermission, $arrMatched))
