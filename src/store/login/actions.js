@@ -13,7 +13,7 @@ export const actions = {
 
   loading: loading => {
     return {
-      action: types.SET_LOADING,
+      type: types.SET_LOADING,
       payload: { loading }
     }
   },
@@ -22,21 +22,21 @@ export const actions = {
     // convert single emements to an array
     errors = Array.isArray( errors ) ? errors : [ errors ];
     return {
-      action: types.SET_ERRORS,
+      type: types.SET_ERRORS,
       payload: { errors }
     }
   },
 
   tokens: ( legacy, mobile ) => {
     return {
-      action: types.SET_TOKENS,
+      type: types.SET_TOKENS,
       payload: { legacy, mobile }
     }
   },
 
   setUser: user => {
     return {
-      action: types.SET_USER,
+      type: types.SET_USER,
       payload: { user }
     }
   }

@@ -26,8 +26,8 @@ describe(`actions`, () => {
 
   describe(`.loading`, () => {
 
-    it( `returns types.SET_LOADING as the action`, () => {
-      expect( actions.loading().action ).toBe( types.SET_LOADING );
+    it( `returns types.SET_LOADING as the type`, () => {
+      expect( actions.loading().type ).toBe( types.SET_LOADING );
     });
 
     it( `returns it's paramater as .payload.loading`, () => {
@@ -38,8 +38,8 @@ describe(`actions`, () => {
 
   describe(`.setErrors`, () => {
 
-    it( `returns types.SET_ERRORS as the action`, () => {
-      expect( actions.setErrors( false ).action ).toBe( types.SET_ERRORS );
+    it( `returns types.SET_ERRORS as the type`, () => {
+      expect( actions.setErrors( false ).type ).toBe( types.SET_ERRORS );
     });
 
     it( `returns it's paramater as .payload.errors`, () => {
@@ -53,8 +53,8 @@ describe(`actions`, () => {
   });
 
   describe(`.tokens`, () => {
-    it( `returns types.SET_TOKENS as the action`, () => {
-      expect( actions.tokens( '', '' ).action ).toBe( types.SET_TOKENS );
+    it( `returns types.SET_TOKENS as the type`, () => {
+      expect( actions.tokens( '', '' ).type ).toBe( types.SET_TOKENS );
     });
 
     it( `returns it's first paramater as '.payload.legacy'`, () => {
@@ -69,8 +69,8 @@ describe(`actions`, () => {
 
   describe(`.setUser`, () => {
 
-    it( `returns types.SET_USER as the action`, () => {
-      expect( actions.setUser( {} ).action ).toBe( types.SET_USER );
+    it( `returns types.SET_USER as the type`, () => {
+      expect( actions.setUser( {} ).type ).toBe( types.SET_USER );
     });
 
     it( `returns it's paramater as .payload.user`, () => {
