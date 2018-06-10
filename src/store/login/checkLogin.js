@@ -10,5 +10,7 @@ export default dispatch => {
   }
 
   if ( tokens.legacy )
-    return dispatch( actions.tokens( tokens ) );
+    return dispatch( actions.tokens( tokens.legacy, tokens.mobile ) );
+
+  return false;
 }
