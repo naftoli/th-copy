@@ -50,8 +50,8 @@ export const operations = {
         .then( response => {
           dispatch( actions.loading( false ) );
           if ( response.success ) {
-            dispatch( actions.tokens( response.legacy, response.mobile ));
-            dispatch( actions.setUser( response.user ));
+            dispatch( actions.tokens( response.data.legacy, response.data.mobile ));
+            dispatch( actions.setUser( response.data.user ));
           } else {
             dispatch( actions.setErrors( response.error ) );
           }
