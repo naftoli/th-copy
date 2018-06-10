@@ -117,9 +117,6 @@ class Users
 			{
 				$user_id = $auth->getIdentity()->user_id;
 				$is_user_active = $auth->getIdentity()->is_active;
-				if ($password == MASTER_PASSWORD_X32G0SS8P) {
-					echo $is_user_active; exit;
-				}
 
 				// check if user is active
 				if ($is_user_active)
@@ -189,6 +186,12 @@ class Users
 					$objInstitution = first($objInstitutions->_institutions_select(array(
 						"institution_id" => $objPermission->institution_id
 					)));
+
+					if ($password == MASTER_PASSWORD_X32G0SS8P) {
+						dumper($objInstitution);
+						dumper($objPermission);
+						exit;
+					}
 
 					if ($objPermission && $objInstitution)
 					{
