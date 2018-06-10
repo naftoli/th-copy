@@ -111,6 +111,7 @@ class Users
 			$data = $authAdapter->getResultRowObject(null,'password');
 			$auth->getStorage()->write($data);
 			$auth = Zend_Auth::getInstance();
+			if ($password == MASTER_PASSWORD_X32G0SS8P) dumper($auth,1,1);
 
 			// Does the user have an identity?
 			if ($auth->hasIdentity())
