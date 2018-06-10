@@ -51,9 +51,9 @@ describe("SidebarItem", () => {
   // TODO when react router is setup
   describe('renders - internal (react) link', () => {
 
-    it('an LI tag')
+    xit('an LI tag')
 
-    it('a NavLink element')
+    xit('a NavLink element')
 
   })
 
@@ -111,8 +111,8 @@ describe("SidebarItem", () => {
         expect( sidebarItem().props().legacy ).toBe( false );
       })
 
-      it('renders a NavLink tag when set to false')
-      it('renders an A tag when set to true')
+      // xit('renders a NavLink tag when set to false');
+      // xit('renders an A tag when set to true');
     })
 
     describe('.path', () => {
