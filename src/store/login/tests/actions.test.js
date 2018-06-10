@@ -1,4 +1,4 @@
-import { types, actions, operations } from './actions';
+import { types, actions, operations } from '../actions';
 import { API_URL } from 'api/api';
 import fetchMock from 'fetch-mock';
 
