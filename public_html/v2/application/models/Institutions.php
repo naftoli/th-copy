@@ -20,80 +20,81 @@ class Institutions
 	// Generic functions
 	public function _institutions_select ($arrParams)
 	{
-		$arrParams = $this->_tools->rsqlclean($arrParams);
-		$strSql = "select * from mashpiadb.schools
-					where school_id = " . $arrParams["institution_id"];
-		//echo $strSql; exit;
-		$arrResult = $this->_db->fetchAll($strSql);
-		return $arrResult;
-		/*
-		$arrParams = $this->_tools->rsqlclean($arrParams);
-		
-		// Possible column selections
-		$arrColumns = array (
-			"institution_id"	 => @$arrParams["institution_id"],
-			"reg_expires"		 => @$arrParams["reg_expires"],
-			"institution_type"	 => @$arrParams["institution_type"],
-			"template_style"	 => @$arrParams["template_style"],
-			"host_id"		 	 => @$arrParams["host_id"],
-			"network_id"		 => @$arrParams["network_id"],
-			"name"				 => @$arrParams["name"],
-			"hebrew_name"		 => @$arrParams["hebrew_name"],
-			"is_active"			 => @$arrParams["is_active"],
-			"address"			 => @$arrParams["address"],
-			"city"				 => @$arrParams["city"],
-			"state"				 => @$arrParams["state"],
-			"country"			 => @$arrParams["country"],
-			"phone"				 => @$arrParams["phone"],
-			"postal"			 => @$arrParams["postal"],
-			"email"				 => @$arrParams["email"],
-			"website"			 => @$arrParams["website"],
-			"image_id"			 => @$arrParams["image_id"],
-			"created"			 => @$arrParams["created"],
-			"modified"			 => @$arrParams["modified"],
-			"created_by"		 => @$arrParams["created_by"]
-		);
-
-		$strSql = "
-			SELECT
-				*
-			FROM
-				institutions
-			WHERE
-				1
-		";
-
-		foreach ($arrColumns as $strColumn => $Value)
-		{
-			if (
-				isset($Value)
-				&& !is_null($Value)
-			) {
-				if (!is_int($Value))
-				{
-					$Value = '"' . $Value . '"';
-				}
-				$strSql .= "
-					AND `" . $strColumn . "` = " . $Value . "
-				";
-			}
+		if (!$arrParams['super_admin']) {
+			$arrParams = $this->_tools->rsqlclean($arrParams);
+			$strSql = "select * from mashpiadb.schools
+						where school_id = " . $arrParams["institution_id"];
+			//echo $strSql; exit;
+			$arrResult = $this->_db->fetchAll($strSql);
+			return $arrResult;
 		}
+		else {
+			$arrParams = $this->_tools->rsqlclean($arrParams);
+			
+			// Possible column selections
+			$arrColumns = array (
+				"institution_id"	 => @$arrParams["institution_id"],
+				"reg_expires"		 => @$arrParams["reg_expires"],
+				"institution_type"	 => @$arrParams["institution_type"],
+				"template_style"	 => @$arrParams["template_style"],
+				"host_id"		 	 => @$arrParams["host_id"],
+				"network_id"		 => @$arrParams["network_id"],
+				"name"				 => @$arrParams["name"],
+				"hebrew_name"		 => @$arrParams["hebrew_name"],
+				"is_active"			 => @$arrParams["is_active"],
+				"address"			 => @$arrParams["address"],
+				"city"				 => @$arrParams["city"],
+				"state"				 => @$arrParams["state"],
+				"country"			 => @$arrParams["country"],
+				"phone"				 => @$arrParams["phone"],
+				"postal"			 => @$arrParams["postal"],
+				"email"				 => @$arrParams["email"],
+				"website"			 => @$arrParams["website"],
+				"image_id"			 => @$arrParams["image_id"],
+				"created"			 => @$arrParams["created"],
+				"modified"			 => @$arrParams["modified"],
+				"created_by"		 => @$arrParams["created_by"]
+			);
 
-		if (isset($arrParams["_GREATER"]))
-		{
-			foreach ($arrParams["_GREATER"] as $intKey => $intVal)
+			$strSql = "
+				SELECT
+					*
+				FROM
+					institutions
+				WHERE
+					1
+			";
+
+			foreach ($arrColumns as $strColumn => $Value)
 			{
-				$strSql .= "
-					AND " . $intKey . " > " . $intVal . "
-				";
+				if (
+					isset($Value)
+					&& !is_null($Value)
+				) {
+					if (!is_int($Value))
+					{
+						$Value = '"' . $Value . '"';
+					}
+					$strSql .= "
+						AND `" . $strColumn . "` = " . $Value . "
+					";
+				}
 			}
+
+			if (isset($arrParams["_GREATER"]))
+			{
+				foreach ($arrParams["_GREATER"] as $intKey => $intVal)
+				{
+					$strSql .= "
+						AND " . $intKey . " > " . $intVal . "
+					";
+				}
+			}
+			$strSql = $strSql . " ORDER BY name ASC";
+
+			$arrResult = $this->_db->fetchAll($strSql);
+			return $arrResult;
 		}
-		$strSql = $strSql . " ORDER BY name ASC";
-
-
-		$arrResult = $this->_db->fetchAll($strSql);
-		return $arrResult;
-		*/
 	}
 
 	public function _institutions_update($arrParams)
