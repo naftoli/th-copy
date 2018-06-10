@@ -39,11 +39,13 @@ export default {
     }).then( parseResponse );
   },
   
-  post( url ) {
+  post( url, data = {} ) {
+    const body = JSON.stringify(data);
     return fetch(`${API_URL}${url}`, {
       method: 'POST',
       headers: headers(),
-      credentials: credentials
+      credentials: credentials,
+      body
     }).then( parseResponse )
   },
 
