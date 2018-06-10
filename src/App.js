@@ -1,15 +1,27 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Dashboard from 'pages/Dashboard/Dashboard';
+import Login from 'pages/Login/Login';
 import 'styles/App.css';
 
-class App extends Component {
+export class App extends Component {
   render() {
-    return (
-      <Dashboard>
-        Hello World!
-      </Dashboard>
-    );
+    if ( this.props.logged_in ) {
+      return (
+        <Dashboard>
+          Hello World!
+        </Dashboard>
+      );
+    } else {
+      return <Login />;
+    }
   }
 }
 
-export default App;
+const mapStateToProps = ( state ) => {
+  return {
+    logged_in: !!state.login.tokens.legacy
+  }
+}
+
+export default connect( mapStateToProps )( App );
