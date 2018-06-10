@@ -56,7 +56,6 @@ $primary-color-hover: #2c539e;
   #mashpia-navbar {
     .navbar-brand {
       &:hover {
-        transform: scale(1.15);
         cursor: pointer;
       }
       img {
