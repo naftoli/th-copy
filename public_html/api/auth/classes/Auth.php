@@ -18,6 +18,25 @@ class Auth {
             return self::mobileAuth( $token['key'] );
     }
 
+    public static function login( $username, $password ) {
+        global $pdo;
+        $username = strtolower( $username );
+
+        $user_query = $pdo->prepare(
+            "SELECT admin_id, username, password FROM admins WHERE username = ? and password = ?"
+        );
+        $user_query->execute([ $username, $password ]);
+
+        if ( $user_query->rowCount() == 0 ) return false;
+
+        $row = $user_query->fetch();
+        return [
+            'user' => \Admin::find( $row['admin_id'] ),
+            'legacy' => self::legacyKey( $row['username'], $row['password'] ),
+            'mobile' => self::mobileKey( $row['admin_id'] )
+        ];
+    }
+
     /**
      * self::legacyAuth
      * 
@@ -36,12 +55,21 @@ class Auth {
         $query->execute([ $admin_id ]);
         $row = $query->fetch();
 
-        $valid_key = hash_hmac(
-            'ripemd128', strtolower($row['username']) . $row['password'], 
-            '53fdc95857aac68970159dd07e7c3782' 
-        );
+        $valid_key = self::legacyKey( $row['username'], $row['password'] );
 
         return $key === $valid_key ? $admin_id : false;
+    }
+
+    private function legacyKey( $username, $password ){
+        return hash_hmac(
+            'ripemd128', strtolower( $username ) . $password, 
+            '53fdc95857aac68970159dd07e7c3782' 
+        );
+    }
+
+    private static function mobileKey( $admin_id ) {
+        require_once( __DIR__ . '/../../../mobile/reg/ajax/encrypt.php' );
+        return encrypt_decrypt('encrypt', $admin_id);
     }
 
     /**
