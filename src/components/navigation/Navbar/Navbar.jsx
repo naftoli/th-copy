@@ -6,6 +6,7 @@ import {
 import './Navbar.scss';
 import { LEGACY_URL } from 'components/constants';
 import user from 'img/user.svg';
+import logo from 'img/logo.svg';
 
 class Navbar extends Component {
   static defaultProps = {
@@ -17,7 +18,7 @@ class Navbar extends Component {
     return (
       <BoostrapNavbar id="mashpia-navbar">
         <NavbarBrand onClick={ this.props.onClick }>
-          <img src="//mashpia.com/mobile/img_new/TH%20Logo-colorful-svg.svg" alt="logo" />
+          <img src={ logo } alt="logo" />
           <span>Menu</span>
         </NavbarBrand>
         <div id="navbar-title" className="mx-auto">
