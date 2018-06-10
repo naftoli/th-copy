@@ -1,7 +1,3 @@
-import { Promise } from "core-js";
-
-// import fetch from 'isomorphic-fetch';
-
 // Development url
 let API_URL = '//192.168.1.12/api';
 // update in production
