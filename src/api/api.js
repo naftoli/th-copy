@@ -1,5 +1,6 @@
+import { LEGACY_URL } from 'components/constants';
 // Development url
-let API_URL = '//192.168.1.7/api';
+let API_URL = `${LEGACY_URL}/api`;
 // update in production
 if ( process.env.NODE_ENV === "production" ) {
   API_URL = '/api'
