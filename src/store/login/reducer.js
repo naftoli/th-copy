@@ -30,8 +30,8 @@ export default ( state = initialState, action ) => {
         current_user: action.payload
       });
     case types.LOGOUT:
-      cookies.remove( 'admin_auth' );
-      cookies.remove( 'admin_id' );
+      cookies.remove( 'admin_auth', { path: '/' } );
+      cookies.remove( 'admin_id', { path: '/' } );
       return Object.assign( {}, initialState );
     default:
       return state; 
