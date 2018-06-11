@@ -60,7 +60,7 @@ class Auth {
         return $key === $valid_key ? $admin_id : false;
     }
 
-    private function legacyKey( $username, $password ){
+    private static function legacyKey( $username, $password ){
         return hash_hmac(
             'ripemd128', strtolower( $username ) . $password, 
             '53fdc95857aac68970159dd07e7c3782' 

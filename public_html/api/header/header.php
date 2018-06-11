@@ -21,8 +21,12 @@ require_once( dirname(__FILE__) . "/../../classes/authorize/PaymentProfile.php" 
 include_once( __DIR__ . '/../../class.globalSettings.php');
 
 // set headers
-header('Access-Control-Allow-Origin: *'); // CORS
+header('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN'] ); // CORS
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Headers: mobile, Content-Type');
 header("Content-Type: text/html; charset=utf-8;");
+
+if ($_SERVER['REQUEST_METHOD'] == "OPTIONS") json_response( false );
 
 $data = json_decode( file_get_contents('php://input'), true );
 if ( is_array( $data ) ) {
