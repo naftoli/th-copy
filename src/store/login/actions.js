@@ -5,7 +5,8 @@ export const types = {
   SET_LOADING: `login/set_loading`,
   SET_ERRORS: `login/set_errors`,
   SET_TOKENS: `login/set_tokens`,
-  SET_USER: `login/set_user`
+  SET_USER: `login/set_user`,
+  LOGOUT: `login/logout`
 };
 
 //** Action Creators */
@@ -18,6 +19,13 @@ export const actions = {
     }
   },
 
+  tokens: ( legacy, mobile ) => {
+    return {
+      type: types.SET_TOKENS,
+      payload: { legacy, mobile }
+    }
+  },
+
   setErrors: errors => {
     // convert single emements to an array
     errors = Array.isArray( errors ) ? errors : [ errors ];
@@ -27,19 +35,16 @@ export const actions = {
     }
   },
 
-  tokens: ( legacy, mobile ) => {
-    return {
-      type: types.SET_TOKENS,
-      payload: { legacy, mobile }
-    }
-  },
-
   setUser: user => {
     return {
       type: types.SET_USER,
       payload: user
     }
-  }
+  },
+
+  logout: () => ({
+    type: types.LOGOUT
+  })
 }
 
 export const operations = {

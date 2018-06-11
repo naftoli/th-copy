@@ -20,6 +20,10 @@ describe(`types`, () => {
     expect( types.SET_USER ).toBe( 'login/set_user' );
   });
 
+  it(`.LOGOUT = 'login/logout'`, () => {
+    expect( types.LOGOUT ).toBe( 'login/logout' );
+  });
+
 });
 
 describe(`actions`, () => {
@@ -76,6 +80,18 @@ describe(`actions`, () => {
     it( `returns it's paramater as 'payload'`, () => {
       const user = { foo: 'bar' };
       expect( actions.setUser( user ).payload ).toEqual( user );
+    });
+
+  });
+
+  describe(`.logout`, () => {
+
+    it( `returns types.LOGOUT as the type`, () => {
+      expect( actions.logout().type ).toBe( types.LOGOUT );
+    });
+
+    it( `has no payload`, () => {
+      expect( actions.logout().payload ).not.toBeDefined();
     });
 
   });
