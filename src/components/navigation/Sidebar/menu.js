@@ -40,7 +40,7 @@ const getMenu = ( user_type ) => {
   // Define the shape of the menu
   const menu = [
     {
-      label: 'Home',  legacy: true, path: '/admin.php',
+      label: 'Home', path: '/',
       icon: <img src={`${LEGACY_URL}/images/icon_admin_home.png`} alt="home"/>
     },
     {
@@ -50,22 +50,22 @@ const getMenu = ( user_type ) => {
         {
           label: "Soldiers",
           children: [
-            { label: "View / Edit" },
-            { label: "Registration" },
-            { label: "Rank Cards" },
+            { label: "View / Edit", path: '/users' },
+            { label: "Registration", path: '/users/registration' },
+            { label: "Rank Cards", path: '/users/cards' },
             { label: "Update Missions", legacy: true, path: '/add_missions.php' },
             { label: "Update Medals", legacy: true, path: '/add_medals.php' },
           ]
         },
-        { label: "Plattons" },
-        { label: "Parents" },
-        { label: "Staff" },
+        { label: "Plattons", path: '/plattons' },
+        { label: "Parents", path: '/parents' },
+        { label: "Staff", path: '/staff' },
         {
           label: "Base",
           children: [
-            { label: 'View / Edit' },
-            { label: 'Settings' },
-            { label: 'Transactions' }
+            { label: 'View / Edit', path: '/base' },
+            { label: 'Settings', path: '/base/settings' },
+            { label: 'Transactions', path: '/base/transactions' }
           ]
         },
       ]
@@ -192,7 +192,7 @@ const getMenu = ( user_type ) => {
       icon: <img src={`${LEGACY_URL}/images/parentIcons/support icon.gif`} alt="Support"/>
     },
     {
-      label: 'Logout', legacy: true, path: '/logout.php',
+      label: 'Logout', path: '/logout',
       icon: <img src={`${LEGACY_URL}/images/parentIcons/logout.gif`} alt="Logout"/>
     },
   ];
