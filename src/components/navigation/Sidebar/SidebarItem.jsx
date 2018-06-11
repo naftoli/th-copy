@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { LEGACY_URL } from 'components/constants';
 import SidebarDropdown from './SidebarDropdown';
+import { NavLink } from 'react-router-dom'
 
 class SidebarItem extends Component {
 
@@ -10,25 +11,16 @@ class SidebarItem extends Component {
       return <SidebarDropdown { ...this.props } />;
     }
 
-    // Generate the correct type of link
-    let path = "#";
+    // Generate link to React-Router page
+    let link = <NavLink exact to={ this.props.path }> { this.props.icon } { this.props.label } </NavLink>;
 
-    // generate the path to the correct location
-    if ( this.props.legacy ){
-      path = LEGACY_URL + this.props.path;
-    } else {
-      // return react router link
+    // use a standard A tag if page is outside of this system
+    if ( this.props.legacy ) {
+      link = <a href={LEGACY_URL + this.props.path}> { this.props.icon } { this.props.label } </a>;
     }
 
-    // return a simple item
-    return (
-      <li>
-        <a href={ path }>
-          { this.props.icon }
-          { this.props.label }
-        </a>
-      </li>
-    )
+    // return the link wrapped in an LI
+    return <li> { link } </li>;
   }
 }
 
