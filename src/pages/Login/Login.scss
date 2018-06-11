@@ -2,11 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: center; justify-content: center;
-  padding-top: 20vh;
+  height: 100vh;
 
   img#logo {
     width: 20%;
-    max-width: 300px;
+    max-width: 250px;
   }
 
   #login-form{
@@ -14,6 +14,7 @@
     text-align: center;
     width: 90%;
     max-width: 450px;
+    transition: .25s;
 
     input {
       font-size: 1.5em;
