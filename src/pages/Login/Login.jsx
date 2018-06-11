@@ -21,7 +21,8 @@ export class Login extends Component {
 
   static defaultProps = {
     loading: false,
-    errors: []
+    errors: [],
+    login: () => {}
   }
 
   handleChange = ( event ) => {
@@ -30,8 +31,7 @@ export class Login extends Component {
     });
   }
 
-  togglePassword = ( event ) => {
-    event.preventDefault();
+  togglePassword = ( event ) => {s
     this.setState({
       show_password: !this.state.show_password
     });
