@@ -1,5 +1,5 @@
 // Development url
-let API_URL = '//192.168.1.12/api';
+let API_URL = '//192.168.1.7/api';
 // update in production
 if ( process.env.NODE_ENV === "production" ) {
   API_URL = '/api'
