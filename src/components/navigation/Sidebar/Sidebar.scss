@@ -8,7 +8,7 @@
   // Define the size
   min-width: 270px;
   max-width: 270px;
-  height: calc( 100vh - 58px );
+  height: calc( 100vh - 53px );
   overflow: auto; // scroll the sidebar independent of the content
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
@@ -32,7 +32,7 @@
         padding-left: 30px;
         background: $primary-color-dark;
       }
-      a:hover, a:focus {
+      a:hover, a:focus, a.active {
         color: $primary-color-dark !important;
         background: #fff;
       }
@@ -71,7 +71,7 @@
     user-select: none;
   }
   // open links
-  a:hover, a.open, a:focus {
+  a:hover, a.open, a:focus, a.active {
     background: $primary-color-hover;
   }
 
