@@ -31,7 +31,7 @@ export class Login extends Component {
     });
   }
 
-  togglePassword = ( event ) => {s
+  togglePassword = ( event ) => {
     this.setState({
       show_password: !this.state.show_password
     });
