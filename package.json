@@ -111,5 +111,6 @@
     "fetch-mock": "^6.4.3",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1"
-  }
+  },
+  "homepage": "/api/build"
 }
