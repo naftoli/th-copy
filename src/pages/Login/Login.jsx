@@ -39,7 +39,7 @@ export class Login extends Component {
   render(){
     const userIcon = <img className="pt-icon" src={user} alt='username' width='26' height='26'/>
     const lockIcon = <img className="pt-icon" src={lock} alt='password' width='26' height='26'/>
-    const lockButton = <Button icon={ this.state.show_password ? 'eye-open' : 'eye-off'} minimal={true} onClick={ this.togglePassword } />
+    const lockButton = <Button icon={ this.state.show_password ? 'eye-open' : 'eye-off'} minimal={true} onClick={ this.togglePassword } id='toggle-password'/>
     return (
       <div id='login-page'>
         <img src={logo} id='logo' alt='logo' />
