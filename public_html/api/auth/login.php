@@ -12,6 +12,10 @@ if ( $_SERVER['REQUEST_METHOD'] !== 'POST' )
 if ( !isset($_POST['username']) || !isset($_POST['password']) )
     json_error( "Invalid Request");
 
-json_response( \mashpia\api\auth\Auth::login(
+$login = \mashpia\api\auth\Auth::login(
     $_POST['username'], $_POST['password']
-));
+);
+
+if ( !$login ) json_error( "Invalid Login" );
+
+json_response( $login );
