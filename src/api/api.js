@@ -1,10 +1,7 @@
 import { LEGACY_URL } from 'components/constants';
-// Development url
+// API url
 let API_URL = `${LEGACY_URL}/api`;
-// update in production
-if ( process.env.NODE_ENV === "production" ) {
-  API_URL = '/api'
-}
+// send cookies
 let credentials = process.env.NODE_ENV === "production" ? 'same-origin' : 'include';
 
 /**

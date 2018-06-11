@@ -6,4 +6,4 @@
  */
 
 // url to use when navigating to older pages
-export const LEGACY_URL = process.env.NODE_ENV === "production" ? "//mashpia.com" : "//mashpia.local/";
+export const LEGACY_URL = process.env.NODE_ENV === "production" ? "" : "//mashpia.local";
