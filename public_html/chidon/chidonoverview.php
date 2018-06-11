@@ -81,8 +81,7 @@ body,td,th {
 	<div class="col-md-9 content-top">
 		<div class="number">
     		
-    		 <div class="row_8">
-				
+    		 <div class="row_8">				
 				
    		        <h3 class="page-in">Chidon Overview </h3>
 				
@@ -100,7 +99,15 @@ body,td,th {
 			<div class="clearfix"></div>
 		  </div>
 		  		
-          <div class="row_8">
+          <div class="row_8" style="margin-top: -20px;">
+
+				<h4><strong>Test Dates</strong></h4>
+
+				<p class="page-top">
+					Test 1: Tuesday, Hey Kislev (Nov 13)<br />
+					Test 2: Wednesday, Yud Ches Teves (Dec 26)<br />
+					Test 3: Wednesday, Aleph Adar 1 (Feb 6)
+				</p>
 
                 <h4><strong>Yahadus books 1 - 5</strong></h4>			
 				
@@ -143,7 +150,8 @@ body,td,th {
 
 	
          
-		  </div>
+			</div>
+
           <div class="row_8">
 			<!--
 			<img src="images/merkoslogo-color.gif" width="150" style="float: left; margin-right: 15px;" />

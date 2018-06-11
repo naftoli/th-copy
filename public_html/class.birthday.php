@@ -54,11 +54,7 @@ class Birthday {
 	}
     
     private function setUsers() {
-        $sql = "select user_id from users where dob > 0 and school_type_id in (2,3) order by user_id desc";
-        $result = mysql_query( $sql );
-        while ( $row = mysql_fetch_assoc( $result ) ) {
-            $this->users[] = $row['user_id'];
-        }
+        $this->users = [];
     }
 
     public function setBirthday() {
@@ -131,7 +127,10 @@ class Birthday {
 					if (!$bornInLeap && $leap && $hMonth == 6) {
 						$hMonth++;
 					}
-	
+    
+                    $date = jewishtojd($hMonth, $hDay, $this->year);
+                    $t->setDates( $date, $date );
+
 	                //get hebrew date of birthday for mission name
 	                $he_date = jdtojewish( $date, true, CAL_JEWISH_ADD_GERESHAYIM + CAL_JEWISH_ADD_ALAFIM_GERESH );
 	                $yomHoledes = iconv( 'WINDOWS-1255', 'UTF-8', $he_date );
@@ -154,8 +153,8 @@ class Birthday {
 	                $mission = mysql_real_escape_string( $missionName );
                     $description = 'Yom Holedes Mission';
                     
-                    $date = jewishtojd($hMonth, $hDay, $this->year);
                     if ( $date > 2458633 ) {
+                        echo "INVALID"; die();
                         mail(
                             "bugs@tzivoshashem.org", "Error: Invalid Birthday Dates", 
                             json_encode([
@@ -168,7 +167,6 @@ class Birthday {
                             ])
                         );
                     }
-	                $t->setDates( $date, $date );
 	                    
 	                if ( $t->createMission( $mission, $description ) ) {
 	                    if ( $t->needToCreateTasks() ) {

@@ -146,7 +146,7 @@ $bpOnly = [ 82 ];
 					$url_id2 = $url_id === '' ? '?' : $url_id . '&amp;'; 
 					?>
 					<li class="list_parent<?=isset($ui_type) && $ui_type == 'school' ? ' current' : ''?>">
-						<a href="/admin_school.php<?=$url_id?>" title="school">
+						<a href="/admin_school2.php<?=$url_id?>" title="school">
 							<div>
 								<span class="icon"><img height="28" width="28" alt="Base Management" src="/images/icon_dashboard.png"></span>
 								<?=T_('Base Management')?>
@@ -249,7 +249,7 @@ $bpOnly = [ 82 ];
 					// if they are a hebrew school...
 					if ( $h_school ) { ?>
 						<li class="list_parent<?=isset($ui_type) && $ui_type == 'school' ? ' current' : ''?>">
-							<a href="/admin_school.php<?=$url_id?>" title="school">
+							<a href="/admin_school2.php<?=$url_id?>" title="school">
 								<div>
 									<span class="icon"><img height="28" width="28" alt="Base Management" src="/images/icon_dashboard.png"></span>
 									<?=T_('Base Management')?>
@@ -351,7 +351,7 @@ $bpOnly = [ 82 ];
 						<?php } // end if showBlog is set in the Get Headers
 					} else { // non hebrew schools ?>     
 						<li class="list_parent<?=isset($ui_type) && $ui_type == 'school' ? ' current' : ''?>">
-							<a href="/admin_school.php<?=$url_id?>" title="school">
+							<a href="/admin_school2.php<?=$url_id?>" title="school">
 								<div>
 									<span class="icon"><img height="28" width="28" alt="Base Management" src="/images/icon_dashboard.png"></span>
 									<?=T_('Base Management')?>
@@ -829,7 +829,7 @@ $bpOnly = [ 82 ];
 							<?php if( $admin_user['auth'] == 'super' || !empty( $admin_user['auths']['school'] ) ) {
 								$url_id = isset($school_id) ? "?school_id=$school_id" : ''; ?>
 								
-								<a href="/admin_school.php<?=$url_id?>" <?=isset($ui_type) && $ui_type == 'school' ? 'class="selected"' : ''?>>
+								<a href="/admin_school2.php<?=$url_id?>" <?=isset($ui_type) && $ui_type == 'school' ? 'class="selected"' : ''?>>
 									<?=T_('Base Management')?>
 								</a>
 								<a href="/admin_school_subjects.php<?=$url_id?>" <?=isset($ui_type) && $ui_type == 'programs' ? 'class="selected"' : ''?>>
