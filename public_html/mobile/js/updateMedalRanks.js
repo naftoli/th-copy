@@ -15,6 +15,7 @@ var updateMedalRanks = function(){
     var timeout = false;
     
     var show_social = first_name && last_name; // determine if we should show the social sharing buttons...
+    var name = first_name + ' ' + last_name;
     
     var onCloseCallback; // create a blank callback for the function
     var rank_names = ["",   "Private",    "Sergeant", "Sergeant Major",   "Second Lieutenant",
@@ -91,7 +92,7 @@ var updateMedalRanks = function(){
             modal.find(".rbn").html('<img src="/file_view.php?id='+details.photo+'">'); // add the image...
             modal.find("#details").html(" You have earned a <strong>" + details.medal + " " + details.name + "</strong> Medal! " );
             
-            updateSocialMedia("Mazel Tov! "+first_name + " " + last_name + " has earned a "+ details.medal + " " + details.name + " medal from Tzivos Hashem!" );
+            updateSocialMedia("Mazel Tov! " + name + " has earned a "+ details.medal + " " + details.name + " medal from Tzivos Hashem!" );
             
             modal.modal('show'); // show the modal
         });
@@ -106,7 +107,7 @@ var updateMedalRanks = function(){
         modal.find(".rank").html('<img src="/mobile/reg/medals/images/trophits/'+rank_info.rank_ord+'.png" alt="">');
         modal.find("#details").html("You have been promoted to the rank of <strong>" + rank_names[rank_info.rank_ord] + "</strong>");
         
-        updateSocialMedia("Mazel Tov! "+ first_name + " " + last_name + " has been promoted to the rank of "+ rank_names[rank_info.rank_ord] + " in Tzivos Hashem!" );
+        updateSocialMedia("Mazel Tov! " + name + " has been promoted to the rank of "+ rank_names[rank_info.rank_ord] + " in Tzivos Hashem!" );
         
         modal.modal('show');
     }
