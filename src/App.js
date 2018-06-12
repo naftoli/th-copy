@@ -42,7 +42,7 @@ export class App extends Component {
 
 const mapStateToProps = ( state ) => {
   return {
-    logged_in: !!state.login.tokens.legacy
+    logged_in: !!state.login.current_user
   }
 }
 
