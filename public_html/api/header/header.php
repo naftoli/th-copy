@@ -23,7 +23,7 @@ include_once( __DIR__ . '/../../class.globalSettings.php');
 // set headers
 header('Access-Control-Allow-Origin: '. ( isset( $_SERVER['HTTP_ORIGIN'] ) ? $_SERVER['HTTP_ORIGIN'] : "*" ) ); // CORS
 header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Headers: mobile, Content-Type');
+header('Access-Control-Allow-Headers: mobile, Content-Type, Authorization');
 header("Content-Type: text/html; charset=utf-8;");
 
 if ($_SERVER['REQUEST_METHOD'] == "OPTIONS") json_response( false );
@@ -36,13 +36,23 @@ if ( is_array( $data ) ) {
 // authenticate user if authentication is required
 if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
     include_once( API_ROOT . "/auth/classes/Auth.php" );
-
+    $headers = getallheaders();
     // detect if we are on mobile
     $mobile = false;
     if ( // check if we have the proper header set or are coming from /mobile
-        ( isset( getallheaders()['mobile'] ) && getallheaders()['mobile'] === 'true' ) || 
+        ( isset( $headers['mobile'] ) && $headers['mobile'] === 'true' ) || 
         ( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], '/mobile' ) > 0 )
     ) $mobile = true;
+
+    if ( count( $_COOKIE ) == 0 && isset( $headers['Authorization'] ) ) {
+        $token = explode( ' ',  $headers['Authorization'] )[1];
+        if ( $mobile ) {
+            $_COOKIE['admin'] = $token;
+        } else {
+            $_COOKIE['admin_id'] = explode( '-', $token )[0];
+            $_COOKIE['admin_auth'] = explode( '-', $token )[1];
+        }
+    }
 
     if ( $mobile && $_COOKIE['admin'] ) {
         $admin_id = \mashpia\api\auth\Auth::authenticate(
