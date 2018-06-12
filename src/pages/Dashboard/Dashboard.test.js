@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import Dashboard from './Dashboard';
 import { MemoryRouter } from 'react-router';
 import Sidebar from 'components/navigation/Sidebar';
+import Navbar from 'components/navigation/Navbar/Navbar';
 
 describe("Dashboard", () => {
   // BOILERPLATE
@@ -62,9 +63,21 @@ describe("Dashboard", () => {
         expect( dashboard().state().active ).toBe( false );
       });
 
-      it(`defaults to false if device width is > 768px`, () => {
+      it(`defaults to true if device width is > 768px`, () => {
         expect( dashboard().state().active ).toBe( true );
       });
+
+      it('toggles the sidebar when the Navbar is clicked', () => {
+        dashboard().find( Navbar ).simulate('click')
+        expect( dashboard().state().active ).toBe( false )
+      });
+
+      it('does not toggle the sidebar when the Navbar is clicked and the screen is above 1024px', () => {
+        window.innerWidth = 1025;
+        dashboard().find( Navbar ).simulate('click');
+        expect( dashboard().state().active ).toBe( true );
+      });
+      
     });
   });
 });
