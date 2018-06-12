@@ -1,9 +1,10 @@
 import { LEGACY_URL } from 'components/constants';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 // API url
 let API_URL = `${LEGACY_URL}/api`;
 // send cookies
-let credentials = process.env.NODE_ENV === "production" ? 'same-origin' : 'include';
-
+const credentials = process.env.NODE_ENV === "production" ? 'same-origin' : 'include';
 /**
  * headers
  * 
@@ -13,7 +14,8 @@ const headers = () => {
   let headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
-    'mobile': 'false'
+    'mobile': 'false',
+    'Authorization': `Legacy ${cookies.get('admin_id')}-${cookies.get('admin_auth')}`
   }
   return headers;
 }
