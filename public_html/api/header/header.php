@@ -21,7 +21,7 @@ require_once( dirname(__FILE__) . "/../../classes/authorize/PaymentProfile.php" 
 include_once( __DIR__ . '/../../class.globalSettings.php');
 
 // set headers
-header('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN'] ); // CORS
+header('Access-Control-Allow-Origin: '. ( isset( $_SERVER['HTTP_ORIGIN'] ) ? $_SERVER['HTTP_ORIGIN'] : "*" ) ); // CORS
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers: mobile, Content-Type');
 header("Content-Type: text/html; charset=utf-8;");
