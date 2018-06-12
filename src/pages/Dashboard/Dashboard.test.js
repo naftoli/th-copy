@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Dashboard from './Dashboard';
+import { Dashboard } from './Dashboard';
 import { MemoryRouter } from 'react-router';
 import Sidebar from 'components/navigation/Sidebar';
 import Navbar from 'components/navigation/Navbar/Navbar';

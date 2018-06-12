@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import Sidebar, { getMenu } from 'components/navigation/Sidebar';
 import Navbar from 'components/navigation/Navbar';
+import { withRouter } from 'react-router';
 import './Dashboard.scss';
 
-class Dashboard extends Component {
+export class Dashboard extends Component {
+
+  static defaultProps = {
+    history: { listen: () => { return () => {} } } // function that returns a function
+  }
 
   constructor( props ){
     super( props );
@@ -22,6 +27,16 @@ class Dashboard extends Component {
     if ( window.innerWidth > 768 ) {
       this.setState({ active: true });
     }
+    // close the sidebar if the route changes
+    this.unlisten = this.props.history.listen( () => {
+      if ( window.innerWidth <= 768 ) {
+        this.setState({ active: false });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.unlisten();
   }
 
   render() {
@@ -39,4 +54,4 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default withRouter(Dashboard);
