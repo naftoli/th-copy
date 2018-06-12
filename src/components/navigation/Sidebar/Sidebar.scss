@@ -32,10 +32,6 @@
         padding-left: 30px;
         background: $primary-color-dark;
       }
-      a:hover, a:focus, a.active {
-        color: $primary-color-dark !important;
-        background: #fff;
-      }
       // third level components ( and all further levels )
       li > div a {
         font-size: 0.8em;
@@ -71,8 +67,13 @@
     user-select: none;
   }
   // open links
-  a:hover, a.open, a:focus, a.active {
-    background: $primary-color-hover;
+  a:hover, a.open, a:focus {
+    background: $primary-color-hover !important;
+  }
+
+  a.active {
+    color: $primary-color-dark !important;
+    background: #fff !important;
   }
 
   a.dropdown::before {
