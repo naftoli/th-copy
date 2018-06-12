@@ -8,15 +8,15 @@ const DEFAULT_USER_TYPES = [ 'HQ', 'BC' ];
  * 
  * Callback function used for getMenu
  * 
- * @param {object} item Object from getMenu array, Tests agains children and user_types keys
+ * @param {object} item Object from getMenu array, Tests agains items and user_types keys
  * @param {string} user_type The type of user (e.g. HQ or BC) that we are filtering the menu for
  * @param {Array} defaults Array of defaults in the event that the item does not have a user_types array
  */
 export const filterItem = ( item, user_type, defaults ) => {
-  // apply to children
-  if ( item.children ) {
+  // apply to items
+  if ( item.items ) {
     item = Object.assign( {}, item, 
-      { children: item.children.filter( child => filterItem( child, user_type, defaults ) ) }
+      { items: item.items.filter( child => filterItem( child, user_type, defaults ) ) }
     );
   }
   // // override the defaults
@@ -46,10 +46,10 @@ const getMenu = ( user_type ) => {
     {
       label: 'Base Managment',
       icon: <img src={`${LEGACY_URL}/images/icon_dashboard.png`} alt="base-managment"/>,
-      children: [
+      items: [
         {
           label: "Soldiers",
-          children: [
+          items: [
             { label: "View / Edit", path: '/users' },
             { label: "Registration", path: '/users/registration' },
             { label: "Rank Cards", path: '/users/cards' },
@@ -62,7 +62,7 @@ const getMenu = ( user_type ) => {
         { label: "Staff", path: '/staff' },
         {
           label: "Base",
-          children: [
+          items: [
             { label: 'View / Edit', path: '/base' },
             { label: 'Settings', path: '/base/settings' },
             { label: 'Transactions', path: '/base/transactions' }
@@ -73,7 +73,7 @@ const getMenu = ( user_type ) => {
     {
       label: "Missions",
       icon: <img src={`${LEGACY_URL}/images/icon_admin_medal.png`} alt="Missions" />,
-      children: [
+      items: [
         { label: 'Print Missions', legacy: true, path: '/print_missions2.php' },
         { label: 'Print Summer Missions', legacy: true, path: '/print_missions_summer.php' },
         { label: 'Mark Missions', legacy: true, path: '/mark_missions2.php' },
@@ -87,7 +87,7 @@ const getMenu = ( user_type ) => {
     {
       label: "Achievement Cards",
       icon: <img src={`${LEGACY_URL}/images/icon_auction.png`} alt="Achievement Cards" />,
-      children: [
+      items: [
         { label: 'Add Achievement Task', legacy: true, path: '/newAchievementTasks.php' },
         { label: 'Add / Subtract Points', legacy: true, path: '/manual_points.php' },
       ]
@@ -95,7 +95,7 @@ const getMenu = ( user_type ) => {
     {
       label: "Chidon",
       icon: <img src={`${LEGACY_URL}/images/chidon.png`} alt="Chidon" />,
-      children: [
+      items: [
         { label: 'Shabbaton Enrolled Report', legacy: true, path: '/reports/chidon/shabbaton_enrollment.php' },
         { label: 'Shabbaton Walking Report', legacy: true, path: '/reports/chidon/walking_groups.php' },
         { label: 'Enter Chidon Test Marks', legacy: true, path: '/chidon_tests.php' },
@@ -108,7 +108,7 @@ const getMenu = ( user_type ) => {
     {
       label: "Reports",
       icon: <img src={`${LEGACY_URL}/images/icon_report.png`} alt="Reports" />,
-      children: [
+      items: [
         { label: 'Registered Report', legacy: true, path: '/registered_report.php' },
         { label: 'Parents Report', legacy: true, path: '/parent_report.php' },
         { label: 'Not Yet Registered Report', legacy: true, path: '/non_registered_report.php' },
@@ -117,20 +117,20 @@ const getMenu = ( user_type ) => {
         { label: 'Auction Miles Report', legacy: true, path: '/auctionMiles.php' },
         { label: 'Missions Done Report', legacy: true, path: '/missions_report.php' },
         { label: "Stickers",
-          children: [
+          items: [
             { label: 'Total Stickers Earned', legacy: true, path: '/stickers_report.php'  },
             { label: 'Total Stickers Earned By Date', legacy: true, path: '/stickers_report_by_week.php'  },
             { label: 'Total Stickers Earned By Child', legacy: true, path: '/stickers_report_by_child.php'  }
           ]
         },
         { label: "Birthdays",
-          children: [
+          items: [
             { label: 'Birthday Report', legacy: true, path: '/names_report.php'  },
             { label: 'Birthdays By Date Range', legacy: true, path: '/find_birthdays_report.php'  }
           ]
         },
         { label: "Ranks / Medals",
-          children: [
+          items: [
             { label: 'Rank Report', legacy: true, path: '/rank_report.php'  },
             { label: 'Mark Ranks / Medals as Received', legacy: true, path: '/admin_received_stats.php'  },
           ]
@@ -144,15 +144,15 @@ const getMenu = ( user_type ) => {
     {
       label: "Campaigns",
       icon: <img src={`${LEGACY_URL}/images/parentIcons/Campaigns.gif`} alt="Campaigns" />,
-      children: [
+      items: [
         { label: 'Tanya', 
-          children: [
+          items: [
             { label: 'Individual Marking', legacy: true, path: '/editSoldierLines2.php' },
             { label: 'Yud Aleph Nissan Reports', legacy: true, path: '/yud_alef_nissan_choose.php' },
           ]
         },
         { label: 'Tehillim', 
-          children: [
+          items: [
             { label: 'Mark Shabbos Mevorchim Tehillim', legacy: true, path: '/mark_tehillim2.php' },
             { label: 'Shabbos Mevorchim Report', legacy: true, path: '/choose_sm_report.php' },
             { label: 'Check Your Tehillim Quotas', legacy: true, path: '/tehillim_quotas.php' },
@@ -165,7 +165,7 @@ const getMenu = ( user_type ) => {
     {
       label: "Rally",
       icon: <img src={`${LEGACY_URL}/images/parentIcons/Rally.gif`} alt="Rally" />,
-      children: [
+      items: [
         { label: 'Promotion Picture Report', legacy: true, path: '/promotion_report.php' },
         { label: 'Teacher\'s Medal Ceremony Report', legacy: true, path: '/medal_rank_ceremony3.php' },
         { label: 'Raffle Winners', legacy: true, path: '/raffles/shared/forms/winners_form.php' }

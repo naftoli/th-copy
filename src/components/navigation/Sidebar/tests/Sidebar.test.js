@@ -2,6 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import Sidebar from '../Sidebar';
 import SidebarItem from '../SidebarItem';
+import { MemoryRouter } from 'react-router-dom';
 
 describe("Sidebar", () => {
   // BOILERPLATE
@@ -9,8 +10,10 @@ describe("Sidebar", () => {
   // sidebar singleton
   const sidebar = () => {
     return mountedComponent ? mountedComponent : mountedComponent = mount(
-      <Sidebar {...props} />
-    );
+      <MemoryRouter>
+        <Sidebar {...props} />
+      </MemoryRouter>
+    ).find( Sidebar );
   }
   // clear global variables before each test
   beforeEach(() => {

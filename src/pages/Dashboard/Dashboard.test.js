@@ -1,21 +1,24 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import Dashboard from './Dashboard';
-
+import { MemoryRouter } from 'react-router';
 import Sidebar from 'components/navigation/Sidebar';
 
 describe("Dashboard", () => {
   // BOILERPLATE
-  let props, mountedComponent, initialWidth;
+  let props, mountedComponent, initialWidth, children;
   // Component singleton
   const dashboard = () => {
-    return mountedComponent ? mountedComponent : mountedComponent = mount(
-      <Dashboard {...props} />
-    );
+    return mountedComponent ? mountedComponent : mountedComponent = shallow(
+      <MemoryRouter>
+        <Dashboard {...props}>{ children }</Dashboard>
+      </MemoryRouter>
+    ).find( Dashboard ).dive();
   }
   // clear global variables before each test
   beforeEach(() => {
     props = {};
+    children = undefined;
     mountedComponent = undefined;
     initialWidth = window.innerWidth;
   });
@@ -45,8 +48,8 @@ describe("Dashboard", () => {
 
     it(`renders it's children`, () => {
       const Sample = () => <div id="sample"></div>;
-      const tmp_dashboard = mount( <Dashboard><Sample/></Dashboard> );
-      expect( tmp_dashboard.find( Sample ).length ).toBe( 1 );
+      children = <Sample />;
+      expect( dashboard().find( Sample ).length ).toBe( 1 );
     });
   });
 
@@ -62,19 +65,6 @@ describe("Dashboard", () => {
       it(`defaults to false if device width is > 768px`, () => {
         expect( dashboard().state().active ).toBe( true );
       });
-
-      it(`toggles when a user presses the sidebar ('.navbar-brand')`, () => {
-        expect( dashboard().state().active ).toBe( true );
-        dashboard().find( '.navbar-brand' ).simulate('click');
-        expect( dashboard().state().active ).toBe( false );
-      });
-
-      it(`does not toggle if the device width is > 1024px`, () => {
-        window.innerWidth = 1080;
-        expect( dashboard().state().active ).toBe( true );
-        dashboard().find( '.navbar-brand' ).simulate('click');
-        expect( dashboard().state().active ).toBe( true );
-      });
-    })
+    });
   });
-})
+});
