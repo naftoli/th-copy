@@ -3,7 +3,7 @@ import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
 export const initialState = {
-  current_user: {},
+  current_user: false,
   loading: false,
   errors: [],
   tokens: {}

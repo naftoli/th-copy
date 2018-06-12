@@ -10,8 +10,8 @@ describe( 'initialState', () => {
     expect( initialState.tokens ).toEqual( {} );
   });
 
-  it(`has a key 'current_user' set to '{}'`, () => {
-    expect( initialState.current_user ).toEqual( {} );
+  it(`has a key 'current_user' set to 'false'`, () => {
+    expect( initialState.current_user ).toEqual( false );
   });
 
   it(`has a key 'loading' set to 'false'`, () => {
@@ -63,7 +63,7 @@ describe( 'reducer', () => {
     it(`updates state.current_user`, () => {
       const user = { foo: 'bar' };
       expect( reducer(initialState, actions.setUser( user )).current_user ).toEqual( user );
-      expect( initialState.current_user ).toEqual( {} );
+      expect( initialState.current_user ).toEqual( false );
     });
 
     it('sets the admin_id cookie', () => {
@@ -75,7 +75,7 @@ describe( 'reducer', () => {
 
   });
   
-  describe('actions.setUser', () => {
+  describe('actions.logout', () => {
     
     it(`clears the admin_auth cookie`, () => {
       cookies.set('admin_auth', 'legacy');
