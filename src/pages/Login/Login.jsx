@@ -35,6 +35,10 @@ export class Login extends Component {
     this.setState({
       show_password: !this.state.show_password
     });
+    const password = document.querySelector('#password');
+    if ( password ) {
+      password.focus(); password.click();
+    }
   }
 
   handleLoginForm = ( event ) => {
