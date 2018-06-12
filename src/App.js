@@ -29,7 +29,7 @@ export class App extends Component {
 
               <Route path={`/logout`} component={Logout}/>
 
-              <Route render={ props => <h1>404 - {process.env.PUBLIC_URL}</h1> } />
+              <Route render={ props => <h1>404</h1> } />
             </Switch>
           </Dashboard>
         </Router>

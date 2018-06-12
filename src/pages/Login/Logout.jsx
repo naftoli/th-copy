@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 
 export class Logout extends Component {
   // log the user out
-  componentWillMount() {
+  componentDidMount() {
     this.props.logout();
   }
   // redirect to the homepage
@@ -14,4 +14,4 @@ export class Logout extends Component {
   }
 }
 
-export default connect( false, { logout: actions.logout} )( Logout );
+export default connect( false, { logout: actions.logout } )( Logout );
