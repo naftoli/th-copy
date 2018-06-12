@@ -66,5 +66,18 @@ export const operations = {
           dispatch( actions.setErrors( "Network Error" ));
         });
     }
+  },
+
+  getCurrentUser: () => {
+    return dispatch => {
+      dispatch( actions.loading( true ) );
+      return API.get( '/auth/current_user.php' )
+        .then( response => {
+          dispatch( actions.loading( false ) );
+          if ( !response.success ) 
+            return dispatch( actions.tokens( false, false ) )
+          return dispatch( actions.setUser( response.data ) );
+        });
+    }
   }
 }
