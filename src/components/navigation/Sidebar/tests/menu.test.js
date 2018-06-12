@@ -36,16 +36,16 @@ describe('filterItem', () => {
     })
   })
 
-  it('non-destructively filters item.children with the same rules', () => {
-    const item = { foo: 'bar', children: [
+  it('non-destructively filters item.items with the same rules', () => {
+    const item = { foo: 'bar', items: [
       { user_types: ['HQ'] },
       { user_types: ['BC'] },
     ]}
-    // expect that the filtered item's children where filtered as well.
-    expect( filterItem( item, 'HQ', ['HQ'] ).children.length ).toBe( 1 );
+    // expect that the filtered item's items where filtered as well.
+    expect( filterItem( item, 'HQ', ['HQ'] ).items.length ).toBe( 1 );
 
     // Do not modify the item object that is passed in
-    expect( item.children.length ).toBe( 2 );
+    expect( item.items.length ).toBe( 2 );
   })
   
 })

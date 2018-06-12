@@ -1,5 +1,6 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
+import { MemoryRouter } from 'react-router';
 import SidebarDropdown from '../SidebarDropdown';
 import SidebarItem from '../SidebarItem';
 import { Collapse } from 'reactstrap';
@@ -9,9 +10,11 @@ describe("SidebarDropdown", () => {
   let props, mountedComponent;
   // Component singleton
   const sidebarDropdown = () => {
-    return mountedComponent ? mountedComponent : mountedComponent = mount(
-      <SidebarDropdown {...props} />
-    );
+    return mountedComponent ? mountedComponent : mountedComponent = shallow(
+      <MemoryRouter>
+        <SidebarDropdown {...props} />
+      </MemoryRouter>
+    ).find(SidebarDropdown).dive();
   }
   // clear global variables before each test
   beforeEach(() => {
@@ -23,7 +26,7 @@ describe("SidebarDropdown", () => {
   describe("renders", () => {
 
     it("an LI element as the root DOM element", () =>{
-      expect( sidebarDropdown().getDOMNode().tagName ).toBe( "LI" );
+      expect( sidebarDropdown().find('li').length ).toBe( 1 );
     })
   
     it("an A tag", () => {
@@ -42,18 +45,18 @@ describe("SidebarDropdown", () => {
 
   describe("props", () => {
 
-    describe(".children", () => {
+    describe(".items", () => {
 
       it("has default value ([])", () => {
-        expect( sidebarDropdown().props().children ).toEqual( [] );
+        expect( SidebarDropdown.defaultProps.items ).toEqual( [] );
       })
 
       it("renders a SidebarItem for each child", () => {
-        props.children = [
+        props.items = [
           { label: 'Item 1.1 '},
           { label: 'Item 1.2 '}
         ]
-        expect( sidebarDropdown().find(SidebarItem).length ).toEqual( props.children.length );
+        expect( sidebarDropdown().find(SidebarItem).length ).toEqual( props.items.length );
       })
 
     })
@@ -61,36 +64,26 @@ describe("SidebarDropdown", () => {
     describe(".label", () => {
       
       it("has default value ('')", () => {
-        expect( sidebarDropdown().props().label ).toEqual( "" );
-      })
-
-      it("accepts new values", () => {
-        props.label = "Dropdown 1";
-        expect( sidebarDropdown().props().label ).toEqual( props.label );
-      })
+        expect( SidebarDropdown.defaultProps.label ).toEqual( "" );
+      });
 
       it("renders value in A tag", () => {
         props.label = "Dropdown 1"
         expect( sidebarDropdown().find('a').text() ).toBe( props.label );
-      })
+      });
 
     })
 
     describe(".icon", () => {
       
       it("has default value (false)", () => {
-        expect( sidebarDropdown().props().icon ).toBe( false );
-      })
-
-      it("accepts boolean values", () => {
-        props.icon = true;
-        expect( sidebarDropdown().props().icon ).toBe( true );
-      })
+        expect( SidebarDropdown.defaultProps.icon ).toBe( false );
+      });
 
       it("accepts and renders element values", () => {
         props.icon = <i id="test-icon" />
         expect( sidebarDropdown().find("#test-icon").length ).toBe( 1 );
-      })
+      });
 
     })
 

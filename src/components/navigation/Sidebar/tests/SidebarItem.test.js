@@ -1,5 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import { MemoryRouter } from 'react-router';
+import { NavLink } from 'react-router-dom';
 import SidebarItem from '../SidebarItem';
 import SidebarDropdown from '../SidebarDropdown';
 
@@ -9,8 +11,10 @@ describe("SidebarItem", () => {
   // Component singleton
   const sidebarItem = () => {
     return mountedComponent ? mountedComponent : mountedComponent = mount(
-      <SidebarItem {...props} />
-    );
+      <MemoryRouter>
+        <SidebarItem {...props} />
+      </MemoryRouter>
+    ).find( SidebarItem );
   }
   // clear global variables before each test
   beforeEach(() => {
@@ -19,10 +23,10 @@ describe("SidebarItem", () => {
   });
 
   // TESTS
-  describe('renders - children', () => {
+  describe('renders - items', () => {
 
     it('renders a SidebarDropdown', () => {
-      props.children = [];
+      props.items = [];
       expect( sidebarItem().find( SidebarDropdown ).length ).toBe( 1 );
     })
 
@@ -31,11 +35,7 @@ describe("SidebarItem", () => {
   describe('renders - legacy link', () => {
     
     beforeEach(() => {
-      props = {
-        label: 'Item 1',
-        legacy: true,
-        path: '/test'
-      }
+      props = { label: 'Item 1', legacy: true, path: '/test' }
     });
 
     it('an LI tag', () => {
@@ -51,9 +51,17 @@ describe("SidebarItem", () => {
   // TODO when react router is setup
   describe('renders - internal (react) link', () => {
 
-    xit('an LI tag')
+    beforeEach(() => {
+      props = { label: 'Item 1', path: '/' }
+    });
 
-    xit('a NavLink element')
+    it('an LI tag', () => {
+      expect( sidebarItem().find('li').length ).toBe( 1 );
+    })
+
+    it('a NavLink element', () => {
+      expect( sidebarItem().find( NavLink ).length ).toBe( 1 );
+    });
 
   })
 
@@ -67,7 +75,7 @@ describe("SidebarItem", () => {
 
       it('renders as the elements text', () => {
         props.label = 'Item 1';
-        expect( sidebarItem().text() ).toBe( props.label );
+        expect( sidebarItem().text().trim() ).toBe( props.label );
       })
     
     })
@@ -85,18 +93,18 @@ describe("SidebarItem", () => {
 
     })
 
-    describe('.children', () => {
+    describe('.items', () => {
 
       it('has a default value (false)', () => {
-        expect( sidebarItem().props().children ).toBe( false );
+        expect( sidebarItem().props().items ).toBe( false );
       })
 
       it('renders a SidebarDropdown with all it\'s props when this prop is valid', () => {
-        props.children = [ { label: "Item 2.1" } ];
+        props.items = [ { label: "Item 2.1" } ];
         props.test = "fake prop";
 
         expect( sidebarItem().find( SidebarDropdown ).length ).toBe( 1 );
-        expect( sidebarItem().find( SidebarDropdown ).props().children ).toBe( props.children );
+        expect( sidebarItem().find( SidebarDropdown ).props().items ).toBe( props.items );
         expect( sidebarItem().find( SidebarDropdown ).props().test ).toBe( props.test );
       })
 

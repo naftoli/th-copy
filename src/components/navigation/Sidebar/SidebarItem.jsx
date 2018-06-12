@@ -7,16 +7,16 @@ class SidebarItem extends Component {
 
   render(){
     // This is a dropdown
-    if ( this.props.children ) {
+    if ( this.props.items ) {
       return <SidebarDropdown { ...this.props } />;
     }
 
     // Generate link to React-Router page
-    let link = <NavLink exact to={ this.props.path }> { this.props.icon } { this.props.label } </NavLink>;
+    let link = <NavLink exact to={ this.props.path }>{ this.props.icon }{ this.props.label }</NavLink>;
 
     // use a standard A tag if page is outside of this system
     if ( this.props.legacy ) {
-      link = <a href={LEGACY_URL + this.props.path}> { this.props.icon } { this.props.label } </a>;
+      link = <a href={LEGACY_URL + this.props.path}>{ this.props.icon }{ this.props.label }</a>;
     }
 
     // return the link wrapped in an LI
@@ -27,7 +27,7 @@ class SidebarItem extends Component {
 SidebarItem.defaultProps = {
   label: '',
   icon: false,
-  children: false,
+  items: false,
   legacy: false,
   path: '#'
 }

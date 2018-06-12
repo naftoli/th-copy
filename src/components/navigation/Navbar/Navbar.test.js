@@ -1,6 +1,13 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import Navbar from './Navbar';
+import indexNavbar from './index';
+
+describe('index.js', () => {
+  it('exports Navbar component as the default', () => {
+    expect( indexNavbar ).toEqual( Navbar );
+  });
+});
 
 describe("Navbar", () => {
   // BOILERPLATE

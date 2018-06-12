@@ -5,24 +5,30 @@ Array [
   Object {
     "icon": <img
       alt="home"
-      src="//mashpia.local//images/icon_admin_home.png"
+      src="//mashpia.local/images/icon_admin_home.png"
 />,
     "label": "Home",
-    "legacy": true,
-    "path": "/admin.php",
+    "path": "/",
   },
   Object {
-    "children": Array [
+    "icon": <img
+      alt="base-managment"
+      src="//mashpia.local/images/icon_dashboard.png"
+/>,
+    "items": Array [
       Object {
-        "children": Array [
+        "items": Array [
           Object {
             "label": "View / Edit",
+            "path": "/users",
           },
           Object {
             "label": "Registration",
+            "path": "/users/registration",
           },
           Object {
             "label": "Rank Cards",
+            "path": "/users/cards",
           },
           Object {
             "label": "Update Missions",
@@ -39,36 +45,42 @@ Array [
       },
       Object {
         "label": "Plattons",
+        "path": "/plattons",
       },
       Object {
         "label": "Parents",
+        "path": "/parents",
       },
       Object {
         "label": "Staff",
+        "path": "/staff",
       },
       Object {
-        "children": Array [
+        "items": Array [
           Object {
             "label": "View / Edit",
+            "path": "/base",
           },
           Object {
             "label": "Settings",
+            "path": "/base/settings",
           },
           Object {
             "label": "Transactions",
+            "path": "/base/transactions",
           },
         ],
         "label": "Base",
       },
     ],
-    "icon": <img
-      alt="base-managment"
-      src="//mashpia.local//images/icon_dashboard.png"
-/>,
     "label": "Base Managment",
   },
   Object {
-    "children": Array [
+    "icon": <img
+      alt="Missions"
+      src="//mashpia.local/images/icon_admin_medal.png"
+/>,
+    "items": Array [
       Object {
         "label": "Print Missions",
         "legacy": true,
@@ -110,14 +122,14 @@ Array [
         "path": "/missions_report.php",
       },
     ],
-    "icon": <img
-      alt="Missions"
-      src="//mashpia.local//images/icon_admin_medal.png"
-/>,
     "label": "Missions",
   },
   Object {
-    "children": Array [
+    "icon": <img
+      alt="Achievement Cards"
+      src="//mashpia.local/images/icon_auction.png"
+/>,
+    "items": Array [
       Object {
         "label": "Add Achievement Task",
         "legacy": true,
@@ -129,14 +141,14 @@ Array [
         "path": "/manual_points.php",
       },
     ],
-    "icon": <img
-      alt="Achievement Cards"
-      src="//mashpia.local//images/icon_auction.png"
-/>,
     "label": "Achievement Cards",
   },
   Object {
-    "children": Array [
+    "icon": <img
+      alt="Chidon"
+      src="//mashpia.local/images/chidon.png"
+/>,
+    "items": Array [
       Object {
         "label": "Shabbaton Enrolled Report",
         "legacy": true,
@@ -173,14 +185,14 @@ Array [
         "path": "/chidon_review.php",
       },
     ],
-    "icon": <img
-      alt="Chidon"
-      src="//mashpia.local//images/chidon.png"
-/>,
     "label": "Chidon",
   },
   Object {
-    "children": Array [
+    "icon": <img
+      alt="Reports"
+      src="//mashpia.local/images/icon_report.png"
+/>,
+    "items": Array [
       Object {
         "label": "Registered Report",
         "legacy": true,
@@ -217,7 +229,7 @@ Array [
         "path": "/missions_report.php",
       },
       Object {
-        "children": Array [
+        "items": Array [
           Object {
             "label": "Total Stickers Earned",
             "legacy": true,
@@ -237,7 +249,7 @@ Array [
         "label": "Stickers",
       },
       Object {
-        "children": Array [
+        "items": Array [
           Object {
             "label": "Birthday Report",
             "legacy": true,
@@ -252,7 +264,7 @@ Array [
         "label": "Birthdays",
       },
       Object {
-        "children": Array [
+        "items": Array [
           Object {
             "label": "Rank Report",
             "legacy": true,
@@ -267,25 +279,25 @@ Array [
         "label": "Ranks / Medals",
       },
     ],
-    "icon": <img
-      alt="Reports"
-      src="//mashpia.local//images/icon_report.png"
-/>,
     "label": "Reports",
   },
   Object {
     "icon": <img
       alt="shipping-reports"
-      src="//mashpia.local//images/icon_report.png"
+      src="//mashpia.local/images/icon_report.png"
 />,
     "label": "Shipping Reports",
     "legacy": true,
     "path": "/reports/shipping",
   },
   Object {
-    "children": Array [
+    "icon": <img
+      alt="Campaigns"
+      src="//mashpia.local/images/parentIcons/Campaigns.gif"
+/>,
+    "items": Array [
       Object {
-        "children": Array [
+        "items": Array [
           Object {
             "label": "Individual Marking",
             "legacy": true,
@@ -300,7 +312,7 @@ Array [
         "label": "Tanya",
       },
       Object {
-        "children": Array [
+        "items": Array [
           Object {
             "label": "Mark Shabbos Mevorchim Tehillim",
             "legacy": true,
@@ -330,14 +342,14 @@ Array [
         "label": "Tehillim",
       },
     ],
-    "icon": <img
-      alt="Campaigns"
-      src="//mashpia.local//images/parentIcons/Campaigns.gif"
-/>,
     "label": "Campaigns",
   },
   Object {
-    "children": Array [
+    "icon": <img
+      alt="Rally"
+      src="//mashpia.local/images/parentIcons/Rally.gif"
+/>,
+    "items": Array [
       Object {
         "label": "Promotion Picture Report",
         "legacy": true,
@@ -354,16 +366,12 @@ Array [
         "path": "/raffles/shared/forms/winners_form.php",
       },
     ],
-    "icon": <img
-      alt="Rally"
-      src="//mashpia.local//images/parentIcons/Rally.gif"
-/>,
     "label": "Rally",
   },
   Object {
     "icon": <img
       alt="Raffles"
-      src="//mashpia.local//images/icon_auction.png"
+      src="//mashpia.local/images/icon_auction.png"
 />,
     "label": "Raffles",
     "legacy": true,
@@ -372,7 +380,7 @@ Array [
   Object {
     "icon": <img
       alt="Yearly Prize"
-      src="//mashpia.local//images/icon_auction.png"
+      src="//mashpia.local/images/icon_auction.png"
 />,
     "label": "Yearly Prize",
     "legacy": true,
@@ -381,7 +389,7 @@ Array [
   Object {
     "icon": <img
       alt="Setup Guide"
-      src="//mashpia.local//images/icon_wizard.png"
+      src="//mashpia.local/images/icon_wizard.png"
 />,
     "label": "Setup Guide",
     "legacy": true,
@@ -390,14 +398,14 @@ Array [
   Object {
     "icon": <img
       alt="Miliage Program"
-      src="//mashpia.local//images/icon_auction.png"
+      src="//mashpia.local/images/icon_auction.png"
 />,
     "label": "Mileage Program",
   },
   Object {
     "icon": <img
       alt="Support"
-      src="//mashpia.local//images/parentIcons/support icon.gif"
+      src="//mashpia.local/images/parentIcons/support icon.gif"
 />,
     "label": "Support",
     "legacy": true,
@@ -406,11 +414,10 @@ Array [
   Object {
     "icon": <img
       alt="Logout"
-      src="//mashpia.local//images/parentIcons/logout.gif"
+      src="//mashpia.local/images/parentIcons/logout.gif"
 />,
     "label": "Logout",
-    "legacy": true,
-    "path": "/logout.php",
+    "path": "/logout",
   },
 ]
 `;
@@ -420,24 +427,30 @@ Array [
   Object {
     "icon": <img
       alt="home"
-      src="//mashpia.local//images/icon_admin_home.png"
+      src="//mashpia.local/images/icon_admin_home.png"
 />,
     "label": "Home",
-    "legacy": true,
-    "path": "/admin.php",
+    "path": "/",
   },
   Object {
-    "children": Array [
+    "icon": <img
+      alt="base-managment"
+      src="//mashpia.local/images/icon_dashboard.png"
+/>,
+    "items": Array [
       Object {
-        "children": Array [
+        "items": Array [
           Object {
             "label": "View / Edit",
+            "path": "/users",
           },
           Object {
             "label": "Registration",
+            "path": "/users/registration",
           },
           Object {
             "label": "Rank Cards",
+            "path": "/users/cards",
           },
           Object {
             "label": "Update Missions",
@@ -454,36 +467,42 @@ Array [
       },
       Object {
         "label": "Plattons",
+        "path": "/plattons",
       },
       Object {
         "label": "Parents",
+        "path": "/parents",
       },
       Object {
         "label": "Staff",
+        "path": "/staff",
       },
       Object {
-        "children": Array [
+        "items": Array [
           Object {
             "label": "View / Edit",
+            "path": "/base",
           },
           Object {
             "label": "Settings",
+            "path": "/base/settings",
           },
           Object {
             "label": "Transactions",
+            "path": "/base/transactions",
           },
         ],
         "label": "Base",
       },
     ],
-    "icon": <img
-      alt="base-managment"
-      src="//mashpia.local//images/icon_dashboard.png"
-/>,
     "label": "Base Managment",
   },
   Object {
-    "children": Array [
+    "icon": <img
+      alt="Missions"
+      src="//mashpia.local/images/icon_admin_medal.png"
+/>,
+    "items": Array [
       Object {
         "label": "Print Missions",
         "legacy": true,
@@ -525,14 +544,14 @@ Array [
         "path": "/missions_report.php",
       },
     ],
-    "icon": <img
-      alt="Missions"
-      src="//mashpia.local//images/icon_admin_medal.png"
-/>,
     "label": "Missions",
   },
   Object {
-    "children": Array [
+    "icon": <img
+      alt="Achievement Cards"
+      src="//mashpia.local/images/icon_auction.png"
+/>,
+    "items": Array [
       Object {
         "label": "Add Achievement Task",
         "legacy": true,
@@ -544,14 +563,14 @@ Array [
         "path": "/manual_points.php",
       },
     ],
-    "icon": <img
-      alt="Achievement Cards"
-      src="//mashpia.local//images/icon_auction.png"
-/>,
     "label": "Achievement Cards",
   },
   Object {
-    "children": Array [
+    "icon": <img
+      alt="Chidon"
+      src="//mashpia.local/images/chidon.png"
+/>,
+    "items": Array [
       Object {
         "label": "Shabbaton Enrolled Report",
         "legacy": true,
@@ -588,14 +607,14 @@ Array [
         "path": "/chidon_review.php",
       },
     ],
-    "icon": <img
-      alt="Chidon"
-      src="//mashpia.local//images/chidon.png"
-/>,
     "label": "Chidon",
   },
   Object {
-    "children": Array [
+    "icon": <img
+      alt="Reports"
+      src="//mashpia.local/images/icon_report.png"
+/>,
+    "items": Array [
       Object {
         "label": "Registered Report",
         "legacy": true,
@@ -632,7 +651,7 @@ Array [
         "path": "/missions_report.php",
       },
       Object {
-        "children": Array [
+        "items": Array [
           Object {
             "label": "Total Stickers Earned",
             "legacy": true,
@@ -652,7 +671,7 @@ Array [
         "label": "Stickers",
       },
       Object {
-        "children": Array [
+        "items": Array [
           Object {
             "label": "Birthday Report",
             "legacy": true,
@@ -667,7 +686,7 @@ Array [
         "label": "Birthdays",
       },
       Object {
-        "children": Array [
+        "items": Array [
           Object {
             "label": "Rank Report",
             "legacy": true,
@@ -682,25 +701,25 @@ Array [
         "label": "Ranks / Medals",
       },
     ],
-    "icon": <img
-      alt="Reports"
-      src="//mashpia.local//images/icon_report.png"
-/>,
     "label": "Reports",
   },
   Object {
     "icon": <img
       alt="shipping-reports"
-      src="//mashpia.local//images/icon_report.png"
+      src="//mashpia.local/images/icon_report.png"
 />,
     "label": "Shipping Reports",
     "legacy": true,
     "path": "/reports/shipping",
   },
   Object {
-    "children": Array [
+    "icon": <img
+      alt="Campaigns"
+      src="//mashpia.local/images/parentIcons/Campaigns.gif"
+/>,
+    "items": Array [
       Object {
-        "children": Array [
+        "items": Array [
           Object {
             "label": "Individual Marking",
             "legacy": true,
@@ -715,7 +734,7 @@ Array [
         "label": "Tanya",
       },
       Object {
-        "children": Array [
+        "items": Array [
           Object {
             "label": "Mark Shabbos Mevorchim Tehillim",
             "legacy": true,
@@ -745,14 +764,14 @@ Array [
         "label": "Tehillim",
       },
     ],
-    "icon": <img
-      alt="Campaigns"
-      src="//mashpia.local//images/parentIcons/Campaigns.gif"
-/>,
     "label": "Campaigns",
   },
   Object {
-    "children": Array [
+    "icon": <img
+      alt="Rally"
+      src="//mashpia.local/images/parentIcons/Rally.gif"
+/>,
+    "items": Array [
       Object {
         "label": "Promotion Picture Report",
         "legacy": true,
@@ -769,16 +788,12 @@ Array [
         "path": "/raffles/shared/forms/winners_form.php",
       },
     ],
-    "icon": <img
-      alt="Rally"
-      src="//mashpia.local//images/parentIcons/Rally.gif"
-/>,
     "label": "Rally",
   },
   Object {
     "icon": <img
       alt="Raffles"
-      src="//mashpia.local//images/icon_auction.png"
+      src="//mashpia.local/images/icon_auction.png"
 />,
     "label": "Raffles",
     "legacy": true,
@@ -787,7 +802,7 @@ Array [
   Object {
     "icon": <img
       alt="Yearly Prize"
-      src="//mashpia.local//images/icon_auction.png"
+      src="//mashpia.local/images/icon_auction.png"
 />,
     "label": "Yearly Prize",
     "legacy": true,
@@ -796,7 +811,7 @@ Array [
   Object {
     "icon": <img
       alt="Setup Guide"
-      src="//mashpia.local//images/icon_wizard.png"
+      src="//mashpia.local/images/icon_wizard.png"
 />,
     "label": "Setup Guide",
     "legacy": true,
@@ -805,14 +820,14 @@ Array [
   Object {
     "icon": <img
       alt="Miliage Program"
-      src="//mashpia.local//images/icon_auction.png"
+      src="//mashpia.local/images/icon_auction.png"
 />,
     "label": "Mileage Program",
   },
   Object {
     "icon": <img
       alt="Support"
-      src="//mashpia.local//images/parentIcons/support icon.gif"
+      src="//mashpia.local/images/parentIcons/support icon.gif"
 />,
     "label": "Support",
     "legacy": true,
@@ -821,11 +836,10 @@ Array [
   Object {
     "icon": <img
       alt="Logout"
-      src="//mashpia.local//images/parentIcons/logout.gif"
+      src="//mashpia.local/images/parentIcons/logout.gif"
 />,
     "label": "Logout",
-    "legacy": true,
-    "path": "/logout.php",
+    "path": "/logout",
   },
 ]
 `;

@@ -16,7 +16,7 @@ class SidebarDropdown extends Component {
   }
 
   render(){
-    const children = this.props.children.map(
+    const items = this.props.items.map(
       (child, index) => <SidebarItem { ...child } key={index} />
     )
 
@@ -28,7 +28,7 @@ class SidebarDropdown extends Component {
         </a>
         <Collapse isOpen={ this.state.collapse }>
           <ul>
-            { children }
+            { items }
           </ul>
         </Collapse>
       </li>
@@ -37,7 +37,7 @@ class SidebarDropdown extends Component {
 }
 
 SidebarDropdown.propTypes = {
-  children: PropTypes.array.isRequired,
+  items: PropTypes.array.isRequired,
   icon: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.element,
@@ -46,7 +46,7 @@ SidebarDropdown.propTypes = {
 }
 
 SidebarDropdown.defaultProps = {
-  children: [],
+  items: [],
   icon: false,
   label: ""
 }
