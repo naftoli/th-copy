@@ -18,6 +18,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     static $alias_attribute = [ 'email' => 'admin_email' ];
     // internalCaches
     private $customer_profile;
+    
     // SERIALIZERS
     public function jsonSerialize() {
         return $this->to_array([
@@ -25,7 +26,8 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
                 "admin_id", "username", "title", "first", "last", "lang", 
                 "father", "mother", "father_pic", "mother_pic",
                 "home_phone", "cell_phone", "admin_email"
-            ]
+            ],
+            'methods' => [ 'authCode' ]
         ]);
     }
 
