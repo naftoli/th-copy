@@ -1,14 +1,18 @@
 import checkLogin from '../checkLogin';
 import Cookies from 'universal-cookie';
-
+import fetchMock from 'fetch-mock';
 const cookies = new Cookies();
 
 describe( 'checkLogin', () => {
   let dispatchMock;
-  beforeEach(() => { dispatchMock = jest.fn(); });
+  beforeEach(() => {
+    dispatchMock = jest.fn();
+    fetchMock.get( '*' , { success: false } );
+  });
   afterEach(() => {
     cookies.remove('admin_auth');
     cookies.remove('admin');
+    fetchMock.restore();
   })
 
   it(`calls dispatch if it finds a legacy token`, () => {
