@@ -69,7 +69,7 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
     
     // Return 401 Unauthorized if we cannot login user
     if ( !$current_user ){
-        http_response_code( 401 ); die();
+        json_error( "Invalid Credentials", false, 401 );
     }
         
 } else {
