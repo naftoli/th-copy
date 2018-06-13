@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Sticker Board | Tzivos Hashem</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="/mobile/css/bug_report.css"/>
+    <!-- Animation Libraries -->
+    <link rel="stylesheet" type="text/css" href="/mobile/css/lib/animate.css" />
+    <!-- Slider  -->
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <!-- Sticker board page -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/medal-board/stickers.css" />
+</head>
+<body>
+    <nav class="navbar">
+        <span class="navbar-text navbar-title mx-auto">
+            Sticker Board
+        </span>
+    </nav>
+    <div class="personalImg"></div>
+    <div class="bug-report">
+        <img src="/mobile/img_new/tools-color-white-svg.svg" data-category="Medal Board" alt="bug-report">
+    </div>
+    <section id="top-nav">
+        <div class="row nav-row">
+            <!-- <div class="col-4">
+                <a href="leaderboard.html" id="leaderBoardLink">
+                    <img src="/mobile/img_new/leaderboard-color-orange-svg.svg">
+                    <span>Leaderboard</span>
+                </a>
+            </div> -->
+            <div class="col-6">
+                <a href="rank.html" id="rankBoardLink">
+                    <img src="/mobile/img_new/trophy-color-orange-svg.svg">
+                    <span>Rank Board</span>
+                </a>
+            </div>
+            <div class="col-6 active">
+                <a href="medals.html" id="medalBoardLink">
+                    <img src="/mobile/img_new/medals-color-orange-svg.svg">
+                    <span>Medal Board</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="medal-slider" class="animated fadeIn"></section>
+
+    <section id="medal-stickers" class="animated fadeIn">
+        <!-- <div class="sticker-board">
+            <div class="campaign-info">
+                <img src="/mobile/img_new/campaig-logos-bw/nigunnim-black-svg.svg" alt="icon" />
+                <p>
+                    <span class="campaign-info-title">ניגונים Campaign</span>              
+                    You can earn up to one niggunim mission each week by <strong>singing the weekly niggunim at your shabbos table</strong>
+                </p>
+            </div>
+            <div class="row">
+                <div class="col-4 col-sm-3 medal-level">
+                    <span class="levelText">Level 1</span>
+                    <img class="medal-img" src="images/backs/weekly/white.gif" />
+                    <div class="medal-status progress">
+                        <div class="progress-bar white" role="progressbar" style="width: 83.33333333333334%;"></div>
+                        <span>1 to Red</span>
+                    </div>
+                </div>
+                <div class="col-8 col-sm-9 medal-level-stickers">
+                    <div class="sticker">1<img src="//mashpia.com/mobile/img_new/stickers/niggunim.gif"></div>
+                    <div class="sticker">2<img src="//mashpia.com/mobile/img_new/stickers/niggunim.gif"></div>
+                    <div class="sticker">3<img src="//mashpia.com/mobile/img_new/stickers/niggunim.gif"></div>
+                    <div class="sticker">4<img src="//mashpia.com/mobile/img_new/stickers/niggunim.gif"></div>
+                    <div class="sticker">5<img src="//mashpia.com/mobile/img_new/stickers/niggunim.gif"></div>
+                    <div class="sticker">6<img src="//mashpia.com/mobile/img_new/stickers/niggunim.gif"></div>
+                    <div class="sticker">7<img src="//mashpia.com/mobile/img_new/stickers/niggunim.gif"></div>
+                    <div class="sticker">8<img src="//mashpia.com/mobile/img_new/stickers/niggunim.gif"></div>
+                    <div class="sticker">9<img src="//mashpia.com/mobile/img_new/stickers/niggunim.gif"></div>
+                    <div class="sticker">10<img src="//mashpia.com/mobile/img_new/stickers/niggunim.gif"></div>
+                    <div class="sticker">11<img src="//mashpia.com/mobile/img_new/stickers/niggunim.gif"></div>
+                    <div class="sticker">12<img src="//mashpia.com/mobile/img_new/stickers/niggunim.gif"></div>
+                    <div class="sticker">13<img src="//mashpia.com/mobile/img_new/stickers/niggunim.gif"></div>
+                    <div class="sticker">14<img src="//mashpia.com/mobile/img_new/stickers/niggunim.gif"></div>
+                    <div class="sticker">15<img src="//mashpia.com/mobile/img_new/stickers/niggunim_bw.gif"></div>
+                </div>
+            </div>
+            <hr>
+        </div> -->
+    </section>
+
+    <section id="loading">
+        <div class="loader"></div>
+    </section>
+
+    <footer>
+        <div class="row nav-row">
+            <div class="col-3">
+                <a href="../reg/parent_detail.html" id="mainLink" class="menu-item">
+                    <img src="/mobile/img_new/boy-color-green-svg.svg">
+                    <span>Accounts</span>
+                </a>
+            </div>
+            <div class="col-3">
+                <a href="/mobile/missionsNew.html?id=8273" id="missionsLink" class="menu-item">
+                    <img src="/mobile/img_new/square-check-color-purple-svg.svg">
+                    <span>Missions</span>
+                </a>
+            </div>
+            <div class="col-3 active">
+                <a href="/mobile/reg/rank.html?id=8273" id="rankLink" class="menu-item">
+                    <img src="/mobile/img_new/achievements-color-orange-svg.svg">
+                    <span>Achievements</span>
+                </a>
+            </div>
+            <div class="col-3">
+                <a href="/mobile/store/index.html?id=8273" id="storeLink" class="menu-item">
+                    <img src="/mobile/img_new/cart-color-red-svg.svg">
+                    <span>Rewards</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="scripts">
+        <!-- Jquery, Popper.js and Bootstrap -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+        <!-- Authentication -->
+        <script src="/mobile/js/js.cookie.js"></script>
+        <script src="/mobile/js/authenticate.js"></script>
+        <!-- Slider -->
+        <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+        <!-- Sticker board js -->
+        <script src="sticker-board.js"></script>
+        <!-- Google Anylitcs -->
+        <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-71974937-1"></script>
+        <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'UA-71974937-1');</script>
+    </div>
+    
+</body>
+</html>
