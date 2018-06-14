@@ -134,4 +134,5 @@ span.date-awarded { font-size: .7em; }
     .sticker img { height: 55px; }
 }
 
-.slick-list.draggable { overflow: visible; }
+#medal-slider { overflow: hidden; }
+#medal-slider .slick-list.draggable { overflow: visible; }
