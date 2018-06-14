@@ -154,7 +154,7 @@ var sticker_board = function() {
         return '<div class="campaign-info">' +
             '<img src="/mobile/img_new/campaig-logos-bw/' + campaign.campaign_logo + '" alt="icon" />' +
             '<p>' +
-                '<span class="campaign-info-title">' + campaign.subject_name + ' Campaign</span>' +
+                '<span class="campaign-info-title">' + campaign.subject_name + '</span>' +
                 campaign.subject_description +
             '</p>' +
         '</div>';

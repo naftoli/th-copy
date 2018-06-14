@@ -108,12 +108,12 @@ ul.slick-dots li.slick-active { background-image: url('/mobile/img_new/circle-co
 .slick-slide { user-select: text; }
 /* Slider campaign info */
 .campaign-info { 
-    display: flex; align-items: center; justify-content: center; font-size: .7em; text-align: center;
+    display: flex; justify-content: center; font-size: .7em; text-align: center;
     background: #f39c12; padding: 15px; color: #fff; border-radius: 6px; margin-bottom: 10px;
 }
 .campaign-info img { max-height: 75px; max-width: 100%; margin-right: 2%; }
 span.campaign-info-title { display: block; font-size: 1.6em; font-weight: bolder; text-align: center; margin-bottom: 5px; }
-.campaign-info > p { flex: 1 }
+.campaign-info > p { flex: 1; margin-bottom: 0px; }
 
 /* Sticker row info */
 .medal-level { text-align: center; } .medal-img.earned { opacity: 1; }
