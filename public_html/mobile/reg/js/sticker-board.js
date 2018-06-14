@@ -163,7 +163,7 @@ var sticker_board = function() {
         start_index = start_index || 0;
 
         $('#medal-slider').slick({
-            initialSlide: start_index,  infinite: true, centerMode: true, dots: false, centerMode: true,
+            initialSlide: start_index,  infinite: true, centerMode: true, dots: false, centerMode: true, speed: 0,
             centerPadding: '0px', slidesToScroll: 1, asNavFor: '#medal-stickers', mobileFirst: true, focusOnSelect: true,
             prevArrow: '<button type="button" class="slick-prev"><img src="/mobile/img_new/arrow-1-color-orange-svg.svg"/></button>',
             nextArrow: '<button type="button" class="slick-next"><img src="/mobile/img_new/arrow-1-color-orange-svg.svg"/></button>',
@@ -182,6 +182,10 @@ var sticker_board = function() {
             console.log( 'onBeforeChange called', event, slick, currentSlide, nextSlide );
             renderFromCache( nextSlide );
         });
+        // fix initial index bug
+        setTimeout( function() {
+            $('#medal-slider').slick( 'slickGoTo', start_index ).slick('slickSetOption', 'speed', 300);
+        }, 10);
 
         renderFromCache( start_index ); // render the first item index;
         $('#loading').hide();
