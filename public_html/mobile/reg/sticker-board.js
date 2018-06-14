@@ -13,7 +13,6 @@ if ( !authenticate ) {
     setNavLinks ( id ); // set the user ID in the navigation links
     setUserPhoto( id ); // set the users profile picture
 }
-
 // setup all the links on the page
 function setNavLinks( id ) {
     // links on the bottom of the page (nav-bar)
@@ -63,93 +62,147 @@ function findGetParameter(parameterName) {
  * 
  * File to handle dynamic content on sticker-board.html / medals3.html
  */
-function setupSlider( start_index ){
-    $('#loading').hide();
-    $('#medal-slider, #medal-stickers').show();
-    // setup the top slider
-    $('#medal-slider').slick({
-        initialSlide: start_index || 0,
-        infinite: true, centerMode: true,
-        centerPadding: '0px',   slidesToScroll: 1,
-        asNavFor: '#medal-stickers',    mobileFirst: true,
-        dots: false,     centerMode: true,   focusOnSelect: true,
-        prevArrow: '<button type="button" class="slick-prev"><img src="/mobile/img_new/arrow-1-color-orange-svg.svg"/></button>',
-        nextArrow: '<button type="button" class="slick-next"><img src="/mobile/img_new/arrow-1-color-orange-svg.svg"/></button>',
-        responsive: [{
-            breakpoint: 767,
-            settings: { slidesToShow: 3, infinite: false, dots: true }
-        }]
-    });
-    // sync the content below it with a fade effect
-    $('#medal-stickers').slick({
-        initialSlide: start_index || 0, lazyLoad: 'ondemand',
-        slidesToShow: 1,    slidesToScroll: 1,
-        arrows: false,  fade: true, infinite: true,
-        asNavFor: '#medal-slider', adaptiveHeight: true,
-        responsive: [{
-            breakpoint: 767,
-            settings: { infinite: true }
-        }]
-    });
-}
-
-function renderPage() {
-    var user_id = findGetParameter('id');
-    var selected_subject = findGetParameter('subject');
-    $.post( 'ajax/getMedalInfo.php?v=2', { user_id: user_id }, function( response ){
-        var html1 = '';
-        var html2 = '';
-        response.forEach( function( item, index ){
-            if( item.subject_id == selected_subject ) selected_subject = index;
-            html1 += renderMedalSliderItem( item );
-            html2 += '<div class="sticker-board">' + renderStickerRows( item.sticker_name, item.total, item.medal_info ) + '</div>'
+var sticker_board = function() {
+    var cache = []; // this is a cache for what to render for performace reasons.
+    // Load the page from the server
+    function loadPage() {
+        var user_id = findGetParameter('id');
+        $.post( 'ajax/getMedalInfo.php?v=2', { user_id: user_id }, renderPage );
+    }
+    // render the response
+    function renderPage( campaigns ) {
+        var selected_subject = findGetParameter('subject');
+        var sliderHtml = '';
+        var boardHtml = '';
+        campaigns.forEach( function( campaign, index ){
+            if( campaign.subject_id == selected_subject ) selected_subject = index;
+            sliderHtml += renderMedalSliderItem( campaign );
+            boardHtml += renderStickerRows( index, campaign, cache ); // cache defined right under sticker_board;
         });
-        $('#medal-slider').html( html1 );
-        $('#medal-stickers').html( html2 );
+        $('#medal-slider').html(sliderHtml);
+        $('#medal-stickers').html(boardHtml);
         setupSlider( selected_subject );
-    });
-}
+    }
+    // template for top slider
+    function renderMedalSliderItem( campaign ){
+        var percent_compleate = ( campaign.total / campaign.subject_total ) * 100;
+        return  '<div class="medal-slider-item">' +
+                    '<img src="' + campaign.photo + '">' + 
+                    '<div class="medal-subject"><span>' + campaign.subject_name + '</span></div>' + 
+                    '<div class="medal-status progress">' + 
+                        '<div class="progress-bar" role="progressbar" style="width: ' + percent_compleate + '%;"></div>' +
+                        '<span>' + campaign.total + ' / ' + campaign.subject_total + ' Missions</span>' +
+                    '</div>' +
+                '</div>';
+    }
 
-function renderMedalSliderItem( data ){
-    var percent_compleate = ( data.total / data.subject_total ) * 100;
-    var html = '<div class="medal-slider-item">';
-    html    +=      '<img src="' + data.photo + '" class="medal">';
-    html    +=      '<div class="medal-status progress">';
-    html    +=          '<div class="progress-bar" role="progressbar" style="width: ' + percent_compleate + '%;"></div>';
-    html    +=          '<span>' + data.total + ' / ' + data.subject_total + ' Missions</span>';
-    html    +=      '</div>';
-    html    += '</div>';
-    return html;
-}
+    function renderStickerRows( index, campaign, cache ){
+        var total = parseInt( campaign.total );
+        var html = renderCampaignInfo( campaign ); // variable to store sticker rows, will be added to cache.
+        // render the row on the sticker board for each of the medals in the campaign
+        campaign.medal_info.forEach( function( medal_info ){
+            var last_total = medal_info.running_total - medal_info.missions_required; // the total reqired to earn the previous medal. Used in math later
+            var medal_classes = ''; var compleation_status = 0; // special classes and the % compleate for this medal ( default 100% ).
+            var status_text = medal_info.medal_name + ' Medal Earned!'; // medal is earned by default
+            var medal_color = medal_info.medal_name.toLowerCase();
+            //******************** Calculate the % status of the medal ********************/
+            // earned
+            if ( total >= medal_info.running_total ) {
+                medal_classes = 'earned animated tada';
+                compleation_status = 100;
+            // current
+            } else if ( total > last_total && medal_info.running_total > total ) {
+                compleation_status = ( ( total - last_total ) / ( medal_info.running_total - last_total ) ) * 100;
+                status_text = ( medal_info.missions_required - ( total - last_total ) ) + ' to ' + medal_info.medal_name;
+            // future
+            } else {
+                compleation_status = ( 1 - ( ( medal_info.running_total - total ) / medal_info.running_total ) ) * 100;
+                status_text = ( medal_info.running_total - total ) + ' to ' + medal_info.medal_name;
+            }
+            
+            // render the medal icon
+            html += '<hr><div class="row">' +
+                '<div class="col-4 col-sm-3 medal-level">' +
+                    '<span class="levelText">Level ' + medal_info.medal_ord + '</span>' + 
+                    '<img class="medal-img ' + medal_classes + '" src="' + medal_info.photo + '" />' + 
+                    '<div class="medal-status progress">' + 
+                        '<div class="progress-bar ' + medal_color + '" role="progressbar" style="width: ' + compleation_status + '%;"></div>' + 
+                        '<span>' + status_text + '</span>' +
+                    '</div>' + 
+                '</div>' +
+                '<div class="col-8 col-sm-9 medal-level-stickers">';
+            // render all the stickers
+            for( var i = 1; i <= medal_info.missions_required; i++ ) {
+                var slot_number = ( medal_info.running_total - medal_info.missions_required ) + i;
+                var earned = slot_number <= total;
+                var slot_sticker = campaign.sticker_name + ( earned ? '' : '_bw' )
+                html += '<div class="sticker ' + ( earned ? 'earned' : '') + '">' +
+                    ( slot_number ) + 
+                    '<img src="//mashpia.com/mobile/img_new/stickers/' + slot_sticker + '.gif">'
+                +'</div>';
+            }
+            // close the tags;
+            html += '</div></div>';
+        });
+        cache[ index ] = html; // add the item to the cache;
+        // return a wrapper container with an ID we can work with ;-)
+        return '<div class="sticker-board" id="sticker-board-' + index + '"></div>';
+    }
 
-function renderStickerRows( sticker_name, total, data ){
-    var html = '';
+    function renderCampaignInfo( campaign ) {
+        return '<div class="campaign-info">' +
+            '<img src="/mobile/img_new/campaig-logos-bw/' + campaign.campaign_logo + '" alt="icon" />' +
+            '<p>' +
+                '<span class="campaign-info-title">' + campaign.subject_name + ' Campaign</span>' +
+                campaign.subject_description +
+            '</p>' +
+        '</div>';
+    }
 
-    data.forEach( function( medal_info ){
-        html += '<div class="row">' +
-            '<div class="col-4 col-sm-3 medal-level">' +
-                '<span class="levelText">Level ' + medal_info.medal_ord + '</span>' + 
-                '<img class="medal-img" data-lazy="' + medal_info.photo + '" />' + 
-                '<div class="medal-status progress">' + 
-                    '<div class="progress-bar white" role="progressbar" style="width: 83.33333333333334%;"></div>' + 
-                    '<span>1 to Red</span>' +
-                '</div>' + 
-            '</div>' +
-            '<div class="col-8 col-sm-9 medal-level-stickers">';
-        // render all the stickers
-        for( var i = 0; i < medal_info.missions_required; i++ ) {
-            var slot_number = ( medal_info.running_total - medal_info.missions_required ) + i;
-            var slot_sticker = sticker_name + ( slot_number > total ? '_bw' : '' )
-            html += '<div class="sticker">' +
-                ( slot_number ) + 
-                '<img data-lazy="//mashpia.com/mobile/img_new/stickers/' + slot_sticker + '.gif">'
-            +'</div>';
+    function setupSlider( start_index ){
+        start_index = start_index || 0;
+
+        $('#medal-slider').slick({
+            initialSlide: start_index,  infinite: true, centerMode: true, dots: false, centerMode: true,
+            centerPadding: '0px', slidesToScroll: 1, asNavFor: '#medal-stickers', mobileFirst: true, focusOnSelect: true,
+            prevArrow: '<button type="button" class="slick-prev"><img src="/mobile/img_new/arrow-1-color-orange-svg.svg"/></button>',
+            nextArrow: '<button type="button" class="slick-next"><img src="/mobile/img_new/arrow-1-color-orange-svg.svg"/></button>',
+            responsive: [{
+                breakpoint: 767,
+                settings: { slidesToShow: 3, infinite: false, dots: true }
+            }]
+        });
+        // sync the content below it with a fade effect. Set to infinite, however do not allow the user to swipe it ( causes bug at literal edge case on desktop )
+        $('#medal-stickers').slick({
+            initialSlide: start_index, lazyLoad: 'ondemand', slidesToShow: 1, slidesToScroll: 1, adaptiveHeight: true,
+            arrows: false,  fade: true, infinite: true, swipe: false, asNavFor: '#medal-slider'
+        });
+
+        $('#medal-stickers').on('beforeChange', function(event, slick, currentSlide, nextSlide){
+            console.log( 'onBeforeChange called', event, slick, currentSlide, nextSlide );
+            renderFromCache( nextSlide );
+        });
+
+        renderFromCache( start_index ); // render the first item index;
+        $('#loading').hide();
+        $('#medal-slider, #medal-stickers').show();
+    }
+    
+    // render the item from the cache if it has not been rendered yet...
+    function renderFromCache( index ){
+        if ( cache[ index ] !== '' ) {
+            $('#sticker-board-' + index).html( cache[ index ] );
+            cache[ index ] = ''; // clear the cache once rendered;
+            // fix issue where height is not calculated correctly on first load
+            setTimeout( function() {
+                var height = $('#sticker-board-' + index)[0].scrollHeight;
+                $('#medal-stickers .slick-list.draggable').height( height );
+                
+            }, 750 ); // 750ms should be enough time to come in and fix the issue then.
         }
-        // close the tags;
-        html += '</div></div>';
-    });
+    }
 
-    return html;
-}
+    return { loadPage: loadPage }
+}();
 
-renderPage();
+sticker_board.loadPage();
