@@ -103,7 +103,7 @@ var sticker_board = function() {
         campaign.medal_info.forEach( function( medal_info ){
             var last_total = medal_info.running_total - medal_info.missions_required; // the total reqired to earn the previous medal. Used in math later
             var medal_classes = ''; var compleation_status = 0; // special classes and the % compleate for this medal ( default 100% ).
-            var status_text = medal_info.medal_name + ' Medal Earned!'; // medal is earned by default
+            var status_text = medal_info.date_awarded; // medal is earned by default
             var medal_color = medal_info.medal_name.toLowerCase();
             //******************** Calculate the % status of the medal ********************/
             // earned
@@ -129,7 +129,6 @@ var sticker_board = function() {
                         '<div class="progress-bar ' + medal_color + '" role="progressbar" style="width: ' + compleation_status + '%;"></div>' + 
                         '<span>' + status_text + '</span>' +
                     '</div>' + 
-                    '<span class="date-awarded">' + ( medal_info.date_awarded || '') + '</span>' +
                 '</div>' +
                 '<div class="col-8 col-sm-9 medal-level-stickers">';
             // render all the stickers
