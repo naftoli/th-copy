@@ -129,6 +129,7 @@ var sticker_board = function() {
                         '<div class="progress-bar ' + medal_color + '" role="progressbar" style="width: ' + compleation_status + '%;"></div>' + 
                         '<span>' + status_text + '</span>' +
                     '</div>' + 
+                    '<span class="date-awarded">' + ( medal_info.date_awarded || '') + '</span>' +
                 '</div>' +
                 '<div class="col-8 col-sm-9 medal-level-stickers">';
             // render all the stickers

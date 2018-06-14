@@ -78,10 +78,11 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
     ksort( $user_missions );
 
     $stickers_required_query = mysql_query(
-        " SELECT subject_id, medal_ord, medal_name, missions_required, profile_photo_id "
-        ." FROM medals_subjects JOIN medals USING ( medal_ord ) "
-        ." WHERE subject_id IN (" . implode( ',', $subjects ) . ") AND profile_photo_id IS NOT NULL "
-        ." ORDER BY subject_id, medal_ord;"
+        " SELECT ms.subject_id, ms.medal_ord, medal_name, missions_required, profile_photo_id, mm.date_awarded "
+        ." FROM medals_subjects ms JOIN medals USING ( medal_ord ) "
+        ." LEFT JOIN medal_marks mm ON ms.subject_id = mm.subject_id AND ms.medal_ord = mm.medal_ord AND user_id = '$user'"
+        ." WHERE ms.subject_id IN (" . implode( ',', $subjects ) . ") AND profile_photo_id IS NOT NULL "
+        ." ORDER BY ms.subject_id, ms.medal_ord;"
     );
 
     $last_subject_id = 0;
@@ -100,6 +101,8 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
             $last_photo_location = '/kiosk/images/medals/holder.png';
         }
         $row['running_total'] = $running_total;
+        // convert julian date to hebrew utf8
+        $row['date_awarded'] = iconv('WINDOWS-1255', 'UTF-8', jdtojewish( $row['date_awarded'], true, CAL_JEWISH_ADD_GERESHAYIM ) );;
         
         // calcuate images for the sticker items
         $medal_name = strtolower( $row['medal_name'] );
@@ -126,7 +129,7 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
 
     $user_missions = array_values( $user_missions );
 
-    header('Content-Type: application/json');
+    header('Content-Type: application/json; charset=utf-8');
     echo json_encode( $user_missions );
 } else {
     $subject = mysql_real_escape_string( $_POST['subject'] );
