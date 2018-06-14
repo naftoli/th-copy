@@ -1,7 +1,7 @@
 /* Loader */
 .loader,.loader:after,.loader:before{border-radius:50%;width:2.5em;height:2.5em;-webkit-animation:load7 1.8s infinite ease-in-out;animation:load7 1.8s infinite ease-in-out}.loader{color:#f68829;font-size:10px;margin:80px auto;position:relative;text-indent:-9999em;-webkit-transform:translateZ(0);-ms-transform:translateZ(0);transform:translateZ(0);-webkit-animation-delay:-.16s;animation-delay:-.16s}.loader.bottom{margin-bottom:155px}.loader:after,.loader:before{content:'';position:absolute;top:0}.loader:before{left:-3.5em;-webkit-animation-delay:-.32s;animation-delay:-.32s}.loader:after{left:3.5em}@-webkit-keyframes load7{0%,100%,80%{box-shadow:0 2.5em 0 -1.3em}40%{box-shadow:0 2.5em 0 0}}@keyframes load7{0%,100%,80%{box-shadow:0 2.5em 0 -1.3em}40%{box-shadow:0 2.5em 0 0}}
+@font-face { font-family: digi; src: url(/mobile/reg/font/DS-DIGIB.TTF); }
 /************************* CSS for all orange pages *************************/
-img { max-width: 100%; }
 .modal-header, nav.navbar, .btn-branding { background-color: #f68829; color: #ffffff; }
 /* Navbar */
 nav.navbar { padding: 1.5%; }
@@ -38,10 +38,10 @@ img#userImg { border-radius: 50%; width: 100%; height: 100%; border: 2px solid #
 /* Footer */
 footer { position: fixed;    width: 100%;    bottom: 0; border-top: 2px solid #9f9f9f; }
 
-/* Progress bars */
+/************************* CSS for progress bars *************************/
 .progress {
     box-shadow: inset 0 1px 2px rgba(0,0,0,.1); position: relative;
-    margin-top: 5px; margin-bottom: 0px; text-align: center;
+    margin-top: 5px; margin-bottom: 0px; text-align: center; height: 20px;
 }
 .progress-bar {
     background-color: #f39c12; height: 100%; animation-name: progress-bar-slide; animation-duration: 2.5s;
@@ -51,12 +51,31 @@ footer { position: fixed;    width: 100%;    bottom: 0; border-top: 2px solid #9
 section#medal-slider .progress { height: 25px; max-width: 95%; margin: 0 auto; }
 section#medal-slider .progress span { font-size: 1.4em; }
 
+.progress-bar.white { background-color: #bbbbbb; }
+.progress-bar.red { background-color: #ef5350; }
+.progress-bar.orange { background-color: #ffa726; }
+.progress-bar.yellow { background-color: #fdd835; }
+.progress-bar.green { background-color: #9ccc65; }
+.progress-bar.blue { background-color: #29b6f6; }
+.progress-bar.purple { background-color: #ab47bc; }
+.progress-bar.brown { background-color: #a1887f; }
+.progress-bar.gray { background-color: #b0bec5; }
+.progress-bar.black { background-color: #616161; }
+.progress-bar.bronze { background-color: #bcaaa4; }
+
 @keyframes progress-bar-slide {
     from {max-width: 0%;}
     to {max-width: 100%;}
 }
 
 /************************* CSS for Stickers page *************************/
+img { max-width: 100%; }
+.medal-subject {
+    background-image: url(/mobile/img_new/banner-1-color-orange-svg.svg);
+    background-size: 100% 100%; height: 35px; margin-top: -30px; line-height: 43px; position: relative;
+    transition: .25s; font-size: 1.2em; color: #ffffff; margin-bottom: 10px;
+}
+.medal-subject span { font-family: font1, "Times New Roman"; }
 /* Slider */
 section#medal-slider, #medal-stickers { display: none; position: relative; max-width: 700px; margin: 0 auto; width: 80%; }
 #medal-stickers { width: 95%; margin: 10px auto 100px; }
@@ -70,7 +89,7 @@ section#medal-slider, #medal-stickers { display: none; position: relative; max-w
 /* Slider buttons */
 .slick-prev, .slick-next {
     font-size: 0; line-height: 0;
-    position: absolute; top: 40%; display: block; width: 20px; height: 20px; padding: 0;
+    position: absolute; top: 40%; display: block; width: 20px; padding: 0;
     -webkit-transform: translate(0, -50%); -ms-transform: translate(0, -50%); transform: translate(0, -50%);
     cursor: pointer; color: transparent; border: none; outline: none; background: transparent;
 }
@@ -85,6 +104,8 @@ ul.slick-dots li {
     height: 20px; width: 20px; display: inline-block; margin: 2px 5px; cursor: pointer;
 }
 ul.slick-dots li.slick-active { background-image: url('/mobile/img_new/circle-color-orange-solid-svg.svg'); }
+
+.slick-slide { user-select: text; }
 /* Slider campaign info */
 .campaign-info { 
     display: flex; align-items: center; justify-content: center; font-size: .7em; text-align: center;
@@ -92,10 +113,18 @@ ul.slick-dots li.slick-active { background-image: url('/mobile/img_new/circle-co
 }
 .campaign-info img { max-height: 75px; max-width: 100%; margin-right: 2%; }
 span.campaign-info-title { display: block; font-size: 1.6em; font-weight: bolder; text-align: center; margin-bottom: 5px; }
+.campaign-info > p { flex: 1 }
+
 /* Sticker row info */
-.medal-level { text-align: center; } .medal-img { margin: 0 auto; height: 97px; }
+.medal-level { text-align: center; } .medal-img.earned { opacity: 1; }
+.medal-img { margin: 0 auto; height: 97px; opacity: .3;}
 .sticker-board > .row { margin: 10px 0px; }
 .col-8.col-sm-9.medal-level-stickers { display: flex; align-items: center; flex-wrap: wrap; }
 .level-text { color: #9f9f9f; font-family: font1; }
 .sticker { display: inline-block; text-align: center; font-size: .8em; margin: 0px 1% 1% 0px; }
 .sticker img { height: 35px; }
+.sticker.earned img { animation: color-sticker 1s; }
+@keyframes color-sticker {
+    from {filter: grayscale(100%)}
+    to {filter: none;}
+}
