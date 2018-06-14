@@ -1,22 +1,21 @@
 <?
 require_once( dirname(__FILE__) . '/../../../db.php' );
 
+function getSubjectName( $subject_id, $default ) {
+    if ( $subject_id == 1 ) 
+        return "תהילים";
+    else if ( $subject_id == 27 ) 
+        return "תניא";
+    return $default;
+}
+
 function getStickerName( $subject_id ){
     $img_to_subject_id = [
-        1 => 'shabbos_mevorchim_tehillim',
-        4 => 'tefillah',
-        12 => 'mivtzoim',
-        13 => 'niggunim',
-        16 => 'hiskashrus',
-        21 => 'sefer_hamitzvos',
-        27 => 'tanya',
-        40 => 'yomei_dipagra',
-        41 => 'avos_ubonim',
-        42 => 'vihalachta_bidrachov',
-        45 => 'cheshbon_hanefesh',
-        90 => 'chitas',
-        91 => 'tanya',
-        100 => 'brias_haguf'
+        1 => 'shabbos_mevorchim_tehillim',  4 => 'tefillah',
+        12 => 'mivtzoim',   13 => 'niggunim',   16 => 'hiskashrus',
+        21 => 'sefer_hamitzvos',    27 => 'tanya',  40 => 'yomei_dipagra',
+        41 => 'avos_ubonim',    42 => 'vihalachta_bidrachov',   45 => 'cheshbon_hanefesh',
+        90 => 'chitas', 91 => 'tanya',  100 => 'brias_haguf'
     ];
     if ( isset( $img_to_subject_id[$subject_id ] ) )
         return $img_to_subject_id[$subject_id ];
@@ -25,18 +24,12 @@ function getStickerName( $subject_id ){
 
 function getSubjectImage( $subject_id ) {
     $campaignLogos = array(
-        1	=>	'wwtc-black-svg.svg',
-        4	=>	'tefillah-black-svg.svg',
-        12	=>	'mivtzoim-black-svg.svg',
-        13	=>	'nigunnim-black-svg.svg',
-        16	=>	'hiskashrus-black-svg.svg',
-        21	=>	'sefer-hamitzvos-black-svg.svg',
-        27	=>	'tanya.gif',
-        40	=>	'yomei-dipagra-black-svg.svg',
-        41	=>	'avos-ubonim-black-svg.svg',
-        42	=>	'Footsteps.gif',
-        45	=>	'cheshbon-hanefesh-black-svg.svg',
-        90	=>	'chitas-black-svg.svg',
+        1	=>	'wwtc-black-svg.svg',   4	=>	'tefillah-black-svg.svg',
+        12	=>	'mivtzoim-black-svg.svg',   13	=>	'nigunnim-black-svg.svg',
+        16	=>	'hiskashrus-black-svg.svg', 21	=>	'sefer-hamitzvos-black-svg.svg',
+        27	=>	'tanya.gif',    40	=>	'yomei-dipagra-black-svg.svg',
+        41	=>	'avos-ubonim-black-svg.svg',    42	=>	'Footsteps.gif',
+        45	=>	'cheshbon-hanefesh-black-svg.svg',  90	=>	'chitas-black-svg.svg',
         100	=>	'Brias-Haguf.gif'
     );
     if ( isset( $campaignLogos[$subject_id ] ) )
@@ -64,12 +57,25 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
     while( $row = mysql_fetch_assoc( $user_missions_query ) ){
         $row['sticker_name'] = getStickerName( $row['subject_id'] );
         $row['campaign_logo'] = getSubjectImage( $row['subject_id'] );
-        if ( $row['subject_id'] == 1 ) 
-            $row['subject_name'] = "תהילים";
-        else if ( $row['subject_id'] == 27 ) 
-            $row['subject_name'] = "תניא";
+        $row['subject_name'] = getSubjectName( $row['subject_id'], $row['subject_name'] );
         $user_missions[$row['subject_id']] = $row;
     }
+
+    foreach( $subjects as $subject_id ){
+        if ( !isset( $user_missions[$subject_id] ) ) {
+            $subject_name_query = mysql_query("SELECT subject_name, subject_description FROM subjects WHERE subject_id = '$subject_id';");
+            $missing_subject_info = mysql_fetch_assoc( $subject_name_query );
+            $user_missions[$subject_id] = [
+                'sticker_name' => getStickerName( $subject_id ),
+                'campaign_logo' => getSubjectImage( $subject_id ),
+                'subject_name' => getSubjectName( $subject_id, $missing_subject_info['subject_name'] ),
+                'subject_description' => $missing_subject_info['subject_description'],
+                'subject_id' => $subject_id,
+                'total' => 0
+            ];
+        }
+    }
+    ksort( $user_missions );
 
     $stickers_required_query = mysql_query(
         " SELECT subject_id, medal_ord, medal_name, missions_required, profile_photo_id "
