@@ -119,12 +119,16 @@ span.campaign-info-title { display: block; font-size: 1.6em; font-weight: bolder
 .medal-level { text-align: center; } .medal-img.earned { opacity: 1; }
 .medal-img { margin: 0 auto; height: 97px; opacity: .3;}
 .sticker-board > .row { margin: 10px 0px; }
-.col-8.col-sm-9.medal-level-stickers { display: flex; align-items: center; flex-wrap: wrap; }
+.col-8.col-sm-9.medal-level-stickers { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
 .level-text { color: #9f9f9f; font-family: font1; }
 .sticker { display: inline-block; text-align: center; font-size: .8em; margin: 0px 1% 1% 0px; }
-.sticker img { height: 35px; }
+.sticker img { height: 35px; transition: .25s; }
 .sticker.earned img { animation: color-sticker 1s; }
 @keyframes color-sticker {
     from {filter: grayscale(100%)}
     to {filter: none;}
+}
+
+@media( min-width: 768px ){
+    .sticker img { height: 55px; }
 }
