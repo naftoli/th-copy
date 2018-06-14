@@ -3,23 +3,45 @@ require_once( dirname(__FILE__) . '/../../../db.php' );
 
 function getStickerName( $subject_id ){
     $img_to_subject_id = [
-        '41' => 'avos_ubonim',
-        '100' => 'brias_haguf',
-        '45' => 'cheshbon_hanefesh',
-        '90' => 'chitas',
-        '16' => 'hiskashrus', 
-        '12' => 'mivtzoim',
-        '13' => 'niggunim',
-        '21' => 'sefer_hamitzvos',
-        '1' => 'shabbos_mevorchim_tehillim',
-        '27' => 'tanya', '91' => 'tanya',
-        '4' => 'tefillah',
-        '42' => 'vihalachta_bidrachov',
-        '40' => 'yomei_dipagra'
+        1 => 'shabbos_mevorchim_tehillim',
+        4 => 'tefillah',
+        12 => 'mivtzoim',
+        13 => 'niggunim',
+        16 => 'hiskashrus',
+        21 => 'sefer_hamitzvos',
+        27 => 'tanya',
+        40 => 'yomei_dipagra',
+        41 => 'avos_ubonim',
+        42 => 'vihalachta_bidrachov',
+        45 => 'cheshbon_hanefesh',
+        90 => 'chitas',
+        91 => 'tanya',
+        100 => 'brias_haguf'
     ];
     if ( isset( $img_to_subject_id[$subject_id ] ) )
         return $img_to_subject_id[$subject_id ];
     return 'cheshbon_hanefesh'; // looks like a checkmark
+}
+
+function getSubjectImage( $subject_id ) {
+    $campaignLogos = array(
+        1	=>	'wwtc-black-svg.svg',
+        4	=>	'tefillah-black-svg.svg',
+        12	=>	'mivtzoim-black-svg.svg',
+        13	=>	'nigunnim-black-svg.svg',
+        16	=>	'hiskashrus-black-svg.svg',
+        21	=>	'sefer-hamitzvos-black-svg.svg',
+        27	=>	'tanya.gif',
+        40	=>	'yomei-dipagra-black-svg.svg',
+        41	=>	'avos-ubonim-black-svg.svg',
+        42	=>	'Footsteps.gif',
+        45	=>	'cheshbon-hanefesh-black-svg.svg',
+        90	=>	'chitas-black-svg.svg',
+        100	=>	'Brias-Haguf.gif'
+    );
+    if ( isset( $campaignLogos[$subject_id ] ) )
+        return $campaignLogos[$subject_id ];
+    return 'cheshbon-hanefesh-black-svg.svg'; // looks like a checkmark
 }
 
 if ( isset( $_GET['v'] ) && $_GET['v'] == 2) { 
@@ -41,6 +63,7 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
     );
     while( $row = mysql_fetch_assoc( $user_missions_query ) ){
         $row['sticker_name'] = getStickerName( $row['subject_id'] );
+        $row['campaign_logo'] = getSubjectImage( $row['subject_id'] );
         if ( $row['subject_id'] == 1 ) 
             $row['subject_name'] = "תהילים";
         else if ( $row['subject_id'] == 27 ) 
