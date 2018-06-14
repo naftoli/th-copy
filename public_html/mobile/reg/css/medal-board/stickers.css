@@ -118,7 +118,7 @@ span.campaign-info-title { display: block; font-size: 1.6em; font-weight: bolder
 /* Sticker row info */
 .medal-level { text-align: center; } .medal-img.earned { opacity: 1; }
 .medal-img { margin: 0 auto; height: 97px; opacity: .3;}
-.col-8.col-sm-9.medal-level-stickers { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
+.col-8.col-sm-9.medal-level-stickers { display: flex; align-items: center; flex-wrap: wrap; }
 .level-text { color: #9f9f9f; font-family: font1; }
 span.date-awarded { font-size: .7em; }
 .sticker { display: inline-block; text-align: center; font-size: .8em; margin: 0px 1% 1% 0px; }
