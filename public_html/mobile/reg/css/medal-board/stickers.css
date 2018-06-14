@@ -133,3 +133,5 @@ span.date-awarded { font-size: .7em; }
 @media( min-width: 768px ){
     .sticker img { height: 55px; }
 }
+
+.slick-list.draggable { overflow: visible; }
