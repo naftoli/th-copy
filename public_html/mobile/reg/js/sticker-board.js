@@ -111,7 +111,7 @@ var sticker_board = function() {
                 medal_classes = 'earned animated tada';
                 compleation_status = 100;
             // current
-            } else if ( total > last_total && medal_info.running_total > total ) {
+            } else if ( total >= last_total && medal_info.running_total > total ) {
                 compleation_status = ( ( total - last_total ) / ( medal_info.running_total - last_total ) ) * 100;
                 status_text = ( medal_info.missions_required - ( total - last_total ) ) + ' to ' + medal_info.medal_name;
             // future
