@@ -86,12 +86,14 @@ var sticker_board = function() {
     // template for top slider
     function renderMedalSliderItem( campaign ){
         var percent_compleate = ( campaign.total / campaign.subject_total ) * 100;
+        var progress_text = campaign.total + ' / ' + campaign.subject_total + ' Missions</span>';
+        if ( percent_compleate >= 100 ) progress_text = 'Campaign Compleate!'
         return  '<div class="medal-slider-item">' +
                     '<img src="' + campaign.photo + '">' + 
                     '<div class="medal-subject"><span>' + campaign.subject_name + '</span></div>' + 
                     '<div class="medal-status progress">' + 
-                        '<div class="progress-bar" role="progressbar" style="width: ' + percent_compleate + '%;"></div>' +
-                        '<span>' + campaign.total + ' / ' + campaign.subject_total + ' Missions</span>' +
+                        '<div class="progress-bar ' + ( percent_compleate >= 100 ? 'green' : '') + '" role="progressbar" style="width: ' + percent_compleate + '%;"></div>' +
+                        '<span>' + progress_text + '</span>' +
                     '</div>' +
                 '</div>';
     }
@@ -123,7 +125,7 @@ var sticker_board = function() {
             html += '<hr><div class="row">' +
                 '<div class="col-4 col-sm-3 medal-level">' +
                     '<span class="levelText">Level ' + medal_info.medal_ord + '</span>' + 
-                    '<img class="medal-img ' + medal_classes + '" src="' + medal_info.photo + '" />';
+                    '<img class="medal-img ' + medal_classes + '" src="' + medal_info.photo + '" onerror="this.src=\'/kiosk/images/medals/holder.png\'"/>';
             if ( status_text !== '' ) {
             html += '<div class="medal-status progress">' + 
                         '<div class="progress-bar ' + medal_color + '" role="progressbar" style="width: ' + compleation_status + '%;"></div>' + 

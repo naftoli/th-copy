@@ -83,7 +83,7 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
         " SELECT ms.subject_id, ms.medal_ord, medal_name, missions_required, profile_photo_id, mm.date_awarded "
         ." FROM medals_subjects ms JOIN medals USING ( medal_ord ) "
         ." LEFT JOIN medal_marks mm ON ms.subject_id = mm.subject_id AND ms.medal_ord = mm.medal_ord AND user_id = '$user'"
-        ." WHERE ms.subject_id IN (" . implode( ',', $subjects ) . ") AND profile_photo_id IS NOT NULL "
+        ." WHERE ms.subject_id IN (" . implode( ',', $subjects ) . ") "
         ." ORDER BY ms.subject_id, ms.medal_ord;"
     );
 
@@ -99,6 +99,8 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
         if ( $subject_id  == $last_subject_id ) {
             $running_total = $amount_required + $running_total;
         } else {
+            if ( isset( $user_missions[ $last_subject_id ] ) && !isset( $user_missions[ $last_subject_id ]['photo'] ) )
+                $user_missions[ $last_subject_id ]['photo'] = $last_photo_location;
             $running_total = $amount_required;
             $last_photo_location = '/kiosk/images/medals/holder.png';
         }
@@ -124,12 +126,13 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
         $user_missions[$subject_id ]['subject_total'] = $running_total;
 
         if ( $running_total > $total && !isset($user_missions[$subject_id ]['photo']) ) {
-            $user_missions[$subject_id ]['photo'] = $last_photo_location;
-            $user_missions[$subject_id ]['left'] = $running_total - $total;
+            $user_missions[ $subject_id ]['photo'] = $last_photo_location;
+            $user_missions[ $subject_id ]['left'] = $running_total - $total;
         }
 
-        $last_photo_location = '/file_view.php?id='.$row['profile_photo_id'];
-        $last_subject_id = $subject_id ;
+        if ( $row['profile_photo_id'] )
+            $last_photo_location = '/file_view.php?id='.$row['profile_photo_id'];
+        $last_subject_id = $subject_id;
     }
 
     $user_missions = array_values( $user_missions );
