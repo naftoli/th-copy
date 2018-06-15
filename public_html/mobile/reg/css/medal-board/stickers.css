@@ -41,14 +41,14 @@ footer { position: fixed;    width: 100%;    bottom: 0; border-top: 2px solid #9
 /************************* CSS for progress bars *************************/
 .progress {
     box-shadow: inset 0 1px 2px rgba(0,0,0,.1); position: relative;
-    margin-top: 5px; margin-bottom: 0px; text-align: center; height: 20px;
+    margin-top: 5px; margin-bottom: 0px; text-align: center; height: 25px;
 }
 .progress-bar {
     background-color: #f39c12; height: 100%; animation-name: progress-bar-slide; animation-duration: 2.5s;
     background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
 }
-.progress span { position: absolute; top: 0px; right: 0px; left: 0px; font-family: digi, monospace; }
-section#medal-slider .progress { height: 25px; max-width: 95%; margin: 0 auto; }
+.progress span { position: absolute; top: 0px; right: 0px; left: 0px; font-family: digi, monospace; font-size: 1.3em; }
+section#medal-slider .progress { height: 26px; max-width: 95%; margin: 0 auto; }
 section#medal-slider .progress span { font-size: 1.4em; }
 
 .progress-bar.white { background-color: #bbbbbb; }
@@ -72,12 +72,13 @@ section#medal-slider .progress span { font-size: 1.4em; }
 img { max-width: 100%; }
 .medal-subject {
     background-image: url(/mobile/img_new/banner-1-color-orange-svg.svg);
-    background-size: 100% 100%; height: 35px; margin-top: -30px; line-height: 43px; position: relative;
+    background-size: 100% 100%; height: 35px; margin-top: -35px; line-height: 43px; position: relative;
     transition: .25s; font-size: 1.2em; color: #ffffff; margin-bottom: 10px;
 }
 .medal-subject span { font-family: font1, "Times New Roman"; }
 /* Slider */
 section#medal-slider, #medal-stickers { display: none; position: relative; max-width: 900px; margin: 0 auto; }
+section#medal-slider { animation-delay: .5s; }
 #medal-stickers { width: 95%; margin: 10px auto 100px; }
 .medal-slider-item { text-align: center; transition: .25s ease; }
 .medal-slider-item img { height: 125px; margin: 10px auto 10px; }
@@ -134,4 +135,5 @@ span.date-awarded { font-size: .7em; }
 /* larger stickers on larger devices */
 @media( min-width: 768px ){
     .sticker img { height: 55px; }
+    .campaign-info > p { font-size: 1.2em; }
 }
