@@ -31,18 +31,23 @@ export class Login extends Component {
     });
   }
 
-  togglePassword = ( event ) => {
+  togglePassword = () => {
+    // update the state
     this.setState({
       show_password: !this.state.show_password
+    }, () => {
+      // update the feild without re-rendering the component ( If we have access to the dom )
+      const password = document.querySelector('#login-form #password');
+      if ( password ) {
+        password.type = this.state.show_password ? 'text' : 'password';
+        password.focus();
+      }
     });
-    const password = document.querySelector('#password');
-    if ( password ) {
-      password.focus(); password.click();
-    }
   }
 
   handleLoginForm = ( event ) => {
     event.preventDefault();
+    this.setState( { show_password: false } ); // reset the show-password state
     this.props.login( this.state.username, this.state.password )
   }
 
@@ -63,7 +68,7 @@ export class Login extends Component {
         <InputGroup 
           large={true} leftIcon={lockIcon} placeholder="Password"
           onChange={this.handleChange} value={this.state.password} id='password' 
-          type={ this.state.show_password ? 'text' : 'password' } rightElement={ lockButton } />
+          type='password' rightElement={ lockButton } />
         { errors }
         <Button text='Login' intent='primary' large={true} type='submit'/>
       </form>

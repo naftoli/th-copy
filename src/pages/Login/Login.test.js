@@ -63,7 +63,9 @@ describe( 'Login', () => {
   });
 
   describe('props', () => {
+
     describe( '.login', () => {
+      
       beforeEach(() => {
         props = { login: jest.fn() };
         login().find('input#username').instance().value = 'username';
