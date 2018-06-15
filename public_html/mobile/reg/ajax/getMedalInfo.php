@@ -109,10 +109,13 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
         // calcuate images for the sticker items
         $medal_name = strtolower( $row['medal_name'] );
         $medal_name = $medal_name == 'gray' ? 'grey' : $medal_name;
+        // 95 total missions
         if ( in_array( $subject_id, [ 1, 12, 21, 15, 93 ] ) )
             $row['photo'] = 'images/backs/wwtc/'.$medal_name.'.gif';
-        else if ( $subject_id == 40 )
+        // 585 total missions
+        else if ( in_array( $subject_id, [ 40, 94 ] ) )
             $row['photo'] = 'images/backs/yd/'.$medal_name.'.gif';
+        // 375 missions
         else
             $row['photo'] = 'images/backs/weekly/'.$medal_name.'.gif';
         
