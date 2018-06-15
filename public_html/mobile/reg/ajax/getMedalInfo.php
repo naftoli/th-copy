@@ -15,7 +15,8 @@ function getStickerName( $subject_id ){
         12 => 'mivtzoim',   13 => 'niggunim',   16 => 'hiskashrus',
         21 => 'sefer_hamitzvos',    27 => 'tanya',  40 => 'yomei_dipagra',
         41 => 'avos_ubonim',    42 => 'vihalachta_bidrachov',   45 => 'cheshbon_hanefesh',
-        90 => 'chitas', 91 => 'tanya',  100 => 'brias_haguf'
+        90 => 'chitas', 91 => 'tanya', 92 => 'niggunim',    93 => 'mivtzoim',
+        94  => 'yomei_dipagra',   100 => 'brias_haguf'
     ];
     if ( isset( $img_to_subject_id[$subject_id ] ) )
         return $img_to_subject_id[$subject_id ];
@@ -30,7 +31,8 @@ function getSubjectImage( $subject_id ) {
         27	=>	'tanya.gif',    40	=>	'yomei-dipagra-black-svg.svg',
         41	=>	'avos-ubonim-black-svg.svg',    42	=>	'Footsteps.gif',
         45	=>	'cheshbon-hanefesh-black-svg.svg',  90	=>	'chitas-black-svg.svg',
-        100	=>	'Brias-Haguf.gif'
+        92  => 'nigunnim-black-svg.svg',    93 => 'mivtzoim-black-svg.svg',
+        94  => 'yomei-dipagra-black-svg.svg',  100	=>	'Brias-Haguf.gif'
     );
     if ( isset( $campaignLogos[$subject_id ] ) )
         return $campaignLogos[$subject_id ];
