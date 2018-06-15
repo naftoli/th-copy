@@ -23,6 +23,10 @@ class AdminSchools {
             if ($this->registeredOnly) 
                 $sql .= "and s.school_era is null ";
             $sql .= "order by school_name";
+        } else if ( $this->auth == 'ckidssuper' ) {
+            $sql = "select s.school_id, s.school_name 
+                    from schools s 
+                    where s.ckids = 1 ";
         } else { 
             $sql = "select s.school_id, s.school_name 
                     from schools s 

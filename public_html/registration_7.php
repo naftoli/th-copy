@@ -1,11 +1,12 @@
 <?php 
 session_start(); 
-if ( !isset( $_SESSION['hschool'] ) ) 
-    header( "Location: admin.php" );
-$h_school = $_SESSION['hschool'];
+if ( !isset( $_SESSION['school_id'] ) ) 
+    header( "Location: registration.php" );
+
+$admin_id = $_SESSION['admin_id'];
+$school_id = $_SESSION['school_id'];
 
 include("db.php");
-include("check_admin_id.php");
 
 require_once('classes/authorize/CustomerProfile.php');
 use \classes\authorize\CustomerProfile;
@@ -21,9 +22,6 @@ $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
 $admin = new admin($row);
-$admin->get_school_id();
-$school_id = $admin->school_id;
-
 // ***** GET THE ADMIN INFO ***** //
 
 $message = "";
@@ -32,7 +30,7 @@ $update_done = false;
 // ***** GET PAYMENT INFO ***** //
 $authorize_school_ids = mysql_query(
 	"SELECT authorize_customer_profile_id as customer_id, authorize_payment_profile_id as payment_id "
-	." FROM schools WHERE school_id = ".$admin->school_id
+	." FROM schools WHERE school_id = ".$school_id
 );
 // load the info from the DBS
 $authorize_school_ids = mysql_fetch_assoc($authorize_school_ids); // fetch the results from the DBS
@@ -48,7 +46,7 @@ if( $customer_id ) {
 }
 
 include("classes/school.php");
-$sql = "SELECT * FROM schools WHERE school_id=" . $admin->school_id;
+$sql = "SELECT * FROM schools WHERE school_id=" . $school_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
 $school = new school($row);
@@ -70,7 +68,7 @@ if (isset($_POST['action'])) {
 			."accounting_name = '" . mysql_real_escape_string($_POST['contact_name']) . "', "
 			."accounting_number = '" . mysql_real_escape_string($_POST['contact_number']) . "', "
 			."accounting_email = '" . mysql_real_escape_string($_POST['contact_email']) . "' "
-			."WHERE school_id=" . $admin->school_id;
+			."WHERE school_id=" . $school_id;
 		$query = mysql_query($sql);
 		// create the bill to array
 		$billto = [
@@ -112,13 +110,13 @@ if (isset($_POST['action'])) {
 
 			// get the email from the admin
 			// create the payment profile
-			$customer_profile = CustomerProfile::create("CTH_".$admin->school_id, $admin->admin_email, $school->school_name, $payment_profile);
+			$customer_profile = CustomerProfile::create("CTH_".$school_id, $admin->admin_email, $school->school_name, $payment_profile);
 			//// if it is a valid payment profile, update the system. (only bad case is a duplicate which then returns an array)
 			if ($customer_profile instanceof CustomerProfile) {
 				// insert the ids into the system....
 				mysql_query("UPDATE schools SET authorize_customer_profile_id = ". $customer_profile->customerProfileId .
 							", authorize_payment_profile_id = " . $customer_profile->paymentProfiles[0]["customerPaymentProfileId"] .
-							" WHERE school_id = $admin->school_id"
+							" WHERE school_id = $school_id"
 				);
 			} else {
                 $message = "<span style='color:red;'>" . $customer_profile['message'] . "</span>";
@@ -155,8 +153,6 @@ function clean_character($string)
 		
 		<script>
 			var next_page = "<?=$next_page;?>";
-			var admin_id = <?=$admin_id;?>;
-			var school_id = <?=$school_id;?>;
 
 			$( function(){ 
 			    
@@ -300,10 +296,7 @@ function clean_character($string)
 
 			function check_next_page() {
 				if (next_page == "true") {
-					var registration_form_eight = document.forms["registration_form_eight"];
-					registration_form_eight.elements["admin_id"].value = admin_id;
-					registration_form_eight.elements["school_id"].value = school_id;
-					registration_form_eight.submit();
+					location.href = "registration_8.php";
 				}
 			}									
 			
@@ -328,11 +321,7 @@ function clean_character($string)
 	</head>
 
 	<body onload="check_next_page();">
-		<FORM name="registration_form_eight" method="post" action="registration_8.php">
-			<input type="hidden" name="admin_id" value="">
-			<input type="hidden" name="school_id" value="">
-		</FORM>
-	
+
 		<NOSCRIPT>
 			<P STYLE="color: red; font-size: larger;">Notice: You have javascript disabled. Some parts of the site will not function without javascript.</P>
 		</NOSCRIPT>
@@ -362,8 +351,6 @@ function clean_character($string)
 	 
 							<form action="registration_7.php" id="ccform" method="post" accept-charset="UTF-8">
 								<input type="hidden" name="action" value="update_credit_card">
-								<input type="hidden" name="school_id" value="<?=$school_id;?>">
-								<input type="hidden" name="admin_id" value="<?=$admin_id;?>">
 
 								<? if ($message != "") : ?>
 									<h1 style="color:red;"><?=$message;?></h1>

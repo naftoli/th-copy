@@ -1,40 +1,19 @@
 <?php 
 session_start();
-if ( !isset( $_SESSION['hschool'] ) ) 
-    header( "Location: admin.php" );
-$h_school = $_SESSION['hschool'];
+if ( !isset( $_SESSION['school_id'] ) ) 
+	header( "Location: registration.php" );
+	
+$admin_id = $_SESSION['admin_id'];
+$school_id = $_SESSION['school_id'];
 
 include("db.php");
-include("check_admin_id.php");
-
-// ***** GET THE ADMIN AND SCHOOL INFO ***** //
-include("classes/admin.php");
-include("classes/user.php");
-include("camps/includes/classes/school_class.php");
 
 // get admin info
+include("classes/admin.php");
 $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
 $admin = new admin($row);
-
-$admin = new admin($row);
-$admin->get_school_id();
-$school_id = $admin->school_id;
-/*
-// get school info
-$sql2 = "SELECT * FROM schools WHERE school_id=" . $school_id;
-$query2 = mysql_query($sql2);
-$row2 = mysql_fetch_assoc($query2);
-$inst_id = $row2['inst_id'];
-
-if ( $inst_id != 4 ) {
-    $reg_fee = 600;
-} else {
-    $reg_fee = 40;
-}
- * 
- */
 
 $reg_fee = 770;
 $total = $reg_fee;
@@ -53,30 +32,6 @@ if (in_array($school_id, array_keys($schools))) {
 	$total += $schools[$school_id];
 }
 
-// ***** GET THE ADMIN AND SCHOOL INFO ***** //
-/*
-//get scanners ordered by school
-$scanners = 0;
-$sql = "select scanners from school_accessories where school_id = " . $school_id . " and year = 5777";
-$result = mysql_query( $sql );
-$row = mysql_fetch_assoc( $result );
-$scanners = $row['scanners'];
-
-$total = $reg_fee + ($scanners * 50);
-
-// ***** GET THE KIOSKS ORDERED BY THE SCHOOL ***** //
-include("classes/school_kiosk.php");
-include("classes/kiosk_type.php");
-$school_kiosks = array();
-$sql = "SELECT * FROM school_kiosks WHERE school_id=" . $admin->school_id;
-$query = mysql_query($sql);
-while ($row = mysql_fetch_assoc($query)) {
-	$school_kiosk = new school_kiosk($row);
-	$school_kiosk->get_kiosk_type();
-	array_push($school_kiosks, $school_kiosk);
-}
-// ***** GET THE KIOSKS ORDERED BY THE SCHOOL ***** //
-*/
 // ***** SEND THE CONFIRMATION EMAIL ***** //
 $confirmation = "";
 $message = "";
@@ -84,7 +39,6 @@ $message = "";
 $sql = "SELECT * FROM schools WHERE school_id = " . $school_id;
 $result2 = mysql_query($sql);
 $row2 = mysql_fetch_assoc($result2);
-//echo "<pre>"; print_r($row2); echo "</pre>";
 
 // make sure there's an authorize profile created
 if (empty($row2['authorize_customer_profile_id']) || empty($row2['authorize_payment_profile_id'])) {
@@ -135,11 +89,7 @@ $year = GlobalSettings::getRegistrationYear();
 				
 				// on click of return button
 				$("#return_to_main_menu_button").click(function(){ 
-					<? if ( $h_school ) { ?>	
-						var str = "admin_setup_guide_hschool.php?school_id=" + school_id;
-					<? } else { ?>
-						var str = "admin_setup_guide.php?school_id=" + school_id;
-					<? } ?>
+					var str = "admin_setup_guide.php?school_id=" + school_id;
 					window.location = str;
 				});
 
@@ -173,14 +123,6 @@ $year = GlobalSettings::getRegistrationYear();
 					return true;
 				}				
 			}
-			
-			// display message
-			// function display_message() {
-				// if (confirmation != "") {
-					// alert(confirmation);
-						// window.location = "http://mashpia.com/admin.php";
-				// }
-			// }
 				
 			function submit_transaction_to_creditcard_processing() {
 				// cast the json into a post params list
@@ -251,9 +193,7 @@ $year = GlobalSettings::getRegistrationYear();
 							<h1>School Registration</h1>	 
 							<form action="#" id="submit_form" method="post" accept-charset="UTF-8" name="login"> 
 								<input type="hidden" name="action" value="submit">
-								<input type="hidden" name="action" value="registration_confirmation">
-								<input type="hidden" name="school_id" value="<?=$school_id;?>">
-								<input type="hidden" name="admin_id" value="<?=$admin_id;?>">								
+								<input type="hidden" name="action" value="registration_confirmation">								
 
 								<? if ($message != "") : ?>
 									<h1><?=$message;?></h1>
@@ -268,7 +208,7 @@ $year = GlobalSettings::getRegistrationYear();
 											<ul>
 												<li>
 													<div class="box">
-														<h4>Base Membership for <?if ( $h_school ) echo "Hebrew School "; ?><?=$year?> - $<?=$reg_fee?></h4>
+														<h4>Base Membership for <?=$year?> - $<?=$reg_fee?></h4>
 													</div>
 												</li>
 												
@@ -279,27 +219,6 @@ $year = GlobalSettings::getRegistrationYear();
 													</div>
 												</li>
 												<? endif; ?>
-												
-												<? if ( $scanners ) { ?>
-												<li>
-                                                    <div class="box">
-                                                        <h4><?=$scanners?> Scanners ($50 / ea.) - $<?=$scanners*50?></h4>
-                                                    </div>
-                                                </li>    
-												<? } ?>
-													
-												<!-- ***** KIOSKS ORDERED BY THE SCHOOL ***** -->
-												<? //for ($skno = 0; $skno < count($school_kiosks); $skno++) :?>
-													<!--<li>
-														<div class="box">
-															<? //$total = $total + ($school_kiosks[$skno]->quantity * $school_kiosks[$skno]->price); ?>															
-															<h4>
-																<?//=$school_kiosks[$skno]->quantity;?> <?//=$school_kiosks[$skno]->kiosk_type->kiosk_name;?> (<?//=number_format($school_kiosks[$skno]->price, 2, '.', '');?>) Kiosk(s) - $<?//=number_format($school_kiosks[$skno]->quantity * $school_kiosks[$skno]->price, 2, '.', '');?>
-															</h4>
-														</div>
-													</li>-->
-												<? //endfor; ?>
-												<!-- ***** KIOSKS ORDERED BY THE SCHOOL ***** -->
 												
 												<li class="right">
 													<div class="box">
@@ -318,8 +237,7 @@ $year = GlobalSettings::getRegistrationYear();
 												<li>
 													<div class="box">
 														<h4><input type="checkbox" name="ccaccept" id="ccaccept" />
-														Please charge my card $<?=$total?>.00
-														<? if ( $h_school ) echo "(Hebrew School " . $year . " Total Registration)"; ?></h4>
+														Please charge my card $<?=$total?>.00</h4>
 													</div>
 												</li>
 												<li>
