@@ -86,6 +86,12 @@ section#medal-slider { animation-delay: .5s; }
 @media ( min-width: 768px ) {
     .medal-slider-item { transform: scale(.6); -webkit-transform: scale(.6); opacity: .8; }
     .medal-slider-item.slick-center { transform: scale(1); -webkit-transform: scale(1); opacity: 1; }
+    /* fade out on desktop at the edges */
+    #medal-slider .slick-list.draggable:before {
+        content: ""; top: 0; left: 0; position: absolute; height: 100%; width: 100%; z-index: 1;
+        background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 15%,  rgba(255, 255, 255, 0) 85%, rgba(255, 255, 255, 1) 100%);
+        filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ffffff', GradientType=1);   
+    }
 }
 /* Slider buttons */
 .slick-prev, .slick-next {
