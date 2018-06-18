@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Sidebar, { getMenu } from 'components/navigation/Sidebar';
 import Navbar from 'components/navigation/Navbar';
 import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
 import './Dashboard.scss';
 
 export class Dashboard extends Component {
@@ -44,7 +45,7 @@ export class Dashboard extends Component {
       <div id="dashboard">
         <Navbar onClick={ this.toggle } />
         <div id="dashboard-body">
-          <Sidebar menu={ getMenu() } active={ this.state.active } />
+          <Sidebar menu={ getMenu( this.props.auth_code ) } active={ this.state.active } />
           <div id="dashboard-content">
             { this.props.children }
           </div>
@@ -54,4 +55,10 @@ export class Dashboard extends Component {
   }
 }
 
-export default withRouter(Dashboard);
+const mapStateToProps = ( state ) => ({
+  auth_code: state.login.current_user.authCode
+});
+
+export default withRouter(
+  connect( mapStateToProps )( Dashboard )
+);
