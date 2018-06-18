@@ -54,6 +54,7 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
         }
     }
 
+    $admin_id = false;
     if ( $mobile && $_COOKIE['admin'] ) {
         $admin_id = \mashpia\api\auth\Auth::authenticate(
             [ "key" => $_COOKIE['admin'] ], "mobile"

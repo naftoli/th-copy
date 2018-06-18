@@ -77,6 +77,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      */
     public function authCode() {
         if ( $this->isHQ() ) return 'HQ';
+        if ( $this->auth === 'ckidssuper' ) return 'CKIDS-ADMIN';
         // not HQ
         $auth_types = $this->getAuthTypes();
         if ( in_array( 'school', $auth_types ) ) return 'BC';
