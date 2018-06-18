@@ -6,8 +6,7 @@ import { operations } from 'store/login/actions';
 
 import './Login.scss';
 import logo from 'img/logo.svg';
-import user from 'img/icons/profile-1-color-gray.svg';
-import lock from 'img/icons/lock-color-gray.svg';
+import { user, lock } from 'img/icons';
 
 export class Login extends Component {
   constructor( props ){
