@@ -80,4 +80,55 @@ describe("Dashboard", () => {
       
     });
   });
+
+  describe('lifecylce', () => {
+    
+    let listen, unmount;
+    
+    beforeEach(() => {
+      listen = jest.fn(); unmount = jest.fn();
+      listen.mockReturnValue( unmount );
+      props.history = { listen: listen };
+    });
+
+    describe('componentDidMount', () => {
+
+      it( 'calls props.history.listen', () => {
+        dashboard();
+        expect( listen ).toHaveBeenCalled();
+      });
+
+      it( 'does not call the return value of props.history.listen', () => {
+        dashboard();
+        expect( unmount ).not.toHaveBeenCalled();
+      });
+
+      it( 'recives a function as a paramater', () => {
+        dashboard();
+        expect( listen ).toBeCalledWith( expect.any( Function ) );
+      });
+      
+      it( 'sets state.active to false when recived function is called and display is 768px', () => {
+        window.innerWidth = 768;
+        dashboard(); listen.mock.calls[0][0]();
+        expect( dashboard().state().active ).toBe( false );
+      });
+
+
+      it( 'does nothing when recived function is called and display is greater then 768px', () => {
+        dashboard(); listen.mock.calls[0][0]();
+        expect( dashboard().state().active ).toBe( true );
+      });
+
+    });
+
+    describe('componentWillUnmount', () => {
+
+      it( 'the return value of props.history.listen', () => {
+        dashboard().unmount();
+        expect( unmount ).toHaveBeenCalled();
+      });
+
+    });
+  });
 });
