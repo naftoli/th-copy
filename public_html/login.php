@@ -373,7 +373,7 @@ if (isset($admin_auth))
 										</ol>
 									</div>
 									
-								</div>
+								</div> 
 								
 								<? require 'footer.php'; ?>
 								
