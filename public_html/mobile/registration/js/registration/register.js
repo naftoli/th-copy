@@ -117,6 +117,12 @@ var registrationApp = function() {
         if( state.selected_users.length === 0 ) return step1();
         window.location.hash = 'step-4';
         showSection("step-4");
+        
+        var total = state.cart.reduce( function( total, item ) { return total + item.price }, 0 );
+        if ( total === 0 ){
+            return registerUsers( { payment: { total: 0 } } );
+        }
+
         templates.renderCheckout( state.cart );
 
         toggleLoading( 'payment', true );
@@ -246,14 +252,7 @@ var registrationApp = function() {
             event.target.checkValidity();
             $( event.target ).addClass('was-validated');
         }
-        var cart_details = state.cart.map( function(item){ return item.meta } );
-        postData.registrations = cart_details.filter( function( item ) { return item.type == 'registration' } );
-        postData.shipping = cart_details.find( function( item ) { return item.type == 'shipping' } );
-        postData.shipping = postData.shipping || { shipping_charges: 0, shipping_type: 0 };
-
-        registerUsers( postData ).then( function( response ){
-            $("#successModal").modal('show');
-        })
+        registerUsers( postData );
     }
 
     /*********************** HELPER FUNCTIONS ***********************/
@@ -349,7 +348,14 @@ var registrationApp = function() {
 
     function registerUsers( postData ){
         return new Promise( function( resolve, reject ){
-            APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve);
+            var cart_details = state.cart.map( function(item){ return item.meta } );
+            postData.registrations = cart_details.filter( function( item ) { return item.type == 'registration' } );
+            postData.shipping = cart_details.find( function( item ) { return item.type == 'shipping' } );
+            postData.shipping = postData.shipping || { shipping_charges: 0, shipping_type: 0 };
+            
+            APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve)
+        }).then( function() { 
+            $("#successModal").modal('show'); 
         });
     }
 

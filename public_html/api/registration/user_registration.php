@@ -86,6 +86,8 @@ class UserRegistrationRouter {
 
         /******************************** SETUP ********************************/
         $payment_info = $_POST['payment'];
+        $total = intval( $payment_info['total'] );
+
         $registrations = $_POST['registrations'];
         $shipping_info = $_POST['shipping'];
         $shipping_charges = intval($shipping_info['shipping_charges']);
@@ -104,52 +106,38 @@ class UserRegistrationRouter {
         $description = "User Registration for $year: " . implode( ", ", $user_serials );
         
         /******************************** PAYMENT ********************************/
-        $customer_profile = $current_user->customerProfile();
-        
-        // if we where given a payment profile
-        if ( $customer_profile && $payment_info['payment_profile'] ){
-            $payment_profile_id = $payment_info['payment_profile'];
-        // if we have a customer profile, but they want to add a card
-        } else if ( $customer_profile && $payment_info['cc-number'] ){
-            $payment_profile = classes\authorize\PaymentProfile::create(
-                $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code'],
-                $current_user->authorize_customer_profile_id
-            );
-            if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
-                json_error( $payment_profile['messages']['message'][0]['text'] );
-            $payment_profile_id = $payment_profile->customerPaymentProfileId;
+        if ( $total != 0 ) {
+            // if we have a payment profile provided
+            if ( $payment_info['payment_profile'] ) {
+                $customer_profile = $current_user->customerProfile();
+                $payment_profile_id = $payment_info['payment_profile'];
+            // we need to create the payment profile
+            } else {
+                $payment_profile  = $current_user->createPaymentProfile( $payment_info );
+                $customer_profile = $current_user->customerProfile();
 
-        // if we do not have a customer profile, but do have a CC to create one...
-        } else if ( !$customer_profile && $payment_info['cc-number'] ){
-            $payment_profile = classes\authorize\PaymentProfile::createBasicArray(
-                $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code']
+                if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
+                    json_error( $payment_profile ); 
+            }
+            
+            // Let the user know if the transaction fails
+            $payment_response = $customer_profile->chargeCard(
+                $total, $payment_profile_id, null, null, $description
             );
-            $customer_profile = $current_user->customerProfile( $payment_profile );
-            // if we fail to create the customer profile, then return the error
-            if ( !($customer_profile instanceof classes\authorize\CustomerProfile) )
-                json_error( $customer_profile["message"] );
-            if ( count( $customer_profile->paymentProfiles ) == 0 )
-                json_error( "Invalid Payment Method" );
-            $payment_profile_id = $customer_profile->paymentProfiles[0]['customerPaymentProfileId'];
+            if ( !is_array( $payment_response ) ) json_error( $payment_response );
+            $transaction_query = $pdo->prepare(
+                "INSERT INTO transactions (trans_date, admin_id, description, amount, reg_amount, ship_amount, zip, users_registered, response) "
+                ."VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)"
+            );
+            $transaction_query->execute([
+                $current_user->admin_id, $description, $payment_info['total'], 
+                ( $total - $shipping_charges ), $shipping_charges,
+                $current_user->admin_postal, implode( ', ', $user_ids ),
+                json_encode( $payment_response )
+            ]);
         } else {
-            json_error( "Payment Error" );
+            $payment_response = 'N/A';
         }
-
-        // Let the user know if the transaction fails
-        $payment_response = $customer_profile->chargeCard(
-            intval($payment_info['total']), $payment_profile_id, null, null, $description
-        );
-        if ( !is_array( $payment_response ) ) json_error( $payment_response );
-        $transaction_query = $pdo->prepare(
-            "INSERT INTO transactions (trans_date, admin_id, description, amount, reg_amount, ship_amount, zip, users_registered, response) "
-            ."VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)"
-        );
-        $transaction_query->execute([
-            $current_user->admin_id, $description, $payment_info['total'], 
-            ( intval($payment_info['total']) - $shipping_charges ), $shipping_charges,
-            $current_user->admin_postal, implode( ', ', $user_ids ),
-            json_encode( $payment_response )
-        ]);
 
         // register all the users...
         $errors = [];   $registration_table_users = [];

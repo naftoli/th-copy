@@ -109,28 +109,46 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      * @param array $payment_profile
      * @return CustomerProfile/boolean/array
      */
-    public function customerProfile( $payment_profile = false ){
-        // if it is in the cache, return it
-        if ( $this->customer_profile instanceof classes\authorize\CustomerProfile )
-            return $this->customer_profile;
-        // if we do not have one and have not been given a payment profile - return false
-        if( !$this->authorize_customer_profile_id && !$payment_profile ) {
-            return false;
-        // if we do not have one and have been given a payment profile - create one
-        } else if ( !$this->authorize_customer_profile_id && $payment_profile ) {
+    public function customerProfile(){
+        if ( $this->authorize_customer_profile_id && !$this->customer_profile ) {
+            $this->customer_profile = new classes\authorize\CustomerProfile(
+                $this->authorize_customer_profile_id
+            );
+        }
+        return $this->customer_profile;
+    }
+
+    public function createPaymentProfile( $payment_info ) { 
+        // if we do not have a customer profile
+        if ( !$this->customerProfile() instanceof classes\authorize\CustomerProfile ) {
+            // create the account
+            $payment_profile = classes\authorize\PaymentProfile::createBasicArray(
+                $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code']
+            );
             $this->customer_profile = classes\authorize\CustomerProfile::create(
                 "cth_admin_".$this->admin_id, $this->admin_email, false, $payment_profile
             );
+            // handle errors
             if ( !$this->customer_profile instanceof classes\authorize\CustomerProfile )
-                return $this->customer_profile; // return the bad array
+                return $this->customer_profile["message"];
+            // save the valid information
             $this->authorize_customer_profile_id = $this->customer_profile->customerProfileId;
             $this->save();
-            return $this->customer_profile;
+            // return a new PaymentProfile instance
+            return new classes\authorize\PaymentProfile(
+                $this->customer_profile->paymentProfiles[0]['customerPaymentProfileId'],
+                $this->customer_profile->customerProfileId
+            );
+        // if we do have a customer profile
+        } else {
+            $payment_profile = classes\authorize\PaymentProfile::create(
+                $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code'],
+                $this->authorize_customer_profile_id
+            );
+            if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
+                return $payment_profile['messages']['message'][0]['text'];
+            return $payment_profile;
         }
-        // if we have one just return it
-        return $this->customer_profile = new classes\authorize\CustomerProfile(
-            $this->authorize_customer_profile_id
-        );
     }
 
     // OTHER
