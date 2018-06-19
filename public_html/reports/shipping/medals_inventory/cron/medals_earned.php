@@ -8,7 +8,7 @@ if ( http_response_code()!==FALSE ) {
 
 require_once( __DIR__ .'/../../../../db.php');
 
-$date = unixtojd();
+$date = unixtojd() - 1;
 echo "Updating medals earned on $date: \n";
 
 $medals_earned = mysql_query(
