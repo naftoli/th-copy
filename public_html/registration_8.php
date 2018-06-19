@@ -84,7 +84,7 @@ $year = GlobalSettings::getRegistrationYear();
 				// on click of submit button
 				$("#submit_button").click(function(){ 				
 					// perform some validation
-					if(check_checkboxes())				{
+					if(check_checkboxes()) {
 						submit_transaction_to_creditcard_processing();
 					}
 				}); 			

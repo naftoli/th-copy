@@ -148,7 +148,6 @@ else {
                     $.post('ajax/checkUsername.php', {user : username}, function(data) {
                         if (data == 1) {
                             alert('This username is already in use.\nPlease choose another one.');
-                            $("#username").focus().select();
                         }
                     });
                 })
@@ -493,31 +492,6 @@ else {
 														<span class="label"><label for="password2">*Re-enter Password</label></span>
 														<span class="label"><input class="required" name="password2" id="password2" type="password" required /></span>
 													</li>
-													<!--
-													<li>
-														<span class="label"><label for="lang">*Language</label></span>
-														<span class="input">
-															<select name="lang" class="select">
-																<option value="0" disabled="disabled">Please Select</option>
-																<? if ($admin->lang == "en") : ?>
-																<option value="en" selected>English</option>
-																<? else : ?>
-																<option value="en">English</option>													  
-																<? endif; ?>
-																<? if ($admin->lang == "he") : ?>
-																<option value="he" selected>עברית</option>
-																<? else : ?>
-																<option value="he">עברית</option>
-																<? endif; ?>
-																<? if ($admin->lang == "yi") : ?>
-																<option value="yi" selected>יידיש</option>
-																<? else : ?>
-																<option value="yi">יידיש</option>
-																<? endif; ?>													  
-															</select>
-														</span>
-													</li>
-													-->
 												</ul>
 											</div>
 										</div>
