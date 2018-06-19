@@ -6,6 +6,12 @@ if ( !isset( $_SESSION['school_id'] ) )
 $admin_id = $_SESSION['admin_id'];
 $school_id = $_SESSION['school_id'];
 
+// if we have the skip cc info setup then skip to last page
+if (isset( $_SESSION['skipCC'] ) && $_SESSION['skipCC'] == 'yes') {
+	header("Location: https://mashpia.com/registration_8.php");
+	exit;
+}
+
 include("db.php");
 
 require_once('classes/authorize/CustomerProfile.php');
@@ -296,7 +302,7 @@ function clean_character($string)
 
 			function check_next_page() {
 				if (next_page == "true") {
-					location.href = "registration_8.php";
+					location.href = "https://mashpia.com/registration_8.php";
 				}
 			}									
 			

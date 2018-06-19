@@ -41,9 +41,11 @@ $result2 = mysql_query($sql);
 $row2 = mysql_fetch_assoc($result2);
 
 // make sure there's an authorize profile created
-if (empty($row2['authorize_customer_profile_id']) || empty($row2['authorize_payment_profile_id'])) {
-    header("Location: registration_7.php");
-    exit;
+if (!isset( $_SESSION['skipCC'] ) || $_SESSION['skipCC'] !== 'yes') {
+	if (empty($row2['authorize_customer_profile_id']) || empty($row2['authorize_payment_profile_id'])) {
+		header("Location: registration_7.php");
+		exit;
+	}
 }
 
 require_once 'class.globalSettings.php';
@@ -125,6 +127,15 @@ $year = GlobalSettings::getRegistrationYear();
 			}
 				
 			function submit_transaction_to_creditcard_processing() {
+				// check if we are suppose to skip cc processing
+				<?php if (isset( $_SESSION['skipCC'] ) && $_SESSION['skipCC'] == 'yes') : ?>
+					var url = "camps/includes/edit_functions.php?function_name=set_school_era&parameters=" + school_id;								
+					$.get(url, function(success) {
+						//alert(success);
+					}); 
+					return false;
+				<?php endif; ?>
+
 				// cast the json into a post params list
 				var dataToSend = $.param({
 					school_id: <?=$row2['school_id'];?>,

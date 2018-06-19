@@ -16,6 +16,11 @@ if (isset( $_REQUEST['school_id'] )) {
 	$_SESSION['school_id'] = $school_id;
 }
 
+if (isset( $_GET['skip'] ) && $_GET['skip'] == 'shimmy') {
+	// we will need to skip the cc part at the end
+	$_SESSION['skipCC'] = 'yes';
+}
+
 if (isset($_POST["action"])) {
 	$action = $_POST["action"];
 	$message = "";
@@ -370,204 +375,207 @@ else {
 									
 								</div>		
 
-								<h2>Principal's Info</h2>
-								<div class="module" id="module-info">
-								
-									<div class="module_content">
+								<div id="otherInfo" style="display: none">
+
+									<h2>Principal's Info</h2>
+									<div class="module" id="module-info">
 									
-										<div class="lists form">
-											
-											<ul>
-												<li>
-													<span class="label"><label for="p_name">*Name</label></span>
-													<span class="label"><input name="p_name" type="text" id="p_name" value="<?=isset($school_info['principal'])?$school_info['principal']:''?>" required /></span>
-												</li>
-												<li>
-													<span class="label"><label for="p_number">*Contact Number</label></span>
-													<span class="label"><input name="p_number" type="text" id="p_number" value="<?=isset($school_info['principal_number'])?$school_info['principal_number']:''?>" required /></span>
-												</li>
-												<li>
-													<span class="label"><label for="p_email">*Email</label></span>
-													<span class="label"><input name="p_email" type="email" id="p_email" value="<?=isset($school_info['principal_email'])?$school_info['principal_email']:''?>" required /></span>
-												</li>
-											</ul>
+										<div class="module_content">
+										
+											<div class="lists form">
+												
+												<ul>
+													<li>
+														<span class="label"><label for="p_name">*Name</label></span>
+														<span class="label"><input name="p_name" type="text" id="p_name" value="<?=isset($school_info['principal'])?$school_info['principal']:''?>" required /></span>
+													</li>
+													<li>
+														<span class="label"><label for="p_number">*Contact Number</label></span>
+														<span class="label"><input name="p_number" type="text" id="p_number" value="<?=isset($school_info['principal_number'])?$school_info['principal_number']:''?>" required /></span>
+													</li>
+													<li>
+														<span class="label"><label for="p_email">*Email</label></span>
+														<span class="label"><input name="p_email" type="email" id="p_email" value="<?=isset($school_info['principal_email'])?$school_info['principal_email']:''?>" required /></span>
+													</li>
+												</ul>
+												
+											</div>
 											
 										</div>
 										
 									</div>
 									
-								</div>
-								
-								<h2>Base Commander's Info</h2> 
-								<div class="module" id="module-info">
-								
-									<div class="module_content">
-									
-										<div class="lists form">
-											
-											<ul>
-												<li>
-													<span class="label"><label for="title">Title</label>
-													</span>
-													
-													<span class="input">
-														<select name="title" class="select">
-															<option value="0" disabled="disabled">Please Select</option>
-															<? if ($admin->title == "Rabbi") : ?>
-															<option value="Rabbi" selected>Rabbi</option>
-															<? else : ?>
-															<option value="Rabbi">Rabbi</option>
-															<? endif; ?>
-															
-															<? if ($admin->title == "Mr.") : ?>
-															<option value="Mr." selected>Mr.</option>
-															<? else : ?>
-															<option value="Mr.">Mr.</option>
-															<? endif; ?>
-															
-															<? if ($admin->title == "Mrs.") : ?>
-															<option value="Mrs." selected>Mrs.</option>
-															<? else : ?>
-															<option value="Mrs.">Mrs.</option>
-															<? endif; ?>
-															
-															<? if ($admin->title == "Ms.") : ?>															
-															<option value="Ms." selected>Ms.</option>
-															<? else : ?>
-															<option value="Ms.">Ms.</option>
-															<? endif; ?>															
-														</select>													
-													</span>
-												</li>
-												<li>
-													<span class="label"><label for="first">*First Name</label></span>
-													<span class="label"><input class="required" name="first" type="text" value="<?=isset($admin->first)?$admin->first:'';?>" required /></span>
-												</li>
-												<li>
-													<span class="label"><label for="last">*Last Name</label></span>
-													<span class="label"><input class="required" name="last" type="text" value="<?=isset($admin->last)?$admin->last:'';?>" required /></span>
-												</li>
-												<li>
-													<span class="label"><label for="mobile">*Mobile Phone</label></span>
-													<span class="label"><input class="required" name="admin_phone_mobile" type="text" value="<?=isset($admin->admin_phone_mobile)?$admin->admin_phone_mobile:'';?>" required /></span>
-												</li>
-												<li>
-													<span class="label"><label for="email">*Email Address</label></span>
-													<span class="label"><input class="required email" name="admin_email" id="admin_email" type="email" value="<?=isset($admin->admin_email)?$admin->admin_email:'';?>" required /></span>
-												</li>
-												<li>
-													<span class="label"><label for="work">*Work Phone (+ext)</label></span>
-													<span class="label"><input class="required" name="admin_phone_work" type="text" value="<?=isset($admin->admin_phone_work)?$admin->admin_phone_work:'';?>" required /></span>
-												</li>
-												<li>
-													<span class="label"><label for="home">Home Phone</label></span>
-													<span class="label"><input name="admin_phone_home" type="text" value="<?=isset($admin->admin_phone_home)?$admin->admin_phone_home:'';?>" /></span>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-																
-								<? if (!isset($admin_id) || $admin_id == 0) : ?>
-								<h2>Login Info</h2> 
-								<div class="module" id="module-info">
-									<div class="module_content">
-										<div class="lists form">
-											<ul>
-												<li>
-													<span class="label"><label for="username">*Username</label></span>
-													<span class="label"><input class="required" name="username" id="username" type="text" required /></span>
-												</li>
-												<li>
-													<span class="label"><label for="password">*Password</label></span>
-													<span class="label"><input class="required" name="password" id="password" type="password" required /></span>
-												</li>
-												<li>
-													<span class="label"><label for="password2">*Re-enter Password</label></span>
-													<span class="label"><input class="required" name="password2" id="password2" type="password" required /></span>
-												</li>
-												<!--
-												<li>
-													<span class="label"><label for="lang">*Language</label></span>
-													<span class="input">
-														<select name="lang" class="select">
-															<option value="0" disabled="disabled">Please Select</option>
-															<? if ($admin->lang == "en") : ?>
-															<option value="en" selected>English</option>
-															<? else : ?>
-															<option value="en">English</option>													  
-															<? endif; ?>
-															<? if ($admin->lang == "he") : ?>
-															<option value="he" selected>עברית</option>
-															<? else : ?>
-															<option value="he">עברית</option>
-															<? endif; ?>
-															<? if ($admin->lang == "yi") : ?>
-															<option value="yi" selected>יידיש</option>
-															<? else : ?>
-															<option value="yi">יידיש</option>
-															<? endif; ?>													  
-														</select>
-													</span>
-												</li>
-												-->
-											</ul>
-										</div>
-									</div>
-								</div>
-								<? endif; ?>
-								
-								<div id="accept_terms" style="display:none">
-									<h2>Accept Terms</h2> 
+									<h2>Base Commander's Info</h2> 
 									<div class="module" id="module-info">
+									
 										<div class="module_content">
+										
 											<div class="lists form">
+												
 												<ul>
 													<li>
-														<span>To help you take full advantage of this program, we ask you to confirm that:</span>
-													</li>
-													<li>
-														<span>
-															<input class="required" type="checkbox" name="responsible" id="responsible" value="responsible">
-															<label for="tac">
-																I am the base commander responsible for supervising Tzivos Hashem, and I pledge to fully understand the goal and mission of Tzivos Hashem and how it works seamlessly with my school’s curriculum.
-															</label>
+														<span class="label"><label for="title">Title</label>
+														</span>
+														
+														<span class="input">
+															<select name="title" class="select">
+																<option value="0" disabled="disabled">Please Select</option>
+																<? if ($admin->title == "Rabbi") : ?>
+																<option value="Rabbi" selected>Rabbi</option>
+																<? else : ?>
+																<option value="Rabbi">Rabbi</option>
+																<? endif; ?>
+																
+																<? if ($admin->title == "Mr.") : ?>
+																<option value="Mr." selected>Mr.</option>
+																<? else : ?>
+																<option value="Mr.">Mr.</option>
+																<? endif; ?>
+																
+																<? if ($admin->title == "Mrs.") : ?>
+																<option value="Mrs." selected>Mrs.</option>
+																<? else : ?>
+																<option value="Mrs.">Mrs.</option>
+																<? endif; ?>
+																
+																<? if ($admin->title == "Ms.") : ?>															
+																<option value="Ms." selected>Ms.</option>
+																<? else : ?>
+																<option value="Ms.">Ms.</option>
+																<? endif; ?>															
+															</select>													
 														</span>
 													</li>
 													<li>
-														<span>
-															<input class="required" type="checkbox" name="designate" id="designate" value="designate">
-															<label for="tac">
-																I am fully committed to the ongoing growth of Tzivos Hashem on our base (school) and will attend the monthly base commanders meetings.
-															</label>
-														</span>
+														<span class="label"><label for="first">*First Name</label></span>
+														<span class="label"><input class="required" name="first" type="text" value="<?=isset($admin->first)?$admin->first:'';?>" required /></span>
 													</li>
 													<li>
-														<span>
-															<input class="required" type="checkbox" name="commited" id="commited" value="designate">
-															<label for="tac">
-																I will ensure that I will provide all my teachers email addresses so we can be in touch with them to provide resources.
-															</label>
-														</span>
+														<span class="label"><label for="last">*Last Name</label></span>
+														<span class="label"><input class="required" name="last" type="text" value="<?=isset($admin->last)?$admin->last:'';?>" required /></span>
 													</li>
 													<li>
-														<span>
-															<input class="required" type="checkbox" name="agree" id="agree" value="designate">
-															<label for="tac">
-																I agree for my card to be charged the registration fee for every student that I  register(s) into the Tzivos Hashem program from my school. [Parents who register directly will pay their own registration fee(s).]
-															</label>
-														</span>
+														<span class="label"><label for="mobile">*Mobile Phone</label></span>
+														<span class="label"><input class="required" name="admin_phone_mobile" type="text" value="<?=isset($admin->admin_phone_mobile)?$admin->admin_phone_mobile:'';?>" required /></span>
 													</li>
 													<li>
-														<input id="Continue" type="submit" value="Continue" class="button" onclick="return validate()">
+														<span class="label"><label for="email">*Email Address</label></span>
+														<span class="label"><input class="required email" name="admin_email" id="admin_email" type="email" value="<?=isset($admin->admin_email)?$admin->admin_email:'';?>" required /></span>
+													</li>
+													<li>
+														<span class="label"><label for="work">*Work Phone (+ext)</label></span>
+														<span class="label"><input class="required" name="admin_phone_work" type="text" value="<?=isset($admin->admin_phone_work)?$admin->admin_phone_work:'';?>" required /></span>
+													</li>
+													<li>
+														<span class="label"><label for="home">Home Phone</label></span>
+														<span class="label"><input name="admin_phone_home" type="text" value="<?=isset($admin->admin_phone_home)?$admin->admin_phone_home:'';?>" /></span>
 													</li>
 												</ul>
 											</div>
 										</div>
 									</div>
-								</div>
-								<div id="nonChayolei">
-									<input id="Continue" type="submit" value="Continue" class="button" onclick="return validate()">
+																	
+									<? if (!isset($admin_id) || $admin_id == 0) : ?>
+									<h2>Login Info</h2> 
+									<div class="module" id="module-info">
+										<div class="module_content">
+											<div class="lists form">
+												<ul>
+													<li>
+														<span class="label"><label for="username">*Username</label></span>
+														<span class="label"><input class="required" name="username" id="username" type="text" required /></span>
+													</li>
+													<li>
+														<span class="label"><label for="password">*Password</label></span>
+														<span class="label"><input class="required" name="password" id="password" type="password" required /></span>
+													</li>
+													<li>
+														<span class="label"><label for="password2">*Re-enter Password</label></span>
+														<span class="label"><input class="required" name="password2" id="password2" type="password" required /></span>
+													</li>
+													<!--
+													<li>
+														<span class="label"><label for="lang">*Language</label></span>
+														<span class="input">
+															<select name="lang" class="select">
+																<option value="0" disabled="disabled">Please Select</option>
+																<? if ($admin->lang == "en") : ?>
+																<option value="en" selected>English</option>
+																<? else : ?>
+																<option value="en">English</option>													  
+																<? endif; ?>
+																<? if ($admin->lang == "he") : ?>
+																<option value="he" selected>עברית</option>
+																<? else : ?>
+																<option value="he">עברית</option>
+																<? endif; ?>
+																<? if ($admin->lang == "yi") : ?>
+																<option value="yi" selected>יידיש</option>
+																<? else : ?>
+																<option value="yi">יידיש</option>
+																<? endif; ?>													  
+															</select>
+														</span>
+													</li>
+													-->
+												</ul>
+											</div>
+										</div>
+									</div>
+									<? endif; ?>
+									
+									<div id="accept_terms" style="display:none">
+										<h2>Accept Terms</h2> 
+										<div class="module" id="module-info">
+											<div class="module_content">
+												<div class="lists form">
+													<ul>
+														<li>
+															<span>To help you take full advantage of this program, we ask you to confirm that:</span>
+														</li>
+														<li>
+															<span>
+																<input class="required" type="checkbox" name="responsible" id="responsible" value="responsible">
+																<label for="tac">
+																	I am the base commander responsible for supervising Tzivos Hashem, and I pledge to fully understand the goal and mission of Tzivos Hashem and how it works seamlessly with my school’s curriculum.
+																</label>
+															</span>
+														</li>
+														<li>
+															<span>
+																<input class="required" type="checkbox" name="designate" id="designate" value="designate">
+																<label for="tac">
+																	I am fully committed to the ongoing growth of Tzivos Hashem on our base (school) and will attend the monthly base commanders meetings.
+																</label>
+															</span>
+														</li>
+														<li>
+															<span>
+																<input class="required" type="checkbox" name="commited" id="commited" value="designate">
+																<label for="tac">
+																	I will ensure that I will provide all my teachers email addresses so we can be in touch with them to provide resources.
+																</label>
+															</span>
+														</li>
+														<li>
+															<span>
+																<input class="required" type="checkbox" name="agree" id="agree" value="designate">
+																<label for="tac">
+																	I agree for my card to be charged the registration fee for every student that I  register(s) into the Tzivos Hashem program from my school. [Parents who register directly will pay their own registration fee(s).]
+																</label>
+															</span>
+														</li>
+														<li>
+															<input id="Continue" type="submit" value="Continue" class="button" onclick="return validate()">
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div id="nonChayolei">
+										<input id="Continue" type="submit" value="Continue" class="button" onclick="return validate()">
+									</div>
 								</div>
 							</form> 
 						</div>
@@ -578,6 +586,7 @@ else {
 	</body>
 	<script>
 		$(".school_type").click( function() {
+			$("#otherInfo").show();
 			var val = $(this).val();
 			if (val == 'chayolei') {
 				$("#chidonInfo").show();
