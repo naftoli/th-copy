@@ -134,50 +134,51 @@ $year = GlobalSettings::getRegistrationYear();
 						//alert(success);
 					}); 
 					return false;
-				<?php endif; ?>
+				<?php else : ?>
 
-				// cast the json into a post params list
-				var dataToSend = $.param({
-					school_id: <?=$row2['school_id'];?>,
-					description: "school registration for: " + '<?=$row2['school_name'];?>',
-					amount: $('#trans_total').val(),
-					customer_profile_id: <?=$row2['authorize_customer_profile_id'];?>,
-					payment_profile_id: <?=$row2['authorize_payment_profile_id'];?>
-				});
-				
-				$.post(
-					"/ajax/authorize/charge_card.php",
-					dataToSend,
-					function(data) { // on a sucessfull hit this function is called
-						data = JSON.parse(data); // parse the result to json
-						// add || sid == 82 to allow the test account access
-						if(data.success) { // if the charge was sucessfull{
-							console.log(data.response); // log out the transaction response
-							// generate the response and show it in the correct box
-							var response  = data.response.transactionResponse.messages[0]; // load the correct section of the response
-							var message = response.description + " (" + response.code + ")"; // format the text
-							$('#cc_response').html(message + "<br/>") ; // show the user the response
-							$("#return_to_main_menu_button").show();
-							$("#submit_button").hide();
+					// cast the json into a post params list
+					var dataToSend = $.param({
+						school_id: <?=$row2['school_id'];?>,
+						description: "school registration for: " + '<?=$row2['school_name'];?>',
+						amount: $('#trans_total').val(),
+						customer_profile_id: <?=$row2['authorize_customer_profile_id'];?>,
+						payment_profile_id: <?=$row2['authorize_payment_profile_id'];?>
+					});
+					
+					$.post(
+						"/ajax/authorize/charge_card.php",
+						dataToSend,
+						function(data) { // on a sucessfull hit this function is called
+							data = JSON.parse(data); // parse the result to json
+							// add || sid == 82 to allow the test account access
+							if(data.success) { // if the charge was sucessfull{
+								console.log(data.response); // log out the transaction response
+								// generate the response and show it in the correct box
+								var response  = data.response.transactionResponse.messages[0]; // load the correct section of the response
+								var message = response.description + " (" + response.code + ")"; // format the text
+								$('#cc_response').html(message + "<br/>") ; // show the user the response
+								$("#return_to_main_menu_button").show();
+								$("#submit_button").hide();
 
-							var url = "camps/includes/edit_functions.php?function_name=set_school_era&parameters=" + school_id;								
-							//alert(url);
-							$.get(url, function(success) {
-								//alert(success);
-							});
-							
-							//update school to be enrolled in all appropriate campaigns
-							$.post('ajax/enrollIntoCampaigns.php', {type : 'school', id : school_id});
-							
-							// send email to office
-							$.post('ajax/sendEmail.php', { school : school_id });
-							
-						} else { // alert the user that the charge has failed.
-							$('#cc_response').html("Credit Card Error: " + data.response + "<br/>Please Try Again.") ; // show the user the error					
+								var url = "camps/includes/edit_functions.php?function_name=set_school_era&parameters=" + school_id;								
+								//alert(url);
+								$.get(url, function(success) {
+									//alert(success);
+								});
+								
+								//update school to be enrolled in all appropriate campaigns
+								$.post('ajax/enrollIntoCampaigns.php', {type : 'school', id : school_id});
+								
+								// send email to office
+								$.post('ajax/sendEmail.php', { school : school_id });
+								
+							} else { // alert the user that the charge has failed.
+								$('#cc_response').html("Credit Card Error: " + data.response + "<br/>Please Try Again.") ; // show the user the error					
+							}
 						}
-					}
-				);
-				return false;
+					);
+					return false;
+				<?php endif; ?>
 			} // end of: submit_transaction_to_creditcard_processing
 		</script>
 	</head>
