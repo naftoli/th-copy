@@ -36,13 +36,22 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         <h2>5778 Shipping System</h2>
         <? include(dirname(__FILE__)."/parts/action_links.php");?>
         
-        <?if ($admin_user['auth'] == 'super') {?>
+        <? if ($admin_user['auth'] == 'super') { ?>
+        <h2>Inventory</h2>
+        <div id="action-links">
+            <a href="medals_inventory/<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="report"/>
+                    <span class="link-text">Medals Inventory</span>
+                </div>
+            </a>
+        </div>
         <h2>Legacy Shipping Reports</h2>
         <div id="action-links">
             <a href="/anashHachayolLabels.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="tickets"/>
-                    <span class="link-text">Anash Kinder</span>
+                    <span class="link-text">Anash Kinder Hachayol Labels</span>
                 </div>
             </a>
             <a href="/raffle_shipping.php<?=$debug ? "?debug=true": "";?>">
