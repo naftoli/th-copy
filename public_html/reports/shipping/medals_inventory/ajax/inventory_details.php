@@ -34,7 +34,7 @@ while ( $row = mysql_fetch_assoc( $query ) ) {
     } else {
         $running_total = 0;
         foreach( $rows as $row ) { 
-            $running_total = in_array( $row['type'], ['initial_entry', 'add_to_stock'] ) ? $running_total + $row['amount'] : $running_total - $row['amount']?>
+            $running_total += $row['amount']?>
         <tr>
             <td><?= str_replace( '_', ' ', $row['type'] ) ?></td>
             <td><?= $row['amount'] ?></td>

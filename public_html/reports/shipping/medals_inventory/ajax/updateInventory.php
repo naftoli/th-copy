@@ -33,6 +33,7 @@ if ( $action == 'add' ) {
 } else if ( $action == 'subtract' ) {
     $new_total = $current_total - $amount;
     $entry_type = 'remove_from_stock';
+    $amount = -1 * abs($amount); // convert to negative
 } else {
     echo json_encode( ['success' => false, 'error' => 'Invalid Action'] ); die();
 }
