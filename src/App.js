@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Dashboard from 'pages/Dashboard/Dashboard';
 import Login, { Logout } from 'pages/Login/';
+import UsersPage from 'pages/users';
 import 'styles/App.css';
 
 export class App extends Component {
@@ -14,10 +15,7 @@ export class App extends Component {
           <Dashboard>
             <Switch>
               <Route path={`/`} exact render={props => <h1>HomePage</h1>}/>
-              <Route path={`/users`} exact render={props => <h1>View / Edit Users</h1>}/>
-              <Route path={`/users/registration`} render={props => <h1>Bulk User Registration</h1>}/>
-              <Route path={`/users/cards`} render={props => <h1>User Rank Cards</h1>}/>
-              <Route path={`/users/:id`} render={props => <h1>View / Edit Single User</h1>}/>
+              <Route path={`/users`} component={ UsersPage } />
 
               <Route path={`/plattons`} exact render={props => <h1>Plattons</h1>}/>
               <Route path={`/parents`} exact render={props => <h1>Parents</h1>}/>
