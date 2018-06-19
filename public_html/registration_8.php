@@ -132,6 +132,8 @@ $year = GlobalSettings::getRegistrationYear();
 					var url = "camps/includes/edit_functions.php?function_name=set_school_era&parameters=" + school_id;								
 					$.get(url, function(success) {
 						//alert(success);
+						$("#return_to_main_menu_button").show();
+						$("#submit_button").hide();
 					}); 
 					return false;
 				<?php else : ?>
