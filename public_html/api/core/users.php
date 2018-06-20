@@ -21,12 +21,14 @@ class UsersRouter {
 
     private function getUsers( $admin, $user_id = false ) {
         $options = [ 'include' => ['school', 'platton'] ];
+        global $current_user;
+        
         if ( !$user_id ) {
             global $pdo;
 
-            $sql = "SELECT * FROM users JOIN schools USING ( school_id ) JOIN classes USING ( class_id ) WHERE users.school_id = ?";
+            $sql = "SELECT * FROM users JOIN schools USING ( school_id ) JOIN classes USING ( class_id ) WHERE users.school_id = ? ORDER BY class_grade, class_sub";
             $query = $pdo->prepare( $sql );
-            $query->execute( [ 82 ] );
+            $query->execute( [ $current_user->getAuthIds('school')[0] ] );
 
             foreach( $query->fetchAll() as $row ){
                 $user = User::build( $row );
