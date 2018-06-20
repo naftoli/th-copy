@@ -24,6 +24,7 @@ while ($row = mysql_fetch_assoc($result)) {
 <html>
     <head>
         <meta charset="utf8" />
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
         <style>
             tr, th, td {
                 padding: 3px;
@@ -46,14 +47,40 @@ while ($row = mysql_fetch_assoc($result)) {
                 <th>Barcode</th>
                 <th>DOB</th>
                 <th>Grade</th>
+                <th>Points</th>
             </tr>
             <?php
             foreach ($info as $row) {
                 echo "<tr><td>" . $row['user_id'] . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['first_he'] . "</td><td>" . $row['last_he'] .
                     "</td><td>" . ($row['rank_ord'] ? $ranks[$row['rank_ord']] : '') . "</td><td>" . $row['user_serial'] . "</td><td>" . '3' . $row['user_code'] . "</td><td>" .
-                    $row['dob'] . "</td><td>" . $row['class_grade'] . '-' . $row['class_sub'] . "</td></tr>";
+                    $row['dob'] . "</td><td>" . $row['class_grade'] . '-' . $row['class_sub'] . "</td><td class='" . $row['user_id'] . "'></td></tr>";
             }
             ?>
         </table>
     </body>
+    <script>
+        $(function() {
+            // get list of id's and then find out points for each id
+            // autofill points column with points 
+            
+            var ids = [];
+            $("tr").each( function(idx, el) {
+                if (idx > 0) { // skip header row
+                    var id = $(el).find('td').eq(0).text();
+                    if (ids.indexOf(id) == -1) {
+                        ids.push( id );
+                    }
+                }
+            });
+            
+            var total = ids.length;
+            for (let i = 0; i < total; i++) { // use let to resolve scope issue inside callback
+                $.post('/mobile/store/ajax/getBalance.php', { user : ids[i] }, function( success ) {
+                    var points = JSON.parse( success );
+                    // find all rows with this id and fill in points
+                    $("." + ids[i]).text( points.available );
+                });
+            }
+        });
+    </script>
 </html>
