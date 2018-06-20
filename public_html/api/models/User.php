@@ -1,10 +1,13 @@
 <?php
+include_once( __DIR__ . '/traits/BuildModel.php' );
+
 class User extends ActiveRecord\Model implements JsonSerializable {
     // relationships
     static $belongs_to = [
         [ 'school' ], [ 'platton', 'foreign_key' => 'class_id' ]
     ];
 
+    use traits\BuildModel;
     // ******************************* HELPER FUNCTIONS *******************************
     /**
      * profilePicture
