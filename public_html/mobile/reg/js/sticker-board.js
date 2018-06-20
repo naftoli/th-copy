@@ -166,7 +166,7 @@ var sticker_board = function() {
         start_index = start_index || 0;
 
         $('#medal-slider').slick({
-            initialSlide: start_index,  infinite: true, dots: false, centerMode: true,
+            initialSlide: start_index,  infinite: true, dots: false, centerMode: true, swipeToSlide: true,
             centerPadding: '0px', slidesToScroll: 1, asNavFor: '#medal-stickers', mobileFirst: true, focusOnSelect: true,
             prevArrow: '<button type="button" class="slick-prev"><img src="/mobile/img_new/arrow-1-color-orange-svg.svg"/></button>',
             nextArrow: '<button type="button" class="slick-next"><img src="/mobile/img_new/arrow-1-color-orange-svg.svg"/></button>',
