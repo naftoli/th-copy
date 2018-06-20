@@ -9,7 +9,9 @@ if ( http_response_code()!==FALSE ) {
 require_once( __DIR__ .'/../../../../db.php');
 
 $date = unixtojd() - 1;
-echo "Updating medals earned on $date: \n";
+
+$log = "Updating medals earned on $date: " . PHP_EOL;
+$failed = false;
 
 $medals_earned = mysql_query(
     " SELECT subject_id, medal_ord, COUNT(*) AS total, subject_name, medal_name, medal_inventory_id"
@@ -21,7 +23,7 @@ $medals_earned = mysql_query(
 );
 
 while( $medal_earned = mysql_fetch_assoc( $medals_earned ) ){
-    echo implode( "\t", [ $medal_earned['total'], $medal_earned['subject_name'], $medal_earned['medal_name'], ] )."\t";
+    $log .= implode( "\t", [ $medal_earned['total'], $medal_earned['subject_name'], $medal_earned['medal_name'], ] )."\t";
     
     $amount = -$medal_earned['total'];
     $medal_inventory_id = $medal_earned['medal_inventory_id'];
@@ -31,11 +33,15 @@ while( $medal_earned = mysql_fetch_assoc( $medals_earned ) ){
         ." VALUES ($medal_inventory_id, 'earned', '$amount');"
     );
 
-    if ( $insert_query ) echo "Updated\n";
-    else echo "Database Error\n";
+    if ( $insert_query ) {
+        $log .= "Updated" . PHP_EOL;
+    } else { 
+        $log .= "Database Error" . PHP_EOL;
+        $failed = true;
+    };
 }
 
-echo "\n\nSync Cache Table: ";
+$log .= PHP_EOL.PHP_EOL."Sync Cache Table: ";
 // sync with the inventory table
 $update_query = mysql_query(
     "UPDATE medals_inventory INNER JOIN ( "
@@ -45,4 +51,8 @@ $update_query = mysql_query(
     ."SET in_stock = details.total;"
 );
 // show the final results
-echo !$update_query ? "Success" : "Failed";
+$log .= ( $update_query ? "Success" : "Failed" ) . PHP_EOL;
+
+file_put_contents( __DIR__ . "/logs/$date.log", $log, FILE_APPEND );
+
+if ( $failed || !$update_query ) echo "Task Failed. LOG:".PHP_EOL.$log;

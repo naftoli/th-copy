@@ -13,7 +13,7 @@ $medals = [];
 $query = mysql_query(
      " SELECT medals_inventory.*, subject_name, medal_name FROM medals_inventory "
     ." JOIN subjects USING (subject_id) JOIN medals USING (medal_ord) "
-    ." WHERE medal_type = '$type' "
+    ." WHERE medal_type = '$type' AND subjects.subject_id != 106"
     ." ORDER BY subject_id, medals_inventory.medal_ord"
 );
 while ( $row = mysql_fetch_assoc( $query ) ) {
