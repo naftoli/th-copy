@@ -23,12 +23,16 @@ ActiveRecord\Config::initialize( function( $cfg ) use ( $connections ) {
     $cfg->set_default_connection('mashpiadb');
 });
 
-$log = new SimpleLogger();
-ActiveRecord\Config::instance()->set_logging(true);
-ActiveRecord\Config::instance()->set_logger($log);
+// log all SQL queries in development
+if ( $development ) {
+    $log = new SimpleLogger();
+    ActiveRecord\Config::instance()->set_logging(true);
+    ActiveRecord\Config::instance()->set_logger($log);
+}
 
 class SimpleLogger {
     public function log( $msg ) {
+        if ( is_array( $msg ) ) $msg = json_encode( $msg );
         $msg = date("F j, Y, g:i a") . "\t" . print_r( $msg, true ) . PHP_EOL;
         file_put_contents( './mysql.log', $msg, FILE_APPEND );
     }
