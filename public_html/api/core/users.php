@@ -12,7 +12,11 @@ class UsersRouter {
 
     public function index() {
         global $current_user;
-        json_response( $this->getUsers( $current_user ) );
+        $this->getUsers( $current_user );
+        $response = array_map( function( $user ) {
+            return $user->indexSerialize();
+        }, $this->users );
+        json_response( $response );
     }
 
     private function getUsers( $admin, $user_id = false ) {
@@ -24,22 +28,19 @@ class UsersRouter {
             $query = $pdo->prepare( $sql );
             $query->execute( [ 82 ] );
 
-            // $rows = [];
-            // foreach( $query->fetchAll() as $row ){
-            //     $rows[] = new User( $row, true, false, false );
-            // }
-            $user = new User;
-            print_r( $user->attributes() ); die();
-            // if ( $admin->authCode() == 'HQ' ) {
-            //     $this->users = User::all( $options );
-            // } else if ( $admin->authCode() == 'BC' ) {
-            //     $this->users = User::find_all_by_school_id( $admin->getAuthIds( 'school' ), $options );
-            // }
+            foreach( $query->fetchAll() as $row ){
+                $user = User::build( $row );
+                $user->SetRelatedModel( 'school', School::build( $row ) );
+                $user->SetRelatedModel( 'platton', Platton::build( $row ) );
+                $this->users[] = $user;
+            }
+            
         } else {
             $this->users = [ User::find( $user_id ), $options ];
         }
         return $this->users;
     }
+
 }
 
 rest_router( new UsersRouter );

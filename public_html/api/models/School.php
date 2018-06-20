@@ -1,5 +1,9 @@
 <?php
+include_once( __DIR__ . '/traits/BuildModel.php' );
+
 class School extends ActiveRecord\Model implements JsonSerializable {
+    use traits\BuildModel;
+    
     // relationships
     static $has_many = [ ['school_reg_infos'], [ 'plattons' ], [ 'users' ] ];
 

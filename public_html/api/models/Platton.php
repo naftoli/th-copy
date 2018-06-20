@@ -1,5 +1,9 @@
 <?php
+include_once( __DIR__ . '/traits/BuildModel.php' );
+
 class Platton extends ActiveRecord\Model implements JsonSerializable {
+    use traits\BuildModel;
+    
     static $table_name = 'classes';
     // relationships
     static $belongs_to = [ [ 'school' ] ];
