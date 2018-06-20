@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
+import './AllUsers.scss';
 import API from 'api/api';
 
 export class AllUsers extends Component {
 
   constructor( props ){
     super( props );
-    this.state = { loading: true, users: [] }
+    this.state = { users: [] }
   }
 
   componentDidMount(){
@@ -22,53 +23,31 @@ export class AllUsers extends Component {
   }
 
   render() {
-    const data = [{
-      name: 'Billy Linsley',
-      age: 15,
-      friend: {
-        name: 'Jason Maurer',
-        age: 15,
-      }
-    },{
-      name: 'Tanner Linsley',
-      age: 26,
-      friend: {
-        name: 'Bob Maurer',
-        age: 23,
-      }
-    },{
-      name: 'Zan Linsley',
-      age: 26,
-      friend: {
-        name: 'Chaim Maurer',
-        age: 90,
-      }
-    },{
-      name: 'Billy Linsley',
-      age: 27,
-      friend: {
-        name: 'Sally Maurer',
-        age: 65,
-      }
-    }];
+    const { users } = this.state;
   
     const columns = [{
-      Header: 'Name',
-      accessor: 'name' // String-based value accessors!
-    }, {
-      Header: 'Age',
-      accessor: 'age',
-      Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
-    }, {
-      id: 'friendName', // Required because our accessor is not a string
-      Header: 'Friend Name',
-      accessor: d => d.friend.name // Custom value accessors!
-    }, {
-      Header: props => <span>Friend Age</span>, // Custom header components!
-      accessor: 'friend.age'
+      Header: 'Profile',
+      accessor: 'profilePicture',
+      Cell: props => <img src={`//mashpia.com/${props.value}`} alt='profile' className='inline-profile'/>,
+      className: 'profile-picture', width: 85,
+      filterable: false, sortable: false 
+    },{ 
+      Header: "First Name", 
+      accessor: 'first' 
+    },{ 
+      Header: "Last Name", 
+      accessor: 'last' 
+    },{
+      id: 'platton', // Required because our accessor is not a string
+      Header: 'Platton',
+      accessor: user => user.platton.class_grade // Custom value accessors!
     }];
 
-    return <ReactTable data={data} columns={columns} filterable={true} />
+    return (
+      <div id="all-users">
+        <ReactTable data={ users } columns={columns} filterable={true} />
+      </div>
+    );
   }
 
 }
