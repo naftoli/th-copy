@@ -29,7 +29,7 @@ while ( $row = mysql_fetch_assoc( $query ) ) {
     <tbody>
     <?php 
     if ( count( $rows ) == 0 ) { ?>
-        <tr><td colspan='3' style='text-align: center'>No Records Available</td></tr>
+        <tr><td colspan='4' style='text-align: center'>No Records Available</td></tr>
     <?php
     } else {
         $running_total = 0;
