@@ -5,7 +5,7 @@
 
 .medal-board {
     max-width: 994px;
-    margin: 0 auto;
+    margin: 0 auto 10px;
 }
 
 .medal-board .medal {
@@ -159,10 +159,10 @@ img.medal-img {
     }
 }
 
-@media ( min-width: 1025px ) {
+@media ( min-width: 1024px ) {
     .medal-board .medal {
         width: 25%;
-        padding: 1% 2%;
+        padding: 1% 2% 0px;
     }
     img.medal-img {
         width: 70%;

@@ -84,7 +84,7 @@ section#medal-slider { animation-delay: .5s; }
 .medal-slider-item img { height: 125px; margin: 10px auto 10px; }
 .slick-disabled { display: none; }
 @media ( min-width: 768px ) {
-    .medal-slider-item { transform: scale(.6); -webkit-transform: scale(.6); opacity: .8; }
+    .medal-slider-item { transform: scale(.8); -webkit-transform: scale(.8); opacity: .8; }
     .medal-slider-item.slick-center { transform: scale(1); -webkit-transform: scale(1); opacity: 1; }
     /* fade out on desktop at the edges */
     #medal-slider .slick-list.draggable:before {
@@ -131,7 +131,7 @@ span.campaign-info-title { display: block; font-size: 1.6em; font-weight: bolder
 .level-text { color: #9f9f9f; font-family: font1; }
 span.date-awarded { font-size: .7em; }
 .sticker { display: inline-block; text-align: center; font-size: .8em; margin: 0px 1% 1% 0px; }
-.sticker img { height: 35px; transition: .25s; }
+.sticker img { height: 30px; transition: .25s; }
 .sticker.earned img { animation: color-sticker 1s; }
 
 @keyframes color-sticker {
@@ -140,6 +140,9 @@ span.date-awarded { font-size: .7em; }
 }
 /* larger stickers on larger devices */
 @media( min-width: 768px ){
-    .sticker img { height: 55px; }
+    .sticker img { height: 45px; }
     .campaign-info > p { font-size: 1.2em; }
+}
+@media( min-width: 1024px ){
+    .sticker img { height: 55px; }
 }
