@@ -1,10 +1,10 @@
 <?php
 session_start();
-if ( !isset( $_SESSION['hschool'] ) ) 
-    header( "Location: admin.php" );
-$h_school = $_SESSION['hschool'];
+if ( !isset( $_SESSION['school_id'] ) ) 
+    header( "Location: registration.php" );
 
-include("check_admin_id.php");
+$admin_id = $_SESSION['admin_id'];
+$school_id = $_SESSION['school_id'];
 $next_page = "false";
 
 include("db.php");
@@ -13,88 +13,29 @@ $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
 $admin = new admin($row);
-$admin->get_school_id();
 
-include("classes/school.php");
-$sql = "SELECT * FROM schools WHERE school_id=" . $admin->school_id;
+$sql = "SELECT * FROM schools WHERE school_id=" . $school_id;
 $query = mysql_query($sql);
-$row = mysql_fetch_assoc($query);
-$school = new school($row);
+$schoolInfo = mysql_fetch_assoc($query);
 
 $message = "";
 if (isset($_POST['submit'])) {
-	
-	foreach ($_POST as $k => $v) {
-		$_POST[$k] = mysql_real_escape_string(trim($v));
-	}
-	
-    $school_id = $_POST['school_id'];
+
 	if (!isset($_POST['reg_type'])) {
 		$message = "You need to choose the type of school that you have.";
 	} else {
 		$sql = "update schools set reg_type = " . mysql_real_escape_string($_POST['reg_type']) . " where school_id = " . $school_id;
-		mysql_query($sql);
+		if (!mysql_query($sql)) {
+			$message = "Error updating school.";
+		}
 	}
-    /*
-    //add scanner qty to database
-    if (isset($_POST['qty'])) {
-	$qty = trim($_POST['qty']);
-	if ( $qty == "" ) 
-        $qty = 0;
-
-        $sql = "select * from school_accessories where school_id = " . $school_id . " and year = " . $year;
-        $result = mysql_query( $sql );
-        if ( mysql_num_rows($result) > 0 ) {
-            $sql = "update school_accessories set scanners = " . $qty . " where school_id = " . $school_id . " and year = " . $year;
-        } else {
-            $sql = "insert into school_accessories values ('', $school_id, $year, $qty)";
-        }
-        mysql_query( $sql );
-    }
-	*/
+    
 	if ($message == "") {
 		$next_page = "true";
 	}
 		
 }
 
-include("classes/user.php");
-$users = array();
-$sql1 = "SELECT id FROM admin_auths WHERE admin_id=" . $admin_id . " AND auth='user'";
-$query1 = mysql_query($sql1);
-while ($row1 = mysql_fetch_assoc($query1)) {
-	$sql2 = "SELECT * FROM users WHERE user_id=" . $row1["id"] . " AND user_registered IS NOT NULL";
-	$query2 = mysql_query($sql2);
-	if (mysql_num_rows($query2) > 0) {
-		$row2 = mysql_fetch_assoc($query2);
-		$user = new user($row2);
-	}
-}
-
-$no_of_options = 1;
-$sql = "SELECT * FROM school_child_types WHERE school_id=" . $admin->school_id . " AND child_type_id=1";
-$query = mysql_query($sql);
-$num_rows = mysql_num_rows($query);
-if ($num_rows > 0)
-	$no_of_options = 2;
-
-include("camps/includes/classes/school_child_type.php");
-$school_child_types = array();
-$sql = "SELECT * FROM school_child_types WHERE school_id=" . $admin->school_id;
-$query = mysql_query($sql);
-while ($row = mysql_fetch_assoc($query)) {
-	$school_child_type = new school_child_type($row);
-	$school_child_type->get_child_type_name();
-	array_push($school_child_types, $school_child_type);
-}
-
-for ($stno = 0; $stno < count($school_child_types); $stno++) {
-	if (count($school_child_types) > 1) {
-		if ($school_child_types[$stno]->child_type_id==1) $st_chabad = 1;
-		if ($school_child_types[$stno]->child_type_id==2) $st_frum = 1;
-		if ($school_child_types[$stno]->child_type_id==3) $st_not_frum = 1;
-	}
-}
 require 'class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
 ?>
@@ -113,8 +54,6 @@ $year = GlobalSettings::getRegistrationYear();
 		
 		<script>
 			var next_page = "<?=$next_page;?>";
-			var admin_id = <?=$admin_id;?>;
-			var school_id = <?=$admin->school_id;?>;
 		
 			$(function() {
 				$('input').placeholder();
@@ -144,15 +83,12 @@ $year = GlobalSettings::getRegistrationYear();
 			
 			function check_next_page() {
 				if (next_page == "true") {
-					var registration_form_six = document.forms["registration_form_six"];
-					registration_form_six.elements["admin_id"].value = admin_id;
-					registration_form_six.elements["school_id"].value = school_id;
-					registration_form_six.submit();
+					location.href = "registration_6.php";
 				}
 			}
 			
 			function validate() {
-				if (!$(".reg_type").is(":checked")) {
+				if (!$(".reg_type:checked").length) {
 					alert("You must choose what type of school registration you have.");
 					return false;
 				}
@@ -162,11 +98,6 @@ $year = GlobalSettings::getRegistrationYear();
 	</head>
 
 	<body onload="check_next_page();">
-	
-		<FORM name="registration_form_six" method="post" action="registration_6.php">
-			<input type="hidden" name="admin_id" value="">
-			<input type="hidden" name="school_id" value="">
-		</FORM>
 	
 		<NOSCRIPT>
 			<P STYLE="color: red; font-size: larger;">Notice: You have javascript disabled. Some parts of the site will not function without javascript.</P>
@@ -199,25 +130,29 @@ $year = GlobalSettings::getRegistrationYear();
 							<h1>School Registration</h1>
 	 
 							<form id="form_5" name="form_5" action="registration_4.php" method="post" accept-charset="UTF-8"> 
-								<input type="hidden" name="school_id" value="<?=$admin->school_id;?>">
-								<input type="hidden" name="admin_id" value="<?=$admin_id;?>">
                             
-                            <? if ( !$h_school ) { ?>
+                            <? if ( true ) { ?>
 								<h2>Type of School Registration</h2>
 								<div class="module list_expand" id="module-info">
 									<div class="module_content">
 										<div class="lists form">
 											<ul>
 												<li>
-													 <h4><input type="radio" name="reg_type" class="reg_type" value="1" /> Tzivos Hashem registration is included in school tuition</h4>
+													 <h4><input type="radio" name="reg_type" class="reg_type" value="1" 
+													 <?php if ($schoolInfo['reg_type'] == 1) echo "checked" ?>
+													/> Tzivos Hashem registration is included in school tuition</h4>
 													 $45 included in each child’s tuition; parents still complete the registration process on their own without additional payment.
 												</li>
 												<li>
-													 <h4><input type="radio" name="reg_type" class="reg_type" value="2" /> Tzivos Hashem is not included in tuition, yet every child in our school will be registered</h4>
+													 <h4><input type="radio" name="reg_type" class="reg_type" value="2" 
+													 <?php if ($schoolInfo['reg_type'] == 2) echo "checked" ?>
+													 /> Tzivos Hashem is not included in tuition, yet every child in our school will be registered</h4>
 													 Since we guarantee that every child will register, parents will pay the discounted price of $45 when registering on the site; any children not registered by Chof Gimmel Elul (September 14) will be registered through the school’s credit card.
 												</li>
 												<li>
-													 <h4><input type="radio" name="reg_type" class="reg_type" value="3" /> Each student will register on their own</h4>
+													 <h4><input type="radio" name="reg_type" class="reg_type" value="3" 
+													 <?php if ($schoolInfo['reg_type'] == 3) echo "checked" ?>
+													 /> Each student will register on their own</h4>
 													 Registration is not included in tuition; each child registers individually for the early-bird price of $50 or regular price of $55 from Chof Gimmel Elul (September 14) onward.
 												</li>
 											</ul>
@@ -547,40 +482,6 @@ $year = GlobalSettings::getRegistrationYear();
                                         </div>
                                     </div>
                                 </div>
-                                <!--
-                                <h2>Accessories</h2> 
-                                
-                                <p>In order to utilize our program you will need to purchase a scanner for each 
-                                  computer that you wish to setup.</p>
-                                  <p>Each scanner costs $50.</p>
-                                
-                                <? //find out if school already entered once a quantity for scanners but got stuck in the registration process
-                                //$sql = "select scanners from school_accessories where year = '5774' and school_id = " . $admin->school_id;
-                                //$result = mysql_query( $sql );
-                                //$row = mysql_fetch_assoc( $result );
-                                //$qty = $row['scanners'];
-                                ?>
-                                
-                                <div class="module" id="module-info">
-                                    <div class="module_content">
-                                        <div class="lists form">
-                                            <ul>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Purchase Scanners</h4>
-                                                        <p>
-                                                            <span class="label">Quantity:</span>
-                                                            <span class="input small">
-                                                                <input type="text" name="qty" id="qty" value="<?=isset($qty)?$qty:''?>">
-                                                            </span>
-                                                        </p>
-                                                    </div>   
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-								-->
 							<? } ?>
 								
 								<div class="module" id="module-info">
