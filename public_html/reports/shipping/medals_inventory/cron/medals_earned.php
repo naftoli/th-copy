@@ -15,8 +15,8 @@ $medals_earned = mysql_query(
     " SELECT subject_id, medal_ord, COUNT(*) AS total, subject_name, medal_name, medal_inventory_id"
     ." FROM medal_marks JOIN subjects USING ( subject_id ) JOIN medals USING ( medal_ord ) "
     ." JOIN medals_inventory USING ( subject_id, medal_ord ) "
-    ." WHERE date_awarded = '".unixtojd()."' "
-    ." AND medals_inventory.medal_type = 'picture_on_back' "
+    ." WHERE date_awarded = '$date' "
+    ." AND medals_inventory.medal_type = 'number_on_back' "
     ." GROUP BY subject_id, medal_ord "
 );
 
@@ -30,15 +30,19 @@ while( $medal_earned = mysql_fetch_assoc( $medals_earned ) ){
          " INSERT INTO medals_inventory_details (medal_inventory_id, type, amount) "
         ." VALUES ($medal_inventory_id, 'earned', '$amount');"
     );
-    // sync with the inventory table
-    $update_query = mysql_query(
-        "UPDATE medals_inventory INNER JOIN ( "
-            ." SELECT medal_inventory_id, SUM(amount) AS total FROM medals_inventory_details "
-            ." GROUP BY medal_inventory_id "
-        .") details USING ( medal_inventory_id ) "
-        ."SET in_stock = details.total"
-    );
 
-    if ( $insert_query && $update_query ) echo "Updated\n";
+    if ( $insert_query ) echo "Updated\n";
     else echo "Database Error\n";
 }
+
+echo "\n\nSync Cache Table: ";
+// sync with the inventory table
+$update_query = mysql_query(
+    "UPDATE medals_inventory INNER JOIN ( "
+        ." SELECT medal_inventory_id, SUM(amount) AS total FROM medals_inventory_details "
+        ." GROUP BY medal_inventory_id "
+    .") details USING ( medal_inventory_id ) "
+    ."SET in_stock = details.total;"
+);
+// show the final results
+echo !$update_query ? "Success" : "Failed";
