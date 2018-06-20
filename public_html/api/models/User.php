@@ -25,7 +25,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         } else if ( $this->user_photo_id ) {
             return "/file_view.php?id=" . $this->user_photo_id;
         }
-        return "/mobile/img_new/boy-color-green-svg.svg";
+        return "/mobile/reg/images/profile-photo-default.jpg";
     }
 
     // ******************************* REGISTRATION *******************************
