@@ -1,27 +1,10 @@
-<?php $debug = false;
-// enable debuging
-if ($_GET['debug']) {
-    error_reporting(E_ALL);
-    ini_set("display_errors", 1);
-    $debug = true; // set debug to true
-}
-
+<?php
 /***************** AUTHENTICATION **********************/
 $admin_auth = array('school'); 
 require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 
 if ($admin_user['auth'] != 'super') {
    header("Location: /admin.php");
-}
-
-$medals = [];
-$query = mysql_query(
-     " SELECT medals_inventory.*, subject_name, medal_name FROM medals_inventory "
-    ." JOIN subjects USING (subject_id) JOIN medals USING (medal_ord) "
-    ." ORDER BY subject_id, medals_inventory.medal_ord, medal_type DESC"
-);
-while ( $row = mysql_fetch_assoc( $query ) ) {
-    $medals[] = $row;
 }
 ?>
 <!DOCTYPE html>
@@ -39,6 +22,7 @@ while ( $row = mysql_fetch_assoc( $query ) ) {
         <link href="/styles/admin/modal.css" rel="stylesheet" type="text/css"/>
         <style>
             .inline-input input[type="number"] { width: 50%; margin: 0px; background: none; border: none; border-bottom: 1px solid; }
+            td { text-align: center; }
         </style>
     </head>
     <body>
@@ -47,33 +31,16 @@ while ( $row = mysql_fetch_assoc( $query ) ) {
         ?>
         <h1>Medals Inventory Report</h1>
 
-        <div id='report'>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Subject</th><th>Medal</th><th>Type</th><th>Stock</th><th>Details</th><th>Add/Subtract</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php foreach( $medals as $medal ) { ?>
-                <tr>
-                    <td><?= $medal['subject_name'] ?></td>
-                    <td><?= $medal['medal_name'] ?></td>
-                    <td><?= str_replace( '_', ' ', $medal['medal_type'] ) ?></td>
-                    <td id='stock-<?=$medal['medal_inventory_id']?>'><?= $medal['in_stock'] ?></td>
-                    <td><a class='button show-details' data-id='<?= $medal['medal_inventory_id'] ?>'>View Details</a></td>
-                    <td>
-                        <div class='inline-input'>
-                            <input type='number' value='0'/>
-                            <a class='button subtract-inventory' data-id='<?= $medal['medal_inventory_id'] ?>'>-</a>    
-                            <a class='button add-inventory' data-id='<?= $medal['medal_inventory_id'] ?>'>+</a>
-                        </div>
-                    </td>
-                </tr>    
-                <?php } ?>
-                </tbody>
-            </table>
+        <div class='options'>
+            Medal Type:
+            <select id='type'>
+                <option value='number_on_back'>Number on Back</option>    
+                <option value='picture_on_back'>Picture on Back</option>
+            </select>
         </div>
+
+        <div id='report'></div>
+
         <div class="modal" id="details-modal">
             <div class="modal-content">
                 <h1>

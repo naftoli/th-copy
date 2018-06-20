@@ -1,9 +1,16 @@
-$('.show-details').click( showDetailsModal );
-
-$('.subtract-inventory').click( subtractInventory );
-$('.add-inventory').click( addInventory );
-
 $('.modal_exit').click( hideDetailModal );
+$('select#type').change( loadInventory ).change();
+
+function loadInventory( event ){
+    $('#report').html( '<div class="loader"></div>' );
+    $.post('ajax/inventory.php', { type: event.target.value }, function( response ) {
+        $('#report').html( response );
+
+        $('.show-details').click( showDetailsModal );
+        $('.subtract-inventory').click( subtractInventory );
+        $('.add-inventory').click( addInventory );
+    });
+}
 
 function showDetailsModal(){
     $('#details-modal').css({visibility: 'visible', opacity: 1});
