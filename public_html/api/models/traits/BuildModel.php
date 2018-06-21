@@ -4,9 +4,9 @@ namespace traits;
 trait BuildModel {
     public static function build( $attributes ) {
         $instance = new self( [], true, false, false );
-        $valid_attributes = array_keys( $instance->attributes() );
+        $valid_attributes = $instance->attributes();
         foreach( $attributes as $key => $value ){
-            if ( in_array( $key, $valid_attributes ) )
+            if ( array_key_exists( $key, $valid_attributes ) )
                 $instance->{ $key } = $value;
         }
         $instance->reset_dirty();
