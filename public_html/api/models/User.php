@@ -156,7 +156,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
             'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture' ],
             'include' => [ 
                 'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ] ],
-                'platton' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]
+                'platton' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ], 'methods' => [ 'name' ] ]
             ]
         ]);
     }
@@ -164,15 +164,14 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     public function indexSerialize(){
         return $this->to_array([
             'only' => [
-                'user_id', 'user_serial', 'first', 'last', 'first_he', 'last_he', 'lang_id', 'dob',
-                'school_type_id', 'user_address1', 'user_address2', 'user_city', 'user_state',
-                'user_postal', 'user_country', 'gender', 'user_start_date', 'user_registered',
-                'chayolei', 'yan', 'chidon', 'allow_parent_tasks', 'print_parent_tasks', 'mobile_pic'
+                'user_id', 'user_serial', 'first', 'last', 'dob',
+                'school_type_id', 'gender', 'user_start_date', 'user_registered',
+                'chayolei', 'yan', 'chidon', 'mobile_pic'
             ],
             'methods' => [ 'profilePicture' ],
             'include' => [ 
                 'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ] ],
-                'platton' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]
+                'platton' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ], 'methods' => [ 'name' ] ]
             ]
         ]);
     }

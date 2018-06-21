@@ -9,6 +9,7 @@ trait BuildModel {
             if ( in_array( $key, $valid_attributes ) )
                 $instance->{ $key } = $value;
         }
+        $instance->reset_dirty();
         return $instance;
     }
 }
