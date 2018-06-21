@@ -73,3 +73,7 @@ div#new-card { border-top: 1px solid #ccc; padding-top: 10px; }
 #success.primary { 
     color: #2c539e;
 }
+
+span.crossed-out {
+    text-decoration: line-through;
+}

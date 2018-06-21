@@ -81,6 +81,8 @@
 
         <section id="step-2" class="animated fadeIn">
             <div class="container">
+                <h2>Soldier Information</h2>
+                <hr>
                 <form id="update-user">
                     <input type="hidden" id="user_id" name="user_id" />
                     <input type="hidden" id="current_index" />
@@ -165,6 +167,7 @@
                             </div>
                         </div>
                     </div>
+                    <h2>Soldier Registration</h2>
                     <label id="chayolei-registration">
                         <hr>
                         <div class="row">
@@ -173,7 +176,7 @@
                                 <span class="checkbox"></span>
                             </div>
                             <div class="col-10 col-md-11">
-                                <strong>I wish to register for Chayolei Tzivos Hashem and am willing to pay the regsitration fee of $<span id="chayolei-cost"></span></strong>
+                                <strong>Chayolei Tzivos Hashem ($<span id="chayolei-cost"></span> fee)</strong>
                             </div>
                         </div>
                     </label>
@@ -186,10 +189,9 @@
                                 </label>
                             </div>
                             <div class="col-10 col-md-11">
-                                <strong>
-                                    I wish to register for the World Wide Chidon, receive a brand new instruciton book and pay the book fee of $<span id="chidon-cost"></span>
-                                </strong><br/>
-                                <label>Chidon Sweater Size:</label>
+                                <strong>Chidon ($<span id="chidon-cost"></span> fee)</strong>
+                                <br/>
+                                <label for="chidon-sweater-size">Chidon Sweater Size:</label>
                                 <select class="form-control" id="chidon-sweater-size">
                                     <option value="children xs">Children XS</option>
                                     <option value="children s">Children S</option>
@@ -201,6 +203,19 @@
                                     <option value="adult l">Adult L</option>
                                     <option value="adult xl">Adult XL</option>
                                 </select>
+                            </div>
+                        </div>
+                    </label>
+                    <label id="yahadus-registration">
+                        <div class="row">
+                            <div class="col-2 col-md-1">
+                                <input type="checkbox" id="yahadus" />
+                                <span class="checkbox"></span>
+                            </div>
+                            <div class="col-10 col-md-11">
+                                <strong>Add Yahadus Book <span id="yahadus-book-number"></span>(<span class="crossed-out">$55</span>
+                                    $<span id="yahadus-cost">45</span>)
+                                </strong>
                             </div>
                         </div>
                     </label>
@@ -378,8 +393,8 @@
 
                 <div class="row spaced navigation">
                     <div class="col-12 right">
-                        <button class="btn btn-primary start-step-3">
-                            <i class="fas fa-arrow-left"></i> &nbsp;Confirm Shipping
+                        <button class="btn btn-primary start-step-2">
+                            <i class="fas fa-arrow-left"></i> &nbsp;Confirm Soldiers
                         </button>
                     </div>
                 </div>

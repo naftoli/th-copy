@@ -7,6 +7,16 @@ $("#successModal").on('hidden.bs.modal', function( event ) { window.location = "
 $('[data-toggle="popover"]').popover();
 hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right places
 
+// yahadus registration
+$( '#step-2 form #chidon-registration input').change( function( event ) {
+    if ( event.target.checked ) {
+        $( '#step-2 form #yahadus-registration').show();
+    } else {
+        $( '#step-2 form #yahadus-registration input' )[0].checked = false;
+        $( '#step-2 form #yahadus-registration').hide();
+    } 
+});
+
 var registrationApp = function() {
     var api_url = '/api/registration/user_registration.php'; // API endpoint for this page
     var state = {
@@ -42,7 +52,7 @@ var registrationApp = function() {
         toggleLoading( "step-1", true );
         state.users = [];
 
-        getUsers().then( function( users ){ 
+        getUsers().then( function( users ) { 
             if( users.length === 0 ) return noChildren();
             if( users.length === 1 ) return step2();
 
@@ -56,10 +66,10 @@ var registrationApp = function() {
         });
     }
 
-    // confirm users
+    // show selected users
     function step2() {
         window.location.hash = 'step-2';
-        state.selected_users = [];
+        state.selected_users = []; state.cart = [];
         // make sure that we have at least one user
         if ( state.users.length === 0 || $('#step-1 #children input:checked').length === 0 ) {
             return showError( 'Please select at least one child' );
@@ -79,12 +89,15 @@ var registrationApp = function() {
             );
             state.selected_users.push( user );
         });
+        // remove the user if we had him before...
+        var user_ids = state.selected_users.map( function( user ) { return user.user_id } );
+        state.cart = state.cart.filter( function(item) { return user_ids.includes( item.meta.user_id ) } );
         // show the page
         templates.showUser( state.selected_users[0], 0 );
         showSection('step-2');
     }
 
-    // select shipping options
+    // select shipping option
     function step3() {
         if( state.selected_users.length === 0 ) return step1();
         window.location.hash = 'step-3';
@@ -146,6 +159,7 @@ var registrationApp = function() {
         var postData = {};  var user_changed = false;
         var current_index = parseInt( $("#current_index").val() );
         var selected_user = state.selected_users[ current_index ];
+        // find all changed feilds
         $( event.target ).serializeArray().forEach( function( item ) {
             if ( selected_user[ item.name ] !== undefined && 
                 selected_user[ item.name ] != item.value 
@@ -155,17 +169,21 @@ var registrationApp = function() {
             }
         });
         // if the user changed update him in the background...
-        if( user_changed ){
+        if ( user_changed ) {
             updateUser( selected_user.user_id, postData );
         }
         // Detect and validate the charges accepted.
         selected_charges = {
             chayolei: $('#chayolei-registration input')[0].checked,
-            chidon: $('#chidon-registration input')[0].checked
+            chidon: $('#chidon-registration input')[0].checked,
+            yahadus: $('#yahadus-registration input')[0].checked
         }
-        if ( selected_charges.chayolei === false && selected_charges.chidon === false ){
+        if ( selected_charges.chayolei === false 
+            && selected_charges.chidon === false 
+            && selected_charges.yahadus === false
+        ){
             return showError(
-                'You must indicate your acceptance of at least one of the registration charges.'
+                'You must select at least one type of registration.'
             );
         } 
 
@@ -192,7 +210,7 @@ var registrationApp = function() {
         } 
         if ( selected_charges.chidon ) {
             state.cart.push({
-                description: 'Chidon '+registration_year+' Registration and Book for ' + selected_user.first,
+                description: 'Chidon '+registration_year+' Registration ' + selected_user.first,
                 price: selected_user.registrationRates.chidon,
                 meta: {
                     type: 'registration',
@@ -200,6 +218,18 @@ var registrationApp = function() {
                     registration_type: 'chidon',
                     paid: selected_user.registrationRates.chidon,
                     size: $("select#chidon-sweater-size").val()
+                }
+            });
+        }
+        if ( selected_charges.yahadus ) {
+            state.cart.push({
+                description: 'Yahadus Book ('+registration_year+') for ' + selected_user.first,
+                price: 45,
+                meta: {
+                    type: 'registration',
+                    user_id: selected_user.user_id,
+                    registration_type: 'yahadus',
+                    paid: 45,
                 }
             });
         }
@@ -419,6 +449,10 @@ var templates = function(){
             // setup the payment options - chayolei
             templates.toggleRates( user, 'chayolei' );
             templates.toggleRates( user, 'chidon' );
+            // yahadus
+            $( '#step-2 form #yahadus-registration input' )[0].checked = false;
+            $( '#step-2 form #yahadus-book' ).text( user.class_grade - 4 );
+            $( '#step-2 form #yahadus-registration').hide();
         },
         toggleRates: function( user, rateType ){
             $( '#step-2 form #' + rateType + '-registration input' )[0].checked = false;

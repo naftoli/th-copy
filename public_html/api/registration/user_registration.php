@@ -92,6 +92,7 @@ class UserRegistrationRouter {
         $shipping_info = $_POST['shipping'];
         $shipping_charges = intval($shipping_info['shipping_charges']);
         // get all the users that we are registering
+
         $user_ids = [];
         foreach( $registrations as $info ){
             if( !in_array( $info['user_id'], $user_ids ) ) $user_ids[] = $info['user_id'];
@@ -135,16 +136,28 @@ class UserRegistrationRouter {
                 $current_user->admin_postal, implode( ', ', $user_ids ),
                 json_encode( $payment_response )
             ]);
+            $trans_id = $pdo->lastInsertId();
         } else {
-            $payment_response = 'N/A';
+            $payment_response = 'N/A'; $trans_id = false;
         }
 
         // register all the users...
         $errors = [];   $registration_table_users = [];
+        $registration_info_query = $pdo->prepare(
+            "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
+            ."VALUES( ?, ?, ?, ?, ?, '$year' )"
+        );
+        // for each user
         foreach ( $users as $user ) {
             $user_errors = [];
             foreach( $registrations as $registration ){
                 if ( !($user->user_id == $registration['user_id']) ) continue;
+                // insert a record into the registration_charges table.
+                $registration_info_query->execute([
+                    ( $trans_id ? $trans_id : null ), 
+                    $user->user_id, $user->school_id, $registration['registration_type'],
+                    $registration['paid']
+                ]);
                 // Chayolei Registration
                 if ( $registration['registration_type'] == 'chayolei' ) {
                     array_merge( $user_errors, $user->registerChayolei(
