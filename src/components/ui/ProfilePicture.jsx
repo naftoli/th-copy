@@ -1,11 +1,16 @@
 import React from 'react';
 
+const handleError = ( props ) => ( e ) => {
+  e.target.src='//mashpia.com/mobile/reg/images/profile-photo-default.jpg';
+  if ( props.onError ) {
+    props.onError( e );
+  }
+}
+
 const ProfilePicture = ( props ) => (
-  <img 
-    { ... props } 
-    onError={ (e) => e.target.src='//mashpia.com/mobile/reg/images/profile-photo-default.jpg' } 
+  <img { ... props } onError={ handleError( props ) }
     className={ props.className ? `${props.className} profile-picture` : 'profile-picture'}
-    />
+  />
 )
 
 export default ProfilePicture;

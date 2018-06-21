@@ -46,7 +46,8 @@ export class AllUsers extends Component {
 
     return (
       <div id="all-users">
-        <ReactTable data={ users } columns={columns} filterable={true} />
+        <ReactTable data={ users } columns={columns} filterable={true} className="-striped -highlight" 
+          style={{ maxHeight: "80vh" }}/>
       </div>
     );
   }
