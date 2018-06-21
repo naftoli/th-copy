@@ -8,7 +8,7 @@ const handleError = ( props ) => ( e ) => {
 }
 
 const ProfilePicture = ( props ) => (
-  <img { ... props } onError={ handleError( props ) }
+  <img { ... props } onError={ handleError( props ) } alt='profile'
     className={ props.className ? `${props.className} profile-picture` : 'profile-picture'}
   />
 )

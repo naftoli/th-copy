@@ -27,7 +27,7 @@ export class AllUsers extends Component {
   
     const columns = [{
       Header: 'Profile',  accessor: 'profilePicture',
-      Cell: props => <ProfilePicture src={`//mashpia.com${props.value}`} alt='profile' className='inline-profile'/>,
+      Cell: props => <ProfilePicture src={`//mashpia.com${props.value}`} className='inline-profile'/>,
       className: 'profile-picture', width: 85, filterable: false,
     },{
       Header: "First Name", 
