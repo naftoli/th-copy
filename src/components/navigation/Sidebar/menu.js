@@ -109,6 +109,7 @@ const getMenu = ( user_type ) => {
       label: "Reports",
       icon: <img src={`${LEGACY_URL}/images/icon_report.png`} alt="Reports" />,
       items: [
+        { label: 'Office Reports', legacy: true, path: '/reports.php', user_types: [ 'HQ' ] },
         { label: 'Registered Report', legacy: true, path: '/registered_report.php' },
         { label: 'Parents Report', legacy: true, path: '/parent_report.php' },
         { label: 'Not Yet Registered Report', legacy: true, path: '/non_registered_report.php' },
