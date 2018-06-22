@@ -37,7 +37,7 @@ class UsersRouter {
                 'user_id' => $row['user_id'], 'user_serial' => $row['user_serial'], 'first' => $row['first'], 
                 'last' => $row['last'], 'dob' => $row['dob'], 'gender' => $row['gender'], 'user_registered' => $row['user_registered'],
                 'chayolei' => $row['chayolei'], 'yan' => $row['yan'], 'chidon' => $row['chidon'], 'mobile_pic' => $row['mobile_pic'],
-                'school' => [ 'school_id' => $row['school_id'], 'school_name' => $row['school_id'], 
+                'school' => [ 'school_id' => $row['school_id'], 'school_name' => $row['school_name'], 
                     'shipping_city' => $row['shipping_city'], 'school_era' => $row['school_era'] ],
                 'profilePicture' => $profilePicture, 'platton' => [ 'name' => $platton ]
             ];
