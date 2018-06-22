@@ -4,3 +4,9 @@ body {
   font-family: sans-serif;
   min-width: 350px;
 }
+
+/* Make scrolling on the entire site smooth */
+* {
+  scroll-behavior: smooth !important;
+  -webkit-overflow-scrolling: touch !important;
+}
