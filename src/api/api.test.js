@@ -14,9 +14,9 @@ describe('headers', () => {
     expect( headers()['Accept'] ).toBe('application/json');
   });
 
-  it('has a key \'Content-Type\' set to \'application/json\'', () => {
+  it('has a key \'Content-Type\' set to \'application/json; charset=utf-8\'', () => {
     expect( headers()['Content-Type'] ).toBeDefined();
-    expect( headers()['Content-Type'] ).toBe('application/json');
+    expect( headers()['Content-Type'] ).toBe('application/json; charset=utf-8');
   });
 
   it('has a key \'mobile\' set to \'false\'', () => {

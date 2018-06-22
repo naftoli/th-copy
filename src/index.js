@@ -11,6 +11,7 @@ import store from './store';
 import checkLogin from 'store/login/checkLogin';
 // App
 import 'styles/index.css';
+import 'styles/branding.scss';
 import App from './App';
 
 checkLogin( store.dispatch );

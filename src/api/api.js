@@ -10,10 +10,10 @@ const credentials = process.env.NODE_ENV === "production" ? 'same-origin' : 'inc
  * 
  * generate HTTP headers for application.
  */
-const headers = () => {
+const headers = ( content_type ) => {
   let headers = {
     'Accept': 'application/json',
-    'Content-Type': 'application/json',
+    'Content-Type': content_type || 'application/json; charset=utf-8',
     'mobile': 'false',
     'Authorization': `Legacy ${cookies.get('admin_id')}-${cookies.get('admin_auth')}`
   }
@@ -27,28 +27,28 @@ const parseResponse = response => {
 export { API_URL, headers, parseResponse };
 
 export default {
-  get( url ) {
+  get( url, content_type = false ) {
     return fetch(`${API_URL}${url}`, {
       method: 'GET',
-      headers: headers(),
+      headers: headers( content_type ),
       credentials: credentials
     }).then( parseResponse );
   },
   
-  post( url, data = {} ) {
+  post( url, data = {}, content_type = false ) {
     const body = JSON.stringify(data);
     return fetch(`${API_URL}${url}`, {
       method: 'POST',
-      headers: headers(),
+      headers: headers( content_type ),
       credentials: credentials,
       body
     }).then( parseResponse )
   },
 
-  delete( url ) {
+  delete( url, content_type = false ) {
     return fetch(`${API_URL}${url}`, {
       method: 'DELETE',
-      headers: headers(),
+      headers: headers( content_type ),
       credentials: credentials
     }).then( parseResponse );
   }

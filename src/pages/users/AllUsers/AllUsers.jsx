@@ -1,13 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+// components
 import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
 import ProfilePicture from 'components/ui/ProfilePicture';
+import CropperModal from 'components/modals/CropperModal';
+// styles
 import 'react-table/react-table.css';
 import './AllUsers.scss';
+// state
 import { getSoldiers } from 'store/soldiers/operations';
 
 export class AllUsers extends Component {
+
+  constructor( props ) {
+    super( props );
+    this.state = {
+      showModal: true,
+      modalSrc: false
+    };
+  }
+
+  closeModal = () => {
+    this.setState( { showModal: false })
+  }
 
   componentDidMount(){
     this.props.getSoldiers();
@@ -45,7 +61,8 @@ export class AllUsers extends Component {
     return (
       <div id="all-users">
         <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight" 
-          style={{ maxHeight: "90vh" }}/>
+          style={{ maxHeight: "90vh" }}/>,
+        <CropperModal isOpen={ this.state.showModal } toggle={ this.closeModal }/>
       </div>
     );
   }
@@ -54,7 +71,8 @@ export class AllUsers extends Component {
 
 const mapStateToProps = ( state ) => {
   return {
-    soldiers: state.soldiers.soldiers
+    ...state.soldiers,
+    current_user: state.login.current_user
   };
 }
 

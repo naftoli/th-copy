@@ -10,3 +10,7 @@ body {
   scroll-behavior: smooth !important;
   -webkit-overflow-scrolling: touch !important;
 }
+
+img { 
+  max-width: 100%;
+}
