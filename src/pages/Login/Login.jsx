@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { InputGroup, Button } from '@blueprintjs/core';
 import Spinner from 'components/ui/Spinner.jsx';
 import { connect } from 'react-redux';
-import { operations } from 'store/login/actions';
+import { login } from 'store/login/operations';
 
 import './Login.scss';
 import logo from 'img/logo.svg';
@@ -89,4 +89,4 @@ const mapStateToProps = ( state ) => ({
   errors: state.login.errors
 });
 
-export default connect(mapStateToProps, { login: operations.login })(Login);
+export default connect(mapStateToProps, { login })(Login);

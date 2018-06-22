@@ -17,7 +17,7 @@ describe( 'checkLogin', () => {
 
   it(`calls dispatch if it finds a legacy token`, () => {
     cookies.set('admin_auth', 'legacy');
-    checkLogin(dispatchMock);
+    checkLogin( dispatchMock );
     expect( dispatchMock ).toHaveBeenCalled();
   });
 

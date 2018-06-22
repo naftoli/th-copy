@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { actions } from 'store/login/actions';
+import { logout } from 'store/login/actions';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
@@ -14,4 +14,4 @@ export class Logout extends Component {
   }
 }
 
-export default connect( false, { logout: actions.logout } )( Logout );
+export default connect( false, { logout } )( Logout );

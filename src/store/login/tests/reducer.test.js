@@ -1,5 +1,5 @@
 import reducer, { initialState } from '../reducer';
-import { actions } from '../actions';
+import * as actions from '../actions';
 
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
@@ -35,23 +35,23 @@ describe( 'reducer', () => {
     expect( initialState.errors ).toEqual( [] );
   });
 
-  it(`actions.loading: updates state.loading`, () => {
-    expect( reducer(initialState, actions.loading(true)).loading ).toBe( true );
+  it(`actions.setLoading: updates state.loading`, () => {
+    expect( reducer(initialState, actions.setLoading(true)).loading ).toBe( true );
     expect( initialState.loading ).toBe( false );
   });
 
-  describe('actions.tokens', () => {
+  describe('actions.setTokens', () => {
 
     it(`updates state.tokens`, () => {
       expect(
-        reducer(initialState, actions.tokens( 'legacy', 'mobile')).tokens 
+        reducer(initialState, actions.setTokens( 'legacy', 'mobile')).tokens 
       ).toEqual( { legacy: 'legacy', mobile: 'mobile' } );
       expect( initialState.tokens ).toEqual( {} );
     });
 
     it('sets the admin_auth cookie', () => {
       cookies.remove('admin_auth');
-      reducer(initialState, actions.tokens( 'legacy', 'mobile'))
+      reducer(initialState, actions.setTokens( 'legacy', 'mobile'))
       expect( cookies.get('admin_auth') ).toBe( 'legacy' );
       cookies.remove('admin_auth');
     });

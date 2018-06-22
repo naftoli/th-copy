@@ -1,4 +1,5 @@
-import { actions, operations } from './actions';
+import { setTokens } from './actions';
+import { getCurrentUser } from './operations';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
@@ -10,8 +11,8 @@ export default dispatch => {
   }
 
   if ( tokens.legacy ) {
-    dispatch( actions.tokens( tokens.legacy, tokens.mobile ) );
-    operations.getCurrentUser()( dispatch );
+    dispatch( setTokens( tokens.legacy, tokens.mobile ) );
+    getCurrentUser()( dispatch );
   }
 
   return false;
