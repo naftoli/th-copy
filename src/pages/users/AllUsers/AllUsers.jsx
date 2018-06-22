@@ -1,29 +1,20 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import ReactTable from "react-table";
+import { Link } from 'react-router-dom';
 import ProfilePicture from 'components/ui/ProfilePicture';
 import 'react-table/react-table.css';
 import './AllUsers.scss';
-import API from 'api/api';
+import { getSoldiers } from 'store/soldiers/operations';
 
 export class AllUsers extends Component {
 
-  constructor( props ){
-    super( props );
-    this.state = { users: [] }
-  }
-
   componentDidMount(){
-    this.getUsers();
-  }
-
-  getUsers = () => {
-    API.get('/core/users.php').then( response => {
-      this.setState({ users: response.data });
-    });
+    this.props.getSoldiers();
   }
 
   render() {
-    const { users } = this.state;
+    const { soldiers } = this.props;
   
     const columns = [{
       Header: 'Profile',  accessor: 'profilePicture',
@@ -31,27 +22,40 @@ export class AllUsers extends Component {
       className: 'profile-picture', width: 85, filterable: false,
     },{
       Header: "First Name", 
-      accessor: 'first' 
+      accessor: 'first',
+      Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
     },{
       Header: "Last Name", 
-      accessor: 'last' 
+      accessor: 'last',
+      Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
     },{
       Header: "Serial Number", 
-      accessor: 'user_serial' 
+      accessor: 'user_serial',
+      Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
+    },{
+      id: 'base', // Required because our accessor is not a string
+      Header: 'Base',
+      accessor: user => user.school.school_name
     },{
       id: 'platton', // Required because our accessor is not a string
       Header: 'Platton',
-      accessor: user => user.platton.name // Custom value accessors!
+      accessor: user => user.platton.name
     }];
 
     return (
       <div id="all-users">
-        <ReactTable data={ users } columns={columns} filterable={true} className="-striped -highlight" 
-          style={{ maxHeight: "80vh" }}/>
+        <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight" 
+          style={{ maxHeight: "90vh" }}/>
       </div>
     );
   }
 
 }
 
-export default AllUsers;
+const mapStateToProps = ( state ) => {
+  return {
+    soldiers: state.soldiers.soldiers
+  };
+}
+
+export default connect( mapStateToProps, { getSoldiers } )( AllUsers );
