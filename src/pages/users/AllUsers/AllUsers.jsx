@@ -16,25 +16,34 @@ export class AllUsers extends Component {
   constructor( props ) {
     super( props );
     this.state = {
-      showModal: true,
+      showModal: false,
       modalSrc: false
     };
-  }
-
-  closeModal = () => {
-    this.setState( { showModal: false })
   }
 
   componentDidMount(){
     this.props.getSoldiers();
   }
 
+  closeModal = () => {
+    this.setState( { showModal: false })
+  }
+
+  editPicture = ( event ) => {
+    const default_picture = '/mobile/reg/images/profile-photo-default.jpg';
+    this.setState({
+      showModal: true,
+      modalSrc: event.target.src.indexOf( default_picture ) >= 0 ? false : event.target.src
+    });
+  }
+
   render() {
     const { soldiers } = this.props;
+    const { showModal, modalSrc } = this.state;
   
     const columns = [{
       Header: 'Profile',  accessor: 'profilePicture',
-      Cell: props => <ProfilePicture src={`//mashpia.com${props.value}`} className='inline-profile'/>,
+      Cell: props => <ProfilePicture src={`//mashpia.com${props.value}`} className='inline-profile' onClick={ this.editPicture }/>,
       className: 'profile-picture', width: 85, filterable: false,
     },{
       Header: "First Name", 
@@ -61,8 +70,8 @@ export class AllUsers extends Component {
     return (
       <div id="all-users">
         <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight" 
-          style={{ maxHeight: "90vh" }}/>,
-        <CropperModal isOpen={ this.state.showModal } toggle={ this.closeModal }/>
+          style={{ maxHeight: "89vh" }}/>,
+        <CropperModal isOpen={ showModal } src={ modalSrc } toggle={ this.closeModal }/>
       </div>
     );
   }
