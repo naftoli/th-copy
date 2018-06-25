@@ -5,18 +5,19 @@ const cookies = new Cookies();
 let API_URL = `${LEGACY_URL}/api`;
 // send cookies
 const credentials = process.env.NODE_ENV === "production" ? 'same-origin' : 'include';
+const defaultContentType = 'application/json; charset=utf-8';
 /**
  * headers
  * 
  * generate HTTP headers for application.
  */
-const headers = ( content_type ) => {
+const headers = ( content_type = defaultContentType ) => {
   let headers = {
     'Accept': 'application/json',
-    'Content-Type': content_type || 'application/json; charset=utf-8',
     'mobile': 'false',
     'Authorization': `Legacy ${cookies.get('admin_id')}-${cookies.get('admin_auth')}`
   }
+  if ( content_type ) headers['Content-Type'] = content_type;
   return headers;
 }
 
@@ -27,16 +28,19 @@ const parseResponse = response => {
 export { API_URL, headers, parseResponse };
 
 export default {
-  get( url, content_type = false ) {
+  get( url ) {
     return fetch(`${API_URL}${url}`, {
       method: 'GET',
-      headers: headers( content_type ),
+      headers: headers(),
       credentials: credentials
     }).then( parseResponse );
   },
   
-  post( url, data = {}, content_type = false ) {
-    const body = JSON.stringify(data);
+  post( url, data = {}, content_type = defaultContentType ) {
+    // support FormData ( for things like images )
+    const body = data instanceof FormData ? data : JSON.stringify(data);
+    content_type = data instanceof FormData ? false : content_type;
+    // make the request and parse the response
     return fetch(`${API_URL}${url}`, {
       method: 'POST',
       headers: headers( content_type ),
@@ -45,10 +49,10 @@ export default {
     }).then( parseResponse )
   },
 
-  delete( url, content_type = false ) {
+  delete( url ) {
     return fetch(`${API_URL}${url}`, {
       method: 'DELETE',
-      headers: headers( content_type ),
+      headers: headers(),
       credentials: credentials
     }).then( parseResponse );
   }
