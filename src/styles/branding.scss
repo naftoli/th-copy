@@ -15,4 +15,7 @@ button.btn-primary {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   > h5 { color: #fff; }
+  > button.close {
+    color: #fff; opacity: 1; font-weight: 100;
+  }
 }
