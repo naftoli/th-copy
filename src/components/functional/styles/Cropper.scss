@@ -1,0 +1,10 @@
+#cropper-controls {
+  display: flex;
+
+  .btn {
+    flex: 1; font-size: 1.5em;
+    border-top-left-radius: 0px;  border-top-right-radius: 0px;
+
+    i { vertical-align: middle; }
+  }
+}

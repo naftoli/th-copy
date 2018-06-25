@@ -1,102 +1,65 @@
 import React, { Component } from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, ButtonGroup } from 'reactstrap';
-import Cropper from 'cropperjs';
-import './styles/CropperModal.scss';
-import 'cropperjs/dist/cropper.css';
-
-const CropperControls = ( props ) => (
-  <ButtonGroup id='cropper-controls'>
-    <Button color="primary" onClick={props.rotateLeft}><i className="fas fa-undo"/></Button>
-    <Button color="primary" onClick={props.rotateRight}><i className="fas fa-redo"/></Button>
-    <Button color="primary" onClick={props.zoomIn}><i className="fas fa-search-plus"/></Button>
-    <Button color="primary" onClick={props.zoomOut}><i className="fas fa-search-minus"/></Button>
-    <Button color="primary" onClick={props.scaleX}><i className="fas fa-arrows-alt-h"/></Button>
-    <Button color="primary" onClick={props.scaleY}><i className="fas fa-arrows-alt-v"/></Button>
-  </ButtonGroup>
-);
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import Cropper from 'components/functional/Cropper';
 
 class CropperModal extends Component {
-
+  // the props we are expecting
   static defaultProps = {
     isOpen: true, centered: true, src: false,
-    uploadImage: () => {}
+    uploadImage: ( formData, contentType ) => {}
   }
 
   constructor( props ) {
     super( props );
-    // refs to manipulate the HTML
-    this.cropperRef = React.createRef();  this.uploadRef = React.createRef();
-    this.cropper = false;
-    // store the src in state so it can be changed
-    this.state = { src: props.src };
+    // internal variables
+    this.uploadRef = React.createRef(); this.cropper = false;
+    // initial state
+    this.state = { 
+      src: props.src, 
+      name: '' 
+    };
   }
 
-  setCropper() {
-    if ( this.cropperRef.current ){
-      // remove the existing cropper instance
-      if ( this.cropper ) { this.cropper.destroy() }
-      // and create a new one
-      this.cropper = new Cropper( this.cropperRef.current, {
-          aspectRatio: 1 / 1,
-          dragMode: 'move'
-      });
-    }
-  }
-
+  setCropper = ( cropper ) => { this.cropper = cropper; }
+  
+  // open the OS/Browsers file select dialog
   openImage = () => {
-    this.uploadRef.current.value = ''; // clear any previously selected files
+    // clear any previously selected files so that they can select the same file again on desktop
+    this.uploadRef.current.value = '';
     this.uploadRef.current.click();
   }
 
+  // Read the image file selected by the user and update the state
   readImageFile = () => {
     const files = this.uploadRef.current.files;
+    this.setState({ name: files[0].name });
+    // read the file if we can
     if ( FileReader && files && files.length ) {
       const fr = new FileReader();
-      fr.onload = () => {
-        this.setState({ src: fr.result });
-      }
+      fr.onload = () => { this.setState({ src: fr.result }); }
       fr.readAsDataURL( files[0] );
     }
   }
 
+  // create the formData and call the uploadImage function with the data that it needs
   uploadImage = () => {
     if ( !this.cropper ) return false;
 
     this.cropper.getCroppedCanvas({ maxWidth: 500, maxHeight: 500 }).toBlob( blob => {
       const formData = new FormData();
-      formData.append( 'profile', blob, this.uploadRef.current.files[0].name );
+      formData.append( 'profile', blob, this.state.name );
       // API must be called with 'application/x-www-form-urlencoded; charset=utf-8' for img to post
-      this.props.uploadImage( formData );
+      this.props.uploadImage( formData, 'application/x-www-form-urlencoded; charset=utf-8' );
     });
   }
-  // cropper editing functions
-  rotateLeft = () => { this.cropper.rotate( -90 ); }
-  rotateRight = () => { this.cropper.rotate( 90 ); }
-  zoomIn = () => { this.cropper.zoom( 0.1 ); }
-  zoomOut = () => { this.cropper.zoom( -0.1 ); }
-  scaleX = () => {
-    const data = this.cropper.getData();
-    if ( ( data.rotate >= 0 && data.rotate < 90 ) || ( data.rotate >= 180 && data.rotate < 270 ) ){
-      this.cropper.scaleX( data.scaleX > 0 ? -1 : 1 );
-    } else {
-      this.cropper.scaleY( data.scaleY > 0 ? -1 : 1 );
-    }
-  }
-  scaleY = () => {
-    const data = this.cropper.getData();
-    if ( ( data.rotate >= 0 && data.rotate < 90 ) || ( data.rotate >= 180 && data.rotate < 270 ) ){
-      this.cropper.scaleY( data.scaleY > 0 ? -1 : 1 ); 
-    } else {
-      this.cropper.scaleX( data.scaleX > 0 ? -1 : 1 );
-    }
-  }
 
-  componentDidMount(){
-    this.setCropper();
-  }
-
-  componentDidUpdate() {
-    this.setCropper();
+  // update the image if we where passed a new one
+  componentDidUpdate( prevProps ) {
+    if ( this.props.src !== prevProps.src ) {
+      this.setState({ src: this.props.src });
+    } if ( prevProps.isOpen && !this.props.isOpen && !this.props.src ) {
+      this.setState({ src: false });
+    }
   }
 
   render() {
@@ -111,14 +74,8 @@ class CropperModal extends Component {
         </Button>
       </div>;
     // if we do, render the cropper component
-    if ( src ) {
-      body =
-        <div style={{ maxWidth: '100%', borderRadius: '5px' }}>
-          <img src={ src } alt="cropper-img" ref={ this.cropperRef }/>
-          <CropperControls rotateRight={this.rotateRight} rotateLeft={this.rotateLeft}
-            zoomIn={this.zoomIn} zoomOut={this.zoomOut} scaleX={this.scaleX} scaleY={this.scaleY}/>
-        </div>;
-    }
+    if ( src ) 
+      body = <Cropper src={ src } cropper={ this.setCropper } />;
     // render the final modal
     return (
       <Modal isOpen={isOpen} centered={centered} toggle={toggle} id='cropper-modal'>
@@ -134,7 +91,6 @@ class CropperModal extends Component {
       </Modal>
     );
   }
-
 }
 
 export default CropperModal;
