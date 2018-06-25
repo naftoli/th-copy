@@ -9,3 +9,12 @@ export const getSoldiers = () => dispatch => {
       return dispatch( actions.setSoldiers( response.data ) );
     });
 }
+
+export const updateSoldier = ( id, data ) => dispatch => {
+  return API.post( `/core/users.php?id=${id}`, data )
+    .then( response => {
+      console.log( response );
+    }).catch( error => {
+      console.error( error );
+    })
+}

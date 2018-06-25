@@ -9,7 +9,7 @@ import CropperModal from 'components/modals/CropperModal';
 import 'react-table/react-table.css';
 import './AllUsers.scss';
 // state
-import { getSoldiers } from 'store/soldiers/operations';
+import { getSoldiers, updateSoldier } from 'store/soldiers/operations';
 
 export class AllUsers extends Component {
 
@@ -17,7 +17,8 @@ export class AllUsers extends Component {
     super( props );
     this.state = {
       showModal: false,
-      modalSrc: false
+      modalSrc: false,
+      modalId: false
     };
   }
 
@@ -29,12 +30,17 @@ export class AllUsers extends Component {
     this.setState( { showModal: false })
   }
 
-  editPicture = ( event ) => {
+  editPicture = ( id ) => ( event ) => {
     const default_picture = '/mobile/reg/images/profile-photo-default.jpg';
     this.setState({
       showModal: true,
-      modalSrc: event.target.src.indexOf( default_picture ) >= 0 ? false : event.target.src
+      modalSrc: event.target.src.indexOf( default_picture ) >= 0 ? false : event.target.src,
+      modalId: id
     });
+  }
+
+  updatePicture = ( formData ) => {
+    this.props.updateSoldier( this.state.modalId, formData );
   }
 
   render() {
@@ -43,7 +49,8 @@ export class AllUsers extends Component {
   
     const columns = [{
       Header: 'Profile',  accessor: 'profilePicture',
-      Cell: props => <ProfilePicture src={`//mashpia.com${props.value}`} className='inline-profile' onClick={ this.editPicture }/>,
+      Cell: props => <ProfilePicture src={`//mashpia.com${props.value}`} className='inline-profile' 
+                        onClick={ this.editPicture( props.original.user_id ) }/>,
       className: 'profile-picture', width: 85, filterable: false,
     },{
       Header: "First Name", 
@@ -71,7 +78,7 @@ export class AllUsers extends Component {
       <div id="all-users">
         <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight" 
           style={{ maxHeight: "89vh" }}/>,
-        <CropperModal isOpen={ showModal } src={ modalSrc } toggle={ this.closeModal }/>
+        <CropperModal isOpen={ showModal } src={ modalSrc } toggle={ this.closeModal } uploadImage={ this.updatePicture }/>
       </div>
     );
   }
@@ -85,4 +92,6 @@ const mapStateToProps = ( state ) => {
   };
 }
 
-export default connect( mapStateToProps, { getSoldiers } )( AllUsers );
+export default connect( 
+  mapStateToProps, { getSoldiers, updateSoldier } 
+)( AllUsers );
