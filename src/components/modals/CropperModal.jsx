@@ -49,7 +49,7 @@ class CropperModal extends Component {
       const formData = new FormData();
       formData.append( 'profile', blob, this.state.name );
       // API must be called with 'application/x-www-form-urlencoded; charset=utf-8' for img to post
-      this.props.uploadImage( formData, 'application/x-www-form-urlencoded; charset=utf-8' );
+      this.props.uploadImage( formData );
     });
   }
 
