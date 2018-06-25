@@ -14,7 +14,9 @@ class UsersRouter {
         // filters and params for the filters
         $filters = [];   $params = [];
         // limit based on admin type
-        if ( $current_user->authCode() === 'CKIDS-ADMIN' ) {
+        if ( $current_user->isHQ() ) {
+            $filters[] = 'schools.test_school = 0';
+        } else if ( $current_user->authCode() === 'CKIDS-ADMIN' ) {
             $filters[] = 'schools.ckids = 1';
         } else if ( $current_user->authCode() === 'BC' ) {
             $filters[] = 'users.school_id = ?';
@@ -23,7 +25,7 @@ class UsersRouter {
         // combine the filters
         $filters = count( $filters ) > 0 ? 'WHERE ' . implode( ' AND ', $filters ) : '';
         // generate the SQL
-        $sql = "SELECT * FROM users JOIN schools USING ( school_id ) JOIN classes USING ( class_id ) $filters ORDER BY class_grade, class_sub";
+        $sql = "SELECT * FROM users JOIN schools USING ( school_id ) JOIN classes USING ( class_id ) $filters ORDER BY school_name, class_grade, class_sub";
         $query = $pdo->prepare( $sql );
         $query->execute( $params );
 
@@ -45,6 +47,10 @@ class UsersRouter {
         }
 
         json_response( $users );
+    }
+
+    public function update( $id ) {
+        print_r( $_FILES['profile'] );
     }
 }
 
