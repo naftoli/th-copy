@@ -16,7 +16,7 @@ class CropperModal extends Component {
     // initial state
     this.state = { 
       src: props.src, 
-      name: '' 
+      name: 'default' 
     };
   }
 
@@ -32,7 +32,7 @@ class CropperModal extends Component {
   // Read the image file selected by the user and update the state
   readImageFile = () => {
     const files = this.uploadRef.current.files;
-    this.setState({ name: files[0].name });
+    this.setState({ name: files[0].name || 'unknown' });
     // read the file if we can
     if ( FileReader && files && files.length ) {
       const fr = new FileReader();
@@ -55,10 +55,12 @@ class CropperModal extends Component {
 
   // update the image if we where passed a new one
   componentDidUpdate( prevProps ) {
+    // update the image if we get a new prop
     if ( this.props.src !== prevProps.src ) {
       this.setState({ src: this.props.src });
-    } if ( prevProps.isOpen && !this.props.isOpen && !this.props.src ) {
-      this.setState({ src: false });
+    // clear any images that we replaced the existing one with
+    } else if ( !this.props.isOpen && this.props.src !== this.state.src ) {
+      this.setState({ src: this.props.src });
     }
   }
 
