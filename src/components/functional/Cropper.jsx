@@ -34,8 +34,9 @@ export class Cropper extends Component {
     // and create a new one
     else if ( this.cropperRef.current ){
       this.cropper = new CropperJS( this.cropperRef.current, {
-          aspectRatio: 1 / 1,
-          dragMode: 'move'
+          aspectRatio: 1 / 1, // force the square shape we want
+          dragMode: 'move', viewMode: 1, // do not allow the user to add alpha to the image. 
+          checkCrossOrigin: false // allow for images from other domains
       });
     }
     // pass the cropper instance to any parents that might want it.
