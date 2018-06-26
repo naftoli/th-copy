@@ -1,6 +1,7 @@
 <?php
 include_once( __DIR__ . '/traits/BuildModel.php' );
 include_once( __DIR__ . '/traits/SetRelatedModel.php' );
+include_once( __DIR__ . '/../functions/files/images.php' );
 
 class User extends ActiveRecord\Model implements JsonSerializable {
     use traits\BuildModel;
@@ -26,6 +27,42 @@ class User extends ActiveRecord\Model implements JsonSerializable {
             return "/file_view.php?id=" . $this->user_photo_id;
         }
         return "/mobile/reg/images/profile-photo-default.jpg";
+    }
+
+    /**
+     * setProfilePicture
+     *
+     * takes an uploaded file and sets it as the profile picture
+     * 
+     * @param array $file
+     * @return string/array ( array if success and string on error )
+     */
+    public function setProfilePicture( $file ){
+        $type = exif_imagetype( $file['tmp_name'] );
+        $extension = image_type_to_extension($type);
+        // only PNG's and JPEG's for profile pictures
+        if ( !in_array( $type, [ IMAGETYPE_JPEG, IMAGETYPE_PNG ] ) )
+            return 'Invalid File Type. Only JPG/JPEG/PNG are supported at the moment.';
+        // all other upload errors
+        if ( $file['error'] !== UPLOAD_ERR_OK )
+            return codeToMessage( $file['error'] ); // api/funcitons/files/images.php#10
+        // generate the file name
+        $file_name = getProfileDestination( $this->user_id, $extension ); // api/funcitons/files/images.php#35
+        $target = __DIR__ . "/../../mobile/reg/$file_name";
+        // remove duplicate files
+        if ( file_exists( $target ) ) unlink( $target );
+        // save file
+        $result = move_uploaded_file( $file['tmp_name'], $target );
+        if ( !$result ) 
+            return 'Unable to save Image. Please check if your file is corrupt before trying again.';
+        // update the profile picture
+        // $this->mobile_pic = $file_name;
+        // $this->save();
+        // return an array with the results
+        return [
+            'location' => "/mobile/reg/$file_name",
+            'filename' => $file_name
+        ];
     }
 
     // ******************************* REGISTRATION *******************************
@@ -154,21 +191,6 @@ class User extends ActiveRecord\Model implements JsonSerializable {
                 'chayolei', 'yan', 'chidon', 'allow_parent_tasks', 'print_parent_tasks', 'mobile_pic'
             ],
             'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture' ],
-            'include' => [ 
-                'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ] ],
-                'platton' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ], 'methods' => [ 'name' ] ]
-            ]
-        ]);
-    }
-
-    public function indexSerialize(){
-        return $this->to_array([
-            'only' => [
-                'user_id', 'user_serial', 'first', 'last', 'dob',
-                'school_type_id', 'gender', 'user_start_date', 'user_registered',
-                'chayolei', 'yan', 'chidon', 'mobile_pic'
-            ],
-            'methods' => [ 'profilePicture' ],
             'include' => [ 
                 'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ] ],
                 'platton' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ], 'methods' => [ 'name' ] ]

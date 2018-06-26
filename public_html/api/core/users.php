@@ -50,7 +50,12 @@ class UsersRouter {
     }
 
     public function update( $id ) {
-        print_r( $_FILES['profile'] );
+        $user = User::find( $id );
+        if ( isset( $_FILES['profile'] ) ) {
+            $result = $user->setProfilePicture( $_FILES['profile'] );
+            if ( !is_array( $result ) ) json_error( $result );
+            json_response( $result );
+        }
     }
 }
 
