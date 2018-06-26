@@ -1,12 +1,15 @@
 import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
 import { LOGOUT } from './login/types';
 import thunk from 'redux-thunk';
+
 import loginReducer from 'store/login/reducer';
 import soldierReducer from 'store/soldiers/reducer';
+import errorReducer from 'store/errors/reducer';
 
 export const reducer = combineReducers({
   login: loginReducer,
-  soldiers: soldierReducer
+  soldiers: soldierReducer,
+  errors: errorReducer
 })
 
 const rootReducer = ( state, action ) => {
