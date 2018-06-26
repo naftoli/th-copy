@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 import Dashboard from 'pages/Dashboard/Dashboard';
 import Login, { Logout } from 'pages/Login/';
@@ -29,6 +30,7 @@ export class App extends Component {
 
               <Route render={ props => <h1>404</h1> } />
             </Switch>
+            <ToastContainer position="bottom-right" autoClose={ 8000 } closeOnClick={false} />
           </Dashboard>
         </Router>
       );
