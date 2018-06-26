@@ -1,4 +1,5 @@
 import API from 'api/api';
+import { toast } from 'react-toastify';
 import * as actions from './actions';
 
 export const getSoldiers = () => dispatch => {
@@ -11,10 +12,22 @@ export const getSoldiers = () => dispatch => {
 }
 
 export const updateSoldier = ( id, data ) => dispatch => {
+  const toast_id = toast.info( "Updating Soldier...", { autoClose: false } );
   return API.post( `/core/users.php?id=${id}`, data )
     .then( response => {
-      console.log( response );
+      if ( !response.success ) {
+        toast.update( toast_id, { type: toast.TYPE.ERROR, render: response.error }); 
+      } else { 
+        toast.update( toast_id, { 
+          type: toast.TYPE.SUCCESS, render: "Soldier Updated!", autoClose: 5000 
+        });
+      };
+      return response;
     }).catch( error => {
       console.error( error );
-    })
+      toast.update( toast_id, { 
+        type: toast.TYPE.ERROR, 
+        render: "Network Error while Updating Soldier. Please check your internet connection."
+      });
+    });
 }
