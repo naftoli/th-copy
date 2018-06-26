@@ -40,11 +40,12 @@ export class AllUsers extends Component {
   }
 
   updatePicture = ( formData ) => {
+    this.setState({ showModal: false });
     this.props.updateSoldier( this.state.modalId, formData );
   }
 
   render() {
-    const { soldiers } = this.props;
+    const { current_user, soldiers } = this.props;
     const { showModal, modalSrc } = this.state;
   
     const columns = [{
@@ -65,14 +66,17 @@ export class AllUsers extends Component {
       accessor: 'user_serial',
       Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
     },{
-      id: 'base', // Required because our accessor is not a string
-      Header: 'Base',
-      accessor: user => user.school.school_name
+      Header: 'Date Of Birth',
+      accessor: 'dob',
     },{
       id: 'platton', // Required because our accessor is not a string
       Header: 'Platton',
       accessor: user => user.platton.name
     }];
+
+    if ( current_user.authCode !== 'BC' ) {
+      columns.push( { id: 'base', Header: 'Base', accessor: user => user.school.school_name } );
+    }
 
     return (
       <div id="all-users">
