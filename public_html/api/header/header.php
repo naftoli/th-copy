@@ -14,6 +14,7 @@ require_once( API_ROOT . "/vendor/autoload.php" ); // composer install must be r
 include_once( __DIR__ . "/json-functions.php" );
 include_once( __DIR__ . "/rest-router.php" );
 include_once( __DIR__ . "/db.php" );
+include_once( __DIR__ . '/getallheaders.php');
 // Import Authorize.net API functions into global space to be used in models
 require_once( dirname(__FILE__) . "/../../classes/authorize/CustomerProfile.php" );
 require_once( dirname(__FILE__) . "/../../classes/authorize/PaymentProfile.php" );
