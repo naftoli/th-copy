@@ -28,6 +28,10 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return $reg_info;
     }
 
+    public function logoPath(){
+        return "/schoolLogos/$this->logo";
+    }
+
     // ******************************* SERIALIZERS *******************************
     /**
      * jsonSerialize

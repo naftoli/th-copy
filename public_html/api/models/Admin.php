@@ -18,18 +18,6 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     static $alias_attribute = [ 'email' => 'admin_email' ];
     // internalCaches
     private $customer_profile;
-    
-    // SERIALIZERS
-    public function jsonSerialize() {
-        return $this->to_array([
-            'only' => [
-                "admin_id", "username", "title", "first", "last", "lang", 
-                "father", "mother", "father_pic", "mother_pic",
-                "home_phone", "cell_phone", "admin_email"
-            ],
-            'methods' => [ 'authCode' ]
-        ]);
-    }
 
     // AUTH FUNCTIONS
     /**
@@ -63,6 +51,23 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         return $auth_ids;
     }
 
+    public function logins(){
+        $logins = [];
+        // Special HQ login
+        if ( $this->isHQ() ) $logins[] = [
+            'type' => 'HQ', 'id' => false, 'name' => 'Tzivos Hashem Headquarters', 
+            'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 'code' => 'HQ'
+        ];
+        // add all the schools
+        foreach( $this->getAuthIds( 'school' ) as $school_id ){
+            $school = School::find( $school_id );
+            $logins[] = [ 'type' => 'school', 'id' => $school_id, 'code' => 'BC',
+                'name' => $school->school_name, 'img' => $school->logoPath()
+            ];
+        };
+        return $logins;
+    }
+
     // are we HQ?
     public function isHQ() {
         return $this->auth === 'super';
@@ -91,10 +96,8 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      * @return int
      */
     public function shippingZone(){
-        if ( $this->admin_country == '' || $this->admin_country == 'USA' )
-            return 1;
-        else if ( $this->admin_country == 'Canada' )
-            return 2;
+        if ( $this->admin_country == '' || $this->admin_country == 'USA' ) return 1;
+        else if ( $this->admin_country == 'Canada' ) return 2;
         return 3;
     }
 
@@ -169,5 +172,17 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         return create_admin( $this->to_array([
             'only' => ['first', 'last', 'admin_email', 'password' ]
         ]) );
+    }
+
+    // SERIALIZERS
+    public function jsonSerialize() {
+        return $this->to_array([
+            'only' => [
+                "admin_id", "username", "title", "first", "last", "lang", 
+                "father", "mother", "father_pic", "mother_pic",
+                "home_phone", "cell_phone", "admin_email"
+            ],
+            'methods' => [ 'authCode' ]
+        ]);
     }
 }
