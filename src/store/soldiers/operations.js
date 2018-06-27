@@ -18,16 +18,14 @@ export const updateSoldier = ( id, data ) => dispatch => {
       if ( !response.success ) {
         toast.update( toast_id, { type: toast.TYPE.ERROR, render: response.error }); 
       } else { 
-        toast.update( toast_id, { 
-          type: toast.TYPE.SUCCESS, render: "Soldier Updated!", autoClose: 5000 
-        });
+        dispatch( actions.updateSoldier( id, response.data ) );
+        toast.update( toast_id, { type: toast.TYPE.SUCCESS, render: "Soldier Updated!", autoClose: null });
       };
       return response;
     }).catch( error => {
-      console.error( error );
-      toast.update( toast_id, { 
-        type: toast.TYPE.ERROR, 
+      toast.update( toast_id, {type: toast.TYPE.ERROR, 
         render: "Network Error while Updating Soldier. Please check your internet connection."
       });
+      console.error( error );
     });
 }

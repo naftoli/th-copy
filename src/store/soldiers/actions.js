@@ -13,3 +13,10 @@ export const setSoldiers = soldiers => {
     payload: soldiers
   }
 };
+
+export const updateSoldier = ( id, updates ) => {
+  return {
+    type: types.UPDATE_SOLDIER,
+    payload: { id, updates }
+  }
+};

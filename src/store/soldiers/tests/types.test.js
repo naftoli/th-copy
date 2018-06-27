@@ -10,4 +10,8 @@ describe(`types`, () => {
     expect( types.SET_SOLDIERS ).toBe( 'soldiers/set_soldiers' );
   });
 
+  it(`exports 'soldiers/update_soldier' as UPDATE_SOLDIER`, () => {
+    expect( types.UPDATE_SOLDIER ).toBe( 'soldiers/update_soldier' );
+  });
+
 });
