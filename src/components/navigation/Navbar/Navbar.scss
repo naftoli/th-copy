@@ -51,6 +51,8 @@ $primary-color-hover: #2c539e;
     button {
       overflow: hidden;
       text-overflow: ellipsis;
+      padding: .75rem 1.5rem;
+      &:hover { cursor: pointer; }
       > img {
         width: 35px;
       }

@@ -17,6 +17,10 @@ class Navbar extends Component {
     onLoginChange: () => {}
   }
 
+  onLoginChange = ( type, id ) => () => {
+    this.props.onLoginChange( type, id );
+  }
+
   render(){
     const { title, current_login, logins } = this.props;
     console.log( logins.length );
@@ -33,8 +37,8 @@ class Navbar extends Component {
             <span>{ current_login.name || `My Accounts` }</span>
           </DropdownToggle>
           <DropdownMenu right>
-          { logins.map( login => (
-            <DropdownItem>
+          { logins.map( ( login, index ) => (
+            <DropdownItem key={ index } onClick={ this.onLoginChange( login.type, login.id ) }>
               <img src={ LEGACY_URL + login.img } alt="profile_picture"/>
               <span>{ login.name }</span>
             </DropdownItem>
