@@ -41,11 +41,12 @@ export class Dashboard extends Component {
   }
 
   render() {
+    const { current_user } = this.props;
     return (
       <div id="dashboard">
-        <Navbar onClick={ this.toggle } />
+        <Navbar onClick={ this.toggle } logins={ current_user.logins } />
         <div id="dashboard-body">
-          <Sidebar menu={ getMenu( this.props.auth_code ) } active={ this.state.active } />
+          <Sidebar menu={ getMenu( current_user.auth_code ) } active={ this.state.active } />
           <div id="dashboard-content">
             { this.props.children }
           </div>
@@ -56,7 +57,7 @@ export class Dashboard extends Component {
 }
 
 const mapStateToProps = ( state ) => ({
-  auth_code: state.login.current_user.authCode
+  current_user: state.login.current_user
 });
 
 export default withRouter(
