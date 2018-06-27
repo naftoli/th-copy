@@ -6,10 +6,14 @@ $connections = [
 ];
 
 // Connect to legacy MySQL
-mysql_connect($global_db_host.":3306", $global_db_user, $global_db_pass);
-mysql_query('SET NAMES utf8');
-mysql_query('SET CHARACTER_SET utf8');
-mysql_select_db('mashpiadb');
+try {
+    @mysql_connect($global_db_host.":3306", $global_db_user, $global_db_pass);
+    mysql_query('SET NAMES utf8');
+    mysql_query('SET CHARACTER_SET utf8');
+    mysql_select_db('mashpiadb');
+} catch ( Exception $e ) {
+    $_GLOBALS['log']->log( "mysql_connect Failed. Error: " . $e );
+}
 
 // Connect $pdo to PDO
 $pdo = new \PDO( "mysql:host=$global_db_host;dbname=mashpiadb", $global_db_user, $global_db_pass );
