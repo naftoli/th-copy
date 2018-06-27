@@ -14,7 +14,6 @@ const defaultContentType = 'application/json; charset=utf-8';
 const headers = ( content_type = defaultContentType ) => {
   let headers = {
     'Accept': 'application/json',
-    'mobile': 'false',
     'Authorization': `Legacy ${cookies.get('admin_id')}-${cookies.get('admin_auth')}`
   }
   if ( content_type ) headers['Content-Type'] = content_type;

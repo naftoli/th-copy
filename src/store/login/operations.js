@@ -5,11 +5,12 @@ export const login = ( username, password ) => dispatch => {
   dispatch( actions.setLoading( true ) );
   return API.post('/auth/login.php', { username, password })
     .then( response => {
-      dispatch( actions.setLoading( false ) );
       if ( response.success ) {
-        dispatch( actions.setTokens( response.data.legacy, response.data.mobile ));
-        dispatch( actions.setUser( response.data.user ));
+        const { legacy, mobile, id } = response.data;
+        dispatch( actions.setTokens( legacy, mobile, id ) );
+        getCurrentUser()( dispatch ); // get the user
       } else {
+        dispatch( actions.setLoading( false ) );
         dispatch( actions.setErrors( response.error ) );
       }
     })

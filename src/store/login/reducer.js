@@ -4,6 +4,7 @@ const cookies = new Cookies();
 
 export const initialState = {
   current_user: false,
+  current_login: {},
   loading: false,
   errors: [],
   tokens: {}
@@ -15,24 +16,30 @@ export default ( state = initialState, action ) => {
       return Object.assign({}, state, {
         errors: action.payload
       });
+    
     case types.SET_LOADING:
       return Object.assign({}, state, {
         loading: action.payload
       });
+
     case types.SET_TOKENS:
       cookies.set( 'admin_auth', action.payload.legacy, { path: '/' } );
-      return Object.assign({}, state, {
-        tokens: action.payload
-      });
+      cookies.set( 'admin_id', action.payload.id, { path: '/' } );
+      cookies.set( 'admin', action.payload.mobile, { path: '/' } );
+      
+      return Object.assign({}, state, { tokens: action.payload });
+
     case types.SET_USER:
-      cookies.set( 'admin_id', action.payload.admin_id, { path: '/' } );
       return Object.assign({}, state, {
-        current_user: action.payload
+        current_user: action.payload,
+        current_login: action.payload.logins[0]
       });
-    case types.LOGOUT:
+    
+      case types.LOGOUT:
       cookies.remove( 'admin_auth', { path: '/' } );
       cookies.remove( 'admin_id', { path: '/' } );
       return Object.assign( {}, initialState );
+    
     default:
       return state; 
   }

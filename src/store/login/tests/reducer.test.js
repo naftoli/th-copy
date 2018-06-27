@@ -44,16 +44,23 @@ describe( 'reducer', () => {
 
     it(`updates state.tokens`, () => {
       expect(
-        reducer(initialState, actions.setTokens( 'legacy', 'mobile')).tokens 
+        reducer(initialState, actions.setTokens( 'legacy', 'mobile' ) ).tokens 
       ).toEqual( { legacy: 'legacy', mobile: 'mobile' } );
       expect( initialState.tokens ).toEqual( {} );
     });
 
     it('sets the admin_auth cookie', () => {
       cookies.remove('admin_auth');
-      reducer(initialState, actions.setTokens( 'legacy', 'mobile'))
+      reducer(initialState, actions.setTokens( 'legacy', 'mobile' ) )
       expect( cookies.get('admin_auth') ).toBe( 'legacy' );
       cookies.remove('admin_auth');
+    });
+
+    it('sets the admin_id cookie', () => {
+      cookies.remove('admin_id');
+      reducer(initialState, actions.setTokens( 'legacy', 'mobile', 567 ));
+      expect( cookies.get('admin_id') ).toBe( '567' ); // cookies always return a string
+      cookies.remove('admin_id');
     });
 
   });
@@ -64,13 +71,6 @@ describe( 'reducer', () => {
       const user = { foo: 'bar' };
       expect( reducer(initialState, actions.setUser( user )).current_user ).toEqual( user );
       expect( initialState.current_user ).toEqual( false );
-    });
-
-    it('sets the admin_id cookie', () => {
-      cookies.remove('admin_id');
-      reducer(initialState, actions.setUser( { admin_id: 567 } ));
-      expect( cookies.get('admin_id') ).toBe( '567' ); // cookies always return a string
-      cookies.remove('admin_id');
     });
 
   });

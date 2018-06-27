@@ -8,10 +8,10 @@ export const setLoading = loading => {
   }
 };
 
-export const setTokens = ( legacy, mobile ) => {
+export const setTokens = ( legacy, mobile, id ) => {
   return {
     type: SET_TOKENS,
-    payload: { legacy, mobile }
+    payload: { legacy, mobile, id }
   }
 };
 
