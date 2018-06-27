@@ -6,7 +6,6 @@ import { ToastContainer } from 'react-toastify';
 import Dashboard from 'pages/Dashboard/Dashboard';
 import Login, { Logout } from 'pages/Login/';
 import UsersPage from 'pages/users';
-import 'styles/App.css';
 
 export class App extends Component {
   render() {
