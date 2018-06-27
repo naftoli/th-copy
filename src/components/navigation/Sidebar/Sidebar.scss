@@ -8,7 +8,7 @@
   // Define the size
   min-width: 270px;
   max-width: 270px;
-  height: calc( 100vh - 53px );
+  max-height: 100%;
   overflow: auto; // scroll the sidebar independent of the content
   // Sidebar Theme and Transitions
   font-family: 'Poppins', sans-serif;
@@ -98,11 +98,6 @@
   }
 }
 
-// Handle expanded navbar
-@media( min-width: 1025px ){
-  #sidebar { height: calc( 100vh - 72px ); }
-}
-
 @media (min-width: 768px) and (max-width: 1025px) {
   #sidebar {
     margin-left: -270px;
@@ -117,7 +112,7 @@
   #sidebar {
       margin-left: -270px;
       position: absolute;
-      z-index: 99999;
+      z-index: 999;
   }
   #sidebar.active {
       margin-left: 0;
