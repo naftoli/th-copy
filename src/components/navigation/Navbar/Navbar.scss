@@ -28,7 +28,8 @@ $primary-color-hover: #2c539e;
     font-size: 1.7em;
   }
 
-  #navbar-menu {
+  ul#navbar-menu {
+    margin: 0px;
     a {
       color: #fff;
       display: inline-block;
@@ -39,15 +40,20 @@ $primary-color-hover: #2c539e;
       }
 
       &:hover {
-        text-decoration: none;
         cursor: pointer;
-        transform: scale(1.1);
       }
     }
     img {
       display: inline-block;
       width: 25px;
       margin-right: 5px;
+    }
+    button {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      > img {
+        width: 35px;
+      }
     }
   }
 }
