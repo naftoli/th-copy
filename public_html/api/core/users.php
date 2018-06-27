@@ -51,11 +51,16 @@ class UsersRouter {
 
     public function update( $id ) {
         $user = User::find( $id );
+        // update the profile picture
         if ( isset( $_FILES['profile'] ) ) {
             $result = $user->setProfilePicture( $_FILES['profile'] );
-            if ( !is_array( $result ) ) json_error( $result );
-            json_response( $result );
+            if ( is_string( $result ) ) json_error( $result );
+            json_response([
+                'mobile_pic' => $user->mobile_pic,
+                'profilePicture' => $user->profilePicture()
+            ]);
         }
+        // update everything else
     }
 }
 

@@ -56,13 +56,10 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         if ( !$result ) 
             return 'Unable to save Image. Please check if your file is corrupt before trying again.';
         // update the profile picture
-        // $this->mobile_pic = $file_name;
+        $this->mobile_pic = $file_name;
         // $this->save();
         // return an array with the results
-        return [
-            'location' => "/mobile/reg/$file_name",
-            'filename' => $file_name
-        ];
+        return true;
     }
 
     // ******************************* REGISTRATION *******************************
