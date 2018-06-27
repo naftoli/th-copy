@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { LEGACY_URL } from 'components/constants';
 // components
 import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
@@ -50,24 +51,22 @@ export class AllUsers extends Component {
   
     const columns = [{
       Header: 'Profile',  accessor: 'profilePicture',
-      Cell: props => <ProfilePicture src={`//mashpia.com${props.value}`} className='inline-profile' 
+      Cell: props => <ProfilePicture src={`${LEGACY_URL}${props.value}`} className='inline-profile' 
                         onClick={ this.editPicture( props.original.user_id ) }/>,
       className: 'profile-picture', width: 85, filterable: false,
     },{
-      Header: "First Name", 
-      accessor: 'first',
+      Header: "First Name", accessor: 'first',
       Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
     },{
-      Header: "Last Name", 
-      accessor: 'last',
+      Header: "Last Name", accessor: 'last',
       Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
     },{
       Header: "Serial Number", 
       accessor: 'user_serial',
       Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
     },{
-      Header: 'Date Of Birth',
-      accessor: 'dob',
+      id: 'dob',  Header: 'Date Of Birth',
+      accessor: user => user.dob ? new Date( user.dob ).toLocaleDateString() : '-',
     },{
       id: 'platton', // Required because our accessor is not a string
       Header: 'Platton',
