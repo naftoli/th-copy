@@ -9,7 +9,7 @@ $connections = [
 
 // Connect to legacy MySQL
 try {
-    mysql_connect($global_db_host.":3306", $global_db_user, $global_db_pass);
+    @mysql_connect($global_db_host.":3306", $global_db_user, $global_db_pass);
     mysql_query('SET NAMES utf8');
     mysql_query('SET CHARACTER_SET utf8');
     mysql_select_db('mashpiadb');
