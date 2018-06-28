@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Sidebar, { getMenu } from 'components/navigation/Sidebar';
 import Navbar from 'components/navigation/Navbar';
+import { LEGACY_URL } from 'components/constants';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { changeLogin } from 'store/login/actions';
@@ -43,12 +44,16 @@ export class Dashboard extends Component {
 
   render() {
     const { current_user, current_login, changeLogin } = this.props;
+    if ( current_login.type === 'user' ) {
+      window.location.href = `${LEGACY_URL}/mobile/reg/`;
+      return null;
+    }
     return (
       <div id="dashboard">
         <Navbar onClick={ this.toggle } onLoginChange={ changeLogin }
           logins={ current_user.logins } current_login={current_login} />
         <div id="dashboard-body">
-          <Sidebar menu={ getMenu( current_user.auth_code ) } active={ this.state.active } />
+          <Sidebar menu={ getMenu( current_login.code ) } active={ this.state.active } />
           <div id="dashboard-content">
             { this.props.children }
           </div>
