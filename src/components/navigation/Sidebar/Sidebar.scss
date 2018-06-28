@@ -5,6 +5,7 @@
 
 // Sidebar
 #sidebar {
+  @media print { display: none; }
   // Define the size
   min-width: 270px;
   max-width: 270px;
