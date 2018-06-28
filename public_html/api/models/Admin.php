@@ -65,6 +65,11 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
                 'name' => $school->school_name, 'img' => $school->logoPath()
             ];
         };
+        if ( count( $this->getAuthIds( 'user') ) > 0  ) {
+            $logins[] = [ 'type' => 'user', 'id' => $this->admin_id, 'code' => 'PARENT',
+                'name' => 'My Parent Portal', 'img' => '/mobile/img_new/TH Logo-colorful-svg.svg'
+            ];
+        }
         return $logins;
     }
 
