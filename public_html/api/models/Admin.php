@@ -18,8 +18,9 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     static $alias_attribute = [ 'email' => 'admin_email' ];
     // internalCaches
     private $customer_profile;
+    public $login = false;
 
-    // AUTH FUNCTIONS
+    //******************************* AUTH *******************************/
     /**
      * getAuthTypes
      * 
@@ -51,11 +52,28 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         return $auth_ids;
     }
 
+    /**
+     * authCode
+     * 
+     * return Auth code for React site
+     *
+     * @return string
+     */
+    public function authCode() {
+        if ( $this->isHQ() ) return 'HQ';
+        if ( $this->auth === 'ckidssuper' ) return 'CKIDS-ADMIN';
+        // not HQ
+        $auth_types = $this->getAuthTypes();
+        if ( in_array( 'school', $auth_types ) ) return 'BC';
+    }
+
+    //******************************* LOGIN *******************************/
+    // get all logins
     public function logins(){
         $logins = [];
         // Special HQ login
         if ( $this->isHQ() ) $logins[] = [
-            'type' => 'HQ', 'id' => false, 'name' => 'Tzivos Hashem Headquarters', 
+            'type' => 'HQ', 'id' => $this->admin_id, 'name' => 'Tzivos Hashem Headquarters', 
             'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 'code' => 'HQ'
         ];
         // add all the schools
@@ -72,25 +90,19 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         }
         return $logins;
     }
+    // set the current login
+    public function setLogin( $type = false, $id = false ){
+        $logins = $this->logins();
+        if ( !$type || !$id ) return $this->login = $logins[0]; // default to the first login
+        foreach( $logins as $login ) {
+            if ( $login['id'] == $id && $login['type'] == $type ) return $this->login = $login;
+        }
+        return $this->login = $logins[0];
+    }
 
     // are we HQ?
     public function isHQ() {
         return $this->auth === 'super';
-    }
-
-    /**
-     * authCode
-     * 
-     * return Auth code for React site
-     *
-     * @return string
-     */
-    public function authCode() {
-        if ( $this->isHQ() ) return 'HQ';
-        if ( $this->auth === 'ckidssuper' ) return 'CKIDS-ADMIN';
-        // not HQ
-        $auth_types = $this->getAuthTypes();
-        if ( in_array( 'school', $auth_types ) ) return 'BC';
     }
 
     /**
