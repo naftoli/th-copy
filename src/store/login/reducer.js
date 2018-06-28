@@ -45,7 +45,7 @@ export default ( state = initialState, action ) => {
 
     case types.CHANGE_LOGIN:
       const { type, id } = action.payload;
-      const login = state.current_user.logins.find( login => login.type === type && login.id === id )
+      const login = state.current_user.logins.find( login => login.type === type && login.id === id ) || {}
       return Object.assign( {}, state, { current_login: login });
 
     default:
