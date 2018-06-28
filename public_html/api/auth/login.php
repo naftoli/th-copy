@@ -12,6 +12,12 @@ if ( $_SERVER['REQUEST_METHOD'] !== 'POST' )
 if ( !isset($_POST['username']) || !isset($_POST['password']) )
     json_error( "Invalid Request");
 
+// clear all cookies
+$past = time() - 3600;
+foreach ( $_COOKIE as $key => $value ) {
+    setcookie( $key, $value, $past, '/' );
+}
+
 $login = \mashpia\api\auth\Auth::login(
     $_POST['username'], $_POST['password']
 );
