@@ -3,6 +3,7 @@ import Sidebar, { getMenu } from 'components/navigation/Sidebar';
 import Navbar from 'components/navigation/Navbar';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import { changeLogin } from 'store/login/actions';
 import './Dashboard.scss';
 
 export class Dashboard extends Component {
@@ -41,10 +42,11 @@ export class Dashboard extends Component {
   }
 
   render() {
-    const { current_user } = this.props;
+    const { current_user, current_login, changeLogin } = this.props;
     return (
       <div id="dashboard">
-        <Navbar onClick={ this.toggle } logins={ current_user.logins } />
+        <Navbar onClick={ this.toggle } onLoginChange={ changeLogin }
+          logins={ current_user.logins } current_login={current_login} />
         <div id="dashboard-body">
           <Sidebar menu={ getMenu( current_user.auth_code ) } active={ this.state.active } />
           <div id="dashboard-content">
@@ -57,9 +59,10 @@ export class Dashboard extends Component {
 }
 
 const mapStateToProps = ( state ) => ({
-  current_user: state.login.current_user
+  current_user: state.login.current_user,
+  current_login: state.login.current_login
 });
 
 export default withRouter(
-  connect( mapStateToProps )( Dashboard )
+  connect( mapStateToProps, { changeLogin } )( Dashboard )
 );

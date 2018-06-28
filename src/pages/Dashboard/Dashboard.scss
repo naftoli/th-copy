@@ -2,7 +2,7 @@
   display: flex;
   align-items: stretch;
   position: relative;
-  height: calc( 100vh - 57px );
+  height: calc( 100vh - 61px );
   @media ( min-width: 1025px ) { height: calc( 100vh - 72px ); }
 
   #dashboard-content {
