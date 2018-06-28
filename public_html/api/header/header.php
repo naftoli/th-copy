@@ -24,7 +24,7 @@ include_once( __DIR__ . '/../../class.globalSettings.php');
 // set headers
 header('Access-Control-Allow-Origin: '. ( isset( $_SERVER['HTTP_ORIGIN'] ) ? $_SERVER['HTTP_ORIGIN'] : "*" ) ); // CORS
 header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Headers: mobile, Content-Type, Authorization');
+header('Access-Control-Allow-Headers: mobile, Content-Type, Authorization, login');
 header("Content-Type: text/html; charset=utf-8;");
 
 if ($_SERVER['REQUEST_METHOD'] == "OPTIONS") json_response( false );
@@ -61,7 +61,7 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
             $_COOKIE['admin_auth'] = explode( '-', $token )[1];
         }
     }
-
+    // get the current user
     $admin_id = false;
     if ( $mobile && $_COOKIE['admin'] ) {
         $admin_id = \mashpia\api\auth\Auth::authenticate(
@@ -73,14 +73,24 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
             "legacy"
         );
     }
-
     $current_user = $admin_id ? Admin::find( $admin_id ) : false;
     
     // Return 401 Unauthorized if we cannot login user
     if ( !$current_user ){
         json_error( "EH1: Invalid Credentials", $_COOKIE, 401 );
     }
-        
+
+    // get the current login
+    if ( isset( $_COOKIE['login'] ) ) {
+        $login_parts = explode('-', $_COOKIE['login']);
+        $current_user->setLogin( $login_parts[0], $login_parts[1] );
+    } else if ( $headers['login'] ) {
+        $login_parts = explode('-', $headers['login']);
+        $current_user->setLogin( $login_parts[0], $login_parts[1] );
+    } else {
+        $current_user->setLogin();
+    }
+// no auth required
 } else {
     $current_user = false;
 }
