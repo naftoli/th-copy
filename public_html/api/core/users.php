@@ -14,13 +14,14 @@ class UsersRouter {
         // filters and params for the filters
         $filters = [];   $params = [];
         // limit based on admin type
-        if ( $current_user->isHQ() ) {
+        $login = $current_user->login;
+        if ( $login['code'] === 'HQ' ) {
             $filters[] = 'schools.test_school = 0';
-        } else if ( $current_user->authCode() === 'CKIDS-ADMIN' ) {
+        } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
             $filters[] = 'schools.ckids = 1';
-        } else if ( $current_user->authCode() === 'BC' ) {
+        } else if ( $login['code'] === 'BC' ) {
             $filters[] = 'users.school_id = ?';
-            $params[] = $current_user->getAuthIds('school')[0];
+            $params[] = $login['id'];
         }
         // combine the filters
         $filters = count( $filters ) > 0 ? 'WHERE ' . implode( ' AND ', $filters ) : '';
