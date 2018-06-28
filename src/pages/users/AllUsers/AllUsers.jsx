@@ -14,13 +14,10 @@ import { getSoldiers, updateSoldier } from 'store/soldiers/operations';
 
 export class AllUsers extends Component {
 
-  constructor( props ) {
-    super( props );
-    this.state = {
-      showModal: false,
-      modalSrc: false,
-      modalId: false
-    };
+  state = {
+    showModal: false,
+    modalSrc: false,
+    modalId: false
   }
 
   componentDidMount(){
@@ -51,8 +48,12 @@ export class AllUsers extends Component {
     this.props.updateSoldier( this.state.modalId, formData );
   }
 
+  scrollToTop = () => {
+    document.querySelector('#all-users .rt-tbody').scrollTop = 0;
+  }
+
   render() {
-    const { current_user, soldiers, loading } = this.props;
+    const { current_login, soldiers, loading } = this.props;
     const { showModal, modalSrc } = this.state;
 
     const columns = [{
@@ -79,14 +80,15 @@ export class AllUsers extends Component {
       accessor: user => user.platton.name
     }];
 
-    if ( current_user.authCode !== 'BC' ) {
+    if ( current_login.code !== 'BC' ) {
       columns.push( { id: 'base', Header: 'Base', accessor: user => user.school.school_name } );
     }
 
     return (
       <div id="all-users">
-        <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight" 
-          style={{ maxHeight: "89vh" }} noDataText={ loading ? 'Loading...' : 'No Data' }/>,
+        <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight"
+          style={{ maxHeight: "89vh" }} noDataText={ loading ? 'Loading...' : 'No Data' } 
+          onPageChange={ this.scrollToTop } onFilteredChange={ this.scrollToTop }/>,
         <CropperModal isOpen={ showModal } src={ modalSrc } toggle={ this.closeModal } uploadImage={ this.updatePicture }/>
       </div>
     );
@@ -97,7 +99,7 @@ export class AllUsers extends Component {
 const mapStateToProps = ( state ) => {
   return {
     ...state.soldiers,
-    current_user: state.login.current_user
+    current_login: state.login.current_login
   };
 }
 
