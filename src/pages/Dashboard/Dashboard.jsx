@@ -45,7 +45,7 @@ export class Dashboard extends Component {
   render() {
     const { current_user, current_login, changeLogin } = this.props;
     if ( current_login.type === 'user' ) {
-      window.location.href = `${LEGACY_URL}/mobile/reg/`;
+      window.location.href = `${LEGACY_URL}/mobile/reg/parent_detail.html`;
       return null;
     }
     return (
