@@ -30,10 +30,18 @@ class Auth {
         if ( $user_query->rowCount() == 0 ) return false;
 
         $row = $user_query->fetch();
+        // generate the keys
+        $legacy = self::legacyKey( $row['username'], $row['password'] );
+        $mobile = self::mobileKey( $row['admin_id'] );
+        // set the cookies
+        $_COOKIE['admin'] = $row['admin_id'];
+        $_COOKIE['admin_id'] = $mobile;
+        $_COOKIE['admin_auth'] = $legacy;
+        // return the results
         return [
-            'user' => \Admin::find( $row['admin_id'] ),
-            'legacy' => self::legacyKey( $row['username'], $row['password'] ),
-            'mobile' => self::mobileKey( $row['admin_id'] )
+            'id' => $row['admin_id'],
+            'legacy' => $legacy,
+            'mobile' => $mobile
         ];
     }
 
