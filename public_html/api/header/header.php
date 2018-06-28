@@ -45,8 +45,14 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
         ( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], '/mobile' ) > 0 )
     ) $mobile = true;
 
+    $token = false;
     if ( count( $_COOKIE ) == 0 && isset( $headers['Authorization'] ) ) {
         $token = explode( ' ',  $headers['Authorization'] )[1];
+    } else if ( count( $_COOKIE ) == 0 && isset( $headers['authorization'] ) ) {
+        $token = explode( ' ',  $headers['authorization'] )[1];
+    }
+
+    if ( $token ) {
         if ( $mobile ) {
             $_COOKIE['admin'] = $token;
         } else {
@@ -71,7 +77,7 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
     
     // Return 401 Unauthorized if we cannot login user
     if ( !$current_user ){
-        json_error( "Invalid Credentials", false, 401 );
+        json_error( "EH1: Invalid Credentials", $headers, 401 );
     }
         
 } else {
