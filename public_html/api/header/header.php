@@ -83,11 +83,13 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
     // get the current login
     if ( isset( $_COOKIE['login'] ) ) {
         $login_parts = explode('-', $_COOKIE['login']);
-        $current_user->setLogin( $login_parts[0], $login_parts[1] );
+        if ( count($login_parts) == 2 ) $current_user->setLogin( $login_parts[0], $login_parts[1] );
     } else if ( $headers['login'] ) {
         $login_parts = explode('-', $headers['login']);
-        $current_user->setLogin( $login_parts[0], $login_parts[1] );
-    } else {
+        if ( count($login_parts) == 2 ) $current_user->setLogin( $login_parts[0], $login_parts[1] );
+    }
+    // make sure we always have a login
+    if ( !$current_user->login ) {
         $current_user->setLogin();
     }
 // no auth required
