@@ -32,6 +32,11 @@ export default ( state = initialState, action ) => {
       return Object.assign({}, state, { tokens: action.payload });
 
     case types.SET_USER:
+      // user is a different portal, do not update the cookies.
+      if ( action.payload.logins[0].type !== 'user' && !cookies.get('login') ) {
+        const login = action.payload.logins[0];
+        cookies.set( 'login', `${login.type}-${login.id}`, { path: '/' } );
+      }
       return Object.assign({}, state, {
         current_user: action.payload,
         current_login: action.payload.logins[0]
@@ -41,12 +46,21 @@ export default ( state = initialState, action ) => {
       cookies.remove( 'admin_auth', { path: '/' } );
       cookies.remove( 'admin_id', { path: '/' } );
       cookies.remove( 'admin', { path: '/' } );
+      cookies.remove( 'login', { path: '/' } );
       return Object.assign( {}, initialState );
 
     case types.CHANGE_LOGIN:
       const { type, id } = action.payload;
-      const login = state.current_user.logins.find( login => login.type === type && login.id === id ) || {}
-      return Object.assign( {}, state, { current_login: login });
+      const current_login = state.current_user.logins.find( 
+        login => login.type === type && login.id === id // find a login with the same type and id
+      ) || state.current_user.logins[0]; // or just get the first one
+      
+      // user is a different portal, do not update the cookies.
+      if ( current_login.type !== 'user' ) {
+        cookies.set( 'login', `${current_login.type}-${current_login.id}`, { path: '/' } );
+      }
+      // non-destructivly return the state
+      return Object.assign( {}, state, { current_login });
 
     default:
       return state; 
