@@ -81,7 +81,7 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
     }
 
     // get the current login
-    if ( $headers['login'] ) {
+    if ( isset( $headers['login'] ) ) {
         $login_parts = explode('-', $headers['login']);
         if ( count($login_parts) == 2 ) $current_user->setLogin( $login_parts[0], $login_parts[1] );
     } else if ( isset( $_COOKIE['login'] ) ) {
