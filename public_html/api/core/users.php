@@ -26,7 +26,7 @@ class UsersRouter {
         // combine the filters
         $filters = count( $filters ) > 0 ? 'WHERE ' . implode( ' AND ', $filters ) : '';
         // generate the SQL
-        $sql = "SELECT * FROM users JOIN schools USING ( school_id ) JOIN classes USING ( class_id ) $filters ORDER BY school_name, class_grade, class_sub, first, last";
+        $sql = "SELECT * FROM users JOIN schools USING ( school_id ) LEFT JOIN classes USING ( class_id ) $filters ORDER BY school_name, class_grade, class_sub, first, last";
         $query = $pdo->prepare( $sql );
         $query->execute( $params );
 
