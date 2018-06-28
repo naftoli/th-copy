@@ -26,7 +26,7 @@ export const getCurrentUser = () => dispatch => {
     .then( response => {
       dispatch( actions.setLoading( false ) );
       if ( !response.success ) 
-        return dispatch( actions.setTokens( false, false ) )
+        return dispatch( actions.logout() )
       return dispatch( actions.setUser( response.data ) );
     });
 }

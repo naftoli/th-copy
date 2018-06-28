@@ -23,10 +23,12 @@ export default ( state = initialState, action ) => {
       });
 
     case types.SET_TOKENS:
-      cookies.set( 'admin_auth', action.payload.legacy, { path: '/' } );
-      cookies.set( 'admin_id', action.payload.id, { path: '/' } );
-      cookies.set( 'admin', action.payload.mobile, { path: '/' } );
-      
+      if ( action.payload.legacy ) {
+        cookies.set( 'admin_auth', action.payload.legacy, { path: '/' } );
+        cookies.set( 'admin_id', action.payload.id, { path: '/' } );
+        cookies.set( 'admin', action.payload.mobile, { path: '/' } );
+      }
+
       return Object.assign({}, state, { tokens: action.payload });
 
     case types.SET_USER:
@@ -35,11 +37,17 @@ export default ( state = initialState, action ) => {
         current_login: action.payload.logins[0]
       });
     
-      case types.LOGOUT:
+    case types.LOGOUT:
       cookies.remove( 'admin_auth', { path: '/' } );
       cookies.remove( 'admin_id', { path: '/' } );
+      cookies.remove( 'admin', { path: '/' } );
       return Object.assign( {}, initialState );
-    
+
+    case types.CHANGE_LOGIN:
+      const { type, id } = action.payload;
+      const login = state.current_user.logins.find( login => login.type === type && login.id === id )
+      return Object.assign( {}, state, { current_login: login });
+
     default:
       return state; 
   }

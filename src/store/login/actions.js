@@ -1,4 +1,7 @@
-import { SET_LOADING, SET_ERRORS, SET_TOKENS, SET_USER, LOGOUT } from './types';
+import { 
+  SET_LOADING, SET_ERRORS, SET_TOKENS, 
+  SET_USER, LOGOUT, CHANGE_LOGIN 
+} from './types';
 
 //** Action Creators */
 export const setLoading = loading => {
@@ -31,4 +34,13 @@ export const setUser = user => {
   }
 };
 
-export const logout = () => ({ type: LOGOUT });
+export const logout = () => ({ 
+  type: LOGOUT 
+});
+
+export const changeLogin = ( type, id ) => {
+  return {
+    type: CHANGE_LOGIN,
+    payload: { type, id }
+  }
+}
