@@ -4,27 +4,29 @@ import { LEGACY_URL } from 'components/constants';
 const DEFAULT_USER_TYPES = [ 'HQ', 'BC' ];
 
 /**
- * filterItem
+ * menuReducer
  * 
- * Callback function used for getMenu
+ * Reducer for items in menu to limit by type (code) provided
  * 
- * @param {object} item Object from getMenu array, Tests agains items and user_types keys
- * @param {string} user_type The type of user (e.g. HQ or BC) that we are filtering the menu for
+ * @param {string} user_type The type of user (e.g. HQ, INSTITUTION, BC, PARENT) that we are filtering the menu for
  * @param {Array} defaults Array of defaults in the event that the item does not have a user_types array
+ * 
+ * @returns {function} Returns a valid reducer to be passed to .reduce with an array as the initilaizer
  */
-export const filterItem = ( item, user_type, defaults ) => {
-  // apply to items
+export const menuReducer = ( user_type, defaults ) => ( filtered = [], item ) => {
+  // reduce the items down a bit
   if ( item.items ) {
     item = Object.assign( {}, item, 
-      { items: item.items.filter( child => filterItem( child, user_type, defaults ) ) }
+      { items: item.items.reduce( menuReducer( user_type, defaults ), [] ) }
     );
   }
-  // // override the defaults
-  if ( item.user_types ){
-    return item.user_types.indexOf( user_type ) > -1 ? item : false;
+
+  if ( item.user_types && item.user_types.indexOf( user_type ) > -1 ) {
+    filtered.push( item );
+  } else if ( !item.user_types && defaults.indexOf( user_type ) > -1 ) {
+    filtered.push( item );
   }
-  // // return if it is in the default array
-  return defaults.indexOf( user_type ) > -1 ? item : false;
+  return filtered;
 }
 
 /**
@@ -199,7 +201,7 @@ const getMenu = ( user_type ) => {
   ];
 
   // filter the menu and return it
-  return menu.filter( item => filterItem( item, user_type, DEFAULT_USER_TYPES ) );
+  return menu.reduce( menuReducer( user_type, DEFAULT_USER_TYPES ), [] );
 } // end getMenu function
 
 // export getMenu by default
