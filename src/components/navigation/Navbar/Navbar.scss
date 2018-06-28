@@ -1,86 +1,75 @@
 /* Google Fonts */
 @import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700");
 // Variables
-$primary-color: #3e6dc4;
-$primary-color-dark: #335eac;
-$primary-color-hover: #2c539e;
+@import "../../../styles/colors";
 
 #mashpia-navbar{
   font-family: 'Poppins', sans-serif;
   background-color: $primary-color-dark;
   color: #fff;
-
+  // Logo section
   .navbar-brand {
     transition: all .3s;
-    img {
-      height: 46px;
-      transition: all .3s;
-    }
-    span {
-      margin-left: .5em;
-      font-size: 1.3em;
-      vertical-align: middle;
-      transition: all .3s;
+    // logo
+    img { height: 46px; transition: all .3s; }
+    // Menu text
+    span { margin-left: .5em; font-size: 1.3em; 
+      vertical-align: middle; transition: all .3s; }
+    // changes on mobile
+    @media( max-width: 1024px ){
+      &:hover { cursor: pointer; }
+      img { height: 26px; }
+      span { font-size: 1em; }
     }
   }
-
+  // Page title
   #navbar-title {
     font-size: 1.7em;
+    @media( max-width: 1024px ){ font-size: 1.2em; }
+    @media( max-width: 680px ) { display: none; }
   }
-
+  // Account selector
   ul#navbar-menu {
-    margin: 0px;
-    a {
-      color: #fff;
-      display: inline-block;
-      transition: .3s;
-      
-      span {
-        vertical-align: middle;
-      }
-
-      &:hover {
-        cursor: pointer;
+    margin: 0px; // clear margins
+    // dropdown item
+    a#nav-login {
+      max-width: 200px; padding-right: 20px; display: inline-block;
+      overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+      color: #fff; transition: .3s; padding-right: 20px;
+      &:hover { cursor: pointer; }
+      // caret
+      &::before {
+        display: block; position: absolute; right: 4px; top: 10px;
+        font-family: Font Awesome\ 5 Free; font-weight: 900; 
+        font-style: normal; font-variant: normal;
+        content: "\f0d7"; transition: transform .25s;
+        -moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; 
+        text-rendering: auto;
       }
     }
+    // flip the caret when the dropdown is shown
+    .dropdown.show a#nav-login::before{ transform: rotate(180deg); }
+    // make the dropdown always stay the same size 
+    .dropdown-menu { min-width: 300px; padding: 0px; }
+    // center the text 
+    span { vertical-align: middle; }
+    // limit the height of images on the navbar
     img {
-      display: inline-block;
-      width: 25px;
-      margin-right: 5px;
+      display: inline-block; height: 25px; margin-right: 5px;
     }
-    button {
+
+    .dropdown-item.active, .dropdown-item:active {
+      background: $primary-color;
+    }
+
+    .dropdown-item {
       overflow: hidden;
       text-overflow: ellipsis;
       padding: .75rem 1.5rem;
       &:hover { cursor: pointer; }
       > img {
-        width: 35px;
+        height: 35px; margin-right: 10px;
       }
     }
-  }
-}
-
-@media( max-width: 1024px ){
-  #mashpia-navbar {
-    .navbar-brand {
-      &:hover {
-        cursor: pointer;
-      }
-      img {
-        height: 26px;
-      }
-      span {
-        font-size: 1em;
-      }
-    }
-    #navbar-title {
-      font-size: 1.2em;
-    }
-  }
-}
-
-@media( max-width: 680px ) {
-  #navbar-title {
-    display: none;
   }
 }

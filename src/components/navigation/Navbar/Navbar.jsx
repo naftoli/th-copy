@@ -23,29 +23,17 @@ class Navbar extends Component {
 
   render(){
     const { title, current_login, logins } = this.props;
-    console.log( logins.length );
-    let dropdown = 
-      <a>
-        <img id="profile-picture" src={ current_login.img || user } alt="profile_picture"/>
-        <span>{ current_login.name || `My Accounts` }</span>
-      </a>;
-    if ( logins.length > 1 ) {
-      dropdown =
-        <UncontrolledDropdown>
-          <DropdownToggle nav caret>
-            <img id="profile-picture" src={ current_login.img || user } alt="profile_picture"/>
-            <span>{ current_login.name || `My Accounts` }</span>
-          </DropdownToggle>
-          <DropdownMenu right>
-          { logins.map( ( login, index ) => (
-            <DropdownItem key={ index } onClick={ this.onLoginChange( login.type, login.id ) }>
-              <img src={ LEGACY_URL + login.img } alt="profile_picture"/>
-              <span>{ login.name }</span>
-            </DropdownItem>
-          )) }
-          </DropdownMenu>
-        </UncontrolledDropdown>;
-    }
+    // only render the dropdown if there are options
+    const loginItems = logins.map( ( login, index ) => {
+      const active = login.type === current_login.type &&  login.id === current_login.id;
+      return (
+        <DropdownItem key={ index } onClick={ this.onLoginChange( login.type, login.id ) }
+          className={ active ? 'active' : ''}>
+          <img src={ LEGACY_URL + login.img } alt="profile_picture"/>
+          <span>{ login.name }</span>
+        </DropdownItem>
+      );
+    });
     
     return (
       <BoostrapNavbar id="mashpia-navbar">
@@ -55,7 +43,21 @@ class Navbar extends Component {
         </NavbarBrand>
         <div id="navbar-title" className="mx-auto">{ title }</div>
         <Nav id="navbar-menu" navbar>
-          { dropdown }
+          <UncontrolledDropdown>
+            <DropdownToggle nav id='nav-login'>
+              <img id="profile-picture" src={ LEGACY_URL + current_login.img || user } alt="profile_picture"/>
+              <span>{ current_login.name || `My Accounts` }</span>
+            </DropdownToggle>
+            <DropdownMenu right>
+              <DropdownItem header>Logins</DropdownItem>
+              { loginItems }
+              <DropdownItem divider />
+              <DropdownItem href={`${LEGACY_URL}/admin_profile.php`}>
+                <img id="profile-picture" src={ user } alt="profile_picture"/>
+                <span>My Account</span>
+              </DropdownItem>
+            </DropdownMenu>
+          </UncontrolledDropdown>
         </Nav>
       </BoostrapNavbar>
     )
