@@ -27,6 +27,12 @@ export class AllUsers extends Component {
     this.props.getSoldiers();
   }
 
+  componentDidUpdate( prevProps ) {
+    if ( prevProps.soldiers.length > 0 && this.props.soldiers.length === 0 ) {
+      this.props.getSoldiers();
+    }
+  }
+
   closeModal = () => {
     this.setState( { showModal: false })
   }
@@ -46,9 +52,9 @@ export class AllUsers extends Component {
   }
 
   render() {
-    const { current_user, soldiers } = this.props;
+    const { current_user, soldiers, loading } = this.props;
     const { showModal, modalSrc } = this.state;
-  
+
     const columns = [{
       Header: 'Profile',  accessor: 'profilePicture',
       Cell: props => <ProfilePicture src={`${LEGACY_URL}${props.value}`} className='inline-profile' 
@@ -80,7 +86,7 @@ export class AllUsers extends Component {
     return (
       <div id="all-users">
         <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight" 
-          style={{ maxHeight: "89vh" }}/>,
+          style={{ maxHeight: "89vh" }} noDataText={ loading ? 'Loading...' : 'No Data' }/>,
         <CropperModal isOpen={ showModal } src={ modalSrc } toggle={ this.closeModal } uploadImage={ this.updatePicture }/>
       </div>
     );
