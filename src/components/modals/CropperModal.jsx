@@ -45,7 +45,7 @@ class CropperModal extends Component {
   uploadImage = () => {
     if ( !this.cropper ) return false;
 
-    this.cropper.getCroppedCanvas({ maxWidth: 500, maxHeight: 500 }).toBlob( blob => {
+    this.cropper.getCroppedCanvas({ width: 500, height: 500 }).toBlob( blob => {
       const formData = new FormData();
       formData.append( 'profile', blob, this.state.name );
       // API must be called with 'application/x-www-form-urlencoded; charset=utf-8' for img to post
