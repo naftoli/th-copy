@@ -44,8 +44,8 @@ Array [
         "label": "Soldiers",
       },
       Object {
-        "label": "Plattons",
-        "path": "/plattons",
+        "label": "Platoons",
+        "path": "/platoons",
       },
       Object {
         "label": "Parents",
@@ -466,8 +466,8 @@ Array [
         "label": "Soldiers",
       },
       Object {
-        "label": "Plattons",
-        "path": "/plattons",
+        "label": "Platoons",
+        "path": "/platoons",
       },
       Object {
         "label": "Parents",
