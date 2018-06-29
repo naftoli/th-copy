@@ -81,6 +81,8 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         // not HQ
         $auth_types = $this->getAuthTypes();
         if ( in_array( 'school', $auth_types ) ) return 'BC';
+        if ( in_array( 'class', $auth_types ) ) return 'TEACHER';
+        if ( in_array( 'class', $auth_types ) ) return 'PARENT';
     }
 
     /**
@@ -99,16 +101,6 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     }
 
     //********************************** PAYMENTS **********************************/
-    /**
-     * customerProfile
-     * 
-     * Attmpts to return customer profile from API, if not found returns false
-     * If optional $payment_profile array provided it will attempt to create a payment profile and return it.
-     *  If it encounters an error while preforming creation it will return the array from the API
-     *
-     * @param array $payment_profile
-     * @return CustomerProfile/boolean/array
-     */
     public function customerProfile(){
         if ( $this->authorize_customer_profile_id && !$this->customer_profile ) {
             $this->customer_profile = new classes\authorize\CustomerProfile(
@@ -117,7 +109,6 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         }
         return $this->customer_profile;
     }
-
     public function createPaymentProfile( $payment_info ) { 
         // if we do not have a customer profile
         if ( !$this->customerProfile() instanceof classes\authorize\CustomerProfile ) {
