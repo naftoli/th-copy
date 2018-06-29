@@ -59,7 +59,7 @@ const getMenu = ( user_type ) => {
             { label: "Update Medals", legacy: true, path: '/add_medals.php' },
           ]
         },
-        { label: "Plattons", path: '/plattons' },
+        { label: "Platoons", path: '/platoons' },
         { label: "Parents", path: '/parents' },
         { label: "Staff", path: '/staff' },
         {

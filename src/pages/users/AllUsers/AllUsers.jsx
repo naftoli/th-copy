@@ -75,12 +75,15 @@ export class AllUsers extends Component {
       id: 'dob',  Header: 'Date Of Birth',
       accessor: user => user.dob ? new Date( user.dob ).toLocaleDateString() : '-',
     },{
-      id: 'platton', // Required because our accessor is not a string
-      Header: 'Platton',
-      accessor: user => user.platton.name
+      id: 'registered',  Header: 'Registered',
+      accessor: user => user.user_registered ? "Yes" : 'No',
+    },{
+      id: 'platoon',
+      Header: 'Platoon',
+      accessor: user => user.platoon.name
     }];
 
-    if ( current_login.code !== 'BC' ) {
+    if ( current_login.code === 'HQ' ) {
       columns.push( { id: 'base', Header: 'Base', accessor: user => user.school.school_name } );
     }
 
@@ -88,7 +91,7 @@ export class AllUsers extends Component {
       <div id="all-users">
         <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight"
           style={{ maxHeight: "89vh" }} noDataText={ loading ? 'Loading...' : 'No Data' } 
-          onPageChange={ this.scrollToTop } onFilteredChange={ this.scrollToTop }/>,
+          onPageChange={ this.scrollToTop } onFilteredChange={ this.scrollToTop } />,
         <CropperModal isOpen={ showModal } src={ modalSrc } toggle={ this.closeModal } uploadImage={ this.updatePicture }/>
       </div>
     );
