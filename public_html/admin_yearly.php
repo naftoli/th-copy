@@ -74,7 +74,7 @@ elseif(gr('tanya_year')) {
 
 			<FORM action="admin_yearly.php" method="post" accept-charset="UTF-8">
 				<P>
-					<? $result = mq('SELECT school_name, school_id FROM schools ORDER BY school_name'); ?>
+					<? $result = mq('SELECT school_name, school_id FROM schools where chayolei = 1 ORDER BY school_name'); ?>
 					<? while($row = mysql_fetch_assoc($result)): ?>
 						<LABEL><INPUT type="checkbox" name="school_id[]" value="<?=$row['school_id']?>"> <?=es($row['school_name'])?></LABEL><BR>
 					<? endwhile; ?>
