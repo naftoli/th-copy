@@ -3,8 +3,8 @@ ini_set('display_errors',1);
 $admin_auth = array(); 
 require('header.php');
 require 'class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
-$year--;
+$regYear = GlobalSettings::getRegistrationYear();
+$year = $regYear - 1;
 
 //$date = cal_from_jd(unixtojd(), CAL_JEWISH);
 $schools = implode(',', array_merge(array(-1), array_filter(gra('school_id'), 'is_numeric')));
@@ -33,14 +33,29 @@ elseif (gr('school_era')) {
 				
 	$message = sprintf(T_('%d schools marked as year %d.'), mysql_affected_rows(), $year);
 } 
-elseif (gr('user_registered')) {	
+elseif (gr('user_registered')) {
 	mq("UPDATE users SET 	user_registered = NULL, 
 							user_registration_fee = NULL, 
 							add_on_one = 0,
 							add_on_two = 0
 							WHERE school_id IN ($schools)");
+	$num = mysql_affected_rows();
+
+	// register pre-registered students
+	$sqlUsers = "select user_id, reg_date, paid from user_registration  
+				where year = " . $regYear . " 
+				and school_id in ($schools)";
+	$resultUsers = mq($sqlUsers);
+	while ($rowUser = mysql_fetch_assoc($resultUsers)) {
+		$sql = "update users 
+				set user_registered = '" . $rowUser['reg_date'] . "', 
+				user_registration_fee = " . $rowUser['paid'] . ", 
+				where user_id = " . $rowUser['user_id'];
+		mq( $sql );
+		$num--;
+	}
 							
-	$message = sprintf(T_('%d users de-registered.'), mysql_affected_rows());
+	$message = sprintf(T_('%d users de-registered.'), $num);
 } 
 elseif(gr('user_tracks')) {
 	// mq("UPDATE user_tracks JOIN users USING (user_id) SET enrolled = 0 WHERE school_id IN ($schools)");
