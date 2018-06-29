@@ -77,7 +77,7 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
     
     // Return 401 Unauthorized if we cannot login user
     if ( !$current_user ){
-        json_error( "EH1: Invalid Credentials", $_COOKIE, 401 );
+        json_error( "Invalid Credentials", false, 401 );
     }
 
     // get the current login

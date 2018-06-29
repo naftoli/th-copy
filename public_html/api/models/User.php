@@ -9,7 +9,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
 
     // relationships
     static $belongs_to = [
-        [ 'school' ], [ 'platton', 'foreign_key' => 'class_id' ]
+        [ 'school' ], [ 'platoon', 'foreign_key' => 'class_id' ]
     ];
     
     // ******************************* HELPER FUNCTIONS *******************************

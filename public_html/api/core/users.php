@@ -34,7 +34,7 @@ class UsersRouter {
         // fetch all results and parse them as models
         while( $row = $query->fetch() ){
             $profilePicture = ( new User(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
-            $platton = ( new Platton(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
+            $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
             // use the BuildModel trait to create instances from 
             $users[] = [
                 'user_id' => $row['user_id'], 'user_serial' => $row['user_serial'], 'first' => $row['first'], 
@@ -42,7 +42,7 @@ class UsersRouter {
                 'chayolei' => $row['chayolei'], 'yan' => $row['yan'], 'chidon' => $row['chidon'], 'mobile_pic' => $row['mobile_pic'],
                 'school' => [ 'school_id' => $row['school_id'], 'school_name' => $row['school_name'], 
                     'shipping_city' => $row['shipping_city'], 'school_era' => $row['school_era'] ],
-                'profilePicture' => $profilePicture, 'platton' => [ 'name' => $platton ]
+                'profilePicture' => $profilePicture, 'platoon' => [ 'name' => $platoon ]
             ];
             $user = null;
         }
