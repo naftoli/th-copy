@@ -10,18 +10,18 @@ $year--;
 $schools = implode(',', array_merge(array(-1), array_filter(gra('school_id'), 'is_numeric')));
 
 if (gr('class_era')) {
-	mq("UPDATE classes SET class_era = " . $year . " WHERE class_era = 0 AND school_id IN ($schools)");
+	// mq("UPDATE classes SET class_era = " . $year . " WHERE class_era = 0 AND school_id IN ($schools)");
 	
-	// automatically create new classes based on last years classes
-	require_once 'class.gradeCreation.php';
-	$g = new GradeCreation( $schools );
-	$msg = '';
-	if (!$g->createGrades()) {
-		$msg = "Error creating new classes for new year.";
-	}
+	// // automatically create new classes based on last years classes
+	// require_once 'class.gradeCreation.php';
+	// $g = new GradeCreation( $schools );
+	// $msg = '';
+	// if (!$g->createGrades()) {
+	// 	$msg = "Error creating new classes for new year.";
+	// }
 	
-	$message = sprintf(T_('%d classes marked as year %d.'), mysql_affected_rows(), $year);
-	if ($msg) $message .= "<br />" . $msg;
+	// $message = sprintf(T_('%d classes marked as year %d.'), mysql_affected_rows(), $year);
+	// if ($msg) $message .= "<br />" . $msg;
 }  
 elseif (gr('school_era')) {
 	mq("UPDATE schools SET 
@@ -43,13 +43,13 @@ elseif (gr('user_registered')) {
 	$message = sprintf(T_('%d users de-registered.'), mysql_affected_rows());
 } 
 elseif(gr('user_tracks')) {
-	mq("UPDATE user_tracks JOIN users USING (user_id) SET enrolled = 0 WHERE school_id IN ($schools)");
-	$message = sprintf(T_('%d user-subjects un-enrolled'), mysql_affected_rows());
-	mq('DELETE FROM user_tracks WHERE track_id IS NULL AND level IS NULL AND enrolled = 0');
+	// mq("UPDATE user_tracks JOIN users USING (user_id) SET enrolled = 0 WHERE school_id IN ($schools)");
+	// $message = sprintf(T_('%d user-subjects un-enrolled'), mysql_affected_rows());
+	// mq('DELETE FROM user_tracks WHERE track_id IS NULL AND level IS NULL AND enrolled = 0');
 } 
 elseif(gr('tanya_year')) {
-	mq("UPDATE tanya_users JOIN users USING (user_id) SET year = year + 1 WHERE school_id IN ($schools) AND year < 8 AND lines_done - lines_offset > 0");
-	$message = sprintf(T_('%d tanya years changed'), mysql_affected_rows());
+	// mq("UPDATE tanya_users JOIN users USING (user_id) SET year = year + 1 WHERE school_id IN ($schools) AND year < 8 AND lines_done - lines_offset > 0");
+	// $message = sprintf(T_('%d tanya years changed'), mysql_affected_rows());
 }
 ?>
 
@@ -81,8 +81,8 @@ elseif(gr('tanya_year')) {
 					
 					<P><?=T_('For the selected school')?>:<BR>
 					
-					<INPUT type="submit" name="class_era" value="Mark classes as last year">
-					<BR> - <?=T_('Or')?> - <BR>
+					<!-- <INPUT type="submit" name="class_era" value="Mark classes as last year">
+					<BR> - <?=T_('Or')?> - <BR> -->
 					<INPUT type="submit" name="school_era" value="Mark the school as last year">
 					<BR> - <?=T_('Or')?> - <BR>
 					<INPUT type="submit" name="user_registered" value="Un-register students">
