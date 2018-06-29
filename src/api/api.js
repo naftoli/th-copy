@@ -15,8 +15,8 @@ const headers = ( content_type = defaultContentType ) => {
   let headers = {
     'Accept': 'application/json',
     'Authorization': `Legacy ${cookies.get('admin_id')}-${cookies.get('admin_auth')}`,
-    'login': `${cookies.get('login')}`
   }
+  if ( cookies.get('login') ) headers['login'] = cookies.get('login');
   if ( content_type ) headers['Content-Type'] = content_type;
   return headers;
 }

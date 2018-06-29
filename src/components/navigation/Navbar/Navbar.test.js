@@ -1,5 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import { Nav } from 'reactstrap';
 import Navbar from './Navbar';
 import indexNavbar from './index';
 
@@ -39,8 +40,8 @@ describe("Navbar", () => {
       expect( navbar().find('div#navbar-title').length ).toBe( 1 );
     })
 
-    it('a div with the id of #navbar-menu', () => {
-      expect( navbar().find('div#navbar-menu').length ).toBe( 1 );
+    it('a Nav', () => {
+      expect( navbar().find( Nav ).length ).toBe( 1 );
     })
 
   })

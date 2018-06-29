@@ -27,19 +27,5 @@ describe(`operations`, () => {
       expect( fetchMock.lastUrl() ).toBe( `${API_URL}/auth/login.php` );
     });
 
-    it(`calls dispatch 4 times on a successfull login`, () => {
-      fetchMock.post('*', { success: true, data: { legacy: 'legacy', mobile: 'mobile' } } );
-      return operations.login( 'test', 'test' )( dispatchMock ).then( () => {
-        expect( dispatchMock ).toHaveBeenCalledTimes( 4 );
-      });
-    });
-
-    it(`calls dispatch 3 times on a un-successfull login`, () => {
-      fetchMock.post('*', { success: false } );
-      return operations.login( 'test', 'test' )( dispatchMock ).then( () => {
-        expect( dispatchMock ).toHaveBeenCalledTimes( 3 );
-      });
-    });
-
   });
 })

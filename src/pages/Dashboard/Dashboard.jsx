@@ -10,7 +10,9 @@ import './Dashboard.scss';
 export class Dashboard extends Component {
 
   static defaultProps = {
-    history: { listen: () => { return () => {} } } // function that returns a function
+    history: { listen: () => { return () => {} } }, // function that returns a function
+    current_login: {},
+    current_user: {}
   }
 
   constructor( props ){

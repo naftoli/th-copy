@@ -1,7 +1,10 @@
 import API, { API_URL, headers, parseResponse } from './api';
 import fetchMock from 'fetch-mock';
+import Cookies from 'universal-cookie';
 // allow routes to be overridden
 fetchMock.config.overwriteRoutes = true;
+// test
+const cookies = new Cookies();
 
 describe('headers', () => {
 
@@ -19,9 +22,11 @@ describe('headers', () => {
     expect( headers()['Content-Type'] ).toBe('application/json; charset=utf-8');
   });
 
-  it('has a key \'mobile\' set to \'false\'', () => {
-    expect( headers()['mobile'] ).toBeDefined();
-    expect( headers()['mobile'] ).toBe('false');
+  it(`has a key 'login' set to 'cookies.get('login')'`, () => {
+    cookies.set( 'login', 'abcd' );
+    expect( headers()['login'] ).toBeDefined();
+    expect( headers()['login'] ).toBe(cookies.get('login'));
+    cookies.remove( 'login' );
   });
 });
 
