@@ -506,16 +506,21 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 <div class="updates">
 	<h2>Tzivos Hashem Updates</h2>
 	
-	<?
-	$qry = "select count(user_id) as total from users where school_id = $school_id and user_registered > 0";
+	<?php
+	$qry = "select count(user_id) as total from users where school_id = $school_id and user_registered > 0 and chayolei = 1";
 	$resultQ = mysql_query($qry);
 	$rowQ = mysql_fetch_assoc($resultQ);
 	$registered = $rowQ['total'];
 	
-	$qry2 = "select count(user_id) as total from users where school_id = $school_id and user_registered is null";
+	$qry2 = "select count(user_id) as total from users where school_id = $school_id and user_registered is null and chayolei = 1";
 	$resultQ2 = mysql_query($qry2);
 	$rowQ2 = mysql_fetch_assoc($resultQ2);
 	$notRegistered = $rowQ2['total'];
+
+	$qry3 = "select count(user_id) as total from users where school_id = $school_id and chidon = 1";
+	$resultQ3 = mysql_query($qry3);
+	$rowQ3 = mysql_fetch_assoc($resultQ3);
+	$chidon = $rowQ3['total'];
 	
 	require_once 'class.globalSettings.php';
 	$year = GlobalSettings::getRegistrationYear();
@@ -524,7 +529,8 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 		<div class="inner">
 			<h3>Registration <?=$year?></h3>
 			<p>
-				You have <?=$registered?> chayolim registered in the program.<br />
+				You have <?=$chidon?> children that are only in the chidon program.<br />
+				You have <?=$registered?> chayolim registered in the chayolei program.<br />
 				<? if ($notRegistered > 0) : ?>
 				<span style="color: red; font-weight: bold;">
 					You still have <?=$notRegistered?> chayolim that are not yet registered!<br />
@@ -616,6 +622,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 
 	<? //if (false) : ?>
 	<? //if (isset($_COOKIE['naftoli'])) : ?>
+	<!--
 	<div>
 		<img src="homeIcons/Present.gif" />
 		<div class="inner">
@@ -647,8 +654,10 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 				Click <a href="order_form.php">here</a> to order posters.
 			</p>
 			-->
+			<!--
 		</div>
 	</div>
+	-->
 	<? //endif; ?>
 	
 	<!--
@@ -808,7 +817,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 		</div>
 	</div>
 	-->
-	<div>
+	<!-- <div>
     	<img src="homeIcons/Commander Meeting.gif" />
 	    <div class="inner">
 	    	<h3>Iyar Meeting</h3>
@@ -816,7 +825,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 			<li>Click <a href="https://docs.google.com/document/d/16qs4MYpHFzoVhHnY-vYR1Eg-iU1cu4uRzLdfbIGuwTE/edit?usp=sharing">here</a> for Iyar Notes</li>
 			<li>Click <a href="https://drive.google.com/drive/folders/0B0VZvvLwWxVhQ1pIMVJhc2t4Nkk?usp=sharing">here</a> for the Base Commander Manuals</li>
 		</div>
-	</div>
+	</div> -->
 	<!--
 	<div>
 		<div class="inner">
