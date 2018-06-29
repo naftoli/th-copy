@@ -1,7 +1,7 @@
 @import "./colors";
 
 // Buttons should use the primary color
-button.btn-primary {
+.btn-primary {
   background-color: $primary-color;
   border-color: $primary-color-dark;
   &:hover, &:focus, &:active { 
