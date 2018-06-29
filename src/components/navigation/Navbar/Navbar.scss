@@ -33,9 +33,9 @@
     margin: 0px; // clear margins
     // dropdown item
     a#nav-login {
-      max-width: 200px; padding-right: 20px; display: inline-block;
+      width: 200px; padding-right: 20px; display: inline-block;
       overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-      color: #fff; transition: .3s; padding-right: 20px;
+      color: #fff; transition: .3s; padding-right: 20px; text-align: right;
       &:hover { cursor: pointer; }
       // caret
       &::before {
@@ -63,12 +63,17 @@
     }
 
     .dropdown-item {
-      overflow: hidden;
-      text-overflow: ellipsis;
+      // allow multi-line text after the image
+      display: flex; align-items: center; white-space: initial; 
       padding: .75rem 1.5rem;
       &:hover { cursor: pointer; }
+      // the image for the login
       > img {
         height: 35px; margin-right: 10px;
+      }
+      // show ... if text overflows in the div.
+      > span {
+        overflow: hidden; text-overflow: ellipsis;
       }
     }
   }
