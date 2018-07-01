@@ -71,6 +71,12 @@ export class AllUsers extends Component {
     arrayToCSV( headers, rows, 'users' );
     toast.update( toast_id, {render: 'File Generated.'} );
   }
+  
+  // filter for case insensitivity and for any location in the string
+  filter = ( filter, row ) => {
+    const id = filter.pivotId || filter.id;
+    return row[id] !== undefined ? String(row[id]).toLowerCase().includes(filter.value.toLowerCase()) : true
+  }
 
   // render the page
   render() {
@@ -97,7 +103,30 @@ export class AllUsers extends Component {
       accessor: user => user.dob ? new Date( user.dob ).toLocaleDateString() : '-',
     },{
       id: 'registered',  Header: 'Registered',
-      accessor: user => user.user_registered ? "Yes" : 'No',
+      accessor: user => user.user_registered ? new Date( user.user_registered ).toLocaleString() : null,
+      filterMethod: ( filter, row ) => {
+        if ( filter.value === 'all' ) return true;
+        if ( filter.value === 'yes') return !!row[filter.id];
+        if ( filter.value === 'no') return !row[filter.id];
+      },
+      Filter: ({ filter, onChange }) =>
+        <select
+          onChange={event => onChange(event.target.value)}
+          style={{ width: "100%" }}
+          value={filter ? filter.value : "all"}
+        >
+          <option value="all">Show All</option>
+          <option value="yes">Registered</option>
+          <option value="no">Not Registered</option>
+        </select>,
+      sortMethod: ( a, b, desc ) => {
+        a = a === null || a === undefined ? '' : a;
+        b = b === null || b === undefined ? '' : b;
+        a = new Date( a ); b = new Date( b );
+        if (a > b) return 1;
+        if (a < b) return -1;
+        return 0;
+      }
     },{
       id: 'platoon',
       Header: 'Platoon',
@@ -118,13 +147,16 @@ export class AllUsers extends Component {
           <Link to={`/users/new`} className="btn btn-primary" role="button">
            <i className="fas fa-plus" /> Add Soldier
           </Link>
+          <Button color="primary">
+            <i className="fas fa-file-upload" /> Upload Soldier List
+          </Button>
           <Button color="primary" onClick={ this.toCSV }>
             <i className="fas fa-file-download" /> Save Soldier List
           </Button>
         </ButtonGroup>
-        <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight"
-          style={{ maxHeight: "85vh" }} noDataText={ loading ? 'Loading...' : 'No Data' } 
-          onPageChange={ this.scrollToTop } onFilteredChange={ this.scrollToTop } />,
+        <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight" 
+          noDataText={ loading ? 'Loading...' : 'No Data' } defaultFilterMethod={ this.filter }
+          onPageChange={ this.scrollToTop } onFilteredChange={ this.scrollToTop }/>
         <CropperModal isOpen={ showModal } src={ modalSrc } toggle={ this.closeModal } uploadImage={ this.updatePicture }/>
       </div>
     );
