@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { LEGACY_URL } from 'components/constants';
+import { LEGACY_URL, DEFAULT_PROFILE } from 'components/constants';
 // components
 import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
@@ -38,11 +38,9 @@ export class AllUsers extends Component {
 
   // handler for pressing the picture
   editPicture = ( id ) => ( event ) => {
-    const default_picture = '/mobile/reg/images/profile-photo-default.jpg';
     this.setState({
-      showModal: true,
-      modalSrc: event.target.src.indexOf( default_picture ) >= 0 ? false : event.target.src,
-      modalId: id
+      showModal: true, modalId: id,
+      modalSrc: event.target.src.indexOf( DEFAULT_PROFILE ) >= 0 ? false : event.target.src      
     });
   }
 
@@ -87,7 +85,19 @@ export class AllUsers extends Component {
       Header: 'Profile',  accessor: 'profilePicture',
       Cell: props => <ProfilePicture src={`${LEGACY_URL}${props.value}`} className='inline-profile' 
                         onClick={ this.editPicture( props.original.user_id ) }/>,
-      className: 'profile-picture', width: 85, filterable: false,
+      className: 'profile-picture', width: 85, sortable: false,
+      Filter: ({ filter, onChange }) =>
+        <select style={{ width: "100%" }} value={filter ? filter.value : "all"}
+          onChange={event => onChange(event.target.value)}>
+          <option value="all">Show All</option>
+          <option value="yes">Has Profile</option>
+          <option value="no">No Profile</option>
+        </select>,
+      filterMethod: ( filter, row ) => {
+        if ( filter.value === 'all' ) return true;
+        if ( filter.value === 'yes') return row[filter.id] !== DEFAULT_PROFILE;
+        if ( filter.value === 'no') return row[filter.id] === DEFAULT_PROFILE;
+      },
     },{
       Header: "First Name", accessor: 'first',
       Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
@@ -110,11 +120,8 @@ export class AllUsers extends Component {
         if ( filter.value === 'no') return !row[filter.id];
       },
       Filter: ({ filter, onChange }) =>
-        <select
-          onChange={event => onChange(event.target.value)}
-          style={{ width: "100%" }}
-          value={filter ? filter.value : "all"}
-        >
+        <select style={{ width: "100%" }} value={filter ? filter.value : "all"}
+          onChange={event => onChange(event.target.value)}>
           <option value="all">Show All</option>
           <option value="yes">Registered</option>
           <option value="no">Not Registered</option>

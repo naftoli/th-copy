@@ -7,3 +7,4 @@
 
 // url to use when navigating to older pages
 export const LEGACY_URL = process.env.NODE_ENV === "production" ? "" : "//mashpia.local";
+export const DEFAULT_PROFILE = '/mobile/reg/images/profile-photo-default.jpg';
