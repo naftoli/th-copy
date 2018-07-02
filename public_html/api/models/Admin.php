@@ -18,20 +18,9 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     static $alias_attribute = [ 'email' => 'admin_email' ];
     // internalCaches
     private $customer_profile;
-    
-    // SERIALIZERS
-    public function jsonSerialize() {
-        return $this->to_array([
-            'only' => [
-                "admin_id", "username", "title", "first", "last", "lang", 
-                "father", "mother", "father_pic", "mother_pic",
-                "home_phone", "cell_phone", "admin_email"
-            ],
-            'methods' => [ 'authCode' ]
-        ]);
-    }
+    public $login = false;
 
-    // AUTH FUNCTIONS
+    //******************************* AUTH *******************************/
     /**
      * getAuthTypes
      * 
@@ -63,11 +52,6 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         return $auth_ids;
     }
 
-    // are we HQ?
-    public function isHQ() {
-        return $this->auth === 'super';
-    }
-
     /**
      * authCode
      * 
@@ -81,8 +65,44 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         // not HQ
         $auth_types = $this->getAuthTypes();
         if ( in_array( 'school', $auth_types ) ) return 'BC';
-        if ( in_array( 'class', $auth_types ) ) return 'TEACHER';
-        if ( in_array( 'class', $auth_types ) ) return 'PARENT';
+    }
+
+    //******************************* LOGIN *******************************/
+    // get all logins
+    public function logins(){
+        $logins = [];
+        // Special HQ login
+        if ( $this->isHQ() ) $logins[] = [
+            'type' => 'HQ', 'id' => $this->admin_id, 'name' => 'Tzivos Hashem Headquarters', 
+            'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 'code' => 'HQ'
+        ];
+        // add all the schools
+        foreach( $this->getAuthIds( 'school' ) as $school_id ){
+            $school = School::find( $school_id );
+            $logins[] = [ 'type' => 'school', 'id' => $school_id, 'code' => 'BC',
+                'name' => $school->school_name, 'img' => $school->logoPath()
+            ];
+        };
+        if ( count( $this->getAuthIds( 'user') ) > 0  ) {
+            $logins[] = [ 'type' => 'user', 'id' => $this->admin_id, 'code' => 'PARENT',
+                'name' => 'My Parent Portal', 'img' => '/mobile/img_new/TH Logo-colorful-svg.svg'
+            ];
+        }
+        return $logins;
+    }
+    // set the current login
+    public function setLogin( $type = false, $id = false ){
+        $logins = $this->logins();
+        if ( !$type || !$id ) return $this->login = $logins[0]; // default to the first login
+        foreach( $logins as $login ) {
+            if ( $login['id'] == $id && $login['type'] == $type ) return $this->login = $login;
+        }
+        return $this->login = $logins[0];
+    }
+
+    // are we HQ?
+    public function isHQ() {
+        return $this->auth === 'super';
     }
 
     /**
@@ -93,14 +113,22 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      * @return int
      */
     public function shippingZone(){
-        if ( $this->admin_country == '' || $this->admin_country == 'USA' )
-            return 1;
-        else if ( $this->admin_country == 'Canada' )
-            return 2;
+        if ( $this->admin_country == '' || $this->admin_country == 'USA' ) return 1;
+        else if ( $this->admin_country == 'Canada' ) return 2;
         return 3;
     }
 
     //********************************** PAYMENTS **********************************/
+    /**
+     * customerProfile
+     * 
+     * Attmpts to return customer profile from API, if not found returns false
+     * If optional $payment_profile array provided it will attempt to create a payment profile and return it.
+     *  If it encounters an error while preforming creation it will return the array from the API
+     *
+     * @param array $payment_profile
+     * @return CustomerProfile/boolean/array
+     */
     public function customerProfile(){
         if ( $this->authorize_customer_profile_id && !$this->customer_profile ) {
             $this->customer_profile = new classes\authorize\CustomerProfile(
@@ -160,5 +188,17 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         return create_admin( $this->to_array([
             'only' => ['first', 'last', 'admin_email', 'password' ]
         ]) );
+    }
+
+    // SERIALIZERS
+    public function jsonSerialize() {
+        return $this->to_array([
+            'only' => [
+                "admin_id", "username", "title", "first", "last", "lang", 
+                "father", "mother", "father_pic", "mother_pic",
+                "home_phone", "cell_phone", "admin_email"
+            ],
+            'methods' => [ 'authCode' ]
+        ]);
     }
 }

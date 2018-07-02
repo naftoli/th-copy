@@ -14,18 +14,19 @@ class UsersRouter {
         // filters and params for the filters
         $filters = [];   $params = [];
         // limit based on admin type
-        if ( $current_user->isHQ() ) {
+        $login = $current_user->login;
+        if ( $login['code'] === 'HQ' ) {
             $filters[] = 'schools.test_school = 0';
-        } else if ( $current_user->authCode() === 'CKIDS-ADMIN' ) {
+        } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
             $filters[] = 'schools.ckids = 1';
-        } else if ( $current_user->authCode() === 'BC' ) {
+        } else if ( $login['code'] === 'BC' ) {
             $filters[] = 'users.school_id = ?';
-            $params[] = $current_user->getAuthIds('school')[0];
+            $params[] = $login['id'];
         }
         // combine the filters
         $filters = count( $filters ) > 0 ? 'WHERE ' . implode( ' AND ', $filters ) : '';
         // generate the SQL
-        $sql = "SELECT * FROM users JOIN schools USING ( school_id ) JOIN classes USING ( class_id ) $filters ORDER BY school_name, class_grade, class_sub";
+        $sql = "SELECT * FROM users JOIN schools USING ( school_id ) LEFT JOIN classes USING ( class_id ) $filters ORDER BY school_name, class_grade, class_sub, last, first";
         $query = $pdo->prepare( $sql );
         $query->execute( $params );
 
@@ -33,7 +34,7 @@ class UsersRouter {
         // fetch all results and parse them as models
         while( $row = $query->fetch() ){
             $profilePicture = ( new User(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
-            $platton = ( new Platton(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
+            $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
             // use the BuildModel trait to create instances from 
             $users[] = [
                 'user_id' => $row['user_id'], 'user_serial' => $row['user_serial'], 'first' => $row['first'], 
@@ -41,7 +42,7 @@ class UsersRouter {
                 'chayolei' => $row['chayolei'], 'yan' => $row['yan'], 'chidon' => $row['chidon'], 'mobile_pic' => $row['mobile_pic'],
                 'school' => [ 'school_id' => $row['school_id'], 'school_name' => $row['school_name'], 
                     'shipping_city' => $row['shipping_city'], 'school_era' => $row['school_era'] ],
-                'profilePicture' => $profilePicture, 'platton' => [ 'name' => $platton ]
+                'profilePicture' => $profilePicture, 'platoon' => [ 'name' => $platoon ]
             ];
             $user = null;
         }
@@ -50,7 +51,17 @@ class UsersRouter {
     }
 
     public function update( $id ) {
-        print_r( $_FILES['profile'] );
+        $user = User::find( $id );
+        // update the profile picture
+        if ( isset( $_FILES['profile'] ) ) {
+            $result = $user->setProfilePicture( $_FILES['profile'] );
+            if ( is_string( $result ) ) json_error( $result );
+            json_response([
+                'mobile_pic' => $user->mobile_pic,
+                'profilePicture' => $user->profilePicture()
+            ]);
+        }
+        // update everything else
     }
 }
 

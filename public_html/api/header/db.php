@@ -1,6 +1,8 @@
-<?php // import DBS details. Note that composer must be already imported
+<?php
 require_once( __DIR__ . "/../../../includes/globals.php");
+require_once( __DIR__ . "/../vendor/autoload.php" );
 
+$_GLOBALS['log'] = new SimpleLogger( __DIR__ . '/../simpleLogger.log' );
 $connections = [
     'mashpiadb' => "mysql://$global_db_user:$global_db_pass@$global_db_host/mashpiadb?charset=utf8"
 ];
@@ -35,9 +37,15 @@ if ( $development ) {
 }
 
 class SimpleLogger {
+    private $file_name;
+
+    public function __construct( $file_name = './mysql.log' ){
+        $this->file_name = $file_name;
+    }
+
     public function log( $msg ) {
         if ( is_array( $msg ) ) $msg = json_encode( $msg );
         $msg = date("F j, Y, g:i a") . "\t" . print_r( $msg, true ) . PHP_EOL;
-        file_put_contents( './mysql.log', $msg, FILE_APPEND );
+        file_put_contents( $this->file_name, $msg, FILE_APPEND );
     }
 }

@@ -9,7 +9,10 @@ if(!$row) {
 	echo "File not found.";
 } 
 else {
-	$disposition = gr('m') == 'd' ? 'attachment' : 'inline';
+    $disposition = gr('m') == 'd' ? 'attachment' : 'inline';
+    // allow for CORS requests of images
+    header('Access-Control-Allow-Origin: '. ( isset( $_SERVER['HTTP_ORIGIN'] ) ? $_SERVER['HTTP_ORIGIN'] : "*" ) ); // CORS
+    // set other headers that an image would have
 	header("Content-type: {$row['file_content_type']}");
 	header("Content-Disposition: $disposition; filename=\"{$row['file_name']}\"");
 	header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $row['file_last_mod']) . ' GMT');

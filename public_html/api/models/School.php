@@ -5,7 +5,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     use traits\BuildModel;
     
     // relationships
-    static $has_many = [ ['school_reg_infos'], [ 'plattons' ], [ 'users' ] ];
+    static $has_many = [ ['school_reg_infos'], [ 'platoons' ], [ 'users' ] ];
 
     // ******************************* GETTERS *******************************
     /**
@@ -26,6 +26,10 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         }
         // return the reg info
         return $reg_info;
+    }
+
+    public function logoPath(){
+        return "/schoolLogos/$this->logo";
     }
 
     // ******************************* SERIALIZERS *******************************
