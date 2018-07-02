@@ -207,7 +207,7 @@ class UserRegistrationRouter {
                 'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture' ],
                 'include' => [ 
                     'school' => [ 'only' => [ 'school_id', 'school_name' ] ],
-                    'platton' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]
+                    'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]
                 ]
             ]);
         }, $users );
