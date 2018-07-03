@@ -21,7 +21,7 @@ var registration_info = function(){
 
     function renderTable(){
         var html = '<table><tbody>';
-        html += '<tr><th>Base Name</th><th>Type</th><th>Fee</th><th>Balance</th><th>Soldier Fee</th><th>Deadline</th><th>Early Bird</th><th>Saved</th></tr>'
+        html += '<tr><th>Base Name</th><th>Type</th><th>Base Fee</th><th>Balance</th><th>Soldier Fee</th><th>Early Bird / Deadline</th><th>Saved</th></tr>'
         state.schools.forEach( function( school ) {
             var reg_info = school.reg_info;
             reg_info.school_registration_id = reg_info.school_registration_id || '';
@@ -33,7 +33,6 @@ var registration_info = function(){
             html += '<td>' + formatNumber(reg_info.fee, 'fee') + '</td>';
             html += '<td>' + formatNumber(reg_info.balance, 'balance') + '</td>';
             html += '<td>' + formatNumber(reg_info.child_fee, 'child_fee') + '</td>';
-            html += '<td>' + formatDate(reg_info.reg_deadline, 'reg_deadline', reg_info.type != 2) + '</td>';
             html += '<td>' + formatDate(reg_info.early_bird, 'early_bird') + '</td>';
 
             html += '<td class="saved">' + ( reg_info.default ? "No" : "Yes" ) + '</td>';
@@ -45,7 +44,7 @@ var registration_info = function(){
 
         html += '</tbody></table>';
         $("#report").html( html );
-        $("select[name='type']").change( toggleDeadline );
+        $("select[name='type']").change( toggleSaved );
         $("#report input").change( toggleSaved );
         $("#report .save-row").click( saveRow );
     }
@@ -72,13 +71,6 @@ var registration_info = function(){
         return html;
     }
 
-    function toggleDeadline( event ){
-        $(event.target).parent().parent().find(
-            'input[name="reg_deadline"]"'
-        )[0].disabled = event.target.value != '2';
-        $(event.target).parent().parent().find( 'td.saved' ).text("No");
-    }
-
     function toggleSaved( event ){
         $(event.target).parent().parent().find( 'td.saved' ).text("No");
     }
@@ -95,7 +87,6 @@ var registration_info = function(){
             type:   row.find( 'select[name="type"]' ).val(),
             fee:   row.find( 'input[name="fee"]' ).val(),
             balance:   row.find( 'input[name="balance"]' ).val(),
-            reg_deadline:   row.find( 'input[name="reg_deadline"]' ).val(),
             child_fee:   row.find( 'input[name="child_fee"]' ).val(),
             early_bird:   row.find( 'input[name="early_bird"]' ).val(),
         }
