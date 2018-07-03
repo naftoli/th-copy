@@ -10,7 +10,6 @@ $admin_id = $_SESSION['admin_id'];
 $school_id = $_SESSION['school_id'];
 $next_page = "false";
 
-// get the admin
 include("db.php");
 require_once( __DIR__ . '/api/header/db.php' ); // import ActiveRecord and PDO
 
@@ -51,7 +50,7 @@ if (isset($_POST['submit'])) {
 <html xmlns="http://www.w3.org/1999/xhtml" dir="<?=$dir?>">
 
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8;" />
 		<meta http-equiv="X-UA-Compatible" content="IE=8" />
 		<title>School Registration</title>
 		<link rel="alternate" media="print" href="index.php">
@@ -81,10 +80,12 @@ if (isset($_POST['submit'])) {
 				$(".reg_type").click( function() {
 					var val = $(this).val();
 					if (val == 3) {
-						$(".regAmount").text('50/55');
+						$(".regAmount").text('<?=$schoolInfo->getChildFee( true, 3 ) .'/'. $schoolInfo->getChildFee( true, 3, true )?>');
+					} else if ( val == 2 ) {
+						$(".regAmount").text('<?=$schoolInfo->getChildFee( true, 2 ) .'/'. $schoolInfo->getChildFee( true, 2, true )?>');
 					} else {
-						$(".regAmount").text('45');
-					}
+                        $(".regAmount").text(<?=$schoolInfo->getChildFee( true, 1 )?>);
+                    }
 				});
 			});
 			
@@ -137,30 +138,52 @@ if (isset($_POST['submit'])) {
 							<h1>School Registration</h1>
 	 
 							<form id="form_5" name="form_5" action="registration_4.php" method="post" accept-charset="UTF-8"> 
-                            
-                            <? if ( true ) { ?>
-								<h2>Type of School Registration</h2>
+							    <h2>Type of School Registration</h2>
 								<div class="module list_expand" id="module-info">
 									<div class="module_content">
 										<div class="lists form">
 											<ul>
 												<li>
-													 <h4><input type="radio" name="reg_type" class="reg_type" value="1" 
-													 <?php if ($schoolInfo->type == 1) echo "checked" ?>
-													/> Tzivos Hashem registration is included in school tuition</h4>
-													 $45 included in each child’s tuition; parents still complete the registration process on their own without additional payment.
+													<h4>
+                                                        <input type="radio" name="reg_type" class="reg_type" value="1" 
+													        <?php if ($schoolInfo->type == 1) echo "checked" ?> /> 
+                                                        Tzivos Hashem registration is included in school tuition
+                                                    </h4>
+                                                    $<?=$schoolInfo->getChildFee( true, 1 )?> included in each child’s tuition; 
+                                                    parents still complete the registration process on their own without additional payment.
 												</li>
 												<li>
-													 <h4><input type="radio" name="reg_type" class="reg_type" value="2" 
-													 <?php if ($schoolInfo->type == 2) echo "checked" ?>
-													 /> Tzivos Hashem is not included in tuition, yet every child in our school will be registered</h4>
-													 Since we guarantee that every child will register, parents will pay the discounted price of $45 when registering on the site; any children not registered by Chof Gimmel Elul (September 14) will be registered through the school’s credit card.
+													 <h4>
+                                                        <input type="radio" name="reg_type" class="reg_type" value="2" 
+                                                            <?php if ($schoolInfo->type == 2) echo "checked" ?> />
+                                                        Tzivos Hashem is not included in tuition, yet every child in our school will be registered
+                                                    </h4>
+                                                    Since we guarantee that every child will register, 
+                                                    parents will recive an additional discount of $<?=GlobalSettings::getGuarenteedDiscount()?> 
+                                                    (above the early bird discount of $<?=GlobalSettings::getEarlyBird()?>).
+                                                    If all children are not registered by 
+                                                    <?=
+                                                    iconv ('WINDOWS-1255', 'UTF-8', substr(  
+                                                        jdtojewish( unixtojd( $schoolInfo->early_bird->getTimestamp() ), true ), 0, -6
+                                                    ));
+                                                    ?>
+                                                    (<?= $schoolInfo->early_bird->format('F j') ?>)
+                                                    <!--Chof Gimmel Elul (September 14)--> 
+                                                    then Tzivos Hashem will bill you for the additional discount's provided ($<?=GlobalSettings::getGuarenteedDiscount()?> per child registered).
 												</li>
 												<li>
-													 <h4><input type="radio" name="reg_type" class="reg_type" value="3" 
-													 <?php if ($schoolInfo->type == 3) echo "checked" ?>
-													 /> Each student will register on their own</h4>
-													 Registration is not included in tuition; each child registers individually for the early-bird price of $50 or regular price of $55 from Chof Gimmel Elul (September 14) onward.
+                                                    <h4><input type="radio" name="reg_type" class="reg_type" value="3" 
+                                                    <?php if ($schoolInfo->type == 3) echo "checked" ?>
+                                                    /> Each student will register on their own</h4>
+                                                    Registration is not included in tuition; 
+                                                    each child registers individually for the early-bird price of $<?=$schoolInfo->getChildFee( true, 3 )?>
+                                                    or regular price of $<?=$schoolInfo->getChildFee( true, 3, true )?> from 
+                                                    <?=
+                                                    iconv ('WINDOWS-1255', 'UTF-8', substr(  
+                                                        jdtojewish( unixtojd( $schoolInfo->early_bird->getTimestamp() ), true ), 0, -6
+                                                    ));
+                                                    ?>
+                                                    (<?= $schoolInfo->early_bird->format('F j') ?>) onward.
 												</li>
 											</ul>
 										</div>
@@ -168,7 +191,7 @@ if (isset($_POST['submit'])) {
 								</div>
 							
 								<h2>School Yearly Membership Benefits and Fees</h2> 
-								<p>Register your school for ONLY $770 and you receive:</p>
+								<p>Register your school for ONLY $<?=$schoolInfo->fee?> and you receive:</p>
 
 								<div class="module list_expand" id="module-info">
 									<div class="module_content">
@@ -181,8 +204,12 @@ if (isset($_POST['submit'])) {
 												</li>
 												<li>
 													<div class="box">
-														<h4>Tzivos Hashem Management System ($950 value)</h4>
-														<p>Your state-of-the-art online management system for staff, students and parents.</p>
+														<h4>Tzivos Hashem Online Management System ($950 value)</h4>
+                                                        <p>
+                                                            State of the art Online portals for Staff, Students and Parents. 
+                                                            Constintly imporoved with new features and bug fixes. 
+                                                            Includes a ticketing system for direct communication with our development team ( closed on Holidays/Weekends ).
+                                                        </p>
 													</div>   
 												</li>
 												<li>
@@ -201,7 +228,7 @@ if (isset($_POST['submit'])) {
 												</li>
 												<li class="right">
 													<div class="box">
-														<h4>Discount Package Price: $770</h4>
+														<h4>Your Price: $<?=$schoolInfo->fee?></h4>
 													</div>   
 												</li>
 											</ul>
@@ -211,7 +238,12 @@ if (isset($_POST['submit'])) {
 
 								<h2>Student Yearly Membership Benefits and Fees</h2>
 								<p>Once your school is registered, you can begin registering individual students, or have parents enroll their children.</p>
-								<p>For ONLY $<span class="regAmount">45</span> each registered student will receive:</p>
+								<p>
+                                    For ONLY $<span class="regAmount"><?
+                                    if ( $schoolInfo->type == '1' ) { echo $schoolInfo->getChildFee( true ); }
+                                    else { echo $schoolInfo->getChildFee( true )?>/<?=$schoolInfo->getChildFee( true, false, true ); }
+                                    ?></span> each registered student will receive:
+                                </p>
 								
 								<div class="module list_expand" id="module-info">
 									<div class="module_content">
@@ -313,183 +345,18 @@ if (isset($_POST['submit'])) {
 												</li>
 												<li class="right">
 													<div class="box">
-														<h4>Discount Package Price: $<span class="regAmount">45</span></h4>
+														<h4>
+                                                            Your Price: $<span class="regAmount"><?
+                                                            if ( $schoolInfo->type == '1' ) { echo $schoolInfo->getChildFee( true ); }
+                                                            else { echo $schoolInfo->getChildFee( true )?>/<?=$schoolInfo->getChildFee( true, false, true ); }
+                                                            ?></span>
+                                                        </h4>
 													</div>   
 												</li>
 											</ul>
 										</div>
 									</div>
 								</div>
-								<!--
-								<h2>Additional Store Prizes </h2>
-								<p>You may purchase additional prizes at 50% off, and offer them to your children at the cost of their own miles in the online store.</p>
-								
-								<div class="module list_expand" id="module-info">
-									<div class="module_content">
-										<div class="lists form">
-											<ul>
-												<li class="expand">
-													<div class="box">
-														<h4><span class="icon"></span>View Prizes</h4>
-													</div>   
-												</li>
-												<li>
-													<div class="box">
-														<h4>770 Photo Album + 320 Pictures of the Rebbe</h4>
-														<p>See the rooms, share the stories and feel the special sense of living in the Rebbe's Daled Amos, with this magnificent spiral-bound album.
-														Plus 320 picture stickers, divided into packs of 5, to be given out each time a Chayol earns 50 miles.</p>
-														<p><b>Price: $48</b></p>
-														<p><b>Your Price: $24</b></p>
-													</div>   
-												</li>
-												<li>
-													<div class="box">
-														<h4>The Fellig Tehillim</h4>
-														<p>Full-color Fellig Chitas Edition of Tehillim, featuring tabs for the daily Yom, translations, illustrations and insights.</p>
-														<p><b>Price: $36</b></p>
-														<p><b>Your Price: $18</b></p>
-													</div>   
-												</li>
-												<li>
-                                                    <div class="box">
-                                                        <h4>Haggadah for Kids</h4>
-                                                        <p><b>Price: $23</b></p>
-                                                        <p><b>Your Price: $15</b></p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Weekly Siddur with Biur Tefillah</h4>
-                                                        <p><b>Price: $36</b></p>
-                                                        <p><b>Your Price: $25</b></p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Shabbos and Yom Tov Siddur with Biur Tefillah</h4>
-                                                        <p><b>Price: $36</b></p>
-                                                        <p><b>Your Price: $25</b></p>
-                                                    </div>   
-                                                </li>
-												<li>
-													<div class="box">
-														<h4>Tzivos Hashem Sweatshirt</h4>
-														<p>Green cozy sweatshirts with the Tzivos Hashem logo on it, available in small, medium, large and extra large.</p>
-														<p><b>Price: $20</b></p>
-														<p><b>Your Price: $10</b></p>
-													</div>   
-												</li>
-												<li>
-													<div class="box">
-														<h4>Tzivos Hashem Cap</h4>
-														<p>Green striking caps with the Tzivos Hashem logo on it to wear all year round!</p>
-														<p><b>Price: $12</b></p>
-														<p><b>Your Price: $6</b></p>
-													</div>   
-												</li>
-												<li>
-													<div class="box">
-														<h4>Tzivos Hashem Yarmulka</h4>
-														<p>Navy Yarmulkas with the Tzivos Hashem logo on it.</p>
-														<p><b>Price: $10</b></p>
-														<p><b>Your Price: $5</b></p>
-													</div>   
-												</li>
-												<li>
-                                                    <div class="box">
-                                                        <h4>Tzivos Hashem Backpack</h4>
-                                                        <p><b>Price: $20</b></p>
-                                                        <p><b>Your Price: $10</b></p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Binder and sticker book</h4>
-                                                        <p><b>Price: $23</b></p>
-                                                        <p><b>Your Price: $15</b></p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Haggadah for kids</h4>
-                                                        <p><b>Price: $23</b></p>
-                                                        <p><b>Your Price: $15</b></p>
-                                                    </div>   
-                                                </li>
-											</ul>
-										</div>
-									</div>
-								</div>
-								-->
-								
-							<? } else { ?>
-							    <h2>Registration Fee</h2>
-                                <p>Registration fee for Hebrew School 5778 is $770.</p>
-                                <p>This includes the use of the Hebrew School Management System.</p>
-                                <div class="module list_expand" id="module-info">
-                                    <div class="module_content">
-                                        <div class="lists form">
-                                            <ul>
-                                                <li class="expand">
-                                                    <div class="box">
-                                                        <h4><span class="icon"></span>Features of Hebrew School Management System</h4>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Uploads</h4>
-                                                        <p>Upload your school List</p>
-                                                        <p>Upload pictures of your students</p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Register your students</h4>
-                                                        <p>Student registration can be done within the system after finishing the school setup</p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Personalized ID Cards</h4>
-                                                        <p>Print paper ID cards with a personalized Barcode</p>
-                                                        <p>Order permanent (hard plastic) ID cards ($2 each)</p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Print Achievement Cards with barcodes</h4>
-                                                        <p>You can print cards for anything you want</p>
-                                                        <p>You can decide how many “points” the cards should be worth</p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Print Reports</h4>
-                                                        <p>Print Point Reports</p>
-                                                        <p>Print Reports of prizes ordered online by your students</p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Manage your Hebrew School Store</h4>
-                                                        <p><b>You can:</b></p>
-                                                        <p>Add Prizes of your choice</p>
-                                                        <p>You can add prizes for all grades or for specific class</p>
-                                                        <p>Determine how many points each prize should cost</p>
-                                                        <p>Keep inventory of how many of each prize you have left</p>
-                                                        <p>Print barcodes for the items in your store</p>
-                                                        <p>Scan a child’s ID card then scan a prize barcode to purchase</p>
-                                                        <p><b>Children can:</b></p>
-                                                        <p>View the prizes in your online store</p>
-                                                        <p>Add / Remove prize to their shopping cart</p>
-                                                        <p>Purchase prizes</p>
-                                                    </div>   
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-							<? } ?>
 								
 								<div class="module" id="module-info">
 									<div class="module_content">
@@ -502,18 +369,11 @@ if (isset($_POST['submit'])) {
 										</div>
 									</div>
 								</div>
-							</form> 
-														
+							</form> 					
 						</div>
-						
 					</div>
-					
 				</div>
-				
 			</div>
-			
 		</div>
-
 	</body>
-	
 </html>
