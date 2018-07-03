@@ -50,10 +50,9 @@ $sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, sri.type 
     ." LEFT JOIN ranks r USING (rank_ord) "
     ." LEFT JOIN th_chidon tc ON u.user_id = tc.user_id and year = $reg_year "
     ." LEFT JOIN user_registration ur ON u.user_id = ur.user_id and ur.year = $reg_year "
-    ." LEFT JOIN school_reg_infos sri ON s.school_id = sri.school_id AND sri.year = $reg_year "
+    ." LEFT JOIN school_registrations sri ON s.school_id = sri.school_id AND sri.year = $reg_year "
 	." WHERE u.user_id IN (" . implode(',', $users) . ") "
 	." ORDER BY u.user_id, rank_ord";
-//echo $sql;
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc($result) ) {
 	$children[$row['user_id']]['first'] 	= $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
