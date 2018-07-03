@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 if ( !isset( $_SESSION['school_id'] ) ) 
     header( "Location: registration.php" );
@@ -7,16 +10,21 @@ $admin_id = $_SESSION['admin_id'];
 $school_id = $_SESSION['school_id'];
 $next_page = "false";
 
+// get the admin
 include("db.php");
-include("classes/admin.php");
-$sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
-$query = mysql_query($sql);
-$row = mysql_fetch_assoc($query);
-$admin = new admin($row);
+require_once( __DIR__ . '/api/header/db.php' ); // import ActiveRecord and PDO
 
-$sql = "SELECT * FROM schools WHERE school_id=" . $school_id;
-$query = mysql_query($sql);
-$schoolInfo = mysql_fetch_assoc($query);
+require 'class.globalSettings.php';
+$year = GlobalSettings::getRegistrationYear();
+// get the registration info for the school
+try {
+    $schoolInfo = School::find( $school_id, [ 'include' => 'school_registrations' ] );
+    $schoolInfo = $schoolInfo->getRegInfo( $year );
+} catch ( \Exception $e ) {
+    $query = mysql_query("SELECT reg_type FROM schools WHERE school_id=" . $school_id);
+    $type = mysql_fetch_assoc($query)['reg_type'];
+    $schoolInfo = SchoolRegistration::getDefault( $school_id, $type, $year );
+};
 
 $message = "";
 if (isset($_POST['submit'])) {
@@ -24,8 +32,10 @@ if (isset($_POST['submit'])) {
 	if (!isset($_POST['reg_type'])) {
 		$message = "You need to choose the type of school that you have.";
 	} else {
-		$sql = "update schools set reg_type = " . mysql_real_escape_string($_POST['reg_type']) . " where school_id = " . $school_id;
-		if (!mysql_query($sql)) {
+		$sql = "UPDATE schools SET reg_type = " . mysql_real_escape_string($_POST['reg_type']) . " WHERE school_id = " . $school_id;
+        $schoolInfo->type = $_POST['reg_type'];
+        
+        if ( !mysql_query($sql) || !$schoolInfo->save() ) {
 			$message = "Error updating school.";
 		}
 	}
@@ -35,9 +45,6 @@ if (isset($_POST['submit'])) {
 	}
 		
 }
-
-require 'class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -139,19 +146,19 @@ $year = GlobalSettings::getRegistrationYear();
 											<ul>
 												<li>
 													 <h4><input type="radio" name="reg_type" class="reg_type" value="1" 
-													 <?php if ($schoolInfo['reg_type'] == 1) echo "checked" ?>
+													 <?php if ($schoolInfo->type == 1) echo "checked" ?>
 													/> Tzivos Hashem registration is included in school tuition</h4>
 													 $45 included in each child’s tuition; parents still complete the registration process on their own without additional payment.
 												</li>
 												<li>
 													 <h4><input type="radio" name="reg_type" class="reg_type" value="2" 
-													 <?php if ($schoolInfo['reg_type'] == 2) echo "checked" ?>
+													 <?php if ($schoolInfo->type == 2) echo "checked" ?>
 													 /> Tzivos Hashem is not included in tuition, yet every child in our school will be registered</h4>
 													 Since we guarantee that every child will register, parents will pay the discounted price of $45 when registering on the site; any children not registered by Chof Gimmel Elul (September 14) will be registered through the school’s credit card.
 												</li>
 												<li>
 													 <h4><input type="radio" name="reg_type" class="reg_type" value="3" 
-													 <?php if ($schoolInfo['reg_type'] == 3) echo "checked" ?>
+													 <?php if ($schoolInfo->type == 3) echo "checked" ?>
 													 /> Each student will register on their own</h4>
 													 Registration is not included in tuition; each child registers individually for the early-bird price of $50 or regular price of $55 from Chof Gimmel Elul (September 14) onward.
 												</li>

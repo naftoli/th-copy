@@ -17,14 +17,9 @@ class SchoolRegistration extends ActiveRecord\Model implements JsonSerializable 
     public $default = false;
 
     public static function getDefault( $school_id, $type, $year ) {
-        $fee = 60;
-        if ( $type === 1 ) $fee = 50;
-        if ( $type === 2 ) $fee = 55;
-
         $instance = new self([
-            'school_id' => $school_id, 'year' => $year, 'type' => $type,
-            'child_fee' => $fee, 'fee' => 770, 'balance' => 0,
-            'early_bird' => new DateTime( '2018-09-07 00:00:00' )
+            'school_id' => $school_id, 'year' => $year, 'type' => $type, 'fee' => 770, 
+            'balance' => 0, 'early_bird' => new DateTime( '2018-09-07 00:00:00' )
         ]);
         $instance->default = true;
         return $instance;
