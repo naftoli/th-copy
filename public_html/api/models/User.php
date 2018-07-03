@@ -73,9 +73,12 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     public function registrationRates() {
         $reg_info = $this->school->getRegInfo(); // get the schools registration type
         $early_bird = $reg_info->early_bird > new DateTime();
-        $result = [ 'chayolei'  => GlobalSettings::getRegCost( $reg_info->type, $early_bird ) ];
+        // calculate chayolei rate
+        $chayolei_fee = $reg_info->child_fee - ( $early_bird ? GlobalSettings::getEarlyBird() : 0 );
+        $chayolei_fee = $chayolei_fee >= 0 ? $chayolei_fee : 0; // remove negative numbers.
+        $result = [ 'chayolei' => $chayolei_fee ];
         // add chidon if user is in grade 4+
-        if ( $this->platton->class_grade >= 4 )
+        if ( $this->platoon->class_grade >= 4 )
             $result[ 'chidon' ] = GlobalSettings::getChidonCost();
         return $result;
     }
@@ -101,7 +104,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $row = $user_status_query->fetch();
         $result = [ 'chayolei'  => !!$row['user_reg_id'] ];
         // only add th_chidon_id if the user is in grade 4+
-        if ( $this->platton->class_grade >= 4 )
+        if ( $this->platoon->class_grade >= 4 )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
         return $result;
     }
@@ -190,24 +193,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
             'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture' ],
             'include' => [ 
                 'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ] ],
-                'platton' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ], 'methods' => [ 'name' ] ]
-            ]
-        ]);
-    }
-
-    /**
-     * publicSerialize
-     * 
-     * serialze school for public endpoints
-     *
-     * @return array
-     */
-    public function publicSerialize(){
-        return $this->to_array([
-            'only' => [ 'user_serial', 'first', 'last' ],
-            'include' => [ 
-                'school' => [ 'only' => [ 'school_id', 'school_name' ] ],
-                'platton' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]
+                'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ], 'methods' => [ 'name' ] ]
             ]
         ]);
     }
