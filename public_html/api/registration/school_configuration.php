@@ -46,8 +46,6 @@ class SchoolRegistrationRouter implements RestRouter {
 
         if ( isset( $_POST['child_fee'] ) ) {
             $reg_info->child_fee = $_POST['child_fee'];
-        } else {
-            $reg_info->child_fee = GlobalSettings::getRegCost( $reg_info->type, false, true );
         }
 
         if ( !$reg_info->is_valid() )
