@@ -439,7 +439,7 @@ var templates = function(){
             $( '#step-2 form #mobile_pic + img' ).attr( 'src', user.profilePicture );
             $( '#step-2 form #gender[value=\'' + user.gender + '\']')[0].checked = true;
             $( '#step-2 form #school_name' ).val( user.school.school_name );
-            $( '#step-2 form #class_name' ).val( user.platton.class_grade + ' ' + user.platton.class_sub );
+            $( '#step-2 form #class_name' ).val( user.platoon.class_grade + ' ' + user.platoon.class_sub );
             // setup the index state
             $( '#step-2 form #current_index' ).val( index );
             // fill out the input feilds
