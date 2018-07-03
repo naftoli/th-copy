@@ -1,5 +1,5 @@
 <?php 
-session_start(); 
+session_start();
 if ( !isset( $_SESSION['school_id'] ) ) 
     header( "Location: registration.php" );
 
@@ -8,7 +8,7 @@ $school_id = $_SESSION['school_id'];
 
 // if we have the skip cc info setup then skip to last page
 if (isset( $_SESSION['skipCC'] ) && $_SESSION['skipCC'] == 'yes') {
-	header("Location: https://mashpia.com/registration_8.php");
+	header("Location: registration_8.php");
 	exit;
 }
 
@@ -43,12 +43,13 @@ $authorize_school_ids = mysql_fetch_assoc($authorize_school_ids); // fetch the r
 $customer_id 	= $authorize_school_ids['customer_id'];
 $payment_id 	= $authorize_school_ids['payment_id'];
 
+$cc = false;
 if( $customer_id ) {
 	$customer_profile = new CustomerProfile($customer_id);
-	$payment_profile = $customer_profile->paymentProfiles[0];
-	$cc = $customer_profile->paymentProfiles[0]["payment"]["creditCard"]; // get the CC info from the API response....
-} else {
-	$cc = false;
+	if ( count( $customer_profile->paymentProfiles ) > 0 ){
+        $payment_profile = $customer_profile->paymentProfiles[0];
+        $cc = $customer_profile->paymentProfiles[0]["payment"]["creditCard"]; // get the CC info from the API response....
+    }
 }
 
 include("classes/school.php");
@@ -302,7 +303,7 @@ function clean_character($string)
 
 			function check_next_page() {
 				if (next_page == "true") {
-					location.href = "https://mashpia.com/registration_8.php";
+					location.href = "registration_8.php";
 				}
 			}									
 			
