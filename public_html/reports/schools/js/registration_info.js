@@ -21,7 +21,7 @@ var registration_info = function(){
 
     function renderTable(){
         var html = '<table><tbody>';
-        html += '<tr><th>Base Name</th><th>Type</th><th>Fee</th><th>Balance</th><th>Deadline</th><th>Early Bird</th><th>Saved</th></tr>'
+        html += '<tr><th>Base Name</th><th>Type</th><th>Fee</th><th>Balance</th><th>Soldier Fee</th><th>Deadline</th><th>Early Bird</th><th>Saved</th></tr>'
         state.schools.forEach( function( school ) {
             var reg_info = school.reg_info;
             reg_info.school_registration_id = reg_info.school_registration_id || '';
@@ -32,6 +32,7 @@ var registration_info = function(){
             html += '<td>' + formatType(reg_info.type) + '</td>';
             html += '<td>' + formatNumber(reg_info.fee, 'fee') + '</td>';
             html += '<td>' + formatNumber(reg_info.balance, 'balance') + '</td>';
+            html += '<td>' + formatNumber(reg_info.child_fee, 'child_fee') + '</td>';
             html += '<td>' + formatDate(reg_info.reg_deadline, 'reg_deadline', reg_info.type != 2) + '</td>';
             html += '<td>' + formatDate(reg_info.early_bird, 'early_bird') + '</td>';
 
@@ -95,6 +96,7 @@ var registration_info = function(){
             fee:   row.find( 'input[name="fee"]' ).val(),
             balance:   row.find( 'input[name="balance"]' ).val(),
             reg_deadline:   row.find( 'input[name="reg_deadline"]' ).val(),
+            child_fee:   row.find( 'input[name="child_fee"]' ).val(),
             early_bird:   row.find( 'input[name="early_bird"]' ).val(),
         }
 
