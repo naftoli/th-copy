@@ -80,5 +80,16 @@ class GlobalSettings {
     public static function getChidonCost(){
         return 5;
     }
+
+    /**
+     * getEarlyBird
+     * 
+     * return the current early bird discount
+     *
+     * @return int
+     */
+    public static function getEarlyBird(){
+        return 5;
+    }
 }
 ?>
