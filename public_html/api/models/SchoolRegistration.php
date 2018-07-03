@@ -8,8 +8,6 @@ class SchoolRegistration extends ActiveRecord\Model implements JsonSerializable 
         [ ['school_id', 'year'], 'message' => '- duplicate record' ]
     ];
     public function validate() {
-        if ( $this->type == 2 && !$this->reg_deadline )
-            $this->errors->add('registration_deadline', 'must be present on guaranteed bases');
         if ( !in_array( $this->type, [ 1, 2, 3 ] ) )
             $this->errors->add('type', 'must be a valid option');
     }
@@ -25,6 +23,31 @@ class SchoolRegistration extends ActiveRecord\Model implements JsonSerializable 
         return $instance;
     }
 
+    public function getChildFee( $is_school = false, $for_type = false, $no_discount = false ){
+        if ( !$for_type ) $for_type = $this->type;
+        // if we have a custom fee...
+        if ( $this->child_fee > 0 ) {
+            $fee = $this->child_fee;
+        // if we do not. get the default rates
+        } else {
+            $fee = GlobalSettings::getRegCost( $for_type, $is_school );
+        }
+        // return the final rate if requested
+        if ( $no_discount ) return $fee >= 0 ? $fee : 0;
+
+        // is the early bird done...
+        $early_bird = $this->early_bird > new DateTime();
+        // add early bird discount
+        if ( $for_type != 1 && $early_bird )
+            $fee -= GlobalSettings::getEarlyBird();
+        // add type 2 discount
+        if ( $for_type == 2 && $early_bird ) {
+            $fee -= GlobalSettings::getGuarenteedDiscount();
+        }
+        // do not allow negative numbers
+        return $fee >= 0 ? $fee : 0;
+    }
+
     public function jsonSerialize(){
         return array_merge(
             $this->to_array(),
@@ -32,5 +55,4 @@ class SchoolRegistration extends ActiveRecord\Model implements JsonSerializable 
         );
     }
 }
-
 ?>
