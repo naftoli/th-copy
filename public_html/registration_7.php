@@ -1,5 +1,7 @@
 <?php 
 session_start();
+// TODO set to false in production
+define("AUTHORIZE_NET_SANDBOX", true);
 if ( !isset( $_SESSION['school_id'] ) ) 
     header( "Location: registration.php" );
 
