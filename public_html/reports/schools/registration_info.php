@@ -23,9 +23,9 @@ $year = GlobalSettings::getRegistrationYear();
     <link href="/styles/admin/grey_select.css" rel="stylesheet" type="text/css"/>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <style>
-        div#wrapper { width: 1201px; }
+        div#wrapper { width: 1081px; }
         #content .col_content { padding: 20px 10px; }
-        #content .slider, #content { width: 950px; }
+        #content .slider, #content { width: 830px; }
         th, td { padding: 4px 8px; font-size: 14px; max-width: 120px; }
         td.saved { padding-right: 0px; }
         td:last-child { padding: 4px 0px; }
@@ -33,7 +33,8 @@ $year = GlobalSettings::getRegistrationYear();
         input[type="date"]:disabled { color: #888; }
         input[type="number"] { width: 80px; border: none; border-bottom: 1px solid; background: none; }
         .info { padding: 10px; background: #ccc; margin-bottom: 15px; }
-        ol { list-style: decimal; margin-left: 15px; padding: 5px; }
+        .info ol, .info ul { list-style: decimal; margin-left: 15px; padding: 5px; }
+        .info ul { list-style: disc }
         button.button { transition: .25s; }
         button.button:focus, button.button:hover, select:focus { transform: scale( 1.1 ) }
     </style>
@@ -52,18 +53,25 @@ $year = GlobalSettings::getRegistrationYear();
         <h4>Settings Explained:</h4><br/>
         <strong>Type:</strong>
         <ol>
-            <li><strong>In Tuition:</strong> Parents do not pay for registration. The base is billed directly.</li>
-            <li><strong>Guaranteed:</strong> Parents pay for registration. However, the base guarantees that they will do so by the <strong>Deadline</strong> and will be billed for the rest.</li>
-            <li><strong>By Parent:</strong> Parents do pay for registration. The base is never billed.</li>
+            <li><strong>In Tuition:</strong> The base charges parents for registration in Tuition.</li>
+            <li><strong>Guaranteed:</strong> 
+                Parents are given an additional $<?=GlobalSettings::getGuarenteedDiscount()?> discount as base guarantees all parents will register. 
+                If some parents do not register the base is charged for the discount given to all soldiers who registered.</li>
+            <li><strong>By Parent:</strong> Parents pay for registration as they wish.</li>
         </ol>
-        <p><strong>Fee:</strong> This is the fee the base will pay to register.</p>
-        <p><strong>Balance:</strong> This is the balance owed to Tzivos Hashem from previous years.</p>
-        <p><strong>Soldier Fee:</strong> The registration fee for soldiers in this base. 
-            Please note that the early bird discount ($<?=GlobalSettings::getEarlyBird()?>) is applied to this amount.
-            For example, $60 soldier fee - $5 early bird is $55 for registration.
+        <p></p>
+        <p><strong>Fee:</strong> The fee the base will pay to register.</p>
+        <p><strong>Balance:</strong> The balance the base owes to Tzivos Hashem.</p>
+        <strong>Soldier Fee:</strong> The registration fee for soldiers in this base.
+        <ul>
+            <li>Please note that the early bird discount ($<?=GlobalSettings::getEarlyBird()?>) is applied to this amount.</li>
+            <li>For example, $60 soldier fee - $5 early bird is $55 for registration.</li>
+            <li><em>Set to / leave as 0 for default rates.</em></li>
+        </ul>
+        <p></p>
+        <p><strong>Early Bird:</strong> The date on which the early bird ends for the base.<br/>
+            For "guaranteed" bases this is also the deadline to have all children register.
         </p>
-        <p><strong>Deadline:</strong> For <em>Guaranteed</em> bases, this is the date on which we bill them for the remaining children.</p>
-        <p><strong>Early Bird:</strong> This is when the early bird discount ends for this school.</p>
     </div>
     <div id="report">
         <div class="loader"></div>
