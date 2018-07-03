@@ -74,9 +74,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $reg_info = $this->school->getRegInfo(); // get the schools registration type
         $early_bird = $reg_info->early_bird > new DateTime();
         // calculate chayolei rate
-        $chayolei_fee = $reg_info->child_fee - ( $early_bird ? GlobalSettings::getEarlyBird() : 0 );
-        $chayolei_fee = $chayolei_fee >= 0 ? $chayolei_fee : 0; // remove negative numbers.
-        $result = [ 'chayolei' => $chayolei_fee ];
+        $result = [ 'chayolei' => $reg_info->getChildFee() ];
         // add chidon if user is in grade 4+
         if ( $this->platoon->class_grade >= 4 )
             $result[ 'chidon' ] = GlobalSettings::getChidonCost();
