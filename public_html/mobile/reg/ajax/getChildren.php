@@ -40,7 +40,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 
 $children = array();
 //need to have multiple result rows to get highest rank
-$sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, sri.type as new_reg_type, c.class_grade, u.user_id, u.first, u.last, "
+$sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, sri.date_paid as registered, c.class_grade, u.user_id, u.first, u.last, "
 	." u.first_he, u.last_he, u.lang_id, !ISNULL(tc.th_chidon_id) as reg_chidon, !ISNULL(ur.user_reg_id) as reg_chayolei, "
 	." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, r.rank_ord, r.rank_name, r.rank_image_id "
 	." FROM users u "
@@ -67,7 +67,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 	$children[$row['user_id']]['mobile_pic']= empty( $row['mobile_pic'] ) ? 0 : $row['mobile_pic'];
 	$children[$row['user_id']]['grade'] 	= $row['class_grade'];
 	$children[$row['user_id']]['schoolRegistered'] = $row['school_era'] > 0 ? 0 : 1;
-	$children[$row['user_id']]['schoolTypeRegistered'] = $row['new_reg_type'] > 0 ? 1 : 0;
+	$children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
 	$children[$row['user_id']]['anashkinder'] = $row['school_id'] == 269 ? 1 : 0;
 	$children[$row['user_id']]['myshliach'] = $row['school_id'] == 61 ? 1 : 0;
 	$children[$row['user_id']]['chidon'] = $CHIDON_ACTIVE && intval($row['class_grade']) > 3 ? 1 : 0;
