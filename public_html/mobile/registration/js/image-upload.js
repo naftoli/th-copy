@@ -56,8 +56,9 @@ var image_upload = function( options, uploadCallback ) {
         $( state.modal + " #cropper-image-container, " + state.submit ).show();
         // enable Cropper for the image
         $( state.image ).cropper({
-            aspectRatio: 1 / 1,
-            dragMode: 'move'
+            aspectRatio: 1 / 1, // force the square shape we want
+            dragMode: 'move', viewMode: 1, // do not allow the user to add alpha to the image.
+            cropBoxMovable: false, cropBoxResizable: false // do not allow the crop box to be moved
         });
     }
 
