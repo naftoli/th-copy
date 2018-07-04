@@ -109,13 +109,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12">
                             <label for="first">School</label>
                             <input type="text" disabled class="form-control" placeholder="N / A" id="school_name">
                         </div>
-                        <div class="col-6">
+                        <div class="col-12" id="class_name">
                             <label for="first">Class / Grade</label>
-                            <input type="text" disabled class="form-control" placeholder="N / A"  id="class_name">
+                            <select class="form-control" name="class_id"></select>
                         </div>
                     </div>
                     <div class="row">
@@ -189,8 +189,9 @@
                                 </label>
                             </div>
                             <div class="col-10 col-md-11">
-                                <strong>Chidon ($<span id="chidon-cost"></span> fee)</strong>
-                                <br/>
+                                <strong>Sign up now for $<span id="chidon-cost"></span> and you will receive a Study Guide from you school when school begins!</strong><br/>
+                                Register by 10 Elul and receive your Study Guide before RH<br/>
+                                Register by 26 Elul and receive your Study Guide before Sukkos<br/>
                                 <label for="chidon-sweater-size">Chidon Sweater Size:</label>
                                 <select class="form-control" id="chidon-sweater-size">
                                     <option value="children xs">Children XS</option>
@@ -516,9 +517,6 @@
         <!-- Polyfill's -->
         <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
         <script src="lib/polyfills.js"></script>
-        <!-- scripts for each page -->
-        <!-- <script src="js/index/page1.js"></script>
-        <script src="js/index/page4.js"></script> -->
         <!-- main script to pull the page together -->
         <script src="js/register.js"></script>
         <!-- Global site tag (gtag.js) - Google Analytics -->

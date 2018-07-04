@@ -50,7 +50,6 @@ var registrationApp = function() {
         window.location.hash = 'step-1';
         showSection( "step-1" );
         toggleLoading( "step-1", true );
-        state.users = [];
 
         getUsers().then( function( users ) { 
             if( users.length === 0 ) return noChildren();
@@ -71,7 +70,11 @@ var registrationApp = function() {
         window.location.hash = 'step-2';
         state.selected_users = []; state.cart = [];
         // make sure that we have at least one user
-        if ( state.users.length === 0 || $('#step-1 #children input:checked').length === 0 ) {
+        if ( state.users.length === 1 ) {
+            state.selected_users.push( Object.assign(
+                { confirmed: false }, state.users[0]
+            ));
+        } else if ( state.users.length === 0 || $('#step-1 #children input:checked').length === 0 ) {
             return showError( 'Please select at least one child' );
         }
         // determine if the navigation should show
@@ -161,16 +164,19 @@ var registrationApp = function() {
         var selected_user = state.selected_users[ current_index ];
         // find all changed feilds
         $( event.target ).serializeArray().forEach( function( item ) {
-            if ( selected_user[ item.name ] !== undefined && 
+            if ( selected_user[ item.name ] && 
                 selected_user[ item.name ] != item.value 
             ) {
                 user_changed = true;
-                postData[ item.name ] = item.value;
+                selected_user[ item.name ] = postData[ item.name ] = item.value;
             }
         });
         // if the user changed update him in the background...
         if ( user_changed ) {
-            updateUser( selected_user.user_id, postData );
+            state.selected_users[ current_index ] = selected_user;
+            updateUser( selected_user.user_id, postData ).then( function() {
+                return getUsers();
+            });
         }
         // Detect and validate the charges accepted.
         selected_charges = {
@@ -302,7 +308,7 @@ var registrationApp = function() {
             if ( window.location.hash === '#step-2' ) return step2();
             if ( window.location.hash === '#step-3' ) return step3();
             if ( window.location.hash === '#step-4' ) return step4();
-        } else if( window.location.hash === '#step-2' ) return step2();
+        }
     });
     // toggle the loading dot
     function toggleLoading( id, loading ){
@@ -341,6 +347,7 @@ var registrationApp = function() {
     function getUsers(){
         return new Promise( function( resolve, reject ){
             APIRequest( 'GET', api_url + '?action=getUsers', {}, function( response ) {
+                state.users = [];
                 response.users.forEach( function( user ) {
                     user.dob = user.dob.split("T")[0];
                     if ( user.registrationStatus.chayolei === false || user.registrationStatus.chidon === false )
@@ -439,7 +446,22 @@ var templates = function(){
             $( '#step-2 form #mobile_pic + img' ).attr( 'src', user.profilePicture );
             $( '#step-2 form #gender[value=\'' + user.gender + '\']')[0].checked = true;
             $( '#step-2 form #school_name' ).val( user.school.school_name );
-            $( '#step-2 form #class_name' ).val( user.platoon.class_grade + ' ' + user.platoon.class_sub );
+            // add the dropdown for naftali
+            var class_select = $( '#step-2 form #class_name select' );
+            class_select.html('');
+            if ( [ 269, 61 ].includes( user.school.school_id ) ) {
+                // get the class list and update the dropdown
+                $.get( "api/classes.php", { 'school_id': user.school.school_id }, function( response ) {
+                    class_select.html('');
+                    response.data.forEach( function( option ) {
+                        class_select.append("<option value='" + option.id + "'>" + option.name + "</option>");
+                    });
+                    class_select.val( user.class_id );
+                    $( '#step-2 form #class_name' ).show(); // make sure it is visiable
+                });
+            } else {
+                $( '#step-2 form #class_name' ).hide(); // hide it
+            }
             // setup the index state
             $( '#step-2 form #current_index' ).val( index );
             // fill out the input feilds
