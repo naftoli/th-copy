@@ -85,7 +85,7 @@ function create_user( $admin_id ){
 // POST /?user_id=
 function update_user( $user_id ){
     // filter POST paramaters
-    $keys = [ 'mobile_pic', 'gender', 'first', 'last', 'first_he', 'last_he', 'dob', 'lang_id' ];
+    $keys = [ 'mobile_pic', 'gender', 'first', 'last', 'first_he', 'last_he', 'dob', 'lang_id', 'class_id' ];
     foreach( $_POST as $key => $value ) {
         if ( isset( $keys[$key] ) ) $_POST[$key] = post_param( $key );
         else unset( $_POST['key'] );
