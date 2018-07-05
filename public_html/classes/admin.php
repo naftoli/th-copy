@@ -84,8 +84,8 @@ class admin {
 	}
 	
 	public function get_children() {
-		include_once("user.php");
-		include_once("school.php");
+		require_once(__DIR__ . "/user.php");
+		require_once(__DIR__ . "/school.php");
 		
 		$sql = "SELECT u.* FROM admin_auths AS aa JOIN users AS u ON (aa.id=u.user_id) WHERE admin_id=" . $this->admin_id . " AND auth='user'";
 		//echo $sql;
@@ -105,8 +105,8 @@ class admin {
 	
 	function get_markable_children()
 	{
-		include_once("user.php");
-		include_once("school.php");
+		require_once(__DIR__ . "/user.php");
+		require_once(__DIR__ . "/school.php");
 		
 		$sql = "SELECT u.* ";
 		$sql = $sql . "FROM admin_auths AS aa ";
@@ -201,7 +201,7 @@ class admin {
 			$sql = $sql . "ORDER BY s.school_name ";
 		}
 		
-		include_once 'school.php';
+		require_once(__DIR__ . "/school.php");
 		$query = mysql_query($sql);
 		while ($row = mysql_fetch_assoc($query)) {
 			$school = new school($row);
