@@ -32,7 +32,11 @@ class school_class {
 		$query = mysql_query($sql);
 		$row = mysql_fetch_assoc($query);
 		$this->number_of_soldiers = $row['number_of_soldiers'];
-	}
+    }
+    
+    function name() {
+        return $this->class_grade . ( $this->class_sub ? ' - ' . $this->class_sub : '' );
+    }
 	
 	function get_points()
 	{
@@ -78,13 +82,15 @@ class school_class {
 	
 	function get_students()
 	{
+        require_once( __DIR__ . '/user.php' );
 		$sql = "SELECT * FROM users WHERE school_id=" . $this->school_id . " AND class_id=" . $this->class_id;
 		$query = mysql_query($sql);
 		while ($row = mysql_fetch_assoc($query))
 		{
 			$student = new user($row);
 			array_push($this->students, $student);
-		}
+        }
+        return $this->students;
 	}
 	
 	function set_ranks($ranks) {
