@@ -20,10 +20,13 @@ class school_class {
 		$this->school_id = $row["school_id"];
 		$this->class_grade = $row["class_grade"];
 		$this->class_sub = $row["class_sub"];
-		$this->class_teacher = $row["class_teacher"];
+        $this->class_teacher = $row["class_teacher"];
+        $this->email = $row["email"];
+        $this->cell = $row["cell"];
 		$this->default_level = $row["default_level"];
 		$this->gender_view = $row["gender_view"];
-		$this->class_era = $row["class_era"];
+        $this->class_era = $row["class_era"];
+        $this->confirmed = $row["confirmed"] == 1;
 	}
 	
 	function get_number_of_soldiers()
