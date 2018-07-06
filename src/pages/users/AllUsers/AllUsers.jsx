@@ -8,6 +8,7 @@ import { Callout } from '@blueprintjs/core';
 import { Button, ButtonGroup } from 'reactstrap';
 import ProfilePicture from 'components/ui/ProfilePicture';
 import CropperModal from 'components/modals/CropperModal';
+import BulkUploadModal from '../BulkUploadModal/BulkUploadModal';
 // functions
 import { toast } from 'react-toastify';
 import arrayToCSV from 'functions/arrayToCSV';
@@ -19,7 +20,10 @@ import { getSoldiers, updateSoldier } from 'store/soldiers/operations';
 
 export class AllUsers extends Component {
 
-  state = { showModal: false, modalSrc: false, modalId: false }
+  state = { 
+    cropperModalShow: false, cropperModalSrc: false, 
+    cropperModalId: false,  uploadModalShow: true
+  }
 
   // update the soldiers when the page loads
   componentDidMount(){
@@ -33,21 +37,22 @@ export class AllUsers extends Component {
     }
   }
 
-  // handler for the modal
-  closeModal = () => { this.setState({ showModal: false }) }
+  // handler for the modals
+  closeCropperModal = () => { this.setState({ cropperModalShow: false }) }
+  toggleUploadModal = () => { this.setState({ uploadModalShow: !this.state.uploadModalShow }) }
 
   // handler for pressing the picture
   editPicture = ( id ) => ( event ) => {
     this.setState({
-      showModal: true, modalId: id,
-      modalSrc: event.target.src.indexOf( DEFAULT_PROFILE ) >= 0 ? false : event.target.src      
+      cropperModalShow: true, cropperModalId: id,
+      cropperModalSrc: event.target.src.indexOf( DEFAULT_PROFILE ) >= 0 ? false : event.target.src      
     });
   }
 
   // handler for when images are updated
   updatePicture = ( formData ) => {
-    this.setState({ showModal: false });
-    this.props.updateSoldier( this.state.modalId, formData );
+    this.setState({ cropperModalShow: false });
+    this.props.updateSoldier( this.state.cropperModalId, formData );
   }
 
   // scroll to the top of the table
@@ -79,7 +84,7 @@ export class AllUsers extends Component {
   // render the page
   render() {
     const { current_login, soldiers, loading } = this.props;
-    const { showModal, modalSrc } = this.state;
+    const { cropperModalShow, cropperModalSrc, uploadModalShow } = this.state;
     // define the table for the page
     const columns = [{
       Header: 'Profile',  accessor: 'profilePicture',
@@ -135,8 +140,7 @@ export class AllUsers extends Component {
         return 0;
       }
     },{
-      id: 'platoon',
-      Header: 'Platoon',
+      id: 'platoon', Header: 'Platoon',
       accessor: user => user.platoon.name
     }];
     // add a collumn for HQ ( and Networks )
@@ -154,7 +158,7 @@ export class AllUsers extends Component {
           <Link to={`/users/new`} className="btn btn-primary" role="button">
            <i className="fas fa-plus" /> Add Soldier
           </Link>
-          <Button color="primary">
+          <Button color="primary" onClick={ this.toggleUploadModal }>
             <i className="fas fa-file-upload" /> Upload Soldier List
           </Button>
           <Button color="primary" onClick={ this.toCSV }>
@@ -164,7 +168,8 @@ export class AllUsers extends Component {
         <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight" 
           noDataText={ loading ? 'Loading...' : 'No Data' } defaultFilterMethod={ this.filter }
           onPageChange={ this.scrollToTop } onFilteredChange={ this.scrollToTop }/>
-        <CropperModal isOpen={ showModal } src={ modalSrc } toggle={ this.closeModal } uploadImage={ this.updatePicture }/>
+        <CropperModal isOpen={ cropperModalShow } src={ cropperModalSrc } toggle={ this.closeCropperModal } uploadImage={ this.updatePicture }/>
+        <BulkUploadModal isOpen={ uploadModalShow } toggle={ this.toggleUploadModal }/>
       </div>
     );
   }
