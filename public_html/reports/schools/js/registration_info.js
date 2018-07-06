@@ -21,7 +21,7 @@ var registration_info = function(){
 
     function renderTable(){
         var html = '<table><tbody>';
-        html += '<tr><th>Base Name</th><th>Type</th><th>Base Fee</th><th>Balance</th><th>Soldier Fee</th><th>Early Bird / Deadline</th><th>Saved</th></tr>'
+        html += '<tr><th>Base Name</th><th>Type</th><th>Base Fee</th><th>Balance</th><th>Soldier Fee</th><th>Early Bird / Deadline</th><th>Live</th></tr>'
         state.schools.forEach( function( school ) {
             var reg_info = school.reg_info;
             reg_info.school_registration_id = reg_info.school_registration_id || '';
@@ -37,7 +37,7 @@ var registration_info = function(){
 
             html += '<td class="saved">' + ( reg_info.default ? "No" : "Yes" ) + '</td>';
 
-            html += '<td><button class="button save-row">Save</button></td>';
+            html += '<td><button class="button save-row">Save / Make Live</button></td>';
 
             html += '</tr>';
         });

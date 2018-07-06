@@ -68,7 +68,7 @@ foreach( $admin->schools as $school ){
             <p><strong>Platoon Transition allows you to setup a large scale transition for multiple soldiers in your bases.</strong></p>
             <p>Select a platoon to see the current status of all soldiers in the platoon.</p>
             <p>Select one or more soldiers in a platoon and select one of the options in step 3 to set this change during the platoon transition process.</p>
-            <p>Once you have finished configuring where you want all the soldiers to be moved to just press the "Make Live" button in step 4 to update all soldiers at once.</p>
+            <p>Once you have finished configuring where you want all the soldiers to be moved to just press the "Make Platoon Transition Live" button in step 4 to update all soldiers at once.</p>
         </div>
 
         <div id="step1">
@@ -131,8 +131,8 @@ foreach( $admin->schools as $school ){
         </div>
 
         <div id="step4">
-            <h2>Step 4: Make updates Live</h2>
-            <a class="button" id="make-live">Deploy Platoon Transition</a>
+            <h2>Step 4: "Deploy" updates</h2>
+            <a class="button" id="make-live">Make Platoon Transition Live</a>
         </div>
 
         <script src="/js/admin/platoonTransitionApp.js"></script>
