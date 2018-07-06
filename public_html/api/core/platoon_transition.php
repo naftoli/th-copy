@@ -53,9 +53,8 @@ class PlatoonTransitionRouter {
     }
 
     function removeFromBase(){
-        // prepare the queries
-        $this->getQueries();
-        $year = GlobalSettings::getCurrentYear(); // get the current year to log the information.
+        // get the current year to log the information.
+        $year = GlobalSettings::getCurrentYear();
 
         $user_ids = $_POST['user_ids'];
         if ( !$user_ids )
