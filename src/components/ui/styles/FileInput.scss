@@ -1,0 +1,20 @@
+.FileInput {
+  text-align: center;
+  margin-top: 10px;
+
+  > input#file {
+    display: none;
+  }
+
+  > label {
+    padding: 14px;
+    background: #deebf5;
+    outline: 1px dashed #3d6cc4;
+    outline-offset: -4px;
+    transition: .25s;
+    &:hover {
+      cursor: pointer; outline-color: #deebf5;
+      color: #fff;  background: #3d6cc4;
+    }
+  }
+}
