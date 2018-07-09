@@ -7,6 +7,8 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     use traits\BuildModel;
     use traits\SetRelatedModel;
 
+    static $before_create = ['generateSerial', 'generateBarcode'];
+
     // relationships
     static $belongs_to = [
         [ 'school' ], [ 'platoon', 'foreign_key' => 'class_id' ]
@@ -28,7 +30,6 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         }
         return "/mobile/reg/images/profile-photo-default.jpg";
     }
-
     /**
      * setProfilePicture
      *
@@ -60,6 +61,9 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $this->save();
         // return an array with the results
         return true;
+    }
+    public function barcode(){
+        return '3'.$this->user_code;
     }
 
     // ******************************* REGISTRATION *******************************
@@ -144,7 +148,16 @@ class User extends ActiveRecord\Model implements JsonSerializable {
 
         return $errors;
     }
-
+    /**
+     * registerChidon
+     * 
+     * adds user to th_chidon
+     *
+     * @param int $year
+     * @param string $size
+     * @param integer $parent_id
+     * @return void
+     */
     public function registerChidon( $year, $size, $parent_id = 0 ){
         global $pdo;
 
@@ -172,6 +185,40 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $hdob = new HeDob( $this->user_id );      @$hdob->setHeDob();
     }
 
+    // ******************************* ONCREATE FUNCTIONS *******************************
+    public function generateSerial(){
+        global $pdo;
+        if ( !$this->user_serial ) {
+            $query = $pdo->query(
+                "SELECT IFNULL( MAX( user_serial ), 0 ) + 1 AS user_serial FROM users"
+            );
+    
+            $this->user_serial = $query->fetch()['user_serial'];
+        }
+    }
+    public function generateBarcode(){
+        global $pdo;
+        if ( !$this->user_code ) {
+            // prepare the sql queries
+            $check_duplicate = $pdo->prepare( "SELECT COUNT(*) as total FROM users WHERE user_code = ?;" );
+            $generate_barcode = $pdo->prepare( "SELECT FLOOR(RAND() * 9223372036854775807) as user_code" );
+            // counters
+            $count = 0; $valid_code = false;
+            // while we do not have a valid code, generate a new one and validate it.
+            while( !$valid_code ) {
+                // at 1,000 iterations ( and 2,000 queries ) just abort saving the model.
+                if ( $count++ > 1000 ) 
+                    return false;
+                // generate the barcode
+                $generate_barcode->execute();
+                $this->user_code = $generate_barcode->fetch()['user_code'];
+                // make sure it is unique
+                $check_duplicate->execute([ $this->user_code ]);
+                $valid_code = $check_duplicate->fetch()['total'] == 0;
+            }
+        }
+    }
+
     // ******************************* SERIALIZERS *******************************
     /**
      * jsonSerialize
@@ -188,7 +235,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
                 'user_postal', 'user_country', 'gender', 'user_start_date', 'user_registered',
                 'chayolei', 'yan', 'chidon', 'allow_parent_tasks', 'print_parent_tasks', 'mobile_pic'
             ],
-            'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture' ],
+            'methods' => [ 'profilePicture', 'barcode' ],
             'include' => [ 
                 'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ] ],
                 'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ], 'methods' => [ 'name' ] ]
