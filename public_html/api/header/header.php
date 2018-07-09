@@ -6,8 +6,6 @@ if ( isset( $_GET['debug'] ) ) {
 
 date_default_timezone_set( 'UTC' );
 define( "API_ROOT", __DIR__ . '/..' );
-// TODO set to false in production
-define("AUTHORIZE_NET_SANDBOX", true);
 
 // include composer dependancies and custom scripts
 require_once( API_ROOT . "/vendor/autoload.php" ); // composer install must be run
