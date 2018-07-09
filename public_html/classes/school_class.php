@@ -20,10 +20,13 @@ class school_class {
 		$this->school_id = $row["school_id"];
 		$this->class_grade = $row["class_grade"];
 		$this->class_sub = $row["class_sub"];
-		$this->class_teacher = $row["class_teacher"];
+        $this->class_teacher = $row["class_teacher"];
+        $this->email = $row["email"];
+        $this->cell = $row["cell"];
 		$this->default_level = $row["default_level"];
 		$this->gender_view = $row["gender_view"];
-		$this->class_era = $row["class_era"];
+        $this->class_era = $row["class_era"];
+        $this->confirmed = $row["confirmed"] == 1;
 	}
 	
 	function get_number_of_soldiers()
@@ -32,7 +35,11 @@ class school_class {
 		$query = mysql_query($sql);
 		$row = mysql_fetch_assoc($query);
 		$this->number_of_soldiers = $row['number_of_soldiers'];
-	}
+    }
+    
+    function name() {
+        return $this->class_grade . ( $this->class_sub ? ' - ' . $this->class_sub : '' );
+    }
 	
 	function get_points()
 	{
@@ -78,13 +85,15 @@ class school_class {
 	
 	function get_students()
 	{
+        require_once( __DIR__ . '/user.php' );
 		$sql = "SELECT * FROM users WHERE school_id=" . $this->school_id . " AND class_id=" . $this->class_id;
 		$query = mysql_query($sql);
 		while ($row = mysql_fetch_assoc($query))
 		{
 			$student = new user($row);
 			array_push($this->students, $student);
-		}
+        }
+        return $this->students;
 	}
 	
 	function set_ranks($ranks) {

@@ -589,7 +589,7 @@ else {
 			else if ( $school_info['chidon'] ) {
 			?>
 				$(".school_type").eq(1).trigger('click');
-			?>
+			<?
 			}
 			else if ( $school_info['tanya'] ) {
 			?>

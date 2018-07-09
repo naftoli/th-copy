@@ -47,5 +47,60 @@ class GlobalSettings {
         $row = mysql_fetch_assoc($result);
         return $row['val'];
     }
+
+    /**
+     * GlobalSettings::getRegCost
+     * 
+     * returns current registration costs for the given school type, and early bird specials.
+     * 
+     * Accepts optional school paramater to return the rate that the school pays.
+     *
+     * @param int $type
+     * @param boolean $early_bird
+     * @param boolean $school
+     * @return integer
+     */
+    public static function getRegCost( $type, $school = false ) {
+        if ( $type == 1 ) { // In Tuition
+            return $school ? 45 : 0;
+        } else if ( $type == 2 ) { // Guarranteed, they get a bit of a discount
+            return 55;
+        }
+        // everyone else / default return
+        return 55;
+    }
+
+    /**
+     * getChidonCost
+     * 
+     * return the current price for chidon registration
+     *
+     * @return int
+     */
+    public static function getChidonCost(){
+        return 5;
+    }
+
+    /**
+     * getEarlyBird
+     * 
+     * return the current early bird discount
+     *
+     * @return int
+     */
+    public static function getEarlyBird(){
+        return 5;
+    }
+
+    /**
+     * getEarlyBird
+     * 
+     * return the current early bird discount
+     *
+     * @return int
+     */
+    public static function getGuarenteedDiscount(){
+        return 5;
+    }
 }
 ?>

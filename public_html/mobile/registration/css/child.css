@@ -1,0 +1,11 @@
+/* CSS to make the pages work */
+#pages {
+    padding-top: 10px;
+}
+button.navigation-button {
+    padding: 3% 15%;
+    font-size: 1.5em;
+}
+#no-th-base {
+    display: none;
+}

@@ -58,6 +58,9 @@ function logOut( redirect ){
 
 // do some cleanup on page load
 $( document ).ready( function() {
+    if ( !Cookies.get('admin') ){
+        window.location = "/mobile/reg/";
+    }
     // get the authentication type
     var auth_type = localStorage.getItem("login");
     // default to admin

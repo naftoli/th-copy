@@ -60,15 +60,21 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         
         <h2>Registration</h2>
         <div id="action-links">
+            <a href="registration_info.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="report"/>
+                    <span class="link-text">Registration Settings</span>
+                </div>
+            </a>
             <a href="/admin_school_register_report.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
-                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <img src="/images/icon_report.png" height="32" alt="report"/>
                     <span class="link-text">Registration Report</span>
                 </div>
             </a>
             <a href="/school_reg_types.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
-                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <img src="/images/icon_report.png" height="32" alt="report"/>
                     <span class="link-text">Registration Status</span>
                 </div>
             </a>

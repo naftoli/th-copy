@@ -33,7 +33,7 @@
 						</a>
 						
 						<SELECT name="class_id" id="class_id">
-							<OPTION value="0">All Plattons</OPTION>
+							<OPTION value="0">All Platoons</OPTION>
 						</SELECT>
 							
 						<a class="next button">
