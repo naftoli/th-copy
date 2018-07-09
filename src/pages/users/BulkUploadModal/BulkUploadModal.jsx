@@ -9,9 +9,15 @@ export class BulkUploadModal extends Component {
     isOpen: false, centered: true,
     toggle: () => {}
   }
+  inputRef = React.createRef();
 
   upload = () => {
-
+    const file = this.inputRef.current.files[0];
+    if ( !file ) return this.props.upload( false );
+    
+    const formData = new FormData();
+    formData.append( 'users', file, file.name );
+    this.props.upload( formData );
   }
 
   render() {
@@ -34,7 +40,7 @@ export class BulkUploadModal extends Component {
               <li>Upload spreadsheet into system using the file input below.</li>
             </ol>
           </Callout>
-          <FileInput />
+          <FileInput inputRef={ this.inputRef }/>
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={ this.upload }>Upload</Button>

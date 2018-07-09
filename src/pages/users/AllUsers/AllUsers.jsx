@@ -16,7 +16,7 @@ import arrayToCSV from 'functions/arrayToCSV';
 import 'react-table/react-table.css';
 import './AllUsers.scss';
 // state
-import { getSoldiers, updateSoldier } from 'store/soldiers/operations';
+import { getSoldiers, updateSoldier, uploadSpreadsheet } from 'store/soldiers/operations';
 
 export class AllUsers extends Component {
 
@@ -53,6 +53,12 @@ export class AllUsers extends Component {
   updatePicture = ( formData ) => {
     this.setState({ cropperModalShow: false });
     this.props.updateSoldier( this.state.cropperModalId, formData );
+  }
+
+  // handler for uploding the excel file
+  uploadSpreadsheet = ( formData ) => {
+    this.setState({ uploadModalShow: false });
+    this.props.uploadSpreadsheet( formData );
   }
 
   // scroll to the top of the table
@@ -168,8 +174,10 @@ export class AllUsers extends Component {
         <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight" 
           noDataText={ loading ? 'Loading...' : 'No Data' } defaultFilterMethod={ this.filter }
           onPageChange={ this.scrollToTop } onFilteredChange={ this.scrollToTop }/>
-        <CropperModal isOpen={ cropperModalShow } src={ cropperModalSrc } toggle={ this.closeCropperModal } uploadImage={ this.updatePicture }/>
-        <BulkUploadModal isOpen={ uploadModalShow } toggle={ this.toggleUploadModal }/>
+        <CropperModal isOpen={ cropperModalShow } src={ cropperModalSrc } 
+          toggle={ this.closeCropperModal } uploadImage={ this.updatePicture }/>
+        <BulkUploadModal isOpen={ uploadModalShow } toggle={ this.toggleUploadModal }
+          upload={ this.uploadSpreadsheet }/>
       </div>
     );
   }
@@ -184,5 +192,5 @@ const mapStateToProps = ( state ) => {
 }
 
 export default connect( 
-  mapStateToProps, { getSoldiers, updateSoldier } 
+  mapStateToProps, { getSoldiers, updateSoldier, uploadSpreadsheet } 
 )( AllUsers );
