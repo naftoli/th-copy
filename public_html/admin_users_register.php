@@ -1,20 +1,15 @@
 <?php
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// Set the page to under construction if the school is not in beta
-//if ($_GET['school_id'] != 82)
-	//header("Location: under_construction.php");
-	
-// Schools and super users can access page.
 $admin_auth = array('school');
-// get the cookies and authorize user
 require_once('header.php');
 // import functions relating to date conversion
 require_once('calendar.php');
 // set the UI
 $ui_type = 'school';
 require_once('admin_ui.php');
-//assure_id_school('school_id');
 
 // get the admin id from the get request headers or if that fails from the decoded cookie
 if (isset($_GET['admin_id'])) {
@@ -22,7 +17,7 @@ if (isset($_GET['admin_id'])) {
 } else {
 	$admin_id = $admin_user['admin_id'];
 }
-// load the admin class
+
 include("classes/admin.php");
 //include("classes/school.php");
 
@@ -30,14 +25,10 @@ include("classes/admin.php");
 $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-// and map him to the orm model
 $admin = new admin($row);
 // load the school id and the schools for given admin
 $admin->get_school_id(); 
 $admin->get_schools();
-
-// some  old debugging
-//print_r($admin);
 
 $admin_user['admin_id'] = $admin_id;
 if ( $admin->auth != "")
@@ -60,8 +51,7 @@ if (isset($_GET['registered'])) {
 if ($school_id == "")
 	$school_id = 0;
 	
-if (isset($_POST["hidden_school_id"]))
-{
+if (isset($_POST["hidden_school_id"])) {
 	$school_id = $_POST["hidden_school_id"];
 	
 	if (isset($_POST["first"]))
@@ -89,11 +79,10 @@ else
 	$sql = $sql . "JOIN schools AS s ON (aa.id=s.school_id) ";
 	$sql = $sql . "WHERE aa.admin_id=" . $admin->admin_id . " ";
 	$sql = $sql . "AND aa.auth='school' ";
-	$sql = $sql . "AND aa.role_id=16";
 	$query = mysql_query($sql);
 	$num_rows = mysql_num_rows($query);
 	
-	if ($num_rows > 1)
+	if ($num_rows >= 1)
 	{
 		while ($row = mysql_fetch_assoc($query)) 
 		{
@@ -104,47 +93,18 @@ else
 }
 
 // for old registration change code please see archive/admin_users_register/admin_users_register_new.php
-// it was all commented out and just causing distractions
 
-// We moved directories, later imports please beware
-chdir('mobile/reg/ajax');
-require_once 'regFeeSchools.php';
-$reg_fee = $userFee;
-if (in_array($school_id, $tuitionSchools) || in_array($school_id, $tuitionSchoolsNoPay)) $reg_fee = 45;
-if ($reg_fee == 55 && unixtojd() < 2458018 && in_array($school_id,  array_keys($extended))) {
-	$reg_fee = $extended[$school_id];
-	if ($reg_fee == 0) {
-		$reg_fee = 45;
-	}
-}
-// myshliach is always 45
-if ($school_id == 61) $reg_fee = 45;
 // if the GET request has a fee set in it use that fee
-if (isset($_GET['fee'])) $reg_fee = $_GET['fee'];
-// we are not a hebrew school by default
-$h_school = false;    
-//if school flagged as hebrew school set fee to 10
-if ( $admin->school_id > 0 ) {
-    $sql = "select inst_id from schools where school_id = " . $admin->school_id;
-    $result = mysql_query( $sql );
-    $row = mysql_fetch_assoc( $result );
-    $inst_id = $row['inst_id'];
-    if ( $inst_id == 4 ) {
-        //$reg_fee = 6;
-        $h_school = true;
-    }
-}
-
+if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['fee'];
+else $reg_fee = false;
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
-
-<HTML>
-	<HEAD>
-
-		<TITLE>Soldiers' Registration - Tzivos Hashem Management System</TITLE>
-		<LINK href="admin_styles.css" rel="stylesheet" type="text/css"/>
-		<LINK href="/styles/admin/loader.css" rel="stylesheet" type="text/css"/>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Soldiers' Registration - Tzivos Hashem Management System</title>
+		<link href="admin_styles.css" rel="stylesheet" type="text/css"/>
+		<link href="/styles/admin/loader.css" rel="stylesheet" type="text/css"/>
 		<link href="/styles/admin/forms.css"  rel="stylesheet" type="text/css"/>
 		<link href="/styles/admin/modal.css"  rel="stylesheet" type="text/css"/>
 <!--		JQuert Tools (loads Jquery 1.4) -->
@@ -155,7 +115,7 @@ if ( $admin->school_id > 0 ) {
 		<script src="js/utils/money_format.js"></script> <!-- Format money on the page -->
 		
 <!--		Page is mostly just Ajax calls and written in JavaScript.-->
-		<SCRIPT type="text/javascript">
+		<script type="text/javascript">
 			var tmp = null;
 			$(document).ready(function() { // once the page is ready, set up and define all the functions so that they are hidden from the user
 				
@@ -163,7 +123,7 @@ if ( $admin->school_id > 0 ) {
 				var first = "<?=$first;?>"; // the first name set in the post headers
 				var last = "<?=$last;?>"; // the last name. Also set in the post headers
 				var is_loaded = false;
-				var reg_fee = <?=$reg_fee;?>; // the registration fee
+				var reg_fee = 0; // the registration fee
 				var sid = <?=$school_id?>; // the id of the school that is registering students
 				
 				get_students(); // make an ajax call to load all the students
@@ -179,10 +139,7 @@ if ( $admin->school_id > 0 ) {
 					$(this).siblings('select').find('option:selected').prev().attr('selected','selected').parent().change();
 				});
 				
-				// reload students when a school is selected from the dropdown (or set to selected with the side arrows)
-				$(".school_list select").sSelect().change(function () {
-					get_students(); // ajax the students in
-				});
+				$(".school_list select").sSelect();
 				
 				// "GO" search button after form for entering names and school
 				$("#search_button").live('click', function() {
@@ -279,16 +236,15 @@ if ( $admin->school_id > 0 ) {
 					user_ids = "";
 					
 					// ***** Get the user ids of each child that is being registered ***** //
-					$.each($("#students_table").find("td[name=student_total]"), function() { 		
-						// if the student total column has a value in it add its value to the studnet ids list
-						if ($(this).html() > 0)
-							user_ids = user_ids + $(this).parents("tr").attr("data") + ":"; // students are seperated by a :
+					$.each($("#students_table").find("td > div.checkboxes > input:checked"), function() { 		
+                        // if the student total column has a value in it add its value to the studnet ids list
+                        user_ids += ( $(this).parent()[0].id + ":" );
 					});
 					// ***** Get the user ids of each child that is being registered ***** //
 					
 					if (user_ids !== "") { // if we have userid's
 						user_ids = user_ids.substr(0, user_ids.length - 1); // // remove the last : from the generated text
-					} else { // no students where selected
+                    } else { // no students where selected
 						alert("You have not made any selection!"); // notify the user that they have not made a selection
 						return false;
 					}
@@ -303,7 +259,6 @@ if ( $admin->school_id > 0 ) {
 				});
 				
 				// *********** CHARGE CREDIT CARD *********** //
-				
 				function preform_authorize_validation() {
 					// cast the json into a post params list
 					var dataToSend = $.param({
@@ -313,32 +268,36 @@ if ( $admin->school_id > 0 ) {
 						customer_profile_id: $("#authorize_customer_profile_id").val(),
 						payment_profile_id: $("#authorize_payment_profile_id").val()
 					});
-					
-					$.post(
-						"/ajax/authorize/charge_card.php",
-						dataToSend,
-						function(data) { // on a sucessfull hit this function is called
-							data = JSON.parse(data); // parse the result to json
-							
-							// add || sid == 82 to allow the test account access
-							
-							if(data.success) { // if the charge was sucessfull{
-								console.log(data.response);// log out the transaction response
-								registerStudents(); // register the students
-								// generate the response and show it in the correct box
-								var response  = data.response.transactionResponse.messages[0]; // load the correct section of the response
-								var message = response.description + " (" + response.code + ")"; // format the text
-								$('#credit_card_approval_results').html(message + "<br>") ; // show the user the response					
-								$('#box_cc_auth').css("display", "block");
-							} else { // alert the user that the charge has failed.
-								//alert(data.response); // show the failure in an alert for now
-								cc_modal.setError(data.response);
-								cc_modal.show();
-								$('#credit_card_approval_results').html(data.response + "<br>") ; // show the user the error					
-								$('#box_cc_auth').css("display", "block");
-							}
-						}
-					);
+                    
+                    if ( $('#grand_total_id').html() != '0.00' ) {
+                        $.post(
+                            "/ajax/authorize/charge_card.php",
+                            dataToSend,
+                            function(data) { // on a sucessfull hit this function is called
+                                data = JSON.parse(data); // parse the result to json
+                                
+                                // add || sid == 82 to allow the test account access
+                                
+                                if(data.success) { // if the charge was sucessfull{
+                                    console.log(data.response);// log out the transaction response
+                                    registerStudents(); // register the students
+                                    // generate the response and show it in the correct box
+                                    var response  = data.response.transactionResponse.messages[0]; // load the correct section of the response
+                                    var message = response.description + " (" + response.code + ")"; // format the text
+                                    $('#credit_card_approval_results').html(message + "<br>") ; // show the user the response					
+                                    $('#box_cc_auth').css("display", "block");
+                                } else { // alert the user that the charge has failed.
+                                    //alert(data.response); // show the failure in an alert for now
+                                    cc_modal.setError(data.response);
+                                    cc_modal.show();
+                                    $('#credit_card_approval_results').html(data.response + "<br>") ; // show the user the error					
+                                    $('#box_cc_auth').css("display", "block");
+                                }
+                            }
+                        );
+                    } else {
+                        registerStudents(); // register the students
+                    }
 				}
 				
 				// *********** REGISTER STUDENTS *********** //
@@ -348,7 +307,8 @@ if ( $admin->school_id > 0 ) {
 					$.each($("#students_table").find("tr[name=student_row]"), function() { // for each student in the table
 						var user_id = $(this).attr("data"); // get the user id
 						var amount = $(this).find("#student_total").html(); // set the amount to the total
-						//var optional = $(this).find("#optional_fee").val(); // get the optional fee. removed.
+                        var selected = $(this).find('div.checkboxes input')[0].checked;
+                        //var optional = $(this).find("#optional_fee").val(); // get the optional fee. removed.
 						var registered = $(this).find("#user_registered").html().trim(); // check if student was registered
 						if (registered == "Not Yet Registered"){ // set the correct formatting for the text
 							registered = "unregistered";
@@ -356,18 +316,18 @@ if ( $admin->school_id > 0 ) {
 							registered = "registered";
 						}
 						//alert(optional); // show the optional amount
-						if (amount > 0){ // if students where registered. set paramaters to the following <paramaters><user_id>;<amount>;<registered>:
+						if (selected){ // if students where registered. set paramaters to the following <paramaters><user_id>;<amount>;<registered>:
 							parameters = parameters + user_id + ";" + amount + ";" + registered + ":";					
 						}
 					});
 					// add the grand total and the user_ids to the paramaters
 					parameters = parameters + $("#grand_total_id").html() + ";" + sid;								
 					var url = "add_functions.php?function_name=register_students&parameters=" + parameters; // send the paramaters to the correct file
-					// get json back from the server.
+                    // get json back from the server.
 					$.getJSON(url, function(success) {
 						if (success) { // if something was returned.
 							alert(success); // alert the user
-						}
+					    }
 					});
 					
 					//update students that are being registered for user tracks and birthday missions
@@ -390,81 +350,71 @@ if ( $admin->school_id > 0 ) {
 				function get_students() {
 					// generate the url to load the students from
 					if ($("#school_id").val() > 0) {
-						var url = "register_school_students_new.php?school_id=" + $("#school_id").val();
+						var url = "/register_school_students_new.php?school_id=" + $("#school_id").val();
 					} else {
-						var url = "register_school_students_new.php?school_id=<?=$admin->school_id;?>";
+						var url = "/register_school_students_new.php?school_id=<?=$admin->school_id;?>";
 					}
 					
 					<? if (!empty($reg)) echo "url += '&registered=1'"; ?>
 					
-					url += "&fee=<?=$reg_fee?>";
+					<?php if ( $reg_fee !== false ) echo "url += \"&fee=$reg_fee\""; ?>
 					
 					// add the class id, first and last names if the page has been loaded once
 					if (is_loaded === true){
 						if ($("#class_id").val() > 0) {
 							url = url + "&class_id=" + $("#class_id").val();
 						}
-						if ($("#first").val() !== "") {
+						if ($("#first").val()) {
 							url = url + "&first=" + $("#first").val();
 						}
-						if ($("#last").val() !== "") {
+						if ($("#last").val()) {
 							url = url + "&last=" + $("#last").val();
 						}
-					}
+                    }
+                    $("#students_div").html('<div class="loader"></div>');
 					// get the data and set the html
-					$.get(url, function(data, status, http) {
-						if (http.readyState == 4 && http.status == 200){
-							$("#students_div").html(data);
-						}
-						
-					});
-													
+					$.get(url, function(data) {
+                        $("#students_div").html(data);
+                        reg_fee = parseInt($('#reg_fee').val(), 10);
+					});						
 				}
 				
 				is_loaded = true; // all the items, functions and page are loaded. change refresh behavior accordingly
 			});
-		</SCRIPT>
-	</HEAD>
+		</script>
+	</head>
 
-	<BODY>		
+	<body>		
 		<? include('lang.php'); ?>
 		<? include('admin_header.php'); ?>
-		
-		<DIV class="ui_<?=$ui_type?> <?=$align_start?>">
-		
-			<DIV class="body">
-			
-				<DIV class="sub_menu">		
+		<div class="ui_<?=$ui_type?> <?=$align_start?>">
+			<div class="body">
+				<div class="sub_menu">		
 					<? if (isset($message) && $message != "") : ?>
 						<H2>
 							<?=$message?>
 						</H2>
 					<?endif;?>
-				</DIV>
+				</div>
+				<H1><?=T_('Base Management')?></H1>
 				
-				<H1>
-					<?=T_('Base Management')?>
-				</H1>
-				
-				<? if (count($schools) > 1) : ?>	
-
-				<div class="infobox2 marking_list clearfix">
-					
+                <?php if (count($schools) > 1) { ?>	
+				    <div class="infobox2 marking_list clearfix">
 						<div class="school_list select_box">
 							<a class="prev button">
 								<span class="icon"></span>
 								<span class="label"><?=T_('Previous School')?></span>
 							</a>
 						
-							<SELECT name="school_id" id="school_id">
-								<? foreach ($schools as $school) : ?>
-									<? if ($school->school_id == $school_id) : ?>
-									<OPTION SELECTED value="<?=$school->school_id;?>"><?=$school->school_name;?></OPTION>
-									<? else : ?>
-									<OPTION value="<?=$school->school_id;?>"><?=$school->school_name;?></OPTION>
-									<? endif; ?>
-								<? endforeach; ?>
-							</SELECT>
+							<select name="school_id" id="school_id">
+								<? foreach ($schools as $school) { ?>
+									<? if ($school->school_id == $school_id) { ?>
+									<option selected value="<?=$school->school_id;?>"><?=$school->school_name;?></option>
+                                    <? } else { ?>
+									<option value="<?=$school->school_id;?>"><?=$school->school_name;?></option>
+									<? } ?>
+                                <? } ?>
+							</select>
 							
 							<a class="next button">
 								<span class="icon"></span>
@@ -472,12 +422,11 @@ if ( $admin->school_id > 0 ) {
 							</a>						
 						</div>
 					</div>
-					
-				<? endif; ?>
+                <? } // end if we have a class selector to show ?>
 				
-				<DIV name="students_div" id="students_div">
+				<div name="students_div" id="students_div">
 					<div class="loader">Loading...</div>
-				</DIV>
+				</div>
 <!--				The modal for editing the users Credit card -->
 				<div class="modal" id="cc_modal">
 					<div class="modal-content">
@@ -532,8 +481,8 @@ if ( $admin->school_id > 0 ) {
 						</form>
 					</div>
 				</div>
-			</DIV>
-		</DIV>
+			</div>
+		</div>
 		
 		<? include('admin_footer.php'); ?>
 		

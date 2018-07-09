@@ -125,10 +125,17 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $errors = [];
         // Insert into user_registration
         $reg_query = $pdo->prepare(
-            "INSERT INTO user_registration (user_id, admin_id, year, reg_date, paid, school_id) VALUES (?, ?, ?, NOW(), ?, ?)"
+            "INSERT INTO user_registration (user_id, admin_id, year, reg_date, paid, school_id) "
+            ."VALUES (:user_id, :admin_id, :year, NOW(), :paid, :school_id)"
+            ."ON DUPLICATE KEY UPDATE paid=:paid"
         );
-        if( !$reg_query->execute([ $this->user_id, $admin_id, $year, $amount, $this->school_id ]) )
-            $errors[] = "Could not insert into user_registration.";
+        if( !$reg_query->execute([ 
+            'user_id' => $this->user_id, 
+            'admin_id' => $admin_id, 
+            'year' => $year, 
+            'paid' => $amount, 
+            'school_id' => $this->school_id 
+        ])) $errors[] = "Could not insert into user_registration.";
         // update feilds to mark registered
         $this->user_registered = new \Datetime();
         if( !$this->user_start_date) $this->user_start_date = unixtojd();

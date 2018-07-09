@@ -1,11 +1,10 @@
 <?php
-include ("db.php");
-include ("classes/school.php");
-include ("classes/user.php");
-include ("classes/school_class.php");
+$admin_auth = array('school');
+require_once( __DIR__ . '/header.php');
+require_once( __DIR__ . '/api/header/db.php' );
 
 // load up authorize.net api
-require_once("classes/authorize/PaymentProfile.php");
+require_once(  __DIR__ . "/classes/authorize/PaymentProfile.php");
 use \classes\authorize\PaymentProfile;
 
 if (isset($_GET['school_id'])) 
@@ -36,14 +35,11 @@ $sql = "SELECT * FROM classes WHERE school_id=" . $school_id;
 $query = mysql_query($sql);
 while ($row = mysql_fetch_assoc($query))
 {
-	$class = new school_class($row);
+	$class = new Platoon($row);
 	array_push($classes, $class);
 }
 
-
-$users = array();
-
-$sql = "SELECT * FROM users WHERE school_id=" . $_GET["school_id"] . " ";
+$sql = "school_id=" . $_GET["school_id"] . " ";
 if ($class_id > 0)
 	$sql = $sql . "AND class_id=" . $class_id . " ";
 if ($first != "")
@@ -51,175 +47,44 @@ if ($first != "")
 if ($last != "")
 	$sql = $sql . "AND last LIKE '%" . $last . "%' ";
 if (isset($_GET['registered']))
-	$sql = $sql . " and (user_registered is null or user_registered = 0) ";
-//$sql .= " and class_id is not null ";
-$sql = $sql . " ORDER BY last, first";
-//echo $sql;
-$query = mysql_query($sql);
-while ($row = mysql_fetch_assoc($query))
-{
-	$user = new user($row);
-	$user->get_school_class();
-	array_push($users, $user);
-}
+	$sql = $sql . " AND (user_registered is null or user_registered = 0) ";
+
+$users = User::all( [ 
+    'conditions' => [$sql], 'include' => ['platoon'],
+    'order' => 'last, first'
+]);
+$users = is_array( $users ) ? $users : [ $users ];
 
 $row_no = 0;
-/*
-$s = "select year from school_add_ons group by year desc limit 1";
-$r = mysql_query($s);
-$y = mysql_fetch_row($r);
-$year = $y[0];
-//get id of first add on
-$s = "select school_add_on_id from school_add_ons where year = $year limit 1";
-$r = mysql_query($s);
-$id = mysql_fetch_row($r);
-$add_on_start = $id[0];
-$num_add_ons = 0;
 
-$add_ons = array();
-$sql = "select * from school_add_ons where year = " . $year;
-$result = mysql_query($sql);
-while ($row = mysql_fetch_assoc($result)) {
-	$add_ons[] = $row;
-	$num_add_ons++;
-}
-//get number of last add on
-$add_on_end = ($add_on_start + $num_add_ons);
-
-//require_once 'fees.php';
-/*
-if ($school_id == 61) {
-	$reg_fee = 40;
-}
-$australian = array(112,66,55,110);
-if (in_array( $school_id, $australian ) && unixtojd() < 2457087) {
-	$reg_fee = 40;
-}
-*/
-$add_ons = array();
-/*
-$reg_fee = 45;
-if (unixtojd() >= 2457655.5) $reg_fee = 55;
-
-//$tuitionSchools = array(30,7,89,45,50,60,63,39,19,42,9,255,84,33,110,265);
-include_once 'mobile/reg/ajax/regFeeSchools.php';
-if (in_array($school_id, $tuitionSchools)) $reg_fee = 40;
-else {
-	if (unixtojd() < 2457665) {
-		if (in_array($school_id, $fortyFive)) $reg_fee = 45;
-		else if (in_array($school_id, $fifty)) $reg_fee = 50;
-	}
-}
-
-if (in_array($school_id, $australia) && unixtojd() <= 2457813) $reg_fee = 40;
-/*
-$chaiElul = 2457268;
-$jd = unixtojd();
-switch ($school_id) {
-		case 61: 
-		if ($jd > $chaiElul) 
-			$reg_fee = 55;
-		else 
-			$reg_fee = 45;
-		break;
-	case 5:
-	case 42:
-	case 63:
-	case 263:
-		if ($jd > 2457269) 
-			$reg_fee = 50;
-		break;
-	case 3:
-	case 49:
-	case 81:
-	case 185:
-	case 192:
-		if ($jd > 2457273) 
-			$reg_fee = 50;
-		break;
-	case 7:
-	case 9:
-	case 30:
-	case 45:
-	case 60:
-	case 89:
-		if ($jd > 2457274) 
-			$reg_fee = 50;
-		break;
-	case 2:
-		if ($jd > 2457275) 
-			$reg_fee = 50;
-		break;
-	case 58:
-	case 106:
-	case 194:
-		if ($jd > 2457276) 
-			$reg_fee = 50;
-		break;
-	case 89:
-	case 176:
-		if ($jd > 2457277) 
-			$reg_fee = 50;
-		break;
-	case 4:
-	case 84:
-	case 21:
-		if ($jd > 2457278) 
-			$reg_fee = 50;
-		break;
-	case 162: 
-		if ($jd > 2457304) 
-			$reg_fee = 50;
-		break;	
-	case 54:
-		if ($jd > 2457309) 
-			$reg_fee = 50;
-		break;
-	case 80:
-		if ($jd > 2457320)
-			$reg_fee = 50;
-		break;
-	case 55:
-		$reg_fee = 40;
-		if ($jd > 2457443)
-			$reg_fee = 50;
-		break;
-	default: 
-		if ($jd > $chaiElul) 
-			$reg_fee = 50;
-		break;
-}
-*/
-chdir('mobile/reg/ajax');
-require_once 'regFeeSchools.php';
-$reg_fee = $userFee;
-if (in_array($school_id, $tuitionSchools) || in_array($school_id, $tuitionSchoolsNoPay)) $reg_fee = 45;
-if ($reg_fee == 55 && unixtojd() < 2458018 && in_array($school_id,  array_keys($extended))) {
-	$reg_fee = $extended[$school_id];
-}
-// day school of houston gets 45 until yom kippur
-//if (unixtojd() < 2458027 && $school_id == 84) $reg_fee = 45;
-
-if (isset($_GET['fee'])) $reg_fee = $_GET['fee'];
-
-// myshliach is always 45
-if ($school_id == 61) $reg_fee = 45;
-
-// Lubavitcher Yeshiva CH is also 45 for the year
-if ($school_id == 9) $reg_fee = 45;
-
-$h_school = false;
-//if school flagged as hebrew school set fee to 10   
-if ( $school_id > 0 ) {
-    $sql = "select inst_id from schools where school_id = " . $school_id;
-    $result = mysql_query( $sql );
-    $row = mysql_fetch_assoc( $result );
-    $inst_id = $row['inst_id'];
-    if ( $inst_id == 4 ) {
-        //$reg_fee = 6;
-        $h_school = true;
+require_once( __DIR__ . '/class.globalSettings.php' );
+$year = GlobalSettings::getRegistrationYear();
+$registration_info_query = mysql_query( 
+    "SELECT * from school_registrations where school_id = $school_id and year = $year"
+);
+$reg_info = mysql_fetch_assoc( $registration_info_query );
+// check for updated data
+if ( $reg_info ) {
+    $early_bird = new DateTime( $reg_info['early_bird'] ) > new DateTime();
+    $reg_fee = GlobalSettings::calculateChildFee( 
+        $reg_info['type'], $reg_info['child_fee'], true, $early_bird, false
+    );
+// fallback to old system
+} else {
+    require_once __DIR__ . '/mobile/reg/ajax/regFeeSchools.php';
+    $reg_fee = $userFee;
+    if ( in_array($school_id, $tuitionSchools ) || in_array( $school_id, $tuitionSchoolsNoPay ) ) $reg_fee = 45;
+    if ($reg_fee == 55 && unixtojd() < 2458018 && in_array($school_id,  array_keys($extended))) {
+        $reg_fee = $extended[$school_id];
+        if ($reg_fee == 0) {
+            $reg_fee = 45;
+        }
     }
+    // myshliach is always 45
+    if ($school_id == 61) $reg_fee = 45;
 }
+// if the GET request has a fee set in it use that fee
+if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['fee'];
 ?>
 
 <DIV class="ui_body">
@@ -250,14 +115,10 @@ if ( $school_id > 0 ) {
 						<select name="class_id" id="class_id">
 							<option value="-1">&lt;All&gt; </option>
 							<? foreach ($classes as $class) : ?>
-							<? if ($class->class_sub != "") $class_sub = "-" . $class->class_sub; else $class_sub = ""; ?>
-							
-								<? if ($class->class_id == $class_id) : ?>
-								<option selected value="<?=$class->class_id;?>"><?=$class->class_grade . $class_sub;?></option>
-								<? else : ?>
-								<option value="<?=$class->class_id;?>"><?=$class->class_grade . $class_sub;?></option>
-								<? endif; ?>
-							
+								<option <?= $class->class_id == $class_id ? 'selected' : ''?> 
+                                    value="<?=$class->class_id;?>">
+                                    <?=$class->name();?>
+                                </option>
 							<? endforeach; ?>
 						</select>
 					</label> 
@@ -273,6 +134,8 @@ if ( $school_id > 0 ) {
 		<INPUT type="hidden" id="cc_number" value="<?=$school->cc_number;?>"> 
 		<INPUT type="hidden" id="cc_exp" value="<?=$school->cc_exp?>"> 
 		<INPUT type="hidden" id="cc_cvv" value="<?=$school->cc_cvv;?>">
+        <!-- Registration Rate -->
+        <INPUT type="hidden" id="reg_fee" value="<?=$reg_fee?>"> 
 		<!-- Authorize.net credentials for user -->
 		<INPUT type="hidden" id="authorize_customer_profile_id" value="<?=$school->authorize_customer_profile_id;?>">
 		<INPUT type="hidden" id="authorize_payment_profile_id" value="<?=$school->authorize_payment_profile_id;?>">
@@ -291,12 +154,7 @@ if ( $school_id > 0 ) {
 			<THEAD>
 			
 				<TR>					
-					<TH>
-						<? if ( !$h_school ) { ?>
-						<!--<a href="suggested_sizes.php" onClick="return popup(this)">View Suggested Sizes</a>-->
-					    <? } ?>
-					</TH>
-					
+					<TH></TH>
 					<TH>			
 						Select All
 						<BR>
@@ -307,18 +165,6 @@ if ( $school_id > 0 ) {
 							?>
 						</LABEL>
 						<BR>
-						
-						<?
-//							if ( !$h_school ) {
-//    							$i = $add_on_start;
-//    							foreach ($add_ons as $add_on) {
-//    								echo "<label><input type='checkbox' name='toggle_add_on_" . $i . "' id='toggle_add_on_" . $i . "'>" . 
-//    									$add_on['title'] . " $" . $add_on['price'] . "</label><br />";
-//    								$i++;
-//    							}
-//    						}
-						?>
-
 					</TH>
 						
 					<TH>
@@ -345,44 +191,16 @@ if ( $school_id > 0 ) {
 					
 			
 			<? foreach ($users as $user) :?>
-			
-				<?
-				//get add-ons for user
-				/*
-				if ( !$h_school ) {
-    				$user_add_ons = array();
-    				$add_ons_qry = "select * from user_add_ons as ua 
-    							join school_add_ons as sa on (ua.school_add_on_id = sa.school_add_on_id) 
-    							where sa.year = $year and user_id = " . $user->user_id;
-    				$res = mysql_query($add_ons_qry);
-    				while ($row = mysql_fetch_assoc($res)) {
-    					if ($row['needs_size']) 
-    						$user_add_ons[$row['school_add_on_id']] = $row['title'] . " (" . strtoupper($row['size']) . ")";
-    					else
-    						$user_add_ons[$row['school_add_on_id']] = $row['title'];
-    				}
-                }
-                */
-				$user_add_ons = array();
-				?>
 				
-				<? if ($user->user_registered > 0) $registered = "registered"; else $registered = "unregistered"; ?>
+				<? if ($user->user_registered) $registered = "registered"; else $registered = "unregistered"; ?>
 				
 				<? if ($row_no % 2 == 0) $class = "even"; else $class = "odd"; ?>
 				
 				<TR name="student_row" id="<?=$registered;?>" class="<?=$class;?>" data="<?=$user->user_id;?>">
 				
 					<TD name="user_registered" id="user_registered" width='20%'>
-						<? if ($user->user_registered > 0) : ?>
+						<? if ($user->user_registered) : ?>
 							Registered
-							<?
-								//find which add-ons student is registered for
-								if ( !$h_school ) {
-    								foreach ($user_add_ons as $user_add_on) {
-    									echo "<br />" . $user_add_on;
-    								}
-                                }
-							?>
 							<? $class = "registered"; ?>
 						<? else : ?>
 							Not Yet Registered
@@ -394,117 +212,13 @@ if ( $school_id > 0 ) {
 					
 						<div class="checkboxes" id="<?=$user->user_id;?>" name="<?=$user->user_id;?>">
 							
-							<? if ($user->user_registered > 0) : ?>
-							
+							<? if ($user->user_registered) : ?>
 								<input type="hidden" name="registration_fee" id="registration_fee" value='registered'>
-								<!--
-								<?
-									if ( !$h_school ) {
-    									$i = $add_on_start;
-    									foreach ($add_ons as $add_on) {
-    										if (!array_key_exists($add_on['school_add_on_id'], $user_add_ons)) {
-    											echo "<input type='checkbox' name='add_on_" . $i . "' id='add_on_" . $i . "'> ";
-    											echo "$" . $add_on['price'] . " " . $add_on['title'];
-    											if ($add_on['needs_size'] == 1) {
-    												$size = $add_on['title'] . "_size";
-    												switch ($add_on['title']) {
-    													case 'Sweatshirt':
-    														echo " <select id='" . $size . "' name='". $size . "'>
-    															<option value='s'>S</option>
-    															<option value='m' selected >M</option>
-    															<option value='l'>L</option>
-    															<option value='xl'>XL</option>
-    															</select>";
-    														break;
-    													case 'Cap':
-    														echo " <select id='" . $size . "' name='". $size . "'>
-    															<option value='s'>S</option>
-    															<option value='l'>L</option>
-    															</select>";
-    														break;
-    													case 'Yarmulka':
-    														echo " <select id='" . $size . "' name='". $size . "'>
-    															<option value='4'>4</option>
-    															<option value='5'>5</option>
-    															</select>";
-    														break;
-    												}											
-    											}
-    											echo "<br />";
-    											$i++;
-    										}
-    										else {
-    											echo "<input type='hidden' name='add_on_" . $i . "' id='add_on_" . $i . "'> ";
-    											$i++;
-    											//echo "$" . $add_on['price'] . " " . $add_on['title'];
-    											//echo "<br />";
-    										}
-    									}
-    								}
-								?>
-								-->
 							<? else : ?>
 								<input type="checkbox" name="registration_fee" id="registration_fee">
-								<?
-                                echo "$" . $reg_fee . ".00";
-								?>
+								<? echo "$" . $reg_fee . ".00"; ?>
 								Registration fee 
 								<br />
-								<!--
-								<?
-									if ( !$h_school ) {
-    									$i = $add_on_start;
-    									foreach ($add_ons as $add_on) {
-    										echo "<input type='checkbox' name='add_on_" . $i . "' id='add_on_" . $i . "'> ";
-    										echo "$" . $add_on['price'] . " " . $add_on['title'];
-    										if ($add_on['needs_size'] == 1) {
-    												$size = $add_on['title'] . "_size";
-    												switch ($add_on['title']) {
-    													case 'Sweatshirt':
-    														echo " <select id='" . $size . "' name='". $size . "'>
-    															<option value='s'>S</option>
-    															<option value='m' selected >M</option>
-    															<option value='l'>L</option>
-    															<option value='xl'>XL</option>
-    															</select>";
-    														break;
-    													case 'Cap':
-    														echo " <select id='" . $size . "' name='". $size . "'>
-    															<option value='s'>S</option>
-    															<option value='l'>L</option>
-    															</select>";
-    														break;
-    													case 'Yarmulka':
-    														echo " <select id='" . $size . "' name='". $size . "'>
-    															<option value='4'>4</option>
-    															<option value='5'>5</option>
-    															</select>";
-    														break;
-    												}
-    												
-    											}
-    										echo "<br />";
-    										$i++;
-    									}
-    								}
-								?>
-								-->
-								<!--
-								<input type="checkbox" name="add_on_one" id="add_on_one">
-								$14.00 School store 
-								Sweatshirt size:
-								<select id='shirt_size_<?=$row['user_id']?>'>
-									<option>S</option>
-									<option selected >M</option>
-									<option>L</option>
-									<option>XL</option>
-								</select>
-								
-								<br />
-								
-								<input type="checkbox" name="add_on_two" id="add_on_two">
-								$24.00 Album 
-								-->
 							<? endif; ?>
 							
 						</div>
@@ -522,16 +236,8 @@ if ( $school_id > 0 ) {
 					</TD>
 					
 					<TD>
-						<?=$user->school_class ? $user->school_class->class_grade : "";?>
-						<? if ($user->school_class && $user->school_class->class_sub != "") : ?>
-							<?="-" . $user->school_class->class_sub;?>
-						<? endif; ?>
+						<?=$user->platoon ? $user->platoon->name() : "";?>
 					</TD>
-					<!--
-					<TD>
-						$<INPUT type="text" name="optional_fee" id="optional_fee" value="<?=$user->user_registration_fee;?>" maxlength="7" size="5">
-					</TD>
-					-->
 				</TR>
 				
 				<? $row_no++; ?>

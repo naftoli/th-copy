@@ -30,22 +30,11 @@ class SchoolRegistration extends ActiveRecord\Model implements JsonSerializable 
             $fee = $this->child_fee;
         // if we do not. get the default rates
         } else {
-            $fee = GlobalSettings::getRegCost( $for_type, $is_school );
+            $fee = 0;
         }
-        // return the final rate if requested
-        if ( $no_discount ) return $fee >= 0 ? $fee : 0;
-
         // is the early bird done...
         $early_bird = $this->early_bird > new DateTime();
-        // add early bird discount
-        if ( $for_type != 1 && $early_bird )
-            $fee -= GlobalSettings::getEarlyBird();
-        // add type 2 discount
-        if ( $for_type == 2 && $early_bird ) {
-            $fee -= GlobalSettings::getGuarenteedDiscount();
-        }
-        // do not allow negative numbers
-        return $fee >= 0 ? $fee : 0;
+        return GlobalSettings::calculateChildFee( $for_type, $fee, $is_school, $early_bird, $no_discount );
     }
 
     public function jsonSerialize(){
