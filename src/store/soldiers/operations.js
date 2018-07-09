@@ -24,7 +24,25 @@ export const updateSoldier = ( id, data ) => dispatch => {
       return response;
     }).catch( error => {
       toast.update( toast_id, {type: toast.TYPE.ERROR, 
-        render: "Network Error while Updating Soldier. Please check your internet connection."
+        render: "Network error while updating Soldier. Please check your internet connection."
+      });
+      console.error( error );
+    });
+}
+
+export const uploadSpreadsheet = ( data ) => dispatch => {
+  const toast_id = toast.info( "Uploading user spreadsheet...", { autoClose: false } );
+  return API.post( `/upload/users.php`, data )
+    .then( response => {
+      if ( !response.success ) {
+        toast.update( toast_id, { type: toast.TYPE.ERROR, render: response.error });
+      } else { 
+        toast.update( toast_id, { type: toast.TYPE.SUCCESS, render: "Spreadsheet uploaded and processed!", autoClose: null });
+      };
+      return response;
+    }).catch( error => {
+      toast.update( toast_id, {type: toast.TYPE.ERROR, 
+        render: "Network error while uploading. Please check your internet connection."
       });
       console.error( error );
     });
