@@ -95,7 +95,7 @@ var registration_info = function(){
         url = id == '0' ? url : url + '?id=' + id;
 
         function handleResponse( response ){
-            $(event.target).text( "Save" );
+            $(event.target).text( "Save / Make Live" );
             if( !response.success ) {
                 return alert( response.error + '\n\n' + response.data.join('\n') )
             }

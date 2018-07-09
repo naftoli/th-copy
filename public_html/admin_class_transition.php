@@ -184,8 +184,9 @@ foreach( $admin->schools as $school ){
         </form>
         <script>
             $('#confirm-teachers').submit( function( event ){
-                if ( !confirm("Yes I have confirmed all the teachers information is correct and up to date") )
+                if ( !confirm("Yes I have confirmed all the teachers information is correct and up to date") ) {
                     event.preventDefault();
+                }
             });
         </script>
     <?php } ?>
