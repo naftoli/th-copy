@@ -78,7 +78,7 @@ require_once('constant_file.php');
                     ).show();
                 } else {
                     $('#errros').html(
-                        'Spreadsheet sucessfully uploaded and parsed.<br/>' + 
+                        'Spreadsheet sucessfully uploaded.<br/>' + 
                         'The Soldiers should now be created for your base.<br/>' +
                         'Please visit <a href="/admin_class_transition.php">Platoon Transition</a> to assign them to a platoon.'
                     ).show();
