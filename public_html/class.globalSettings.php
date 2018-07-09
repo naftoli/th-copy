@@ -71,6 +71,34 @@ class GlobalSettings {
     }
 
     /**
+     * calculateChildFee
+     * 
+     * calculates the child registration fee with all discounts applied
+     *
+     * @param integer $type
+     * @param integer $fee
+     * @param boolean $is_school
+     * @param boolean $early_bird
+     * @param boolean $no_discount
+     * @return integer
+     */
+    public static function calculateChildFee( $type, $fee = 0, $is_school = false, $early_bird = false, $no_discount = false ) {
+        // get the default fee
+        $fee = $fee > 0 ? $fee : self::getRegCost( $type, $is_school );
+        // return the final rate if requested
+        if ( $no_discount ) return $fee >= 0 ? $fee : 0;
+        // add early bird discount ( not for type 1 )
+        if ( $type != 1 && $early_bird )
+            $fee -= self::getEarlyBird();
+        // add type 2 discount
+        if ( $type == 2 && $early_bird ) {
+            $fee -= self::getGuarenteedDiscount();
+        }
+        // do not allow negative numbers
+        return $fee >= 0 ? $fee : 0;
+    }
+
+    /**
      * getChidonCost
      * 
      * return the current price for chidon registration
