@@ -341,29 +341,31 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
     $notRegistered = $rowQ2['total'];
     
     $school_registered_query = mysql_query(
-        "SELECT date_paid FROM school_registrations WHERE school_id = $school_id AND year = $regYear;"
+        "SELECT COUNT(*) as total, date_paid FROM school_registrations WHERE school_id = $school_id AND year = $regYear;"
     );
-    $school_registered = mysql_fetch_assoc( $school_registered_query )['date_paid'];
-	?>	
-	<div>
-		<div class="inner">
-			<h3>Registration <?=$regYear?></h3>
-            <? if ( $school_registered ) { ?>
-                <p>
-                    You have <?=$registered?> chayolim registered in the program for <?=$regYear?>.<br />
-                    <? if ($notRegistered > 0) : ?>
-                    <span style="color: red; font-weight: bold;">
-                        You still have <?=$notRegistered?> chayolim that are not yet registered for <?=$regYear?>!<br />
-                        <!-- Click <a href="admin_users_register_new.php?school_id=<?=$school_id?>&registered=1">here</a> to register them!</span> -->
-                    </span>
-                    <? endif; ?>
-                </p>
-            <? } else { ?>
-                <h4>Pre-register your base for <?=$regYear?> <a href='registration.php'>here</a>.</h4>
-            <? } ?>
-			<!--Click <a href="child_list.php">here</a> for the list of parent accounts with linked children.-->
-		</div>
-	</div>
+    $school_registered_query = mysql_fetch_assoc( $school_registered_query );
+    $school_registered = $school_registered_query['date_paid'];
+    if ( $school_registered_query['total'] > 0 ) { ?>
+        <div>
+            <div class="inner">
+                <h3>Registration <?=$regYear?></h3>
+                <? if ( $school_registered ) { ?>
+                    <p>
+                        You have <?=$registered?> chayolim registered in the program for <?=$regYear?>.<br />
+                        <? if ($notRegistered > 0) : ?>
+                        <span style="color: red; font-weight: bold;">
+                            You still have <?=$notRegistered?> chayolim that are not yet registered for <?=$regYear?>!<br />
+                            <!-- Click <a href="admin_users_register_new.php?school_id=<?=$school_id?>&registered=1">here</a> to register them!</span> -->
+                        </span>
+                        <? endif; ?>
+                    </p>
+                <? } else { ?>
+                    <h4>Pre-register your base for <?=$regYear?> <a href='registration.php'>here</a>.</h4>
+                <? } ?>
+                <!--Click <a href="child_list.php">here</a> for the list of parent accounts with linked children.-->
+            </div>
+        </div>
+    <?php } ?>
 	<!--
 	<div>
 		<div class="inner">
