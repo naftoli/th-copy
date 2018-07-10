@@ -28,7 +28,7 @@ else
 $sql = "SELECT * FROM schools WHERE school_id=" . $school_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-$school = new school($row);
+$school = new School($row);
 
 $classes = array();
 $sql = "SELECT * FROM classes WHERE school_id=" . $school_id;
