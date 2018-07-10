@@ -1,11 +1,7 @@
 <?php
-include_once( __DIR__ . '/traits/BuildModel.php' );
-include_once( __DIR__ . '/traits/SetRelatedModel.php' );
 include_once( __DIR__ . '/../functions/files/images.php' );
 
 class User extends ActiveRecord\Model implements JsonSerializable {
-    use traits\BuildModel;
-    use traits\SetRelatedModel;
 
     static $before_create = ['generateSerial', 'generateBarcode'];
 
@@ -127,7 +123,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $reg_query = $pdo->prepare(
             "INSERT INTO user_registration (user_id, admin_id, year, reg_date, paid, school_id) "
             ."VALUES (:user_id, :admin_id, :year, NOW(), :paid, :school_id)"
-            ."ON DUPLICATE KEY UPDATE paid=:paid"
+            ."ON DUPLICATE KEY UPDATE admin_id=:admin_id, paid=:paid"
         );
         if( !$reg_query->execute([ 
             'user_id' => $this->user_id, 
