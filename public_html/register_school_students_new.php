@@ -59,51 +59,28 @@ $row_no = 0;
 
 require_once( __DIR__ . '/class.globalSettings.php' );
 $year = GlobalSettings::getRegistrationYear();
-$registration_info_query = mysql_query( 
-    "SELECT * from school_registrations where school_id = $school_id and year = $year"
-);
-$reg_info = mysql_fetch_assoc( $registration_info_query );
-// check for updated data
-if ( $reg_info ) {
-    $early_bird = new DateTime( $reg_info['early_bird'] ) > new DateTime();
-    $reg_fee = GlobalSettings::calculateChildFee( 
-        $reg_info['type'], $reg_info['child_fee'], true, $early_bird, false
-    );
-// fallback to old system
-} else {
-    require_once __DIR__ . '/mobile/reg/ajax/regFeeSchools.php';
-    $reg_fee = $userFee;
-    if ( in_array($school_id, $tuitionSchools ) || in_array( $school_id, $tuitionSchoolsNoPay ) ) $reg_fee = 45;
-    if ($reg_fee == 55 && unixtojd() < 2458018 && in_array($school_id,  array_keys($extended))) {
-        $reg_fee = $extended[$school_id];
-        if ($reg_fee == 0) {
-            $reg_fee = 45;
-        }
-    }
-    // myshliach is always 45
-    if ($school_id == 61) $reg_fee = 45;
-}
+// 
+$reg_info = $school->getRegInfo( $year );
+$reg_fee = $reg_info->getChildFee( true );
+
 // if the GET request has a fee set in it use that fee
 if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['fee'];
 ?>
-
-<DIV class="ui_body">
-
-	<DIV class="content">
 	
+<div class="ui_body">
+	<div class="content">
 		<h2>Soldiers' Registration</h2>
-		
 		<div class="infobox">
-			All of your Soldiers are displayed below. Select the Soldiers you are registering and their registration levels.						
+			All of your Soldiers are displayed below.<br/>
+            Select the Soldiers you are registering.						
 		</div>		
-		
+        <!-- Generate infobox -->
 		<div class="infobox2">
 			<p>
 				<form method="post" action="admin_users_register_new.php">
 					<input type="hidden" name="hidden_school_id" id="hidden_school_id" value="<?=$school_id;?>">
 					
-					<label style="white-space: nowrap;">
-						First name: 
+					<label style="white-space: nowrap;">First name: 
 						<input type="text" value="<?=$first;?>" name="first" id="first">
 					</label> 
 					
@@ -122,149 +99,105 @@ if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['
 							<? endforeach; ?>
 						</select>
 					</label> 
-										
 					<input type="button" class="button" name="search_button" id="search_button" value="GO">
 				</form>
 			</p>
 		</div>
 		
 		<!--Embedding CC information in the page when loaded over ajax.-->
-        <INPUT type="hidden" id="cc_first" value="<?=$school->cc_first?>"> 
-        <INPUT type="hidden" id="cc_last" value="<?=$school->cc_last?>"> 		    
-		<INPUT type="hidden" id="cc_number" value="<?=$school->cc_number;?>"> 
-		<INPUT type="hidden" id="cc_exp" value="<?=$school->cc_exp?>"> 
-		<INPUT type="hidden" id="cc_cvv" value="<?=$school->cc_cvv;?>">
+        <input type="hidden" id="cc_first" value="<?=$school->cc_first?>"/> 
+        <input type="hidden" id="cc_last" value="<?=$school->cc_last?>"/> 		    
+		<input type="hidden" id="cc_number" value="<?=$school->cc_number;?>"/> 
+		<input type="hidden" id="cc_exp" value="<?=$school->cc_exp?>"/> 
+		<input type="hidden" id="cc_cvv" value="<?=$school->cc_cvv;?>"/>
         <!-- Registration Rate -->
-        <INPUT type="hidden" id="reg_fee" value="<?=$reg_fee?>"> 
+        <input type="hidden" id="reg_fee" value="<?=$reg_fee?>"/> 
 		<!-- Authorize.net credentials for user -->
-		<INPUT type="hidden" id="authorize_customer_profile_id" value="<?=$school->authorize_customer_profile_id;?>">
-		<INPUT type="hidden" id="authorize_payment_profile_id" value="<?=$school->authorize_payment_profile_id;?>">
+		<input type="hidden" id="authorize_customer_profile_id" value="<?=$school->authorize_customer_profile_id;?>"/>
+		<input type="hidden" id="authorize_payment_profile_id" value="<?=$school->authorize_payment_profile_id;?>"/>
 		<? // send billing information in the same refresh page
 		if($school->authorize_payment_profile_id && $school->authorize_customer_profile_id){
 			$paymentProfile = new PaymentProfile($school->authorize_payment_profile_id, $school->authorize_customer_profile_id);
 			$billTo = json_encode($paymentProfile->billTo); // pass it to the client as json
 		}
 		?>
-		<INPUT type="hidden" id="authorize_bill_to" value='<?=$billTo;?>'> <!-- use single quotes to pass json to client side -->
-		<INPUT type="hidden" id="authorize_cc_num" value='<?=$paymentProfile->cardNumber;?>'>
-		<INPUT type="hidden" id="authorize_cc_exp" value='<?=$paymentProfile->expirationDate;?>'>
+		<input type="hidden" id="authorize_bill_to" value='<?=$billTo;?>'/> <!-- use single quotes to pass json to client side -->
+		<input type="hidden" id="authorize_cc_num" value='<?=$paymentProfile->cardNumber;?>'/>
+		<input type="hidden" id="authorize_cc_exp" value='<?=$paymentProfile->expirationDate;?>'/>
 		
-		<TABLE cellspacing="0" cellpadding="0" style="font-size: 12px;" class="list list_left" id="students_table" name="students_table">
-
-			<THEAD>
-			
-				<TR>					
-					<TH></TH>
-					<TH>			
+		<table cellspacing="0" style="font-size: 12px;" class="list list_left" 
+                id="students_table" name="students_table" cellpadding="0">
+			<thead>
+				<tr>					
+					<th></th>
+					<th>			
 						Select All
-						<BR>
-						<LABEL style="white-space: nowrap;"> 
-							<INPUT type="checkbox" name="toggle_registration_fee" id="toggle_registration_fee">Registration fee 
-							<?
-							echo "$" . $reg_fee . ".00";
+						<br/>
+						<label style="white-space: nowrap;"> 
+							<input type="checkbox" name="toggle_registration_fee" id="toggle_registration_fee">
+                            Registration fee  <?="$" . $reg_fee . ".00";?>
+						</label>
+						<br/>
+					</th>
+					<th>Total</th>
+					<th>Name</th>
+					<th>Platoon</th>
+				</tr>
+			</thead>
+			<tbody>
+            <?php 
+            foreach ($users as $user) {
+				$registered = $user->user_registered ? "registered" : "unregistered";
+                $class = ($row_no % 2 == 0) ? "even" : "odd"; ?>
+				<tr name="student_row" id="<?=$registered;?>" class="<?=$class;?>" data="<?=$user->user_id;?>">
+					<td name="user_registered" id="user_registered" width='20%'>
+                        <?php
+                            if ($user->user_registered) {
+                                echo 'Registered';
+                                $class = "registered";
+                            } else {
+                                echo 'Not Yet Registered';
+                                $class = "unregistered";
+                            }
 							?>
-						</LABEL>
-						<BR>
-					</TH>
+					</td>
 						
-					<TH>
-						Total
-					</TH>
-					
-					<TH>
-						Name
-					</TH>
-					
-					<TH>
-						Platoon
-					</TH>
-					<!--
-					<TH>
-						Registration Fee (Optional, for your records only)
-					</TH>
-					-->
-				</TR>
-
-			</THEAD>
-
-			<TBODY>
-					
-			
-			<? foreach ($users as $user) :?>
-				
-				<? if ($user->user_registered) $registered = "registered"; else $registered = "unregistered"; ?>
-				
-				<? if ($row_no % 2 == 0) $class = "even"; else $class = "odd"; ?>
-				
-				<TR name="student_row" id="<?=$registered;?>" class="<?=$class;?>" data="<?=$user->user_id;?>">
-				
-					<TD name="user_registered" id="user_registered" width='20%'>
-						<? if ($user->user_registered) : ?>
-							Registered
-							<? $class = "registered"; ?>
-						<? else : ?>
-							Not Yet Registered
-							<? $class = "unregistered"; ?>
-						<? endif; ?>
-					</TD>
-					
-					<TD width='25%'>
-					
+					<td width='25%'>
 						<div class="checkboxes" id="<?=$user->user_id;?>" name="<?=$user->user_id;?>">
-							
-							<? if ($user->user_registered) : ?>
+							<?php if ($user->user_registered) { ?>
 								<input type="hidden" name="registration_fee" id="registration_fee" value='registered'>
-							<? else : ?>
+                            <?php } else { ?>
 								<input type="checkbox" name="registration_fee" id="registration_fee">
-								<? echo "$" . $reg_fee . ".00"; ?>
-								Registration fee 
+								$<?=$reg_fee?>.00 Registration fee 
 								<br />
-							<? endif; ?>
-							
+							<?php } ?>
 						</div>
-						
-					</TD>
-					
-					<TD id="student_total" name="student_total" width='10%'>
-						0.00
-					</TD>
-					
-					<TD>
-						<A HREF="admin_user.php?action=edit&amp;user_id=<?=$user->user_id;?>&school_id=<?=$user->school_id?>&class_id=<?=$user->class_id?>">
+					</td>
+					<td id="student_total" name="student_total" width='10%'>0.00</td>
+					<td>
+						<a href="admin_user.php?action=edit&amp;user_id=<?=$user->user_id;?>&school_id=<?=$user->school_id?>&class_id=<?=$user->class_id?>">
 							<?=$user->last;?>, <?=$user->first;?>
-						</A>
-					</TD>
-					
-					<TD>
-						<?=$user->platoon ? $user->platoon->name() : "";?>
-					</TD>
-				</TR>
-				
-				<? $row_no++; ?>
-				
-			<? endforeach; ?>
-							
-			</TBODY>
-			
-		</TABLE>
+						</a>
+					</td>
+					<td><?=$user->platoon ? $user->platoon->name() : "";?></td>
+				</tr>
+				<?php $row_no++;
+            } ?>			
+			</tbody>
+		</table>
+		<table class="list">
+			<tr>
+				<td>&nbsp;</td>
+				<td>Total</td>
+				<td>&nbsp;</td>
+				<td id="grand_total_id" name="grand_total_id">0.00</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+		<br /><br />
 		
-		<TABLE class="list">
-			<TR>
-				<TD>&nbsp;</TD>
-				<TD>Total</TD>
-				<TD>&nbsp;</TD>
-				<TD id="grand_total_id" name="grand_total_id">0.00</TD>
-				<TD>&nbsp;</TD>
-				<TD>&nbsp;</TD>
-			</TR>
-		</TABLE>
-		
-		<br />
-		<br />
-		
-		<h2>
-			Credit card approval
-		</h2>
+		<h2>Credit card approval</h2>
 
 		<div class="module" id="module-info">
 			<div class="module_content">
@@ -285,9 +218,7 @@ if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['
 			</div>
 		</div>
 		
-		<h2>
-			Refund Policy
-		</h2>
+		<h2>Refund Policy</h2>
 
 		<div class="module" id="module-info">
 			<div class="module_content">
@@ -314,10 +245,7 @@ if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['
 		<br />
 		
 		<div id="box_cc_auth" style="display:none;">
-			<h2>
-				Credit Card Authorization Results
-			</h2>
-			
+			<h2>Credit Card Authorization Results</h2>
 			<div class="module" id="module-info">
 				<div class="module_content">
 					<div class="lists form">
@@ -334,12 +262,10 @@ if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['
 		<br />
 		
 		<div style="text-align:center">
-			<INPUT type="button" value="Register Above Soldiers" id='register_students' />
-			<INPUT type="button" value="Review school settings" name="school_review" id="school_review" />
-			<INPUT type="button" value="Review CC settings" name="school_cc_review" id="school_cc_review" />
+			<input type="button" value="Register Above Soldiers" id='register_students' />
+			<input type="button" value="Review school settings" name="school_review" id="school_review" />
+			<input type="button" value="Review CC settings" name="school_cc_review" id="school_cc_review" />
+		</div>
+	</div>
 		</div>
 				
-	</DIV>
-	
-	
-</DIV>	
