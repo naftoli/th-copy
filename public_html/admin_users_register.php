@@ -62,18 +62,14 @@ if (isset($_POST["hidden_school_id"])) {
 }
 // get the schools the user can access
 $schools = array();
-if ($admin->auth == "super")
-{	
+if ($admin->auth == "super") {	
 	$sql = "SELECT * FROM schools ORDER BY school_name";
 	$query = mysql_query($sql);
-	while ($row = mysql_fetch_assoc($query)) 
-	{
+	while ( $row = mysql_fetch_assoc( $query ) ) {
 		$school = new school($row);
 		array_push($schools, $school);
 	}
-} 	
-else
-{
+} else {
 	$sql = "SELECT s.* ";
 	$sql = $sql . "FROM admin_auths AS aa ";
 	$sql = $sql . "JOIN schools AS s ON (aa.id=s.school_id) ";
@@ -82,10 +78,8 @@ else
 	$query = mysql_query($sql);
 	$num_rows = mysql_num_rows($query);
 	
-	if ($num_rows >= 1)
-	{
-		while ($row = mysql_fetch_assoc($query)) 
-		{
+	if ( $num_rows >= 1 ) {
+		while ( $row = mysql_fetch_assoc($query) ) {
 			$school = new school($row);
 			array_push($schools, $school);
 		}
@@ -113,10 +107,109 @@ else $reg_fee = false;
 		<script src="js/admin/components/cc_modal.js"></script> <!-- Show the modal for credit cards -->
 		<script src="js/utils/cc_validate.js"></script> <!-- Validate Credit cards -->
 		<script src="js/utils/money_format.js"></script> <!-- Format money on the page -->
+	</head>
+
+	<body>		
+		<? include('lang.php'); ?>
+		<? include('admin_header.php'); ?>
+		<div class="ui_<?=$ui_type?> <?=$align_start?>">
+			<div class="body">
+				<div class="sub_menu">		
+					<?php if (isset($message) && $message != "") { ?>
+						<h2><?=$message?></h2>
+                    <?php } ?>
+				</div>
+				<h1><?=T_('Base Management')?></h1>
+				
+                <?php if ( count($schools) > 1 ) { ?>	
+				    <div class="infobox2 marking_list clearfix">
+						<div class="school_list select_box">
+							<a class="prev button">
+								<span class="icon"></span>
+								<span class="label"><?=T_('Previous School')?></span>
+							</a>
+						
+							<select name="school_id" id="school_id">
+								<? foreach ($schools as $school) { ?>
+									<? if ($school->school_id == $school_id) { ?>
+									<option selected value="<?=$school->school_id;?>"><?=$school->school_name;?></option>
+                                    <? } else { ?>
+									<option value="<?=$school->school_id;?>"><?=$school->school_name;?></option>
+									<? } ?>
+                                <? } ?>
+							</select>
+							
+							<a class="next button">
+								<span class="icon"></span>
+								<span class="label"><?=T_('Next School')?></span>
+							</a>						
+						</div>
+					</div>
+                <? } // end if we have a class selector to show ?>
+				
+				<div name="students_div" id="students_div">
+					<div class="loader">Loading...</div>
+				</div>
+<!--				The modal for editing the users Credit card -->
+				<div class="modal" id="cc_modal">
+					<div class="modal-content">
+						<h1 style="margin-bottom: 0px;">Update Credit Card<span class="close" id="update_cc_exit">&times;</span></h1>
+						<h2 id="cc_modal_error"></h2>
+						<form id="update_cc" action="/ajax/authorize/update_card.php" method="post">						
+							<div class="input_group input_half">
+								<label><?=T_('CC Number')?><br />
+									<input TYPE="text" NAME="cc_number" id="cc_number" VALUE="" MAXLENGTH="19" required/>
+									<span class="cc_form_error" id="cc_number_errors"></span>
+								</label>
+							</div><div class="input_group input_quarter">
+								<label><?=T_('Expires MM/YY')?><br />
+									<input TYPE="text" NAME="cc_exp" id="cc_exp" VALUE="" MAXLENGTH="5" required/>
+									<span class="cc_form_error" id="cc_exp_errors"></span>
+								</label>
+							</div><div class="input_group input_quarter">
+								<label><?=T_('CVV')?><br />
+									<input TYPE="text" NAME="cc_cvv" id="cc_cvv" VALUE="" MAXLENGTH="4"/>
+									<span class="cc_form_error" id="cc_cvv_errors"></span>
+								</label>
+							</div>
+							<div class="input_group input_full">
+								<label>
+									<?=T_('Billing Address')?><br />
+									<input type="text" name="billing_address" id="billing_address" value="" maxlength=255 required/><br/>
+									<span class="cc_form_error" id="billing_address_errors"></span>
+								</label><br />
+							</div><div class="input_group input_third">
+								<label>
+									<?=T_('Billing City')?><br />
+									<input type="text" name="billing_city" id="billing_city" value="" maxlength=255 required/>
+									<span class="cc_form_error" id="billing_city_errors"></span>
+								</label><br />
+							</div><div class="input_group input_third">
+								<label>
+									<?=T_('Billing State/Province')?><br />
+									<input type="text" name="billing_state" id="billing_state" value="" maxlength=255 required/>
+									<span class="cc_form_error" id="billing_state_errors"></span>
+								</label><br />
+							</div><div class="input_group input_third">
+								<label>
+									<?=T_('Billing Zip/Postal code')?><br />
+									<input type="text" name="billing_postal" id="billing_postal" value="" maxlength=10 required/>
+									<span class="cc_form_error" id="billing_postal_errors"></span>
+								</label><br />
+							</div>
+							<div class="modal-footer">
+								<input type="submit" value="Update" id="update_cc_submit"/>
+								<input type="button" value="Cancel" id="update_cc_cancel"/>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 		
-<!--		Page is mostly just Ajax calls and written in JavaScript.-->
+		<? include('admin_footer.php'); ?>
+		<!--		Page is mostly just Ajax calls and written in JavaScript.-->
 		<script type="text/javascript">
-			var tmp = null;
 			$(document).ready(function() { // once the page is ready, set up and define all the functions so that they are hidden from the user
 				
 				var user_ids = "";	 // the user id list that is being registered			
@@ -130,32 +223,23 @@ else $reg_fee = false;
 			
 				// next and previous school buttons
 				$('.marking_list div a.next').click(function(){
-					// get the select box and set the next item as selected
 					$(this).siblings('select').find('option:selected').next().attr('selected','selected').parent().change();
 				});
-				
 				$('.marking_list div a.prev').click(function(){
-					// get the select box and set the previous item as selected
 					$(this).siblings('select').find('option:selected').prev().attr('selected','selected').parent().change();
 				});
-				
+				// style the dropdown
 				$(".school_list select").sSelect();
-				
 				// "GO" search button after form for entering names and school
-				$("#search_button").live('click', function() {
-					get_students(); // ajax the new list of students
-				});	
-				
+				$("#search_button").live('click', get_students );
 				// redirect the user to the edit page for the school should he press the review button
 				$('#school_review').live('click', function() {	
 					window.location = "/admin_school2.php?school_id=" + sid + "&action=edit";	
 				});
-				
-				$('#school_cc_review').live('click', function() {
-					cc_modal.show();
-				});
+                // show the modal when the button is pressed
+				$('#school_cc_review').live('click', function() { cc_modal.show(); });
 			
-				// ********** REGISTARTION FEES ********** //
+				// ****************************** REGISTARTION FEES ****************************** //
 				
 				// ********************* MASTER REGISTRATION SWITCH ************************ //
 				$("#toggle_registration_fee").live('click', function() { // toggle all the registration fees.
@@ -204,9 +288,7 @@ else $reg_fee = false;
 				
 				// ********** MISC ********** //
 				// if the class id box changess reload the students
-				$('#class_id').live("change", function() {
-					get_students();
-				});
+				$('#class_id').live( "change", get_students );
 				
 				// if the school id changes, change the review school link and refresh the students
 				$("#school_id").change(function() {
@@ -301,7 +383,6 @@ else $reg_fee = false;
 				}
 				
 				// *********** REGISTER STUDENTS *********** //
-				
 				function registerStudents() {
 					var parameters = ""; // the paramaters for the request
 					$.each($("#students_table").find("tr[name=student_row]"), function() { // for each student in the table
@@ -346,15 +427,13 @@ else $reg_fee = false;
 				}
 				
 				// ********** LOAD STUDENTS ********** //
-				
 				function get_students() {
 					// generate the url to load the students from
+                    var url = "/register_school_students_new.php?school_id=<?=$admin->school_id;?>";
 					if ($("#school_id").val() > 0) {
-						var url = "/register_school_students_new.php?school_id=" + $("#school_id").val();
-					} else {
-						var url = "/register_school_students_new.php?school_id=<?=$admin->school_id;?>";
+						url = "/register_school_students_new.php?school_id=" + $("#school_id").val();
 					}
-					
+					// add the registered flag
 					<? if (!empty($reg)) echo "url += '&registered=1'"; ?>
 					
 					<?php if ( $reg_fee !== false ) echo "url += \"&fee=$reg_fee\""; ?>
@@ -376,116 +455,11 @@ else $reg_fee = false;
 					$.get(url, function(data) {
                         $("#students_div").html(data);
                         reg_fee = parseInt($('#reg_fee').val(), 10);
-					});						
+					});
 				}
 				
 				is_loaded = true; // all the items, functions and page are loaded. change refresh behavior accordingly
 			});
 		</script>
-	</head>
-
-	<body>		
-		<? include('lang.php'); ?>
-		<? include('admin_header.php'); ?>
-		<div class="ui_<?=$ui_type?> <?=$align_start?>">
-			<div class="body">
-				<div class="sub_menu">		
-					<? if (isset($message) && $message != "") : ?>
-						<H2>
-							<?=$message?>
-						</H2>
-					<?endif;?>
-				</div>
-				<H1><?=T_('Base Management')?></H1>
-				
-                <?php if (count($schools) > 1) { ?>	
-				    <div class="infobox2 marking_list clearfix">
-						<div class="school_list select_box">
-							<a class="prev button">
-								<span class="icon"></span>
-								<span class="label"><?=T_('Previous School')?></span>
-							</a>
-						
-							<select name="school_id" id="school_id">
-								<? foreach ($schools as $school) { ?>
-									<? if ($school->school_id == $school_id) { ?>
-									<option selected value="<?=$school->school_id;?>"><?=$school->school_name;?></option>
-                                    <? } else { ?>
-									<option value="<?=$school->school_id;?>"><?=$school->school_name;?></option>
-									<? } ?>
-                                <? } ?>
-							</select>
-							
-							<a class="next button">
-								<span class="icon"></span>
-								<span class="label"><?=T_('Next School')?></span>
-							</a>						
-						</div>
-					</div>
-                <? } // end if we have a class selector to show ?>
-				
-				<div name="students_div" id="students_div">
-					<div class="loader">Loading...</div>
-				</div>
-<!--				The modal for editing the users Credit card -->
-				<div class="modal" id="cc_modal">
-					<div class="modal-content">
-						<h1 style="margin-bottom: 0px;">Update Credit Card<span class="close" id="update_cc_exit">&times;</span></h1>
-						<h2 id="cc_modal_error"></h2>
-						<form id="update_cc" action="/ajax/authorize/update_card.php" method="post">						
-							<div class="input_group input_half">
-								<LABEL><?=T_('CC Number')?><BR>
-									<INPUT TYPE="text" NAME="cc_number" id="cc_number" VALUE="" MAXLENGTH="19" required/>
-									<span class="cc_form_error" id="cc_number_errors"></span>
-								</LABEL>
-							</div><div class="input_group input_quarter">
-								<LABEL><?=T_('Expires MM/YY')?><BR>
-									<INPUT TYPE="text" NAME="cc_exp" id="cc_exp" VALUE="" MAXLENGTH="5" required/>
-									<span class="cc_form_error" id="cc_exp_errors"></span>
-								</LABEL>
-							</div><div class="input_group input_quarter">
-								<LABEL><?=T_('CVV')?><BR>
-									<INPUT TYPE="text" NAME="cc_cvv" id="cc_cvv" VALUE="" MAXLENGTH="4"/>
-									<span class="cc_form_error" id="cc_cvv_errors"></span>
-								</LABEL>
-							</div>
-							<div class="input_group input_full">
-								<LABEL>
-									<?=T_('Billing Address')?><BR>
-									<INPUT type="text" name="billing_address" id="billing_address" value="" maxlength=255 required/><br/>
-									<span class="cc_form_error" id="billing_address_errors"></span>
-								</LABEL><BR>
-							</div><div class="input_group input_third">
-								<LABEL>
-									<?=T_('Billing City')?><BR>
-									<INPUT type="text" name="billing_city" id="billing_city" value="" maxlength=255 required/>
-									<span class="cc_form_error" id="billing_city_errors"></span>
-								</LABEL><BR>
-							</div><div class="input_group input_third">
-								<LABEL>
-									<?=T_('Billing State/Province')?><BR>
-									<INPUT type="text" name="billing_state" id="billing_state" value="" maxlength=255 required/>
-									<span class="cc_form_error" id="billing_state_errors"></span>
-								</LABEL><BR>
-							</div><div class="input_group input_third">
-								<LABEL>
-									<?=T_('Billing Zip/Postal code')?><BR>
-									<INPUT type="text" name="billing_postal" id="billing_postal" value="" maxlength=10 required/>
-									<span class="cc_form_error" id="billing_postal_errors"></span>
-								</LABEL><BR>
-							</div>
-							<div class="modal-footer">
-								<input type="submit" value="Update" id="update_cc_submit"/>
-								<input type="button" value="Cancel" id="update_cc_cancel"/>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<? include('admin_footer.php'); ?>
-		
-	</BODY>
-</HTML>
-
+	</body>
+</html>
