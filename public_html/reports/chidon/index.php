@@ -111,6 +111,15 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
+        <h2>Booklets</h2>
+        <div id="action-links">
+            <a href="booklet_report.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/v2/images/back-end/admin/icon_install.png" height="32" alt="tickets"/>
+                    <span class="link-text">Chidon Booklet Report</span>
+                </div>
+            </a>
+        </div>
         <?} // end admin only links ?>
         </div>
         
