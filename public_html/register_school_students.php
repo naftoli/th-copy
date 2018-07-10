@@ -1,8 +1,11 @@
 <?php
-include ("db.php");
-include ("classes/school.php");
-include ("classes/user.php");
-include ("classes/school_class.php");
+$admin_auth = array('school');
+require_once( __DIR__ . '/header.php');
+require_once( __DIR__ . '/api/header/db.php' );
+
+// load up authorize.net api
+require_once(  __DIR__ . "/classes/authorize/PaymentProfile.php");
+use \classes\authorize\PaymentProfile;
 
 if (isset($_GET['school_id'])) 
 	$school_id = $_GET["school_id"];
@@ -32,49 +35,52 @@ $sql = "SELECT * FROM classes WHERE school_id=" . $school_id;
 $query = mysql_query($sql);
 while ($row = mysql_fetch_assoc($query))
 {
-	$class = new school_class($row);
+	$class = new Platoon($row);
 	array_push($classes, $class);
 }
 
-
-$users = array();
-
-$sql = "SELECT * FROM users WHERE school_id=" . $_GET["school_id"] . " ";
+$sql = "school_id=" . $_GET["school_id"] . " ";
 if ($class_id > 0)
 	$sql = $sql . "AND class_id=" . $class_id . " ";
 if ($first != "")
 	$sql = $sql . "AND first LIKE '%" . $first . "%' ";
 if ($last != "")
 	$sql = $sql . "AND last LIKE '%" . $last . "%' ";
-$sql = $sql . " ORDER BY last, first";
-$query = mysql_query($sql);
-while ($row = mysql_fetch_assoc($query))
-{
-	$user = new user($row);
-	$user->get_school_class();
-	array_push($users, $user);
-}
+if (isset($_GET['registered']))
+	$sql = $sql . " AND (user_registered is null or user_registered = 0) ";
+
+$users = User::all( [ 
+    'conditions' => [$sql], 'include' => ['platoon'],
+    'order' => 'last, first'
+]);
+$users = is_array( $users ) ? $users : [ $users ];
 
 $row_no = 0;
+
+require_once( __DIR__ . '/class.globalSettings.php' );
+$year = GlobalSettings::getRegistrationYear();
+// 
+$reg_info = $school->getRegInfo( $year );
+$reg_fee = $reg_info->getChildFee( true );
+
+// if the GET request has a fee set in it use that fee
+if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['fee'];
 ?>
-
-<DIV class="ui_body">
-
-	<DIV class="content">
 	
+<div class="ui_body">
+	<div class="content">
 		<h2>Soldiers' Registration</h2>
-		
 		<div class="infobox">
-			All of your Soldiers are displayed below. Select the Soldiers you are registering and their registration levels. (For your records: At the end of each line you can input if registration fees were collected and how much.)						
+			All of your Soldiers are displayed below.<br/>
+            Select the Soldiers you are registering.						
 		</div>		
-		
+        <!-- Generate infobox -->
 		<div class="infobox2">
 			<p>
 				<form method="post" action="admin_users_register.php">
 					<input type="hidden" name="hidden_school_id" id="hidden_school_id" value="<?=$school_id;?>">
 					
-					<label style="white-space: nowrap;">
-						First name: 
+					<label style="white-space: nowrap;">First name: 
 						<input type="text" value="<?=$first;?>" name="first" id="first">
 					</label> 
 					
@@ -86,202 +92,112 @@ $row_no = 0;
 						<select name="class_id" id="class_id">
 							<option value="-1">&lt;All&gt; </option>
 							<? foreach ($classes as $class) : ?>
-							<? if ($class->class_sub != "") $class_sub = "-" . $class->class_sub; else $class_sub = ""; ?>
-							
-								<? if ($class->class_id == $class_id) : ?>
-								<option selected value="<?=$class->class_id;?>"><?=$class->class_grade . $class_sub;?></option>
-								<? else : ?>
-								<option value="<?=$class->class_id;?>"><?=$class->class_grade . $class_sub;?></option>
-								<? endif; ?>
-							
+								<option <?= $class->class_id == $class_id ? 'selected' : ''?> 
+                                    value="<?=$class->class_id;?>">
+                                    <?=$class->name();?>
+                                </option>
 							<? endforeach; ?>
 						</select>
 					</label> 
-										
 					<input type="button" class="button" name="search_button" id="search_button" value="GO">
 				</form>
 			</p>
 		</div>
 		
-		<INPUT type="hidden" id="cc_first" value="<?=$school->cc_first?>"> 
-		<INPUT type="hidden" id="cc_number" value="<?=$school->cc_number;?>"> 
-		<INPUT type="hidden" id="cc_exp" value="<?=$school->cc_exp?>"> 
-		<INPUT type="hidden" id="cc_cvv" value="<?=$school->cc_cvv;?>"> 
-									
-		<TABLE cellspacing="0" cellpadding="0" style="font-size: 12px;" class="list list_left" id="students_table" name="students_table">
-
-			<THEAD>
-			
-				<TR>
-				
-					<TH>
-					</TH>
-					
-					<TH>			
-						Package (note that base package is mandatory if options are selected)
-						<BR>
-						<BR>
+		<!--Embedding CC information in the page when loaded over ajax.-->
+        <input type="hidden" id="cc_first" value="<?=$school->cc_first?>"/> 
+        <input type="hidden" id="cc_last" value="<?=$school->cc_last?>"/> 		    
+		<input type="hidden" id="cc_number" value="<?=$school->cc_number;?>"/> 
+		<input type="hidden" id="cc_exp" value="<?=$school->cc_exp?>"/> 
+		<input type="hidden" id="cc_cvv" value="<?=$school->cc_cvv;?>"/>
+        <!-- Registration Rate -->
+        <input type="hidden" id="reg_fee" value="<?=$reg_fee?>"/> 
+		<!-- Authorize.net credentials for user -->
+		<input type="hidden" id="authorize_customer_profile_id" value="<?=$school->authorize_customer_profile_id;?>"/>
+		<input type="hidden" id="authorize_payment_profile_id" value="<?=$school->authorize_payment_profile_id;?>"/>
+		<? // send billing information in the same refresh page
+		if($school->authorize_payment_profile_id && $school->authorize_customer_profile_id){
+			$paymentProfile = new PaymentProfile($school->authorize_payment_profile_id, $school->authorize_customer_profile_id);
+			$billTo = json_encode($paymentProfile->billTo); // pass it to the client as json
+		}
+		?>
+		<input type="hidden" id="authorize_bill_to" value='<?=$billTo;?>'/> <!-- use single quotes to pass json to client side -->
+		<input type="hidden" id="authorize_cc_num" value='<?=$paymentProfile->cardNumber;?>'/>
+		<input type="hidden" id="authorize_cc_exp" value='<?=$paymentProfile->expirationDate;?>'/>
+		
+		<table cellspacing="0" style="font-size: 12px;" class="list list_left" 
+                id="students_table" name="students_table" cellpadding="0">
+			<thead>
+				<tr>					
+					<th></th>
+					<th>			
 						Select All
-						<BR>
-						<LABEL style="white-space: nowrap;"> 
-							<INPUT type="checkbox" name="toggle_registration_fee" id="toggle_registration_fee">Registration fee 
-						</LABEL>
-						<BR>
-						
-						<LABEL>
-							<INPUT type="checkbox" name="toggle_add_on_one" id="toggle_add_on_one">School store
-						</LABEL>
-						<BR>
-						
-						<LABEL>
-							<INPUT type="checkbox" name="toggle_add_on_two" id="toggle_add_on_two">770 album
-						</LABEL>
-						<BR>
-					</TH>
-						
-					<TH>
-						Total
-					</TH>
-					
-					<TH>
-						Name
-					</TH>
-					
-					<TH>
-						Platoon
-					</TH>
-					
-					<TH>
-						Registration Fee (Optional, for your records only)
-					</TH>
-					
-				</TR>
-
-			</THEAD>
-
-			<TBODY>
-					
-			
-			<? foreach ($users as $user) :?>
-				
-				<? if ($user->user_registered > 0) $registered = "registered"; else $registered = "unregistered"; ?>
-				
-				<? if ($row_no % 2 == 0) $class = "even"; else $class = "odd"; ?>
-				
-				<TR name="student_row" id="<?=$registered;?>" class="<?=$class;?>" data="<?=$user->user_id;?>">
-				
-					<TD name="user_registered" id="user_registered" width='20%'>
-						<? if ($user->user_registered > 0) : ?>
-							Registered
-							<?
-								//find which add-ons student is registered for
-								if ($user->add_on_one == 1) echo "<br />Store";
-								if ($user->add_on_two == 1) echo "<br />Album";
+						<br/>
+						<label style="white-space: nowrap;"> 
+							<input type="checkbox" name="toggle_registration_fee" id="toggle_registration_fee">
+                            Registration fee  <?="$" . $reg_fee . ".00";?>
+						</label>
+						<br/>
+					</th>
+					<th>Total</th>
+					<th>Name</th>
+					<th>Platoon</th>
+				</tr>
+			</thead>
+			<tbody>
+            <?php 
+            foreach ($users as $user) {
+				$registered = $user->user_registered ? "registered" : "unregistered";
+                $class = ($row_no % 2 == 0) ? "even" : "odd"; ?>
+				<tr name="student_row" id="<?=$registered;?>" class="<?=$class;?>" data="<?=$user->user_id;?>">
+					<td name="user_registered" id="user_registered" width='20%'>
+                        <?php
+                            if ($user->user_registered) {
+                                echo 'Registered';
+                                $class = "registered";
+                            } else {
+                                echo 'Not Yet Registered';
+                                $class = "unregistered";
+                            }
 							?>
-							<? $class = "registered"; ?>
-						<? else : ?>
-							<? $class = "unregistered"; ?>
-						<? endif; ?>
-					</TD>
-					
-					<TD width='25%'>
-					
-						<div class="checkboxes" id="<?=$user->user_id;?>" name="<?=$user->user_id;?>">
-							
-							<? if ($user->user_registered > 0) : ?>
-							
-								<? if ($user->add_on_one == 0 && ($school->add_on_one == 2 || $school->add_on_one == 3 || $school->add_on_one == 4)) : ?>
-									<input type="checkbox" name="add_on_one" id="add_on_one">
-									$14.00 School store 
-									Sweatshirt size:
-									<select id="shirt_size" name="shirt_size">
-										<option>S</option>
-										<option selected >M</option>
-										<option>L</option>
-										<option>XL</option>
-									</select>
-									<br />
-								<? endif; ?>
-								
-								<? if ($user->add_on_two == 0 && ($school->add_on_two == 2 || $school->add_on_two == 3 || $school->add_on_two == 4)) : ?>
-									<input type="checkbox" name="add_on_two" id="add_on_two">
-									$24.00 Album 								
-								<? endif; ?>							
-								
-							<? else : ?>
-								<input type="checkbox" name="registration_fee" id="registration_fee">
-								$36.00 Registration fee 
-								
-								<br />
-								
-								<input type="checkbox" name="add_on_one" id="add_on_one">
-								$14.00 School store 
-								Sweatshirt size:
-								<select id='shirt_size_<?=$row['user_id']?>'>
-									<option>S</option>
-									<option selected >M</option>
-									<option>L</option>
-									<option>XL</option>
-								</select>
-								
-								<br />
-								
-								<input type="checkbox" name="add_on_two" id="add_on_two">
-								$24.00 Album 
-							<? endif; ?>
-							
-						</div>
+					</td>
 						
-					</TD>
-					
-					<TD id="student_total" name="student_total" width='10%'>
-						0.00
-					</TD>
-					
-					<TD>
-						<A HREF="admin_user.php?action=edit&amp;user_id=<?=$user->user_id;?>&school_id=<?=$user->school_id?>&class_id=<?=$user->class_id?>">
+					<td width='25%'>
+						<div class="checkboxes" id="<?=$user->user_id;?>" name="<?=$user->user_id;?>">
+							<?php if ($user->user_registered) { ?>
+								<input type="hidden" name="registration_fee" id="registration_fee" value='registered'>
+                            <?php } else { ?>
+								<input type="checkbox" name="registration_fee" id="registration_fee">
+								$<?=$reg_fee?>.00 Registration fee 
+								<br />
+							<?php } ?>
+						</div>
+					</td>
+					<td id="student_total" name="student_total" width='10%'>0.00</td>
+					<td>
+						<a href="admin_user.php?action=edit&amp;user_id=<?=$user->user_id;?>&school_id=<?=$user->school_id?>&class_id=<?=$user->class_id?>">
 							<?=$user->last;?>, <?=$user->first;?>
-						</A>
-					</TD>
-					
-					<TD>
-						<?=$user->school_class->class_grade;?>
-						<? if ($user->school_class->class_sub != "") : ?>
-							<?="-" . $user->school_class->class_sub;?>
-						<? endif; ?>
-					</TD>
+						</a>
+					</td>
+					<td><?=$user->platoon ? $user->platoon->name() : "";?></td>
+				</tr>
+				<?php $row_no++;
+            } ?>			
+			</tbody>
+		</table>
+		<table class="list">
+			<tr>
+				<td>&nbsp;</td>
+				<td>Total</td>
+				<td>&nbsp;</td>
+				<td id="grand_total_id" name="grand_total_id">0.00</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+		<br /><br />
 		
-					<TD>
-						$<INPUT type="text" value="<?=$user->user_registration_fee;?>" maxlength="7" size="5">
-					</TD>
-		
-				</TR>
-				
-				<? $row_no++; ?>
-				
-			<? endforeach; ?>
-							
-			</TBODY>
-			
-		</TABLE>
-		
-		<TABLE class="list">
-			<TR>
-				<TD>&nbsp;</TD>
-				<TD>Total</TD>
-				<TD>&nbsp;</TD>
-				<TD id="grand_total_id" name="grand_total_id">0.00</TD>
-				<TD>&nbsp;</TD>
-				<TD>&nbsp;</TD>
-			</TR>
-		</TABLE>
-		
-		<br />
-		<br />
-		
-		<h2>
-			Credit card approval
-		</h2>
+		<h2>Credit card approval</h2>
 
 		<div class="module" id="module-info">
 			<div class="module_content">
@@ -302,13 +218,34 @@ $row_no = 0;
 			</div>
 		</div>
 		
+		<h2>Refund Policy</h2>
+
+		<div class="module" id="module-info">
+			<div class="module_content">
+				<div class="lists form">
+					<ul>
+						<li>
+							<span class="box">
+								<p class='input'>
+								Registration:
+								We will not refund any legitimate registration even if the program was not used on your end.
+								<br />
+								Processing errors:
+								For any overcharge of registration due to technical errors we will fully refund. 
+								Credit card transactions will be credited to the original card used. 
+								This process may take up to two weeks.
+								</p>
+							</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
 		<br />
 		
 		<div id="box_cc_auth" style="display:none;">
-			<h2>
-				Credit Card Authorization Results
-			</h2>
-			
+			<h2>Credit Card Authorization Results</h2>
 			<div class="module" id="module-info">
 				<div class="module_content">
 					<div class="lists form">
@@ -325,11 +262,10 @@ $row_no = 0;
 		<br />
 		
 		<div style="text-align:center">
-			<INPUT type="button" value="Review school settings" name="school_review" id="school_review" >
-			<INPUT type="button" value="Register Above Soldiers" id='register_students' >
+			<input type="button" value="Register Above Soldiers" id='register_students' />
+			<input type="button" value="Review school settings" name="school_review" id="school_review" />
+			<input type="button" value="Review CC settings" name="school_cc_review" id="school_cc_review" />
+		</div>
+	</div>
 		</div>
 				
-	</DIV>
-	
-	
-</DIV>	
