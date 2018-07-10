@@ -355,7 +355,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
                         <? if ($notRegistered > 0) : ?>
                         <span style="color: red; font-weight: bold;">
                             You still have <?=$notRegistered?> chayolim that are not yet registered for <?=$regYear?>!<br />
-                            <!-- Click <a href="admin_users_register_new.php?school_id=<?=$school_id?>&registered=1">here</a> to register them!</span> -->
+                            <!-- Click <a href="admin_users_register.php?school_id=<?=$school_id?>&registered=1">here</a> to register them!</span> -->
                         </span>
                         <? endif; ?>
                     </p>
@@ -408,7 +408,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 				<? if ($notRegistered > 0) : ?>
 				<span style="color: red; font-weight: bold;">
 					You still have <?=$notRegistered?> chayolim that are not yet registered!<br />
-					Click <a href="admin_users_register_new.php?registered=1">here</a> to register them!</span>
+					Click <a href="admin_users_register.php?registered=1">here</a> to register them!</span>
 				</span>
 				<? endif; ?>
 				<br />
@@ -665,7 +665,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 		<div class="inner">
 			<h3>Registration 5776</h3>
 			<p>
-				Click <a href="admin_users_register_new.php">here</a> to register your chayolim!
+				Click <a href="admin_users_register.php">here</a> to register your chayolim!
 			</p>
 			<p>
 				Click <a href="https://www.dropbox.com/sh/7sy6vd4ocywp6kb/AACPLjmtZGckS7nTSdGh1iSRa/CTH%20-%20Registration%20Brochure%205776%20single%20pages%20LR.pdf?dl=0">here</a> 

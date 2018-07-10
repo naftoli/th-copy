@@ -77,7 +77,7 @@ if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['
         <!-- Generate infobox -->
 		<div class="infobox2">
 			<p>
-				<form method="post" action="admin_users_register_new.php">
+				<form method="post" action="admin_users_register.php">
 					<input type="hidden" name="hidden_school_id" id="hidden_school_id" value="<?=$school_id;?>">
 					
 					<label style="white-space: nowrap;">First name: 

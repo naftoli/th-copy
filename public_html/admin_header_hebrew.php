@@ -190,7 +190,7 @@ $role_id = $row["role_id"];
                                 <li><a href="admin_user.php<?=$url_id2?>action=add"><?=T_('Add Individual')?></a></li>
                                 <li><a href="admin_school_file.php<?=$url_id?>"><?=T_('Upload School / Class')?></a></li>
                                 <li><a href="admin_users_photo.php<?=$url_id?>"><?=T_("Upload Photos")?></a></li>
-                                <li><a href="https://www.mashpia.com/admin_users_register_new.php<?=$url_id?>"><?=T_("Registration")?></a></li> 
+                                <li><a href="/admin_users_register.php<?=$url_id?>"><?=T_("Registration")?></a></li> 
                                 <li><a href="admin_card_print.php<?=$url_id?>"><?=T_('Print Rank Cards')?></a></li>
                             </ul>
 

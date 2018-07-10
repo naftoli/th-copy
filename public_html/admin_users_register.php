@@ -150,7 +150,7 @@ else $reg_fee = false;
 				<div name="students_div" id="students_div">
 					<div class="loader">Loading...</div>
 				</div>
-<!--				The modal for editing the users Credit card -->
+<!--    The modal for editing the users Credit card -->
 				<div class="modal" id="cc_modal">
 					<div class="modal-content">
 						<h1 style="margin-bottom: 0px;">Update Credit Card<span class="close" id="update_cc_exit">&times;</span></h1>
@@ -429,9 +429,9 @@ else $reg_fee = false;
 				// ********** LOAD STUDENTS ********** //
 				function get_students() {
 					// generate the url to load the students from
-                    var url = "/register_school_students_new.php?school_id=<?=$admin->school_id;?>";
+                    var url = "/register_school_students.php?school_id=<?=$admin->school_id;?>";
 					if ($("#school_id").val() > 0) {
-						url = "/register_school_students_new.php?school_id=" + $("#school_id").val();
+						url = "/register_school_students.php?school_id=" + $("#school_id").val();
 					}
 					// add the registered flag
 					<? if (!empty($reg)) echo "url += '&registered=1'"; ?>

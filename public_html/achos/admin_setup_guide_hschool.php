@@ -97,7 +97,7 @@ $(function() {
                                     <h3><span class="icon"></span>Register Students for 5773</h3>
                                     <p>Students added to the system are not regsitered for this years program.</p>
                                     <p>Use the following link to register students in this years program.</p>
-                                    <p><a href="admin_users_register_new.php">Register Students</a></p>
+                                    <p><a href="admin_users_register.php">Register Students</a></p>
                                 </li>
 
                                 <!--
