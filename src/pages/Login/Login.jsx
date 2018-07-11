@@ -73,7 +73,7 @@ export class Login extends Component {
           <InputGroupAddon addonType="append">
             <Button onClick={ this.togglePassword } id='toggle-password' 
               tabIndex="-1" outline>
-              <i className={`far fa-${this.state.show_password ? 'eye-slash' : 'eye'}`}></i>
+              <i className={`far fa-${this.state.show_password ? 'eye' : 'eye-slash'}`}></i>
             </Button>
           </InputGroupAddon>
         </InputGroup>
