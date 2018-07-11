@@ -1,3 +1,5 @@
+@import '../../styles/colors.scss';
+
 #login-page {
   display: flex;
   flex-direction: column;
@@ -9,24 +11,45 @@
     max-width: 250px;
   }
 
-  #login-form{
+  #login-form {
     margin-top: 2%;
     text-align: center;
     width: 90%;
     max-width: 450px;
     transition: .25s;
-
+    // space the inputs
+    .input-group {
+      margin: 10px 0px;
+    }
+    // put the icon in the input
+    .input-group-prepend {
+      // define the width to match the height
+      width: 48px;
+      // center the content
+      justify-content: center;
+      align-items: center;
+      // set the border
+      position: absolute;
+      height: 100%;
+      z-index: 10;
+    }
+    // eliminate border on input
+    input.form-control:not(:first-child) {
+      padding-left: 58px;
+      border-top-left-radius: .3rem;
+      border-bottom-left-radius: .3rem;
+    }
+    // increase the font size
     input {
       font-size: 1.5em;
-      height: 50px;
-      padding-left: 50px;
-      padding-top: 5px;
-      margin-bottom: 3%;
-      width: 100%;
     }
-
-    span.pt-input-action{
-      margin-top: 5px;
+    // style the toggle
+    #toggle-password {
+      border-color: #ccc;
+      &:hover {
+        background: $primary-color;
+        border-color: $primary-color-hover;
+      }
     }
   }
 
