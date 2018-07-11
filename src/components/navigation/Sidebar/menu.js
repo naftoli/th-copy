@@ -42,11 +42,11 @@ const getMenu = ( user_type ) => {
   // Define the shape of the menu
   const menu = [
     {
-      label: 'Home', path: '/',
+      label: 'Home', path: '/', user_types: [ 'HQ', 'BC', 'TEACHER' ],
       icon: <img src={`${LEGACY_URL}/images/icon_admin_home.png`} alt="home"/>
     },
     {
-      label: 'Base Managment',
+      label: 'Base Managment', user_types: [ 'HQ', 'BC', 'TEACHER' ],
       icon: <img src={`${LEGACY_URL}/images/icon_dashboard.png`} alt="base-managment"/>,
       items: [
         {
@@ -59,6 +59,7 @@ const getMenu = ( user_type ) => {
             { label: "Update Medals", legacy: true, path: '/add_medals.php' },
           ]
         },
+        { label: 'Soldiers', user_types: [ 'TEACHER' ], path: '/users' },
         { label: "Platoons", path: '/platoons' },
         { label: "Parents", path: '/parents' },
         { label: "Staff", path: '/staff' },
@@ -73,12 +74,12 @@ const getMenu = ( user_type ) => {
       ]
     },
     {
-      label: "Missions",
+      label: "Missions", user_types: [ 'HQ', 'BC', 'TEACHER' ],
       icon: <img src={`${LEGACY_URL}/images/icon_admin_medal.png`} alt="Missions" />,
       items: [
-        { label: 'Print Missions', legacy: true, path: '/print_missions2.php' },
+        { label: 'Print Missions', legacy: true, path: '/print_missions2.php', user_types: [ 'HQ', 'BC', 'TEACHER' ] },
         { label: 'Print Summer Missions', legacy: true, path: '/print_missions_summer.php' },
-        { label: 'Mark Missions', legacy: true, path: '/mark_missions2.php' },
+        { label: 'Mark Missions', legacy: true, path: '/mark_missions2.php', user_types: [ 'HQ', 'BC', 'TEACHER' ] },
         { label: 'Mark Yahadus', legacy: true, path: '/sefer_hamitzvos.php' },
         { label: 'Personalize Your Missions', legacy: true, path: '/task_customization.php' },
         { label: 'Add Tasks', legacy: true, path: '/newTask.php' },
@@ -87,11 +88,15 @@ const getMenu = ( user_type ) => {
       ]
     },
     {
-      label: "Achievement Cards",
+      label: "Achievement Cards", user_types: [ 'HQ', 'BC', 'TEACHER' ],
       icon: <img src={`${LEGACY_URL}/images/icon_auction.png`} alt="Achievement Cards" />,
       items: [
-        { label: 'Add Achievement Task', legacy: true, path: '/newAchievementTasks.php' },
-        { label: 'Add / Subtract Points', legacy: true, path: '/manual_points.php' },
+        { label: 'Add Achievement Task', legacy: true, 
+          path: '/newAchievementTasks.php', user_types: [ 'HQ', 'BC', 'TEACHER' ] 
+        },
+        { label: 'Add / Subtract Points', legacy: true, 
+          path: '/manual_points.php', user_types: [ 'HQ', 'BC', 'TEACHER' ], 
+        },
       ]
     },
     {
