@@ -20,7 +20,8 @@ const arrayToCSV = ( headers, rows, filename ) => {
   
   let link = document.createElement('a');
   link.setAttribute('href', encodeURI( csvContent ));
-  link.setAttribute('download', `${filename}.csv`);
+  link.target = '_blank';
+  link.download = `${filename}.csv`;
   link.click();
 }
 
