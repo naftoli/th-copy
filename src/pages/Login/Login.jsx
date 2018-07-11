@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { InputGroup, Button } from '@blueprintjs/core';
+import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
 import Spinner from 'components/ui/Spinner.jsx';
 import { connect } from 'react-redux';
 import { login } from 'store/login/operations';
@@ -51,25 +51,36 @@ export class Login extends Component {
   }
 
   render(){
-    const userIcon = <img className="pt-icon" src={user} alt='username' width='26' height='26'/>
-    const lockIcon = <img className="pt-icon" src={lock} alt='password' width='26' height='26'/>
-    const lockButton = <Button icon={ this.state.show_password ? 'eye-open' : 'eye-off'} minimal={true} onClick={ this.togglePassword } id='toggle-password' tabIndex="-1"/>
-    
     let errors = this.props.errors.map( (error, index) => 
       <div className="alert alert-danger" key={index}>{error}</div> 
     );
 
     let form = (
       <form id="login-form" onSubmit={ this.handleLoginForm }>
-        <InputGroup 
-          large={true} leftIcon={userIcon} placeholder="Username" 
-          onChange={this.handleChange} value={this.state.username} id='username' />
-        <InputGroup 
-          large={true} leftIcon={lockIcon} placeholder="Password"
-          onChange={this.handleChange} value={this.state.password} id='password' 
-          type='password' rightElement={ lockButton } />
+        <InputGroup size="lg">
+          <InputGroupAddon addonType="prepend">
+            <img className="pt-icon" src={user} alt='username' width='26' height='26'/>
+          </InputGroupAddon>
+          <input className='form-control' placeholder='Username' autoFocus='true' required
+            onChange={this.handleChange} value={this.state.username} id='username' />
+        </InputGroup>
+        <InputGroup size="lg">
+          <InputGroupAddon addonType="prepend">
+            <img className="pt-icon" src={lock} alt='username' width='26' height='26'/>
+          </InputGroupAddon>
+          <input className='form-control' placeholder='Password' type='password' required
+            onChange={this.handleChange} value={this.state.password} id='password' />
+          <InputGroupAddon addonType="append">
+            <Button onClick={ this.togglePassword } id='toggle-password' 
+              tabIndex="-1" outline>
+              <i className={`far fa-${this.state.show_password ? 'eye-slash' : 'eye'}`}></i>
+            </Button>
+          </InputGroupAddon>
+        </InputGroup>
         { errors }
-        <Button text='Login' intent='primary' large={true} type='submit'/>
+        <Button size="lg" color='primary' type='submit'>
+          Login <i className="fas fa-sign-in-alt"></i>
+        </Button>
       </form>
     );
 
