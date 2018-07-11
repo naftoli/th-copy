@@ -17,7 +17,7 @@ export class App extends Component {
               <Route path={`/`} exact render={props => <h1>HomePage</h1>}/>
               <Route path={`/users`} component={ UsersPage } />
 
-              <Route path={`/plattons`} exact render={props => <h1>Plattons</h1>}/>
+              <Route path={`/platoons`} exact render={props => <h1>Platoons</h1>}/>
               <Route path={`/parents`} exact render={props => <h1>Parents</h1>}/>
               <Route path={`/staff`} exact render={props => <h1>Staff</h1>}/>
 
