@@ -57,13 +57,13 @@ export class AllUsers extends Component {
   updatePicture = ( formData ) => {
     this.setState({ cropperModalShow: false });
     this.props.updateSoldier( this.state.cropperModalId, formData )
-      .then( this.props.getSoldiers ); // refresh the users
   }
 
   // handler for uploding the excel file
   uploadSpreadsheet = ( formData ) => {
     this.setState({ uploadModalShow: false });
-    this.props.uploadSpreadsheet( formData );
+    this.props.uploadSpreadsheet( formData )
+      .then( this.props.getSoldiers ); // refresh the users;
   }
 
   // scroll to the top of the table
@@ -142,10 +142,10 @@ export class AllUsers extends Component {
           <option value="yes">Registered</option>
           <option value="no">Not Registered</option>
         </select>,
-      sortMethod: ( a, b, desc ) => {
+      sortMethod: ( a, b ) => {
         a = a === null || a === undefined ? '' : a;
         b = b === null || b === undefined ? '' : b;
-        a = new Date( a ); b = new Date( b );
+        a = !a || new Date( a ); b =  !b || new Date( b );
         if (a > b) return 1;
         if (a < b) return -1;
         return 0;
@@ -167,7 +167,7 @@ export class AllUsers extends Component {
           Click on a Soldier's profile picture to edit or replace it.
         </Callout>
         {/* Action buttons */}
-        <ButtonGroup style={{ margin: '10px', width: 'calc(100% - 20px', justifyContent: 'flex-end' }}>
+        <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
           <Link to={`/users/new`} className="btn btn-primary" role="button">
            <i className="fas fa-plus" /> Add Soldier
           </Link>

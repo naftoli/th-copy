@@ -13,13 +13,14 @@
  */
 const arrayToCSV = ( headers, rows, filename ) => {
   // generate the csv content
-  let csvContent = "data:text/csv;charset=utf-8,";
-  csvContent += `${headers.join(',')}\r\n`;
+  const universalBOM = "\uFEFF";
+  let csvContent = `${headers.join(',')}\r\n`;
 
-  rows.forEach( row => { csvContent += `${row.join(',')}\r\n`});
-  
+  rows.forEach( row => { csvContent += `${row.join(',')}\n`});
+  csvContent = encodeURIComponent( universalBOM + csvContent );
   let link = document.createElement('a');
-  link.setAttribute('href', encodeURI( csvContent ));
+  link.href = `data:text/csv;charset=utf-8,${csvContent}`;
+  debugger;
   link.target = '_blank';
   link.download = `${filename}.csv`;
   link.click();
