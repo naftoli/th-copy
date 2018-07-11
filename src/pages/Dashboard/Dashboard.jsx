@@ -45,11 +45,13 @@ export class Dashboard extends Component {
   }
 
   render() {
-    const { current_user, current_login, changeLogin } = this.props;
-    if ( current_login.type === 'user' ) {
+    const { current_user, current_login, changeLogin, location } = this.props;
+    // if we are a user and not logging out - redirect to legacy parent portal
+    if ( current_login.type === 'user' && location.pathname !== '/logout' ) {
       window.location.href = `${LEGACY_URL}/mobile/reg/parent_detail.html`;
       return null;
     }
+
     return (
       <div id="dashboard">
         <Navbar onClick={ this.toggle } onLoginChange={ changeLogin }
