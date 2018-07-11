@@ -8,7 +8,7 @@ import { Callout } from '@blueprintjs/core';
 import { Button, ButtonGroup } from 'reactstrap';
 import ProfilePicture from 'components/ui/ProfilePicture';
 import CropperModal from 'components/modals/CropperModal';
-import BulkUploadModal from '../BulkUploadModal/BulkUploadModal';
+import BulkUploadModal from './BulkUploadModal';
 // functions
 import { toast } from 'react-toastify';
 import arrayToCSV from 'functions/arrayToCSV';
@@ -22,17 +22,20 @@ export class AllUsers extends Component {
 
   state = { 
     cropperModalShow: false, cropperModalSrc: false, 
-    cropperModalId: false,  uploadModalShow: true
+    cropperModalId: false,  uploadModalShow: false
   }
-
-  // update the soldiers when the page loads
+  // load the contents if we do not have any
   componentDidMount(){
-    this.props.getSoldiers();
+    if ( this.props.soldiers.length === 0 ) {
+      this.props.getSoldiers();
+    }
   }
 
   // if the soldier list is emptied while on the page... then refresh it
   componentDidUpdate( prevProps ) {
-    if ( prevProps.soldiers.length > 0 && this.props.soldiers.length === 0 ) {
+    const { type, id } = this.props.current_login;
+    const { type: prevType, id: prevId } = prevProps.current_login;
+    if ( type !== prevType || prevId !== id ) {
       this.props.getSoldiers();
     }
   }
@@ -52,7 +55,8 @@ export class AllUsers extends Component {
   // handler for when images are updated
   updatePicture = ( formData ) => {
     this.setState({ cropperModalShow: false });
-    this.props.updateSoldier( this.state.cropperModalId, formData );
+    this.props.updateSoldier( this.state.cropperModalId, formData )
+      .then( this.props.getSoldiers ); // refresh the users
   }
 
   // handler for uploding the excel file
@@ -156,14 +160,19 @@ export class AllUsers extends Component {
     // page definition
     return (
       <div id="all-users">
+        {/* User Guide */}
         <Callout intent="primary" title="View Soldiers">
           Click a Soldier's name or serial number to view and edit their account.<br/>
           Click on a Soldier's profile picture to edit or replace it.
         </Callout>
+        {/* Action buttons */}
         <ButtonGroup style={{ margin: '10px', width: 'calc(100% - 20px', justifyContent: 'flex-end' }}>
           <Link to={`/users/new`} className="btn btn-primary" role="button">
            <i className="fas fa-plus" /> Add Soldier
           </Link>
+          <Button color="primary" onClick={ this.props.getSoldiers }>
+            <i className={`fas fa-redo-alt ${ !loading || 'fa-spin' }`}></i> Refresh
+          </Button>
           <Button color="primary" onClick={ this.toggleUploadModal }>
             <i className="fas fa-file-upload" /> Upload Soldier List
           </Button>
@@ -171,11 +180,14 @@ export class AllUsers extends Component {
             <i className="fas fa-file-download" /> Save Soldier List
           </Button>
         </ButtonGroup>
+        {/* Table with data */}
         <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight" 
           noDataText={ loading ? 'Loading...' : 'No Data' } defaultFilterMethod={ this.filter }
           onPageChange={ this.scrollToTop } onFilteredChange={ this.scrollToTop }/>
+        {/* Modal to edit images */}
         <CropperModal isOpen={ cropperModalShow } src={ cropperModalSrc } 
           toggle={ this.closeCropperModal } uploadImage={ this.updatePicture }/>
+        {/* Modal to upload soldiers */}
         <BulkUploadModal isOpen={ uploadModalShow } toggle={ this.toggleUploadModal }
           upload={ this.uploadSpreadsheet }/>
       </div>
