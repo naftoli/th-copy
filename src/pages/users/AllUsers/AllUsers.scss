@@ -1,10 +1,13 @@
 
+@import '../../../styles/colors.scss';
+
 #all-users {
   height: 100%;
   .inline-profile {
     height: 65px;
     width: 65px;
-    border-radius: 50%; 
+    border-radius: 50%;
+    border: 1.5px solid $primary-color;
   }
   
   .ReactTable {
