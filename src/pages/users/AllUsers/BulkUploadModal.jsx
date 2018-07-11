@@ -39,6 +39,10 @@ export class BulkUploadModal extends Component {
               </li>
               <li>Upload spreadsheet into system using the file input below.</li>
             </ol>
+            <p>
+              <strong>Please understand that all soldiers in your spreadsheet will be added to the system.
+                <em> We do not, and will not, prevent you from creating duplicate accounts.</em></strong>
+            </p>
           </Callout>
           <FileInput inputRef={ this.inputRef }/>
         </ModalBody>
