@@ -80,10 +80,10 @@ require('header.php');
                 	}
                 	echo "</td><td>";
 					if ( !empty( $admin['admin_phone_home'] ) ) {
-						echo $admin['admin_phone_home'] . ", <br />";
+						echo $admin['admin_phone_home'] . "; <br />";
 					}
 					if ( !empty( $admin['admin_phone_work'] ) ) {
-						echo $admin['admin_phone_work'] . ", <br />";
+						echo $admin['admin_phone_work'] . "; <br />";
 					}
 					if ( !empty( $admin['admin_phone_mobile'] ) ) {
 						echo $admin['admin_phone_mobile'];
