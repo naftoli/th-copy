@@ -26,6 +26,7 @@ require('header.php');
     <BODY>
         <? include('admin_header.php'); ?>
         <h1>Not Yet Registered Report</h1>
+        <a class="button" id='export_csv' style='display: none;'>Export To CSV</a>
         <? 
         require_once 'class.adminSchools.php';
         require_once 'class.schoolsUsers.php';         
@@ -49,8 +50,8 @@ require('header.php');
         
         foreach ( $schoolsUsers as $school => $users ) {
             echo "<h2>" . $schools[$school] . "</h2>";
-            echo "<table>";
-            echo "<tr><th>Grade</th><th>Student</th><th>User ID</th><th>Start Date</th>
+            echo "<table data-school_name='".$schools[$school]."' class='exported'>";
+            echo "<tr><th>Grade</th><th>Student</th><th>Serial #</th><th>Start Date</th>
             	<th>DOB</th><th>Email</th><th>Phone Numbers</th></tr>";
             foreach ( $users as $user ) {
             	//get phone numbers, email from parent account
@@ -67,7 +68,7 @@ require('header.php');
 								
                 $grade = $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] );
                 echo "<tr><td>" . $grade . "</td><td>" . $user['first'] . " " . $user['last'] . 
-                    "</td><td>" . $user['user_id'] . "</td><td>" . jdtogregorian( $user['user_start_date'] ) . 
+                    "</td><td>" . $user['user_serial'] . "</td><td>" . jdtogregorian( $user['user_start_date'] ) . 
 					"</td><td>" . $user['dob'] . "</td><td>";
 				if ( is_null( $admin ) ) {
                     echo "</td><td>" . $user['email'];
@@ -114,5 +115,37 @@ require('header.php');
             echo "<div class='page-break'></div>";
         }
         ?>
+        <script>
+            $(document).ready( function() {
+                $('#export_csv').show().click( export_csv );
+            })
+            function export_csv() {
+                alert("Please note that is feature is in BETA and may not work correctly in all browsers/readers. "
+                    +"Please note that it does not work with IE or Microsoft Edge, "
+                    +"and has been only been tested with Microsoft Excel 2016."
+                );
+                var csvContent = "Grade,Student,Serial #,Start Date,DOB,Email,Phone Numbers,Base\n"; // the baisc csv file
+                var universalBOM = "\uFEFF";
+                
+                $.each( $('table.exported'), function( index, table ) {
+                    var school_name = table.dataset.school_name;
+                    table = $(table);
+                    $.each(table.find("tr:not(:first-child)"), function(index, tr) {
+                        var row = [];
+                        $.each($(tr).find("td"), function(index, td) {
+                            row.push($(td).text());
+                        });
+                        row.push( school_name );
+                        csvContent += row.join(',') + '\n';
+                    });
+                });
+                
+                var hiddenElement = document.createElement('a');
+                hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURIComponent(universalBOM+csvContent); // set the data
+                hiddenElement.target = '_blank'; // in a new tab
+                hiddenElement.download = 'non_registered.csv'; // with this file_name
+                hiddenElement.click(); // and click it
+            }
+        </script>
     </body>
 </html>
