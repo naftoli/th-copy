@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 
 import Dashboard from 'pages/Dashboard/Dashboard';
 import Login, { Logout } from 'pages/Login/';
-import UsersPage from 'pages/users';
+import UsersPages from 'pages/users';
 
 export class App extends Component {
   render() {
@@ -15,7 +15,7 @@ export class App extends Component {
           <Dashboard>
             <Switch>
               <Route path={`/`} exact render={props => <h1>HomePage</h1>}/>
-              <Route path={`/users`} component={ UsersPage } />
+              <Route path={`/users`} component={ UsersPages } />
 
               <Route path={`/platoons`} exact render={props => <h1>Platoons</h1>}/>
               <Route path={`/parents`} exact render={props => <h1>Parents</h1>}/>

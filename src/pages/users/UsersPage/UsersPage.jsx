@@ -15,11 +15,11 @@ import is from 'is_js';
 import arrayToCSV from 'functions/arrayToCSV';
 // styles
 import 'react-table/react-table.css';
-import './AllUsers.scss';
+import './UsersPage.scss';
 // state
 import { getSoldiers, updateSoldier, uploadSpreadsheet } from 'store/soldiers/operations';
 
-export class AllUsers extends Component {
+export class UsersPage extends Component {
 
   state = { 
     cropperModalShow: false, cropperModalSrc: false, 
@@ -211,4 +211,4 @@ const mapStateToProps = ( state ) => {
 
 export default connect( 
   mapStateToProps, { getSoldiers, updateSoldier, uploadSpreadsheet } 
-)( AllUsers );
+)( UsersPage );
