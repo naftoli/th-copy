@@ -11,6 +11,7 @@ import CropperModal from 'components/modals/CropperModal';
 import BulkUploadModal from './BulkUploadModal';
 // functions
 import { toast } from 'react-toastify';
+import is from 'is_js';
 import arrayToCSV from 'functions/arrayToCSV';
 // styles
 import 'react-table/react-table.css';
@@ -173,12 +174,15 @@ export class AllUsers extends Component {
           <Button color="primary" onClick={ this.props.getSoldiers }>
             <i className={`fas fa-redo-alt ${ !loading || 'fa-spin' }`}></i> Refresh
           </Button>
-          <Button color="primary" onClick={ this.toggleUploadModal }>
-            <i className="fas fa-file-upload" /> Upload Soldier List
-          </Button>
-          <Button color="primary" onClick={ this.toCSV }>
-            <i className="fas fa-file-download" /> Save Soldier List
-          </Button>
+          { current_login.code === 'BC' && // only Base Commanders can upload
+            <Button color="primary" onClick={ this.toggleUploadModal }>
+              <i className="fas fa-file-upload" /> Upload Soldier List
+            </Button>
+          } { is.not.edge() && is.not.ios() &&
+            <Button color="primary" onClick={ this.toCSV }>
+              <i className="fas fa-file-download" /> Save Soldier List
+            </Button>
+          }
         </ButtonGroup>
         {/* Table with data */}
         <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight" 
@@ -187,9 +191,11 @@ export class AllUsers extends Component {
         {/* Modal to edit images */}
         <CropperModal isOpen={ cropperModalShow } src={ cropperModalSrc } 
           toggle={ this.closeCropperModal } uploadImage={ this.updatePicture }/>
-        {/* Modal to upload soldiers */}
-        <BulkUploadModal isOpen={ uploadModalShow } toggle={ this.toggleUploadModal }
-          upload={ this.uploadSpreadsheet }/>
+        {/* Modal to upload soldiers */ 
+          current_login.code === 'BC' &&
+          <BulkUploadModal isOpen={ uploadModalShow } toggle={ this.toggleUploadModal }
+            upload={ this.uploadSpreadsheet }/>
+        }
       </div>
     );
   }
