@@ -1,12 +1,17 @@
 @import "./colors";
 
+.form-control:focus {
+  border-color: $primary-color-focus;
+  // box-shadow: 0 0 0 0.2rem rgba(0, 97, 202, 0.5);
+}
 // Buttons should use the primary color
 .btn-primary {
   background-color: $primary-color;
   border-color: $primary-color-dark;
   &:hover, &:focus, &:active { 
+    border-color: $primary-color-focus;
     background-color: $primary-color-hover; 
-    box-shadow: none !important;
+    // box-shadow: 0 0 0 0.2rem rgba(0, 97, 202, 0.5);
   }
 }
 // modal headers should use it as well
@@ -18,4 +23,8 @@
   > button.close {
     color: #fff; opacity: 1; font-weight: 100;
   }
+}
+
+.Toastify__toast--info {
+  background: $primary-color;
 }
