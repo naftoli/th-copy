@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import Cropper from 'components/functional/Cropper';
+import { toast } from 'react-toastify';
 
 class CropperModal extends Component {
   // the props we are expecting
@@ -44,13 +45,20 @@ class CropperModal extends Component {
   // create the formData and call the uploadImage function with the data that it needs
   uploadImage = () => {
     if ( !this.cropper ) return false;
-
-    this.cropper.getCroppedCanvas({ width: 500, height: 500 }).toBlob( blob => {
-      const formData = new FormData();
-      formData.append( 'profile', blob, this.state.name );
-      // API must be called with 'application/x-www-form-urlencoded; charset=utf-8' for img to post
-      this.props.uploadImage( formData );
-    });
+    try {
+      this.cropper.getCroppedCanvas({ width: 500, height: 500 }).toBlob( blob => {
+        const formData = new FormData();
+        formData.append( 'profile', blob, this.state.name );
+        // API must be called with 'application/x-www-form-urlencoded; charset=utf-8' for img to post
+        this.props.uploadImage( formData );
+      });
+    } catch ( e ) {
+      console.error( e );
+      toast.error( 
+        `There was an error while cropping your image. ` + 
+        `Please select a different image and/or use a different browser`
+      );
+    }
   }
 
   // update the image if we where passed a new one
