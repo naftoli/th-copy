@@ -65,7 +65,7 @@ $year = GlobalSettings::getRegistrationYear();
         <strong>Soldier Fee:</strong> The registration fee for soldiers in this base.
         <ul>
             <li>Please note that the early bird discount ($<?=GlobalSettings::getEarlyBird()?>) is applied to this amount.</li>
-            <li>For example, $60 soldier fee - $5 early bird is $55 for registration.</li>
+            <li>For example, $55 soldier fee - $5 early bird is $50 for registration.</li>
             <li><em>Set to / leave as 0 for default rates.</em></li>
         </ul>
         <p></p>
