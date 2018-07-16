@@ -15,6 +15,7 @@ if (isset($_POST['key']))
 else
 	$PostedKey = '';
 
+$PostedKey = $PublicKey;
 header('Content-type: application/json');
 
 $Curl_Session = curl_init($URLToPost);
