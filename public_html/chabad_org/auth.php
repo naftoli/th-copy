@@ -58,9 +58,9 @@ $defaults = array(
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => $params,
     CURLOPT_HTTPHEADER => array(
-        'Accept:'       =>  'text/json', 
-        'Content-type:' =>  'application/x-www-form-urlencoded', 
-        'Authorization:'=>  $auth
+        'Accept: text/json', 
+        'Content-type: application/x-www-form-urlencoded', 
+        "Authorization: $auth"
     )
 );
 $ch = curl_init();
