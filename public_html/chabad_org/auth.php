@@ -49,7 +49,7 @@ $public = '474DBD09-F59F-433D-A755-5A97594FC4E1';
 $private = 'R9WIfWVU7VXiiEporuuIvbEcFqIwzJYwmc5q4bb2/lQ=';
 $timestamp = time();
 $key = $public . '|' . $timestamp . '|' . '/api/login/authenticate';
-$signature = base64_encode( hash_hmac('sha1', $key, base64_decode( $private ) ) );
+$signature = base64_encode( hash_hmac('sha1', $key, base64_decode( $private ), true ) );
 $auth = 'h=' . $public . '|' . $timestamp . '; s=' . $signature;
 //exit;
 $params = array('key' => $public);
