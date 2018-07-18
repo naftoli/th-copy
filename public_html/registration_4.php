@@ -150,26 +150,28 @@ if (isset($_POST['submit'])) {
                                                         Tzivos Hashem registration is included in school tuition
                                                     </h4>
                                                     $<?=$schoolInfo->getChildFee( true, 1 )?> included in each child’s tuition; 
-                                                    parents still complete the registration process on their own without additional payment.
+													parents still complete the registration process on their own without additional payment. 
+													<strong>School credit card gets automatically charged at once for all unregistered students by 24 Elul (Sep 4).</strong>
 												</li>
 												<li>
 													 <h4>
                                                         <input type="radio" name="reg_type" class="reg_type" value="2" 
                                                             <?php if ($schoolInfo->type == 2) echo "checked" ?> />
-                                                        Tzivos Hashem is not included in tuition, yet every child in our school will be registered
+															$<?=$schoolInfo->getChildFee( true, 1 )?> per student. 
+															Tzivos Hashem is not included in tuition, yet every child in our school will be registered
                                                     </h4>
                                                     Since we guarantee that every child will register, 
-                                                    parents will recive an additional discount of $<?=GlobalSettings::getGuarenteedDiscount()?> 
+                                                    parents will receive an additional discount of $<?=GlobalSettings::getGuarenteedDiscount()?> 
                                                     (above the early bird discount of $<?=GlobalSettings::getEarlyBird()?>).
                                                     If all children are not registered by 
                                                     <?=
                                                     iconv ('WINDOWS-1255', 'UTF-8', substr(  
-                                                        jdtojewish( unixtojd( $schoolInfo->early_bird->getTimestamp() ), true ), 0, -6
+                                                        jdtojewish( unixtojd( $schoolInfo->early_bird->getTimestamp() ) + 1, true ), 0, -6
                                                     ));
                                                     ?>
                                                     (<?= $schoolInfo->early_bird->format('F j') ?>)
                                                     <!--Chof Gimmel Elul (September 14)--> 
-                                                    then Tzivos Hashem will bill you for the additional discount's provided ($<?=GlobalSettings::getGuarenteedDiscount()?> per child registered).
+                                                    then Tzivos Hashem will automatically charge the credit card on file for the additional discount provided ($<?=GlobalSettings::getGuarenteedDiscount()?> per child registered).
 												</li>
 												<li>
                                                     <h4><input type="radio" name="reg_type" class="reg_type" value="3" 
@@ -180,7 +182,7 @@ if (isset($_POST['submit'])) {
                                                     or regular price of $<?=$schoolInfo->getChildFee( true, 3, true )?> from 
                                                     <?=
                                                     iconv ('WINDOWS-1255', 'UTF-8', substr(  
-                                                        jdtojewish( unixtojd( $schoolInfo->early_bird->getTimestamp() ), true ), 0, -6
+                                                        jdtojewish( unixtojd( $schoolInfo->early_bird->getTimestamp() ) + 1, true ), 0, -6
                                                     ));
                                                     ?>
                                                     (<?= $schoolInfo->early_bird->format('F j') ?>) onward.
