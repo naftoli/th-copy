@@ -35,7 +35,7 @@ if ($admin_user['auth'] != 'super') {
             Medal Type:
             <select id='type'>
                 <option value='number_on_back'>Number on Back</option>    
-                <option value='picture_on_back'>Picture on Back</option>
+                <option value='picture_on_back'>Logo on Back</option>
             </select>
         </div>
 
