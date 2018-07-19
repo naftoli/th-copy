@@ -193,6 +193,8 @@ if (isset($_POST['submit'])) {
 								</div>
 							
 								<h2>School Yearly Membership Benefits and Fees</h2> 
+								<p>Click <a href="https://docs.google.com/document/d/1W9-gsHpu2yiEvKpNdmJJ_A4aCUPLnGgUFyqNzJq_vuk/edit" target="_blank">here</a> 
+								to see what’s included in the school and child registration packages</p>
 								<p>Register your school for ONLY $<?=$schoolInfo->fee?> and you receive:</p>
 
 								<div class="module list_expand" id="module-info">
