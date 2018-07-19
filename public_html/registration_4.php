@@ -208,9 +208,8 @@ if (isset($_POST['submit'])) {
 													<div class="box">
 														<h4>Tzivos Hashem Online Management System ($950 value)</h4>
                                                         <p>
-                                                            State of the art Online portals for Staff, Students and Parents. 
-                                                            Constintly imporoved with new features and bug fixes. 
-                                                            Includes a ticketing system for direct communication with our development team ( closed on Holidays/Weekends ).
+                                                            State of the art Online portal for staff, students and parents. 
+                                                            Constantly new features and ticketing system for direct communication with our development team.
                                                         </p>
 													</div>   
 												</li>
@@ -342,7 +341,7 @@ if (isset($_POST['submit'])) {
                                                 </li>
 												<li class="right">
 													<div class="box">
-														<h4>Total Value: $120</h4>
+														<h4>Total Value: Exceeds $150</h4>
 													</div>   
 												</li>
 												<li class="right">
