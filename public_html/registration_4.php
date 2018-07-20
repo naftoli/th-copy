@@ -28,14 +28,43 @@ try {
 $message = "";
 if (isset($_POST['submit'])) {
 
-	if (!isset($_POST['reg_type'])) {
-		$message = "You need to choose the type of school that you have.";
+	if (!isset($_POST['reg_type']) || !isset($_POST['store_points'])) {
+		$message = "You need to choose the type of school that you have and your store options.";
 	} else {
-		$sql = "UPDATE schools SET reg_type = " . mysql_real_escape_string($_POST['reg_type']) . " WHERE school_id = " . $school_id;
-        $schoolInfo->type = $_POST['reg_type'];
-        
-        if ( !mysql_query($sql) || !$schoolInfo->save() ) {
-			$message = "Error updating school.";
+		$store_points = mysql_real_escape_string( $_POST['store_points'] );
+		switch ($store_points) {
+			case 1:
+				$reset_points = 2458285;
+				break;
+			case 2:
+				$reset_points = 2458347;
+				break;
+			case 3:
+				$reset_points = 0;
+				break;
+			case 4:
+				$str_date = mysql_real_escape_string( $_POST['store_date'] );
+				if ( empty( $str_date) ) {
+					$message = "You need to enter a valid date for the store points reset.";
+					break;
+				}
+				$dates = explode('-', $str_date);
+				$yy = $dates[0];
+				$mm = $dates[1];
+				$dd = $dates[2];
+				$reset_points = gregoriantojd($mm, $dd, $yy);
+				break;
+		}
+
+		if ( !$message ) {
+			$sql = "UPDATE schools 
+					SET reg_type = " . mysql_real_escape_string($_POST['reg_type']) . ", 
+					store_reset = " . $reset_points . " 
+					WHERE school_id = " . $school_id;
+			$schoolInfo->type = $_POST['reg_type'];
+			if ( !mysql_query($sql) || !$schoolInfo->save() ) {
+				$message = "Error updating school.";
+			}
 		}
 	}
     
@@ -99,6 +128,17 @@ if (isset($_POST['submit'])) {
 				if (!$(".reg_type:checked").length) {
 					alert("You must choose what type of school registration you have.");
 					return false;
+				}
+				if (!$(".store_points:checked").length) {
+					alert("You must choose your store option.");
+					return false;
+				}
+				var store = $(".store_points:checked").val();
+				if (store == 4) {
+					if (!$(".store_date").val()) {
+						alert("You must choose a valid date for resetting your store.");
+						return false;
+					}
 				}
 				return true;
 			}			
@@ -211,7 +251,8 @@ if (isset($_POST['submit'])) {
 														<h4>Tzivos Hashem Online Management System ($950 value)</h4>
                                                         <p>
                                                             State of the art Online portal for staff, students and parents. 
-                                                            Constantly new features and ticketing system for direct communication with our development team.
+															Constantly new features and ticketing system for direct communication 
+															with our development team.
                                                         </p>
 													</div>   
 												</li>
@@ -357,6 +398,38 @@ if (isset($_POST['submit'])) {
 													</div>   
 												</li>
 											</ul>
+										</div>
+									</div>
+								</div>
+
+								<h2>School Store Option</h2>
+								<div class="module list_expand" id="module-info">
+									<div class="module_content">
+										<div class="lists form">
+											<ul>
+												<li>
+													<h4>
+														When would you like the school store points of all your chayolim to go back to 0?
+														(please note that this does not effect the auction points)
+													</h4>	
+												</li>
+												<li>
+													<input type="radio" name="store_points" class="store_points" value="1" />
+													Beis Tammuz/June 15 (Chayolim can use the points they earned from summer missions and on)
+												</li>
+												<li>
+													<input type="radio" name="store_points" class="store_points" value="2" />	
+													Hey Elul/Aug 16 (Chayolim will not be able to use the points they earned from the majority of summer missions)
+												</li>
+												<li>
+													<input type="radio" name="store_points" class="store_points" value="3" />
+													Never (Points will continue accumulating from last year)
+												</li>
+												<li>
+													<input type="radio" name="store_points" class="store_points" value="4" />
+													Choose your own Date: <input type="date" name="store_date" class="store_date" />
+												</li>
+											</ul>											
 										</div>
 									</div>
 								</div>

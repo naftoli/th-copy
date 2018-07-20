@@ -7,6 +7,7 @@ class Points
     const YEARSTART = 2457934; // also need to update kiosk controller getHebrewPoints function with proper dates when year changes
     const YEARSTARTAUSTRALIA = 2457629; // also need to update kiosk controller getHebrewPoints function with proper dates when year changes
     private $debug;
+    private $school_id;
     
     public function __construct( $id ) {
         $this->user_id = $id;
@@ -15,9 +16,9 @@ class Points
         $result = mysql_query($sql);
         $row = mysql_fetch_assoc($result);		
         $this->usercode = $row['user_code'];
-        $school_id = $row['school_id'];
+        $this->school_id = $row['school_id'];
         $australian = array(55,66,110,112,180);
-        if (in_array($school_id, $australian)) $this->australian = true;
+        if (in_array($this->school_id, $australian)) $this->australian = true;
         $this->debug = false;
     }
     
@@ -72,13 +73,13 @@ class Points
     }
     
     public function getStorePoints() {
-        if ($this->australian) $points = floor(mysql_result(mq(totalMarks("WHERE user_id = $this->user_id and mark_date >= " . self::YEARSTARTAUSTRALIA)), 0));
-        else $points = floor(mysql_result(mq(totalMarks("WHERE user_id = $this->user_id and mark_date >= " . self::YEARSTART)), 0));
+        $reset_date = $this->getStoreResetDate();
+        $points = floor(mysql_result(mq(totalMarks("WHERE user_id = $this->user_id and mark_date >= " . $reset_date)), 0));
         $arrParams['user_code'] = $this->usercode;
-        $arrParams['start_date'] = $this->australian ? self::YEARSTARTAUSTRALIA : self::YEARSTART;
+        $arrParams['start_date'] = $reset_date;
         $arrPoints = header_store_points( $arrParams );
         if ($this->debug) {
-            echo totalMarks("WHERE user_id = $this->user_id and mark_date >= " . self::YEARSTART);
+            echo totalMarks("WHERE user_id = $this->user_id and mark_date >= " . $reset_date);
             echo "<pre>";
             print_r($arrPoints);
             echo "</pre>";
@@ -88,8 +89,23 @@ class Points
     }
     
     public function getMashpiaStorePoints() {
-        if ($this->australian) $points = floor(mysql_result(mq(totalMarks("WHERE user_id = $this->user_id and mark_date >= " . self::YEARSTARTAUSTRALIA)), 0));
-        else $points = floor(mysql_result(mq(totalMarks("WHERE user_id = $this->user_id and mark_date >= " . self::YEARSTART)), 0));
+        $reset_date = $this->getStoreResetDate();
+        $points = floor(mysql_result(mq(totalMarks("WHERE user_id = $this->user_id and mark_date >= " .$reset_date)), 0));
         return $points;
+    }
+
+    private function getStoreResetDate() {
+        // find out if school has a store reset date set
+        $sql = "select store_reset from schools where school_id = " . $this->school_id;
+		$result = mysql_query( $sql );
+		$row = mysql_fetch_assoc( $result );
+		$store_date = $row['store_reset'];
+		if ($store_date > 0 && $store_date <= unixtojd()) { // make sure we are now after the start date set by the school
+            $reset_date = $store_date;
+        } else {
+            if ($this->australian) $reset_date = self::YEARSTARTAUSTRALIA;
+            else $reset_date = self::YEARSTART;
+        }
+        return $reset_date;
     }
 }
