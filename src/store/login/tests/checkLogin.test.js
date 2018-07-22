@@ -3,7 +3,7 @@ import Cookies from 'universal-cookie';
 import fetchMock from 'fetch-mock';
 const cookies = new Cookies();
 
-describe( 'checkLogin', () => {
+xdescribe( 'checkLogin', () => {
   let dispatchMock;
   beforeEach(() => {
     dispatchMock = jest.fn();

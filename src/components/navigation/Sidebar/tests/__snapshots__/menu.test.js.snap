@@ -9,6 +9,11 @@ Array [
 />,
     "label": "Home",
     "path": "/",
+    "user_types": Array [
+      "HQ",
+      "BC",
+      "TEACHER",
+    ],
   },
   Object {
     "icon": <img
@@ -74,6 +79,11 @@ Array [
       },
     ],
     "label": "Base Managment",
+    "user_types": Array [
+      "HQ",
+      "BC",
+      "TEACHER",
+    ],
   },
   Object {
     "icon": <img
@@ -85,6 +95,11 @@ Array [
         "label": "Print Missions",
         "legacy": true,
         "path": "/print_missions2.php",
+        "user_types": Array [
+          "HQ",
+          "BC",
+          "TEACHER",
+        ],
       },
       Object {
         "label": "Print Summer Missions",
@@ -95,6 +110,11 @@ Array [
         "label": "Mark Missions",
         "legacy": true,
         "path": "/mark_missions2.php",
+        "user_types": Array [
+          "HQ",
+          "BC",
+          "TEACHER",
+        ],
       },
       Object {
         "label": "Mark Yahadus",
@@ -123,6 +143,11 @@ Array [
       },
     ],
     "label": "Missions",
+    "user_types": Array [
+      "HQ",
+      "BC",
+      "TEACHER",
+    ],
   },
   Object {
     "icon": <img
@@ -134,14 +159,29 @@ Array [
         "label": "Add Achievement Task",
         "legacy": true,
         "path": "/newAchievementTasks.php",
+        "user_types": Array [
+          "HQ",
+          "BC",
+          "TEACHER",
+        ],
       },
       Object {
         "label": "Add / Subtract Points",
         "legacy": true,
         "path": "/manual_points.php",
+        "user_types": Array [
+          "HQ",
+          "BC",
+          "TEACHER",
+        ],
       },
     ],
     "label": "Achievement Cards",
+    "user_types": Array [
+      "HQ",
+      "BC",
+      "TEACHER",
+    ],
   },
   Object {
     "icon": <img
@@ -431,6 +471,11 @@ Array [
 />,
     "label": "Home",
     "path": "/",
+    "user_types": Array [
+      "HQ",
+      "BC",
+      "TEACHER",
+    ],
   },
   Object {
     "icon": <img
@@ -496,6 +541,11 @@ Array [
       },
     ],
     "label": "Base Managment",
+    "user_types": Array [
+      "HQ",
+      "BC",
+      "TEACHER",
+    ],
   },
   Object {
     "icon": <img
@@ -507,6 +557,11 @@ Array [
         "label": "Print Missions",
         "legacy": true,
         "path": "/print_missions2.php",
+        "user_types": Array [
+          "HQ",
+          "BC",
+          "TEACHER",
+        ],
       },
       Object {
         "label": "Print Summer Missions",
@@ -517,6 +572,11 @@ Array [
         "label": "Mark Missions",
         "legacy": true,
         "path": "/mark_missions2.php",
+        "user_types": Array [
+          "HQ",
+          "BC",
+          "TEACHER",
+        ],
       },
       Object {
         "label": "Mark Yahadus",
@@ -545,6 +605,11 @@ Array [
       },
     ],
     "label": "Missions",
+    "user_types": Array [
+      "HQ",
+      "BC",
+      "TEACHER",
+    ],
   },
   Object {
     "icon": <img
@@ -556,14 +621,29 @@ Array [
         "label": "Add Achievement Task",
         "legacy": true,
         "path": "/newAchievementTasks.php",
+        "user_types": Array [
+          "HQ",
+          "BC",
+          "TEACHER",
+        ],
       },
       Object {
         "label": "Add / Subtract Points",
         "legacy": true,
         "path": "/manual_points.php",
+        "user_types": Array [
+          "HQ",
+          "BC",
+          "TEACHER",
+        ],
       },
     ],
     "label": "Achievement Cards",
+    "user_types": Array [
+      "HQ",
+      "BC",
+      "TEACHER",
+    ],
   },
   Object {
     "icon": <img
