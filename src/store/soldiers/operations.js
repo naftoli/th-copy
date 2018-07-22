@@ -8,6 +8,8 @@ export const getSoldiers = () => dispatch => {
     .then( response => {
       dispatch( actions.setLoading( false ) );
       return dispatch( actions.setSoldiers( response.data ) );
+    }).catch( response => {
+      dispatch( actions.setLoading( false ) );
     });
 }
 
