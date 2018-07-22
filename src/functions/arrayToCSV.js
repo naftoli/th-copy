@@ -20,7 +20,6 @@ const arrayToCSV = ( headers, rows, filename ) => {
   csvContent = encodeURIComponent( universalBOM + csvContent );
   let link = document.createElement('a');
   link.href = `data:text/csv;charset=utf-8,${csvContent}`;
-  debugger;
   link.target = '_blank';
   link.download = `${filename}.csv`;
   link.click();
