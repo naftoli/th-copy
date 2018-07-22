@@ -1,4 +1,4 @@
-import API, { API_URL, headers, parseResponse } from './api';
+import API, { API_URL, headers, toJSON } from './api';
 import fetchMock from 'fetch-mock';
 import Cookies from 'universal-cookie';
 // allow routes to be overridden
@@ -30,11 +30,11 @@ describe('headers', () => {
   });
 });
 
-describe('parseResponse( response )', () => {
+describe('toJSON( response )', () => {
 
   it('calls \'.json()\' on response', () => {
     const response = { json: jest.fn() };
-    parseResponse( response );
+    toJSON( response );
 
     expect( response.json ).toHaveBeenCalled();
   });
@@ -43,7 +43,7 @@ describe('parseResponse( response )', () => {
     const response = { json: jest.fn() };
     response.json.mockReturnValue( 'test' );
 
-    expect( parseResponse( response ) ).toBe( 'test' );
+    expect( toJSON( response ) ).toBe( 'test' );
   });
 });
 

@@ -1,5 +1,7 @@
 import { LEGACY_URL } from 'components/constants';
 import Cookies from 'universal-cookie';
+import { toast } from 'react-toastify';
+import { Promise } from 'core-js';
 const cookies = new Cookies();
 // API url
 let API_URL = `${LEGACY_URL}/api`;
@@ -21,11 +23,20 @@ const headers = ( content_type = defaultContentType ) => {
   return headers;
 }
 
-const parseResponse = response => {
+const toJSON = response => {
   return response.json();
 }
 
-export { API_URL, headers, parseResponse };
+const parseResponse = response => {
+  if ( response.success === false && response.error ) {
+    // show all errors except Invalid Login
+    response.error === 'Invalid Login' || toast.error( response.error );
+    return Promise.reject( response );
+  }
+  return response;
+}
+
+export { API_URL, headers, toJSON, parseResponse };
 
 export default {
   get( url ) {
@@ -33,7 +44,8 @@ export default {
       method: 'GET',
       headers: headers(),
       credentials: credentials
-    }).then( parseResponse );
+    }).then( toJSON ) // convert to json
+      .then( parseResponse ) // understand the response
   },
   
   post( url, data = {}, content_type = defaultContentType ) {
@@ -46,7 +58,8 @@ export default {
       headers: headers( content_type ),
       credentials: credentials,
       body
-    }).then( parseResponse )
+    }).then( toJSON ) // convert to json
+      .then( parseResponse ) // understand the response
   },
 
   delete( url ) {
@@ -54,6 +67,7 @@ export default {
       method: 'DELETE',
       headers: headers(),
       credentials: credentials
-    }).then( parseResponse );
+    }).then( toJSON ) // convert to json
+      .then( parseResponse ) // understand the response
   }
 }
