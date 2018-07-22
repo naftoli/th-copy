@@ -16,7 +16,7 @@ export const login = ( username, password ) => dispatch => {
     })
     .catch( error => {
       dispatch( actions.setLoading( false ) );
-      dispatch( actions.setErrors( "Network Error" ));
+      dispatch( actions.setErrors( 'Could not log in. Please try again.' ));
     });
 };
 
