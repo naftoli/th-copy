@@ -2,17 +2,28 @@ import API from 'api/api';
 import { toast } from 'react-toastify';
 import * as actions from './actions';
 
+// get all soldiers
 export const getSoldiers = () => dispatch => {
   dispatch( actions.setLoading( true ) );
   return API.get( '/core/users.php' )
     .then( response => {
       dispatch( actions.setLoading( false ) );
       return dispatch( actions.setSoldiers( response.data ) );
-    }).catch( response => {
+    }).catch( () => {
       dispatch( actions.setLoading( false ) );
     });
 }
 
+// load a single soldier
+export const getSoldier = ( id ) => dispatch => {
+  return API.get( `/core/users.php?id=${id}` )
+    .then( response => {
+      dispatch( actions.updateSoldier( id, response.data ) );
+      return response.data;
+    })
+}
+
+// update a single soldier
 export const updateSoldier = ( id, data ) => dispatch => {
   const toast_id = toast.info( "Updating Soldier...", { autoClose: false } );
   return API.post( `/core/users.php?id=${id}`, data )
@@ -32,6 +43,7 @@ export const updateSoldier = ( id, data ) => dispatch => {
     });
 }
 
+// upload a users spreadsheet
 export const uploadSpreadsheet = ( data ) => dispatch => {
   const toast_id = toast.info( "Uploading user spreadsheet...", { autoClose: false } );
   return API.post( `/upload/users.php`, data )
