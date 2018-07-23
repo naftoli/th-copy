@@ -121,19 +121,8 @@ var sticker_board = function() {
                 compleation_status = 0; status_text = '';
             }
             
-            // render the medal icon
-            html += '<hr><div class="row">' +
-                '<div class="col-4 col-sm-3 medal-level">' +
-                    '<span class="levelText">Level ' + medal_info.medal_ord + '</span>' + 
-                    '<img class="medal-img ' + medal_classes + '" src="' + medal_info.photo + '" onerror="this.src=\'/kiosk/images/medals/holder.png\'"/>';
-            if ( status_text !== '' ) {
-            html += '<div class="medal-status progress">' + 
-                        '<div class="progress-bar ' + medal_color + '" role="progressbar" style="width: ' + compleation_status + '%;"></div>' + 
-                        '<span>' + status_text + '</span>' +
-                    '</div>';
-            }
-            html += '</div>' +
-                '<div class="col-8 col-sm-9 medal-level-stickers">';
+            html += '<hr><div class="row">';
+            html += '<div class="col-8 col-sm-9 medal-level-stickers">';
             // render all the stickers
             for( var i = 1; i <= medal_info.missions_required; i++ ) {
                 var slot_number = ( medal_info.running_total - medal_info.missions_required ) + i;
@@ -145,6 +134,17 @@ var sticker_board = function() {
                 +'</div>';
             }
             // close the tags;
+            html += '</div>';
+            // render the medal icon
+            html += '<div class="col-4 col-sm-3 medal-level">' +
+                    '<span class="levelText">Level ' + medal_info.medal_ord + '</span>' + 
+                    '<img class="medal-img ' + medal_classes + '" src="' + medal_info.photo + '" onerror="this.src=\'/kiosk/images/medals/holder.png\'"/>';
+            if ( status_text !== '' ) {
+            html += '<div class="medal-status progress">' + 
+                        '<div class="progress-bar ' + medal_color + '" role="progressbar" style="width: ' + compleation_status + '%;"></div>' + 
+                        '<span>' + status_text + '</span>' +
+                    '</div>';
+            }
             html += '</div></div>';
         });
         cache[ index ] = html; // add the item to the cache;
