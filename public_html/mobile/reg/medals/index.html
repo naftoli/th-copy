@@ -329,7 +329,9 @@
             
             // set the Miles total
     		$.post('ajax/getPoints.php', { user_id : id }, function( success ) {
-    			$(".points").append(success + ' miles');
+    			$(".points").append(
+                    parseInt( success ).toLocaleString() + ' miles'
+                );
     			$("#points").val( success );
     		});
 			
