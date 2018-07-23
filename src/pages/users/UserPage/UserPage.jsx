@@ -1,12 +1,34 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 
 class UserPage extends Component {
 
-  render(){
+  state = {
+    soldier: false
+  }
+
+  componentDidMount() {
     const { soldiers, match } = this.props;
-    const user = soldiers.find( soldier => soldier.user_id == match.params.id )
-    return <pre>{ JSON.stringify( user, null, 2 ) }</pre>
+    const current_soldier = soldiers.find( 
+      soldier => soldier.user_id === match.params.id
+    );
+    this.setState({
+      soldier:  current_soldier
+    });
+  }
+
+  render(){
+    const { soldier } = this.state;
+
+    if ( soldier === undefined ) {
+      return <Redirect to='/users' />;
+    }
+
+    console.log( this.state );
+    return (
+      <pre>{ JSON.stringify( this.state.soldier, null, 2 ) }</pre>
+    )
   }
 }
 
