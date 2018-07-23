@@ -50,7 +50,7 @@ foreach ( $objWorksheet->getRowIterator() as $row ) {
         if (!array_key_exists($main, $institutions)) $institutions[$main] = $institution;
         $desc = $category . " (" . $institution . ")";
         if ($level == 'Primary') $desc .= " [<strong><i>primary</i></strong>]";
-        $info[$mosadId][$institutions[$main]][] = $desc;
+        $info[$main][$institutions[$main]][] = $desc;
     }
 }
 echo "<pre>"; 
