@@ -28,7 +28,7 @@ export class UsersPage extends Component {
   // load the contents if we do not have any
   componentDidMount(){
     setTitle( 'View/Edit Soldiers' );
-    if ( this.props.soldiers.length === 0 ) {
+    if ( this.props.soldiers.length < 2 ) {
       this.props.getSoldiers();
     }
   }
@@ -153,7 +153,7 @@ export class UsersPage extends Component {
       }
     },{
       id: 'platoon', Header: 'Platoon',
-      accessor: user => user.platoon.name
+      accessor: user => user.platoon ? user.platoon.name : '-'
     }];
     // add a collumn for HQ ( and Networks )
     if ( current_login.code === 'HQ' ) {
@@ -161,7 +161,7 @@ export class UsersPage extends Component {
     }
     // page definition
     return (
-      <div id="all-users">
+      <div id="UsersPage">
         {/* User Guide */}
         <Callout intent="primary" title="View Soldiers">
           Click a Soldier's name or serial number to view and edit their account.<br/>
