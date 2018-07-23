@@ -4629,7 +4629,7 @@ CREATE TABLE `schools` (
   `hachayol_name` varchar(65) COLLATE utf8_unicode_ci DEFAULT NULL,
   `allow_parent_tasks` tinyint(3) DEFAULT '1',
   `print_parent_tasks` tinyint(3) DEFAULT '1',
-  `store_start_date` int(11) DEFAULT NULL,
+  `store_reset` int(11) DEFAULT NULL,
   PRIMARY KEY (`school_id`),
   UNIQUE KEY `school_name` (`inst_id`,`school_name`),
   UNIQUE KEY `school_number` (`school_number`)
