@@ -83,8 +83,8 @@ while ( $row = mysql_fetch_assoc($result) ) {
     // REGISTRATION 5779
     $children[$row['user_id']]['needsReg'] = 0;
     $children[$row['user_id']]['allowRemove'] = 0;
-    $children[$row['user_id']]['reg_types'] = [];
-
+	$children[$row['user_id']]['reg_types'] = [];
+	
     // not open for australia yet.
     if( !in_array( $row['school_id'], $australia ) ) {
         // chayolei registration

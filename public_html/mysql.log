@@ -1,0 +1,528 @@
+July 18, 2018, 9:20 pm	SET NAMES ?
+July 18, 2018, 9:20 pm	["utf8"]
+July 18, 2018, 9:20 pm	SHOW COLUMNS FROM `schools`
+July 18, 2018, 9:20 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 18, 2018, 9:20 pm	["465"]
+July 18, 2018, 9:20 pm	SHOW COLUMNS FROM `school_registrations`
+July 18, 2018, 9:20 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 18, 2018, 9:20 pm	[465]
+July 18, 2018, 9:21 pm	SET NAMES ?
+July 18, 2018, 9:21 pm	["utf8"]
+July 18, 2018, 9:21 pm	SHOW COLUMNS FROM `schools`
+July 18, 2018, 9:21 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 18, 2018, 9:21 pm	["465"]
+July 18, 2018, 9:21 pm	SHOW COLUMNS FROM `school_registrations`
+July 18, 2018, 9:21 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 18, 2018, 9:21 pm	[465]
+July 18, 2018, 9:27 pm	SET NAMES ?
+July 18, 2018, 9:27 pm	["utf8"]
+July 18, 2018, 9:27 pm	SHOW COLUMNS FROM `schools`
+July 18, 2018, 9:27 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 18, 2018, 9:27 pm	["465"]
+July 18, 2018, 9:27 pm	SHOW COLUMNS FROM `school_registrations`
+July 18, 2018, 9:27 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 18, 2018, 9:27 pm	[465]
+July 18, 2018, 9:27 pm	SET NAMES ?
+July 18, 2018, 9:27 pm	["utf8"]
+July 18, 2018, 9:27 pm	SHOW COLUMNS FROM `schools`
+July 18, 2018, 9:27 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 18, 2018, 9:27 pm	["465"]
+July 18, 2018, 9:27 pm	SHOW COLUMNS FROM `school_registrations`
+July 18, 2018, 9:27 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 18, 2018, 9:27 pm	[465]
+July 18, 2018, 9:28 pm	SET NAMES ?
+July 18, 2018, 9:28 pm	["utf8"]
+July 18, 2018, 9:28 pm	SHOW COLUMNS FROM `schools`
+July 18, 2018, 9:28 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 18, 2018, 9:28 pm	["465"]
+July 18, 2018, 9:28 pm	SHOW COLUMNS FROM `school_registrations`
+July 18, 2018, 9:28 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 18, 2018, 9:28 pm	[465]
+July 18, 2018, 9:29 pm	SET NAMES ?
+July 18, 2018, 9:29 pm	["utf8"]
+July 18, 2018, 9:29 pm	SHOW COLUMNS FROM `schools`
+July 18, 2018, 9:29 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 18, 2018, 9:29 pm	["465"]
+July 18, 2018, 9:29 pm	SHOW COLUMNS FROM `school_registrations`
+July 18, 2018, 9:29 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 18, 2018, 9:29 pm	[465]
+July 18, 2018, 9:29 pm	SET NAMES ?
+July 18, 2018, 9:29 pm	["utf8"]
+July 18, 2018, 9:29 pm	SHOW COLUMNS FROM `schools`
+July 18, 2018, 9:29 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 18, 2018, 9:29 pm	["465"]
+July 18, 2018, 9:29 pm	SHOW COLUMNS FROM `school_registrations`
+July 18, 2018, 9:29 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 18, 2018, 9:29 pm	[465]
+July 19, 2018, 5:59 pm	SET NAMES ?
+July 19, 2018, 5:59 pm	["utf8"]
+July 19, 2018, 5:59 pm	SHOW COLUMNS FROM `schools`
+July 19, 2018, 5:59 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 19, 2018, 5:59 pm	["465"]
+July 19, 2018, 5:59 pm	SHOW COLUMNS FROM `school_registrations`
+July 19, 2018, 5:59 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 19, 2018, 5:59 pm	[465]
+July 19, 2018, 6:00 pm	SET NAMES ?
+July 19, 2018, 6:00 pm	["utf8"]
+July 19, 2018, 6:00 pm	SHOW COLUMNS FROM `schools`
+July 19, 2018, 6:00 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 19, 2018, 6:00 pm	["465"]
+July 19, 2018, 6:00 pm	SHOW COLUMNS FROM `school_registrations`
+July 19, 2018, 6:00 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 19, 2018, 6:00 pm	[465]
+July 19, 2018, 6:39 pm	SET NAMES ?
+July 19, 2018, 6:39 pm	["utf8"]
+July 19, 2018, 6:39 pm	SHOW COLUMNS FROM `schools`
+July 19, 2018, 6:39 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 19, 2018, 6:39 pm	["465"]
+July 19, 2018, 6:39 pm	SHOW COLUMNS FROM `school_registrations`
+July 19, 2018, 6:39 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 19, 2018, 6:39 pm	[465]
+July 19, 2018, 6:39 pm	SELECT COUNT(*) FROM `school_registrations` WHERE `school_registration_id` != ? AND `school_id`=? AND `year`=?
+July 19, 2018, 6:39 pm	[20,465,5779]
+July 19, 2018, 6:39 pm	UPDATE `school_registrations` SET `type`=? WHERE `school_registration_id`=?
+July 19, 2018, 6:39 pm	[1,20]
+July 19, 2018, 6:39 pm	SET NAMES ?
+July 19, 2018, 6:39 pm	["utf8"]
+July 19, 2018, 6:39 pm	SHOW COLUMNS FROM `schools`
+July 19, 2018, 6:39 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 19, 2018, 6:39 pm	["465"]
+July 19, 2018, 6:39 pm	SHOW COLUMNS FROM `school_registrations`
+July 19, 2018, 6:39 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 19, 2018, 6:39 pm	[465]
+July 19, 2018, 6:39 pm	SET NAMES ?
+July 19, 2018, 6:39 pm	["utf8"]
+July 19, 2018, 6:39 pm	SHOW COLUMNS FROM `schools`
+July 19, 2018, 6:39 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 19, 2018, 6:39 pm	["465"]
+July 19, 2018, 6:39 pm	SHOW COLUMNS FROM `school_registrations`
+July 19, 2018, 6:39 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 19, 2018, 6:39 pm	[465]
+July 19, 2018, 6:39 pm	SELECT COUNT(*) FROM `school_registrations` WHERE `school_registration_id` != ? AND `school_id`=? AND `year`=?
+July 19, 2018, 6:39 pm	[20,465,5779]
+July 19, 2018, 6:39 pm	UPDATE `school_registrations` SET `type`=? WHERE `school_registration_id`=?
+July 19, 2018, 6:39 pm	[1,20]
+July 19, 2018, 6:39 pm	SET NAMES ?
+July 19, 2018, 6:39 pm	["utf8"]
+July 19, 2018, 6:39 pm	SHOW COLUMNS FROM `schools`
+July 19, 2018, 6:39 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 19, 2018, 6:39 pm	["465"]
+July 19, 2018, 6:39 pm	SHOW COLUMNS FROM `school_registrations`
+July 19, 2018, 6:39 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 19, 2018, 6:39 pm	[465]
+July 19, 2018, 7:16 pm	SET NAMES ?
+July 19, 2018, 7:16 pm	["utf8"]
+July 19, 2018, 7:16 pm	SHOW COLUMNS FROM `schools`
+July 19, 2018, 7:16 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 19, 2018, 7:16 pm	["465"]
+July 19, 2018, 7:16 pm	SHOW COLUMNS FROM `school_registrations`
+July 19, 2018, 7:16 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 19, 2018, 7:16 pm	[465]
+July 19, 2018, 7:17 pm	SET NAMES ?
+July 19, 2018, 7:17 pm	["utf8"]
+July 19, 2018, 7:17 pm	SHOW COLUMNS FROM `schools`
+July 19, 2018, 7:17 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 19, 2018, 7:17 pm	["465"]
+July 19, 2018, 7:17 pm	SHOW COLUMNS FROM `school_registrations`
+July 19, 2018, 7:17 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 19, 2018, 7:17 pm	[465]
+July 19, 2018, 7:17 pm	SET NAMES ?
+July 19, 2018, 7:17 pm	["utf8"]
+July 19, 2018, 7:17 pm	SHOW COLUMNS FROM `schools`
+July 19, 2018, 7:17 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 19, 2018, 7:17 pm	["465"]
+July 19, 2018, 7:17 pm	SHOW COLUMNS FROM `school_registrations`
+July 19, 2018, 7:17 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 19, 2018, 7:17 pm	[465]
+July 19, 2018, 7:19 pm	SET NAMES ?
+July 19, 2018, 7:19 pm	["utf8"]
+July 19, 2018, 7:19 pm	SHOW COLUMNS FROM `schools`
+July 19, 2018, 7:19 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 19, 2018, 7:19 pm	["465"]
+July 19, 2018, 7:19 pm	SHOW COLUMNS FROM `school_registrations`
+July 19, 2018, 7:19 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 19, 2018, 7:19 pm	[465]
+July 20, 2018, 6:19 pm	SET NAMES ?
+July 20, 2018, 6:19 pm	["utf8"]
+July 20, 2018, 6:19 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:19 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:19 pm	["465"]
+July 20, 2018, 6:19 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:19 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:19 pm	[465]
+July 20, 2018, 6:22 pm	SET NAMES ?
+July 20, 2018, 6:22 pm	["utf8"]
+July 20, 2018, 6:22 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:22 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:22 pm	["465"]
+July 20, 2018, 6:22 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:22 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:22 pm	[465]
+July 20, 2018, 6:26 pm	SET NAMES ?
+July 20, 2018, 6:26 pm	["utf8"]
+July 20, 2018, 6:26 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:26 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:26 pm	["465"]
+July 20, 2018, 6:26 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:26 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:26 pm	[465]
+July 20, 2018, 6:27 pm	SET NAMES ?
+July 20, 2018, 6:27 pm	["utf8"]
+July 20, 2018, 6:27 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:27 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:27 pm	["465"]
+July 20, 2018, 6:27 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:27 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:27 pm	[465]
+July 20, 2018, 6:28 pm	SET NAMES ?
+July 20, 2018, 6:28 pm	["utf8"]
+July 20, 2018, 6:28 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:28 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:28 pm	["465"]
+July 20, 2018, 6:28 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:28 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:28 pm	[465]
+July 20, 2018, 6:31 pm	SET NAMES ?
+July 20, 2018, 6:31 pm	["utf8"]
+July 20, 2018, 6:31 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:31 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:31 pm	["465"]
+July 20, 2018, 6:31 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:31 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:31 pm	[465]
+July 20, 2018, 6:32 pm	SET NAMES ?
+July 20, 2018, 6:32 pm	["utf8"]
+July 20, 2018, 6:32 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:32 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:32 pm	["465"]
+July 20, 2018, 6:32 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:32 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:32 pm	[465]
+July 20, 2018, 6:33 pm	SET NAMES ?
+July 20, 2018, 6:33 pm	["utf8"]
+July 20, 2018, 6:33 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:33 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:33 pm	["465"]
+July 20, 2018, 6:33 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:33 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:33 pm	[465]
+July 20, 2018, 6:33 pm	SET NAMES ?
+July 20, 2018, 6:33 pm	["utf8"]
+July 20, 2018, 6:33 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:33 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:33 pm	["465"]
+July 20, 2018, 6:33 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:33 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:33 pm	[465]
+July 20, 2018, 6:40 pm	SET NAMES ?
+July 20, 2018, 6:40 pm	["utf8"]
+July 20, 2018, 6:40 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:40 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:40 pm	["465"]
+July 20, 2018, 6:40 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:40 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:40 pm	[465]
+July 20, 2018, 6:44 pm	SET NAMES ?
+July 20, 2018, 6:44 pm	["utf8"]
+July 20, 2018, 6:44 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:44 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:44 pm	["465"]
+July 20, 2018, 6:44 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:44 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:44 pm	[465]
+July 20, 2018, 6:56 pm	SET NAMES ?
+July 20, 2018, 6:56 pm	["utf8"]
+July 20, 2018, 6:56 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:56 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:56 pm	["465"]
+July 20, 2018, 6:56 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:56 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:56 pm	[465]
+July 20, 2018, 6:57 pm	SET NAMES ?
+July 20, 2018, 6:57 pm	["utf8"]
+July 20, 2018, 6:57 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:57 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:57 pm	["465"]
+July 20, 2018, 6:57 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:57 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:57 pm	[465]
+July 20, 2018, 6:57 pm	SELECT COUNT(*) FROM `school_registrations` WHERE `school_registration_id` != ? AND `school_id`=? AND `year`=?
+July 20, 2018, 6:57 pm	[20,465,5779]
+July 20, 2018, 6:57 pm	UPDATE `school_registrations` SET `type`=? WHERE `school_registration_id`=?
+July 20, 2018, 6:57 pm	[1,20]
+July 20, 2018, 6:57 pm	SET NAMES ?
+July 20, 2018, 6:57 pm	["utf8"]
+July 20, 2018, 6:57 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:57 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:57 pm	["465"]
+July 20, 2018, 6:57 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:57 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:57 pm	[465]
+July 20, 2018, 6:58 pm	SET NAMES ?
+July 20, 2018, 6:58 pm	["utf8"]
+July 20, 2018, 6:58 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 6:58 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 6:58 pm	["465"]
+July 20, 2018, 6:58 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 6:58 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 6:58 pm	[465]
+July 20, 2018, 7:00 pm	SET NAMES ?
+July 20, 2018, 7:00 pm	["utf8"]
+July 20, 2018, 7:00 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 7:00 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 7:00 pm	["465"]
+July 20, 2018, 7:00 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 7:00 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 7:00 pm	[465]
+July 20, 2018, 7:29 pm	SET NAMES ?
+July 20, 2018, 7:29 pm	["utf8"]
+July 20, 2018, 7:29 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 7:29 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 7:29 pm	["465"]
+July 20, 2018, 7:29 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 7:29 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 7:29 pm	[465]
+July 20, 2018, 7:33 pm	SET NAMES ?
+July 20, 2018, 7:33 pm	["utf8"]
+July 20, 2018, 7:33 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 7:33 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 7:33 pm	["465"]
+July 20, 2018, 7:33 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 7:33 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 7:33 pm	[465]
+July 20, 2018, 7:34 pm	SET NAMES ?
+July 20, 2018, 7:34 pm	["utf8"]
+July 20, 2018, 7:34 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 7:34 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 7:34 pm	["465"]
+July 20, 2018, 7:34 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 7:34 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 7:34 pm	[465]
+July 20, 2018, 7:36 pm	SET NAMES ?
+July 20, 2018, 7:36 pm	["utf8"]
+July 20, 2018, 7:36 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 7:36 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 7:36 pm	["465"]
+July 20, 2018, 7:36 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 7:36 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 7:36 pm	[465]
+July 20, 2018, 7:36 pm	SET NAMES ?
+July 20, 2018, 7:36 pm	["utf8"]
+July 20, 2018, 7:36 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 7:36 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 7:36 pm	["465"]
+July 20, 2018, 7:36 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 7:36 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 7:36 pm	[465]
+July 20, 2018, 7:37 pm	SET NAMES ?
+July 20, 2018, 7:37 pm	["utf8"]
+July 20, 2018, 7:37 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 7:37 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 7:37 pm	["465"]
+July 20, 2018, 7:37 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 7:37 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 7:37 pm	[465]
+July 20, 2018, 7:37 pm	SELECT COUNT(*) FROM `school_registrations` WHERE `school_registration_id` != ? AND `school_id`=? AND `year`=?
+July 20, 2018, 7:37 pm	[20,465,5779]
+July 20, 2018, 7:37 pm	UPDATE `school_registrations` SET `type`=? WHERE `school_registration_id`=?
+July 20, 2018, 7:37 pm	[1,20]
+July 20, 2018, 7:44 pm	SET NAMES ?
+July 20, 2018, 7:44 pm	["utf8"]
+July 20, 2018, 7:44 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 7:44 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 7:44 pm	["465"]
+July 20, 2018, 7:44 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 7:44 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 7:44 pm	[465]
+July 20, 2018, 7:50 pm	SET NAMES ?
+July 20, 2018, 7:50 pm	["utf8"]
+July 20, 2018, 7:50 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 7:50 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 7:50 pm	["465"]
+July 20, 2018, 7:50 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 7:50 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 7:50 pm	[465]
+July 20, 2018, 7:52 pm	SET NAMES ?
+July 20, 2018, 7:52 pm	["utf8"]
+July 20, 2018, 7:52 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 7:52 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 7:52 pm	["465"]
+July 20, 2018, 7:52 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 7:52 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 7:52 pm	[465]
+July 20, 2018, 8:44 pm	SET NAMES ?
+July 20, 2018, 8:44 pm	["utf8"]
+July 20, 2018, 8:44 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 8:44 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 8:44 pm	["465"]
+July 20, 2018, 8:44 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 8:44 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 8:44 pm	[465]
+July 20, 2018, 8:50 pm	SET NAMES ?
+July 20, 2018, 8:50 pm	["utf8"]
+July 20, 2018, 8:50 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 8:50 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 8:50 pm	["465"]
+July 20, 2018, 8:50 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 8:50 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 8:50 pm	[465]
+July 20, 2018, 8:50 pm	SET NAMES ?
+July 20, 2018, 8:50 pm	["utf8"]
+July 20, 2018, 8:50 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 8:50 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 8:50 pm	["465"]
+July 20, 2018, 8:50 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 8:50 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 8:50 pm	[465]
+July 20, 2018, 8:51 pm	SET NAMES ?
+July 20, 2018, 8:51 pm	["utf8"]
+July 20, 2018, 8:51 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 8:51 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 8:51 pm	["465"]
+July 20, 2018, 8:51 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 8:51 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 8:51 pm	[465]
+July 20, 2018, 8:53 pm	SET NAMES ?
+July 20, 2018, 8:53 pm	["utf8"]
+July 20, 2018, 8:53 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 8:53 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 8:53 pm	["465"]
+July 20, 2018, 8:53 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 8:53 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 8:53 pm	[465]
+July 20, 2018, 8:54 pm	SET NAMES ?
+July 20, 2018, 8:54 pm	["utf8"]
+July 20, 2018, 8:54 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 8:54 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 8:54 pm	["465"]
+July 20, 2018, 8:54 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 8:54 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 8:54 pm	[465]
+July 20, 2018, 8:54 pm	SELECT COUNT(*) FROM `school_registrations` WHERE `school_registration_id` != ? AND `school_id`=? AND `year`=?
+July 20, 2018, 8:54 pm	[20,465,5779]
+July 20, 2018, 8:54 pm	UPDATE `school_registrations` SET `type`=? WHERE `school_registration_id`=?
+July 20, 2018, 8:54 pm	[1,20]
+July 20, 2018, 8:54 pm	SET NAMES ?
+July 20, 2018, 8:54 pm	["utf8"]
+July 20, 2018, 8:54 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 8:54 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 8:54 pm	["465"]
+July 20, 2018, 8:54 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 8:54 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 8:54 pm	[465]
+July 20, 2018, 8:54 pm	SET NAMES ?
+July 20, 2018, 8:54 pm	["utf8"]
+July 20, 2018, 8:54 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 8:54 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 8:54 pm	["465"]
+July 20, 2018, 8:54 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 8:54 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 8:54 pm	[465]
+July 20, 2018, 8:54 pm	SELECT COUNT(*) FROM `school_registrations` WHERE `school_registration_id` != ? AND `school_id`=? AND `year`=?
+July 20, 2018, 8:54 pm	[20,465,5779]
+July 20, 2018, 8:54 pm	UPDATE `school_registrations` SET `type`=? WHERE `school_registration_id`=?
+July 20, 2018, 8:54 pm	[1,20]
+July 20, 2018, 8:55 pm	SET NAMES ?
+July 20, 2018, 8:55 pm	["utf8"]
+July 20, 2018, 8:55 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 8:55 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 8:55 pm	["465"]
+July 20, 2018, 8:55 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 8:55 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 8:55 pm	[465]
+July 20, 2018, 8:55 pm	SET NAMES ?
+July 20, 2018, 8:55 pm	["utf8"]
+July 20, 2018, 8:55 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 8:55 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 8:55 pm	["465"]
+July 20, 2018, 8:55 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 8:55 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 8:55 pm	[465]
+July 20, 2018, 8:55 pm	SELECT COUNT(*) FROM `school_registrations` WHERE `school_registration_id` != ? AND `school_id`=? AND `year`=?
+July 20, 2018, 8:55 pm	[20,465,5779]
+July 20, 2018, 8:55 pm	UPDATE `school_registrations` SET `type`=? WHERE `school_registration_id`=?
+July 20, 2018, 8:55 pm	[1,20]
+July 20, 2018, 8:55 pm	SET NAMES ?
+July 20, 2018, 8:55 pm	["utf8"]
+July 20, 2018, 8:55 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 8:55 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 8:55 pm	["465"]
+July 20, 2018, 8:55 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 8:55 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 8:55 pm	[465]
+July 20, 2018, 9:36 pm	SET NAMES ?
+July 20, 2018, 9:36 pm	["utf8"]
+July 20, 2018, 9:36 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 9:36 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 9:36 pm	["465"]
+July 20, 2018, 9:36 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 9:36 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 9:36 pm	[465]
+July 20, 2018, 9:36 pm	SELECT COUNT(*) FROM `school_registrations` WHERE `school_registration_id` != ? AND `school_id`=? AND `year`=?
+July 20, 2018, 9:36 pm	[20,465,5779]
+July 20, 2018, 9:36 pm	UPDATE `school_registrations` SET `type`=? WHERE `school_registration_id`=?
+July 20, 2018, 9:36 pm	[1,20]
+July 20, 2018, 9:44 pm	SET NAMES ?
+July 20, 2018, 9:44 pm	["utf8"]
+July 20, 2018, 9:44 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 9:44 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 9:44 pm	["465"]
+July 20, 2018, 9:44 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 9:44 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 9:44 pm	[465]
+July 20, 2018, 9:44 pm	SET NAMES ?
+July 20, 2018, 9:44 pm	["utf8"]
+July 20, 2018, 9:44 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 9:44 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 9:44 pm	["465"]
+July 20, 2018, 9:44 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 9:44 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 9:44 pm	[465]
+July 20, 2018, 9:44 pm	SET NAMES ?
+July 20, 2018, 9:44 pm	["utf8"]
+July 20, 2018, 9:44 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 9:45 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 9:45 pm	["465"]
+July 20, 2018, 9:45 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 9:45 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 9:45 pm	[465]
+July 20, 2018, 9:45 pm	SELECT COUNT(*) FROM `school_registrations` WHERE `school_registration_id` != ? AND `school_id`=? AND `year`=?
+July 20, 2018, 9:45 pm	[20,465,5779]
+July 20, 2018, 9:45 pm	UPDATE `school_registrations` SET `type`=? WHERE `school_registration_id`=?
+July 20, 2018, 9:45 pm	[1,20]
+July 20, 2018, 9:45 pm	SET NAMES ?
+July 20, 2018, 9:45 pm	["utf8"]
+July 20, 2018, 9:45 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 9:45 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 9:45 pm	["465"]
+July 20, 2018, 9:45 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 9:45 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 9:45 pm	[465]
+July 20, 2018, 9:45 pm	SET NAMES ?
+July 20, 2018, 9:45 pm	["utf8"]
+July 20, 2018, 9:45 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 9:45 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 9:45 pm	["465"]
+July 20, 2018, 9:45 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 9:45 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 9:45 pm	[465]
+July 20, 2018, 9:45 pm	SET NAMES ?
+July 20, 2018, 9:45 pm	["utf8"]
+July 20, 2018, 9:45 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 9:46 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 9:46 pm	["465"]
+July 20, 2018, 9:46 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 9:46 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 9:46 pm	[465]
+July 20, 2018, 9:46 pm	SET NAMES ?
+July 20, 2018, 9:46 pm	["utf8"]
+July 20, 2018, 9:46 pm	SHOW COLUMNS FROM `schools`
+July 20, 2018, 9:46 pm	SELECT * FROM `schools` WHERE `school_id`=?
+July 20, 2018, 9:46 pm	["465"]
+July 20, 2018, 9:46 pm	SHOW COLUMNS FROM `school_registrations`
+July 20, 2018, 9:46 pm	SELECT * FROM `school_registrations` WHERE `school_id` IN(?)
+July 20, 2018, 9:46 pm	[465]
+July 20, 2018, 9:46 pm	SELECT COUNT(*) FROM `school_registrations` WHERE `school_registration_id` != ? AND `school_id`=? AND `year`=?
+July 20, 2018, 9:46 pm	[20,465,5779]
+July 20, 2018, 9:46 pm	UPDATE `school_registrations` SET `type`=? WHERE `school_registration_id`=?
+July 20, 2018, 9:46 pm	[1,20]
