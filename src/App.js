@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import Dashboard from 'pages/Dashboard/Dashboard';
-import Login, { Logout } from 'pages/Login/';
+import Dashboard from 'pages/dashboard/Dashboard';
+import Login, { Logout } from 'pages/login';
 import UsersPages from 'pages/users';
 
 export class App extends Component {
