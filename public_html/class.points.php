@@ -13,7 +13,7 @@ class Points
     public function __construct( $id ) {
         $this->user_id = $id;
         $result = mysql_query(
-            "SELECT store_reset, user_code FROM users LEFT JOIN schools USING (school_id) WHERE user_id = "
+            "SELECT store_reset, school_id, user_code FROM users LEFT JOIN schools USING (school_id) WHERE user_id = "
             . mysql_real_escape_string( $id )
         );
         $row = mysql_fetch_assoc($result);		
@@ -29,7 +29,7 @@ class Points
     }
     
     public function getTotalPoints() {
-        $points = floor(mysql_result(mq(totalMarks("WHERE user_id = $this->user_id")), 0));
+        $points = $this->getTotalMarks("WHERE user_id = $this->user_id");
         $arrParams['user_code'] = $this->usercode;
         $arrPoints = header_total_points( $arrParams );
         $points += $arrPoints[$arrParams['user_code']];
@@ -37,29 +37,22 @@ class Points
     }
     
     public function getTotalThisYear() {
-        if ( $this->store_reset ){
-            $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= " . $this->store_reset );
-            $arrParams = [
-                'user_code' => $this->usercode,
-                'start_date' => $this->store_reset
-            ];
-
-            $arrPoints = header_total_points( $arrParams );
-            $points += $arrPoints[$arrParams['user_code']];
-            return $points;
-        } else {
-            return $this->getTotalPoints();
+        if ($this->australian) $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= " . self::YEARSTARTAUSTRALIA);
+        else $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= " . self::YEARSTART);
+        $arrParams['user_code'] = $this->usercode;
+        $arrParams['start_date'] = $this->australian ? self::YEARSTARTAUSTRALIA : self::YEARSTART;
+        $arrPoints = header_total_points( $arrParams );
+        if ($this->debug) {
+            echo "<pre>";
+            print_r($arrPoints);
+            echo "</pre>";
         }
         $points += $arrPoints[$arrParams['user_code']];
         return $points;
     }
     
     public function getAuctionPoints( $auction_start_date ) {
-        // limit the auciton to the store start date
-        if ( $this->store_reset && $auction_start_date < $this->store_reset ) {
-            $auction_start_date = $this->store_reset;
-        }
-        $points = floor(mysql_result(mq(totalMarks("WHERE user_id = $this->user_id and mark_date >= $auction_start_date")), 0));
+        $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= $auction_start_date");
         $arrParams['user_code'] = $this->usercode;
         $arrParams['auction_date'] = $auction_start_date;
         $arrPoints = header_auction_points( $arrParams );
@@ -74,7 +67,7 @@ class Points
     
     public function getStorePoints() {
         $reset_date = $this->getStoreResetDate();
-        $points = floor(mysql_result(mq(totalMarks("WHERE user_id = $this->user_id and mark_date >= " . $reset_date)), 0));
+        $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= " . $reset_date);
         $arrParams['user_code'] = $this->usercode;
         $arrParams['start_date'] = $reset_date;
         $arrPoints = header_store_points( $arrParams );
@@ -89,11 +82,9 @@ class Points
     }
     
     public function getMashpiaStorePoints() {
-        if ( $this->store_reset ) {
-            return $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= " . $this->store_reset );
-        } else {
-            return $this->getTotalMarks("WHERE user_id = $this->user_id ");
-        }
+        $reset_date = $this->getStoreResetDate();
+        $points = $this->getTotalMarks( "WHERE user_id = $this->user_id and mark_date >= " .$reset_date );
+        return $points;
     }
 
     private function getTotalMarks( $limit ) {
@@ -107,13 +98,9 @@ class Points
     }
 
     private function getStoreResetDate() {
-        // find out if school has a store reset date set
-        $sql = "select store_reset from schools where school_id = " . $this->school_id;
-		$result = mysql_query( $sql );
-		$row = mysql_fetch_assoc( $result );
-		$store_date = $row['store_reset'];
-		if ($store_date > 0 && $store_date <= unixtojd()) { // make sure we are now after the start date set by the school
-            $reset_date = $store_date;
+		$this->store_reset;
+		if ($this->store_reset > 0 && $this->store_reset <= unixtojd()) { // make sure we are now after the start date set by the school
+            $reset_date = $this->store_reset;
         } else {
             if ($this->australian) $reset_date = self::YEARSTARTAUSTRALIA;
             else $reset_date = self::YEARSTART;
