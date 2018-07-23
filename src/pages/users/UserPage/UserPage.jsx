@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 import Spinner from 'components/ui/Spinner';
+import PersonalTab from './PersonalTab';
 // functions
 import { getSoldier } from 'store/soldiers/operations';
 import { connect } from 'react-redux';
@@ -93,7 +94,7 @@ class UserPage extends Component {
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
           <TabPane tabId={1}>
-            <h1>Personal</h1>
+            <PersonalTab soldier={ soldier } />
           </TabPane>
           <TabPane tabId={2}>
             <h1>Address</h1>
