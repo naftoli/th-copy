@@ -1,13 +1,16 @@
 <?php
+ini_set('display_errors', TRUE);
+$admin_auth = array('school'); 
+require('../header.php');
+
 // a little bit of security
 if (
-    ($_SERVER['HTTP_HOST'] == '192.168.56.4' && $_SERVER['SERVER_NAME'] == '192.168.56.4')
-    ||
-    ($_SERVER['HTTP_HOST'] == '192.168.56.4' && $_SERVER['SERVER_NAME'] == '192.168.56.4')
+    $admin_user['auth'] == 'super' &&
+    (
+        ($_SERVER['HTTP_HOST'] == '192.168.56.4' && $_SERVER['SERVER_NAME'] == '192.168.56.4') ||
+        ($_SERVER['HTTP_HOST'] == 'mashpia.com' && $_SERVER['SERVER_NAME'] == 'mashpia.com')
+    )
 ) {
-    ini_set('display_errors', TRUE);
-    $admin_auth = array('school'); 
-    require('../header.php');
     require '../PHPExcel/IOFactory.php';
 
     //load spreadsheet
