@@ -1,62 +1,71 @@
 <?php
-ini_set('display_errors', TRUE);
-$admin_auth = array('school'); 
-require('../header.php');
-require '../PHPExcel/IOFactory.php';
+// a little bit of security
+if (
+    ($_SERVER['HTTP_HOST'] == '192.168.56.4' && $_SERVER['SERVER_NAME'] == '192.168.56.4')
+    ||
+    ($_SERVER['HTTP_HOST'] == '192.168.56.4' && $_SERVER['SERVER_NAME'] == '192.168.56.4')
+) {
+    ini_set('display_errors', TRUE);
+    $admin_auth = array('school'); 
+    require('../header.php');
+    require '../PHPExcel/IOFactory.php';
 
-//load spreadsheet
-$objPHPExcel = PHPExcel_IOFactory::load("Mosad Categories.xlsx");
-$objWorksheet = $objPHPExcel->getActiveSheet();
+    //load spreadsheet
+    $objPHPExcel = PHPExcel_IOFactory::load("Mosad Categories.xlsx");
+    $objWorksheet = $objPHPExcel->getActiveSheet();
 
-$firstRow = true;
-$msg = "";
-$errorLine = 1;
-$info = array();
-$institutions = array();
+    $firstRow = true;
+    $msg = "";
+    $errorLine = 1;
+    $info = array();
+    $institutions = array();
 
-foreach ( $objWorksheet->getRowIterator() as $row ) {
-    if ( $firstRow ) {
-        $firstRow = false;
-    } else {
-        $i = 0; 
-        $user_id = null; 
-        $cellIterator = $row->getCellIterator();
-        $cellIterator->setIterateOnlyExistingCells(false);
-        foreach ( $cellIterator as $cell ) {
-            $value = trim( $cell->getValue() );
-            switch ($i++) {
-                case 0:
-                    $mosadId = (int)$value;
-                    break;
-                case 1:
-                    $parentId = (int)$value;
-                    break;
-                case 2:
-                    $institution = $value;
-                    break;
-                case 3:
-                    $category = $value;
-                    break;
-                case 4:
-                    $level = $value;
-                    break;
-            }
-        }
-        if ($parentId) {
-            $main = $parentId;
+    foreach ( $objWorksheet->getRowIterator() as $row ) {
+        if ( $firstRow ) {
+            $firstRow = false;
         } else {
-            $main = $mosadId;
+            $i = 0; 
+            $user_id = null; 
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false);
+            foreach ( $cellIterator as $cell ) {
+                $value = trim( $cell->getValue() );
+                switch ($i++) {
+                    case 0:
+                        $mosadId = (int)$value;
+                        break;
+                    case 1:
+                        $parentId = (int)$value;
+                        break;
+                    case 2:
+                        $institution = $value;
+                        break;
+                    case 3:
+                        $category = $value;
+                        break;
+                    case 4:
+                        $level = $value;
+                        break;
+                }
+            }
+            if ($parentId) {
+                $main = $parentId;
+            } else {
+                $main = $mosadId;
+            }
+            if (!array_key_exists($main, $institutions)) $institutions[$main] = $institution;
+            $desc = $category . " (" . $institution . ")";
+            if ($level == 'Primary') $desc .= " [<strong><i>primary</i></strong>]";
+            $info[$main][$institutions[$main]][] = $desc;
         }
-        if (!array_key_exists($main, $institutions)) $institutions[$main] = $institution;
-        $desc = $category . " (" . $institution . ")";
-        if ($level == 'Primary') $desc .= " [<strong><i>primary</i></strong>]";
-        $info[$main][$institutions[$main]][] = $desc;
     }
+    echo "<pre>"; 
+    //print_r( $institutions );
+    //print_r( $info ); 
+    echo "</pre>";
+} else {
+    exit;
 }
-echo "<pre>"; 
-//print_r( $institutions );
-//print_r( $info ); 
-echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
