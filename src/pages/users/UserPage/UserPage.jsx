@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
+import { setTitle } from 'functions/utils';
+import './UserPage.scss';
 
 class UserPage extends Component {
 
@@ -13,6 +15,11 @@ class UserPage extends Component {
     const current_soldier = soldiers.find( 
       soldier => soldier.user_id === match.params.id
     );
+    // update the page title
+    if ( current_soldier ) {
+      setTitle(`View / Edit ${current_soldier.user_serial}`)
+    }
+    // update the state
     this.setState({
       soldier:  current_soldier
     });
@@ -20,12 +27,11 @@ class UserPage extends Component {
 
   render(){
     const { soldier } = this.state;
-
+    // if we do not have the soldier...
     if ( soldier === undefined ) {
       return <Redirect to='/users' />;
     }
-
-    console.log( this.state );
+    // render the page and it's sub-pages ( tabs )
     return (
       <pre>{ JSON.stringify( this.state.soldier, null, 2 ) }</pre>
     )

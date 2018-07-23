@@ -12,7 +12,7 @@ import BulkUploadModal from './BulkUploadModal';
 // functions
 import { toast } from 'react-toastify';
 import is from 'is_js';
-import arrayToCSV from 'functions/arrayToCSV';
+import { arrayToCSV, setTitle } from 'functions/utils';
 // styles
 import 'react-table/react-table.css';
 import './UsersPage.scss';
@@ -27,6 +27,7 @@ export class UsersPage extends Component {
   }
   // load the contents if we do not have any
   componentDidMount(){
+    setTitle( 'View/Edit Soldiers' );
     if ( this.props.soldiers.length === 0 ) {
       this.props.getSoldiers();
     }
