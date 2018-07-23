@@ -41,7 +41,7 @@ class KioskController extends Zend_Controller_Action
 		$result = $db->query( $sql );
 		$row = $result->fetch();
 		$date = $row['store_reset'];
-		if ($date > 0 && $date <= unixtojd()) { // make sure we are now after the start date set by the school
+		if ($date > 0) { 
 			$start_date = $date;
 		} else {
 			$australian = array(55,66,110,112,180);
