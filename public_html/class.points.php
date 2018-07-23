@@ -16,10 +16,11 @@ class Points
             "SELECT store_reset, school_id, user_code FROM users LEFT JOIN schools USING (school_id) WHERE user_id = "
             . mysql_real_escape_string( $id )
         );
-        $row = mysql_fetch_assoc($result);		
+        $row = mysql_fetch_assoc($result);	
+        $this->store_reset = $row['store_reset'];
         $this->usercode = $row['user_code'];
         $this->school_id = $row['school_id'];
-        $australian = array(55,66,110,112,180);
+        $australian = array( 55, 66, 110, 112, 180 );
         if (in_array($this->school_id, $australian)) $this->australian = true;
         $this->debug = false;
     }
@@ -81,6 +82,7 @@ class Points
         return $points;
     }
     
+    // used in statement.php line 628
     public function getMashpiaStorePoints() {
         $reset_date = $this->getStoreResetDate();
         $points = $this->getTotalMarks( "WHERE user_id = $this->user_id and mark_date >= " .$reset_date );
@@ -98,7 +100,6 @@ class Points
     }
 
     private function getStoreResetDate() {
-		$this->store_reset;
 		if ($this->store_reset > 0 && $this->store_reset <= unixtojd()) { // make sure we are now after the start date set by the school
             $reset_date = $this->store_reset;
         } else {
