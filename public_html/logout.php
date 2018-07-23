@@ -38,5 +38,5 @@ else {
     $page = '/';
 }
 
-header('Location: http://mashpia.com' . $page);
+header('Location: ' . $page);
 ?>

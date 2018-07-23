@@ -114,7 +114,7 @@ $school = new school($row);
 			
 			function check_next_page() {
 				if (next_page == "true") {
-					location.href = "https://mashpia.com/registration_7.php";
+					location.href = "/registration_7.php";
 				}
 			}
 

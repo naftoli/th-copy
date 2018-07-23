@@ -3,7 +3,7 @@
 //$tuitionSchools = array(5,7,19,30,33,37,39,42,45,49,50,58,63,110,176,185,255);
 //$fortyFive = array(54,48,81,61,269,7,263,58,2,21,37,4,49,192);
 //$fifty = array(162);
-require_once '../../../db.php';
+require_once __DIR__ . '/../../../db.php';
 $australia = array(55,66,110,112,256);
 
 // reg_type of '1' means school pays for children, reg_type of '2' means school pays for children not registered by a certain date

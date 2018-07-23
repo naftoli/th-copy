@@ -207,7 +207,7 @@
 					<img id="item13" src="/mobile/img_new/circle-color-green-svg.svg">
                 </div>
 				
-				<div class="span12" style="margin-top:15px;">
+				<div class="span12" id='raffleInfoBanner' style="margin-top:15px; display: none;">
                     <div class="medal-label">
                         <span>RAFFLE INFO</span>
                     </div>
@@ -335,7 +335,10 @@
 			
 			// get raffle eligibility info
 			$.post('ajax/getRaffleInfo.php', { user_id : id }, function( response ) {
-				$("#raffleInfo").append( response );
+                if ( response ) {
+                    $("#raffleInfoBanner").show();
+                    $("#raffleInfo").append( response );
+                }
 			});
             
             // get the user's information and update the UI

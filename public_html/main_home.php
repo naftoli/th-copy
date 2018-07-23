@@ -1,35 +1,9 @@
 <?
-/*
-$qry = "select count(*) as total from users 
-		join schools using (school_id) 
-		where school_id is not null 
-		and school_era is null";
-$res = mysql_query($qry);
-$r = mysql_fetch_assoc($res);
-$total = $r['total'];
-
-$qry = "select count(*) as total from users 
-		join schools using (school_id) 
-		where user_registered > 0";
-$res = mysql_query($qry);
-$r = mysql_fetch_assoc($res);
-$totalReg = $r['total'];
-
-$qry = "select count(*) as total from users where school_id = " . $school_id;
-$res = mysql_query($qry);
-$r = mysql_fetch_assoc($res);
-$totalSchool = $r['total'];
-
-$qry = "select count(*) as total from users where school_id = " . $school_id . " and user_registered > 0";
-$res = mysql_query($qry);
-$r = mysql_fetch_assoc($res);
-$totalSchoolReg = $r['total'];
-*/
 require_once 'class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$chidonYear = GlobalSettings::getChidonYear();
 
 // get campaigns for current year
-$campaign_query = mysql_query( "SELECT * FROM line_campaigns WHERE year = " . $year );
+$campaign_query = mysql_query( "SELECT * FROM line_campaigns WHERE year = " . $chidonYear );
 while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 	if (strtolower($campaign['type']) == 'tanya') $tanyaCampaign = $campaign['id'];
 	else if (strtolower($campaign['type']) == 'mishna') $mishnaCampaign = $campaign['id'];
@@ -56,9 +30,6 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
                     "<input type='submit' name='submit' value='submit' />" + 
                 "</form>" );
         });
-         
-        //check if user has been created in wordpress
-        //$.get('syc.php', {user : user, pass : pass});
         
         var del = <?=isset($_GET['deletedParents']) ? $_GET['deletedParents'] : 0?>;
         if (del) {
@@ -161,113 +132,8 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
         			alert("Error updating.");
         		}
         	});
-        });       
-        /*
-        $("#learned").blur( function() {
-        	var num = $(this).val().trim();
-			if (num == '') num = 0;
-        	var school = <?=$school_id?>;
-        	if (isNaN(num)) {
-        		alert("You must enter a number.");
-        		return;
-        	}
-        	$.post('ajax/updateBalPehCampaign.php', {
-        		id : tanyaCampaign, 
-        		val : num, 
-        		school : school, 
-        		table : 'lines_learned'
-        	}, function( data ) {
-        		if (data == 1) {
-        			//alert("Updated.");
-					
-//         			$.post('ajax/updateBpSummary.php', {
-//         				campaign : tanyaCampaign, 
-//         				school : school 
-//         			});
-        			
-        		} else {
-        			alert("Error updating.");
-        		}
-        	});
         });
-        
-        $("#mLearned").blur( function() {
-        	var num = $(this).val().trim();
-			if (num == '') num = 0;
-        	var school = <?=$school_id?>;
-        	if (isNaN(num)) {
-        		alert("You must enter a number.");
-        		return;
-        	}
-        	$.post('ajax/updateBalPehCampaign.php', {
-        		id : mishnaCampaign, 
-        		val : num, 
-        		school : school, 
-        		table : 'lines_learned'
-        	}, function( data ) {
-        		if (data == 1) {
-        			//alert("Updated.");
-					
-//         			$.post('ajax/updateBpSummary.php', {
-//         				campaign : mishnaCampaign, 
-//         				school : school 
-//         			});
-        			
-        		} else {
-        			alert("Error updating.");
-        		}
-        	});
-        });
-		
-		$("#syncTanya").click( function() {
-			$.post('ajax/updateBpSummary.php', {
-				campaign : tanyaCampaign, 
-				school : school 
-			});
-		});
-		
-		$("#syncMishna").click( function() {
-			$.post('ajax/updateBpSummary.php', {
-				campaign : mishnaCampaign, 
-				school : school 
-			});
-		});
-		/*
-        function checkLines() {
-        	<? if (!$admin->is_parent == true) : ?>
-        	var v = prompt("Please enter how many lines your school commits to learn Baal Peh by Yud Alef Nissan", " ");
-        	if (v > 0 && !isNaN(v)) {
-        		$("#lines").val(v);
-        		$("#lines").trigger('blur');
-        	} else {
-        		checkLines();
-        	}
-        	<? endif; ?>
-        }
-        
-        $.post('ajax/maosChittim.php', {
-        	school : <?=$schl_id;?>,
-        	type : 'pledged',
-        	action : 'get'
-        }, function(data) {
-        	if (data) {
-        		$("#maos").val(data);
-        	}
-        });
-        
-        $("#maos").blur(function() {
-        	var val = $(this).val();
-        	$.post('ajax/maosChittim.php', {
-        		school : <?=$schl_id;?>, 
-        		val : val, 
-	        	type : 'pledged',
-	        	action : 'set'
-        	});
-        });
-        */
-        //var total = <?//=$total?>;
-        //var totalReg = <?//=$totalReg?>;
-	    });
+	});
 </script>
 
 <style>
@@ -316,7 +182,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 	.updates div .inner {
 		clear: none;
 		overflow: hidden;
-		padding: 0;
+		padding: 10px;
 	}
 	.updates div.resources {
 		background-color: #D5D8DE;
@@ -435,39 +301,6 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 	</p>
 	<div style='clear: both'></div>
 </div>
-<!--
-<div align="center">
-	<br />
-	<p>
-		Click <a href="admin_user_auction.php">here</a> to assign prizes to your students for the End of Year Auction!
-	</p>
-</div>
-
-<div align="center">
-	<video width="480" height="320" controls>
-	  <source src="downloads/Auction3.mp4" type="video/mp4">
-	Your browser does not support the video tag. 
-	Click <a href="downloads/Auction3.mp4">here</a> to view end of year auction video clip.
-	</video>
-</div>
-
-<div align="center">
-	<video width="480" height="320" controls>
-	  <source src="downloads/chidon2.mp4" type="video/mp4">
-	Your browser does not support the video tag. 
-	Click <a href="downloads/chidon2.mp4">here</a> to view end of year auction video clip.
-	</video>
-</div>
-
-<div align="center">
-	<br />
-	<video width="480" height="320" controls>
-	  <source src="downloads/Auction 5775 HD.mp4" type="video/mp4">
-	Your browser does not support the video tag. 
-	Click <a href="downloads/Auction 5775 HD.mp4">here</a> to view end of year auction video clip.
-	</video><br />
-</div>
--->
 <div class="middle">
 	<div class="line"></div>
 	<div class="buttons"> 
@@ -484,21 +317,6 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 				<br />Mark Missions
 			</a>
 		</div>
-		<!--
-		<div class="button">
-			<a href="stickers_report.php">
-				<img src="images/parentIcons/StickerHiskashrus.jpg" />
-				<br />Sticker Report
-			</a>
-		</div>
-		
-		<div class="button">
-			<a href="charge_card_report.php">
-				<img src="images/parentIcons/Charge it Report.gif" />
-				<br />Charge It Report
-			</a>
-		</div>
-		-->	
 	</div>
 	<div style='clear: both'></div>
 </div>
@@ -507,34 +325,47 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 	<h2>Tzivos Hashem Updates</h2>
 	
 	<?
-	$qry = "select count(user_id) as total from users where school_id = $school_id and user_registered > 0";
+    $regYear = GlobalSettings::getRegistrationYear();
+
+    $qry = "SELECT COUNT(user_id) AS total FROM user_registration "
+        ."WHERE school_id = $school_id AND year = $regYear;";
 	$resultQ = mysql_query($qry);
 	$rowQ = mysql_fetch_assoc($resultQ);
 	$registered = $rowQ['total'];
 	
-	$qry2 = "select count(user_id) as total from users where school_id = $school_id and user_registered is null";
+    $qry2 = "SELECT COUNT(user_id) AS total FROM users u "
+        ."LEFT JOIN user_registration USING (user_id) "
+        ."WHERE u.school_id = $school_id AND ( year = $regYear OR year is null );";
 	$resultQ2 = mysql_query($qry2);
 	$rowQ2 = mysql_fetch_assoc($resultQ2);
-	$notRegistered = $rowQ2['total'];
-	
-	require_once 'class.globalSettings.php';
-	$year = GlobalSettings::getRegistrationYear();
-	?>	
-	<div>
-		<div class="inner">
-			<h3>Registration <?=$year?></h3>
-			<p>
-				You have <?=$registered?> chayolim registered in the program.<br />
-				<? if ($notRegistered > 0) : ?>
-				<span style="color: red; font-weight: bold;">
-					You still have <?=$notRegistered?> chayolim that are not yet registered!<br />
-					Click <a href="admin_users_register_new.php?school_id=<?=$school_id?>&registered=1">here</a> to register them!</span>
-				</span>
-				<? endif; ?>
-			</p>
-			<!--Click <a href="child_list.php">here</a> for the list of parent accounts with linked children.-->
-		</div>
-	</div>
+    $notRegistered = $rowQ2['total'];
+    
+    $school_registered_query = mysql_query(
+        "SELECT COUNT(*) as total, date_paid FROM school_registrations WHERE school_id = $school_id AND year = $regYear;"
+    );
+    $school_registered_query = mysql_fetch_assoc( $school_registered_query );
+    $school_registered = $school_registered_query['date_paid'];
+    if ( $school_registered_query['total'] > 0 ) { ?>
+        <div>
+            <div class="inner">
+                <h3>Registration <?=$regYear?></h3>
+                <? if ( $school_registered ) { ?>
+                    <p>
+                        You have <?=$registered?> chayolim registered in the program for <?=$regYear?>.<br />
+                        <? if ($notRegistered > 0) : ?>
+                        <span style="color: red; font-weight: bold;">
+                            You still have <?=$notRegistered?> chayolim that are not yet registered for <?=$regYear?>!<br />
+                            <!-- Click <a href="admin_users_register.php?school_id=<?=$school_id?>&registered=1">here</a> to register them!</span> -->
+                        </span>
+                        <? endif; ?>
+                    </p>
+                <? } else { ?>
+                    <h4>Pre-register your base for <?=$regYear?> <a href='registration.php'>here</a>.</h4>
+                <? } ?>
+                <!--Click <a href="child_list.php">here</a> for the list of parent accounts with linked children.-->
+            </div>
+        </div>
+    <?php } ?>
 	<!--
 	<div>
 		<div class="inner">
@@ -577,7 +408,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 				<? if ($notRegistered > 0) : ?>
 				<span style="color: red; font-weight: bold;">
 					You still have <?=$notRegistered?> chayolim that are not yet registered!<br />
-					Click <a href="admin_users_register_new.php?registered=1">here</a> to register them!</span>
+					Click <a href="admin_users_register.php?registered=1">here</a> to register them!</span>
 				</span>
 				<? endif; ?>
 				<br />
@@ -616,6 +447,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 
 	<? //if (false) : ?>
 	<? //if (isset($_COOKIE['naftoli'])) : ?>
+	<!--
 	<div>
 		<img src="homeIcons/Present.gif" />
 		<div class="inner">
@@ -647,8 +479,10 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 				Click <a href="order_form.php">here</a> to order posters.
 			</p>
 			-->
+			<!--
 		</div>
 	</div>
+	-->
 	<? //endif; ?>
 	
 	<!--
@@ -808,7 +642,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 		</div>
 	</div>
 	-->
-	<div>
+	<!-- <div>
     	<img src="homeIcons/Commander Meeting.gif" />
 	    <div class="inner">
 	    	<h3>Iyar Meeting</h3>
@@ -816,7 +650,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 			<li>Click <a href="https://docs.google.com/document/d/16qs4MYpHFzoVhHnY-vYR1Eg-iU1cu4uRzLdfbIGuwTE/edit?usp=sharing">here</a> for Iyar Notes</li>
 			<li>Click <a href="https://drive.google.com/drive/folders/0B0VZvvLwWxVhQ1pIMVJhc2t4Nkk?usp=sharing">here</a> for the Base Commander Manuals</li>
 		</div>
-	</div>
+	</div> -->
 	<!--
 	<div>
 		<div class="inner">
@@ -831,7 +665,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 		<div class="inner">
 			<h3>Registration 5776</h3>
 			<p>
-				Click <a href="admin_users_register_new.php">here</a> to register your chayolim!
+				Click <a href="admin_users_register.php">here</a> to register your chayolim!
 			</p>
 			<p>
 				Click <a href="https://www.dropbox.com/sh/7sy6vd4ocywp6kb/AACPLjmtZGckS7nTSdGh1iSRa/CTH%20-%20Registration%20Brochure%205776%20single%20pages%20LR.pdf?dl=0">here</a> 

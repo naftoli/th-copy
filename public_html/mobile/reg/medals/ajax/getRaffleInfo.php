@@ -13,7 +13,7 @@ use raffles\shared\Constants as Constants;
  * returns the percent_done and msg for the user_id passed in
  *
  * @param string $user_id
- * @return array
+ * @return array/boolean
  */
 function checkYearly( $user_id ) {
     $yearly_raffle = new YearlyRaffle;
@@ -21,6 +21,8 @@ function checkYearly( $user_id ) {
     $num_days = $yearly_raffle->set_user_eligibility( $user_id )[ $user_id ];
     
     $raffle_info = formatRaffleInfo( $num_days, $quota, "end of year" );
+
+    if ( $yearly_raffle->getEnd() < unixtojd() + 30 ) return false;
 
     if ( $yearly_raffle->getEnd() < unixtojd() && $num_days < $quota ) {
         return [
@@ -167,8 +169,10 @@ if ( $monthly ) { ?>
     <div class="progress-bar" role="progressbar" style="width: <?= $monthly['percent_done']?>%;"></div>
     <span ><?= $monthly['msg'] ?></span>
 </div>
-<? } ?>
+<? } 
+if ( $yearly ) { ?>
 <div class="progress <?= $yearly['percent_done'] == 100 ? "compleate" : ""?> <?= $yearly['missed-deadline'] ? "missed-deadline" : ""?>">
     <div class="progress-bar" role="progressbar" style="width: <?= $yearly['percent_done']?>%;"></div>
     <span ><?= $yearly['msg'] ?></span>
 </div>
+<? } ?>

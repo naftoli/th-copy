@@ -710,9 +710,9 @@ if ( $admin->school_id > 0 ) {
 				function get_students()
 				{	
 					if ($("#school_id").val() > 0)
-						var url = "register_school_students_new.php?school_id=" + $("#school_id").val();
+						var url = "register_school_students.php?school_id=" + $("#school_id").val();
 					else
-						var url = "register_school_students_new.php?school_id=<?=$admin->school_id;?>";
+						var url = "register_school_students.php?school_id=<?=$admin->school_id;?>";
 					
 					<? if (!empty($reg)) echo "url += '&registered=1'"; ?>
 					

@@ -142,7 +142,7 @@ if ($admin_school_id > 0)
         <div>
             <span class="red">No Soldier Left Behind!</span><br />
             You have <?=$notRegistered?> soldiers still unregistered!<br />
-            Click <a href="admin_users_register_new.php?registered=false">here</a> to register them.<br />
+            Click <a href="admin_users_register.php?registered=false">here</a> to register them.<br />
         </div>
     </fieldset>
     <? } ?>
@@ -169,7 +169,7 @@ if ($admin_school_id > 0)
     <fieldset>
     	<legend>Chof Daled Teves Story CD</legend>
     	<p>
-    		Encourage your students to purchase the Chof Daled Teves Story CD <a href="admin_users_register_new.php">here</a>. 
+    		Encourage your students to purchase the Chof Daled Teves Story CD <a href="admin_users_register.php">here</a>. 
     	</p>
     </fieldset>
 
@@ -244,7 +244,7 @@ if ($admin_school_id > 0)
 		}
 		?>
 		
-   		Click <a href="admin_users_register_new.php">here</a> to purchase the Siddur add-on for more children.<br />
+   		Click <a href="admin_users_register.php">here</a> to purchase the Siddur add-on for more children.<br />
 		Click <a href="siddurim.php">here</a> to purchase additional Siddurim.<br />
    		
    		<?

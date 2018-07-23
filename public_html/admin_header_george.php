@@ -182,7 +182,7 @@ $role_id = $row["role_id"];
 								?>
 								<!--<li><a href="https://www.mashpia.com/admin_users_register.php<?=$url_id?>"><?=T_("Registration")?></a></li>-->
 								<? //} else { ?>
-								<li><a href="https://www.mashpia.com/admin_users_register_new.php<?=$url_id?>"><?=T_("Registration")?></a></li> 
+								<li><a href="https://www.mashpia.com/admin_users_register.php<?=$url_id?>"><?=T_("Registration")?></a></li> 
 								<? //} ?>
 								<li><a href="admin_users_subject.php<?=$url_id?>"><?=T_("Campaign Enrollment")?></a></li>
 								<li><a href="admin_card_print.php<?=$url_id?>"><?=T_('Print Rank Cards')?></a></li>

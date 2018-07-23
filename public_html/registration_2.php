@@ -385,6 +385,10 @@ if ( isset( $school->school_logo_id ) && $school->school_logo_id > 0 )
 										</div>
 									</div>
 								</div>
+
+								<p style="font-size: 16px; font-style: italic">
+									Are you currently on the BC info whatsapp group? If not, please message (310) 978-7026 to join.
+								</p>
 								
 								<ul>
 									<li>

@@ -154,7 +154,6 @@ class Birthday {
                     $description = 'Yom Holedes Mission';
                     
                     if ( $date > 2458633 ) {
-                        echo "INVALID"; die();
                         mail(
                             "bugs@tzivoshashem.org", "Error: Invalid Birthday Dates", 
                             json_encode([
