@@ -8,9 +8,9 @@ const handleError = ( props ) => ( e ) => {
 }
 
 const ProfilePicture = ( props ) => (
-  <img { ... props } onError={ handleError( props ) } alt='profile'
-    className={ props.className ? `${props.className} profile-picture` : 'profile-picture'}
-  />
-)
+  <div className='profile-picture'>
+    <img { ... props } onError={ handleError( props ) } alt='profile' />
+  </div>
+);
 
 export default ProfilePicture;
