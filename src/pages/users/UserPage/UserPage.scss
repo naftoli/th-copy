@@ -2,9 +2,17 @@
 
 #UserPage {
   padding-bottom: 10px;
-
+  // TODO, move
   a.nav-link { font-weight: bold; }
-  .row > .col-6 { margin-bottom: 6px; }
+  p.title {
+    border-bottom: 1px solid $primary-color;
+    font-size: 1.4em;
+    padding-left: .5em;
+    margin-top: .7em;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .row label { margin-top: .5rem; }
   // navigation tabs
   .nav-tabs {
     overflow-x: auto;
@@ -32,10 +40,9 @@
   // Tab 1
   #PersonalTab {
     .profile-picture {
-      max-width: fit-content;
-      // max-height: fit-content;
-      max-height: 210px;
-      margin-bottom: 10px;
+      max-width: fit-content; max-height: 210px;
+      // add space on mobile
+      @media ( max-width: 575px ) { margin-bottom: 10px; }
       > img.inline-profile { 
         border-radius: 15px;
         border: 1px solid $primary-color;
@@ -47,8 +54,7 @@
       > label {
         &:hover { cursor: pointer; }
         user-select: none;
-        margin-bottom: 0px;
-        margin-right: 10px;
+        margin: 0px 10px 0px 0px;
       }
     }
   }
