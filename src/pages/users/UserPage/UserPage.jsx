@@ -48,11 +48,10 @@ class UserPage extends Component {
     return this.state.activeTab === tab ? 'active': '';
   }
   // handle form changes
-  handleChange = ( event ) => {
-    const update = { [event.target.id]: event.target.value }
+  handleUpdate = ( update ) => {
     // non-destructivly update the state
     const tmp_soldier = Object.assign( {}, this.state.soldier, update );
-    const updates = Object.assign( {}, this.state.updates, update )
+    const updates = Object.assign( {}, this.state.updates, update );
     this.setState({
       soldier: tmp_soldier,
       updates: updates
@@ -77,39 +76,21 @@ class UserPage extends Component {
             Personal
           </NavigationTab>
           <NavigationTab className={this.isActive(2)} onClick={this.toggle(2)}>
-            Address
+            Settings + Platoon
           </NavigationTab>
           <NavigationTab className={this.isActive(3)} onClick={this.toggle(3)}>
-            Platoon
-          </NavigationTab>
-          <NavigationTab className={this.isActive(4)} onClick={this.toggle(4)}>
-            Settings
-          </NavigationTab>
-          <NavigationTab className={this.isActive(5)} onClick={this.toggle(5)}>
-            Registration
-          </NavigationTab>
-          <NavigationTab className={this.isActive(6)} onClick={this.toggle(6)}>
             Rank
           </NavigationTab>
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
           <TabPane tabId={1}>
-            <PersonalTab soldier={ soldier } handleChange={ this.handleChange } />
+            <PersonalTab soldier={ soldier } handleChange={ this.handleUpdate } />
           </TabPane>
           <TabPane tabId={2}>
-            <h1>Address</h1>
-          </TabPane>
-          <TabPane tabId={3}>
-            <h1>Platoon</h1>
-          </TabPane>
-          <TabPane tabId={4}>
             <h1>Settings</h1>
             <pre>{ JSON.stringify( soldier, null, 2 ) }</pre>
           </TabPane>
-          <TabPane tabId={5}>
-            <h1>Registration</h1>
-          </TabPane>
-          <TabPane tabId={6}>
+          <TabPane tabId={3}>
             <h1>Rank</h1>
           </TabPane>
         </TabContent>
