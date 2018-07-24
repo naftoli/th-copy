@@ -36,3 +36,20 @@
   background: #dee2e6; 
   box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
 }
+
+// customize react-datepicker colors to make it look like ours
+.react-datepicker__current-month, 
+.react-datepicker-time__header, 
+.react-datepicker__header select,
+.react-datepicker__day-name {
+  color: #fff;
+}
+.react-datepicker__header,
+.react-datepicker__header select,
+.react-datepicker__day--selected { 
+  background-color: $primary-color; 
+}
+.react-datepicker__day--selected:hover { background-color: $primary-color-hover; }
+.react-datepicker__header select { margin-top: 10px; border-color: $primary-color; }
+.react-datepicker__triangle { border-bottom-color: $primary-color !important; }
+.form-control .react-datepicker-wrapper, .form-control .react-datepicker__input-container { width: 100%; }
