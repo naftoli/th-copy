@@ -4,11 +4,11 @@ class Points
     private $user_id;
     private $usercode;
     private $store_reset;
-    
-    const YEARSTART = 2457934; // also need to update kiosk controller getHebrewPoints function with proper dates when year changes
-    const YEARSTARTAUSTRALIA = 2457629; // also need to update kiosk controller getHebrewPoints function with proper dates when year changes
     private $debug;
     private $school_id;
+    private $australian;
+    const YEARSTART = 2457934; // also need to update kiosk controller getHebrewPoints function with proper dates when year changes
+    const YEARSTARTAUSTRALIA = 2457629; // also need to update kiosk controller getHebrewPoints function with proper dates when year changes
     
     public function __construct( $id ) {
         $this->user_id = $id;
@@ -18,7 +18,7 @@ class Points
         );
         $row = mysql_fetch_assoc($result);	
         $this->store_reset = $row['store_reset'];
-        $this->usercode = $row['user_code'];
+        $this->usercode = $row['user_code']; 
         $this->school_id = $row['school_id'];
         $australian = array( 55, 66, 110, 112, 180 );
         if (in_array($this->school_id, $australian)) $this->australian = true;
@@ -100,7 +100,7 @@ class Points
     }
 
     private function getStoreResetDate() {
-		if ($this->store_reset > 0 && $this->store_reset <= unixtojd()) { // make sure we are now after the start date set by the school
+		if ($this->store_reset > 0) { 
             $reset_date = $this->store_reset;
         } else {
             if ($this->australian) $reset_date = self::YEARSTARTAUSTRALIA;

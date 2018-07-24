@@ -527,7 +527,7 @@ else {
 															<span>
 																<input class="required" type="checkbox" name="commited" id="commited" value="designate">
 																<label for="tac">
-																	I will ensure that I will provide all my teachers email addresses so we can be in touch with them to provide resources.
+																	I will ensure that I will provide all my teachers email addresses and cell phone numbers so we can be in touch with them to provide resources.
 																</label>
 															</span>
 														</li>

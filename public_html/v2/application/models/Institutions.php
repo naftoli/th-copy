@@ -20,7 +20,7 @@ class Institutions
 	// Generic functions
 	public function _institutions_select ($arrParams)
 	{
-		if (!$arrParams['super_admin']) {
+		if (!isset($arrParams['super_admin']) || !$arrParams['super_admin']) {
 			$arrParams = $this->_tools->rsqlclean($arrParams);
 			$strSql = "select * from mashpiadb.schools
 						where school_id = " . $arrParams["institution_id"];
