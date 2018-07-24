@@ -68,7 +68,11 @@ export class UsersPage extends Component {
   }
 
   // scroll to the top of the table
-  scrollToTop = () => { document.querySelector('#all-users .rt-tbody').scrollTop = 0; }
+  scrollToTop = () => { 
+    const table = document.querySelector('#UsersPage .rt-tbody')
+    if ( table )
+      table.scrollTop = 0; 
+  }
 
   // download the content as a CSV
   toCSV = () => {
