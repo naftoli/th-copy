@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // components
-import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import { TabContent, TabPane, Nav, NavItem, NavLink, Button } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 import Spinner from 'components/ui/Spinner';
 import PersonalTab from './PersonalTab';
@@ -28,7 +28,7 @@ class UserPage extends Component {
   }
   // load user on page load
   componentDidMount() {
-    const { soldiers, match, getSoldier } = this.props;
+    const { match, getSoldier } = this.props;
     getSoldier( match.params.id ).then( soldier => {
       this.setState({ soldier: soldier, loading: false });
     });
@@ -57,9 +57,14 @@ class UserPage extends Component {
       updates: updates
     });
   }
+  saveChanges = ( event ) => {
+    event.preventDefault();
+    console.log( this );
+    debugger;
+  }
   // render the page
   render(){
-    const { soldier, loading } = this.state;
+    const { soldier, loading, updates } = this.state;
     // if we do not have the soldier...
     if ( soldier === undefined ) {
       return <Redirect to='/users' />;
@@ -82,18 +87,23 @@ class UserPage extends Component {
             Rank
           </NavigationTab>
         </Nav>
-        <TabContent activeTab={this.state.activeTab}>
-          <TabPane tabId={1}>
-            <PersonalTab soldier={ soldier } handleChange={ this.handleUpdate } />
-          </TabPane>
-          <TabPane tabId={2}>
-            <h1>Settings</h1>
-            <pre>{ JSON.stringify( soldier, null, 2 ) }</pre>
-          </TabPane>
-          <TabPane tabId={3}>
-            <h1>Rank</h1>
-          </TabPane>
-        </TabContent>
+        <form onSubmit={ this.saveChanges }>
+          <TabContent activeTab={this.state.activeTab}>
+            <TabPane tabId={1}>
+              <PersonalTab soldier={ soldier } handleChange={ this.handleUpdate } />
+            </TabPane>
+            <TabPane tabId={2}>
+              <h1>Settings</h1>
+              <pre>{ JSON.stringify( soldier, null, 2 ) }</pre>
+            </TabPane>
+            <TabPane tabId={3}>
+              <h1>Rank</h1>
+            </TabPane>
+          </TabContent>
+          { Object.keys( updates ).length > 0 &&
+            <Button color='primary'>Save Changes</Button>
+          }
+        </form>
       </div>
     );
   }
