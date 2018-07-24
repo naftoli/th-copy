@@ -17,6 +17,7 @@ export default ( state = initialState, action ) => {
       });
     case types.UPDATE_SOLDIER:
       let updated_soldiers = state.soldiers.concat( action.payload.updates );
+      action.payload.id = parseInt( action.payload.id, 10 );
       if ( state.soldiers.find( soldier => soldier.user_id === action.payload.id ) ) {
         // update the details on the edited user in the list of users
         updated_soldiers = state.soldiers.map( 
