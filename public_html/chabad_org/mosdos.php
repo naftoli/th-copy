@@ -11,6 +11,7 @@ if (
         ($_SERVER['HTTP_HOST'] == 'mashpia.com' && $_SERVER['SERVER_NAME'] == 'mashpia.com')
     )
 ) {
+    /*
     require '../PHPExcel/IOFactory.php';
 
     //load spreadsheet
@@ -18,8 +19,7 @@ if (
     $objWorksheet = $objPHPExcel->getActiveSheet();
 
     $firstRow = true;
-    $msg = "";
-    $errorLine = 1;
+    $qrys = array();
     $info = array();
     $institutions = array();
 
@@ -51,6 +51,17 @@ if (
                         break;
                 }
             }
+            // create qry
+            $sql = "insert into chabad_mosdos 
+                    set mosad_id = " . $mosadId . ", 
+                    primary_mosad_id = " . $parentId . ", 
+                    name = \"" . $institution . "\", 
+                    mosad_category = \"" . $category . "\", 
+                    mosad_type = '" . $level . "'";
+            $qrys[] = $sql;
+            //echo $sql . "<br />";
+
+            // presentation on screen
             if ($parentId) {
                 $main = $parentId;
             } else {
@@ -60,12 +71,48 @@ if (
             $desc = $category . " (" . $institution . ")";
             if ($level == 'Primary') $desc .= " [<strong><i>primary</i></strong>]";
             $info[$main][$institutions[$main]][] = $desc;
+
         }
     }
-    echo "<pre>"; 
+
+    $updated = 0;
+    foreach ($qrys as $qry) {
+        if (mysql_query( $qry )) {
+            $updated++;
+        } else {
+            echo mysql_error() . "<br />" . $sql . "<br />";
+        }
+    }
+    echo "Updated: " . $updated;
+
+    //echo "<pre>"; 
     //print_r( $institutions );
     //print_r( $info ); 
-    echo "</pre>";
+    //echo "</pre>";
+    */
+
+    // retrieve records from db
+    $info = array();
+    $institutions = array();
+    $sql = "select * from chabad_mosdos";
+    $result = mysql_query( $sql );
+    while ($row = mysql_fetch_assoc( $result )) {
+        $mosadId = $row['mosad_id'];
+        $parentId = $row['primary_mosad_id'];
+        $institution = $row['name'];
+        $category = $row['mosad_category'];
+        $type = $row['mosad_type'];
+
+        if ($parentId) {
+            $main = $parentId;
+        } else {
+            $main = $mosadId;
+        }
+        if (!array_key_exists($main, $institutions)) $institutions[$main] = $institution;
+        $desc = $category . " (" . $institution . ")";
+        if ($type == 'Primary') $desc .= " [<strong><i>primary</i></strong>]";
+        $info[$main][$institutions[$main]][] = $desc;
+    }
 } else {
     exit;
 }
