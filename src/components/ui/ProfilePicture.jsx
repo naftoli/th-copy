@@ -21,7 +21,8 @@ const ProfilePicture = ( props ) => (
   <div className='profile-picture' style={styles.profilePicture}>
     <img { ...props } onError={ handleError( props ) } alt='profile' />
     { props.rank && 
-      <img className='rank' src={`${LEGACY_URL}/mobile/img_new/ranks/${props.rank}.svg`} style={styles.rankPicture} /> 
+      <img className='rank' src={`${LEGACY_URL}/mobile/img_new/ranks/${props.rank}.svg`} 
+        style={styles.rankPicture} alt='rank' /> 
     }
   </div>
 );
