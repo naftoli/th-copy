@@ -6,6 +6,7 @@ class Points
     private $store_reset;
     private $debug;
     private $school_id;
+    private $australian;
     const YEARSTART = 2457934; // also need to update kiosk controller getHebrewPoints function with proper dates when year changes
     const YEARSTARTAUSTRALIA = 2457629; // also need to update kiosk controller getHebrewPoints function with proper dates when year changes
     
