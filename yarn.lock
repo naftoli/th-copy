@@ -4460,6 +4460,10 @@ jsx-ast-utils@^2.0.0:
   dependencies:
     array-includes "^3.0.3"
 
+julian@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/julian/-/julian-0.2.0.tgz#8d7bfc360d76cc89d5d83b2137d860a18e47e2f1"
+
 killable@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/killable/-/killable-1.0.0.tgz#da8b84bd47de5395878f95d64d02f2449fe05e6b"
