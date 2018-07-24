@@ -1,7 +1,9 @@
 @import "../../../styles/colors";
 
 #UserPage {
-  .row { margin-bottom: 6px; }
+  a.nav-link { font-weight: bold; }
+  
+  .row > .col-6 { margin-bottom: 6px; }
   // navigation tabs
   .nav-tabs {
     overflow-x: auto;
@@ -22,16 +24,28 @@
     width: 100%; text-align: right;
   }
 
+  .form-check-input {
+    position: relative; margin-left: 0px;
+  }
+
   // Tab 1
   #PersonalTab {
     .profile-picture {
       max-width: fit-content;
       max-height: fit-content;
-      float: right;
       > img { 
         border-radius: 15px;
         border: 1px solid $primary-color;
         max-height: 210px;
+      }
+    }
+    #gender-row {
+      font-size: 1.5em;
+      > label {
+        &:hover { cursor: pointer; }
+        user-select: none;
+        margin-bottom: 0px;
+        margin-right: 10px;
       }
     }
     // fix image on mobile
