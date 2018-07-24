@@ -40,7 +40,7 @@ class KioskController extends Zend_Controller_Action
 		$sql = "SELECT store_reset FROM mashpiadb.schools WHERE school_id = " . $objUser->school_id;
 		$result = $db->query( $sql );
 		$row = $result->fetch();
-		$date = $row['store_reset'];
+		$date = $row->store_reset;
 		if ($date > 0) { 
 			$start_date = $date;
 		} else {
