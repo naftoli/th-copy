@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker';
 import ProfilePicture from 'components/ui/ProfilePicture';
 // functions
 import { toHebrew } from 'functions/utils';
+import julian from 'julian';
 import moment from 'moment';
 
 class PersonalTab extends Component {
@@ -29,10 +30,11 @@ class PersonalTab extends Component {
     let { 
       user_serial, profilePicture, barcode, 
       first, last, first_he, last_he, 
-      dob, dob_he, currentRank, gender
+      dob, dob_he, currentRank, gender,
+      user_address1, user_city, user_state, phone,
+      user_postal, user_country, user_start_date, user_registered
     } = this.props.soldier;
-    dob = moment( dob );
-
+    console.log(  );
     // render form
     return (
       <div id='PersonalTab'>
@@ -99,9 +101,44 @@ class PersonalTab extends Component {
             </Row>
           </Col>
         </Row>
-        Address
-        Registration Info
-        {/* <pre>{ JSON.stringify( this.props, null, 2 ) }</pre> */}
+        <Row id='address-row'>
+          <Col xs='12'>
+            <p className='title'>Address</p>
+          </Col>
+          <Col xs='12'>
+            <label>Address</label>
+            <Input id='user_address1' value={ user_address1 } onChange={ this.handleChange } />
+          </Col>
+          <Col xs='5'>
+            <label>City</label>
+            <Input id='user_city' value={ user_city } onChange={ this.handleChange } />
+          </Col>
+          <Col xs='4'>
+            <label>State</label>
+            <Input id='user_state' value={ user_state } onChange={ this.handleChange } />
+          </Col>
+          <Col xs='3'>
+            <label>Zip</label>
+            <Input id='user_postal' value={ user_postal } onChange={ this.handleChange } />
+          </Col>
+          <Col xs='6'>
+            <label>Country</label>
+            <Input id='user_country' value={ user_country } onChange={ this.handleChange } />
+          </Col>
+          <Col xs='6'>
+            <label>Phone #</label>
+            <Input id='phone' value={ phone } onChange={ this.handleChange } />
+          </Col>
+        </Row>
+        <Row id='registration-row'>
+          <Col xs='12'>
+            <p className='title'>Registration Info</p>
+            <label>Member Since:</label>
+            <h4>{moment( julian.toDate( user_start_date ) ).format("LLLL")}</h4>
+            <label>Registered:</label>
+            <h4>{ user_registered ? moment( user_registered ).format("LLLL") : 'Not Registered.'}</h4>
+          </Col>
+        </Row>
       </div>
     );
   }
