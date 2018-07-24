@@ -1,8 +1,9 @@
 @import "../../../styles/colors";
 
 #UserPage {
+  padding-bottom: 10px;
+
   a.nav-link { font-weight: bold; }
-  
   .row > .col-6 { margin-bottom: 6px; }
   // navigation tabs
   .nav-tabs {
@@ -16,7 +17,7 @@
   }
   // style the content box
   .tab-content {
-    padding: 10px; margin-bottom: 10px;
+    padding: 10px; margin-bottom: 10px; 
     border: 1px solid #dee2e6; border-top: none;
   }
 
@@ -32,32 +33,22 @@
   #PersonalTab {
     .profile-picture {
       max-width: fit-content;
-      max-height: fit-content;
-      > img { 
+      // max-height: fit-content;
+      max-height: 210px;
+      margin-bottom: 10px;
+      > img.inline-profile { 
         border-radius: 15px;
         border: 1px solid $primary-color;
         max-height: 210px;
       }
     }
     #gender-row {
-      font-size: 1.5em;
+      font-size: 1.35em;
       > label {
         &:hover { cursor: pointer; }
         user-select: none;
         margin-bottom: 0px;
         margin-right: 10px;
-      }
-    }
-    // fix image on mobile
-    @media ( max-width: 480px ) {
-      div#image-row { 
-        display: block; 
-        clear: both;
-        > .col-4 { 
-          float: right; 
-          > .profile-picture > img { max-height: 94px; }
-        }
-        > .col-8 { max-width: 100%; }
       }
     }
   }
