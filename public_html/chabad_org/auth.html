@@ -33,10 +33,11 @@
             {
                 //alert('valid-user');
                 //you now have the option to redirect the user to secure area
-                $.post('getPeople.php', { key: key, id: response.responseJson.Id  }, function(res) {
+                $.post('getPeople.php', { key: key, id: response.responseJson.ShliachId }, function(res) {
                     console.log(res);
-                    if (res.Centers) {
-                        $.post('getCenters.php', { key: key, ids: res.Centers }, function(res) {
+                    var person = res.People[0];
+                    if (person.Centers) {
+                        $.post('getCenters.php', { key: key, ids: person.Centers }, function(res) {
                             console.log(res);
                             if (key) key = undefined; // make sure to remove key
                         });

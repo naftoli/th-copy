@@ -5,10 +5,11 @@ $PublicKey = '474DBD09-F59F-433D-A755-5A97594FC4E1';
 $PrivateKey = base64_decode('R9WIfWVU7VXiiEporuuIvbEcFqIwzJYwmc5q4bb2/lQ=');
 $timestamp = time();
 
-$centers = $_REQUEST['centers'];
+$centers = $_REQUEST['ids'];
+$center = $centers[0];
 
 $BaseUrl = 'https://chabadorg.clhosting.org';
-$RequestUrl = "/api/centers/$centers[0]";
+$RequestUrl = "/api/centers/$center?includeDepartments=true";
 $URLToPost = "$BaseUrl$RequestUrl";
 
 $raw_auth = hash_hmac('sha1', "$PublicKey|$timestamp|$RequestUrl", $PrivateKey, true);
