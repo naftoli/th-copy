@@ -9,6 +9,7 @@
       <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
       <script language="javascript" type="text/javascript" src="https://chabadorg.clhosting.org/scripts/js/api/baseapi.js.asp?474DBD09-F59F-433D-A755-5A97594FC4E1"></script>
       <script type="text/javascript">
+        var key;
         MyChabadApi.Events.AddEventListener("statusUpdated", function (ev)
         {
             if (ev.response.Status)
@@ -18,10 +19,8 @@
                 if (loaderNode.length > 0)
                     Co.Tools.Content.AppendClassName(loaderNode, "active");
                 //make call to the server.
+                key = ev.response.Key;
                 new Co.Ajax.RequestObject("auth.php", { Method: "POST", EnableCaching: true, Parameters: { key: ev.response.Key }, Callback: onAuthenticationCompleteCallback }).Request();
-                $.post('getCenters.php', { key: ev.response.Key }, function(res) {
-                    console.log(res);
-                });
             }
         });
         function onAuthenticationCompleteCallback(response)
@@ -32,8 +31,18 @@
                 Co.Tools.Content.RemoveClassName(loaderNode, "active");
             if (response.responseJson.IsValidUser)
             {
-                alert('valid-user');
+                //alert('valid-user');
                 //you now have the option to redirect the user to secure area
+                $.post('getPeople.php', { key: key, id: response.responseJson.Id  }, function(res) {
+                    console.log(res);
+                    if (res.Centers) {
+                        $.post('getCenters.php', { key: key, ids: res.Centers }, function(res) {
+                            console.log(res);
+                            if (key) key = undefined; // make sure to remove key
+                        });
+                    }
+                    if (key) key = undefined; // make sure to remove key
+                });
             }
             else
             {
