@@ -1,14 +1,50 @@
+@import "../../../styles/colors";
+
 #UserPage {
+  .row { margin-bottom: 6px; }
+  // navigation tabs
+  .nav-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    // customize the scrollbar on chrome and safari
+    &::-webkit-scrollbar { height: 3px; }
+    &::-webkit-scrollbar-track { background: #dee2e6; }
+    &::-webkit-scrollbar-thumb { background: $primary-color; }
+    .nav-item{ margin-bottom: 0px; }
+  }
+  // style the content box
   .tab-content {
     padding: 10px; margin-bottom: 10px;
     border: 1px solid #dee2e6; border-top: none;
   }
 
+  div[dir='rtl'] > label {
+    width: 100%; text-align: right;
+  }
+
+  // Tab 1
   #PersonalTab {
     .profile-picture {
-      border: 2px solid #335dac;
       max-width: fit-content;
+      max-height: fit-content;
       float: right;
+      > img { 
+        border-radius: 15px;
+        border: 1px solid $primary-color;
+        max-height: 210px;
+      }
+    }
+    // fix image on mobile
+    @media ( max-width: 480px ) {
+      div#image-row { 
+        display: block; 
+        clear: both;
+        > .col-4 { 
+          float: right; 
+          > .profile-picture > img { max-height: 94px; }
+        }
+        > .col-8 { max-width: 100%; }
+      }
     }
   }
 }
