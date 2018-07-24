@@ -1,20 +1,21 @@
 <?php
-
+header('Content-type: application/json');
 # Communication between chabadorg.clhosting.org and partner
 $PublicKey = '474DBD09-F59F-433D-A755-5A97594FC4E1';
 $PrivateKey = base64_decode('R9WIfWVU7VXiiEporuuIvbEcFqIwzJYwmc5q4bb2/lQ=');
 $timestamp = time();
-$URLToPost = 'https://chabadorg.clhosting.org/api/login/authenticate';
 
-$raw_auth = hash_hmac('sha1', "$PublicKey|$timestamp|/api/login/authenticate", $PrivateKey, true);
+$BaseUrl = 'https://chabadorg.clhosting.org';
+$RequestUrl = '/api/login/authenticate';
+$URLToPost = "$BaseUrl$RequestUrl";
+
+$raw_auth = hash_hmac('sha1', "$PublicKey|$timestamp|$RequestUrl", $PrivateKey, true);
 $signature = base64_encode($raw_auth);
 
 if (isset($_REQUEST['key']))
       $PostedKey = $_REQUEST['key'];
 else
       $PostedKey = '';
-
-header('Content-type: application/json');
 
 $Curl_Session = curl_init($URLToPost);
 curl_setopt ($Curl_Session, CURLOPT_POST, true);
@@ -32,7 +33,7 @@ $result = curl_exec($Curl_Session);
 $http_status = curl_getinfo($Curl_Session, CURLINFO_HTTP_CODE);
 curl_close ($Curl_Session);
 
-//echo $result;
+echo $result;
 
 $response_array = json_decode($result, true);
 
