@@ -52,12 +52,19 @@ export class Dashboard extends Component {
       return null;
     }
 
+    const menu = getMenu( current_login.code );
+    // add a logout button
+    menu.push({
+      label: 'Logout', path: '/logout',
+      icon: <img src={`${LEGACY_URL}/images/parentIcons/logout.gif`} alt="Logout"/>
+    });
+
     return (
       <div id="dashboard">
         <Navbar onClick={ this.toggle } onLoginChange={ changeLogin }
           logins={ current_user.logins } current_login={current_login} />
         <div id="dashboard-body">
-          <Sidebar menu={ getMenu( current_login.code ) } active={ this.state.active } />
+          <Sidebar menu={ menu } active={ this.state.active } />
           <div id="dashboard-content">
             { this.props.children }
           </div>

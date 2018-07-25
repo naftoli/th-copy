@@ -198,11 +198,7 @@ const getMenu = ( user_type ) => {
     {
       label: 'Support', legacy: true, path: '/helpdesk/?p=open',
       icon: <img src={`${LEGACY_URL}/images/parentIcons/support icon.gif`} alt="Support"/>
-    },
-    {
-      label: 'Logout', path: '/logout',
-      icon: <img src={`${LEGACY_URL}/images/parentIcons/logout.gif`} alt="Logout"/>
-    },
+    }
   ];
 
   // filter the menu and return it
