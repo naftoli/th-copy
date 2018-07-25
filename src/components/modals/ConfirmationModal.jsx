@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 
+const styles = {
+  body: { textAlign: 'center', fontSize: '2em' }
+}
+
 class ConfirmationModal extends Component {
 
   accept = () => {
@@ -15,7 +19,7 @@ class ConfirmationModal extends Component {
     const { isOpen, message } = this.props;
     return (
       <Modal isOpen={isOpen} onClick={ this.cancel } centered={true}>
-        <ModalBody><h2>{ message }</h2></ModalBody>
+        <ModalBody><p style={ styles.body }>{ message }</p></ModalBody>
         <ModalFooter>
           <Button color='primary' onClick={this.accept}>Yes</Button>{' '}
           <Button color='danger' onClick={this.cancel}>No</Button>
