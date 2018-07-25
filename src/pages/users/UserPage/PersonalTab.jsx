@@ -34,7 +34,6 @@ class PersonalTab extends Component {
       user_address1, user_city, user_state, phone,
       user_postal, user_country, user_start_date, user_registered
     } = this.props.soldier;
-    console.log(  );
     // render form
     return (
       <div id='PersonalTab'>
@@ -88,9 +87,9 @@ class PersonalTab extends Component {
             <Row>
               <Col xs='6'>
                 <label>Date of Birth</label>
-                <DatePicker className='form-control' dropdownMode="select" showMonthDropdown
-                  selected={moment( dob )} onChange={this.dateChange('dob')} showYearDropdown
-                  dateFormat="LL" readOnly
+                <DatePicker className='form-control' dropdownMode="select" 
+                  selected={ dob ? moment( dob ) : undefined } onChange={ this.dateChange('dob') } 
+                  dateFormat="LL" readOnly showMonthDropdown showYearDropdown
                   minDate={moment().subtract( 20, 'years' )} maxDate={moment().subtract( 5, "years" )}
                 />
               </Col>
