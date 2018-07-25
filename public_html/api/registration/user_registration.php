@@ -17,6 +17,7 @@ class UserRegistrationRouter {
 
         // get all the users information
         $users = User::find( $user_ids );
+        $users = is_array( $users ) ? $users : [ $users ];
 
         $available_users = [];
         foreach( $users as $user ){
