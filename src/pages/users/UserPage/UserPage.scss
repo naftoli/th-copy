@@ -11,6 +11,9 @@
     margin-top: .7em;
     font-family: Arial, Helvetica, sans-serif;
   }
+  .form-control[readonly] {
+    background-color: #fafafa;
+  }
 
   .row label { margin-top: .5rem; }
   // navigation tabs

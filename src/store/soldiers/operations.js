@@ -36,10 +36,8 @@ export const updateSoldier = ( id, data ) => dispatch => {
       };
       return response;
     }).catch( error => {
-      toast.update( toast_id, {type: toast.TYPE.ERROR, 
-        render: "Network error while updating Soldier. Please check your internet connection."
-      });
-      console.error( error );
+      toast.update( toast_id, {type: toast.TYPE.ERROR, render: error.error });
+      return Promise.reject( error );
     });
 }
 
@@ -55,9 +53,8 @@ export const uploadSpreadsheet = ( data ) => dispatch => {
       };
       return response;
     }).catch( error => {
-      toast.update( toast_id, {type: toast.TYPE.ERROR, 
-        render: "Network error while uploading. Please check your internet connection."
-      });
+      toast.dismiss( toast_id );
       console.error( error );
+      return Promise.reject( error );
     });
 }
