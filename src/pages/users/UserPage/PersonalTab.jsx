@@ -34,7 +34,7 @@ class PersonalTab extends Component {
       user_serial, profilePicture, barcode, 
       first, last, first_he, last_he, 
       dob, dob_he, currentRank, gender,
-      user_address1, user_city, user_state, phone,
+      user_address1, user_city, user_state, user_phone,
       user_postal, user_country, user_start_date, user_registered
     } = this.props.soldier;
     // render form
@@ -129,7 +129,7 @@ class PersonalTab extends Component {
           </Col>
           <Col xs='6'>
             <label>Phone #</label>
-            <MaskedInput className='form-control' id='phone' value={ phone } 
+            <MaskedInput className='form-control' id='user_phone' value={ user_phone } 
               onChange={ this.handleChange } mask={ masks.phone } />
           </Col>
         </Row>
