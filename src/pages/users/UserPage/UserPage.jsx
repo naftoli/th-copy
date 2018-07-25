@@ -6,9 +6,10 @@ import { Prompt } from 'react-router';
 import Spinner from 'components/ui/Spinner';
 import PersonalTab from './PersonalTab';
 // functions
-import { getSoldier } from 'store/soldiers/operations';
+import { getSoldier, updateSoldier } from 'store/soldiers/operations';
 import { connect } from 'react-redux';
 import { setTitle } from 'functions/utils';
+import { loginChanged } from 'functions/login';
 // styles
 import './UserPage.scss';
 
@@ -28,18 +29,30 @@ class UserPage extends Component {
     loading: true,  activeTab: 1
   }
   // load user on page load
-  componentDidMount() {
-    const { match, getSoldier } = this.props;
-    getSoldier( match.params.id ).then( soldier => {
-      this.setState({ soldier: soldier, loading: false });
-    });
+  componentDidMount() { 
+    this.getSoldier();
   }
   // set the title once we have the info
-  componentDidUpdate() {
+  componentDidUpdate( prevProps ) {
     if ( this.state.soldier ) {
       setTitle( `View / Edit ${this.state.soldier.user_serial}` );
     }
+    // if the login changed then we should make sure we have the up to date information...
+    if ( loginChanged( this.props.current_login, prevProps.current_login ) )
+      this.getSoldier();
   }
+
+  // get the soldier for the page
+  getSoldier = () => {
+    const { match, getSoldier } = this.props;
+    getSoldier( match.params.id )
+      .then( soldier => {
+        this.setState({ soldier, loading: false });
+      }).catch( error => {
+        this.setState({ soldier: undefined });
+      });
+  }
+  
   // handle tabs
   toggle = ( tab ) => () => {
     this.setState({ activeTab: tab });
@@ -51,17 +64,19 @@ class UserPage extends Component {
   // handle form changes
   handleUpdate = ( update ) => {
     // non-destructivly update the state
-    const tmp_soldier = Object.assign( {}, this.state.soldier, update );
+    const soldier = Object.assign( {}, this.state.soldier, update );
     const updates = Object.assign( {}, this.state.updates, update );
-    this.setState({
-      soldier: tmp_soldier,
-      updates: updates
-    });
+    this.setState({ soldier, updates });
   }
+  // save changes to the database
   saveChanges = ( event ) => {
     event.preventDefault();
-    console.log( this );
-    debugger;
+    const { soldier, updates } = this.state;
+    // update the soldier
+    this.props.updateSoldier( soldier.user_id, updates )
+    .then( ( response ) => {
+      this.setState({ updates: {}, soldier: response.data });
+    });
   }
   // render the page
   render(){
@@ -119,4 +134,4 @@ const mapStateToProps = ( state ) => {
   };
 }
 
-export default connect( mapStateToProps, { getSoldier } )( UserPage );
+export default connect( mapStateToProps, { getSoldier, updateSoldier } )( UserPage );
