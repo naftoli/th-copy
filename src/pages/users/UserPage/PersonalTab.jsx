@@ -3,11 +3,14 @@ import { LEGACY_URL } from 'components/constants';
 // components
 import { Row, Col, Input } from 'reactstrap';
 import DatePicker from 'react-datepicker';
+import MaskedInput from 'react-text-mask'
 import ProfilePicture from 'components/ui/ProfilePicture';
 // functions
 import { toHebrew } from 'functions/utils';
 import julian from 'julian';
 import moment from 'moment';
+// data
+import masks from 'components/masks';
 
 class PersonalTab extends Component {
 
@@ -108,11 +111,11 @@ class PersonalTab extends Component {
             <label>Address</label>
             <Input id='user_address1' value={ user_address1 } onChange={ this.handleChange } />
           </Col>
-          <Col xs='5'>
+          <Col xs='6'>
             <label>City</label>
             <Input id='user_city' value={ user_city } onChange={ this.handleChange } />
           </Col>
-          <Col xs='4'>
+          <Col xs='3'>
             <label>State</label>
             <Input id='user_state' value={ user_state } onChange={ this.handleChange } />
           </Col>
@@ -126,7 +129,8 @@ class PersonalTab extends Component {
           </Col>
           <Col xs='6'>
             <label>Phone #</label>
-            <Input id='phone' value={ phone } onChange={ this.handleChange } />
+            <MaskedInput className='form-control' id='phone' value={ phone } 
+              onChange={ this.handleChange } mask={ masks.phone } />
           </Col>
         </Row>
         <Row id='registration-row'>
