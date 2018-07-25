@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // components
 import { TabContent, TabPane, Nav, NavItem, NavLink, Button } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
+import { Prompt } from 'react-router';
 import Spinner from 'components/ui/Spinner';
 import PersonalTab from './PersonalTab';
 // functions
@@ -65,6 +66,7 @@ class UserPage extends Component {
   // render the page
   render(){
     const { soldier, loading, updates } = this.state;
+    const updated = Object.keys( updates ).length > 0;
     // if we do not have the soldier...
     if ( soldier === undefined ) {
       return <Redirect to='/users' />;
@@ -76,6 +78,7 @@ class UserPage extends Component {
     // render the page and it's sub-pages ( tabs )
     return (
       <div id='UserPage'>
+        <Prompt when={ updated } message="You have unsaved changes. Are you sure you want to leave?" />
         <Nav tabs>
           <NavigationTab className={this.isActive(1)} onClick={this.toggle(1)}>
             Personal
@@ -100,7 +103,7 @@ class UserPage extends Component {
               <h1>Rank</h1>
             </TabPane>
           </TabContent>
-          { Object.keys( updates ).length > 0 &&
+          { updated &&
             <Button color='primary'>Save Changes</Button>
           }
         </form>
