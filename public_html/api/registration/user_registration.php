@@ -104,7 +104,7 @@ class UserRegistrationRouter {
         
         // setup the variables we will need later
         $user_serials = array_map( function( $user ){ return $user->user_serial; }, $users);
-        $year = GlobalSettings::getRegistrationYear();
+        $year = GlobalSettings::getRegistrationYear( $user->school_id );
         $description = "User Registration for $year: " . implode( ", ", $user_serials );
         
         /******************************** PAYMENT ********************************/
