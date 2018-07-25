@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import { Prompt } from 'react-router';
 import Spinner from 'components/ui/Spinner';
 import PersonalTab from './PersonalTab';
+import SettingsTab from './SettingsTab';
 // functions
 import { getSoldier, updateSoldier } from 'store/soldiers/operations';
 import { connect } from 'react-redux';
@@ -26,7 +27,7 @@ class UserPage extends Component {
   // initial state
   state = {
     soldier: {},  updates: {},
-    loading: true,  activeTab: 1
+    loading: true,  activeTab: 2
   }
   // load user on page load
   componentDidMount() { 
@@ -111,11 +112,11 @@ class UserPage extends Component {
               <PersonalTab soldier={ soldier } handleChange={ this.handleUpdate } />
             </TabPane>
             <TabPane tabId={2}>
-              <h1>Settings</h1>
-              <pre>{ JSON.stringify( soldier, null, 2 ) }</pre>
+              <SettingsTab soldier={ soldier } handleChange={ this.handleUpdate } />
             </TabPane>
             <TabPane tabId={3}>
-              <h1>Rank</h1>
+              <h1>Rank Information - Coming Soon!</h1>
+              <pre>{ JSON.stringify( soldier, null, 2 ) }</pre>
             </TabPane>
           </TabContent>
           { updated &&
