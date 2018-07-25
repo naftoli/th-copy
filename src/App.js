@@ -2,16 +2,33 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-
+// pages
 import Dashboard from 'pages/dashboard/Dashboard';
 import Login, { Logout } from 'pages/login';
 import UsersPages from 'pages/users';
+// components
+import ConfirmationModal from 'components/modals/ConfirmationModal';
 
 export class App extends Component {
+  // state for confirmation modal
+  state = { message: '', isOpen: false }
+  callback = false;
+  // show the modal
+  showDialog = ( message, callback ) => {
+    this.callback = callback;
+    this.setState({ message: message, isOpen: true });
+  }
+  // hide the modal when an option is selected
+  handleCallback = ( ok ) => {
+    this.callback( ok );
+    this.setState({ isOpen: false });
+  }
+  // render the page
   render() {
     if ( this.props.logged_in ) {
+      const { message, isOpen } = this.state;
       return (
-        <Router basename={ process.env.PUBLIC_URL } >
+        <Router basename={ process.env.PUBLIC_URL } getUserConfirmation={ this.showDialog } >
           <Dashboard>
             <Switch>
               <Route path={`/`} exact render={props => <h1>HomePage</h1>}/>
@@ -27,9 +44,10 @@ export class App extends Component {
 
               <Route path={`/logout`} component={Logout}/>
 
-              <Route render={ props => <h1>404</h1> } />
+              <Route render={ () => <h1>404</h1> } />
             </Switch>
             <ToastContainer position="bottom-right" autoClose={ 8000 } closeOnClick={false} />
+            <ConfirmationModal isOpen={ isOpen } message={ message } callback={ this.handleCallback } />
           </Dashboard>
         </Router>
       );
