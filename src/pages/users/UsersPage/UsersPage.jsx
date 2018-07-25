@@ -12,6 +12,7 @@ import BulkUploadModal from './BulkUploadModal';
 // functions
 import { toast } from 'react-toastify';
 import is from 'is_js';
+import moment from 'moment';
 import { arrayToCSV, setTitle } from 'functions/utils';
 // styles
 import 'react-table/react-table.css';
@@ -131,10 +132,10 @@ export class UsersPage extends Component {
       Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
     },{
       id: 'dob',  Header: 'Date Of Birth',
-      accessor: user => user.dob ? new Date( user.dob ).toLocaleDateString() : '-',
+      accessor: user => user.dob ? moment( user.dob ).format('l') : '-',
     },{
       id: 'registered',  Header: 'Registered',
-      accessor: user => user.user_registered ? new Date( user.user_registered ).toLocaleString() : null,
+      accessor: user => user.user_registered ? moment( user.user_registered ).format('l LT') : null,
       filterMethod: ( filter, row ) => {
         if ( filter.value === 'all' ) return true;
         if ( filter.value === 'yes') return !!row[filter.id];
