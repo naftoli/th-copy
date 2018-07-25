@@ -135,7 +135,7 @@ class PersonalTab extends Component {
         </Row>
         <Row id='registration-row'>
           <Col xs='12'>
-            <p className='title'>Registration Info</p>
+            <p className='title'>Registration Information</p>
             <label>Member Since:</label>
             <h4>{moment( julian.toDate( user_start_date ) ).format("LLLL")}</h4>
             <label>Registered:</label>
