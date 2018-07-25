@@ -7,6 +7,10 @@ import '@blueprintjs/icons/lib/css/blueprint-icons.css';
 import 'cropperjs/dist/cropper.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 import 'react-datepicker/dist/react-datepicker.css';
+// supported languages;
+import moment from 'moment';
+import 'moment/locale/he.js';
+import 'moment/locale/fr.js';
 
 import { Provider } from 'react-redux';
 import store from './store';
@@ -18,6 +22,8 @@ import 'styles/branding.scss';
 import App from './App';
 
 checkLogin( store.dispatch );
+// set the langauge to match the browser;
+moment.locale( navigator.language );
 
 ReactDOM.render(
   <Provider store={store}>
