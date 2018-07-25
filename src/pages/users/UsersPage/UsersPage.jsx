@@ -85,7 +85,7 @@ export class UsersPage extends Component {
     const rows = this.props.soldiers.map( soldier => [
       soldier.user_serial, soldier.first, soldier.last, soldier.dob, soldier.gender, 
       soldier.user_registered, soldier.chayolei, soldier.yan, soldier.chidon,
-      soldier.platoon.name, soldier.school.school_name
+      soldier.platoon ? soldier.platoon.name : '-', soldier.school.school_name
     ]);
     arrayToCSV( headers, rows, 'users' );
     toast.update( toast_id, {render: 'File Generated.'} );
