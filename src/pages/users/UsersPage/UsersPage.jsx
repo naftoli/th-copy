@@ -178,7 +178,7 @@ export class UsersPage extends Component {
           <Button color="primary" onClick={ this.props.getSoldiers }>
             <i className={`fas fa-redo-alt ${ !loading || 'fa-spin' }`}></i> Refresh
           </Button>
-          { current_login.code === 'BC' && // only Base Commanders can upload
+          { current_login.code === 'BC' && is.not.mobile() && // only Base Commanders on desktops/tablets can upload
             <Button color="primary" onClick={ this.toggleUploadModal }>
               <i className="fas fa-file-upload" /> Upload Soldier List
             </Button>
