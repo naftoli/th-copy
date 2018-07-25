@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import is from 'is_js';
 import moment from 'moment';
 import { arrayToCSV, setTitle } from 'functions/utils';
+import { loginChanged } from 'functions/login';
 // styles
 import 'react-table/react-table.css';
 import './UsersPage.scss';
@@ -36,11 +37,8 @@ export class UsersPage extends Component {
 
   // if the soldier list is emptied while on the page... then refresh it
   componentDidUpdate( prevProps ) {
-    const { type, id } = this.props.current_login;
-    const { type: prevType, id: prevId } = prevProps.current_login;
-    if ( type !== prevType || prevId !== id ) {
+    if ( loginChanged( this.props.current_login, prevProps.current_login ) )
       this.props.getSoldiers();
-    }
   }
 
   // handler for the modals
