@@ -90,7 +90,7 @@ class PersonalTab extends Component {
                 <label>Date of Birth</label>
                 <DatePicker className='form-control' dropdownMode="select" showMonthDropdown
                   selected={moment( dob )} onChange={this.dateChange('dob')} showYearDropdown
-                  dateFormat="LL"
+                  dateFormat="LL" readOnly
                   minDate={moment().subtract( 20, 'years' )} maxDate={moment().subtract( 5, "years" )}
                 />
               </Col>
