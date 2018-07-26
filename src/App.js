@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 // pages
-import Dashboard from 'pages/dashboard/Dashboard';
-import Login, { Logout } from 'pages/login';
+import Dashboard from 'pages/Dashboard/Dashboard';
+import Login, { Logout } from 'pages/Login';
 import UsersPages from 'pages/users';
 // components
 import ConfirmationModal from 'components/modals/ConfirmationModal';
