@@ -6,6 +6,7 @@ import { Prompt } from 'react-router';
 import Spinner from 'components/ui/Spinner';
 import PersonalTab from './PersonalTab';
 import SettingsTab from './SettingsTab';
+import RankTab from './RankTab';
 // functions
 import { getSoldier, updateSoldier } from 'store/soldiers/operations';
 import { connect } from 'react-redux';
@@ -27,7 +28,7 @@ class UserPage extends Component {
   // initial state
   state = {
     soldier: {},  updates: {},
-    loading: true,  activeTab: 2
+    loading: true,  activeTab: 3
   }
   // load user on page load
   componentDidMount() { 
@@ -105,6 +106,9 @@ class UserPage extends Component {
           <NavigationTab className={this.isActive(3)} onClick={this.toggle(3)}>
             Rank
           </NavigationTab>
+          <NavigationTab className={this.isActive(4)} onClick={this.toggle(4)}>
+            Debug
+          </NavigationTab>
         </Nav>
         <form onSubmit={ this.saveChanges }>
           <TabContent activeTab={this.state.activeTab}>
@@ -115,7 +119,9 @@ class UserPage extends Component {
               <SettingsTab soldier={ soldier } handleChange={ this.handleUpdate } />
             </TabPane>
             <TabPane tabId={3}>
-              <h1>Rank Information - Coming Soon!</h1>
+              <RankTab soldier={ soldier } />
+            </TabPane>
+            <TabPane tabId={4}>
               <pre>{ JSON.stringify( soldier, null, 2 ) }</pre>
             </TabPane>
           </TabContent>
