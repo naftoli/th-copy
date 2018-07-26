@@ -18,6 +18,14 @@ class PersonalTab extends Component {
     this.props.handleChange( { [event.target.id]: event.target.value } );
   }
 
+  genderChange = ( event ) => {
+    const { school_type_id } = this.props.soldier;
+    this.props.handleChange({
+      [event.target.id]: event.target.value,
+      school_type_id: school_type_id + ( event.target.value === 'M' ? -1 : 1 )
+    });
+  }
+
   hebrewChange = ( event ) => {
     event.target.value = toHebrew( event.target.value );
     this.handleChange( event );
@@ -30,7 +38,7 @@ class PersonalTab extends Component {
   }
 
   render(){
-    let { 
+    let {
       user_serial, profilePicture, barcode, 
       first, last, first_he, last_he, 
       dob, dob_he, currentRank, gender,
@@ -52,12 +60,12 @@ class PersonalTab extends Component {
                 <div id='gender-row'>
                   <label>
                     <Input type='radio' name='gender' id='gender' value='M' 
-                      checked={ gender === 'M' } onChange={ this.handleChange }/>{' '}
+                      checked={ gender === 'M' } onChange={ this.genderChange }/>{' '}
                     Male <i className='fas fa-male'></i>
                   </label>
                   <label>
                     <Input type='radio' name='gender' id='gender' value='F'
-                      checked={ gender === 'F' } onChange={ this.handleChange }/>{' '}
+                      checked={ gender === 'F' } onChange={ this.genderChange }/>{' '}
                     Female <i className='fas fa-female'></i>
                   </label>
                 </div>
