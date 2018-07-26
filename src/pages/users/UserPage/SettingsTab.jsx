@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Row, Col, Input } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import Select from 'react-select';
+import Checkbox from 'components/ui/Checkbox';
 
 class SettingsTab extends Component {
   // format the data for the UserPage component
-  handleChange = ( event ) => {
-    this.props.handleChange( { [event.target.id]: event.target.value } );
+  handleCheckbox = ( event ) => {
+    this.props.handleChange( { [event.target.id]: event.target.checked ? 1 : 0 } );
   }
   
   handleSelectChange = ( id ) => ( option ) => {
@@ -13,7 +14,8 @@ class SettingsTab extends Component {
   }
 
   render() {
-    let { class_id, school } = this.props.soldier;
+    let { class_id, school, chayolei, yan, chidon } = this.props.soldier;
+    // get the list of platoons from the user for now ( TODO, replace with advanced platoon dropdown )
     const platoon_options = school.platoons.map( 
       platoon => ({ value: platoon.class_id, label: platoon.name})
     );
@@ -48,11 +50,17 @@ class SettingsTab extends Component {
           </Col>
         </Row>
         <Row>
-          <Col xs='6' sm='4'>
+          <Col xs='12' sm='6'>
             <label>Enrolled in:</label><br/>
-            <label><Input type='checkbox' /> Chayolei</label><br/>
-            <label><Input type='checkbox' /> Chidon</label><br/>
-            <label><Input type='checkbox' /> WWTC</label>
+            <Checkbox checked={ !!chayolei } id='chayolei' onChange={ this.handleCheckbox }>
+              Chayolei
+            </Checkbox>
+            <Checkbox checked={ !!chidon } id='chidon' onChange={ this.handleCheckbox }>
+              Chidon
+            </Checkbox>
+            <Checkbox checked={ !!yan } id='yan' onChange={ this.handleCheckbox }>
+              WWTC
+            </Checkbox>
           </Col>
         </Row>
       </div>
