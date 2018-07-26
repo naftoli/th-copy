@@ -39,7 +39,7 @@ class UserPage extends Component {
       setTitle( `View / Edit ${this.state.soldier.user_serial}` );
     }
     // if the login changed then we should make sure we have the up to date information...
-    if ( loginChanged( this.props.current_login, prevProps.current_login ) )
+    if ( loginChanged( this.props.current_login, prevProps.current_login ) && !this.state.loading )
       this.getSoldier();
   }
 
