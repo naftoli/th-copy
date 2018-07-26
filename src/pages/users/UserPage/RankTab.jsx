@@ -30,8 +30,8 @@ const RankRow = ( { rank } ) => {
     <Row className='RankRow'>
       <Col xs='3' sm='2' className='RankRow-rank'>
         <p>{ rank.rank_name }</p>
-        <p>({ moment(rank.date_promoted).format('l') })</p>
         <img src={`${LEGACY_URL}/mobile/img_new/ranks/${rank.rank_ord}.svg`} alt='rank' />
+        <p>({ moment(rank.date_promoted).format('l') })</p>
       </Col>
       <Col xs='9' sm='10' className='RankRow-medals'>
         { rank.medals && rank.medals.map( (medal, index) => 
