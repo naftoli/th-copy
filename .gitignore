@@ -48,3 +48,5 @@ composer.lock
 error_log
 .ftpquota
 .vscode
+
+mysql.log

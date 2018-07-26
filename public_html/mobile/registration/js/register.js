@@ -25,7 +25,7 @@ var registrationApp = function() {
         cart: [], // items that the user is paying for
         shipping_type: 1 // 1 or 2
     }
-    var registration_year = 5779;
+    // var registration_year = 5779;
     // navigation buttons
     $(".start-step-1").click( step1 );
     $(".start-step-2").click( step2 );
@@ -204,7 +204,7 @@ var registrationApp = function() {
         // and re-add him to the cart
         if ( selected_charges.chayolei ) {
             state.cart.push({
-                description: 'Tzivos Hashem '+registration_year+' Registration for ' + selected_user.first,
+                description: 'Tzivos Hashem Registration for ' + selected_user.first,
                 price: selected_user.registrationRates.chayolei,
                 meta: {
                     type: 'registration',
@@ -216,7 +216,7 @@ var registrationApp = function() {
         } 
         if ( selected_charges.chidon ) {
             state.cart.push({
-                description: 'Chidon '+registration_year+' Registration ' + selected_user.first,
+                description: 'Chidon Registration ' + selected_user.first,
                 price: selected_user.registrationRates.chidon,
                 meta: {
                     type: 'registration',
@@ -229,7 +229,7 @@ var registrationApp = function() {
         }
         if ( selected_charges.yahadus ) {
             state.cart.push({
-                description: 'Yahadus Book ('+registration_year+') for ' + selected_user.first,
+                description: 'Yahadus Book for ' + selected_user.first,
                 price: 45,
                 meta: {
                     type: 'registration',
