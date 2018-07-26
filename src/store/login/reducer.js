@@ -24,9 +24,11 @@ export default ( state = initialState, action ) => {
 
     case types.SET_TOKENS:
       if ( action.payload.legacy ) {
-        cookies.set( 'admin_auth', action.payload.legacy, { path: '/' } );
-        cookies.set( 'admin_id', action.payload.id, { path: '/' } );
-        cookies.set( 'admin', action.payload.mobile, { path: '/' } );
+        const expires = new Date();
+        expires.setFullYear(new Date().getFullYear() + 10);
+        cookies.set( 'admin_auth', action.payload.legacy, { path: '/', expires } );
+        cookies.set( 'admin_id', action.payload.id, { path: '/', expires } );
+        cookies.set( 'admin', action.payload.mobile, { path: '/', expires } );
       }
 
       return Object.assign({}, state, { tokens: action.payload });
