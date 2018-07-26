@@ -45,7 +45,7 @@ class PersonalTab extends Component {
             <Row>
               <Col xs='3' sm='12'>
                 <ProfilePicture src={`${LEGACY_URL}${profilePicture}`} className='inline-profile' 
-                  rank={ currentRank.rank_ord} />
+                  rank={ currentRank.rank } />
               </Col>
               <Col xs='9' sm='12'>
                 <label>Gender</label>
