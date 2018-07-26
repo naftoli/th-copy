@@ -2,71 +2,61 @@
 
 #UserPage {
   padding-bottom: 10px;
-  // TODO, move
-  a.nav-link { font-weight: bold; }
-  p.title {
-    border-bottom: 1px solid $primary-color;
-    font-size: 1.4em;
-    padding-left: .5em;
-    margin-top: .7em;
-    font-family: Arial, Helvetica, sans-serif;
-  }
-  .form-control[readonly] {
-    background-color: #fafafa;
-    user-select: none;
-    &:hover{ cursor: pointer; }
-  }
 
   .row label { margin-top: .5rem; }
-  // navigation tabs
-  .nav-tabs {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    border-color: $primary-color;
-    // customize the scrollbar on chrome and safari
-    &::-webkit-scrollbar { height: 3px; }
-    &::-webkit-scrollbar-track { background: #dee2e6; }
-    &::-webkit-scrollbar-thumb { background: $primary-color; }
-    .nav-item{ margin-bottom: 0px; }
-    
-    .active.nav-link {
-      background-color: $primary-color;
-      color: #fff;
-      border-color: $primary-color;
-    }
-  }
-  // style the content box
-  .tab-content {
-    padding: 10px; margin-bottom: 10px; 
-    border: 1px solid $primary-color; border-top: none;
-  }
-
-  div[dir='rtl'] > label {
-    width: 100%; text-align: right;
-  }
-
   .form-check-input {
     position: relative; margin-left: 0px;
   }
+}
 
-  // Tab 1
-  #PersonalTab {
-    .profile-picture {
-      max-width: fit-content; max-height: 210px;
-      // add space on mobile
-      @media ( max-width: 575px ) { margin-bottom: 10px; }
-      > img.inline-profile { 
-        border-radius: 15px;
-        border: 1px solid $primary-color;
-        max-height: 210px;
-      }
+#PersonalTab {
+  .profile-picture {
+    max-width: fit-content; max-height: 210px;
+    // add space on mobile
+    @media ( max-width: 575px ) { margin-bottom: 10px; }
+    > img.inline-profile { 
+      border-radius: 15px;
+      border: 1px solid $primary-color;
+      max-height: 210px;
     }
-    #gender-row {
-      font-size: 1.35em;
-      > label {
-        &:hover { cursor: pointer; }
-        user-select: none;
-        margin: 0px 10px 0px 0px;
+  }
+  #gender-row {
+    font-size: 1.35em;
+    > label {
+      &:hover { cursor: pointer; }
+      user-select: none;
+      margin: 0px 10px 0px 0px;
+    }
+  }
+}
+
+.RankRow {
+  text-align: center;
+  border-top: 1px dashed $primary-color-focus;
+  margin: 0px -10px;
+  padding: 10px 0px;
+
+  .RankRow-rank {
+    p { margin-top: .2rem; margin-bottom: 0px; }
+    img{ max-width: 150px; }
+  }
+
+  .RankRow-medals {
+    display: flex;
+    flex-wrap: wrap;
+
+    div {
+      display: inline-block;
+      margin: 10px;
+      max-width: 90px;
+      transition: .25s;
+      p { font-size: .8em; margin-top: .4rem; margin-bottom: 0px; }
+      @media ( max-width: 630px ) {
+        max-width: 70px;
+      }
+      @media ( max-width: 414px ) {
+        max-width: 65px;
+        p { font-size: .7em; }
       }
     }
   }

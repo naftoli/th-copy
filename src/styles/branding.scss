@@ -53,3 +53,26 @@
 .react-datepicker__header select { margin-top: 10px; border-color: $primary-color; }
 .react-datepicker__triangle { border-bottom-color: $primary-color !important; }
 .react-datepicker-wrapper, .react-datepicker__input-container { width: 100%; }
+
+// Bootstrap tabbed layouts
+.nav-tabs {
+  overflow-x: auto; flex-wrap: nowrap; border-color: $primary-color;
+  a.active.nav-link { background-color: $primary-color; color: #fff; border-color: $primary-color; }
+  .nav-item{ margin-bottom: 0px; }
+  a.nav-link{ white-space: nowrap; font-weight: bold; }
+  
+}
+.tab-content { padding: 10px; margin-bottom: 10px; border: 1px solid $primary-color; border-top: none; }
+
+// Titles
+p.title { 
+  border-bottom: 1px solid $primary-color; font-size: 1.4em; padding-left: .5em;
+  margin-top: .7em; font-family: Arial, Helvetica, sans-serif;
+}
+
+// Forms
+.form-control[readonly] { // readonly-inputs should not look like disabled ones
+  background-color: #fafafa; user-select: none;
+  &:hover{ cursor: pointer; }
+}
+div[dir='rtl'] > label { width: 100%; text-align: right; } // RTL labels
