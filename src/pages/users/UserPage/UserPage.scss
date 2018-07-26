@@ -13,6 +13,8 @@
   }
   .form-control[readonly] {
     background-color: #fafafa;
+    user-select: none;
+    &:hover{ cursor: pointer; }
   }
 
   .row label { margin-top: .5rem; }
@@ -20,16 +22,23 @@
   .nav-tabs {
     overflow-x: auto;
     flex-wrap: nowrap;
+    border-color: $primary-color;
     // customize the scrollbar on chrome and safari
     &::-webkit-scrollbar { height: 3px; }
     &::-webkit-scrollbar-track { background: #dee2e6; }
     &::-webkit-scrollbar-thumb { background: $primary-color; }
     .nav-item{ margin-bottom: 0px; }
+    
+    .active.nav-link {
+      background-color: $primary-color;
+      color: #fff;
+      border-color: $primary-color;
+    }
   }
   // style the content box
   .tab-content {
     padding: 10px; margin-bottom: 10px; 
-    border: 1px solid #dee2e6; border-top: none;
+    border: 1px solid $primary-color; border-top: none;
   }
 
   div[dir='rtl'] > label {
