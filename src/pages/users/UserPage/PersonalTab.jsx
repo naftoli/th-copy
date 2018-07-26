@@ -41,7 +41,7 @@ class PersonalTab extends Component {
     return (
       <div id='PersonalTab'>
         <Row id='image-row'>
-          <Col xs='12' sm={{ size: 4, order: 12 }} lg='3'>
+          <Col xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2'>
             <Row>
               <Col xs='3' sm='12'>
                 <ProfilePicture src={`${LEGACY_URL}${profilePicture}`} className='inline-profile' 
@@ -64,7 +64,7 @@ class PersonalTab extends Component {
               </Col>
             </Row>
           </Col>
-          <Col xs='12' sm='8' lg='9'>
+          <Col xs='12' sm='8' lg='9' xl='10'>
             <h4>Serial #: {user_serial}</h4>
             <h4>Barcode: {barcode}</h4>
             <Row>
