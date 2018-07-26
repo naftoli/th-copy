@@ -28,7 +28,7 @@ class UserPage extends Component {
   // initial state
   state = {
     soldier: {},  updates: {},
-    loading: true,  activeTab: 3
+    loading: true,  activeTab: 1
   }
   // load user on page load
   componentDidMount() { 
@@ -106,9 +106,6 @@ class UserPage extends Component {
           <NavigationTab className={this.isActive(3)} onClick={this.toggle(3)}>
             Rank
           </NavigationTab>
-          <NavigationTab className={this.isActive(4)} onClick={this.toggle(4)}>
-            Debug
-          </NavigationTab>
         </Nav>
         <form onSubmit={ this.saveChanges }>
           <TabContent activeTab={this.state.activeTab}>
@@ -121,13 +118,8 @@ class UserPage extends Component {
             <TabPane tabId={3}>
               <RankTab soldier={ soldier } />
             </TabPane>
-            <TabPane tabId={4}>
-              <pre>{ JSON.stringify( soldier, null, 2 ) }</pre>
-            </TabPane>
           </TabContent>
-          { updated &&
-            <Button color='primary'>Save Changes</Button>
-          }
+          { updated && <Button color='primary'>Save Changes</Button> }
         </form>
       </div>
     );
