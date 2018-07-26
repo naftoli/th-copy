@@ -50,6 +50,7 @@
       margin: 10px;
       max-width: 90px;
       transition: .25s;
+      img { width: 100%; }
       p { font-size: .8em; margin-top: .4rem; margin-bottom: 0px; }
       @media ( max-width: 630px ) {
         max-width: 70px;
