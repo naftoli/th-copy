@@ -1,0 +1,64 @@
+@import "../../../styles/colors";
+
+#UserPage {
+  padding-bottom: 10px;
+
+  .row label { margin-top: .5rem; }
+  .form-check-input {
+    position: relative; margin-left: 0px;
+  }
+}
+
+#PersonalTab {
+  .profile-picture {
+    max-width: fit-content; max-height: 210px;
+    // add space on mobile
+    @media ( max-width: 575px ) { margin-bottom: 10px; }
+    > img.inline-profile { 
+      border-radius: 15px;
+      border: 1px solid $primary-color;
+      max-height: 210px;
+    }
+  }
+  #gender-row {
+    font-size: 1.35em;
+    > label {
+      &:hover { cursor: pointer; }
+      user-select: none;
+      margin: 0px 10px 0px 0px;
+    }
+  }
+}
+
+.RankRow {
+  text-align: center;
+  border-top: 1px dashed $primary-color-focus;
+  margin: 0px -10px;
+  padding: 10px 0px;
+
+  .RankRow-rank {
+    p { margin-top: .2rem; margin-bottom: 0px; }
+    img{ max-width: 150px; }
+  }
+
+  .RankRow-medals {
+    display: flex;
+    flex-wrap: wrap;
+
+    div {
+      display: inline-block;
+      margin: 10px;
+      max-width: 90px;
+      transition: .25s;
+      img { width: 100%; }
+      p { font-size: .8em; margin-top: .4rem; margin-bottom: 0px; }
+      @media ( max-width: 630px ) {
+        max-width: 70px;
+      }
+      @media ( max-width: 414px ) {
+        max-width: 65px;
+        p { font-size: .65em; }
+      }
+    }
+  }
+}

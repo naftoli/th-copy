@@ -12,7 +12,9 @@ import BulkUploadModal from './BulkUploadModal';
 // functions
 import { toast } from 'react-toastify';
 import is from 'is_js';
-import arrayToCSV from 'functions/arrayToCSV';
+import moment from 'moment';
+import { arrayToCSV, setTitle } from 'functions/utils';
+import { loginChanged } from 'functions/login';
 // styles
 import 'react-table/react-table.css';
 import './UsersPage.scss';
@@ -27,18 +29,16 @@ export class UsersPage extends Component {
   }
   // load the contents if we do not have any
   componentDidMount(){
-    if ( this.props.soldiers.length === 0 ) {
+    setTitle( 'View/Edit Soldiers' );
+    if ( this.props.soldiers.length < 2 ) {
       this.props.getSoldiers();
     }
   }
 
   // if the soldier list is emptied while on the page... then refresh it
   componentDidUpdate( prevProps ) {
-    const { type, id } = this.props.current_login;
-    const { type: prevType, id: prevId } = prevProps.current_login;
-    if ( type !== prevType || prevId !== id ) {
+    if ( loginChanged( this.props.current_login, prevProps.current_login ) )
       this.props.getSoldiers();
-    }
   }
 
   // handler for the modals
@@ -67,7 +67,11 @@ export class UsersPage extends Component {
   }
 
   // scroll to the top of the table
-  scrollToTop = () => { document.querySelector('#all-users .rt-tbody').scrollTop = 0; }
+  scrollToTop = () => { 
+    const table = document.querySelector('#UsersPage .rt-tbody')
+    if ( table )
+      table.scrollTop = 0; 
+  }
 
   // download the content as a CSV
   toCSV = () => {
@@ -80,7 +84,7 @@ export class UsersPage extends Component {
     const rows = this.props.soldiers.map( soldier => [
       soldier.user_serial, soldier.first, soldier.last, soldier.dob, soldier.gender, 
       soldier.user_registered, soldier.chayolei, soldier.yan, soldier.chidon,
-      soldier.platoon.name, soldier.school.school_name
+      soldier.platoon ? soldier.platoon.name : '-', soldier.school.school_name
     ]);
     arrayToCSV( headers, rows, 'users' );
     toast.update( toast_id, {render: 'File Generated.'} );
@@ -126,10 +130,10 @@ export class UsersPage extends Component {
       Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
     },{
       id: 'dob',  Header: 'Date Of Birth',
-      accessor: user => user.dob ? new Date( user.dob ).toLocaleDateString() : '-',
+      accessor: user => user.dob ? moment( user.dob ).format('l') : '-',
     },{
       id: 'registered',  Header: 'Registered',
-      accessor: user => user.user_registered ? new Date( user.user_registered ).toLocaleString() : null,
+      accessor: user => user.user_registered ? moment( user.user_registered ).format('l LT') : null,
       filterMethod: ( filter, row ) => {
         if ( filter.value === 'all' ) return true;
         if ( filter.value === 'yes') return !!row[filter.id];
@@ -152,7 +156,7 @@ export class UsersPage extends Component {
       }
     },{
       id: 'platoon', Header: 'Platoon',
-      accessor: user => user.platoon.name
+      accessor: user => user.platoon ? user.platoon.name : '-'
     }];
     // add a collumn for HQ ( and Networks )
     if ( current_login.code === 'HQ' ) {
@@ -160,7 +164,7 @@ export class UsersPage extends Component {
     }
     // page definition
     return (
-      <div id="all-users">
+      <div id="UsersPage">
         {/* User Guide */}
         <Callout intent="primary" title="View Soldiers">
           Click a Soldier's name or serial number to view and edit their account.<br/>
@@ -174,11 +178,11 @@ export class UsersPage extends Component {
           <Button color="primary" onClick={ this.props.getSoldiers }>
             <i className={`fas fa-redo-alt ${ !loading || 'fa-spin' }`}></i> Refresh
           </Button>
-          { current_login.code === 'BC' && // only Base Commanders can upload
+          { current_login.code === 'BC' && is.not.mobile() && // only Base Commanders on desktops/tablets can upload
             <Button color="primary" onClick={ this.toggleUploadModal }>
               <i className="fas fa-file-upload" /> Upload Soldier List
             </Button>
-          } { is.not.edge() && is.not.ios() &&
+          } { is.not.edge() && is.not.ie() && is.not.ios() &&
             <Button color="primary" onClick={ this.toCSV }>
               <i className="fas fa-file-download" /> Save Soldier List
             </Button>

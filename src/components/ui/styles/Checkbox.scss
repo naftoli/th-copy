@@ -1,0 +1,15 @@
+label.checkbox {
+  margin: 0px 5px;
+  input[type="checkbox"] { display: none; }
+  span.checkbox-state {
+    display: inline-block;
+    font: normal normal normal 14px/1 Font Awesome\ 5 Free;
+    font-size: 1.2em;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    &:before { content: "\f0c8"; }
+    
+  }
+  input:checked + span.checkbox-state::before { content: "\f14a"; }
+}

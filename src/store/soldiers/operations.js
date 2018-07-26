@@ -2,17 +2,28 @@ import API from 'api/api';
 import { toast } from 'react-toastify';
 import * as actions from './actions';
 
+// get all soldiers
 export const getSoldiers = () => dispatch => {
   dispatch( actions.setLoading( true ) );
   return API.get( '/core/users.php' )
     .then( response => {
       dispatch( actions.setLoading( false ) );
       return dispatch( actions.setSoldiers( response.data ) );
-    }).catch( response => {
+    }).catch( () => {
       dispatch( actions.setLoading( false ) );
     });
 }
 
+// load a single soldier
+export const getSoldier = ( id ) => dispatch => {
+  return API.get( `/core/users.php?id=${id}` )
+    .then( response => {
+      dispatch( actions.updateSoldier( id, response.data ) );
+      return response.data;
+    })
+}
+
+// update a single soldier
 export const updateSoldier = ( id, data ) => dispatch => {
   const toast_id = toast.info( "Updating Soldier...", { autoClose: false } );
   return API.post( `/core/users.php?id=${id}`, data )
@@ -25,13 +36,12 @@ export const updateSoldier = ( id, data ) => dispatch => {
       };
       return response;
     }).catch( error => {
-      toast.update( toast_id, {type: toast.TYPE.ERROR, 
-        render: "Network error while updating Soldier. Please check your internet connection."
-      });
-      console.error( error );
+      toast.update( toast_id, {type: toast.TYPE.ERROR, render: error.error });
+      return Promise.reject( error );
     });
 }
 
+// upload a users spreadsheet
 export const uploadSpreadsheet = ( data ) => dispatch => {
   const toast_id = toast.info( "Uploading user spreadsheet...", { autoClose: false } );
   return API.post( `/upload/users.php`, data )
@@ -43,9 +53,8 @@ export const uploadSpreadsheet = ( data ) => dispatch => {
       };
       return response;
     }).catch( error => {
-      toast.update( toast_id, {type: toast.TYPE.ERROR, 
-        render: "Network error while uploading. Please check your internet connection."
-      });
+      toast.dismiss( toast_id );
       console.error( error );
+      return Promise.reject( error );
     });
 }
