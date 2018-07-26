@@ -14,7 +14,10 @@ class SettingsTab extends Component {
   }
 
   render() {
-    let { class_id, school, chayolei, yan, chidon } = this.props.soldier;
+    let { 
+      class_id, school, chayolei, yan, chidon,
+      allow_parent_tasks, print_parent_tasks
+    } = this.props.soldier;
     // get the list of platoons from the user for now ( TODO, replace with advanced platoon dropdown )
     const platoon_options = school.platoons.map( 
       platoon => ({ value: platoon.class_id, label: platoon.name})
@@ -33,7 +36,7 @@ class SettingsTab extends Component {
     ];
 
     return (
-      <div id='settings-tab'>
+      <div id='SettingsTab'>
         <Row>
           <Col xs='12' sm='4'>
             <label>Platoon</label>
@@ -60,6 +63,15 @@ class SettingsTab extends Component {
             </Checkbox>
             <Checkbox checked={ !!yan } id='yan' onChange={ this.handleCheckbox }>
               WWTC
+            </Checkbox>
+          </Col>
+          <Col xs='12' sm='6'>
+            <label>Custom Parent Tasks</label><br/>
+            <Checkbox checked={ !!allow_parent_tasks } id='allow_parent_tasks' onChange={ this.handleCheckbox }>
+              Allow
+            </Checkbox>
+            <Checkbox checked={ !!print_parent_tasks } id='print_parent_tasks' onChange={ this.handleCheckbox }>
+              Print on Mission Sheets
             </Checkbox>
           </Col>
         </Row>
