@@ -21,7 +21,8 @@ class UserRegistrationRouter {
 
         $available_users = [];
         foreach( $users as $user ){
-            if ( $user->school->getRegInfo()->default ) continue;
+            $reg_info = $user->school->getRegInfo();
+            if ( $reg_info->default || !$reg_info->date_paid ) continue;
             $available_users[] = $user;
         }
 
