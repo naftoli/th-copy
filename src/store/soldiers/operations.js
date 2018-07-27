@@ -1,5 +1,6 @@
 import API from 'api/api';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 import * as actions from './actions';
 
 // get all soldiers
@@ -7,18 +8,26 @@ export const getSoldiers = () => dispatch => {
   dispatch( actions.setLoading( true ) );
   return API.get( '/core/users.php' )
     .then( response => {
+      var t0 = performance.now();
+      // format data
+      const soldiers = response.data.map( soldier => Object.assign({}, soldier, { 
+        dob: soldier.dob ? moment( soldier.dob ).format('l') : soldier.dob,
+        user_registered: soldier.user_registered ? 
+          moment( soldier.user_registered ).format('l LT') : 
+          soldier.user_registered
+      }));
+      console.log("Formatting users response took " + (performance.now() - t0) + " milliseconds. TODO, speed up.");
       dispatch( actions.setLoading( false ) );
-      return dispatch( actions.setSoldiers( response.data ) );
+      return dispatch( actions.setSoldiers( soldiers ) );
     }).catch( () => {
       dispatch( actions.setLoading( false ) );
     });
 }
 
-// load a single soldier
+// load a single soldier - not added to state
 export const getSoldier = ( id ) => dispatch => {
   return API.get( `/core/users.php?id=${id}` )
     .then( response => {
-      dispatch( actions.updateSoldier( id, response.data ) );
       return response.data;
     })
 }

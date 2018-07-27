@@ -12,7 +12,6 @@ import BulkUploadModal from './BulkUploadModal';
 // functions
 import { toast } from 'react-toastify';
 import is from 'is_js';
-import moment from 'moment';
 import { arrayToCSV, setTitle } from 'functions/utils';
 import { loginChanged } from 'functions/login';
 // styles
@@ -69,8 +68,7 @@ export class UsersPage extends Component {
   // scroll to the top of the table
   scrollToTop = () => { 
     const table = document.querySelector('#UsersPage .rt-tbody')
-    if ( table )
-      table.scrollTop = 0; 
+    if ( table ) table.scrollTop = 0; 
   }
 
   // download the content as a CSV
@@ -130,10 +128,10 @@ export class UsersPage extends Component {
       Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
     },{
       id: 'dob',  Header: 'Date Of Birth',
-      accessor: user => user.dob ? moment( user.dob ).format('l') : '-',
+      accessor: user => user.dob, sortable: false
     },{
-      id: 'registered',  Header: 'Registered',
-      accessor: user => user.user_registered ? moment( user.user_registered ).format('l LT') : null,
+      id: 'registered',  Header: 'Registered', sortable: false,
+      accessor: user => user.user_registered,
       filterMethod: ( filter, row ) => {
         if ( filter.value === 'all' ) return true;
         if ( filter.value === 'yes') return !!row[filter.id];
@@ -145,20 +143,12 @@ export class UsersPage extends Component {
           <option value="all">Show All</option>
           <option value="yes">Registered</option>
           <option value="no">Not Registered</option>
-        </select>,
-      sortMethod: ( a, b ) => {
-        a = a === null || a === undefined ? '' : a;
-        b = b === null || b === undefined ? '' : b;
-        a = !a || new Date( a ); b =  !b || new Date( b );
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-      }
-    },{
-      id: 'platoon', Header: 'Platoon',
-      accessor: user => user.platoon ? user.platoon.name : '-'
-    }];
+        </select>
+    },];
     // add a collumn for HQ ( and Networks )
+    if ( current_login.code !== 'Teacher' ) {
+      columns.push({id: 'platoon', Header: 'Platoon', accessor: user => user.platoon ? user.platoon.name : '-'});
+    }
     if ( current_login.code === 'HQ' ) {
       columns.push( { id: 'base', Header: 'Base', accessor: user => user.school.school_name } );
     }
