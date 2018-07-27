@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import 'react-datepicker/dist/react-datepicker.css';
 // supported languages;
 import moment from 'moment';
+import 'moment/locale/en-ca.js';
 import 'moment/locale/he.js';
 import 'moment/locale/fr.js';
 
