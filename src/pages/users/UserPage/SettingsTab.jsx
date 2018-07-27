@@ -72,7 +72,7 @@ class SettingsTab extends Component {
               Chidon
             </Checkbox>
             <Checkbox checked={!!yan} id='yan' onChange={this.handleCheckbox}>
-              WWTC
+              Tanya
             </Checkbox>
           </Col>
           <Col xs='12' sm='6'>
