@@ -28,5 +28,8 @@ export const getCurrentUser = () => dispatch => {
       if ( !response.success ) 
         return dispatch( actions.logout() )
       return dispatch( actions.setUser( response.data ) );
+    }).catch( error => {
+      dispatch( actions.logout() );
+      dispatch( actions.setErrors( 'Could not get account info. Please clear your cookies and try again.' ));
     });
 }
