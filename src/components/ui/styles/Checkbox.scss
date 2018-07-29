@@ -13,7 +13,7 @@ label.checkbox {
   }
   &:hover {
     cursor: pointer; 
-    span.checkbox-state:before { font-weight: 900; content: "\f14a"; }
+    // span.checkbox-state:before { font-weight: 900; content: "\f14a"; }
   }
   input:checked + span.checkbox-state::before { font-weight: normal; content: "\f14a"; }
 }

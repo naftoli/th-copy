@@ -15,7 +15,7 @@ label.radio {
   // hover and checked states
   &:hover {
     cursor: pointer; 
-    span.radio-state:before { font-weight: 900; content: "\f192"; }
+    // span.radio-state:before { font-weight: 900; content: "\f192"; }
   }
   input:checked + span.radio-state::before { font-weight: normal; content: "\f192"; }
 }
