@@ -1,0 +1,21 @@
+label.radio {
+  // setup
+  margin: 0px 5px;
+  input[type="radio"] { display: none; }
+  // default state
+  span.radio-state {
+    display: inline-block;
+    font: normal normal normal 14px/1 Font Awesome\ 5 Free;
+    font-size: 1em;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    &:before { content: "\f111"; }
+  }
+  // hover and checked states
+  &:hover {
+    cursor: pointer; 
+    span.radio-state:before { font-weight: 900; content: "\f192"; }
+  }
+  input:checked + span.radio-state::before { font-weight: normal; content: "\f192"; }
+}
