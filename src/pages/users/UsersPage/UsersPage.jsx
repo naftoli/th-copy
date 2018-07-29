@@ -48,7 +48,7 @@ export class UsersPage extends Component {
   editPicture = ( id ) => ( event ) => {
     this.setState({
       cropperModalShow: true, cropperModalId: id,
-      cropperModalSrc: event.target.src.indexOf( DEFAULT_PROFILE ) >= 0 ? false : event.target.src      
+      cropperModalSrc: event.target.src      
     });
   }
 

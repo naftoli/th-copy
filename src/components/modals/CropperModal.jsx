@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { DEFAULT_PROFILE } from 'components/constants';
+// components
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import Cropper from 'components/functional/Cropper';
+// functions
 import { toast } from 'react-toastify';
 
 class CropperModal extends Component {
@@ -75,7 +78,8 @@ class CropperModal extends Component {
   render() {
     // extract the props and state
     const { isOpen, centered, toggle } = this.props;
-    const { src } = this.state;
+    let { src } = this.state;
+    src = src && src.indexOf( DEFAULT_PROFILE ) >= 0 ? false : src;
     // assume we do not have an image
     let body = 
       <div style={{textAlign: 'center'}}>
