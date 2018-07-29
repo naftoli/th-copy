@@ -5,6 +5,7 @@ import {
 } from 'reactstrap';
 import './Navbar.scss';
 import { LEGACY_URL } from 'components/constants';
+import { loginChanged } from 'functions/login';
 import user from 'img/user.svg';
 import logo from 'img/logo.svg';
 
@@ -18,7 +19,8 @@ class Navbar extends Component {
   }
 
   onLoginChange = ( type, id ) => () => {
-    this.props.onLoginChange( type, id );
+    if ( loginChanged( {type, id}, this.props.current_login) )
+      this.props.onLoginChange( type, id );
   }
 
   render(){
