@@ -73,11 +73,8 @@ const getMenu = ( user_type ) => {
       ]
     },
     {
-      label: 'Platoon Managment', user_types: [ 'TEACHER' ],
+      label: 'Platoon Managment', user_types: [ 'TEACHER' ], path: '/users',
       icon: <i className="fas fas fa-chalkboard-teacher"></i>,
-      items: [
-        { label: 'Soldiers', user_types: [ 'TEACHER' ], path: '/users' }
-      ]
     },
     {
       label: "Missions", user_types: [ 'HQ', 'BC', 'TEACHER' ],
