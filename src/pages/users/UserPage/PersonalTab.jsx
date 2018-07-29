@@ -5,6 +5,7 @@ import { Row, Col, Input } from 'reactstrap';
 import DatePicker from 'react-datepicker';
 import MaskedInput from 'react-text-mask'
 import ProfilePicture from 'components/ui/ProfilePicture';
+import CropperModal from 'components/modals/CropperModal';
 // functions
 import { toHebrew } from 'functions/utils';
 import julian from 'julian';
@@ -13,11 +14,13 @@ import moment from 'moment';
 import masks from 'components/masks';
 
 class PersonalTab extends Component {
-
+  // initial state
+  state = { cropperModalShow: false }
+  // handle updates from events
   handleChange = ( event ) => {
     this.props.handleChange( { [event.target.id]: event.target.value } );
   }
-
+  // handle the gender change
   genderChange = ( event ) => {
     const { school_type_id } = this.props.soldier;
     this.props.handleChange({
@@ -25,16 +28,24 @@ class PersonalTab extends Component {
       school_type_id: school_type_id + ( event.target.value === 'M' ? -1 : 1 )
     });
   }
-
+  // change the hebrew text
   hebrewChange = ( event ) => {
     event.target.value = toHebrew( event.target.value );
     this.handleChange( event );
   }
-
+  // format dates
   dateChange = ( name ) => ( date ) => {
     this.props.handleChange(
       { [name]: date.format("YYYY-MM-DD HH:mm:ss") }
     )
+  }
+  // edit profile
+  toggle = () => {
+    this.setState({ cropperModalShow: !this.state.cropperModalShow });
+  }
+  updateProfile = ( formData ) => {
+    this.toggle();
+    this.props.updateProfile( formData );
   }
 
   render(){
@@ -45,6 +56,7 @@ class PersonalTab extends Component {
       user_address1, user_city, user_state, user_phone,
       user_postal, user_country, user_start_date, user_registered
     } = this.props.soldier;
+    const profile_picture = `${LEGACY_URL}${profilePicture}`;
     // render form
     return (
       <div id='PersonalTab'>
@@ -52,8 +64,8 @@ class PersonalTab extends Component {
           <Col xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2'>
             <Row>
               <Col xs='3' sm='12'>
-                <ProfilePicture src={`${LEGACY_URL}${profilePicture}`} className='inline-profile' 
-                  rank={ currentRank.rank } />
+                <ProfilePicture src={ profile_picture } className='inline-profile' 
+                  rank={ currentRank.rank } onClick={ this.toggle } />
               </Col>
               <Col xs='9' sm='12'>
                 <label>Gender</label>
@@ -154,6 +166,8 @@ class PersonalTab extends Component {
             <h4>{ user_registered ? moment( user_registered ).format("LLLL") : 'Not Registered.'}</h4>
           </Col>
         </Row>
+        <CropperModal isOpen={ this.state.cropperModalShow } src={ profile_picture } 
+          toggle={ this.toggle } uploadImage={ this.updateProfile } />
       </div>
     );
   }

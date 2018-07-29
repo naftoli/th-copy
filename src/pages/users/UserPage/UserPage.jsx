@@ -43,7 +43,6 @@ class UserPage extends Component {
     if ( loginChanged( this.props.current_login, prevProps.current_login ) && !this.state.loading )
       this.getSoldier();
   }
-
   // get the soldier for the page
   getSoldier = () => {
     const { match, getSoldier } = this.props;
@@ -54,7 +53,6 @@ class UserPage extends Component {
         this.setState({ soldier: undefined });
       });
   }
-  
   // handle tabs
   toggle = ( tab ) => () => {
     this.setState({ activeTab: tab });
@@ -79,6 +77,16 @@ class UserPage extends Component {
     .then( ( response ) => {
       this.setState({ updates: {}, soldier: response.data });
     });
+  }
+  // update the soldiers profile page
+  updateProfile = ( formData ) => {
+    const { soldier } = this.state;
+    this.props.updateSoldier( soldier.user_id, formData )
+      .then(( response ) => {
+        this.setState({
+          soldier: Object.assign({}, soldier, { ...response.data })
+        })
+      });
   }
   // render the page
   render(){
@@ -110,7 +118,8 @@ class UserPage extends Component {
         <form onSubmit={ this.saveChanges }>
           <TabContent activeTab={this.state.activeTab}>
             <TabPane tabId={1}>
-              <PersonalTab soldier={ soldier } handleChange={ this.handleUpdate } />
+              <PersonalTab soldier={ soldier } handleChange={ this.handleUpdate } 
+                updateProfile={ this.updateProfile } />
             </TabPane>
             <TabPane tabId={2}>
               <SettingsTab soldier={ soldier } handleChange={ this.handleUpdate } />
