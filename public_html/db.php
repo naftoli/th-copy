@@ -13,7 +13,9 @@ mysql_select_db('mashpiadb') or trigger_error_server('Failed to select db', E_US
 //doesn't seem to work
 define('FILE_DIR','files/');
 
+// not relevant - naftoli 7/28/18
 $arrDevRemotes = array(
+	/*
 	"173.178.192.216" => 1, // andys house
 	'173.178.180.66' => 1, // gfs
 	"173.176.52.44" => 1,  //
@@ -23,6 +25,7 @@ $arrDevRemotes = array(
 	'173.176.48.60' => 1,
 	'24.114.81.95' => 1, // shaya hotspot
 	'173.176.51.138' => 1 //naftoli home
+	*/
 );
 
 // Check if the users IP is in the hash defined above

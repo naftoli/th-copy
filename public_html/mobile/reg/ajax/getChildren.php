@@ -171,7 +171,6 @@ while ( $row = mysql_fetch_assoc($result) ) {
 		}
 	}
 	
-	
 	//if ($row['user_id'] == 26598) {
 	//	$children[$row['user_id']]['chidonShow'] = 1;
 	//}
