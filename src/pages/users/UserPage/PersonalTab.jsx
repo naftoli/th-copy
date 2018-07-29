@@ -5,6 +5,7 @@ import { Row, Col, Input } from 'reactstrap';
 import DatePicker from 'react-datepicker';
 import MaskedInput from 'react-text-mask'
 import ProfilePicture from 'components/ui/ProfilePicture';
+import Radio from 'components/ui/Radio';
 import CropperModal from 'components/modals/CropperModal';
 // functions
 import { toHebrew } from 'functions/utils';
@@ -70,16 +71,14 @@ class PersonalTab extends Component {
               <Col xs='9' sm='12'>
                 <label>Gender</label>
                 <div id='gender-row'>
-                  <label>
-                    <Input type='radio' name='gender' id='gender' value='M' 
-                      checked={ gender === 'M' } onChange={ this.genderChange }/>{' '}
+                  <Radio type='radio' name='gender' id='gender' value='M' 
+                      checked={ gender === 'M' } onChange={ this.genderChange }>
                     Male <i className='fas fa-male'></i>
-                  </label>
-                  <label>
-                    <Input type='radio' name='gender' id='gender' value='F'
-                      checked={ gender === 'F' } onChange={ this.genderChange }/>{' '}
+                  </Radio>
+                  <Radio type='radio' name='gender' id='gender' value='F'
+                      checked={ gender === 'F' } onChange={ this.genderChange }>
                     Female <i className='fas fa-female'></i>
-                  </label>
+                  </Radio>
                 </div>
               </Col>
             </Row>
