@@ -20,7 +20,8 @@
   // keep the text and images a little separate.
   img, i {
     margin-right: .5em;
-    max-height: 28px;
+    max-height: 28px; width: 28px;
+    font-size: 24px; text-align: center;
   }
   // top level navigation
   ul.components {
@@ -49,7 +50,7 @@
       text-align: left;
       padding: 15px 10px;
       font-size: 1.1em;
-      display: block;
+      display: flex; align-items: center;
       position: relative; // this is used for the arrow icons
     }
   }
