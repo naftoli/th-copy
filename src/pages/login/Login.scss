@@ -35,8 +35,11 @@
     }
     // eliminate border on input
     input.form-control:not(:first-child) {
-      padding: 8px 58px;
+      padding-left: 56px;
       border-radius: .3rem;
+    }
+    input.form-control:not(:last-child) {
+      padding-right: 60px;
     }
     // increase the font size
     input {
