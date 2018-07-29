@@ -20,6 +20,12 @@
       max-height: 210px;
     }
   }
+  .profile-picture.editable:hover:before {
+    transition: .5s;
+    @media ( min-width: 500px ) { font-size: 2em; }
+    @media ( min-width: 575px ) { font-size: 3em; }
+  }
+  
   #gender-row {
     font-size: 1.35em;
     > label {
