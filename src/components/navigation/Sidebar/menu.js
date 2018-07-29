@@ -43,11 +43,11 @@ const getMenu = ( user_type ) => {
   const menu = [
     {
       label: 'Home', path: '/', user_types: [ 'HQ', 'BC', 'TEACHER' ],
-      icon: <img src={`${LEGACY_URL}/images/icon_admin_home.png`} alt="home"/>
+      icon: <i className="fas fa-home"></i>
     },
     {
-      label: 'Base Managment', user_types: [ 'HQ', 'BC', 'TEACHER' ],
-      icon: <img src={`${LEGACY_URL}/images/icon_dashboard.png`} alt="base-managment"/>,
+      label: 'Base Managment',
+      icon: <i className="fas fa-school"></i>,
       items: [
         {
           label: "Soldiers",
@@ -59,7 +59,6 @@ const getMenu = ( user_type ) => {
             { label: "Update Medals", legacy: true, path: '/add_medals.php' },
           ]
         },
-        { label: 'Soldiers', user_types: [ 'TEACHER' ], path: '/users' },
         { label: "Platoons", path: '/platoons' },
         { label: "Parents", path: '/parents' },
         { label: "Staff", path: '/staff' },
@@ -74,8 +73,15 @@ const getMenu = ( user_type ) => {
       ]
     },
     {
+      label: 'Platoon Managment', user_types: [ 'TEACHER' ],
+      icon: <i className="fas fas fa-chalkboard-teacher"></i>,
+      items: [
+        { label: 'Soldiers', user_types: [ 'TEACHER' ], path: '/users' }
+      ]
+    },
+    {
       label: "Missions", user_types: [ 'HQ', 'BC', 'TEACHER' ],
-      icon: <img src={`${LEGACY_URL}/images/icon_admin_medal.png`} alt="Missions" />,
+      icon: <i className="fas fa-award"></i>,
       items: [
         { label: 'Print Missions', legacy: true, path: '/print_missions2.php', user_types: [ 'HQ', 'BC', 'TEACHER' ] },
         { label: 'Print Summer Missions', legacy: true, path: '/print_missions_summer.php' },
@@ -89,7 +95,7 @@ const getMenu = ( user_type ) => {
     },
     {
       label: "Achievement Cards", user_types: [ 'HQ', 'BC', 'TEACHER' ],
-      icon: <img src={`${LEGACY_URL}/images/icon_auction.png`} alt="Achievement Cards" />,
+      icon: <i className="fas fa-ticket-alt"></i>,
       items: [
         { label: 'Add Achievement Task', legacy: true, 
           path: '/newAchievementTasks.php', user_types: [ 'HQ', 'BC', 'TEACHER' ] 

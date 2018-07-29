@@ -56,7 +56,7 @@ export class Dashboard extends Component {
     // add a logout button
     menu.push({
       label: 'Logout', path: '/logout',
-      icon: <img src={`${LEGACY_URL}/images/parentIcons/logout.gif`} alt="Logout"/>
+      icon: <i className="fas fa-sign-out-alt"></i>
     });
 
     return (
