@@ -5,6 +5,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import Cropper from 'components/functional/Cropper';
 // functions
 import { toast } from 'react-toastify';
+import { readFile } from 'functions/utils';
 
 class CropperModal extends Component {
   // the props we are expecting
@@ -38,10 +39,8 @@ class CropperModal extends Component {
     const files = this.uploadRef.current.files;
     this.setState({ name: files[0].name || 'unknown' });
     // read the file if we can
-    if ( FileReader && files && files.length ) {
-      const fr = new FileReader();
-      fr.onload = () => { this.setState({ src: fr.result }); }
-      fr.readAsDataURL( files[0] );
+    if ( files && files.length ) {
+      readFile( files[0] ).then( fr => this.setState({ src: fr.result }) );
     }
   }
 
