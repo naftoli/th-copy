@@ -146,7 +146,7 @@ export class UsersPage extends Component {
         </select>
     },];
     // add a collumn for HQ ( and Networks )
-    if ( current_login.code !== 'Teacher' ) {
+    if ( current_login.code !== 'TEACHER' ) {
       columns.push({id: 'platoon', Header: 'Platoon', accessor: user => user.platoon ? user.platoon.name : '-'});
     }
     if ( current_login.code === 'HQ' ) {
