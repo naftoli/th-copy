@@ -21,7 +21,7 @@ const DobRow = ( { soldier, onChange, show_he, children } ) => {
         />
       </Col>
       { show_he && 
-        <Col xs='6'dir='rtl'>
+        <Col xs='6' dir='rtl'>
           <label>יום הולדת</label>
           <Input disabled value={ dob_he }/>
         </Col>
