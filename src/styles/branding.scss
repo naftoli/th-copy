@@ -58,6 +58,7 @@
 .react-datepicker__header select { margin-top: 10px; border-color: $primary-color; }
 .react-datepicker__triangle { border-bottom-color: $primary-color !important; }
 .react-datepicker-wrapper, .react-datepicker__input-container { width: 100%; }
+.react-datepicker__header select:hover { cursor: pointer; }
 
 // Bootstrap tabbed layouts
 .nav-tabs {
@@ -65,7 +66,6 @@
   a.active.nav-link { background-color: $primary-color; color: #fff; border-color: $primary-color; }
   .nav-item{ margin-bottom: 0px; }
   a.nav-link{ white-space: nowrap; font-weight: bold; transition: .1s; }
-  
 }
 .tab-content { padding: 10px; margin-bottom: 10px; border: 1px solid $primary-color; border-top: none; }
 

@@ -24,9 +24,8 @@
     font-family: Font Awesome\ 5 Free; font-weight: 900;
     -webkit-font-smoothing: antialiased; text-rendering: auto;
   }
-
-  img.profile-img:hover {
+  &:hover img.profile-img {
     cursor: pointer;
-    filter: brightness(50%) blur(2px);
+    filter: grayscale(100%) brightness(60%) blur(2px);
   }
 }
