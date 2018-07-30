@@ -36,9 +36,9 @@ class UserPage extends Component {
   }
   // set the title once we have the info
   componentDidUpdate( prevProps ) {
-    if ( this.state.soldier ) {
+    // update the page title
+    if ( this.state.soldier )
       setTitle( `View / Edit ${this.state.soldier.user_serial}` );
-    }
     // if the login changed then we should make sure we have the up to date information...
     if ( loginChanged( this.props.current_login, prevProps.current_login ) && !this.state.loading )
       this.getSoldier();
@@ -47,15 +47,12 @@ class UserPage extends Component {
   getSoldier = () => {
     const { match, getSoldier } = this.props;
     getSoldier( match.params.id )
-      .then( soldier => {
-        this.setState({ soldier, loading: false });
-      }).catch( error => {
-        this.setState({ soldier: undefined });
-      });
+    .then( soldier => { this.setState({ soldier, loading: false }); })
+    .catch( () => { this.setState({ soldier: undefined }); } );
   }
   // handle tabs
-  toggle = ( tab ) => () => {
-    this.setState({ activeTab: tab });
+  toggle = ( activeTab ) => () => {
+    this.setState({ activeTab });
   }
   // handle tab styles
   isActive = ( tab ) => {
@@ -82,11 +79,11 @@ class UserPage extends Component {
   updateProfile = ( formData ) => {
     const { soldier } = this.state;
     this.props.updateSoldier( soldier.user_id, formData )
-      .then(( response ) => {
-        this.setState({
-          soldier: Object.assign({}, soldier, { ...response.data })
-        })
-      });
+    .then(( response ) => {
+      this.setState({
+        soldier: Object.assign({}, soldier, { ...response.data })
+      })
+    });
   }
   // render the page
   render(){

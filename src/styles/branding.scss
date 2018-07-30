@@ -24,9 +24,14 @@
     color: #fff; opacity: 1; font-weight: 100;
   }
 }
-
+// Change the toast colors to fit our branding
 .Toastify__toast--info {
   background: $primary-color;
+}
+
+// customize react-table styles
+.rt-th.rt-resizable-header:not(.-cursor-pointer) {
+  color: $primary-color; background: #f6f6f6;
 }
 
 // customize the scrollbar on chrome and safari
@@ -59,7 +64,7 @@
   overflow-x: auto; flex-wrap: nowrap; border-color: $primary-color;
   a.active.nav-link { background-color: $primary-color; color: #fff; border-color: $primary-color; }
   .nav-item{ margin-bottom: 0px; }
-  a.nav-link{ white-space: nowrap; font-weight: bold; }
+  a.nav-link{ white-space: nowrap; font-weight: bold; transition: .1s; }
   
 }
 .tab-content { padding: 10px; margin-bottom: 10px; border: 1px solid $primary-color; border-top: none; }
