@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import UsersPage from './UsersPage/UsersPage';
 import UserPage from './UserPage/UserPage';
+import NewUserPage from './UserPage/NewUserPage';
 
 export class UsersIndexPage extends Component {
 
@@ -13,7 +14,7 @@ export class UsersIndexPage extends Component {
         <Route path={ path } exact component={ UsersPage } />
         <Route path={`${path}/registration`} render={props => <h1>Bulk User Registration</h1>}/>
         <Route path={`${path}/cards`} render={props => <h1>User Rank Cards</h1>}/>
-        <Route path={`${path}/new`} render={props => <h1>Create New User</h1>}/>
+        <Route path={`${path}/new`} component={ NewUserPage }/>
         <Route path={`${path}/:id`} component={ UserPage }/>
       </Switch>
     )
