@@ -85,6 +85,16 @@ class SettingsTab extends Component {
             </Checkbox>
           </Col>
         </Row>
+        {/* <Row>
+          <Col xs='12'>
+            <p className='title'>Actions</p>
+          </Col>
+          <Col xs='12' style={{display: 'flex', justifyContent: 'space-around'}}>
+            <Button color="danger" outline>Remove Soldier From School</Button>
+            <Button color="danger">Delete Soldier</Button>
+            <Button color="danger" outline>Remove From Parent Account</Button>
+          </Col>
+        </Row> */}
       </div>
     );
   }
