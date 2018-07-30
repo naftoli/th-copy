@@ -81,3 +81,4 @@ p.title {
   &:hover{ cursor: pointer; }
 }
 div[dir='rtl'] > label { width: 100%; text-align: right; } // RTL labels
+.row label { margin-top: .5rem; }
