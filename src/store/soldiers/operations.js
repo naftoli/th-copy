@@ -23,15 +23,6 @@ export const getSoldiers = () => dispatch => {
       dispatch( actions.setLoading( false ) );
     });
 }
-
-// load a single soldier - not added to state
-export const getSoldier = ( id ) => dispatch => {
-  return API.get( `/core/users.php?id=${id}` )
-    .then( response => {
-      return response.data;
-    })
-}
-
 // update a single soldier
 export const updateSoldier = ( id, data ) => dispatch => {
   const toast_id = toast.info( "Updating Soldier...", { autoClose: false } );
@@ -45,11 +36,31 @@ export const updateSoldier = ( id, data ) => dispatch => {
       };
       return response;
     }).catch( error => {
-      toast.update( toast_id, {type: toast.TYPE.ERROR, render: error.error });
+      toast.update( toast_id, {type: toast.TYPE.ERROR, render: error.message });
       return Promise.reject( error );
     });
 }
 
+/********************** NON STORE API OPERATIONS **********************/
+// load a single soldier - not added to state
+export const getSoldier = ( id ) => dispatch => {
+  return API.get( `/core/users.php?id=${id}` )
+    .then( response => {
+      return response.data;
+    })
+}
+// upload a spreadsheet. does not deal with store
+export const uploadProfile = ( formData ) => dispatch => {
+  const toast_id = toast.info( "Uploading Profile Picture...", { autoClose: false } );
+  return API.post( '/core/users.php?action=uploadProfile', formData )
+    .then( response => {
+      toast.update( toast_id, { type: toast.TYPE.SUCCESS, render: "Image Uploaded!!", autoClose: null });
+      return response;
+    }).catch( error => { 
+      toast.update( toast_id, {type: toast.TYPE.ERROR, render: error.message });
+      return Promise.reject( error );
+    })
+}
 // upload a users spreadsheet
 export const uploadSpreadsheet = ( data ) => dispatch => {
   const toast_id = toast.info( "Uploading user spreadsheet...", { autoClose: false } );
