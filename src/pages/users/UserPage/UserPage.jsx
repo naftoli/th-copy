@@ -46,10 +46,6 @@ class UserPage extends Component {
   toggle = ( activeTab ) => () => {
     this.setState({ activeTab });
   }
-  // handle tab styles
-  isActive = ( tab ) => {
-    return this.state.activeTab === tab ? 'active': '';
-  }
   // handle form changes
   handleUpdate = ( update ) => {
     // non-destructivly update the state
@@ -83,7 +79,7 @@ class UserPage extends Component {
   }
   // render the page
   render(){
-    const { soldier, loading, updates } = this.state;
+    const { soldier, loading, updates, activeTab } = this.state;
     const updated = Object.keys( updates ).length > 0;
     // if we do not have the soldier...
     if ( soldier === undefined ) {
@@ -98,13 +94,13 @@ class UserPage extends Component {
       <div id='UserPage'>
         <Prompt when={ updated } message="You have unsaved changes. Are you sure you want to leave?" />
         <Nav tabs>
-          <NavigationTab className={this.isActive(1)} onClick={this.toggle(1)}>
+          <NavigationTab active={activeTab === 1} onClick={this.toggle(1)}>
             Personal
           </NavigationTab>
-          <NavigationTab className={this.isActive(2)} onClick={this.toggle(2)}>
+          <NavigationTab active={activeTab === 2} onClick={this.toggle(2)}>
             Settings + Platoon
           </NavigationTab>
-          <NavigationTab className={this.isActive(3)} onClick={this.toggle(3)}>
+          <NavigationTab active={activeTab === 3} onClick={this.toggle(3)}>
             Rank
           </NavigationTab>
         </Nav>
