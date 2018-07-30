@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 // components
-import { TabContent, TabPane, Nav, NavItem, NavLink, Button } from 'reactstrap';
+import { TabContent, TabPane, Nav, Button } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 import { Prompt } from 'react-router';
+import { NavigationTab } from 'components/navigation';
 import Spinner from 'components/ui/Spinner';
 import PersonalTab from './PersonalTab';
 import SettingsTab from './SettingsTab';
@@ -14,15 +15,6 @@ import { setTitle } from 'functions/utils';
 import { loginChanged } from 'functions/login';
 // styles
 import './UserPage.scss';
-
-// navigation tab details
-const NavigationTab = ( props ) => (
-  <NavItem>
-    <NavLink { ...props } >
-      { props.children }
-    </NavLink>
-  </NavItem>
-);
 
 class UserPage extends Component {
   // initial state
