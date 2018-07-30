@@ -8,15 +8,21 @@ const handleError = ( props ) => ( e ) => {
   if ( props.onError ) props.onError( e );
 }
 
-const ProfilePicture = ( props ) => (
-  <div className={classnames( `profile-picture`, { editable: !!props.onClick } )}>
-    <img { ...props } className={ classnames( props.className, 'profile-img' ) } 
-      onError={ handleError( props ) } alt='profile' />
-    { props.rank && 
-      <img src={`${LEGACY_URL}/mobile/img_new/ranks/${props.rank}.svg`} 
-        className='rank' alt='rank' />
-    }
-  </div>
-);
+const ProfilePicture = ( props ) => {
+  const onKeyPress = ( event ) => {
+    if ( event.key === 'Enter' ) event.target.children[0].click();
+  }
+  return (
+    <div tabIndex={0} onKeyPress={onKeyPress}
+        className={classnames( `profile-picture`, { editable: !!props.onClick } )}>
+      <img { ...props } className={ classnames( props.className, 'profile-img' ) } 
+        onError={ handleError( props ) } alt='profile' />
+      { props.rank && 
+        <img src={`${LEGACY_URL}/mobile/img_new/ranks/${props.rank}.svg`} 
+          className='rank' alt='rank' />
+      }
+    </div>
+  );
+}
 
 export default ProfilePicture;
