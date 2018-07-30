@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from 'reactstrap';
+import classnames from 'classnames';
 import SidebarItem from './SidebarItem';
 
 class SidebarDropdown extends Component {
@@ -19,17 +20,17 @@ class SidebarDropdown extends Component {
     const items = this.props.items.map(
       (child, index) => <SidebarItem { ...child } key={index} />
     )
-
+    const { icon, label } = this.props;
+    const { collapse } = this.state;
     return (
       <li>
-        <a onClick={ this.toggle } className={`dropdown ${ this.state.collapse ? "open" : "" }` }>
-          { this.props.icon }
-          <span>{ this.props.label }</span>
+        <a onClick={ this.toggle } onKeyPress={ this.toggle } tabIndex={0}
+          className={ classnames('dropdown', { open: collapse }) }>
+          { icon }
+          <span>{ label }</span>
         </a>
-        <Collapse isOpen={ this.state.collapse }>
-          <ul>
-            { items }
-          </ul>
+        <Collapse isOpen={ collapse }>
+          <ul>{ items }</ul>
         </Collapse>
       </li>
     )
