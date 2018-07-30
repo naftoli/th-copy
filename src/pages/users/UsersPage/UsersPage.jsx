@@ -21,7 +21,7 @@ import './UsersPage.scss';
 import { getSoldiers, updateSoldier, uploadSpreadsheet } from 'store/soldiers/operations';
 
 export class UsersPage extends Component {
-
+  // initial state
   state = { 
     cropperModalShow: false, cropperModalSrc: false, 
     cropperModalId: false,  uploadModalShow: false
