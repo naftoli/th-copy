@@ -11,6 +11,9 @@ export const initialState = {
 };
 
 export default ( state = initialState, action ) => {
+  const expires = new Date();
+  expires.setFullYear(new Date().getFullYear() + 10);
+
   switch ( action.type ) {
     case types.SET_ERRORS:
       return Object.assign({}, state, {
@@ -24,8 +27,6 @@ export default ( state = initialState, action ) => {
 
     case types.SET_TOKENS:
       if ( action.payload.legacy ) {
-        const expires = new Date();
-        expires.setFullYear(new Date().getFullYear() + 10);
         cookies.set( 'admin_auth', action.payload.legacy, { path: '/', expires } );
         cookies.set( 'admin_id', action.payload.id, { path: '/', expires } );
         cookies.set( 'admin', action.payload.mobile, { path: '/', expires } );
@@ -59,7 +60,7 @@ export default ( state = initialState, action ) => {
       
       // user is a different portal, do not update the cookies.
       if ( current_login.type !== 'user' ) {
-        cookies.set( 'login', `${current_login.type}-${current_login.id}`, { path: '/' } );
+        cookies.set( 'login', `${current_login.type}-${current_login.id}`, { path: '/', expires } );
       }
       // non-destructivly return the state
       return Object.assign( {}, state, { current_login });
