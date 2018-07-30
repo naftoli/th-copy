@@ -5,9 +5,7 @@ import { Redirect } from 'react-router-dom';
 import { Prompt } from 'react-router';
 import { NavigationTab } from 'components/navigation';
 import Spinner from 'components/ui/Spinner';
-import PersonalTab from './PersonalTab';
-import SettingsTab from './SettingsTab';
-import RankTab from './RankTab';
+import { PersonalTab, SettingsTab, RankTab } from './tabs';
 // functions
 import { getSoldier, updateSoldier } from 'store/soldiers/operations';
 import { connect } from 'react-redux';
@@ -126,7 +124,6 @@ class UserPage extends Component {
 
 const mapStateToProps = ( state ) => {
   return {
-    ...state.soldiers,
     current_login: state.login.current_login
   };
 }
