@@ -3,14 +3,16 @@
 #UserPage, #NewUserPage {
   padding-bottom: 10px;
 
-  > .row { margin-bottom: 1em; }
+  > .row { margin-bottom: .3em; }
   .form-check-input {
     position: relative; margin-left: 0px;
   }
 
   .profile-picture {
     max-width: fit-content; max-height: 210px;
-    > img.inline-profile { max-height: 210px; }
+    > img.inline-profile {
+      border-radius: 15px; border: 1px solid $primary-color; max-height: 210px;
+    }
     @media ( max-width: 575px ) { margin-bottom: 10px; }
   }
   .profile-picture.editable:hover:before,
@@ -26,16 +28,6 @@
       user-select: none; margin: 0px 10px 0px 0px;
       &:hover { cursor: pointer; }
     }
-  }
-}
-
-#NewUserPage {
-  img.inline-profile { border-radius: 50%; }
-}
-
-#PersonalTab {
-  .profile-picture > img.inline-profile { 
-    border-radius: 15px; border: 1px solid $primary-color;
   }
 }
 
