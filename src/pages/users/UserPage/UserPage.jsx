@@ -70,10 +70,14 @@ class UserPage extends Component {
     event.preventDefault();
     const { soldier, updates } = this.state;
     // update the soldier
-    this.props.updateSoldier( soldier.user_id, updates )
-    .then( ( response ) => {
-      this.setState({ updates: {}, soldier: response.data });
-    });
+    if ( Object.keys( updates ).length > 0 ) {
+      this.props.updateSoldier( soldier.user_id, updates )
+      .then( ( response ) => {
+        this.setState({ updates: {}, soldier: response.data });
+      });
+    } else {
+      this.setState({ updates: {} })
+    }
   }
   // update the soldiers profile page
   updateProfile = ( formData ) => {
