@@ -8,25 +8,15 @@ import { changeLogin } from 'store/login/actions';
 import './Dashboard.scss';
 
 export class Dashboard extends Component {
-
+  // default props
   static defaultProps = {
     history: { listen: () => { return () => {} } }, // function that returns a function
     current_login: {},
     current_user: {}
   }
-
-  constructor( props ){
-    super( props );
-    this.state = { active: false }
-  }
-
-  toggle = () => {
-    // only toggle the sidebar if it will change the state
-    if ( window.innerWidth <= 1024 ) {
-      this.setState({ active: !this.state.active });
-    }
-  }
-
+  // initial state
+  state = { active: false, hasError: false }
+  // setup initial state on component mount
   componentDidMount() {
     // open the sidebar by default on larger displays
     if ( window.innerWidth > 768 ) {
@@ -39,9 +29,23 @@ export class Dashboard extends Component {
       }
     });
   }
-
+  // when component unmounts unlisten to history
   componentWillUnmount() {
     this.unlisten();
+  }
+  // handle application wide errors in a gracefull way in production
+  componentDidCatch( error, info ) {
+    // Display fallback UI
+    this.setState({ hasError: true });
+    // You can also log the error to an error reporting service
+    console.warn( error, info );
+  }
+
+  // only toggle the sidebar if the screen is small enough
+  toggle = () => {
+    if ( window.innerWidth <= 1024 ) {
+      this.setState({ active: !this.state.active });
+    }
   }
 
   render() {
@@ -66,7 +70,8 @@ export class Dashboard extends Component {
         <div id="dashboard-body">
           <Sidebar menu={ menu } active={ this.state.active } />
           <div id="dashboard-content">
-            { this.props.children }
+            { this.state.hasError && <h1>Something went wrong.</h1> }
+            { !this.state.hasError && this.props.children }
           </div>
         </div>
       </div>
