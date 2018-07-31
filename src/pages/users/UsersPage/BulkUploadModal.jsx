@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { Callout } from '@blueprintjs/core';
-import FileInput from 'components/ui/FileInput';
+import { Spinner, FileInput } from 'components/ui';
 
 export class BulkUploadModal extends Component {
 
@@ -9,46 +9,74 @@ export class BulkUploadModal extends Component {
     isOpen: false, centered: true,
     toggle: () => {}
   }
+
+  state = { loading: false, errors: [] }
+
   inputRef = React.createRef();
+
+  toggleLoading = ( loading ) => {
+    this.setState( { loading: loading } )
+  }
 
   upload = () => {
     const file = this.inputRef.current.files[0];
     if ( !file ) return this.props.upload( false );
-    
     const formData = new FormData();
     formData.append( 'users', file, file.name );
-    this.props.upload( formData );
+    this.setState( { loading: true } );
+    // upload data and handle result
+    this.props.upload( formData )
+    .then( () => this.setState( { loading: false } ) )
+    .catch( error => {
+      let errors = error.data;
+      if ( !Array.isArray( errors ) ) { errors = [ errors ]; }
+      this.setState({ loading: false, errors });
+    });
   }
 
   render() {
     const { isOpen, centered, toggle } = this.props;
+    const { loading, errors } = this.state;
 
     return (
       <Modal isOpen={isOpen} centered={centered} toggle={toggle} id='cropper-modal'>
-        <ModalHeader toggle={toggle}>School or Class Upload</ModalHeader>
+        <ModalHeader toggle={toggle}>Upload Soldier List</ModalHeader>
         <ModalBody>
-          <Callout intent="primary" title="Directions:">
-            <ol style={{ paddingLeft: '0px' }}>
-              <li>Download the <a href="//mashpia.com/students.xls">spreadsheet</a> (Excel/.xls)</li>
-              <li>Enter all information into spreadsheet.<br/>
-                <strong>
-                  Please Note: You MUST have the First Name, Last Name, 
-                  First Name Hebrew, Last name Hebrew, English Date of Birth, Gender, 
-                  and Mission Type fields of each student filled out.
-                </strong>
-              </li>
-              <li>Upload spreadsheet into system using the file input below.</li>
-            </ol>
-            <p>
-              <strong>Please understand that all soldiers in your spreadsheet will be added to the system.
-                <em> We do not, and will not, prevent you from creating duplicate accounts.</em></strong>
-            </p>
-          </Callout>
-          <FileInput inputRef={ this.inputRef }/>
+          { errors.length === 0 && 
+            <Callout intent='primary' title='Directions:'>
+              <ol style={{ paddingLeft: '0px' }}>
+                <li>Download the <a href='//mashpia.com/students.xls' target='_href'>spreadsheet</a> (Excel/.xls)</li>
+                <li>Enter all information into spreadsheet.<br/>
+                  <strong>
+                    Please Note: You MUST have the First Name, Last Name, 
+                    First Name Hebrew, Last name Hebrew, English Date of Birth, Gender, 
+                    and Mission Type fields of each student filled out.
+                  </strong>
+                </li>
+                <li>Upload spreadsheet into system using the file input below.</li>
+                <li>
+                  If there are errors in your spreadsheet they will replace this instructions box. 
+                  Please correct these errors and re-upload using the file input below when you are ready.
+                </li>
+              </ol>
+              <p>
+                <strong>Please understand that all soldiers in your spreadsheet will be added to the system.
+                  <em> We do not, and will not, prevent you from creating duplicate accounts.</em></strong>
+              </p>
+            </Callout>
+          } { errors.length > 0 && !loading &&
+            <Callout intent='danger' title='Error Details:'>
+              { errors.map( (error, index) => <p key={index}>{error}</p> ) }
+              <p><strong>Please correct the above errors and re-upload your spreadsheet</strong></p>
+            </Callout>
+          } { loading && <Spinner size='5' /> }
+          { !loading && <FileInput inputRef={ this.inputRef }/>}
         </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={ this.upload }>Upload</Button>
-        </ModalFooter>
+        { !loading && 
+          <ModalFooter>
+              <Button color='primary' onClick={this.upload}>Upload Spreadsheet</Button>
+          </ModalFooter>
+        }
       </Modal>
     );
   }

@@ -48,7 +48,7 @@ export class UsersPage extends Component {
   editPicture = ( id ) => ( event ) => {
     this.setState({
       cropperModalShow: true, cropperModalId: id,
-      cropperModalSrc: event.target.src      
+      cropperModalSrc: event.target.src
     });
   }
 
@@ -60,15 +60,17 @@ export class UsersPage extends Component {
 
   // handler for uploding the excel file
   uploadSpreadsheet = ( formData ) => {
-    this.setState({ uploadModalShow: false });
-    this.props.uploadSpreadsheet( formData )
-      .then( this.props.getSoldiers ); // refresh the users;
+    return this.props.uploadSpreadsheet( formData )
+    .then( () => {
+      this.setState({ uploadModalShow: false }); 
+      return this.props.getSoldiers();
+    });
   }
 
   // scroll to the top of the table
   scrollToTop = () => { 
     const table = document.querySelector('#UsersPage .rt-tbody')
-    if ( table ) table.scrollTop = 0; 
+    if ( table ) table.scrollTop = 0;
   }
 
   // download the content as a CSV
