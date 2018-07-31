@@ -9,11 +9,14 @@ const ProfileRow = ({ soldier, onChange, toggle }) => {
 
   const genderChange = ( event ) => {
     let { school_type_id } = soldier;
+    const value = event.target.value;
     // format the data
     if ( ![2, 12, 22, 3, 13, 23].includes(school_type_id) ) {
-      school_type_id = event.target.value === 'M' ? 2 : 3
-    } else {
-      school_type_id = school_type_id + ( event.target.value === 'M' ? -1 : 1 )
+      school_type_id = value === 'M' ? 2 : 3
+    } else if ( value === 'M' && [3, 13, 23].includes(school_type_id) ) {
+      school_type_id = school_type_id - 1;
+    } else if ( value === 'F' && [2, 12, 22].includes(school_type_id) ) {
+      school_type_id = school_type_id + 1;
     }
     // format the data
     onChange({
