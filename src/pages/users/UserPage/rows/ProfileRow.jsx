@@ -10,7 +10,7 @@ const ProfileRow = ({ soldier, onChange, toggle }) => {
   const genderChange = ( event ) => {
     let { school_type_id } = soldier;
     // format the data
-    if ( ![2, 12, 3, 13].includes(school_type_id) ) {
+    if ( ![2, 12, 22, 3, 13, 23].includes(school_type_id) ) {
       school_type_id = event.target.value === 'M' ? 2 : 3
     } else {
       school_type_id = school_type_id + ( event.target.value === 'M' ? -1 : 1 )

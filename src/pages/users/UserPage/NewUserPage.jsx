@@ -65,7 +65,9 @@ class NewUserPage extends Component {
     const { gender, school_type_id } = soldier;
     // generate the mission_type options
     const findOption = ( options, value ) => options.find( option => option.value === value );
-    let mission_type_options = [ { value: 2, label: 'Chabad' }, { value: 12, label: 'Frum' } ];
+    let mission_type_options = [ 
+      { value: 2, label: 'Chabad' }, { value: 12, label: 'Frum' }, { value: 22, label: 'C-Kids' } 
+    ];
     if ( gender === 'F' ) {
       mission_type_options = mission_type_options.map( 
         option => Object.assign( {}, option, { value: option.value + 1 } )

@@ -29,7 +29,8 @@ class SettingsTab extends Component {
     // generate the mission_type options
     let mission_type_options = [
       { value: 2, label: 'Chabad' },
-      { value: 12, label: 'Frum' }
+      { value: 12, label: 'Frum' },
+      { value: 22, label: 'C-Kids' }
     ];
     if ( gender === 'F' ) {
       mission_type_options = mission_type_options.map( 
