@@ -8,8 +8,8 @@ export const getPlatoons = ( id ) => dispatch => {
   const query_string = id ? `?school_id=${id}` : '';
   return API.get( `/core/platoons.php${query_string}` )
     .then( response => {
-      dispatch( actions.setLoading( false ) );
-      return dispatch( actions.setPlatoons( response.data ) );
+      dispatch( actions.setPlatoons( response.data ) );
+      return dispatch( actions.setLoading( false ) );
     }).catch( () => {
       dispatch( actions.setLoading( false ) );
     });
