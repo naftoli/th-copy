@@ -45,10 +45,10 @@ export class Cropper extends Component {
   // object with all the editing features of cropper that we are using
   editing = () => {
     return {
-      rotateLeft: () => { this.cropper.rotate( -90 ); },
-      rotateRight: () => { this.cropper.rotate( 90 ); },
-      zoomIn: () => { this.cropper.zoom( 0.1 ); },
-      zoomOut: () => { this.cropper.zoom( -0.1 ); },
+      rotateLeft:   () => { this.cropper && this.cropper.rotate( -90 ); },
+      rotateRight:  () => { this.cropper && this.cropper.rotate(  90 ); },
+      zoomIn:   () => { this.cropper && this.cropper.zoom(  0.1 ); },
+      zoomOut:  () => { this.cropper && this.cropper.zoom( -0.1 ); },
       scaleX: this.scale('X'),
       scaleY: this.scale('Y')
     }
@@ -56,6 +56,7 @@ export class Cropper extends Component {
   // this.scale( dir ) returns a function that will always scale in that direction
   scale = ( dir ) => () => {
     const cropper = this.cropper;
+    if ( !cropper ) return false; // handle when cropper is not set yet
     const data = cropper.getData();
     // handle scaling if the image is rotated
     if ( ( data.rotate >= 0 && data.rotate < 90 ) || ( data.rotate >= 180 && data.rotate < 270 ) )
