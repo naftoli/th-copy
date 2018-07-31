@@ -3,9 +3,8 @@
 exports[`getMenu returns the expected array for BC's 1`] = `
 Array [
   Object {
-    "icon": <img
-      alt="home"
-      src="//mashpia.local/images/icon_admin_home.png"
+    "icon": <i
+      className="fas fa-home"
 />,
     "label": "Home",
     "path": "/",
@@ -16,9 +15,8 @@ Array [
     ],
   },
   Object {
-    "icon": <img
-      alt="base-managment"
-      src="//mashpia.local/images/icon_dashboard.png"
+    "icon": <i
+      className="fas fa-school"
 />,
     "items": Array [
       Object {
@@ -79,16 +77,10 @@ Array [
       },
     ],
     "label": "Base Managment",
-    "user_types": Array [
-      "HQ",
-      "BC",
-      "TEACHER",
-    ],
   },
   Object {
-    "icon": <img
-      alt="Missions"
-      src="//mashpia.local/images/icon_admin_medal.png"
+    "icon": <i
+      className="fas fa-award"
 />,
     "items": Array [
       Object {
@@ -150,9 +142,8 @@ Array [
     ],
   },
   Object {
-    "icon": <img
-      alt="Achievement Cards"
-      src="//mashpia.local/images/icon_auction.png"
+    "icon": <i
+      className="fas fa-ticket-alt"
 />,
     "items": Array [
       Object {
@@ -186,7 +177,7 @@ Array [
   Object {
     "icon": <img
       alt="Chidon"
-      src="//mashpia.local/images/chidon.png"
+      src="//10.0.1.152/images/chidon.png"
 />,
     "items": Array [
       Object {
@@ -230,7 +221,7 @@ Array [
   Object {
     "icon": <img
       alt="Reports"
-      src="//mashpia.local/images/icon_report.png"
+      src="//10.0.1.152/images/icon_report.png"
 />,
     "items": Array [
       Object {
@@ -324,7 +315,7 @@ Array [
   Object {
     "icon": <img
       alt="shipping-reports"
-      src="//mashpia.local/images/icon_report.png"
+      src="//10.0.1.152/images/icon_report.png"
 />,
     "label": "Shipping Reports",
     "legacy": true,
@@ -333,7 +324,7 @@ Array [
   Object {
     "icon": <img
       alt="Campaigns"
-      src="//mashpia.local/images/parentIcons/Campaigns.gif"
+      src="//10.0.1.152/images/parentIcons/Campaigns.gif"
 />,
     "items": Array [
       Object {
@@ -387,7 +378,7 @@ Array [
   Object {
     "icon": <img
       alt="Rally"
-      src="//mashpia.local/images/parentIcons/Rally.gif"
+      src="//10.0.1.152/images/parentIcons/Rally.gif"
 />,
     "items": Array [
       Object {
@@ -411,7 +402,7 @@ Array [
   Object {
     "icon": <img
       alt="Raffles"
-      src="//mashpia.local/images/icon_auction.png"
+      src="//10.0.1.152/images/icon_auction.png"
 />,
     "label": "Raffles",
     "legacy": true,
@@ -420,7 +411,7 @@ Array [
   Object {
     "icon": <img
       alt="Yearly Prize"
-      src="//mashpia.local/images/icon_auction.png"
+      src="//10.0.1.152/images/icon_auction.png"
 />,
     "label": "Yearly Prize",
     "legacy": true,
@@ -429,7 +420,7 @@ Array [
   Object {
     "icon": <img
       alt="Setup Guide"
-      src="//mashpia.local/images/icon_wizard.png"
+      src="//10.0.1.152/images/icon_wizard.png"
 />,
     "label": "Setup Guide",
     "legacy": true,
@@ -438,26 +429,18 @@ Array [
   Object {
     "icon": <img
       alt="Miliage Program"
-      src="//mashpia.local/images/icon_auction.png"
+      src="//10.0.1.152/images/icon_auction.png"
 />,
     "label": "Mileage Program",
   },
   Object {
     "icon": <img
       alt="Support"
-      src="//mashpia.local/images/parentIcons/support icon.gif"
+      src="//10.0.1.152/images/parentIcons/support icon.gif"
 />,
     "label": "Support",
     "legacy": true,
     "path": "/helpdesk/?p=open",
-  },
-  Object {
-    "icon": <img
-      alt="Logout"
-      src="//mashpia.local/images/parentIcons/logout.gif"
-/>,
-    "label": "Logout",
-    "path": "/logout",
   },
 ]
 `;
@@ -465,9 +448,8 @@ Array [
 exports[`getMenu returns the expected array for HQ 1`] = `
 Array [
   Object {
-    "icon": <img
-      alt="home"
-      src="//mashpia.local/images/icon_admin_home.png"
+    "icon": <i
+      className="fas fa-home"
 />,
     "label": "Home",
     "path": "/",
@@ -478,9 +460,8 @@ Array [
     ],
   },
   Object {
-    "icon": <img
-      alt="base-managment"
-      src="//mashpia.local/images/icon_dashboard.png"
+    "icon": <i
+      className="fas fa-school"
 />,
     "items": Array [
       Object {
@@ -541,16 +522,10 @@ Array [
       },
     ],
     "label": "Base Managment",
-    "user_types": Array [
-      "HQ",
-      "BC",
-      "TEACHER",
-    ],
   },
   Object {
-    "icon": <img
-      alt="Missions"
-      src="//mashpia.local/images/icon_admin_medal.png"
+    "icon": <i
+      className="fas fa-award"
 />,
     "items": Array [
       Object {
@@ -612,9 +587,8 @@ Array [
     ],
   },
   Object {
-    "icon": <img
-      alt="Achievement Cards"
-      src="//mashpia.local/images/icon_auction.png"
+    "icon": <i
+      className="fas fa-ticket-alt"
 />,
     "items": Array [
       Object {
@@ -648,7 +622,7 @@ Array [
   Object {
     "icon": <img
       alt="Chidon"
-      src="//mashpia.local/images/chidon.png"
+      src="//10.0.1.152/images/chidon.png"
 />,
     "items": Array [
       Object {
@@ -692,7 +666,7 @@ Array [
   Object {
     "icon": <img
       alt="Reports"
-      src="//mashpia.local/images/icon_report.png"
+      src="//10.0.1.152/images/icon_report.png"
 />,
     "items": Array [
       Object {
@@ -794,7 +768,7 @@ Array [
   Object {
     "icon": <img
       alt="shipping-reports"
-      src="//mashpia.local/images/icon_report.png"
+      src="//10.0.1.152/images/icon_report.png"
 />,
     "label": "Shipping Reports",
     "legacy": true,
@@ -803,7 +777,7 @@ Array [
   Object {
     "icon": <img
       alt="Campaigns"
-      src="//mashpia.local/images/parentIcons/Campaigns.gif"
+      src="//10.0.1.152/images/parentIcons/Campaigns.gif"
 />,
     "items": Array [
       Object {
@@ -857,7 +831,7 @@ Array [
   Object {
     "icon": <img
       alt="Rally"
-      src="//mashpia.local/images/parentIcons/Rally.gif"
+      src="//10.0.1.152/images/parentIcons/Rally.gif"
 />,
     "items": Array [
       Object {
@@ -881,7 +855,7 @@ Array [
   Object {
     "icon": <img
       alt="Raffles"
-      src="//mashpia.local/images/icon_auction.png"
+      src="//10.0.1.152/images/icon_auction.png"
 />,
     "label": "Raffles",
     "legacy": true,
@@ -890,7 +864,7 @@ Array [
   Object {
     "icon": <img
       alt="Yearly Prize"
-      src="//mashpia.local/images/icon_auction.png"
+      src="//10.0.1.152/images/icon_auction.png"
 />,
     "label": "Yearly Prize",
     "legacy": true,
@@ -899,7 +873,7 @@ Array [
   Object {
     "icon": <img
       alt="Setup Guide"
-      src="//mashpia.local/images/icon_wizard.png"
+      src="//10.0.1.152/images/icon_wizard.png"
 />,
     "label": "Setup Guide",
     "legacy": true,
@@ -908,26 +882,18 @@ Array [
   Object {
     "icon": <img
       alt="Miliage Program"
-      src="//mashpia.local/images/icon_auction.png"
+      src="//10.0.1.152/images/icon_auction.png"
 />,
     "label": "Mileage Program",
   },
   Object {
     "icon": <img
       alt="Support"
-      src="//mashpia.local/images/parentIcons/support icon.gif"
+      src="//10.0.1.152/images/parentIcons/support icon.gif"
 />,
     "label": "Support",
     "legacy": true,
     "path": "/helpdesk/?p=open",
-  },
-  Object {
-    "icon": <img
-      alt="Logout"
-      src="//mashpia.local/images/parentIcons/logout.gif"
-/>,
-    "label": "Logout",
-    "path": "/logout",
   },
 ]
 `;
