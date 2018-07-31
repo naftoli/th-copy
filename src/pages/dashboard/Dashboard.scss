@@ -1,13 +1,14 @@
 #dashboard {
-  overflow: hidden;
+  overflow: hidden; height: 100vh;
+  display: flex;  flex-direction: column;
 }
 
 #dashboard-body {
   display: flex;
   align-items: stretch;
   position: relative;
-  height: calc( 100vh - 61px );
-  @media ( min-width: 1025px ) { height: calc( 100vh - 72px ); }
+  height: 100%;
+  // @media ( min-width: 1025px ) { height: calc( 100vh - 72px ); }
 
   #dashboard-content {
     width: 100%;
