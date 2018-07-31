@@ -15,7 +15,7 @@
   }
 }
 
-.profile-picture.editable {
+.profile-picture.editable:not(.ie) {
   &:focus { outline: none; }
   &:hover:before, &:focus:before {
     content: '\f030'; position: absolute; display: flex;
@@ -28,5 +28,17 @@
   &:hover img.profile-img, &:focus img.profile-img {
     cursor: pointer;
     filter: grayscale(100%) brightness(60%) blur(2px);
+  }
+}
+
+.profile-picture.ie {
+  &:hover { cursor: pointer; }
+  &:hover:before, &:focus:before {
+    content: '\f030'; position: absolute; display: flex;
+    height: 100%; width: 100%; pointer-events: none;
+    z-index: 2; color: #000; font-size: 2em;
+    align-items: center; justify-content: center;
+    font-family: Font Awesome\ 5 Free; font-weight: 900;
+    -webkit-font-smoothing: antialiased; text-rendering: auto;
   }
 }

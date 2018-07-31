@@ -1,6 +1,7 @@
 import React from 'react';
 import { LEGACY_URL } from 'components/constants';
 import classnames from 'classnames';
+import is from 'is_js';
 import './styles/ProfilePicture.scss'
 
 const handleError = ( props ) => ( e ) => {
@@ -14,7 +15,7 @@ const ProfilePicture = ( props ) => {
   }
   return (
     <div tabIndex={0} onKeyPress={onKeyPress}
-        className={classnames( `profile-picture`, { editable: !!props.onClick } )}>
+        className={classnames( `profile-picture`, { editable: !!props.onClick, ie: is.ie() } )}>
       <img { ...props } className={ classnames( props.className, 'profile-img' ) } 
         onError={ handleError( props ) } alt='profile' />
       { props.rank && 
