@@ -5,9 +5,10 @@ import thunk from 'redux-thunk';
 import login from 'store/login/reducer';
 import soldiers from 'store/soldiers/reducer';
 import platoons from 'store/platoons/reducer';
+import bases from 'store/bases/reducer';
 
 export const reducer = combineReducers({
-  login, soldiers, platoons
+  login, soldiers, platoons, bases
 })
 
 const rootReducer = ( state, action ) => {
