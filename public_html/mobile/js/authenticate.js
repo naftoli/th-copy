@@ -58,7 +58,7 @@ function logOut( redirect ){
 
 // do some cleanup on page load
 $( document ).ready( function() {
-    if ( !Cookies.get('admin') ){
+    if ( !Cookies.get('admin') && !Cookies.get('kiosk') ){
         window.location = "/mobile/reg/";
     }
     // get the authentication type
