@@ -6,13 +6,13 @@
   .inline-profile {
     max-height: 65px;
     width: 65px;
-    border-radius: 50%;
-    border: 1.5px solid $primary-color;
+    border-radius: 15%;
+    border: 1px solid $primary-color;
   }
   
   .ReactTable {
     max-height: 87%;
-    @media ( max-height: 1080px ){ max-height: 83%; }
+    @media ( max-height: 1080px ){ max-height: 82%; margin-bottom: 1%; }
     @media ( max-height: 768px ){ max-height: 78%; }
     @media ( max-height: 731px ){ max-height: 92%; }
 
