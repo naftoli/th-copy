@@ -98,8 +98,8 @@ class CropperModal extends Component {
           { body }
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={ this.openImage }>Replace</Button>
-          <Button color="primary" onClick={ this.uploadImage }>Upload</Button>
+          <Button color="primary" onClick={ this.openImage }>Change Image</Button>
+          <Button color="primary" onClick={ this.uploadImage }>Save / Replace</Button>
         </ModalFooter>
       </Modal>
     );
