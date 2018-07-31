@@ -21,7 +21,6 @@ export class BaseSelect extends Component {
   }
   // load the platoons
   loadBases = () => {
-    debugger;
     this.setState({ loading: true });
     this.props.getBases().then( () => {
       this.setState({ loading: false });

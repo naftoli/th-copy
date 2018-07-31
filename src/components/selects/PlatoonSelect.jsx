@@ -25,7 +25,7 @@ export class PlatoonSelect extends Component {
   }
   // load the platoons
   loadPlatoons = () => {
-    const { school_id, login, value } = this.props;
+    const { school_id, login } = this.props;
     const haveSchool = school_id || login.code === 'BC';
     if ( haveSchool ) {
       this.setState({ loading: true });
