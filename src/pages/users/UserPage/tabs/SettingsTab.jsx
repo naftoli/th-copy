@@ -3,40 +3,41 @@ import { Row, Col } from 'reactstrap';
 import Select from 'react-select';
 import Checkbox from 'components/ui/Checkbox';
 
+// function to get the mission_type_options variable;
+export const missionTypeOptions = ( gender ) => {
+  const offset = gender === 'F' ? 1 : 0;
+  let mission_type_options = [
+    { value:  2 + offset, label: 'Chabad' },
+    { value: 12 + offset, label: 'Frum' },
+    { value: 22 + offset, label: 'C-Kids' }
+  ];
+  return mission_type_options;
+}
+// function to find an option in the select
+export const findOption = ( options, value ) => options.find( option => option.value === value );
+
 class SettingsTab extends Component {
-  // format the data for the UserPage component
+  // handle checkbox events
   handleCheckbox = ( event ) => {
     this.props.handleChange( { [event.target.id]: event.target.checked ? 1 : 0 } );
   }
-  
+  // handle react-select change events
   handleSelectChange = ( id ) => ( option ) => {
     this.props.handleChange( { [id]: option.value } );
   }
-
+  // render the page
   render() {
     let { 
       class_id, school, chayolei, yan, chidon,
       allow_parent_tasks, print_parent_tasks, 
       school_type_id, gender, lang_id
     } = this.props.soldier;
-
-    const findOption = ( options, value ) => options.find( option => option.value === value );
-
     // get the list of platoons from the user for now ( TODO, replace with advanced platoon dropdown )
     const platoon_options = school.platoons.map( 
       platoon => ({ value: platoon.class_id, label: platoon.name})
     );
-    // generate the mission_type options
-    let mission_type_options = [
-      { value: 2, label: 'Chabad' },
-      { value: 12, label: 'Frum' },
-      { value: 22, label: 'C-Kids' }
-    ];
-    if ( gender === 'F' ) {
-      mission_type_options = mission_type_options.map( 
-        option => Object.assign( {}, option, { value: option.value + 1 } )
-      );
-    }
+    // mission_type_options
+    const mission_type_options = missionTypeOptions( gender );
     // language options
     const language_options = [
       { value: 1, label: 'English' },

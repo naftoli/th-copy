@@ -6,6 +6,7 @@ import CropperModal from 'components/modals/CropperModal';
 import Select from 'react-select';
 // functions
 import { connect } from 'react-redux';
+import { missionTypeOptions, findOption } from './tabs/SettingsTab';
 import { setTitle } from 'functions/utils';
 import { uploadProfile } from 'store/soldiers/operations';
 
@@ -35,16 +36,16 @@ class NewUserPage extends Component {
   handleDateChange = ( name ) => ( date ) => {
     this.handleUpdate({ [name]: date.format("YYYY-MM-DD HH:mm:ss") });
   }
-  // handle dropdown change events
+  // handle react-select dropdown change events
   handleSelectChange = ( id ) => ( option ) => {
     this.handleUpdate( { [id]: option.value } );
   }
-  // handle updates to the soldier
+  // handle updates to the form
   handleUpdate = ( update ) => {
     const soldier = Object.assign( {}, this.state.soldier, update );
     this.setState({ soldier });
   }
-  // handle new images
+  // upload profile picture
   updateProfile = ( formData ) => {
     this.toggle();
     this.props.uploadProfile( formData )
@@ -53,7 +54,7 @@ class NewUserPage extends Component {
       this.setState({ soldier });
     })
   }
-  // submit the user...
+  // validate and submit the user...
   submit = ( event ) => {
     event.preventDefault();
     console.log( this.state.soldier );
@@ -61,18 +62,11 @@ class NewUserPage extends Component {
   }
 
   render() {
+    const { current_login } = this.props;
     const { soldier, cropperModalShow } = this.state;
     const { gender, school_type_id } = soldier;
     // generate the mission_type options
-    const findOption = ( options, value ) => options.find( option => option.value === value );
-    let mission_type_options = [ 
-      { value: 2, label: 'Chabad' }, { value: 12, label: 'Frum' }, { value: 22, label: 'C-Kids' } 
-    ];
-    if ( gender === 'F' ) {
-      mission_type_options = mission_type_options.map( 
-        option => Object.assign( {}, option, { value: option.value + 1 } )
-      );
-    }
+    let mission_type_options = missionTypeOptions( gender );
 
     return (
       <form id='NewUserPage' onSubmit={this.submit}>
