@@ -2,19 +2,7 @@ import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
 import Select from 'react-select';
 import Checkbox from 'components/ui/Checkbox';
-
-// function to get the mission_type_options variable;
-export const missionTypeOptions = ( gender ) => {
-  const offset = gender === 'F' ? 1 : 0;
-  let mission_type_options = [
-    { value:  2 + offset, label: 'Chabad' },
-    { value: 12 + offset, label: 'Frum' },
-    { value: 22 + offset, label: 'C-Kids' }
-  ];
-  return mission_type_options;
-}
-// function to find an option in the select
-export const findOption = ( options, value ) => options.find( option => option.value === value );
+import { findOption, missionTypeOptions } from 'functions/selects';
 
 class SettingsTab extends Component {
   // handle checkbox events
