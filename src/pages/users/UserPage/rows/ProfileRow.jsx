@@ -27,7 +27,7 @@ const ProfileRow = ({ soldier, onChange, toggle }) => {
 
   return (
     <Row>
-      <Col xs='3' sm='12'>
+      <Col xs='3' sm='12' style={{textAlign: 'center'}}>
         <ProfilePicture src={ profile_picture } className='inline-profile' 
           rank={ rank } onClick={ toggle } />
       </Col>
