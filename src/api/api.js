@@ -29,8 +29,6 @@ const toJSON = response => {
 
 const parseResponse = response => {
   if ( response.success === false && response.message ) {
-    // show all errors except Invalid Login
-    response.message === 'Invalid Login' || toast.error( response.message );
     return Promise.reject( response );
   }
   return response;
