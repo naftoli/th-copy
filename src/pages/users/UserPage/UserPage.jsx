@@ -11,6 +11,7 @@ import { getSoldier, updateSoldier } from 'store/soldiers/operations';
 import { connect } from 'react-redux';
 import { setTitle } from 'functions/utils';
 import { loginChanged } from 'functions/login';
+import { toast } from 'react-toastify';
 // styles
 import './UserPage.scss';
 
@@ -38,7 +39,10 @@ class UserPage extends Component {
     const { match, getSoldier } = this.props;
     getSoldier( match.params.id )
     .then( soldier => { this.setState({ soldier, loading: false }); })
-    .catch( () => { this.setState({ soldier: undefined }); } );
+    .catch( error => {
+      toast.error( error.message );
+      this.setState({ soldier: undefined }); }
+    );
   }
   // handle tabs
   toggle = ( activeTab ) => () => {
