@@ -10,7 +10,7 @@
   }
   // input:invalid[value=""] { border-color: #dcc1c1; }
   input:invalid:not([value=""]) { border-color: #ff3c3c; }
-  input:invalid:not([value=""]) + div.invalid-message { max-height: 1.2em; transition-delay: 1s; }
+  input:invalid:not([value=""]) + div.invalid-message { max-height: 1.3em; transition-delay: 1s; }
 
   > .row { margin-bottom: .7em; }
   .form-check-input {
