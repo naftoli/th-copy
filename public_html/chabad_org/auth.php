@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 header('Content-type: application/json');
 require 'classes/ChabadShliach.php';
 $shliach = new ChabadShliach( $_POST['key'] );
