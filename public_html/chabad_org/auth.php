@@ -8,7 +8,7 @@ $shliach = new ChabadShliach( $_POST['key'] );
 $success = false;
 if ( $shliach->authenticate() ) {
       if ( $shliach->setPersonalInfo() ) {
-            $shliach->setCenters( array( 117539 ) );
+            $shliach->setCenters( array( 117552 ) );
             if ( $shliach->setMosdos() ) {
                   $success = true;
                   // do something with info
