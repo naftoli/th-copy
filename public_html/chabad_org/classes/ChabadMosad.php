@@ -4,21 +4,20 @@ require '../db.php';
 class ChabadMosad
 {
     private $id;
-    private $info;
 
     public function __construct( $mosadInfo ) {
         $this->id = $mosadInfo->Id;
-        $this->info['name'] = $mosadInfo->Institution;
-        $this->info['address'] = $mosadInfo->Address;
-        $this->info['address2'] = $mosadInfo->Address2;
-        $this->info['city'] = $mosadInfo->City;
-        $this->info['state'] = $mosadInfo->State;
-        $this->info['zip'] = $mosadInfo->PostCode;
-        $this->info['country'] = $mosadInfo->Country;
-        $this->info['phone'] = $mosadInfo->Phone;
-        $this->info['fax'] = $mosadInfo->Fax;
-        $this->info['url'] = $mosadInfo->WebAddress;
-        $this->info['types'] = $this->getMosadInfo();
+        $this->name = $mosadInfo->Institution;
+        $this->address = $mosadInfo->Address;
+        $this->address2 = $mosadInfo->Address2;
+        $this->city = $mosadInfo->City;
+        $this->state = $mosadInfo->State;
+        $this->zip = $mosadInfo->PostCode;
+        $this->country = $mosadInfo->Country;
+        $this->phone = $mosadInfo->Phone;
+        $this->fax = $mosadInfo->Fax;
+        $this->url = $mosadInfo->WebAddress;
+        $this->types = $this->getMosadInfo();
     }
 
     private function getMosadInfo() {

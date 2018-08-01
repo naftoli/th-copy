@@ -6,7 +6,7 @@ class ChabadShliach
 {
     private $key;
     private $shliachID;
-    private $personalInfo;
+    private $centers;
     private $mosdos;
     private $error;
 
@@ -37,18 +37,17 @@ class ChabadShliach
             $url = "/api/centers/people/$this->shliachID";
             $result = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );
             $info = $result->People[0];
-            // convert to more user friendly array
-            $this->personalInfo['title'] = $info->Title;
-            $this->personalInfo['first'] = $info->FirstName;
-            $this->personalInfo['last']  = $info->LastName;
-            $this->personalInfo['address'] = $info->Address;
-            $this->personalInfo['address2'] = $info->Address2;
-            $this->personalInfo['city'] = $info->City;
-            $this->personalInfo['state'] = $info->State;
-            $this->personalInfo['zip'] = $info->PostCode;
-            $this->personalInfo['country'] = $info->Country;
-            $this->personalInfo['phone'] = $info->HomePhone;
-            $this->personalInfo['centers'] = $info->Centers;
+            $this->title = $info->Title;
+            $this->first = $info->FirstName;
+            $this->last  = $info->LastName;
+            $this->address = $info->Address;
+            $this->address2 = $info->Address2;
+            $this->city = $info->City;
+            $this->state = $info->State;
+            $this->zip = $info->PostCode;
+            $this->country = $info->Country;
+            $this->phone = $info->HomePhone;
+            $this->centers = $info->Centers;
             return true;
         } else {
             $this->error = "Invalid shliach.";
@@ -67,7 +66,7 @@ class ChabadShliach
                 foreach ( $mosdos->Centers as $mosad ) {
                     $chabadMosad = new ChabadMosad( $mosad );
                     // only add mosad if it exists in our database
-                    if ( !empty( $chabadMosad['types'] ) ) {
+                    if ( !empty( $chabadMosad->info['types'] ) ) {
                         $this->mosdos[$centerID][] = $chabadMosad;
                     }
                 }
