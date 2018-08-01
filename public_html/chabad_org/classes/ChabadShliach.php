@@ -68,20 +68,25 @@ class ChabadShliach
                 //$url = "/api/centers/$centerID?includeDepartments=true";
                 $url = "/api/centers/$centerID";
                 $mosdos = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );
+                print_r( $mosdos ); exit;
+                // extract all mosad ids from types
+                $ids = array();
                 foreach ( $mosdos->Centers as $mosad ) {
-                    $chabadMosad = new ChabadMosad( $mosad );
-                    // only add mosad if it exists in our database
-                    if ( !empty( $chabadMosad->types ) ) {
-                        $mosdosInfo[$centerID][] = $chabadMosad;
-                    }
+                   
+                    // $chabadMosad = new ChabadMosad( $mosad );
+                    // // only add mosad if it exists in our database
+                    // if ( !empty( $chabadMosad->types ) ) {
+                    //     $mosdosInfo[$centerID][] = $chabadMosad;
+                    // }
                 }
                 print_r( $mosdosInfo );
             }
 
             // mosad info is complicated in terms of how it's returned from the api
-            // one of the mosdos can be the "primary_mosad" which in our db is the "primary_mosad_id" 
-            // this id can be connected with multiple mosdos which many of them is also returned by the api
-            // so this function tries to make some sense out of the information
+            // api returns array of mosdos connected with center id returned by shliach info
+            // api info on each mosad returned does not include what type of institution it is (camp, day school, etc.)
+            // the type/category info can be extracted from our db
+
             //$this->createMosdos( $mosdosInfo );           
 
             return true;
