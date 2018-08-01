@@ -111,9 +111,10 @@ class ChabadShliach
                 foreach ( $mosdos as $mosad ) {
                     if ( $mosad->id == $id ) { // we have a match to give us more info
                         // add category and type info from db
-                    $mosad->category = $type['mosad_category'];
-                    $mosad->type = $type['mosad_type'];
-                    $this->mosdos[] = $mosad;
+                        $mosad->category = $type['mosad_category'];
+                        $mosad->type = $type['mosad_type'];
+                        $this->mosdos[] = $mosad;
+                        $found = true;
                     }
                 }
                 if ( !$found ) {
