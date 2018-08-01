@@ -68,7 +68,6 @@ class ChabadShliach
                 //$url = "/api/centers/$centerID?includeDepartments=true";
                 $url = "/api/centers/$centerID";
                 $mosdos = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );
-                print_r( $mosdos );
                 foreach ( $mosdos->Centers as $mosad ) {
                     $chabadMosad = new ChabadMosad( $mosad );
                     // only add mosad if it exists in our database
@@ -76,13 +75,14 @@ class ChabadShliach
                         $mosdosInfo[$centerID][] = $chabadMosad;
                     }
                 }
+                print_r( $mosdosInfo );
             }
 
             // mosad info is complicated in terms of how it's returned from the api
             // one of the mosdos can be the "primary_mosad" which in our db is the "primary_mosad_id" 
             // this id can be connected with multiple mosdos which many of them is also returned by the api
             // so this function tries to make some sense out of the information
-            $this->createMosdos( $mosdosInfo );           
+            //$this->createMosdos( $mosdosInfo );           
 
             return true;
         } else {
