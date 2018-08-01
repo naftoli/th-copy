@@ -59,8 +59,8 @@ class ChabadShliach
     public function setMosdos() {
         if ( $this->centers ) {
             foreach ($this->centers as $centerID) {
-                //$url = "/api/centers/$centerID?includeDepartments=true";
-                $url = "/api/centers/$centerID";
+                $url = "/api/centers/$centerID?includeDepartments=true";
+                //$url = "/api/centers/$centerID";
                 $mosdos = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );
                 foreach ( $mosdos->Centers as $mosad ) {
                     $chabadMosad = new ChabadMosad( $mosad );
