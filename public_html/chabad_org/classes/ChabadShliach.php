@@ -55,6 +55,11 @@ class ChabadShliach
         }
     }
 
+    // hardcode centers for testing
+    public function setCenters( array $centers ) {
+        $this->centers = $centers;
+    }
+
     // get mosdos connected to shliach from chabad.org api
     public function setMosdos() {
         if ( $this->centers ) {
