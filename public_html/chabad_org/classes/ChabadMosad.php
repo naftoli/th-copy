@@ -3,8 +3,6 @@ require '../db.php';
 
 class ChabadMosad
 {
-    private $id;
-
     public function __construct( $mosadInfo ) {
         $this->id = $mosadInfo->Id;
         $this->name = $mosadInfo->Institution;
