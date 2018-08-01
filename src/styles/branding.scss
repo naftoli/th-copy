@@ -30,8 +30,11 @@
 }
 
 // customize react-table styles
-.rt-th.rt-resizable-header:not(.-cursor-pointer) {
-  color: $primary-color; background: #f6f6f6;
+.ReactTable {
+  .rt-th.rt-resizable-header:not(.-cursor-pointer) {
+    color: $primary-color; background: #f6f6f6;
+  }
+  .-pagination button.-btn { background: $primary-color; color: #fff; }
 }
 
 // customize the scrollbar on chrome and safari
