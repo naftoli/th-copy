@@ -57,16 +57,15 @@ class ChabadShliach
 
     // get mosdos connected to shliach from chabad.org api
     public function setMosdos() {
-        if ( $this->personalInfo['centers'] ) {
-            $centers = $this->personalInfo['centers'];
-            foreach ($centers as $centerID) {
+        if ( $this->centers ) {
+            foreach ($this->centers as $centerID) {
                 //$url = "/api/centers/$centerID?includeDepartments=true";
                 $url = "/api/centers/$centerID";
                 $mosdos = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );
                 foreach ( $mosdos->Centers as $mosad ) {
                     $chabadMosad = new ChabadMosad( $mosad );
                     // only add mosad if it exists in our database
-                    if ( !empty( $chabadMosad->info['types'] ) ) {
+                    if ( !empty( $chabadMosad->types ) ) {
                         $this->mosdos[$centerID][] = $chabadMosad;
                     }
                 }
