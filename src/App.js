@@ -46,7 +46,7 @@ export class App extends Component {
 
               <Route render={ () => <h1>404</h1> } />
             </Switch>
-            <ToastContainer position="bottom-right" autoClose={ 8000 } closeOnClick={false} />
+            <ToastContainer position="bottom-right" autoClose={ 8000 } closeOnClick={false} draggablePercent={40}/>
             <ConfirmationModal isOpen={ isOpen } message={ message } callback={ this.handleCallback } />
           </Dashboard>
         </Router>
