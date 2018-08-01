@@ -39,11 +39,11 @@ const ProfileRow = ({ soldier, onChange, toggle }) => {
         <div id='gender-row'>
           <Radio type='radio' name='gender' id='gender' value='M' 
               checked={ gender === 'M' } onChange={ genderChange }>
-            Male <i className='fas fa-male'></i>
+            Boy <i className='fas fa-male'></i>
           </Radio>
           <Radio type='radio' name='gender' id='gender' value='F'
               checked={ gender === 'F' } onChange={ genderChange }>
-            Female <i className='fas fa-female'></i>
+            Girl <i className='fas fa-female'></i>
           </Radio>
         </div>
       </Col>
