@@ -8,7 +8,7 @@ import BaseSelect from 'components/selects/BaseSelect';
 import Select from 'react-select';
 // functions
 import { missionTypeOptions, findOption } from 'functions/selects';
-import { uploadProfile, createSoldier } from 'store/soldiers/operations';
+import { uploadProfile, createSoldier, getSoldiers } from 'store/soldiers/operations';
 import { loginChanged } from 'functions/login';
 import { setTitle } from 'functions/utils';
 import { connect } from 'react-redux';
@@ -81,18 +81,18 @@ class NewUserPage extends Component {
   }
 
   validateSoldier = () => {
-    const { soldier, loading } = this.state;
+    const { soldier } = this.state;
     const { code } = this.props.current_login;
     return new Promise( (resolve, reject) => {
       // validate DOB
-      if ( !soldier.dob ) { reject( 'Please select a valid Date of Birth' ); }
-      if ( !soldier.school_type_id ) { reject( 'Please select a Mission Type' ); }
-      if ( !soldier.gender ) { reject( 'Please select a Gender' ); }
+      if ( !soldier.dob ) { reject( new Error('Please select a valid Date of Birth') ); }
+      if ( !soldier.school_type_id ) { reject( new Error('Please select a Mission Type') ); }
+      if ( !soldier.gender ) { reject( new Error('Please select a Gender') ); }
       if ( ['HQ', 'CKIDS-ADMIN'].includes( code ) && !soldier.school_id ) {
-        reject( 'Please select a Base' );
+        reject( new Error('Please select a Base') );
       }
       if ( ['HQ', 'CKIDS-ADMIN', 'BC'].includes( code ) && !soldier.class_id ) {
-        reject( 'Please select a Platoon' );
+        reject( new Error('Please select a Platoon') );
       }
       resolve( soldier );
     });
@@ -108,11 +108,13 @@ class NewUserPage extends Component {
       return this.props.createSoldier( soldier );
     })
     .then( response => {
-      if ( response.success ) this.clearSoldier();
-      return this.setState({ loading: false });
+      this.setState({ loading: false });
+      if ( response.success )
+        this.props.getSoldiers(); // refresh the list of soldiers
+        this.props.history.push(`/users/${response.data.user_id}`);
     })
     .catch( error => {
-      toast.error( error );
+      toast.error( error.message );
       this.setState({ loading: false });
     })
   }
@@ -182,4 +184,6 @@ const mapStateToProps = ( state ) => ({
   current_login: state.login.current_login
 });
 
-export default connect( mapStateToProps, { uploadProfile, createSoldier } )( NewUserPage );
+export default connect( mapStateToProps, {
+  uploadProfile, createSoldier, getSoldiers 
+} )( NewUserPage );
