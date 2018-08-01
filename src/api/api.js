@@ -1,6 +1,5 @@
 import { LEGACY_URL } from 'components/constants';
 import Cookies from 'universal-cookie';
-import { toast } from 'react-toastify';
 import { Promise } from 'core-js';
 const cookies = new Cookies();
 // API url
