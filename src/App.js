@@ -58,8 +58,9 @@ export class App extends Component {
 }
 
 const mapStateToProps = ( state ) => {
+  const { current_login, current_user } = state.login;
   return {
-    logged_in: !!state.login.current_user
+    logged_in: !!current_login && !!current_user
   }
 }
 

@@ -41,8 +41,7 @@ export default ( state = initialState, action ) => {
         cookies.set( 'login', `${login.type}-${login.id}`, { path: '/' } );
       }
       return Object.assign({}, state, {
-        current_user: action.payload,
-        current_login: action.payload.logins[0]
+        current_user: action.payload
       });
     
     case types.LOGOUT:
