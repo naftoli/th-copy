@@ -18,7 +18,7 @@ const ProfilePicture = ( props ) => {
         className={classnames( `profile-picture`, { editable: !!props.onClick, ie: is.ie() } )}>
       <img { ...props } className={ classnames( props.className, 'profile-img' ) } 
         onError={ handleError( props ) } alt='profile' />
-      { props.rank && 
+      { !!props.rank && 
         <img src={`${LEGACY_URL}/mobile/img_new/ranks/${props.rank}.svg`} 
           className='rank' alt='rank' />
       }
