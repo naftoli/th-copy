@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
+import { LEGACY_URL } from 'components/constants';
+// components
+import { Link } from 'react-router-dom'
 import {
   Navbar as BoostrapNavbar, NavbarBrand, Nav,
   UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
 } from 'reactstrap';
 import './Navbar.scss';
-import { LEGACY_URL } from 'components/constants';
+// functions
 import { loginChanged } from 'functions/login';
+// icons
 import user from 'img/user.svg';
 import logo from 'img/logo.svg';
 
@@ -58,6 +62,12 @@ class Navbar extends Component {
                 <img id="profile-picture" src={ user } alt="profile_picture"/>
                 <span>My Account</span>
               </DropdownItem>
+              <Link to={'/logout'}>
+                <DropdownItem>
+                  <i className="fas fa-sign-out-alt"></i>
+                  <span>Logout</span>
+                </DropdownItem>
+              </Link>
             </DropdownMenu>
           </UncontrolledDropdown>
         </Nav>
