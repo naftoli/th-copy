@@ -90,38 +90,40 @@ class ChabadShliach
         }
     }
 
-    private function createMosdos( $mosdos ) {
-        // find mosad with largest array of types
-        $num = count( $mosdos );
-        $totals = array();
-        for ($i = 0; $i < $num; $i++) {
-            $total = count( $mosdos[$i]->types );
-            $totals[$i] = $total;
-        }
-        // order by totals desc
-        arsort( $totals );
-        // get index of highest total
-        $index = key( $totals );
-
-        // set mosdos to all types of main mosad and see if passed in mosdos array has any extra info
-        foreach ( $mosdos[$index]->types as $type ) {
-            $id = $type['mosad_id'];
-            $found = false; // flag to know if we found more info or not
-            foreach ( $mosdos as $mosad ) {
-                if ( $mosad->id == $id ) { // we have a match to give us more info
-                    // add category and type info from db
-                   $mosad->category = $type['mosad_category'];
-                   $mosad->type = $type['mosad_type'];
-                   $this->mosdos[] = $mosad;
-                }
+    private function createMosdos( $info ) {
+        foreach ( $info as $centerID => $mosdos ) {
+            // find mosad with largest array of types
+            $num = count( $mosdos );
+            $totals = array();
+            for ($i = 0; $i < $num; $i++) {
+                $total = count( $mosdos[$i]->types );
+                $totals[$i] = $total;
             }
-            if ( !$found ) {
-                $mosad = (object) array();
-                $mosad->id = $type['mosad_id'];
-                $mosad->name = $type['name'];
-                $mosad->category = $type['mosad_category'];
-                $mosad->type = $type['mosad_type'];
-                $this->mosdos[] = $mosad;
+            // order by totals desc
+            arsort( $totals );
+            // get index of highest total
+            $index = key( $totals );
+
+            // set mosdos to all types of main mosad and see if passed in mosdos array has any extra info
+            foreach ( $mosdos[$index]->types as $type ) {
+                $id = $type['mosad_id'];
+                $found = false; // flag to know if we found more info or not
+                foreach ( $mosdos as $mosad ) {
+                    if ( $mosad->id == $id ) { // we have a match to give us more info
+                        // add category and type info from db
+                    $mosad->category = $type['mosad_category'];
+                    $mosad->type = $type['mosad_type'];
+                    $this->mosdos[] = $mosad;
+                    }
+                }
+                if ( !$found ) {
+                    $mosad = (object) array();
+                    $mosad->id = $type['mosad_id'];
+                    $mosad->name = $type['name'];
+                    $mosad->category = $type['mosad_category'];
+                    $mosad->type = $type['mosad_type'];
+                    $this->mosdos[] = $mosad;
+                }
             }
         }
         print_r( $this->mosdos );
