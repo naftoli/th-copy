@@ -8,20 +8,24 @@ import BaseSelect from 'components/selects/BaseSelect';
 import Select from 'react-select';
 // functions
 import { missionTypeOptions, findOption } from 'functions/selects';
-import { uploadProfile } from 'store/soldiers/operations';
+import { uploadProfile, createSoldier } from 'store/soldiers/operations';
 import { loginChanged } from 'functions/login';
 import { setTitle } from 'functions/utils';
 import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
+
+const initialSoldier = {
+  first: '', last: '', first_he: '', last_he: '', 
+  user_city: '', user_state: '', user_phone: '', 
+  user_postal: '', user_country: ''
+}
 
 class NewUserPage extends Component {
   // initial state
   state = { 
+    loading: false, 
     cropperModalShow: false, 
-    soldier: {
-      first: '', last: '', first_he: '', last_he: '', 
-      user_city: '', user_state: '', user_phone: '', 
-      user_postal: '', user_country: ''
-    }
+    soldier: initialSoldier
   }
   // lifecylcle - initial component mount
   componentDidMount() { 
@@ -40,6 +44,10 @@ class NewUserPage extends Component {
       return this.setState({ soldier: { ...this.state.soldier, school_id: id } });
     if ( code === 'TEACHER' )
       return this.setState({ soldier: { ...this.state.soldier, class_id: id } });
+  }
+  // clear the soldier
+  clearSoldier = () => {
+    this.setState({ soldier: initialSoldier });
   }
   // edit profile
   toggle = () => {
@@ -71,22 +79,52 @@ class NewUserPage extends Component {
       this.setState({ soldier });
     })
   }
+
+  validateSoldier = () => {
+    const { soldier, loading } = this.state;
+    const { code } = this.props.current_login;
+    return new Promise( (resolve, reject) => {
+      // validate DOB
+      if ( !soldier.dob ) { reject( 'Please select a valid Date of Birth' ); }
+      if ( !soldier.school_type_id ) { reject( 'Please select a Mission Type' ); }
+      if ( !soldier.gender ) { reject( 'Please select a Gender' ); }
+      if ( ['HQ', 'CKIDS-ADMIN'].includes( code ) && !soldier.school_id ) {
+        reject( 'Please select a Base' );
+      }
+      if ( ['HQ', 'CKIDS-ADMIN', 'BC'].includes( code ) && !soldier.class_id ) {
+        reject( 'Please select a Platoon' );
+      }
+      resolve( soldier );
+    });
+  }
+
   // validate and submit the user...
   submit = ( event ) => {
     event.preventDefault();
-    console.log( this.state.soldier );
-    debugger;
+    if ( this.state.loading ) return false;
+    this.validateSoldier()
+    .then( soldier => {
+      this.setState({ loading: true });
+      return this.props.createSoldier( soldier );
+    })
+    .then( response => {
+      if ( response.success ) this.clearSoldier();
+      return this.setState({ loading: false });
+    })
+    .catch( error => {
+      toast.error( error );
+      this.setState({ loading: false });
+    })
   }
 
   render() {
     const { code } = this.props.current_login;
-    const { soldier, cropperModalShow } = this.state;
+    const { soldier, cropperModalShow, loading } = this.state;
     const { gender, school_type_id, school_id, class_id } = soldier;
     // generate the mission_type options
     let mission_type_options = missionTypeOptions( gender );
-
+    // show the dropdown needed for the current login
     let baseSelect, platoonSelect;
-    
     if ( ['HQ', 'CKIDS-ADMIN'].includes( code ) ) {
       baseSelect = (
         <Col xs='6'>
@@ -95,16 +133,16 @@ class NewUserPage extends Component {
         </Col>
       );
     }
-
     if ( ['HQ', 'CKIDS-ADMIN', 'BC' ].includes( code ) ) {
       platoonSelect = (
         <Col xs={ code === 'BC' ? 12 : 6 }>
           <label>Platoon</label>
-          <PlatoonSelect school_id={ school_id } value={ class_id } />
+          <PlatoonSelect school_id={ school_id } value={ class_id } 
+            onChange={this.handleSelectChange('class_id')} />
         </Col>
       );
     }
-
+    // render the page
     return (
       <form id='NewUserPage' onSubmit={this.submit}>
         <Row id='image-row' style={{alignItems: 'center'}}>
@@ -131,7 +169,7 @@ class NewUserPage extends Component {
 
         <AddressRow soldier={ soldier } onChange={ this.handleChangeEvent } />
 
-        <Button color='primary'>Create Soldier</Button>
+        <Button color='primary'>{ loading ? 'Creating...' : 'Create Soldier'}</Button>
 
         <CropperModal isOpen={ cropperModalShow } 
           toggle={ this.toggle } uploadImage={ this.updateProfile } />
@@ -144,4 +182,4 @@ const mapStateToProps = ( state ) => ({
   current_login: state.login.current_login
 });
 
-export default connect( mapStateToProps, { uploadProfile } )( NewUserPage );
+export default connect( mapStateToProps, { uploadProfile, createSoldier } )( NewUserPage );
