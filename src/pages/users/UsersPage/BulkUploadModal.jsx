@@ -39,11 +39,16 @@ export class BulkUploadModal extends Component {
     const { loading, errors } = this.state;
 
     return (
-      <Modal isOpen={isOpen} centered={centered} toggle={toggle} id='cropper-modal'>
+      <Modal isOpen={isOpen} centered={centered} toggle={toggle} id='bulk-upload-modal'>
         <ModalHeader toggle={toggle}>Upload Soldier List</ModalHeader>
         <ModalBody>
           { errors.length === 0 && 
             <Callout intent='primary' title='Directions:'>
+              <p id='warning'>
+                Warning! Do not add any Soldiers that are switching from another Tzivos Hashem base. 
+                Please contact <a href='cth@tizvoshashem.org'>Headquarters</a> with a list of names, dob's and base's they came from to be transferred to your base. 
+                Leaving them in your spreadsheet will reset them back to a private.
+              </p>
               <ol style={{ paddingLeft: '0px' }}>
                 <li>Download the <a href='//mashpia.com/students.xls' target='_href'>spreadsheet</a> (Excel/.xls)</li>
                 <li>Enter all information into spreadsheet.<br/>

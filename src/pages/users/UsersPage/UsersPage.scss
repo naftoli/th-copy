@@ -21,3 +21,12 @@
     .rt-td { white-space: initial; }
   }
 }
+
+#bulk-upload-modal {
+  max-width: 650px;
+
+  #warning {
+    font-size: 1.3em; font-weight: 500;
+    color: #c23030;
+  }
+}
