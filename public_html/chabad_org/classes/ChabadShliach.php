@@ -84,7 +84,7 @@ class ChabadShliach
 
                 foreach ( $mosdos->Centers as $mosad ) {
                     $chabadMosad = new ChabadMosad( $mosad );
-                    if ( $chabadMosad->hasTypes ) $this->mosdos[$centerID][] = $chabadMosad;
+                    if ( $chabadMosad->hasTypes ) $this->mosdos[] = $chabadMosad;
                 }
             }
             
