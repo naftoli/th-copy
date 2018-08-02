@@ -29,8 +29,8 @@ if (
             $main = $mosadId;
         }
         if (!array_key_exists($main, $institutions)) $institutions[$main] = $institution;
-        $desc = $category . " (" . $institution . ")";
-        if ($type == 'Primary') $desc .= " [<strong><i>primary</i></strong>]";
+        $desc = $type . " (" . $institution . ")";
+        if ($category == 'Primary') $desc .= " [<strong><i>primary</i></strong>]";
         $info[$main][$institutions[$main]][] = $desc;
     }
 } else {
