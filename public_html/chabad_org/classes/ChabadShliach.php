@@ -84,14 +84,14 @@ class ChabadShliach
 
                 foreach ( $mosdos->Centers as $mosad ) {
                     $chabadMosad = new ChabadMosad( $mosad );
-                    if ( $chabadMosad->hasTypes ) $mosdosInfo[] = $chabadMosad;
+                    if ( $chabadMosad->hasTypes ) $this->mosdos[$centerID][] = $chabadMosad;
                 }
             }
+            
             if ( $this->debug ) {
                 echo "Mosdos Info:";
-                print_r( $mosdosInfo );
-            }       
-
+                print_r( $this->mosdos );
+            }
             return true;
         } else {
             $this->error = "Invalid reponse from chabad.org";
