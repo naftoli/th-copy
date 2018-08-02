@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { LEGACY_URL, DEFAULT_PROFILE } from 'components/constants';
 // components
 import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
 import { Callout } from 'components/ui';
 import { Button, ButtonGroup } from 'reactstrap';
-import ProfilePicture from 'components/ui/ProfilePicture';
 import CropperModal from 'components/modals/CropperModal';
 import BulkUploadModal from './BulkUploadModal';
 // functions
@@ -15,10 +13,11 @@ import is from 'is_js';
 import { arrayToCSV, setTitle } from 'functions/utils';
 import { loginChanged } from 'functions/login';
 // styles
-import 'react-table/react-table.css';
 import './UsersPage.scss';
 // state
 import { getSoldiers, updateSoldier, uploadSpreadsheet } from 'store/soldiers/operations';
+// data
+import getColumns from './columns';
 
 export class UsersPage extends Component {
   // initial state
@@ -100,65 +99,12 @@ export class UsersPage extends Component {
   render() {
     const { current_login, soldiers, loading } = this.props;
     const { cropperModalShow, cropperModalSrc, uploadModalShow } = this.state;
-    // define the table for the page
-    const columns = [{
-      Header: 'Profile',  accessor: 'profilePicture',
-      Cell: props => <ProfilePicture src={`${LEGACY_URL}${props.value}`} className='inline-profile' 
-                        onClick={ this.editPicture( props.original.user_id ) }/>,
-      className: 'profile-picture', width: 85, sortable: false,
-      Filter: ({ filter, onChange }) =>
-        <select style={{ width: "100%" }} value={filter ? filter.value : "all"}
-          onChange={event => onChange(event.target.value)}>
-          <option value="all">Show All</option>
-          <option value="yes">Has Profile</option>
-          <option value="no">No Profile</option>
-        </select>,
-      filterMethod: ( filter, row ) => {
-        if ( filter.value === 'all' ) return true;
-        if ( filter.value === 'yes') return row[filter.id] !== DEFAULT_PROFILE;
-        if ( filter.value === 'no') return row[filter.id] === DEFAULT_PROFILE;
-      },
-    },{
-      Header: "First Name", accessor: 'first',
-      Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
-    },{
-      Header: "Last Name", accessor: 'last',
-      Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
-    },{
-      Header: "Serial Number", 
-      accessor: 'user_serial',
-      Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
-    },{
-      id: 'dob',  Header: 'Date Of Birth',
-      accessor: user => user.dob, sortable: false
-    },{
-      id: 'registered',  Header: 'Registered', sortable: false,
-      accessor: user => user.user_registered,
-      filterMethod: ( filter, row ) => {
-        if ( filter.value === 'all' ) return true;
-        if ( filter.value === 'yes') return !!row[filter.id];
-        if ( filter.value === 'no') return !row[filter.id];
-      },
-      Filter: ({ filter, onChange }) =>
-        <select style={{ width: "100%" }} value={filter ? filter.value : "all"}
-          onChange={event => onChange(event.target.value)}>
-          <option value="all">Show All</option>
-          <option value="yes">Registered</option>
-          <option value="no">Not Registered</option>
-        </select>
-    },];
-    // add a collumn for HQ ( and Networks )
-    if ( current_login.code !== 'TEACHER' ) {
-      columns.push({id: 'platoon', Header: 'Platoon', accessor: user => user.platoon ? user.platoon.name : '-'});
-    }
-    if ( current_login.code === 'HQ' ) {
-      columns.push( { id: 'base', Header: 'Base', accessor: user => user.school.school_name } );
-    }
+    const columns = getColumns( current_login.code, this.editPicture );
     // page definition
     return (
       <div id="UsersPage">
         {/* User Guide */}
-        <Callout intent="primary" title="View Soldiers">
+        <Callout title="View Soldiers">
           Click a Soldier's name or serial number to view and edit their account.<br/>
           Click on a Soldier's profile picture to edit or replace it.
         </Callout>
