@@ -9,6 +9,7 @@ $mosadID = $_POST['mosad'];
 $success = false;
 if ( $shliach->authenticate() ) {
     $shliach->setDebug( true );
+    $shliach->includeDepartments( true );
     if ( $shliach->setPersonalInfo() ) {
         $shliach->setCenters( array( $mosadID ) );
         if ( $shliach->setMosdos() ) {

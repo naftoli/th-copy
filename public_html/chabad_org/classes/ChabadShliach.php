@@ -10,6 +10,7 @@ class ChabadShliach
     private $mosdos;
     private $error;
     private $debug;
+    private $include_departments;
 
     public function __construct( $key ) {
         $this->key = $key;
@@ -18,6 +19,7 @@ class ChabadShliach
         $this->mosdos = array();
         $this->error = null;
         $this->debug = false;
+        $this->include_departments = false;
     }
 
     // check if user exists and is valid on chabad.org
@@ -35,6 +37,10 @@ class ChabadShliach
 
     public function setDebug( $bool ) {
         $this->debug = $bool;
+    }
+
+    public function includeDepartments( $bool ) {
+        $this->include_departments = $bool;
     }
 
     // get shliach info from chabad.org api
@@ -75,8 +81,8 @@ class ChabadShliach
         if ( $this->centers ) {
             $mosdosInfo = array();
             foreach ($this->centers as $centerID) {
-                //$url = "/api/centers/$centerID?includeDepartments=true";
                 $url = "/api/centers/$centerID";
+                if ( $this->include_departments ) $url .= "?includeDepartments=true";
                 $mosdos = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );
                 if ( $this->debug ) {
                     echo "Centers Info:";
