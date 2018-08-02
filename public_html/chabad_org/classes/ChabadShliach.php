@@ -9,6 +9,7 @@ class ChabadShliach
     private $centers;
     private $mosdos;
     private $error;
+    private $debug;
 
     public function __construct( $key ) {
         $this->key = $key;
@@ -16,6 +17,7 @@ class ChabadShliach
         $this->personalInfo = array();
         $this->mosdos = array();
         $this->error = null;
+        $this->debug = false;
     }
 
     // check if user exists and is valid on chabad.org
@@ -31,12 +33,20 @@ class ChabadShliach
         }
     }
 
+    public function setDebug( $bool ) {
+        $this->debug = $bool;
+    }
+
     // get shliach info from chabad.org api
     public function setPersonalInfo() {
         if ($this->shliachID) {
             $url = "/api/centers/people/$this->shliachID";
             $result = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );
             $info = $result->People[0];
+            if ( $this->debug ) {
+                echo "Personal Info:";
+                print_r( $info );
+            }
             $this->title = $info->Title;
             $this->first = $info->FirstName;
             $this->last  = $info->LastName;
@@ -68,16 +78,29 @@ class ChabadShliach
                 //$url = "/api/centers/$centerID?includeDepartments=true";
                 $url = "/api/centers/$centerID";
                 $mosdos = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );
+                if ( $this->debug ) {
+                    echo "Centers Info:";
+                    print_r( $mosdos );
+                }
+
                 $ids = array();
                 foreach ( $mosdos->Centers as $mosad ) {
                     $chabadMosad = new ChabadMosad( $mosad );
                     // get mosad ids
                     $ids = $chabadMosad->getIDs();
+                    if ( $this->debug ) {
+                        echo "IDs associated with this center:";
+                        print_r( $ids );
+                    }
                 }
+
                 foreach ( $ids as $id ) {
                     $url = "/api/centers/$id";
                     $mosdos = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );
-                    print_r( $mosdos );
+                    if ( $this->debug ) {
+                        echo "Mosad $id Info:";
+                        print_r( $mosdos );
+                    }
                     foreach ( $mosdos->Centers as $mosad ) {
                         $chabadMosad = new ChabadMosad( $mosad );
                         // only add mosad if it exists in our database
@@ -86,7 +109,6 @@ class ChabadShliach
                         }
                     }
                 }
-                print_r( $mosdosInfo );
             }
 
             // mosad info is complicated in terms of how it's returned from the api
