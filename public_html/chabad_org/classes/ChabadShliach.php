@@ -101,13 +101,6 @@ class ChabadShliach
                         echo "Mosad $id Info:";
                         print_r( $mosdos );
                     }
-                    foreach ( $mosdos->Centers as $mosad ) {
-                        $chabadMosad = new ChabadMosad( $mosad );
-                        // only add mosad if it exists in our database
-                        if ( !empty( $chabadMosad->types ) ) {
-                            $mosdosInfo[] = $chabadMosad;
-                        }
-                    }
                 }
             }
 
