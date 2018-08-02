@@ -9,7 +9,13 @@
       <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
       <script language="javascript" type="text/javascript" src="https://chabadorg.clhosting.org/scripts/js/api/baseapi.js.asp?474DBD09-F59F-433D-A755-5A97594FC4E1"></script>
       <script type="text/javascript">
-        var key;
+        // get mosad id to check
+        var url = location.href;
+        var pos = url.indexOf('?');
+        if ( pos != -1 ) {
+            id = url.substring(pos+1);
+        }
+
         MyChabadApi.Events.AddEventListener("statusUpdated", function (ev)
         {
             if (ev.response.Status)
@@ -20,7 +26,7 @@
                     Co.Tools.Content.AppendClassName(loaderNode, "active");
                 //make call to the server.
                 key = ev.response.Key;
-                $.post('testAPI.php', { key: key }, function( result ) {
+                $.post('testAPI.php', { key: key, mosad: id }, function( result ) {
                     console.log( result );  
                 });
             }
