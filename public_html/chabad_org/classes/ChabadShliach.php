@@ -23,7 +23,7 @@ class ChabadShliach
         $url = '/api/login/authenticate';
         $info = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );
         if ( isset( $info->IsValidUser ) && $info->IsValidUser == true ) {
-            $this->shliachID = $info->ShliachId;
+            $this->shliachID = trim( $info->ShliachId );
             return true;
         } else {
             $this->error = "Invalid username / password.";
@@ -45,16 +45,16 @@ class ChabadShliach
                 echo "Personal Info:";
                 print_r( $info );
             }
-            $this->title = $info->Title;
-            $this->first = $info->FirstName;
-            $this->last  = $info->LastName;
-            $this->address = $info->Address;
-            $this->address2 = $info->Address2;
-            $this->city = $info->City;
-            $this->state = $info->State;
-            $this->zip = $info->PostCode;
-            $this->country = $info->Country;
-            $this->phone = $info->HomePhone;
+            $this->title = trim( $info->Title );
+            $this->first = trim( $info->FirstName );
+            $this->last  = trim( $info->LastName );
+            $this->address = trim( $info->Address );
+            $this->address2 = trim( $info->Address2 );
+            $this->city = trim( $info->City );
+            $this->state = trim( $info->State );
+            $this->zip = trim( $info->PostCode );
+            $this->country = trim( $info->Country );
+            $this->phone = trim( $info->HomePhone );
             $this->centers = $info->Centers;
             return true;
         } else {

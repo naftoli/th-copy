@@ -26,8 +26,11 @@ if (isset($_POST["action"])) {
 	$message = "";
 	
 	foreach ($_POST as $k => $v) {
-		$_POST[$k] = mysql_real_escape_string(trim($v));
-	}
+        if (!is_array($v))
+		    $_POST[$k] = mysql_real_escape_string(trim($v));
+    }
+    
+    echo "<pre>"; print_r( $_POST ); echo "</pre>"; exit;
 
 	if ($action == "update") {		
 		$sql = "UPDATE admins SET title='" . $_POST['title']  ."', first='" . $_POST['first'] . "', last='" . $_POST['last'] . "', admin_phone_mobile='" . $_POST['admin_phone_mobile'] . "', admin_email='" . $_POST['admin_email'] . "', admin_phone_work='" . $_POST['admin_phone_work'] . "', admin_phone_home='" . $_POST['admin_phone_home'] . "' WHERE admin_id=" . $admin_id;
@@ -43,29 +46,8 @@ if (isset($_POST["action"])) {
 		$sql = "update schools
 				set principal = '" . mysql_real_escape_string($_POST['p_name']) . "',
 				principal_number = '" . mysql_real_escape_string($_POST['p_number']) . "',
-				principal_email = '" . mysql_real_escape_string($_POST['p_email']) . "'";
-
-		switch ($school_type) {
-			case 'chayolei':
-				$sql .= ", chayolei = 1, chidon = 1, tanya = 1, ckids = 0";
-				$sql .= ", chidon_name = '" . mysql_real_escape_string($_POST['chidon_name']) . "',
-						chidon_number = '" . mysql_real_escape_string($_POST['chidon_number']) . "',
-						chidon_email = '" . mysql_real_escape_string($_POST['chidon_email']) . "'";
-				break;
-			case 'chidon':
-				$sql .= ", chayolei = 0, chidon = 1, tanya = 0, ckids = 0";
-				$sql .= ",chidon_name = '" . mysql_real_escape_string($_POST['chidon_name']) . "',
-						chidon_number = '" . mysql_real_escape_string($_POST['chidon_number']) . "',
-						chidon_email = '" . mysql_real_escape_string($_POST['chidon_email']) . "'";
-				break;
-			case 'tanya':
-				$sql .= ", chayolei = 0, chidon = 0, tanya = 1, ckids = 0";
-				break;
-			case 'ckids':
-				$sql .= ", chayolei = 0, chidon = 0, tanya = 0, ckids = 1";
-				break;
-		}
-
+                principal_email = '" . mysql_real_escape_string($_POST['p_email']) . "'";
+        $sql .= ", chayolei = 0, chidon = 0, tanya = 0, ckids = 1";
 		$sql .= " where school_id = " . $school_id;
 
 		if (!mysql_query( $sql )) {
@@ -96,7 +78,10 @@ if (isset($_POST["action"])) {
 			$_SESSION['p_email'] 		= $_POST['p_email'];
 			$_SESSION['chidon_name'] 	= $_POST['chidon_name'];
 			$_SESSION['chidon_number'] 	= $_POST['chidon_number'];
-			$_SESSION['chidon_email'] 	= $_POST['chidon_email'];
+            $_SESSION['chidon_email'] 	= $_POST['chidon_email'];
+            
+            $_SESSION['mosdos']     = $_POST['mosdos'];
+            $_SESSION['mosdosInfo'] = $_POST['mosdosInfo'];
 		} else {
 			//echo $sql . mysql_error();
 			$message = "<span style='color:red;'>Administrator not added. Please try again.</span></a>";
@@ -156,7 +141,7 @@ else {
 
 			function check_next_page() {
 				if (next_page) {		
-					location.href = "registration_2.php";
+					location.href = "registration_ckids2.php";
 				}
 			}
 			
@@ -187,43 +172,8 @@ else {
 			}
 			
 			function validate() {
+                return true;
 				var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-				
-				// make sure school type is checked
-				var school_type =  false;
-				if ($(".school_type:checked").length) {
-					school_type = true;
-					var school_type_val = $(".school_type:checked").val();
-				}
-
-				if (!school_type) {
-					alert('You must indicate what type of school you have.');
-					return false;
-				}
-								
-				if (school_type_val == 'chayolei' || school_type_val == 'chidon') {
-					// make sure chidon info is entered
-					var cname = $("#chidon_name").val().trim();
-					var cnumber = $("#chidon_number").val().trim();
-					var cemail = $("#chidon_email").val().trim();
-					if (cname == '' || cnumber == '' || cemail == '') {
-						alert("You must enter your chidon coordinator name, number and email.");
-						return false;
-					}
-					if (cname.length < 3) {
-						alert("Coordinator name must be at least 3 characters.");
-						return false;
-					}
-					if (cnumber.length < 9 || isAlphabetic(cnumber)) {
-						alert("Coordinator number must be at least 9 digits and cannot contain alphabetic characters.");
-						return false;
-					}
-					if (reg.test(cemail) !== true) {
-						alert("Invalid coordinator email address.");
-						return false;
-					}
-				}
-				
 				// principal info
 				var p_name = $("#p_name").val().trim();
 				var p_number = $("#p_number").val().trim();
@@ -244,8 +194,6 @@ else {
 					alert("Invalid principal email address.");
 					return false;
 				}
-
-				if (school_type_val == 'chayolei') return checkTerms();
 			}
 
             MyChabadApi.Events.AddEventListener("statusUpdated", function (ev)
@@ -258,7 +206,6 @@ else {
                         Co.Tools.Content.AppendClassName(loaderNode, "active");
                     //make call to the server.
                     key = ev.response.Key;
-                    $("#chabadKey").val( key );
                     $.post('chabad_org/auth.php', { key: key }, function( shliach ) {
                         console.log( shliach );
                         var name = shliach.title + ' ' + shliach.first + ' ' + shliach.last;
@@ -282,7 +229,8 @@ else {
                             }
                             mosadAddress += "<br />" + mosad.city + ', ' + mosad.state + ' ' + mosad.zip + "<br />" + mosad.country;
                             var types = mosad.types;
-                            html += "<input type='checkbox' name='mosdos[]' /> " + mosadName + ' (';
+                            html+= "<input type='hidden' name='mosdosInfo[]' value='" + JSON.stringify( mosad ) + "' />";
+                            html += "<input type='checkbox' name='mosdos[]' value='" + mosad.id + "' /> " + mosadName + ' (';
                             for (var t in types) {
                                 html += types[t] + ', ';
                             }
@@ -366,7 +314,7 @@ else {
 								</div>
 							</div>
 	 
-							<form method="post" name="registration_form" id="registration_form" action="registration.php" accept-charset="UTF-8"> 
+							<form method="post" name="registration_form" id="registration_form" action="registration_ckids.php" accept-charset="UTF-8"> 
 								<? if ($admin_id > 0) : ?>
 								<input type="hidden" name="action" value="update">
 								<? else : ?>
@@ -374,7 +322,6 @@ else {
                                 <? endif; ?>
                                 
                                 <input type="hidden" name="school_type" value="ckids" />
-                                <input type="hidden" name="chabadKey" id="chabadKey" />
 
                                 <h2>Chabad.org Login</h2>
                                 <p>You can login to chabad.org for us to retreive your personal information as well as the mosdos that are connected to your account</p>
