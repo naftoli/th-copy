@@ -136,7 +136,8 @@ else {
 		<title>School Registration</title>
 		<link rel="alternate" media="print" href="index.php">
 		<link href="admin_styles.css" rel="stylesheet" type="text/css" />
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <script language="javascript" type="text/javascript" src="https://chabadorg.clhosting.org/scripts/js/api/baseapi.js.asp?474DBD09-F59F-433D-A755-5A97594FC4E1"></script>
 		<script>
 			var next_page = <?=$next_page;?>;
 			
@@ -246,6 +247,32 @@ else {
 
 				if (school_type_val == 'chayolei') return checkTerms();
 			}
+
+            MyChabadApi.Events.AddEventListener("statusUpdated", function (ev)
+            {
+                if (ev.response.Status)
+                {
+                    console.log(ev.response);
+                    var loaderNode = Co.Tools.GetElementsByClassName("loader", "div");
+                    if (loaderNode.length > 0)
+                        Co.Tools.Content.AppendClassName(loaderNode, "active");
+                    //make call to the server.
+                    key = ev.response.Key;
+                    $("#chabadKey").val( key );
+                    $.post('chabad_org/auth.php', { key: key }, function( shliach ) {
+                        console.log( shliach );
+                        var name = shliach.title + ' ' + shliach.first + ' ' + shliach.last;
+                        var phone = shliach.phone;
+                        var address = shliach.address;
+                        if (shliach.address2) address += "<br />" + shliach.address2;
+                        address += "<br />" + shliach.city + ', ' + shliach.state + ' ' + shliach.zip + "<br />" + shliach.country;
+                        $("#shliachName").html( name );
+                        $("#shliachPhone").html( phone );
+                        $("#shliachAddress").html( address );
+                        $("#shliachInfo").show();
+                    });
+                }
+            });
 		</script>
 		<style type="text/css">
 		    label.error {
@@ -323,9 +350,51 @@ else {
                                 <? endif; ?>
                                 
                                 <input type="hidden" name="school_type" value="ckids" />
-								
-								<p>* denotes mandatory field</p>
-								
+                                <input type="hidden" name="chabadKey" id="chabadKey" />
+
+                                <h2>Chabad.org Login</h2>
+                                <p>You can login to chabad.org for us to retreive your personal information as well as the mosdos that are connected to your account</p>
+                                <span class="mychabad" view="login" settings="viewStyle=button"></span>
+                                <div class="loader"></div>                                
+                                <br /><br />
+
+                                <div id="shliachInfo" style="display: none;">
+                                    <h2>Shliach Info</h2>
+                                    <div class="module">
+                                        <div class="module_content">
+                                            <div class="lists form">
+                                                <ul>
+                                                    <li>
+                                                        <span class="label">Name</span>
+                                                        <span id="shliachName"></span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="label">Phone</span>
+                                                        <span id="shliachPhone"></span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="label">Address</span>
+                                                        <span id="shliachAddress"></span>
+                                                    </li>      
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="mosdosInfo" style="display: none;">                               
+                                        <h2>Mosdos</h2>
+                                        <p>Please choose which mosdos you would like to associate with your Tzivos Hashem account.
+                                        <div class="module">
+                                            <div class="module_content">
+                                                <div class="lists form">
+                                                    <ul id="chooseMosdos"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+								<p>* denotes mandatory field</p>								
 
                                 <h2>Principal's Info</h2>
                                 <div class="module" id="module-info">

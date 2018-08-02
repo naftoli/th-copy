@@ -14,7 +14,7 @@ class ChabadShliach
     public function __construct( $key ) {
         $this->key = $key;
         $this->shliachID = 0;
-        $this->personalInfo = array();
+        $this->centers = array();
         $this->mosdos = array();
         $this->error = null;
         $this->debug = false;
@@ -65,7 +65,7 @@ class ChabadShliach
         }
     }
 
-    // hardcode centers for testing
+    // ability to hardcode centers for testing
     public function setCenters( array $centers ) {
         $this->centers = $centers;
     }
