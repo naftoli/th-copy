@@ -44,13 +44,13 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
     ) $mobile = true;
 
     $token = false;
-    $have_cookies = (isset($_COOKIE['admin_auth']) && isset($_COOKIE['admin_id'])) || isset($_COOKIE['admin']);
-    if ( !$have_cookies && isset( $headers['Authorization'] ) ) {
+    // $have_cookies = (isset($_COOKIE['admin_auth']) && isset($_COOKIE['admin_id'])) || isset($_COOKIE['admin']);
+    if ( isset( $headers['Authorization'] ) ) {
         $token = explode( ' ',  $headers['Authorization'] )[1];
-    } else if ( !$have_cookies && isset( $headers['authorization'] ) ) {
+    } else if ( isset( $headers['authorization'] ) ) {
         $token = explode( ' ',  $headers['authorization'] )[1];
     }
-
+    // set the token as cookies
     if ( $token ) {
         if ( $mobile ) {
             $_COOKIE['admin'] = $token;

@@ -5,7 +5,11 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     use traits\BuildModel;
     
     // relationships
-    static $has_many = [ [ 'school_registrations' ], [ 'platoons' ], [ 'users' ] ];
+    static $has_many = [ 
+        [ 'school_registrations' ], 
+        [ 'platoons', 'order' => 'class_grade, class_sub', ], 
+        [ 'users' ] 
+    ];
 
     // ******************************* GETTERS *******************************
     /**

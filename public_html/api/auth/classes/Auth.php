@@ -75,7 +75,7 @@ class Auth {
         );
     }
 
-    private static function mobileKey( $admin_id ) {
+    public static function mobileKey( $admin_id ) {
         require_once( __DIR__ . '/../../../mobile/reg/ajax/encrypt.php' );
         return encrypt_decrypt('encrypt', $admin_id);
     }

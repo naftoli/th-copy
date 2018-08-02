@@ -1,4 +1,5 @@
 <?php
+include_once( __DIR__ . '/../auth/classes/Auth.php' );
 // This class uses the Authorize.net gateway
 
 class Admin extends ActiveRecord\Model implements JsonSerializable {
@@ -76,16 +77,32 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             'type' => 'HQ', 'id' => $this->admin_id, 'name' => 'Tzivos Hashem Headquarters', 
             'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 'code' => 'HQ'
         ];
+        if ( $this->auth === 'ckidssuper' ) $logins[] = [
+            'type' => 'CKIDS-ADMIN', 'id' => $this->admin_id, 'name' => 'C-Kids Headquarters', 
+            'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 'code' => 'CKIDS-ADMIN',
+            'ckids' => true
+        ];
         // add all the schools
         foreach( $this->getAuthIds( 'school' ) as $school_id ){
             $school = School::find( $school_id );
             $logins[] = [ 'type' => 'school', 'id' => $school_id, 'code' => 'BC',
-                'name' => $school->school_name, 'img' => $school->logoPath()
+                'name' => $school->school_name, 'img' => $school->logoPath(), 
+                'ckids' => !!$school->ckids
             ];
         };
+        // add all classes
+        foreach( $this->getAuthIds( 'class' ) as $class_id ){
+            $platoon = Platoon::find( $class_id, ['include' => ['school']] );
+            $logins[] = [ 'type' => 'class', 'id' => $class_id, 'code' => 'TEACHER',
+                'name' => $platoon->name(), 'img' => $platoon->school->logoPath(),
+                'ckids' => !!$platoon->school->ckids
+            ];
+        };
+        // add parent account
         if ( count( $this->getAuthIds( 'user') ) > 0  ) {
             $logins[] = [ 'type' => 'user', 'id' => $this->admin_id, 'code' => 'PARENT',
-                'name' => 'My Parent Portal', 'img' => '/mobile/img_new/TH Logo-colorful-svg.svg'
+                'name' => 'My Parent Portal', 'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 
+                'key' => mashpia\api\auth\Auth::mobileKey( $this->admin_id )
             ];
         }
         return $logins;

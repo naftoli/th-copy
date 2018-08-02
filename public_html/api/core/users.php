@@ -16,42 +16,81 @@ class UsersRouter {
         // limit based on admin type
         $login = $current_user->login;
         if ( $login['code'] === 'HQ' ) {
-            $filters[] = 'schools.test_school = 0';
+            $filters[] = 's.test_school = 0';
         } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
-            $filters[] = 'schools.ckids = 1';
+            $filters[] = 's.ckids = 1';
         } else if ( $login['code'] === 'BC' ) {
-            $filters[] = 'users.school_id = ?';
-            $params[] = $login['id'];
-        }
+            $filters[] = 'u.school_id = ?'; $params[] = $login['id'];
+        } else if ( $login['code'] === 'TEACHER' ) {
+            $filters[] = 'u.class_id = ?'; $params[] = $login['id'];
+        } else { json_error( 'Access Deinied: CORE-USERS-26' ); }
         // combine the filters
-        $filters = count( $filters ) > 0 ? 'WHERE ' . implode( ' AND ', $filters ) : '';
+        $filters = 'WHERE ' . implode( ' AND ', $filters );
         // generate the SQL
-        $sql = "SELECT * FROM users JOIN schools USING ( school_id ) LEFT JOIN classes USING ( class_id ) $filters ORDER BY school_name, class_grade, class_sub, last, first";
+        $sql = "SELECT u.*, s.*, c.class_grade, c.class_sub FROM users u "
+            ."JOIN schools s USING ( school_id ) "
+            ."LEFT JOIN classes c USING ( class_id ) $filters "
+            ."ORDER BY school_name, class_grade, class_sub, last, first";
         $query = $pdo->prepare( $sql );
         $query->execute( $params );
 
-        $users = []; $user = null;
+        $users = [];
         // fetch all results and parse them as models
         while( $row = $query->fetch() ){
             $profilePicture = ( new User(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
             $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
-            // use the BuildModel trait to create instances from 
+            // format dates
+            $dob = $row['dob'] ? ( new DateTime( $row['dob'] ) )->format(DateTime::ATOM) : $row['dob'];
+            $user_registered = $row['user_registered'] ? ( new DateTime( $row['user_registered'] ) )->format(DateTime::ATOM) : $row['user_registered'];
+            // format and return just the data we want...
             $users[] = [
-                'user_id' => $row['user_id'], 'user_serial' => $row['user_serial'], 'first' => $row['first'], 
-                'last' => $row['last'], 'dob' => $row['dob'], 'gender' => $row['gender'], 'user_registered' => $row['user_registered'],
-                'chayolei' => $row['chayolei'], 'yan' => $row['yan'], 'chidon' => $row['chidon'], 'mobile_pic' => $row['mobile_pic'],
+                'user_id' => intval($row['user_id']), 'user_serial' => intval($row['user_serial']), 
+                'first' => $row['first'], 'last' => $row['last'], 'dob' => $dob, 'gender' => $row['gender'], 
+                'user_registered' => $user_registered,  'mobile_pic' => $row['mobile_pic'], 'profilePicture' => $profilePicture,
+                'chayolei' => intval($row['chayolei']), 'yan' => intval($row['yan']), 'chidon' => intval($row['chidon']), 
                 'school' => [ 'school_id' => $row['school_id'], 'school_name' => $row['school_name'], 
                     'shipping_city' => $row['shipping_city'], 'school_era' => $row['school_era'] ],
-                'profilePicture' => $profilePicture, 'platoon' => [ 'name' => $platoon ]
+                'barcode' => '3'.$row['user_code'],
+                'platoon' => ( $platoon ? [ 'name' => $platoon ] : null )
             ];
-            $user = null;
         }
-
         json_response( $users );
     }
 
+    public function show( $id ) {
+        global $current_user;
+        try {
+            $user = User::find( $id );
+            if ( !$user->validateAccess( $current_user->login ) )
+                json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-65', 401 );
+            json_response( $user );
+        } catch ( Exception $e ) {
+            json_error( 'Soldier does not exist', 'CORE-USERS-68', 404 );
+        }
+    }
+
+    public function create() {
+        global $current_user;
+        $user = User::build( $_POST );
+        if ( $current_user->login['code'] === 'TEACHER' ) {
+            $user->school_id = Platoon::find( $current_user->login['id'] )->school_id;
+        } else {
+            $platoon_school_id = Platoon::find( $user->class_id )->school_id;
+            if ( $platoon_school_id !== $user->school_id )
+                json_error( 'Please Select a valid Platoon' );
+        }
+        if ( !$user->is_valid() || !$user->save() )
+            json_error( 'Could not create Soldier. (CODE: CORE-USERS-79)' );
+        json_response( $user );
+    }
+
     public function update( $id ) {
+        global $current_user;
+
         $user = User::find( $id );
+        if ( !$user->validateAccess( $current_user->login ) )
+            json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-75', 401 );
+        
         // update the profile picture
         if ( isset( $_FILES['profile'] ) ) {
             $result = $user->setProfilePicture( $_FILES['profile'] );
@@ -60,8 +99,54 @@ class UsersRouter {
                 'mobile_pic' => $user->mobile_pic,
                 'profilePicture' => $user->profilePicture()
             ]);
+        // update other properties
+        } else {
+            foreach( User::table()->columns as $column ){
+                if ( !isset( $_POST[ $column->name ] ) ) continue;
+                $user->{ $column->name } = $_POST[ $column->name ];
+            }
+            if ( !$user->is_valid() || !$user->save() )
+                json_error('Could not update soldier. Please check to make sure that the data is valid', 'CORE-USERS-90');
+            // update the birthday missions if dob was changed
+            if ( isset( $_POST['dob'] ) ){
+                $user->setupBirthdayMissions();
+            }
+            if ( isset( $_POST['school_type_id'] ) ){
+                $user->enrollInCampaigns();
+            }
+            json_response( $user );
         }
-        // update everything else
+    }
+
+    public function destroy( $id ) {
+        global $current_user;
+        try {
+            $user = User::find( $id );
+            if ( !$user->validateAccess( $current_user->login ) )
+                json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-126', 401 );
+            if ( !in_array( $current_user->login['code'], ['BC', 'HQ', 'CKIDS-ADMIN'] ) ) {
+                json_error( 'Your current login does not have the ability to remove users' );
+            }
+            if ( $user->canDestroy() ) {
+                json_response( 'deleted', $user->delete() );
+            } else {
+                $user->school_id = null;
+                $user->class_id = null;
+                json_response( 'removed-from-school', $user->save() );
+            }
+        } catch ( Exception $e ) {
+            json_error( 'Soldier does not exist', 'CORE-USERS-137', 401 );
+        }
+    }
+
+    public function uploadProfile() {
+        global $current_user;
+        if ( isset( $_FILES['profile'] ) ) {
+            $result = User::uploadProfilePicture( $current_user->admin_id, $_FILES['profile'] );
+            if ( is_string( $result ) ) json_error( $result );
+            json_response( $result );
+        }
+        json_error('Server did not get the profile picture :-(.');
     }
 }
 
