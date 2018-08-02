@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import is from 'is_js';
 import { arrayToCSV, setTitle } from 'functions/utils';
 import { loginChanged } from 'functions/login';
+import { filter, scrollToTop } from 'functions/tables';
 // styles
 import './UsersPage.scss';
 // state
@@ -66,12 +67,6 @@ export class UsersPage extends Component {
     });
   }
 
-  // scroll to the top of the table
-  scrollToTop = () => { 
-    const table = document.querySelector('#UsersPage .rt-tbody')
-    if ( table ) table.scrollTop = 0;
-  }
-
   // download the content as a CSV
   toCSV = () => {
     const toast_id = toast.info("Generating File...");
@@ -83,16 +78,10 @@ export class UsersPage extends Component {
     const rows = this.props.soldiers.map( soldier => [
       soldier.user_serial, soldier.first, soldier.last, soldier.dob, soldier.gender, 
       soldier.user_registered, soldier.chayolei, soldier.yan, soldier.chidon,
-      soldier.platoon ? soldier.platoon.name : '-', soldier.school.school_name
+      soldier.platoon ? `="${soldier.platoon.name}"` : '-', soldier.school.school_name
     ]);
     arrayToCSV( headers, rows, 'users' );
     toast.update( toast_id, {render: 'File Generated.'} );
-  }
-  
-  // filter for case insensitivity and for any location in the string
-  filter = ( filter, row ) => {
-    const id = filter.pivotId || filter.id;
-    return row[id] !== undefined ? String(row[id]).toLowerCase().includes(filter.value.toLowerCase()) : true
   }
 
   // render the page
@@ -128,8 +117,8 @@ export class UsersPage extends Component {
         </ButtonGroup>
         {/* Table with data */}
         <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight" 
-          noDataText={ loading ? 'Loading...' : 'No Data' } defaultFilterMethod={ this.filter }
-          onPageChange={ this.scrollToTop } onFilteredChange={ this.scrollToTop }/>
+          noDataText={ loading ? 'Loading...' : 'No Data' } defaultFilterMethod={ filter }
+          onPageChange={ scrollToTop('UsersPage') } onFilteredChange={ scrollToTop('UsersPage') }/>
         {/* Modal to edit images */}
         <CropperModal isOpen={ cropperModalShow } src={ cropperModalSrc } 
           toggle={ this.closeCropperModal } uploadImage={ this.updatePicture }/>
