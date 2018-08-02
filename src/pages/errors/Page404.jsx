@@ -15,7 +15,10 @@ class Page404 extends Component {
           <Link to='/'>Take me home</Link>
         </p>
         <div id='legal'>
-          Icon made by <a href="https://www.flaticon.com/authors/twitter" target='_blank'>Twitter</a> from flaticon.com is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+          Icon made by 
+          <a href="https://www.flaticon.com/authors/twitter" target='_blank' rel="noopener noreferrer"> Twitter </a>
+          from flaticon.com is licensed by 
+          <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank" rel="noopener noreferrer"> CC 3.0 BY </a>
         </div>
       </div>
     );
