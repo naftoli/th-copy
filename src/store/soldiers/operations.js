@@ -4,7 +4,7 @@ import moment from 'moment';
 import * as actions from './actions';
 
 const createNotifcation = ( message ) => {
-  return toast.info( 'Updating Soldier...', { autoClose: false } );
+  return toast.info( message, { autoClose: false } );
 }
 
 const updateNotifcation = ( toast_id, message, error = '', success = true ) => {
@@ -46,7 +46,7 @@ export const updateSoldier = ( id, data ) => dispatch => {
   const toast_id = createNotifcation('Updating Soldier');
   return API.post( `/core/users.php?id=${id}`, data )
     .then( response => {
-      updateNotifcation( toast_id, 'Soldier Updated!', response.error, response.success)
+      updateNotifcation( toast_id, 'Soldier Updated!', response.error, response.success );
       if ( response.success ) { 
         dispatch( actions.updateSoldier( id, response.data ) ); 
       } 
@@ -70,7 +70,7 @@ export const uploadProfile = ( formData ) => dispatch => {
   const toast_id = createNotifcation('Uploading Profile Picture...');
   return API.post( '/core/users.php?action=uploadProfile', formData )
     .then( response => {
-      updateNotifcation( toast_id, 'Image Uploaded!', response.message, response.success)
+      updateNotifcation( toast_id, 'Image Uploaded!', response.message, response.success );
       return response;
     }).catch( error => { 
       updateNotifcation( toast_id, '', error.message, false );
@@ -82,10 +82,10 @@ export const uploadSpreadsheet = ( data ) => dispatch => {
   const toast_id = createNotifcation('Uploading user spreadsheet...');
   return API.post( `/upload/users.php`, data )
     .then( response => {
-      updateNotifcation( toast_id, 'Image Uploaded!', response.message, response.success);
+      updateNotifcation( toast_id, 'Spreadsheet Uploaded!', response.message, response.success );
       return response;
     }).catch( error => {
-      toast.dismiss( toast_id );
+      updateNotifcation( toast_id, '', error.message, false );
       console.error( error );
       return Promise.reject( error );
     });
