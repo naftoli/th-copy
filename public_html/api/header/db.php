@@ -28,6 +28,7 @@ ActiveRecord\Config::initialize( function( $cfg ) use ( $connections ) {
     $cfg->set_connections( $connections );
     $cfg->set_default_connection('mashpiadb');
 });
+ActiveRecord\Serialization::$DATETIME_FORMAT = 'Y-m-d H:i:s';
 
 // log all SQL queries in development
 if ( $development ) {

@@ -37,6 +37,7 @@ function json_error( $msg, $data = false, $code = 400, $die = true ) {
     echo json_encode([
         "success" => false,
         "error"    => $msg,
+        "message"  => $msg,
         "data"   => $data
     ]);
     if ( $die ) die();
