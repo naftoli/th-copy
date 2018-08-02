@@ -29,7 +29,6 @@ export default ( state = initialState, action ) => {
       if ( action.payload.legacy ) {
         cookies.set( 'admin_auth', action.payload.legacy, { path: '/', expires } );
         cookies.set( 'admin_id', action.payload.id, { path: '/', expires } );
-        cookies.set( 'admin', action.payload.mobile, { path: '/', expires } );
       }
 
       return Object.assign({}, state, { tokens: action.payload });
@@ -60,6 +59,8 @@ export default ( state = initialState, action ) => {
       // user is a different portal, do not update the cookies.
       if ( current_login.type !== 'user' ) {
         cookies.set( 'login', `${current_login.type}-${current_login.id}`, { path: '/', expires } );
+      } else {
+        cookies.set( 'admin', current_login.key, { path: '/', expires } );
       }
       // non-destructivly return the state
       return Object.assign( {}, state, { current_login });
