@@ -56,7 +56,7 @@ export class Dashboard extends Component {
       return null;
     }
 
-    const menu = getMenu( current_login.code );
+    const menu = getMenu( current_login.code, current_login.ckids );
     // add a logout button
     menu.push({
       label: 'Logout', path: '/logout',

@@ -13,19 +13,21 @@ const DEFAULT_USER_TYPES = [ 'HQ', 'BC' ];
  * 
  * @returns {function} Returns a valid reducer to be passed to .reduce with an array as the initilaizer
  */
-export const menuReducer = ( user_type, defaults ) => ( filtered = [], item ) => {
+export const menuReducer = ( user_type, no_legacy, defaults ) => ( filtered = [], item ) => {
   // reduce the items down a bit
   if ( item.items ) {
     item = Object.assign( {}, item, 
-      { items: item.items.reduce( menuReducer( user_type, defaults ), [] ) }
+      { items: item.items.reduce( menuReducer( user_type, no_legacy, defaults ), [] ) }
     );
   }
-
-  if ( item.user_types && item.user_types.indexOf( user_type ) > -1 ) {
-    filtered.push( item );
-  } else if ( !item.user_types && defaults.indexOf( user_type ) > -1 ) {
-    filtered.push( item );
+  if ( !(no_legacy && item.legacy) ) {
+    if ( item.user_types && item.user_types.indexOf( user_type ) > -1 ) {
+      filtered.push( item );
+    } else if ( !item.user_types && defaults.indexOf( user_type ) > -1 ) {
+      filtered.push( item );
+    }
   }
+  
   return filtered;
 }
 
@@ -36,7 +38,7 @@ export const menuReducer = ( user_type, defaults ) => ( filtered = [], item ) =>
  * 
  * @param {string} user_type The type of user to get the menu for 
  */
-const getMenu = ( user_type ) => {
+const getMenu = ( user_type, no_legacy ) => {
   // Default to BC
   user_type = user_type || "BC";
   // Define the shape of the menu
@@ -103,7 +105,7 @@ const getMenu = ( user_type ) => {
       ]
     },
     {
-      label: "Chidon",
+      label: "Chidon", legacy: true,
       icon: <img src={`${LEGACY_URL}/images/chidon.png`} alt="Chidon" />,
       items: [
         { label: 'Shabbaton Enrolled Report', legacy: true, path: '/reports/chidon/shabbaton_enrollment.php' },
@@ -116,10 +118,10 @@ const getMenu = ( user_type ) => {
       ]
     },
     {
-      label: "Reports",
+      label: "Reports", legacy: true,
       icon: <img src={`${LEGACY_URL}/images/icon_report.png`} alt="Reports" />,
       items: [
-        { label: 'Office Reports', legacy: true, path: '/reports.php', user_types: [ 'HQ' ] },
+        { label: 'Office Reports', legacy: true, path: '/reports/', user_types: [ 'HQ' ] },
         { label: 'Registered Report', legacy: true, path: '/registered_report.php' },
         { label: 'Parents Report', legacy: true, path: '/parent_report.php' },
         { label: 'Not Yet Registered Report', legacy: true, path: '/non_registered_report.php' },
@@ -153,7 +155,7 @@ const getMenu = ( user_type ) => {
       icon: <img src={`${LEGACY_URL}/images/icon_report.png`} alt="shipping-reports"/>
     },
     {
-      label: "Campaigns",
+      label: "Campaigns", legacy: true,
       icon: <img src={`${LEGACY_URL}/images/parentIcons/Campaigns.gif`} alt="Campaigns" />,
       items: [
         { label: 'Tanya', 
@@ -174,7 +176,7 @@ const getMenu = ( user_type ) => {
       ]
     },
     {
-      label: "Rally",
+      label: "Rally", legacy: true,
       icon: <img src={`${LEGACY_URL}/images/parentIcons/Rally.gif`} alt="Rally" />,
       items: [
         { label: 'Promotion Picture Report', legacy: true, path: '/promotion_report.php' },
@@ -195,7 +197,7 @@ const getMenu = ( user_type ) => {
       icon: <img src={`${LEGACY_URL}/images/icon_wizard.png`} alt="Setup Guide"/>
     },
     {
-      label: 'Mileage Program',
+      label: 'Mileage Program', legacy: true,
       icon: <img src={`${LEGACY_URL}/images/icon_auction.png`} alt="Miliage Program"/>
     },
     {
@@ -205,7 +207,7 @@ const getMenu = ( user_type ) => {
   ];
 
   // filter the menu and return it
-  return menu.reduce( menuReducer( user_type, DEFAULT_USER_TYPES ), [] );
+  return menu.reduce( menuReducer( user_type, no_legacy, DEFAULT_USER_TYPES ), [] );
 } // end getMenu function
 
 // export getMenu by default
