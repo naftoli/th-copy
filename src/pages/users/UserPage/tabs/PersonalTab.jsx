@@ -30,7 +30,7 @@ class PersonalTab extends Component {
 
   render(){
     const soldier = this.props.soldier;
-    let { user_serial, barcode, profilePicture  } = soldier;
+    let { user_serial, barcode, profilePicture } = soldier;
     const profile_picture = profilePicture ? `${LEGACY_URL}${profilePicture}` : '';
     // render form
     return (

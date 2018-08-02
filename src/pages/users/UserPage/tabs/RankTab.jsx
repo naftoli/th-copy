@@ -5,10 +5,11 @@ import moment from 'moment';
 
 class RankTab extends Component {
   render() {
-    let { currentRank } = this.props.soldier;
+    let { currentRank, miles } = this.props.soldier;
     return (
       <div id='RankTab'>
         <h4>Rank: {currentRank.name}</h4>
+        <h4>Miles: {miles.toLocaleString( navigator.language )}</h4>
         { currentRank.ranks.map( (rank, index) => <RankRow rank={rank} key={index} />) }
       </div>
     )
