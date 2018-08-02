@@ -37,6 +37,7 @@ class UserPage extends Component {
   // get the soldier for the page
   getSoldier = () => {
     const { match, getSoldier } = this.props;
+    this.setState({ loading: true });
     getSoldier( match.params.id )
     .then( soldier => { this.setState({ soldier, loading: false }); })
     .catch( error => {
@@ -113,7 +114,8 @@ class UserPage extends Component {
                 updateProfile={ this.updateProfile } />
             </TabPane>
             <TabPane tabId={2}>
-              <SettingsTab soldier={ soldier } handleChange={ this.handleUpdate } />
+              <SettingsTab soldier={ soldier } handleChange={ this.handleUpdate } 
+                getSoldier={this.getSoldier} />
             </TabPane>
             <TabPane tabId={3}>
               <RankTab soldier={ soldier } />

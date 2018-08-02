@@ -78,8 +78,12 @@ class SettingsTab extends Component {
             </Checkbox>
           </Col>
         </Row>
-
-        { !!parentAccount && <ParentRow parentAccount={parentAccount} userId={user_id}/> }
+        <Row>
+          <Col xs='12'>
+            <p className='title'>Parent Account</p>
+          </Col>
+        </Row>
+        <ParentRow parentAccount={parentAccount} userId={user_id} refresh={this.props.getSoldier}/> 
         {/* <Row>
           <Col xs='12'>
             <p className='title'>Actions</p>
