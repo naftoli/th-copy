@@ -7,7 +7,6 @@ class ChabadShliach
     private $key;
     private $shliachID;
     private $centers;
-    private $mosdos;
     private $error;
     private $debug;
 
@@ -15,7 +14,6 @@ class ChabadShliach
         $this->key = $key;
         $this->shliachID = 0;
         $this->centers = array();
-        $this->mosdos = array();
         $this->error = null;
         $this->debug = false;
     }
@@ -73,7 +71,6 @@ class ChabadShliach
     // get mosdos connected to shliach from chabad.org api
     public function setMosdos() {
         if ( $this->centers ) {
-            $mosdosInfo = array();
             foreach ($this->centers as $centerID) {
                 $url = "/api/centers/$centerID?includeDepartments=true";
                 $mosdos = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );

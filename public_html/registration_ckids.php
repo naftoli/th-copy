@@ -270,6 +270,30 @@ else {
                         $("#shliachPhone").html( phone );
                         $("#shliachAddress").html( address );
                         $("#shliachInfo").show();
+
+                        var mosdos = shliach.mosdos;
+                        var html = '';
+                        for (var m in mosdos) {
+                            var mosad = mosdos[m];
+                            var mosadName = mosad.name;
+                            var mosadAddress = mosad.address;
+                            if (mosad.address2) {
+                                mosadAddress += "<br />" + mosad.address2;
+                            }
+                            mosadAddress += "<br />" + mosad.city + ', ' + mosad.state + ' ' + mosad.zip + "<br />" + mosad.country;
+                            var types = mosad.types;
+                            html += "<input type='checkbox' name='mosdos[]' /> " + mosadName + ' (';
+                            for (var t in types) {
+                                html += types[t] + ', ';
+                            }
+                            // remove trailing comma
+                            html = html.substring(0, html.length-2);
+                            html += ")<br />" + mosadAddress + "<br />";
+                        }
+                        if (html) {
+                            $("#chooseMosdos").html( html );
+                            $("#mosdosInfo").show();
+                        }
                     });
                 }
             });
@@ -387,13 +411,14 @@ else {
                                         <div class="module">
                                             <div class="module_content">
                                                 <div class="lists form">
-                                                    <ul id="chooseMosdos"></ul>
+                                                    <p id="chooseMosdos"></p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
+                                
+                                <br /><br />
 								<p>* denotes mandatory field</p>								
 
                                 <h2>Principal's Info</h2>

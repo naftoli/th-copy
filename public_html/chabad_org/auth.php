@@ -12,7 +12,6 @@ if ( $shliach->authenticate() ) {
                   $success = true;
                   // do something with info
                   echo json_encode( $shliach );
-                  echo json_encode( $shliach->getMosdos() );
             }
       }
 }
