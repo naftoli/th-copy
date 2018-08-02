@@ -68,16 +68,22 @@ class ChabadShliach
                 //$url = "/api/centers/$centerID?includeDepartments=true";
                 $url = "/api/centers/$centerID";
                 $mosdos = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );
-                print_r( $mosdos ); exit;
-                // extract all mosad ids from types
                 $ids = array();
                 foreach ( $mosdos->Centers as $mosad ) {
-                   
-                    // $chabadMosad = new ChabadMosad( $mosad );
-                    // // only add mosad if it exists in our database
-                    // if ( !empty( $chabadMosad->types ) ) {
-                    //     $mosdosInfo[$centerID][] = $chabadMosad;
-                    // }
+                    $chabadMosad = new ChabadMosad( $mosad );
+                    // get mosad ids
+                    $ids = $chabadMosad->getIDs();
+                }
+                foreach ( $ids as $id ) {
+                    $url = "/api/centers/$id";
+                    $mosdos = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );
+                    foreach ( $mosdos->Centers as $mosad ) {
+                        $chabadMosad = new ChabadMosad( $mosad );
+                        // only add mosad if it exists in our database
+                        if ( !empty( $chabadMosad->types ) ) {
+                            $mosdosInfo[] = $chabadMosad;
+                        }
+                    }
                 }
                 print_r( $mosdosInfo );
             }
