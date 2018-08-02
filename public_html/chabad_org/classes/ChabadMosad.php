@@ -15,28 +15,20 @@ class ChabadMosad
         $this->phone = $mosadInfo->Phone;
         $this->fax = $mosadInfo->Fax;
         $this->url = $mosadInfo->WebAddress;
-        $this->types = $this->getTypes();
+        $this->getTypes();
     }
 
     private function getTypes() {
-        $types = array();
         $sql = "SELECT mosad_type FROM chabad_mosdos 
                 WHERE mosad_id = " . $this->id;
         $result = mysql_query( $sql );
-        while ( $row = mysql_fetch_assoc( $result ) ) {
-            $types[] = $row['mosad_type'];
+        if ( mysql_num_rows( $result ) > 0 ) {
+            $this->hasTypes = true;
+            while ( $row = mysql_fetch_assoc( $result ) ) {
+                $this->types[] = $row['mosad_type'];
+            }
+        } else {
+            $this->hasTypes = false;
         }
-        return $types;
-    }
-
-    public function getIDs() {
-        $ids = array();
-        $sql = "SELECT DISTINCT mosad_id FROM chabad_mosdos 
-                WHERE (mosad_id = " . $this->id . " or primary_mosad_id = " . $this->id . ")";
-        $result = mysql_query( $sql );
-        while ($row = mysql_fetch_assoc( $result )) {
-            $ids[] = $row['mosad_id'];
-        }
-        return $ids;
     }
 }

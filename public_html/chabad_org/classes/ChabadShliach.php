@@ -10,7 +10,6 @@ class ChabadShliach
     private $mosdos;
     private $error;
     private $debug;
-    private $include_departments;
 
     public function __construct( $key ) {
         $this->key = $key;
@@ -19,7 +18,6 @@ class ChabadShliach
         $this->mosdos = array();
         $this->error = null;
         $this->debug = false;
-        $this->include_departments = false;
     }
 
     // check if user exists and is valid on chabad.org
@@ -37,10 +35,6 @@ class ChabadShliach
 
     public function setDebug( $bool ) {
         $this->debug = $bool;
-    }
-
-    public function includeDepartments( $bool ) {
-        $this->include_departments = $bool;
     }
 
     // get shliach info from chabad.org api
@@ -81,85 +75,27 @@ class ChabadShliach
         if ( $this->centers ) {
             $mosdosInfo = array();
             foreach ($this->centers as $centerID) {
-                $url = "/api/centers/$centerID";
-                if ( $this->include_departments ) $url .= "?includeDepartments=true";
+                $url = "/api/centers/$centerID?includeDepartments=true";
                 $mosdos = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );
                 if ( $this->debug ) {
                     echo "Centers Info:";
                     print_r( $mosdos );
                 }
 
-                $ids = array();
                 foreach ( $mosdos->Centers as $mosad ) {
                     $chabadMosad = new ChabadMosad( $mosad );
-                    // get mosad ids
-                    $ids = $chabadMosad->getIDs();
-                    if ( $this->debug ) {
-                        echo "IDs associated with center $chabadMosad->id:";
-                        print_r( $ids );
-                    }
-                }
-
-                foreach ( $ids as $id ) {
-                    $url = "/api/centers/$id";
-                    $mosdos = json_decode( ChabadAuth::connectToApi( $url, $this->key ) );
-                    if ( $this->debug ) {
-                        echo "Mosad $id Info:";
-                        print_r( $mosdos );
-                    }
+                    if ( $chabadMosad->hasTypes ) $mosdosInfo[] = $chabadMosad;
                 }
             }
-
-            // mosad info is complicated in terms of how it's returned from the api
-            // api returns array of mosdos connected with center id returned by shliach info
-            // api info on each mosad returned does not include what type of institution it is (camp, day school, etc.)
-            // the type/category info can be extracted from our db
-
-            //$this->createMosdos( $mosdosInfo );           
+            if ( $this->debug ) {
+                echo "Mosdos Info:";
+                print_r( $mosdosInfo );
+            }       
 
             return true;
         } else {
             $this->error = "Invalid reponse from chabad.org";
             return false;
-        }
-    }
-
-    private function createMosdos( $info ) {
-        foreach ( $info as $centerID => $mosdos ) {
-            // find mosad with largest array of types
-            $num = count( $mosdos );
-            $totals = array();
-            for ($i = 0; $i < $num; $i++) {
-                $total = count( $mosdos[$i]->types );
-                $totals[$i] = $total;
-            }
-            // order by totals desc
-            arsort( $totals );
-            // get index of highest total
-            $index = key( $totals );
-
-            // set mosdos to all types of main mosad and see if passed in mosdos array has any extra info
-            foreach ( $mosdos[$index]->types as $type ) {
-                $id = $type['mosad_id'];
-                $found = false; // flag to know if we found more info or not
-                foreach ( $mosdos as $mosad ) {
-                    if ( $mosad->id == $id ) { // we have a match to give us more info
-                        // add category and type info from db
-                        $mosad->category = $type['mosad_category'];
-                        $mosad->type = $type['mosad_type'];
-                        $this->mosdos[] = $mosad;
-                        $found = true;
-                    }
-                }
-                if ( !$found ) {
-                    $mosad = (object) array();
-                    $mosad->id = $type['mosad_id'];
-                    $mosad->name = $type['name'];
-                    $mosad->category = $type['mosad_category'];
-                    $mosad->type = $type['mosad_type'];
-                    $this->mosdos[] = $mosad;
-                }
-            }
         }
     }
 
