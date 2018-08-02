@@ -90,7 +90,7 @@ export class ParentRow extends Component {
                 placeholder='Username' ref={ this.usernameRef } className='form-control'/>
               <InputGroupAddon addonType="append">
                 <Button onClick={ this.addToAccount } color='primary' outline tabIndex={0}>
-                  <i className={'fas fa-plus'}></i> Add
+                  <i className={'fas fa-user-plus'}></i> Add Soldier
                 </Button>
               </InputGroupAddon>
             </InputGroup>
