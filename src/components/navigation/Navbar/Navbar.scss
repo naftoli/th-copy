@@ -1,11 +1,9 @@
-/* Google Fonts */
-@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700");
 // Variables
 @import "../../../styles/colors";
 @import "../../../styles/variables";
 
 #mashpia-navbar{
-  font-family: 'Poppins', sans-serif;
+  // font-family: 'Poppins', sans-serif;
   background-color: $primary-color-dark;
   color: #fff;
   height: $navbar-height;
