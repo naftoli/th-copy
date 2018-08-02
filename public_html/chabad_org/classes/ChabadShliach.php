@@ -95,7 +95,7 @@ class ChabadShliach
                     // get mosad ids
                     $ids = $chabadMosad->getIDs();
                     if ( $this->debug ) {
-                        echo "IDs associated with this center:";
+                        echo "IDs associated with center $chabadMosad->id:";
                         print_r( $ids );
                     }
                 }
