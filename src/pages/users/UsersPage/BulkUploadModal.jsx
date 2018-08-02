@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { Callout } from '@blueprintjs/core';
+import { Callout } from 'components/ui'; 
 import { Spinner, FileInput } from 'components/ui';
 
 export class BulkUploadModal extends Component {
@@ -43,7 +43,7 @@ export class BulkUploadModal extends Component {
         <ModalHeader toggle={toggle}>Upload Soldier List</ModalHeader>
         <ModalBody>
           { errors.length === 0 && 
-            <Callout intent='primary' title='Directions:'>
+            <Callout color='primary' title='Directions:'>
               <p id='warning'>
                 Warning! Do not add any Soldiers that are switching from another Tzivos Hashem base. 
                 Please contact <a href='cth@tizvoshashem.org'>Headquarters</a> with a list of names, dob's and base's they came from to be transferred to your base. 
@@ -70,7 +70,7 @@ export class BulkUploadModal extends Component {
               </p>
             </Callout>
           } { errors.length > 0 && !loading &&
-            <Callout intent='danger' title='Error Details:'>
+            <Callout color='danger' title='Error Details:' icon='fas fa-exclamation-triangle'>
               { errors.map( (error, index) => <p key={index}>{error}</p> ) }
               <p><strong>Please correct the above errors and re-upload your spreadsheet</strong></p>
             </Callout>

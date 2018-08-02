@@ -4,7 +4,7 @@ import { LEGACY_URL, DEFAULT_PROFILE } from 'components/constants';
 // components
 import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
-import { Callout } from '@blueprintjs/core';
+import { Callout } from 'components/ui';
 import { Button, ButtonGroup } from 'reactstrap';
 import ProfilePicture from 'components/ui/ProfilePicture';
 import CropperModal from 'components/modals/CropperModal';
