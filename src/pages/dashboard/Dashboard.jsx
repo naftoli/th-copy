@@ -5,6 +5,7 @@ import { LEGACY_URL } from 'components/constants';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { changeLogin } from 'store/login/actions';
+import { ClientError } from 'pages/errors';
 import './Dashboard.scss';
 
 export class Dashboard extends Component {
@@ -24,9 +25,8 @@ export class Dashboard extends Component {
     }
     // close the sidebar if the route changes
     this.unlisten = this.props.history.listen( () => {
-      if ( window.innerWidth <= 768 ) {
-        this.setState({ active: false });
-      }
+      const active = window.innerWidth <= 768 ? false : this.state.active;
+      this.setState({ hasError: false, active })
     });
   }
   // when component unmounts unlisten to history
@@ -70,7 +70,7 @@ export class Dashboard extends Component {
         <div id="dashboard-body">
           <Sidebar menu={ menu } active={ this.state.active } />
           <div id="dashboard-content">
-            { this.state.hasError && <h1>Something went wrong.</h1> }
+            { this.state.hasError && <ClientError/> }
             { !this.state.hasError && this.props.children }
           </div>
         </div>
