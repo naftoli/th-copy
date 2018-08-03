@@ -101,7 +101,7 @@ class UserPage extends Component {
             Personal
           </NavigationTab>
           <NavigationTab active={activeTab === 2} onClick={this.toggle(2)}>
-            Settings + Platoon
+            Settings
           </NavigationTab>
           <NavigationTab active={activeTab === 3} onClick={this.toggle(3)}>
             Rank
