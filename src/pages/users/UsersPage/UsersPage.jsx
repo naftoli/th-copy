@@ -89,6 +89,14 @@ export class UsersPage extends Component {
     const { current_login, soldiers, loading } = this.props;
     const { cropperModalShow, cropperModalSrc, uploadModalShow } = this.state;
     const columns = getColumns( current_login.code, this.editPicture );
+    const onChange = scrollToTop('UsersPage');
+    const tableProps = {
+      data: soldiers, columns, className: "-striped -highlight", 
+      noDataText: loading ? 'Loading...' : 'No Data', 
+      filterable: true, defaultFilterMethod: filter,
+      minRows: soldiers.length ? 5 : 15, defaultPageSize: is.mobile() || is.tablet() ? 20 : 50,
+      onPageChange: onChange, onFilteredChange: onChange
+    }
     // page definition
     return (
       <div id="UsersPage">
@@ -116,9 +124,7 @@ export class UsersPage extends Component {
           }
         </ButtonGroup>
         {/* Table with data */}
-        <ReactTable data={ soldiers } columns={columns} filterable={true} className="-striped -highlight" 
-          noDataText={ loading ? 'Loading...' : 'No Data' } defaultFilterMethod={ filter }
-          onPageChange={ scrollToTop('UsersPage') } onFilteredChange={ scrollToTop('UsersPage') }/>
+        <ReactTable { ...tableProps } />
         {/* Modal to edit images */}
         <CropperModal isOpen={ cropperModalShow } src={ cropperModalSrc } 
           toggle={ this.closeCropperModal } uploadImage={ this.updatePicture }/>
