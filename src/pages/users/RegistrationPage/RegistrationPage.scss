@@ -1,5 +1,27 @@
+@import '../../../styles/colors.scss';
+
 #RegistrationPage {
+  height: 100%;
   .selected-row {
-    background-color: #cce5ff !important;
+    background-color: $primary-color-light !important;
+  }
+
+  .ReactTable {
+    max-height: 87%;
+    @media ( max-height: 1080px ){ max-height: 73.6%; }
+    @media ( max-height: 768px ){ max-height: 70%; }
+    @media ( max-height: 731px ){ max-height: 85%; }
+
+    .rt-tr-group { overflow: hidden; }
+    .rt-tr { align-items: center; &:hover{ cursor: pointer; } }
+    .rt-td { white-space: initial; }
+    .-pagination .-pageInfo {
+      margin-right: 0px;
+    }
+  }
+
+  #total{
+    margin-bottom: 10px;
+    margin-top: 10px;
   }
 }

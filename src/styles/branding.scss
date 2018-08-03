@@ -39,7 +39,13 @@ body { font-family: 'Poppins', sans-serif; }
   .rt-th.rt-resizable-header:not(.-cursor-pointer) {
     color: $primary-color; background: #f6f6f6;
   }
+  .-pagination button.-btn:not([disabled]):hover,
+  .-pagination button.-btn:not([disabled]):focus 
+  { background: $primary-color-hover; }
   .-pagination button.-btn { background: $primary-color; color: #fff; }
+  input, .-pagination select{ 
+    &:focus { box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+  }
 }
 
 // customize the scrollbar on chrome and safari
