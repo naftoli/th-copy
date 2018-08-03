@@ -55,7 +55,7 @@ const getMenu = ( user_type, no_legacy ) => {
           label: "Soldiers",
           items: [
             { label: "View / Edit", path: '/users' },
-            { label: "Registration", path: '/users/registration' },
+            { label: "Registration", path: '/users/registration', user_types: [ 'BC' ] },
             { label: "Rank Cards", path: '/users/cards' },
             { label: "Update Missions", legacy: true, path: '/add_missions.php' },
             { label: "Update Medals", legacy: true, path: '/add_medals.php' },

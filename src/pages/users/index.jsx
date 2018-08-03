@@ -16,10 +16,11 @@ export class UsersIndexPage extends Component {
     const { code } = this.props.login;
     const { path } = this.props.match;
     const isBC = ['HQ', 'CKIDS-ADMIN', 'BC'].includes( code );
+    const onlyBC = ['BC'].includes( code );
     return (
       <Switch>
         <Route path={ path } exact component={ UsersPage } />
-        { isBC && <Route path={`${path}/registration`} component={ RegistrationPage }/> }
+        { onlyBC && <Route path={`${path}/registration`} component={ RegistrationPage }/> }
         { isBC && <Route path={`${path}/cards`} render={props => <h1>User Rank Cards</h1>}/> }
         <Route path={`${path}/new`} component={ NewUserPage }/>
         <Route path={`${path}/:id([0-9]+)`} component={ UserPage }/>
