@@ -8,6 +8,8 @@ import { changeLogin } from 'store/login/actions';
 import { ClientError } from 'pages/errors';
 import './Dashboard.scss';
 
+const threshold = 768;
+
 export class Dashboard extends Component {
   // default props
   static defaultProps = {
@@ -20,12 +22,12 @@ export class Dashboard extends Component {
   // setup initial state on component mount
   componentDidMount() {
     // open the sidebar by default on larger displays
-    if ( window.innerWidth > 768 ) {
+    if ( window.innerWidth > threshold ) {
       this.setState({ active: true });
     }
     // close the sidebar if the route changes
     this.unlisten = this.props.history.listen( () => {
-      const active = window.innerWidth <= 768 ? false : this.state.active;
+      const active = window.innerWidth <= threshold ? false : this.state.active;
       this.setState({ hasError: false, active })
     });
   }
