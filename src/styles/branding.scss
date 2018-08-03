@@ -72,8 +72,9 @@ body { font-family: 'Poppins', sans-serif; }
 .nav-tabs {
   overflow-x: auto; flex-wrap: nowrap; border-color: $primary-color;
   a.active.nav-link { background-color: $primary-color; color: #fff; border-color: $primary-color; }
-  .nav-item{ margin-bottom: 0px; }
-  a.nav-link{ white-space: nowrap; font-weight: bold; transition: .1s; }
+  .nav-item { margin-bottom: 0px; }
+  a.nav-link { white-space: nowrap; font-weight: bold; transition: .1s; }
+  a.nav-link:hover { cursor: default; }
 }
 .tab-content { padding: 10px; margin-bottom: 10px; border: 1px solid $primary-color; border-top: none; }
 
