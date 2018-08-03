@@ -14,6 +14,13 @@ export const setSoldiers = soldiers => {
   }
 };
 
+export const setRegistrationSoldiers = soldiers => {
+  return {
+    type: types.SET_REGISTRATION_SOLDIERS,
+    payload: soldiers
+  }
+};
+
 export const updateSoldier = ( id, updates ) => {
   return {
     type: types.UPDATE_SOLDIER,

@@ -1,8 +1,8 @@
 import * as types from './types';
 
 export const initialState = {
-  soldiers: [],
-  loading: false
+  soldiers: [], loading: false,
+  registration_soldiers: []
 };
 
 export default ( state = initialState, action ) => {
@@ -14,6 +14,10 @@ export default ( state = initialState, action ) => {
     case types.SET_SOLDIERS:
       return Object.assign({}, state, {
         soldiers: action.payload
+      });
+    case types.SET_REGISTRATION_SOLDIERS:
+      return Object.assign({}, state, {
+        registration_soldiers: action.payload
       });
     case types.UPDATE_SOLDIER:
       let updated_soldiers = state.soldiers.concat( action.payload.updates );
