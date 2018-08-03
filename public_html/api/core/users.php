@@ -4,11 +4,6 @@ include_once( __DIR__ . "/../header/header.php" );
 
 class UsersRouter {
 
-    public function authenticate() {
-        global $current_user;
-        return in_array( $current_user->authCode(), [ 'HQ', 'BC' ] );
-    }
-
     public function index() {
         global $current_user; global $pdo;
         // filters and params for the filters
