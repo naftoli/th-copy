@@ -47,8 +47,9 @@ export class RegistrationPage extends Component {
       'First Name', 'Last Name', 'Serial Number', 'Registration Fee', 'Platoon'
     ];
     const rows = soldiers.map( soldier => [
-      soldier.first, soldier.last, soldier.user_serial, soldier.fee, `="${soldier.platoon}"`
-    ])
+      soldier.first, soldier.last, soldier.user_serial, soldier.fee,
+      soldier.platoon ? `="${soldier.platoon}"` : ''
+    ]);
     arrayToCSV( headers, rows, 'not_registered_soldiers' );
   }
 
