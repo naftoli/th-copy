@@ -218,7 +218,7 @@ else {
 			
 			function validate() {
                 var errors = [];
-				var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+				var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,6})$/;
 
                 if ( duplicateEmail ) {
                     errors.push('The email you are using for your base commander (admin) account already exists. Please choose a different one.');
