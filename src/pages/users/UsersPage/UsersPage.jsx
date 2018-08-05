@@ -69,7 +69,6 @@ export class UsersPage extends Component {
 
   // download the content as a CSV
   toCSV = () => {
-    const toast_id = toast.info("Generating File...");
     const headers = [
       'Serial Number', 'First Name', 'Last Name', 'DOB', 'Gender', 'Registered', 
       'Chayolei', 'Tehillim', 'Chidon', 'Platoon', 'Base'
@@ -80,8 +79,7 @@ export class UsersPage extends Component {
       soldier.user_registered, soldier.chayolei, soldier.yan, soldier.chidon,
       soldier.platoon ? `="${soldier.platoon.name}"` : '-', soldier.school.school_name
     ]);
-    arrayToCSV( headers, rows, 'users' );
-    toast.update( toast_id, {render: 'File Generated.'} );
+    arrayToCSV( headers, rows, 'soldiers' );
   }
 
   // render the page
