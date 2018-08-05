@@ -5,14 +5,12 @@ require 'ChabadMosad.php';
 class ChabadShliach 
 {
     private $key;
-    private $shliachID;
     private $centers;
     private $error;
     private $debug;
 
     public function __construct( $key ) {
         $this->key = $key;
-        $this->shliachID = 0;
         $this->centers = array();
         $this->error = null;
         $this->debug = false;
