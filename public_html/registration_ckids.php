@@ -294,14 +294,14 @@ else {
             {
                 if (ev.response.Status)
                 {
-                    console.log(ev.response);
+                    //console.log(ev.response);
                     var loaderNode = Co.Tools.GetElementsByClassName("loader", "div");
                     if (loaderNode.length > 0)
                         Co.Tools.Content.AppendClassName(loaderNode, "active");
                     //make call to the server.
                     var key = ev.response.Key;
                     $.post('chabad_org/getShliachInfo.php', { key: key }, function( shliachInfo ) {
-                        console.log( shliachInfo );
+                        //console.log( shliachInfo );
                         shliach = shliachInfo; // set access to shliach info from global scope
                         var name = shliach.title + ' ' + shliach.first + ' ' + shliach.last;
                         var phone = shliach.phone;
