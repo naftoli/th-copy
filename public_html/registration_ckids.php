@@ -26,8 +26,14 @@ if (isset($_POST["action"])) {
 	$message = "";
 	
 	foreach ($_POST as $k => $v) {
-		$_POST[$k] = mysql_real_escape_string(trim($v));
-	}
+        if (!is_array($v) && $k != 'shliach')
+		    $_POST[$k] = mysql_real_escape_string(trim($v));
+    }
+
+    $shliach = json_decode( $_POST['shliach'] );
+    if ( !empty( $_POST['shliachEmail'] ) ) {
+        $shliach->email = $_POST['shliachEmail'];
+    }    
 
 	if ($action == "update") {		
 		$sql = "UPDATE admins SET title='" . $_POST['title']  ."', first='" . $_POST['first'] . "', last='" . $_POST['last'] . "', admin_phone_mobile='" . $_POST['admin_phone_mobile'] . "', admin_email='" . $_POST['admin_email'] . "', admin_phone_work='" . $_POST['admin_phone_work'] . "', admin_phone_home='" . $_POST['admin_phone_home'] . "' WHERE admin_id=" . $admin_id;
@@ -36,36 +42,13 @@ if (isset($_POST["action"])) {
 			//echo $sql . mysql_error();
 			$message = "<span style='color:red;'>Administrator not updated. Please try again.</span></a>";
 		}
-
-		$school_type = $_SESSION['school_type'] = $_POST['school_type'];
 		
 		// update principal info and school type / chidon info
 		$sql = "update schools
 				set principal = '" . mysql_real_escape_string($_POST['p_name']) . "',
 				principal_number = '" . mysql_real_escape_string($_POST['p_number']) . "',
-				principal_email = '" . mysql_real_escape_string($_POST['p_email']) . "'";
-
-		switch ($school_type) {
-			case 'chayolei':
-				$sql .= ", chayolei = 1, chidon = 1, tanya = 1, ckids = 0";
-				$sql .= ", chidon_name = '" . mysql_real_escape_string($_POST['chidon_name']) . "',
-						chidon_number = '" . mysql_real_escape_string($_POST['chidon_number']) . "',
-						chidon_email = '" . mysql_real_escape_string($_POST['chidon_email']) . "'";
-				break;
-			case 'chidon':
-				$sql .= ", chayolei = 0, chidon = 1, tanya = 0, ckids = 0";
-				$sql .= ",chidon_name = '" . mysql_real_escape_string($_POST['chidon_name']) . "',
-						chidon_number = '" . mysql_real_escape_string($_POST['chidon_number']) . "',
-						chidon_email = '" . mysql_real_escape_string($_POST['chidon_email']) . "'";
-				break;
-			case 'tanya':
-				$sql .= ", chayolei = 0, chidon = 0, tanya = 1, ckids = 0";
-				break;
-			case 'ckids':
-				$sql .= ", chayolei = 0, chidon = 0, tanya = 0, ckids = 1";
-				break;
-		}
-
+                principal_email = '" . mysql_real_escape_string($_POST['p_email']) . "'";
+        $sql .= ", chayolei = 0, chidon = 0, tanya = 0, ckids = 1";
 		$sql .= " where school_id = " . $school_id;
 
 		if (!mysql_query( $sql )) {
@@ -81,27 +64,26 @@ if (isset($_POST["action"])) {
 				admin_phone_mobile='" . $_POST['admin_phone_mobile'] . "', 
 				admin_email='" . 		$_POST['admin_email'] . "', 
 				admin_phone_work='" . 	$_POST['admin_phone_work'] . "', 
-				admin_phone_home='" . 	$_POST['admin_phone_home'] . "'";
-				
-		$query = mysql_query($sql);
-		if ($query) {
-			$admin_id = mysql_insert_id();
+                admin_phone_home='" . 	$_POST['admin_phone_home'] . "', 
+                chabad_ord_id = " .     $shliach->id;
+        $_SESSION['qry'] = $sql;
+		// $query = mysql_query($sql);
+		// if ($query) {
+			//$admin_id = mysql_insert_id();
 			$_SESSION['admin_id'] = $admin_id;
 			$_SESSION['school_id'] = $school_id;
 			$_SESSION['school_type']	= $_POST['school_type'];
 			
-			// save principal and chidon info to session
+			// save principal and shliach info to session
 			$_SESSION['p_name'] 		= $_POST['p_name'];
 			$_SESSION['p_number'] 		= $_POST['p_number'];
-			$_SESSION['p_email'] 		= $_POST['p_email'];
-			$_SESSION['chidon_name'] 	= $_POST['chidon_name'];
-			$_SESSION['chidon_number'] 	= $_POST['chidon_number'];
-			$_SESSION['chidon_email'] 	= $_POST['chidon_email'];
-		} else {
-			//echo $sql . mysql_error();
-			$message = "<span style='color:red;'>Administrator not added. Please try again.</span></a>";
-		    //echo mysql_error();
-		}			
+            $_SESSION['p_email'] 		= $_POST['p_email'];
+            $_SESSION['shliach']        = json_encode( $shliach );
+		// } else {
+		// 	//echo $sql . mysql_error();
+		// 	$message = "<span style='color:red;'>Administrator not added. Please try again.</span></a>";
+		//     //echo mysql_error();
+		// }			
 	}
 
 	if ($message=="") {
@@ -151,12 +133,29 @@ else {
                             alert('This username is already in use.\nPlease choose another one.');
                         }
                     });
-                })
+                });
+                
+                $("#copyShliach").click( function() {
+                    if ( $(this).is(":checked") ) {
+                        $("#p_name").val( shliach.first + ' ' + shliach.last );
+                        $("#p_number").val( shliach.phone );
+                        $("#p_email").val( $("#shliachEmail").val().trim() );
+                    }
+                });
+
+                $("#copyToBc").click( function() {
+                    if ( $(this).is(":checked") ) {
+                        $("#bcFirst").val( shliach.first );
+                        $("#bcLast").val( shliach.last );
+                        $("#bcEmail").val( $("#shliachEmail").val().trim() );
+                        $("#bcPhone2").val( shliach.phone );
+                    }
+                });
 			});
 
 			function check_next_page() {
 				if (next_page) {		
-					location.href = "registration_2.php";
+					location.href = "registration_ckids2.php";
 				}
 			}
 			
@@ -187,67 +186,75 @@ else {
 			}
 			
 			function validate() {
+                var errors = [];
 				var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-				
-				// make sure school type is checked
-				var school_type =  false;
-				if ($(".school_type:checked").length) {
-					school_type = true;
-					var school_type_val = $(".school_type:checked").val();
-				}
 
-				if (!school_type) {
-					alert('You must indicate what type of school you have.');
-					return false;
-				}
-								
-				if (school_type_val == 'chayolei' || school_type_val == 'chidon') {
-					// make sure chidon info is entered
-					var cname = $("#chidon_name").val().trim();
-					var cnumber = $("#chidon_number").val().trim();
-					var cemail = $("#chidon_email").val().trim();
-					if (cname == '' || cnumber == '' || cemail == '') {
-						alert("You must enter your chidon coordinator name, number and email.");
-						return false;
-					}
-					if (cname.length < 3) {
-						alert("Coordinator name must be at least 3 characters.");
-						return false;
-					}
-					if (cnumber.length < 9 || isAlphabetic(cnumber)) {
-						alert("Coordinator number must be at least 9 digits and cannot contain alphabetic characters.");
-						return false;
-					}
-					if (reg.test(cemail) !== true) {
-						alert("Invalid coordinator email address.");
-						return false;
-					}
-				}
-				
-				// principal info
+                if ( shliach ) {
+                    // check that shliach email is filled in and is valid
+                    var email = $("#shliachEmail").val().trim();
+                    if (reg.test(email) !== true) {
+                        errors.push('You must enter a valid shliach email.');
+                        $("#shliachEmail").focus();
+                    }
+                }
+
+                // make sure username and password fields are not empty
+                var username = $("#username").val().trim();
+                var password = $("#password").val().trim();
+                var password2 = $("#password2").val().trim();
+                if (username == '' || password == '') {
+                    errors.push('You must enter a username and password.');
+                }
+                if (password !== password2) {
+                    errors.push('Your passwords do not match.');
+                }
+
+				// check principal info
 				var p_name = $("#p_name").val().trim();
 				var p_number = $("#p_number").val().trim();
 				var p_email = $("#p_email").val().trim();
 				if (p_name == '' || p_number == '' || p_email == '') {
-					alert("You must enter the principal's info.");
-					return false;
+					errors.push("You must enter the principal's info.");
 				}
 				if (p_name.length < 3) {
-					alert("Principal name must be at least 3 characters.");
-					return false;
+					errors.push("Principal name must be at least 3 characters.");
 				}
 				if (p_number.length < 9 || isAlphabetic(p_number)) {
-					alert("Principal number must be at least 9 digits and cannot contain alphabetic characters.");
-					return false;
+					errors.push("Principal number must be at least 9 digits and cannot contain alphabetic characters.");
 				}
 				if (reg.test(p_email) !== true) {
-					alert("Invalid principal email address.");
-					return false;
+					errors.push("Invalid principal email address.");
 				}
 
-				if (school_type_val == 'chayolei') return checkTerms();
-			}
+                // check base commander info
+                var bc_first = $("#bcFirst").val().trim();
+                var bc_last = $("#bcLast").val().trim();
+                var bc_email = $("#bcEmail").val().trim();
+                var bc_phone1 = $("#bcPhone1").val().trim();
+                var bc_phone2 = $("#bcPhone2").val().trim();
+                var bc_phone3 = $("#bcPhone3").val().trim();
 
+                if (bc_first.length < 2 || bc_last.length < 3) {
+                    errors.push('Base Commander first and last name are too short.');
+                }
+
+                if (bc_phone1.length < 9 || isAlphabetic(bc_phone1) || 
+                    bc_phone2.length < 9 || isAlphabetic(bc_phone2) ||
+                    (bc_phone3.length > 0 && (bc_phone3.length < 9 || isAlphabetic(bc_phone3)))) {
+                        errors.push('Base Commander phone numbers must be at least 9 digits and cannot contain alphabetic characters.');
+                }
+
+                if (reg.test(bc_email) !== true) {
+                    errors.push('Invalid base commander email.');
+                }
+
+                if ( errors.length ) {
+                    alert( errors.join("\n") );
+                    return false;
+                }
+			}
+            
+            var shliach; 
             MyChabadApi.Events.AddEventListener("statusUpdated", function (ev)
             {
                 if (ev.response.Status)
@@ -257,10 +264,10 @@ else {
                     if (loaderNode.length > 0)
                         Co.Tools.Content.AppendClassName(loaderNode, "active");
                     //make call to the server.
-                    key = ev.response.Key;
-                    $("#chabadKey").val( key );
-                    $.post('chabad_org/auth.php', { key: key }, function( shliach ) {
-                        console.log( shliach );
+                    var key = ev.response.Key;
+                    $.post('chabad_org/getShliachInfo.php', { key: key }, function( shliachInfo ) {
+                        console.log( shliachInfo );
+                        shliach = shliachInfo; // set access to shliach info from global scope
                         var name = shliach.title + ' ' + shliach.first + ' ' + shliach.last;
                         var phone = shliach.phone;
                         var address = shliach.address;
@@ -269,31 +276,11 @@ else {
                         $("#shliachName").html( name );
                         $("#shliachPhone").html( phone );
                         $("#shliachAddress").html( address );
+                        $("#login").hide();
                         $("#shliachInfo").show();
-
-                        var mosdos = shliach.mosdos;
-                        var html = '';
-                        for (var m in mosdos) {
-                            var mosad = mosdos[m];
-                            var mosadName = mosad.name;
-                            var mosadAddress = mosad.address;
-                            if (mosad.address2) {
-                                mosadAddress += "<br />" + mosad.address2;
-                            }
-                            mosadAddress += "<br />" + mosad.city + ', ' + mosad.state + ' ' + mosad.zip + "<br />" + mosad.country;
-                            var types = mosad.types;
-                            html += "<input type='checkbox' name='mosdos[]' /> " + mosadName + ' (';
-                            for (var t in types) {
-                                html += types[t] + ', ';
-                            }
-                            // remove trailing comma
-                            html = html.substring(0, html.length-2);
-                            html += ")<br />" + mosadAddress + "<br />";
-                        }
-                        if (html) {
-                            $("#chooseMosdos").html( html );
-                            $("#mosdosInfo").show();
-                        }
+                        $("#copyShliachInfo").show();
+                        $("#copyToBcInfo").show();
+                        $("#shliach").val( JSON.stringify( shliach ) );
                     });
                 }
             });
@@ -366,7 +353,7 @@ else {
 								</div>
 							</div>
 	 
-							<form method="post" name="registration_form" id="registration_form" action="registration.php" accept-charset="UTF-8"> 
+							<form method="post" name="registration_form" id="registration_form" action="registration_ckids.php" accept-charset="UTF-8"> 
 								<? if ($admin_id > 0) : ?>
 								<input type="hidden" name="action" value="update">
 								<? else : ?>
@@ -374,13 +361,16 @@ else {
                                 <? endif; ?>
                                 
                                 <input type="hidden" name="school_type" value="ckids" />
-                                <input type="hidden" name="chabadKey" id="chabadKey" />
+                                <input type="hidden" name="shliach" id="shliach" value="" />
+                                
+                                <div id="login">
+                                    <p>Login to chabad.org to retrieve your personal and mosad info.</p>
+                                    <span class="mychabad" view="login" settings="viewStyle=button"></span>
+                                    <div class="loader"></div>
+                                    <br /><br />  
+                                </div>
 
-                                <h2>Chabad.org Login</h2>
-                                <p>You can login to chabad.org for us to retreive your personal information as well as the mosdos that are connected to your account</p>
-                                <span class="mychabad" view="login" settings="viewStyle=button"></span>
-                                <div class="loader"></div>                                
-                                <br /><br />
+                                <p>* denotes mandatory field</p>
 
                                 <div id="shliachInfo" style="display: none;">
                                     <h2>Shliach Info</h2>
@@ -390,38 +380,54 @@ else {
                                                 <ul>
                                                     <li>
                                                         <span class="label">Name</span>
-                                                        <span id="shliachName"></span>
+                                                        <span class="input" id="shliachName"></span>
                                                     </li>
                                                     <li>
                                                         <span class="label">Phone</span>
-                                                        <span id="shliachPhone"></span>
+                                                        <span class="input" id="shliachPhone"></span>
                                                     </li>
                                                     <li>
                                                         <span class="label">Address</span>
-                                                        <span id="shliachAddress"></span>
-                                                    </li>      
+                                                        <span class="input" id="shliachAddress"></span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="label">*Email</span>
+                                                        <span class="input"><input type="text" name="shliachEmail" id="shliachEmail" /></span>    
+                                                    </li>
                                                 </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div id="mosdosInfo" style="display: none;">                               
-                                        <h2>Mosdos</h2>
-                                        <p>Please choose which mosdos you would like to associate with your Tzivos Hashem account.
-                                        <div class="module">
-                                            <div class="module_content">
-                                                <div class="lists form">
-                                                    <p id="chooseMosdos"></p>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <br /><br />
-								<p>* denotes mandatory field</p>								
+                                <? if (!isset($admin_id) || $admin_id == 0) : ?>
+                                    <h2>Create Login For Tzivos Hashem Account</h2> 
+                                    <div class="module" id="module-info">
+                                        <div class="module_content">
+                                            <div class="lists form">
+                                                <ul>
+                                                    <li>
+                                                        <span class="label"><label for="username">*Username</label></span>
+                                                        <span class="input"><input class="required" name="username" id="username" type="text" required /></span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="label"><label for="password">*Password</label></span>
+                                                        <span class="input"><input class="required" name="password" id="password" type="password" required /></span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="label"><label for="password2">*Re-enter Password</label></span>
+                                                        <span class="input"><input class="required" name="password2" id="password2" type="password" required /></span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <? endif; ?>
 
                                 <h2>Principal's Info</h2>
+                                <div id="copyShliachInfo" style="display:none">
+                                    <input type="checkbox" id="copyShliach" /> Shliach is Principal
+                                </div>
                                 <div class="module" id="module-info">
                                 
                                     <div class="module_content">
@@ -431,15 +437,15 @@ else {
                                             <ul>
                                                 <li>
                                                     <span class="label"><label for="p_name">*Name</label></span>
-                                                    <span class="label"><input name="p_name" type="text" id="p_name" value="<?=isset($school_info['principal'])?$school_info['principal']:''?>" required /></span>
+                                                    <span class="input"><input name="p_name" type="text" id="p_name" value="<?=isset($school_info['principal'])?$school_info['principal']:''?>" required /></span>
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="p_number">*Contact Number</label></span>
-                                                    <span class="label"><input name="p_number" type="text" id="p_number" value="<?=isset($school_info['principal_number'])?$school_info['principal_number']:''?>" required /></span>
+                                                    <span class="input"><input name="p_number" type="text" id="p_number" value="<?=isset($school_info['principal_number'])?$school_info['principal_number']:''?>" required /></span>
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="p_email">*Email</label></span>
-                                                    <span class="label"><input name="p_email" type="email" id="p_email" value="<?=isset($school_info['principal_email'])?$school_info['principal_email']:''?>" required /></span>
+                                                    <span class="input"><input name="p_email" type="text" id="p_email" value="<?=isset($school_info['principal_email'])?$school_info['principal_email']:''?>" required /></span>
                                                 </li>
                                             </ul>
                                             
@@ -450,6 +456,9 @@ else {
                                 </div>
                                 
                                 <h2>Base Commander's Info</h2> 
+                                <div id="copyToBcInfo" style="display:none">
+                                    <input type="checkbox" id="copyToBc" /> Shliach is Base Commander
+                                </div>
                                 <div class="module" id="module-info">
                                 
                                     <div class="module_content">
@@ -458,11 +467,12 @@ else {
                                             
                                             <ul>
                                                 <li>
-                                                    <span class="label"><label for="title">Title</label>
+                                                    <span class="label">
+                                                        <label for="title">Title</label>
                                                     </span>
                                                     
                                                     <span class="input">
-                                                        <select name="title" class="select">
+                                                        <select name="title" class="select input">
                                                             <option value="0" disabled="disabled">Please Select</option>
                                                             <? if ($admin->title == "Rabbi") : ?>
                                                             <option value="Rabbi" selected>Rabbi</option>
@@ -492,60 +502,37 @@ else {
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="first">*First Name</label></span>
-                                                    <span class="label"><input class="required" name="first" type="text" value="<?=isset($admin->first)?$admin->first:'';?>" required /></span>
+                                                    <span class="input"><input class="required" name="first" id="bcFirst" type="text" value="<?=isset($admin->first)?$admin->first:'';?>" required /></span>
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="last">*Last Name</label></span>
-                                                    <span class="label"><input class="required" name="last" type="text" value="<?=isset($admin->last)?$admin->last:'';?>" required /></span>
+                                                    <span class="input"><input class="required" name="last" id="bcLast" type="text" value="<?=isset($admin->last)?$admin->last:'';?>" required /></span>
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="mobile">*Mobile Phone</label></span>
-                                                    <span class="label"><input class="required" name="admin_phone_mobile" type="text" value="<?=isset($admin->admin_phone_mobile)?$admin->admin_phone_mobile:'';?>" required /></span>
+                                                    <span class="input"><input class="required" name="admin_phone_mobile" id="bcPhone1" type="text" value="<?=isset($admin->admin_phone_mobile)?$admin->admin_phone_mobile:'';?>" required /></span>
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="email">*Email Address</label></span>
-                                                    <span class="label"><input class="required email" name="admin_email" id="admin_email" type="email" value="<?=isset($admin->admin_email)?$admin->admin_email:'';?>" required /></span>
+                                                    <span class="input"><input class="required" name="admin_email" id="bcEmail" type="text" value="<?=isset($admin->admin_email)?$admin->admin_email:'';?>" required /></span>
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="work">*Work Phone (+ext)</label></span>
-                                                    <span class="label"><input class="required" name="admin_phone_work" type="text" value="<?=isset($admin->admin_phone_work)?$admin->admin_phone_work:'';?>" required /></span>
+                                                    <span class="input"><input class="required" name="admin_phone_work" id="bcPhone2" type="text" value="<?=isset($admin->admin_phone_work)?$admin->admin_phone_work:'';?>" required /></span>
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="home">Home Phone</label></span>
-                                                    <span class="label"><input name="admin_phone_home" type="text" value="<?=isset($admin->admin_phone_home)?$admin->admin_phone_home:'';?>" /></span>
+                                                    <span class="input"><input name="admin_phone_home" id="bcPhone3" type="text" value="<?=isset($admin->admin_phone_home)?$admin->admin_phone_home:'';?>" /></span>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
-                                                                
-                                <? if (!isset($admin_id) || $admin_id == 0) : ?>
-                                <h2>Login Info</h2> 
-                                <div class="module" id="module-info">
-                                    <div class="module_content">
-                                        <div class="lists form">
-                                            <ul>
-                                                <li>
-                                                    <span class="label"><label for="username">*Username</label></span>
-                                                    <span class="label"><input class="required" name="username" id="username" type="text" required /></span>
-                                                </li>
-                                                <li>
-                                                    <span class="label"><label for="password">*Password</label></span>
-                                                    <span class="label"><input class="required" name="password" id="password" type="password" required /></span>
-                                                </li>
-                                                <li>
-                                                    <span class="label"><label for="password2">*Re-enter Password</label></span>
-                                                    <span class="label"><input class="required" name="password2" id="password2" type="password" required /></span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <? endif; ?>
-                                
+
                                 <div id="nonChayolei">
                                     <input id="Continue" type="submit" value="Continue" class="button" onclick="return validate()">
                                 </div>
+                                                                
 							</form> 
 						</div>
 					</div>
