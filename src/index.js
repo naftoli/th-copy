@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 // Global Styles
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'cropperjs/dist/cropper.css';
 import 'react-table/react-table.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 import 'react-datepicker/dist/react-datepicker.css';
+import 'react-credit-cards/es/styles-compiled.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 // supported languages;
 import moment from 'moment';
 import 'moment/locale/en-ca.js';
