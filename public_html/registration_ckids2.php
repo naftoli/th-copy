@@ -238,28 +238,26 @@ if ( isset( $school->school_logo_id ) && $school->school_logo_id > 0 )
 				});
 
                 var shliach = <?=$_SESSION['shliach']?>;
-                if (shliach) {
+                if (shliach && shliach.mosdos) {
                     var mosdos = shliach.mosdos;
                     var html = '';
-					if ( mosdos.length ) {
-						for (var m in mosdos) {
-							var mosad = mosdos[m];
-							var mosadName = mosad.name;
-							var mosadAddress = mosad.address;
-							if (mosad.address2) {
-								mosadAddress += "<br />" + mosad.address2;
-							}
-							mosadAddress += "<br />" + mosad.city + ', ' + mosad.state + ' ' + mosad.zip + "<br />" + mosad.country;
-							var types = mosad.types;
-							html+= "<li><input type='hidden' name='mosdosInfo[]' value='" + JSON.stringify( mosad ) + "' />";
-							html += "<input type='checkbox' class='mosdos' name='mosdos[]' value='" + mosad.id + "' /> <div class='mosadInfo'>" + mosadName + ' (';
-							for (var t in types) {
-								html += types[t] + ', ';
-							}
-							// remove trailing comma
-							html = html.substring(0, html.length-2);
-							html += ")<br />" + mosadAddress + "</div></li>";
+					for (var m in mosdos) {
+						var mosad = mosdos[m];
+						var mosadName = mosad.name;
+						var mosadAddress = mosad.address;
+						if (mosad.address2) {
+							mosadAddress += "<br />" + mosad.address2;
 						}
+						mosadAddress += "<br />" + mosad.city + ', ' + mosad.state + ' ' + mosad.zip + "<br />" + mosad.country;
+						var types = mosad.types;
+						html+= "<li><input type='hidden' name='mosdosInfo[]' value='" + JSON.stringify( mosad ) + "' />";
+						html += "<input type='checkbox' class='mosdos' name='mosdos[]' value='" + mosad.id + "' /> <div class='mosadInfo'>" + mosadName + ' (';
+						for (var t in types) {
+							html += types[t] + ', ';
+						}
+						// remove trailing comma
+						html = html.substring(0, html.length-2);
+						html += ")<br />" + mosadAddress + "</div></li>";
 					}
                     if (html != '') {
                         $("#chooseMosdos").html( html );
