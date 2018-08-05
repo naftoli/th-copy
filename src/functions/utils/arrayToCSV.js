@@ -24,7 +24,7 @@ const arrayToCSV = ( headers, rows, filename ) => {
     // create and click the download link
     let link = document.createElement('a');
     link.href = `data:text/csv;charset=utf-8,${csvContent}`;
-    link.target = '_blank';
+    // link.target = '_blank';
     link.download = `${filename}.csv`;
     link.click();
     // update the notification
