@@ -166,6 +166,11 @@ else {
                         checkDuplicateEmail();
                     }
                 });
+
+                <?php if ( isset( $_SESSION['shliach'] ) ) : ?>
+                    shliach = <?=$_SESSION['shliach']?>;
+                    setShliachInfo();
+                <?php endif; ?>
 			});
 
 			function check_next_page() {
@@ -303,22 +308,26 @@ else {
                     $.post('chabad_org/getShliachInfo.php', { key: key }, function( shliachInfo ) {
                         //console.log( shliachInfo );
                         shliach = shliachInfo; // set access to shliach info from global scope
-                        var name = shliach.title + ' ' + shliach.first + ' ' + shliach.last;
-                        var phone = shliach.phone;
-                        var address = shliach.address;
-                        if (shliach.address2) address += "<br />" + shliach.address2;
-                        address += "<br />" + shliach.city + ', ' + shliach.state + ' ' + shliach.zip + "<br />" + shliach.country;
-                        $("#shliachName").html( name );
-                        $("#shliachPhone").html( phone );
-                        $("#shliachAddress").html( address );
-                        $("#login").hide();
-                        $("#shliachInfo").show();
-                        $("#copyShliachInfo").show();
-                        $("#copyToBcInfo").show();
-                        $("#shliach").val( JSON.stringify( shliach ) );
+                        setShliachInfo();
                     });
                 }
             });
+
+            function setShliachInfo() {
+                var name = shliach.title + ' ' + shliach.first + ' ' + shliach.last;
+                var phone = shliach.phone;
+                var address = shliach.address;
+                if (shliach.address2) address += "<br />" + shliach.address2;
+                address += "<br />" + shliach.city + ', ' + shliach.state + ' ' + shliach.zip + "<br />" + shliach.country;
+                $("#shliachName").html( name );
+                $("#shliachPhone").html( phone );
+                $("#shliachAddress").html( address );
+                $("#login").hide();
+                $("#shliachInfo").show();
+                $("#copyShliachInfo").show();
+                $("#copyToBcInfo").show();
+                $("#shliach").val( JSON.stringify( shliach ) );
+            }
 		</script>
 		<style type="text/css">
 		    label.error {
@@ -427,7 +436,9 @@ else {
                                                     </li>
                                                     <li>
                                                         <span class="label">*Email</span>
-                                                        <span class="input"><input type="text" name="shliachEmail" id="shliachEmail" class="email" /></span>    
+                                                        <span class="input"><input type="text" name="shliachEmail" id="shliachEmail" class="email" 
+                                                        <?php if ( isset( $_POST['shliachEmail'] ) ) echo "value='" . $_POST['shliachEmail'] . "'" ?>
+                                                        /></span>    
                                                     </li>
                                                 </ul>
                                             </div>
@@ -443,7 +454,9 @@ else {
                                                 <ul>
                                                     <li>
                                                         <span class="label"><label for="username">*Username</label></span>
-                                                        <span class="input"><input class="required" name="username" id="username" type="text" required /></span>
+                                                        <span class="input"><input class="required" name="username" id="username" type="text" 
+                                                        <?php if ( isset( $_POST['username'] ) ) echo "value='" . $_POST['username'] . "'" ?>
+                                                        required /></span>
                                                     </li>
                                                     <li>
                                                         <span class="label"><label for="password">*Password</label></span>
@@ -472,15 +485,25 @@ else {
                                             <ul>
                                                 <li>
                                                     <span class="label"><label for="p_name">*Name</label></span>
-                                                    <span class="input"><input name="p_name" type="text" id="p_name" value="<?=isset($school_info['principal'])?$school_info['principal']:''?>" required /></span>
+                                                    <span class="input"><input name="p_name" type="text" id="p_name" 
+                                                    <?php if ( isset( $_POST['username'] ) ) echo "value='" . $_POST['username'] . "'" ?>
+                                                    <?php if ( isset( $school_info['principal'] ) ) echo "value='" . $school_info['principal'] . "'" ?>
+                                                    required /></span>
+                                                
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="p_number">*Contact Number</label></span>
-                                                    <span class="input"><input name="p_number" type="text" id="p_number" value="<?=isset($school_info['principal_number'])?$school_info['principal_number']:''?>" required /></span>
+                                                    <span class="input"><input name="p_number" type="text" id="p_number" 
+                                                    <?php if ( isset( $_POST['p_number'] ) ) echo "value='" . $_POST['p_number'] . "'" ?>
+                                                    <?php if ( isset( $school_info['principal_number'] ) ) echo "value='" . $school_info['principal_number'] . "'" ?>
+                                                    required /></span>
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="p_email">*Email</label></span>
-                                                    <span class="input"><input name="p_email" type="text" id="p_email" value="<?=isset($school_info['principal_email'])?$school_info['principal_email']:''?>" class="email" required /></span>
+                                                    <span class="input"><input name="p_email" type="text" id="p_email" class="email" 
+                                                    <?php if ( isset( $_POST['p_email'] ) ) echo "value='" . $_POST['p_email'] . "'" ?>
+                                                    <?php if ( isset( $school_info['principal_email'] ) ) echo "value='" . $school_info['principal_email'] . "'" ?>
+                                                    required /></span>
                                                 </li>
                                             </ul>
                                             
@@ -537,27 +560,45 @@ else {
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="first">*First Name</label></span>
-                                                    <span class="input"><input class="required" name="first" id="bcFirst" type="text" value="<?=isset($admin->first)?$admin->first:'';?>" required /></span>
+                                                    <span class="input"><input class="required" name="first" id="bcFirst" type="text" 
+                                                    <?php if ( isset( $_POST['first'] ) ) echo "value='" . $_POST['first'] . "'" ?>
+                                                    <?php if ( isset( $admin->first ) ) echo "value='" . $admin->first . "'" ?>
+                                                    value="<?=isset($admin->first)?$admin->first:'';?>" required /></span>
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="last">*Last Name</label></span>
-                                                    <span class="input"><input class="required" name="last" id="bcLast" type="text" value="<?=isset($admin->last)?$admin->last:'';?>" required /></span>
+                                                    <span class="input"><input class="required" name="last" id="bcLast" type="text" 
+                                                    <?php if ( isset( $_POST['last'] ) ) echo "value='" . $_POST['last'] . "'" ?>
+                                                    <?php if ( isset( $admin->last ) ) echo "value='" . $admin->last . "'" ?>                                                    
+                                                    required /></span>
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="mobile">*Mobile Phone</label></span>
-                                                    <span class="input"><input class="required" name="admin_phone_mobile" id="bcPhone1" type="text" value="<?=isset($admin->admin_phone_mobile)?$admin->admin_phone_mobile:'';?>" required /></span>
+                                                    <span class="input"><input class="required" name="admin_phone_mobile" id="bcPhone1" type="text" 
+                                                    <?php if ( isset( $_POST['admin_phone_mobile'] ) ) echo "value='" . $_POST['admin_phone_mobile'] . "'" ?>
+                                                    <?php if ( isset( $admin->admin_phone_mobile ) ) echo "value='" . $admin->admin_phone_mobile . "'" ?>    
+                                                    required /></span>
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="email">*Email Address</label></span>
-                                                    <span class="input"><input class="required" name="admin_email" id="bcEmail" type="text" value="<?=isset($admin->admin_email)?$admin->admin_email:'';?>" class="email" required /></span>
+                                                    <span class="input"><input class="required" name="admin_email" id="bcEmail" type="text" 
+                                                    <?php if ( isset( $_POST['admin_email'] ) ) echo "value='" . $_POST['admin_email'] . "'" ?>
+                                                    <?php if ( isset( $admin->admin_email ) ) echo "value='" . $admin->admin_email . "'" ?>    
+                                                    required /></span>
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="work">*Work Phone (+ext)</label></span>
-                                                    <span class="input"><input class="required" name="admin_phone_work" id="bcPhone2" type="text" value="<?=isset($admin->admin_phone_work)?$admin->admin_phone_work:'';?>" required /></span>
+                                                    <span class="input"><input class="required" name="admin_phone_work" id="bcPhone2" type="text" 
+                                                    <?php if ( isset( $_POST['admin_phone_work'] ) ) echo "value='" . $_POST['admin_phone_work'] . "'" ?>
+                                                    <?php if ( isset( $admin->admin_phone_work ) ) echo "value='" . $admin->admin_phone_work . "'" ?>    
+                                                    required /></span>
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="home">Home Phone</label></span>
-                                                    <span class="input"><input name="admin_phone_home" id="bcPhone3" type="text" value="<?=isset($admin->admin_phone_home)?$admin->admin_phone_home:'';?>" /></span>
+                                                    <span class="input"><input name="admin_phone_home" id="bcPhone3" type="text" 
+                                                    <?php if ( isset( $_POST['admin_phone_home'] ) ) echo "value='" . $_POST['admin_phone_home'] . "'" ?>
+                                                    <?php if ( isset( $admin->admin_phone_home ) ) echo "value='" . $admin->admin_phone_home . "'" ?>   
+                                                    /></span>
                                                 </li>
                                             </ul>
                                         </div>
