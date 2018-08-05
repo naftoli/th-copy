@@ -5,6 +5,7 @@ import { Callout, Checkbox } from 'components/ui';
 import { Link } from 'react-router-dom';
 import { Row, Col, Button, ButtonGroup } from 'reactstrap'; 
 import ReactTable from "react-table";
+import RegistrationModal from './RegistrationModal';
 // functions
 import is from 'is_js';
 import { toast } from 'react-toastify';
@@ -18,11 +19,10 @@ import './RegistrationPage.scss';
 export class RegistrationPage extends Component {
 
   state = {
-    selection: [],
-    selectAll: false,
-    total: 0
+    selection: [],selectAll: false,
+    total: 0, showModal: false
   }
-
+  // refs
   checkboxTable = React.createRef();
   checkAll = null; // uses callback refs. will point directly ( not using .current )
   
@@ -40,37 +40,33 @@ export class RegistrationPage extends Component {
     }
   }
 
-  toCSV = () => { 
-    const { soldiers } = this.props;
-    console.log( soldiers );
+  toCSV = () => {
     const headers = [
       'First Name', 'Last Name', 'Serial Number', 'Registration Fee', 'Platoon'
     ];
-    const rows = soldiers.map( soldier => [
+    const rows = this.props.soldiers.map( soldier => [
       soldier.first, soldier.last, soldier.user_serial, soldier.fee,
       soldier.platoon ? `="${soldier.platoon}"` : ''
     ]);
     arrayToCSV( headers, rows, 'not_registered_soldiers' );
   }
 
-  isSelected = user_id => {
-    return this.state.selection.includes( user_id );
-  };
+  toggleModal = () => this.setState({ showModal: !this.state.showModal });
 
-  toggle = ( { user_id, fee } ) => {
+  isSelected = user_id => this.state.selection.includes( user_id );
+
+  toggleRow = ( { user_id, fee } ) => {
     // start off with the existing state ( with a new array to avoid errors )
     let selection = [ ...this.state.selection ];
     const keyIndex = selection.indexOf( user_id );
     // check to see if the key exists
     if (keyIndex >= 0) { // it does exist so we will remove it using destructing
-      selection = [
-        ...selection.slice(0, keyIndex),
-        ...selection.slice(keyIndex + 1)
-      ];
-      fee = -Math.abs(fee)
+      selection = [ ...selection.slice(0, keyIndex), ...selection.slice(keyIndex + 1) ];
+      fee = -Math.abs(fee); // update the fee to a negative number
     } else { // it does not exist so add it
       selection.push(user_id);
     }
+    // UI update
     this.checkAll.indeterminate = this.props.soldiers.length > selection.length && selection.length > 0;
     // update the state
     const total = this.state.total + fee;
@@ -90,7 +86,7 @@ export class RegistrationPage extends Component {
       // we just push all the IDs onto the selection array
       currentRecords.forEach(item => {
         selection.push(item._original.user_id);
-        total += item._original.fee;
+        total += item._original.fee; // add the fee
       });
     }
     this.setState({ selectAll, selection, total });
@@ -98,8 +94,8 @@ export class RegistrationPage extends Component {
 
   render() {
     const { login, loading, soldiers, getSoldiers } = this.props;
-    const { selectAll, total, selection } = this.state;
-    const { toCSV, isSelected, toggle, toggleAll } = this;
+    const { selectAll, total, selection, showModal } = this.state;
+    const { toCSV, isSelected, toggleRow, toggleAll, toggleModal } = this;
     // define table columns
     let columns = [
       { id: 'checkbox', accessor: '', width: 38,
@@ -125,34 +121,27 @@ export class RegistrationPage extends Component {
     const getTrProps = ( state, row ) => {
       const selected = row ? isSelected( row.original.user_id ) : false;
       return {
-        onClick: e => { e.preventDefault(); toggle( row.original ); },
+        onClick: e => { e.preventDefault(); toggleRow( row.original ); },
         className: selected ? "selected-row" : ""
       }
     }
     // set the props for the table
     const tableProps = {
-      data: soldiers,
-      minRows: 10,
-      filterable: true,
-      columns, getTrProps,
-      defaultPageSize: 100,
-      defaultFilterMethod: filter,
-      className: '-striped -highlight',
-      onPageChange: scrollToTop('RegistrationPage'),
-      noDataText: loading ? 'Loading...' : 'No Data',
+      columns, getTrProps, data: soldiers, minRows: 10, defaultPageSize: 100, 
+      filterable: true, defaultFilterMethod: filter, className: '-striped -highlight', 
+      noDataText: loading ? 'Loading...' : 'No Data', onPageChange: scrollToTop('RegistrationPage'), 
       onFilteredChange: scrollToTop('RegistrationPage')
     }
     // render the page
     return (
       <div id='RegistrationPage'>
-        {/* User Guide */}
         <Callout title='Soldier Registration'>
           All unregistered soldiers are displayed below, along with the cost to register.<br/>
           Please select the Soldiers you are registering.
         </Callout>
-        {/* Action buttons */}
+        
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
-          <Button color='primary'>
+          <Button color='primary' onClick={toggleModal}>
             <i className={`fas fa-dollar-sign`}></i> Pay and Register
           </Button>
           <Button color='primary' onClick={ getSoldiers }>
@@ -177,6 +166,8 @@ export class RegistrationPage extends Component {
           </Col>
         </Row>
         <ReactTable { ...tableProps } ref={this.checkboxTable}/>
+
+        <RegistrationModal isOpen={showModal} toggle={toggleModal}/>
       </div>
     )
   }
