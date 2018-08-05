@@ -10,15 +10,11 @@ class UsersRouter {
         $filters = [];   $params = [];
         // limit based on admin type
         $login = $current_user->login;
-        if ( $login['code'] === 'HQ' ) {
-            $filters[] = 's.test_school = 0';
-        } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
-            $filters[] = 's.ckids = 1';
-        } else if ( $login['code'] === 'BC' ) {
+        if ( $login['code'] === 'BC' ) {
             $filters[] = 'u.school_id = ?'; $params[] = $login['id'];
-        } else if ( $login['code'] === 'TEACHER' ) {
-            $filters[] = 'u.class_id = ?'; $params[] = $login['id'];
-        } else { json_error( 'Access Deinied: CORE-USERS-26' ); }
+        } else { 
+            json_error( 'Access Deinied: CORE-USERS-26' ); 
+        }
         $filters[] = 'ur.paid IS NULL';
         // combine the filters
         $filters = implode( ' AND ', $filters );
@@ -29,7 +25,7 @@ class UsersRouter {
             ."LEFT JOIN school_registrations sr ON sr.school_id = s.school_id AND sr.year = 5779 "
             ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = 5779 "
             ."LEFT JOIN classes c USING (class_id) WHERE $filters "
-            ."ORDER BY school_name, first, last, class_grade, class_sub;";
+            ."ORDER BY first, last, class_grade, class_sub;";
         $query = $pdo->prepare( $sql );
         $query->execute( $params );
 
