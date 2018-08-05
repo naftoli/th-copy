@@ -19,6 +19,7 @@ body { font-family: 'Poppins', sans-serif; }
     // box-shadow: 0 0 0 0.2rem rgba(0, 97, 202, 0.5);
   }
 }
+.btn-group .btn { white-space: normal; }
 // modal headers should use it as well
 .modal-header {
   background-color: $primary-color;

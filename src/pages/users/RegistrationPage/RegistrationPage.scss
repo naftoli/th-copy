@@ -16,9 +16,6 @@
     .rt-tr-group { overflow: hidden; }
     .rt-tr { align-items: center; &:hover{ cursor: pointer; } }
     .rt-td { white-space: initial; }
-    .-pagination .-pageInfo {
-      margin-right: 0px;
-    }
   }
 
   #total{

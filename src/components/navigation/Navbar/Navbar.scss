@@ -10,6 +10,10 @@
   @media( max-width: 1024px ) { height: $navbar-height-mobile; }
   // Logo section
   .navbar-brand {
+    width: 200px;
+    @media ( max-width: 1024px ) { width: 120px; }
+    @media ( max-width: 767px ) { width: auto; }
+
     transition: all .3s;
     // logo
     img { height: 46px; transition: all .3s; }
@@ -23,20 +27,26 @@
       span { font-size: 1em; }
     }
   }
+
+  
+  
   // Page title
   #navbar-title {
     font-size: 1.7em;
     @media( max-width: 1024px ){ font-size: 1.2em; }
-    @media( max-width: 680px ) { display: none; }
+    @media( max-width: 767px ) { display: none; }
   }
   // Account selector
   ul#navbar-menu {
     margin: 0px; // clear margins
     // dropdown item
     a#nav-login {
-      width: 200px; padding-right: 20px; display: inline-block;
+      width: 250px;
+      @media ( max-width: 1024px ) { width: 200px; }
+      
+      padding-right: 20px; display: inline-block;
       overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-      color: #fff; transition: .3s; padding-right: 20px; text-align: right;
+      color: #fff; transition: .3s; text-align: right;
       &:hover { cursor: pointer; }
       // caret
       &::before {
