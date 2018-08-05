@@ -1,8 +1,9 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
 session_start();
+
+//echo "<pre>"; print_r( $_SESSION ); echo "</pre>";
 if ( !isset( $_SESSION['school_id'] ) ) 
     header( "Location: registration.php" );
 

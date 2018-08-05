@@ -44,7 +44,7 @@ if (isset($_POST["action"])) {
 		$sql = "UPDATE schools ";
 		$sql = $sql . "SET school_name='" 	. mysql_real_escape_string($_POST["school_name"]) . "', ";
 		$sql = $sql . "school_name_he='" 	. mysql_real_escape_string($_POST["school_name_he"]) . "', ";
-		$sql = $sql . "inst_id=2, ";                 
+		$sql = $sql . "inst_id=3, ";                 
 		if ( isset( $_POST['school_gender'] ) ) $sql = $sql . "school_gender='" 	. mysql_real_escape_string($_POST["school_gender"]) . "', ";
 		$sql = $sql . "school_address1='" 	. mysql_real_escape_string($_POST["school_address1"]) . "', ";
 		$sql = $sql . "school_address2='" 	. mysql_real_escape_string($_POST["school_address2"]) . "', ";
@@ -93,7 +93,7 @@ if (isset($_POST["action"])) {
 		$sql = $sql . "school_postal='" . mysql_real_escape_string($_POST["school_postal"]) . "', ";
 		$sql = $sql . "school_country='" . mysql_real_escape_string($_POST["school_country"]) . "', ";
 		$sql = $sql . "school_phone='" . mysql_real_escape_string($_POST["school_phone"]) . "', ";
-		$sql = $sql . "school_era=1, ";
+		$sql = $sql . "school_era=1, reg_type=3, ";
 		
 		if (isset($school_logo_id) && $school_logo_id > 0)
 			$sql = $sql . "school_logo_id=" . $school_logo_id;
@@ -104,17 +104,32 @@ if (isset($_POST["action"])) {
 		$sql .= ", principal = '" . mysql_real_escape_string($_SESSION['p_name']) . "',
 				principal_number = '" . mysql_real_escape_string($_SESSION['p_number']) . "',
 				principal_email = '" . mysql_real_escape_string($_SESSION['p_email']) . "'";
-		echo $sql . "<br />";
+		//echo $sql . "<br />";
 		$query = mysql_query($sql);
 		if (!$query) {
-			$message = "School not added. Please try again.";
+			$message = "School not added. Please try again. <span style='font-size: 12px;'>(" . mysql_error() . ")</span>";
 			//echo $sql . "<br />" . mysql_error();
 		}
 		else {
             $school_id = mysql_insert_id();
 			$_SESSION['school_id'] = $school_id;
-			$sql = "INSERT INTO admin_auths SET id=" . $school_id . ", admin_id=" . $admin_id . ", auth='school'";
-            $query = mysql_query($sql);
+			$sql = "INSERT INTO admin_auths SET id=" . $school_id . ", admin_id=" . $admin_id . ", auth='school', role_id = 18";
+			//echo $sql; exit;
+			$query = mysql_query($sql);
+			
+			// get shliach id 
+			$shliach = json_decode( $_SESSION['shliach'] );
+			$shliach_id = $shliach->shliachID;
+
+			// delete any previous info in shliach / mosad rel table
+			$sql = "DELETE FROM shliach_mosad_rel 
+					WHERE shliach_id = " . $shliach_id;
+			mysql_query( $sql );
+
+			// delete any previous school / mosad info
+			$sql = "DELETE FROM school_mosad_rel 
+					WHERE school_id = " . $school_id;
+			mysql_query( $sql );
             
             // add mosdos info to db
             foreach ($_POST['mosdosInfo'] as $mosadInfo) {
@@ -123,22 +138,24 @@ if (isset($_POST["action"])) {
                 $sql = "INSERT IGNORE INTO chabad_mosad_info SET 
                         mosad_id = " . mysql_real_escape_string( $mosad_id ) . ", 
                         json_info = '" . $mosadInfo . "'";
-                echo $sql . "<br />";
-                // add shliach / mosad relationship to db
-                $shliach = json_decode( $_SESSION['shliach'] );
-                $shliach_id = $shliach->shliachID;
-                $sql = "INSERT IGNORE INTO shliach_mosad_rel SET 
+				//echo $sql . "<br />";
+				mysql_query( $sql );
+
+                // add shliach / mosad relationship to db                
+                $sql = "INSERT INTO shliach_mosad_rel SET 
                         shliach_id = " . mysql_real_escape_string( $shliach_id ) . ", 
                         mosad_id = " . mysql_real_escape_string( $mosad_id );
-                echo $sql . "<br />";
+				//echo $sql . "<br />";
+				mysql_query( $sql );
             }
 
             // add school / mosad relationship to db
             foreach ($_POST['mosdos'] as $mosad_id) {
-                $sql = "INSERT IGNORE INTO school_mosad_rel SET 
+                $sql = "INSERT INTO school_mosad_rel SET 
                         school_id = " . $school_id . ", 
                         mosad_id = " . mysql_real_escape_string( $mosad_id );
-                echo $sql . "<br />";
+				//echo $sql . "<br />";
+				mysql_query( $sql );
             }            
 		}
     }
@@ -224,29 +241,31 @@ if ( isset( $school->school_logo_id ) && $school->school_logo_id > 0 )
                 if (shliach) {
                     var mosdos = shliach.mosdos;
                     var html = '';
-                    for (var m in mosdos) {
-                        var mosad = mosdos[m];
-                        var mosadName = mosad.name;
-                        var mosadAddress = mosad.address;
-                        if (mosad.address2) {
-                            mosadAddress += "<br />" + mosad.address2;
-                        }
-                        mosadAddress += "<br />" + mosad.city + ', ' + mosad.state + ' ' + mosad.zip + "<br />" + mosad.country;
-                        var types = mosad.types;
-                        html+= "<li><input type='hidden' name='mosdosInfo[]' value='" + JSON.stringify( mosad ) + "' />";
-                        html += "<input type='checkbox' class='mosdos' name='mosdos[]' value='" + mosad.id + "' /> <div class='mosadInfo'>" + mosadName + ' (';
-                        for (var t in types) {
-                            html += types[t] + ', ';
-                        }
-                        // remove trailing comma
-                        html = html.substring(0, html.length-2);
-                        html += ")<br />" + mosadAddress + "</div></li>";
-                    }
-                    if (html) {
+					if ( mosdos.length ) {
+						for (var m in mosdos) {
+							var mosad = mosdos[m];
+							var mosadName = mosad.name;
+							var mosadAddress = mosad.address;
+							if (mosad.address2) {
+								mosadAddress += "<br />" + mosad.address2;
+							}
+							mosadAddress += "<br />" + mosad.city + ', ' + mosad.state + ' ' + mosad.zip + "<br />" + mosad.country;
+							var types = mosad.types;
+							html+= "<li><input type='hidden' name='mosdosInfo[]' value='" + JSON.stringify( mosad ) + "' />";
+							html += "<input type='checkbox' class='mosdos' name='mosdos[]' value='" + mosad.id + "' /> <div class='mosadInfo'>" + mosadName + ' (';
+							for (var t in types) {
+								html += types[t] + ', ';
+							}
+							// remove trailing comma
+							html = html.substring(0, html.length-2);
+							html += ")<br />" + mosadAddress + "</div></li>";
+						}
+					}
+                    if (html != '') {
                         $("#chooseMosdos").html( html );
                         $("#mosdosInfo").show();
                         $("#copyFromMosad").show();
-                    }
+                    } 
                 }
 
                 $("#copyMosad").click( function() {
@@ -314,7 +333,7 @@ if ( isset( $school->school_logo_id ) && $school->school_logo_id > 0 )
 
 			function check_next_page() {
 				if (next_page == "true") {
-					location.href = "registration_4.php";
+					location.href = "registration_ckids3.php";
 				}
 			}
         </script>
@@ -365,7 +384,7 @@ if ( isset( $school->school_logo_id ) && $school->school_logo_id > 0 )
 								<? endif; ?>
 							
 								<? if ($message != "") : ?>
-									<?=$message;?>
+									<div style="color:red"><?=$message;?></div>
                                 <? endif; ?>
                                 
                                 <div id="mosdosInfo" style="display: none;">                               

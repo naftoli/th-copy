@@ -52,38 +52,45 @@ if (isset($_POST["action"])) {
 		$sql .= " where school_id = " . $school_id;
 
 		if (!mysql_query( $sql )) {
-			$message = "<span style='color:red;'>Principal Info and / or Chidon Info not updated.</span></a>";
+			$message = "<span style='color:red;'>Principal Info not updated.</span></a>";
 		}
-	} else {		
-		$sql = "INSERT INTO admins SET 
-				username='" . 			$_POST['username'] . "', 
-				password='" . 			$_POST['password'] . "', 
-				title='" . 				$_POST['title']  ."', 
-				first='" . 				$_POST['first'] . "', 
-				last='" . 				$_POST['last'] . "', 
-				admin_phone_mobile='" . $_POST['admin_phone_mobile'] . "', 
-				admin_email='" . 		$_POST['admin_email'] . "', 
-				admin_phone_work='" . 	$_POST['admin_phone_work'] . "', 
-                admin_phone_home='" . 	$_POST['admin_phone_home'] . "', 
-                chabad_ord_id = " .     $shliach->id;
-        $_SESSION['qry'] = $sql;
-		// $query = mysql_query($sql);
-		// if ($query) {
-			//$admin_id = mysql_insert_id();
-			$_SESSION['admin_id'] = $admin_id;
-			$_SESSION['school_id'] = $school_id;
-			$_SESSION['school_type']	= $_POST['school_type'];
-			
-			// save principal and shliach info to session
-			$_SESSION['p_name'] 		= $_POST['p_name'];
-			$_SESSION['p_number'] 		= $_POST['p_number'];
-            $_SESSION['p_email'] 		= $_POST['p_email'];
-            $_SESSION['shliach']        = json_encode( $shliach );
-		// } else {
-		// 	//echo $sql . mysql_error();
-		// 	$message = "<span style='color:red;'>Administrator not added. Please try again.</span></a>";
-		//     //echo mysql_error();
-		// }			
+	} else {
+        // check for duplicate email address
+        $sql = "SELECT * FROM admins 
+                WHERE admin_email = '" . $_POST['admin_email'] . "'";
+        $result = mysql_query( $sql );
+        if ( mysql_num_rows( $result ) > 0 ) {
+            $message = "This email is already associated with an existing account, please choose another one (or login to existing account).";
+        } else {
+            $sql = "INSERT INTO admins SET 
+                    username='" . 			$_POST['username'] . "', 
+                    password='" . 			$_POST['password'] . "', 
+                    title='" . 				$_POST['title']  ."', 
+                    first='" . 				$_POST['first'] . "', 
+                    last='" . 				$_POST['last'] . "', 
+                    admin_phone_mobile='" . $_POST['admin_phone_mobile'] . "', 
+                    admin_email='" . 		$_POST['admin_email'] . "', 
+                    admin_phone_work='" . 	$_POST['admin_phone_work'] . "', 
+                    admin_phone_home='" . 	$_POST['admin_phone_home'] . "', 
+                    chabad_org_shliach_id = " . $shliach->shliachID;
+            //$_SESSION['qry'] = $sql;
+            $query = mysql_query($sql);
+            if ($query) {
+                $admin_id = mysql_insert_id();
+                $_SESSION['admin_id'] = $admin_id;
+                $_SESSION['school_id'] = $school_id;
+                $_SESSION['school_type']	= $_POST['school_type'];
+                
+                // save principal and shliach info to session
+                $_SESSION['p_name'] 		= $_POST['p_name'];
+                $_SESSION['p_number'] 		= $_POST['p_number'];
+                $_SESSION['p_email'] 		= $_POST['p_email'];
+                $_SESSION['shliach']        = json_encode( $shliach );
+            } else {
+                $message = "<span style='color:red;'>Error creating admin account. Please try again.</span></a>";
+                //echo $sql . "<br />" . mysql_error();
+            }	
+        }		
 	}
 
 	if ($message=="") {
@@ -122,17 +129,24 @@ else {
         <script language="javascript" type="text/javascript" src="https://chabadorg.clhosting.org/scripts/js/api/baseapi.js.asp?474DBD09-F59F-433D-A755-5A97594FC4E1"></script>
 		<script>
 			var next_page = <?=$next_page;?>;
-			
+            var duplicateEmail = false;
+
 			$(function() {
 				$("#nav").height($("#content").height());
                 
                 $("#username").blur( function() { 
-                    var username = $("#username").val();
-                    $.post('ajax/checkUsername.php', {user : username}, function(data) {
-                        if (data == 1) {
-                            alert('This username is already in use.\nPlease choose another one.');
-                        }
-                    });
+                    var username = $("#username").val().trim();
+                    if ( username ) {
+                        $.post('ajax/checkUsername.php', {user : username}, function(data) {
+                            if (data == 1) {
+                                alert('This username is already in use.\nPlease choose another one.');
+                            }
+                        });
+                    }
+                });
+
+                $("#bcEmail").blur( function() {
+                    checkDuplicateEmail();
                 });
                 
                 $("#copyShliach").click( function() {
@@ -149,6 +163,7 @@ else {
                         $("#bcLast").val( shliach.last );
                         $("#bcEmail").val( $("#shliachEmail").val().trim() );
                         $("#bcPhone2").val( shliach.phone );
+                        checkDuplicateEmail();
                     }
                 });
 			});
@@ -184,10 +199,30 @@ else {
 					}
 				}				
 			}
+
+            function checkDuplicateEmail() {
+                var email = $("#bcEmail").val().trim();
+                if ( email ) {
+                    $.post('ajax/checkDuplicateEmail.php', { email: email }, function( duplicate ) {
+                        if ( duplicate == 1 ) {
+                            alert('This email is already in use.\nPlease choose another one.');
+                            duplicateEmail = true;
+                        } else {
+                            duplicateEmail = false;
+                        }
+                    });
+                } else {
+                    duplicateEmail = false;
+                }
+            }
 			
 			function validate() {
                 var errors = [];
 				var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+
+                if ( duplicateEmail ) {
+                    errors.push('The email you are using for your base commander (admin) account already exists. Please choose a different one.');
+                }
 
                 if ( shliach ) {
                     // check that shliach email is filled in and is valid
@@ -339,7 +374,7 @@ else {
 							<h1>School Registration</h1>
 							
 							<? if (isset($message) && $message != "") : ?>
-								<h1><?=$message;?></h1>
+								<h1 style="color:red"><?=$message;?></h1>
 							<? endif; ?>
 											
 							<div class="infobox">
@@ -392,7 +427,7 @@ else {
                                                     </li>
                                                     <li>
                                                         <span class="label">*Email</span>
-                                                        <span class="input"><input type="text" name="shliachEmail" id="shliachEmail" /></span>    
+                                                        <span class="input"><input type="text" name="shliachEmail" id="shliachEmail" class="email" /></span>    
                                                     </li>
                                                 </ul>
                                             </div>
@@ -445,7 +480,7 @@ else {
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="p_email">*Email</label></span>
-                                                    <span class="input"><input name="p_email" type="text" id="p_email" value="<?=isset($school_info['principal_email'])?$school_info['principal_email']:''?>" required /></span>
+                                                    <span class="input"><input name="p_email" type="text" id="p_email" value="<?=isset($school_info['principal_email'])?$school_info['principal_email']:''?>" class="email" required /></span>
                                                 </li>
                                             </ul>
                                             
@@ -514,7 +549,7 @@ else {
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="email">*Email Address</label></span>
-                                                    <span class="input"><input class="required" name="admin_email" id="bcEmail" type="text" value="<?=isset($admin->admin_email)?$admin->admin_email:'';?>" required /></span>
+                                                    <span class="input"><input class="required" name="admin_email" id="bcEmail" type="text" value="<?=isset($admin->admin_email)?$admin->admin_email:'';?>" class="email" required /></span>
                                                 </li>
                                                 <li>
                                                     <span class="label"><label for="work">*Work Phone (+ext)</label></span>
