@@ -20,7 +20,7 @@ export class RegistrationPage extends Component {
 
   state = {
     selection: [],selectAll: false,
-    total: 0, showModal: false
+    total: 0, showModal: true
   }
   // refs
   checkboxTable = React.createRef();
