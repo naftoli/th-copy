@@ -349,7 +349,7 @@ var registrationApp = function() {
             APIRequest( 'GET', api_url + '?action=getUsers', {}, function( response ) {
                 state.users = [];
                 response.users.forEach( function( user ) {
-                    user.dob = user.dob.split("T")[0];
+                    user.dob = user.dob.split(" ")[0];
                     if ( user.registrationStatus.chayolei === false || user.registrationStatus.chidon === false )
                         state.users.push( user );
                 });
