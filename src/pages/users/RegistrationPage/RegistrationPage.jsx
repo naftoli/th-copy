@@ -40,7 +40,17 @@ export class RegistrationPage extends Component {
     }
   }
 
-  toCSV = () => { debugger; }
+  toCSV = () => { 
+    const { soldiers } = this.props;
+    console.log( soldiers );
+    const headers = [
+      'First Name', 'Last Name', 'Serial Number', 'Registration Fee', 'Platoon'
+    ];
+    const rows = soldiers.map( soldier => [
+      soldier.first, soldier.last, soldier.user_serial, soldier.fee, `="${soldier.platoon}"`
+    ])
+    arrayToCSV( headers, rows, 'not_registered_soldiers' );
+  }
 
   isSelected = user_id => {
     return this.state.selection.includes( user_id );
