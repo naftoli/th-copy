@@ -10,7 +10,7 @@ if ( $current_user )
                 'father', 'mother', 'father_pic', 'mother_pic',
                 'home_phone', 'cell_phone', 'admin_email'
             ],
-            'methods' => [ 'authCode', 'logins' ]
+            'methods' => [ 'logins' ]
         ])
     );
 else
