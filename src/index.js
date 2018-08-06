@@ -1,25 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 // Global Styles
-import 'cropperjs/dist/cropper.css';
-import 'react-table/react-table.css';
-import 'react-toastify/dist/ReactToastify.min.css';
-import 'react-datepicker/dist/react-datepicker.css';
-import 'react-credit-cards/es/styles-compiled.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'styles/styles.scss';
 // supported languages;
 import moment from 'moment';
 import 'moment/locale/en-ca.js';
 import 'moment/locale/he.js';
 import 'moment/locale/fr.js';
-
+// React-Redux
 import { Provider } from 'react-redux';
 import store from './store';
 // Authentication
 import checkLogin from 'store/login/checkLogin';
-// App
-import 'styles/index.css';
-import 'styles/branding.scss';
+// Components
 import App from './App';
 
 checkLogin( store.dispatch );
