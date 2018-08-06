@@ -16,6 +16,7 @@ class UsersRouter {
             json_error( 'Access Deinied: CORE-USERS-26' ); 
         }
         $filters[] = 'ur.paid IS NULL';
+        $filters[] = 'u.chayolei = 1';
         // combine the filters
         $filters = implode( ' AND ', $filters );
         // generate the SQL
@@ -48,18 +49,75 @@ class UsersRouter {
     }
 
     public function create() {
-        // global $current_user;
-        // $user = User::build( $_POST );
-        // if ( $current_user->login['code'] === 'TEACHER' ) {
-        //     $user->school_id = Platoon::find( $current_user->login['id'] )->school_id;
-        // } else {
-        //     $platoon_school_id = Platoon::find( $user->class_id )->school_id;
-        //     if ( $platoon_school_id !== $user->school_id )
-        //         json_error( 'Please Select a valid Platoon' );
-        // }
-        // if ( !$user->is_valid() || !$user->save() )
-        //     json_error( 'Could not create Soldier. (CODE: CORE-USERS-79)' );
-        // json_response( $user );
+        global $current_user;
+
+        if ( !$current_user->login['code'] === 'BC' )
+            json_error( 'Only Base Commanders can authorize registration.');
+        $school = School::find( $current_user->login['id'] );
+        // get all the users we are registering\
+        if ( !isset($_POST['user_ids']) || count($_POST['user_ids']) < 1 ) 
+            json_error('Please select some soldiers to register.');
+        try {
+            $users = User::find( $_POST['user_ids'] );
+            $users = is_array( $users ) ? $users : [ $users ];
+        } catch ( Exception $e ) {
+            json_error( 'Invalid Request', $e );
+        }
+        // get the payment information
+        if ( !isset( $_POST[ 'payment' ] ) ) {
+            json_error( 'Please select a Credit Card' );
+        } else if ( isset($_POST['payment']['payment_profile_id']) ){
+            $customer_profile = $school->customerProfile()->customerPaymentProfileId;
+            $payment_profile_id = $_POST['payment']['payment_profile_id'];
+        } else {
+            $payment_profile  = $school->createPaymentProfile( $_POST['payment'], $current_user->admin_email );
+            $customer_profile = $school->customerProfile();
+            if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
+                json_error( $payment_profile );
+            $payment_profile_id = $payment_profile->customerPaymentProfileId; 
+        }
+
+        // setup the variables we will need later
+        $user_serials = array_map( function( $user ){ return $user->user_serial; }, $users);
+        $year = GlobalSettings::getRegistrationYear( $school->school_id );
+        $description = "Base - Soldier Registration for $year: " . implode( ", ", $user_serials );
+        $total = intval( $_POST['total'] );
+
+        // create Transaction
+        $create_transaction_query = $pdo->prepare(
+            "INSERT INTO transactions (school_id, trans_date, description, amount, admin_id, zip, users_registered) VALUES (?, NOW(), ?, ?, ?, ?, ?)"
+        );
+        $delete_transaction_query = $pdo->prepare( 'DELETE FROM transactions WHERE transaction_id = ?' );
+        $finish_transaction_query = $pdo->prepare( 'UPDATE transactions SET response=? WHERE transaction_id = ?' );
+        $create_transaction_query->execute([
+            $school->school_id, $description, $total, $current_user->admin_id, 
+            $school->shipping_postal, implode( ', ', $user_ids )
+        ]);
+        $trans_id = $pdo->lastInsertId();
+
+        // Run the transaction
+        $payment_response = $customer_profile->chargeCard(
+            $total, $payment_profile_id, null, $trans_id, $description
+        );
+        if ( !is_array( $payment_response ) ) {
+            $delete_transaction_query->execute([ $trans_id ]);
+            json_error( $payment_response );
+        }
+        $finish_transaction_query->execute([json_encode($payment_response), $trans_id]);
+
+        $errors = []; $fee = $school->getRegInfo( $year )->child_fee;
+        foreach( $users as $user ) {
+            $user_errors = $user->registerChayolei(
+                $current_user->admin_id, $year, $fee
+            );
+            if ( count( $user_errors ) > 0 ) $errors[$user->user_id] = $user_errors;
+        }
+        // email any errors
+        if ( count( $errors ) > 0 ) {
+            mail( "bugs@tzivoshashem.org", "BC Registration Error(s)", json_encode( $errors ) );
+        }
+
+        json_response( $payment_response );
     }
 }
 
