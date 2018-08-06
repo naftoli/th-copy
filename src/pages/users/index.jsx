@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 // sub pages
 import { Page404 } from 'pages/errors';
-import UsersPage from './UsersPage/UsersPage';
 import UserPage from './UserPage/UserPage';
+import UsersPage from './UsersPage/UsersPage';
 import NewUserPage from './UserPage/NewUserPage';
+import RankCardsPage from './RankCardsPage/RankCardsPage';
 import RegistrationPage from './RegistrationPage/RegistrationPage';
 // functions
 import { connect } from 'react-redux';
@@ -21,7 +22,7 @@ export class UsersIndexPage extends Component {
       <Switch>
         <Route path={ path } exact component={ UsersPage } />
         { onlyBC && <Route path={`${path}/registration`} component={ RegistrationPage }/> }
-        { isBC && <Route path={`${path}/cards`} render={props => <h1>User Rank Cards</h1>}/> }
+        { isBC && <Route path={`${path}/cards`} component={ RankCardsPage }/> }
         <Route path={`${path}/new`} component={ NewUserPage }/>
         <Route path={`${path}/:id([0-9]+)`} component={ UserPage }/>
         <Route component={ Page404 } />
