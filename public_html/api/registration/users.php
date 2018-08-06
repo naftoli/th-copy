@@ -49,7 +49,7 @@ class UsersRouter {
     }
 
     public function create() {
-        global $current_user;
+        global $current_user; global $pdo;
 
         if ( !$current_user->login['code'] === 'BC' )
             json_error( 'Only Base Commanders can authorize registration.');
@@ -67,7 +67,7 @@ class UsersRouter {
         if ( !isset( $_POST[ 'payment' ] ) ) {
             json_error( 'Please select a Credit Card' );
         } else if ( isset($_POST['payment']['payment_profile_id']) ){
-            $customer_profile = $school->customerProfile()->customerPaymentProfileId;
+            $customer_profile = $school->customerProfile();
             $payment_profile_id = $_POST['payment']['payment_profile_id'];
         } else {
             $payment_profile  = $school->createPaymentProfile( $_POST['payment'], $current_user->admin_email );
@@ -88,10 +88,10 @@ class UsersRouter {
             "INSERT INTO transactions (school_id, trans_date, description, amount, admin_id, zip, users_registered) VALUES (?, NOW(), ?, ?, ?, ?, ?)"
         );
         $delete_transaction_query = $pdo->prepare( 'DELETE FROM transactions WHERE transaction_id = ?' );
-        $finish_transaction_query = $pdo->prepare( 'UPDATE transactions SET response=? WHERE transaction_id = ?' );
+        $finish_transaction_query = $pdo->prepare( 'UPDATE transactions SET response = ? WHERE trans_id = ?' );
         $create_transaction_query->execute([
             $school->school_id, $description, $total, $current_user->admin_id, 
-            $school->shipping_postal, implode( ', ', $user_ids )
+            $school->shipping_postal, implode( ', ', $_POST['user_ids'] )
         ]);
         $trans_id = $pdo->lastInsertId();
 
@@ -103,9 +103,10 @@ class UsersRouter {
             $delete_transaction_query->execute([ $trans_id ]);
             json_error( $payment_response );
         }
-        $finish_transaction_query->execute([json_encode($payment_response), $trans_id]);
+        $updated = $finish_transaction_query->execute([json_encode($payment_response), $trans_id]);
 
-        $errors = []; $fee = $school->getRegInfo( $year )->child_fee;
+        $errors = [];
+        $fee = $school->getRegInfo( $year )->getChildFee( true );
         foreach( $users as $user ) {
             $user_errors = $user->registerChayolei(
                 $current_user->admin_id, $year, $fee
@@ -117,7 +118,11 @@ class UsersRouter {
             mail( "bugs@tzivoshashem.org", "BC Registration Error(s)", json_encode( $errors ) );
         }
 
-        json_response( $payment_response );
+        json_response([
+            'updated' => $updated,
+            'response' => $payment_response,
+            'transaction_id' => $trans_id
+        ]);
     }
 }
 
