@@ -8,7 +8,7 @@ import { Button, ButtonGroup } from 'reactstrap';
 import CropperModal from 'components/modals/CropperModal';
 import BulkUploadModal from './BulkUploadModal';
 // functions
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import is from 'is_js';
 import { arrayToCSV, setTitle } from 'functions/utils';
 import { loginChanged } from 'functions/login';
