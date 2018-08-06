@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { Callout } from 'components/ui'; 
-import PaymentForm from 'components/functional/PaymentForm'
+import { Callout } from 'components/ui';
+import { ProfileForm } from 'components/functional/payments';
 // import { Spinner, FileInput } from 'components/ui';
 
 export class RegistrationModal extends Component {
@@ -36,7 +36,7 @@ export class RegistrationModal extends Component {
               Credit card transactions will be credited to the original card used. This process may take up to two weeks.
             </p>
           </Callout>
-          <PaymentForm />
+          <ProfileForm />
         </ModalBody>
         { !loading && 
           <ModalFooter>
