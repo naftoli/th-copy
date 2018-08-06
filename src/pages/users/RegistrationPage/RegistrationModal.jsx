@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { Callout } from 'components/ui';
-import { ProfileForm } from 'components/functional/payments';
+import { ProfileForm, CCForm } from 'components/functional/payments';
 // import { Spinner, FileInput } from 'components/ui';
+// functions
+import Payment from 'payment';
+import { toast } from 'react-toastify';
 
 export class RegistrationModal extends Component {
+
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired
+  }
 
   static defaultProps = {
     isOpen: false, centered: true,
@@ -12,20 +20,53 @@ export class RegistrationModal extends Component {
   }
 
   state = { 
-    loading: false
+    payment_profile_id: undefined,
+    cc_info: {}
   }
 
-  toggleLoading = ( loading ) => {
-    this.setState( { loading: loading } )
+  onProfileSelected = payment_profile_id => {
+    this.setState({ payment_profile_id });
+  }
+
+  onCCEntered = cc_info => {
+    this.setState({ cc_info });
+  }
+
+  validateCC = () => {
+    const { number, expiry, cvc } = this.state.cc_info;
+    return new Promise( ( resolve, reject ) => {
+      if ( !Payment.fns.validateCardNumber( number ) ) {
+        reject( new Error('Invalid Credit Card Number') );
+      } else if ( !expiry ) {
+        reject( new Error('Invalid Exparation Date') );
+      } else if ( !cvc ) {
+        reject( new Error('Invalid CVC (Code)') );
+      }
+      const mapped_cc = { 'cc-number': number, 'cc-exp': expiry, 'x_card_code': cvc };
+      resolve( mapped_cc );
+    });
+  }
+
+  submit = () => {
+    const { payment_profile_id } = this.state;
+    if ( payment_profile_id ) {
+      return this.props.onSubmit({ payment_profile_id });
+    }
+    // validate the CC before leaving the modal
+    this.validateCC().then( payment => {
+      return this.props.onSubmit( payment );
+    }).catch( error => {
+      toast.error( error.message );
+    })
   }
 
   render() {
     const { isOpen, centered, toggle } = this.props;
-    const { loading } = this.state;
+    const { payment_profile_id } = this.state;
 
     return (
       <Modal isOpen={isOpen} centered={centered} toggle={toggle} id='RegistrationModal'>
-        <ModalHeader toggle={toggle}>Upload Soldier List</ModalHeader>
+        <ModalHeader toggle={toggle}>Registration Payment</ModalHeader>
         <ModalBody>
           <Callout title='Refund Policy'>
             <p>
@@ -36,13 +77,15 @@ export class RegistrationModal extends Component {
               Credit card transactions will be credited to the original card used. This process may take up to two weeks.
             </p>
           </Callout>
-          <ProfileForm />
+          <ProfileForm onProfileSelected={this.onProfileSelected} value={payment_profile_id}>
+            <CCForm onInputChange={ this.onCCEntered } show={ payment_profile_id === false }/>
+          </ProfileForm>
         </ModalBody>
-        { !loading && 
-          <ModalFooter>
-              <Button color='primary'>Pay and Register</Button>
-          </ModalFooter>
-        }
+        <ModalFooter>
+          <Button color='primary' onClick={this.submit}>
+            Pay and Register
+          </Button>
+        </ModalFooter>
       </Modal>
     );
   }
