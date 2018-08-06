@@ -12,15 +12,15 @@ import { toast } from 'react-toastify';
 import { loginChanged } from 'functions/login';
 import { arrayToCSV, setTitle } from 'functions/utils';
 import { filter, scrollToTop } from 'functions/tables';
-import { getSoldiers } from 'store/soldiers/registration/operations';
+import { getSoldiers, registerSoldiers } from 'store/soldiers/registration/operations';
 // styles
 import './RegistrationPage.scss';
 
 export class RegistrationPage extends Component {
 
   state = {
-    selection: [],selectAll: false,
-    total: 0, showModal: true
+    selection: [],  selectAll: false,
+    total: 0, showModal: false
   }
   // refs
   checkboxTable = React.createRef();
@@ -91,6 +91,15 @@ export class RegistrationPage extends Component {
     }
     this.setState({ selectAll, selection, total });
   };
+
+  registerUsers = ( payment ) => {
+    this.setState({ showModal: false });
+    if ( this.state.selection.length === 0 ) {
+      return toast.error('Cannot Register 0 Soldiers.');
+    }
+    this.props.registerSoldiers( this.state.selection, payment, this.state.total )
+    .then( this.props.getSoldiers );
+  }
 
   render() {
     const { login, loading, soldiers, getSoldiers } = this.props;
@@ -167,7 +176,7 @@ export class RegistrationPage extends Component {
         </Row>
         <ReactTable { ...tableProps } ref={this.checkboxTable}/>
 
-        <RegistrationModal isOpen={showModal} toggle={toggleModal}/>
+        <RegistrationModal isOpen={showModal} toggle={toggleModal} onSubmit={ this.registerUsers }/>
       </div>
     )
   }
@@ -179,4 +188,4 @@ const mapStateToProps = ( { login, soldiers } ) => ({
   loading: soldiers.loading
 });
 
-export default connect( mapStateToProps, { getSoldiers } )( RegistrationPage );
+export default connect( mapStateToProps, { getSoldiers, registerSoldiers } )( RegistrationPage );
