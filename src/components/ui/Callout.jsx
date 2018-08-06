@@ -3,9 +3,10 @@ import { Alert } from 'reactstrap';
 import classnames from 'classnames';
 import './styles/Callout.scss';
 
-const Callout = ( { icon = 'fas fa-info-circle', title, children, color='primary' } ) => {
+const Callout = ( { icon = 'fas fa-info-circle', title, children, color='primary', className } ) => {
   const classNames = classnames('th-callout', {
-    'th-callout-icon': !!icon
+    'th-callout-icon': !!icon,
+    [className]: !!className
   });
   return (
     <Alert className={classNames} color={color} transition={{ baseClass: '', timeout: 0 }}>
