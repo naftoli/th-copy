@@ -444,6 +444,7 @@ $bpOnly = [ 82 ];
 						<ul class='list_second'>
 							<li><a href="/newAchievementTasks.php">Add Achievement Task</a></li>
 							<li><a href="/manual_points.php">Add / Subtract Points</a></li>
+							<li><a href="/remove_old_achievement_cards.php">Delete Old Achievement Cards</a></li>
 						</ul>
 						
 						<li class="list_parent<?=isset($ui_type) && $ui_type == 'programs' ? ' current' : ''?>">

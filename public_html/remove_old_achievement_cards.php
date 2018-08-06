@@ -10,7 +10,7 @@ if (isset($_POST['submit'])) {
             $sql = "DELETE FROM pointsDB.achievement_cards WHERE status = 'not scanned' AND created < '" . mysql_real_escape_string( $date ) . "' AND institution_id = " . $school_id;
             //echo $sql;
             if (mysql_query($sql)) {
-                $msg = "You have successfully deleted all unsused achievement cards from before " . $date;
+                $msg = "You have successfully deleted all unscanned achievement cards from before " . $date;
             } else {
                 $msg = "There was an error deleting the achievement cards.";
             }
@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
             ?>
             <form method="post" action="remove_old_achievement_cards.php" id="deleteForm">
                 <p>
-                    Delete all unused achievement cards that were create before 
+                    Delete all unscanned achievement cards that were create before 
                     <input type="date" name="date" id="date" /><br />
                     <input type="submit" value="delete" name="submit" />
                 </p>
