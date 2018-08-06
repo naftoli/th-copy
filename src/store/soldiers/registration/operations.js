@@ -33,7 +33,6 @@ export const registerSoldiers = ( user_ids, payment, total ) => dispatch => {
       toast_id, `${user_ids.length} Soldiers Registered for $${total}!`, 
       response.message, response.success 
     );
-    debugger;
   }).catch( error => {
     updateNotifcation( toast_id, '', error.message, false );
   })
