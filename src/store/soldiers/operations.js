@@ -1,21 +1,7 @@
 import API from 'api/api';
-import { toast } from 'react-toastify';
+import { createNotifcation, updateNotifcation } from 'functions/notifications';
 import moment from 'moment';
 import * as actions from './actions';
-
-const createNotifcation = ( message ) => {
-  return toast.info( message, { autoClose: false } );
-}
-
-const updateNotifcation = ( toast_id, message, error = '', success = true ) => {
-  const { SUCCESS, ERROR } = toast.TYPE;
-  toast.update( toast_id, { 
-    type: success ? SUCCESS : ERROR, 
-    render: success ? message : error,
-    autoClose: success ? null : false
-  }); 
-  return success;
-}
 
 // get all soldiers
 export const getSoldiers = () => dispatch => {
@@ -46,7 +32,7 @@ export const updateSoldier = ( id, data ) => dispatch => {
   const toast_id = createNotifcation('Updating Soldier');
   return API.post( `/core/users.php?id=${id}`, data )
     .then( response => {
-      updateNotifcation( toast_id, 'Soldier Updated!', response.error, response.success );
+      updateNotifcation( toast_id, 'Soldier Updated!', response.message, response.success );
       if ( response.success ) { 
         dispatch( actions.updateSoldier( id, response.data ) ); 
       } 
