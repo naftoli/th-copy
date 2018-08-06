@@ -6,10 +6,11 @@ import login from 'store/login/reducer';
 import soldiers from 'store/soldiers/reducer';
 import platoons from 'store/platoons/reducer';
 import bases from 'store/bases/reducer';
+import payments from 'store/payments/reducer';
 
 export const reducer = combineReducers({
-  login, soldiers, platoons, bases
-})
+  login, soldiers, platoons, bases, payments
+});
 
 const rootReducer = ( state, action ) => {
   // reset the state on logout
