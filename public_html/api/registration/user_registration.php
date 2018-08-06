@@ -120,7 +120,8 @@ class UserRegistrationRouter {
                 $customer_profile = $current_user->customerProfile();
 
                 if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
-                    json_error( $payment_profile ); 
+                    json_error( $payment_profile );
+                $payment_profile_id = $payment_profile->customerPaymentProfileId;
             }
             
             // Let the user know if the transaction fails
