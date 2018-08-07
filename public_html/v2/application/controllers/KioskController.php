@@ -36,12 +36,12 @@ class KioskController extends Zend_Controller_Action
 
 		// find out if school has a store reset date set
 		$db = Zend_Registry::get('db');
-		$db->setFetchMode(Zend_Db::FETCH_OBJ);
+		// $db->setFetchMode(Zend_Db::FETCH_OBJ);
 		$sql = "SELECT store_reset FROM mashpiadb.schools WHERE school_id = " . $objUser->school_id;
 		$result = $db->query( $sql );
 		$row = $result->fetch();
-		$date = $row['store_reset'];
-		if ($date > 0 && $date <= unixtojd()) { // make sure we are now after the start date set by the school
+		$date = $row->store_reset;
+		if ($date > 0) { 
 			$start_date = $date;
 		} else {
 			$australian = array(55,66,110,112,180);

@@ -14,7 +14,9 @@ $("#manual-scanner #scanner").keyup( function( event ) {
 
 Quagga.onDetected( function( data ) {
     if ( !checkNumber( data.codeResult.code ) ) {
-        showError( "Sorry, it seems we could not read the card properly. Please try another angle." )
+        setTimeout( function() {
+            showError( "Sorry, it seems we could not read the card properly. Please try another angle." )
+        }, 1000 );
     }
 });
 

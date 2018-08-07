@@ -20,7 +20,9 @@ class GlobalSettings {
         return $dates;
     }
     
-    public static function getRegistrationYear() {
+    public static function getRegistrationYear( $school_id = false ) {
+        if ( in_array( $school_id, [ 55, 66, 110, 112, 256 ] ) )
+            return 5778;
         $sql = "select `val` from global_settings where `key` = 'registration_year'";
         $result = mysql_query($sql);
         $row = mysql_fetch_assoc($result);

@@ -5,7 +5,11 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     use traits\BuildModel;
     
     // relationships
-    static $has_many = [ [ 'school_registrations' ], [ 'platoons' ], [ 'users' ] ];
+    static $has_many = [ 
+        [ 'school_registrations' ], 
+        [ 'platoons', 'order' => 'class_grade, class_sub', ], 
+        [ 'users' ] 
+    ];
 
     // ******************************* GETTERS *******************************
     /**
@@ -18,7 +22,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
      * @return SchoolRegistration
      */
     public function getRegInfo( $year = false ){
-        $year = $year ? $year : GlobalSettings::getRegistrationYear();
+        $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
         $reg_info = SchoolRegistration::getDefault( $this->school_id, $this->reg_type, $year );
         // check for non-default option
         foreach( $this->school_registrations as $custom_reg_info ){

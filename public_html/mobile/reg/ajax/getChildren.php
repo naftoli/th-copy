@@ -1,12 +1,10 @@
 <?php
 require '../../../db.php';
+require_once( __DIR__ . '/../../../class.globalSettings.php' );
 $CHIDON_ACTIVE = false; // change to activate chidon
 
 $admin = mysql_real_escape_string( $_POST['admin'] );
 $year = mysql_real_escape_string( $_POST['year'] );
-
-require_once( __DIR__ . '/../../../class.globalSettings.php' );
-$reg_year = GlobalSettings::getRegistrationYear();
 
 require 'encrypt.php';
 $admin = encrypt_decrypt('decrypt', $admin);
@@ -20,7 +18,7 @@ $yearly_raffle = new YearlyRaffle();
 $info = array();
 
 $parent = array();
-$sql = "select father, mother, father_pic, mother_pic from admins where admin_id = " . $admin;
+$sql = "SELECT father, mother, father_pic, mother_pic FROM admins WHERE admin_id = " . $admin;
 $result = mysql_query( $sql );
 $row = mysql_fetch_assoc( $result );
 
@@ -40,21 +38,20 @@ while ( $row = mysql_fetch_assoc($result) ) {
 
 $children = array();
 //need to have multiple result rows to get highest rank
-$sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, sri.date_paid as registered, c.class_grade, u.user_id, u.first, u.last, "
-	." u.first_he, u.last_he, u.lang_id, !ISNULL(tc.th_chidon_id) as reg_chidon, !ISNULL(ur.user_reg_id) as reg_chayolei, "
+$sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, c.class_grade, u.user_id, u.first, u.last, "
+	." u.first_he, u.last_he, u.lang_id, "
 	." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, r.rank_ord, r.rank_name, r.rank_image_id "
 	." FROM users u "
     ." JOIN schools s USING (school_id) "
 	." LEFT JOIN classes c ON c.class_id = u.class_id "
 	." LEFT JOIN rank_marks rm USING (user_id) "
     ." LEFT JOIN ranks r USING (rank_ord) "
-    ." LEFT JOIN th_chidon tc ON u.user_id = tc.user_id and year = $reg_year "
-    ." LEFT JOIN user_registration ur ON u.user_id = ur.user_id and ur.year = $reg_year "
-    ." LEFT JOIN school_registrations sri ON s.school_id = sri.school_id AND sri.year = $reg_year "
 	." WHERE u.user_id IN (" . implode(',', $users) . ") "
-	." ORDER BY u.user_id, rank_ord";
+    ." ORDER BY u.user_id, rank_ord";
+
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc($result) ) {
+    $reg_year = GlobalSettings::getRegistrationYear( $row['school_id'] );
 	$children[$row['user_id']]['first'] 	= $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
 	$children[$row['user_id']]['last']  	= $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
 	$children[$row['user_id']]['school'] 	= $row['school_name'];
@@ -67,14 +64,25 @@ while ( $row = mysql_fetch_assoc($result) ) {
 	$children[$row['user_id']]['mobile_pic']= empty( $row['mobile_pic'] ) ? 0 : $row['mobile_pic'];
 	$children[$row['user_id']]['grade'] 	= $row['class_grade'];
 	$children[$row['user_id']]['schoolRegistered'] = $row['school_era'] > 0 ? 0 : 1;
-	$children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
 	$children[$row['user_id']]['anashkinder'] = $row['school_id'] == 269 ? 1 : 0;
 	$children[$row['user_id']]['myshliach'] = $row['school_id'] == 61 ? 1 : 0;
 	$children[$row['user_id']]['chidon'] = $CHIDON_ACTIVE && intval($row['class_grade']) > 3 ? 1 : 0;
 	$children[$row['user_id']]['chidonRegistered'] = 0;
 	$children[$row['user_id']]['chayolei'] = 1;
-	$children[$row['user_id']]['user_registered'] = $row['user_registered'];
-	
+    $children[$row['user_id']]['user_registered'] = $row['user_registered'];
+    $children[$row['user_id']]['reg_year'] = $reg_year;
+    
+    $reg_query = mysql_query(
+        "SELECT !ISNULL(tc.th_chidon_id) AS reg_chidon, !ISNULL(ur.user_reg_id) AS reg_chayolei, "
+        ."sri.date_paid AS registered FROM users u "
+        ."LEFT JOIN th_chidon tc ON u.user_id = tc.user_id and year = $reg_year "
+        ."LEFT JOIN user_registration ur ON u.user_id = ur.user_id and ur.year = $reg_year "
+        ."LEFT JOIN school_registrations sri ON u.school_id = sri.school_id AND sri.year = $reg_year "
+        ."WHERE u.user_id = ".$row['user_id']
+    );
+    $row = array_merge( $row, mysql_fetch_assoc( $reg_query ) );
+    $children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
+
 	// after Nov 8, 2017 registration is closed
 	if (unixtojd() > 2458067 && !in_array($row['school_id'], array(61,269))) $children[$row['user_id']]['chidon'] = 0;
 	
@@ -83,21 +91,23 @@ while ( $row = mysql_fetch_assoc($result) ) {
     // REGISTRATION 5779
     $children[$row['user_id']]['needsReg'] = 0;
     $children[$row['user_id']]['allowRemove'] = 0;
-    $children[$row['user_id']]['reg_types'] = [];
-
-    // not open for australia yet.
-    if( !in_array( $row['school_id'], $australia ) ) {
-        // chayolei registration
-        if ( !$row['reg_chayolei'] ) {
-            // do not show for 7-8 grade who are registered in chidon 
-            if ( !(in_array( $row['class_grade'], [7, 8] ) && $row['reg_chidon'] ) ) {
-                $children[$row['user_id']]['needsReg'] = 1;
-                $children[$row['user_id']]['reg_types']['chayolei'] = true;
-            }
-        } else if ( !$row['reg_chidon'] && $row['class_grade'] >= 4 ) {
-            $children[$row['user_id']]['needsReg'] = 1;
-            $children[$row['user_id']]['reg_types']['chidon'] = true;
-        }
+	$children[$row['user_id']]['reg_types'] = [];
+	
+    if ( !$row['reg_chayolei'] && // if not registered for chayolei
+        // do not show for 7-8 grade who are registered in chidon 
+        ( !(in_array( $row['class_grade'], [7, 8] ) && $row['reg_chidon'] ) ) 
+    ) {
+        $children[$row['user_id']]['needsReg'] = 1;
+        $children[$row['user_id']]['reg_types']['chayolei'] = true;
+    } 
+    
+    // chidon regustration
+    if ( !$row['reg_chidon'] && // if not in chidon 
+        $row['class_grade'] >= 4 && // and in grade 4+
+        !in_array( $row['school_id'], $australia ) // and not in australia..
+    ) {
+        $children[$row['user_id']]['needsReg'] = 1;
+        $children[$row['user_id']]['reg_types']['chidon'] = true;
     }
     
     // make sure beis rivka ch for 7/8 grades don't show registration button
@@ -160,7 +170,6 @@ while ( $row = mysql_fetch_assoc($result) ) {
 			$children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . " days of tasks to enter the yearly raffle";
 		}
 	}
-	
 	
 	//if ($row['user_id'] == 26598) {
 	//	$children[$row['user_id']]['chidonShow'] = 1;

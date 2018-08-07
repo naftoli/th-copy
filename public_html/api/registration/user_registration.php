@@ -17,10 +17,12 @@ class UserRegistrationRouter {
 
         // get all the users information
         $users = User::find( $user_ids );
+        $users = is_array( $users ) ? $users : [ $users ];
 
         $available_users = [];
         foreach( $users as $user ){
-            if ( $user->school->getRegInfo()->default ) continue;
+            $reg_info = $user->school->getRegInfo();
+            if ( $reg_info->default || !$reg_info->date_paid ) continue;
             $available_users[] = $user;
         }
 
@@ -103,7 +105,7 @@ class UserRegistrationRouter {
         
         // setup the variables we will need later
         $user_serials = array_map( function( $user ){ return $user->user_serial; }, $users);
-        $year = GlobalSettings::getRegistrationYear();
+        $year = GlobalSettings::getRegistrationYear( $users[0]->school_id );
         $description = "User Registration for $year: " . implode( ", ", $user_serials );
         
         /******************************** PAYMENT ********************************/
@@ -118,7 +120,8 @@ class UserRegistrationRouter {
                 $customer_profile = $current_user->customerProfile();
 
                 if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
-                    json_error( $payment_profile ); 
+                    json_error( $payment_profile );
+                $payment_profile_id = $payment_profile->customerPaymentProfileId;
             }
             
             // Let the user know if the transaction fails

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+      <head>            
+      </head>
+      <body>
+            <span class="mychabad" view="login" settings="viewStyle=button"></span>
+            <div class="loader"></div>
+      </body>
+      <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+      <script language="javascript" type="text/javascript" src="https://chabadorg.clhosting.org/scripts/js/api/baseapi.js.asp?474DBD09-F59F-433D-A755-5A97594FC4E1"></script>
+      <script type="text/javascript">
+        var key;
+        MyChabadApi.Events.AddEventListener("statusUpdated", function (ev)
+        {
+            if (ev.response.Status)
+            {
+                console.log(ev.response);
+                var loaderNode = Co.Tools.GetElementsByClassName("loader", "div");
+                if (loaderNode.length > 0)
+                    Co.Tools.Content.AppendClassName(loaderNode, "active");
+                //make call to the server.
+                key = ev.response.Key;
+                $.post('auth.php', { key: key }, function( result ) {
+                    console.log( result );  
+                });
+                //new Co.Ajax.RequestObject("auth.php", { Method: "POST", EnableCaching: true, Parameters: { key: ev.response.Key }, Callback: onAuthenticationCompleteCallback }).Request();
+                // $.post('getAllCenters.php', { key: ev.response.Key }, function( response ) {
+                //     console.log( response );
+                // });
+            }
+        });
+        function onAuthenticationCompleteCallback(response)
+        {
+            console.log(response);
+            // var loaderNode = Co.Tools.GetElementsByClassName("loader", "div");
+            // if (loaderNode.length > 0)
+            //     Co.Tools.Content.RemoveClassName(loaderNode, "active");
+            // if (response.responseJson.IsValidUser)
+            // {
+            //     //alert('valid-user');
+            //     //you now have the option to redirect the user to secure area
+            //     var auth = key;
+            //     key = null; // make sure to remove key from global scope
+            //     $.post('getPeople.php', { key: auth, id: response.responseJson.ShliachId }, function(res) {
+            //         console.log(res);
+            //         var person = res.People[0];
+            //         if (person.Centers) {
+            //             $.post('getCenters.php', { key: auth, ids: person.Centers }, function(res) {
+            //                 console.log(res);
+            //                 var centers = res.Centers;
+            //                 for (var i in centers) {
+            //                     // get center info from database
+            //                     $.post('getCenterInfo.php', { id: centers[i].Id }, function( result ) {
+            //                         console.log( result );
+            //                     });
+            //                 }
+            //             });
+            //         } 
+            //     });
+            // }
+            // else
+            // {
+            //     alert('not-valid');
+            // }
+        }
+        </script>
+        
+</html>

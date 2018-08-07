@@ -1,50 +1,147 @@
 <?php
 include_once( __DIR__ . '/../functions/files/images.php' );
+include_once( __DIR__ . '/../auth/classes/Auth.php' );
+include_once( __DIR__ . '/traits/BuildModel.php' );
 
 class User extends ActiveRecord\Model implements JsonSerializable {
-
+    use \traits\BuildModel;
+    
     static $before_create = ['generateSerial', 'generateBarcode'];
+    static $after_create = [ 
+        'generateRank','enrollInCampaigns', 'setupBirthdayMissions',
+        'afterCreate'
+    ];
+    static $before_destroy = ['canDestroy'];
 
     // relationships
     static $belongs_to = [
         [ 'school' ], [ 'platoon', 'foreign_key' => 'class_id' ]
     ];
+
+    // cache
+    private $miles;
+
+    // Access validation - takes a login and returns true or false if it can access the user
+    public function validateAccess( $login ){
+        if ( $login['code'] === 'HQ' ) return true;
+        if ( $login['code'] === 'CKIDS-ADMIN' ) return !!$this->school->ckids;
+        if ( $login['code'] === 'BC' ) return $this->school_id == $login['id'];
+        if ( $login['code'] === 'TEACHER' ) return $this->class_id == $login['id'];
+        if ( $login['code'] === 'PARENT' ) return false; // TODO, check if parent can access child
+        return false;
+    }
     
     // ******************************* HELPER FUNCTIONS *******************************
-    /**
-     * profilePicture
-     *
-     * returns profile picture path from /
-     * 
-     * @return string
-     */
+    // returns profile picture path from (mashpia.com)/
     public function profilePicture() {
         if ( $this->mobile_pic ) {
-            return "/mobile/reg/" . $this->mobile_pic;
+            return '/mobile/reg/' . $this->mobile_pic;
         } else if ( $this->user_photo_id ) {
-            return "/file_view.php?id=" . $this->user_photo_id;
+            return '/file_view.php?id=' . $this->user_photo_id;
         }
-        return "/mobile/reg/images/profile-photo-default.jpg";
+        return '/mobile/reg/images/profile-photo-default.jpg';
     }
-    /**
-     * setProfilePicture
-     *
-     * takes an uploaded file and sets it as the profile picture
-     * 
-     * @param array $file
-     * @return string/array ( array if success and string on error )
-     */
+    // returns full barcode
+    public function barcode(){
+        return '3'.$this->user_code;
+    }
+    // returns the current rank
+    public function currentRank() {
+        global $pdo; $result = [];
+        // get all ranks earned
+        $rank_query = $pdo->prepare(
+            "SELECT r.rank_ord, r.rank_name, r.rank_color, r.medals_required, date_promoted "
+            ."FROM rank_marks JOIN ranks AS r USING(rank_ord) "
+            ."WHERE user_id=? ORDER BY rank_ord"
+        );
+        // get all medals earned
+        $medals_query = $pdo->prepare(
+            "SELECT ms.*, date_awarded FROM medal_marks "
+            ."JOIN medals_subjects AS ms USING(subject_id, medal_ord) "
+            ."WHERE user_id=? ORDER BY date_awarded, medal_ord"
+        );
+        $medals_query->execute( [ $this->user_id ] );
+        $medals = [];
+        while( $medal = $medals_query->fetch() ){
+            $medal['date_awarded_he'] = iconv( 'WINDOWS-1255', 'UTF-8', jdtojewish( 
+                $medal['date_awarded'], true, CAL_JEWISH_ADD_GERESHAYIM )
+            );
+            $medal['date_awarded'] = date('Y-m-d', jdtounix( $medal['date_awarded'] ));
+            $medal['photo'] = $medal['profile_photo_id'] ? 
+                '/file_view.php?id='.$medal['profile_photo_id'] : 
+                '/kiosk/images/medals/holder.png';
+            $medals[] = $medal;
+        }
+        // get the amounts for each rank
+        $medals_required = $pdo->query(
+            "SELECT medals_required FROM ranks ORDER BY rank_ord"
+        )->fetchAll( PDO::FETCH_COLUMN, 0 ); // fetch from the dbs
+        $medals_required[] = count($medals) > 133 ? count($medals) : 133;
+        // get all the ranks
+        $rank_query->execute( [ $this->user_id ] );
+        $ranks = $rank_query->fetchAll();
+        // set the current rank
+        $result['rank'] = intval( end( $ranks )['rank_ord'] );
+        $result['name'] = end( $ranks )['rank_name'];
+        // update the rank contents
+        $medals_index = 0;
+        foreach( $ranks as $index => $rank ){
+            $ranks[$index]['medals'] = [];
+            $ranks[$index]['date_promoted'] = date('Y-m-d', jdtounix( $rank['date_promoted'] ));
+            $medals_in_rank = intval( $medals_required[ $index + 1 ] );
+            $ranks[$index]['total_medals'] = $medals_in_rank;
+            while( isset( $medals[ $medals_index ] ) && $medals_index < $medals_in_rank ) {
+                $ranks[$index]['medals'][] = $medals[ $medals_index++ ];
+            }
+        };
+        $result['ranks'] = $ranks;
+        
+        return $result;
+    }
+    // get the current miles
+    public function miles( $force_refresh = false ) {
+        if ( $this->miles && !$force_refresh ) return $this->miles;
+        global $pdo;
+        $query = $pdo->prepare(
+            'SELECT SUM(mark_points) miles FROM date_tasks_marks WHERE user_id = ?'
+        );
+        $query->execute([ $this->user_id ]);
+        return $this->miles = intval( $query->fetch()['miles'] );
+    }
+    // get parent account
+    public function parentAccount() {
+        global $pdo;
+        $query = $pdo->prepare(
+            'SELECT admin_id, first, last, admin_phone_mobile AS phone, admin_email as email '
+            .'FROM admins JOIN admin_auths aa USING (admin_id) WHERE aa.auth="user" and id=?;'
+        );
+        $query->execute( [$this->user_id] );
+        $parent = $query->fetch();
+        if ( !$parent ) return false;
+        // set the admin key if we have a parent
+        $parent['key'] = mashpia\api\auth\Auth::mobileKey( $parent['admin_id'] );
+        return $parent;
+    }
+    // takes an uploaded file and sets it as the profile picture
     public function setProfilePicture( $file ){
+        $upload = self::uploadProfilePicture( $this->user_id, $file );
+        if ( !is_array( $upload ) ) return $upload;
+        // update the mobile_pic column
+        $this->mobile_pic = $upload['mobile_pic'];
+        $this->save();
+        return true;
+    }
+    // validates and moves the uploaded profile picture...
+    public static function uploadProfilePicture( $user_id, $file ){
         $type = exif_imagetype( $file['tmp_name'] );
-        $extension = image_type_to_extension($type);
-        // only PNG's and JPEG's for profile pictures
+        $extension = image_type_to_extension( $type );
         if ( !in_array( $type, [ IMAGETYPE_JPEG, IMAGETYPE_PNG ] ) )
             return 'Invalid File Type. Only JPG/JPEG/PNG are supported at the moment.';
         // all other upload errors
         if ( $file['error'] !== UPLOAD_ERR_OK )
             return codeToMessage( $file['error'] ); // api/funcitons/files/images.php#10
         // generate the file name
-        $file_name = getProfileDestination( $this->user_id, $extension ); // api/funcitons/files/images.php#35
+        $file_name = getProfileDestination( $user_id, $extension ); // api/funcitons/files/images.php#35
         $target = __DIR__ . "/../../mobile/reg/$file_name";
         // remove duplicate files
         if ( file_exists( $target ) ) unlink( $target );
@@ -52,45 +149,28 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $result = move_uploaded_file( $file['tmp_name'], $target );
         if ( !$result ) 
             return 'Unable to save Image. Please check if your file is corrupt before trying again.';
-        // update the profile picture
-        $this->mobile_pic = $file_name;
-        $this->save();
-        // return an array with the results
-        return true;
-    }
-    public function barcode(){
-        return '3'.$this->user_code;
+        return [
+            'mobile_pic' => $file_name,
+            'profilePicture' => '/mobile/reg/' . $file_name
+        ];
     }
 
     // ******************************* REGISTRATION *******************************
-    /**
-     * registrationRates
-     *
-     * returns array of registration rates. Call $this->registrationStatus() to get each ones status
-     * 
-     * @return array
-     */
+    // returns array of registration rates. Call $this->registrationStatus() to get each ones status
     public function registrationRates() {
         $reg_info = $this->school->getRegInfo(); // get the schools registration type
         $early_bird = $reg_info->early_bird > new DateTime();
         // calculate chayolei rate
         $result = [ 'chayolei' => $reg_info->getChildFee() ];
         // add chidon if user is in grade 4+
-        if ( $this->platoon->class_grade >= 4 )
+        if ( $this->platoon && $this->platoon->class_grade >= 4 )
             $result[ 'chidon' ] = GlobalSettings::getChidonCost();
         return $result;
     }
-    /**
-     * registrationStatus
-     * 
-     * returns array with the status of the various registration types for the current year.
-     *
-     * @param string $year
-     * @return array
-     */
+    // returns array with the status of the various registration types for the current year.
     public function registrationStatus( $year = false ) {
         global $pdo;
-        $year = $year ? $year : GlobalSettings::getRegistrationYear();
+        $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $pdo->prepare(
             "SELECT user_reg_id, th_chidon_id FROM users u "
@@ -102,7 +182,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $row = $user_status_query->fetch();
         $result = [ 'chayolei'  => !!$row['user_reg_id'] ];
         // only add th_chidon_id if the user is in grade 4+
-        if ( $this->platoon->class_grade >= 4 )
+        if ( $this->platoon && $this->platoon->class_grade >= 4 )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
         return $result;
     }
@@ -135,16 +215,8 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         // update feilds to mark registered
         $this->user_registered = new \Datetime();
         if( !$this->user_start_date) $this->user_start_date = unixtojd();
+        $this->generateRank();
         $this->save();
-        // make sure we have at least one rank
-        $rank_query = $pdo->prepare( "SELECT * FROM rank_marks WHERE user_id = ?" );
-        $rank_query->execute([ $this->user_id ]);
-        if( $rank_query->rowCount() == 0 ){
-            if ( !$pdo->prepare(
-                    "INSERT INTO rank_marks (rank_ord, user_id, date_promoted) VALUES (1, ?, ?) "
-                )->execute([ $this->user_id, unixtojd() ])
-            ) $errors[] = "Could not insert into rank_marks.";
-        }
         // create campaigns and birthday missions
         $this->enrollInCampaigns();
         $this->setupBirthdayMissions();
@@ -171,14 +243,14 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     }
 
     // ******************************* SETUP WITH EXTERNAL CODE *******************************
-    private function enrollInCampaigns() {
+    public function enrollInCampaigns() {
         require_once( __DIR__ . '/../../class.campaignEnrollment.php');
         try {
             $c = new CampaignEnrollment($this->user_id);
             $c->enroll();
         } catch (EnrollmentException $e) {}
     }
-    private function setupBirthdayMissions(){
+    public function setupBirthdayMissions(){
         require_once( __DIR__ . '/../../class.birthday.php' );
         require_once( __DIR__ . '/../../class.birthdayYi.php' );
         require_once( __DIR__ . '/../../class.heDob.php' );
@@ -195,7 +267,6 @@ class User extends ActiveRecord\Model implements JsonSerializable {
             $query = $pdo->query(
                 "SELECT IFNULL( MAX( user_serial ), 0 ) + 1 AS user_serial FROM users"
             );
-    
             $this->user_serial = $query->fetch()['user_serial'];
         }
     }
@@ -221,26 +292,46 @@ class User extends ActiveRecord\Model implements JsonSerializable {
             }
         }
     }
+    public function generateRank(){
+        global $pdo;
+        // make sure we have at least one rank
+        $rank_query = $pdo->prepare( "SELECT * FROM rank_marks WHERE user_id = ?" );
+        $rank_query->execute([ $this->user_id ]);
+        if( $rank_query->rowCount() == 0 ){
+            $pdo->prepare(
+                "INSERT INTO rank_marks (rank_ord, user_id, date_promoted) VALUES (1, ?, ?) "
+            )->execute([ $this->user_id, unixtojd() ]);
+        }
+    }
+    public function afterCreate(){
+        // update the enrollment info to match the school
+        $this->chayolei = $this->school->chayolei;
+        $this->chidon = $this->school->chidon;
+        $this->yan = $this->school->tehillim;
+        $this->save();
+    }
+    // ******************************* ONDELETE FUNCTIONS *******************************
+    public function canDestroy(){
+        return $this->miles() === 0;
+    }
 
     // ******************************* SERIALIZERS *******************************
-    /**
-     * jsonSerialize
-     * 
-     * serialize object to array
-     * 
-     * @return array
-     */
+    // serialize to array for json responses
     public function jsonSerialize(){
         return $this->to_array([
             'only' => [
-                'user_id', 'user_serial', 'first', 'last', 'first_he', 'last_he', 'lang_id', 'dob',
+                'user_id', 'user_serial', 'first', 'last', 'first_he', 'last_he', 'lang_id', 'dob', 'dob_he',
                 'school_type_id', 'user_address1', 'user_address2', 'user_city', 'user_state',
-                'user_postal', 'user_country', 'gender', 'user_start_date', 'user_registered',
-                'chayolei', 'yan', 'chidon', 'allow_parent_tasks', 'print_parent_tasks', 'mobile_pic'
+                'user_postal', 'user_country', 'user_phone', 'gender', 'user_start_date', 'user_registered',
+                'chayolei', 'yan', 'chidon', 'allow_parent_tasks', 'print_parent_tasks', 'mobile_pic',
+                'school_id', 'class_id', 'school_type_id'
             ],
-            'methods' => [ 'profilePicture', 'barcode' ],
+            'methods' => [ 'profilePicture', 'barcode', 'currentRank', 'miles', 'parentAccount' ],
             'include' => [ 
-                'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ] ],
+                'school' => [ 
+                    'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ],
+                    'include' => [ 'platoons' => [ 'only' => [ 'class_id' ], 'methods' => [ 'name' ] ] ]                     
+                ],
                 'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ], 'methods' => [ 'name' ] ]
             ]
         ]);

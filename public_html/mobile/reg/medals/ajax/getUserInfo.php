@@ -8,8 +8,8 @@ $sql = "SELECT u.first, u.last, u.first_he, u.last_he, u.lang_id, u.user_serial,
 	." FROM users u "
 	." JOIN schools s USING (school_id) "
 	." JOIN classes c ON c.class_id = u.class_id "
-	." JOIN rank_marks USING (user_id) "
-	." JOIN ranks r USING (rank_ord) "
+	." LEFT JOIN rank_marks USING (user_id) "
+	." LEFT JOIN ranks r USING (rank_ord) "
 	." LEFT JOIN thumbs t ON t.file_id = u.user_photo_id "
 	." WHERE u.user_id = " . $user_id . " "
 	." ORDER BY rank_ord DESC LIMIT 1";

@@ -14,7 +14,7 @@ class UsersUploadRouter {
         global $pdo; global $current_user;
 
         if ( !isset( $_FILES['users'] ) )
-            json_error("No File Sent", [ $_POST, $_FILES ]);
+            json_error("No File Sent", 'UPLOAD-USERS-17');
         // columns to create users
         $columnNames = [
             "*First Name",  "*Last Name", 
@@ -54,7 +54,7 @@ class UsersUploadRouter {
                     json_error(
                          "You have an incorrect excel sheet.\n"
                         ."Please download the sample file again and do not modify the header information.",
-                        [ $headers, $columnNames ]
+                        'UPLOAD-USERS-57'
                     );
 
                 $firstRow = false;
@@ -139,9 +139,9 @@ class UsersUploadRouter {
 
                     // validate mission type
                     if ( $headers[$cellIndex] == "*Mission Type" && 
-                        !in_array( $value, [ 'chabad', 'frum' ] )
+                        !in_array( $value, [ 'chabad', 'frum', 'c-kids' ] )
                     ) {
-                        $errors[] = "$errorString Mission type must be 'chabad' or 'frum.";
+                        $errors[] = "$errorString Mission type must be 'chabad', 'frum' or 'c-kids'.";
                     }
                     
                     $user[ $dbColumnNames[ $cellIndex ] ] = $value;
@@ -154,7 +154,7 @@ class UsersUploadRouter {
 
         // return an error if there where no users provided
         if ( count( $users ) == 0 ) {
-            return json_error( "No soldiers found on spreadsheet. Please check your file before uploading." );
+            return json_error( "No soldiers found on spreadsheet. Please check your file before uploading.", 'UPLOAD-USERS-157' );
         }
 
         // return the list of errors
@@ -177,8 +177,10 @@ class UsersUploadRouter {
         foreach( $users as $index => $user ){
             if ( $user['school_type_id'] == 'chabad' ) {
                 $user['school_type_id'] = $user['gender'] == 'M' ? 2 : 3; 
+            } else if ( $user['school_type_id'] == 'frum' ) {
+                $user['school_type_id'] = $user['gender'] == 'M' ? 12 : 13;
             } else {
-                $user['school_type_id'] = $user['gender'] == 'M' ? 12 : 13; 
+                $user['school_type_id'] = $user['gender'] == 'M' ? 22 : 23; 
             }
 
             $user = new User( $user );
