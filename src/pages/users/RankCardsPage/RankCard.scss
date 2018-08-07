@@ -8,7 +8,8 @@ $colors: (
   // permenent cards are different
   @media print {
     &.permanent{ 
-      page-break-after: always; display: block; 
+      page-break-after: always; display: block;
+      .rank-card .top { opacity: 0; }
     }
   }
   
