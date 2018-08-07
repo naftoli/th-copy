@@ -10,6 +10,9 @@ body {
   scroll-behavior: smooth !important;
   -webkit-overflow-scrolling: touch !important;
 }
+.react-select__menu, .react-select__menu-list {
+  scroll-behavior: unset !important;
+}
 /* Images cannot go beyond their parent containers */
 img { 
   max-width: 100%;
