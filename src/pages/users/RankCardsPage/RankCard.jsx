@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { LEGACY_URL } from 'components/constants';
 import PropTypes from 'prop-types';
-// import classnames from 'classnames';
+import classnames from 'classnames';
 import './RankCard.scss';
 
 class RankCard extends Component {
   
   static propTypes = {
+    permanent: PropTypes.bool,
     user: PropTypes.shape({
       rank: PropTypes.string,
       rank_ord: PropTypes.number,
@@ -15,17 +16,25 @@ class RankCard extends Component {
       last: PropTypes.string,
       school_logo: PropTypes.string,
       profilePicture: PropTypes.string,
-      barcode: PropTypes.string,
+      barcode: PropTypes.number,
+      platoon: PropTypes.string
     })
+  }
+
+  static defaultProps = {
+    permanent: true
   }
 
   render() {
     const { 
       rank, user_serial, first, last, school_logo, 
-      profilePicture, barcode, rank_ord
-    } = this.props.user
+      profilePicture, barcode, rank_ord, platoon
+    } = this.props.user;
+    // classnames for cards. See SCSS for what they do
+    const classNames = classnames('print RankCard', { 'permanent': this.props.permanent });
+
     return (
-      <div className='print RankCard'>
+      <div className={classNames}>
         <div className={`rank-card rank-${rank_ord}`}>
           <div className='top'>
             This card entitles the cardholder to TH privileges with the { rank } rank
@@ -44,7 +53,8 @@ class RankCard extends Component {
             <div className='base'>
               <p>BASE #614199</p>
               <p><strong>Avrohom Academy</strong></p>
-              <p>Brooklyn, NY <strong>Platoon:</strong></p>
+              <p>Brooklyn, NY</p>
+              <p><strong>Platoon: { platoon }</strong></p>
               </div>
             <div className='photo'>
               <img src={ LEGACY_URL + profilePicture } alt='profile'/>
@@ -55,7 +65,10 @@ class RankCard extends Component {
               <img src={`${LEGACY_URL}/barcode.php/${barcode}`} alt='barcode'/>
               { barcode }
             </div>
-            <div className='stats'></div>
+            <div className='stats'>
+              <p>Member since<br/> כ"ד אלול התשע"ה</p>
+              <p>Valid until<br/> כ"ט אלול התשפ"ג</p>
+            </div>
           </div>
         </div>
       </div>

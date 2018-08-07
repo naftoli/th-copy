@@ -5,7 +5,14 @@ $colors: (
 );
 
 .RankCard {
-  page-break-after: always;
+  // permenent cards are different
+  @media print {
+    &.permanent{ 
+      page-break-after: always; display: block; 
+    }
+  }
+  
+  display: inline-block;
   // Colors - go through each rank number and add the color to CSS
   @each $rank, $rank_color in $colors {
     .rank-card.rank-#{$rank} {
@@ -20,35 +27,77 @@ $colors: (
     font-size: 2mm; position: relative; display: inline-block;
     padding: 0px; vertical-align: top; margin: auto;
     font-family: "Myriad Pro", Arial, Helvetica, sans-serif;
-    page-break-after: always;
+    
+    @media screen {
+      border: 1px solid #000;
+      margin: 10px;
+    }
   
-    p { margin-bottom: 0px; }
+    p { margin: 0px; }
+    
     .top {
       text-align: center; font-weight: bold;
-      color: #fff; height: .2in; line-height: .2in; font-size: 1.85mm;
+      color: #fff; height: .25in; line-height: .2in; font-size: 1.85mm;
     }
+    
     .sig {
-      border-top: .03in solid; height: .38in;
-      background-color: #fff; text-align: right; padding-left: 0.4in;
+      height: .38in;
+      background-color: #fff; text-align: right; padding-right: 0.1in;
       .rank-row {
         text-transform: uppercase; padding: 0mm; margin: 0mm; font-weight: bold; 
         font-size: .1in; line-height: .125in;
       }
       .rank { text-transform: uppercase; font-style: normal; font-weight: 700; }
     }
+    
     .info { display: flex; align-items: center; justify-content: space-between; }
-    .logo img { height: .75in; padding-left: .04in; }
-    .base { flex-grow: 1; }
+    
+    .logo img { height: .75in; padding: 0px .04in; }
+    
+    .base { 
+      flex-grow: 1; line-height: 3mm; 
+      strong { font-size: 3mm; }
+    }
+    
     .photo { 
-      height: 1in;
+      height: 1in; padding: .05in;
       img {
-        border: .03in solid;
+        border: .02in solid;
+        border-radius: 5px;
       }
     }
+    
     .barcode {
+      display: flex;
       .code {
-        width: 2.43in; text-align: center;
+        width: 2.47in;
+        
+        font-size: .14in;
+        line-height: .2in;
+
+        text-align: center; 
+        vertical-align: middle;
+        padding-top: .02in;
+        padding-left: .04in;
+        margin-bottom: 0px;
+
         img { width: 2.43in; height: .25in; }
+      }
+      .stats {
+        text-align: center;
+        flex-grow: 1;
+        padding-right: .04in;
+        padding-top: .02in;
+        p {
+          font-size: .08in;
+          line-height: .09in;
+          text-align: left;
+          font-weight: bold;
+          text-align: center;
+          margin: 0px;
+          padding: 0px;
+          padding-bottom: .04in;
+        }
       }
     }
   }
