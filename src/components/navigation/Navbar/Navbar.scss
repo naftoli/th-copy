@@ -3,6 +3,7 @@
 @import "../../../styles/variables";
 
 #mashpia-navbar{
+  @media print { display: none; }
   // font-family: 'Poppins', sans-serif;
   background-color: $primary-color-dark;
   color: #fff;

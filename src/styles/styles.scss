@@ -4,13 +4,16 @@ $theme-colors: (
   "primary": $primary-color,
   "danger": #ff4136
 );
+// clear bootstrap page settings for printing
+$print-page-size: auto;
+$print-body-min-width: auto;
 
 @import '~cropperjs/dist/cropper.css';
 @import '~react-table/react-table.css';
 @import '~react-toastify/dist/ReactToastify.min.css';
 @import '~react-datepicker/dist/react-datepicker.css';
 @import '~react-credit-cards/es/styles.scss';
-@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~bootstrap/scss/bootstrap';
 
 @import 'branding.scss';
 @import 'index.css';
