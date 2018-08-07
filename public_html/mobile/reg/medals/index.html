@@ -350,7 +350,7 @@
     			var grade = user.class_grade;
     			if (user.class_sub) grade += '-' + user.class_sub;
     			// update the information on the page
-    			$("#rank").text( user.rank_name );
+    			$("#rank").text( user.rank_name ? user.rank_name : 'Private' );
     			$("#name").text( user.lang_id === "2" ? user.first_he + ' ' + user.last_he : user.first + ' ' + user.last );
 				$("#serial").text( user.user_serial );
     			$("#grade").text( grade );
