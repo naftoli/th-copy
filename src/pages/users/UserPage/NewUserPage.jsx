@@ -4,8 +4,7 @@ import { Row, Col, Button } from 'reactstrap';
 import { ProfileRow, NameRow, DobRow, AddressRow } from './rows';
 import PlatoonSelect from 'components/selects/PlatoonSelect';
 import CropperModal from 'components/modals/CropperModal';
-import BaseSelect from 'components/selects/BaseSelect';
-import Select from 'react-select';
+import { BaseSelect, Select } from 'components/selects';
 // functions
 import { missionTypeOptions, findOption } from 'functions/selects';
 import { uploadProfile, createSoldier, getSoldiers } from 'store/soldiers/operations';
@@ -157,7 +156,7 @@ class NewUserPage extends Component {
               <Col xs='6'>
                 <label>Mission Type</label>
                 <Select options={mission_type_options} onChange={this.handleSelectChange('school_type_id')}
-                  value={findOption( mission_type_options, school_type_id )} openMenuOnFocus />
+                  value={findOption( mission_type_options, school_type_id )} />
               </Col>
               { baseSelect }
               { platoonSelect }

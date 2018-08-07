@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // components
 import { Row, Col } from 'reactstrap';
 import { ParentRow } from '../rows';
-import Select from 'react-select';
+import { Select } from 'components/selects';
 import Checkbox from 'components/ui/Checkbox';
 // functions
 import { findOption, missionTypeOptions } from 'functions/selects';
@@ -42,17 +42,17 @@ class SettingsTab extends Component {
           <Col xs='12' sm='4'>
             <label>Platoon</label>
             <Select options={platoon_options} onChange={this.handleSelectChange('class_id')}
-              value={findOption( platoon_options, class_id )} openMenuOnFocus />
+              value={findOption( platoon_options, class_id )} />
           </Col>
           <Col xs='6' sm='4'>
             <label>Mission Type</label>
             <Select options={mission_type_options} onChange={this.handleSelectChange('school_type_id')}
-              value={findOption( mission_type_options, school_type_id )} openMenuOnFocus/>
+              value={findOption( mission_type_options, school_type_id )} />
           </Col>
           <Col xs='6' sm='4'>
             <label>Language</label>
             <Select options={language_options} onChange={this.handleSelectChange('lang_id')}
-              value={findOption( language_options, lang_id )} openMenuOnFocus/>
+              value={findOption( language_options, lang_id )} />
           </Col>
         </Row>
         <Row>

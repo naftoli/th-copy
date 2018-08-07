@@ -1,11 +1,22 @@
 import React, { Component } from 'react';
-import Select from 'react-select';
-import { getBases } from 'store/bases/operations';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+// components
+import Select from './Select';
+// functions
+import { getBases } from 'store/bases/operations';
 import { loginChanged } from 'functions/login';
 import { findOption } from 'functions/selects';
 
 export class BaseSelect extends Component {
+
+  static propTypes = {
+    showAll: PropTypes.bool
+  }
+
+  static defaultProps = {
+    showAll: false
+  }
 
   state = { loading: false }
 
@@ -28,15 +39,16 @@ export class BaseSelect extends Component {
   }
   // render
   render() {
-    const { bases, onChange, value } = this.props;
+    const { bases, onChange, value, showAll } = this.props;
     const base_options = bases.map( 
       ({ school_id, school_name }) => ({ value: school_id, label: school_name })
     );
+    if ( showAll ) base_options.unshift({ value: false, label: 'All Bases' });
 
     let selected = findOption( base_options, value );
 
     return (
-      <Select options={base_options} value={ selected } openMenuOnFocus
+      <Select options={base_options} value={ selected }
         isLoading={ this.state.loading } onChange={ onChange } />
     )
   }
