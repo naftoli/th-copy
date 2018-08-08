@@ -11,6 +11,15 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
     public function name() {
         return $this->class_grade . ( $this->class_sub ? ' - ' . $this->class_sub : '' );
     }
+    public function staff() {
+        global $pdo;
+        $staff_query = $pdo->prepare(
+            'SELECT a.first, a.last, a.username, a.admin_email FROM admins a '
+            .'JOIN admin_auths aa USING( admin_id ) WHERE aa.auth="class" AND aa.id=?;'
+        );
+        $staff_query->execute([ $this->class_id ]);
+        return $staff_query->fetchAll();
+    }
 
     // ******************************* SERIALIZERS *******************************
     /**
@@ -21,21 +30,9 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
      * @return array
      */
     public function jsonSerialize(){
-        return $this->to_array();
-    }
-
-    /**
-     * publicSerialize
-     * 
-     * serialze school for public endpoints
-     *
-     * @return array
-     */
-    public function publicSerialize(){
         return $this->to_array([
-            'only' => [ 'class_id', 'class_grade', 'class_sub' ],
-            'methods' => [ 'name' ],
-            'include' => [ 'school' => [ 'only' => [ 'school_id', 'school_name' ] ] ]
+            // 'only' => [ 'class_id' ],
+            'methods' => [ 'name', 'staff' ],
         ]);
     }
 }
