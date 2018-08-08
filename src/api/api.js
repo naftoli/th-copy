@@ -33,7 +33,14 @@ const parseResponse = response => {
   return response;
 }
 
-export { API_URL, headers, toJSON, parseResponse };
+const handleAPIResponse = response => {
+  if ( !response.success ) { 
+    return Promise.reject( response );
+  }
+  return response.data;
+}
+
+export { API_URL, headers, toJSON, parseResponse, handleAPIResponse };
 
 export default {
   get( url ) {
