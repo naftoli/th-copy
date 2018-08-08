@@ -6,28 +6,17 @@ class UsersRouter {
 
     public function index() {
         global $current_user; global $pdo;
-        // filters and params for the filters
-        $filters = [];   $params = [];
         // limit based on admin type
-        $login = $current_user->login;
-        if ( $login['code'] === 'HQ' ) {
-            $filters[] = 's.test_school = 0';
-        } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
-            $filters[] = 's.ckids = 1';
-        } else if ( $login['code'] === 'BC' ) {
-            $filters[] = 'u.school_id = ?'; $params[] = $login['id'];
-        } else if ( $login['code'] === 'TEACHER' ) {
-            $filters[] = 'u.class_id = ?'; $params[] = $login['id'];
-        } else { json_error( 'Access Deinied: CORE-USERS-26' ); }
+        $filters_and_params = $this->getFilters( $current_user->login );
         // combine the filters
-        $filters = 'WHERE ' . implode( ' AND ', $filters );
+        $filters = 'WHERE ' . implode( ' AND ', $filters_and_params['filters'] );
         // generate the SQL
         $sql = "SELECT u.*, s.*, c.class_grade, c.class_sub FROM users u "
             ."JOIN schools s USING ( school_id ) "
             ."LEFT JOIN classes c USING ( class_id ) $filters "
             ."ORDER BY school_name, class_grade, class_sub, last, first";
         $query = $pdo->prepare( $sql );
-        $query->execute( $params );
+        $query->execute( $filters_and_params['params'] );
 
         $users = [];
         // fetch all results and parse them as models
@@ -43,6 +32,7 @@ class UsersRouter {
                 'first' => $row['first'], 'last' => $row['last'], 'dob' => $dob, 'gender' => $row['gender'], 
                 'user_registered' => $user_registered,  'mobile_pic' => $row['mobile_pic'], 'profilePicture' => $profilePicture,
                 'chayolei' => intval($row['chayolei']), 'yan' => intval($row['yan']), 'chidon' => intval($row['chidon']), 
+                'school_id' => intval( $row['school_id'] ), 'class_id' => $row['class_id'] ? intval( $row['class_id'] ) : false, 
                 'school' => [ 'school_id' => $row['school_id'], 'school_name' => $row['school_name'], 
                     'shipping_city' => $row['shipping_city'], 'school_era' => $row['school_era'] ],
                 'barcode' => '3'.$row['user_code'],
@@ -142,6 +132,22 @@ class UsersRouter {
             json_response( $result );
         }
         json_error('Server did not get the profile picture :-(.');
+    }
+
+    private function getFilters( $login ){
+        // filters and params for the filters
+        $filters = [];   $params = [];
+        if ( $login['code'] === 'HQ' ) {
+            $filters[] = 's.test_school = 0';
+        } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
+            $filters[] = 's.ckids = 1';
+        } else if ( $login['code'] === 'BC' ) {
+            $filters[] = 'u.school_id = ?'; $params[] = $login['id'];
+        } else if ( $login['code'] === 'TEACHER' ) {
+            $filters[] = 'u.class_id = ?'; $params[] = $login['id'];
+        } else { json_error( 'Access Deinied: CORE-USERS-26' ); }
+        
+        return [ 'filters' => $filters, 'params' => $params ];
     }
 }
 
