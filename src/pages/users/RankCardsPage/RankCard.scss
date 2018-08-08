@@ -25,6 +25,9 @@ $colors: (
     }
   }
 
+  p { margin: 0px; }
+  > .no-print { text-align: center; }
+
   .rank-card {
     width: 3.37in; height: 2.12in;
     font-size: 2mm; position: relative; display: inline-block;
@@ -33,18 +36,16 @@ $colors: (
     
     @media screen {
       border: 1px solid #000;
-      margin: 10px;
+      margin: 10px; margin-top: 0px;
     }
-  
-    p { margin: 0px; }
     
     .top {
-      text-align: center; font-weight: bold;
-      color: #fff; height: .25in; line-height: .2in; font-size: 1.85mm;
+      text-align: center; font-weight: bold; color: #fff; 
+      height: .3in; line-height: .3in; font-size: 1.85mm;
     }
     
     .sig {
-      height: .38in;
+      height: .33in;
       background-color: #fff; text-align: right; padding-right: 0.1in;
       .rank-row {
         text-transform: uppercase; padding: 0mm; margin: 0mm; font-weight: bold; 
@@ -77,6 +78,7 @@ $colors: (
         
         font-size: .14in;
         line-height: .2in;
+        font-family: 'Source Code Pro', monospace;
 
         text-align: center; 
         vertical-align: middle;
