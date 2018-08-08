@@ -15,4 +15,9 @@
     margin-top: 10px;
     @media print { display: block; margin-top: 0px; }
   }
+
+  .alert-danger { 
+    text-align: center;
+    margin-top: 15px;
+  }
 }
