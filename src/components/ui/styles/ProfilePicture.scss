@@ -31,7 +31,7 @@
   }
 }
 
-.profile-picture.ie {
+.profile-picture.editable.ie {
   &:hover { cursor: pointer; }
   &:hover:before, &:focus:before {
     content: '\f030'; position: absolute; display: flex;
