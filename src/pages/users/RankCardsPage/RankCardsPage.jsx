@@ -41,13 +41,13 @@ export class RegistrationPage extends Component {
   componentDidMount(){ 
     setTitle('Soldier Rank Cards');
     if ( this.props.soldiers.length < 2 ) {
-      // this.props.getSoldiers();
+      this.props.getSoldiers();
     }
   }
   // when the login changes: reload the users and clear the options
   componentDidUpdate( prevProps ) {
     if ( loginChanged( this.props.login, prevProps.login ) ) {
-      // this.props.getSoldiers();
+      this.props.getSoldiers();
       if ( this.props.login.code === 'BC' ) {
         this.changeOption({ 
           school_id: false, class_id: false, user_serial: false,
