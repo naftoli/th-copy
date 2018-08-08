@@ -11,11 +11,11 @@ import { findOption } from 'functions/selects';
 export class BaseSelect extends Component {
 
   static propTypes = {
-    showAll: PropTypes.bool
+    showAllOption: PropTypes.bool
   }
 
   static defaultProps = {
-    showAll: false
+    showAllOption: false
   }
 
   state = { loading: false }
@@ -39,13 +39,14 @@ export class BaseSelect extends Component {
   }
   // render
   render() {
-    const { bases, onChange, value, showAll } = this.props;
+    const { bases, onChange, value, showAllOption } = this.props;
     const base_options = bases.map( 
       ({ school_id, school_name }) => ({ value: school_id, label: school_name })
     );
-    if ( showAll ) base_options.unshift({ value: false, label: 'All Bases' });
+    if ( showAllOption ) base_options.unshift({ value: false, label: 'All Bases' });
 
     let selected = findOption( base_options, value );
+    if ( !selected && base_options.length > 0 ) selected = base_options[0];
 
     return (
       <Select options={base_options} value={ selected }
