@@ -53,21 +53,6 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         return $auth_ids;
     }
 
-    /**
-     * authCode
-     * 
-     * return Auth code for React site
-     *
-     * @return string
-     */
-    public function authCode() {
-        if ( $this->isHQ() ) return 'HQ';
-        if ( $this->auth === 'ckidssuper' ) return 'CKIDS-ADMIN';
-        // not HQ
-        $auth_types = $this->getAuthTypes();
-        if ( in_array( 'school', $auth_types ) ) return 'BC';
-    }
-
     //******************************* LOGIN *******************************/
     // get all logins
     public function logins(){
@@ -215,7 +200,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
                 "father", "mother", "father_pic", "mother_pic",
                 "home_phone", "cell_phone", "admin_email"
             ],
-            'methods' => [ 'authCode' ]
+            'methods' => [ 'logins' ]
         ]);
     }
 }
