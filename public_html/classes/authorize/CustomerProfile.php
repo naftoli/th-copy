@@ -295,11 +295,5 @@ class CustomerProfile {
             return "$status ($code): $text";
         }
     }
-    
-    /* 
-     * 
-     * 
-     * 
-     */
 }
 ?>

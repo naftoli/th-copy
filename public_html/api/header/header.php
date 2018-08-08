@@ -32,6 +32,10 @@ if ( is_array( $data ) ) {
     $_POST = $data;
 }
 
+if ( $development ) {
+    define('AUTHORIZE_NET_SANDBOX', true);
+}
+
 // authenticate user if authentication is required
 if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
     include_once( API_ROOT . "/auth/classes/Auth.php" );

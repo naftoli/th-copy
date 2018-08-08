@@ -9,10 +9,10 @@ function rest_router( $router ){
         json_error( "Access Denied" );
     }
 
-    if ( isset( $_GET['action'] ) && $_GET['action'] && method_exists( $router, $_GET['action']) ) {
-        
-        return $router->{ $_GET['action'] }( $id );
-    
+    if ( isset( $_GET['action'] ) && $_GET['action'] ){
+        if ( method_exists( $router, $_GET['action']) ) {
+            return $router->{ $_GET['action'] }( $id );
+        }
     } else if ( $_SERVER['REQUEST_METHOD'] == "GET" ) {
         
         if ( $id && method_exists( $router, 'show' ) ) {
