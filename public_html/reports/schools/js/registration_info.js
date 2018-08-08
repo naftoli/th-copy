@@ -51,7 +51,7 @@ var registration_info = function(){
 
     function formatDate( date, name, disabled ){
         date = date ? date : '';
-        return '<input type="date" name="' + name + '" value="' + date.split('T')[0] + '" ' +  
+        return '<input type="date" name="' + name + '" value="' + date.split(' ')[0] + '" ' +  
             ( disabled ? "disabled='true'" : "") + '"/>';
     }
 
