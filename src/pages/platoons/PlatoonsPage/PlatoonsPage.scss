@@ -1,0 +1,15 @@
+#PlatoonsPage {
+  height: 100%;
+  
+  .ReactTable {
+    max-height: 87%;
+    @media ( max-height: 1080px ){ max-height: 82%; }
+    @media ( max-height: 768px ){ max-height: 78%; }
+    @media ( max-height: 731px ){ max-height: 92%; }
+
+    .rt-tr-group { overflow: hidden; }
+    .rt-tr { align-items: center; }
+    .rt-td { white-space: initial; }
+  }
+
+}
