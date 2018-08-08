@@ -33,7 +33,7 @@ class UsersRouter {
             $rank_marks = 'rank_marks rm USING (user_id) ';
         }
 
-        $sql = "SELECT rank_name AS rank, rank_ord, user_serial, first, last, first_he, last_he, "
+        $sql = "SELECT rank_name AS rank, rank_ord, user_id, user_serial, first, last, first_he, last_he, "
             ." school_name, school_logo_id, logo, user_photo_id, mobile_pic, rm.date_printed as printed, "
             ." rm.date_promoted, user_code AS barcode, class_grade, class_sub, user_start_date, dob, dob_he_offset "
             ." FROM users u LEFT JOIN $rank_marks "
@@ -49,7 +49,7 @@ class UsersRouter {
             $row['profilePicture'] = ( new User(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
             $row['platoon'] = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
             // functions from public_html/calendar.php
-            $row['member_since'] = dateToHebrewShortYear($row['user_start_date']);
+            $row['member_since'] = $row['user_start_date'] ? dateToHebrewShortYear($row['user_start_date']) : false;
             // copied from admin_card_print.php, TODO, validate and move to User model
             $dob = dateToJD( $row['dob'] );
             $cal = cal_from_jd( $dob, CAL_JEWISH );
@@ -62,6 +62,27 @@ class UsersRouter {
             $response[] = $row;
         }
         json_response( $response );
+    }
+
+    public function markPrinted() {
+        global $pdo;
+        $date = date("Y-m-d H:i:s");
+        $printed_query = $pdo->prepare(
+            "UPDATE rank_marks SET date_printed='$date' WHERE user_id=? AND rank_ord=?"
+        );
+        $not_printed_query = $pdo->prepare(
+            'UPDATE rank_marks SET date_printed=null WHERE user_id=? AND rank_ord=?'
+        );
+        $status = [];
+        // expects a post like so { updates: [ { user_id, rank_ord, printed }, ... ] }
+        foreach( $_POST['updates'] as $update ) {
+            $query = $printed_query;
+            $printed = !(!$update['printed'] || $update['printed'] === 'false');
+            if ( !$printed ) { $query = $not_printed_query; }
+            $success = $query->execute([ $update['user_id'], $update['rank_ord'] ]);
+            $status[$update['user_id']] = ( $success ? $printed : !$printed );
+        }
+        json_response( $status );
     }
 
     private function getFilters( $login ){
