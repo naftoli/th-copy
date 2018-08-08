@@ -7,9 +7,11 @@ $colors: (
 .RankCard {
   // permenent cards are different
   @media print {
-    &.permanent{ 
+    border: 1px dashed;
+    &.permanent{
       page-break-after: always; display: block;
       .rank-card .top { opacity: 0; }
+      border: none;
     }
   }
   
@@ -60,7 +62,7 @@ $colors: (
       strong { font-size: 3mm; }
     }
     
-    .photo { 
+    .profile-picture { 
       height: 1in; padding: .05in;
       img {
         border: .02in solid;
