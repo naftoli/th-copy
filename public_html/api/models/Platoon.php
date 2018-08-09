@@ -14,7 +14,7 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
     public function staff() {
         global $pdo;
         $staff_query = $pdo->prepare(
-            'SELECT a.first, a.last, a.username, a.admin_email FROM admins a '
+            'SELECT a.first, a.last, a.username, a.admin_email, a.admin_id FROM admins a '
             .'JOIN admin_auths aa USING( admin_id ) WHERE aa.auth="class" AND aa.id=?;'
         );
         $staff_query->execute([ $this->class_id ]);
