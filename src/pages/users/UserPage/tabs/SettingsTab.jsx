@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 // components
 import { Row, Col, Button, Input } from 'reactstrap';
 import { ParentRow } from '../rows';
@@ -6,6 +7,7 @@ import { Select, PlatoonSelect } from 'components/selects';
 import Checkbox from 'components/ui/Checkbox';
 // functions
 import { findOption, missionTypeOptions } from 'functions/selects';
+import { deleteSoldier, getSoldiers } from 'store/soldiers/operations';
 
 class SettingsTab extends Component {
   // handle checkbox events
@@ -16,6 +18,13 @@ class SettingsTab extends Component {
   handleSelectChange = ( id ) => ( option ) => {
     this.props.handleChange( { [id]: option && option.value } );
   }
+
+  delete = () => { 
+    this.props.deleteSoldier( this.props.soldier.user_id )
+    .then( () => this.props.getSoldiers() ) // refresh the main list
+    .then( () => this.props.getSoldier() ); // refresh the single soldier
+  }
+
   // render the page
   render() {
     let { 
@@ -85,7 +94,7 @@ class SettingsTab extends Component {
         <p className='title'>Delete Soldier</p>
         <Row>
           <Col xs='12'>
-            <Button color="danger">Delete Soldier</Button>
+            <Button color="danger" onClick={ this.delete }>Delete Soldier</Button>
           </Col>
         </Row>
       </div>
@@ -93,4 +102,4 @@ class SettingsTab extends Component {
   }
 }
 
-export default SettingsTab;
+export default connect(null, { deleteSoldier, getSoldiers })( SettingsTab );

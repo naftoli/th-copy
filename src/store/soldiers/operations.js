@@ -45,10 +45,10 @@ export const updateSoldier = ( id, data ) => dispatch => {
 
 export const deleteSoldier = ( id ) => dispatch => {
   const toast_id = createNotifcation('Deleting Soldier');
-  return API.delete( `/core/users/?id=${id}`)
+  return API.delete( `/core/users?id=${id}`)
     .then( response => {
-      debugger;
-    })
+      updateNotifcation( toast_id, response.data, response.message, response.success );
+    });
 }
 
 /********************** NON STORE API OPERATIONS **********************/
