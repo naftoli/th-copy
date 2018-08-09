@@ -69,15 +69,22 @@ var report = {
 
     bulk_shipment_select: function( event ) {
         var dropdowns = $(event.target).parent().parent().parent().parent().find("td .shipments_select");
+        var shipment_id = event.target.value;
+        var ajaxArray = []; updatedDropdowns = [];
+        
         $.each( dropdowns, function( index, dropdown ) {
-            if ( 
-                !(event.target.value === dropdown.value) &&
-                $(dropdown).parent().parent().find(".shipped_toggle")[0].checked
-            ) {
-                dropdown.value = event.target.value
-                $(dropdown).change();
+            var row = $(dropdown).parent().parent();
+            if ( !(event.target.value === dropdown.value) && row.find(".shipped_toggle")[0].checked ) {
+                ajaxArray.push( shipments.get_ajax( row ) );
+                updatedDropdowns.push( dropdown );
+                // dropdown.value = event.target.value;
+                // $(dropdown).change();
             }
-        })
+        });
+        var postData = { shipment_id: shipment_id, ajax: ajaxArray };
+        $.post("../ajax/add_or_move_shipment.php", postData, function( data ) {
+            updatedDropdowns.forEach( function(dropdown){ dropdown.value = shipment_id });
+        });
     },
     
     generate_report: function() {
@@ -124,39 +131,54 @@ var report = {
     toggle_shipped: function(event) {
         var checked = event.target.checked; // get the status of the checkbox
         var ajax_info = event.target.dataset.ajax; // and the pre-minified params
-        $.post("../ajax/mark_shipped.php", {checked: checked, params: ajax_info}, function(data){
+        $.post("../ajax/mark_shipped.php", {checked: checked, params: [ ajax_info ]}, function(data){
             if (debug) {console.log(data);} // log the response to the console if we are in debug mode
             data = JSON.parse(data); // parse the data as JSON
             if (data.success === false) { // if the server could not update the shipping status
                 event.target.checked = !event.target.checked; // undo the check/uncheck
-                alert(data.error); // and show the user the error provided by the server in an alert
-            } else {
-                var row = $(event.target).parent().parent().parent();
-                row.find(".status").text(checked ? "Shipped" : "Not Shipped");
-                row.find(".missing a").css({"display": checked ? "inline-block" : "none"});
-                row.find(".shipments_select").val("");
-                // toggle the disabled status...
-                if (!checked) {
-                    row.find(".shipments_select").attr("disabled", 'disabled');
-                } else {
-                    row.find(".shipments_select").removeAttr("disabled");
-                }
+                return alert(data.error); // and show the user the error provided by the server in an alert
             }
+            return report.toggle_shipped_ui( event.target );
         }); // end ajax call
     }, // end toggle shipped
+    
+    toggle_shipped_ui: function( target ) {
+        var checked = target.checked;
+        var row = $(target).parent().parent().parent();
+        row.find(".status").text(checked ? "Shipped" : "Not Shipped");
+        row.find(".missing a").css({"display": checked ? "inline-block" : "none"});
+        row.find(".shipments_select").val("");
+        // toggle the disabled status...
+        if (!checked) { row.find(".shipments_select").attr("disabled", 'disabled'); } 
+        else { row.find(".shipments_select").removeAttr("disabled"); }
+    },
     
     // master swich to toggle all the shipping checkboxes for the school
     toggle_shipped_bulk: function(event) {
         // get all the checkboxes by going up to the schools div and finding all the checkboxes
         var checkboxes = $(event.target).parent().parent().parent().parent().find("table input.shipped_toggle"); // add another layer for toggle-third container...
         var bulk_checked = event.target.checked; // get what we want to set them all to
+        var ajaxArray = []; var changedCheckboxes = [];
         if(debug) {console.log("bulk toggle", checkboxes);} // log it out for inspection in debug mode
         $.each(checkboxes, function(index, item){ // go through each checkbox
             if (item.checked != bulk_checked) { // if the item is different from the bulk toggle
-                item.checked = bulk_checked; // update it's status
-                $(item).change(); // run the click event listener (a.k.a update the server that it has been checked)
+                ajaxArray.push( item.dataset.ajax ); changedCheckboxes.push( item );
             }
         }); // end foreach checkbox
+        
+        if ( ajaxArray.length === 0 ) return false;
+
+        $.post("../ajax/mark_shipped.php", {checked: bulk_checked, params: ajaxArray}, function(data) {
+            data = JSON.parse( data )
+            if (data.success === false) {
+                changedCheckboxes.forEach( function( item ) { item.checked = !bulk_checked; } );
+                return alert(data.error);
+            }
+            return changedCheckboxes.forEach( function( item ) { 
+                item.checked = bulk_checked;
+                report.toggle_shipped_ui( item );
+            });
+        });
     }, // end toggle_shipped_bulk
     
     mark_missing: function(event) {
@@ -182,6 +204,7 @@ var report = {
     mark_hachayol_shipped: function (event) {
         var ajax_info = event.target.dataset.ajax;
         var qty = event.target.value ? event.target.value : 0;
+        debugger;
         $.post("../ajax/mark_shipped.php", {params: ajax_info, qty: qty }, function(data){
             if (debug) {console.log(data);} // log the response to the console if we are in debug mode
             data = JSON.parse(data); // parse the data as JSON

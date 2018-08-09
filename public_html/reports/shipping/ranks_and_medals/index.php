@@ -108,7 +108,7 @@ if($debug) echo "</pre>";?>
                 <i class="fa fa-calendar" aria-hidden="true"></i> Dates:
                 Previous
                 <label class="slider-container">
-                    <input type="checkbox" class="shipped_toggle_bulk" id="report_dates" checked/>
+                    <input type="checkbox" id="report_dates" checked/>
                     <span class="slider-span"></span>
                 </label>
                 Current
