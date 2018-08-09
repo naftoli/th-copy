@@ -133,6 +133,13 @@ class Shipment {
     }
     
     //************** PUBLIC INSTANCE FUNCTIONS ***************//
+
+    public function add_or_move_items( $ajaxArray ) {
+        foreach( $ajaxArray as $ajax ) { 
+            $success = $this->add_or_move_item( $ajax );
+        }
+        return $success;
+    }
     
     /*  shipment->add_or_move_item()
      *  
@@ -349,7 +356,7 @@ class Shipment {
     public static function getSchoolShipments($school_id, $dbAdpater = false){
         if(!$dbAdpater) $dbAdpater = new DBAdapter(); // make sure we have a DB adapter if none was provided.....
         // run the query
-        $query = $dbAdpater->query("SELECT * FROM ".self::$table_name." WHERE school_id = $school_id");
+        $query = $dbAdpater->query("SELECT * FROM ".self::$table_name." WHERE school_id = $school_id AND status != 'archived'");
         $shipments = []; // create a blank array
         // if there are results
         if($query && $query->num_rows() > 0){ // make sure the query is valid and there are results.....

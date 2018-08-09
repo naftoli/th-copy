@@ -54,22 +54,27 @@ var shipments = function(){
     }; // end function
     
     function update_shipment(event) {
-        var ajax; // hoist it up in code so we are not confused...
-        if ($(event.target).parent().parent().find("input[type='checkbox']").length > 0) {
-            ajax = $(event.target).parent().parent().find("input[type='checkbox']")[0].dataset.ajax;
-        } else {
-            ajax = $(event.target).parent().parent().find(".hachayol_shipped")[0].dataset.ajax;
-        }
-        var shipment_id = event.target.value;
+        var row = $(event.target).parent().parent();
+        var ajax = get_ajax( row );
         
-        $.post("../ajax/add_or_move_shipment.php", {shipment_id: shipment_id, ajax: ajax}, function(data){
-            console.log(data);
+        var shipment_id = event.target.value;
+        var postData = { shipment_id: shipment_id, ajax: [ ajax ] };
+        $.post("../ajax/add_or_move_shipment.php", postData, function( data ) {
+            // console.log( postData, data );
         });
+    }
+
+    function get_ajax( row ) {
+        if (row.find("input[type='checkbox']").length > 0) {
+            return row.find("input[type='checkbox']")[0].dataset.ajax;
+        }
+        return row.find(".hachayol_shipped")[0].dataset.ajax;
     }
     
     return { // expose the following info in the return statement....
         get_shipments: get_shipments,
         render_shipments: render_shipments_select,
-        update_shipment: update_shipment
+        update_shipment: update_shipment,
+        get_ajax: get_ajax
     };
 }(); // run function and return result (publlc info)
