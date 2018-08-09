@@ -13,7 +13,7 @@ import { setTitle } from 'functions/utils';
 import julian from 'julian';
 import moment from 'moment';
 import { findOption } from 'functions/selects';
-import toast from 'react-toastify';
+import { toast } from 'react-toastify';
 import is from 'is_js';
 // state
 import { getSoldiers } from 'store/soldiers/operations';
@@ -40,9 +40,10 @@ export class RegistrationPage extends Component {
   // on page load get all the users
   componentDidMount(){ 
     setTitle('Soldier Rank Cards');
-    if ( this.props.soldiers.length < 2 ) {
+    if ( this.props.soldiers.length < 2 ) 
       this.props.getSoldiers();
-    }
+    if ( this.props.login.code === 'BC' ) 
+      this.changeOption({  permanent: false, current: true });
   }
   // when the login changes: reload the users and clear the options
   componentDidUpdate( prevProps ) {
@@ -61,7 +62,7 @@ export class RegistrationPage extends Component {
     this.setState({ loading: true, updates: [], cards: [], loaded: false })
     getRankCards( this.state.options )
     .then( cards => this.setState({ cards, loading: false, loaded: true }))
-    .catch( error => toast.error( error.message ) );
+    .catch( error => { toast.error( error.message ) } );
   }
   // change one or more options in the state
   changeOption( changes ) {
