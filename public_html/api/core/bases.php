@@ -14,6 +14,9 @@ class BaseRouter {
             $filters[] = 'schools.test_school = 0';
         } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
             $filters[] = 'schools.ckids = 1';
+        } else if ( isset( $_GET['all'] ) ) { // get all bases on the account
+            $school_ids = $current_user->getAuthIds( 'school' );
+            $filters[] = 's.school_id IN ('. implode(', ', $school_ids ) .')';
         } else if ( $login['code'] === 'BC' ) {
             $filters[] = 'schools.school_id = ?';   $params[] = $login['id'];
         } else if ( $login['code'] === 'TEACHER' ) {
