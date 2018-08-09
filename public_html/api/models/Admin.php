@@ -84,7 +84,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             ];
         };
         // add parent account
-        if ( count( $this->getAuthIds( 'user') ) > 0  ) {
+        if ( count( $this->getAuthIds( 'user') ) > 0 || count( $logins ) === 0 ) {
             $logins[] = [ 'type' => 'user', 'id' => $this->admin_id, 'code' => 'PARENT',
                 'name' => 'My Parent Portal', 'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 
                 'key' => mashpia\api\auth\Auth::mobileKey( $this->admin_id )
