@@ -329,8 +329,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
             'methods' => [ 'profilePicture', 'barcode', 'currentRank', 'miles', 'parentAccount' ],
             'include' => [ 
                 'school' => [ 
-                    'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ],
-                    'include' => [ 'platoons' => [ 'only' => [ 'class_id' ], 'methods' => [ 'name' ] ] ]                     
+                    'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ]                     
                 ],
                 'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ], 'methods' => [ 'name' ] ]
             ]
