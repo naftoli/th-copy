@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 // components
-import { Row, Col } from 'reactstrap';
+import { Row, Col, Button, Input } from 'reactstrap';
 import { ParentRow } from '../rows';
-import { Select } from 'components/selects';
+import { Select, PlatoonSelect } from 'components/selects';
 import Checkbox from 'components/ui/Checkbox';
 // functions
 import { findOption, missionTypeOptions } from 'functions/selects';
@@ -14,19 +14,15 @@ class SettingsTab extends Component {
   }
   // handle react-select change events
   handleSelectChange = ( id ) => ( option ) => {
-    this.props.handleChange( { [id]: option.value } );
+    this.props.handleChange( { [id]: option && option.value } );
   }
   // render the page
   render() {
     let { 
-      user_id, class_id, school, chayolei, yan, chidon,
-      allow_parent_tasks, print_parent_tasks, 
-      school_type_id, gender, lang_id, parentAccount
+      user_id, class_id, school_id, chayolei, yan, chidon,
+      allow_parent_tasks, print_parent_tasks, gender,
+      school_type_id, lang_id, parentAccount, school
     } = this.props.soldier;
-    // get the list of platoons from the user for now ( TODO, replace with advanced platoon dropdown )
-    const platoon_options = school.platoons.map( 
-      platoon => ({ value: platoon.class_id, label: platoon.name})
-    );
     // mission_type_options
     const mission_type_options = missionTypeOptions( gender );
     // language options
@@ -39,17 +35,21 @@ class SettingsTab extends Component {
     return (
       <div id='SettingsTab'>
         <Row>
-          <Col xs='12' sm='4'>
-            <label>Platoon</label>
-            <Select options={platoon_options} onChange={this.handleSelectChange('class_id')}
-              value={findOption( platoon_options, class_id )} />
+          <Col xs='12' sm='6'>
+            <label>Base</label>
+            <Input disabled value={ school.school_name } />
           </Col>
-          <Col xs='6' sm='4'>
+          <Col xs='12' sm='6'>
+            <label>Platoon</label>
+            <PlatoonSelect school_id={ school_id } value={ class_id } isClearable 
+              onChange={this.handleSelectChange('class_id')} />
+          </Col>
+          <Col xs='6'>
             <label>Mission Type</label>
             <Select options={mission_type_options} onChange={this.handleSelectChange('school_type_id')}
               value={findOption( mission_type_options, school_type_id )} />
           </Col>
-          <Col xs='6' sm='4'>
+          <Col xs='6'>
             <label>Language</label>
             <Select options={language_options} onChange={this.handleSelectChange('lang_id')}
               value={findOption( language_options, lang_id )} />
@@ -78,22 +78,16 @@ class SettingsTab extends Component {
             </Checkbox>
           </Col>
         </Row>
+        
+        <p className='title'>Parent Account</p>
+        <ParentRow parentAccount={parentAccount} userId={user_id} refresh={this.props.getSoldier}/> 
+        
+        <p className='title'>Delete Soldier</p>
         <Row>
           <Col xs='12'>
-            <p className='title'>Parent Account</p>
+            <Button color="danger">Delete Soldier</Button>
           </Col>
         </Row>
-        <ParentRow parentAccount={parentAccount} userId={user_id} refresh={this.props.getSoldier}/> 
-        {/* <Row>
-          <Col xs='12'>
-            <p className='title'>Actions</p>
-          </Col>
-          <Col xs='12' style={{display: 'flex', justifyContent: 'space-around'}}>
-            <Button color="danger" outline>Remove Soldier From School</Button>
-            <Button color="danger">Delete Soldier</Button>
-            <Button color="danger" outline>Remove From Parent Account</Button>
-          </Col>
-        </Row> */}
       </div>
     );
   }
