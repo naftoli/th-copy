@@ -248,7 +248,7 @@ class Shipment {
             ."FROM shipment_details JOIN users ON type='prize' AND users.user_id = item_id JOIN raffle_winners ON users.user_id = raffle_winners.user_id "
             ."JOIN prizes ON raffle_winners.prize_id = prizes.prize_id ";
         /*************************** HACHAYOLS (VERSION 2.0) *********************/
-        $sql .= "UNION SELECT hs.shipment_id, school_name as name, CONCAT(hs.qty, ' Hachayol Issue #', hachayols.issue_number, ' (', hachayols.name, ' - ', hachayols.supplement, ')') as item "
+        $sql .= "UNION SELECT hs.shipment_id, school_name as name, CONCAT(hs.qty, ' x Hachayol Issue #', hachayols.issue_number, ' (', hachayols.name, ' - ', hachayols.supplement, ')') as item "
             ."FROM hachayol_shipping hs JOIN schools USING (school_id) JOIN hachayols ON hs.hachayol_id = hachayols.hachayol_id " ;
         /*************************** PRIZES *********************/
         $sql .= "UNION SELECT aw.shipment_id, CONCAT(u.last, ', ', u.first) as name, p.prize_name as item "
