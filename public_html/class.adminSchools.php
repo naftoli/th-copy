@@ -5,13 +5,15 @@ class AdminSchools {
     private $schools;
     private $registeredOnly;
     private $chidon;
+    private $noTest;
     
-    public function __construct( $id, $auth, $registered = true, $chidon = false ) {
+    public function __construct( $id, $auth, $registered = true, $chidon = false, $noTest = true ) {
         $this->admin_id = $id;
         $this->auth = $auth;
         $this->schools = array();
         $this->registeredOnly = $registered;
         $this->chidon = $chidon;
+        $this->noTest = $noTest;
     }
     
     private function setSchools() {
@@ -22,6 +24,7 @@ class AdminSchools {
             if ($this->chidon) $sql .= "or s.chidon = 1 ";
             if ($this->registeredOnly) 
                 $sql .= "and s.school_era is null ";
+            if ( $this->noTest ) $sql .= 'and s.test_school = 0 ';
             $sql .= "order by school_name";
         } else if ( $this->auth == 'ckidssuper' ) {
             $sql = "select s.school_id, s.school_name 
