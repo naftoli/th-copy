@@ -58,10 +58,9 @@ if($debug) echo "</pre>";?>
                 <div class="row">
                     <i class="fa fa-university" aria-hidden="true"></i> School: 
                     <select id="school_id" name="school_id">
-                        <option value="">All Schools</option>
                         <? foreach($schools as $school_id => $school_name){?>
                             <option value="<?=$school_id?>"><?=$school_name?></option>
-                        <?}?>
+                        <? } ?>
                     </select>
                 </div>
             </div>
