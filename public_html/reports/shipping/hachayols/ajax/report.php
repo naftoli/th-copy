@@ -34,7 +34,7 @@ foreach($schools as $school_id => $school_name) {
             <tr>
                 <th>Item</th><th>S/T</th>
                 <?if(get_extra_hachayols($school_id) != 0) { ?><th># Extra</th><? } ?>
-                <th>Total</th><th>Status</th><th>Report Missing</th><th># Shipped</th>
+                <th>Total</th><th>Status</th><th>Report Missing</th><th>Shipped</th>
                 <th>Shipment</th>
             </tr>
         </thead>
