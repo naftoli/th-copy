@@ -35,7 +35,7 @@ foreach( $_POST['params'] as $params ) {
             break;
         case 'hachayol':
             include_once(dirname(__FILE__)."/../functions/get_hachayols.php");
-            $status['success'] = mark_hachayol($qty, $params[1], $params[2]);
+            $status['success'] = mark_hachayol($params[3], $params[1], $params[2]);
             $status['error'] = "Sorry, it seems that we could not update the hachayol shipping status at this time. Please try again later.";
             break;
         case 'gift':

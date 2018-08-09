@@ -44,7 +44,7 @@ function get_hachayols($school_id, $start_date, $end_date){
         $hachayol_count_query = mysql_query($hachayol_count_sql); // excecute the query we generated....
         
         while($hachayol_count_row = mysql_fetch_assoc($hachayol_count_query)){
-            $ajax = "hachayol:".$hachayol_count_row['school_id'].":".$parsha['id'];
+            $ajax = "hachayol:".$hachayol_count_row['school_id'].":".$parsha['id'].":".$hachayol_count_row['total'];
             $shipping_info = get_hachayol_shipping($hachayol_count_row['school_id'], $parsha['id'])[0];
             $result[$hachayol_count_row['school_id']][] = [
                 'ajax'          => $ajax,
