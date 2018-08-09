@@ -19,14 +19,16 @@ export class PlatoonsPage extends Component {
   // load the contents if we do not have any
   componentDidMount(){
     setTitle( 'View/Edit Platoons' );
-    this.props.getPlatoons();
+    this.getPlatoons();
   }
 
   // if the soldier list is emptied while on the page... then refresh it
   componentDidUpdate( { login } ) {
     if ( loginChanged( this.props.login, login ) )
-      this.props.getPlatoons();
+      this.getPlatoons();
   }
+
+  getPlatoons = () => { this.props.getPlatoons(); }
 
   toCSV = () => {
     const headers = [ 'Grade', 'Subject', 'Teacher', 'Cell Phone', 'E-mail', '# of Soldiers', '# of Staff', 'Base' ];
@@ -71,7 +73,7 @@ export class PlatoonsPage extends Component {
           <Link to={`/platoons/new`} className="btn btn-primary" role="button">
           <i className="fas fa-plus" /> Add Platoon
           </Link>
-          <Button color="primary" onClick={ this.props.getPlatoons }>
+          <Button color="primary" onClick={ this.getPlatoons }>
             <i className={`fas fa-redo-alt ${ !loading || 'fa-spin' }`}></i> Refresh
           </Button>
           { is.not.edge() && is.not.ie() && is.not.ios() &&
