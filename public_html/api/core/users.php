@@ -86,9 +86,9 @@ class UsersRouter {
             ]);
         // update other properties
         } else {
-            foreach( User::table()->columns as $column ){
-                if ( !isset( $_POST[ $column->name ] ) ) continue;
-                $user->{ $column->name } = $_POST[ $column->name ];
+            $columns = array_keys( User::table()->columns );
+            foreach( $_POST as $key => $value ) {
+                if ( in_array( $key, $columns ) ) $user->{ $key } = $_POST[ $key ];
             }
             if ( !$user->is_valid() || !$user->save() )
                 json_error('Could not update soldier. Please check to make sure that the data is valid', 'CORE-USERS-90');
@@ -112,13 +112,15 @@ class UsersRouter {
             if ( !in_array( $current_user->login['code'], ['BC', 'HQ', 'CKIDS-ADMIN'] ) ) {
                 json_error( 'Your current login does not have the ability to remove users' );
             }
-            if ( $user->canDestroy() ) {
-                json_response( 'deleted', $user->delete() );
-            } else {
+            if ( $user->canDestroy() && $user->delete() ) {
+                return json_response( 'Soldier has been deleted.' );
+            } else if ( !$user->canDestroy() ) {
                 $user->school_id = null;
                 $user->class_id = null;
-                json_response( 'removed-from-school', $user->save() );
+                if ( $user->save() ) 
+                    return json_response( 'Soldier has been removed from Base.' );
             }
+            return json_error( 'Could not delete soldier.' );
         } catch ( Exception $e ) {
             json_error( 'Soldier does not exist', 'CORE-USERS-137', 401 );
         }
