@@ -6,7 +6,7 @@ import * as actions from './actions';
 // get all soldiers
 export const getSoldiers = () => dispatch => {
   dispatch( actions.setLoading( true ) );
-  return API.get( '/core/users.php' )
+  return API.get( '/core/users' )
     .then( response => {
       var t0 = performance.now();
       // format data
@@ -25,12 +25,12 @@ export const getSoldiers = () => dispatch => {
 }
 // create new soldier
 export const createSoldier = data => dispatch => {
-  return API.post( '/core/users.php', data );
+  return API.post( '/core/users', data );
 }
 // update a single soldier
 export const updateSoldier = ( id, data ) => dispatch => {
   const toast_id = createNotifcation('Updating Soldier');
-  return API.post( `/core/users.php?id=${id}`, data )
+  return API.post( `/core/users?id=${id}`, data )
     .then( response => {
       updateNotifcation( toast_id, 'Soldier Updated!', response.message, response.success );
       if ( response.success ) { 
@@ -43,10 +43,18 @@ export const updateSoldier = ( id, data ) => dispatch => {
     });
 }
 
+export const deleteSoldier = ( id ) => dispatch => {
+  const toast_id = createNotifcation('Deleting Soldier');
+  return API.delete( `/core/users/?id=${id}`)
+    .then( response => {
+      debugger;
+    })
+}
+
 /********************** NON STORE API OPERATIONS **********************/
 // load a single soldier - not added to state
 export const getSoldier = ( id ) => dispatch => {
-  return API.get( `/core/users.php?id=${id}` )
+  return API.get( `/core/users?id=${id}` )
     .then( response => {
       return response.data;
     })
@@ -54,7 +62,7 @@ export const getSoldier = ( id ) => dispatch => {
 // upload a spreadsheet. does not deal with store
 export const uploadProfile = ( formData ) => dispatch => {
   const toast_id = createNotifcation('Uploading Profile Picture...');
-  return API.post( '/core/users.php?action=uploadProfile', formData )
+  return API.post( '/core/users?action=uploadProfile', formData )
     .then( response => {
       updateNotifcation( toast_id, 'Image Uploaded!', response.message, response.success );
       return response;
@@ -66,7 +74,7 @@ export const uploadProfile = ( formData ) => dispatch => {
 // upload a users spreadsheet
 export const uploadSpreadsheet = ( data ) => dispatch => {
   const toast_id = createNotifcation('Uploading user spreadsheet...');
-  return API.post( `/upload/users.php`, data )
+  return API.post( `/upload/users`, data )
     .then( response => {
       updateNotifcation( toast_id, 'Spreadsheet Uploaded!', response.message, response.success );
       return response;

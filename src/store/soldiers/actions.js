@@ -27,3 +27,10 @@ export const updateSoldier = ( id, updates ) => {
     payload: { id, updates }
   }
 };
+
+export const deleteSoldier = ( id ) => {
+  return {
+    type: types.DELETE_SOLDIER,
+    payload: id
+  }
+};
