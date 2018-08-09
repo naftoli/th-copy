@@ -176,7 +176,7 @@ class Shipment {
     private function mark_hachayol($ajax){
         $params = explode(":", $ajax);
         return !!$this->db->query(
-            "UPDATE hachayol_shipping SET shipment_id=".$this->shipment_id." WHERE school_id = ".$params[1]. " AND parsha_id = ". $params[2]
+            "UPDATE hachayol_shipping SET shipment_id=".$this->shipment_id." WHERE school_id = ".$params[1]. " AND hachayol_id = ". $params[2]
         );
     }
 
@@ -248,9 +248,9 @@ class Shipment {
             ."FROM shipment_details JOIN users ON type='prize' AND users.user_id = item_id JOIN raffle_winners ON users.user_id = raffle_winners.user_id "
             ."JOIN prizes ON raffle_winners.prize_id = prizes.prize_id ";
         /*************************** HACHAYOLS (VERSION 2.0) *********************/
-        $sql .= "UNION SELECT hs.shipment_id, school_name as name, CONCAT(hs.qty, ' Hachayols For ', parshos.name) as item "
-            ."FROM hachayol_shipping hs JOIN schools USING (school_id) JOIN parshos ON hs.parsha_id = parshos.id " ;
-        /*************************** HACHAYOLS (VERSION 2.0) *********************/
+        $sql .= "UNION SELECT hs.shipment_id, school_name as name, CONCAT(hs.qty, ' Hachayol Issue #', hachayols.issue_number, ' (', hachayols.name, ' - ', hachayols.supplement, ')') as item "
+            ."FROM hachayol_shipping hs JOIN schools USING (school_id) JOIN hachayols ON hs.hachayol_id = hachayols.hachayol_id " ;
+        /*************************** PRIZES *********************/
         $sql .= "UNION SELECT aw.shipment_id, CONCAT(u.last, ', ', u.first) as name, p.prize_name as item "
             ."FROM auction_winners aw JOIN users u USING (user_id) JOIN prizes_auction p using(prize_id) ";
         /*************************** FILTERS *********************/
