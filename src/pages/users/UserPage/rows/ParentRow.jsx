@@ -36,8 +36,10 @@ export class ParentRow extends Component {
   addToAccount = () => {
     const { username } = this.state;
     const { userId: user_id, addChild } = this.props;
+    // make sure something was typed
     if ( username === '' && this.usernameRef.current ) 
       return this.usernameRef.current.focus();
+    // add child and update the UI based on it's result
     addChild( username, user_id )
     .then( this.props.refresh )
     .catch( error => { toast.error( error.message ) });
