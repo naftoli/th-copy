@@ -71,11 +71,11 @@ export class PlatoonPage extends Component {
     return (
       <div id='PlatoonPage'>
         <p className='title'>Platoon Information</p>
-        <Alert color='info'>
+        <div className="alert alert-info">
           Please note that this information is for display and managment purposes only.<br/>
           To add/remove teacher (staff) accounts please look at the Staff tab under Base Managment.
           To edit these accounts please go <Link to='/staff'>here.</Link>
-        </Alert>
+        </div>
         <Row>
           <Col xs={6}>
             <label>Grade</label>
