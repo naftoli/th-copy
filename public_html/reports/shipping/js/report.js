@@ -107,7 +107,6 @@ var report = {
                     }); // end foreach .school
                 } // end if shipments....
                 
-                $(".hachayol_shipped").keyup(report.mark_hachayol_shipped);
             },
             error: function() { $("div#report").html("Server error while generating report. Please contact support for further assistance"); }
         });
@@ -200,30 +199,6 @@ var report = {
         }); // end ajax call
     }, // end mark_missing function
     
-    // special function for hachayols....
-    mark_hachayol_shipped: function (event) {
-        var ajax_info = event.target.dataset.ajax;
-        var qty = event.target.value ? event.target.value : 0;
-        debugger;
-        $.post("../ajax/mark_shipped.php", {params: ajax_info, qty: qty }, function(data){
-            if (debug) {console.log(data);} // log the response to the console if we are in debug mode
-            data = JSON.parse(data); // parse the data as JSON
-            if (data.success === false) { // if the server could not update the shipping status
-                alert(data.error); // and show the user the error provided by the server in an alert
-            } else {
-                var row = $(event.target).parent().parent();
-                row.find(".status").text(qty ? "Shipped" : "Not Shipped");
-                row.find(".missing a").css({"display": qty ? "inline-block" : "none"});
-                row.find(".shipments_select").val("");
-                // toggle the disabled status...
-                if (!qty) {
-                    row.find(".shipments_select").attr("disabled", 'disabled');
-                } else {
-                    row.find(".shipments_select").removeAttr("disabled");
-                }
-            }
-        }); // end ajax call
-    },
     
     toggle_gift_shipping: function (event){
         var school_id       = event.target.dataset.school_id;

@@ -44,6 +44,7 @@ if($debug) echo "</pre>";?>
         <style>
             td, th{min-width: 0px;}
             input.hachayol_shipped {width: 90px;text-align: center;background: no-repeat;border: none;border-bottom: 1px solid;font-size: 1.1em;}
+            .toggle-3rd {width: 49%;display: inline-block;}
         </style>
     </head>
     <body>

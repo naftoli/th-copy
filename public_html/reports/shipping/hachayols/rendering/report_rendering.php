@@ -19,15 +19,10 @@ function render_row($shipment, $extra){
     $row .= '<td class="missing"><a style="display: ' .($shipment['shipped'] ? "inline-block" : "none").'" class="button" data-ajax="'.$shipment['ajax'].'">Missing</a></td>';
     // if it is a superuser render the row with the shipping checkboxes and shipment dropdowns
     if ($admin_user['auth'] == 'super') {
-        //$row .= '<td style="text-align: center;"><label class="fancy-check-container">';
-        //    $row .=  '<input class="shipped_toggle" type="checkbox" '.($shipment['shipped'] ? "checked" : "").' data-ajax="'.$shipment['ajax'].'"/>';
-        //    $row .=  '<span class="fancy-check"></span>';
-        //$row .=  '</label></td>';
-        // input to enter how much is shipped...
-        $row .= '<td style="text-align: center;">';
-            $row .=  '<input class="hachayol_shipped" type="number" value="'.($shipment['shipped'])
-                    .'" max="'.($shipment['hachayol_qty'] + $extra).'" data-ajax="'.$shipment['ajax'].'"/>';
-        $row .=  '</td>';
+        $row .= '<td style="text-align: center;"><label class="fancy-check-container">';
+           $row .=  '<input class="shipped_toggle" type="checkbox" '.($shipment['shipped'] ? "checked" : "").' data-qty="'.($shipment['hachayol_qty'] + $extra).'" data-ajax="'.$shipment['ajax'].'"/>';
+           $row .=  '<span class="fancy-check"></span>';
+        $row .=  '</label></td>';
         
         $row .=  '<td class="shipment_dropdown" data-shipment_id="'.$shipment['shipment_id'].'"></td>';
     } else { // regular users just get to see the shipment that it is part of....
