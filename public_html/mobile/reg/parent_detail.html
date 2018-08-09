@@ -56,6 +56,8 @@
             @media screen and (max-width: 479px) {
                 .chidonRegInfo {font-size: 12px;}
             }
+
+            #no-children { display: none; text-align: center; }
         </style>
 	</head>
 	<body>
@@ -301,7 +303,12 @@
 									</div>
 								{{/each}}
 							</script>
-						</div>
+                        </div>
+                        <div id='no-children'>
+                            <h3>
+                                It looks like you have not added any children yet.
+                            </h3>
+                        </div>
 					</div>
 				</div>
 				
@@ -449,13 +456,14 @@
                         var unregistered_html = tpl({ children: unregistered_children });
                         // put the registered kids first
                         var html = registered_html + unregistered_html;
-                        
-                        // Add the compiled html to the page
-                        $(".chilrens").append( html );
-                        
-                        setSwiper();
-                        
-                        $(".year").text(year);
+                        if ( $.trim( html ) === '' ) { 
+                            $("#no-children").show(); 
+                        } else {
+                            // Add the compiled html to the page
+                            $(".chilrens").append( html );
+                            setSwiper();
+                            $(".year").text(year);
+                        } 
                     }
                 });
                 
@@ -565,9 +573,9 @@
                     window.location = "/mobile/reg/";
                 });
                 
-                $("#addChild").click( function() {
-                    //$("#popModal").modal();
-                });
+                // $("#addChild").click( function() {
+                //     //$("#popModal").modal();
+                // });
                 
                 $("#popup").submit( function() {
                     var answer = $(".thAdded");
