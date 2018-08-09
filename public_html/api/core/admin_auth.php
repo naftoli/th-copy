@@ -29,10 +29,10 @@ class AdminAuthRouter {
         json_response( false, $success );
     }
 
-    public function index() {
-        $auth = AdminAuth::findAuth( 2, 'school', 58 );
-        json_response( $auth->admin );
-    }
+    // public function index() {
+    //     $auth = AdminAuth::findAuth( 2, 'school', 58 );
+    //     json_response( $auth->admin );
+    // }
 }
 
 rest_router( new AdminAuthRouter );
