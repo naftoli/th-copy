@@ -50,7 +50,7 @@ export class PlatoonSelect extends Component {
     platoon_options = loading ? [] : platoon_options;
 
     return (
-      <Select options={platoon_options} value={ selected }
+      <Select {...this.props} options={ platoon_options } value={ selected }
         isLoading={ loading } onChange={ onChange }/>
     )
   }

@@ -45,7 +45,7 @@ export class BaseSelect extends Component {
     if ( !selected && base_options.length > 0 ) onChange( base_options[0] );
 
     return (
-      <Select options={base_options} value={ selected }
+      <Select { ...this.props } options={base_options} value={ selected }
         isLoading={ loading } onChange={ onChange } />
     )
   }
