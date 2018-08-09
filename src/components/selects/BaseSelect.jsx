@@ -18,7 +18,6 @@ export class BaseSelect extends Component {
     showAllOption: false
   }
 
-  state = { loading: false }
 
   componentDidMount(){
     if ( this.props.bases.length === 0 )
@@ -32,31 +31,28 @@ export class BaseSelect extends Component {
   }
   // load the platoons
   loadBases = () => {
-    this.setState({ loading: true });
-    this.props.getBases().then( () => {
-      this.setState({ loading: false });
-    });
+    this.props.getBases();
   }
   // render
   render() {
-    const { bases, onChange, value, showAllOption } = this.props;
+    const { bases, onChange, value, showAllOption, loading } = this.props;
     const base_options = bases.map( 
       ({ school_id, school_name }) => ({ value: school_id, label: school_name })
     );
     if ( showAllOption ) base_options.unshift({ value: false, label: 'All Bases' });
 
     let selected = findOption( base_options, value );
-    if ( !selected && base_options.length > 0 ) selected = base_options[0];
+    if ( !selected && base_options.length > 0 ) onChange( base_options[0] );
 
     return (
       <Select options={base_options} value={ selected }
-        isLoading={ this.state.loading } onChange={ onChange } />
+        isLoading={ loading } onChange={ onChange } />
     )
   }
 }
 
 const mapStateToProps = ( { bases, login } ) => ({
-  bases: bases.bases, 
+  ...bases,
   login: login.current_login
 })
 

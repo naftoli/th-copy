@@ -19,56 +19,45 @@ export class PlatoonSelect extends Component {
     showAllOption: false
   }
 
-  state = { loading: false }
-
   componentDidMount(){
     if ( this.props.platoons.length === 0 )
       this.loadPlatoons();
   }
 
   // update if the login changed or the school_id prop changed
-  componentDidUpdate( prevProps ) {
-    if (
-      loginChanged( this.props.login, prevProps.login ) ||
-      prevProps.school_id !== this.props.school_id
-    ) {
+  componentDidUpdate( { school_id: prevId, login: prevLogin } ) {
+    const { login, school_id } = this.props;
+    if ( loginChanged( login, prevLogin ) || prevId !== school_id )
       this.loadPlatoons();
-    }
   }
   // load the platoons
   loadPlatoons = () => {
     const { school_id, login } = this.props;
     const haveSchool = school_id || login.code === 'BC';
-    if ( haveSchool ) {
-      this.setState({ loading: true });
-      this.props.getPlatoons( school_id ).then( () => {
-        this.setState({ loading: false });
-      })
-    } else {
-      this.props.setPlatoons([]);
-    }
+    if ( haveSchool ) this.props.getPlatoons( school_id );
+    else this.props.setPlatoons( [] );
   }
 
   render() {
-    const { platoons, value, onChange, showAllOption } = this.props;
+    const { platoons, value, onChange, showAllOption, loading } = this.props;
     let platoon_options = platoons.map( 
       ({ class_id, name, school_id }) => ({ value: class_id, label: name, school_id, class_id })
     );
     if ( showAllOption ) platoon_options.unshift({ value: false, label: 'All Platoons' });
 
     let selected = findOption( platoon_options, value );
-    if ( !selected && platoon_options.length > 0 ) selected = platoon_options[0];
-    platoon_options = this.state.loading ? [] : platoon_options;
+    if ( !selected && platoon_options.length > 0 ) onChange( platoon_options[0] );
+    platoon_options = loading ? [] : platoon_options;
 
     return (
       <Select options={platoon_options} value={ selected }
-        isLoading={ this.state.loading } onChange={ onChange }/>
+        isLoading={ loading } onChange={ onChange }/>
     )
   }
 }
 
 const mapStateToProps = ( { platoons, login } ) => ({
-  platoons: platoons.platoons, 
+  ...platoons,
   login: login.current_login
 })
 
