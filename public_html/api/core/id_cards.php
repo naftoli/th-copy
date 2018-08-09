@@ -33,7 +33,7 @@ class UsersRouter {
             $rank_marks = 'rank_marks rm USING (user_id) ';
         }
 
-        $sql = "SELECT rank_name AS rank, rank_ord, user_id, user_serial, first, last, first_he, last_he, "
+        $sql = "SELECT rank_name AS rank, rank_ord, u.user_id, user_serial, first, last, first_he, last_he, "
             ." school_name, school_logo_id, logo, user_photo_id, mobile_pic, rm.date_printed as printed, "
             ." rm.date_promoted, user_code AS barcode, class_grade, class_sub, user_start_date, dob, dob_he_offset "
             ." FROM users u LEFT JOIN $rank_marks "
@@ -42,7 +42,7 @@ class UsersRouter {
             ." ORDER BY s.school_name, c.class_grade, c.class_sub, u.first, u.last, rm.rank_ord;";
         $query = $pdo->prepare( $sql );
         $query->execute( $params );
-
+        
         $response = [];
         while( $row = $query->fetch() ){
             // set the picture, and profile name using the models
