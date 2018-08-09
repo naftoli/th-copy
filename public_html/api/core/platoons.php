@@ -14,7 +14,7 @@ class PlatoonRouter {
             $filters[] = 's.test_school = 0';
         } else if ( $login['code'] === 'CKIDS-ADMIN' && !isset( $_GET['school_id'] ) ) {
             $filters[] = 's.ckids = 1';
-        } else if ( $login['code'] === 'BC' ) {
+        } else if ( $login['code'] === 'BC' && !isset( $_GET['school_id'] ) ) {
             $filters[] = 'c.school_id = ?';   $params[] = $login['id'];
         } else if ( $login['code'] === 'TEACHER' ) {
             $filters[] = 'c.class_id = ?';   $params[] = $login['id'];
