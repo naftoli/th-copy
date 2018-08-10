@@ -11,22 +11,22 @@ class BaseRouter {
         // limit based on admin type
         $login = $current_user->login;
         if ( $login['code'] === 'HQ' ) {
-            $filters[] = 'schools.test_school = 0';
+            $filters[] = 's.test_school = 0';
         } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
-            $filters[] = 'schools.ckids = 1';
+            $filters[] = 's.ckids = 1';
         } else if ( isset( $_GET['all'] ) ) { // get all bases on the account
             $school_ids = $current_user->getAuthIds( 'school' );
             $filters[] = 's.school_id IN ('. implode(', ', $school_ids ) .')';
         } else if ( $login['code'] === 'BC' ) {
-            $filters[] = 'schools.school_id = ?';   $params[] = $login['id'];
+            $filters[] = 's.school_id = ?';   $params[] = $login['id'];
         } else if ( $login['code'] === 'TEACHER' ) {
-            $filters[] = 'class_id = ?';   $params[] = $login['id'];
+            $filters[] = 'c.class_id = ?';   $params[] = $login['id'];
         } else { json_error( 'Access Deinied'); }
         // combine the filters
         $filters = 'WHERE ' . implode( ' AND ', $filters );
         // generate the SQL
         $query = $pdo->prepare( 
-            "SELECT schools.* FROM classes JOIN schools USING (school_id) $filters "
+            "SELECT s.school_id, s.school_name FROM classes c JOIN schools s USING (school_id) $filters "
             ." GROUP BY school_id ORDER BY school_name;"
         );
         $query->execute( $params );
