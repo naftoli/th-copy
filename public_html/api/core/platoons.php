@@ -48,7 +48,14 @@ class PlatoonRouter {
     }
 
     public function show( $id ) {
-        $platoon = Platoon::find( $id );
+        global $current_user;
+        try {
+            $platoon = Platoon::find( $id );
+            if ( !$platoon->validateAccess( $current_user->login ) )
+                return json_error( 'Your current login does not have access to this platoon.', 'CORE-PLATOONS-54', 401 );
+        } catch ( ActiveRecord\RecordNotFound $e ) {
+            return json_error( 'Platoon does not exist', 'CORE-PLATOONS-56', 404 );
+        }
         json_response( $platoon );
     }
 
