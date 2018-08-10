@@ -58,10 +58,11 @@ export class PlatoonsPage extends Component {
 
     const onChange = scrollToTop('PlatoonsPage');
     const tableProps = {
-      data: platoons, columns,
+      data: loading ? [] : platoons, columns,
       className: "-striped -highlight",
       filterable: true, defaultFilterMethod: filter,
       minRows: is.mobile() || is.tablet() ? 10 : 15,
+      noDataText: loading ? 'Loading...' : 'No Data',
       onPageChange: onChange, onFilteredChange: onChange,
       defaultPageSize: is.mobile() || is.tablet() ? 50 : 100,
     }
