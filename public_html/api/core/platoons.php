@@ -51,6 +51,23 @@ class PlatoonRouter {
         $platoon = Platoon::find( $id );
         json_response( $platoon );
     }
+
+    public function update( $id ) {
+        global $current_user;
+
+        $platoon = Platoon::find( $id );
+        if ( !$platoon->validateAccess( $current_user->login ) )
+            json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-75', 401 );
+        
+        $columns = array_keys( Platoon::table()->columns );
+        foreach( $_POST as $key => $value ) {
+            if ( in_array( $key, $columns ) ) $platoon->{ $key } = $_POST[ $key ];
+        }
+        if ( !$platoon->is_valid() || !$platoon->save() )
+            json_error('Could not update soldier. Please check to make sure that the data is valid', 'CORE-USERS-90');
+        
+        json_response( $platoon );
+    }
 }
 
 rest_router( new PlatoonRouter );
