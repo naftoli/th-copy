@@ -97,7 +97,7 @@ p.title {
   &:hover{ cursor: pointer; }
 }
 div[dir='rtl'] > label { width: 100%; text-align: right; } // RTL labels
-.row label { margin-top: .5rem; }
+.row label { margin-top: .5rem; margin-bottom: .2rem; }
 
 // custom pre tags - taken from blupritjs
 pre {
