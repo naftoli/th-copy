@@ -4,6 +4,78 @@
         
     </head>
     <body>
-        
+        <p>
+            Use following form to select the information you would like to see on your report.
+        </p>
+        <form action="createReport.php" method="POST" name="reportGenerator" id="reportGenerator">
+            <fieldset id="userInfo">
+                <legend>
+                    Student Info
+                </legend>
+            </fieldset>
+
+            <fieldset id="parentInfo">
+                <legend>
+                    Parent Info
+                </legend>
+            </fieldset>
+            <br />
+            <input type="submit" name="submit" value="generate" />
+        </form>
     </body>
+
+    <script
+        src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
+
+    <script>
+        // key corresponds to db table and field name and value corresponds to output text on form
+        // when we are not pulling from a specific table I use the word 'calc' instead
+        var userInfo = {
+            'users|first'           : 'First Name', 
+            'users|last'            : 'Last Name', 
+            'users|first_he'        : 'Hebrew First', 
+            'users|last_he'         : 'Hebrew Last', 
+            'users|dob'             : 'English DOB', 
+            'users|dob_he'          : 'Hebrew DOB', 
+            'users|user_registered' : 'Registered Date', 
+            'classes|class_grade'   : 'Grade', 
+            'schools|school_name'   : 'School', 
+            'ranks|rank_name'       : 'Current Rank',
+            'calc|store_points'     : 'Store Miles', 
+            'calc|auction_points'   : 'Auction Miles'
+        }
+
+        var adminInfo = {
+            'admins|first'             : 'First Name', 
+            'admins|last'              : 'Last Name', 
+            'admins|admin_address1'   : 'Address Line 1', 
+            'admins|admin_address2'   : 'Address Line 2', 
+            'admins|admin_city'        : 'City', 
+            'admins|admin_state'       : 'State', 
+            'admins|admin_postal'      : 'Zip', 
+            'admins|admin_country'     : 'Country', 
+            'admins|admin_email'       : 'Email', 
+            'admins|admin_phone_work'  : 'Work Phone', 
+            'admins|admin_phone_home'  : 'Home Phone', 
+            'admins|admin_phone_mobile': 'Cell Phone'
+        }
+
+        // build html
+        var html = buildHtml( userInfo );
+        $("#userInfo").append( html );
+
+        var html = buildHtml( adminInfo );
+        $("#parentInfo").append( html );
+
+        // function for building html
+        function buildHtml( info ) {
+            var html = '';
+            for (var i in info) {
+                html += "<input type='checkbox' name='" + i + "' /> " + info[i] + "<br />";
+            }
+            return html;
+        }
+    </script>
 </html>
