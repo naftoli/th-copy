@@ -61,8 +61,9 @@ export class PlatoonsPage extends Component {
       data: platoons, columns,
       className: "-striped -highlight",
       filterable: true, defaultFilterMethod: filter,
+      minRows: is.mobile() || is.tablet() ? 10 : 15,
       onPageChange: onChange, onFilteredChange: onChange,
-      minRows: 15, defaultPageSize: is.mobile() || is.tablet() ? 50 : 100,
+      defaultPageSize: is.mobile() || is.tablet() ? 50 : 100,
     }
 
     return (
