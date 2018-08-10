@@ -66,11 +66,13 @@ export default {
       .then( parseResponse ) // understand the response
   },
 
-  delete( url ) {
+  delete( url, data = {} ) {
+    const body = data instanceof FormData ? data : JSON.stringify(data);
     return fetch(`${API_URL}${url}`, {
       method: 'DELETE',
       headers: headers(),
-      credentials: credentials
+      credentials: credentials,
+      body
     }).then( toJSON ) // convert to json
       .then( parseResponse ) // understand the response
   }

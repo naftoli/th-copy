@@ -1,26 +1,31 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
+import { Prompt } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Spinner } from 'components/ui';
 import MaskedInput from 'react-text-mask';
 import { Select } from 'components/selects';
-import { Row, Col, Button, ButtonGroup, Input, Alert } from 'reactstrap';
+import { Row, Col, Input, InputGroup, InputGroupAddon, Button } from 'reactstrap';
 // functions
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { loginChanged } from 'functions/login';
 import { getPlatoon } from 'store/platoons/operations';
+import { deleteAuth, createAuth } from 'store/login/operations';
 // data
 import masks from 'components/masks';
+import StaffRow from './StaffRow';
 // styles
-// import './PlatoonPage.scss';
+import './PlatoonPage.scss';
 
 export class PlatoonPage extends Component {
   // initial state
   state = {
     platoon: {}, updates: {}, loading: true
   }
+
+  emailRef = React.createRef()
 
   // non-destructivly update the state
   handleUpdate = ( update ) => {
@@ -54,12 +59,34 @@ export class PlatoonPage extends Component {
     );
   }
 
+  save = () => {
+    console.log( this.state.updates );
+  }
+
+  disconnect = ( admin_id ) => {
+    const { class_id: id } = this.state.platoon;
+    this.props.deleteAuth({ admin_id, id, auth: 'class' })
+    .then( this.getPlatoon )
+    .catch( error => { toast.error( error.message ) } );
+  }
+
+  connect = () => {
+    const { class_id: id } = this.state.platoon;
+    const emailInput = this.emailRef.current;
+    // if nothing was entered, focus on the input
+    if ( !emailInput.value ) return emailInput.focus();
+    // create the connection
+    this.props.createAuth({ 
+      email: emailInput.value, id, auth: 'class'
+    }).then( this.getPlatoon )
+    .catch( error => { toast.error( error.message ) } );
+  }
+
   render() {
     if ( this.state.loading ) return <Spinner size='10'/>
     
-    const { 
-      class_grade, class_sub, class_teacher, cell, email 
-    } = this.state.platoon;
+    const updated = Object.keys( this.state.updates ).length > 0;
+    const { class_grade, class_sub, class_teacher, cell, email, staff } = this.state.platoon;
     const inputProps = { onChange: this.handleInputChange };
 
     let grades = [
@@ -70,6 +97,8 @@ export class PlatoonPage extends Component {
 
     return (
       <div id='PlatoonPage'>
+        <Prompt when={ updated } message="You have unsaved changes. Are you sure you want to leave?" />
+
         <p className='title'>Platoon Information</p>
         <div className="alert alert-info">
           Please note that this information is for display and managment purposes only.<br/>
@@ -99,19 +128,44 @@ export class PlatoonPage extends Component {
             <label>Teacher E-Mail</label>
             <Input name='email' value={ email } { ...inputProps } />
           </Col>
+          { updated &&
+            <Col xs={12} id='save'>
+              <Button onClick={ this.save } color='primary'>
+                <i className={'fas fa-save'}></i> Save Changes
+              </Button>
+            </Col>
+          }
         </Row>
-        <p className='title'>Staff</p>
+        {/* show all the staff and manage them */}
+        <p className='title'>Connected Staff</p>
+        <Row id='connect-new-staff'>
+          <Col xs='12'>
+            <label>Add staff by E-mail address</label>
+            <InputGroup>
+              <input placeholder='example@example.com' ref={ this.emailRef } className='form-control'/>
+              <InputGroupAddon addonType="append">
+                <Button onClick={ this.connect } color='primary' outline tabIndex={0}>
+                  <i className={'fas fa-user-plus'}></i> Connect Staff
+                </Button>
+              </InputGroupAddon>
+            </InputGroup>
+          </Col>
+        </Row>
+        { staff.map( (staff, index) => 
+          <StaffRow key={index} disconnect={this.disconnect} {...staff} />
+        )}
+        {/* Debugging */}
         <p className='title'>Debug</p>
-        <pre>{ JSON.stringify( this.state, null, 2 ) }</pre>
+        <pre>{ JSON.stringify( this.state.updates, null, 2 ) }</pre>
       </div>
     )
   }
 }
 
-const mapStateToProps = ( { platoons, login } ) => ({
+const mapStateToProps = ({ login }) => ({
   login: login.current_login
 })
 
-const mapDispatchToProps = { getPlatoon }
+const mapDispatchToProps = { getPlatoon, deleteAuth, createAuth }
 
 export default connect( mapStateToProps, mapDispatchToProps )( PlatoonPage );
