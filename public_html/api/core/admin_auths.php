@@ -41,7 +41,7 @@ class AdminAuthRouter {
             return json_error('Cannot delete invalid login. Please try again.');
         try {
             $auth = AdminAuth::findAuth( $_POST['admin_id'], $_POST['auth'], $_POST['id'] );
-            if ( $auth ) return json_response( false, $auth->delete() );
+            if ( $auth ) return json_response( $auth, $auth->delete() );
         } catch ( Exception $e ) {
             return json_error('Cannot delete invalid login. Please try again.');
         }
