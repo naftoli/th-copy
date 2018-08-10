@@ -74,7 +74,10 @@ export class PlatoonsPage extends Component {
         </Callout>
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
           <Link to={`/platoons/new`} className="btn btn-primary" role="button">
-          <i className="fas fa-plus" /> Add Platoon
+            <i className="fas fa-plus" /> Add Platoon
+          </Link>
+          <Link to={`/platoons/transition`} className="btn btn-primary" role="button">
+            <i className="fas fa-users" /> Platoon Transition
           </Link>
           <Button color="primary" onClick={ this.getPlatoons }>
             <i className={`fas fa-redo-alt ${ !loading || 'fa-spin' }`}></i> Refresh

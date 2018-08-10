@@ -5,6 +5,7 @@ import { Page404 } from 'pages/errors';
 import PlatoonPage from './PlatoonPage/PlatoonPage';
 import PlatoonsPage from './PlatoonsPage/PlatoonsPage';
 import NewPlatoonPage from './PlatoonPage/NewPlatoonPage';
+import PlatoonTransitionPage from './PlatoonTransitionPage/PlatoonTransitionPage';
 // functions
 import { connect } from 'react-redux';
 
@@ -18,6 +19,7 @@ export class PlatoonsIndexPage extends Component {
         <Route path={ path } exact component={ PlatoonsPage } />
         <Route path={`${path}/new`} component={ NewPlatoonPage }/>
         <Route path={`${path}/:id([0-9]+)`} component={ PlatoonPage }/>
+        <Route path={`${path}/transition`} component={ PlatoonTransitionPage }/>
         <Route component={ Page404 } />
       </Switch>
     )
