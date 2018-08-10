@@ -1,4 +1,4 @@
-import API from 'api/api';
+import API, { handleAPIResponse } from 'api/api';
 import * as actions from './actions';
 import Cookies from 'universal-cookie';
 
@@ -41,4 +41,15 @@ export const getCurrentUser = () => dispatch => {
       dispatch( actions.logout() );
       dispatch( actions.setErrors( 'Could not get account info. Please clear your cookies and try again.' ));
     });
+}
+
+export const deleteAuth = ( auth ) => dispatch => {
+  return API.delete( '/core/admin_auths', auth )
+  .then( handleAPIResponse )
+  .then( data => dispatch( actions.removeAuth( data.auth, data.id ) ) );
+}
+
+export const createAuth = ( auth ) => dispatch => {
+  return API.post( '/core/admin_auths', auth )
+  .then( handleAPIResponse )
 }
