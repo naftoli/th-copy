@@ -28,9 +28,13 @@ export const updatePlatoon = ( id, data ) => dispatch => {
     .then( response => {
       updateNotifcation( toast_id, 'Platoon Updated!', response.message, response.success );
       if ( response.success ) dispatch( actions.updatePlatoon( id, response.data ) );
-      return response;
+      return response.data;
     }).catch( error => {
       updateNotifcation( toast_id, '', error.message, false );
       return Promise.reject( error );
     });
+}
+
+export const createPlatoon = data => dispatch => {
+  return API.post( '/core/platoons', data ).then( handleAPIResponse );
 }
