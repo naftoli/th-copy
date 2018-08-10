@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Prompt } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Spinner } from 'components/ui';
 import { Row, Col, InputGroup, InputGroupAddon, Button } from 'reactstrap';
 // functions
@@ -81,6 +81,7 @@ export class PlatoonPage extends Component {
   }
 
   render() {
+    if ( this.state.platoon === undefined ) return <Redirect to='/platoons' />;
     if ( this.state.loading ) return <Spinner size='10'/>
     
     const { staff } = this.state.platoon;
