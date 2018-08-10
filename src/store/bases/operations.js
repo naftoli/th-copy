@@ -3,9 +3,9 @@ import API from 'api/api';
 import * as actions from './actions';
 
 // get all soldiers
-export const getBases = () => dispatch => {
+export const getBases = ( all = false ) => dispatch => {
   dispatch( actions.setLoading( true ) );
-  return API.get( `/core/bases.php` )
+  return API.get( `/core/bases.php${ all && '?all=true' }` )
     .then( response => {
       dispatch( actions.setBases( response.data ) );
       return dispatch( actions.setLoading( false ) );

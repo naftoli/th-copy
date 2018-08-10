@@ -3,17 +3,22 @@ import { createNotifcation, updateNotifcation } from 'functions/notifications';
 import * as actions from './actions';
 
 // get all soldiers
-export const getPlatoons = ( school_id = false ) => dispatch => {
+export const getPlatoons = ( school_id = false, all = false ) => dispatch => {
+  // generate query string
+  let queries = [];
+  if ( school_id ) queries.push( `school_id=${school_id}` );
+  if ( all ) queries.push( 'all=true' );
+  const query_string = queries.length > 0 ? `?${queries.join('&')}` : '';
+  // fetch data
   dispatch( actions.setLoading( true ) );
-  const query_string = school_id ? `?school_id=${school_id}` : '';
   return API.get( `/core/platoons${query_string}` )
-    .then( response => {
-      dispatch( actions.setPlatoons( response.data ) );
-      return dispatch( actions.setLoading( false ) );
-    }).catch( ( error ) => {
-      dispatch( actions.setLoading( false ) );
-      return Promise.reject( error );
-    });
+  .then( response => {
+    dispatch( actions.setPlatoons( response.data ) );
+    return dispatch( actions.setLoading( false ) );
+  }).catch( ( error ) => {
+    dispatch( actions.setLoading( false ) );
+    return Promise.reject( error );
+  });
 }
 
 // get a single platoon
