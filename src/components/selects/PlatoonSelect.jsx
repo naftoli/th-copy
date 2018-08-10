@@ -37,8 +37,8 @@ export class PlatoonSelect extends Component {
     // if we have a value and it is not selected, select it
     const options = this.getOptions();
     const selected = findOption( options, value );
-    if ( !selected && options.length > 0 && !isClearable ) { 
-      onChange( options[0] ); 
+    if ( !selected && options.length > 0 && value ) {
+      onChange( isClearable ? false : options[0] ); 
     }
   }
   // load the platoons
@@ -62,7 +62,9 @@ export class PlatoonSelect extends Component {
     .filter( platoon => platoon.school_id === school_id )
     // map them to what react-select expects
     .map( ({ class_id, name, school_id }) => ({ value: class_id, label: name }) );
+    // add an all platoons option
     if ( showAllOption ) options.unshift({ value: false, label: 'All Platoons' });
+    // and return the options
     return options;
   }
 
@@ -70,7 +72,7 @@ export class PlatoonSelect extends Component {
     const { value, onChange, loading } = this.props;
 
     let options = this.getOptions();
-    const selected = findOption( options, value );
+    const selected = findOption( options, value ) || null;
     options = loading ? [] : options;
 
     return (
