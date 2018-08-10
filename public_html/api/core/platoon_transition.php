@@ -32,6 +32,13 @@ class PlatoonTransitionRouter {
         $user_query->execute( $params );
         $results = [];
         while ( $user = $user_query->fetch() ){
+            if ( $user['class_grade']) {
+                $user['transition'] = ( new Platoon(
+                    ['class_grade' => $user['class_grade'], 'class_sub' => $user['class_sub']])
+                )->name();
+            } else {
+                $user['transition'] = 'Not Transitioning';
+            }
             $user['being_moved'] = $user['being_moved'] == '1';
             $results[] = $user;
         }
