@@ -11,7 +11,7 @@ import is from 'is_js';
 import { toast } from 'react-toastify';
 import { loginChanged } from 'functions/login';
 import { arrayToCSV, setTitle } from 'functions/utils';
-import { filter, scrollToTop } from 'functions/tables';
+import { defaultTableProps } from 'functions/tables';
 import { getSoldiers, registerSoldiers } from 'store/soldiers/registration/operations';
 // styles
 import './RegistrationPage.scss';
@@ -135,11 +135,10 @@ export class RegistrationPage extends Component {
       }
     }
     // set the props for the table
-    const tableProps = {
-      columns, getTrProps, data: soldiers, minRows: 10, defaultPageSize: 100, 
-      filterable: true, defaultFilterMethod: filter, className: '-striped -highlight', 
-      noDataText: loading ? 'Loading...' : 'No Data', onPageChange: scrollToTop('RegistrationPage'), 
-      onFilteredChange: scrollToTop('RegistrationPage')
+    let tableProps = defaultTableProps( 'RegistrationPage', loading )
+    tableProps = { 
+      ...tableProps, columns, getTrProps, 
+      data: soldiers, minRows: 10, defaultPageSize: 100, 
     }
     // render the page
     return (
