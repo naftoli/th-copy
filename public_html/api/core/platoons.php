@@ -52,6 +52,21 @@ class PlatoonRouter {
         json_response( $platoon );
     }
 
+    public function create() {
+        global $current_user; global $pdo;
+
+        if ( !in_array( $current_user->login['code'], ['HQ', 'CKIDS-ADMIN', 'BC'] ) )
+            return json_error( 'Access Deined' );
+        if ( $current_user->login['code'] == 'BC' )
+            $_POST['school_id'] = $current_user->login['id'];
+
+        $platoon = Platoon::build( $_POST );
+        if ( !$platoon->is_valid() || !$platoon->save() )
+            json_error( 'Could not create Platoon. (CODE: CORE-PLATOONS-65)' );
+
+        json_response( $platoon );
+    }
+
     public function update( $id ) {
         global $current_user;
 

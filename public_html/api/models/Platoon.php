@@ -1,6 +1,8 @@
 <?php
+include_once( __DIR__ . '/traits/BuildModel.php' );
 
 class Platoon extends ActiveRecord\Model implements JsonSerializable {
+    use \traits\BuildModel;
     
     static $table_name = 'classes';
     // relationships
