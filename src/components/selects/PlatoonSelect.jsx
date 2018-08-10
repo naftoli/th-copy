@@ -44,8 +44,10 @@ export class PlatoonSelect extends Component {
   }
 
   getPlatoonOptions = () => {
-    const { platoons, showAllOption } = this.props;
-    const platoon_options = platoons.map( 
+    const { platoons, showAllOption, school_id } = this.props;
+    const platoon_options = platoons.filter(
+      platoon => platoon.school_id === school_id
+    ).map( 
       ({ class_id, name, school_id }) => ({ value: class_id, label: name, school_id, class_id })
     );
     if ( showAllOption ) platoon_options.unshift({ value: false, label: 'All Platoons' });
