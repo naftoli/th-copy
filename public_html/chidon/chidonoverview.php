@@ -106,7 +106,7 @@ body,td,th {
 				<p class="page-top">
 					Test 1: Tuesday, Hey Kislev (Nov 13)<br />
 					Test 2: Wednesday, Yud Ches Teves (Dec 26)<br />
-					Test 3: Wednesday, Aleph Adar 1 (Feb 6)
+					Test 3: Wednesday, Aleph Adar 1 (Feb 6)<br />
 				</p>
 
                 <h4><strong>Yahadus books 1 - 5</strong></h4>			

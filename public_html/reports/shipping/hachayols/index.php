@@ -23,8 +23,12 @@ require_once ($_SERVER["DOCUMENT_ROOT"].'/class.globalSettings.php');
 $year = GlobalSettings::getCurrentYear();
 
 // get the parshios for the current year...
-require_once(dirname(__FILE__)."/../functions/get_parshos.php");
-$parshos = get_parshos($year, false, (unixtojd() + 28)); // get all the parshios untill next month...
+require_once(dirname(__FILE__)."/../functions/get_hachayols.php");
+$prints = [];
+foreach( get_hachayol_prints( 5779 ) as $print ){
+    $prints[$print['print_number']] = $print;
+};
+
 
 if($debug) echo "</pre>";?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
@@ -44,6 +48,7 @@ if($debug) echo "</pre>";?>
         <style>
             td, th{min-width: 0px;}
             input.hachayol_shipped {width: 90px;text-align: center;background: no-repeat;border: none;border-bottom: 1px solid;font-size: 1.1em;}
+            .toggle-3rd {width: 49%;display: inline-block;}
         </style>
     </head>
     <body>
@@ -80,16 +85,10 @@ if($debug) echo "</pre>";?>
         
         <div class="options bordered" id="filters">
             <span class="option_space">
-                <i class="fa fa-calendar" aria-hidden="true"></i> From Parsha: 
+                <i class="fa fa-print" aria-hidden="true"></i> Print Number: 
                 <select id="start_date" name="start_date">
-                    <? foreach ($parshos as $index => $parsha) { ?>
-                    <option value="<?=date("Y-m-d", jdtounix($parsha['start']))?>" <?=$index + 1 == count($parshos) - 3 ? "selected" : ""?>><?=$parsha['name']?></option>
-                    <? } // end foreach parsha ?>
-                </select>
-                To Parshas:
-                <select id="end_date" name="end_date">
-                    <? foreach ($parshos as $index => $parsha) { ?>
-                    <option value="<?=date("Y-m-d", jdtounix($parsha['end']))?>" <?=$index + 1 == count($parshos) ? "selected" : ""?>><?=$parsha['name']?></option>
+                    <? foreach ($prints as $index => $print) { ?>
+                    <option value="<?=$print['ship_date']?>">Print #<?=$print['print_number']?></option>
                     <? } // end foreach parsha ?>
                 </select>
             </span>
@@ -142,8 +141,8 @@ if($debug) echo "</pre>";?>
                     hachayols: true
                 },
                 shipping_status: $("select#shipping-status").val(),
-                start_date: /*"2017-07-01",*/$("select#start_date").val(),
-                end_date: $("select#end_date").val()
+                start_date: $("select#start_date").val(),
+                end_date: $("select#start_date").val()
                 //sort: $("select#sort").val(),
                 //sort_desc: $("input#sort-desc")[0].checked
             };

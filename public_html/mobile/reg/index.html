@@ -93,7 +93,7 @@
                                 <div class="error-change"><a href="forgot.html">Forgot user/password?</a></div>
                             </div>
                             <div class="col-xs-5 text-right create-account">
-                                <a href="parent_register.html"><b>Create account</b></a>
+                                <a href="parent_register.html" id="createAccount"><b>Create account</b></a>
                             </div>
                         </div>
 						<!--
@@ -177,6 +177,11 @@
                     	}
                     });  
                 });
+
+				$("#createAccount").click( function(e) {
+					var confirm = window.confirm("Warning! Do not create a new account if you might have an existing one. Your school could have already created a parent account for you. You can find out if they have an account by clicking “forgot user/password” and you will be prompted to enter your email address in which you will be sent your password.\nAre you sure you want to continue creating a new account?");
+					return confirm;
+				});
             });
         </script>
         <script>

@@ -4,7 +4,7 @@ $admin_auth = array('school');
 require('header.php');
 
 require 'class.globalSettings.php';
-$year = GlobalSettings::getCurrentYear();
+$year = GlobalSettings::getChidonYear();
 //$year = 5777;
 
 require_once 'class.adminSchools.php';       

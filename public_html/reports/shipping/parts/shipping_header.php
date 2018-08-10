@@ -121,7 +121,7 @@ if($shipments['medals']) {
 $hachayols = [];
 if($shipments['hachayols']) {
     require_once(dirname(__FILE__)."/../functions/get_hachayols.php");
-    $hachayols = get_hachayols($school_id, $greg_start, $greg_end);
+    $hachayols = get_hachayols( $school_id, $start_date, $end_date );
 }
 
 $auctions = [];
