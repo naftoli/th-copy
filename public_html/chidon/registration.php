@@ -88,35 +88,32 @@ body,td,th {
 				
                 <h4>Dates:</h4>
                 <div class="indent">
-					Chidon Registration Begins: Tuesday, Yud Elul (Aug 21). Only parents can register their children for Chidon, schools cannot register chayolim.
+					Starting Tuesday, Yud Elul (Aug 21), parents can register their children through their parent accounts, below or on mashpia.com/mobile. 
+					Only parents can register their children for Chidon; schools cannot register chayolim. 
                 </div>
                 <br />
 				
 				<div class="indent">
-					Chidon Registration Ends: Tuesday, Zayin Cheshvan (Oct 16). Once registration closes, no new applications will be accepted.
+					Registration closes on Tuesday, Zayin Cheshvan (Oct 16). Once registration closes, no new applications will be accepted.
                 </div>
-				<br />
-				<!--
-				<div class="indent">
-                    Registration is free. You can purchase Yahadus books and a printed copy of the Chidon learning guide as part of Chidon Registration. Alternatively, you can download and print them for free.
-                </div>
-				<br />
-				-->
-				<h4>How to Register:</h4>				
-				<div class="indent">
-					Parents can register their children through their parent accounts, below or on mashpia.com/mobile.
-					<br />
-					Log in to your parent account.
-					<br />
-					If you do not have an account, please create one by clicking “Create account.”
-					<br />
-					If your child does not appear on your account, please add your child to the account by clicking “Add child.”
-					<br />
-				</div>
 				<br />
 				
 				<div class="indent">
-					For further support email chidon@tzivoshashem.org or contact your school’s Chidon coordinator.
+                    Registration is $5. You can purchase Yahadus books and a printed copy of the Chidon learning guide as part of Chidon Registration. Alternatively, you can download and print them for free.
+                </div>
+				<br />
+				
+				<h4>How to Register:</h4>				
+				<div class="indent">
+					<br />	
+					Log in to your parent account and register your children.
+					<br /><br />
+					If you do not have an account, please create one by going to mashpia.com/mobile and clicking “Create account.”
+					<br /><br />
+					If your child does not appear on your account, please add your child to the account by clicking “Add child.” 
+					<br /><br />
+					For further support email chidon@tzivoshashem.org or contact your school’s Chidon coordinator. 
+					<br />
 				</div>
 				<br />
 								
