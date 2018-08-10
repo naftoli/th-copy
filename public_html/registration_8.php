@@ -223,7 +223,7 @@ if (!isset( $_SESSION['skipCC'] ) || $_SESSION['skipCC'] !== 'yes') {
 												<li>
 													<div class="box">
 														<h4><input type="checkbox" name="ccaccept" id="ccaccept" />
-														Please charge my card $<?=$total?>.00</h4>
+														Please charge my card $<?=$total?></h4>
 													</div>
 												</li>
 												<li>
