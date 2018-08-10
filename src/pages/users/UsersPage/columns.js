@@ -29,8 +29,7 @@ export default ( code, editPicture ) => {
       Header: "Last Name", accessor: 'last',
       Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
     },{
-      Header: "Serial Number", 
-      accessor: 'user_serial',
+      Header: "Serial Number", accessor: 'user_serial',
       Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
     },{
       id: 'dob',  Header: 'Date Of Birth',

@@ -1,11 +1,46 @@
 import React, { Component } from 'react';
+// import connect from 'react-redux';
+// components
+import { Callout } from 'components/ui';
+import { Step1, Step2, Step3, Step4 } from './steps';
+// styles
+import './PlatoonTransitionPage.scss';
 
 class PlatoonTransitionPage extends Component {
 
+  state = {
+    from: { school_id: false, class_id: false },
+    to: { school_id: false, class_id: false },
+    soldiers: []
+  }
+  // update an id in `to` or `from`
+  selectChange = ( section ) => ( id ) => ( option ) => {
+    const updated = Object.assign({}, this.state[section], { [id]: option && option.value })
+    this.setState({ [section]: updated });
+  }
+
   render() {
+    const { from, to, soldiers } = this.state;
     return (
       <div id='PlatoonTransitionPage'>
-        <h1>Platoon Transition Page</h1>
+        <Callout title='Platoon Transition Instructions'>
+          <p><strong>Platoon Transition allows you to setup a large scale transition for multiple soldiers in all bases your account has access to.</strong></p>
+          <p>To setup this transition use steps 1-3 in order to move soldiers from one platoon to another.</p>
+          <p>When you have finished seting up the transition you can make it live anytime using step 4.</p>
+        </Callout>
+
+        <Step1 { ...from } 
+          selectChange={ this.selectChange('from') } />
+
+        <Step2 />
+
+        <Step3 { ...to } 
+          selectChange={ this.selectChange('to') } />
+
+        <Step4 />
+
+        <p className="title">Debug</p>
+        <pre>{ JSON.stringify( this.state, null, 2 ) }</pre>
       </div>
     );
   }
