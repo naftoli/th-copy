@@ -56,10 +56,12 @@ export class PlatoonsPage extends Component {
       columns.push( { Header: 'Base', accessor: 'school_name' } );
     }
 
+    const onChange = scrollToTop('PlatoonsPage');
     const tableProps = {
       data: platoons, columns,
       className: "-striped -highlight",
       filterable: true, defaultFilterMethod: filter,
+      onPageChange: onChange, onFilteredChange: onChange,
       minRows: 15, defaultPageSize: is.mobile() || is.tablet() ? 50 : 100,
     }
 
