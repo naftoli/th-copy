@@ -37,13 +37,16 @@ export class PlatoonSelect extends Component {
     // if we have a value and it is not selected, select it
     const options = this.getOptions();
     const selected = findOption( options, value );
-    if ( !selected && options.length > 0 && value ) {
-      onChange( isClearable ? false : options[0] ); 
+    if ( !selected && options.length > 0 ) {
+      // if it is clearable and we have a value, clear it.
+      if ( isClearable && value ) { onChange( false ); }
+      // if it is not clearable select the first value
+      else if ( !isClearable ) { onChange( options[0] ) }
     }
   }
   // load the platoons
   loadPlatoons = () => {
-    const { school_id, fetchAll, loading } = this.props;
+    const { school_id, fetchAll } = this.props;
     
     if ( fetchAll ) { 
       return this.props.getPlatoons( false, true ); // fetch all platoons
