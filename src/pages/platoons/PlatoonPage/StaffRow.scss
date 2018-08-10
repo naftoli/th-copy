@@ -1,0 +1,17 @@
+.StaffRow {
+  padding: 10px;
+  margin-bottom: .5rem;
+
+  > .row { 
+    align-items: flex-end;
+  }
+
+  .btn-group {
+    display: block;
+  }
+
+  p.staff-name {
+    margin-bottom: .4rem;
+    font-size: 1.4em;
+  }
+}
