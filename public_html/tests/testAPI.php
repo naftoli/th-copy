@@ -19,7 +19,7 @@
             crossorigin="anonymous"></script>
         <script>
             $.ajax({
-                url: 'https://192.168.56.6/symfony/public',
+                url: 'https://192.168.56.6/lumen/public',
                 crossDomain: true, 
                 method: "GET",
                 success: function( res ) {
