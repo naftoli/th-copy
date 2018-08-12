@@ -82,14 +82,18 @@ export class RegistrationPage extends Component {
   handlePrintedChange = ( user_id, rank_ord, printed ) => {
     const { cards } = this.state; let updates = [ ...this.state.updates ];
     // check if we already updated this one
-    const updatedIndex = this.state.updates.findIndex( update => update.user_id === user_id );
+    const updatedIndex = this.state.updates.findIndex( 
+      update => ( update.user_id === user_id && update.rank_ord === rank_ord )
+    );
     if ( updatedIndex >= 0 ) {
       updates = [ ...updates.slice(0, updatedIndex), ...updates.slice(updatedIndex + 1) ];
     } else {
       updates.push({ user_id, rank_ord, printed });
     }
     // update the cards and set the state
-    const newCards = cards.map( card => card.user_id === user_id ? Object.assign({}, card, { printed }) : card );
+    const newCards = cards.map( 
+      card => card.user_id === user_id && card.rank_ord === rank_ord ? Object.assign({}, card, { printed }) : card 
+    );
     this.setState({ updates, cards: newCards });
   }
 
