@@ -23,9 +23,9 @@ $year = GlobalSettings::getRegistrationYear();
     <link href="/styles/admin/grey_select.css" rel="stylesheet" type="text/css"/>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <style>
-        div#wrapper { width: 1101px; }
+        div#wrapper { width: 1201px; }
         #content .col_content { padding: 20px 10px; }
-        #content .slider, #content { width: 850px; }
+        #content .slider, #content { width: 950px; }
         th, td { padding: 4px 8px; font-size: 14px; max-width: 130px; }
         td.saved { padding-right: 0px; }
         td:last-child { padding: 4px 0px; }
@@ -71,6 +71,15 @@ $year = GlobalSettings::getRegistrationYear();
         <p></p>
         <p><strong>Early Bird:</strong> The date on which the early bird ends for the base.<br/>
             For "guaranteed" bases this is also the deadline to have all children register.
+        </p>
+        <p></p>
+        <p><strong>Stauts:</strong> The current status of the base<br/>
+        <ul>
+            <li><strong>Not Live:</strong> you need to confirm the information and make the base live</li>
+            <li><strong>Lock Base:</strong> Base commanders still have access to this base, Press the button to revoke access.</li>
+            <li><strong>Locked:</strong> the base is locked and will redirect to the registration pages</li>
+            <li><strong>Paid:</strong> the base has gone through registration and paid.</li>
+        </ul>
         </p>
     </div>
     <div id="report">
