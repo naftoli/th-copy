@@ -12,6 +12,7 @@ body {
 }
 .react-select__menu, .react-select__menu-list {
   scroll-behavior: unset !important;
+  z-index: 10 !important;
 }
 /* Images cannot go beyond their parent containers */
 img { 
