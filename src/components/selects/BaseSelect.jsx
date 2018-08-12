@@ -47,7 +47,7 @@ export class BaseSelect extends Component {
     const options = bases.map( 
       ({ school_name, school_id }) => ({ value: school_id, label: school_name })
     );
-    if ( showAllOption ) options.unshift({ value: false, label: 'All Platoons' });
+    if ( showAllOption ) options.unshift({ value: false, label: 'All Bases' });
     return options;
   }
 
