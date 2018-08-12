@@ -107,7 +107,10 @@ class GlobalSettings {
      *
      * @return int
      */
-    public static function getChidonCost(){
+    public static function getChidonCost( $school_id = false ) {
+        // Anash kinder has $40 fee
+        if ( in_array( $school_id, [ 269 ] ) )
+            return 40;
         return 5;
     }
 
