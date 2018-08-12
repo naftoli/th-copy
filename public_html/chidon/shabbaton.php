@@ -94,16 +94,16 @@ body,td,th {
                 
                 <h4>Dates:</h4>
 				<div class="indent">
-					Girls Chidon: Thursday, Chof Aleph Adar Beis (March 28) -Sunday Chof Daled Adar Beis (March 31)<br />
-					Boys Chidon: Thursday, Chof Ches Adar Beis (April 4) - Sunday, Beis Nissan (April 7)
+					Girls Shabbaton: Thursday, Chof Aleph Adar Beis (March 28) -Sunday Chof Daled Adar Beis (March 31)<br />
+					Boys Shabbaton: Thursday, Chof Ches Adar Beis (April 4) - Sunday, Beis Nissan (April 7)
 				</div>
 				<br />
                 
-                <h4>Registration Deadline</h4>
+                <h4>Enrollment Deadline</h4>
                 <div class="indent">
-					Shabbaton Enrollment Opens: <span style="font-weight: bold">Wednesday, Ches Adar Aleph  (Feb 13)</span>.<br />
-					Shabbaton Enrollment Closes: <span style="font-weight: bold">Wednesday, Tes Vov Adar Aleph (Feb 20)</span>.<br /> 
-					Registration and payment information must be submitted by then. We apologize in advance that there will be no exceptions. 
+					Shabbaton Registration opens on <span style="font-weight: bold">Wednesday, Ches Adar 1 (February 13)</span>.<br />
+					Enrollment and payment information must be submitted before <span style="font-weight: bold">Wednesday, Tes Vov Adar 1 (February 20) at 11:59 p.m.</span> 
+					We apologize in advance that there will be no exceptions. 
                 </div>
                 <br />
                 
@@ -113,11 +113,11 @@ body,td,th {
                     Please note: Fees do not include transportation to and from New York.
                 </div><br />
 				
-				<h4>Game Show</h4>
+				<!-- <h4>Game Show</h4>
                 <div class="indent">
                     Tickets for the game show will be available for sale shortly.
                 </div>
-                <br />
+                <br /> -->
 			</div>			
 		
 		</div>

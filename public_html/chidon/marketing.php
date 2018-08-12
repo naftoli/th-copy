@@ -88,20 +88,18 @@ body,td,th {
 				<br />
 				
                 <h4>Videos</h4>
+				<br />
 				<div class="indent">
-                    <iframe src="https://player.vimeo.com/video/261015763" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+					<iframe src="https://player.vimeo.com/video/210522039?byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
                     <br/>
-                    <iframe src="https://player.vimeo.com/video/261060327" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                    <br/>
-					<iframe src="https://player.vimeo.com/video/210522039" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+					<iframe src="https://player.vimeo.com/video/209330084?byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>                    <br/>
 					<br />
-					<iframe src="https://player.vimeo.com/video/209330084" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+					<iframe src="https://player.vimeo.com/video/181964830?byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>					<br />
 					<br />
-					<iframe src="https://player.vimeo.com/video/181964830" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-					<br />
-					<iframe src="https://player.vimeo.com/video/182592115" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+					<iframe src="https://player.vimeo.com/video/182592115?byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>					<br />
 					<br />
 					<iframe src="https://player.vimeo.com/video/79694119" width="640" height="468" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+					<br />
 				</div>
 				<br /><br />
 				

@@ -164,7 +164,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $result = [ 'chayolei' => $reg_info->getChildFee() ];
         // add chidon if user is in grade 4+
         if ( $this->platoon && $this->platoon->class_grade >= 4 )
-            $result[ 'chidon' ] = GlobalSettings::getChidonCost();
+            $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
         return $result;
     }
     // returns array with the status of the various registration types for the current year.
