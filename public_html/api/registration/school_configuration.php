@@ -15,11 +15,11 @@ class SchoolRegistrationRouter implements RestRouter {
         $year = isset( $_GET['year'] ) && $_GET['year'] ? $_GET['year'] : '5779';
         $schools = School::find( 'all', [
             'include' => 'school_registrations', 'order' => 'school_name',
-            'conditions' => "test_school = 0 and chayolei = 1"
+            'conditions' => "test_school = 1 and chayolei = 1"
         ] );
         json_response( array_map( function( $school ) use ( $year ) {
             $array = $school->to_array([
-                'only' => [ 'school_id', 'school_name' ],
+                'only' => [ 'school_id', 'school_name', 'school_era' ],
                 // 'include' => [ 'school_registrations' ],
             ]);
             $array['reg_info'] = $school->getRegInfo( $year );
@@ -86,6 +86,13 @@ class SchoolRegistrationRouter implements RestRouter {
         }
         
         json_response( null, $reg_info->delete() );
+    }
+
+    // set the school_era to last year
+    public function disableSchool() {
+        $school = School::find( $_POST[ 'school_id' ] );
+        $school->school_era = intval( GlobalSettings::getCurrentYear() ) - 1;
+        json_response( false, $school->save() );
     }
 
     private function getInstance( $id ){
