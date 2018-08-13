@@ -22,7 +22,7 @@ export const removeFromBase = ( user_ids ) => {
   return API.post( url, { user_ids } ).then( handleAPIResponse );
 }
 
-export const transitionPlatoons = () => {
+export const transitionPlatoons = ( school_id ) => {
   const url = '/core/platoon_transition?action=transitionPlatoons';
-  return API.post( url ).then( handleAPIResponse );
+  return API.post( url, { school_id } ).then( handleAPIResponse );
 }
