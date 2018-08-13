@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Callout } from 'components/ui';
-import { Step1, Step2, Step3 } from './steps';
-import { Button, ButtonGroup } from 'reactstrap';
+import { Step1, Step2, Step3, Deploy } from './steps';
 // functions
 import { toast } from 'react-toastify';
 import { loginStoreChanged } from 'functions/login';
@@ -68,8 +67,8 @@ class PlatoonTransitionPage extends Component {
     .catch( error => toast.error( error.message ) );
   }
   // Deploy the transition
-  transition = () => {
-    transitionPlatoons()
+  transition = ( school_id ) => {
+    transitionPlatoons( school_id )
     .then( ({ rowCount }) => toast.info( `${rowCount / 2} Soldiers Transitioned` ) )
     .catch( error => toast.error( error.message ) );
   }
@@ -88,12 +87,7 @@ class PlatoonTransitionPage extends Component {
           <p><strong>Press the button below to deploy all your transitions whenever you like!</strong></p>
         </Callout>
 
-        <ButtonGroup>
-          <Button color='primary' onClick={ this.transition }>
-            <i className="fas fa-rocket"></i>{' '}
-            Deploy Transition (Make Changes Live)
-          </Button>
-        </ButtonGroup>
+        <Deploy onDeploy={ this.transition } />
 
         <Step1 { ...from }
           selectChange={ this.selectChange('from') } 

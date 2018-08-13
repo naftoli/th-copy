@@ -24,6 +24,13 @@
     &.hide { max-height: 0px; overflow: hidden; }
     &.show { animation: 1s delay-overflow; }
   }
+
+  div#deploy {
+    margin-top: 10px;
+    @media ( min-width: 768px ) {
+      .btn { margin-top: 0px; }
+    }
+  }
 }
 
 @keyframes delay-overflow {
