@@ -29,7 +29,7 @@ export class RegistrationPage extends Component {
     loading: false, loaded: false,
     options: {
       school_id: false, class_id: false,
-      rank: false, user_serial: false,
+      rank: 1, user_serial: false,
       hide_printed: true, current: false,
       earned_before: toJulian( moment() ),
       permanent: true
@@ -43,7 +43,7 @@ export class RegistrationPage extends Component {
     if ( this.props.soldiers.length < 2 ) 
       this.props.getSoldiers();
     if ( this.props.login.code === 'BC' ) 
-      this.changeOption({  permanent: false, current: true });
+      this.changeOption({ permanent: false, current: true });
   }
   // when the login changes: reload the users and clear the options
   componentDidUpdate( prevProps ) {
@@ -52,7 +52,7 @@ export class RegistrationPage extends Component {
       if ( this.props.login.code === 'BC' ) {
         this.changeOption({ 
           school_id: false, class_id: false, user_serial: false,
-          permanent: false, current: true,
+          permanent: false, current: true, rank: false
         });
       }
     }
