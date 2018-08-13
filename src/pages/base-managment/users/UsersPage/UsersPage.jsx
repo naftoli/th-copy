@@ -116,7 +116,7 @@ export class UsersPage extends Component {
             <Button color="primary" onClick={ this.toggleUploadModal }>
               <i className="fas fa-file-upload" /> Upload Soldier List
             </Button>
-          } { is.not.edge() && is.not.ie() && is.not.ios() && soldiers.length &&
+          } { is.not.edge() && is.not.ie() && is.not.ios() && soldiers.length > 0 &&
             <Button color="primary" onClick={ this.toCSV }>
               <i className="fas fa-file-download" /> Save Soldier List
             </Button>
