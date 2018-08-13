@@ -1,4 +1,4 @@
-import API from 'api/api';
+import API, { handleAPIResponse } from 'api/api';
 // import { toast } from 'react-toastify';
 import * as actions from './actions';
 
@@ -13,4 +13,14 @@ export const getBases = ( all = false ) => dispatch => {
     }).catch( () => {
       dispatch( actions.setLoading( false ) );
     });
+}
+
+/**
+ * this function is used in platoonSelect only
+ */
+export const getBaseList = ( all = false ) => {
+  const query_string = all ? '?all=true' : '';
+
+  return API.get( `/core/bases${query_string}` )
+  .then( handleAPIResponse );
 }
