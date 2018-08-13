@@ -148,7 +148,7 @@ class UserRegistrationRouter {
         $errors = [];   $registration_table_users = [];
         $registration_info_query = $pdo->prepare(
             "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
-            ."VALUES( ?, ?, ?, ?, ?, '?' )"
+            ."VALUES( ?, ?, ?, ?, ?, ? )"
         );
         // for each user
         foreach ( $users as $user ) {
