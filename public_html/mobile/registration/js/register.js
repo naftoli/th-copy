@@ -492,7 +492,7 @@ var templates = function(){
             } else { 
                 $( '#step-2 form #yahadus-cost' ).text( '$60' );
                 $( '#step-2 form #yahadus-real-cost' ).text( 50 )
-                $( '#step-2 form #yahadus-text').text( '. Price includes shipping cost.' );
+                $( '#step-2 form #yahadus-text').text( ' (Includes $5 shipping fee)' );
             }
         },
         toggleRates: function( user, rateType ){
