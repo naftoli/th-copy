@@ -75,9 +75,6 @@ export class NewPlatoonPage extends Component {
             </Button>
           </Col>
         </Row>
-
-        <p className='title'>Debug</p>
-        <pre>{ JSON.stringify( this.state.platoon, null, 2 ) }</pre>
       </form>
     )
   }
