@@ -16,11 +16,14 @@ class UserRegistrationRouter {
         $user_ids = $current_user->getAuthIds( 'user' );
 
         // get all the users information
-        $users = User::find( $user_ids );
+        $users = User::find( $user_ids, 
+            ['include' => [ 'school', 'platoon' ] ] 
+        );
         $users = is_array( $users ) ? $users : [ $users ];
 
         $available_users = [];
         foreach( $users as $user ){
+            if ( !$user->school_id ) continue;
             $reg_info = $user->school->getRegInfo();
             if ( $reg_info->default || !$reg_info->date_paid ) continue;
             $available_users[] = $user;
@@ -148,7 +151,7 @@ class UserRegistrationRouter {
         $errors = [];   $registration_table_users = [];
         $registration_info_query = $pdo->prepare(
             "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
-            ."VALUES( ?, ?, ?, ?, ?, ? )"
+            ."VALUES( ?, ?, ?, ?, ?, '?' )"
         );
         // for each user
         foreach ( $users as $user ) {
