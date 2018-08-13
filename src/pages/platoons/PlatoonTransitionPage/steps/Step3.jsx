@@ -31,9 +31,11 @@ const Step3 = ({
         <Col sm={12}>
           <ButtonGroup>
             <Button color='primary' onClick={ move }>
+              <i className="fas fa-exchange-alt"></i>{' '}
               Transition (Move) Soldiers
             </Button>
             <Button color='danger' onClick={ discharge }>
+              <i className="fas fa-trash-alt"></i>{' '}
               Discharge (Remove) Soldiers 
             </Button>
           </ButtonGroup>
