@@ -212,7 +212,7 @@ if (isset($_POST['submit'])) {
                                                     ?>
                                                     (<?= $schoolInfo->early_bird->format('F j') ?>)
                                                     <!--Chof Gimmel Elul (September 14)--> 
-                                                    then Tzivos Hashem will automatically charge the credit card on file for the additional discount provided ($<?=GlobalSettings::getGuarenteedDiscount()?> per child registered).
+                                                    then Tzivos Hashem will automatically charge the school credit card on file for the additional discount provided ($<?=GlobalSettings::getGuarenteedDiscount()?> per child registered).
 												</li>
 												<li>
                                                     <h4><input type="radio" name="reg_type" class="reg_type" value="3" 
