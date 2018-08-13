@@ -33,19 +33,19 @@ export class PlatoonSelect extends Component {
   // update if the login changed or the school_id prop changed
   componentDidUpdate( { school_id: prevId } ) {
     // if the school ID changed, get the new platoons into redux
-    const { school_id, onChange, value, isClearable } = this.props;
+    const { school_id, value, isClearable } = this.props;
     if ( prevId !== school_id ) {
       this.loadPlatoons();
     }
 
     // if we have a value and it is not selected, select it
     const options = this.getOptions();
-    const selected = findOption( options, value );
+    const selected = findOption( options, value, 'class_id' );
     if ( !selected && options.length > 0 ) {
       // if it is clearable and we have a value, clear it.
-      if ( isClearable && value ) onChange( false );
+      if ( isClearable && value ) this.onChange( false );
       // if it is not clearable select the first value
-      else if ( !isClearable ) onChange( options[0] );
+      else if ( !isClearable ) this.onChange( options[0] );
     }
   }
 
@@ -73,27 +73,31 @@ export class PlatoonSelect extends Component {
     // only platoons in the school_id from props
     .filter( platoon => platoon.school_id === school_id )
     // map them to what react-select expects
-    .map( ({ class_id, name }) => ({ value: class_id, label: name }) );
+    .map( ({ class_id, name }) => ({ value: name, label: name, class_id }) );
     // add special options
     if ( showAllOption ) 
-      options.unshift({ value: false, label: 'All Platoons' });
+      options.unshift({ value: false, label: 'All Platoons', class_id: false });
     else if ( showNoneOption ) 
-      options.unshift({ value: false, label: 'No Platoon' });
+      options.unshift({ value: false, label: 'No Platoon', class_id: false });
     // and return the options
     return options;
   }
+
+  onChange = ({ class_id, label }) => {
+    return this.props.onChange({ value: class_id, label });
+  }
   
   render() {
-    const { value, onChange } = this.props;
+    const { value } = this.props;
     const { loading } = this.state;
 
     let options = this.getOptions();
-    const selected = findOption( options, value ) || null;
+    const selected = findOption( options, value, 'class_id' ) || null;
     options = loading ? [] : options;
 
     return (
       <Select {...this.props} options={ options } value={ selected }
-        isLoading={ loading } onChange={ onChange }/>
+        isLoading={ loading } onChange={ this.onChange }/>
     )
   }
 }
