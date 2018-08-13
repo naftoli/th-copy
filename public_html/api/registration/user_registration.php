@@ -148,18 +148,22 @@ class UserRegistrationRouter {
         $errors = [];   $registration_table_users = [];
         $registration_info_query = $pdo->prepare(
             "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
-            ."VALUES( ?, ?, ?, ?, ?, '$year' )"
+            ."VALUES( ?, ?, ?, ?, ?, '?' )"
         );
         // for each user
         foreach ( $users as $user ) {
             $user_errors = [];
             foreach( $registrations as $registration ){
                 if ( !($user->user_id == $registration['user_id']) ) continue;
+                // set the year based on the school id for chayolei only
+                $year = $registration['registration_type'] == 'chayolei' ? 
+                    GlobalSettings::getRegistrationYear( $user->school_id ) : 
+                    GlobalSettings::getRegistrationYear();
                 // insert a record into the registration_charges table.
                 $registration_info_query->execute([
                     ( $trans_id ? $trans_id : null ), 
                     $user->user_id, $user->school_id, $registration['registration_type'],
-                    $registration['paid']
+                    $registration['paid'], $year
                 ]);
                 // Chayolei Registration
                 if ( $registration['registration_type'] == 'chayolei' ) {
