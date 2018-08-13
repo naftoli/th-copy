@@ -14,7 +14,7 @@ const Step3 = ({ school_id, class_id, selectChange }) => (
       </Col>
       <Col xs={6}>
         <label>To Platoon</label>
-        <PlatoonSelect value={ class_id } school_id={ school_id } fetchAll 
+        <PlatoonSelect value={ class_id } school_id={ school_id } 
           onChange={ selectChange('class_id') } />
       </Col>
       <Col xs={12}>
