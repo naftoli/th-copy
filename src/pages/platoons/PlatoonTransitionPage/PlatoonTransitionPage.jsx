@@ -70,6 +70,7 @@ class PlatoonTransitionPage extends Component {
   transition = ( school_id ) => {
     transitionPlatoons( school_id )
     .then( ({ rowCount }) => toast.info( `${rowCount / 2} Soldiers Transitioned` ) )
+    .then( this.getSoldiers )
     .catch( error => toast.error( error.message ) );
   }
 
