@@ -1,6 +1,6 @@
 // find an option in an array of options by value
-export const findOption = ( options, value ) => {
-  return options.find( option => option.value === value )
+export const findOption = ( options, value, key = 'value' ) => {
+  return options.find( option => option[ key ] === value )
 };
 
 // function to get the mission_type_options variable;
