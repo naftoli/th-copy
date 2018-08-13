@@ -84,7 +84,7 @@ body,td,th {
 				
 			<div class="magazine">
 				
-				<h4>Stay tuned...</h4>
+				<h4>Coming Soon...</h4>
 
 			</div>			
 		
