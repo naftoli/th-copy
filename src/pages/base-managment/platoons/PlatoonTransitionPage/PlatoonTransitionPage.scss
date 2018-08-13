@@ -18,7 +18,7 @@
   }
 
   div#step-3 {
-    max-height: 300px;
+    max-height: 325px;
     transition: 1s;
     animation-fill-mode: forwards;
     &.hide { max-height: 0px; overflow: hidden; }
