@@ -74,9 +74,10 @@ class PlatoonTransitionPage extends Component {
           loading={ loading } />
 
         <Step3 { ...to } 
-          selectChange={ this.selectChange('to') } />
+          selectChange={ this.selectChange('to') }
+          selection={ selection } />
 
-        <Step4 />
+        {/* <Step4 /> */}
 
         <p className="title">Debug</p>
         <pre>{ JSON.stringify( this.state, null, 2 ) }</pre>
