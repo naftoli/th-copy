@@ -21,11 +21,13 @@ class ParentsRouter {
         $filters = implode( ' AND ', $filters );
 
         $sql = "SELECT a.admin_id, a.username, a.title, a.first, a.last, "
-            ." admin_address1, admin_city, admin_state, admin_postal, admin_country, "
-            ." admin_phone_mobile, admin_email, father_pic, mother_pic, "
+            ." CONCAT( admin_address1, ' ', admin_address2) as address, admin_city as city, "
+            ." admin_state as state, admin_postal as zip, admin_country as country, "
+            ." admin_phone_mobile as cell, admin_email as email, father_pic, mother_pic, "
             ." u.first as child_first, u.last as child_last, u.user_id, u.user_serial FROM "
             ." users u JOIN schools s USING (school_id) LEFT JOIN admin_auths aa ON aa.auth = 'user' AND aa.id = u.user_id "
-            ." LEFT JOIN admins a USING (admin_id) WHERE $filters;";
+            ." LEFT JOIN admins a USING (admin_id) WHERE $filters "
+            ." ORDER BY first, last;";
         $query = $pdo->prepare( $sql );
         $query->execute( $params );
 
@@ -54,7 +56,7 @@ class ParentsRouter {
         }
         json_response([
             'parents' => array_values( $parents ),
-            'availableChildren' => array_values( $children ) 
+            'children' => array_values( $children ) 
         ]);
     }
 
