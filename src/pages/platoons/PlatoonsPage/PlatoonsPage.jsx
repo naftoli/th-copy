@@ -5,6 +5,7 @@ import ReactTable from "react-table";
 import { Callout } from 'components/ui';
 import { Link } from 'react-router-dom';
 import { Button, ButtonGroup } from 'reactstrap';
+import { InlineSync } from 'components/ui/loading';
 // functions
 import is from 'is_js';
 import { loginChanged } from 'functions/login';
@@ -81,9 +82,9 @@ export class PlatoonsPage extends Component {
             <i className="fas fa-users" /> Platoon Transition
           </Link>
           <Button color="primary" onClick={ this.getPlatoons }>
-            <i className={`fas fa-redo-alt ${ !loading || 'fa-spin' }`}></i> Refresh
+            <InlineSync loading={ loading } /> Refresh
           </Button>
-          { is.not.edge() && is.not.ie() && is.not.ios() &&
+          { is.not.edge() && is.not.ie() && is.not.ios() && platoons.length > 0 &&
             <Button color="primary" onClick={ this.toCSV }>
               <i className="fas fa-file-download" /> Save Platoon List
             </Button>

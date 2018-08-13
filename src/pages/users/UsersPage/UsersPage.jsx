@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
 import { Callout } from 'components/ui';
-import { Button, ButtonGroup } from 'reactstrap';
-import CropperModal from 'components/modals/CropperModal';
 import BulkUploadModal from './BulkUploadModal';
+import { Button, ButtonGroup } from 'reactstrap';
+import { InlineSync } from 'components/ui/loading';
+import CropperModal from 'components/modals/CropperModal';
 // functions
 // import { toast } from 'react-toastify';
 import is from 'is_js';
@@ -109,13 +110,13 @@ export class UsersPage extends Component {
            <i className="fas fa-plus" /> Add Soldier
           </Link>
           <Button color="primary" onClick={ this.props.getSoldiers }>
-            <i className={`fas fa-redo-alt ${ !loading || 'fa-spin' }`}></i> Refresh
+            <InlineSync loading={ loading } /> Refresh
           </Button>
-          { current_login.code === 'BC' && is.not.mobile() && // only Base Commanders on desktops/tablets can upload
+          { current_login.code === 'BC' && is.not.mobile() && is.not.ios() && // only Base Commanders on desktops/tablets can upload
             <Button color="primary" onClick={ this.toggleUploadModal }>
               <i className="fas fa-file-upload" /> Upload Soldier List
             </Button>
-          } { is.not.edge() && is.not.ie() && is.not.ios() &&
+          } { is.not.edge() && is.not.ie() && is.not.ios() && soldiers.length &&
             <Button color="primary" onClick={ this.toCSV }>
               <i className="fas fa-file-download" /> Save Soldier List
             </Button>
