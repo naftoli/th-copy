@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Callout } from 'components/ui';
-import { Step1, Step2, Step3, Step4 } from './steps';
+import { Step1, Step2, Step3 } from './steps';
+import { Button, ButtonGroup } from 'reactstrap';
 // functions
+import { toast } from 'react-toastify';
 import { loginStoreChanged } from 'functions/login';
-import { getUsers } from 'store/platoons/platoon_transition';
+import { 
+  getUsers, changePlatoon, removeFromBase, transitionPlatoons 
+} from 'store/platoons/platoon_transition';
 // styles
 import './PlatoonTransitionPage.scss';
 
@@ -45,7 +49,29 @@ class PlatoonTransitionPage extends Component {
   getSoldiers = () => {
     this.setState({ loading: true, selection: [] });
     getUsers( this.state.from )
-    .then( soldiers => this.setState({ soldiers, loading: false }) );
+    .then( soldiers => this.setState({ soldiers, loading: false }) )
+    .catch( error => {
+      this.setState({ soldiers: [], loading: false });
+      toast.error( error.message );
+    });
+  }
+  // Move to new base
+  move = () => {
+    changePlatoon({ user_ids: this.state.selection, ...this.state.to })
+    .then( this.getSoldiers )
+    .catch( error => toast.error( error.message ) );
+  }
+  // Discharge from Tzivos Hashem
+  discharge = () => {
+    removeFromBase( this.state.selection )
+    .then( this.getSoldiers )
+    .catch( error => toast.error( error.message ) );
+  }
+  // Deploy the transition
+  transition = () => {
+    transitionPlatoons()
+    .then( ({ rowCount }) => toast.info( `${rowCount / 2} Soldiers Transitioned` ) )
+    .catch( error => toast.error( error.message ) );
   }
 
   // Selection functions
@@ -59,8 +85,15 @@ class PlatoonTransitionPage extends Component {
         <Callout title='Platoon Transition Instructions'>
           <p><strong>Platoon Transition allows you to setup a large scale transition for multiple soldiers in all bases your account has access to.</strong></p>
           <p>To setup this transition use steps 1-3 in order to move soldiers from one platoon to another.</p>
-          <p>When you have finished seting up the transition you can make it live anytime using step 4.</p>
+          <p><strong>Press the button below to deploy all your transitions whenever you like!</strong></p>
         </Callout>
+
+        <ButtonGroup>
+          <Button color='primary' onClick={ this.transition }>
+            <i className="fas fa-rocket"></i>{' '}
+            Deploy Transition (Make Changes Live)
+          </Button>
+        </ButtonGroup>
 
         <Step1 { ...from }
           selectChange={ this.selectChange('from') } 
@@ -75,12 +108,10 @@ class PlatoonTransitionPage extends Component {
 
         <Step3 { ...to } 
           selectChange={ this.selectChange('to') }
-          selection={ selection } />
+          selection={ selection } 
+          move={ this.move }
+          discharge={ this.discharge } />
 
-        {/* <Step4 /> */}
-
-        <p className="title">Debug</p>
-        <pre>{ JSON.stringify( this.state, null, 2 ) }</pre>
       </div>
     );
   }
