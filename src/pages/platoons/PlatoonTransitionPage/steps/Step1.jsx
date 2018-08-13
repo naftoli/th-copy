@@ -8,17 +8,17 @@ const Step1 = ({ school_id, class_id, selectChange, onSubmit, loading }) => (
   <div id='step-1'>
     <p className="title">Step 1: Select Platoon</p>
     <Row>
-      <Col xs={5}>
+      <Col sm={5}>
         <label>From Base</label>
         <BaseSelect value={ school_id } fetchAll 
           onChange={ selectChange( 'school_id' ) } />
       </Col>
-      <Col xs={4}>
+      <Col sm={4}>
         <label>From Platoon</label>
         <PlatoonSelect value={ class_id } school_id={ school_id }
           onChange={ selectChange( 'class_id' ) } showNoneOption />
       </Col>
-      <Col xs={3}>
+      <Col sm={3}>
         <Button color='primary' onClick={ onSubmit }>
           <InlineSync loading={loading} /> Load Soldiers
         </Button>
