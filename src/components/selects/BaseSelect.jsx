@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 // components
 import Select from './Select';
 // functions
-import { getBaseList } from 'store/bases/operations';
 import { loginChanged } from 'functions/login';
 import { findOption } from 'functions/selects';
+import { makeCancelable } from 'functions/utils/promises';
+import { getBaseList } from 'store/bases/operations';
 
 class BaseSelect extends Component {
 
@@ -27,6 +28,8 @@ class BaseSelect extends Component {
     loading: false
   }
 
+  apiRequest = null;
+
   componentDidMount(){
     this.getBases( this.props.fetchAll );
   }
@@ -46,9 +49,14 @@ class BaseSelect extends Component {
     }
   }
 
+  componentWillUnmount(){
+    this.apiRequest && this.apiRequest.cancel();
+  }
+
   getBases = () =>  {
-    this.setState({ loading: true })
-    return getBaseList()
+    this.setState({ loading: true });
+    this.apiRequest = makeCancelable( getBaseList() );
+    return this.apiRequest.promise
     .then( bases => this.setState({ bases, loading: false }) )
   }
 

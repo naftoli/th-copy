@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 // components
 import Select from './Select';
 // functions
-import { getPlatoonList } from 'store/platoons/operations';
 import { findOption } from 'functions/selects';
+import { makeCancelable } from 'functions/utils/promises';
+import { getPlatoonList } from 'store/platoons/operations';
 
 export class PlatoonSelect extends Component {
 
@@ -23,12 +24,16 @@ export class PlatoonSelect extends Component {
     // fetchAll: false
   }
 
+  apiRequest = null;
+
   state = { 
     platoons: [],
     loading: false
   }
 
-  componentDidMount(){ this.loadPlatoons(); }
+  componentDidMount(){ 
+    this.loadPlatoons(); 
+  }
 
   // update if the login changed or the school_id prop changed
   componentDidUpdate( { school_id: prevId } ) {
@@ -49,6 +54,10 @@ export class PlatoonSelect extends Component {
     }
   }
 
+  componentWillUnmount(){
+    this.apiRequest && this.apiRequest.cancel();
+  }
+
   loadPlatoons = () => {
     this.setState({ loading: true })
     return this.getPlatoons()
@@ -58,12 +67,14 @@ export class PlatoonSelect extends Component {
   // load the platoons
   getPlatoons = () => { 
     const { school_id } = this.props;
-    if ( school_id ) 
-      return getPlatoonList( school_id ); 
-    // else if ( fetchAll )
-    //   return getPlatoonList();
-    else
-      return new Promise( resolve => resolve([]) ); // resolve a promise with a new array
+    if ( school_id ) {
+      this.apiRequest = makeCancelable( getPlatoonList( school_id ) );
+    } else {
+      this.apiRequest = makeCancelable( 
+        new Promise( resolve => resolve([]) )
+      ); // resolve a promise with a new array
+    }
+    return this.apiRequest.promise; 
   }
 
   getOptions = () => {
