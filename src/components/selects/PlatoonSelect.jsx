@@ -45,7 +45,7 @@ export class PlatoonSelect extends Component {
 
     // if we have a value and it is not selected, select it
     const options = this.getOptions();
-    const selected = findOption( options, value, 'class_id' );
+    const selected = findOption( options, value );
     if ( !selected && options.length > 0 ) {
       // if it is clearable and we have a value, clear it.
       if ( isClearable && value ) this.onChange( false );
@@ -84,35 +84,34 @@ export class PlatoonSelect extends Component {
     // only platoons in the school_id from props
     .filter( platoon => platoon.school_id === school_id )
     // map them to what react-select expects
-    .map( ({ class_id, name }) => ({ value: name, label: name, class_id }) );
+    .map( ({ class_id, name }) => ({ value: class_id, label: name }) );
     // add special options
     if ( showAllOption ) 
-      options.unshift({ value: false, label: 'All Platoons', class_id: false });
+      options.unshift({ value: false, label: 'All Platoons' });
     else if ( showNoneOption ) 
-      options.unshift({ value: false, label: 'No Platoon', class_id: false });
+      options.unshift({ value: false, label: 'No Platoon' });
     // and return the options
     return options;
   }
 
   onChange = ( option ) => {
-    if ( !option )
-      return this.props.onChange( option );
-    
-    const { class_id, label } = option;
-    return this.props.onChange({ value: class_id, label });
+    return this.props.onChange( option );
   }
+
+  filter = ( option, value ) => option.label.toLowerCase().includes( value.toLowerCase() );
   
   render() {
     const { value } = this.props;
     const { loading } = this.state;
 
     let options = this.getOptions();
-    const selected = findOption( options, value, 'class_id' ) || null;
+    const selected = findOption( options, value ) || null;
     options = loading ? [] : options;
 
     return (
       <Select {...this.props} options={ options } value={ selected }
-        isLoading={ loading } onChange={ this.onChange }/>
+        isLoading={ loading } onChange={ this.onChange } 
+        filterOption={ this.filter } />
     )
   }
 }
