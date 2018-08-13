@@ -18,34 +18,42 @@ export const scrollToTop = ( id ) => () => {
  * 
  * Relies on component to have a selection key in it's state.
  * 
- * @prop component a component with .setState and .state.selection
+ * @prop component: a component with .setState and .state.selection
+ * @prop size: the total size that the selection could grow to
+ * @prop checkAll: ref to checkall checkbox
+ * 
+ * @returns function
+ * @prop id: the id/value that was selected
  */
-export const toggleRowBasic = ( component, collection, checkAll, id ) => {
+export const toggleRowBasic = ( initialSelection, size, checkAll = false ) => ( id ) => {
   return new Promise( resolve => {
-    let selection = [ ...component.state.selection ];
+    let selection = [ ...initialSelection ];
     // get the index of the item if it exists
     if (selection.indexOf( id ) >= 0) {
       selection = selection.filter( item => item !== id );
     } else {
       selection.push( id );
     }
-    const selectAll = collection.length === selection.length
-    component.setState({ selection, selectAll });
-    resolve( selection );
+    const selectAll = size === selection.length;
+    // we cannot determine the status of checkAll if the collection size is greater then the selected size
+    if ( checkAll ) {
+      checkAll.indeterminate = size > selection.length && selection.length > 0;
+    }
+
+    // component.setState({ selection, selectAll });
+    resolve({ selection, selectAll });
   })
 }
 
-export const toggleAllBasic = ( component, reactTable, getId ) => {
+export const toggleAllBasic = ( selectAll, reactTable, getId ) => {
   return new Promise( resolve => {
-    const selectAll = !component.state.selectAll;
     const selection = [];
-    if ( selectAll ) {
+    if ( !selectAll && reactTable ) {
       reactTable.getResolvedState().sortedData.forEach( 
-        item => selection.push( getId( item ) ) 
+        item => selection.push( getId( item._original ) ) 
       );
     }
-    component.setState({ selection, selectAll });
-    resolve( selection );
+    resolve({ selection, selectAll: !selectAll });
   });  
 }
 
