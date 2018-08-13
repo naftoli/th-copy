@@ -24,31 +24,38 @@ class ParentsRouter {
             ." admin_address1, admin_city, admin_state, admin_postal, admin_country, "
             ." admin_phone_mobile, admin_email, father_pic, mother_pic, "
             ." u.first as child_first, u.last as child_last, u.user_id, u.user_serial FROM "
-            ." admins a JOIN admin_auths aa ON aa.auth = 'user' AND a.admin_id = aa.admin_id "
-            ." JOIN users u ON aa.id = u.user_id JOIN schools s USING (school_id) WHERE $filters;";
+            ." users u JOIN schools s USING (school_id) LEFT JOIN admin_auths aa ON aa.auth = 'user' AND aa.id = u.user_id "
+            ." LEFT JOIN admins a USING (admin_id) WHERE $filters;";
         $query = $pdo->prepare( $sql );
         $query->execute( $params );
 
-        $parents = [];
+        $parents = []; $children = [];
         // fetch all results and parse them as models
         while( $parent = $query->fetch() ){
             $child = [ 
                 'first' => $parent['child_first'], 'last' => $parent['child_last'], 
                 'user_id' => $parent['user_id'], 'user_serial' => $parent['user_serial'] 
             ];
-            if ( !isset( $parents[$parent['admin_id']] ) ) {
+            // if there is no parent, save them as a child
+            if ( !$parent['admin_id'] ) {
+                $children[] = $child;
+            // create new parents
+            } else if ( !isset( $parents[$parent['admin_id']] ) ) {
                 // remove extra columns
                 unset($parent['child_first']); unset($parent['child_last']);
                 unset($parent['user_serial']); unset($parent['user_id']);
                 // create the children array and add this child
                 $parent['children'] = [ $child ];
                 $parents[$parent['admin_id']] = $parent;
+            // add to existing parent
             } else {
-                // add to existing parent
                 $parents[$parent['admin_id']]['children'][] = $child;
             }
         }
-        json_response( array_values( $parents ) );
+        json_response([
+            'parents' => array_values( $parents ),
+            'availableChildren' => array_values( $children ) 
+        ]);
     }
 
     function removeChild() {
