@@ -3,13 +3,16 @@ import { LOGOUT, CHANGE_LOGIN } from './login/types';
 import thunk from 'redux-thunk';
 
 import login from 'store/login/reducer';
+import bases from 'store/bases/reducer';
+import parents from 'store/parents/reducer';
+import payments from 'store/payments/reducer';
 import soldiers from 'store/soldiers/reducer';
 import platoons from 'store/platoons/reducer';
-import bases from 'store/bases/reducer';
-import payments from 'store/payments/reducer';
+
 
 export const reducer = combineReducers({
-  login, soldiers, platoons, bases, payments
+  login, soldiers, platoons, bases, payments,
+  parents,
 });
 
 const rootReducer = ( state, action ) => {
