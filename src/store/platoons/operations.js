@@ -2,7 +2,7 @@ import API, { handleAPIResponse } from 'api/api';
 import { createNotifcation, updateNotifcation } from 'functions/notifications';
 import * as actions from './actions';
 
-// get all soldiers
+// get all platoons
 export const getPlatoons = ( school_id = false, all = false ) => dispatch => {
   // generate query string
   let queries = [];
@@ -42,4 +42,14 @@ export const updatePlatoon = ( id, data ) => dispatch => {
 
 export const createPlatoon = data => dispatch => {
   return API.post( '/core/platoons', data ).then( handleAPIResponse );
+}
+
+/**
+ * this function is used in platoonSelect only
+ */
+export const getPlatoonList = ( school_id = false ) => {
+  const query_string = school_id ? `?school_id=${school_id}` : '?all=true';
+
+  return API.get( `/core/platoons${query_string}` )
+  .then( handleAPIResponse );
 }
