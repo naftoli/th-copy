@@ -7,11 +7,22 @@ import API, { handleAPIResponse } from 'api/api';
  * Note that it does not connect to the redux store as the page is self-contained
  */
 
-// getUsers in API
-export const getUsers = ({ school_id, class_id }) => {
+export const getUsers = ( data ) => {
   const url = '/core/platoon_transition?action=getUsers';
+  return API.post( url, data ).then( handleAPIResponse );
+}
 
-  return API.post( url, { school_id, class_id } )
-  
-  .then( handleAPIResponse )
+export const changePlatoon = ( data ) => {
+  const url = '/core/platoon_transition?action=changePlatoon';
+  return API.post( url, data ).then( handleAPIResponse );
+}
+
+export const removeFromBase = ( user_ids ) => {
+  const url = '/core/platoon_transition?action=removeFromBase';
+  return API.post( url, { user_ids } ).then( handleAPIResponse );
+}
+
+export const transitionPlatoons = () => {
+  const url = '/core/platoon_transition?action=transitionPlatoons';
+  return API.post( url ).then( handleAPIResponse );
 }
