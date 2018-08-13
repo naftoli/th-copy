@@ -13,29 +13,43 @@ class PlatoonTransitionRouter {
         $have_class_id = isset( $_POST['class_id'] ) && intval( $_POST['class_id'] );
         if ( !isset( $_POST['school_id'] ) )
             json_error( 'Invalid Request' );
+
+        $params = [ 'school_id' => $_POST['school_id'] ];
+        if ( $have_class_id ) $params['class_id'] = $_POST['class_id'];
+
+        $hq_filter = ''; // AND pt.admin_id = 82'
+        if ( $current_user->login['code'] !== 'BC' ) {
+            $hq_filter = 'AND pt.admin_id = :admin_id';
+            $params['admin_id'] = $current_user->admin_id;
+        }
         // generate query to fetch the users and the location that they are going to
         $user_query = $pdo->prepare(
             "SELECT u.user_id, u.user_serial, u.first, u.last, u.school_id AS current_school_id, "
             ."pt.school_id, pt.class_id, s.school_name, c.class_grade, c.class_sub, "
             ."!ISNULL(pt.created_at) as being_moved FROM users u "
-            ."LEFT JOIN platoon_transitions pt ON u.user_id = pt.user_id AND pt.deployed_at IS NULL "
+            ."LEFT JOIN platoon_transitions pt ON u.user_id = pt.user_id AND pt.deployed_at IS NULL $hq_filter "
             ."LEFT JOIN schools s ON pt.school_id = s.school_id "
             ."LEFT JOIN classes c ON pt.class_id = c.class_id "
-            ."WHERE u.school_id = :school_id AND u.class_id "
-            .($have_class_id ? "= :class_id ": "IS NULL ") // = null does not work. duh, that would make sense...
+            ."WHERE u.school_id = :school_id AND u.class_id ".($have_class_id ? "= :class_id ": "IS NULL ") // = null does not work. duh, that would make sense...
+            ."ORDER BY u.last, u.first;"
         );
-        $params = [
-            'school_id' => $_POST['school_id']
-        ];
-        if ( $have_class_id ) $params['class_id'] = $_POST['class_id'];
-
         $user_query->execute( $params );
         $results = [];
         while ( $user = $user_query->fetch() ){
-            if ( $user['class_grade']) {
-                $user['transition'] = ( new Platoon(
-                    ['class_grade' => $user['class_grade'], 'class_sub' => $user['class_sub']])
-                )->name();
+            if ( $user['being_moved']) {
+                if ( !$user['school_id'] ) {
+                    $user['transition'] = 'Discharged (Removed)';
+                } else {
+                    $tranistion = ( new Platoon(
+                        ['class_grade' => $user['class_grade'], 'class_sub' => $user['class_sub']])
+                    )->name();
+
+                    if ( $user['current_school_id'] !== $user['school_id'] ) {
+                        $tranistion .= ' ('.$user['school_name'].')';
+                    }
+
+                    $user['transition'] = $tranistion;
+                }
             } else {
                 $user['transition'] = 'Not Transitioning';
             }
@@ -75,12 +89,20 @@ class PlatoonTransitionRouter {
     function transitionPlatoons(){
         global $current_user; global $pdo;
 
-        $school_ids = implode( ', ', $current_user->getAuthIds('school') );
+        if ( !isset($_POST['school_id']) || !intval( $_POST['school_id'] ) ) {
+            return json_error( 'Please select a base to deploy' );
+        }
 
+        $filter = "u.school_id = ".$_POST['school_id']." ";
+
+        if ( $current_user->login['code'] !== 'BC' ) {
+            $filter .= "AND pt.admin_id = '$current_user->admin_id' ";
+        }    
+        
         $transition_query = $pdo->prepare(
             "UPDATE users u JOIN platoon_transitions pt ON u.user_id = pt.user_id AND pt.deployed_at IS NULL " 
             ."SET pt.deployed_at = NOW(), pt.from_school_id = u.school_id, pt.from_class_id = u.class_id, "
-            ."u.school_id = pt.school_id, u.class_id = pt.class_id WHERE u.school_id IN ($school_ids);"
+            ."u.school_id = pt.school_id, u.class_id = pt.class_id WHERE $filter;"
         );
         $success = $transition_query->execute();
         
@@ -94,16 +116,16 @@ class PlatoonTransitionRouter {
 
     // move or create entries for an array of user_ids
     private function moveOrCreate( $user_ids, $school_id, $class_id, $year ) {
-        global $pdo;
+        global $pdo; global $current_user;
         // setup the queries
         $find_query = $pdo->prepare(
             'SELECT platoon_transitions_id FROM platoon_transitions WHERE user_id = ? AND deployed_at IS NULL'
         );
         $insert_query = $pdo->prepare(
-            'INSERT INTO platoon_transitions (user_id, school_id, class_id, year) VALUES (?, ?, ?, ?)'
+            'INSERT INTO platoon_transitions (user_id, admin_id, school_id, class_id, year) VALUES (?, ?, ?, ?, ?)'
         );
         $update_query = $pdo->prepare(
-            'UPDATE platoon_transitions SET user_id = ?, school_id = ?, class_id = ?, year = ? WHERE platoon_transitions_id = ?'
+            'UPDATE platoon_transitions SET user_id = ?, admin_id = ?, school_id = ?, class_id = ?, year = ? WHERE platoon_transitions_id = ?'
         );
         // for each user
         foreach( $user_ids as $user_id ){
@@ -113,12 +135,14 @@ class PlatoonTransitionRouter {
             if ( $find_query->rowCount() >= 1 ) {
                 $id = $find_query->fetch()['platoon_transitions_id'];
                 $update_query->execute([
-                    $user_id, $school_id, $class_id, $year, $id
+                    $user_id, $current_user->admin_id, 
+                    $school_id, $class_id, $year, $id
                 ]);
             // or create a row for him
             } else {
                 $insert_query->execute([
-                    $user_id, $school_id, $class_id, $year
+                    $user_id, $current_user->admin_id, 
+                    $school_id, $class_id, $year
                 ]);
             }
         }
