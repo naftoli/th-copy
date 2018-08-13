@@ -231,15 +231,15 @@ var registrationApp = function() {
             });
         }
         if ( selected_charges.yahadus ) {
-            var shipping_included = selected_user.school.shipping_method === 'deliver';
+            var shipping_included = selected_user.school.shipping_method !== 'pickup';
             state.cart.push({
                 description: 'Yahadus Book for ' + selected_user.first + ( shipping_included ? ' (Shipping Included)' : '' ),
-                price: shipping_included ? 45 : 50,
+                price: shipping_included ? 50 : 45,
                 meta: {
                     type: 'registration',
                     user_id: selected_user.user_id,
                     registration_type: 'yahadus',
-                    paid: 45,
+                    paid: shipping_included ? 50 : 45,
                 }
             });
         }
