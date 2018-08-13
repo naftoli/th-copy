@@ -4,6 +4,60 @@ include_once( __DIR__ . "/../header/header.php" );
 
 class ParentsRouter {
 
+    public function index() {
+        global $current_user; global $pdo;
+
+        $filters = [];   $params = [];
+        // limit based on admin type
+        $login = $current_user->login;
+        if ( $login['code'] === 'HQ' ) {
+            $filters[] = 's.test_school = 0';
+        } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
+            $filters[] = 's.ckids = 1';
+        } else if ( $login['code'] === 'BC' ) {
+            $filters[] = 's.school_id = ?';   $params[] = $login['id'];
+        } else { json_error( 'Access Denied' ); }
+        // combine the filters
+        $filters = implode( ' AND ', $filters );
+
+        $sql = "SELECT a.admin_id, a.username, a.title, a.first, a.last, "
+            ." admin_address1, admin_city, admin_state, admin_postal, admin_country, "
+            ." admin_phone_mobile, admin_email, father_pic, mother_pic, "
+            ." u.first as child_first, u.last as child_last, u.user_id, u.user_serial FROM "
+            ." users u JOIN schools s USING (school_id) LEFT JOIN admin_auths aa ON aa.auth = 'user' AND aa.id = u.user_id "
+            ." LEFT JOIN admins a USING (admin_id) WHERE $filters;";
+        $query = $pdo->prepare( $sql );
+        $query->execute( $params );
+
+        $parents = []; $children = [];
+        // fetch all results and parse them as models
+        while( $parent = $query->fetch() ){
+            $child = [ 
+                'first' => $parent['child_first'], 'last' => $parent['child_last'], 
+                'user_id' => $parent['user_id'], 'user_serial' => $parent['user_serial'] 
+            ];
+            // if there is no parent, save them as a child
+            if ( !$parent['admin_id'] ) {
+                $children[] = $child;
+            // create new parents
+            } else if ( !isset( $parents[$parent['admin_id']] ) ) {
+                // remove extra columns
+                unset($parent['child_first']); unset($parent['child_last']);
+                unset($parent['user_serial']); unset($parent['user_id']);
+                // create the children array and add this child
+                $parent['children'] = [ $child ];
+                $parents[$parent['admin_id']] = $parent;
+            // add to existing parent
+            } else {
+                $parents[$parent['admin_id']]['children'][] = $child;
+            }
+        }
+        json_response([
+            'parents' => array_values( $parents ),
+            'availableChildren' => array_values( $children ) 
+        ]);
+    }
+
     function removeChild() {
         global $pdo;
         if ( !isset($_POST['user_id']) ) json_error('Need a child to remove');
