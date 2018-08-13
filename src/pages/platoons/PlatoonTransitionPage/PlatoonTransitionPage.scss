@@ -1,13 +1,11 @@
 #PlatoonTransitionPage {
+  padding-bottom: 2.5vh;
+
   .row {
     align-items: flex-end;
   }
 
   .btn { margin-top: 10px; }
-
-  .btn-group {
-    display: block;
-  }
 
   p.title{
     font-size: 1.6em;
