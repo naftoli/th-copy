@@ -10,7 +10,7 @@ class PlatoonTransitionRouter {
 
     public function getUsers(){
         global $current_user;   global $pdo;
-        $have_class_id = isset( $_POST['class_id'] );
+        $have_class_id = isset( $_POST['class_id'] ) && intval( $_POST['class_id'] );
         if ( !isset( $_POST['school_id'] ) )
             json_error( 'Invalid Request' );
         // generate query to fetch the users and the location that they are going to
