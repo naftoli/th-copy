@@ -84,7 +84,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
     $children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
 
 	// after Nov 8, 2017 registration is closed
-	if (unixtojd() > 2458067 && !in_array($row['school_id'], array(61,269))) $children[$row['user_id']]['chidon'] = 0;
+	//if (unixtojd() > 2458067 && !in_array($row['school_id'], array(61,269))) $children[$row['user_id']]['chidon'] = 0;
 	
 	//if (unixtojd() < 2457996) $children[$row['user_id']]['chidon'] = 0; // chidon registration only begins August 31, 2017
     
@@ -102,9 +102,12 @@ while ( $row = mysql_fetch_assoc($result) ) {
     } 
     
     // chidon regustration
-    if ( !$row['reg_chidon'] && // if not in chidon 
-        $row['class_grade'] >= 4 && // and in grade 4+
-        !in_array( $row['school_id'], $australia ) // and not in australia..
+    // if ( !$row['reg_chidon'] && // if not in chidon 
+    //     $row['class_grade'] >= 4 && // and in grade 4+
+    //     !in_array( $row['school_id'], $australia ) // and not in australia..
+    // ) {
+	if ( !$row['reg_chidon'] && // if not in chidon 
+        $row['class_grade'] >= 4 // and in grade 4+
     ) {
         $children[$row['user_id']]['needsReg'] = 1;
         $children[$row['user_id']]['reg_types']['chidon'] = true;
