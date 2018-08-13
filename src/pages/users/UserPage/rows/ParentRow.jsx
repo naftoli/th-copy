@@ -85,7 +85,7 @@ export class ParentRow extends Component {
     } else { // if we do not have a parent account
       return (
         <Row>
-          <Col xs='12' sm='6' xl='4'>
+          <Col xs='12'>
             <label>Add to parent account by parents username</label>
             <InputGroup>
               <input onChange={this.updateUsername} value={this.state.username} 
