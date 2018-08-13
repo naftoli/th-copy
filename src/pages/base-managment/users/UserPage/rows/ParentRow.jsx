@@ -50,7 +50,7 @@ export class ParentRow extends Component {
     const admin_id = parseInt( parentAccount.admin_id, 10 );
     this.props.removeChild( admin_id, user_id )
     .then( this.props.refresh )
-    .catch( error => { debugger; });
+    .catch( error => { toast.error( error.message ) });
   }
 
   render() {
