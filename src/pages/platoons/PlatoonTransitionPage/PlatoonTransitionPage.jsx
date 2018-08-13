@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Callout } from 'components/ui';
 import { Step1, Step2, Step3, Step4 } from './steps';
 // functions
-import { getUsers } from 'store/platoons/platoon_transition';
 import { loginStoreChanged } from 'functions/login';
+import { getUsers } from 'store/platoons/platoon_transition';
 // styles
 import './PlatoonTransitionPage.scss';
 
@@ -43,10 +43,13 @@ class PlatoonTransitionPage extends Component {
 
   // get the soldiers we can transition
   getSoldiers = () => {
-    this.setState({ loading: true, });
+    this.setState({ loading: true, selection: [] });
     getUsers( this.state.from )
     .then( soldiers => this.setState({ soldiers, loading: false }) );
   }
+
+  // Selection functions
+  updateSelection = selection => this.setState({ selection });
 
   render() {
     const { from, to, soldiers, selection, loading } = this.state;
@@ -66,7 +69,9 @@ class PlatoonTransitionPage extends Component {
 
         <Step2 
           soldiers={ soldiers }
-          selection={ selection } />
+          selection={ selection } 
+          updateSelection={ this.updateSelection }
+          loading={ loading } />
 
         <Step3 { ...to } 
           selectChange={ this.selectChange('to') } />
