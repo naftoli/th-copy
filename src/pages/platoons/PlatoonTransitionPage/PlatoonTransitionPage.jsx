@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-// import connect from 'react-redux';
+import { connect } from 'react-redux';
 // components
 import { Callout } from 'components/ui';
 import { Step1, Step2, Step3, Step4 } from './steps';
 // functions
 import { getUsers } from 'store/platoons/platoon_transition';
+import { loginStoreChanged } from 'functions/login';
 // styles
 import './PlatoonTransitionPage.scss';
 
@@ -14,8 +15,26 @@ class PlatoonTransitionPage extends Component {
     from: { school_id: false, class_id: false },
     to: { school_id: false, class_id: false },
     soldiers: [],
+    selection: [],
     loading: false,
   }
+
+  componentDidMount() { 
+    this.setupPage(); 
+  }
+
+  componentDidUpdate({ login }) {
+    if ( loginStoreChanged( login ) ) this.setupPage();
+  }
+
+  setupPage = () => {
+    const { code, id } = this.props.login
+    if ( code === 'BC' ) this.setState({
+      to: { ...this.state.to, school_id: id },
+      from: { ...this.state.from, school_id: id }
+    });
+  }
+
   // update an id in `to` or `from`
   selectChange = ( section ) => ( id ) => ( option ) => {
     const updated = Object.assign({}, this.state[section], { [id]: option && option.value })
@@ -30,7 +49,8 @@ class PlatoonTransitionPage extends Component {
   }
 
   render() {
-    const { from, to, soldiers, loading } = this.state;
+    const { from, to, soldiers, selection, loading } = this.state;
+
     return (
       <div id='PlatoonTransitionPage'>
         <Callout title='Platoon Transition Instructions'>
@@ -45,7 +65,8 @@ class PlatoonTransitionPage extends Component {
           loading={ loading } />
 
         <Step2 
-          soldiers={ soldiers }/>
+          soldiers={ soldiers }
+          selection={ selection } />
 
         <Step3 { ...to } 
           selectChange={ this.selectChange('to') } />
@@ -59,4 +80,8 @@ class PlatoonTransitionPage extends Component {
   }
 }
 
-export default PlatoonTransitionPage;
+const mapStateToProps = ({ login }) => ({
+  login: login.current_login
+})
+
+export default connect( mapStateToProps )( PlatoonTransitionPage );
