@@ -32,7 +32,7 @@ class PlatoonTransitionPage extends Component {
     if ( code === 'BC' ) this.setState({
       to: { ...this.state.to, school_id: id },
       from: { ...this.state.from, school_id: id }
-    });
+    }, this.getSoldiers ); // set the state and get the first round of soldiers
   }
 
   // update an id in `to` or `from`
