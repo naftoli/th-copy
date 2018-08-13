@@ -102,6 +102,11 @@ body,td,th {
                     Registration is $5. You can purchase Yahadus books and a printed copy of the Chidon learning guide as part of Chidon Registration. Alternatively, you can download and print them for free.
                 </div>
 				<br />
+
+				<div class="indent">
+					The cost for the Shabbaton if your child qualifies is $150. Shabbaton enrollment opens Wednesday Ches Adar Aleph (February 13).
+				</div>
+				<br />
 				
 				<h4>How to Register:</h4>				
 				<div class="indent">
