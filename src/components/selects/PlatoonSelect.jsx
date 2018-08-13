@@ -83,7 +83,11 @@ export class PlatoonSelect extends Component {
     return options;
   }
 
-  onChange = ({ class_id, label }) => {
+  onChange = ( option ) => {
+    if ( !option )
+      return this.props.onChange( option );
+    
+    const { class_id, label } = option;
     return this.props.onChange({ value: class_id, label });
   }
   
