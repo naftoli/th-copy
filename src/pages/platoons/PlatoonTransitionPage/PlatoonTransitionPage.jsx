@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 // components
 import { Callout } from 'components/ui';
 import { Step1, Step2, Step3, Step4 } from './steps';
+// functions
+import { getUsers } from 'store/platoons/platoon_transition';
 // styles
 import './PlatoonTransitionPage.scss';
 
@@ -11,7 +13,8 @@ class PlatoonTransitionPage extends Component {
   state = {
     from: { school_id: false, class_id: false },
     to: { school_id: false, class_id: false },
-    soldiers: []
+    soldiers: [],
+    loading: false,
   }
   // update an id in `to` or `from`
   selectChange = ( section ) => ( id ) => ( option ) => {
@@ -19,8 +22,15 @@ class PlatoonTransitionPage extends Component {
     this.setState({ [section]: updated });
   }
 
+  // get the soldiers we can transition
+  getSoldiers = () => {
+    this.setState({ loading: true, });
+    getUsers( this.state.from )
+    .then( soldiers => this.setState({ soldiers, loading: false }) );
+  }
+
   render() {
-    const { from, to, soldiers } = this.state;
+    const { from, to, soldiers, loading } = this.state;
     return (
       <div id='PlatoonTransitionPage'>
         <Callout title='Platoon Transition Instructions'>
@@ -29,10 +39,13 @@ class PlatoonTransitionPage extends Component {
           <p>When you have finished seting up the transition you can make it live anytime using step 4.</p>
         </Callout>
 
-        <Step1 { ...from } 
-          selectChange={ this.selectChange('from') } />
+        <Step1 { ...from }
+          selectChange={ this.selectChange('from') } 
+          onSubmit={ this.getSoldiers }
+          loading={ loading } />
 
-        <Step2 />
+        <Step2 
+          soldiers={ soldiers }/>
 
         <Step3 { ...to } 
           selectChange={ this.selectChange('to') } />
