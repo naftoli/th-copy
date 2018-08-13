@@ -6,7 +6,7 @@ function withDefaultProps( Select ){
   return class extends Component {
     render() {
       return (
-        <Select openMenuOnFocus { ...this.props } classNamePrefix="react-select"/>
+        <Select openMenuOnFocus { ...this.props } classNamePrefix="react-select" menuPlacement="auto"/>
       )
     }
   }
