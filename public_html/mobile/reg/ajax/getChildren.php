@@ -102,12 +102,9 @@ while ( $row = mysql_fetch_assoc($result) ) {
     } 
     
     // chidon regustration
-    // if ( !$row['reg_chidon'] && // if not in chidon 
-    //     $row['class_grade'] >= 4 && // and in grade 4+
-    //     !in_array( $row['school_id'], $australia ) // and not in australia..
-    // ) {
-	if ( !$row['reg_chidon'] && // if not in chidon 
-        $row['class_grade'] >= 4 // and in grade 4+
+    if ( !$row['reg_chidon'] && // if not in chidon 
+        $row['class_grade'] >= 4 && // and in grade 4+
+        !in_array( $row['school_id'], $australia ) // and not in australia..
     ) {
         $children[$row['user_id']]['needsReg'] = 1;
         $children[$row['user_id']]['reg_types']['chidon'] = true;
