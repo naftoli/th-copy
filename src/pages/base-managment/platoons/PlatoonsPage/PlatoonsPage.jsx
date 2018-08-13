@@ -41,7 +41,7 @@ export class PlatoonsPage extends Component {
   }
 
   render() {
-    const { platoons, loading, login } = this.props;
+    const { platoons, loading, login, match } = this.props;
 
     let columns = [
       { Header: 'Grade', accessor: 'class_grade',
@@ -75,10 +75,10 @@ export class PlatoonsPage extends Component {
           <p><strong>To connect a Staff member to a Platoon go to the edit page by clicking on the Grade, Subject or Teacher.</strong></p>
         </Callout>
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
-          <Link to={`/platoons/new`} className="btn btn-primary" role="button">
+          <Link to={`${match.path}/new`} className="btn btn-primary" role="button">
             <i className="fas fa-plus" /> Add Platoon
           </Link>
-          <Link to={`/platoons/transition`} className="btn btn-primary" role="button">
+          <Link to={`${match.path}/transition`} className="btn btn-primary" role="button">
             <i className="fas fa-users" /> Platoon Transition
           </Link>
           <Button color="primary" onClick={ this.getPlatoons }>

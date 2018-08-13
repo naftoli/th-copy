@@ -97,7 +97,7 @@ export class PlatoonPage extends Component {
         <div className="alert alert-info">
           Please note that this information is for display and managment purposes only.<br/>
           To add/remove teacher (staff) accounts please look at the Staff tab under Base Managment.
-          To edit these accounts please go <Link to='/staff'>here.</Link>
+          To edit these accounts please go <Link to='/bm/staff'>here.</Link>
         </div>
 
         <PlatoonRow platoon={this.state.platoon} 
