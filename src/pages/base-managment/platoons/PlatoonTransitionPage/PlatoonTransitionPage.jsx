@@ -5,6 +5,7 @@ import { Callout } from 'components/ui';
 import { Step1, Step2, Step3, Deploy } from './steps';
 // functions
 import { toast } from 'react-toastify';
+import { setTitle } from 'functions/utils';
 import { loginStoreChanged } from 'functions/login';
 import { 
   getUsers, changePlatoon, removeFromBase, transitionPlatoons 
@@ -22,7 +23,8 @@ class PlatoonTransitionPage extends Component {
     loading: false,
   }
 
-  componentDidMount() { 
+  componentDidMount() {
+    setTitle( 'Platoon Transition' );
     this.setupPage(); 
   }
 
