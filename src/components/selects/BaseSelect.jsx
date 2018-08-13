@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 // components
 import Select from './Select';
 // functions
-import { getBases } from 'store/bases/operations';
+import { getBaseList } from 'store/bases/operations';
 import { loginChanged } from 'functions/login';
 import { findOption } from 'functions/selects';
 
-export class BaseSelect extends Component {
+class BaseSelect extends Component {
 
   static propTypes = {
     showAllOption: PropTypes.bool,
@@ -22,17 +22,21 @@ export class BaseSelect extends Component {
     fetchAll: false
   }
 
+  state = { 
+    bases: [],
+    loading: false
+  }
 
   componentDidMount(){
-    this.props.getBases( this.props.fetchAll );
+    this.getBases( this.props.fetchAll );
   }
 
   // update if the login changed and we did not fetch all bases for this BC
   componentDidUpdate( prevProps ) {
-    const { login, fetchAll, getBases, onChange, value, isClearable } = this.props;
+    const { login, fetchAll, onChange, value, isClearable } = this.props;
     // fetch new bases if we need to
     if ( loginChanged( login, prevProps.login ) ) {
-      getBases( fetchAll );
+      this.getBases( fetchAll );
     }
     // actually select the first option if is not clearable
     const options = this.getOptions();
@@ -42,9 +46,15 @@ export class BaseSelect extends Component {
     }
   }
 
+  getBases = () =>  {
+    this.setState({ loading: true })
+    return getBaseList()
+    .then( bases => this.setState({ bases, loading: false }) )
+  }
+
   getOptions = () => {
-    const { bases, showAllOption } = this.props;
-    const options = bases.map( 
+    const { showAllOption } = this.props;
+    const options = this.state.bases.map( 
       ({ school_name, school_id }) => ({ value: school_id, label: school_name })
     );
     if ( showAllOption ) options.unshift({ value: false, label: 'All Bases' });
@@ -67,8 +77,7 @@ export class BaseSelect extends Component {
 }
 
 const mapStateToProps = ( { bases, login } ) => ({
-  ...bases,
   login: login.current_login
 })
 
-export default connect( mapStateToProps, { getBases } )( BaseSelect );
+export default connect( mapStateToProps )( BaseSelect );
