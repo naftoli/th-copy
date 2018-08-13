@@ -45,11 +45,11 @@ export class PlatoonsPage extends Component {
 
     let columns = [
       { Header: 'Grade', accessor: 'class_grade',
-        Cell: props => <Link to={`/platoons/${props.original.class_id}`}>{props.value}</Link> },
+        Cell: props => <Link to={`/bm/platoons/${props.original.class_id}`}>{props.value}</Link> },
       { Header: 'Subject', id: 'subject', accessor: platoon => platoon.class_sub || ' - ',
-        Cell: props => <Link to={`/platoons/${props.original.class_id}`}>{props.value}</Link> },
+        Cell: props => <Link to={`/bm/platoons/${props.original.class_id}`}>{props.value}</Link> },
       { Header: 'Teacher', accessor: 'teacher', 
-        Cell: props => <Link to={`/platoons/${props.original.class_id}`}>{props.value}</Link> },
+        Cell: props => <Link to={`/bm/platoons/${props.original.class_id}`}>{props.value}</Link> },
       { Header: '# of Soldiers', accessor: 'soldier_count' },
       { Header: '# of Staff', accessor: 'staff_count' },
     ];

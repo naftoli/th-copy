@@ -114,11 +114,11 @@ export class RegistrationPage extends Component {
         Header: props => <Checkbox onChange={ toggleAll } checked={ selectAll }
           setRef={ ref => { this.checkAll = ref } } /> },
       { Header: 'First Name', accessor: 'first',
-        Cell: props => <Link to={`/users/${props.original.user_id}`} tabIndex={-1}>{props.value}</Link> },
+        Cell: props => <Link to={`/bm/users/${props.original.user_id}`} tabIndex={-1}>{props.value}</Link> },
       { Header: 'Last Name', accessor: 'last',
-        Cell: props => <Link to={`/users/${props.original.user_id}`} tabIndex={-1}>{props.value}</Link> },
+        Cell: props => <Link to={`/bm/users/${props.original.user_id}`} tabIndex={-1}>{props.value}</Link> },
       { Header: 'Serial Number', accessor: 'user_serial',
-        Cell: props => <Link to={`/users/${props.original.user_id}`} tabIndex={-1}>{props.value}</Link> },
+        Cell: props => <Link to={`/bm/users/${props.original.user_id}`} tabIndex={-1}>{props.value}</Link> },
       { Header: 'Registration Fee', accessor: 'fee' },
       { Header: 'Platoon', accessor: 'platoon' },
     ];

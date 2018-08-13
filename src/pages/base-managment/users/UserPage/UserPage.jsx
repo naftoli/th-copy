@@ -86,7 +86,7 @@ class UserPage extends Component {
     const updated = Object.keys( updates ).length > 0;
     // if we do not have the soldier...
     if ( soldier === undefined ) {
-      return <Redirect to='/users' />;
+      return <Redirect to='/bm/users' />;
     }
     // if loading return a spinner
     if ( loading ) {

@@ -54,28 +54,28 @@ const getMenu = ( user_type, no_legacy ) => {
         {
           label: "Soldiers",
           items: [
-            { label: "View / Edit", path: '/users' },
-            { label: "Registration", path: '/users/registration', user_types: [ 'BC' ] },
-            { label: "Rank Cards", path: '/users/cards' },
+            { label: "View / Edit", path: '/bm/users' },
+            { label: "Registration", path: '/bm/users/registration', user_types: [ 'BC' ] },
+            { label: "Rank Cards", path: '/bm/users/cards' },
             { label: "Update Missions", legacy: true, path: '/add_missions.php' },
             { label: "Update Medals", legacy: true, path: '/add_medals.php' },
           ]
         },
-        { label: "Platoons", path: '/platoons' },
-        { label: "Parents", path: '/parents' },
-        { label: "Staff", path: '/staff' },
+        { label: "Platoons", path: '/bm/platoons' },
+        { label: "Parents", path: '/bm/parents' },
+        { label: "Staff", path: '/bm/staff' },
         {
           label: "Base",
           items: [
-            { label: 'View / Edit', path: '/base' },
-            { label: 'Settings', path: '/base/settings' },
-            { label: 'Transactions', path: '/base/transactions' }
+            { label: 'View / Edit', path: '/bm/base' },
+            { label: 'Settings', path: '/bm/base/settings' },
+            { label: 'Transactions', path: '/bm/base/transactions' }
           ]
         },
       ]
     },
     {
-      label: 'Platoon Managment', user_types: [ 'TEACHER' ], path: '/users',
+      label: 'Platoon Managment', user_types: [ 'TEACHER' ], path: '/bm/users',
       icon: <i className="fas fas fa-chalkboard-teacher"></i>,
     },
     {

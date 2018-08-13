@@ -85,7 +85,7 @@ export class UsersPage extends Component {
 
   // render the page
   render() {
-    const { current_login, soldiers, loading } = this.props;
+    const { current_login, soldiers, loading, match } = this.props;
     const { cropperModalShow, cropperModalSrc, uploadModalShow } = this.state;
     const columns = getColumns( current_login.code, this.editPicture );
     const onChange = scrollToTop('UsersPage');
@@ -106,7 +106,7 @@ export class UsersPage extends Component {
         </Callout>
         {/* Action buttons */}
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
-          <Link to={`/users/new`} className="btn btn-primary" role="button">
+          <Link to={`${match.path}/new`} className="btn btn-primary" role="button">
            <i className="fas fa-plus" /> Add Soldier
           </Link>
           <Button color="primary" onClick={ this.props.getSoldiers }>

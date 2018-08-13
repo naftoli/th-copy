@@ -110,7 +110,7 @@ class NewUserPage extends Component {
       this.setState({ loading: false });
       if ( response.success )
         this.props.getSoldiers(); // refresh the list of soldiers
-        this.props.history.push(`/users/${response.data.user_id}`);
+        this.props.history.push(`/bm/users/${response.data.user_id}`);
     })
     .catch( error => {
       toast.error( error.message );

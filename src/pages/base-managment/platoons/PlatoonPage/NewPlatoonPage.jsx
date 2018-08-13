@@ -37,7 +37,7 @@ export class NewPlatoonPage extends Component {
     if ( !platoon.class_grade ) return toast.error( 'Cannot create Platoon without grade.' );
     this.props.createPlatoon( platoon )
     .then( platoon => {
-      this.props.history.push(`/platoons/${platoon.class_id}`);
+      this.props.history.push(`/bm/platoons/${platoon.class_id}`);
     });
   }
 

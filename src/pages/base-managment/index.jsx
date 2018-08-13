@@ -1,0 +1,43 @@
+import React, { Component } from 'react';
+import { Switch, Route } from 'react-router-dom';
+// sub pages
+import { Page404 } from 'pages/errors';
+import UsersPages from './users';
+import PlatoonPages from './platoons';
+// functions
+import { connect } from 'react-redux';
+
+
+export class BaseManagmentIndexPage extends Component {
+
+  render() {
+    const { code } = this.props.login;
+    const { path } = this.props.match;
+    const isBC = ['HQ', 'CKIDS-ADMIN', 'BC'].includes( code );
+
+    const BCRoutes = [
+      <Route path={`${path}/platoons`} component={ PlatoonPages } />,
+      <Route path={`${path}/parents`} exact render={props => <h1>Parents</h1>}/>,
+      <Route path={`${path}/staff`} exact render={props => <h1>Staff</h1>}/>,
+
+      <Route path={`${path}/base`} exact render={props => <h1>View / Edit Base</h1>}/>,
+      <Route path={`${path}/base/settings`} exact render={props => <h1>Base Settings</h1>}/>,
+      <Route path={`${path}/base/transactions`} exact render={props => <h1>Base Transactions</h1>}/>
+    ];
+
+    return (
+      <Switch>
+        <Route path={`${path}/users`} component={ UsersPages } />
+        {/* render BC only routes */}
+        { isBC && BCRoutes }
+        <Route component={ Page404 } />
+      </Switch>
+    )
+  }
+}
+
+const mapStateToProps = ( state ) => ({
+  login: state.login.current_login
+})
+
+export default connect( mapStateToProps )( BaseManagmentIndexPage );

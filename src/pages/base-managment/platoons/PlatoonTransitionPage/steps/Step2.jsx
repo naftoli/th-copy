@@ -23,13 +23,13 @@ class Step2 extends Component {
         checked={this.state.selectAll} setRef={ref => {this.checkAll = ref}} />
     }, {
       Header: "First Name", accessor: 'first',
-      Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
+      Cell: props => <Link to={`/bm/users/${props.original.user_id}`}>{props.value}</Link>,
     },{
       Header: "Last Name", accessor: 'last',
-      Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
+      Cell: props => <Link to={`/bm/users/${props.original.user_id}`}>{props.value}</Link>,
     },{
       Header: "Serial Number", accessor: 'user_serial',
-      Cell: props => <Link to={`/users/${props.original.user_id}`}>{props.value}</Link>,
+      Cell: props => <Link to={`/bm/users/${props.original.user_id}`}>{props.value}</Link>,
     },{ Header: 'Transitioning To', accessor: 'transition' },
   ];
   // functions
