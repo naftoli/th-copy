@@ -16,13 +16,13 @@ export class BaseManagmentIndexPage extends Component {
     const isBC = ['HQ', 'CKIDS-ADMIN', 'BC'].includes( code );
 
     const BCRoutes = [
-      <Route path={`${path}/platoons`} component={ PlatoonPages } />,
-      <Route path={`${path}/parents`} exact render={props => <h1>Parents</h1>}/>,
-      <Route path={`${path}/staff`} exact render={props => <h1>Staff</h1>}/>,
+      <Route key={1} path={`${path}/platoons`} component={ PlatoonPages } />,
+      <Route key={2} path={`${path}/parents`} exact render={props => <h1>Parents</h1>}/>,
+      <Route key={3} path={`${path}/staff`} exact render={props => <h1>Staff</h1>}/>,
 
-      <Route path={`${path}/base`} exact render={props => <h1>View / Edit Base</h1>}/>,
-      <Route path={`${path}/base/settings`} exact render={props => <h1>Base Settings</h1>}/>,
-      <Route path={`${path}/base/transactions`} exact render={props => <h1>Base Transactions</h1>}/>
+      <Route key={4} path={`${path}/base`} exact render={props => <h1>View / Edit Base</h1>}/>,
+      <Route key={5} path={`${path}/base/settings`} exact render={props => <h1>Base Settings</h1>}/>,
+      <Route key={6} path={`${path}/base/transactions`} exact render={props => <h1>Base Transactions</h1>}/>
     ];
 
     return (

@@ -27,7 +27,6 @@ export class App extends Component {
   // render the page
   render() {
     if ( this.props.logged_in ) {
-      const { code } = this.props.login;
       const { message, isOpen } = this.state;
       return (
         <Router basename={ process.env.PUBLIC_URL } getUserConfirmation={ this.showDialog } >
