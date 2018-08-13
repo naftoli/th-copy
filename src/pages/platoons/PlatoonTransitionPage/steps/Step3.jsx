@@ -5,7 +5,8 @@ import { Row, Col, Button, ButtonGroup } from 'reactstrap';
 import { BaseSelect, PlatoonSelect } from 'components/selects';
 
 const Step3 = ({ 
-  school_id, class_id, selectChange, selection
+  school_id, class_id, selectChange, 
+  selection, move, discharge
 }) => {
   // define classnames
   const className = classnames({
@@ -17,21 +18,24 @@ const Step3 = ({
     <div id='step-3' className={className}>
       <p className="title">Step 3: Select Transition for { selection.length } Soldiers</p>
       <Row>
-        <Col xs={6}>
+        <Col sm={6}>
           <label>To Base</label>
           <BaseSelect value={ school_id } fetchAll 
             onChange={ selectChange('school_id') } />
         </Col>
-        <Col xs={6}>
+        <Col sm={6}>
           <label>To Platoon</label>
           <PlatoonSelect value={ class_id } school_id={ school_id } 
             onChange={ selectChange('class_id') } />
         </Col>
-        <Col xs={12}>
-          <label>Transition Action</label>
+        <Col sm={12}>
           <ButtonGroup>
-            <Button color='primary'>Move Soldiers</Button>
-            <Button color='danger'>Graduate Soldiers ( Remove From Base )</Button>
+            <Button color='primary' onClick={ move }>
+              Transition (Move) Soldiers
+            </Button>
+            <Button color='danger' onClick={ discharge }>
+              Discharge (Remove) Soldiers 
+            </Button>
           </ButtonGroup>
         </Col>
       </Row>
