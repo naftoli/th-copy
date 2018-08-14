@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { COOKIES, EXPIRES } from 'store/constants';
-import { LEGACY_URL } from 'components/constants';
 // components
 import { Row, Col, Input, InputGroup, InputGroupAddon, Button } from 'reactstrap';
 import { FontAwesome } from 'components/ui';
 // functions
+import { mobileLogin } from 'functions/login';
 import { connect } from 'react-redux';
 import { removeChild, addChild } from 'store/parents/operations';
 import { toast } from 'react-toastify';
@@ -29,9 +28,7 @@ export class ParentRow extends Component {
   updateUsername = ( event ) => { this.setState({username: event.target.value}) }
 
   changeLogin = () => {
-    const { key } = this.props.parentAccount;
-    COOKIES.set('admin', key, { path: '/', EXPIRES } );
-    window.open( `${LEGACY_URL}/mobile/reg/parent_detail.html`, '_blank' ).focus();
+    mobileLogin( this.props.parentAccount.key );
   }
 
   addToAccount = () => {
