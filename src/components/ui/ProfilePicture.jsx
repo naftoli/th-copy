@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import is from 'is_js';
 import './styles/ProfilePicture.scss';
 
-const fallbackImage = `${LEGACY_URL}/mobile/reg/images/profile-photo-default-2.jpg`;
+const fallbackImage = `${LEGACY_URL}/mobile/reg/images/profile-photo-default.jpg`;
 
 const handleError = ( props ) => ( e ) => {
   e.target.src = fallbackImage ;
