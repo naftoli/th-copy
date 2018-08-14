@@ -12,7 +12,7 @@ import CropperModal from 'components/modals/CropperModal';
 // import { toast } from 'react-toastify';
 import is from 'is_js';
 import { arrayToCSV, setTitle } from 'functions/utils';
-import { loginChanged } from 'functions/login';
+import { loginStoreChanged } from 'functions/login';
 import { filter, scrollToTop } from 'functions/tables';
 // styles
 import './UsersPage.scss';
@@ -37,7 +37,7 @@ export class UsersPage extends Component {
 
   // if the soldier list is emptied while on the page... then refresh it
   componentDidUpdate( prevProps ) {
-    if ( loginChanged( this.props.current_login, prevProps.current_login ) )
+    if ( loginStoreChanged( prevProps.current_login ) )
       this.props.getSoldiers();
   }
 

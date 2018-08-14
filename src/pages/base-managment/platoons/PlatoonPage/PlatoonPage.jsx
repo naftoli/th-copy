@@ -8,7 +8,7 @@ import { Row, Col, InputGroup, InputGroupAddon, Button } from 'reactstrap';
 // functions
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
-import { loginChanged } from 'functions/login';
+import { loginStoreChanged } from 'functions/login';
 import { StaffRow, PlatoonRow } from '../rows/';
 import { getPlatoon, updatePlatoon } from 'store/platoons/operations';
 import { deleteAuth, createAuth } from 'store/login/operations';
@@ -41,7 +41,7 @@ export class PlatoonPage extends Component {
 
   // if the soldier list is emptied while on the page... then refresh it
   componentDidUpdate( { login } ) {
-    if ( loginChanged( this.props.login, login ) ) { this.getPlatoon(); }
+    if ( loginStoreChanged( login ) ) { this.getPlatoon(); }
   }
 
   getPlatoon = () => {

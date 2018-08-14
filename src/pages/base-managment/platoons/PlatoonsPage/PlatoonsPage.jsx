@@ -8,7 +8,7 @@ import { Button, ButtonGroup } from 'reactstrap';
 import { InlineSync } from 'components/ui/loading';
 // functions
 import is from 'is_js';
-import { loginChanged } from 'functions/login';
+import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle } from 'functions/utils';
 import { filter, scrollToTop } from 'functions/tables';
 import { getPlatoons } from 'store/platoons/operations';
@@ -25,7 +25,7 @@ export class PlatoonsPage extends Component {
 
   // if the soldier list is emptied while on the page... then refresh it
   componentDidUpdate( { login } ) {
-    if ( loginChanged( this.props.login, login ) )
+    if ( loginStoreChanged( login ) )
       this.getPlatoons();
   }
 

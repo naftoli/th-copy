@@ -9,7 +9,7 @@ import RegistrationModal from './RegistrationModal';
 // functions
 import is from 'is_js';
 import { toast } from 'react-toastify';
-import { loginChanged } from 'functions/login';
+import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle } from 'functions/utils';
 import { defaultTableProps } from 'functions/tables';
 import { getSoldiers, registerSoldiers } from 'store/soldiers/registration/operations';
@@ -34,7 +34,7 @@ export class RegistrationPage extends Component {
   }
 
   componentDidUpdate( prevProps ) {
-    if ( loginChanged( this.props.login, prevProps.login ) ) {
+    if ( loginStoreChanged( prevProps.login ) ) {
       this.props.getSoldiers().catch( e => toast.error( e.message ) );
       this.setState({ selectAll: false, selection: [], total: 0 });
     }

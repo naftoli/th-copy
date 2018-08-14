@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 // components
 import Select from './Select';
 // functions
-import { loginChanged } from 'functions/login';
+import { loginStoreChanged } from 'functions/login';
 import { findOption } from 'functions/selects';
 import { makeCancelable } from 'functions/utils/promises';
 import { getBaseList } from 'store/bases/operations';
@@ -36,9 +36,9 @@ class BaseSelect extends Component {
 
   // update if the login changed and we did not fetch all bases for this BC
   componentDidUpdate( prevProps ) {
-    const { login, fetchAll, onChange, value, isClearable } = this.props;
+    const { fetchAll, onChange, value, isClearable } = this.props;
     // fetch new bases if we need to
-    if ( loginChanged( login, prevProps.login ) ) {
+    if ( loginStoreChanged( prevProps.login ) ) {
       this.getBases( fetchAll );
     }
     // actually select the first option if is not clearable

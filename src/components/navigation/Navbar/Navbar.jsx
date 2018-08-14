@@ -9,7 +9,7 @@ import {
 } from 'reactstrap';
 import './Navbar.scss';
 // functions
-import { loginChanged } from 'functions/login';
+import { loginStoreChanged } from 'functions/login';
 // icons
 import user from 'img/user.svg';
 import logo from 'img/logo.svg';
@@ -24,7 +24,7 @@ class Navbar extends Component {
   }
 
   onLoginChange = ( type, id ) => () => {
-    if ( loginChanged( {type, id}, this.props.current_login) )
+    if ( loginStoreChanged( {type, id} ) )
       this.props.onLoginChange( type, id );
   }
 

@@ -8,7 +8,7 @@ import { BaseSelect, Select } from 'components/selects';
 // functions
 import { missionTypeOptions, findOption } from 'functions/selects';
 import { uploadProfile, createSoldier, getSoldiers } from 'store/soldiers/operations';
-import { loginChanged } from 'functions/login';
+import { loginStoreChanged } from 'functions/login';
 import { setTitle } from 'functions/utils';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -32,7 +32,7 @@ class NewUserPage extends Component {
     this.setupSoldier();
   }
   componentDidUpdate( prevProps ) {
-    if ( loginChanged( this.props.current_login, prevProps.current_login ) ) {
+    if ( loginStoreChanged( prevProps.current_login ) ) {
       this.setupSoldier();
     }
   }
