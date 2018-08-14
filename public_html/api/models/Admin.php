@@ -8,11 +8,11 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     static $has_many = [ [ 'admin_auths' ] ];
     // validations
     static $validates_uniqueness_of = [
-        [ 'username', 'message' => 'Usernames must be unique' ],
-        [ 'admin_email', 'message' => 'Email Addresses must be unique' ],
+        [ 'username', 'message' => 'must be unique' ],
+        [ 'admin_email', 'message' => 'addresses must be unique' ],
     ];
     static $validates_format_of = [
-        [ 'admin_email', 'message' => 'Email Addresses must be valid',
+        [ 'admin_email', 'message' => 'addresses must be valid',
             'with' => '/^[^0-9][A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/' ]
     ];
     // prop mapping
