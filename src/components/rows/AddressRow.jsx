@@ -26,7 +26,7 @@ export const AddressRow = ({ address, city, state, zip, country, disabled, onCha
         <label>Zip</label>
         <Input value={ zip } {...inputProps} />
       </Col>
-      <Col xs='6'>
+      <Col xs='12'>
         <label>Country</label>
         <Input value={ country } {...inputProps} />
       </Col>
