@@ -1,6 +1,5 @@
 import API from 'api/api';
 import { createNotifcation, updateNotifcation } from 'functions/notifications';
-import moment from 'moment';
 import * as actions from './actions';
 
 // get all soldiers
@@ -8,17 +7,9 @@ export const getSoldiers = () => dispatch => {
   dispatch( actions.setLoading( true ) );
   return API.get( '/core/users' )
     .then( response => {
-      var t0 = performance.now();
-      // format data
-      const soldiers = response.data.map( soldier => Object.assign({}, soldier, { 
-        dob: soldier.dob ? moment( soldier.dob ).format('l') : soldier.dob,
-        user_registered: soldier.user_registered ? 
-          moment( soldier.user_registered ).format('l LT') : 
-          soldier.user_registered
-      }));
-      console.log("Formatting users response took " + (performance.now() - t0) + " milliseconds. TODO, speed up.");
       dispatch( actions.setLoading( false ) );
-      return dispatch( actions.setSoldiers( soldiers ) );
+      dispatch( actions.setSoldiers( response.data ) );
+      return response.data;
     }).catch( () => {
       dispatch( actions.setLoading( false ) );
     });
