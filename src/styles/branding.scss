@@ -80,6 +80,7 @@ body { font-family: 'Poppins', sans-serif; }
   padding: 0px; border: 0px; // elimite form-control styles
   .react-select__control { border-top-right-radius: 0px; border-bottom-right-radius: 0px; }
 }
+div.react-select__multi-value { background-color: $primary-color-light; }
 
 // Bootstrap tabbed layouts
 .nav-tabs {
