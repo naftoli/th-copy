@@ -1,4 +1,5 @@
 import store from 'store/index';
+import { LEGACY_URL } from 'components/constants';
 import { COOKIES, EXPIRES } from 'store/constants';
 
 // detect login changes
