@@ -61,5 +61,13 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="lib/quagga.min.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        var pos = location.href.indexOf('?');
+        if ( pos != -1 ) {
+            // get barcode
+            var code = location.href.substring( pos+1 );
+            checkNumber( code );
+        }
+    </script>
 </body>
 </html>
