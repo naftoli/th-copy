@@ -105,7 +105,11 @@ function buildSelect( $info ) {
                         echo "<option value='" . $id . "'>" . $school . "</option>";
                     }
                     echo "</select><br /><br />";
-                } 
+                } else {
+                    // get school id
+                    $school_id = key( $schools );
+                    echo "<input type='hidden' name='school' value='" . $school_id . "' />";
+                }
 
                 // get school id
                 reset( $schools );
