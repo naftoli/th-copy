@@ -18,7 +18,7 @@ class ConfirmationModal extends Component {
   render(){
     const { isOpen, message } = this.props;
     return (
-      <Modal isOpen={isOpen} onClick={ this.cancel } centered={true}>
+      <Modal isOpen={isOpen} toggle={ this.cancel } centered={true}>
         <ModalBody><p style={ styles.body }>{ message }</p></ModalBody>
         <ModalFooter>
           <Button color='primary' onClick={this.accept}>Yes</Button>{' '}
