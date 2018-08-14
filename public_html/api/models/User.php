@@ -67,7 +67,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
             $medal['date_awarded_he'] = iconv( 'WINDOWS-1255', 'UTF-8', jdtojewish( 
                 $medal['date_awarded'], true, CAL_JEWISH_ADD_GERESHAYIM )
             );
-            $medal['date_awarded'] = date('Y-m-d', jdtounix( $medal['date_awarded'] ));
+            $medal['date_awarded'] = date('n/j/Y', jdtounix( $medal['date_awarded'] ));
             $medal['photo'] = $medal['profile_photo_id'] ? 
                 '/file_view.php?id='.$medal['profile_photo_id'] : 
                 '/kiosk/images/medals/holder.png';
@@ -88,7 +88,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $medals_index = 0;
         foreach( $ranks as $index => $rank ){
             $ranks[$index]['medals'] = [];
-            $ranks[$index]['date_promoted'] = date('Y-m-d', jdtounix( $rank['date_promoted'] ));
+            $ranks[$index]['date_promoted'] = date('n/j/Y', jdtounix( $rank['date_promoted'] ));
             $medals_in_rank = intval( $medals_required[ $index + 1 ] );
             $ranks[$index]['total_medals'] = $medals_in_rank;
             while( isset( $medals[ $medals_index ] ) && $medals_index < $medals_in_rank ) {
@@ -113,7 +113,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     public function parentAccount() {
         global $pdo;
         $query = $pdo->prepare(
-            'SELECT admin_id, a.father, a.mother, admin_phone_mobile AS phone, admin_email as email '
+            'SELECT admin_id, father, mother, admin_phone_mobile AS phone, admin_email as email '
             .'FROM admins JOIN admin_auths aa USING (admin_id) WHERE aa.auth="user" and id=?;'
         );
         $query->execute( [$this->user_id] );
