@@ -21,7 +21,9 @@ class ParentsPage extends Component {
   // load the contents if we do not have any
   componentDidMount(){
     setTitle( 'View/Edit Parents' );
-    this.getParents();
+    if ( this.props.parents.length === 0 ) {
+      this.getParents();
+    }
   }
 
   // if the soldier list is emptied while on the page... then refresh it
@@ -61,6 +63,7 @@ class ParentsPage extends Component {
         Cell: props => <Link to={`${match.path}/${props.original.admin_id}`}>{props.value}</Link> },
       { Header: 'Last Name', accessor: 'last',
         Cell: props => <Link to={`${match.path}/${props.original.admin_id}`}>{props.value}</Link> },
+      { Header: 'Username', accessor: 'username' },
       { Header: 'Cell Phone', accessor: 'cell' },
       { Header: 'E-mail Address', accessor: 'email' },
       { Header: 'Children', id: 'children', accessor: parent => parent.children.length },
@@ -104,7 +107,8 @@ class ParentsPage extends Component {
 }
 
 const mapStateToProps = ( { parents, login } ) => ({
-  ...parents,
+  parents: parents.parents,
+  loading: parents.loading,
   login: login.current_login
 })
 
