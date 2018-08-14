@@ -1,6 +1,7 @@
 <?php
 define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
+include_once( __DIR__ . "/../functions/format/parents.php" );
 
 class ParentsRouter {
 
@@ -20,14 +21,13 @@ class ParentsRouter {
         // combine the filters
         $filters = implode( ' AND ', $filters );
 
-        $sql = "SELECT a.admin_id, a.username, a.title, a.first, a.last, "
+        $sql = "SELECT a.admin_id, a.username, a.title, a.father, a.mother, a.last, "
             ." CONCAT( admin_address1, ' ', admin_address2) as address, admin_city as city, "
             ." admin_state as state, admin_postal as zip, admin_country as country, "
             ." admin_phone_mobile as cell, admin_email as email, father_pic, mother_pic, "
             ." u.first as child_first, u.last as child_last, u.user_id, u.user_serial FROM "
             ." users u JOIN schools s USING (school_id) LEFT JOIN admin_auths aa ON aa.auth = 'user' AND aa.id = u.user_id "
-            ." LEFT JOIN admins a USING (admin_id) WHERE $filters "
-            ." ORDER BY first, last;";
+            ." LEFT JOIN admins a USING (admin_id) WHERE $filters;";
         $query = $pdo->prepare( $sql );
         $query->execute( $params );
 
@@ -47,8 +47,11 @@ class ParentsRouter {
                 unset($parent['child_first']); unset($parent['child_last']);
                 unset($parent['user_serial']); unset($parent['user_id']);
                 // create the children array and add this child
+                $parent['first'] = formatParentName( $parent['father'], $parent['mother'] );
                 $parent['children'] = [ $child ];
-                $parents[$parent['admin_id']] = $parent;
+                $parent['father_pic'] = $parent['father_pic'] ? '/mobile/reg/' . $parent['father_pic'] : false;
+                $parent['mother_pic'] = $parent['mother_pic'] ? '/mobile/reg/' . $parent['mother_pic'] : false;
+                if ( $parent['first'] ) $parents[$parent['admin_id']] = $parent;
             // add to existing parent
             } else {
                 $parents[$parent['admin_id']]['children'][] = $child;

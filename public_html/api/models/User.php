@@ -1,4 +1,5 @@
 <?php
+include_once( __DIR__ . "/../functions/format/parents.php" );
 include_once( __DIR__ . '/../functions/files/images.php' );
 include_once( __DIR__ . '/../auth/classes/Auth.php' );
 include_once( __DIR__ . '/traits/BuildModel.php' );
@@ -112,7 +113,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     public function parentAccount() {
         global $pdo;
         $query = $pdo->prepare(
-            'SELECT admin_id, first, last, admin_phone_mobile AS phone, admin_email as email '
+            'SELECT admin_id, a.father, a.mother, admin_phone_mobile AS phone, admin_email as email '
             .'FROM admins JOIN admin_auths aa USING (admin_id) WHERE aa.auth="user" and id=?;'
         );
         $query->execute( [$this->user_id] );
@@ -120,6 +121,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         if ( !$parent ) return false;
         // set the admin key if we have a parent
         $parent['key'] = mashpia\api\auth\Auth::mobileKey( $parent['admin_id'] );
+        $parent['first'] = formatParentName( $parent['father'], $parent['mother'] );
         return $parent;
     }
     // takes an uploaded file and sets it as the profile picture
