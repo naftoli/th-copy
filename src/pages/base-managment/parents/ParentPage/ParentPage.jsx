@@ -64,10 +64,6 @@ class ParentPage extends Component {
       .catch( error => toast.error( error.message ) );
   }
 
-  getChildOptions = () => {
-    return getChildOptions( this.props.availableChildren );
-  }
-
   onChildChange = ( option ) => {
     this.setState({ selectedUserId: option && option.value });
   }
