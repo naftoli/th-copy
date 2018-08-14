@@ -75,6 +75,12 @@ body { font-family: 'Poppins', sans-serif; }
 .react-datepicker-wrapper, .react-datepicker__input-container { width: 100%; }
 .react-datepicker__header select:hover { cursor: pointer; }
 
+// React-Select
+.react-select.form-control {
+  padding: 0px; border: 0px; // elimite form-control styles
+  .react-select__control { border-top-right-radius: 0px; border-bottom-right-radius: 0px; }
+}
+
 // Bootstrap tabbed layouts
 .nav-tabs {
   overflow-x: auto; flex-wrap: nowrap; border-color: $primary-color;
