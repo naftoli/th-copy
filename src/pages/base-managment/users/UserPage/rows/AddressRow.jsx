@@ -1,9 +1,7 @@
 import React from 'react';
 // components
-import MaskedInput from 'react-text-mask';
+import { PhoneNumber } from 'components/inputs';
 import { Row, Col, Input } from 'reactstrap';
-// data
-import masks from 'components/masks';
 
 const AddressRow = ( { soldier, onChange } ) => {
   const { 
@@ -37,8 +35,7 @@ const AddressRow = ( { soldier, onChange } ) => {
       </Col>
       <Col xs='6'>
         <label>Phone #</label>
-        <MaskedInput className='form-control' id='user_phone' value={ user_phone } 
-          onChange={ onChange } mask={ masks.phone } />
+        <PhoneNumber id='user_phone' value={ user_phone } onChange={ onChange }/>
       </Col>
     </Row>
   )

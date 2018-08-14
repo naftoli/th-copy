@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 // components
-import MaskedInput from 'react-text-mask';
+import { PhoneNumber } from 'components/inputs';
 import { Select } from 'components/selects';
 import { Row, Col, Input } from 'reactstrap';
-// data
-import masks from 'components/masks';
 // styles
 // import './PlatoonPage.scss';
 
@@ -37,8 +35,7 @@ export class PlatoonRow extends Component {
         </Col>
         <Col xs={6}>
           <label>Teacher Cell</label>
-          <MaskedInput name='cell' value={ cell } { ...inputProps } 
-            mask={ masks.phone } className='form-control'/>
+          <PhoneNumber name='cell' value={ cell } { ...inputProps } />
         </Col>
         <Col xs={6}>
           <label>Teacher E-Mail</label>

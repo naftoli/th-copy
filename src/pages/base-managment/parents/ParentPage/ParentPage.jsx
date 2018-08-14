@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Spinner, ProfilePicture, FontAwesome } from 'components/ui';
+import { PhoneNumber } from 'components/inputs';
 import { Row, Col, Input, Button, InputGroup, InputGroupAddon } from 'reactstrap';
 import { AddressRow } from 'components/rows';
 import { Select } from 'components/selects';
-import MaskedInput from 'react-text-mask';
 import { Page404 } from 'pages/errors';
 import Child from './Child';
 // functions
@@ -15,8 +15,6 @@ import { getChildOptions } from '../functions';
 import { getParents } from 'store/parents/operations';
 import { removeChild, addChild } from 'store/parents/operations';
 import { loginStoreChanged, mobileLogin } from 'functions/login';
-// data
-import masks from 'components/masks';
 // style
 import './ParentPage.scss';
 
@@ -117,7 +115,7 @@ class ParentPage extends Component {
           </Col>
           <Col sm={{size: 6, order: 3}}>
             <label>Cell Phone</label>
-            <MaskedInput className='form-control' value={ cell } disabled mask={ masks.phone } />
+            <PhoneNumber value={ cell } disabled />
           </Col>
           <Col sm={{size: 6, order: 4}}>
             <label>E-Mail Address</label>
