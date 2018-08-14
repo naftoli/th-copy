@@ -18,6 +18,9 @@ th, td {
 	padding: 6px;
     font-size: 12px;
 }
+div#wrapper { width: 1151px; }
+#content .col_content { padding: 20px 10px; }
+#content .slider, #content { width: 900px; }
 </style>
 </head>
 
