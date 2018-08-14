@@ -47,6 +47,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      */
     public function getAuthIds( $auth_type ) {
         $auth_ids = [];
+        if ( !$this->admin_auths ) return $auth_ids;
         foreach( $this->admin_auths as $auth ){
             if ( $auth->auth === $auth_type ) $auth_ids[] = $auth->id;
         }
