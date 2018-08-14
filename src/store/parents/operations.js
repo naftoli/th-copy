@@ -10,7 +10,7 @@ export const getParents = () => dispatch => {
     dispatch( actions.setChildren( children ) )
   })
   .catch( error => {
-    dispatch( actions.setLoading( true ) );
+    dispatch( actions.setLoading( false ) );
     return Promise.reject( error );
   })
 }
