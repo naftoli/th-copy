@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { Callout, FontAwesome } from 'components/ui';
 import { Button, ButtonGroup } from 'reactstrap';
 import { InlineSync } from 'components/ui/loading';
+// modals
+import NewParentModal from './NewParentModal';
 // functions
 import is from 'is_js';
 import { loginStoreChanged } from 'functions/login';
@@ -17,6 +19,8 @@ import { getParents } from 'store/parents/operations';
 import './ParentsPage.scss';
 
 class ParentsPage extends Component {
+
+  state = { showModal: false }
 
   // load the contents if we do not have any
   componentDidMount(){
@@ -33,6 +37,7 @@ class ParentsPage extends Component {
   }
 
   getParents = () => { this.props.getParents() }
+  toggle = () => this.setState({ showModal: !this.state.showModal });
 
   toCSV = () => {
     // convert to escaped, multiline string
@@ -80,7 +85,7 @@ class ParentsPage extends Component {
 
     return (
       <div id='ParentsPage'>
-        <Callout title='View / Edit Parents'>
+        <Callout title='View Parent Accounts'>
           <p>
             Parents are any account with direct access to a soldier via the Parent Portal.
             Please note that for security reasons you cannot edit their accounts or view their passwords once they are created.
@@ -88,9 +93,9 @@ class ParentsPage extends Component {
           <p><strong>To add / remove children please select the First or Last name and have their Serial Number ready.</strong></p>
         </Callout>
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
-          <Link to={`${match.path}/new`} className='btn btn-primary' role='button'>
+          <Button onClick={this.toggle} className='btn btn-primary'>
             <FontAwesome icon='plus' /> Add Parent
-          </Link>
+          </Button>
           <Button color='primary' onClick={ this.getParents }>
             <InlineSync loading={ loading } /> Refresh
           </Button>
@@ -101,6 +106,8 @@ class ParentsPage extends Component {
           }
         </ButtonGroup>
         <ReactTable { ...tableProps } />
+
+        <NewParentModal isOpen={ this.state.showModal } toggle={ this.toggle } />
       </div>
     )
   }
