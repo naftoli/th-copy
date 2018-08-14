@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup } from 'reactstrap';
 import { default as CropperJS } from 'cropperjs';
+// components
+import { Button, ButtonGroup } from 'reactstrap';
+import { FontAwesome } from 'components/ui';
+// styles
 import './styles/Cropper.scss';
 
 export class Cropper extends Component {
@@ -80,12 +83,12 @@ export class Cropper extends Component {
 const CropperControls = ( props ) => {
   return (
     <ButtonGroup id='cropper-controls'>
-      <Button color='primary' onClick={ props.rotateLeft }><i className='fas fa-undo'/></Button>
-      <Button color='primary' onClick={ props.rotateRight }><i className='fas fa-redo'/></Button>
-      <Button color='primary' onClick={ props.zoomIn }><i className='fas fa-search-plus'/></Button>
-      <Button color='primary' onClick={ props.zoomOut }><i className='fas fa-search-minus'/></Button>
-      <Button color='primary' onClick={ props.scaleX }><i className='fas fa-arrows-alt-h'/></Button>
-      <Button color='primary' onClick={ props.scaleY }><i className='fas fa-arrows-alt-v'/></Button>
+      <Button color='primary' onClick={ props.rotateLeft }><FontAwesome icon='undo'/></Button>
+      <Button color='primary' onClick={ props.rotateRight }><FontAwesome icon='redo'/></Button>
+      <Button color='primary' onClick={ props.zoomIn }><FontAwesome icon='search-plus'/></Button>
+      <Button color='primary' onClick={ props.zoomOut }><FontAwesome icon='search-minus'/></Button>
+      <Button color='primary' onClick={ props.scaleX }><FontAwesome icon='arrows-alt-h'/></Button>
+      <Button color='primary' onClick={ props.scaleY }><FontAwesome icon='arrows-alt-v'/></Button>
     </ButtonGroup>
   );
 };

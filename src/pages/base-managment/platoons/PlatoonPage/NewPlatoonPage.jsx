@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { PlatoonRow } from '../rows/';
 import { Row, Col, Button } from 'reactstrap';
 import { BaseSelect } from 'components/selects';
+import { FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
@@ -71,7 +72,7 @@ export class NewPlatoonPage extends Component {
         <Row>
           <Col xs={12} id='save'>
             <Button color='primary'>
-              <i className={'fas fa-save'}></i> Save Changes
+              <FontAwesome icon='fa-save'/> Save Changes
             </Button>
           </Col>
         </Row>

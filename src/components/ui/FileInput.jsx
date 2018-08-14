@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { FontAwesome } from 'components/ui';
 import './styles/FileInput.scss';
 
 export class FileInput extends Component {
@@ -20,7 +21,7 @@ export class FileInput extends Component {
         <input type="file" id="file" accept=".xls" ref={ inputRef } 
           className={ className } onChange={ this.fileSelected }/>
         <label htmlFor="file">
-          <i className="fas fa-upload"></i>&nbsp;
+          <FontAwesome icon='upload'/>&nbsp;
           <strong>{this.state.text}</strong>
           {/* <span className="box__dragndrop"> or drag it here</span>. */}
         </label>

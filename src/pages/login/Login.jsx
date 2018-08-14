@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
-import Spinner from 'components/ui/Spinner.jsx';
+import { Spinner, FontAwesome } from 'components/ui';
 import { connect } from 'react-redux';
 import { login } from 'store/login/operations';
 
@@ -73,13 +73,13 @@ export class Login extends Component {
           <InputGroupAddon addonType="append">
             <Button onClick={ this.togglePassword } id='toggle-password' 
               tabIndex="-1" outline>
-              <i className={`far fa-${this.state.show_password ? 'eye' : 'eye-slash'}`}></i>
+              <FontAwesome icon={this.state.show_password ? 'eye' : 'eye-slash'} />
             </Button>
           </InputGroupAddon>
         </InputGroup>
         { errors }
         <Button size="lg" color='primary' id='login'>
-          Login <i className="fas fa-sign-in-alt"></i>
+          Login <FontAwesome icon='sign-in-alt '/>
         </Button>
       </form>
     );

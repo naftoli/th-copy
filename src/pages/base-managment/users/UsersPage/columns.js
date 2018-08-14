@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ProfilePicture from 'components/ui/ProfilePicture';
-import { LEGACY_URL, DEFAULT_PROFILE } from 'components/constants';
+import { DEFAULT_PROFILE } from 'components/constants';
 
 export default ( code, editPicture ) => {
   // define the table for the page
   let columns = [{
     Header: 'Profile',  accessor: 'profilePicture',
-    Cell: props => <ProfilePicture src={`${LEGACY_URL}${props.value}`} className='inline-profile' 
+    Cell: props => <ProfilePicture src={ props.value } className='inline-profile' 
                       onClick={ editPicture( props.original.user_id ) }/>,
     className: 'profile-picture', width: 85, sortable: false,
     Filter: ({ filter, onChange }) =>

@@ -77,7 +77,7 @@ class RankCard extends Component {
               <p>Brooklyn, NY</p>
               <p><strong>Platoon: { platoon || 'N/A' }</strong></p>
             </div>
-            <ProfilePicture src={ LEGACY_URL + profilePicture } tabIndex={-1} />
+            <ProfilePicture src={ profilePicture } tabIndex={-1} />
           </div>
           <div className='barcode'>
             <div className='code'>

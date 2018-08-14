@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 // components
 import { Prompt } from 'react-router';
 import { Link, Redirect } from 'react-router-dom';
-import { Spinner } from 'components/ui';
+import { Spinner, FontAwesome } from 'components/ui';
 import { Row, Col, InputGroup, InputGroupAddon, Button } from 'reactstrap';
 // functions
 import { toast } from 'react-toastify';
@@ -106,7 +106,7 @@ export class PlatoonPage extends Component {
           <Row>
             <Col xs={12} id='save'>
               <Button onClick={ this.save } color='primary'>
-                <i className={'fas fa-save'}></i> Save Changes
+                <FontAwesome icon='save' /> Save Changes
               </Button>
             </Col>
           </Row>
@@ -120,7 +120,7 @@ export class PlatoonPage extends Component {
               <input placeholder='example@example.com' ref={ this.emailRef } className='form-control'/>
               <InputGroupAddon addonType="append">
                 <Button onClick={ this.connect } color='primary' outline tabIndex={0}>
-                  <i className={'fas fa-user-plus'}></i> Connect Staff
+                  <FontAwesome icon='user-plus' /> Connect Staff
                 </Button>
               </InputGroupAddon>
             </InputGroup>

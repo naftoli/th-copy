@@ -1,5 +1,6 @@
 import React from 'react';
+import { FontAwesome } from '../'
 
 export const InlineSync = ({ loading }) => {
-  return <i className={`fas fa-sync-alt ${ loading ? 'fa-spin' : '' }`}></i>;
+  return <FontAwesome icon='sync-alt' spin={ loading } />;
 }

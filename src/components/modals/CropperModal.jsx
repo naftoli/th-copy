@@ -3,6 +3,7 @@ import { DEFAULT_PROFILE } from 'components/constants';
 // components
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import Cropper from 'components/functional/Cropper';
+import { FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { readFile } from 'functions/utils';
@@ -83,7 +84,7 @@ class CropperModal extends Component {
     let body = 
       <div style={{textAlign: 'center'}}>
         <Button color="primary" size="lg" outline onClick={ this.openImage }>
-          <i className="fas fa-camera"></i> Select Image
+          <FontAwesome icon='camera' /> Select Image
         </Button>
       </div>;
     // if we do, render the cropper component

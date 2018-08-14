@@ -3,6 +3,7 @@ import { COOKIES, EXPIRES } from 'store/constants';
 import { LEGACY_URL } from 'components/constants';
 // components
 import { Row, Col, Input, InputGroup, InputGroupAddon, Button } from 'reactstrap';
+import { FontAwesome } from 'components/ui';
 // functions
 import { connect } from 'react-redux';
 import { removeChild, addChild } from 'store/parents/operations';
@@ -92,7 +93,7 @@ export class ParentRow extends Component {
                 placeholder='Username' ref={ this.usernameRef } className='form-control'/>
               <InputGroupAddon addonType="append">
                 <Button onClick={ this.addToAccount } color='primary' outline tabIndex={0}>
-                  <i className={'fas fa-user-plus'}></i> Add Soldier
+                  <FontAwesome icon='user-plus' /> Add Soldier
                 </Button>
               </InputGroupAddon>
             </InputGroup>

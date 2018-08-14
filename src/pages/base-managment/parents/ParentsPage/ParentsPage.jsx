@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 // components
 import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
-import { Callout } from 'components/ui';
+import { Callout, FontAwesome } from 'components/ui';
 import { Button, ButtonGroup } from 'reactstrap';
 import { InlineSync } from 'components/ui/loading';
 // functions
@@ -56,7 +56,7 @@ class ParentsPage extends Component {
   }
 
   render() {
-    const { parents, loading, login, match } = this.props;
+    const { parents, loading, match } = this.props;
 
     let columns = [
       { Header: 'First Name', accessor: 'first',
@@ -80,7 +80,7 @@ class ParentsPage extends Component {
 
     return (
       <div id='ParentsPage'>
-        <Callout title="View / Edit Parents">
+        <Callout title='View / Edit Parents'>
           <p>
             Parents are any account with direct access to a soldier via the Parent Portal.
             Please note that for security reasons you cannot edit their accounts or view their passwords once they are created.
@@ -88,15 +88,15 @@ class ParentsPage extends Component {
           <p><strong>To add / remove children please select the First or Last name and have their Serial Number ready.</strong></p>
         </Callout>
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
-          <Link to={`${match.path}/new`} className="btn btn-primary" role="button">
-            <i className="fas fa-plus" /> Add Parent
+          <Link to={`${match.path}/new`} className='btn btn-primary' role='button'>
+            <FontAwesome icon='plus' /> Add Parent
           </Link>
-          <Button color="primary" onClick={ this.getParents }>
+          <Button color='primary' onClick={ this.getParents }>
             <InlineSync loading={ loading } /> Refresh
           </Button>
           { is.not.edge() && is.not.ie() && is.not.ios() && parents.length > 0 &&
-            <Button color="primary" onClick={ this.toCSV }>
-              <i className="fas fa-file-download" /> Save Parent List
+            <Button color='primary' onClick={ this.toCSV }>
+              <FontAwesome icon='file-download' /> Save Parent List
             </Button>
           }
         </ButtonGroup>

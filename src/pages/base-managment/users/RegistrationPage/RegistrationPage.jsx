@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { Callout, Checkbox } from 'components/ui';
+import { Callout, Checkbox, FontAwesome } from 'components/ui';
 import { Link } from 'react-router-dom';
 import { Row, Col, Button, ButtonGroup } from 'reactstrap'; 
 import ReactTable from "react-table";
@@ -150,14 +150,14 @@ export class RegistrationPage extends Component {
         
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
           <Button color='primary' onClick={toggleModal}>
-            <i className={`fas fa-dollar-sign`}></i> Pay and Register
+            <FontAwesome icon='dollar-sign' /> Pay and Register
           </Button>
           <Button color='primary' onClick={ getSoldiers }>
-            <i className={`fas fa-redo-alt ${ !loading || 'fa-spin' }`}></i> Refresh
+            <FontAwesome icon='redo-alt' spin={loading} /> Refresh
           </Button>
           { is.not.edge() && is.not.ie() && is.not.ios() &&
             <Button color='primary' onClick={ toCSV }>
-              <i className='fas fa-file-download' /> Save Soldier Registration List
+              <FontAwesome icon='fa-file-download' /> Save Soldier Registration List
             </Button>
           }
         </ButtonGroup>

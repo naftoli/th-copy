@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import ReactTable from "react-table";
-import { Callout } from 'components/ui';
+import { Callout, FontAwesome } from 'components/ui';
 import { Link } from 'react-router-dom';
 import { Button, ButtonGroup } from 'reactstrap';
 import { InlineSync } from 'components/ui/loading';
@@ -76,17 +76,17 @@ export class PlatoonsPage extends Component {
         </Callout>
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
           <Link to={`${match.path}/new`} className="btn btn-primary" role="button">
-            <i className="fas fa-plus" /> Add Platoon
+            <FontAwesome icon='plus' /> Add Platoon
           </Link>
           <Link to={`${match.path}/transition`} className="btn btn-primary" role="button">
-            <i className="fas fa-users" /> Platoon Transition
+            <FontAwesome icon='users' /> Platoon Transition
           </Link>
           <Button color="primary" onClick={ this.getPlatoons }>
             <InlineSync loading={ loading } /> Refresh
           </Button>
           { is.not.edge() && is.not.ie() && is.not.ios() && platoons.length > 0 &&
             <Button color="primary" onClick={ this.toCSV }>
-              <i className="fas fa-file-download" /> Save Platoon List
+              <FontAwesome icon='file-download' /> Save Platoon List
             </Button>
           }
         </ButtonGroup>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Sidebar, { getMenu } from 'components/navigation/Sidebar';
 import Navbar from 'components/navigation/Navbar';
 import { LEGACY_URL } from 'components/constants';
+import { FontAwesome } from 'components/ui';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { changeLogin } from 'store/login/actions';
@@ -62,7 +63,7 @@ export class Dashboard extends Component {
     // add a logout button
     menu.push({
       label: 'Logout', path: '/logout',
-      icon: <i className="fas fa-sign-out-alt"></i>
+      icon: <FontAwesome icon='sign-out-alt' />
     });
 
     return (

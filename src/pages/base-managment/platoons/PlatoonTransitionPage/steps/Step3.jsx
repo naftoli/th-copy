@@ -3,6 +3,7 @@ import classnames from 'classnames';
 // components
 import { Row, Col, Button, ButtonGroup } from 'reactstrap';
 import { BaseSelect, PlatoonSelect } from 'components/selects';
+import { FontAwesome } from 'components/ui';
 
 const Step3 = ({ 
   school_id, class_id, selectChange, 
@@ -31,11 +32,11 @@ const Step3 = ({
         <Col sm={12}>
           <ButtonGroup>
             <Button color='primary' onClick={ move }>
-              <i className="fas fa-exchange-alt"></i>{' '}
+              <FontAwesome icon="exchange-alt" />{' '}
               Transition (Move) Soldiers
             </Button>
             <Button color='danger' onClick={ discharge }>
-              <i className="fas fa-trash-alt"></i>{' '}
+              <FontAwesome icon="trash-alt" />{' '}
               Discharge (Remove) Soldiers 
             </Button>
           </ButtonGroup>

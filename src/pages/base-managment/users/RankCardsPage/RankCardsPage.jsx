@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 // components
 import RankCard from './RankCard';
 import DatePicker from 'react-datepicker';
-import { Callout, Checkbox, Radio, Spinner } from 'components/ui';
+import { Callout, Checkbox, Radio, Spinner, FontAwesome } from 'components/ui';
 import { PlatoonSelect, BaseSelect, Select } from 'components/selects';
 import { Row, Col, Button, ButtonGroup, Alert, Input } from 'reactstrap';
 // functions
@@ -133,7 +133,7 @@ export class RegistrationPage extends Component {
           <p>If you wish to print your own please make sure you can print <strong>3.37in x 2.12in</strong> ( 8.55cm x 5.38cm )</p>
           <p><strong>Please note that you can only print rank cards for registered soldiers.</strong></p>
           { is.firefox() && 
-            <p>To get a print preview in FireFox please press the <i className="fas fa-bars"></i> button in the upper right corner and press "Print"</p>
+            <p>To get a print preview in FireFox please press the <FontAwesome icon='bars' /> button in the upper right corner and press "Print"</p>
           }
         </Callout>
         <p className='title no-print'>Options</p>
@@ -192,10 +192,10 @@ export class RegistrationPage extends Component {
           <Col xs='12'>
             <ButtonGroup>
               <Button color='primary' onClick={ this.getRankCards }>
-                <i className={`fas fa-redo ${loading && 'fa-spin'}`}></i> Generate Rank Cards
+                <FontAwesome icon='sync-alt' spin={loading} /> Generate Rank Cards
               </Button>
               <Button color='primary' onClick={ this.print }>
-                <i className="fas fa-print"></i> Print
+               <FontAwesome icon='print' /> Print
               </Button>
               { isHQ && cards.length > 0 && // mark all as printed
                 <React.Fragment>
@@ -209,7 +209,7 @@ export class RegistrationPage extends Component {
               }
               { isHQ && updates.length > 0 && // sync the updates array with the server
                 <Button color='primary' onClick={ this.syncPrinted }>
-                  <i className="fas fa-save"></i> Sync Printed Updates
+                 <FontAwesome icon='save' /> Sync Printed Updates
                 </Button>
               }
             </ButtonGroup>

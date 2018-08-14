@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { LEGACY_URL } from 'components/constants';
 // components
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { FontAwesome } from 'components/ui';
 import {
   Navbar as BoostrapNavbar, NavbarBrand, Nav,
   UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
@@ -64,7 +65,7 @@ class Navbar extends Component {
               </DropdownItem>
               <Link to={'/logout'}>
                 <DropdownItem>
-                  <i className="fas fa-sign-out-alt"></i>
+                  <FontAwesome icon="sign-out-alt" />
                   <span>Logout</span>
                 </DropdownItem>
               </Link>

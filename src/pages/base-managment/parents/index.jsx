@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 // sub pages
 import { Page404 } from 'pages/errors';
+import ParentPage from './ParentPage/ParentPage';
 import ParentsPage from './ParentsPage/ParentsPage';
 
 
@@ -12,7 +13,7 @@ class ParentsIndexPage extends Component {
       <Switch>
         <Route path={ path } exact component={ ParentsPage } />
         <Route path={`${path}/new`} render={() => <h1>New Parent</h1>}/>
-        <Route path={`${path}/:id([0-9]+)`} render={() => <h1>View Parent</h1>}/>
+        <Route path={`${path}/:id([0-9]+)`} component={ ParentPage } />
         <Route component={ Page404 } />
       </Switch>
     )

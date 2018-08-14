@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import ReactTable from "react-table";
+import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
-import { Callout } from 'components/ui';
+import { Callout, FontAwesome } from 'components/ui';
 import BulkUploadModal from './BulkUploadModal';
 import { Button, ButtonGroup } from 'reactstrap';
 import { InlineSync } from 'components/ui/loading';
@@ -98,27 +98,27 @@ export class UsersPage extends Component {
     }
     // page definition
     return (
-      <div id="UsersPage">
+      <div id='UsersPage'>
         {/* User Guide */}
-        <Callout title="View Soldiers">
+        <Callout title='View Soldiers'>
           Click a Soldier's name or serial number to view and edit their account.<br/>
           Click on a Soldier's profile picture to edit or replace it.
         </Callout>
         {/* Action buttons */}
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
-          <Link to={`${match.path}/new`} className="btn btn-primary" role="button">
-           <i className="fas fa-plus" /> Add Soldier
+          <Link to={`${match.path}/new`} className='btn btn-primary' role='button'>
+           <FontAwesome icon='plus' /> Add Soldier
           </Link>
-          <Button color="primary" onClick={ this.props.getSoldiers }>
+          <Button color='primary' onClick={ this.props.getSoldiers }>
             <InlineSync loading={ loading } /> Refresh
           </Button>
           { current_login.code === 'BC' && is.not.mobile() && is.not.ios() && // only Base Commanders on desktops/tablets can upload
-            <Button color="primary" onClick={ this.toggleUploadModal }>
-              <i className="fas fa-file-upload" /> Upload Soldier List
+            <Button color='primary' onClick={ this.toggleUploadModal }>
+              <FontAwesome icon='file-upload' /> Upload Soldier List
             </Button>
           } { is.not.edge() && is.not.ie() && is.not.ios() && soldiers.length > 0 &&
-            <Button color="primary" onClick={ this.toCSV }>
-              <i className="fas fa-file-download" /> Save Soldier List
+            <Button color='primary' onClick={ this.toCSV }>
+              <FontAwesome icon='file-download' /> Save Soldier List
             </Button>
           }
         </ButtonGroup>

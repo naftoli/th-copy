@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // components
 import { BaseSelect } from 'components/selects';
+import { FontAwesome } from 'components/ui';
 import { Button, ButtonGroup, Row, Col } from 'reactstrap';
 
 
@@ -26,7 +27,7 @@ class Deploy extends Component {
         <Col sm={6}>
           <ButtonGroup>
             <Button color='primary' onClick={ this.transition }>
-              <i className="fas fa-rocket"></i>{' '}
+              <FontAwesome icon="rocket" />{' '}
               Deploy Transition (Make Changes Live)
             </Button>
           </ButtonGroup>

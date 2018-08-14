@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontAwesome } from 'components/ui';
 // constants
 import { LEGACY_URL } from 'components/constants';
 const DEFAULT_USER_TYPES = [ 'HQ', 'BC' ];
@@ -45,11 +46,11 @@ const getMenu = ( user_type, no_legacy ) => {
   const menu = [
     {
       label: 'Home', path: '/', user_types: [ 'HQ', 'BC', 'TEACHER' ],
-      icon: <i className="fas fa-home"></i>
+      icon: <FontAwesome icon='home'/>
     },
     {
       label: 'Base Managment',
-      icon: <i className="fas fa-school"></i>,
+      icon: <FontAwesome icon='school'/>,
       items: [
         {
           label: "Soldiers",
@@ -76,11 +77,11 @@ const getMenu = ( user_type, no_legacy ) => {
     },
     {
       label: 'Platoon Managment', user_types: [ 'TEACHER' ], path: '/bm/users',
-      icon: <i className="fas fas fa-chalkboard-teacher"></i>,
+      icon: <FontAwesome icon='chalkboard-teacher' />,
     },
     {
       label: "Missions", user_types: [ 'HQ', 'BC', 'TEACHER' ],
-      icon: <i className="fas fa-award"></i>,
+      icon: <FontAwesome icon='award' />,
       items: [
         { label: 'Print Missions', legacy: true, path: '/print_missions2.php', user_types: [ 'HQ', 'BC', 'TEACHER' ] },
         { label: 'Print Summer Missions', legacy: true, path: '/print_missions_summer.php' },
@@ -94,7 +95,7 @@ const getMenu = ( user_type, no_legacy ) => {
     },
     {
       label: "Achievement Cards", user_types: [ 'HQ', 'BC', 'TEACHER' ],
-      icon: <i className="fas fa-ticket-alt"></i>,
+      icon: <FontAwesome icon='ticket-alt' />,
       items: [
         { label: 'Add Achievement Task', legacy: true, 
           path: '/newAchievementTasks.php', user_types: [ 'HQ', 'BC', 'TEACHER' ] 
