@@ -15,6 +15,11 @@ export const getParents = () => dispatch => {
   })
 }
 
+export const createParent = ( data ) => dispatch => {
+  return API.post( `/core/parents`, data )
+  .then( handleAPIResponse )
+}
+
 /***************************** DOES NOT MODIFY STATE. JUST HITS API *****************************/
 export const removeChild = ( admin_id, user_id ) => dispatch => {
   return API.post(`/core/parents?action=removeChild`, { admin_id, user_id } )
