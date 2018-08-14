@@ -3,15 +3,6 @@
 #UserPage, #NewUserPage {
   padding-bottom: 10px;
 
-  // TODO move to forms.scss
-  div.invalid-message { 
-    padding-top: .2em; max-height: 0px; transition: .25s;
-    overflow: hidden; color: #ff3c3c; 
-  }
-  // input:invalid[value=""] { border-color: #dcc1c1; }
-  input:invalid:not([value=""]) { border-color: #ff3c3c; }
-  input:invalid:not([value=""]) + div.invalid-message { max-height: fit-content; transition-delay: 1s; }
-
   > .row { margin-bottom: .7em; }
   .form-check-input {
     position: relative; margin-left: 0px;
