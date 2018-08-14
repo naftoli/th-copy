@@ -20,6 +20,7 @@ class RankCard extends Component {
       first: PropTypes.string,
       last: PropTypes.string,
       school_name: PropTypes.string,
+      school_number: PropTypes.string,
       school_logo: PropTypes.string,
       profilePicture: PropTypes.string,
       barcode: PropTypes.string,
@@ -41,7 +42,7 @@ class RankCard extends Component {
     const { 
       rank, user_id, user_serial, first, last, first_he, last_he,
       profilePicture, barcode, rank_ord, platoon, printed,
-      school_logo, school_name, member_since, valid_utill
+      school_logo, school_name, school_number, member_since, valid_utill
     } = this.props.user;
     // classnames for cards. See SCSS for what they do
     const classNames = classnames('print RankCard', { 'permanent': this.props.permanent });
@@ -71,7 +72,7 @@ class RankCard extends Component {
               <img src={ LEGACY_URL + school_logo } alt='school_logo' />
             </div>
             <div className='base'>
-              <p>BASE #614199</p>
+              <p>BASE #{school_number}</p>
               <p><strong>{school_name}</strong></p>
               <p>Brooklyn, NY</p>
               <p><strong>Platoon: { platoon || 'N/A' }</strong></p>
