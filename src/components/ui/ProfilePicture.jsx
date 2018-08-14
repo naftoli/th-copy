@@ -14,7 +14,7 @@ const ProfilePicture = ( props ) => {
     if ( event.key === 'Enter' ) event.target.children[0].click();
   }
   return (
-    <div tabIndex={0} onKeyPress={onKeyPress}
+    <div tabIndex={ props.tabIndex || 0 } onKeyPress={onKeyPress}
         className={classnames( `profile-picture`, { editable: !!props.onClick, ie: is.ie() } )}>
       <img { ...props } className={ classnames( props.className, 'profile-img' ) } 
         onError={ handleError( props ) } alt='profile' />
