@@ -18,10 +18,14 @@ export const getParents = () => dispatch => {
 /***************************** DOES NOT MODIFY STATE. JUST HITS API *****************************/
 export const removeChild = ( admin_id, user_id ) => dispatch => {
   return API.post(`/core/parents?action=removeChild`, { admin_id, user_id } )
-    .then( handleAPIResponse);
+    .then( handleAPIResponse )
+    .then( () => {
+      dispatch( actions.removeChild( admin_id, user_id ) )
+    });
 }
 
 export const addChild = ( username, user_id ) => dispatch => {
   return API.post(`/core/parents?action=addChild`, { username, user_id } )
-    .then( handleAPIResponse);
+    .then( handleAPIResponse )
+    .then( response => dispatch( actions.addChild( response.admin_id, user_id ) ) );
 }
