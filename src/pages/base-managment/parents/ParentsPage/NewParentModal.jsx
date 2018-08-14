@@ -14,12 +14,14 @@ import { getChildOptions } from '../functions';
 import makeAnimated from 'react-select/lib/animated';
 import { getParents, createParent } from 'store/parents/operations';
 
+const initialState = {
+  father: '', mother: '', last: '', email: '',
+  cell: '', home: '', error: false, children: []
+}
+
 class NewParentModal extends Component {
 
-  state = {
-    father: '', mother: '', last: '', email: '',
-    cell: '', home: '', error: false, children: []
-  }
+  state = { ...initialState };
 
   createParent = ( e ) => {
     e.preventDefault();
@@ -32,8 +34,9 @@ class NewParentModal extends Component {
       return this.setState({ error: `Please select some soldiers.`});
     this.props.createParent( this.state )
     .then( () => {
-      this.props.getParents();
       this.props.toggle();
+      this.props.getParents();
+      this.setState({ ...initialState });
     })
     .catch( error => {
       this.setState( error: error.message );
