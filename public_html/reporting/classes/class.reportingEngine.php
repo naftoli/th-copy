@@ -9,6 +9,8 @@ class ReportingEngine {
     private $error;
     private $school_id;
     private $class_id;
+    private $grade;
+    private $checkRank;
     private $checkPoints;
     
     public function __construct( $info ) {
@@ -19,6 +21,8 @@ class ReportingEngine {
         $this->error = '';
         $this->school_id = 0;
         $this->class_id = 0;
+        $this->grade = 0;
+        $this->checkRank = false;
         $this->checkPoints = false;
     }
     
@@ -27,9 +31,7 @@ class ReportingEngine {
             'users'         =>  'u',
             'admins'        =>  'a',
             'classes'       =>  'c',
-            'schools'       =>  's',
-            'medals'        =>  'm',
-            'ranks'         =>  'r'
+            'schools'       =>  's'
         );
     }
 
@@ -39,6 +41,10 @@ class ReportingEngine {
 
     public function setClass( $id ) {
         if ( $id > 0 ) $this->class_id = $id;
+    }
+
+    public function setGrade( $grade ) {
+        if ( $grade > 0 ) $this->grade = $grade;
     }
     
     public function createQry() {
@@ -51,8 +57,8 @@ class ReportingEngine {
     private function generateSelect() {
         $sql = "SELECT ";
         foreach ($this->data as $table => $columns) {
-            // skip calc info
-            if ( $table == 'calc' ) continue;
+            // skip rank and calc info - we will get that later
+            if ( in_array( $table, ['calc','ranks'] ) ) continue;
 
             // make sure to always have user_id when pulling from users table
             if ( $table == 'users' ) {
@@ -74,8 +80,10 @@ class ReportingEngine {
         $tables = array_keys( $this->data );
         
         // figure out root table for joins
+        // by default it's users
         $root = 'users';
-        if ( !in_array('users', $tables) && in_array('admins', $tables) ) {
+        // root table is admins only if no other table is chosen
+        if ( count( $tables ) == 1 && in_array('admins', $tables) ) {
             $root = 'admins';
         }
         
@@ -88,15 +96,14 @@ class ReportingEngine {
                         $sql .= "JOIN admin_auths aa ON aa.id = u.user_id
                                 JOIN admins a USING (admin_id) ";
                         break;
-                    case 'ranks':
-                        $sql .= "JOIN rank_marks rm USING (user_id) 
-                                JOIN ranks r USING (rank_ord) ";
-                        break;
                     case 'schools':
                         $sql .= "JOIN schools s ON s.school_id = u.school_id ";
                         break;
                     case 'classes':
                         $sql .= "JOIN classes c ON c.class_id = u.class_id ";
+                        break;
+                    case 'ranks':
+                        $this->checkRank = true;
                         break;
                     case 'calc':
                         $this->checkPoints = true;
@@ -105,12 +112,17 @@ class ReportingEngine {
             }
         } else if ( $root == 'admins' ) {
             $sql .= "admins a ";
+
             // if we are limiting to school / grade and we only are looking for admin info, we need some joins
             if ( $this->school_id > 0 ) {
-                $sql .= "JOIN admin_auths aa USING (admin_id) 
-                        JOIN users u ON u.user_id = aa.id";
-            }
-            
+                $sql .= " JOIN admin_auths aa USING (admin_id) 
+                        JOIN users u ON u.user_id = aa.id ";
+            }            
+        }
+
+        // if limiting to grade only, and we don't have the classes table in our data array, we need to add a join
+        if ( $this->grade > 0 && !in_array( 'classes', array_keys( $this->data ) ) ) {
+            $sql .= "JOIN classes c ON c.class_id = u.class_id ";
         }
         return $sql;
     }
@@ -122,6 +134,8 @@ class ReportingEngine {
             $sql .= " AND u.school_id = " . $this->school_id;
             if ( $this->class_id > 0 ) {
                 $sql .= " AND u.class_id = " . $this->class_id;
+            } else if ( $this->grade > 0 ) {
+                $sql .= " AND c.class_grade = '" . $this->grade . "'";
             }
         }
 
@@ -133,6 +147,10 @@ class ReportingEngine {
         if ( empty( $this->qry ) ) return false;
         if ( $res = mysql_query( $this->qry ) ) {
             while ( $row = mysql_fetch_assoc( $res ) ) {
+                // check if we need to find out current / highest rank
+                if ( $this->checkRank ) {
+                    $row['r_rank_name'] = $this->getRank( $row['user_id'] );
+                }
                 // check if we need to add points info to result
                 if ( $this->checkPoints ) {
                     $p = new Points( $row['user_id'] );
@@ -175,5 +193,17 @@ class ReportingEngine {
 
     public function getError() {
         return $this->error;
+    }
+
+    public function getRank( $user_id ) {
+        $sql = "SELECT rank_name 
+                FROM ranks 
+                WHERE rank_ord = (
+                    SELECT max(rank_ord) FROM rank_marks WHERE user_id = $user_id
+                )";
+        //echo $sql . "<br />";
+        $result = mysql_query( $sql );
+        $row = mysql_fetch_assoc( $result );
+        return $row['rank_name'];
     }
 }

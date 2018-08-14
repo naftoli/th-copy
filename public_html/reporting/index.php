@@ -117,10 +117,20 @@ function buildSelect( $info ) {
                 // get classes
                 $sc = new SchoolClasses( $school_id );
                 $grades = $sc->getClasses();
+                echo "Choose a class: ";
                 echo "<select name='grade' id='grade'>";
                 echo "<option value='-1'>All Classes</option>";
                 foreach ( $grades as $grade ) {
                     echo "<option value='" . $grade['class_id'] . "'>" . ($grade['class_grade'] . (empty($grade['class_sub']) ? '' : '-' . $grade['class_sub'])) . "</option>";
+                }
+                echo "</select>";
+
+                echo "<br />OR<br />";
+                echo "Choose a grade: ";
+                echo "<select name='gradeOnly'>";
+                echo "<option value='-1'>Choose Grade</option>";
+                for ( $i = 1; $i < 9; $i ++ ) {
+                    echo "<option value='" . $i . "'>Grade " . $i . "</option>";
                 }
                 echo "</select>";
                 ?>

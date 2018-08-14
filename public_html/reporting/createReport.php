@@ -30,6 +30,7 @@ foreach ( $_POST as $k => $v ) {
 $engine = new ReportingEngine( $info );
 $engine->setSchool( mysql_real_escape_string( $_POST['school'] ) );
 $engine->setClass( mysql_real_escape_string( $_POST['grade'] ) );
+$engine->setGrade( mysql_real_escape_string( $_POST['gradeOnly'] ) );
 
 $engine->createQry();
 if ( $engine->runQry() ) {
