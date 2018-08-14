@@ -9,7 +9,7 @@ import { InlineSync } from 'components/ui/loading';
 // functions
 import is from 'is_js';
 import { loginStoreChanged } from 'functions/login';
-import { arrayToCSV, setTitle } from 'functions/utils';
+import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { filter, scrollToTop } from 'functions/tables';
 import { getPlatoons } from 'store/platoons/operations';
 // styles
@@ -84,7 +84,7 @@ export class PlatoonsPage extends Component {
           <Button color="primary" onClick={ this.getPlatoons }>
             <InlineSync loading={ loading } /> Refresh
           </Button>
-          { is.not.edge() && is.not.ie() && is.not.ios() && platoons.length > 0 &&
+          { canDownload( platoons.length ) &&
             <Button color="primary" onClick={ this.toCSV }>
               <FontAwesome icon='file-download' /> Save Platoon List
             </Button>

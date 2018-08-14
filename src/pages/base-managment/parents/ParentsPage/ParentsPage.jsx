@@ -11,7 +11,7 @@ import NewParentModal from './NewParentModal';
 // functions
 import is from 'is_js';
 import { loginStoreChanged } from 'functions/login';
-import { arrayToCSV, setTitle } from 'functions/utils';
+import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { defaultTableProps } from 'functions/tables';
 // state
 import { getParents } from 'store/parents/operations';
@@ -99,7 +99,7 @@ class ParentsPage extends Component {
           <Button color='primary' onClick={ this.getParents }>
             <InlineSync loading={ loading } /> Refresh
           </Button>
-          { is.not.edge() && is.not.ie() && is.not.ios() && parents.length > 0 &&
+          { canDownload( parents ) &&
             <Button color='primary' onClick={ this.toCSV }>
               <FontAwesome icon='file-download' /> Save Parent List
             </Button>

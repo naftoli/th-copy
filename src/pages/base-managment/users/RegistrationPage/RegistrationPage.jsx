@@ -10,7 +10,7 @@ import RegistrationModal from './RegistrationModal';
 import is from 'is_js';
 import { toast } from 'react-toastify';
 import { loginStoreChanged } from 'functions/login';
-import { arrayToCSV, setTitle } from 'functions/utils';
+import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { defaultTableProps } from 'functions/tables';
 import { getSoldiers, registerSoldiers } from 'store/soldiers/registration/operations';
 // styles
@@ -155,7 +155,7 @@ export class RegistrationPage extends Component {
           <Button color='primary' onClick={ getSoldiers }>
             <FontAwesome icon='redo-alt' spin={loading} /> Refresh
           </Button>
-          { is.not.edge() && is.not.ie() && is.not.ios() &&
+          { canDownload( soldiers ) &&
             <Button color='primary' onClick={ toCSV }>
               <FontAwesome icon='fa-file-download' /> Save Soldier Registration List
             </Button>

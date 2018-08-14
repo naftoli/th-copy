@@ -11,7 +11,7 @@ import CropperModal from 'components/modals/CropperModal';
 // functions
 // import { toast } from 'react-toastify';
 import is from 'is_js';
-import { arrayToCSV, setTitle } from 'functions/utils';
+import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { loginStoreChanged } from 'functions/login';
 import { filter, scrollToTop } from 'functions/tables';
 // styles
@@ -116,7 +116,7 @@ export class UsersPage extends Component {
             <Button color='primary' onClick={ this.toggleUploadModal }>
               <FontAwesome icon='file-upload' /> Upload Soldier List
             </Button>
-          } { is.not.edge() && is.not.ie() && is.not.ios() && soldiers.length > 0 &&
+          } { canDownload( soldiers.length ) &&
             <Button color='primary' onClick={ this.toCSV }>
               <FontAwesome icon='file-download' /> Save Soldier List
             </Button>
