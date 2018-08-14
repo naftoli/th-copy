@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { Callout } from 'components/ui';
 import RankCard from './RankCard';
-import { Row, Col, Button, ButtonGroup, Alert } from 'reactstrap';
-import { PlatoonSelect, BaseSelect, Select } from 'components/selects';
-import { Checkbox, Radio, Spinner } from 'components/ui';
 import DatePicker from 'react-datepicker';
+import { Callout, Checkbox, Radio, Spinner } from 'components/ui';
+import { PlatoonSelect, BaseSelect, Select } from 'components/selects';
+import { Row, Col, Button, ButtonGroup, Alert, Input } from 'reactstrap';
 // functions
-import { loginChanged } from 'functions/login';
-import { setTitle } from 'functions/utils';
+import is from 'is_js';
 import julian from 'julian';
 import moment from 'moment';
-import { findOption } from 'functions/selects';
 import { toast } from 'react-toastify';
-import is from 'is_js';
+import { setTitle } from 'functions/utils';
+import { findOption } from 'functions/selects';
+import { loginStoreChanged } from 'functions/login';
 // state
-import { getSoldiers } from 'store/soldiers/operations';
 import { getRankCards, markPrinted } from 'store/soldiers/id_cards/operations';
 // styles
 import './RankCardsPage.scss';
@@ -29,10 +27,9 @@ export class RegistrationPage extends Component {
     loading: false, loaded: false,
     options: {
       school_id: false, class_id: false,
-      rank: 1, user_serial: false,
+      rank: 1, user_serial: '', permanent: true,
       hide_printed: true, current: false,
-      earned_before: toJulian( moment() ),
-      permanent: true
+      earned_before: toJulian( moment() )
     },
     cards: [],
     updates: []
@@ -40,21 +37,16 @@ export class RegistrationPage extends Component {
   // on page load get all the users
   componentDidMount(){ 
     setTitle('Soldier Rank Cards');
-    if ( this.props.soldiers.length < 2 ) 
-      this.props.getSoldiers();
     if ( this.props.login.code === 'BC' ) 
       this.changeOption({ permanent: false, current: true });
   }
   // when the login changes: reload the users and clear the options
   componentDidUpdate( prevProps ) {
-    if ( loginChanged( this.props.login, prevProps.login ) ) {
-      this.props.getSoldiers();
-      if ( this.props.login.code === 'BC' ) {
-        this.changeOption({ 
-          school_id: false, class_id: false, user_serial: false,
-          permanent: false, current: true, rank: false
-        });
-      }
+    if ( loginStoreChanged( prevProps.login ) && this.props.login.code === 'BC' ) {
+      this.changeOption({
+        school_id: false, class_id: false,
+        permanent: false, current: true, rank: false
+      });
     }
   }
   // get the rank cards
@@ -69,7 +61,9 @@ export class RegistrationPage extends Component {
     const options = Object.assign({}, this.state.options, changes);
     this.setState({ options });
   }
-  // event handlers - Select returns an option, capture the key we are updating first
+  // standard input event handler
+  handleInputChange = ( event ) => { this.changeOption({ [event.target.name]: event.target.value }); }
+  // Select returns an option, capture the key we are updating first
   handleSelectChange = ( key ) => ( option ) => { this.changeOption({ [key]: option.value }); }
   // cast the radio buttons value to JSON
   handleRadioChange = ( event ) => { this.changeOption({ [event.target.name]: JSON.parse( event.target.value ) }); }
@@ -97,23 +91,6 @@ export class RegistrationPage extends Component {
     this.setState({ updates, cards: newCards });
   }
 
-  // TODO: replace with special UserSelect component
-  getSoldierOptions = () => {
-    const { school_id, class_id } = this.state.options; // get the selected school and class id
-    // filter the soldiers to just what we want
-    const options = this.props.soldiers.filter( soldier => {
-      // filter based on the class or school id, based on which one is set.
-      if ( class_id ) return soldier.class_id === class_id;
-      else if ( school_id ) return soldier.school_id === school_id;
-      return soldier.user_registered;
-    }).map( // map them for the dropdown
-      ({user_serial, first, last}) => ({ value: user_serial, label: `${last}, ${first}`}) 
-    ).sort( // and sort the labels alphabetically
-      (a, b) => a.label.localeCompare(b.label)
-    );
-    options.unshift({ value: false, label: 'All Soldiers'});
-    return options;
-  }
   // TODO, Extract and fetch data from server ( add ranks to redux state when needed to prevent re-fetching )
   getRankOptions = () => {
     const ranks = [ 
@@ -141,11 +118,11 @@ export class RegistrationPage extends Component {
   print = () => { window.print(); }
   
   render() {
-    const { login, loading: loadingSoldiers } = this.props;
+    const { login } = this.props;
     const { cards, loading, loaded, options, updates } = this.state;
     const { school_id, class_id, rank, user_serial, current, hide_printed, earned_before, permanent } = options;
     // generate dropdowns
-    const soldierOptions = this.getSoldierOptions();
+    // const soldierOptions = this.getSoldierOptions();
     const rankOptions = this.getRankOptions();
     const isHQ = ['HQ', 'CKIDS-ADMIN'].includes( login.code );
 
@@ -178,9 +155,8 @@ export class RegistrationPage extends Component {
               onChange={this.handleSelectChange('rank')} openMenuOnFocus/>
           </Col>
           <Col xs='12' sm='4'>
-            <label>Single Soldier</label>
-            <Select options={soldierOptions} value={findOption( soldierOptions, user_serial )} isLoading={ loadingSoldiers }
-              onChange={this.handleSelectChange('user_serial')} openMenuOnFocus />
+            <label>Serial Number</label>
+            <Input name='user_serial' value={ user_serial } onChange={ this.handleInputChange } />
           </Col>
           <Col xs='12' sm='6'>
             <label>Show Ranks:</label><br/>
@@ -260,9 +236,7 @@ export class RegistrationPage extends Component {
 }
 
 const mapStateToProps = ( { login, soldiers } ) => ({
-  login: login.current_login,
-  soldiers: soldiers.soldiers,
-  loading: soldiers.loading
+  login: login.current_login
 });
 
-export default connect( mapStateToProps, { getSoldiers } )( RegistrationPage );
+export default connect( mapStateToProps )( RegistrationPage );
