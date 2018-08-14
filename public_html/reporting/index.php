@@ -77,7 +77,8 @@ function buildSelect( $info ) {
     <body>
         <h1>Create Your Own Report</h1>
         <p>
-            Use following form to select the information you would like to see on your report.
+            Use following form to select the information you would like to see on your report.<br />
+            <i>Please Note: If you choose to see points, the time it takes to generate the report will vary greatly so please be patient.</i>
         </p>
         <form action="createReport.php" method="POST" name="reportGenerator" id="reportGenerator">
             <fieldset id="userInfo">
