@@ -9,7 +9,6 @@ import { InlineSync } from 'components/ui/loading';
 // modals
 import NewParentModal from './NewParentModal';
 // functions
-import is from 'is_js';
 import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { defaultTableProps } from 'functions/tables';

@@ -7,7 +7,6 @@ import { Row, Col, Button, ButtonGroup } from 'reactstrap';
 import ReactTable from "react-table";
 import RegistrationModal from './RegistrationModal';
 // functions
-import is from 'is_js';
 import { toast } from 'react-toastify';
 import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
