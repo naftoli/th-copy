@@ -209,7 +209,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             ."Your Username is: " . $this->username . " <br />"
             ."Your Default Password is: " . $this->password . " <br />"
             ."<br />"
-            ."To change your username/password simply log into your account on tzivoshashem.com/mobile and click 'edit profile' on the top right hand corner. "
+            ."To change your username/password simply log into your account on https://TzivosHashem.com/mobile and click 'edit profile' on the top right hand corner. "
             ."<br /><br />"
             ."For any questions, help, or feedback, contact your school's Base Commander."
             ."<br /><br />"
