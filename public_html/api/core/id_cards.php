@@ -34,7 +34,7 @@ class UsersRouter {
         }
 
         $sql = "SELECT rank_name AS rank, rank_ord, u.user_id, user_serial, first, last, first_he, last_he, "
-            ." school_name, school_logo_id, logo, user_photo_id, mobile_pic, rm.date_printed as printed, "
+            ." school_name, school_number, school_logo_id, logo, user_photo_id, mobile_pic, rm.date_printed as printed, "
             ." rm.date_promoted, user_code AS barcode, class_grade, class_sub, user_start_date, dob, dob_he_offset "
             ." FROM users u LEFT JOIN $rank_marks "
             ." LEFT JOIN ranks r USING (rank_ord) JOIN schools s USING (school_id) "

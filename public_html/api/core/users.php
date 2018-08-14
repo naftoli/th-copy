@@ -24,8 +24,8 @@ class UsersRouter {
             $profilePicture = ( new User(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
             $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
             // format dates
-            $dob = $row['dob'] ? ( new DateTime( $row['dob'] ) )->format(DateTime::ATOM) : $row['dob'];
-            $user_registered = $row['user_registered'] ? ( new DateTime( $row['user_registered'] ) )->format(DateTime::ATOM) : $row['user_registered'];
+            $dob = $row['dob'] ? ( new DateTime( $row['dob'] ) )->format('n/j/Y') : $row['dob'];
+            $user_registered = $row['user_registered'] ? ( new DateTime( $row['user_registered'] ) )->format('n/j/Y g:i A') : $row['user_registered'];
             // format and return just the data we want...
             $users[] = [
                 'user_id' => intval($row['user_id']), 'user_serial' => intval($row['user_serial']), 

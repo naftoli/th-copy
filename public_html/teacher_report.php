@@ -65,9 +65,16 @@ foreach ($teachers as $school => $info) {
         </tr>
         <?
         foreach ($info as $class_id => $other) {
-			foreach ($other as $grade => $row) {
-				echo "<tr id=" . $class_id . "><td>" . $row['last'] . "</td><td>" .	$grade . "</td><td>" . $row['username'] . "</td><td>" .
-                    $row['password'] . "</td><td>" . $row['email'] . "</td><td>" . $row['cell'] . "</td></tr>";
+			foreach ($other as $grade => $row) { ?>
+                <tr id=<?=$class_id?>>
+                    <td><?=$row['first'] . ' ' . $row['last']?></td>
+                    <td><?=$grade?></td>
+                    <td><?=$row['username']?></td>
+                    <td><?=$row['password']?></td>
+                    <td><?=$row['email']?></td>
+                    <td><?=$row['cell']?></td>
+                </tr>
+            <?php
 			}
 		}
         ?>
