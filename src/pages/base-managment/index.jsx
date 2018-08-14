@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import { Page404 } from 'pages/errors';
 import UsersPages from './users';
 import PlatoonPages from './platoons';
+import ParentPages from './parents';
 // functions
 import { connect } from 'react-redux';
 
@@ -17,7 +18,7 @@ export class BaseManagmentIndexPage extends Component {
 
     const BCRoutes = [
       <Route key={1} path={`${path}/platoons`} component={ PlatoonPages } />,
-      <Route key={2} path={`${path}/parents`} exact render={props => <h1>Parents</h1>}/>,
+      <Route key={2} path={`${path}/parents`} component={ ParentPages } />,
       <Route key={3} path={`${path}/staff`} exact render={props => <h1>Staff</h1>}/>,
 
       <Route key={4} path={`${path}/base`} exact render={props => <h1>View / Edit Base</h1>}/>,
