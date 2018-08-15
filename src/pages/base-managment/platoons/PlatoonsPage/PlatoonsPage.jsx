@@ -84,9 +84,9 @@ export class PlatoonsPage extends Component {
           <Button color="primary" onClick={ this.getPlatoons }>
             <InlineSync loading={ loading } /> Refresh
           </Button>
-          { canDownload( platoons.length ) &&
+          { canDownload( platoons ) &&
             <Button color="primary" onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Save Platoon List
+              <FontAwesome icon='file-download' /> Download Platoons (CSV/Excel)
             </Button>
           }
         </ButtonGroup>

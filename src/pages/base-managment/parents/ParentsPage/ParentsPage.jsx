@@ -100,7 +100,7 @@ class ParentsPage extends Component {
           </Button>
           { canDownload( parents ) &&
             <Button color='primary' onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Save Parent List
+              <FontAwesome icon='file-download' /> Download Parents (CSV/Excel)
             </Button>
           }
         </ButtonGroup>

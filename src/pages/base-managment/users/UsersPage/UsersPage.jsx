@@ -116,9 +116,9 @@ export class UsersPage extends Component {
             <Button color='primary' onClick={ this.toggleUploadModal }>
               <FontAwesome icon='file-upload' /> Upload Soldier List
             </Button>
-          } { canDownload( soldiers.length ) &&
+          } { canDownload( soldiers ) &&
             <Button color='primary' onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Save Soldier List
+              <FontAwesome icon='file-download' /> Download Soldiers (CSV/Excel)
             </Button>
           }
         </ButtonGroup>

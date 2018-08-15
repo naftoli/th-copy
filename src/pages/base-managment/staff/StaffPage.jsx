@@ -72,7 +72,7 @@ class StaffPage extends Component {
           </Button>
           {  canDownload( staff ) &&
             <Button color='primary' onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Download Staff
+              <FontAwesome icon='file-download' /> Download Staff (CSV/Excel)
             </Button>
           }
         </ButtonGroup>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Callout, Checkbox, FontAwesome } from 'components/ui';
+import { InlineSync } from 'components/ui/loading';
 import { Link } from 'react-router-dom';
 import { Row, Col, Button, ButtonGroup } from 'reactstrap'; 
 import ReactTable from "react-table";
@@ -152,11 +153,11 @@ export class RegistrationPage extends Component {
             <FontAwesome icon='dollar-sign' /> Pay and Register
           </Button>
           <Button color='primary' onClick={ getSoldiers }>
-            <FontAwesome icon='redo-alt' spin={loading} /> Refresh
+            <InlineSync loading={ loading } /> Refresh
           </Button>
           { canDownload( soldiers ) &&
             <Button color='primary' onClick={ toCSV }>
-              <FontAwesome icon='fa-file-download' /> Save Soldier Registration List
+              <FontAwesome icon='file-download' /> Download Page (CSV/Excel)
             </Button>
           }
         </ButtonGroup>
