@@ -26,7 +26,7 @@ export class PlatoonRow extends Component {
           <Select options={ grades } value={ selectedGrade } { ...selectProps } />
         </Col>
         <Col xs={6}>
-          <label>Sub (optional details 'Boys' or 'א‬'. Will be shown as Grade - Sub)</label>
+          <label>Sub (optional details, e.g. 'Boys' or 'א‬'.)</label>
           <Input name='class_sub' value={ class_sub } { ...inputProps } />
         </Col>
         <Col xs={12}>
