@@ -5,6 +5,7 @@ import { Page404 } from 'pages/errors';
 import UsersPages from './users';
 import PlatoonPages from './platoons';
 import ParentPages from './parents';
+import StaffPages from './staff';
 // functions
 import { connect } from 'react-redux';
 
@@ -19,7 +20,7 @@ export class BaseManagmentIndexPage extends Component {
     const BCRoutes = [
       <Route key={1} path={`${path}/platoons`} component={ PlatoonPages } />,
       <Route key={2} path={`${path}/parents`} component={ ParentPages } />,
-      <Route key={3} path={`${path}/staff`} exact render={props => <h1>Staff</h1>}/>,
+      <Route key={3} path={`${path}/staff`} component={ StaffPages } />,
 
       <Route key={4} path={`${path}/base`} exact render={props => <h1>View / Edit Base</h1>}/>,
       <Route key={5} path={`${path}/base/settings`} exact render={props => <h1>Base Settings</h1>}/>,

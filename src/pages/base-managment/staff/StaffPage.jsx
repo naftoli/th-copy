@@ -1,0 +1,98 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+// components
+import ReactTable from "react-table";
+import { Link } from 'react-router-dom';
+import { Callout, FontAwesome } from 'components/ui';
+import { Button, ButtonGroup } from 'reactstrap';
+import { InlineSync } from 'components/ui/loading';
+// modals
+import NewStaffModal from './NewStaffModal';
+
+import { loginStoreChanged } from 'functions/login';
+import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { defaultTableProps } from 'functions/tables';
+// state
+// import { getParents } from 'store/parents/operations';
+
+class StaffPage extends Component {
+  // modal to create staff
+  state = { showModal: false }
+
+  static defaultProps = {
+    loading: false,
+    staff: []
+  }
+
+  // load the contents if we do not have any
+  componentDidMount(){
+    setTitle( 'View/Edit Parents' );
+    this.getStaff()
+  }
+
+  // if the soldier list is emptied while on the page... then refresh it
+  componentDidUpdate( { login } ) {
+    if ( loginStoreChanged( login ) )
+      this.getStaff();
+  }
+
+  getStaff = () => { console.log('getStaff called') }
+  toggle = () => this.setState({ showModal: !this.state.showModal });
+
+  toCSV = () => {
+    const headers = [];
+    const rows = this.props.staff.map( staff => [] );
+    arrayToCSV( headers, rows, 'staff' );
+  }
+
+  render() {
+    const { staff, loading, match } = this.props;
+
+    let columns = [
+      { Header: 'First Name', accessor: 'first',
+        Cell: props => <Link to={`${match.path}/${props.original.admin_id}`}>{props.value}</Link> },
+      { Header: 'Last Name', accessor: 'last',
+        Cell: props => <Link to={`${match.path}/${props.original.admin_id}`}>{props.value}</Link> },
+      { Header: 'Username', accessor: 'username' },
+      { Header: 'Password', accessor: 'password' },
+      { Header: 'E-mail Address', accessor: 'email' },
+      { Header: 'Cell Phone', accessor: 'cell' },
+      { Header: 'Position', accessor: 'position' },
+    ];
+
+    let tableProps  = defaultTableProps( 'StaffPage', loading );
+    tableProps = { ...tableProps, data: staff, columns }
+
+    return (
+      <div id='StaffPage'>
+        <Callout title='View / Edit Staff Accounts'>
+          <p>Staff accounts are any accounts connected to your base.</p>
+        </Callout>
+        <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
+          <Button onClick={this.toggle} className='btn btn-primary'>
+            <FontAwesome icon='plus' /> Add Staff
+          </Button>
+          <Button color='primary' onClick={ this.getStaff }>
+            <InlineSync loading={ loading } /> Refresh
+          </Button>
+          {  canDownload( staff ) &&
+            <Button color='primary' onClick={ this.toCSV }>
+              <FontAwesome icon='file-download' /> Save Staff List
+            </Button>
+          }
+        </ButtonGroup>
+        <ReactTable { ...tableProps } />
+
+        <NewStaffModal isOpen={ this.state.showModal } toggle={ this.toggle } />
+      </div>
+    )
+  }
+}
+
+const mapStateToProps = ( { parents, login } ) => ({
+  login: login.current_login
+})
+
+const mapDispatchToProps = {}
+
+export default connect( mapStateToProps, mapDispatchToProps )( StaffPage );
