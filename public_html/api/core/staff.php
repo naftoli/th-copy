@@ -5,6 +5,12 @@ include_once( __DIR__ . "/../functions/format/parents.php" );
 
 class StaffRouter {
 
+    private $defaultPositions = [
+        'school' => 'Base Commander',
+        'class' => 'Teacher',
+        'staff' => 'Unknown'
+    ];
+
     public function index() {
         global $current_user; global $pdo;
 
@@ -41,6 +47,10 @@ class StaffRouter {
             $platoon = (new Platoon([
                 'class_grade' => $admin['class_grade'], 'class_sub' => $admin['class_sub']
             ]))->name();
+            // set the position if it is blank
+            if ( !$admin['position'] ) 
+                $admin['position'] = $this->defaultPositions[ $admin['auth'] ];
+            // admin has many positions
             $position = [ 
                 'auth' => $admin['auth'], 'admin_id' => intval($admin['admin_id']), 
                 'id' => intval($admin['id']), 'position' => $admin['position'],
@@ -64,6 +74,7 @@ class StaffRouter {
             // add to existing parent
             } else {
                 $staff[ $admin['admin_id'] ]['positions'][] = $position;
+                $staff[ $admin['admin_id'] ]['position'] = 'Mulitple Positions';
             }
         }
         json_response( array_values( $staff ) );
@@ -112,6 +123,22 @@ class StaffRouter {
         // }
         
         // json_response( $admin->admin_id );
+    }
+
+    public function update( $id ) {
+        try { // find the admin
+            $admin = Admin::find( $id );
+            foreach( $_POST as $key => $value ) {
+                $admin->{ $key } = $value;
+            }
+        } catch ( Exception $e ) { 
+            return json_error( 'Could not update staff' );
+        }
+        // return any errors
+        if ( !$admin->is_valid() ) return json_error( $admin->errors->__toString() );
+        // make sure we can update him
+        if ( !$admin->save() ) return json_error( 'Could not update staff' );
+        return json_response( $_POST );
     }
 }
 
