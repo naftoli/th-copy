@@ -8,7 +8,7 @@ import { Button, ButtonGroup } from 'reactstrap';
 import { InlineSync } from 'components/ui/loading';
 // modals
 import NewStaffModal from './NewStaffModal';
-
+// functions
 import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { defaultTableProps } from 'functions/tables';
@@ -65,7 +65,7 @@ class StaffPage extends Component {
         </Callout>
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
           <Button onClick={this.toggle} className='btn btn-primary'>
-            <FontAwesome icon='plus' /> Add Staff
+            <FontAwesome icon='plus' /> Create Parent Account
           </Button>
           <Button color='primary' onClick={ this.getStaff }>
             <InlineSync loading={ loading } /> Refresh
