@@ -50,9 +50,9 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
 
     $token = false;
     // $have_cookies = (isset($_COOKIE['admin_auth']) && isset($_COOKIE['admin_id'])) || isset($_COOKIE['admin']);
-    if ( isset( $headers['Authorization'] ) ) {
+    if ( isset( $headers['Authorization'] ) && $headers['Authorization'] ) {
         $token = explode( ' ',  $headers['Authorization'] )[1];
-    } else if ( isset( $headers['authorization'] ) ) {
+    } else if ( isset( $headers['authorization'] ) && $headers['authorization'] ) {
         $token = explode( ' ',  $headers['authorization'] )[1];
     }
     // set the token as cookies
