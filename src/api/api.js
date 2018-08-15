@@ -66,6 +66,20 @@ export default {
       .then( parseResponse ) // understand the response
   },
 
+  patch( url, data = {}, content_type = defaultContentType ) {
+    // support FormData ( for things like images )
+    const body = data instanceof FormData ? data : JSON.stringify(data);
+    content_type = data instanceof FormData ? false : content_type;
+    // make the request and parse the response
+    return fetch(`${API_URL}${url}`, {
+      method: 'PATCH',
+      headers: headers( content_type ),
+      credentials: credentials,
+      body
+    }).then( toJSON ) // convert to json
+      .then( parseResponse ) // understand the response
+  },
+
   delete( url, data = {} ) {
     const body = data instanceof FormData ? data : JSON.stringify(data);
     return fetch(`${API_URL}${url}`, {
