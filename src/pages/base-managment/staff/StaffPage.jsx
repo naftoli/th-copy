@@ -13,21 +13,16 @@ import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { defaultTableProps } from 'functions/tables';
 // state
-// import { getParents } from 'store/parents/operations';
+import { getStaff } from 'store/staff/operations';
 
 class StaffPage extends Component {
   // modal to create staff
   state = { showModal: false }
 
-  static defaultProps = {
-    loading: false,
-    staff: []
-  }
-
   // load the contents if we do not have any
   componentDidMount(){
-    setTitle( 'View/Edit Parents' );
-    this.getStaff()
+    setTitle( 'View/Edit Staff' );
+    this.getStaff();
   }
 
   // if the soldier list is emptied while on the page... then refresh it
@@ -36,7 +31,7 @@ class StaffPage extends Component {
       this.getStaff();
   }
 
-  getStaff = () => { console.log('getStaff called') }
+  getStaff = () => { this.props.getStaff() }
   toggle = () => this.setState({ showModal: !this.state.showModal });
 
   toCSV = () => {
@@ -77,7 +72,7 @@ class StaffPage extends Component {
           </Button>
           {  canDownload( staff ) &&
             <Button color='primary' onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Save Staff List
+              <FontAwesome icon='file-download' /> Download Staff
             </Button>
           }
         </ButtonGroup>
@@ -89,10 +84,11 @@ class StaffPage extends Component {
   }
 }
 
-const mapStateToProps = ( { parents, login } ) => ({
+const mapStateToProps = ( { staff, login } ) => ({
+  ...staff,
   login: login.current_login
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = { getStaff }
 
 export default connect( mapStateToProps, mapDispatchToProps )( StaffPage );
