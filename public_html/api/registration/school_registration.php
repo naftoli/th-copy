@@ -36,6 +36,7 @@ class SchoolRegistrationRouter {
             ]);
         } else {
             $statusTransaction = true;
+            $response = false;
         }
         // get the current registration info
         $year = GlobalSettings::getRegistrationYear();
