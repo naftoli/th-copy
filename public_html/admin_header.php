@@ -364,6 +364,7 @@ $bpOnly = [ 82 ];
 							<li>
 								<a href="#"><?=T_('Teachers')?></a>
 								<ul>
+                                    <li><a href="/teacher_information.php">Teacher Information</a></li>
 									<li><a href="/teacher_list.php">Teacher Logins</a></li>
 									<li><a href="/teacher_letter.php">Teacher Letters</a></li>
 									<li><a href="/teacher_settings.php">Teacher Settings</a></li>
