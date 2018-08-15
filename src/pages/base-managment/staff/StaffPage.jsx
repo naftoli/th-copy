@@ -65,12 +65,12 @@ class StaffPage extends Component {
         </Callout>
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
           <Button onClick={this.toggle} className='btn btn-primary'>
-            <FontAwesome icon='plus' /> Create Parent Account
+            <FontAwesome icon='plus' /> Create Staff Account
           </Button>
           <Button color='primary' onClick={ this.getStaff }>
             <InlineSync loading={ loading } /> Refresh
           </Button>
-          {  canDownload( staff ) &&
+          { canDownload( staff ) &&
             <Button color='primary' onClick={ this.toCSV }>
               <FontAwesome icon='file-download' /> Download Staff (CSV/Excel)
             </Button>
