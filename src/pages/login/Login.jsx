@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
 import { Spinner, FontAwesome } from 'components/ui';
+import { Password } from 'components/inputs';
 import { connect } from 'react-redux';
 import { login } from 'store/login/operations';
 
@@ -24,9 +25,9 @@ export class Login extends Component {
     login: () => {}
   }
 
-  handleChange = ( event ) => {
+  handleChange = ({ target }) => {
     this.setState({
-      [event.target.id]: event.target.value
+      [target.name]: target.value
     });
   }
 
@@ -62,21 +63,11 @@ export class Login extends Component {
             <img className="pt-icon" src={user} alt='username' width='26' height='26'/>
           </InputGroupAddon>
           <input className='form-control' placeholder='Username' autoFocus='true' required
-            onChange={this.handleChange} value={this.state.username} id='username' />
+            onChange={this.handleChange} value={this.state.username} name='username' />
         </InputGroup>
-        <InputGroup size="lg">
-          <InputGroupAddon addonType="prepend">
-            <img className="pt-icon" src={lock} alt='username' width='26' height='26'/>
-          </InputGroupAddon>
-          <input className='form-control' placeholder='Password' type='password' required
-            onChange={this.handleChange} value={this.state.password} id='password' />
-          <InputGroupAddon addonType="append">
-            <Button onClick={ this.togglePassword } id='toggle-password' 
-              tabIndex="-1" outline>
-              <FontAwesome icon={this.state.show_password ? 'eye' : 'eye-slash'} />
-            </Button>
-          </InputGroupAddon>
-        </InputGroup>
+
+        <Password size="lg" value={this.state.password} showIcon onChange={this.handleChange} />
+        
         { errors }
         <Button size="lg" color='primary' id='login'>
           Login <FontAwesome icon='sign-in-alt '/>
