@@ -93,7 +93,7 @@ class ParentsPage extends Component {
         </Callout>
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
           <Button onClick={this.toggle} className='btn btn-primary'>
-            <FontAwesome icon='plus' /> Add Parent
+            <FontAwesome icon='plus' /> Create Parent Account
           </Button>
           <Button color='primary' onClick={ this.getParents }>
             <InlineSync loading={ loading } /> Refresh
