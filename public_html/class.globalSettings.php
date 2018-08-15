@@ -21,7 +21,7 @@ class GlobalSettings {
     }
     
     public static function getRegistrationYear( $school_id = false ) {
-        if ( in_array( $school_id, [ 55, 66, 110, 112, 256 ] ) )
+        if ( self::isAustralian( $school_id ) )
             return 5778;
         $sql = "select `val` from global_settings where `key` = 'registration_year'";
         $result = mysql_query($sql);
@@ -134,6 +134,11 @@ class GlobalSettings {
      */
     public static function getGuarenteedDiscount(){
         return 5;
+    }
+
+    public static function isAustralian( $school_id ) {
+        $australian = [ 55, 66, 110, 112, 256 ];
+        return in_array( $school_id, $australian );
     }
 }
 ?>
