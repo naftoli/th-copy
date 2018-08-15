@@ -10,6 +10,8 @@ $last = mysql_real_escape_string($_POST['last']);
 $email = mysql_real_escape_string($_POST['email']);
 $cell = mysql_real_escape_string($_POST['cell']);
 
+$refresh = false;
+
 if ($class_id) {
     // $sql = "update classes set
     //         class_teacher = '" . $name . "',
@@ -30,6 +32,7 @@ if ($class_id) {
     } else {
         $admin_id = mysql_query("SELECT admin_id FROM admins WHERE admin_email = '$email'");
         $admin_id = mysql_fetch_assoc($admin_id)['admin_id'];
+        $refresh = true;
     }
     // connect the two accounts
     $sql = "INSERT INTO admin_auths
@@ -38,9 +41,9 @@ if ($class_id) {
             auth = 'class',
             role_id = 13";
     if (mysql_query($sql)) {
-        echo 0;
+        echo json_encode(['success' => true, 'refresh' => $refresh]);
     } else {
-        echo mysql_error();
+        echo json_encode(['success' => false, 'message' => mysql_error()]);
     }
     exit;
 } else {
@@ -48,15 +51,15 @@ if ($class_id) {
     $result = mysql_query($sql);
     $row = mysql_fetch_assoc($result);
     $class_id = $row['id'];
-    
-    // $sql = "update classes set
-    //         class_teacher = '" . $name . "',
-    //         email = '" . $email . "',
-    //         cell = '" . $cell . "'  
-    //         where class_id = " . $class_id;
-    // @mysql_query($sql);
-    
-    $sql = "UPDATE admins SET
+
+    $email_admin_id = mysql_query("SELECT admin_id FROM admins WHERE admin_email = '$email'");
+    $email_admin_id = mysql_fetch_assoc($email_admin_id)['admin_id'];
+
+    if ( $email_admin_id && $email_admin_id !== $admin_id ) {
+        $sql = "UPDATE admin_auths SET admin_id=$email_admin_id WHERE auth='class' AND admin_id='$admin_id'";
+        $refresh = true;
+    } else {
+        $sql = "UPDATE admins SET
             username = '$username',
             password = '$password',
             first = '$first',
@@ -64,6 +67,7 @@ if ($class_id) {
             admin_email = '$email',
             admin_phone_mobile = '$cell' 
             where admin_id = $admin_id";
+    }
 
     if (mysql_query($sql)) {
         // send email to hq about change
@@ -88,11 +92,9 @@ Email: " . $email . "<br />
 Phone: " . $cell . "<br />";
         mail($to, $subject, $msg, implode("\r\n", $headers));
         
-        echo 0;
+        echo json_encode(['success' => true, 'refresh' => $refresh]);
     } else {
-        //echo 1;
-        echo mysql_error();
+        echo json_encode(['success' => false, 'message' => mysql_error()]);
     }
-    exit;
 }
 ?>

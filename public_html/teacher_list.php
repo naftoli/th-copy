@@ -28,14 +28,22 @@ div#wrapper { width: 1151px; }
 <? include('admin_header.php');?>
 <h1>Teacher Logins</h1>
 <div class='infobox'>
-    <p>If your teachers already have an account with their E-mail address we will connect your platoon to that account.</p>
+    <h2>What this page does</h2>
+    <p>This page allows you to View and Edit the account information ( usernames/passwords ) that your teachers are using to login to the teacher portal.</p>
+    
+    <h2>Connecting Existing Accounts</h2>
+    <p>If the E-mail address you enter already exists, for another teacher account or a parent account, we will connect the platoon to the existing account.</p>
     <p><strong>Please note that if this is the case the teachers existing account information will override what you enter.</strong></p>
-    <p>Please refresh the page when you are done to see the updated information.</p>
     <p>
-        If a teacher has access to more then one grade they will be combined to one row. 
-        To split them up please email <a href='mailto:bugs@tzivoshashem.org?subject=Remove Teacher From Platoon'>Bugs@tzivoshashem.org</a> for now <strong>with details.</strong>
-        (If you do not clearly express which platoon you want removed from which teacher your email may be ignored)
+        If an account has access to more then one grade they will be combined to one row.
+        To split them up please email <a href='mailto:bugs@tzivoshashem.org?subject=Remove Teacher From Platoon'>Bugs@tzivoshashem.org</a>
+        for now <strong>with the platoon and account information you want to split up.</strong>
     </p>
+    <h2>Disclaimer. PLEASE READ</h2>
+    <p>
+        <strong>If you wish to edit what shows up on the Mobile Site and Mission sheets please click <a href='/teacher_information.php'>here.</a></strong>
+    </p>
+    <p></p>
 </div>
 <?
 $teachers = array();
@@ -56,9 +64,8 @@ foreach ($schools as $id => $school) {
         $result2 = mysql_query($sql2);
         $row2 = mysql_fetch_assoc($result2);
         $row2['grade'] = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-        $row2['email'] = empty($row2['admin_email']) ? $row['email'] : $row2['admin_email'];
-        $row2['cell'] = empty($row2['admin_phone_mobile']) ? $row['cell'] : $row2['admin_phone_mobile'];
-		$row2['last'] = empty($row2['last']) ? $row['class_teacher'] : $row2['last'];
+        $row2['email'] = $row2['admin_email'];
+        $row2['cell'] = $row2['admin_phone_mobile'];
 		$id = $row2['admin_id'];
         if (!$id) $id = 'class' . $row['class_id'];
         $row2['id'] = $row2['admin_id'] ? $row2['admin_id'] : 'class' . $row['class_id'];
@@ -150,11 +157,16 @@ foreach ($teachers as $school => $info) { ?>
 				email : email,
 				cell : cell
 			}, function( success ) {
-				if (parseInt(success) == 0) {
-					alert('Updated.');
-				} else {
-					alert(success);
-				}
+                var response = JSON.parse( success );
+                if ( response.success && response.refresh ) {
+                    if ( confirm( 'Connected to existing account. Do you want to refresh the page?' ) ){
+                        location.reload();
+                    }
+                } else if ( !response.success ) {
+                    return alert( response.message );
+                } else {
+                    return alert('Updated');
+                }
 			});
 		});
 	});

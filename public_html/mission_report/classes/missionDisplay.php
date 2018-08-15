@@ -190,7 +190,7 @@ abstract class MissionDisplay {
 						echo $user->first . ' ' . $user->last;
 					}
 				}
-				echo " (" . $user->user_id . ")";
+                echo " (" . $user->user_serial . ")";
 				?>
 			</div>
 			<div class="pageNum">
@@ -280,7 +280,7 @@ abstract class MissionDisplay {
 										echo $user->first . ' ' . $user->last;
 									}
 								}
-								echo " (" . $user->user_serial . ")";
+								echo "<p style='margin: 0px;'>(" . $user->user_serial . ")</p>";
 								?>
 							</span>
 		    			</td>
@@ -767,7 +767,7 @@ abstract class MissionDisplay {
 						<tr style="vertical-align: bottom">
 							<td align="left" class="border"><span class="sb">
 								<?=$user->first . ' ' . $user->last;?>
-								<?=" (" . $user->user_id . ")";?>
+								<?=" (" . $user->user_serial . ")";?>
 							</span></td>
 							<td width="48%" class="i review">
 								&#10004; I reviewed my child's progress as a chayol in Hashem's army.
@@ -790,7 +790,7 @@ abstract class MissionDisplay {
 								} else {
 									echo $user->first . ' ' . $user->last;
 								}
-								echo " (" . $user->user_id . ")";
+								echo " (" . $user->user_serial . ")";
 								?>
 							</span></td>
 							<td width="48%" class="i review">

@@ -182,6 +182,10 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $user_status_query->execute([ ':year' => $year, ':user_id' => $this->user_id ]);
         $row = $user_status_query->fetch();
         $result = [ 'chayolei'  => !!$row['user_reg_id'] ];
+        // australian registration ends here.
+        if ( GlobalSettings::isAustralian( $this->school_id ) ) 
+            return $result;
+        
         // only add th_chidon_id if the user is in grade 4+
         if ( $this->platoon && $this->platoon->class_grade >= 4 )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
