@@ -13,3 +13,17 @@ export const setStaff = staff => {
     payload: staff
   }
 };
+
+export const updateStaff = ( admin_id, updates ) => {
+  return {
+    type: types.UPDATE_STAFF,
+    payload: { admin_id, updates }
+  }
+};
+
+export const removePosition = ( admin_id, auth, id ) => {
+  return {
+    type: types.REMOVE_POSITION,
+    payload: { admin_id, auth, id }
+  }
+};
