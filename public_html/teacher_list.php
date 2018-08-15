@@ -65,8 +65,7 @@ foreach ($schools as $id => $school) {
         $row2 = mysql_fetch_assoc($result2);
         $row2['grade'] = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
         $row2['email'] = $row2['admin_email'];
-        $row2['cell'] = empty($row2['admin_phone_mobile']) ? $row['cell'] : $row2['admin_phone_mobile'];
-		$row2['last'] = empty($row2['last']) ? $row['class_teacher'] : $row2['last'];
+        $row2['cell'] = $row2['admin_phone_mobile'];
 		$id = $row2['admin_id'];
         if (!$id) $id = 'class' . $row['class_id'];
         $row2['id'] = $row2['admin_id'] ? $row2['admin_id'] : 'class' . $row['class_id'];
@@ -158,11 +157,16 @@ foreach ($teachers as $school => $info) { ?>
 				email : email,
 				cell : cell
 			}, function( success ) {
-				if (parseInt(success) == 0) {
-					alert('Updated.');
-				} else {
-					alert(success);
-				}
+                var response = JSON.parse( success );
+                if ( response.success && response.refresh ) {
+                    if ( confirm( 'Connected to existing account. Do you want to refresh the page?' ) ){
+                        location.reload();
+                    }
+                } else if ( !response.success ) {
+                    return alert( response.message );
+                } else {
+                    return alert('Updated');
+                }
 			});
 		});
 	});
