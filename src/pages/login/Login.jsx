@@ -7,7 +7,7 @@ import { login } from 'store/login/operations';
 
 import './Login.scss';
 import logo from 'img/logo.svg';
-import { user, lock } from 'img/icons';
+import { user } from 'img/icons';
 
 export class Login extends Component {
   constructor( props ){
