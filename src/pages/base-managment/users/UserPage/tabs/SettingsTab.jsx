@@ -91,15 +91,21 @@ class SettingsTab extends Component {
         <p className='title'>Parent Account</p>
         <ParentRow parentAccount={parentAccount} userId={user_id} refresh={this.props.getSoldier}/> 
         
-        <p className='title'>Delete Soldier</p>
-        <Row>
-          <Col xs='12'>
-            <Button color="danger" onClick={ this.delete }>Delete Soldier</Button>
-          </Col>
-        </Row>
+        { ['HQ', 'BC', 'CKIDS-ADMIN'].includes( this.props.login.code ) &&
+          <Row>
+            <Col xs='12'>
+              <p className='title'>Delete Soldier</p>
+              <Button color="danger" onClick={ this.delete }>Delete Soldier</Button>
+            </Col>
+          </Row>
+        }
       </div>
     );
   }
 }
 
-export default connect(null, { deleteSoldier, getSoldiers })( SettingsTab );
+const mapStateToProps = ({ login }) => ({
+  login: login.current_login
+});
+
+export default connect( mapStateToProps, { deleteSoldier, getSoldiers } )( SettingsTab );

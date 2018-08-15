@@ -50,8 +50,10 @@ export class PlatoonsPage extends Component {
         Cell: props => <Link to={`${match.path}/${props.original.class_id}`}>{props.value}</Link> },
       { Header: 'Teacher', accessor: 'teacher', 
         Cell: props => <Link to={`${match.path}/${props.original.class_id}`}>{props.value}</Link> },
-      { Header: '# of Soldiers', accessor: 'soldier_count' },
-      { Header: '# of Staff', accessor: 'staff_count' },
+      { Header: 'Cell Phone', accessor: 'cell' },
+      { Header: 'E-mail Address', accessor: 'email' },
+      { Header: 'Soldiers', accessor: 'soldier_count' },
+      { Header: 'Staff', accessor: 'staff_count' },
     ];
     if ( ['HQ', 'CKIDS-ADMIN'].includes(login.code) ) {
       columns.push( { Header: 'Base', accessor: 'school_name' } );

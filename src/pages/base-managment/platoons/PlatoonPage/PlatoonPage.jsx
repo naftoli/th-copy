@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 // components
 import { Prompt } from 'react-router';
 import { Link, Redirect } from 'react-router-dom';
-import { Spinner, FontAwesome } from 'components/ui';
+import { Spinner, FontAwesome, Callout } from 'components/ui';
 import { Row, Col, InputGroup, InputGroupAddon, Button } from 'reactstrap';
 // functions
 import { toast } from 'react-toastify';
@@ -94,11 +94,10 @@ export class PlatoonPage extends Component {
         <Prompt when={ updated } message="You have unsaved changes. Are you sure you want to leave?" />
 
         <p className='title'>Platoon Information</p>
-        <div className="alert alert-info">
-          Please note that this information is for display and managment purposes only.<br/>
-          To add/remove teacher (staff) accounts please look at the Staff tab under Base Managment.
-          To edit these accounts please go <Link to='/bm/staff'>here.</Link>
-        </div>
+        <Callout icon={ false }>
+          <p>Please note that we will use this information when sending updates and printing Mission Sheets. Please make sure it is up to date.</p>
+          <p>To edit staff (Teacher) accounts please look at the <Link to='/bm/staff'>Staff tab under Base Managment.</Link></p>
+        </Callout>
 
         <PlatoonRow platoon={this.state.platoon} 
           inputProps={ inputProps } selectProps={ selectProps } />
@@ -112,15 +111,18 @@ export class PlatoonPage extends Component {
           </Row>
         }
         {/* show all the staff and manage them */}
-        <p className='title'>Connected Staff</p>
+        <p className='title'>Connected Staff Accounts</p>
+        <Callout color='info' icon={false}>
+          Please note that you can connect Parent accounts as well using their e-mail address
+        </Callout>
         <Row id='connect-new-staff'>
           <Col xs='12'>
-            <label>Add staff by E-mail address</label>
+            <label>Add account by e-mail address</label>
             <InputGroup>
               <input placeholder='example@example.com' ref={ this.emailRef } className='form-control'/>
               <InputGroupAddon addonType="append">
                 <Button onClick={ this.connect } color='primary' outline tabIndex={0}>
-                  <FontAwesome icon='user-plus' /> Connect Staff
+                  <FontAwesome icon='user-plus' /> Connect Account
                 </Button>
               </InputGroupAddon>
             </InputGroup>
