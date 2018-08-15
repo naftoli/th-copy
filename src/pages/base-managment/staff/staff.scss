@@ -1,0 +1,33 @@
+#StaffDetailPage {
+  #save {
+    overflow: hidden;
+    transition: .5s;
+    &.hide { max-height: 0px; }
+    &.show { 
+      max-height: 55px; 
+      padding-top: 10px; padding-bottom: 3px;
+      margin-left: -3px; padding-left: 3px;
+    }
+  }
+
+  .PositionRow {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
+
+    .row { align-items: flex-end; }
+
+    p { margin-bottom: .5rem; }
+    label { margin-top: 0px; font-weight: bold; }
+
+    .btn-group {
+      margin-top: .5rem;
+      width: 100%;
+      .btn { 
+        flex-grow: 1;
+        transition: .5s;
+      }
+    }
+  }
+}

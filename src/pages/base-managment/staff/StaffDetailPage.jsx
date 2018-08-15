@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
+import { Prompt } from 'react-router';
 import { Page404 } from 'pages/errors';
 import { Spinner, FontAwesome } from 'components/ui';
-import { Row, Col, Input, Button, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Button } from 'reactstrap';
 // rows
-import { EditStaffRow } from './rows/EditStaffRow';
+import EditStaffRow from './rows/EditStaffRow';
+import PositionRow from './rows/PositionRow';
 // functions
 import memoize from 'memoize-one';
 import { toast } from 'react-toastify';
 import { loginStoreChanged } from 'functions/login';
 // state
-import { getStaff } from 'store/staff/operations';
+import { getStaff, updateStaff } from 'store/staff/operations';
 
 class StaffDetailPage extends Component {
 
@@ -41,9 +43,14 @@ class StaffDetailPage extends Component {
   // event handlers
   handleUpdates = ( updates ) => { this.setState({ updates: { ...this.state.updates, ...updates } }) };
   onChange = ({ target }) => { this.handleUpdates({ [target.name]: target.value }) };
+  save = () => {
+    this.props.updateStaff( parseInt( this.props.match.params.id, 10 ), this.state.updates )
+    .catch( error => toast.error( error.message ) );
+  }
 
   render() {
     const { loading } = this.props;
+    const updated = Object.keys( this.state.updates ).length > 0;
     let staff = this.getStaff();
 
     if ( loading && !staff ) return <Spinner size='10' />;
@@ -55,16 +62,24 @@ class StaffDetailPage extends Component {
     // and render the page
     return (
       <div id='StaffDetailPage'>
-        
+        <Prompt when={ updated } message="You have unsaved changes. Are you sure you want to leave?" />
+
         <p className='title'>Account Information</p>
+
         <EditStaffRow 
           { ...staff } 
-          onChange={ this.onChange }
-          />
-        {/* <p className='title'>Positions</p>
-        <pre>{ JSON.stringify( staff.positions, null, 2 ) }</pre> */}
-        <p className='title'>Debug</p>
-        <pre>{ JSON.stringify( { state: this.state }, null, 2 ) }</pre>
+          onChange={ this.onChange } />
+
+        <div id='save' className={ updated ? 'show' : 'hide' }>
+          <Button color='primary' onClick={ this.save }>
+            <FontAwesome icon='save' /> Save Changes
+          </Button>
+        </div>
+
+        <p className='title'>Positions</p>
+        { staff.positions.map( 
+          ( position, index ) => <PositionRow key={ index } { ...position } />) 
+        }
       </div>
     );
   }
@@ -75,7 +90,9 @@ const mapStateToProps = ( { staff, login } ) => ({
   login: login.current_login
 })
 
-const mapDispatchToProps = { getStaff }
+const mapDispatchToProps = { 
+  getStaff, updateStaff 
+}
 
 export default connect( 
   mapStateToProps, mapDispatchToProps 

@@ -2,7 +2,7 @@ import React from 'react';
 import { PhoneNumber, Password } from 'components/inputs';
 import { Row, Col, Input } from 'reactstrap';
 
-export const EditStaffRow = ( props ) => {
+const EditStaffRow = ( props ) => {
   const inputProps = { onChange: props.onChange };
   const { username, password, title, first, last, email, work, cell } = props;
   return (
@@ -44,3 +44,5 @@ export const EditStaffRow = ( props ) => {
     </Row>
   );
 }
+
+export default EditStaffRow;
