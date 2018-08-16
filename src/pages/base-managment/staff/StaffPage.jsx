@@ -44,13 +44,12 @@ class StaffPage extends Component {
     const { staff, loading, match } = this.props;
 
     let columns = [
-      { Header: 'First Name', accessor: 'first',
-        Cell: props => <Link to={`${match.path}/${props.original.admin_id}`}>{props.value}</Link> },
-      { Header: 'Last Name', accessor: 'last',
-        Cell: props => <Link to={`${match.path}/${props.original.admin_id}`}>{props.value}</Link> },
       { Header: 'Username', accessor: 'username',
         Cell: props => <Link to={`${match.path}/${props.original.admin_id}`}>{props.value}</Link> },
-      { Header: 'Password', accessor: 'password' },
+      { Header: 'Password', accessor: 'password',
+        Cell: props => <Link to={`${match.path}/${props.original.admin_id}`}>{props.value}</Link> },
+      { Header: 'First Name', accessor: 'first' },
+      { Header: 'Last Name', accessor: 'last' },
       { Header: 'E-mail Address', accessor: 'email' },
       { Header: 'Cell Phone', accessor: 'cell' },
       { Header: 'Position', accessor: 'position' },
