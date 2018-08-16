@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { FontAwesome } from 'components/ui';
-import { PhoneNumber } from 'components/inputs';
+// import { PhoneNumber } from 'components/inputs';
 import { 
   Modal, ModalHeader, ModalBody, ModalFooter, Button,
-  Row, Col, Input, Label, Alert
+  Row, /* Col, Input, Label, */ Alert
 } from 'reactstrap';
 // functions
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 // import { getParents, createParent } from 'store/parents/operations';
 
 class NewStaffModal extends Component {
@@ -29,11 +29,11 @@ class NewStaffModal extends Component {
     const { isOpen, toggle } = this.props;
     const { error } = this.state;
     // props for all inputs
-    const inputProps = { onChange: this.onChange };
+    // const inputProps = { onChange: this.onChange };
 
     return (
       <Modal isOpen={ isOpen } toggle={ toggle } centered id='NewStaffModal'>
-        <ModalHeader toggle={ toggle }>Create New Parent</ModalHeader>
+        <ModalHeader toggle={ toggle }>Create Staff Account</ModalHeader>
         <form onSubmit={ this.createParent }>
           <ModalBody>
             <Row>

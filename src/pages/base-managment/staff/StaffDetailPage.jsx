@@ -50,7 +50,7 @@ class StaffDetailPage extends Component {
   }
 
   render() {
-    const { loading, login } = this.props;
+    const { loading } = this.props;
     const updated = Object.keys( this.state.updates ).length > 0;
     let staff = this.getStaff();
 
