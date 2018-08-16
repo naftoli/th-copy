@@ -15,7 +15,7 @@ const Step1 = ({ school_id, class_id, selectChange, onSubmit, loading }) => (
       </Col>
       <Col sm={4}>
         <label>From Platoon</label>
-        <PlatoonSelect value={ class_id } school_id={ school_id }
+        <PlatoonSelect value={ class_id } schoolId={ school_id }
           onChange={ selectChange( 'class_id' ) } showNoneOption />
       </Col>
       <Col sm={3}>

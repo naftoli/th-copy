@@ -138,7 +138,7 @@ class NewUserPage extends Component {
       platoonSelect = (
         <Col xs={ code === 'BC' ? 12 : 6 }>
           <label>Platoon</label>
-          <PlatoonSelect school_id={ school_id } value={ class_id } 
+          <PlatoonSelect schoolId={ school_id } value={ class_id } 
             onChange={this.handleSelectChange('class_id')} />
         </Col>
       );

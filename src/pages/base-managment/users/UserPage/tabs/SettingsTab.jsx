@@ -50,7 +50,7 @@ class SettingsTab extends Component {
           </Col>
           <Col xs='12' sm='6'>
             <label>Platoon</label>
-            <PlatoonSelect school_id={ school_id } value={ class_id } isClearable 
+            <PlatoonSelect schoolId={ school_id } value={ class_id } isClearable 
               onChange={this.handleSelectChange('class_id')} />
           </Col>
           <Col xs='6'>

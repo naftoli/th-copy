@@ -26,7 +26,7 @@ const Step3 = ({
         </Col>
         <Col sm={6}>
           <label>To Platoon</label>
-          <PlatoonSelect value={ class_id } school_id={ school_id } 
+          <PlatoonSelect value={ class_id } schoolId={ school_id } 
             onChange={ selectChange('class_id') } />
         </Col>
         <Col sm={12}>

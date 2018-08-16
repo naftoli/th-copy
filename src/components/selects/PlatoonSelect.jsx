@@ -14,7 +14,7 @@ export class PlatoonSelect extends Component {
     showNoneOption: PropTypes.bool,
     onChange: PropTypes.func,
     value: PropTypes.any,
-    school_id: PropTypes.any.isRequired,
+    schoolId: PropTypes.any,
     // fetchAll: PropTypes.bool
   }
 
@@ -35,11 +35,11 @@ export class PlatoonSelect extends Component {
     this.loadPlatoons(); 
   }
 
-  // update if the login changed or the school_id prop changed
-  componentDidUpdate( { school_id: prevId } ) {
+  // update if the login changed or the schoolId prop changed
+  componentDidUpdate( { schoolId: prevId } ) {
     // if the school ID changed, get the new platoons into redux
-    const { school_id, value, isClearable } = this.props;
-    if ( prevId !== school_id ) {
+    const { schoolId, value, isClearable } = this.props;
+    if ( prevId !== schoolId ) {
       this.loadPlatoons();
     }
 
@@ -66,9 +66,9 @@ export class PlatoonSelect extends Component {
 
   // load the platoons
   getPlatoons = () => { 
-    const { school_id } = this.props;
-    if ( school_id ) {
-      this.apiRequest = makeCancelable( getPlatoonList( school_id ) );
+    const { schoolId } = this.props;
+    if ( schoolId ) {
+      this.apiRequest = makeCancelable( getPlatoonList( schoolId ) );
     } else {
       this.apiRequest = makeCancelable( 
         new Promise( resolve => resolve([]) )
@@ -78,11 +78,11 @@ export class PlatoonSelect extends Component {
   }
 
   getOptions = () => {
-    const { showAllOption, showNoneOption, school_id } = this.props;
+    const { showAllOption, showNoneOption, schoolId } = this.props;
     
     const options = this.state.platoons
-    // only platoons in the school_id from props
-    .filter( platoon => platoon.school_id === school_id )
+    // only platoons in the schoolId from props
+    .filter( platoon => platoon.school_id === schoolId )
     // map them to what react-select expects
     .map( ({ class_id, name }) => ({ value: class_id, label: name }) );
     // add special options
@@ -95,7 +95,7 @@ export class PlatoonSelect extends Component {
   }
 
   onChange = ( option ) => {
-    return this.props.onChange( option );
+    return this.props.onChange && this.props.onChange( option );
   }
 
   filter = ( option, value ) => option.label.toLowerCase().includes( value.toLowerCase() );

@@ -146,7 +146,7 @@ export class RegistrationPage extends Component {
           }
           <Col xs='6' sm='4'>
             <label>Platoon</label>
-            <PlatoonSelect school_id={ school_id } value={ class_id } 
+            <PlatoonSelect schoolId={ school_id } value={ class_id } 
               onChange={this.handleSelectChange('class_id')} showAllOption />
           </Col>
           <Col xs='6' sm='4'>
