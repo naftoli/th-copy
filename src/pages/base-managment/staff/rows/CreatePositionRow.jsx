@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // components
 import { Select, BaseSelect, PlatoonSelect } from 'components/selects'
@@ -6,31 +7,49 @@ import { FontAwesome } from 'components/ui';
 import { Row, Col, Input, ButtonGroup, Button } from 'reactstrap';
 // functions
 import classnames from 'classnames';
-import { toast } from 'react-toastify';
 import { findOption } from 'functions/selects';
 import { createAuth } from 'store/staff/operations';
 
+const defaultAuth = { auth: 'staff', school_id: false, class_id: false, position: '' };
 class CreatePositionRow extends Component {
-
-  state = {
-    auth: 'staff',
-    school_id: false,
-    class_id: false,
-    position: ''
+  // props we expect
+  static propTypes = {
+    showCreateButton: PropTypes.bool,
+    onCreate: PropTypes.func,
+    onChange: PropTypes.func
   }
+  // default props
+  static defaultProps = {
+    showCreateButton: false,
+  }
+  // initial state
+  state = {
+    auth: 'staff',    position: '',
+    school_id: false, class_id: false,
+  }
+  // update the state and call onChange
+  handleUpdates = updates => {
+    this.setState(
+      { ...updates }, 
+      () => { this.props.onChange && this.props.onChange( this.getAuth() ) }
+    );
+  }
+  // handle when a select is changed
+  handleOptionChange = id => option => this.handleUpdates({ [id]: option.value });
+  // handle when the target is blank
+  handleInputChange = ({ target }) => this.handleUpdates({ [target.name]: target.value });
 
-  handleOptionChange = id => option => this.setState({ [id]: option.value });
-  handleInputChange = ({ target }) => this.setState({ [target.name]: target.value });
-
-  create = () => {
+  getAuth = () => {
     const { school_id, class_id , ...auth } = this.state;
     auth.id = auth.auth === 'class' ? class_id : school_id;
     auth.admin_id = this.props.adminId;
-    this.props.createAuth( auth )
-    .catch( error => toast.error( error.message ));
+    return auth;
   }
 
+  create = () => this.props.onCreate( this.getAuth() );
+
   render() {
+    const { showCreateButton } = this.props;
     const { auth, school_id, class_id, position } = this.state;
 
     const roleOptions = [
@@ -63,6 +82,8 @@ class CreatePositionRow extends Component {
             <label>Position</label>
             <Input name='position' value={ position } onChange={ this.handleInputChange } />
           </Col>
+          {/* optional create button */}
+          { showCreateButton && 
           <Col xs={12}>
             <ButtonGroup>
               <Button color='primary' onClick={this.create}>
@@ -70,6 +91,7 @@ class CreatePositionRow extends Component {
               </Button>
             </ButtonGroup>
           </Col>
+          }
         </Row>
       </div>
     );

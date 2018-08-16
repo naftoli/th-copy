@@ -14,7 +14,7 @@ import memoize from 'memoize-one';
 import { toast } from 'react-toastify';
 import { loginStoreChanged } from 'functions/login';
 // state
-import { getStaff, updateStaff } from 'store/staff/operations';
+import { getStaff, updateStaff, createAuth } from 'store/staff/operations';
 
 class StaffDetailPage extends Component {
 
@@ -47,6 +47,12 @@ class StaffDetailPage extends Component {
   save = () => {
     this.props.updateStaff( parseInt( this.props.match.params.id, 10 ), this.state.updates )
     .catch( error => toast.error( error.message ) );
+  }
+  // show notification for errors
+  createAuth = ( auth ) => {
+    this.props.createAuth( auth )
+    .then( () => toast.info('Position Created') )
+    .catch( error => toast.error( error.message ));
   }
 
   render() {
@@ -81,7 +87,10 @@ class StaffDetailPage extends Component {
         <p className='title'>Positions</p>
 
         <CreatePositionRow 
-          adminId={ staff.admin_id } />
+          adminId={ staff.admin_id } 
+          showCreateButton
+          onCreate={ this.createAuth }
+          />
 
         { staff.positions.map( 
           ( position, index ) => <PositionRow key={ index } { ...position } />) 
@@ -97,7 +106,7 @@ const mapStateToProps = ( { staff, login } ) => ({
 })
 
 const mapDispatchToProps = { 
-  getStaff, updateStaff 
+  getStaff, updateStaff, createAuth
 }
 
 export default connect( 
