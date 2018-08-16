@@ -36,13 +36,15 @@ while( $prize = mysql_fetch_assoc( $prizes_query ) ) $prizes[] = $prize;
                     if ( $winner ) { ?>
                         <td> <?=$winner?> </td>
                     <? } else { ?>
-                        <strong>No Eligible Winners.<br/>Please Set Manually:</strong><br/>
-                        <input class='manual_winner_serial' type='text' placeholder='Serial Number' />
-                        <button class='manual_winner' data-prize_id='<?=$prize['prize_id']?>'
-                            data-raffle_id='<?=$raffle->raffle_id?>' 
-                            data-school_id='<?=$prize['school_id']?>'>
-                            Save
-                        </button>
+                        <td> 
+                            <strong>No Eligible Winners.<br/>Please Set Manually:</strong><br/>
+                            <input class='manual_winner_serial' type='text' placeholder='Serial Number' />
+                            <button class='manual_winner' data-prize_id='<?=$prize['prize_id']?>'
+                                data-raffle_id='<?=$raffle->raffle_id?>' 
+                                data-school_id='<?=$prize['school_id']?>'>
+                                Save
+                            </button>
+                        </td>
                     <? } ?>
                 <? } // only show the winner if the raffle ran...?>
             </tr>
