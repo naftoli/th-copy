@@ -35,13 +35,13 @@ export default ( state = initialState, action ) => {
       return {
         ...state,
         staff: state.staff.map( staff => {
-          if ( staff.admin_id === action.payload.admin_id )
-            return { 
-              ...staff, 
+          if ( staff.admin_id === action.payload.admin_id ) {
+            return { ...staff, // filter the positions to remove the payload
               positions: staff.positions.filter(
-                ({ id, auth }) => id !== action.payload.id && auth !== action.payload.auth 
+                ({ id, auth }) => !( id === action.payload.id && auth === action.payload.auth ) 
               )
             };
+          }
           return staff;
         })
       };

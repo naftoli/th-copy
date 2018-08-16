@@ -8,6 +8,7 @@ import { Button } from 'reactstrap';
 // rows
 import EditStaffRow from './rows/EditStaffRow';
 import PositionRow from './rows/PositionRow';
+import CreatePositionRow from './rows/CreatePositionRow';
 // functions
 import memoize from 'memoize-one';
 import { toast } from 'react-toastify';
@@ -49,7 +50,7 @@ class StaffDetailPage extends Component {
   }
 
   render() {
-    const { loading } = this.props;
+    const { loading, login } = this.props;
     const updated = Object.keys( this.state.updates ).length > 0;
     let staff = this.getStaff();
 
@@ -68,7 +69,8 @@ class StaffDetailPage extends Component {
 
         <EditStaffRow 
           { ...staff } 
-          onChange={ this.onChange } />
+          onChange={ this.onChange }
+          />
 
         <div id='save' className={ updated ? 'show' : 'hide' }>
           <Button color='primary' onClick={ this.save }>
@@ -77,6 +79,10 @@ class StaffDetailPage extends Component {
         </div>
 
         <p className='title'>Positions</p>
+
+        <CreatePositionRow 
+          adminId={ staff.admin_id } />
+
         { staff.positions.map( 
           ( position, index ) => <PositionRow key={ index } { ...position } />) 
         }

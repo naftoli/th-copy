@@ -1,3 +1,14 @@
+#StaffPage {
+  height: 100%;
+
+  .ReactTable {
+    max-height: 90%;
+    @media ( max-height: 1080px ){ max-height: 85%; }
+    @media ( max-height: 768px ){ max-height: 81%; }
+    @media ( max-height: 731px ){ max-height: 90%; }
+  }
+}
+
 #StaffDetailPage {
   #save {
     overflow: hidden;
@@ -10,21 +21,43 @@
     }
   }
 
-  .PositionRow {
+  .PositionRow, .CreatePositionRow {
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 15px;
 
-    .row { align-items: flex-end; }
+    .row { 
+      align-items: flex-end;
+      > div { margin-bottom: .5rem; }
+    }
+    
+    .platoon {
+      transition: .5s;
+      max-height: 65px;
+      &.hide {
+        max-width: 0; padding: 0; overflow: hidden;
+      }
+    }
 
-    p { margin-bottom: .5rem; }
+    .position {
+      &.expand {
+        animation: expand-position .5s;
+        flex: 0 0 100%; max-width: 100%;
+      }
+      @keyframes expand-position {
+        from { flex: 0 0 50%; max-width: 50%; }
+        to { flex: 0 0 100%; max-width: 100%; }
+      }      
+    }
+
+    p { margin-bottom: 0px; }
     label { margin-top: 0px; font-weight: bold; }
 
     .btn-group {
       margin-top: .5rem;
       width: 100%;
-      .btn { 
+      .btn {
         flex-grow: 1;
         transition: .5s;
       }
