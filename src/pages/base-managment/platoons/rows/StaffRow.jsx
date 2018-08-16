@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 // reactstrap
+import { Link } from 'react-router-dom';
 import { Row, Col, Button, ButtonGroup, Card, Input } from 'reactstrap';
 // styles
 import './StaffRow.scss';
@@ -17,13 +18,15 @@ class StaffRow extends Component {
   
   render() {
 
-    const { first, last, username, email } = this.props;
+    const { admin_id, first, last, username, email } = this.props;
     
     return (
       <Card className='StaffRow'>
         <Row>
           <Col xs='12'>
-            <p className='staff-name'>Name: {last}, {first}</p>
+            <p className='staff-name'>
+              Name: <Link to={`/bm/staff/${admin_id}`}>{last}, {first}</Link>
+            </p>
           </Col>
           <Col sm='4'>
             <label>Username</label>
