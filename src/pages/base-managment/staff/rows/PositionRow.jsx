@@ -41,16 +41,16 @@ class PositionRow extends Component {
       <div className='PositionRow'>
         <Row>
           <Col xs={6} sm={4}>
+            <strong>Role</strong>
+            <p>{ role }</p>
+          </Col>
+          <Col xs={6} sm={4}>
             <strong>Base</strong>
             <p>{ base }</p>
           </Col>
           <Col xs={6} sm={4}>
             <strong>Platoon</strong>
             <p>{ platoon }</p>
-          </Col>
-          <Col xs={6} sm={4}>
-            <strong>Role</strong>
-            <p>{ role }</p>
           </Col>
           <Col xs={6}>
             <label>Position</label>
