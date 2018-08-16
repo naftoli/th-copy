@@ -37,15 +37,16 @@ export class RegistrationPage extends Component {
   // on page load get all the users
   componentDidMount(){ 
     setTitle('Soldier Rank Cards');
-    if ( this.props.login.code === 'BC' ) 
-      this.changeOption({ permanent: false, current: true });
+    const { code, id } = this.props.login;
+    if ( code === 'BC' ) 
+      this.changeOption({ permanent: false, current: true, rank: false, school_id: id });
   }
   // when the login changes: reload the users and clear the options
   componentDidUpdate( prevProps ) {
-    if ( loginStoreChanged( prevProps.login ) && this.props.login.code === 'BC' ) {
+    const { code, id } = this.props.login;
+    if ( loginStoreChanged( prevProps.login ) && code === 'BC' ) {
       this.changeOption({
-        school_id: false, class_id: false,
-        permanent: false, current: true, rank: false
+        school_id: id, class_id: false, permanent: false, current: true, rank: false
       });
     }
   }
