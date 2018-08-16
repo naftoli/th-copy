@@ -62,7 +62,7 @@ class AdminAuth extends ActiveRecord\Model implements JsonSerializable {
             'methods' => [ 'base', 'platoon' ],
             'except' => [ 'role_id' ]
         ]);
-        $res['role'] = $this->role->role_name;
+        $res['role'] = $this->role ? $this->role->role_name : 'N/A';
         return $res;
     }
 }
