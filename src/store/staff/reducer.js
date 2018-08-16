@@ -31,7 +31,7 @@ export default ( state = initialState, action ) => {
         })
       };
 
-    case types.REMOVE_POSITION:
+    case types.REMOVE_AUTH:
       return {
         ...state,
         staff: state.staff.map( staff => {
@@ -46,7 +46,7 @@ export default ( state = initialState, action ) => {
         })
       };
 
-    case types.CREATE_POSITION:
+    case types.CREATE_AUTH:
       return {
         ...state,
         staff: state.staff.map( staff => {

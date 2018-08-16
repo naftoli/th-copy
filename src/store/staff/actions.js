@@ -21,16 +21,16 @@ export const updateStaff = ( admin_id, updates ) => {
   }
 };
 
-export const removePosition = ( admin_id, auth, id ) => {
+export const removeAuth = ( auth ) => {
   return {
-    type: types.REMOVE_POSITION,
-    payload: { admin_id, auth, id }
+    type: types.REMOVE_AUTH,
+    payload: auth
   }
 };
 
-export const createPosition = ( position ) => {
+export const createAuth = ( auth ) => {
   return {
-    type: types.CREATE_POSITION,
-    payload: position
+    type: types.CREATE_AUTH,
+    payload: auth
   }
 };

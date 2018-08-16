@@ -1,4 +1,6 @@
 import * as types from './types';
+// handle when positions change in the UI
+import { REMOVE_AUTH } from '../staff/types';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
@@ -65,13 +67,15 @@ export default ( state = initialState, action ) => {
       // non-destructivly return the state
       return Object.assign( {}, state, { current_login });
 
-    case types.REMOVE_AUTH:
-      const filtered_logins = state.current_user.logins.filter( login => {
-        return !(login.type === action.payload.type && login.id === action.payload.id)
-      })
-      return Object.assign( {}, state, {
-        current_user: { ...state.current_user, logins: filtered_logins }
-      });
+    case REMOVE_AUTH:
+      // TODO, remove auth from login if 
+      debugger;
+      // const filtered_logins = state.current_user.logins.filter( login => {
+      //   return !(login.type === action.payload.type && login.id === action.payload.id)
+      // })
+      // return Object.assign( {}, state, {
+      //   current_user: { ...state.current_user, logins: filtered_logins }
+      // });
 
     default:
       return state; 

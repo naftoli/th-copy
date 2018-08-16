@@ -23,18 +23,16 @@ export const updateStaff = ( admin_id, updates ) => dispatch => {
   .then( response => dispatch( actions.updateStaff( admin_id, response ) ) );
 }
 
-export const removeStaffPosition = ( admin_id, auth, id ) => dispatch =>  {
-  return API.delete( `/core/admin_auths`, { admin_id, auth, id } )
+export const removeAuth = ( auth ) => dispatch =>  {
+  return API.delete( `/core/admin_auths`, auth )
   .then( handleAPIResponse )
-  .then( ({ admin_id, auth, id }) => 
-    dispatch( actions.removePosition( admin_id, auth, id ) ) 
-  );
+  .then( auth => dispatch( actions.removeAuth( auth ) ) );
 }
 
-export const createStaffPosition = ( position ) => dispatch =>  {
-  return API.post( `/core/admin_auths`, { ...position } )
+export const createAuth = ( auth ) => dispatch =>  {
+  return API.post( `/core/admin_auths`, auth )
   .then( handleAPIResponse )
-  .then( response => dispatch( actions.createPosition( response ) ) );
+  .then( response => dispatch( actions.createAuth( response ) ) );
 }
 
 /************************* THIS FUNCTION DOES NOT CONNECT TO REDUX YET *************************/
