@@ -3,8 +3,11 @@ import { PhoneNumber, Password } from 'components/inputs';
 import { Row, Col, Input } from 'reactstrap';
 
 const EditStaffRow = ( props ) => {
-  const inputProps = { onChange: props.onChange };
-  const { username, password, title, first, last, email, work, cell } = props;
+  const { 
+    username, password, title, first, last, email, work, cell,
+    onChange, disabled, required
+  } = props;
+  const inputProps = { onChange, disabled, required };
   return (
     <Row>
       <Col xs={6}>
@@ -13,7 +16,7 @@ const EditStaffRow = ( props ) => {
       </Col>
       <Col xs={6}>
         <label>Password</label>
-        <Password value={ password } {...inputProps} tabToggle />
+        <Password value={ password } {...inputProps} tabToggle defaultOpen />
       </Col>
       <Col xs={4}>
         <label>Title</label>
@@ -29,7 +32,8 @@ const EditStaffRow = ( props ) => {
       </Col>
       <Col xs={12}>
         <label>E-Mail</label>
-        <Input name='email' value={ email } {...inputProps} />
+        <Input name='email' type='email' value={ email } {...inputProps} />
+        <div className='invalid-message'>Please enter a valid E-mail address</div>
       </Col>
       <Col xs={12} sm={6}>
         <label>Work Phone</label>
