@@ -7,7 +7,6 @@ import { Row, Col, Input, ButtonGroup, Button } from 'reactstrap';
 // functions
 import classnames from 'classnames';
 import { findOption } from 'functions/selects';
-import { createAuth } from 'store/staff/operations';
 
 class CreatePositionRow extends Component {
   // props we expect
