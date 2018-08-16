@@ -10,32 +10,39 @@ export class Password extends Component {
     required: false,
     value: '',
     onChange: () => {},
-    showIcon: false,
-    showToggle: true,
-    tabToggle: false,
+    showIcon: false, // are we showing an icon
+    showToggle: true, // do we have a toggle
+    tabToggle: false, // can they tab to the toggle
+    defaultOpen: false, // can we see the password by default
   }
-
-  state = {
-    show_password: false
+  // use a constructor to set the default state
+  constructor( props ) {
+    super( props );
+    this.state = {
+      show_password: props.defaultOpen
+    }
   }
-
+  // dom manimpulation works, if you render based on state it keeps re-rendering in the dom and will not work
   passwordRef = React.createRef();
 
   togglePassword = () => {
     this.setState({
       show_password: !this.state.show_password
     }, () => {
-      // update the feild without re-rendering the component ( If we have access to the dom )
       const password = this.passwordRef.current;
       if ( password ) {
         password.type = this.state.show_password ? 'text' : 'password';
-        password.focus();
+        this.props.tabToggle || password.focus();
       };
     });
   }
 
   render() {
-    const { size, required, value, onChange, showIcon, showToggle, tabToggle } = this.props;
+    const { 
+      size, required, value, onChange, 
+      showIcon, showToggle, tabToggle, defaultOpen
+    } = this.props;
+    const inputType = defaultOpen ? 'text' : 'password';
 
     return (
       <InputGroup size={ size } className='Password'>
@@ -44,7 +51,7 @@ export class Password extends Component {
             <img src={lock} alt='lock' width='26' height='26'/>
           </InputGroupAddon>
         }
-        <input className='form-control' placeholder='Password' type='password' required={required}
+        <input className='form-control' placeholder='Password' type={ inputType } required={ required }
           onChange={ onChange } value={ value } name='password' ref={ this.passwordRef } />
         { showToggle &&
           <InputGroupAddon addonType="append">
