@@ -23,6 +23,7 @@ export const updateStaff = ( admin_id, updates ) => dispatch => {
   .then( response => dispatch( actions.updateStaff( admin_id, response ) ) );
 }
 
+/************************* ADMIN AUTHS *************************/
 export const removeAuth = ( auth ) => dispatch =>  {
   return API.delete( `/core/admin_auths`, auth )
   .then( handleAPIResponse )
@@ -36,10 +37,10 @@ export const createAuth = ( auth ) => dispatch =>  {
 }
 
 /************************* THIS FUNCTION DOES NOT CONNECT TO REDUX YET *************************/
-/** updateStaffPosition updates the admin_auth relevent to the staff position. 
+/** updateAuth updates the admin_auth relevent to the staff position. 
  * Does not update the store in redux yet as the api does not return the final position yet. Just the one for this position.
  */
-export const updateStaffPosition = ( admin_id, auth, id, position ) => {
-  return API.patch( `/core/admin_auths`, { admin_id, auth, id, position } )
+export const updateAuth = ( auth ) => {
+  return API.patch( `/core/admin_auths`, auth )
   .then( handleAPIResponse )
 }

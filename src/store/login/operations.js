@@ -1,4 +1,4 @@
-import API, { handleAPIResponse } from 'api/api';
+import API from 'api/api';
 import * as actions from './actions';
 import Cookies from 'universal-cookie';
 

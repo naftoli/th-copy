@@ -5,7 +5,7 @@ import { FontAwesome } from 'components/ui';
 import { Row, Col, Input, ButtonGroup, Button } from 'reactstrap';
 // functions
 import { toast } from 'react-toastify';
-import { updateStaffPosition, removeStaffPosition } from 'store/staff/operations';
+import { updateAuth, removeAuth } from 'store/staff/operations';
 
 class PositionRow extends Component {
 
@@ -24,14 +24,14 @@ class PositionRow extends Component {
 
   update = () => {
     const { admin_id, auth, id } = this.props;
-    updateStaffPosition( admin_id, auth, id, this.state.position )
+    updateAuth({ admin_id, auth, id, ...this.state })
     .then( () => toast.info( 'Position Updated' ) )
     .catch( error => toast.error( error.message ) );
   }
 
   remove = () => {
     const { admin_id, auth, id } = this.props;
-    this.props.removeStaffPosition( admin_id, auth, id )
+    this.props.removeAuth({ admin_id, auth, id });
   }
 
   render() {
@@ -72,4 +72,4 @@ class PositionRow extends Component {
   }
 }
 
-export default connect( null, { removeStaffPosition })( PositionRow );
+export default connect( null, { removeAuth })( PositionRow );
