@@ -45,6 +45,19 @@ export default ( state = initialState, action ) => {
           return staff;
         })
       };
+
+    case types.CREATE_POSITION:
+      return {
+        ...state,
+        staff: state.staff.map( staff => {
+          if ( staff.admin_id === action.payload.admin_id )
+            return { // if we are on the right admin add the payload
+              ...staff, 
+              positions: staff.positions.concat( action.payload )
+            };
+          return staff;
+        })
+      };
     
     default:
       return state;

@@ -27,3 +27,10 @@ export const removePosition = ( admin_id, auth, id ) => {
     payload: { admin_id, auth, id }
   }
 };
+
+export const createPosition = ( position ) => {
+  return {
+    type: types.CREATE_POSITION,
+    payload: position
+  }
+};

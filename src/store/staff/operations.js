@@ -31,9 +31,15 @@ export const removeStaffPosition = ( admin_id, auth, id ) => dispatch =>  {
   );
 }
 
+export const createStaffPosition = ( position ) => dispatch =>  {
+  return API.post( `/core/admin_auths`, { ...position } )
+  .then( handleAPIResponse )
+  .then( response => dispatch( actions.createPosition( response ) ) );
+}
+
 /************************* THIS FUNCTION DOES NOT CONNECT TO REDUX YET *************************/
 /** updateStaffPosition updates the admin_auth relevent to the staff position. 
- * Does not update the store in redux yet as the api does not return the final position yet. Just the one for this login.
+ * Does not update the store in redux yet as the api does not return the final position yet. Just the one for this position.
  */
 export const updateStaffPosition = ( admin_id, auth, id, position ) => {
   return API.patch( `/core/admin_auths`, { admin_id, auth, id, position } )
