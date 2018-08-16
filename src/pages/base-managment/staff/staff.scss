@@ -36,25 +36,6 @@
       align-items: flex-end;
       > div { margin-bottom: .5rem; }
     }
-    
-    .platoon {
-      transition: .5s;
-      max-height: 65px;
-      &.hide {
-        max-width: 0; padding: 0; overflow: hidden;
-      }
-    }
-
-    .position {
-      &.expand {
-        animation: expand-position .5s;
-        flex: 0 0 100%; max-width: 100%;
-      }
-      @keyframes expand-position {
-        from { flex: 0 0 50%; max-width: 50%; }
-        to { flex: 0 0 100%; max-width: 100%; }
-      }      
-    }
 
     p { margin-bottom: 0px; }
     label { margin-top: 0px; font-weight: bold; }
@@ -67,5 +48,21 @@
         transition: .5s;
       }
     }
+  }
+}
+
+.CreatePositionRow {
+  .platoon {
+    transition: .5s;
+    max-height: 75px;
+    &.hide { overflow: hidden; max-height: 0px; } 
+    // reset the animation each time we leave .hide
+    .platoon:not(.hide) { animation: show-platoon .5s; }
+  }
+  // prevent overflow
+  @keyframes show-platoon {
+    0% { overflow: hidden;}
+    99% { overflow: hidden;}
+    100% { overflow: visible;}
   }
 }
