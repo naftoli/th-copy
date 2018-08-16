@@ -13,10 +13,10 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         [ 'username', 'message' => 'must be unique' ],
         [ 'admin_email', 'message' => 'addresses must be unique' ],
     ];
-    static $validates_format_of = [
-        [ 'admin_email', 'message' => 'addresses must be valid',
-            'with' => '/^[^0-9][A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/' ]
-    ];
+    // static $validates_format_of = [
+    //     [ 'admin_email', 'message' => 'addresses must be valid',
+    //         'with' => '/^[^0-9][A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/' ]
+    // ];
     // prop mapping
     static $alias_attribute = [ 
         'email' => 'admin_email', 
