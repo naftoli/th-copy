@@ -11,7 +11,7 @@ import { setTitle } from 'functions/utils';
 import { loginStoreChanged } from 'functions/login';
 import { StaffRow, PlatoonRow } from '../rows/';
 import { getPlatoon, updatePlatoon } from 'store/platoons/operations';
-import { deleteAuth, createAuth } from 'store/login/operations';
+import { removeAuth, createAuth } from 'store/staff/operations';
 // styles
 import './PlatoonPage.scss';
 
@@ -63,7 +63,7 @@ export class PlatoonPage extends Component {
 
   disconnect = ( admin_id ) => {
     const { class_id: id } = this.state.platoon;
-    this.props.deleteAuth({ admin_id, id, auth: 'class' })
+    this.props.removeAuth({ admin_id, id, auth: 'class' })
     .then( this.getPlatoon )
     .catch( error => { toast.error( error.message ) } );
   }
@@ -142,7 +142,7 @@ const mapStateToProps = ({ login }) => ({
 
 const mapDispatchToProps = { 
   getPlatoon, updatePlatoon, 
-  deleteAuth, createAuth
+  removeAuth, createAuth
 }
 
 export default connect( mapStateToProps, mapDispatchToProps )( PlatoonPage );
