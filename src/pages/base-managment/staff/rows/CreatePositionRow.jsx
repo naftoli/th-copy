@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 // components
 import { Select, BaseSelect, PlatoonSelect } from 'components/selects'
 import { FontAwesome } from 'components/ui';
@@ -10,7 +9,6 @@ import classnames from 'classnames';
 import { findOption } from 'functions/selects';
 import { createAuth } from 'store/staff/operations';
 
-const defaultAuth = { auth: 'staff', school_id: false, class_id: false, position: '' };
 class CreatePositionRow extends Component {
   // props we expect
   static propTypes = {
@@ -98,4 +96,4 @@ class CreatePositionRow extends Component {
   }
 }
 
-export default connect( null, { createAuth } )( CreatePositionRow );
+export default CreatePositionRow;
