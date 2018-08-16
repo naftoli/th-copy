@@ -19,7 +19,7 @@ $parshos = get_parshos();
         <select name="start_date" required>
             <?foreach($parshos as $parsha){ // fill the list with parshos
                 $selected = $parsha['start'] == $raffle->start_date ? "selected" : "";
-                echo "<option value=".$parsha['start']." $selected >".$parsha["name"]."</option>"; 
+                echo "<option value=".$parsha['start']." $selected >".$parsha["year"] ." - ".$parsha["name"]."</option>"; 
             }?>
         </select>
     </label>
@@ -30,7 +30,7 @@ $parshos = get_parshos();
         <select name="end_date" required>
             <?foreach($parshos as $parsha){ // fill the list with parshos
                 $selected = $parsha['end'] == $raffle->end_date ? "selected" : "";
-                echo "<option value=".$parsha['end']." $selected >".$parsha["name"]."</option>"; 
+                echo "<option value=".$parsha['end']." $selected >".$parsha["year"] ." - ".$parsha["name"]."</option>"; 
             }?>
         </select>
     </label>

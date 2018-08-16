@@ -46,7 +46,7 @@ $raffles = Raffle::loadAll($filter);
             $prizes = $raffle->get_prizes();
             if ($prizes) {
                 foreach($prizes as $prize) {
-                    $raffle->name .= " (" . $prize->name . ")";
+                    $raffle->name .= ' - ' . $raffle->year . " (" . $prize->name . ")";
                 }
             }
         }

@@ -16,9 +16,10 @@ if ($admin_user['auth'] != 'super') {
 }
 
 /***************** IMPORTS **********************/
-require_once(dirname(__FILE__).'/../classes/Raffle.php');
-require_once(dirname(__FILE__).'/../classes/Prize.php');
-require_once(dirname(__FILE__).'/../functions.php');
+require_once( $_SERVER["DOCUMENT_ROOT"].'/class.globalSettings.php' );
+require_once( __DIR__ .'/../classes/Raffle.php' );
+require_once( __DIR__ .'/../classes/Prize.php' );
+require_once( __DIR__ .'/../functions.php' );
 
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
 use raffles\weekly\Prize as Prize; // use the prizes for the prize form under the edit action
@@ -62,7 +63,6 @@ if($action == "create" || $action == "update"){ // for both create and update, r
         $error .= "Run Date must be on a Wendsday<br/>";
         $valid = false;
     }
-    /********************* VALIDATE RUN DATE IS ON WENDSDAY **********************/
     
     // preform validations on name and type
     if($_POST['name'] == ""){
@@ -156,7 +156,7 @@ if($debug) echo "</pre>"; // end debugging preformatting
                 </div>
                 <div class="input_group input_half">
                     Type*:
-                    <select name="type">
+                    <select class="grey" name="type">
                         <option value="weekly">Weekly</option>
                         <option value="monthly">Monthly</option>
                     </select>
@@ -211,20 +211,36 @@ if($debug) echo "</pre>"; // end debugging preformatting
                     <option value="weekly">Weekly</option>
                     <option value="monthly">Monthly</option>
                 </select>
+                <select class="grey" id="year" name="year">
+                    <?php
+                        $year = intval( globalSettings::getCurrentYear() );
+                        $countDown = ( $year - 5778 );
+                        for( $i = 0; $i <= $countDown; $i++) { ?>
+                            <option value="<?=$year - $i?>"><?=$year - $i?></option>
+                        <?php
+                        }
+                    ?>
+                </select>
             </div>
             
             <div id="raffles"></div>
             <script>
                 var debug_mode = <?=$debug ? "true" : "false"?>;
-                $("select#type").change(function(event){
-                    var type = event.target.value;
-                    $.post("/raffles/shared/ajax/table_raffle.php" + (debug_mode ? "?debug=true" : ""), {type: type}, function(data){
-                        $("#raffles").html(data);
-                    });
-                });
-                $(document).ready(function(){
-                    $("select#type").change();
-                });
+
+                function getTable() {
+                    var type = $("select#type").val();
+                    var year = $("select#year").val();
+                    $.post(
+                        "/raffles/shared/ajax/table_raffle.php" + (debug_mode ? "?debug=true" : ""), 
+                        { type: type, year: year }, 
+                        function(data){ $("#raffles").html(data); }
+                    );
+                }
+
+                $("select#type").change( getTable );
+                $("select#year").change( getTable );
+
+                $(document).ready( getTable );
             </script>
         <?}?>
         <script src="/js/admin/components/modal.js"></script>

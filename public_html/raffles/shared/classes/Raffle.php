@@ -2,8 +2,8 @@
 
 namespace raffles\weekly;
 
-require_once(dirname(__FILE__)."/Constants.php");
-require_once(dirname(__FILE__)."/DBAdapter.php");
+require_once( __DIR__ . '/Constants.php' );
+require_once( __DIR__ . '/DBAdapter.php' );
 
 use \DateTime;
 use \DBAdapter;
@@ -24,6 +24,7 @@ class Raffle {
     public $date_created; // the date it was created
     public $date_ran; // the date it actually ran
     public $show_on_mobile; // if it should be shown on the mobile website
+    public $year; // if it should be shown on the mobile website
     
     // not in DBS
     public $prizes = []; // by default the prizes is an empty array
@@ -217,10 +218,17 @@ class Raffle {
      * TODO: check even if the user is not in the table based off of doc
      */
     public function get_eligable_user_ids($user_id=false, $log=false, $group_by_school=false){
+        $year = $this->year;
         $this->eligable_user_ids = [];
         // first add the users that where marked as eligibile - excluding users that have won in the past. should we bring them in if they have been marked?
-        $sql = "SELECT u.user_id, u.school_id, aa.admin_id FROM raffle_eligibility re LEFT JOIN raffle_winners rw using (user_id) JOIN users u USING (user_id) ".
-                "LEFT JOIN admin_auths aa ON u.user_id = aa.id WHERE re.raffle_id = ".$this->raffle_id." AND re.eligible = 1 AND (aa.auth = 'user' OR aa.auth IS NULL) AND rw.prize_id IS NULL ";
+        $sql = "SELECT u.user_id, u.school_id, aa.admin_id ".
+            " FROM raffle_eligibility re LEFT JOIN raffle_winners rw using (user_id) ".
+            " LEFT JOIN raffles r ON rw.raffle_id = r.raffle_id ".
+            " JOIN users u USING (user_id) ".
+            " LEFT JOIN admin_auths aa ON u.user_id = aa.id and aa.auth='user' ".
+            " WHERE re.raffle_id = ".$this->raffle_id." ".
+            " AND re.eligible = 1 ".
+            " AND ( r.year IS NULL OR r.year != $year ) ";
         // add the sorting by the user_id
         if($user_id) $sql .= "AND u.user_id=$user_id ";
         $sql .= "GROUP BY u.user_id;";
@@ -239,17 +247,16 @@ class Raffle {
         if($log) echo "Got $user_count manually marked eligibile users\n";
         if($log) echo "Loading remaining users...\n";
         // get all users not marked in raffle_eligibility and who are registerd
-        $sql = "SELECT u.user_id, u.school_id, aa.admin_id FROM users u LEFT JOIN admin_auths aa ON u.user_id = aa.id LEFT JOIN raffle_winners rw using (user_id)".
-            " LEFT JOIN raffle_eligibility re USING (user_id) WHERE u.user_registered IS NOT NULL AND u.school_id IS NOT NULL AND (re.raffle_id != ".$this->raffle_id." OR re.raffle_id IS NULL)".
-            " AND (aa.auth = 'user' OR aa.auth IS NULL) AND rw.prize_id IS NULL";
-        // old SQL
-        //$sql =  "SELECT user_id, school_id FROM users LEFT JOIN raffle_eligibility re USING (user_id) WHERE users.user_registered IS NOT NULL AND users.school_id IS NOT NULL ".
-        //        "AND (re.raffle_id != ".$this->raffle_id." OR re.raffle_id IS NULL)";
+        $sql = "SELECT u.user_id, u.school_id, aa.admin_id FROM users u LEFT JOIN admin_auths aa ON aa.auth = 'user' AND u.user_id = aa.id ".
+            " LEFT JOIN admins a USING ( admin_id ) LEFT JOIN raffle_winners rw using (user_id) LEFT JOIN raffles r USING (raffle_id) ".
+            " LEFT JOIN raffle_eligibility re USING (user_id) ".
+            " WHERE u.user_registered IS NOT NULL AND u.school_id IS NOT NULL ".
+            " AND (re.raffle_id != ".$this->raffle_id." OR re.raffle_id IS NULL)".
+            " AND ( r.year IS NULL OR r.year != $year )";
         // if a user is passed in, then limit it to this user
         if($user_id) $sql .= " AND u.user_id=$user_id";
         // sort by the user_id
         $sql .= " GROUP BY u.user_id ORDER BY u.user_id;"; // LIMIT 250 only for testing
-        
         $query = mysql_query($sql); // run the query
         // log the total users that we have to manually check
         if($log) echo "Checking ".mysql_num_rows($query)." remaining users";
