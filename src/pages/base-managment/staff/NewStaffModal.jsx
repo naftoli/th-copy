@@ -2,11 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { FontAwesome } from 'components/ui';
-// import { PhoneNumber } from 'components/inputs';
-import { 
-  Modal, ModalHeader, ModalBody, ModalFooter, Button,
-  Row, /* Col, Input, Label, */ Alert
-} from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Alert } from 'reactstrap';
 // rows
 import EditStaffRow from './rows/EditStaffRow';
 import CreatePositionRow from './rows/CreatePositionRow';
