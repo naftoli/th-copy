@@ -18,15 +18,15 @@ const EditStaffRow = ( props ) => {
         <label>Password</label>
         <Password value={ password } {...inputProps} tabToggle defaultOpen />
       </Col>
-      <Col xs={4}>
+      <Col xs={4} sm={3}>
         <label>Title</label>
-        <Input name='title' value={ title } {...inputProps} />
+        <Input name='title' value={ title } {...inputProps} required={ false } />
       </Col>
       <Col xs={8} sm={4}>
         <label>First Name</label>
         <Input name='first' value={ first } {...inputProps} />
       </Col>
-      <Col xs={12} sm={4}>
+      <Col xs={12} sm={5}>
         <label>Last Name</label>
         <Input name='last' value={ last } {...inputProps} />
       </Col>
