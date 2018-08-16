@@ -105,7 +105,7 @@ export class UsersPage extends Component {
           Click on a Soldier's profile picture to edit or replace it.
         </Callout>
         {/* Action buttons */}
-        <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
+        <ButtonGroup>
           <Link to={`${match.path}/new`} className='btn btn-primary' role='button'>
            <FontAwesome icon='plus' /> Add Soldier
           </Link>
