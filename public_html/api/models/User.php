@@ -1,6 +1,7 @@
 <?php
 include_once( __DIR__ . "/../functions/format/parents.php" );
 include_once( __DIR__ . '/../functions/files/images.php' );
+require_once( __DIR__ . '/../../calendar.php' );
 include_once( __DIR__ . '/../auth/classes/Auth.php' );
 include_once( __DIR__ . '/traits/BuildModel.php' );
 
@@ -64,9 +65,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $medals_query->execute( [ $this->user_id ] );
         $medals = [];
         while( $medal = $medals_query->fetch() ){
-            $medal['date_awarded_he'] = iconv( 'WINDOWS-1255', 'UTF-8', jdtojewish( 
-                $medal['date_awarded'], true, CAL_JEWISH_ADD_GERESHAYIM )
-            );
+            $medal['date_awarded_he'] = dateToHebrew( $medal['date_awarded'] );
             $medal['date_awarded'] = date('n/j/Y', jdtounix( $medal['date_awarded'] ));
             $medal['photo'] = $medal['profile_photo_id'] ? 
                 '/file_view.php?id='.$medal['profile_photo_id'] : 
@@ -113,7 +112,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     public function parentAccount() {
         global $pdo;
         $query = $pdo->prepare(
-            'SELECT admin_id, father, mother, admin_phone_mobile AS phone, admin_email as email '
+            'SELECT admin_id, first, father, mother, last, admin_phone_mobile AS phone, admin_email as email '
             .'FROM admins JOIN admin_auths aa USING (admin_id) WHERE aa.auth="user" and id=?;'
         );
         $query->execute( [$this->user_id] );
@@ -121,7 +120,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         if ( !$parent ) return false;
         // set the admin key if we have a parent
         $parent['key'] = mashpia\api\auth\Auth::mobileKey( $parent['admin_id'] );
-        $parent['first'] = formatParentName( $parent['father'], $parent['mother'] );
+        $parent['first'] = formatParentName( $parent['father'], $parent['mother'], $parent['first'] );
         return $parent;
     }
     // takes an uploaded file and sets it as the profile picture
@@ -324,11 +323,11 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     // ******************************* SERIALIZERS *******************************
     // serialize to array for json responses
     public function jsonSerialize(){
-        return $this->to_array([
+        $result = $this->to_array([
             'only' => [
                 'user_id', 'user_serial', 'first', 'last', 'first_he', 'last_he', 'lang_id', 'dob', 'dob_he',
                 'school_type_id', 'user_address1', 'user_address2', 'user_city', 'user_state',
-                'user_postal', 'user_country', 'user_phone', 'gender', 'user_start_date', 'user_registered',
+                'user_postal', 'user_country', 'user_phone', 'gender', 
                 'chayolei', 'yan', 'chidon', 'allow_parent_tasks', 'print_parent_tasks', 'mobile_pic',
                 'school_id', 'class_id', 'school_type_id'
             ],
@@ -340,5 +339,11 @@ class User extends ActiveRecord\Model implements JsonSerializable {
                 'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ], 'methods' => [ 'name' ] ]
             ]
         ]);
+        // other functions
+        $result['start_date'] = dateToHebrew($this->user_start_date);
+        $result['registered_at'] = $this->user_registered ? // format the date if we have it
+            ( new DateTime( $this->user_registered ) )->format('n/j/Y g:i A') : false;
+
+        return $result;
     }
 }

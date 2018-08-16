@@ -36,6 +36,16 @@ class AdminAuthRouter {
         return json_response( $auth );
     }
 
+    public function update( $id ) {
+        // find the auth
+        $auth = AdminAuth::findAuth( $_POST['admin_id'], $_POST['auth'], $_POST['id'] );
+        // update the position
+        $auth->position = $_POST['position'];
+        $auth->save();
+        // and return it
+        json_response( $auth->position );
+    }
+
     public function delete() {
         if ( !isset($_POST['id']) || !isset($_POST['admin_id']) || !isset($_POST['auth']) )
             return json_error('Cannot delete invalid login. Please try again.');
@@ -48,10 +58,10 @@ class AdminAuthRouter {
        return json_error('You cannot delete login if it does not exist');
     }
 
-    // public function index() {
-    //     $auth = AdminAuth::findAuth( 2, 'school', 58 );
-    //     json_response( $auth->admin );
-    // }
+    public function index() {
+        $auth = AdminAuth::findAuth( 2, 'school', 58 );
+        json_response( $auth );
+    }
 }
 
 rest_router( new AdminAuthRouter );

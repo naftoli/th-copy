@@ -114,7 +114,7 @@ class UserRegistrationRouter {
         /******************************** PAYMENT ********************************/
         if ( $total != 0 ) {
             // if we have a payment profile provided
-            if ( $payment_info['payment_profile'] ) {
+            if ( isset($payment_info['payment_profile']) && $payment_info['payment_profile'] ) {
                 $customer_profile = $current_user->customerProfile();
                 $payment_profile_id = $payment_info['payment_profile'];
             // we need to create the payment profile
@@ -151,7 +151,7 @@ class UserRegistrationRouter {
         $errors = [];   $registration_table_users = [];
         $registration_info_query = $pdo->prepare(
             "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
-            ."VALUES( ?, ?, ?, ?, ?, '?' )"
+            ."VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year )"
         );
         // for each user
         foreach ( $users as $user ) {
@@ -164,9 +164,12 @@ class UserRegistrationRouter {
                     GlobalSettings::getRegistrationYear();
                 // insert a record into the registration_charges table.
                 $registration_info_query->execute([
-                    ( $trans_id ? $trans_id : null ), 
-                    $user->user_id, $user->school_id, $registration['registration_type'],
-                    $registration['paid'], $year
+                    'trans_id' => ( $trans_id ? $trans_id : '' ), 
+                    'user_id' => $user->user_id, 
+                    'school_id' => $user->school_id, 
+                    'type' => $registration['registration_type'],
+                    'amount' => $registration['paid'], 
+                    'year' => $year
                 ]);
                 // Chayolei Registration
                 if ( $registration['registration_type'] == 'chayolei' ) {

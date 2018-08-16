@@ -4,7 +4,7 @@ class AdminAuth extends ActiveRecord\Model implements JsonSerializable {
     static $before_create = ['setDefaultRole', 'setDefaultPosition'];
     
     static $belongs_to = [
-        [ 'admin' ]
+        [ 'admin' ], [ 'role' ]
     ];
 
     static $validates_uniqueness_of = [
@@ -23,6 +23,8 @@ class AdminAuth extends ActiveRecord\Model implements JsonSerializable {
             $this->role_id = 13;
         } else if ( $this->auth === 'school' ) {
             $this->role_id = 18;
+        } else if ( $this->auth === 'staff' ) {
+            $this->role_id = 40;
         }
     }
     // set the default position for the auth
@@ -34,10 +36,33 @@ class AdminAuth extends ActiveRecord\Model implements JsonSerializable {
             $this->position = 'Teacher';
         } else if ( $this->auth === 'school' ) {
             $this->position = 'Base Commander';
+        } else if ( $this->auth === 'school' ) {
+            $this->position = 'Staff Member';
         }
     }
 
+    public function base() {
+        if ( $this->auth == 'school' )
+            return School::find( $this->id )->school_name;
+        else if ( $this->auth == 'class' )
+            return Platoon::find( $this->id )->school->school_name;
+        return 'N/A';
+    }
+
+    public function platoon() {
+        if ( $this->auth == 'school' )
+            return 'All Platoons';
+        else if ( $this->auth == 'class' )
+            return Platoon::find( $this->id )->name();
+        return 'N/A';
+    }
+
     public function jsonSerialize() {
-        return $this->to_array();
+        $res = $this->to_array([
+            'methods' => [ 'base', 'platoon' ],
+            'except' => [ 'role_id' ]
+        ]);
+        $res['role'] = $this->role->role_name;
+        return $res;
     }
 }

@@ -22,7 +22,7 @@ class ParentsRouter {
         // combine the filters
         $filters = implode( ' AND ', $filters );
 
-        $sql = "SELECT a.admin_id, a.username, a.title, a.father, a.mother, a.last, "
+        $sql = "SELECT a.admin_id, a.username, a.title, a.first, a.father, a.mother, a.last, "
             ." CONCAT( admin_address1, ' ', admin_address2) as address, admin_city as city, "
             ." admin_state as state, admin_postal as zip, admin_country as country, "
             ." admin_phone_mobile as cell, admin_email as email, father_pic, mother_pic, "
@@ -49,7 +49,7 @@ class ParentsRouter {
                 unset($parent['user_serial']); unset($parent['user_id']);
                 // create the children array and add this child
                 $parent['admin_id'] = intval( $parent['admin_id'] );
-                $parent['first'] = formatParentName( $parent['father'], $parent['mother'] );
+                $parent['first'] = formatParentName( $parent['father'], $parent['mother'], $parent['first'] );
                 $parent['children'] = [ $child ];
                 $parent['father_pic'] = $parent['father_pic'] ? '/mobile/reg/' . $parent['father_pic'] : false;
                 $parent['mother_pic'] = $parent['mother_pic'] ? '/mobile/reg/' . $parent['mother_pic'] : false;

@@ -30,6 +30,7 @@ th, td {
 <div class='infobox'>
     <h2>What this page does</h2>
     <p>This page edits the information headquarters will use to contact this platoon and for all E-mail, SMS and WhatsApp notifications.</p>
+    <p>This page also edits what shows up as the teacher's name on the mission sheets.</p>
     <p><strong>If you wish to edit the account ( username/password ) used to access a platoon please click <a href='/teacher_list.php'>here.</a></strong></p>
 </div>
 <?

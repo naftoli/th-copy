@@ -29,7 +29,7 @@ div#wrapper { width: 1151px; }
 <h1>Teacher Logins</h1>
 <div class='infobox'>
     <h2>What this page does</h2>
-    <p>Use this page to view/edit the account information that your teachers are using to use the teacher portal.</p>
+    <p>This page allows you to View and Edit the account information ( usernames/passwords ) that your teachers are using to login to the teacher portal.</p>
     
     <h2>Connecting Existing Accounts</h2>
     <p>If the E-mail address you enter already exists, for another teacher account or a parent account, we will connect the platoon to the existing account.</p>
