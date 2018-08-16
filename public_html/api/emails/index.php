@@ -4,14 +4,14 @@ class MashpiaEmails {
 
     public static function passwordChanged( $to, $name ) {
         $subject = 'Your Password has been changed.';
-        ob_start();
-        include("templates/passwordChanged.html");
-        $email = ob_get_clean();
+        $email = self::load('templates/passwordChanged.html');
+        return self::sendEmail( 'noreply@tzivoshashem.com', $to, $subject, $email );
+    }
 
-        return self::sendEmail(
-            'noreply@tzivoshashem.com', $to, 
-            $subject, $email
-        );
+    public static function newBC( $to, $base, $name, $username, $password ) {
+        $subject = 'Your new Base Commander Account.';
+        $email = self::load('templates/newBC.html');
+        return self::sendEmail( 'noreply@tzivoshashem.com', $to, $subject, $email );
     }
 
     public static function sendParentEmail( $to, $username, $password ) {
@@ -32,10 +32,7 @@ class MashpiaEmails {
             ."Wishing you much Yiddishe and Chassidishe Nachas,"
             ."<br /><br />"
             ."CTH Headquarters";
-        return self::sendEmail( 
-            'cth@tzivoshashem.org', $to,
-            $subject, $message
-        );
+        return self::sendEmail( 'cth@tzivoshashem.org', $to, $subject, $message );
     }
 
     public static function sendEmail( $from, $to, $subject, $msg ) {
@@ -45,5 +42,11 @@ class MashpiaEmails {
         $headers .= "Reply-to: $from\r\n";
     
         return @mail( $to, $subject, $msg, $headers );
+    }
+
+    public static function load( $template ) {
+        ob_start();
+        include( $template );
+        return ob_get_clean();
     }
 }
