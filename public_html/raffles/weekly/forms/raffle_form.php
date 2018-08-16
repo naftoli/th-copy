@@ -9,7 +9,7 @@ if ($_GET['debug']) {
 require_once(dirname(__FILE__).'/../../shared/functions.php');
 require_once($_SERVER["DOCUMENT_ROOT"].'/db.php');
 
-$parshos = get_parshos();
+$parshos = get_parshos( $raffle->year );
 
 ?>
 <input name="type" value="weekly" type="hidden"/>
