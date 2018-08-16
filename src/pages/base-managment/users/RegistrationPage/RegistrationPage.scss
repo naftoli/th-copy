@@ -1,17 +1,21 @@
 @import '../../../styles/colors.scss';
 
 #RegistrationPage {
-  height: 100%;
+
   .selected-row {
     background-color: $primary-color-light !important;
   }
 
   .ReactTable {
-    max-height: 87%;
-    @media ( max-height: 1080px ){ max-height: 77%; }
-    @media ( max-height: 895px ){ max-height: 75%; }
-    @media ( max-height: 768px ){ max-height: 71%; }
-    @media ( max-height: 731px ){ max-height: 85%; }
+    // Supersized displays
+    max-height: 87vh;
+    // Desktop
+    @media ( max-height: 1080px ){ max-height: 71vh; }
+    // iPad
+    @media ( max-height: 768px ){ max-height: 65vh; }
+    @media ( max-height: 731px ){ max-height: 64vh; }
+    // mobile
+    @media ( max-width: 450px ){ max-height: 68vh; }
 
     .rt-tr-group { overflow: hidden; }
     .rt-tr { align-items: center; &:hover{ cursor: pointer; } }
