@@ -56,7 +56,6 @@ class CreatePositionRow extends Component {
     ];
     const selectedRole = findOption( roleOptions, auth );
     const platoonClassnames = classnames('platoon', { 'hide': auth !== 'class' } );
-    const positionClassnames = classnames('position', { 'expand': auth !== 'class' } );
 
     return (
       <div className='CreatePositionRow'>
@@ -70,18 +69,18 @@ class CreatePositionRow extends Component {
             <label>Base</label>
             <BaseSelect value={ school_id } onChange={ this.handleOptionChange('school_id') } />
           </Col>
-          <Col xs={6} className={platoonClassnames}>
+          <Col xs={12} className={platoonClassnames}>
             <label>Platoon</label>
             <PlatoonSelect schoolId={ school_id } value={ class_id }
               onChange={ this.handleOptionChange('class_id') } tabIndex={ auth !== 'class' ? '-1' : '0' } />
           </Col>
-          <Col xs={6} className={positionClassnames}>
+          <Col xs={12} lg={ showCreateButton ? 6 : 12 }>
             <label>Position</label>
             <Input name='position' value={ position } onChange={ this.handleInputChange } />
           </Col>
           {/* optional create button */}
           { showCreateButton && 
-          <Col xs={12}>
+          <Col xs={12} lg={6}>
             <ButtonGroup>
               <Button color='primary' onClick={this.create}>
                 <FontAwesome icon='save'/> Create Position
