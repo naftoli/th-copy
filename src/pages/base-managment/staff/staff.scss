@@ -66,3 +66,9 @@
     100% { overflow: visible;}
   }
 }
+
+#NewStaffModal div#errors .alert {
+  margin-bottom: 0px;
+  margin-top: .5rem;
+  text-align: center;
+}

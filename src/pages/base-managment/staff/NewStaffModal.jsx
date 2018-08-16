@@ -11,20 +11,21 @@ import {
 import EditStaffRow from './rows/EditStaffRow';
 import CreatePositionRow from './rows/CreatePositionRow';
 // functions
-// import { toast } from 'react-toastify';
-// import { getParents, createParent } from 'store/parents/operations';
+import { toast } from 'react-toastify';
+import { createStaff, getStaff } from 'store/staff/operations';
+
+const initialState = {
+  staff: {
+    username: '', password: '', email: '',
+    title: '', first: '', last: '', work: '', cell: '',
+  },
+  auth: {},
+  error: false
+}
 
 class NewStaffModal extends Component {
 
-  state = {
-    staff: {
-      username: '', password: '', email: '',
-      title: '', first: '', last: '', work: '', cell: '',
-    },
-    auth: {},
-    error: false, 
-    positions: []
-  }
+  state = { ...initialState }
   // update state.staff
   updateStaff = ({ target }) => {
     this.setState({ staff: { ...this.state.staff, [target.name]: target.value }})
@@ -34,7 +35,17 @@ class NewStaffModal extends Component {
   // onSubmit
   createParent = ( e ) => {
     e.preventDefault();
-    debugger;
+    this.setState({ error: false });
+    const { staff, auth } = this.state
+    this.props.createStaff({ ...staff, auth })
+    .then( response => {
+      this.props.toggle();  this.props.getStaff();
+      this.setState({ ...initialState });
+    })
+    .catch( ({ message }) => {
+      this.setState({ error: message });
+      if ( !this.props.isOpen ) toast.error( message );
+    })
   }
   // onChange event handler
   onChange = ({ target }) => { this.setState({ [target.id]: target.value }) }
@@ -77,10 +88,6 @@ class NewStaffModal extends Component {
   }
 }
 
-const mapStateToProps = ({ parents }) => ({
-  // TODO, return some props
-});
+const mapDispatchToProps = { createStaff, getStaff };
 
-const mapDispatchToProps = {};
-
-export default connect( mapStateToProps, mapDispatchToProps )( NewStaffModal );
+export default connect( null, mapDispatchToProps )( NewStaffModal );
