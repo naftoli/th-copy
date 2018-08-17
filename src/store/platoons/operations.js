@@ -48,8 +48,6 @@ export const createPlatoon = data => dispatch => {
  * this function is used in platoonSelect only
  */
 export const getPlatoonList = ( school_id = false ) => {
-  const query_string = school_id ? `?school_id=${school_id}` : '?all=true';
-
-  return API.get( `/core/platoons${query_string}` )
+  return API.post( `/core/platoons?action=small`, { school_id } )
   .then( handleAPIResponse );
 }
