@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // components
 import { Link } from 'react-router-dom';
-import { Table, Callout } from 'components/ui';
+import { Button, ButtonGroup } from 'reactstrap';
+import { Table, Callout, InlineSync, FontAwesome, Number } from 'components/ui';
 // functions
 import { loginStoreChanged, isAdmin } from 'functions/login';
+import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
 import { getBases } from 'store/bases/operations';
 
@@ -32,32 +34,39 @@ class BasesPage extends Component {
     const { bases, loading, match } = this.props;
 
     let columns = [
-      { Header: 'Base #', accessor: 'school_number',
+      { Header: 'Base Number', accessor: 'school_number',
         Cell: props => <Link to={`${match.path}/${props.original.school_id}`}>{props.value}</Link> },
       { Header: 'Base Name', accessor: 'school_name',
         Cell: props => <Link to={`${match.path}/${props.original.school_id}`}>{props.value}</Link> },
       { Header: 'Base City', accessor: 'school_city' },
       { Header: 'Base State', accessor: 'school_state' },
       { Header: 'Base Country', accessor: 'school_country' },
-      { Header: 'Soldiers', accessor: 'soldier_count' },
+      { Header: 'Soldiers', accessor: 'soldier_count', Cell: props => <Number value={props.value}/> },
     ];
 
     return (
       <div id='BasesPage'>
-        <Callout title='View Soldiers'>
-          Click a Soldier's name or serial number to view and edit their account.<br/>
-          Click on a Soldier's profile picture to edit or replace it.
-        </Callout>
+      
+        <ButtonGroup>
+          {/* <Button onClick={this.toggle} className='btn btn-primary'>
+            <FontAwesome icon='plus' /> Create Base
+          </Button> */}
+          <Button color='primary' onClick={ this.loadBases }>
+            <InlineSync loading={ loading } /> Refresh
+          </Button>
+          { canDownload( bases ) &&
+            <Button color='primary' onClick={ this.toCSV }>
+              <FontAwesome icon='file-download' /> Download Bases (CSV/Excel)
+            </Button>
+          }
+        </ButtonGroup>
 
         <Table 
-          columns={columns} 
-          data={bases} 
-          loading={loading} 
+          data={ bases } 
+          columns={ columns } 
+          loading={ loading && !bases.length } 
           pageId='BasesPage' />
-          
-        <pre>
-          { JSON.stringify( this.props, null, 2 ) }
-        </pre>
+
       </div>
     );
   }
