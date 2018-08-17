@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 // components
 import { Row, Col, Button, ButtonGroup } from 'reactstrap';
-import { BaseSelect, PlatoonSelect } from 'components/selects';
+import { BaseSelect, PlatoonSelect } from 'components/inputs';
 import { FontAwesome } from 'components/ui';
 
 const Step3 = ({ 

@@ -4,9 +4,8 @@ import { connect } from 'react-redux';
 import RankCard from './RankCard';
 import DatePicker from 'react-datepicker';
 import { Callout, Spinner, FontAwesome } from 'components/ui';
-import { Checkbox, Radio } from 'components/inputs'
-import { PlatoonSelect, BaseSelect, Select } from 'components/selects';
 import { Row, Col, Button, ButtonGroup, Alert, Input } from 'reactstrap';
+import { PlatoonSelect, BaseSelect, Select, Checkbox, Radio } from 'components/inputs'
 // functions
 import is from 'is_js';
 import julian from 'julian';

@@ -1,8 +1,8 @@
 import React from 'react';
 // components
 import { Row, Col, Button } from 'reactstrap';
-import { BaseSelect, PlatoonSelect } from 'components/selects';
-import { InlineSync } from 'components/ui/loading';
+import { BaseSelect, PlatoonSelect } from 'components/inputs';
+import { InlineSync } from 'components/ui';
 
 const Step1 = ({ school_id, class_id, selectChange, onSubmit, loading }) => (
   <div id='step-1'>

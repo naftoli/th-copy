@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { FontAwesome } from 'components/ui';
-import { Select } from 'components/selects';
-import { PhoneNumber } from 'components/inputs';
+import { Select, PhoneNumber } from 'components/inputs';
 import { 
   Modal, ModalHeader, ModalBody, ModalFooter, Button,
   Row, Col, Input, Label, Alert

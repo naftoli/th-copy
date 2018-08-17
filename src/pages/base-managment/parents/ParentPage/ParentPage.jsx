@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Spinner, ProfilePicture, FontAwesome } from 'components/ui';
-import { PhoneNumber } from 'components/inputs';
+import { Select, PhoneNumber } from 'components/inputs';
 import { Row, Col, Input, Button, InputGroup, InputGroupAddon } from 'reactstrap';
 import { AddressRow } from 'components/rows';
-import { Select } from 'components/selects';
 import { Page404 } from 'pages/errors';
 import Child from './Child';
 // functions

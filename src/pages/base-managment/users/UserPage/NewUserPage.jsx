@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 // components
 import { Row, Col, Button } from 'reactstrap';
 import { ProfileRow, NameRow, DobRow, AddressRow } from './rows';
-import PlatoonSelect from 'components/selects/PlatoonSelect';
 import CropperModal from 'components/modals/CropperModal';
-import { BaseSelect, Select } from 'components/selects';
+import { PlatoonSelect, BaseSelect, Select } from 'components/inputs';
 // functions
 import { missionTypeOptions, findOption } from 'functions/selects';
 import { uploadProfile, createSoldier, getSoldiers } from 'store/soldiers/operations';

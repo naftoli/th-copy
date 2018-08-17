@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 // components
 import { PlatoonRow } from '../rows/';
 import { Row, Col, Button } from 'reactstrap';
-import { BaseSelect } from 'components/selects';
+import { BaseSelect } from 'components/inputs';
 import { FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';

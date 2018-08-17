@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // components
-import { Select, BaseSelect, PlatoonSelect } from 'components/selects'
+import { Select, BaseSelect, PlatoonSelect } from 'components/inputs'
 import { FontAwesome } from 'components/ui';
 import { Row, Col, Input, ButtonGroup, Button } from 'reactstrap';
 // functions

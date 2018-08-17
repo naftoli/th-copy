@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // components
-import { BaseSelect } from 'components/selects';
+import { BaseSelect } from 'components/inputs';
 import { FontAwesome } from 'components/ui';
 import { Button, ButtonGroup, Row, Col } from 'reactstrap';
 

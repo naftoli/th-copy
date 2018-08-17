@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 // components
-import { PhoneNumber } from 'components/inputs';
-import { Select } from 'components/selects';
+import { Select, PhoneNumber } from 'components/inputs';
 import { Row, Col, Input } from 'reactstrap';
 // styles
 // import './PlatoonPage.scss';
