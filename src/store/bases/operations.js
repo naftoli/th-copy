@@ -3,10 +3,9 @@ import API, { handleAPIResponse } from 'api/api';
 import * as actions from './actions';
 
 // get all soldiers
-export const getBases = ( all = false ) => dispatch => {
+export const getBases = () => dispatch => {
   dispatch( actions.setLoading( true ) );
-  all = all ? '?all=true' : '';
-  return API.get( `/core/bases.php${all}` )
+  return API.get( `/core/bases` )
     .then( response => {
       dispatch( actions.setBases( response.data ) );
       return dispatch( actions.setLoading( false ) );
@@ -19,8 +18,6 @@ export const getBases = ( all = false ) => dispatch => {
  * this function is used in platoonSelect only
  */
 export const getBaseList = ( all = false ) => {
-  const query_string = all ? '?all=true' : '';
-
-  return API.get( `/core/bases${query_string}` )
+  return API.post( `/core/bases?action=small`, { all } )
   .then( handleAPIResponse );
 }

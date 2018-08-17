@@ -53,9 +53,9 @@ class BaseSelect extends Component {
     this.apiRequest && this.apiRequest.cancel();
   }
 
-  getBases = () =>  {
+  getBases = ( fetchAll ) =>  {
     this.setState({ loading: true });
-    this.apiRequest = makeCancelable( getBaseList() );
+    this.apiRequest = makeCancelable( getBaseList( fetchAll ) );
     return this.apiRequest.promise
     .then( bases => this.setState({ bases, loading: false }) )
   }
