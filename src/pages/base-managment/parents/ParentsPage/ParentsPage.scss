@@ -4,8 +4,8 @@
   .ReactTable {
     max-height: 85vh;
     @media ( max-height: 1080px ){ max-height: 76vh; }
-    @media ( max-height: 768px ){ max-height: 68vh; }
-    @media ( max-height: 731px ){ max-height: 67vh; }
+    @media ( max-height: 768px ){ max-height: 66vh; }
+    @media ( max-height: 731px ){ max-height: 64vh; }
     // mobile
     @media ( max-width: 450px ){ max-height: 78vh; }
   }
