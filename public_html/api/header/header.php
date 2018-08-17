@@ -1,9 +1,9 @@
 <?php
+error_reporting(0);
 if ( isset( $_GET['debug'] ) ) {
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
 }
-
 date_default_timezone_set( 'UTC' );
 define( "API_ROOT", __DIR__ . '/..' );
 
