@@ -36,7 +36,7 @@ class StaffRouter {
             ." LEFT JOIN schools s ON aa.auth IN ('school', 'staff') AND id = school_id "
             ." LEFT JOIN classes c ON aa.auth = 'class' AND id = class_id "
             ." LEFT JOIN schools s2 ON c.school_id = s2.school_id "
-            ." WHERE aa.auth IN ('school' , 'class', 'staff') "
+            ." WHERE aa.auth IN ('school' , 'class', 'staff') AND a.auth !='super' "
             ." HAVING $filters "
             ." ORDER BY school_name, aa.auth, role, position, first, last;";
         $query = $pdo->prepare( $sql );
