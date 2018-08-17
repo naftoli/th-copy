@@ -38,9 +38,7 @@ class PlatoonRouter {
         $platoons = [];
         // fetch all results and parse them as models
         while( $platoon = $query->fetch() ){
-            $platoon['name'] = ( new Platoon([
-                'class_grade' => $platoon['class_grade'], 'class_sub' => $platoon['class_sub']
-            ]) )->name();
+            $platoon['name'] = $this->getName($platoon);
             $platoon['class_id']  = intval( $platoon['class_id' ] );
             $platoon['school_id'] = intval( $platoon['school_id'] );
             $platoon['soldier_count'] = intval( $platoon['soldier_count'] );
@@ -48,6 +46,22 @@ class PlatoonRouter {
             $platoons[] = $platoon;
         }
         json_response( $platoons );
+    }
+
+    public function small(){
+        global $pdo;
+        // get the school_id
+        $school_id = $_POST['school_id'];
+        if ( !$school_id ) return json_response([]);
+        // get the platoons
+        $query = $pdo->prepare( 'SELECT school_id, class_id, class_grade, class_sub FROM classes WHERE school_id=:school_id;' );
+        $query->execute(['school_id' => $school_id]);
+        $platoons = $query->fetchAll();
+        // serialize the platoons
+        $platoons = array_map(function ( $platoon ){
+            $platoon['name'] = $this->getName($platoon); return $platoon;
+        }, $platoons );
+        return json_response( $platoons );
     }
 
     public function show( $id ) {
@@ -92,6 +106,12 @@ class PlatoonRouter {
             json_error('Could not update soldier. Please check to make sure that the data is valid', 'CORE-USERS-90');
         
         json_response( $platoon );
+    }
+
+    private function getName( $platoon ){
+        return ( new Platoon([
+            'class_grade' => $platoon['class_grade'], 'class_sub' => $platoon['class_sub']
+        ]) )->name();
     }
 }
 
