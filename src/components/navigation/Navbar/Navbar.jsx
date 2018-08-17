@@ -18,7 +18,7 @@ class Navbar extends Component {
 
   static defaultProps = {
     title: "Tzivos Hashem",
-    current_login: {},
+    currentLogin: {},
     logins: [], 
     onLoginChange: () => {}
   }
@@ -29,10 +29,10 @@ class Navbar extends Component {
   }
 
   render(){
-    const { title, current_login, logins } = this.props;
+    const { title, currentLogin, logins } = this.props;
     // only render the dropdown if there are options
     const loginItems = logins.map( ( login, index ) => {
-      const active = login.type === current_login.type &&  login.id === current_login.id;
+      const active = login.type === currentLogin.type &&  login.id === currentLogin.id;
       return (
         <DropdownItem key={ index } onClick={ this.onLoginChange( login.type, login.id ) }
           className={ active ? 'active' : ''}>
@@ -52,8 +52,8 @@ class Navbar extends Component {
         <Nav id="navbar-menu" navbar>
           <UncontrolledDropdown>
             <DropdownToggle nav id='nav-login'>
-              <img id="profile-picture" src={ LEGACY_URL + current_login.img || user } alt="profile_picture"/>
-              <span>{ current_login.name || `My Accounts` }</span>
+              <img id="profile-picture" src={ LEGACY_URL + currentLogin.img || user } alt="profile_picture"/>
+              <span>{ currentLogin.name || `My Accounts` }</span>
             </DropdownToggle>
             <DropdownMenu right>
               <DropdownItem header>Logins</DropdownItem>

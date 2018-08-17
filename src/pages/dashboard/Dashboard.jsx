@@ -58,8 +58,8 @@ export class Dashboard extends Component {
       window.location.href = `${LEGACY_URL}/mobile/reg/parent_detail.html`;
       return null;
     }
-
-    const menu = getMenu( current_login.code, current_login.ckids );
+    const { code, id, ckids } = current_login;
+    const menu = getMenu( code, id, ckids );
     // add a logout button
     menu.push({
       label: 'Logout', path: '/logout',
@@ -69,7 +69,7 @@ export class Dashboard extends Component {
     return (
       <div id="dashboard">
         <Navbar onClick={ this.toggle } onLoginChange={ changeLogin }
-          logins={ current_user.logins } current_login={current_login} />
+          logins={ current_user.logins } currentLogin={current_login} />
         <div id="dashboard-body">
           <Sidebar menu={ menu } active={ this.state.active } />
           <div id="dashboard-content">

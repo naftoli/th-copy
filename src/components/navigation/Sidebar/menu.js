@@ -39,7 +39,7 @@ export const menuReducer = ( user_type, no_legacy, defaults ) => ( filtered = []
  * 
  * @param {string} user_type The type of user to get the menu for 
  */
-const getMenu = ( user_type, no_legacy ) => {
+const getMenu = ( user_type, id, no_legacy ) => {
   // Default to BC
   user_type = user_type || "BC";
   // Define the shape of the menu
@@ -66,11 +66,17 @@ const getMenu = ( user_type, no_legacy ) => {
         { label: "Parents", path: '/bm/parents' },
         { label: "Staff", path: '/bm/staff' },
         {
-          label: "Base",
+          label: "Base", user_types: [ 'HQ', 'CKIDS-ADMIN' ],
           items: [
-            { label: 'View / Edit', path: '/bm/base' },
-            { label: 'Settings', path: '/bm/base/settings' },
+            { label: 'View / Edit', path: `/bm/base` },
             { label: 'Transactions', path: '/bm/base/transactions' }
+          ]
+        },
+        {
+          label: "Base", user_types: [ 'BC' ],
+          items: [
+            { label: 'View / Edit', path: `/bm/base/${id}` },
+            { label: 'Transactions', path: `/bm/base/${id}/transactions` }
           ]
         },
       ]
