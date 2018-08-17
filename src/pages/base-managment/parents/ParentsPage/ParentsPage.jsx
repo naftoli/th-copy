@@ -98,7 +98,7 @@ class ParentsPage extends Component {
         <Table 
           data={ parents }
           columns={ columns }
-          loading={ loading }
+          loading={ loading && !parents.length }
           pageId='ParentsPage'
           defaultSorted={[ { id: "first", desc: false }, { id: "last", desc: false } ]}
           />

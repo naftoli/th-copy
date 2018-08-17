@@ -82,7 +82,7 @@ export class PlatoonsPage extends Component {
         <Table 
           data={ platoons } 
           columns={ columns } 
-          loading={ loading } 
+          loading={ loading && !platoons.length } 
           pageId='PlatoonsPage' />
 
       </div>

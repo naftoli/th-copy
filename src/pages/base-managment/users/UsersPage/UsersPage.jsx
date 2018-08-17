@@ -116,7 +116,7 @@ export class UsersPage extends Component {
         <Table 
           columns={ columns } 
           data={ soldiers } 
-          loading={ loading } 
+          loading={ loading && !soldiers.length } 
           pageId='UsersPage' />
         {/* Modal to edit images */}
         <CropperModal isOpen={ cropperModalShow } src={ cropperModalSrc } 

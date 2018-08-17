@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Link } from 'react-router-dom';
-import { Table, Callout, FontAwesome } from 'components/ui';
+import { Table, Callout, InlineSync, FontAwesome } from 'components/ui';
 import { Button, ButtonGroup } from 'reactstrap';
-import { InlineSync } from 'components/ui/loading';
 // modals
 import NewStaffModal from './NewStaffModal';
 // functions
@@ -58,7 +57,7 @@ class StaffPage extends Component {
         <Callout title='View / Edit Staff Accounts'>
           <p>Staff accounts are any accounts connected to your base.</p>
         </Callout>
-        <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
+        <ButtonGroup>
           <Button onClick={this.toggle} className='btn btn-primary'>
             <FontAwesome icon='plus' /> Create Staff Account
           </Button>
@@ -74,7 +73,7 @@ class StaffPage extends Component {
 
         <Table 
           data={ staff } 
-          loading={ loading } 
+          loading={ loading && !staff.length } 
           columns={ columns } 
           pageId='StaffPage' />
 
