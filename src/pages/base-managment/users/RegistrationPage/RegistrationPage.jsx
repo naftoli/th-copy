@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { Callout, Checkbox, FontAwesome } from 'components/ui';
-import { InlineSync } from 'components/ui/loading';
+import { Callout, InlineSync, FontAwesome } from 'components/ui';
+import { Checkbox } from 'components/inputs';
 import { Link } from 'react-router-dom';
 import { Row, Col, Button, ButtonGroup } from 'reactstrap'; 
 import ReactTable from "react-table";

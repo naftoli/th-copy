@@ -1,7 +1,8 @@
 import React from 'react';
 // components
 import { Row, Col } from 'reactstrap';
-import { ProfilePicture, Radio, FontAwesome } from 'components/ui';
+import { ProfilePicture, FontAwesome } from 'components/ui';
+import { Radio } from 'components/inputs';
 
 const ProfileRow = ({ soldier, onChange, toggle }) => {
 

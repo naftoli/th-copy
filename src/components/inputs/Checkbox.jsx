@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles/Checkbox.scss';
 
-const Checkbox = ( props ) => {
+export const Checkbox = ( props ) => {
   const { onChange, checked, id, name, className, setRef } = props;
   const inputProps = { onChange, checked, id, name };
   // toggle on pressing enter
@@ -23,5 +23,3 @@ const Checkbox = ( props ) => {
     </label>
   );
 }
-
-export default Checkbox;

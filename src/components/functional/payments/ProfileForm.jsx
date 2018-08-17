@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Card, CardBody, CardTitle } from 'reactstrap';
-import { Spinner, Radio } from 'components/ui';
+import { Radio } from 'components/inputs';
+import { Spinner } from 'components/ui';
 // functions
 import propTypes from 'prop-types';
 import { getPaymentProfiles } from 'store/payments/operations';

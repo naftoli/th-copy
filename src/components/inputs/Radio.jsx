@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles/Radio.scss';
 
-const Radio = ( props ) => {
+export const Radio = ( props ) => {
   const { onChange, checked, id, name, value, className } = props;
   const inputProps = { onChange, checked, id, name, value };
   // toggle on pressing enter
@@ -18,5 +18,3 @@ const Radio = ( props ) => {
     </label>
   );
 }
-
-export default Radio;

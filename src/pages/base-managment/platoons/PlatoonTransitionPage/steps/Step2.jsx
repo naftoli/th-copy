@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 // components
 import ReactTable from 'react-table';
-import { Checkbox } from 'components/ui';
+import { Checkbox } from 'components/inputs';
 // functions
 import {
   defaultTableProps, toggleRowBasic, toggleAllBasic

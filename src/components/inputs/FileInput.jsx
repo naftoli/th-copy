@@ -29,5 +29,3 @@ export class FileInput extends Component {
     )
   }
 }
-
-export default FileInput;

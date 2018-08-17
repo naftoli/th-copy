@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Row, Col, Button, Input } from 'reactstrap';
 import { ParentRow } from '../rows';
 import { Select, PlatoonSelect } from 'components/selects';
-import Checkbox from 'components/ui/Checkbox';
+import { Checkbox } from 'components/inputs';
 // functions
 import { findOption, missionTypeOptions } from 'functions/selects';
 import { deleteSoldier, getSoldiers } from 'store/soldiers/operations';

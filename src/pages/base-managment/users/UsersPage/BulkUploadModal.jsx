@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+// components
+import { FileInput } from 'components/inputs'; 
+import { Spinner, Callout } from 'components/ui';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { Callout } from 'components/ui'; 
-import { Spinner, FileInput } from 'components/ui';
 
 export class BulkUploadModal extends Component {
 

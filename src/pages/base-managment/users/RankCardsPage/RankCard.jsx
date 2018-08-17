@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // components
-import { ProfilePicture, Checkbox } from 'components/ui';
+import { ProfilePicture } from 'components/ui';
+import { Checkbox } from 'components/inputs';
 // constants and functions
 import { LEGACY_URL } from 'components/constants';
 import classnames from 'classnames';

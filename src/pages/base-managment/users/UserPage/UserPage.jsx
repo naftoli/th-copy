@@ -4,7 +4,7 @@ import { TabContent, TabPane, Nav, Button } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 import { Prompt } from 'react-router';
 import { NavigationTab } from 'components/navigation';
-import Spinner from 'components/ui/Spinner';
+import { Spinner } from 'components/ui';
 import { PersonalTab, SettingsTab, RankTab } from './tabs';
 // functions
 import { getSoldier, updateSoldier } from 'store/soldiers/operations';

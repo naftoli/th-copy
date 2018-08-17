@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 // components
 import RankCard from './RankCard';
 import DatePicker from 'react-datepicker';
-import { Callout, Checkbox, Radio, Spinner, FontAwesome } from 'components/ui';
+import { Callout, Spinner, FontAwesome } from 'components/ui';
+import { Checkbox, Radio } from 'components/inputs'
 import { PlatoonSelect, BaseSelect, Select } from 'components/selects';
 import { Row, Col, Button, ButtonGroup, Alert, Input } from 'reactstrap';
 // functions
