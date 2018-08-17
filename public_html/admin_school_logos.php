@@ -23,27 +23,27 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && count($_FILES) > 0 ) {
     $school_id = $_POST['school_id'];
     $school_name = $_POST['school_name'];
     // default to no new logos...
-    $logo = false; $logo_2 = false;
+    $logo = false; $logo_girls = false;
     // get the first school id
     if( isset($_FILES["logo-$school_id"]) ) {
         $logo = saveFile($_FILES["logo-$school_id"], "schoolLogos/", $school_name . "_logo");
         $logo = $logo ? str_replace("schoolLogos/", "", $logo) : false; // remove the folder from the name as it will be added by whatever is accessing the file.
     }
     // get the second school logo if applicable...
-    if( isset( $_FILES["logo_2-$school_id"] ) ) {
-        $logo_2 = saveFile($_FILES["logo_2-$school_id"], "schoolLogos/", $school_name . "_logo_2");
-        $logo_2 = $logo_2 ? str_replace("schoolLogos/", "", $logo_2) : false; // remove the folder from the name as it will be added by whatever is accessing the file.
+    if( isset( $_FILES["logo_girls-$school_id"] ) ) {
+        $logo_girls = saveFile($_FILES["logo_girls-$school_id"], "schoolLogos/", $school_name . "_logo_girls");
+        $logo_girls = $logo_girls ? str_replace("schoolLogos/", "", $logo_girls) : false; // remove the folder from the name as it will be added by whatever is accessing the file.
     }
     
     // save the new logos to the database...
-    if( $logo || $logo_2 ) {
+    if( $logo || $logo_girls ) {
         $logo_sql = "UPDATE schools SET ";
         // if we have the logo update that
         if($logo) $logo_sql .= " logo = '$logo' ";
         // if we have both add a comma
-        if( $logo && $logo_2 )  $logo_sql .= ", ";
+        if( $logo && $logo_girls )  $logo_sql .= ", ";
         // if we have the second logo save that too.
-        if($logo_2) $logo_sql .= " logo_2 = '$logo_2' ";
+        if($logo_girls) $logo_sql .= " logo_girls = '$logo_girls' ";
         
         $logo_sql .= "WHERE school_id = '$school_id' ";
         
@@ -52,7 +52,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && count($_FILES) > 0 ) {
 }
 
 // load all registered chayolei schools....
-$schools_sql = mysql_query( "SELECT school_id, school_name, school_gender, logo, logo_2 FROM schools WHERE school_era IS NULL AND chayolei = '1' ORDER BY school_name" );
+$schools_sql = mysql_query( "SELECT school_id, school_name, school_gender, logo, logo_girls FROM schools WHERE school_era IS NULL AND chayolei = '1' ORDER BY school_name" );
 $schools = [];
 while( $school = mysql_fetch_assoc( $schools_sql ) ){
     $schools[] = $school;
@@ -153,11 +153,11 @@ while( $school = mysql_fetch_assoc( $schools_sql ) ){
                     <?php if ($school_gender === "Mixed") { ?>
                         <div class="school_logo">
                             <h3>Girls</h3>
-                            <img src="/schoolLogos/<?=$school['logo_2'] ? $school['logo_2'] : $school_logo?>" id="img_logo_2-<?=$school['school_id']?>" alt="girls"/>
+                            <img src="/schoolLogos/<?=$school['logo_girls'] ? $school['logo_girls'] : $school_logo?>" id="img_logo_girls-<?=$school['school_id']?>" alt="girls"/>
                             
                             <div>
-                                <input type="file" name="logo_2-<?=$school['school_id']?>" id="logo_2-<?=$school['school_id']?>" class="inputfile" />
-                                <label for="logo_2-<?=$school['school_id']?>">
+                                <input type="file" name="logo_girls-<?=$school['school_id']?>" id="logo_girls-<?=$school['school_id']?>" class="inputfile" />
+                                <label for="logo_girls-<?=$school['school_id']?>">
                                     <i class="fa fa-upload" aria-hidden="true"></i> Choose a file
                                 </label>
                             </div>
