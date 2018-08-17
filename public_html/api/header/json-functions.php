@@ -14,7 +14,7 @@ function json_response( $data, $success = true, $die = true ) {
     echo json_encode([
         "success" => $success,
         "data"    => $data
-    ]);
+    ], JSON_NUMERIC_CHECK);
     if ( $die ) die();
 }
 
@@ -39,6 +39,6 @@ function json_error( $msg, $data = false, $code = 400, $die = true ) {
         "error"    => $msg,
         "message"  => $msg,
         "data"   => $data
-    ]);
+    ], JSON_NUMERIC_CHECK);
     if ( $die ) die();
 }
