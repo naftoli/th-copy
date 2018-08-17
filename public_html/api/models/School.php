@@ -10,6 +10,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         [ 'platoons', 'order' => 'class_grade, class_sub', ], 
         [ 'users' ] 
     ];
+    static $validates_uniqueness_of = [ [ 'school_number' ] ];
 
     // ******************************* GETTERS *******************************
     /**
@@ -35,6 +36,10 @@ class School extends ActiveRecord\Model implements JsonSerializable {
 
     public function logoPath(){
         return "/schoolLogos/$this->logo";
+    }
+
+    public function logos() {
+        // return "/schoolLogos/$this->logo";
     }
 
     //********************************** PAYMENTS **********************************/
@@ -99,9 +104,13 @@ class School extends ActiveRecord\Model implements JsonSerializable {
      */
     public function jsonSerialize(){
         return $this->to_array([
+            // old columns that we no longer use
             'except' => [
-                'cc_first', 'cc_last', 'cc_address', 'cc_state', 'cc_zip', 'cc_number', 'cc_exp', 'cc_cvv',
-                'cc_approval_number',  'authorize_customer_profile_id', 'authorize_payment_profile_id'
+                'school_makeup_id', 'school_settings', 'package_id', 'school_logo_id', 'school_logo_kiosk_id',
+                'school_no_logo', 'school_file_id', 'kiosk_print', 'school_store', 'camp_id', 'add_on_one',
+                'add_on_two', 'big_prizes_won', 'store_only', 'he_name_principal', 'he_name_p2', 'conf_pushka_users',
+                'tanya_ord', 'tanya_cat_ord', 'school_type', 'col_show', 'tuition', 'reg_type', 'cc_first', 'cc_last', 
+                'cc_address', 'cc_state', 'cc_zip', 'cc_number', 'cc_exp', 'cc_cvv', 'cc_approval_number',  'authorize_customer_profile_id', 
             ]
         ]);
     }
