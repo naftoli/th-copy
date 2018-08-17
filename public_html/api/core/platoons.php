@@ -51,7 +51,7 @@ class PlatoonRouter {
     public function small(){
         global $pdo;
         // get the school_id
-        $school_id = $_POST['school_id'];
+        $school_id = isset( $_POST['school_id'] ) ? $_POST['school_id'] : false;
         if ( !$school_id ) return json_response([]);
         // get the platoons
         $query = $pdo->prepare( 'SELECT school_id, class_id, class_grade, class_sub FROM classes WHERE school_id=:school_id;' );
