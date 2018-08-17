@@ -11,4 +11,4 @@ RewriteCond %{REQUEST_FILENAME}\.php -f
 RewriteRule ^(.*)$ $1.php [NC,L]
 
 php_flag log_errors On
-php_value error_log .error_log
+php_value error_log error_log
