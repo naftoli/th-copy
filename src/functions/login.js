@@ -15,3 +15,11 @@ export const mobileLogin = ( key ) => {
   COOKIES.set('admin', key, { path: '/', EXPIRES } );
   window.open( `${LEGACY_URL}/mobile/reg/parent_detail.html`, '_blank' ).focus();
 }
+
+export const isAdmin = code => {
+  return [ 'HQ', 'CKIDS-ADMIN' ].includes( code );
+}
+
+export const isBC = code => {
+  return [ 'HQ', 'CKIDS-ADMIN', 'BC' ].includes( code );
+}
