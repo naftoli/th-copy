@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
-import { Callout, FontAwesome } from 'components/ui';
+import { Table, Callout, FontAwesome } from 'components/ui';
 import { Button, ButtonGroup } from 'reactstrap';
 import { InlineSync } from 'components/ui/loading';
 // modals
@@ -11,7 +10,6 @@ import NewStaffModal from './NewStaffModal';
 // functions
 import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
-import { defaultTableProps } from 'functions/tables';
 // state
 import { getStaff } from 'store/staff/operations';
 
@@ -55,9 +53,6 @@ class StaffPage extends Component {
       { Header: 'Position', accessor: 'position' },
     ];
 
-    let tableProps  = defaultTableProps( 'StaffPage', loading );
-    tableProps = { ...tableProps, data: staff, columns }
-
     return (
       <div id='StaffPage'>
         <Callout title='View / Edit Staff Accounts'>
@@ -76,9 +71,17 @@ class StaffPage extends Component {
             </Button>
           }
         </ButtonGroup>
-        <ReactTable { ...tableProps } />
 
-        <NewStaffModal isOpen={ this.state.showModal } toggle={ this.toggle } />
+        <Table 
+          data={ staff } 
+          loading={ loading } 
+          columns={ columns } 
+          pageId='StaffPage' />
+
+        <NewStaffModal 
+          isOpen={ this.state.showModal } 
+          toggle={ this.toggle } 
+          />
       </div>
     )
   }

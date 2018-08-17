@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import ReactTable from "react-table";
-import { Callout, FontAwesome } from 'components/ui';
+import { Table, Callout, FontAwesome } from 'components/ui';
 import { Link } from 'react-router-dom';
 import { Button, ButtonGroup } from 'reactstrap';
 import { InlineSync } from 'components/ui/loading';
 // functions
-import is from 'is_js';
 import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
-import { filter, scrollToTop } from 'functions/tables';
 import { getPlatoons } from 'store/platoons/operations';
 // styles
 import './PlatoonsPage.scss';
@@ -59,17 +56,6 @@ export class PlatoonsPage extends Component {
       columns.push( { Header: 'Base', accessor: 'school_name' } );
     }
 
-    const onChange = scrollToTop('PlatoonsPage');
-    const tableProps = {
-      data: platoons, columns,
-      className: "-striped -highlight",
-      filterable: true, defaultFilterMethod: filter,
-      minRows: is.mobile() || is.tablet() ? 10 : 15,
-      noDataText: loading ? 'Loading...' : 'No Data',
-      onPageChange: onChange, onFilteredChange: onChange,
-      defaultPageSize: is.mobile() || is.tablet() ? 50 : 100,
-    }
-
     return (
       <div id='PlatoonsPage'>
         <Callout title="View / Edit Platoons">
@@ -92,7 +78,13 @@ export class PlatoonsPage extends Component {
             </Button>
           }
         </ButtonGroup>
-        <ReactTable { ...tableProps } />
+
+        <Table 
+          data={ platoons } 
+          columns={ columns } 
+          loading={ loading } 
+          pageId='PlatoonsPage' />
+
       </div>
     )
   }

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
-import { Callout, FontAwesome } from 'components/ui';
+import { Table, Callout, FontAwesome } from 'components/ui';
 import { Button, ButtonGroup } from 'reactstrap';
 import { InlineSync } from 'components/ui/loading';
 // modals
@@ -11,7 +10,6 @@ import NewParentModal from './NewParentModal';
 // functions
 import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
-import { defaultTableProps } from 'functions/tables';
 // state
 import { getParents } from 'store/parents/operations';
 // styles
@@ -73,15 +71,6 @@ class ParentsPage extends Component {
       { Header: 'Children', id: 'children', accessor: parent => parent.children.length },
     ];
 
-    let tableProps  = defaultTableProps( 'ParentsPage', loading );
-    tableProps = { 
-      ...tableProps, data: parents, columns,
-      defaultSorted: [
-        { id: "first", desc: false }, 
-        { id: "last", desc: false }
-      ]
-    }
-
     return (
       <div id='ParentsPage'>
         <Callout title='View Parent Accounts'>
@@ -91,6 +80,7 @@ class ParentsPage extends Component {
           </p>
           <p><strong>To add / remove children please select the First or Last name and have their Serial Number ready.</strong></p>
         </Callout>
+        
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
           <Button onClick={this.toggle} className='btn btn-primary'>
             <FontAwesome icon='plus' /> Create Parent Account
@@ -104,9 +94,19 @@ class ParentsPage extends Component {
             </Button>
           }
         </ButtonGroup>
-        <ReactTable { ...tableProps } />
 
-        <NewParentModal isOpen={ this.state.showModal } toggle={ this.toggle } />
+        <Table 
+          data={ parents }
+          columns={ columns }
+          loading={ loading }
+          pageId='ParentsPage'
+          defaultSorted={[ { id: "first", desc: false }, { id: "last", desc: false } ]}
+          />
+
+        <NewParentModal 
+          isOpen={ this.state.showModal } 
+          toggle={ this.toggle } 
+          />
       </div>
     )
   }

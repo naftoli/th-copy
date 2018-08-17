@@ -3,17 +3,15 @@ import { connect } from 'react-redux';
 // components
 import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
-import { Callout, FontAwesome } from 'components/ui';
 import BulkUploadModal from './BulkUploadModal';
 import { Button, ButtonGroup } from 'reactstrap';
-import { InlineSync } from 'components/ui/loading';
 import CropperModal from 'components/modals/CropperModal';
+import { Table, InlineSync, Callout, FontAwesome } from 'components/ui';
 // functions
 // import { toast } from 'react-toastify';
 import is from 'is_js';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { loginStoreChanged } from 'functions/login';
-import { filter, scrollToTop } from 'functions/tables';
 // styles
 import './UsersPage.scss';
 // state
@@ -88,14 +86,6 @@ export class UsersPage extends Component {
     const { current_login, soldiers, loading, match } = this.props;
     const { cropperModalShow, cropperModalSrc, uploadModalShow } = this.state;
     const columns = getColumns( current_login.code, this.editPicture );
-    const onChange = scrollToTop('UsersPage');
-    const tableProps = {
-      data: soldiers, columns, className: "-striped -highlight", 
-      noDataText: loading ? 'Loading...' : 'No Data', 
-      filterable: true, defaultFilterMethod: filter,
-      minRows: soldiers.length ? 5 : 15, defaultPageSize: is.mobile() || is.tablet() ? 20 : 50,
-      onPageChange: onChange, onFilteredChange: onChange
-    }
     // page definition
     return (
       <div id='UsersPage'>
@@ -123,7 +113,11 @@ export class UsersPage extends Component {
           }
         </ButtonGroup>
         {/* Table with data */}
-        <ReactTable { ...tableProps } />
+        <Table 
+          columns={ columns } 
+          data={ soldiers } 
+          loading={ loading } 
+          pageId='UsersPage' />
         {/* Modal to edit images */}
         <CropperModal isOpen={ cropperModalShow } src={ cropperModalSrc } 
           toggle={ this.closeCropperModal } uploadImage={ this.updatePicture }/>
