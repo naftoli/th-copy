@@ -1,5 +1,11 @@
 #BasesPage {
 
+  .btn-group { 
+    margin: 10px 0px; width: 100%;
+    justify-content: flex-end;
+    min-height: fit-content;
+  }
+
   .ReactTable {
     max-height: 70vh;
   }
