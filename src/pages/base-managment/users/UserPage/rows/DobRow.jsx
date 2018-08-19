@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker';
 // functions
 import moment from 'moment';
 
-const DobRow = ( { soldier, onChange, show_he, children } ) => {
+const DobRow = ( { soldier, onChange, showHe, children } ) => {
   const { dob, dob_he } = soldier;
   return (
     <Row>
@@ -20,7 +20,7 @@ const DobRow = ( { soldier, onChange, show_he, children } ) => {
           minDate={moment().subtract( 20, 'years' )} maxDate={moment().subtract( 5, 'years' )}
         />
       </Col>
-      { show_he && 
+      { showHe && 
         <Col xs='6' dir='rtl'>
           <label>יום הולדת</label>
           <Input disabled value={ dob_he }/>

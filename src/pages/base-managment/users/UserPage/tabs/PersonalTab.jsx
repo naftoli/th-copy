@@ -42,7 +42,7 @@ class PersonalTab extends Component {
 
             <NameRow soldier={ soldier } onChange={ this.handleChange } />
 
-            <DobRow soldier={ soldier } show_he onChange={ this.dateChange('dob') } />
+            <DobRow soldier={ soldier } showHe onChange={ this.dateChange('dob') } />
 
           </Col>
           <Col xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2'>
