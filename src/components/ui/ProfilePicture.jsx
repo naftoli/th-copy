@@ -1,34 +1,49 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { LEGACY_URL } from 'components/constants';
 import classnames from 'classnames';
 import is from 'is_js';
 import './styles/ProfilePicture.scss';
 
-const fallbackImage = `${LEGACY_URL}/mobile/reg/images/profile-photo-default.jpg`;
+export class ProfilePicture extends Component {
 
-const handleError = ( props ) => ( e ) => {
-  e.target.src = fallbackImage ;
-  if ( props.onError ) props.onError( e );
-}
-
-const ProfilePicture = ( props ) => {
-  const onKeyPress = ( event ) => {
+  static defaultProps = {
+    fallbackImage: `${LEGACY_URL}/mobile/reg/images/profile-photo-default.jpg`
+  }
+  
+  onKeyPress = event => {
     if ( event.key === 'Enter' ) event.target.children[0].click();
   }
 
-  const src = props.src ? `${LEGACY_URL}${props.src}` : '';
+  handleError = e => {
+    e.target.src = this.props.fallbackImage;
+    if ( this.props.onError ) this.props.onError( e );
+  }
 
-  return (
-    <div tabIndex={ props.tabIndex || 0 } onKeyPress={onKeyPress}
-        className={classnames( `profile-picture`, { editable: !!props.onClick, ie: is.ie() } )}>
-      <img { ...props } src={ src } className={ classnames( props.className, 'profile-img' ) } 
-        onError={ handleError( props ) } alt='profile' />
-      { !!props.rank && 
-        <img src={`${LEGACY_URL}/mobile/img_new/ranks/${props.rank}.svg`} 
-          className='rank' alt='rank' />
-      }
-    </div>
-  );
+  render() {
+    let { src, tabIndex, onClick, className, rank, fallbackImage, ...props } = this.props;
+    // classnames
+    const classNames = classnames( `profile-picture`, { editable: !!onClick, ie: is.ie() } );
+    const imageClassNames = classnames( className, 'profile-img' );
+    // update props
+    tabIndex = tabIndex || 0;
+    src = src ? `${LEGACY_URL}${src}` : ''
+
+    return (
+      <div tabIndex={ tabIndex } onKeyPress={ this.onKeyPress } className={ classNames }>
+
+        <img { ...props } 
+          src={ src } alt='profile' 
+          className={ imageClassNames } 
+          onError={ this.handleError } 
+          />
+        
+        {/* Show the rank icon if we need to */}
+        { !!rank && 
+          <img 
+            className='rank' alt='rank' 
+            src={`${LEGACY_URL}/mobile/img_new/ranks/${rank}.svg`} />
+        }
+      </div>
+    );
+  }
 }
-
-export default ProfilePicture;
