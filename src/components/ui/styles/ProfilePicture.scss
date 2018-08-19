@@ -27,7 +27,7 @@
   }
   &:hover img.profile-img, &:focus img.profile-img {
     cursor: pointer;
-    filter: grayscale(100%) brightness(60%) blur(2px);
+    filter: grayscale(100%) brightness(60%);
   }
 }
 
