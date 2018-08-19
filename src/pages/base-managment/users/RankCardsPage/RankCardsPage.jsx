@@ -11,15 +11,13 @@ import is from 'is_js';
 import julian from 'julian';
 import moment from 'moment';
 import { toast } from 'react-toastify';
-import { setTitle } from 'functions/utils';
+import { setTitle, toJulian } from 'functions/utils';
 import { findOption } from 'functions/selects';
 import { loginStoreChanged } from 'functions/login';
 // state
 import { getRankCards, markPrinted } from 'store/soldiers/id_cards/operations';
 // styles
 import './RankCardsPage.scss';
-
-const toJulian = date => parseInt( julian( date.toDate() ), 10 );
 
 export class RegistrationPage extends Component {
   // initial state with default options
