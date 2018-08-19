@@ -1,10 +1,10 @@
 /**
  * This file updates store.payments
  */
-import API from 'api/api';
+import API, { handleAPIResponse } from 'api/api';
 import { setLoading, setPayments } from './actions';
 
-// get all soldiers
+// get all of the current logins payments
 export const getPaymentProfiles = () => dispatch => {
   dispatch( setLoading( true ) );
   return API.get( '/payments/profiles.php' )
@@ -20,4 +20,10 @@ export const getPaymentProfiles = () => dispatch => {
     dispatch( setLoading( false ) );
     return Promise.reject( error );
   });
+}
+
+//** DOES NOT CONNECT TO REDUX. USED TO PULL OTHERS CC INFO */
+export const loadPaymentProfiles = id => {
+  return API.get( `/payments/profiles.php?id=${id}` )
+  .then( handleAPIResponse );
 }
