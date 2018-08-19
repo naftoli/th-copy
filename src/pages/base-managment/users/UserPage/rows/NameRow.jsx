@@ -4,7 +4,7 @@ import { Row, Col, Input } from 'reactstrap';
 // functions
 import { toHebrew } from 'functions/utils';
 
-const RegistrationRow = ( { soldier, onChange, required } ) => {
+const NameRow = ( { soldier, onChange, required } ) => {
   const { first, last, first_he, last_he } = soldier;
   // change the hebrew text
   const hebrewChange = ( event ) => {
@@ -42,4 +42,4 @@ const RegistrationRow = ( { soldier, onChange, required } ) => {
   );
 }
 
-export default RegistrationRow;
+export default NameRow;

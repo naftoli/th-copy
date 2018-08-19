@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import ProfilePicture from 'components/ui/ProfilePicture';
+import { ProfilePicture } from 'components/ui';
 import { DEFAULT_PROFILE } from 'components/constants';
 
 export default ( code, editPicture ) => {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
+import { Link } from 'react-router-dom';
 import { FontAwesome } from 'components/ui';
 import { Row, Col, Input, ButtonGroup, Button } from 'reactstrap';
 // functions
@@ -35,8 +36,13 @@ class PositionRow extends Component {
   }
 
   render() {
-    const { role, base, platoon } = this.props;
+    let { role, base, platoon, auth, id } = this.props;
     const { position } = this.state;
+
+    if ( auth === 'class' ){
+      platoon = <Link to={`/bm/platoons/${id}`}>{ platoon }</Link>;
+    }
+    
     return (
       <div className='PositionRow'>
         <Row>
