@@ -15,7 +15,10 @@ class BasesPage extends Component {
 
   static propTypes = {};
 
-  componentDidMount() { this.loadBases(); }
+  componentDidMount() { 
+    setTitle( 'View / Edit Bases' );
+    this.loadBases(); 
+  }
 
   componentDidUpdate({ login }) {
     if ( loginStoreChanged( login ) ) this.loadBases();
