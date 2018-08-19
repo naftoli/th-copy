@@ -22,5 +22,5 @@ function load_form(type) {
 }
 // Handle the requested autofill function
 function fill_name(text) {
-    $("input[name='name']").val(text);
+    $("input[name='name']").val(text.replace(/57[0-9]{2} - /, ''));
 }

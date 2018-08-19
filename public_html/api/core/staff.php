@@ -36,7 +36,7 @@ class StaffRouter {
             ." LEFT JOIN schools s ON aa.auth IN ('school', 'staff') AND id = school_id "
             ." LEFT JOIN classes c ON aa.auth = 'class' AND id = class_id "
             ." LEFT JOIN schools s2 ON c.school_id = s2.school_id "
-            ." WHERE aa.auth IN ('school' , 'class', 'staff') "
+            ." WHERE aa.auth IN ('school' , 'class', 'staff') AND a.auth !='super' "
             ." HAVING $filters "
             ." ORDER BY school_name, aa.auth, role, position, first, last;";
         $query = $pdo->prepare( $sql );
@@ -86,46 +86,36 @@ class StaffRouter {
     public function create() {
         global $current_user; global $pdo;
 
-        // $admin = new Admin([
-        //     'username' => $_POST['email'],
-        //     'password' => 'p1234',
-        //     'first' => formatParentName( $_POST['father'], $_POST['mother'] ),
-        //     'father' => $_POST['father'],
-        //     'mother' => $_POST['mother'],
-        //     'last' => $_POST['last'],
-        //     'admin_email'=> $_POST['email'],
-        //     'admin_phone_home'  => $_POST['home'],
-        //     'admin_phone_mobile'=> $_POST['cell'],
-        //     'is_parent' => '1',
-        //     'created_by' => $current_user->admin_id,
-        // ]);
+        $admin = new Admin([
+            'username' => $_POST['username'],   'password' => $_POST['password'],
+            'title' => $_POST['title'], 'first' => $_POST['first'], 'last' => $_POST['last'],
+            'admin_email'=> $_POST['email'],    'admin_phone_work'  => $_POST['work'],
+            'admin_phone_mobile'=> $_POST['cell'],  'created_by' => $current_user->admin_id,
+        ]);
 
-        // if ( !$admin->is_valid() && $admin->errors->is_invalid('admin_email') )
-        //     return json_error( 'There is already an account for this email address.');
+        if ( !$admin->is_valid() && $admin->errors->is_invalid('admin_email') )
+            return json_error( 'There is already an account for this email address.');
 
-        // if ( !$admin->is_valid() )
-        //     return json_error( implode(', ', $admin->errors->full_messages() ) );
+        if ( !$admin->is_valid() )
+            return json_error( implode(', ', $admin->errors->full_messages() ) );
 
-        // if ( !$admin->save() )
-        //     return json_error( 'Server Error CORE-PARENTS-87. Could not create parent account.');
-
-        // $admin->sendParentEmail();
-
-        // $insert_query = $pdo->prepare(
-        //     'INSERT INTO admin_auths ( admin_id, auth, id, role_id, position ) '.
-        //     'VALUES( ?, "user", ?, 1, "parent");'
-        // );
-        // $has_parent_query = $pdo->prepare(
-        //     'SELECT * FROM admin_auths WHERE admin_id=? AND auth = "user" AND id=?'
-        // );
-        // foreach( $_POST['children'] as $user_id ) {
-        //     $has_parent_query->execute([ $admin->admin_id, $user_id ]);
-        //     if ( $has_parent_query->rowCount() == 0 ) {
-        //         $insert_query->execute([ $admin->admin_id, $user_id ]);
-        //     }
+        $auth = new AdminAuth( $_POST['auth'] );
+        // send a sign-up email
+        // if ( $auth->auth === 'school' ) {
+        //     $base = School::find( $auth->id )->school_name;
+        //     $admin->sendNewBCEmail( $auth->auth, $base );
         // }
-        
-        // json_response( $admin->admin_id );
+        // save the admin info
+        if ( !$admin->save() )
+            return json_error( 'Server Error CORE-STAFF-115. Could not create staff account.');
+        // connect the auth
+        $auth->admin_id = $admin->admin_id;
+        // save the user
+        if ( !$auth->save() ) {
+            $admin->delete();
+            return json_error( 'Server Error CORE-STAFF-121. Could not create staff account.');
+        }
+        json_response( false );
     }
 
     public function update( $id ) {

@@ -51,7 +51,7 @@ class SchoolRegistrationRouter {
         $statusRegistration = $schoolInfo->save() && $school->save();
 
         // send email to office
-        $to = "bugs@tzivoshashem.org"; // update to cth@
+        $to = "cth@tzivoshashem.org";
         $subject = "School Registration $year";
         $msg = $school->school_name. " has just registered their school for $year. ";
         $headers = 'From: admin@mashpia.com' . "\r\n";

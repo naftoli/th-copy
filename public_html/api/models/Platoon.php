@@ -11,7 +11,7 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
 
     // ******************************* HELPER FUNCTIONS *******************************
     public function name() {
-        return $this->class_grade . ( $this->class_sub ? ' - ' . $this->class_sub : '' );
+        return $this->class_grade . ( $this->class_sub ? ' - ' . $this->class_sub : ' ' );
     }
     public function staff() {
         global $pdo;

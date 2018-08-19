@@ -206,8 +206,11 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     }
     // E-mails
     public function sendParentEmail() {
-        return MashpiaEmails::sendParentEmail( 
-            $this->admin_email, $this->username, $this->password 
+        return MashpiaEmails::sendParentEmail( $this->admin_email, $this->username, $this->password );
+    }
+    public function sendNewBCEmail( $auth, $base ) {
+        return MashpiaEmails::newBC( $this->admin_email, $base, 
+            $this->first . " " . $this->last, $this->username, $this->password 
         );
     }
 
@@ -215,9 +218,9 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     public function jsonSerialize() {
         return $this->to_array([
             'only' => [
-                "admin_id", "username", "title", "first", "last", "lang", 
-                "father", "mother", "father_pic", "mother_pic",
-                "home_phone", "cell_phone", "admin_email"
+                'admin_id', 'username', 'title', 'first', 'last', 'lang', 
+                'father', 'mother', 'father_pic', 'mother_pic',
+                'home_phone', 'cell_phone', 'admin_email'
             ],
             'methods' => [ 'logins' ]
         ]);

@@ -366,10 +366,10 @@
     				$("#userImg").attr('src', '/mobile/reg/images/profile-photo-default.jpg');
                 }
                 // set the school logo
-    			if (user.logo && (!user.logo_2 || user.gender === "M")) {
+    			if (user.logo && (!user.logo_girls || user.gender === "M")) {
     				$("#logo").attr('src', '/schoolLogos/' + user.logo);
-    			} else if(user.logo_2) {
-					$("#logo").attr('src', '/schoolLogos/' + user.logo_2);
+    			} else if(user.logo_girls) {
+					$("#logo").attr('src', '/schoolLogos/' + user.logo_girls);
 				} else {
     				$("#logo").attr('src', '/schoolLogos/TH-Blank Logo.gif');
     			}
