@@ -67,6 +67,7 @@ $types = array(
     }
 
     $schools = $h->getSchools();
+    $h->setChidonNumbers(); // find out the chidon eligible children 
 
     //variables for grand totals
     $grandTotal = 0;
@@ -87,6 +88,7 @@ $types = array(
     <?php
     if ( isset( $schools['pickup'] ) ) {
         foreach( $schools['pickup'] as $id => $school ) { ?>
+            <?php $chidonNum = $h->getChidonNumber( $id ); ?>
             <h2>For Pickup</h2>
             <div class='info'>
                 <?=$school['name']?><br />
@@ -110,6 +112,7 @@ $types = array(
                 Total: <?=$total?><br />
                 Already Registered for Chidon: <?=$school['chidonReg']?><br />
                 Number of posters: <?=$posters[$id]?><br />
+                Possible Chidon Children: <?=$chidonNum?><br />
                 Shipping Requests: <?=$school['shipping_requests']?><br /><br />
                 <?php
                 $grandTotal += $total;
@@ -123,6 +126,7 @@ $types = array(
     
     if ( isset( $schools['deliver'] ) ) {
         foreach ( $schools['deliver'] as $id => $school ) { ?>
+            <?php $chidonNum = $h->getChidonNumber( $id ); ?>
             <h2>For Delivery</h2>
             <div class='info'>
                 <?=$school['name']?><br />
@@ -143,6 +147,7 @@ $types = array(
                 Total: <?=$total?><br />
                 Already Registered for Chidon: <?=$school['chidonReg']?><br />
                 Number of posters: <?=$posters[$id]?><br />
+                Possible Chidon Children: <?=$chidonNum?><br />
                 Shipping Requests: <?=$school['shipping_requests']?><br /><br />
                 <?php
                 $grandTotal += $total;
