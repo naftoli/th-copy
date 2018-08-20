@@ -43,7 +43,7 @@ class ProfileForm extends Component {
   onChange = ( event ) => {
     const { onProfileSelected } = this.props;
     if ( event.target.value ) {
-      return onProfileSelected( event.target.value );
+      return onProfileSelected( parseInt( event.target.value, 10 ) );
     }
     onProfileSelected( false );
   }
