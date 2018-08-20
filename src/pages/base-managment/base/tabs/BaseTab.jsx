@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 // components
 import { BaseRow } from '../rows';
-import { Row, Col } from 'reactstrap';
+import { AddressRow } from 'components/rows';
+import { Row, Col, Input } from 'reactstrap';
 import { ProfilePicture } from 'components/ui';
+// functions
+import { eventToUpdate } from 'functions/events';
+import { pickObjectProps } from 'functions/utils';
 
 export class BaseTab extends Component {
+
+  onChange = ({ target }) => {
+    this.props.onUpdate( eventToUpdate( target, 'name' ) );
+  }
 
   render(){
     const { base, onUpdate } = this.props;
@@ -17,15 +25,18 @@ export class BaseTab extends Component {
 
             <BaseRow 
               { ...base }
-              onUpdate={ onUpdate }
-              />
+              onUpdate={ onUpdate } />
           </Col>
           <Col xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2'>
             <ProfilePicture src={ base.logoPaths.logo }/>
           </Col>
         </Row>
 
-        {/* <AddressRow soldier={ soldier } onChange={ this.handleChange } /> */}
+        <AddressRow { ...base } prefix='school_' onChange={ this.onChange } />
+
+        <p className='title'>Notes</p>
+        <Input type="textarea" name='notes' rows='10'
+          value={ base.notes } onChange={ this.onChange } />
 
       </div>
     )
