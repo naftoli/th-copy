@@ -6,7 +6,6 @@ import { Row, Col, Input } from 'reactstrap';
 import { ProfilePicture } from 'components/ui';
 // functions
 import { eventToUpdate } from 'functions/events';
-import { pickObjectProps } from 'functions/utils';
 
 export class BaseTab extends Component {
 
