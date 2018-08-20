@@ -92,7 +92,7 @@ class CropperModal extends Component {
       body = <Cropper src={ src } cropper={ this.setCropper } />;
     // render the final modal
     return (
-      <Modal isOpen={isOpen} centered={centered} toggle={toggle} id='cropper-modal'>
+      <Modal isOpen={isOpen} centered={centered} id='cropper-modal' zIndex='auto'>
         <ModalHeader toggle={toggle}>Edit / Upload Image</ModalHeader>
         <ModalBody>
           <input type="file" style={{display: 'none'}} ref={ this.uploadRef } onChange={ this.readImageFile }/>
