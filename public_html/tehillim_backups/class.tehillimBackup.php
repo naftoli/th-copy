@@ -11,16 +11,30 @@ class TehillimBackup {
         require_once(dirname(__FILE__).'/../class.globalSettings.php');
         $this->year = GlobalSettings::getCurrentYear();
         $this->dates = array(
-            0, 0, // no dates provided for the first two months
-            2458091,
-            2458122,
-            2458142,
-            2458170,
-            2458198,
-            2458233,
-            2458264,
-            2458289
+            2458383, // tishrei 5778
+            2458404, 
+            2458431, 
+            2458459,
+            2458494,
+            2458524,
+            2458550,
+            2458578,
+            2458614,
+            2458641,
+            2458669,
+            2458697
         );
+        // $this->dates = array(
+        //     0, 0, // no dates provided for the first two months
+        //     2458091,
+        //     2458122,
+        //     2458142,
+        //     2458170,
+        //     2458198,
+        //     2458233,
+        //     2458264,
+        //     2458289
+        // );
         $this->errors = array();
     }
     

@@ -38,8 +38,6 @@ if($debug) echo "</pre>";?>
             .options label.slider-container span.slider-span{font: normal normal normal 14px/1 FontAwesome;height: 22px;}
             .options label.slider-container span.slider-span:before{content: "\f0a8"; font-size: 1.4em; background: none; color: #fff;top: 1.5px;left:3px;}
             .options label.slider-container input:checked + .slider-span:before{content: "\f0a9"; }
-        </style>
-        <style>
             .toggle-3rd {width: 49%;display: inline-block;}
         </style>
     </head>
@@ -58,10 +56,9 @@ if($debug) echo "</pre>";?>
                 <div class="row">
                     <i class="fa fa-university" aria-hidden="true"></i> School: 
                     <select id="school_id" name="school_id">
-                        <option value="">All Schools</option>
                         <? foreach($schools as $school_id => $school_name){?>
                             <option value="<?=$school_id?>"><?=$school_name?></option>
-                        <?}?>
+                        <? } ?>
                     </select>
                 </div>
             </div>
@@ -108,7 +105,7 @@ if($debug) echo "</pre>";?>
                 <i class="fa fa-calendar" aria-hidden="true"></i> Dates:
                 Previous
                 <label class="slider-container">
-                    <input type="checkbox" class="shipped_toggle_bulk" id="report_dates" checked/>
+                    <input type="checkbox" id="report_dates" checked/>
                     <span class="slider-span"></span>
                 </label>
                 Current

@@ -11,7 +11,7 @@ $main_query = mysql_query(
     ."FROM schools s LEFT JOIN school_registrations sr USING (school_id) "
     ."JOIN ( "
         ."SELECT  school_id, COUNT(*) AS total FROM users GROUP BY school_id "
-    .") u USING (school_id) JOIN ( "
+    .") u USING (school_id) LEFT JOIN ( "
         ."SELECT school_id, COUNT(*) AS not_chayolei FROM users WHERE yan = 1 OR chidon = 1 GROUP BY school_id"
     .") nc USING (school_id) LEFT JOIN ("
         ."SELECT school_id, COUNT(*) AS total_registered FROM user_registration WHERE year = $year GROUP BY school_id"

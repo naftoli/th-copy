@@ -52,11 +52,10 @@ function get_staff($school_id = false){
     /***************** GET THE LIST OF TEACHERS FROM ADMINS TABLE **********************/
     
     // Get all the admin auths
-    $teacher_sql = "SELECT classes.school_id, admins.admin_id AS 'id', admins.last AS 'name', admin_email AS 'email', admin_phone_mobile AS 'cell_phone', admin_phone_work AS 'work_phone', 'Primary Teacher' AS 'position', 'teacher' AS 'type', class_grade, class_sub, classes.class_id ";
+    $teacher_sql = "SELECT classes.school_id, admins.admin_id AS 'id', CONCAT(admins.first, ' ', admins.last) AS 'name', admin_email AS 'email', admin_phone_mobile AS 'cell_phone', admin_phone_work AS 'work_phone', 'Primary Teacher' AS 'position', 'teacher' AS 'type', class_grade, class_sub, classes.class_id ";
     $teacher_sql .= "FROM admins JOIN admin_auths aa USING (admin_id) JOIN classes on classes.class_id = aa.id JOIN roles USING (role_id) WHERE aa.auth = 'class' AND admins.last != '' ";
     if($school_id) $teacher_sql .= "AND classes.school_id = $school_id "; // limit the school if we where passed a school_id
     $teacher_sql .= "ORDER BY class_grade, class_sub, admins.last;";
-    //echo $teacher_sql;
     
     $teacher_query = mysql_query($teacher_sql);
     while ($teacher_row = mysql_fetch_assoc($teacher_query)){

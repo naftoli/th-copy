@@ -9,10 +9,6 @@ if ($_GET['debug']) {
 /***************** AUTHENTICATION **********************/
 $admin_auth = array('school'); 
 require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
-// only superusers can use this page. Non superusers get redirected to the page that they can use
-//if ($admin_user['auth'] != 'super') {
-//    header("Location: /raffles/shared/forms/eligible_form.php");
-//}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <html>

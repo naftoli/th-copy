@@ -81,8 +81,8 @@ function mark_rank($shipped, $rank_ord, $user_id, $date_promoted, $shipment_type
     $shipment_type_col = $shipment_type == "book" ? "date_book_shipped" : "date_card_shipped";
     $shipped_date = $shipped ? date("'Y-m-d H:i:s'") : "NULL" ;
     //create the query
-    $rank_sql = "UPDATE rank_marks SET $shipment_type_col='$shipped_date' WHERE user_id=$user_id AND date_promoted=$date_promoted AND rank_ord=$rank_ord;";
-    
+    $rank_sql = "UPDATE rank_marks SET $shipment_type_col=$shipped_date WHERE user_id=$user_id AND date_promoted=$date_promoted AND rank_ord=$rank_ord;";
+
     if(!$shipped && mysql_query($rank_sql)){ // if it is being marked as unshipped remove from shipment....
         $rank_shipment_detail_sql = "DELETE FROM shipment_details WHERE type='rank' AND item_type='$shipment_type' AND item_id='$user_id' AND item_ord='$rank_ord'";
         return !!mysql_query($rank_shipment_detail_sql);

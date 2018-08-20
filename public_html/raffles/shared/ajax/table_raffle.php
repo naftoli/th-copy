@@ -21,14 +21,20 @@ require_once(dirname(__FILE__).'/../functions.php');
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
 use raffles\weekly\Prize as Prize; // use the raffle from its namespace
 
-$filter = "";
+$filters = [];
 
 if($_POST["type"]){
     $type = mysql_real_escape_string($_POST['type']);
-    $filter = "WHERE type='$type' ";
+    $filters[] = "type='$type'";
 }
 
-$filter .= "ORDER BY run_date";
+if($_POST["year"]){
+    $year = mysql_real_escape_string($_POST['year']);
+    $filters[] = "year='$year'";
+}
+
+$filter = ' WHERE ' . implode( ' AND ', $filters ) . ' ';
+$filter .= " ORDER BY run_date;";
 
 $raffles = Raffle::loadAll($filter);
 

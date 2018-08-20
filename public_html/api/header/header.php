@@ -1,9 +1,9 @@
 <?php
+error_reporting(0);
 if ( isset( $_GET['debug'] ) ) {
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
 }
-
 date_default_timezone_set( 'UTC' );
 define( "API_ROOT", __DIR__ . '/..' );
 
@@ -22,6 +22,7 @@ include_once( __DIR__ . '/../../class.globalSettings.php');
 // set headers
 header('Access-Control-Allow-Origin: '. ( isset( $_SERVER['HTTP_ORIGIN'] ) ? $_SERVER['HTTP_ORIGIN'] : "*" ) ); // CORS
 header('Access-Control-Allow-Credentials: true');
+header("Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS, DELETE");
 header('Access-Control-Allow-Headers: mobile, Content-Type, Authorization, login');
 header("Content-Type: text/html; charset=utf-8;");
 
@@ -30,6 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] == "OPTIONS") json_response( false );
 $data = json_decode( file_get_contents('php://input'), true );
 if ( is_array( $data ) ) {
     $_POST = $data;
+}
+
+if ( $development ) {
+    define('AUTHORIZE_NET_SANDBOX', true);
 }
 
 // authenticate user if authentication is required
@@ -45,9 +50,9 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
 
     $token = false;
     // $have_cookies = (isset($_COOKIE['admin_auth']) && isset($_COOKIE['admin_id'])) || isset($_COOKIE['admin']);
-    if ( isset( $headers['Authorization'] ) ) {
+    if ( isset( $headers['Authorization'] ) && $headers['Authorization'] ) {
         $token = explode( ' ',  $headers['Authorization'] )[1];
-    } else if ( isset( $headers['authorization'] ) ) {
+    } else if ( isset( $headers['authorization'] ) && $headers['authorization'] ) {
         $token = explode( ' ',  $headers['authorization'] )[1];
     }
     // set the token as cookies

@@ -1,22 +1,28 @@
 <?php
 include_once( __DIR__ . '/../auth/classes/Auth.php' );
+include_once( __DIR__ . '/../emails/index.php' );
 // This class uses the Authorize.net gateway
 
 class Admin extends ActiveRecord\Model implements JsonSerializable {
     static $before_create = ['createHelpdeskAccount'];
+    static $before_update = ['handleChanges'];
     // relationships 
     static $has_many = [ [ 'admin_auths' ] ];
     // validations
     static $validates_uniqueness_of = [
-        [ 'username', 'message' => 'Usernames must be unique' ],
-        [ 'admin_email', 'message' => 'Email Addresses must be unique' ],
+        [ 'username', 'message' => 'must be unique' ],
+        [ 'admin_email', 'message' => 'addresses must be unique' ],
     ];
-    static $validates_format_of = [
-        [ 'admin_email', 'message' => 'Email Addresses must be valid',
-            'with' => '/^[^0-9][A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/' ]
-    ];
+    // static $validates_format_of = [
+    //     [ 'admin_email', 'message' => 'addresses must be valid',
+    //         'with' => '/^[^0-9][A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/' ]
+    // ];
     // prop mapping
-    static $alias_attribute = [ 'email' => 'admin_email' ];
+    static $alias_attribute = [ 
+        'email' => 'admin_email', 
+        'work' => 'admin_phone_work',
+        'cell' => 'admin_phone_mobile' 
+    ];
     // internalCaches
     private $customer_profile;
     public $login = false;
@@ -47,25 +53,11 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      */
     public function getAuthIds( $auth_type ) {
         $auth_ids = [];
+        if ( !$this->admin_auths ) return $auth_ids;
         foreach( $this->admin_auths as $auth ){
             if ( $auth->auth === $auth_type ) $auth_ids[] = $auth->id;
         }
         return $auth_ids;
-    }
-
-    /**
-     * authCode
-     * 
-     * return Auth code for React site
-     *
-     * @return string
-     */
-    public function authCode() {
-        if ( $this->isHQ() ) return 'HQ';
-        if ( $this->auth === 'ckidssuper' ) return 'CKIDS-ADMIN';
-        // not HQ
-        $auth_types = $this->getAuthTypes();
-        if ( in_array( 'school', $auth_types ) ) return 'BC';
     }
 
     //******************************* LOGIN *******************************/
@@ -99,7 +91,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             ];
         };
         // add parent account
-        if ( count( $this->getAuthIds( 'user') ) > 0  ) {
+        if ( count( $this->getAuthIds( 'user') ) > 0 || count( $logins ) === 0 ) {
             $logins[] = [ 'type' => 'user', 'id' => $this->admin_id, 'code' => 'PARENT',
                 'name' => 'My Parent Portal', 'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 
                 'key' => mashpia\api\auth\Auth::mobileKey( $this->admin_id )
@@ -206,16 +198,31 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             'only' => ['first', 'last', 'admin_email', 'password' ]
         ]) );
     }
+    // send the admin any emails if we need to
+    public function handleChanges() {
+        if ( $this->attribute_is_dirty('admin_email') ){} 
+        else if ( $this->attribute_is_dirty('username') || $this->attribute_is_dirty('password') ) {}
+        return true;
+    }
+    // E-mails
+    public function sendParentEmail() {
+        return MashpiaEmails::sendParentEmail( $this->admin_email, $this->username, $this->password );
+    }
+    public function sendNewBCEmail( $auth, $base ) {
+        return MashpiaEmails::newBC( $this->admin_email, $base, 
+            $this->first . " " . $this->last, $this->username, $this->password 
+        );
+    }
 
     // SERIALIZERS
     public function jsonSerialize() {
         return $this->to_array([
             'only' => [
-                "admin_id", "username", "title", "first", "last", "lang", 
-                "father", "mother", "father_pic", "mother_pic",
-                "home_phone", "cell_phone", "admin_email"
+                'admin_id', 'username', 'title', 'first', 'last', 'lang', 
+                'father', 'mother', 'father_pic', 'mother_pic',
+                'home_phone', 'cell_phone', 'admin_email'
             ],
-            'methods' => [ 'authCode' ]
+            'methods' => [ 'logins' ]
         ]);
     }
 }

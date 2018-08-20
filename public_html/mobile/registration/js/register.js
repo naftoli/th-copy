@@ -17,6 +17,8 @@ $( '#step-2 form #chidon-registration input').change( function( event ) {
     } 
 });
 
+var anash_kinder = 269;
+
 var registrationApp = function() {
     var api_url = '/api/registration/user_registration.php'; // API endpoint for this page
     var state = {
@@ -215,8 +217,9 @@ var registrationApp = function() {
             });
         } 
         if ( selected_charges.chidon ) {
+            var anash = selected_user.school.school_id === anash_kinder;
             state.cart.push({
-                description: 'Chidon Registration ' + selected_user.first,
+                description: 'Chidon Registration ' + selected_user.first + ( anash ? ' (includes coordinator and study guide)' : ''),
                 price: selected_user.registrationRates.chidon,
                 meta: {
                     type: 'registration',
@@ -228,14 +231,15 @@ var registrationApp = function() {
             });
         }
         if ( selected_charges.yahadus ) {
+            var shipping_included = selected_user.school.shipping_method !== 'pickup';
             state.cart.push({
-                description: 'Yahadus Book for ' + selected_user.first,
-                price: 45,
+                description: 'Yahadus Book for ' + selected_user.first + ( shipping_included ? ' (Shipping Included)' : '' ),
+                price: shipping_included ? 50 : 45,
                 meta: {
                     type: 'registration',
                     user_id: selected_user.user_id,
                     registration_type: 'yahadus',
-                    paid: 45,
+                    paid: shipping_included ? 50 : 45,
                 }
             });
         }
@@ -471,10 +475,25 @@ var templates = function(){
             // setup the payment options - chayolei
             templates.toggleRates( user, 'chayolei' );
             templates.toggleRates( user, 'chidon' );
+            if ( user.registrationRates.chidon && user.school.school_id == anash_kinder ) {
+                $( '#chidon-text' ).text( '. This fee includes a chidon coordinator and study guide.' );
+            } else {
+                $( '#chidon-text' ).text( 'and you will receive a Study Guide from you school when school begins!' );
+            }
             // yahadus
             $( '#step-2 form #yahadus-registration input' )[0].checked = false;
-            $( '#step-2 form #yahadus-book' ).text( user.class_grade - 4 );
+            // $( '#step-2 form #yahadus-book-number' ).text( user.class_grade - 4 );
+            // $( '#step-2 form #yahadus-cost' ).text(  ? 45 : 50 );
             $( '#step-2 form #yahadus-registration').hide();
+            if ( user.school.shipping_method === 'pickup' ) {
+                $( '#step-2 form #yahadus-cost' ).text( '$55' );
+                $( '#step-2 form #yahadus-real-cost' ).text( 45 )
+                $( '#step-2 form #yahadus-text').text( '' );
+            } else { 
+                $( '#step-2 form #yahadus-cost' ).text( '$60' );
+                $( '#step-2 form #yahadus-real-cost' ).text( 50 )
+                $( '#step-2 form #yahadus-text').text( '. Price includes shipping cost.' );
+            }
         },
         toggleRates: function( user, rateType ){
             $( '#step-2 form #' + rateType + '-registration input' )[0].checked = false;

@@ -96,7 +96,7 @@ body,td,th {
 						Book 5 — Grade 8<br />
 					</p>
 					<p class="page-top">
-						<span style="text-decoration: line-through;">List price $55</span> $45 Chidon price
+						<span style="text-decoration: line-through;">List price $55</span> $45 Chidon price plus $5 Shipping Fee.
 					</p>
 				</div>
 			</div>
@@ -105,7 +105,7 @@ body,td,th {
 			<p class="page-top">
 				Books shipped within the U.S. will arrive within 5-7 business days. Books shipped internationally will arrive in approximately 14 business days.
 				<br /><br />
-				To order books please contact your school’s Chidon Coordinator.
+				To place an order register for chidon on your parent account.
 			</p>
 		  
 		</div>

@@ -137,9 +137,12 @@ if (!isset( $_SESSION['skipCC'] ) || $_SESSION['skipCC'] !== 'yes') {
 						function(response) { // on a sucessfull hit this function is called
 							// add || sid == 82 to allow the test account access
 							if(response.success) { // if the charge was sucessfull
+                                var message = 'Registration Compleate';
 								// generate the response and show it in the correct box
-								var response  = response.data.payment.transactionResponse.messages[0]; // load the correct section of the response
-								var message = response.description + " (" + response.code + ")"; // format the text
+                                if ( response.data.payment ) {
+                                    var response  = response.data.payment.transactionResponse.messages[0]; // load the correct section of the response
+								    var message = response.description + " (" + response.code + ")"; // format the text
+                                }
 								$('#cc_response').html(message + "<br/>") ; // show the user the response
 								$("#return_to_main_menu_button").show();
 								$("#submit_button").hide();
@@ -223,7 +226,7 @@ if (!isset( $_SESSION['skipCC'] ) || $_SESSION['skipCC'] !== 'yes') {
 												<li>
 													<div class="box">
 														<h4><input type="checkbox" name="ccaccept" id="ccaccept" />
-														Please charge my card $<?=$total?>.00</h4>
+														Please charge my card $<?=$total?></h4>
 													</div>
 												</li>
 												<li>

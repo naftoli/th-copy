@@ -7,6 +7,7 @@ class SchoolRegistration extends ActiveRecord\Model implements JsonSerializable 
     static $validates_uniqueness_of = [
         [ ['school_id', 'year'], 'message' => '- duplicate record' ]
     ];
+
     public function validate() {
         if ( !in_array( $this->type, [ 1, 2, 3 ] ) )
             $this->errors->add('type', 'must be a valid option');
@@ -14,10 +15,14 @@ class SchoolRegistration extends ActiveRecord\Model implements JsonSerializable 
     // not a default instance
     public $default = false;
 
+    public static function getDefaultEarlyBird() {
+        return new DateTime( '2018-09-07 00:00:00' );
+    }
+
     public static function getDefault( $school_id, $type, $year ) {
         $instance = new self([
             'school_id' => $school_id, 'year' => $year, 'type' => $type, 'fee' => 770, 
-            'balance' => 0, 'early_bird' => new DateTime( '2018-09-07 00:00:00' )
+            'balance' => 0, 'early_bird' => self::getDefaultEarlyBird()
         ]);
         $instance->default = true;
         return $instance;

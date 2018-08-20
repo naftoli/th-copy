@@ -1,5 +1,7 @@
 <?php
+include_once( __DIR__ . "/../functions/format/parents.php" );
 include_once( __DIR__ . '/../functions/files/images.php' );
+require_once( __DIR__ . '/../../calendar.php' );
 include_once( __DIR__ . '/../auth/classes/Auth.php' );
 include_once( __DIR__ . '/traits/BuildModel.php' );
 
@@ -63,10 +65,8 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $medals_query->execute( [ $this->user_id ] );
         $medals = [];
         while( $medal = $medals_query->fetch() ){
-            $medal['date_awarded_he'] = iconv( 'WINDOWS-1255', 'UTF-8', jdtojewish( 
-                $medal['date_awarded'], true, CAL_JEWISH_ADD_GERESHAYIM )
-            );
-            $medal['date_awarded'] = date('Y-m-d', jdtounix( $medal['date_awarded'] ));
+            $medal['date_awarded_he'] = dateToHebrew( $medal['date_awarded'] );
+            $medal['date_awarded'] = date('n/j/Y', jdtounix( $medal['date_awarded'] ));
             $medal['photo'] = $medal['profile_photo_id'] ? 
                 '/file_view.php?id='.$medal['profile_photo_id'] : 
                 '/kiosk/images/medals/holder.png';
@@ -87,7 +87,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $medals_index = 0;
         foreach( $ranks as $index => $rank ){
             $ranks[$index]['medals'] = [];
-            $ranks[$index]['date_promoted'] = date('Y-m-d', jdtounix( $rank['date_promoted'] ));
+            $ranks[$index]['date_promoted'] = date('n/j/Y', jdtounix( $rank['date_promoted'] ));
             $medals_in_rank = intval( $medals_required[ $index + 1 ] );
             $ranks[$index]['total_medals'] = $medals_in_rank;
             while( isset( $medals[ $medals_index ] ) && $medals_index < $medals_in_rank ) {
@@ -112,7 +112,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     public function parentAccount() {
         global $pdo;
         $query = $pdo->prepare(
-            'SELECT admin_id, first, last, admin_phone_mobile AS phone, admin_email as email '
+            'SELECT admin_id, first, father, mother, last, admin_phone_mobile AS phone, admin_email as email '
             .'FROM admins JOIN admin_auths aa USING (admin_id) WHERE aa.auth="user" and id=?;'
         );
         $query->execute( [$this->user_id] );
@@ -120,6 +120,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         if ( !$parent ) return false;
         // set the admin key if we have a parent
         $parent['key'] = mashpia\api\auth\Auth::mobileKey( $parent['admin_id'] );
+        $parent['first'] = formatParentName( $parent['father'], $parent['mother'], $parent['first'] );
         return $parent;
     }
     // takes an uploaded file and sets it as the profile picture
@@ -164,7 +165,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $result = [ 'chayolei' => $reg_info->getChildFee() ];
         // add chidon if user is in grade 4+
         if ( $this->platoon && $this->platoon->class_grade >= 4 )
-            $result[ 'chidon' ] = GlobalSettings::getChidonCost();
+            $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
         return $result;
     }
     // returns array with the status of the various registration types for the current year.
@@ -181,6 +182,10 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $user_status_query->execute([ ':year' => $year, ':user_id' => $this->user_id ]);
         $row = $user_status_query->fetch();
         $result = [ 'chayolei'  => !!$row['user_reg_id'] ];
+        // australian registration ends here.
+        if ( GlobalSettings::isAustralian( $this->school_id ) ) 
+            return $result;
+        
         // only add th_chidon_id if the user is in grade 4+
         if ( $this->platoon && $this->platoon->class_grade >= 4 )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
@@ -318,22 +323,27 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     // ******************************* SERIALIZERS *******************************
     // serialize to array for json responses
     public function jsonSerialize(){
-        return $this->to_array([
+        $result = $this->to_array([
             'only' => [
                 'user_id', 'user_serial', 'first', 'last', 'first_he', 'last_he', 'lang_id', 'dob', 'dob_he',
                 'school_type_id', 'user_address1', 'user_address2', 'user_city', 'user_state',
-                'user_postal', 'user_country', 'user_phone', 'gender', 'user_start_date', 'user_registered',
+                'user_postal', 'user_country', 'user_phone', 'gender', 
                 'chayolei', 'yan', 'chidon', 'allow_parent_tasks', 'print_parent_tasks', 'mobile_pic',
                 'school_id', 'class_id', 'school_type_id'
             ],
             'methods' => [ 'profilePicture', 'barcode', 'currentRank', 'miles', 'parentAccount' ],
             'include' => [ 
                 'school' => [ 
-                    'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ],
-                    'include' => [ 'platoons' => [ 'only' => [ 'class_id' ], 'methods' => [ 'name' ] ] ]                     
+                    'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ]                     
                 ],
                 'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ], 'methods' => [ 'name' ] ]
             ]
         ]);
+        // other functions
+        $result['start_date'] = dateToHebrew($this->user_start_date);
+        $result['registered_at'] = $this->user_registered ? // format the date if we have it
+            ( new DateTime( $this->user_registered ) )->format('n/j/Y g:i A') : false;
+
+        return $result;
     }
 }

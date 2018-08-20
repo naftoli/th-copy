@@ -3,6 +3,8 @@ require_once 'class.globalSettings.php';
 $chidonYear = GlobalSettings::getChidonYear();
 
 // get campaigns for current year
+$tanyaCampaign = 0;
+$mishnaCampaign = 0;
 $campaign_query = mysql_query( "SELECT * FROM line_campaigns WHERE year = " . $chidonYear );
 while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 	if (strtolower($campaign['type']) == 'tanya') $tanyaCampaign = $campaign['id'];

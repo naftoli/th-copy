@@ -62,7 +62,8 @@ require('header.php');
         <h1>Chidon Ticket Purchases Report</h1>
         
         <?
-        $year = 5777;
+        require 'class.globalSettings.php';
+		$year = GlobalSettings::getChidonYear();
         $purchases = array();
         //$sql = "select * from chidon where year = $year and (mqty > 0 or gqty > 0 or ggqty > 0) order by name";
         $sql = "select * from chidon where year = $year and (mqty > 0 or gqty > 0 or ggqty > 0) order by name";

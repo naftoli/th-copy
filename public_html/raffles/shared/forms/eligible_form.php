@@ -101,8 +101,8 @@ use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
         
         
         <script>
-            var test_mode = <?=$_GET['test'] ? "true" : "false";?>;
-            var debug_mode = <?=$_GET['debug'] ? "true" : "false";?>;
+            var test_mode = <?=isset($_GET['test']) ? "true" : "false";?>;
+            var debug_mode = <?=isset($_GET['debug']) ? "true" : "false";?>;
         </script>
         <script src="/raffles/shared/js/user_eligible.js"></script>
     </body>

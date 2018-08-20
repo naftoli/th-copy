@@ -13,25 +13,31 @@ class SchoolRegistrationRouter {
         $payment_profile_id 	= mysql_real_escape_string($_POST['payment_profile_id']);
         // charge the card
         $customer_profile = new classes\authorize\CustomerProfile($customer_profile_id, false);
-        $response = $customer_profile->chargeCard($amount, $payment_profile_id, null, null, $description);
         
-        if ( $response == 'Error (E00040): Customer Profile ID or Customer Payment Profile ID not found.' )
-            $response = "Error (E00040): Invalid Card on File, Please go back and update it.";
+        if ( $amount > 0 ) {
+            $response = $customer_profile->chargeCard(
+                $amount, $payment_profile_id, null, null, $description
+            );
+            if ( $response == 'Error (E00040): Customer Profile ID or Customer Payment Profile ID not found.' )
+                $response = "Error (E00040): Invalid Card on File, Please go back and update it.";
+            
+            if ( !is_array( $response ) )
+                json_error( $response, false, 200 );
 
-        if ( !is_array( $response ) )
-            json_error( $response, false, 200 );
-
-        // save to transactions table.
-        $transaction_query = $pdo->prepare(
-            "INSERT INTO transactions (trans_date, school_id, admin_id, description, amount, first, last, zip, response) "
-            ."VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)"
-        );
-        $statusTransaction = $transaction_query->execute([
-            $school_id, $current_user->admin_id, $description, $amount, 
-            $current_user->first, $current_user->last,
-            $current_user->admin_postal, json_encode( $response )
-        ]);
-
+            // save to transactions table.
+            $transaction_query = $pdo->prepare(
+                "INSERT INTO transactions (trans_date, school_id, admin_id, description, amount, first, last, zip, response) "
+                ."VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)"
+            );
+            $statusTransaction = $transaction_query->execute([
+                $school_id, $current_user->admin_id, $description, $amount, 
+                $current_user->first, $current_user->last,
+                $current_user->admin_postal, json_encode( $response )
+            ]);
+        } else {
+            $statusTransaction = true;
+            $response = false;
+        }
         // get the current registration info
         $year = GlobalSettings::getRegistrationYear();
         $school = School::find( $school_id, [ 'include' => 'school_registrations' ] );
@@ -45,7 +51,7 @@ class SchoolRegistrationRouter {
         $statusRegistration = $schoolInfo->save() && $school->save();
 
         // send email to office
-        $to = "bugs@tzivoshashem.org"; // update to cth@
+        $to = "cth@tzivoshashem.org";
         $subject = "School Registration $year";
         $msg = $school->school_name. " has just registered their school for $year. ";
         $headers = 'From: admin@mashpia.com' . "\r\n";

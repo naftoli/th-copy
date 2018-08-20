@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Password Changed</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body{ margin: 0px; padding: 0px; font-family: 'Helvetica', sans-serif; }
+        img { max-height: 100%; max-width: 100%; }
+        header { 
+            height: 75px;
+            background: #335eac;
+            display: flex;
+            align-items: center; 
+        }
+        header h1 { flex-grow: 1; text-align: center; color: #fff;}
+        header img { width: 50px; padding: 15px; }
+
+        section#content { background: #fff; padding: 10px 15px; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <img src="https://mashpia.com/mobile/img_new/TH%20Logo-colorful-svg.svg" alt='logo'/>
+            <h1>Tzivos Hashem</h1>
+        </header>
+        <section id='content'>
+            <h1>Hi <?= $name ?>,</h1>
+            <p><?= $base ?> has created a account for you to access their base in Chayolei Tzivos Hashem.</p>
+            
+            Your Username is: <?=$username?><br />
+            Your Password is: <?=$password?> <br /> <br />
+
+            Access your portal by loggin into <a href='https://TzivosHashem.com/'>TzivosHashem.com</a>.
+            
+            For any questions, help, or feedback, please contact <a href='mailto:cth@tzivoshashem.org'>CTH@TzivosHashem.org</a>.
+
+            Wishing you much Yiddishe and Chassidishe Nachas,<br/>
+            CTH Headquarters
+        </section>
+    </div>
+</body>
+</html>

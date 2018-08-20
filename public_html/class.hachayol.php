@@ -6,6 +6,7 @@ class Hachayol {
     private $schools;
     private $schoolDetails;
     private $chidonYear;
+    private $chidonNumbers;
     
     public function __construct() {
         require_once 'class.db.php';
@@ -13,6 +14,7 @@ class Hachayol {
         $this->schools = array();
         $this->schoolDetails = array();
         $this->chidonYear = GlobalSettings::getChidonYear();
+        $this->chidonNumbers = array();
     }
     
     public function setSchools( $id = null ) {
@@ -123,6 +125,29 @@ class Hachayol {
     
     public function getSchoolDetails() {
         return $this->schoolDetails;
+    }
+
+    public function setChidonNumbers() {
+        $sql = "
+            SELECT s.school_id, s.school_name, count( u.user_id ) AS total 
+            FROM users u 
+            JOIN schools s ON s.school_id = u.school_id 
+            JOIN classes c ON c.class_id = u.class_id 
+            WHERE (
+                (u.chayolei = 1 AND u.user_registered > 0) 
+                or u.chidon = 1
+            ) 
+            AND c.class_grade in ('4','5','6','7','8') 
+            AND s.test_school = 0
+            GROUP BY s.school_name";
+        $result = mysql_query( $sql );
+        while ( $row = mysql_fetch_assoc( $result ) ) {
+            $this->chidonNumbers[$row['school_id']] = $row['total'];
+        }
+    }
+
+    public function getChidonNumber( $school_id ) {
+        return ( isset( $this->chidonNumbers[$school_id] ) ? $this->chidonNumbers[$school_id] : 0 );
     }
 }
 ?>

@@ -177,6 +177,7 @@ if(gr('save') && $school_id != -1) {
                 $sql .= "dob = '" . mysql_real_escape_string($dob) . "', ";
                 $sql .= "user_start_date='" . unixtojd() . "', ";                         
                 $sql .= "user_serial=" . $user_serial;
+                $sql .= " chidon=1, chayolei=0";
                 //echo $sql;
                 mysql_query( $sql ) or die( mysql_error() );
                 $user_id = mysql_insert_id();

@@ -21,7 +21,7 @@ class GlobalSettings {
     }
     
     public static function getRegistrationYear( $school_id = false ) {
-        if ( in_array( $school_id, [ 55, 66, 110, 112, 256 ] ) )
+        if ( self::isAustralian( $school_id ) )
             return 5778;
         $sql = "select `val` from global_settings where `key` = 'registration_year'";
         $result = mysql_query($sql);
@@ -107,7 +107,10 @@ class GlobalSettings {
      *
      * @return int
      */
-    public static function getChidonCost(){
+    public static function getChidonCost( $school_id = false ) {
+        // Anash kinder has $40 fee
+        if ( in_array( $school_id, [ 269 ] ) )
+            return 40;
         return 5;
     }
 
@@ -131,6 +134,11 @@ class GlobalSettings {
      */
     public static function getGuarenteedDiscount(){
         return 5;
+    }
+
+    public static function isAustralian( $school_id ) {
+        $australian = [ 55, 66, 110, 112, 256 ];
+        return in_array( $school_id, $australian );
     }
 }
 ?>

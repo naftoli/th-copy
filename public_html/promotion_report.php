@@ -126,7 +126,7 @@ if (isset($_POST['submit'])) {
         echo "Click <a href='promotion_report.php?go=back'>here</a> to show previous report dates.<br /><br />";
     }
 	
-	$jd = ($dates['end'] + 7);
+	$jd = ($dates['end'] + 8); // pictures are due 8 days after data entry
 	$sendDate = iconv('WINDOWS-1255', 'UTF-8', jdtojewish($jd, true, CAL_JEWISH_ADD_GERESHAYIM));
 	echo "<h3>Any schools who do not send in their promotion pictures by " . $sendDate . " , will not be mentioned during the promotion segment.
 	    Past promotions will not be able to be made up in future rallies.</h3>";

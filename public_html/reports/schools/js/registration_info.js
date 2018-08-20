@@ -21,7 +21,8 @@ var registration_info = function(){
 
     function renderTable(){
         var html = '<table><tbody>';
-        html += '<tr><th>Base Name</th><th>Type</th><th>Base Fee</th><th>Balance</th><th>Soldier Fee</th><th>Early Bird / Deadline</th><th>Live</th></tr>'
+        html += '<tr><th>Base Name</th><th>Type</th><th>Base Fee</th><th>Balance</th>'
+            + '<th>Soldier Fee</th><th>Early Bird / Deadline</th><th>Live</th><th></th><th>Status</th></tr>';
         state.schools.forEach( function( school ) {
             var reg_info = school.reg_info;
             reg_info.school_registration_id = reg_info.school_registration_id || '';
@@ -37,7 +38,14 @@ var registration_info = function(){
 
             html += '<td class="saved">' + ( reg_info.default ? "No" : "Yes" ) + '</td>';
 
-            html += '<td><button class="button save-row">Save / Make Live</button></td>';
+            html += '<td><button class="button save-row">' + ( reg_info.default ? "Make Live" : "Update" ) + '</button></td>';
+
+            html += '<td>' + ( 
+                !reg_info.default && !school.school_era && !reg_info.date_paid ? 
+                    '<button class="button disable-base" data-school_id='+(school.school_id)+'>Lock base</button>' : 
+                    ( reg_info.date_paid ? 'paid' : ( reg_info.default ? 'Not Live' : 'Locked' ) )
+                ) 
+                + '</td>';
 
             html += '</tr>';
         });
@@ -47,11 +55,12 @@ var registration_info = function(){
         $("select[name='type']").change( toggleSaved );
         $("#report input").change( toggleSaved );
         $("#report .save-row").click( saveRow );
+        $("#report .disable-base").click( disableBase );
     }
 
     function formatDate( date, name, disabled ){
         date = date ? date : '';
-        return '<input type="date" name="' + name + '" value="' + date.split('T')[0] + '" ' +  
+        return '<input type="date" name="' + name + '" value="' + date.split(' ')[0] + '" ' +  
             ( disabled ? "disabled='true'" : "") + '"/>';
     }
 
@@ -95,7 +104,7 @@ var registration_info = function(){
         url = id == '0' ? url : url + '?id=' + id;
 
         function handleResponse( response ){
-            $(event.target).text( "Save / Make Live" );
+            $(event.target).text( "Update" );
             if( !response.success ) {
                 return alert( response.error + '\n\n' + response.data.join('\n') )
             }
@@ -109,6 +118,15 @@ var registration_info = function(){
             data: postData, 
             success: handleResponse,
             error: function( xhr ) { handleResponse( JSON.parse( xhr.response ) ) }
+        });
+    }
+
+    function disableBase( event ) {
+        var button = event.target;
+        var postData = { school_id: button.dataset.school_id };
+        $.post( '/api/registration/school_configuration?action=disableSchool', postData, function( response ) {
+            if ( response.success ) 
+                return $(button).parent().html('Locked');
         });
     }
 

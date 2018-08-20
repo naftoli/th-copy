@@ -16,11 +16,14 @@ class UserRegistrationRouter {
         $user_ids = $current_user->getAuthIds( 'user' );
 
         // get all the users information
-        $users = User::find( $user_ids );
+        $users = User::find( $user_ids, 
+            ['include' => [ 'school', 'platoon' ] ] 
+        );
         $users = is_array( $users ) ? $users : [ $users ];
 
         $available_users = [];
         foreach( $users as $user ){
+            if ( !$user->school_id ) continue;
             $reg_info = $user->school->getRegInfo();
             if ( $reg_info->default || !$reg_info->date_paid ) continue;
             $available_users[] = $user;
@@ -111,7 +114,7 @@ class UserRegistrationRouter {
         /******************************** PAYMENT ********************************/
         if ( $total != 0 ) {
             // if we have a payment profile provided
-            if ( $payment_info['payment_profile'] ) {
+            if ( isset($payment_info['payment_profile']) && $payment_info['payment_profile'] ) {
                 $customer_profile = $current_user->customerProfile();
                 $payment_profile_id = $payment_info['payment_profile'];
             // we need to create the payment profile
@@ -148,18 +151,25 @@ class UserRegistrationRouter {
         $errors = [];   $registration_table_users = [];
         $registration_info_query = $pdo->prepare(
             "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
-            ."VALUES( ?, ?, ?, ?, ?, '$year' )"
+            ."VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year )"
         );
         // for each user
         foreach ( $users as $user ) {
             $user_errors = [];
             foreach( $registrations as $registration ){
                 if ( !($user->user_id == $registration['user_id']) ) continue;
+                // set the year based on the school id for chayolei only
+                $year = $registration['registration_type'] == 'chayolei' ? 
+                    GlobalSettings::getRegistrationYear( $user->school_id ) : 
+                    GlobalSettings::getRegistrationYear();
                 // insert a record into the registration_charges table.
                 $registration_info_query->execute([
-                    ( $trans_id ? $trans_id : null ), 
-                    $user->user_id, $user->school_id, $registration['registration_type'],
-                    $registration['paid']
+                    'trans_id' => ( $trans_id ? $trans_id : '' ), 
+                    'user_id' => $user->user_id, 
+                    'school_id' => $user->school_id, 
+                    'type' => $registration['registration_type'],
+                    'amount' => $registration['paid'], 
+                    'year' => $year
                 ]);
                 // Chayolei Registration
                 if ( $registration['registration_type'] == 'chayolei' ) {
@@ -209,7 +219,7 @@ class UserRegistrationRouter {
                 ],
                 'methods' => [ 'registrationRates', 'registrationStatus', 'profilePicture' ],
                 'include' => [ 
-                    'school' => [ 'only' => [ 'school_id', 'school_name' ] ],
+                    'school' => [ 'only' => [ 'school_id', 'school_name', 'shipping_method' ] ],
                     'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ] ]
                 ]
             ]);

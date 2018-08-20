@@ -4,35 +4,19 @@ include_once( __DIR__ . "/../header/header.php" );
 
 class UsersRouter {
 
-    public function authenticate() {
-        global $current_user;
-        return in_array( $current_user->authCode(), [ 'HQ', 'BC' ] );
-    }
-
     public function index() {
         global $current_user; global $pdo;
-        // filters and params for the filters
-        $filters = [];   $params = [];
         // limit based on admin type
-        $login = $current_user->login;
-        if ( $login['code'] === 'HQ' ) {
-            $filters[] = 's.test_school = 0';
-        } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
-            $filters[] = 's.ckids = 1';
-        } else if ( $login['code'] === 'BC' ) {
-            $filters[] = 'u.school_id = ?'; $params[] = $login['id'];
-        } else if ( $login['code'] === 'TEACHER' ) {
-            $filters[] = 'u.class_id = ?'; $params[] = $login['id'];
-        } else { json_error( 'Access Deinied: CORE-USERS-26' ); }
+        $filters_and_params = $this->getFilters( $current_user->login );
         // combine the filters
-        $filters = 'WHERE ' . implode( ' AND ', $filters );
+        $filters = 'WHERE ' . implode( ' AND ', $filters_and_params['filters'] );
         // generate the SQL
         $sql = "SELECT u.*, s.*, c.class_grade, c.class_sub FROM users u "
             ."JOIN schools s USING ( school_id ) "
             ."LEFT JOIN classes c USING ( class_id ) $filters "
             ."ORDER BY school_name, class_grade, class_sub, last, first";
         $query = $pdo->prepare( $sql );
-        $query->execute( $params );
+        $query->execute( $filters_and_params['params'] );
 
         $users = [];
         // fetch all results and parse them as models
@@ -40,14 +24,15 @@ class UsersRouter {
             $profilePicture = ( new User(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
             $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
             // format dates
-            $dob = $row['dob'] ? ( new DateTime( $row['dob'] ) )->format(DateTime::ATOM) : $row['dob'];
-            $user_registered = $row['user_registered'] ? ( new DateTime( $row['user_registered'] ) )->format(DateTime::ATOM) : $row['user_registered'];
+            $dob = $row['dob'] ? ( new DateTime( $row['dob'] ) )->format('n/j/Y') : $row['dob'];
+            $user_registered = $row['user_registered'] ? ( new DateTime( $row['user_registered'] ) )->format('n/j/Y g:i A') : $row['user_registered'];
             // format and return just the data we want...
             $users[] = [
                 'user_id' => intval($row['user_id']), 'user_serial' => intval($row['user_serial']), 
                 'first' => $row['first'], 'last' => $row['last'], 'dob' => $dob, 'gender' => $row['gender'], 
                 'user_registered' => $user_registered,  'mobile_pic' => $row['mobile_pic'], 'profilePicture' => $profilePicture,
                 'chayolei' => intval($row['chayolei']), 'yan' => intval($row['yan']), 'chidon' => intval($row['chidon']), 
+                'school_id' => intval( $row['school_id'] ), 'class_id' => $row['class_id'] ? intval( $row['class_id'] ) : false, 
                 'school' => [ 'school_id' => $row['school_id'], 'school_name' => $row['school_name'], 
                     'shipping_city' => $row['shipping_city'], 'school_era' => $row['school_era'] ],
                 'barcode' => '3'.$row['user_code'],
@@ -101,9 +86,9 @@ class UsersRouter {
             ]);
         // update other properties
         } else {
-            foreach( User::table()->columns as $column ){
-                if ( !isset( $_POST[ $column->name ] ) ) continue;
-                $user->{ $column->name } = $_POST[ $column->name ];
+            $columns = array_keys( User::table()->columns );
+            foreach( $_POST as $key => $value ) {
+                if ( in_array( $key, $columns ) ) $user->{ $key } = $_POST[ $key ];
             }
             if ( !$user->is_valid() || !$user->save() )
                 json_error('Could not update soldier. Please check to make sure that the data is valid', 'CORE-USERS-90');
@@ -127,13 +112,15 @@ class UsersRouter {
             if ( !in_array( $current_user->login['code'], ['BC', 'HQ', 'CKIDS-ADMIN'] ) ) {
                 json_error( 'Your current login does not have the ability to remove users' );
             }
-            if ( $user->canDestroy() ) {
-                json_response( 'deleted', $user->delete() );
-            } else {
+            if ( $user->canDestroy() && $user->delete() ) {
+                return json_response( 'Soldier has been deleted.' );
+            } else if ( !$user->canDestroy() ) {
                 $user->school_id = null;
                 $user->class_id = null;
-                json_response( 'removed-from-school', $user->save() );
+                if ( $user->save() ) 
+                    return json_response( 'Soldier has been removed from Base.' );
             }
+            return json_error( 'Could not delete soldier.' );
         } catch ( Exception $e ) {
             json_error( 'Soldier does not exist', 'CORE-USERS-137', 401 );
         }
@@ -147,6 +134,22 @@ class UsersRouter {
             json_response( $result );
         }
         json_error('Server did not get the profile picture :-(.');
+    }
+
+    private function getFilters( $login ){
+        // filters and params for the filters
+        $filters = [];   $params = [];
+        if ( $login['code'] === 'HQ' ) {
+            $filters[] = 's.test_school = 0';
+        } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
+            $filters[] = 's.ckids = 1';
+        } else if ( $login['code'] === 'BC' ) {
+            $filters[] = 'u.school_id = ?'; $params[] = $login['id'];
+        } else if ( $login['code'] === 'TEACHER' ) {
+            $filters[] = 'u.class_id = ?'; $params[] = $login['id'];
+        } else { json_error( 'Access Deinied: CORE-USERS-26' ); }
+        
+        return [ 'filters' => $filters, 'params' => $params ];
     }
 }
 

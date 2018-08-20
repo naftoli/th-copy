@@ -10,7 +10,7 @@
     <a href="gifts_and_prizes/<?=$debug ? "?debug=true": "";?>">
         <div class="button">
             <span class="img-box"><img src="/images/icon_auction.png" height="32" alt="tickets"/></span>
-            <span class="link-text">Tehillims and Raffle Prizes</span>
+            <span class="link-text">Yearly Gift and Raffle Prizes</span>
         </div>
     </a>
     <a href="ranks_and_medals/<?=$debug ? "?debug=true": "";?>">

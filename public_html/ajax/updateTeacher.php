@@ -5,40 +5,45 @@ $admin_id = mysql_real_escape_string($_POST['id']);
 $username = mysql_real_escape_string($_POST['username']);
 $password = mysql_real_escape_string($_POST['password']);
 $class_id = mysql_real_escape_string($_POST['class_id']);
-$name = mysql_real_escape_string($_POST['name']);
+$first = mysql_real_escape_string($_POST['first']);
+$last = mysql_real_escape_string($_POST['last']);
 $email = mysql_real_escape_string($_POST['email']);
 $cell = mysql_real_escape_string($_POST['cell']);
 
+$refresh = false;
+
 if ($class_id) {
-    $sql = "update classes set
-            class_teacher = '" . $name . "',
-            email = '" . $email . "',
-            cell = '" . $cell . "', 
-            where class_id = " . $class_id;
-    @mysql_query($sql);
+    // $sql = "update classes set
+    //         class_teacher = '" . $name . "',
+    //         email = '" . $email . "',
+    //         cell = '" . $cell . "', 
+    //         where class_id = " . $class_id;
+    // @mysql_query($sql);
     
-    $sql = "insert into admins
-            set username = '" . $username . "',
-            password = '" . $password . "',
-            last = '" . $name . "',
-            admin_email = '" . $email . "',
-            admin_phone_mobile = '" . $cell . "'";
-    if ($result = mysql_query($sql)) {
+    $sql = "INSERT INTO admins
+            SET username = '$username',
+            password = '$password',
+            first = '$first', last = '$last',
+            admin_email = '$email',
+            admin_phone_mobile = '$cell'";
+    
+    if ( mysql_query($sql) ) {
         $admin_id = mysql_insert_id();
-        
-        $sql = "insert into admin_auths
-                set admin_id = " . $admin_id . ",
-                id = " . $class_id . ",
-                auth = 'class',
-                role_id = 13";
-        if (mysql_query($sql)) {
-            echo 0;
-        } else {
-            echo mysql_error();
-        }
     } else {
-        //echo 1;
-        echo mysql_error();
+        $admin_id = mysql_query("SELECT admin_id FROM admins WHERE admin_email = '$email'");
+        $admin_id = mysql_fetch_assoc($admin_id)['admin_id'];
+        $refresh = true;
+    }
+    // connect the two accounts
+    $sql = "INSERT INTO admin_auths
+            SET admin_id = '$admin_id',
+            id = '$class_id',
+            auth = 'class',
+            role_id = 13";
+    if (mysql_query($sql)) {
+        echo json_encode(['success' => true, 'refresh' => $refresh]);
+    } else {
+        echo json_encode(['success' => false, 'message' => mysql_error()]);
     }
     exit;
 } else {
@@ -46,28 +51,30 @@ if ($class_id) {
     $result = mysql_query($sql);
     $row = mysql_fetch_assoc($result);
     $class_id = $row['id'];
-    
-    $sql = "update classes set
-            class_teacher = '" . $name . "',
-            email = '" . $email . "',
-            cell = '" . $cell . "'  
-            where class_id = " . $class_id;
-    @mysql_query($sql);
-    
-    $sql = "update admins set
-            username = '" . $username . "',
-            password = '" . $password . "',
-            last = '" . $name . "',
-            admin_email = '" . $email . "',
-            admin_phone_mobile = '" . $cell . "' 
-            where admin_id = " . $admin_id;
+
+    $email_admin_id = mysql_query("SELECT admin_id FROM admins WHERE admin_email = '$email'");
+    $email_admin_id = mysql_fetch_assoc($email_admin_id)['admin_id'];
+
+    if ( $email_admin_id && $email_admin_id !== $admin_id ) {
+        $sql = "UPDATE admin_auths SET admin_id=$email_admin_id WHERE auth='class' AND admin_id='$admin_id'";
+        $refresh = true;
+    } else {
+        $sql = "UPDATE admins SET
+            username = '$username',
+            password = '$password',
+            first = '$first',
+            last = '$last',
+            admin_email = '$email',
+            admin_phone_mobile = '$cell' 
+            where admin_id = $admin_id";
+    }
 
     if (mysql_query($sql)) {
         // send email to hq about change
-        $sql = "select class_grade, class_sub, school_name
-                from classes c
-                join schools s using (school_id)
-                where c.class_id = " . $class_id;
+        $sql = "SELECT class_grade, class_sub, school_name
+                FROM classes c
+                JOIN schools s USING (school_id)
+                WHERE c.class_id = " . $class_id;
         $result = mysql_query($sql);
         $row = mysql_fetch_assoc($result);
         $school = $row['school_name'];
@@ -80,16 +87,14 @@ if ($class_id) {
         $msg = "The teacher info from <b>" . $school . " Grade: " . $grade . "</b> has just been changed.<br />
 Username: " . $username . "<br />
 Password: " . $password . "<br />
-Name: " . $name . "<br />
+Name: " . $first . " " . $last . "<br />
 Email: " . $email . "<br />
 Phone: " . $cell . "<br />";
         mail($to, $subject, $msg, implode("\r\n", $headers));
         
-        echo 0;
+        echo json_encode(['success' => true, 'refresh' => $refresh]);
     } else {
-        //echo 1;
-        echo mysql_error();
+        echo json_encode(['success' => false, 'message' => mysql_error()]);
     }
-    exit;
 }
 ?>
