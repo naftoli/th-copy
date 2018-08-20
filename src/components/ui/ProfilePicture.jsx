@@ -32,6 +32,7 @@ export class ProfilePicture extends Component {
       <div tabIndex={ tabIndex } onKeyPress={ this.onKeyPress } className={ classNames }>
 
         <img { ...props } 
+          onClick={ onClick }
           src={ src } alt='profile' 
           className={ imageClassNames } 
           onError={ this.handleError } 
