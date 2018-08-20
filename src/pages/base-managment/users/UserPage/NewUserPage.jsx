@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 // components
+import { FontAwesome } from 'components/ui';
+import { AddressRow } from 'components/rows';
 import { Row, Col, Button } from 'reactstrap';
-import { ProfileRow, NameRow, DobRow, AddressRow } from './rows';
+import { ProfileRow, NameRow, DobRow } from './rows';
 import CropperModal from 'components/modals/CropperModal';
 import { PlatoonSelect, BaseSelect, Select } from 'components/inputs';
 // functions
@@ -167,9 +169,12 @@ class NewUserPage extends Component {
           </Col>
         </Row>
 
-        <AddressRow soldier={ soldier } onChange={ this.handleChangeEvent } />
+        <AddressRow {...soldier} prefix='user_' onChange={ this.handleChangeEvent } />
 
-        <Button color='primary'>{ loading ? 'Creating...' : 'Create Soldier'}</Button>
+        <Button color='primary'>
+          <FontAwesome icon='save' />
+          { loading ? ' Creating...' : ' Create Soldier'}
+        </Button>
 
         <CropperModal isOpen={ cropperModalShow } 
           toggle={ this.toggle } uploadImage={ this.updateProfile } />

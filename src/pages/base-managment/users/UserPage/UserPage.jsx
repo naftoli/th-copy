@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
-// components
-import { TabContent, TabPane, Nav, Button } from 'reactstrap';
-import { Redirect } from 'react-router-dom';
-import { Prompt } from 'react-router';
-import { NavigationTab } from 'components/navigation';
-import { Spinner } from 'components/ui';
-import { PersonalTab, SettingsTab, RankTab } from './tabs';
-// functions
-import { getSoldier, updateSoldier } from 'store/soldiers/operations';
 import { connect } from 'react-redux';
-import { setTitle } from 'functions/utils';
-import { loginStoreChanged } from 'functions/login';
+// components
+import { Prompt } from 'react-router';
+import { Redirect } from 'react-router-dom';
+import { Spinner, FontAwesome } from 'components/ui';
+import { NavigationTab } from 'components/navigation';
+import { PersonalTab, SettingsTab, RankTab } from './tabs';
+import { TabContent, TabPane, Nav, Button } from 'reactstrap';
+// functions
 import { toast } from 'react-toastify';
+import { setTitle } from 'functions/utils';
+import { filterUpdates } from 'functions/events';
+import { loginStoreChanged } from 'functions/login';
+import { getSoldier, updateSoldier } from 'store/soldiers/operations';
 // styles
 import './UserPage.scss';
 
@@ -28,7 +29,7 @@ class UserPage extends Component {
   // set the title once we have the info
   componentDidUpdate( prevProps ) {
     // update the page title
-    if ( this.state.soldier )
+    if ( this.state.soldier.user_serial )
       setTitle( `View / Edit ${this.state.soldier.user_serial}` );
     // if the login changed then we should make sure we have the up to date information...
     if ( loginStoreChanged( prevProps.current_login ) && !this.state.loading )
@@ -51,10 +52,8 @@ class UserPage extends Component {
   }
   // handle form changes
   handleUpdate = ( update ) => {
-    // non-destructivly update the state
-    const soldier = Object.assign( {}, this.state.soldier, update );
-    const updates = Object.assign( {}, this.state.updates, update );
-    this.setState({ soldier, updates });
+    const updates = filterUpdates( this.state.soldier, { ...this.state.updates, ...update } );
+    this.setState({ updates });
   }
   // save changes to the database
   saveChanges = ( event ) => {
@@ -74,16 +73,15 @@ class UserPage extends Component {
   updateProfile = ( formData ) => {
     const { soldier } = this.state;
     this.props.updateSoldier( soldier.user_id, formData )
-    .then(( response ) => {
-      this.setState({
-        soldier: Object.assign({}, soldier, { ...response.data })
-      })
+    .then( response => {
+      this.setState({ soldier: { ...soldier, ...response.data } });
     });
   }
   // render the page
   render(){
-    const { soldier, loading, updates, activeTab } = this.state;
+    let { soldier, loading, updates, activeTab } = this.state;
     const updated = Object.keys( updates ).length > 0;
+    soldier = { ...soldier, ...updates };
     // if we do not have the soldier...
     if ( soldier === undefined ) {
       return <Redirect to='/bm/users' />;
@@ -98,13 +96,13 @@ class UserPage extends Component {
         <Prompt when={ updated } message="You have unsaved changes. Are you sure you want to leave?" />
         <Nav tabs>
           <NavigationTab active={activeTab === 1} onClick={this.toggle(1)}>
-            Personal
+            Personal <FontAwesome icon='user'/>
           </NavigationTab>
           <NavigationTab active={activeTab === 2} onClick={this.toggle(2)}>
-            Settings
+            Settings <FontAwesome icon='sliders-h'/>
           </NavigationTab>
           <NavigationTab active={activeTab === 3} onClick={this.toggle(3)}>
-            Rank
+            Rank <FontAwesome icon='medal'/>
           </NavigationTab>
         </Nav>
         <form onSubmit={ this.saveChanges }>
@@ -121,7 +119,11 @@ class UserPage extends Component {
               <RankTab soldier={ soldier } />
             </TabPane>
           </TabContent>
-          { updated && <Button color='primary'>Save Changes</Button> }
+          { updated && 
+            <Button color='primary'>
+              <FontAwesome icon='save'/> Save Changes
+            </Button>
+          }
         </form>
       </div>
     );

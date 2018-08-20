@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { LEGACY_URL } from 'components/constants';
 // components
 import { Row, Col } from 'reactstrap';
+import { AddressRow } from 'components/rows';
 import CropperModal from 'components/modals/CropperModal';
-import { ProfileRow, NameRow, DobRow, AddressRow, RegistrationRow } from '../rows';
+import { ProfileRow, NameRow, DobRow, RegistrationRow } from '../rows';
 
 class PersonalTab extends Component {
   // initial state
@@ -51,7 +52,7 @@ class PersonalTab extends Component {
           </Col>
         </Row>
 
-        <AddressRow soldier={ soldier } onChange={ this.handleChange } />
+        <AddressRow { ...soldier } prefix='user_' onChange={ this.handleChange } />
 
         <RegistrationRow soldier={ soldier } />
 

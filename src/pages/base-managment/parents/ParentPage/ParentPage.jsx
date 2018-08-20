@@ -77,7 +77,7 @@ class ParentPage extends Component {
     // get the info from the parent
     const { 
       father_pic, mother_pic, father, mother, last,
-      username, cell, email, address, city, state, zip, country
+      username, cell, email, children, ...address
     } = parent;
 
     const options = getChildOptions( this.props.availableChildren );
@@ -118,12 +118,7 @@ class ParentPage extends Component {
           </Col>
         </Row>
 
-        <AddressRow showTitle disabled 
-          address={address}
-          city={city} 
-          state={state}
-          zip={zip} 
-          country={country} />
+        <AddressRow disabled { ...address } prefix='admin_' />
 
         <p className='title'>Children</p>
         <Row id='add-child'>
