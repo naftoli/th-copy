@@ -32,4 +32,16 @@
     width: 100%;
     margin-top: 10px;
   }
+
+  #credit-cards {
+    justify-content: space-around;
+    margin: 0px;
+
+    .CardDisplay {
+      padding: 10px;
+      text-align: center;
+    }
+
+    .btn { width: 100%; margin-top: 8px; }
+  }
 }

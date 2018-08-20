@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 import { Prompt } from 'react-router';
 import { FontAwesome, Spinner } from 'components/ui';
 import { NavigationTab } from 'components/navigation';
-import { TabContent, TabPane, Nav, Button } from 'reactstrap';
+import { TabContent, TabPane, Nav, Button, Collapse } from 'reactstrap';
 // tabs
-import { BaseTab } from './tabs';
+import { BaseTab, PaymentsTab, ShippingTab } from './tabs';
 // state
 import { getBase } from 'store/bases/operations';
 // functions
@@ -16,6 +16,18 @@ import { setTitle } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
 import { loginStoreChanged, isAdmin } from 'functions/login';
 
+const SaveButton = props => (
+  <Button color='primary' {...props}>
+    <FontAwesome icon='save'/> Save Changes
+  </Button>
+);
+
+const ErrorButton = props => (
+  <Button color='danger' role='button' disabled {...props}>
+    <FontAwesome icon='exclamation-circle'/> Cannot Save Invalid Information. 
+      Please Check <strong>All</strong> Tabs.
+  </Button>
+);
 
 class BasesPage extends Component {
 
@@ -24,9 +36,11 @@ class BasesPage extends Component {
   state = {
     base: {}, // the current base
     updates: {}, // the updates we have done
-    activeTab: 1, // currently visiable tab
+    activeTab: 4, // currently visiable tab
     loading: true // loading base or not
   }
+
+  formRef = React.createRef();
 
   /********************************* PAGE LIFECYCLE *********************************/
   // update the base on mount
@@ -43,11 +57,12 @@ class BasesPage extends Component {
     let school_id = parseInt( match.params.id, 10 );
     // if we are on the wrong base, fix the URL
     if ( !isAdmin( login.code ) && school_id !== login.id ) {
-      history.replace( match.path.replace(':id([0-9]+)', login.id) );
+      this.setState({ loading: true, updates: {} }, () => { // clear any updates before navigating away...
+        history.replace( match.path.replace(':id([0-9]+)', login.id) );
+      });
       school_id = login.id; // and load the correct school
-    }
+    } else this.setState({ loading: true, updates: {} });
     // load the final base
-    this.setState({ loading: true });
     getBase( school_id )
       .then( base => {
         setTitle( `View / Edit Base #${base.school_number}` );
@@ -64,15 +79,21 @@ class BasesPage extends Component {
     this.setState({ updates });
   };
   // save the changes to the base
-  saveChanges = () => {
-    debugger;
+  saveChanges = event => {
+    event && event.preventDefault();
+    console.log( this.state.updates );
   }
   
 
   render() {
     let { loading, base, updates, activeTab } = this.state;
     base = { ...base, ...updates };
+    // is the form updated and valid
     const updated = Object.keys( updates ).length > 0;
+    const valid = this.formRef.current && this.formRef.current.checkValidity();
+
+    let saveButton = <SaveButton />;
+    if ( updated && !valid ) saveButton = <ErrorButton />;
 
     if ( loading ) return <Spinner />;
 
@@ -83,9 +104,9 @@ class BasesPage extends Component {
           <NavigationTab active={activeTab === 1} onClick={this.toggle(1)}>
             Base <FontAwesome icon='school'/>
           </NavigationTab>
-          <NavigationTab active={activeTab === 2} onClick={this.toggle(2)}>
+          {/* <NavigationTab active={activeTab === 2} onClick={this.toggle(2)}>
             Settings <FontAwesome icon='sliders-h'/>
-          </NavigationTab>
+          </NavigationTab> */}
           <NavigationTab active={activeTab === 3} onClick={this.toggle(3)}>
             Shipping <FontAwesome icon='shipping-fast'/>
           </NavigationTab>
@@ -96,29 +117,27 @@ class BasesPage extends Component {
             Debug <FontAwesome icon='bug'/>
           </NavigationTab>
         </Nav>
-        <form onSubmit={ this.saveChanges }>
+        <form onSubmit={ this.saveChanges } ref={ this.formRef }>
           <TabContent activeTab={ activeTab }>
             <TabPane tabId={1}>
               <BaseTab base={ base } onUpdate={ this.onUpdate } />
             </TabPane>
-            <TabPane tabId={2}>
+            {/* <TabPane tabId={2}>
               <h1>Settings</h1>
-            </TabPane>
+            </TabPane> */}
             <TabPane tabId={3}>
-              <h1>Shipping</h1>
+              <ShippingTab base={ base } onUpdate={ this.onUpdate } />
             </TabPane>
             <TabPane tabId={4}>
-              <h1>Payments</h1>
+              <PaymentsTab profile={ base.customerProfile } />
             </TabPane>
             <TabPane tabId={5}>
               <pre>{ JSON.stringify( this.state, null, 2 ) }</pre>
             </TabPane>
+            <Collapse isOpen={ updated } id='save'>
+              { saveButton }
+            </Collapse>
           </TabContent>
-          { updated && 
-            <Button color='primary'>
-              <FontAwesome icon='save'/> Save Changes
-            </Button>
-          }
         </form>
       </div>
     );
