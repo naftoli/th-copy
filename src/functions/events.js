@@ -16,5 +16,5 @@ export const filterUpdates = ( source, updates ) => {
     // filter to entries who's value does not match that of the same key in the source
     .filter( entry => source[entry[0]] !== entry[1] )
     // and convert that back to an object using reduce
-    .reduce( ( obj, item ) => ({ [item[0]]: item[1] }), {} )
+    .reduce( ( obj, item ) => ({ ...obj, [item[0]]: item[1] }), {} )
 }
