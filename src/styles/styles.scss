@@ -8,6 +8,10 @@ $theme-colors: (
 $print-page-size: auto;
 $print-body-min-width: auto;
 
+// $rccs-size: 250px;
+// $rccs-name-font-size: 15px;
+// $rccs-number-font-size: 1.2em;
+
 @import '~cropperjs/dist/cropper.css';
 @import '~react-table/react-table.css';
 @import '~react-toastify/dist/ReactToastify.min.css';
