@@ -85,10 +85,12 @@ div.react-select__multi-value { background-color: $primary-color-light; }
 // Bootstrap tabbed layouts
 .nav-tabs {
   overflow-x: auto; flex-wrap: nowrap; border-color: $primary-color;
-  a.active.nav-link { background-color: $primary-color; color: #fff; border-color: $primary-color; }
+  
   .nav-item { margin-bottom: 0px; flex-grow: 1; text-align: center; }
+  .nav-link:hover{ cursor: pointer; color: $primary-color; }
+  
   a.nav-link { white-space: nowrap; font-weight: bold; transition: .1s; }
-  a.nav-link:hover { cursor: default; }
+  a.active.nav-link { background-color: $primary-color; color: #fff; border-color: $primary-color; }
 }
 .tab-content { padding: 10px; margin-bottom: 10px; border: 1px solid $primary-color; border-top: none; }
 

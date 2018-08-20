@@ -62,7 +62,7 @@ export default ( state = initialState, action ) => {
       parents = state.parents.map( 
         parent => {
           if ( parent.admin_id === action.payload.admin_id ) 
-            return { ...parent, children: parent.children.concat( child ) };
+            return { ...parent, children: [ child, ...parent.children ] };
           return parent;
         }
       )

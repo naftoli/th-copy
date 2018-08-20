@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { FontAwesome } from 'components/ui';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Alert } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Alert, Collapse } from 'reactstrap';
 // rows
 import EditStaffRow from './rows/EditStaffRow';
 import CreatePositionRow from './rows/CreatePositionRow';
 // functions
 import { toast } from 'react-toastify';
+import { isAdmin } from 'functions/login';
 import { createStaff, getStaff } from 'store/staff/operations';
 
 const initialState = {
@@ -47,7 +48,7 @@ class NewStaffModal extends Component {
   onChange = ({ target }) => { this.setState({ [target.id]: target.value }) }
 
   render(){
-    const { isOpen, toggle } = this.props;
+    const { isOpen, toggle, login } = this.props;
     const { error, staff } = this.state;
 
     return (
@@ -64,13 +65,14 @@ class NewStaffModal extends Component {
 
             <CreatePositionRow 
               onChange={ this.setAuth }
+              isAdmin={ isAdmin( login.code ) }
               />
 
-            { error && 
+            <Collapse isOpen={ !!error }>
               <div id='errors'>
                 <Alert color='danger'>{ error }</Alert>
               </div>
-            }
+            </Collapse>
 
           </ModalBody>
           <ModalFooter>
@@ -84,6 +86,10 @@ class NewStaffModal extends Component {
   }
 }
 
+const mapStateToProps = ({ login }) => ({
+  login: login.current_user
+})
+
 const mapDispatchToProps = { createStaff, getStaff };
 
-export default connect( null, mapDispatchToProps )( NewStaffModal );
+export default connect( mapStateToProps, mapDispatchToProps )( NewStaffModal );

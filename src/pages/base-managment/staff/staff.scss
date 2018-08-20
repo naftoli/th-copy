@@ -72,8 +72,12 @@
   }
 }
 
-#NewStaffModal div#errors .alert {
-  margin-bottom: 0px;
-  margin-top: .5rem;
-  text-align: center;
+#NewStaffModal {
+  max-width: 650px;
+
+  div#errors .alert {
+    margin-bottom: 0px;
+    margin-top: .5rem;
+    text-align: center;
+  }
 }

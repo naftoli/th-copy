@@ -18,6 +18,7 @@ class CreatePositionRow extends Component {
   // default props
   static defaultProps = {
     showCreateButton: false,
+    isAdmin: false
   }
   // initial state
   state = {
@@ -46,7 +47,7 @@ class CreatePositionRow extends Component {
   create = () => this.props.onCreate( this.getAuth() );
 
   render() {
-    const { showCreateButton } = this.props;
+    const { showCreateButton, isAdmin } = this.props;
     const { auth, school_id, class_id, position } = this.state;
 
     const roleOptions = [
@@ -57,6 +58,10 @@ class CreatePositionRow extends Component {
     const selectedRole = findOption( roleOptions, auth );
     const platoonClassnames = classnames('platoon', { 'hide': auth !== 'class' } );
 
+    let baseSelect;
+    if ( isAdmin ) 
+      baseSelect = <BaseSelect value={ school_id } onChange={ this.handleOptionChange('school_id') } />;
+
     return (
       <div className='CreatePositionRow'>
         <Row>
@@ -66,21 +71,23 @@ class CreatePositionRow extends Component {
               onChange={ this.handleOptionChange('auth') } />
           </Col>
           <Col xs={6}>
-            <label>Base</label>
-            <BaseSelect value={ school_id } onChange={ this.handleOptionChange('school_id') } />
+            <label>Position</label>
+            <Input name='position' value={ position } onChange={ this.handleInputChange } />
           </Col>
-          <Col xs={12} className={platoonClassnames}>
+          { isAdmin && 
+            <Col xs={6}>
+              <label>Base</label> { baseSelect }
+            </Col>
+          }
+          <Col xs={ isAdmin ? 6 : 12 } className={platoonClassnames}>
             <label>Platoon</label>
             <PlatoonSelect schoolId={ school_id } value={ class_id }
               onChange={ this.handleOptionChange('class_id') } tabIndex={ auth !== 'class' ? '-1' : '0' } />
           </Col>
-          <Col xs={12} lg={ showCreateButton ? 6 : 12 }>
-            <label>Position</label>
-            <Input name='position' value={ position } onChange={ this.handleInputChange } />
-          </Col>
+          
           {/* optional create button */}
           { showCreateButton && 
-          <Col xs={12} lg={6}>
+          <Col xs={12}>
             <ButtonGroup>
               <Button color='primary' onClick={this.create}>
                 <FontAwesome icon='save'/> Create Position

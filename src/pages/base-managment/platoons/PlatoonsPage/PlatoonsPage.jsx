@@ -59,8 +59,7 @@ export class PlatoonsPage extends Component {
     return (
       <div id='PlatoonsPage'>
         <Callout title="View / Edit Platoons">
-          <p>Platoons are the official Tzivos Hashem Lingo for your classes.</p>
-          <p><strong>To connect a Staff member to a Platoon go to the edit page by clicking on the Grade, Subject or Teacher.</strong></p>
+          <p><strong>To connect a Staff member to a Platoon go to the edit page by clicking on the Grade, Sub or Teacher.</strong></p>
         </Callout>
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
           <Link to={`${match.path}/new`} className="btn btn-primary" role="button">
