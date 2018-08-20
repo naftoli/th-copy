@@ -11,8 +11,6 @@ import { hebrewChange, eventToUpdate } from 'functions/events';
 
 export class BaseRow extends Component {
 
-  genderChange = ({ })
-
   onChange = ({ target }) => {
     this.props.onUpdate( eventToUpdate( target, 'name' ) );
   }
@@ -51,7 +49,7 @@ export class BaseRow extends Component {
           <p className='input-message'>(This is how it will appear on school banner)</p>
         </Col>
         {/* Base Gender */}
-        <Col xs='5'>
+        <Col xs={12} sm={5} lg={6}>
           <label>Base Gender</label>
           <div id='gender-row'>
             <Radio type='radio' name='school_gender' id='school_gender' value='M' 
@@ -68,7 +66,7 @@ export class BaseRow extends Component {
             </Radio>
           </div>
         </Col>
-        <Col xs='7' id='store-miles'>
+        <Col xs={12} sm={7} lg={6} id='store-miles'>
           <label>Store Miles Start From:</label>
           <DatePicker className='form-control' 
             // display formats
