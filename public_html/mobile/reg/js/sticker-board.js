@@ -122,7 +122,7 @@ var sticker_board = function() {
             }
             
             html += '<hr><div class="row">';
-            html += '<div class="col-8 col-sm-9 medal-level-stickers">';
+            html += '<div class="col-8 col-sm-9 order-12 medal-level-stickers">';
             // render all the stickers
             for( var i = 1; i <= medal_info.missions_required; i++ ) {
                 var slot_number = ( medal_info.running_total - medal_info.missions_required ) + i;
