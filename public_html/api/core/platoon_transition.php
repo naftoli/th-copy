@@ -89,14 +89,16 @@ class PlatoonTransitionRouter {
     function transitionPlatoons(){
         global $current_user; global $pdo;
 
-        $filter = '';
+        $filters = [];
         if ( isset($_POST['school_id']) ) {
-            $filter = "u.school_id = ".$_POST['school_id']." ";
+            $filters[] = "u.school_id = ".$_POST['school_id']." ";
         }
 
         if ( $current_user->login['code'] !== 'BC' ) {
-            $filter .= "AND pt.admin_id = '$current_user->admin_id' ";
-        }    
+            $filters[] = "pt.admin_id = '$current_user->admin_id' ";
+        }
+
+        $filter = count($filters) > 0 ? 'WHERE '.implode( ' AND ', $filters ) : '';
         
         $transition_query = $pdo->prepare(
             "UPDATE users u JOIN platoon_transitions pt ON u.user_id = pt.user_id AND pt.deployed_at IS NULL " 
