@@ -89,11 +89,10 @@ class PlatoonTransitionRouter {
     function transitionPlatoons(){
         global $current_user; global $pdo;
 
-        if ( !isset($_POST['school_id']) || !intval( $_POST['school_id'] ) ) {
-            return json_error( 'Please select a base to deploy' );
+        $filter = '';
+        if ( isset($_POST['school_id']) ) {
+            $filter = "u.school_id = ".$_POST['school_id']." ";
         }
-
-        $filter = "u.school_id = ".$_POST['school_id']." ";
 
         if ( $current_user->login['code'] !== 'BC' ) {
             $filter .= "AND pt.admin_id = '$current_user->admin_id' ";
