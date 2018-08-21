@@ -58,17 +58,17 @@ class UserRegistrationRouter {
         );
 
         // handle more kids then discounted rates allow for.
-        if ( $child_count > 7 ) {
-            $query->execute( [ $zone, 7 ] );
+        if ( $child_count > 6 ) {
+            $query->execute( [ $zone, 6 ] );
             $max_bluk_rates = $query->fetchAll();
             
             $multiplied_rates = array_map( function( $info ) use ( $child_count ) {
-                $info['rate'] *= intval( $child_count / 7 );
+                $info['rate'] *= intval( $child_count / 6 );
                 return $info;
             }, $max_bluk_rates );
 
             // get the rate for the remaining kids
-            $query->execute( [ $zone, $child_count % 7 ] );
+            $query->execute( [ $zone, $child_count % 6 ] );
             $rates = $query->fetchAll();
 
             foreach( $rates as $index => $rate ){
@@ -79,7 +79,7 @@ class UserRegistrationRouter {
         // return false if no shipping
         } else if( $child_count == 0) {
             json_response( false );
-        // return discounted rate for multiple kids if less then max ( 7 )
+        // return discounted rate for multiple kids if less then max ( 6 )
         } else {
             $query->execute( [ $zone, $child_count ] );
             json_response( $query->fetchAll() );
@@ -146,46 +146,49 @@ class UserRegistrationRouter {
         } else {
             $payment_response = 'N/A'; $trans_id = false;
         }
-
-        // register all the users...
-        $errors = [];   $registration_table_users = [];
-        $registration_info_query = $pdo->prepare(
-            "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
-            ."VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year )"
-        );
-        // for each user
-        foreach ( $users as $user ) {
-            $user_errors = [];
-            foreach( $registrations as $registration ){
-                if ( !($user->user_id == $registration['user_id']) ) continue;
-                // set the year based on the school id for chayolei only
-                $year = $registration['registration_type'] == 'chayolei' ? 
-                    GlobalSettings::getRegistrationYear( $user->school_id ) : 
-                    GlobalSettings::getRegistrationYear();
-                // insert a record into the registration_charges table.
-                $registration_info_query->execute([
-                    'trans_id' => ( $trans_id ? $trans_id : '' ), 
-                    'user_id' => $user->user_id, 
-                    'school_id' => $user->school_id, 
-                    'type' => $registration['registration_type'],
-                    'amount' => $registration['paid'], 
-                    'year' => $year
-                ]);
-                // Chayolei Registration
-                if ( $registration['registration_type'] == 'chayolei' ) {
-                    array_merge( $user_errors, $user->registerChayolei(
-                        $current_user->admin_id, $year, $registration['paid']
-                    ) );
-                    if ( in_array( $user->school_id, [ '269', '61' ] ) )
-                        $registration_table_users[ $user->school_id ][] = $user->user_id;
-                // Chidon Registration
-                } else if ( $registration['registration_type'] == 'chidon' ) {
-                    if ( !$user->registerChidon( $year, $registration['size'], $current_user->admin_id ) )
-                        $user_errors[] = "Could not register ".$user->user_id." for chidon";
+        try {
+            // register all the users...
+            $errors = [];   $registration_table_users = [];
+            $registration_info_query = $pdo->prepare(
+                "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
+                ."VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year )"
+            );
+            // for each user
+            foreach ( $users as $user ) {
+                $user_errors = [];
+                foreach( $registrations as $registration ){
+                    if ( !($user->user_id == $registration['user_id']) ) continue;
+                    // set the year based on the school id for chayolei only
+                    $year = $registration['registration_type'] == 'chayolei' ? 
+                        GlobalSettings::getRegistrationYear( $user->school_id ) : 
+                        GlobalSettings::getRegistrationYear();
+                    // insert a record into the registration_charges table.
+                    $registration_info_query->execute([
+                        'trans_id' => ( $trans_id ? $trans_id : '' ), 
+                        'user_id' => $user->user_id, 
+                        'school_id' => $user->school_id, 
+                        'type' => $registration['registration_type'],
+                        'amount' => $registration['paid'], 
+                        'year' => $year
+                    ]);
+                    // Chayolei Registration
+                    if ( $registration['registration_type'] == 'chayolei' ) {
+                        array_merge( $user_errors, $user->registerChayolei(
+                            $current_user->admin_id, $year, $registration['paid']
+                        ) );
+                        if ( in_array( $user->school_id, [ '269', '61' ] ) )
+                            $registration_table_users[ $user->school_id ][] = $user->user_id;
+                    // Chidon Registration
+                    } else if ( $registration['registration_type'] == 'chidon' ) {
+                        if ( !$user->registerChidon( $year, $registration['size'], $current_user->admin_id ) )
+                            $user_errors[] = "Could not register ".$user->user_id." for chidon";
+                    }
                 }
+                if ( count( $user_errors ) > 0 ) 
+                    $errors[$user->user_id] = $user_errors;
             }
-            if ( count( $user_errors ) > 0 ) 
-                $errors[$user->user_id] = $user_errors;
+        } catch( Exception $e ) {
+            $errors['other'] = $e;
         };
 
         // insert into special myshliach/anash kinder table
