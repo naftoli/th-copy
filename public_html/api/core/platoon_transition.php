@@ -12,7 +12,7 @@ class PlatoonTransitionRouter {
         global $current_user;   global $pdo;
         $have_class_id = isset( $_POST['class_id'] ) && intval( $_POST['class_id'] );
         if ( !isset( $_POST['school_id'] ) )
-            json_error( 'Invalid Request' );
+            json_error( 'Invalid Request', false, 200 );
 
         $params = [ 'school_id' => $_POST['school_id'] ];
         if ( $have_class_id ) $params['class_id'] = $_POST['class_id'];
@@ -66,7 +66,7 @@ class PlatoonTransitionRouter {
         $year = GlobalSettings::getCurrentYear(); // get the current year to log the information.
 
         if ( !$user_ids || !$school_id || !$class_id || !$year )
-            json_error( 'Invalid Request' );
+            json_error( 'Invalid Request', false, 200 );
         // prepare the queries
         $this->moveOrCreate( $user_ids, $school_id, $class_id, $year );
 
@@ -79,7 +79,7 @@ class PlatoonTransitionRouter {
 
         $user_ids = $_POST['user_ids'];
         if ( !$user_ids )
-            json_error('Invalid Request');
+            json_error('Invalid Request', false, 200);
 
         $this->moveOrCreate( $user_ids, null, null, $year );
 
@@ -108,7 +108,7 @@ class PlatoonTransitionRouter {
         $success = $transition_query->execute();
         
         if ( !$success )
-            json_error("Unknown Error: Could not deploy platoons. Please email bugs@tzivoshashem.org");
+            json_error("Unknown Error: Could not deploy platoons. Please email bugs@tzivoshashem.org", false, 200);
         
         json_response([
             'rowCount' => $transition_query->rowCount()
