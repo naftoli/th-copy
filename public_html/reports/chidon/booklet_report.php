@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 $admin_auth = array(); 	
 require_once ( __DIR__ . '/../../header.php' ); 
 
@@ -64,6 +65,7 @@ $booklets = array(
     </table>
     <?php
         foreach( $booklet_users as $school_id => $users ) {
+            $booklet_totals = array();
             $base = $users[0]; ?>
             <h2><?=$base[ 'school_name' ]?></h2>
             <table>
@@ -87,9 +89,23 @@ $booklets = array(
                                 <td><?= ( new DateTime($user[ 'date' ]) )->format( 'm/d/Y g:i:sa e' ); ?></td>
                             </tr>
                         <?php 
+                        if ( isset( $booklet_totals[$user['class_grade']] ) ) $booklet_totals[$user['class_grade']] += $booklets[$user['class_grade']];
+                        else $booklet_totals[$user['class_grade']] = $booklets[$user['class_grade']];
                         } 
                     ?>
                 </tbody>
+            </table>
+            <h2>Booklet Totals for <?=$base['school_name'];?></h2>
+            <table>
+                <tr>
+                    <th>Booklet #</th>
+                    <th>Total</th>
+                </tr>
+                <?php
+                foreach ( $booklet_totals as $booklet => $total ) {
+                    echo "<tr><td>" . $booklet . "</td><td>" . $total . "</td></tr>";
+                }
+                ?>
             </table>
         <?php
         } 
