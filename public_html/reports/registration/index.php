@@ -42,12 +42,6 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Soldier Registration Charges</span>
                 </div>
             </a>
-            <a href="study_guides.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/images/icon_report.png" height="32" alt="reports"/>
-                    <span class="link-text">Study Guides Report</span>
-                </div>
-            </a>
         </div>
         <?} // end admin only links ?>
         </div>

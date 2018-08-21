@@ -7,14 +7,24 @@ $year = GlobalSettings::getRegistrationYear();
 
 $booklet_users = [];
 $booklet_users_query = mysql_query(
-    "SELECT amount, date, year, schools.school_id, school_name, logo, first, last "
+    "SELECT amount, date, year, schools.school_id, school_name, logo, first, last, c.class_grade, c.class_sub "
     ."FROM registration_charges JOIN schools USING (school_id) "
-    ."JOIN users USING (user_id) WHERE type = 'chidon' "
+    ."JOIN users USING (user_id) " 
+    ."JOIN classes c ON c.class_id = users.class_id " 
+    ."WHERE type = 'chidon' " 
     ."AND year = $year ORDER BY school_name, first, last, date;"
 );
 while ( $row = mysql_fetch_assoc( $booklet_users_query ) ) {
     $booklet_users[$row['school_id']][] = $row;
 }
+
+$booklets = array(
+    4   =>  1,
+    5   =>  2,
+    6   =>  3, 
+    7   =>  4, 
+    8   =>  5
+);
 ?>
 <!DOCTYPE html>
 <html>
@@ -61,6 +71,8 @@ while ( $row = mysql_fetch_assoc( $booklet_users_query ) ) {
                     <tr>
                         <th>First</th>
                         <th>Last</th>
+                        <th>Grade</th>
+                        <th>Booklet #</th>
                         <th>Registered For Chidon</th>
                     </tr>
                 </thead>
@@ -70,6 +82,8 @@ while ( $row = mysql_fetch_assoc( $booklet_users_query ) ) {
                             <tr>
                                 <td><?= $user[ 'first' ]; ?></td>
                                 <td><?= $user[ 'last' ]; ?></td>
+                                <td><?= $user['class_grade'] . (empty( $user['class_sub'] ) ? '' : '-' . $user['class_sub']); ?></td>
+                                <td><?= $booklets[$user['class_grade']]; ?></td>
                                 <td><?= ( new DateTime($user[ 'date' ]) )->format( 'm/d/Y g:i:sa e' ); ?></td>
                             </tr>
                         <?php 
