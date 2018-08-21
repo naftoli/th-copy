@@ -12,7 +12,7 @@ $main_query = mysql_query(
     ."LEFT JOIN ( "
         ."SELECT  school_id, COUNT(*) AS total FROM users GROUP BY school_id "
     .") u USING (school_id) LEFT JOIN ( "
-        ."SELECT school_id, COUNT(*) AS not_chayolei FROM users WHERE yan = 1 OR chidon = 1 GROUP BY school_id"
+        ."SELECT school_id, COUNT(*) AS not_chayolei FROM users WHERE chidon = 1 GROUP BY school_id"
     .") nc USING (school_id) LEFT JOIN ("
         ."SELECT school_id, COUNT(*) AS total_registered FROM user_registration WHERE year = $year GROUP BY school_id"
     .") ur USING (school_id) LEFT JOIN ("
@@ -46,7 +46,7 @@ while( $row = mysql_fetch_assoc( $main_query ) ) $data[] = $row;
             <th>Registered</th>
             <th>Amount Paid</th>
             <th>Soldiers Registered</th>
-            <th>Non-Chayolei Soldiers</th>
+            <th>Chidon Only Soldiers</th>
             <th>Confirmed Platoon Info</th>
         </thead>
         <tbody>
