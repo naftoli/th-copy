@@ -103,7 +103,7 @@ class PlatoonTransitionRouter {
         $transition_query = $pdo->prepare(
             "UPDATE users u JOIN platoon_transitions pt ON u.user_id = pt.user_id AND pt.deployed_at IS NULL " 
             ."SET pt.deployed_at = NOW(), pt.from_school_id = u.school_id, pt.from_class_id = u.class_id, "
-            ."u.school_id = pt.school_id, u.class_id = pt.class_id WHERE $filter;"
+            ."u.school_id = pt.school_id, u.class_id = pt.class_id $filter;"
         );
         $success = $transition_query->execute();
         
