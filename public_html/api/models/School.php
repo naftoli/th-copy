@@ -38,8 +38,12 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return "/schoolLogos/$this->logo";
     }
 
-    public function logos() {
-        // return "/schoolLogos/$this->logo";
+    public function logoPaths() {
+        return [
+            'logo' => $this->logoPath(),
+            'boys' => "/schoolLogos/$this->logo_boys",
+            'girls' => "/schoolLogos/$this->logo_girls"
+        ];
     }
 
     //********************************** PAYMENTS **********************************/
@@ -111,7 +115,8 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                 'add_on_two', 'big_prizes_won', 'store_only', 'he_name_principal', 'he_name_p2', 'conf_pushka_users',
                 'tanya_ord', 'tanya_cat_ord', 'school_type', 'col_show', 'tuition', 'reg_type', 'cc_first', 'cc_last', 
                 'cc_address', 'cc_state', 'cc_zip', 'cc_number', 'cc_exp', 'cc_cvv', 'cc_approval_number',  'authorize_customer_profile_id', 
-            ]
+            ],
+            'methods' => [ 'logoPaths', 'customerProfile' ]
         ]);
     }
 
