@@ -956,30 +956,27 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 	
 	<div class="resources">
 		<span>
+			<a href="https://www.dropbox.com/sh/c2g76cp76it1bf6/AABw7AHHEKWfahv-yIFXV8Qsa?dl=0" target='_blank'>
 			<img src="homeIcons/Hachayol Header.gif" /><br />
-			<a href="https://www.dropbox.com/sh/hi9cbiye4ubryuy/AAA19HR5kSdliyqFpZKKDpmKa?dl=0">
-				5777
-			</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href="https://www.dropbox.com/sh/c2g76cp76it1bf6/AABw7AHHEKWfahv-yIFXV8Qsa?dl=0">
-				5778
+				5779
 			</a>
 		</span>
 		
 		<span>
-			<a href="https://www.dropbox.com/s/id0bfk1wpuebkum/CTH%20-%20BC%20Calendar%205777%20posters%20HR.pdf?dl=0">
+			<a href="https://www.dropbox.com/s/9h5k3bqrvm1qrjr/CTH%20-%20BC%20Calendar%205779%20with%20bleed%20HR.pdf?dl=0" target='_blank'>
 				<img src="homeIcons/Calendar.gif" /><br />
 				Commander's Calendar
 			</a>			
 		</span>
 		<span>
-			<a href="https://www.dropbox.com/sh/41u2regs73kfp9h/AACJV58J9KD6elXXZisYz74Ia?dl=0">
+			<a href="https://www.dropbox.com/sh/41u2regs73kfp9h/AACJV58J9KD6elXXZisYz74Ia?dl=0" target='_blank'>
 				<img src="homeIcons/Tanya CD.gif" /><br />
 				Tanya Resources
 			</a>
 		</span>
 		
 		<span>
-			<a href="https://www.dropbox.com/sh/i9hjub6ug1ii6q7/AABgHDk2nH-tNE5JKDJericXa?dl=0">
+			<a href="https://www.dropbox.com/sh/i9hjub6ug1ii6q7/AABgHDk2nH-tNE5JKDJericXa?dl=0" target='_blank'>
 				<img src="homeIcons/Chidon.gif" /><br />
 				Yahadus Resources
 			</a>
