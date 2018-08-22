@@ -24,7 +24,7 @@ describe(`operations`, () => {
       const mock = fetchMock.get('*', { key: `abcd` } );
       operations.getSoldiers()( dispatchMock )
       expect( mock.called() ).toBe( true );
-      expect( fetchMock.lastUrl() ).toBe( `${API_URL}/core/users.php` );
+      expect( fetchMock.lastUrl() ).toBe( `${API_URL}/core/users` );
     });
 
     it(`calls dispatch 3 times`, () => {

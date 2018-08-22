@@ -28,36 +28,30 @@ describe( 'Login', () => {
       expect( login().find('form#login-form').length ).toBe( 1 );
     });
 
-    it(`renders one input#username`, () => {
-      expect( login().find('input#username').length ).toBe( 1 );
+    it(`renders one input[name='username']`, () => {
+      expect( login().find(`input[name='username']`).length ).toBe( 1 );
     });
 
-    it(`renders one one input#password`, () => {
-      expect( login().find('input#password').length ).toBe( 1 );
+    it(`renders one one input[name='password']`, () => {
+      expect( login().find(`input[name='password']`).length ).toBe( 1 );
     });
 
   });
 
   describe('state', () => {
 
-    it('updates state.username when text is entered into input#username', () => {
-      const usernameInput = login().find('input#username');
+    it(`updates state.username when text is entered into input[name='username']`, () => {
+      const usernameInput = login().find(`input[name='username']`);
       usernameInput.instance().value = 'test';
       usernameInput.simulate('change');
       expect( login().state().username ).toBe('test');
     });
 
-    it('updates state.password when text is entered into input#password', () => {
-      const passwordInput = login().find('input#password');
+    it(`updates state.password when text is entered into input[name='password']`, () => {
+      const passwordInput = login().find(`input[name='password']`);
       passwordInput.instance().value = 'test';
       passwordInput.simulate('change');
       expect( login().state().password ).toBe('test');
-    });
-
-    it('updates state.show_password when button#toggle-password is clicked', () => {
-      expect( login().state().show_password ).toBe( false );
-      login().find('button#toggle-password').simulate('click');
-      expect( login().state().show_password ).toBe( true );
     });
 
   });
@@ -68,10 +62,10 @@ describe( 'Login', () => {
       
       beforeEach(() => {
         props = { login: jest.fn() };
-        login().find('input#username').instance().value = 'username';
-        login().find('input#username').simulate('change');
-        login().find('input#password').instance().value = 'password';
-        login().find('input#password').simulate('change');
+        login().find(`input[name='username']`).instance().value = 'username';
+        login().find(`input[name='username']`).simulate('change');
+        login().find(`input[name='password']`).instance().value = 'password';
+        login().find(`input[name='password']`).simulate('change');
         login().find('form#login-form').simulate('submit');
       });
 

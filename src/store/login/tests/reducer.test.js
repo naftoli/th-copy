@@ -70,9 +70,7 @@ describe( 'reducer', () => {
     it(`updates state.current_user`, () => {
       const user = { foo: 'bar', logins: [ { type: 'user', id: 5 }] };
       expect( reducer(initialState, actions.setUser( user )).current_user ).toEqual( user );
-      expect( reducer(initialState, actions.setUser( user )).current_login ).toEqual( user.logins[0] );
       expect( initialState.current_user ).toEqual( false );
-      expect( initialState.current_login ).toEqual( {} );
     });
 
   });

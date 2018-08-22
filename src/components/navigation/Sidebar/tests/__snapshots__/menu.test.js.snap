@@ -3,8 +3,13 @@
 exports[`getMenu returns the expected array for BC's 1`] = `
 Array [
   Object {
-    "icon": <i
-      className="fas fa-home"
+    "icon": <FontAwesome
+      brand={false}
+      icon="home"
+      light={false}
+      regular={false}
+      solid={false}
+      spin={false}
 />,
     "label": "Home",
     "path": "/",
@@ -15,23 +20,31 @@ Array [
     ],
   },
   Object {
-    "icon": <i
-      className="fas fa-school"
+    "icon": <FontAwesome
+      brand={false}
+      icon="school"
+      light={false}
+      regular={false}
+      solid={false}
+      spin={false}
 />,
     "items": Array [
       Object {
         "items": Array [
           Object {
             "label": "View / Edit",
-            "path": "/users",
+            "path": "/bm/users",
           },
           Object {
             "label": "Registration",
-            "path": "/users/registration",
+            "path": "/bm/users/registration",
+            "user_types": Array [
+              "BC",
+            ],
           },
           Object {
             "label": "Rank Cards",
-            "path": "/users/cards",
+            "path": "/bm/users/cards",
           },
           Object {
             "label": "Update Missions",
@@ -48,39 +61,43 @@ Array [
       },
       Object {
         "label": "Platoons",
-        "path": "/platoons",
+        "path": "/bm/platoons",
       },
       Object {
         "label": "Parents",
-        "path": "/parents",
+        "path": "/bm/parents",
       },
       Object {
         "label": "Staff",
-        "path": "/staff",
+        "path": "/bm/staff",
       },
       Object {
         "items": Array [
           Object {
             "label": "View / Edit",
-            "path": "/base",
-          },
-          Object {
-            "label": "Settings",
-            "path": "/base/settings",
+            "path": "/bm/base/undefined",
           },
           Object {
             "label": "Transactions",
-            "path": "/base/transactions",
+            "path": "/bm/base/undefined/transactions",
           },
         ],
         "label": "Base",
+        "user_types": Array [
+          "BC",
+        ],
       },
     ],
     "label": "Base Managment",
   },
   Object {
-    "icon": <i
-      className="fas fa-award"
+    "icon": <FontAwesome
+      brand={false}
+      icon="award"
+      light={false}
+      regular={false}
+      solid={false}
+      spin={false}
 />,
     "items": Array [
       Object {
@@ -142,8 +159,13 @@ Array [
     ],
   },
   Object {
-    "icon": <i
-      className="fas fa-ticket-alt"
+    "icon": <FontAwesome
+      brand={false}
+      icon="ticket-alt"
+      light={false}
+      regular={false}
+      solid={false}
+      spin={false}
 />,
     "items": Array [
       Object {
@@ -177,7 +199,7 @@ Array [
   Object {
     "icon": <img
       alt="Chidon"
-      src="//10.0.1.152/images/chidon.png"
+      src="//mashpia.local/images/chidon.png"
 />,
     "items": Array [
       Object {
@@ -217,11 +239,12 @@ Array [
       },
     ],
     "label": "Chidon",
+    "legacy": true,
   },
   Object {
     "icon": <img
       alt="Reports"
-      src="//10.0.1.152/images/icon_report.png"
+      src="//mashpia.local/images/icon_report.png"
 />,
     "items": Array [
       Object {
@@ -311,11 +334,12 @@ Array [
       },
     ],
     "label": "Reports",
+    "legacy": true,
   },
   Object {
     "icon": <img
       alt="shipping-reports"
-      src="//10.0.1.152/images/icon_report.png"
+      src="//mashpia.local/images/icon_report.png"
 />,
     "label": "Shipping Reports",
     "legacy": true,
@@ -324,7 +348,7 @@ Array [
   Object {
     "icon": <img
       alt="Campaigns"
-      src="//10.0.1.152/images/parentIcons/Campaigns.gif"
+      src="//mashpia.local/images/parentIcons/Campaigns.gif"
 />,
     "items": Array [
       Object {
@@ -374,11 +398,12 @@ Array [
       },
     ],
     "label": "Campaigns",
+    "legacy": true,
   },
   Object {
     "icon": <img
       alt="Rally"
-      src="//10.0.1.152/images/parentIcons/Rally.gif"
+      src="//mashpia.local/images/parentIcons/Rally.gif"
 />,
     "items": Array [
       Object {
@@ -398,11 +423,12 @@ Array [
       },
     ],
     "label": "Rally",
+    "legacy": true,
   },
   Object {
     "icon": <img
       alt="Raffles"
-      src="//10.0.1.152/images/icon_auction.png"
+      src="//mashpia.local/images/icon_auction.png"
 />,
     "label": "Raffles",
     "legacy": true,
@@ -411,7 +437,7 @@ Array [
   Object {
     "icon": <img
       alt="Yearly Prize"
-      src="//10.0.1.152/images/icon_auction.png"
+      src="//mashpia.local/images/icon_auction.png"
 />,
     "label": "Yearly Prize",
     "legacy": true,
@@ -420,7 +446,7 @@ Array [
   Object {
     "icon": <img
       alt="Setup Guide"
-      src="//10.0.1.152/images/icon_wizard.png"
+      src="//mashpia.local/images/icon_wizard.png"
 />,
     "label": "Setup Guide",
     "legacy": true,
@@ -429,14 +455,15 @@ Array [
   Object {
     "icon": <img
       alt="Miliage Program"
-      src="//10.0.1.152/images/icon_auction.png"
+      src="//mashpia.local/images/icon_auction.png"
 />,
     "label": "Mileage Program",
+    "legacy": true,
   },
   Object {
     "icon": <img
       alt="Support"
-      src="//10.0.1.152/images/parentIcons/support icon.gif"
+      src="//mashpia.local/images/parentIcons/support icon.gif"
 />,
     "label": "Support",
     "legacy": true,
@@ -448,8 +475,13 @@ Array [
 exports[`getMenu returns the expected array for HQ 1`] = `
 Array [
   Object {
-    "icon": <i
-      className="fas fa-home"
+    "icon": <FontAwesome
+      brand={false}
+      icon="home"
+      light={false}
+      regular={false}
+      solid={false}
+      spin={false}
 />,
     "label": "Home",
     "path": "/",
@@ -460,23 +492,24 @@ Array [
     ],
   },
   Object {
-    "icon": <i
-      className="fas fa-school"
+    "icon": <FontAwesome
+      brand={false}
+      icon="school"
+      light={false}
+      regular={false}
+      solid={false}
+      spin={false}
 />,
     "items": Array [
       Object {
         "items": Array [
           Object {
             "label": "View / Edit",
-            "path": "/users",
-          },
-          Object {
-            "label": "Registration",
-            "path": "/users/registration",
+            "path": "/bm/users",
           },
           Object {
             "label": "Rank Cards",
-            "path": "/users/cards",
+            "path": "/bm/users/cards",
           },
           Object {
             "label": "Update Missions",
@@ -493,39 +526,44 @@ Array [
       },
       Object {
         "label": "Platoons",
-        "path": "/platoons",
+        "path": "/bm/platoons",
       },
       Object {
         "label": "Parents",
-        "path": "/parents",
+        "path": "/bm/parents",
       },
       Object {
         "label": "Staff",
-        "path": "/staff",
+        "path": "/bm/staff",
       },
       Object {
         "items": Array [
           Object {
             "label": "View / Edit",
-            "path": "/base",
-          },
-          Object {
-            "label": "Settings",
-            "path": "/base/settings",
+            "path": "/bm/base",
           },
           Object {
             "label": "Transactions",
-            "path": "/base/transactions",
+            "path": "/bm/base/transactions",
           },
         ],
         "label": "Base",
+        "user_types": Array [
+          "HQ",
+          "CKIDS-ADMIN",
+        ],
       },
     ],
     "label": "Base Managment",
   },
   Object {
-    "icon": <i
-      className="fas fa-award"
+    "icon": <FontAwesome
+      brand={false}
+      icon="award"
+      light={false}
+      regular={false}
+      solid={false}
+      spin={false}
 />,
     "items": Array [
       Object {
@@ -587,8 +625,13 @@ Array [
     ],
   },
   Object {
-    "icon": <i
-      className="fas fa-ticket-alt"
+    "icon": <FontAwesome
+      brand={false}
+      icon="ticket-alt"
+      light={false}
+      regular={false}
+      solid={false}
+      spin={false}
 />,
     "items": Array [
       Object {
@@ -622,7 +665,7 @@ Array [
   Object {
     "icon": <img
       alt="Chidon"
-      src="//10.0.1.152/images/chidon.png"
+      src="//mashpia.local/images/chidon.png"
 />,
     "items": Array [
       Object {
@@ -662,17 +705,18 @@ Array [
       },
     ],
     "label": "Chidon",
+    "legacy": true,
   },
   Object {
     "icon": <img
       alt="Reports"
-      src="//10.0.1.152/images/icon_report.png"
+      src="//mashpia.local/images/icon_report.png"
 />,
     "items": Array [
       Object {
         "label": "Office Reports",
         "legacy": true,
-        "path": "/reports.php",
+        "path": "/reports/",
         "user_types": Array [
           "HQ",
         ],
@@ -764,11 +808,12 @@ Array [
       },
     ],
     "label": "Reports",
+    "legacy": true,
   },
   Object {
     "icon": <img
       alt="shipping-reports"
-      src="//10.0.1.152/images/icon_report.png"
+      src="//mashpia.local/images/icon_report.png"
 />,
     "label": "Shipping Reports",
     "legacy": true,
@@ -777,7 +822,7 @@ Array [
   Object {
     "icon": <img
       alt="Campaigns"
-      src="//10.0.1.152/images/parentIcons/Campaigns.gif"
+      src="//mashpia.local/images/parentIcons/Campaigns.gif"
 />,
     "items": Array [
       Object {
@@ -827,11 +872,12 @@ Array [
       },
     ],
     "label": "Campaigns",
+    "legacy": true,
   },
   Object {
     "icon": <img
       alt="Rally"
-      src="//10.0.1.152/images/parentIcons/Rally.gif"
+      src="//mashpia.local/images/parentIcons/Rally.gif"
 />,
     "items": Array [
       Object {
@@ -851,11 +897,12 @@ Array [
       },
     ],
     "label": "Rally",
+    "legacy": true,
   },
   Object {
     "icon": <img
       alt="Raffles"
-      src="//10.0.1.152/images/icon_auction.png"
+      src="//mashpia.local/images/icon_auction.png"
 />,
     "label": "Raffles",
     "legacy": true,
@@ -864,7 +911,7 @@ Array [
   Object {
     "icon": <img
       alt="Yearly Prize"
-      src="//10.0.1.152/images/icon_auction.png"
+      src="//mashpia.local/images/icon_auction.png"
 />,
     "label": "Yearly Prize",
     "legacy": true,
@@ -873,7 +920,7 @@ Array [
   Object {
     "icon": <img
       alt="Setup Guide"
-      src="//10.0.1.152/images/icon_wizard.png"
+      src="//mashpia.local/images/icon_wizard.png"
 />,
     "label": "Setup Guide",
     "legacy": true,
@@ -882,14 +929,15 @@ Array [
   Object {
     "icon": <img
       alt="Miliage Program"
-      src="//10.0.1.152/images/icon_auction.png"
+      src="//mashpia.local/images/icon_auction.png"
 />,
     "label": "Mileage Program",
+    "legacy": true,
   },
   Object {
     "icon": <img
       alt="Support"
-      src="//10.0.1.152/images/parentIcons/support icon.gif"
+      src="//mashpia.local/images/parentIcons/support icon.gif"
 />,
     "label": "Support",
     "legacy": true,

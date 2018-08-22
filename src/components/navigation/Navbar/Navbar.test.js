@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import { Nav } from 'reactstrap';
 import Navbar from './Navbar';
 import indexNavbar from './index';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('index.js', () => {
   it('exports Navbar component as the default', () => {
@@ -16,8 +17,10 @@ describe("Navbar", () => {
   // Component singleton
   const navbar = () => {
     return mountedComponent ? mountedComponent : mountedComponent = mount(
-      <Navbar {...props} />
-    );
+      <MemoryRouter>
+        <Navbar {...props} />
+      </MemoryRouter>
+    ).find( Navbar );
   }
   // clear global variables before each test
   beforeEach(() => {
@@ -50,7 +53,7 @@ describe("Navbar", () => {
 
     describe('.title', () => {
 
-      it('has a default value (\'Tzivos Hashem\'', () => {
+      it('has a default value (\'Tzivos Hashem\')', () => {
         expect( navbar().props().title ).toBe( "Tzivos Hashem" );
       })
       

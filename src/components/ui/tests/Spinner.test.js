@@ -1,5 +1,5 @@
 import React from 'react';
-import Spinner from '../loading';
+import { Spinner } from '../loading';
 import { mount } from 'enzyme';
 
 describe('Spinner', () => {

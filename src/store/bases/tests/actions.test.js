@@ -29,18 +29,18 @@ describe(`actions`, () => {
 
   });
 
-  describe(`.updateBases`, () => {
+  describe(`.updateBase`, () => {
 
     it( `returns types.UPDATE_BASE as the type`, () => {
-      expect( actions.updateBases().type ).toBe( types.UPDATE_BASE );
+      expect( actions.updateBase().type ).toBe( types.UPDATE_BASE );
     });
 
     it( `returns it's first paramater as 'payload.id'`, () => {
-      expect( actions.updateBases( 1 ).payload.id ).toBe( 1 );
+      expect( actions.updateBase( 1 ).payload.id ).toBe( 1 );
     });
 
     it( `returns it's second paramater as 'payload.updates'`, () => {
-      expect( actions.updateBases( 1, { foo: 'bar' } ).payload.updates ).toEqual( { foo: 'bar' } );
+      expect( actions.updateBase( 1, { foo: 'bar' } ).payload.updates ).toEqual( { foo: 'bar' } );
     });
 
   });
