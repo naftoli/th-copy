@@ -9,6 +9,10 @@ export const hebrewChange = onChange => event => {
 export const eventToUpdate = ( target, key = 'name' ) => {
   return { [target[key]]: target.value }
 }
+// handle checkbox inputs
+export const handleCheckbox = handleChange => ({ target }) => {
+  handleChange( { [target.name]: target.checked ? 1 : 0 } );
+}
 
 // filter updates to only ones which are different from the source object. should be Object.filter( key, value => res ) but hey..
 export const filterUpdates = ( source, updates ) => {
