@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 // components
 import { Row, Col, Input } from 'reactstrap';
 // functions
-import { hebrewChange, eventToUpdate } from 'functions/events';
+import { hebrewUpdate, eventToUpdate } from 'functions/events';
+import { toHebrew } from 'functions/utils';
 
 export class BaseRow extends Component {
 
@@ -29,21 +30,20 @@ export class BaseRow extends Component {
         </Col>
         <Col xs='6' dir='rtl'>
           <label>Hebrew Base Name</label>
-          <Input name='school_name_he' value={ school_name_he }
-            { ...inputProps } onChange={ hebrewChange( this.onChange ) }
+          <Input name='school_name_he' value={ school_name_he } { ...inputProps }
             pattern='^[^a-zA-Z]{3,}$' title="Three or more Hebrew letters" />
           <div className='invalid-message'>Please enter 3 or more <em>Hebrew</em> letters</div>
           <p className='input-message'>(This is how it will appear on school banner)</p>
         </Col>
         <Col xs='6'>
           <label>Nickname</label>
-          <Input name='nickname' value={ nickname } { ...inputProps } 
+          <Input name='nickname' value={ nickname || '' } { ...inputProps } 
             pattern='^.{3,}$' title="Three or more letters" />
           <div className='invalid-message'>Please enter 3 or more letters</div>
         </Col>
         <Col xs='6'>
           <label>Hachayol Name</label>
-          <Input name='hachayol_name' value={ hachayol_name } { ...inputProps } 
+          <Input name='hachayol_name' value={ hachayol_name || '' } { ...inputProps } 
             pattern='^.{3,}$' title="Three or more letters" />
           <div className='invalid-message'>Please enter 3 or more letters</div>
         </Col>
