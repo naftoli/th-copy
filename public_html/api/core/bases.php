@@ -46,6 +46,7 @@ class BaseRouter {
     public function update( $id ) {
         $base = School::find( $id );
         $base->bulkUpdate( $_POST );
+        if ( !$base->save() ) json_error( 'Could not save base' );
         json_response( $base );
     }
 
