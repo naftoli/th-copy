@@ -136,6 +136,7 @@ class BasesPage extends Component {
             onValidChange={ this.updateValid('shipping') } />
 
           <PaymentsTab 
+            tabId={ 4 }
             profile={ base.customerProfile }
             isAdmin={ isAdmin( this.props.login.code ) }
             />

@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 // components
 import { FontAwesome } from 'components/ui';
 import { CCForm } from 'components/functional/payments';
-import { Row, Col, Input, Button, ButtonGroup } from 'reactstrap';
-import { loadPaymentProfiles } from 'store/payments/operations';
+import { Row, Col, Button, TabPane } from 'reactstrap';
 import Cards from 'react-credit-cards';
 
 const CardDisplay = ({ cardType, cardNumber, profileId, onDelete }) => {
@@ -47,7 +46,7 @@ export class PaymentsTab extends Component {
   }
 
   render(){
-    const { profile, isAdmin } = this.props;
+    const { profile, isAdmin, tabId } = this.props;
 
     let cards;
     if ( profile && profile.paymentProfiles.length > 0 ) {
@@ -60,43 +59,45 @@ export class PaymentsTab extends Component {
     }
 
     return (
-      <div id='PaymentsTab'>
-        { profile && isAdmin && 
-          <div id='payment-profile'>
-            <p className='title'>Payment Profile</p>
-            <Row>
-              <Col xs={6} sm={2}>
-                <strong>Profile ID</strong>
-                <p>{ profile.customerProfileId }</p>
-              </Col>
-              <Col xs={6} sm={2}>
-                <strong>TH ID</strong>
-                <p>{ profile.merchantCustomerId }</p>
-              </Col>
-              <Col xs={6} sm={4}>
-                <strong>E-mail Address</strong>
-                <p>{ profile.email }</p>
-              </Col>
-              <Col xs={6} sm={4}>
-                <strong>Description</strong>
-                <p>{ profile.description }</p>
-              </Col>
-            </Row>
+      <TabPane tabId={ tabId }>
+        <div id='PaymentsTab'>
+          { profile && isAdmin && 
+            <div id='payment-profile'>
+              <p className='title'>Payment Profile</p>
+              <Row>
+                <Col xs={6} sm={2}>
+                  <strong>Profile ID</strong>
+                  <p>{ profile.customerProfileId }</p>
+                </Col>
+                <Col xs={6} sm={2}>
+                  <strong>TH ID</strong>
+                  <p>{ profile.merchantCustomerId }</p>
+                </Col>
+                <Col xs={6} sm={4}>
+                  <strong>E-mail Address</strong>
+                  <p>{ profile.email }</p>
+                </Col>
+                <Col xs={6} sm={4}>
+                  <strong>Description</strong>
+                  <p>{ profile.description }</p>
+                </Col>
+              </Row>
+            </div>
+          }
+          <div id='add-card'>
+            <p className='title'>Add new card</p>
+            <CCForm onInputChange={ this.updateCC }/>
           </div>
-        }
-        <div id='add-card'>
-          <p className='title'>Add new card</p>
-          <CCForm onInputChange={ this.updateCC }/>
+          { !!cards && 
+            <div id='on-file'>
+              <p className='title'>Cards on file</p>
+              <Row id='credit-cards'>
+                { cards }
+              </Row>
+            </div>
+          }
         </div>
-        { !!cards && 
-          <div id='on-file'>
-            <p className='title'>Cards on file</p>
-            <Row id='credit-cards'>
-              { cards }
-            </Row>
-          </div>
-        }
-      </div>
+      </TabPane>
     )
   }
 }

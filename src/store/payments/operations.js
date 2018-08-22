@@ -21,9 +21,3 @@ export const getPaymentProfiles = () => dispatch => {
     return Promise.reject( error );
   });
 }
-
-//** DOES NOT CONNECT TO REDUX. USED TO PULL OTHERS CC INFO */
-export const loadPaymentProfiles = id => {
-  return API.get( `/payments/profiles.php?id=${id}` )
-  .then( handleAPIResponse );
-}
