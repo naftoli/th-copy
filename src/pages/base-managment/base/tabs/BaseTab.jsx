@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { LEGACY_URL } from 'components/constants';
 // components
 import { BaseRow } from '../rows';
 import { Form } from 'components/inputs';
@@ -6,11 +7,22 @@ import { AddressRow } from 'components/rows';
 import { ProfilePicture } from 'components/ui';
 import { SaveButton } from 'components/buttons';
 import { Row, Col, Input, TabPane } from 'reactstrap';
-
+import CropperModal from 'components/modals/CropperModal';
 // functions
 import { eventToUpdate } from 'functions/events';
 
 export class BaseTab extends Component {
+
+  state = {
+    showModal: false
+  }
+
+  toggle = () => this.setState({ showModal: !this.state.showModal });
+  
+  updateLogo = formData => {
+    this.toggle();
+    this.props.updateBase( formData );
+  }
 
   onChange = ({ target }) => {
     this.props.onUpdate( eventToUpdate( target, 'name' ) );
@@ -31,8 +43,10 @@ export class BaseTab extends Component {
                 onUpdate={ onUpdate } />
                 
             </Col>
-            <Col xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2'>
-              <ProfilePicture src={ base.logoPaths.logo }/>
+            <Col xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2' style={{alignSelf: 'center'}}>
+              <ProfilePicture 
+                src={ base.logoPaths.logo } 
+                onClick={ this.toggle } />
             </Col>
           </Row>
 
@@ -43,7 +57,16 @@ export class BaseTab extends Component {
             value={ base.notes } onChange={ this.onChange } />
 
           <SaveButton show={ updated } />
+
         </Form>
+
+        <CropperModal 
+          fileName='logo' viewMode={0}
+          toggle={ this.toggle } 
+          uploadImage={ this.updateLogo }
+          isOpen={ this.state.showModal } 
+          src={ `${LEGACY_URL}${base.logoPaths.logo}` } />
+
       </TabPane>
     )
   }

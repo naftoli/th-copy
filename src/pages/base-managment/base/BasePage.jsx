@@ -78,8 +78,12 @@ class BasesPage extends Component {
     const isInvalid = Object.values( this.state.valid ).includes( false );
     if ( isInvalid ) return toast.error( 'Please correct all invalid feilds' );
     // save the base
-    this.props.updateBase( this.state.base.school_id, this.state.updates )
-    .then( base => this.setState({ base, updates: {} }) )
+    this.updateBase( this.state.updates )
+    .then( base => this.setState({ updates: {} }) );
+  }
+  updateBase = updates => {
+    return this.props.updateBase( this.state.base.school_id, updates )
+    .then( base => this.setState({ base }) );
   }
   
 
@@ -117,6 +121,7 @@ class BasesPage extends Component {
             updated={ updated }
             onUpdate={ this.onUpdate } 
             onSubmit={ this.saveChanges }
+            updateBase = { this.updateBase }
             onValidChange={ this.updateValid('base') } />
 
           <SettingsTab 
