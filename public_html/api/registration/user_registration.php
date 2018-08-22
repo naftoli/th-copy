@@ -97,19 +97,26 @@ class UserRegistrationRouter {
         $shipping_info = $_POST['shipping'];
         $shipping_charges = intval($shipping_info['shipping_charges']);
         // get all the users that we are registering
-
+        $totals = [ 'chayolei' => 0, 'chidon' => 0, 'yahadus' => 0, 'shipping' => $shipping_charges ];
         $user_ids = [];
         foreach( $registrations as $info ){
             if( !in_array( $info['user_id'], $user_ids ) ) $user_ids[] = $info['user_id'];
+            $totals[$info['registration_type']] += $info['paid'];
         }
         // get all the user models
         $users = User::find( $user_ids );
         if ( !is_array( $users ) ) $users = [ $users ]; // force an array, even if it is just one user
         
+        $totals_string = '';
+        foreach( $totals as $k => $v ) {
+            if ( $v > 0 ) $totals_string .= "$k: $v";
+        }
+        $totals_string = trim( $totals_string );
+
         // setup the variables we will need later
         $user_serials = array_map( function( $user ){ return $user->user_serial; }, $users);
         $year = GlobalSettings::getRegistrationYear( $users[0]->school_id );
-        $description = "User Registration for $year: " . implode( ", ", $user_serials );
+        $description = "Parent Registration ($totals_string) $year: " . implode( ", ", $user_serials );
         
         /******************************** PAYMENT ********************************/
         if ( $total != 0 ) {
