@@ -19,7 +19,7 @@ body { font-family: 'Poppins', sans-serif; }
     // box-shadow: 0 0 0 0.2rem rgba(0, 97, 202, 0.5);
   }
 }
-.btn-group .btn { white-space: normal; }
+.btn-group .btn { white-space: normal; flex-grow: 1; margin: 0px 2px; }
 // modal headers should use it as well
 .modal-header {
   background-color: $primary-color;
@@ -37,6 +37,10 @@ body { font-family: 'Poppins', sans-serif; }
 
 // customize react-table styles
 .ReactTable {
+  .rt-tr-group { overflow: hidden; }
+  .rt-tr { align-items: center; }
+  .rt-td { white-space: initial; }
+
   .rt-th.rt-resizable-header:not(.-cursor-pointer) {
     color: $primary-color; background: #f6f6f6;
   }
@@ -88,6 +92,8 @@ div.react-select__multi-value { background-color: $primary-color-light; }
   
   .nav-item { margin-bottom: 0px; flex-grow: 1; text-align: center; }
   .nav-link:hover{ cursor: pointer; color: $primary-color; }
+
+  .nav-link:not(.active) i.fas.fa-exclamation { color: red; }
   
   a.nav-link { white-space: nowrap; font-weight: bold; transition: .1s; }
   a.active.nav-link { background-color: $primary-color; color: #fff; border-color: $primary-color; }
