@@ -9,7 +9,7 @@ import { TabContent, TabPane, Nav, Button, Collapse } from 'reactstrap';
 // tabs
 import { BaseTab, PaymentsTab, ShippingTab, SettingsTab } from './tabs';
 // state
-import { getBase } from 'store/bases/operations';
+import { getBase, updateBase } from 'store/bases/operations';
 // functions
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
@@ -63,7 +63,7 @@ class BasesPage extends Component {
       school_id = login.id; // and load the correct school
     } else this.setState({ loading: true, updates: {} });
     // load the final base
-    getBase( school_id )
+    this.props.getBase( school_id )
       .then( base => {
         setTitle( `View / Edit Base #${base.school_number}` );
         this.setState({ base, loading: false })
@@ -81,7 +81,8 @@ class BasesPage extends Component {
   // save the changes to the base
   saveChanges = event => {
     event && event.preventDefault();
-    console.log( this.state.updates );
+    this.props.updateBase( this.state.base.school_id, this.state.updates )
+    .then( base => this.setState({ base, updates: {} }) )
   }
   
 
@@ -90,10 +91,8 @@ class BasesPage extends Component {
     base = { ...base, ...updates };
     // is the form updated and valid
     const updated = Object.keys( updates ).length > 0;
-    const valid = this.formRef.current && this.formRef.current.checkValidity();
 
     let saveButton = <SaveButton />;
-    if ( updated && !valid ) saveButton = <ErrorButton />;
 
     if ( loading ) return <Spinner />;
 
@@ -134,10 +133,10 @@ class BasesPage extends Component {
             <TabPane tabId={5}>
               <pre>{ JSON.stringify( this.state, null, 2 ) }</pre>
             </TabPane>
-            <Collapse isOpen={ updated } id='save'>
-              { saveButton }
-            </Collapse>
           </TabContent>
+          <Collapse isOpen={ updated } id='save'>
+            { saveButton }
+          </Collapse>
         </form>
       </div>
     );
@@ -148,4 +147,4 @@ const mapStateToProps = ({ login }) => ({
   login: login.current_login
 });
 
-export default connect( mapStateToProps )( BasesPage );
+export default connect( mapStateToProps, { getBase, updateBase } )( BasesPage );
