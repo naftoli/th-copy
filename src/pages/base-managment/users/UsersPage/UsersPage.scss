@@ -1,6 +1,7 @@
 @import '../../../styles/colors.scss';
 
 #UsersPage {
+  height: 100%;
 
   .inline-profile {
     max-height: 65px;
@@ -17,19 +18,17 @@
   }
   
   .ReactTable {
-    // Supersized displays
-    max-height: 87vh;
-    // Desktop
-    @media ( max-height: 1080px ){ max-height: 76vh; }
-    // iPad
-    @media ( max-height: 768px ){ max-height: 71vh; }
-    @media ( max-height: 731px ){ max-height: 70vh; }
-    // mobile
-    @media ( max-width: 450px ){ max-height: 80vh; }
-
-    .rt-tr-group { overflow: hidden; }
-    .rt-tr { align-items: center; }
-    .rt-td { white-space: initial; }
+    height: calc( 100% - 150px );
+    // page height grows as content shrinks
+    @media ( max-width: 1012px ) {
+      height: calc( 100% - 180px ); // top of the page takes up 50px
+    }
+    @media ( min-width: 769px ) and ( max-width: 837px ) {
+      height: calc( 100% - 200px ); // top of the page takes up 50px
+    }
+    @media ( max-width: 411px ) {
+      height: calc( 100% - 50px ); // top of the page takes up 50px
+    }
   }
 }
 
