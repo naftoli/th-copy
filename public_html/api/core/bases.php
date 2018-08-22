@@ -38,6 +38,18 @@ class BaseRouter {
         json_response( $bases );
     }
 
+    public function show( $id ) {
+        $base = School::find( $id );
+        json_response( $base );
+    }
+
+    public function update( $id ) {
+        $base = School::find( $id );
+        $base->bulkUpdate( $_POST );
+        if ( !$base->save() ) json_error( 'Could not save base' );
+        json_response( $base );
+    }
+
     private function getFilters( $all, &$params ){
         global $current_user; 
         $filters = [];

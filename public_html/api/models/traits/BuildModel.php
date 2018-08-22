@@ -22,4 +22,11 @@ trait BuildModel {
         $instance->reset_dirty();
         return $instance;
     }
+
+    public function bulkUpdate( $updates ) {
+        $columns = array_keys( self::table()->columns );
+        foreach( $updates as $key => $value ) {
+            if ( in_array( $key, $columns ) ) $this->{ $key } = $updates[ $key ];
+        }
+    }
 }

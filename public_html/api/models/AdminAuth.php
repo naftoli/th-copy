@@ -42,7 +42,7 @@ class AdminAuth extends ActiveRecord\Model implements JsonSerializable {
     }
 
     public function base() {
-        if ( $this->auth == 'school' )
+        if ( in_array( $this->auth, [ 'school', 'staff' ] ) )
             return School::find( $this->id )->school_name;
         else if ( $this->auth == 'class' )
             return Platoon::find( $this->id )->school->school_name;
@@ -50,7 +50,7 @@ class AdminAuth extends ActiveRecord\Model implements JsonSerializable {
     }
 
     public function platoon() {
-        if ( $this->auth == 'school' )
+        if ( in_array( $this->auth, [ 'school', 'staff' ] ) )
             return 'All Platoons';
         else if ( $this->auth == 'class' )
             return Platoon::find( $this->id )->name();
