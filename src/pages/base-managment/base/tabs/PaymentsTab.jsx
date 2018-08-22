@@ -47,49 +47,55 @@ export class PaymentsTab extends Component {
   }
 
   render(){
-    const { profile } = this.props;
-    const { customerProfileId, merchantCustomerId, email, description } = profile;
+    const { profile, isAdmin } = this.props;
 
-    const cards = profile.paymentProfiles.map( ( profile, index ) => 
-      <CardDisplay key={ index } 
-        { ...profile.payment.creditCard } 
-        profileId={ profile.customerPaymentProfileId }
-        onDelete={ this.deleteCard } />
-    );
+    let cards;
+    if ( profile && profile.paymentProfiles.length > 0 ) {
+      cards = profile.paymentProfiles.map( ( profile, index ) => 
+        <CardDisplay key={ index } 
+          { ...profile.payment.creditCard } 
+          profileId={ profile.customerPaymentProfileId }
+          onDelete={ this.deleteCard } />
+      );
+    }
 
     return (
       <div id='PaymentsTab'>
-        <div id='payment-profile'>
-          <p className='title'>Payment Profile</p>
-          <Row>
-            <Col xs={6} sm={2}>
-              <strong>Profile ID</strong>
-              <p>{ customerProfileId }</p>
-            </Col>
-            <Col xs={6} sm={2}>
-              <strong>TH ID</strong>
-              <p>{ merchantCustomerId }</p>
-            </Col>
-            <Col xs={6} sm={4}>
-              <strong>E-mail Address</strong>
-              <p>{ email }</p>
-            </Col>
-            <Col xs={6} sm={4}>
-              <strong>Description</strong>
-              <p>{ description }</p>
-            </Col>
-          </Row>
-        </div>
+        { profile && isAdmin && 
+          <div id='payment-profile'>
+            <p className='title'>Payment Profile</p>
+            <Row>
+              <Col xs={6} sm={2}>
+                <strong>Profile ID</strong>
+                <p>{ profile.customerProfileId }</p>
+              </Col>
+              <Col xs={6} sm={2}>
+                <strong>TH ID</strong>
+                <p>{ profile.merchantCustomerId }</p>
+              </Col>
+              <Col xs={6} sm={4}>
+                <strong>E-mail Address</strong>
+                <p>{ profile.email }</p>
+              </Col>
+              <Col xs={6} sm={4}>
+                <strong>Description</strong>
+                <p>{ profile.description }</p>
+              </Col>
+            </Row>
+          </div>
+        }
         <div id='add-card'>
           <p className='title'>Add new card</p>
           <CCForm onInputChange={ this.updateCC }/>
         </div>
-        <div id='on-file'>
-          <p className='title'>Cards on file</p>
-          <Row id='credit-cards'>
-            { cards }
-          </Row>
-        </div>
+        { !!cards && 
+          <div id='on-file'>
+            <p className='title'>Cards on file</p>
+            <Row id='credit-cards'>
+              { cards }
+            </Row>
+          </div>
+        }
       </div>
     )
   }
