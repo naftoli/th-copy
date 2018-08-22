@@ -43,6 +43,12 @@ class BaseRouter {
         json_response( $base );
     }
 
+    public function update( $id ) {
+        $base = School::find( $id );
+        $base->bulkUpdate( $_POST );
+        json_response( $base );
+    }
+
     private function getFilters( $all, &$params ){
         global $current_user; 
         $filters = [];
