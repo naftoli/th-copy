@@ -13,6 +13,7 @@ $qry = "SELECT amount, date, year, schools.school_id, school_name, logo, first, 
     ."JOIN classes c ON c.class_id = users.class_id " 
     ."WHERE type = 'chidon' " 
     ."AND year = $year ";
+// limit to dates if limit exists
 if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) && $_POST['toDate']) {
     $from = mysql_real_escape_string( $_POST['fromDate'] );
     $to = mysql_real_escape_string( $_POST['toDate'] );
