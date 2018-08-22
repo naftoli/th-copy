@@ -7,7 +7,7 @@ import { FontAwesome, Spinner } from 'components/ui';
 import { NavigationTab } from 'components/navigation';
 import { TabContent, TabPane, Nav, Button, Collapse } from 'reactstrap';
 // tabs
-import { BaseTab, PaymentsTab, ShippingTab } from './tabs';
+import { BaseTab, PaymentsTab, ShippingTab, SettingsTab } from './tabs';
 // state
 import { getBase } from 'store/bases/operations';
 // functions
@@ -36,7 +36,7 @@ class BasesPage extends Component {
   state = {
     base: {}, // the current base
     updates: {}, // the updates we have done
-    activeTab: 4, // currently visiable tab
+    activeTab: 1, // currently visiable tab
     loading: true // loading base or not
   }
 
@@ -104,9 +104,9 @@ class BasesPage extends Component {
           <NavigationTab active={activeTab === 1} onClick={this.toggle(1)}>
             Base <FontAwesome icon='school'/>
           </NavigationTab>
-          {/* <NavigationTab active={activeTab === 2} onClick={this.toggle(2)}>
+          <NavigationTab active={activeTab === 2} onClick={this.toggle(2)}>
             Settings <FontAwesome icon='sliders-h'/>
-          </NavigationTab> */}
+          </NavigationTab>
           <NavigationTab active={activeTab === 3} onClick={this.toggle(3)}>
             Shipping <FontAwesome icon='shipping-fast'/>
           </NavigationTab>
@@ -122,9 +122,9 @@ class BasesPage extends Component {
             <TabPane tabId={1}>
               <BaseTab base={ base } onUpdate={ this.onUpdate } />
             </TabPane>
-            {/* <TabPane tabId={2}>
-              <h1>Settings</h1>
-            </TabPane> */}
+            <TabPane tabId={2}>
+              <SettingsTab base={ base } onUpdate={ this.onUpdate } />
+            </TabPane>
             <TabPane tabId={3}>
               <ShippingTab base={ base } onUpdate={ this.onUpdate } />
             </TabPane>

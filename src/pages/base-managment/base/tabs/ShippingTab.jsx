@@ -21,18 +21,18 @@ export class ShippingTab extends Component {
       <div id='ShippingTab'>
 
         <Row>
-          <Col xs={4}>
+          <Col xs={12} sm={4}>
             <Label>Shipping Method</Label>
             <Input type="select" name='shipping_method' value={ shipping_method } onChange={ this.onChange }>
               <option value='pickup'>Pickup</option>
               <option value='deliver'>Delivery</option>
             </Input>
           </Col>
-          <Col xs={4}>
+          <Col xs={6} sm={4}>
             <Label>First Name</Label>
             <Input name='shipping_first' value={ shipping_first } onChange={ this.onChange } />
           </Col>
-          <Col xs={4}>
+          <Col xs={6} sm={4}>
             <Label>Last Name</Label>
             <Input name='shipping_last' value={ shipping_last } onChange={ this.onChange } />
           </Col>
