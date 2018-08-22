@@ -22,7 +22,9 @@ class CropperModal extends Component {
     // initial state
     this.state = { 
       src: props.src, 
-      name: 'default' 
+      name: 'default',
+      fileName: 'profile',
+      viewMode: 1
     };
   }
 
@@ -51,7 +53,7 @@ class CropperModal extends Component {
     try {
       this.cropper.getCroppedCanvas({ width: 500, height: 500 }).toBlob( blob => {
         const formData = new FormData();
-        formData.append( 'profile', blob, this.state.name );
+        formData.append( this.props.fileName, blob, this.state.name );
         // API must be called with 'application/x-www-form-urlencoded; charset=utf-8' for img to post
         this.props.uploadImage( formData );
       });
@@ -77,7 +79,7 @@ class CropperModal extends Component {
 
   render() {
     // extract the props and state
-    const { isOpen, centered, toggle } = this.props;
+    const { isOpen, centered, toggle, viewMode } = this.props;
     let { src } = this.state;
     src = src && src.indexOf( DEFAULT_PROFILE ) >= 0 ? false : src;
     // assume we do not have an image
@@ -89,7 +91,7 @@ class CropperModal extends Component {
       </div>;
     // if we do, render the cropper component
     if ( src ) 
-      body = <Cropper src={ src } cropper={ this.setCropper } />;
+      body = <Cropper src={ src } cropper={ this.setCropper } viewMode={ viewMode }/>;
     // render the final modal
     return (
       <Modal isOpen={isOpen} centered={centered} id='cropper-modal' zIndex='auto'>

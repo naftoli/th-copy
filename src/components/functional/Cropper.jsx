@@ -9,7 +9,8 @@ import './styles/Cropper.scss';
 export class Cropper extends Component {
   // the props we are expecting
   static defaultProps = { 
-    src: '', cropper: ( cropper ) => {} 
+    src: '', cropper: ( cropper ) => {},
+    viewMode: 1
   }
   // setup some internal props on creation
   constructor( props ) {
@@ -38,8 +39,9 @@ export class Cropper extends Component {
     else if ( this.cropperRef.current ){
       this.cropper = new CropperJS( this.cropperRef.current, {
           aspectRatio: 1 / 1, // force the square shape we want
-          dragMode: 'move', viewMode: 1, // do not allow the user to add alpha to the image.
-          cropBoxMovable: false, cropBoxResizable: false
+          dragMode: 'move', viewMode: this.props.viewMode, // do not allow the user to add alpha to the image.
+          cropBoxMovable: false, cropBoxResizable: false,
+          ready: () => { this.cropper.zoomTo(0.75); }
       });
     }
     // pass the cropper instance to any parents that might want it.
@@ -50,8 +52,8 @@ export class Cropper extends Component {
     return {
       rotateLeft:   () => { this.cropper && this.cropper.rotate( -90 ); },
       rotateRight:  () => { this.cropper && this.cropper.rotate(  90 ); },
-      zoomIn:   () => { this.cropper && this.cropper.zoom(  0.1 ); },
-      zoomOut:  () => { this.cropper && this.cropper.zoom( -0.1 ); },
+      zoomIn:   () => { this.cropper && this.cropper.zoom(  0.05 ); },
+      zoomOut:  () => { this.cropper && this.cropper.zoom( -0.05 ); },
       scaleX: this.scale('X'),
       scaleY: this.scale('Y')
     }
