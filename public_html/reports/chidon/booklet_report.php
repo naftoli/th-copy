@@ -1,5 +1,4 @@
 <?php
-ini_set('display_errors',1);
 $admin_auth = array(); 	
 require_once ( __DIR__ . '/../../header.php' ); 
 
