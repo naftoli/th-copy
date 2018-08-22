@@ -45,8 +45,23 @@ class BaseRouter {
 
     public function update( $id ) {
         $base = School::find( $id );
+
+        if ( count( $_FILES ) > 0 ) {
+            try {
+                if ( isset( $_FILES['logo'] ) )
+                    $base->setLogo( 'logo', $_FILES['logo'] );
+                if ( isset( $_FILES['logo_boys'] ) )
+                    $base->setLogo( 'logo_boys', $_FILES['logo_boys'] );
+                if ( isset( $_FILES['logo_girls'] ) )
+                    $base->setLogo( 'logo_girls', $_FILES['logo_girls'] );
+            } catch ( Exception $e ) {
+                json_error( $e->getMessage() );
+            }
+        }
+
         $base->bulkUpdate( $_POST );
         if ( !$base->save() ) json_error( 'Could not save base' );
+
         json_response( $base );
     }
 

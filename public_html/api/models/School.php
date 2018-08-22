@@ -1,5 +1,6 @@
 <?php
 include_once( __DIR__ . '/traits/BuildModel.php' );
+include_once( __DIR__ . '/../functions/files/images.php' );
 
 class School extends ActiveRecord\Model implements JsonSerializable {
     use traits\BuildModel;
@@ -11,6 +12,17 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         [ 'users' ] 
     ];
     static $validates_uniqueness_of = [ [ 'school_number' ] ];
+
+    // ******************************* HELPER FUNCTIONS *******************************
+    public function staff() {
+        global $pdo;
+        $staff_query = $pdo->prepare(
+            'SELECT a.first, a.last, a.username, a.admin_email as email, a.admin_id FROM admins a '
+            .'JOIN admin_auths aa USING( admin_id ) WHERE aa.auth="school" AND aa.id=?;'
+        );
+        $staff_query->execute([ $this->school_id ]);
+        return $staff_query->fetchAll();
+    }
 
     // ******************************* GETTERS *******************************
     /**
@@ -34,11 +46,38 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return $reg_info;
     }
 
+    // ******************************* LOGOS *******************************
+    public function setLogo( $logo_name, $file ){
+        $filename = self::uploadLogo( $this->school_id, $logo_name, $file );
+        // update the mobile_pic column
+        $this->{ $logo_name } = $filename;
+    }
+    // validates and moves the uploaded profile picture...
+    public static function uploadLogo( $school_id, $logo_name, $file ){
+        $type = exif_imagetype( $file['tmp_name'] );
+        $extension = image_type_to_extension( $type );
+        if ( !in_array( $type, [ IMAGETYPE_JPEG, IMAGETYPE_PNG ] ) )
+            throw new Exception('Invalid File Type. Only JPG/JPEG/PNG are supported at the moment.');
+        // all other upload errors
+        if ( $file['error'] !== UPLOAD_ERR_OK )
+            throw new Exception( codeToMessage( $file['error'] ) ); // api/funcitons/files/images.php#10
+        // generate the file name
+        $file_name = getLogoDestination( $school_id, $extension ); // api/funcitons/files/images.php#35
+        $target = __DIR__ . "/../../schoolLogos/$file_name";
+        // remove duplicate files
+        if ( file_exists( $target ) ) unlink( $target );
+        // save file
+        $result = move_uploaded_file( $file['tmp_name'], $target );
+        if ( !$result ) 
+            throw new Exception( 'Unable to save Image. Please check if your file is corrupt before trying again.' );
+        return $file_name;
+    }
+
     public function platoonTransitionDone() {
-        $transition_qry = "select * from classes where class_era = 0 and confirmed = 0 and school_id = " . $this->school_id;
-        $transition_res = mysql_query( $transition_qry );
-        if ( mysql_num_rows( $transition_res ) > 0 ) return false;
-        else return true;
+        global $pdo;
+        $transition = $pdo->prepare( "SELECT * from classes where class_era = 0 and confirmed = 0 and school_id = ?" );
+        $transition->execute([ $this->school_id ]);
+        return $transition->rowCount() > 0;
     }
 
     public function logoPath(){
@@ -123,7 +162,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                 'tanya_ord', 'tanya_cat_ord', 'school_type', 'col_show', 'tuition', 'reg_type', 'cc_first', 'cc_last', 
                 'cc_address', 'cc_state', 'cc_zip', 'cc_number', 'cc_exp', 'cc_cvv', 'cc_approval_number',  'authorize_customer_profile_id', 
             ],
-            'methods' => [ 'logoPaths', 'customerProfile' ]
+            'methods' => [ 'logoPaths', 'customerProfile', 'staff' ]
         ]);
     }
 
