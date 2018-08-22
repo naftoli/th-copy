@@ -30,7 +30,7 @@ if (isset($_POST["action"])) {
 	}
 
 	if ($action == "update") {		
-		$sql = "UPDATE admins SET title='" . $_POST['title']  ."', first='" . $_POST['first'] . "', last='" . $_POST['last'] . "', admin_phone_mobile='" . $_POST['admin_phone_mobile'] . "', admin_email='" . $_POST['admin_email'] . "', admin_phone_work='" . $_POST['admin_phone_work'] . "', admin_phone_home='" . $_POST['admin_phone_home'] . "' WHERE admin_id=" . $admin_id;
+		$sql = "UPDATE admins SET title='" . $_POST['title']  ."', first='" . $_POST['first'] . "', last='" . $_POST['last'] . "', admin_phone_mobile='" . $_POST['admin_phone_mobile'] . "', admin_phone_work='" . $_POST['admin_phone_work'] . "', admin_phone_home='" . $_POST['admin_phone_home'] . "' WHERE admin_id=" . $admin_id;
 		$query = mysql_query($sql);
 		if (!$query) {
 			//echo $sql . mysql_error();
@@ -71,8 +71,31 @@ if (isset($_POST["action"])) {
 		if (!mysql_query( $sql )) {
 			$message = "<span style='color:red;'>Principal Info and / or Chidon Info not updated.</span></a>";
 		}
-	} else {		
-		$sql = "INSERT INTO admins SET 
+	} else {
+		if ( $_POST['has_account'] == 'true' ) {
+			$sql = 'SELECT admin_id FROM admins WHERE username = "'.$_POST['old_username'].'" AND password = "'. $_POST['old_password'] .'"';
+			$have_admin = mysql_query($sql);
+			if ( !$have_admin ) {
+				$message = "<span style='color:red;'>Administrator not found. Please try again.</span></a>";
+			} else {
+				$admin_id = mysql_fetch_assoc( $have_admin )['admin_id'];
+				$sql = "UPDATE admins SET 
+					title='" . 				$_POST['title']  ."', 
+					first='" . 				$_POST['first'] . "', 
+					last='" . 				$_POST['last'] . "', 
+					admin_phone_mobile='" . $_POST['admin_phone_mobile'] . "', 
+					admin_phone_work='" . 	$_POST['admin_phone_work'] . "', 
+					admin_phone_home='" . 	$_POST['admin_phone_home'] . "'
+					WHERE admin_id='$admin_id'";
+				$query = mysql_query($sql);
+				if ($query) {
+					$_SESSION['admin_id'] = $admin_id;
+				} else {
+					$message = "<span style='color:red;'>Administrator not updated. Please try again.</span></a>";
+				}
+			}
+		} else {
+			$sql = "INSERT INTO admins SET 
 				username='" . 			$_POST['username'] . "', 
 				password='" . 			$_POST['password'] . "', 
 				title='" . 				$_POST['title']  ."', 
@@ -82,26 +105,25 @@ if (isset($_POST["action"])) {
 				admin_email='" . 		$_POST['admin_email'] . "', 
 				admin_phone_work='" . 	$_POST['admin_phone_work'] . "', 
 				admin_phone_home='" . 	$_POST['admin_phone_home'] . "'";
-				
-		$query = mysql_query($sql);
-		if ($query) {
-			$admin_id = mysql_insert_id();
-			$_SESSION['admin_id'] = $admin_id;
-			$_SESSION['school_id'] = $school_id;
-			$_SESSION['school_type']	= $_POST['school_type'];
-			
-			// save principal and chidon info to session
-			$_SESSION['p_name'] 		= $_POST['p_name'];
-			$_SESSION['p_number'] 		= $_POST['p_number'];
-			$_SESSION['p_email'] 		= $_POST['p_email'];
-			$_SESSION['chidon_name'] 	= $_POST['chidon_name'];
-			$_SESSION['chidon_number'] 	= $_POST['chidon_number'];
-			$_SESSION['chidon_email'] 	= $_POST['chidon_email'];
-		} else {
-			//echo $sql . mysql_error();
-			$message = "<span style='color:red;'>Administrator not added. Please try again.</span></a>";
-		    //echo mysql_error();
-		}			
+			$query = mysql_query($sql);
+			if ($query) {
+				$admin_id = mysql_insert_id();
+				$_SESSION['admin_id'] = $admin_id;
+			} else {
+				$message = "<span style='color:red;'>Administrator not added. Please try again.</span></a>";
+			}
+		}
+		// save session info
+		$_SESSION['school_id'] = $school_id;
+		$_SESSION['school_type']	= $_POST['school_type'];
+		
+		// save principal and chidon info to session
+		$_SESSION['p_name'] 		= $_POST['p_name'];
+		$_SESSION['p_number'] 		= $_POST['p_number'];
+		$_SESSION['p_email'] 		= $_POST['p_email'];
+		$_SESSION['chidon_name'] 	= $_POST['chidon_name'];
+		$_SESSION['chidon_number'] 	= $_POST['chidon_number'];
+		$_SESSION['chidon_email'] 	= $_POST['chidon_email'];			
 	}
 
 	if ($message=="") {
@@ -404,7 +426,8 @@ else {
 										
 									</div>
 									
-									<h2>Base Commander's Info</h2> 
+									<h2>Base Commander's Info</h2>
+
 									<div class="module" id="module-info">
 									
 										<div class="module_content">
@@ -413,8 +436,7 @@ else {
 												
 												<ul>
 													<li>
-														<span class="label"><label for="title">Title</label>
-														</span>
+														<span class="label"><label for="title">Title</label></span>
 														
 														<span class="input">
 															<select name="title" class="select">
@@ -458,10 +480,6 @@ else {
 														<span class="label"><input class="required" name="admin_phone_mobile" type="text" value="<?=isset($admin->admin_phone_mobile)?$admin->admin_phone_mobile:'';?>" required /></span>
 													</li>
 													<li>
-														<span class="label"><label for="email">*Email Address</label></span>
-														<span class="label"><input class="required email" name="admin_email" id="admin_email" type="email" value="<?=isset($admin->admin_email)?$admin->admin_email:'';?>" required /></span>
-													</li>
-													<li>
 														<span class="label"><label for="work">*Work Phone (+ext)</label></span>
 														<span class="label"><input class="required" name="admin_phone_work" type="text" value="<?=isset($admin->admin_phone_work)?$admin->admin_phone_work:'';?>" required /></span>
 													</li>
@@ -481,17 +499,48 @@ else {
 											<div class="lists form">
 												<ul>
 													<li>
-														<span class="label"><label for="username">*Username</label></span>
-														<span class="label"><input class="required" name="username" id="username" type="text" required /></span>
+														<p style="font-size: 16px; font-weight: bold;">Do you have an existing Tzivos Hashem Account?</p>
 													</li>
 													<li>
-														<span class="label"><label for="password">*Password</label></span>
-														<span class="label"><input class="required" name="password" id="password" type="password" required /></span>
+														<input type="radio" name="has_account" value="true" class="has_account" /> 
+														<span class='school_type_info'>Yes I do</span><br />
+														<input type="radio" name="has_account" value="false" class="has_account" /> 
+														<span class='school_type_info'>No I do not</span><br />
 													</li>
-													<li>
-														<span class="label"><label for="password2">*Re-enter Password</label></span>
-														<span class="label"><input class="required" name="password2" id="password2" type="password" required /></span>
-													</li>
+													<div id="has_account" style="display: none">
+														<li></li>
+														<li>
+															<p style="font-size: 16px; font-weight: bold;">
+																Please provide your existing login information:
+															</p>
+														</li>
+														<li>
+															<span class="label"><label for="old_username">*Username</label></span>
+															<span class="label"><input class="required" name="old_username" id="old_username" type="text" required /></span>
+														</li>
+														<li>
+															<span class="label"><label for="old_password">*Password</label></span>
+															<span class="label"><input class="required" name="old_password" id="old_password" type="password" required /></span>
+														</li>
+													</div>
+													<div id="new_account" style="display: none">
+														<li>
+															<span class="label"><label for="email">*Email Address</label></span>
+															<span class="label"><input class="required email" name="admin_email" id="admin_email" type="email" value="<?=isset($admin->admin_email)?$admin->admin_email:'';?>" required /></span>
+														</li>
+														<li>
+															<span class="label"><label for="username">*Username</label></span>
+															<span class="label"><input class="required" name="username" id="username" type="text" required /></span>
+														</li>
+														<li>
+															<span class="label"><label for="password">*Password</label></span>
+															<span class="label"><input class="required" name="password" id="password" type="password" required /></span>
+														</li>
+														<li>
+															<span class="label"><label for="password2">*Re-enter Password</label></span>
+															<span class="label"><input class="required" name="password2" id="password2" type="password" required /></span>
+														</li>
+													</div>
 												</ul>
 											</div>
 										</div>
@@ -576,6 +625,20 @@ else {
 				$("#nonChayolei").show();
 			}
 		});
+
+		$(".has_account").change( function() {
+			if ( JSON.parse( $(this).val() ) ) {
+				$("#has_account").show();
+				$("#has_account input").attr('required', true);
+				$("#new_account").hide();
+				$("#new_account input").attr('required', false);
+			} else {
+				$("#has_account").hide();
+				$("#has_account input").attr('required', false);
+				$("#new_account").show();
+				$("#new_account input").attr('required', true);
+			}
+		})
 		
 		<?php
 		// when updating existing school automatically choose correct school type

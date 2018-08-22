@@ -6,18 +6,18 @@ require_once ( __DIR__ . '/../../class.globalSettings.php' );
 $year = GlobalSettings::getRegistrationYear();
 
 $main_query = mysql_query(
-    "SELECT s.school_id, s.school_name, !ISNULL(sr.type) as live, sr.date_paid, sr.amount_paid, total, "
+    "SELECT s.school_id, s.school_number, s.school_name, !ISNULL(sr.type) as live, sr.date_paid, sr.amount_paid, total, "
     ."total_registered, not_chayolei, classes_unconfirmed "
     ."FROM schools s LEFT JOIN school_registrations sr USING (school_id) "
-    ."JOIN ( "
+    ."LEFT JOIN ( "
         ."SELECT  school_id, COUNT(*) AS total FROM users GROUP BY school_id "
     .") u USING (school_id) LEFT JOIN ( "
-        ."SELECT school_id, COUNT(*) AS not_chayolei FROM users WHERE yan = 1 OR chidon = 1 GROUP BY school_id"
+        ."SELECT school_id, COUNT(*) AS not_chayolei FROM users WHERE chidon = 1 GROUP BY school_id"
     .") nc USING (school_id) LEFT JOIN ("
         ."SELECT school_id, COUNT(*) AS total_registered FROM user_registration WHERE year = $year GROUP BY school_id"
     .") ur USING (school_id) LEFT JOIN ("
         ."SELECT school_id, COUNT(*) AS classes_unconfirmed FROM classes WHERE confirmed = 0 GROUP BY school_id"
-    .") c USING (school_id) WHERE sr.year = $year OR sr.year IS NULL GROUP BY school_id"
+    .") c USING (school_id) WHERE ( sr.year = $year OR sr.year IS NULL ) AND test_school=0 GROUP BY school_id ORDER BY school_name"
 );
 $data = [];
 while( $row = mysql_fetch_assoc( $main_query ) ) $data[] = $row;
@@ -41,11 +41,12 @@ while( $row = mysql_fetch_assoc( $main_query ) ) $data[] = $row;
     <h2>Details</h2>
     <table>
         <thead>
+            <th>Base #</th>
             <th>Base</th>
             <th>Registered</th>
             <th>Amount Paid</th>
             <th>Soldiers Registered</th>
-            <th>Non-Chayolei Soldiers</th>
+            <th>Chidon Only Soldiers</th>
             <th>Confirmed Platoon Info</th>
         </thead>
         <tbody>
@@ -54,6 +55,7 @@ while( $row = mysql_fetch_assoc( $main_query ) ) $data[] = $row;
                     if ( !$base['total_registered'] ) $base['total_registered'] = 0; 
                     if ( $base['total'] == 1 && $base['not_chayolei'] == 1) continue; ?>
                     <tr>
+                        <td><?= $base['school_number'] ?></td>
                         <td><?= $base['school_name'] ?></td>
                         <td><?= $base[ 'date_paid' ] ? 
                             ( new DateTime($base[ 'date_paid' ]) )->format( 'm/d/Y g:i:s' ) : 

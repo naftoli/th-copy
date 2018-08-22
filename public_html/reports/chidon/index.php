@@ -116,7 +116,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="booklet_report.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/v2/images/back-end/admin/icon_install.png" height="32" alt="tickets"/>
-                    <span class="link-text">Chidon Booklet Report</span>
+                    <span class="link-text">Study Guide Report</span>
                 </div>
             </a>
         </div>
