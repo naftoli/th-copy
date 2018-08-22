@@ -5,6 +5,7 @@ include_once( __DIR__ . "/../header/header.php" );
 class AdminAuthRouter {
 
     public function create() {
+        global $current_user;
         // make sure we have an auth and id
         if ( !isset($_POST['id']) ) json_error('id missing.');
         if ( !isset($_POST['auth']) ) json_error('auth missing.');
@@ -24,15 +25,22 @@ class AdminAuthRouter {
             return json_error('Admin account not found.');
         }
         
-        $attrs = [ 'admin_id' => $admin->admin_id, 'auth' => $_POST['auth'], 'id' => $_POST['id'] ];
+        $attrs = [ 'admin_id' => $admin->admin_id, 'auth' => $_POST['auth'] ];
         if ( isset( $_POST['role_id'] ) ) $attrs['role_id'] = $_POST['role_id'];
         if ( isset( $_POST['position'] ) ) $attrs['position'] = $_POST['position'];
+
+        if ( $current_user->login['code'] == 'BC' ) {
+            $attrs['id'] = $current_user->login['id'];
+        } else {
+            $attrs['id'] = $_POST['id'];
+        }
 
         try {
             $auth = AdminAuth::create( $attrs );
         } catch ( ActiveRecord\DatabaseException $e ) {
             return json_error( 'Login already exists. Please refresh page.' );
         }
+
         return json_response( $auth );
     }
 
