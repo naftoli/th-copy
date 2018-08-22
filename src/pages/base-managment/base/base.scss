@@ -8,7 +8,7 @@
   }
 
   .ReactTable {
-    max-height: calc( 100% - 50px ); // top of the page takes up 50px
+    height: calc( 100% - 50px ); // top of the page takes up 50px
   }
 
 }
@@ -16,10 +16,6 @@
 #BasePage {
 
   .tab-content { margin-bottom: 0px; }
-
-  .nav-link:not(.active) i.fas.fa-exclamation {
-    color: red;
-  }
 
   p.input-message {
     font-size: .7em;
@@ -29,12 +25,6 @@
 
   #store-miles label.checkbox {
     margin-top: .4em;
-  }
-
-  #save > button {
-    width: 100%;
-    margin-top: 10px;
-    font-size: 1.4em;
   }
 
   #payment-profile > .row {
