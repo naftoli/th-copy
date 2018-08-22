@@ -1,10 +1,5 @@
 import { toHebrew } from 'functions/utils';
 
-// handle hebrew text inputs
-export const hebrewChange = onChange => event => {
-  event.target.value = toHebrew( event.target.value );
-  onChange( event )
-}
 // convert events to { target.key: target.value };
 export const eventToUpdate = ( target, key = 'name' ) => {
   return { [target[key]]: target.value }
