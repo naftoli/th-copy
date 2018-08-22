@@ -1,4 +1,5 @@
 #StaffPage {
+  height: 100%;
 
   .btn-group { 
     margin: 10px 0px; width: 100%;
@@ -7,29 +8,21 @@
   }
 
   .ReactTable {
-    // Supersized displays
-    max-height: 87vh;
-    // Desktop
-    @media ( max-height: 1080px ){ max-height: 78vh; }
-    // iPad
-    @media ( max-height: 768px ){ max-height: 74vh; }
-    @media ( max-height: 731px ){ max-height: 73vh; }
-    // mobile
-    @media ( max-width: 450px ){ max-height: 82vh; }
+    height: calc( 100% - 130px );
+    // page height grows as content shrinks
+    @media ( max-width: 1012px ) {
+      height: calc( 100% - 180px ); // top of the page takes up 50px
+    }
+    @media ( min-width: 769px ) and ( max-width: 837px ) {
+      height: calc( 100% - 200px ); // top of the page takes up 50px
+    }
+    @media ( max-width: 411px ) {
+      height: calc( 100% - 50px ); // top of the page takes up 50px
+    }
   }
 }
 
 #StaffDetailPage {
-  #save {
-    overflow: hidden;
-    transition: .5s;
-    &.hide { max-height: 0px; }
-    &.show { 
-      max-height: 55px; 
-      padding-top: 10px; padding-bottom: 3px;
-      margin-left: -3px; padding-left: 3px;
-    }
-  }
 
   .PositionRow, .CreatePositionRow {
     border: 1px solid #ccc;
