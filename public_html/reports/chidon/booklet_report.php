@@ -43,27 +43,8 @@ $booklets = array(
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
     <h1>Chidon Booklet Report</h1>
-    <h2>Base Totals</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Base</th>
-                <th># of Booklets</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            foreach( $booklet_users as $school_id => $users ) {
-                $base = $users[0]; ?>
-                <tr>
-                    <td><?= $base[ 'school_name' ]; ?></td>
-                    <td><?= count( $users ); ?></td>
-                </tr>
-            <?php 
-            } ?>
-        </tbody>
-    </table>
     <?php
+        $booklet_grand_totals = array();
         foreach( $booklet_users as $school_id => $users ) {
             $booklet_totals = array();
             $base = $users[0]; ?>
@@ -89,8 +70,13 @@ $booklets = array(
                                 <td><?= ( new DateTime($user[ 'date' ]) )->format( 'm/d/Y g:i:sa e' ); ?></td>
                             </tr>
                         <?php 
+                        // totals per school
                         if ( isset( $booklet_totals[$user['class_grade']] ) ) $booklet_totals[$user['class_grade']] += $booklets[$user['class_grade']];
                         else $booklet_totals[$user['class_grade']] = $booklets[$user['class_grade']];
+
+                        // grand totals
+                        if ( isset( $booklet_grand_totals[$user['class_grade']] ) ) $booklet_grand_totals[$user['class_grade']] += $booklets[$user['class_grade']];
+                        else $booklet_grand_totals[$user['class_grade']] = $booklets[$user['class_grade']];
                         } 
                     ?>
                 </tbody>
@@ -102,6 +88,7 @@ $booklets = array(
                     <th>Total</th>
                 </tr>
                 <?php
+                ksort( $booklet_totals );
                 foreach ( $booklet_totals as $booklet => $total ) {
                     echo "<tr><td>" . $booklet . "</td><td>" . $total . "</td></tr>";
                 }
@@ -110,5 +97,38 @@ $booklets = array(
         <?php
         } 
     ?>
+    <h2>Totals</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Base</th>
+                <th># of Booklets</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach( $booklet_users as $school_id => $users ) {
+                $base = $users[0]; ?>
+                <tr>
+                    <td><?= $base[ 'school_name' ]; ?></td>
+                    <td><?= count( $users ); ?></td>
+                </tr>
+            <?php 
+            } ?>
+        </tbody>
+    </table>
+    <h2>Grand Totals</h2>
+    <table>
+        <tr>
+            <th>Booklet #</th>
+            <th>Grand Total</th>
+        </tr>
+        <?php
+        ksort( $booklet_grand_totals );
+        foreach ( $booklet_grand_totals as $booklet => $total ) {
+            echo "<tr><td>" . $booklet . "</td><td>" . $total . "</td></tr>";
+        }
+        ?>
+    </table>
 </body>
 </html>
