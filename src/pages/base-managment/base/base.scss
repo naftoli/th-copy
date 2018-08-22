@@ -17,6 +17,10 @@
 
   .tab-content { margin-bottom: 0px; }
 
+  .nav-link:not(.active) i.fas.fa-exclamation {
+    color: red;
+  }
+
   p.input-message {
     font-size: .7em;
     margin-bottom: 0px;
@@ -30,10 +34,23 @@
   #save > button {
     width: 100%;
     margin-top: 10px;
+    font-size: 1.4em;
   }
 
   #payment-profile > .row {
     margin-left: -5px;
+  }
+
+  @media ( min-width: 2200px ) {
+    #add-card:not(:last-child) {
+      width: 30%;
+      display: inline-block;
+      vertical-align: top;
+    }
+    #on-file {
+      width: 70%;
+      display: inline-block;
+    }
   }
 
   #credit-cards {
