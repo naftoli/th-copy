@@ -34,6 +34,13 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return $reg_info;
     }
 
+    public function platoonTransitionDone() {
+        $transition_qry = "select * from classes where class_era = 0 and confirmed = 0 and school_id = " . $this->school_id;
+        $transition_res = mysql_query( $transition_qry );
+        if ( mysql_num_rows( $transition_res ) > 0 ) return false;
+        else return true;
+    }
+
     public function logoPath(){
         return "/schoolLogos/$this->logo";
     }

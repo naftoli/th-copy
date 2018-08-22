@@ -25,7 +25,7 @@ class UserRegistrationRouter {
         foreach( $users as $user ){
             if ( !$user->school_id ) continue;
             $reg_info = $user->school->getRegInfo();
-            if ( $reg_info->default || !$reg_info->date_paid ) continue;
+            if ( $reg_info->default || !$reg_info->date_paid || !$user->school->platoonTransitionDone()  ) continue; // also check if platoon transition was done for this school
             $available_users[] = $user;
         }
 
