@@ -13,7 +13,7 @@ export class Form extends Component {
   }
 
   render() {
-    const { children, ...props } = this.props;
+    const { children, onValidChange, ...props } = this.props;
     return (
       <form {...props} ref={ this.formRef }>
         { children }
