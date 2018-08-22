@@ -17,6 +17,11 @@
 
   .tab-content { margin-bottom: 0px; }
 
+  .profile-picture.editable:hover {
+    background: #eee;
+    border-radius: 15px;
+  }
+
   p.input-message {
     font-size: .7em;
     margin-bottom: 0px;
