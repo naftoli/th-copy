@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 // import PropTypes from 'prop-types';
 // components
 import { Prompt } from 'react-router';
+import { TabContent, Nav } from 'reactstrap';
 import { FontAwesome, Spinner } from 'components/ui';
 import { NavigationTab } from 'components/navigation';
-import { TabContent, TabPane, Nav, Button } from 'reactstrap';
 // tabs
 import { BaseTab, PaymentsTab, ShippingTab, SettingsTab } from './tabs';
 // state

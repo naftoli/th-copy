@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 // components
 import { Prompt } from 'react-router';
 import { Page404 } from 'pages/errors';
-import { Spinner, FontAwesome } from 'components/ui';
-import { Button } from 'reactstrap';
+import { Spinner } from 'components/ui';
+import { SaveButton } from 'components/buttons';
 // rows
 import EditStaffRow from './rows/EditStaffRow';
 import PositionRow from './rows/PositionRow';
@@ -12,7 +12,8 @@ import CreatePositionRow from './rows/CreatePositionRow';
 // functions
 import memoize from 'memoize-one';
 import { toast } from 'react-toastify';
-import { loginStoreChanged } from 'functions/login';
+import { filterUpdates } from 'functions/events';
+import { loginStoreChanged, isAdmin } from 'functions/login';
 // state
 import { getStaff, updateStaff, createAuth } from 'store/staff/operations';
 
@@ -42,7 +43,10 @@ class StaffDetailPage extends Component {
   getStaff = () => this.findStaff( this.props.staff, parseInt( this.props.match.params.id, 10 ) );
   
   // event handlers
-  handleUpdates = ( updates ) => { this.setState({ updates: { ...this.state.updates, ...updates } }) };
+  handleUpdates = updates => {
+    updates = filterUpdates( this.getStaff(), { ...this.state.updates, ...updates } );
+    this.setState({ updates });
+  };
   onChange = ({ target }) => { this.handleUpdates({ [target.name]: target.value }) };
   save = () => {
     this.props.updateStaff( parseInt( this.props.match.params.id, 10 ), this.state.updates )
@@ -56,7 +60,7 @@ class StaffDetailPage extends Component {
   }
 
   render() {
-    const { loading } = this.props;
+    const { loading, login } = this.props;
     const updated = Object.keys( this.state.updates ).length > 0;
     let staff = this.getStaff();
 
@@ -78,18 +82,15 @@ class StaffDetailPage extends Component {
           onChange={ this.onChange }
           />
 
-        <div id='save' className={ updated ? 'show' : 'hide' }>
-          <Button color='primary' onClick={ this.save }>
-            <FontAwesome icon='save' /> Save Changes
-          </Button>
-        </div>
+        <SaveButton show={ updated } onClick={ this.save }/>
 
         <p className='title'>Positions</p>
 
         <CreatePositionRow 
-          adminId={ staff.admin_id } 
+          adminId={ staff.admin_id }
           showCreateButton
           onCreate={ this.createAuth }
+          isAdmin={ isAdmin( login.code ) }
           />
 
         { staff.positions.map( 
