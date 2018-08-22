@@ -25,6 +25,7 @@ export class BaseTab extends Component {
             <BaseRow 
               { ...base }
               onUpdate={ onUpdate } />
+              
           </Col>
           <Col xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2'>
             <ProfilePicture src={ base.logoPaths.logo }/>
@@ -34,7 +35,7 @@ export class BaseTab extends Component {
         <AddressRow { ...base } prefix='school_' onChange={ this.onChange } />
 
         <p className='title'>Notes</p>
-        <Input type="textarea" name='notes' rows='10'
+        <Input type="textarea" name='notes' rows='8'
           value={ base.notes } onChange={ this.onChange } />
 
       </div>
