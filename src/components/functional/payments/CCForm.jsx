@@ -41,7 +41,7 @@ class CCForm extends Component {
   };
   // clean up the input as it is entered
   handleInputChange = ({ target }) => {
-    const callback = () => { this.props.onInputChange( this.state ) }
+    const callback = () => { this.props.onInputChange && this.props.onInputChange( this.state ) }
 
     if (target.name === 'number') {
       this.setState({ [target.name]: target.value.replace(/ /g, '') }, callback);
