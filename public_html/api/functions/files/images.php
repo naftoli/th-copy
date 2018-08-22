@@ -35,3 +35,16 @@ function codeToMessage( $code ) {
 function getProfileDestination( $id, $extension ) {
     return "img/$id." . date('YmdHis') . $extension;
 }
+
+/**
+ * getLogoDestination
+ *
+ * Generates the destination location of the image ( id.timestamp.extension ) ( in /schoolLogos/ becuase reasons :-( )
+ *
+ * @param string/int $id
+ * @param string $extension
+ * @return string
+ */
+function getLogoDestination( $id, $extension ) {
+    return "$id." . date('YmdHis') . $extension;
+}
