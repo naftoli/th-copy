@@ -34,7 +34,8 @@
   }
 
   #credit-cards {
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
     margin: 0px;
 
     .CardDisplay {
@@ -42,6 +43,6 @@
       text-align: center;
     }
 
-    .btn { width: 100%; margin-top: 8px; }
+    .btn { width: 290px; margin-top: 8px; }
   }
 }

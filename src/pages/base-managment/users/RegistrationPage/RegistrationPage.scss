@@ -31,23 +31,4 @@
   max-width: 600px;
   .th-callout { margin-bottom: 10px; }
   label { margin-bottom: 2px; }
-
-  .CCForm {
-    max-height: 0px;
-    overflow: hidden;
-    transition: max-height .25s ease-in;
-    &.show { max-height: 210px; }
-
-    @media ( max-width: 767px ) {
-      transition: max-height .5s ease-in;
-      &.show { max-height: 400px; }
-    }
-
-    > .col-12 {
-      padding-top: 15px;
-      padding-bottom: 10px;
-    }
-
-    input { margin-bottom: 10px; }
-  }
 }

@@ -1,0 +1,33 @@
+.CCForm {
+  max-height: 0px;
+  overflow: hidden;
+  transition: .25s ease-in;
+  display: flex;
+  justify-content: center;
+  // flex-wrap: wrap;
+  padding: 0px;
+
+  #preview {
+    margin-right: 20px;
+  }
+
+  #form {
+    input { font-family: monospace; font-size: 1.2em;}
+  }
+
+  &.show { max-height: 450px; padding: 15px 5px; }
+
+  @media ( max-width: 767px ) {
+    transition: .5s ease-in;
+    flex-wrap: wrap;
+    &.show { max-height: 600px; }
+    #preview { margin: 0px; }
+  }
+
+  > .col-12 {
+    padding-top: 15px;
+    padding-bottom: 10px;
+  }
+
+  input { margin-bottom: 10px; }
+}

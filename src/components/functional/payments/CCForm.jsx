@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes  from 'prop-types';
 // Components
-import { Input, Row, Col } from 'reactstrap';
+import { Input, Row, Col, Label } from 'reactstrap';
 import Cards from 'react-credit-cards';
 // Functions
 import classnames from 'classnames';
 import Payment from 'payment';
+// styles
+import './CCForm.scss';
 
 class CCForm extends Component {
 
@@ -15,7 +17,7 @@ class CCForm extends Component {
   }
 
   static defaultProps = {
-    show: false
+    show: true
   }
 
   state = {
@@ -56,29 +58,29 @@ class CCForm extends Component {
       onKeyUp: this.handleInputChange,
       onFocus: this.handleInputFocus
     }
-    const classNames = classnames('CCForm row', {'show': this.props.show})
+    const classNames = classnames('CCForm', {'show': this.props.show})
     return (
       <div className={ classNames } ref={ this.formRef }>
-        <Col xs={{size: 12, order: 12}} md={{size: 7, order: 0}}>
+        <div id='preview'>
           <Cards number={number} name={name} expiry={expiry} cvc={cvc} focused={focused} 
             acceptedCards={['visa', 'mastercard', 'amex', 'discover']}/>
-        </Col>
-        <Col xs='12' md='5'>
+        </div>
+        <div id='form'>
           <Row>
             <Col xs='12'>
-              <Input type='tel' name='number' placeholder='Card Number' {...inputProps}/>
-            </Col>
-            <Col xs='12'>
-              <Input type='text' name='name' placeholder='Name' {...inputProps}/>
+              <Label>Card Number</Label>
+              <Input type='tel' name='number' placeholder='4725 9182 9976 7854' {...inputProps}/>
             </Col>
             <Col xs='7'>
+              <Label>Expiration</Label>
               <Input type='tel' name='expiry' placeholder='MM / YY' {...inputProps}/>
             </Col>
             <Col xs='5'>
+              <Label>CVC</Label>
               <Input type='tel' name='cvc' placeholder='CVC' {...inputProps}/>
             </Col>
           </Row>
-        </Col>
+        </div>
       </div>
     );
   }
