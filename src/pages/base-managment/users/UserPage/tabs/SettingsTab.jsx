@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { Row, Col, Button, Input } from 'reactstrap';
 import { ParentRow } from '../rows';
+import { Form } from 'components/inputs';
+import { SaveButton } from 'components/buttons';
+import { Row, Col, Button, Input, TabPane } from 'reactstrap';
 import { Select, PlatoonSelect, Checkbox } from 'components/inputs';
 // functions
+import { isAdmin } from 'functions/login';
 import { findOption, missionTypeOptions } from 'functions/selects';
 import { deleteSoldier, getSoldiers } from 'store/soldiers/operations';
 
@@ -26,11 +29,12 @@ class SettingsTab extends Component {
 
   // render the page
   render() {
+    const { soldier, tabId, updated, onSubmit, onValidChange } = this.props;
     let { 
       user_id, class_id, school_id, chayolei, yan, chidon,
       allow_parent_tasks, print_parent_tasks, gender,
       school_type_id, lang_id, parentAccount, school
-    } = this.props.soldier;
+    } = soldier;
     // mission_type_options
     const mission_type_options = missionTypeOptions( gender );
     // language options
@@ -41,64 +45,69 @@ class SettingsTab extends Component {
     ];
     // render the settings tab
     return (
-      <div id='SettingsTab'>
-        <Row>
-          <Col xs='12' sm='6'>
-            <label>Base</label>
-            <Input disabled value={ school.school_name } />
-          </Col>
-          <Col xs='12' sm='6'>
-            <label>Platoon</label>
-            <PlatoonSelect schoolId={ school_id } value={ class_id } isClearable 
-              onChange={this.handleSelectChange('class_id')} />
-          </Col>
-          <Col xs='6'>
-            <label>Mission Type</label>
-            <Select options={mission_type_options} onChange={this.handleSelectChange('school_type_id')}
-              value={findOption( mission_type_options, school_type_id )} />
-          </Col>
-          <Col xs='6'>
-            <label>Language</label>
-            <Select options={language_options} onChange={this.handleSelectChange('lang_id')}
-              value={findOption( language_options, lang_id )} />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs='12' sm='6'>
-            <label>Enrolled in:</label><br/>
-            <Checkbox checked={!!chayolei} id='chayolei' onChange={this.handleCheckbox}>
-              Chayolei
-            </Checkbox>
-            <Checkbox checked={!!chidon} id='chidon' onChange={this.handleCheckbox}>
-              Chidon
-            </Checkbox>
-            <Checkbox checked={!!yan} id='yan' onChange={this.handleCheckbox}>
-              Tanya
-            </Checkbox>
-          </Col>
-          <Col xs='12' sm='6'>
-            <label>Custom Parent Tasks</label><br/>
-            <Checkbox checked={!!allow_parent_tasks} id='allow_parent_tasks' onChange={this.handleCheckbox}>
-              Allow
-            </Checkbox>
-            <Checkbox checked={!!print_parent_tasks} id='print_parent_tasks' onChange={this.handleCheckbox}>
-              Print on Mission Sheets
-            </Checkbox>
-          </Col>
-        </Row>
-        
-        <p className='title'>Parent Account</p>
-        <ParentRow parentAccount={parentAccount} userId={user_id} refresh={this.props.getSoldier}/> 
-        
-        { ['HQ', 'BC', 'CKIDS-ADMIN'].includes( this.props.login.code ) &&
+      <TabPane tabId = { tabId }>
+        <Form id='SettingsTab' onSubmit={ onSubmit } onValidChange={ onValidChange }>
           <Row>
-            <Col xs='12'>
-              <p className='title'>Delete Soldier</p>
-              <Button color="danger" onClick={ this.delete }>Delete Soldier</Button>
+            <Col xs='12' sm='6'>
+              <label>Base</label>
+              <Input disabled value={ school.school_name } />
+            </Col>
+            <Col xs='12' sm='6'>
+              <label>Platoon</label>
+              <PlatoonSelect schoolId={ school_id } value={ class_id } isClearable 
+                onChange={this.handleSelectChange('class_id')} />
+            </Col>
+            <Col xs='6'>
+              <label>Mission Type</label>
+              <Select options={mission_type_options} onChange={this.handleSelectChange('school_type_id')}
+                value={findOption( mission_type_options, school_type_id )} />
+            </Col>
+            <Col xs='6'>
+              <label>Language</label>
+              <Select options={language_options} onChange={this.handleSelectChange('lang_id')}
+                value={findOption( language_options, lang_id )} />
             </Col>
           </Row>
-        }
-      </div>
+          <Row>
+            <Col xs='12' sm='6'>
+              <label>Enrolled in:</label><br/>
+              <Checkbox checked={!!chayolei} id='chayolei' onChange={this.handleCheckbox}>
+                Chayolei
+              </Checkbox>
+              <Checkbox checked={!!chidon} id='chidon' onChange={this.handleCheckbox}>
+                Chidon
+              </Checkbox>
+              <Checkbox checked={!!yan} id='yan' onChange={this.handleCheckbox}>
+                Tanya
+              </Checkbox>
+            </Col>
+            <Col xs='12' sm='6'>
+              <label>Custom Parent Tasks</label><br/>
+              <Checkbox checked={!!allow_parent_tasks} id='allow_parent_tasks' onChange={this.handleCheckbox}>
+                Allow
+              </Checkbox>
+              <Checkbox checked={!!print_parent_tasks} id='print_parent_tasks' onChange={this.handleCheckbox}>
+                Print on Mission Sheets
+              </Checkbox>
+            </Col>
+          </Row>
+          
+          <p className='title'>Parent Account</p>
+          <ParentRow parentAccount={parentAccount} userId={user_id} refresh={this.props.getSoldier}/> 
+            
+          { isAdmin( this.props.login.code ) &&
+            <Row>
+              <Col xs='12'>
+                <p className='title'>Delete Soldier</p>
+                <Button color="danger" onClick={ this.delete }>Delete Soldier</Button>
+              </Col>
+            </Row>
+          }
+
+          <SaveButton show={ updated } />
+        </Form>
+        
+      </TabPane>
     );
   }
 }

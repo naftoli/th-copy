@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { LEGACY_URL } from 'components/constants';
-import { Row, Col } from 'reactstrap';
+import { Row, Col, TabPane } from 'reactstrap';
+
 class RankTab extends Component {
   render() {
     let { currentRank, miles } = this.props.soldier;
     return (
-      <div id='RankTab'>
+      <TabPane id='RankTab' tabId= { this.props.tabId }>
         <h4>Rank: {currentRank.name}</h4>
         <h4>Miles: {miles.toLocaleString( navigator.language )}</h4>
         { currentRank.ranks.map( (rank, index) => <RankRow rank={rank} key={index} />) }
-      </div>
+      </TabPane>
     )
   }
 }

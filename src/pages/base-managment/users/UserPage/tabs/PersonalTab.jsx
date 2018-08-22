@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { LEGACY_URL } from 'components/constants';
 // components
-import { Row, Col } from 'reactstrap';
+import { Form } from 'components/inputs';
 import { AddressRow } from 'components/rows';
+import { Row, Col, TabPane } from 'reactstrap';
+import { SaveButton } from 'components/buttons';
 import CropperModal from 'components/modals/CropperModal';
 import { ProfileRow, NameRow, DobRow, RegistrationRow } from '../rows';
 
@@ -30,12 +32,14 @@ class PersonalTab extends Component {
   }
 
   render(){
-    const soldier = this.props.soldier;
+    const { soldier, tabId, updated, onSubmit, onValidChange } = this.props;
     let { user_serial, barcode, profilePicture } = soldier;
     const profile_picture = profilePicture ? `${LEGACY_URL}${profilePicture}` : '';
     // render form
     return (
-      <div id='PersonalTab'>
+    <TabPane tabId={ tabId }>
+      <Form id='PersonalTab' onSubmit={ onSubmit } onValidChange={ onValidChange }>
+        
         <Row id='image-row'>
           <Col xs={{ size: 12, order: 12 }} sm='8' lg='9' xl='10'>
             { user_serial && <h4>Serial #: {user_serial}</h4> }
@@ -56,10 +60,14 @@ class PersonalTab extends Component {
 
         <RegistrationRow soldier={ soldier } />
 
-        <CropperModal isOpen={ this.state.cropperModalShow } src={ profile_picture } 
+        <SaveButton show={ updated } />
+
+      </Form>
+      
+      <CropperModal isOpen={ this.state.cropperModalShow } src={ profile_picture } 
           toggle={ this.toggle } uploadImage={ this.updateProfile } />
 
-      </div>
+    </TabPane>
     );
   }
 }
