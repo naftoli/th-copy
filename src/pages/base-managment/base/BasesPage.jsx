@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 // components
 import { Link } from 'react-router-dom';
 import { Button, ButtonGroup } from 'reactstrap';
-import { Table, Callout, InlineSync, FontAwesome, Number } from 'components/ui';
+import { Table, InlineSync, FontAwesome, Number } from 'components/ui';
 // functions
 import { loginStoreChanged, isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';

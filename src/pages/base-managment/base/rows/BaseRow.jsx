@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 // components
 import { Row, Col, Input } from 'reactstrap';
 // functions
-import { hebrewUpdate, eventToUpdate } from 'functions/events';
-import { toHebrew } from 'functions/utils';
+import { eventToUpdate } from 'functions/events';
 
 export class BaseRow extends Component {
 

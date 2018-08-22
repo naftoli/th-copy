@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 // components
 import { Prompt } from 'react-router';
 import { Redirect } from 'react-router-dom';
+import { TabContent, Nav } from 'reactstrap';
 import { Spinner, FontAwesome } from 'components/ui';
 import { NavigationTab } from 'components/navigation';
 import { PersonalTab, SettingsTab, RankTab } from './tabs';
-import { TabContent, TabPane, Nav, Button } from 'reactstrap';
 // functions
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';

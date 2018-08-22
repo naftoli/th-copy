@@ -1,4 +1,4 @@
-import { toHebrew } from 'functions/utils';
+// import { toHebrew } from 'functions/utils';
 
 // convert events to { target.key: target.value };
 export const eventToUpdate = ( target, key = 'name' ) => {

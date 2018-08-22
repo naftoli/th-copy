@@ -1,7 +1,7 @@
 /**
  * This file updates store.payments
  */
-import API, { handleAPIResponse } from 'api/api';
+import API from 'api/api';
 import { setLoading, setPayments } from './actions';
 
 // get all of the current logins payments
