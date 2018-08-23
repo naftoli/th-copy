@@ -16,23 +16,8 @@ $main_query = mysql_query(
 );
 
 $data = [];
-$schools = [];
-$schoolTransitioned = [];
-
 while( $row = mysql_fetch_assoc( $main_query ) ) {
     $data[$row['school_id']][] = $row;
-    $schools[$row['school_id']] = $row['school_name'];
-}
-
-// find out transition info for each school
-foreach ( $schools as $id => $name ) {
-    $transition_qry = "SELECT * FROM classes WHERE class_era = 0 AND confirmed = 0 AND school_id = " . $id;
-    $transition_res = mysql_query( $transition_qry );
-    if ( mysql_num_rows( $transition_res ) > 0 ) {
-        $schoolTransitioned[$id] = false;
-    } else {
-        $schoolTransitioned[$id] = true;
-    }
 }
 
 $books = [
@@ -74,7 +59,6 @@ $grand_totals = [
             <th>Student</th>
             <th>Grade</th>
             <th>Book #</th>
-            <th>Transitioned Grades</th>
         </thead>
         <tbody>
             <?php
@@ -89,16 +73,7 @@ $grand_totals = [
                     foreach ( $info as $base ) { 
                         $grade = $base['class_grade'];
                         $book = $books[$base['class_grade']];
-                        // if platoon transition was not done, grade and book should be moved one higher
-                        if ( !$schoolTransitioned[$school_id] ) {
-                            $grade++;
-                            $book++;
-                        }
-                        echo "<tr><td>" . $base['school_name'] . "</td><td>" . $base['first'] . ' ' . $base['last'] . "</td><td>" . $grade . "</td><td>" . $book . "</td><td>";
-                        if ( $schoolTransitioned[$school_id] ) echo "yes";
-                        else echo "no";
-                        echo "</td></tr>";
-
+                        echo "<tr><td>" . $base['school_name'] . "</td><td>" . $base['first'] . ' ' . $base['last'] . "</td><td>" . $grade . "</td><td>" . $book . "</td></tr>";
                         // add to base and army totals
                         $totals[$school_id][$book]++;
                         $grand_totals[$book]++;
