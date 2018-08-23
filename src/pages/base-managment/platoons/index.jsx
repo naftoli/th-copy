@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 // sub pages
 import { Page404 } from 'pages/errors';
-import PlatoonPage from './PlatoonPage/PlatoonPage';
-import PlatoonsPage from './PlatoonsPage/PlatoonsPage';
-import NewPlatoonPage from './PlatoonPage/NewPlatoonPage';
+import PlatoonPage from './PlatoonPage';
+import PlatoonsPage from './PlatoonsPage';
+import NewPlatoonPage from './NewPlatoonPage';
 import PlatoonTransitionPage from './PlatoonTransitionPage/PlatoonTransitionPage';
 // functions
 import { connect } from 'react-redux';
-
+// styles
+import './platoons.scss';
 
 export class PlatoonsIndexPage extends Component {
 

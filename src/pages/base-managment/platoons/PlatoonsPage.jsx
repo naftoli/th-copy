@@ -9,8 +9,6 @@ import { InlineSync } from 'components/ui/loading';
 import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { getPlatoons } from 'store/platoons/operations';
-// styles
-import './PlatoonsPage.scss';
 
 export class PlatoonsPage extends Component {
 

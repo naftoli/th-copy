@@ -9,11 +9,9 @@ import { Row, Col, InputGroup, InputGroupAddon, Button } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { loginStoreChanged } from 'functions/login';
-import { StaffRow, PlatoonRow } from '../rows/';
+import { StaffRow, PlatoonRow } from './rows';
 import { getPlatoon, updatePlatoon } from 'store/platoons/operations';
 import { removeAuth, createAuth } from 'store/staff/operations';
-// styles
-import './PlatoonPage.scss';
 
 export class PlatoonPage extends Component {
   // initial state

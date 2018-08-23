@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { PlatoonRow } from '../rows/';
+import { PlatoonRow } from './rows';
 import { Row, Col, Button } from 'reactstrap';
 import { BaseSelect } from 'components/inputs';
 import { FontAwesome } from 'components/ui';
