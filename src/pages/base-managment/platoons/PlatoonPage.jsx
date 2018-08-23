@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Prompt } from 'react-router';
+import { SaveButton } from 'components/buttons';
 import { Link, Redirect } from 'react-router-dom';
 import { Spinner, FontAwesome, Callout } from 'components/ui';
 import { Row, Col, InputGroup, InputGroupAddon, Button } from 'reactstrap';
@@ -9,11 +10,9 @@ import { Row, Col, InputGroup, InputGroupAddon, Button } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { loginStoreChanged } from 'functions/login';
-import { StaffRow, PlatoonRow } from '../rows/';
+import { StaffRow, PlatoonRow } from './rows';
 import { getPlatoon, updatePlatoon } from 'store/platoons/operations';
 import { removeAuth, createAuth } from 'store/staff/operations';
-// styles
-import './PlatoonPage.scss';
 
 export class PlatoonPage extends Component {
   // initial state
@@ -55,7 +54,8 @@ export class PlatoonPage extends Component {
     );
   }
 
-  save = () => {
+  save = ( event ) => {
+    event && event.preventDefault();
     const { updates, platoon } = this.state;
     this.props.updatePlatoon( platoon.class_id, updates )
     .then( platoon => this.setState({ platoon, updates: {} }) );
@@ -99,17 +99,13 @@ export class PlatoonPage extends Component {
           <p>To edit staff (Teacher) accounts please look at the <Link to='/bm/staff'>Staff tab under Base Managment.</Link></p>
         </Callout>
 
-        <PlatoonRow platoon={this.state.platoon} 
-          inputProps={ inputProps } selectProps={ selectProps } />
-        { updated &&
-          <Row>
-            <Col xs={12} id='save'>
-              <Button onClick={ this.save } color='primary'>
-                <FontAwesome icon='save' /> Save Changes
-              </Button>
-            </Col>
-          </Row>
-        }
+        <form onSubmit={ this.save }>
+          <PlatoonRow platoon={this.state.platoon} 
+            inputProps={ inputProps } selectProps={ selectProps } />
+
+          <SaveButton show={ updated } />
+        </form>
+        
         {/* show all the staff and manage them */}
         <p className='title'>Connected Staff Accounts</p>
         <Callout color='info' icon={false}>

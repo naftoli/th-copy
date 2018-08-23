@@ -12,8 +12,6 @@ import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
 import { getParents } from 'store/parents/operations';
-// styles
-import './ParentsPage.scss';
 
 class ParentsPage extends Component {
 

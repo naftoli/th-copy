@@ -6,16 +6,14 @@ import { Select, PhoneNumber } from 'components/inputs';
 import { Row, Col, Input, Button, InputGroup, InputGroupAddon } from 'reactstrap';
 import { AddressRow } from 'components/rows';
 import { Page404 } from 'pages/errors';
-import Child from './Child';
+import Child from './misc/Child';
 // functions
 import memoize from 'memoize-one';
 import { toast } from 'react-toastify';
-import { getChildOptions } from '../functions';
+import { getChildOptions } from './misc/functions';
 import { getParents } from 'store/parents/operations';
 import { removeChild, addChild } from 'store/parents/operations';
 import { loginStoreChanged, mobileLogin } from 'functions/login';
-// style
-import './ParentPage.scss';
 
 class ParentPage extends Component {
 

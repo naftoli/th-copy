@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 // sub pages
 import { Page404 } from 'pages/errors';
-import ParentPage from './ParentPage/ParentPage';
-import ParentsPage from './ParentsPage/ParentsPage';
+import ParentPage from './ParentPage';
+import ParentsPage from './ParentsPage';
+// styles
+import './parents.scss';
 
 class ParentsIndexPage extends Component {
   render() {

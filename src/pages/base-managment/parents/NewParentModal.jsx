@@ -9,7 +9,7 @@ import {
 } from 'reactstrap';
 // functions
 import { toast } from 'react-toastify';
-import { getChildOptions } from '../functions';
+import { getChildOptions } from './misc/functions';
 import makeAnimated from 'react-select/lib/animated';
 import { getParents, createParent } from 'store/parents/operations';
 
@@ -38,7 +38,7 @@ class NewParentModal extends Component {
       this.setState({ ...initialState });
     })
     .catch( error => {
-      this.setState( error: error.message );
+      this.setState({ error: error.message });
       // otherwise show the error message to the user as a notification
       if ( !this.props.isOpen ) toast.error( error.message );
     })
