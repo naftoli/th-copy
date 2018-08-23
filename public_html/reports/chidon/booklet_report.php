@@ -25,13 +25,21 @@ while ( $row = mysql_fetch_assoc( $booklet_users_query ) ) {
     $booklet_users[$row['school_id']][] = $row;
 }
 
-$booklets = array(
+$booklets = [
     4   =>  1,
     5   =>  2,
     6   =>  3, 
     7   =>  4, 
     8   =>  5
-);
+];
+
+$booklet_grand_totals = [
+    4   =>  0,
+    5   =>  0,
+    6   =>  0, 
+    7   =>  0, 
+    8   =>  0
+];
 ?>
 <!DOCTYPE html>
 <html>
@@ -60,9 +68,23 @@ $booklets = array(
         <input type="submit" name="submit" value="Refresh Report" />
     </form>
     <?php
-        $booklet_grand_totals = array();
         foreach( $booklet_users as $school_id => $users ) {
-            $booklet_totals = array();
+            // find out if school did transition
+            $transition_qry = "SELECT * FROM classes WHERE class_era = 0 AND confirmed = 0 AND school_id = " . $school_id;
+            $transition_res = mysql_query( $transition_qry );
+            if ( mysql_num_rows( $transition_res ) > 0 ) {
+                $schoolTransitioned = false;
+            } else {
+                $schoolTransitioned = true;
+            }
+
+            $booklet_totals = [
+                4   =>  0,
+                5   =>  0,
+                6   =>  0, 
+                7   =>  0, 
+                8   =>  0
+            ];
             $base = $users[0]; ?>
             <h2><?=$base[ 'school_name' ]?></h2>
             <table>
@@ -77,23 +99,23 @@ $booklets = array(
                 </thead>
                 <tbody>
                     <?php
-                        foreach( $users as $user ) { ?>
+                        foreach( $users as $user ) { 
+                            $grade = $user['class_grade'];
+                            if ( !$schoolTransitioned ) $grade++;
+                            ?>
                             <tr>
                                 <td><?= $user[ 'first' ]; ?></td>
                                 <td><?= $user[ 'last' ]; ?></td>
-                                <td><?= $user['class_grade'] . (empty( $user['class_sub'] ) ? '' : '-' . $user['class_sub']); ?></td>
-                                <td><?= $booklets[$user['class_grade']]; ?></td>
+                                <td><?= $grade ?></td>
+                                <td><?= $booklets[$grade]; ?></td>
                                 <td><?= ( new DateTime($user[ 'date' ]) )->format( 'm/d/Y g:i:sa e' ); ?></td>
                             </tr>
-                        <?php 
-                        // totals per school
-                        if ( isset( $booklet_totals[$user['class_grade']] ) ) $booklet_totals[$user['class_grade']] += $booklets[$user['class_grade']];
-                        else $booklet_totals[$user['class_grade']] = $booklets[$user['class_grade']];
-
-                        // grand totals
-                        if ( isset( $booklet_grand_totals[$user['class_grade']] ) ) $booklet_grand_totals[$user['class_grade']] += $booklets[$user['class_grade']];
-                        else $booklet_grand_totals[$user['class_grade']] = $booklets[$user['class_grade']];
-                        } 
+                            <?php 
+                            // totals per school
+                            $booklet_totals[$grade]++;
+                            // grand totals
+                            $booklet_grand_totals[$grade]++;
+                        }
                     ?>
                 </tbody>
             </table>
