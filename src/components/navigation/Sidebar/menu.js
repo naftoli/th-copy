@@ -65,20 +65,8 @@ const getMenu = ( user_type, id, no_legacy ) => {
         { label: "Platoons", path: '/bm/platoons' },
         { label: "Parents", path: '/bm/parents' },
         { label: "Staff", path: '/bm/staff' },
-        {
-          label: "Base", user_types: [ 'HQ', 'CKIDS-ADMIN' ],
-          items: [
-            { label: 'View / Edit', path: `/bm/base` },
-            { label: 'Transactions', path: '/bm/base/transactions' }
-          ]
-        },
-        {
-          label: "Base", user_types: [ 'BC' ],
-          items: [
-            { label: 'View / Edit', path: `/bm/base/${id}` },
-            { label: 'Transactions', path: `/bm/base/${id}/transactions` }
-          ]
-        },
+        { label: "Bases", user_types: [ 'HQ', 'CKIDS-ADMIN' ], path: `/bm/base` },
+        { label: "Base", user_types: [ 'BC' ], path: `/bm/base/${id}` },
       ]
     },
     {
