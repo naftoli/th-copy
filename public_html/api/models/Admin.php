@@ -76,19 +76,23 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         ];
         // add all the schools
         foreach( $this->getAuthIds( 'school' ) as $school_id ){
-            $school = School::find( $school_id );
-            $logins[] = [ 'type' => 'school', 'id' => $school_id, 'code' => 'BC',
-                'name' => $school->school_name, 'img' => $school->logoPath(), 
-                'ckids' => !!$school->ckids
-            ];
+            try {
+                $school = School::find( $school_id );
+                $logins[] = [ 'type' => 'school', 'id' => $school_id, 'code' => 'BC',
+                    'name' => $school->school_name, 'img' => $school->logoPath(), 
+                    'ckids' => !!$school->ckids
+                ];
+            } catch ( \ActiveRecord\RecordNotFound $e ) {}
         };
         // add all classes
         foreach( $this->getAuthIds( 'class' ) as $class_id ){
-            $platoon = Platoon::find( $class_id, ['include' => ['school']] );
-            $logins[] = [ 'type' => 'class', 'id' => $class_id, 'code' => 'TEACHER',
-                'name' => $platoon->name(), 'img' => $platoon->school->logoPath(),
-                'ckids' => !!$platoon->school->ckids
-            ];
+            try {
+                $platoon = Platoon::find( $class_id, ['include' => ['school']] );
+                $logins[] = [ 'type' => 'class', 'id' => $class_id, 'code' => 'TEACHER',
+                    'name' => $platoon->name(), 'img' => $platoon->school->logoPath(),
+                    'ckids' => !!$platoon->school->ckids
+                ];
+            } catch ( \ActiveRecord\RecordNotFound $e ) {}
         };
         // add parent account
         if ( count( $this->getAuthIds( 'user') ) > 0 || count( $logins ) === 0 ) {
