@@ -33,7 +33,6 @@ class Navbar extends Component {
     // only render the dropdown if there are options
     const loginItems = logins.map( ( login, index ) => {
       const active = login.type === currentLogin.type &&  login.id === currentLogin.id;
-      console.log( login.img );
       return (
         <DropdownItem key={ index } onClick={ this.onLoginChange( login.type, login.id ) }
           className={ active ? 'active' : ''}>
