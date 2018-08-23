@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes  from 'prop-types';
 // Components
-import { Input, Row, Col, Label } from 'reactstrap';
 import Cards from 'react-credit-cards';
+import { FontAwesome } from 'components/ui';
+import { Input, Row, Col, Label, Button } from 'reactstrap';
 // Functions
 import classnames from 'classnames';
 import Payment from 'payment';
@@ -12,19 +13,17 @@ import './CCForm.scss';
 class CCForm extends Component {
 
   static propTypes = {
-    onInputChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+    value: PropTypes.object.isRequired,
     show: PropTypes.bool
   }
 
   static defaultProps = {
-    show: true
+    show: true,
+    value: {}
   }
 
-  state = {
-    number: '', name: '',
-    expiry: '', cvc: '',
-    focused: '',
-  };
+  state = { focused: '' };
   formRef = React.createRef();
 
   componentDidMount() {
@@ -41,19 +40,21 @@ class CCForm extends Component {
   };
   // clean up the input as it is entered
   handleInputChange = ({ target }) => {
-    const callback = () => { this.props.onInputChange && this.props.onInputChange( this.state ) }
+    let { value, onChange } = this.props;
 
-    if (target.name === 'number') {
-      this.setState({ [target.name]: target.value.replace(/ /g, '') }, callback);
-    } else if (target.name === 'expiry') {
-      this.setState({ [target.name]: target.value.replace(/ |\//g, '') }, callback);
-    } else {
-      this.setState({ [target.name]: target.value }, callback);
-    }
+    if (target.name === 'number')
+      value[target.name] = target.value.replace(/ /g, '');
+    else if (target.name === 'expiry')
+      value[target.name] = target.value.replace(/ |\//g, '');
+    else
+      value[target.name] = target.value;
+    
+    onChange( value );
   };
   
   render() {
-    const { name, number, expiry, cvc, focused } = this.state;
+    const { value, onSubmit } = this.props;
+    const { name, number, expiry, cvc } = value;
     const inputProps = {
       onKeyUp: this.handleInputChange,
       onFocus: this.handleInputFocus
@@ -62,7 +63,12 @@ class CCForm extends Component {
     return (
       <div className={ classNames } ref={ this.formRef }>
         <div id='preview'>
-          <Cards number={number} name={name} expiry={expiry} cvc={cvc} focused={focused} 
+          <Cards 
+            cvc={ cvc || '' }
+            name={ name || '' }
+            number={ number || '' }
+            expiry={ expiry || '' }
+            focused={ this.state.focused } 
             acceptedCards={['visa', 'mastercard', 'amex', 'discover']}/>
         </div>
         <div id='form'>
@@ -71,14 +77,21 @@ class CCForm extends Component {
               <Label>Card Number</Label>
               <Input type='tel' name='number' placeholder='4725 9182 9976 7854' {...inputProps}/>
             </Col>
-            <Col xs='7'>
+            <Col xs={ onSubmit ? 5 : 7 }>
               <Label>Expiration</Label>
               <Input type='tel' name='expiry' placeholder='MM / YY' {...inputProps}/>
             </Col>
-            <Col xs='5'>
+            <Col xs={ onSubmit ? 3 : 5 }>
               <Label>CVC</Label>
               <Input type='tel' name='cvc' placeholder='CVC' {...inputProps}/>
             </Col>
+            { onSubmit &&
+              <Col xs={ 4 } className='save'>
+                <Button color='primary' onFocus={ this.handleInputFocus } name='number'>
+                  <FontAwesome icon='plus'/> Add
+                </Button>
+              </Col>
+            }
           </Row>
         </div>
       </div>

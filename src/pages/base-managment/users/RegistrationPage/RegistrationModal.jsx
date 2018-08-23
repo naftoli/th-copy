@@ -21,19 +21,19 @@ export class RegistrationModal extends Component {
 
   state = { 
     payment_profile_id: undefined,
-    cc_info: {}
+    ccInfo: {}
   }
 
   onProfileSelected = payment_profile_id => {
     this.setState({ payment_profile_id });
   }
 
-  onCCEntered = cc_info => {
-    this.setState({ cc_info });
+  onCCEntered = ccInfo => {
+    this.setState({ ccInfo });
   }
 
   validateCC = () => {
-    const { number, expiry, cvc } = this.state.cc_info;
+    const { number, expiry, cvc } = this.state.ccInfo;
     return new Promise( ( resolve, reject ) => {
       if ( !Payment.fns.validateCardNumber( number ) ) {
         reject( new Error('Invalid Credit Card Number') );
@@ -62,7 +62,7 @@ export class RegistrationModal extends Component {
 
   render() {
     const { isOpen, centered, toggle } = this.props;
-    const { payment_profile_id } = this.state;
+    const { payment_profile_id, ccInfo } = this.state;
 
     return (
       <Modal isOpen={isOpen} centered={centered} toggle={toggle} id='RegistrationModal'>
@@ -78,7 +78,7 @@ export class RegistrationModal extends Component {
             </p>
           </Callout>
           <ProfileForm onProfileSelected={this.onProfileSelected} value={payment_profile_id}>
-            <CCForm onInputChange={ this.onCCEntered } show={ payment_profile_id === false }/>
+            <CCForm onChange={ this.onCCEntered } value={ ccInfo } show={ payment_profile_id === false }/>
           </ProfileForm>
         </ModalBody>
         <ModalFooter>

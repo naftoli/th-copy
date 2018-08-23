@@ -23,7 +23,7 @@ class BasesPage extends Component {
   state = {
     base: {}, // the current base
     updates: {}, // the updates we have done
-    activeTab: 1, // currently visiable tab
+    activeTab: 4, // currently visiable tab
     loading: true, // loading base or not
     valid: {
       base: true, settings: true, shipping: true
@@ -79,7 +79,7 @@ class BasesPage extends Component {
     if ( isInvalid ) return toast.error( 'Please correct all invalid feilds' );
     // save the base
     this.updateBase( this.state.updates )
-    .then( base => this.setState({ updates: {} }) );
+    .then( () => this.setState({ updates: {} }) );
   }
   updateBase = updates => {
     return this.props.updateBase( this.state.base.school_id, updates )

@@ -34,11 +34,15 @@ const CardDisplay = ({ cardType, cardNumber, profileId, onDelete }) => {
 export class PaymentsTab extends Component {
 
   state = {
-    newCC: {}
+    ccInfo: {}
   }
 
-  updateCC = newCC => {
-    this.setState({ newCC });
+  updateCC = ccInfo => {
+    this.setState({ ccInfo });
+  }
+
+  addCC = () => {
+    this.setState({ ccInfo: {} });
   }
 
   deleteCard = event => {
@@ -61,6 +65,7 @@ export class PaymentsTab extends Component {
     return (
       <TabPane tabId={ tabId }>
         <div id='PaymentsTab'>
+
           { profile && isAdmin && 
             <div id='payment-profile'>
               <p className='title'>Payment Profile</p>
@@ -84,10 +89,15 @@ export class PaymentsTab extends Component {
               </Row>
             </div>
           }
+
           <div id='add-card'>
             <p className='title'>Add new card</p>
-            <CCForm onInputChange={ this.updateCC }/>
+            <CCForm 
+              onSubmit={ this.addCC }
+              value={ this.state.ccInfo }
+              onChange={ this.updateCC } />
           </div>
+
           { !!cards && 
             <div id='on-file'>
               <p className='title'>Cards on file</p>

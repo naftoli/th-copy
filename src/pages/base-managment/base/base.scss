@@ -13,14 +13,16 @@
 
 }
 
+#BasesPage, #BasePage {
+  .profile-picture.editable:hover {
+    background: #ddd;
+    border-radius: 15px;
+  }
+}
+
 #BasePage {
 
   .tab-content { margin-bottom: 0px; }
-
-  .profile-picture.editable:hover {
-    background: #eee;
-    border-radius: 15px;
-  }
 
   p.input-message {
     font-size: .7em;
