@@ -86,7 +86,7 @@ $booklet_grand_totals = [
                         <th>Last</th>
                         <th>Grade</th>
                         <th>Book #</th>
-                        <th>Registered For Chidon</th>
+                        <th>Date Purchased</th>
                     </tr>
                 </thead>
                 <tbody>
