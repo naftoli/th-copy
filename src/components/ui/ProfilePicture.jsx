@@ -7,7 +7,7 @@ import './styles/ProfilePicture.scss';
 export class ProfilePicture extends Component {
 
   static defaultProps = {
-    fallbackImage: `${LEGACY_URL}/mobile/reg/images/profile-photo-default.jpg`
+    fallbackImage: `/mobile/reg/images/profile-photo-default.jpg`
   }
   
   onKeyPress = event => {
@@ -15,7 +15,7 @@ export class ProfilePicture extends Component {
   }
 
   handleError = e => {
-    e.target.src = this.props.fallbackImage;
+    e.target.src = `${LEGACY_URL}${this.props.fallbackImage}`;
     if ( this.props.onError ) this.props.onError( e );
   }
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { LEGACY_URL } from 'components/constants';
 // components
 import { Link } from 'react-router-dom';
-import { FontAwesome } from 'components/ui';
+import { FontAwesome, ProfilePicture } from 'components/ui';
 import {
   Navbar as BoostrapNavbar, NavbarBrand, Nav,
   UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
@@ -33,10 +33,11 @@ class Navbar extends Component {
     // only render the dropdown if there are options
     const loginItems = logins.map( ( login, index ) => {
       const active = login.type === currentLogin.type &&  login.id === currentLogin.id;
+      console.log( login.img );
       return (
         <DropdownItem key={ index } onClick={ this.onLoginChange( login.type, login.id ) }
           className={ active ? 'active' : ''}>
-          <img src={ LEGACY_URL + login.img } alt="profile_picture"/>
+          <ProfilePicture src={ login.img } alt="logo" fallbackImage='/schoolLogos/logo.png'/>
           <span>{ login.name }</span>
         </DropdownItem>
       );
@@ -52,7 +53,7 @@ class Navbar extends Component {
         <Nav id="navbar-menu" navbar>
           <UncontrolledDropdown>
             <DropdownToggle nav id='nav-login'>
-              <img id="profile-picture" src={ LEGACY_URL + currentLogin.img || user } alt="profile_picture"/>
+              <ProfilePicture src={ currentLogin.img || user } alt="logo" fallbackImage='/schoolLogos/logo.png'/>
               <span>{ currentLogin.name || `My Accounts` }</span>
             </DropdownToggle>
             <DropdownMenu right>

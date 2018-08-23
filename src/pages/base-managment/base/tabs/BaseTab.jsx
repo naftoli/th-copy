@@ -46,7 +46,8 @@ export class BaseTab extends Component {
             <Col xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2' style={{alignSelf: 'center'}}>
               <ProfilePicture 
                 src={ base.logoPaths.logo } 
-                onClick={ this.toggle } />
+                onClick={ this.toggle } 
+                fallbackImage='/schoolLogos/logo.png' />
             </Col>
           </Row>
 
