@@ -35,10 +35,12 @@ export class PlatoonRow extends Component {
         <Col xs={6}>
           <label>Teacher Cell</label>
           <PhoneNumber name='cell' value={ cell } { ...inputProps } />
+          <div className='invalid-message'>Please enter a valid phone number</div>
         </Col>
         <Col xs={6}>
           <label>Teacher E-Mail</label>
-          <Input name='email' value={ email } { ...inputProps } />
+          <Input name='email' type='email' value={ email } { ...inputProps } />
+          <div className='invalid-message'>Please enter a valid E-mail address</div>
         </Col>
       </Row>
     );
