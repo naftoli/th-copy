@@ -34,11 +34,11 @@ $booklets = [
 ];
 
 $booklet_grand_totals = [
-    4   =>  0,
-    5   =>  0,
-    6   =>  0, 
-    7   =>  0, 
-    8   =>  0
+    1   =>  0,
+    2   =>  0,
+    3   =>  0, 
+    4   =>  0, 
+    5   =>  0
 ];
 ?>
 <!DOCTYPE html>
@@ -69,21 +69,12 @@ $booklet_grand_totals = [
     </form>
     <?php
         foreach( $booklet_users as $school_id => $users ) {
-            // find out if school did transition
-            $transition_qry = "SELECT * FROM classes WHERE class_era = 0 AND confirmed = 0 AND school_id = " . $school_id;
-            $transition_res = mysql_query( $transition_qry );
-            if ( mysql_num_rows( $transition_res ) > 0 ) {
-                $schoolTransitioned = false;
-            } else {
-                $schoolTransitioned = true;
-            }
-
             $booklet_totals = [
-                4   =>  0,
-                5   =>  0,
-                6   =>  0, 
-                7   =>  0, 
-                8   =>  0
+                1   =>  0,
+                2   =>  0,
+                3   =>  0, 
+                4   =>  0, 
+                5   =>  0
             ];
             $base = $users[0]; ?>
             <h2><?=$base[ 'school_name' ]?></h2>
@@ -101,20 +92,20 @@ $booklet_grand_totals = [
                     <?php
                         foreach( $users as $user ) { 
                             $grade = $user['class_grade'];
-                            if ( !$schoolTransitioned ) $grade++;
+                            //if ( !$schoolTransitioned ) $grade++;
                             ?>
                             <tr>
                                 <td><?= $user[ 'first' ]; ?></td>
                                 <td><?= $user[ 'last' ]; ?></td>
-                                <td><?= $grade ?></td>
+                                <td><?= $grade . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']); ?></td>
                                 <td><?= $booklets[$grade]; ?></td>
                                 <td><?= ( new DateTime($user[ 'date' ]) )->format( 'm/d/Y g:i:sa e' ); ?></td>
                             </tr>
                             <?php 
                             // totals per school
-                            $booklet_totals[$grade]++;
+                            $booklet_totals[$booklets[$grade]]++;
                             // grand totals
-                            $booklet_grand_totals[$grade]++;
+                            $booklet_grand_totals[$booklets[$grade]]++;
                         }
                     ?>
                 </tbody>
