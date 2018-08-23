@@ -71,6 +71,10 @@ class BasesPage extends Component {
       { Header: 'Base City', accessor: 'school_city' },
       { Header: 'Base State', accessor: 'school_state' },
       { Header: 'Base Country', accessor: 'school_country' },
+      { Header: 'CTH', id: 'chayolei', accessor: base => base.chayolei ? 'Yes' : 'No' },
+      { Header: 'Chidon', id: 'chidon', accessor: base => base.chidon ? 'Yes' : 'No' },
+      { Header: 'WWTC', id: 'tehillim', accessor: base => base.tehillim ? 'Yes' : 'No' },
+      { Header: 'Tanya', id: 'tanya', accessor: base => base.tanya ? 'Yes' : 'No' },
       { Header: 'Soldiers', accessor: 'soldier_count', Cell: props => <Number value={props.value}/> },
     ];
 
