@@ -163,6 +163,17 @@ class UserRegistrationRouter {
                 "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
                 ."VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year )"
             );
+            // add shipping to the registration_charges table
+            if ( $shipping_charges > 0 ) {
+                $registration_info_query->execute([
+                    'trans_id' => ( $trans_id ? $trans_id : '' ), 
+                    'user_id' => ( count( $users ) == 1 ? $users[0]->user_id : 0 ), 
+                    'school_id' => 269, // only school with shipping at the moment. TODO update later.. 
+                    'type' => 'shipping',
+                    'amount' => $shipping_charges, 
+                    'year' => GlobalSettings::getRegistrationYear()
+                ]);
+            }
             // for each user
             foreach ( $users as $user ) {
                 $user_errors = [];
