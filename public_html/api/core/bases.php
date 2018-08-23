@@ -70,7 +70,7 @@ class BaseRouter {
         global $current_user; 
         $filters = [];
         $login = $current_user->login;
-        if ( $login['code'] === 'HQ' ) $filters[] = 's.test_school = 1';
+        if ( $login['code'] === 'HQ' ) $filters[] = 's.test_school = 0';
         else if ( $login['code'] === 'CKIDS-ADMIN' ) $filters[] = 's.ckids = 1';
         // get all bases on the account
         else if ( $all ) { 
