@@ -11,10 +11,11 @@ class UsersRouter {
         // limit based on admin type
         $login = $current_user->login;
         if ( $login['code'] === 'BC' ) {
-            $filters[] = 'u.school_id = ?'; $params[] = $login['id'];
+            $filters[] = 'u.school_id = :school_id'; $params['school_id'] = $login['id'];
         } else { 
             json_error( 'Access Deinied: CORE-USERS-26' ); 
         }
+        $params['year'] = GlobalSettings::getRegistrationYear( $login['id'] );
         $filters[] = 'ur.paid IS NULL';
         $filters[] = 'u.chayolei = 1';
         // combine the filters
@@ -23,8 +24,8 @@ class UsersRouter {
         $sql = "SELECT u.user_id, u.user_serial, u.first, u.last, s.school_name, c.class_grade, c.class_sub, "
             ."!ISNULL(sr.date_paid) as school_registered, sr.type, s.reg_type, sr.early_bird, ur.paid, "
             ."sr.child_fee FROM users u JOIN schools s USING (school_id) "
-            ."LEFT JOIN school_registrations sr ON sr.school_id = s.school_id AND sr.year = 5779 "
-            ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = 5779 "
+            ."LEFT JOIN school_registrations sr ON sr.school_id = s.school_id AND sr.year = :year "
+            ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = :year "
             ."LEFT JOIN classes c USING (class_id) WHERE $filters "
             ."ORDER BY first, last, class_grade, class_sub;";
         $query = $pdo->prepare( $sql );

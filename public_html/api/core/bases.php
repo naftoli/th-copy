@@ -11,6 +11,7 @@ class BaseRouter {
         if ( !$filters ) return json_error('Access Deinied');
         $query = $pdo->prepare( 
              " SELECT s.school_number, s.logo, s.school_id, s.school_name, s.school_city, s.school_state, s.school_country, "
+            ." s.chayolei, s.chidon, s.tanya, s.tehillim, s.ckids, "
             ." IFNULL( soldier_count, 0 ) as soldier_count "
             ." FROM schools s LEFT JOIN classes c USING (school_id) LEFT JOIN ( "
                 ." SELECT COUNT(*) AS soldier_count, school_id FROM users GROUP BY school_id "
@@ -69,7 +70,7 @@ class BaseRouter {
         global $current_user; 
         $filters = [];
         $login = $current_user->login;
-        if ( $login['code'] === 'HQ' ) $filters[] = 's.test_school = 0';
+        if ( $login['code'] === 'HQ' ) $filters[] = 's.test_school = 1';
         else if ( $login['code'] === 'CKIDS-ADMIN' ) $filters[] = 's.ckids = 1';
         // get all bases on the account
         else if ( $all ) { 
