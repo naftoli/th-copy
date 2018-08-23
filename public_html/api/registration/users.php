@@ -16,7 +16,7 @@ class UsersRouter {
             json_error( 'Access Deinied: CORE-USERS-26' ); 
         }
         $params['year'] = GlobalSettings::getRegistrationYear( $login['id'] );
-        $filters[] = 'ur.paid IS NULL';
+        $filters[] = '(ur.paid IS NULL OR ur.paid = 0.00)';
         $filters[] = 'u.chayolei = 1';
         // combine the filters
         $filters = implode( ' AND ', $filters );
