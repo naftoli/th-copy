@@ -28,7 +28,7 @@ export class App extends Component {
       this.setState({ refreshing: hadLogin });
       if ( hadLogin ) {
         // show the user the refreshing screen. This would be a good time to do any work we might need to do.
-        setTimeout(() => { this.setState({ refreshing: false }); }, 250)
+        setTimeout(() => { this.setState({ refreshing: false }); }, 500)
       }
     }
   }
@@ -44,20 +44,37 @@ export class App extends Component {
     if ( this.props.logged_in ) {
       const { message, isOpen, refreshing } = this.state;
       // make sure we are not "refreshing"
-      if ( refreshing ) return <Login forceLoading={true} />
+      
       // render the core dashboard
       return (
         <Router basename={ process.env.PUBLIC_URL } getUserConfirmation={ this.showDialog } >
           <Dashboard>
-            <Switch>
-              <Route path={`/`} exact render={props => <h1>HomePage</h1>}/>
-              <Route path={`/bm`} component={ BaseManagment } />
-              
-              <Route path={`/logout`} component={Logout}/>
-              <Route component={Page404} />
-            </Switch>
-            <ToastContainer position="bottom-right" autoClose={ 8000 } closeOnClick={false} draggablePercent={40}/>
-            <ConfirmationModal isOpen={ isOpen } message={ message } callback={ this.handleCallback } />
+
+            { refreshing && 
+              <Login forceLoading={true} /> 
+            }
+
+            { !refreshing && 
+              <Switch>
+                <Route path={`/`} exact render={props => <h1>HomePage</h1>}/>
+                <Route path={`/bm`} component={ BaseManagment } />
+                
+                <Route path={`/logout`} component={Logout}/>
+                <Route component={Page404} />
+              </Switch>
+            }
+            
+            <ToastContainer 
+              position="bottom-right" 
+              autoClose={ 5000 } 
+              closeOnClick={false} 
+              draggablePercent={40} />
+
+            <ConfirmationModal 
+              isOpen={ isOpen } 
+              message={ message } 
+              callback={ this.handleCallback } />
+
           </Dashboard>
         </Router>
       );
