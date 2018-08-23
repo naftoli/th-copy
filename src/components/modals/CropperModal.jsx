@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { DEFAULT_PROFILE } from 'components/constants';
+import { DEFAULT_PROFILE, DEFAULT_LOGO } from 'components/constants';
 // components
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import Cropper from 'components/functional/Cropper';
@@ -77,11 +77,16 @@ class CropperModal extends Component {
     }
   }
 
+  handleError = e => {
+    this.setState({ src: false });
+  }
+
   render() {
     // extract the props and state
     const { isOpen, centered, toggle, viewMode } = this.props;
     let { src } = this.state;
     src = src && src.indexOf( DEFAULT_PROFILE ) >= 0 ? false : src;
+    src = src && src.indexOf( DEFAULT_LOGO ) >= 0 ? false : src;
     // assume we do not have an image
     let body = 
       <div style={{textAlign: 'center'}}>
@@ -91,7 +96,7 @@ class CropperModal extends Component {
       </div>;
     // if we do, render the cropper component
     if ( src ) 
-      body = <Cropper src={ src } cropper={ this.setCropper } viewMode={ viewMode }/>;
+      body = <Cropper src={ src } onError={ this.handleError } cropper={ this.setCropper } viewMode={ viewMode }/>;
     // render the final modal
     return (
       <Modal isOpen={isOpen} centered={centered} id='cropper-modal' zIndex='auto'>

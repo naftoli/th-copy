@@ -71,10 +71,10 @@ export class Cropper extends Component {
   }
 
   render() {
-    const { src } = this.props;
+    const { src, onError } = this.props;
     return (
       <div style={{ maxWidth: '100%', borderRadius: '5px' }}>
-        <img src={ src } alt="cropper-img" ref={ this.cropperRef }/>
+        <img src={ src } alt="cropper-img" ref={ this.cropperRef } onError={ onError }/>
         <CropperControls { ...this.editing() } />
       </div>
     );
