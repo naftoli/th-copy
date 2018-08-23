@@ -33,7 +33,8 @@ if (isset($_POST["action"])) {
 				shipping_state='" . $_POST['shipping_state'] . "',
 				shipping_postal='" . $_POST['shipping_postal'] . "',
 				shipping_country='" . $_POST['shipping_country'] . "',
-				shipping_requests = '" . $_POST['requests'] . "' 
+				shipping_requests = '" . $_POST['requests'] . "', 
+				shipping_method = '" . $_POST['shipping_method'] . "' 
 				WHERE school_id=" . $school_id;
 		$query = mysql_query($sql);
 		
@@ -70,6 +71,22 @@ $school = new school($row);
 		}
 		.box{
 			padding-left:40px;
+		}
+		select#shipping_method {
+			border: 1px solid #BBBBBB;
+			-moz-border-radius: 5px 5px 5px 5px;
+			-webkit-border-radius: 5px;
+			width: 350px;
+			/* min-width: 350px; */
+			font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+			font-size: 16px;
+			font-weight: bold;
+			/* border: none; */
+			background: #fff;
+			min-height: 26px;
+			margin: 1px 0;
+			padding: 5px;
+			margin-right: 5px;
 		}
 		</style>
 		
@@ -249,6 +266,17 @@ $school = new school($row);
     													<span class="label"><label for="country">Country</label></span>
     													<span class="input"><input name="shipping_country" 
     													    value="<?=empty($school->shipping_country)?$school->school_country:$school->shipping_country;?>" type="text" /></span>
+													</li>
+													<li>
+    													<span class="label"><label for="shipping_method">Shipping Method</label></span>
+    													<span class="input">
+															<select name="shipping_method" id='shipping_method'>
+																<option value='pickup'>Pickup</option>
+																<option value='deliver' <?= $school->shipping_method =='deliver' ? 'selected' : ''?>>
+																	Delivery
+																</option>
+															</select>
+														</span>
     												</li>
 													<li>
 														<span class="label"><label for="requests">Shipment Requests</label></span>
