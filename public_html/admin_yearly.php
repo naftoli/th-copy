@@ -50,7 +50,7 @@ elseif (gr('user_registered')) {
 	while ($rowUser = mysql_fetch_assoc($resultUsers)) {
 		$sql = "update users 
 				set user_registered = '" . $rowUser['reg_date'] . "', 
-				user_registration_fee = " . $rowUser['paid'] . ", 
+				user_registration_fee = " . $rowUser['paid'] . "  
 				where user_id = " . $rowUser['user_id'];
 		if ( mq( $sql ) ) $added++;
 	}
