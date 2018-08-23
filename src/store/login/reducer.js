@@ -1,5 +1,5 @@
 import * as types from './types';
-// handle when positions change in the UI
+// TODO handle when positions change in the UI
 // import { REMOVE_AUTH } from '../staff/types';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
@@ -9,7 +9,8 @@ export const initialState = {
   current_login: {},
   loading: false,
   errors: [],
-  tokens: {}
+  tokens: {},
+  title: false
 };
 
 export default ( state = initialState, action ) => {
@@ -17,24 +18,24 @@ export default ( state = initialState, action ) => {
   expires.setFullYear(new Date().getFullYear() + 10);
 
   switch ( action.type ) {
-    case types.SET_ERRORS:
-      return Object.assign({}, state, {
-        errors: action.payload
-      });
-    
-    case types.SET_LOADING:
-      return Object.assign({}, state, {
-        loading: action.payload
-      });
 
+    // set any login errors
+    case types.SET_ERRORS:
+      return { ...state, errors: action.payload };
+
+    // set the loading staus
+    case types.SET_LOADING:
+      return { ...state, loading: action.payload };
+
+    // set the tokens
     case types.SET_TOKENS:
       if ( action.payload.legacy ) {
         cookies.set( 'admin_auth', action.payload.legacy, { path: '/', expires } );
         cookies.set( 'admin_id', action.payload.id, { path: '/', expires } );
       }
+      return { ...state, tokens: action.payload };
 
-      return Object.assign({}, state, { tokens: action.payload });
-
+    // set the current user
     case types.SET_USER:
       // user is a different portal, do not update the cookies.
       if ( action.payload.logins[0].type !== 'user' && !cookies.get('login') ) {
@@ -44,14 +45,20 @@ export default ( state = initialState, action ) => {
       return Object.assign({}, state, {
         current_user: action.payload
       });
+
+    // set the page title
+    case types.SET_TITLE:
+      return { ...state, title: action.payload }
     
+    // logout the user
     case types.LOGOUT:
       cookies.remove( 'admin_auth', { path: '/' } );
       cookies.remove( 'admin_id', { path: '/' } );
       cookies.remove( 'admin', { path: '/' } );
       cookies.remove( 'login', { path: '/' } );
-      return Object.assign( {}, initialState );
+      return { ...initialState };
 
+    // change the login
     case types.CHANGE_LOGIN:
       const { type, id } = action.payload;
       const current_login = state.current_user.logins.find( 
@@ -65,16 +72,7 @@ export default ( state = initialState, action ) => {
         cookies.set( 'admin', current_login.key, { path: '/', expires } );
       }
       // non-destructivly return the state
-      return Object.assign( {}, state, { current_login });
-
-    // case REMOVE_AUTH:
-      // TODO, remove auth from login if 
-      // const filtered_logins = state.current_user.logins.filter( login => {
-      //   return !(login.type === action.payload.type && login.id === action.payload.id)
-      // })
-      // return Object.assign( {}, state, {
-      //   current_user: { ...state.current_user, logins: filtered_logins }
-      // });
+      return { ...state, current_login };
 
     default:
       return state; 

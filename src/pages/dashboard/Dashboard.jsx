@@ -52,7 +52,7 @@ export class Dashboard extends Component {
   }
 
   render() {
-    const { current_user, current_login, changeLogin, location } = this.props;
+    const { current_user, current_login, changeLogin, location, title } = this.props;
     // if we are a user and not logging out - redirect to legacy parent portal
     if ( current_login.type === 'user' && location.pathname !== '/logout' ) {
       window.location.href = `${LEGACY_URL}/mobile/reg/parent_detail.html`;
@@ -69,7 +69,8 @@ export class Dashboard extends Component {
     return (
       <div id="dashboard">
         <Navbar onClick={ this.toggle } onLoginChange={ changeLogin }
-          logins={ current_user.logins } currentLogin={current_login} />
+          logins={ current_user.logins } currentLogin={ current_login }
+          title={ title } />
         <div id="dashboard-body">
           <Sidebar menu={ menu } active={ this.state.active } />
           <div id="dashboard-content">
@@ -82,9 +83,10 @@ export class Dashboard extends Component {
   }
 }
 
-const mapStateToProps = ( state ) => ({
-  current_user: state.login.current_user,
-  current_login: state.login.current_login
+const mapStateToProps = ({ login }) => ({
+  current_user: login.current_user,
+  current_login: login.current_login,
+  title: login.title
 });
 
 export default withRouter(

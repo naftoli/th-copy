@@ -1,6 +1,6 @@
 import { 
   SET_LOADING, SET_ERRORS, SET_TOKENS, 
-  SET_USER, LOGOUT, CHANGE_LOGIN, REMOVE_AUTH
+  SET_USER, LOGOUT, CHANGE_LOGIN, SET_TITLE
 } from './types';
 
 //** Action Creators */
@@ -45,9 +45,9 @@ export const changeLogin = ( type, id ) => {
   }
 }
 
-export const removeAuth = ( type, id ) => {
+export const setTitle = title => {
   return {
-    type: REMOVE_AUTH,
-    payload: { type, id }
+    type: SET_TITLE,
+    payload: title
   }
 }

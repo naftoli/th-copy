@@ -1,9 +1,10 @@
+import store from 'store/index';
+import * as actions from 'store/login/actions'
+
 // set the page title wherever it needs to be set..
-const setTitle = ( title ) => {
+export const setTitle = ( title ) => {
   if ( document ) {
     document.title = `${title} | Mashpia.com`;
   }
-  // TODO. set the title prop on Navbar.jsx
+  store.dispatch( actions.setTitle( title ) );
 }
-
-export default setTitle;
