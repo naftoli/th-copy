@@ -42,6 +42,7 @@ elseif (gr('user_registered')) {
 	$num = mysql_affected_rows();
 
 	// register pre-registered students
+	$added = 0;
 	$sqlUsers = "select user_id, reg_date, paid from user_registration  
 				where year = " . $regYear . " 
 				and school_id in ($schools)";
@@ -49,13 +50,12 @@ elseif (gr('user_registered')) {
 	while ($rowUser = mysql_fetch_assoc($resultUsers)) {
 		$sql = "update users 
 				set user_registered = '" . $rowUser['reg_date'] . "', 
-				user_registration_fee = " . $rowUser['paid'] . ", 
+				user_registration_fee = " . $rowUser['paid'] . "  
 				where user_id = " . $rowUser['user_id'];
-		mq( $sql );
-		$num--;
+		if ( mq( $sql ) ) $added++;
 	}
 							
-	$message = sprintf(T_('%d users de-registered.'), $num);
+	$message = sprintf(T_('%d users de-registered. %d users re-registered from pre-registration.'), $num, $added);
 } 
 elseif(gr('user_tracks')) {
 	// mq("UPDATE user_tracks JOIN users USING (user_id) SET enrolled = 0 WHERE school_id IN ($schools)");

@@ -67,6 +67,7 @@ $booklet_grand_totals = [
         </p>
         <input type="submit" name="submit" value="Refresh Report" />
     </form>
+    <div style="page-break-after: always;"></div>
     <?php
         foreach( $booklet_users as $school_id => $users ) {
             $booklet_totals = [
@@ -123,6 +124,7 @@ $booklet_grand_totals = [
                 }
                 ?>
             </table>
+            <div style="page-break-after: always;"></div>
         <?php
         } 
     ?>

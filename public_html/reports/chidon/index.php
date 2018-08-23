@@ -124,7 +124,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 
         <h2>Yahadus Books</h2>
         <div id="action-links">
-            <a href="yahadus_books.php<?=$debug ? "?debug=true": "";?>">
+            <a href="yahadus.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/v2/images/back-end/admin/icon_install.png" height="32" alt="tickets"/>
                     <span class="link-text">Yahadus Book Purchases</span>
