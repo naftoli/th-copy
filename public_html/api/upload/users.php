@@ -38,7 +38,7 @@ class UsersUploadRouter {
         $headers = [];
         $users = []; $errors = [];
         $firstRow = true;
-        $errorLine = 1;
+        $errorLine = 2;
 
         foreach( $objWorksheet->getRowIterator() as $row ) {
             $cellIterator = $row->getCellIterator();
@@ -132,8 +132,8 @@ class UsersUploadRouter {
                         // check that it is in our year range
                         $year = date('Y');
                         $startYear = $year - 5; $endYear = $year - 15;
-                        if ( $dob->format('Y') > $startYear || $dob->format('Y') < $endYear - 15 ) {
-                            $errors[] ="$errorString Date of Birth must be between $startYear and $endYear.";
+                        if ( $dob->format('Y') > $startYear || $dob->format('Y') < $endYear ) {
+                            $errors[] ="$errorString Date of Birth must be between $startYear and $endYear. Year is " . $dob->format('Y');
                         }
                     }
 
