@@ -7,7 +7,7 @@ import { Button, ButtonGroup } from 'reactstrap';
 import CropperModal from 'components/modals/CropperModal';
 import { Table, InlineSync, FontAwesome, Number, ProfilePicture } from 'components/ui';
 // functions
-import { loginStoreChanged, isAdmin } from 'functions/login';
+import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
 import { getBases, updateBase } from 'store/bases/operations';
@@ -23,10 +23,6 @@ class BasesPage extends Component {
   componentDidMount() { 
     setTitle( 'View / Edit Bases' );
     this.loadBases(); 
-  }
-
-  componentDidUpdate({ login }) {
-    if ( loginStoreChanged( login ) ) this.loadBases();
   }
 
   loadBases = () => {

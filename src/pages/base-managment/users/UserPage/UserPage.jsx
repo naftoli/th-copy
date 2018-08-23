@@ -11,7 +11,6 @@ import { PersonalTab, SettingsTab, RankTab } from './tabs';
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
-import { loginStoreChanged } from 'functions/login';
 import { getSoldier, updateSoldier } from 'store/soldiers/operations';
 // styles
 import './UserPage.scss';
@@ -30,13 +29,10 @@ class UserPage extends Component {
     this.getSoldier();
   }
   // set the title once we have the info
-  componentDidUpdate( prevProps ) {
+  componentDidUpdate() {
     // update the page title
     if ( this.state.soldier.user_serial )
       setTitle( `View / Edit ${this.state.soldier.user_serial}` );
-    // if the login changed then we should make sure we have the up to date information...
-    if ( loginStoreChanged( prevProps.current_login ) && !this.state.loading )
-      this.getSoldier();
   }
   // get the soldier for the page
   getSoldier = () => {

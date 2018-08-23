@@ -9,7 +9,6 @@ import ReactTable from "react-table";
 import RegistrationModal from './RegistrationModal';
 // functions
 import { toast } from 'react-toastify';
-import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { defaultTableProps } from 'functions/tables';
 import { getSoldiers, registerSoldiers } from 'store/soldiers/registration/operations';
@@ -31,13 +30,6 @@ export class RegistrationPage extends Component {
     const { soldiers, getSoldiers } = this.props;
     if ( soldiers.length === 0 )
       getSoldiers().catch( e => toast.error( e.message ) );
-  }
-
-  componentDidUpdate( prevProps ) {
-    if ( loginStoreChanged( prevProps.login ) ) {
-      this.props.getSoldiers().catch( e => toast.error( e.message ) );
-      this.setState({ selectAll: false, selection: [], total: 0 });
-    }
   }
 
   toCSV = () => {

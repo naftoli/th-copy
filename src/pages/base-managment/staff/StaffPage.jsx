@@ -7,7 +7,6 @@ import { Button, ButtonGroup } from 'reactstrap';
 // modals
 import NewStaffModal from './NewStaffModal';
 // functions
-import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
 import { getStaff } from 'store/staff/operations';
@@ -20,12 +19,6 @@ class StaffPage extends Component {
   componentDidMount(){
     setTitle( 'View/Edit Staff' );
     this.getStaff();
-  }
-
-  // if the soldier list is emptied while on the page... then refresh it
-  componentDidUpdate( { login } ) {
-    if ( loginStoreChanged( login ) )
-      this.getStaff();
   }
 
   getStaff = () => { this.props.getStaff() }

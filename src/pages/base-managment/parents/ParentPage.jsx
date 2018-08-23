@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import { getChildOptions } from './misc/functions';
 import { getParents } from 'store/parents/operations';
 import { removeChild, addChild } from 'store/parents/operations';
-import { loginStoreChanged, mobileLogin } from 'functions/login';
+import { mobileLogin } from 'functions/login';
 
 class ParentPage extends Component {
 
@@ -23,12 +23,6 @@ class ParentPage extends Component {
     if ( this.props.parents.length === 0 ) {
       this.props.getParents();
     }
-  }
-
-  componentDidUpdate({ login }) {
-    if ( loginStoreChanged( login ) ) {
-      this.props.getParents();
-    };
   }
 
   findParent = memoize( ( parents, admin_id ) => {

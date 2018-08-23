@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { Button, ButtonGroup } from 'reactstrap';
 import { InlineSync } from 'components/ui/loading';
 // functions
-import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { getPlatoons } from 'store/platoons/operations';
 
@@ -16,12 +15,6 @@ export class PlatoonsPage extends Component {
   componentDidMount(){
     setTitle( 'View/Edit Platoons' );
     this.getPlatoons();
-  }
-
-  // if the soldier list is emptied while on the page... then refresh it
-  componentDidUpdate( { login } ) {
-    if ( loginStoreChanged( login ) )
-      this.getPlatoons();
   }
 
   getPlatoons = () => { this.props.getPlatoons(); }

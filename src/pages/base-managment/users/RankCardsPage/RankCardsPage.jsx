@@ -13,7 +13,6 @@ import moment from 'moment';
 import { toast } from 'react-toastify';
 import { setTitle, toJulian } from 'functions/utils';
 import { findOption } from 'functions/selects';
-import { loginStoreChanged } from 'functions/login';
 // state
 import { getRankCards, markPrinted } from 'store/soldiers/id_cards/operations';
 // styles
@@ -39,15 +38,7 @@ export class RegistrationPage extends Component {
     if ( code === 'BC' ) 
       this.changeOption({ permanent: false, current: true, rank: false, school_id: id });
   }
-  // when the login changes: reload the users and clear the options
-  componentDidUpdate( prevProps ) {
-    const { code, id } = this.props.login;
-    if ( loginStoreChanged( prevProps.login ) && code === 'BC' ) {
-      this.changeOption({
-        school_id: id, class_id: false, permanent: false, current: true, rank: false
-      });
-    }
-  }
+  
   // get the rank cards
   getRankCards = () => {
     this.setState({ loading: true, updates: [], cards: [], loaded: false })

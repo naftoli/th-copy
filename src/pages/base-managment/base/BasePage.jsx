@@ -14,7 +14,7 @@ import { getBase, updateBase } from 'store/bases/operations';
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
-import { loginStoreChanged, isAdmin } from 'functions/login';
+import { isAdmin } from 'functions/login';
 
 class BasesPage extends Component {
 
@@ -34,10 +34,6 @@ class BasesPage extends Component {
   // update the base on mount
   componentDidMount() {
     this.loadBase()
-  }
-  // or on login change
-  componentDidUpdate({ login }) {
-    if ( loginStoreChanged( login ) ) this.loadBase();
   }
   // load the base from the API
   loadBase = () => {

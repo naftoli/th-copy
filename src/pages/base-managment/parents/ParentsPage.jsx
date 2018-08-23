@@ -8,7 +8,6 @@ import { InlineSync } from 'components/ui/loading';
 // modals
 import NewParentModal from './NewParentModal';
 // functions
-import { loginStoreChanged } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
 import { getParents } from 'store/parents/operations';
@@ -23,12 +22,6 @@ class ParentsPage extends Component {
     if ( this.props.parents.length === 0 ) {
       this.getParents();
     }
-  }
-
-  // if the soldier list is emptied while on the page... then refresh it
-  componentDidUpdate( { login } ) {
-    if ( loginStoreChanged( login ) )
-      this.getParents();
   }
 
   getParents = () => { this.props.getParents() }

@@ -10,7 +10,6 @@ import { Table, InlineSync, Callout, FontAwesome } from 'components/ui';
 // import { toast } from 'react-toastify';
 import is from 'is_js';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
-import { loginStoreChanged } from 'functions/login';
 // styles
 import './UsersPage.scss';
 // state
@@ -30,12 +29,6 @@ export class UsersPage extends Component {
     if ( this.props.soldiers.length < 2 ) {
       this.props.getSoldiers();
     }
-  }
-
-  // if the soldier list is emptied while on the page... then refresh it
-  componentDidUpdate( prevProps ) {
-    if ( loginStoreChanged( prevProps.current_login ) )
-      this.props.getSoldiers();
   }
 
   // handler for the modals

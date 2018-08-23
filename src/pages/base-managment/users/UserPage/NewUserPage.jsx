@@ -9,7 +9,6 @@ import { PlatoonSelect, BaseSelect, Select } from 'components/inputs';
 // functions
 import { missionTypeOptions, findOption } from 'functions/selects';
 import { uploadProfile, createSoldier, getSoldiers } from 'store/soldiers/operations';
-import { loginStoreChanged } from 'functions/login';
 import { setTitle } from 'functions/utils';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -31,11 +30,6 @@ class NewUserPage extends Component {
   componentDidMount() { 
     setTitle( 'Create New Soldier' );
     this.setupSoldier();
-  }
-  componentDidUpdate( prevProps ) {
-    if ( loginStoreChanged( prevProps.current_login ) ) {
-      this.setupSoldier();
-    }
   }
   // setup the school_id/class_id on the soldier
   setupSoldier = () => {

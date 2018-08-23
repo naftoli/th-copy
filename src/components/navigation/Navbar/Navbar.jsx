@@ -24,7 +24,7 @@ class Navbar extends Component {
   }
 
   onLoginChange = ( type, id ) => () => {
-    if ( loginStoreChanged( {type, id} ) )
+    if ( loginStoreChanged( { type, id } ) )
       this.props.onLoginChange( type, id );
   }
 

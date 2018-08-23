@@ -6,7 +6,6 @@ import { Step1, Step2, Step3, Deploy } from './steps';
 // functions
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
-import { loginStoreChanged } from 'functions/login';
 import { 
   getUsers, changePlatoon, removeFromBase, transitionPlatoons 
 } from 'store/platoons/platoon_transition';
@@ -26,10 +25,6 @@ class PlatoonTransitionPage extends Component {
   componentDidMount() {
     setTitle( 'Platoon Transition' );
     this.setupPage(); 
-  }
-
-  componentDidUpdate({ login }) {
-    if ( loginStoreChanged( login ) ) this.setupPage();
   }
 
   setupPage = () => {

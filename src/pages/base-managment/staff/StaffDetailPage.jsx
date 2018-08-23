@@ -13,7 +13,7 @@ import CreatePositionRow from './rows/CreatePositionRow';
 import memoize from 'memoize-one';
 import { toast } from 'react-toastify';
 import { filterUpdates } from 'functions/events';
-import { loginStoreChanged, isAdmin } from 'functions/login';
+import { isAdmin } from 'functions/login';
 // state
 import { getStaff, updateStaff, createAuth } from 'store/staff/operations';
 
@@ -29,9 +29,7 @@ class StaffDetailPage extends Component {
     }
   }
 
-  componentDidUpdate({ login, staff }) {
-    if ( loginStoreChanged( login ) )
-      this.loadStaff();
+  componentDidUpdate({ staff }) {
     if ( staff !== this.props.staff ) 
       this.setState({ updates: {} });
   }

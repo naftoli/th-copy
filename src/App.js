@@ -3,31 +3,49 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 // pages
-import Dashboard from 'pages/dashboard/Dashboard';
+import { Page404 } from 'pages/errors';
 import Login, { Logout } from 'pages/login';
 import BaseManagment from 'pages/base-managment';
+import Dashboard from 'pages/dashboard/Dashboard';
 // components
 import ConfirmationModal from 'components/modals/ConfirmationModal';
-import { Page404 } from 'pages/errors';
+// functions
+import { loginStoreChanged } from 'functions/login';
 
 export class App extends Component {
   // state for confirmation modal
-  state = { message: '', isOpen: false }
+  state = { 
+    message: '', isOpen: false,
+    refreshing: true, // by default the app is refreshing as we have nothing in redux
+  }
+
+  /**
+   * Note that if the redux store is cached or hydrated you will need to update the folowing behavior....
+   */
+  componentDidUpdate({ login }) { // once we get a login ( which starts off as {} ) then refresh the dashboard.
+    if ( loginStoreChanged( login ) ) {
+      const hadLogin = Object.keys( login ).length > 0;
+      this.setState({ refreshing: hadLogin });
+      if ( hadLogin ) {
+        // show the user the refreshing screen. This would be a good time to do any work we might need to do.
+        setTimeout(() => { this.setState({ refreshing: false }); }, 250)
+      }
+    }
+  }
+  
+  // show the confirmation modal for react-router
   callback = false;
-  // show the modal
-  showDialog = ( message, callback ) => {
-    this.callback = callback;
-    this.setState({ message: message, isOpen: true });
-  }
+  showDialog = ( message, callback ) => { this.callback = callback; this.setState({ message: message, isOpen: true }); }
   // hide the modal when an option is selected
-  handleCallback = ( ok ) => {
-    this.callback( ok );
-    this.setState({ isOpen: false });
-  }
+  handleCallback = ( ok ) => { this.callback( ok ); this.setState({ isOpen: false }); }
+  
   // render the page
   render() {
     if ( this.props.logged_in ) {
-      const { message, isOpen } = this.state;
+      const { message, isOpen, refreshing } = this.state;
+      // make sure we are not "refreshing"
+      if ( refreshing ) return <Login forceLoading={true} />
+      // render the core dashboard
       return (
         <Router basename={ process.env.PUBLIC_URL } getUserConfirmation={ this.showDialog } >
           <Dashboard>
