@@ -49,7 +49,7 @@ export class PlatoonsPage extends Component {
 
     return (
       <div id='PlatoonsPage'>
-        <Callout title="View / Edit Platoons">
+        <Callout title="Platoons">
           <p><strong>To connect a Staff member to a Platoon go to the edit page by clicking on the Grade, Sub or Teacher.</strong></p>
         </Callout>
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>

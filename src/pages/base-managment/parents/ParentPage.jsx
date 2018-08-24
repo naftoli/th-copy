@@ -10,16 +10,18 @@ import Child from './misc/Child';
 // functions
 import memoize from 'memoize-one';
 import { toast } from 'react-toastify';
+import { setTitle } from 'functions/utils';
+import { mobileLogin } from 'functions/login';
 import { getChildOptions } from './misc/functions';
 import { getParents } from 'store/parents/operations';
 import { removeChild, addChild } from 'store/parents/operations';
-import { mobileLogin } from 'functions/login';
 
 class ParentPage extends Component {
 
   state = { selectedUserId: false }
 
   componentDidMount() {
+    setTitle( 'Parent Account' )
     if ( this.props.parents.length === 0 ) {
       this.props.getParents();
     }

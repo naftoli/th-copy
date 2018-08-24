@@ -32,7 +32,7 @@ class UserPage extends Component {
   componentDidUpdate() {
     // update the page title
     if ( this.state.soldier.user_serial )
-      setTitle( `View / Edit ${this.state.soldier.user_serial}` );
+      setTitle( `Soldier #${this.state.soldier.user_serial}` );
   }
   // get the soldier for the page
   getSoldier = () => {

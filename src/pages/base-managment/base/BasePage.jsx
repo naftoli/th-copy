@@ -49,7 +49,7 @@ class BasesPage extends Component {
     // load the final base
     this.props.getBase( school_id )
       .then( base => {
-        setTitle( `View / Edit Base #${base.school_number}` );
+        setTitle( `Base #${base.school_number}` );
         this.setState({ base, loading: false })
       })
       .catch( error => toast.error( error.message ) );

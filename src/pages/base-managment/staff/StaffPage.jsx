@@ -17,7 +17,7 @@ class StaffPage extends Component {
 
   // load the contents if we do not have any
   componentDidMount(){
-    setTitle( 'View/Edit Staff' );
+    setTitle( 'Staff' );
     this.getStaff();
   }
 

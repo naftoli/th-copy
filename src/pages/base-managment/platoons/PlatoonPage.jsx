@@ -33,7 +33,7 @@ export class PlatoonPage extends Component {
 
   // load the contents if we do not have any
   componentDidMount(){
-    setTitle( 'View/Edit Platoon' );
+    setTitle( 'Platoon' );
     this.getPlatoon();
   }
 

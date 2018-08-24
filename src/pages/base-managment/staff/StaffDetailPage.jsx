@@ -12,8 +12,9 @@ import CreatePositionRow from './rows/CreatePositionRow';
 // functions
 import memoize from 'memoize-one';
 import { toast } from 'react-toastify';
-import { filterUpdates } from 'functions/events';
 import { isAdmin } from 'functions/login';
+import { setTitle } from 'functions/utils';
+import { filterUpdates } from 'functions/events';
 // state
 import { getStaff, updateStaff, createAuth } from 'store/staff/operations';
 
@@ -24,6 +25,7 @@ class StaffDetailPage extends Component {
   }
 
   componentDidMount() {
+    setTitle( 'Staff Account' )
     if ( this.props.staff.length === 0 ) {
       this.loadStaff();
     }

@@ -18,7 +18,7 @@ class ParentsPage extends Component {
 
   // load the contents if we do not have any
   componentDidMount(){
-    setTitle( 'View/Edit Parents' );
+    setTitle( 'Parents' );
     if ( this.props.parents.length === 0 ) {
       this.getParents();
     }
