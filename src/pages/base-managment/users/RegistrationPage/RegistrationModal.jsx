@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { Callout } from 'components/ui';
 import { ProfileForm, CCForm } from 'components/functional/payments';
-// import { Spinner, FileInput } from 'components/ui';
 // functions
-import Payment from 'payment';
+import { validateCC } from 'functions/validations';
 import { toast } from 'react-toastify';
 
 export class RegistrationModal extends Component {
@@ -32,28 +31,13 @@ export class RegistrationModal extends Component {
     this.setState({ ccInfo });
   }
 
-  validateCC = () => {
-    const { number, expiry, cvc } = this.state.ccInfo;
-    return new Promise( ( resolve, reject ) => {
-      if ( !Payment.fns.validateCardNumber( number ) ) {
-        reject( new Error('Invalid Credit Card Number') );
-      } else if ( !expiry ) {
-        reject( new Error('Invalid Exparation Date') );
-      } else if ( !cvc ) {
-        reject( new Error('Invalid CVC (Code)') );
-      }
-      const mapped_cc = { 'cc-number': number, 'cc-exp': expiry, 'x_card_code': cvc };
-      resolve( mapped_cc );
-    });
-  }
-
   submit = () => {
-    const { payment_profile_id } = this.state;
+    const { payment_profile_id, ccInfo } = this.state;
     if ( payment_profile_id ) {
       return this.props.onSubmit({ payment_profile_id });
     }
     // validate the CC before leaving the modal
-    this.validateCC().then( payment => {
+    validateCC( ccInfo ).then( payment => {
       return this.props.onSubmit( payment );
     }).catch( error => {
       toast.error( error.message );

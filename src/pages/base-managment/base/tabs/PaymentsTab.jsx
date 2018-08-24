@@ -4,6 +4,11 @@ import { FontAwesome } from 'components/ui';
 import { CCForm } from 'components/functional/payments';
 import { Row, Col, Button, TabPane } from 'reactstrap';
 import Cards from 'react-credit-cards';
+// network
+import { deletePayment, addPayment } from 'store/bases/operations';
+// functions
+import { toast } from 'react-toastify';
+import { validateCC } from 'functions/validations';
 
 const CardDisplay = ({ cardType, cardNumber, profileId, onDelete }) => {
   let issuer, number;
@@ -42,11 +47,16 @@ export class PaymentsTab extends Component {
   }
 
   addCC = () => {
-    this.setState({ ccInfo: {} });
+    const { ccInfo } = this.state;
+    return validateCC( ccInfo ).then( payment => addPayment( this.props.schoolId, payment ) )
+    .then( res => this.props.refresh() )
+    .catch( error => toast.error( error.message ) );
   }
 
-  deleteCard = event => {
-    console.log( event );
+  deleteCard = payment_profile_id => {
+    return deletePayment( this.props.schoolId, payment_profile_id )
+    .then( res => this.props.refresh() )
+    .catch( error => toast.error( error.message ) );
   }
 
   render(){

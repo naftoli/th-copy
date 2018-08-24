@@ -43,3 +43,13 @@ export const getBaseList = ( all = false ) => {
   return API.post( `/core/bases?action=small`, { all } )
   .then( handleAPIResponse );
 }
+
+export const addPayment = ( school_id, cc ) => {
+  return API.post( `/core/bases?action=addPayment`, { school_id, cc } )
+  .then( handleAPIResponse );
+}
+
+export const deletePayment = ( school_id, payment_profile_id ) => {
+  return API.post( `/core/bases?action=deletePayment`, { school_id, payment_profile_id } )
+  .then( handleAPIResponse );
+}
