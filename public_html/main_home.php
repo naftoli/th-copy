@@ -1,5 +1,6 @@
 <?
 require_once 'class.globalSettings.php';
+require_once 'calendar.php';
 $chidonYear = GlobalSettings::getChidonYear();
 
 // get campaigns for current year
@@ -244,6 +245,21 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 		color: red;
 		line-height: 1.4;
 	}
+
+	#rank-promotions {
+		height: 300px;
+		padding: 15px;
+		text-align: center;
+		overflow: auto;
+		background: #F2F2F2;
+		margin-bottom: 25px;
+	}
+	#rank-promotions table { width: 100%; }
+	#rank-promotions table tbody tr { border-top: 1px solid #333; }
+	#rank-promotions th, #rank-promotions td { font-size: 1.2em; padding: 8px 4px; }
+	#rank-promotions td:first-child { width: 25%; }
+	#rank-promotions td { width: 50%; }
+	#rank-promotions td:last-child { width: 25%; }
 </style>
 
 <? if (!in_array($schl_id, $tanyaOnlySchools)) : ?>
@@ -947,7 +963,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 			<li>Click <a href="parent_children_barcodes.php">here</a> for Parent Invitations</li>
 			<li>Click <a href="parent_list.php">here</a> to view parent accounts</li>
 		</div>
-	</div>   
+	</div>
 	-->
 
 	<div style='clear: both; background-color: #D5D8DE'></div>
@@ -983,6 +999,37 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 		</span>
 	</div>
 	<br /><br /><br /><br /><br />
+
+	<div style='clear: both; background-color: #D5D8DE'></div>
+	<h2>Latest 50 Rank Promotions</h2>
+	<div id='rank-promotions'>
+		<table>
+			<thead>
+				<tr>
+					<th>Rank</th><th>Name</th><th>Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				$promotions_query = mysql_query(
+					"SELECT date_promoted, rank_name, rank_ord, first, first_he, last, last_he "
+					."FROM rank_marks JOIN ranks USING (rank_ord) JOIN users USING (user_id) "
+					."WHERE school_id = $school_id AND rank_ord > 1 ORDER BY date_promoted DESC LIMIT 50"
+				);
+				while ( $row = mysql_fetch_assoc( $promotions_query ) ) {?>
+					<tr>
+						<td><?=$row['rank_name']?></td>
+						<td>
+							<?=$row['first_he'] ? $row['first_he'] : $row['first']?>
+							<?=$row['last_he'] ? $row['last_he'] : $row['last']?>
+						</td>
+						<td><?=dateToHebrew($row['date_promoted'])?></td>
+					</tr>
+				<?php } ?>
+			</tbody>
+		</table>
+		
+	</div>
 	<span style='clear: both'></span>
 </div>
 
