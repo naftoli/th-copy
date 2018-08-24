@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Prompt } from 'react-router';
 import { Redirect } from 'react-router-dom';
 import { TabContent, Nav } from 'reactstrap';
-import { Spinner, FontAwesome } from 'components/ui';
+import { LoadingScreen, FontAwesome } from 'components/ui';
 import { NavigationTab } from 'components/navigation';
 import { PersonalTab, SettingsTab, RankTab } from './tabs';
 // functions
@@ -14,6 +14,7 @@ import { filterUpdates } from 'functions/events';
 import { getSoldier, updateSoldier } from 'store/soldiers/operations';
 // styles
 import './UserPage.scss';
+import { LoadingScreen } from 'components/ui/loading/index';
 
 class UserPage extends Component {
   // initial state
@@ -84,8 +85,8 @@ class UserPage extends Component {
     // if we do not have the soldier...
     if ( soldier === undefined ) 
       return <Redirect to='/bm/users' />;
-    // if loading return a spinner
-    if ( loading ) return <Spinner size='8' />;
+    // if loading return a LoadingScreen
+    if ( loading ) return <LoadingScreen size='8' />;
 
     // render the page and it's sub-pages ( tabs )
     return (

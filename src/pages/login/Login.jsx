@@ -52,7 +52,7 @@ export class Login extends Component {
   }
 
   render(){
-    let { errors, loading, forceLoading } = this.props;
+    let { errors, loading } = this.props;
 
     errors = errors.map( (error, index) => 
       <div className="alert alert-danger" key={index}>{error}</div> 
@@ -77,7 +77,7 @@ export class Login extends Component {
       </form>
     );
 
-    if ( loading || forceLoading ) form = <Spinner size={ 8 } />;
+    if ( loading ) form = <Spinner size={ 8 } />;
     
     return (
       <div id='login-page'>

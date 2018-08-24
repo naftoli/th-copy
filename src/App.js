@@ -7,6 +7,7 @@ import { Page404 } from 'pages/errors';
 import Login, { Logout } from 'pages/login';
 import BaseManagment from 'pages/base-managment';
 import Dashboard from 'pages/dashboard/Dashboard';
+import { LoadingScreen } from 'components/ui';
 // components
 import ConfirmationModal from 'components/modals/ConfirmationModal';
 // functions
@@ -50,9 +51,7 @@ export class App extends Component {
         <Router basename={ process.env.PUBLIC_URL } getUserConfirmation={ this.showDialog } >
           <Dashboard>
 
-            { refreshing && 
-              <Login forceLoading={true} /> 
-            }
+            { refreshing &&  <LoadingScreen /> }
 
             { !refreshing && 
               <Switch>

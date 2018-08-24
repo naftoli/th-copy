@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { Spinner, ProfilePicture, FontAwesome } from 'components/ui';
+import { LoadingScreen, ProfilePicture, FontAwesome } from 'components/ui';
 import { Select, PhoneNumber } from 'components/inputs';
 import { Row, Col, Input, Button, InputGroup, InputGroupAddon } from 'reactstrap';
 import { AddressRow } from 'components/rows';
@@ -15,6 +15,7 @@ import { mobileLogin } from 'functions/login';
 import { getChildOptions } from './misc/functions';
 import { getParents } from 'store/parents/operations';
 import { removeChild, addChild } from 'store/parents/operations';
+import { LoadingScreen } from 'components/ui/loading/index';
 
 class ParentPage extends Component {
 
@@ -65,8 +66,8 @@ class ParentPage extends Component {
     const { loading } = this.props;
     // get the parent information
     const parent = this.getParent();
-    // if we have nothing, end the function here and show a spinner
-    if ( loading && !parent ) return <Spinner size='10' />;
+    // if we have nothing, end the function here and show a LoadingScreen
+    if ( loading && !parent ) return <LoadingScreen />;
     else if ( !parent ) return <Page404 />;
     // get the info from the parent
     const { 

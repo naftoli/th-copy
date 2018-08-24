@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 // components
 import { Prompt } from 'react-router';
 import { Page404 } from 'pages/errors';
-import { Spinner } from 'components/ui';
+import { LoadingScreen } from 'components/ui';
 import { SaveButton } from 'components/buttons';
 // rows
 import EditStaffRow from './rows/EditStaffRow';
@@ -64,7 +64,7 @@ class StaffDetailPage extends Component {
     const updated = Object.keys( this.state.updates ).length > 0;
     let staff = this.getStaff();
 
-    if ( loading && !staff ) return <Spinner size='10' />;
+    if ( loading && !staff ) return <LoadingScreen />;
     if ( !staff ) return <Page404 />;
 
     // get the things we have changed;
