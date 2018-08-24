@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // components
 import { TabPane } from 'reactstrap';
-import { SaveButton } from 'components/buttons';
-import { Form } from 'components/inputs';
-import { SettingsRow, StaffRow, NewStaffRow } from '../rows';
+import { StaffRow, NewStaffRow } from '../rows';
 // functions
 import { toast } from 'react-toastify';
 
