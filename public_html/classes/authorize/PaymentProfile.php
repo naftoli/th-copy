@@ -22,6 +22,7 @@ class PaymentProfile {
     public $live = true;
     
     private $api = null;
+    public $invalid = false;
     
     /*
      * new PaymentProfile($api, $customerPaymentProfileId, $customerProfileId)
@@ -147,14 +148,15 @@ class PaymentProfile {
             "getCustomerPaymentProfileRequest",
             [
                 "customerProfileId" => $this->customerProfileId,
-                "customerPaymentProfileId" => $this->customerPaymentProfileId
+                "customerPaymentProfileId" => $this->customerPaymentProfileId,
+                "includeIssuerInfo" => "true"
             ]
         );
         // return it for now (eventually make the api call and get the data)
         $this->api->setPostData($api_array);
         $api_data = $this->api->execute();
         
-        if ($api_data['messages']['message'][0]['code'] == 'I00001'){
+        if($api_data['messages']['resultCode'] == Constants::RESPONSE_OK) {
             $cc = $api_data['paymentProfile']['payment']['creditCard'];
             $this->cardNumber = $cc['cardNumber'];
             $this->expirationDate = $cc["expirationDate"];
@@ -162,6 +164,8 @@ class PaymentProfile {
             if(array_key_exists('billTo', $api_data['paymentProfile'])){
                 $this->billTo = $api_data['paymentProfile']['billTo'];
             }
+        } else {
+            $this->invalid = true;
         }
     }
     
@@ -177,7 +181,6 @@ class PaymentProfile {
      * So proper usage would be $errors = paymentProfile.update(); and then you can check for errors.
      *
      */
-    
     public function update() {
         $api_array = [
             "customerProfileId" => $this->customerProfileId,
@@ -218,6 +221,22 @@ class PaymentProfile {
         } else {
             return null;
         }
+    }
+
+    public function delete() {
+        // Generate the JSON to get the API data
+        $api_array = $this->auth->createApiCall(
+            "deleteCustomerPaymentProfileRequest",
+            [
+                "customerProfileId" => $this->customerProfileId,
+                "customerPaymentProfileId" => $this->customerPaymentProfileId
+            ]
+        );
+        // return it for now (eventually make the api call and get the data)
+        $this->api->setPostData($api_array);
+        $api_data = $this->api->execute();
+        
+        return $api_data['messages']['resultCode'] == Constants::RESPONSE_OK;
     }
 }
 
