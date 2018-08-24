@@ -50,7 +50,10 @@ export class PaymentsTab extends Component {
     const { ccInfo } = this.state;
     return validateCC( ccInfo ).then( payment => addPayment( this.props.schoolId, payment ) )
     .then( res => this.props.refresh() )
-    .catch( error => toast.error( error.message ) );
+    .catch( error => {
+      toast.error( error.message );
+      return Promise.reject( error );
+    });
   }
 
   deleteCard = payment_profile_id => {
