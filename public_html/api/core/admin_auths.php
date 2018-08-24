@@ -29,7 +29,7 @@ class AdminAuthRouter {
         if ( isset( $_POST['role_id'] ) ) $attrs['role_id'] = $_POST['role_id'];
         if ( isset( $_POST['position'] ) ) $attrs['position'] = $_POST['position'];
 
-        if ( $current_user->login['code'] == 'BC' ) {
+        if ( $current_user->login['code'] == 'BC' && !isset( $_POST['id'] ) ) {
             $attrs['id'] = $current_user->login['id'];
         } else {
             $attrs['id'] = $_POST['id'];
