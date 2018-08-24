@@ -5,6 +5,10 @@
     border-bottom: 1px solid $primary-color;
   }
 
+  .card-body{
+    padding-bottom: 8px;
+  }
+
   .CCLogos {
     font-size: 2.5em;
     display: flex;
@@ -23,6 +27,12 @@
     min-height: 45px; display: flex; align-items: center;
     padding-right: 65px;
     label { width: 100%; }
+
+    &:not(:last-child){
+      border-bottom: 1px solid $primary-color-light;
+      padding-bottom: 2px;
+      margin-bottom: 2px;
+    }
   }
   // Base64 versions of the CC logos
   .CCOption.visa {
@@ -39,4 +49,7 @@
   .CCOption.discover {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAeCAYAAABqpJ3BAAAABHNCSVQICAgIfAhkiAAABMNJREFUWIXVWF1oU2cYfnJ6WrTYbE2oBEpko9JQaosQsChjggqhiobdWC+qd2V/udCOXUmkdlUYvciuKsxhV3B0qx1tJrgJrZqua1eKmmKWpkbr2lg12BobNSfJ+c55djEX7FrFn2KTB76L877v937PA8/Hd3gNAHD9+vVSAB6S20makMUwGAwPDAZDP4BD5eXlMwa/319aWFh4zWw2rzEajfmyLK80xxdCCIF4PK7Ozc09TiQSVXJhYaHHbDYXmUym7Gb+FLIsw2Qy5QNYA8Aj6bq+w2g05gT5Z2E0GvN1Xd8hASjOdtsshaeci6WVJvKmyHkBi7xz9OhRRCIRrFq1Cna7Hfv374csy3C73XC5XFAUBS0tLYhGo6ivr0ddXR1mZ2fR2tqKYDCIyspKHD58GEVFRdBu/QF1+FsgEYNU9iHyP3Dh+9OdMJlMcDqdAIBTp05h3bp1GBgYwJ07dwAAJSUlOH78OBoaGgAAxcXFOHDgAKqqqhYrCIVCfBbV1dU8efIke3t76XQ6uWfPHpKkzWbjxMQEHQ4HW1tbOTw8zNHRUSqKQpvNxubmZgYCAXo8HobDYYrpUT5pfp9Pmt/LrOSZz3j27Flu3LiRJJlOp2mxWDg9Pc2Kigq2t7ezv7+fQ0NDFEJQkiSOjIywvb2dFouF/0coFOKSt3fTpk2orq7Grl27YLFYEIlEMrnS0lJ4vV6sX78eu3fvRl9fH8xmM9xuNwCgsrISAJD65UsAXNBXGz+H2sYWfP7gAcbGxnDjxg1s3rwZVqsVADA5OYlEIgGr1QqDwQAAiEQimJ6eRklJyctZaEFSllFQUABVVTOxEydOoKurC8eOHYPX64XT6cTq1asXb5byluwp5eWhoaEBHR0dmJiYQGNjYyaXTCahKApSqRQAgCR8Ph86OzsRCoWWJrmUhS5evMhgMEiXy8WtW7cusJDP52MsFmNPTw/tdjvn5uZosVjY3d1NIQS7u7sZCAQoZvx88lXZQgv1HCJJ3r17l2vXruWGDRsy51ZUVHBwcJDRaJTRaJRCCObl5ZEkHQ4H29ralrTQIgH19fWsqanhtm3b2NTUxPn5eZLk3r17OTU1xSNHjrC8vJx2u52XLl0iSfr9fu7cuZNlZWWsra1lOBwmSYrIFSbPfEqlo47pwTbqIpU55+DBg+zo6Mh879u3jzU1NZmlqiq3bNlCkgwEAnQ4HFQUJVOvhs4vLSAXIG4NMdG2naFQiDn3DujRcaTOfALoGoAce8j0e0EkT9cDyXgmljM/Qdrfw0h1fQykHi2I54QA9fIPUH9rAnSxKJfVAph6jPSvbmjXep9bk7UCtKkRpL1fgPMzL6zLOgFMxJC+8DW0qz+9VH3WCKCWhrjSCdX3DaA8fOl9Ky6AugYt4IXq84APb7/y/hUTQFWB8HdB/PndaxH/D29dgD57E+LqjxBj3a9klefhrQig8hBa6DzE2M/QI6PL01T6l7oMICaEWPbJBB/fhxa+ABE8B/3WHwC1Ze2Pd60AEJMlSeqLx+Mfvelgi2oS+u3L0G4OQJv8HYyOLw/R5yBlcwpJkvpee7RITYV+7y/ot69An7kKPToOaIuf+mWFXAC8Y0XK5hT3iyoeAagyALk93P0HjHXGXp92US0AAAAASUVORK5CYII=);
   }
+  // .CCOption.jcb {
+  //   background-image: url('../../../img/icons/cc/visa.svg');
+  // }
 }

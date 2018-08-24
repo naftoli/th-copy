@@ -1,28 +1,42 @@
 .CCForm {
-  max-height: 0px;
+  max-height: 0px; padding: 0px 5px;
   overflow: hidden;
-  transition: .25s ease-in;
-  display: flex;
-  justify-content: center;
-  // flex-wrap: wrap;
-  padding: 0px;
 
-  label { margin-top: 8px; }
+  transition: .25s ease-in;
+
+  display: flex; flex-wrap: wrap;
+  &.has-add { align-items: center; }
+
+  label, .btn { margin-top: 6px; margin-bottom: 0px; }
 
   #preview {
-    margin-right: 20px;
+    margin-left: 15px;
   }
 
-  #form {
-    input { font-family: monospace; font-size: 1.2em;}
+  > form {
+    min-width: 250px;
+    width: calc( 100% - 350px );
+    max-width: 600px;
+    margin-bottom: 20px;
+    
+    input { 
+      font-family: Consolas, Courier, monospace; 
+      font-size: 1.2em;
+    }
   }
 
-  &.show { max-height: 450px; padding: 15px 5px; }
+  &.show {
+    max-height: 235px; 
+    padding: 20px 5px;
+  }
 
-  @media ( max-width: 767px ) {
+  @media ( max-width: 642px ) {
     transition: .5s ease-in;
     flex-wrap: wrap;
-    &.show { max-height: 600px; }
+    > form { max-width: 100%; }
+    &.show { max-height: 425px; padding-top: 0px; }
+  }
+  @media ( max-width: 630px ) {
     #preview { margin: 0px; }
   }
 
@@ -40,4 +54,6 @@
       white-space: pre-wrap;
     }
   }
+
+  .rccs__card--front, .rccs__card--back { box-shadow: none; }
 }

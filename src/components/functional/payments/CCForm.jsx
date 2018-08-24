@@ -70,13 +70,42 @@ class CCForm extends Component {
       onFocus: this.handleInputFocus,
       required: !!onSubmit
     }
-    const classNames = classnames('CCForm', {'show': this.props.show});
+    const classNames = classnames('CCForm', {
+      'show': this.props.show,
+      'has-add': !!onSubmit
+    });
     // get the text for the button
     let buttonText = <span><FontAwesome icon='plus'/> Add</span>;
     if ( loading ) buttonText = <InlineSync loading />;
 
     return (
       <div className={ classNames } ref={ this.formRef }>
+        <form onSubmit={ this.submit } autoComplete='on'>
+          <Row>
+            <Col xs='12'>
+              <Label>Card Number</Label>
+              <Input type='tel' name='number' value={ number || '' } {...inputProps}
+                placeholder='4725 9182 9976 7854' autocompletetype="cc-number" />
+            </Col>
+            <Col xs={ 7 }>
+              <Label>Expiration</Label>
+              <Input type='tel' name='expiry' value={ expiry || '' } {...inputProps}
+                placeholder='MM / YY' autocompletetype="cc-exp" />
+            </Col>
+            <Col xs={ 5 }>
+              <Label>CVC</Label>
+              <Input type='tel' name='cvc' value={ cvc || '' } placeholder='CVC' {...inputProps}
+                autocompletetype="cc-csc" autoComplete="off" />
+            </Col>
+            { onSubmit &&
+              <Col xs={ 12 } className='save'>
+                <Button color='primary' onFocus={ this.handleInputFocus } name='number'>
+                  { buttonText }
+                </Button>
+              </Col>
+            }
+          </Row>
+        </form>
         <div id='preview'>
           <Cards 
             cvc={ cvc || '' }
@@ -85,33 +114,6 @@ class CCForm extends Component {
             number={ number ? number.replace(/ /g, '') : '' }
             expiry={ expiry ? expiry.replace(/ |\//g, '') : '' } />
         </div>
-        <form id='form' onSubmit={ this.submit } autoComplete='on'>
-          <Row>
-            <Col xs='12'>
-              <Label>Card Number</Label>
-              <Input type='tel' name='number' value={ number || '' } {...inputProps}
-                placeholder='4725 9182 9976 7854' autocompletetype="cc-number" />
-            </Col>
-            <Col xs={ onSubmit ? 5 : 7 }>
-              <Label>Expiration</Label>
-              <Input type='tel' name='expiry' value={ expiry || '' } {...inputProps}
-                placeholder='MM / YY' autocompletetype="cc-exp" />
-            </Col>
-            <Col xs={ onSubmit ? 3 : 5 }>
-              <Label>CVC</Label>
-              <Input type='tel' name='cvc' value={ cvc || '' } placeholder='CVC' {...inputProps}
-                autocompletetype="cc-csc" autoComplete="off" />
-            </Col>
-            { onSubmit &&
-              <Col xs={ 4 } className='save'>
-                <Button color='primary' onFocus={ this.handleInputFocus } name='number'>
-                  { buttonText }
-                </Button>
-              </Col>
-            }
-          </Row>
-        </form>
-
       </div>
     );
   }
