@@ -58,6 +58,8 @@
     .CardDisplay {
       padding: 10px;
       text-align: center;
+
+      .rccs__card--front, .rccs__card--back { box-shadow: none; }
     }
 
     .btn { width: 290px; margin-top: 8px; }
