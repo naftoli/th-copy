@@ -5,13 +5,12 @@ import { Prompt } from 'react-router';
 import { SaveButton } from 'components/buttons';
 import { Link, Redirect } from 'react-router-dom';
 import { StaffRow, NewStaffRow, PlatoonRow } from './rows';
-import { LoadingScreen,} from 'components/ui';
+import { LoadingScreen, Callout } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { getPlatoon, updatePlatoon } from 'store/platoons/operations';
 import { removeAuth, createAuth } from 'store/staff/operations';
-import { LoadingScreen } from 'components/ui/loading/index';
 
 export class PlatoonPage extends Component {
   // initial state
@@ -70,7 +69,7 @@ export class PlatoonPage extends Component {
 
   render() {
     if ( this.state.platoon === undefined ) return <Redirect to='/platoons' />;
-    if ( this.state.loading ) return <LoadingScreen />
+    if ( this.state.loading ) return <LoadingScreen  Callout />
     
     const { staff } = this.state.platoon;
     const inputProps = { onChange: this.handleInputChange };

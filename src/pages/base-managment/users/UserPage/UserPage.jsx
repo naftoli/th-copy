@@ -14,7 +14,6 @@ import { filterUpdates } from 'functions/events';
 import { getSoldier, updateSoldier } from 'store/soldiers/operations';
 // styles
 import './UserPage.scss';
-import { LoadingScreen } from 'components/ui/loading/index';
 
 class UserPage extends Component {
   // initial state

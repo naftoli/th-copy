@@ -15,7 +15,6 @@ import { mobileLogin } from 'functions/login';
 import { getChildOptions } from './misc/functions';
 import { getParents } from 'store/parents/operations';
 import { removeChild, addChild } from 'store/parents/operations';
-import { LoadingScreen } from 'components/ui/loading/index';
 
 class ParentPage extends Component {
 
