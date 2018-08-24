@@ -4,12 +4,16 @@ import { connect } from 'react-redux';
 // components
 import { Prompt } from 'react-router';
 import { TabContent, Nav } from 'reactstrap';
-import { FontAwesome, Spinner } from 'components/ui';
+import { FontAwesome, LoadingScreen } from 'components/ui';
 import { NavigationTab } from 'components/navigation';
 // tabs
-import { BaseTab, PaymentsTab, ShippingTab, SettingsTab } from './tabs';
+import { 
+  BaseTab, PaymentsTab, ShippingTab, 
+  SettingsTab, StaffTab
+} from './tabs';
 // state
 import { getBase, updateBase } from 'store/bases/operations';
+import { removeAuth, createAuth } from 'store/staff/operations';
 // functions
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
@@ -23,7 +27,7 @@ class BasesPage extends Component {
   state = {
     base: {}, // the current base
     updates: {}, // the updates we have done
-    activeTab: 4, // currently visiable tab
+    activeTab: 5, // currently visiable tab
     loading: true, // loading base or not
     valid: {
       base: true, settings: true, shipping: true
@@ -86,7 +90,7 @@ class BasesPage extends Component {
   render() {
     let { loading, base, updates, activeTab, valid } = this.state;
     // return a spinner when loading
-    if ( loading ) return <Spinner />;
+    if ( loading ) return <LoadingScreen />;
     // update the base info
     base = { ...base, ...updates };
     // is the form updated and valid
@@ -108,6 +112,9 @@ class BasesPage extends Component {
           <NavigationTab active={activeTab === 4} onClick={this.toggle(4)}>
             Payments <FontAwesome icon='credit-card'/>
           </NavigationTab>
+          <NavigationTab active={activeTab === 5} onClick={this.toggle(5)}>
+            Staff <FontAwesome icon='users'/>
+          </NavigationTab>
         </Nav>
         <TabContent activeTab={ activeTab }>
 
@@ -117,15 +124,18 @@ class BasesPage extends Component {
             updated={ updated }
             onUpdate={ this.onUpdate } 
             onSubmit={ this.saveChanges }
-            updateBase = { this.updateBase }
+            updateBase={ this.updateBase }
             onValidChange={ this.updateValid('base') } />
 
           <SettingsTab 
             tabId={ 2 } 
-            base={ base } 
-            updated = { updated }
+            base={ base }
+            updated={ updated }
+            refresh={ this.loadBase }
             onUpdate={ this.onUpdate } 
             onSubmit={ this.saveChanges }
+            createAuth={ this.props.createAuth }
+            removeAuth={ this.props.removeAuth }
             onValidChange={ this.updateValid('settings') } />
 
           <ShippingTab
@@ -141,8 +151,16 @@ class BasesPage extends Component {
             schoolId={ base.school_id }
             refresh={ this.loadBase }
             profile={ base.customerProfile }
-            isAdmin={ isAdmin( this.props.login.code ) }
-            />
+            isAdmin={ isAdmin( this.props.login.code ) } />
+
+          <StaffTab 
+            tabId={ 5 } 
+            staff={ base.staff }
+            updated={ updated }
+            refresh={ this.loadBase }
+            schoolId={ base.school_id }
+            createAuth={ this.props.createAuth }
+            removeAuth={ this.props.removeAuth } />
 
         </TabContent>
       </div>
@@ -154,4 +172,8 @@ const mapStateToProps = ({ login }) => ({
   login: login.current_login
 });
 
-export default connect( mapStateToProps, { getBase, updateBase } )( BasesPage );
+const mapDispatchToProps = {
+  getBase, updateBase, removeAuth, createAuth
+}
+
+export default connect( mapStateToProps, mapDispatchToProps )( BasesPage );

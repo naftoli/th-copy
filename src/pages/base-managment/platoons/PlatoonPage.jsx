@@ -4,12 +4,11 @@ import { connect } from 'react-redux';
 import { Prompt } from 'react-router';
 import { SaveButton } from 'components/buttons';
 import { Link, Redirect } from 'react-router-dom';
-import { Spinner, FontAwesome, Callout } from 'components/ui';
-import { Row, Col, InputGroup, InputGroupAddon, Button } from 'reactstrap';
+import { StaffRow, NewStaffRow, PlatoonRow } from './rows';
+import { Spinner, Callout } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
-import { StaffRow, PlatoonRow } from './rows';
 import { getPlatoon, updatePlatoon } from 'store/platoons/operations';
 import { removeAuth, createAuth } from 'store/staff/operations';
 
@@ -18,8 +17,6 @@ export class PlatoonPage extends Component {
   state = {
     platoon: {}, updates: {}, loading: true
   }
-
-  emailRef = React.createRef()
 
   // non-destructivly update the state
   handleUpdate = ( update ) => {
@@ -62,15 +59,11 @@ export class PlatoonPage extends Component {
     .catch( error => { toast.error( error.message ) } );
   }
 
-  connect = () => {
+  connect = ( email ) => {
     const { class_id: id } = this.state.platoon;
-    const emailInput = this.emailRef.current;
-    // if nothing was entered, focus on the input
-    if ( !emailInput.value ) return emailInput.focus();
     // create the connection
-    this.props.createAuth({ 
-      email: emailInput.value, id, auth: 'class'
-    }).then( this.getPlatoon )
+    this.props.createAuth( { email, id, auth: 'class' } )
+    .then( this.getPlatoon )
     .catch( error => { toast.error( error.message ) } );
   }
 
@@ -102,25 +95,13 @@ export class PlatoonPage extends Component {
         
         {/* show all the staff and manage them */}
         <p className='title'>Connected Staff Accounts</p>
-        <Callout color='info' icon={false}>
-          Please note that you can connect Parent accounts as well using their e-mail address
-        </Callout>
-        <Row id='connect-new-staff'>
-          <Col xs='12'>
-            <label>Add account by e-mail address</label>
-            <InputGroup>
-              <input placeholder='example@example.com' ref={ this.emailRef } className='form-control'/>
-              <InputGroupAddon addonType="append">
-                <Button onClick={ this.connect } color='primary' outline tabIndex={0}>
-                  <FontAwesome icon='user-plus' /> Connect Account
-                </Button>
-              </InputGroupAddon>
-            </InputGroup>
-          </Col>
-        </Row>
+
+        <NewStaffRow onSubmit={ this.connect } />
+
         { staff.map( (staff, index) => 
           <StaffRow key={index} disconnect={this.disconnect} {...staff} />
         )}
+
       </div>
     )
   }

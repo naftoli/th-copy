@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 // components
 import { TabPane } from 'reactstrap';
-import { SaveButton } from 'components/buttons';
-import { Form } from 'components/inputs';
 import { SettingsRow } from '../rows';
+import { Form } from 'components/inputs';
+import { SaveButton } from 'components/buttons';
+
 export class SettingsTab extends Component {
+
+  static propTypes = {
+    base: PropTypes.object.isRequired,
+    tabId: PropTypes.number.isRequired,
+    onUpdate: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    onValidChange: PropTypes.func.isRequired,
+  }
 
   render(){
     const { 
@@ -20,6 +30,7 @@ export class SettingsTab extends Component {
             onUpdate={ onUpdate } />
 
           <SaveButton show={ updated } />
+
         </Form>
       </TabPane>
     )

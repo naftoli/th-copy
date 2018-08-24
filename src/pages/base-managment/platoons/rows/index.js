@@ -1,2 +1,2 @@
-export { default as StaffRow } from './StaffRow';
+export * from 'components/rows/StaffRow';
 export { default as PlatoonRow } from './PlatoonRow';
