@@ -60,7 +60,7 @@ if(!empty($action)) {
 	switch($action) {
 
 		case 'add':
-			$result = mq("SELECT -1 user_id, '' email, '' child_type_id, '' first, '' last, '' first_he, '' last_he, '' lang, '' lang_id, $class_id class_id, NULL school_type_id, NULL team_id, '' user_address1, '' user_address2, '' user_city, '' user_state, '' user_postal, '' user_country, '' user_phone, NULL gender, NULL dob, '' kiosk_edit, NULL user_photo_id, NULL mobile_pic, NULL user_registered, 0 parent_marking");
+			$result = mq("SELECT -1 user_id, '' email, '' child_type_id, '' first, '' last, '' first_he, '' last_he, '' lang, '' lang_id, $class_id class_id, NULL school_type_id, NULL team_id, '' user_address1, '' user_address2, '' user_city, '' user_state, '' user_postal, '' user_country, '' user_phone, NULL gender, NULL dob, '' kiosk_edit, NULL user_photo_id, NULL mobile_pic, NULL user_registered, 0 parent_marking, 1 chayolei, 1 chidon, 1 yan");
 			$edit_row = mysql_fetch_assoc($result);
 		break;
 
@@ -93,15 +93,9 @@ if(!empty($action)) {
 
 			} while (mysql_result(mq("SELECT COUNT(*) FROM users WHERE user_code = $user_code"),0) != 0);
 
-            $yan = 0;
-            $chidon = 0;
-            if ($_POST['chayolei'] == 0) {
-                if (isset($_POST['soldierType'])) {
-                    foreach ($_POST['soldierType'] as $type) {
-                        $$type = 1;
-                    }
-                }
-            }
+            $yan = isset($_POST['yan']) ? 1 : 0;
+			$chidon = isset($_POST['chidon']) ? 1 : 0;
+			$chayolei = isset($_POST['chayolei']) ? 1 : 0;
 
             if ( !$h_school ) {
     			//insert school type
@@ -147,20 +141,14 @@ if(!empty($action)) {
 						', user_registered = NOW(), user_start_date = ' . unixtojd() : '') .
 						', gender = ' . nullif_ms((gr('gender') != 'M' && gr('gender') != 'F' ? 'NULL' : gr('gender')), 'NULL') .
 						', dob = ' . nullif_ms(gr('dob'), '') .
+						', chayolei = ' . $chayolei .
+						', yan = ' . $yan .
+						', chidon = ' . $chidon .
 						", user_photo_id = $user_photo_id" .
 						(gr('password') ? ', password = ' . ms(gr('password')) : '');
     			//echo $sql; exit;
 				mq( $sql ) or die( $sql . mysql_error() );
                 $new_user_id = mysql_result(mq("SELECT LAST_INSERT_ID()"), 0);
-
-                if ($chidon || $yan) {
-                    $sqlAdd = "update users set ";
-                    if ($chidon && $yan) $sqlAdd .= "chidon = 1, yan = 1";
-                    else if ($chidon) $sqlAdd .= "chidon = 1";
-                    else if ($yan) $sqlAdd .= "yan = 1";
-                    $sqlAdd .= " where user_id = " . $new_user_id;
-                    mq($sqlAdd);
-                }
 
 				if ($mobile_pic && $mobile_pic != 'NULL') mq("update users set mobile_pic = '" . $mobile_pic . "' where user_id = " . $new_user_id);
 				/*
@@ -201,18 +189,13 @@ if(!empty($action)) {
 				   school_type_id = ' . $school_type . ',
 				   team_id = ' . nullif(gri('team_id', -1), -1) . (gri('user_registered', 0) ? ', user_registered = NOW(), user_start_date = ' . unixtojd() : '') . ',
 				   gender = ' . nullif_ms((gr('gender') != 'M' && gr('gender') != 'F' ? 'NULL' : gr('gender')), 'NULL') . ',
-				   dob = ' . nullif_ms(gr('dob'), '') . ",
+				   dob = ' . nullif_ms(gr('dob'), '') .
+				   ', chayolei = ' . $chayolei .
+				   ', yan = ' . $yan .
+				   ', chidon = ' . $chidon . ", 
 				   user_photo_id = $user_photo_id" . (gr('password') ? ', password = ' . ms(gr('password')) : ''));
                 $new_user_id = mysql_result(mq("SELECT LAST_INSERT_ID()"), 0);
 
-                if ($chidon || $yan) {
-                    $sqlAdd = "update users set ";
-                    if ($chidon && $yan) $sqlAdd .= "chidon = 1, yan = 1";
-                    else if ($chidon) $sqlAdd .= "chidon = 1";
-                    else if ($yan) $sqlAdd .= "yan = 1";
-                    $sqlAdd .= " where user_id = " . $new_user_id;
-                    mq($sqlAdd);
-                }
 				/*
                 header_update_icorpa_student(array(
                     "legacy_user_id" => $new_user_id
@@ -482,7 +465,8 @@ if(!empty($action)) {
                 mq('UPDATE users SET email = ' . ms(gr('email')) . ', first = ' . ucwords(strtolower(ms(gr('first')))) . ', last = ' . ucwords(strtolower(ms(gr('last')))) . ', first_he = ' . ucwords(strtolower(ms(gr('first_he')))) . ', last_he = ' . ucwords(strtolower(ms(gr('last_he')))) . ', lang = ' . ms(gr('lang')) . ', user_address1 = ' . ms(gr('address1')) . ', user_address2 = ' . ms(gr('address2')) . ', user_city = ' . ms(gr('city')) . ', user_state = ' . ms(gr('state')) . ', user_postal = ' . ms(gr('postal')) . ', user_country = ' . ms(gr('country')) . ', user_phone = ' . ms(gr('phone')) . ', class_id = ' . nullif(gri('class_id', -1), -1) . ', team_id = ' . nullif(gri('team_id', -1), -1) . $reg . ', dob = ' . nullif_ms(gr('dob'), '') . ', gender = ' . nullif_ms((gr('gender') != 'M' && gr('gender') != 'F' ? 'NULL' : gr('gender')), 'NULL') . ", user_photo_id = $user_photo_id" . (gr('password') ? ', password = ' . ms(gr('password')) : '') . ' WHERE user_id = ' . gri('user_id', -1) . " AND school_id = $school_id");
                 $sqlAdd = "update users set
                         chidon = " . $chidon . ",
-                        yan = " . $yan . "
+						yan = " . $yan . ",
+						chayolei = " . $chayolei . "
                         where user_id = " . gri('user_id', -1);
                 mq($sqlAdd);
             }
