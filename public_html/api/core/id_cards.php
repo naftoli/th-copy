@@ -34,7 +34,7 @@ class UsersRouter {
         }
 
         $sql = "SELECT rank_name AS rank, rank_ord, u.user_id, user_serial, first, last, first_he, last_he, "
-            ." school_name, school_number, school_logo_id, logo, user_photo_id, mobile_pic, rm.date_printed as printed, "
+            ." school_name, school_number, logo, user_photo_id, mobile_pic, rm.date_printed as printed, "
             ." rm.date_promoted, user_code AS barcode, class_grade, class_sub, user_start_date, dob, dob_he_offset "
             ." FROM users u LEFT JOIN $rank_marks "
             ." LEFT JOIN ranks r USING (rank_ord) JOIN schools s USING (school_id) "
@@ -55,7 +55,7 @@ class UsersRouter {
             $cal = cal_from_jd( $dob, CAL_JEWISH );
             $row['valid_utill'] = $dob ? dateToHebrewShortYear( cal_to_jd( CAL_JEWISH, 13, cal_days_in_month( CAL_JEWISH, 13, $cal['year'] + 13 ), $cal['year'] + 13 ) ) : false;
             // set the logo to show for the school
-            $row['school_logo'] = $row['school_logo_id'] ? '/file_view.php?id='.$row['school_logo_id'] : $row['logo'];
+            $row['school_logo'] = "/schoolLogos/".$row['logo'];
             // set the correct types
             $row['rank_ord'] = intval( $row['rank_ord'] );
             $row['barcode'] = '3'. $row['barcode'];
