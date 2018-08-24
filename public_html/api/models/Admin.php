@@ -27,6 +27,12 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     private $customer_profile;
     public $login = false;
 
+    public function name( $withTitle = true ) {
+        $name = $this->first . ' ' . $this->last;
+        if ( $withTitle ) return $this->title . ' ' . $name;
+        return $name;
+    }
+
     //******************************* AUTH *******************************/
     /**
      * getAuthTypes
@@ -42,7 +48,6 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         }
         return $types;
     }
-
     /**
      * getAuthIds
      * 
@@ -112,12 +117,10 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         }
         return $this->login = $logins[0];
     }
-
     // are we HQ?
     public function isHQ() {
         return $this->auth === 'super';
     }
-
     /**
      * shippingZone
      * 
@@ -150,7 +153,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         }
         return $this->customer_profile;
     }
-    public function createPaymentProfile( $payment_info ) { 
+    public function createPaymentProfile( $payment_info ) {
         // if we do not have a customer profile
         if ( !$this->customerProfile() instanceof classes\authorize\CustomerProfile ) {
             // create the account
@@ -158,7 +161,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
                 $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code']
             );
             $this->customer_profile = classes\authorize\CustomerProfile::create(
-                "cth_admin_".$this->admin_id, $this->admin_email, false, $payment_profile
+                "cth_admin_".$this->admin_id, $this->admin_email, $this->name(), $payment_profile
             );
             // handle errors
             if ( !$this->customer_profile instanceof classes\authorize\CustomerProfile )
