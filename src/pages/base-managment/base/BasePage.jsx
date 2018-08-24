@@ -138,6 +138,8 @@ class BasesPage extends Component {
 
           <PaymentsTab 
             tabId={ 4 }
+            schoolId={ base.school_id }
+            refresh={ this.loadBase }
             profile={ base.customerProfile }
             isAdmin={ isAdmin( this.props.login.code ) }
             />
