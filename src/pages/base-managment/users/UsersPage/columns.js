@@ -50,7 +50,9 @@ export default ( code, editPicture ) => {
           <option value="yes">Registered</option>
           <option value="no">Not Registered</option>
         </select>
-    }
+    },
+    { id: 'chayolei',  Header: 'CTH', accessor: user => user.chayoeli ? 'Yes' : 'No' },
+    { id: 'chidon',  Header: 'Chidon', accessor: user => user.chidon ? 'Yes' : 'No' }
   ];
   // add a collumn for HQ ( and Networks )
   if ( code !== 'TEACHER' ) {

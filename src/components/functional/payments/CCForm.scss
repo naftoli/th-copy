@@ -4,7 +4,8 @@
 
   transition: .25s ease-in;
 
-  display: flex; flex-wrap: wrap;
+  display: flex; flex-wrap: wrap; justify-content: center;
+  
   &.has-add { align-items: center; }
 
   label, .btn { margin-top: 6px; margin-bottom: 0px; }

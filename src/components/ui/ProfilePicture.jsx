@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { LEGACY_URL } from 'components/constants';
+import { LEGACY_URL, DEFAULT_LOGO, DEFAULT_PROFILE } from 'components/constants';
 import classnames from 'classnames';
 import is from 'is_js';
 import './styles/ProfilePicture.scss';
@@ -7,7 +7,7 @@ import './styles/ProfilePicture.scss';
 export class ProfilePicture extends Component {
 
   static defaultProps = {
-    fallbackImage: `/mobile/reg/images/profile-photo-default.jpg`
+    fallbackImage: DEFAULT_PROFILE
   }
   
   onKeyPress = event => {
@@ -48,3 +48,7 @@ export class ProfilePicture extends Component {
     );
   }
 }
+
+export const BaseLogo = props => (
+  <ProfilePicture fallbackImage={ DEFAULT_LOGO } { ...props } />
+)
