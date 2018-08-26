@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { LEGACY_URL } from 'components/constants';
+import { LEGACY_URL, DEFAULT_LOGO } from 'components/constants';
 // components
 import { BaseRow } from '../rows';
 import { Form } from 'components/inputs';
@@ -43,11 +43,11 @@ export class BaseTab extends Component {
                 onUpdate={ onUpdate } />
                 
             </Col>
-            <Col xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2' style={{alignSelf: 'center'}}>
+            <Col id='logo' xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2'>
               <ProfilePicture 
                 src={ base.logoPaths.logo } 
                 onClick={ this.toggle } 
-                fallbackImage='/schoolLogos/logo.png' />
+                fallbackImage={ DEFAULT_LOGO }/>
             </Col>
           </Row>
 

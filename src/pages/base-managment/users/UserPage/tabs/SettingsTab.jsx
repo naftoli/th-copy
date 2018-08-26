@@ -92,6 +92,8 @@ class SettingsTab extends Component {
             </Col>
           </Row>
           
+          <SaveButton show={ updated } />
+
           <p className='title'>Parent Account</p>
           <ParentRow parentAccount={parentAccount} userId={user_id} refresh={this.props.getSoldier}/> 
             
@@ -103,8 +105,6 @@ class SettingsTab extends Component {
               </Col>
             </Row>
           }
-
-          <SaveButton show={ updated } />
         </Form>
         
       </TabPane>

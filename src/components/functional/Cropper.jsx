@@ -41,7 +41,7 @@ export class Cropper extends Component {
           aspectRatio: 1 / 1, // force the square shape we want
           dragMode: 'move', viewMode: this.props.viewMode, // do not allow the user to add alpha to the image.
           cropBoxMovable: false, cropBoxResizable: false,
-          ready: () => { this.cropper.zoomTo(0.75); }
+          // ready: () => { this.cropper.zoomTo(0.75); }
       });
     }
     // pass the cropper instance to any parents that might want it.

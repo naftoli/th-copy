@@ -16,7 +16,7 @@ const EditStaffRow = ( props ) => {
       </Col>
       <Col xs={6}>
         <label>Password</label>
-        <Password value={ password } {...inputProps} tabToggle defaultOpen />
+        <Password value={ password } {...inputProps} tabToggle />
       </Col>
       <Col xs={4} sm={3}>
         <label>Title</label>
@@ -32,7 +32,7 @@ const EditStaffRow = ( props ) => {
       </Col>
       <Col xs={12}>
         <label>E-Mail</label>
-        <Input name='email' type='email' value={ email } {...inputProps} />
+        <Input name='email' type='email' value={ email } {...inputProps} required={ false } />
         <div className='invalid-message'>Please enter a valid E-mail address</div>
       </Col>
       <Col xs={12} sm={6}>

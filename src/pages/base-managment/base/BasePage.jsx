@@ -27,7 +27,7 @@ class BasesPage extends Component {
   state = {
     base: {}, // the current base
     updates: {}, // the updates we have done
-    activeTab: 5, // currently visiable tab
+    activeTab: 1, // currently visiable tab
     loading: true, // loading base or not
     valid: {
       base: true, settings: true, shipping: true
