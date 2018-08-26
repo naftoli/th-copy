@@ -9,7 +9,7 @@ import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
 import { login } from 'store/login/operations';
 // styles and images
 import './Login.scss';
-import logo from 'img/logo.svg';
+import { logo } from 'img/logos';
 import { user } from 'img/icons';
 import { LEGACY_URL } from 'components/constants';
 
