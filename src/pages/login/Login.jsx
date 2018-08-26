@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
-import { Spinner, FontAwesome } from 'components/ui';
-import { Password } from 'components/inputs';
 import { connect } from 'react-redux';
+// components
+import { Password } from 'components/inputs';
+import { Spinner, FontAwesome } from 'components/ui';
+import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
+// import { GoogleButton, ChabadOrgButton } from 'components/buttons';
+// state
 import { login } from 'store/login/operations';
-
+// styles and images
 import './Login.scss';
 import logo from 'img/logo.svg';
 import { user } from 'img/icons';
+import { LEGACY_URL } from 'components/constants';
 
 export class Login extends Component {
   constructor( props ){
@@ -57,32 +61,47 @@ export class Login extends Component {
     errors = errors.map( (error, index) => 
       <div className="alert alert-danger" key={index}>{error}</div> 
     );
-
-    let form = (
-      <form id="login-form" onSubmit={ this.handleLoginForm }>
-        <InputGroup size="lg">
-          <InputGroupAddon addonType="prepend">
-            <img className="pt-icon" src={user} alt='username' width='26' height='26'/>
-          </InputGroupAddon>
-          <input className='form-control' placeholder='Username' autoFocus='true' required
-            onChange={this.handleChange} value={this.state.username} name='username' />
-        </InputGroup>
-
-        <Password size="lg" value={this.state.password} showIcon onChange={this.handleChange} />
-        
-        { errors }
-        <Button size="lg" color='primary' id='login'>
-          Login <FontAwesome icon='sign-in-alt '/>
-        </Button>
-      </form>
-    );
-
-    if ( loading ) form = <Spinner size={ 8 } />;
     
     return (
-      <div id='login-page'>
-        <img src={logo} id='logo' alt='logo' />
-        { form }
+      <div>
+        <div id='login-page'>
+          <img src={logo} id='logo' alt='logo' />
+
+          { loading && <Spinner size={ 8 } /> }
+
+          { !loading &&
+          <div id='login-form'>
+            <form onSubmit={ this.handleLoginForm }>
+              <InputGroup size="lg">
+                <InputGroupAddon addonType="prepend">
+                  <img className="pt-icon" src={user} alt='username' width='26' height='26'/>
+                </InputGroupAddon>
+                <input className='form-control' placeholder='Username' autoFocus='true' required
+                  onChange={this.handleChange} value={this.state.username} name='username' />
+              </InputGroup>
+
+              <Password size="lg" value={this.state.password} showIcon onChange={this.handleChange} />
+
+              { errors }
+
+              <Button size="lg" color='primary' id='login'>
+                Login <FontAwesome icon='sign-in-alt '/>
+              </Button>
+            </form>
+
+            {/* <strong>Sign In With:</strong>
+            <div id='sign-in-with'>
+              <ChabadOrgButton size="lg" />
+              <GoogleButton size='lg'/>
+            </div> */}
+          </div>
+          }
+        </div>
+        <div id='links'>
+          <a href={LEGACY_URL + '/mobile/reg/forgot.html'}> Forgot Password </a>|
+          <a href={LEGACY_URL + '/registration.php'}> New Base </a>|
+          <a href={LEGACY_URL + '/mobile/reg/parent_register.html'}> New Parent Account </a>
+        </div>
       </div>
     );
   }
