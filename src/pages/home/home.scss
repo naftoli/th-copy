@@ -1,0 +1,48 @@
+@import 'styles/colors';
+
+#HomePage {
+
+  #logo {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    img { height: 175px; }
+
+    ~ h1 {
+      font-size: 2em;
+      text-align: center;
+      font-family: 'Black Ops One', cursive;
+    }
+  }
+
+  h2 {
+    background: $primary-color;
+    color: #fff;
+    font-size: 1.5em;
+    padding: .35em;
+    text-align: center;
+  }
+
+  #links {
+    display: flex;
+    font-size: 1em;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    
+    a {
+      color: #000;
+      transition: transform .25s;
+      margin: 10px 5px;
+      &:hover, &:focus {
+        text-decoration: none;
+        transform: scale( 1.1 );
+      }
+      > i {
+        font-size: 6em;
+        display: block;
+        text-align: center;
+      }
+    }
+  }
+}

@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 // pages
 import { Page404 } from 'pages/errors';
 import Login, { Logout } from 'pages/login';
+import HomePage from 'pages/home/HomePage';
 import BaseManagment from 'pages/base-managment';
 import Dashboard from 'pages/dashboard/Dashboard';
 import { LoadingScreen } from 'components/ui';
@@ -55,7 +56,7 @@ export class App extends Component {
 
             { !refreshing && 
               <Switch>
-                <Route path={`/`} exact render={props => <h1>HomePage</h1>}/>
+                <Route path={`/`} exact component={ HomePage }/>
                 <Route path={`/bm`} component={ BaseManagment } />
                 
                 <Route path={`/logout`} component={Logout}/>
