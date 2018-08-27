@@ -47,22 +47,19 @@ if (isset($_POST["action"])) {
 
 		switch ($school_type) {
 			case 'chayolei':
-				$sql .= ", chayolei = 1, chidon = 1, tanya = 1, ckids = 0";
+				$sql .= ", chayolei = 1, chidon = 1, tanya = 1";
 				$sql .= ", chidon_name = '" . mysql_real_escape_string($_POST['chidon_name']) . "',
 						chidon_number = '" . mysql_real_escape_string($_POST['chidon_number']) . "',
 						chidon_email = '" . mysql_real_escape_string($_POST['chidon_email']) . "'";
 				break;
 			case 'chidon':
-				$sql .= ", chayolei = 0, chidon = 1, tanya = 0, ckids = 0";
+				$sql .= ", chayolei = 0, chidon = 1, tanya = 0";
 				$sql .= ",chidon_name = '" . mysql_real_escape_string($_POST['chidon_name']) . "',
 						chidon_number = '" . mysql_real_escape_string($_POST['chidon_number']) . "',
 						chidon_email = '" . mysql_real_escape_string($_POST['chidon_email']) . "'";
 				break;
 			case 'tanya':
-				$sql .= ", chayolei = 0, chidon = 0, tanya = 1, ckids = 0";
-				break;
-			case 'ckids':
-				$sql .= ", chayolei = 0, chidon = 0, tanya = 0, ckids = 1";
+				$sql .= ", chayolei = 0, chidon = 0, tanya = 1";
 				break;
 		}
 
@@ -287,6 +284,10 @@ else {
 			.school_type_info {
 				font-size: 14px;
 			}
+			#ckids {
+				margin: 3px 3px 0px 5px;
+				padding-left: 20px;
+			}
 		</style>
 	</head>
 
@@ -364,8 +365,11 @@ else {
 													<span class='school_type_info'>Chidon Only</span><br />
 													<input type="radio" name="school_type" value="tanya" class="school_type" /> 
 													<span class='school_type_info'>Tanya Only</span><br />
-													<input type="radio" name="school_type" value="ckids" class="school_type" /> 
-													<span class='school_type_info'>CKids</span> <span class='new'>NEW</span><br /> 
+													<!-- <input type="radio" name="school_type" value="ckids" class="school_type" /> 
+													<span class='school_type_info'>CKids</span> <span class='new'>NEW</span><br />  -->
+													<a href='/registration_ckids.php' id='ckids'>
+														CKids <span class='new'>NEW</span>
+													</a>
 												</li>
 
 												<div id="chidonInfo" style="display: none">

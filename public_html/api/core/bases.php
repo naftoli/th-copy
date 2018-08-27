@@ -11,7 +11,7 @@ class BaseRouter {
         if ( !$filters ) return json_error('Access Deinied');
         $query = $pdo->prepare( 
              " SELECT s.school_number, s.logo, s.school_id, s.school_name, s.school_city, s.school_state, s.school_country, "
-            ." s.chayolei, s.chidon, s.tanya, s.tehillim, s.ckids, "
+            ." s.chayolei, s.chidon, s.tanya, s.tehillim, "
             ." IFNULL( soldier_count, 0 ) as soldier_count "
             ." FROM schools s LEFT JOIN classes c USING (school_id) LEFT JOIN ( "
                 ." SELECT COUNT(*) AS soldier_count, school_id FROM users GROUP BY school_id "

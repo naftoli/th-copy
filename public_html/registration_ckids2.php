@@ -44,7 +44,7 @@ if (isset($_POST["action"])) {
 		$sql = "UPDATE schools ";
 		$sql = $sql . "SET school_name='" 	. mysql_real_escape_string($_POST["school_name"]) . "', ";
 		$sql = $sql . "school_name_he='" 	. mysql_real_escape_string($_POST["school_name_he"]) . "', ";
-		$sql = $sql . "inst_id=3, ";                 
+		$sql = $sql . "inst_id = 10, ";                 
 		if ( isset( $_POST['school_gender'] ) ) $sql = $sql . "school_gender='" 	. mysql_real_escape_string($_POST["school_gender"]) . "', ";
 		$sql = $sql . "school_address1='" 	. mysql_real_escape_string($_POST["school_address1"]) . "', ";
 		$sql = $sql . "school_address2='" 	. mysql_real_escape_string($_POST["school_address2"]) . "', ";
@@ -82,8 +82,8 @@ if (isset($_POST["action"])) {
 		$sql = "INSERT INTO schools ";
 		$sql = $sql . "SET school_name='" . mysql_real_escape_string($_POST["school_name"]) . "', ";
 		$sql = $sql . "school_name_he='" . mysql_real_escape_string($_POST["school_name_he"]) . "', ";
-		$sql = $sql . "inst_id=3";
-        $sql .= ", chayolei = 0, chidon = 0, tanya = 0, ckids = 1";
+		$sql = $sql . "inst_id = 10 ";
+        $sql .= ", chayolei = 0, chidon = 0, tanya = 0 ";
 		if ( isset( $_POST['school_gender'] ) )	$sql = $sql . ", school_gender='" . mysql_real_escape_string($_POST["school_gender"]) . "'";
 		$sql = $sql . ", school_number=" . $school_number . ", ";
 		$sql = $sql . "school_address1='" . mysql_real_escape_string($_POST["school_address1"]) . "', ";

@@ -22,14 +22,15 @@ class AdminSchools {
                     from schools s 
                     where s.chayolei = 1 ";
             if ($this->chidon) $sql .= "or s.chidon = 1 ";
-            if ($this->registeredOnly) 
-                $sql .= "and s.school_era is null ";
+            if ($this->registeredOnly) $sql .= "and s.school_era is null ";
             if ( $this->noTest ) $sql .= 'and s.test_school = 0 ';
             $sql .= "order by school_name";
         } else if ( $this->auth == 'ckidssuper' ) {
             $sql = "select s.school_id, s.school_name 
                     from schools s 
-                    where s.ckids = 1 ";
+                    where s.isnt_id = 10 ";
+            if ( $this->noTest ) $sql .= 'and s.test_school = 0 ';
+            if ( $this->registeredOnly ) $sql .= "and s.school_era is null ";
         } else { 
             $sql = "select s.school_id, s.school_name 
                     from schools s 

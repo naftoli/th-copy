@@ -84,22 +84,19 @@ if (isset($_POST["action"])) {
 		$school_type = $_SESSION['school_type'];
 		switch ($school_type) {
 			case 'chayolei':
-				$sql .= ", chayolei = 1, chidon = 1, tanya = 1, ckids = 0";
+				$sql .= ", chayolei = 1, chidon = 1, tanya = 1";
 				$sql .= ", chidon_name = '" . mysql_real_escape_string($_SESSION['chidon_name']) . "',
 						chidon_number = '" . mysql_real_escape_string($_SESSION['chidon_number']) . "',
 						chidon_email = '" . mysql_real_escape_string($_SESSION['chidon_email']) . "'";
 				break;
 			case 'chidon':
-				$sql .= ", chayolei = 0, chidon = 1, tanya = 0, ckids = 0";
+				$sql .= ", chayolei = 0, chidon = 1, tanya = 0";
 				$sql .= ",chidon_name = '" . mysql_real_escape_string($_SESSION['chidon_name']) . "',
 						chidon_number = '" . mysql_real_escape_string($_SESSION['chidon_number']) . "',
 						chidon_email = '" . mysql_real_escape_string($_SESSION['chidon_email']) . "'";
 				break;
 			case 'tanya':
-				$sql .= ", chayolei = 0, chidon = 0, tanya = 1, ckids = 0";
-				break;
-			case 'ckids':
-				$sql .= ", chayolei = 0, chidon = 0, tanya = 0, ckids = 1";
+				$sql .= ", chayolei = 0, chidon = 0, tanya = 1";
 				break;
 		}
                 
