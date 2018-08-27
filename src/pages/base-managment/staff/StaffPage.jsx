@@ -7,6 +7,7 @@ import { Button, ButtonGroup } from 'reactstrap';
 // modals
 import NewStaffModal from './NewStaffModal';
 // functions
+import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
 import { getStaff } from 'store/staff/operations';
@@ -31,7 +32,7 @@ class StaffPage extends Component {
   }
 
   render() {
-    const { staff, loading, match } = this.props;
+    const { staff, loading, match, login } = this.props;
 
     let columns = [
       { Header: 'Username', accessor: 'username',
@@ -44,6 +45,10 @@ class StaffPage extends Component {
       { Header: 'Cell Phone', accessor: 'cell' },
       { Header: 'Position', accessor: 'position' },
     ];
+
+    if ( isAdmin( login.code ) ) {
+      columns.push( { Header: 'Base', accessor: 'school_name' } )
+    }
 
     return (
       <div id='StaffPage'>
