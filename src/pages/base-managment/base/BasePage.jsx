@@ -113,7 +113,7 @@ class BasesPage extends Component {
             Payments <FontAwesome icon='credit-card'/>
           </NavigationTab>
           <NavigationTab active={activeTab === 5} onClick={this.toggle(5)}>
-            Staff <FontAwesome icon='users'/>
+            Commanders <FontAwesome icon='users'/>
           </NavigationTab>
         </Nav>
         <TabContent activeTab={ activeTab }>

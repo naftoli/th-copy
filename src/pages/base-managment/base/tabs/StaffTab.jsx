@@ -40,8 +40,6 @@ export class StaffTab extends Component {
         <div id='StaffTab'>
           
           {/* show all the staff and manage them */}
-          <p className='title'>Connected Staff Accounts</p>
-          
           <NewStaffRow onSubmit={ this.connect }/>
 
           { staff.map( (staff, index) => 
