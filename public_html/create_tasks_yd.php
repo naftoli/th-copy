@@ -113,7 +113,8 @@ if (isset($_POST['submit'])) {
         $missionNumber = 1;
     }
     //echo $missionNumber;
-    $missionYear = 5779;
+    require 'class.globalSettings.php';
+    $missionYear = GlobalSettings::getRegistrationYear();
     
     $weeks = array();
     $sql2 = "select * from parshos where year = " . $missionYear;
@@ -122,8 +123,8 @@ if (isset($_POST['submit'])) {
         $weeks[$row2['start']][$row2['end']] = $row2['name'];
     }
 	
-	$defaultStart = 2458369; // Sept 7, 2018
-	$defaultEnd = 2458732; // Sept 5, 2019
+	$defaultStart = 2458362; // Aug 31, 2018
+	$defaultEnd = 2458739; // Sept 12, 2019
 
 	$lang = $_POST['lang'];
 	if ($lang == 1) {
