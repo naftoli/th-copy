@@ -44,11 +44,11 @@ if (isset($_POST["action"])) {
 		}
 		
 		// update principal info and school type / chidon info
-		$sql = "update schools
-				set principal = '" . mysql_real_escape_string($_POST['p_name']) . "',
+		$sql = "UPDATE schools
+				SET principal = '" . mysql_real_escape_string($_POST['p_name']) . "',
 				principal_number = '" . mysql_real_escape_string($_POST['p_number']) . "',
                 principal_email = '" . mysql_real_escape_string($_POST['p_email']) . "'";
-        $sql .= ", chayolei = 0, chidon = 0, tanya = 0, ckids = 1";
+        $sql .= ", chayolei = 0, chidon = 0, tanya = 0, inst_id = 10 ";
 		$sql .= " where school_id = " . $school_id;
 
 		if (!mysql_query( $sql )) {
@@ -79,7 +79,6 @@ if (isset($_POST["action"])) {
                 $admin_id = mysql_insert_id();
                 $_SESSION['admin_id'] = $admin_id;
                 $_SESSION['school_id'] = $school_id;
-                $_SESSION['school_type']	= $_POST['school_type'];
                 
                 // save principal and shliach info to session
                 $_SESSION['p_name'] 		= $_POST['p_name'];
@@ -404,7 +403,6 @@ else {
 								<input type="hidden" name="action" value="add">
                                 <? endif; ?>
                                 
-                                <input type="hidden" name="school_type" value="ckids" />
                                 <input type="hidden" name="shliach" id="shliach" value="" />
                                 
                                 <div id="login">

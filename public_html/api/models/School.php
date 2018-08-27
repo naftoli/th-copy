@@ -11,6 +11,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         [ 'platoons', 'order' => 'class_grade, class_sub', ], 
         [ 'users' ] 
     ];
+    static $belongs_to = [ 'institution' ];
     static $validates_uniqueness_of = [ [ 'school_number' ] ];
 
     // ******************************* HELPER FUNCTIONS *******************************
@@ -111,7 +112,10 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         }
         return $this->customer_profile;
     }
-    public function createPaymentProfile( $payment_info, $email='example@example.com' ) { 
+    // create a payment profile
+    public function createPaymentProfile( $payment_info, $email = false ) {
+        $email = $email ? $email : $this->accounting_email;
+
         // if we do not have a customer profile
         if ( !$this->customerProfile() instanceof classes\authorize\CustomerProfile ) {
             // create the account
@@ -119,7 +123,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                 $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code']
             );
             $this->customer_profile = classes\authorize\CustomerProfile::create(
-                "CTH_".$this->school_id, $email, false, $payment_profile
+                "CTH_".$this->school_id, $email, $this->school_name, $payment_profile
             );
             // handle errors
             if ( !$this->customer_profile instanceof classes\authorize\CustomerProfile )

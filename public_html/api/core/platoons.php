@@ -12,8 +12,8 @@ class PlatoonRouter {
         $login = $current_user->login;
         if ( $login['code'] === 'HQ' && !isset( $_GET['school_id'] ) ) {
             $filters[] = 's.test_school = 0';
-        } else if ( $login['code'] === 'CKIDS-ADMIN' && !isset( $_GET['school_id'] ) ) {
-            $filters[] = 's.ckids = 1';
+        } else if ( $login['code'] === 'INST' && !isset( $_GET['school_id'] ) ) {
+            $filters[] = 's.inst_id = ?'; $params[] = $login['id'];
         } else if ( $login['code'] === 'BC' && isset( $_GET['all'] ) ) { // get all bases on the account
             $school_ids = $current_user->getAuthIds( 'school' );
             $filters[] = 'c.school_id IN ('. implode(', ', $school_ids ) .')';
@@ -79,7 +79,7 @@ class PlatoonRouter {
     public function create() {
         global $current_user; global $pdo;
 
-        if ( !in_array( $current_user->login['code'], ['HQ', 'CKIDS-ADMIN', 'BC'] ) )
+        if ( !in_array( $current_user->login['code'], ['HQ', 'INST', 'BC'] ) )
             return json_error( 'Access Deined' );
         if ( $current_user->login['code'] == 'BC' )
             $_POST['school_id'] = $current_user->login['id'];

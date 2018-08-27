@@ -25,7 +25,7 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
 
     public function validateAccess( $login ){
         if ( $login['code'] === 'HQ' ) return true;
-        if ( $login['code'] === 'CKIDS-ADMIN' ) return !!$this->school->ckids;
+        if ( $login['code'] === 'INST' ) return !!$this->school->inst_id == $login['id'];
         if ( $login['code'] === 'BC' ) return $this->school->school_id == $login['id'];
         // if ( $login['code'] === 'TEACHER' ) return $this->class_id == $login['id'];
         return false;

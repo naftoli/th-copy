@@ -27,6 +27,12 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     private $customer_profile;
     public $login = false;
 
+    public function name( $withTitle = true ) {
+        $name = $this->first . ' ' . $this->last;
+        if ( $withTitle ) return $this->title . ' ' . $name;
+        return $name;
+    }
+
     //******************************* AUTH *******************************/
     /**
      * getAuthTypes
@@ -42,7 +48,6 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         }
         return $types;
     }
-
     /**
      * getAuthIds
      * 
@@ -69,26 +74,35 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             'type' => 'HQ', 'id' => $this->admin_id, 'name' => 'Tzivos Hashem Headquarters', 
             'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 'code' => 'HQ'
         ];
-        if ( $this->auth === 'ckidssuper' ) $logins[] = [
-            'type' => 'CKIDS-ADMIN', 'id' => $this->admin_id, 'name' => 'C-Kids Headquarters', 
-            'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 'code' => 'CKIDS-ADMIN',
-            'ckids' => true
-        ];
+        // add all the schools
+        foreach( $this->getAuthIds( 'institution' ) as $inst_id ){
+            try {
+                $institution = Institution::find( $inst_id );
+                $logins[] = [ 'type' => 'inst', 'id' => $inst_id, 'code' => 'INST',
+                    'name' => $institution->name, 'img' => $institution->logo(),
+                    'ckids' => $institution->inst_id === 10
+                ];
+            } catch ( \ActiveRecord\RecordNotFound $e ) {}
+        };
         // add all the schools
         foreach( $this->getAuthIds( 'school' ) as $school_id ){
-            $school = School::find( $school_id );
-            $logins[] = [ 'type' => 'school', 'id' => $school_id, 'code' => 'BC',
-                'name' => $school->school_name, 'img' => $school->logoPath(), 
-                'ckids' => !!$school->ckids
-            ];
+            try {
+                $school = School::find( $school_id );
+                $logins[] = [ 'type' => 'school', 'id' => $school_id, 'code' => 'BC',
+                    'name' => $school->school_name, 'img' => $school->logoPath(), 
+                    'ckids' => $school->inst_id === 10
+                ];
+            } catch ( \ActiveRecord\RecordNotFound $e ) {}
         };
         // add all classes
         foreach( $this->getAuthIds( 'class' ) as $class_id ){
-            $platoon = Platoon::find( $class_id, ['include' => ['school']] );
-            $logins[] = [ 'type' => 'class', 'id' => $class_id, 'code' => 'TEACHER',
-                'name' => $platoon->name(), 'img' => $platoon->school->logoPath(),
-                'ckids' => !!$platoon->school->ckids
-            ];
+            try {
+                $platoon = Platoon::find( $class_id, ['include' => ['school']] );
+                $logins[] = [ 'type' => 'class', 'id' => $class_id, 'code' => 'TEACHER',
+                    'name' => $platoon->name(), 'img' => $platoon->school->logoPath(),
+                    'ckids' => $platoon->school->inst_id === 10
+                ];
+            } catch ( \ActiveRecord\RecordNotFound $e ) {}
         };
         // add parent account
         if ( count( $this->getAuthIds( 'user') ) > 0 || count( $logins ) === 0 ) {
@@ -108,12 +122,10 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         }
         return $this->login = $logins[0];
     }
-
     // are we HQ?
     public function isHQ() {
         return $this->auth === 'super';
     }
-
     /**
      * shippingZone
      * 
@@ -146,7 +158,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         }
         return $this->customer_profile;
     }
-    public function createPaymentProfile( $payment_info ) { 
+    public function createPaymentProfile( $payment_info ) {
         // if we do not have a customer profile
         if ( !$this->customerProfile() instanceof classes\authorize\CustomerProfile ) {
             // create the account
@@ -154,7 +166,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
                 $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code']
             );
             $this->customer_profile = classes\authorize\CustomerProfile::create(
-                "cth_admin_".$this->admin_id, $this->admin_email, false, $payment_profile
+                "cth_admin_".$this->admin_id, $this->admin_email, $this->name(), $payment_profile
             );
             // handle errors
             if ( !$this->customer_profile instanceof classes\authorize\CustomerProfile )

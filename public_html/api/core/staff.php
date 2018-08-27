@@ -19,8 +19,8 @@ class StaffRouter {
         $login = $current_user->login;
         if ( $login['code'] === 'HQ' ) {
             $filters[] = 'test_school = 0';
-        } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
-            $filters[] = 'ckids = 1';
+        } else if ( $login['code'] === 'INST' ) {
+            $filters[] = 'inst_id = ?'; $params[] = $login['id'];
         } else if ( $login['code'] === 'BC' ) {
             $filters[] = 'school_id = ?';   $params[] = $login['id'];
         } else { json_error( 'Access Denied' ); }
@@ -31,7 +31,7 @@ class StaffRouter {
             ." a.first, a.last, a.admin_email AS email, a.admin_phone_work AS work, a.admin_phone_mobile AS cell, "
             ." aa.position, r.role_name as role, IFNULL(s.school_name, s2.school_name) as school_name, "
             ." c.class_grade, c.class_sub, IFNULL(s.school_id, s2.school_id) as school_id, "
-            ." IFNULL(s.test_school, s2.test_school) as test_school, IFNULL(s.ckids, s2.ckids) as ckids "
+            ." IFNULL(s.test_school, s2.test_school) as test_school, IFNULL(s.inst_id, s2.inst_id) AS inst_id "
             ." FROM admin_auths aa JOIN roles r USING (role_id) JOIN admins a USING (admin_id) "
             ." LEFT JOIN schools s ON aa.auth IN ('school', 'staff') AND id = school_id "
             ." LEFT JOIN classes c ON aa.auth = 'class' AND id = class_id "
@@ -39,14 +39,15 @@ class StaffRouter {
             ." WHERE aa.auth IN ('school' , 'class', 'staff') AND a.auth !='super' "
             ." HAVING $filters "
             ." ORDER BY school_name, aa.auth, role, position, first, last;";
+        // echo $sql; die();
         $query = $pdo->prepare( $sql );
         $query->execute( $params );
 
         $staff = [];
         while( $admin = $query->fetch() ){
-            $platoon = (new Platoon([
+            $platoon = trim( (new Platoon([
                 'class_grade' => $admin['class_grade'], 'class_sub' => $admin['class_sub']
-            ]))->name();
+            ]))->name() );
             // set the position if it is blank
             if ( !$admin['position'] ) 
                 $admin['position'] = $this->defaultPositions[ $admin['auth'] ];
@@ -61,15 +62,14 @@ class StaffRouter {
             if ( !isset( $staff[$admin['admin_id']] ) ) {
                 // remove extra columns
                 unset($admin['auth']); unset($admin['id']);
-                unset($admin['positions']); unset($admin['school_name']);
-                unset($admin['class_grade']); unset($admin['class_sub']);
+                unset($admin['positions']); unset($admin['class_grade']);
+                unset($admin['class_sub']);
                 
                 // create the admin/staff instance
                 $admin['admin_id'] = intval( $admin['admin_id'] );
                 $admin['school_id'] = intval( $admin['school_id'] );
                 $admin['positions'] = [ $position ];
                 $admin['email'] = $admin['email'] ? $admin['email'] : '';
-                $admin['ckids'] = !!$admin['ckids'];
                 $admin['test_school'] = !!$admin['test_school'];
                 // $admin['key'] = mashpia\api\auth\Auth::mobileKey( $admin['admin_id'] );
                 $staff[ $admin['admin_id'] ] = $admin;
@@ -78,6 +78,7 @@ class StaffRouter {
                 $staff[ $admin['admin_id'] ]['positions'][] = $position;
                 $staff[ $admin['admin_id'] ]['position'] = 'Mulitple Positions';
                 $staff[ $admin['admin_id'] ]['role'] = 'Mulitple Roles';
+                $staff[ $admin['admin_id'] ]['school_name'] = 'Mulitple Bases';
             }
         }
         json_response( array_values( $staff ) );
