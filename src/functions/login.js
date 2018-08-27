@@ -17,9 +17,9 @@ export const mobileLogin = ( key ) => {
 }
 
 export const isAdmin = code => {
-  return [ 'HQ', 'CKIDS-ADMIN' ].includes( code );
+  return [ 'HQ', 'INST' ].includes( code );
 }
 
 export const isBC = code => {
-  return [ 'HQ', 'CKIDS-ADMIN', 'BC' ].includes( code );
+  return [ 'HQ', 'INST', 'BC' ].includes( code );
 }

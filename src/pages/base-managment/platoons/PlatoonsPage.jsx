@@ -6,8 +6,9 @@ import { Link } from 'react-router-dom';
 import { Button, ButtonGroup } from 'reactstrap';
 import { InlineSync } from 'components/ui/loading';
 // functions
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { isAdmin } from 'functions/login';
 import { getPlatoons } from 'store/platoons/operations';
+import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 
 export class PlatoonsPage extends Component {
 
@@ -43,7 +44,7 @@ export class PlatoonsPage extends Component {
       { Header: 'Soldiers', accessor: 'soldier_count' },
       { Header: 'Staff', accessor: 'staff_count' },
     ];
-    if ( ['HQ', 'CKIDS-ADMIN'].includes(login.code) ) {
+    if ( isAdmin(login.code) ) {
       columns.push( { Header: 'Base', accessor: 'school_name' } );
     }
 

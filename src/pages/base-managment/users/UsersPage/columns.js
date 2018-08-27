@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ProfilePicture } from 'components/ui';
 import { DEFAULT_PROFILE } from 'components/constants';
+import { isBC, isAdmin } from 'functions/login';
 
 export default ( code, editPicture ) => {
   // define the table for the page
@@ -54,17 +55,19 @@ export default ( code, editPicture ) => {
     { id: 'chayolei',  Header: 'CTH', accessor: user => user.chayoeli ? 'Yes' : 'No' },
     { id: 'chidon',  Header: 'Chidon', accessor: user => user.chidon ? 'Yes' : 'No' }
   ];
-  // add a collumn for HQ ( and Networks )
-  if ( code !== 'TEACHER' ) {
+  
+  if ( isBC( code ) ) {
     columns.push({
       id: 'platoon', Header: 'Platoon', 
       accessor: user => user.platoon ? user.platoon.name : '-'
     });
   }
-  if ( code === 'HQ' ) {
+
+  if ( isAdmin( code ) ) {
     columns.push({
       id: 'base', Header: 'Base', accessor: user => user.school.school_name
     });
   }
+
   return columns;
 }

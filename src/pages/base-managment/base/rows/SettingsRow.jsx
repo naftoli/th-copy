@@ -24,8 +24,7 @@ export class SettingsRow extends Component {
 
   render () {
     let { 
-      store_reset, school_gender, allow_parent_tasks, print_parent_tasks, 
-      chayolei, chidon, tanya, tehillim, ckids
+      store_reset, school_gender, allow_parent_tasks, print_parent_tasks, chayolei, chidon, tanya, tehillim
     } = this.props.base;
 
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
@@ -64,9 +63,6 @@ export class SettingsRow extends Component {
           </Checkbox>
           <Checkbox checked={!!tehillim} name='tehillim' { ...checkboxProps} >
             WWTC
-          </Checkbox>
-          <Checkbox checked={!!ckids} name='ckids' { ...checkboxProps} >
-            C-Kids
           </Checkbox>
         </Col>
         <Col xs={12} sm={6} xl={4}>

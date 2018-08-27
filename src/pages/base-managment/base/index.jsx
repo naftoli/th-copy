@@ -15,10 +15,10 @@ class BaseIndexPage extends Component {
       <Switch>
         {/* Index routes */}
         <Route path={ path } exact component={ BasesPage } />
-        <Route path={`${path}/transactions`} exact render={props => <h1>Base Transactions List</h1>}/>
+        {/* <Route path={`${path}/transactions`} exact render={props => <h1>Base Transactions List</h1>}/> */}
         {/* Detail Page Routes */}
         <Route path={`${path}/:id([0-9]+)`} exact component={ BasePage } />
-        <Route path={`${path}/:id([0-9]+)/transactions`} exact render={props => <h1>Base Transactions</h1>}/>
+        {/* <Route path={`${path}/:id([0-9]+)/transactions`} exact render={props => <h1>Base Transactions</h1>}/> */}
         {/* All other routes */}
         <Route component={ Page404 } />
       </Switch>

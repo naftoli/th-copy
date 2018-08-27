@@ -11,8 +11,9 @@ import is from 'is_js';
 import julian from 'julian';
 import moment from 'moment';
 import { toast } from 'react-toastify';
-import { setTitle, toJulian } from 'functions/utils';
+import { isAdmin } from 'functions/login';
 import { findOption } from 'functions/selects';
+import { setTitle, toJulian } from 'functions/utils';
 // state
 import { getRankCards, markPrinted } from 'store/soldiers/id_cards/operations';
 // styles
@@ -114,7 +115,7 @@ export class RegistrationPage extends Component {
     // generate dropdowns
     // const soldierOptions = this.getSoldierOptions();
     const rankOptions = this.getRankOptions();
-    const isHQ = ['HQ', 'CKIDS-ADMIN'].includes( login.code );
+    const isHQ = isAdmin( login.code );
 
     return (
       <div id='RankCardsPage'>

@@ -7,11 +7,12 @@ import { ProfileRow, NameRow, DobRow } from './rows';
 import CropperModal from 'components/modals/CropperModal';
 import { PlatoonSelect, BaseSelect, Select } from 'components/inputs';
 // functions
-import { missionTypeOptions, findOption } from 'functions/selects';
-import { uploadProfile, createSoldier, getSoldiers } from 'store/soldiers/operations';
-import { setTitle } from 'functions/utils';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
+import { setTitle } from 'functions/utils';
+import { isAdmin, isBC } from 'functions/login';
+import { missionTypeOptions, findOption } from 'functions/selects';
+import { uploadProfile, createSoldier, getSoldiers } from 'store/soldiers/operations';
 
 const initialSoldier = {
   first: '', last: '', first_he: '', last_he: '', 
@@ -82,10 +83,10 @@ class NewUserPage extends Component {
       if ( !soldier.dob ) { reject( new Error('Please select a valid Date of Birth') ); }
       if ( !soldier.school_type_id ) { reject( new Error('Please select a Mission Type') ); }
       if ( !soldier.gender ) { reject( new Error('Please select a Gender') ); }
-      if ( ['HQ', 'CKIDS-ADMIN'].includes( code ) && !soldier.school_id ) {
+      if ( isAdmin( code ) && !soldier.school_id ) {
         reject( new Error('Please select a Base') );
       }
-      if ( ['HQ', 'CKIDS-ADMIN', 'BC'].includes( code ) && !soldier.class_id ) {
+      if ( isBC( code ) && !soldier.class_id ) {
         reject( new Error('Please select a Platoon') );
       }
       resolve( soldier );
@@ -121,7 +122,7 @@ class NewUserPage extends Component {
     let mission_type_options = missionTypeOptions( gender );
     // show the dropdown needed for the current login
     let baseSelect, platoonSelect;
-    if ( ['HQ', 'CKIDS-ADMIN'].includes( code ) ) {
+    if ( isAdmin( code ) ) {
       baseSelect = (
         <Col xs='6'>
           <label>Base</label>
@@ -129,7 +130,7 @@ class NewUserPage extends Component {
         </Col>
       );
     }
-    if ( ['HQ', 'CKIDS-ADMIN', 'BC' ].includes( code ) ) {
+    if ( isBC( code ) ) {
       platoonSelect = (
         <Col xs={ code === 'BC' ? 12 : 6 }>
           <label>Platoon</label>

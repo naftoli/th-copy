@@ -31,7 +31,7 @@ class UserPage extends Component {
   // set the title once we have the info
   componentDidUpdate() {
     // update the page title
-    if ( this.state.soldier.user_serial )
+    if ( this.state.soldier && this.state.soldier.user_serial )
       setTitle( `Soldier #${this.state.soldier.user_serial}` );
   }
   // get the soldier for the page
@@ -79,13 +79,14 @@ class UserPage extends Component {
   // render the page
   render(){
     let { soldier, loading, updates, activeTab, valid } = this.state;
-    const updated = Object.keys( updates ).length > 0;
-    soldier = { ...soldier, ...updates };
+
     // if we do not have the soldier...
-    if ( soldier === undefined ) 
-      return <Redirect to='/bm/users' />;
+    if ( soldier === undefined ) return <Redirect to='/bm/users' />;
     // if loading return a LoadingScreen
     if ( loading ) return <LoadingScreen size='8' />;
+
+    soldier = { ...soldier, ...updates };
+    const updated = Object.keys( updates ).length > 0;
 
     // render the page and it's sub-pages ( tabs )
     return (

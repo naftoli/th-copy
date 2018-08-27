@@ -9,8 +9,9 @@ import ReactTable from "react-table";
 import RegistrationModal from './RegistrationModal';
 // functions
 import { toast } from 'react-toastify';
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { isAdmin } from 'functions/login';
 import { defaultTableProps } from 'functions/tables';
+import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { getSoldiers, registerSoldiers } from 'store/soldiers/registration/operations';
 // styles
 import './RegistrationPage.scss';
@@ -115,7 +116,7 @@ export class RegistrationPage extends Component {
       { Header: 'Platoon', accessor: 'platoon' },
     ];
     // add base column for HQ
-    if ( ['HQ', 'CKIDS-ADMIN'].includes(login.code) ) {
+    if ( isAdmin(login.code) ) {
       columns.push( { Header: 'Base', accessor: 'school_name' } );
     }
     // set props for each row in the table

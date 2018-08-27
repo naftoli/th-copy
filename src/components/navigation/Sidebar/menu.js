@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesome } from 'components/ui';
 // constants
 import { LEGACY_URL } from 'components/constants';
-const DEFAULT_USER_TYPES = [ 'HQ', 'BC' ];
+const DEFAULT_USER_TYPES = [ 'HQ', 'INST', 'BC' ];
 
 /**
  * menuReducer
@@ -65,7 +65,7 @@ const getMenu = ( user_type, id, no_legacy ) => {
         { label: "Platoons", path: '/bm/platoons' },
         { label: "Parents", path: '/bm/parents' },
         { label: "Staff", path: '/bm/staff' },
-        { label: "Bases", user_types: [ 'HQ', 'CKIDS-ADMIN' ], path: `/bm/base` },
+        { label: "Bases", user_types: [ 'HQ', 'INST' ], path: `/bm/base` },
         { label: "Base", user_types: [ 'BC' ], path: `/bm/base/${id}` },
       ]
     },

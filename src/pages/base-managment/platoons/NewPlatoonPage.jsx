@@ -7,6 +7,7 @@ import { BaseSelect } from 'components/inputs';
 import { FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
+import { isAdmin } from 'functions/login';
 import { setTitle } from 'functions/utils';
 import { createPlatoon } from 'store/platoons/operations';
 // styles
@@ -48,7 +49,7 @@ export class NewPlatoonPage extends Component {
     const selectProps = { onChange: this.handleSelectChange };
 
     let baseSelect;
-    if ( ['HQ', 'CKIDS-ADMIN'].includes( code ) ) {
+    if ( isAdmin( code ) ) {
       baseSelect = (
         <Row>
           <Col xs='12'>
