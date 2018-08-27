@@ -102,7 +102,7 @@ class BaseRouter {
         global $current_user;
 
         if ( !$id ) {
-            if ( in_array( $current_user->login['code'], ['HQ', 'CKIDS-ADMIN'] ) ) {
+            if ( in_array( $current_user->login['code'], ['HQ', 'INST'] ) ) {
                 if ( !isset( $_POST['school_id'] ) || intval( $_POST['school_id'] ) <= 0 )
                     json_error( 'CORE-BASE-73 Invalid Request' );
                 $id = intval( $_POST['school_id'] );
@@ -124,10 +124,11 @@ class BaseRouter {
         global $current_user; 
         $filters = [];
         $login = $current_user->login;
-        if ( $login['code'] === 'HQ' ) $filters[] = 's.test_school = 0';
-        else if ( $login['code'] === 'CKIDS-ADMIN' ) $filters[] = 's.ckids = 1';
-        // get all bases on the account
-        else if ( $all ) { 
+        if ( $login['code'] === 'HQ' ) {
+            $filters[] = 's.test_school = 0';
+        } else if ( $login['code'] === 'INST' ) {
+            $filters[] = 's.inst_id = ?'; $params[] = $login['id'];
+        } else if ( $all ) { 
             $school_ids = $current_user->getAuthIds( 'school' );
             $filters[] = 's.school_id IN ('. implode(', ', $school_ids ) .')';
         } else if ( $login['code'] === 'BC' ) {

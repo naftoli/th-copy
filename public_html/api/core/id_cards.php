@@ -90,8 +90,8 @@ class UsersRouter {
         $filters = [];   $params = [];
         if ( $login['code'] === 'HQ' ) {
             $filters[] = 's.test_school = 0';
-        } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
-            $filters[] = 's.ckids = 1';
+        } else if ( $login['code'] === 'INST' ) {
+            $filters[] = 's.inst_id = ?'; $params[] = $login['id'];
         } else if ( $login['code'] === 'BC' ) {
             $filters[] = 'u.school_id = ?'; $params[] = $login['id'];
         } else if ( $login['code'] === 'TEACHER' ) {

@@ -24,8 +24,9 @@ class UsersRouter {
             $profilePicture = ( new User(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
             $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
             // format dates
-            $dob = $row['dob'] ? ( new DateTime( $row['dob'] ) )->format('n/j/Y') : $row['dob'];
-            $user_registered = $row['user_registered'] ? ( new DateTime( $row['user_registered'] ) )->format('n/j/Y g:i A') : $row['user_registered'];
+            $dob = $row['dob']; $user_registered = $row['user_registered'];
+            // $dob = $row['dob'] ? ( new DateTime( $row['dob'] ) )->format('n/j/Y') : $row['dob'];
+            // $user_registered = $row['user_registered'] ? ( new DateTime( $row['user_registered'] ) )->format('n/j/Y g:i A') : $row['user_registered'];
             // format and return just the data we want...
             $users[] = [
                 'user_id' => intval($row['user_id']), 'user_serial' => intval($row['user_serial']), 
@@ -74,16 +75,13 @@ class UsersRouter {
 
         $user = User::find( $id );
         if ( !$user->validateAccess( $current_user->login ) )
-            json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-75', 401 );
+            json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-77', 401 );
         
         // update the profile picture
         if ( isset( $_FILES['profile'] ) ) {
             $result = $user->setProfilePicture( $_FILES['profile'] );
-            if ( is_string( $result ) ) json_error( $result );
-            json_response([
-                'mobile_pic' => $user->mobile_pic,
-                'profilePicture' => $user->profilePicture()
-            ]);
+            if ( is_string( $result ) )
+                json_error( $result );
         // update other properties
         } else {
             $columns = array_keys( User::table()->columns );
@@ -99,8 +97,9 @@ class UsersRouter {
             if ( isset( $_POST['school_type_id'] ) ){
                 $user->enrollInCampaigns();
             }
-            json_response( $user );
         }
+
+        json_response( $user );
     }
 
     public function destroy( $id ) {
@@ -109,7 +108,7 @@ class UsersRouter {
             $user = User::find( $id );
             if ( !$user->validateAccess( $current_user->login ) )
                 json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-126', 401 );
-            if ( !in_array( $current_user->login['code'], ['BC', 'HQ', 'CKIDS-ADMIN'] ) ) {
+            if ( !in_array( $current_user->login['code'], ['BC', 'HQ', 'INST'] ) ) {
                 json_error( 'Your current login does not have the ability to remove users' );
             }
             if ( $user->canDestroy() && $user->delete() ) {
@@ -141,8 +140,8 @@ class UsersRouter {
         $filters = [];   $params = [];
         if ( $login['code'] === 'HQ' ) {
             $filters[] = 's.test_school = 0';
-        } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
-            $filters[] = 's.ckids = 1';
+        } else if ( $login['code'] === 'INST' ) {
+            $filters[] = 's.inst_id = ?'; $params[] = $login['id'];
         } else if ( $login['code'] === 'BC' ) {
             $filters[] = 'u.school_id = ?'; $params[] = $login['id'];
         } else if ( $login['code'] === 'TEACHER' ) {

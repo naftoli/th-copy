@@ -11,6 +11,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         [ 'platoons', 'order' => 'class_grade, class_sub', ], 
         [ 'users' ] 
     ];
+    static $belongs_to = [ 'institution' ];
     static $validates_uniqueness_of = [ [ 'school_number' ] ];
 
     // ******************************* HELPER FUNCTIONS *******************************

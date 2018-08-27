@@ -74,18 +74,23 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             'type' => 'HQ', 'id' => $this->admin_id, 'name' => 'Tzivos Hashem Headquarters', 
             'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 'code' => 'HQ'
         ];
-        if ( $this->auth === 'ckidssuper' ) $logins[] = [
-            'type' => 'CKIDS-ADMIN', 'id' => $this->admin_id, 'name' => 'C-Kids Headquarters', 
-            'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 'code' => 'CKIDS-ADMIN',
-            'ckids' => true
-        ];
+        // add all the schools
+        foreach( $this->getAuthIds( 'institution' ) as $inst_id ){
+            try {
+                $institution = Institution::find( $inst_id );
+                $logins[] = [ 'type' => 'inst', 'id' => $inst_id, 'code' => 'INST',
+                    'name' => $institution->name, 'img' => $institution->logo(),
+                    'ckids' => $institution->inst_id === 10
+                ];
+            } catch ( \ActiveRecord\RecordNotFound $e ) {}
+        };
         // add all the schools
         foreach( $this->getAuthIds( 'school' ) as $school_id ){
             try {
                 $school = School::find( $school_id );
                 $logins[] = [ 'type' => 'school', 'id' => $school_id, 'code' => 'BC',
                     'name' => $school->school_name, 'img' => $school->logoPath(), 
-                    'ckids' => !!$school->ckids
+                    'ckids' => $school->inst_id === 10
                 ];
             } catch ( \ActiveRecord\RecordNotFound $e ) {}
         };
@@ -95,7 +100,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
                 $platoon = Platoon::find( $class_id, ['include' => ['school']] );
                 $logins[] = [ 'type' => 'class', 'id' => $class_id, 'code' => 'TEACHER',
                     'name' => $platoon->name(), 'img' => $platoon->school->logoPath(),
-                    'ckids' => !!$platoon->school->ckids
+                    'ckids' => $platoon->school->inst_id === 10
                 ];
             } catch ( \ActiveRecord\RecordNotFound $e ) {}
         };

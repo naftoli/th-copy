@@ -14,8 +14,8 @@ class ParentsRouter {
         if ( $login['code'] === 'HQ' ) {
             $filters[] = 's.test_school = 0';
             $filters[] = 'u.user_registered IS NOT NULL';
-        } else if ( $login['code'] === 'CKIDS-ADMIN' ) {
-            $filters[] = 's.ckids = 1';
+        } else if ( $login['code'] === 'INST' ) {
+            $filters[] = 's.inst_id = ?'; $params[] = $login['id'];
         } else if ( $login['code'] === 'BC' ) {
             $filters[] = 's.school_id = ?';   $params[] = $login['id'];
         } else { json_error( 'Access Denied' ); }

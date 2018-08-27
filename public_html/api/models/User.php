@@ -26,7 +26,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     // Access validation - takes a login and returns true or false if it can access the user
     public function validateAccess( $login ){
         if ( $login['code'] === 'HQ' ) return true;
-        if ( $login['code'] === 'CKIDS-ADMIN' ) return !!$this->school->ckids;
+        if ( $login['code'] === 'INST' ) return !!$this->school->inst_id == $login['id'];
         if ( $login['code'] === 'BC' ) return $this->school_id == $login['id'];
         if ( $login['code'] === 'TEACHER' ) return $this->class_id == $login['id'];
         if ( $login['code'] === 'PARENT' ) return false; // TODO, check if parent can access child
@@ -45,7 +45,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     }
     // returns full barcode
     public function barcode(){
-        return '3'.$this->user_code;
+        return "3$this->user_code";
     }
     // returns the current rank
     public function currentRank() {
@@ -329,7 +329,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
                 'school_type_id', 'user_address1', 'user_address2', 'user_city', 'user_state',
                 'user_postal', 'user_country', 'user_phone', 'gender', 
                 'chayolei', 'yan', 'chidon', 'allow_parent_tasks', 'print_parent_tasks', 'mobile_pic',
-                'school_id', 'class_id', 'school_type_id'
+                'school_id', 'class_id', 'school_type_id', 'user_code'
             ],
             'methods' => [ 'profilePicture', 'barcode', 'currentRank', 'miles', 'parentAccount' ],
             'include' => [ 
