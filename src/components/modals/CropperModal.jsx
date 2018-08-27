@@ -11,7 +11,7 @@ import { readFile } from 'functions/utils';
 class CropperModal extends Component {
   // the props we are expecting
   static defaultProps = {
-    isOpen: true, centered: true, src: false,
+    isOpen: true, centered: true, src: false, fileName: 'profile',
     uploadImage: ( formData, contentType ) => {}
   }
 
@@ -23,7 +23,6 @@ class CropperModal extends Component {
     this.state = { 
       src: props.src, 
       name: 'default',
-      fileName: 'profile',
       viewMode: 1
     };
   }
