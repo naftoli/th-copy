@@ -83,16 +83,6 @@ while ( $row = mysql_fetch_assoc($result) ) {
     );
     $row = array_merge( $row, mysql_fetch_assoc( $reg_query ) );
 	$children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
-	
-	// check if platoon transition was done for registered schools
-	// if not do not allow children to register
-	if ( $row['registered'] > 0 ) {
-		$transition_qry = "select * from classes where class_era = 0 and confirmed = 0 and school_id = " . $row['school_id'];
-		$transition_res = mysql_query( $transition_qry );
-		if ( mysql_num_rows( $transition_res) > 0 ) {
-			$children[$row['user_id']]['schoolTypeRegistered'] = 0;
-		}
-	}
 
 	// after Nov 8, 2017 registration is closed
 	//if (unixtojd() > 2458067 && !in_array($row['school_id'], array(61,269))) $children[$row['user_id']]['chidon'] = 0;
