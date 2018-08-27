@@ -3,6 +3,7 @@ import { FontAwesome } from 'components/ui';
 // constants
 import { LEGACY_URL } from 'components/constants';
 const DEFAULT_USER_TYPES = [ 'HQ', 'INST', 'BC' ];
+const ALL_USER_TYPES = [ 'HQ', 'INST', 'BC', 'TEACHER' ];
 
 /**
  * menuReducer
@@ -45,7 +46,7 @@ const getMenu = ( user_type, id, no_legacy ) => {
   // Define the shape of the menu
   const menu = [
     {
-      label: 'Home', path: '/', user_types: [ 'HQ', 'BC', 'TEACHER' ],
+      label: 'Home', path: '/', user_types: ALL_USER_TYPES,
       icon: <FontAwesome icon='home'/>
     },
     {
@@ -74,12 +75,12 @@ const getMenu = ( user_type, id, no_legacy ) => {
       icon: <FontAwesome icon='chalkboard-teacher' />,
     },
     {
-      label: "Missions", user_types: [ 'HQ', 'BC', 'TEACHER' ],
+      label: "Missions", user_types: ALL_USER_TYPES,
       icon: <FontAwesome icon='award' />,
       items: [
-        { label: 'Print Missions', legacy: true, path: '/print_missions2.php', user_types: [ 'HQ', 'BC', 'TEACHER' ] },
+        { label: 'Print Missions', legacy: true, path: '/print_missions2.php', user_types: ALL_USER_TYPES },
         { label: 'Print Summer Missions', legacy: true, path: '/print_missions_summer.php' },
-        { label: 'Mark Missions', legacy: true, path: '/mark_missions2.php', user_types: [ 'HQ', 'BC', 'TEACHER' ] },
+        { label: 'Mark Missions', legacy: true, path: '/mark_missions2.php', user_types: ALL_USER_TYPES },
         { label: 'Mark Yahadus', legacy: true, path: '/sefer_hamitzvos.php' },
         { label: 'Personalize Your Missions', legacy: true, path: '/task_customization.php' },
         { label: 'Add Tasks', legacy: true, path: '/newTask.php' },
@@ -88,14 +89,14 @@ const getMenu = ( user_type, id, no_legacy ) => {
       ]
     },
     {
-      label: "Achievement Cards", user_types: [ 'HQ', 'BC', 'TEACHER' ],
+      label: "Achievement Cards", user_types: ALL_USER_TYPES,
       icon: <FontAwesome icon='ticket-alt' />,
       items: [
-        { label: 'Add Achievement Task', legacy: true, 
-          path: '/newAchievementTasks.php', user_types: [ 'HQ', 'BC', 'TEACHER' ] 
+        { label: 'Add Achievement Task', legacy: true,
+          path: '/newAchievementTasks.php', user_types: ALL_USER_TYPES 
         },
         { label: 'Add / Subtract Points', legacy: true, 
-          path: '/manual_points.php', user_types: [ 'HQ', 'BC', 'TEACHER' ], 
+          path: '/manual_points.php', user_types: ALL_USER_TYPES, 
         },
       ]
     },
