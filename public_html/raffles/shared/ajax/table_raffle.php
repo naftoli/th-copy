@@ -33,9 +33,6 @@ if($_POST["year"]){
     $filters[] = "year='$year'";
 }
 
-// only show raffles created after Sun August 26, 2018
-$filters[] = "date_created > '2018-08-26 00:00:00'";
-
 $filter = ' WHERE ' . implode( ' AND ', $filters ) . ' ';
 $filter .= " ORDER BY run_date;";
 
