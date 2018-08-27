@@ -2,6 +2,7 @@ import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
 import { LOGOUT, CHANGE_LOGIN } from './login/types';
 import thunk from 'redux-thunk';
 
+import home from 'store/home/reducer';
 import login from 'store/login/reducer';
 import bases from 'store/bases/reducer';
 import staff from 'store/staff/reducer';
@@ -13,7 +14,7 @@ import platoons from 'store/platoons/reducer';
 
 export const reducer = combineReducers({
   login,  soldiers, platoons, bases,  payments,
-  staff,  parents,
+  staff,  parents,  home
 });
 
 const rootReducer = ( state, action ) => {
