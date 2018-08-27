@@ -744,7 +744,7 @@ $bpOnly = [ 82 ];
 						<li>
 							<a href="/helpdesk/?p=open" id="helpdesk_link" title="support"><div><span class="icon"><img height="28" width="28" alt="Support" src="/images/parentIcons/support icon.gif"></span><?=T_('Support')?></div></a>
 						</li>
-							
+						
 						<?php if (isset($_GET['showBlog'])) { ?>
 							<li>
 								<form name="blog" action="blog/wp-login.php" method="post">
@@ -775,12 +775,7 @@ $bpOnly = [ 82 ];
 			
 			if( $admin_user['auth'] == 'super' || !empty( $admin_user['auths']['user'] ) ) {
 				$url_id = isset($user_id) ? "?user_id=$user_id" : '';
-			}
-
-			// load the parent menu if applicable
-			if ( !empty( $admin_user['auths']['user'] ) ) {
-				require_once(dirname(__FILE__).'/parent_menu.php');
-			} ?>
+			}?>
 	
 			<li class="list_parent">
 				<a href="/logout.php" onclick="document.location.href=this.href">
