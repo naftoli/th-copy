@@ -49,7 +49,7 @@
       }
       // animate the login button
       button#login {
-        width: 100%;
+        width: 100%; margin-bottom: 15px;
         transition: .25s;
         &:hover, &:focus { word-spacing: .5em; }
       }
