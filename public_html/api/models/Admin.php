@@ -1,9 +1,12 @@
 <?php
 include_once( __DIR__ . '/../auth/classes/Auth.php' );
+include_once( __DIR__ . '/traits/BuildModel.php' );
 include_once( __DIR__ . '/../emails/index.php' );
 // This class uses the Authorize.net gateway
 
 class Admin extends ActiveRecord\Model implements JsonSerializable {
+    use \traits\BuildModel;
+    
     static $before_create = ['createHelpdeskAccount'];
     static $before_update = ['handleChanges'];
     // relationships 
@@ -78,7 +81,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         foreach( $this->getAuthIds( 'institution' ) as $inst_id ){
             try {
                 $institution = Institution::find( $inst_id );
-                $logins[] = [ 'type' => 'inst', 'id' => $inst_id, 'code' => 'INST',
+                $logins[] = [ 'type' => 'institution', 'id' => $inst_id, 'code' => 'INST',
                     'name' => $institution->name, 'img' => $institution->logo(),
                     'ckids' => $institution->inst_id === 10
                 ];
