@@ -25,7 +25,7 @@ export class ProfilePicture extends Component {
     const classNames = classnames( `profile-picture`, { editable: !!onClick, ie: is.ie() } );
     const imageClassNames = classnames( className, 'profile-img' );
     // update props
-    tabIndex = tabIndex || 0;
+    tabIndex = tabIndex || ( onClick ? 0 : -1 );
     src = src ? `${LEGACY_URL}${src}` : ''
 
     return (
