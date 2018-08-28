@@ -151,7 +151,7 @@ $types = array(
                 Shipping Requests: <?=$school['shipping_requests']?><br /><br />
                 <?php
                 $grandTotal += $total;
-                $totals['pickup'] += $total;
+                $totals['deliver'] += $total;
                 ?>
             </div>
             <div class='page-break'></div>

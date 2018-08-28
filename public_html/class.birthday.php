@@ -153,7 +153,7 @@ class Birthday {
 	                $mission = mysql_real_escape_string( $missionName );
                     $description = 'Yom Holedes Mission';
                     
-                    if ( $date > 2458633 ) {
+                    if ( $date > 2459089 ) { // Aug 20, 2020
                         @mail(
                             "bugs@tzivoshashem.org", "Error: Invalid Birthday Dates", 
                             json_encode([
