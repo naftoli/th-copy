@@ -56,7 +56,7 @@ class PersonalTab extends Component {
           </Col>
         </Row>
 
-        <AddressRow { ...soldier } prefix='user_' onChange={ this.handleChange } />
+        <AddressRow { ...soldier } showPhone prefix='user_' onChange={ this.handleChange } />
 
         <RegistrationRow soldier={ soldier } />
 

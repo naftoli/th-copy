@@ -164,7 +164,7 @@ class NewUserPage extends Component {
           </Col>
         </Row>
 
-        <AddressRow {...soldier} prefix='user_' onChange={ this.handleChangeEvent } />
+        <AddressRow {...soldier} showPhone prefix='user_' onChange={ this.handleChangeEvent } />
 
         <Button color='primary'>
           <FontAwesome icon='save' />

@@ -4,11 +4,11 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 // pages
 import { Page404 } from 'pages/errors';
-import Login, { Logout } from 'pages/login';
 import HomePage from 'pages/home/HomePage';
+import { LoadingScreen } from 'components/ui';
 import BaseManagment from 'pages/base-managment';
 import Dashboard from 'pages/dashboard/Dashboard';
-import { LoadingScreen } from 'components/ui';
+import { Login, Logout, AccountPage } from 'pages/login';
 // components
 import ConfirmationModal from 'components/modals/ConfirmationModal';
 // functions
@@ -58,7 +58,8 @@ export class App extends Component {
               <Switch>
                 <Route path={`/`} exact component={ HomePage }/>
                 <Route path={`/bm`} component={ BaseManagment } />
-                
+                <Route path={`/myaccount`} exact component={ AccountPage }/>
+                {/* Action only pages */}
                 <Route path={`/logout`} component={Logout}/>
                 <Route component={Page404} />
               </Switch>

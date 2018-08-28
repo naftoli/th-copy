@@ -41,7 +41,7 @@ export class ShippingTab extends Component {
             </Col>
           </Row>
 
-          <AddressRow { ...base } prefix='shipping_' 
+          <AddressRow { ...base } showPhone prefix='shipping_' 
             onChange={ this.onChange } title={ false } />
 
           <p className='title'>Special Shipping Requests</p>

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { LEGACY_URL } from 'components/constants';
 // components
 import { Link } from 'react-router-dom';
-import { FontAwesome, ProfilePicture } from 'components/ui';
+import { FontAwesome, BaseLogo } from 'components/ui';
 import {
   Navbar as BoostrapNavbar, NavbarBrand, Nav,
   UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
@@ -34,9 +33,9 @@ class Navbar extends Component {
     const loginItems = logins.map( ( login, index ) => {
       const active = login.type === currentLogin.type &&  login.id === currentLogin.id;
       return (
-        <DropdownItem key={ index } onClick={ this.onLoginChange( login.type, login.id ) }
-          className={ active ? 'active' : ''}>
-          <ProfilePicture src={ login.img } alt="logo" fallbackImage='/schoolLogos/logo.png'/>
+        <DropdownItem key={ index } className={ active ? 'active' : ''}
+            onClick={ this.onLoginChange( login.type, login.id ) } >
+          <BaseLogo src={ login.img } alt="logo" />
           <span>{ login.name }</span>
         </DropdownItem>
       );
@@ -44,25 +43,34 @@ class Navbar extends Component {
     
     return (
       <BoostrapNavbar id="mashpia-navbar">
+
         <NavbarBrand onClick={ this.props.onClick }>
           <img src={ logo } alt="logo" />
           <span>Menu</span>
         </NavbarBrand>
+
         <div id="navbar-title" className="mx-auto">{ title }</div>
+
         <Nav id="navbar-menu" navbar>
           <UncontrolledDropdown>
+
             <DropdownToggle nav id='nav-login'>
-              <ProfilePicture src={ currentLogin.img || user } alt="logo" fallbackImage='/schoolLogos/logo.png'/>
+              <BaseLogo src={ currentLogin.img || user } alt="logo" />
               <span>{ currentLogin.name || `My Accounts` }</span>
             </DropdownToggle>
+
             <DropdownMenu right>
               <DropdownItem header>Logins</DropdownItem>
               { loginItems }
               <DropdownItem divider />
-              <DropdownItem href={`${LEGACY_URL}/admin_profile.php`}>
-                <img id="profile-picture" src={ user } alt="profile_picture"/>
-                <span>My Account</span>
-              </DropdownItem>
+
+              <Link to={'/myaccount'}>
+                <DropdownItem>
+                  <img id="profile-picture" src={ user } alt="profile_picture"/>
+                  <span>My Account</span>
+                </DropdownItem>
+              </Link>
+
               <Link to={'/logout'}>
                 <DropdownItem>
                   <FontAwesome icon="sign-out-alt" />
@@ -70,6 +78,7 @@ class Navbar extends Component {
                 </DropdownItem>
               </Link>
             </DropdownMenu>
+
           </UncontrolledDropdown>
         </Nav>
       </BoostrapNavbar>
