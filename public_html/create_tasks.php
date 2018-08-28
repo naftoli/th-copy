@@ -136,6 +136,7 @@ if (isset($_POST['submit'])) {
     while ( $row2 = mysql_fetch_assoc( $result2 ) ) {
         $weeks[$row2['start']][$row2['end']] = $row2['name'];
     }
+    echo "<pre>"; print_r( $weeks ); echo "</pre>"; exit;
     
 	$langSheet = $_POST['lang'];
 	if ($langSheet == 1) {
