@@ -160,9 +160,7 @@ if (isset($_POST['submit'])) {
             $objWorksheet = $objPHPExcel->getActiveSheet();
             
             $missions = array();
-            $firstRow = true;
-            $missionNames = array();
-            
+            $firstRow = true;            
             $fieldNames = array(
                 'action',
                 'missionValue',
@@ -191,65 +189,13 @@ if (isset($_POST['submit'])) {
                 'cat',
                 'labelID'
             );
-            /*
-            $fieldNames = array(
-                'action',
-                'missionName',
-                'missionDescription',
-                'missionValue',
-                'start',
-                'end',
-                'firstLevel',
-                'lastLevel',
-                'type',
-                'catOrd',
-                'grid_id',
-                'mission_marking',
-                'grid_marking',
-                'cat',
-                'qty',
-                'mandatory',
-                'ord',
-                'daily',
-                'needed',
-                'focus',
-                'taskID',
-                'shortName',
-                'task',
-                'points',
-                'default',
-                'labelOrd',
-                'labelID',
-                'lang',
-                'pic'
-            );
-            */
+            
             foreach ( $objWorksheet->getRowIterator() as $row ) {
                 $cellIterator = $row->getCellIterator();
                 $cellIterator->setIterateOnlyExistingCells(false);
                 $i = 0;
 				
                 if ( $firstRow ) {
-					/*
-                    $headers = array(
-                        "Action", "Mission Name", "Mission Description", "Mission Value", "Start Date", "End Date", 
-                        "From Age", "Till Age", "School Types (2,3,12,13)", "Task Category", "Qty", "Mandatory Start end", 
-                        "Task Ord", "Daily", "Needed", "Focus / Charge It start", "Task Name", "Points", "Default On", "TaskLabel Ord", "Label ID", "Lang"                    
-                    );
-                    foreach( $cellIterator as $cell ) { 
-                        $actual[] = trim($cell->getValue());
-                    }
-                    $diff = array_diff($headers, $actual);
-                    if (!empty($diff)) {
-                        echo "<pre>";
-                        print_r($headers);
-                        print_r($actual);
-                        echo "</pre>";
-                        echo "You have a corrupted file, please redownload template file and try again!.";
-                        exit;
-                    }
-					 * 
-					 */
                     $firstRow = false;
                     continue;
                 }
