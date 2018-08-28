@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { LEGACY_URL } from 'components/constants';
 // components
 // import { Link } from 'react-router-dom';
-import { FontAwesome, BaseLogo } from 'components/ui';
+import { BaseLogo } from 'components/ui';
+import { Row } from 'reactstrap';
+import { 
+  QuickLinks, Resources, RegistrationWidget
+} from './widgets';
+
 // styles and images
 import './home.scss';
+import './widgets/style.scss';
 import { man, woman } from 'img/th';
 
 class HomePage extends Component {
 
   render() {
 
-    const { name, img, ckids } = this.props.login;
+    const { name, img } = this.props.login;
 
     return (
       <div id='HomePage'>
@@ -22,20 +27,17 @@ class HomePage extends Component {
           <img src={ woman } alt='woman' className='general' />
         </div>
         <h1>{ name }</h1>
+        <hr/>
 
-        <h2>Quick Links</h2>
-        <div id='links'>
-          <a href={`${LEGACY_URL}/print_missions2.php`} target='_blank'>
-            <FontAwesome icon='print' />
-            Print Missions
-          </a>
-          <a href={`${LEGACY_URL}/mark_missions2.php`} target='_blank'>
-            <FontAwesome icon='check-circle' regular />
-            Mark Missions
-          </a>
-        </div>
+        <Row id='widgets'>
 
-        <div id='widgets'></div>
+          <QuickLinks />
+
+          <Resources />
+
+          <RegistrationWidget />
+
+        </Row>
       </div>
     );
   }

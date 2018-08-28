@@ -1,0 +1,54 @@
+#QuickLinks {
+  #links {
+    display: flex;
+    font-size: 1em;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    
+    a {
+      color: #000;
+      transition: transform .25s;
+      margin: 10px 5px;
+      &:hover, &:focus {
+        text-decoration: none;
+        transform: scale( 1.1 );
+      }
+      > i {
+        font-size: 4em;
+        display: block;
+        text-align: center;
+      }
+    }
+  }
+}
+
+#RegistrationWidget {
+  // > div {
+  //   display: flex;
+  //   flex-wrap: wrap;
+  // }
+
+  p {
+    margin-bottom: 3px;
+    font-size: 1.5em;
+    padding: 0px 3%;
+
+    strong { display: block; font-size: .7em; }
+  }
+}
+
+#Resources {
+  text-align: center;
+  #links a {
+    display: inline-block; width: 50%; max-width: 120px;
+    padding-bottom: 0px; padding: 3%;
+    text-align: center; color: #000;
+    font-size: .8em; transition: .25s;
+
+    &:hover{ transform: scale( 1.1 ); }
+
+    @media ( min-width: 1921px ) {
+      max-width: 25%;
+    }
+  }
+}
