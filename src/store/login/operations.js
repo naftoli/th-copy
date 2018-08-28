@@ -1,6 +1,7 @@
 import API from 'api/api';
 import * as actions from './actions';
 import Cookies from 'universal-cookie';
+import { createNotifcation, updateNotifcation } from 'functions/notifications';
 
 const cookies = new Cookies();
 
@@ -28,17 +29,48 @@ export const getCurrentUser = () => dispatch => {
   return API.get( '/auth/current_user.php' )
     .then( response => {
       dispatch( actions.setLoading( false ) );
-      if ( !response.success ) 
-        return dispatch( actions.logout() )
-      dispatch( actions.setUser( response.data ) )
-      if ( cookies.get( 'login' ) ) {
-        const [ type, id ] = cookies.get( 'login' ).split('-');
-        return dispatch( actions.changeLogin( type, parseInt(id, 10) ) );
-      } else { 
-        return dispatch( actions.changeLogin() );
-      }
+
+      if ( !response.success ) return dispatch( actions.logout() );
+
+      dispatch( actions.setUser( response.data ) );
+      
+      return setLogin( dispatch );
     }).catch( error => {
       dispatch( actions.logout() );
-      dispatch( actions.setErrors( 'Could not get account info. Please clear your cookies and try again.' ));
+      dispatch( actions.setErrors(
+        'Could not get account info. Please clear your cookies and try again.'
+      ));
+      return Promise.reject( error );
     });
+}
+
+export const updateCurrentUser = ( updates ) => dispatch => {
+
+  const toast_id = createNotifcation('Updating Account');
+
+  return API.post( '/auth/current_user.php', updates )
+    .then( response => {
+      updateNotifcation(
+        toast_id, 'Account Updated', response.message, response.success
+      );
+      dispatch( actions.setUser( response.data.account ) );
+
+      const { legacy, mobile, id } = response.data.tokens;
+      dispatch( actions.setTokens( legacy, mobile, id ) );
+
+      setLogin( dispatch );
+      return response.data;
+    }).catch( error => {
+      updateNotifcation( toast_id, '', error.message, false );
+      return Promise.reject( error );
+    });
+}
+
+const setLogin = dispatch => {
+  if ( cookies.get( 'login' ) ) {
+    const [ type, id ] = cookies.get( 'login' ).split('-');
+    return dispatch( actions.changeLogin( type, parseInt(id, 10) ) );
+  } else { 
+    return dispatch( actions.changeLogin() );
+  }
 }
