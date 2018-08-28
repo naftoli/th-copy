@@ -992,7 +992,7 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 		</span>
 		
 		<span>
-			<a href="https://www.dropbox.com/sh/i9hjub6ug1ii6q7/AABgHDk2nH-tNE5JKDJericXa?dl=0" target='_blank'>
+			<a href="https://www.dropbox.com/sh/ztiltfbvpo4te9p/AABZjQmM71L5YESXllu1xjrIa?dl=0" target='_blank'>
 				<img src="homeIcons/Chidon.gif" /><br />
 				Yahadus Resources
 			</a>

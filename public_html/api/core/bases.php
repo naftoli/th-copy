@@ -20,7 +20,7 @@ class BaseRouter {
         );
         $query->execute( $params );
         $bases = $query->fetchAll();
-        json_response( $bases );
+        json_response( $bases, true, true );
     }
 
     public function small() {
@@ -31,12 +31,12 @@ class BaseRouter {
         if ( !$filters ) return json_error('Access Deinied');
         // generate the SQL
         $query = $pdo->prepare( 
-            "SELECT s.school_id, s.school_name FROM classes c JOIN schools s USING (school_id)"
+            "SELECT s.school_id, s.school_name FROM schools s LEFT JOIN classes c USING (school_id)"
             ." WHERE $filters GROUP BY school_id ORDER BY school_name;"
         );
         $query->execute( $params );
         $bases = $query->fetchAll();
-        json_response( $bases );
+        json_response( $bases, true, true );
     }
 
     public function show( $id ) {

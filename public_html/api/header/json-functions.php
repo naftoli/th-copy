@@ -9,12 +9,12 @@
  * @param boolean $die ( true )
  * @return void
  */
-function json_response( $data, $success = true, $die = true ) {
+function json_response( $data, $success = true, $parseNumbers = false, $die = true ) {
     header("Content-Type: application/json; charset=utf-8;");
     echo json_encode([
         "success" => $success,
         "data"    => $data
-    ]);
+    ], ( $parseNumbers ? JSON_NUMERIC_CHECK : false  ) );
     if ( $die ) die();
 }
 

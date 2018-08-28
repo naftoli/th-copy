@@ -47,6 +47,13 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return $reg_info;
     }
 
+    public function getRegStatus( $year = false ) {
+        $reg_info = $this->getRegInfo( $year );
+        if ( $reg_info->default ) return 'Registration Closed';
+        if ( !$reg_info->date_paid ) return 'Base Registration Open';
+        return 'Registration Open';
+    }
+
     // ******************************* LOGOS *******************************
     public function setLogo( $logo_name, $file ){
         $filename = self::uploadLogo( $this->school_id, $logo_name, $file );
