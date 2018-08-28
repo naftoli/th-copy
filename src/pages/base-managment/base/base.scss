@@ -1,3 +1,5 @@
+@import 'styles/colors';
+
 #BasesPage {
   height: 100%;
 
@@ -13,19 +15,21 @@
 
 }
 
-#BasesPage, #BasePage {
-  .profile-picture.editable:hover {
-    background: #ddd;
-    border-radius: 15px;
-  }
-}
 
 #BasePage {
 
-  #logo { align-self: center; text-align: center; }
+  #logo {
+    align-self: center; text-align: center;
+    .profile-picture img {
+      filter: drop-shadow( 0 0 0.2rem $primary-color-light );
+    }
+    .profile-picture:hover img, .profile-picture:focus img {
+      filter: grayscale(100%) brightness(60%) drop-shadow( 0 0 0.2rem $primary-color-light );
+    }
+  }
 
   @media ( max-width: 575px ) {
-    #logo .profile-picture img { transition: none; max-height: 125px; margin-bottom: 15px; }
+    #logo  { transition: none; max-height: 125px; margin-bottom: 15px; }
     h3 { text-align: center; }
   }
 
