@@ -3,6 +3,8 @@
 #UserPage, #NewUserPage {
   padding-bottom: 10px;
 
+  div[dir=rtl] > label { font-size: .9em; }
+
   > .row { margin-bottom: .7em; }
   .form-check-input {
     position: relative; margin-left: 0px;
