@@ -6,11 +6,11 @@ import { BaseLogo } from 'components/ui';
 import { Row } from 'reactstrap';
 import { 
   QuickLinks, Resources, RegistrationWidget,
-  BirthdaysWidget
+  BirthdaysWidget, PromotionsWidget
 } from './widgets';
 // state
 import { 
-  getRegistration, getBirthdays 
+  getRegistration, getBirthdays, getPromotions
 } from 'store/home/operations';
 // functions
 import { setTitle } from 'functions/utils';
@@ -48,12 +48,15 @@ class HomePage extends Component {
             data={ home.registration } 
             refresh={ getRegistration } />
 
+          <Resources />
+
           <BirthdaysWidget
-            login={ login }
             refresh={ this.props.getBirthdays }
             birthdays={ home.birthdays } />
 
-          <Resources />
+          <PromotionsWidget 
+            refresh={ this.props.getPromotions }
+            promotions={ home.promotions } />
 
         </Row>
       </div>
@@ -67,7 +70,7 @@ const mapStateToProps = ({ login, home }) => ({
 })
 
 const mapDispatchToProps = {
-  getRegistration, getBirthdays
+  getRegistration, getBirthdays, getPromotions
 }
 
 export default connect( mapStateToProps, mapDispatchToProps )( HomePage );

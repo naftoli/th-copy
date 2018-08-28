@@ -8,13 +8,13 @@ import { FontAwesome, Spinner, ProfilePicture } from 'components/ui';
 import { toast } from 'react-toastify';
 // constants
 
-const Birthday = ({ profilePicture, user_id, name, class_id, platoon }) => {
+const Soldier = ({ profilePicture, user_id, name, rank_ord, class_id, platoon }) => {
   return (
-    <Row className='Birthday'>
+    <Row className='Soldier'>
       <Col xs={3} xl={2}>
-        <ProfilePicture src={ profilePicture } />
+        <ProfilePicture src={ profilePicture } rank={ rank_ord } />
       </Col>
-      <Col xs={9}>
+      <Col xs={9} xl={10}>
         <Link to={`/bm/users/${user_id}`}>{ name }</Link><br/>
         <Link to={`/bm/users/${class_id}`}>{ platoon }</Link>
       </Col>
@@ -22,15 +22,15 @@ const Birthday = ({ profilePicture, user_id, name, class_id, platoon }) => {
   )
 }
 
-export class BirthdaysWidget extends Component {
+export class PromotionsWidget extends Component {
 
   static propTypes = {
     refresh: PropTypes.func.isRequired,
-    // birthdays: PropTypes.object.isRequired
+    // promotions: PropTypes.object.isRequired
   }
 
   static defaultProps = {
-    birthdays: {},
+    promotions: {},
   }
 
   componentDidMount() {
@@ -39,26 +39,26 @@ export class BirthdaysWidget extends Component {
   }
 
   render() {
-    let { birthdays } = this.props;
+    let { promotions } = this.props;
 
     let content;
 
-    if ( birthdays === false ) {
+    if ( promotions === false ) {
       content = <Spinner size={5} />
-    } else if ( Object.keys( birthdays ).length === 0 ) {
+    } else if ( Object.keys( promotions ).length === 0 ) {
       content = (
         <div className='no-data'>
-          <FontAwesome icon='birthday-cake' />
-          <p>No Upcoming Birthdays</p>
+          <FontAwesome icon='medal' />
+          <p>No Recent Promotions</p>
         </div>
       );
     } else {
       content = (
-        <div className='birthdays'>
-          { Object.entries( birthdays ).map( ( date, index ) => ( // for each date
+        <div className='promotions'>
+          { Object.entries( promotions ).map( ( date, index ) => ( // for each date
             <div className='date' key={ index }>
               <h3>{ date[0] }</h3>
-              { date[1].map( ( soldier, index ) => <Birthday { ...soldier } key={ index } /> ) }
+              { date[1].map( ( soldier, index ) => <Soldier { ...soldier } key={ index } /> ) }
             </div>
           )) }
         </div>
@@ -67,8 +67,8 @@ export class BirthdaysWidget extends Component {
 
     return (
       <Col xs={12} sm={6}>
-        <div id='BirthdaysWidget' className='widget'>
-          <h2>Upcoming Birthdays</h2>
+        <div id='PromotionsWidget' className='widget'>
+          <h2>Recent Promotions</h2>
           { content }
         </div>
       </Col>

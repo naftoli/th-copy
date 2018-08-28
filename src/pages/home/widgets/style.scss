@@ -55,8 +55,8 @@
   }
 }
 
-#BirthdaysWidget .birthdays {
-  max-height: 300px; 
+#BirthdaysWidget .birthdays, #PromotionsWidget .promotions {
+  max-height: 375px; 
   overflow-x: hidden; 
   overflow-y: auto;
   padding: 0px 6px;
@@ -69,14 +69,16 @@
   }
 
   .row {
-    padding-bottom: .25rem;
-    margin-bottom: .25em;
+    padding-bottom: .25rem; margin-bottom: .25em;
     border-bottom: 1px dashed $primary-color-light;
+    > div a:first-child { 
+      font-size: 1.2em;
+    }
   }
 
   .profile-picture {
     padding: 5%;
-    > img {
+    > img.profile-img {
       border-radius: 5px;
       border: 1px solid $primary-color;
     }

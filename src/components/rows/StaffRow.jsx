@@ -73,14 +73,15 @@ export class NewStaffRow extends Component {
   render() {
     return (
       <Fragment>
-        <Callout color='info' icon={false}>
-          Please note that you can connect Parent accounts as well using their e-mail address
+        <Callout color='info'>
+          Please note that you can connect "Parent accounts" as well using their accounts E-mail address or username.<br/>
+          To create new accounts, please go <Link to='/bm/staff'>to the staff page.</Link>
         </Callout>
         <Row className='NewStaffRow'>
           <Col xs='12'>
-            <label>Add account by e-mail address</label>
+            <label>Add account by E-mail address or username.</label>
             <InputGroup>
-              <input placeholder='example@example.com' ref={ this.emailRef } className='form-control'/>
+              <input placeholder='example@example.com / username' ref={ this.emailRef } className='form-control'/>
               <InputGroupAddon addonType="append">
                 <Button onClick={ this.onClick } color='primary' outline tabIndex={0}>
                   <FontAwesome icon='user-plus' /> Connect Account

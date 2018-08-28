@@ -12,3 +12,9 @@ export const getBirthdays = () => dispatch => {
     .then( handleAPIResponse )
     .then( birthdays => dispatch( actions.setBirthdays( birthdays ) ) );
 }
+
+export const getPromotions = () => dispatch => {
+  return API.get( `/core/homepage/promotions` )
+    .then( handleAPIResponse )
+    .then( promotions => dispatch( actions.setPromotions( promotions ) ) );
+}

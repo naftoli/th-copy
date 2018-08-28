@@ -13,3 +13,10 @@ export const setBirthdays = birthdays => {
     payload: birthdays
   }
 };
+
+export const setPromotions = promotions => {
+  return {
+    type: types.SET_PROMOTIONS,
+    payload: promotions
+  }
+};

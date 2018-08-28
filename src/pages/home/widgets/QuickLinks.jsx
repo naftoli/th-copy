@@ -32,7 +32,7 @@ export class Resources extends Component {
 
   render() {
     return (
-      <Col xs={12} sm={6} xl={4}>
+      <Col xs={{ size: 12, order: 12 }} xl={{ size: 4, order: 0 }}>
         <div id='Resources' className='widget'>
           <h2>Resources</h2>
 
