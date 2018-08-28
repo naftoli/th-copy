@@ -1,7 +1,8 @@
 import * as types from './types';
 
 export const initialState = {
-  registration: {}
+  registration: {},
+  birthdays: false
 };
 
 export default ( state = initialState, action ) => {
@@ -9,6 +10,9 @@ export default ( state = initialState, action ) => {
     
     case types.SET_REGISTRATION:
       return { ...state, registration: action.payload };
+
+    case types.SET_BIRTHDAYS:
+      return { ...state, birthdays: action.payload };
 
     default:
       return state; 

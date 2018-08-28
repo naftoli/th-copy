@@ -6,3 +6,10 @@ export const setRegistration = data => {
     payload: data
   }
 };
+
+export const setBirthdays = birthdays => {
+  return {
+    type: types.SET_BIRTHDAYS,
+    payload: birthdays
+  }
+};
