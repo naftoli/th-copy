@@ -48,7 +48,7 @@ export class BirthdaysWidget extends Component {
     } else if ( Object.keys( birthdays ).length === 0 ) {
       content = (
         <div className='no-data'>
-          <FontAwesome icon='exclamation-triangle' />
+          <FontAwesome icon='birthday-cake' />
           <p>No Upcoming Birthdays</p>
         </div>
       );
