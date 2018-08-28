@@ -7,7 +7,13 @@
     margin-top: 5px;
     margin-bottom: 5px;
 
-    img { height: 175px; }
+    img {
+      height: 175px;
+    }
+
+    .profile-img {
+      filter: drop-shadow( 0 0 0.2rem $primary-color-light );
+    }
 
     ~ h1 {
       font-size: 2em;
@@ -16,15 +22,16 @@
     }
   }
 
-  #widgets > div {
-    margin-bottom: 10px;
+  #widgets {
+    justify-content: center;
+    > div { margin-bottom: 15px; }
   }
 
   div.widget {
     box-shadow: 0px 2px 5px #e3e3e3;
     border: 1px solid $primary-color-light;
     height: 100%; padding-bottom: 5px;
-    border-radius: 5px;
+    border-radius: 10px;
 
     h2 {
       background: $primary-color;
@@ -32,8 +39,24 @@
       font-size: 1.5em;
       padding: .35em;
       text-align: center;
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      margin-bottom: 0px;
+    }
+
+    h2 + div {
+      padding-top: 8px;
+    }
+
+    .no-data {
+      text-align: center;
+      height: calc( 100% - 60px );
+      min-height: 125px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      font-size: 1.2em;
+      > i { font-size: 2em; }
     }
   }
 }

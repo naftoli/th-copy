@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 // components
 import { Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
 // functions
 import { toast } from 'react-toastify';
-import { setTitle } from 'functions/utils';
-import { getRegistration } from 'store/home/operations';
 // constants
 import { LEGACY_URL } from 'components/constants';
 
-class RegistrationWidget extends Component {
+export class RegistrationWidget extends Component {
+
+  static propTypes = {
+    refresh: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired,
+    login: PropTypes.object.isRequired
+  }
 
   componentDidMount() {
-    setTitle( 'Home Page' );
-    this.props.getRegistration()
+    this.props.refresh()
     .catch( error => toast.error( error.message ) );
   }
 
@@ -48,10 +51,3 @@ class RegistrationWidget extends Component {
     );
   }
 }
-
-const mapStateToProps = ({ login, home }) => ({
-  login: login.current_login,
-  data: home.registration
-})
-
-export default connect( mapStateToProps, { getRegistration } )( RegistrationWidget );

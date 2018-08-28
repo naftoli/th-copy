@@ -1,2 +1,3 @@
 export * from './QuickLinks';
-export { default as RegistrationWidget } from './RegistrationWidget';
+export * from './RegistrationWidget';
+export * from './BirthdaysWidget';

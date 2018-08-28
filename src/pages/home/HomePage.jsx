@@ -5,9 +5,15 @@ import { connect } from 'react-redux';
 import { BaseLogo } from 'components/ui';
 import { Row } from 'reactstrap';
 import { 
-  QuickLinks, Resources, RegistrationWidget
+  QuickLinks, Resources, RegistrationWidget,
+  BirthdaysWidget
 } from './widgets';
-
+// state
+import { 
+  getRegistration, getBirthdays 
+} from 'store/home/operations';
+// functions
+import { setTitle } from 'functions/utils';
 // styles and images
 import './home.scss';
 import './widgets/style.scss';
@@ -15,8 +21,12 @@ import { man, woman } from 'img/th';
 
 class HomePage extends Component {
 
-  render() {
+  componentDidMount() {
+    setTitle( 'Home Page' );
+  }
 
+  render() {
+    const { login, home, getRegistration } = this.props;
     const { name, img } = this.props.login;
 
     return (
@@ -33,9 +43,17 @@ class HomePage extends Component {
 
           <QuickLinks />
 
-          <Resources />
+          <RegistrationWidget
+            login={ login }
+            data={ home.registration } 
+            refresh={ getRegistration } />
 
-          <RegistrationWidget />
+          <BirthdaysWidget
+            login={ login }
+            refresh={ this.props.getBirthdays }
+            birthdays={ home.birthdays } />
+
+          <Resources />
 
         </Row>
       </div>
@@ -43,8 +61,13 @@ class HomePage extends Component {
   }
 }
 
-const mapStateToProps = ({ login }) => ({
-  login: login.current_login
+const mapStateToProps = ({ login, home }) => ({
+  login: login.current_login,
+  home,
 })
 
-export default connect( mapStateToProps )( HomePage );
+const mapDispatchToProps = {
+  getRegistration, getBirthdays
+}
+
+export default connect( mapStateToProps, mapDispatchToProps )( HomePage );
