@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { Login } from './Login'; // import the compenent not connected to the store
+import { Login } from '../Login'; // import the compenent not connected to the store
 
 describe( 'Login', () => {
   // BOILERPLATE

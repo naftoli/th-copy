@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { MemoryRouter, Redirect } from 'react-router-dom';
-import { Logout } from './Logout'; // import the compenent not connected to the stores
+import { Logout } from '../Logout'; // import the compenent not connected to the stores
 
 describe( 'Logout', () => {
   // BOILERPLATE
