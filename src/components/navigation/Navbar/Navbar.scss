@@ -63,7 +63,10 @@
     // flip the caret when the dropdown is shown
     .dropdown.show a#nav-login::before{ transform: rotate(180deg); }
     // make the dropdown always stay the same size 
-    .dropdown-menu { min-width: 300px; padding: 0px; }
+    .dropdown-menu {
+      min-width: 300px; padding: 0px;
+      a:hover { text-decoration: none; }
+    }
     // center the text 
     span { vertical-align: middle; }
     // limit the height of images on the navbar
