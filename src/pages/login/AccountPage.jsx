@@ -2,13 +2,39 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Prompt } from 'react-router';
-import { Row, Col, Input } from 'reactstrap';
 import { AddressRow } from 'components/rows';
 import { SaveButton } from 'components/buttons';
+import { BaseLogo, FontAwesome } from 'components/ui';
 import { PhoneNumber, Password } from 'components/inputs';
+import { Row, Col, Input, Button, Card } from 'reactstrap';
 // functions
 import { setTitle } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
+// style
+import './AccountPage.scss';
+
+class Account extends Component {
+  render() {
+    const { name, img } = this.props;
+    return (
+      <Card className='Account'>
+        <Row>
+          <Col xs={3} xl={2}>
+            <BaseLogo src={ img } />
+          </Col>
+          <Col xs={5} xl={6}>
+            <span className='name'>{ name }</span>
+          </Col>
+          <Col xs={4}>
+            <Button color='danger'>
+              <FontAwesome icon='trash'/> Remove
+            </Button>
+          </Col>
+        </Row>
+      </Card>
+    );
+  }
+}
 
 class AccountPage extends Component {
 
@@ -31,10 +57,14 @@ class AccountPage extends Component {
 
     account = { ...account, ...this.state.updates };
     const updated = Object.keys( this.state.updates ).length > 0;
-    const { 
+    let { 
       username, password, title, first, last, admin_email,
-      admin_phone_work, admin_phone_mobile, logins, ...address
+      admin_phone_work, admin_phone_mobile, logins, customerProfile, ...address
     } = account;
+
+    logins = logins.filter(
+      login => [ 'INST', 'BC', 'TEACHER' ].includes( login.code )
+    );
 
     const inputProps = {
       onChange: this.onChange
@@ -97,10 +127,9 @@ class AccountPage extends Component {
         <SaveButton show={ updated } onClick={ this.update } />
 
         <p className='title'>Account Access</p>
-        
-        <pre>
-          { JSON.stringify( this.props.account.logins, null, 2 ) }
-        </pre>
+        <div id='accounts'>
+          { logins.map( ( login, index ) => <Account key={ index } { ...login } /> )}
+        </div>
       </div>
     )
   }

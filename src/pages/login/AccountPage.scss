@@ -1,0 +1,37 @@
+#accounts {
+
+  display: flex;
+  flex-wrap: wrap;
+
+  .Account {
+    width: 98%;
+    margin: 1%;
+    padding: 1%;
+    justify-content: center;
+
+    @media ( min-width: 1024px ) {
+      width: 48%;
+      .name { font-size: 1.1em; }
+    }
+
+    @media ( min-width: 1500px ) {
+      width: 31%;
+      .name { font-size: 1.3em; }
+    }
+    @media ( min-width: 2150px ) {
+      width: 23%;
+      .name { font-size: 1.5em; }
+    }
+
+    > .row { align-items: center; }
+
+    img {
+      width: 100%;
+      max-width: 100px;
+    }
+
+    .btn {
+      white-space: normal;
+    }
+  }
+}
