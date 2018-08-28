@@ -14,7 +14,7 @@ const Birthday = ({ profilePicture, user_id, name, class_id, platoon }) => {
       <Col xs={3} xl={2}>
         <ProfilePicture src={ profilePicture } />
       </Col>
-      <Col xs={9}>
+      <Col xs={9} xl={10}>
         <Link to={`/bm/users/${user_id}`}>{ name }</Link><br/>
         <Link to={`/bm/platoons/${class_id}`}>{ platoon }</Link>
       </Col>
