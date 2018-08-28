@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { getPlatoon, updatePlatoon } from 'store/platoons/operations';
 import { removeAuth, createAuth } from 'store/staff/operations';
+import { filterUpdates } from 'functions/events';
 
 export class PlatoonPage extends Component {
   // initial state
@@ -20,9 +21,8 @@ export class PlatoonPage extends Component {
 
   // non-destructivly update the state
   handleUpdate = ( update ) => {
-    const platoon = Object.assign( {}, this.state.platoon, update );
-    const updates = Object.assign( {}, this.state.updates, update );
-    this.setState({ platoon, updates });
+    const updates = filterUpdates( this.state.platoon, { ...this.state.updates, ...update } );
+    this.setState({ updates });
   }
   // handle selects
   handleInputChange = ({ target }) => { this.handleUpdate({ [target.name]: target.value }) };
@@ -68,13 +68,18 @@ export class PlatoonPage extends Component {
   }
 
   render() {
-    if ( this.state.platoon === undefined ) return <Redirect to='/platoons' />;
-    if ( this.state.loading ) return <LoadingScreen  Callout />
+    let { platoon, loading, updates } = this.state;
+
+    if ( platoon === undefined ) return <Redirect to='/platoons' />;
+    if ( loading ) return <LoadingScreen  Callout />
     
-    const { staff } = this.state.platoon;
+    const { staff } = platoon;
+
     const inputProps = { onChange: this.handleInputChange };
     const selectProps = { onChange: this.handleSelectChange };
+
     const updated = Object.keys( this.state.updates ).length > 0;
+    platoon = { ...platoon, ...updates };
 
     return (
       <div id='PlatoonPage'>
@@ -87,7 +92,7 @@ export class PlatoonPage extends Component {
         </Callout>
 
         <form onSubmit={ this.save }>
-          <PlatoonRow platoon={this.state.platoon} 
+          <PlatoonRow platoon={ platoon } 
             inputProps={ inputProps } selectProps={ selectProps } />
 
           <SaveButton show={ updated } />

@@ -73,7 +73,7 @@ export class NewPlatoonPage extends Component {
         <Row>
           <Col xs={12} id='save'>
             <Button color='primary'>
-              <FontAwesome icon='fa-save'/> Save Changes
+              <FontAwesome icon='save'/> Create Platoon
             </Button>
           </Col>
         </Row>

@@ -22,7 +22,7 @@ class SettingsTab extends Component {
   }
 
   delete = () => {
-    if ( confirm( 'Are you sure you want to delete this soldier?') ) {
+    if ( window.confirm( 'Are you sure you want to delete this soldier?') ) {
       this.props.deleteSoldier( this.props.soldier.user_id )
       .then( () => this.props.getSoldiers() ) // refresh the main list
       .then( () => this.props.getSoldier() ); // refresh the single soldier
