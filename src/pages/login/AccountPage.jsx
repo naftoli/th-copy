@@ -59,9 +59,10 @@ class AccountPage extends Component {
     this.setState({ updates });
   };
   onChange = ({ target }) => { this.handleUpdates({ [target.name]: target.value }) };
-  onSubmit = () => {
+  onSubmit = ( e ) => {
+    e && e.preventDefault();
     this.props.updateCurrentUser( this.state.updates )
-    .then( account => { this.setState({ updates: {} }); });
+    .then( () => { this.setState({ updates: {} }); });
   }
   // disconnect accounts
   disconnect = ( auth, id ) => {
@@ -99,7 +100,7 @@ class AccountPage extends Component {
             </Col>
             <Col xs={12} sm={6}>
               <label>New Password</label>
-              <Password name='password' value={ password } {...inputProps} tabToggle required />
+              <Password name='password' value={ password } {...inputProps} tabToggle />
             </Col>
           </Row>
 
@@ -112,12 +113,12 @@ class AccountPage extends Component {
 
             <Col xs={8} sm={4}>
               <label>First Name</label>
-              <Input name='first' value={ first } {...inputProps} />
+              <Input name='first' value={ first } {...inputProps} required />
             </Col>
 
             <Col xs={12} sm={5}>
               <label>Last Name</label>
-              <Input name='last' value={ last } {...inputProps} />
+              <Input name='last' value={ last } {...inputProps} required />
             </Col>
 
             <Col xs={12}>
