@@ -12,13 +12,13 @@ const NameRow = ( { soldier, onChange, required } ) => {
       <Col xs='6'>
         <label>First Name</label>
         <Input id='first' value={ first } { ...inputProps }
-          pattern='^[\w\s]{3,}$' title="Three or more letters"/>
+          pattern='^[a-zA-Z-\s]{3,}$' title="Three or more letters"/>
         <div className='invalid-message'>Please enter 3 or more letters</div>
       </Col>
       <Col xs='6'>
         <label>Last Name</label>
         <Input id='last' value={ last } { ...inputProps }
-          pattern='^[\w\s]{3,}$' title="Three or more letters"/>
+          pattern='^[a-zA-Z-\s]{3,}$' title="Three or more letters"/>
         <div className='invalid-message'>Please enter 3 or more letters</div>
       </Col>
       <Col xs='6' dir='rtl'>
