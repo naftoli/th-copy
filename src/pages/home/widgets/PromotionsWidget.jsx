@@ -16,7 +16,7 @@ const Soldier = ({ profilePicture, user_id, name, rank_ord, class_id, platoon })
       </Col>
       <Col xs={9} xl={10}>
         <Link to={`/bm/users/${user_id}`}>{ name }</Link><br/>
-        <Link to={`/bm/users/${class_id}`}>{ platoon }</Link>
+        <Link to={`/bm/platoons/${class_id}`}>{ platoon }</Link>
       </Col>
     </Row>
   )
