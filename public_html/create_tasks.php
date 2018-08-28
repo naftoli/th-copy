@@ -122,29 +122,25 @@ if (isset($_POST['submit'])) {
     }
 	//echo $missionNumber;
     
-    $sql2 = "select * from parshos where year in (5777, 5778)";
+    // get start and end from db
+    require 'class.globalSettings.php';
+    $missionYear = GlobalSettings::getRegistrationYear();
+    $defaultDates = GlobalSettings::getCurYearDates();
+	$defaultStart = $defaultDates['start'];
+    $defaultEnd = $defaultDates['start'];
+
+    $weeks = array();
+    $sql2 = 'select * from parshos where year in(' . ($missionYear-1) . ',' . $missionYear . ')';
     $result2 = mysql_query( $sql2 );
     while ( $row2 = mysql_fetch_assoc( $result2 ) ) {
-        // where is weeks defined?
         $weeks[$row2['start']][$row2['end']] = $row2['name'];
     }
-    echo "<pre>";
-    //print_r($weeks);
-    echo "</pre>";
-	
-	$defaultStart = 2458005; // Sept 8, 2017 
-	$defaultEnd = 2458368; // Sept 6, 2018
-    /*
-    if ($subject_id == 101) {
-        $defaultStart = 2457830;
-        $defaultEnd = 2457850;
-    }
-	*/
+    
 	$langSheet = $_POST['lang'];
 	if ($langSheet == 1) {
-  		$file = "SystemTasks/" . $subjects[$subject_id] . "5778.xlsx";
+  		$file = "SystemTasks/" . $subjects[$subject_id] . $missionYear . ".xlsx";
 	} else if ($langSheet == 2) {
-		$file = "SystemTasks/Yi" . $subjects[$subject_id] . "5778.xlsx";
+		$file = "SystemTasks/Yi" . $subjects[$subject_id] . $missionYear . ".xlsx";
 	}
     
     $arrMandatory = array();
