@@ -15,6 +15,7 @@ Array [
     "path": "/",
     "user_types": Array [
       "HQ",
+      "INST",
       "BC",
       "TEACHER",
     ],
@@ -72,17 +73,8 @@ Array [
         "path": "/bm/staff",
       },
       Object {
-        "items": Array [
-          Object {
-            "label": "View / Edit",
-            "path": "/bm/base/undefined",
-          },
-          Object {
-            "label": "Transactions",
-            "path": "/bm/base/undefined/transactions",
-          },
-        ],
         "label": "Base",
+        "path": "/bm/base/undefined",
         "user_types": Array [
           "BC",
         ],
@@ -106,6 +98,7 @@ Array [
         "path": "/print_missions2.php",
         "user_types": Array [
           "HQ",
+          "INST",
           "BC",
           "TEACHER",
         ],
@@ -121,6 +114,7 @@ Array [
         "path": "/mark_missions2.php",
         "user_types": Array [
           "HQ",
+          "INST",
           "BC",
           "TEACHER",
         ],
@@ -154,6 +148,7 @@ Array [
     "label": "Missions",
     "user_types": Array [
       "HQ",
+      "INST",
       "BC",
       "TEACHER",
     ],
@@ -174,6 +169,7 @@ Array [
         "path": "/newAchievementTasks.php",
         "user_types": Array [
           "HQ",
+          "INST",
           "BC",
           "TEACHER",
         ],
@@ -184,6 +180,7 @@ Array [
         "path": "/manual_points.php",
         "user_types": Array [
           "HQ",
+          "INST",
           "BC",
           "TEACHER",
         ],
@@ -192,6 +189,7 @@ Array [
     "label": "Achievement Cards",
     "user_types": Array [
       "HQ",
+      "INST",
       "BC",
       "TEACHER",
     ],
@@ -487,6 +485,7 @@ Array [
     "path": "/",
     "user_types": Array [
       "HQ",
+      "INST",
       "BC",
       "TEACHER",
     ],
@@ -537,20 +536,11 @@ Array [
         "path": "/bm/staff",
       },
       Object {
-        "items": Array [
-          Object {
-            "label": "View / Edit",
-            "path": "/bm/base",
-          },
-          Object {
-            "label": "Transactions",
-            "path": "/bm/base/transactions",
-          },
-        ],
-        "label": "Base",
+        "label": "Bases",
+        "path": "/bm/base",
         "user_types": Array [
           "HQ",
-          "CKIDS-ADMIN",
+          "INST",
         ],
       },
     ],
@@ -572,6 +562,7 @@ Array [
         "path": "/print_missions2.php",
         "user_types": Array [
           "HQ",
+          "INST",
           "BC",
           "TEACHER",
         ],
@@ -587,6 +578,7 @@ Array [
         "path": "/mark_missions2.php",
         "user_types": Array [
           "HQ",
+          "INST",
           "BC",
           "TEACHER",
         ],
@@ -620,6 +612,7 @@ Array [
     "label": "Missions",
     "user_types": Array [
       "HQ",
+      "INST",
       "BC",
       "TEACHER",
     ],
@@ -640,6 +633,7 @@ Array [
         "path": "/newAchievementTasks.php",
         "user_types": Array [
           "HQ",
+          "INST",
           "BC",
           "TEACHER",
         ],
@@ -650,6 +644,7 @@ Array [
         "path": "/manual_points.php",
         "user_types": Array [
           "HQ",
+          "INST",
           "BC",
           "TEACHER",
         ],
@@ -658,6 +653,7 @@ Array [
     "label": "Achievement Cards",
     "user_types": Array [
       "HQ",
+      "INST",
       "BC",
       "TEACHER",
     ],
