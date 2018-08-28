@@ -7,6 +7,8 @@ import { SaveButton } from 'components/buttons';
 import { BaseLogo, FontAwesome } from 'components/ui';
 import { PhoneNumber, Password } from 'components/inputs';
 import { Row, Col, Input, Button, Card } from 'reactstrap';
+// state
+import { updateCurrentUser } from 'store/login/operations';
 // functions
 import { setTitle } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
@@ -49,7 +51,8 @@ class AccountPage extends Component {
   };
   onChange = ({ target }) => { this.handleUpdates({ [target.name]: target.value }) };
   update = () => {
-    console.log( this.props.account.admin_id, this.state.updates );
+    this.props.updateCurrentUser( this.state.updates )
+    .then( account => { this.setState({ updates: {} }); });
   }
 
   render() {
@@ -82,7 +85,7 @@ class AccountPage extends Component {
           </Col>
           <Col xs={12} sm={6}>
             <label>New Password</label>
-            <Password name='password' value={ password } {...inputProps} required />
+            <Password name='password' value={ password } {...inputProps} tabToggle required />
           </Col>
         </Row>
 
@@ -139,4 +142,8 @@ const mapStateToProps = ({ login }) => ({
   account: login.current_user
 })
 
-export default connect( mapStateToProps )( AccountPage );
+const mapDispatchToProps = {
+  updateCurrentUser
+}
+
+export default connect( mapStateToProps, mapDispatchToProps )( AccountPage );
