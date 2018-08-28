@@ -45,7 +45,7 @@ class PlatoonRouter {
             $platoon['staff_count'] = intval( $platoon['staff_count'] );
             $platoons[] = $platoon;
         }
-        json_response( $platoons );
+        json_response( $platoons, true, true );
     }
 
     public function small(){
@@ -61,7 +61,7 @@ class PlatoonRouter {
         $platoons = array_map(function ( $platoon ){
             $platoon['name'] = $this->getName($platoon); return $platoon;
         }, $platoons );
-        return json_response( $platoons );
+        return json_response( $platoons, true, true );
     }
 
     public function show( $id ) {
