@@ -36,7 +36,7 @@ class BaseRouter {
         );
         $query->execute( $params );
         $bases = $query->fetchAll();
-        json_response( $params, true, true );
+        json_response( $bases, true, true );
     }
 
     public function show( $id ) {
