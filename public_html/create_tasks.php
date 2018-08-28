@@ -110,6 +110,7 @@ if (isset($_POST['submit'])) {
         100 => 	"BriasHaguf",
         101 =>  "MishnaBalPeh"
     );
+
     // there is null data in the database under mission_number
     $sql = "select mission_number from date_tasks_missions where subject_id = $subject_id order by mission_number desc limit 1";
     //echo $sql;
@@ -127,7 +128,7 @@ if (isset($_POST['submit'])) {
     $missionYear = GlobalSettings::getRegistrationYear();
     $defaultDates = GlobalSettings::getCurYearDates();
 	$defaultStart = $defaultDates['start'];
-    $defaultEnd = $defaultDates['start'];
+    $defaultEnd = $defaultDates['end'];
 
     $weeks = array();
     $sql2 = 'select * from parshos where year in(' . ($missionYear-1) . ',' . $missionYear . ')';
@@ -135,6 +136,7 @@ if (isset($_POST['submit'])) {
     while ( $row2 = mysql_fetch_assoc( $result2 ) ) {
         $weeks[$row2['start']][$row2['end']] = $row2['name'];
     }
+    //echo "<pre>"; print_r( $weeks ); echo "</pre>"; exit;
     
 	$langSheet = $_POST['lang'];
 	if ($langSheet == 1) {
@@ -159,9 +161,7 @@ if (isset($_POST['submit'])) {
             $objWorksheet = $objPHPExcel->getActiveSheet();
             
             $missions = array();
-            $firstRow = true;
-            $missionNames = array();
-            
+            $firstRow = true;            
             $fieldNames = array(
                 'action',
                 'missionValue',
@@ -190,65 +190,13 @@ if (isset($_POST['submit'])) {
                 'cat',
                 'labelID'
             );
-            /*
-            $fieldNames = array(
-                'action',
-                'missionName',
-                'missionDescription',
-                'missionValue',
-                'start',
-                'end',
-                'firstLevel',
-                'lastLevel',
-                'type',
-                'catOrd',
-                'grid_id',
-                'mission_marking',
-                'grid_marking',
-                'cat',
-                'qty',
-                'mandatory',
-                'ord',
-                'daily',
-                'needed',
-                'focus',
-                'taskID',
-                'shortName',
-                'task',
-                'points',
-                'default',
-                'labelOrd',
-                'labelID',
-                'lang',
-                'pic'
-            );
-            */
+            
             foreach ( $objWorksheet->getRowIterator() as $row ) {
                 $cellIterator = $row->getCellIterator();
                 $cellIterator->setIterateOnlyExistingCells(false);
                 $i = 0;
 				
                 if ( $firstRow ) {
-					/*
-                    $headers = array(
-                        "Action", "Mission Name", "Mission Description", "Mission Value", "Start Date", "End Date", 
-                        "From Age", "Till Age", "School Types (2,3,12,13)", "Task Category", "Qty", "Mandatory Start end", 
-                        "Task Ord", "Daily", "Needed", "Focus / Charge It start", "Task Name", "Points", "Default On", "TaskLabel Ord", "Label ID", "Lang"                    
-                    );
-                    foreach( $cellIterator as $cell ) { 
-                        $actual[] = trim($cell->getValue());
-                    }
-                    $diff = array_diff($headers, $actual);
-                    if (!empty($diff)) {
-                        echo "<pre>";
-                        print_r($headers);
-                        print_r($actual);
-                        echo "</pre>";
-                        echo "You have a corrupted file, please redownload template file and try again!.";
-                        exit;
-                    }
-					 * 
-					 */
                     $firstRow = false;
                     continue;
                 }
@@ -267,7 +215,7 @@ if (isset($_POST['submit'])) {
 								$arrValues = explode(':', $val);
 								foreach ($arrValues as $value) {
 									$arrTemp = explode(',', $value);
-									$year = $arrTemp[0] == 13 ? 5777 : 5778; 
+									$year = $arrTemp[0] == 13 ? ($missionYear - 1) : $missionYear; 
 									$jd = jewishtojd($arrTemp[0], $arrTemp[1], $year);
                     				$arrStart[] = $jd;
                                     $arrEnd[] = $jd;
@@ -276,7 +224,7 @@ if (isset($_POST['submit'])) {
 							} else {
                                 if (strpos($val, ',') !== false) {
 	                                $arrTemp = explode(',', $val);
-                                    $year = in_array($arrTemp[0], array(12,13)) ? 5777 : 5778;
+                                    $year = in_array($arrTemp[0], array(12,13)) ? ($missionYear - 1) : $missionYear;
                                     $startDate = jewishtojd($arrTemp[0], $arrTemp[1], $year);
                                     //echo "Start : " . $val . " = " . $startDate . "<br />";
                                     $arrStart[] = $startDate;
@@ -294,7 +242,7 @@ if (isset($_POST['submit'])) {
                         case 3:
                             if (strpos($val, ',') !== false) {
                                 $arrTemp = explode(',', $val);
-                                $year = in_array($arrTemp[0], array(12,13)) ? 5777 : 5778;
+                                $year = in_array($arrTemp[0], array(12,13)) ? ($missionYear - 1) : $missionYear;
                                 $endDate = jewishtojd($arrTemp[0], $arrTemp[1], $year);
                                 //echo "End : " . $val . " = " . $endDate  ."<br />";
                                 
@@ -428,7 +376,7 @@ if (isset($_POST['submit'])) {
                         $startTemp += 7;
                     }
                 }
-                
+
                 // This takes the array of start dates and creates new missions based on that
                 $num = count($arrStart);
 				for ($k = 0; $k < $num; $k++) { //index into $arrStart array
@@ -521,10 +469,10 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
 			//exit;
-			//echo "<pre>";
-			//print_r($missions);
-			//echo "</pre>";
-			//exit; 
+			// echo "<pre>";
+			// print_r($missions);
+			// echo "</pre>";
+			// exit; 
             
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN"); 
