@@ -1,12 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-// reactstrap
+// components
 import { Link } from 'react-router-dom';
 import { FontAwesome, Callout } from 'components/ui';
 import { 
   Row, Col, Button, ButtonGroup, Card, 
   Input, InputGroup, InputGroupAddon
 } from 'reactstrap';
+// functions
+import is from 'is_js';
 // styles
 import './StaffRow.scss';
 
@@ -67,7 +69,11 @@ export class NewStaffRow extends Component {
     const emailInput = this.emailRef.current;
     // if nothing was entered, focus on the input
     if ( !emailInput.value ) return emailInput.focus();
-    this.props.onSubmit( emailInput.value );
+    // valid emails we look for the email address
+    if ( is.email( emailInput.value ) )
+      return this.props.onSubmit({ email: emailInput.value });
+    // otherwise look for the username
+    return this.props.onSubmit({ username: emailInput.value });
   }
 
   render() {

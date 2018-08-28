@@ -24,10 +24,10 @@ export class StaffTab extends Component {
     .catch( error => { toast.error( error.message ) } );
   }
 
-  connect = email => {
+  connect = ({ email, username }) => {
     const id = this.props.schoolId;
     // create the connection
-    this.props.createAuth({ email, id, auth: 'school' })
+    this.props.createAuth({ email, username, id, auth: 'school' })
     .then( this.props.refresh )
     .catch( error => { toast.error( error.message ) } );
   }

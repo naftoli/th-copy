@@ -59,10 +59,10 @@ export class PlatoonPage extends Component {
     .catch( error => { toast.error( error.message ) } );
   }
 
-  connect = ( email ) => {
+  connect = ({ email, username }) => {
     const { class_id: id } = this.state.platoon;
     // create the connection
-    this.props.createAuth( { email, id, auth: 'class' } )
+    this.props.createAuth( { email, username, id, auth: 'class' } )
     .then( this.getPlatoon )
     .catch( error => { toast.error( error.message ) } );
   }
