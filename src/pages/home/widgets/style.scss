@@ -76,8 +76,14 @@
     }
   }
 
+  .date .col-9.col-xl-10 {
+    align-self: center;
+  }
+    
+
   .profile-picture {
-    padding: 5%;
+    padding: 5%; text-align: center;
+    max-width: 100px;
     > img.profile-img {
       border-radius: 5px;
       border: 1px solid $primary-color;
