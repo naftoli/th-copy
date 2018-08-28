@@ -7,7 +7,7 @@ import { SaveButton } from 'components/buttons';
 import { Row, Col, Button, Input, TabPane } from 'reactstrap';
 import { Select, PlatoonSelect, Checkbox } from 'components/inputs';
 // functions
-import { isAdmin } from 'functions/login';
+import { isBC } from 'functions/login';
 import { findOption, missionTypeOptions } from 'functions/selects';
 import { deleteSoldier, getSoldiers } from 'store/soldiers/operations';
 
@@ -21,10 +21,12 @@ class SettingsTab extends Component {
     this.props.handleChange( { [id]: option && option.value } );
   }
 
-  delete = () => { 
-    this.props.deleteSoldier( this.props.soldier.user_id )
-    .then( () => this.props.getSoldiers() ) // refresh the main list
-    .then( () => this.props.getSoldier() ); // refresh the single soldier
+  delete = () => {
+    if ( confirm( 'Are you sure you want to delete this soldier?') ) {
+      this.props.deleteSoldier( this.props.soldier.user_id )
+      .then( () => this.props.getSoldiers() ) // refresh the main list
+      .then( () => this.props.getSoldier() ); // refresh the single soldier
+    }
   }
 
   // render the page
@@ -97,7 +99,7 @@ class SettingsTab extends Component {
           <p className='title'>Parent Account</p>
           <ParentRow parentAccount={parentAccount} userId={user_id} refresh={this.props.getSoldier}/> 
             
-          { isAdmin( this.props.login.code ) &&
+          { isBC( this.props.login.code ) &&
             <Row>
               <Col xs='12'>
                 <p className='title'>Delete Soldier</p>
