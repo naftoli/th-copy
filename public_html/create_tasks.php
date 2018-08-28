@@ -44,6 +44,19 @@ function getStartEnd($arr) {
     }
     return $temp;
 }
+
+function createStartArray( $val ) {
+    // these tasks are a colon separated list of dates that are both the start date and end date of that task
+    global $missionYear, $arrStart, $arrEnd;
+    $arrValues = explode(':', $val);
+    foreach ($arrValues as $value) {
+        $arrTemp = explode(',', $value);
+        $year = $arrTemp[0] == 13 ? ($missionYear - 1) : $missionYear; 
+        $jd = jewishtojd($arrTemp[0], $arrTemp[1], $year);
+        $arrStart[] = $jd;
+        $arrEnd[] = $jd;
+    }
+}
 ?>
 <html>
     <head>
@@ -212,15 +225,8 @@ if (isset($_POST['submit'])) {
                         // Start Date
                         case 2:
 							if (strpos($val, ':') !== false) {
-								$arrValues = explode(':', $val);
-								foreach ($arrValues as $value) {
-									$arrTemp = explode(',', $value);
-									$year = $arrTemp[0] == 13 ? ($missionYear - 1) : $missionYear; 
-									$jd = jewishtojd($arrTemp[0], $arrTemp[1], $year);
-                    				$arrStart[] = $jd;
-                                    $arrEnd[] = $jd;
-									$startDate = $arrStart[0];
-								}
+                                createStartArray( $val );
+								$startDate = $arrStart[0];
 							} else {
                                 if (strpos($val, ',') !== false) {
 	                                $arrTemp = explode(',', $val);
