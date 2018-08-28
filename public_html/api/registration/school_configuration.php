@@ -15,7 +15,7 @@ class SchoolRegistrationRouter implements RestRouter {
         $year = isset( $_GET['year'] ) && $_GET['year'] ? $_GET['year'] : '5779';
         $schools = School::find( 'all', [
             'include' => 'school_registrations', 'order' => 'school_name',
-            'conditions' => "test_school = 0 and chayolei = 1"
+            'conditions' => "test_school = 0"
         ] );
         json_response( array_map( function( $school ) use ( $year ) {
             $array = $school->to_array([
