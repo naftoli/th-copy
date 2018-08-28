@@ -3,7 +3,7 @@ import PropTypes  from 'prop-types';
 // Components
 import Cards from 'react-credit-cards';
 import { FontAwesome, InlineSync } from 'components/ui';
-import { Input, Row, Col, Label, Button } from 'reactstrap';
+import { Input, Row, Col, Label, Button, Collapse } from 'reactstrap';
 // Functions
 import Payment from 'payment';
 import classnames from 'classnames';
@@ -61,7 +61,7 @@ class CCForm extends Component {
   }
   
   render() {
-    const { value, onSubmit } = this.props;
+    const { value, onSubmit, show } = this.props;
     const { loading } = this.state;
     const { name, number, expiry, cvc } = value;
 
@@ -70,17 +70,14 @@ class CCForm extends Component {
       onFocus: this.handleInputFocus,
       required: !!onSubmit
     }
-    const classNames = classnames('CCForm', {
-      'show': this.props.show,
-      'has-add': !!onSubmit
-    });
+    const classNames = classnames('CCForm', { 'has-add': !!onSubmit });
     // get the text for the button
     let buttonText = <span><FontAwesome icon='plus'/> Add</span>;
     if ( loading ) buttonText = <InlineSync loading />;
 
     return (
-      <div className={ classNames } ref={ this.formRef }>
-        <form onSubmit={ this.submit } autoComplete='on'>
+      <Collapse className={ classNames } isOpen={ show }>
+        <form onSubmit={ this.submit } autoComplete='on' ref={ this.formRef }>
           <Row>
             <Col xs='12'>
               <Label>Card Number</Label>
@@ -114,7 +111,7 @@ class CCForm extends Component {
             number={ number ? number.replace(/ /g, '') : '' }
             expiry={ expiry ? expiry.replace(/ |\//g, '') : '' } />
         </div>
-      </div>
+      </Collapse>
     );
   }
 }
