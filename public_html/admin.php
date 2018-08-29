@@ -12,7 +12,7 @@ if (!isset($_GET['fromMobile']) && !isset($_POST['fromMobile'])) {
 	require_once 'Mobile_Detect.php';
 	$detect = new Mobile_Detect;
 	if ( $detect->isMobile() || $detect->isTablet() ) {
-		header("Location: https://mashpia.com/mobile/reg");
+		header("Location: https://mashpia.com/api/build");
 		exit;
 	}
 }
@@ -93,6 +93,10 @@ $ui_type = 'admin';
 
 if ($admin_user['admin_id'] > 0) {        
     $_SESSION["admin_id"] = $admin_user['admin_id'];
+}
+
+if ( $admin->beta ) {
+	header( 'Location: /api/build' );
 }
 // Note that T_() in the following html transalates the text if needed.
 ?>

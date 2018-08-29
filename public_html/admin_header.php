@@ -256,7 +256,7 @@ $bpOnly = [ 82 ];
 								</div>
 							</a>
 						</li>
-		
+
 						<ul class="list_second">
 							<li>
 								<a href="#"><?=T_('Students (Soldiers)')?></a>
@@ -358,62 +358,92 @@ $bpOnly = [ 82 ];
 								</div>
 							</a>
 						</li>
-
-						<ul class="list_second">
-							<li><a href="/yearly_prize/forms/staff_info.php">Staff Management</a></li>
-							<li>
-								<a href="#"><?=T_('Teachers')?></a>
-								<ul>
-                                    <li><a href="/teacher_information.php">Teacher Information</a></li>
-									<li><a href="/teacher_list.php">Teacher Logins</a></li>
-									<li><a href="/teacher_letter.php">Teacher Letters</a></li>
-									<li><a href="/teacher_settings.php">Teacher Settings</a></li>
-								</ul>
-							</li>
-							<li>
-								<a href="#"><?=T_('Students (Soldiers)')?></a>
-								<ul>
-                                    <li><a href="/admin_user.php<?=$url_id?>"><?=T_('View / Edit')?></a></li>
-									<li><a href="/admin_user.php<?=$url_id2?>action=add"><?=T_('Add Individual')?></a></li>
-									<li><a href="/admin_school_file.php<?=$url_id?>"><?=T_('Upload School or Class List')?></a></li>
-									<li><a href="/admin_users_photo.php<?=$url_id?>"><?=T_("Upload Photos")?></a></li>
-									<li><a href="/admin_users_register.php<?=$url_id?>"><?=T_("Registration")?></a></li> 
-                                    <li><a href="/admin_card_print.php<?=$url_id?>"><?=T_('Print Rank Cards')?></a></li>
-                                    <li><a href="/reports/users/student_info.php"><?=T_('Search By Serial / Barcode')?></a></li>
-									<li><a href="/add_missions.php"><?=T_('Update Soldier\'s Missions')?></a></li>
-									<li><a href="/add_medals.php"><?=T_('Update Soldier\'s Medals')?></a></li>
-								</ul>
-							</li>						
-							<li>
-								<a href="#"><?=T_('Classes (Platoons)')?></a>
-								<ul>
-									<li><a href="/admin_class.php<?=$url_id?>"><?=T_('Manage')?></a></li>
-									<li><a href="/admin_class.php<?=$url_id2?>action=add"><?=T_('Add New')?></a></li>
-									<li><a href="/admin_class_transition.php<?=$url_id?>"><?=T_('Platoon Transition')?></a></li>
-								</ul>
-							</li>
-							
-							<li>
-								<a href="#"><?=T_('School (Base)')?></a>
-								<ul>
-									<li><a href="/admin_school2.php<?=$url_id2?>action=edit"><?=T_('Edit School Profile')?></a></li>
-									<li><a href="/admin_profile.php">Edit Admin Profile</a></li>
-									<li><a href="/settings.php<?=$url_id2?>">Settings</a></li>
-									<li><a href="/admin_invoice_items.php<?=$url_id?>"><?=T_('Transaction History')?></a></li>
-									<?php if( $admin_user['auth'] === "super" ) { ?>
-										<li><a href="/admin_school_logos.php"><?=T_('Edit School Logos')?></a></li>
-									<?php } ?>
-								</ul>
-							</li>
-							
-							<li>
-								<a href="#"><?=T_('Parents')?></a>
-								<ul>
-									<li><a href="/parent_list.php">Parent Accounts</a></li>
-									<li><a href="/child_list.php">Parent / Children Accounts</a></li>
-								</ul>
-							</li>		
-						</ul>
+						<?php if ( $admin->beta ) { ?>
+							<ul class="list_second">
+								<li>
+									<a href="#"><?=T_('Soldiers')?></a>
+									<ul>
+										<li><a href="/api/build/bm/users"><?=T_('View / Edit')?></a></li>
+										<?php if ($admin_user['auth'] == 'super') { ?>
+											<li><a href="/admin_users_register.php<?=$url_id?>"><?=T_("Registration")?></a></li> 
+										<?php } else { ?>
+											<li><a href="/api/build/bm/uses/registration"><?=T_("Registration")?></a></li> 
+										<?php } ?>
+										<li><a href="/api/build/bm/users/cards"><?=T_('Rank Cards')?></a></li>
+										<li><a href="/add_missions.php"><?=T_('Update Soldier\'s Missions')?></a></li>
+										<li><a href="/add_medals.php"><?=T_('Update Soldier\'s Medals')?></a></li>
+									</ul>
+								</li>
+								<li>
+									<a href="/api/build/bm/platoons"><?=T_('Platoons')?></a>
+								</li>
+								<li>
+									<a href="/api/build/bm/parents"><?=T_('Parents')?></a>
+								</li>
+								<li>
+									<a href="/api/build/bm/staff"><?=T_('Staff')?></a>
+								</li>
+								<li>
+									<a href="/api/build/bm/base"><?=T_('Base')?></a>
+								</li>
+							</ul>
+						<?php  } else { ?>
+							<ul class="list_second">
+								<li><a href="/yearly_prize/forms/staff_info.php">Staff Management</a></li>
+								<li>
+									<a href="#"><?=T_('Teachers')?></a>
+									<ul>
+										<li><a href="/teacher_information.php">Teacher Information</a></li>
+										<li><a href="/teacher_list.php">Teacher Logins</a></li>
+										<li><a href="/teacher_letter.php">Teacher Letters</a></li>
+										<li><a href="/teacher_settings.php">Teacher Settings</a></li>
+									</ul>
+								</li>
+								<li>
+									<a href="#"><?=T_('Students (Soldiers)')?></a>
+									<ul>
+										<li><a href="/admin_user.php<?=$url_id?>"><?=T_('View / Edit')?></a></li>
+										<li><a href="/admin_user.php<?=$url_id2?>action=add"><?=T_('Add Individual')?></a></li>
+										<li><a href="/admin_school_file.php<?=$url_id?>"><?=T_('Upload School or Class List')?></a></li>
+										<li><a href="/admin_users_photo.php<?=$url_id?>"><?=T_("Upload Photos")?></a></li>
+										<li><a href="/admin_users_register.php<?=$url_id?>"><?=T_("Registration")?></a></li> 
+										<li><a href="/admin_card_print.php<?=$url_id?>"><?=T_('Print Rank Cards')?></a></li>
+										<li><a href="/reports/users/student_info.php"><?=T_('Search By Serial / Barcode')?></a></li>
+										<li><a href="/add_missions.php"><?=T_('Update Soldier\'s Missions')?></a></li>
+										<li><a href="/add_medals.php"><?=T_('Update Soldier\'s Medals')?></a></li>
+									</ul>
+								</li>						
+								<li>
+									<a href="#"><?=T_('Classes (Platoons)')?></a>
+									<ul>
+										<li><a href="/admin_class.php<?=$url_id?>"><?=T_('Manage')?></a></li>
+										<li><a href="/admin_class.php<?=$url_id2?>action=add"><?=T_('Add New')?></a></li>
+										<li><a href="/admin_class_transition.php<?=$url_id?>"><?=T_('Platoon Transition')?></a></li>
+									</ul>
+								</li>
+								
+								<li>
+									<a href="#"><?=T_('School (Base)')?></a>
+									<ul>
+										<li><a href="/admin_school2.php<?=$url_id2?>action=edit"><?=T_('Edit School Profile')?></a></li>
+										<li><a href="/admin_profile.php">Edit Admin Profile</a></li>
+										<li><a href="/settings.php<?=$url_id2?>">Settings</a></li>
+										<li><a href="/admin_invoice_items.php<?=$url_id?>"><?=T_('Transaction History')?></a></li>
+										<?php if( $admin_user['auth'] === "super" ) { ?>
+											<li><a href="/admin_school_logos.php"><?=T_('Edit School Logos')?></a></li>
+										<?php } ?>
+									</ul>
+								</li>
+								
+								<li>
+									<a href="#"><?=T_('Parents')?></a>
+									<ul>
+										<li><a href="/parent_list.php">Parent Accounts</a></li>
+										<li><a href="/child_list.php">Parent / Children Accounts</a></li>
+									</ul>
+								</li>		
+							</ul>
+						<? } ?>
 
 						<li class="list_parent<?=isset($ui_type) && $ui_type == 'programs' ? ' current' : ''?>">
 							<a href="#" title="programs">
