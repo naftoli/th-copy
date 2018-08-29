@@ -343,47 +343,80 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 	<h2>Tzivos Hashem Updates</h2>
 	
 	<?
-    $regYear = GlobalSettings::getRegistrationYear();
+	$regYear = GlobalSettings::getRegistrationYear();
 
-    $qry = "SELECT COUNT(user_id) AS total FROM user_registration "
-        ."WHERE school_id = $school_id AND year = $regYear;";
+	$qry = "SELECT COUNT(user_id) AS total FROM user_registration "
+		."WHERE school_id = $school_id AND year = $regYear;";
 	$resultQ = mysql_query($qry);
 	$rowQ = mysql_fetch_assoc($resultQ);
 	$registered = $rowQ['total'];
-	
-    $qry2 = "SELECT COUNT(user_id) AS total FROM users u "
-        ."LEFT JOIN user_registration USING (user_id) "
-        ."WHERE u.school_id = $school_id AND ( year = $regYear OR year is null );";
+
+	$qry2 = "SELECT COUNT(user_id) AS total FROM users u "
+		."LEFT JOIN user_registration USING (user_id) "
+		."WHERE u.school_id = $school_id AND ( year = $regYear OR year is null );";
 	$resultQ2 = mysql_query($qry2);
 	$rowQ2 = mysql_fetch_assoc($resultQ2);
-    $notRegistered = $rowQ2['total'];
-    
-    $school_registered_query = mysql_query(
-        "SELECT COUNT(*) as total, date_paid FROM school_registrations WHERE school_id = $school_id AND year = $regYear;"
-    );
-    $school_registered_query = mysql_fetch_assoc( $school_registered_query );
-    $school_registered = $school_registered_query['date_paid'];
-    if ( $school_registered_query['total'] > 0 ) { ?>
-        <div>
-            <div class="inner">
-                <h3>Registration <?=$regYear?></h3>
-                <? if ( $school_registered ) { ?>
-                    <p>
-                        You have <?=$registered?> chayolim registered in the program for <?=$regYear?>.<br />
-                        <? if ($notRegistered > 0) : ?>
-                        <span style="color: red; font-weight: bold;">
-                            You still have <?=$notRegistered?> chayolim that are not yet registered for <?=$regYear?>!<br />
-                            <!-- Click <a href="admin_users_register.php?school_id=<?=$school_id?>&registered=1">here</a> to register them!</span> -->
-                        </span>
-                        <? endif; ?>
-                    </p>
-                <? } else { ?>
-                    <h4>Pre-register your base for <?=$regYear?> <a href='registration.php'>here</a>.</h4>
-                <? } ?>
-                <!--Click <a href="child_list.php">here</a> for the list of parent accounts with linked children.-->
-            </div>
-        </div>
-    <?php } ?>
+	$notRegistered = $rowQ2['total'];
+
+	$school_registered_query = mysql_query(
+		"SELECT COUNT(*) as total, date_paid FROM school_registrations WHERE school_id = $school_id AND year = $regYear;"
+	);
+	$school_registered_query = mysql_fetch_assoc( $school_registered_query );
+	$school_registered = $school_registered_query['date_paid'];
+	if ( $school_registered_query['total'] > 0 ) { ?>
+		<div>
+			<div class="inner">
+				<h3>Registration <?=$regYear?></h3>
+				<? if ( $school_registered ) { ?>
+					<p>
+						You have <?=$registered?> chayolim registered in the program for <?=$regYear?>.<br />
+						<? if ($notRegistered > 0) : ?>
+						<span style="color: red; font-weight: bold;">
+							You still have <?=$notRegistered?> chayolim that are not yet registered for <?=$regYear?>!<br />
+							<!-- Click <a href="admin_users_register.php?school_id=<?=$school_id?>&registered=1">here</a> to register them!</span> -->
+						</span>
+						<? endif; ?>
+					</p>
+				<? } else { ?>
+					<h4>Pre-register your base for <?=$regYear?> <a href='registration.php'>here</a>.</h4>
+				<? } ?>
+				<!--Click <a href="child_list.php">here</a> for the list of parent accounts with linked children.-->
+			</div>
+		</div>
+	<?php } ?>
+	<div>
+		<div class="inner">
+			<h3>Mashpia.com Beta</h3>
+			<p>
+				We are hard at work cleaning up the website to make your experiance, simpler, faster and better. Some new features include:
+			</p>
+			<ul>
+				<li>
+					<strong>New Resposive Design:</strong>
+					Manage your base on Desktops, Laptops and Cellphones.
+				</li>
+				<li>
+					<strong>Streamlined image editing:</strong>
+					Scale, Rotate, Flip and Zoom your profile's and logo's right from the browser.
+				</li>
+				<li>
+					<strong>Multi Login Accounts:</strong>
+					A single account can now switch between all Bases and/or Platoons it has access to.
+				</li>
+				<li>
+					<strong>Sort and Filter:</strong>
+					Sort and filter multiple columns at once to find exactly what you are looking for.
+				</li>
+				<li>
+					<strong>Increased Security:</strong>
+					New interface always uses HTTPS encryption to midigate "man in the middle" attacks.
+				</li>
+			</ul>
+			
+			<div> <a id='joinBeta' href='/api/build' class='button'>Try Beta Version</a> </div>
+			<!--Click <a href="child_list.php">here</a> for the list of parent accounts with linked children.-->
+		</div>
+	</div>
 	<!--
 	<div>
 		<div class="inner">
