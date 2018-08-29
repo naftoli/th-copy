@@ -55,7 +55,8 @@ class AccountPage extends Component {
 
   // event handlers
   handleUpdates = updates => {
-    updates = filterUpdates( this.props.account, { ...this.state.updates, ...updates } );
+    const account = { ...this.props.account, password: '' }
+    updates = filterUpdates( account, { ...this.state.updates, ...updates } );
     this.setState({ updates });
   };
   onChange = ({ target }) => { this.handleUpdates({ [target.name]: target.value }) };
@@ -99,7 +100,7 @@ class AccountPage extends Component {
               <Input name='username' value={ username } {...inputProps} required />
             </Col>
             <Col xs={12} sm={6}>
-              <label>New Password</label>
+              <label>New Password (4 or more characters)</label>
               <Password name='password' value={ password } {...inputProps} tabToggle />
             </Col>
           </Row>
