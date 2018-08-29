@@ -75,7 +75,8 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         // Special HQ login
         if ( $this->isHQ() ) $logins[] = [
             'type' => 'HQ', 'id' => $this->admin_id, 'name' => 'Tzivos Hashem Headquarters', 
-            'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 'code' => 'HQ'
+            'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 
+            'code' => 'HQ', 'active' => true, 'ckids' => false
         ];
         // add all the schools
         foreach( $this->getAuthIds( 'institution' ) as $inst_id ){
@@ -83,7 +84,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
                 $institution = Institution::find( $inst_id );
                 $logins[] = [ 'type' => 'institution', 'id' => $inst_id, 'code' => 'INST',
                     'name' => $institution->name, 'img' => $institution->logo(),
-                    'ckids' => $institution->inst_id === 10
+                    'ckids' => $institution->inst_id === 10, 'active' => true
                 ];
             } catch ( \ActiveRecord\RecordNotFound $e ) {}
         };
@@ -93,7 +94,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
                 $school = School::find( $school_id );
                 $logins[] = [ 'type' => 'school', 'id' => $school_id, 'code' => 'BC',
                     'name' => $school->school_name, 'img' => $school->logoPath(), 
-                    'ckids' => $school->inst_id === 10
+                    'ckids' => $school->inst_id === 10, 'active' => is_null( $school->school_era )
                 ];
             } catch ( \ActiveRecord\RecordNotFound $e ) {}
         };
@@ -103,7 +104,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
                 $platoon = Platoon::find( $class_id, ['include' => ['school']] );
                 $logins[] = [ 'type' => 'class', 'id' => $class_id, 'code' => 'TEACHER',
                     'name' => $platoon->name(), 'img' => $platoon->school->logoPath(),
-                    'ckids' => $platoon->school->inst_id === 10
+                    'ckids' => $platoon->school->inst_id === 10, 'active' => is_null( $platoon->school->school_era )
                 ];
             } catch ( \ActiveRecord\RecordNotFound $e ) {}
         };
