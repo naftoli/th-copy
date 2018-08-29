@@ -192,18 +192,13 @@
 																		{{#if this.schoolTypeRegistered}}
 																			<button class="btn btn-primary re_register">Register
                                                                                 {{#if this.reg_types.chayolei }}
-                                                                                    Tzivos Hashem 
+                                                                                    Tzivos Hashem {{ this.reg_year }}
                                                                                 {{else}}
                                                                                     {{#if this.reg_types.chidon }}
-                                                                                        Chidon
+                                                                                        Chidon {{ this.chidon_year }}
                                                                                     {{/if}}
                                                                                 {{/if}}
-                                                                                {{ this.reg_year }}
                                                                             </button>
-                                                                        {{else}}
-                                                                            {{#if this.reg_types.chidon }}
-                                                                                <button class="btn btn-primary re_register">Register Chidon</button>
-                                                                            {{/if}}
 																		{{/if}}
 																	{{/if}}
 																</div>

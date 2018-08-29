@@ -51,7 +51,8 @@ $sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, c.class_g
 
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc($result) ) {
-    $reg_year = GlobalSettings::getRegistrationYear( $row['school_id'] );
+	$reg_year = GlobalSettings::getRegistrationYear( $row['school_id'] );
+	$chidon_year = GlobalSettings::getRegistrationYear( );
 	$children[$row['user_id']]['first'] 	= $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
 	$children[$row['user_id']]['last']  	= $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
 	$children[$row['user_id']]['school'] 	= $row['school_name'];
@@ -71,12 +72,13 @@ while ( $row = mysql_fetch_assoc($result) ) {
 	$children[$row['user_id']]['chayolei'] = 1;
     $children[$row['user_id']]['user_registered'] = $row['user_registered'];
 	$children[$row['user_id']]['reg_year'] = $reg_year;
+	$children[$row['user_id']]['chidon_year'] = $chidon_year;
 	$children[$row['user_id']]['school_id'] = $row['school_id'];
     
     $reg_query = mysql_query(
         "SELECT !ISNULL(tc.th_chidon_id) AS reg_chidon, !ISNULL(ur.user_reg_id) AS reg_chayolei, "
         ."sri.date_paid AS registered FROM users u "
-        ."LEFT JOIN th_chidon tc ON u.user_id = tc.user_id and year = $reg_year "
+        ."LEFT JOIN th_chidon tc ON u.user_id = tc.user_id and year = $chidon_year "
         ."LEFT JOIN user_registration ur ON u.user_id = ur.user_id and ur.year = $reg_year "
         ."LEFT JOIN school_registrations sri ON u.school_id = sri.school_id AND sri.year = $reg_year "
         ."WHERE u.user_id = ".$row['user_id']
