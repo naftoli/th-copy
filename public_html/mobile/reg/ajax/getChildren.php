@@ -1,7 +1,7 @@
 <?php
 require '../../../db.php';
 require_once( __DIR__ . '/../../../class.globalSettings.php' );
-$CHIDON_ACTIVE = false; // change to activate chidon
+$CHIDON_ACTIVE = true; // change to activate chidon
 
 $admin = mysql_real_escape_string( $_POST['admin'] );
 $year = mysql_real_escape_string( $_POST['year'] );
@@ -104,8 +104,8 @@ while ( $row = mysql_fetch_assoc($result) ) {
     
     // chidon regustration
     if ( !$row['reg_chidon'] && // if not in chidon 
-        $row['class_grade'] >= 4 && // and in grade 4+
-        !in_array( $row['school_id'], $australia ) // and not in australia..
+		$row['class_grade'] >= 4 // and in grade 4+
+		//&& in_array( $row['school_id'], $australia ) // and not in australia..
     ) {
         $children[$row['user_id']]['needsReg'] = 1;
         $children[$row['user_id']]['reg_types']['chidon'] = true;

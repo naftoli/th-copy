@@ -201,7 +201,9 @@
                                                                                 {{ this.reg_year }}
                                                                             </button>
                                                                         {{else}}
-                                                                            <!-- <button class="btn btn-primary no-register">Register Tzivos Hashem 5779</button> -->
+                                                                            {{#if this.reg_types.chidon }}
+                                                                                <button class="btn btn-primary re_register">Register Chidon</button>
+                                                                            {{/if}}
 																		{{/if}}
 																	{{/if}}
 																</div>

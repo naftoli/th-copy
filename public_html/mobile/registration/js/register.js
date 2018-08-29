@@ -7,16 +7,6 @@ $("#successModal").on('hidden.bs.modal', function( event ) { window.location = "
 $('[data-toggle="popover"]').popover();
 hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right places
 
-// yahadus registration
-$( '#step-2 form #chidon-registration input').change( function( event ) {
-    if ( event.target.checked ) {
-        $( '#step-2 form #yahadus-registration').show();
-    } else {
-        $( '#step-2 form #yahadus-registration input' )[0].checked = false;
-        $( '#step-2 form #yahadus-registration').hide();
-    } 
-});
-
 var anash_kinder = 269;
 
 var registrationApp = function() {
@@ -54,6 +44,7 @@ var registrationApp = function() {
         toggleLoading( "step-1", true );
 
         getUsers().then( function( users ) { 
+            console.log( users );
             if( users.length === 0 ) return noChildren();
             if( users.length === 1 ) return step2();
 
@@ -100,6 +91,24 @@ var registrationApp = function() {
         // show the page
         templates.showUser( state.selected_users[0], 0 );
         showSection('step-2');
+
+        var current_index = parseInt( $("#current_index").val() );
+        var selected_user = state.selected_users[ current_index ];
+        var school_id = selected_user.school.school_id;
+        var australian = [ 55, 66, 110, 112, 180 ];
+
+        // show study guides info for all non Australian schools
+        if ( !australian.includes( school_id ) ) $("#study-guides").show();
+        
+        // yahadus registration
+        $( '#step-2 form #chidon-registration input').change( function( event ) {
+            if ( event.target.checked ) {
+                if ( !australian.includes( school_id ) ) $( '#step-2 form #yahadus-registration').show();
+            } else {
+                $( '#step-2 form #yahadus-registration input' )[0].checked = false;
+                $( '#step-2 form #yahadus-registration').hide();
+            } 
+        });
     }
 
     // select shipping option
