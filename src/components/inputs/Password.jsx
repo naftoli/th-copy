@@ -52,7 +52,8 @@ export class Password extends Component {
           </InputGroupAddon>
         }
         <input className='form-control' placeholder='Password' type={ inputType } required={ required }
-          onChange={ onChange } value={ value } name='password' ref={ this.passwordRef } />
+          onChange={ onChange } value={ value } name='password' ref={ this.passwordRef } 
+          pattern='^[\w\s]{4,}$' title='4 or more characters'/>
         { showToggle &&
           <InputGroupAddon addonType="append">
             <Button color='primary' onClick={ this.togglePassword } id='toggle-password' 
