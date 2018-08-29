@@ -9,7 +9,7 @@ import { changeLogin } from 'store/login/actions';
 import { ClientError } from 'pages/errors';
 import './Dashboard.scss';
 
-const threshold = 768;
+const threshold = 1025;
 
 export class Dashboard extends Component {
   // default props
@@ -22,10 +22,6 @@ export class Dashboard extends Component {
   state = { active: false, hasError: false }
   // setup initial state on component mount
   componentDidMount() {
-    // open the sidebar by default on larger displays
-    if ( window.innerWidth > threshold ) {
-      this.setState({ active: true });
-    }
     // close the sidebar if the route changes
     this.unlisten = this.props.history.listen( () => {
       const active = window.innerWidth <= threshold ? false : this.state.active;
@@ -41,12 +37,12 @@ export class Dashboard extends Component {
     // Display fallback UI
     this.setState({ hasError: true });
     // You can also log the error to an error reporting service
-    console.warn( error, info );
+    // console.warn( error, info );
   }
 
   // only toggle the sidebar if the screen is small enough
   toggle = () => {
-    if ( window.innerWidth <= 1024 ) {
+    if ( window.innerWidth <= threshold ) {
       this.setState({ active: !this.state.active });
     }
   }

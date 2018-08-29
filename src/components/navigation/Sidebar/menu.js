@@ -50,7 +50,7 @@ const getMenu = ( user_type, id, no_legacy ) => {
       icon: <FontAwesome icon='home'/>
     },
     {
-      label: 'Base Managment',
+      label: 'Base Management',
       icon: <FontAwesome icon='school'/>,
       items: [
         {
@@ -71,7 +71,7 @@ const getMenu = ( user_type, id, no_legacy ) => {
       ]
     },
     {
-      label: 'Platoon Managment', user_types: [ 'TEACHER' ], path: '/bm/users',
+      label: 'Platoon Management', user_types: [ 'TEACHER' ], path: '/bm/users',
       icon: <FontAwesome icon='chalkboard-teacher' />,
     },
     {

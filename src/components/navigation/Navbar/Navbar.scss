@@ -11,8 +11,10 @@
   @media( max-width: 1024px ) { height: $navbar-height-mobile; }
   // Logo section
   .navbar-brand {
-    width: 200px;
-    @media ( max-width: 1024px ) { width: 120px; }
+    width: 200px; user-select: none;
+    @media ( max-width: 1025px ) {
+      width: 200px;
+    }
     @media ( max-width: 767px ) { width: auto; }
 
     transition: all .3s;

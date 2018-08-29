@@ -87,7 +87,7 @@ class NewStaffModal extends Component {
 }
 
 const mapStateToProps = ({ login }) => ({
-  login: login.current_user
+  login: login.current_login
 })
 
 const mapDispatchToProps = { createStaff, getStaff };

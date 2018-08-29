@@ -99,24 +99,15 @@
   }
 }
 
-@media (min-width: 768px) and (max-width: 1025px) {
-  #sidebar {
-    margin-left: -270px;
-  }
-  #sidebar.active {
-    margin-left: 0px;
-  }
-}
-
-/* Mobile Design */
-@media (max-width: 768px) {
+/* Mobile / Tablet Design */
+@media (max-width: 1025px) {
   #sidebar {
       margin-left: -270px;
       position: absolute;
       z-index: 999;
   }
   #sidebar.active {
-      margin-left: 0;
+      margin-left: 0px;
   }
 }
 

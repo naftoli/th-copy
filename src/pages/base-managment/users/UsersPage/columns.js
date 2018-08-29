@@ -24,19 +24,19 @@ export default ( code, editPicture ) => {
         if ( filter.value === 'yes') return row[filter.id] !== DEFAULT_PROFILE;
         if ( filter.value === 'no') return row[filter.id] === DEFAULT_PROFILE;
       },
-    },{
+    }, {
       Header: "First Name", accessor: 'first',
       Cell: props => <Link to={`/bm/users/${props.original.user_id}`}>{props.value}</Link>,
-    },{
+    }, {
       Header: "Last Name", accessor: 'last',
       Cell: props => <Link to={`/bm/users/${props.original.user_id}`}>{props.value}</Link>,
-    },{
+    }, {
       Header: "Serial Number", accessor: 'user_serial',
       Cell: props => <Link to={`/bm/users/${props.original.user_id}`}>{props.value}</Link>,
-    },{
+    }, {
       Header: 'Date Of Birth', accessor: 'dob', sortable: false, filterable: false,
       Cell: props => <Date value={ props.value } format = 'l'/>,
-    },{
+    }, {
       Header: 'Registered', accessor: 'user_registered', sortable: false,
       Cell: props => <Date value={ props.value } format = 'l LT'/>,
       filterMethod: ( filter, row ) => {
@@ -52,7 +52,7 @@ export default ( code, editPicture ) => {
           <option value="no">Not Registered</option>
         </select>
     },
-    { id: 'chayolei',  Header: 'CTH', accessor: user => user.chayoeli ? 'Yes' : 'No' },
+    { id: 'chayolei',  Header: 'CTH', accessor: user => user.chayolei ? 'Yes' : 'No' },
     { id: 'chidon',  Header: 'Chidon', accessor: user => user.chidon ? 'Yes' : 'No' }
   ];
   
