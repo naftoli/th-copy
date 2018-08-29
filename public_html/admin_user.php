@@ -225,93 +225,7 @@ if(!empty($action)) {
 			require_once 'class.heDob.php';
 			$hdob = new HeDob( $new_user_id );
 			$hdob->setHeDob();
-			/*
-			//add ladder/year
-			if ($_POST['class_id'] > 0) {
-				$year = "select class_grade from classes where class_id = " . $_POST['class_id'];
-				$year_res = mysql_query($year);
-				$row = mysql_fetch_row($year_res);
-				$y = $row[0];
-				switch ($y) {
-					case 'Pre1a':
-						$level = 6;
-						break;
-					case '1':
-						$level = 7;
-						break;
-					case '2':
-						$level = 8;
-						break;
-					case '3':
-						$level = 9;
-						break;
-					case '4':
-						$level = 10;
-						break;
-					case '5':
-						$level = 11;
-						break;
-					case '6':
-						$level = 12;
-						break;
-					case '7':
-						$level = 13;
-						break;
-					case '8':
-						$level = 14;
-						break;
-					default:
-						$level = null;
-						break;
-				}
-			} else {
-				$level = null;
-			}
 
-			if ($level) {
-				//get all subjects
-				$sbj = "select * from subjects where subject_type NOT IN ('school_points', 'home_points')";
-				$sub_res = mysql_query($sbj);
-				$subjects = array();
-				while ($subject = mysql_fetch_assoc($sub_res)) {
-					$subjects[] = $subject['subject_id'];
-				}
-				foreach ($subjects as $subject) {
-					$track_id = 1;
-					if ($subject == 1) {
-						if (in_array($school_type, array(12,13))) {
-							$track_id = 3;
-						} else if (in_array($school_type, array(2,3))) {
-							$track_id = 5;
-						}
-					}
-					$ins = "insert into user_tracks values ($new_user_id, $subject, $track_id, $level, 0)";
-					@mysql_query($ins);
-				}
-			}
-			/*
-			//create private rank for soldier
-			$jd = unixtojd();
-			$sql = "insert into rank_marks
-					set rank_ord = 1,
-					user_id = $new_user_id,
-					date_promoted = " .$jd;
-			@mysql_query( $sql );
-			*/
-			/*
-			//add birthday mission/task
-			require_once 'class.birthday.php';
-			$b = new Birthday( $new_user_id );
-			$b->setBirthday();
-			require_once 'class.birthdayYi.php';
-			$by = new BirthdayYi( $new_user_id );
-			$by->setBirthday();
-
-			//set dob for syncing with wp
-			require_once 'class.heDob.php';
-			$hdob = new HeDob( $new_user_id );
-			$hdob->setHeDob();
-			*/
 			$message = T_('Soldier added');
 		break;
 
@@ -1152,7 +1066,7 @@ $class_result = mq($qry);
 
 											<? $points = mysql_result(mq(totalMarks("WHERE user_id = {$row['user_id']}")), 0); ?>
 
-											<TD><?=( new DateTime( $row['dob'] ) )->format('M dS, Y')?></TD>
+											<TD><?= $row['dob'] ? ( new DateTime( $row['dob'] ) )->format('M dS, Y') : ''?></TD>
 											<!--<TD><?=es($row['team_name'])?></TD>-->
 
                                             <td>
