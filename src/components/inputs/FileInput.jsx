@@ -9,8 +9,10 @@ export class FileInput extends Component {
   }
 
   fileSelected = () => {
+    var files = this.props.inputRef.current.files;
+    
     this.setState({
-      text: this.props.inputRef.current.files[0].name
+      text: files.length > 0 ? files[0].name : 'Choose a file'
     });
   }
 
