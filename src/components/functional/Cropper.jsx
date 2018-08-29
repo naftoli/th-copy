@@ -41,7 +41,8 @@ export class Cropper extends Component {
           aspectRatio: 1 / 1, // force the square shape we want
           dragMode: 'move', viewMode: this.props.viewMode, // do not allow the user to add alpha to the image.
           cropBoxMovable: false, cropBoxResizable: false,
-          // ready: () => { this.cropper.zoomTo(0.75); }
+          // autoCropArea: 1,
+          ready: () => { this.cropper.zoom( -0.25 ); }
       });
     }
     // pass the cropper instance to any parents that might want it.
@@ -74,7 +75,9 @@ export class Cropper extends Component {
     const { src, onError } = this.props;
     return (
       <div style={{ maxWidth: '100%', borderRadius: '5px' }}>
-        <img src={ src } alt="cropper-img" ref={ this.cropperRef } onError={ onError }/>
+        <div style={{ maxHeight: '60vh' }}>
+          <img src={ src } alt="cropper-img" ref={ this.cropperRef } onError={ onError }/>
+        </div>
         <CropperControls { ...this.editing() } />
       </div>
     );
