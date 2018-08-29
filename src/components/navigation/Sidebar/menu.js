@@ -193,7 +193,7 @@ const getMenu = ( user_type, id, no_legacy ) => {
       icon: <img src={`${LEGACY_URL}/images/icon_wizard.png`} alt="Setup Guide"/>
     },
     {
-      label: 'Mileage Program', legacy: true,
+      label: 'Mileage Program', user_types: [ 'BC' ], path: '/v2',
       icon: <img src={`${LEGACY_URL}/images/icon_auction.png`} alt="Miliage Program"/>
     },
     {

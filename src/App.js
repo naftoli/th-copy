@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 // pages
 import { Page404 } from 'pages/errors';
+import V2 from 'pages/mileage-program/v2';
 import HomePage from 'pages/home/HomePage';
 import { LoadingScreen } from 'components/ui';
 import BaseManagment from 'pages/base-managment';
@@ -56,6 +57,7 @@ export class App extends Component {
 
             { !refreshing && 
               <Switch>
+                <Route path={`/v2`} exact component={ V2 } />
                 <Route path={`/`} exact component={ HomePage }/>
                 <Route path={`/bm`} component={ BaseManagment } />
                 <Route path={`/myaccount`} exact component={ AccountPage }/>
