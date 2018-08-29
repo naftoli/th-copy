@@ -135,6 +135,7 @@ class UsersUploadRouter {
                         if ( $dob->format('Y') > $startYear || $dob->format('Y') < $endYear ) {
                             $errors[] ="$errorString Date of Birth must be between $startYear and $endYear. Year is " . $dob->format('Y');
                         }
+                        $value = $dob->format('Y-m-d');
                     }
 
                     // validate mission type
