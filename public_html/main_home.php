@@ -387,13 +387,18 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 	<div>
 		<div class="inner">
 			<h3>Mashpia.com Beta</h3>
+			<p> Sections Updated </p>
+			<ul>
+				<li><strong>Home Page</strong></li>
+				<li><strong>Base Managment</strong></li>
+			</ul>
 			<p>
 				We are hard at work cleaning up the website to make your experiance, simpler, faster and better. Some new features include:
 			</p>
 			<ul>
 				<li>
 					<strong>New Resposive Design:</strong>
-					Manage your base on Desktops, Laptops and Cellphones.
+					Manage your base on Desktops, Laptops and Tablets.
 				</li>
 				<li>
 					<strong>Streamlined image editing:</strong>
@@ -405,16 +410,15 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 				</li>
 				<li>
 					<strong>Sort and Filter:</strong>
-					Sort and filter multiple columns at once to find exactly what you are looking for.
+					Sort and filter multiple columns at once to find exactly what you are looking for with ease.
 				</li>
 				<li>
 					<strong>Increased Security:</strong>
-					New interface always uses HTTPS encryption to midigate "man in the middle" attacks.
+					New interface always uses HTTPS encryption.
 				</li>
 			</ul>
 			
-			<div> <a id='joinBeta' href='/api/build' class='button'>Try Beta Version</a> </div>
-			<!--Click <a href="child_list.php">here</a> for the list of parent accounts with linked children.-->
+			<div> <a id='joinBeta' href='/api/beta' class='button'>Join Beta</a> </div>
 		</div>
 	</div>
 	<!--
