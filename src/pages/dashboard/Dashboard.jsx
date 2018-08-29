@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { changeLogin } from 'store/login/actions';
 import { ClientError } from 'pages/errors';
 import './Dashboard.scss';
+import { RegistrationPage } from 'pages/registration/RegistrationPage';
 
 const threshold = 1025;
 
@@ -48,12 +49,24 @@ export class Dashboard extends Component {
   }
 
   render() {
-    const { current_user, current_login, changeLogin, location, title } = this.props;
+    let { current_user, current_login, changeLogin, location, title, children } = this.props;
+
     // if we are a user and not logging out - redirect to legacy parent portal
-    if ( current_login.type === 'user' && location.pathname !== '/logout' ) {
-      window.location.href = `${LEGACY_URL}/mobile/reg/parent_detail.html`;
-      return null;
+    if ( location.pathname !== '/logout' ) {
+      if ( current_login.type === 'user' ) {
+        window.location.href = `${LEGACY_URL}/mobile/reg/parent_detail.html`;
+        return null;
+      }
+      if ( !current_login.active ) {
+        if ( current_login.code === 'BC' ) {
+          window.location.href = `${LEGACY_URL}/registration${ current_login.ckids && '_ckids'}.php`;
+          return null;
+        } else {
+          children = <RegistrationPage />;
+        }
+      }
     }
+    
     const { code, id, ckids } = current_login;
     const menu = getMenu( code, id, ckids );
     // add a logout button
@@ -71,7 +84,7 @@ export class Dashboard extends Component {
           <Sidebar menu={ menu } active={ this.state.active } />
           <div id="dashboard-content">
             { this.state.hasError && <ClientError/> }
-            { !this.state.hasError && this.props.children }
+            { !this.state.hasError && children }
           </div>
         </div>
       </div>
