@@ -18,7 +18,7 @@ $detail_query = mysql_query(
     "SELECT s.school_name, u.first, u.last, rc.type, rc.date, rc.year, rc.amount "
     ."FROM registration_charges rc LEFT JOIN schools s USING ( school_id ) "
     ."LEFT JOIN users u USING ( user_id ) LEFT JOIN transactions t USING ( trans_id ) "
-    ."WHERE year = $year ORDER BY school_name, u.first, u.last, rc.date, rc.amount;"
+    ."WHERE year = $year ORDER BY rc.date DESC, school_name, u.first, u.last, rc.amount;"
 );
 while ( $row = mysql_fetch_assoc( $detail_query ) ) $details[] = $row;
 ?>
