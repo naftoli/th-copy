@@ -21,6 +21,10 @@ export class QuickLinks extends Component {
               <FontAwesome icon='check-circle' regular />
               Mark Missions
             </a>
+            <a href={`${LEGACY_URL}/api/beta`}>
+              <FontAwesome icon='door-open' />
+              Leave Beta
+            </a>
           </div>
         </div>
       </Col>
