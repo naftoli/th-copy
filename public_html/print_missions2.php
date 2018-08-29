@@ -224,7 +224,7 @@ if ($school_id > 0)
     // ***** REPORT DATES ***** //
     include("classes/report.php");
     $reports = array();
-    $sql = "SELECT * FROM reports WHERE report_type='mission_cover_sheet' AND visibility != 'none' and start_date > $start ORDER BY start_date";    
+    $sql = "SELECT * FROM reports WHERE report_type='mission_cover_sheet' AND visibility != 'none' and start_date >= $start ORDER BY start_date";    
     $query = mysql_query($sql);
     while ($row = mysql_fetch_assoc($query)) {
         $report = new report($row);
