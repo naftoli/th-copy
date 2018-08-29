@@ -10,7 +10,7 @@ import { ClientError } from 'pages/errors';
 import './Dashboard.scss';
 import { RegistrationPage } from 'pages/registration/RegistrationPage';
 
-const threshold = 1025;
+const threshold = 1025; // anything larger then an ipad
 
 export class Dashboard extends Component {
   // default props
@@ -21,18 +21,28 @@ export class Dashboard extends Component {
   }
   // initial state
   state = { active: false, hasError: false }
-  // setup initial state on component mount
+
+  
   componentDidMount() {
-    // close the sidebar if the route changes
-    this.unlisten = this.props.history.listen( () => {
+    this.unlisten = this.props.history.listen( ( location ) => {
+
+      // close the sidebar if the route changes
       const active = window.innerWidth <= threshold ? false : this.state.active;
-      this.setState({ hasError: false, active })
+      this.setState({ hasError: false, active });
+
+      // Google Anylitics
+      if ( window.ga ) {
+        window.ga('set', 'page', location.pathname + location.search);
+        window.ga('send', 'pageview', location.pathname + location.search);
+      }
     });
   }
+
   // when component unmounts unlisten to history
   componentWillUnmount() {
     this.unlisten();
   }
+
   // handle application wide errors in a gracefull way in production
   componentDidCatch( error, info ) {
     // Display fallback UI
