@@ -85,6 +85,8 @@ class date_tasks_mission {
 			if ($this->allowPersonalization) {
 				if ( $row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
 				if ( $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
+			} else {
+				if ( $row['default_on'] == 0 ) continue;
 			}
 			
             if ( $row['name'] == 'I said קריאת שמע before the זמן.' ) continue;
@@ -123,6 +125,8 @@ class date_tasks_mission {
 		    if ($this->allowPersonalization) {
 				if ($row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
 				if ( $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
+			} else {
+				if ( $row['default_on'] == 0 ) continue;
 			}
 			
 			if (!empty($this->tasks)) {
@@ -161,6 +165,8 @@ class date_tasks_mission {
 		    if ($this->allowPersonalization) {
 				if ($row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
 				if ( $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
+			} else {
+				if ( $row['default_on'] == 0 ) continue;
 			}
 			
 			if (!empty($this->tasks)) {
@@ -196,6 +202,8 @@ class date_tasks_mission {
 		    if ($this->allowPersonalization) {
 				if ($row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
 				if ( $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
+			} else {
+				if ( $row['default_on'] == 0 ) continue;
 			}
 
 			if (!empty($this->tasks)) {
