@@ -165,7 +165,7 @@ class CustomerProfile {
             $profile = $api_data['profile'];
             
             // and set all the internal variables to the API data.
-            $this->paymentProfiles = isset( $profile['paymentProfiles'] ) ? $profile['paymentProfiles'] : null;
+            $this->paymentProfiles = isset( $profile['paymentProfiles'] ) ? $profile['paymentProfiles'] : [];
             
             $this->customerProfileId = $profile['customerProfileId'];
             $this->description = isset( $profile['description'] ) ? $profile['description'] : false;
