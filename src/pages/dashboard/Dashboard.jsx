@@ -69,7 +69,7 @@ export class Dashboard extends Component {
       }
       if ( !current_login.active ) {
         if ( current_login.code === 'BC' ) {
-          window.location.href = `${LEGACY_URL}/registration${ current_login.ckids && '_ckids'}.php`;
+          window.location.href = `${LEGACY_URL}/registration${ current_login.ckids ? '_ckids' : ''}.php`;
           return null;
         } else {
           children = <RegistrationPage />;
