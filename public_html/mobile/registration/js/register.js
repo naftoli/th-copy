@@ -95,10 +95,13 @@ var registrationApp = function() {
         var current_index = parseInt( $("#current_index").val() );
         var selected_user = state.selected_users[ current_index ];
         var school_id = selected_user.school.school_id;
-        var australian = [ 55, 66, 110, 112, 180 ];
+        var australian = [ 55, 66, 110, 112, 180, 256, 61 ]; // include myshliach in hiding of booklets and yahadus book
 
         // show study guides info for all non Australian schools
         if ( !australian.includes( school_id ) ) $("#study-guides").show();
+
+        // show anash kinder text if anash kinder school
+        if ( school_id == anash_kinder ) $("#anash_kinder_text").show();
         
         // yahadus registration
         $( '#step-2 form #chidon-registration input').change( function( event ) {
@@ -132,9 +135,10 @@ var registrationApp = function() {
             })
         ).then( function( response ){
             if( !response ) return step4(); // skip straight to step 4
-            response.forEach( function( rate ) { 
-                $("#shipping-type-" + rate.type).text("$" + rate.rate) 
-            });
+            $("#shipping-type-1").text("$" + response);
+            // response.forEach( function( rate ) { 
+            //     $("#shipping-type-" + rate.type).text("$" + rate.rate) 
+            // });
             toggleLoading( 'step-3', false );
         });
     }

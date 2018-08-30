@@ -177,6 +177,7 @@
                             </div>
                             <div class="col-10 col-md-11">
                                 <strong>Chayolei Tzivos Hashem ($<span id="chayolei-cost"></span> fee)</strong>
+                                <span id="anash_kinder_text" style="display: none"> Please Note: You can only register through Anash Kinder if your child’s school doesn’t offer Tzivos Hashem</span>
                             </div>
                         </div>
                     </label>
@@ -283,11 +284,19 @@
                     <div class="col-12">
                         <h2>Shipping Rates</h2>
                         <p>
-                            All children not enrolled in an active Tzivos Hashem Base will need to have their physical items (such as Rank books and Medals) shipped directly. 
+                            All children not enrolled in an active Tzivos Hashem Base will need to have their physical items (such as Hachayols, Rank Books and Medals) shipped directly. 
                             Sadly, as much as we would love to do this for free we simply cannot do so and must charge for shipping.<br/><br/>
                             
-                            Please note that this charge is <strong>only for children who are <em>not</em> enrolled in an active Tzivos Hashem Base.</strong>
-                            Children who <strong>are enrolled will have their items delivered to them by their Base Commanders.</strong><br/><br/>
+                            <!-- Please note that this charge is <strong>only for children who are <em>not</em> enrolled in an active Tzivos Hashem Base.</strong>
+                            Children who <strong>are enrolled will have their items delivered to them by their Base Commanders.</strong><br/><br/> -->
+
+                            The shipping fee covers a minimum 14 shipments per year, which includes approximately:
+                            <ul>
+                                <li>11 Hachayol shipments containing 7 issues each, one subscription per family</li>
+                                <li>3 shipments of medals, rank books and rank cards</li>
+                                <li>1 shipment of the annual gift</li>
+                                <li>Raffle prize shipments (if your child wins)</li>
+                            </ul
 
                             <small>Shipping rates may vary by location and are subject to group discounts.</small>
                         </p>
@@ -296,17 +305,17 @@
                 <form id="shipping-form">
                     <div class="row">
                         <div class="col-3 col-lg-2 col-xl-1">
-                            <label class="radio-label">
+                            <label class="radio-label" style="display: none">
                                 <input type="radio" id="shipping-type" name="shipping-type" value="1" checked/>
                                 <span class="radio"></span>
                             </label>
                             <span id="shipping-type-1" class="shipping_cost">$40</span>
                         </div>
                         <div class="col-9 col-lg-10 col-xl-11">
-                            <p>Prepaid shipping for <strong>magazines, medals and rank books.</strong></p>
+                            <p>Prepaid shipping fee for <strong>Hachayol magazines, medals and rank books.</strong></p>
                         </div>
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-3 col-lg-2 col-xl-1">
                             <label class="radio-label">
                                 <input type="radio" id="shipping-type" name="shipping-type" value="2"/>
@@ -317,10 +326,10 @@
                         <div class="col-9 col-lg-10 col-xl-11">
                             <p>Prepaid shipping for <strong>medals and rank books only.</strong> You are always welcome to pick up the magazines in the office.</p>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="row">
                         <div class="col-12">
-                            <input type="submit" class="btn btn-primary" value="Confirm Shipping"/>
+                            <input type="submit" class="btn btn-primary" value="Confirm Shipping Fee"/>
                         </div>
                     </div>
                 </form>
