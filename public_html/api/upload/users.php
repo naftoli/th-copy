@@ -192,10 +192,9 @@ class UsersUploadRouter {
             $user->yan    = $school->tanya;
             
             $user->save();
-            $users[$index] = $user;
         }
 
-        json_response( false );
+        json_response('success');
     } // end create function
 }
 
