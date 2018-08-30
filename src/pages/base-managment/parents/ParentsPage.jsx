@@ -8,6 +8,7 @@ import { InlineSync } from 'components/ui/loading';
 // modals
 import NewParentModal from './NewParentModal';
 // functions
+import { toast } from 'react-toastify';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
 import { getParents } from 'store/parents/operations';
@@ -24,7 +25,10 @@ class ParentsPage extends Component {
     }
   }
 
-  getParents = () => { this.props.getParents() }
+  getParents = () => {
+    this.props.getParents()
+    .catch( error => toast.error( error.message ) )
+  }
   toggle = () => this.setState({ showModal: !this.state.showModal });
 
   toCSV = () => {
@@ -56,7 +60,8 @@ class ParentsPage extends Component {
         Cell: props => <Link to={`${match.path}/${props.original.admin_id}`}>{props.value}</Link> },
       { Header: 'Last Name', accessor: 'last',
         Cell: props => <Link to={`${match.path}/${props.original.admin_id}`}>{props.value}</Link> },
-      { Header: 'Username', accessor: 'username' },
+      { Header: 'Username', accessor: 'username',
+        Cell: props => <Link to={`${match.path}/${props.original.admin_id}`}>{props.value}</Link> },
       { Header: 'Cell Phone', accessor: 'cell' },
       { Header: 'E-mail Address', accessor: 'email' },
       { Header: 'Children', id: 'children', accessor: parent => parent.children.length },

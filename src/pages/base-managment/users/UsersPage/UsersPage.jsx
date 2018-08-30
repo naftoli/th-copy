@@ -7,7 +7,7 @@ import { Button, ButtonGroup } from 'reactstrap';
 import CropperModal from 'components/modals/CropperModal';
 import { Table, InlineSync, Callout, FontAwesome } from 'components/ui';
 // functions
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import is from 'is_js';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // styles
@@ -27,8 +27,13 @@ export class UsersPage extends Component {
   componentDidMount(){
     setTitle( 'View/Edit Soldiers' );
     if ( this.props.soldiers.length < 2 ) {
-      this.props.getSoldiers();
+      this.getSoldiers();
     }
+  }
+
+  getSoldiers = () => {
+    this.props.getSoldiers()
+    .catch( e => toast.error( e.message ) );
   }
 
   // handler for the modals
@@ -54,7 +59,7 @@ export class UsersPage extends Component {
     return this.props.uploadSpreadsheet( formData )
     .then( () => {
       this.setState({ uploadModalShow: false }); 
-      return this.props.getSoldiers();
+      return this.getSoldiers();
     });
   }
 
@@ -91,7 +96,7 @@ export class UsersPage extends Component {
           <Link to={`${match.path}/new`} className='btn btn-primary' role='button'>
            <FontAwesome icon='plus' /> Add Soldier
           </Link>
-          <Button color='primary' onClick={ this.props.getSoldiers }>
+          <Button color='primary' onClick={ this.getSoldiers }>
             <InlineSync loading={ loading } /> Refresh
           </Button>
           { current_login.code === 'BC' && is.not.mobile() && is.not.ios() && // only Base Commanders on desktops/tablets can upload

@@ -10,8 +10,9 @@ export const getSoldiers = () => dispatch => {
       dispatch( actions.setLoading( false ) );
       dispatch( actions.setSoldiers( response.data ) );
       return response.data;
-    }).catch( () => {
+    }).catch( e => {
       dispatch( actions.setLoading( false ) );
+      return Promise.reject( e );
     });
 }
 // create new soldier
