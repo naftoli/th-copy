@@ -76,7 +76,12 @@ export class Cropper extends Component {
     return (
       <div style={{ maxWidth: '100%', borderRadius: '5px' }}>
         <div style={{ maxHeight: '60vh' }}>
-          <img src={ src } alt="cropper-img" ref={ this.cropperRef } onError={ onError }/>
+          <img 
+            style={{ maxHeight: '60vh' }} 
+            src={ src } 
+            alt="cropper-img" 
+            ref={ this.cropperRef } 
+            onError={ onError } />
         </div>
         <CropperControls { ...this.editing() } />
       </div>
