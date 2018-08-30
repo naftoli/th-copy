@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 // pages
 import { Page404 } from 'pages/errors';
-import V2 from 'pages/mileage-program/v2';
+import V2 from 'pages/rewards/v2';
 import HomePage from 'pages/home/HomePage';
 import { LoadingScreen } from 'components/ui';
 import BaseManagment from 'pages/base-managment';
