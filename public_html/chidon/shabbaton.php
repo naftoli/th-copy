@@ -109,7 +109,7 @@ body,td,th {
                 
                 <h4>Fee</h4>
                 <div class="indent">
-                    Thanks to Tzivos Hashem and its sponsors, we are able to cut the original fee of $300 per child by more than half to $136.<br />
+                    Thanks to Tzivos Hashem and its sponsors, we are able to cut the original fee of $300 per child to $150.<br />
                     Please note: Fees do not include transportation to and from New York.
                 </div><br />
 				

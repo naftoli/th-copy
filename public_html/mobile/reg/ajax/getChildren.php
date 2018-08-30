@@ -52,7 +52,7 @@ $sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, c.class_g
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc($result) ) {
 	$reg_year = GlobalSettings::getRegistrationYear( $row['school_id'] );
-	$chidon_year = GlobalSettings::getRegistrationYear( );
+	$chidon_year = GlobalSettings::getChidonYear( );
 	$children[$row['user_id']]['first'] 	= $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
 	$children[$row['user_id']]['last']  	= $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
 	$children[$row['user_id']]['school'] 	= $row['school_name'];
