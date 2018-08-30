@@ -11,7 +11,8 @@ class UserRegistrationRouter {
 
     // get all the users that the parent has, serialized for the registration pages.
     public function getUsers(){
-        global $current_user;   global $MASHPIA_DB;
+        global $current_user;   
+        // global $MASHPIA_DB;
         // load all his user id's
         $user_ids = $current_user->getAuthIds( 'user' );
 
@@ -65,20 +66,20 @@ class UserRegistrationRouter {
         switch ( $zone ) {
             case 1:
                 $base = 57;
-                $increase = 10;
+                $increaseBy = 10;
                 break;
             case 2:
                 $base = 90;
-                $increase = 15;
+                $increaseBy = 15;
                 break;
             case 3:
                 $base = 167;
-                $increase = 20;
+                $increaseBy = 20;
                 break;
         }
         $rate = $base;
         $extra = $child_count - 1;
-        $rate += $extra * $increase;
+        $rate += $extra * $increaseBy;
         json_response( $rate );
 
         // $query = $MASHPIA_DB->prepare(
