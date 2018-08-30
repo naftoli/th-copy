@@ -12,7 +12,7 @@ if (!isset($_GET['fromMobile']) && !isset($_POST['fromMobile'])) {
 	require_once 'Mobile_Detect.php';
 	$detect = new Mobile_Detect;
 	if ( $detect->isMobile() || $detect->isTablet() ) {
-		header("Location: https://mashpia.com/api/build");
+		header("Location: https://mashpia.com/mobile/reg");
 		exit;
 	}
 }
@@ -96,7 +96,7 @@ if ($admin_user['admin_id'] > 0) {
 }
 
 if ( $admin->beta ) {
-	header( 'Location: /api/build' );
+	header( 'Location: /beta' );
 }
 // Note that T_() in the following html transalates the text if needed.
 ?>

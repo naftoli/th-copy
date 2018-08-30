@@ -363,28 +363,28 @@ $bpOnly = [ 82 ];
 								<li>
 									<a href="#"><?=T_('Soldiers')?></a>
 									<ul>
-										<li><a href="/api/build/bm/users"><?=T_('View / Edit')?></a></li>
+										<li><a href="/beta/bm/users"><?=T_('View / Edit')?></a></li>
 										<?php if ($admin_user['auth'] == 'super') { ?>
 											<li><a href="/admin_users_register.php<?=$url_id?>"><?=T_("Registration")?></a></li> 
 										<?php } else { ?>
-											<li><a href="/api/build/bm/uses/registration"><?=T_("Registration")?></a></li> 
+											<li><a href="/beta/bm/uses/registration"><?=T_("Registration")?></a></li> 
 										<?php } ?>
-										<li><a href="/api/build/bm/users/cards"><?=T_('Rank Cards')?></a></li>
+										<li><a href="/beta/bm/users/cards"><?=T_('Rank Cards')?></a></li>
 										<li><a href="/add_missions.php"><?=T_('Update Soldier\'s Missions')?></a></li>
 										<li><a href="/add_medals.php"><?=T_('Update Soldier\'s Medals')?></a></li>
 									</ul>
 								</li>
 								<li>
-									<a href="/api/build/bm/platoons"><?=T_('Platoons')?></a>
+									<a href="/beta/bm/platoons"><?=T_('Platoons')?></a>
 								</li>
 								<li>
-									<a href="/api/build/bm/parents"><?=T_('Parents')?></a>
+									<a href="/beta/bm/parents"><?=T_('Parents')?></a>
 								</li>
 								<li>
-									<a href="/api/build/bm/staff"><?=T_('Staff')?></a>
+									<a href="/beta/bm/staff"><?=T_('Staff')?></a>
 								</li>
 								<li>
-									<a href="/api/build/bm/base"><?=T_('Base')?></a>
+									<a href="/beta/bm/base"><?=T_('Base')?></a>
 								</li>
 							</ul>
 						<?php  } else { ?>
