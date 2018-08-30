@@ -37,7 +37,8 @@ class UserRegistrationRouter {
     }
     // return shipping price for users submitted
     public function getShipping(){
-        global $current_user; global $MASHPIA_DB;
+        global $current_user; 
+        //global $MASHPIA_DB;
 
         if( !isset( $_POST[ 'school_ids' ] ) ){
             json_response( false );
@@ -75,10 +76,14 @@ class UserRegistrationRouter {
                 $increase = 20;
                 break;
         }
+        $rate = $base;
+        $extra = $child_count - 1;
+        $rate += $extra * $increase;
+        json_response( $rate );
 
-        $query = $MASHPIA_DB->prepare(
-            "SELECT type, rate FROM shipping_rates WHERE zone=? AND child_count=?;"
-        );
+        // $query = $MASHPIA_DB->prepare(
+        //     "SELECT type, rate FROM shipping_rates WHERE zone=? AND child_count=?;"
+        // );
         
         // $query->execute( [ $zone, $child_count ] );
         // json_response( $query->fetchAll() );
