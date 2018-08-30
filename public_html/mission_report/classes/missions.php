@@ -49,8 +49,10 @@ class Missions {
 		while ( $row = mysql_fetch_assoc($query) ) {
 		    $user = new user( $row );
 		    $user->get_rank();
-		    $user->get_school_class();
-			if ( !$allowPersonalization && $row['school_id'] == 255 ) $user->disablePersonalization(); // disable personalization for a specific school just becuase...
+			$user->get_school_class();
+			// the idea was to disable personalization for OT so that there's the same number of pages that get printed for every child in each class, 
+			// but since it doesn't help anyway (b/c ages could be different in same class), the if statment will not return true but false
+			// if ( !$allowPersonalization && $row['school_id'] == 255 ) $user->disablePersonalization(); 
 		    $user->get_user_tracks( -1, $this->start, $this->end, array(), $user->lang_id, $printing_mode );
 		    array_push( $this->missions, $user );
 		}
