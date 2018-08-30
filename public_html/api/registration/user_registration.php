@@ -37,8 +37,7 @@ class UserRegistrationRouter {
     }
     // return shipping price for users submitted
     public function getShipping(){
-        global $current_user; 
-        //global $MASHPIA_DB;
+        global $current_user;
 
         if( !isset( $_POST[ 'school_ids' ] ) ){
             json_response( false );
@@ -80,41 +79,6 @@ class UserRegistrationRouter {
         $extra = $child_count - 1;
         $rate += $extra * $increase;
         json_response( $rate );
-
-        // $query = $MASHPIA_DB->prepare(
-        //     "SELECT type, rate FROM shipping_rates WHERE zone=? AND child_count=?;"
-        // );
-        
-        // $query->execute( [ $zone, $child_count ] );
-        // json_response( $query->fetchAll() );
-
-        // // handle more kids then discounted rates allow for.
-        // if ( $child_count > 6 ) {
-        //     $query->execute( [ $zone, 6 ] );
-        //     $max_bluk_rates = $query->fetchAll();
-            
-        //     $multiplied_rates = array_map( function( $info ) use ( $child_count ) {
-        //         $info['rate'] *= intval( $child_count / 6 );
-        //         return $info;
-        //     }, $max_bluk_rates );
-
-        //     // get the rate for the remaining kids
-        //     $query->execute( [ $zone, $child_count % 6 ] );
-        //     $rates = $query->fetchAll();
-
-        //     foreach( $rates as $index => $rate ){
-        //         $rates[$index]['rate'] += $multiplied_rates[$index]['rate'];
-        //     }
-
-        //     json_response( $rates );
-        // // return false if no shipping
-        // } else if( $child_count == 0) {
-        //     json_response( false );
-        // // return discounted rate for multiple kids if less then max ( 6 )
-        // } else {
-        //     $query->execute( [ $zone, $child_count ] );
-        //     json_response( $query->fetchAll() );
-        // } 
     }
     // charge the card and register the users
     public function registerUsers(){
