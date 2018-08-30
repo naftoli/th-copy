@@ -29,7 +29,10 @@
   }
 
   @media ( max-width: 575px ) {
-    #logo  { transition: none; max-height: 125px; margin-bottom: 15px; }
+    #logo  {
+      transition: none; margin-bottom: 15px;
+      img { max-height: 125px; }
+    }
     h3 { text-align: center; }
   }
 
