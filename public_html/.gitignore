@@ -109,3 +109,7 @@ hakhel/*.png
 
 # ignore attachments in HelpDesk
 /helpdesk/content/attachments/*
+
+# ignore the beta folder
+/beta/*
+/new/*
