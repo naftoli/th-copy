@@ -5,11 +5,11 @@ include_once( __DIR__ . "/../header/header.php" );
 class BaseRouter {
 
     public function index(){
-        global $pdo;
+        global $MASHPIA_DB;
         $params = [];
         $filters = $this->getFilters(false, $params);
         if ( !$filters ) return json_error('Access Deinied');
-        $query = $pdo->prepare( 
+        $query = $MASHPIA_DB->prepare( 
              " SELECT s.school_number, s.logo, s.school_id, s.school_name, s.school_city, s.school_state, s.school_country, "
             ." s.chayolei, s.chidon, s.tanya, s.tehillim, "
             ." IFNULL( soldier_count, 0 ) as soldier_count "
@@ -24,13 +24,13 @@ class BaseRouter {
     }
 
     public function small() {
-        global $pdo;
+        global $MASHPIA_DB;
         $params = [];
         $all = isset( $_POST['all'] ) ? $_POST['all'] : false;
         $filters = $this->getFilters( $all, $params );
         if ( !$filters ) return json_error('Access Deinied');
         // generate the SQL
-        $query = $pdo->prepare( 
+        $query = $MASHPIA_DB->prepare( 
             "SELECT s.school_id, s.school_name FROM schools s LEFT JOIN classes c USING (school_id)"
             ." WHERE $filters GROUP BY school_id ORDER BY school_name;"
         );

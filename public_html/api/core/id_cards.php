@@ -6,7 +6,7 @@ include_once( __DIR__ . "/../../calendar.php" );
 class UsersRouter {
     // index, but we are using a POST request for it
     public function create(){
-        global $current_user; global $pdo;
+        global $current_user; global $MASHPIA_DB;
         // limit based on admin type
         extract($this->getFilters( $current_user->login ));
         // add filters from post request
@@ -40,7 +40,7 @@ class UsersRouter {
             ." LEFT JOIN ranks r USING (rank_ord) JOIN schools s USING (school_id) "
             ." LEFT JOIN classes c USING (class_id) WHERE $filters "
             ." ORDER BY s.school_name, c.class_grade, c.class_sub, u.first, u.last, rm.rank_ord;";
-        $query = $pdo->prepare( $sql );
+        $query = $MASHPIA_DB->prepare( $sql );
         $query->execute( $params );
         
         $response = [];
@@ -65,12 +65,12 @@ class UsersRouter {
     }
 
     public function markPrinted() {
-        global $pdo;
+        global $MASHPIA_DB;
         $date = date("Y-m-d H:i:s");
-        $printed_query = $pdo->prepare(
+        $printed_query = $MASHPIA_DB->prepare(
             "UPDATE rank_marks SET date_printed='$date' WHERE user_id=? AND rank_ord=?"
         );
-        $not_printed_query = $pdo->prepare(
+        $not_printed_query = $MASHPIA_DB->prepare(
             'UPDATE rank_marks SET date_printed=null WHERE user_id=? AND rank_ord=?'
         );
         $status = [];

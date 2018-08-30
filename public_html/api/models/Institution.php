@@ -1,6 +1,6 @@
 <?php
 include_once( __DIR__ . '/../auth/classes/Auth.php' );
-include_once( __DIR__ . '/../emails/index.php' );
+include_once( __DIR__ . '/../tools/emails/index.php' );
 // This class uses the Authorize.net gateway
 
 class Institution extends ActiveRecord\Model implements JsonSerializable {

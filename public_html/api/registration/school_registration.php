@@ -4,7 +4,7 @@ include_once( __DIR__ . "/../header/header.php" );
 
 class SchoolRegistrationRouter {
     public function register(){
-        global $current_user; global $pdo;
+        global $current_user; global $MASHPIA_DB;
         // get POST params
         $school_id 				= mysql_real_escape_string(isset($_POST['school_id'])? $_POST['school_id'] : "");
         $amount 				= mysql_real_escape_string($_POST['amount']);
@@ -25,7 +25,7 @@ class SchoolRegistrationRouter {
                 json_error( $response, false, 200 );
 
             // save to transactions table.
-            $transaction_query = $pdo->prepare(
+            $transaction_query = $MASHPIA_DB->prepare(
                 "INSERT INTO transactions (trans_date, school_id, admin_id, description, amount, first, last, zip, response) "
                 ."VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)"
             );

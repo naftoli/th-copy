@@ -5,7 +5,7 @@ include_once( __DIR__ . "/../header/header.php" );
 class UsersRouter {
 
     public function index() {
-        global $current_user; global $pdo;
+        global $current_user; global $MASHPIA_DB;
         // filters and params for the filters
         $filters = [];   $params = [];
         // limit based on admin type
@@ -28,7 +28,7 @@ class UsersRouter {
             ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = :year "
             ."LEFT JOIN classes c USING (class_id) WHERE $filters "
             ."ORDER BY first, last, class_grade, class_sub;";
-        $query = $pdo->prepare( $sql );
+        $query = $MASHPIA_DB->prepare( $sql );
         $query->execute( $params );
 
         $users = [];
@@ -50,7 +50,7 @@ class UsersRouter {
     }
 
     public function create() {
-        global $current_user; global $pdo;
+        global $current_user; global $MASHPIA_DB;
 
         if ( !$current_user->login['code'] === 'BC' )
             json_error( 'Only Base Commanders can authorize registration.');
@@ -85,16 +85,16 @@ class UsersRouter {
         $total = intval( $_POST['total'] );
 
         // create Transaction
-        $create_transaction_query = $pdo->prepare(
+        $create_transaction_query = $MASHPIA_DB->prepare(
             "INSERT INTO transactions (school_id, trans_date, description, amount, admin_id, zip, users_registered) VALUES (?, NOW(), ?, ?, ?, ?, ?)"
         );
-        $delete_transaction_query = $pdo->prepare( 'DELETE FROM transactions WHERE transaction_id = ?' );
-        $finish_transaction_query = $pdo->prepare( 'UPDATE transactions SET response = ? WHERE trans_id = ?' );
+        $delete_transaction_query = $MASHPIA_DB->prepare( 'DELETE FROM transactions WHERE transaction_id = ?' );
+        $finish_transaction_query = $MASHPIA_DB->prepare( 'UPDATE transactions SET response = ? WHERE trans_id = ?' );
         $create_transaction_query->execute([
             $school->school_id, $description, $total, $current_user->admin_id, 
             $school->shipping_postal, implode( ', ', $_POST['user_ids'] )
         ]);
-        $trans_id = $pdo->lastInsertId();
+        $trans_id = $MASHPIA_DB->lastInsertId();
 
         // Run the transaction
         $payment_response = $customer_profile->chargeCard(

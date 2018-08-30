@@ -1,6 +1,6 @@
 <?php
 include_once( __DIR__ . '/traits/BuildModel.php' );
-include_once( __DIR__ . '/../functions/files/images.php' );
+include_once( __DIR__ . '/../tools/functions/files/images.php' );
 
 class School extends ActiveRecord\Model implements JsonSerializable {
     use traits\BuildModel;
@@ -16,8 +16,8 @@ class School extends ActiveRecord\Model implements JsonSerializable {
 
     // ******************************* HELPER FUNCTIONS *******************************
     public function staff() {
-        global $pdo;
-        $staff_query = $pdo->prepare(
+        global $MASHPIA_DB;
+        $staff_query = $MASHPIA_DB->prepare(
             'SELECT a.first, a.last, a.username, a.admin_email as email, a.admin_id FROM admins a '
             .'JOIN admin_auths aa USING( admin_id ) WHERE aa.auth="school" AND aa.id=?;'
         );
@@ -81,10 +81,11 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return $file_name;
     }
 
-    public function logoPath(){
-        return "/schoolLogos/$this->logo";
-    }
-
+    // default name
+    public function name(){ return $this->school_name; }
+    // logo
+    public function logoPath(){ return "/schoolLogos/$this->logo"; }
+    // all logos
     public function logoPaths() {
         return [
             'logo' => $this->logoPath(),

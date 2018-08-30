@@ -1,6 +1,6 @@
 <?php
-include_once( __DIR__ . "/../functions/format/parents.php" );
-include_once( __DIR__ . '/../functions/files/images.php' );
+include_once( __DIR__ . "/../tools/functions/format/parents.php" );
+include_once( __DIR__ . '/../tools/functions/files/images.php' );
 require_once( __DIR__ . '/../../calendar.php' );
 include_once( __DIR__ . '/../auth/classes/Auth.php' );
 include_once( __DIR__ . '/traits/BuildModel.php' );
@@ -49,15 +49,15 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     }
     // returns the current rank
     public function currentRank() {
-        global $pdo; $result = [];
+        global $MASHPIA_DB; $result = [];
         // get all ranks earned
-        $rank_query = $pdo->prepare(
+        $rank_query = $MASHPIA_DB->prepare(
             "SELECT r.rank_ord, r.rank_name, r.rank_color, r.medals_required, date_promoted "
             ."FROM rank_marks JOIN ranks AS r USING(rank_ord) "
             ."WHERE user_id=? ORDER BY rank_ord"
         );
         // get all medals earned
-        $medals_query = $pdo->prepare(
+        $medals_query = $MASHPIA_DB->prepare(
             "SELECT ms.*, date_awarded FROM medal_marks "
             ."JOIN medals_subjects AS ms USING(subject_id, medal_ord) "
             ."WHERE user_id=? ORDER BY date_awarded, medal_ord"
@@ -73,7 +73,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
             $medals[] = $medal;
         }
         // get the amounts for each rank
-        $medals_required = $pdo->query(
+        $medals_required = $MASHPIA_DB->query(
             "SELECT medals_required FROM ranks ORDER BY rank_ord"
         )->fetchAll( PDO::FETCH_COLUMN, 0 ); // fetch from the dbs
         $medals_required[] = count($medals) > 133 ? count($medals) : 133;
@@ -101,8 +101,8 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     // get the current miles
     public function miles( $force_refresh = false ) {
         if ( $this->miles && !$force_refresh ) return $this->miles;
-        global $pdo;
-        $query = $pdo->prepare(
+        global $MASHPIA_DB;
+        $query = $MASHPIA_DB->prepare(
             'SELECT SUM(mark_points) miles FROM date_tasks_marks WHERE user_id = ?'
         );
         $query->execute([ $this->user_id ]);
@@ -110,8 +110,8 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     }
     // get parent account
     public function parentAccount() {
-        global $pdo;
-        $query = $pdo->prepare(
+        global $MASHPIA_DB;
+        $query = $MASHPIA_DB->prepare(
             'SELECT admin_id, first, father, mother, last, admin_phone_mobile AS phone, admin_email as email '
             .'FROM admins JOIN admin_auths aa USING (admin_id) WHERE aa.auth="user" and id=?;'
         );
@@ -170,11 +170,11 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     }
     // returns array with the status of the various registration types for the current year.
     public function registrationStatus( $year = false, $chidon_year = false ) {
-        global $pdo;
+        global $MASHPIA_DB;
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
         $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getRegistrationYear();
         // fetch the status from the two other tables, with prepared statements for security ;-)
-        $user_status_query = $pdo->prepare(
+        $user_status_query = $MASHPIA_DB->prepare(
             "SELECT user_reg_id, th_chidon_id FROM users u "
             ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = :year "
             ."LEFT JOIN th_chidon tc ON tc.user_id = u.user_id AND tc.year = :chidon_year "
@@ -204,10 +204,10 @@ class User extends ActiveRecord\Model implements JsonSerializable {
      * @return array
      */
     public function registerChayolei( $admin_id, $year, $amount ){
-        global $pdo;
+        global $MASHPIA_DB;
         $errors = [];
         // Insert into user_registration
-        $reg_query = $pdo->prepare(
+        $reg_query = $MASHPIA_DB->prepare(
             "INSERT INTO user_registration (user_id, admin_id, year, reg_date, paid, school_id) "
             ."VALUES (:user_id, :admin_id, :year, NOW(), :paid, :school_id)"
             ."ON DUPLICATE KEY UPDATE admin_id=:admin_id, paid=:paid"
@@ -241,9 +241,9 @@ class User extends ActiveRecord\Model implements JsonSerializable {
      * @return void
      */
     public function registerChidon( $year, $size, $parent_id = 0 ){
-        global $pdo;
+        global $MASHPIA_DB;
 
-        $chidon_query = $pdo->prepare(
+        $chidon_query = $MASHPIA_DB->prepare(
             "INSERT INTO th_chidon (year, school_id, user_id, size, parent_id) VALUES (?, ?, ?, ?, ?)"
         );
         return $chidon_query->execute( [ $year, $this->school_id, $this->user_id, $size, $parent_id ] );
@@ -269,20 +269,20 @@ class User extends ActiveRecord\Model implements JsonSerializable {
 
     // ******************************* ONCREATE FUNCTIONS *******************************
     public function generateSerial(){
-        global $pdo;
+        global $MASHPIA_DB;
         if ( !$this->user_serial ) {
-            $query = $pdo->query(
+            $query = $MASHPIA_DB->query(
                 "SELECT IFNULL( MAX( user_serial ), 0 ) + 1 AS user_serial FROM users"
             );
             $this->user_serial = $query->fetch()['user_serial'];
         }
     }
     public function generateBarcode(){
-        global $pdo;
+        global $MASHPIA_DB;
         if ( !$this->user_code ) {
             // prepare the sql queries
-            $check_duplicate = $pdo->prepare( "SELECT COUNT(*) as total FROM users WHERE user_code = ?;" );
-            $generate_barcode = $pdo->prepare( "SELECT FLOOR(RAND() * 9223372036854775807) as user_code" );
+            $check_duplicate = $MASHPIA_DB->prepare( "SELECT COUNT(*) as total FROM users WHERE user_code = ?;" );
+            $generate_barcode = $MASHPIA_DB->prepare( "SELECT FLOOR(RAND() * 9223372036854775807) as user_code" );
             // counters
             $count = 0; $valid_code = false;
             // while we do not have a valid code, generate a new one and validate it.
@@ -300,12 +300,12 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         }
     }
     public function generateRank(){
-        global $pdo;
+        global $MASHPIA_DB;
         // make sure we have at least one rank
-        $rank_query = $pdo->prepare( "SELECT * FROM rank_marks WHERE user_id = ?" );
+        $rank_query = $MASHPIA_DB->prepare( "SELECT * FROM rank_marks WHERE user_id = ?" );
         $rank_query->execute([ $this->user_id ]);
         if( $rank_query->rowCount() == 0 ){
-            $pdo->prepare(
+            $MASHPIA_DB->prepare(
                 "INSERT INTO rank_marks (rank_ord, user_id, date_promoted) VALUES (1, ?, ?) "
             )->execute([ $this->user_id, unixtojd() ]);
         }

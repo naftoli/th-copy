@@ -4,7 +4,8 @@ require_once( __DIR__ . "/../vendor/autoload.php" );
 
 $_GLOBALS['log'] = new SimpleLogger( __DIR__ . '/../simpleLogger.log' );
 $connections = [
-    'mashpiadb' => "mysql://$global_db_user:$global_db_pass@$global_db_host/mashpiadb?charset=utf8"
+    'mashpiadb' => "mysql://$global_db_user:$global_db_pass@$global_db_host/mashpiadb?charset=utf8",
+    'pointsDB' => "mysql://$global_db_user:$global_db_pass@$global_db_host/pointsDB?charset=utf8"
 ];
 
 // Connect to legacy MySQL
@@ -17,10 +18,15 @@ try {
     $_GLOBALS['log']->log( "mysql_connect Failed. Error: " . $e );
 }
 
-// Connect $pdo to PDO
-$pdo = new \PDO( "mysql:host=$global_db_host;dbname=mashpiadb", $global_db_user, $global_db_pass );
-$pdo->exec( "SET NAMES utf8" ); // fix utf8
-$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+// Connect mashpiadb to PDO
+$MASHPIA_DB = new \PDO( "mysql:host=$global_db_host;dbname=mashpiadb", $global_db_user, $global_db_pass );
+$MASHPIA_DB->exec( "SET NAMES utf8" ); // fix utf8
+$MASHPIA_DB->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+// connect to PointsDB with PDO
+$POINTS_DB =  new \PDO( "mysql:host=$global_db_host;dbname=pointsDB", $global_db_user, $global_db_pass );
+$POINTS_DB->exec( "SET NAMES utf8" ); // fix utf8
+$POINTS_DB->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
 // connect ActiveRecord to DBS
 ActiveRecord\Config::initialize( function( $cfg ) use ( $connections ) {

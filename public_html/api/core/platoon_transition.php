@@ -9,7 +9,7 @@ class PlatoonTransitionRouter {
     private $insert_query;
 
     public function getUsers(){
-        global $current_user;   global $pdo;
+        global $current_user;   global $MASHPIA_DB;
         $have_class_id = isset( $_POST['class_id'] ) && intval( $_POST['class_id'] );
         if ( !isset( $_POST['school_id'] ) )
             json_error( 'Invalid Request', false, 200 );
@@ -23,7 +23,7 @@ class PlatoonTransitionRouter {
             $params['admin_id'] = $current_user->admin_id;
         }
         // generate query to fetch the users and the location that they are going to
-        $user_query = $pdo->prepare(
+        $user_query = $MASHPIA_DB->prepare(
             "SELECT u.user_id, u.user_serial, u.first, u.last, u.school_id AS current_school_id, "
             ."pt.school_id, pt.class_id, s.school_name, c.class_grade, c.class_sub, "
             ."!ISNULL(pt.created_at) as being_moved FROM users u "
@@ -87,7 +87,7 @@ class PlatoonTransitionRouter {
     }
 
     function transitionPlatoons(){
-        global $current_user; global $pdo;
+        global $current_user; global $MASHPIA_DB;
 
         $filters = [];
         if ( isset($_POST['school_id']) ) {
@@ -100,7 +100,7 @@ class PlatoonTransitionRouter {
 
         $filter = count($filters) > 0 ? 'WHERE '.implode( ' AND ', $filters ) : '';
         
-        $transition_query = $pdo->prepare(
+        $transition_query = $MASHPIA_DB->prepare(
             "UPDATE users u JOIN platoon_transitions pt ON u.user_id = pt.user_id AND pt.deployed_at IS NULL " 
             ."SET pt.deployed_at = NOW(), pt.from_school_id = u.school_id, pt.from_class_id = u.class_id, "
             ."u.school_id = pt.school_id, u.class_id = pt.class_id $filter;"
@@ -117,15 +117,15 @@ class PlatoonTransitionRouter {
 
     // move or create entries for an array of user_ids
     private function moveOrCreate( $user_ids, $school_id, $class_id, $year ) {
-        global $pdo; global $current_user;
+        global $MASHPIA_DB; global $current_user;
         // setup the queries
-        $find_query = $pdo->prepare(
+        $find_query = $MASHPIA_DB->prepare(
             'SELECT platoon_transitions_id FROM platoon_transitions WHERE user_id = ? AND deployed_at IS NULL'
         );
-        $insert_query = $pdo->prepare(
+        $insert_query = $MASHPIA_DB->prepare(
             'INSERT INTO platoon_transitions (user_id, admin_id, school_id, class_id, year) VALUES (?, ?, ?, ?, ?)'
         );
-        $update_query = $pdo->prepare(
+        $update_query = $MASHPIA_DB->prepare(
             'UPDATE platoon_transitions SET user_id = ?, admin_id = ?, school_id = ?, class_id = ?, year = ? WHERE platoon_transitions_id = ?'
         );
         // for each user

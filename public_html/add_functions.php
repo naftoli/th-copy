@@ -73,11 +73,12 @@ function register_students($parameters) {
         $user_info = explode( ";", $user );
         $user_ids[] = $user_info[ 0 ];
         $user_amounts[] = intval($user_info[ 1 ]);
-    }
+	}
 
     // load all the users in an array
     $users = User::find( $user_ids );
-    $users = is_array( $users ) ? $users : [ $users ];
+	$users = is_array( $users ) ? $users : [ $users ];
+	$total_registered = count( $users );
     // and register all the users
     foreach( $users as $index => $user ){
         $user->registerChayolei( 0, $year, $user_amounts[$index] );

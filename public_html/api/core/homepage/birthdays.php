@@ -6,14 +6,14 @@ include_once( __DIR__ . "/../../../calendar.php" );
 class BirthdayRouter {
 
     public function index() {
-        global $current_user; global $pdo;
+        global $current_user; global $MASHPIA_DB;
 
         // define $filters and $params;
         extract( $this->getFilters( $current_user->login ) );
         $start_date = unixtojd();
         $end_date = $start_date + 3; // 3 days of birthdays
 
-        $query = $pdo->prepare(
+        $query = $MASHPIA_DB->prepare(
              " SELECT user_id, class_id, first, last, mobile_pic, user_photo_id, school_name, class_grade, class_sub, start_date, end_date "
             ." FROM birthdays JOIN users u USING (user_id) JOIN schools s USING (school_id) "
             ." JOIN classes c USING (class_id) JOIN date_tasks_missions USING (date_tasks_mission_id) "

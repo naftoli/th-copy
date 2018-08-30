@@ -5,7 +5,7 @@ include_once( __DIR__ . "/../../header/header.php" );
 class RegistrationRouter {
 
     public function index() {
-        global $current_user; global $pdo;
+        global $current_user; global $MASHPIA_DB;
 
         // define $filters and $params;
         extract( $this->getFilters( $current_user->login ) );
@@ -15,7 +15,7 @@ class RegistrationRouter {
             $year = GlobalSettings::getRegistrationYear();
             $reg_open = false;
             // get the status for instiutions
-            $status_query = $pdo->prepare(
+            $status_query = $MASHPIA_DB->prepare(
                  ' SELECT COUNT(*) AS bases, SUM(CASE WHEN date_paid IS NOT NULL THEN 1 ELSE 0 END) AS total '
                 .' FROM schools s LEFT JOIN school_registrations USING (school_id) WHERE '. implode( ' AND ', $filters ) . ';'
             );
@@ -36,7 +36,7 @@ class RegistrationRouter {
             $reg_open = false;
         }
 
-        $query = $pdo->prepare(
+        $query = $MASHPIA_DB->prepare(
              ' SELECT COUNT(*) AS soldiers, SUM(CASE WHEN paid > 0 THEN 1 ELSE 0 END) AS total '
             ." FROM users u JOIN schools s USING (school_id) LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = $year "
             .' WHERE ' . implode( ' AND ', $filters ) . ';'
