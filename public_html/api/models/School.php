@@ -81,10 +81,11 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return $file_name;
     }
 
-    public function logoPath(){
-        return "/schoolLogos/$this->logo";
-    }
-
+    // default name
+    public function name(){ return $this->school_name; }
+    // logo
+    public function logoPath(){ return "/schoolLogos/$this->logo"; }
+    // all logos
     public function logoPaths() {
         return [
             'logo' => $this->logoPath(),
