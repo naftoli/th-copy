@@ -50,7 +50,7 @@ class Missions {
 		    $user = new user( $row );
 		    $user->get_rank();
 		    $user->get_school_class();
-			if ( $row['school_id'] == 255 ) $user->disablePersonalization(); // disable personalization for oholei torah so that all pages for all children always come out the same
+			if ( !$allowPersonalization && $row['school_id'] == 255 ) $user->disablePersonalization(); // disable personalization for a specific school just becuase...
 		    $user->get_user_tracks( -1, $this->start, $this->end, array(), $user->lang_id, $printing_mode );
 		    array_push( $this->missions, $user );
 		}
