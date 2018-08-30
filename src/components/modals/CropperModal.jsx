@@ -5,6 +5,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import Cropper from 'components/functional/Cropper';
 import { FontAwesome } from 'components/ui';
 // functions
+import is from 'is_js';
 import { toast } from 'react-toastify';
 import { readFile } from 'functions/utils';
 
@@ -98,7 +99,8 @@ class CropperModal extends Component {
       body = <Cropper src={ src } onError={ this.handleError } cropper={ this.setCropper } viewMode={ viewMode }/>;
     // render the final modal
     return (
-      <Modal isOpen={isOpen} centered={centered} id='cropper-modal' zIndex='auto'>
+      <Modal isOpen={isOpen} id='cropper-modal' zIndex='auto'
+          centered={centered} toggle={ is.not.mobile() ? toggle : undefined }>
         <ModalHeader toggle={toggle}>Edit / Upload Image</ModalHeader>
         <ModalBody>
           <input type="file" style={{display: 'none'}} ref={ this.uploadRef } onChange={ this.readImageFile }/>
