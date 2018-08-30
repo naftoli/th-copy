@@ -16,8 +16,9 @@ class RegistrationRouter {
             $reg_open = false;
             // get the status for instiutions
             $status_query = $MASHPIA_DB->prepare(
-                 ' SELECT COUNT(*) AS bases, SUM(CASE WHEN date_paid IS NOT NULL THEN 1 ELSE 0 END) AS total '
-                .' FROM schools s LEFT JOIN school_registrations USING (school_id) WHERE '. implode( ' AND ', $filters ) . ';'
+                 " SELECT COUNT(*) AS bases, SUM(CASE WHEN date_paid IS NOT NULL THEN 1 ELSE 0 END) AS total "
+                ." FROM schools s LEFT JOIN school_registrations sr ON s.school_id = sr.school_id AND sr.year = $year "
+                ." WHERE ". implode( ' AND ', $filters ) . ';'
             );
             $status_query->execute( $params );
             $status_numbers = $status_query->fetch();
@@ -59,6 +60,7 @@ class RegistrationRouter {
         $filters = [];   $params = [];
         if ( $login['code'] === 'HQ' ) {
             $filters[] = 's.test_school = 0';
+            $filters[] = '( s.chayolei = 1 OR s.chidon = 1 )';
         } else if ( $login['code'] === 'INST' ) {
             $filters[] = 's.inst_id = ?'; $params[] = $login['id'];
         } else if ( $login['code'] === 'BC' ) {
