@@ -15,17 +15,24 @@ const ALL_USER_TYPES = [ 'HQ', 'INST', 'BC', 'TEACHER' ];
  * 
  * @returns {function} Returns a valid reducer to be passed to .reduce with an array as the initilaizer
  */
-export const menuReducer = ( user_type, no_legacy, defaults ) => ( filtered = [], item ) => {
+export const menuReducer = ( login, defaults = DEFAULT_USER_TYPES ) => ( filtered = [], item ) => {
+  const { code, ckids } = login;
   // reduce the items down a bit
   if ( item.items ) {
     item = Object.assign( {}, item, 
-      { items: item.items.reduce( menuReducer( user_type, no_legacy, defaults ), [] ) }
+      { items: item.items.reduce(
+        menuReducer( login, item.user_types || defaults ), 
+        []
+      )}
     );
   }
-  if ( !(no_legacy && item.legacy) ) {
-    if ( item.user_types && item.user_types.indexOf( user_type ) > -1 ) {
+  // hide legacy links from CKids
+  if ( !(ckids && item.legacy) ) {
+    // if the item is enabled for that code, add it to the sidebar
+    if ( item.user_types && item.user_types.indexOf( code ) > -1 ) {
       filtered.push( item );
-    } else if ( !item.user_types && defaults.indexOf( user_type ) > -1 ) {
+    // if the default for this section contains this code, add it
+    } else if ( !item.user_types && defaults.indexOf( code ) > -1 ) {
       filtered.push( item );
     }
   }
@@ -40,9 +47,8 @@ export const menuReducer = ( user_type, no_legacy, defaults ) => ( filtered = []
  * 
  * @param {string} user_type The type of user to get the menu for 
  */
-const getMenu = ( user_type, id, no_legacy ) => {
-  // Default to BC
-  user_type = user_type || "BC";
+const getMenu = ( login ) => {
+  const { id } = login;
   // Define the shape of the menu
   const menu = [
     {
@@ -89,14 +95,18 @@ const getMenu = ( user_type, id, no_legacy ) => {
       ]
     },
     {
-      label: "Achievement Cards", user_types: ALL_USER_TYPES,
-      icon: <FontAwesome icon='ticket-alt' />,
+      label: "Rewards Program", user_types: ALL_USER_TYPES,
+      icon: <FontAwesome icon='shopping-cart' />,
       items: [
-        { label: 'Add Achievement Task', legacy: true,
-          path: '/newAchievementTasks.php', user_types: ALL_USER_TYPES 
-        },
-        { label: 'Add / Subtract Points', legacy: true, 
-          path: '/manual_points.php', user_types: ALL_USER_TYPES, 
+        { label: "Achievement Cards", path: '/rewards/cards' },
+        { label: "Tasks", path: '/rewards/tasks' },
+        // { label: "Points Grid", path: '/rewards/points-grid' },
+        // { label: "Prizes", path: '/rewards/prizes' },
+        // { label: "Orders", path: '/rewards/orders' },
+        { label: 'Add / Subtract Points', legacy: true, path: '/manual_points.php' },
+        {
+          label: 'Mileage Program', user_types: [ 'BC' ], path: '/v2',
+          icon: <img src={`${LEGACY_URL}/images/icon_auction.png`} alt="Miliage Program"/>
         },
       ]
     },
@@ -193,17 +203,13 @@ const getMenu = ( user_type, id, no_legacy ) => {
       icon: <img src={`${LEGACY_URL}/images/icon_wizard.png`} alt="Setup Guide"/>
     },
     {
-      label: 'Mileage Program', user_types: [ 'BC' ], path: '/v2',
-      icon: <img src={`${LEGACY_URL}/images/icon_auction.png`} alt="Miliage Program"/>
-    },
-    {
       label: 'Support', legacy: true, path: '/helpdesk/?p=open',
       icon: <img src={`${LEGACY_URL}/images/parentIcons/support icon.gif`} alt="Support"/>
     }
   ];
 
   // filter the menu and return it
-  return menu.reduce( menuReducer( user_type, no_legacy, DEFAULT_USER_TYPES ), [] );
+  return menu.reduce( menuReducer( login ), [] );
 } // end getMenu function
 
 // export getMenu by default

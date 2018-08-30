@@ -16,7 +16,7 @@ export class Dashboard extends Component {
   // default props
   static defaultProps = {
     history: { listen: () => { return () => {} } }, // function that returns a function
-    current_login: {},
+    login: {},
     current_user: {}
   }
   // initial state
@@ -59,17 +59,17 @@ export class Dashboard extends Component {
   }
 
   render() {
-    let { current_user, current_login, changeLogin, location, title, children } = this.props;
+    let { current_user, login, changeLogin, location, title, children } = this.props;
 
     // if we are a user and not logging out - redirect to legacy parent portal
     if ( location.pathname !== '/logout' ) {
-      if ( current_login.type === 'user' ) {
+      if ( login.type === 'user' ) {
         window.location.href = `${LEGACY_URL}/mobile/reg/parent_detail.html`;
         return null;
       }
-      if ( !current_login.active ) {
-        if ( current_login.code === 'BC' ) {
-          const { ckids, id } = current_login;
+      if ( !login.active ) {
+        if ( login.code === 'BC' ) {
+          const { ckids, id } = login;
           const { admin_id } = current_user;
           window.location.href = `${LEGACY_URL}/registration${ckids ? '_ckids' : ''}.php?school_id=${id}&admin_id=${admin_id}`;
           return null;
@@ -79,8 +79,7 @@ export class Dashboard extends Component {
       }
     }
     
-    const { code, id, ckids } = current_login;
-    const menu = getMenu( code, id, ckids );
+    const menu = getMenu( login );
     // add a logout button
     menu.push({
       label: 'Logout', path: '/logout',
@@ -90,7 +89,7 @@ export class Dashboard extends Component {
     return (
       <div id="dashboard">
         <Navbar onClick={ this.toggle } onLoginChange={ changeLogin }
-          logins={ current_user.logins } currentLogin={ current_login }
+          logins={ current_user.logins } currentLogin={ login }
           title={ title } />
         <div id="dashboard-body">
           <Sidebar menu={ menu } active={ this.state.active } />
@@ -106,7 +105,7 @@ export class Dashboard extends Component {
 
 const mapStateToProps = ({ login }) => ({
   current_user: login.current_user,
-  current_login: login.current_login,
+  login: login.current_login,
   title: login.title
 });
 

@@ -53,13 +53,9 @@ import getMenu, { menuReducer } from '../menu';
 describe("getMenu", () => {
   it('returns the expected array for BC\'s', () => {
     expect( getMenu('BC') ).toMatchSnapshot();
-  })
+  });
 
   it('returns the expected array for HQ', () => {
     expect( getMenu('HQ') ).toMatchSnapshot();
-  })
-
-  it('user_type defaults to BC', () => {
-    expect( getMenu('BC') ).toEqual( getMenu() )
-  })
+  });
 })
