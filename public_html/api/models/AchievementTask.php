@@ -29,6 +29,9 @@ class AchievementTask extends ActiveRecord\Model implements JsonSerializable {
     // serialize to json
     public function jsonSerialize() {
         return $this->to_array([
+            'include' => [
+                'subject' => [ 'only' => [ 'subject_name', 'subject_id', 'subject_type' ] ]
+            ],
             'methods' => [ 'platoonName', 'baseName' ]
         ]);
     }
