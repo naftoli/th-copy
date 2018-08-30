@@ -13,7 +13,6 @@ class ParentsRouter {
         $login = $current_user->login;
         if ( $login['code'] === 'HQ' ) {
             $filters[] = 's.test_school = 0';
-            $filters[] = 'u.user_registered IS NOT NULL';
         } else if ( $login['code'] === 'INST' ) {
             $filters[] = 's.inst_id = ?'; $params[] = $login['id'];
         } else if ( $login['code'] === 'BC' ) {
@@ -22,28 +21,24 @@ class ParentsRouter {
         // combine the filters
         $filters = implode( ' AND ', $filters );
 
-        $sql = "SELECT a.admin_id, a.username, a.title, a.first, a.father, a.mother, a.last, "
-            ." CONCAT( admin_address1, ' ', admin_address2) as address, admin_city as city, "
-            ." admin_state as state, admin_postal as zip, admin_country as country, "
-            ." admin_phone_mobile as cell, admin_email as email, father_pic, mother_pic, "
-            ." u.first as child_first, u.last as child_last, u.user_id, u.user_serial FROM "
-            ." users u JOIN schools s USING (school_id) LEFT JOIN admin_auths aa ON aa.auth = 'user' AND aa.id = u.user_id "
-            ." LEFT JOIN admins a USING (admin_id) WHERE $filters;";
-        $query = $MASHPIA_DB->prepare( $sql );
-        $query->execute( $params );
+        $parent_sql = "SELECT a.admin_id, a.username, a.title, a.first, a.father, a.mother, a.last, "
+            ." CONCAT(admin_address1, ' ', admin_address2) AS address, admin_city AS city, admin_state AS state, "
+            ." admin_postal AS zip, admin_country AS country, admin_phone_mobile AS cell, admin_email AS email, "
+            ." father_pic, mother_pic, u.first AS child_first, u.last AS child_last, u.user_id, u.user_serial "
+            ." FROM admins a JOIN admin_auths aa USING (admin_id) JOIN users u ON aa.auth = 'user' AND aa.id = u.user_id "
+            ." JOIN schools s USING (school_id) WHERE $filters;";
+
+        $parent_query = $MASHPIA_DB->prepare( $parent_sql );
+        $parent_query->execute( $params );
 
         $parents = []; $children = [];
         // fetch all results and parse them as models
-        while( $parent = $query->fetch() ){
+        while( $parent = $parent_query->fetch() ){
             $child = [ 
                 'first' => $parent['child_first'], 'last' => $parent['child_last'], 
                 'user_id' => intval($parent['user_id']), 'user_serial' => intval($parent['user_serial'])
             ];
-            // if there is no parent, save them as a child
-            if ( !$parent['admin_id'] ) {
-                $children[] = $child;
-            // create new parents
-            } else if ( !isset( $parents[$parent['admin_id']] ) ) {
+            if ( !isset( $parents[$parent['admin_id']] ) ) {
                 // remove extra columns
                 unset($parent['child_first']); unset($parent['child_last']);
                 unset($parent['user_serial']); unset($parent['user_id']);
@@ -60,10 +55,22 @@ class ParentsRouter {
                 $parents[$parent['admin_id']]['children'][] = $child;
             }
         }
+
+        $children_query = "SELECT first, last, user_id, user_serial FROM users u "
+            ." JOIN schools s USING (school_id) "
+            . "LEFT JOIN admin_auths aa ON id = user_id AND auth = 'user' "
+            ." WHERE aa.admin_id IS NULL AND $filters";
+        // only registered soldiers for HQ to prevent the list from getting to long
+        if ( $current_user->login['code'] == 'HQ' )
+            $children_query .= ' AND u.user_registered IS NOT NULL;';
+        // run the query
+        $children_query = $MASHPIA_DB->prepare( $children_query );
+        $children_query->execute( $params );
+
         json_response([
             'parents' => array_values( $parents ),
-            'children' => array_values( $children ) 
-        ]);
+            'children' => $children_query->fetchAll()
+        ], true, true );
     }
 
     public function create() {
