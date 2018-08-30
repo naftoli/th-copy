@@ -11,7 +11,7 @@ class UserRegistrationRouter {
 
     // get all the users that the parent has, serialized for the registration pages.
     public function getUsers(){
-        global $current_user;   global $pdo;
+        global $current_user;   global $MASHPIA_DB;
         // load all his user id's
         $user_ids = $current_user->getAuthIds( 'user' );
 
@@ -37,7 +37,7 @@ class UserRegistrationRouter {
     }
     // return shipping price for users submitted
     public function getShipping(){
-        global $current_user; global $pdo;
+        global $current_user; global $MASHPIA_DB;
 
         if( !isset( $_POST[ 'school_ids' ] ) ){
             json_response( false );
@@ -55,7 +55,7 @@ class UserRegistrationRouter {
                 $child_count += 1;
         }
 
-        $query = $pdo->prepare(
+        $query = $MASHPIA_DB->prepare(
             "SELECT type, rate FROM shipping_rates WHERE zone=? AND child_count=?;"
         );
 
@@ -89,7 +89,7 @@ class UserRegistrationRouter {
     }
     // charge the card and register the users
     public function registerUsers(){
-        global $current_user; global $pdo;
+        global $current_user; global $MASHPIA_DB;
 
         /******************************** SETUP ********************************/
         $payment_info = $_POST['payment'];
@@ -141,7 +141,7 @@ class UserRegistrationRouter {
                 $total, $payment_profile_id, null, null, $description
             );
             if ( !is_array( $payment_response ) ) json_error( $payment_response );
-            $transaction_query = $pdo->prepare(
+            $transaction_query = $MASHPIA_DB->prepare(
                 "INSERT INTO transactions (trans_date, admin_id, description, amount, reg_amount, ship_amount, zip, users_registered, response) "
                 ."VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)"
             );
@@ -151,14 +151,14 @@ class UserRegistrationRouter {
                 $current_user->admin_postal, implode( ', ', $user_ids ),
                 json_encode( $payment_response )
             ]);
-            $trans_id = $pdo->lastInsertId();
+            $trans_id = $MASHPIA_DB->lastInsertId();
         } else {
             $payment_response = 'N/A'; $trans_id = false;
         }
         try {
             // register all the users...
             $errors = [];   $registration_table_users = [];
-            $registration_info_query = $pdo->prepare(
+            $registration_info_query = $MASHPIA_DB->prepare(
                 "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
                 ."VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year )"
             );
@@ -213,7 +213,7 @@ class UserRegistrationRouter {
 
         // insert into special myshliach/anash kinder table
         if( count($registration_table_users) > 0 ){
-            $registration_table_query = $pdo->prepare(
+            $registration_table_query = $MASHPIA_DB->prepare(
                 "INSERT INTO registration (description, approval, year, school_id, "
                 ."admin_id, ship_option, ship_dest, users) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
             );

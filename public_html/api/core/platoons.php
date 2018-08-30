@@ -5,7 +5,7 @@ include_once( __DIR__ . "/../header/header.php" );
 class PlatoonRouter {
 
     public function index() {
-        global $current_user; global $pdo;
+        global $current_user; global $MASHPIA_DB;
         // filters and params for the filters
         $filters = [];   $params = [];
         // limit based on admin type
@@ -32,7 +32,7 @@ class PlatoonRouter {
             ."FROM classes c JOIN schools s USING (school_id) LEFT JOIN users u USING ( class_id ) "
             ."LEFT JOIN ( SELECT count(*) as staff_count, id FROM admin_auths WHERE auth='class' GROUP BY id ) s ON s.id = c.class_id "
             ." $filters GROUP BY class_id ORDER BY school_name, class_grade, class_sub ";
-        $query = $pdo->prepare( $sql );
+        $query = $MASHPIA_DB->prepare( $sql );
         $query->execute( $params );
 
         $platoons = [];
@@ -49,12 +49,12 @@ class PlatoonRouter {
     }
 
     public function small(){
-        global $pdo;
+        global $MASHPIA_DB;
         // get the school_id
         $school_id = isset( $_POST['school_id'] ) ? $_POST['school_id'] : false;
         if ( !$school_id ) return json_response([]);
         // get the platoons
-        $query = $pdo->prepare( 'SELECT school_id, class_id, class_grade, class_sub FROM classes WHERE school_id=:school_id;' );
+        $query = $MASHPIA_DB->prepare( 'SELECT school_id, class_id, class_grade, class_sub FROM classes WHERE school_id=:school_id;' );
         $query->execute(['school_id' => $school_id]);
         $platoons = $query->fetchAll();
         // serialize the platoons
@@ -77,7 +77,7 @@ class PlatoonRouter {
     }
 
     public function create() {
-        global $current_user; global $pdo;
+        global $current_user; global $MASHPIA_DB;
 
         if ( !in_array( $current_user->login['code'], ['HQ', 'INST', 'BC'] ) )
             return json_error( 'Access Deined' );

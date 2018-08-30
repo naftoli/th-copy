@@ -11,7 +11,7 @@ class UsersUploadRouter {
     }
     
     function create(){
-        global $pdo; global $current_user;
+        global $current_user;
 
         if ( !isset( $_FILES['users'] ) )
             json_error("No File Sent", 'UPLOAD-USERS-17');

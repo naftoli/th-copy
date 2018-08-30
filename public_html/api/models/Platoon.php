@@ -14,8 +14,8 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
         return $this->class_grade . ( $this->class_sub ? ' - ' . $this->class_sub : ' ' );
     }
     public function staff() {
-        global $pdo;
-        $staff_query = $pdo->prepare(
+        global $MASHPIA_DB;
+        $staff_query = $MASHPIA_DB->prepare(
             'SELECT a.first, a.last, a.username, a.admin_email as email, a.admin_id FROM admins a '
             .'JOIN admin_auths aa USING( admin_id ) WHERE aa.auth="class" AND aa.id=?;'
         );

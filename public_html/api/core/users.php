@@ -5,7 +5,7 @@ include_once( __DIR__ . "/../header/header.php" );
 class UsersRouter {
 
     public function index() {
-        global $current_user; global $pdo;
+        global $current_user; global $MASHPIA_DB;
         // limit based on admin type
         $filters_and_params = $this->getFilters( $current_user->login );
         // combine the filters
@@ -15,7 +15,7 @@ class UsersRouter {
             ."JOIN schools s USING ( school_id ) "
             ."LEFT JOIN classes c USING ( class_id ) $filters "
             ."ORDER BY school_name, class_grade, class_sub, last, first";
-        $query = $pdo->prepare( $sql );
+        $query = $MASHPIA_DB->prepare( $sql );
         $query->execute( $filters_and_params['params'] );
 
         $users = [];

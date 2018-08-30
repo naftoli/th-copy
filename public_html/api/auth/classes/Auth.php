@@ -19,10 +19,10 @@ class Auth {
     }
 
     public static function login( $username, $password ) {
-        global $pdo;
+        global $MASHPIA_DB;
         $username = strtolower( $username );
 
-        $user_query = $pdo->prepare(
+        $user_query = $MASHPIA_DB->prepare(
             "SELECT admin_id, username, password FROM admins WHERE username = ? and password = ?"
         );
         $user_query->execute([ $username, $password ]);
@@ -55,9 +55,9 @@ class Auth {
      * @return int/boolean
      */
     private static function legacyAuth( $admin_id, $key ) {
-        global $pdo;
+        global $MASHPIA_DB;
 
-        $query = $pdo->prepare(
+        $query = $MASHPIA_DB->prepare(
             "SELECT username, password FROM admins WHERE admin_id = ?;"
         );
         $query->execute([ $admin_id ]);
