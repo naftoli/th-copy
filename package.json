@@ -68,8 +68,11 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "build": "PUBLIC_URL=/api/build node scripts/build.js",
+    "test": "node scripts/test.js --env=jsdom",
+
+    "build-beta": "PUBLIC_URL=/beta node scripts/build.js",
+    "build-prod": "PUBLIC_URL=/new node scripts/build.js"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/src/tests/setupTests.js",
@@ -124,6 +127,5 @@
     "fetch-mock": "^6.4.3",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1"
-  },
-  "homepage": "/api/build"
+  }
 }
