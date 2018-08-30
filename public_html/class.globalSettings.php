@@ -65,7 +65,7 @@ class GlobalSettings {
     public static function getRegCost( $type, $school = false ) {
         if ( $type == 1 ) { // In Tuition
             return $school ? 45 : 0;
-        } else if ( $type == 2 ) { // Guarranteed, they get a bit of a discount
+        } else if ( $type == 2 ) { // Guarranteed, they get a bit of a discount ($45, calculated elsewhere )
             return 55;
         }
         // everyone else / default return
