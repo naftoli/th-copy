@@ -17,13 +17,15 @@ class Campaigns
 		$this->_tools = new ToolsModels();
    	}
 	
+	// get all subjects from mashpiadb where subject_type is in '', 'WWTC', 'Tanya', 'achievement',
+	// potentially limit to subject_id
 	public function achievement_campaigns_select($arrParams = array())
 	{
 		$arrParams = $this->_tools->rsqlclean($arrParams);
 		
-		$strSql = "select * from mashpiadb.subjects where subject_type in ('', 'WWTC', 'Tanya', 'achievement')";
+		$strSql = "SELECT * FROM mashpiadb.subjects WHERE subject_type IN ('', 'WWTC', 'Tanya', 'achievement')";
 		if (isset($arrParams['campaign_id'])) {
-			$strSql .= " and subject_id = " . $arrParams['campaign_id'];
+			$strSql .= " AND subject_id = " . $arrParams['campaign_id'];
 		}
 		$arrResult = $this->_db->fetchAll($strSql);
 		return $arrResult;
