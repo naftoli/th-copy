@@ -8,7 +8,7 @@ import V2 from 'pages/rewards/v2';
 import HomePage from 'pages/home/HomePage';
 import { LoadingScreen } from 'components/ui';
 import BaseManagment from 'pages/base-managment';
-import Dashboard from 'pages/dashboard/Dashboard';
+import { Dashboard } from 'components/navigation';
 import { Login, Logout, AccountPage } from 'pages/login';
 // components
 import ConfirmationModal from 'components/modals/ConfirmationModal';

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import Sidebar, { getMenu } from 'components/navigation/Sidebar';
-import Navbar from 'components/navigation/Navbar';
+import { Navbar, Sidebar, getMenu } from '../index';
 import { LEGACY_URL } from 'components/constants';
 import { FontAwesome } from 'components/ui';
 import { withRouter } from 'react-router';
