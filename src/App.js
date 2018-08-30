@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-// pages
+// screens
 import { Page404 } from 'pages/errors';
-import V2 from 'pages/rewards/v2';
-import HomePage from 'pages/home/HomePage';
-import { LoadingScreen } from 'components/ui';
-import BaseManagment from 'pages/base-managment';
-import { Dashboard } from 'components/navigation';
 import { Login, Logout, AccountPage } from 'pages/login';
+// pages
+import HomePage from 'pages/home/HomePage';
+import Rewards, { V2 } from 'pages/rewards';
+import BaseManagment from 'pages/base-managment';
 // components
+import { Dashboard } from 'components/navigation';
+import { LoadingScreen } from 'components/ui';
 import ConfirmationModal from 'components/modals/ConfirmationModal';
 // functions
 import { loginStoreChanged } from 'functions/login';
@@ -58,8 +59,11 @@ export class App extends Component {
             { !refreshing && 
               <Switch>
                 <Route path={`/v2`} exact component={ V2 } />
+                
                 <Route path={`/`} exact component={ HomePage }/>
+                <Route path={`/rewards`} component={ Rewards } />
                 <Route path={`/bm`} component={ BaseManagment } />
+                
                 <Route path={`/myaccount`} exact component={ AccountPage }/>
                 {/* Action only pages */}
                 <Route path={`/logout`} component={Logout}/>
