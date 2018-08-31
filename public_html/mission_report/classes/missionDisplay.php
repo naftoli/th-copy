@@ -548,6 +548,15 @@ abstract class MissionDisplay {
 								$labelAdded++;
 								?>
 						 		<div class="label"><?=$label_name1?></div>
+								 <?php
+									//if ( $label_name1 == 'Shabbos Mevorchim' || $label_name1 == 'שבת מברכים' ) {
+										if ( $label_name1 == 'Shabbos Mevorchim' ) {
+										echo "<div class='short' style='padding-top: 10px; padding-bottom: 10px;'>
+											Reminder! Fill in the additional Shabbos Mevorchim Tehillim quota sheet and bring it into school on Monday!
+											</div>";
+										$rendered++;
+									}
+								?>
 						 		<?
 						 		$numTasks = count($user->shabbos_tasks);
 						 		for ($stno = 0; $stno < $numTasks; $stno++) {
@@ -1184,7 +1193,7 @@ abstract class MissionDisplay {
 								$labelAdded++;
 								?>
 						 		<div class="label"><?=$label_name1?></div>
-						 		<?
+								<?
 						 		$numTasks = count($user->shabbos_tasks);
 						 		for ($stno = 0; $stno < $numTasks; $stno++) {
 						 			$label_name = $user->shabbos_tasks[$stno]->label_name;
