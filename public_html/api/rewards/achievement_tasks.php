@@ -59,10 +59,13 @@ class TasksRouter {
             $task->platoon = $login['id'];
         }
 
+        if ( !$task->subject_id )
+            json_error( 'Cannot create a Task without a Campaign' );
+        
         if ( $login['code'] == 'INST' ) {
             $subject = Subject::find( $task->subject_id );
             if ( $subject->inst_id != $login['id'] )
-                return json_error('You do not have permission to create Tasks for this subject. Please select another one.');
+                return json_error('You do not have permission to create Tasks for this Campaign. Please select another one.');
         }
 
         if ( !$task->save() )
