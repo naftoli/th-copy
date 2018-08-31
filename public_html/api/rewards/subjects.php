@@ -20,7 +20,7 @@ class SubjectsRouter {
             } else if ( $current_user->login['code'] == 'TEACHER' ) {
                 $platoon = Platoon::find( $current_user->login['id'] );
                 $inst_id = $platoon->school->inst_id;
-                $base_filter .= 'OR t.base = ' . $school->school_id;
+                $base_filter .= 'OR t.base = ' . $platoon->school->school_id;
                 $platoon_filter .= 'OR t.platoon = ' . $platoon->class_id;
             } 
         } catch ( Exception $e ) {};
