@@ -549,11 +549,11 @@ abstract class MissionDisplay {
 								?>
 						 		<div class="label"><?=$label_name1?></div>
 								 <?php
-									//if ( $label_name1 == 'Shabbos Mevorchim' || $label_name1 == 'שבת מברכים' ) {
-										if ( $label_name1 == 'Shabbos Mevorchim' ) {
-										echo "<div class='short' style='padding-top: 10px; padding-bottom: 10px;'>
-											Reminder! Fill in the additional Shabbos Mevorchim Tehillim quota sheet and bring it into school on Monday!
-											</div>";
+									if ( $label_name1 == 'Shabbos Mevorchim' || $label_name1 == 'שבת מברכים' ) {
+										echo "<div class='short' style='padding-top: 10px; padding-bottom: 10px;'>";
+										if ( $label_name1 == 'Shabbos Mevorchim' ) echo "Reminder! Fill in the additional Shabbos Mevorchim Tehillim quota sheet and bring it into school on Monday!";
+										else if ( $label_name1 == 'שבת מברכים' ) echo "געדענקט אנצופילן דער עקסטרא שבת מברכים צעטיל און דאס צוריקברענגן צו ישיבה אויף מאנטיג!";
+										echo "</div>";
 										$rendered++;
 									}
 								?>
