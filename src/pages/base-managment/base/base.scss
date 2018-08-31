@@ -4,7 +4,12 @@
   height: 100%;
 
   .ReactTable {
-    height: calc( 100% - 50px ); // top of the page takes up 50px
+    height: calc( 100% - 65px ); // top of the page takes up 50px
+  }
+
+  .inline-profile {
+    max-height: 65px;
+    width: 65px;
   }
 
 }

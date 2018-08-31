@@ -26,12 +26,16 @@
 
     @media print { padding: 0px; }
 
-    > :first-child .btn-group {
-      margin: 10px 0px; width: 100%;
-      justify-content: flex-end;
-      min-height: fit-content;
+    > :first-child {
+      height: 100%;
 
-      .btn { flex-grow: 1; transition: .5s; }
+      .btn-group {
+        margin: 10px 0px; width: 100%;
+        justify-content: flex-end;
+        min-height: fit-content;
+
+        .btn { flex-grow: 1; transition: .5s; }
+      }
     }
   }
 }

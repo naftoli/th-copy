@@ -43,6 +43,16 @@ body { font-family: 'Poppins', sans-serif; }
   .rt-th.rt-resizable-header:not(.-cursor-pointer) {
     color: $primary-color; background: #f6f6f6;
   }
+
+  .rt-thead .rt-th, 
+  .rt-thead .rt-td,
+  .rt-tbody .rt-td {
+    text-align: center;
+    // border-right: 1px solid #cce5ff !important;
+    // make the line go for the full height
+    // height: 100%; align-self: center; display: inline-flex; justify-content: center; flex-direction: column;
+  }
+
   .-pagination button.-btn:not([disabled]):hover,
   .-pagination button.-btn:not([disabled]):focus 
   { background: $primary-color-hover; }
