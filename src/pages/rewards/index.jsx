@@ -3,11 +3,7 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 // sub pages
 import { Page404 } from 'pages/errors';
-// import UsersPages from './users';
-// import PlatoonPages from './platoons';
-// import ParentPages from './parents';
-// import StaffPages from './staff';
-// import BasePages from './base';
+import TasksPage from './tasks/TasksPage';
 // functions
 // import { isBC } from 'functions/login';
 
@@ -18,8 +14,8 @@ export class BaseManagmentIndexPage extends Component {
 
     return (
       <Switch>
-        <Route path={`${path}/cards`} render={ props => <pre>{ JSON.stringify( props, null, 2 )}</pre> } />
-        <Route path={`${path}/tasks`} render={ props => <pre>{ JSON.stringify( props, null, 2 )}</pre> } />
+        <Route path={`${path}/cards`} render={ () => <h1>Achievement Cards Coming Soon!</h1> } />
+        <Route path={`${path}/tasks`} component={ TasksPage } />
 
         <Route component={ Page404 } />
       </Switch>
