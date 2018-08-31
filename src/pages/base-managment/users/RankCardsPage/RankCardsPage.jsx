@@ -185,9 +185,6 @@ export class RegistrationPage extends Component {
               <Button color='primary' onClick={ this.getRankCards }>
                 <FontAwesome icon='sync-alt' spin={loading} /> Generate Rank Cards
               </Button>
-              <Button color='primary' onClick={ this.print }>
-               <FontAwesome icon='print' /> Print
-              </Button>
               { isHQ && cards.length > 0 && // mark all as printed
                 <React.Fragment>
                   <Button color='primary' onClick={ this.markAllPrinted(true) }>
@@ -203,6 +200,9 @@ export class RegistrationPage extends Component {
                  <FontAwesome icon='save' /> Sync Printed Updates
                 </Button>
               }
+              <Button color='primary' onClick={ this.print }>
+               <FontAwesome icon='print' /> Print
+              </Button>
             </ButtonGroup>
           </Col>
         </Row>
