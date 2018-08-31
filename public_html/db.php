@@ -12,6 +12,10 @@ mysql_select_db('mashpiadb') or trigger_error_server('Failed to select db', E_US
 //mysql_query('set max_allowed_packet = ' . units2bytes('1G'));
 //doesn't seem to work
 define('FILE_DIR','files/');
+// authorize.net is in demo mode in development
+if ( $development ) {
+	define('AUTHORIZE_NET_SANDBOX', true);
+}
 
 // not relevant - naftoli 7/28/18
 $arrDevRemotes = array(
