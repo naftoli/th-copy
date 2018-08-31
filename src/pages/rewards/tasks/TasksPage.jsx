@@ -62,7 +62,7 @@ class TasksPage extends Component {
     // and handle it's results
     return action
     .catch( e => {
-      // toast.error( e.message, { autoClose: false } );
+      toast.error( e.message, { autoClose: false } );
       return Promise.reject( e );
     });
   }
@@ -91,8 +91,11 @@ class TasksPage extends Component {
   }
 
   render() {
-    const { tasks, loading, subjects, subjectsLoading, login } = this.props;
+    let { tasks, loading, subjects, subjectsLoading, login } = this.props;
     const { show, task } = this.state;
+
+    if ( login.code == 'INST' )
+      subjects = subjects.filter( subject => subject.inst_id === login.id );
 
     let columns = [
       { Header: 'Task', accessor: 'task',
