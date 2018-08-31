@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // components
 import { FontAwesome } from 'components/ui';
 import { AddressRow } from 'components/rows';
-import { Row, Col, Button } from 'reactstrap';
+import { Row, Col, Button, Input } from 'reactstrap';
 import { ProfileRow, NameRow, DobRow } from './rows';
 import CropperModal from 'components/modals/CropperModal';
 import { PlatoonSelect, BaseSelect, Select } from 'components/inputs';
@@ -117,7 +117,7 @@ class NewUserPage extends Component {
   render() {
     const { code } = this.props.current_login;
     const { soldier, cropperModalShow, loading } = this.state;
-    const { gender, school_type_id, school_id, class_id } = soldier;
+    const { gender, school_type_id, school_id, class_id, email } = soldier;
     // generate the mission_type options
     let mission_type_options = missionTypeOptions( gender );
     // show the dropdown needed for the current login
@@ -132,7 +132,7 @@ class NewUserPage extends Component {
     }
     if ( isBC( code ) ) {
       platoonSelect = (
-        <Col xs={ code === 'BC' ? 12 : 6 }>
+        <Col xs={ isAdmin( code ) ? 6 : 12 }>
           <label>Platoon</label>
           <PlatoonSelect schoolId={ school_id } value={ class_id } 
             onChange={this.handleSelectChange('class_id')} />
@@ -142,13 +142,14 @@ class NewUserPage extends Component {
     // render the page
     return (
       <form id='NewUserPage' onSubmit={this.submit}>
-        <Row id='image-row' style={{alignItems: 'center'}}>
+        <Row id='image-row'>
           <Col xs={{ size: 12, order: 12 }} sm='8' lg='9' xl='10'>
             <p className='title'>Required Personal Information</p>
             
             <NameRow soldier={ soldier } onChange={ this.handleChangeEvent } required />
             
             <DobRow soldier={ soldier } onChange={ this.handleDateChange('dob') } required>
+
               <Col xs='6'>
                 <label>Mission Type</label>
                 <Select options={mission_type_options} onChange={this.handleSelectChange('school_type_id')}
@@ -156,7 +157,16 @@ class NewUserPage extends Component {
               </Col>
               { baseSelect }
               { platoonSelect }
+
+              <Col xs={ isAdmin( code ) ? 12 : 6 }>
+                <label htmlFor='email'>Parent E-mail</label>
+                <Input type='email' value={ email } id='email' onChange={ this.handleChangeEvent }/>
+                <div className='invalid-message'>Please enter a valid E-mail Address</div>
+              </Col>
+
             </DobRow>
+            
+            
           </Col>
           <Col xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2'>
             <ProfileRow soldier={ soldier } toggle={ this.toggle } 
@@ -166,7 +176,7 @@ class NewUserPage extends Component {
 
         <AddressRow {...soldier} showPhone prefix='user_' onChange={ this.handleChangeEvent } />
 
-        <Button color='primary'>
+        <Button color='primary' style={{ width: '100%' }}>
           <FontAwesome icon='save' />
           { loading ? ' Creating...' : ' Create Soldier'}
         </Button>
