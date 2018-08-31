@@ -11,10 +11,13 @@ import payments from 'store/payments/reducer';
 import soldiers from 'store/soldiers/reducer';
 import platoons from 'store/platoons/reducer';
 
+// nested reducers
+import rewards from './rewards';
+
 
 export const reducer = combineReducers({
   login,  soldiers, platoons, bases,  payments,
-  staff,  parents,  home
+  staff,  parents,  rewards,  home
 });
 
 const rootReducer = ( state, action ) => {
