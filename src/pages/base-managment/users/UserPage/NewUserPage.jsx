@@ -142,7 +142,7 @@ class NewUserPage extends Component {
     // render the page
     return (
       <form id='NewUserPage' onSubmit={this.submit}>
-        <Row id='image-row'>
+        <Row id='image-row'  style={{alignItems: 'center'}}>
           <Col xs={{ size: 12, order: 12 }} sm='8' lg='9' xl='10'>
             <p className='title'>Required Personal Information</p>
             
