@@ -81,7 +81,7 @@ class UsersRouter {
         // setup the variables we will need later
         $user_serials = array_map( function( $user ){ return $user->user_serial; }, $users);
         $year = GlobalSettings::getRegistrationYear( $school->school_id );
-        $description = "Base - Soldier Registration for $year: " . implode( ", ", $user_serials );
+        $description = "Soldier Registration ( Base ) for $year: " . count( $users ) . " Soldiers. ";
         $total = intval( $_POST['total'] );
 
         // create Transaction
@@ -95,6 +95,7 @@ class UsersRouter {
             $school->shipping_postal, implode( ', ', $_POST['user_ids'] )
         ]);
         $trans_id = $MASHPIA_DB->lastInsertId();
+        $description .= "Transaction #: $trans_id";
 
         // Run the transaction
         $payment_response = $customer_profile->chargeCard(

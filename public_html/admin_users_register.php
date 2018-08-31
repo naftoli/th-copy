@@ -315,18 +315,16 @@ else $reg_fee = false;
 				// button is located at the bottom of the page
 				$('#register_students').live('click', function() {	
 					// reset the user id's to "";
-					user_ids = "";
+					user_ids = [];
 					
 					// ***** Get the user ids of each child that is being registered ***** //
 					$.each($("#students_table").find("td > div.checkboxes > input:checked"), function() { 		
                         // if the student total column has a value in it add its value to the studnet ids list
-                        user_ids += ( $(this).parent()[0].id + ":" );
+                        user_ids.push( $(this).parent()[0].id );
 					});
 					// ***** Get the user ids of each child that is being registered ***** //
 					
-					if (user_ids !== "") { // if we have userid's
-						user_ids = user_ids.substr(0, user_ids.length - 1); // // remove the last : from the generated text
-                    } else { // no students where selected
+					if ( user_ids.length == 0 ) { // no students where selected
 						alert("You have not made any selection!"); // notify the user that they have not made a selection
 						return false;
 					}
@@ -345,7 +343,8 @@ else $reg_fee = false;
 					// cast the json into a post params list
 					var dataToSend = $.param({
 						school_id: sid,
-						description: "child registration->" + user_ids,
+						description: "Base Legacy Soldier Registration for " + user_ids.length + " Soldiers",
+						user_ids: user_ids,
 						amount: $('#grand_total_id').html(),
 						customer_profile_id: $("#authorize_customer_profile_id").val(),
 						payment_profile_id: $("#authorize_payment_profile_id").val()
@@ -378,7 +377,7 @@ else $reg_fee = false;
                             }
                         );
                     } else {
-                        registerStudents(); // register the students
+                        // registerStudents(); // register the students
                     }
 				}
 				

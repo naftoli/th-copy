@@ -57,6 +57,7 @@ function add_ons() {
 function register_students($parameters) {
     require_once( __DIR__ . '/class.globalSettings.php' );
     $year = GlobalSettings::getRegistrationYear( $school_id );
+	$admin_id = isset( $_COOKIE['admin_id'] ) ? mysql_real_escape_string( $_COOKIE['admin_id'] ) : 0;
 
     // parse the params
     $parms = $parameters[0];
@@ -81,22 +82,8 @@ function register_students($parameters) {
 	$total_registered = count( $users );
     // and register all the users
     foreach( $users as $index => $user ){
-        $user->registerChayolei( 0, $year, $user_amounts[$index] );
+        $user->registerChayolei( $admin_id, $year, $user_amounts[$index] );
     }
-
-	//update transactions
-	$description = "";
-	if ($total_registered > 0) {
-		$description .= $total_registered . " children registered; ";
-	}
-	$invoice = "INSERT INTO invoice_items VALUES($school_id, null, $total, now(), 'charge', null, '$description', '')";
-	//echo $invoice;
-	@mysql_query($invoice);
-
-	$transaction = "INSERT INTO transactions (school_id, trans_date, description, amount, reg_amount, users_registered ) "
-		." VALUES($school_id, NOW(), '$description', $total, $total, " . implode( ', ', $user_ids ) . ")";
-	//echo $transaction;
-	@mysql_query($transaction);
 }
 
 function assign_winner($parameters) {
