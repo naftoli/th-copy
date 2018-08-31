@@ -56,7 +56,8 @@ class TaskModal extends Component {
     .then( () => {
       this.setState({ updates: {}, saving: false });
       this.toggle();
-    });
+    })
+    .catch( () => this.setState({ saving: false }) );
   }
 
   toggle = () => this.props.toggle();
