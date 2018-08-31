@@ -1,6 +1,8 @@
 import { LEGACY_URL } from 'components/constants';
 import Cookies from 'universal-cookie';
 import { Promise } from 'core-js';
+import striptags from 'striptags';
+
 const cookies = new Cookies();
 // API url
 let API_URL = `${LEGACY_URL}/api`;
@@ -23,7 +25,15 @@ const headers = ( content_type = defaultContentType ) => {
 }
 
 const toJSON = response => {
-  return response.json();
+  return response.text()
+  .then( text => {
+    try {
+      return JSON.parse( text );
+    } catch ( e ) {
+      text = striptags( text );
+      return Promise.reject( new Error( text ) );
+    }
+  });
 }
 
 const parseResponse = response => {
