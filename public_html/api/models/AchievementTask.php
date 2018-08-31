@@ -31,6 +31,10 @@ class AchievementTask extends ActiveRecord\Model implements JsonSerializable {
         $login = $current_user->login;
         if ( 
             $login['code'] == 'HQ' || // HQ can edit all
+            // institutions can edit campaigns that their bases create
+            ( $login['code'] == 'INST' && $this->school && $this->school->inst_id == $login['id'] ) ||
+            // they can also edit tasks within their own campaigns as a whole
+            ( $login['code'] == 'INST' && $this->subject->inst_id == $login['id'] ) ||
             // A base can only edit their tasks
             ( $login['code'] == 'BC' && $this->base == $login['id'] ) ||
             // A teacher can only edit their tasks
