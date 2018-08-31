@@ -258,9 +258,9 @@ class CustomerProfile {
             $api_array['transactionRequest']['profile']['paymentProfile'] = ['paymentProfileId' => $paymentProfileId];
         }
         
-        if (!!$invoice_number) {
-            $api_array['transactionRequest']['order']['invoiceNumber'] = $invoice_number;
-        }
+        // if (!!$invoice_number) {
+        //     $api_array['transactionRequest']['order']['invoiceNumber'] = $invoice_number;
+        // }
         
         if (!!$description) {
             $api_array['transactionRequest']['order']['description'] = $description;
