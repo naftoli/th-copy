@@ -10,17 +10,17 @@ class ProfilesRouter {
             $this->serializeAccount( $current_user )
         );
     }
-
+    // functions as update
     public function create() {
         global $current_user;
 
         $current_user->bulkUpdate( $_POST );
 
-        if ( !$current_user->save() )
-            return json_error( 'Could not update account information' );
-
         if ( !$current_user->is_valid() )
             return json_error( $current_user->errors->__toString() );
+
+        if ( !$current_user->save() )
+            return json_error( 'Could not update account information' );
 
         return json_response([
             'account' => $this->serializeAccount( $current_user ),
