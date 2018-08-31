@@ -26,13 +26,26 @@ class AchievementTask extends ActiveRecord\Model implements JsonSerializable {
         return $this->school_id > 1 ? $this->school->name() : 'All Bases';
     }
 
+    public function editable() {
+        global $current_user;
+        $login = $current_user->login;
+        if ( 
+            $login['code'] == 'HQ' || // HQ can edit all
+            // A base can only edit their tasks
+            ( $login['code'] == 'BC' && $this->base == $login['id'] ) ||
+            // A teacher can only edit their tasks
+            ( $login['code'] == 'TEACHER' && $this->platoon == $login['id'] )
+        ) return true;
+        return false;
+    }
+
     // serialize to json
     public function jsonSerialize() {
         return $this->to_array([
             'include' => [
                 'subject' => [ 'only' => [ 'subject_name', 'subject_id', 'subject_type' ] ]
             ],
-            'methods' => [ 'platoonName', 'baseName' ]
+            'methods' => [ 'platoonName', 'baseName', 'editable' ]
         ]);
     }
 }
