@@ -33,7 +33,7 @@ export class UsersPage extends Component {
 
   getSoldiers = () => {
     this.props.getSoldiers()
-    .catch( e => toast.error( e.message ) );
+    .catch( e => toast.error( e.message, { autoClose: 10000 } ) );
   }
 
   // handler for the modals
