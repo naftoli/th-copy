@@ -26,7 +26,7 @@ class SubjectsRouter {
         } catch ( Exception $e ) {};
         
         $subjects = $MASHPIA_DB->prepare(
-             " SELECT s.subject_id, s.subject_name, count(t.achievement_task_id) AS tasks "
+             " SELECT s.subject_id, s.subject_name, s.inst_id, count(t.achievement_task_id) AS tasks "
             ." FROM subjects s LEFT JOIN achievement_tasks t ON s.subject_id = t.subject_id "
             ." AND ( $base_filter ) AND ( $platoon_filter ) "
             ." WHERE inst_id IN (0, :inst_id) "
