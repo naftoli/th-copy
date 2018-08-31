@@ -8,6 +8,7 @@
   background-color: $primary-color-dark;
   color: #fff;
   height: $navbar-height;
+  align-content: center;
   @media( max-width: 1024px ) { height: $navbar-height-mobile; }
   // Logo section
   .navbar-brand {
