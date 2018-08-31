@@ -1,12 +1,6 @@
 #StaffPage {
   height: 100%;
 
-  .btn-group { 
-    margin: 10px 0px; width: 100%;
-    justify-content: flex-end;
-    min-height: fit-content;
-  }
-
   .ReactTable {
     height: calc( 100% - 130px );
     // page height grows as content shrinks
@@ -40,11 +34,7 @@
 
     .btn-group {
       margin-top: .5rem;
-      width: 100%;
-      .btn {
-        flex-grow: 1;
-        transition: .5s;
-      }
+      
     }
   }
 }

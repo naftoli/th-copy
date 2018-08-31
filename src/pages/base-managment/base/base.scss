@@ -3,12 +3,6 @@
 #BasesPage {
   height: 100%;
 
-  .btn-group { 
-    margin-bottom: 10px; width: 100%;
-    justify-content: flex-end;
-    min-height: fit-content;
-  }
-
   .ReactTable {
     height: calc( 100% - 50px ); // top of the page takes up 50px
   }

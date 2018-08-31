@@ -31,9 +31,8 @@ body { font-family: 'Poppins', sans-serif; }
   }
 }
 // Change the toast colors to fit our branding
-.Toastify__toast--info {
-  background: $primary-color;
-}
+.Toastify__toast--info { background: $primary-color; }
+.Toastify__toast-body { max-width: 95%; word-wrap: break-word; }
 
 // customize react-table styles
 .ReactTable {
