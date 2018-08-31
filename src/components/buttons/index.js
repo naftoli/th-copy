@@ -1,15 +1,18 @@
 import React from 'react';
-import { FontAwesome } from 'components/ui';
+import { FontAwesome, InlineSync } from 'components/ui';
 import { Button, Collapse } from 'reactstrap';
 // images
 import { chabad, google } from 'img/logos';
 // styles
 import './styles.scss';
 
-export const SaveButton = ({ show = true, ...props }) => (
+export const SaveButton = ({
+  show = true, text = 'Save Changes', saving = false, ...props 
+}) => (
   <Collapse isOpen={ show } id='save'>
     <Button color='primary' { ...props }>
-      <FontAwesome icon='save'/> Save Changes
+      {!saving && <span><FontAwesome icon='save'/> { text }</span> }
+      { saving && <span><InlineSync loading /> Saving...</span> }
     </Button>
   </Collapse>
 );
