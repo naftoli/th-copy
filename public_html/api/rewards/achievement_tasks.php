@@ -59,6 +59,12 @@ class TasksRouter {
             $task->platoon = $login['id'];
         }
 
+        if ( $login['code'] == 'INST' ) {
+            $subject = Subject::find( $task->subject_id );
+            if ( $subject->inst_id != $login['id'] )
+                return json_error('You do not have permission to create Tasks for this subject. Please select another one.');
+        }
+
         if ( !$task->save() )
             json_error( 'Could not create Task.' );
         json_response( $task );
