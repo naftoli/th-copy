@@ -35,10 +35,7 @@ class TaskModal extends Component {
     ) this.onUpdate({ subject_id: subjects[0].subject_id });
 
     if ( !isOpen && this.props.isOpen )
-      this.setState({ updates: {
-        points: task.points || 5,
-        task: task.task || 'Test Task For 6-1'
-      } });
+      this.setState({ updates: {} });
   }
 
   // update state
