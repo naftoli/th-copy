@@ -94,7 +94,7 @@ class TasksPage extends Component {
     let { tasks, loading, subjects, subjectsLoading, login } = this.props;
     const { show, task } = this.state;
 
-    if ( login.code == 'INST' )
+    if ( login.code === 'INST' )
       subjects = subjects.filter( subject => subject.inst_id === login.id );
 
     let columns = [
