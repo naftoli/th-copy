@@ -118,7 +118,6 @@ class TasksPage extends Component {
           return value;
         } 
       },
-      { Header: 'Editable', id: 'editable', accessor: ({editable}) => JSON.stringify(editable) },
     ];
 
     return (
