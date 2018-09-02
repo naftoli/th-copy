@@ -109,7 +109,10 @@ body,td,th {
 				});
 			</script>
 		<!-- //requried-jsfiles-for owl -->
-            <!-- start content_slider -->
+			<!-- start content_slider -->
+		<h4>Register Today!</h4>
+		<p>Click <a href="registration.php#register">here</a> to register now for the Chidon.</p>	
+
         <div class="bases"><strong style="font-size: 30px; color: #22418e;">5778 Videos</strong></div>   
 
         <iframe src="https://player.vimeo.com/video/261015763" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
