@@ -15,6 +15,23 @@ class CardsRouter {
         global $current_user;   global $POINTS_DB;
         $login = $current_user->login;
 
+        if ( !isset( $_POST['card_count'] ) )
+            return json_error( 'Cannot print unknown amount of cards.' );
+
+        $fake_codes = $POINTS_DB->prepare(
+             " SELECT FLOOR(RAND() * 9999999999999999999) AS random_num FROM "
+            ." achievement_cards WHERE 'random_num' NOT IN ( "
+                ." SELECT card_serial FROM achievement_cards"
+            ." ) LIMIT ? "
+        );
+
+        $fake_codes->execute([ intval( $_POST['card_count'] ) ]);
+
+        return json_response([
+            'cards' => $fake_codes->fetchAll(),
+            'miles' => $this->getMiles()
+        ]);
+
         // try {
         //     $task = new AchievementTask( $_POST );
         // } catch ( Exception $e ) { json_error( 'Invalid Request' ); }
