@@ -39,7 +39,6 @@ class GradeCreation
                         $sql = "insert into classes
                                 set school_id = " . $row['school_id'] . ",
                                 class_grade = '" . $row['class_grade'] . "',
-                                class_grade_fr = '" . $row['class_grade_fr'] . "',
                                 class_sub = '" . $row['class_sub'] . "',
                                 class_teacher = '" . $row['class_teacher'] . "',
                                 email = '" . $row['email'] . "',
