@@ -25,7 +25,7 @@ export default ( state = initialState, action ) => {
     case types.SET_MILES:
       return { 
         ...state, 
-        miles: action.miles
+        miles: action.payload
       };
 
     default:
