@@ -4,7 +4,6 @@ import { Switch, Route } from 'react-router-dom';
 import { Page404 } from 'pages/errors';
 import PlatoonPage from './PlatoonPage';
 import PlatoonsPage from './PlatoonsPage';
-import NewPlatoonPage from './NewPlatoonPage';
 import PlatoonTransitionPage from './PlatoonTransitionPage/PlatoonTransitionPage';
 // functions
 import { connect } from 'react-redux';
@@ -18,7 +17,6 @@ export class PlatoonsIndexPage extends Component {
     return (
       <Switch>
         <Route path={ path } exact component={ PlatoonsPage } />
-        <Route path={`${path}/new`} component={ NewPlatoonPage }/>
         <Route path={`${path}/:id([0-9]+)`} component={ PlatoonPage }/>
         <Route path={`${path}/transition`} component={ PlatoonTransitionPage }/>
         <Route component={ Page404 } />

@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { Table, Callout, FontAwesome } from 'components/ui';
 import { Link } from 'react-router-dom';
 import { Button, ButtonGroup } from 'reactstrap';
 import { InlineSync } from 'components/ui/loading';
+import NewPlatoonModal from './newPlatoonModal';
+import { Table, Callout, FontAwesome, Number } from 'components/ui';
 // functions
 import { isAdmin } from 'functions/login';
-import { getPlatoons } from 'store/platoons/operations';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { getPlatoons, createPlatoon } from 'store/platoons/operations';
 
 export class PlatoonsPage extends Component {
+
+  state = { showModal: false }
 
   // load the contents if we do not have any
   componentDidMount(){
@@ -19,6 +22,7 @@ export class PlatoonsPage extends Component {
   }
 
   getPlatoons = () => { this.props.getPlatoons(); }
+  toggle = () => this.setState({ showModal: !this.state.showModal });
 
   toCSV = () => {
     const headers = [ 'Grade', 'Subject', 'Teacher', 'Cell Phone', 'E-mail', '# of Soldiers', '# of Staff', 'Base' ];
@@ -31,6 +35,7 @@ export class PlatoonsPage extends Component {
 
   render() {
     const { platoons, loading, login, match } = this.props;
+    const { showModal } = this.state;
 
     let columns = [
       { Header: 'Grade', accessor: 'class_grade',
@@ -43,6 +48,8 @@ export class PlatoonsPage extends Component {
       { Header: 'E-mail Address', accessor: 'email' },
       { Header: 'Soldiers', accessor: 'soldier_count' },
       { Header: 'Staff', accessor: 'staff_count' },
+      { Header: 'Miles Balance', accessor: 'miles_balance',
+       Cell: props => <Number value={props.value}/> },
     ];
     if ( isAdmin(login.code) ) {
       columns.push( { Header: 'Base', accessor: 'school_name' } );
@@ -54,9 +61,9 @@ export class PlatoonsPage extends Component {
           <p><strong>To connect a Staff member to a Platoon go to the edit page by clicking on the Grade, Sub or Teacher.</strong></p>
         </Callout>
         <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
-          <Link to={`${match.path}/new`} className="btn btn-primary" role="button">
+          <Button color="primary" onClick={ this.toggle }>
             <FontAwesome icon='plus' /> Add Platoon
-          </Link>
+          </Button>
           <Link to={`${match.path}/transition`} className="btn btn-primary" role="button">
             <FontAwesome icon='users' /> Platoon Transition
           </Link>
@@ -76,6 +83,13 @@ export class PlatoonsPage extends Component {
           loading={ loading && !platoons.length } 
           pageId='PlatoonsPage' />
 
+        <NewPlatoonModal
+          login={ login }
+          isOpen={ showModal }
+          toggle={ this.toggle }
+          refresh={ this.getPlatoons }
+          onSubmit={ this.props.createPlatoon } />
+
       </div>
     )
   }
@@ -86,6 +100,8 @@ const mapStateToProps = ( { platoons, login } ) => ({
   login: login.current_login
 })
 
-const mapDispatchToProps = { getPlatoons }
+const mapDispatchToProps = {
+  getPlatoons, createPlatoon
+}
 
 export default connect( mapStateToProps, mapDispatchToProps )( PlatoonsPage );
