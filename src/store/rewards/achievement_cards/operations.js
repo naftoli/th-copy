@@ -1,12 +1,14 @@
-import API from 'api/api';
+import API, { handleAPIResponse } from 'api/api';
 import * as actions from './actions';
 
 // generate cards
 export const generateAchievementCards = ( data ) => dispatch => {
   dispatch( actions.setLoading( true ) );
-  return API.post( `/rewards/achievement_cards` )
-    .then( response => {
-      dispatch( actions.setCards( response.data ) );
+  return API.post( `/rewards/achievement_cards`, data )
+    .then( handleAPIResponse )
+    .then( ({ cards, miles }) => {
+      dispatch( actions.setCards( cards ) );
+      dispatch( actions.setMiles( miles ) );
     }).catch( e => {
       dispatch( actions.setLoading( false ) );
       return Promise.reject( e );

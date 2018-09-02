@@ -18,7 +18,7 @@ export default ( state = initialState, action ) => {
     case types.SET_CARDS:
       return { 
         ...state, 
-        cards: action.cards, 
+        cards: action.payload, 
         loading: false
       };
     

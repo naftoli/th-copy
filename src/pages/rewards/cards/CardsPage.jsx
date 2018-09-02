@@ -3,24 +3,25 @@ import { connect } from 'react-redux';
 // components
 import { InlineSync, FontAwesome, Number } from 'components/ui';
 import { Row, Col, Input, Button, ButtonGroup } from 'reactstrap';
-import { SubjectSelect, AchievementTaskSelect } from 'components/inputs';
+import { 
+  SubjectSelect, AchievementTaskSelect, Date
+} from 'components/inputs';
 // functions
+import moment from 'moment';
 import { toast } from 'react-toastify';
 import { isTeacher, isBC, isAdmin } from 'functions/login';
 import { setTitle } from 'functions/utils';
 // state
 import { getSubjects } from 'store/rewards/subjects/operations';
 import { getTasks } from 'store/rewards/achievement_tasks/operations';
+import { 
+  getMiles, generateAchievementCards
+} from 'store/rewards/achievement_cards/operations';
 // style
 import './cards.scss';
 import Callout from 'components/ui/Callout';
 
 class CardsPage extends Component {
-
-  // static propTypes = {
-  //   tasks: PropTypes.array,
-  //   subjects: PropTypes.array
-  // };
 
   static defaultProps = {
     tasks: [],
@@ -31,13 +32,15 @@ class CardsPage extends Component {
   state = { 
     subject_id: false,
     task_id: false,
-    card_count: 10
+    card_count: 10,
+    delete_to: moment()
   };
 
   componentDidMount() {
     setTitle( 'Achievement Cards' );
-    this.loadSubjects();
-    this.loadTasks(); 
+    this.props.getMiles(); // load my miles limit
+    this.loadSubjects(); // refresh the subjects
+    this.loadTasks(); // refresh all tasks
   }
 
   // load all subjects
@@ -53,19 +56,30 @@ class CardsPage extends Component {
   // cards
   generateCards = e => {
     e.preventDefault();
-    console.log( this.state );
-    debugger;
+    const { delete_to, ...postData } = this.state;
+    // make sure a subject was selected
+    if ( !postData.subject_id )
+      return toast.error('Cannot create Achievement Cards without a Campaign.');
+    // make sure a task was selected
+    if ( !postData.task_id )
+      return toast.error('Cannot create Achievement Cards without a Task.');
+    if ( !postData.card_count )
+      return toast.error('Cannot create unknown number of Achievement Cards.')
+    
+    return this.props.generateAchievementCards( postData )
+    .catch( e => toast.error( e.message ) );
   }
 
   // event handlers
   onChange = ({ target }) => { this.setState({ [target.id]: target.value }) }
   onTaskChange = ({ value }) => { this.setState({ task_id: value }) }
-  onSubjectChange = ({ value }) => { this.setState({ subject_id: value }) }
+  onSubjectChange = ({ value }) => { this.setState({ subject_id: value, task_id: false }) }
+  onDateChange = date => this.setState({ delete_to: date });
   print = () => { window.print(); }
 
   render() {
     let { cards, login } = this.props;
-    const { subject_id, task_id, card_count } = this.state;
+    const { subject_id, task_id, card_count, delete_to } = this.state;
 
     const subjectFilter = subject => subject.tasks > 0;
     const taskFilter = task => {
@@ -91,9 +105,29 @@ class CardsPage extends Component {
             }
           </Callout>
 
+          <p className='title'>Delete Unused Cards</p>
+          <Row id='delete'>
+            <Col sm={ 6 }>
+              <label>Printed before</label>
+              <Date 
+                maxDate={ moment() }
+                value={ delete_to } 
+                onChange={ this.onDateChange } />
+            </Col>
+            <Col sm={ 6 }>
+              <ButtonGroup>
+                <Button color='danger'>
+                  <FontAwesome icon='trash' /> Delete Unused Cards
+                </Button>
+              </ButtonGroup>
+            </Col>
+          </Row>
+
+          <p className='title'>Generate cards</p>
+
           { isTeacher( login.code ) && 
             <h2 id='available-miles'>
-              <Number value={ 5000 } /> Available Miles
+              <Number value={ cards.miles || 0 } /> Available Miles
             </h2>
           }
 
@@ -130,7 +164,7 @@ class CardsPage extends Component {
               <Col sm={ 6 } xl={3}>
                 <ButtonGroup>
                   <Button color='primary'>
-                    <InlineSync /> Generate
+                    <InlineSync loading={ cards.loading } /> Generate
                   </Button>
                   <Button onClick={ this.print } className='btn btn-primary'>
                     <FontAwesome icon='print' /> Print
@@ -141,6 +175,10 @@ class CardsPage extends Component {
             </Row>
           </form>
         </div>
+
+        <pre>
+          { JSON.stringify( cards.cards, null, 2 ) }
+        </pre>
       </div>
     );
   }
@@ -155,7 +193,8 @@ const mapStateToProps = ({ rewards, login }) => {
 };
 
 const mapDispatchToProps = {
-  getSubjects, getTasks
+  getSubjects, getTasks,
+  getMiles, generateAchievementCards
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )( CardsPage );
