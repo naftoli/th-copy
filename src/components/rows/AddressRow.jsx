@@ -43,7 +43,7 @@ export class AddressRow extends Component {
             value={ getValue( 'address2' ) } {...inputProps} maxLength={ 255 } />
         </Col>
 
-        <Col xs={ 6 }>
+        <Col xs={ 6 } xl={ showPhone ? 6 : 4 }>
           <label>City</label>
           <Input name={ getName( 'city' ) } id={ getName( 'city' ) }
             value={ getValue( 'city' ) } {...inputProps} placeholder='Brooklyn'
@@ -51,7 +51,7 @@ export class AddressRow extends Component {
           <div className='invalid-message'>Please enter 3 or more letters</div>
         </Col>
 
-        <Col xs={ 3 }>
+        <Col xs={ 3 } xl={ showPhone ? 3 : 2 }>
           <label>State</label>
           <Input name={ getName( 'state' ) } id={ getName( 'state' ) }
             value={ getValue( 'state' ) } {...inputProps } placeholder='NY'
@@ -59,7 +59,7 @@ export class AddressRow extends Component {
           <div className='invalid-message'>Please enter a valid state</div>
         </Col>
 
-        <Col xs={ 3 }>
+        <Col xs={ 3 } xl={ showPhone ? 3 : 2 }>
           <label>Zip</label>
           <Input name={ getName( 'postal' ) } id={ getName( 'postal' ) }
             value={ getValue( 'postal' ) } {...inputProps} placeholder='11213'
@@ -67,11 +67,11 @@ export class AddressRow extends Component {
           <div className='invalid-message'>Please enter 3 to 255 letters</div>
         </Col>
 
-        <Col xs={ showPhone ? 6 : 12 }>
+        <Col xs={ showPhone ? 6 : 12 } xl={ showPhone ? 6 : 4 }>
           <label>Country</label>
           <Input name={ getName( 'country' ) } id={ getName( 'country' ) } 
             value={ getValue( 'country' ) } {...inputProps} placeholder='USA'
-            pattern='^.{3,255}$' title="3 to 255 letters" />
+            pattern='^.{2,255}$' title="2 to 255 letters" />
           <div className='invalid-message'>Please enter 3 to 255 letters</div>
         </Col>
 
