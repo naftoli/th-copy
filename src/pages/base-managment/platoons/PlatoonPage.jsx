@@ -63,8 +63,6 @@ export class PlatoonPage extends Component {
     
     if ( loading )
       return <LoadingScreen  Callout />
-    
-    const { staff } = platoon;
 
     const updated = Object.keys( this.state.updates ).length > 0;
     platoon = { ...platoon, ...updates };
@@ -96,25 +94,7 @@ export class PlatoonPage extends Component {
             createAuth={ this.props.createAuth }
             removeAuth={ this.props.removeAuth } />
 
-          {/* <StaffTab 
-            tabId={ 2 } 
-            staff={ base.staff }
-            updated={ updated }
-            refresh={ this.loadBase }
-            schoolId={ base.school_id }
-            createAuth={ this.props.createAuth }
-            removeAuth={ this.props.removeAuth } /> */}
-
         </TabContent>
-
-        {/* show all the staff and manage them */}
-        {/* <p className='title'>Connected Staff Accounts</p>
-
-        <NewStaffRow onSubmit={ this.connect } />
-
-        { staff.map( (staff, index) => 
-          <StaffRow key={index} disconnect={this.disconnect} {...staff} />
-        )} */}
 
       </div>
     )
