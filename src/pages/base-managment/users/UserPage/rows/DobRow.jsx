@@ -1,7 +1,7 @@
 import React from 'react';
 // components
 import { Row, Col, Input } from 'reactstrap';
-import DatePicker from 'react-datepicker';
+import { Date } from 'components/inputs';
 // functions
 import moment from 'moment';
 
@@ -11,14 +11,13 @@ const DobRow = ( { soldier, onChange, showHe, children } ) => {
     <Row>
       <Col xs='6'>
         <label>Date of Birth</label>
-        <DatePicker className='form-control' 
-          // display formats
-          dateFormat='LL' readOnly showMonthDropdown showYearDropdown dropdownMode='select'
-          // current date and handle change
-          selected={ dob ? moment( dob ) : undefined } onChange={ onChange } 
+        <Date
+          dateFormat='LL'
+          value={ dob ? moment( dob ) : undefined } 
+          onChange={ onChange } 
           // client side date validations
-          minDate={moment().subtract( 20, 'years' )} maxDate={moment().subtract( 5, 'years' )}
-        />
+          minDate={ moment().subtract( 20, 'years' ) } 
+          maxDate={ moment().subtract( 5, 'years' ) } />
       </Col>
       { showHe && 
         <Col xs='6' dir='rtl'>

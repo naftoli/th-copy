@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import RankCard from './RankCard';
-import DatePicker from 'react-datepicker';
 import { Callout, Spinner, FontAwesome } from 'components/ui';
 import { Row, Col, Button, ButtonGroup, Alert, Input } from 'reactstrap';
-import { PlatoonSelect, BaseSelect, Select, Checkbox, Radio } from 'components/inputs'
+import { 
+  PlatoonSelect, BaseSelect, Select, 
+  Checkbox, Radio, Date 
+} from 'components/inputs'
 // functions
 import is from 'is_js';
 import julian from 'julian';
@@ -169,10 +171,10 @@ export class RegistrationPage extends Component {
           </Col>
           <Col xs='12' sm='6'>
             <label>Ranks Earned Before:</label><br/>
-            <DatePicker className='form-control' maxDate={ moment() }
-              dateFormat='l' readOnly showMonthDropdown showYearDropdown dropdownMode='select' 
-              selected={ moment( julian.toDate( earned_before ) ) } onChange={ this.handleDateChange } 
-            />
+            <Date 
+              maxDate={ moment() }
+              value={ moment( julian.toDate( earned_before ) ) } 
+              onChange={ this.handleDateChange } />
           </Col>
           <Col xs='12' sm='6'>
             <label>Other Options:</label><br/>

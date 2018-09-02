@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 // components
-import DatePicker from 'react-datepicker';
 import { Row, Col } from 'reactstrap';
-import { Radio, Checkbox } from 'components/inputs';
+import { Radio, Checkbox, Date } from 'components/inputs';
 // functions
 import julian from 'julian';
 import moment from 'moment';
@@ -76,12 +75,12 @@ export class SettingsRow extends Component {
         </Col>
         <Col xs={12} lg={6} id='store-miles'>
           <label>Store Miles Start From:</label>
-          <DatePicker className='form-control' disabled 
-            // display formats
-            dateFormat='LL' readOnly showMonthDropdown showYearDropdown dropdownMode='select'
-            // current date and handle change
-            selected={ store_reset } onChange={ this.onDateChage } 
-          />
+          <Date 
+            disabled 
+            dateFormat='LL' 
+            value={ store_reset }
+            onChange={ this.onDateChage } />
+            
           <Checkbox checked={ !store_reset } onChange={ this.disableSchoolReset }>
             Allow soldiers to spend all their miles.
           </Checkbox>
