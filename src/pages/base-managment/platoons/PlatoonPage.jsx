@@ -19,7 +19,7 @@ export class PlatoonPage extends Component {
   // initial state
   state = {
     platoon: {}, updates: {}, 
-    loading: true, activeTab: 2,
+    loading: true, activeTab: 1,
   }
 
   // load the contents if we do not have any

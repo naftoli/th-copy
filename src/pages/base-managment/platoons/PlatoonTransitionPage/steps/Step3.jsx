@@ -1,5 +1,4 @@
 import React from 'react';
-import classnames from 'classnames';
 // components
 import { Row, Col, Button, ButtonGroup } from 'reactstrap';
 import { BaseSelect, PlatoonSelect } from 'components/inputs';

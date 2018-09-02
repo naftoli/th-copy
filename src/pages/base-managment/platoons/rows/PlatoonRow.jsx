@@ -24,20 +24,20 @@ export class PlatoonRow extends Component {
         </Col>
         <Col xs={6}>
           <label>Sub (optional details, e.g. 'Boys' or 'א‬'.)</label>
-          <Input name='class_sub' value={ class_sub } { ...inputProps } />
+          <Input name='class_sub' value={ class_sub || '' } { ...inputProps } />
         </Col>
         <Col xs={12}>
           <label>Teacher Name</label>
-          <Input name='class_teacher' value={ class_teacher } { ...inputProps } />
+          <Input name='class_teacher' value={ class_teacher || '' } { ...inputProps } />
         </Col>
         <Col xs={6}>
           <label>Teacher Phone</label>
-          <PhoneNumber name='cell' value={ cell } { ...inputProps } />
+          <PhoneNumber name='cell' value={ cell || '' } { ...inputProps } />
           <div className='invalid-message'>Please enter a valid phone number</div>
         </Col>
         <Col xs={6}>
           <label>Teacher E-Mail</label>
-          <Input name='email' type='email' value={ email } { ...inputProps } />
+          <Input name='email' type='email' value={ email || '' } { ...inputProps } />
           <div className='invalid-message'>Please enter a valid E-mail address</div>
         </Col>
       </Row>

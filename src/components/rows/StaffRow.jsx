@@ -37,11 +37,11 @@ export class StaffRow extends Component {
           </Col>
           <Col sm='4'>
             <label>Username</label>
-            <Input disabled value={username} />
+            <Input disabled value={username || ''} />
           </Col>
           <Col sm='4'>
             <label>E-Mail</label>
-            <Input disabled value={email} />
+            <Input disabled value={email || ''} />
           </Col>
           <Col sm='4'>
             <label>Actions</label>
