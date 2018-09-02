@@ -8,7 +8,7 @@ export class Form extends Component {
   componentDidUpdate() { this.updateValid() }
 
   updateValid = () => {
-    if ( this.formRef.current )
+    if ( this.formRef.current && this.props.onValidChange )
       this.props.onValidChange( this.formRef.current.checkValidity() );
   }
 
