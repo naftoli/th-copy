@@ -175,21 +175,23 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getRegistrationYear();
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
-            "SELECT user_reg_id, th_chidon_id FROM users u "
+            "SELECT user_reg_id, chayolei, th_chidon_id, chidon FROM users u "
             ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = :year "
             ."LEFT JOIN th_chidon tc ON tc.user_id = u.user_id AND tc.year = :chidon_year "
             ."WHERE u.user_id = :user_id;"
         );
         $user_status_query->execute([ ':year' => $year, ':chidon_year' => $chidon_year, ':user_id' => $this->user_id ]);
         $row = $user_status_query->fetch();
-        $result = [ 'chayolei'  => !!$row['user_reg_id'] ];
+        
+        if ( $row['chayolei'] )
+            $result = [ 'chayolei'  => !!$row['user_reg_id'] ];
         
         // australian registration ends here.
         //if ( GlobalSettings::isAustralian( $this->school_id ) ) 
             //return $result;
         
         // only add th_chidon_id if the user is in grade 4+
-        if ( $this->platoon && $this->platoon->class_grade >= 4 )
+        if ( $this->platoon && $this->platoon->class_grade >= 4 && $row['chidon'] )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
         return $result;
     }

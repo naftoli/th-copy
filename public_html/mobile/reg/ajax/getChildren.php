@@ -76,7 +76,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 	$children[$row['user_id']]['school_id'] = $row['school_id'];
     
     $reg_query = mysql_query(
-        "SELECT !ISNULL(tc.th_chidon_id) AS reg_chidon, !ISNULL(ur.user_reg_id) AS reg_chayolei, "
+        "SELECT !ISNULL(tc.th_chidon_id) AS reg_chidon, !ISNULL(ur.user_reg_id) AS reg_chayolei, u.chayolei, "
         ."sri.date_paid AS registered FROM users u "
         ."LEFT JOIN th_chidon tc ON u.user_id = tc.user_id and year = $chidon_year "
         ."LEFT JOIN user_registration ur ON u.user_id = ur.user_id and ur.year = $reg_year "
@@ -96,7 +96,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
     $children[$row['user_id']]['allowRemove'] = 0;
 	$children[$row['user_id']]['reg_types'] = [];
 	
-    if ( !$row['reg_chayolei'] && // if not registered for chayolei
+    if ( !$row['reg_chayolei'] && $row['chayolei'] && // if not registered for chayolei
         // do not show for 7-8 grade who are registered in chidon 
         ( !(in_array( $row['class_grade'], [7, 8] ) && $row['reg_chidon'] ) ) 
     ) {
@@ -105,17 +105,12 @@ while ( $row = mysql_fetch_assoc($result) ) {
     } 
     
     // chidon regustration
-    if ( !$row['reg_chidon'] && // if not in chidon 
+    if ( !$row['reg_chidon'] && // if not in chidon
 		$row['class_grade'] >= 4 // and in grade 4+
 		//&& in_array( $row['school_id'], $australia ) // and not in australia..
     ) {
-        $children[$row['user_id']]['needsReg'] = 1;
-        $children[$row['user_id']]['reg_types']['chidon'] = true;
-    }
-    
-    // make sure beis rivka ch for 7/8 grades don't show registration button
-    if ($row['school_id'] == 54 && in_array( $row['class_grade'], array( 7, 8 ) ) ) {
-        $children[$row['user_id']]['needsReg'] = 0;
+        $children[ $row['user_id'] ]['needsReg'] = 1;
+        $children[ $row['user_id'] ]['reg_types']['chidon'] = true;
     }
     
     $children[$row['user_id']]['enrollShabbaton'] = 0;
