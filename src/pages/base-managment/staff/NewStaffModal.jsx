@@ -30,7 +30,7 @@ class NewStaffModal extends Component {
   // update state.auth
   setAuth = auth => this.setState({ auth });
   // onSubmit
-  createParent = ( e ) => {
+  createStaff = ( e ) => {
     e.preventDefault();
     this.setState({ error: false });
     const { staff, auth } = this.state
@@ -54,7 +54,7 @@ class NewStaffModal extends Component {
     return (
       <Modal isOpen={ isOpen } toggle={ toggle } centered id='NewStaffModal'>
         <ModalHeader toggle={ toggle }>Create Staff Account</ModalHeader>
-        <form onSubmit={ this.createParent }>
+        <form onSubmit={ this.createStaff }>
           <ModalBody>
             
             <EditStaffRow 
