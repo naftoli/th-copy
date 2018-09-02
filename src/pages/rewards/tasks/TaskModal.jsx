@@ -2,19 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // components
 import { SaveButton } from 'components/buttons';
-import { Select } from 'components/inputs';
+import { SubjectSelect } from 'components/inputs';
 import { 
   Modal, ModalHeader, ModalBody, ModalFooter,
   Row, Col, Label, Input
 } from 'reactstrap';
 // functions
-import { findOption } from 'functions/selects';
 import { filterUpdates } from 'functions/events';
 
 class TaskModal extends Component {
 
   static propTypes = {
-    loading: PropTypes.bool,
     task: PropTypes.object.isRequired,
     isOpen: PropTypes.bool.isRequired,
     toggle: PropTypes.func.isRequired,
@@ -63,7 +61,7 @@ class TaskModal extends Component {
   toggle = () => this.props.toggle();
 
   render(){
-    let { isOpen, task, subjects, loading, login } = this.props;
+    let { isOpen, task, login } = this.props;
     const { updates, saving } = this.state;
 
     const editing = !!task.achievement_task_id;
@@ -72,13 +70,9 @@ class TaskModal extends Component {
     task = { ...task, ...updates };
     
     // insitutions can only create tasks in their own campaigns.
+    let filter;
     if ( ( !task.base || task.base <= 1 ) && login.code === 'INST' )
-      subjects = subjects.filter( subject => subject.inst_id === login.id );
-
-    let subjectOptions = subjects.map( subject => ({
-      value: subject.subject_id, label: subject.subject_name
-    }));
-    let campaign = findOption( subjectOptions, task.subject_id );
+      filter = subject => subject.inst_id === login.id;
 
     return (
       <Modal isOpen={ isOpen } toggle={ this.toggle } centered id='TaskModal'>
@@ -94,10 +88,9 @@ class TaskModal extends Component {
               <Col xs={ 8 }>
 
                 <Label>Campaign</Label>
-                <Select id='campaign'
-                  value={ campaign }
-                  options={ subjectOptions } 
-                  isLoading={ loading }
+                <SubjectSelect 
+                  filter={ filter }
+                  value={ task.subject_id }
                   onChange={ this.onSubjectChange } />
 
               </Col>

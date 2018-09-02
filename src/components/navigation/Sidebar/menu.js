@@ -100,12 +100,12 @@ const getMenu = ( login ) => {
       items: [
         { label: "Achievement Cards", path: '/rewards/cards' },
         { label: "Tasks", path: '/rewards/tasks' },
-        // { label: "Points Grid", path: '/rewards/points-grid' },
-        // { label: "Prizes", path: '/rewards/prizes' },
-        // { label: "Orders", path: '/rewards/orders' },
+        // { label: "Miles Grid", path: '/rewards/miles-grid' },
+        { label: "Prizes", path: '/rewards/prizes' },
+        { label: "Orders", path: '/rewards/orders' },
         { label: 'Add / Subtract Points', legacy: true, path: '/manual_points.php' },
         {
-          label: 'Mileage Program', user_types: [ 'BC' ], path: '/v2',
+          label: 'Legacy Mileage Program', user_types: [ 'BC' ], path: '/v2',
           icon: <img src={`${LEGACY_URL}/images/icon_auction.png`} alt="Miliage Program"/>
         },
       ]

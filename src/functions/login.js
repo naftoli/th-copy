@@ -23,3 +23,7 @@ export const isAdmin = code => {
 export const isBC = code => {
   return [ 'HQ', 'INST', 'BC' ].includes( code );
 }
+
+export const isTeacher = code => {
+  return [ 'TEACHER' ].includes( code );
+}

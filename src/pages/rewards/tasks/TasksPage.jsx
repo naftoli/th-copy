@@ -84,14 +84,15 @@ class TasksPage extends Component {
       'Task', 'Subject', 'Miles', 'Base', 'Platoon', 
     ];
     // get the data
-    const rows = this.props.bases.map( base => [
-      base.school_number, base.school_name, base.school_city, base.school_state, base.school_country, base.soldier_count
+    const rows = this.props.bases.map( task => [
+      task.task, task.subject && task.subject.subject_name, 
+      task.points, task.baseName, task.platoonName
     ]);
     arrayToCSV( headers, rows, 'achievement_tasks' );
   }
 
   render() {
-    let { tasks, loading, subjects, subjectsLoading, login } = this.props;
+    let { tasks, loading, subjects, login } = this.props;
     const { show, task } = this.state;
 
     let columns = [
@@ -149,7 +150,6 @@ class TasksPage extends Component {
           isOpen={ show }
           toggle={ this.toggle }
           subjects={ subjects }
-          loading={ subjectsLoading }
           onSubmit={ this.saveTask } />
 
       </div>
@@ -162,7 +162,6 @@ const mapStateToProps = ({ rewards, login }) => {
   return {
     ...achievement_tasks,
     subjects: subjects.subjects,
-    subjectsLoading: subjects.loading,
     login: login.current_login
   }
 };
