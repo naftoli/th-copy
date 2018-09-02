@@ -5,7 +5,7 @@
     align-items: flex-end;
   }
 
-  .btn { margin-top: 10px; }
+  .btn { width: 100%; margin-top: 10px; }
 
   p.title{
     font-size: 1.6em;
@@ -15,15 +15,13 @@
 
   .ReactTable {
     max-height: 70vh;
-    height: 60vh;
+    height: 31vh;
   }
 
   div#step-3 {
     max-height: 325px;
     transition: 1s;
     animation-fill-mode: forwards;
-    &.hide { max-height: 0px; overflow: hidden; }
-    &.show { animation: 1s delay-overflow; }
   }
 
   div#deploy {
@@ -32,10 +30,4 @@
       .btn { margin-top: 0px; }
     }
   }
-}
-
-@keyframes delay-overflow {
-  0% { overflow: hidden;}
-  99% { overflow: hidden;}
-  100% { overflow: visible; }
 }

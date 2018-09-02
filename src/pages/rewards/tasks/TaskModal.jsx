@@ -63,13 +63,17 @@ class TaskModal extends Component {
   toggle = () => this.props.toggle();
 
   render(){
-    let { isOpen, task, subjects, loading } = this.props;
+    let { isOpen, task, subjects, loading, login } = this.props;
     const { updates, saving } = this.state;
 
     const editing = !!task.achievement_task_id;
 
     const updated = Object.keys( this.state.updates ).length > 0;
     task = { ...task, ...updates };
+    
+    // insitutions can only create tasks in their own campaigns.
+    if ( ( !task.base || task.base <= 1 ) && login.code === 'INST' )
+      subjects = subjects.filter( subject => subject.inst_id === login.id );
 
     let subjectOptions = subjects.map( subject => ({
       value: subject.subject_id, label: subject.subject_name

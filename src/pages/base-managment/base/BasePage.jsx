@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 // components
 import { Prompt } from 'react-router';
 import { TabContent, Nav } from 'reactstrap';
-import { FontAwesome, LoadingScreen } from 'components/ui';
 import { NavigationTab } from 'components/navigation';
+import { FontAwesome, LoadingScreen } from 'components/ui';
 // tabs
 import { 
   BaseTab, PaymentsTab, ShippingTab, 

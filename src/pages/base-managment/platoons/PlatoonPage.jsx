@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Prompt } from 'react-router';
-import { SaveButton } from 'components/buttons';
-import { Link, Redirect } from 'react-router-dom';
-import { StaffRow, NewStaffRow, PlatoonRow } from './rows';
-import { LoadingScreen, Callout } from 'components/ui';
+import { TabContent, Nav  } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
+import { NavigationTab } from 'components/navigation';
+import { FontAwesome, LoadingScreen } from 'components/ui';
+// tabs
+import { PlatoonTab, TeachersTab } from './tabs';
 // functions
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
@@ -16,17 +18,9 @@ import { filterUpdates } from 'functions/events';
 export class PlatoonPage extends Component {
   // initial state
   state = {
-    platoon: {}, updates: {}, loading: true
+    platoon: {}, updates: {}, 
+    loading: true, activeTab: 2,
   }
-
-  // non-destructivly update the state
-  handleUpdate = ( update ) => {
-    const updates = filterUpdates( this.state.platoon, { ...this.state.updates, ...update } );
-    this.setState({ updates });
-  }
-  // handle selects
-  handleInputChange = ({ target }) => { this.handleUpdate({ [target.name]: target.value }) };
-  handleSelectChange = ( option ) => { this.handleUpdate({ [option.id]: option.value }) };
 
   // load the contents if we do not have any
   componentDidMount(){
@@ -34,6 +28,15 @@ export class PlatoonPage extends Component {
     this.getPlatoon();
   }
 
+  // non-destructivly update the state
+  onUpdate = ( update ) => {
+    const updates = filterUpdates( this.state.platoon, { ...this.state.updates, ...update } );
+    this.setState({ updates });
+  }
+  // toggle tabs
+  toggle = activeTab => () => this.setState({ activeTab });
+
+  // Networking
   getPlatoon = () => {
     const { match, getPlatoon } = this.props;
     this.setState({ loading: true });
@@ -44,7 +47,7 @@ export class PlatoonPage extends Component {
       this.setState({ platoon: undefined }); }
     );
   }
-
+  // save platoon
   save = ( event ) => {
     event && event.preventDefault();
     const { updates, platoon } = this.state;
@@ -52,31 +55,16 @@ export class PlatoonPage extends Component {
     .then( platoon => this.setState({ platoon, updates: {} }) );
   }
 
-  disconnect = ( admin_id ) => {
-    const { class_id: id } = this.state.platoon;
-    this.props.removeAuth({ admin_id, id, auth: 'class' })
-    .then( this.getPlatoon )
-    .catch( error => { toast.error( error.message ) } );
-  }
-
-  connect = ({ email, username }) => {
-    const { class_id: id } = this.state.platoon;
-    // create the connection
-    this.props.createAuth( { email, username, id, auth: 'class' } )
-    .then( this.getPlatoon )
-    .catch( error => { toast.error( error.message ) } );
-  }
-
   render() {
-    let { platoon, loading, updates } = this.state;
+    let { platoon, loading, updates, activeTab } = this.state;
 
-    if ( platoon === undefined ) return <Redirect to='/platoons' />;
-    if ( loading ) return <LoadingScreen  Callout />
+    if ( platoon === undefined ) 
+      return <Redirect to='/platoons' />;
+    
+    if ( loading )
+      return <LoadingScreen  Callout />
     
     const { staff } = platoon;
-
-    const inputProps = { onChange: this.handleInputChange };
-    const selectProps = { onChange: this.handleSelectChange };
 
     const updated = Object.keys( this.state.updates ).length > 0;
     platoon = { ...platoon, ...updates };
@@ -84,28 +72,49 @@ export class PlatoonPage extends Component {
     return (
       <div id='PlatoonPage'>
         <Prompt when={ updated } message="You have unsaved changes. Are you sure you want to leave?" />
+        <Nav tabs>
+          <NavigationTab active={activeTab === 1} onClick={this.toggle( 1 )}>
+            Platoon <FontAwesome icon='chalkboard-teacher'/>
+          </NavigationTab>
+          <NavigationTab active={activeTab === 2} onClick={this.toggle( 2 )}>
+            Teacher Accounts <FontAwesome icon='users'/>
+          </NavigationTab>
+        </Nav>
+        <TabContent activeTab={ activeTab }>
 
-        <p className='title'>Platoon Information</p>
-        <Callout icon={ false }>
-          <p>Please note that we will use this information when sending updates and printing Mission Sheets. Please make sure it is up to date.</p>
-          <p>To edit staff (Teacher) accounts please look at the <Link to='/bm/staff'>Staff tab under Base Managment.</Link></p>
-        </Callout>
+          <PlatoonTab 
+            tabId={ 1 }
+            platoon={ platoon } 
+            updated={ updated }
+            onUpdate={ this.onUpdate } 
+            onSubmit={ this.save }/>
+          
+          <TeachersTab
+            tabId={ 2 }
+            platoon={ platoon }
+            refresh={ this.getPlatoon }
+            createAuth={ this.props.createAuth }
+            removeAuth={ this.props.removeAuth } />
 
-        <form onSubmit={ this.save }>
-          <PlatoonRow platoon={ platoon } 
-            inputProps={ inputProps } selectProps={ selectProps } />
+          {/* <StaffTab 
+            tabId={ 2 } 
+            staff={ base.staff }
+            updated={ updated }
+            refresh={ this.loadBase }
+            schoolId={ base.school_id }
+            createAuth={ this.props.createAuth }
+            removeAuth={ this.props.removeAuth } /> */}
 
-          <SaveButton show={ updated } />
-        </form>
-        
+        </TabContent>
+
         {/* show all the staff and manage them */}
-        <p className='title'>Connected Staff Accounts</p>
+        {/* <p className='title'>Connected Staff Accounts</p>
 
         <NewStaffRow onSubmit={ this.connect } />
 
         { staff.map( (staff, index) => 
           <StaffRow key={index} disconnect={this.disconnect} {...staff} />
-        )}
+        )} */}
 
       </div>
     )

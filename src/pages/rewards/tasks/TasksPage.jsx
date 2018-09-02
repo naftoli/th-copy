@@ -94,9 +94,6 @@ class TasksPage extends Component {
     let { tasks, loading, subjects, subjectsLoading, login } = this.props;
     const { show, task } = this.state;
 
-    if ( login.code === 'INST' )
-      subjects = subjects.filter( subject => subject.inst_id === login.id );
-
     let columns = [
       { Header: 'Task', accessor: 'task',
         Cell: ({ value, original }) => {
@@ -147,7 +144,8 @@ class TasksPage extends Component {
           pageId='TasksPage' />
 
         <TaskModal 
-          task={ task } 
+          task={ task }
+          login={ login }
           isOpen={ show }
           toggle={ this.toggle }
           subjects={ subjects }

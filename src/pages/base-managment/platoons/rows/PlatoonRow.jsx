@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 // components
 import { Select, PhoneNumber } from 'components/inputs';
 import { Row, Col, Input } from 'reactstrap';
-// styles
-// import './PlatoonPage.scss';
 
 export class PlatoonRow extends Component {
 
@@ -29,11 +27,11 @@ export class PlatoonRow extends Component {
           <Input name='class_sub' value={ class_sub } { ...inputProps } />
         </Col>
         <Col xs={12}>
-          <label>Teacher</label>
+          <label>Teacher Name</label>
           <Input name='class_teacher' value={ class_teacher } { ...inputProps } />
         </Col>
         <Col xs={6}>
-          <label>Teacher Cell</label>
+          <label>Teacher Phone</label>
           <PhoneNumber name='cell' value={ cell } { ...inputProps } />
           <div className='invalid-message'>Please enter a valid phone number</div>
         </Col>

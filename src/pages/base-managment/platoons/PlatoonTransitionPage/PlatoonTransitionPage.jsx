@@ -64,9 +64,9 @@ class PlatoonTransitionPage extends Component {
     .catch( error => toast.error( error.message ) );
   }
   // Deploy the transition
-  transition = ( school_id ) => {
-    transitionPlatoons( school_id )
-    .then( ({ rowCount }) => toast.info( `${rowCount / 2} Soldiers Transitioned` ) )
+  transition = () => {
+    transitionPlatoons()
+    .then( ({ rowCount }) => toast.info( `${ Math.floor( rowCount / 2 ) } Soldiers Transitioned` ) )
     .then( this.getSoldiers )
     .catch( error => toast.error( error.message ) );
   }
@@ -75,6 +75,7 @@ class PlatoonTransitionPage extends Component {
   updateSelection = selection => this.setState({ selection });
 
   render() {
+    const { login } = this.props;
     const { from, to, soldiers, selection, loading } = this.state;
 
     return (
@@ -88,9 +89,10 @@ class PlatoonTransitionPage extends Component {
         <Deploy onDeploy={ this.transition } />
 
         <Step1 { ...from }
-          selectChange={ this.selectChange('from') } 
+          login={ login }
+          loading={ loading }
           onSubmit={ this.getSoldiers }
-          loading={ loading } />
+          selectChange={ this.selectChange('from') } />
 
         <Step2 
           soldiers={ soldiers }
