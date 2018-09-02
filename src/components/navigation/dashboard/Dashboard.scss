@@ -27,7 +27,7 @@
     @media print { padding: 0px; }
 
     > :first-child {
-      height: 100%;
+      height: calc( 100% - 13px );
 
       > .btn-group {
         margin: 10px 0px; width: 100%;

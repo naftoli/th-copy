@@ -2,14 +2,8 @@
   height: 100%;
 
   .ReactTable {
-    height: calc( 100% - 80px );
+    height: calc( 100% - 120px );
     // page height grows as content shrinks
-    @media ( max-width: 1012px ) {
-      height: calc( 100% - 130px ); // top of the page takes up 50px
-    }
-    @media ( min-width: 769px ) and ( max-width: 837px ) {
-      height: calc( 100% - 150px ); // top of the page takes up 50px
-    }
     @media ( max-width: 411px ) {
       height: calc( 100% - 50px ); // top of the page takes up 50px
     }
