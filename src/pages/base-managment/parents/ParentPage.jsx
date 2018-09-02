@@ -112,7 +112,7 @@ class ParentPage extends Component {
           </Col>
         </Row>
 
-        <AddressRow disabled { ...address } showPhone prefix='admin_' />
+        <AddressRow disabled { ...address } prefix='admin_' />
 
         <p className='title'>Children</p>
         <Row id='add-child'>
