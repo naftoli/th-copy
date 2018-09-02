@@ -27,6 +27,7 @@ $MASHPIA_DB->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 $POINTS_DB =  new \PDO( "mysql:host=$global_db_host;dbname=pointsDB", $global_db_user, $global_db_pass );
 $POINTS_DB->exec( "SET NAMES utf8" ); // fix utf8
 $POINTS_DB->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+$POINTS_DB->setAttribute( PDO::ATTR_EMULATE_PREPARES, false );
 
 // connect ActiveRecord to DBS
 ActiveRecord\Config::initialize( function( $cfg ) use ( $connections ) {
