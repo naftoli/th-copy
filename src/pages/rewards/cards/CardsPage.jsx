@@ -6,7 +6,7 @@ import { Row, Col, Input, Button, ButtonGroup } from 'reactstrap';
 import { SubjectSelect, AchievementTaskSelect } from 'components/inputs';
 // functions
 import { toast } from 'react-toastify';
-import { isTeacher } from 'functions/login';
+import { isTeacher, isBC, isAdmin } from 'functions/login';
 import { setTitle } from 'functions/utils';
 // state
 import { getSubjects } from 'store/rewards/subjects/operations';
@@ -31,7 +31,7 @@ class CardsPage extends Component {
   state = { 
     subject_id: false,
     task_id: false,
-    cards: 10
+    card_count: 10
   };
 
   componentDidMount() {
@@ -53,6 +53,7 @@ class CardsPage extends Component {
   // cards
   generateCards = e => {
     e.preventDefault();
+    console.log( this.state );
     debugger;
   }
 
@@ -60,75 +61,86 @@ class CardsPage extends Component {
   onChange = ({ target }) => { this.setState({ [target.id]: target.value }) }
   onTaskChange = ({ value }) => { this.setState({ task_id: value }) }
   onSubjectChange = ({ value }) => { this.setState({ subject_id: value }) }
+  print = () => { window.print(); }
 
   render() {
-    let { tasks, subjects, login } = this.props;
-    const { subject_id, task_id, cards } = this.state;
+    let { cards, login } = this.props;
+    const { subject_id, task_id, card_count } = this.state;
 
     const subjectFilter = subject => subject.tasks > 0;
-    const taskFilter = task => task.subject_id === subject_id;
+    const taskFilter = task => {
+      // limits based on rank
+      if ( isBC( login.code ) && task.platoon > 1 )
+        return false;
+      
+      if ( isAdmin( login.code ) && task.base > 1 )
+        return false;
+      
+      return task.subject_id === subject_id;
+    }
 
     let max = 200;
 
     return (
       <div id='AchievementsCardsPage'>
+        <div className='no-print'>
+          <Callout title='Achievement Cards'>
+            <p>Print cards for your tasks to give out to your soldiers to spend on rewards in your store.</p>
+            { isTeacher( login.code ) && 
+              <p>Please note that once you generate the cards the miles will be subtracted from your available miles.</p>
+            }
+          </Callout>
 
-        <Callout title='Achievement Cards'>
-          <p>Print cards for your tasks to give out to your soldiers to spend on rewards in your store.</p>
           { isTeacher( login.code ) && 
-            <p>Please note that once you generate the cards the miles will be subtracted from your available miles.</p>
+            <h2 id='available-miles'>
+              <Number value={ 5000 } /> Available Miles
+            </h2>
           }
-        </Callout>
 
-        { isTeacher( login.code ) && 
-          <h2 id='available-miles'>
-            <Number value={ 5000 } /> Available Miles
-          </h2>
-        }
+          <form onSubmit={ this.generateCards }>
+            <Row id='options'>
 
-        <form onSubmit={ this.generateCards }>
-          <Row id='options'>
+              <Col sm={ 6 } xl={3}>
+                <label>Campaign</label>
+                <SubjectSelect 
+                  showTasks
+                  filter={ subjectFilter }
+                  value={ subject_id }
+                  onChange={ this.onSubjectChange } />
+              </Col>
 
-            <Col sm={ 6 } xl={3}>
-              <label>Campaign</label>
-              <SubjectSelect 
-                showTasks
-                filter={ subjectFilter }
-                value={ subject_id }
-                onChange={ this.onSubjectChange } />
-            </Col>
+              <Col sm={ 6 } xl={3}>
+                <label>Task</label>
+                <AchievementTaskSelect 
+                  showMiles
+                  value={ task_id }
+                  filter={ taskFilter }
+                  onChange={ this.onTaskChange } />
+              </Col>
 
-            <Col sm={ 6 } xl={3}>
-              <label>Task</label>
-              <AchievementTaskSelect 
-                showMiles
-                value={ task_id }
-                filter={ taskFilter }
-                onChange={ this.onTaskChange } />
-            </Col>
+              <Col sm={ 6 } xl={3}>
+                <label htmlFor='card_count'># Of Cards</label>
+                <Input
+                  type='number' id='card_count' 
+                  max={ max } min={ 1 } value={ card_count }
+                  onChange={ this.onChange } required />
+                <div className='invalid-message'>You can only generate 1 to { max } cards at once.</div>
+              </Col>
 
-            <Col sm={ 6 } xl={3}>
-              <label htmlFor='cards'># Of Cards</label>
-              <Input
-                type='number' id='cards' 
-                max={ max } min={ 1 } value={ cards }
-                onChange={ this.onChange } required />
-              <div className='invalid-message'>You can only generate 1 to { max } cards at once.</div>
-            </Col>
+              <Col sm={ 6 } xl={3}>
+                <ButtonGroup>
+                  <Button color='primary'>
+                    <InlineSync /> Generate
+                  </Button>
+                  <Button onClick={ this.print } className='btn btn-primary'>
+                    <FontAwesome icon='print' /> Print
+                  </Button>
+                </ButtonGroup>
+              </Col>
 
-            <Col sm={ 6 } xl={3}>
-              <ButtonGroup>
-                <Button color='primary'>
-                  <InlineSync /> Generate
-                </Button>
-                <Button onClick={ this.print } className='btn btn-primary'>
-                  <FontAwesome icon='print' /> Print
-                </Button>
-              </ButtonGroup>
-            </Col>
-
-          </Row>
-        </form>
+            </Row>
+          </form>
+        </div>
       </div>
     );
   }

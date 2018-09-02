@@ -8,5 +8,6 @@
   #options .btn-group {
     width: 100%;
     margin-top: 35.2px;
+    @media ( max-width: 500px ) { margin-top: 10px; }
   }
 }
