@@ -1282,7 +1282,6 @@ CREATE TABLE `classes` (
   `class_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `school_id` int(10) unsigned NOT NULL,
   `class_grade` enum('Pre-school 1','Pre-school 2','Pre-school 3','Pre1a','1','2','3','4','5','6','7','8','9','10','11','12') COLLATE utf8_unicode_ci NOT NULL,
-  `class_grade_fr` enum('Gan_1','Gan_2','Gan_3','Grand_Gan','CP','CE1','CE2','CM1','CM2','6eme','5eme','4eme','3eme','2nde','1ere','Term') COLLATE utf8_unicode_ci DEFAULT NULL,
   `class_sub` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `class_teacher` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -1299,7 +1298,7 @@ CREATE TABLE `classes` (
   `confirmed` tinyint(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`class_id`),
   UNIQUE KEY `school_id` (`school_id`,`class_id`),
-  UNIQUE KEY `class_grade` (`school_id`,`class_era`,`class_grade`,`class_grade_fr`,`class_sub`),
+  UNIQUE KEY `class_grade` (`school_id`,`class_era`,`class_grade`,`class_sub`),
   KEY `class_era` (`class_era`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6493 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

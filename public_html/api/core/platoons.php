@@ -27,7 +27,7 @@ class PlatoonRouter {
         // combine the filters
         $filters = 'WHERE ' . implode( ' AND ', $filters );
         // generate the SQL
-        $sql = "SELECT class_id, class_grade, class_sub, s.school_id, school_name, "
+        $sql = "SELECT class_id, class_grade, class_sub, s.school_id, school_name, miles_balance, "
             ."class_teacher as teacher, c.cell, c.email, COUNT(user_id) as soldier_count, staff_count "
             ."FROM classes c JOIN schools s USING (school_id) LEFT JOIN users u USING ( class_id ) "
             ."LEFT JOIN ( SELECT count(*) as staff_count, id FROM admin_auths WHERE auth='class' GROUP BY id ) s ON s.id = c.class_id "
