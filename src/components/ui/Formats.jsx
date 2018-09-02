@@ -2,9 +2,9 @@ import React from 'react';
 import moment from 'moment';
 
 // Format number as per the locale
-export const Number = ({ value }) => {
+export const Number = ({ value, ...opts }) => {
   if ( typeof value === 'number' ) 
-    value = value.toLocaleString( navigator.language );
+    value = value.toLocaleString( navigator.language, opts );
   return <span>{value}</span>
 }
 
