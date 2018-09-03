@@ -10,7 +10,7 @@ $schools = $as->getSchools();
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Tzivos Hashem | Chidon Reports | Shabbaton enrollment</title>
+        <title>Chidon Enrollment Report</title>
         <link href="/admin_styles.css" rel="stylesheet" type="text/css">
         <link href="../inc/css/report.css" rel="stylesheet" type="text/css">
 <!--    Rotating Spinner, grey dropdowns and fancy checkboxes... -->
