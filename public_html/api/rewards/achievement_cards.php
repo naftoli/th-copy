@@ -83,11 +83,47 @@ class CardsRouter {
 
     public function delete() {
         global $current_user; global $POINTS_DB;
+        $login = $current_user->login;
 
         if ( !isset( $_POST['delete_to']) )
             return json_error('Invalid Request');
         
         $date = ( new DateTime( $_POST['delete_to'] ) )->format( 'Y-m-d' );
+        $school_query = "= ". ( $login['school_id'] ? $login['school_id'] : 0 );
+        if ( $login['code'] == 'INST' )
+            $school_query = 'IN ( SELECT school_id FROM mashpiadb.schools WHERE inst_id = '.$login['id'] . ')';
+
+        $filters = " created_by = :created_by AND status = 'not scanned' "
+            ." AND institution_id $school_query AND class_id = :class_id "
+            ." AND created <= :delete_to";
+        $params = [
+            ':delete_to' => $date . ' 23:59:59',
+            ':created_by' => $current_user->admin_id,
+            ':class_id' => $login['class_id'] ? $login['class_id'] : 0,
+        ];
+
+        $miles = $this->getMiles();
+        if ( $miles !== false ) {
+            $query = $POINTS_DB->prepare(
+                "SELECT SUM( card_points ) as total FROM achievement_cards WHERE $filters ORDER BY achievement_card_id DESC"
+            );
+            $query->execute( $params );
+            $miles += intval( $query->fetch()['total'] );
+            $platoon = Platoon::find( $current_user->login['id'] );
+            $platoon->miles_balance = $miles;
+            $platoon->save();
+        }
+
+        $query = $POINTS_DB->prepare(
+            "DELETE FROM achievement_cards WHERE $filters"
+        );
+        $query->execute( $params );
+        $cards_deleted = $query->rowCount();
+
+        return json_response([
+            'miles' => $miles,
+            'cards_deleted' => $cards_deleted
+        ]);
     }
 
     private function getMiles(){
