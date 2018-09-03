@@ -43,7 +43,13 @@ div#wrapper { width: 1151px; }
     <p>
         <strong>If you wish to edit what shows up on the Mobile Site and Mission sheets please click <a href='/teacher_information.php'>here.</a></strong>
     </p>
-    <p></p>
+    <p style='color: red'>
+        <strong>
+            Please Note that editing the information will edit the account info.
+            Regardless of if it is used as a parent account or not.<br/><br/>
+            Please use the Beta for a better experiance adding/removing teacher accounts from platoons.
+        </strong>
+    </p>
 </div>
 <?
 $teachers = array();
