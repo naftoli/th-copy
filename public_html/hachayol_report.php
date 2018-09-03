@@ -93,7 +93,10 @@ $types = array(
             <div class='info'>
                 <?=$school['name']?><br />
                 <?=$school['address']?><br /><br />
-                Type of School: <?=$types[$id]?><br />
+                <?php if ( isset( $types[$id] ) ) { ?>
+                    Type of School: <?=$types[$id]?><br />
+                <?php } ?>
+                
                 Principal: <?=$school['principal']?><br />
                 <?php
                 foreach( $school['admins'] as $admin ) {
@@ -118,7 +121,9 @@ $types = array(
 
                 Total: <?=$total?><br />
                 Already Registered for Chidon: <?=$school['chidonReg']?><br />
-                Number of posters: <?=$posters[$id]?><br />
+                <?php if ( isset( $posters[$id] ) ) { ?>
+                    Number of posters: <?=$posters[$id]?><br />
+                <?php } ?>
                 Possible Chidon Children: <?=$chidonNum?><br />
                 Shipping Requests: <?=$school['shipping_requests']?><br /><br />
                 <?php
