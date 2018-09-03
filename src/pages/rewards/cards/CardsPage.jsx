@@ -112,24 +112,6 @@ class CardsPage extends Component {
             }
           </Callout>
 
-          <p className='title'>Delete Unused Cards</p>
-          <Row id='delete'>
-            <Col sm={ 6 }>
-              <label>Printed by (inclusive)</label>
-              <Date 
-                maxDate={ moment() }
-                value={ delete_to } 
-                onChange={ this.onDateChange } />
-            </Col>
-            <Col sm={ 6 }>
-              <ButtonGroup>
-                <Button color='danger' onClick={ this.deleteUnused }>
-                  <FontAwesome icon='trash' /> Delete Unused Cards
-                </Button>
-              </ButtonGroup>
-            </Col>
-          </Row>
-
           <p className='title'>Generate cards</p>
 
           { isTeacher( login.code ) && 
@@ -165,13 +147,13 @@ class CardsPage extends Component {
                   type='number' id='card_count' 
                   max={ max } min={ 1 } value={ card_count }
                   onChange={ this.onChange } required />
-                <div className='invalid-message'>You can only generate 1 to { max } cards at once.</div>
+                <div className='invalid-message'>You can only create up to { max } cards at once.</div>
               </Col>
 
               <Col sm={ 6 } xl={3}>
                 <ButtonGroup>
                   <Button color='primary'>
-                    <InlineSync loading={ cards.loading } /> Generate
+                    <InlineSync loading={ cards.loading } /> Create
                   </Button>
                   <Button onClick={ this.print } className='btn btn-primary'>
                     <FontAwesome icon='print' /> Print
@@ -187,6 +169,26 @@ class CardsPage extends Component {
           { cards.cards.map(
             ( card, index ) => <AchievementCard { ...card } logo={ login.img } key={ index } />
           ) }
+        </div>
+
+        <div className='no-print'>
+          <p className='title'>Delete Unused Cards</p>
+          <Row id='delete'>
+            <Col sm={ 6 }>
+              <label>Printed On Or Before</label>
+              <Date 
+                maxDate={ moment() }
+                value={ delete_to } 
+                onChange={ this.onDateChange } />
+            </Col>
+            <Col sm={ 6 }>
+              <ButtonGroup>
+                <Button color='danger' onClick={ this.deleteUnused }>
+                  <FontAwesome icon='trash' /> Delete Unused Cards
+                </Button>
+              </ButtonGroup>
+            </Col>
+          </Row>
         </div>
         
       </div>

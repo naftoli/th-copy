@@ -14,8 +14,6 @@ import { getBases, updateBase } from 'store/bases/operations';
 
 class BasesPage extends Component {
 
-  static propTypes = {};
-
   state = { 
     modal: { show: false, id: false, src: false } 
   };
