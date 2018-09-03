@@ -31,7 +31,7 @@ const Step3 = ({
             </Button>
             <Button color='danger' onClick={ discharge }>
               <FontAwesome icon="trash-alt" />{' '}
-              Discharge (Remove) Soldiers 
+              Discharge (Delete) Soldiers 
             </Button>
           </ButtonGroup>
         </Col>
