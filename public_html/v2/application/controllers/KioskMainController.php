@@ -415,7 +415,7 @@ class KioskMainController extends Zend_Controller_Action
 		}
 		*/
 		// check that child is in same institution as card created for
-		else if ( $objCard->institution_id != $objUser->school_id && $objCard->institution_id !== 0 )
+		else if ( $objCard->institution_id != $objUser->school_id && $objCard->institution_id > 0 )
 		{
 			print "You are not in the correct base to scan this card.";
 		}
