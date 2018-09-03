@@ -89,12 +89,12 @@ class CardsRouter {
             return json_error('Invalid Request');
         
         $date = ( new DateTime( $_POST['delete_to'] ) )->format( 'Y-m-d' );
-        $school_query = "= ". ( $login['school_id'] ? $login['school_id'] : 0 );
+        $school_query = "institution_id = ". ( $login['school_id'] ? $login['school_id'] : 0 );
         if ( $login['code'] == 'INST' )
-            $school_query = 'IN ( SELECT school_id FROM mashpiadb.schools WHERE inst_id = '.$login['id'] . ')';
+            $school_query = '( institution_id IN ( SELECT school_id FROM mashpiadb.schools WHERE inst_id = '.$login['id'] . ') OR institution_id = 0 )';
 
         $filters = " created_by = :created_by AND status = 'not scanned' "
-            ." AND institution_id $school_query AND class_id = :class_id "
+            ." AND $school_query AND class_id = :class_id "
             ." AND created <= :delete_to";
         $params = [
             ':delete_to' => $date . ' 23:59:59',
