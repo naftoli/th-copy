@@ -20,8 +20,8 @@ class Hachayol {
     public function setSchools( $id = null ) {
         //get list of schools with totals per school of registered students
         $sql = "
-            SELECT s.school_id, s.school_name, s.hachayol_name, count( u.user_id ) AS total, s.school_address1, s.school_address2, 
-            s.school_city, s.school_state, s.school_country, s.school_postal, s.shipping_method, s.principal, s.shipping_requests  
+            SELECT s.school_id, s.school_name, s.hachayol_name, count( u.user_id ) AS total, s.shipping_address1, s.shipping_address2, 
+            s.shipping_city, s.shipping_state, s.shipping_country, s.shipping_postal, s.shipping_method, s.principal, s.shipping_requests  
             FROM schools s
             JOIN users u
             USING ( school_id )
@@ -47,10 +47,10 @@ class Hachayol {
             $this->schools[$method][$school]['principal'] = $row['principal'];
             $this->schools[$method][$school]['name'] = $row['hachayol_name'] ? $row['hachayol_name'] : $row['school_name'];
             $this->schools[$method][$school]['total'] = $total;
-            $this->schools[$method][$school]['address'] = $row['school_address1'] . 
-                ($row['school_address2'] == "" ? "<br />" . $row['school_address2'] : "<br />") . 
-                $row['school_city'] . ", " . $row['school_state'] . "<br />" . $row['school_postal'] . "<br />" . 
-                $row['school_country'];
+            $this->schools[$method][$school]['address'] = $row['shipping_address1'] . 
+                ($row['shipping_address2'] == "" ? "<br />" . $row['shipping_address2'] : "<br />") . 
+                $row['shipping_city'] . ", " . $row['shipping_state'] . "<br />" . $row['shipping_postal'] . "<br />" . 
+                $row['shipping_country'];
             $this->schools[$method][$school]['shipping_requests'] = $row['shipping_requests'];
             
             $sql2 = "select a.first, a.last 
