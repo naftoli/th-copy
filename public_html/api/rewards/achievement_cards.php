@@ -5,9 +5,11 @@ include_once( __DIR__ . "/../header/header.php" );
 class CardsRouter {
 
     public function index() {
+        // $card = AchievementCard::find( 3497391 );
         // Get available Miles (and other info?)
         return json_response([
             'miles' => $this->getMiles(),
+            // 'card' => $card,
         ]);
     }
 
@@ -19,58 +21,73 @@ class CardsRouter {
             return json_error( 'Cannot print unknown amount of cards.' );
 
         $fake_codes = $POINTS_DB->prepare(
-             " SELECT FLOOR(RAND() * 9999999999999999999) AS random_num FROM "
-            ." achievement_cards WHERE 'random_num' NOT IN ( "
-                ." SELECT card_serial FROM achievement_cards"
-            ." ) LIMIT ? "
+            "SELECT card_serial FROM ("
+                ." SELECT CAST(CONCAT(4, ROUND(RAND() * 999999999), ROUND(RAND() * 9999999999)) AS CHAR ) AS card_serial "
+                ." FROM pointsDB.achievement_cards WHERE 'card_serial' NOT IN ("
+                    ." SELECT card_serial FROM pointsDB.achievement_cards "
+                .") "
+            .") AS numbers HAVING LENGTH( card_serial ) = 20 LIMIT ?;"
         );
 
-        $fake_codes->execute([ intval( $_POST['card_count'] ) ]);
+        $card_count = intval( $_POST['card_count'] );
+        $cards = []; $data = [];
+        $fake_codes->execute([ $card_count ]);
+        $subject = Subject::find( intval( $_POST['subject_id'] ) );
+        $task = AchievementTask::find( intval( $_POST['task_id'] ) );
+        $miles = $this->getMiles(); 
+        $miles_spent = $task->points * $card_count;
+
+        // validate miles
+        if ( $miles === 0 ) {
+            return json_error( "You do not have any miles left. Please come back at the begining of the month when you will be given more miles." );
+        } else if ( $miles !== false && $miles_spent > $miles ) {
+            $can_print = floor( $miles / $task->points );
+            if ( $can_print > 1 )
+                return json_error( "You only have enough miles to print $can_print of these cards. Please try again." );
+            return json_error( "You do not have enough miles to print these cards." );
+        }
+        // $cards = $fake_codes->fetchAll();
+
+        while ( $code = $fake_codes->fetch() ) {
+            AchievementCard::create([
+                'institution_id' => $login['school_id'] ? $login['school_id'] : 0,
+                'campaign_id' => $subject->subject_id,
+                'task_id' => $task->achievement_task_id,
+                'class_id' => $login['class_id'],
+                'card_serial' => $code['card_serial'],
+                'card_type' => $login['code'] == 'TEACHER' ? 'Teacher' : 'Institution Administrator',
+                'card_points' => $task->points,
+                'created_by' => $current_user->admin_id
+            ]);
+            $cards[] = [
+                'card_serial' => $code['card_serial'],
+                'campaign' => $subject->subject_name,
+                'task' => $task->task,
+                'miles' => $task->points,
+                'campaignLogo' => $subject->logoPath()
+            ];
+        }
+        // subtract miles
+        if ( $miles !== false ) {
+            $platoon = Platoon::find( $current_user->login['id'] );
+            $platoon->miles_balance = $miles - $miles_spent;
+            $platoon->save();
+        }
 
         return json_response([
-            'cards' => $fake_codes->fetchAll(),
-            'miles' => $this->getMiles()
+            'cards' => $cards,
+            'data' => $data,
+            'miles' => $miles ? $miles - $miles_spent : false
         ]);
-
-        // try {
-        //     $task = new AchievementTask( $_POST );
-        // } catch ( Exception $e ) { json_error( 'Invalid Request' ); }
-
-        // if ( $login['code'] == 'BC' ) {
-        //     $task->base = $login['id'];
-        // } else if ( $login['code'] == 'TEACHER') {
-        //     $task->base = Platoon::find( $login['id'] )->school->school_id;
-        //     $task->platoon = $login['id'];
-        // }
-
-        // if ( !$task->subject_id )
-        //     json_error( 'Cannot create a Task without a Campaign' );
-        
-        // if ( $login['code'] == 'INST' ) {
-        //     $subject = Subject::find( $task->subject_id );
-        //     if ( $subject->inst_id != $login['id'] )
-        //         return json_error('You do not have permission to create Tasks for this Campaign. Please select another one.');
-        // }
-
-        // if ( !$task->save() )
-        //     json_error( 'Could not create Task.' );
-        // json_response( $task );
-
-        # use this query to generate serial numbers
-        // SELECT 
-        // FLOOR(RAND() * 9999999999999999999) AS random_num
-        // FROM
-        // pointsDB.achievement_cards
-        // WHERE
-        // 'random_num' NOT IN (SELECT 
-        //         card_serial
-        //     FROM
-        //         pointsDB.achievement_cards)
-        // LIMIT 1
     }
 
     public function delete() {
-        // Delete all cards issued before a given date that have not been reddemed
+        global $current_user; global $POINTS_DB;
+
+        if ( !isset( $_POST['delete_to']) )
+            return json_error('Invalid Request');
+        
+        $date = ( new DateTime( $_POST['delete_to'] ) )->format( 'Y-m-d' );
     }
 
     private function getMiles(){
