@@ -12,11 +12,13 @@ use \DBAdapter;
 use raffles\shared\Constants as Constants; // was created later and has correct namespace
 
 class YearlyRaffle {
-    private $DAY_COUNT = 160;
+    private $DAY_COUNT = 180; // iber yor, up limit to 180 days
     private $db_conn;
     private $dates;
     private $year;
-    private $deadline = 2458243; // May 4 2018
+    // ends on lag baomer
+    // private $deadline = 2458243; // 5778, May 4 2018
+    private $deadline = 2458626; // 5779, May 23 2019
     
     public $eligibility;
 

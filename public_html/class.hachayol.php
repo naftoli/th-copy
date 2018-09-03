@@ -29,9 +29,9 @@ class Hachayol {
             and s.chayolei = 1 
             AND u.user_registered > 0
             and s.test_school = 0 ";
-        if ( !is_null( $id ) ) $sql .= "AND s.school_id = " . $id; 
-        else $sql .= "AND s.school_id not in (82)";
-        $sql .= " GROUP BY s.school_id ORDER BY s.shipping_method, s.school_name";
+        if ( !is_null( $id ) ) $sql .= " AND s.school_id = " . $id; 
+        else $sql .= " AND s.test_school = 0 ";
+        $sql .= " GROUP BY s.school_id ORDER BY s.shipping_method, s.school_name ";
         //echo $sql; exit;
         
         foreach ( $this->db->query( $sql ) as $row ) {
