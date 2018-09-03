@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { InlineSync, FontAwesome, Number } from 'components/ui';
+import AchievementCard from './AchievementCard';
 import { Row, Col, Input, Button, ButtonGroup } from 'reactstrap';
-import { 
-  SubjectSelect, AchievementTaskSelect, Date
-} from 'components/inputs';
+import { InlineSync, FontAwesome, Number, Callout } from 'components/ui';
+import { SubjectSelect, AchievementTaskSelect, Date } from 'components/inputs';
 // functions
 import moment from 'moment';
 import { toast } from 'react-toastify';
@@ -19,7 +18,6 @@ import {
 } from 'store/rewards/achievement_cards/operations';
 // style
 import './cards.scss';
-import Callout from 'components/ui/Callout';
 
 class CardsPage extends Component {
 
@@ -56,7 +54,8 @@ class CardsPage extends Component {
   // cards
   generateCards = e => {
     e.preventDefault();
-    const { delete_to, ...postData } = this.state;
+    const { subject_id, task_id, card_count } = this.state;
+    const postData = { subject_id, task_id, card_count };
     // make sure a subject was selected
     if ( !postData.subject_id )
       return toast.error('Cannot create Achievement Cards without a Campaign.');
@@ -176,9 +175,12 @@ class CardsPage extends Component {
           </form>
         </div>
 
-        <pre>
-          { JSON.stringify( cards.cards, null, 2 ) }
-        </pre>
+        <div id='cards'>
+          { cards.cards.map(
+            ( card, index ) => <AchievementCard { ...card } logo={ login.img } key={ index } />
+          ) }
+        </div>
+        
       </div>
     );
   }

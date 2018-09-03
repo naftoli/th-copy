@@ -10,4 +10,73 @@
     margin-top: 35.2px;
     @media ( max-width: 500px ) { margin-top: 10px; }
   }
+
+  #cards {
+    // display: grid;
+    text-align: center;
+    margin: 20px 0px;
+    @media print { margin: 0px; }
+    // grid-template-columns: repeat( auto-fit, minmax( 86mm, 1fr ) );
+  }
+}
+
+.AchievementCard {
+  margin: 0 auto;
+  padding: .4mm 2mm;
+  display: inline-block;
+  
+  .card {
+    height: 50mm;
+    width: 81.62mm;
+    font-size: .9em;
+  
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 2mm;
+  
+    display: flex;
+    
+    flex-direction: column;
+  
+    .logos {
+      flex-grow: 1;
+      display: inline-flex;
+      align-items: center;
+  
+      img {
+        height: 15mm;
+        width: 15mm;
+      }
+  
+      p { margin-bottom: 0px; }
+  
+      .card-details {
+        flex-grow: 1;
+        text-align: center;
+        padding: 0px 2mm;
+      
+        p.campaign {
+          font-size: 1.1em;
+          font-weight: bold;
+          margin: .3mm 0px .8mm 0px ;
+        }
+  
+        p.task {
+          font-size: .7em;
+          flex-grow: 1;
+        }
+  
+        p.miles {
+          font-size: 1.2em;
+          font-weight: bold;
+          margin-top: 2.5mm;
+        }
+      }
+    }
+  
+    .barcode {
+      text-align: center;
+      height: 37px;
+    }
+  }
 }
