@@ -63,12 +63,16 @@ var platoonTransitionApp = function(){
     // call removeFromBase action ( see api )
     function removeFromBase(){
         var selected_soldiers = getSelectedUserIds();
-        $.post( '/api/core/platoon_transition.php?action=removeFromBase', {
-            user_ids: selected_soldiers
-        }, function( response ){
-            if ( response.success) getUsers();
-            else alert( response.error );
-        });
+        if ( 
+            window.confirm('Are you sure you want to do this? Once you deploy this transition these soldiers will be deleted and cannot be recovered.')
+        ) {
+            $.post( '/api/core/platoon_transition.php?action=removeFromBase', {
+                user_ids: selected_soldiers
+            }, function( response ){
+                if ( response.success) getUsers();
+                else alert( response.error );
+            });
+        }
     }
     // call transitionPlatoons action ( see api )
     function transitionPlatoons(){
