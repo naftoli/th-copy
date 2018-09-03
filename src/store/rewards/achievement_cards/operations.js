@@ -23,3 +23,12 @@ export const getMiles = () => dispatch => {
     return data;
   });
 }
+
+export const deleteUnused = delete_to => dispatch => {
+  return API.delete( `/rewards/achievement_cards`, { delete_to } )
+  .then( handleAPIResponse )
+  .then( ({ miles, cards_deleted }) => {
+    dispatch( actions.setMiles( miles ) );
+    return cards_deleted;
+  });
+}

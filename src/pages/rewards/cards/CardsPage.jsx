@@ -14,7 +14,7 @@ import { setTitle } from 'functions/utils';
 import { getSubjects } from 'store/rewards/subjects/operations';
 import { getTasks } from 'store/rewards/achievement_tasks/operations';
 import { 
-  getMiles, generateAchievementCards
+  getMiles, generateAchievementCards, deleteUnused
 } from 'store/rewards/achievement_cards/operations';
 // style
 import './cards.scss';
@@ -69,6 +69,14 @@ class CardsPage extends Component {
     .catch( e => toast.error( e.message ) );
   }
 
+  deleteUnused = () => {
+    if ( window.confirm('Are you sure you want to delete these achievement cards? Once they are deleted the numbers will be recycled and they cannot be recovered.') ) {
+      this.props.deleteUnused( this.state.delete_to.format() )
+      .then( cards_deleted => toast.info(`${ cards_deleted } Achievement Cards Deleted.`) )
+      .catch( e => toast.error( e.message ) );
+    }
+  }
+
   // event handlers
   onChange = ({ target }) => { this.setState({ [target.id]: target.value }) }
   onTaskChange = ({ value }) => { this.setState({ task_id: value }) }
@@ -107,7 +115,7 @@ class CardsPage extends Component {
           <p className='title'>Delete Unused Cards</p>
           <Row id='delete'>
             <Col sm={ 6 }>
-              <label>Printed before</label>
+              <label>Printed by (inclusive)</label>
               <Date 
                 maxDate={ moment() }
                 value={ delete_to } 
@@ -115,7 +123,7 @@ class CardsPage extends Component {
             </Col>
             <Col sm={ 6 }>
               <ButtonGroup>
-                <Button color='danger'>
+                <Button color='danger' onClick={ this.deleteUnused }>
                   <FontAwesome icon='trash' /> Delete Unused Cards
                 </Button>
               </ButtonGroup>
@@ -195,7 +203,7 @@ const mapStateToProps = ({ rewards, login }) => {
 };
 
 const mapDispatchToProps = {
-  getSubjects, getTasks,
+  getSubjects, getTasks, deleteUnused,
   getMiles, generateAchievementCards
 };
 

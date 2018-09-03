@@ -31,6 +31,7 @@ const AchievementCard = props => {
             margin={ 0 }
             height={ 25 }
             fontSize={ 10 }
+            format={ 'CODE128C' }
             value={ `${ props.card_serial }` } />
         </div>
       </div>
