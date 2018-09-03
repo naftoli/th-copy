@@ -47,6 +47,7 @@ $schools = $as->getSchools();
                     <i class="fa fa-university" aria-hidden="true"></i> School: 
                     <select id="school_id" name="school_id">
                         <option value="" disabled selected>Select School</option>
+                        <option value="-1">All Schools</option>
                         <? foreach($schools as $school_id => $school_name){?>
                             <option value="<?=$school_id?>"><?=$school_name?></option>
                         <?}?>
