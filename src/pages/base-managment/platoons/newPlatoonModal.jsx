@@ -88,8 +88,6 @@ class NewPlatoonModal extends Component {
             inputProps={ inputProps } 
             selectProps={ selectProps } />
 
-          <pre>{ JSON.stringify( platoon, null, 2 ) }</pre>
-
           </ModalBody>
           <ModalFooter>
             <SaveButton show saving={ saving } />
