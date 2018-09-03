@@ -59,9 +59,11 @@ class PlatoonTransitionPage extends Component {
   }
   // Discharge from Tzivos Hashem
   discharge = () => {
-    removeFromBase( this.state.selection )
-    .then( this.getSoldiers )
-    .catch( error => toast.error( error.message ) );
+    if ( window.confirm('Are you sure you want to do this? Once you deploy this transition these soldiers will be deleted and cannot be recovered.') ) {
+      removeFromBase( this.state.selection )
+      .then( this.getSoldiers )
+      .catch( error => toast.error( error.message ) );
+    }
   }
   // Deploy the transition
   transition = () => {
