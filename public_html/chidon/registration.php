@@ -85,6 +85,9 @@ body,td,th {
 			<div class="magazine">
 				
 				<h1>Registration</h1>
+
+				<h4><a href="#register">Register Today!</a></h4>
+				<br />
 				
                 <h4>Dates:</h4>
                 <div class="indent">
@@ -108,7 +111,7 @@ body,td,th {
 				</div>
 				<br />
 				
-				<h4>How to Register:</h4>				
+				<h4><a name="register">How to Register:</a></h4>				
 				<div class="indent">
 					<br />	
 					Log in to your parent account and register your children.
@@ -117,7 +120,7 @@ body,td,th {
 					<br /><br />
 					If your child does not appear on your account, please add your child to the account by clicking “Add child.” 
 					<br /><br />
-					For further support email chidon@tzivoshashem.org or contact your school’s Chidon coordinator. 
+					Need help? Email chidon@tzivoshashem.org or contact your school’s Chidon coordinator. 
 					<br />
 				</div>
 				<br />
