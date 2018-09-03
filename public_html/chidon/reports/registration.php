@@ -1,4 +1,6 @@
-<?
+<?php
+header("Location: /reports/chidon/chidon_enrollment.php");
+exit;
 require '../../db.php';
 require 'vars.php';
 

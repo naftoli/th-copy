@@ -20,17 +20,18 @@ $year = GlobalSettings::getChidonYear();
 $school_id = mysql_real_escape_string($_POST['school_id']);
 
 /***************** LOAD DATA **********************/
-$users_query = mysql_query(
-    "SELECT u.first, u.last, u.first_he, u.last_he, u.user_id, "
-    ." c.class_grade, c.class_sub, "
-    ." a.admin_phone_mobile, a.admin_phone_mobile2 "
-    ." FROM th_chidon th "
-    ." JOIN users u USING (user_id) "
-    ." JOIN classes c USING (class_id) "
-    ." JOIN admins a ON parent_id = admin_id "
-    ." WHERE th.school_id = $school_id AND th.year = $year "
-    ." ORDER BY class_grade, class_sub, u.last "
-);
+$qry = "SELECT u.first, u.last, u.first_he, u.last_he, u.user_id, "
+        ." c.class_grade, c.class_sub, s.school_name, "
+        ." a.admin_phone_mobile, a.admin_phone_mobile2 "
+        ." FROM th_chidon th "
+        ." JOIN users u USING (user_id) "
+        ." JOIN classes c USING (class_id) "
+        ." JOIN admins a ON parent_id = admin_id "
+        ." JOIN schools s ON s.school_id = u.school_id " 
+        ." WHERE th.year = " . $year;
+if ( $school_id > 0 ) $qry .= " AND th.school_id = $school_id ";
+$qry .= " ORDER BY s.school_name, c.class_grade, c.class_sub, u.last ";
+$users_query = mysql_query( $qry );
 
 $users = [];
 while($row = mysql_fetch_assoc($users_query)){
@@ -43,11 +44,19 @@ if($debug) echo "</pre>";
 if (count($users) > 0) { ?>
     <table>
         <thead>
+            <?php if ($school_id < 0) : ?>
+            <th>School</th>
+            <?php endif; ?>
             <th>Grade</th><th>Name</th><th>Hebrew Name</th><th>Father Cell</th><th>Mother Cell</th>
         </thead>
         <tbody>
             <? foreach($users as $user) {?>
             <tr class="users">
+                <?php 
+                if ($school_id < 0) {
+                    echo "<td>" . $user['school_name'] . "</td>";
+                }
+                ?>
                 <td><?=$user['class_grade'] . ($user['class_sub'] ? " - " . $user['class_sub'] : "")?></td>
                 <td><?=$user['first'] . " " . $user['last']?></td>
                 <td><?=$user['first_he'] . " " . $user['last_he']?></td>
