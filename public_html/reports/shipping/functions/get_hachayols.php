@@ -37,16 +37,15 @@ function get_hachayols($school_id, $start_date, $end_date){
     
     // get the current year...
     $year = GlobalSettings::getCurrentYear();
-    $year_start = '2017-07-01';/*date("Y-m-d" , jdtounix(GlobalSettings::getCurYearDates()['start']));*/
     // get the parshos of hachayol selected...
-    $prints = get_hachayol_prints(5779, $start_date, $end_date);
+    $prints = get_hachayol_prints($year, $start_date, $end_date);
     // the array containing all the results from the report generation...
     $result = [];
     
     foreach($prints as $print){ // for each hachayol print;
         $ship_date = $print['ship_date'];
         $hachayol_count_sql = "SELECT school_id, SUM(total) as total, SUM(teacher_total) as teachers FROM ( "
-            ."SELECT school_id, COUNT(*) as total, 0 as teacher_total FROM users WHERE user_registered > '$year_start' AND user_registered < '$ship_date' ";
+            ."SELECT school_id, COUNT(*) as total, 0 as teacher_total FROM users WHERE user_registered > 0 AND user_registered < '$ship_date' ";
         if($school_id) $hachayol_count_sql .= "AND school_id = $school_id ";
         $hachayol_count_sql .= "GROUP BY school_id UNION "
             ."SELECT school_id, COUNT(*) as total, COUNT(*) as teacher_total FROM classes WHERE class_era = 0 ";
