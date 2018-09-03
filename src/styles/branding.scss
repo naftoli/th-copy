@@ -63,6 +63,14 @@ span.hebrew { display: inline-block; }
   input, .-pagination select{ 
     &:focus { box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
   }
+
+  @media ( max-width: 412px ) {
+    height: 100%;
+    .-pagination {
+      .-center { flex-wrap: nowrap; width: 100%; flex: auto; margin-bottom: 5px; }
+      .-previous, .-next { order: 1; }
+    }
+  }
 }
 
 // customize the scrollbar on chrome and safari
