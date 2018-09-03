@@ -3,6 +3,7 @@ import * as actions from './actions';
 
 // generate cards
 export const generateAchievementCards = ( data ) => dispatch => {
+  dispatch( actions.setCards([]) );
   dispatch( actions.setLoading( true ) );
   return API.post( `/rewards/achievement_cards`, data )
     .then( handleAPIResponse )
