@@ -24,6 +24,10 @@
   margin: 0 auto;
   padding: .4mm 2mm;
   display: inline-block;
+
+  @media screen {
+    &:not(:first-child) { display: none; }
+  }
   
   .card {
     height: 50mm;
@@ -31,7 +35,7 @@
     font-size: .9em;
   
     border: 1px solid;
-    border-radius: 5px;
+    border-radius: 0px;
     padding: 2mm;
   
     display: flex;
