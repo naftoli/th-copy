@@ -95,6 +95,8 @@ class TasksPage extends Component {
     let { tasks, loading, subjects, login } = this.props;
     const { show, task } = this.state;
 
+    tasks = tasks.filter( task => task.editable );
+
     let columns = [
       { Header: 'Task', accessor: 'task',
         Cell: ({ value, original }) => {
