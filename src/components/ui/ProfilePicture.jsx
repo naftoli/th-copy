@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { LEGACY_URL, DEFAULT_LOGO, DEFAULT_PROFILE } from 'components/constants';
+import { 
+  LEGACY_URL, DEFAULT_LOGO, DEFAULT_PROFILE,
+  DEFAULT_PRIZE
+} from 'components/constants';
 import classnames from 'classnames';
 import is from 'is_js';
 import './styles/ProfilePicture.scss';
@@ -51,4 +54,8 @@ export class ProfilePicture extends Component {
 
 export const BaseLogo = props => (
   <ProfilePicture fallbackImage={ DEFAULT_LOGO } { ...props } />
+)
+
+export const StorePrize = props => (
+  <ProfilePicture fallbackImage={ DEFAULT_PRIZE } { ...props } />
 )
