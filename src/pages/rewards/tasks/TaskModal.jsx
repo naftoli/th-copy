@@ -105,8 +105,8 @@ class TaskModal extends Component {
               <Col xs={ 12 }>
                 {/* TODO, limit to 40 characters */}
                 <Label htmlFor='task'>Task</Label>
-                <Input id='task' name='task' maxLength={ 100 } required
-                  pattern='^.{3,100}$' title='3 to 100 characters'
+                <Input id='task' name='task' maxLength={ 75 } required
+                  pattern='^.{3,75}$' title='3 to 75 characters'
                   value={ task.task || '' } onChange={ this.onChange }  />
                 <div className='invalid-message'>Please enter a valid task name</div>
 
