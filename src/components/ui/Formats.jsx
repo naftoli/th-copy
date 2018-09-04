@@ -2,10 +2,10 @@ import React from 'react';
 import moment from 'moment';
 
 // Format number as per the locale
-export const Number = ({ value, ...opts }) => {
+export const Number = ({ value, className, ...opts }) => {
   if ( typeof value === 'number' ) 
     value = value.toLocaleString( navigator.language, opts );
-  return <span>{value}</span>
+  return <span className={ className }>{value}</span>
 }
 
 export const Date = ({ value, format = 'l' }) => {
