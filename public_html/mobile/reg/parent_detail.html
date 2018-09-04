@@ -110,7 +110,12 @@
                                 <span class="lb-add-child">&nbsp;add child</span>
                             </div>
                         </a>
-					</div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="button-spacing childrens-content" style="float:right;">
+                            <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>
+                        </div>
+                    </div>
 				</div>
 				
 				<div class="row">
@@ -253,7 +258,7 @@
 																	<span class="ln-delete"><b>REMOVE FROM ACCOUNT</b></span>
 																</div>
 															</a>
-															{{/if}}
+                                                            {{/if}}
 															
 															{{#if this.showStory}}
 																<div style="margin:10px 0px">
@@ -607,6 +612,10 @@
                 });
                 $(document).on('click', ".no-register", function() {
                     alert("Sorry, this soldier's base has not yet been setup for advance registration.");
+                });
+
+                $(document).on('click', '.lulav', function() {
+                    window.open("lulavSet.html");
                 });
             });
 		</script>
