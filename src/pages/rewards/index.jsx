@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 import { Page404 } from 'pages/errors';
 import TasksPage from './tasks/TasksPage';
 import CardsPage from './cards/CardsPage';
+import PrizePages from './prizes';
 // functions
 // import { isBC } from 'functions/login';
 
@@ -17,7 +18,7 @@ export class BaseManagmentIndexPage extends Component {
       <Switch>
         <Route path={`${path}/cards`} component={ CardsPage } />
         <Route path={`${path}/tasks`} component={ TasksPage } />
-        <Route path={`${path}/prizes`} render={ () => <h1>Prizes Pages Coming Soon!</h1> } />
+        <Route path={`${path}/prizes`} component={ PrizePages } />
         <Route path={`${path}/orders`} render={ () => <h1>Orders Page Coming Soon!</h1> } />
 
         <Route component={ Page404 } />

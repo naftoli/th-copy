@@ -1,0 +1,106 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+// components
+import { Button, ButtonGroup } from 'reactstrap';
+
+import CropperModal from 'components/modals/CropperModal';
+import { 
+  Table, InlineSync, FontAwesome, 
+  
+} from 'components/ui';
+// functions
+import { getColumns } from './columns';
+import { isAdmin } from 'functions/login';
+import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+// state
+import { getPrizes } from 'store/rewards/prizes/operations';
+
+
+class PrizesPage extends Component {
+
+  // static propTypes = {};
+
+  state = { 
+    modal: { show: false, id: false, src: false } 
+  };
+
+  componentDidMount() { 
+    setTitle( 'Store Prizes' );
+    this.loadPrizes(); 
+  }
+  // Network
+  loadPrizes = () => { this.props.getPrizes(); }
+
+  // update base logos from master page
+  toggle = () => this.setState({ modal: { ...this.state.modal, show: false } });
+  editPicture = id => ({ target }) => this.setState({ modal: { show: true, id, src: target.src } });
+  upload = formData => { debugger; };
+  // upload = formData => this.props.updateBase( this.state.modal.id, formData );
+
+  updateToggle = ( key, value ) => e => {
+    console.log( key, value, e.target.checked );
+  }
+
+  toCSV = () => {
+    const headers = [ 'Prize Name', 'Miles', 'In Stock', 'Active', 'One Per Soldier', 'Last Updated' ];
+    const rows = this.props.prizes.map( prize => [
+      prize.prize_name, prize.miles, prize.stock, 
+      prize.is_active ? 'Yes' : 'No', prize.one_per_user ? 'Yes' : 'No', 
+      prize.modified
+    ]);
+    arrayToCSV( headers, rows, 'store_prizes' );
+  }
+
+  render() {
+    const { prizes, loading, match, login } = this.props;
+    const { modal } = this.state;
+
+    let columns = getColumns(
+      this.editPicture, match.path, 
+      this.updateToggle, isAdmin( login.code )
+    );
+
+    return (
+      <div id='PrizesPage'>
+        <ButtonGroup>
+          <Button className='btn btn-primary'>
+            <FontAwesome icon='plus' /> Create Prize
+          </Button>
+          <Button color='primary' onClick={ this.loadPrizes }>
+            <InlineSync loading={ loading } /> Refresh
+          </Button>
+          { canDownload( prizes ) &&
+            <Button color='primary' onClick={ this.toCSV }>
+              <FontAwesome icon='file-download' /> Download Prizes (CSV/Excel)
+            </Button>
+          }
+        </ButtonGroup>
+
+        <Table 
+          data={ prizes } 
+          columns={ columns } 
+          loading={ loading && !prizes.length } 
+          pageId='PrizesPage' />
+
+        <CropperModal 
+          fileName='picture' isOpen={ modal.show }
+          src={ modal.src } toggle={ this.toggle }
+          uploadImage={ this.upload } />
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = ({ rewards, login }) => {
+  const { prizes } = rewards;
+  return {
+    ...prizes,
+    login: login.current_login
+  }
+};
+
+const mapDispatchToProps = {
+  getPrizes
+};
+
+export default connect( mapStateToProps, mapDispatchToProps )( PrizesPage );

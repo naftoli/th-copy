@@ -1,0 +1,23 @@
+@import 'styles/colors.scss';
+
+#PrizesPage {
+  height: 100%;
+
+  .inline-profile {
+    max-height: 65px;
+    width: 65px;
+    border-radius: 15%;
+    border: 1px solid $primary-color;
+  }
+  
+  .ReactTable {
+    height: calc( 100% - 50px );
+  }
+}
+
+.Stock {
+  transition: .25s ease-in-out;
+  color: green; font-size: 1.3em;
+  &.low { color: red; }
+  &.warning { color: orange; }
+}
