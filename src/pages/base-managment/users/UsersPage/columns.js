@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ProfilePicture, Date } from 'components/ui';
+import { ProfilePicture, DateDisplay } from 'components/ui';
 import { DEFAULT_PROFILE } from 'components/constants';
 import { isBC, isAdmin } from 'functions/login';
 
@@ -35,10 +35,10 @@ export default ( code, editPicture ) => {
       Cell: props => <Link to={`/bm/users/${props.original.user_id}`}>{props.value}</Link>,
     }, {
       Header: 'Date Of Birth', accessor: 'dob', sortable: false, filterable: false,
-      Cell: props => <Date value={ props.value } format = 'l'/>,
+      Cell: props => <DateDisplay value={ props.value } format = 'l'/>,
     }, {
       Header: 'Registered', accessor: 'user_registered', sortable: false,
-      Cell: props => <Date value={ props.value } format = 'l LT'/>,
+      Cell: props => <DateDisplay value={ props.value } format = 'l LT'/>,
       filterMethod: ( filter, row ) => {
         if ( filter.value === 'all' ) return true;
         if ( filter.value === 'yes') return !!row[filter.id];

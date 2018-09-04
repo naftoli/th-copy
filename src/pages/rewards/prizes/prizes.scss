@@ -12,6 +12,8 @@
   
   .ReactTable {
     height: calc( 100% - 50px );
+
+    .rt-td:last-child{ text-transform: capitalize; }
   }
 }
 

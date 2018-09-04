@@ -8,6 +8,21 @@ export const Number = ({ value, className, ...opts }) => {
   return <span className={ className }>{value}</span>
 }
 
-export const Date = ({ value, format = 'l' }) => {
-  return <span>{ value ? moment( value ).format( format ) : '' }</span>
+export const DateDisplay = ({ value, calendar = false, fromNow = false, format = 'l' }) => {
+  // format correctly
+  if ( value ){
+    value = moment( value );
+
+    if ( calendar )
+      value = value.calendar();
+
+    else if ( fromNow )
+      value = value.fromNow();
+
+    else if ( format )
+      value = value.format( format );
+    
+  }
+
+  return <span>{ value || '' }</span>
 }

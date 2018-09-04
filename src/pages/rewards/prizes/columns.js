@@ -4,7 +4,7 @@ import { DEFAULT_PRIZE } from 'components/constants';
 import { Stock } from './components';
 import { Link } from 'react-router-dom';
 import { Toggle } from 'components/inputs';
-import { Number, Date, StorePrize } from 'components/ui';
+import { Number, DateDisplay, StorePrize } from 'components/ui';
 
 const yesNoFilter = ( filter, row ) => {
   if ( filter.value === 'all' ) return true;
@@ -69,6 +69,7 @@ export function getColumns( editPicture, path, updateToggle, admin ) {
           onChange={ updateToggle( 'one_per_user', original.prize_id ) } />,
     },
   
-    { Header: 'Last Updated', accessor: 'modified', Cell: props => <Date value={props.value}/>, filterable: false },
+    { Header: 'Last Updated', accessor: 'modified', filterable: false,
+      Cell: props => <DateDisplay value={props.value} fromNow />, },
   ];
 }
