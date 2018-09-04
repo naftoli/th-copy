@@ -6,6 +6,21 @@ import { Link } from 'react-router-dom';
 import { Toggle } from 'components/inputs';
 import { Number, Date, StorePrize } from 'components/ui';
 
+const yesNoFilter = ( filter, row ) => {
+  if ( filter.value === 'all' ) return true;
+  if ( filter.value === 'yes') return !!row[filter.id];
+  if ( filter.value === 'no') return !row[filter.id];
+}
+
+const yesNoFilterRender = ( onOff = false ) => ({ filter, onChange }) => (
+  <select style={{ width: "100%" }} value={filter ? filter.value : "all"}
+    onChange={event => onChange(event.target.value)}>
+    <option value="all">Show All</option>
+    <option value="yes">{ onOff ? 'On' : 'Yes' }</option>
+    <option value="no">{ onOff ? 'Off' : 'No' }</option>
+  </select>
+);
+
 export function getColumns( editPicture, path, updateToggle, admin ) {
   return [
     {
@@ -34,16 +49,18 @@ export function getColumns( editPicture, path, updateToggle, admin ) {
 
     { Header: 'In Stock', accessor: 'prize_count', Cell: props => <Stock value={props.value}/> },
   
-    { Header: 'Active', accessor: 'is_active', 
+    { Header: 'Status', accessor: 'is_active', 
+      Filter: yesNoFilterRender( true ), filterMethod: yesNoFilter,
       Cell: ({ value, original }) => 
         <Toggle
           className='danger' 
           disabled={ admin }
           checked={ !!value }
-          onChange={ updateToggle( 'is_active', original.prize_id ) } />, 
+          onChange={ updateToggle( 'is_active', original.prize_id ) } />,
     },
 
-    { Header: 'One Per Soldier', accessor: 'one_per_user', 
+    { Header: 'One Per Soldier', accessor: 'one_per_user',
+      Filter: yesNoFilterRender( false ), filterMethod: yesNoFilter,
       Cell: ({ value, original }) => 
         <Toggle
           on='yes' off='no'

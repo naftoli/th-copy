@@ -9,6 +9,7 @@ import {
   
 } from 'components/ui';
 // functions
+import { toast } from 'react-toastify';
 import { getColumns } from './columns';
 import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
@@ -34,11 +35,16 @@ class PrizesPage extends Component {
   // update base logos from master page
   toggle = () => this.setState({ modal: { ...this.state.modal, show: false } });
   editPicture = id => ({ target }) => this.setState({ modal: { show: true, id, src: target.src } });
-  upload = formData => { debugger; };
+  upload = formData => { 
+    return this.props.updatePrize( this.state.modal.id, formData )
+      .then( this.toggle )
+      .catch( e => { toast.error( e.message ); });
+  };
   // upload = formData => this.props.updateBase( this.state.modal.id, formData );
 
   updateToggle = ( key, id ) => e => {
-    this.props.updatePrize( id, { [key]: e.target.checked ? 1 : 0 } );
+    return this.props.updatePrize( id, { [key]: e.target.checked ? 1 : 0 } )
+    .catch( e => toast.error( e.message ) );
   }
 
   toCSV = () => {
@@ -83,7 +89,7 @@ class PrizesPage extends Component {
           pageId='PrizesPage' />
 
         <CropperModal 
-          fileName='picture' isOpen={ modal.show }
+          fileName='image' isOpen={ modal.show }
           src={ modal.src } toggle={ this.toggle }
           uploadImage={ this.upload } />
       </div>
