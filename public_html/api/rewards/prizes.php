@@ -21,30 +21,37 @@ class PrizesRouter {
 
         $prizes = StorePrize::find('all', [
             'conditions' => $filter,
-            'order' => 'is_active DESC, prize_count ASC, prize_name ASC'
+            'order' => 'is_active DESC, prize_count ASC, prize_name ASC', 
+            'include' => [ 'school' ]
         ]);
 
         json_response( $prizes, true, true );
     }
 
     public function show( $id ){
-        json_response( StorePrize::find( $id ) );
+        $prize = StorePrize::find( $id );
+        json_response( $prize->jsonSerialize([
+            'methods' => [ 'platoons' ]
+        ]));
     }
 
     public function update( $id ) {
         try {
             $prize = StorePrize::find( $id );
-
+            // update profile picture
             if( isset( $_FILES['image'] ) ) {
                 $prize->setImage( $_FILES['image'] );
             }
-
+            // blulk update valid params
             $prize->bulkUpdate( $_POST );
+
+            // TODO update prize_classes table
 
             if ( !$prize->save() )
                 return json_error( $prize->errors->full_messages() );
-        
+            // return the prize as the response
             return json_response( $prize );
+        // send all errors as text
         } catch ( Exception $e ) {
             return json_error( $e->getMessage() );
         }

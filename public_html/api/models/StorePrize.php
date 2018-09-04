@@ -22,6 +22,14 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
         return self::IMG_PATH . 'default.png';
     }
 
+    public function platoons() {
+        global $POINTS_DB;
+
+        $platoons = $POINTS_DB->prepare( 'SELECT class_id FROM prize_classes WHERE prize_id = ?;' );
+        $platoons->execute([ $this->prize_id ]);
+        return $platoons->fetchAll(PDO::FETCH_COLUMN, 0);
+    }
+
     static $belongs_to = [
         [ 'school', 'class_name' => 'School', 'foreign_key' => 'institution_id' ],
         [ 'admin', 'class_name' => 'Admin', 'foreign_key' => 'created_by' ],
@@ -59,17 +67,16 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
     }
 
     // serialize to json
-    public function jsonSerialize() {
-        return $this->to_array([
+    public function jsonSerialize( $options = [] ) {
+        $default_options = [
             'only' => [
                 'prize_id','prize_name', 'institution_id', 'points', 'prize_description', 
                 'one_per_user', 'prize_count', 'is_active', 'modified'
             ],
-            // 'include' => [
-            //     'school', 'class', 'task', 
-            //     'subject' => [ 'only' => [ 'subject_name', 'subject_id', 'subject_type' ] ]
-            // ],
+            'include' => [ 'school' => [ 'only' => [ 'school_name', 'school_id', 'school_number' ] ] ],
             'methods' => [ 'image' ]
-        ]);
+        ];
+
+        return $this->to_array( array_merge_recursive( $default_options, $options ) );
     }
 }
