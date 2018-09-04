@@ -38,7 +38,7 @@ export class PlatoonSelect extends Component {
   // update if the login changed or the schoolId prop changed
   componentDidUpdate( { schoolId: prevId } ) {
     // if the school ID changed, get the new platoons into redux
-    const { schoolId, value, isClearable } = this.props;
+    const { schoolId, value, isClearable, isMulti } = this.props;
     if ( prevId !== schoolId ) {
       this.loadPlatoons();
     }
@@ -50,7 +50,7 @@ export class PlatoonSelect extends Component {
       // if it is clearable and we have a value, clear it.
       if ( isClearable && value ) this.onChange( false );
       // if it is not clearable select the first value
-      else if ( !isClearable ) this.onChange( options[0] );
+      else if ( !isClearable && !isMulti ) this.onChange( options[0] );
     }
   }
 
@@ -101,18 +101,30 @@ export class PlatoonSelect extends Component {
   filter = ( option, value ) => option.label.toLowerCase().includes( value.toLowerCase() );
   
   render() {
-    const { value } = this.props;
+    const { value, values } = this.props;
     const { loading } = this.state;
 
     let options = this.getOptions();
-    const selected = findOption( options, value ) || null;
+    let selected;
+    // support single value
+    if ( value )
+      selected = findOption( options, value ) || null;
+    // support multiple values
+    if ( values )
+      selected = values
+        .map( value => findOption( options, value ) || false )
+        .filter( value => value !== false );
+    
     options = loading ? [] : options;
 
     return (
-      <Select {...this.props} options={ options } value={ selected }
-        isLoading={ loading } onChange={ this.onChange } 
+      <Select
+        {...this.props}
+        value={ selected }
+        options={ options }
+        isLoading={ loading }
         filterOption={ this.filter } />
-    )
+    );
   }
 }
 
