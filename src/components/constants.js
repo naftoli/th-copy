@@ -11,4 +11,4 @@ export const LEGACY_URL = process.env.NODE_ENV === "production" ? "" : "//mashpi
 // fallback images
 export const DEFAULT_PROFILE = '/mobile/reg/images/profile-photo-default.jpg';
 export const DEFAULT_LOGO = '/schoolLogos/logo.png';
-export const DEFAULT_PRIZE = '/v2/images/imgsrepo/default.jpg';
+export const DEFAULT_PRIZE = '/v2/images/imgsrepo/default.png';
