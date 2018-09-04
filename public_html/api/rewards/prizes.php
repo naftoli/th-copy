@@ -31,8 +31,11 @@ class PrizesRouter {
     public function update( $id ) {
         $prize = StorePrize::find( $id );
         $prize->bulkUpdate( $_POST );
+
+        if ( !$prize->save() )
+            return json_error( $prize->errors->full_messages() );
         
-        json_response( $prize );
+        return json_response( $prize );
     }
 }
 
