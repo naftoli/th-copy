@@ -21,7 +21,7 @@ class PrizesRouter {
 
         $prizes = StorePrize::find('all', [
             'conditions' => $filter,
-            'order' => 'is_active DESC, prize_count DESC, prize_name ASC'
+            'order' => 'is_active DESC, prize_count ASC, prize_name ASC'
         ]);
 
         json_response( $prizes, true, true );
