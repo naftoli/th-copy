@@ -19,7 +19,10 @@ class PrizesRouter {
             $filter = ' institution_id = '. $login['school_id'].' AND teacher_id = ' . $login['id'];
         }
 
-        $prizes = StorePrize::find('all', [ 'conditions' => $filter ]);
+        $prizes = StorePrize::find('all', [
+            'conditions' => $filter,
+            'order' => 'is_active DESC, prize_count DESC, prize_name ASC'
+        ]);
 
         json_response( $prizes, true, true );
     }
