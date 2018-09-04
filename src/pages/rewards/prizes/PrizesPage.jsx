@@ -7,7 +7,7 @@ import CropperModal from 'components/modals/CropperModal';
 import { Table, InlineSync, FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
-import { getColumns } from './columns';
+import { getColumns } from './include/columns';
 import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
