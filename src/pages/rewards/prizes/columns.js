@@ -26,8 +26,9 @@ export function getColumns( editPicture, path, updateToggle, admin ) {
     {
       Header: 'Picture',  accessor: 'image',
       className: 'profile-picture', width: 85, sortable: false,
-      Cell: props => <StorePrize src={ props.value } className='inline-profile' 
-                        onClick={ editPicture( props.original.prize_id ) }/>,
+      Cell: props => 
+        <StorePrize src={ props.value } className='inline-profile' 
+          onClick={ admin? undefined : editPicture( props.original.prize_id ) }/>,
       Filter: ({ filter, onChange }) =>
         <select style={{ width: "100%" }} value={filter ? filter.value : "all"}
           onChange={event => onChange(event.target.value)}>
@@ -43,7 +44,12 @@ export function getColumns( editPicture, path, updateToggle, admin ) {
     },
 
     { Header: 'Prize Name', accessor: 'prize_name',
-      Cell: props => <Link to={`${path}/${props.original.prize_id}`}>{props.value}</Link> },
+      Cell: props => {
+        if ( admin )
+          return props.value;
+        return <Link to={`${path}/${props.original.prize_id}`}>{props.value}</Link> 
+      }
+    },
   
     { Header: 'Miles', accessor: 'points', Cell: props => <Number value={props.value}/> },
 
