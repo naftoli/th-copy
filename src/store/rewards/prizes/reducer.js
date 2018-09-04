@@ -1,9 +1,5 @@
 import * as types from './types';
 
-const updatePrize = ( id, prizes ) => {
-  return 
-}
-
 export const initialState = {
   loading: false,
   prizes: []
