@@ -2,7 +2,7 @@
 
 $theme-colors: (
   "primary": $primary-color,
-  "danger": #ff4136
+  "danger": $danger
 );
 // clear bootstrap page settings for printing
 $print-page-size: auto;
