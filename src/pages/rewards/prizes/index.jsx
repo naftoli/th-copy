@@ -3,11 +3,11 @@ import { Switch, Route } from 'react-router-dom';
 // sub pages
 import { Page404 } from 'pages/errors';
 import PrizesPage from './PrizesPage';
-// import PlatoonsPage from './PlatoonsPage';
+import PrizePage from './PrizePage';
 // functions
 import { connect } from 'react-redux';
 // styles
-import './prizes.scss';
+import './include/prizes.scss';
 
 export class PrizesIndexPage extends Component {
 
@@ -16,7 +16,8 @@ export class PrizesIndexPage extends Component {
     return (
       <Switch>
         <Route path={ path } exact component={ PrizesPage } />
-        {/* <Route path={`${path}/:id([0-9]+)`} component={ PrizePage }/> */}
+        <Route path={`${path}/:id([0-9]+)`} component={ PrizePage }/>
+        
         <Route component={ Page404 } />
       </Switch>
     )

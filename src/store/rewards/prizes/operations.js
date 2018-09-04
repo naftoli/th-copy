@@ -11,6 +11,11 @@ export const getPrizes = () => dispatch => {
   });
 }
 
+export const getPrize = id => dispatch => {
+  return API.get( `/rewards/prizes?id=${id}` )
+  .then( handleAPIResponse )
+}
+
 export const updatePrize = ( id, updates ) => dispatch => {
   
   return API.post( `/rewards/prizes?id=${id}`, updates )
