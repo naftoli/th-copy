@@ -46,9 +46,11 @@ class ImgsController extends Zend_Controller_Action
 	{
 		$strBaseURL = WEB_ROOT . "images/imgsrepo/";
 		$strImage = $this->_request->getParam("src");
-		if (preg_match("/^[0-9a-z]{7}_[0-9]+\.(jpg|gif|jpeg|png)$/i", $strImage, $arrImage))
-		{
-
+		if (preg_match("/^[0-9a-z]{7}_[0-9]+\.(jpg|gif|jpeg|png)$/i", $strImage, $arrImage)) {
+			// images from v2, keep going
+		} 
+		else if ( preg_match('/^[0-9]{1,}.[0-9]{14}.(jpg|gif|jpeg|png)$/i', $strImage, $arrImage) )  {
+			// images from react site, keep going
 		}
 		else if (!preg_match("/^(?:[0-9]{7}_)?[0-9]+\.(jpg|gif|jpeg|png)$/i", $strImage, $arrImage))
 		{
