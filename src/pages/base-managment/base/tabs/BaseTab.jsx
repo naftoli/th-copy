@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { LEGACY_URL, DEFAULT_LOGO } from 'components/constants';
+import { LEGACY_URL } from 'components/constants';
 // components
 import { BaseRow } from '../rows';
 import { Form } from 'components/inputs';
 import { AddressRow } from 'components/rows';
-import { ProfilePicture } from 'components/ui';
+import { BaseLogo } from 'components/ui';
 import { SaveButton } from 'components/buttons';
 import { Row, Col, Input, TabPane } from 'reactstrap';
 import CropperModal from 'components/modals/CropperModal';
@@ -44,10 +44,9 @@ export class BaseTab extends Component {
                 
             </Col>
             <Col id='logo' xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2'>
-              <ProfilePicture 
-                src={ base.logoPaths.logo } 
+              <BaseLogo
                 onClick={ this.toggle } 
-                fallbackImage={ DEFAULT_LOGO }/>
+                src={ base.logoPaths.logo } />
             </Col>
           </Row>
 
