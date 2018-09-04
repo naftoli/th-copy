@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { DEFAULT_PROFILE, DEFAULT_LOGO } from 'components/constants';
+import { DEFAULT_PROFILE, DEFAULT_LOGO, DEFAULT_PRIZE } from 'components/constants';
 // components
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import Cropper from 'components/functional/Cropper';
@@ -87,6 +87,7 @@ class CropperModal extends Component {
     let { src } = this.state;
     src = src && src.indexOf( DEFAULT_PROFILE ) >= 0 ? false : src;
     src = src && src.indexOf( DEFAULT_LOGO ) >= 0 ? false : src;
+    src = src && src.indexOf( DEFAULT_PRIZE ) >= 0 ? false : src;
     // assume we do not have an image
     let body = 
       <div style={{textAlign: 'center'}}>
