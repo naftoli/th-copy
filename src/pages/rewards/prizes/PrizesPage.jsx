@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
+import { Link } from 'react-router-dom';
 import { Button, ButtonGroup } from 'reactstrap';
-
 import CropperModal from 'components/modals/CropperModal';
-import { 
-  Table, InlineSync, FontAwesome, 
-  
-} from 'components/ui';
+import { Table, InlineSync, FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { getColumns } from './columns';
@@ -48,11 +45,14 @@ class PrizesPage extends Component {
   }
 
   toCSV = () => {
-    const headers = [ 'Prize Name', 'Miles', 'In Stock', 'Active', 'One Per Soldier', 'Last Updated' ];
+    const headers = [
+      'Prize Name', 'Miles', 'In Stock', 'Active',
+      'One Per Soldier', 'Last Updated', 'Base Number', 'Base'
+    ];
     const rows = this.props.prizes.map( prize => [
       prize.prize_name, prize.points, prize.prize_count, 
       prize.is_active ? 'Yes' : 'No', prize.one_per_user ? 'Yes' : 'No', 
-      prize.modified
+      prize.modified, prize.school.school_number, prize.school.school_name
     ]);
     arrayToCSV( headers, rows, 'store_prizes' );
   }
@@ -65,6 +65,13 @@ class PrizesPage extends Component {
       this.editPicture, match.path, 
       this.updateToggle, isAdmin( login.code )
     );
+
+    if ( isAdmin( login.code ) )
+      columns.push(
+        { Header: 'Base', id: 'base', accessor: prize => prize.school.school_name,
+          Cell: props => <Link to={`/bm/base/${props.original.school.school_id}`}>{props.value}</Link>,
+        }
+      );
 
     return (
       <div id='PrizesPage'>
