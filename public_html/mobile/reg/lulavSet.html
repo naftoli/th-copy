@@ -56,8 +56,8 @@
         <section style="width: 300px; margin: 10px auto; display: none;" id="purchase_lulav_sets">
             <div class="container page5">   
                 <div class="row">
-                    <div class="col-12" style="font-size: 18px; font-weight: bold;">
-                        Please use the following form to enter how many sets you would like to purchase for each child.
+                    <div class="col-12" style="font-size: 16px;">
+                        Lulav Sets cost ONLY $7.70. We will charge an additional $3 for shipping it to YOUR CHILD'S SCHOOL.
                     </div>
                 </div>   
                 
@@ -72,10 +72,10 @@
                                 <div class="child">
                                         <div style="padding: 10px; font-size: 14px;">
                                             <span>
+                                                <input type="checkbox" class="lulav" style="width: 30px;" id="{{@key}}" />
                                                 <b>{{rank}}</b> {{first}} {{last}} 
                                             </span>
-                                            <input type="text" class="lulav form-control" style="width: 40px; float: right;" />
-                                            <input type="hidden" class="id" value="{{@key}}" />
+                                            <input type="hidden" class="ship" value="{{shipping}}"
                                         </div>
                                     </div>
                                     {{/each}}
@@ -91,7 +91,6 @@
 
                     <hr />
                     <div class="row">
-                        <button id="calculate" class="btn btn-primray">Calculate Total</button>
                         <h2>Total: $<span id="amount">0</span></h2>
                         <input type="hidden" id="total" />
                     </div>
@@ -193,19 +192,29 @@
                     } 
                 }
             });
-
-            $(document).on("click", "#calculate", calcAmount);
-
+            
+            $(document).on('click', '.lulav', calcAmount);
             $(document).on("click", "#purchase", purchaseSets);
 
             function calcAmount() {
-                var base = 7.70;
-                var amount = 0;
-                $(".lulav").each( function() {
-                    var val = $(this).val();
-                    if ( val > 0 ) amount += (base * val);
-                });
-                amount = amount.toFixed(2); 
+                var total = 0;
+                var cost = 7.70;
+                var ship = 3.00;
+                var numChildren = $(".lulav:checked").length;
+
+                if ( numChildren ) {
+                    $.each($(".lulav:checked"), function() {
+                        var id = $(this).attr('id');
+                        var ship = $(this).parent().parent().find('.ship').val();
+                        if (ship == 'deliver') {
+                            total += cost + ship;
+                        } else if (ship == 'pickup') {
+                            total += cost;
+                        }
+                    });
+                }
+                
+                var amount = total.toFixed(2); 
                 $("#amount").text( amount );
                 $("#total").val( amount );
             }
@@ -233,6 +242,7 @@
 
                     // build data
                     var info = {};
+                    info.year = year;
                     info.admin = admin;
                     info.amount = total;
                     info.cc = {};
@@ -241,18 +251,13 @@
                     info.cc.num = num;
                     info.cc.exp = exp;
                     info.zip = zip;
-                    info.sets = [];
-                    var num_sets = 0;
-                    $(".child").each( function() {
-                        var id = $(this).find('.id').val();
-                        var numsets = $(this).find('.lulav').val();
-                        info.sets.push({
-                            id: id, 
-                            num: numsets
-                        });
-                        num_sets += parseInt( numsets );
+                    info.users = [];
+                    $.each($(".lulav:checked"), function() {
+                        var id = $(this).attr('id');
+                        info.users.push( id );
                     });
                     
+                    var num_sets = info.users.length;
                     $.post('ajax/lulavPayment.php', { info: info }, function( info ) {
                         var result = JSON.parse( info );
                         if ( result.success ) {

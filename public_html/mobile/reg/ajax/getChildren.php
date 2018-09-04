@@ -38,7 +38,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 
 $children = array();
 //need to have multiple result rows to get highest rank
-$sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, c.class_grade, u.user_id, u.first, u.last, "
+$sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, s.shipping_method, c.class_grade, u.user_id, u.first, u.last, "
 	." u.first_he, u.last_he, u.lang_id, "
 	." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, r.rank_ord, r.rank_name, r.rank_image_id "
 	." FROM users u "
@@ -74,6 +74,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 	$children[$row['user_id']]['reg_year'] = $reg_year;
 	$children[$row['user_id']]['chidon_year'] = $chidon_year;
 	$children[$row['user_id']]['school_id'] = $row['school_id'];
+	$children[$row['user_id']]['shipping'] = $row['shipping_method'];
     
     $reg_query = mysql_query(
         "SELECT !ISNULL(tc.th_chidon_id) AS reg_chidon, !ISNULL(ur.user_reg_id) AS reg_chayolei, u.chayolei, "

@@ -7,6 +7,7 @@ $info = $_POST['info'];
 require 'encrypt.php';
 $admin_id = encrypt_decrypt('decrypt', $info['admin']);
 
+$year = $info['year'];
 $amount = $info['amount'];
 $card_num = $info['cc']['num'];
 $exp_date = $info['cc']['exp'];
@@ -16,17 +17,13 @@ $zip = $info['zip'];
 $address = "";
 $state = "";
 
-$num_sets = 0;
-foreach ( $info['sets'] as $set ) {
-    $num_sets += $set['num'];
-}
-$description = "Mivtza Lulav 5779 purchase - Admin ID: " . $admin_id . " Number of sets purchased: " . $num_sets;
+$description = "Mivtza Lulav 5779 purchase - Admin ID: " . $admin_id . "; Users: " . implode(',', $info['users']);
 
 chdir('../../../');
 require_once 'authorize.php';
 chdir('mobile/reg/ajax/');
 
-if ($response_array[3] == 1) { // success
+if ($response_array[3] != 1) { // success
     $strResponse =  $response_array[3] . ':' . 
 					$response_array[4] . ':' . 
 					$response_array[6] . ':' . 
@@ -36,28 +33,17 @@ if ($response_array[3] == 1) { // success
         "INSERT into lulav_purchases 
         SET admin_id = :admin, 
         amount_paid = :amount, 
-        authorization = :auth"
+        authorization = :auth, 
+        users = :users, 
+        year = :year"
     );
     $qry->execute([
         ':admin'    => $admin_id, 
         ':amount'   => $amount, 
-        ':auth'     => $strResponse
+        ':auth'     => $strResponse, 
+        ':users'    => implode(',', $info['users']), 
+        ':year'     => $year
     ]);
-
-    $purchase_id = $MASHPIA_DB->lastInsertId();
-    $qry = $MASHPIA_DB->prepare(
-        "INSERT INTO lulav_purchase_details 
-        SET purchase_id = :id, 
-        user_id = :user, 
-        num_sets = :num"
-    );
-    foreach ( $info['sets'] as $set ) {
-        $qry->execute([
-            ':id'       => $purchase_id, 
-            ':user'     => $set['id'], 
-            ':num'      => $set['num']
-        ]);
-    }
     
     $qry = $MASHPIA_DB->prepare(
         "INSERT INTO transactions 
