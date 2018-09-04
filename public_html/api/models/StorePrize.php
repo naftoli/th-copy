@@ -17,7 +17,9 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
     ];
 
     public function image() {
-        return self::IMG_PATH . $this->image_id;
+        if ( $this->image_id > 0 )
+            return self::IMG_PATH . $this->image_id;
+        return self::IMG_PATH . 'default.png';
     }
 
     static $belongs_to = [
