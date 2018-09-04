@@ -1,7 +1,9 @@
+@import 'styles/colors';
+
 @mixin toggle-branding(
-  $off-color: #777, // color when off
-  $on-color: #3d9c72, // color when on lighter:  #5fc054
-  $inactive-text: rgba(white, 0.5), // color for inactive text
+  $off-color: $danger, // color when off // was #777,
+  $on-color: green, // color when on lighter:  #5fc054
+  $inactive-text: rgba(white, 0.8), // color for inactive text
   $transition: cubic-bezier(0,1,0.5,1) // transition style
 ) {
   // everything is next to the checkbox
@@ -177,13 +179,13 @@ label.toggle {
   }
   
   // Or re-brand the toggle for different applications
-  &.danger {
-    @include toggle-branding
-    (
-      #b53e74,  // Off state color
-      #3d9c72,  // On state color
-      rgba(white, 0.6)  // Off state text color
-      // ease-in-out  // Transition timing function
-    ); 
-  }
+  // &.danger {
+  //   @include toggle-branding
+  //   (
+  //     #b53e74,  // Off state color
+  //     #3d9c72,  // On state color
+  //     rgba(white, 0.6)  // Off state text color
+  //     // ease-in-out  // Transition timing function
+  //   ); 
+  // }
 }
