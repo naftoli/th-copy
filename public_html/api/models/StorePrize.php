@@ -30,6 +30,23 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
         return $platoons->fetchAll(PDO::FETCH_COLUMN, 0);
     }
 
+    public function setPlatoons( $class_ids ) {
+        global $POINTS_DB;
+        
+        // delete all existing connections
+        $delete = $POINTS_DB->prepare( 'DELETE FROM prize_classes WHERE prize_id = ?;' );
+        if ( !$delete->execute([ $this->prize_id ]) )
+            return false;
+        
+        // connect all the class_id's provided
+        $insert = $POINTS_DB->prepare( 'INSERT INTO prize_classes ( prize_id, class_id ) VALUES ( ?, ? )' );
+        foreach( $class_ids as $class_id ) {
+            $insert->execute([ $this->prize_id, $class_id ]);
+        }
+
+        return true;
+    }
+
     static $belongs_to = [
         [ 'school', 'class_name' => 'School', 'foreign_key' => 'institution_id' ],
         [ 'admin', 'class_name' => 'Admin', 'foreign_key' => 'created_by' ],

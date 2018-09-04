@@ -45,12 +45,20 @@ class PrizesRouter {
             // blulk update valid params
             $prize->bulkUpdate( $_POST );
 
-            // TODO update prize_classes table
-
             if ( !$prize->save() )
                 return json_error( $prize->errors->full_messages() );
+
+            // update prize_classes table
+            if (
+                isset( $_POST['platoons'] ) && 
+                is_array( $_POST['platoons'] ) &&
+                !$prize->setPlatoons( $_POST['platoons'] ) 
+            ) return json_error( 'Could update Platoons');
+
             // return the prize as the response
-            return json_response( $prize );
+            return json_response( $prize->jsonSerialize([
+                'methods' => [ 'platoons' ]
+            ]));
         // send all errors as text
         } catch ( Exception $e ) {
             return json_error( $e->getMessage() );
