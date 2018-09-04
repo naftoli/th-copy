@@ -135,7 +135,7 @@ class ImgsController extends Zend_Controller_Action
 			$strRepoPath = SERVER_ROOT . "images/imgsrepo/";
 			if (!file_exists($strUploadPath))
 			{
-				print text("Sorry, there was an error") . ": CI-PU101-DSF7DS";
+				print "Sorry, there was an error: CI-PU101-DSF7DS";
 				exit;
 			}
 			// Start the HTTP adapter to receive the file
@@ -143,7 +143,7 @@ class ImgsController extends Zend_Controller_Action
 			$objAdapter->setDestination($strUploadPath);
 			if (!$objAdapter->receive($strFileName))
 			{
-				print text("Sorry, there was an error") . ": CI-PU102-SD7D78";
+				print "Sorry, there was an error: CI-PU102-SD7D78";
 				exit;
 			}
 
