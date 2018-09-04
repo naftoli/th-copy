@@ -65,7 +65,7 @@ class SettingsTab extends Component {
                 value={findOption( mission_type_options, school_type_id )} />
             </Col>
             <Col xs='6'>
-              <label>Language</label>
+              <label>Mission Language</label>
               <Select options={language_options} onChange={this.handleSelectChange('lang_id')}
                 value={findOption( language_options, lang_id )} />
             </Col>
