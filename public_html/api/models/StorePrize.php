@@ -1,8 +1,5 @@
 <?php
-/**
- * Due to how the DBS is structured, 
- * it is $this->class not $this->platoon ( which is the same as $this->class_id )
- */
+include_once( __DIR__ . '/../tools/functions/files/images.php' );
 include_once( __DIR__ . '/traits/BuildModel.php' );
 
 class StorePrize extends ActiveRecord\Model implements JsonSerializable {
@@ -29,6 +26,35 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
     //     [ 'subject', 'class_name' => 'Subject', 'foreign_key' => 'campaign_id' ],
     //     [ 'task', 'class_name' => 'AchievementTask', 'foreign_key' => 'task_id' ],
     ];
+
+    // takes an uploaded file and sets it as the profile picture
+    public function setImage( $file ){
+        $upload = self::uploadImage( $this->prize_id, $file );
+        // update the mobile_pic column
+        $this->image_id = $upload;
+        $this->save();
+        return true;
+    }
+    // validates and moves the uploaded profile picture...
+    public static function uploadImage( $prize_id, $file ){
+        $type = exif_imagetype( $file['tmp_name'] );
+        $extension = image_type_to_extension( $type );
+        if ( !in_array( $type, [ IMAGETYPE_JPEG, IMAGETYPE_PNG ] ) )
+            throw new Exception( 'Invalid File Type. Only JPG/JPEG/PNG are supported at the moment.' );
+        // all other upload errors
+        if ( $file['error'] !== UPLOAD_ERR_OK )
+            throw new Exception( codeToMessage( $file['error'] ) ); // api/funcitons/files/images.php#10
+        // generate the file name
+        $file_name = getLogoDestination( $prize_id, $extension ); // api/funcitons/files/images.php#35
+        $target = __DIR__ . "/../../" . self::IMG_PATH . "/$file_name";
+        // remove duplicate files
+        if ( file_exists( $target ) ) unlink( $target );
+        // save file
+        $result = move_uploaded_file( $file['tmp_name'], $target );
+        if ( !$result ) 
+            throw new Exception( 'Unable to save Image. Please check if your file is corrupt before trying again.' );
+        return $file_name;
+    }
 
     // serialize to json
     public function jsonSerialize() {

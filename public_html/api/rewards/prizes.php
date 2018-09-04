@@ -32,13 +32,22 @@ class PrizesRouter {
     }
 
     public function update( $id ) {
-        $prize = StorePrize::find( $id );
-        $prize->bulkUpdate( $_POST );
+        try {
+            $prize = StorePrize::find( $id );
 
-        if ( !$prize->save() )
-            return json_error( $prize->errors->full_messages() );
+            if( isset( $_FILES['image'] ) ) {
+                $prize->setImage( $_FILES['image'] );
+            }
+
+            $prize->bulkUpdate( $_POST );
+
+            if ( !$prize->save() )
+                return json_error( $prize->errors->full_messages() );
         
-        return json_response( $prize );
+            return json_response( $prize );
+        } catch ( Exception $e ) {
+            return json_error( $e->getMessage() );
+        }
     }
 }
 
