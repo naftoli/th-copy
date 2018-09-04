@@ -13,3 +13,10 @@ export const setPrizes = prizes => {
     payload: prizes
   }
 };
+
+export const updatePrize = ( id, prize ) => {
+  return {
+    type: types.UPDATE_PRIZE,
+    payload: { id, prize }
+  }
+};

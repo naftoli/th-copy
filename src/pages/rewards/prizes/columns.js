@@ -30,9 +30,9 @@ export function getColumns( editPicture, path, updateToggle, admin ) {
     { Header: 'Prize Name', accessor: 'prize_name',
       Cell: props => <Link to={`${path}/${props.original.prize_id}`}>{props.value}</Link> },
   
-    { Header: 'Miles', accessor: 'miles', Cell: props => <Number value={props.value}/> },
+    { Header: 'Miles', accessor: 'points', Cell: props => <Number value={props.value}/> },
 
-    { Header: 'In Stock', accessor: 'stock', Cell: props => <Stock value={props.value}/> },
+    { Header: 'In Stock', accessor: 'prize_count', Cell: props => <Stock value={props.value}/> },
   
     { Header: 'Active', accessor: 'is_active', 
       Cell: ({ value, original }) => 

@@ -10,3 +10,13 @@ export const getPrizes = () => dispatch => {
     return prizes;
   });
 }
+
+export const updatePrize = ( id, updates ) => dispatch => {
+  
+  return API.post( `/rewards/prizes?id=${id}`, updates )
+  .then( handleAPIResponse )
+  .then( prize => { 
+    dispatch( actions.updatePrize( id, prize ) ); 
+    return prize;
+  });
+}

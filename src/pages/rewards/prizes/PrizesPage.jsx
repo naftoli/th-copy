@@ -13,12 +13,12 @@ import { getColumns } from './columns';
 import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
-import { getPrizes } from 'store/rewards/prizes/operations';
+import { 
+  getPrizes, updatePrize 
+} from 'store/rewards/prizes/operations';
 
 
 class PrizesPage extends Component {
-
-  // static propTypes = {};
 
   state = { 
     modal: { show: false, id: false, src: false } 
@@ -37,14 +37,14 @@ class PrizesPage extends Component {
   upload = formData => { debugger; };
   // upload = formData => this.props.updateBase( this.state.modal.id, formData );
 
-  updateToggle = ( key, value ) => e => {
-    console.log( key, value, e.target.checked );
+  updateToggle = ( key, id ) => e => {
+    this.props.updatePrize( id, { [key]: e.target.checked ? 1 : 0 } );
   }
 
   toCSV = () => {
     const headers = [ 'Prize Name', 'Miles', 'In Stock', 'Active', 'One Per Soldier', 'Last Updated' ];
     const rows = this.props.prizes.map( prize => [
-      prize.prize_name, prize.miles, prize.stock, 
+      prize.prize_name, prize.points, prize.prize_count, 
       prize.is_active ? 'Yes' : 'No', prize.one_per_user ? 'Yes' : 'No', 
       prize.modified
     ]);
@@ -100,7 +100,7 @@ const mapStateToProps = ({ rewards, login }) => {
 };
 
 const mapDispatchToProps = {
-  getPrizes
+  getPrizes, updatePrize
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )( PrizesPage );
