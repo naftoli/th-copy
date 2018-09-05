@@ -113,6 +113,17 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
         return false;
     }
 
+    // serialize for templates
+    public function templateSerialize( $options = [] ) {
+        $default_options = [
+            'only' => [
+                'prize_id','prize_name', 'institution_id', 'points', 'prize_description', 
+                'one_per_user', 'prize_count', 'is_active', 'teacher_edit', 'modified', 'image_id'
+            ],
+            'methods' => [ 'image' ]
+        ];
+        return $this->to_array( array_merge_recursive( $default_options, $options ) );
+    }
     // serialize to json
     public function jsonSerialize( $options = [] ) {
         $default_options = [

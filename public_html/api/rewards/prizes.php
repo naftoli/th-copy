@@ -31,10 +31,20 @@ class PrizesRouter {
             $platoons[ $platoon['prize_id'] ][] = intval( $platoon['class_id'] );
         }
 
-        foreach( $prizes as $prize )
-            $prize->cachePlatoons( isset( $platoons[ $prize->prize_id ] ) ? $platoons[ $prize->prize_id ] : [] );
+        $response = [];
+        foreach( $prizes as $prize ) { // cache the prizes for large stores to prevent return runs to the DBS
+            $prize_platoons = isset( $platoons[ $prize->prize_id ] ) ? $platoons[ $prize->prize_id ] : [];
+            $prize->cachePlatoons( $prize_platoons );
+            
+            if ( $login['code'] == 'TEACHER' // teachers
+                && count( $prize_platoons ) > 0 // if the prize has 1 or more platoons
+                && !in_array( $login['id'], $prize_platoons ) // and they are not in the list
+            ) continue; // they do not see the prize.
 
-        json_response( $prizes, true, true );
+            $response[] = $prize; 
+        }
+
+        json_response( $response, true, true );
     }
 
     public function show( $id ){
