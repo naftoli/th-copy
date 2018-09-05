@@ -27,7 +27,7 @@ const AchievementCard = props => {
 
         <div className='barcode'>
           <Barcode
-            width={ 2 }
+            width={ 1.8 }
             margin={ 0 }
             height={ 25 }
             fontSize={ 10 }
