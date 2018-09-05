@@ -17,6 +17,7 @@ $admin_id = encrypt_decrypt('decrypt', $_COOKIE['admin']);
 /************************ LOAD UP THE CURRENT YEAR ************************/
 require_once $_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php';
 $year = GlobalSettings::getCurrentYear();
+$yearDates = GlobalSettings::getCurYearDates();
 
 /************************ LOAD UP THE LIST OF PARSHIOS ************************/
 $parshos = [];
@@ -41,9 +42,10 @@ $daily = in_array($label_id, [30,31,32,38,50,51,52,58]); // hardcoded list of da
 
 /************************ PREVENT DUPLICATES ************************/
 $check_duplicate_sql = "SELECT DISTINCT dt.cat FROM date_tasks dt " // get the catagorys
-    ."JOIN date_tasks_missions dtm USING ( date_tasks_mission_id ) " // join with date_tasks_missions for filtering it...
-    ."WHERE dt.cat = '$category' " // where it is like "My Personal Task"
-    ."AND dtm.created_by_school IS NULL AND dtm.created_by_parent = '$admin_id' AND dtm.default_on = 0"; // and it is not created by a school, made by a parent and is off by default...
+    ." JOIN date_tasks_missions dtm USING ( date_tasks_mission_id ) " // join with date_tasks_missions for filtering it...
+    ." WHERE dt.cat = '$category' " // where it is like "My Personal Task"
+    ." AND dtm.created_by_school IS NULL AND dtm.created_by_parent = '$admin_id' AND dtm.default_on = 0 "
+    ." AND end_date > " . $yearDates['start']; // and it is not created by a school, made by a parent and is off by default...
 // if the task already exists....
 if(mysql_num_rows(mysql_query($check_duplicate_sql)) > 0){
     echo json_encode(["success" => false, 'error_message' => "It appears that this task is a duplicate"]); die();
