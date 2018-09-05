@@ -51,7 +51,7 @@ export const getSoldier = ( id ) => dispatch => {
       return response.data;
     })
 }
-// upload a spreadsheet. does not deal with store
+// upload a profile picture. does not deal with store
 export const uploadProfile = ( formData ) => dispatch => {
   const toast_id = createNotifcation('Uploading Profile Picture...');
   return API.post( '/core/users?action=uploadProfile', formData )

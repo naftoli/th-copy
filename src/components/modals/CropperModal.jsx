@@ -100,7 +100,7 @@ class CropperModal extends Component {
       body = <Cropper src={ src } onError={ this.handleError } cropper={ this.setCropper } viewMode={ viewMode }/>;
     // render the final modal
     return (
-      <Modal isOpen={isOpen} id='cropper-modal' zIndex='auto'
+      <Modal isOpen={isOpen} id='cropper-modal'
           centered={centered} toggle={ is.not.mobile() ? toggle : undefined }>
         <ModalHeader toggle={toggle}>Edit / Upload Image</ModalHeader>
         <ModalBody>
