@@ -593,6 +593,7 @@ $bpOnly = [ 82 ];
 									<li><a href="/tehillim_quotas.php">Check Your Tehillim Quotas</a></li>
 									<li><a href="/admin_users_track.php">Change Tehillim Ladder/Quota</a></li>
 									<li><a href="https://vimeo.com/195384916">Shabbos Mevorchim Tutorial Video</a></li>
+									<li><a href="quota_cards.php">Quota Cards</a></li>
 								</ul>
 							</li>
 						</ul>
