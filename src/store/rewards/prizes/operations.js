@@ -20,12 +20,27 @@ export const getPrize = id => dispatch => {
   })
 }
 
+export const createPrize = prize => dispatch => {
+  return API.post( `/rewards/prizes`, prize )
+  .then( handleAPIResponse )
+  .then( prize => { 
+    dispatch( actions.createPrize( prize ) ); 
+    return prize;
+  });
+}
+
 export const updatePrize = ( id, updates ) => dispatch => {
-  
   return API.post( `/rewards/prizes?id=${id}`, updates )
   .then( handleAPIResponse )
   .then( prize => { 
     dispatch( actions.updatePrize( id, prize ) ); 
     return prize;
   });
+}
+
+/********************** NON STORE API OPERATIONS **********************/
+// upload a prize image. does not deal with store
+export const uploadImage = ( formData ) => dispatch => {
+  return API.post( '/rewards/prizes?action=uploadImage', formData )
+  .then( handleAPIResponse )
 }

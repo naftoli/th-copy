@@ -21,6 +21,13 @@ export default ( state = initialState, action ) => {
         loading: false
       };
 
+    // add prize to top of list becuase it is new ;-)
+    case types.CREATE_PRIZE:
+      return { 
+        ...state, 
+        prizes: [ action.payload, ...state.prizes ], 
+      };
+
     case types.UPDATE_PRIZE:
       return { 
         ...state, 

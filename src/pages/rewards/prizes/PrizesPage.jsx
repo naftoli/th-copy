@@ -13,8 +13,10 @@ import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
 import { 
-  getPrizes, updatePrize 
+  getPrizes, updatePrize, uploadImage
 } from 'store/rewards/prizes/operations';
+// styles
+import './include/prizes.scss';
 
 
 class PrizesPage extends Component {
@@ -34,7 +36,7 @@ class PrizesPage extends Component {
     .catch( e => toast.error( e.message ) );
   }
 
-  // update base logos from master page
+  // update prizes in a modal ( not much data )
   togglePrize = () => this.setState({
     prizeModal: { ...this.state.prizeModal, show: false }
   });
@@ -42,6 +44,15 @@ class PrizesPage extends Component {
     this.setState({
       prizeModal: { show: true, prize }
     })
+  }
+  newPrize = () => {
+    let modal = {  ...this.state.prizeModal, show: true }
+    // clear it if we had an existing prize loaded up
+    if ( this.state.prizeModal.prize.prize_id ) {
+      modal.prize = {};
+    }
+    // update the modal
+    this.setState({ prizeModal: modal })
   }
 
   toggleCropper = () => this.setState({
@@ -57,7 +68,7 @@ class PrizesPage extends Component {
     if ( this.state.cropperModal.id ) {
       promise = this.props.updatePrize( this.state.cropperModal.id, formData )
     } else {
-      debugger;
+      promise = this.props.uploadImage( formData );
     }
     // return the promise
     return promise
@@ -112,9 +123,11 @@ class PrizesPage extends Component {
     return (
       <div id='PrizesPage'>
         <ButtonGroup>
-          <Button className='btn btn-primary'>
-            <FontAwesome icon='plus' /> Create Prize
-          </Button>
+          { !isAdmin( login.code ) &&
+            <Button className='btn btn-primary' onClick={ this.newPrize }>
+              <FontAwesome icon='plus' /> Create Prize
+            </Button>
+          }
           <Button color='primary' onClick={ this.loadPrizes }>
             <InlineSync loading={ loading } /> Refresh
           </Button>
@@ -159,7 +172,7 @@ const mapStateToProps = ({ rewards, login }) => {
 };
 
 const mapDispatchToProps = {
-  getPrizes, updatePrize
+  getPrizes, updatePrize, uploadImage
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )( PrizesPage );

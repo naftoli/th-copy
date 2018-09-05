@@ -10,7 +10,7 @@ import { PrizeRow } from './rows/PrizeRow';
 import { toast } from 'react-toastify';
 // import { makeCancelable } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
-import { getPrize, updatePrize } from 'store/rewards/prizes/operations';
+import { getPrize, updatePrize, createPrize } from 'store/rewards/prizes/operations';
 
 class PrizeModal extends Component {
 
@@ -49,23 +49,25 @@ class PrizeModal extends Component {
   // update the prize
   submit = event => {
     event.preventDefault();
-
     const { prize_id } = this.props.prize;
-
     this.setState({ saving: true });
 
+    // handle create or edit
     let promise;
     if ( prize_id )
       promise = this.props.updatePrize( prize_id, this.state.updates );
-    else {
-      debugger;
-    }
-    
+    else
+      promise = this.props.createPrize( { ...this.props.prize, ...this.state.updates } );
+
+    // handle create and update the same
     promise.then( () => {
       this.props.toggle();
       this.setState({ saving: false, updates: {} }) 
     })
-    .catch( e => toast.error( e.message ) );
+    .catch( e => {
+      this.setState({ saving: false} );
+      toast.error( e.message )
+    });
   }
 
   render() {
@@ -89,13 +91,6 @@ class PrizeModal extends Component {
               onUpdate={ this.onUpdate } 
               onImageEdit={ this.onImageEdit } />
 
-            <pre>
-              { JSON.stringify( this.state, null, 2 ) }
-            </pre>
-            <pre>
-              { JSON.stringify( this.props, null, 2 ) }
-            </pre>
-
           </ModalBody>
           <ModalFooter>
 
@@ -113,7 +108,7 @@ const mapStateToProps = ( state ) => ({
 });
 
 const mapDispatchToProps = {
-  getPrize, updatePrize
+  getPrize, updatePrize, createPrize
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )( PrizeModal );

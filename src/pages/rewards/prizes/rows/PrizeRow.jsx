@@ -39,9 +39,11 @@ export class PrizeRow extends Component {
     // props for all inputs
     const inputProps = { required: true, onChange: this.onChange };
     const bc = isBC( login.code );
+
+    if ( !school && login.code === 'BC' )
+      school = { school_id: login.id }
     
     return (
-
       <Row >
           <Col xs={{ size: 12, order: 1 }} sm='8'>
           <Row>
@@ -83,7 +85,7 @@ export class PrizeRow extends Component {
                 checked={ !!one_per_user }
                 onChange={ this.onToggleChange }/>
             </Col>
-            { bc &&
+            { bc && school && 
               <Col xs={ 6 } sm={ 4 }>
                 <label>Teacher Editing</label><br/>
                 <Toggle 
@@ -96,12 +98,12 @@ export class PrizeRow extends Component {
             }
             </Row>
         </Col>
-        <Col xs='12' sm={{ size: 4, order: 1 }}>
+        <Col xs='12' sm={{ size: 4, order: 1 }} className='prize-picture'>
           <label>Prize Image</label>
           <StorePrize src={ image } onClick={ onImageEdit }/>
         </Col>
 
-        { bc && school &&
+        { bc && 
           <Col xs={{ size: 12, order: 2 }}>
             <label>Limit To Platoon (leave blank for all)</label>
             <PlatoonSelect 

@@ -33,5 +33,17 @@
       border-radius: 5px; border: 1px solid $primary-color; max-height: 210px;
     }
   }
+
+  @media( max-width: 500px ) {
+    .prize-picture {
+      text-align: center;
+      label { width: 100%; }
+    }
+
+    .profile-picture {
+      max-height: 150px;
+      > img.profile-img { max-height: 150px; }
+    }
+  }
   
 }

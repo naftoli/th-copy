@@ -14,6 +14,13 @@ export const setPrizes = prizes => {
   }
 };
 
+export const createPrize = prize => {
+  return {
+    type: types.CREATE_PRIZE,
+    payload: prize
+  }
+};
+
 export const updatePrize = ( id, prize ) => {
   return {
     type: types.UPDATE_PRIZE,
