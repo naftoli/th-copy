@@ -7,7 +7,10 @@ export const Checkbox = ( props ) => {
   // toggle on pressing enter
   let inputRef = null;
   const onKeyPress = ( event ) => {
-    if ( event.key === 'Enter' ) inputRef.click();
+    if ( event.key === 'Enter' ) {
+      event.preventDefault(); // do not submit the parent form
+      inputRef.click();
+    }
   }
   // pass the inputRef up..
   const setupRef = ( ref ) => {

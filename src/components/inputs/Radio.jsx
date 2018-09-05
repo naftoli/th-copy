@@ -7,7 +7,10 @@ export const Radio = ( props ) => {
   // toggle on pressing enter
   const ref = React.createRef();
   const onKeyPress = ( event ) => {
-    if ( event.key === 'Enter' ) ref.current.click();
+    if ( event.key === 'Enter' ) {
+      event.preventDefault(); // do not submit the parent form
+      ref.click();
+    }
   }
 
   return (
