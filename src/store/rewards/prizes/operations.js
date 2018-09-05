@@ -14,6 +14,10 @@ export const getPrizes = () => dispatch => {
 export const getPrize = id => dispatch => {
   return API.get( `/rewards/prizes?id=${id}` )
   .then( handleAPIResponse )
+  .then( prize => {
+    dispatch( actions.updatePrize( id, prize ) );
+    return prize;
+  })
 }
 
 export const updatePrize = ( id, updates ) => dispatch => {

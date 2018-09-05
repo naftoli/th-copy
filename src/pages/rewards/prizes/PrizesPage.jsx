@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 // components
 import { Link } from 'react-router-dom';
 import { Button, ButtonGroup } from 'reactstrap';
+import PrizeModal from './PrizeModal';
 import CropperModal from 'components/modals/CropperModal';
 import { Table, InlineSync, FontAwesome } from 'components/ui';
 // functions
@@ -19,7 +20,8 @@ import {
 class PrizesPage extends Component {
 
   state = { 
-    modal: { show: false, id: false, src: false } 
+    cropperModal: { show: false, id: false, src: false },
+    prizeModal: { show: false, prize: {} }
   };
 
   componentDidMount() { 
@@ -27,17 +29,34 @@ class PrizesPage extends Component {
     this.loadPrizes(); 
   }
   // Network
-  loadPrizes = () => { this.props.getPrizes(); }
+  loadPrizes = () => {
+    this.props.getPrizes()
+    .catch( e => toast.error( e.message ) );
+  }
 
   // update base logos from master page
-  toggle = () => this.setState({ modal: { ...this.state.modal, show: false } });
-  editPicture = id => ({ target }) => this.setState({ modal: { show: true, id, src: target.src } });
-  upload = formData => { 
-    return this.props.updatePrize( this.state.modal.id, formData )
-      .then( this.toggle )
-      .catch( e => { toast.error( e.message ); });
+  togglePrize = () => this.setState({
+    prizeModal: { ...this.state.prizeModal, show: false }
+  });
+  editPrize = ( prize ) => () => {
+    this.setState({
+      prizeModal: { show: true, prize }
+    })
+  }
+
+  toggleCropper = () => this.setState({
+    cropperModal: { ...this.state.cropperModal, show: false }
+  });
+  editPicture = id => ({ target }) => this.setState({ cropperModal: {
+    show: true, id, src: target.src }
+  });
+  
+  upload = formData => {
+    debugger;
+    // return this.props.updatePrize( this.state.modal.id, formData )
+    //   .then( this.toggleCropper )
+    //   .catch( e => { toast.error( e.message ); });
   };
-  // upload = formData => this.props.updateBase( this.state.modal.id, formData );
 
   updateToggle = ( key, id ) => e => {
     return this.props.updatePrize( id, { [key]: e.target.checked ? 1 : 0 } )
@@ -58,13 +77,15 @@ class PrizesPage extends Component {
   }
 
   render() {
+    const { prizeModal, cropperModal } = this.state;
     const { prizes, loading, match, login } = this.props;
-    const { modal } = this.state;
+    const { editPrize, editPicture, updateToggle } = this;
 
-    let columns = getColumns(
-      this.editPicture, match.path, 
-      this.updateToggle, isAdmin( login.code )
-    );
+    let columns = getColumns({
+      path: match.path,
+      admin: isAdmin( login.code ),
+      editPrize, editPicture, updateToggle
+    });
 
     if ( isAdmin( login.code ) )
       columns.push(
@@ -95,10 +116,19 @@ class PrizesPage extends Component {
           loading={ loading && !prizes.length } 
           pageId='PrizesPage' />
 
+        <PrizeModal
+          prize = { prizeModal.prize }
+          toggle={ this.togglePrize }
+          isOpen = { prizeModal.show }
+          />
+
         <CropperModal 
-          fileName='image' isOpen={ modal.show }
-          src={ modal.src } toggle={ this.toggle }
+          fileName='image'
+          src={ cropperModal.src }
+          isOpen={ cropperModal.show }
+          toggle={ this.toggleCropper }
           uploadImage={ this.upload } />
+
       </div>
     );
   }
