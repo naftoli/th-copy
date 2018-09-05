@@ -47,6 +47,8 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
     // set the platoons in the DBS, return true or false
     public function setPlatoons( $class_ids ) {
         global $POINTS_DB;
+
+        if ( !is_array( $class_ids ) ) return false;
         
         // delete all existing connections
         $delete = $POINTS_DB->prepare( 'DELETE FROM prize_classes WHERE prize_id = ?;' );
@@ -116,7 +118,7 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
         $default_options = [
             'only' => [
                 'prize_id','prize_name', 'institution_id', 'points', 'prize_description', 
-                'one_per_user', 'prize_count', 'is_active', 'teacher_edit', 'modified'
+                'one_per_user', 'prize_count', 'is_active', 'teacher_edit', 'modified', 'image_id'
             ],
             'include' => [ 'school' => [ 'only' => [ 'school_name', 'school_id', 'school_number' ] ] ],
             'methods' => [ 'image', 'platoons', 'editable' ]
