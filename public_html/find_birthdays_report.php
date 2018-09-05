@@ -215,6 +215,7 @@ require_once('calendar.php');
 					<td> <?= $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] ) ?></td>
 					<td> <?= $user['first'] ?> </td>
 					<td> <?= $user['last'] ?> </td>
+					<td> <?= $user['first_he'] ?> </td>
 					<td> <?= $user['last_he'] ?> </td>
 					<td><?= $_POST['dob'] == 'en' ? $user['dob'] : $user['dob_he'] ?></td>
 				</tr>

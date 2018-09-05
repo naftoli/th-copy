@@ -9,7 +9,7 @@ class MyShliachHachayol {
 	}	
 	
 	private function setInfo( $noShip, $id ) {
-		$sql = "select a.*, a.first as afirst, a.last as alast, u.* from admins a 
+		$sql = "SELECT a.*, a.first as afirst, a.last as alast, u.* from admins a 
 				join admin_auths aa using (admin_id) 
 				join users u on aa.id = u.user_id 
 				where aa.auth = 'user' 

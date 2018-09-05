@@ -44,17 +44,21 @@ function get_hachayols($school_id, $start_date, $end_date){
     
     foreach($prints as $print){ // for each hachayol print;
         $ship_date = $print['ship_date'];
+        
         $hachayol_count_sql = "SELECT school_id, SUM(total) as total, SUM(teacher_total) as teachers FROM ( "
             ."SELECT school_id, COUNT(*) as total, 0 as teacher_total FROM users WHERE user_registered > 0 AND user_registered < '$ship_date' ";
-        if($school_id) $hachayol_count_sql .= "AND school_id = $school_id ";
+        if( $school_id ) $hachayol_count_sql .= "AND school_id = $school_id ";
+        
         $hachayol_count_sql .= "GROUP BY school_id UNION "
-            ."SELECT school_id, COUNT(*) as total, COUNT(*) as teacher_total FROM classes WHERE class_era = 0 ";
-            if($school_id) $hachayol_count_sql .= "AND school_id = $school_id ";
-        $hachayol_count_sql .= "GROUP BY school_id, class_teacher "
+            ." SELECT DISTINCT school_id, 0 AS total, COUNT(*) AS teacher_total FROM classes c "
+            ." JOIN schools s USING (school_id) WHERE c.class_era = 0 ";
+            if ( $school_id ) $hachayol_count_sql .= "AND school_id = $school_id ";
+
+        $hachayol_count_sql .= "GROUP BY school_id "
             .") AS SQ GROUP BY school_id";
         
         $hachayol_count_query = mysql_query($hachayol_count_sql); // excecute the query we generated....
-        
+
         while($hachayol_count_row = mysql_fetch_assoc($hachayol_count_query)){
             $ajax = "hachayol:".$hachayol_count_row['school_id'].":".$print['hachayol_id'].":".$hachayol_count_row['total'];
             $shipping_info = get_hachayol_shipping($hachayol_count_row['school_id'], $print['hachayol_id'])[0];
@@ -67,7 +71,7 @@ function get_hachayols($school_id, $start_date, $end_date){
                 'shipment_id'   => $shipping_info['shipment_id'],
                 // totals for rendering
                 'hachayol_qty'  => $hachayol_count_row['total'],
-                'student_qty'   => $hachayol_count_row['total'] - $hachayol_count_row['teachers'],
+                'student_qty'   => $hachayol_count_row['total'],
                 'teacher_qty'   => $hachayol_count_row['teachers']
             ];
         }
