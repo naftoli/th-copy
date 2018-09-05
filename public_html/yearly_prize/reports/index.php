@@ -33,7 +33,9 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             for the complete rewards manual
         </p>
         <h2>Reports</h2>
-        <div id="action-links">
+
+        <strong>Coming Soon!!!</strong>
+        <!-- <div id="action-links">
             <a href="eligible_students.php">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="tickets"/>
@@ -46,7 +48,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Over 160 Days of missions (Yearly Raffle)</span>
                 </div>
             </a>
-        </div>
+        </div> -->
         
     </body>
 </html>

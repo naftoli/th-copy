@@ -12,6 +12,9 @@ if($debug) echo "<pre>";
 $admin_auth = array('school'); 
 require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 
+if ( $admin_user['auth'] == 'super' ) {
+    header( 'Location: /yearly_prize/reports/' ); die();
+}
 /***************** EXTERNAL DEPENDENCIES **********************/
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.schoolsUsers.php';

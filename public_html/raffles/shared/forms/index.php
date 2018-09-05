@@ -48,7 +48,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
-        <h2>Yearly Raffle</h2>
+        <!-- <h2>Yearly Raffle</h2>
         <div id="action-links">
             <a href="../../yearly/eligibility_report.php">
                 <div class="button">
@@ -68,7 +68,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Print Posters</span>
                 </div>
             </a>
-        </div>
+        </div> -->
         <?if ($admin_user['auth'] == 'super') {?>
             <h2>Administration Forms</h2>
             <div id="action-links">
