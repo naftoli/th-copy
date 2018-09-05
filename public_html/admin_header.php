@@ -359,7 +359,7 @@ $bpOnly = [ 82 ];
 								</div>
 							</a>
 						</li>
-						<?php if ( property_exists( $admin, 'beta' ) && $admin->beta ) { ?>
+						<?php if ( $admin_user["beta"] ) { ?>
 							<ul class="list_second">
 								<li>
 									<a href="#"><?=T_('Soldiers')?></a>

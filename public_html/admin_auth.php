@@ -12,7 +12,7 @@ if (!function_exists('check_auth_admin')) {
 
 		if ($admin_id && !empty($auth)) {
 			
-			$sql = "SELECT username, password, auth, first, last, lang, camp_id, is_parent, admin_email FROM admins WHERE admin_id=" . $admin_id;
+			$sql = "SELECT username, password, auth, first, last, lang, camp_id, is_parent, admin_email, beta FROM admins WHERE admin_id=" . $admin_id;
 			$result = mysql_query($sql) or die('Query failed 1');
 			
 			if ($row = mysql_fetch_assoc($result)) {
@@ -30,6 +30,7 @@ if (!function_exists('check_auth_admin')) {
 					$admin_user['lang']			= $lang = $row['lang'];
 					$admin_user['auth'] 		= $row['auth'];
 					$admin_user["is_parent"] 	= $row["is_parent"];
+					$admin_user["beta"] 		= $row["beta"];
 					$admin_user["no_of_children"] = 0;
 					
 					$allow = $row['auth'] == 'super'; //not super? then start at false, and check below
