@@ -39,7 +39,7 @@ while ($row = mysql_fetch_assoc($query))
 	array_push($classes, $class);
 }
 
-$sql = "school_id=" . $_GET["school_id"] . " ";
+$sql = "school_id=" . $_GET["school_id"] . " AND chayolei = 1 ";
 if ($class_id > 0)
 	$sql = $sql . "AND class_id=" . $class_id . " ";
 if ($first != "")
