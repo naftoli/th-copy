@@ -7,6 +7,7 @@ body { font-family: 'Poppins', sans-serif; }
 
 // hebrew text
 span.hebrew { display: inline-block; }
+a[tabindex]:hover { cursor: pointer; }
 
 .form-control:focus {
   border-color: $primary-color-focus;
