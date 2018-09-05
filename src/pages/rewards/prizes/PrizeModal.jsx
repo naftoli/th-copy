@@ -2,18 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // components
-import {
-  Modal, ModalHeader, ModalBody, ModalFooter, 
-  Row, Col
-} from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { SaveButton } from 'components/buttons';
-import { StorePrize } from 'components/ui';
 // rows
 import { PrizeRow } from './rows/PrizeRow';
 // functions
 import { toast } from 'react-toastify';
-import { makeCancelable } from 'functions/utils';
-// import { isAdmin, isBC } from 'functions/login';
+// import { makeCancelable } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
 import { getPrize, updatePrize } from 'store/rewards/prizes/operations';
 
@@ -24,7 +19,8 @@ class PrizeModal extends Component {
     login: PropTypes.object,
     isOpen: PropTypes.bool,
     toggle: PropTypes.func,
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func,
+    editPicture: PropTypes.func
   }
 
   static defaultProps = {
@@ -37,13 +33,17 @@ class PrizeModal extends Component {
   }
 
   componentDidUpdate({ prize }) {
-    if ( prize !== this.props.prize )
+    if ( prize.prize_id !== this.props.prize.prize_id )
       this.setState({ updates: {} });
   }
 
   onUpdate = updates => {
     updates = filterUpdates( this.props.prize, { ...this.state.updates, ...updates } );
     this.setState({ updates });
+  }
+
+  onImageEdit = ( e ) => {
+    this.props.editPicture( this.props.prize.prize_id )( e );
   }
 
   // update the prize
@@ -75,20 +75,26 @@ class PrizeModal extends Component {
 
     prize = { ...prize, ...updates };
 
+    const editing = !!prize.prize_id;
+
     return (
       <Modal isOpen={ isOpen } toggle={ toggle } centered id='PrizeModal'>
-        <ModalHeader toggle={ toggle }>Prize</ModalHeader>
+        <ModalHeader toggle={ toggle }>{ editing ? 'Edit' : 'Create' } Prize</ModalHeader>
         <form onSubmit={ this.submit }>
           <ModalBody>
             
             <PrizeRow
               { ...prize }
-              login={ login } 
-              onUpdate={ this.onUpdate } />
+              login={ login }
+              onUpdate={ this.onUpdate } 
+              onImageEdit={ this.onImageEdit } />
 
-            {/* <pre>
+            <pre>
               { JSON.stringify( this.state, null, 2 ) }
-            </pre> */}
+            </pre>
+            <pre>
+              { JSON.stringify( this.props, null, 2 ) }
+            </pre>
 
           </ModalBody>
           <ModalFooter>

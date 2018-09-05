@@ -52,11 +52,28 @@ class PrizesPage extends Component {
   });
   
   upload = formData => {
-    debugger;
-    // return this.props.updatePrize( this.state.modal.id, formData )
-    //   .then( this.toggleCropper )
-    //   .catch( e => { toast.error( e.message ); });
+    let promise;
+    // if we are editing a prize...
+    if ( this.state.cropperModal.id ) {
+      promise = this.props.updatePrize( this.state.cropperModal.id, formData )
+    } else {
+      debugger;
+    }
+    // return the promise
+    return promise
+      .then( prize => this.updatePrizePicture( prize ) ) // update the prize modal to the new image
+      .then( () => this.toggleCropper() ) // toggle the image editing modal
+      .catch( e => toast.error( e.message ) ); // catch and show any errors
   };
+  // update the image in the modals nested structure
+  updatePrizePicture = ({ image, image_id }) => {
+    this.setState({
+      prizeModal: {
+        ...this.state.prizeModal,
+        prize: { ...this.state.prizeModal.prize, image, image_id }
+      }
+    });
+  }
 
   updateToggle = ( key, id ) => e => {
     return this.props.updatePrize( id, { [key]: e.target.checked ? 1 : 0 } )
@@ -78,12 +95,10 @@ class PrizesPage extends Component {
 
   render() {
     const { prizeModal, cropperModal } = this.state;
-    const { prizes, loading, match, login } = this.props;
+    const { prizes, loading, login } = this.props;
     const { editPrize, editPicture, updateToggle } = this;
 
     let columns = getColumns({
-      path: match.path,
-      admin: isAdmin( login.code ),
       editPrize, editPicture, updateToggle
     });
 
@@ -120,6 +135,7 @@ class PrizesPage extends Component {
           prize = { prizeModal.prize }
           toggle={ this.togglePrize }
           isOpen = { prizeModal.show }
+          editPicture={ editPicture }
           />
 
         <CropperModal 

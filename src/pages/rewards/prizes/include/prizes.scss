@@ -6,7 +6,7 @@
   .inline-profile {
     max-height: 65px;
     width: 65px;
-    border-radius: 15%;
+    border-radius: 5px;
     border: 1px solid $primary-color;
   }
   
@@ -22,4 +22,16 @@
   color: green; font-size: 1.3em;
   &.low { color: red; }
   &.warning { color: orange; }
+}
+
+#PrizeModal {
+  max-width: 700px;
+
+  .profile-picture {
+    max-width: fit-content; max-height: 210px;
+    > img.profile-img {
+      border-radius: 5px; border: 1px solid $primary-color; max-height: 210px;
+    }
+  }
+  
 }
