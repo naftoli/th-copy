@@ -66,10 +66,22 @@ $date = $dates[$month];
                 width: 15px;
                 background-color: #eee;
             }
+            @media print {
+                .no-print {
+                    display: none;
+                }
+            }
+            .no-print {
+                color: red;
+                font-weight: bold;
+            }
         </style>
     </head>
 
     <body>
+    <p class="no-print">
+        Please Note: When printing this page, please use firefox, make sure to have the "Print Background" option clicked (in Page Setup) and scale to 95%
+    </p>
     <?php 
     foreach ( $schoolsUsers as $school => $users ) {
         $j = 0;
