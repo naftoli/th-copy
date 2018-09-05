@@ -47,3 +47,8 @@
   }
   
 }
+
+.react-select__input input {
+  max-width: 375px;
+  text-overflow: ellipsis;
+}
