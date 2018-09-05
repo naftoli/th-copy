@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
 // components
 import ReactSelect from 'react-select';
+import ReactSelectCreatable from 'react-select/lib/Creatable';
 
 function withDefaultProps( Select ){
   return class extends Component {
     render() {
       return (
-        <Select openMenuOnFocus { ...this.props } classNamePrefix="react-select" menuPlacement="auto"/>
-      )
+        <Select 
+          openMenuOnFocus
+          { ...this.props }
+          menuPlacement="auto" 
+          classNamePrefix="react-select" />
+      );
     }
   }
 }
 
-export default withDefaultProps( ReactSelect );
+export const Select = withDefaultProps( ReactSelect );
+export const Creatable = withDefaultProps( ReactSelectCreatable );

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 // components
 import { Row, Col, Input } from 'reactstrap';
-import { PlatoonSelect, Toggle } from 'components/inputs';
+import { PlatoonSelect, Toggle, Creatable } from 'components/inputs';
 import { StorePrize } from 'components/ui';
 // functions
 import { eventToUpdate } from 'functions/events';
-import { isBC } from 'functions/login';
+import { isBC, isAdmin } from 'functions/login';
 
-export class PrizeRow extends Component {
+export class PrizeForm extends Component {
 
   static defaultProps = {
     platoons: []
@@ -17,15 +17,23 @@ export class PrizeRow extends Component {
     this.props.onUpdate( eventToUpdate( target, 'name' ) );
   }
 
+  onTemplateChange = option => {
+    let { value, label, ...template } = option;
+
+    if ( template.__isNew__ )
+      this.props.onUpdate({ prize_name: label });
+    else
+      this.props.onUpdate({ ...template });
+  }
+
   // handle react-select dropdown change events
   onPlatoonChange = ( options ) => {
     let updates = { platoons: options.map( option => option.value ) };
-    
-    if ( options.length !== 1 ) updates.teacher_edit = 0;
-
+    if ( options.length !== 1 )
+      updates.teacher_edit = 0;
     this.props.onUpdate( updates );
   };
-  // 
+  // handle toggle's on the page
   onToggleChange = ({ target }) => {
     this.props.onUpdate({ [target.name]: target.checked ? 1 : 0 });
   }
@@ -34,15 +42,23 @@ export class PrizeRow extends Component {
     let { 
       platoons, prize_name, prize_description, prize_count, points,
       one_per_user, is_active, teacher_edit, school, image, login,
-      onImageEdit
+      onImageEdit, editing
     } = this.props;
     // props for all inputs
     const inputProps = { required: true, onChange: this.onChange };
-    const bc = isBC( login.code );
+    const bc = isBC( login.code, true );
 
     if ( !school && login.code === 'BC' )
       school = { school_id: login.id }
     
+    const templates = [
+      { 
+        value: 'Say Posuk at Line Up', label: 'Say Posuk at Line Up', prize_name: 'Say Posuk at Line Up',
+        points: 8000, is_active: 1, one_per_user: 2, image_id: '163933.20180904172354.png',
+        image: '/v2/images/imgsrepo/163933.20180904172354.png'
+      }
+    ]
+
     return (
       <Row >
           <Col xs={{ size: 12, order: 1 }} sm='8'>
@@ -50,8 +66,13 @@ export class PrizeRow extends Component {
 
             <Col xs={ 12 }>
               <label>Prize Name</label>
-              <Input name='prize_name' value={ prize_name || '' } { ...inputProps } 
-                pattern='^.{3,80}$' title="3 to 80 letters" maxLength={ 80 } />
+              { editing && 
+                <Input name='prize_name' value={ prize_name || '' } { ...inputProps } 
+                  pattern='^.{3,80}$' title="3 to 80 letters" maxLength={ 80 } />
+              }
+              { !editing && !isAdmin( login.code ) && 
+                <Creatable onChange={ this.onTemplateChange } options={ templates } />
+              }
               <div className='invalid-message'>Please enter 3 to 80 characters</div>
             </Col>
 

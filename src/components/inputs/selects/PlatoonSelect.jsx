@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // components
-import Select from './Select';
+import { Select } from './Select';
 // functions
 import { findOption } from 'functions/selects';
 import { makeCancelable } from 'functions/utils/promises';

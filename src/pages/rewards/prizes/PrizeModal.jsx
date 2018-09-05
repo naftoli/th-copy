@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { SaveButton } from 'components/buttons';
 // rows
-import { PrizeRow } from './rows/PrizeRow';
+import { PrizeForm } from './PrizeForm';
 // functions
 import { toast } from 'react-toastify';
 // import { makeCancelable } from 'functions/utils';
@@ -85,9 +85,10 @@ class PrizeModal extends Component {
         <form onSubmit={ this.submit }>
           <ModalBody>
             
-            <PrizeRow
+            <PrizeForm
               { ...prize }
               login={ login }
+              editing={ editing }
               onUpdate={ this.onUpdate } 
               onImageEdit={ this.onImageEdit } />
 

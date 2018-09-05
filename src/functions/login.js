@@ -20,7 +20,10 @@ export const isAdmin = code => {
   return [ 'HQ', 'INST' ].includes( code );
 }
 
-export const isBC = code => {
+export const isBC = ( code, only = false ) => {
+  if ( only ) {
+    return [ 'BC' ].includes( code );
+  }
   return [ 'HQ', 'INST', 'BC' ].includes( code );
 }
 
