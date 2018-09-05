@@ -343,20 +343,16 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
 	<h2>Tzivos Hashem Updates</h2>
 	
 	<?
-	$regYear = GlobalSettings::getRegistrationYear();
+	$regYear = GlobalSettings::getRegistrationYear( $school_id );
 
-	$qry = "SELECT COUNT(user_id) AS total FROM user_registration "
-		."WHERE school_id = $school_id AND year = $regYear;";
+	$qry = " SELECT COUNT(*) AS soldiers, SUM(CASE WHEN paid > 0 THEN 1 ELSE 0 END) AS total "
+		." FROM users u JOIN schools s USING (school_id) "
+		." LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = $regYear "
+        ." WHERE u.chayolei = 1 AND u.school_id = $school_id;";
 	$resultQ = mysql_query($qry);
 	$rowQ = mysql_fetch_assoc($resultQ);
 	$registered = $rowQ['total'];
-
-	$qry2 = "SELECT COUNT(user_id) AS total FROM users u "
-		."LEFT JOIN user_registration USING (user_id) "
-		."WHERE u.school_id = $school_id AND ( year = $regYear OR year is null );";
-	$resultQ2 = mysql_query($qry2);
-	$rowQ2 = mysql_fetch_assoc($resultQ2);
-	$notRegistered = $rowQ2['total'];
+	$notRegistered = $rowQ['soldiers'] - $rowQ['total'];
 
 	$school_registered_query = mysql_query(
 		"SELECT COUNT(*) as total, date_paid FROM school_registrations WHERE school_id = $school_id AND year = $regYear;"
