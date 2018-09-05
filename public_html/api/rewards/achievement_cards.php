@@ -5,11 +5,9 @@ include_once( __DIR__ . "/../header/header.php" );
 class CardsRouter {
 
     public function index() {
-        // $card = AchievementCard::find( 3497391 );
         // Get available Miles (and other info?)
         return json_response([
             'miles' => $this->getMiles(),
-            // 'card' => $card,
         ]);
     }
 
