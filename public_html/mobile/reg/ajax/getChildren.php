@@ -39,7 +39,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 $children = array();
 //need to have multiple result rows to get highest rank
 $sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, s.shipping_method, c.class_grade, u.user_id, u.first, u.last, "
-	." u.first_he, u.last_he, u.lang_id, "
+	." u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, "
 	." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, r.rank_ord, r.rank_name, r.rank_image_id "
 	." FROM users u "
     ." JOIN schools s USING (school_id) "
@@ -67,7 +67,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 	$children[$row['user_id']]['schoolRegistered'] = $row['school_era'] > 0 ? 0 : 1;
 	$children[$row['user_id']]['anashkinder'] = $row['school_id'] == 269 ? 1 : 0;
 	$children[$row['user_id']]['myshliach'] = $row['school_id'] == 61 ? 1 : 0;
-	$children[$row['user_id']]['chidon'] = $CHIDON_ACTIVE && intval($row['class_grade']) > 3 ? 1 : 0;
+	$children[$row['user_id']]['chidon'] = $CHIDON_ACTIVE && intval($row['class_grade']) > 3 ? 1 : 0 && $row['chidon'];
 	$children[$row['user_id']]['chidonRegistered'] = 0;
 	$children[$row['user_id']]['chayolei'] = 1;
     $children[$row['user_id']]['user_registered'] = $row['user_registered'];
@@ -77,8 +77,8 @@ while ( $row = mysql_fetch_assoc($result) ) {
 	$children[$row['user_id']]['shipping'] = $row['shipping_method'];
     
     $reg_query = mysql_query(
-        "SELECT !ISNULL(tc.th_chidon_id) AS reg_chidon, !ISNULL(ur.user_reg_id) AS reg_chayolei, u.chayolei, "
-        ."sri.date_paid AS registered FROM users u "
+        "SELECT !ISNULL(tc.th_chidon_id) AS reg_chidon, !ISNULL(ur.user_reg_id) AS reg_chayolei,"
+        ."sri.date_paid AS registered, u.chayolei, u.chidon FROM users u "
         ."LEFT JOIN th_chidon tc ON u.user_id = tc.user_id and year = $chidon_year "
         ."LEFT JOIN user_registration ur ON u.user_id = ur.user_id and ur.year = $reg_year "
         ."LEFT JOIN school_registrations sri ON u.school_id = sri.school_id AND sri.year = $reg_year "
@@ -106,8 +106,9 @@ while ( $row = mysql_fetch_assoc($result) ) {
     } 
     
     // chidon regustration
-    if ( !$row['reg_chidon'] && // if not in chidon
-		$row['class_grade'] >= 4 // and in grade 4+
+    if ( !$row['reg_chidon'] // if not in chidon
+		&& $row['class_grade'] >= 4 // and in grade 4+
+		&& $row['chidon'] // make sure the kid is in chidon
 		//&& in_array( $row['school_id'], $australia ) // and not in australia..
     ) {
         $children[ $row['user_id'] ]['needsReg'] = 1;
