@@ -11,15 +11,6 @@ export const getPrizes = () => dispatch => {
   });
 }
 
-export const getPrize = id => dispatch => {
-  return API.get( `/rewards/prizes?id=${id}` )
-  .then( handleAPIResponse )
-  .then( prize => {
-    dispatch( actions.updatePrize( id, prize ) );
-    return prize;
-  })
-}
-
 export const createPrize = prize => dispatch => {
   return API.post( `/rewards/prizes`, prize )
   .then( handleAPIResponse )
@@ -35,6 +26,16 @@ export const updatePrize = ( id, updates ) => dispatch => {
   .then( prize => { 
     dispatch( actions.updatePrize( id, prize ) ); 
     return prize;
+  });
+}
+
+export const getTemplates = () => dispatch => {
+  dispatch( actions.setLoading( true ) );
+  return API.get( `/rewards/templates` )
+  .then( handleAPIResponse )
+  .then( templates => { 
+    dispatch( actions.setTemplates( templates ) ); 
+    return templates;
   });
 }
 

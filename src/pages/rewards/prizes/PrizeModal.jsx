@@ -10,7 +10,7 @@ import { PrizeForm } from './PrizeForm';
 import { toast } from 'react-toastify';
 // import { makeCancelable } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
-import { getPrize, updatePrize, createPrize } from 'store/rewards/prizes/operations';
+import { updatePrize, createPrize } from 'store/rewards/prizes/operations';
 
 class PrizeModal extends Component {
 
@@ -35,6 +35,14 @@ class PrizeModal extends Component {
   componentDidUpdate({ prize }) {
     if ( prize.prize_id !== this.props.prize.prize_id )
       this.setState({ updates: {} });
+
+    if ( prize.image !== this.props.prize.image && this.state.updates.image ) {
+      this.setState({ updates: { 
+        ...this.state.updates, 
+        image: this.props.prize.image, 
+        image_id: this.props.prize.image_id 
+      }});
+    }
   }
 
   onUpdate = updates => {
@@ -49,7 +57,11 @@ class PrizeModal extends Component {
   // update the prize
   submit = event => {
     event.preventDefault();
-    const { prize_id } = this.props.prize;
+    const { prize_id, prize_name } = this.props.prize;
+
+    if ( !prize_name && !this.state.updates.prize_name )
+      return toast.error('You must enter a prize name');
+
     this.setState({ saving: true });
 
     // handle create or edit
@@ -72,12 +84,16 @@ class PrizeModal extends Component {
 
   render() {
     let { updates, saving } = this.state;
-    let { prize, login, toggle, isOpen } = this.props;
+    let { prize, login, toggle, isOpen, templates } = this.props;
     const updated = Object.keys( updates ).length > 0;
 
     prize = { ...prize, ...updates };
 
     const editing = !!prize.prize_id;
+
+    templates = templates.map( template => ({
+      label: template.prize_name, value: template.prize_name, ...template
+    }))
 
     return (
       <Modal isOpen={ isOpen } toggle={ toggle } centered id='PrizeModal'>
@@ -86,9 +102,10 @@ class PrizeModal extends Component {
           <ModalBody>
             
             <PrizeForm
-              { ...prize }
+              prize={ prize }
               login={ login }
               editing={ editing }
+              templates={ templates }
               onUpdate={ this.onUpdate } 
               onImageEdit={ this.onImageEdit } />
 
@@ -105,11 +122,12 @@ class PrizeModal extends Component {
 }
 
 const mapStateToProps = ( state ) => ({
-  login: state.login.current_login
+  login: state.login.current_login,
+  templates: state.rewards.prizes.templates
 });
 
 const mapDispatchToProps = {
-  getPrize, updatePrize, createPrize
+  updatePrize, createPrize
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )( PrizeModal );

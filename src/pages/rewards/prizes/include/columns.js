@@ -73,6 +73,9 @@ export function getColumns({
           disabled={ !original.editable } 
           checked={ !!value } 
           onChange={ updateToggle( 'one_per_user', original.prize_id ) } />,
-    }
+    },
+
+    { Header: 'Platoons', id: 'platoons', 
+      accessor: ({ platoons }) =>platoons.length > 0 ? platoons.length : 'All' },
   ];
 }

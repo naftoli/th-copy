@@ -1,24 +1,20 @@
 import React, { Component } from 'react';
 // components
-import { Row, Col, Input } from 'reactstrap';
+import { StorePrize, FontAwesome } from 'components/ui';
+import { Row, Col, Input, UncontrolledTooltip } from 'reactstrap';
 import { PlatoonSelect, Toggle, Creatable } from 'components/inputs';
-import { StorePrize } from 'components/ui';
 // functions
 import { eventToUpdate } from 'functions/events';
 import { isBC, isAdmin } from 'functions/login';
 
 export class PrizeForm extends Component {
 
-  static defaultProps = {
-    platoons: []
-  }
-
   onChange = ({ target }) => {
     this.props.onUpdate( eventToUpdate( target, 'name' ) );
   }
 
   onTemplateChange = option => {
-    let { value, label, ...template } = option;
+    let { value, label, prize_id, ...template } = option;
 
     if ( template.__isNew__ )
       this.props.onUpdate({ prize_name: label });
@@ -39,11 +35,11 @@ export class PrizeForm extends Component {
   }
 
   render () {
+    let { login, onImageEdit, editing, templates, prize } = this.props;
     let { 
-      platoons, prize_name, prize_description, prize_count, points,
-      one_per_user, is_active, teacher_edit, school, image, login,
-      onImageEdit, editing
-    } = this.props;
+      platoons = [], prize_name, prize_description, prize_count, points,
+      one_per_user, is_active, teacher_edit, school, image
+    } = prize;
     // props for all inputs
     const inputProps = { required: true, onChange: this.onChange };
     const bc = isBC( login.code, true );
@@ -51,14 +47,6 @@ export class PrizeForm extends Component {
     if ( !school && login.code === 'BC' )
       school = { school_id: login.id }
     
-    const templates = [
-      { 
-        value: 'Say Posuk at Line Up', label: 'Say Posuk at Line Up', prize_name: 'Say Posuk at Line Up',
-        points: 8000, is_active: 1, one_per_user: 2, image_id: '163933.20180904172354.png',
-        image: '/v2/images/imgsrepo/163933.20180904172354.png'
-      }
-    ]
-
     return (
       <Row >
           <Col xs={{ size: 12, order: 1 }} sm='8'>
@@ -66,31 +54,37 @@ export class PrizeForm extends Component {
 
             <Col xs={ 12 }>
               <label>Prize Name</label>
-              { editing && 
+              { ( editing || prize_name ) && 
                 <Input name='prize_name' value={ prize_name || '' } { ...inputProps } 
-                  pattern='^.{3,80}$' title="3 to 80 letters" maxLength={ 80 } />
+                  pattern='^.{3,50}$' title="3 to 50 letters" maxLength={ 50 } />
               }
-              { !editing && !isAdmin( login.code ) && 
-                <Creatable onChange={ this.onTemplateChange } options={ templates } />
+              { !editing && !isAdmin( login.code ) && !prize_name &&
+                <Creatable 
+                  placeholder={ prize_name || 'Select Template / Create New' }
+                  options={ templates } 
+                  openMenuOnFocus={ false }
+                  onChange={ this.onTemplateChange } 
+                  isValidNewOption={ val => val.length >= 3 && val.length <= 50 } />
               }
-              <div className='invalid-message'>Please enter 3 to 80 characters</div>
+              <div className='invalid-message'>Must be between 3 - 50 characters</div>
             </Col>
 
-            <Col xs={ 12 } sm={ 6 }>
+            <Col xs={ 6 } >
               <label>Price (in miles)</label>
               <Input type='number' name='points' value={ points || '' } { ...inputProps } min="1" max="999999" />
-              <div className='invalid-message'>Prizes must cost between 1 and 1,000,000 miles</div>
+              <div className='invalid-message'>Must be between 1 - 1,000,000 miles</div>
             </Col>
 
-            <Col xs={ 12 } sm={ 6 }>
+            <Col xs={ 6 } >
               <label>In Stock</label>
               <Input type='number' name='prize_count' value={ prize_count || '' } { ...inputProps } min="0" max="99999999999" />
-              <div className='invalid-message'>Stock must between 0 and 100,000,000,000.</div>
+              <div className='invalid-message'>Must be between 0 - 100,000,000,000</div>
             </Col>
 
             <Col xs={ 6 } sm={ bc ? 4 : 6 }>
-              <label>Active</label><br/>
+              <label htmlFor='is_active'>Active</label><br/>
               <Toggle 
+                id='is_active'
                 name='is_active'
                 className='large'
                 checked={ !!is_active }
@@ -98,17 +92,21 @@ export class PrizeForm extends Component {
             </Col>
 
             <Col xs={ 6 } sm={ bc ? 4 : 6 }>
-              <label>1 per Soldier</label><br/>
+              <label htmlFor='one_per_user'>1 per Soldier</label><br/>
               <Toggle 
                 className='large' 
-                on='yes' off='no' 
+                on='yes' off='no'
+                id='one_per_user'
                 name='one_per_user'
                 checked={ !!one_per_user }
                 onChange={ this.onToggleChange }/>
             </Col>
             { bc && school && 
               <Col xs={ 6 } sm={ 4 }>
-                <label>Teacher Editing</label><br/>
+                <label id='teacherEdit'>Teacher Editing</label><br/>
+                <UncontrolledTooltip placement="top" target="teacherEdit" autohide={ false }>
+                  When limited to a single platoon, toggle this setting to allow teachers of that platoon to edit this prize.
+                </UncontrolledTooltip>
                 <Toggle 
                   name='teacher_edit'
                   className='large'

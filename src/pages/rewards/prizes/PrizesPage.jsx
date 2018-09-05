@@ -13,7 +13,8 @@ import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
 import { 
-  getPrizes, updatePrize, uploadImage
+  getPrizes, updatePrize, uploadImage,
+  getTemplates
 } from 'store/rewards/prizes/operations';
 // styles
 import './include/prizes.scss';
@@ -34,6 +35,10 @@ class PrizesPage extends Component {
   loadPrizes = () => {
     this.props.getPrizes()
     .catch( e => toast.error( e.message ) );
+    // load all templates if we can create prizes
+    if ( !isAdmin( this.props.login.code ) )
+      this.props.getTemplates()
+      .catch( e => toast.error( e.message ) );
   }
 
   // update prizes in a modal ( not much data )
@@ -172,7 +177,8 @@ const mapStateToProps = ({ rewards, login }) => {
 };
 
 const mapDispatchToProps = {
-  getPrizes, updatePrize, uploadImage
+  getPrizes, updatePrize, uploadImage,
+  getTemplates
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )( PrizesPage );

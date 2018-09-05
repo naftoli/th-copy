@@ -2,7 +2,8 @@ import * as types from './types';
 
 export const initialState = {
   loading: false,
-  prizes: []
+  prizes: [],
+  templates: [],
 };
 
 export default ( state = initialState, action ) => {
@@ -21,11 +22,24 @@ export default ( state = initialState, action ) => {
         loading: false
       };
 
+    case types.SET_TEMPLATES:
+      return { 
+        ...state, 
+        templates: action.payload, 
+        loading: false
+      };
+
     // add prize to top of list becuase it is new ;-)
     case types.CREATE_PRIZE:
       return { 
         ...state, 
         prizes: [ action.payload, ...state.prizes ], 
+      };
+
+    case types.CREATE_TEMPLATE:
+      return { 
+        ...state, 
+        templates: [ action.payload, ...state.templates ], 
       };
 
     case types.UPDATE_PRIZE:
@@ -35,6 +49,16 @@ export default ( state = initialState, action ) => {
           if ( prize.prize_id === action.payload.id )
             return action.payload.prize;
           return prize;
+        }),
+      };
+
+    case types.UPDATE_TEMPLATE:
+      return { 
+        ...state, 
+        templates: state.templates.map( template => {
+          if ( template.prize_id === action.payload.id )
+            return action.payload.template;
+          return template;
         }),
       };
 

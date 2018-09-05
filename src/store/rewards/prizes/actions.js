@@ -27,3 +27,25 @@ export const updatePrize = ( id, prize ) => {
     payload: { id, prize }
   }
 };
+
+
+export const setTemplates = templates => {
+  return {
+    type: types.SET_TEMPLATES,
+    payload: templates
+  }
+};
+
+export const createTemplate = template => {
+  return {
+    type: types.CREATE_TEMPLATE,
+    payload: template
+  }
+};
+
+export const updateTemplate = ( id, template ) => {
+  return {
+    type: types.UPDATE_TEMPLATE,
+    payload: { id, template }
+  }
+};
