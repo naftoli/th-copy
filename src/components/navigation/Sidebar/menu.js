@@ -104,13 +104,21 @@ const getMenu = ( user_type, id, no_legacy ) => {
       label: "Chidon", legacy: true,
       icon: <img src={`${LEGACY_URL}/images/chidon.png`} alt="Chidon" />,
       items: [
+        { label: 'Registered for Chidon', legacy: true, path: '/reports/chidon/chidon_enrollment.php' },
         { label: 'Shabbaton Enrolled Report', legacy: true, path: '/reports/chidon/shabbaton_enrollment.php' },
         { label: 'Shabbaton Walking Report', legacy: true, path: '/reports/chidon/walking_groups.php' },
         { label: 'Enter Chidon Test Marks', legacy: true, path: '/chidon_tests.php' },
         { label: 'Enroll Chaperones', legacy: true, path: '/chidon_school_reg.php' },
-        { label: 'Activate Enrollment', legacy: true, path: '/enrollment.php' },
+        
+        { label: 'Activate Enrollment', legacy: true, user_types: ['BC'], path: '/enrollment.php' },
+        { label: 'Activate Enrollment HQ', legacy: true, user_types: ['HQ'], path: '/enrollment_hq.php' },
+        
         { label: 'Review Enrollment', legacy: true, path: '/review_enrollment.php' },
         { label: 'Print Enrollment Info', legacy: true, path: '/chidon_review.php' },
+
+        { label: 'Generate ID Cards', legacy: true, user_types: ['HQ'], path: '/chidon/IDcards/' },
+        { label: 'Upload Spreadsheets', legacy: true, user_types: ['HQ'], path: '/chidon/upload/' },
+        { label: 'Chidon Office Reports', legacy: true, user_types: ['HQ'], path: '/reports/chidon/' },
       ]
     },
     {
