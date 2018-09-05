@@ -9,14 +9,13 @@ class PrizesRouter {
         $login = $current_user->login;
         $IMG_PATH = StorePrize::IMG_PATH;
 
-        $filter = ' institution_id IN ( SELECT school_id FROM mashpiadb.schools WHERE test_school = 0 ) ';
+        $filter = 'institution_id IN ( SELECT school_id FROM mashpiadb.schools WHERE test_school = 0 ) ';
         if ( $login['code'] == 'INST' ) {
-            $filter = ' institution_id IN ( SELECT school_id FROM mashpiadb.schools WHERE inst_id = '. $login['id'].' ) ';
+            $filter = 'institution_id IN ( SELECT school_id FROM mashpiadb.schools WHERE inst_id = '. $login['id'].' ) ';
         } else if ( $login['code'] == 'BC' ) {
-            $filter = ' institution_id = '. $login['id'].' ';
-        // Does not work
+            $filter = 'institution_id = '. $login['id'].' ';
         } else if ( $login['code'] == 'TEACHER' ) {
-            $filter = ' institution_id = '. $login['school_id'].' AND teacher_id = ' . $login['id'];
+            $filter = 'institution_id = '. $login['school_id'];
         }
 
         $prizes = StorePrize::find('all', [
@@ -25,14 +24,60 @@ class PrizesRouter {
             'include' => [ 'school' ]
         ]);
 
+        // optimize platoons queries for large stores
+        $platoons = [];
+        $query = $POINTS_DB->query( 'SELECT prize_id, class_id FROM prize_classes' );
+        while ( $platoon = $query->fetch() ) {
+            $platoons[ $platoon['prize_id'] ][] = intval( $platoon['class_id'] );
+        }
+
+        foreach( $prizes as $prize )
+            $prize->cachePlatoons( isset( $platoons[ $prize->prize_id ] ) ? $platoons[ $prize->prize_id ] : [] );
+
         json_response( $prizes, true, true );
     }
 
     public function show( $id ){
         $prize = StorePrize::find( $id );
-        json_response( $prize->jsonSerialize([
-            'methods' => [ 'platoons' ]
-        ]));
+        json_response( $prize );
+    }
+
+    public function create() {
+        global $current_user;
+        $login = $current_user->login;
+
+        try {
+            $prize = StorePrize::build( $_POST );
+
+            if ( $login['code'] == 'BC' ) {
+                $prize->institution_id = $login['id'];
+            } else if ( $login['code'] == 'TEACHER' ) {
+                $prize->teacher_edit = 1;
+                $prize->institution_id = $login['school_id'];
+                $prize->teacher_id = $current_user->admin_id;
+            }
+
+            $prize->prize_type = '';
+            $prize->created_by = $current_user->admin_id;
+
+            if ( !$prize->save() )
+                return json_error( $prize->errors->full_messages() );
+
+            // update prize_classes table
+            if ( isset( $_POST['platoons'] )
+                && !$prize->setPlatoons( $_POST['platoons'] ) 
+            ) return json_error( 'Could limit to Platoons');
+
+            if ( $login['code'] == 'TEACHER'
+                && !$prize->setPlatoons([ $login['id'] ])
+            ) return json_error( 'Could connect to Platoon, Please contact Base Commander');
+
+            // return the prize as the response
+            return json_response( $prize );
+        // send all errors as text
+        } catch ( Exception $e ) {
+            return json_error( $e->getMessage() );
+        }
     }
 
     public function update( $id ) {
@@ -51,18 +96,31 @@ class PrizesRouter {
             // update prize_classes table
             if (
                 isset( $_POST['platoons'] ) && 
-                is_array( $_POST['platoons'] ) &&
                 !$prize->setPlatoons( $_POST['platoons'] ) 
             ) return json_error( 'Could update Platoons');
 
             // return the prize as the response
-            return json_response( $prize->jsonSerialize([
-                'methods' => [ 'platoons' ]
-            ]));
+            return json_response( $prize );
         // send all errors as text
         } catch ( Exception $e ) {
             return json_error( $e->getMessage() );
         }
+    }
+
+    public function uploadImage() {
+        global $current_user;
+        if ( isset( $_FILES['image'] ) ) {
+            try {
+                $result = StorePrize::uploadImage( $current_user->admin_id, $_FILES['image'] );
+                json_response([
+                    'image' => StorePrize::IMG_PATH . $result,
+                    'image_id' => $result
+                ]);
+            } catch ( Exception $e ) {
+                return json_error( $e->getMessage() );
+            }
+        }
+        json_error('Server did not get the prize image.');
     }
 }
 

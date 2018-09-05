@@ -13,7 +13,7 @@ mysql_select_db('mashpiadb') or trigger_error_server('Failed to select db', E_US
 //doesn't seem to work
 define('FILE_DIR','files/');
 // authorize.net is in demo mode in development
-if ( $development ) {
+if ( $development && !defined('AUTHORIZE_NET_SANDBOX') ) {
 	define('AUTHORIZE_NET_SANDBOX', true);
 }
 

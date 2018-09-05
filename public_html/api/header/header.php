@@ -33,7 +33,7 @@ if ( is_array( $data ) ) {
     $_POST = $data;
 }
 
-if ( $development ) {
+if ( $development && !defined('AUTHORIZE_NET_SANDBOX') ) {
     define('AUTHORIZE_NET_SANDBOX', true);
 }
 

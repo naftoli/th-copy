@@ -15,6 +15,13 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
         'miles' => 'points',
         'stock' => 'prize_count'
     ];
+    // cache variables
+    private $platoons = false;
+
+    static $belongs_to = [
+        [ 'school', 'class_name' => 'School', 'foreign_key' => 'institution_id' ],
+        [ 'admin', 'class_name' => 'Admin', 'foreign_key' => 'created_by' ],
+    ];
 
     public function image() {
         if ( $this->image_id > 0 )
@@ -24,14 +31,24 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
 
     public function platoons() {
         global $POINTS_DB;
-
+        // if an array is set for the platoons, return it
+        if ( is_array( $this->platoons ) )
+            return $this->platoons;
+        
+        // if we do not have it, load it from the dbs
         $platoons = $POINTS_DB->prepare( 'SELECT class_id FROM prize_classes WHERE prize_id = ?;' );
         $platoons->execute([ $this->prize_id ]);
-        return $platoons->fetchAll(PDO::FETCH_COLUMN, 0);
+        return $this->platoons = $platoons->fetchAll(PDO::FETCH_COLUMN, 0);
     }
-
+    // allow 
+    public function cachePlatoons( $platoons ) {
+        $this->platoons = $platoons;
+    }
+    // set the platoons in the DBS, return true or false
     public function setPlatoons( $class_ids ) {
         global $POINTS_DB;
+
+        if ( !is_array( $class_ids ) ) return false;
         
         // delete all existing connections
         $delete = $POINTS_DB->prepare( 'DELETE FROM prize_classes WHERE prize_id = ?;' );
@@ -43,16 +60,11 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
         foreach( $class_ids as $class_id ) {
             $insert->execute([ $this->prize_id, $class_id ]);
         }
+        // update the cache
+        $this->platoons = $class_ids;
 
         return true;
     }
-
-    static $belongs_to = [
-        [ 'school', 'class_name' => 'School', 'foreign_key' => 'institution_id' ],
-        [ 'admin', 'class_name' => 'Admin', 'foreign_key' => 'created_by' ],
-    //     [ 'subject', 'class_name' => 'Subject', 'foreign_key' => 'campaign_id' ],
-    //     [ 'task', 'class_name' => 'AchievementTask', 'foreign_key' => 'task_id' ],
-    ];
 
     // takes an uploaded file and sets it as the profile picture
     public function setImage( $file ){
@@ -83,15 +95,33 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
         return $file_name;
     }
 
+    // get if current user can edit it
+    public function editable( $user = false ) {
+        global $current_user;
+        if ( !$user )
+            $user = $current_user;
+        // BC's can edit their prizes
+        if ( $user->login['code'] === 'BC' && $this->institution_id == $user->login['id'] )
+            return true;
+        // teachers can edit prizes if...
+        if ( $user->login['code'] === 'TEACHER' 
+            && $this->teacher_edit // the prize is marked as teacher editable
+            && count( $this->platoons() ) == 1 // and the prize is limited to one platoon
+            && $this->platoons[0] == $user->login['id'] // and that platoon is them
+        ) return true;
+        // cannot edit if does not meet above conditions
+        return false;
+    }
+
     // serialize to json
     public function jsonSerialize( $options = [] ) {
         $default_options = [
             'only' => [
                 'prize_id','prize_name', 'institution_id', 'points', 'prize_description', 
-                'one_per_user', 'prize_count', 'is_active', 'modified'
+                'one_per_user', 'prize_count', 'is_active', 'teacher_edit', 'modified', 'image_id'
             ],
             'include' => [ 'school' => [ 'only' => [ 'school_name', 'school_id', 'school_number' ] ] ],
-            'methods' => [ 'image' ]
+            'methods' => [ 'image', 'platoons', 'editable' ]
         ];
 
         return $this->to_array( array_merge_recursive( $default_options, $options ) );
