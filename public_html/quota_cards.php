@@ -31,12 +31,7 @@ $date = $dates[$month];
     <head>
         <meta charset="utf8" />
         <style>
-            body {
-                /* background-image: url('wwtc.jpg');
-                background-repeat: repeat-y; */
-            }
             .card {
-                /* position: absolute; */
                 float: left;
                 padding-top: 150px;
                 padding-left: 20px;
@@ -45,22 +40,6 @@ $date = $dates[$month];
                 background-image: url('wwtc1.jpg');
                 background-repeat: no-repeat;
             }
-            /* .card_1 {
-                margin-left: 20px;
-                margin-top: 150px;
-            }
-            .card_2 {
-                margin-left: 420px;
-                margin-top: 150px;
-            }
-            .card_3 {
-                margin-left: 20px;
-                margin-top: 650px;
-            }
-            .card_4 {
-                margin-left: 420px;
-                margin-top: 650px;
-            } */
             .groupBox {
                 height: 15px;
                 width: 15px;
@@ -80,15 +59,15 @@ $date = $dates[$month];
 
     <body>
     <p class="no-print">
-        Please Note: When printing this page, please use firefox, make sure to have the "Print Background" option clicked (in Page Setup) and scale to 95%
+        Please Note: When printing this page, please use Firefox, make sure to have the "Print Background" option clicked (in Page Setup) and scale to 95%
     </p>
     <?php 
     foreach ( $schoolsUsers as $school => $users ) {
-        $j = 0;
-        $max = count( $users );
-        for ($i = 1; $i < 5; $i++) {
-            if ($j == $max) continue;
-            $user = $users[$j++];
+        // we need to keep track of the cards 
+        // so that we can move to new row after 2 cards 
+        // and move to new page after 4 cards
+        $cards = 0;
+        foreach ( $users as $user ) {
             $name = $user['first'] . ' ' . $user['last'];
             $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
             
@@ -122,7 +101,7 @@ $date = $dates[$month];
                 else if ( $grid == 8002 ) $minutes = $row['total'];
             }
             ?>
-            <div class="card card_<?=$i?>">
+            <div class="card">
                 Name: <?=$name?><br />
                 Grade: <?=$grade?><br />
                 <?=$month?> Quota: <b><?=$quota?> kapitelach, <?=$minutes?> minutes</b>.<br />
@@ -133,13 +112,10 @@ $date = $dates[$month];
                 Parent's Signature: ____________________
             </div>
             <?php
-            if ( $i % 2 == 0 ) {
-                ?>
-                <div style='clear: both;'></div>
-                <?php
-            }
+            $cards++;
+            if ( $cards % 2 == 0 ) echo "<div style='clear: both;'></div>";
+            if ( $cards % 4 == 0 ) echo "<div style='page-break-after: always;'></div>";
         }
-        echo "<div style='page-break-after: always;'></div>";
     }
     ?>
     </body>
