@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // components
-import { StorePrize, FontAwesome } from 'components/ui';
+import { StorePrize } from 'components/ui';
 import { Row, Col, Input, UncontrolledTooltip } from 'reactstrap';
 import { PlatoonSelect, Toggle, Creatable } from 'components/inputs';
 // functions

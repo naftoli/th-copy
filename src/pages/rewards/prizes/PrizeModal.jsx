@@ -33,10 +33,11 @@ class PrizeModal extends Component {
   }
 
   componentDidUpdate({ prize }) {
-    if ( prize.prize_id !== this.props.prize.prize_id )
+    // clear the state on a new prize
+    if ( prize.prize_id !== this.props.prize.prize_id ) {
       this.setState({ updates: {} });
-
-    if ( prize.image !== this.props.prize.image && this.state.updates.image ) {
+    // however if just the image was updated (not the prize id)
+    } else if ( prize.image !== this.props.prize.image && this.state.updates.image ) {
       this.setState({ updates: { 
         ...this.state.updates, 
         image: this.props.prize.image, 
