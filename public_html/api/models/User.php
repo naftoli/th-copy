@@ -183,8 +183,10 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $user_status_query->execute([ ':year' => $year, ':chidon_year' => $chidon_year, ':user_id' => $this->user_id ]);
         $row = $user_status_query->fetch();
         
+        $result = [];
+
         if ( $row['chayolei'] )
-            $result = [ 'chayolei'  => !!$row['user_reg_id'] ];
+            $result[ 'chayolei' ] = !!$row['user_reg_id'];
         
         // australian registration ends here.
         //if ( GlobalSettings::isAustralian( $this->school_id ) ) 
