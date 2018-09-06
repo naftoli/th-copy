@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 // components
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { SaveButton } from 'components/buttons';
@@ -10,7 +9,6 @@ import { PrizeForm } from './PrizeForm';
 import { toast } from 'react-toastify';
 // import { makeCancelable } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
-import { updatePrize, createPrize } from 'store/rewards/prizes/operations';
 
 class PrizeModal extends Component {
 

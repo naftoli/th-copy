@@ -5,7 +5,7 @@ import { Row, Col, Input, UncontrolledTooltip } from 'reactstrap';
 import { PlatoonSelect, Toggle, Creatable } from 'components/inputs';
 // functions
 import { eventToUpdate } from 'functions/events';
-import { isBC, isAdmin } from 'functions/login';
+import { isBC } from 'functions/login';
 
 export class PrizeForm extends Component {
 
