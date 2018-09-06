@@ -15,23 +15,25 @@
     // display: grid;
     text-align: center;
     margin: 20px 0px;
-    @media print { margin: 0px; }
+    @media print { margin: 0px; text-align: left; }
     // grid-template-columns: repeat( auto-fit, minmax( 86mm, 1fr ) );
   }
 }
 
 .AchievementCard {
   margin: 0 auto;
-  padding: .4mm 2mm;
+  padding: 0mm 2mm 2mm;
   display: inline-block;
+  page-break-after: always;
+  text-align: center;
 
   @media screen {
     &:not(:first-child) { display: none; }
   }
   
   .card {
-    height: 50mm;
-    width: 81.62mm;
+    height: 46.9mm;
+    width: 81.5mm;
     font-size: .9em;
   
     border: 1px solid;
@@ -41,6 +43,8 @@
     display: flex;
     
     flex-direction: column;
+
+    .icon img { height: 8mm; }
   
     .logos {
       flex-grow: 1;
