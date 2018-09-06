@@ -23,10 +23,12 @@ function showError( message ){
 
 function handleAPIResponse( callback ){
     return function( response ){
+        if ( typeof response == 'string' )
+            return showError( 'Unknown Server Error. Please contact bugs@tzivoshashem.org.' );
         if ( !response.success ){
-            showError( response.error );
+            return showError( response.error );
         } else {
-            callback( response.data );
+            return callback( response.data );
         }
     }
 }
