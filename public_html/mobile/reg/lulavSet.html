@@ -226,12 +226,12 @@
                 var numChildren = $(".lulav:checked").length;
 
                 if ( numChildren ) {
-                    $.each($(".lulav:checked"), function() {
+                    $(".lulav:checked").each( function() {
                         var id = $(this).attr('id');
-                        var ship = $(this).parent().parent().find('.ship').val();
-                        if (ship == 'deliver') {
+                        var shipping = $(this).parent().parent().find('.ship').val();
+                        if (shipping == 'deliver') {
                             total += cost + ship;
-                        } else if (ship == 'pickup') {
+                        } else if (shipping == 'pickup') {
                             total += cost;
                         }
                     });
