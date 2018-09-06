@@ -23,7 +23,7 @@ chdir('../../../');
 require_once 'authorize.php';
 chdir('mobile/reg/ajax/');
 
-if ($response_array[3] == 1) { // success
+if ($response_array[0] == 1) { // success
     $strResponse =  $response_array[3] . ':' . 
 					$response_array[4] . ':' . 
 					$response_array[6] . ':' . 
