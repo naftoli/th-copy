@@ -10,12 +10,16 @@ $totals = [];
 $total_query = mysql_query(
     "SELECT type, SUM( amount ) AS total FROM registration_charges WHERE year = $year GROUP BY type;"
 );
-while ( $row = mysql_fetch_assoc( $total_query ) ) $totals[] = $row;
+$grand_total = 0;
+while ( $row = mysql_fetch_assoc( $total_query ) ) {
+    $grand_total += intval( $row['total'] );
+    $totals[] = $row;
+}
 
 // get the details
 $details = [];
 $detail_query = mysql_query(
-    "SELECT s.school_name, u.first, u.last, rc.type, rc.date, rc.year, rc.amount "
+    "SELECT s.school_name, s.school_number, u.user_serial, u.first, u.last, rc.type, rc.date, rc.year, rc.amount "
     ."FROM registration_charges rc LEFT JOIN schools s USING ( school_id ) "
     ."LEFT JOIN users u USING ( user_id ) LEFT JOIN transactions t USING ( trans_id ) "
     ."WHERE year = $year ORDER BY rc.date DESC, school_name, u.first, u.last, rc.amount;"
@@ -33,6 +37,7 @@ while ( $row = mysql_fetch_assoc( $detail_query ) ) $details[] = $row;
     <style>
         table { width: 100%; }
         th, td { border: 1px solid #888; padding: 4px 8px; }
+        #details { font-size: 14px; }
     </style>
 </head>
 <body>
@@ -49,15 +54,20 @@ while ( $row = mysql_fetch_assoc( $detail_query ) ) $details[] = $row;
                 foreach( $totals as $total ) { ?>
                 <tr>
                     <td><?= $total['type'] ?></td>
-                    <td>$<?= $total['total'] ?></td>
+                    <td>$<?=number_format( intval( $total['total'] ) ) ?></td>
                 </tr>
             <?php } ?>
+            <tr>
+                <th>Grand Total</th>
+                <th>$<?=number_format( $grand_total ) ?></th>
+            </tr>
         </tbody>
     </table>
     <h2>Details</h2>
-    <table>
+    <table id='details'>
         <thead>
-            <th>Base</th>
+            <th colspan='2'>Base</th>
+            <th>Serial Number</th>
             <th>Name</th>
             <th>Registration Type</th>
             <th>Registration Time</th>
@@ -67,7 +77,9 @@ while ( $row = mysql_fetch_assoc( $detail_query ) ) $details[] = $row;
             <?php
                 foreach( $details as $user ) { ?>
                 <tr>
+                    <td><?= $user['school_number'] ?></td>
                     <td><?= $user['school_name'] ?></td>
+                    <td><?= $user['user_serial'] ?></td>
                     <td><?= $user['first'] . " " . $user['last'] ?></td>
                     <td><?= $user['type'] ?></td>
                     <td><?= ( new DateTime($user[ 'date' ]) )->format( 'm/d/Y g:i:sa e' ); ?></td>
