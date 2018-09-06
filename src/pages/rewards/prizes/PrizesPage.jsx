@@ -14,7 +14,7 @@ import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
 import { 
   getPrizes, updatePrize, uploadImage,
-  getTemplates
+  getTemplates, createPrize
 } from 'store/rewards/prizes/operations';
 // styles
 import './include/prizes.scss';
@@ -111,8 +111,8 @@ class PrizesPage extends Component {
 
   render() {
     const { prizeModal, cropperModal } = this.state;
-    const { prizes, loading, login } = this.props;
     const { editPrize, editPicture, updateToggle } = this;
+    const { prizes, loading, login, templates, updatePrize, createPrize } = this.props;
 
     let columns = getColumns({
       editPrize, editPicture, updateToggle
@@ -150,11 +150,14 @@ class PrizesPage extends Component {
           pageId='PrizesPage' />
 
         <PrizeModal
-          prize = { prizeModal.prize }
+          login={ login }
+          prize={ prizeModal.prize }
+          isOpen={ prizeModal.show }
           toggle={ this.togglePrize }
-          isOpen = { prizeModal.show }
+          templates={ templates }
           editPicture={ editPicture }
-          />
+          updatePrize={ updatePrize }
+          createPrize={ createPrize } />
 
         <CropperModal 
           fileName='image'
@@ -177,8 +180,8 @@ const mapStateToProps = ({ rewards, login }) => {
 };
 
 const mapDispatchToProps = {
-  getPrizes, updatePrize, uploadImage,
-  getTemplates
+  getPrizes, updatePrize, createPrize,
+  getTemplates, uploadImage
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )( PrizesPage );

@@ -122,13 +122,4 @@ class PrizeModal extends Component {
   }
 }
 
-const mapStateToProps = ( state ) => ({
-  login: state.login.current_login,
-  templates: state.rewards.prizes.templates
-});
-
-const mapDispatchToProps = {
-  updatePrize, createPrize
-};
-
-export default connect( mapStateToProps, mapDispatchToProps )( PrizeModal );
+export default PrizeModal;
