@@ -76,11 +76,11 @@ class PrizesRouter {
             // update prize_classes table
             if ( isset( $_POST['platoons'] )
                 && !$prize->setPlatoons( $_POST['platoons'] ) 
-            ) return json_error( 'Could limit to Platoons');
+            ) return json_error( 'Error limiting to Platoons');
 
             if ( $login['code'] == 'TEACHER'
                 && !$prize->setPlatoons([ $login['id'] ])
-            ) return json_error( 'Could connect to Platoon, Please contact Base Commander');
+            ) return json_error( 'Error connecting to Platoon, Please contact Base Commander');
 
             // return the prize as the response
             return json_response( $prize );
@@ -107,7 +107,7 @@ class PrizesRouter {
             if (
                 isset( $_POST['platoons'] ) && 
                 !$prize->setPlatoons( $_POST['platoons'] ) 
-            ) return json_error( 'Could update Platoons');
+            ) return json_error( 'Could connect Platoons');
 
             // return the prize as the response
             return json_response( $prize );
