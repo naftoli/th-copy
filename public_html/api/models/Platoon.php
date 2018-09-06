@@ -43,6 +43,10 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
         return $this->to_array([
             // 'only' => [ 'class_id' ],
             'methods' => [ 'name', 'staff' ],
+            'include' => [ 'users' => [
+                'only' => [ 'user_id', 'first', 'last', 'user_serial' ],
+                'methods' => [ 'rank', 'profilePicture' ]
+            ]]
         ]);
     }
 }

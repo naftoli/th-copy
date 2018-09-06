@@ -22,6 +22,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
 
     // cache
     private $miles;
+    private $rank;
 
     // Access validation - takes a login and returns true or false if it can access the user
     public function validateAccess( $login ){
@@ -48,7 +49,36 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         return "3$this->user_code";
     }
     // returns the current rank
-    public function currentRank() {
+    public function rank( $cache = false ) {
+        global $MASHPIA_DB;
+
+        if ( $cache ) $this->rank = $cache;
+        if ( $this->rank ) return $this->rank;
+
+        $query = $MASHPIA_DB->prepare(
+             ' SELECT rank_ord, rank_name as name FROM rank_marks JOIN ranks USING (rank_ord) '
+            .' WHERE user_id = ? ORDER BY rank_ord DESC LIMIT 1'
+        );
+        $query->execute([ $this->user_id ]);
+        return $this->rank = $query->fetch();
+    }
+
+    // get the current miles
+    public function miles( $force_refresh = false ) {
+        global $MASHPIA_DB;
+        
+        if ( $this->miles && !$force_refresh ) return $this->miles;
+        
+        $query = $MASHPIA_DB->prepare(
+            'SELECT SUM( mark_points ) miles FROM date_tasks_marks WHERE user_id = ?'
+        );
+        $query->execute([ $this->user_id ]);
+        return $this->miles = intval( $query->fetch()['miles'] );
+    }
+
+    // ******************************* CHAYOLEI BOARDS ******************************* //
+    // returns the current rank and how they got there
+    public function rankBoard() {
         global $MASHPIA_DB; $result = [];
         // get all ranks earned
         $rank_query = $MASHPIA_DB->prepare(
@@ -66,7 +96,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $medals = [];
         while( $medal = $medals_query->fetch() ){
             $medal['date_awarded_he'] = dateToHebrew( $medal['date_awarded'] );
-            $medal['date_awarded'] = date('n/j/Y', jdtounix( $medal['date_awarded'] ));
+            $medal['date_awarded'] = date('Y-m-d H:i:s', jdtounix( $medal['date_awarded'] ));
             $medal['photo'] = $medal['profile_photo_id'] ? 
                 '/file_view.php?id='.$medal['profile_photo_id'] : 
                 '/kiosk/images/medals/holder.png';
@@ -87,7 +117,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $medals_index = 0;
         foreach( $ranks as $index => $rank ){
             $ranks[$index]['medals'] = [];
-            $ranks[$index]['date_promoted'] = date('n/j/Y', jdtounix( $rank['date_promoted'] ));
+            $ranks[$index]['date_promoted'] = date('Y-m-d H:i:s', jdtounix( $rank['date_promoted'] ));
             $medals_in_rank = intval( $medals_required[ $index + 1 ] );
             $ranks[$index]['total_medals'] = $medals_in_rank;
             while( isset( $medals[ $medals_index ] ) && $medals_index < $medals_in_rank ) {
@@ -98,16 +128,8 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         
         return $result;
     }
-    // get the current miles
-    public function miles( $force_refresh = false ) {
-        if ( $this->miles && !$force_refresh ) return $this->miles;
-        global $MASHPIA_DB;
-        $query = $MASHPIA_DB->prepare(
-            'SELECT SUM(mark_points) miles FROM date_tasks_marks WHERE user_id = ?'
-        );
-        $query->execute([ $this->user_id ]);
-        return $this->miles = intval( $query->fetch()['miles'] );
-    }
+
+    // ******************************* PARENT ACCOUNT ******************************* //
     // get parent account
     public function parentAccount() {
         global $MASHPIA_DB;
@@ -123,6 +145,8 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $parent['first'] = formatParentName( $parent['father'], $parent['mother'], $parent['first'] );
         return $parent;
     }
+
+    // ******************************* IMAGES ******************************* //
     // takes an uploaded file and sets it as the profile picture
     public function setProfilePicture( $file ){
         $upload = self::uploadProfilePicture( $this->user_id, $file );
@@ -187,10 +211,6 @@ class User extends ActiveRecord\Model implements JsonSerializable {
 
         if ( $row['chayolei'] )
             $result[ 'chayolei' ] = !!$row['user_reg_id'];
-        
-        // australian registration ends here.
-        //if ( GlobalSettings::isAustralian( $this->school_id ) ) 
-            //return $result;
         
         // only add th_chidon_id if the user is in grade 4+
         if ( $this->platoon && $this->platoon->class_grade >= 4 && $row['chidon'] )
@@ -321,6 +341,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         $this->yan = $this->school->tehillim;
         $this->save();
     }
+
     // ******************************* ONDELETE FUNCTIONS *******************************
     public function canDestroy(){
         return $this->miles() === 0;
@@ -337,7 +358,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
                 'chayolei', 'yan', 'chidon', 'allow_parent_tasks', 'print_parent_tasks', 'mobile_pic',
                 'school_id', 'class_id', 'school_type_id', 'user_code', 'email'
             ],
-            'methods' => [ 'profilePicture', 'barcode', 'currentRank', 'miles', 'parentAccount' ],
+            'methods' => [ 'profilePicture', 'barcode', 'rankBoard', 'miles', 'parentAccount' ],
             'include' => [ 
                 'school' => [ 
                     'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ]                     
