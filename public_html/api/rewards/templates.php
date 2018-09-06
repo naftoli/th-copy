@@ -21,70 +21,62 @@ class TemplatesRouter {
         json_response( $response, true, true );
     }
 
-    // public function create() {
-    //     global $current_user;
-    //     $login = $current_user->login;
+    public function create() {
+        global $current_user;
+        if ( !$current_user->isHQ() )
+            return json_error('This Login Cannot Edit Templates');
+        
+        $login = $current_user->login;
 
-    //     try {
-    //         $prize = StorePrize::build( $_POST );
+        try {
+            $prize = StorePrize::build( $_POST );
+            // set template_prize specific things
+            $prize->institution_id = 1;
+            $prize->parent_prize_id = 0;
+            $prize->teacher_edit = 0;
+            $prize->prize_type = 'Template';
+            $prize->created_by = $current_user->admin_id;
 
-    //         if ( $login['code'] == 'BC' ) {
-    //             $prize->institution_id = $login['id'];
-    //         } else if ( $login['code'] == 'TEACHER' ) {
-    //             $prize->teacher_edit = 1;
-    //             $prize->institution_id = $login['school_id'];
-    //             $prize->teacher_id = $current_user->admin_id;
-    //         }
+            if ( !$prize->save() )
+                return json_error( $prize->errors->full_messages() );
 
-    //         $prize->prize_type = '';
-    //         $prize->created_by = $current_user->admin_id;
+            // return the prize as the response
+            return json_response( $prize );
+        // send all errors as text
+        } catch ( Exception $e ) {
+            return json_error( $e->getMessage() );
+        }
+    }
 
-    //         if ( !$prize->save() )
-    //             return json_error( $prize->errors->full_messages() );
+    public function update( $id ) {
+        // validate user
+        global $current_user;
+        if ( !$current_user->isHQ() )
+            return json_error('This Login Cannot Edit Templates');
 
-    //         // update prize_classes table
-    //         if ( isset( $_POST['platoons'] )
-    //             && !$prize->setPlatoons( $_POST['platoons'] ) 
-    //         ) return json_error( 'Could limit to Platoons');
+        try {
+            $template = StorePrize::find( $id );
 
-    //         if ( $login['code'] == 'TEACHER'
-    //             && !$prize->setPlatoons([ $login['id'] ])
-    //         ) return json_error( 'Could connect to Platoon, Please contact Base Commander');
+            if ( $template->prize_type !== 'Template' )
+                return json_error('This Prize is not a Template');
 
-    //         // return the prize as the response
-    //         return json_response( $prize );
-    //     // send all errors as text
-    //     } catch ( Exception $e ) {
-    //         return json_error( $e->getMessage() );
-    //     }
-    // }
+            // update profile picture
+            if( isset( $_FILES['image'] ) ) {
+                $template->setImage( $_FILES['image'] );
+            }
+            // blulk update valid params
+            $template->bulkUpdate( $_POST );
 
-    // public function update( $id ) {
-    //     try {
-    //         $prize = StorePrize::find( $id );
-    //         // update profile picture
-    //         if( isset( $_FILES['image'] ) ) {
-    //             $prize->setImage( $_FILES['image'] );
-    //         }
-    //         // blulk update valid params
-    //         $prize->bulkUpdate( $_POST );
+            if ( !$template->save() )
+                return json_error( $template->errors->full_messages() );
 
-    //         if ( !$prize->save() )
-    //             return json_error( $prize->errors->full_messages() );
-
-    //         // update prize_classes table
-    //         if (
-    //             isset( $_POST['platoons'] ) && 
-    //             !$prize->setPlatoons( $_POST['platoons'] ) 
-    //         ) return json_error( 'Could update Platoons');
-
-    //         // return the prize as the response
-    //         return json_response( $prize );
-    //     // send all errors as text
-    //     } catch ( Exception $e ) {
-    //         return json_error( $e->getMessage() );
-    //     }
-    // }
+            // return the prize as the response
+            return json_response( $template );
+        // send all errors as text
+        } catch ( Exception $e ) {
+            return json_error( $e->getMessage() );
+        }
+    }
 }
 
 rest_router( new TemplatesRouter );
