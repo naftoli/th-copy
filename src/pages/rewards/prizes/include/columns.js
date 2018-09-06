@@ -53,14 +53,14 @@ export function getColumns({
   
     { Header: isTemplate ? 'Default Miles' : 'Miles', 
       accessor: 'points', Cell: props => <Number value={props.value}/> },
-
-    { Header: isTemplate ? 'Default Stock' : 'In Stock', accessor: 'prize_count', 
-      Cell: ({ value }) => isTemplate ? <Number value={value}/> : <Stock value={ value }/> },
   ];
 
   // add the toggles
   if ( !isTemplate ) {
     columns.push(
+      { Header: 'In Stock', accessor: 'prize_count', 
+        Cell: ({ value }) => isTemplate ? <Number value={value}/> : <Stock value={ value }/> },
+
       { Header: 'Status', accessor: 'is_active', 
         Filter: yesNoFilterRender, filterMethod: yesNoFilter,
         Cell: ({ value, original }) => 
@@ -69,6 +69,7 @@ export function getColumns({
             checked={ !!value }
             onChange={ updateToggle( 'is_active', original.prize_id ) } />,
       },
+      
       { Header: 'One Per Soldier', accessor: 'one_per_user',
         Filter: yesNoFilterRender, filterMethod: yesNoFilter,
         Cell: ({ value, original }) => 
@@ -82,7 +83,6 @@ export function getColumns({
   
   if ( isTemplate ) {
     columns.push(
-      { Header: 'Default Status', id: 'status', accessor: ({ is_active }) => is_active ? 'Active' : 'Disabled' },
       { Header: 'One Per Soldier', id: 'one_per_user', accessor: ({ one_per_user }) => one_per_user ? 'Yes' : 'No' }
     )
   }

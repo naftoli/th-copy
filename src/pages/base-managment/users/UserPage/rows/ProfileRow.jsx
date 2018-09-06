@@ -23,8 +23,8 @@ const ProfileRow = ({ soldier, onChange, toggle }) => {
     });
   }
 
-  const { profilePicture, currentRank, gender  } = soldier;
-  const rank = currentRank ? currentRank.rank : undefined;
+  const { profilePicture, rankBoard, gender  } = soldier;
+  const rank = rankBoard ? rankBoard.rank : undefined;
 
   return (
     <Row>

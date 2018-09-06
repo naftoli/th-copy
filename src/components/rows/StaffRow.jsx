@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 // components
 import { Link } from 'react-router-dom';
 import { FontAwesome, Callout } from 'components/ui';
-import { 
-  Row, Col, Button, ButtonGroup, Card, 
-  Input, InputGroup, InputGroupAddon
-} from 'reactstrap';
+import { Row, Col, Button, Card, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 // functions
 import is from 'is_js';
 // styles

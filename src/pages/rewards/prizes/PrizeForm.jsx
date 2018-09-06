@@ -35,7 +35,7 @@ export class PrizeForm extends Component {
   }
 
   render () {
-    let { login, onImageEdit, editing, templates, prize, isTemplate } = this.props;
+    let { login, onImageEdit, editing, templates, prize } = this.props;
     let { 
       platoons = [], prize_name, prize_description, prize_count, points,
       one_per_user, is_active, teacher_edit, school, image
@@ -57,11 +57,11 @@ export class PrizeForm extends Component {
 
             <Col xs={ 12 }>
               <label>Prize Name</label>
-              { ( editing || prize_name || isTemplate ) && 
+              { ( editing || prize_name ) && 
                 <Input name='prize_name' value={ prize_name || '' } { ...inputProps } 
                   pattern='^.{3,50}$' title="3 to 50 letters" maxLength={ 50 } />
               }
-              { !editing && !prize_name && !isTemplate &&
+              { !editing && !prize_name &&
                 <Creatable 
                   placeholder={ prize_name || 'Select Template / Create New' }
                   options={ templates } 
@@ -138,7 +138,7 @@ export class PrizeForm extends Component {
         }
 
         <Col xs={{ size: 12, order: 2 }}>
-          <label>Description</label>
+          <label>Description / Sponsor</label>
           <Input
             { ...inputProps }
             required={ false }

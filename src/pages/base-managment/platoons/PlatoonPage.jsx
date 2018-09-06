@@ -7,7 +7,7 @@ import { Redirect } from 'react-router-dom';
 import { NavigationTab } from 'components/navigation';
 import { FontAwesome, LoadingScreen } from 'components/ui';
 // tabs
-import { PlatoonTab, TeachersTab } from './tabs';
+import { PlatoonTab, TeachersTab, SoldiersTab } from './tabs';
 // functions
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
@@ -75,7 +75,10 @@ export class PlatoonPage extends Component {
             Platoon <FontAwesome icon='chalkboard-teacher'/>
           </NavigationTab>
           <NavigationTab active={activeTab === 2} onClick={this.toggle( 2 )}>
-            Teacher Accounts <FontAwesome icon='users'/>
+            Teacher Accounts <FontAwesome icon='user-lock'/>
+          </NavigationTab>
+          <NavigationTab active={activeTab === 3} onClick={this.toggle( 3 )}>
+            Soldiers <FontAwesome icon='users'/>
           </NavigationTab>
         </Nav>
         <TabContent activeTab={ activeTab }>
@@ -93,6 +96,10 @@ export class PlatoonPage extends Component {
             refresh={ this.getPlatoon }
             createAuth={ this.props.createAuth }
             removeAuth={ this.props.removeAuth } />
+
+          <SoldiersTab 
+            tabId={ 3 }
+            users={ platoon.users } />
 
         </TabContent>
 

@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { LEGACY_URL } from 'components/constants';
 import { Row, Col, TabPane } from 'reactstrap';
+import { DateDisplay } from 'components/ui';
 
 class RankTab extends Component {
   render() {
-    let { currentRank, miles } = this.props.soldier;
+    let { rankBoard, miles } = this.props.soldier;
     return (
       <TabPane id='RankTab' tabId= { this.props.tabId }>
-        <h4>Rank: {currentRank.name}</h4>
+        <h4>Rank: {rankBoard.name}</h4>
         <h4>Miles: {miles.toLocaleString( navigator.language )}</h4>
-        { currentRank.ranks.map( (rank, index) => <RankRow rank={rank} key={index} />) }
+        { rankBoard.ranks.map( (rank, index) => <RankRow rank={rank} key={index} />) }
       </TabPane>
     )
   }
@@ -31,13 +32,13 @@ const RankRow = ( { rank } ) => {
       <Col xs='3' sm='2' className='RankRow-rank'>
         <p>{ rank.rank_name }</p>
         <img src={`${LEGACY_URL}/mobile/img_new/ranks/${rank.rank_ord}.svg`} alt='rank' />
-        <p>({ rank.date_promoted })</p>
+        <p>(<DateDisplay value={ rank.date_promoted } />)</p>
       </Col>
       <Col xs='9' sm='10' className='RankRow-medals'>
         { rank.medals && rank.medals.map( (medal, index) => 
           <div key={index}>
             <img src={ `${LEGACY_URL}${medal.photo}` } alt='medal'/>
-            <p>{ medal.date_awarded }</p>
+            <p><DateDisplay value={ medal.date_awarded } /></p>
             <p>{ medal.date_awarded_he }</p>
           </div>
         ) }

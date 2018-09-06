@@ -5,6 +5,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { SaveButton } from 'components/buttons';
 // rows
 import { PrizeForm } from './PrizeForm';
+import { TemplateForm } from './TemplateForm';
 // functions
 import { toast } from 'react-toastify';
 // import { makeCancelable } from 'functions/utils';
@@ -95,26 +96,38 @@ class PrizeModal extends Component {
         label: template.prize_name, value: template.prize_name, ...template
       }));
 
+    let form;
+    if ( isTemplate ) {
+      form = 
+        <TemplateForm
+          prize={ prize }
+          onUpdate={ this.onUpdate } 
+          onImageEdit={ this.onImageEdit } />;
+    } else {
+      form =
+        <PrizeForm
+          prize={ prize }
+          login={ login }
+          editing={ editing }
+          templates={ templates }
+          onUpdate={ this.onUpdate }
+          onImageEdit={ this.onImageEdit } />;
+    }
+
     return (
       <Modal isOpen={ isOpen } toggle={ toggle } centered id='PrizeModal'>
-        <ModalHeader toggle={ toggle }>{ editing ? 'Edit' : 'Create' } Prize</ModalHeader>
+        <ModalHeader toggle={ toggle }>
+          { editing ? 'Edit ' : 'Create ' }
+          { isTemplate ? 'Template ' : 'Prize ' }
+        </ModalHeader>
+        
         <form onSubmit={ this.submit }>
           <ModalBody>
-            
-            <PrizeForm
-              prize={ prize }
-              login={ login }
-              editing={ editing }
-              templates={ templates }
-              isTemplate={ isTemplate }
-              onUpdate={ this.onUpdate } 
-              onImageEdit={ this.onImageEdit } />
-
+            { form }
           </ModalBody>
-          <ModalFooter>
 
+          <ModalFooter>
             <SaveButton show={ !prize.prize_id || updated } saving={ saving } />
-          
           </ModalFooter>
         </form>
       </Modal>

@@ -103,7 +103,7 @@ const getMenu = ( login ) => {
         // { label: "Miles Grid", path: '/rewards/miles-grid' },
         { label: "Prizes", path: '/rewards/prizes' },
         { label: "Prize Templates", path: '/rewards/templates', user_types: [ 'HQ' ] },
-        { label: "Orders", path: '/rewards/orders' },
+        { label: "Orders", path: '/rewards/orders', user_types: [ 'BC', 'TEACHER' ] },
         { label: 'Add / Subtract Points', legacy: true, path: '/manual_points.php' },
         {
           label: 'Old Mileage Program', user_types: [ 'BC' ], path: '/v2',

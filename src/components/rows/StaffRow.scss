@@ -3,9 +3,9 @@
   margin: .5rem;
   display: inline-block;
 
-  width: 100%;
   @media ( min-width: 730px ) {
     width: calc( 50% - 1rem );
+    &:first-child { flex-grow: 1; }
   }
 
   > .row { 
