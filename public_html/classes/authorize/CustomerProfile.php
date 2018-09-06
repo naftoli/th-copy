@@ -169,7 +169,7 @@ class CustomerProfile {
             
             $this->customerProfileId = $profile['customerProfileId'];
             $this->description = isset( $profile['description'] ) ? $profile['description'] : false;
-            $this->email = $profile['email'];
+            $this->email = isset( $profile['email'] ) ? $profile['email'] : '';
             // handle strict testing
             if(array_key_exists('merchantCustomerId', $profile )) {
                 $this->merchantCustomerId = $profile['merchantCustomerId'];
