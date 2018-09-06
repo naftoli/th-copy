@@ -61,7 +61,8 @@
                         <h2>Already Sold: <span id="sold">760</span></h2>
                         <h2>Currently Available: <span id="leftToSell">240</span></h2>
                     </div>
-                    <div class="col-12" class="sold-out" style="font-size: 16px; display:none;">
+                    <div class="col-12" id="sold-out" style="font-size: 16px; display:none;">
+                        <hr />
                         Wow! Boruch Hashem in such a short time 1000 chayolim have bought their OWN Lulov and esrog for Mivtzoim.<br />                        
                         We have SOLD OUT for this year. Next year we hope to get more sets.<br />                        
                         כתיבה וחתימה טובה
@@ -158,14 +159,20 @@
             // make sure we have a cookie
             var admin = Cookies.get('admin');
             if (!admin) { window.close(); }
-
+            
             // find out how many sets have been sold
+            var soldOut = false;
             $.post('ajax/lulavPurchases.php', function( sold ) {
                 var alreadySold = 760;
                 alreadySold += parseInt( sold );
                 var leftToSell = 1000 - alreadySold;
                 $("#sold").text( alreadySold );
                 $("#leftToSell").text( leftToSell );
+                if ( leftToSell < 1 ) {
+                    soldOut = true;
+                    $("#sold-out").show();
+                    $("#purchases").hide();
+                }
             });
             
             // get the current year
@@ -211,7 +218,8 @@
                         // Add the compiled html to the page
                         $(".chilrens").append( html );
                         $(".year").text(year);
-                        $("#purchases").show();
+                        if ( soldOut ) $("#sold-out").show();
+                        else $("#purchases").show();
                     } 
                 }
             });
