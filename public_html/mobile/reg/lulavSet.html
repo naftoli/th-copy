@@ -56,15 +56,24 @@
         <section style="width: 300px; margin: 10px auto; display: none;" id="purchase_lulav_sets">
             <div class="container page5">   
                 <div class="row">
-                    <div class="col-12" style="font-size: 16px;">
-                        Lulav Sets cost ONLY $7.70. We will charge an additional $3 for shipping it to YOUR CHILD'S SCHOOL.
+                    <div class="col-12" style="font-size: 16px;">                   
+                        Lulav Sets cost ONLY $7.70. We will charge an additional $5.80 for shipping it to YOUR CHILD'S SCHOOL.
+                        <hr />
+                        <h2>Number of sets: 1000</h2>
+                        <h2>Already Sold: <span id="sold">800</span></h2>
+                        <h2>Currently Available: <span id="leftToSell">200</span></h2>
                     </div>
-                </div>   
+                    <div class="col-12" class="sold-out" style="font-size: 16px; display:none;">
+                        Wow! Boruch Hashem in such a short time 1000 chayolim have bought their OWN Lulov and esrog for Mivtzoim.<br />                        
+                        We have SOLD OUT for this year. Next year we hope to get more sets.<br />                        
+                        כתיבה וחתימה טובה
+                    </div>
+                </div>  
+                <hr /> 
                 
                 <div style="width: 250px; margin: auto;">
                     <div class="row">
-                        <h2>Lulav Sets</h2>
-                        <hr />
+                        <h2>Purchase For:</h2>
                         <div class="col-12">
                             <div class="chilrens" id="children">
                                 <script id="childrenTpl" type="text/x-handlebars-template">
@@ -89,16 +98,15 @@
                         </div>
                     </div>
 
-                    <hr />
                     <div class="row">
                         <h2>Total: $<span id="amount">0</span></h2>
                         <input type="hidden" id="total" />
                     </div>
+                    <hr />
 
                     <form action="" method="post">
                         <div class="row">
                             <h2>Checkout</h2>
-                            <hr />
                             <div class="form-group">
                                 <label for="cc-first" class="control-label mb-1">First Name on Card</label>
                                 <input id="cc-first" name="cc-first" type="tel" class="form-control cc-first identified" required placeholder="First Name" maxlength="10">
@@ -110,12 +118,12 @@
                                 <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
                             </div>
                             <div class="form-group">
-                                <label for="cc-number" class="control-label mb-1">Card number</label>
-                                <input id="cc-number" name="cc-number" type="tel" class="form-control cc-number identified" required placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
+                                <label for="cc-number" class="control-label mb-1">Card number (no spaces please)</label>
+                                <input id="cc-number" name="cc-number" type="tel" class="form-control cc-number identified" required placeholder="XXXXXXXXXXXXXXXX" maxlength="19">
                                 <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
                             </div>
                             <div class="form-group">
-                                <label for="cc-exp" class="control-label mb-1">Expiration</label>
+                                <label for="cc-exp" class="control-label mb-1">Expiration (no dashes or slashes please)</label>
                                 <input id="cc-exp" name="cc-exp" type="tel" class="form-control cc-exp" required placeholder="MMYY" autocomplete="cc-exp" maxlength="4">
                                 <!-- <span class="invalid-feedback">Enter the expiration date</span> -->
                             </div>
@@ -145,6 +153,15 @@
             // make sure we have a cookie
             var admin = Cookies.get('admin');
             if (!admin) { window.close(); }
+
+            // find out how many sets have been sold
+            $.post('ajax/lulavPurchases.php', function( sold ) {
+                var alreadySold = 800;
+                alreadySold += parseInt( sold );
+                var leftToSell = 1000 - alreadySold;
+                $("#sold").text( alreadySold );
+                $("#leftToSell").text( leftToSell );
+            });
             
             // get the current year
             var year;
@@ -199,7 +216,7 @@
             function calcAmount() {
                 var total = 0;
                 var cost = 7.70;
-                var ship = 3.00;
+                var ship = 5.80;
                 var numChildren = $(".lulav:checked").length;
 
                 if ( numChildren ) {
@@ -229,14 +246,15 @@
                     var num = $("#cc-number").val().trim();
                     var exp = $("#cc-exp").val().trim();
                     var zip = $("#zip").val().trim();
+                    var cvv = $("#x_card_code").val().trim();
 
-                    if ( !first || !last || !num || !exp || !zip ) {
+                    if ( !first || !last || !num || !exp || !zip || !cvv ) {
                         alert("You must fill in all fields.");
                         return false;
                     }
 
-                    if ( isNaN( num ) || isNaN(exp) ) {
-                        alert("Credit Card Number and Expiry Date must be numbers.");
+                    if ( isNaN( num ) || isNaN( exp ) || isNaN( cvv ) ) {
+                        alert("Credit Card Number, Expiry Date, and Security Code may only contain NUMBERS.");
                         return false;
                     }
 
@@ -261,7 +279,8 @@
                     $.post('ajax/lulavPayment.php', { info: info }, function( info ) {
                         var result = JSON.parse( info );
                         if ( result.success ) {
-                            alert("You have successfully purchased " + num_sets + " sets.");
+                            alert("Thank you! You have successfully purchased " + num_sets + " sets. Your child(ren)'s school will receive them for your child(ren).");
+                            location.reload();
                         } else {
                             alert( result.error );
                         }
