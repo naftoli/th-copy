@@ -54,6 +54,9 @@ class CardsPage extends Component {
   // cards
   generateCards = e => {
     e.preventDefault();
+    // do not keep generating tasks
+    if ( this.props.loading ) return false;
+    // validate input and generate cards
     const { subject_id, task_id, card_count } = this.state;
     const postData = { subject_id, task_id, card_count };
     // make sure a subject was selected
@@ -85,7 +88,7 @@ class CardsPage extends Component {
   print = () => { window.print(); }
 
   render() {
-    let { cards, login } = this.props;
+    let { loading, miles, cards, login } = this.props;
     const { subject_id, task_id, card_count, delete_to } = this.state;
 
     const subjectFilter = subject => subject.tasks > 0;
@@ -100,7 +103,7 @@ class CardsPage extends Component {
       return task.subject_id === subject_id;
     }
 
-    let max = 200;
+    let max = 5000;
 
     return (
       <div id='AchievementsCardsPage'>
@@ -116,7 +119,7 @@ class CardsPage extends Component {
 
           { isTeacher( login.code ) && 
             <h2 id='available-miles'>
-              <Number value={ cards.miles || 0 } /> Available Miles
+              <Number value={ miles || 0 } /> Available Miles
             </h2>
           }
 
@@ -153,7 +156,7 @@ class CardsPage extends Component {
               <Col sm={ 6 } xl={3}>
                 <ButtonGroup>
                   <Button color='primary'>
-                    <InlineSync loading={ cards.loading } /> Create
+                    <InlineSync loading={ loading } /> Create
                   </Button>
                   <Button onClick={ this.print } className='btn btn-primary'>
                     <FontAwesome icon='print' /> Print
@@ -166,7 +169,7 @@ class CardsPage extends Component {
         </div>
 
         <div id='cards'>
-          { cards.cards.map(
+          { cards.map(
             ( card, index ) => <AchievementCard { ...card } logo={ login.img } key={ index } />
           ) }
         </div>
