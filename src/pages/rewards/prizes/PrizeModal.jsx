@@ -85,16 +85,17 @@ class PrizeModal extends Component {
 
   render() {
     let { updates, saving } = this.state;
-    let { prize, login, toggle, isOpen, templates } = this.props;
+    let { prize, login, toggle, isOpen, templates, isTemplate } = this.props;
     const updated = Object.keys( updates ).length > 0;
 
     prize = { ...prize, ...updates };
 
     const editing = !!prize.prize_id;
 
-    templates = templates.map( template => ({
-      label: template.prize_name, value: template.prize_name, ...template
-    }))
+    if ( templates )
+      templates = templates.map( template => ({
+        label: template.prize_name, value: template.prize_name, ...template
+      }));
 
     return (
       <Modal isOpen={ isOpen } toggle={ toggle } centered id='PrizeModal'>
@@ -107,6 +108,7 @@ class PrizeModal extends Component {
               login={ login }
               editing={ editing }
               templates={ templates }
+              isTemplate={ isTemplate }
               onUpdate={ this.onUpdate } 
               onImageEdit={ this.onImageEdit } />
 

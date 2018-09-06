@@ -1,7 +1,10 @@
 import * as types from './types';
 
 export const initialState = {
-  loading: false,
+  loading: {
+    prizes: false,
+    templates: false
+  },
   prizes: [],
   templates: [],
 };
@@ -12,21 +15,21 @@ export default ( state = initialState, action ) => {
     case types.SET_LOADING:
       return { 
         ...state, 
-        loading: action.payload 
+        loading: { ...state.loading, ...action.payload } 
       };
 
     case types.SET_PRIZES:
       return { 
         ...state, 
         prizes: action.payload, 
-        loading: false
+        loading: { ...state.loading, prizes: false } 
       };
 
     case types.SET_TEMPLATES:
       return { 
         ...state, 
         templates: action.payload, 
-        loading: false
+        loading: { ...state.loading, templates: false } 
       };
 
     // add prize to top of list becuase it is new ;-)

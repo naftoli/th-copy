@@ -16,17 +16,21 @@ export const mobileLogin = ( key ) => {
   window.open( `${LEGACY_URL}/mobile/reg/parent_detail.html`, '_blank' ).focus();
 }
 
+
+export const isHQ = code => {
+  return code === 'HQ';
+}
+
 export const isAdmin = code => {
   return [ 'HQ', 'INST' ].includes( code );
 }
 
 export const isBC = ( code, only = false ) => {
-  if ( only ) {
-    return [ 'BC' ].includes( code );
-  }
+  if ( only )
+    return code === 'BC';
   return [ 'HQ', 'INST', 'BC' ].includes( code );
 }
 
 export const isTeacher = code => {
-  return [ 'TEACHER' ].includes( code );
+  return code === 'TEACHER';
 }

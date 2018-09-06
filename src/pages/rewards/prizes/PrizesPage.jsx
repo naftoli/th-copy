@@ -115,7 +115,8 @@ class PrizesPage extends Component {
     const { prizes, loading, login, templates, updatePrize, createPrize } = this.props;
 
     let columns = getColumns({
-      editPrize, editPicture, updateToggle
+      editPrize, editPicture, updateToggle,
+      showPlatoons: true
     });
 
     if ( isAdmin( login.code ) )
@@ -134,7 +135,7 @@ class PrizesPage extends Component {
             </Button>
           }
           <Button color='primary' onClick={ this.loadPrizes }>
-            <InlineSync loading={ loading } /> Refresh
+            <InlineSync loading={ loading.prizes } /> Refresh
           </Button>
           { canDownload( prizes ) &&
             <Button color='primary' onClick={ this.toCSV }>
@@ -146,7 +147,7 @@ class PrizesPage extends Component {
         <Table 
           data={ prizes } 
           columns={ columns } 
-          loading={ loading && !prizes.length } 
+          loading={ loading.prizes && !prizes.length } 
           pageId='PrizesPage' />
 
         <PrizeModal

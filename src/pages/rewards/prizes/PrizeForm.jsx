@@ -35,7 +35,7 @@ export class PrizeForm extends Component {
   }
 
   render () {
-    let { login, onImageEdit, editing, templates, prize } = this.props;
+    let { login, onImageEdit, editing, templates, prize, isTemplate } = this.props;
     let { 
       platoons = [], prize_name, prize_description, prize_count, points,
       one_per_user, is_active, teacher_edit, school, image
@@ -46,6 +46,9 @@ export class PrizeForm extends Component {
 
     if ( !school && login.code === 'BC' )
       school = { school_id: login.id }
+
+    if ( !prize_count && prize_count !== 0 )
+      prize_count = 0;
     
     return (
       <Row >
@@ -54,11 +57,11 @@ export class PrizeForm extends Component {
 
             <Col xs={ 12 }>
               <label>Prize Name</label>
-              { ( editing || prize_name ) && 
+              { ( editing || prize_name || isTemplate ) && 
                 <Input name='prize_name' value={ prize_name || '' } { ...inputProps } 
                   pattern='^.{3,50}$' title="3 to 50 letters" maxLength={ 50 } />
               }
-              { !editing && !isAdmin( login.code ) && !prize_name &&
+              { !editing && !prize_name && !isTemplate &&
                 <Creatable 
                   placeholder={ prize_name || 'Select Template / Create New' }
                   options={ templates } 
@@ -77,7 +80,7 @@ export class PrizeForm extends Component {
 
             <Col xs={ 6 } >
               <label>In Stock</label>
-              <Input type='number' name='prize_count' value={ prize_count || '' } { ...inputProps } min="0" max="99999999999" />
+              <Input type='number' name='prize_count' value={ prize_count } { ...inputProps } min="0" max="99999999999" />
               <div className='invalid-message'>Must be between 0 - 100,000,000,000</div>
             </Col>
 

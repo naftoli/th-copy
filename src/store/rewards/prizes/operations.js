@@ -1,8 +1,10 @@
 import API, { handleAPIResponse } from 'api/api';
 import * as actions from './actions';
 
+/********************** PRIZES **********************/
+
 export const getPrizes = () => dispatch => {
-  dispatch( actions.setLoading( true ) );
+  dispatch( actions.setLoading( 'prizes', true ) );
   return API.get( `/rewards/prizes` )
   .then( handleAPIResponse )
   .then( prizes => { 
@@ -29,13 +31,33 @@ export const updatePrize = ( id, updates ) => dispatch => {
   });
 }
 
+/********************** PRIZE TEMPLATES **********************/
+
 export const getTemplates = () => dispatch => {
-  dispatch( actions.setLoading( true ) );
+  dispatch( actions.setLoading( 'templates', true ) );
   return API.get( `/rewards/templates` )
   .then( handleAPIResponse )
   .then( templates => { 
     dispatch( actions.setTemplates( templates ) ); 
     return templates;
+  });
+}
+
+export const createTemplate = template => dispatch => {
+  return API.post( `/rewards/templates`, template )
+  .then( handleAPIResponse )
+  .then( template => { 
+    dispatch( actions.createTemplate( template ) ); 
+    return template;
+  });
+}
+
+export const updateTemplate = ( id, updates ) => dispatch => {
+  return API.post( `/rewards/templates?id=${id}`, updates )
+  .then( handleAPIResponse )
+  .then( template => { 
+    dispatch( actions.updateTemplate( id, template ) ); 
+    return template;
   });
 }
 

@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 // sub pages
 import { Page404 } from 'pages/errors';
 import TasksPage from './tasks/TasksPage';
 import CardsPage from './cards/CardsPage';
 import PrizesPage from './prizes/PrizesPage';
-// functions
-// import { isBC } from 'functions/login';
+import TemplatesPage from './prizes/TemplatesPage';
 
 export class BaseManagmentIndexPage extends Component {
 
@@ -19,6 +17,7 @@ export class BaseManagmentIndexPage extends Component {
         <Route path={`${path}/cards`} component={ CardsPage } />
         <Route path={`${path}/tasks`} component={ TasksPage } />
         <Route path={`${path}/prizes`} component={ PrizesPage } />
+        <Route path={`${path}/templates`} component={ TemplatesPage } />
         <Route path={`${path}/orders`} render={ () => <h1>Orders Page Coming Soon!</h1> } />
 
         <Route component={ Page404 } />
@@ -27,10 +26,6 @@ export class BaseManagmentIndexPage extends Component {
   }
 }
 
-const mapStateToProps = ( state ) => ({
-  login: state.login.current_login
-})
-
-export default connect( mapStateToProps )( BaseManagmentIndexPage );
+export default BaseManagmentIndexPage;
 // export link to legacy system
 export { default as V2 } from './v2';
