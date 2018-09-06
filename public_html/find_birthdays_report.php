@@ -155,7 +155,7 @@ require_once('calendar.php');
 				}
 				
 				//find out what day hebrew birthday is in current year
-				$jd = gregoriantojd($arrDOB[1], $arrDOB[2], $yy);
+				$jd = gregoriantojd( $arrDOB[1], $arrDOB[2], $yy );
 				$jDate = jdtojewish($jd);
 				$arrJDate = explode("/", $jDate);
 				$hMonth = $arrJDate[0];
@@ -183,8 +183,11 @@ require_once('calendar.php');
 				if (!$bornInLeap && $leap && $hMonth == 6) {
 					$hMonth++;
 				}
+
+				if ( $arrJNow[0] == 13 && $hMonth == 1 ) $hYear += 1;
 				
 				$he_birthday = jewishtojd($hMonth, $hDay, $hYear);
+
 				if ( $_POST['dob'] == 'en' ) {
 					if ( $en_birthday >= $_POST['start_date'] && $en_birthday <= $_POST['end_date'] ) {
 						$temp[] = $user;
