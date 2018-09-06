@@ -202,7 +202,7 @@ class CardsPage extends Component {
 const mapStateToProps = ({ rewards, login }) => {
   const { achievement_cards } = rewards;
   return {
-    cards: achievement_cards,
+    ...achievement_cards,
     login: login.current_login
   }
 };
