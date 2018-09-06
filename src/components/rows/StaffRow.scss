@@ -1,13 +1,23 @@
 .StaffRow {
   padding: 10px;
-  margin-bottom: .5rem;
+  margin: .5rem;
+  display: inline-block;
+
+  width: 100%;
+  @media ( min-width: 730px ) {
+    width: calc( 50% - 1rem );
+  }
 
   > .row { 
     align-items: flex-end;
   }
 
-  .btn-group {
+  .btn {
     display: block;
+    width: 100%;
+    overflow: hidden;
+    word-wrap: nowrap;
+    text-overflow: ellipsis;
   }
 
   p.staff-name {

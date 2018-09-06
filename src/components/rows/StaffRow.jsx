@@ -30,27 +30,30 @@ export class StaffRow extends Component {
     return (
       <Card className='StaffRow'>
         <Row>
+
           <Col xs='12'>
             <p className='staff-name'>
               Name: <Link to={`/bm/staff/${admin_id}`}>{last}, {first}</Link>
             </p>
           </Col>
-          <Col sm='4'>
+
+          <Col xs={7} xl={3}>
             <label>Username</label>
             <Input disabled value={username || ''} />
           </Col>
-          <Col sm='4'>
+
+          <Col xs={{ size: 12, order: 2 }} xl={{ size: 6, order: 1 }}>
             <label>E-Mail</label>
             <Input disabled value={email || ''} />
           </Col>
-          <Col sm='4'>
+
+          <Col xs={{ size: 5, order: 1 }} xl={{ size: 3, order: 2 }}>
             <label>Actions</label>
-            <ButtonGroup>
-              <Button color='danger' onClick={ this.disconnect }>
-                Disconnect
-              </Button>
-            </ButtonGroup>
+            <Button color='danger' onClick={ this.disconnect }>
+              Disconnect
+            </Button>
           </Col>
+
         </Row>
       </Card>
     );
