@@ -237,7 +237,7 @@
                     });
                 }
                 
-                var amount = total.toFixed(2); 
+                var amount = parseFloat(total).toFixed(2); 
                 $("#amount").text( amount );
                 $("#total").val( amount );
             }
