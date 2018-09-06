@@ -8,7 +8,7 @@ require 'encrypt.php';
 $admin_id = encrypt_decrypt('decrypt', $info['admin']);
 
 $year = $info['year'];
-$amount = $info['amount'];
+$amount = (float)$info['amount'];
 $card_num = $info['cc']['num'];
 $exp_date = $info['cc']['exp'];
 $first_name = $info['cc']['first'];
@@ -73,6 +73,6 @@ if ( $amount > 0 ) {
 } else {
     echo json_encode([
         'success'   => false,
-        'error'     => "You have not selected anything to purchase.";
-    ])
+        'error'     => "You have not selected anything to purchase."
+    ]);
 }
