@@ -103,7 +103,7 @@ class CardsPage extends Component {
       return task.subject_id === subject_id;
     }
 
-    let max = 5000;
+    let max = 1500;
 
     return (
       <div id='AchievementsCardsPage'>
