@@ -59,18 +59,22 @@
 			img#cart-img{height: 52px;}
 			
 			#page-title{
+				text-transform: capitalize;
 				font-size: 25px;font-weight: 700;color: #fff;text-align: center;
 				width: auto;display: block;padding: 5px 0px;transition: .25s;
 			}
 			@media (min-width: 525px){
 				#page-title{font-size: 40px;padding: 10px 0px;}
 			}
+
+			h4#no-prizes-message { font-size: 2em; }
+			#balance { font-size: 2em;}
 		</style>
 	</head>
 	<body class="page-goals">
         <header class="navbar" id="top" role="banner">
 			<div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
-				<span id="page-title">MY STORE</span>
+				<span id="page-title">My Store</span>
 			</div>
         </header>
 		
@@ -135,10 +139,12 @@
                 <div id="main"></div>
 
                 <div id='no-prizes' class='alert alert-danger' style='display: none; text-align: center;'>
-                    <h4>
-                        It appears that your base does not have any prizes setup yet, or all it's prizes are out of stock.<br/><br/>
-                        Please contact your Base Commander for more information.
-                    </h4>
+                    <h4 id='no-prizes-message'>
+                        It appears that your base does not have any prizes setup yet, or all it's prizes are out of stock.
+					</h4>
+					<h5>
+						Please contact your Base Commander for more information.
+					</h5>
                 </div>
             </div>
         </div>
@@ -250,20 +256,25 @@
             
             $.post('ajax/getBalance.php', { user : user }, function( success ) {
                 var info = $.parseJSON(success);
-    			var html = "Total Miles Earned: " + info.tpoints;
-                html += "<br />Total Miles Earned this Year: " + info.earned;
-                html += "<br />Available <strong>Store</strong> Miles: <span id='balance'>" + info.available + "</span>";
+				var html = '';
+    			// html += "Total Miles Earned: " + info.tpoints + "<br />";
+                // html += "Total Miles Earned this Year: " + info.earned + "<br />";
+                html += "Available <strong>Store</strong> Miles: <br /><span id='balance'>" + info.available + "</span>";
                 $(".balance").html(html);
                 originalBal = info.available;
                 initCart();
                 calcBalance();
             });
             
-            $.post('ajax/getPrizes.php', { user : user }, function( success ) {
-                var prizes = $.parseJSON(success);
+            $.post('ajax/getPrizes.php', { user : user }, function( data ) {
+                // var data = $.parseJSON(success);
+
+				var prizes = data.prizes;
+				var message = data.message;
                 
                 if ( prizes.length == 0 ) {
-                    $('#no-prizes').show();
+                    $('#no-prizes-message').text( message );
+					$('#no-prizes').show();
                 }
 
                 var html = '';
@@ -349,21 +360,7 @@
 					}, 300);
 				}
 			});
-//            $(document).on('click', ".panel-heading", function() {
-//    			//$(this).parent().find(".collapse").collapse('toggle');
-//                var c = $(this).parent().attr('class');
-//                if (c.indexOf('open') > 0) {
-//                    $(this).parent().removeClass('open');
-//                    $(this).parent().find('.collapse').removeClass('in');
-//					console.log($(this).parent().find('.collapse').data());
-//                } else {
-//                    $(this).parent().addClass('open');
-//                    $(this).parent().find('.collapse').addClass('in');
-//                    $(this).parent().siblings().removeClass('open');
-//                    $(this).parent().siblings().find('.collapse').removeClass('in');
-//                }
-//            });
-            
+
             function initCart() {
 				if (!window.localStorage) {
     				// need to update browser so that sessionStorage will work

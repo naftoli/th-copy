@@ -606,28 +606,11 @@ require 'mobile/reg/ajax/encrypt.php';
 					<li><a href="auction_home.php" class="icon_auction"><?=T_('Auction')?></a></li>
 					<? //} ?>
 					<li><a href="kiosk/profile.php" class="icon_profile"><?=T_('Profile')?></a></li>
-					<?php /*
-						$users = array();
-						$sql = "
-							SELECT
-								*
-							FROM
-								users
-							WHERE
-								user_registered > 0
-								AND user_code = \"" . $user_row['user_code'] . "\"";
-						$result = mysql_query($sql);
-						$row = mysql_fetch_assoc($result);
-						if ($row)
-						{ */
-						//if ($user_row['school_id'] != 61) {
-						//if (in_array($user_row['school_id'], array(55,66,110,112))) {
-						//if (!in_array($user_row['school_id'], array(269))) {
-						
-					?>					
+					<?php if ( $user_row['school_store'] > 0 ) { ?>
 						<li><a href="http://mashpia.com/v2/kiosk/auto-login/uc/<?=encrypt_decrypt('encrypt', '3' . $user_row['user_code'])?>/pb/<?=encrypt_decrypt('encrypt', $p->getMashpiaStorePoints())?>" class="icon_shop"><?=T_('Store')?></a></li>
 					<!-- LI><a href="logout.php?n=statement.php"><IMG src="kiosk/images/icon_logout.png" alt="" width="48" height="48"><?=T_('Logout')?></A></li-->
-                </ul>
+					<?php } ?>
+				</ul>
 			</div> <!-- one_column -->
 	     <? endif; ?>
 
@@ -636,7 +619,9 @@ require 'mobile/reg/ajax/encrypt.php';
 				<? $inbox = mysql_fetch_assoc(mq("SELECT COUNT(*) num FROM user_codes WHERE user_id = {$user_row['user_id']}")); ?>
 				<ul class="buttons button_icons">
 					<li><a href="kiosk/store_withdraw.php" class="icon_withdraw"><?=T_('Withdraw')?></a><? if($left_points>50){?><span class="badge"><?=((int)($left_points/50))?></span><?}?></li>
-					<li><a href="kiosk/store.php" class="icon_shop"><?=T_('Store')?></a></li>
+					<?php if ( $user_row['school_store'] > 0 ) { ?>
+						<li><a href="kiosk/store.php" class="icon_shop"><?=T_('Store')?></a></li>
+					<?php } ?>
 					<li><a href="kiosk/progress.php" class="icon_progress">Progress</a></li>
 					<!--<li><a href="kiosk/medals.php?camp_id=<?=$camp_id;?>&user_id=<?=$user['user_id'];?>" class="icon_medals">Medals</a></li>-->
 					<!-- LI><a href="logout.php?n=statement.php"><IMG src="kiosk/images/icon_logout.png" alt="" width="48" height="48"><?=T_('Logout')?></A></li-->
