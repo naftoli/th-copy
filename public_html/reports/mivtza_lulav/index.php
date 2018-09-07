@@ -42,14 +42,19 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     <style>
         table { width: 100%; }
         th, td { border: 1px solid #888; padding: 4px 8px; }
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
     <h1><?=$year?> Lulav Purchases</h1>
     <?php foreach ( $info as $school => $users ) : ?>
-        <h2><?= $school . ' (' . count( $users ) . ')' ?></h2>
-        <p>Grand Total: <?= $total ?></p>
+        <h2 class="no-print"><?= $school . ' (' . count( $users ) . ')' ?></h2>
+        <p class="no-print">Grand Total: <?= $total ?></p>
         <table>
             <thead>
                 <th>Grade</th>
@@ -64,6 +69,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <div style="page-break-after: always"></div>
     <?php endforeach; ?>
 </body>
 </html>
