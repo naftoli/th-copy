@@ -7,6 +7,7 @@ export const initialState = {
   },
   prizes: [],
   templates: [],
+  school_store: true
 };
 
 export default ( state = initialState, action ) => {
@@ -16,6 +17,12 @@ export default ( state = initialState, action ) => {
       return { 
         ...state, 
         loading: { ...state.loading, ...action.payload } 
+      };
+
+    case types.SET_STORE_OPEN:
+      return { 
+        ...state, 
+        school_store: action.payload
       };
 
     case types.SET_PRIZES:

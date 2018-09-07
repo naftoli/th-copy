@@ -9,12 +9,12 @@ import { Table, InlineSync, FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { getColumns } from './include/columns';
-import { isAdmin } from 'functions/login';
+import { isAdmin, isBC } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
 import { 
   getPrizes, updatePrize, uploadImage,
-  getTemplates, createPrize
+  getTemplates, createPrize, setStoreOpen
 } from 'store/rewards/prizes/operations';
 // styles
 import './include/prizes.scss';
@@ -29,7 +29,7 @@ class PrizesPage extends Component {
 
   componentDidMount() { 
     setTitle( 'Store Prizes' );
-    this.loadPrizes(); 
+    this.loadPrizes();
   }
   // Network
   loadPrizes = () => {
@@ -95,6 +95,14 @@ class PrizesPage extends Component {
     return this.props.updatePrize( id, { [key]: e.target.checked ? 1 : 0 } )
     .catch( e => toast.error( e.message ) );
   }
+  toggleStore = () => {
+    const { school_store } = this.props;
+    if ( window.confirm( `Are you sure you want to ${ school_store ? 'close' : 'open' } your base store?` ) ) {
+      this.props.setStoreOpen( !school_store )
+      .then( () => toast.info( `Store ${ school_store ? 'closed' : 'opened' }` ) )
+      .catch( e => toast.error( e.message ) );
+    }
+  }
 
   toCSV = () => {
     const headers = [
@@ -112,7 +120,10 @@ class PrizesPage extends Component {
   render() {
     const { prizeModal, cropperModal } = this.state;
     const { editPrize, editPicture, updateToggle } = this;
-    const { prizes, loading, login, templates, updatePrize, createPrize } = this.props;
+    const { 
+      prizes, loading, login, templates, 
+      school_store, updatePrize, createPrize 
+    } = this.props;
 
     let columns = getColumns({
       editPrize, editPicture, updateToggle,
@@ -126,6 +137,22 @@ class PrizesPage extends Component {
         }
       );
 
+    // open-close store
+    let storeButton;
+    if ( school_store ) {
+      storeButton = (
+        <Button color='primary' onClick={ this.toggleStore }>
+          <FontAwesome icon='store' /> Close Store
+        </Button>
+      );
+    } else {
+      storeButton = (
+        <Button color='danger' onClick={ this.toggleStore }>
+          <FontAwesome icon='store' /> Open Store
+        </Button>
+      );
+    }
+
     return (
       <div id='PrizesPage'>
         <ButtonGroup>
@@ -134,9 +161,13 @@ class PrizesPage extends Component {
               <FontAwesome icon='plus' /> Create Prize
             </Button>
           }
+          
           <Button color='primary' onClick={ this.loadPrizes }>
             <InlineSync loading={ loading.prizes } /> Refresh
           </Button>
+          
+          { isBC( login.code, true ) && storeButton }
+
           { canDownload( prizes ) &&
             <Button color='primary' onClick={ this.toCSV }>
               <FontAwesome icon='file-download' /> Download Prizes (CSV/Excel)
@@ -182,7 +213,7 @@ const mapStateToProps = ({ rewards, login }) => {
 
 const mapDispatchToProps = {
   getPrizes, updatePrize, createPrize,
-  getTemplates, uploadImage
+  getTemplates, uploadImage, setStoreOpen
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )( PrizesPage );

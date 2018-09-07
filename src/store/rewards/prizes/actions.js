@@ -28,7 +28,6 @@ export const updatePrize = ( id, prize ) => {
   }
 };
 
-
 export const setTemplates = templates => {
   return {
     type: types.SET_TEMPLATES,
@@ -47,5 +46,12 @@ export const updateTemplate = ( id, template ) => {
   return {
     type: types.UPDATE_TEMPLATE,
     payload: { id, template }
+  }
+};
+
+export const setStoreOpen = status => {
+  return {
+    type: types.SET_STORE_OPEN,
+    payload: status
   }
 };

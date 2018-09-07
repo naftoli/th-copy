@@ -7,8 +7,9 @@ export const getPrizes = () => dispatch => {
   dispatch( actions.setLoading( 'prizes', true ) );
   return API.get( `/rewards/prizes` )
   .then( handleAPIResponse )
-  .then( prizes => { 
-    dispatch( actions.setPrizes( prizes ) ); 
+  .then( ({ prizes, school_store }) => { 
+    dispatch( actions.setPrizes( prizes ) );
+    dispatch( actions.setStoreOpen( school_store ) );
     return prizes;
   });
 }
@@ -59,6 +60,13 @@ export const updateTemplate = ( id, updates ) => dispatch => {
     dispatch( actions.updateTemplate( id, template ) ); 
     return template;
   });
+}
+
+/********************** STORE STATUS **********************/
+export const setStoreOpen = ( school_store ) => dispatch => {
+  return API.post( `/rewards/prizes?action=setStoreOpen`, { school_store } )
+  .then( handleAPIResponse )
+  .then( data => dispatch( actions.setStoreOpen( data.school_store ) ) );
 }
 
 /********************** NON STORE API OPERATIONS **********************/

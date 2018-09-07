@@ -12,7 +12,9 @@
   
   .ReactTable {
     height: calc( 100% - 50px );
-
+    @media ( max-width: 500px ) {
+      height: 100%;
+    }
     .rt-td:last-child{ text-transform: capitalize; }
   }
 }
