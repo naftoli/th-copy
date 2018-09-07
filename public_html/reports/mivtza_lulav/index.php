@@ -51,9 +51,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 </head>
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
-    <h1><?=$year?> Lulav Purchases</h1>
+    <h1 class="no-print"><?=$year?> Lulav Purchases</h1>
     <?php foreach ( $info as $school => $users ) : ?>
-        <h2 class="no-print"><?= $school . ' (' . count( $users ) . ')' ?></h2>
+        <h2><?= $school . ' (' . count( $users ) . ')' ?></h2>
         <p class="no-print">Grand Total: <?= $total ?></p>
         <table>
             <thead>
