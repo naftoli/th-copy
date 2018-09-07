@@ -163,7 +163,7 @@
             // find out how many sets have been sold
             var soldOut = false;
             $.post('ajax/lulavPurchases.php', function( sold ) {
-                var alreadySold = 760;
+                var alreadySold = 820;
                 alreadySold += parseInt( sold );
                 var leftToSell = 1000 - alreadySold;
                 $("#sold").text( alreadySold );
