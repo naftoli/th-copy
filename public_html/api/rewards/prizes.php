@@ -6,13 +6,16 @@ class PrizesRouter {
 
     public function index() {
         global $current_user; global $POINTS_DB;
+
         $login = $current_user->login;
         $IMG_PATH = StorePrize::IMG_PATH;
+        $school_store = false;
 
         $filter = 'institution_id IN ( SELECT school_id FROM mashpiadb.schools WHERE test_school = 0 ) ';
         if ( $login['code'] == 'INST' ) {
             $filter = 'institution_id IN ( SELECT school_id FROM mashpiadb.schools WHERE inst_id = '. $login['id'].' ) ';
         } else if ( $login['code'] == 'BC' ) {
+            $school_store = !!School::find( $current_user->login['id'] )->school_store;
             $filter = 'institution_id = '. $login['id'].' ';
         } else if ( $login['code'] == 'TEACHER' ) {
             $filter = 'institution_id = '. $login['school_id'];
@@ -44,7 +47,10 @@ class PrizesRouter {
             $response[] = $prize; 
         }
 
-        json_response( $response, true, true );
+        json_response( [
+            'prizes' => $response,
+            'school_store' => $school_store
+        ], true, true );
     }
 
     public function show( $id ){
@@ -120,17 +126,26 @@ class PrizesRouter {
     public function uploadImage() {
         global $current_user;
         if ( isset( $_FILES['image'] ) ) {
-            try {
-                $result = StorePrize::uploadImage( $current_user->admin_id, $_FILES['image'] );
-                json_response([
-                    'image' => StorePrize::IMG_PATH . $result,
-                    'image_id' => $result
-                ]);
-            } catch ( Exception $e ) {
-                return json_error( $e->getMessage() );
-            }
+            $result = StorePrize::uploadImage( $current_user->admin_id, $_FILES['image'] );
+            json_response([
+                'image' => StorePrize::IMG_PATH . $result,
+                'image_id' => $result
+            ]);
         }
         json_error('Server did not get the prize image.');
+    }
+
+    public function setStoreOpen() {
+        global $current_user;
+
+        $school = School::find( $current_user->login['id'] );
+
+        $school->school_store = $_POST['school_store'];
+        $school->save();
+
+        json_response([
+            'school_store' => $school->school_store
+        ]);
     }
 }
 
