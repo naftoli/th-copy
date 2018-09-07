@@ -5,10 +5,7 @@ require_once ( __DIR__ . '/../../class.globalSettings.php' );
 $year = GlobalSettings::getRegistrationYear();
 
 $children = [];
-$query = mysql_query(
-    "SELECT users FROM lulav_purchases WHERE year = $year"
-);
-
+$query = mysql_query("SELECT users FROM lulav_purchases WHERE year = $year");
 while ( $row = mysql_fetch_assoc( $query ) ) {
     if ( strpos($row['users'], ',') !== false ) {
         $users = explode(',', $row['users']);

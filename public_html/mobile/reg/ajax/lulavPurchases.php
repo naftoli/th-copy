@@ -1,8 +1,17 @@
 <?php
 require '../../../db.php'; 
 
-$sql = "select count(*) as sold from lulav_purchases";
-$result = mysql_query( $sql );
-$row = mysql_fetch_assoc( $result );
+$children = [];
+$query = mysql_query("SELECT users FROM lulav_purchases");
+while ( $row = mysql_fetch_assoc( $query ) ) {
+    if ( strpos($row['users'], ',') !== false ) {
+        $users = explode(',', $row['users']);
+        foreach ( $users as $id ) {
+            $children[] = intval( $id );
+        }
+    } else {
+        $children[] = intval( $row['users'] );
+    }
+}
 
-echo $row['sold'];
+echo count( $children );
