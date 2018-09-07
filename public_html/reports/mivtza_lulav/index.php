@@ -52,9 +52,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 <body>
     <?php include( __DIR__ . '/../../admin_header.php'); ?>
     <h1 class="no-print"><?=$year?> Lulav Purchases</h1>
+    <p class="no-print">Grand Total: <?= $total ?></p>
     <?php foreach ( $info as $school => $users ) : ?>
         <h2><?= $school . ' (' . count( $users ) . ')' ?></h2>
-        <p class="no-print">Grand Total: <?= $total ?></p>
         <table>
             <thead>
                 <th>Grade</th>
