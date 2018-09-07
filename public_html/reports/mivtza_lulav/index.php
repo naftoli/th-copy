@@ -53,14 +53,12 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         <h2><?= $school . ' (' . count( $users ) . ')' ?></h2>
         <table>
             <thead>
-                <th>School</th>
                 <th>Grade</th>
                 <th>Student</th>
             </thead>
             <tbody>
                 <?php foreach ( $users as $user ) : ?>
                     <tr>
-                        <td><?= $user['school_name'] ?></td>
                         <td><?= $user['class_grade'] . (empty( $user['class_sub'] ) ? '' : '-' . $user['class_sub']) ?></td>
                         <td><?= $user['first'] . " " . $user['last'] ?></td>
                     </tr>
