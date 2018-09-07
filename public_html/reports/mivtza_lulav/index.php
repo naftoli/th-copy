@@ -16,6 +16,7 @@ while ( $row = mysql_fetch_assoc( $query ) ) {
         $children[] = intval( $row['users'] );
     }
 }
+$total = count( $children );
 //echo "<pre>"; print_r( $children ); echo "</pre>"; exit;
 
 $info = [];
@@ -48,6 +49,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     <h1><?=$year?> Lulav Purchases</h1>
     <?php foreach ( $info as $school => $users ) : ?>
         <h2><?= $school . ' (' . count( $users ) . ')' ?></h2>
+        <p>Grand Total: <?= $total ?></p>
         <table>
             <thead>
                 <th>Grade</th>
