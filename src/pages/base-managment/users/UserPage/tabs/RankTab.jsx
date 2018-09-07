@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { LEGACY_URL } from 'components/constants';
 import { Row, Col, TabPane } from 'reactstrap';
+import { Date } from 'components/ui'
 
 class RankTab extends Component {
   render() {
@@ -31,13 +32,13 @@ const RankRow = ( { rank } ) => {
       <Col xs='3' sm='2' className='RankRow-rank'>
         <p>{ rank.rank_name }</p>
         <img src={`${LEGACY_URL}/mobile/img_new/ranks/${rank.rank_ord}.svg`} alt='rank' />
-        <p>({ rank.date_promoted })</p>
+        <p>(<Date value={ rank.date_promoted } />)</p>
       </Col>
       <Col xs='9' sm='10' className='RankRow-medals'>
         { rank.medals && rank.medals.map( (medal, index) => 
           <div key={index}>
             <img src={ `${LEGACY_URL}${medal.photo}` } alt='medal'/>
-            <p>{ medal.date_awarded }</p>
+            <p><Date value={ medal.date_awarded } /></p>
             <p>{ medal.date_awarded_he }</p>
           </div>
         ) }
