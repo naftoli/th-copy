@@ -15,7 +15,7 @@ if ( !$row['school_store'] )
     $message = "$school_name has closed it's prize store.";
 else {
     mysql_select_db('pointsDB');
-    $sql = "SELECT prize_id, prize_name, prize_description, points, image_id, one_per_user, prize_count, class_id 
+    $sql = "SELECT prize_id, prize_name, prize_description, prizes.modified, points, image_id, one_per_user, prize_count, class_id 
             FROM pointsDB.prizes 
             LEFT JOIN pointsDB.prize_classes USING (prize_id)
             WHERE is_active = 1

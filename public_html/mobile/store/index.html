@@ -18,6 +18,7 @@
 		<link rel="stylesheet" href="/mobile/css/bug_report.css"/>
 		<script src="/mobile/js/bug_report.js?v=2.0" defer></script>
 		<style>
+			.product.light .product-caption .block-name { display: block; }
 			body {
 				position: relative;
 			}
@@ -52,9 +53,8 @@
 			@media (min-width: 1200px) {.product {width: 33%;}}
 			@media (max-width: 725px) {.product{width: 100%;}}
 			/*			Center the header text*/
-			.container>.navbar-header{
-				margin-left: 0px;
-			}
+			.container { margin-bottom: 100px; }
+			.container >.navbar-header{ margin-left: 0px; }
 /*			Switch from absolute to fixed to avoid iOS glitch */
 			.personalImg{
 				position: fixed;
@@ -67,7 +67,7 @@
 			img#cart-img{height: 52px;}
 			
 			#page-title{
-				text-transform: capitalize;
+				text-transform: uppercase;
 				font-size: 25px;font-weight: 700;color: #fff;text-align: center;
 				width: auto;display: block;padding: 5px 0px;transition: .25s;
 			}
@@ -298,17 +298,19 @@
                 var html = '';
                 for (var amount in prizes) {
                     html += '<div class="panel panel-default">' +
-						'<div class="panel-heading"><i class="glyphicon glyphicon-chevron-right"></i>' +  amount +  ' Mile Prizes</div>' +
+						'<div class="panel-heading"><i class="glyphicon glyphicon-chevron-right"></i>' +  parseInt( amount, 10 ).toLocaleString() +  ' Mile Prizes</div>' +
 						'<div class="collapse" id="collapse_prize_' + amount + '"><div class="panel-body"><div class="row">';
                     for (var p in prizes[amount]) {
     					var prize = prizes[amount][p];
                         html += '<div class="col-xs-6 col-sm-6 col-md-4 text-center product">\
 							<article class="product light">\
 								<div class="product-caption">';
-                        html += '<figure class="figure-hover-overlay">' +                                                                      
-                                    '<a href="#" class="figure-href"></a>' +
-                                    '<div class="product-new">new</div> '+
-                                    '<!--<div class="product-sale">&nbsp;7% <br> off</div>-->';
+                        html += '<figure class="figure-hover-overlay">';
+						// show the new label if the prize was edited in the last 15 days
+                        if ( new Date( prize.modified ).getTime() > new Date().getTime() - (15 * 24 * 60 * 60 * 1000) ) {
+							html += '<div class="product-new">new</div> ';
+						}
+                        html += 	'<!--<div class="product-sale">&nbsp;7% <br> off</div>-->';
 							if (prize.image_id != 0) {
 								html += '<img class="img-responsive" onerror="handleImageError( this )" src="/v2/imgs/v/w/150/src/' + prize.image_id + '" alt="" title="">';
 							} else {
@@ -317,7 +319,7 @@
 						html += '</figure>\
 								<div class="block-name">\
 									<a href="#" class="product-name">' + prize.prize_name + '</a>\
-									<p class="product-price">' + prize.points + ' Mile' + ( prize.points > 1 ? 's' : '' ) + '</p>\
+									<p class="product-price">' + parseInt( prize.points, 10 ).toLocaleString() + ' Mile' + ( prize.points > 1 ? 's' : '' ) + '</p>\
 								</div>\
 								<div class="product-cart" id="' +
 								prize.prize_id + ':' + prize.points + ':' +	prize.image_id + ':' +
@@ -493,7 +495,12 @@
     	});
 
 		function handleImageError( img ) {
-			img.src = '/v2/images/imgsrepo/default.png';
+			// console.log( img.src );
+			if( img.src.indexOf('imgs/v/w/150/src/') > 0 ) {
+				img.src = img.src.replace('imgs/v/w/150/src/', 'images/imgsrepo/')
+			} else {
+				img.src = '/v2/images/imgsrepo/default.png';
+			}
 		}
     </script>
 </html>
