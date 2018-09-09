@@ -1,11 +1,7 @@
-@import '../../../styles/colors.scss';
+@import 'styles/colors.scss';
 
 #RegistrationPage {
   height: 100%;
-  
-  .selected-row {
-    background-color: $primary-color-light !important;
-  }
 
   .ReactTable {
     height: calc( 100% - 200px );

@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { Callout, InlineSync, FontAwesome } from 'components/ui';
-import { Checkbox } from 'components/inputs';
 import { Link } from 'react-router-dom';
-import { Row, Col, Button, ButtonGroup } from 'reactstrap'; 
-import ReactTable from "react-table";
 import RegistrationModal from './RegistrationModal';
+import { Row, Col, Button, ButtonGroup } from 'reactstrap'; 
+import { SelectTable, Callout, InlineSync, FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
-import { defaultTableProps } from 'functions/tables';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { getSoldiers, registerSoldiers } from 'store/soldiers/registration/operations';
 // styles
@@ -19,12 +16,10 @@ import './RegistrationPage.scss';
 export class RegistrationPage extends Component {
 
   state = {
-    selection: [],  selectAll: false,
-    total: 0, showModal: false
+    total: 0,
+    selection: [],
+    showModal: false
   }
-  // refs
-  checkboxTable = React.createRef();
-  checkAll = null; // uses callback refs. will point directly ( not using .current )
   
   componentDidMount(){ 
     setTitle('Soldier Registration');
@@ -46,43 +41,22 @@ export class RegistrationPage extends Component {
 
   toggleModal = () => this.setState({ showModal: !this.state.showModal });
 
-  isSelected = user_id => this.state.selection.includes( user_id );
+  getId = row => row.user_id;
 
-  toggleRow = ( { user_id, fee } ) => {
-    // start off with the existing state ( with a new array to avoid errors )
-    let selection = [ ...this.state.selection ];
-    const keyIndex = selection.indexOf( user_id );
-    // check to see if the key exists
-    if (keyIndex >= 0) { // it does exist so we will remove it using destructing
-      selection = [ ...selection.slice(0, keyIndex), ...selection.slice(keyIndex + 1) ];
-      fee = -Math.abs(fee); // update the fee to a negative number
-    } else { // it does not exist so add it
-      selection.push(user_id);
-    }
-    // UI update
-    this.checkAll.indeterminate = this.props.soldiers.length > selection.length && selection.length > 0;
+  toggleRow = ( selection, { fee } ) => {
+    if ( this.state.selection.length > selection.length )
+      fee = -Math.abs(fee); // update the fee to a negative number if we reduced the length of items
     // update the state
     const total = this.state.total + fee;
-    const selectAll = this.props.soldiers.length === selection.length
-    this.setState({ selection, total, selectAll });
+    this.setState({ selection, total });
   };
 
-  toggleAll = () => {
-    // uses HOC to select all the currently visiable users in all pages ( not the ones filtered out )
-    const selectAll = this.state.selectAll ? false : true;
-    const selection = [];
+  toggleAll = ( selection, currentRecords ) => {
     let total = 0;
-    if (selectAll) {
-      // we need to get at the internals of ReactTable
-      // the 'sortedData' property contains the currently accessible records based on the filter and sort
-      const currentRecords = this.checkboxTable.current.getResolvedState().sortedData;
-      // we just push all the IDs onto the selection array
-      currentRecords.forEach(item => {
-        selection.push(item._original.user_id);
-        total += item._original.fee; // add the fee
-      });
-    }
-    this.setState({ selectAll, selection, total });
+    if ( currentRecords.length > 0 )
+      currentRecords.forEach(item => { total += item._original.fee; } ); // calculate the fee
+      
+    this.setState({ selection, total });
   };
 
   registerUsers = ( payment ) => {
@@ -96,16 +70,10 @@ export class RegistrationPage extends Component {
 
   render() {
     const { login, loading, soldiers, getSoldiers } = this.props;
-    const { selectAll, total, selection, showModal } = this.state;
-    const { toCSV, isSelected, toggleRow, toggleAll, toggleModal } = this;
+    const { total, selection, showModal } = this.state;
+    const { toCSV, toggleModal } = this;
     // define table columns
     let columns = [
-      { id: 'checkbox', accessor: '', width: 38,
-        filterable: false, sortable: false, resizable: false,
-        Cell: props => <Checkbox checked={ isSelected(props.original.user_id) }
-          onChange={ () => {/* handled on line 110 for whole row*/} }/>, 
-        Header: props => <Checkbox onChange={ toggleAll } checked={ selectAll }
-          setRef={ ref => { this.checkAll = ref } } /> },
       { Header: 'First Name', accessor: 'first',
         Cell: props => <Link to={`/bm/users/${props.original.user_id}`} tabIndex={-1}>{props.value}</Link> },
       { Header: 'Last Name', accessor: 'last',
@@ -119,20 +87,7 @@ export class RegistrationPage extends Component {
     if ( isAdmin(login.code) ) {
       columns.push( { Header: 'Base', accessor: 'school_name' } );
     }
-    // set props for each row in the table
-    const getTrProps = ( state, row ) => {
-      const selected = row ? isSelected( row.original.user_id ) : false;
-      return {
-        onClick: e => { e.preventDefault(); toggleRow( row.original ); },
-        className: selected ? "selected-row" : ""
-      }
-    }
-    // set the props for the table
-    let tableProps = defaultTableProps( 'RegistrationPage', loading )
-    tableProps = { 
-      ...tableProps, columns, getTrProps, 
-      data: soldiers, minRows: 10, defaultPageSize: 100, 
-    }
+
     // render the page
     return (
       <div id='RegistrationPage'>
@@ -166,7 +121,16 @@ export class RegistrationPage extends Component {
             </h2>
           </Col>
         </Row>
-        <ReactTable { ...tableProps } ref={this.checkboxTable}/>
+        <SelectTable 
+          pageId='RegistrationPage' 
+          data={ soldiers } columns={ columns }
+          loading={ loading && !soldiers.length }
+
+          getId={ this.getId }
+          selection={ selection }
+          maxSelectionSize={ soldiers.length }
+          toggleRow={ this.toggleRow }
+          toggleAll={ this.toggleAll } />
 
         <RegistrationModal isOpen={showModal} toggle={toggleModal} onSubmit={ this.registerUsers }/>
       </div>

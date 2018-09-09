@@ -27,12 +27,12 @@ class Step1 extends Component {
               { baseSelect }
             </Col>
           }
-          <Col sm={4}>
+          <Col sm={ baseSelect ? 4 : 6 }>
             <label>From Platoon</label>
             <PlatoonSelect value={ class_id } schoolId={ school_id }
               onChange={ selectChange( 'class_id' ) } showNoneOption />
           </Col>
-          <Col sm={4}>
+          <Col sm={ baseSelect ? 4 : 6 }>
             <Button color='primary' onClick={ onSubmit }>
               <InlineSync loading={loading} /> Load Soldiers
             </Button>
