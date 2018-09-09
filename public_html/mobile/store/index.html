@@ -33,15 +33,22 @@
 			}
 			.product {
 				width: 50%;
-				height: 155px;
-				margin-bottom: 15px;
+				min-height: 150px;
+			}
+			.description {
+				/* overflow: hidden; */
+				word-wrap: break-word;
+				text-overflow: ellipsis;
 			}
 			.figure-hover-overlay img{
-				max-height: 155px;
+				max-height: 150px;
 			}
-			.figure-hover-overlay{ width: 40%; display: inline-block;}
+			.figure-hover-overlay{
+				width: 40%; max-width: 150px; float: left; border: 1px solid;
+				margin: 0px 10px 5px 0px; max-height: 150px;
+			}
 			.product.light{margin: 10px 0; min-width: 100%;}
-			.product-caption{width: 60%; float: right;}
+			/* .product-caption{width: 60%; float: right;} */
 			@media (min-width: 1200px) {.product {width: 33%;}}
 			@media (max-width: 725px) {.product{width: 100%;}}
 			/*			Center the header text*/
@@ -52,6 +59,7 @@
 			.personalImg{
 				position: fixed;
 				z-index: 999;
+				background: #ff1a1a;
 			}
 /*			Dropdown arrows*/
 			i.glyphicon.glyphicon-chevron-right, i.glyphicon.glyphicon-chevron-left {background: url("https://mashpia.com/mobile/img_new/arrow-1-color-white-svg.svg");width: 10px;height: 15px;background-repeat: no-repeat;}
@@ -69,6 +77,16 @@
 
 			h4#no-prizes-message { font-size: 2em; }
 			#balance { font-size: 2em;}
+
+			.clearfix:before,
+			.clearfix:after {
+				content: ".";    
+				display: block;    
+				height: 0;    
+				overflow: hidden; 
+			}
+			.clearfix:after { clear: both; }
+			.clearfix { zoom: 1; } /* IE < 8 */
 		</style>
 	</head>
 	<body class="page-goals">
@@ -280,37 +298,39 @@
                 var html = '';
                 for (var amount in prizes) {
                     html += '<div class="panel panel-default">' +
-						'<div class="panel-heading"><i class="glyphicon glyphicon-chevron-right"></i>' +  amount +  ' Point Prizes</div>' +
+						'<div class="panel-heading"><i class="glyphicon glyphicon-chevron-right"></i>' +  amount +  ' Mile Prizes</div>' +
 						'<div class="collapse" id="collapse_prize_' + amount + '"><div class="panel-body"><div class="row">';
                     for (var p in prizes[amount]) {
     					var prize = prizes[amount][p];
-                        html += '<div class="col-xs-6 col-sm-6 col-md-4 text-center product"><article class="product light">' +
-                                '<figure class="figure-hover-overlay">' +                                                                      
+                        html += '<div class="col-xs-6 col-sm-6 col-md-4 text-center product">\
+							<article class="product light">\
+								<div class="product-caption">';
+                        html += '<figure class="figure-hover-overlay">' +                                                                      
                                     '<a href="#" class="figure-href"></a>' +
                                     '<div class="product-new">new</div> '+
                                     '<!--<div class="product-sale">&nbsp;7% <br> off</div>-->';
-                        if (prize.image_id != 0) {
-							html += '<img class="img-responsive" src="/v2/imgs/v/w/150/src/' + prize.image_id + '" alt="" title="">';
-						} else {
-							html += '<img class="img-responsive" src="/mobile/img_new/stock/prize.png" alt="" title="">';
-						};
-                        html += '</figure>\
-                                <div class="product-caption">\
-                                    <div class="block-name">\
-                                        <a href="#" class="product-name">' + prize.prize_name + '</a>\
-                                        <p class="product-price"><!--<span>' + prize.points + '</span>--> ' + prize.points + ' Points</p>\
-                                    </div>\
-                                    <div class="product-cart" id="' +
-    								prize.prize_id + ':' + prize.points + ':' +	prize.image_id + ':' +
-    								prize.prize_name + ':' + prize.one_per_user + ':' + prize.prize_count + '">\
-                                        <a href="#"><i class="fa fa-shopping-cart"></i> </a>\
-                                    </div>\
-                                    <p class="description">' + prize.prize_description + '</p>';
+							if (prize.image_id != 0) {
+								html += '<img class="img-responsive" onerror="handleImageError( this )" src="/v2/imgs/v/w/150/src/' + prize.image_id + '" alt="" title="">';
+							} else {
+								html += '<img class="img-responsive" src="/v2/images/imgsrepo/default.png" alt="" title="">';
+							};
+						html += '</figure>\
+								<div class="block-name">\
+									<a href="#" class="product-name">' + prize.prize_name + '</a>\
+									<p class="product-price">' + prize.points + ' Mile' + ( prize.points > 1 ? 's' : '' ) + '</p>\
+								</div>\
+								<div class="product-cart" id="' +
+								prize.prize_id + ':' + prize.points + ':' +	prize.image_id + ':' +
+								prize.prize_name + ':' + prize.one_per_user + ':' + prize.prize_count + '">\
+									<a href="#"><i class="fa fa-shopping-cart"></i> </a>\
+								</div>';
     							if (parseInt(prize.one_per_user) == 1) {
-    								html += '<p class="onePerUser">Only one per child</p>';
+    								html += '<p class="onePerUser">Only one per Soldier</p>';
     							}
-    							html += '</div>\
-                            </article></div>';
+								html += '<p class="description clearfix">' + prize.prize_description + '</p>';
+								html += '</div>\
+								</article>\
+							</div>';
                     }
                     
                     html += '</div></div></div></div>';
@@ -471,5 +491,9 @@
     			location.href = "cart.html?id=" + user;
             });
     	});
+
+		function handleImageError( img ) {
+			img.src = '/v2/images/imgsrepo/default.png';
+		}
     </script>
 </html>
