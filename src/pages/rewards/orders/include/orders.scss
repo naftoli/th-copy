@@ -1,0 +1,15 @@
+@import 'styles/colors.scss';
+
+#OrdersPage {
+  height: 100%;
+  
+  .ReactTable {
+    height: calc( 100% - 40px );
+    @media ( max-width: 500px ) {
+      height: 100%;
+    }
+    margin-bottom: 8px;
+  }
+}
+
+// #PrizeModal {}
