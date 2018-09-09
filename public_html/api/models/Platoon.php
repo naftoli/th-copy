@@ -11,8 +11,13 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
 
     // ******************************* HELPER FUNCTIONS *******************************
     public function name() {
-        return $this->class_grade . ( $this->class_sub ? ' - ' . $this->class_sub : ' ' );
+        return self::generateName( $this->class_grade, $this->class_sub );
     }
+
+    public static function generateName( $grade, $sub ) {
+        return $grade . ( $sub ? ' - ' . $sub : ' ' );
+    }
+
     public function staff() {
         global $MASHPIA_DB;
         $staff_query = $MASHPIA_DB->prepare(
