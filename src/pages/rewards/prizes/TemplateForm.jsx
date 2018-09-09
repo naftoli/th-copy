@@ -59,8 +59,8 @@ export class TemplateForm extends Component {
                   name='prize_description'
                   type="textarea" rows='2'
                   value={ prize_description || '' }
-                  pattern='^.{20,2000}$' title="20 to 2000 characters" maxLength={ 2000 } />
-                <div className='invalid-message'>Please enter between 20 and 2,000 characters</div>
+                  pattern='^.{10,500}$' title="10 to 500 characters" maxLength={ 500 } />
+                <div className='invalid-message'>Please enter between 10 and 2,000 characters</div>
               </Col>
             </Row>
         </Col>
