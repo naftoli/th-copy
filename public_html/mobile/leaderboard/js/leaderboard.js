@@ -66,7 +66,7 @@ var leaderboardApp = function(){
             offset:     offset
         };
         // fetch and render the leaderboard
-        $.post( "/mobile/api/leaderboard.php", postData, function( response ){
+        $.post( "api/leaderboard.php", postData, function( response ){
             renderLeaderBoard( response.data, offset );
         });
     }
@@ -133,7 +133,7 @@ var leaderboardApp = function(){
         html +=         '<h1 class="position">#' + position + '</h1>';
         html +=         '<h2 class="name">'+ user.first.toLowerCase() + ' ' + user.last.toLowerCase() + '</h2>'
         html +=         '<div class="medal_count">' + user.medal_count + ' Medals</div>'
-        html +=         '<div class="mission_count">' + formatNumber(user.mission_count) + ' Missions</div>'
+        html +=         '<div class="mission_count">' + formatNumber(user.mission_count) + ' Stickers</div>'
         html +=     '</div>';
         html +=    '</div>';
         return html;
