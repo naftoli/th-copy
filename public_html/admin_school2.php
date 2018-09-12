@@ -661,30 +661,31 @@ if (!empty($action)) { switch($action) {
 												<button id="copy_main_address">Use Primary Address</button>
 												<button id="copy_shipping_address">Use Shipping Address</button><br/>
 											</center>
+                                            <?php $has_billing = isset( $payment_profile['billTo'] ); ?>
 											<div class="input_group input_full">
 												<label>
 													<?=T_('Billing Address')?><br/>
-													<input type="text" name="billing_address" value="<?=$customer_profile ? $payment_profile['billTo']['address'] : "";?>" maxlength=255>
+													<input type="text" name="billing_address" value="<?=$customer_profile && $has_billing ? $payment_profile['billTo']['address'] : "";?>" maxlength=255>
 												</label><br/>
 											</div>
 											<div class="input_group input_third">
 												<label>
 													<?=T_('Billing City')?><br/>
 													<input type="text" name="billing_city" maxlength=255
-														value="<?=$customer_profile && isset($payment_profile['billTo']['city']) ? $payment_profile['billTo']['city'] : "";?>"
+														value="<?=$has_billing && $customer_profile && isset( $payment_profile['billTo']['city']) ? $payment_profile['billTo']['city'] : "";?>"
 													/>
 												</label><br/>
 											</div>
 											<div class="input_group input_third">
 												<label>
 													<?=T_('Billing State/Province')?><br/>
-													<input type="text" name="billing_state" value="<?=$customer_profile ? $payment_profile['billTo']['state'] : "";?>" maxlength=255>
+													<input type="text" name="billing_state" value="<?=$has_billing && $customer_profile ? $payment_profile['billTo']['state'] : "";?>" maxlength=255>
 												</label><br/>
 											</div>
 											<div class="input_group input_third">
 												<label>
 													<?=T_('Billing Zip/Postal code')?><br/>
-													<input type="text" name="billing_postal" value="<?=$customer_profile ? $payment_profile['billTo']['zip'] : "";?>" maxlength=10>
+													<input type="text" name="billing_postal" value="<?=$has_billing && $customer_profile ? $payment_profile['billTo']['zip'] : "";?>" maxlength=10>
 												</label><br/>
 											</div>
 											<br/>

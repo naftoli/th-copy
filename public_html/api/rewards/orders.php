@@ -22,14 +22,14 @@ class OrdersRouter {
 
         $query = $POINTS_DB->prepare(
              " SELECT user_prize_id, user_serial, first, last, prize_name, p.points, points.points as total, "
-            ." quantity, status, class_grade, class_sub, orders.modified "
+            ." quantity, status, class_grade, class_sub, orders.created "
             ." FROM pointsDB.user_prizes orders "
             ." JOIN pointsDB.prizes p USING ( prize_id ) "
             ." JOIN mashpiadb.users u USING( user_id ) "
             ." JOIN mashpiadb.classes c USING( class_id ) "
             ." JOIN pointsDB.user_points points USING ( user_prize_id ) "
             ." WHERE is_reversed = 0 AND $filter AND status = ? "
-            ." ORDER BY status ASC, orders.modified DESC, class_grade ASC, class_sub ASC, first ASC, last ASC, prize_name ASC;"
+            ." ORDER BY orders.created DESC, class_grade ASC, class_sub ASC, first ASC, last ASC, prize_name ASC;"
         );
 
         $query->execute([ $login['id'], $status ]);
