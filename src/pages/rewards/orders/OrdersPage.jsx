@@ -2,22 +2,23 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Button, ButtonGroup } from 'reactstrap';
-// import PrizeModal from './PrizeModal';
+import OrderModal from './OrderModal';
 import { Callout, SelectTable, InlineSync, FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { isBC } from 'functions/login';
 import { getColumns } from './include/columns';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { createNotifcation, updateNotifcation } from 'functions/notifications';
 // state
-import { getOrders } from 'store/rewards/orders/operations';
+import { getOrders, processOrders } from 'store/rewards/orders/operations';
 // styles
 import './include/orders.scss';
 
 class OrdersPage extends Component {
 
   state = { 
-    modal: { show: false },
+    modal: false,
     selection: [],
     redeemed: false,
   };
@@ -30,6 +31,9 @@ class OrdersPage extends Component {
   // refs
   checkboxTable = React.createRef();
   checkAll = null;
+
+  // modal
+  toggleModal = () => this.setState({ modal: !this.state.modal });
 
   // table
   getId = row => row.user_prize_id;
@@ -46,20 +50,21 @@ class OrdersPage extends Component {
     this.setState(
       { redeemed: !this.state.redeemed },
       () => this.loadOrders()
-    )
+    );
   }
 
-  cancelOrders = () => {
-    console.log( this.state.selection );
-  }
+  processOrders = action => () => {
+    if ( action == 'reverse'
+      && !window.confirm('Are you sure you want to delete and refund these orders? This action cannot be undone.')
+    ) return false;
 
-  unredeemOrders = () => {
-    console.log( this.state.selection );
-  }
+    const order_count = this.state.selection.length;
+    const toast_id = createNotifcation( `${action}ing ${order_count} orders.` );
 
-
-  redeemOrders = () => {
-    console.log( this.state.selection );
+    this.props.processOrders( action, this.state.selection )
+    .then( () => updateNotifcation( toast_id, `${order_count} orders updated!` ) )
+    .then( this.loadOrders )
+    .catch( e => updateNotifcation( toast_id, '', e.message, false ) );
   }
 
   toCSV = () => {
@@ -76,7 +81,7 @@ class OrdersPage extends Component {
   }
 
   render() {
-    const { selection, redeemed } = this.state;
+    const { modal, selection, redeemed } = this.state;
     const { orders, loading, login } = this.props;
 
     let columns = getColumns( isBC( login.code, true ) );
@@ -85,14 +90,12 @@ class OrdersPage extends Component {
       <div id='OrdersPage'>
         <Callout title='Store Orders'>
           <p>Create and manage orders coming in from Teachers, Kiosks and Parent Accounts</p>
-          <p>
-            <strong>By Default this page only loads current orders that need to be fulfiled. </strong>
-            To see old orders which have already been redeemed, please press the "Load Redeemed Orders" button.
-          </p>
+          <strong>This page loads open orders. </strong>
+          To see old orders, please press the "Load Redeemed Orders" button.
         </Callout>
 
         <ButtonGroup>
-          <Button className='btn btn-primary'>
+          <Button className='btn btn-primary' onClick={ this.toggleModal }>
             <FontAwesome icon='plus' /> Create Order
           </Button>
           
@@ -102,8 +105,8 @@ class OrdersPage extends Component {
           </Button>
 
           <Button color='primary' onClick={ this.toggleOrderStatus }>
-            <FontAwesome icon={redeemed ? 'store-alt' : 'archive'} />{' '}
-            Load { redeemed ? 'Current' : 'Redeemed' } Orders
+            <FontAwesome icon={redeemed ? 'store' : 'archive'} />{' '}
+            Load { redeemed ? 'Open' : 'Redeemed' } Orders
           </Button>
 
           { canDownload( orders ) &&
@@ -114,7 +117,7 @@ class OrdersPage extends Component {
 
           { redeemed && 
             <Button color='primary' 
-                onClick={ this.unredeemOrders } 
+                onClick={ this.processOrders( 'unredeem' ) } 
                 disabled={ selection.length === 0 }>
               <FontAwesome icon='undo' /> Un-redeem
             </Button>
@@ -122,16 +125,16 @@ class OrdersPage extends Component {
 
           { !redeemed && 
             <Button color='primary' 
-                onClick={ this.redeemOrders } 
+                onClick={ this.processOrders( 'redeem' ) } 
                 disabled={ selection.length === 0 }>
               <FontAwesome icon='box' /> Redeem
             </Button>
           }
 
           <Button color='primary'
-              onClick={ this.cancelOrders }
+              onClick={ this.processOrders( 'reverse' ) }
               disabled={ selection.length === 0 }>
-            <FontAwesome icon='ban'/> Cancel
+            <FontAwesome icon='trash'/> Delete
           </Button>
           
         </ButtonGroup>
@@ -149,9 +152,9 @@ class OrdersPage extends Component {
           toggleRow={ this.toggleRow }
           toggleAll={ this.toggleAll } />
 
-        {/* <pre>
-          { JSON.stringify( this.state, null, 2 ) }
-        </pre> */}
+        <OrderModal
+          isOpen={ modal }
+          toggle={ this.toggleModal } />
 
       </div>
     );
@@ -166,6 +169,6 @@ const mapStateToProps = ({ rewards, login }) => {
   }
 };
 
-const mapDispatchToProps = { getOrders };
+const mapDispatchToProps = { getOrders, processOrders };
 
 export default connect( mapStateToProps, mapDispatchToProps )( OrdersPage );

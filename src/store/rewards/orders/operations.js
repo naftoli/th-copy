@@ -10,3 +10,7 @@ export const getOrders = ( redeemed = false ) => dispatch => {
     return orders;
   });
 }
+
+export const processOrders = ( action, user_prize_ids ) => dispatch => {
+  return API.post( `/rewards/orders?action=${action}`, { user_prize_ids } )
+}
