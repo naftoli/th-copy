@@ -5,16 +5,12 @@ import { Number, DateDisplay } from 'components/ui';
 
 export function getColumns( bc ) {
   const columns = [
-    { Header: 'Date', accessor: 'modified', filterable: false,
-      Cell: ({ value }) => <DateDisplay value={ value } format='l LT' />
-    },
-  
+    { Header: 'Prize', accessor: 'prize_name' },
     { Header: 'First Name', accessor: 'first' },
     { Header: 'Last Name', accessor: 'last' },
-    { Header: 'Prize', accessor: 'prize_name' },
 
-    { Header: 'Miles', accessor: 'total', Cell: props => <Number value={ props.value * -1 }/> },
     { Header: 'Qty', accessor: 'quantity', Cell: props => <Number value={props.value}/> },
+    { Header: 'Total Miles', accessor: 'total', Cell: props => <Number value={ props.value * -1 }/> },
   ];
 
   if ( bc ) {
@@ -22,6 +18,12 @@ export function getColumns( bc ) {
       { Header: 'Platoon', accessor: 'platoon' },
     )
   }
+
+  columns.push(
+    { Header: 'Date', accessor: 'created', filterable: false,
+      Cell: ({ value }) => <DateDisplay value={ value } format='l LT' />
+    },
+  )
 
   return columns;
 }
