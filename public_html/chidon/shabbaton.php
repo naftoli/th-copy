@@ -94,29 +94,30 @@ body,td,th {
                 
                 <h4>Dates:</h4>
 				<div class="indent">
-                    Girls’ Shabbaton: Thursday, Chof Alef Adar (March 8) – Sunday, Chof Daled Adar (March 11)<br />
-                    Boys’ Shabbaton: Thursday, Chof Ches Adar (March 15) – Sunday, Beis Nissan (March 18)
-                </div>
-                <br />
+					Girls Shabbaton: Thursday, Chof Aleph Adar Beis (March 28) -Sunday Chof Daled Adar Beis (March 31)<br />
+					Boys Shabbaton: Thursday, Chof Ches Adar Beis (April 4) - Sunday, Beis Nissan (April 7)
+				</div>
+				<br />
                 
-                <h4>Registration Deadline</h4>
+                <h4>Enrollment Deadline</h4>
                 <div class="indent">
-                    Shabbaton Registration opens on <span style="font-weight: bold">Sunday, Chof Vov Shvat (February 11)</span>. Registration and payment information must be
-                    submitted before <span style="font-weight: bold">Monday, Daled adar (February 19) at 11:59 p.m.</span> We apologize in advance that there will be no exceptions. 
+					Shabbaton Registration opens on <span style="font-weight: bold">Wednesday, Ches Adar 1 (February 13)</span>.<br />
+					Enrollment and payment information must be submitted before <span style="font-weight: bold">Wednesday, Tes Vov Adar 1 (February 20) at 11:59 p.m.</span> 
+					We apologize in advance that there will be no exceptions. 
                 </div>
                 <br />
                 
                 <h4>Fee</h4>
                 <div class="indent">
-                    Thanks to Tzivos Hashem and its sponsors, we are able to cut the original fee of $300 per child by more than half to $136.<br />
+                    Thanks to Tzivos Hashem and its sponsors, we are able to cut the original fee of $300 per child to $150.<br />
                     Please note: Fees do not include transportation to and from New York.
                 </div><br />
 				
-				<h4>Game Show</h4>
+				<!-- <h4>Game Show</h4>
                 <div class="indent">
                     Tickets for the game show will be available for sale shortly.
                 </div>
-                <br />
+                <br /> -->
 			</div>			
 		
 		</div>

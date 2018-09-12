@@ -1,7 +1,8 @@
 <?php
 ini_set('display_errors', 1);
-require_once dirname(__FILE__) . '/db.php';
-require_once dirname(__FILE__) . '/yearly_prize/classes/TotalWeeklyTasks.php';
+require_once( __DIR__ . '/db.php' );
+require_once( __DIR__ . '/api/header/db.php' );
+require_once( __DIR__ . '/yearly_prize/classes/TotalWeeklyTasks.php' );
 
 //var_dump($_GET);
 $function_name = $_GET['function_name'];
@@ -53,152 +54,36 @@ function add_ons() {
 	return json_encode($success);
 }
 
-/*
-function register_students($parameters)
-{
-	require_once("classes/user.php");
-
-	$parms = $parameters[0];
-	$users = explode(":", $parms);
-
-	$today = date("Y-m-d H:i:s", time());
-	$today_jd = gregoriantojd (date("n"), date("j"), date("Y"));
-
-	for ($uno = 0; $uno < count($users); $uno++)
-	{
-		$user = $users[$uno];
-
-		$user_info = explode(";", $user);
-
-		$user_id = $user_info[0];
-		$amount = $user_info[1];
-		$add_on_one = substr($user_info[2], 0, 1);
-		if ($add_on_one == "1")
-			$shirt_size = substr($user_info[2], 1, strlen($user_info[2]) - 1);
-		$add_on_two = $user_info[3];
-		$registered = $user_info[4];
-
-		$sql = "SELECT * FROM users WHERE user_id=" . $user_id;
-		$query = mysql_query($sql);
-		$row = mysql_fetch_assoc($query);
-		$user = new user($row);
-
-		if ($registered)
-		{
-			$sql = "UPDATE users SET user_registration_fee=" . ($user->user_registration_fee + $amount);
-			if ($add_on_one == "1")
-				$sql = $sql . ", add_on_one=" . $add_on_one . ", shirt_size='" . $shirt_size . "' ";
-			if ($add_on_two == "1")
-				$sql = $sql . ", add_on_two=" . $add_on_two;
-			$sql = $sql . " WHERE user_id=" . $user_id;
-		}
-		else
-		{
-			$sql = "UPDATE users ";
-			$sql = $sql . "SET user_registered='" . $today . "', ";
-			if (is_null($user->user_start_date))
-				$sql = $sql . "user_start_date='" . $today_jd. "', ";
-			$sql = $sql . "add_on_one=" . $add_on_one. ", ";
-			$sql = $sql . "add_on_two=" . $add_on_two . ", ";
-			$sql = $sql . "user_registration_fee=" . $amount . " ";
-			$sql = $sql . "WHERE user_id=" . $user_id;
-		}
-
-		$query = mysql_query($sql);
-	}
-}
-*/
-
 function register_students($parameters) {
-	require_once("classes/user.php");
-	require_once 'class.campaignEnrollment.php';
-	require_once 'class.globalSettings.php';
-	$year = GlobalSettings::getRegistrationYear();
+    require_once( __DIR__ . '/class.globalSettings.php' );
+    $year = GlobalSettings::getRegistrationYear( $school_id );
+	$admin_id = isset( $_COOKIE['admin_id'] ) ? mysql_real_escape_string( $_COOKIE['admin_id'] ) : 0;
 
-	$parms = $parameters[0];
-	$users = explode(":", $parms);
-    //print_r($users);
+    // parse the params
+    $parms = $parameters[0];
+    $users = explode(":", $parms);
 
-	//variables for transactions table
-	$total_registered = 0;
-	$transaction_info = explode(";", $users[count($users)-1]);
-	$total = $transaction_info[0];
-	$school_id = $transaction_info[1];
+    //variables for transactions table
+    $transaction_info = explode( ";", array_pop( $users ) );
+    $total = $transaction_info[0];
+    $school_id = $transaction_info[1];
+    $total_registered = 0;
 
-	for ($uno = 0; $uno < count($users)-1; $uno++)
-	{
-		$user = $users[$uno];
-		$user_info = explode(";", $user);
-		//print_r($user_info);
-
-		$k = 0;
-		$user_id = $user_info[$k++];
-		$amount = $user_info[$k++];
-		if ($amount == '') $amount = 0;
-		$registered = $user_info[$k++];
-
-		$sql = "SELECT * FROM users WHERE user_id=" . $user_id;
-		$query = mysql_query($sql);
-		$row = mysql_fetch_assoc($query);
-		$user = new user($row);
-
-		if ($registered == "registered") {
-			$sql = "UPDATE users SET user_registration_fee=" . $amount;
-			$sql = $sql . " WHERE user_id=" . $user_id;
-			//echo $sql;
-		} else {
-			$sql = "UPDATE users ";
-			$sql = $sql . "SET user_registered = now(), ";
-			if (is_null($user->user_start_date))
-				$sql = $sql . "user_start_date='" . unixtojd() . "', ";
-			$sql = $sql . "user_registration_fee=" . $amount . " ";
-			$sql = $sql . "WHERE user_id=" . $user_id;
-			//echo $sql . "<br />";
-			$total_registered++;
-		}
-		$query = mysql_query($sql);
-
-		// create private rank for soldier if no rank exists
-		$sql = "select * from rank_marks where user_id = " . $user_id;
-		$result = mysql_query($sql);
-		if (mysql_num_rows($result) == 0) {
-			$sql = "insert into rank_marks
-					set rank_ord = 1,
-					user_id = " . $user_id . ",
-					date_promoted = " . unixtojd();
-			@mysql_query($sql);
-		}
-
-		// update child to be enrolled in all campaigns
-		if ($registered != "registered") {
-			try {
-				$c = new CampaignEnrollment($user_id);
-				$c->enroll();
-			} catch (EnrollmentException $e) {
-				echo $e->getMessage() . "<br />";
-			}
-		}
-
-
-		if ($school_id) {
-			$sql = "insert into user_registration
-					set user_id = " . $user_id . ",
-					admin_id = 0,
-					year = " . $year . ",
-					reg_date = now(),
-					paid = " . $amount . ",
-					school_id = " . $school_id;
-			@mysql_query($sql);
-		}
+    $user_ids = []; $user_amounts = [];
+    foreach( $users as $user ) {
+        $user_info = explode( ";", $user );
+        $user_ids[] = $user_info[ 0 ];
+        $user_amounts[] = intval($user_info[ 1 ]);
 	}
-	//update transactions
-	$description = "";
-	if ($total_registered > 0) {
-		$description .= $total_registered . " children registered; ";
-	}
-	$sql = "insert into invoice_items values($school_id, null, $total, now(), 'charge', null, '$description', '')";
-	//echo $sql;
-	@mysql_query($sql);
+
+    // load all the users in an array
+    $users = User::find( $user_ids );
+	$users = is_array( $users ) ? $users : [ $users ];
+	$total_registered = count( $users );
+    // and register all the users
+    foreach( $users as $index => $user ){
+        $user->registerChayolei( $admin_id, $year, $user_amounts[$index] );
+    }
 }
 
 function assign_winner($parameters) {

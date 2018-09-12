@@ -11,11 +11,13 @@ require 'header.php';
 
 /********************** IMPORTS ******************/
 require_once 'class.adminSchools.php';
-require_once 'class.schoolsUsers.php';    
+require_once 'class.schoolsUsers.php';
+require_once 'class.globalSettings.php';
+
 
 /********************** GET DATES FOR THE REPORT ******************/
 function get_dates(){
-    $starting_date = 2458076;
+    $starting_date = GlobalSettings::getCurYearDates()['start'];
     $dates_query = mysql_query("SELECT mission_description, start_date" // get the name of the month as well as the date
                                ." FROM date_tasks dt JOIN date_tasks_missions dtm USING (date_tasks_mission_id)" // from the date tasks and date tasks missoins table
                                ." WHERE dt.grid_id = 8001 AND start_date >= $starting_date GROUP BY start_date"); // where it is a shabbos mevorchim tehillim report and after kislev 5778
@@ -34,7 +36,7 @@ $dates = get_dates();
 if(isset($_POST['date']) && isset($dates[$_POST['date']])){
     $date = mysql_real_escape_string($_POST['date']);
 } else {
-    $date = 2458076;
+    $date = GlobalSettings::getCurYearDates()['start'];
 }
 
 /********************** GET SCHOOL_ID FROM POST PARAMS (IF SENT) ******************/

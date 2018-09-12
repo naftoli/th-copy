@@ -11,25 +11,30 @@ foreach($schools as $school_id => $school_name) {
 <div id="school_<?=$school_id?>" class="school" data-school_id="<?=$school_id?>">
     <h2><?$hachayol_name = get_school_hachayol_name($school_id); echo $hachayol_name ? $hachayol_name : $school_name?></h2>
     
-    <?php if ($admin_user['auth'] == 'super') : ?>
-    <?/***************** TOGGLE SHIPPED **********************/?>
-    <!--<div class="toggles">
-        Toggle Shipped
-        <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="This toggle will check/uncheck all the shipped checkboxes on the page.
-        Please double check your filters and use responsibly"></i>
-        <label class="slider-container">
-            <input type="checkbox" class="shipped_toggle_bulk"/>
-            <span class="slider-span"></span>
-        </label>
-    </div>-->
-    <?php endif; ?>
+    <? if ($admin_user['auth'] == 'super') { ?>
+    <div class="toggles">
+        <div class="toggle-3rd">
+            Toggle Shipped
+            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="This toggle will check/uncheck all the shipped checkboxes on the page.
+            Please double check your filters and use responsibly"></i>
+            <label class="slider-container">
+                <input type="checkbox" class="shipped_toggle_bulk"/>
+                <span class="slider-span"></span>
+            </label>
+        </div>
+        <div class="toggle-3rd">
+            Shipment (All):
+            <div class="bulk-shipment-select"></div>
+        </div>
+    </div>
+    <? } // end if admin us superperuser ?>
     <?/***************** ACTUAL REPORT **********************/?>
     <table id="report_table">
         <thead>
             <tr>
                 <th>Item</th><th>S/T</th>
                 <?if(get_extra_hachayols($school_id) != 0) { ?><th># Extra</th><? } ?>
-                <th>Total</th><th>Status</th><th>Report Missing</th><th># Shipped</th>
+                <th>Total</th><th>Status</th><th>Report Missing</th><th>Shipped</th>
                 <th>Shipment</th>
             </tr>
         </thead>

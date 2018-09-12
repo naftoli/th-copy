@@ -207,7 +207,7 @@
 					<img id="item13" src="/mobile/img_new/circle-color-green-svg.svg">
                 </div>
 				
-				<div class="span12" style="margin-top:15px;">
+				<div class="span12" id='raffleInfoBanner' style="margin-top:15px; display: none;">
                     <div class="medal-label">
                         <span>RAFFLE INFO</span>
                     </div>
@@ -329,13 +329,18 @@
             
             // set the Miles total
     		$.post('ajax/getPoints.php', { user_id : id }, function( success ) {
-    			$(".points").append(success + ' miles');
+    			$(".points").append(
+                    parseInt( success ).toLocaleString() + ' miles'
+                );
     			$("#points").val( success );
     		});
 			
 			// get raffle eligibility info
 			$.post('ajax/getRaffleInfo.php', { user_id : id }, function( response ) {
-				$("#raffleInfo").append( response );
+                if ( response ) {
+                    $("#raffleInfoBanner").show();
+                    $("#raffleInfo").append( response );
+                }
 			});
             
             // get the user's information and update the UI
@@ -345,7 +350,7 @@
     			var grade = user.class_grade;
     			if (user.class_sub) grade += '-' + user.class_sub;
     			// update the information on the page
-    			$("#rank").text( user.rank_name );
+    			$("#rank").text( user.rank_name ? user.rank_name : 'Private' );
     			$("#name").text( user.lang_id === "2" ? user.first_he + ' ' + user.last_he : user.first + ' ' + user.last );
 				$("#serial").text( user.user_serial );
     			$("#grade").text( grade );
@@ -361,10 +366,10 @@
     				$("#userImg").attr('src', '/mobile/reg/images/profile-photo-default.jpg');
                 }
                 // set the school logo
-    			if (user.logo && (!user.logo_2 || user.gender === "M")) {
+    			if (user.logo && (!user.logo_girls || user.gender === "M")) {
     				$("#logo").attr('src', '/schoolLogos/' + user.logo);
-    			} else if(user.logo_2) {
-					$("#logo").attr('src', '/schoolLogos/' + user.logo_2);
+    			} else if(user.logo_girls) {
+					$("#logo").attr('src', '/schoolLogos/' + user.logo_girls);
 				} else {
     				$("#logo").attr('src', '/schoolLogos/TH-Blank Logo.gif');
     			}

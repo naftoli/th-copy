@@ -62,25 +62,25 @@ $pass = $admin->password; // Plain text passwords?
 $schl_id = $admin->school_id;
 if ($admin_user['auths']['school']) {
 
-    // ***** CHECK FOR ALL SCHOOLS ***** //
-    $_SESSION["admin_id"] = $admin_user["admin_id"];
-    $_SESSION["school_id"] = $schl_id;
-    
-    $sql = "SELECT school_id FROM admin_auths AS aa 
+	// ***** CHECK FOR ALL SCHOOLS ***** //
+	$_SESSION["admin_id"] = $admin_user["admin_id"];
+	$_SESSION["school_id"] = $schl_id;
+
+	$sql = "SELECT school_id FROM admin_auths AS aa 
 			JOIN schools AS s ON (aa.id=s.school_id AND s.school_era > 0) 
 			WHERE aa.admin_id=" . $admin_user["admin_id"] . " 
 			AND auth='school' 
 			AND (aa.role_id=16 OR aa.role_id=18 or aa.role_id=34 or aa.role_id is null)";
-    $query = mysql_query($sql);
-    $row = mysql_fetch_assoc($query);
-    $unregistered_school_id = $row["school_id"];
-    if ($unregistered_school_id > 0) {
-        $school_registered = "false";
-        $schl_id = $unregistered_school_id;
-        $_SESSION["school_id"] = $schl_id;
-    }
-    // ***** CHECK FOR ALL SCHOOLS ***** //
-    
+	$query = mysql_query($sql);
+	$row = mysql_fetch_assoc($query);
+	$unregistered_school_id = $row["school_id"];
+	if ($unregistered_school_id > 0) {
+		$school_registered = "false";
+		$schl_id = $unregistered_school_id;
+		$_SESSION["school_id"] = $schl_id;
+	}
+	// ***** CHECK FOR ALL SCHOOLS ***** //
+
 } else {
 	if ($admin_user['auth'] != 'super') {
 		//header("Location: /mobile/reg/parent_detail.html");
@@ -94,6 +94,10 @@ $ui_type = 'admin';
 if ($admin_user['admin_id'] > 0) {        
     $_SESSION["admin_id"] = $admin_user['admin_id'];
 }
+
+if ( $admin->beta ) {
+	header( 'Location: /beta' );
+}
 // Note that T_() in the following html transalates the text if needed.
 ?>
 
@@ -101,27 +105,27 @@ if ($admin_user['admin_id'] > 0) {
 
 <HTML DIR="<?=$dir?>">
 
-    <HEAD>
-        <TITLE><?=T_('Admin Menu'), ' - ', T_('Tzivos Hashem Management System')?></TITLE>
-        <LINK href="admin_styles.css" rel="stylesheet" type="text/css">
-        <SCRIPT type="text/javascript" src="jquery.js"></SCRIPT>
+	<HEAD>
+		<TITLE><?=T_('Admin Menu'), ' - ', T_('Tzivos Hashem Management System')?></TITLE>
+		<LINK href="admin_styles.css" rel="stylesheet" type="text/css">
+		<SCRIPT type="text/javascript" src="jquery.js"></SCRIPT>
 		<LINK rel="stylesheet" type="text/css" href="css/admin/admin.php.css"/> <!--chrome says this is not used by the page-->
-        <STYLE type="text/css">
-            .points tbody th {
-              text-align: <?=$align_start?>;
-            }
-/*			The styles from here where moved to css/admin/admin.php.css Chrome audit found that none of it was used. - hornbacher */
-        </STYLE>
-        
-        <script>
-            var school_registered = "<?=$school_registered;?>";
-            var admin_id = <?=$admin_user['admin_id'];?>;
-            // cannot find location of these variables being used.
-            var user = <?="'" . $uname . "'";?>;
-            var pass = <?="'" . $pass . "'";?>; // plain text password put in js!?!?!?!?
-                        
-            // moved to js/admin/admin.php.js
-        </script>
+		<STYLE type="text/css">
+			.points tbody th {
+				text-align: <?=$align_start?>;
+			}
+	/*			The styles from here where moved to css/admin/admin.php.css Chrome audit found that none of it was used. - hornbacher */
+		</STYLE>
+		
+		<script>
+			var school_registered = "<?=$school_registered;?>";
+			var admin_id = <?=$admin_user['admin_id'];?>;
+			// cannot find location of these variables being used.
+			var user = <?="'" . $uname . "'";?>;
+			var pass = <?="'" . $pass . "'";?>; // plain text password put in js!?!?!?!?
+						
+			// moved to js/admin/admin.php.js
+		</script>
 		<script src="js/admin/admin.php.js"></script>
 		
 <?php if (isset($_COOKIE['naftoli'])) : ?>
@@ -130,26 +134,23 @@ if ($admin_user['admin_id'] > 0) {
 <script>!function(a){if(!a.Localize){a.Localize={};for(var e=["translate","untranslate","phrase","initialize","translatePage","setLanguage","getLanguage","detectLanguage","getAvailableLanguages","untranslatePage","bootstrap","prefetch","on","off"],t=0;t<e.length;t++)a.Localize[e[t]]=function(){}}}(window);</script>
 
 <script>
- Localize.initialize({
-  key: 'seqkv59qMeLU8',
-  rememberLanguage: true
- });
+Localize.initialize({ key: 'seqkv59qMeLU8', rememberLanguage: true });
 </script>
 <?php endif; ?>
-    </HEAD>
-    
-    <BODY onload="check_school_registered();">
+	</HEAD>
 
-        <? include('admin_header.php'); ?>
-                
-        <DIV CLASS="body">          
-            
-            <DIV class="admin">
+	<BODY onload="check_school_registered();">
+
+		<? include('admin_header.php'); ?>
+
+		<DIV CLASS="body">          
+
+			<DIV class="admin">
 				<?php //this form is submitted with the code in ./js/admin/admin.php.js on line ~16 ?>
-                <FORM name="registration_form" method="post" action="registration.php">
-                    <input type="hidden" name="admin_id" value="<?=$admin_user["admin_id"];?>">
-                    <input type="hidden" name="school_id" value="<?=$schl_id;?>">
-                </FORM>
+				<FORM name="registration_form" method="post" action="registration.php">
+					<input type="hidden" name="admin_id" value="<?=$admin_user["admin_id"];?>">
+					<input type="hidden" name="school_id" value="<?=$schl_id;?>">
+				</FORM>
 
 				<?
 				//print_r($admin_user['auths']); exit;
@@ -192,7 +193,7 @@ if ($admin_user['admin_id'] > 0) {
 					<?
 				}
 				
-				//add footer with links to about us, etc.
+				// add footer with links to about us, etc.
 				include 'footer.php';
 								
 				if ($admin->auth == 'super') {
@@ -210,20 +211,20 @@ if ($admin_user['admin_id'] > 0) {
 		<!-- ***** If a parent logs in but has not registered any children yet ***** -->
 		<? 
 		if ($admin_user["is_parent"] == 1 && $admin_user["no_of_children"] == 0) : ?>
-		    <CENTER>
-		        <br />
-		        <h1 style="color:red;">You have no children associated with your account.</h1>
-		        <ul>
-			        <li>
-				        <FORM name="register_parent_form" method="post" action="associate_children.php">
-				                <input type="hidden" name="admin_id" value="<?=$admin->admin_id;?>">
-				                    <a href="#" onclick="document.forms['register_parent_form'].elements['admin_id'].value=<?=$admin->admin_id;?>; document.forms['register_parent_form'].submit();">  
-				                    <?=T_('Add Children to Account')?>
-				                </a>
-				        </FORM>
-			        </li>
-		        </ul>
-		    </CENTER>
+			<div style='text-align:center'>
+				<br />
+				<h1 style="color:red;">You have no children associated with your account.</h1>
+				<ul>
+					<li>
+						<FORM name="register_parent_form" method="post" action="associate_children.php">
+								<input type="hidden" name="admin_id" value="<?=$admin->admin_id;?>">
+									<a href="#" onclick="document.forms['register_parent_form'].elements['admin_id'].value=<?=$admin->admin_id;?>; document.forms['register_parent_form'].submit();">  
+									<?=T_('Add Children to Account')?>
+								</a>
+						</FORM>
+					</li>
+				</ul>
+			</div>
 		<? endif; ?>
 		<!-- ***** If a parent logs in but has not registered any children yet ***** -->
 

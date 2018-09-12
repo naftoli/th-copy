@@ -12,13 +12,12 @@ class ParseDonation
         $this->info = $donation_info;
         $this->donation = $donation_json;
         $this->year = GlobalSettings::getCharidyYear();
-        $this->qrys = array();
+        $this->errors = array();
     }
 
     public function createDonation() {
-        echo "<pre>"; print_r( $this->info ); echo "</pre>";
-        echo "<pre>"; print_r( $this->donation ); echo "</pre>";
-        
+        //echo "<pre>"; print_r( $this->info ); echo "</pre>";
+        //echo "<pre>"; print_r( $this->donation ); echo "</pre>";        
         if ( !empty( $this->donation ) && $this->donation->donor_id == 0 
             && isset( $this->donation->children ) && !empty( $this->donation->children ) ) {
             $this->findDonorFromChildren();
@@ -31,26 +30,8 @@ class ParseDonation
         }
     }
 
-    public function saveDonation() {
-        $errors = array();
-
-        mysql_query('set autocommit = 0');
-        mysql_query('begin');
-        foreach ($this->qrys as $qry) {
-            if (!mysql_query( $qry )) {
-                $errors[] = $sql . "<br />" . mysql_error() . "<br />";
-                break;
-            }
-        }
-        if (empty( $errors )) {
-            mysql_query('commit');
-        } else {
-            mysql_query('rollback');
-            foreach ($errors as $error) {
-                echo $error;
-            }
-        }
-        mysql_query('set autocommit=1');
+    public function getErrors() {
+        return $this->errors;
     }
 
     private function findDonorFromChildren() {
@@ -125,14 +106,14 @@ class ParseDonation
             $children_donations = false;
         }
 
-        if (!$children_donations) {
-            $amount = mysql_real_escape_string( $this->donation->total_donation_amount );
-            if ($this->donation->total_donation_amount != $this->donation->amount) {
-                echo "<br />Discrepancy found: " . $this->donation->donor_id . "<br /><br />";
-                echo "<pre>"; print_r( $this->donation ); echo "</pre>";
-                return;
-            }
-        }
+        // if (!$children_donations) {
+        //     $amount = mysql_real_escape_string( $this->donation->total_donation_amount );
+        //     if ($this->donation->total_donation_amount != $this->donation->amount) {
+        //         echo "<br />Discrepancy found: " . $this->donation->donor_id . "<br /><br />";
+        //         echo "<pre>"; print_r( $this->donation ); echo "</pre>";
+        //         return;
+        //     }
+        // }
 
         // if we only have 1 child being paid for, and amount on parent object equals amount on child object
         // only use child object to create donation
@@ -161,14 +142,17 @@ class ParseDonation
                     dedication_name = '" . addslashes( $dedication_name ) . "', 
                     dedication_text = '" . addslashes( $dedication_text ) . "', 
                     child_only_donation = 0";
-            echo $sql . "<br />";
+            //echo $sql . "<br />";
+            if (!mysql_query( $sql )) {
+                $this->errors = $sql . "<br />" . mysql_error();   
+            }
         }
 
         if ($children_donations && $children_with_amounts) {
             foreach ($children as $child) {
                 $user_id = mysql_real_escape_string( $child->user_id );
                 $amount = mysql_real_escape_string( $child->amount );
-                if ($amount > 0) {
+                if ($amount > 0 && is_numeric($user_id)) {
                     $sql = "insert into charidy_donations 
                             set donor_id = " . $donor_id . ", 
                             year = " . $this->year . ", 
@@ -178,7 +162,10 @@ class ParseDonation
                             dedication_name = '" . addslashes( $dedication_name ) . "', 
                             dedication_text = '" . addslashes( $dedication_text ) . "', 
                             child_only_donation = 1";
-                    echo $sql . "<br />";
+                    //echo $sql . "<br />";
+                    if (!mysql_query( $sql )) {
+                        $this->errors = $sql . "<br />" . mysql_error();   
+                    }
                 }
             }
         }
@@ -222,8 +209,12 @@ class ParseDonation
                         zip = '" . $zip . "',
                         phone = '" . addslashes( $phone ) . "', 
                         email = '" . $email . "'";
-                echo $sql . "<br />";
-                $donor_id = 1111;
+                //echo $sql . "<br />";
+                if (mysql_query( $sql )) {
+                    $donor_id = mysql_insert_id();
+                } else {
+                    $this->errors = $sql . "<br />" . mysql_error();   
+                }
             }
 
             // find out user_id if we were given a serial number
@@ -252,7 +243,10 @@ class ParseDonation
                     dedication_name = '" . addslashes( $dedication_name ) . "', 
                     dedication_text = '" . addslashes( $dedication_text ) . "', 
                     child_only_donation = 0";
-            echo $sql . "<br />";
+            //echo $sql . "<br />";
+            if (!mysql_query( $sql )) {
+                $this->errors = $sql . "<br />" . mysql_error();   
+            }
         }
     }
 
@@ -313,10 +307,24 @@ class ParseDonation
         // find out if picture is a thumb or a mobile pic
         if ($pos = strpos('/thumbs/', $picture) !== false) {
             $mobile_pic = substr($picture, $pos);
-            echo $mobile_pic . "<br />";
+            //echo $mobile_pic . "<br />";
+            $sql = "select user_id from users where mobile_pic = '" . $mobile_pic . "'";
+            $result = mysql_query( $sql );
+            if (mysql_num_rows( $result ) == 1) {
+                $row = mysql_fetch_assoc( $result );
+                return $this->findParentByUserID( $row['user_id'] );
+            }
         } else if ($pos = strpos('/reg/', $picture) !== false) {
             $thumb = substr($picture, $pos);
-            echo $thumb;
+            //echo $thumb;
+            $sql = "select user_id from users u 
+                    join thumbs t on t.file_id = u.user_photo_id 
+                    where t.thumb = '" . $thumb . "'";
+            $result = mysql_query( $sql );
+            if (mysql_num_rows( $result )) {
+                $row = mysql_fetch_assoc( $result );
+                return $this->findParentByUserID( $row['user_id'] );
+            }
         }
         return false;
     }
@@ -336,8 +344,11 @@ class ParseDonation
                 if ($this->donation->parent_id == $row['parent_admin_id']) {
                     $this->donation->donor_id = $row['donor_id'];
                     $sql = "update charidy_donors set email = '" . $this->info->email . "' where donor_id = " . $this->donation->donor_id;
-                    echo $sql . "<br />";
-                    //mysql_query( $sql );
+                    //echo $sql . "<br />";
+                    mysql_query( $sql );
+                    $sql = "update admins set admin_email = '" . $this->info->email . "' where admin_id = " . $this->donation->parent_id;
+                    //echo $sql;
+                    mysql_query( $sql );
                 }
             }
         }

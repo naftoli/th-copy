@@ -13,7 +13,8 @@ require_once(dirname(__FILE__)."/../classes/Shipment.php");
 /***************** POST DATA **********************/
 $status = ['success' => false, 'error' => "Under Development"];
 $shipment_id = mysql_real_escape_string(isset($_POST['shipment_id']) ? $_POST['shipment_id'] : $_GET['shipment_id']); // get the school id from the get or post paramaters....
-$ajax = mysql_real_escape_string(isset($_POST['ajax']) ? $_POST['ajax'] : $_GET['ajax']); // get the AJAX info....
+// $ajax = mysql_real_escape_string(isset($_POST['ajax']) ? $_POST['ajax'] : $_GET['ajax']); // get the AJAX info....
+$ajaxArray = $_POST['ajax'];
 
 /***************** POST DATA VALIDATION **********************/
 if(!$shipment_id){
@@ -22,7 +23,7 @@ if(!$shipment_id){
 
 /***************** SQL **********************/
 $shipment = shipping\Shipment::load($shipment_id);
-$status['success'] = $shipment->add_or_move_item($ajax);
+$status['success'] = $shipment->add_or_move_items($ajaxArray);
 $status['error'] = "ERROR: Internal Data Error. Please contact support";
 
 echo json_encode($status);

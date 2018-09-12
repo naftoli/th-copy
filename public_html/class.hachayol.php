@@ -6,6 +6,7 @@ class Hachayol {
     private $schools;
     private $schoolDetails;
     private $chidonYear;
+    private $chidonNumbers;
     
     public function __construct() {
         require_once 'class.db.php';
@@ -13,13 +14,14 @@ class Hachayol {
         $this->schools = array();
         $this->schoolDetails = array();
         $this->chidonYear = GlobalSettings::getChidonYear();
+        $this->chidonNumbers = array();
     }
     
     public function setSchools( $id = null ) {
         //get list of schools with totals per school of registered students
         $sql = "
-            SELECT s.school_id, s.school_name, s.hachayol_name, count( u.user_id ) AS total, s.school_address1, s.school_address2, 
-            s.school_city, s.school_state, s.school_country, s.school_postal, s.shipping_method, s.principal, s.shipping_requests  
+            SELECT s.school_id, s.school_name, s.hachayol_name, count( u.user_id ) AS total, s.shipping_address1, s.shipping_address2, 
+            s.shipping_city, s.shipping_state, s.shipping_country, s.shipping_postal, s.shipping_method, s.principal, s.shipping_requests  
             FROM schools s
             JOIN users u
             USING ( school_id )
@@ -27,9 +29,9 @@ class Hachayol {
             and s.chayolei = 1 
             AND u.user_registered > 0
             and s.test_school = 0 ";
-        if ( !is_null( $id ) ) $sql .= "AND s.school_id = " . $id; 
-        else $sql .= "AND s.school_id not in (82)";
-        $sql .= " GROUP BY s.school_id ORDER BY s.shipping_method, s.school_name";
+        if ( !is_null( $id ) ) $sql .= " AND s.school_id = " . $id; 
+        else $sql .= " AND s.test_school = 0 ";
+        $sql .= " GROUP BY s.school_id ORDER BY s.shipping_method, s.school_name ";
         //echo $sql; exit;
         
         foreach ( $this->db->query( $sql ) as $row ) {
@@ -45,10 +47,10 @@ class Hachayol {
             $this->schools[$method][$school]['principal'] = $row['principal'];
             $this->schools[$method][$school]['name'] = $row['hachayol_name'] ? $row['hachayol_name'] : $row['school_name'];
             $this->schools[$method][$school]['total'] = $total;
-            $this->schools[$method][$school]['address'] = $row['school_address1'] . 
-                ($row['school_address2'] == "" ? "<br />" . $row['school_address2'] : "<br />") . 
-                $row['school_city'] . ", " . $row['school_state'] . "<br />" . $row['school_postal'] . "<br />" . 
-                $row['school_country'];
+            $this->schools[$method][$school]['address'] = $row['shipping_address1'] . 
+                ($row['shipping_address2'] == "" ? "<br />" . $row['shipping_address2'] : "<br />") . 
+                $row['shipping_city'] . ", " . $row['shipping_state'] . "<br />" . $row['shipping_postal'] . "<br />" . 
+                $row['shipping_country'];
             $this->schools[$method][$school]['shipping_requests'] = $row['shipping_requests'];
             
             $sql2 = "select a.first, a.last 
@@ -123,6 +125,29 @@ class Hachayol {
     
     public function getSchoolDetails() {
         return $this->schoolDetails;
+    }
+
+    public function setChidonNumbers() {
+        $sql = "
+            SELECT s.school_id, s.school_name, count( u.user_id ) AS total 
+            FROM users u 
+            JOIN schools s ON s.school_id = u.school_id 
+            JOIN classes c ON c.class_id = u.class_id 
+            WHERE (
+                (u.chayolei = 1 AND u.user_registered > 0) 
+                or u.chidon = 1
+            ) 
+            AND c.class_grade in ('4','5','6','7','8') 
+            AND s.test_school = 0
+            GROUP BY s.school_name";
+        $result = mysql_query( $sql );
+        while ( $row = mysql_fetch_assoc( $result ) ) {
+            $this->chidonNumbers[$row['school_id']] = $row['total'];
+        }
+    }
+
+    public function getChidonNumber( $school_id ) {
+        return ( isset( $this->chidonNumbers[$school_id] ) ? $this->chidonNumbers[$school_id] : 0 );
     }
 }
 ?>

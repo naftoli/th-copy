@@ -46,9 +46,11 @@ class ImgsController extends Zend_Controller_Action
 	{
 		$strBaseURL = WEB_ROOT . "images/imgsrepo/";
 		$strImage = $this->_request->getParam("src");
-		if (preg_match("/^[0-9a-z]{7}_[0-9]+\.(jpg|gif|jpeg|png)$/i", $strImage, $arrImage))
-		{
-
+		if (preg_match("/^[0-9a-z]{7}_[0-9]+\.(jpg|gif|jpeg|png)$/i", $strImage, $arrImage)) {
+			// images from v2, keep going
+		} 
+		else if ( preg_match('/^[0-9]{1,}.[0-9]{14}.(jpg|gif|jpeg|png)$/i', $strImage, $arrImage) )  {
+			// images from react site, keep going
 		}
 		else if (!preg_match("/^(?:[0-9]{7}_)?[0-9]+\.(jpg|gif|jpeg|png)$/i", $strImage, $arrImage))
 		{
@@ -135,7 +137,7 @@ class ImgsController extends Zend_Controller_Action
 			$strRepoPath = SERVER_ROOT . "images/imgsrepo/";
 			if (!file_exists($strUploadPath))
 			{
-				print text("Sorry, there was an error") . ": CI-PU101-DSF7DS";
+				print "Sorry, there was an error: CI-PU101-DSF7DS";
 				exit;
 			}
 			// Start the HTTP adapter to receive the file
@@ -143,7 +145,7 @@ class ImgsController extends Zend_Controller_Action
 			$objAdapter->setDestination($strUploadPath);
 			if (!$objAdapter->receive($strFileName))
 			{
-				print text("Sorry, there was an error") . ": CI-PU102-SD7D78";
+				print "Sorry, there was an error: CI-PU102-SD7D78";
 				exit;
 			}
 

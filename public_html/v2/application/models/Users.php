@@ -184,7 +184,8 @@ class Users
 					}
 
 					$objInstitution = first($objInstitutions->_institutions_select(array(
-						"institution_id" => $objPermission->institution_id
+						"institution_id" => $objPermission->institution_id, 
+						"super_admin"	 => 1 
 					)));
 
 					if ($objPermission && $objInstitution)

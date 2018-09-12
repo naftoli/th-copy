@@ -4,6 +4,7 @@
 // only allow schools here
 $admin_auth = array('school'); 
 require_once $_SERVER["DOCUMENT_ROOT"].'/header.php';
+require_once $_SERVER["DOCUMENT_ROOT"].'/class.globalSettings.php';
 
 /***************** IMPORTS **********************/
 require_once(dirname(__FILE__).'/../classes/Raffle.php');
@@ -26,6 +27,7 @@ if($type !== "" && $ran_only) {
 } else if ($ran_only) {
     $filter .= "WHERE date_ran IS NOT NULL ";
 }
+$filter .= 'AND year = '.GlobalSettings::getCurrentYear(); // only show raffles from this year
 
 $filter .= "ORDER BY run_date DESC, type";
 
@@ -46,7 +48,7 @@ $raffles = Raffle::loadAll($filter);
             $prizes = $raffle->get_prizes();
             if ($prizes) {
                 foreach($prizes as $prize) {
-                    $raffle->name .= " (" . $prize->name . ")";
+                    $raffle->name .= ' - ' . $raffle->year . " (" . $prize->name . ")";
                 }
             }
         }

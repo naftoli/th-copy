@@ -25,14 +25,14 @@ var customParentTasks = function(){
     
     function loadPlatoons(school_id) {
         $.get("//mashpia.com/ajax/getClasses.php?id="+school_id+"&named=true&extra=parent_tasks", function(raw_response){
-            plattons = $.parseJSON(raw_response);
+            platoons = $.parseJSON(raw_response);
             
             var html = "";
-            for (var i = 0; i < plattons.length; i++) {
-                var platton = plattons[i];
-                html += render_table_row(platton.class_name, "class", platton.class_id, platton.parent_tasks.allow, platton.parent_tasks.print);
+            for (var i = 0; i < platoons.length; i++) {
+                var platoon = platoons[i];
+                html += render_table_row(platoon.class_name, "class", platoon.class_id, platoon.parent_tasks.allow, platoon.parent_tasks.print);
             }
-            html = render_table("Platton", html);
+            html = render_table("Platoon", html);
             
             $("#platoonCustomParentTasks > div").html(html);
             

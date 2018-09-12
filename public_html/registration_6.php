@@ -1,12 +1,12 @@
 <?php 
 session_start();
-if ( !isset( $_SESSION['hschool'] ) ) 
-    header( "Location: admin.php" );
-$h_school = $_SESSION['hschool'];
+if ( !isset( $_SESSION['school_id'] ) ) 
+	header( "Location: registration.php" );
+	
+$admin_id = $_SESSION['admin_id'];
+$school_id = $_SESSION['school_id'];
 
 include("db.php");
-include("check_admin_id.php");
-
 $next_page = "false";
 
 include("classes/admin.php");
@@ -14,8 +14,6 @@ $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
 $admin = new admin($row);
-$admin->get_school_id();
-$school_id = $admin->school_id;
 	
 $message = "";	
 if (isset($_POST["action"])) {
@@ -35,7 +33,8 @@ if (isset($_POST["action"])) {
 				shipping_state='" . $_POST['shipping_state'] . "',
 				shipping_postal='" . $_POST['shipping_postal'] . "',
 				shipping_country='" . $_POST['shipping_country'] . "',
-				shipping_requests = '" . $_POST['requests'] . "' 
+				shipping_requests = '" . $_POST['requests'] . "', 
+				shipping_method = '" . $_POST['shipping_method'] . "' 
 				WHERE school_id=" . $school_id;
 		$query = mysql_query($sql);
 		
@@ -44,13 +43,9 @@ if (isset($_POST["action"])) {
 		}
 		else {
 			$next_page = "true";
-			//header("Location: http://www.mashpia.com/registration_7.php");
 		}
 	}
 	
-}
-else { 
-	header("https://www.mashpia.com/registration.php");
 }
 
 include("classes/school.php");
@@ -76,6 +71,22 @@ $school = new school($row);
 		}
 		.box{
 			padding-left:40px;
+		}
+		select#shipping_method {
+			border: 1px solid #BBBBBB;
+			-moz-border-radius: 5px 5px 5px 5px;
+			-webkit-border-radius: 5px;
+			width: 350px;
+			/* min-width: 350px; */
+			font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+			font-size: 16px;
+			font-weight: bold;
+			/* border: none; */
+			background: #fff;
+			min-height: 26px;
+			margin: 1px 0;
+			padding: 5px;
+			margin-right: 5px;
 		}
 		</style>
 		
@@ -115,27 +126,12 @@ $school = new school($row);
 			});
 
 			function check_radio_buttons() {
-				//var deliver = document.login.shipping_method[0].checked;
-				//var pickup = document.login.shipping_method[1].checked;
-								
-				//if (!deliver && !pickup) {
-				//	alert("You must choose a delivery type.");
-				//	return false;
-				//}				
-				//else {
-					if (checkForm())
-						return true;
-					else 
-						return false;
-				//}
+				return checkForm();
 			}
 			
 			function check_next_page() {
 				if (next_page == "true") {
-					var registration_form_seven = document.forms["registration_form_seven"];
-					registration_form_seven.elements["admin_id"].value = admin_id;
-					registration_form_seven.elements["school_id"].value = school_id;
-					registration_form_seven.submit();
+					location.href = "/registration_7.php";
 				}
 			}
 
@@ -161,10 +157,6 @@ $school = new school($row);
 	</head>
 
 	<body onload="check_next_page();">
-		<FORM name="registration_form_seven" method="post" action="registration_7.php">
-			<input type="hidden" name="admin_id" value="">
-			<input type="hidden" name="school_id" value="">
-		</FORM>
 	
 		<NOSCRIPT><P STYLE="color: red; font-size: larger;">Notice: You have javascript disabled. Some parts of the site will not function without javascript.</P></NOSCRIPT>
 		<div id="wrapper">
@@ -274,6 +266,17 @@ $school = new school($row);
     													<span class="label"><label for="country">Country</label></span>
     													<span class="input"><input name="shipping_country" 
     													    value="<?=empty($school->shipping_country)?$school->school_country:$school->shipping_country;?>" type="text" /></span>
+													</li>
+													<li>
+    													<span class="label"><label for="shipping_method">Shipping Method</label></span>
+    													<span class="input">
+															<select name="shipping_method" id='shipping_method'>
+																<option value='pickup'>Pickup</option>
+																<option value='deliver' <?= $school->shipping_method =='deliver' ? 'selected' : ''?>>
+																	Delivery
+																</option>
+															</select>
+														</span>
     												</li>
 													<li>
 														<span class="label"><label for="requests">Shipment Requests</label></span>

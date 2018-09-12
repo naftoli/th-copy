@@ -37,7 +37,7 @@ class CustomerProfile {
      *
      * Optional:
      *  Takes profile ID and auto loads all the details
-     *  Takes a boolean (defaults to true) that determins if the items details will be loaded.
+     *  Takes a boolean (defaults to true) that determines if the items details will be loaded.
      *
      */
     
@@ -75,7 +75,7 @@ class CustomerProfile {
     
     // Create a new CustomerProfile with data
     // (Idealy return a new instance as well)
-    public static function create($customerId, $email, $description, $paymentProfile, $live = true, $api=null) {
+    public static function create($customerId, $email, $description, $paymentProfile, $live = false, $api=null) {
 
         $auth = new Auth(); // create a new instance of auth in the static context
         
@@ -123,7 +123,12 @@ class CustomerProfile {
             preg_match('/ID [0-9]*/', $api_data['messages']['message'][0]['text'], $matches);
             
             $customerProfileId = explode(" ", $matches[0])[1];
-            
+            // create payment profile
+            $paymentProfile = $paymentProfile["payment"]["creditCard"];
+            PaymentProfile::create(
+                $paymentProfile["cardNumber"],  $paymentProfile["expirationDate"], 
+                $paymentProfile["cardCode"],    $customerProfileId 
+            );
             return new self($customerProfileId, true, $api);
         } else { // return an error message
             $error_msg = $api_data['messages']['resultCode'] .
@@ -160,11 +165,11 @@ class CustomerProfile {
             $profile = $api_data['profile'];
             
             // and set all the internal variables to the API data.
-            $this->paymentProfiles = $profile['paymentProfiles'];
+            $this->paymentProfiles = isset( $profile['paymentProfiles'] ) ? $profile['paymentProfiles'] : [];
             
             $this->customerProfileId = $profile['customerProfileId'];
-            $this->description = $profile['description'];
-            $this->email = $profile['email'];
+            $this->description = isset( $profile['description'] ) ? $profile['description'] : false;
+            $this->email = isset( $profile['email'] ) ? $profile['email'] : '';
             // handle strict testing
             if(array_key_exists('merchantCustomerId', $profile )) {
                 $this->merchantCustomerId = $profile['merchantCustomerId'];
@@ -253,9 +258,9 @@ class CustomerProfile {
             $api_array['transactionRequest']['profile']['paymentProfile'] = ['paymentProfileId' => $paymentProfileId];
         }
         
-        if (!!$invoice_number) {
-            $api_array['transactionRequest']['order']['invoiceNumber'] = $invoice_number;
-        }
+        // if (!!$invoice_number) {
+        //     $api_array['transactionRequest']['order']['invoiceNumber'] = $invoice_number;
+        // }
         
         if (!!$description) {
             $api_array['transactionRequest']['order']['description'] = $description;
@@ -290,11 +295,5 @@ class CustomerProfile {
             return "$status ($code): $text";
         }
     }
-    
-    /* 
-     * 
-     * 
-     * 
-     */
 }
 ?>

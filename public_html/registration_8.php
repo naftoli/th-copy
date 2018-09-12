@@ -1,82 +1,28 @@
 <?php 
 session_start();
-if ( !isset( $_SESSION['hschool'] ) ) 
-    header( "Location: admin.php" );
-$h_school = $_SESSION['hschool'];
+if ( !isset( $_SESSION['school_id'] ) ) 
+	header( "Location: registration.php" );
+	
+$admin_id = $_SESSION['admin_id'];
+$school_id = $_SESSION['school_id'];
 
 include("db.php");
-include("check_admin_id.php");
+require_once( __DIR__ . '/api/header/db.php' ); // import ActiveRecord and PDO
 
-// ***** GET THE ADMIN AND SCHOOL INFO ***** //
-include("classes/admin.php");
-include("classes/user.php");
-include("camps/includes/classes/school_class.php");
+require 'class.globalSettings.php';
+$year = GlobalSettings::getRegistrationYear();
+// get the registration info for the school
+try {
+    $schoolInfo = School::find( $school_id, [ 'include' => 'school_registrations' ] );
+    $schoolInfo = $schoolInfo->getRegInfo( $year );
+} catch ( \Exception $e ) {
+    $query = mysql_query("SELECT reg_type FROM schools WHERE school_id=" . $school_id);
+    $type = mysql_fetch_assoc($query)['reg_type'];
+    $schoolInfo = SchoolRegistration::getDefault( $school_id, $type, $year );
+};
 
-// get admin info
-$sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
-$query = mysql_query($sql);
-$row = mysql_fetch_assoc($query);
-$admin = new admin($row);
+$total = $schoolInfo->fee + $schoolInfo->balance;
 
-$admin = new admin($row);
-$admin->get_school_id();
-$school_id = $admin->school_id;
-/*
-// get school info
-$sql2 = "SELECT * FROM schools WHERE school_id=" . $school_id;
-$query2 = mysql_query($sql2);
-$row2 = mysql_fetch_assoc($query2);
-$inst_id = $row2['inst_id'];
-
-if ( $inst_id != 4 ) {
-    $reg_fee = 600;
-} else {
-    $reg_fee = 40;
-}
- * 
- */
-
-$reg_fee = 770;
-$total = $reg_fee;
- 
-$schools = array(
-	84  => 410.31,
-	185 => 1052.9,
-	37  => 300,
-	194 => 183.54,
-	80  => 770,
-	264 => 770,
-	328 => 85.59
-);
- 
-if (in_array($school_id, array_keys($schools))) {
-	$total += $schools[$school_id];
-}
-
-// ***** GET THE ADMIN AND SCHOOL INFO ***** //
-/*
-//get scanners ordered by school
-$scanners = 0;
-$sql = "select scanners from school_accessories where school_id = " . $school_id . " and year = 5777";
-$result = mysql_query( $sql );
-$row = mysql_fetch_assoc( $result );
-$scanners = $row['scanners'];
-
-$total = $reg_fee + ($scanners * 50);
-
-// ***** GET THE KIOSKS ORDERED BY THE SCHOOL ***** //
-include("classes/school_kiosk.php");
-include("classes/kiosk_type.php");
-$school_kiosks = array();
-$sql = "SELECT * FROM school_kiosks WHERE school_id=" . $admin->school_id;
-$query = mysql_query($sql);
-while ($row = mysql_fetch_assoc($query)) {
-	$school_kiosk = new school_kiosk($row);
-	$school_kiosk->get_kiosk_type();
-	array_push($school_kiosks, $school_kiosk);
-}
-// ***** GET THE KIOSKS ORDERED BY THE SCHOOL ***** //
-*/
 // ***** SEND THE CONFIRMATION EMAIL ***** //
 $confirmation = "";
 $message = "";
@@ -84,16 +30,14 @@ $message = "";
 $sql = "SELECT * FROM schools WHERE school_id = " . $school_id;
 $result2 = mysql_query($sql);
 $row2 = mysql_fetch_assoc($result2);
-//echo "<pre>"; print_r($row2); echo "</pre>";
 
 // make sure there's an authorize profile created
-if (empty($row2['authorize_customer_profile_id']) || empty($row2['authorize_payment_profile_id'])) {
-    header("Location: registration_7.php");
-    exit;
+if (!isset( $_SESSION['skipCC'] ) || $_SESSION['skipCC'] !== 'yes') {
+	if (empty($row2['authorize_customer_profile_id']) || empty($row2['authorize_payment_profile_id'])) {
+		header("Location: registration_7.php");
+		exit;
+	}
 }
-
-require_once 'class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -113,33 +57,25 @@ $year = GlobalSettings::getRegistrationYear();
 
 			// jquery
 			$(document).ready( function() {
-				
 				// pop up for outstanding balance
-				var schools = <?=json_encode($schools)?>;
-				
-				for (var s in schools) {
-					if (s == school_id) {
-						alert("Your base has a previous outstanding balance of $" + schools[s] + ". This amount will be added to your registration fee. If you have any questions please contact accounting@tzivoshashem.org.");
-					}
-				}
+                <? if ( $schoolInfo->balance > 0 ) { ?>
+                    alert("Your base has a previous outstanding balance of $<?=$schoolInfo->balance?>. This amount will be added to your registration fee. If you have any questions please contact accounting@tzivoshashem.org.");
+                <? } ?>
+
 				// hide return button
 				$("#return_to_main_menu_button").hide();
 				
 				// on click of submit button
 				$("#submit_button").click(function(){ 				
 					// perform some validation
-					if(check_checkboxes())				{
+					if(check_checkboxes()) {
 						submit_transaction_to_creditcard_processing();
 					}
 				}); 			
 				
 				// on click of return button
 				$("#return_to_main_menu_button").click(function(){ 
-					<? if ( $h_school ) { ?>	
-						var str = "admin_setup_guide_hschool.php?school_id=" + school_id;
-					<? } else { ?>
-						var str = "admin_setup_guide.php?school_id=" + school_id;
-					<? } ?>
+					var str = "admin_setup_guide.php?school_id=" + school_id;
 					window.location = str;
 				});
 
@@ -173,58 +109,54 @@ $year = GlobalSettings::getRegistrationYear();
 					return true;
 				}				
 			}
-			
-			// display message
-			// function display_message() {
-				// if (confirmation != "") {
-					// alert(confirmation);
-						// window.location = "http://mashpia.com/admin.php";
-				// }
-			// }
 				
 			function submit_transaction_to_creditcard_processing() {
-				// cast the json into a post params list
-				var dataToSend = $.param({
-					school_id: <?=$row2['school_id'];?>,
-					description: "school registration for: " + '<?=$row2['school_name'];?>',
-					amount: $('#trans_total').val(),
-					customer_profile_id: <?=$row2['authorize_customer_profile_id'];?>,
-					payment_profile_id: <?=$row2['authorize_payment_profile_id'];?>
-				});
-				
-				$.post(
-					"/ajax/authorize/charge_card.php",
-					dataToSend,
-					function(data) { // on a sucessfull hit this function is called
-						data = JSON.parse(data); // parse the result to json
-						// add || sid == 82 to allow the test account access
-						if(data.success) { // if the charge was sucessfull{
-							console.log(data.response); // log out the transaction response
-							// generate the response and show it in the correct box
-							var response  = data.response.transactionResponse.messages[0]; // load the correct section of the response
-							var message = response.description + " (" + response.code + ")"; // format the text
-							$('#cc_response').html(message + "<br/>") ; // show the user the response
-							$("#return_to_main_menu_button").show();
-							$("#submit_button").hide();
+				// check if we are suppose to skip cc processing
+				<?php if (isset( $_SESSION['skipCC'] ) && $_SESSION['skipCC'] == 'yes') : ?>
+					var url = "camps/includes/edit_functions.php?function_name=set_school_era&parameters=" + school_id;								
+					$.get(url, function(success) {
+						//alert(success);
+						$("#return_to_main_menu_button").show();
+						$("#submit_button").hide();
+					}); 
+					return false;
+				<?php else : ?>
 
-							var url = "camps/includes/edit_functions.php?function_name=set_school_era&parameters=" + school_id;								
-							//alert(url);
-							$.get(url, function(success) {
-								//alert(success);
-							});
-							
-							//update school to be enrolled in all appropriate campaigns
-							$.post('ajax/enrollIntoCampaigns.php', {type : 'school', id : school_id});
-							
-							// send email to office
-							$.post('ajax/sendEmail.php', { school : school_id });
-							
-						} else { // alert the user that the charge has failed.
-							$('#cc_response').html("Credit Card Error: " + data.response + "<br/>Please Try Again.") ; // show the user the error					
+					// cast the json into a post params list
+					var dataToSend = $.param({
+						school_id: <?=$row2['school_id'];?>,
+						description: "school registration for: " + '<?=$row2['school_name'];?>',
+						amount: $('#trans_total').val(),
+						customer_profile_id: <?=$row2['authorize_customer_profile_id'];?>,
+						payment_profile_id: <?=$row2['authorize_payment_profile_id'];?>
+                    });
+                    
+					$.post(
+						'/api/registration/school_registration.php?action=register',
+						dataToSend,
+						function(response) { // on a sucessfull hit this function is called
+							// add || sid == 82 to allow the test account access
+							if(response.success) { // if the charge was sucessfull
+                                var message = 'Registration Compleate';
+								// generate the response and show it in the correct box
+                                if ( response.data.payment ) {
+                                    var response  = response.data.payment.transactionResponse.messages[0]; // load the correct section of the response
+								    var message = response.description + " (" + response.code + ")"; // format the text
+                                }
+								$('#cc_response').html(message + "<br/>") ; // show the user the response
+								$("#return_to_main_menu_button").show();
+								$("#submit_button").hide();
+								
+								//update school to be enrolled in all appropriate campaigns
+								$.post('ajax/enrollIntoCampaigns.php', {type : 'school', id : school_id});
+								
+							} else { // alert the user that the charge has failed.
+								$('#cc_response').html("Credit Card Error: " + response.error + "<br/>Please Go back and update your card information.") ; // show the user the error					
+							}
 						}
-					}
-				);
-				return false;
+					);
+					return false;
+				<?php endif; ?>
 			} // end of: submit_transaction_to_creditcard_processing
 		</script>
 	</head>
@@ -251,9 +183,7 @@ $year = GlobalSettings::getRegistrationYear();
 							<h1>School Registration</h1>	 
 							<form action="#" id="submit_form" method="post" accept-charset="UTF-8" name="login"> 
 								<input type="hidden" name="action" value="submit">
-								<input type="hidden" name="action" value="registration_confirmation">
-								<input type="hidden" name="school_id" value="<?=$school_id;?>">
-								<input type="hidden" name="admin_id" value="<?=$admin_id;?>">								
+								<input type="hidden" name="action" value="registration_confirmation">								
 
 								<? if ($message != "") : ?>
 									<h1><?=$message;?></h1>
@@ -264,42 +194,20 @@ $year = GlobalSettings::getRegistrationYear();
 								<div class="module" id="module-info">								
 									<div class="module_content">	
 										<div class="lists form">
-					                       
 											<ul>
 												<li>
 													<div class="box">
-														<h4>Base Membership for <?if ( $h_school ) echo "Hebrew School "; ?><?=$year?> - $<?=$reg_fee?></h4>
+														<h4>Base Membership for <?=$year?> - $<?=$schoolInfo->fee?></h4>
 													</div>
 												</li>
 												
-												<?php if (in_array($school_id, array_keys($schools))) : ?>
+												<?php if ($schoolInfo->balance > 0 ){ ?>
 												<li>
 													<div class="box">
-														<h4>Total outstanding balance - $<?=$schools[$school_id]?></h4>
+														<h4>Total outstanding balance - $<?=$schoolInfo->balance?></h4>
 													</div>
 												</li>
-												<? endif; ?>
-												
-												<? if ( $scanners ) { ?>
-												<li>
-                                                    <div class="box">
-                                                        <h4><?=$scanners?> Scanners ($50 / ea.) - $<?=$scanners*50?></h4>
-                                                    </div>
-                                                </li>    
-												<? } ?>
-													
-												<!-- ***** KIOSKS ORDERED BY THE SCHOOL ***** -->
-												<? //for ($skno = 0; $skno < count($school_kiosks); $skno++) :?>
-													<!--<li>
-														<div class="box">
-															<? //$total = $total + ($school_kiosks[$skno]->quantity * $school_kiosks[$skno]->price); ?>															
-															<h4>
-																<?//=$school_kiosks[$skno]->quantity;?> <?//=$school_kiosks[$skno]->kiosk_type->kiosk_name;?> (<?//=number_format($school_kiosks[$skno]->price, 2, '.', '');?>) Kiosk(s) - $<?//=number_format($school_kiosks[$skno]->quantity * $school_kiosks[$skno]->price, 2, '.', '');?>
-															</h4>
-														</div>
-													</li>-->
-												<? //endfor; ?>
-												<!-- ***** KIOSKS ORDERED BY THE SCHOOL ***** -->
+                                                <? } ?>
 												
 												<li class="right">
 													<div class="box">
@@ -318,8 +226,7 @@ $year = GlobalSettings::getRegistrationYear();
 												<li>
 													<div class="box">
 														<h4><input type="checkbox" name="ccaccept" id="ccaccept" />
-														Please charge my card $<?=$total?>.00
-														<? if ( $h_school ) echo "(Hebrew School " . $year . " Total Registration)"; ?></h4>
+														Please charge my card $<?=$total?></h4>
 													</div>
 												</li>
 												<li>

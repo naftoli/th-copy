@@ -126,7 +126,7 @@ $(function() {
                                             <p>The registration fee for 5774 is $50. Please take advantage of the early bird special by registering before the 6th of Tishrei and pay as low as $40 per child.  
                                             Every child who registered will be receiving the Weiss Shabbos V’Yom Tov Siddur with Biur Teffilah - a most stunning gift for every Chayol. 
                                             This gift will be received by the end of the year!</p>
-                                            <p><a href="admin_users_register_new.php">Register Students</a></p>
+                                            <p><a href="admin_users_register.php">Register Students</a></p>
                                         </div>
                                         <h3><span class="icon"></span>Step 3: Upload Student Photos</h3>
                                         <div class="innerP">
@@ -186,7 +186,7 @@ $(function() {
                                 	<h3><span class="icon"></span>Register Students for 5774</h3>
                                     <p>Students added to the system are not regsitered for this years program.</p>
                                     <p>Use this page to register students in this years program.</p>
-                                    <p><a href="admin_users_register_new.php">Register Students</a></p>
+                                    <p><a href="admin_users_register.php">Register Students</a></p>
                                 </li>
 				<!--
                                 <li>

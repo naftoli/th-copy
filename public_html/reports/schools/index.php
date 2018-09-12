@@ -57,22 +57,6 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
-        
-        <h2>Registration</h2>
-        <div id="action-links">
-            <a href="/admin_school_register_report.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
-                    <span class="link-text">Registration Report</span>
-                </div>
-            </a>
-            <a href="/school_reg_types.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
-                    <span class="link-text">Registration Status</span>
-                </div>
-            </a>
-        </div>
 
         <h2>Teachers</h2>
         <div id="action-links">

@@ -61,11 +61,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 	$ctr = 0;
     while ( $row2 = mysql_fetch_assoc( $result2 ) ) {
         $tempMedals[$ctr] = $row2['medal_name'];
-		$tempMedalPics[$ctr] = $row2['profile_photo_id'];
+        if ( $row2['profile_photo_id'] ) $tempMedalPics[$ctr] = $row2['profile_photo_id'];
         $required = (int)$row2['missions_required'];
         $base_amount = $needed;
         $needed += $required;
-		//echo $medal . " needs " . $needed . " missions.<br />";
+
         if ( $needed > $total ) {
         	if ($ctr == 0) {
         		$missions[$subject] = array(
@@ -89,7 +89,17 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             break;
         }
 		$ctr++;
-    }   
+    }
+    if ( $total >= $needed ) {
+        $missions[$subject] = array(
+            'medal'	=>	$tempMedals[$ctr-1], 
+            'photo'	=>	end($tempMedalPics), 
+            'left'	=>	$needed - $total,
+            'total' =>  $total,
+            'needed' => $needed,
+            'base_amount' => $base_amount
+        );
+    }
 }
 //echo "<pre>"; print_r( $missions ); echo "</pre>";
 

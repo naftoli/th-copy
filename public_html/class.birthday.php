@@ -54,11 +54,7 @@ class Birthday {
 	}
     
     private function setUsers() {
-        $sql = "select user_id from users where dob > 0 and school_type_id in (2,3) order by user_id desc";
-        $result = mysql_query( $sql );
-        while ( $row = mysql_fetch_assoc( $result ) ) {
-            $this->users[] = $row['user_id'];
-        }
+        $this->users = [];
     }
 
     public function setBirthday() {
@@ -131,7 +127,10 @@ class Birthday {
 					if (!$bornInLeap && $leap && $hMonth == 6) {
 						$hMonth++;
 					}
-	
+    
+                    $date = jewishtojd($hMonth, $hDay, $this->year);
+                    $t->setDates( $date, $date );
+
 	                //get hebrew date of birthday for mission name
 	                $he_date = jdtojewish( $date, true, CAL_JEWISH_ADD_GERESHAYIM + CAL_JEWISH_ADD_ALAFIM_GERESH );
 	                $yomHoledes = iconv( 'WINDOWS-1255', 'UTF-8', $he_date );
@@ -154,9 +153,8 @@ class Birthday {
 	                $mission = mysql_real_escape_string( $missionName );
                     $description = 'Yom Holedes Mission';
                     
-                    $date = jewishtojd($hMonth, $hDay, $this->year);
-                    if ( $date > 2458633 ) {
-                        mail(
+                    if ( $date > 2459089 ) { // Aug 20, 2020
+                        @mail(
                             "bugs@tzivoshashem.org", "Error: Invalid Birthday Dates", 
                             json_encode([
                                 "date" => $date,
@@ -166,9 +164,9 @@ class Birthday {
                                 "server" => $_SERVER,
                                 "request" => $_REQUEST
                             ])
-                        );
+						);
+						return false;
                     }
-	                $t->setDates( $date, $date );
 	                    
 	                if ( $t->createMission( $mission, $description ) ) {
 	                    if ( $t->needToCreateTasks() ) {
@@ -204,12 +202,13 @@ class Birthday {
 	
 	                    //check if user already has birthday missions and delete - only for english b/c it's the first one to run
 	                    $sql = "delete from birthdays where user_id = " . $user_id;
-	                    mysql_query( $sql );
+	                    @mysql_query( $sql );
 	
 	                    //add user_id and mission_id to birthday database
 						$mission_id = $t->getMissionID();
 	                    $sql = "insert ignore into birthdays values( $user_id, $mission_id )";
-	                    mysql_query( $sql );
+						@mysql_query( $sql );
+						return true;
                     } else {
                         $this->errors[$user_id][] = $user_id . " is not signed up to a class and is not signed up to yoma depagra / yom tov";
                     }

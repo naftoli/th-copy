@@ -146,7 +146,7 @@ $bpOnly = [ 82 ];
 					$url_id2 = $url_id === '' ? '?' : $url_id . '&amp;'; 
 					?>
 					<li class="list_parent<?=isset($ui_type) && $ui_type == 'school' ? ' current' : ''?>">
-						<a href="/admin_school.php<?=$url_id?>" title="school">
+						<a href="/admin_school2.php<?=$url_id?>" title="school">
 							<div>
 								<span class="icon"><img height="28" width="28" alt="Base Management" src="/images/icon_dashboard.png"></span>
 								<?=T_('Base Management')?>
@@ -190,7 +190,7 @@ $bpOnly = [ 82 ];
 						</li>
 							
 						<ul class='list_second'>
-							<li><a href="/chidon_report.php">Registered for Chidon</a></li>
+							<li><a href="/reports/chidon/chidon_enrollment.php">Registered for Chidon</a></li>
 							<li><a href="/chidon_tests.php">Enter Chidon Test Marks</a></li>
 						</ul>
 					<?php } // end chidon school only list ?>
@@ -205,6 +205,7 @@ $bpOnly = [ 82 ];
 					</li>
 					
 					<ul class='list_second'>
+						<li><a href="/reports/chidon/chidon_enrollment.php">Registered for Chidon</a></li>
 						<li><a href="/reports/chidon/shabbaton_enrollment.php">Shabbaton Enrolled Report</a></li>
 						<li><a href="/chidon_tests.php">Enter Chidon Test Marks</a></li>
 						<li><a href="/chidon_school_reg.php">Enroll Chaperones</a></li>
@@ -249,14 +250,14 @@ $bpOnly = [ 82 ];
 					// if they are a hebrew school...
 					if ( $h_school ) { ?>
 						<li class="list_parent<?=isset($ui_type) && $ui_type == 'school' ? ' current' : ''?>">
-							<a href="/admin_school.php<?=$url_id?>" title="school">
+							<a href="/admin_school2.php<?=$url_id?>" title="school">
 								<div>
 									<span class="icon"><img height="28" width="28" alt="Base Management" src="/images/icon_dashboard.png"></span>
 									<?=T_('Base Management')?>
 								</div>
 							</a>
 						</li>
-		
+
 						<ul class="list_second">
 							<li>
 								<a href="#"><?=T_('Students (Soldiers)')?></a>
@@ -351,68 +352,99 @@ $bpOnly = [ 82 ];
 						<?php } // end if showBlog is set in the Get Headers
 					} else { // non hebrew schools ?>     
 						<li class="list_parent<?=isset($ui_type) && $ui_type == 'school' ? ' current' : ''?>">
-							<a href="/admin_school.php<?=$url_id?>" title="school">
+							<a href="/admin_school2.php<?=$url_id?>" title="school">
 								<div>
 									<span class="icon"><img height="28" width="28" alt="Base Management" src="/images/icon_dashboard.png"></span>
 									<?=T_('Base Management')?>
 								</div>
 							</a>
 						</li>
-
-						<ul class="list_second">
-							<li><a href="/yearly_prize/forms/staff_info.php">Staff Management</a></li>
-							<li>
-								<a href="#"><?=T_('Teachers')?></a>
-								<ul>
-									<li><a href="/teacher_list.php">Teacher Logins</a></li>
-									<li><a href="/teacher_letter.php">Teacher Letters</a></li>
-									<li><a href="/teacher_settings.php">Teacher Settings</a></li>
-								</ul>
-							</li>
-							<li>
-								<a href="#"><?=T_('Students (Soldiers)')?></a>
-								<ul>
-                                    <li><a href="/admin_user.php<?=$url_id?>"><?=T_('View / Edit')?></a></li>
-									<li><a href="/admin_user.php<?=$url_id2?>action=add"><?=T_('Add Individual')?></a></li>
-									<li><a href="/admin_school_file.php<?=$url_id?>"><?=T_('Upload School or Class List')?></a></li>
-									<li><a href="/admin_users_photo.php<?=$url_id?>"><?=T_("Upload Photos")?></a></li>
-									<li><a href="/admin_users_register.php<?=$url_id?>"><?=T_("Registration")?></a></li> 
-                                    <li><a href="/admin_card_print.php<?=$url_id?>"><?=T_('Print Rank Cards')?></a></li>
-                                    <li><a href="/reports/users/student_info.php"><?=T_('Search By Serial / Barcode')?></a></li>
-									<li><a href="/add_missions.php"><?=T_('Update Soldier\'s Missions')?></a></li>
-									<li><a href="/add_medals.php"><?=T_('Update Soldier\'s Medals')?></a></li>
-								</ul>
-							</li>						
-							<li>
-								<a href="#"><?=T_('Classes (Platoons)')?></a>
-								<ul>
-									<li><a href="/admin_class.php<?=$url_id?>"><?=T_('Manage')?></a></li>
-									<li><a href="/admin_class.php<?=$url_id2?>action=add"><?=T_('Add New')?></a></li>
-									<li><a href="/admin_class_transition.php<?=$url_id?>"><?=T_('Platoon Transition')?></a></li>
-								</ul>
-							</li>
-							
-							<li>
-								<a href="#"><?=T_('School (Base)')?></a>
-								<ul>
-									<li><a href="/admin_school2.php<?=$url_id2?>action=edit"><?=T_('Edit School Profile')?></a></li>
-									<li><a href="/admin_profile.php">Edit Admin Profile</a></li>
-									<li><a href="/settings.php<?=$url_id2?>">Settings</a></li>
-									<li><a href="/admin_invoice_items.php<?=$url_id?>"><?=T_('Transaction History')?></a></li>
-									<?php if( $admin_user['auth'] === "super" ) { ?>
-										<li><a href="/admin_school_logos.php"><?=T_('Edit School Logos')?></a></li>
-									<?php } ?>
-								</ul>
-							</li>
-							
-							<li>
-								<a href="#"><?=T_('Parents')?></a>
-								<ul>
-									<li><a href="/parent_list.php">Parent Accounts</a></li>
-									<li><a href="/child_list.php">Parent / Children Accounts</a></li>
-								</ul>
-							</li>		
-						</ul>
+						<?php if ( $admin_user["beta"] ) { ?>
+							<ul class="list_second">
+								<li>
+									<a href="#"><?=T_('Soldiers')?></a>
+									<ul>
+										<li><a href="/beta/bm/users"><?=T_('View / Edit')?></a></li>
+										<?php if ($admin_user['auth'] == 'super') { ?>
+											<li><a href="/admin_users_register.php<?=$url_id?>"><?=T_("Registration")?></a></li> 
+										<?php } else { ?>
+											<li><a href="/beta/bm/uses/registration"><?=T_("Registration")?></a></li> 
+										<?php } ?>
+										<li><a href="/beta/bm/users/cards"><?=T_('Rank Cards')?></a></li>
+										<li><a href="/add_missions.php"><?=T_('Update Soldier\'s Missions')?></a></li>
+										<li><a href="/add_medals.php"><?=T_('Update Soldier\'s Medals')?></a></li>
+									</ul>
+								</li>
+								<li>
+									<a href="/beta/bm/platoons"><?=T_('Platoons')?></a>
+								</li>
+								<li>
+									<a href="/beta/bm/parents"><?=T_('Parents')?></a>
+								</li>
+								<li>
+									<a href="/beta/bm/staff"><?=T_('Staff')?></a>
+								</li>
+								<li>
+									<a href="/beta/bm/base"><?=T_('Base')?></a>
+								</li>
+							</ul>
+						<?php  } else { ?>
+							<ul class="list_second">
+								<li><a href="/yearly_prize/forms/staff_info.php">Staff Management</a></li>
+								<li>
+									<a href="#"><?=T_('Teachers')?></a>
+									<ul>
+										<li><a href="/teacher_information.php">Teacher Information</a></li>
+										<li><a href="/teacher_list.php">Teacher Logins</a></li>
+										<li><a href="/teacher_letter.php">Teacher Letters</a></li>
+										<li><a href="/teacher_settings.php">Teacher Settings</a></li>
+									</ul>
+								</li>
+								<li>
+									<a href="#"><?=T_('Students (Soldiers)')?></a>
+									<ul>
+										<li><a href="/admin_user.php<?=$url_id?>"><?=T_('View / Edit')?></a></li>
+										<li><a href="/admin_user.php<?=$url_id2?>action=add"><?=T_('Add Individual')?></a></li>
+										<li><a href="/admin_school_file.php<?=$url_id?>"><?=T_('Upload School or Class List')?></a></li>
+										<li><a href="/admin_users_photo.php<?=$url_id?>"><?=T_("Upload Photos")?></a></li>
+										<li><a href="/admin_users_register.php<?=$url_id?>"><?=T_("Registration")?></a></li> 
+										<li><a href="/admin_card_print.php<?=$url_id?>"><?=T_('Print Rank Cards')?></a></li>
+										<li><a href="/reports/users/student_info.php"><?=T_('Search By Serial / Barcode')?></a></li>
+										<li><a href="/add_missions.php"><?=T_('Update Soldier\'s Missions')?></a></li>
+										<li><a href="/add_medals.php"><?=T_('Update Soldier\'s Medals')?></a></li>
+									</ul>
+								</li>						
+								<li>
+									<a href="#"><?=T_('Classes (Platoons)')?></a>
+									<ul>
+										<li><a href="/admin_class.php<?=$url_id?>"><?=T_('Manage')?></a></li>
+										<li><a href="/admin_class.php<?=$url_id2?>action=add"><?=T_('Add New')?></a></li>
+										<li><a href="/admin_class_transition.php<?=$url_id?>"><?=T_('Platoon Transition')?></a></li>
+									</ul>
+								</li>
+								
+								<li>
+									<a href="#"><?=T_('School (Base)')?></a>
+									<ul>
+										<li><a href="/admin_school2.php<?=$url_id2?>action=edit"><?=T_('Edit School Profile')?></a></li>
+										<li><a href="/admin_profile.php">Edit Admin Profile</a></li>
+										<li><a href="/settings.php<?=$url_id2?>">Settings</a></li>
+										<li><a href="/admin_invoice_items.php<?=$url_id?>"><?=T_('Transaction History')?></a></li>
+										<?php if( $admin_user['auth'] === "super" ) { ?>
+											<li><a href="/admin_school_logos.php"><?=T_('Edit School Logos')?></a></li>
+										<?php } ?>
+									</ul>
+								</li>
+								
+								<li>
+									<a href="#"><?=T_('Parents')?></a>
+									<ul>
+										<li><a href="/parent_list.php">Parent Accounts</a></li>
+										<li><a href="/child_list.php">Parent / Children Accounts</a></li>
+									</ul>
+								</li>		
+							</ul>
+						<? } ?>
 
 						<li class="list_parent<?=isset($ui_type) && $ui_type == 'programs' ? ' current' : ''?>">
 							<a href="#" title="programs">
@@ -444,6 +476,7 @@ $bpOnly = [ 82 ];
 						<ul class='list_second'>
 							<li><a href="/newAchievementTasks.php">Add Achievement Task</a></li>
 							<li><a href="/manual_points.php">Add / Subtract Points</a></li>
+							<li><a href="/remove_old_achievement_cards.php">Delete Old Achievement Cards</a></li>
 						</ul>
 						
 						<li class="list_parent<?=isset($ui_type) && $ui_type == 'programs' ? ' current' : ''?>">
@@ -453,6 +486,7 @@ $bpOnly = [ 82 ];
 						<ul class='list_second'>
 							<!--<li><a href="/uploadChidonFile.php">Upload File for Chidon</a></li>-->
 							<!--<li><a href="/chidon_report.php">Registered for Chidon</a></li>-->
+							<li><a href="/reports/chidon/chidon_enrollment.php">Registered for Chidon</a></li>
 							<li><a href="/reports/chidon/shabbaton_enrollment.php">Shabbaton Enrolled Report</a></li>
 							<li><a href="/reports/chidon/walking_groups.php">Shabbaton Walking Report</a></li>
 							<li><a href="/chidon_tests.php">Enter Chidon Test Marks</a></li>
@@ -559,6 +593,7 @@ $bpOnly = [ 82 ];
 									<li><a href="/tehillim_quotas.php">Check Your Tehillim Quotas</a></li>
 									<li><a href="/admin_users_track.php">Change Tehillim Ladder/Quota</a></li>
 									<li><a href="https://vimeo.com/195384916">Shabbos Mevorchim Tutorial Video</a></li>
+									<li><a href="quota_cards.php">Quota Cards</a></li>
 								</ul>
 							</li>
 						</ul>
@@ -588,6 +623,14 @@ $bpOnly = [ 82 ];
 							<a href="/yearly_prize/reports/">
 								<span class="icon">
 									<img src="/images/icon_auction.png" width="28" height="28" />Yearly Prize
+								</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="/auction/winners3.php">
+								<span class="icon">
+									<img src="/images/icon_auction.png" width="28" height="28" />Auction Winners
 								</span>
 							</a>
 						</li>
@@ -734,7 +777,7 @@ $bpOnly = [ 82 ];
 						<li>
 							<a href="/helpdesk/?p=open" id="helpdesk_link" title="support"><div><span class="icon"><img height="28" width="28" alt="Support" src="/images/parentIcons/support icon.gif"></span><?=T_('Support')?></div></a>
 						</li>
-							
+						
 						<?php if (isset($_GET['showBlog'])) { ?>
 							<li>
 								<form name="blog" action="blog/wp-login.php" method="post">
@@ -765,12 +808,7 @@ $bpOnly = [ 82 ];
 			
 			if( $admin_user['auth'] == 'super' || !empty( $admin_user['auths']['user'] ) ) {
 				$url_id = isset($user_id) ? "?user_id=$user_id" : '';
-			}
-
-			// load the parent menu if applicable
-			if ( !empty( $admin_user['auths']['user'] ) ) {
-				require_once(dirname(__FILE__).'/parent_menu.php');
-			} ?>
+			}?>
 	
 			<li class="list_parent">
 				<a href="/logout.php" onclick="document.location.href=this.href">
@@ -821,7 +859,7 @@ $bpOnly = [ 82 ];
 							<?php if( $admin_user['auth'] == 'super' || !empty( $admin_user['auths']['school'] ) ) {
 								$url_id = isset($school_id) ? "?school_id=$school_id" : ''; ?>
 								
-								<a href="/admin_school.php<?=$url_id?>" <?=isset($ui_type) && $ui_type == 'school' ? 'class="selected"' : ''?>>
+								<a href="/admin_school2.php<?=$url_id?>" <?=isset($ui_type) && $ui_type == 'school' ? 'class="selected"' : ''?>>
 									<?=T_('Base Management')?>
 								</a>
 								<a href="/admin_school_subjects.php<?=$url_id?>" <?=isset($ui_type) && $ui_type == 'programs' ? 'class="selected"' : ''?>>

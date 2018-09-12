@@ -222,11 +222,11 @@ body,td,th {
                         and practice questions complete with answer keys. 
                         <br /><br />
                         <i>Click on a link to view and download the Study Guide.</i><br />
-                        <a href="downloads/Study Guide Book 1 BW Cover LR.pdf">Study Guide Grade 4</a><br />
-                        <a href="downloads/Study Guide Book 2 BW Cover LR.pdf">Study Guide Grade 5</a><br />
-                        <a href="downloads/Study Guide Book 3 BW Cover LR.pdf">Study Guide Grade 6</a><br />
-                        <a href="downloads/Study Guide Book 4 BW Cover LR.pdf">Study Guide Grade 7</a><br />
-                        <a href="downloads/Study Guide Book 5 BW Cover LR.pdf">Study Guide Grade 8</a><br />
+                        <a href="https://www.dropbox.com/s/z8y6l4hujcjdcb5/Study%20Guide%20Book%201.pdf?dl=0">Study Guide Grade 4</a><br />
+                        <a href="https://www.dropbox.com/s/4nbdawg68b1ofiv/Study%20Guide%20Book%202%20D2.pdf?dl=0">Study Guide Grade 5</a><br />
+                        <a href="https://www.dropbox.com/s/phnvqeod8s355l7/Study%20guide%20Book%203.pdf?dl=0">Study Guide Grade 6</a><br />
+                        <a href="https://www.dropbox.com/s/crvvs6l81kqi3vn/Study%20Guide%20Book%204%20D2.pdf?dl=0">Study Guide Grade 7</a><br />
+                        <a href="https://www.dropbox.com/s/ojzcrlqaiz3xghk/Study%20guide%20Book%205.pdf?dl=0">Study Guide Grade 8</a><br />
                     </div>
                 </div>
                 
@@ -290,7 +290,7 @@ body,td,th {
 				<div style="margin-left: 5%;">
 					<h4>Registration</h4>
 					<div class="indent">
-						To register for the online classes please visit <a href="http://myshliach.com/ChidonClasses">MyShliach.com/ChidonClasses</a>. Upon providing your gender and grade,
+						To register for the online classes please visit <a href="http://chidon613.com/myshliachclasses">chidon613.com/myshliachclasses</a>. Upon providing your gender and grade,
 						scheduling and teacher information will be made available to you.
 					</div>
 					<br />

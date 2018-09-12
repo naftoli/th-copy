@@ -85,38 +85,43 @@ body,td,th {
 			<div class="magazine">
 				
 				<h1>Registration</h1>
+
+				<h4><a href="#register">Register Today!</a></h4>
+				<br />
 				
                 <h4>Dates:</h4>
                 <div class="indent">
-                    Starts Wednesday, Tes Vov Elul (September 6). Only parents can register their children for Chidon, schools cannot register chayolim.
+					Starting Tuesday, Yud Elul (Aug 21), parents can register their children through their parent accounts, below or on mashpia.com/mobile. 
+					Only parents can register their children for Chidon; schools cannot register chayolim. 
                 </div>
                 <br />
 				
 				<div class="indent">
-                    Registration closes on Wednesday, Yud Tes Cheshvan (November 8). Once registration closes, no new applications will be accepted.
+					Registration closes on Tuesday, Zayin Cheshvan (Oct 16). Once registration closes, no new applications will be accepted.
                 </div>
-				<br />
-				<!--
-				<div class="indent">
-                    Registration is free. You can purchase Yahadus books and a printed copy of the Chidon learning guide as part of Chidon Registration. Alternatively, you can download and print them for free.
-                </div>
-				<br />
-				-->
-				<h4>How to Register:</h4>				
-				<div class="indent">
-					Parents can register their children through their parent accounts, below or on mashpia.com/mobile.
-					<br />
-					Log in to your parent account.
-					<br />
-					If you do not have an account, please create one by clicking “Create account.”
-					<br />
-					If your child does not appear on your account, please add your child to the account by clicking “Add child.”
-					<br />
-				</div>
 				<br />
 				
 				<div class="indent">
-					For further support email chidon@tzivoshashem.org or contact your school’s Chidon coordinator.
+                    Registration is $5. You can purchase Yahadus books and a printed copy of the Chidon learning guide as part of Chidon Registration. Alternatively, you can download and print them for free.
+                </div>
+				<br />
+
+				<div class="indent">
+					The cost for the Shabbaton if your child qualifies is $150. Shabbaton enrollment opens Wednesday Ches Adar Aleph (February 13).
+				</div>
+				<br />
+				
+				<h4><a name="register">How to Register:</a></h4>				
+				<div class="indent">
+					<br />	
+					Log in to your parent account and register your children.
+					<br /><br />
+					If you do not have an account, please create one by going to mashpia.com/mobile and clicking “Create account.”
+					<br /><br />
+					If your child does not appear on your account, please add your child to the account by clicking “Add child.” 
+					<br /><br />
+					Need help? Email chidon@tzivoshashem.org or contact your school’s Chidon coordinator. 
+					<br />
 				</div>
 				<br />
 								

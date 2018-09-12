@@ -118,7 +118,7 @@ if ( $school_id > 0 ) {
 		
 		<div class="infobox2">
 			<p>
-				<form method="post" action="admin_users_register_new.php">
+				<form method="post" action="admin_users_register.php">
 					<input type="hidden" name="hidden_school_id" id="hidden_school_id" value="<?=$school_id;?>">
 					
 					<label style="white-space: nowrap;">

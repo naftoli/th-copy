@@ -11,7 +11,7 @@
             </div>
             <div class="input_group input_half">
                 <label for="date_shipped">Date Shipped: </label>
-                <input type="date" placeholder="2017-12-31" name="date_shipped" id="date_shipped"/>
+                <input type="date" placeholder="2017-12-31" value='<?=date('Y-m-d')?>' name="date_shipped" id="date_shipped"/>
             </div>
             <div class="input_group input_full">
                 <label for="date_shipped">Description:</label>

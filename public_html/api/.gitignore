@@ -1,0 +1,4 @@
+build/*
+**/tmp/*
+**/mysql.log
+error_log

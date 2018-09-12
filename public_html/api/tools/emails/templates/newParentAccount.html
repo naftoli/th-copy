@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Password Changed</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body{ margin: 0px; padding: 0px; }
+        img { max-height: 100%; max-width: 100%; }
+        header { 
+            height: 75px;
+            background: #335eac;
+            display: flex;
+            align-items: center; 
+        }
+        header h1 { flex-grow: 1; text-align: center; color: #fff; font-family: sans-serif; }
+        header img { width: 50px; padding: 15px; }
+
+        section#content { background: #fff; padding: 10px 15px; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <img src="https://mashpia.com/mobile/img_new/TH%20Logo-colorful-svg.svg" alt='logo'/>
+            <h1>Tzivos Hashem</h1>
+        </header>
+        <section id='content'>
+            Hi!<br /><br />
+            
+            A parent account has been created for your child (or children) in Chayolei Tzivos Hashem.<br /><br />
+            
+            With it, you’ll able to mark your children’s missions daily, straight from any smartphone (or computer). 
+            You will also be able to check in on their progress reports, personalize their growth, 
+            and stay up-to-date on Tzivos Hashem news from bases around the world.<br/><br/>
+            
+            Darchei Hachassidus will come alive in your home as managing your kids’ Chayolei Tzivos Hashem accounts becomes easier than ever. 
+            Help your young soldier reach the greatest heights in Hashem’s army.<br /><br />
+            
+            Your Username is: <?=$username?><br />
+            Your Default Password is: <?=$password?> <br /> <br />
+
+            To change your username and/or password, simply log into your account at 
+            <a href='https://TzivosHashem.com/mobile'>TzivosHashem.com/mobile</a> 
+            and click 'edit profile' on the top right hand corner.<br /><br />
+            
+            For any questions, help, or feedback, contact your school's Base Commander.
+
+            Wishing you much Yiddishe and Chassidishe Nachas,<br/>
+            CTH Headquarters
+        </section>
+    </div>
+</body>
+</html>

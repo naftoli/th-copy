@@ -49,7 +49,7 @@ if (!isset($menu_type))
 	<!-- if ($menu_type == 'super') : -->
 	<? if ($menu_type == 'super') : ?>
 		<? $url_id = ''; ?>
-			<li><a href="school_reg_types.php">School Registration & Types</a></li>
+			<!-- <li><a href="school_reg_types.php">School Registration & Types</a></li> -->
 			<li><a href="shabbo_mevorchim_hq.php">Shabbos Mevorchim HQ Report</a></li>
 			<li><a href="school_poster_brochure_orders.php">School Brochure / Poster Orders Report</a></li>
 			<li><a href="chidon_report.php">Chidon Registered Report</a></li>

@@ -109,7 +109,7 @@ body,td,th {
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td>Tuesday, Chof Hey Cheshvan (Nov. 14)</td>
+                                <td>Tuesday, Hey Kislev (Nov 13)</td>
                                 <td>Units 1-16</td>
                                 <td>Units 46-62</td>
                                 <td>Units 100-117</td>
@@ -118,7 +118,7 @@ body,td,th {
                             </tr>
                             <tr>
                                 <td>2</td>
-                                <td>Tuesday, Ches Teves (Dec. 26)</td>
+                                <td>Wednesday, Yud Ches Teves (Dec 26)</td>
                                 <td>Units 17-30</td>
                                 <td>Units 63-80</td>
                                 <td>Units 118-135</td>
@@ -127,7 +127,7 @@ body,td,th {
                             </tr>
                             <tr>
                                 <td>3</td>
-                                <td>Monday, Chof Shvat (Feb. 5)</td>
+                                <td>Wednesday, Aleph Adar 1 (Feb 6)</td>
                                 <td>Units 31-45</td>
                                 <td>Units 81-99</td>
                                 <td>Units 136-156</td>

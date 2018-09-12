@@ -7,6 +7,11 @@ if ( isset( $_GET['debug'] ) ) {
 /***************** AUTHENTICATION **********************/
 $admin_auth = array('school'); 
 require(dirname(__FILE__) . '/../../header.php');
+
+if ( $admin_user['auth'] == 'super' ) {
+    header( 'Location: /raffles/' ); die();
+}
+
 /***************** EXTERNAL DEPENDENCIES **********************/
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
 

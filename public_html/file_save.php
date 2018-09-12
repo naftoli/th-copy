@@ -198,7 +198,7 @@ function addFileNew($file, $missing = NULL) {
 							exif_imagetype($target) == IMAGETYPE_TIFF_MM ) && exif_read_data($target)
 						){
 							$exif = @exif_read_data($target);
-							$orientation = $exif['Orientation'];
+							$orientation = isset( $exif['Orientation'] ) ? $exif['Orientation'] : false;
 							if($orientation){ // this will only run if orientation is set which can only happen if $_POST['action'] is set to fix
 								switch($orientation) {  
 									case 3: // upside down

@@ -54,11 +54,7 @@ class BirthdayYi {
     }
     
     private function setUsers() {
-        $sql = "select user_id from users where dob > 0 and school_type_id in (2,3) order by user_id desc";
-        $result = mysql_query( $sql );
-        while ( $row = mysql_fetch_assoc( $result ) ) {
-            $this->users[] = $row['user_id'];
-        }
+        $this->users = [];
     }
 
     public function setBirthday() {
@@ -133,6 +129,9 @@ class BirthdayYi {
 					if (!$bornInLeap && $leap && $hMonth == 6) {
 						$hMonth++;
                     }
+
+                    $date = jewishtojd($hMonth, $hDay, $this->year);
+	                $t->setDates( $date, $date );
 	
 	                //get hebrew date of birthday for mission name
 	                $he_date = jdtojewish( $date, true, CAL_JEWISH_ADD_GERESHAYIM + CAL_JEWISH_ADD_ALAFIM_GERESH );
@@ -141,9 +140,6 @@ class BirthdayYi {
 	                $missionName = "מזל טוב פאר דיין יום הולדת - " . $yomHoledes;
 	                $mission = mysql_real_escape_string( $missionName );
                     $description = 'יום הולדת';
-                    
-                    $date = jewishtojd($hMonth, $hDay, $this->year);
-	                $t->setDates( $date, $date );
 
 	                if ( $t->createMission( $mission, $description ) ) {
 	                    if ( $t->needToCreateTasks() ) {

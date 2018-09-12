@@ -366,15 +366,14 @@ if (isset($admin_auth))
 												-->
 												<p><a href="#" id="contact_us">Contact Us</a></p>
 												<p><a href="statement.php">Enter Kiosk Mode</a></p>
-												<p><a href="registration.php">New Yeshiva Schools register here</a></p>
-                                                <p><a href="registration.php?type=hschool">New Hebrew Schools register here</a></p>
+												<p><a href="https://mashpia.com/registration.php">New Schools register here</a></p>
 												<p><a href="register_parent.php">Create a Parent Account</a></p>
 												<!--<p><a href="http://v2.mashpia.com">Teacher login here</a></p>-->
 											</li>
 										</ol>
 									</div>
 									
-								</div>
+								</div> 
 								
 								<? require 'footer.php'; ?>
 								

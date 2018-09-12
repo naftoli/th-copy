@@ -67,6 +67,7 @@ $types = array(
     }
 
     $schools = $h->getSchools();
+    $h->setChidonNumbers(); // find out the chidon eligible children 
 
     //variables for grand totals
     $grandTotal = 0;
@@ -87,11 +88,15 @@ $types = array(
     <?php
     if ( isset( $schools['pickup'] ) ) {
         foreach( $schools['pickup'] as $id => $school ) { ?>
+            <?php $chidonNum = $h->getChidonNumber( $id ); ?>
             <h2>For Pickup</h2>
             <div class='info'>
                 <?=$school['name']?><br />
                 <?=$school['address']?><br /><br />
-                Type of School: <?=$types[$id]?><br />
+                <?php if ( isset( $types[$id] ) ) { ?>
+                    Type of School: <?=$types[$id]?><br />
+                <?php } ?>
+                
                 Principal: <?=$school['principal']?><br />
                 <?php
                 foreach( $school['admins'] as $admin ) {
@@ -100,16 +105,26 @@ $types = array(
                 } ?>
                 Total Teachers: <?=$school['teachers']?><br />
                 Total Registered children: <?=$school['total']?><br />
+                
                 <?php
                 if ($id === 162) { // Bais Chaya Mushka LA does not want chayoleis for teachers....
-                    $total = $school['total'] + get_extra_hachayols($id, $school['total']);
+                    $extra = get_extra_hachayols($id, $school['total']);
+                    $total = $school['total'] + $extra;
                 } else { // for all other schools add the extras to the total
-                    $total = $school['teachers'] + $school['total'] + get_extra_hachayols($id, $school['teachers'] + $school['total']); 
+                    $extra = get_extra_hachayols($id, $school['teachers'] + $school['total']);
+                    $total = $school['teachers'] + $school['total'] + $extra; 
                 }
-                ?>
+
+                if ( $extra !== 0 ) { ?>
+                Extra: <?=$extra?><br />
+                <?php } ?>
+
                 Total: <?=$total?><br />
                 Already Registered for Chidon: <?=$school['chidonReg']?><br />
-                Number of posters: <?=$posters[$id]?><br />
+                <?php if ( isset( $posters[$id] ) ) { ?>
+                    Number of posters: <?=$posters[$id]?><br />
+                <?php } ?>
+                Possible Chidon Children: <?=$chidonNum?><br />
                 Shipping Requests: <?=$school['shipping_requests']?><br /><br />
                 <?php
                 $grandTotal += $total;
@@ -123,6 +138,7 @@ $types = array(
     
     if ( isset( $schools['deliver'] ) ) {
         foreach ( $schools['deliver'] as $id => $school ) { ?>
+            <?php $chidonNum = $h->getChidonNumber( $id ); ?>
             <h2>For Delivery</h2>
             <div class='info'>
                 <?=$school['name']?><br />
@@ -136,17 +152,28 @@ $types = array(
                 Total Teachers: <?=$school['teachers']?><br />
                 Total Registered children: <?=$school['total']?><br />
                 <?php
-                if ( in_array($id,  [54, 265] ) ) $total = get_extra_hachayols($id); // Beis Rivkah only wants the total specified in this file.
-                else if ($id != 162) $total = $school['teachers'] + $school['total'] + get_extra_hachayols($id); // for all other schools add the extras to the total
-                else $total = $school['total'] + get_extra_hachayols($id);
-                ?>
+                if ( in_array($id,  [54, 265] ) ) { // Beis Rivkah only wants the total specified in this file.
+                    $extra = $total = get_extra_hachayols($id);
+                } else if ($id != 162) { // for all other schools add the extras to the total
+                    $extra = get_extra_hachayols($id, $school['teachers'] + $school['total']);
+                    $total = $school['teachers'] + $school['total'] + $extra; 
+                } else {
+                    $extra = get_extra_hachayols($id, $school['total']);
+                    $total = $school['total'] + $extra;
+                }
+
+                if ( $extra !== 0 ) { ?>
+                    Extra: <?=$extra?><br />
+                <?php } ?>
+
                 Total: <?=$total?><br />
                 Already Registered for Chidon: <?=$school['chidonReg']?><br />
                 Number of posters: <?=$posters[$id]?><br />
+                Possible Chidon Children: <?=$chidonNum?><br />
                 Shipping Requests: <?=$school['shipping_requests']?><br /><br />
                 <?php
                 $grandTotal += $total;
-                $totals['pickup'] += $total;
+                $totals['deliver'] += $total;
                 ?>
             </div>
             <div class='page-break'></div>

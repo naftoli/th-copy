@@ -134,6 +134,7 @@ $row = mysql_fetch_assoc($query); // and get the user
 
 $lang = $row['lang_id']; // update the language
 $user = new user($row); // create a new user
+
 $user->get_rank(); // get his rank
 $user->get_school_class(); // and get his class
 chdir('../'); // move up a directory
@@ -292,515 +293,525 @@ $he_chars = array(
 	<img src="/mobile/img_new/tools-color-white-svg.svg" data-user_id="<?=$user_id?>" data-category="Marking Missions" alt="bug-report" />
 </div>
 
+<?php if ( !$user->user_registered ) { ?>
 <div class="container">
     <div class="content">
-		<? /********************** BUTTONS ON THE TOP OF THE PAGE **********************/ ?>
-    	<div style="margin-bottom: 20px;">
-			<? $alignmentRight = $lang == 2 ? "left" : "right"; // swich right to left for hebrew ?>
-			<? $alignmentLeft  = $lang == 2 ? "right" : "left"; // swich left to right for hebrew ?>
-			<div id="buttons" style="text-align: center;">
-				<div id="rightButtons" style="float: <?=$alignmentRight?>; text-align:<?=$alignmentRight?>;">
-					<?php require_once dirname(__FILE__) . '/reg/ajax/encrypt.php';?>
-					<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=$desktop ? "display: none" : ""?>" />
-					<a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
-						<input type="button" class="btn btn-danger btn-sm" value="Print Missions" />
-					</a>
-				</div>
-				<div id="leftButtons" style="float: <?=$alignmentLeft?>; text-align:<?=$alignmentLeft?>;">
-					<a id="goalsLink" href="" style="float: <?=$alignmentLeft?>">
-						<input type="button" class="btn btn-danger btn-sm" value="Personalize" />
-					</a>
-				</div>
-				<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal" style="margin: 0 5px;">
-					Help
-				</button>
-			</div>
-			<? /********************** DATE DROPDOWN. TODO: REMOVE AND MOVE TO SLIDING BAR ON TOP **********************/ ?>
-			
-			<div style="clear:both"></div>
-		</div>
-
-		<?// for every day of the week
-		for ($from = 1; $from < 8; $from++) {
-			if(!$daily){
-				$timestamp = time(); // set the date to todays date....
-				$from = 8; // only do this once
-			} else {
-				$timestamp = jdtounix($start + $from);
-			}?>
-			<div class="tasks-day" data-date="<?=date('y-m-d', $timestamp)?>">
-			<?
-			if (count($user->daily_labels) > 0) { // if the user has dialy tasks
-				foreach ($user->sorted_daily_labels as $index => $value) { // for each of the users sorted daily labels...
-					$info = explode(":", $value); // split up the info
-					$label = $info[0]; // and get the label
-					
-					/*************** GENERATE A PANEL FOR EACH OF THE DAILY TASKS ****************/?>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<i class="glyphicon glyphicon-chevron-left"></i> <?=$label?>
-						</div>
-						<div class="collapse in" id="#panel_<?=$index?>">
-							<div class="panel-body dailyPanel">
-							<div class="text-<?= $lang == 2 ? "left" : "right"; // move based on language?>">
-								<input type="button" class="checkAll<?=!$daily ? "Daily" : ""; // change the class if we are rendering the whole week.?> btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999; <?//$desktop ? "" : "display: none"; ?>"/>
-							</div>
-							<br />
-							<?//if ($lang == 2) echo '<br />'; // extra space for hebrew ?>
-							<ul class="list-unstyled">
-								<? /************ RENDER EACH TASK ***************/
-								$numDaily = count($user->daily_tasks); // count the tasks
-								for ($j = 0; $j < $numDaily; $j++) { // for each task
-									if ($user->daily_tasks[$j]->label_name == $label) { // make sure that the label fits the label that we are showing.....
-										$daily_task = $user->daily_tasks[$j]; // get the daily task
-										$date_task_mark = $daily_task->date_task_marks[ $from - 1 ]; // and get the mark for todays date <= does not work if the mission starts later in the week...
-										
-										// if the total count of the missions is less then 7 (does not cover the full week) AND the first one does not start at the beginning of the week....
-										if($daily && count($daily_task->date_task_marks) < 7 && $daily_task->date_task_marks[0]->mark_date != $start){ // if there are less then 7 date_task_marks and the first one is not the first date....
-											foreach($daily_task->date_task_marks as $task){ // go through each task
-												if($task->mark_date == $start + ($from - 1 )){ // if the mark date is the date we are generating....
-													$date_task_mark = $task; break;
-												} else {
-													$date_task_mark = false;
-												}
-											}
-										}
-										// change the $checked variable based on if the task is marked
-										$checked = $date_task_mark->marked == true;
-										if($daily && !$date_task_mark) continue; // if we are generating the daily view and there is no mark for today (weekly would be false if it is not available on the last day of the week)
-										?>
-										<li class="task daily">
-											<div class="row">
-												<div class="rowImg"> 
-													<img src="<?=HOME?>/campaignLogos/<?=$campaignLogos[$daily_task->subject_id]?>" width="50" height="52" alt=""/>
-												</div>
-												<? if (!empty($daily_task->medium_pic)) { ?>
-												<div class="mediumPic">
-													<img src="<?=HOME?>/color/<?=$daily_task->medium_pic?>.jpg" />
-												</div>
-												<? } // end if we should show medium_pic?>
-												<label class="checkbox" <?= !$daily ? "style='padding-right:0px;'": "";?> >
-													<?if ($daily) {?>
-														<div class="actions">
-															<input type="checkbox" class="box-check daily <? if ($checked) echo "pre-checked" ?>" 
-																value="<?=$date_task_mark->date_task_id;?>:<?=$date_task_mark->mark_date;?>" 
-																<? if ($checked) echo "checked" ?> />
-															<span class="check"></span>
-															<span class="box"></span>
-														</div>
-													<? } // end daily checkbox ?>
-													<? if ($daily_task->focus_task) { ?>
-														<div class="focus">
-															<img src="images/31204.png" alt="" />
-														</div>
-													<? } ?>
-													<div class="short" style="<?=!$daily ? "max-width: 100%;" : ""?>">
-														<? if ($daily_task->mandatory_qty) echo "<span class='mandStar'>*</span>"; ?>
-														<?=($daily_task->short_name == '' ? '<br />' : $daily_task->short_name)?>
-													</div>
-													<div class="long" <?= !$daily ? "style='max-width:100%;'": "";?>>
-														<?=$daily_task->task_name?>
-													</div>
-												</label>
-												<? if(!$daily) {// find out the marks dates to know if this task is only on specific dates
-													$dates = array(); // all the dates in the week
-													foreach ($daily_task->date_task_marks as $mark) { // full the dates array with the mark dates
-														$dates[] = $mark->mark_date;									     
-													}
-													/****** WEEKLY CHECKBOX OPTIONS: TODO MOVE TO WEEKLY RENDER *******/?>
-													<div class="dailyBoxes">
-														<table>
-															<tr>
-															<?foreach ($days_of_week as $index => $day) { // go through the days of the week
-																if (in_array(($start + $index), $dates)) { // if the date is available
-																	$k = array_search($start + $index, $dates); // get the key
-																	$until = $jd-$start; // get the until
-																	$task_mark = $daily_task->date_task_marks[$k]; // get the date_task_mark or the day
-																	$done = $task_mark->marked == true; // mark if it was done
-																	?>
-																	<td>
-																		<div class="checkboxDaily" style="border: none">
-																			<div style="color: grey;">
-																				<span class='dMark'><?
-																				if ($index <= $until) { // if it is before today
-																					$id = $task_mark->date_task_id . ':' . $task_mark->mark_date . ($done ? ':1' : ':0');?>
-																					<span class='dMarkID' id='<?=$id?>'></span>
-																					<span class='<?= $done ? "checked" : "unchecked" ;?>'></span>
-																				<? } else { // it is in the future ?>
-																					<span class='unchecked' style='padding-top: 2px;'>
-																					<?=$user->lang_id == 1 ? $days_of_week[$index] : $heDatesDisp[$index] ; ?>
-																					</span>
-																				<? }?>
-																				</span>
-																			</div>
-																		</div>
-																	</td>
-																<?} else { // if it is unavailable render the unavailable checkbox?>
-																	<td>
-																		<div class="checkboxDaily">
-																			<span class="unavilable-box"></span>
-																		</div>
-																	</td>
-																<?} // end if the mission is not available on that date....
-															}?>
-															</tr>
-														</table>
-														<? if ($daily_task->mandatory_qty) { // if it is mandatory get the stickers info
-															echo "<div class='mandatoryImg'><img src=\"" . HOME . "/5of7stickers/" . $dailyStickers[$daily_task->subject_id] . "\" /></div>";
-														}?>
-													</div>
-													<div class="dailyBoxesLine"></div>
-												<? } // end if daily or not ?>
-											</div>
-										</li>
-									<?
-									}
-								}
-								?>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<?
-			}
-		}        
-		?>
-		
-		<?
-		if (count($user->weekly_labels) > 0) {
-			$i = 1;
-			foreach ($user->sorted_weekly_labels as $value) {
-				$info = explode(":", $value); 
-				$label = $info[0]; 
-				?>
-
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<i class="glyphicon glyphicon-chevron-left"></i> <?=$label?>
-					</div>
-					<div class="collapse">
-						<div class="panel-body">
-							<div class="text-<?= $lang == 2 ? "left" : "right"; // move based on language?>">
-								<input type="button" class="checkAll btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999;" />
-							</div>
-							<br />
-							<ul class="list-unstyled">
-								<?
-								$numWeekly = count($user->weekly_tasks);
-								for ($j = 0; $j < $numWeekly; $j++) {
-									if ($user->weekly_tasks[$j]->label_name == $label) {
-										$weekly_task = $user->weekly_tasks[$j];
-										$date_task_mark = $weekly_task->date_task_mark; 
-										if ($date_task_mark->marked == true) 
-											$checked = true; 
-										else 
-											$checked = false;
-										?>
-											<li class="task">
-												<div class="row">
-													<div class="rowImg"> 
-														<img src="<?=HOME?>/campaignLogos/<?=$campaignLogos[$weekly_task->subject_id]?>" width="50" height="52" alt=""/>
-													</div>
-													<label class="checkbox">
-														<div class="actions">
-															<? if ($weekly_task->quantity) : ?>
-															<input type="number"  pattern="\d*" class="textInput" id="<?=$date_task_mark->date_task_id;?>:<?=$weekly_task->mark_date;?>" 
-																size="2" maxlength="3" 
-																<? 
-																if ($lang == 2) echo 'style="left: 15px; right: auto;'; 
-																else echo 'style="float: right;"';
-																?>
-																font-size: 12px;" 
-																<? if ($date_task_mark->done_qty) echo "value='" . $date_task_mark->done_qty . "' "; ?>	/>
-															<? else : ?>
-															<input type="checkbox" class="box-check weekly <? if ($checked) echo "pre-checked" ?>"
-																id="<?=$weekly_task->date_task_id?>" 
-																value="<?=$date_task_mark->date_task_id;?>:<?=$weekly_task->mark_date;?>"
-																<? if ($checked) echo "checked" ?> />
-															<!--<span class="circle"></span>-->
-															<span class="check"></span>
-															<span class="box"></span>
-															<? endif; ?>
-														</div>
-														<div class="short">
-															<? if ($weekly_task->mandatory_qty) echo "<span class='mandStar'>*</span>"; ?>
-															<?=($weekly_task->short_name == '' ? '<br />' : $weekly_task->short_name)?>
-														</div>
-														<div class="long">
-															<?=$weekly_task->task_name?>
-														</div>
-													</label>
-												</div>
-											</li>
-										<?
-									}
-								}
-								?>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<?
-				$i++;
-			}
-		}        
-		?>
-		
-		<?
-		if (count($user->shabbos_labels) > 0) {
-			$i = 1;
-			foreach ($user->sorted_shabbos_labels as $value) {
-				$info = explode(":", $value); 
-				$label = $info[0]; 
-				?>
-
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<i class="glyphicon glyphicon-chevron-left"></i> <?=$label?>
-					</div>
-					<div class="collapse">
-						<div class="panel-body">
-							<? if (strtolower($label) == 'shabbos mevorchim' || strtolower($label) == 'שבת מברכים') : ?>
-							<?
-							/*
-							$qry = "select qty, minutes from tehillim_ladders where ";
-							$p = 1;
-							foreach ($user->tehillim as $key => $val) {
-								$qry .= $key . " = " . $val;
-								if ($p++ == 1) $qry .= " and ";
-							}
-							//echo "<input type='hidden' name='tehillimQry' value='$qry' />";
-							$res = mysql_query($qry);
-							$r = mysql_fetch_assoc($res);
-							*/
-							echo "<span class='age' id='" . $user->tehillim['age'] . "'></span>";
-							?>
-							<? else : ?>
-							<? if ($lang == 2) : ?>
-								<div class="text-left">
-							<? else : ?>
-								<div class="text-right">
-							<? endif; ?>
-								<input type="button" class="checkAll btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999;" />
-							</div>
-							<br />
-							<? endif; ?>
-							<ul class="list-unstyled">
-								<?
-								$numShabbos = count($user->shabbos_tasks);
-								for ($j = 0; $j < $numShabbos; $j++) {
-									if ($user->shabbos_tasks[$j]->label_name == $label) {
-										$shabbos_task = $user->shabbos_tasks[$j];
-										/*
-										if ($shabbos_task->short_name == 'Tehillim Quota') {
-											echo "<li class='task' style='margin-top: -10px; margin-bottom: 10px; margin-left: 10px;'><div class='row'>";
-											echo "My Ladder: <select name='userLevel' class='userLevel'>";
-											for ($m = 3; $m < 8; $m++) {
-												if ($user->tehillim['ladder'] == $m) echo "<option value='" . $m . "' selected>" . $m . "</option>"; 
-												else echo "<option value='" . $m . "'>" . $m . "</option>";	
-											}
-											echo "</select></div></li>";
-										}
-										*/
-										$date_task_mark = $shabbos_task->date_task_mark; 
-										if ($date_task_mark->marked == true) 
-											$checked = true; 
-										else 
-											$checked = false;
-										?>
-											<li class="task">
-												<div class="row">
-													<div class="rowImg"> 
-														<img src="<?=HOME?>/campaignLogos/<?=$campaignLogos[$shabbos_task->subject_id]?>" width="50" height="52" alt=""/>
-													</div>
-													<label class="checkbox">
-														<div class="actions">
-															<? if ($shabbos_task->quantity  || ($shabbos_task->subject_id == 1 && in_array($shabbos_task->grid_id, array(8001,8002)))) : ?>
-															<input type="number" pattern="\d*" class="textInput" id="<?=$shabbos_task->date_task_id;?>:<?=$shabbos_task->mark_date;?>" 
-																size="2" maxlength="3" 
-																<? if ($lang == 2) echo 'style="left: 15px; right: auto;" '; ?>
-																<? if ($date_task_mark->done_qty) echo 'value="' . $date_task_mark->done_qty . '" '; ?>
-																/>
-															<? else : ?>
-															<input type="checkbox" class="box-check weekly <? if ($checked) echo "pre-checked" ?>"
-																id="<?=$shabbos_task->date_task_id?>" 
-																value="<?=$date_task_mark->date_task_id;?>:<?=$shabbos_task->mark_date;?>"
-																<? if ($checked) echo "checked" ?> />
-															<span class="circle"></span>
-															<span class="check"></span>
-															<span class="box"></span>
-															<? endif; ?>
-														</div>
-														<div class="short">
-															<? if ($shabbos_task->mandatory_qty) echo "<span class='mandStar'>*</span>"; ?>
-															<?=($shabbos_task->short_name == '' ? '<br />' : $shabbos_task->short_name)?>
-														</div>
-														<? 
-														if (strtolower($label) == 'shabbos mevorchim' || $label == 'שבת מברכים') {
-															if ($shabbos_task->short_name == 'Tehillim Quota' || 
-																$shabbos_task->short_name == 'תהילים קוואטע') {
-																echo "<div class='quota'>Quota: <b><span class='tQty tehillim'>" . $shabbos_task->quantity . "</span></b> kap.</div>";
-															} else if ($shabbos_task->short_name == 'Tehillim Minutes' || 
-																		$shabbos_task->short_name == 'תהילים מינוטן') {
-																echo "<div class='quota'>Quota: <b><span class='tMin tehillim'>" . $shabbos_task->quantity . "</span></b> min.</div>";
-															}
-														}
-														?>
-														<div class="long">
-															<?=$shabbos_task->task_name?>
-														</div>
-													</label>
-												</div>
-											</li>
-											
-										<?
-									}
-								}
-								?>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<?
-				$i++;
-			}
-		}
-		?>
-		
-		<?
-		if (count($user->no_label_subjects) > 0) {
-			$i = 1;
-			foreach ($user->no_label_subjects as $value) {
-				$info = explode(":", $value); 
-				$label = $info[1];
-				?>
-
-				<div class="panel panel-default noLabel">
-					<div class="panel-heading">
-						<i class="glyphicon glyphicon-chevron-left"></i> <?=$label?>
-					</div>
-					<div class="collapse mission_list">
-						<div class="panel-body">
-							<? if ($lang == 2) : ?>
-								<div class="text-left">
-							<? else : ?>
-								<div class="text-right">
-							<? endif; ?>
-								<input type="button" class="checkAll btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999;"/>
-							</div>
-							<br />
-							<ul class="list-unstyled">
-								<?
-								$numTasks = count($user->no_label_tasks);
-								for ($j = 0; $j < $numTasks; $j++) {
-									if ($user->no_label_tasks[$j]->mission_name == $label) {
-										$no_label_task = $user->no_label_tasks[$j];
-										
-										// if daily marking, hide yoma depagra not relevant to today 
-										$today = floor(unixtojd($timestamp));
-										if (
-											($_COOKIE['marking'] == 'daily' ||
-											($detect->isMobile() && $_COOKIE['marking'] !== 'weekly'))
-											&&
-											($today < $no_label_task->start_date || $today > $no_label_task->end_date)
-										) continue;
-										
-										$date_task_mark = $no_label_task->date_task_mark; 
-										if ($date_task_mark->marked == true) 
-											$checked = true; 
-										else 
-											$checked = false;
-										?>
-											<li class="task" data="<?=$no_label_task->start_date . ':' . $no_label_task->end_date?>">
-												<div class="row">
-													<div class="rowImg"> 
-														<img src="<?=HOME?>/campaignLogos/<?=$campaignLogos[$no_label_task->subject_id]?>" width="50" height="52" alt=""/>
-													</div>
-													<label class="checkbox">
-														<div class="actions">
-															<? if ($no_label_task->quantity) : ?>
-															<input type="number" pattern="\d*" class="textInput" id="<?=$date_task_mark->date_task_id;?>:<?=$no_label_task->mark_date;?>" 
-																size="2" maxlength="3" 
-																<? 
-																if ($lang == 2) echo 'style="left: 15px; right: auto;'; 
-																else echo 'style="float: right;"';
-																?>
-																font-size: 12px;" 
-																<? if ($date_task_mark->done_qty) echo "value='" . $date_task_mark->done_qty . "' "; ?>	/>
-															<? else : ?>
-															<input type="checkbox" class="box-check weekly <? if ($checked) echo "pre-checked" ?>"
-																id="<?=$no_label_task->date_task_id?>" 
-																value="<?=$date_task_mark->date_task_id;?>:<?=$no_label_task->mark_date;?>"
-																<? if ($checked) echo "checked" ?> />
-															<span class="circle"></span>
-															<span class="check"></span>
-															<span class="box"></span>
-															<? endif; ?>
-														</div>
-														<div class="short">
-															<? if ($no_label_task->mandatory_qty) echo "<span class='mandStar'>*</span>"; ?>
-															<?=($no_label_task->short_name == '' ? '<br />' : $no_label_task->short_name)?>
-														</div>
-														<div class="long">
-															<?=$no_label_task->task_name?>
-														</div>
-													</label>
-												</div>
-											</li>
-										<?
-									}
-								}
-								?>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<?
-				$i++;
-			}
-		}        
-		?>
-		
-		<?php if (isset($_GET['naftoli'])) : ?>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<i class="glyphicon glyphicon-chevron-left"></i> משניות בע"פ
-				</div>
-				<div class="collapse">
-					<div class="panel-body">
-						<div id="mishna">
-													
-							<? foreach ($assigned as $id => $mesechto) : ?>
-								<div class="panel panel-default mishnaPanel">
-									<div class="panel-heading mishnaHeader">
-										<i class="glyphicon glyphicon-chevron-left"></i> מסכת <?=$mesechto?>
-									</div>
-									
-									<div class="collapse">
-										<div class="panel-body" id="<?=$id?>">
-											<div class="perokim"></div>
-										</div>
-									</div>
-								</div>
-							<? endforeach; ?>
-						
-						</div>
-					</div>
-				</div>
-			</div>
-		<?php endif; ?>
-		
-		</div>
-		<? // quit the loop if the timestamp is today
-			if (floor(unixtojd($timestamp)) == floor(unixtojd())) {
-				break;
-			}
-		}
-        ?>
-		
+        <h1 style='text-align: center; font-weight: bold;'>
+            It appears that <?=$user->first?> is not currently registered for Tzivos Hashem.<br/><br/>
+            Please Register <?=$user->gender == 'm' ? 'him' : 'her'?> before marking missions.
+        </h1>
     </div>
 </div>
+<?php } else { ?>
+    <div class="container">
+        <div class="content">
+            <? /********************** BUTTONS ON THE TOP OF THE PAGE **********************/ ?>
+            <div style="margin-bottom: 20px;">
+                <? $alignmentRight = $lang == 2 ? "left" : "right"; // swich right to left for hebrew ?>
+                <? $alignmentLeft  = $lang == 2 ? "right" : "left"; // swich left to right for hebrew ?>
+                <div id="buttons" style="text-align: center;">
+                    <div id="rightButtons" style="float: <?=$alignmentRight?>; text-align:<?=$alignmentRight?>;">
+                        <?php require_once dirname(__FILE__) . '/reg/ajax/encrypt.php';?>
+                        <input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?=$desktop ? "display: none" : ""?>" />
+                        <a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
+                            <input type="button" class="btn btn-danger btn-sm" value="Print Missions" />
+                        </a>
+                    </div>
+                    <div id="leftButtons" style="float: <?=$alignmentLeft?>; text-align:<?=$alignmentLeft?>;">
+                        <a id="goalsLink" href="" style="float: <?=$alignmentLeft?>">
+                            <input type="button" class="btn btn-danger btn-sm" value="Personalize" />
+                        </a>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal" style="margin: 0 5px;">
+                        Help
+                    </button>
+                </div>
+                <? /********************** DATE DROPDOWN. TODO: REMOVE AND MOVE TO SLIDING BAR ON TOP **********************/ ?>
+                
+                <div style="clear:both"></div>
+            </div>
 
+            <?// for every day of the week
+            for ($from = 1; $from < 8; $from++) {
+                if(!$daily){
+                    $timestamp = time(); // set the date to todays date....
+                    $from = 8; // only do this once
+                } else {
+                    $timestamp = jdtounix($start + $from);
+                }?>
+                <div class="tasks-day" data-date="<?=date('y-m-d', $timestamp)?>">
+                <?
+                if (count($user->daily_labels) > 0) { // if the user has dialy tasks
+                    foreach ($user->sorted_daily_labels as $index => $value) { // for each of the users sorted daily labels...
+                        $info = explode(":", $value); // split up the info
+                        $label = $info[0]; // and get the label
+                        
+                        /*************** GENERATE A PANEL FOR EACH OF THE DAILY TASKS ****************/?>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <i class="glyphicon glyphicon-chevron-left"></i> <?=$label?>
+                            </div>
+                            <div class="collapse in" id="#panel_<?=$index?>">
+                                <div class="panel-body dailyPanel">
+                                <div class="text-<?= $lang == 2 ? "left" : "right"; // move based on language?>">
+                                    <input type="button" class="checkAll<?=!$daily ? "Daily" : ""; // change the class if we are rendering the whole week.?> btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999; <?//$desktop ? "" : "display: none"; ?>"/>
+                                </div>
+                                <br />
+                                <?//if ($lang == 2) echo '<br />'; // extra space for hebrew ?>
+                                <ul class="list-unstyled">
+                                    <? /************ RENDER EACH TASK ***************/
+                                    $numDaily = count($user->daily_tasks); // count the tasks
+                                    for ($j = 0; $j < $numDaily; $j++) { // for each task
+                                        if ($user->daily_tasks[$j]->label_name == $label) { // make sure that the label fits the label that we are showing.....
+                                            $daily_task = $user->daily_tasks[$j]; // get the daily task
+                                            $date_task_mark = $daily_task->date_task_marks[ $from - 1 ]; // and get the mark for todays date <= does not work if the mission starts later in the week...
+                                            
+                                            // if the total count of the missions is less then 7 (does not cover the full week) AND the first one does not start at the beginning of the week....
+                                            if($daily && count($daily_task->date_task_marks) < 7 && $daily_task->date_task_marks[0]->mark_date != $start){ // if there are less then 7 date_task_marks and the first one is not the first date....
+                                                foreach($daily_task->date_task_marks as $task){ // go through each task
+                                                    if($task->mark_date == $start + ($from - 1 )){ // if the mark date is the date we are generating....
+                                                        $date_task_mark = $task; break;
+                                                    } else {
+                                                        $date_task_mark = false;
+                                                    }
+                                                }
+                                            }
+                                            // change the $checked variable based on if the task is marked
+                                            $checked = $date_task_mark->marked == true;
+                                            if($daily && !$date_task_mark) continue; // if we are generating the daily view and there is no mark for today (weekly would be false if it is not available on the last day of the week)
+                                            ?>
+                                            <li class="task daily">
+                                                <div class="row">
+                                                    <div class="rowImg"> 
+                                                        <img src="<?=HOME?>/campaignLogos/<?=$campaignLogos[$daily_task->subject_id]?>" width="50" height="52" alt=""/>
+                                                    </div>
+                                                    <? if (!empty($daily_task->medium_pic)) { ?>
+                                                    <div class="mediumPic">
+                                                        <img src="<?=HOME?>/color/<?=$daily_task->medium_pic?>.jpg" />
+                                                    </div>
+                                                    <? } // end if we should show medium_pic?>
+                                                    <label class="checkbox" <?= !$daily ? "style='padding-right:0px;'": "";?> >
+                                                        <?if ($daily) {?>
+                                                            <div class="actions">
+                                                                <input type="checkbox" class="box-check daily <? if ($checked) echo "pre-checked" ?>" 
+                                                                    value="<?=$date_task_mark->date_task_id;?>:<?=$date_task_mark->mark_date;?>" 
+                                                                    <? if ($checked) echo "checked" ?> />
+                                                                <span class="check"></span>
+                                                                <span class="box"></span>
+                                                            </div>
+                                                        <? } // end daily checkbox ?>
+                                                        <? if ($daily_task->focus_task) { ?>
+                                                            <div class="focus">
+                                                                <img src="images/31204.png" alt="" />
+                                                            </div>
+                                                        <? } ?>
+                                                        <div class="short" style="<?=!$daily ? "max-width: 100%;" : ""?>">
+                                                            <? if ($daily_task->mandatory_qty) echo "<span class='mandStar'>*</span>"; ?>
+                                                            <?=($daily_task->short_name == '' ? '<br />' : $daily_task->short_name)?>
+                                                        </div>
+                                                        <div class="long" <?= !$daily ? "style='max-width:100%;'": "";?>>
+                                                            <?=$daily_task->task_name?>
+                                                        </div>
+                                                    </label>
+                                                    <? if(!$daily) {// find out the marks dates to know if this task is only on specific dates
+                                                        $dates = array(); // all the dates in the week
+                                                        foreach ($daily_task->date_task_marks as $mark) { // full the dates array with the mark dates
+                                                            $dates[] = $mark->mark_date;									     
+                                                        }
+                                                        /****** WEEKLY CHECKBOX OPTIONS: TODO MOVE TO WEEKLY RENDER *******/?>
+                                                        <div class="dailyBoxes">
+                                                            <table>
+                                                                <tr>
+                                                                <?foreach ($days_of_week as $index => $day) { // go through the days of the week
+                                                                    if (in_array(($start + $index), $dates)) { // if the date is available
+                                                                        $k = array_search($start + $index, $dates); // get the key
+                                                                        $until = $jd-$start; // get the until
+                                                                        $task_mark = $daily_task->date_task_marks[$k]; // get the date_task_mark or the day
+                                                                        $done = $task_mark->marked == true; // mark if it was done
+                                                                        ?>
+                                                                        <td>
+                                                                            <div class="checkboxDaily" style="border: none">
+                                                                                <div style="color: grey;">
+                                                                                    <span class='dMark'><?
+                                                                                    if ($index <= $until) { // if it is before today
+                                                                                        $id = $task_mark->date_task_id . ':' . $task_mark->mark_date . ($done ? ':1' : ':0');?>
+                                                                                        <span class='dMarkID' id='<?=$id?>'></span>
+                                                                                        <span class='<?= $done ? "checked" : "unchecked" ;?>'></span>
+                                                                                    <? } else { // it is in the future ?>
+                                                                                        <span class='unchecked' style='padding-top: 2px;'>
+                                                                                        <?=$user->lang_id == 1 ? $days_of_week[$index] : $heDatesDisp[$index] ; ?>
+                                                                                        </span>
+                                                                                    <? }?>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    <?} else { // if it is unavailable render the unavailable checkbox?>
+                                                                        <td>
+                                                                            <div class="checkboxDaily">
+                                                                                <span class="unavilable-box"></span>
+                                                                            </div>
+                                                                        </td>
+                                                                    <?} // end if the mission is not available on that date....
+                                                                }?>
+                                                                </tr>
+                                                            </table>
+                                                            <? if ($daily_task->mandatory_qty) { // if it is mandatory get the stickers info
+                                                                echo "<div class='mandatoryImg'><img src=\"" . HOME . "/5of7stickers/" . $dailyStickers[$daily_task->subject_id] . "\" /></div>";
+                                                            }?>
+                                                        </div>
+                                                        <div class="dailyBoxesLine"></div>
+                                                    <? } // end if daily or not ?>
+                                                </div>
+                                            </li>
+                                        <?
+                                        }
+                                    }
+                                    ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <?
+                }
+            }        
+            ?>
+            
+            <?
+            if (count($user->weekly_labels) > 0) {
+                $i = 1;
+                foreach ($user->sorted_weekly_labels as $value) {
+                    $info = explode(":", $value); 
+                    $label = $info[0]; 
+                    ?>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="glyphicon glyphicon-chevron-left"></i> <?=$label?>
+                        </div>
+                        <div class="collapse">
+                            <div class="panel-body">
+                                <div class="text-<?= $lang == 2 ? "left" : "right"; // move based on language?>">
+                                    <input type="button" class="checkAll btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999;" />
+                                </div>
+                                <br />
+                                <ul class="list-unstyled">
+                                    <?
+                                    $numWeekly = count($user->weekly_tasks);
+                                    for ($j = 0; $j < $numWeekly; $j++) {
+                                        if ($user->weekly_tasks[$j]->label_name == $label) {
+                                            $weekly_task = $user->weekly_tasks[$j];
+                                            $date_task_mark = $weekly_task->date_task_mark; 
+                                            if ($date_task_mark->marked == true) 
+                                                $checked = true; 
+                                            else 
+                                                $checked = false;
+                                            ?>
+                                                <li class="task">
+                                                    <div class="row">
+                                                        <div class="rowImg"> 
+                                                            <img src="<?=HOME?>/campaignLogos/<?=$campaignLogos[$weekly_task->subject_id]?>" width="50" height="52" alt=""/>
+                                                        </div>
+                                                        <label class="checkbox">
+                                                            <div class="actions">
+                                                                <? if ($weekly_task->quantity) : ?>
+                                                                <input type="number"  pattern="\d*" class="textInput" id="<?=$date_task_mark->date_task_id;?>:<?=$weekly_task->mark_date;?>" 
+                                                                    size="2" maxlength="3" 
+                                                                    <? 
+                                                                    if ($lang == 2) echo 'style="left: 15px; right: auto;'; 
+                                                                    else echo 'style="float: right;"';
+                                                                    ?>
+                                                                    font-size: 12px;" 
+                                                                    <? if ($date_task_mark->done_qty) echo "value='" . $date_task_mark->done_qty . "' "; ?>	/>
+                                                                <? else : ?>
+                                                                <input type="checkbox" class="box-check weekly <? if ($checked) echo "pre-checked" ?>"
+                                                                    id="<?=$weekly_task->date_task_id?>" 
+                                                                    value="<?=$date_task_mark->date_task_id;?>:<?=$weekly_task->mark_date;?>"
+                                                                    <? if ($checked) echo "checked" ?> />
+                                                                <!--<span class="circle"></span>-->
+                                                                <span class="check"></span>
+                                                                <span class="box"></span>
+                                                                <? endif; ?>
+                                                            </div>
+                                                            <div class="short">
+                                                                <? if ($weekly_task->mandatory_qty) echo "<span class='mandStar'>*</span>"; ?>
+                                                                <?=($weekly_task->short_name == '' ? '<br />' : $weekly_task->short_name)?>
+                                                            </div>
+                                                            <div class="long">
+                                                                <?=$weekly_task->task_name?>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                            <?
+                                        }
+                                    }
+                                    ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <?
+                    $i++;
+                }
+            }        
+            ?>
+            
+            <?
+            if (count($user->shabbos_labels) > 0) {
+                $i = 1;
+                foreach ($user->sorted_shabbos_labels as $value) {
+                    $info = explode(":", $value); 
+                    $label = $info[0]; 
+                    ?>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="glyphicon glyphicon-chevron-left"></i> <?=$label?>
+                        </div>
+                        <div class="collapse">
+                            <div class="panel-body">
+                                <? if (strtolower($label) == 'shabbos mevorchim' || strtolower($label) == 'שבת מברכים') : ?>
+                                <?
+                                /*
+                                $qry = "select qty, minutes from tehillim_ladders where ";
+                                $p = 1;
+                                foreach ($user->tehillim as $key => $val) {
+                                    $qry .= $key . " = " . $val;
+                                    if ($p++ == 1) $qry .= " and ";
+                                }
+                                //echo "<input type='hidden' name='tehillimQry' value='$qry' />";
+                                $res = mysql_query($qry);
+                                $r = mysql_fetch_assoc($res);
+                                */
+                                echo "<span class='age' id='" . $user->tehillim['age'] . "'></span>";
+                                ?>
+                                <? else : ?>
+                                <? if ($lang == 2) : ?>
+                                    <div class="text-left">
+                                <? else : ?>
+                                    <div class="text-right">
+                                <? endif; ?>
+                                    <input type="button" class="checkAll btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999;" />
+                                </div>
+                                <br />
+                                <? endif; ?>
+                                <ul class="list-unstyled">
+                                    <?
+                                    $numShabbos = count($user->shabbos_tasks);
+                                    for ($j = 0; $j < $numShabbos; $j++) {
+                                        if ($user->shabbos_tasks[$j]->label_name == $label) {
+                                            $shabbos_task = $user->shabbos_tasks[$j];
+                                            /*
+                                            if ($shabbos_task->short_name == 'Tehillim Quota') {
+                                                echo "<li class='task' style='margin-top: -10px; margin-bottom: 10px; margin-left: 10px;'><div class='row'>";
+                                                echo "My Ladder: <select name='userLevel' class='userLevel'>";
+                                                for ($m = 3; $m < 8; $m++) {
+                                                    if ($user->tehillim['ladder'] == $m) echo "<option value='" . $m . "' selected>" . $m . "</option>"; 
+                                                    else echo "<option value='" . $m . "'>" . $m . "</option>";	
+                                                }
+                                                echo "</select></div></li>";
+                                            }
+                                            */
+                                            $date_task_mark = $shabbos_task->date_task_mark; 
+                                            if ($date_task_mark->marked == true) 
+                                                $checked = true; 
+                                            else 
+                                                $checked = false;
+                                            ?>
+                                                <li class="task">
+                                                    <div class="row">
+                                                        <div class="rowImg"> 
+                                                            <img src="<?=HOME?>/campaignLogos/<?=$campaignLogos[$shabbos_task->subject_id]?>" width="50" height="52" alt=""/>
+                                                        </div>
+                                                        <label class="checkbox">
+                                                            <div class="actions">
+                                                                <? if ($shabbos_task->quantity  || ($shabbos_task->subject_id == 1 && in_array($shabbos_task->grid_id, array(8001,8002)))) : ?>
+                                                                <input type="number" pattern="\d*" class="textInput" id="<?=$shabbos_task->date_task_id;?>:<?=$shabbos_task->mark_date;?>" 
+                                                                    size="2" maxlength="3" 
+                                                                    <? if ($lang == 2) echo 'style="left: 15px; right: auto;" '; ?>
+                                                                    <? if ($date_task_mark->done_qty) echo 'value="' . $date_task_mark->done_qty . '" '; ?>
+                                                                    />
+                                                                <? else : ?>
+                                                                <input type="checkbox" class="box-check weekly <? if ($checked) echo "pre-checked" ?>"
+                                                                    id="<?=$shabbos_task->date_task_id?>" 
+                                                                    value="<?=$date_task_mark->date_task_id;?>:<?=$shabbos_task->mark_date;?>"
+                                                                    <? if ($checked) echo "checked" ?> />
+                                                                <span class="circle"></span>
+                                                                <span class="check"></span>
+                                                                <span class="box"></span>
+                                                                <? endif; ?>
+                                                            </div>
+                                                            <div class="short">
+                                                                <? if ($shabbos_task->mandatory_qty) echo "<span class='mandStar'>*</span>"; ?>
+                                                                <?=($shabbos_task->short_name == '' ? '<br />' : $shabbos_task->short_name)?>
+                                                            </div>
+                                                            <? 
+                                                            if (strtolower($label) == 'shabbos mevorchim' || $label == 'שבת מברכים') {
+                                                                if ($shabbos_task->short_name == 'Tehillim Quota' || 
+                                                                    $shabbos_task->short_name == 'תהילים קוואטע') {
+                                                                    echo "<div class='quota'>Quota: <b><span class='tQty tehillim'>" . $shabbos_task->quantity . "</span></b> kap.</div>";
+                                                                } else if ($shabbos_task->short_name == 'Tehillim Minutes' || 
+                                                                            $shabbos_task->short_name == 'תהילים מינוטן') {
+                                                                    echo "<div class='quota'>Quota: <b><span class='tMin tehillim'>" . $shabbos_task->quantity . "</span></b> min.</div>";
+                                                                }
+                                                            }
+                                                            ?>
+                                                            <div class="long">
+                                                                <?=$shabbos_task->task_name?>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                                
+                                            <?
+                                        }
+                                    }
+                                    ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <?
+                    $i++;
+                }
+            }
+            ?>
+            
+            <?
+            if (count($user->no_label_subjects) > 0) {
+                $i = 1;
+                foreach ($user->no_label_subjects as $value) {
+                    $info = explode(":", $value); 
+                    $label = $info[1];
+                    ?>
+
+                    <div class="panel panel-default noLabel">
+                        <div class="panel-heading">
+                            <i class="glyphicon glyphicon-chevron-left"></i> <?=$label?>
+                        </div>
+                        <div class="collapse mission_list">
+                            <div class="panel-body">
+                                <? if ($lang == 2) : ?>
+                                    <div class="text-left">
+                                <? else : ?>
+                                    <div class="text-right">
+                                <? endif; ?>
+                                    <input type="button" class="checkAll btn btn-danger btn-xs" value="Check All" style="background-color : #5e1c77;border-color:#834999;"/>
+                                </div>
+                                <br />
+                                <ul class="list-unstyled">
+                                    <?
+                                    $numTasks = count($user->no_label_tasks);
+                                    for ($j = 0; $j < $numTasks; $j++) {
+                                        if ($user->no_label_tasks[$j]->mission_name == $label) {
+                                            $no_label_task = $user->no_label_tasks[$j];
+                                            
+                                            // if daily marking, hide yoma depagra not relevant to today 
+                                            $today = floor(unixtojd($timestamp));
+                                            if (
+                                                ($_COOKIE['marking'] == 'daily' ||
+                                                ($detect->isMobile() && $_COOKIE['marking'] !== 'weekly'))
+                                                &&
+                                                ($today < $no_label_task->start_date || $today > $no_label_task->end_date)
+                                            ) continue;
+                                            
+                                            $date_task_mark = $no_label_task->date_task_mark; 
+                                            if ($date_task_mark->marked == true) 
+                                                $checked = true; 
+                                            else 
+                                                $checked = false;
+                                            ?>
+                                                <li class="task" data="<?=$no_label_task->start_date . ':' . $no_label_task->end_date?>">
+                                                    <div class="row">
+                                                        <div class="rowImg"> 
+                                                            <img src="<?=HOME?>/campaignLogos/<?=$campaignLogos[$no_label_task->subject_id]?>" width="50" height="52" alt=""/>
+                                                        </div>
+                                                        <label class="checkbox">
+                                                            <div class="actions">
+                                                                <? if ($no_label_task->quantity) : ?>
+                                                                <input type="number" pattern="\d*" class="textInput" id="<?=$date_task_mark->date_task_id;?>:<?=$no_label_task->mark_date;?>" 
+                                                                    size="2" maxlength="3" 
+                                                                    <? 
+                                                                    if ($lang == 2) echo 'style="left: 15px; right: auto;'; 
+                                                                    else echo 'style="float: right;"';
+                                                                    ?>
+                                                                    font-size: 12px;" 
+                                                                    <? if ($date_task_mark->done_qty) echo "value='" . $date_task_mark->done_qty . "' "; ?>	/>
+                                                                <? else : ?>
+                                                                <input type="checkbox" class="box-check weekly <? if ($checked) echo "pre-checked" ?>"
+                                                                    id="<?=$no_label_task->date_task_id?>" 
+                                                                    value="<?=$date_task_mark->date_task_id;?>:<?=$no_label_task->mark_date;?>"
+                                                                    <? if ($checked) echo "checked" ?> />
+                                                                <span class="circle"></span>
+                                                                <span class="check"></span>
+                                                                <span class="box"></span>
+                                                                <? endif; ?>
+                                                            </div>
+                                                            <div class="short">
+                                                                <? if ($no_label_task->mandatory_qty) echo "<span class='mandStar'>*</span>"; ?>
+                                                                <?=($no_label_task->short_name == '' ? '<br />' : $no_label_task->short_name)?>
+                                                            </div>
+                                                            <div class="long">
+                                                                <?=$no_label_task->task_name?>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                            <?
+                                        }
+                                    }
+                                    ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <?
+                    $i++;
+                }
+            }        
+            ?>
+            
+            <?php if (isset($_GET['naftoli'])) : ?>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="glyphicon glyphicon-chevron-left"></i> משניות בע"פ
+                    </div>
+                    <div class="collapse">
+                        <div class="panel-body">
+                            <div id="mishna">
+                                                        
+                                <? foreach ($assigned as $id => $mesechto) : ?>
+                                    <div class="panel panel-default mishnaPanel">
+                                        <div class="panel-heading mishnaHeader">
+                                            <i class="glyphicon glyphicon-chevron-left"></i> מסכת <?=$mesechto?>
+                                        </div>
+                                        
+                                        <div class="collapse">
+                                            <div class="panel-body" id="<?=$id?>">
+                                                <div class="perokim"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <? endforeach; ?>
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+            
+            </div>
+            <? // quit the loop if the timestamp is today
+                if (floor(unixtojd($timestamp)) == floor(unixtojd())) {
+                    break;
+                }
+            }
+            ?>
+            
+        </div>
+    </div>
+<?php } ?>
 <div style="position: fixed;width: 100%;bottom:0px; z-index: 1000;">
     <div class="span12 footer">
 		<div class="span3" id="mainLink">

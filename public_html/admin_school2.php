@@ -94,15 +94,15 @@ if (!empty($action)) { switch($action) {
 			$edit_row = mysql_fetch_assoc($result); // set the result to the current row on the editing table
 			$action = 'add'; // and revert to add
 		} else { // if this is a genuine new organization
-			$logo = false; $logo_2 = false;
+			$logo = false; $logo_girls = false;
 			if( isset($_FILES['logo']) ) {
 				$logo = saveFile($_FILES['logo'], "schoolLogos/", $name . "_logo");
 				$logo = $logo ? str_replace("schoolLogos/", "", $logo) : false; // remove the folder from the name as it will be added by whatever is accessing the file.
 			}
 			
-			if( isset($_FILES['logo_2']) ) {
-				$logo_2 = saveFile($_FILES['logo_2'], "schoolLogos/", $name . "_logo_2");
-				$logo_2 = $logo_2 ? str_replace("schoolLogos/", "", $logo_2) : false; // remove the folder from the name as it will be added by whatever is accessing the file.
+			if( isset($_FILES['logo_girls']) ) {
+				$logo_girls = saveFile($_FILES['logo_girls'], "schoolLogos/", $name . "_logo_girls");
+				$logo_girls = $logo_girls ? str_replace("schoolLogos/", "", $logo_girls) : false; // remove the folder from the name as it will be added by whatever is accessing the file.
 			}
 			
 			// removed school_logo_kiosk_id and $school_file_id from insert query
@@ -159,13 +159,13 @@ if (!empty($action)) { switch($action) {
 		// added the authorize.net feilds to be loaded
 		$result = mq(
 			" SELECT school_id, school_name, school_name_he, school_makeup_id, "
-			." inst_id, school_settings, school_gender, logo, logo_2, school_logo_kiosk_id, "
+			." inst_id, school_settings, school_gender, logo, logo_girls, school_logo_kiosk_id, "
 			." school_no_logo, school_file_id, school_address1, school_address2, school_city, "
 			." school_state, school_postal, school_country, school_phone, cc_number, cc_exp, cc_cvv, "
 			." authorize_customer_profile_id, authorize_payment_profile_id, kiosk_print, "
 			."shipping_method, shipping_first, shipping_last, shipping_phone, shipping_address1, "
 			." shipping_address2, shipping_city, shipping_state, shipping_postal, shipping_country, "
-			." school_store, notes, shipping_requests FROM schools WHERE school_id = $school_id"
+			." school_store, notes, shipping_requests, store_reset FROM schools WHERE school_id = $school_id"
 		);
 		// and set it to the edit row
 		$edit_row = mysql_fetch_assoc($result);
@@ -198,20 +198,20 @@ if (!empty($action)) { switch($action) {
 				. ms(gr('shipping_first')) . ' shipping_first, ' .  ms(gr('shipping_last')) . ' shipping_last, ' .  ms(gr('shipping_address1')) . ' shipping_address1, '
 				.  ms(gr('shipping_address2')) . ' shipping_address2, ' .  ms(gr('shipping_city')) . ' shipping_city, ' .  ms(gr('shipping_state')) . ' shipping_state, '
 				.  ms(gr('shipping_postal')) . ' shipping_postal, ' .  ms(gr('shipping_country')) . ' shipping_country, ' .  ms(gr('shipping_phone')) . " shipping_phone, "
-				." authorize_customer_profile_id, authorize_payment_profile_id, school_store FROM schools WHERE school_id = $school_id"
+				." authorize_customer_profile_id, authorize_payment_profile_id, school_store, store_reset FROM schools WHERE school_id = $school_id"
 			);
 			$edit_row = mysql_fetch_assoc($result); // get the generated edit_row
 			$action = 'edit'; // set the action to edit
 		} else { // the user is not using another institutions name			
-			$logo = false; $logo_2 = false;
+			$logo = false; $logo_girls = false;
 			if( isset($_FILES['logo']) ) {
 				$logo = saveFile($_FILES['logo'], "schoolLogos/", $name . "_logo");
 				$logo = $logo ? str_replace("schoolLogos/", "", $logo) : false; // remove the folder from the name as it will be added by whatever is accessing the file.
 			}
 			
-			if( isset($_FILES['logo_2']) ) {
-				$logo_2 = saveFile($_FILES['logo_2'], "schoolLogos/", $name . "_logo_2");
-				$logo_2 = $logo_2 ? str_replace("schoolLogos/", "", $logo_2) : false; // remove the folder from the name as it will be added by whatever is accessing the file.
+			if( isset($_FILES['logo_girls']) ) {
+				$logo_girls = saveFile($_FILES['logo_girls'], "schoolLogos/", $name . "_logo_girls");
+				$logo_girls = $logo_girls ? str_replace("schoolLogos/", "", $logo_girls) : false; // remove the folder from the name as it will be added by whatever is accessing the file.
 			}
 			
 			// legacy kiosk logo...
@@ -224,7 +224,9 @@ if (!empty($action)) { switch($action) {
 			if(isset($_FILES['file'])) $school_file_id = addFile($_FILES['file'], $school_file_id);
 	  
 			if($school_file_id !== 'school_file_id') mq("DELETE FROM files USING files JOIN schools ON (files.file_id = schools.school_file_id) WHERE school_id = $school_id");
-	  
+      
+            $store_reset = gr('store_reset');
+            $store_reset = $store_reset ? unixtojd( strtotime( $store_reset ) ) : 'NULL';
 			// update the school
 			mq('UPDATE schools SET school_name = ' . ms($name) . ', school_name_he = ' . ms(gr('name_he')) . ', '
 				." school_makeup_id = " . gri('school_makeup_id', -1) 	. ", "
@@ -252,11 +254,12 @@ if (!empty($action)) { switch($action) {
 				." shipping_postal = " 	. ms(gr('shipping_postal')) 	. ", "
 				." shipping_country = " . ms(gr('shipping_country')) 	. ", "
 				." shipping_phone = " 	. ms(gr('shipping_phone')) 		. ", "
-				." school_store=" 		. gri('school_store', 0) 		. ", "
+                ." school_store=" 		. gri('school_store', 0) 		. ", "
+                ." store_reset="   . $store_reset             . ", "
 				." shipping_requests=" 	. ms(gr('shipping_requests', null)) . ", "
 				." notes = " 			. ms(gr('notes', null)) 		. " "
 				.($logo ? ", logo = '$logo' " : "")
-				.($logo_2 ? ", logo_2 = '$logo_2' " : "")
+				.($logo_girls ? ", logo_girls = '$logo_girls' " : "")
 				." WHERE school_id = $school_id");
 		  
 		// if there is a CC update that too.
@@ -443,7 +446,15 @@ if (!empty($action)) { switch($action) {
 										<label>
 											<input type="radio" name="school_gender" value="B" <?=$edit_row['school_gender'] == 'B' ? 'CHECKED' : ''?>><?=T_('Both')?>
 										</label>
-									</div>
+                                    </div>
+                                    <div class="input_group input_half">
+                                        <label><?=T_('Store Miles Start From:')?></label>
+                                        <?php $store_reset = $edit_row['store_reset'] ? date( 'Y-m-d', jdtounix( $edit_row['store_reset'] ) ) : ""; ?>
+                                        <input type='date' id='store_reset' name='store_reset' <?= $store_reset ? "" : "disabled" ?>
+                                            value="<?= $store_reset ? $store_reset : "" ?>"/><br/>
+                                        <input type='checkbox' id='toggle_store_reset' <?= $store_reset ? "" : "checked" ?> />
+                                        <span>Allow soldiers to spend all their miles.</span>
+                                    </div>
 									<div class="input_group input_full">
 											<!-- Address information -->
 										<label><?=T_('Address 1')?><br/>
@@ -495,11 +506,11 @@ if (!empty($action)) { switch($action) {
 											</div>
 											<div class="girls_school_logo" <?=$edit_row['school_gender'] == "B" ? "" : "style='display: none;'"?>>
 												<hr style="display: block"/>
-												<img src="schoolLogos/<?=isset($edit_row['logo_2']) ? $edit_row['logo_2'] : $logo?>" alt="logo_2" id="logo_2"/>
+												<img src="schoolLogos/<?=isset($edit_row['logo_girls']) ? $edit_row['logo_girls'] : $logo?>" alt="logo_girls" id="logo_girls"/>
 												<div class="img_options">
 													<strong>Girls Logo:</strong><br/>
 													<?=T_('PNG, GIF, or JPEG, but a transparent PNG is strongly recommended.')?><br/><br/>
-													<input type="file" name="logo_2" class="file"><br/>
+													<input type="file" name="logo_girls" class="file"><br/>
 													<?=T_('Maximum file size')?>: <?=bytes2units(maxFileSize())?>B<br/>
 												</div>
 											</div>
@@ -809,6 +820,21 @@ if (!empty($action)) { switch($action) {
 			</div>
 		</div>
 		<script>
+            $('input#toggle_store_reset').change( function( event ){
+                var input = $('input#store_reset');
+                if ( event.target.checked ) {
+                    if ( input.val() ) {
+                        event.target.dataset.value = input.val();
+                    };
+                    input.attr('disabled', true).val('')
+                } else {
+                    var value = event.target.dataset.value;
+                    input.attr('disabled', false).val(
+                        value ? value : new Date().toISOString().substr(0, 10)
+                    );
+                }
+            });
+
 			$(".file").change( function( event ) {
 				var input = event.target; // get the input
 				if (input.files && input.files[0]) { // make sure a file was selected...

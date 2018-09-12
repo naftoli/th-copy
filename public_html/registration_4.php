@@ -1,109 +1,86 @@
 <?php
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
 session_start();
-if ( !isset( $_SESSION['hschool'] ) ) 
-    header( "Location: admin.php" );
-$h_school = $_SESSION['hschool'];
 
-include("check_admin_id.php");
+//echo "<pre>"; print_r( $_SESSION ); echo "</pre>";
+if ( !isset( $_SESSION['school_id'] ) ) 
+    header( "Location: registration.php" );
+
+$admin_id = $_SESSION['admin_id'];
+$school_id = $_SESSION['school_id'];
 $next_page = "false";
 
 include("db.php");
-include("classes/admin.php");
-$sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
-$query = mysql_query($sql);
-$row = mysql_fetch_assoc($query);
-$admin = new admin($row);
-$admin->get_school_id();
+require_once( __DIR__ . '/api/header/db.php' ); // import ActiveRecord and PDO
 
-include("classes/school.php");
-$sql = "SELECT * FROM schools WHERE school_id=" . $admin->school_id;
-$query = mysql_query($sql);
-$row = mysql_fetch_assoc($query);
-$school = new school($row);
+require 'class.globalSettings.php';
+$year = GlobalSettings::getRegistrationYear();
+// get the registration info for the school
+try {
+    $schoolInfo = School::find( $school_id, [ 'include' => 'school_registrations' ] );
+    $schoolInfo = $schoolInfo->getRegInfo( $year );
+} catch ( \Exception $e ) {
+    $query = mysql_query("SELECT reg_type FROM schools WHERE school_id=" . $school_id);
+    $type = mysql_fetch_assoc($query)['reg_type'];
+    $schoolInfo = SchoolRegistration::getDefault( $school_id, $type, $year );
+};
 
 $message = "";
 if (isset($_POST['submit'])) {
-	
-	foreach ($_POST as $k => $v) {
-		$_POST[$k] = mysql_real_escape_string(trim($v));
-	}
-	
-    $school_id = $_POST['school_id'];
-	if (!isset($_POST['reg_type'])) {
-		$message = "You need to choose the type of school that you have.";
-	} else {
-		$sql = "update schools set reg_type = " . mysql_real_escape_string($_POST['reg_type']) . " where school_id = " . $school_id;
-		mysql_query($sql);
-	}
-    /*
-    //add scanner qty to database
-    if (isset($_POST['qty'])) {
-	$qty = trim($_POST['qty']);
-	if ( $qty == "" ) 
-        $qty = 0;
 
-        $sql = "select * from school_accessories where school_id = " . $school_id . " and year = " . $year;
-        $result = mysql_query( $sql );
-        if ( mysql_num_rows($result) > 0 ) {
-            $sql = "update school_accessories set scanners = " . $qty . " where school_id = " . $school_id . " and year = " . $year;
-        } else {
-            $sql = "insert into school_accessories values ('', $school_id, $year, $qty)";
-        }
-        mysql_query( $sql );
-    }
-	*/
+	if (!isset($_POST['reg_type']) || !isset($_POST['store_points'])) {
+		$message = "You need to choose the type of school that you have and your store options.";
+	} else {
+		$store_points = mysql_real_escape_string( $_POST['store_points'] );
+		switch ($store_points) {
+			case 1:
+				$reset_points = 2458285;
+				break;
+			case 2:
+				$reset_points = 2458347;
+				break;
+			case 3:
+				$reset_points = 0;
+				break;
+			case 4:
+				$str_date = mysql_real_escape_string( $_POST['store_date'] );
+				if ( empty( $str_date) ) {
+					$message = "You need to enter a valid date for the store points reset.";
+					break;
+				}
+				$dates = explode('-', $str_date);
+				$yy = $dates[0];
+				$mm = $dates[1];
+				$dd = $dates[2];
+				$reset_points = gregoriantojd($mm, $dd, $yy);
+				break;
+		}
+
+		if ( !$message ) {
+			$sql = "UPDATE schools 
+					SET reg_type = " . mysql_real_escape_string($_POST['reg_type']) . ", 
+					store_reset = " . $reset_points . " 
+					WHERE school_id = " . $school_id;
+			$schoolInfo->type = $_POST['reg_type'];
+			if ( !mysql_query($sql) || !$schoolInfo->save() ) {
+				$message = "Error updating school.";
+			}
+		}
+	}
+    
 	if ($message == "") {
 		$next_page = "true";
 	}
 		
 }
-
-include("classes/user.php");
-$users = array();
-$sql1 = "SELECT id FROM admin_auths WHERE admin_id=" . $admin_id . " AND auth='user'";
-$query1 = mysql_query($sql1);
-while ($row1 = mysql_fetch_assoc($query1)) {
-	$sql2 = "SELECT * FROM users WHERE user_id=" . $row1["id"] . " AND user_registered IS NOT NULL";
-	$query2 = mysql_query($sql2);
-	if (mysql_num_rows($query2) > 0) {
-		$row2 = mysql_fetch_assoc($query2);
-		$user = new user($row2);
-	}
-}
-
-$no_of_options = 1;
-$sql = "SELECT * FROM school_child_types WHERE school_id=" . $admin->school_id . " AND child_type_id=1";
-$query = mysql_query($sql);
-$num_rows = mysql_num_rows($query);
-if ($num_rows > 0)
-	$no_of_options = 2;
-
-include("camps/includes/classes/school_child_type.php");
-$school_child_types = array();
-$sql = "SELECT * FROM school_child_types WHERE school_id=" . $admin->school_id;
-$query = mysql_query($sql);
-while ($row = mysql_fetch_assoc($query)) {
-	$school_child_type = new school_child_type($row);
-	$school_child_type->get_child_type_name();
-	array_push($school_child_types, $school_child_type);
-}
-
-for ($stno = 0; $stno < count($school_child_types); $stno++) {
-	if (count($school_child_types) > 1) {
-		if ($school_child_types[$stno]->child_type_id==1) $st_chabad = 1;
-		if ($school_child_types[$stno]->child_type_id==2) $st_frum = 1;
-		if ($school_child_types[$stno]->child_type_id==3) $st_not_frum = 1;
-	}
-}
-require 'class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" dir="<?=$dir?>">
 
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8;" />
 		<meta http-equiv="X-UA-Compatible" content="IE=8" />
 		<title>School Registration</title>
 		<link rel="alternate" media="print" href="index.php">
@@ -113,8 +90,6 @@ $year = GlobalSettings::getRegistrationYear();
 		
 		<script>
 			var next_page = "<?=$next_page;?>";
-			var admin_id = <?=$admin_id;?>;
-			var school_id = <?=$admin->school_id;?>;
 		
 			$(function() {
 				$('input').placeholder();
@@ -135,26 +110,36 @@ $year = GlobalSettings::getRegistrationYear();
 				$(".reg_type").click( function() {
 					var val = $(this).val();
 					if (val == 3) {
-						$(".regAmount").text('50/55');
+						$(".regAmount").text('<?=$schoolInfo->getChildFee( true, 3 ) .'/'. $schoolInfo->getChildFee( true, 3, true )?>');
+					} else if ( val == 2 ) {
+						$(".regAmount").text('<?=$schoolInfo->getChildFee( true, 2 ) .'/'. $schoolInfo->getChildFee( true, 2, true )?>');
 					} else {
-						$(".regAmount").text('45');
-					}
+                        $(".regAmount").text(<?=$schoolInfo->getChildFee( true, 1 )?>);
+                    }
 				});
 			});
 			
 			function check_next_page() {
 				if (next_page == "true") {
-					var registration_form_six = document.forms["registration_form_six"];
-					registration_form_six.elements["admin_id"].value = admin_id;
-					registration_form_six.elements["school_id"].value = school_id;
-					registration_form_six.submit();
+					location.href = "registration_6.php";
 				}
 			}
 			
 			function validate() {
-				if (!$(".reg_type").is(":checked")) {
+				if (!$(".reg_type:checked").length) {
 					alert("You must choose what type of school registration you have.");
 					return false;
+				}
+				if (!$(".store_points:checked").length) {
+					alert("You must choose your store option.");
+					return false;
+				}
+				var store = $(".store_points:checked").val();
+				if (store == 4) {
+					if (!$(".store_date").val()) {
+						alert("You must choose a valid date for resetting your store.");
+						return false;
+					}
 				}
 				return true;
 			}			
@@ -162,11 +147,6 @@ $year = GlobalSettings::getRegistrationYear();
 	</head>
 
 	<body onload="check_next_page();">
-	
-		<FORM name="registration_form_six" method="post" action="registration_6.php">
-			<input type="hidden" name="admin_id" value="">
-			<input type="hidden" name="school_id" value="">
-		</FORM>
 	
 		<NOSCRIPT>
 			<P STYLE="color: red; font-size: larger;">Notice: You have javascript disabled. Some parts of the site will not function without javascript.</P>
@@ -199,26 +179,54 @@ $year = GlobalSettings::getRegistrationYear();
 							<h1>School Registration</h1>
 	 
 							<form id="form_5" name="form_5" action="registration_4.php" method="post" accept-charset="UTF-8"> 
-								<input type="hidden" name="school_id" value="<?=$admin->school_id;?>">
-								<input type="hidden" name="admin_id" value="<?=$admin_id;?>">
-                            
-                            <? if ( !$h_school ) { ?>
-								<h2>Type of School Registration</h2>
+							    <h2>Type of School Registration</h2>
 								<div class="module list_expand" id="module-info">
 									<div class="module_content">
 										<div class="lists form">
 											<ul>
 												<li>
-													 <h4><input type="radio" name="reg_type" class="reg_type" value="1" /> Tzivos Hashem registration is included in school tuition</h4>
-													 $45 included in each child’s tuition; parents still complete the registration process on their own without additional payment.
+													<h4>
+                                                        <input type="radio" name="reg_type" class="reg_type" value="1" 
+													        <?php if ($schoolInfo->type == 1) echo "checked" ?> /> 
+                                                        Tzivos Hashem registration is included in school tuition
+                                                    </h4>
+                                                    $<?=$schoolInfo->getChildFee( true, 1 )?> included in each child’s tuition; 
+													parents still complete the registration process on their own without additional payment. 
+													<strong>School credit card gets automatically charged at once for all unregistered students by 24 Elul (Sep 4).</strong>
 												</li>
 												<li>
-													 <h4><input type="radio" name="reg_type" class="reg_type" value="2" /> Tzivos Hashem is not included in tuition, yet every child in our school will be registered</h4>
-													 Since we guarantee that every child will register, parents will pay the discounted price of $45 when registering on the site; any children not registered by Chof Gimmel Elul (September 14) will be registered through the school’s credit card.
+													 <h4>
+                                                        <input type="radio" name="reg_type" class="reg_type" value="2" 
+                                                            <?php if ($schoolInfo->type == 2) echo "checked" ?> />
+															$<?=$schoolInfo->getChildFee( true, 1 )?> per student. 
+															Tzivos Hashem is not included in tuition, yet every child in our school will be registered
+                                                    </h4>
+                                                    Since we guarantee that every child will register, 
+                                                    parents will receive an additional discount of $<?=GlobalSettings::getGuarenteedDiscount()?> 
+                                                    (above the early bird discount of $<?=GlobalSettings::getEarlyBird()?>).
+                                                    If all children are not registered by 
+                                                    <?=
+                                                    iconv ('WINDOWS-1255', 'UTF-8', substr(  
+                                                        jdtojewish( unixtojd( $schoolInfo->early_bird->getTimestamp() ) + 1, true ), 0, -6
+                                                    ));
+                                                    ?>
+                                                    (<?= $schoolInfo->early_bird->format('F j') ?>)
+                                                    <!--Chof Gimmel Elul (September 14)--> 
+                                                    then Tzivos Hashem will automatically charge the school credit card on file for the additional discount provided ($<?=GlobalSettings::getGuarenteedDiscount()?> per child registered).
 												</li>
 												<li>
-													 <h4><input type="radio" name="reg_type" class="reg_type" value="3" /> Each student will register on their own</h4>
-													 Registration is not included in tuition; each child registers individually for the early-bird price of $50 or regular price of $55 from Chof Gimmel Elul (September 14) onward.
+                                                    <h4><input type="radio" name="reg_type" class="reg_type" value="3" 
+                                                    <?php if ($schoolInfo->type == 3) echo "checked" ?>
+                                                    /> Each student will register on their own</h4>
+                                                    Registration is not included in tuition; 
+                                                    each child registers individually for the early-bird price of $<?=$schoolInfo->getChildFee( true, 3 )?>
+                                                    or regular price of $<?=$schoolInfo->getChildFee( true, 3, true )?> from 
+                                                    <?=
+                                                    iconv ('WINDOWS-1255', 'UTF-8', substr(  
+                                                        jdtojewish( unixtojd( $schoolInfo->early_bird->getTimestamp() ) + 1, true ), 0, -6
+                                                    ));
+                                                    ?>
+                                                    (<?= $schoolInfo->early_bird->format('F j') ?>) onward.
 												</li>
 											</ul>
 										</div>
@@ -226,7 +234,9 @@ $year = GlobalSettings::getRegistrationYear();
 								</div>
 							
 								<h2>School Yearly Membership Benefits and Fees</h2> 
-								<p>Register your school for ONLY $770 and you receive:</p>
+								<p>Click <a href="https://docs.google.com/document/d/1W9-gsHpu2yiEvKpNdmJJ_A4aCUPLnGgUFyqNzJq_vuk/edit" target="_blank">here</a> 
+								to see what’s included in the school and child registration packages</p>
+								<p>Register your school for ONLY $<?=$schoolInfo->fee?> and you receive:</p>
 
 								<div class="module list_expand" id="module-info">
 									<div class="module_content">
@@ -239,8 +249,12 @@ $year = GlobalSettings::getRegistrationYear();
 												</li>
 												<li>
 													<div class="box">
-														<h4>Tzivos Hashem Management System ($950 value)</h4>
-														<p>Your state-of-the-art online management system for staff, students and parents.</p>
+														<h4>Tzivos Hashem Online Management System ($950 value)</h4>
+                                                        <p>
+                                                            State of the art Online portal for staff, students and parents. 
+															Constantly new features and ticketing system for direct communication 
+															with our development team.
+                                                        </p>
 													</div>   
 												</li>
 												<li>
@@ -259,7 +273,7 @@ $year = GlobalSettings::getRegistrationYear();
 												</li>
 												<li class="right">
 													<div class="box">
-														<h4>Discount Package Price: $770</h4>
+														<h4>Your Price: $<?=$schoolInfo->fee?></h4>
 													</div>   
 												</li>
 											</ul>
@@ -269,7 +283,12 @@ $year = GlobalSettings::getRegistrationYear();
 
 								<h2>Student Yearly Membership Benefits and Fees</h2>
 								<p>Once your school is registered, you can begin registering individual students, or have parents enroll their children.</p>
-								<p>For ONLY $<span class="regAmount">45</span> each registered student will receive:</p>
+								<p>
+                                    For ONLY $<span class="regAmount"><?
+                                    if ( $schoolInfo->type == '1' ) { echo $schoolInfo->getChildFee( true ); }
+                                    else { echo $schoolInfo->getChildFee( true )?>/<?=$schoolInfo->getChildFee( true, false, true ); }
+                                    ?></span> each registered student will receive:
+                                </p>
 								
 								<div class="module list_expand" id="module-info">
 									<div class="module_content">
@@ -366,222 +385,55 @@ $year = GlobalSettings::getRegistrationYear();
                                                 </li>
 												<li class="right">
 													<div class="box">
-														<h4>Total Value: $120</h4>
+														<h4>Total Value: Exceeds $150</h4>
 													</div>   
 												</li>
 												<li class="right">
 													<div class="box">
-														<h4>Discount Package Price: $<span class="regAmount">45</span></h4>
+														<h4>
+                                                            Your Price: $<span class="regAmount"><?
+                                                            if ( $schoolInfo->type == '1' ) { echo $schoolInfo->getChildFee( true ); }
+                                                            else { echo $schoolInfo->getChildFee( true )?>/<?=$schoolInfo->getChildFee( true, false, true ); }
+                                                            ?></span>
+                                                        </h4>
 													</div>   
 												</li>
 											</ul>
 										</div>
 									</div>
 								</div>
-								<!--
-								<h2>Additional Store Prizes </h2>
-								<p>You may purchase additional prizes at 50% off, and offer them to your children at the cost of their own miles in the online store.</p>
-								
+
+								<h2>School Store Option</h2>
 								<div class="module list_expand" id="module-info">
 									<div class="module_content">
 										<div class="lists form">
 											<ul>
-												<li class="expand">
-													<div class="box">
-														<h4><span class="icon"></span>View Prizes</h4>
-													</div>   
+												<li>
+													<h4>
+														When would you like the school store points of all your chayolim to go back to 0?
+														(please note that this does not effect the auction points)
+													</h4>	
 												</li>
 												<li>
-													<div class="box">
-														<h4>770 Photo Album + 320 Pictures of the Rebbe</h4>
-														<p>See the rooms, share the stories and feel the special sense of living in the Rebbe's Daled Amos, with this magnificent spiral-bound album.
-														Plus 320 picture stickers, divided into packs of 5, to be given out each time a Chayol earns 50 miles.</p>
-														<p><b>Price: $48</b></p>
-														<p><b>Your Price: $24</b></p>
-													</div>   
+													<input type="radio" name="store_points" class="store_points" value="1" />
+													Beis Tammuz/June 15 (Chayolim can use the points they earned from summer missions and on)
 												</li>
 												<li>
-													<div class="box">
-														<h4>The Fellig Tehillim</h4>
-														<p>Full-color Fellig Chitas Edition of Tehillim, featuring tabs for the daily Yom, translations, illustrations and insights.</p>
-														<p><b>Price: $36</b></p>
-														<p><b>Your Price: $18</b></p>
-													</div>   
+													<input type="radio" name="store_points" class="store_points" value="2" />	
+													Hey Elul/Aug 16 (Chayolim will not be able to use the points they earned from the majority of summer missions)
 												</li>
 												<li>
-                                                    <div class="box">
-                                                        <h4>Haggadah for Kids</h4>
-                                                        <p><b>Price: $23</b></p>
-                                                        <p><b>Your Price: $15</b></p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Weekly Siddur with Biur Tefillah</h4>
-                                                        <p><b>Price: $36</b></p>
-                                                        <p><b>Your Price: $25</b></p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Shabbos and Yom Tov Siddur with Biur Tefillah</h4>
-                                                        <p><b>Price: $36</b></p>
-                                                        <p><b>Your Price: $25</b></p>
-                                                    </div>   
-                                                </li>
-												<li>
-													<div class="box">
-														<h4>Tzivos Hashem Sweatshirt</h4>
-														<p>Green cozy sweatshirts with the Tzivos Hashem logo on it, available in small, medium, large and extra large.</p>
-														<p><b>Price: $20</b></p>
-														<p><b>Your Price: $10</b></p>
-													</div>   
+													<input type="radio" name="store_points" class="store_points" value="3" />
+													Never (Points will continue accumulating from last year)
 												</li>
 												<li>
-													<div class="box">
-														<h4>Tzivos Hashem Cap</h4>
-														<p>Green striking caps with the Tzivos Hashem logo on it to wear all year round!</p>
-														<p><b>Price: $12</b></p>
-														<p><b>Your Price: $6</b></p>
-													</div>   
+													<input type="radio" name="store_points" class="store_points" value="4" />
+													Choose your own Date: <input type="date" name="store_date" class="store_date" />
 												</li>
-												<li>
-													<div class="box">
-														<h4>Tzivos Hashem Yarmulka</h4>
-														<p>Navy Yarmulkas with the Tzivos Hashem logo on it.</p>
-														<p><b>Price: $10</b></p>
-														<p><b>Your Price: $5</b></p>
-													</div>   
-												</li>
-												<li>
-                                                    <div class="box">
-                                                        <h4>Tzivos Hashem Backpack</h4>
-                                                        <p><b>Price: $20</b></p>
-                                                        <p><b>Your Price: $10</b></p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Binder and sticker book</h4>
-                                                        <p><b>Price: $23</b></p>
-                                                        <p><b>Your Price: $15</b></p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Haggadah for kids</h4>
-                                                        <p><b>Price: $23</b></p>
-                                                        <p><b>Your Price: $15</b></p>
-                                                    </div>   
-                                                </li>
-											</ul>
+											</ul>											
 										</div>
 									</div>
 								</div>
-								-->
-								
-							<? } else { ?>
-							    <h2>Registration Fee</h2>
-                                <p>Registration fee for Hebrew School 5778 is $770.</p>
-                                <p>This includes the use of the Hebrew School Management System.</p>
-                                <div class="module list_expand" id="module-info">
-                                    <div class="module_content">
-                                        <div class="lists form">
-                                            <ul>
-                                                <li class="expand">
-                                                    <div class="box">
-                                                        <h4><span class="icon"></span>Features of Hebrew School Management System</h4>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Uploads</h4>
-                                                        <p>Upload your school List</p>
-                                                        <p>Upload pictures of your students</p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Register your students</h4>
-                                                        <p>Student registration can be done within the system after finishing the school setup</p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Personalized ID Cards</h4>
-                                                        <p>Print paper ID cards with a personalized Barcode</p>
-                                                        <p>Order permanent (hard plastic) ID cards ($2 each)</p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Print Achievement Cards with barcodes</h4>
-                                                        <p>You can print cards for anything you want</p>
-                                                        <p>You can decide how many “points” the cards should be worth</p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Print Reports</h4>
-                                                        <p>Print Point Reports</p>
-                                                        <p>Print Reports of prizes ordered online by your students</p>
-                                                    </div>   
-                                                </li>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Manage your Hebrew School Store</h4>
-                                                        <p><b>You can:</b></p>
-                                                        <p>Add Prizes of your choice</p>
-                                                        <p>You can add prizes for all grades or for specific class</p>
-                                                        <p>Determine how many points each prize should cost</p>
-                                                        <p>Keep inventory of how many of each prize you have left</p>
-                                                        <p>Print barcodes for the items in your store</p>
-                                                        <p>Scan a child’s ID card then scan a prize barcode to purchase</p>
-                                                        <p><b>Children can:</b></p>
-                                                        <p>View the prizes in your online store</p>
-                                                        <p>Add / Remove prize to their shopping cart</p>
-                                                        <p>Purchase prizes</p>
-                                                    </div>   
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--
-                                <h2>Accessories</h2> 
-                                
-                                <p>In order to utilize our program you will need to purchase a scanner for each 
-                                  computer that you wish to setup.</p>
-                                  <p>Each scanner costs $50.</p>
-                                
-                                <? //find out if school already entered once a quantity for scanners but got stuck in the registration process
-                                //$sql = "select scanners from school_accessories where year = '5774' and school_id = " . $admin->school_id;
-                                //$result = mysql_query( $sql );
-                                //$row = mysql_fetch_assoc( $result );
-                                //$qty = $row['scanners'];
-                                ?>
-                                
-                                <div class="module" id="module-info">
-                                    <div class="module_content">
-                                        <div class="lists form">
-                                            <ul>
-                                                <li>
-                                                    <div class="box">
-                                                        <h4>Purchase Scanners</h4>
-                                                        <p>
-                                                            <span class="label">Quantity:</span>
-                                                            <span class="input small">
-                                                                <input type="text" name="qty" id="qty" value="<?=isset($qty)?$qty:''?>">
-                                                            </span>
-                                                        </p>
-                                                    </div>   
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-								-->
-							<? } ?>
 								
 								<div class="module" id="module-info">
 									<div class="module_content">
@@ -594,18 +446,11 @@ $year = GlobalSettings::getRegistrationYear();
 										</div>
 									</div>
 								</div>
-							</form> 
-														
+							</form> 					
 						</div>
-						
 					</div>
-					
 				</div>
-				
 			</div>
-			
 		</div>
-
 	</body>
-	
 </html>

@@ -198,7 +198,7 @@ function get_classes_select($school_id, $class_id) {
         else // otherwise just generate the default option tag
             $classes_select = $classes_select . "<option value='" . $row['class_id'] . "'>" . $row['class_grade'] . "-" . $row['class_sub'] . "</option>";
     }
-    // create the "Next Platton" button....
+    // create the "Next Platoon" button....
     $classes_select = $classes_select . "</select>"; // end the select
     $classes_select = $classes_select . "</div>"; // end the div from line 183
 }

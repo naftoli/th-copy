@@ -135,7 +135,7 @@ $(function() {
                                             <p>The registration fee for <?=$year?> is $55. Please take advantage of the early bird special by registering before Chof Gimmel Elul (September 14)
 											and pay as low as $50 per child. (or $45 if part of tuition).
 											</p>
-                                            <p><a href="admin_users_register_new.php">Register Students</a></p>
+                                            <p><a href="admin_users_register.php">Register Students</a></p>
                                         </div>
                                         <h3><span class="icon"></span>Step 3: Upload Student Photos</h3>
                                         <div class="innerP">
@@ -196,7 +196,7 @@ $(function() {
                                 	<h3><span class="icon"></span>Register Students for 5774</h3>
                                     <p>Students added to the system are not regsitered for this years program.</p>
                                     <p>Use this page to register students in this years program.</p>
-                                    <p><a href="admin_users_register_new.php">Register Students</a></p>
+                                    <p><a href="admin_users_register.php">Register Students</a></p>
                                 </li>
 				<!--
                                 <li>

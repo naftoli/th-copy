@@ -301,17 +301,18 @@ class KioskMainController extends Zend_Controller_Action
 			}
 			*/
 			// check that child is in same institution as card created for
-			else if ($objCard->institution_id != $objUser->school_id)
+			
+			else if ( $objCard->institution_id != $objUser->school_id && $objCard->institution_id > 0 )
 			{
-				$this->view->strScanCodeMessage = "You are not in the correct school to scan this card.";
+				$this->view->strScanCodeMessage = "You are not in the correct base to scan this card.";
 			}
 			else if (!$objUser->class_id > 0)
 			{
-				$this->view->strScanCodeMessage = "You must be in a class to scan this card.";
+				$this->view->strScanCodeMessage = "You must be in a platoon to scan this card.";
 			}
 			else if ($objCard->class_id > 0 && $objUser->class_id != $objCard->class_id)
 			{
-				$this->view->strScanCodeMessage = "You are not in the correct class to scan this card.";
+				$this->view->strScanCodeMessage = "You are not in the correct platoon to scan this card.";
 			}
 			else if($objCard->status == "scanned")
 			{
@@ -415,17 +416,17 @@ class KioskMainController extends Zend_Controller_Action
 		}
 		*/
 		// check that child is in same institution as card created for
-		else if ($objCard->institution_id != $objUser->school_id)
+		else if ( $objCard->institution_id != $objUser->school_id && $objCard->institution_id > 0 )
 		{
-			print "You are not in the correct school to scan this card.";
+			print "You are not in the correct base to scan this card.";
 		}
 		else if (!$objUser->class_id > 0)
 		{
-			print "You must be in a class to scan this card.";
+			print "You must be in a platoon to scan this card.";
 		}
 		else if ($objCard->class_id > 0 && $objUser->class_id != $objCard->class_id)
 		{
-			print "You are not in the correct class to scan this card.";
+			print "You are not in the correct platoon to scan this card.";
 		}
 		else if ($objCard->status == "scanned") 
 		{

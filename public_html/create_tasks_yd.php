@@ -112,23 +112,27 @@ if (isset($_POST['submit'])) {
     } else {
         $missionNumber = 1;
     }
-	//echo $missionNumber;
+    //echo $missionNumber;
+    
+    // get start and end from db
+    require 'class.globalSettings.php';
+    $missionYear = GlobalSettings::getRegistrationYear();
+    $defaultDates = GlobalSettings::getCurYearDates();
+	$defaultStart = $defaultDates['start'];
+    $defaultEnd = $defaultDates['start'];
     
     $weeks = array();
-    $sql2 = "select * from parshos where year = 5778";
+    $sql2 = 'select * from parshos where year in(' . ($missionYear-1) . ',' . $missionYear . ')';
     $result2 = mysql_query( $sql2 );
     while ( $row2 = mysql_fetch_assoc( $result2 ) ) {
         $weeks[$row2['start']][$row2['end']] = $row2['name'];
     }
-	
-	$defaultStart = 2458005; // Sept 8, 2017
-	$defaultEnd = 2458368; // Sept 6, 2018
 
 	$lang = $_POST['lang'];
 	if ($lang == 1) {
-  		$file = "SystemTasks/" . $subjects[$subject_id] . "5778.xlsx";
+  		$file = "SystemTasks/" . $subjects[$subject_id] . $missionYear . ".xlsx";
 	} else if ($lang == 2) {
-		$file = "SystemTasks/Yi" . $subjects[$subject_id] . "5778.xlsx";
+		$file = "SystemTasks/Yi" . $subjects[$subject_id] . $missionYear . ".xlsx";
 	}
     
     // load the file and save it to the database
@@ -200,7 +204,7 @@ if (isset($_POST['submit'])) {
 								foreach ($arrValues as $value) {
 									$arrTemp = explode(',', $value);
                                     // this causes problems b/c the beginning of the yr tasks relate to previous yr and end or yr tasks refer to next yr
-									$year = $arrTemp[0] == 13 ? 5777 : 5778;
+									$year = $arrTemp[0] == 13 ? $missionYear - 1 : $missionYear;
                                     //$year = 5778; 
 									$jd = jewishtojd($arrTemp[0], $arrTemp[1], $year);
                     				$arrStart[] = $jd;
@@ -292,10 +296,10 @@ if (isset($_POST['submit'])) {
                 
                 // set the start date from the array if it is full and $startDate is empty
                 if (isset($arrStart) && !empty($arrStart) && empty($startDate)) {
-                    $year = in_array($arrStart[0], array(12,13)) ? 5777 : 5778;
+                    $year = in_array($arrStart[0], array(12,13)) ? $missionYear - 1 : $missionYear;
                     //$year = 5778;
                     $startDate = jewishtojd($arrStart[0], $arrStart[1], $year);
-                    $year = in_array($arrEnd[0], array(12,13)) ? 5777 : 5778;
+                    $year = in_array($arrEnd[0], array(12,13)) ? $missionYear - 1 : $missionYear;
                     //$year = 5778;
                     $endDate = jewishtojd($arrEnd[0], $arrEnd[1], $year);
                 }

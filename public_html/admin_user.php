@@ -60,7 +60,7 @@ if(!empty($action)) {
 	switch($action) {
 
 		case 'add':
-			$result = mq("SELECT -1 user_id, '' email, '' child_type_id, '' first, '' last, '' first_he, '' last_he, '' lang, '' lang_id, $class_id class_id, NULL school_type_id, NULL team_id, '' user_address1, '' user_address2, '' user_city, '' user_state, '' user_postal, '' user_country, '' user_phone, NULL gender, NULL dob, '' kiosk_edit, NULL user_photo_id, NULL mobile_pic, NULL user_registered, 0 parent_marking");
+			$result = mq("SELECT -1 user_id, '' email, '' child_type_id, '' first, '' last, '' first_he, '' last_he, '' lang, '' lang_id, $class_id class_id, NULL school_type_id, NULL team_id, '' user_address1, '' user_address2, '' user_city, '' user_state, '' user_postal, '' user_country, '' user_phone, NULL gender, NULL dob, '' kiosk_edit, NULL user_photo_id, NULL mobile_pic, NULL user_registered, 0 parent_marking, 1 chayolei, 1 chidon, 1 yan");
 			$edit_row = mysql_fetch_assoc($result);
 		break;
 
@@ -93,15 +93,9 @@ if(!empty($action)) {
 
 			} while (mysql_result(mq("SELECT COUNT(*) FROM users WHERE user_code = $user_code"),0) != 0);
 
-            $yan = 0;
-            $chidon = 0;
-            if ($_POST['chayolei'] == 0) {
-                if (isset($_POST['soldierType'])) {
-                    foreach ($_POST['soldierType'] as $type) {
-                        $$type = 1;
-                    }
-                }
-            }
+            $yan = isset($_POST['yan']) ? 1 : 0;
+			$chidon = isset($_POST['chidon']) ? 1 : 0;
+			$chayolei = isset($_POST['chayolei']) ? 1 : 0;
 
             if ( !$h_school ) {
     			//insert school type
@@ -147,20 +141,14 @@ if(!empty($action)) {
 						', user_registered = NOW(), user_start_date = ' . unixtojd() : '') .
 						', gender = ' . nullif_ms((gr('gender') != 'M' && gr('gender') != 'F' ? 'NULL' : gr('gender')), 'NULL') .
 						', dob = ' . nullif_ms(gr('dob'), '') .
+						', chayolei = ' . $chayolei .
+						', yan = ' . $yan .
+						', chidon = ' . $chidon .
 						", user_photo_id = $user_photo_id" .
 						(gr('password') ? ', password = ' . ms(gr('password')) : '');
     			//echo $sql; exit;
 				mq( $sql ) or die( $sql . mysql_error() );
                 $new_user_id = mysql_result(mq("SELECT LAST_INSERT_ID()"), 0);
-
-                if ($chidon || $yan) {
-                    $sqlAdd = "update users set ";
-                    if ($chidon && $yan) $sqlAdd .= "chidon = 1, yan = 1";
-                    else if ($chidon) $sqlAdd .= "chidon = 1";
-                    else if ($yan) $sqlAdd .= "yan = 1";
-                    $sqlAdd .= " where user_id = " . $new_user_id;
-                    mq($sqlAdd);
-                }
 
 				if ($mobile_pic && $mobile_pic != 'NULL') mq("update users set mobile_pic = '" . $mobile_pic . "' where user_id = " . $new_user_id);
 				/*
@@ -201,18 +189,13 @@ if(!empty($action)) {
 				   school_type_id = ' . $school_type . ',
 				   team_id = ' . nullif(gri('team_id', -1), -1) . (gri('user_registered', 0) ? ', user_registered = NOW(), user_start_date = ' . unixtojd() : '') . ',
 				   gender = ' . nullif_ms((gr('gender') != 'M' && gr('gender') != 'F' ? 'NULL' : gr('gender')), 'NULL') . ',
-				   dob = ' . nullif_ms(gr('dob'), '') . ",
+				   dob = ' . nullif_ms(gr('dob'), '') .
+				   ', chayolei = ' . $chayolei .
+				   ', yan = ' . $yan .
+				   ', chidon = ' . $chidon . ", 
 				   user_photo_id = $user_photo_id" . (gr('password') ? ', password = ' . ms(gr('password')) : ''));
                 $new_user_id = mysql_result(mq("SELECT LAST_INSERT_ID()"), 0);
 
-                if ($chidon || $yan) {
-                    $sqlAdd = "update users set ";
-                    if ($chidon && $yan) $sqlAdd .= "chidon = 1, yan = 1";
-                    else if ($chidon) $sqlAdd .= "chidon = 1";
-                    else if ($yan) $sqlAdd .= "yan = 1";
-                    $sqlAdd .= " where user_id = " . $new_user_id;
-                    mq($sqlAdd);
-                }
 				/*
                 header_update_icorpa_student(array(
                     "legacy_user_id" => $new_user_id
@@ -242,93 +225,7 @@ if(!empty($action)) {
 			require_once 'class.heDob.php';
 			$hdob = new HeDob( $new_user_id );
 			$hdob->setHeDob();
-			/*
-			//add ladder/year
-			if ($_POST['class_id'] > 0) {
-				$year = "select class_grade from classes where class_id = " . $_POST['class_id'];
-				$year_res = mysql_query($year);
-				$row = mysql_fetch_row($year_res);
-				$y = $row[0];
-				switch ($y) {
-					case 'Pre1a':
-						$level = 6;
-						break;
-					case '1':
-						$level = 7;
-						break;
-					case '2':
-						$level = 8;
-						break;
-					case '3':
-						$level = 9;
-						break;
-					case '4':
-						$level = 10;
-						break;
-					case '5':
-						$level = 11;
-						break;
-					case '6':
-						$level = 12;
-						break;
-					case '7':
-						$level = 13;
-						break;
-					case '8':
-						$level = 14;
-						break;
-					default:
-						$level = null;
-						break;
-				}
-			} else {
-				$level = null;
-			}
 
-			if ($level) {
-				//get all subjects
-				$sbj = "select * from subjects where subject_type NOT IN ('school_points', 'home_points')";
-				$sub_res = mysql_query($sbj);
-				$subjects = array();
-				while ($subject = mysql_fetch_assoc($sub_res)) {
-					$subjects[] = $subject['subject_id'];
-				}
-				foreach ($subjects as $subject) {
-					$track_id = 1;
-					if ($subject == 1) {
-						if (in_array($school_type, array(12,13))) {
-							$track_id = 3;
-						} else if (in_array($school_type, array(2,3))) {
-							$track_id = 5;
-						}
-					}
-					$ins = "insert into user_tracks values ($new_user_id, $subject, $track_id, $level, 0)";
-					@mysql_query($ins);
-				}
-			}
-			/*
-			//create private rank for soldier
-			$jd = unixtojd();
-			$sql = "insert into rank_marks
-					set rank_ord = 1,
-					user_id = $new_user_id,
-					date_promoted = " .$jd;
-			@mysql_query( $sql );
-			*/
-			/*
-			//add birthday mission/task
-			require_once 'class.birthday.php';
-			$b = new Birthday( $new_user_id );
-			$b->setBirthday();
-			require_once 'class.birthdayYi.php';
-			$by = new BirthdayYi( $new_user_id );
-			$by->setBirthday();
-
-			//set dob for syncing with wp
-			require_once 'class.heDob.php';
-			$hdob = new HeDob( $new_user_id );
-			$hdob->setHeDob();
-			*/
 			$message = T_('Soldier added');
 		break;
 
@@ -355,7 +252,7 @@ if(!empty($action)) {
 		break;
 
 		case 'edit':
-			$result = mq('SELECT user_id, user_code, username, email, first, last, first_he, last_he, lang, lang_id, class_id, school_type_id, team_id, user_serial, user_address1, user_address2, user_city, user_state, user_postal, user_country, user_phone, kiosk_edit, dob, gender, user_photo_id, mobile_pic, user_registered, user_start_date, child_type_id, parent_marking, chidon, yan FROM users WHERE user_id = ' . gri('user_id', -1) . ($school_id ? " AND school_id = $school_id" : ''));
+			$result = mq('SELECT user_id, user_code, username, email, first, last, first_he, last_he, lang, lang_id, class_id, school_type_id, team_id, user_serial, user_address1, user_address2, user_city, user_state, user_postal, user_country, user_phone, kiosk_edit, dob, gender, user_photo_id, mobile_pic, user_registered, user_start_date, child_type_id, parent_marking, chayolei, chidon, yan FROM users WHERE user_id = ' . gri('user_id', -1) . ($school_id ? " AND school_id = $school_id" : ''));
 			$edit_row = mysql_fetch_assoc($result);
 		break;
 
@@ -381,15 +278,9 @@ if(!empty($action)) {
 				$reg = ', user_registered = NULL, user_start_date = IF(user_start_date > ' . (unixtojd()-10) . ', NULL, user_start_date)';
 			}
 
-            $yan = 0;
-            $chidon = 0;
-            if ($_POST['chayolei'] == 0) {
-                if (isset($_POST['soldierType'])) {
-                    foreach ($_POST['soldierType'] as $type) {
-                        $$type = 1;
-                    }
-                }
-            }
+			$yan = isset($_POST['yan']) ? 1 : 0;
+			$chidon = isset($_POST['chidon']) ? 1 : 0;
+			$chayolei = isset($_POST['chayolei']) ? 1 : 0;
 
             if ( !$h_school ) {
     			//insert school type
@@ -422,38 +313,23 @@ if(!empty($action)) {
 				$lang_id = mysql_real_escape_string($_POST['lang']);
 				//echo $lang_id;
 				//echo gri('user_id', -1);
-				mq('UPDATE users SET
-					school_type_id = ' . $school_type .
-					', email = ' . ms(gr('email')) .
-					', first = \'' . ucwords(strtolower(mysql_real_escape_string(gr('first')))) .
-					'\', last = \'' . ucwords(strtolower(mysql_real_escape_string(gr('last')))) .
-					'\', first_he = ' . ms(gr('first_he')) .
-					', last_he = ' . ms(gr('last_he')) .
-					', lang = "' . $langs[$lang_id] .
-					'", lang_id = ' . $lang_id .
-					', user_address1 = ' . ms(gr('address1')) .
-					', user_address2 = ' . ms(gr('address2')) .
-					', user_city = ' . ms(gr('city')) .
-					', user_state = ' . ms(gr('state')) .
-					', user_postal = ' . ms(gr('postal')) .
-					', user_country = ' . ms(gr('country')) .
-					', user_phone = ' . ms(gr('phone')) .
-					', kiosk_edit = ' . ms(gr('kiosk_edit')) .
-					', class_id = ' . nullif(gri('class_id', -1), -1) .
-					', child_type_id = ' . $_POST['child_type'] .
-					', team_id = ' . nullif(gri('team_id', -1), -1) . $reg .
-					', dob = ' . nullif_ms(gr('dob'), '') .
-					', gender = ' . nullif_ms((gr('gender') != 'M' && gr('gender') != 'F' ? 'NULL' : gr('gender')), 'NULL') .
-					", user_photo_id = $user_photo_id" .
-					(gr('password') ? ', password = ' . ms(gr('password')) : '') .
+				mq(
+					'UPDATE users SET school_type_id = ' . $school_type . ', email = ' . ms(gr('email')) .', '
+					.' first = \'' . ucwords(strtolower(mysql_real_escape_string(gr('first')))) . '\', '
+					.' last = \'' . ucwords(strtolower(mysql_real_escape_string(gr('last')))) .'\', '
+					.' first_he = ' . ms(gr('first_he')) .', last_he = ' . ms(gr('last_he')) .', '
+					.' lang = "' . $langs[$lang_id] .'", lang_id = ' . $lang_id .', yan = ' . $yan .', '
+					.' chidon = ' . $chidon . ', chayolei = ' . $chayolei .', user_address1 = ' . ms(gr('address1')) .', '
+					.' user_address2 = ' . ms(gr('address2')) . ', user_city = ' . ms(gr('city')) . ', '
+					.' user_state = ' . ms(gr('state')) . ', user_postal = ' . ms(gr('postal')) . ', '
+					.' user_country = ' . ms(gr('country')) . ', user_phone = ' . ms(gr('phone')) . ', kiosk_edit = ' . ms(gr('kiosk_edit')) . ', '
+					.'class_id = ' . nullif(gri('class_id', -1), -1) . ', child_type_id = ' . $_POST['child_type'] . ', '
+					.'team_id = ' . nullif(gri('team_id', -1), -1) . $reg . ', dob = ' . nullif_ms(gr('dob'), '') . ', '
+					.'gender = ' . nullif_ms((gr('gender') != 'M' && gr('gender') != 'F' ? 'NULL' : gr('gender')), 'NULL') .
+					", user_photo_id = $user_photo_id" . (gr('password') ? ', password = ' . ms(gr('password')) : '') .
 					' WHERE user_id = ' . gri('user_id', -1) .
-					" AND school_id = $school_id");
-
-				$sqlAdd = "update users set
-						chidon = " . $chidon . ",
-						yan = " . $yan . "
-						where user_id = " . gri('user_id', -1);
-				mq($sqlAdd);
+					" AND school_id = $school_id"
+				);
 
 				// update the th_chidon table when the users grade is changed...
 				if(gri('class_id', -1) != -1){ // if we have a class ID
@@ -503,7 +379,8 @@ if(!empty($action)) {
                 mq('UPDATE users SET email = ' . ms(gr('email')) . ', first = ' . ucwords(strtolower(ms(gr('first')))) . ', last = ' . ucwords(strtolower(ms(gr('last')))) . ', first_he = ' . ucwords(strtolower(ms(gr('first_he')))) . ', last_he = ' . ucwords(strtolower(ms(gr('last_he')))) . ', lang = ' . ms(gr('lang')) . ', user_address1 = ' . ms(gr('address1')) . ', user_address2 = ' . ms(gr('address2')) . ', user_city = ' . ms(gr('city')) . ', user_state = ' . ms(gr('state')) . ', user_postal = ' . ms(gr('postal')) . ', user_country = ' . ms(gr('country')) . ', user_phone = ' . ms(gr('phone')) . ', class_id = ' . nullif(gri('class_id', -1), -1) . ', team_id = ' . nullif(gri('team_id', -1), -1) . $reg . ', dob = ' . nullif_ms(gr('dob'), '') . ', gender = ' . nullif_ms((gr('gender') != 'M' && gr('gender') != 'F' ? 'NULL' : gr('gender')), 'NULL') . ", user_photo_id = $user_photo_id" . (gr('password') ? ', password = ' . ms(gr('password')) : '') . ' WHERE user_id = ' . gri('user_id', -1) . " AND school_id = $school_id");
                 $sqlAdd = "update users set
                         chidon = " . $chidon . ",
-                        yan = " . $yan . "
+						yan = " . $yan . ",
+						chayolei = " . $chayolei . "
                         where user_id = " . gri('user_id', -1);
                 mq($sqlAdd);
             }
@@ -992,54 +869,23 @@ $class_result = mq($qry);
 										</LABEL>
 
                                         <br /><br />
-                                        <LABEL>
-											<?=T_('Soldier Type')?>
-											<BR>
-											<input type="radio" class="chayolei" name="chayolei" value='1'
-                                            <?php
-                                            if (isset($edit_row['chidon']) || isset($edit_row['yan'])) {
-                                                if ($edit_row['chidon'] == 0 && $edit_row['yan'] == 0) {
-                                                    echo "checked ";
-                                                }
-                                            } else {
-                                                echo "checked ";
-                                            }
-                                            ?>
-                                            /> Chayolei Soldier<br />
-                                            <input type="radio" class="chayolei" name="chayolei" value='0'
-                                            <?php
-                                            if (isset($edit_row['chidon']) || isset($edit_row['yan'])) {
-                                                if ($edit_row['chidon'] == 1 || $edit_row['yan'] == 1) {
-                                                    echo "checked ";
-                                                }
-                                            }
-                                            ?>
-                                            /> Non-Chayolei Soldier<br />
-                                            <div class="soldierType"
-                                                <?php
-                                                if (isset($edit_row['chidon']) || isset($edit_row['yan'])) {
-                                                    if ($edit_row['chidon'] == 0 && $edit_row['yan'] == 0) {
-                                                        echo "style='display:none'";
-                                                    }
-                                                }
-                                                ?>
-                                            >
-                                                <input type="checkbox" name="soldierType[]" value="chidon"
-                                                <?php
-                                                if (isset($edit_row['chidon']) && $edit_row['chidon'] == 1) {
-                                                    echo "checked ";
-                                                }
-                                                ?>
-                                                />Chidon<br />
-                                                <input type="checkbox" name="soldierType[]" value="yan"
-                                                <?php
-                                                if (isset($edit_row['yan']) && $edit_row['yan'] == 1) {
-                                                    echo "checked ";
-                                                }
-                                                ?>
-                                                />Tanya
-                                            </div>
-										</LABEL>
+
+										<strong><?=T_('Soldier Type (Enrolled In)')?></strong><br/>
+                                        <label>
+											<input type="checkbox" class="chayolei" name="chayolei" <?= $edit_row['chayolei'] ? 'checked' : '' ?> />
+											<?=T_('Chayolei Tzivos Hashem')?>
+										</label>
+										<br/>
+										<label>
+											<input type="checkbox" class="chidon" name="chidon" <?= $edit_row['chidon'] ? 'checked' : '' ?> />
+											<?=T_('Chidon')?>
+										</label>
+										<br/>
+										<label>
+											<input type="checkbox" class="yan" name="yan" <?= $edit_row['yan'] ? 'checked' : '' ?> />
+											<?=T_('Tanya/Mishna')?>
+										</label>
+										<br/>
 										<!--
 										<BR>
 										<BR>
@@ -1183,7 +1029,7 @@ $class_result = mq($qry);
 
 								<?
 								$qry = "
-									SELECT class_grade, class_sub, user_id, user_code, username, first, last, user_serial, team_name, dob, yan, chidon
+									SELECT class_grade, class_sub, user_id, user_code, username, first, last, user_serial, team_name, dob, chayolei, yan, chidon
 									FROM users
 									LEFT JOIN classes USING (class_id, school_id)
 									LEFT JOIN teams USING (team_id, school_id)
@@ -1197,23 +1043,17 @@ $class_result = mq($qry);
 									" ORDER BY class_grade, class_sub, last, first, username";
 								$result = mq($qry);
 								?>
-								<TABLE CLASS="list list_<?=$align_start?>" style="font-size:12px">
-									<THEAD>
-										<TR>
-											<!--   <TH><?//=T_('Username')?></TH> -->
-											<TH><?=T_('Last')?></TH>
-											<TH><?=T_('First')?></TH>
-											<TH><?=T_('Platoon')?></TH>
-											<!--   <TH><?//=T_('Points')?></TH> -->
-											<TH><?=T_('Birthdate')?></TH>
-											<!--<TH><?=T_('Squad')?></TH>-->
-											<!--   <TH></TH> -->
-											<!--   <TH></TH> -->
-                                            <th>Non-Chayolei</th>
-											<TH>Actions</TH>
-											<!--   <TH></TH> -->
-										</TR>
-									</THEAD>
+								<table CLASS="list list_<?=$align_start?>" style="font-size:12px">
+									<thead>
+										<tr>
+											<th><?=T_('Last')?></th>
+											<th><?=T_('First')?></th>
+											<th><?=T_('Platoon')?></th>
+											<th><?=T_('Birthdate')?></th>
+                                            <th><?=T_('Enrolled In')?></th>
+											<th><?=T_('Actions')?></th>
+										</tr>
+									</thead>
 
 									<? $toggle = 0; ?>
 									<? while($row = mysql_fetch_assoc($result)): ?>
@@ -1226,16 +1066,13 @@ $class_result = mq($qry);
 
 											<? $points = mysql_result(mq(totalMarks("WHERE user_id = {$row['user_id']}")), 0); ?>
 
-											<TD><?=$row['dob']?></TD>
+											<TD><?= $row['dob'] ? ( new DateTime( $row['dob'] ) )->format('M dS, Y') : ''?></TD>
 											<!--<TD><?=es($row['team_name'])?></TD>-->
 
                                             <td>
-                                                <input type="checkbox" class="yan"
-                                                <?php if ($row['yan']) echo "checked ";?>
-                                                /> Tanya/Mishna<br />
-                                                <input type="checkbox" class="chidon"
-                                                <?php if ($row['chidon']) echo "checked ";?>
-                                                /> Chidon<br />
+												<input type="checkbox" class="chayolei"<?= $row['chayolei'] ? "checked " : ''?> /> Chayolei<br />
+                                                <input type="checkbox" class="chidon"<?= $row['chidon'] ? "checked " : ''?> /> Chidon<br />
+												<input type="checkbox" class="yan"<?= $row['yan'] ? "checked " : ''?> /> Tanya/Mishna<br />
                                             </td>
 
 											<TD>
@@ -1266,7 +1103,7 @@ $class_result = mq($qry);
 										</TR>
 									<? endwhile; ?>
 
-								</TABLE>
+								</table>
 								<!--
 								<br />
 								<A HREF="admin_user.php?action=export_users&amp;school_id=<?=$school_id?>&amp;<?=http_build_query(array_intersect_key($_GETPOST, array_fill_keys(array('search_first', 'search_last', 'search_user_serial', 'search_class_id', 'search_user_registered'), 0)), NULL, '&amp;')?>"><?=T_('Export Soldiers')?></A><BR>
@@ -1289,28 +1126,19 @@ $class_result = mq($qry);
 
     <script>
         $( function() {
-            $(".yan").click( function() {
-                var user = $(this).parent().parent().attr('id');
-                var val = $(this).is(":checked");
-                $.post('ajax/updateUserSettings.php', { user : user, type : 'yan', value : val }, function( error ) {
-                    if (error == 0) {
-                        alert('Updated.');
-                    } else {
-                        alert('Error updating.');
-                    }
-                });
-            });
-            $(".chidon").click( function() {
-                var user = $(this).parent().parent().attr('id');
-                var val = $(this).is(":checked");
-                $.post('ajax/updateUserSettings.php', { user : user, type : 'chidon', value : val }, function( error ) {
-                    if (error == 0) {
-                        alert('Updated.');
-                    } else {
-                        alert('Error updating.');
-                    }
-                });
-            });
+			$('.yan, .chidon, .chayolei').click( function(){
+				var user = $(this).parent().parent().attr('id');
+				if ( !user ) return true;
+				var value = $(this).is(":checked");
+				var type = this.className; // IE6+
+
+				function callback( error ) {
+					if (error == 0) { alert( 'updated' ); }
+					else { alert( 'Error updating' ) }
+				}
+
+				$.post( 'ajax/updateUserSettings.php', { user: user, type: type, value: value }, callback );
+			});
         });
     </script>
 

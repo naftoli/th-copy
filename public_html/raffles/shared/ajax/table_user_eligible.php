@@ -6,6 +6,7 @@ if ($_GET['debug']) {
     $debug = true;
 }
 // enable test mode
+$report_mode = false;
 if ($_POST['type'] == "report") {
     $report_mode = true;
 }
@@ -57,14 +58,14 @@ foreach ( $schoolsUsers as $school => $users ) {
         // print the user's name and grade
         echo "<tr><td>" . $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] ) . 
             "</td><td>" . $user['first'] . " " . $user['last'];
-        if($report_mode){
+        if( $report_mode ){
             $user_ids = $raffle->get_eligable_user_ids($user['user_id']); // in test mode run the full raffle check
-            echo "<td class='". ($user_ids[$user['user_id']] ? "green'>✓" : "red'>x" ) ."</td>"; // determine the class and content
+            echo "<td class='". ( isset($user_ids[$user['user_id']]) ? "green'>✓" : "red'>x" ) ."</td>"; // determine the class and content
         } else {
             $user_ids = $raffle->get_raffle_eligable_user_ids($user['user_id']); // pass the school id in to only get the students that we need
             echo "</td><td><input class='eligible-toggle' type='checkbox' name='" .
                 $user['user_id'] . ":" . $raffle->raffle_id .
-                "' " . ($user_ids[$user['user_id']] ? "checked" : "" ) .
+                "' " . ( isset($user_ids[$user['user_id']]) ? "checked" : "" ) .
                 "/></td>"; // render a checkbox with the correct params and set it to checked if it has a task
         }
         

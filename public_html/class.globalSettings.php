@@ -20,7 +20,9 @@ class GlobalSettings {
         return $dates;
     }
     
-    public static function getRegistrationYear() {
+    public static function getRegistrationYear( $school_id = false ) {
+        if ( self::isAustralian( $school_id ) )
+            return 5778;
         $sql = "select `val` from global_settings where `key` = 'registration_year'";
         $result = mysql_query($sql);
         $row = mysql_fetch_assoc($result);
@@ -46,6 +48,97 @@ class GlobalSettings {
         $result = mysql_query($sql);
         $row = mysql_fetch_assoc($result);
         return $row['val'];
+    }
+
+    /**
+     * GlobalSettings::getRegCost
+     * 
+     * returns current registration costs for the given school type, and early bird specials.
+     * 
+     * Accepts optional school paramater to return the rate that the school pays.
+     *
+     * @param int $type
+     * @param boolean $early_bird
+     * @param boolean $school
+     * @return integer
+     */
+    public static function getRegCost( $type, $school = false ) {
+        if ( $type == 1 ) { // In Tuition
+            return $school ? 45 : 0;
+        } else if ( $type == 2 ) { // Guarranteed, they get a bit of a discount ($45, calculated elsewhere )
+            return 55;
+        }
+        // everyone else / default return
+        return 55;
+    }
+
+    /**
+     * calculateChildFee
+     * 
+     * calculates the child registration fee with all discounts applied
+     *
+     * @param integer $type
+     * @param integer $fee
+     * @param boolean $is_school
+     * @param boolean $early_bird
+     * @param boolean $no_discount
+     * @return integer
+     */
+    public static function calculateChildFee( $type, $fee = 0, $is_school = false, $early_bird = false, $no_discount = false ) {
+        // get the default fee
+        $fee = $fee > 0 ? $fee : self::getRegCost( $type, $is_school );
+        // return the final rate if requested
+        if ( $no_discount ) return $fee >= 0 ? $fee : 0;
+        // add early bird discount ( not for type 1 )
+        if ( $type != 1 && $early_bird )
+            $fee -= self::getEarlyBird();
+        // add type 2 discount
+        if ( $type == 2 && $early_bird ) {
+            $fee -= self::getGuarenteedDiscount();
+        }
+        // do not allow negative numbers
+        return $fee >= 0 ? $fee : 0;
+    }
+
+    /**
+     * getChidonCost
+     * 
+     * return the current price for chidon registration
+     *
+     * @return int
+     */
+    public static function getChidonCost( $school_id = false ) {
+        // Anash kinder has $40 fee
+        if ( in_array( $school_id, [ 269 ] ) )
+            return 40;
+        return 5;
+    }
+
+    /**
+     * getEarlyBird
+     * 
+     * return the current early bird discount
+     *
+     * @return int
+     */
+    public static function getEarlyBird(){
+        return 5;
+    }
+
+    /**
+     * getEarlyBird
+     * 
+     * return the current early bird discount
+     *
+     * @return int
+     */
+    public static function getGuarenteedDiscount(){
+        return 5;
+    }
+
+    public static function isAustralian( $school_id ) {
+        $australian = [ 55, 66, 110, 112, 180, 256 ];
+        return in_array( $school_id, $australian );
     }
 }
 ?>

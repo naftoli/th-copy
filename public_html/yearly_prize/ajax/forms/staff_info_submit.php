@@ -67,8 +67,8 @@ if($staff_type == "teacher"){
     $row = mysql_fetch_assoc(mysql_query($sql)); // get the row
     $class_id = $row['id']; // and get the class ID from there
     
-    $sql = "UPDATE classes SET class_teacher = \"" . $name . "\", email = '" . $email . "', cell = '" . $cell_number . "' WHERE class_id = " . $class_id;
-    @mysql_query($sql);
+    // $sql = "UPDATE classes SET class_teacher = \"" . $name . "\", email = '" . $email . "', cell = '" . $cell_number . "' WHERE class_id = " . $class_id;
+    // @mysql_query($sql);
     
     $sql = "UPDATE admins SET last = \"" . $name . "\", admin_email = '" . $email . "', admin_phone_work = '" . $work_number .
             "', admin_phone_mobile = '" . $cell_number . "' WHERE admin_id = " . $admin_id;

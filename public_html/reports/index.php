@@ -109,6 +109,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">News Site Backend</span>
                 </div>
             </a>
+            <a href="registration">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="reports"/>
+                    <span class="link-text">Registration Reports</span>
+                </div>
+            </a>
         </div>
         <?} // end admin only links ?>
         </div>
