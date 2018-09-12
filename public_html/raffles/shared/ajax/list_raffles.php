@@ -1,6 +1,6 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 // only allow schools here
 $admin_auth = array('school'); 
 require_once $_SERVER["DOCUMENT_ROOT"].'/header.php';
@@ -16,20 +16,18 @@ use raffles\weekly\Prize as Prize; // use the raffle from its namespace
 /***************** GET POST DATA *********************/
 // get the type from the post request
 $type = mysql_real_escape_string($_POST['type']);
-$ran_only = $_POST['ran_only'] == "true" ? true : false;
+$ran_only = isset( $_POST['ran_only'] ) && $_POST['ran_only'] == "true";
 $all = isset( $_POST['all'] ) && $_POST['all'] == "true" ? true : false;
 
-$filter = ""; // sorting
+$filter = []; // sorting
 // load all the raffles
-if($type !== "") $filter .= "WHERE type='$type' "; // add the where clause before the order_by\
-if($type !== "" && $ran_only) {
-    $filter .= "AND date_ran IS NOT NULL ";
-} else if ($ran_only) {
-    $filter .= "WHERE date_ran IS NOT NULL ";
-}
-$filter .= 'AND year = '.GlobalSettings::getCurrentYear(); // only show raffles from this year
+if ( $type !== "" )
+    $filter[] = "type='$type'"; // add the where clause before the order_by\
+if ( $ran_only )
+    $filter[] = "date_ran IS NOT NULL";
+$filter[] = 'year = '.GlobalSettings::getCurrentYear(); // only show raffles from this year
 
-$filter .= "ORDER BY run_date DESC, type";
+$filter = 'WHERE '.implode( ' AND ', $filter ).' ORDER BY run_date DESC, type';
 
 $raffles = Raffle::loadAll($filter);
 

@@ -81,7 +81,7 @@ if($debug) echo "</pre>";
                 <a class="button" style="display: inline-block" id="export-to-csv">Export to CSV</a>
             </center>
         </p>
-        <h2>Please select the school and raffle you would like to see.</h2>
+        <h2>Please select the raffle you would like to see.</h2>
         
         <div id="dropdowns">
         
