@@ -49,6 +49,19 @@ class OrdersPage extends Component {
     )
   }
 
+  cancelOrders = () => {
+    console.log( this.state.selection );
+  }
+
+  unredeemOrders = () => {
+    console.log( this.state.selection );
+  }
+
+
+  redeemOrders = () => {
+    console.log( this.state.selection );
+  }
+
   toCSV = () => {
     const headers = [
       'Date', 'First Name', 'Last Name', 'Serial Number', 'Prize',
@@ -93,25 +106,34 @@ class OrdersPage extends Component {
             Load { redeemed ? 'Current' : 'Redeemed' } Orders
           </Button>
 
-          { selection.length > 0 && 
-            <Button color='primary' onClick={ this.toggleOrderStatus }>
-              <FontAwesome icon='ban'/> Cancel
-            </Button>
-          }
-          
-
-          { selection.length > 0 && redeemed && 
-            <Button color='primary' onClick={ this.toggleOrderStatus }>
-              <FontAwesome icon='undo' /> Un-redeem
-            </Button>
-          }
-          
-
           { canDownload( orders ) &&
             <Button color='primary' onClick={ this.toCSV }>
               <FontAwesome icon='file-download' /> Download Orders (CSV/Excel)
             </Button>
           }
+
+          { redeemed && 
+            <Button color='primary' 
+                onClick={ this.unredeemOrders } 
+                disabled={ selection.length === 0 }>
+              <FontAwesome icon='undo' /> Un-redeem
+            </Button>
+          }
+
+          { !redeemed && 
+            <Button color='primary' 
+                onClick={ this.redeemOrders } 
+                disabled={ selection.length === 0 }>
+              <FontAwesome icon='box' /> Redeem
+            </Button>
+          }
+
+          <Button color='primary'
+              onClick={ this.cancelOrders }
+              disabled={ selection.length === 0 }>
+            <FontAwesome icon='ban'/> Cancel
+          </Button>
+          
         </ButtonGroup>
 
         <SelectTable 
@@ -119,7 +141,7 @@ class OrdersPage extends Component {
           columns={ columns }
           pageId='OrdersPage' 
           
-          loading={ loading && !orders.length }
+          loading={ loading }
 
           getId={ this.getId }
           selection={ selection }
