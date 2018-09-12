@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { Button, ButtonGroup } from 'reactstrap';
+import { Button } from 'reactstrap';
 import OrderModal from './OrderModal';
-import { Callout, SelectTable, InlineSync, FontAwesome } from 'components/ui';
+import { ButtonBar, Callout, SelectTable, InlineSync, FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { isBC } from 'functions/login';
@@ -94,7 +94,7 @@ class OrdersPage extends Component {
           To see old orders, please press the "Load Redeemed Orders" button.
         </Callout>
 
-        <ButtonGroup>
+        <ButtonBar>
           <Button className='btn btn-primary' onClick={ this.toggleModal }>
             <FontAwesome icon='plus' /> Create Order
           </Button>
@@ -137,7 +137,7 @@ class OrdersPage extends Component {
             <FontAwesome icon='trash'/> Delete
           </Button>
           
-        </ButtonGroup>
+        </ButtonBar>
 
         <SelectTable 
           data={ orders } 

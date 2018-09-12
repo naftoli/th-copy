@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Link } from 'react-router-dom';
-import { FontAwesome } from 'components/ui';
-import { Row, Col, Input, ButtonGroup, Button } from 'reactstrap';
+import { ButtonBar, FontAwesome } from 'components/ui';
+import { Row, Col, Input, Button } from 'reactstrap';
 // functions
 import { toast } from 'react-toastify';
 import { updateAuth, removeAuth } from 'store/staff/operations';
@@ -63,14 +63,14 @@ class PositionRow extends Component {
             <Input value={ position } onChange={ this.onPositionChanged }/>
           </Col>
           <Col xs={12} sm={6}>
-            <ButtonGroup>
+            <ButtonBar>
               <Button color='primary' onClick={this.update}>
                 <FontAwesome icon='save'/> Update
               </Button>
               <Button color='danger' onClick={this.remove}>
                 <FontAwesome icon='trash'/> Remove
               </Button>
-            </ButtonGroup>
+            </ButtonBar>
           </Col>
         </Row>
       </div>

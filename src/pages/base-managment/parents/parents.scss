@@ -2,12 +2,13 @@
 
 #ParentsPage {
   height: 100%;
+  margin-bottom: 10px;
   
   .ReactTable {
-    height: calc( 100% - 160px );
+    height: calc( 100% - 180px );
     min-height: 500px;
-    @media ( max-width: 411px ) {
-      height: calc( 100% - 50px );
+    @media ( max-width: 1024px ) {
+      height: calc( 100% - 40px );
     }
   }
 }

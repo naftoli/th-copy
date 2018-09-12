@@ -1,7 +1,8 @@
-@import '../../../styles/colors.scss';
+@import 'styles/colors.scss';
 
 #UsersPage {
   height: 100%;
+  margin-bottom: 10px;
 
   .inline-profile {
     max-height: 65px;
@@ -14,11 +15,8 @@
     height: calc( 100% - 150px );
     min-height: 450px;
     // page height grows as content shrinks
-    @media ( max-width: 1012px ) {
-      height: calc( 100% - 180px ); // top of the page takes up 50px
-    }
-    @media ( min-width: 769px ) and ( max-width: 837px ) {
-      height: calc( 100% - 200px ); // top of the page takes up 50px
+    @media ( max-width: 1024px ) {
+      height: calc( 100% - 40px ); // top of the page takes up 50px
     }
     @media ( max-width: 412px ) {
       height: 100%; // top of the page takes up 50px

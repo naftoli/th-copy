@@ -23,16 +23,7 @@ a[tabindex]:hover { cursor: pointer; }
     // box-shadow: 0 0 0 0.2rem rgba(0, 97, 202, 0.5);
   }
 }
-.btn-group {
-  flex-wrap: wrap;
-  .btn {
-    white-space: normal;
-    flex-grow: 1;
-    margin: 3px;
-    border-radius: .25rem !important;
-    // &.btn-primary { border-color: #0f3373; }
-  }
-}
+
 // modal headers should use it as well
 .modal-header {
   background-color: $primary-color;
@@ -45,7 +36,10 @@ a[tabindex]:hover { cursor: pointer; }
 }
 // Change the toast colors to fit our branding
 .Toastify__toast--info { background: $primary-color; }
-.Toastify__toast-body { max-width: 95%; word-wrap: break-word; }
+.Toastify__toast-body { 
+  max-width: 95%; word-wrap: break-word;
+  &::first-letter { text-transform: capitalize; }
+}
 
 // customize react-table styles
 .ReactTable {

@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // components
 import TaskModal from './TaskModal';
+import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Button, ButtonGroup } from 'reactstrap';
-import { Table, InlineSync, FontAwesome, Number } from 'components/ui';
+import { ButtonBar, Table, InlineSync, FontAwesome, Number } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { isBC, isAdmin } from 'functions/login';
@@ -126,7 +126,7 @@ class TasksPage extends Component {
     return (
       <div id='TasksPage'>
       
-        <ButtonGroup>
+        <ButtonBar>
           <Button onClick={this.newTask} className='btn btn-primary'>
             <FontAwesome icon='plus' /> Create Task
           </Button>
@@ -138,7 +138,7 @@ class TasksPage extends Component {
               <FontAwesome icon='file-download' /> Download Tasks (CSV/Excel)
             </Button>
           }
-        </ButtonGroup>
+        </ButtonBar>
 
         <Table 
           data={ tasks } 

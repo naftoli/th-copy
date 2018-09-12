@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { Redirect } from 'react-router-dom';
-import { Button, ButtonGroup } from 'reactstrap';
+import { Button } from 'reactstrap';
 import PrizeModal from './PrizeModal';
+import { Redirect } from 'react-router-dom';
 import CropperModal from 'components/modals/CropperModal';
-import { Table, InlineSync, FontAwesome } from 'components/ui';
+import { ButtonBar, Table, InlineSync, FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { getColumns } from './include/columns';
@@ -114,7 +114,7 @@ class TemplatesPage extends Component {
 
     return (
       <div id='TemplatesPage'>
-        <ButtonGroup>
+        <ButtonBar>
           <Button className='btn btn-primary' onClick={ this.newTemplate }>
             <FontAwesome icon='plus' /> Create Template
           </Button>
@@ -126,7 +126,7 @@ class TemplatesPage extends Component {
               <FontAwesome icon='file-download' /> Download Templates (CSV/Excel)
             </Button>
           }
-        </ButtonGroup>
+        </ButtonBar>
 
         <Table 
           data={ templates } 

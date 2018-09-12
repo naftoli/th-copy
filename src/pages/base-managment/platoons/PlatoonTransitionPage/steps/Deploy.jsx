@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 // components
-import { FontAwesome } from 'components/ui';
-import { Button, ButtonGroup, Row, Col } from 'reactstrap';
+import { ButtonBar, FontAwesome } from 'components/ui';
+import { Button, Row, Col } from 'reactstrap';
 
 class Deploy extends Component {
   render() {
     return (
       <Row id='deploy'>
         <Col>
-          <ButtonGroup>
+          <ButtonBar>
             <Button color='primary' onClick={ this.props.onDeploy }>
               <FontAwesome icon="rocket" />{' '}
               Deploy Transition (Make Changes Live)
             </Button>
-          </ButtonGroup>
+          </ButtonBar>
         </Col>
       </Row>
     )

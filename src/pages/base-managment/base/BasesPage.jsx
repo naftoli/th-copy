@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // import PropTypes from 'prop-types';
 // components
+import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Button, ButtonGroup } from 'reactstrap';
 import CropperModal from 'components/modals/CropperModal';
-import { Table, InlineSync, FontAwesome, Number, ProfilePicture } from 'components/ui';
+import { 
+  ButtonBar, Table, InlineSync, FontAwesome, Number, ProfilePicture
+} from 'components/ui';
 // functions
 import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
@@ -75,7 +77,7 @@ class BasesPage extends Component {
     return (
       <div id='BasesPage'>
       
-        <ButtonGroup>
+        <ButtonBar>
           {/* <Button onClick={this.toggle} className='btn btn-primary'>
             <FontAwesome icon='plus' /> Create Base
           </Button> */}
@@ -87,7 +89,7 @@ class BasesPage extends Component {
               <FontAwesome icon='file-download' /> Download Bases (CSV/Excel)
             </Button>
           }
-        </ButtonGroup>
+        </ButtonBar>
 
         <Table 
           data={ bases } 

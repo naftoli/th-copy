@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import RankCard from './RankCard';
-import { Callout, Spinner, FontAwesome } from 'components/ui';
-import { Row, Col, Button, ButtonGroup, Alert, Input } from 'reactstrap';
+import { ButtonBar, Callout, Spinner, FontAwesome } from 'components/ui';
+import { Row, Col, Button, Alert, Input } from 'reactstrap';
 import { 
   PlatoonSelect, BaseSelect, Select, 
   Checkbox, Radio, Date 
@@ -183,7 +183,7 @@ export class RegistrationPage extends Component {
             </Checkbox>
           </Col>
           <Col xs='12'>
-            <ButtonGroup>
+            <ButtonBar>
               <Button color='primary' onClick={ this.getRankCards }>
                 <FontAwesome icon='sync-alt' spin={loading} /> Generate Rank Cards
               </Button>
@@ -205,7 +205,7 @@ export class RegistrationPage extends Component {
               <Button color='primary' onClick={ this.print }>
                <FontAwesome icon='print' /> Print
               </Button>
-            </ButtonGroup>
+            </ButtonBar>
           </Col>
         </Row>
         { loading && <Spinner size='8' /> }

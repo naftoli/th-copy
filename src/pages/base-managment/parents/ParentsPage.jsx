@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
+import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Table, Callout, FontAwesome } from 'components/ui';
-import { Button, ButtonGroup } from 'reactstrap';
 import { InlineSync } from 'components/ui/loading';
+import { ButtonBar, Table, Callout, FontAwesome } from 'components/ui';
 // modals
 import NewParentModal from './NewParentModal';
 // functions
@@ -77,7 +77,7 @@ class ParentsPage extends Component {
           <p><strong>To add / remove children please select the First or Last name and have their Serial Number ready.</strong></p>
         </Callout>
         
-        <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
+        <ButtonBar style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
           <Button onClick={this.toggle} className='btn btn-primary'>
             <FontAwesome icon='plus' /> Create Parent Account
           </Button>
@@ -89,7 +89,7 @@ class ParentsPage extends Component {
               <FontAwesome icon='file-download' /> Download Parents (CSV/Excel)
             </Button>
           }
-        </ButtonGroup>
+        </ButtonBar>
 
         <Table 
           data={ parents }

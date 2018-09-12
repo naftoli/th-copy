@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
+import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Button, ButtonGroup } from 'reactstrap';
-import { InlineSync } from 'components/ui/loading';
 import NewPlatoonModal from './newPlatoonModal';
-import { Table, Callout, FontAwesome, Number } from 'components/ui';
+import { 
+  InlineSync, ButtonBar, Table, Callout, FontAwesome, Number
+} from 'components/ui';
 // functions
 import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
@@ -60,7 +61,7 @@ export class PlatoonsPage extends Component {
         <Callout title="Platoons">
           <p><strong>To connect a Staff member to a Platoon go to the edit page by clicking on the Grade, Sub or Teacher.</strong></p>
         </Callout>
-        <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
+        <ButtonBar style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
           <Button color="primary" onClick={ this.toggle }>
             <FontAwesome icon='plus' /> Add Platoon
           </Button>
@@ -75,7 +76,7 @@ export class PlatoonsPage extends Component {
               <FontAwesome icon='file-download' /> Download Platoons (CSV/Excel)
             </Button>
           }
-        </ButtonGroup>
+        </ButtonBar>
 
         <Table 
           data={ platoons } 

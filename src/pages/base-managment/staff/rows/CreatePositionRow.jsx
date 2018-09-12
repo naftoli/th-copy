@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // components
 import { Select, BaseSelect, PlatoonSelect } from 'components/inputs'
-import { FontAwesome } from 'components/ui';
-import { Row, Col, Input, ButtonGroup, Button } from 'reactstrap';
+import { ButtonBar, FontAwesome } from 'components/ui';
+import { Row, Col, Input, Button } from 'reactstrap';
 // functions
 import classnames from 'classnames';
 import { findOption } from 'functions/selects';
@@ -88,11 +88,11 @@ class CreatePositionRow extends Component {
           {/* optional create button */}
           { showCreateButton && 
           <Col xs={12}>
-            <ButtonGroup>
+            <ButtonBar>
               <Button color='primary' onClick={this.create}>
                 <FontAwesome icon='save'/> Create Position
               </Button>
-            </ButtonGroup>
+            </ButtonBar>
           </Col>
           }
         </Row>

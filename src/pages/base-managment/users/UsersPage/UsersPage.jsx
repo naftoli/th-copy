@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 // components
 import { Link } from 'react-router-dom';
 import BulkUploadModal from './BulkUploadModal';
-import { Button, ButtonGroup } from 'reactstrap';
+import { Button } from 'reactstrap';
 import CropperModal from 'components/modals/CropperModal';
-import { Table, InlineSync, Callout, FontAwesome } from 'components/ui';
+import { ButtonBar, Table, InlineSync, Callout, FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import is from 'is_js';
@@ -92,7 +92,7 @@ export class UsersPage extends Component {
           Click on a Soldier's profile picture to edit or replace it.
         </Callout>
         {/* Action buttons */}
-        <ButtonGroup>
+        <ButtonBar>
           <Link to={`${match.path}/new`} className='btn btn-primary' role='button'>
            <FontAwesome icon='plus' /> Add Soldier
           </Link>
@@ -108,7 +108,7 @@ export class UsersPage extends Component {
               <FontAwesome icon='file-download' /> Download Soldiers (CSV/Excel)
             </Button>
           }
-        </ButtonGroup>
+        </ButtonBar>
         {/* Table with data */}
         <Table 
           columns={ columns } 

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import AchievementCard from './AchievementCard';
-import { Row, Col, Input, Button, ButtonGroup } from 'reactstrap';
-import { InlineSync, FontAwesome, Number, Callout } from 'components/ui';
+import { Row, Col, Input, Button } from 'reactstrap';
 import { SubjectSelect, AchievementTaskSelect, Date } from 'components/inputs';
+import { ButtonBar, InlineSync, FontAwesome, Number, Callout } from 'components/ui';
 // functions
 import moment from 'moment';
 import { toast } from 'react-toastify';
@@ -154,14 +154,14 @@ class CardsPage extends Component {
               </Col>
 
               <Col sm={ 6 } xl={3}>
-                <ButtonGroup>
+                <ButtonBar>
                   <Button color='primary'>
                     <InlineSync loading={ loading } /> Create
                   </Button>
                   <Button onClick={ this.print } className='btn btn-primary'>
                     <FontAwesome icon='print' /> Print
                   </Button>
-                </ButtonGroup>
+                </ButtonBar>
               </Col>
 
             </Row>
@@ -185,11 +185,9 @@ class CardsPage extends Component {
                 onChange={ this.onDateChange } />
             </Col>
             <Col sm={ 6 }>
-              <ButtonGroup>
-                <Button color='danger' onClick={ this.deleteUnused }>
-                  <FontAwesome icon='trash' /> Delete Unused Cards
-                </Button>
-              </ButtonGroup>
+              <Button color='danger' onClick={ this.deleteUnused }>
+                <FontAwesome icon='trash' /> Delete Unused Cards
+              </Button>
             </Col>
           </Row>
         </div>

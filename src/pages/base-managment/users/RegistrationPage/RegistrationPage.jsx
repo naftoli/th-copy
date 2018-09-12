@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 // components
 import { Link } from 'react-router-dom';
 import RegistrationModal from './RegistrationModal';
-import { Row, Col, Button, ButtonGroup } from 'reactstrap'; 
-import { SelectTable, Callout, InlineSync, FontAwesome } from 'components/ui';
+import { Row, Col, Button } from 'reactstrap'; 
+import { ButtonBar, SelectTable, Callout, InlineSync, FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
@@ -96,7 +96,7 @@ export class RegistrationPage extends Component {
           Please select the Soldiers you are registering.
         </Callout>
         
-        <ButtonGroup style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
+        <ButtonBar style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
           <Button color='primary' onClick={toggleModal}>
             <FontAwesome icon='dollar-sign' /> Pay and Register
           </Button>
@@ -108,7 +108,7 @@ export class RegistrationPage extends Component {
               <FontAwesome icon='file-download' /> Download Page (CSV/Excel)
             </Button>
           }
-        </ButtonGroup>
+        </ButtonBar>
         <Row>
           <Col xs='12' sm='6'>
             <h2 id='total'>

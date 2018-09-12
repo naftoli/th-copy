@@ -1,8 +1,8 @@
 import React from 'react';
 // components
-import { Row, Col, Button, ButtonGroup } from 'reactstrap';
+import { Row, Col, Button } from 'reactstrap';
 import { BaseSelect, PlatoonSelect } from 'components/inputs';
-import { FontAwesome } from 'components/ui';
+import { ButtonBar, FontAwesome } from 'components/ui';
 
 const Step3 = ({ 
   school_id, class_id, selectChange, 
@@ -24,7 +24,7 @@ const Step3 = ({
             onChange={ selectChange('class_id') } />
         </Col>
         <Col sm={12} xl={4}>
-          <ButtonGroup>
+          <ButtonBar>
             <Button color='primary' onClick={ move }>
               <FontAwesome icon="exchange-alt" />{' '}
               Transition (Move) Soldiers
@@ -33,7 +33,7 @@ const Step3 = ({
               <FontAwesome icon="trash-alt" />{' '}
               Discharge (Delete) Soldiers 
             </Button>
-          </ButtonGroup>
+          </ButtonBar>
         </Col>
       </Row>
     </div>

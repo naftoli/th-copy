@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
+import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Button, ButtonGroup } from 'reactstrap';
 import PrizeModal from './PrizeModal';
 import CropperModal from 'components/modals/CropperModal';
-import { Table, InlineSync, FontAwesome } from 'components/ui';
+import { ButtonBar, Table, InlineSync, FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { getColumns } from './include/columns';
@@ -155,7 +155,7 @@ class PrizesPage extends Component {
 
     return (
       <div id='PrizesPage'>
-        <ButtonGroup>
+        <ButtonBar>
           { !isAdmin( login.code ) &&
             <Button className='btn btn-primary' onClick={ this.newPrize }>
               <FontAwesome icon='plus' /> Create Prize
@@ -173,7 +173,7 @@ class PrizesPage extends Component {
               <FontAwesome icon='file-download' /> Download Prizes (CSV/Excel)
             </Button>
           }
-        </ButtonGroup>
+        </ButtonBar>
 
         <Table 
           data={ prizes } 
