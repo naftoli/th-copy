@@ -41,16 +41,27 @@
 
 #Resources {
   text-align: center;
-  #links a {
-    display: inline-block; width: 50%; max-width: 120px;
-    padding-bottom: 0px; padding: 3%;
-    text-align: center; color: #000;
-    font-size: .8em; transition: .25s;
+  #links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 
-    &:hover{ transform: scale( 1.1 ); }
+    a {
+      display: inline-block; width: 50%; max-width: 120px;
+      padding-bottom: 0px; padding: 3%;
+      text-align: center; color: #000;
+      font-size: .8em; transition: .25s;
 
-    @media ( min-width: 1921px ) {
-      max-width: 25%;
+      img {
+        max-height: 100px;
+      }
+
+      &:hover{ transform: scale( 1.1 ); }
+
+      @media ( min-width: 1921px ) {
+        max-width: 25%;
+      }
     }
   }
 }
