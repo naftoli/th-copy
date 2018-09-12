@@ -54,7 +54,7 @@ class OrdersPage extends Component {
   }
 
   processOrders = action => () => {
-    if ( action == 'reverse'
+    if ( action === 'reverse'
       && !window.confirm('Are you sure you want to delete and refund these orders? This action cannot be undone.')
     ) return false;
 

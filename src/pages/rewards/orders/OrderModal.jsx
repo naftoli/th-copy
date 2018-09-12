@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 // components
 import { SaveButton } from 'components/buttons';
 import { Select } from 'components/inputs';
 import { 
-  Modal, ModalHeader, ModalBody, ModalFooter,
+  Modal, ModalHeader, ModalBody,
   Row, Col, Label, Input
 } from 'reactstrap';
 // functions
-import { filterUpdates } from 'functions/events';
 import { Spinner } from 'components/ui/loading/index';
 
 class OrderModal extends Component {
