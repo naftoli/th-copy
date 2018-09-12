@@ -29,7 +29,7 @@ function updateRaffle() {
         
         // if the data is undefined (no raffle selected)
         if (raffles[0] === undefined) {
-            return false;
+            return $('div#winner_list_container').html("<h3 style='margin-top: 15px; text-align: center'>No Winners Found</h3>");
         }
         $("p#loader-status").text("Generating Table...."); // update the status on slow devices
         

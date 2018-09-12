@@ -3,6 +3,7 @@
 //ini_set("display_errors", 1);
 /***************** IMPORTS **********************/
 require_once( $_SERVER["DOCUMENT_ROOT"].'/db.php' ); // load the db so that the raffle can do its thing
+require_once( $_SERVER["DOCUMENT_ROOT"].'/class.globalSettings.php' );
 require_once( dirname(__FILE__).'/../classes/Raffle.php' );
 // namespace fixing
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
@@ -32,7 +33,7 @@ if(!$raffle_id && $_GET['v'] == 2){
     $raffle_query = mysql_query("SELECT r.* "
                                 ."FROM raffles r WHERE show_on_mobile = 1 "
                                 ." ORDER BY date_ran DESC, type "
-                                .(isset($_GET['latest']) ? "LIMIT 1 " : "LIMIT 10 "));
+                                .( isset($_GET['latest']) ? "LIMIT 1 " : "LIMIT 10 ") );
     $raffles = [];
     while($raffle_info = mysql_fetch_assoc($raffle_query)){
         $raffle = Raffle::loadFromRow($raffle_info);
@@ -40,7 +41,7 @@ if(!$raffle_id && $_GET['v'] == 2){
         $raffles[] = $raffle;
     }
 } elseif(!$raffle_id) {
-    $raffles = Raffle::loadAll("WHERE show_on_mobile = 1 ORDER BY date_ran desc, type"); // show the most recent raffles with weekly having a higher priority then monthly to maintain order
+    $raffles = Raffle::loadAll("WHERE show_on_mobile = 1 AND year = " . GlobalSettings::getCurrentYear() . " ORDER BY date_ran desc, type"); // show the most recent raffles with weekly having a higher priority then monthly to maintain order
 } else {
     $raffles = []; // create a raffles array
     $raffles[] = Raffle::load($raffle_id); // and add the raffle they asked for

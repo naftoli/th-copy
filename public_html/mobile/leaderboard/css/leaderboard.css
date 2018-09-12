@@ -1,0 +1,141 @@
+/* Filter options */
+#filters {
+    margin-top: 7px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+h2#user_position {
+    margin: 0 2%;
+    margin-top: 1%;
+    margin-bottom: 0px;
+    padding: 1% 2%;
+    font-size: 1.4em;
+    border-bottom: 1px solid #ccc;
+    transition: font-size .25s ease-in-out;
+}
+.filter > button {
+    margin-top: 20px;
+}
+.filter-title {
+    display: inline-block;
+    font-size: 1.2em;
+    margin-right: .5em;
+}
+.filter-options {
+    display: inline-flex;
+    vertical-align: middle;
+}
+.filter-option > span {
+    border: 1px solid #f68829;
+    padding: 6px 10px;
+    background: #fff;
+    transition: .25s;
+    display: inline-block;
+}
+.filter-option > span:hover{
+    cursor: pointer;
+    background: -webkit-linear-gradient(top,#ffcb9d,#f68829);
+}
+.filter-option > input[type="radio"]:checked ~ span {
+    background: -webkit-linear-gradient(top,#ffcb9d,#f68829);
+}
+.filter-option:first-child > span {
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+.filter-option:last-child > span {
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+input[type="radio"] {
+    display: none;
+}
+@media screen and (min-width: 400px) {
+    .filter-option > span {
+        padding: 6px 17px;
+    }
+}
+@media screen and (min-width: 479px) {
+    .filter-option > span {
+        padding: 6px 32px;
+    }
+}
+/* Leaderboard */
+.modal-header {
+    border-top-right-radius: 3.5px;
+    border-top-left-radius: 3.5px;
+}
+.modal-content{
+    border: none;
+}
+section#leaderboard {
+    margin-bottom: 91px;
+    text-align: center;
+}
+.user {
+    width: 95%;
+    display: inline-block;
+    padding: 2%;
+    margin: 1% 2%;
+    vertical-align: bottom;
+    border-bottom: 1px solid #ccc;
+}
+.user > img, .user div {
+    display: inline-block;
+}
+.user > img {
+    width: 20%;
+    vertical-align: top;
+}
+.user h1.position {
+    font-size: 1.5em;
+    margin-bottom: 0px;
+    vertical-align: middle;
+    font-family: monospace;
+}
+.user h2.name {
+    font-size: 1.15em;
+    margin-bottom: 0px;
+    vertical-align: middle;
+    text-transform: capitalize;
+}
+.user div.user_info {
+    width: 78%;
+    padding: 0% 2%;
+}
+.medal_count, .mission_count {
+    width: 50%;
+    margin-top: 5px;
+}
+div#load-more-box {
+    padding: 25px;
+}
+@media ( min-width: 630px ) {
+    .user {
+        width: 48%;
+        margin: 0% .5%;
+    }
+    h2#user_position {
+        font-size: 1.7em;
+    }
+}
+
+@media (min-width: 1200px) {
+    .user {
+        width: 28%;
+    }
+    h2#user_position {
+        font-size: 2em;
+    }
+}
+
+.alert-branding{
+    background-color: #f68829;
+    color: #fff; font-size: 1.2em;
+    width: 80%; max-width: 400px;
+    margin: 10% auto;
+}
+
+.modal-footer {
+    justify-content: center;
+}
