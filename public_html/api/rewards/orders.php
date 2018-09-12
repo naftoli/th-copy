@@ -43,100 +43,76 @@ class OrdersRouter {
         json_response( $orders, true, true );
     }
 
-    // public function show( $id ){
-    //     $prize = StorePrize::find( $id );
-    //     json_response( $prize );
-    // }
+    // redeem orders
+    public function redeem() {
+        global $POINTS_DB; global $current_user;
+        $ids = $_POST['user_prize_ids'];
 
-    // public function create() {
-    //     global $current_user;
-    //     $login = $current_user->login;
+        $query = $POINTS_DB->prepare(
+            'UPDATE pointsDB.user_prizes SET status="Redeemed", redeemed_by = ? WHERE user_prize_id IN ( ? )'
+        );
+        if ( !$query->execute([ $current_user->admin_id, implode( ', ', $ids ) ]) )
+            return json_error( 'Server Error: Could Not Redeem Prizes. (REWARDS-ORDERS-54)' );
+        return json_response( false );
+    }
 
-    //     try {
-    //         $prize = StorePrize::build( $_POST );
+    // unredeem orders
+    public function unredeem() {
+        global $POINTS_DB; global $current_user;
+        $ids = $_POST['user_prize_ids'];
+        
+        $query = $POINTS_DB->prepare(
+            'UPDATE pointsDB.user_prizes SET status="Checked Out", redeemed_by = null WHERE user_prize_id IN ( ? )'
+        );
+        if ( !$query->execute([ implode( ', ', $ids ) ]) )
+            return json_error( 'Server Error: Could Not Redeem Prizes. (REWARDS-ORDERS-66)' );
+        return json_response( false );
+    }
 
-    //         if ( $login['code'] == 'BC' ) {
-    //             $prize->institution_id = $login['id'];
-    //         } else if ( $login['code'] == 'TEACHER' ) {
-    //             $prize->teacher_edit = 1;
-    //             $prize->institution_id = $login['school_id'];
-    //             $prize->teacher_id = $current_user->admin_id;
-    //         }
+    // reverse orders
+    public function reverse() {
+        global $POINTS_DB; global $current_user;
 
-    //         $prize->prize_type = '';
-    //         $prize->created_by = $current_user->admin_id;
+        $ids = $_POST['user_prize_ids'];
+        $qMarks = str_repeat('?,', count($ids) - 1) . '?';
 
-    //         if ( !$prize->save() )
-    //             return json_error( $prize->errors->full_messages() );
+        // get the user_points row for the orders
+        $user_points = [];
+        $user_points_query = $POINTS_DB->prepare(
+             ' SELECT p.user_prize_id, p.user_point_id, p.points, o.prize_id, '
+            .' o.user_id, o.quantity, o.institution_id FROM pointsDB.user_points p '
+            .' JOIN pointsDB.user_prizes o USING ( user_prize_id ) WHERE user_prize_id IN ( '.$qMarks.' ) '
+        );
+        $user_points_query->execute( $ids );
+        while( $row = $user_points_query->fetch() ) {
+            $user_points[ $row['user_prize_id'] ] = $row;
+        }
 
-    //         // update prize_classes table
-    //         if ( isset( $_POST['platoons'] )
-    //             && !$prize->setPlatoons( $_POST['platoons'] ) 
-    //         ) return json_error( 'Error limiting to Platoons');
+        // reverse the orders
+        $reverse_orders_query = $POINTS_DB->prepare(
+            'UPDATE pointsDB.user_prizes SET is_reversed = 1, reversed_by = ? WHERE user_prize_id IN ( '.$qMarks.' )'
+        );
+        if ( !$reverse_orders_query->execute( array_merge([ $current_user->admin_id ], $ids )) )
+            return json_error( 'Server Error: Could Not Reverse Orders. (REWARDS-ORDERS-87)' );
+        
+        // return the points and update the stock for each prize
+        $reverse_points_query = $POINTS_DB->prepare(
+             ' INSERT INTO user_points '
+            .' (reversed_user_point_id, points, prize_id, user_prize_id, user_id, institution_id, resource_name) '
+            .' VALUES (?, ?, ?, ?, ?, ?, "transaction_manager_store")'
+        );
+        foreach( $user_points as $row ) {
+            $POINTS_DB->query(
+                'UPDATE pointsDB.prizes SET prize_count = prize_count + '.$row['quantity'] . ' WHERE prize_id = '.$row['prize_id']
+            );
+            $reverse_points_query->execute([
+                $row['user_point_id'], $row['points'] * -1, $row['prize_id'],
+                $row['user_prize_id'], $row['user_id'], $row['institution_id']
+            ]);
+        }
 
-    //         if ( $login['code'] == 'TEACHER'
-    //             && !$prize->setPlatoons([ $login['id'] ])
-    //         ) return json_error( 'Error connecting to Platoon, Please contact Base Commander');
-
-    //         // return the prize as the response
-    //         return json_response( $prize );
-    //     // send all errors as text
-    //     } catch ( Exception $e ) {
-    //         return json_error( $e->getMessage() );
-    //     }
-    // }
-
-    // public function update( $id ) {
-    //     try {
-    //         $prize = StorePrize::find( $id );
-    //         // update profile picture
-    //         if( isset( $_FILES['image'] ) ) {
-    //             $prize->setImage( $_FILES['image'] );
-    //         }
-    //         // blulk update valid params
-    //         $prize->bulkUpdate( $_POST );
-
-    //         if ( !$prize->save() )
-    //             return json_error( $prize->errors->full_messages() );
-
-    //         // update prize_classes table
-    //         if (
-    //             isset( $_POST['platoons'] ) && 
-    //             !$prize->setPlatoons( $_POST['platoons'] ) 
-    //         ) return json_error( 'Could connect Platoons');
-
-    //         // return the prize as the response
-    //         return json_response( $prize );
-    //     // send all errors as text
-    //     } catch ( Exception $e ) {
-    //         return json_error( $e->getMessage() );
-    //     }
-    // }
-
-    // public function uploadImage() {
-    //     global $current_user;
-    //     if ( isset( $_FILES['image'] ) ) {
-    //         $result = StorePrize::uploadImage( $current_user->admin_id, $_FILES['image'] );
-    //         json_response([
-    //             'image' => StorePrize::IMG_PATH . $result,
-    //             'image_id' => $result
-    //         ]);
-    //     }
-    //     json_error('Server did not get the prize image.');
-    // }
-
-    // public function setStoreOpen() {
-    //     global $current_user;
-
-    //     $school = School::find( $current_user->login['id'] );
-
-    //     $school->school_store = $_POST['school_store'];
-    //     $school->save();
-
-    //     json_response([
-    //         'school_store' => $school->school_store
-    //     ]);
-    // }
+        return json_response( false );
+    }
 }
 
 rest_router( new OrdersRouter );
