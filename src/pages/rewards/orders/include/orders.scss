@@ -4,7 +4,8 @@
   height: 100%;
   
   .ReactTable {
-    height: calc( 100% - 40px );
+    max-height: calc( 100% - 40px );
+    min-height: 80%;
     @media ( max-width: 500px ) {
       height: 100%;
     }

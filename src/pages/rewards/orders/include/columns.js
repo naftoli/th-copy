@@ -13,7 +13,7 @@ export function getColumns( bc ) {
     { Header: 'Last Name', accessor: 'last' },
     { Header: 'Prize', accessor: 'prize_name' },
 
-    { Header: 'Miles', accessor: 'total', Cell: props => <Number value={ props.value }/> },
+    { Header: 'Miles', accessor: 'total', Cell: props => <Number value={ props.value * -1 }/> },
     { Header: 'Qty', accessor: 'quantity', Cell: props => <Number value={props.value}/> },
   ];
 
