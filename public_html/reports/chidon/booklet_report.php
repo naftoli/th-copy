@@ -18,7 +18,7 @@ if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) &
     $to = mysql_real_escape_string( $_POST['toDate'] );
     $qry .= "AND rc.date >= '" . $from . " 00:00:00' AND rc.date <= '" . $to . " 23:59:59' ";
 }
-$qry .= " AND rc.school_id NOT IN (55, 66, 110, 112, 180, 256, 61) ";
+$qry .= " AND rc.school_id NOT IN (55, 66, 110, 112, 180, 256, 61, 269) ";
 $qry .= "ORDER BY school_name, first, last, date";
 //echo $qry;
 $booklet_users_query = mysql_query( $qry );
