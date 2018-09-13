@@ -14,12 +14,20 @@
 }
 
 #OrderModal {
+  max-width: 700px;
+
+  label { margin-top: 0px; }
+
   #total-row {
     align-items: flex-end;
-    p {
+    margin-bottom: 0px;
+    label { margin-bottom: 0px; margin-top: 8px; }
+    span.total {
+      display: block;
       margin-bottom: 0px;
       font-weight: bold;
-      font-size: 1.1em;
+      font-size: 1.5em;
+      font-family: monospace;
     }
   }
 }

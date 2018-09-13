@@ -17,7 +17,8 @@ export const processOrders = ( action, user_prize_ids ) => dispatch => {
 
 
 export const getStore = user_id => dispatch => {
+  dispatch( actions.setStore( false ) )
   return API.post( `/rewards/orders?action=store`, { user_id } )
   .then( handleAPIResponse )
-  .then( store => actions.setStore( store ) )
+  .then( store => dispatch( actions.setStore( store ) ) )
 }

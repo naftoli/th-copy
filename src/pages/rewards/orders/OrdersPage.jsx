@@ -3,11 +3,12 @@ import { connect } from 'react-redux';
 // components
 import { Button } from 'reactstrap';
 import OrderModal from './OrderModal';
+import { Redirect } from 'react-router-dom';
 import { ButtonBar, Callout, SelectTable, InlineSync, FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
-import { isBC } from 'functions/login';
 import { getColumns } from './include/columns';
+import { isBC, isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { createNotifcation, updateNotifcation } from 'functions/notifications';
 // state
@@ -59,7 +60,7 @@ class OrdersPage extends Component {
     ) return false;
 
     const order_count = this.state.selection.length;
-    const toast_id = createNotifcation( `${action}ing ${order_count} orders.` );
+    const toast_id = createNotifcation( `Updating ${order_count} orders.` );
 
     this.props.processOrders( action, this.state.selection )
     .then( () => updateNotifcation( toast_id, `${order_count} orders updated!` ) )
@@ -81,6 +82,10 @@ class OrdersPage extends Component {
   }
 
   render() {
+    // non-admins go to their prizes
+    if ( isAdmin( this.props.login.code ) )
+      return <Redirect to='/rewards/templates' />;
+
     const { modal, selection, redeemed } = this.state;
     const { orders, loading, login } = this.props;
 
@@ -153,6 +158,7 @@ class OrdersPage extends Component {
           toggleAll={ this.toggleAll } />
 
         <OrderModal
+          login={ login }
           isOpen={ modal }
           toggle={ this.toggleModal } />
 
