@@ -1,9 +1,11 @@
 <?php
 include_once( __DIR__ . "/../tools/functions/format/parents.php" );
 include_once( __DIR__ . '/../tools/functions/files/images.php' );
-require_once( __DIR__ . '/../../calendar.php' );
 include_once( __DIR__ . '/../auth/classes/Auth.php' );
 include_once( __DIR__ . '/traits/BuildModel.php' );
+// LEGACY CODE
+require_once( __DIR__ . '/../../calendar.php' );
+require_once( __DIR__ . '/../../class.points.php' );
 
 class User extends ActiveRecord\Model implements JsonSerializable {
     use \traits\BuildModel;
@@ -21,8 +23,9 @@ class User extends ActiveRecord\Model implements JsonSerializable {
     ];
 
     // cache
-    private $miles;
-    private $rank;
+    private $miles; // total miles that the user has earned
+    private $store_miles; // miles available for the store
+    private $rank; // the users current rank
 
     // Access validation - takes a login and returns true or false if it can access the user
     public function validateAccess( $login ){
@@ -65,15 +68,17 @@ class User extends ActiveRecord\Model implements JsonSerializable {
 
     // get the current miles
     public function miles( $force_refresh = false ) {
-        global $MASHPIA_DB;
-        
-        if ( $this->miles && !$force_refresh ) return $this->miles;
-        
-        $query = $MASHPIA_DB->prepare(
-            'SELECT SUM( mark_points ) miles FROM date_tasks_marks WHERE user_id = ?'
-        );
-        $query->execute([ $this->user_id ]);
-        return $this->miles = intval( $query->fetch()['miles'] );
+        if ( $this->miles && !$force_refresh )
+            return $this->miles;
+        $points = new Points( $this->user_id );
+        return $this->miles = $points->getTotalPoints();
+    }
+    // get what they can spend in the store
+    public function storeMiles( $force_refresh = false ) {
+        if ( $this->store_miles && !$force_refresh )
+            return $this->store_miles;
+        $points = new Points( $this->user_id );
+        return $this->store_miles = $points->getStorePoints();
     }
 
     // ******************************* CHAYOLEI BOARDS ******************************* //

@@ -1,4 +1,6 @@
 <?php
+require_once( __DIR__ . '/db.php' ); // make sure that db.php is loaded in as we rely on some functions...
+
 class Points
 {
     private $user_id;

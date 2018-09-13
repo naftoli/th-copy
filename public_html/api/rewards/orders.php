@@ -43,6 +43,105 @@ class OrdersRouter {
         json_response( $orders, true, true );
     }
 
+    // get store for a single user
+    public function store() {
+        if ( !isset( $_POST['user_id']) )
+            return json_error('Missing user id');
+
+        $user = User::find( $_POST['user_id'] );
+
+        $prizes = StorePrize::find('all', [
+            'select' => 'prizes.*, COUNT(user_prize_id) AS ordered ',
+            'conditions' => 'is_active = 1 AND prize_count > 0 '
+                .' AND prizes.institution_id = '.$user->school_id
+                .' AND (class_id IS NULL ' . ( $user->class_id ? 'OR class_id = ' . $user->class_id : '' ) . ') ',
+            'joins' => 'LEFT JOIN prize_classes USING (prize_id) '
+                .'LEFT JOIN user_prizes ON prizes.prize_id = user_prizes.prize_id '
+                .'AND is_reversed = 0 AND user_id = ' . $user->user_id,
+            'group' => 'prizes.prize_id',
+            'having' => '(one_per_user = 0 OR ordered = 0)',
+            'order' => 'points, prize_name',
+            'include' => [ 'school' ]
+        ]);
+
+        json_response([
+            'miles' => $user->storeMiles(),
+            'prizes' => $prizes
+        ]);
+    }
+
+    // place an order
+    public function order() {
+        global $POINTS_DB;
+        // get the post params
+        $user = User::find( $_POST['user_id'] );
+        $qty = intval( $_POST['qty'] );
+        $prize = $_POST['prize'];
+        if ( $qty <= 0 )
+            return json_error('Cannot order 0 prizes.');
+        // make sure they have the money
+        $total = intval( $prize['points'] ) * $qty;
+        if ( $total > $user->storeMiles() )
+            return json_error('Not Enough Miles');
+
+        // generate order number
+        $order_number = $POINTS_DB->query(
+            "SELECT serial FROM ( "
+                ."SELECT ROUND(RAND() * 9999999999) AS serial FROM user_prizes WHERE 'serial' NOT IN ( "
+                    ."SELECT serial FROM user_prizes "
+                .") "
+            .") AS numbers HAVING LENGTH(serial) = 10 LIMIT 1;"
+        )->fetch()['serial'];
+
+        // update user_prizes
+        $order_query = $POINTS_DB->prepare(
+            'INSERT INTO user_prizes '
+            .'(prize_id, user_id, institution_id, quantity, serial) '
+            .'VALUES ( ?, ?, ?, ?, ? )'
+        );
+        $status = $order_query->execute([
+            $prize['prize_id'], $user->user_id,
+            $user->school_id, $qty, $order_number
+        ]);
+        if ( !$status ) return json_error( 'Could not create order' );
+
+        $user_prize_id = $POINTS_DB->lastInsertId();
+
+        // update user_points
+        $user_points = $POINTS_DB->prepare(
+            'INSERT INTO user_points '
+            .'(prize_id, user_prize_id, user_id, institution_id, points, resource_name) '
+            .'VALUES ( ?, ?, ?, ?, ?, "store" )'
+        );
+        $status = $user_points->execute([
+            $prize['prize_id'], $user_prize_id, 
+            $user->user_id, $user->school_id, $total * -1
+        ]);
+        if ( !$status ) return json_error( 'Could not subtract points' );
+
+        // update stock
+        $stock_query = $POINTS_DB->prepare(
+            'UPDATE prizes SET prize_count = prize_count - ? WHERE prize_id = ?'
+        );
+        if ( !$stock_query->execute([ $qty, $prize['prize_id'] ]) )
+            return json_error('Could not update stock');
+
+        // return a the order for the client
+        json_response([
+            'created' => date("Y-m-d H:i:s"),
+            'first' => $user->first,
+            'last' => $user->last,
+            'platoon' => $user->platoon->name(),
+            'points' => $prize['points'],
+            'prize_name' => $prize['prize_name'],
+            'quantity' => $qty,
+            'status' => "Checked Out",
+            'total' => $total * -1,
+            'user_prize_id' => $user_prize_id,
+            'user_serial' => $user->user_serial
+        ]);
+    }
+
     // redeem orders
     public function redeem() {
         global $POINTS_DB; global $current_user;
@@ -70,7 +169,7 @@ class OrdersRouter {
     }
 
     // reverse orders
-    public function reverse() {
+    public function delete() {
         global $POINTS_DB; global $current_user;
 
         $ids = $_POST['user_prize_ids'];
