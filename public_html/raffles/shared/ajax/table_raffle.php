@@ -42,7 +42,7 @@ $raffles = Raffle::loadAll($filter);
 <table>
     <thead>
         <tr>
-            <th>Name</th><th>Prizes</th><th>Type</th><th>Run Date</th><th>Starts On</th><th>Ends On</th><th>Ran On</th><th>Actions</th>
+            <th>Name</th><th>Prizes</th><th>Type</th><th>Starts On</th><th>Ends On</th><th>Run Date</th><th>Ran On</th><th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -61,9 +61,9 @@ $raffles = Raffle::loadAll($filter);
                 }
                 ?></td>
                 <td><?=$raffle->type?></td>
-                <td><?=$raffle->run_date->format('m/d/Y')?></td>
                 <td><?=formatJdToDate($raffle->start_date, "m/d/Y")?></td>
                 <td><?=formatJdToDate($raffle->end_date, "m/d/Y")?></td>
+                <td><?=$raffle->run_date->format('m/d/Y')?></td>
                 <td><?=($raffle->date_ran ? $raffle->date_ran->format('m/d/Y') : "N/A")?></td>
                 <td>
                     <a href="raffle_form.php?action=edit&raffle_id=<?=$raffle->raffle_id.($debug ? "&debug=true" : "")?>" class='button'>View/Edit</a>
