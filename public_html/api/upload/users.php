@@ -129,13 +129,17 @@ class UsersUploadRouter {
                         } catch ( Exception $e ) {
                             $errors[] ="$errorString Date of Birth must follow the format MM/DD/YYYY.";
                         }
-                        // check that it is in our year range
-                        $year = date('Y');
-                        $startYear = $year - 5; $endYear = $year - 15;
-                        if ( $dob->format('Y') > $startYear || $dob->format('Y') < $endYear ) {
-                            $errors[] ="$errorString Date of Birth must be between $startYear and $endYear. Year is " . $dob->format('Y');
+                        if ( $dob instanceof \DateTime ) {
+                            // check that it is in our year range
+                            $year = date('Y');
+                            $startYear = $year - 5; $endYear = $year - 15;
+                            if ( $dob->format('Y') > $startYear || $dob->format('Y') < $endYear ) {
+                                $errors[] ="$errorString Date of Birth must be between $startYear and $endYear. Year is " . $dob->format('Y');
+                            }
+                            $value = $dob->format('Y-m-d');
+                        } else {
+                            $errors[] ="$errorString Date of Birth must follow the format MM/DD/YYYY.";
                         }
-                        $value = $dob->format('Y-m-d');
                     }
 
                     // validate mission type
