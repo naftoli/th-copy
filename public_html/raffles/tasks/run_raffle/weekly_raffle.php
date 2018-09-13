@@ -106,30 +106,30 @@ function weekly_raffle($raffle){
     } // end round one
     
     /************************** ROUND TWO: GIVE ALL THE EXTRA PRIZES TO MYSHLIACH CHILDEREN **************************/
-    echo "\nDrawing the extra prizes from MyShliach...\n";
-    echo "School\t Draw #\t Result\t\t\tusers left\t\tprizes left\t\tunique prizes left\n";
+    // echo "\nDrawing the extra prizes from MyShliach...\n";
+    // echo "School\t Draw #\t Result\t\t\tusers left\t\tprizes left\t\tunique prizes left\n";
     
-    $myshliach = $schools[61]; // get the myshlicah school
-    $myshliach_limit = 4;
-    while (count($myshliach) > 0 && count($prizes) > 0 && $myshliach_limit-- > 0) {
-        $user = $myshliach[array_rand($myshliach)];   // get a random id from the array of user arrays (keys)
-        $draw_num++; // count up the drawing
-        // make sure that a simbling did not win...
-        if(!check_first_in_family($user, $winning_families) && count($user_ids) <= $school_limits[$school_id]){
-            echo $user['school_id']."\t#".$draw_num."\t".$user['user_id'] . " is currently ineligible. Sibling (user_id: ".$winning_families[$user['admin_id']].") has already won. Removing from raffle\n";
-            continue; // go to the next draw
-        }
-        unset($myshliach[$user['user_id']]); // remove the user from the array
-        // select a prize
-        $prize = $prizes[array_rand($prizes)]; // get a prize;
-        $prize->qty -= 1;   $total_prizes--; // remove the prize from the counters
-        // remove the prize if it was already picked...
-        if($prize->qty == 0) unset($prizes[$prize->prize_id]);
+    // $myshliach = $schools[61]; // get the myshlicah school
+    // $myshliach_limit = 4;
+    // while (count($myshliach) > 0 && count($prizes) > 0 && $myshliach_limit-- > 0) {
+    //     $user = $myshliach[array_rand($myshliach)];   // get a random id from the array of user arrays (keys)
+    //     $draw_num++; // count up the drawing
+    //     // make sure that a simbling did not win...
+    //     if(!check_first_in_family($user, $winning_families) && count($user_ids) <= $school_limits[$school_id]){
+    //         echo $user['school_id']."\t#".$draw_num."\t".$user['user_id'] . " is currently ineligible. Sibling (user_id: ".$winning_families[$user['admin_id']].") has already won. Removing from raffle\n";
+    //         continue; // go to the next draw
+    //     }
+    //     unset($myshliach[$user['user_id']]); // remove the user from the array
+    //     // select a prize
+    //     $prize = $prizes[array_rand($prizes)]; // get a prize;
+    //     $prize->qty -= 1;   $total_prizes--; // remove the prize from the counters
+    //     // remove the prize if it was already picked...
+    //     if($prize->qty == 0) unset($prizes[$prize->prize_id]);
         
-        $winners[] = ['user_id' => $user['user_id'], 'school_id' => $user['school_id'], 'prize_id' => $prize->prize_id];
-        echo $user['school_id']."\t#".$draw_num."\t".$user['user_id']." won prize_id ".$prize->prize_id."\t"
-            .count($user_ids)." users left\t\t"."$total_prizes prizes left\t\t".count($prizes)." unique prizes left\n";
-    } // end round two...
+    //     $winners[] = ['user_id' => $user['user_id'], 'school_id' => $user['school_id'], 'prize_id' => $prize->prize_id];
+    //     echo $user['school_id']."\t#".$draw_num."\t".$user['user_id']." won prize_id ".$prize->prize_id."\t"
+    //         .count($user_ids)." users left\t\t"."$total_prizes prizes left\t\t".count($prizes)." unique prizes left\n";
+    // } // end round two...
     
     /************************** ROUND THREE: GIVE ALL THE EXTRA PRIZES TO NON-SIBLINGS **************************/
     //echo "\nDrawing the extra prizes from remaining users (non-siblings)...\n";
