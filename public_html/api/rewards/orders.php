@@ -43,6 +43,31 @@ class OrdersRouter {
         json_response( $orders, true, true );
     }
 
+    // get store for a single user
+    public function store() {
+        if ( !isset( $_POST['user_id']) )
+            return json_error('Missing user id');
+
+        $user = User::find( $_POST['user_id'] );
+        
+        $filter = 'is_active = 1 AND prize_count > 0 '
+            .' AND institution_id = '.$user->school_id
+            .' AND (class_id IS NULL ' . ( $user->class_id ? 'OR class_id = ' . $user->class_id : '' ) . ') ';
+
+        $prizes = StorePrize::find('all', [
+            'conditions' => $filter,
+            'select' => 'prizes.*',
+            'joins' => 'LEFT JOIN prize_classes USING (prize_id)',
+            'order' => 'points, prize_name',
+            'include' => [ 'school' ]
+        ]);
+
+        json_response([
+            'miles' => $user->storeMiles(),
+            'prizes' => $prizes
+        ]);
+    }
+
     // redeem orders
     public function redeem() {
         global $POINTS_DB; global $current_user;

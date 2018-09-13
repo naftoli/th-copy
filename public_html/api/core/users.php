@@ -43,6 +43,23 @@ class UsersRouter {
         json_response( $users );
     }
 
+    public function small(){
+        global $MASHPIA_DB;
+        // get the class_id
+        $class_id = isset( $_POST['class_id'] ) ? $_POST['class_id'] : false;
+        if ( !$class_id ) return json_response([]);
+        // get the platoons
+        $query = $MASHPIA_DB->prepare( 'SELECT class_id, user_id, user_serial, first, last FROM users WHERE class_id=:class_id;' );
+        $query->execute([':class_id' => $class_id]);
+        $soldiers = $query->fetchAll();
+        // serialize the platoons
+        $soldiers = array_map(function ( $soldier ){
+            $soldier['name'] = $soldier['user_serial'].': '.$soldier['first'].', '.$soldier['last'];
+            return $soldier;
+        }, $soldiers );
+        return json_response( $soldiers, true, true );
+    }
+
     public function show( $id ) {
         global $current_user;
         try {
