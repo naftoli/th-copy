@@ -98,7 +98,6 @@ function get_hachayol_shipping($school_id, $hachayol_id = false){
 function get_extra_hachayols($school_id, $current_amount=false){
     $extras = [
         265 => reduce_to_total($current_amount, 65),  // Lubavitch Girls London requested only 65 via email to shipping@tzivoshashem.org
-        89  => reduce_to_total($current_amount, 51), // Cheder Chabad Philadelphia Via Ester Zachar on 3/27/2017
         // 54  => reduce_to_total($current_amount, 580),  // wants 580 (550 before 1/3/2018) in each shipment. no matter what
         3   => reduce_to_total($current_amount, 110), // Lubavitch Boys London
         58  => 45,   // YTTL-Montreal
