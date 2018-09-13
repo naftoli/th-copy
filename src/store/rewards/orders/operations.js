@@ -14,3 +14,10 @@ export const getOrders = ( redeemed = false ) => dispatch => {
 export const processOrders = ( action, user_prize_ids ) => dispatch => {
   return API.post( `/rewards/orders?action=${action}`, { user_prize_ids } )
 }
+
+
+export const getStore = user_id => dispatch => {
+  return API.post( `/rewards/orders?action=store`, { user_id } )
+  .then( handleAPIResponse )
+  .then( store => actions.setStore( store ) )
+}

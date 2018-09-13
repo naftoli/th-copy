@@ -1,4 +1,4 @@
-import API from 'api/api';
+import API, { handleAPIResponse } from 'api/api';
 import { createNotifcation, updateNotifcation } from 'functions/notifications';
 import * as actions from './actions';
 
@@ -75,4 +75,12 @@ export const uploadSpreadsheet = ( data ) => dispatch => {
       console.error( error );
       return Promise.reject( error );
     });
+}
+
+/**
+ * this function is used in platoonSelect only
+ */
+export const getSoldierList = ( class_id = false ) => {
+  return API.post( `/core/users?action=small`, { class_id } )
+  .then( handleAPIResponse );
 }

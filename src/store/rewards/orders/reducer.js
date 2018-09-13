@@ -2,7 +2,8 @@ import * as types from './types';
 
 export const initialState = {
   loading: false,
-  orders: []
+  orders: [],
+  store: false
 };
 
 export default ( state = initialState, action ) => {
@@ -19,6 +20,12 @@ export default ( state = initialState, action ) => {
         ...state, 
         orders: action.payload, 
         loading: false
+      };
+
+    case types.SET_STORE:
+      return { 
+        ...state, 
+        store: action.payload, 
       };
 
     default:

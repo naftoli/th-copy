@@ -13,3 +13,10 @@ export const setOrders = orders => {
     payload: orders
   }
 };
+
+export const setStore = store => {
+  return {
+    type: types.SET_STORE,
+    payload: store
+  }
+};
