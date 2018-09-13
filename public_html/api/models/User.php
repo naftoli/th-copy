@@ -193,13 +193,13 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         return $result;
     }
     // returns array with the status of the various registration types for the current year.
-    public function registrationStatus( $year = false, $chidon_year = false ) {
+    public function registrationStatus( $year = false, $chidon_year = false, $isBC = false ) {
         global $MASHPIA_DB;
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
         $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getRegistrationYear();
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
-            "SELECT user_reg_id, chayolei, th_chidon_id, chidon FROM users u "
+            "SELECT user_reg_id, ur.paid, chayolei, th_chidon_id, chidon FROM users u "
             ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = :year "
             ."LEFT JOIN th_chidon tc ON tc.user_id = u.user_id AND tc.year = :chidon_year "
             ."WHERE u.user_id = :user_id;"
@@ -209,8 +209,11 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         
         $result = [];
 
-        if ( $row['chayolei'] )
+        if ( $row['chayolei'] && !$isBC ) {
             $result[ 'chayolei' ] = !!$row['user_reg_id'];
+        } else if ( $row['chayolei'] ) {
+            $result[ 'chayolei' ] = !!$row['user_reg_id'] && $row['paid'] > 0;
+        }
         
         // only add th_chidon_id if the user is in grade 4+
         if ( $this->platoon && $this->platoon->class_grade >= 4 && $row['chidon'] )
