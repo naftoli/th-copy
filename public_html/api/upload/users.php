@@ -126,10 +126,6 @@ class UsersUploadRouter {
                         // make sure it is a valid date
                         try {
                             $dob = new \DateTime( $dob );
-                        } catch ( Exception $e ) {
-                            $errors[] ="$errorString Date of Birth must follow the format MM/DD/YYYY.";
-                        }
-                        if ( $dob instanceof \DateTime ) {
                             // check that it is in our year range
                             $year = date('Y');
                             $startYear = $year - 5; $endYear = $year - 15;
@@ -137,7 +133,7 @@ class UsersUploadRouter {
                                 $errors[] ="$errorString Date of Birth must be between $startYear and $endYear. Year is " . $dob->format('Y');
                             }
                             $value = $dob->format('Y-m-d');
-                        } else {
+                        } catch ( Exception $e ) {
                             $errors[] ="$errorString Date of Birth must follow the format MM/DD/YYYY.";
                         }
                     }
