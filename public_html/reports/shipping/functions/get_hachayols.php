@@ -101,7 +101,6 @@ function get_extra_hachayols($school_id, $current_amount=false){
         89  => reduce_to_total($current_amount, 51), // Cheder Chabad Philadelphia Via Ester Zachar on 3/27/2017
         // 54  => reduce_to_total($current_amount, 580),  // wants 580 (550 before 1/3/2018) in each shipment. no matter what
         3   => reduce_to_total($current_amount, 110), // Lubavitch Boys London
-        84  => 75,    // Torah Day School of Houston
         58  => 45,   // YTTL-Montreal
         9   => 20   // Lubavitcher Yeshiva, Crown Heights => requested by Ester Zachar via Email to bugs@tzivoshashem.org on 2/27/2018
     ];
