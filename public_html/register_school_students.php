@@ -147,12 +147,14 @@ if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['
 			<tbody>
             <?php 
             foreach ($users as $user) {
-				$registered = $user->user_registered ? "registered" : "unregistered";
+				if ( !$user->chayolei )
+					continue;
+				$registered = $user->registrationStatus(false, false, true)['chayolei'];
                 $class = ($row_no % 2 == 0) ? "even" : "odd"; ?>
-				<tr name="student_row" id="<?=$registered;?>" class="<?=$class;?>" data="<?=$user->user_id;?>">
+				<tr name="student_row" id="<?=$registered ? "registered" : "unregistered" ?>" class="<?=$class;?>" data="<?=$user->user_id;?>">
 					<td name="user_registered" id="user_registered" width='20%'>
                         <?php
-                            if ($user->user_registered) {
+                            if ($registered) {
                                 echo 'Registered';
                                 $class = "registered";
                             } else {
@@ -164,7 +166,7 @@ if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['
 						
 					<td width='25%'>
 						<div class="checkboxes" id="<?=$user->user_id;?>" name="<?=$user->user_id;?>">
-							<?php if ($user->user_registered) { ?>
+							<?php if ($registered) { ?>
 								<input type="hidden" name="registration_fee" id="registration_fee" value='registered'>
                             <?php } else { ?>
 								<input type="checkbox" name="registration_fee" id="registration_fee">
