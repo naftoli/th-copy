@@ -18,6 +18,7 @@ if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) &
     $to = mysql_real_escape_string( $_POST['toDate'] );
     $qry .= "AND rc.date >= '" . $from . " 00:00:00' AND rc.date <= '" . $to . " 23:59:59' ";
 }
+$qry .= " AND rc.school_id NOT IN (55, 66, 110, 112, 180, 256, 61) ";
 $qry .= "ORDER BY school_name, first, last, date";
 //echo $qry;
 $booklet_users_query = mysql_query( $qry );
@@ -62,8 +63,12 @@ $booklet_grand_totals = [
             To have report based on dates, choose starting and ending dates and then click "Refresh Report"
         </p>  
         <p>  
-            From Date: <input type="date" name="fromDate" /> 
-            To Date: <input type="date" name="toDate" />
+            From Date: <input type="date" name="fromDate" 
+            <?php if (isset( $_POST['fromDate'] )) echo "value='" . $_POST['fromDate'] . "'"; ?>
+            /> 
+            To Date: <input type="date" name="toDate" 
+            <?php if (isset( $_POST['toDate'] )) echo "value='" . $_POST['toDate'] . "'"; ?>
+            />
         </p>
         <input type="submit" name="submit" value="Refresh Report" />
     </form>
