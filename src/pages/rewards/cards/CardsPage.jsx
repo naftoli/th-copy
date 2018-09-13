@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import AchievementCard from './AchievementCard';
-import { Row, Col, Input, Button } from 'reactstrap';
+import { Row, Col, Input, Button, ButtonGroup } from 'reactstrap';
 import { SubjectSelect, AchievementTaskSelect, Date } from 'components/inputs';
 import { ButtonBar, InlineSync, FontAwesome, Number, Callout } from 'components/ui';
 // functions
@@ -185,9 +185,11 @@ class CardsPage extends Component {
                 onChange={ this.onDateChange } />
             </Col>
             <Col sm={ 6 }>
-              <Button color='danger' onClick={ this.deleteUnused }>
-                <FontAwesome icon='trash' /> Delete Unused Cards
-              </Button>
+              <ButtonGroup>
+                <Button color='danger' onClick={ this.deleteUnused }>
+                  <FontAwesome icon='trash' /> Delete Unused Cards
+                </Button>
+              </ButtonGroup>
             </Col>
           </Row>
         </div>

@@ -18,6 +18,10 @@
     @media print { margin: 0px; text-align: left; }
     // grid-template-columns: repeat( auto-fit, minmax( 86mm, 1fr ) );
   }
+
+  #delete{
+    align-items: flex-end;
+  }
 }
 
 .AchievementCard {
