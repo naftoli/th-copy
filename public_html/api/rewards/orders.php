@@ -49,15 +49,17 @@ class OrdersRouter {
             return json_error('Missing user id');
 
         $user = User::find( $_POST['user_id'] );
-        
-        $filter = 'is_active = 1 AND prize_count > 0 '
-            .' AND institution_id = '.$user->school_id
-            .' AND (class_id IS NULL ' . ( $user->class_id ? 'OR class_id = ' . $user->class_id : '' ) . ') ';
 
         $prizes = StorePrize::find('all', [
-            'conditions' => $filter,
-            'select' => 'prizes.*',
-            'joins' => 'LEFT JOIN prize_classes USING (prize_id)',
+            'select' => 'prizes.*, COUNT(user_prize_id) AS ordered ',
+            'conditions' => 'is_active = 1 AND prize_count > 0 '
+                .' AND prizes.institution_id = '.$user->school_id
+                .' AND (class_id IS NULL ' . ( $user->class_id ? 'OR class_id = ' . $user->class_id : '' ) . ') ',
+            'joins' => 'LEFT JOIN prize_classes USING (prize_id) '
+                .'LEFT JOIN user_prizes ON prizes.prize_id = user_prizes.prize_id '
+                .'AND is_reversed = 0 AND user_id = ' . $user->user_id,
+            'group' => 'prizes.prize_id',
+            'having' => '(one_per_user = 0 OR ordered = 0)',
             'order' => 'points, prize_name',
             'include' => [ 'school' ]
         ]);
