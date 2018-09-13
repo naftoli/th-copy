@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // components
-
 import { Spinner } from 'components/ui';
+import { OrderForm } from './OrderForm';
 import { PlatoonSelect, SoldierSelect } from 'components/inputs';
 import { Modal, ModalHeader, ModalBody, Row, Col, Label, Collapse } from 'reactstrap';
 // functions
 import { toast } from 'react-toastify';
 import { isBC } from 'functions/login';
-import { getStore } from 'store/rewards/orders/operations';
-import { OrderForm } from './OrderForm'
+import { getStore, placeOrder } from 'store/rewards/orders/operations';
 
 const initialState = {
   class_id: false,  user_id: false,
-  loading: false, prize: false, qty: 1
+  loading: false, prize: false,
+  saving: false, qty: 1
 }
 
 class OrderModal extends Component {
@@ -22,7 +22,6 @@ class OrderModal extends Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
     toggle: PropTypes.func.isRequired,
-    // onSubmit: PropTypes.func.isRequired
   };
   // clear state on update
   componentDidUpdate({ isOpen }) {
@@ -58,12 +57,17 @@ class OrderModal extends Component {
 
   onSubmit = ( e ) => {
     e.preventDefault();
-    debugger;
+    this.setState({ saving: true })
+
+    this.props.placeOrder( this.state )
+    .then( this.props.toggle )
+    .catch( e => toast.error( e.message ) )
+    .then( () => this.setState({ saving: false }) )
   }
 
   render(){
     let { isOpen, login, toggle, store } = this.props;
-    const { loading, class_id, user_id, prize, qty } = this.state;
+    const { loading, class_id, user_id, prize, qty, saving } = this.state;
     const bc = isBC( login.code );
 
     // render the form or a spinner
@@ -74,6 +78,7 @@ class OrderModal extends Component {
         qty={ qty }
         store={ store }
         prize={ prize }
+        saving={ saving }
         updateQty={ this.updateQty }
         updatePrize={ this.updatePrize }/>
     );
@@ -125,7 +130,7 @@ const mapStateToProps = ({ rewards }) => ({
 });
 
 const mapDispatchToProps = {
-  getStore
+  getStore, placeOrder
 }
 
 export default connect( mapStateToProps, mapDispatchToProps )( OrderModal );

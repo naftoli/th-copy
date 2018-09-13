@@ -55,7 +55,7 @@ class OrdersPage extends Component {
   }
 
   processOrders = action => () => {
-    if ( action === 'reverse'
+    if ( action === 'delete'
       && !window.confirm('Are you sure you want to delete and refund these orders? This action cannot be undone.')
     ) return false;
 
@@ -137,7 +137,7 @@ class OrdersPage extends Component {
           }
 
           <Button color='primary'
-              onClick={ this.processOrders( 'reverse' ) }
+              onClick={ this.processOrders( 'delete' ) }
               disabled={ selection.length === 0 }>
             <FontAwesome icon='trash'/> Delete
           </Button>

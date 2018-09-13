@@ -28,6 +28,12 @@ export default ( state = initialState, action ) => {
         store: action.payload, 
       };
 
+    case types.ADD_ORDER:
+      return {
+        ...state,
+        orders: [ action.payload, ...state.orders ] 
+      };
+
     default:
       return state; 
   }

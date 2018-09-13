@@ -20,3 +20,10 @@ export const setStore = store => {
     payload: store
   }
 };
+
+export const addOrder = order => {
+  return {
+    type: types.ADD_ORDER,
+    payload: order
+  }
+};

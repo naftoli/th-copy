@@ -15,10 +15,15 @@ export const processOrders = ( action, user_prize_ids ) => dispatch => {
   return API.post( `/rewards/orders?action=${action}`, { user_prize_ids } )
 }
 
-
 export const getStore = user_id => dispatch => {
   dispatch( actions.setStore( false ) )
   return API.post( `/rewards/orders?action=store`, { user_id } )
   .then( handleAPIResponse )
   .then( store => dispatch( actions.setStore( store ) ) )
+}
+
+export const placeOrder = order => dispatch => {
+  return API.post( `/rewards/orders?action=order`, order )
+  .then( handleAPIResponse )
+  .then( order => dispatch( actions.addOrder( order ) ) )
 }
