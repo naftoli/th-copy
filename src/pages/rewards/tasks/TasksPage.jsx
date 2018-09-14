@@ -108,6 +108,16 @@ class TasksPage extends Component {
       { Header: 'Miles', accessor: 'points', Cell: ({ value }) => <Number value={ value }/> },
       { Header: 'Campaign', id: 'subject', accessor: ({ subject }) => subject && subject.subject_name },
     ];
+    if ( isAdmin( login.code ) ) columns.push(
+      {
+        Header: 'Base', accessor: 'baseName', Cell: ({ value, original }) => {
+          if ( original.base > 1 )
+            return <Link to={`/bm/base/${original.base}`}>{ value }</Link>;
+          return value;
+        }
+      }
+    );
+      
     // add the platoon column if a base is accessing the page
     if ( isBC( login.code ) ) columns.push(
       { 

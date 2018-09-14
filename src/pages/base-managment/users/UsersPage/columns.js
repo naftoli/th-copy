@@ -9,9 +9,9 @@ export default ( code, editPicture ) => {
   let columns = [
     {
       Header: 'Profile',  accessor: 'profilePicture',
+      className: 'profile-picture', width: 85, sortable: false,
       Cell: props => <ProfilePicture src={ props.value } className='inline-profile' 
                         onClick={ editPicture( props.original.user_id ) }/>,
-      className: 'profile-picture', width: 85, sortable: false,
       Filter: ({ filter, onChange }) =>
         <select style={{ width: "100%" }} value={filter ? filter.value : "all"}
           onChange={event => onChange(event.target.value)}>
@@ -34,10 +34,10 @@ export default ( code, editPicture ) => {
       Header: "Serial Number", accessor: 'user_serial',
       Cell: props => <Link to={`/bm/users/${props.original.user_id}`}>{props.value}</Link>,
     }, {
-      Header: 'Date Of Birth', accessor: 'dob', sortable: false, filterable: false,
+      Header: 'Date Of Birth', accessor: 'dob', filterable: false,
       Cell: props => <DateDisplay value={ props.value } format = 'l'/>,
     }, {
-      Header: 'Registered', accessor: 'user_registered', sortable: false,
+      Header: 'Registered', accessor: 'user_registered',
       Cell: props => <DateDisplay value={ props.value } format = 'l LT'/>,
       filterMethod: ( filter, row ) => {
         if ( filter.value === 'all' ) return true;

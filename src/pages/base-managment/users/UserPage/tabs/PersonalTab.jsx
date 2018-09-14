@@ -18,7 +18,7 @@ class PersonalTab extends Component {
   // format dates
   dateChange = ( name ) => ( date ) => {
     this.props.handleChange(
-      { [name]: date.format("YYYY-MM-DD HH:mm:ss") }
+      { [name]: date ? date.format("YYYY-MM-DD HH:mm:ss") : date }
     )
   }
   // edit profile

@@ -12,9 +12,8 @@ const DobRow = ( { soldier, onChange, showHe, children } ) => {
       <Col xs='6'>
         <label>Date of Birth</label>
         <Date
-          dateFormat='LL'
           value={ dob ? moment( dob ) : undefined } 
-          onChange={ onChange } 
+          onChange={ onChange } required
           // client side date validations
           minDate={ moment().subtract( 20, 'years' ) } 
           maxDate={ moment().subtract( 5, 'years' ) } />

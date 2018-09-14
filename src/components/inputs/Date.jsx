@@ -4,14 +4,14 @@ import DatePicker from 'react-datepicker';
 
 export const Date = ({ value, ...props }) => {
   // make sure it is a moment instance
-  if ( !moment.isMoment( value ))
+  if ( value && !moment.isMoment( value ))
     value = moment( value );
 
   return (
     <DatePicker 
-      className='form-control' readOnly
+      className='form-control'
       // display formats
-      dateFormat='l' 
+      dateFormat='l' placeholderText={ moment().format( props.dateFormat || 'l' ) }
       // dropdowns
       showMonthDropdown showYearDropdown dropdownMode='select'
       // current date and handle change

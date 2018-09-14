@@ -19,11 +19,17 @@ export class SettingsRow extends Component {
     this.props.onUpdate({ store_reset });
   }
 
+  onDateChage = date => {
+    this.props.onUpdate({ store_reset: date ? toJulian( date ) : date });
+  }
+
   handleCheckbox = handleCheckbox( this.props.onUpdate );
 
   render () {
     let { 
-      store_reset, school_gender, allow_parent_tasks, print_parent_tasks, chayolei, chidon, tanya, tehillim
+      store_reset, school_gender, 
+      allow_parent_tasks, print_parent_tasks,
+      chayolei, chidon, tanya, tehillim // modules
     } = this.props.base;
 
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
@@ -32,7 +38,7 @@ export class SettingsRow extends Component {
     
     return (
       <Row id='SettingsRow'>
-        <Col xs={12} sm={4} xl={3}>
+        <Col xs={12} sm={6}>
           <label>Base Gender</label>
           <div id='gender-row'>
             <Radio type='radio' name='school_gender' id='school_gender' value='M' 
@@ -49,7 +55,7 @@ export class SettingsRow extends Component {
             </Radio>
           </div>
         </Col>
-        <Col xs={12} sm={8} xl={5}>
+        {/* <Col xs={12} sm={8} xl={5}>
           <label>Base Enrolled in:</label><br/>
           <Checkbox checked={!!chayolei} name='chayolei' { ...checkboxProps} >
             Chayolei
@@ -63,8 +69,8 @@ export class SettingsRow extends Component {
           <Checkbox checked={!!tehillim} name='tehillim' { ...checkboxProps} >
             WWTC
           </Checkbox>
-        </Col>
-        <Col xs={12} sm={6} xl={4}>
+        </Col> */}
+        <Col xs={12} sm={6}>
           <label>Custom Parent Tasks</label><br/>
           <Checkbox checked={!!allow_parent_tasks} name='allow_parent_tasks' { ...checkboxProps} >
             Allow
@@ -75,16 +81,17 @@ export class SettingsRow extends Component {
         </Col>
         <Col xs={12} lg={6} id='store-miles'>
           <label>Store Miles Start From:</label>
-          <Date 
-            disabled 
-            dateFormat='LL' 
+          <Date
             value={ store_reset }
+            disabled = { !store_reset }
             onChange={ this.onDateChage } />
             
           <Checkbox checked={ !store_reset } onChange={ this.disableSchoolReset }>
             Allow soldiers to spend all their miles.
           </Checkbox>
         </Col>
+
+        { }
       </Row>
 );
   }
