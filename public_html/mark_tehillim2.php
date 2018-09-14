@@ -411,11 +411,11 @@ if (isset($_POST['submit'])) {
         
         $("#school").change( function() {
             var school = $(this).val();
-            $.get('ajax/getClasses.php', { id : school }, function(info) {
+            $.get('ajax/getClasses.php?flat=true', { id : school }, function( info ) {
                 var grades = JSON.parse( info );
                 var html = "<option value='0'>Choose Grade</option>";
                 for (var g in grades) {
-                    html += "<option value='" + g + "'>" + grades[g] + "</option>";
+                    html += "<option value='" + grades[g][0] + "'>" + grades[g][1] + "</option>";
                 }
                 $("#grade").empty();
                 $("#grade").append( html );
