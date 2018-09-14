@@ -87,7 +87,7 @@ $schools = $as->getSchools();
                 
                 function generate_csv() {
                     var rows = []; // the rows for the csv export
-                    var csvContent = "Grade,Name,Hebrew Name,Father Cell,Mother Cell\n"; //"Serial,First,Last,Grade,# Created\n"; // the baisc csv file
+                    var csvContent = "Grade,First Name,Last Name,Hebrew First Name,Hebrew Last Name,Father Cell,Mother Cell\n"; //"Serial,First,Last,Grade,# Created\n"; // the baisc csv file
                     var universalBOM = "\uFEFF";
                     // TODO add headers
                     $.each($("tr"), function(index, tr) {

@@ -45,9 +45,9 @@ if (count($users) > 0) { ?>
     <table>
         <thead>
             <?php if ($school_id < 0) : ?>
-            <th>School</th>
+                <th>School</th>
             <?php endif; ?>
-            <th>Grade</th><th>Name</th><th>Hebrew Name</th><th>Father Cell</th><th>Mother Cell</th>
+            <th>Grade</th><th colspan='2'>Name</th><th colspan='2'>Hebrew Name</th><th>Father Cell</th><th>Mother Cell</th>
         </thead>
         <tbody>
             <? foreach($users as $user) {?>
@@ -58,8 +58,10 @@ if (count($users) > 0) { ?>
                 }
                 ?>
                 <td><?=$user['class_grade'] . ($user['class_sub'] ? " - " . $user['class_sub'] : "")?></td>
-                <td><?=$user['first'] . " " . $user['last']?></td>
-                <td><?=$user['first_he'] . " " . $user['last_he']?></td>
+                <td><?=$user['first']?></td>
+                <td><?=$user['last']?></td>
+                <td><?=$user['first_he']?></td>
+                <td><?=$user['last_he']?></td>
                 <td><?=$user['admin_phone_mobile']?></td>
                 <td><?=$user['admin_phone_mobile2']?></td>
             </tr>
