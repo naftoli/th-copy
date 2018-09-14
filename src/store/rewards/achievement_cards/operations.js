@@ -29,6 +29,7 @@ export const deleteUnused = delete_to => dispatch => {
   .then( handleAPIResponse )
   .then( ({ miles, cards_deleted }) => {
     dispatch( actions.setMiles( miles ) );
+    dispatch( actions.setCards( [] ) );
     return cards_deleted;
   });
 }
