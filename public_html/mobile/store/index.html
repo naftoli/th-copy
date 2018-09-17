@@ -87,6 +87,10 @@
 			}
 			.clearfix:after { clear: both; }
 			.clearfix { zoom: 1; } /* IE < 8 */
+
+			.balance > div { display: inline-block; }
+			.media-body { display: block; }
+			#balance-box { margin-right: 5%; }
 		</style>
 	</head>
 	<body class="page-goals">
@@ -149,7 +153,7 @@
                             (<span id="cartQty">0</span>) <img id="cart-img" src="../img_new/cart-color-brown-svg.svg"/>
                         </div>
                         <div class="media-body">
-                            <span class="balance"></span>
+                            <div class="balance"></div>
                         </div>
                     </div>
                 </div>
@@ -274,10 +278,12 @@
             
             $.post('ajax/getBalance.php', { user : user }, function( success ) {
                 var info = $.parseJSON(success);
-				var html = '';
-    			// html += "Total Miles Earned: " + info.tpoints + "<br />";
-                // html += "Total Miles Earned this Year: " + info.earned + "<br />";
-                html += "Available <strong>Store</strong> Miles: <br /><span id='balance'>" + info.available + "</span>";
+				var html = '<div id="balance-box">';
+				html += 	"Available <strong>Store</strong> Miles: <br /><span id='balance'></span>";
+				html += '</div><div id="data-box">'
+				html += 	"Total Miles Earned: " + info.tpoints.toLocaleString( navigator.language ) + "<br />";
+                html += 	"Total Miles Earned this Year: " + info.earned.toLocaleString( navigator.language ) + "<br />";
+				html += '</div>'
                 $(".balance").html(html);
                 originalBal = info.available;
                 initCart();
@@ -413,7 +419,7 @@
             
             function calcBalance() {
                 bal = originalBal - totalPrice;
-                $("#balance").text(bal);
+                $("#balance").text(bal.toLocaleString( navigator.language ));
             }
             
             $(document).on('click', '.product-cart', function() {
