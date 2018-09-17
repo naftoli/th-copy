@@ -36,7 +36,7 @@ $dates = get_dates();
 if(isset($_POST['date']) && isset($dates[$_POST['date']])){
     $date = mysql_real_escape_string($_POST['date']);
 } else {
-    $date = GlobalSettings::getCurYearDates()['start'];
+    $date = array_keys($dates)[0];
 }
 
 /********************** GET SCHOOL_ID FROM POST PARAMS (IF SENT) ******************/
@@ -118,7 +118,7 @@ if(!$tehillim_school_id && count($schools) == 1){
                 <table>
                     <tr><th>Grade</th><th>First Name</th><th>Last Name</th><th>Quota</th></tr>
                 <?php
-                foreach ( $users as $user ) {
+                    foreach ( $users as $user ) {
                     // get level, track_id
                     $sql = "SELECT * FROM user_tracks WHERE subject_id = 1 AND user_id = " . $user['user_id'];
                     $result = mysql_query( $sql );
@@ -137,7 +137,7 @@ if(!$tehillim_school_id && count($schools) == 1){
                     //echo $sql . "<br /><br />";
                     $result2 = mysql_query( $sql2 );
                     $row2 = mysql_fetch_assoc( $result2 );
-            ?>
+                    ?>
                     <tr>
                         <td><?= $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']) ?></td>
                         <td><?= $user['first'] ?></td>
