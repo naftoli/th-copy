@@ -24,6 +24,7 @@ else {
             AND (class_id is null or class_id = " . $class_id . ")";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
+        $row['prize_description'] = urldecode( $row['prize_description'] );
         // make sure user hasn't already purchased this prize if it's a one time prize
         $oneTime = $row['one_per_user'];
         if ($oneTime) {
