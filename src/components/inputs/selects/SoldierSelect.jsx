@@ -16,6 +16,10 @@ export class SoldierSelect extends Component {
     classId: PropTypes.any,
   }
 
+  static defaultProps = {
+    showAllOption: false
+  }
+
   apiRequest = null;
 
   state = { 
@@ -61,13 +65,16 @@ export class SoldierSelect extends Component {
   }
 
   getOptions = () => {
-    const { classId } = this.props;
+    const { showAllOption, classId } = this.props;
     
     const options = this.state.soldiers
     // only soldiers in the classId from props
     .filter( soldier => soldier.class_id === classId )
     // map them to what react-select expects
     .map( ({ user_id, name }) => ({ value: user_id, label: name }) );
+    // add special options
+    if ( showAllOption ) 
+      options.unshift({ value: false, label: 'All Soldiers' });
     // and return the options
     return options;
   }
@@ -79,7 +86,7 @@ export class SoldierSelect extends Component {
   filter = ( option, value ) => option.label.toLowerCase().includes( value.toLowerCase() );
   
   render() {
-    const { value, values } = this.props;
+    const { value, values, showAllOption } = this.props;
     const { loading } = this.state;
 
     let options = this.getOptions();
@@ -87,6 +94,8 @@ export class SoldierSelect extends Component {
     // support single value
     if ( value )
       selected = findOption( options, value ) || null;
+    else if ( value === false && showAllOption && !loading )
+      selected = options[0];
     else if ( value === false )
       selected = false;
     // support multiple values

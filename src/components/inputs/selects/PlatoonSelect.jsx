@@ -14,14 +14,12 @@ export class PlatoonSelect extends Component {
     showNoneOption: PropTypes.bool,
     onChange: PropTypes.func,
     value: PropTypes.any,
-    schoolId: PropTypes.any,
-    // fetchAll: PropTypes.bool
+    schoolId: PropTypes.any
   }
 
   static defaultProps = {
     showAllOption: false, 
-    showNoneOption: false,
-    // fetchAll: false
+    showNoneOption: false
   }
 
   apiRequest = null;
