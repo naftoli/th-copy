@@ -288,7 +288,7 @@ elseif (count($admin->schools) > 0)
                         </a>
                         
                         <select name="date_list" class="sSelect">
-                            <option value="1">Pesach 5778</option>
+                            <option value="1">Succos 5779</option>
                         </select>
                         
                         <a class="next button">
