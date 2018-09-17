@@ -113,35 +113,41 @@ if(!$tehillim_school_id && count($schools) == 1){
             $s = new SchoolsUsers( $tehillim_school_id );
             $schoolsUsers[$tehillim_school_id] = $s->getUsers(true, true);
             
-            foreach ( $schoolsUsers as $school => $users ) {
-                echo "<h2>" . $schools[$tehillim_school_id] . "</h2>";
-                echo "<table>";
-                echo "<tr><th>Grade</th><th>First Name</th><th>Last Name</th><th>Quota</th></tr>";
+            foreach ( $schoolsUsers as $school => $users ) { ?>
+                <h2><?= $schools[$tehillim_school_id] ?></h2>
+                <table>
+                    <tr><th>Grade</th><th>First Name</th><th>Last Name</th><th>Quota</th></tr>
+                <?php
                 foreach ( $users as $user ) {
                     // get level, track_id
-                    $sql = "select * from user_tracks where subject_id = 1 and user_id = " . $user['user_id'];
+                    $sql = "SELECT * FROM user_tracks WHERE subject_id = 1 AND user_id = " . $user['user_id'];
                     $result = mysql_query( $sql );
                     $row = mysql_fetch_assoc( $result );
                     
                     // get quota
-                    $sql2 = "select dt.quantity from date_tasks dt
-                            join date_tasks_missions dtm using (date_tasks_mission_id) 
-                            where dt.grid_id = 8001
-                            and dtm.start_date = " . $date . " 
-                            and dtm.end_date = " . $date . " 
-                            and dtm.school_type_id = " . $user['school_type_id'] . " 
-                            and dtm.track_id = " . $row['track_id'] . " 
-                            and dtm.level = " . $row['level'] . " 
-                            and dtm.lang_id = " . $user['lang_id'];
+                    $sql2 = "SELECT dt.quantity FROM date_tasks dt "
+                        ." JOIN date_tasks_missions dtm USING (date_tasks_mission_id) "
+                        ." WHERE dt.grid_id = 8001 "
+                        ." AND dtm.start_date = " . $date
+                        ." AND dtm.end_date = " . $date 
+                        ." AND dtm.school_type_id = " . $user['school_type_id']
+                        ." AND dtm.track_id = " . $row['track_id']
+                        ." AND dtm.level = " . $row['level']
+                        ." AND dtm.lang_id = " . $user['lang_id'];
                     //echo $sql . "<br /><br />";
                     $result2 = mysql_query( $sql2 );
                     $row2 = mysql_fetch_assoc( $result2 );
-                    echo "<tr><td>" . $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']) . "</td><td>" .
-                        $user['first'] . "</td><td>" . $user['last'] . "</td><td>" . $row2['quantity'] . "</td></tr>";
-                }
-                echo "</table>";
-            }
             ?>
-        <? } // end if there is a school id?>
+                    <tr>
+                        <td><?= $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']) ?></td>
+                        <td><?= $user['first'] ?></td>
+                        <td><?= $user['last'] ?></td>
+                        <td><?= $row2['quantity'] ?></td>
+                    </tr>
+                <?php } // end for loop for soldiers in table ?>
+                </table>
+            <?php 
+            } // end for each school
+        } // end if there is a school id ?>
     </body>
 </html>
