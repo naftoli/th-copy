@@ -60,7 +60,7 @@ export class PrizeForm extends Component {
               }
               { !editing && !prize_name &&
                 <Creatable 
-                  placeholder={ prize_name || 'Select Template / Create New' }
+                  placeholder={ prize_name || 'Select Template / Type For New' }
                   options={ templates } 
                   openMenuOnFocus={ false }
                   onChange={ this.onTemplateChange } 
