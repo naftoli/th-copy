@@ -104,11 +104,7 @@ const getMenu = ( login ) => {
         { label: "Prizes", path: '/rewards/prizes' },
         { label: "Prize Templates", path: '/rewards/templates', user_types: [ 'HQ' ] },
         { label: "Orders", path: '/rewards/orders', user_types: [ 'BC', 'TEACHER' ] },
-        { label: 'Add / Subtract Points', legacy: true, path: '/manual_points.php' },
-        {
-          label: 'Old Mileage Program', user_types: [ 'BC' ], path: '/v2',
-          icon: <img src={`${LEGACY_URL}/images/icon_auction.png`} alt="Miliage Program"/>
-        },
+        { label: 'Add / Subtract Miles', path: '/rewards/miles', user_types: DEFAULT_USER_TYPES }
       ]
     },
     {
