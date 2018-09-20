@@ -76,7 +76,8 @@
 			}
 
 			h4#no-prizes-message { font-size: 2em; }
-			#balance { font-size: 2em;}
+			#balance { display: none; }
+			#balance-display { font-size: 2em;}
 
 			.clearfix:before,
 			.clearfix:after {
@@ -283,7 +284,7 @@
             $.post('ajax/getBalance.php', { user : user }, function( success ) {
                 var info = $.parseJSON(success);
 				var html = '<div id="balance-box">';
-				html += 	"Available <strong>Store</strong> Miles: <br /><span id='balance'></span>";
+				html += 	"Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>";
 				html += '</div><div id="data-box">'
 				html += 	"Total Miles Earned: " + info.tpoints.toLocaleString( navigator.language ) + "<br />";
                 html += 	"Total Miles Earned this Year: " + info.earned.toLocaleString( navigator.language ) + "<br />";
@@ -423,7 +424,8 @@
             
             function calcBalance() {
                 bal = originalBal - totalPrice;
-                $("#balance").text(bal.toLocaleString( navigator.language ));
+				$('#balance').text( bal );
+                $("#balance-display").text(bal.toLocaleString( navigator.language ));
             }
             
             $(document).on('click', '.product-cart', function() {
