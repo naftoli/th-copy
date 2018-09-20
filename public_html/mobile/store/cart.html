@@ -319,19 +319,19 @@
             $("#back").click( function() {
                 location.href = "index.html?id=" + user;
             });
-
-            function handleImageError( img ) {
-                // console.log( img.src );
-                if( img.src.indexOf('imgs/v/w/150/src/') > 0 ) {
-                    img.src = img.src.replace('imgs/v/w/150/src/', 'images/imgsrepo/')
-                } else {
-                    img.src = '/v2/images/imgsrepo/default.png';
-                }
-            }
-
-            function handleProfileError( img ) {
-                img.src = '/mobile/reg/images/profile-photo-default.jpg';
-            }
         });
+
+        function handleImageError( img ) {
+            // console.log( img.src );
+            if( img.src.indexOf('imgs/v/w/150/src/') > 0 ) {
+                img.src = img.src.replace('imgs/v/w/150/src/', 'images/imgsrepo/')
+            } else {
+                img.src = '/v2/images/imgsrepo/default.png';
+            }
+        }
+
+        function handleProfileError( img ) {
+            img.src = '/mobile/reg/images/profile-photo-default.jpg';
+        }
     </script>
 </html>
