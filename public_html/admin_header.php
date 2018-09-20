@@ -320,13 +320,15 @@ $bpOnly = [ 82 ];
 								</a>
 							</form>
 						</li>
-						<li>
-							<a href="http://mashpia.com/v2/login/frommashpia/school_id/<?=$admin->school_id ? $admin->school_id : $admin_user['auths']['school'][0]?>/admin_id/<?=$admin_user['admin_id']?>">
-								<span class="icon">
-									<img src="/images/icon_auction.png" width="28" height="28" alt="Dashboard" />Mileage Program
-								</span>
-							</a>
-						</li>
+						<?php if ( !$admin_user["beta"] ) { ?>
+							<li>
+								<a href="http://mashpia.com/v2/login/frommashpia/school_id/<?=$admin->school_id ? $admin->school_id : $admin_user['auths']['school'][0]?>/admin_id/<?=$admin_user['admin_id']?>">
+									<span class="icon">
+										<img src="/images/icon_auction.png" width="28" height="28" alt="Dashboard" />Mileage Program
+									</span>
+								</a>
+							</li>
+						<?php } ?>
 						<li>
 							<a href="/helpdesk/?p=open" id="helpdesk_link" title="support">
 								<div>
@@ -468,16 +470,34 @@ $bpOnly = [ 82 ];
 							<li><a href="/mission_sheets_checklist.php"><?=T_("Teacher's Missions Checklist")?></a></li>
 							<li><a href="/missions_report.php"><?=T_('Missions Accomplished Report')?></a></li>
 						</ul>
-						
-						<li class="list_parent<?=isset( $ui_type ) && $ui_type == 'programs' ? ' current' : '' ?>">
-							<a href="#" title="programs"><div><span class="icon"><img height="28" width="28" alt="Campaigns" src="/images/icon_auction.png"></span><?=T_('Achievement Cards')?></div></a>
-						</li>
-							
-						<ul class='list_second'>
-							<li><a href="/newAchievementTasks.php">Add Achievement Task</a></li>
-							<li><a href="/manual_points.php">Add / Subtract Points</a></li>
-							<li><a href="/remove_old_achievement_cards.php">Delete Old Achievement Cards</a></li>
-						</ul>
+
+						<?php if ( $admin_user["beta"] ) { ?>
+							<li class="list_parent<?=isset( $ui_type ) && $ui_type == 'programs' ? ' current' : '' ?>">
+								<a href="#" title="programs"><div>
+									<span class="icon">
+										<img height="28" width="28" alt="cart" src="/images/iconl_cart.png">
+									</span><?=T_('Rewards Program')?>
+								</div></a>
+							</li>
+								
+							<ul class='list_second'>
+								<li><a href="/beta/rewards/cards"><?=T_('Achievement Cards')?></a></li>
+								<li><a href="/beta/rewards/tasks"><?=T_('Tasks')?></a></li>
+								<li><a href="/beta/rewards/prizes"><?=T_('Prizes')?></a></li>
+								<li><a href="/beta/rewards/orders"><?=T_('Orders')?></a></li>
+								<li><a href="/beta/rewards/miles"><?=T_('Add / Subtract Miles')?></a></li>
+							</ul>
+						<?php } else { ?>
+							<li class="list_parent<?=isset( $ui_type ) && $ui_type == 'programs' ? ' current' : '' ?>">
+								<a href="#" title="programs"><div><span class="icon"><img height="28" width="28" alt="Campaigns" src="/images/icon_auction.png"></span><?=T_('Achievement Cards')?></div></a>
+							</li>
+								
+							<ul class='list_second'>
+								<li><a href="/newAchievementTasks.php">Add Achievement Task</a></li>
+								<li><a href="/manual_points.php">Add / Subtract Points</a></li>
+								<li><a href="/remove_old_achievement_cards.php">Delete Old Achievement Cards</a></li>
+							</ul>
+						<?php } ?>
 						
 						<li class="list_parent<?=isset($ui_type) && $ui_type == 'programs' ? ' current' : ''?>">
 							<a href="#" title="programs"><div><span class="icon"><img height="28" width="28" alt="Chidon" src="/images/chidon.png"></span><?=T_('Chidon')?></div></a>
@@ -764,16 +784,16 @@ $bpOnly = [ 82 ];
 								</a>
 							</form>
 						</li>
-							
-						<li>
-							<a href="http://mashpia.com/v2/login/frommashpia/school_id/<?=$admin->school_id ? $admin->school_id : $admin_user['auths']['school'][0]?>/admin_id/<?=$admin_user['admin_id']?>">
-								<span class="icon">
-									<img src="/images/icon_auction.png" width="28" height="28" alt="Dashboard" />
-									Mileage Program
-								</span>
-							</a>
-						</li>
-							
+						<?php if ( !$admin_user["beta"] ) { ?>
+							<li>
+								<a href="http://mashpia.com/v2/login/frommashpia/school_id/<?=$admin->school_id ? $admin->school_id : $admin_user['auths']['school'][0]?>/admin_id/<?=$admin_user['admin_id']?>">
+									<span class="icon">
+										<img src="/images/icon_auction.png" width="28" height="28" alt="Dashboard" />
+										Mileage Program
+									</span>
+								</a>
+							</li>
+						<?php } ?>
 						<li>
 							<a href="/helpdesk/?p=open" id="helpdesk_link" title="support"><div><span class="icon"><img height="28" width="28" alt="Support" src="/images/parentIcons/support icon.gif"></span><?=T_('Support')?></div></a>
 						</li>
