@@ -29,7 +29,7 @@ export class SettingsRow extends Component {
     let { 
       store_reset, school_gender, 
       allow_parent_tasks, print_parent_tasks,
-      chayolei, chidon, tanya, tehillim // modules
+      // chayolei, chidon, tanya, tehillim // modules
     } = this.props.base;
 
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;

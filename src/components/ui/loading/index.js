@@ -4,8 +4,8 @@ import { logo } from 'img/logos';
 import './Spinner.scss';
 import './LoadingScreen.scss';
 
-export const InlineSync = ({ loading }) => {
-  return <FontAwesome icon='sync-alt' spin={ loading } />;
+export const InlineSync = ({ loading, icon }) => {
+  return <FontAwesome icon={ !loading && icon ? icon : 'sync-alt' } spin={ loading } />;
 }
 
 export class Spinner extends Component{
