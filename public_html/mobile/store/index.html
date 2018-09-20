@@ -91,6 +91,9 @@
 			.balance > div { display: inline-block; }
 			.media-body { display: block; }
 			#balance-box { margin-right: 5%; }
+			.panel.panel-default .panel-heading { margin-bottom: 0px; transition: .25s; }
+			.panel.panel-default.open > .panel-heading { border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; }
+			.product.light .product-caption .product-price { font-size: 1.25em; font-family: Raleway,sans-serif; }
 		</style>
 	</head>
 	<body class="page-goals">
@@ -261,10 +264,11 @@
 	        $.post('../reg/ajax/getPhoto.php', { user_id : user }, function( success ) {
 	            var info = $.parseJSON( success );
 	            var html = '<a href="../reg/medals/index.html?id=' + user +'">';
-	            if (info.mobile_pic) html += '<img id="userImg" src="https://mashpia.com/mobile/reg/' + info.mobile_pic + '">';
-	            else if (info.thumb) html += '<img id="userImg" src="https://mashpia.com/thumbs/' + info.thumb + '">';
-	            else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' + info.photo + '">';
-	            html += '</a>';
+	            if (info.mobile_pic) html += '<img onerror="handleProfileError(this)" id="userImg" src="https://mashpia.com/mobile/reg/' + info.mobile_pic + '">';
+	            else if (info.thumb) html += '<img onerror="handleProfileError(this)" id="userImg" src="https://mashpia.com/thumbs/' + info.thumb + '">';
+	            else if (info.photo) html += '<img onerror="handleProfileError(this)" id="userImg" src="https://mashpia.com/file_view.php?id=' + info.photo + '">';
+	            else html += '<img id="userImg" src="/mobile/reg/images/profile-photo-default.jpg">';
+				html += '</a>';
 	            $(".personalImg").append( html );
 				// set the USER ID for bug reports
                 $(".bug-report img").data("user_id", user);
@@ -312,8 +316,8 @@
 							<article class="product light">\
 								<div class="product-caption">';
                         html += '<figure class="figure-hover-overlay">';
-						// show the new label if the prize was edited in the last 15 days
-                        if ( new Date( prize.modified ).getTime() > new Date().getTime() - (15 * 24 * 60 * 60 * 1000) ) {
+						// show the new label if the prize was edited in the last 30 days
+                        if ( new Date( prize.created ).getTime() > new Date().getTime() - (30 * 24 * 60 * 60 * 1000) ) {
 							html += '<div class="product-new">new</div> ';
 						}
                         html += 	'<!--<div class="product-sale">&nbsp;7% <br> off</div>-->';
@@ -507,6 +511,10 @@
 			} else {
 				img.src = '/v2/images/imgsrepo/default.png';
 			}
+		}
+
+		function handleProfileError( img ) {
+			img.src = '/mobile/reg/images/profile-photo-default.jpg';
 		}
     </script>
 </html>
