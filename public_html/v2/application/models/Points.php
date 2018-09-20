@@ -81,17 +81,16 @@ class Points
 			exit;
 		}
 		
-		$strSql = "select sum(points) as total from user_points
-					where user_id = " . $arrParams["user_id"] . "
-					and institution_id = " . $arrParams["institution_id"] . "
-					and points > 0"; // make sure we don't take off subtracted points
+		$strSql = "SELECT sum(points) AS total FROM user_points WHERE user_id = " . $arrParams["user_id"]
+				. " AND institution_id = " . $arrParams["institution_id"]
+				. " AND points > 0"; // make sure we don't take off subtracted points
 		if (intval($arrParams['start_date']) > 0) {
 			$strDate = jdtogregorian( $arrParams['start_date'] );
 			$arrDate = explode('/', $strDate);
 			$strDate = $arrDate[2] . '-' . $arrDate[0] . '-' . $arrDate[1];
-			$strSql .= " and created >= '" . $strDate . "'";
+			$strSql .= " AND created >= '" . $strDate . "'";
 		}
-		$strSql .= " and resource_name not in ('store', 'transaction_manager_store')";
+		$strSql .= " AND resource_name NOT IN ('store', 'transaction_manager_store')";
 		//echo $strSql; exit;
 		$arrResult = first($this->_db->fetchAll($strSql));
 		return $arrResult->total;

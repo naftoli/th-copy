@@ -21,7 +21,7 @@ if (isset($_POST['submit'])) {
     $school = mysql_real_escape_string($_POST['school']);
     $grade = mysql_real_escape_string($_POST['grade']);
     $user = mysql_real_escape_string($_POST['user']);
-    $action = mysql_real_escape_string($_POST['action']);
+    $action = mysql_real_escape_string($_POST['action']); // -1 is subtract
     $points = abs(mysql_real_escape_string($_POST['points']));
     if ($action == -1) {
         $points *= -1;
@@ -51,13 +51,13 @@ if (isset($_POST['submit'])) {
     mysql_query('set autocommit=0');
     mysql_query('begin');
     foreach ($users as $user) {
-        $sql = "insert into pointsDB.user_points
-                set user_id = " . $user . ",
-                institution_id = " . $school . ",
-                class_id = " . $grade . ",
-                points = " . $points . ",
-                created = now(),  
-                resource_name = '" . $resource . "'";
+        $sql = "INSERT INTO pointsDB.user_points
+                SET user_id = $user,
+                institution_id = $school,
+                class_id = $grade,
+                points = $points,
+                created = NOW(),  
+                resource_name = '$resource'";
         if (!mysql_query($sql)) {
             $success = false;
             break;
