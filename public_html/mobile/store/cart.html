@@ -103,7 +103,7 @@
                                 {{#each items}}
                                     <div class="cart-item">
                                         <figure class="store-image-overlay">
-                                            <img class="store-image img-responsive" src="/v2/images/imgsrepo/{{this.image}}" />
+                                            <img class="store-image img-responsive" onerror="handleImageError(this)" src="/v2/images/imgsrepo/{{this.image}}" />
                                         </figure>
                                         <div class="store-item" style="line-height: 1.6" id="{{@key}}">
                                             <div class="item-title">{{this.name}}</div>
