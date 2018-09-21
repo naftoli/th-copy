@@ -71,14 +71,14 @@ class User extends ActiveRecord\Model implements JsonSerializable {
         if ( $this->miles && !$force_refresh )
             return $this->miles;
         $points = new Points( $this->user_id );
-        return $this->miles = $points->getTotalPoints();
+        return $this->miles = intval( $points->getTotalPoints() );
     }
     // get what they can spend in the store
     public function storeMiles( $force_refresh = false ) {
         if ( $this->store_miles && !$force_refresh )
             return $this->store_miles;
         $points = new Points( $this->user_id );
-        return $this->store_miles = $points->getStorePoints();
+        return $this->store_miles = intval( $points->getStorePoints() );
     }
 
     // ******************************* CHAYOLEI BOARDS ******************************* //
@@ -352,7 +352,7 @@ class User extends ActiveRecord\Model implements JsonSerializable {
 
     // ******************************* ONDELETE FUNCTIONS *******************************
     public function canDestroy(){
-        return $this->miles() === 0;
+        return $this->miles() == 0;
     }
 
     // ******************************* SERIALIZERS *******************************
