@@ -52,7 +52,7 @@ class SettingsTab extends Component {
           <Row>
             <Col xs='12' sm='6'>
               <label>Base</label>
-              <Input disabled value={ school.school_name } />
+              <Input disabled value={ school ? school.school_name : 'N / A' } />
             </Col>
             <Col xs='12' sm='6'>
               <label>Platoon</label>
