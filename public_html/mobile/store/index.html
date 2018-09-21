@@ -311,7 +311,7 @@
                 var html = '';
                 for (var amount in prizes) {
                     html += '<div class="panel panel-default">' +
-						'<div class="panel-heading"><i class="glyphicon glyphicon-chevron-right"></i>' +  parseInt( amount, 10 ).toLocaleString() +  ' Mile Prizes</div>' +
+						'<div class="panel-heading"><i class="glyphicon glyphicon-chevron-right"></i>' +  parseInt( amount, 10 ).toLocaleString( navigator.language ) +  ' Mile Prizes</div>' +
 						'<div class="collapse" id="collapse_prize_' + amount + '"><div class="panel-body"><div class="row">';
                     for (var p in prizes[amount]) {
     					var prize = prizes[amount][p];
@@ -332,7 +332,7 @@
 						html += '</figure>\
 								<div class="block-name">\
 									<a href="#" class="product-name">' + prize.prize_name + '</a>\
-									<p class="product-price">' + parseInt( prize.points, 10 ).toLocaleString() + ' Mile' + ( prize.points > 1 ? 's' : '' ) + '</p>\
+									<p class="product-price">' + parseInt( prize.points, 10 ).toLocaleString( navigator.language ) + ' Mile' + ( prize.points > 1 ? 's' : '' ) + '</p>\
 								</div>\
 								<div class="product-cart" id="' +
 								prize.prize_id + ':' + prize.points + ':' +	prize.image_id + ':' +
