@@ -120,7 +120,7 @@ class UsersRouter {
     }
 
     public function destroy( $id ) {
-        global $current_user;
+        global $current_user; global $MASHPIA_DB;
         try {
             $user = User::find( $id );
             if ( !$user->validateAccess( $current_user->login ) )
@@ -129,6 +129,8 @@ class UsersRouter {
                 json_error( 'Your current login does not have the ability to remove users' );
             }
             if ( $user->canDestroy() && $user->delete() ) {
+                // remove from parent account
+                $MASHPIA_DB->query('DELETE FROM admin_auths WHERE id='.$user->user_id.' AND auth = "user"');
                 return json_response( 'Soldier has been deleted.' );
             } else if ( !$user->canDestroy() ) {
                 $user->school_id = null;
