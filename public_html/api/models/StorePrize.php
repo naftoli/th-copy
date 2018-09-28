@@ -13,7 +13,9 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
 
     static $alias_attribute = [
         'miles' => 'points',
-        'stock' => 'prize_count'
+        'name' => 'prize_name',
+        'stock' => 'prize_count',
+        'description' => 'prize_description',
     ];
     // cache variables
     private $platoons = false;
