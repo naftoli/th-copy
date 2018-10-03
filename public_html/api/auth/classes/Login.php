@@ -10,6 +10,7 @@ class Login implements \JsonSerializable {
     public $type; // the type of login that this is
 
     public $model; // model that the login refers to
+    public $modules;
 
     private $name; // The name displayed to the user
     private $img; // the icon to accompany it
@@ -38,6 +39,7 @@ class Login implements \JsonSerializable {
         else $this->setModel();
         // setup the details
         $this->setup();
+        $this->setModules();
     }
 
     public function getFilter( $school_key = 's.', $class_key = 'c.' ){
@@ -128,6 +130,40 @@ class Login implements \JsonSerializable {
             $this->key = Auth::mobileKey( $this->model->admin_id );
         }
     }
+
+    /**
+     * setup
+     * 
+     * sets the internal variables based on the internal model
+     */
+    private function setModules() {
+        if ( !$this->model )
+            return false;
+        // Tzivos Hashem Offices
+        if ( in_array( $this->type, [ 'HQ', 'institution' ] ) )
+            $this->modules = [
+                'chayolei' => true, 'chidon' => true,
+                'tehillim' => true, 'tanya' => true,
+                'rewards'  => true
+            ];
+        // Tzivos Hashem Bases
+        else if ( $this->type == 'school' )
+            $this->modules = [
+                'chayolei' => !!$this->model->chayolei, 'chidon' => !!$this->model->chidon,
+                'tehillim' => !!$this->model->tehillim, 'tanya' => !!$this->model->tanya,
+                'rewards'  => !!$this->model->rewards
+            ];
+        // Tzivos Hashem Platoons
+        else if ( $this->type == 'class' ) {
+            $school = $this->model->school;
+            $this->modules = [
+                'chayolei' => !!$school->chayolei, 'chidon' => !!$school->chidon,
+                'tehillim' => !!$school->tehillim, 'tanya' => !!$school->tanya,
+                'rewards'  => !!$school->rewards
+            ];
+        // Tzivos Hashem Parents
+        }
+    }
     
     /**
      * jsonSerialize
@@ -141,7 +177,8 @@ class Login implements \JsonSerializable {
             'code' => $this->code,          'name' => $this->name,
             'img' => $this->img,            'legacy' => $this->legacy,
             'active' => $this->active,      'school_id' => $this->school_id,
-            'inst_id' => $this->inst_id,    'class_id' => $this->class_id
+            'inst_id' => $this->inst_id,    'class_id' => $this->class_id,
+            'modules' => $this->modules,
         ];
         // add the login key for parent accounts to the parent portal
         if ( $this->type == 'PARENT' )
