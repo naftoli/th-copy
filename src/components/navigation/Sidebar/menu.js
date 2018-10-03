@@ -16,7 +16,7 @@ const ALL_USER_TYPES = [ 'HQ', 'INST', 'BC', 'TEACHER' ];
  * @returns {function} Returns a valid reducer to be passed to .reduce with an array as the initilaizer
  */
 export const menuReducer = ( login, defaults = DEFAULT_USER_TYPES ) => ( filtered = [], item ) => {
-  const { code, legacy } = login;
+  const { code, legacy, modules } = login;
   // reduce the items down a bit
   if ( item.items ) {
     item = Object.assign( {}, item, 
@@ -26,15 +26,18 @@ export const menuReducer = ( login, defaults = DEFAULT_USER_TYPES ) => ( filtere
       )}
     );
   }
-  // hide legacy links from new bases
-  if ( !( !legacy && item.legacy ) ) {
-    // if the item is enabled for that code, add it to the sidebar
-    if ( item.user_types && item.user_types.indexOf( code ) > -1 ) {
-      filtered.push( item );
-    // if the default for this section contains this code, add it
-    } else if ( !item.user_types && defaults.indexOf( code ) > -1 ) {
-      filtered.push( item );
-    }
+
+  if (
+    ( !legacy && item.legacy ) // hide legacy links from new institutions
+    || ( item.module && !modules[ item.module ] ) // hide menu if login does not have access to this module
+  ) return filtered;
+  
+  // if the item is enabled for that code, add it to the sidebar
+  if ( item.user_types && item.user_types.indexOf( code ) > -1 ) {
+    filtered.push( item );
+  // if the default for this section contains this code, add it
+  } else if ( !item.user_types && defaults.indexOf( code ) > -1 ) {
+    filtered.push( item );
   }
   
   return filtered;
@@ -49,6 +52,9 @@ export const menuReducer = ( login, defaults = DEFAULT_USER_TYPES ) => ( filtere
  */
 const getMenu = ( login ) => {
   const { id } = login;
+
+  if ( Object.keys( login ).length === 0 )
+    return [];
   // Define the shape of the menu
   const menu = [
     {
@@ -81,7 +87,7 @@ const getMenu = ( login ) => {
       icon: <FontAwesome icon='chalkboard-teacher' />,
     },
     {
-      label: "Missions", user_types: ALL_USER_TYPES,
+      label: "Missions", user_types: ALL_USER_TYPES, module: 'chayolei',
       icon: <FontAwesome icon='award' />,
       items: [
         { label: 'Print Missions', legacy: true, path: '/print_missions2.php', user_types: ALL_USER_TYPES },
@@ -95,7 +101,7 @@ const getMenu = ( login ) => {
       ]
     },
     {
-      label: "Rewards Program", user_types: ALL_USER_TYPES,
+      label: "Rewards Program", user_types: ALL_USER_TYPES, module: 'rewards',
       icon: <FontAwesome icon='shopping-cart' />,
       items: [
         { label: "Achievement Cards", path: '/rewards/cards' },
@@ -108,7 +114,7 @@ const getMenu = ( login ) => {
       ]
     },
     {
-      label: "Chidon", legacy: true,
+      label: "Chidon", legacy: true, module: 'chidon',
       icon: <img src={`${LEGACY_URL}/images/chidon.png`} alt="Chidon" />,
       items: [
         { label: 'Registered for Chidon', legacy: true, path: '/reports/chidon/chidon_enrollment.php' },
@@ -169,13 +175,13 @@ const getMenu = ( login ) => {
       label: "Campaigns", legacy: true,
       icon: <img src={`${LEGACY_URL}/images/parentIcons/Campaigns.gif`} alt="Campaigns" />,
       items: [
-        { label: 'Tanya', 
+        { label: 'Tanya', module: 'tanya',
           items: [
             { label: 'Individual Marking', legacy: true, path: '/editSoldierLines2.php' },
             { label: 'Yud Aleph Nissan Reports', legacy: true, path: '/yud_alef_nissan_choose.php' },
           ]
         },
-        { label: 'Tehillim', 
+        { label: 'Tehillim', module: 'tehillim',
           items: [
             { label: 'Mark Shabbos Mevorchim Tehillim', legacy: true, path: '/mark_tehillim2.php' },
             { label: 'Shabbos Mevorchim Report', legacy: true, path: '/choose_sm_report.php' },
