@@ -1,0 +1,141 @@
+<?php
+namespace mashpia\api\auth;
+
+require_once( __DIR__ . '/Auth.php' );
+
+class Login implements \JsonSerializable {
+
+    private $model; // model that the login refers to
+
+    public $id; // the ID for the login to be sent on the wire.
+    public $code; // code to use in interface
+
+    private $type; // the type of login that this is
+    private $name; // The name displayed to the user
+    private $img; // the icon to accompany it
+    
+    private $active; // Is this login active?
+    private $legacy; // Does this login have access to legacy systems?
+
+    private $inst_id = false; // cache the inst id
+    private $school_id = false; // cache the school id
+    private $class_id = false; // cache the class id
+
+    const LEGACY_ID = 2; // School institution
+
+    /**
+     * new Login( $type, $id[, $model ] )
+     * @param $type string of login type
+     * @param $id string or number to find the model
+     * @param $model ( optional ) provide prefetched model.
+     * ! Throws \ActiveRecord\RecordNotFound if model cannot be found
+     */
+    public function __construct( $type, $id, $model = false ) {
+        $this->type = $type;
+        $this->id = $id;
+        // set the model
+        if ( $model ) $this->model = $model;
+        else $this->setModel();
+        // setup the details
+        $this->setup();
+    }
+
+    /**
+     * setModel
+     * * Sets the model for the login based on the id.
+     */
+    private function setModel() {
+
+        if ( $this->type == 'HQ' || $this->type == 'PARENT' )
+            $this->model = \Admin::find( $this->id );
+        if ( $this->type == 'institution' )
+            $this->model = \Institution::find( $this->id );
+        if ( $this->type == 'school' )
+            $this->model = \School::find( $this->id );
+        if ( $this->type == 'class' )
+            $this->model = \Platoon::find( $this->id, ['include' => ['school']] );
+    }
+
+    /**
+     * setup
+     * 
+     * sets the internal variables based on the internal model
+     */
+    private function setup() {
+        if ( !$this->model )
+            return false;
+        // Tzivos Hashem Offices
+        if ( $this->type == 'HQ' ) {
+            $this->name = 'Tzivos Hashem Headquarters';
+            $this->img = '/mobile/img_new/TH Logo-colorful-svg.svg';
+            $this->code = 'HQ';
+
+            $this->active = true;
+            $this->legacy = true;
+        // Affiliated institutions
+        } else if ( $this->type == 'institution' ) {
+            $this->name = $this->model->name;
+            $this->img = $this->model->logo();
+            $this->code = 'INST';
+
+            $this->active = true;
+            $this->legacy = $this->model->inst_id === self::LEGACY_ID;
+            
+            $this->inst_id = $this->model->inst_id;
+        // Tzivos Hashem Bases
+        } else if ( $this->type == 'school' ) {
+            $this->name = $this->model->name;
+            $this->img = $this->model->logoPath();
+            $this->code = 'BC';
+
+            $this->active = is_null( $this->model->school_era );
+            $this->legacy = $this->model->inst_id === self::LEGACY_ID;
+
+            $this->inst_id = $this->model->inst_id;
+            $this->school_id = $this->model->school_id;
+        // Tzivos Hashem Platoons
+        } else if ( $this->type == 'class' ) {
+            $this->name = $this->model->name();
+            $this->img = $this->model->school->logoPath();
+            $this->code = 'TEACHER';
+
+            $this->active = is_null( $this->model->school->school_era );
+            $this->legacy = $this->model->school->inst_id === self::LEGACY_ID;
+
+            $this->inst_id = $this->model->school->inst_id;
+            $this->school_id = $this->model->school_id;
+            $this->class_id = $this->model->class_id;
+        // Tzivos Hashem Parents
+        } else if ( $this->type == 'PARENT' ) {
+            $this->name = 'My Parent Portal';
+            $this->img = '/mobile/img_new/TH Logo-colorful-svg.svg';
+            $this->code = 'PARENT';
+
+            $this->active = true;
+            $this->legacy = true;
+
+            $this->key = Auth::mobileKey( $this->model->admin_id );
+        }
+    }
+    
+    /**
+     * jsonSerialize
+     * 
+     * required by implements JsonSerializable.
+     * run when calling json_encode
+    */
+    public function jsonSerialize() {
+        $res = [
+            'type' => $this->type,          'id' => $this->id,
+            'code' => $this->code,          'name' => $this->name,
+            'img' => $this->img,            'legacy' => $this->legacy,
+            'active' => $this->active,      'school_id' => $this->school_id,
+            'inst_id' => $this->inst_id,    'class_id' => $this->class_id
+        ];
+        // add the login key for parent accounts to the parent portal
+        if ( $this->type == 'PARENT' )
+            $res['key'] = Auth::mobileKey( $this->model->admin_id );
+
+        return $res;
+    }
+}

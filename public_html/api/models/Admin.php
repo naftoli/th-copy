@@ -1,8 +1,11 @@
 <?php
 include_once( __DIR__ . '/../auth/classes/Auth.php' );
+include_once( __DIR__ . '/../auth/classes/Login.php' );
 include_once( __DIR__ . '/traits/BuildModel.php' );
 include_once( __DIR__ . '/../tools/emails/index.php' );
-// This class uses the Authorize.net gateway
+// * This class uses the Authorize.net gateway
+
+use mashpia\api\auth\Login as Login;
 
 class Admin extends ActiveRecord\Model implements JsonSerializable {
     use \traits\BuildModel;
@@ -73,60 +76,35 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     public function logins(){
         $logins = [];
         // Special HQ login
-        if ( $this->isHQ() ) $logins[] = [
-            'type' => 'HQ', 'id' => $this->admin_id, 'name' => 'Tzivos Hashem Headquarters', 
-            'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 
-            'code' => 'HQ', 'active' => true, 'ckids' => false,
-            'school_id' => false, 'class_id' => false
-        ];
+        if ( $this->isHQ() )
+            try { $logins[] = new Login( 'HQ', $this->admin_id, $this ); }
+            catch ( \ActiveRecord\RecordNotFound $e ) {}
+        // add all the institutions
+        foreach( $this->getAuthIds( 'institution' ) as $inst_id )
+            try { $logins[] = new Login( 'institution', $inst_id ); }
+            catch ( \ActiveRecord\RecordNotFound $e ) {}
         // add all the schools
-        foreach( $this->getAuthIds( 'institution' ) as $inst_id ){
-            try {
-                $institution = Institution::find( $inst_id );
-                $logins[] = [ 'type' => 'institution', 'id' => $inst_id, 'code' => 'INST',
-                    'name' => $institution->name, 'img' => $institution->logo(),
-                    'ckids' => $institution->inst_id === 10, 'active' => true,
-                    'school_id' => false, 'class_id' => false
-                ];
-            } catch ( \ActiveRecord\RecordNotFound $e ) {}
-        };
-        // add all the schools
-        foreach( $this->getAuthIds( 'school' ) as $school_id ){
-            try {
-                $school = School::find( $school_id );
-                $logins[] = [ 'type' => 'school', 'id' => $school_id, 'code' => 'BC',
-                    'name' => $school->school_name, 'img' => $school->logoPath(), 
-                    'ckids' => $school->inst_id === 10, 'active' => is_null( $school->school_era ),
-                    'school_id' => $school->school_id, 'class_id' => false
-                ];
-            } catch ( \ActiveRecord\RecordNotFound $e ) {}
-        };
+        foreach( $this->getAuthIds( 'school' ) as $school_id )
+            try { $logins[] = new Login( 'school', $school_id ); }
+            catch ( \ActiveRecord\RecordNotFound $e ) {}
         // add all classes
-        foreach( $this->getAuthIds( 'class' ) as $class_id ){
-            try {
-                $platoon = Platoon::find( $class_id, ['include' => ['school']] );
-                $logins[] = [ 'type' => 'class', 'id' => $class_id, 'code' => 'TEACHER',
-                    'name' => $platoon->name(), 'img' => $platoon->school->logoPath(),
-                    'ckids' => $platoon->school->inst_id === 10, 'active' => is_null( $platoon->school->school_era ),
-                    'school_id' => $platoon->school->school_id, 'class_id' => $platoon->class_id
-                ];
-            } catch ( \ActiveRecord\RecordNotFound $e ) {}
-        };
+        foreach( $this->getAuthIds( 'class' ) as $class_id )
+            try { $logins[] = new Login( 'class', $class_id ); }
+            catch ( \ActiveRecord\RecordNotFound $e ) {}
         // add parent account
         if ( count( $this->getAuthIds( 'user') ) > 0 || count( $logins ) === 0 ) {
-            $logins[] = [ 'type' => 'user', 'id' => $this->admin_id, 'code' => 'PARENT',
-                'name' => 'My Parent Portal', 'img' => '/mobile/img_new/TH Logo-colorful-svg.svg', 
-                'key' => mashpia\api\auth\Auth::mobileKey( $this->admin_id )
-            ];
+            try { $logins[] = new Login( 'PARENT', $this->admin_id, $this ); }
+            catch ( \ActiveRecord\RecordNotFound $e ) {}
         }
         return $logins;
     }
     // set the current login
     public function setLogin( $type = false, $id = false ){
         $logins = $this->logins();
-        if ( !$type || !$id ) return $this->login = $logins[0]; // default to the first login
+        if ( !$type || !$id )
+            return $this->login = $logins[0]; // default to the first login
         foreach( $logins as $login ) {
-            if ( $login['id'] == $id && $login['type'] == $type ) return $this->login = $login;
+            if ( $login->id == $id && $login->type == $type ) return $this->login = $login;
         }
         return $this->login = $logins[0];
     }
