@@ -9,7 +9,9 @@ class BirthdayRouter {
         global $current_user; global $MASHPIA_DB;
 
         // define $filters and $params;
-        extract( $this->getFilters( $current_user->login ) );
+        $filter = $current_user->login->getFilter( 's.', 'u.' );
+        if ( !$filter )
+            json_error( 'Access Deinied: HOME-BIRTHDAY-14' );
         $end_date = unixtojd();
         $start_date = $end_date - 7; // 7 days of promotions
 
@@ -19,10 +21,10 @@ class BirthdayRouter {
             ." FROM rank_marks JOIN ranks USING (rank_ord) JOIN users u USING (user_id) "
             ." JOIN schools s USING (school_id) JOIN classes c USING (class_id) "
             ." WHERE rank_ord > 1 AND date_promoted > $start_date AND date_promoted <= $end_date "
-            ." AND " . implode( ' AND ', $filters ) . ' '
+            ." AND $filter "
             ." GROUP BY user_id ORDER BY date_promoted DESC, first, last;"
         );
-        $query->execute( $params );
+        $query->execute();
         $promotions = [];
         while( $row = $query->fetch() ) {
             $soldier = [
@@ -36,22 +38,6 @@ class BirthdayRouter {
 
         // year, status, soldiers, total, reg_open
         json_response( $promotions, true, true );
-    }
-
-    private function getFilters( $login ){
-        // filters and params for the filters
-        $filters = [];   $params = [];
-        if ( $login['code'] === 'HQ' ) {
-            $filters[] = 's.test_school = 0';
-        } else if ( $login['code'] === 'INST' ) {
-            $filters[] = 's.inst_id = ?'; $params[] = $login['id'];
-        } else if ( $login['code'] === 'BC' ) {
-            $filters[] = 'u.school_id = ?'; $params[] = $login['id'];
-        } else if ( $login['code'] === 'TEACHER' ) {
-            $filters[] = 'u.class_id = ?'; $params[] = $login['id'];
-        } else { json_error( 'Access Deinied: HOME-BIRTHDAY-26' ); }
-        
-        return [ 'filters' => $filters, 'params' => $params ];
     }
 }
 

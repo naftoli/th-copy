@@ -9,8 +9,8 @@ class ProfilesRouter {
     function index() {
         global $current_user;
         
-        if ( $current_user->login['code'] === 'BC' ) {
-            $school = School::find( $current_user->login['id'] );
+        if ( $current_user->login->code === 'BC' ) {
+            $school = $current_user->login->model;
             $customer_profile = $school->customerProfile();
         } else {
             $customer_profile = $current_user->customerProfile();

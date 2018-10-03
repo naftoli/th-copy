@@ -10,15 +10,17 @@ class SubjectsRouter {
         $inst_id = 2; // default institution id.
         $base_filter = 't.base = 1 ';
         $platoon_filter = 't.platoon = 1 ';
+        $login  = $current_user->login;
+
         try {
-            if ( $current_user->login['code'] == 'INST' ) {
-                $inst_id = $current_user->login['id'];
+            if ( $login->code == 'INST' ) {
+                $inst_id = $login->id;
                 $base_filter .= 'OR t.base IN ( SELECT school_id FROM schools WHERE inst_id = :inst_id ) ';
-            } else if ( $current_user->login['code'] == 'BC' ) {
-                $inst_id = School::find( $current_user->login['id'] )->inst_id;
-                $base_filter .= 'OR t.base = ' . $current_user->login['id'];
-            } else if ( $current_user->login['code'] == 'TEACHER' ) {
-                $platoon = Platoon::find( $current_user->login['id'] );
+            } else if ( $login->code == 'BC' ) {
+                $inst_id = School::find( $login->id )->inst_id;
+                $base_filter .= 'OR t.base = ' . $login->id;
+            } else if ( $login->code == 'TEACHER' ) {
+                $platoon = Platoon::find( $login->id );
                 $inst_id = $platoon->school->inst_id;
                 $base_filter .= 'OR t.base = ' . $platoon->school->school_id;
                 $platoon_filter .= 'OR t.platoon = ' . $platoon->class_id;

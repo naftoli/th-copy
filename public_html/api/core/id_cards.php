@@ -8,7 +8,10 @@ class UsersRouter {
     public function create(){
         global $current_user; global $MASHPIA_DB;
         // limit based on admin type
-        extract($this->getFilters( $current_user->login ));
+        $params = [];
+        $filters = [ $current_user->login->getFilter( 's.', 'u.' ) ];
+        if ( !$filters[0] )
+            return json_error( 'Access Deinied: CORE-ID_CARDS-14' );
         // add filters from post request
         if ( isset($_POST['school_id']) && $_POST['school_id'] ) {
             $filters[] = 'u.school_id = ?'; $params[] = $_POST['school_id'];
@@ -83,22 +86,6 @@ class UsersRouter {
             $status[$update['user_id']] = ( $success ? $printed : !$printed );
         }
         json_response( $status );
-    }
-
-    private function getFilters( $login ){
-        // filters and params for the filters
-        $filters = [];   $params = [];
-        if ( $login['code'] === 'HQ' ) {
-            $filters[] = 's.test_school = 0';
-        } else if ( $login['code'] === 'INST' ) {
-            $filters[] = 's.inst_id = ?'; $params[] = $login['id'];
-        } else if ( $login['code'] === 'BC' ) {
-            $filters[] = 'u.school_id = ?'; $params[] = $login['id'];
-        } else if ( $login['code'] === 'TEACHER' ) {
-            $filters[] = 'u.class_id = ?'; $params[] = $login['id'];
-        } else { json_error( 'Access Deinied: CORE-USERS-26' ); }
-        
-        return [ 'filters' => $filters, 'params' => $params ];
     }
 }
 

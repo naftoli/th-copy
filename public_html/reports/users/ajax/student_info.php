@@ -162,7 +162,7 @@ if ( $th_chidon ) include( dirname(__FILE__) . "/../../../chidon_passwords.php" 
     </div>
     <div class="info info-quarter">
         <span class="title">Chayolei Soldier:</span>
-        <h3><?= $user->is_chayolei() ? "Yes" : "No"; ?></h3>
+        <h3><?= $user->chayolei ? "Yes" : "No"; ?></h3>
     </div>
     <div class="info">
         <h2>Parent Account (#<?= $user->childs_parent->admin_id ?>)</h2>

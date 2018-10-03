@@ -6,17 +6,15 @@ class UsersRouter {
 
     public function index() {
         global $current_user; global $MASHPIA_DB;
-        // limit based on admin type
-        $filters_and_params = $this->getFilters( $current_user->login );
-        // combine the filters
-        $filters = 'WHERE ' . implode( ' AND ', $filters_and_params['filters'] );
+
+        $filters = $current_user->login->getFilter( 's.', 'u.' );
         // generate the SQL
         $sql = "SELECT u.*, s.*, c.class_grade, c.class_sub FROM users u "
             ."JOIN schools s USING ( school_id ) "
-            ."LEFT JOIN classes c USING ( class_id ) $filters "
+            ."LEFT JOIN classes c USING ( class_id ) WHERE $filters "
             ."ORDER BY school_name, class_grade, class_sub, last, first";
         $query = $MASHPIA_DB->prepare( $sql );
-        $query->execute( $filters_and_params['params'] );
+        $query->execute();
 
         $users = [];
         // fetch all results and parse them as models
@@ -75,8 +73,8 @@ class UsersRouter {
     public function create() {
         global $current_user;
         $user = User::build( $_POST );
-        if ( $current_user->login['code'] === 'TEACHER' ) {
-            $user->school_id = Platoon::find( $current_user->login['id'] )->school_id;
+        if ( $current_user->login->code === 'TEACHER' ) {
+            $user->school_id = $current_user->login->model->school_id;
         } else {
             $platoon_school_id = Platoon::find( $user->class_id )->school_id;
             if ( $platoon_school_id !== $user->school_id )
@@ -125,7 +123,7 @@ class UsersRouter {
             $user = User::find( $id );
             if ( !$user->validateAccess( $current_user->login ) )
                 json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-126', 401 );
-            if ( !in_array( $current_user->login['code'], ['BC', 'HQ', 'INST'] ) ) {
+            if ( !in_array( $current_user->login->code, ['BC', 'HQ', 'INST'] ) ) {
                 json_error( 'Your current login does not have the ability to remove users' );
             }
             if ( $user->canDestroy() && $user->delete() ) {
@@ -152,22 +150,6 @@ class UsersRouter {
             json_response( $result );
         }
         json_error('Server did not get the profile picture :-(.');
-    }
-
-    private function getFilters( $login ){
-        // filters and params for the filters
-        $filters = [];   $params = [];
-        if ( $login['code'] === 'HQ' ) {
-            $filters[] = 's.test_school = 0';
-        } else if ( $login['code'] === 'INST' ) {
-            $filters[] = 's.inst_id = ?'; $params[] = $login['id'];
-        } else if ( $login['code'] === 'BC' ) {
-            $filters[] = 'u.school_id = ?'; $params[] = $login['id'];
-        } else if ( $login['code'] === 'TEACHER' ) {
-            $filters[] = 'u.class_id = ?'; $params[] = $login['id'];
-        } else { json_error( 'Access Deinied: CORE-USERS-26' ); }
-        
-        return [ 'filters' => $filters, 'params' => $params ];
     }
 }
 

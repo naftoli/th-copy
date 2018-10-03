@@ -293,12 +293,21 @@ $he_chars = array(
 	<img src="/mobile/img_new/tools-color-white-svg.svg" data-user_id="<?=$user_id?>" data-category="Marking Missions" alt="bug-report" />
 </div>
 
-<?php if ( !$user->user_registered ) { ?>
+<?php if ( !$user->chayolei ) { ?>
+<div class="container">
+    <div class="content">
+        <h1 style='text-align: center; font-weight: bold;'>
+            It appears that <?=$user->first?> is currently unenrolled from Chayolei Tzivos Hashem (CTH).<br/><br/>
+            Please contact your base commander regarding enrolling <?=$user->gender == 'M' ? 'him' : 'her'?> in Chayolei Tzivos Hashem.
+        </h1>
+    </div>
+</div>
+<?php } else if ( !$user->user_registered ) { ?>
 <div class="container">
     <div class="content">
         <h1 style='text-align: center; font-weight: bold;'>
             It appears that <?=$user->first?> is not currently registered for Tzivos Hashem.<br/><br/>
-            Please Register <?=$user->gender == 'm' ? 'him' : 'her'?> before marking missions.
+            Please Register <?=$user->gender == 'M' ? 'him' : 'her'?> before marking missions.
         </h1>
     </div>
 </div>

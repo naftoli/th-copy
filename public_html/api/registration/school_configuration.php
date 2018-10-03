@@ -7,7 +7,6 @@ class SchoolRegistrationRouter implements RestRouter {
     function authenticate(){
         global $current_user;
         return $current_user->isHQ();
-        // return $current_user->login['code'] === 'HQ';
     }
 
     // return all schools with their registration info

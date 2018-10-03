@@ -114,6 +114,7 @@ class user {
 	public $mobile_pic;
 	
 	public $allowPersonalization;
+	public $chayolei;
     
     // REGISTRATION //
     public $registration_fee = false;
@@ -163,6 +164,7 @@ class user {
 		$this->allowPersonalization = true;
 		$this->allow_parent_tasks = $row['allow_parent_tasks'] == '1' ? true : false;
 		$this->print_parent_tasks = $row['print_parent_tasks'] == '1' ? true : false;
+		$this->chayolei = $row['chayolei'] == '1' ? true : false;
 	}
 	
 	public function get_school() {
@@ -279,8 +281,7 @@ class user {
 		}
 	}
 	
-	function get_school_class() 
-	{
+	function get_school_class() {
 		require_once 'school_class.php';	
 		if ($this->class_id > 0)
 		{
@@ -318,8 +319,7 @@ class user {
      * @param string $newline newline character to break address on
      * @return string
      */
-    public function get_address( $newline = "<br/>" )
-    {
+    public function get_address( $newline = "<br/>" ) {
         $address  = $this->user_address1 . $newline;
         if ($this->user_address2) $address .= $this->user_address2 . $newline;
         $address .= $this->user_city . ", " . $this->user_state . " " . $this->user_postal;
@@ -333,31 +333,15 @@ class user {
      *
      * @return string
      */
-    public function get_mission_type()
-    {
+    public function get_mission_type() {
         if ( in_array( $this->school_type_id, [ 2, 3 ] ) )
             return "chabad";
         else if ( in_array( $this->school_type_id, [ 12, 13 ] ) )
-            return "frum";
+			return "frum";
+		else if ( in_array( $this->school_type_id, [ 22, 23 ] ) )
+            return "c-kids";
         else
             return "n/a";
-    }
-
-    /**
-     * get_chayolei
-     * 
-     * Returns true if chidon and yan are both false
-     *
-     * @return string
-     */
-    public function is_chayolei()
-    {
-        $query = mysql_query(
-            "SELECT chidon, yan FROM users WHERE user_id = " . $this->user_id . ";"
-        );
-        $row = mysql_fetch_assoc( $query );
-        
-        return $row['chidon'] == 0 && $row['yan'] == 0;
     }
     
     /**
@@ -365,8 +349,7 @@ class user {
      *
      * @return array
      */
-    public function get_chidon_info( $year )
-    {   // make sure the year is here
+    public function get_chidon_info( $year ) {   // make sure the year is here
         if ( $year ) $year = mysql_real_escape_string( $year );
         else return false;
         // load all the chidon info...
@@ -496,8 +479,7 @@ class user {
 			}
 		}
 		
-		for ($utno = 0; $utno < count($this->user_tracks); $utno++) 
-		{
+		for ($utno = 0; $utno < count($this->user_tracks); $utno++) {
 			$user_track = $this->user_tracks[$utno];
 			
 			for ($dtno = 0; $dtno < count($user_track->daily_tasks); $dtno++) {
@@ -631,8 +613,7 @@ class user {
 		// ********** NO LABEL TASKS ********** //
 	}
 
-	function get_subjects()
-	{
+	function get_subjects()	{
 		$sql = "SELECT ss.subject_id, s.subject_name ";
 		$sql = $sql . "FROM school_subjects AS ss ";
 		$sql = $sql . "JOIN subjects AS s USING (subject_id) ";
@@ -648,39 +629,33 @@ class user {
 
 	}
 			
-	public function set_school_name($school_name) 
-	{
+	public function set_school_name($school_name) {
 		$this->school_name = $school_name;
 	}	
 
-	public function set_no_of_tickets($no_of_tickets)
-	{
+	public function set_no_of_tickets($no_of_tickets){
 		$this->no_of_tickets = $no_of_tickets;
 	}
 	
-	public function set_has_won_big_prize($has_won_big_prize)
-	{
+	public function set_has_won_big_prize($has_won_big_prize){
 		if ($has_won_big_prize == true)
 			$this->has_won_big_prize = "*** HAS WON BIG PRIZE ***";
 		else
 			$this->has_won_big_prize = "";
 	}
 	
-	public function set_has_won($has_won)
-	{
+	public function set_has_won($has_won){
 		if ($has_won == true)
 			$this->has_won = "*** HAS WON ***";
 		else
 			$this->has_won = "";
 	}
 	
-	public function set_big_prizes_won($big_prizes_won)
-	{
+	public function set_big_prizes_won($big_prizes_won){
 		$this->big_prizes_won = $big_prizes_won;
 	}
 	
-	function get_all_subjects($subject_id)
-	{
+	function get_all_subjects($subject_id){
 		$sql = "SELECT * FROM subjects WHERE subject_type NOT IN ('school_points', 'home_points', 'Tanya') ORDER BY subject_name ";
 		if ($subject_id > 0)
 			$sql = $sql . "AND subject_id=" . $subject_id;
@@ -692,8 +667,7 @@ class user {
 		}		
 	}
 	
-	function get_class()
-	{
+	function get_class() {
 		if ($this->class_id > 0) {
 			$sql = "SELECT * FROM classes WHERE class_id=" . $this->class_id;
 			$query = mysql_query($sql);
@@ -703,16 +677,14 @@ class user {
 		}
     }
     
-    function get_grade()
-    {
+    function get_grade() {
         $grade = $this->class_grade;
         if ( $this->class_sub ) $grade .= " - " . $this->class_sub;
 
         return $grade;
     }
 	
-	function set_class($row)
-	{
+	function set_class($row) {
 		$this->class_grade = $row['class_grade'];
 		$this->class_sub = $row['class_sub'];		
 	}
