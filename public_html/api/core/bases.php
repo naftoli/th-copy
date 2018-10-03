@@ -6,8 +6,7 @@ class BaseRouter {
 
     public function index(){
         global $MASHPIA_DB;
-        $params = [];
-        $filters = $this->getFilters(false, $params);
+        $filters = $this->getFilters( false );
         if ( !$filters ) return json_error('Access Deinied');
         $query = $MASHPIA_DB->prepare( 
              " SELECT s.school_number, s.logo, s.school_id, s.school_name, s.school_city, s.school_state, s.school_country, "
@@ -18,23 +17,22 @@ class BaseRouter {
             ." ) soldiers USING (school_id) "
             ." WHERE $filters GROUP BY school_id ORDER BY school_name;"
         );
-        $query->execute( $params );
+        $query->execute();
         $bases = $query->fetchAll();
         json_response( $bases, true, true );
     }
 
     public function small() {
         global $MASHPIA_DB;
-        $params = [];
         $all = isset( $_POST['all'] ) ? $_POST['all'] : false;
-        $filters = $this->getFilters( $all, $params );
+        $filters = $this->getFilters( $all );
         if ( !$filters ) return json_error('Access Deinied');
         // generate the SQL
         $query = $MASHPIA_DB->prepare( 
             "SELECT s.school_id, s.school_name FROM schools s LEFT JOIN classes c USING (school_id)"
             ." WHERE $filters GROUP BY school_id ORDER BY school_name;"
         );
-        $query->execute( $params );
+        $query->execute();
         $bases = $query->fetchAll();
         json_response( $bases, true, true );
     }
@@ -102,41 +100,32 @@ class BaseRouter {
         global $current_user;
 
         if ( !$id ) {
-            if ( in_array( $current_user->login['code'], ['HQ', 'INST'] ) ) {
+            if ( in_array( $current_user->login->code, ['HQ', 'INST'] ) ) {
                 if ( !isset( $_POST['school_id'] ) || intval( $_POST['school_id'] ) <= 0 )
                     json_error( 'CORE-BASE-73 Invalid Request' );
                 $id = intval( $_POST['school_id'] );
-            } else if ( $current_user->login['code'] == 'BC' ) {
-                $id = $current_user->login['id'];
+            } else if ( $current_user->login->code == 'BC' ) {
+                $id = $current_user->login->id;
             } else {
                 json_error( 'Access Deined' );
             }
         }
         // get the school
-        try {
-            return School::find( $id );
-        } catch ( Exception $e ) { 
-            return json_error( 'CORE-BASE-85: Base not found' );
-        }
+        try { return School::find( $id ); } 
+        catch ( Exception $e ) { return json_error( 'CORE-BASE-85: Base not found' ); }
     }
 
-    private function getFilters( $all, &$params ){
+    private function getFilters( $all ){
         global $current_user; 
         $filters = [];
         $login = $current_user->login;
-        if ( $login['code'] === 'HQ' ) {
-            $filters[] = 's.test_school = 0';
-        } else if ( $login['code'] === 'INST' ) {
-            $filters[] = 's.inst_id = ?'; $params[] = $login['id'];
-        } else if ( $all ) { 
+        
+        if ( $all ) {
             $school_ids = $current_user->getAuthIds( 'school' );
             $filters[] = 's.school_id IN ('. implode(', ', $school_ids ) .')';
-        } else if ( $login['code'] === 'BC' ) {
-            $filters[] = 's.school_id = ?';   $params[] = $login['id'];
-        } else if ( $login['code'] === 'TEACHER' ) {
-            $filters[] = 'c.class_id = ?';   $params[] = $login['id'];
-        } else return false;
-        // combine the filters
+        } else {
+            $filters[] = $login->getFilter();
+        }
         return implode( ' AND ', $filters );
     }
 

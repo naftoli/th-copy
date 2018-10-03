@@ -14,9 +14,9 @@ class OrdersRouter {
             $status = 'Redeemed';
         }
 
-        if ( $login['code'] == 'BC' ) {
+        if ( $login->code == 'BC' ) {
             $filter = 'orders.institution_id = ?';
-        } else if ( $login['code'] == 'TEACHER' ) {
+        } else if ( $login->code == 'TEACHER' ) {
             $filter = ' u.class_id = ? ';
         } else return json_error('Access Denied');
 
@@ -32,7 +32,7 @@ class OrdersRouter {
             ." ORDER BY orders.created DESC, class_grade ASC, class_sub ASC, first ASC, last ASC, prize_name ASC;"
         );
 
-        $query->execute([ $login['id'], $status ]);
+        $query->execute([ $login->id, $status ]);
         $orders = [];
         while( $order = $query->fetch() ) {
             $order['platoon'] = Platoon::generateName( $order['class_grade'], $order['class_sub'] );

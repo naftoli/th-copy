@@ -5,21 +5,21 @@ require_once( __DIR__ . '/Auth.php' );
 
 class Login implements \JsonSerializable {
 
-    private $model; // model that the login refers to
-
     public $id; // the ID for the login to be sent on the wire.
     public $code; // code to use in interface
+    public $type; // the type of login that this is
 
-    private $type; // the type of login that this is
+    public $model; // model that the login refers to
+
     private $name; // The name displayed to the user
     private $img; // the icon to accompany it
     
     private $active; // Is this login active?
     private $legacy; // Does this login have access to legacy systems?
 
-    private $inst_id = false; // cache the inst id
-    private $school_id = false; // cache the school id
-    private $class_id = false; // cache the class id
+    public $inst_id = false; // cache the inst id
+    public $school_id = false; // cache the school id
+    public $class_id = false; // cache the class id
 
     const LEGACY_ID = 2; // School institution
 
@@ -40,12 +40,23 @@ class Login implements \JsonSerializable {
         $this->setup();
     }
 
+    public function getFilter( $school_key = 's.', $class_key = 'c.' ){
+        if ( $this->type == 'HQ' )
+            return $school_key.'test_school = 0';
+        if ( $this->type == 'institution' )
+            return $school_key.'inst_id = '. $this->inst_id;
+        if ( $this->type == 'school' )
+            return $school_key.'school_id = '. $this->school_id;
+        if ( $this->type == 'class' )
+            return $class_key.'class_id = '. $this->class_id;
+        return false;
+    }
+
     /**
      * setModel
      * * Sets the model for the login based on the id.
      */
     private function setModel() {
-
         if ( $this->type == 'HQ' || $this->type == 'PARENT' )
             $this->model = \Admin::find( $this->id );
         if ( $this->type == 'institution' )

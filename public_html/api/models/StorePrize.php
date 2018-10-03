@@ -102,19 +102,17 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
         global $current_user;
         if ( !$user )
             $user = $current_user;
-        // extract the login into local variables
-        extract( $user->login );
         // HQ can edit templates
-        if ( $user->isHQ() && $this->prize_type === 'Template' )
+        if ( $user->login->code == 'HQ' && $this->prize_type === 'Template' )
             return true;
         // BC's can edit their prizes
-        if ( $code === 'BC' && $this->institution_id == $id )
+        if ( $user->login->code === 'BC' && $this->institution_id == $user->login->id )
             return true;
         // teachers can edit prizes if...
-        if ( $code === 'TEACHER' 
+        if ( $user->login->code === 'TEACHER' 
             && $this->teacher_edit // the prize is marked as teacher editable
             && count( $this->platoons() ) == 1 // and the prize is limited to one platoon
-            && $this->platoons[0] == $id // and that platoon is them
+            && $this->platoons[0] == $user->login->id // and that platoon is them
         ) return true;
         // cannot edit if does not meet above conditions
         return false;

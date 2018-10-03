@@ -8,18 +8,7 @@ class ParentsRouter {
     public function index() {
         global $current_user; global $MASHPIA_DB;
 
-        $filters = [];   $params = [];
-        // limit based on admin type
-        $login = $current_user->login;
-        if ( $login['code'] === 'HQ' ) {
-            $filters[] = 's.test_school = 0';
-        } else if ( $login['code'] === 'INST' ) {
-            $filters[] = 's.inst_id = ?'; $params[] = $login['id'];
-        } else if ( $login['code'] === 'BC' ) {
-            $filters[] = 's.school_id = ?';   $params[] = $login['id'];
-        } else { json_error( 'Access Denied' ); }
-        // combine the filters
-        $filters = implode( ' AND ', $filters );
+        $filters = $current_user->login->getFilter( 's.', 'u.' );
 
         $parent_sql = "SELECT a.admin_id, a.username, a.title, a.first, a.father, a.mother, a.last, "
             ." CONCAT(admin_address1, ' ', admin_address2) AS address, admin_city AS city, admin_state AS state, "
@@ -29,7 +18,7 @@ class ParentsRouter {
             ." JOIN schools s USING (school_id) WHERE $filters;";
 
         $parent_query = $MASHPIA_DB->prepare( $parent_sql );
-        $parent_query->execute( $params );
+        $parent_query->execute();
 
         $parents = []; $children = [];
         // fetch all results and parse them as models
@@ -61,11 +50,11 @@ class ParentsRouter {
             . "LEFT JOIN admin_auths aa ON id = user_id AND auth = 'user' "
             ." WHERE aa.admin_id IS NULL AND $filters";
         // only registered soldiers for HQ to prevent the list from getting to long
-        if ( $current_user->login['code'] == 'HQ' )
+        if ( $current_user->login->code == 'HQ' )
             $children_query .= ' AND u.user_registered IS NOT NULL;';
         // run the query
         $children_query = $MASHPIA_DB->prepare( $children_query );
-        $children_query->execute( $params );
+        $children_query->execute();
 
         json_response([
             'parents' => array_values( $parents ),
