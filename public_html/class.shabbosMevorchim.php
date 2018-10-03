@@ -53,7 +53,12 @@ class ShabbosMevorchim {
     private $debug;
     private $backup;
         
-    public function __construct($year = 5778) {
+    public function __construct($year = 0) {
+        if ( $year == 0 ) {
+            require_once( $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php" ); 
+            $year = GlobalSettings::getRegistrationYear();
+        }
+
         require_once( $_SERVER['DOCUMENT_ROOT'] . "/tehillim_backups/class.tehillimBackup.php" ); // load the backups class
         $this->backup = new TehillimBackup();
 
