@@ -98,8 +98,8 @@ class TaskModal extends Component {
 
                 <Label htmlFor='miles'>Miles</Label>
                 <Input id='miles' name='points' value={ task.points || '' }
-                  type="number" min="1" max="1000" onChange={ this.onChange } required/>
-                <div className='invalid-message'>1 to 1000 Miles</div>
+                  type='number' min='1' max='1000' onChange={ this.onChange } required/>
+                <div className='invalid-message'>1 to 1,000 Miles</div>
 
               </Col>
               <Col xs={ 12 }>
