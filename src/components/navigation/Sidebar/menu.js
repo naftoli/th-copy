@@ -69,7 +69,7 @@ const getMenu = ( login ) => {
           label: "Soldiers",
           items: [
             { label: "View / Edit", path: '/bm/users' },
-            { label: "Registration", path: '/bm/users/registration', user_types: [ 'BC' ] },
+            { label: "Registration", path: '/bm/users/registration', module: 'chayolei', user_types: [ 'BC' ] },
             { label: "Rank Cards", path: '/bm/users/cards' },
             { label: "Update Missions", legacy: true, path: '/add_missions.php' },
             { label: "Update Medals", legacy: true, path: '/add_medals.php' },
@@ -135,7 +135,7 @@ const getMenu = ( login ) => {
       ]
     },
     {
-      label: "Reports", legacy: true,
+      label: "Reports", legacy: true, module: 'chayolei',
       icon: <img src={`${LEGACY_URL}/images/icon_report.png`} alt="Reports" />,
       items: [
         { label: 'Office Reports', legacy: true, path: '/reports/', user_types: [ 'HQ' ] },
@@ -168,7 +168,7 @@ const getMenu = ( login ) => {
       ]
     },
     {
-      label: 'Shipping Reports',  legacy: true, path: '/reports/shipping',
+      label: 'Shipping Reports',  legacy: true, path: '/reports/shipping', module: 'chayolei',
       icon: <img src={`${LEGACY_URL}/images/icon_report.png`} alt="shipping-reports"/>
     },
     {
@@ -193,7 +193,7 @@ const getMenu = ( login ) => {
       ]
     },
     {
-      label: "Rally", legacy: true,
+      label: "Rally", legacy: true, module: 'chayolei',
       icon: <img src={`${LEGACY_URL}/images/parentIcons/Rally.gif`} alt="Rally" />,
       items: [
         { label: 'Promotion Picture Report', legacy: true, path: '/promotion_report.php' },
@@ -202,15 +202,15 @@ const getMenu = ( login ) => {
       ]
     },
     {
-      label: 'Raffles',  legacy: true, path: '/raffles/',
+      label: 'Raffles',  legacy: true, path: '/raffles/', module: 'chayolei',
       icon: <img src={`${LEGACY_URL}/images/icon_auction.png`} alt="Raffles"/>
     },
     {
-      label: 'Yearly Prize',  legacy: true, path: '/yearly_prize/reports/',
+      label: 'Yearly Prize',  legacy: true, path: '/yearly_prize/reports/', module: 'chayolei',
       icon: <img src={`${LEGACY_URL}/images/icon_auction.png`} alt="Yearly Prize"/>
     },
     {
-      label: 'Setup Guide',  legacy: true, path: '/admin_setup_guide.php',
+      label: 'Setup Guide',  legacy: true, path: '/admin_setup_guide.php', module: 'chayolei',
       icon: <img src={`${LEGACY_URL}/images/icon_wizard.png`} alt="Setup Guide"/>
     },
     {
