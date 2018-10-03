@@ -3,7 +3,7 @@ import './styles/Toggle.scss';
 
 export const Toggle = ( props ) => {
   let { className, setRef, on, off, ...inputProps } = props;
-  // // toggle on pressing enter
+  // toggle on pressing enter
   let inputRef = null;
   const onKeyPress = ( event ) => {
     if ( event.key === 'Enter' ) {

@@ -9,13 +9,13 @@ export const Radio = ( props ) => {
   const onKeyPress = ( event ) => {
     if ( event.key === 'Enter' ) {
       event.preventDefault(); // do not submit the parent form
-      ref.click();
+      ref.current.click();
     }
   }
 
   return (
     <label className={`radio ${ className || '' }`} tabIndex={0} onKeyPress={onKeyPress}>
-      <input className='form-check-input' type='radio' { ...inputProps } ref={ref} />
+      <input className='form-check-input' type='radio' { ...inputProps } ref={ ref } />
       <span className='radio-state' />{' '}
       { props.children }
     </label>
