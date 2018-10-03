@@ -1,0 +1,4 @@
+Options +FollowSymLinks
+RewriteEngine On
+
+RewriteRule ^myshliachclasses[/]?$ https://merkos302.formstack.com/forms/chidon_shiurim_registration [R=301,L]

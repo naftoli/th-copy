@@ -38,6 +38,9 @@ cgi-bin
 /v2/stats
 /chidon/attendance/db-seeder/vendor
 
+# ignore image cache
+/camps/includes/imagecache/
+
 # ignore v2 images
 /v2/images/imgsrepo
 /v2/images/uploads
@@ -56,6 +59,7 @@ cgi-bin
 
 # general files we do not want in the codebase...
 error_log
+errors.log
 Makefile
 .ftpquota
 cookiefile
