@@ -68,9 +68,9 @@ export class Dashboard extends Component {
       }
       if ( !login.active ) {
         if ( login.code === 'BC' ) {
-          const { ckids, id } = login;
+          const { legacy, id } = login;
           const { admin_id } = current_user;
-          window.location.href = `${LEGACY_URL}/registration${ckids ? '_ckids' : ''}.php?school_id=${id}&admin_id=${admin_id}`;
+          window.location.href = `${LEGACY_URL}/registration${!legacy ? '_ckids' : ''}.php?school_id=${id}&admin_id=${admin_id}`;
           return null;
         } else {
           children = <RegistrationPage />;

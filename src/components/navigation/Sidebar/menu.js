@@ -16,7 +16,7 @@ const ALL_USER_TYPES = [ 'HQ', 'INST', 'BC', 'TEACHER' ];
  * @returns {function} Returns a valid reducer to be passed to .reduce with an array as the initilaizer
  */
 export const menuReducer = ( login, defaults = DEFAULT_USER_TYPES ) => ( filtered = [], item ) => {
-  const { code, ckids } = login;
+  const { code, legacy } = login;
   // reduce the items down a bit
   if ( item.items ) {
     item = Object.assign( {}, item, 
@@ -26,8 +26,8 @@ export const menuReducer = ( login, defaults = DEFAULT_USER_TYPES ) => ( filtere
       )}
     );
   }
-  // hide legacy links from CKids
-  if ( !(ckids && item.legacy) ) {
+  // hide legacy links from new bases
+  if ( !( !legacy && item.legacy ) ) {
     // if the item is enabled for that code, add it to the sidebar
     if ( item.user_types && item.user_types.indexOf( code ) > -1 ) {
       filtered.push( item );
