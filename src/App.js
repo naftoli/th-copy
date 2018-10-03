@@ -74,8 +74,8 @@ export class App extends Component {
             <ToastContainer 
               position="bottom-right" 
               autoClose={ 5000 } 
-              closeOnClick={false} 
-              draggablePercent={40} />
+              closeOnClick={ false } 
+              draggablePercent={ 40 } />
 
             <ConfirmationModal 
               isOpen={ isOpen } 
