@@ -12,6 +12,10 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         [ 'users' ] 
     ];
     static $belongs_to = [ 'institution' ];
+
+    static $alias_attribute = [ 
+        'name' => 'school_name', 
+    ];
     static $validates_uniqueness_of = [ [ 'school_number' ] ];
 
     // ******************************* HELPER FUNCTIONS *******************************

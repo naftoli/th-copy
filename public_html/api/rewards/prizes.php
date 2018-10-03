@@ -12,13 +12,13 @@ class PrizesRouter {
         $school_store = false;
 
         $filter = 'institution_id IN ( SELECT school_id FROM mashpiadb.schools WHERE test_school = 0 ) ';
-        if ( $login['code'] == 'INST' ) {
-            $filter = 'institution_id IN ( SELECT school_id FROM mashpiadb.schools WHERE inst_id = '. $login['id'].' ) ';
-        } else if ( $login['code'] == 'BC' ) {
-            $school_store = !!School::find( $current_user->login['id'] )->school_store;
-            $filter = 'institution_id = '. $login['id'].' ';
-        } else if ( $login['code'] == 'TEACHER' ) {
-            $filter = 'institution_id = '. $login['school_id'];
+        if ( $login->code == 'INST' ) {
+            $filter = 'institution_id IN ( SELECT school_id FROM mashpiadb.schools WHERE inst_id = '. $login->id .' ) ';
+        } else if ( $login->code == 'BC' ) {
+            $school_store = !!School::find( $current_user->login->school_id )->school_store;
+            $filter = 'institution_id = '. $login->school_id .' ';
+        } else if ( $login->code == 'TEACHER' ) {
+            $filter = 'institution_id = '. $login->school_id;
         }
 
         $prizes = StorePrize::find('all', [
@@ -39,9 +39,9 @@ class PrizesRouter {
             $prize_platoons = isset( $platoons[ $prize->prize_id ] ) ? $platoons[ $prize->prize_id ] : [];
             $prize->cachePlatoons( $prize_platoons );
             
-            if ( $login['code'] == 'TEACHER' // teachers
+            if ( $login->code == 'TEACHER' // teachers
                 && count( $prize_platoons ) > 0 // if the prize has 1 or more platoons
-                && !in_array( $login['id'], $prize_platoons ) // and they are not in the list
+                && !in_array( $login->id, $prize_platoons ) // and they are not in the list
             ) continue; // they do not see the prize.
 
             $response[] = $prize; 
@@ -65,11 +65,11 @@ class PrizesRouter {
         try {
             $prize = StorePrize::build( $_POST );
 
-            if ( $login['code'] == 'BC' ) {
-                $prize->institution_id = $login['id'];
-            } else if ( $login['code'] == 'TEACHER' ) {
+            if ( $login->code == 'BC' ) {
+                $prize->institution_id = $login->id;
+            } else if ( $login->code == 'TEACHER' ) {
                 $prize->teacher_edit = 1;
-                $prize->institution_id = $login['school_id'];
+                $prize->institution_id = $login->school_id;
                 $prize->teacher_id = $current_user->admin_id;
             }
 
@@ -84,8 +84,8 @@ class PrizesRouter {
                 && !$prize->setPlatoons( $_POST['platoons'] ) 
             ) return json_error( 'Error limiting to Platoons');
 
-            if ( $login['code'] == 'TEACHER'
-                && !$prize->setPlatoons([ $login['id'] ])
+            if ( $login->code == 'TEACHER'
+                && !$prize->setPlatoons([ $login->id ])
             ) return json_error( 'Error connecting to Platoon, Please contact Base Commander');
 
             // return the prize as the response
@@ -138,7 +138,7 @@ class PrizesRouter {
     public function setStoreOpen() {
         global $current_user;
 
-        $school = School::find( $current_user->login['id'] );
+        $school = School::find( $current_user->login->id );
 
         $school->school_store = $_POST['school_store'];
         $school->save();

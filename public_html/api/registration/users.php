@@ -10,12 +10,12 @@ class UsersRouter {
         $filters = [];   $params = [];
         // limit based on admin type
         $login = $current_user->login;
-        if ( $login['code'] === 'BC' ) {
-            $filters[] = 'u.school_id = :school_id'; $params['school_id'] = $login['id'];
+        if ( $login->code === 'BC' ) {
+            $filters[] = 'u.school_id = :school_id'; $params['school_id'] = $login->id;
         } else { 
             json_error( 'Access Deinied: CORE-USERS-26' ); 
         }
-        $params['year'] = GlobalSettings::getRegistrationYear( $login['id'] );
+        $params['year'] = GlobalSettings::getRegistrationYear( $login->id );
         $filters[] = '(ur.paid IS NULL OR ur.paid = 0.00)';
         $filters[] = 'u.chayolei = 1';
         // combine the filters
@@ -52,10 +52,10 @@ class UsersRouter {
     public function create() {
         global $current_user; global $MASHPIA_DB;
 
-        if ( !$current_user->login['code'] === 'BC' )
+        if ( !$current_user->login->code === 'BC' )
             json_error( 'Only Base Commanders can authorize registration.');
-        $school = School::find( $current_user->login['id'] );
-        // get all the users we are registering\
+        $school = $current_user->login->model;
+        // get all the users we are registering
         if ( !isset($_POST['user_ids']) || count($_POST['user_ids']) < 1 ) 
             json_error('Please select some soldiers to register.');
         try {

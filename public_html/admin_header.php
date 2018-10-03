@@ -153,47 +153,79 @@ $bpOnly = [ 82 ];
 							</div>
 						</a>
 					</li>
-				
 
-					<ul class="list_second">
-						<li>
-							<a href="#"><?=T_('Students (Soldiers)')?></a>
-							<ul>
-								<li><a href="/admin_user.php<?=$url_id?>"><?=T_('View / Edit')?></a></li>
-								<li><a href="/admin_user.php<?=$url_id2?>action=add"><?=T_('Add Individual')?></a></li>
-								<li><a href="/admin_school_file.php<?=$url_id?>"><?=T_('Upload School or Class List')?></a></li>
-								<li><a href="/admin_users_photo.php<?=$url_id?>"><?=T_("Upload Photos")?></a></li>
-							</ul>
-						</li>
-						<li>
-							<a href="#"><?=T_('Classes (Platoons)')?></a>
-							<ul>
-								<li><a href="/admin_class.php<?=$url_id?>"><?=T_('Manage')?></a></li>
-								<li><a href="/admin_class.php<?=$url_id2?>action=add"><?=T_('Add New')?></a></li>
-								<li><a href="/admin_class_transition.php<?=$url_id?>"><?=T_('Platoon Transition')?></a></li>
-							</ul>
-						</li>
-						<?php if ( in_array($admin->school_id, $chidonSchools ) ) { ?>
+					<?php if ( $admin_user["beta"] ) { ?>
+						<ul class="list_second">
 							<li>
-								<a href="#"><?=T_('Parents')?></a>
+								<a href="#"><?=T_('Soldiers')?></a>
 								<ul>
-									<li><a href="/parent_list.php">Parent Accounts</a></li>
-									<li><a href="/child_list.php">Parent / Children Accounts</a></li>
+									<li><a href="/beta/bm/users"><?=T_('View / Edit')?></a></li>
+									<li><a href="/beta/bm/users/cards"><?=T_('Rank Cards')?></a></li>
+									<li><a href="/add_missions.php"><?=T_('Update Soldier\'s Missions')?></a></li>
+									<li><a href="/add_medals.php"><?=T_('Update Soldier\'s Medals')?></a></li>
 								</ul>
 							</li>
-						<?php } // end if school is a chidon school ?>
-					</ul>
+							<li>
+								<a href="/beta/bm/platoons"><?=T_('Platoons')?></a>
+							</li>
+							<li>
+								<a href="/beta/bm/parents"><?=T_('Parents')?></a>
+							</li>
+							<li>
+								<a href="/beta/bm/staff"><?=T_('Staff')?></a>
+							</li>
+							<li>
+								<a href="/beta/bm/base"><?=T_('Base')?></a>
+							</li>
+						</ul>
+					<?php  } else { ?>
+						<ul class="list_second">
+							<li>
+								<a href="#"><?=T_('Students (Soldiers)')?></a>
+								<ul>
+									<li><a href="/admin_user.php<?=$url_id?>"><?=T_('View / Edit')?></a></li>
+									<li><a href="/admin_user.php<?=$url_id2?>action=add"><?=T_('Add Individual')?></a></li>
+									<li><a href="/admin_school_file.php<?=$url_id?>"><?=T_('Upload School or Class List')?></a></li>
+									<li><a href="/admin_users_photo.php<?=$url_id?>"><?=T_("Upload Photos")?></a></li>
+								</ul>
+							</li>
+							<li>
+								<a href="#"><?=T_('Classes (Platoons)')?></a>
+								<ul>
+									<li><a href="/admin_class.php<?=$url_id?>"><?=T_('Manage')?></a></li>
+									<li><a href="/admin_class.php<?=$url_id2?>action=add"><?=T_('Add New')?></a></li>
+									<li><a href="/admin_class_transition.php<?=$url_id?>"><?=T_('Platoon Transition')?></a></li>
+								</ul>
+							</li>
+							<?php if ( in_array($admin->school_id, $chidonSchools ) ) { ?>
+								<li>
+									<a href="#"><?=T_('Parents')?></a>
+									<ul>
+										<li><a href="/parent_list.php">Parent Accounts</a></li>
+										<li><a href="/child_list.php">Parent / Children Accounts</a></li>
+									</ul>
+								</li>
+							<?php } // end if school is a chidon school ?>
+						</ul>	
+					<? } ?>
 
-					<? if ( in_array( $admin->school_id, $chidonSchools ) ) { // show chidon UI options to Chidon Schools ?>
-						<li class="list_parent<?=isset($ui_type) && $ui_type == 'programs' ? ' current' : ''?>">
-							<a href="#" title="programs"><div><span class="icon"><img height="28" width="28" alt="Chidon" src="/images/icon_admin_medal.png"></span><?=T_('Chidon')?></div></a>
+					<?php if ( $admin_user["beta"] ) { ?>
+						<li class="list_parent<?=isset( $ui_type ) && $ui_type == 'programs' ? ' current' : '' ?>">
+							<a href="#" title="programs"><div>
+								<span class="icon">
+									<img height="28" width="28" alt="cart" src="/images/iconl_cart.png">
+								</span><?=T_('Rewards Program')?>
+							</div></a>
 						</li>
 							
 						<ul class='list_second'>
-							<li><a href="/reports/chidon/chidon_enrollment.php">Registered for Chidon</a></li>
-							<li><a href="/chidon_tests.php">Enter Chidon Test Marks</a></li>
+							<li><a href="/beta/rewards/cards"><?=T_('Achievement Cards')?></a></li>
+							<li><a href="/beta/rewards/tasks"><?=T_('Tasks')?></a></li>
+							<li><a href="/beta/rewards/prizes"><?=T_('Prizes')?></a></li>
+							<li><a href="/beta/rewards/orders"><?=T_('Orders')?></a></li>
+							<li><a href="/beta/rewards/miles"><?=T_('Add / Subtract Miles')?></a></li>
 						</ul>
-					<?php } // end chidon school only list ?>
+					<?php } ?>
 				
 					<li class="list_parent<?=isset($ui_type) && $ui_type == 'programs' ? ' current' : ''?>">
 						<a href="#" title="programs">

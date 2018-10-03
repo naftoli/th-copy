@@ -48,12 +48,12 @@ class CardsRouter {
 
         while ( $code = $fake_codes->fetch() ) {
             AchievementCard::create([
-                'institution_id' => $login['school_id'] ? $login['school_id'] : 0,
+                'institution_id' => $login->school_id ? $login->school_id : 0,
                 'campaign_id' => $subject->subject_id,
                 'task_id' => $task->achievement_task_id,
-                'class_id' => $login['class_id'],
+                'class_id' => $login->class_id,
                 'card_serial' => $code['card_serial'],
-                'card_type' => $login['code'] == 'TEACHER' ? 'Teacher' : 'Institution Administrator',
+                'card_type' => $login->code == 'TEACHER' ? 'Teacher' : 'Institution Administrator',
                 'card_points' => $task->points,
                 'created_by' => $current_user->admin_id
             ]);
@@ -67,7 +67,7 @@ class CardsRouter {
         }
         // subtract miles
         if ( $miles !== false ) {
-            $platoon = Platoon::find( $current_user->login['id'] );
+            $platoon = $current_user->login->model;
             $platoon->miles_balance = $miles - $miles_spent;
             $platoon->save();
         }
@@ -87,9 +87,9 @@ class CardsRouter {
             return json_error('Invalid Request');
         
         $date = ( new DateTime( $_POST['delete_to'] ) )->format( 'Y-m-d' );
-        $school_query = "institution_id = ". ( $login['school_id'] ? $login['school_id'] : 0 );
-        if ( $login['code'] == 'INST' )
-            $school_query = '( institution_id IN ( SELECT school_id FROM mashpiadb.schools WHERE inst_id = '.$login['id'] . ') OR institution_id = 0 )';
+        $school_query = "institution_id = ". ( $login->school_id ? $login->school_id : 0 );
+        if ( $login->code == 'INST' )
+            $school_query = '( institution_id IN ( SELECT school_id FROM mashpiadb.schools WHERE inst_id = '.$login->id . ') OR institution_id = 0 )';
 
         $filters = " created_by = :created_by AND status = 'not scanned' "
             ." AND $school_query AND class_id = :class_id "
@@ -97,7 +97,7 @@ class CardsRouter {
         $params = [
             ':delete_to' => $date . ' 23:59:59',
             ':created_by' => $current_user->admin_id,
-            ':class_id' => $login['class_id'] ? $login['class_id'] : 0,
+            ':class_id' => $login->class_id ? $login->class_id : 0,
         ];
 
         $miles = $this->getMiles();
@@ -107,7 +107,7 @@ class CardsRouter {
             );
             $query->execute( $params );
             $miles += intval( $query->fetch()['total'] );
-            $platoon = Platoon::find( $current_user->login['id'] );
+            $platoon = $current_user->login->model;
             $platoon->miles_balance = $miles;
             $platoon->save();
         }
@@ -127,8 +127,8 @@ class CardsRouter {
     private function getMiles(){
         global $current_user;
 
-        if ( $current_user->login['code'] === 'TEACHER' )
-            return Platoon::find( $current_user->login['id'] )->miles_balance;
+        if ( $current_user->login->code === 'TEACHER' )
+            return Platoon::find( $current_user->login->id )->miles_balance;
         
         return false;
     }

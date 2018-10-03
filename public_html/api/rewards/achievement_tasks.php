@@ -13,17 +13,17 @@ class TasksRouter {
         $base_filter = false;
         $platoon_filter = false;
         try {
-            if ( $login['code'] == 'HQ' ) {
+            if ( $login->code == 'HQ' ) {
                 $base_filter = 'base IN ( SELECT school_id FROM schools WHERE test_school = 0 )';
-            } else if ( $login['code'] == 'INST' ) {
-                $inst_id = $login['id'];
+            } else if ( $login->code == 'INST' ) {
+                $inst_id = $login->id;
                 $base_filter .= "base IN ( SELECT school_id FROM schools WHERE inst_id = $inst_id ) ";
-            } else if ( $login['code'] == 'BC' ) {
-                $inst_id = School::find( $login['id'] )->inst_id;
-                $base_filter .= 'base = ' . $login['id'];
-                $platoon_filter .= 'platoon IN ( SELECT class_id FROM classes WHERE school_id = "' . $login['id'] . '") ';
-            } else if ( $login['code'] == 'TEACHER' ) {
-                $platoon = Platoon::find( $login['id'] );
+            } else if ( $login->code == 'BC' ) {
+                $inst_id = $login->model->inst_id;
+                $base_filter .= 'base = ' . $login->id;
+                $platoon_filter .= 'platoon IN ( SELECT class_id FROM classes WHERE school_id = "' . $login->id . '") ';
+            } else if ( $login->code == 'TEACHER' ) {
+                $platoon = $login->model;
                 $inst_id = $platoon->school->inst_id;
                 $base_filter .= 'base = "' . $platoon->school->school_id . '"';
                 $platoon_filter .= 'platoon = "' . $platoon->class_id . '"';
@@ -52,19 +52,19 @@ class TasksRouter {
             $task = new AchievementTask( $_POST );
         } catch ( Exception $e ) { json_error( 'Invalid Request' ); }
 
-        if ( $login['code'] == 'BC' ) {
-            $task->base = $login['id'];
-        } else if ( $login['code'] == 'TEACHER') {
-            $task->base = Platoon::find( $login['id'] )->school->school_id;
-            $task->platoon = $login['id'];
+        if ( $login->code == 'BC' ) {
+            $task->base = $login->id;
+        } else if ( $login->code == 'TEACHER') {
+            $task->base = Platoon::find( $login->id )->school->school_id;
+            $task->platoon = $login->id;
         }
 
         if ( !$task->subject_id )
             json_error( 'Cannot create a Task without a Campaign' );
         
-        if ( $login['code'] == 'INST' ) {
+        if ( $login->code == 'INST' ) {
             $subject = Subject::find( $task->subject_id );
-            if ( $subject->inst_id != $login['id'] )
+            if ( $subject->inst_id != $login->id )
                 return json_error('You do not have permission to create Tasks for this Campaign. Please select another one.');
         }
 

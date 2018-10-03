@@ -18,7 +18,7 @@ class PlatoonTransitionRouter {
         if ( $have_class_id ) $params['class_id'] = $_POST['class_id'];
 
         $hq_filter = ''; // AND pt.admin_id = 82'
-        if ( $current_user->login['code'] !== 'BC' ) {
+        if ( $current_user->login->code !== 'BC' ) {
             $hq_filter = 'AND pt.admin_id = :admin_id';
             $params['admin_id'] = $current_user->admin_id;
         }
@@ -90,10 +90,10 @@ class PlatoonTransitionRouter {
         global $current_user; global $MASHPIA_DB;
 
         $filters = [];
-        if ( $current_user->login['code'] !== 'BC' ) {
+        if ( $current_user->login->code !== 'BC' ) {
             $filters[] = "pt.admin_id = '$current_user->admin_id' ";
         } else {
-            $filters[] = "u.school_id = ".$current_user->login['id']." ";
+            $filters[] = "u.school_id = ".$current_user->login->id." ";
         }
 
         $filter = count($filters) > 0 ? 'WHERE '.implode( ' AND ', $filters ) : '';

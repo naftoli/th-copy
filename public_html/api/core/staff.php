@@ -16,14 +16,9 @@ class StaffRouter {
 
         $filters = [];   $params = [];
         // limit based on admin type
-        $login = $current_user->login;
-        if ( $login['code'] === 'HQ' ) {
-            $filters[] = 'test_school = 0';
-        } else if ( $login['code'] === 'INST' ) {
-            $filters[] = 'inst_id = ?'; $params[] = $login['id'];
-        } else if ( $login['code'] === 'BC' ) {
-            $filters[] = 'school_id = ?';   $params[] = $login['id'];
-        } else { json_error( 'Access Denied' ); }
+        $filters[] = $current_user->login->getFilter( '', '' );
+        if ( !$filters[0] )
+            return json_error( 'Access Denied: CORE-STAFF-21' );
         // combine the filters
         $filters = implode( ' AND ', $filters );
 

@@ -1,4 +1,7 @@
 <?php
+require_once( __DIR__ . '/../auth/classes/Login.php' ); // mashpia\api\auth\Login class
+
+use mashpia\api\auth\Login as Login;
 
 class AdminAuth extends ActiveRecord\Model implements JsonSerializable {
     static $before_create = ['setDefaultRole', 'setDefaultPosition'];
@@ -55,6 +58,14 @@ class AdminAuth extends ActiveRecord\Model implements JsonSerializable {
         else if ( $this->auth == 'class' )
             return Platoon::find( $this->id )->name();
         return 'N/A';
+    }
+
+    public function getLogin() {
+        try {
+            return new Login( $this->auth, $this->id );
+        } catch ( \ActiveRecord\RecordNotFound $e ) { 
+            return false;
+        }
     }
 
     public function jsonSerialize() {
