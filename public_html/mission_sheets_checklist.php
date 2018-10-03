@@ -8,10 +8,9 @@ require_once 'class.globalSettings.php';
 $year = GlobalSettings::getCurrentYear();
 
 // get default dates
-// start from summer 5777
 $dates = array();
 $sql = "SELECT * FROM parshos 
-        WHERE start >= 2457921 or year = " . $year;   
+        WHERE year = " . $year;   
 //$sql = "SELECT * FROM parshos 
 //        WHERE year = " . $year;   
 $result = mysql_query($sql);
@@ -169,8 +168,8 @@ while ($row = mysql_fetch_assoc($result)) {
 			if ( isset( $_POST['weeks'] ) || !isset( $_POST['from'] ) ) {
 				
 				if ( !isset($_POST['weeks'] ) ) {                
-					//find out which ten week period to show
-					$weeks = array(2458005, 2458082, 2458152, 2458229, 2458299);
+					//find out which period to show
+					$weeks = array(2458362, 2458439, 2458516, 2458593, 2458670);
 					//get todays date
 					$jd = unixtojd();
 					for ( $i = 0; $i < 6; $i++ ) {
@@ -183,29 +182,29 @@ while ($row = mysql_fetch_assoc($result)) {
 				
 				switch ( $_POST['weeks'] ) {
 	                case 'set1': 
-	                    $from = 2458005;
-	                    $to = 2458081;
+	                    $from = 2458362;
+	                    $to = 2458438;
 	                    break;
 	                case 'set2': 
-	                    $from = 2458082;
-	                    $to = 2458151;
+	                    $from = 2458439;
+	                    $to = 2458515;
 	                    break;
 	                case 'set3':
-	                    $from = 2458152;
-	                    $to = 2458228;
+	                    $from = 2458516;
+	                    $to = 2458592;
 	                    break;
 	                case 'set4':
-	                    $from = 2458229;
-	                    $to = 2458298;
+	                    $from = 2458593;
+	                    $to = 2458669;
 	                    break;
 	                case 'set5':
-	                    $from = 2458299;
-	                    $to = 2458368;
+	                    $from = 2458670;
+	                    $to = 2458753;
 	                    break;
-                    case 'set6':
-	                    $from = 2457921;
-	                    $to = 2458004;
-	                    break;
+                    // case 'set6':
+	                //     $from = 2457921;
+	                //     $to = 2458004;
+	                //     break;
 	                default:
 	                    break;
 	            }
