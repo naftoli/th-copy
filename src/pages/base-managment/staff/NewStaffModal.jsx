@@ -8,8 +8,8 @@ import CreatePositionRow from './rows/CreatePositionRow';
 // functions
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
+import { SaveButton } from 'components/buttons';
 import { createStaff, getStaff } from 'store/base/staff/operations';
-import { SaveButton } from 'components/buttons/index';
 
 const initialState = {
   staff: {

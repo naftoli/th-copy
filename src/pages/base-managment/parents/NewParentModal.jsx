@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { FontAwesome } from 'components/ui';
+import { SaveButton } from 'components/buttons';
 import { Select, PhoneNumber } from 'components/inputs';
 import { 
-  Modal, ModalHeader, ModalBody, ModalFooter, Button,
+  Modal, ModalHeader, ModalBody, ModalFooter,
   Row, Col, Input, Label, Alert
 } from 'reactstrap';
 // functions
 import { toast } from 'react-toastify';
 import { getChildOptions } from './misc/functions';
 import makeAnimated from 'react-select/lib/animated';
-import { getParents, createParent } from 'store/parents/operations';
+import { getParents, createParent } from 'store/base/parents/operations';
 
 const initialState = {
-  father: '', mother: '', last: '', email: '',
-  cell: '', home: '', error: false, children: []
+  father: '', mother: '', last: '',   email: '',
+  cell: '',   home: '',   children: [],
+  error: false, saving: false
 }
 
 class NewParentModal extends Component {
@@ -31,6 +32,9 @@ class NewParentModal extends Component {
     // make sure they have children
     if ( children.length === 0 )
       return this.setState({ error: `Please select some soldiers.`});
+
+    this.setState({ saving: true });
+
     this.props.createParent( this.state )
     .then( () => {
       this.props.toggle();
@@ -42,6 +46,7 @@ class NewParentModal extends Component {
       // otherwise show the error message to the user as a notification
       if ( !this.props.isOpen ) toast.error( error.message );
     })
+    .then( () => this.setState({ saving: false }) );
   }
   // handle input changes
   onChange = ({ target }) => {
@@ -55,9 +60,7 @@ class NewParentModal extends Component {
 
   render(){
     const { isOpen, toggle } = this.props;
-    const { 
-      error, father, mother, last, cell, home, email
-    } = this.state;
+    const { error, saving, father, mother, last, cell, home, email } = this.state;
     // props for all inputs
     const inputProps = { onChange: this.onChange };
     const options = getChildOptions( this.props.availableChildren );
@@ -111,9 +114,7 @@ class NewParentModal extends Component {
             </Row>
           </ModalBody>
           <ModalFooter>
-            <Button color='primary'>
-              <FontAwesome icon='save' /> Create
-            </Button>
+            <SaveButton text='Create' saving={ saving } />
           </ModalFooter>
         </form>
       </Modal>
@@ -121,8 +122,8 @@ class NewParentModal extends Component {
   }
 }
 
-const mapStateToProps = ({ parents }) => ({
-  availableChildren: parents.children,
+const mapStateToProps = ({ base }) => ({
+  availableChildren: base.parents.children,
 });
 
 const mapDispatchToProps = { getParents, createParent };

@@ -5,7 +5,7 @@ import { FontAwesome } from 'components/ui';
 // functions
 import { mobileLogin } from 'functions/login';
 import { connect } from 'react-redux';
-import { removeChild, addChild } from 'store/parents/operations';
+import { removeChild, addChild } from 'store/base/parents/operations';
 import { toast } from 'react-toastify';
 
 const styles = {

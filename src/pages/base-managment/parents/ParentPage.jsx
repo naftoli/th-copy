@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { LoadingScreen, ProfilePicture, FontAwesome } from 'components/ui';
-import { Select, PhoneNumber } from 'components/inputs';
-import { Row, Col, Input, Button, InputGroup, InputGroupAddon } from 'reactstrap';
-import { AddressRow } from 'components/rows';
-import { Page404 } from 'pages/errors';
 import Child from './misc/Child';
+import { Page404 } from 'pages/errors';
+import { AddressRow } from 'components/rows';
+import { Select, PhoneNumber } from 'components/inputs';
+import { LoadingScreen, ProfilePicture, FontAwesome } from 'components/ui';
+import { Row, Col, Input, Button, InputGroup, InputGroupAddon } from 'reactstrap';
 // functions
 import memoize from 'memoize-one';
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { mobileLogin } from 'functions/login';
 import { getChildOptions } from './misc/functions';
-import { getParents } from 'store/parents/operations';
-import { removeChild, addChild } from 'store/parents/operations';
+import {
+  getParents, removeChild, addChild 
+} from 'store/base/parents/operations';
 
 class ParentPage extends Component {
 
@@ -117,7 +118,6 @@ class ParentPage extends Component {
         <p className='title'>Children</p>
         <Row id='add-child'>
           <Col xs='12'>
-            <label>Add child using Serial Number</label>
             <InputGroup>
               <Select options={ options } onChange={ this.onChildChange } 
                 isClearable className='react-select form-control' />
@@ -137,10 +137,10 @@ class ParentPage extends Component {
   }
 }
 
-const mapStateToProps = ( { parents, login } ) => ({
-  parents: parents.parents,
-  loading: parents.loading,
-  availableChildren: parents.children,
+const mapStateToProps = ( { base, login } ) => ({
+  parents: base.parents.parents,
+  loading: base.parents.loading,
+  availableChildren: base.parents.children,
   login: login.current_login
 })
 

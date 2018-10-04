@@ -11,7 +11,7 @@ import NewParentModal from './NewParentModal';
 import { toast } from 'react-toastify';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
-import { getParents } from 'store/parents/operations';
+import { getParents } from 'store/base/parents/operations';
 
 class ParentsPage extends Component {
 
@@ -108,9 +108,9 @@ class ParentsPage extends Component {
   }
 }
 
-const mapStateToProps = ( { parents, login } ) => ({
-  parents: parents.parents,
-  loading: parents.loading,
+const mapStateToProps = ( { base, login } ) => ({
+  parents: base.parents.parents,
+  loading: base.parents.loading,
   login: login.current_login
 })
 
