@@ -132,7 +132,7 @@ class NewUserPage extends Component {
     }
     if ( isBC( code ) ) {
       platoonSelect = (
-        <Col xs={ isAdmin( code ) ? 6 : 12 }>
+        <Col xs={ 6 }>
           <label>Platoon</label>
           <PlatoonSelect schoolId={ school_id } value={ class_id } 
             onChange={this.handleSelectChange('class_id')} />
