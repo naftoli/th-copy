@@ -90,14 +90,11 @@ const getMenu = ( login ) => {
       label: "Missions", user_types: ALL_USER_TYPES, module: 'chayolei',
       icon: <FontAwesome icon='award' />,
       items: [
-        { label: 'Print Missions', legacy: true, path: '/print_missions2.php', user_types: ALL_USER_TYPES },
-        { label: 'Print Summer Missions', legacy: true, path: '/print_missions_summer.php' },
-        { label: 'Mark Missions', legacy: true, path: '/mark_missions2.php', user_types: ALL_USER_TYPES },
-        { label: 'Mark Yahadus', legacy: true, path: '/sefer_hamitzvos.php' },
-        { label: 'Personalize Your Missions', legacy: true, path: '/task_customization.php' },
-        { label: 'Add Tasks', legacy: true, path: '/newTask.php' },
-        { label: 'Teachers Mission Checklist', legacy: true, path: '/mission_sheets_checklist.php' },
-        { label: 'Missions Accomplished Report', legacy: true, path: '/missions_report.php' }
+        { label: 'Print', path: '/missions/print' },
+        { label: 'Mark', path: '/missions/mark' },
+        { label: 'Personalize', path: '/missions/personalize' },
+        { label: 'Add Task', path: '/missions/tasks' },
+        { label: 'Mission Report', path: '/missions/report' }
       ]
     },
     {
