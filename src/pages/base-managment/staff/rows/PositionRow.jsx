@@ -6,7 +6,7 @@ import { ButtonBar, FontAwesome } from 'components/ui';
 import { Row, Col, Input, Button } from 'reactstrap';
 // functions
 import { toast } from 'react-toastify';
-import { updateAuth, removeAuth } from 'store/staff/operations';
+import { updateAuth, removeAuth } from 'store/base/staff/operations';
 
 class PositionRow extends Component {
 

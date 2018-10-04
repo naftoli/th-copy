@@ -16,7 +16,7 @@ import { isAdmin } from 'functions/login';
 import { setTitle } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
 // state
-import { getStaff, updateStaff, createAuth } from 'store/staff/operations';
+import { getStaff, updateStaff, createAuth } from 'store/base/staff/operations';
 
 class StaffDetailPage extends Component {
 
@@ -89,6 +89,7 @@ class StaffDetailPage extends Component {
         <CreatePositionRow 
           adminId={ staff.admin_id }
           showCreateButton
+          login={ login }
           onCreate={ this.createAuth }
           isAdmin={ isAdmin( login.code ) }
           />
@@ -101,8 +102,8 @@ class StaffDetailPage extends Component {
   }
 }
 
-const mapStateToProps = ( { staff, login } ) => ({
-  ...staff,
+const mapStateToProps = ( { base, login } ) => ({
+  ...base.staff,
   login: login.current_login
 })
 

@@ -10,7 +10,7 @@ import NewStaffModal from './NewStaffModal';
 import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
-import { getStaff } from 'store/staff/operations';
+import { getStaff } from 'store/base/staff/operations';
 
 class StaffPage extends Component {
   // modal to create staff
@@ -85,8 +85,8 @@ class StaffPage extends Component {
   }
 }
 
-const mapStateToProps = ( { staff, login } ) => ({
-  ...staff,
+const mapStateToProps = ( { base, login } ) => ({
+  ...base.staff,
   login: login.current_login
 })
 

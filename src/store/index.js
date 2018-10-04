@@ -7,7 +7,6 @@ import login from 'store/login/reducer';
 import payments from 'store/payments/reducer';
 
 import bases from 'store/bases/reducer';
-import staff from 'store/staff/reducer';
 import parents from 'store/parents/reducer';
 
 // nested reducers
@@ -19,8 +18,8 @@ export const reducer = combineReducers({
   // nested
   rewards,  base,
   // flat
-  login,  bases,    payments,
-  staff,  parents,  home,
+  login,    bases,  payments,
+  parents,  home,
 });
 
 const rootReducer = ( state, action ) => {

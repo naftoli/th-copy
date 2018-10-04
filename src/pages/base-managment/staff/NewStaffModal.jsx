@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { FontAwesome } from 'components/ui';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Alert, Collapse } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Alert, Collapse } from 'reactstrap';
 // rows
 import EditStaffRow from './rows/EditStaffRow';
 import CreatePositionRow from './rows/CreatePositionRow';
 // functions
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
-import { createStaff, getStaff } from 'store/staff/operations';
+import { createStaff, getStaff } from 'store/base/staff/operations';
+import { SaveButton } from 'components/buttons/index';
 
 const initialState = {
   staff: {
@@ -17,7 +17,8 @@ const initialState = {
     title: '', first: '', last: '', work: '', cell: '',
   },
   auth: {},
-  error: false
+  error: false,
+  saving: false
 }
 
 class NewStaffModal extends Component {
@@ -32,24 +33,29 @@ class NewStaffModal extends Component {
   // onSubmit
   createStaff = ( e ) => {
     e.preventDefault();
-    this.setState({ error: false });
-    const { staff, auth } = this.state
+
+    this.setState({ error: false, saving: true });
+    const { staff, auth } = this.state;
+
     this.props.createStaff({ ...staff, auth })
-    .then( response => {
-      this.props.toggle();  this.props.getStaff();
+    .then( () => {
+      this.props.toggle();
+      this.props.getStaff();
       this.setState({ ...initialState });
     })
     .catch( ({ message }) => {
       this.setState({ error: message });
       if ( !this.props.isOpen ) toast.error( message );
     })
+    .then( () => this.setState({ saving: false }) );
+
   }
   // onChange event handler
   onChange = ({ target }) => { this.setState({ [target.id]: target.value }) }
 
   render(){
     const { isOpen, toggle, login } = this.props;
-    const { error, staff } = this.state;
+    const { error, staff, saving } = this.state;
 
     return (
       <Modal isOpen={ isOpen } toggle={ toggle } centered id='NewStaffModal'>
@@ -65,6 +71,7 @@ class NewStaffModal extends Component {
 
             <CreatePositionRow 
               onChange={ this.setAuth }
+              login={ login }
               isAdmin={ isAdmin( login.code ) }
               />
 
@@ -76,9 +83,7 @@ class NewStaffModal extends Component {
 
           </ModalBody>
           <ModalFooter>
-            <Button color='primary'>
-              <FontAwesome icon='save' /> Create
-            </Button>
+            <SaveButton text='Create' saving={ saving } />
           </ModalFooter>
         </form>
       </Modal>

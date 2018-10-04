@@ -35,8 +35,8 @@ export class BaseManagmentIndexPage extends Component {
   }
 }
 
-const mapStateToProps = ( state ) => ({
-  login: state.login.current_login
+const mapStateToProps = ({ login }) => ({
+  login: login.current_login
 })
 
 export default connect( mapStateToProps )( BaseManagmentIndexPage );

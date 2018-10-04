@@ -12,7 +12,7 @@ import { PlatoonTab, TeachersTab, SoldiersTab } from './tabs';
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { getPlatoon, updatePlatoon, deletePlatoon } from 'store/base/platoons/operations';
-import { removeAuth, createAuth } from 'store/staff/operations';
+import { removeAuth, createAuth } from 'store/base/staff/operations';
 import { filterUpdates } from 'functions/events';
 
 export class PlatoonPage extends Component {

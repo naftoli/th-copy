@@ -8,7 +8,7 @@ import { BaseLogo, FontAwesome } from 'components/ui';
 import { PhoneNumber, Password } from 'components/inputs';
 import { Row, Col, Input, Button, Card } from 'reactstrap';
 // state
-import { removeAuth } from 'store/staff/operations';
+import { removeAuth } from 'store/base/staff/operations';
 import { updateCurrentUser, getCurrentUser } from 'store/login/operations';
 // functions
 import { setTitle } from 'functions/utils';

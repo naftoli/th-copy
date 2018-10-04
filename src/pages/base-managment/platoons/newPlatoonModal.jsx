@@ -24,7 +24,7 @@ const initialState = {
 class NewPlatoonModal extends Component {
 
   state = { ...initialState }
-  // update state.staff
+  
   onChange = ({ target }) => {
     this.setState({ platoon: { ...this.state.platoon, [target.name]: target.value } });
   }

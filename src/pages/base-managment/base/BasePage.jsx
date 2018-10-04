@@ -13,7 +13,7 @@ import {
 } from './tabs';
 // state
 import { getBase, updateBase } from 'store/bases/operations';
-import { removeAuth, createAuth } from 'store/staff/operations';
+import { removeAuth, createAuth } from 'store/base/staff/operations';
 // functions
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';

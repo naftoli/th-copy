@@ -13,7 +13,8 @@ class CreatePositionRow extends Component {
   static propTypes = {
     showCreateButton: PropTypes.bool,
     onCreate: PropTypes.func,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    login: PropTypes.object.isRequired
   }
   // default props
   static defaultProps = {
@@ -38,7 +39,11 @@ class CreatePositionRow extends Component {
   handleInputChange = ({ target }) => this.handleUpdates({ [target.name]: target.value });
 
   getAuth = () => {
-    const { school_id, class_id , ...auth } = this.state;
+    let { school_id, class_id , ...auth } = this.state;
+
+    if ( !school_id ) school_id = this.props.login.school_id;
+    if ( !class_id ) class_id = this.props.login.class_id;
+
     auth.id = auth.auth === 'class' ? class_id : school_id;
     auth.admin_id = this.props.adminId;
     return auth;
