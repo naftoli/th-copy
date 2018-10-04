@@ -24,7 +24,7 @@ class UsersRouter {
         } if ( isset($_POST['hide_printed']) && $_POST['hide_printed'] ) {
             $filters[] = 'rm.date_printed IS NULL';
         } if ( isset($_POST['earned_before']) ) { // expect julian date from client
-            $filters[] = 'rm.date_promoted < ?'; $params[] = $_POST['earned_before'];
+            $filters[] = 'rm.date_promoted <= ?'; $params[] = $_POST['earned_before'];
         }
         // combine the filters
         $filters[] = 'u.user_registered IS NOT NULL';
