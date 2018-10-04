@@ -9,7 +9,7 @@ class UsersRouter {
 
         $filters = $current_user->login->getFilter( 's.', 'u.' );
         // generate the SQL
-        $sql = "SELECT u.*, s.*, c.class_grade, c.class_sub FROM users u "
+        $sql = "SELECT u.*, s.school_name, s.shipping_city, s.school_era, c.class_grade, c.class_sub FROM users u "
             ."JOIN schools s USING ( school_id ) "
             ."LEFT JOIN classes c USING ( class_id ) WHERE $filters "
             ."ORDER BY school_name, class_grade, class_sub, last, first";
