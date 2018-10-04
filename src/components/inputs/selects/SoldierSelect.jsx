@@ -6,7 +6,7 @@ import { Select } from './Select';
 import { toast } from 'react-toastify';
 import { findOption } from 'functions/selects';
 import { makeCancelable } from 'functions/utils/promises';
-import { getSoldierList } from 'store/soldiers/operations';
+import { getSoldierList } from 'store/base/soldiers/operations';
 
 export class SoldierSelect extends Component {
 

@@ -17,7 +17,7 @@ import { isAdmin } from 'functions/login';
 import { findOption } from 'functions/selects';
 import { setTitle, toJulian } from 'functions/utils';
 // state
-import { getRankCards, markPrinted } from 'store/soldiers/id_cards/operations';
+import { getRankCards, markPrinted } from 'store/base/soldiers/id_cards/operations';
 // styles
 import './RankCardsPage.scss';
 
@@ -121,7 +121,7 @@ export class RegistrationPage extends Component {
 
     return (
       <div id='RankCardsPage'>
-        <Callout title='Soldier Rank Cards' className='no-print'>
+        <Callout title='Soldier rank cards' className='no-print'>
           <p>Please note that Headquarters will likely print and ship permenent ID cards to you.</p>
           <p>If you wish to print your own please make sure you can print <strong>3.37in x 2.12in</strong> ( 8.55cm x 5.38cm )</p>
           <p><strong>Please note that you can only print rank cards for registered soldiers.</strong></p>
@@ -148,20 +148,20 @@ export class RegistrationPage extends Component {
               onChange={this.handleSelectChange('rank')} openMenuOnFocus/>
           </Col>
           <Col xs='12' sm='4'>
-            <label>Serial Number</label>
+            <label>Serial number</label>
             <Input name='user_serial' value={ user_serial } onChange={ this.handleInputChange } />
           </Col>
           <Col xs='12' sm='6'>
-            <label>Show Ranks:</label><br/>
+            <label>Show ranks:</label><br/>
             <Radio name='current' value={true} checked={ current } onChange={ this.handleRadioChange }>
-              Current Rank Only
+              Current rank only
             </Radio>
             <Radio name='current' value={false} checked={ !current } onChange={ this.handleRadioChange }>
-              All Ranks Earned
+              All ranks earned
             </Radio>
           </Col>
           <Col xs='12' sm='6'>
-            <label>Print Type:</label><br/>
+            <label>Print type:</label><br/>
             <Radio name='permanent' value={false} checked={ !permanent } onChange={ this.handleRadioChange }>
               Temporary
             </Radio>
@@ -170,7 +170,7 @@ export class RegistrationPage extends Component {
             </Radio>
           </Col>
           <Col xs='12' sm='6'>
-            <label>Ranks Earned Before:</label><br/>
+            <label>Ranks earned on or before:</label><br/>
             <Date 
               maxDate={ moment() }
               value={ moment( julian.toDate( earned_before ) ) } 
@@ -228,7 +228,7 @@ export class RegistrationPage extends Component {
   }
 }
 
-const mapStateToProps = ( { login, soldiers } ) => ({
+const mapStateToProps = ( { login } ) => ({
   login: login.current_login
 });
 

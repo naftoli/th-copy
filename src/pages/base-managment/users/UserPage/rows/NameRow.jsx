@@ -23,13 +23,13 @@ const NameRow = ( { soldier, onChange, required } ) => {
       </Col>
       <Col xs='6' dir='rtl'>
         <label>שם פרטי (First Name)</label>
-        <Input id='first_he' value={ first_he } { ...inputProps }
+        <Input id='first_he' value={ first_he } { ...inputProps } required={ false }
           pattern='^[^a-zA-Z]{2,}$' title="Three or more Hebrew letters"/>
         <div className='invalid-message'>Please enter 2 or more <em>Hebrew</em> letters</div>
       </Col>
       <Col xs='6' dir='rtl'>
         <label>שם משפחה (Last Name)</label>
-        <Input id='last_he' value={ last_he } { ...inputProps }
+        <Input id='last_he' value={ last_he } { ...inputProps } required={ false }
           pattern='^[^a-zA-Z]{2,}$' title="Three or more Hebrew letters"/>
         <div className='invalid-message'>Please enter 2 or more <em>Hebrew</em> letters</div>
       </Col>

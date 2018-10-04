@@ -9,7 +9,6 @@ import payments from 'store/payments/reducer';
 import bases from 'store/bases/reducer';
 import staff from 'store/staff/reducer';
 import parents from 'store/parents/reducer';
-import soldiers from 'store/soldiers/reducer';
 
 // nested reducers
 import rewards from './rewards';
@@ -20,7 +19,7 @@ export const reducer = combineReducers({
   // nested
   rewards,  base,
   // flat
-  login,  soldiers, bases,  payments,
+  login,  bases,    payments,
   staff,  parents,  home,
 });
 

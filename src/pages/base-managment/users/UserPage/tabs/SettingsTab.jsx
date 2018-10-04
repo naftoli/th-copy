@@ -9,7 +9,8 @@ import { Select, PlatoonSelect, Checkbox } from 'components/inputs';
 // functions
 import { isBC } from 'functions/login';
 import { findOption, missionTypeOptions } from 'functions/selects';
-import { deleteSoldier, getSoldiers } from 'store/soldiers/operations';
+import { deleteSoldier, getSoldiers } from 'store/base/soldiers/operations';
+import { FontAwesome } from 'components/ui/Icons';
 
 class SettingsTab extends Component {
   // handle checkbox events
@@ -103,7 +104,9 @@ class SettingsTab extends Component {
             <Row>
               <Col xs='12'>
                 <p className='title'>Delete Soldier</p>
-                <Button color="danger" onClick={ this.delete }>Delete Soldier</Button>
+                <Button color="danger" onClick={ this.delete }>
+                  <FontAwesome icon='trash' /> Delete Soldier
+                </Button>
               </Col>
             </Row>
           }

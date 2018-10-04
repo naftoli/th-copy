@@ -9,7 +9,7 @@ import { ButtonBar, SelectTable, Callout, InlineSync, FontAwesome } from 'compon
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
-import { getSoldiers, registerSoldiers } from 'store/soldiers/registration/operations';
+import { getSoldiers, registerSoldiers } from 'store/base/soldiers/registration/operations';
 // styles
 import './RegistrationPage.scss';
 
@@ -138,10 +138,10 @@ export class RegistrationPage extends Component {
   }
 }
 
-const mapStateToProps = ( { login, soldiers } ) => ({
+const mapStateToProps = ( { login, base } ) => ({
   login: login.current_login,
-  soldiers: soldiers.registration_soldiers,
-  loading: soldiers.loading
+  soldiers: base.soldiers.registration_soldiers,
+  loading: base.soldiers.loading
 });
 
 export default connect( mapStateToProps, { getSoldiers, registerSoldiers } )( RegistrationPage );

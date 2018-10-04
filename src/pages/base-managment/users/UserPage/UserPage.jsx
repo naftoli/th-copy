@@ -11,7 +11,7 @@ import { PersonalTab, SettingsTab, RankTab } from './tabs';
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
-import { getSoldier, updateSoldier } from 'store/soldiers/operations';
+import { getSoldier, updateSoldier } from 'store/base/soldiers/operations';
 // styles
 import './UserPage.scss';
 

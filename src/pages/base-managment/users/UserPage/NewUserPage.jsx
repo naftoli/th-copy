@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { isAdmin, isBC } from 'functions/login';
 import { missionTypeOptions, findOption } from 'functions/selects';
-import { uploadProfile, createSoldier, getSoldiers } from 'store/soldiers/operations';
+import { uploadProfile, createSoldier, getSoldiers } from 'store/base/soldiers/operations';
 
 const initialSoldier = {
   first: '', last: '', first_he: '', last_he: '', 

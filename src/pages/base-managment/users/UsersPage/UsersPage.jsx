@@ -13,7 +13,7 @@ import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // styles
 import './UsersPage.scss';
 // state
-import { getSoldiers, updateSoldier, uploadSpreadsheet } from 'store/soldiers/operations';
+import { getSoldiers, updateSoldier, uploadSpreadsheet } from 'store/base/soldiers/operations';
 // data
 import getColumns from './columns';
 
@@ -129,10 +129,10 @@ export class UsersPage extends Component {
 
 }
 
-const mapStateToProps = ( state ) => {
+const mapStateToProps = ({ base, login }) => {
   return {
-    ...state.soldiers,
-    current_login: state.login.current_login
+    ...base.soldiers,
+    current_login: login.current_login
   };
 }
 
