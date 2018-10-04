@@ -16,7 +16,7 @@ const initialState = {
   platoon: {
     class_grade: '', class_sub: '', class_teacher: '',
     email: '', cell: '', miles_balance: 1000,
-    miles_per_soldier: 200
+    miles_per_soldier: 100
   },
   saving: false,
 }
