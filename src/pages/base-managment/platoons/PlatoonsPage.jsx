@@ -10,7 +10,7 @@ import {
 // functions
 import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
-import { getPlatoons, createPlatoon } from 'store/platoons/operations';
+import { getPlatoons, createPlatoon } from 'store/base/platoons/operations';
 
 export class PlatoonsPage extends Component {
 
@@ -96,8 +96,8 @@ export class PlatoonsPage extends Component {
   }
 }
 
-const mapStateToProps = ( { platoons, login } ) => ({
-  ...platoons,
+const mapStateToProps = ( { base, login } ) => ({
+  ...base.platoons,
   login: login.current_login
 })
 

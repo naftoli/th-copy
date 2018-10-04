@@ -23,7 +23,8 @@ export const getPlatoons = ( school_id = false, all = false ) => dispatch => {
 
 // get a single platoon
 export const getPlatoon = ( id ) => dispatch => {
-  return API.get( `/core/platoons?id=${id}` ).then( handleAPIResponse );
+  return API.get( `/core/platoons?id=${id}` )
+    .then( handleAPIResponse );
 }
 
 // update a single soldier
@@ -41,7 +42,14 @@ export const updatePlatoon = ( id, data ) => dispatch => {
 }
 
 export const createPlatoon = data => dispatch => {
-  return API.post( '/core/platoons', data ).then( handleAPIResponse );
+  return API.post( '/core/platoons', data )
+    .then( handleAPIResponse );
+}
+
+export const deletePlatoon = class_id => disptach => {
+  return API.delete( `/core/platoons?id=${ class_id }` )
+  .then( handleAPIResponse )
+  .then( disptach( actions.deletePlatoon( class_id ) ) )
 }
 
 /**

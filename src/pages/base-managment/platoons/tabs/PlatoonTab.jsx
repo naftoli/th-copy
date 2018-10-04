@@ -18,7 +18,7 @@ export class PlatoonTab extends Component {
   };
 
   render(){
-    const { platoon, tabId, updated, onSubmit } = this.props;
+    const { platoon, tabId, updated, onSubmit, onDelete } = this.props;
 
     const inputProps = { onChange: this.onChange };
     const selectProps = { onChange: this.onSelectChange };
@@ -35,8 +35,11 @@ export class PlatoonTab extends Component {
 
         <form id='PlatoonTab' onSubmit={ onSubmit }>
 
-          <PlatoonRow platoon={ platoon } 
-            inputProps={ inputProps } selectProps={ selectProps } />
+          <PlatoonRow 
+            platoon={ platoon } 
+            onDelete={ onDelete } 
+            inputProps={ inputProps }
+            selectProps={ selectProps } />
 
           <SaveButton show={ updated } />
 

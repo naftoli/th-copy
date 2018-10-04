@@ -11,7 +11,7 @@ import { PlatoonTab, TeachersTab, SoldiersTab } from './tabs';
 // functions
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
-import { getPlatoon, updatePlatoon } from 'store/platoons/operations';
+import { getPlatoon, updatePlatoon, deletePlatoon } from 'store/base/platoons/operations';
 import { removeAuth, createAuth } from 'store/staff/operations';
 import { filterUpdates } from 'functions/events';
 
@@ -55,11 +55,21 @@ export class PlatoonPage extends Component {
     .then( platoon => this.setState({ platoon, updates: {} }) );
   }
 
+  delete = event => {
+    event && event.preventDefault();
+    if ( !window.confirm('Are you sure you want to delete this platoon?') )
+      return false;
+
+    this.props.deletePlatoon( this.state.platoon.class_id )
+    .then( () => { this.setState({ platoon: undefined }) })
+    .catch( e => toast.error( e.message ) );
+  }
+
   render() {
     let { platoon, loading, updates, activeTab } = this.state;
 
     if ( platoon === undefined ) 
-      return <Redirect to='/platoons' />;
+      return <Redirect to='/bm/platoons' />;
     
     if ( loading )
       return <LoadingScreen  Callout />
@@ -77,9 +87,11 @@ export class PlatoonPage extends Component {
           <NavigationTab active={activeTab === 2} onClick={this.toggle( 2 )}>
             Teacher Accounts <FontAwesome icon='user-lock'/>
           </NavigationTab>
-          <NavigationTab active={activeTab === 3} onClick={this.toggle( 3 )}>
-            Soldiers <FontAwesome icon='users'/>
-          </NavigationTab>
+          { platoon.users.length > 0 &&
+            <NavigationTab active={activeTab === 3} onClick={this.toggle( 3 )}>
+              Soldiers <FontAwesome icon='users'/>
+            </NavigationTab>
+          }
         </Nav>
         <TabContent activeTab={ activeTab }>
 
@@ -87,8 +99,9 @@ export class PlatoonPage extends Component {
             tabId={ 1 }
             platoon={ platoon } 
             updated={ updated }
-            onUpdate={ this.onUpdate } 
-            onSubmit={ this.save }/>
+            onSubmit={ this.save }
+            onDelete={ this.delete } 
+            onUpdate={ this.onUpdate } />
           
           <TeachersTab
             tabId={ 2 }
@@ -113,7 +126,7 @@ const mapStateToProps = ({ login }) => ({
 })
 
 const mapDispatchToProps = { 
-  getPlatoon, updatePlatoon, 
+  getPlatoon, updatePlatoon, deletePlatoon,
   removeAuth, createAuth
 }
 

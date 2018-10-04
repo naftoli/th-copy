@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 // components
 import { Select, PhoneNumber } from 'components/inputs';
-import { Row, Col, Input } from 'reactstrap';
-import { findOption } from 'functions/selects'
+import { Row, Col, Input, Button } from 'reactstrap';
+import { findOption } from 'functions/selects';
+import { FontAwesome, Number } from 'components/ui';
 
 export class PlatoonRow extends Component {
 
   render() {
-    const { inputProps, selectProps } = this.props;
+    const { inputProps, selectProps, onDelete } = this.props;
     const { 
       class_grade, class_sub, class_teacher, cell, email,
-      miles_per_soldier, miles_balance
+      users, miles_per_soldier, miles_balance,
     } = this.props.platoon;
 
     let grades = [
@@ -53,9 +54,17 @@ export class PlatoonRow extends Component {
         <Col xs={6}>
           <label>Current Miles Balance</label>
           <Input 
-            type='number' name='miles_balance' 
+            type='number' name='miles_balance'  min='0' max='99999999999'
             value={ miles_balance } { ...inputProps } />
+          <div className='invalid-message'>0 to <Number value={ 99999999999 } /></div>
         </Col>
+        { users && users.length === 0 && 
+          <Col xs={6}>
+            <Button color='danger' onClick={ onDelete } id='delete'>
+              <FontAwesome icon='trash' /> Delete Platoon
+            </Button>
+          </Col>
+        }
       </Row>
     );
   }

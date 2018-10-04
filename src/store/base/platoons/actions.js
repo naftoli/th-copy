@@ -20,3 +20,10 @@ export const updatePlatoon = ( id, updates ) => {
     payload: { id, updates }
   }
 };
+
+export const deletePlatoon = id => {
+  return {
+    type: types.DELETE_PLATOON,
+    payload: id
+  }
+};

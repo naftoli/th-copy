@@ -27,6 +27,12 @@ export default ( state = initialState, action ) => {
           platoon => ( platoon.class_id === action.payload.id ? {...platoon, ...action.payload.updates } : platoon )
         )
       };
+
+    case types.DELETE_PLATOON:
+      return {
+        ...state, 
+        platoons: state.platoons.filter( platoon => platoon.class_id !== action.payload )
+      };
     // // add a platoon when it is created
     // case types.CREATE_PLATOON:
     //   return {

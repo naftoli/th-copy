@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { 
   getUsers, changePlatoon, removeFromBase, transitionPlatoons 
-} from 'store/platoons/platoon_transition';
+} from 'store/base/platoons/platoon_transition';
 // styles
 import './PlatoonTransitionPage.scss';
 

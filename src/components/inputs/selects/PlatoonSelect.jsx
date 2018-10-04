@@ -5,7 +5,7 @@ import { Select } from './Select';
 // functions
 import { findOption } from 'functions/selects';
 import { makeCancelable } from 'functions/utils/promises';
-import { getPlatoonList } from 'store/platoons/operations';
+import { getPlatoonList } from 'store/base/platoons/operations';
 
 export class PlatoonSelect extends Component {
 

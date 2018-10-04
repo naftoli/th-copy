@@ -4,20 +4,24 @@ import thunk from 'redux-thunk';
 
 import home from 'store/home/reducer';
 import login from 'store/login/reducer';
+import payments from 'store/payments/reducer';
+
 import bases from 'store/bases/reducer';
 import staff from 'store/staff/reducer';
 import parents from 'store/parents/reducer';
-import payments from 'store/payments/reducer';
 import soldiers from 'store/soldiers/reducer';
-import platoons from 'store/platoons/reducer';
 
 // nested reducers
 import rewards from './rewards';
+import base from './base';
 
 
 export const reducer = combineReducers({
-  login,  soldiers, platoons, bases,  payments,
-  staff,  parents,  rewards,  home
+  // nested
+  rewards,  base,
+  // flat
+  login,  soldiers, bases,  payments,
+  staff,  parents,  home,
 });
 
 const rootReducer = ( state, action ) => {
