@@ -38,7 +38,7 @@ export default ( state = initialState, action ) => {
     // set the current user
     case types.SET_USER:
       // user is a different portal, do not update the cookies.
-      if ( action.payload.logins[0].type !== 'user' && !cookies.get('login') ) {
+      if ( action.payload.logins[0].type !== 'PARENT' && !cookies.get('login') ) {
         const login = action.payload.logins[0];
         cookies.set( 'login', `${login.type}-${login.id}`, { path: '/' } );
       }
@@ -66,7 +66,7 @@ export default ( state = initialState, action ) => {
       ) || state.current_user.logins[0]; // or just get the first one
       
       // user is a different portal, do not update the cookies.
-      if ( current_login.type !== 'user' ) {
+      if ( current_login.type !== 'PARENT' ) {
         cookies.set( 'login', `${current_login.type}-${current_login.id}`, { path: '/', expires } );
       } else {
         cookies.set( 'admin', current_login.key, { path: '/', expires } );

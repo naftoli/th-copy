@@ -62,7 +62,7 @@ export class Dashboard extends Component {
 
     // if we are a user and not logging out - redirect to legacy parent portal
     if ( location.pathname !== '/logout' ) {
-      if ( login.type === 'user' ) {
+      if ( login.type === 'PARENT' ) {
         window.location.href = `${LEGACY_URL}/mobile/reg/parent_detail.html`;
         return null;
       }
