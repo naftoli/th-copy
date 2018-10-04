@@ -9,6 +9,8 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
     static $belongs_to = [ [ 'school' ] ];
     static $has_many = [ [ 'users', 'foreign_key' => 'class_id' ] ];
 
+    static $before_destroy = ['canDestroy'];
+
     // ******************************* HELPER FUNCTIONS *******************************
     public function name() {
         return self::generateName( $this->class_grade, $this->class_sub );
@@ -34,6 +36,11 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
         if ( $login->code === 'BC' ) return $this->school->school_id == $login->id;
         // if ( $login->code === 'TEACHER' ) return $this->class_id == $login->id;
         return false;
+    }
+
+    // ******************************* ONDELETE FUNCTIONS *******************************
+    public function canDestroy(){
+        return count( $this->users ) == 0;
     }
 
     // ******************************* SERIALIZERS *******************************
