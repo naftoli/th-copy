@@ -21,16 +21,13 @@ export const createSoldier = data => dispatch => {
 }
 // update a single soldier
 export const updateSoldier = ( id, data ) => dispatch => {
-  const toast_id = createNotifcation('Updating Soldier');
   return API.post( `/core/users?id=${id}`, data )
     .then( response => {
-      updateNotifcation( toast_id, 'Soldier Updated!', response.message, response.success );
       if ( response.success ) { 
         dispatch( actions.updateSoldier( id, response.data ) ); 
       } 
       return response;
     }).catch( error => {
-      updateNotifcation( toast_id, '', error.message, false );
       return Promise.reject( error );
     });
 }

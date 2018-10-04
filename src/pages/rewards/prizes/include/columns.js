@@ -4,25 +4,15 @@ import { DEFAULT_PRIZE } from 'components/constants';
 import { Stock } from './components';
 import { Toggle } from 'components/inputs';
 import { Number, StorePrize } from 'components/ui';
-
-const yesNoFilter = ( filter, row ) => {
-  if ( filter.value === 'all' ) return true;
-  if ( filter.value === 'yes') return !!row[filter.id];
-  if ( filter.value === 'no') return !row[filter.id];
-}
-
-const yesNoFilterRender = ({ filter, onChange }) => (
-  <select style={{ width: "100%" }} value={filter ? filter.value : "all"}
-    onChange={event => onChange(event.target.value)}>
-    <option value="all">Show All</option>
-    <option value="yes">On</option>
-    <option value="no">Off</option>
-  </select>
-);
+// functions
+import { yesNoFilter, yesNoFilterRender } from 'functions/tables';
 
 export function getColumns({
   editPicture, editPrize, updateToggle, isTemplate = false
 }) {
+
+  const dropdown = yesNoFilterRender('On', 'Off');
+
   const columns = [
     {
       Header: 'Picture',  accessor: 'image',
@@ -62,7 +52,7 @@ export function getColumns({
         Cell: ({ value }) => isTemplate ? <Number value={value}/> : <Stock value={ value }/> },
 
       { Header: 'Status', accessor: 'is_active', 
-        Filter: yesNoFilterRender, filterMethod: yesNoFilter,
+        Filter: dropdown, filterMethod: yesNoFilter,
         Cell: ({ value, original }) => 
           <Toggle
             disabled={ !original.editable }
@@ -71,7 +61,7 @@ export function getColumns({
       },
       
       { Header: 'One Per Soldier', accessor: 'one_per_user',
-        Filter: yesNoFilterRender, filterMethod: yesNoFilter,
+        Filter: dropdown, filterMethod: yesNoFilter,
         Cell: ({ value, original }) => 
           <Toggle
             disabled={ !original.editable } 

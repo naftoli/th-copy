@@ -13,7 +13,9 @@ import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // styles
 import './UsersPage.scss';
 // state
-import { getSoldiers, updateSoldier, uploadSpreadsheet } from 'store/base/soldiers/operations';
+import { 
+  getSoldiers, updateSoldier, uploadSpreadsheet 
+} from 'store/base/soldiers/operations';
 // data
 import getColumns from './columns';
 
@@ -54,6 +56,11 @@ export class UsersPage extends Component {
     this.props.updateSoldier( this.state.cropperModalId, formData )
   }
 
+  updateToggle = ( key, id ) => e => {
+    return this.props.updateSoldier( id, { [key]: e.target.checked ? 1 : 0 } )
+    .catch( e => toast.error( e.message ) );
+  }
+
   // handler for uploding the excel file
   uploadSpreadsheet = ( formData ) => {
     return this.props.uploadSpreadsheet( formData )
@@ -82,7 +89,7 @@ export class UsersPage extends Component {
   render() {
     const { current_login, soldiers, loading, match } = this.props;
     const { cropperModalShow, cropperModalSrc, uploadModalShow } = this.state;
-    const columns = getColumns( current_login.code, this.editPicture );
+    const columns = getColumns( current_login.code, this.editPicture, this.updateToggle );
     // page definition
     return (
       <div id='UsersPage'>

@@ -64,7 +64,7 @@ a[tabindex]:hover { cursor: pointer; }
   .-pagination button.-btn:not([disabled]):focus 
   { background: $primary-color-hover; }
   .-pagination button.-btn { background: $primary-color; color: #fff; }
-  input, .-pagination select{ 
+  input, select{ 
     &:focus { box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
   }
 

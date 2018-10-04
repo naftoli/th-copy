@@ -1,10 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ProfilePicture, DateDisplay } from 'components/ui';
-import { DEFAULT_PROFILE } from 'components/constants';
-import { isBC, isAdmin } from 'functions/login';
 
-export default ( code, editPicture ) => {
+import { Link } from 'react-router-dom';
+import { Toggle } from 'components/inputs';
+import { ProfilePicture, DateDisplay } from 'components/ui';
+
+import { isBC, isAdmin } from 'functions/login';
+import { DEFAULT_PROFILE } from 'components/constants';
+import { yesNoFilter, yesNoFilterRender } from 'functions/tables';
+
+export default ( code, editPicture, updateToggle ) => {
   // define the table for the page
   let columns = [
     {
@@ -26,10 +30,10 @@ export default ( code, editPicture ) => {
       },
     }, {
       Header: "First Name", accessor: 'first',
-      Cell: props => <Link to={`/bm/users/${props.original.user_id}`}>{props.value}</Link>,
+      Cell: props => <Link to={`/bm/users/${props.original.user_id}`} tabIndex={ -1 } >{props.value}</Link>,
     }, {
       Header: "Last Name", accessor: 'last',
-      Cell: props => <Link to={`/bm/users/${props.original.user_id}`}>{props.value}</Link>,
+      Cell: props => <Link to={`/bm/users/${props.original.user_id}`} tabIndex={ -1 } >{props.value}</Link>,
     }, {
       Header: "Serial Number", accessor: 'user_serial',
       Cell: props => <Link to={`/bm/users/${props.original.user_id}`}>{props.value}</Link>,
@@ -52,8 +56,16 @@ export default ( code, editPicture ) => {
           <option value="no">Not Registered</option>
         </select>
     },
-    { id: 'chayolei',  Header: 'CTH', accessor: user => user.chayolei ? 'Yes' : 'No' },
-    { id: 'chidon',  Header: 'Chidon', accessor: user => user.chidon ? 'Yes' : 'No' }
+    { Header: 'CTH', accessor: 'chayolei',
+      Cell: ({ value, original }) => <Toggle checked={ !!value } 
+        onChange={ updateToggle( 'chayolei', original.user_id ) } />,
+      Filter: yesNoFilterRender(), filterMethod: yesNoFilter
+    },
+    { Header: 'Chidon', accessor: 'chidon',
+      Cell: ({ value, original }) => <Toggle checked={ !!value } 
+        onChange={ updateToggle( 'chidon', original.user_id ) } />,
+      Filter: yesNoFilterRender(), filterMethod: yesNoFilter
+    },
   ];
   
   if ( isBC( code ) ) {

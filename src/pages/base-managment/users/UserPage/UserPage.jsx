@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
 import { getSoldier, updateSoldier } from 'store/base/soldiers/operations';
+import { createNotifcation, updateNotifcation } from 'functions/notifications';
 // styles
 import './UserPage.scss';
 
@@ -67,8 +68,13 @@ class UserPage extends Component {
     const isInvalid = Object.values( valid ).includes( false );
     if ( isInvalid ) return toast.error( 'Please correct all invalid feilds' );
     // update the soldier
+    const toast_id = createNotifcation('Updating Soldier');
     this.props.updateSoldier( soldier.user_id, updates )
-    .then (({ data }) => this.setState({ updates: {}, soldier: data }) );
+    .then( res => {
+      updateNotifcation( toast_id, 'Soldier Updated!', res.message, res.success )
+      this.setState({ updates: {}, soldier: res.data })
+    })
+    .catch( error => updateNotifcation( toast_id, '', error.message, false ) );
   }
   // update the soldiers profile page
   updateProfile = ( formData ) => {
