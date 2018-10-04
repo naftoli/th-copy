@@ -12,7 +12,7 @@ import {
 import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
-import { getBases, updateBase } from 'store/bases/operations';
+import { getBases, updateBase } from 'store/base/bases/operations';
 
 class BasesPage extends Component {
 
@@ -107,8 +107,8 @@ class BasesPage extends Component {
   }
 }
 
-const mapStateToProps = ({ bases, login }) => ({
-  ...bases,
+const mapStateToProps = ({ base, login }) => ({
+  ...base.bases,
   login: login.current_login
 });
 

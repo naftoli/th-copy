@@ -1,11 +1,14 @@
 import { combineReducers } from 'redux';
 
+import staff from './staff/reducer';
+import bases from './bases/reducer';
 import soldiers from './soldiers/reducer';
 import platoons from './platoons/reducer';
-import staff from './staff/reducer';
+
 
 const reducer = combineReducers({
-  platoons, soldiers, staff
+  platoons, bases,
+  soldiers, staff,
 });
 
 export default reducer;

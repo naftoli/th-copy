@@ -12,7 +12,7 @@ import {
   SettingsTab, StaffTab
 } from './tabs';
 // state
-import { getBase, updateBase } from 'store/bases/operations';
+import { getBase, updateBase } from 'store/base/bases/operations';
 import { removeAuth, createAuth } from 'store/base/staff/operations';
 // functions
 import { toast } from 'react-toastify';

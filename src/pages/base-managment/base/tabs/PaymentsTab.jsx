@@ -5,7 +5,7 @@ import { CCForm } from 'components/functional/payments';
 import { Row, Col, Button, TabPane } from 'reactstrap';
 import Cards from 'react-credit-cards';
 // network
-import { deletePayment, addPayment } from 'store/bases/operations';
+import { deletePayment, addPayment } from 'store/base/bases/operations';
 // functions
 import { toast } from 'react-toastify';
 import { validateCC } from 'functions/validations';

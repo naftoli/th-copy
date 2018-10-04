@@ -6,7 +6,7 @@ import { Select } from './Select';
 // functions
 import { findOption } from 'functions/selects';
 import { makeCancelable } from 'functions/utils/promises';
-import { getBaseList } from 'store/bases/operations';
+import { getBaseList } from 'store/base/bases/operations';
 
 class BaseSelect extends Component {
 
@@ -80,7 +80,7 @@ class BaseSelect extends Component {
   }
 }
 
-const mapStateToProps = ( { bases, login } ) => ({
+const mapStateToProps = ( { login } ) => ({
   login: login.current_login
 })
 
