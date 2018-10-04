@@ -96,7 +96,8 @@ $year = GlobalSettings::getChidonYear();
             }
         }
         $total = 0;
-        $totals = array();
+        $totals = [];
+        $totalsByGrade = [];
         foreach ($users as $school_id => $info) {
             ?>
             <table>
@@ -184,6 +185,14 @@ $year = GlobalSettings::getChidonYear();
                                                             }
                                                             if (isset($totals[$gender][$school_id][$grade])) $totals[$gender][$school_id][$grade]++;
                                                             else $totals[$gender][$school_id][$grade] = 1;
+
+                                                            // for totals by grade we need grade only without the sub
+                                                            if ( $pos = strpos( $grade, '-' ) !== false ) {
+                                                                $grade = substr( $grade, 0, $pos );
+                                                            }
+                                                            $grade = trim( $grade );
+                                                            if ( isset( $totalsByGrade[$grade][$gender] ) ) $totalsByGrade[$grade][$gender]++;
+                                                            else $totalsByGrade[$grade][$gender] = 1;
                                                         }
                                                     }
                                                 }
@@ -219,6 +228,63 @@ $year = GlobalSettings::getChidonYear();
             }
             echo "<tr><td colspan='3' align='right'><b>Grand Total: " . $grandTotal . "</b></td></tr>";
             echo "</table>";
+        }
+
+        // only show for th hq
+        if ($admin_user['auth'] == 'super') {
+            // get total number of children registered in CTH but not signed up to chidon per grade
+            $notSignedUp = [];
+            $grades = ['4','5','6','7','8'];
+            foreach ( $grades as $grade ) {
+                // for boys
+                $sql = "SELECT count(*) as total FROM users u 
+                        join classes c on c.class_id = u.class_id 
+                        where c.class_grade = '" . $grade . "'  
+                        and u.school_type_id in ('2','12') 
+                        and u.user_id not in (
+                        select user_id from th_chidon where year = 5779) 
+                        and u.user_registered > 0";
+                $result = mysql_query( $sql );
+                $row = mysql_fetch_assoc( $result );
+                $notSignedUp[$grade]['Boys'] = $row['total'];
+
+                // for girls
+                $sql = "SELECT count(*) as total FROM users u 
+                        join classes c on c.class_id = u.class_id 
+                        where c.class_grade = '" . $grade . "'  
+                        and u.school_type_id in ('3','13') 
+                        and u.user_id not in (
+                        select user_id from th_chidon where year = 5779) 
+                        and u.user_registered > 0";
+                $result = mysql_query( $sql );
+                $row = mysql_fetch_assoc( $result );
+                $notSignedUp[$grade]['Girls'] = $row['total'];
+            }
+            
+
+            $totals['Boys']['signedUp'] = 0;
+            $totals['Girls']['signedUp'] = 0;
+            $totals['Boys']['notSignedUp'] = 0;
+            $totals['Girls']['notSignedUp'] = 0;
+
+            echo "<h2>Totals By Grade</h2>";
+            echo "<table><tr><th>Grade</th><th colspan='2'>Boys</th><th colspan='2'>Girls</th></tr>";
+            echo "<tr><th></th><th>Number of kids SIGNED UP</th><th>Number of kids NOT SIGNED UP</th><th>Number of kids SIGNED UP</th><th>Number of kids NOT SIGNED UP</th></tr>";
+            foreach ( $totalsByGrade as $grade => $amount ) {
+                if ( is_numeric( $grade ) ) {
+                    echo "<tr><td>" . $grade . "</td><td>" . $amount['Boys'] . "</td><td>" . $notSignedUp[$grade]['Boys'] . "</td><td>";
+                    echo $amount['Girls'] . "</td><td>" . $notSignedUp[$grade]['Girls'] . "</td></tr>";
+                    $totals['Boys']['notSignedUp'] += $notSignedUp[$grade]['Boys'];
+                    $totals['Girls']['notSignedUp'] += $notSignedUp[$grade]['Girls'];
+                } else {
+                    echo "<tr><td>" . $grade . "</td><td>" . $amount['Boys'] . "</td><td></td><td>" . $amount['Girls'] . "</td><td></td></tr>";
+                }
+                $totals['Boys']['signedUp'] += $amount['Boys'];
+                $totals['Girls']['signedUp'] += $amount['Girls'];
+            }
+            echo "<tr><th>Totals:</th><th>" . $totals['Boys']['signedUp'] . "</th><th>" . $totals['Boys']['notSignedUp'] . "</th><th>" . $totals['Girls']['signedUp'];
+            echo "</th><th>" . $totals['Girls']['notSignedUp'] . "</th></tr></table>";
+            echo "<br /><br />Grand Total Signed Up: " . ($totals['Boys']['signedUp'] + $totals['Girls']['signedUp']);
         }
         ?>
         
