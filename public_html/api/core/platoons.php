@@ -10,20 +10,15 @@ class PlatoonRouter {
         $filters = [];   $params = [];
         // limit based on admin type
         $login = $current_user->login;
-        if ( $login->code === 'HQ' && !isset( $_GET['school_id'] ) ) {
-            $filters[] = 's.test_school = 0';
-        } else if ( $login->code === 'INST' && !isset( $_GET['school_id'] ) ) {
-            $filters[] = 's.inst_id = ?'; $params[] = $login->id;
-        } else if ( $login->code === 'BC' && isset( $_GET['all'] ) ) { // get all bases on the account
+
+        if ( $login->code === 'BC' && isset( $_GET['all'] ) ) {
             $school_ids = $current_user->getAuthIds( 'school' );
             $filters[] = 'c.school_id IN ('. implode(', ', $school_ids ) .')';
-        } else if ( $login->code === 'BC' && !isset( $_GET['school_id'] ) ) {
-            $filters[] = 'c.school_id = ?';   $params[] = $login->id;
-        } else if ( $login->code === 'TEACHER' ) {
-            $filters[] = 'c.class_id = ?';   $params[] = $login->id;
         } else if ( isset( $_GET['school_id'] ) ) {
             $filters[] = 'c.school_id = ?';   $params[] = $_GET['school_id'];
-        } else { json_error( 'Invalid request. Please select a Base.'); }
+        } else {
+            $filters[] = $login->getFilter( 's.', 'c.' );
+        }
         // combine the filters
         $filters = 'WHERE ' . implode( ' AND ', $filters );
         // generate the SQL
@@ -96,14 +91,24 @@ class PlatoonRouter {
 
         $platoon = Platoon::find( $id );
         if ( !$platoon->validateAccess( $current_user->login ) )
-            json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-75', 401 );
+            json_error( 'Your current login does not have access to this platoon.', 'CORE-PLATOONS-99', 401 );
         
         $columns = array_keys( Platoon::table()->columns );
         foreach( $_POST as $key => $value ) {
             if ( in_array( $key, $columns ) ) $platoon->{ $key } = $_POST[ $key ];
         }
         if ( !$platoon->is_valid() || !$platoon->save() )
-            json_error('Could not update soldier. Please check to make sure that the data is valid', 'CORE-USERS-90');
+            json_error('Could not update platoon. Please check to make sure that the data is valid', 'CORE-PLATOONS-106');
+        
+        json_response( $platoon );
+    }
+
+    public function destroy( $id ) {
+        global $current_user;
+
+        $platoon = Platoon::find( $id );
+        if ( !$platoon->delete() )
+            return json_error( 'Cannot Delete Platoon', 'CORE-PLATOONS-116' );
         
         json_response( $platoon );
     }
