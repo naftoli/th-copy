@@ -7,8 +7,9 @@ import { Page404 } from 'pages/errors';
 import { Login, Logout, AccountPage } from 'pages/login';
 // pages
 import HomePage from 'pages/home/HomePage';
-import Rewards, { V2 } from 'pages/rewards';
+import Rewards from 'pages/rewards';
 import BaseManagment from 'pages/base-managment';
+import Missions from 'pages/missions';
 // components
 import { Dashboard } from 'components/navigation';
 import { LoadingScreen } from 'components/ui';
@@ -58,11 +59,10 @@ export class App extends Component {
 
             { !refreshing && 
               <Switch>
-                <Route path={`/v2`} exact component={ V2 } />
-                
                 <Route path={`/`} exact component={ HomePage }/>
                 <Route path={`/rewards`} component={ Rewards } />
                 <Route path={`/bm`} component={ BaseManagment } />
+                <Route path={`/missions`} component={ Missions } />
                 
                 <Route path={`/myaccount`} exact component={ AccountPage }/>
                 {/* Action only pages */}
