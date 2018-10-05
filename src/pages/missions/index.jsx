@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 // sub pages
 import { Page404, Construction } from 'pages/errors';
-// import UsersPages from './users';
+import PrintPage from './print/PrintPage';
 // import PlatoonPages from './platoons';
 // import ParentPages from './parents';
 // import StaffPages from './staff';
@@ -24,7 +24,7 @@ export class BaseManagmentIndexPage extends Component {
 
     return (
       <Switch>
-        <Route path={`${path}/print`} component={ Construction } />
+        <Route path={`${path}/print`} component={ PrintPage } />
         <Route path={`${path}/mark`} component={ Construction } />
 
         { isBC( code ) && BCRoutes }
