@@ -24,8 +24,8 @@ describe( 'Login', () => {
       expect( login().find('#login-page').length ).toBe( 1 );
     });
 
-    it(`renders one form#login-form`, () => {
-      expect( login().find('form#login-form').length ).toBe( 1 );
+    it(`renders one div#login-form`, () => {
+      expect( login().find('div#login-form').length ).toBe( 1 );
     });
 
     it(`renders one input[name='username']`, () => {
@@ -66,7 +66,7 @@ describe( 'Login', () => {
         login().find(`input[name='username']`).simulate('change');
         login().find(`input[name='password']`).instance().value = 'password';
         login().find(`input[name='password']`).simulate('change');
-        login().find('form#login-form').simulate('submit');
+        login().find('form').simulate('submit');
       });
 
       it('calls props.login on submit', () => {

@@ -1,4 +1,4 @@
-import API, { API_URL, headers, toJSON } from './api';
+import API, { API_URL, headers, toJSON, parseResponse, handleAPIResponse } from './api';
 import fetchMock from 'fetch-mock';
 import Cookies from 'universal-cookie';
 // allow routes to be overridden
@@ -6,23 +6,23 @@ fetchMock.config.overwriteRoutes = true;
 // test
 const cookies = new Cookies();
 
-describe('headers', () => {
+describe( `headers`, () => {
 
-  it('returns an object', () => {
+  it( `returns an object`, () => {
     expect( typeof headers() ).toBe( 'object' );
   });
 
-  it('has a key \'Accept\' set to \'application/json\'', () => {
+  it( `has a key \'Accept\' set to \'application/json\'`, () => {
     expect( headers()['Accept'] ).toBeDefined();
     expect( headers()['Accept'] ).toBe('application/json');
   });
 
-  it('has a key \'Content-Type\' set to \'application/json; charset=utf-8\'', () => {
+  it( `has a key \'Content-Type\' set to \'application/json; charset=utf-8\'`, () => {
     expect( headers()['Content-Type'] ).toBeDefined();
-    expect( headers()['Content-Type'] ).toBe('application/json; charset=utf-8');
+    expect( headers()['Content-Type'] ).toBe( 'application/json; charset=utf-8' );
   });
 
-  it(`has a key 'login' set to 'cookies.get('login')'`, () => {
+  it( `has a key 'login' set to 'cookies.get('login')'`, () => {
     cookies.set( 'login', 'abcd' );
     expect( headers()['login'] ).toBeDefined();
     expect( headers()['login'] ).toBe(cookies.get('login'));
@@ -30,26 +30,58 @@ describe('headers', () => {
   });
 });
 
-describe('toJSON( response )', () => {
+describe( `toJSON( response )`, () => {
 
-  it('calls \'.json()\' on response', () => {
-    const response = { json: jest.fn() };
+  it( `calls \'.text()\' on response`, () => {
+    const response = { text: jest.fn( () => Promise.resolve( `{"foo":"bar"}` ) ) };
     toJSON( response );
 
-    expect( response.json ).toHaveBeenCalled();
+    expect( response.text ).toHaveBeenCalled();
   });
 
-  it('returns the result of \'response.json\'', () => {
-    const response = { json: jest.fn() };
-    response.json.mockReturnValue( 'test' );
+  it( `resolves with the response parsed from json`, () => {
+    const response = { text: jest.fn( () => Promise.resolve( `{"foo":"bar"}` ) ) };
+    expect( toJSON( response ) ).resolves.toEqual( { foo: 'bar' } );
+  })
 
-    expect( toJSON( response ) ).toBe( 'test' );
+  it( `rejects the promise if the response is not valid JSON`, () => {
+    const response = { text: jest.fn( () => Promise.resolve( 'hi' ) ) };
+    expect( toJSON( response ) ).rejects.toEqual( new Error('hi') );
+  });
+
+  it( `rejects the promise if the response is not valid JSON with HTML tags striped out`, () => {
+    const response = { text: jest.fn( () => Promise.resolve( '<b>hi</b>' ) ) };
+    expect( toJSON( response ) ).rejects.toEqual( new Error('hi') );
   });
 });
 
-describe('API (default)', () => {
+describe( `parseResponse`, () => {
+  it( `returns response if response.success is true`, () => {
+    const res = { success: true, data: 'bla' };
+    expect( parseResponse( res ) ).toEqual( res );
+  });
 
-  describe('.get', () => {
+  it( `rejects response if response.success is false and message is present`, () => {
+    const res = { success: false, message: 'hi', data: 'bla' };
+    expect( Promise.resolve( parseResponse( res ) ) ).rejects.toEqual( res );
+  });
+});
+
+describe( `handleAPIResponse`, () => {
+  it( `returns response.data if response.success is true`, () => {
+    const res = { success: true, data: 'bla' };
+    expect( handleAPIResponse( res ) ).toEqual( res.data );
+  });
+
+  it( `rejects response if response.success is false`, () => {
+    const res = { success: false, data: 'bla' };
+    expect( Promise.resolve( handleAPIResponse( res ) ) ).rejects.toEqual( res );
+  });
+});
+
+describe( `API (default)`, () => {
+
+  describe( `.get`, () => {
 
     let mock;
 
@@ -57,24 +89,24 @@ describe('API (default)', () => {
       mock = fetchMock.reset().getOnce( '*', { foo: 'bar' } );
     });
 
-    it('sends a fetch request to the `url` paramater', () => {
+    it( `sends a fetch request to the 'url' paramater`, () => {
       return API.get( '/test' ).then( response => {
         expect( mock.called() ).toBe( true );
       });
     });
 
-    it('returns a promise that resolves to the network response', () => {
+    it( `returns a promise that resolves to the network response`, () => {
       expect( API.get( '/test' ) ).resolves.toEqual( { foo: 'bar' }  );
     });
 
-    it('sends the request to API_URL', () => {
+    it( `sends the request to API_URL`, () => {
       return API.get( '/test' ).then( response => {
         expect( fetchMock.lastUrl() ).toBe( `${API_URL}/test` );
       });
     });
   });
 
-  describe('.post', () => {
+  describe( `.post`, () => {
 
     let mock;
 
@@ -82,24 +114,24 @@ describe('API (default)', () => {
       mock = fetchMock.reset().postOnce( '*', { foo: 'bar' } );
     });
 
-    it('sends a fetch request to the `url` paramater', () => {
+    it( `sends a fetch request to the 'url' paramater`, () => {
       return API.post( '/test' ).then( response => {
         expect( mock.called() ).toBe( true );
       });
     });
 
-    it('returns a promise that resolves to the network response', () => {
+    it( `returns a promise that resolves to the network response`, () => {
       expect( API.post( '/test' ) ).resolves.toEqual( { foo: 'bar' }  );
     });
 
-    it('sends the request to API_URL', () => {
+    it( `sends the request to API_URL`, () => {
       return API.post( '/test' ).then( response => {
         expect( fetchMock.lastUrl() ).toBe( `${API_URL}/test` );
       });
     });
   });
 
-  describe('.delete', () => {
+  describe( `.delete`, () => {
 
     let mock;
 
@@ -107,21 +139,20 @@ describe('API (default)', () => {
       mock = fetchMock.reset().deleteOnce( '*', { foo: 'bar' } );
     });
 
-    it('sends a fetch request to the `url` paramater', () => {
+    it( `sends a fetch request to the 'url' paramater`, () => {
       return API.delete( '/test' ).then( response => {
         expect( mock.called() ).toBe( true );
       });
     });
 
-    it('returns a promise that resolves to the network response', () => {
+    it( `returns a promise that resolves to the network response`, () => {
       expect( API.delete( '/test' ) ).resolves.toEqual( { foo: 'bar' }  );
     });
 
-    it('sends the request to API_URL', () => {
+    it( `sends the request to API_URL`, () => {
       return API.delete( '/test' ).then( response => {
         expect( fetchMock.lastUrl() ).toBe( `${API_URL}/test` );
       });
     });
   });
-
 });

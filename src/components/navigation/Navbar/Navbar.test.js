@@ -2,14 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { Nav } from 'reactstrap';
 import Navbar from './Navbar';
-import indexNavbar from './index';
 import { MemoryRouter } from 'react-router-dom';
-
-describe('index.js', () => {
-  it('exports Navbar component as the default', () => {
-    expect( indexNavbar ).toEqual( Navbar );
-  });
-});
 
 describe("Navbar", () => {
   // BOILERPLATE
