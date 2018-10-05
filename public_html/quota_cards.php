@@ -19,12 +19,12 @@ require_once 'class.shabbosMevorchim.php';
 
 $year = GlobalSettings::getCurrentYear();
 $sm = new ShabbosMevorchim( $year );
-$sm->setReportDates();
+$sm->setQuotaCardDates();
 $dates = $sm->getReportDates();
 end( $dates );
 $month = key( $dates );
 $date = $dates[$month];
-//echo "<pre>"; print_r( $dates ); echo "</pre>"; exit;
+echo "<pre>"; print_r( $dates ); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>

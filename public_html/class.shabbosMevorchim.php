@@ -199,6 +199,21 @@ class ShabbosMevorchim {
 			}
 		} // end if no date was provided.
     } // end function setReportDates( $date )
+
+    public function setQuotaCardDates() {
+        $today = unixtojd(); // get the curent unix date..
+        $dates = array();
+        foreach ( $this->dates as $month => $date ) {
+            //echo $today . " : " . $month . "-" . $date . "<br />";
+            $dates[$month] = $date; // add the date to the function's date array if we have a backup
+            if ( $date >= $today ) break;
+        }
+        // get the last date
+        $d = end($dates);
+        $month = key($dates); // and the month
+        // update the rdates array
+        $this->rDates[$month] = $d;
+    }
     
     public function getReportDates() {
         return $this->rDates;
