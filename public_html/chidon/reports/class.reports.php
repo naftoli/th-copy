@@ -6,7 +6,8 @@ class Reports
     private $aliases;
     private $checkAvg;
     private $avgs;
-    
+
+    // we can only create the sql for one year at a time because of the group by user situation    
     public function __construct($year)
     {
         $this->year = $year;
@@ -23,7 +24,8 @@ class Reports
             'th_chidon_teams'       =>  'tct',
             'th_chidon_bunks'       =>  'tcb',
             'th_chidon_walking_bunks'  =>  'tcwb',
-            'th_chidon_walking_chaperones' => 'tcwc'
+            'th_chidon_walking_chaperones' => 'tcwc', 
+            'classes'               =>  'cl'
         );
         $this->fields = array(
             'chidon_id'     =>  array(
@@ -106,6 +108,16 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  array('contestant', 'school_rep')
             ),
+            'year'      =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'year'
+            ),
+
+            'class'     =>  array(
+                'table'     => 'classes', 
+                'column'    =>  ['class_grade', 'class_sub']
+            ),
+
             'chap_name'     =>  array(
                 'table'     =>  'th_chidon_chaps',
                 'column'    =>  'name as chap_name',
@@ -454,6 +466,9 @@ class Reports
                                 break;
                             case 'admins':
                                 $sql .= " join admins a on a.admin_id = tc.parent_id";
+                                break;
+                            case 'classes':
+                                $sql .= " join classes cl on u.class_id = cl.class_id";
                                 break;
                             case 'th_chidon_chaps':
                                 $sql .= " left join th_chidon_chaps tcc on tcc.school_id = tc.school_id and tcc.year = '" . $this->year . "' ";
