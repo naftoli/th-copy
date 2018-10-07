@@ -145,6 +145,7 @@ if (count($users) > 0) {
                 echo "Teacher: " . $users[0]['class_teacher'] . "</h4>";
                 if ( $users[0]['year'] == $year ) $showExtra = true;
                 else $showExtra = false;
+                $totalChidonReg = 0;
                 ?>
                 <table>
                     <thead>
@@ -161,6 +162,9 @@ if (count($users) > 0) {
                     </thead>
                     <tbody>
                     <? foreach($users as $user) {?>
+                        <?php
+                        if ($user['chidonReg']) $totalChidonReg++;
+                        ?>
                         <tr class="users">
                             <?php if ( $showExtra ) : ?>
                                 <td><?php if ($options[0] == 'true') echo $user['chidonReg'] ? 'yes' : 'no'; ?></td>
@@ -175,6 +179,15 @@ if (count($users) > 0) {
                         <?}?>
                     </tbody>
                 </table>
+                <h4>Total children Registered for Chidon this year: <?=$totalChidonReg?>
+                <?php
+                // if we are showing also registered to CTH but unregistered to Chidon show percentage
+                if ( $options[1] == 'true' ) {
+                    $total = count($users);
+                    echo "<br />Percentage of children registered for Chidon this year: " . round( ($totalChidonReg / $total * 100), 2 ) . "%";
+                }
+                ?>
+                </h4>
                 <div style="page-break-after: always"></div>
                 <?
             }
@@ -191,7 +204,7 @@ if (count($users) > 0) {
                         <th><?php if ($options[1] == 'true') echo "Enrolled into CTH"; ?></th>
                     <? endif; ?>
                     <?php foreach ( $columns as $column ) {
-                        if (!in_array( $column, ['chidonReg', 'user_registered'] )) echo "<th>" . $column . "</th>"; 
+                        if (!in_array( $column, ['chidonReg', 'user_registered', 'class_teacher'] )) echo "<th>" . $column . "</th>"; 
                     }    
                     ?>
                 </tr>
@@ -205,7 +218,7 @@ if (count($users) > 0) {
                     <?php endif; ?>
                     <?php 
                         foreach ( $columns as $column ) {
-                            if (!in_array( $column, ['chidonReg', 'user_registered'] )) echo "<td>" . (isset( $user[$column] ) ? $user[$column] : '') . "</td>"; 
+                            if (!in_array( $column, ['chidonReg', 'user_registered', 'class_teacher'] )) echo "<td>" . (isset( $user[$column] ) ? $user[$column] : '') . "</td>"; 
                         }
                     ?>
                 </tr>
