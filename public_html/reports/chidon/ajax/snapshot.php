@@ -29,6 +29,13 @@ foreach ( $_POST['years'] as $y ) {
     $years[] = mysql_real_escape_string( $y );
 }
 
+// if we have current year to check then make sure to add user_registered field
+if ( in_array( $year, $years ) ) {
+    if (!in_array('user_registered', $fields)) {
+        $fields[] = 'user_registered';
+    }
+}
+
 // array to hold results
 $users = [];
 
@@ -65,8 +72,9 @@ if (in_array( $year, $years ) && $options[0] == 'true' || $options[1] == 'true')
 /***************** LOAD DATA **********************/
 require_once $_SERVER['DOCUMENT_ROOT'] . "/chidon/reports/class.reports.php";
 foreach( $years as $y ) {
-    $r = new Reports( $y );
+    $r = new Reports( $y, $school_id );
     $qry = $r->createSql( $fields );
+    echo $qry;
     $users_query = mysql_query( $qry ) or die( mysql_error() );
 
     while( $row = mysql_fetch_assoc($users_query) ) {
@@ -129,9 +137,9 @@ if($debug) echo "</pre>";
 
 if (count($users) > 0) { 
     if (isset($_POST['printed']) && $_POST['printed']) {
+        echo "<button onclick='window.print()' class='noPrint'>Print</button>";
         foreach ($printed as $grade => $more) {
             foreach ($more as $sub => $users) {
-                echo "<button onclick='window.print()'>Print</button>";
                 echo "<h4>Grade: " . $grade . ($sub ? '-' . $sub : '') . "</h4>";
                 ?>
                 <table>

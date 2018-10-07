@@ -106,7 +106,9 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                 <legend>Choose the years:</legend>
                 <?php
                 for ($i = 5777; $i <= $chidonYear; $i++) {
-                    echo "<input type='checkbox' class='year' value='" . $i . "' /> " . $i . "<br />";
+                    echo "<input type='checkbox' class='year' value='" . $i . "'";
+                    if ( $i == $chidonYear ) echo " checked='checked'";
+                    echo " /> " . $i . "<br />";
                 }
                 ?>
             </fieldset>

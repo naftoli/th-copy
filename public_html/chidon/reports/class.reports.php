@@ -2,15 +2,17 @@
 class Reports
 {
     private $year;
+    private $school_id;
     private $fields;
     private $aliases;
     private $checkAvg;
     private $avgs;
 
     // we can only create the sql for one year at a time because of the group by user situation    
-    public function __construct($year)
+    public function __construct($year, $school_id = 0)
     {
         $this->year = $year;
+        $this->school_id = $school_id;
         $this->checkAvg = false;
         $this->avgs = array();
         $this->aliases = array(
@@ -64,6 +66,11 @@ class Reports
                 'table'     =>  'users',
                 'column'    =>  'gender',
             ),
+            'user_registered'   =>  array(
+                'table'     =>  'users',
+                'column'    =>  'user_registered',
+            ),
+
             'accomodations' =>  array(
                 'table'     =>  'th_chidon',
                 'column'    =>  array('host', 'host_address1', 'host_address2')
@@ -504,6 +511,9 @@ class Reports
             }
             
             $sql .= " where " . $this->aliases[$root] . ".year = " . $this->year;
+            if ( $root == 'th_chidon' && $this->school_id ) {
+                $sql .= " and tc.school_id = " . $this->school_id;
+            }
             
             if ($root == 'th_chidon_chaps' && $chidonType) {
                 $sql .= " and tcc.chidon_type = '" . $chidonType . "'";
