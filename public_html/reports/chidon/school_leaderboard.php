@@ -16,17 +16,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 
 // get schools connected to account
 require_once($_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php');
-print_r( $admin_user );
-$as = new adminSchools( $admin_user['admin_id'], $admin_user['auth'] );
-$schools = $as->getSchools();
 
 //***************** LOAD CURRENT YEAR **********************/
 require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
 $year = GlobalSettings::getChidonYear();
 
-$totalReg = [];
-$totalUnreg = [];
-$schoolInfo = [];
+$info = [];
 $sql = "select s.school_name, c.class_grade, c.class_sub, c.class_teacher, u.user_id, tc.th_chidon_id 
         from users u 
         join schools s using (school_id) 
@@ -38,23 +33,25 @@ $sql = "select s.school_name, c.class_grade, c.class_sub, c.class_teacher, u.use
         and s.school_era is null 
         and s.chayolei = 1 
         and c.class_grade in ('4','5','6','7','8') 
-        and s.school_id in (" . implode(',', array_keys($schools)) . ") 
         order by school_name, class_grade, class_sub, u.user_id";
 //echo $sql;
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     // initialize vars if not set
-    if ( !isset( $schoolInfo[$row['school_name']][$row['class_grade']][$row['class_sub']] ) ) $schoolInfo[$row['school_name']][$row['class_grade']][$row['class_sub']] = 0;
-    if ( !isset( $totalReg[$row['school_name']][$row['class_grade']][$row['class_sub']] ) ) $totalReg[$row['school_name']][$row['class_grade']][$row['class_sub']] = 0;
-    if ( !isset( $totalUnreg[$row['school_name']][$row['class_grade']][$row['class_sub']] ) ) $totalUnreg[$row['school_name']][$row['class_grade']][$row['class_sub']] = 0;
+    if ( !isset( $info[$row['school_name']]['reg'] ) ) $info[$row['school_name']]['reg'] = 0;
+    if ( !isset( $info[$row['school_name']]['notReg'] ) ) $info[$row['school_name']]['notReg'] = 0;
     
-    if ($row['th_chidon_id']) $totalReg[$row['school_name']][$row['class_grade']][$row['class_sub']]++;
-    else $totalUnreg[$row['school_name']][$row['class_grade']][$row['class_sub']]++;
+    if ($row['th_chidon_id']) $info[$row['school_name']]['reg']++;
+    else $info[$row['school_name']]['notReg']++;
 }
-// echo "<pre>"; 
-// print_r( $totalReg );
-// print_r( $totalUnreg ); 
-// echo "</pre>";
+
+$percentages = [];
+foreach ( $info as $school => $data ) {
+    $percent = round( ($data['reg'] / ($data['notReg'] + $data['reg']) * 100), 2 );
+    $percentages[$school] = $percent;
+}
+arsort( $percentages );
+//echo "<pre>"; print_r( $percentages ); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
@@ -78,18 +75,21 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         </style>
     </head>
     <body>
-        <?php
-        foreach ( $schoolInfo as $school => $info ) {
-            echo "<h2>" . $school . "</h2>";
-            echo "<table><tr><th>Grade</th><th>Sub</th><th>Number of Chayolim in Platoon</th><th>Number of Chayolim Registered in Chidon</th><th>Percentage of Chayolim Registered</th></tr>";
-            foreach ( $info as $grade => $other ) {
-                foreach ( $other as $sub => $notNeeded ) {
-                    echo "<tr><td>" . $grade . "</td><td>" . $sub . "</td><td>" . $totalUnreg[$school][$grade][$sub] . "</td><td>" . $totalReg[$school][$grade][$sub] . "</td><td>";
-                    $percent = round( ($totalReg[$school][$grade][$sub] / ($totalReg[$school][$grade][$sub] + $totalUnreg[$school][$grade][$sub]) * 100), 2 );
-                    echo $percent . "</td></tr>";
+        <button onclick='window.print()' class='noPrint'>Print</button>
+        <table>
+            <thead>
+                <tr>
+                    <th></th><th>School</th><th>Chayolim in Base</th><th>Chayolim Registered in Chidon</th><th>Percentage Registered</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $i = 1;
+                foreach ( $percentages as $school => $percent ) {            
+                    echo "<tr><td>#" . $i++ . "</td><td>" . $school . "</td><td>" . ($info[$school]['notReg'] + $info[$school]['reg']) . "</td><td>" . $info[$school]['reg'] . "</td><td>" . $percent . "</td></tr>";
                 }
-            }
-        }
-        ?>
+                ?>
+            </tbody>
+        </table>
     </body>
 </html>
