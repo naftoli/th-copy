@@ -74,7 +74,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/chidon/reports/class.reports.php";
 foreach( $years as $y ) {
     $r = new Reports( $y, $school_id );
     $qry = $r->createSql( $fields );
-    echo $qry;
+    //echo $qry;
     $users_query = mysql_query( $qry ) or die( mysql_error() );
 
     while( $row = mysql_fetch_assoc($users_query) ) {
