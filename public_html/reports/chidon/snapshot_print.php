@@ -8,6 +8,15 @@
                    display: none;
                 }
             }
+            body {
+                font-family: Verdana;
+            }
+            tr, th, td {
+                font-size: 14px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                font-family: Verdana;
+            }
         </style>
     </head>
     <body>

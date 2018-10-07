@@ -43,17 +43,18 @@ $users = [];
 $options = $_POST['options'];
 
 // make sure that current year was selected if choosing to show option
-if (in_array( $year, $years ) && $options[0] == 'true' || $options[1] == 'true') { // ajax call send true / false as string
-    $sql = "select c.class_grade, c.class_sub, u.last as last_name, u.first as first_name, u.user_registered  
+if (in_array( $year, $years ) && ($options[0] == 'true' || $options[1] == 'true')) { // ajax call send true / false as string
+    $sql = "select c.class_grade, c.class_sub, c.class_teacher, u.last as last_name, u.first as first_name, u.user_registered  
             from users u 
             join schools s using (school_id) 
             join classes c on c.class_id = u.class_id 
             where c.class_grade in ('4','5','6','7','8') 
+            and u.school_id = " . $school_id . " 
             and u.user_id not in (
                 select user_id from th_chidon 
                 where year = " . $year . " 
                 and school_id = " . $school_id . " 
-            )";
+            ) ";
     
     if ($options[0] && !$options[1]) { // show children enrolled into cth but not in chidon
         $sql .= "and u.user_registered > 0";
@@ -140,31 +141,34 @@ if (count($users) > 0) {
         echo "<button onclick='window.print()' class='noPrint'>Print</button>";
         foreach ($printed as $grade => $more) {
             foreach ($more as $sub => $users) {
-                echo "<h4>Grade: " . $grade . ($sub ? '-' . $sub : '') . "</h4>";
+                echo "<h4>Grade: " . $grade . ($sub ? '-' . $sub : '') . "<br />";
+                echo "Teacher: " . $users[0]['class_teacher'] . "</h4>";
+                if ( $users[0]['year'] == $year ) $showExtra = true;
+                else $showExtra = false;
                 ?>
                 <table>
                     <thead>
                         <tr>
-                        <th>Enrolled into Chidon</th>
-                        <th>Enrolled into CTH</th>
-                        <?php foreach ( $columns as $column ) {
-                            if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub'] )) echo "<th>" . $column . "</th>"; 
-                        }    
-                        ?>
+                            <?php if ( $showExtra ) : ?>
+                                <th><?php if ($options[0] == 'true') echo "Enrolled into Chidon"; ?></th>
+                                <th><?php if ($options[1] == 'true') echo "Enrolled into CTH"; ?></th>
+                            <? endif; ?>
+                            <?php foreach ( $columns as $column ) {
+                                if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub', 'class_teacher'] )) echo "<th>" . $column . "</th>"; 
+                            } 
+                            ?>
+                        </tr>
                     </thead>
                     <tbody>
                     <? foreach($users as $user) {?>
                         <tr class="users">
-                            <?php if ( $user['year'] == $year ) : ?>
-                                <td><?php echo $user['chidonReg'] ? 'yes' : 'no'; ?></td>
-                                <td><?php echo (isset($user['user_registered']) && $user['user_registered'] > 0) ? 'yes' : 'no'; ?></td>
-                            <?php else : ?>
-                                <td></td>
-                                <td></td>
+                            <?php if ( $showExtra ) : ?>
+                                <td><?php if ($options[0] == 'true') echo $user['chidonReg'] ? 'yes' : 'no'; ?></td>
+                                <td><?php if ($options[1] == 'true') echo (isset($user['user_registered']) && $user['user_registered'] > 0) ? 'yes' : 'no'; ?></td>
                             <?php endif; ?>
                             <?php 
                                 foreach ( $columns as $column ) {
-                                    if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub'] )) echo "<td>" . (isset( $user[$column] ) ? $user[$column] : '') . "</td>"; 
+                                    if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub', 'class_teacher'] )) echo "<td>" . (isset( $user[$column] ) ? $user[$column] : '') . "</td>"; 
                                 }
                             ?>
                         </tr>
@@ -176,12 +180,16 @@ if (count($users) > 0) {
             }
         }
     } else {
+        if ( $users[0]['year'] == $year ) $showExtra = true;
+        else $showExtra = false;
         ?>
         <table>
             <thead>
                 <tr>
-                    <th>Enrolled into Chidon</th>
-                    <th>Enrolled into CTH</th>
+                    <?php if ( $showExtra ) : ?>
+                        <th><?php if ($options[0] == 'true') echo "Enrolled into Chidon"; ?></th>
+                        <th><?php if ($options[1] == 'true') echo "Enrolled into CTH"; ?></th>
+                    <? endif; ?>
                     <?php foreach ( $columns as $column ) {
                         if (!in_array( $column, ['chidonReg', 'user_registered'] )) echo "<th>" . $column . "</th>"; 
                     }    
@@ -191,12 +199,9 @@ if (count($users) > 0) {
             <tbody>
                 <? foreach($users as $user) {?>
                 <tr class="users">
-                    <?php if ( $user['year'] == $year ) : ?>
-                        <td><?php echo $user['chidonReg'] ? 'yes' : 'no'; ?></td>
-                        <td><?php echo (isset($user['user_registered']) && $user['user_registered'] > 0) ? 'yes' : 'no'; ?></td>
-                    <?php else : ?>
-                        <td></td>
-                        <td></td>
+                    <?php if ( $showExtra ) : ?>
+                        <td><?php if ($options[0] == 'true') echo $user['chidonReg'] ? 'yes' : 'no'; ?></td>
+                        <td><?php if ($options[1] == 'true') echo (isset($user['user_registered']) && $user['user_registered'] > 0) ? 'yes' : 'no'; ?></td>
                     <?php endif; ?>
                     <?php 
                         foreach ( $columns as $column ) {

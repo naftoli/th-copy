@@ -113,8 +113,8 @@ $required = ['first_name', 'last_name', 'class', 'school'];
 
             <fieldset>
                 <legend>Additional Options (Only relevant for children from this year)</legend>
-                <input type="checkbox" id="onlyCTH" /> Include children that are enrolled into CTH.<br />
-                <input type="checkbox" id="unregistered" /> Include children that are not enrolled into CTH.<br />
+                <input type="checkbox" id="onlyCTH" /> Include children that are enrolled into CTH but not Chidon.<br />
+                <input type="checkbox" id="unregistered" /> Include children that are not enrolled into CTH or Chidon.<br />
             </fieldset>
             <br />
         </div>
@@ -175,6 +175,7 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                             }
                         }
                     }
+                    data.push('teacher'); // show teacher name
 
                     var showCTH = $("#onlyCTH").is(":checked");
                     var showUnreg = $("#unregistered").is(":checked");

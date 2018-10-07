@@ -124,6 +124,10 @@ class Reports
                 'table'     => 'classes', 
                 'column'    =>  ['class_grade', 'class_sub']
             ),
+            'teacher'   =>  array(
+                'table'     => 'classes', 
+                'column'    => 'class_teacher'
+            ),
 
             'chap_name'     =>  array(
                 'table'     =>  'th_chidon_chaps',
