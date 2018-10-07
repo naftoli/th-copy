@@ -18,7 +18,6 @@ $info = [
     'gender'		=>	'Gender',
     'dob'			=>	'Date of Birth',
     'class'			=>	'Class/Grade',
-    'school'		=>	'School',
     'winner_type'	=>	'Contestant / School Rep.',
     'test1a'		=>	'Test 1 Part 1',
     'test1b'		=>	'Test 1 Part 2',
@@ -138,7 +137,9 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                 if ($("select#school_id").val()) {
                     generate_report();
                 }
-                
+
+                var ajaxData; // need to store data sent in ajax request for printed pages
+
                 function generate_report() {
                     var school_id = $("select#school_id").val();
                     
@@ -178,11 +179,12 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                     var showCTH = $("#onlyCTH").is(":checked");
                     var showUnreg = $("#unregistered").is(":checked");
                     
-                    $("#qryBuilder").hide();
+                    //$("#qryBuilder").hide();
                     $("#report").html("<div class='loader'></div>");
-                    $.post("ajax/snapshot.php", { school_id: school_id, years: years, fields: data, options: [showCTH, showUnreg] }, function( data ) {
+                    ajaxData = { school_id: school_id, years: years, fields: data, options: [showCTH, showUnreg] };
+                    $.post("ajax/snapshot.php", ajaxData, function( data ) {
                         $("#report").html(data);
-                        $("#generate_report").hide();
+                        //$("#generate_report").hide();
                         $("#generate_print").show();
                     });
                 }
@@ -218,7 +220,7 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                 }
 
                 function generate_print() {
-
+                    window.open('snapshot_print.php?data=' + JSON.stringify(ajaxData));
                 }
             });
         </script>
