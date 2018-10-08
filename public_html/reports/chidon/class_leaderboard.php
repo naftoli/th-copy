@@ -26,6 +26,7 @@ $sql = "SELECT u.class_id, s.school_name, c.class_grade, c.class_sub, count(*) a
         join classes c on c.class_id = u.class_id 
         where tc.year = " . $year . "  
         and u.school_type_id in ('2','12') 
+        and c.class_grade in ('4','5','6','7','8') 
         group by u.class_id";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
@@ -44,6 +45,7 @@ $sql = "SELECT u.class_id, s.school_name, c.class_grade, c.class_sub, count(*) a
         join classes c on c.class_id = u.class_id 
         where tc.year = " . $year . "  
         and u.school_type_id in ('3','13') 
+        and c.class_grade in ('4','5','6','7','8') 
         group by u.class_id";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
@@ -65,74 +67,76 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 // echo $sql;
 // get total number of children registered in CTH but not signed up to chidon per school
 $notSignedUp = [];
-foreach ($classesInfo as $class_id => $more) {
-    // for boys
+foreach ($classesInfo as $gender => $more ) {
+    foreach ( $more as $class_id => $other) {
+        // for boys
 
-    // registered to cth
-    $sql = "SELECT count(*) as total FROM users u 
-            join classes c on c.class_id = u.class_id 
-            where u.class_id = " . $class_id . " 
-            and u.school_type_id in ('2','12') 
-            and u.user_id not in (
-                select tc.user_id from th_chidon tc 
-                join users u using (user_id) 
-                where tc.year = $year
-                and u.class_id = $class_id
-            ) 
-            and u.user_registered > 0";
-    $result = mysql_query( $sql );
-    $row = mysql_fetch_assoc( $result );
-    $notSignedUp['Boys'][$class_id]['reg'] = $row['total'];
-                
-    // not yet registered
-    $sql = "SELECT count(*) as total FROM users u 
-            join classes c on c.class_id = u.class_id 
-            where u.class_id = " . $class_id . " 
-            and u.school_type_id in ('2','12') 
-            and u.user_id not in (
-                select tc.user_id from th_chidon tc 
-                join users u using (user_id) 
-                where tc.year = $year
-                and u.class_id = $class_id
-            ) 
-            and (u.user_registered is null or u.user_registered = 0)";
-    $result = mysql_query( $sql );
-    $row = mysql_fetch_assoc( $result );
-    $notSignedUp['Boys'][$class_id]['notReg'] = $row['total'];
+        // registered to cth
+        $sql = "SELECT count(*) as total FROM users u 
+                join classes c on c.class_id = u.class_id 
+                where u.class_id = " . $class_id . " 
+                and u.school_type_id in ('2','12') 
+                and u.user_id not in (
+                    select tc.user_id from th_chidon tc 
+                    join users u using (user_id) 
+                    where tc.year = $year
+                    and u.class_id = $class_id
+                ) 
+                and u.user_registered > 0";
+        $result = mysql_query( $sql );
+        $row = mysql_fetch_assoc( $result );
+        $notSignedUp['Boys'][$class_id]['reg'] = $row['total'];
+                    
+        // not yet registered
+        $sql = "SELECT count(*) as total FROM users u 
+                join classes c on c.class_id = u.class_id 
+                where u.class_id = " . $class_id . " 
+                and u.school_type_id in ('2','12') 
+                and u.user_id not in (
+                    select tc.user_id from th_chidon tc 
+                    join users u using (user_id) 
+                    where tc.year = $year
+                    and u.class_id = $class_id
+                ) 
+                and (u.user_registered is null or u.user_registered = 0)";
+        $result = mysql_query( $sql );
+        $row = mysql_fetch_assoc( $result );
+        $notSignedUp['Boys'][$class_id]['notReg'] = $row['total'];
 
-    // for girls
+        // for girls
 
-    // registered to cth
-    $sql = "SELECT count(*) as total FROM users u 
-            join classes c on c.class_id = u.class_id 
-            where u.class_id = " . $class_id . " 
-            and u.school_type_id in ('3','13') 
-            and u.user_id not in (
-                select tc.user_id from th_chidon tc 
-                join users u using (user_id) 
-                where tc.year = $year
-                and u.class_id = $class_id
-            ) 
-            and u.user_registered > 0";
-    $result = mysql_query( $sql );
-    $row = mysql_fetch_assoc( $result );
-    $notSignedUp['Girls'][$class_id]['reg'] = $row['total'];
+        // registered to cth
+        $sql = "SELECT count(*) as total FROM users u 
+                join classes c on c.class_id = u.class_id 
+                where u.class_id = " . $class_id . " 
+                and u.school_type_id in ('3','13') 
+                and u.user_id not in (
+                    select tc.user_id from th_chidon tc 
+                    join users u using (user_id) 
+                    where tc.year = $year
+                    and u.class_id = $class_id
+                ) 
+                and u.user_registered > 0";
+        $result = mysql_query( $sql );
+        $row = mysql_fetch_assoc( $result );
+        $notSignedUp['Girls'][$class_id]['reg'] = $row['total'];
 
-    // not yet registered
-    $sql = "SELECT count(*) as total FROM users u 
-            join classes c on c.class_id = u.class_id 
-            where u.class_id = " . $class_id . " 
-            and u.school_type_id in ('3','13') 
-            and u.user_id not in (
-                select tc.user_id from th_chidon tc 
-                join users u using (user_id) 
-                where tc.year = $year
-                and u.class_id = $class_id
-            ) 
-            and (u.user_registered is null or u.user_registered = 0)";
-    $result = mysql_query( $sql );
-    $row = mysql_fetch_assoc( $result );
-    $notSignedUp['Girls'][$class_id]['notReg'] = $row['total'];
+        // not yet registered
+        $sql = "SELECT count(*) as total FROM users u 
+                join classes c on c.class_id = u.class_id 
+                where u.class_id = " . $class_id . " 
+                and u.school_type_id in ('3','13') 
+                and u.user_id not in (
+                    select tc.user_id from th_chidon tc 
+                    join users u using (user_id) 
+                    where tc.year = $year
+                    and u.class_id = $class_id
+                ) 
+                and (u.user_registered is null or u.user_registered = 0)";
+        $result = mysql_query( $sql );
+        $row = mysql_fetch_assoc( $result );
+        $notSignedUp['Girls'][$class_id]['notReg'] = $row['total'];
+    }
 }
 
 $percentages = [];

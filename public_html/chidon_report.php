@@ -56,6 +56,7 @@ $year = GlobalSettings::getChidonYear();
                     join admins a using (admin_id) 
                     where tc.year = ". $year . " 
                     and aa.auth = 'user' 
+                    and c.class_grade in ('4','5','6','7','8') 
                     and u.school_id = " . $id;
             if ($admin_user['auth'] != 'super') $sql .= " and deleted = 0";
             //if ($admin_user['auth'] != 'super' && $shutdown && !in_array($id, $exceptions)) $sql .= " and tc.shabbaton = 1";

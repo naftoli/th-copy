@@ -37,6 +37,7 @@ foreach ($schools as $id => $school) {
             and aa.auth = 'user' 
             and u.school_id = " . $id . " 
             and u.school_type_id in ('2','12') 
+            and c.class_grade in ('4','5','6','7','8') 
             group by u.school_id";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
@@ -55,6 +56,7 @@ foreach ($schools as $id => $school) {
             and aa.auth = 'user' 
             and u.school_id = " . $id . " 
             and u.school_type_id in ('3','13') 
+            and c.class_grade in ('4','5','6','7','8') 
             group by u.school_id";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
