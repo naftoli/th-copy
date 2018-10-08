@@ -121,7 +121,7 @@ class MilesPage extends Component {
               <Button color='danger' 
                 onClick={ this.subtractMiles( true ) }
                 disabled={ disableActions }>
-                  <InlineSync icon='minus' /> Subtract (Global)
+                  <InlineSync icon='minus' /> Subtract (Store + Auction)
               </Button>
               <Button color='danger' 
                 onClick={ this.subtractMiles( false ) }
