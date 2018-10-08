@@ -52,7 +52,7 @@ if($debug) echo "</pre>";
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Tzivos Hashem | Student - Parent Email Report</title>
+        <title>Tzivos Hashem | Student - Registered Soldier Parent Account Email Report</title>
         <link href="/admin_styles.css" rel="stylesheet" type="text/css"/>
         <link href="/styles/admin/loader.css" rel="stylesheet" type="text/css"/>
         <link href="/styles/admin/grey_select.css" rel="stylesheet" type="text/css"/>

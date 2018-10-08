@@ -120,7 +120,7 @@ class BaseRouter {
         $filters = [];
         $login = $current_user->login;
         
-        if ( $all ) {
+        if ( $all && !in_array( $login->code, [ 'HQ', 'INST' ] ) ) {
             $school_ids = $current_user->getAuthIds( 'school' );
             $filters[] = 's.school_id IN ('. implode(', ', $school_ids ) .')';
         } else {

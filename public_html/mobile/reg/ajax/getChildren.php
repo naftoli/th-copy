@@ -114,10 +114,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
     $children[$row['user_id']]['allowRemove'] = 0;
 	$children[$row['user_id']]['reg_types'] = [];
 	
-    if ( !$row['reg_chayolei'] && $row['chayolei'] && // if not registered for chayolei
-        // do not show for 7-8 grade who are registered in chidon 
-        ( !(in_array( $row['class_grade'], [7, 8] ) && $row['reg_chidon'] ) ) 
-    ) {
+    if ( !$row['reg_chayolei'] && $row['chayolei'] ) {
         $children[$row['user_id']]['needsReg'] = 1;
         $children[$row['user_id']]['reg_types']['chayolei'] = true;
     } 
