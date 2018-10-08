@@ -32,8 +32,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     $info['Boys'][$row['class_id']] = $row['total'];
     $classesInfo['Boys'][$row['class_id']] = [
         'school'    =>  $row['school_name'], 
-        'grade'     =>  $row['school_grade'], 
-        'sub'       =>  $row['school_sub']
+        'grade'     =>  $row['class_grade'], 
+        'sub'       =>  $row['class_sub']
     ];
 }
 // for girls
@@ -51,7 +51,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     $classesInfo['Girls'][$row['class_id']] = [
         'school'    =>  $row['school_name'], 
         'grade'     =>  $row['class_grade'], 
-        'sub'       =>  $row['school_sub']
+        'sub'       =>  $row['class_sub']
     ];
 }
 // $total = 0;
