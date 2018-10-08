@@ -120,7 +120,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      * @return int
      */
     public function shippingZone(){
-        if ( $this->admin_country == '' || $this->admin_country == 'USA' ) return 1;
+        if ( $this->admin_country == '' || in_array( strtolower( $this->admin_country ), ['usa', 'united states'] ) ) return 1;
         else if ( $this->admin_country == 'Canada' ) return 2;
         return 3;
     }
