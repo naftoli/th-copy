@@ -7,7 +7,6 @@ if ($_POST['debug']) {
     error_reporting(E_ALL);
     ini_set("display_errors", 1);
     $debug = true; // set debug to true
-    echo "<pre>";
 }
 
 /***************** AUTHENTICATION **********************/
@@ -91,7 +90,8 @@ arsort( $percentages );
                 <?php
                 $i = 1;
                 foreach ( $percentages as $school => $percent ) {            
-                    echo "<tr><td>#" . $i++ . "</td><td>" . $school . "</td><td>" . ($info[$school]['notReg'] + $info[$school]['reg']) . "</td><td>" . $info[$school]['reg'] . "</td><td>" . $percent . "</td></tr>";
+                    echo "<tr><td>#" . $i++ . "</td><td>" . $school . "</td><td>" . ($info[$school]['notReg'] + $info[$school]['reg']) . "</td><td>" . $info[$school]['reg'];
+                    echo "</td><td>" . $percent . "</td></tr>";
                 }
                 ?>
             </tbody>
