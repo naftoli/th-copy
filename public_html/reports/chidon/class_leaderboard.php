@@ -189,7 +189,7 @@ arsort( $percentages['Girls'] );
                         }  
                         $class = $classesInfo[$class_id];
                         $school = $class['school'];
-                        $grade = $class['grade'] . ($class['sub'] ? '-' . $class['sub'] : '');
+                        $grade = ($class['grade'] . $class['sub'] ? '-' . $class['sub'] : '');
                         echo "<tr><td>#" . $i . "</td><td>" . $school . "</td><td>" . $grade . "</td><td>";
                         echo ($info[$gender][$class_id] + $notSignedUp[$gender][$class_id]['reg'] + $notSignedUp[$gender][$class_id]['notReg']) . "</td><td>";
                         echo $info[$gender][$class_id] . "</td><td>" . $percent . "</td></tr>";
