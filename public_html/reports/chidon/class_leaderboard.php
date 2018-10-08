@@ -16,76 +16,53 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
 $year = GlobalSettings::getChidonYear();
 
-// get all chidon schools
-require_once($_SERVER['DOCUMENT_ROOT'].'/class.adminSchools.php');       
-$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // add chidon schools
-$schools = $as->getSchools();
-//echo implode(',', array_keys($schools)); exit;
-
-$classesInfo = [];
-foreach ($schools as $id => $school) {
-    // get grades 
-    $sql = "select class_id, class_grade, class_sub 
-            from classes 
-            where class_era = 0 
-            and class_grade in ('4','5','6','7','8') 
-            and school_id = " . $id;
-    $result = mysql_query( $sql );
-    while ( $row = mysql_fetch_assoc( $result ) ) {
-        $classesInfo[$row['class_id']] = array(
-                'school'=>  $school, 
-                'grade' =>  $row['class_grade'], 
-                'sub'   =>  $row['class_sub']
-        );
-    }
-}
-
 $info = [];
-foreach ( $classesInfo as $class_id => $other ) {
-    // for boys
-    
-    $sql = "select count(tc.user_id) as chidon_reg 
-            from th_chidon tc 
-            join users u using (user_id)
-            join classes c on u.class_id = c.class_id
-            join admin_auths aa on aa.id = u.user_id 
-            join admins a using (admin_id) 
-            join schools s on s.school_id = u.school_id 
-            where tc.year = " . $year . "  
-            and aa.auth = 'user' 
-            and u.class_id = " . $class_id . " 
-            and u.school_type_id in ('2','12')";
-    $result = mysql_query($sql);
-    while ($row = mysql_fetch_assoc($result)) {
-        $info['Boys'][$class_id] = $row['chidon_reg'];
-    }
-
-    // for girls
-    $sql = "select count(tc.user_id) as chidon_reg 
-            from th_chidon tc 
-            join users u using (user_id)
-            join classes c on u.class_id = c.class_id
-            join admin_auths aa on aa.id = u.user_id 
-            join admins a using (admin_id) 
-            join schools s on s.school_id = u.school_id 
-            where tc.year = " . $year . "  
-            and aa.auth = 'user' 
-            and u.class_id = " . $class_id . " 
-            and u.school_type_id in ('3','13')";
-    $result = mysql_query($sql);
-    while ($row = mysql_fetch_assoc($result)) {
-        $info['Girls'][$class_id] = $row['chidon_reg'];
-    }
+$classesInfo = [];
+// for boys 
+$sql = "SELECT u.class_id, s.school_name, c.class_grade, c.class_sub, count(*) as total 
+        from th_chidon tc 
+        join users u using (user_id) 
+        join schools s on s.school_id = u.school_id 
+        join classes c on c.class_id = u.class_id 
+        where tc.year = " . $year . "  
+        and u.school_type_id in ('2','12') 
+        group by u.class_id";
+$result = mysql_query( $sql );
+while ( $row = mysql_fetch_assoc( $result ) ) {
+    $info['Boys'][$row['class_id']] = $row['total'];
+    $classesInfo[$row['class_id']] = [
+        'school'    =>  $row['school_name'], 
+        'grade'     =>  $row['school_grade'], 
+        'sub'       =>  $row['school_sub']
+    ];
 }
-$total = 0;
-foreach ( $info as $gender => $other ) {
-    foreach ( $other as $reg ) {
-        $total += $reg;
-    }
+// for girls
+$sql = "SELECT u.class_id, s.school_name, c.class_grade, c.class_sub, count(*) as total 
+        from th_chidon tc 
+        join users u using (user_id) 
+        join schools s on s.school_id = u.school_id 
+        join classes c on c.class_id = u.class_id 
+        where tc.year = " . $year . "  
+        and u.school_type_id in ('3','13') 
+        group by u.class_id";
+$result = mysql_query( $sql );
+while ( $row = mysql_fetch_assoc( $result ) ) {
+    $info['Girls'][$row['class_id']] = $row['total'];
+    $classesInfo[$row['class_id']] = [
+        'school'    =>  $row['school_name'], 
+        'grade'     =>  $row['school_grade'], 
+        'sub'       =>  $row['school_sub']
+    ];
 }
-echo $total; exit;
-//echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
-//echo $sql;
+// $total = 0;
+// foreach ( $info as $gender => $other ) {
+//     foreach ( $other as $reg ) {
+//         $total += $reg;
+//     }
+// }
+// echo $total; 
+// echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
+// echo $sql;
 // get total number of children registered in CTH but not signed up to chidon per school
 $notSignedUp = [];
 foreach ($classesInfo as $class_id => $more) {
@@ -210,9 +187,9 @@ arsort( $percentages['Girls'] );
                             $i++;
                             $prev = $percent;
                         }  
-                        $info = $classesInfo[$class_id];
-                        $school = $info['school'];
-                        $grade = $info['grade'] . ($info['sub'] ? '-' . $info['sub'] : '');
+                        $class = $classesInfo[$class_id];
+                        $school = $class['school'];
+                        $grade = $class['grade'] . ($class['sub'] ? '-' . $class['sub'] : '');
                         echo "<tr><td>#" . $i . "</td><td>" . $school . "</td><td>" . $grade . "</td><td>";
                         echo ($info[$gender][$class_id] + $notSignedUp[$gender][$class_id]['reg'] + $notSignedUp[$gender][$class_id]['notReg']) . "</td><td>";
                         echo $info[$gender][$class_id] . "</td><td>" . $percent . "</td></tr>";
