@@ -1,7 +1,6 @@
 <?php
 $debug = false;
 /***************** DEBUGGING **********************/
-$_POST['debug'] = true;
 // enable debuging
 if ($_POST['debug']) {
     error_reporting(E_ALL);
