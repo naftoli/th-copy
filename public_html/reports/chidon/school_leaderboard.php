@@ -183,8 +183,14 @@ arsort( $percentages['Girls'] );
                 <tbody>
                     <?php
                     $i = 1;
-                    foreach ( $other as $school => $percent ) {            
-                        echo "<tr><td>#" . $i++ . "</td><td>" . $school . "</td><td>";
+                    $prev = 0;
+                    foreach ( $other as $school => $percent ) {   
+                        // add one to i if prev percent does not equal current percent
+                        if ( $prev != $percent ) {
+                            $i++;
+                            $prev = $percent;
+                        }         
+                        echo "<tr><td>#" . $i . "</td><td>" . $school . "</td><td>";
                         echo ($info[$gender][$school] + $notSignedUp[$gender][$school]['reg'] + $notSignedUp[$gender][$school]['notReg']) . "</td><td>";
                         echo $info[$gender][$school] . "</td><td>" . $percent . "</td></tr>";
                     }
