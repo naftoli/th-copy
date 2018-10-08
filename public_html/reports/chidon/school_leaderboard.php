@@ -194,4 +194,4 @@ arsort( $percentages['Girls'] );
             </table>
         <?php endforeach; ?>
     </body>
-</html>
+</html> 
