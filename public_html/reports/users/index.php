@@ -77,6 +77,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Parent Report</span>
                 </div>
             </a>
+            <a href="../email_report.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
+                    <span class="link-text">Parent Email Report</span>
+                </div>
+            </a>
             <a href="../created_users.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="tickets"/>
