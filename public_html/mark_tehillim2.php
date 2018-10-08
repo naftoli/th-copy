@@ -306,6 +306,22 @@ if (isset($_POST['submit'])) {
             <input type="hidden" name="date" value="<?=$date?>" />
             <input type="hidden" name="school" value="<?=$school?>" />
             <input type="hidden" name="oldGrade" id="oldGrade" value="<?=$grade?>" />
+
+            <h2>Shabbos Mevorchim 
+                <?
+                foreach ($sm as $month => $smdate) {
+                    if ($sm[6] == $sm[7]) {
+                        if ($month == 5) $months[$month] = "Adar";
+                        if ($month == 6) continue;
+                    }
+                    if ( $date == $smdate ) {
+                        echo $months[$month];
+                        break;
+                    }
+                }
+                ?>
+            </h2>
+
             Change Grade to: 
             <select name="grade" id="grade">
                 <option value='0'>All Grades</option>
