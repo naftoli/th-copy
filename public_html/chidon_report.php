@@ -45,6 +45,7 @@ $year = GlobalSettings::getChidonYear();
         //echo "<pre>"; print_r( $schools ); echo "</pre>"; exit;
         //if ($admin_user['auth'] == 'super') $schools[82] = "Avrohom Academy";
         
+        $ids = [];
         $users = array();
         foreach ($schools as $id => $school) {
             $sql = "select tc.*, u.first, u.last, u.first_he, u.last_he, u.school_type_id, c.*, a.admin_email, a.admin_phone_mobile, a.admin_phone_mobile2, a.admin_phone_home
@@ -55,6 +56,7 @@ $year = GlobalSettings::getChidonYear();
                     join admins a using (admin_id) 
                     where tc.year = ". $year . " 
                     and aa.auth = 'user' 
+                    and c.class_grade in ('4','5','6','7','8') 
                     and u.school_id = " . $id;
             if ($admin_user['auth'] != 'super') $sql .= " and deleted = 0";
             //if ($admin_user['auth'] != 'super' && $shutdown && !in_array($id, $exceptions)) $sql .= " and tc.shabbaton = 1";
@@ -93,8 +95,10 @@ $year = GlobalSettings::getChidonYear();
                 */
                 $users[$id][$grade][][$name][$email][$phone1][$phone2][$phone3][$row['th_chidon_id']][$heName][$date][$chidonType] =
                     array('paid' => $row['paid'], 'deleted' => $row['deleted'], 'info' => $row);
+                $ids[] = $id;
             }
         }
+        echo "<input type='hidden' name='numSchools' value='" . count($ids) . "'>";
         $total = 0;
         $totals = [];
         $totalsByGrade = [];

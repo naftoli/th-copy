@@ -1,6 +1,7 @@
 <?php
 $debug = false;
 /***************** DEBUGGING **********************/
+$_POST['debug'] = true;
 // enable debuging
 if ($_POST['debug']) {
     error_reporting(E_ALL);
@@ -37,7 +38,6 @@ foreach ($schools as $id => $school) {
             and aa.auth = 'user' 
             and u.school_id = " . $id . " 
             and u.school_type_id in ('2','12') 
-            and c.class_grade in ('4','5','6','7','8') 
             group by u.school_id";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
@@ -56,7 +56,6 @@ foreach ($schools as $id => $school) {
             and aa.auth = 'user' 
             and u.school_id = " . $id . " 
             and u.school_type_id in ('3','13') 
-            and c.class_grade in ('4','5','6','7','8') 
             group by u.school_id";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
@@ -184,15 +183,9 @@ arsort( $percentages['Girls'] );
                 </thead>
                 <tbody>
                     <?php
-                    $i = 0;
-                    $prev = 0;
-                    foreach ( $other as $school => $percent ) {   
-                        // add one to i if prev percent does not equal current percent
-                        if ( $prev != $percent ) {
-                            $i++;
-                            $prev = $percent;
-                        }         
-                        echo "<tr><td>#" . $i . "</td><td>" . $school . "</td><td>";
+                    $i = 1;
+                    foreach ( $other as $school => $percent ) {            
+                        echo "<tr><td>#" . $i++ . "</td><td>" . $school . "</td><td>";
                         echo ($info[$gender][$school] + $notSignedUp[$gender][$school]['reg'] + $notSignedUp[$gender][$school]['notReg']) . "</td><td>";
                         echo $info[$gender][$school] . "</td><td>" . $percent . "</td></tr>";
                     }
@@ -201,4 +194,4 @@ arsort( $percentages['Girls'] );
             </table>
         <?php endforeach; ?>
     </body>
-</html> 
+</html>

@@ -1,7 +1,6 @@
 <?php
 $debug = false;
 /***************** DEBUGGING **********************/
-$_POST['debug'] = true;
 // enable debuging
 if ($_POST['debug']) {
     error_reporting(E_ALL);
@@ -17,60 +16,139 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
 $year = GlobalSettings::getChidonYear();
 
-// get all chidon schools
-require_once($_SERVER['DOCUMENT_ROOT'].'/class.adminSchools.php');       
-$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // add chidon schools
-$schools = $as->getSchools();
-
-$ids = [];
 $info = [];
-$sql = "select c.class_id, count(u.user_id) as total   
-        from users u 
-        join schools s using (school_id) 
+$classesInfo = [];
+// for boys 
+$sql = "SELECT u.class_id, s.school_name, c.class_grade, c.class_sub, count(*) as total 
+        from th_chidon tc 
+        join users u using (user_id) 
+        join schools s on s.school_id = u.school_id 
         join classes c on c.class_id = u.class_id 
-        where s.school_id in (" . implode( ',', array_keys( $schools ) ) . ") 
-        and s.test_school != 1 
+        where tc.year = " . $year . "  
+        and u.school_type_id in ('2','12') 
         and c.class_grade in ('4','5','6','7','8') 
-        and c.class_era = 0 
-        group by c.class_id";
-//echo $sql;
+        group by u.class_id";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
-    // initialize vars if not set
-    $ids[] = $row['class_id'];
-    $info[$row['class_id']]['notReg'] = $row['total'];
+    $info['Boys'][$row['class_id']] = $row['total'];
+    $classesInfo['Boys'][$row['class_id']] = [
+        'school'    =>  $row['school_name'], 
+        'grade'     =>  $row['class_grade'], 
+        'sub'       =>  $row['class_sub']
+    ];
+}
+// for girls
+$sql = "SELECT u.class_id, s.school_name, c.class_grade, c.class_sub, count(*) as total 
+        from th_chidon tc 
+        join users u using (user_id) 
+        join schools s on s.school_id = u.school_id 
+        join classes c on c.class_id = u.class_id 
+        where tc.year = " . $year . "  
+        and u.school_type_id in ('3','13') 
+        and c.class_grade in ('4','5','6','7','8') 
+        group by u.class_id";
+$result = mysql_query( $sql );
+while ( $row = mysql_fetch_assoc( $result ) ) {
+    $info['Girls'][$row['class_id']] = $row['total'];
+    $classesInfo['Girls'][$row['class_id']] = [
+        'school'    =>  $row['school_name'], 
+        'grade'     =>  $row['class_grade'], 
+        'sub'       =>  $row['class_sub']
+    ];
+}
+// $total = 0;
+// foreach ( $info as $gender => $other ) {
+//     foreach ( $other as $reg ) {
+//         $total += $reg;
+//     }
+// }
+// echo $total; 
+// echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
+// echo $sql;
+// get total number of children registered in CTH but not signed up to chidon per school
+$notSignedUp = [];
+foreach ($classesInfo as $gender => $more ) {
+    foreach ( $more as $class_id => $other) {
+        // for boys
 
-    // find out how many users from school are registered for chidon
-    $sqlChidon = "select count(*) as registered from th_chidon 
-                    where user_id in (
-                        select user_id from users where class_id = " . $row['class_id'] . "
-                    )    
-                    and year = " . $year;
-    $resultChidon = mysql_query( $sqlChidon );
-    $rowChidon = mysql_fetch_assoc( $resultChidon );
-    $info[$row['class_id']]['reg'] = $rowChidon['registered'];
+        // registered to cth
+        $sql = "SELECT count(*) as total FROM users u 
+                join classes c on c.class_id = u.class_id 
+                where u.class_id = " . $class_id . " 
+                and u.school_type_id in ('2','12') 
+                and u.user_id not in (
+                    select tc.user_id from th_chidon tc 
+                    join users u using (user_id) 
+                    where tc.year = $year
+                    and u.class_id = $class_id
+                ) 
+                and u.user_registered > 0";
+        $result = mysql_query( $sql );
+        $row = mysql_fetch_assoc( $result );
+        $notSignedUp['Boys'][$class_id]['reg'] = $row['total'];
+                    
+        // not yet registered
+        $sql = "SELECT count(*) as total FROM users u 
+                join classes c on c.class_id = u.class_id 
+                where u.class_id = " . $class_id . " 
+                and u.school_type_id in ('2','12') 
+                and u.user_id not in (
+                    select tc.user_id from th_chidon tc 
+                    join users u using (user_id) 
+                    where tc.year = $year
+                    and u.class_id = $class_id
+                ) 
+                and (u.user_registered is null or u.user_registered = 0)";
+        $result = mysql_query( $sql );
+        $row = mysql_fetch_assoc( $result );
+        $notSignedUp['Boys'][$class_id]['notReg'] = $row['total'];
+
+        // for girls
+
+        // registered to cth
+        $sql = "SELECT count(*) as total FROM users u 
+                join classes c on c.class_id = u.class_id 
+                where u.class_id = " . $class_id . " 
+                and u.school_type_id in ('3','13') 
+                and u.user_id not in (
+                    select tc.user_id from th_chidon tc 
+                    join users u using (user_id) 
+                    where tc.year = $year
+                    and u.class_id = $class_id
+                ) 
+                and u.user_registered > 0";
+        $result = mysql_query( $sql );
+        $row = mysql_fetch_assoc( $result );
+        $notSignedUp['Girls'][$class_id]['reg'] = $row['total'];
+
+        // not yet registered
+        $sql = "SELECT count(*) as total FROM users u 
+                join classes c on c.class_id = u.class_id 
+                where u.class_id = " . $class_id . " 
+                and u.school_type_id in ('3','13') 
+                and u.user_id not in (
+                    select tc.user_id from th_chidon tc 
+                    join users u using (user_id) 
+                    where tc.year = $year
+                    and u.class_id = $class_id
+                ) 
+                and (u.user_registered is null or u.user_registered = 0)";
+        $result = mysql_query( $sql );
+        $row = mysql_fetch_assoc( $result );
+        $notSignedUp['Girls'][$class_id]['notReg'] = $row['total'];
+    }
 }
 
 $percentages = [];
-foreach ( $info as $class_id => $data ) {
-    if ( $data['reg'] == 0 ) {
-        unset($info[$class_id]);
-        continue;
+foreach ($info as $gender => $other) {
+    foreach ($other as $class_id => $registered) {
+        $percent = round( ($registered / ($registered + $notSignedUp[$gender][$class_id]['reg'] + $notSignedUp[$gender][$class_id]['notReg']) * 100), 2 );
+        $percentages[$gender][$class_id] = $percent;
     }
-    $percent = round( ($data['reg'] / ($data['notReg'] + $data['reg']) * 100), 2 );
-    $percentages[$class_id] = $percent;
 }
-arsort( $percentages );
-
-$classInfo = [];
-$sql = "select s.school_name, c.class_id, c.class_grade, c.class_sub 
-        from schools s 
-        join classes c using (school_id) 
-        where class_id in (" . implode(',', $ids) . ")";
-$result = mysql_query( $sql );
-while ( $row = mysql_fetch_assoc( $result ) ) {
-    $classInfo[$row['class_id']] = $row;
-}
+arsort( $percentages['Boys'] );
+arsort( $percentages['Girls'] );
+//echo "<pre>"; print_r( $percentages ); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
@@ -95,25 +173,34 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     </head>
     <body>
         <button onclick='window.print()' class='noPrint'>Print</button>
-        <table>
-            <thead>
-                <tr>
-                    <th></th><th>School</th><th>Grade</th><th>Sub</th><th>Chayolim in Base</th><th>Chayolim Registered in Chidon</th><th>Percentage Registered</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $i = 1;
-                foreach ( $percentages as $class_id => $percent ) { 
-                    $school = $classInfo[$class_id]['school_name'];
-                    $grade = $classInfo[$class_id]['class_grade'];
-                    $sub = $classInfo[$class_id]['class_sub'];
-                    echo "<tr><td>#" . $i++ . "</td><td>" . $school . "</td><td>" . $grade . "</td><td>" . $sub . "</td><td>";
-                    echo ($info[$class_id]['notReg'] + $info[$class_id]['reg']) . "</td><td>";
-                    echo $info[$class_id]['reg'] . "</td><td>" . $percent . "</td></tr>";     
-                }
-                ?>
-            </tbody>
-        </table>
+        <?php foreach ( $percentages as $gender => $other ) : ?>
+            <h2><?=$gender?></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th><th>School</th><th>Grade</th><th>Chayolim in Base</th><th>Chayolim Registered in Chidon</th><th>Percentage Registered</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $i = 0;
+                    $prev = 0;
+                    foreach ( $other as $class_id => $percent ) {  
+                        // add one to i if prev percent does not equal current percent
+                        if ( $prev != $percent ) {
+                            $i++;
+                            $prev = $percent;
+                        }  
+                        $class = $classesInfo[$gender][$class_id];
+                        $school = $class['school'];
+                        $grade = $class['grade'] . ($class['sub'] ? '-' . $class['sub'] : '');
+                        echo "<tr><td>#" . $i . "</td><td>" . $school . "</td><td>" . $grade . "</td><td>";
+                        echo ($info[$gender][$class_id] + $notSignedUp[$gender][$class_id]['reg'] + $notSignedUp[$gender][$class_id]['notReg']) . "</td><td>";
+                        echo $info[$gender][$class_id] . "</td><td>" . $percent . "</td></tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        <?php endforeach; ?>
     </body>
 </html>
