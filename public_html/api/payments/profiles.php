@@ -7,9 +7,9 @@ use classes\authorize\CustomerProfile as CustomerProfile;
 class ProfilesRouter {
     
     function index() {
-        global $current_user;
+        global $current_user; global $mobile;
         
-        if ( $current_user->login->code === 'BC' ) {
+        if ( $current_user->login->code === 'BC' && !$mobile ) {
             $school = $current_user->login->model;
             $customer_profile = $school->customerProfile();
         } else {
