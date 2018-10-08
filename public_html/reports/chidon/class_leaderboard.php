@@ -50,7 +50,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     $info['Girls'][$row['class_id']] = $row['total'];
     $classesInfo['Girls'][$row['class_id']] = [
         'school'    =>  $row['school_name'], 
-        'grade'     =>  $row['school_grade'], 
+        'grade'     =>  $row['class_grade'], 
         'sub'       =>  $row['school_sub']
     ];
 }
