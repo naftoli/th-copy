@@ -24,25 +24,26 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true
 $schools = $as->getSchools();
 
 $info = [];
-$sql = "select s.school_name, c.class_grade, c.class_sub, c.class_teacher, u.user_id, tc.th_chidon_id 
-        from users u 
-        join schools s using (school_id) 
+$sql = "select s.school_id, s.school_name, count(u.user_id) as total 
+        from schools s 
+        join users u using (school_id) 
         left join classes c on c.class_id = u.class_id 
-        left join th_chidon tc on tc.user_id = u.user_id 
         where s.school_id in (" . implode( ',', array_keys( $schools ) ) . ") 
         and s.test_school != 1 
         and c.class_grade in ('4','5','6','7','8') 
-        group by u.user_id 
-        order by s.school_name, c.class_grade, c.class_sub, u.user_id";
+        and c.class_era = 0 
+        group by s.school_id";
 //echo $sql;
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     // initialize vars if not set
-    if ( !isset( $info[$row['school_name']]['reg'] ) ) $info[$row['school_name']]['reg'] = 0;
-    if ( !isset( $info[$row['school_name']]['notReg'] ) ) $info[$row['school_name']]['notReg'] = 0;
-    
-    if ($row['th_chidon_id']) $info[$row['school_name']]['reg']++;
-    else $info[$row['school_name']]['notReg']++;
+    $info[$row['school_name']]['notReg'] = $row['total'];
+
+    // find out how many users from school are registered for chidon
+    $sqlChidon = "select count(*) as registered from th_chidon where school_id = " . $row['school_id'] . " and year = " . $year;
+    $resultChidon = mysql_query( $sqlChidon );
+    $rowChidon = mysql_fetch_assoc( $resultChidon );
+    $info[$row['school_name']]['reg'] = $rowChidon['registered'];
 }
 
 $percentages = [];
