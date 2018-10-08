@@ -27,7 +27,7 @@ $info = [];
 $sql = "select s.school_id, s.school_name, count(u.user_id) as total 
         from schools s 
         join users u using (school_id) 
-        left join classes c on c.class_id = u.class_id 
+        join classes c on c.class_id = u.class_id 
         where s.school_id in (" . implode( ',', array_keys( $schools ) ) . ") 
         and s.test_school != 1 
         and c.class_grade in ('4','5','6','7','8') 
@@ -48,6 +48,10 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 
 $percentages = [];
 foreach ( $info as $school => $data ) {
+    if ( $data['reg'] == 0 ) {
+        unset($info[$school]);
+        continue;
+    }
     $percent = round( ($data['reg'] / ($data['notReg'] + $data['reg']) * 100), 2 );
     $percentages[$school] = $percent;
 }
