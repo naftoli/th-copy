@@ -222,13 +222,12 @@ class Raffle {
         $this->eligable_user_ids = [];
         // first add the users that where marked as eligibile - excluding users that have won in the past. should we bring them in if they have been marked?
         $sql = "SELECT u.user_id, u.school_id, aa.admin_id ".
-            " FROM raffle_eligibility re LEFT JOIN raffle_winners rw using (user_id) ".
-            " LEFT JOIN raffles r ON rw.raffle_id = r.raffle_id ".
+            " FROM raffle_eligibility re".
             " JOIN users u USING (user_id) ".
             " LEFT JOIN admin_auths aa ON u.user_id = aa.id and aa.auth='user' ".
             " WHERE re.raffle_id = ".$this->raffle_id." ".
             " AND re.eligible = 1 ".
-            " AND ( r.year IS NULL OR r.year != $year ) ";
+            " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners JOIN raffles USING (raffle_id) WHERE year = $year )";
         // add the sorting by the user_id
         if($user_id) $sql .= "AND u.user_id=$user_id ";
         $sql .= "GROUP BY u.user_id;";
@@ -248,11 +247,9 @@ class Raffle {
         if($log) echo "Loading remaining users...\n";
         // get all users not marked in raffle_eligibility and who are registerd
         $sql = "SELECT u.user_id, u.school_id, aa.admin_id FROM users u LEFT JOIN admin_auths aa ON aa.auth = 'user' AND u.user_id = aa.id ".
-            " LEFT JOIN admins a USING ( admin_id ) LEFT JOIN raffle_winners rw using (user_id) LEFT JOIN raffles r USING (raffle_id) ".
-            " LEFT JOIN raffle_eligibility re USING (user_id) ".
+            " LEFT JOIN admins a USING ( admin_id ) ".
             " WHERE u.user_registered IS NOT NULL AND u.school_id IS NOT NULL ".
-            " AND (re.raffle_id != ".$this->raffle_id." OR re.raffle_id IS NULL)".
-            " AND ( r.year IS NULL OR r.year != $year )";
+            " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners JOIN raffles USING (raffle_id) WHERE year = $year )";
         // if a user is passed in, then limit it to this user
         if($user_id) $sql .= " AND u.user_id=$user_id";
         // sort by the user_id
