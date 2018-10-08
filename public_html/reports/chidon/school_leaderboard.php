@@ -182,7 +182,7 @@ arsort( $percentages['Girls'] );
                 </thead>
                 <tbody>
                     <?php
-                    $i = 1;
+                    $i = 0;
                     $prev = 0;
                     foreach ( $other as $school => $percent ) {   
                         // add one to i if prev percent does not equal current percent
