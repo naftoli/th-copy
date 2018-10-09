@@ -117,6 +117,7 @@ while( $mark = $lulav_query->fetch() ) {
         <table>
             <thead>
                 <tr>
+                    <th></th>
                     <th>School</th>
                     <th>Total PPL shook Lulav</th>
                     <th>Total chayolim registered</th>
