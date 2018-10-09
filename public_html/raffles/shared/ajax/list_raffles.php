@@ -25,7 +25,9 @@ if ( $type !== "" )
     $filter[] = "type='$type'"; // add the where clause before the order_by\
 if ( $ran_only )
     $filter[] = "date_ran IS NOT NULL";
-$filter[] = 'year = '.GlobalSettings::getCurrentYear(); // only show raffles from this year
+
+if ( $admin_user['auth'] !== 'super' )
+    $filter[] = 'year = '.GlobalSettings::getCurrentYear(); // only show raffles from this year
 
 $filter = 'WHERE '.implode( ' AND ', $filter ).' ORDER BY run_date DESC, type';
 
