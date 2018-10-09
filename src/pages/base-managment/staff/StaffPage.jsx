@@ -44,6 +44,7 @@ class StaffPage extends Component {
       { Header: 'E-mail Address', accessor: 'email' },
       { Header: 'Cell Phone', accessor: 'cell' },
       { Header: 'Position', accessor: 'position' },
+      { Header: 'Platoon', accessor: 'platoon' },
     ];
 
     if ( isAdmin( login.code ) ) {
