@@ -43,7 +43,9 @@ class StaffRouter {
             $platoon = trim( (new Platoon([
                 'class_grade' => $admin['class_grade'], 'class_sub' => $admin['class_sub']
             ]))->name() );
-            $admin['platoon'] = $platoon;
+
+            if ( $platoon )
+                $admin['platoon'] = $platoon;
             
             // set the position if it is blank
             if ( !$admin['position'] ) 
@@ -76,7 +78,9 @@ class StaffRouter {
                 $staff[ $admin['admin_id'] ]['position'] = 'Mulitple Positions';
                 $staff[ $admin['admin_id'] ]['role'] = 'Mulitple Roles';
                 $staff[ $admin['admin_id'] ]['school_name'] = 'Mulitple Bases';
-                $admin[ $admin['admin_id'] ]['platoon'] = 'Multiple Platoons';
+
+                if ( $platoon )
+                    $staff[ $admin['admin_id'] ]['platoon'] = 'Multiple Platoons';
             }
         }
         json_response( array_values( $staff ) );
