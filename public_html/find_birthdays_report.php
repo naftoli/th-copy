@@ -110,17 +110,15 @@ require_once('calendar.php');
 				</LABEL>
 			</span>
 		</fieldset>
-		<div align='center'>
+		<div style='text-align: center'>
 			<br /><input type="submit" name="submit" value="Submit" />
 		</div>
 	</form>
 	<?	
 	} else {
-		/*
-		echo "<pre>";
-		print_r( $_POST );
-		echo "</pre>";
-		*/
+		// echo "<pre>";
+		// print_r( $_POST );
+		// echo "</pre>";
 	
 		require_once 'class.adminSchools.php';
 		require_once 'class.schoolsUsers.php';         
@@ -155,7 +153,7 @@ require_once('calendar.php');
 				}
 				
 				//find out what day hebrew birthday is in current year
-				$jd = gregoriantojd( $arrDOB[1], $arrDOB[2], $yy );
+				$jd = gregoriantojd( $arrDOB[1], $arrDOB[2], $arrDOB[0] );
 				$jDate = jdtojewish($jd);
 				$arrJDate = explode("/", $jDate);
 				$hMonth = $arrJDate[0];
