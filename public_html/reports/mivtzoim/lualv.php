@@ -138,7 +138,8 @@ while( $mark = $lulav_query->fetch() ) {
             <thead>
                 <tr>
                     <th>School</th>
-                    <th>Total</th>
+                    <th>Total PPL shook Lulav</th>
+                    <th>Total chayolim registered</th>
                     <th>Avg Per Child</th>
                 </tr>
             </thead>
@@ -146,7 +147,7 @@ while( $mark = $lulav_query->fetch() ) {
                 <?php
                 foreach ( $grandTotals as $school => $total ) {
                     $avg = round( $total / $regTotals[$school] );
-                    echo "<tr><td>" . $school . "</td><td>" . $total . "</td><td>" . $avg . "</td></tr>";
+                    echo "<tr><td>" . $school . "</td><td>" . $total . "</td><td>" . $regTotals[$school] . "</td><td>" . $avg . "</td></tr>";
                 }
                 ?>
             </tbody>
