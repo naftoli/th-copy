@@ -100,6 +100,8 @@ while( $mark = $lulav_query->fetch() ) {
             </thead>
             <tbody>
                 <?php
+                $regTotals = [];
+                $grandTotals = [];
                 foreach ( $info as $row ) { ?>
                     <tr>
                         <td> <?= $row['school_name'] ?></td>
@@ -108,6 +110,9 @@ while( $mark = $lulav_query->fetch() ) {
                         <td> <?= $row['first'] ?></td>
                         <td> <?= $row['last'] ?></td>
                 <?php
+                    if ( isset( $regTotals[ $row['school_name'] ] ) ) $regTotals[ $row['school_name'] ]++;
+                    else $regTotals[ $row['school_name'] ] = 1;
+
                     $total = 0;
                     // find out mivtza lulav numbers
                     foreach ( $dates as $date ) {
@@ -116,6 +121,10 @@ while( $mark = $lulav_query->fetch() ) {
                             $mark = $lulav_marks[ $row['user_id'] ][ $date['start'] ];
 
                         $total += $mark;
+
+                        if ( isset( $grandTotals[ $row['school_name'] ] ) ) $grandTotals[ $row['school_name'] ] += $mark;
+                        else $grandTotals[ $row['school_name'] ] = $mark; 
+
                         echo "<td>".number_format( $mark )."</td>";
                     } 
                     echo "<td>" . number_format( $total ) . "</td></tr>";
@@ -123,5 +132,23 @@ while( $mark = $lulav_query->fetch() ) {
                 ?>
             </tbody>
         </table>
+        <br /><br />
+        <h2>Grand Totals</h2>
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th>School</th>
+                    <th>Total</th>
+                    <th>Avg Per Child</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                foreach ( $grandTotals as $school => $total ) {
+                    $avg = round( $total / $regTotals[$school] );
+                    echo "<tr><td>" . $school . "</td><td>" . $total . "</td><td>" . $avg . "</td></tr>";
+                }
+                ?>
+            </tbody>
     </body>
 </html>
