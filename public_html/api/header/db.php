@@ -2,6 +2,8 @@
 require_once( __DIR__ . "/../../../includes/globals.php");
 require_once( __DIR__ . "/../vendor/autoload.php" );
 
+define( 'SQL_DATE_FORMAT', 'Y-m-d H:i:s' );
+
 $_GLOBALS['log'] = new SimpleLogger( __DIR__ . '/../simpleLogger.log' );
 $connections = [
     'mashpiadb' => "mysql://$global_db_user:$global_db_pass@$global_db_host/mashpiadb?charset=utf8",
@@ -35,7 +37,7 @@ ActiveRecord\Config::initialize( function( $cfg ) use ( $connections ) {
     $cfg->set_connections( $connections );
     $cfg->set_default_connection('mashpiadb');
 });
-ActiveRecord\Serialization::$DATETIME_FORMAT = 'Y-m-d H:i:s';
+ActiveRecord\Serialization::$DATETIME_FORMAT = SQL_DATE_FORMAT;
 
 // log all SQL queries in development
 if ( $development ) {
