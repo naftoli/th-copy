@@ -1,9 +1,8 @@
 <?php
 $debug = false;
 /***************** DEBUGGING **********************/
-$_POST['debug'] = true;
 // enable debuging
-if ($_POST['debug']) {
+if ( isset( $_GET['debug'] ) ) {
     error_reporting(E_ALL);
     ini_set("display_errors", 1);
     $debug = true; // set debug to true
@@ -28,25 +27,46 @@ $year = GlobalSettings::getRegistrationYear();
 $grid_id = 9034;
 $dates = [
     [
-        'start' =>  2458390,
-        'end'  =>  2458392
-    ], 
-    [
         'start' =>  2458386,
         'end'   =>  2458389
+    ],
+    [
+        'start' =>  2458390,
+        'end'  =>  2458392
     ]
 ];
 
-$sql = "select s.school_name, c.class_grade, c.class_sub, u.first, u.last, u.user_id, dtm.done_qty   
+$sql = "SELECT s.school_name, c.class_grade, c.class_sub, u.first, u.last, u.user_id
         from users u  
         join schools s on s.school_id = u.school_id 
         join classes c on c.class_id = u.class_id 
         where u.user_registered > 0 
         and u.school_id in (" . implode(',', array_keys($schools)) . ") 
         order by school_name, class_grade, class_sub, last, first";
+
 $result = $MASHPIA_DB->query( $sql );
 $info = $result->fetchAll();
 //echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
+
+$lulav_query = $MASHPIA_DB->prepare(
+    "SELECT user_id, start_date, done_qty "
+    ."FROM date_tasks_marks dtm "
+    ."JOIN date_tasks dt USING (date_task_id) "
+    ."JOIN date_tasks_missions dtmm USING (date_tasks_mission_id) "
+    ."WHERE dtmm.start_date >= :start_date AND dtmm.end_date <= :end_date "
+    ."AND dt.grid_id = :grid_id GROUP BY user_id, start_date"
+);
+
+$lulav_query->execute([
+    ':start_date' => $dates[0]['start'],
+    ':end_date' => $dates[1]['end'],
+    ':grid_id' => $grid_id
+]);
+
+$lulav_marks = [];
+while( $mark = $lulav_query->fetch() ) {
+    $lulav_marks[ $mark['user_id'] ][ $mark['start_date'] ] = $mark['done_qty'];
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -85,37 +105,23 @@ $info = $result->fetchAll();
             </thead>
             <tbody>
                 <?php
-                foreach ( $info as $row ) {
-                    echo "<tr><td>" . $row['school_name'] 
-                        ."</td><td>" . $row['class_grade'] 
-                        ."</td><td>" . $row['class_sub'] 
-                        ."</td><td>" . $row['first'] 
-                        ."</td><td>" . $row['last'] 
-                        ."</td>";
+                foreach ( $info as $row ) { ?>
+                    <tr>
+                        <td> <?= $row['school_name'] ?></td>
+                        <td> <?= $row['class_grade'] ?></td>
+                        <td> <?= $row['class_sub'] ?></td>
+                        <td> <?= $row['first'] ?></td>
+                        <td> <?= $row['last'] ?></td>
+                <?php
                     $total = 0;
                     // find out mivtza lulav numbers
                     foreach ( $dates as $date ) {
-                        $sql = "select done_qty from date_tasks_marks dtm 
-                                join date_tasks dt using (date_task_id) 
-                                join date_tasks_missions dtmm using (date_tasks_mission_id) 
-                                where dtmm.start_date = :start 
-                                and dtmm.end_date = :end  
-                                and dt.grid_id = :id 
-                                and dtm.user_id = :user_id";
-                        $sth = $MASHPIA_DB->prepare( $sql );
-                        $sth->execute([
-                            ':start'    =>  $date['start'], 
-                            ':end'      =>  $date['end'], 
-                            ':id'       =>  $grid_id,
-                            ':user_id'  =>  $row['user_id']
-                        ]);
-                        if ( $sth->rowCount() ) {
-                            $done = $sth->fetch( PDO::FETCH_ASSOC );
-                            echo "<td>" . $done['done_qty'] . "</td>";
-                            $total += $done['done_qty'];
-                        } else {
-                            echo "<td>0</td>";
-                        }
+                        $mark = 0;
+                        if ( isset( $lulav_marks[ $row['user_id'] ][ $date['start'] ] ) )
+                            $mark = $lulav_marks[ $row['user_id'] ][ $date['start'] ];
+
+                        $total += $mark;
+                        echo "<td>$mark</td>";
                     } 
                     echo "<td>" . $total . "</td></tr>";
                 }
