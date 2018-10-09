@@ -539,6 +539,7 @@ $bpOnly = [ 82 ];
 							<!--<li><a href="/uploadChidonFile.php">Upload File for Chidon</a></li>-->
 							<!--<li><a href="/chidon_report.php">Registered for Chidon</a></li>-->
 							<li><a href="/reports/chidon/chidon_enrollment.php">Registered for Chidon</a></li>
+							<li><a href="/reports/chidon/snapshot.php">Registered / Unregistered Report</a></li>
 							<li><a href="/reports/chidon/shabbaton_enrollment.php">Shabbaton Enrolled Report</a></li>
 							<li><a href="/reports/chidon/walking_groups.php">Shabbaton Walking Report</a></li>
 							<li><a href="/chidon_tests.php">Enter Chidon Test Marks</a></li>
