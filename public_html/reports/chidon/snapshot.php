@@ -18,17 +18,17 @@ $info = [
     'gender'		=>	'Gender',
     'dob'			=>	'Date of Birth',
     'class'			=>	'Class/Grade',
-    'winner_type'	=>	'Contestant / School Rep.',
-    'test1a'		=>	'Test 1 Part 1',
-    'test1b'		=>	'Test 1 Part 2',
-    'test2a'		=>	'Test 2 Part 1',
-    'test2b'		=>	'Test 2 Part 2',
-    'test3a'		=>	'Test 3 Part 1',
-    'test3b'		=>	'Test 3 Part 2', 
-    'history'		=>	'Previous history (years enrolled prior to 5777)',
-    'date_paid'		=>	'Enrolled To Shabbaton',
-    'paid'			=>	'Amount Paid',
-    'cert_number'	=>  'Certificate Code'
+    // 'winner_type'	=>	'Contestant / School Rep.',
+    // 'test1a'		=>	'Test 1 Part 1',
+    // 'test1b'		=>	'Test 1 Part 2',
+    // 'test2a'		=>	'Test 2 Part 1',
+    // 'test2b'		=>	'Test 2 Part 2',
+    // 'test3a'		=>	'Test 3 Part 1',
+    // 'test3b'		=>	'Test 3 Part 2', 
+    // 'history'		=>	'Previous history (years enrolled prior to 5777)',
+    // 'date_paid'		=>	'Enrolled To Shabbaton',
+    // 'paid'			=>	'Amount Paid',
+    // 'cert_number'	=>  'Certificate Code'
 ];
 
 // required fields for qry to work
@@ -100,7 +100,7 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                 <?php endforeach; ?>
             </fieldset>
 
-            <fieldset>
+            <!-- <fieldset>
                 <legend>Choose the years:</legend>
                 <?php
                 for ($i = 5777; $i <= $chidonYear; $i++) {
@@ -109,10 +109,10 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                     echo " /> " . $i . "<br />";
                 }
                 ?>
-            </fieldset>
+            </fieldset> -->
 
             <fieldset>
-                <legend>Additional Options (Only relevant for children from this year)</legend>
+                <legend>Options</legend>
                 <input type="checkbox" id="onlyCTH" /> Include children that are enrolled into CTH but not Chidon.<br />
                 <input type="checkbox" id="unregistered" /> Include children that are not enrolled into CTH or Chidon.<br />
             </fieldset>
@@ -137,7 +137,8 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                 if ($("select#school_id").val()) {
                     generate_report();
                 }
-
+                
+                var years = [<?=$chidonYear?>];
                 var ajaxData; // need to store data sent in ajax request for printed pages
 
                 function generate_report() {
@@ -148,17 +149,17 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                     }
 
                     // make sure at least one year was selected
-                    if ( !$("input.year:checked").length ) {
-                        alert("You must choose at least one year.");
-                        return false;
-                    } else {
-                        var years = [];
-                        $(".year").each( function() {
-                            if ($(this).is(":checked")) {
-                                years.push( $(this).val() );
-                            }
-                        });
-                    }
+                    // if ( !$("input.year:checked").length ) {
+                    //     alert("You must choose at least one year.");
+                    //     return false;
+                    // } else {
+                    //     var years = [];
+                    //     $(".year").each( function() {
+                    //         if ($(this).is(":checked")) {
+                    //             years.push( $(this).val() );
+                    //         }
+                    //     });
+                    // }
 
                     // make sure we have checked options
                     if ( !$("fieldset input:checked").length ) {

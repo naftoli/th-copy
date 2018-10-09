@@ -1,6 +1,5 @@
 <?php $debug = false;
 /***************** DEBUGGING **********************/
-$_POST['debug'] = true;
 // enable debuging
 if ($_POST['debug']) {
     error_reporting(E_ALL);
@@ -22,8 +21,6 @@ $school_id = mysql_real_escape_string( $_POST['school_id'] );
 foreach ( $_POST['fields'] as $v ) {
     $fields[] = mysql_real_escape_string( $v );
 }
-// add year field
-$fields[] = 'year';
 
 foreach ( $_POST['years'] as $y ) {
     $years[] = mysql_real_escape_string( $y );
@@ -64,9 +61,8 @@ if (in_array( $year, $years ) && ($options[0] == 'true' || $options[1] == 'true'
 
     $result = mysql_query( $sql );
     while ( $row = mysql_fetch_assoc( $result ) ) {
-        $row['year'] = $year;
         $row['chidonReg'] = 0;
-        $users[$row['class_grade']][$row['class_sub']][$row['last_name']][$row['first_name']][$row['year']] = $row;
+        $users[$row['class_grade']][$row['class_sub']][$row['last_name']][$row['first_name']] = $row;
     }
 }
 
@@ -80,7 +76,7 @@ foreach( $years as $y ) {
 
     while( $row = mysql_fetch_assoc($users_query) ) {
         $row['chidonReg'] = 1; // flag to know that this child is registered in chidon for that yr
-        $users[$row['class_grade']][$row['class_sub']][$row['last_name']][$row['first_name']][$row['year']] = $row;
+        $users[$row['class_grade']][$row['class_sub']][$row['last_name']][$row['first_name']] = $row;
     }
 }
 
@@ -89,9 +85,6 @@ foreach ( $users as $grade => $other ) {
     foreach ( $other as $sub => $info ) {
         foreach ( $info as $last => $other ) {
             foreach ( $other as $first => $info ) {
-                foreach ( $info as $y => $other ) {
-                    ksort( $users[$grade][$sub][$last][$first][$y] );
-                }
                 ksort( $users[$grade][$sub][$last][$first] );
             }
             ksort( $users[$grade][$sub][$last] );
@@ -108,9 +101,7 @@ foreach ( $users as $grade => $other ) {
     foreach ( $other as $sub => $info ) {
         foreach ( $info as $last => $other ) {
             foreach ( $other as $first => $info ) {
-                foreach ( $info as $y => $other ) {
-                    $temp[] = $other;
-                }
+                $temp[] = $info;
             }
         }
     }
@@ -120,9 +111,7 @@ foreach ( $users as $grade => $other ) {
     foreach ( $other as $sub => $info ) {
         foreach ( $info as $last => $other ) {
             foreach ( $other as $first => $info ) {
-                foreach ( $info as $y => $other ) {
-                    $printed[$grade][$sub][] = $other;
-                }
+                $printed[$grade][$sub][] = $info;
             }
         }
     }
@@ -143,7 +132,7 @@ if (count($users) > 0) {
             foreach ($more as $sub => $users) {
                 echo "<h4>Grade: " . $grade . ($sub ? '-' . $sub : '') . "<br />";
                 echo "Teacher: " . $users[0]['class_teacher'] . "</h4>";
-                if ( $users[0]['year'] == $year ) $showExtra = true;
+                if ($options[0] == 'true' || $options[1] == 'true') $showExtra = true;
                 else $showExtra = false;
                 $totalChidonReg = 0;
                 ?>
@@ -151,7 +140,7 @@ if (count($users) > 0) {
                     <thead>
                         <tr>
                             <?php if ( $showExtra ) : ?>
-                                <th><?php if ($options[0] == 'true') echo "Enrolled into Chidon"; ?></th>
+                                <th><?php if ($options[0] == 'true' || $options[1] == 'true') echo "Enrolled into Chidon"; ?></th>
                                 <th><?php if ($options[1] == 'true') echo "Enrolled into CTH"; ?></th>
                             <? endif; ?>
                             <?php foreach ( $columns as $column ) {
@@ -167,7 +156,7 @@ if (count($users) > 0) {
                         ?>
                         <tr class="users">
                             <?php if ( $showExtra ) : ?>
-                                <td><?php if ($options[0] == 'true') echo $user['chidonReg'] ? 'yes' : 'no'; ?></td>
+                                <td><?php if ($options[0] == 'true' || $options[1] == 'true') echo $user['chidonReg'] ? 'yes' : 'no'; ?></td>
                                 <td><?php if ($options[1] == 'true') echo (isset($user['user_registered']) && $user['user_registered'] > 0) ? 'yes' : 'no'; ?></td>
                             <?php endif; ?>
                             <?php 
@@ -179,28 +168,29 @@ if (count($users) > 0) {
                         <?}?>
                     </tbody>
                 </table>
-                <h4>Total children Registered for Chidon this year: <?=$totalChidonReg?>
+                <h4>Total children Registered for Chidon: <?=$totalChidonReg?>
                 <?php
                 // if we are showing also registered to CTH but unregistered to Chidon show percentage
                 if ( $options[1] == 'true' ) {
                     $total = count($users);
-                    echo "<br />Percentage of children registered for Chidon this year: " . round( ($totalChidonReg / $total * 100), 2 ) . "%";
+                    echo "<br />Total children Registered for CTH: " . $total;
+                    echo "<br />Percentage of children Registered for Chidon this year: " . round( ($totalChidonReg / $total * 100), 2 ) . "%";
                 }
-                ?>
+                ?> 
                 </h4>
                 <div style="page-break-after: always"></div>
                 <?
             }
         }
     } else {
-        if ( $users[0]['year'] == $year ) $showExtra = true;
+        if ($options[0] == 'true' || $options[1] == 'true') $showExtra = true;
         else $showExtra = false;
         ?>
         <table>
             <thead>
                 <tr>
                     <?php if ( $showExtra ) : ?>
-                        <th><?php if ($options[0] == 'true') echo "Enrolled into Chidon"; ?></th>
+                        <th><?php if ($options[0] == 'true' || $options[1] == 'true') echo "Enrolled into Chidon"; ?></th>
                         <th><?php if ($options[1] == 'true') echo "Enrolled into CTH"; ?></th>
                     <? endif; ?>
                     <?php foreach ( $columns as $column ) {
@@ -213,7 +203,7 @@ if (count($users) > 0) {
                 <? foreach($users as $user) {?>
                 <tr class="users">
                     <?php if ( $showExtra ) : ?>
-                        <td><?php if ($options[0] == 'true') echo $user['chidonReg'] ? 'yes' : 'no'; ?></td>
+                        <td><?php if ($options[0] == 'true' || $options[1] == 'true') echo $user['chidonReg'] ? 'yes' : 'no'; ?></td>
                         <td><?php if ($options[1] == 'true') echo (isset($user['user_registered']) && $user['user_registered'] > 0) ? 'yes' : 'no'; ?></td>
                     <?php endif; ?>
                     <?php 
