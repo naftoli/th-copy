@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import { Callout, FontAwesome } from 'components/ui';
 import { Row, Col, Button, Input, UncontrolledTooltip } from 'reactstrap';
 import { 
-  Select, Radio,
-  BaseSelect, PlatoonSelect, SoldierSelect 
+  PlatoonSelect, SoldierSelect,
+  Radio, ParshaSelect, BaseSelect
 } from 'components/inputs';
 // functions
+import julian from 'julian';
 import { setTitle } from 'functions/utils';
 import { isAdmin, isBC } from 'functions/login';
 // style
@@ -23,11 +24,26 @@ class PrintPage extends Component {
   };
 
   componentDidMount() {
-    const { school_id, class_id } = this.props.login;
     setTitle( 'Print Missions' );
-
+    // set the default school id and class id
+    const { school_id, class_id } = this.props.login;
     this.setState({ school_id });
     if ( class_id ) this.setState({ class_ids: [ class_id ] });
+    // set the default parsha
+    if ( this.props.parshos.length > 0 ) this.setDefaultParsha();
+  }
+
+  componentDidUpdate( prevProps ) {
+    if ( prevProps.parshos !== this.props.parshos )
+      this.setDefaultParsha();
+  }
+
+  setDefaultParsha() {
+    const { parshos } = this.props;
+    const today = parseInt( julian( new Date() ), 10 );
+    // get the first week after the current week and select it
+    const parsha_id = parshos.find( parsha => today < parsha.start ).id;
+    this.setState({ parsha_ids: [ parsha_id ] });
   }
 
   showInstructions = () => {
@@ -38,8 +54,7 @@ class PrintPage extends Component {
   }
 
   schoolChange = ({ value }) => this.setState({ school_id: value });
-  platoonChange = ( values ) => this.setState({ class_ids: values.map( val => val.value ) });
-  soldierChange = ( values ) => this.setState({ user_ids: values.map( val => val.value ) });
+  multiSelectChange = key => values => this.setState({ [key]: values.map( val => val.value ) });
 
   toggleDates = ( e ) => this.setState({ dates: e.target.value });
   toggleDoubleSided = ( e ) => this.setState({ double_sided: JSON.parse( e.target.value ) });
@@ -67,28 +82,29 @@ class PrintPage extends Component {
             <Col sm={6}>
               <label>Base</label>
               <BaseSelect name='school_id' isDisabled={ !isAdmin( login.code ) }
-                value={ school_id } onChange={ this.schoolChange} />
+                value={ school_id } onChange={ this.schoolChange } />
             </Col>
 
             <Col sm={6}>
               <label>Platoon(s)</label>
               <PlatoonSelect isMulti isDisabled={ !isBC( login.code ) }
                 values={ class_ids } placeholder='All Platoons'
-                schoolId={ school_id } onChange={ this.platoonChange } />
+                schoolId={ school_id } onChange={ this.multiSelectChange('class_ids') } />
               <input type='hidden' value={ class_ids } name='class_ids' />
             </Col>
 
             <Col sm={6}>
               <label>Soldier(s)</label>
-              <SoldierSelect values={ user_ids } isMulti
-                schoolId={ school_id } classIds={ class_ids } 
-                onChange={ this.soldierChange } openMenuOnFocus={ false } placeholder='All Soldiers' />
+              <SoldierSelect values={ user_ids } isMulti registeredOnly 
+                schoolId={ school_id } classIds={ class_ids } openMenuOnFocus={ false } 
+                onChange={ this.multiSelectChange('user_ids') } placeholder='All Soldiers' />
               <input type='hidden' value={ user_ids } name='user_ids' />
             </Col>
 
             <Col sm={6}>
               <label>Parsha(s)</label>
-              <Select />
+              <ParshaSelect isMulti values={ parsha_ids } 
+                onChange={ this.multiSelectChange('parsha_ids') } />
               <input type='hidden' value={ parsha_ids } name='parsha_ids'/>
             </Col>
           </Row>
@@ -106,13 +122,13 @@ class PrintPage extends Component {
 
             <Col sm={6} xl={ 3 }>
               <label>Dates</label><br/>
-              <Radio checked={ dates == 'none' } value='none' onChange={ this.toggleDates }>
+              <Radio name='dates' checked={ dates === 'none' } value='none' onChange={ this.toggleDates }>
                 <strong>No</strong> dates.
               </Radio>
-              <Radio checked={ dates == 'hebrew' } value='hebrew' onChange={ this.toggleDates }>
+              <Radio name='dates' checked={ dates === 'hebrew' } value='hebrew' onChange={ this.toggleDates }>
                 <strong>Hebrew</strong> dates.
               </Radio><br/>
-              <Radio checked={ dates == 'english' } value='english' onChange={ this.toggleDates }>
+              <Radio name='dates' checked={ dates === 'english' } value='english' onChange={ this.toggleDates }>
                 <strong>Hebrew and English</strong> dates.
               </Radio>
             </Col>
@@ -147,9 +163,10 @@ class PrintPage extends Component {
   }
 }
 
-const mapStateToProps = ({ login }) => {
+const mapStateToProps = ({ login, missions }) => {
   return {
-    login: login.current_login
+    login: login.current_login,
+    parshos: missions.parshos.parshos
   }
 };
 
