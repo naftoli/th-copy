@@ -36,7 +36,7 @@ $dates = [
     ]
 ];
 
-$sql = "SELECT s.school_name, c.class_grade, c.class_sub, u.first, u.last, u.user_id
+$sql = "SELECT s.school_name, c.class_grade, c.class_sub, u.user_serial, u.first, u.last, u.user_id
         from users u  
         join schools s on s.school_id = u.school_id 
         join classes c on c.class_id = u.class_id 
@@ -72,6 +72,7 @@ while( $mark = $lulav_query->fetch() ) {
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <style>
             @media print {
                .noPrint {
@@ -81,21 +82,15 @@ while( $mark = $lulav_query->fetch() ) {
             body {
                 font-family: Verdana;
             }
-            tr, th, td {
-                font-size: 14px;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                font-family: Verdana;
-            }
         </style>
     </head>
     <body>
-        <table>
+        <table class="table table-sm table-striped">
             <thead>
                 <tr>
-                    <th>School</th>
-                    <th>Grade</th>
-                    <th>Sub</th>
+                    <th>Base</th>
+                    <th>Platoon</th>
+                    <th>Serial Number</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th># PPL shook Lulav Week 1</th>
@@ -108,8 +103,8 @@ while( $mark = $lulav_query->fetch() ) {
                 foreach ( $info as $row ) { ?>
                     <tr>
                         <td> <?= $row['school_name'] ?></td>
-                        <td> <?= $row['class_grade'] ?></td>
-                        <td> <?= $row['class_sub'] ?></td>
+                        <td> <?= Platoon::generateName( $row['class_grade'], $row['class_sub'] ) ?></td>
+                        <td> <?= $row['user_serial'] ?></td>
                         <td> <?= $row['first'] ?></td>
                         <td> <?= $row['last'] ?></td>
                 <?php
@@ -121,9 +116,9 @@ while( $mark = $lulav_query->fetch() ) {
                             $mark = $lulav_marks[ $row['user_id'] ][ $date['start'] ];
 
                         $total += $mark;
-                        echo "<td>$mark</td>";
+                        echo "<td>".number_format( $mark )."</td>";
                     } 
-                    echo "<td>" . $total . "</td></tr>";
+                    echo "<td>" . number_format( $total ) . "</td></tr>";
                 }
                 ?>
             </tbody>
