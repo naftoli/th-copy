@@ -125,8 +125,8 @@ while( $mark = $lulav_query->fetch() ) {
             </thead>
             <tbody>
                 <?php
-                foreach ( $grandTotals as $school => $total ) {
-                    echo "<tr><td>" . $school . "</td><td>" . $total . "</td><td>" . $regTotals[$school] . "</td><td>" . $leaderboard[$school] . "</td></tr>";
+                foreach ( $leaderboard as $school => $avg ) {
+                    echo "<tr><td>" . $school . "</td><td>" . $grandTotals[$school] . "</td><td>" . $regTotals[$school] . "</td><td>" . $avg . "</td></tr>";
                 }
                 ?>
             </tbody>
