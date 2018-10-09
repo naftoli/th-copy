@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // components
 import { Select } from './Select';
@@ -7,47 +8,32 @@ import { toast } from 'react-toastify';
 import { findOption } from 'functions/selects';
 import { makeCancelable } from 'functions/utils/promises';
 import { getSoldierList } from 'store/base/soldiers/operations';
+// state
+import { getSoldiers } from 'store/base/soldiers/operations';
 
 export class SoldierSelect extends Component {
 
   static propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.any,
+
     classId: PropTypes.any,
+    classIds: PropTypes.array,
+
+    schoolId: PropTypes.any,
+    schoolIds: PropTypes.array,
   }
 
   static defaultProps = {
     showAllOption: false
   }
 
-  apiRequest = null;
-
-  state = { 
-    soldiers: [],
-    loading: false
-  }
-
   componentDidMount(){ 
     this.loadSoldiers(); 
   }
 
-  // update if the login changed or the schoolId prop changed
-  componentDidUpdate( { classId: prevId } ) {
-    // if the school ID changed, get the new soldiers into redux
-    const { classId } = this.props;
-    if ( prevId !== classId ) {
-      this.loadSoldiers();
-    }
-  }
-
-  componentWillUnmount(){
-    this.apiRequest && this.apiRequest.cancel();
-  }
-
   loadSoldiers = () => {
-    this.setState({ loading: true })
-    return this.getSoldiers()
-    .then( soldiers => this.setState({ soldiers, loading: false }) )
+    return this.props.getSoldiers()
     .catch( e => toast.error( e.message ) );
   }
 
@@ -65,15 +51,31 @@ export class SoldierSelect extends Component {
   }
 
   getOptions = () => {
-    const { showAllOption, classId } = this.props;
+    const { 
+      showAllOption, isMulti, 
+      schoolId, schoolIds, 
+      classId, classIds, soldiers 
+    } = this.props;
     
-    const options = this.state.soldiers
+    if ( !( schoolId || schoolIds ) )
+      return [];
+
+    let options = soldiers;
     // only soldiers in the classId from props
-    .filter( soldier => soldier.class_id === classId )
+    if ( classId )
+      options = options.filter( soldier => soldier.class_id === classId );
+    else if ( classIds.length > 0 )
+      options = options.filter( soldier => classIds.includes( soldier.class_id ) );
+
+    if ( schoolId )
+      options = options.filter( soldier => soldier.school_id === schoolId );
+    else if ( schoolIds.length > 0 )
+      options = options.filter( soldier => schoolIds.includes( soldier.school_id ) );
+
     // map them to what react-select expects
-    .map( ({ user_id, name }) => ({ value: user_id, label: name }) );
+    options = options.map( ({ user_id, first, last }) => ({ value: user_id, label: `${first} ${last}` }) );
     // add special options
-    if ( showAllOption ) 
+    if ( showAllOption && !isMulti ) 
       options.unshift({ value: false, label: 'All Soldiers' });
     // and return the options
     return options;
@@ -86,8 +88,7 @@ export class SoldierSelect extends Component {
   filter = ( option, value ) => option.label.toLowerCase().includes( value.toLowerCase() );
   
   render() {
-    const { value, values, showAllOption } = this.props;
-    const { loading } = this.state;
+    const { value, loading, values, showAllOption } = this.props;
 
     let options = this.getOptions();
     let selected;
@@ -117,4 +118,11 @@ export class SoldierSelect extends Component {
   }
 }
 
-export default SoldierSelect;
+const mapStateToProps = ({ base }) => {
+  return {
+    loading: base.soldiers.loading,
+    soldiers: base.soldiers.soldiers,
+  };
+}
+
+export default connect( mapStateToProps, { getSoldiers } )( SoldierSelect );
