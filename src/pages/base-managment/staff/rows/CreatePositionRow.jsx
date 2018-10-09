@@ -52,8 +52,8 @@ class CreatePositionRow extends Component {
   create = () => this.props.onCreate( this.getAuth() );
 
   render() {
-    const { showCreateButton, isAdmin } = this.props;
-    const { auth, school_id, class_id, position } = this.state;
+    const { showCreateButton, isAdmin, login } = this.props;
+    let { auth, school_id, class_id, position } = this.state;
 
     const roleOptions = [
       { value: 'staff', label: 'Staff Member' },
@@ -66,6 +66,9 @@ class CreatePositionRow extends Component {
     let baseSelect;
     if ( isAdmin ) 
       baseSelect = <BaseSelect value={ school_id } onChange={ this.handleOptionChange('school_id') } />;
+
+    if ( !school_id ) school_id = login.school_id;
+    if ( !class_id ) class_id = login.class_id;
 
     return (
       <div className='CreatePositionRow'>
@@ -84,7 +87,7 @@ class CreatePositionRow extends Component {
               <label>Base</label> { baseSelect }
             </Col>
           }
-          <Col xs={ isAdmin ? 6 : 12 } className={platoonClassnames}>
+          <Col xs={ isAdmin ? 6 : 12 } className={ platoonClassnames }>
             <label>Platoon</label>
             <PlatoonSelect schoolId={ school_id } value={ class_id }
               onChange={ this.handleOptionChange('class_id') } tabIndex={ auth !== 'class' ? '-1' : '0' } />
