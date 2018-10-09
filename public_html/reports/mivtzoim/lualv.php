@@ -72,7 +72,7 @@ while( $mark = $lulav_query->fetch() ) {
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
         <style>
             @media print {
                .noPrint {
@@ -82,10 +82,14 @@ while( $mark = $lulav_query->fetch() ) {
             body {
                 font-family: Verdana;
             }
+            tr, th, td {
+                font-size: 14px;
+                padding: 10px;
+            }
         </style>
     </head>
     <body>
-        <table class="table table-sm table-striped">
+        <table>
             <thead>
                 <tr>
                     <th>Base</th>
@@ -134,7 +138,7 @@ while( $mark = $lulav_query->fetch() ) {
         </table>
         <br /><br />
         <h2>Grand Totals</h2>
-        <table class="table table-sm table-striped">
+        <table>
             <thead>
                 <tr>
                     <th>School</th>
