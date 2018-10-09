@@ -19,10 +19,6 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php');
 $as = new adminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
-//***************** LOAD CURRENT YEAR **********************/
-require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
-$year = GlobalSettings::getRegistrationYear();
-
 // find number of ppl that each child shook lulav and esrog with
 $grid_id = 9034;
 $dates = [
