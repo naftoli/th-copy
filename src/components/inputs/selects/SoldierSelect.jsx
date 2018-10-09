@@ -6,8 +6,6 @@ import { Select } from './Select';
 // functions
 import { toast } from 'react-toastify';
 import { findOption } from 'functions/selects';
-import { makeCancelable } from 'functions/utils/promises';
-import { getSoldierList } from 'store/base/soldiers/operations';
 // state
 import { getSoldiers } from 'store/base/soldiers/operations';
 
@@ -21,11 +19,11 @@ export class SoldierSelect extends Component {
     classIds: PropTypes.array,
 
     schoolId: PropTypes.any,
-    schoolIds: PropTypes.array,
   }
 
   static defaultProps = {
-    showAllOption: false
+    showAllOption: false,
+    registeredOnly: false
   }
 
   componentDidMount(){ 
@@ -37,40 +35,30 @@ export class SoldierSelect extends Component {
     .catch( e => toast.error( e.message ) );
   }
 
-  // load the soldiers
-  getSoldiers = () => { 
-    const { classId } = this.props;
-    if ( classId ) {
-      this.apiRequest = makeCancelable( getSoldierList( classId ) );
-    } else {
-      this.apiRequest = makeCancelable( 
-        new Promise( resolve => resolve([]) )
-      ); // resolve a promise with a new array
-    }
-    return this.apiRequest.promise; 
-  }
-
   getOptions = () => {
     const { 
       showAllOption, isMulti, 
-      schoolId, schoolIds, 
+      schoolId, registeredOnly, 
       classId, classIds, soldiers 
     } = this.props;
     
-    if ( !( schoolId || schoolIds ) )
+    if ( !schoolId )
       return [];
 
     let options = soldiers;
+
     // only soldiers in the classId from props
     if ( classId )
       options = options.filter( soldier => soldier.class_id === classId );
     else if ( classIds.length > 0 )
       options = options.filter( soldier => classIds.includes( soldier.class_id ) );
-
+    // limit to school ID
     if ( schoolId )
       options = options.filter( soldier => soldier.school_id === schoolId );
-    else if ( schoolIds.length > 0 )
-      options = options.filter( soldier => schoolIds.includes( soldier.school_id ) );
+
+    // limit to registered only
+    if ( registeredOnly )
+      options = options.filter( soldier => !!soldier.user_registered );
 
     // map them to what react-select expects
     options = options.map( ({ user_id, first, last }) => ({ value: user_id, label: `${first} ${last}` }) );
