@@ -7,13 +7,14 @@ import login from 'store/login/reducer';
 import payments from 'store/payments/reducer';
 
 // nested reducers
-import rewards from './rewards';
 import base from './base';
+import rewards from './rewards';
+import missions from './missions';
 
 
 export const reducer = combineReducers({
   // nested
-  rewards,  base,
+  rewards,  base,   missions,
   // flat
   payments, login,  home,
 });
