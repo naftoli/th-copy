@@ -146,7 +146,7 @@ while( $mark = $lulav_query->fetch() ) {
             <tbody>
                 <?php
                 foreach ( $grandTotals as $school => $total ) {
-                    $avg = round( $total / $regTotals[$school] );
+                    $avg = round( ( doubleval($total) / $regTotals[$school] ), 2 );
                     echo "<tr><td>" . $school . "</td><td>" . $total . "</td><td>" . $regTotals[$school] . "</td><td>" . $avg . "</td></tr>";
                 }
                 ?>
