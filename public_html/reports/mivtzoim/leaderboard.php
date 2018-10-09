@@ -105,6 +105,13 @@ while( $mark = $lulav_query->fetch() ) {
                     else $grandTotals[ $row['school_name'] ] = $mark; 
                 } 
             }
+
+            $leaderboard = [];
+            foreach ( $grandTotals as $school => $total ) {
+                $avg = round( ( doubleval($total) / $regTotals[$school] ), 2 );
+                $leaderboard[$school] = $avg;
+            }
+            arsort( $leaderboard );
         ?>
         <h2>Leaderboard</h2>
         <table>
@@ -119,8 +126,7 @@ while( $mark = $lulav_query->fetch() ) {
             <tbody>
                 <?php
                 foreach ( $grandTotals as $school => $total ) {
-                    $avg = round( ( doubleval($total) / $regTotals[$school] ), 2 );
-                    echo "<tr><td>" . $school . "</td><td>" . $total . "</td><td>" . $regTotals[$school] . "</td><td>" . $avg . "</td></tr>";
+                    echo "<tr><td>" . $school . "</td><td>" . $total . "</td><td>" . $regTotals[$school] . "</td><td>" . $leaderboard[$school] . "</td></tr>";
                 }
                 ?>
             </tbody>
