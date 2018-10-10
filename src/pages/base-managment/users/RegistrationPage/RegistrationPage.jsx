@@ -23,9 +23,8 @@ export class RegistrationPage extends Component {
   
   componentDidMount(){ 
     setTitle('Soldier Registration');
-    const { soldiers, getSoldiers } = this.props;
-    if ( soldiers.length === 0 )
-      getSoldiers().catch( e => toast.error( e.message ) );
+    if ( this.props.soldiers.length === 0 )
+      this.getSoldiers();
   }
 
   toCSV = () => {
@@ -59,17 +58,23 @@ export class RegistrationPage extends Component {
     this.setState({ selection, total });
   };
 
+  getSoldiers = () => {
+    this.props.getSoldiers()
+    .catch( e => toast.error( e.message ) );
+  }
+
   registerUsers = ( payment ) => {
     this.setState({ showModal: false });
     if ( this.state.selection.length === 0 ) {
       return toast.error('Cannot Register 0 Soldiers.');
     }
     this.props.registerSoldiers( this.state.selection, payment, this.state.total )
-    .then( this.props.getSoldiers );
+    .then( this.props.getSoldiers )
+    .catch( e => toast.error( e.message ) );
   }
 
   render() {
-    const { login, loading, soldiers, getSoldiers } = this.props;
+    const { login, loading, soldiers } = this.props;
     const { total, selection, showModal } = this.state;
     const { toCSV, toggleModal } = this;
     // define table columns
@@ -100,7 +105,7 @@ export class RegistrationPage extends Component {
           <Button color='primary' onClick={toggleModal}>
             <FontAwesome icon='dollar-sign' /> Pay and Register
           </Button>
-          <Button color='primary' onClick={ getSoldiers }>
+          <Button color='primary' onClick={ this.getSoldiers }>
             <InlineSync loading={ loading } /> Refresh
           </Button>
           { canDownload( soldiers ) &&
