@@ -47,7 +47,8 @@ $year = GlobalSettings::getRegistrationYear();
 
     <div class="info">
         <h3>School Registration Settings for <select id="year" value="<?=$year?>">
-            <option value="<?=$year?>"><?=$year?></option>
+            <option value="<?=$year - 1?>"><?=$year - 1?></option>
+            <option value="<?=$year?>" selected><?=$year?></option>
             <option value="<?=$year + 1?>"><?=$year + 1?></option>
         </select></h3><br/>
         <h4>Settings Explained:</h4><br/>

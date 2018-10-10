@@ -38,7 +38,7 @@ class UsersRouter {
             $early_bird = $row['early_bird'] ? new DateTime( $row['early_bird'] ) : SchoolRegistration::getDefaultEarlyBird();
             $type = intval( $row['type'] ? $row['type'] : $row['reg_type'] );
             $fee = GlobalSettings::calculateChildFee( $type, 0, true, $early_bird > new DateTime() );
-            $fee = intval( $row['child_fee'] > 0 ? $row['child_fee'] : $fee );
+            $fee = intval( $row['child_fee'] ) > 0 ? intval( $row['child_fee'] ) : $fee;
             // format and return just the data we want...
             $users[] = [
                 'user_id' => intval($row['user_id']), 'first' => $row['first'], 'last' => $row['last'],
