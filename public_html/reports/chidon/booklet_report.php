@@ -1,9 +1,13 @@
 <?php
-$admin_auth = array(); 	
-require_once ( __DIR__ . '/../../header.php' ); 
+$admin_auth = array('school'); 	
+require_once ( __DIR__ . '/../../header.php' );
 
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
 $year = GlobalSettings::getRegistrationYear();
+
+require_once ( __DIR__ . '/../../class.adminSchools.php' ); 
+$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+$schools = $as->getSchools();
 
 $booklet_users = [];
 $qry = "SELECT amount, date, year, schools.school_id, school_name, logo, first, last, c.class_grade, c.class_sub "
@@ -18,6 +22,7 @@ if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) &
     $to = mysql_real_escape_string( $_POST['toDate'] );
     $qry .= "AND rc.date >= '" . $from . " 00:00:00' AND rc.date <= '" . $to . " 23:59:59' ";
 }
+$qry .= " AND rc.school_id in (" . implode(',', array_keys($schools)) . ") ";
 $qry .= " AND rc.school_id NOT IN (55, 66, 110, 112, 180, 256, 61) ";
 $qry .= "ORDER BY school_name, first, last, date";
 //echo $qry;
@@ -153,6 +158,7 @@ $booklet_grand_totals = [
             } ?>
         </tbody>
     </table>
+    <?php if ($admin_user['auth'] == 'super') : ?>
     <h2>Grand Totals</h2>
     <table>
         <tr>
@@ -166,5 +172,6 @@ $booklet_grand_totals = [
         }
         ?>
     </table>
+    <?php endif; ?>
 </body>
 </html>
