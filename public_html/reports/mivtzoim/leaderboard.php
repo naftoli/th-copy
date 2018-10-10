@@ -16,7 +16,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/api/header/db.php');
 
 // get schools connected to account
 require_once($_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php');
-$as = new adminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+$as = new adminSchools( 175069, 'super' );
 $schools = $as->getSchools();
 
 // find number of ppl that each child shook lulav and esrog with
@@ -85,58 +85,39 @@ while( $mark = $lulav_query->fetch() ) {
         </style>
     </head>
     <body>
+        <?php
+            $regTotals = [];
+            $grandTotals = [];
+            foreach ( $info as $row ) { 
+                if ( isset( $regTotals[ $row['school_name'] ] ) ) $regTotals[ $row['school_name'] ]++;
+                else $regTotals[ $row['school_name'] ] = 1;
+
+                $total = 0;
+                // find out mivtza lulav numbers
+                foreach ( $dates as $date ) {
+                    $mark = 0;
+                    if ( isset( $lulav_marks[ $row['user_id'] ][ $date['start'] ] ) )
+                        $mark = $lulav_marks[ $row['user_id'] ][ $date['start'] ];
+
+                    $total += $mark;
+
+                    if ( isset( $grandTotals[ $row['school_name'] ] ) ) $grandTotals[ $row['school_name'] ] += $mark;
+                    else $grandTotals[ $row['school_name'] ] = $mark; 
+                } 
+            }
+
+            $leaderboard = [];
+            foreach ( $grandTotals as $school => $total ) {
+                $avg = round( ( doubleval($total) / $regTotals[$school] ), 2 );
+                $leaderboard[$school] = $avg;
+            }
+            arsort( $leaderboard );
+        ?>
+        <h2>Leaderboard</h2>
         <table>
             <thead>
                 <tr>
-                    <th>Base</th>
-                    <th>Platoon</th>
-                    <th>Serial Number</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th># PPL shook Lulav Week 1</th>
-                    <th># PPL shook Lulav Week 2</th>
-                    <th>Total #</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $regTotals = [];
-                $grandTotals = [];
-                foreach ( $info as $row ) { ?>
-                    <tr>
-                        <td> <?= $row['school_name'] ?></td>
-                        <td> <?= Platoon::generateName( $row['class_grade'], $row['class_sub'] ) ?></td>
-                        <td> <?= $row['user_serial'] ?></td>
-                        <td> <?= $row['first'] ?></td>
-                        <td> <?= $row['last'] ?></td>
-                <?php
-                    if ( isset( $regTotals[ $row['school_name'] ] ) ) $regTotals[ $row['school_name'] ]++;
-                    else $regTotals[ $row['school_name'] ] = 1;
-
-                    $total = 0;
-                    // find out mivtza lulav numbers
-                    foreach ( $dates as $date ) {
-                        $mark = 0;
-                        if ( isset( $lulav_marks[ $row['user_id'] ][ $date['start'] ] ) )
-                            $mark = $lulav_marks[ $row['user_id'] ][ $date['start'] ];
-
-                        $total += $mark;
-
-                        if ( isset( $grandTotals[ $row['school_name'] ] ) ) $grandTotals[ $row['school_name'] ] += $mark;
-                        else $grandTotals[ $row['school_name'] ] = $mark; 
-
-                        echo "<td>".number_format( $mark )."</td>";
-                    } 
-                    echo "<td>" . number_format( $total ) . "</td></tr>";
-                }
-                ?>
-            </tbody>
-        </table>
-        <br /><br />
-        <h2>Grand Totals</h2>
-        <table>
-            <thead>
-                <tr>
+                    <th></th>
                     <th>School</th>
                     <th>Total PPL shook Lulav</th>
                     <th>Total chayolim registered</th>
@@ -145,9 +126,10 @@ while( $mark = $lulav_query->fetch() ) {
             </thead>
             <tbody>
                 <?php
-                foreach ( $grandTotals as $school => $total ) {
-                    $avg = round( ( doubleval($total) / $regTotals[$school] ), 2 );
-                    echo "<tr><td>" . $school . "</td><td>" . $total . "</td><td>" . $regTotals[$school] . "</td><td>" . $avg . "</td></tr>";
+                $i = 1;
+                $prevSchool = 0;
+                foreach ( $leaderboard as $school => $avg ) {
+                    echo "<tr><td>#" . $i++ . "</td><td>" . $school . "</td><td>" . $grandTotals[$school] . "</td><td>" . $regTotals[$school] . "</td><td>" . $avg . "</td></tr>";
                 }
                 ?>
             </tbody>

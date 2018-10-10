@@ -56,7 +56,6 @@ function add_ons() {
 
 function register_students($parameters) {
     require_once( __DIR__ . '/class.globalSettings.php' );
-    $year = GlobalSettings::getRegistrationYear( $school_id );
 	$admin_id = isset( $_COOKIE['admin_id'] ) ? mysql_real_escape_string( $_COOKIE['admin_id'] ) : 0;
 
     // parse the params
@@ -67,7 +66,9 @@ function register_students($parameters) {
     $transaction_info = explode( ";", array_pop( $users ) );
     $total = $transaction_info[0];
     $school_id = $transaction_info[1];
-    $total_registered = 0;
+	$total_registered = 0;
+	
+	$year = GlobalSettings::getRegistrationYear( $school_id );
 
     $user_ids = []; $user_amounts = [];
     foreach( $users as $user ) {

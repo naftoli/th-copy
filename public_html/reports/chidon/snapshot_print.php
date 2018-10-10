@@ -37,6 +37,7 @@
                 data.printed = 1;
                 $.post('ajax/snapshot.php', data, function( data ) {
                     $("#printedReport").html( data );
+                    window.print();
                 });
             }
         });

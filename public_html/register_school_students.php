@@ -58,7 +58,7 @@ $users = is_array( $users ) ? $users : [ $users ];
 $row_no = 0;
 
 require_once( __DIR__ . '/class.globalSettings.php' );
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getRegistrationYear( $school->school_id );
 // 
 $reg_info = $school->getRegInfo( $year );
 $reg_fee = $reg_info->getChildFee( true );
@@ -149,7 +149,7 @@ if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['
             foreach ($users as $user) {
 				if ( !$user->chayolei )
 					continue;
-				$registered = $user->registrationStatus(false, false, true)['chayolei'];
+				$registered = $user->registrationStatus($year, false, true)['chayolei'];
                 $class = ($row_no % 2 == 0) ? "even" : "odd"; ?>
 				<tr name="student_row" id="<?=$registered ? "registered" : "unregistered" ?>" class="<?=$class;?>" data="<?=$user->user_id;?>">
 					<td name="user_registered" id="user_registered" width='20%'>

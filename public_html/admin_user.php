@@ -5,6 +5,7 @@ define("USES_WORDPRESS", true); // do not connect to the tickets DBS
 
 $admin_auth = array( 'school' );
 require( dirname(__FILE__) . '/header.php' );
+require( dirname(__FILE__) . '/class.globalSettings.php' );
 require_once( dirname(__FILE__) . '/file_save.php' );
 require_once( dirname(__FILE__) . '/calendar.php' );
 
@@ -276,6 +277,7 @@ if(!empty($action)) {
 			}
 			elseif ($admin_user['auth'] == 'super' && gri('user_registered_not', 0)) {
 				$reg = ', user_registered = NULL, user_start_date = IF(user_start_date > ' . (unixtojd()-10) . ', NULL, user_start_date)';
+				mq('DELETE FROM user_registration WHERE year = '. GlobalSettings::getRegistrationYear() .' AND user_id = ' . gri('user_id', -1));
 			}
 
 			$yan = isset($_POST['yan']) ? 1 : 0;
