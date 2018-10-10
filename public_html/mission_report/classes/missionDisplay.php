@@ -147,9 +147,9 @@ abstract class MissionDisplay {
 	?>
 		<div class="footer">
 			<? if ($this->lang_id == 1) : ?>
-				<img class="footerImg" src="image/missionInstructions.gif" width="100%" alt=""/>
+				<img class="footerImg" src="/mission_report/image/missionInstructions.gif" width="100%" alt=""/>
 			<? elseif ($this->lang_id == 2) : ?>
-				<img class="footerImg" src="image/mission-instructions-yiddish2.gif" width="55%" alt=""/>
+				<img class="footerImg" src="/mission_report/image/mission-instructions-yiddish2.gif" width="55%" alt=""/>
 			<? endif; ?>
 			<div style="direction: ltr;">
 				<div class="boxer">
@@ -161,7 +161,7 @@ abstract class MissionDisplay {
 							<p><b>2.</b> Daily missions are completed when the task is done five out of seven times a week.</p> 
 						</div>
 						<div class="box">
-							<p><b>3.</b> An <img src="image/31204.png" width="40" height="10" alt=""/> icon near a task means you earn a charge card for completing the mission.</p> 
+							<p><b>3.</b> An <img src="/mission_report/image/31204.png" width="40" height="10" alt=""/> icon near a task means you earn a charge card for completing the mission.</p> 
 						</div>
 						<div class="box">
 							<p><b>4.</b> A “quota” means your assigned goal, decided upon with your commanders.</p>
@@ -203,7 +203,7 @@ abstract class MissionDisplay {
 	}
 
 	public function printMission($debug = false) {
-		chdir("../");
+		// chdir("../");
 		$user = $this->mission;
 		$numLabels = count($user->daily_labels) + count($user->weekly_labels) + count($user->shabbos_labels) + count($user->no_label_subjects);
 		$tracks = $user->user_tracks;
@@ -231,9 +231,9 @@ abstract class MissionDisplay {
 			<div class="header">
 				<div class="userImg">
 					<? if (isset($user->mobile_pic)) : ?>
-						<img src="../mobile/reg/<?=$user->mobile_pic?>" width="60" alt=""/>
+						<img src="/mobile/reg/<?=$user->mobile_pic?>" width="60" alt=""/>
 					<? elseif (isset($user->user_photo_id)) : ?>
-						<img src="../file_view2.php?id=<?=$user->user_photo_id?>" width="60" alt=""/>
+						<img src="/file_view.php?id=<?=$user->user_photo_id?>" width="60" alt=""/>
 					<? else : ?>
 						<img src="" width="60" alt=""/> 
 					<? endif; ?>
@@ -244,7 +244,7 @@ abstract class MissionDisplay {
 				$row = mysql_fetch_assoc($result);
 				?>
 				<div class="schoolLogo">
-					<img src="schools/<?=$row['school_number']?>.png" width="80" alt=""/>
+					<img src="/mission_report/schools/<?=$row['school_number']?>.png" width="80" alt=""/>
 				</div>
 		    	<table>
 		    		<tr>
@@ -261,9 +261,9 @@ abstract class MissionDisplay {
 		    			<td>
 		    				<div class="headerImg">
 		    					<? if ($this->lang_id == 1) : ?>
-		    						<img src="image/mission report logo.png" width="350" />
+		    						<img src="/mission_report/image/mission report logo.png" width="350" />
 		    					<? elseif ($this->lang_id == 2) : ?>
-		    						<img src="image/mission-report-yiddish.png" width="350" />
+		    						<img src="/mission_report/image/mission-report-yiddish.png" width="350" />
 		    					<? endif; ?>
 		    				</div>
 		    			</td>
@@ -336,14 +336,14 @@ abstract class MissionDisplay {
 										<div class="taskRow">
 							            <div class="row">
 											<div class="rowImg">
-												<img src="campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id]?>" width="50" height="52" alt=""/>
+												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
 											<? if ($this->missionType == 2) { ?>
-												<div class="mediumPic"><img src="color/<?=$daily_task->medium_pic?>.jpg" /></div>
+												<div class="mediumPic"><img src="/mission_report/color/<?=$daily_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<? if ($daily_task->focus_task) { ?>
 												<div class="focus">
-													<img src="image/31204.png" alt="" />
+													<img src="/mission_report/image/31204.png" alt="" />
 												</div>
 											<? } ?>
 											<div class="short"><?=($daily_task->short_name == '' ? '<br />' : $daily_task->short_name)?></div>
@@ -357,7 +357,7 @@ abstract class MissionDisplay {
 												echo " firstColumn";
 											else 
 												echo " secondColumn";
-									    	echo "'><img src=\"5of7stickers/" . $this->dailyStickers[$daily_task->subject_id] . "\" /></div>";
+									    	echo "'><img src=\"/mission_report/5of7stickers/" . $this->dailyStickers[$daily_task->subject_id] . "\" /></div>";
 									    }
 									    ?>
 										
@@ -464,7 +464,7 @@ abstract class MissionDisplay {
 											<div class='mandatoryImg'>&nbsp;
 											<?
 										    if ($weekly_task->mandatory_qty) {
-										    	echo "<img src='stickerOutlines/" . $this->stickerOutlines[$weekly_task->subject_id] . "' />";
+										    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$weekly_task->subject_id] . "' />";
 										    } else {
 										    	echo "<img src='' alt='' />";
 										    }
@@ -472,15 +472,15 @@ abstract class MissionDisplay {
 										    </div>
 											<div class="checkbox<?php if ($weekly_task->quantity) echo " textInput";?>"></div>
 											<div class="rowImg">
-												<img src="campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id]?>" width="50" height="52" alt=""/>
+												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
 											<? if ($this->missionType == 2) { ?>
-												<div class="mediumPic"><img src="color/<?=$weekly_task->medium_pic?>.jpg" /></div>
+												<div class="mediumPic"><img src="/mission_report/color/<?=$weekly_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($weekly_task->short_name == '' ? '<br />' : $weekly_task->short_name)?>
 											<? if ($weekly_task->focus_task) { ?>
 												<div class="focus">
-													<img src="image/31204.png" alt="" />
+													<img src="/mission_report/image/31204.png" alt="" />
 												</div>
 											<? } ?>
 											</div>
@@ -570,7 +570,7 @@ abstract class MissionDisplay {
 											<div class='mandatoryImg'>&nbsp;
 											<?
 										    if ($shabbos_task->mandatory_qty) {
-										    	echo "<img src='stickerOutlines/" . $this->stickerOutlines[$shabbos_task->subject_id] . "' />";
+										    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$shabbos_task->subject_id] . "' />";
 										    } else {
 										    	echo "<img src='' alt='' />";
 										    }
@@ -578,15 +578,15 @@ abstract class MissionDisplay {
 										    </div>
 											<div class="checkbox<?php if ($shabbos_task->quantity) echo " textInput";?>"></div>
 											<div class="rowImg">
-												<img src="campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id]?>" width="50" height="52" alt=""/>
+												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
 											<? if ($this->missionType == 2) { ?>
-												<div class="mediumPic"><img src="color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
+												<div class="mediumPic"><img src="/mission_report/color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($shabbos_task->short_name == '' ? '<br />' : $shabbos_task->short_name)?>
 											<? if ($shabbos_task->focus_task) { ?>
 												<div class="focus">
-													<img src="image/31204.png" alt="" />
+													<img src="/mission_report/image/31204.png" alt="" />
 												</div>
 											<? } ?>
 											</div>
@@ -679,7 +679,7 @@ abstract class MissionDisplay {
 									<div class='mandatoryImg'>&nbsp;
 									<?
 								    if ($no_label_task->mandatory_qty) {
-								    	echo "<img src='stickerOutlines/" . $this->stickerOutlines[$no_label_task->subject_id] . "' />";
+								    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$no_label_task->subject_id] . "' />";
 								    } else {
 								    	echo "<img src='' alt='' />";
 								    }
@@ -687,15 +687,15 @@ abstract class MissionDisplay {
 								    </div>
 									<div class="checkbox<?php if ($no_label_task->quantity) echo " textInput";?>"></div>
 									<div class="rowImg">
-										<img src="campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id]?>" width="50" height="52" alt=""/>
+										<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id]?>" width="50" height="52" alt=""/>
 									</div>
 									<? if ($this->missionType == 2) { ?>
-										<div class="mediumPic"><img src="color/<?=$no_label_task->medium_pic?>.jpg" /></div>
+										<div class="mediumPic"><img src="/mission_report/color/<?=$no_label_task->medium_pic?>.jpg" /></div>
 									<? } ?>
 									<div class="short"><?=($no_label_task->short_name == '' ? '<br />' : $no_label_task->short_name)?>
 									<? if ($no_label_task->focus_task) { ?>
 										<div class="focus">
-											<img src="image/31204.png" alt="" />
+											<img src="/mission_report/image/31204.png" alt="" />
 										</div>
 									<? } ?>
 									</div>
@@ -770,8 +770,8 @@ abstract class MissionDisplay {
 				-->
 				<input type="hidden" class="pages" value="<?=$page?>" />
 				<? if ($this->lang_id == 1) : ?>
-					<img class="rankLogo" src="image/rank report logo.png" />
-					<img class="rank" src="../rankPics/<?=$user->rank_ord;?>BW.png" height="70" />
+					<img class="rankLogo" src="/mission_report/image/rank report logo.png" />
+					<img class="rank" src="/rankPics/<?=$user->rank_ord;?>BW.png" height="70" />
 					<table class="footerInfo">
 						<tr style="vertical-align: bottom">
 							<td align="left" class="border"><span class="sb">
@@ -788,8 +788,8 @@ abstract class MissionDisplay {
 						</tr>
 					</table> 
 				<? elseif ($this->lang_id == 2) : ?>
-					<img class="rankLogo" src="image/rank report yiddish.png" />
-					<img class="rank" src="../rankPics/<?=$user->rank_ord;?>BW.png" height="70" />
+					<img class="rankLogo" src="/mission_report/image/rank report yiddish.png" />
+					<img class="rank" src="/rankPics/<?=$user->rank_ord;?>BW.png" height="70" />
 					<table class="footerInfo">
 						<tr style="vertical-align: bottom">
 							<td align="right" class="border"><span class="sb">
@@ -819,7 +819,7 @@ abstract class MissionDisplay {
 		if ($page % 2 != 0 && $this->dblSided == 1) {
 			echo "<div style='page-break-after: always'>&nbsp;</div>";
 		}
-		chdir("classes");
+		// chdir("classes");
 	}
 
 	public function markMission() {
@@ -847,9 +847,9 @@ abstract class MissionDisplay {
 			<div class="header">
 				<div class="userImg">
 					<? if (isset($user->mobile_pic)) : ?>
-						<img src="../mobile/reg/<?=$user->mobile_pic?>" width="60" alt=""/>
+						<img src="/mobile/reg/<?=$user->mobile_pic?>" width="60" alt=""/>
 					<? elseif (isset($user->user_photo_id)) : ?>
-						<img src="../file_view2.php?id=<?=$user->user_photo_id?>" width="60" alt=""/>
+						<img src="/file_view2.php?id=<?=$user->user_photo_id?>" width="60" alt=""/>
 					<? else : ?>
 						<img src="" width="60" alt=""/> 
 					<? endif; ?>
@@ -860,7 +860,7 @@ abstract class MissionDisplay {
 				$row = mysql_fetch_assoc($result);
 				?>
 				<div class="schoolLogo">
-					<img src="schools/<?=$row['school_number']?>.png" width="80" alt=""/>
+					<img src="/mission_report/schools/<?=$row['school_number']?>.png" width="80" alt=""/>
 				</div>
 		    	<table>
 		    		<tr>
@@ -877,9 +877,9 @@ abstract class MissionDisplay {
 		    			<td>
 		    				<div class="headerImg">
 		    					<? if ($this->lang_id == 1) : ?>
-		    						<img src="image/mission report logo.png" width="350" />
+		    						<img src="/mission_report/image/mission report logo.png" width="350" />
 		    					<? elseif ($this->lang_id == 2) : ?>
-		    						<img src="image/mission-report-yiddish.png" width="350" />
+		    						<img src="/mission_report/image/mission-report-yiddish.png" width="350" />
 		    					<? endif; ?>
 		    				</div>
 		    			</td>
@@ -926,7 +926,7 @@ abstract class MissionDisplay {
 				<button id="twoCols">Change to two Columns</button>
 			</div>
 			
-			<div id="loading" style="display: none;"><img src="../images/loading2.gif" /></div>
+			<div id="loading" style="display: none;"><img src="/images/loading2.gif" /></div>
 			
 			<div class="marking">
 				<?
@@ -954,14 +954,14 @@ abstract class MissionDisplay {
 										?>
 							            <div class="row">
 											<div class="rowImg">
-												<img src="campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id]?>" width="50" height="52" alt=""/>
+												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
 											<? if ($this->missionType == 2) { ?>
-												<div class="mediumPic"><img src="color/<?=$daily_task->medium_pic?>.jpg" /></div>
+												<div class="mediumPic"><img src="/mission_report/color/<?=$daily_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<? if ($daily_task->focus_task) { ?>
 												<div class="focus">
-													<img src="image/31204.png" alt="" />
+													<img src="/mission_report/image/31204.png" alt="" />
 												</div>
 											<? } ?>
 											<div class="short"><?=($daily_task->short_name == '' ? '<br />' : $daily_task->short_name)?></div>
@@ -975,7 +975,7 @@ abstract class MissionDisplay {
 												echo " firstColumn";
 											else 
 												echo " secondColumn";
-									    	echo "'><img src=\"5of7stickers/" . $this->dailyStickers[$daily_task->subject_id] . "\" /></div>";
+									    	echo "'><img src=\"/mission_report/5of7stickers/" . $this->dailyStickers[$daily_task->subject_id] . "\" /></div>";
 									    }
 									    ?>
 									    
@@ -1092,7 +1092,7 @@ abstract class MissionDisplay {
 											<div class='mandatoryImg'>&nbsp;
 											<?
 										    if ($weekly_task->mandatory_qty) {
-										    	echo "<img src='stickerOutlines/" . $this->stickerOutlines[$weekly_task->subject_id] . "' />";
+										    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$weekly_task->subject_id] . "' />";
 										    } else {
 										    	echo "<img src='' alt='' />";
 										    }
@@ -1127,15 +1127,15 @@ abstract class MissionDisplay {
 												?>
 											</div>
 											<div class="rowImg">
-												<img src="campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id]?>" width="50" height="52" alt=""/>
+												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
 											<? if ($this->missionType == 2) { ?>
-												<div class="mediumPic"><img src="color/<?=$weekly_task->medium_pic?>.jpg" /></div>
+												<div class="mediumPic"><img src="/mission_report/color/<?=$weekly_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($weekly_task->short_name == '' ? '<br />' : $weekly_task->short_name)?>
 											<? if ($weekly_task->focus_task) { ?>
 												<div class="focus">
-													<img src="image/31204.png" alt="" />
+													<img src="/mission_report/image/31204.png" alt="" />
 												</div>
 											<? } ?>
 											</div>
@@ -1204,7 +1204,7 @@ abstract class MissionDisplay {
 											<div class='mandatoryImg'>&nbsp;
 											<?
 										    if ($shabbos_task->mandatory_qty) {
-										    	echo "<img src='stickerOutlines/" . $this->stickerOutlines[$shabbos_task->subject_id] . "' />";
+										    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$shabbos_task->subject_id] . "' />";
 										    } else {
 										    	echo "<img src='' alt='' />";
 										    }
@@ -1239,15 +1239,15 @@ abstract class MissionDisplay {
 												?>
 											</div>
 											<div class="rowImg">
-												<img src="campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id]?>" width="50" height="52" alt=""/>
+												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
 											<? if ($this->missionType == 2) { ?>
-												<div class="mediumPic"><img src="color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
+												<div class="mediumPic"><img src="/mission_report/color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($shabbos_task->short_name == '' ? '<br />' : $shabbos_task->short_name)?>
 											<? if ($shabbos_task->focus_task) { ?>
 												<div class="focus">
-													<img src="image/31204.png" alt="" />
+													<img src="/mission_report/image/31204.png" alt="" />
 												</div>
 											<? } ?>
 											</div>
@@ -1332,7 +1332,7 @@ abstract class MissionDisplay {
 									<div class='mandatoryImg'>&nbsp;
 									<?
 								    if ($no_label_task->mandatory_qty) {
-								    	echo "<img src='stickerOutlines/" . $this->stickerOutlines[$no_label_task->subject_id] . "' />";
+								    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$no_label_task->subject_id] . "' />";
 								    } else {
 								    	echo "<img src='' alt='' />";
 								    }
@@ -1367,15 +1367,15 @@ abstract class MissionDisplay {
 										?>
 									</div>
 									<div class="rowImg">
-										<img src="campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id]?>" width="50" height="52" alt=""/>
+										<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id]?>" width="50" height="52" alt=""/>
 									</div>
 									<? if ($this->missionType == 2) { ?>
-										<div class="mediumPic"><img src="color/<?=$no_label_task->medium_pic?>.jpg" /></div>
+										<div class="mediumPic"><img src="/mission_report/color/<?=$no_label_task->medium_pic?>.jpg" /></div>
 									<? } ?>
 									<div class="short"><?=($no_label_task->short_name == '' ? '<br />' : $no_label_task->short_name)?>
 									<? if ($no_label_task->focus_task) { ?>
 										<div class="focus">
-											<img src="image/31204.png" alt="" />
+											<img src="/mission_report/image/31204.png" alt="" />
 										</div>
 									<? } ?>
 									</div>
@@ -1428,8 +1428,8 @@ abstract class MissionDisplay {
 			<div id="<?=$user->user_id?>" class="bottomFooter" align="center" dir="ltr">
 				<input type="hidden" class="pages" value="<?=$page?>" />
 				<? if ($this->lang_id == 1) : ?>
-					<img class="rankLogo" src="image/rank report logo.png" />
-					<img class="rank" src="../rankPics/<?=$user->rank_ord;?>BW.png" height="70" />
+					<img class="rankLogo" src="/mission_report/image/rank report logo.png" />
+					<img class="rank" src="/rankPics/<?=$user->rank_ord;?>BW.png" height="70" />
 					<table class="footerInfo">
 						<tr style="vertical-align: bottom">
 							<td align="left" class="border"><span class="sb">
@@ -1445,8 +1445,8 @@ abstract class MissionDisplay {
 						</tr>
 					</table> 
 				<? elseif ($this->lang_id == 2) : ?>
-					<img class="rankLogo" src="image/rank report yiddish.png" />
-					<img class="rank" src="../rankPics/<?=$user->rank_ord;?>BW.png" height="70" />
+					<img class="rankLogo" src="/mission_report/image/rank report yiddish.png" />
+					<img class="rank" src="/rankPics/<?=$user->rank_ord;?>BW.png" height="70" />
 					<table class="footerInfo">
 						<tr style="vertical-align: bottom">
 							<td align="right" class="border"><span class="sb">
@@ -1500,9 +1500,9 @@ abstract class MissionDisplay {
 			<div class="header">
 				<div class="userImg">
 					<? if (isset($user->mobile_pic)) : ?>
-						<img src="../mobile/reg/<?=$user->mobile_pic?>" width="60" alt=""/>
+						<img src="/mobile/reg/<?=$user->mobile_pic?>" width="60" alt=""/>
 					<? elseif (isset($user->user_photo_id)) : ?>
-						<img src="../file_view2.php?id=<?=$user->user_photo_id?>" width="60" alt=""/>
+						<img src="/file_view2.php?id=<?=$user->user_photo_id?>" width="60" alt=""/>
 					<? else : ?>
 						<img src="" width="60" alt=""/> 
 					<? endif; ?>
@@ -1513,7 +1513,7 @@ abstract class MissionDisplay {
 				$row = mysql_fetch_assoc($result);
 				?>
 				<div class="schoolLogo">
-					<img src="schools/<?=$row['school_number']?>.png" width="80" alt=""/>
+					<img src="/mission_report/schools/<?=$row['school_number']?>.png" width="80" alt=""/>
 				</div>
 		    	<table>
 		    		<tr>
@@ -1530,9 +1530,9 @@ abstract class MissionDisplay {
 		    			<td>
 		    				<div class="headerImg">
 		    					<? if ($this->lang_id == 1) : ?>
-		    						<img src="image/mission report logo.png" width="350" />
+		    						<img src="/mission_report/image/mission report logo.png" width="350" />
 		    					<? elseif ($this->lang_id == 2) : ?>
-		    						<img src="image/mission-report-yiddish.png" width="350" />
+		    						<img src="/mission_report/image/mission-report-yiddish.png" width="350" />
 		    					<? endif; ?>
 		    				</div>
 		    			</td>
@@ -1579,7 +1579,7 @@ abstract class MissionDisplay {
 				<button id="oneCol">Change to one Column</button>
 			</div>
 			
-			<div id="loading" style="display: none;"><img src="../images/loading2.gif" /></div>
+			<div id="loading" style="display: none;"><img src="/images/loading2.gif" /></div>
 			
 			<div class="left">
 				<?
@@ -1607,14 +1607,14 @@ abstract class MissionDisplay {
 										?>
 							            <div class="row">
 											<div class="rowImg">
-												<img src="campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id]?>" width="50" height="52" alt=""/>
+												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
 											<? if ($this->missionType == 2) { ?>
-												<div class="mediumPic"><img src="color/<?=$daily_task->medium_pic?>.jpg" /></div>
+												<div class="mediumPic"><img src="/mission_report/color/<?=$daily_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<? if ($daily_task->focus_task) { ?>
 												<div class="focus">
-													<img src="image/31204.png" alt="" />
+													<img src="/mission_report/image/31204.png" alt="" />
 												</div>
 											<? } ?>
 											<div class="short"><?=($daily_task->short_name == '' ? '<br />' : $daily_task->short_name)?></div>
@@ -1628,7 +1628,7 @@ abstract class MissionDisplay {
 												echo " firstColumn";
 											else 
 												echo " secondColumn";
-									    	echo "'><img src=\"5of7stickers/" . $this->dailyStickers[$daily_task->subject_id] . "\" /></div>";
+									    	echo "'><img src=\"/mission_report/5of7stickers/" . $this->dailyStickers[$daily_task->subject_id] . "\" /></div>";
 									    }
 									    ?>
 									    
@@ -1742,7 +1742,7 @@ abstract class MissionDisplay {
 											<div class='mandatoryImg'>&nbsp;
 											<?
 										    if ($weekly_task->mandatory_qty) {
-										    	echo "<img src='stickerOutlines/" . $this->stickerOutlines[$weekly_task->subject_id] . "' />";
+										    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$weekly_task->subject_id] . "' />";
 										    } else {
 										    	echo "<img src='' alt='' />";
 										    }
@@ -1777,15 +1777,15 @@ abstract class MissionDisplay {
 												?>
 											</div>
 											<div class="rowImg">
-												<img src="campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id]?>" width="50" height="52" alt=""/>
+												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
 											<? if ($this->missionType == 2) { ?>
-												<div class="mediumPic"><img src="color/<?=$weekly_task->medium_pic?>.jpg" /></div>
+												<div class="mediumPic"><img src="/mission_report/color/<?=$weekly_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($weekly_task->short_name == '' ? '<br />' : $weekly_task->short_name)?>
 											<? if ($weekly_task->focus_task) { ?>
 												<div class="focus">
-													<img src="image/31204.png" alt="" />
+													<img src="/mission_report/image/31204.png" alt="" />
 												</div>
 											<? } ?>
 											</div>
@@ -1851,7 +1851,7 @@ abstract class MissionDisplay {
 											<div class='mandatoryImg'>&nbsp;
 											<?
 										    if ($shabbos_task->mandatory_qty) {
-										    	echo "<img src='stickerOutlines/" . $this->stickerOutlines[$shabbos_task->subject_id] . "' />";
+										    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$shabbos_task->subject_id] . "' />";
 										    } else {
 										    	echo "<img src='' alt='' />";
 										    }
@@ -1886,15 +1886,15 @@ abstract class MissionDisplay {
 												?>
 											</div>
 											<div class="rowImg">
-												<img src="campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id]?>" width="50" height="52" alt=""/>
+												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id]?>" width="50" height="52" alt=""/>
 											</div>
 											<? if ($this->missionType == 2) { ?>
-												<div class="mediumPic"><img src="color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
+												<div class="mediumPic"><img src="/mission_report/color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
 											<? } ?>
 											<div class="short"><?=($shabbos_task->short_name == '' ? '<br />' : $shabbos_task->short_name)?>
 											<? if ($shabbos_task->focus_task) { ?>
 												<div class="focus">
-													<img src="image/31204.png" alt="" />
+													<img src="/mission_report/image/31204.png" alt="" />
 												</div>
 											<? } ?>
 											</div>
@@ -1976,7 +1976,7 @@ abstract class MissionDisplay {
 									<div class='mandatoryImg'>&nbsp;
 									<?
 								    if ($no_label_task->mandatory_qty) {
-								    	echo "<img src='stickerOutlines/" . $this->stickerOutlines[$no_label_task->subject_id] . "' />";
+								    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$no_label_task->subject_id] . "' />";
 								    } else {
 								    	echo "<img src='' alt='' />";
 								    }
@@ -2011,15 +2011,15 @@ abstract class MissionDisplay {
 										?>
 									</div>
 									<div class="rowImg">
-										<img src="campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id]?>" width="50" height="52" alt=""/>
+										<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id]?>" width="50" height="52" alt=""/>
 									</div>
 									<? if ($this->missionType == 2) { ?>
-										<div class="mediumPic"><img src="color/<?=$no_label_task->medium_pic?>.jpg" /></div>
+										<div class="mediumPic"><img src="/mission_report/color/<?=$no_label_task->medium_pic?>.jpg" /></div>
 									<? } ?>
 									<div class="short"><?=($no_label_task->short_name == '' ? '<br />' : $no_label_task->short_name)?>
 									<? if ($no_label_task->focus_task) { ?>
 										<div class="focus">
-											<img src="image/31204.png" alt="" />
+											<img src="/mission_report/image/31204.png" alt="" />
 										</div>
 									<? } ?>
 									</div>
@@ -2069,8 +2069,8 @@ abstract class MissionDisplay {
 			<div id="<?=$user->user_id?>" class="bottomFooter" align="center" dir="ltr">
 				<input type="hidden" class="pages" value="<?=$page?>" />
 				<? if ($this->lang_id == 1) : ?>
-					<img class="rankLogo" src="image/rank report logo.png" />
-					<img class="rank" src="../rankPics/<?=$user->rank_ord;?>BW.png" height="70" />
+					<img class="rankLogo" src="/mission_report/image/rank report logo.png" />
+					<img class="rank" src="/rankPics/<?=$user->rank_ord;?>BW.png" height="70" />
 					<table class="footerInfo">
 						<tr style="vertical-align: bottom">
 							<td align="left" class="border"><span class="sb">
@@ -2086,8 +2086,8 @@ abstract class MissionDisplay {
 						</tr>
 					</table> 
 				<? elseif ($this->lang_id == 2) : ?>
-					<img class="rankLogo" src="image/rank report yiddish.png" />
-					<img class="rank" src="../rankPics/<?=$user->rank_ord;?>BW.png" height="70" />
+					<img class="rankLogo" src="/mission_report/image/rank report yiddish.png" />
+					<img class="rank" src="/rankPics/<?=$user->rank_ord;?>BW.png" height="70" />
 					<table class="footerInfo">
 						<tr style="vertical-align: bottom">
 							<td align="right" class="border"><span class="sb">

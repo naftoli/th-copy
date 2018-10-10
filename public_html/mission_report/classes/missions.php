@@ -18,18 +18,17 @@ class Missions {
 	}
 	
 	private function createMissions( $allowPersonalization, $printing_mode = false ) {
-		chdir("../"); // what if this class is called not from ../mission_report ? this will not work as expected.
-		include_once("classes/user.php");
-		include_once("classes/user_track.php");
-		include_once("classes/school_class.php");
-		include_once("class.taskExceptions.php");
-		include_once("classes/date_tasks_mission.php");
-		include_once("classes/daily_task.php");
-		include_once("classes/weekly_task.php");
-		include_once("classes/shabbos_task.php");
-		include_once("classes/no_label_task.php");
-		include_once("classes/task.php");
-		include_once("classes/date_tasks_mark.php");
+		include_once( __DIR__ . "/../../classes/user.php" );
+		include_once( __DIR__ . "/../../classes/user_track.php" );
+		include_once( __DIR__ . "/../../classes/school_class.php" );
+		include_once( __DIR__ . "/../../class.taskExceptions.php" );
+		include_once( __DIR__ . "/../../classes/date_tasks_mission.php" );
+		include_once( __DIR__ . "/../../classes/daily_task.php" );
+		include_once( __DIR__ . "/../../classes/weekly_task.php" );
+		include_once( __DIR__ . "/../../classes/shabbos_task.php" );
+		include_once( __DIR__ . "/../../classes/no_label_task.php" );
+		include_once( __DIR__ . "/../../classes/task.php" );
+		include_once( __DIR__ . "/../../classes/date_tasks_mark.php" );
 		
 		$sql = "SELECT u.* FROM users u"
 				." JOIN classes c ON u.class_id = c.class_id"
@@ -56,7 +55,6 @@ class Missions {
 		    $user->get_user_tracks( -1, $this->start, $this->end, array(), $user->lang_id, $printing_mode );
 		    array_push( $this->missions, $user );
 		}
-		chdir("mission_report");
 	}
 	
 	public function getMissions() {
