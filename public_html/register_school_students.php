@@ -58,7 +58,7 @@ $users = is_array( $users ) ? $users : [ $users ];
 $row_no = 0;
 
 require_once( __DIR__ . '/class.globalSettings.php' );
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getRegistrationYear( $school->school_id );
 // 
 $reg_info = $school->getRegInfo( $year );
 $reg_fee = $reg_info->getChildFee( true );
