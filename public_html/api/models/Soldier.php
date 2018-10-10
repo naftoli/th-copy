@@ -7,8 +7,11 @@ include_once( __DIR__ . '/traits/BuildModel.php' );
 require_once( __DIR__ . '/../../calendar.php' );
 require_once( __DIR__ . '/../../class.points.php' );
 
-class User extends ActiveRecord\Model implements JsonSerializable {
+class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     use \traits\BuildModel;
+
+    static $table_name = 'users';
+    static $primary_key = 'user_id';
     
     static $before_create = ['generateSerial', 'generateBarcode'];
     static $after_create = [ 

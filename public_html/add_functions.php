@@ -78,7 +78,7 @@ function register_students($parameters) {
 	}
 
     // load all the users in an array
-    $users = User::find( $user_ids );
+    $users = Soldier::find( $user_ids );
 	$users = is_array( $users ) ? $users : [ $users ];
 	$total_registered = count( $users );
     // and register all the users

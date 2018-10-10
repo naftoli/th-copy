@@ -19,7 +19,7 @@ class UsersRouter {
         $users = [];
         // fetch all results and parse them as models
         while( $row = $query->fetch() ){
-            $profilePicture = ( new User(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
+            $profilePicture = ( new Soldier(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
             $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
             // format dates
             $dob = $row['dob']; $user_registered = $row['user_registered'];
@@ -61,7 +61,7 @@ class UsersRouter {
     public function show( $id ) {
         global $current_user;
         try {
-            $user = User::find( $id );
+            $user = Soldier::find( $id );
             if ( !$user->validateAccess( $current_user->login ) )
                 json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-65', 401 );
             json_response( $user );
@@ -72,7 +72,7 @@ class UsersRouter {
 
     public function create() {
         global $current_user;
-        $user = User::build( $_POST );
+        $user = Soldier::build( $_POST );
         if ( $current_user->login->code === 'TEACHER' ) {
             $user->school_id = $current_user->login->model->school_id;
         } else {
@@ -88,7 +88,7 @@ class UsersRouter {
     public function update( $id ) {
         global $current_user;
 
-        $user = User::find( $id );
+        $user = Soldier::find( $id );
         if ( !$user->validateAccess( $current_user->login ) )
             json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-77', 401 );
         
@@ -99,7 +99,7 @@ class UsersRouter {
                 json_error( $result );
         // update other properties
         } else {
-            $columns = array_keys( User::table()->columns );
+            $columns = array_keys( Soldier::table()->columns );
             foreach( $_POST as $key => $value ) {
                 if ( in_array( $key, $columns ) ) $user->{ $key } = $_POST[ $key ];
             }
@@ -120,7 +120,7 @@ class UsersRouter {
     public function destroy( $id ) {
         global $current_user; global $MASHPIA_DB;
         try {
-            $user = User::find( $id );
+            $user = Soldier::find( $id );
             if ( !$user->validateAccess( $current_user->login ) )
                 json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-126', 401 );
             if ( !in_array( $current_user->login->code, ['BC', 'HQ', 'INST'] ) ) {
@@ -145,7 +145,7 @@ class UsersRouter {
     public function uploadProfile() {
         global $current_user;
         if ( isset( $_FILES['profile'] ) ) {
-            $result = User::uploadProfilePicture( $current_user->admin_id, $_FILES['profile'] );
+            $result = Soldier::uploadProfilePicture( $current_user->admin_id, $_FILES['profile'] );
             if ( is_string( $result ) ) json_error( $result );
             json_response( $result );
         }

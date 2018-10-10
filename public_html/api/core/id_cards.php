@@ -3,7 +3,7 @@ define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
 include_once( __DIR__ . "/../../calendar.php" );
 
-class UsersRouter {
+class IdCardsRouter {
     // index, but we are using a POST request for it
     public function create(){
         global $current_user; global $MASHPIA_DB;
@@ -49,11 +49,11 @@ class UsersRouter {
         $response = [];
         while( $row = $query->fetch() ){
             // set the picture, and profile name using the models
-            $row['profilePicture'] = ( new User(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
+            $row['profilePicture'] = ( new Soldier(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
             $row['platoon'] = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
             // functions from public_html/calendar.php
             $row['member_since'] = $row['user_start_date'] ? dateToHebrewShortYear($row['user_start_date']) : false;
-            // copied from admin_card_print.php, TODO, validate and move to User model
+            // copied from admin_card_print.php, TODO, validate and move to Soldier model
             $dob = dateToJD( $row['dob'] );
             $cal = cal_from_jd( $dob, CAL_JEWISH );
             $row['valid_utill'] = $dob ? dateToHebrewShortYear( cal_to_jd( CAL_JEWISH, 13, cal_days_in_month( CAL_JEWISH, 13, $cal['year'] + 13 ), $cal['year'] + 13 ) ) : false;
@@ -89,4 +89,4 @@ class UsersRouter {
     }
 }
 
-rest_router( new UsersRouter );
+rest_router( new IdCardsRouter );

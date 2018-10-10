@@ -59,7 +59,7 @@ class UsersRouter {
         if ( !isset($_POST['user_ids']) || count($_POST['user_ids']) < 1 ) 
             json_error('Please select some soldiers to register.');
         try {
-            $users = User::find( $_POST['user_ids'] );
+            $users = Soldier::find( $_POST['user_ids'] );
             $users = is_array( $users ) ? $users : [ $users ];
         } catch ( Exception $e ) {
             json_error( 'Invalid Request', $e );

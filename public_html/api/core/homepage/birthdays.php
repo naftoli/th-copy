@@ -31,7 +31,7 @@ class BirthdayRouter {
                 'name' => $row['first'] . ' ' . $row['last'],
                 'platoon' => ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name(),
                 'base' => $row['school_name'],
-                'profilePicture' => ( new User(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture()
+                'profilePicture' => ( new Soldier(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture()
             ];
             $birthdays[ dateToHebrew( $row['start_date'] ) ][] = $soldier;
         };

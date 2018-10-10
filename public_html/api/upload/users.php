@@ -184,7 +184,7 @@ class UsersUploadRouter {
                 $user['school_type_id'] = $user['gender'] == 'M' ? 22 : 23; 
             }
 
-            $user = new User( $user );
+            $user = new Soldier( $user );
             // copy over defaults from the school on creation...
             $user->school_id = $school->school_id;
             $user->chayolei = $school->chayolei;

@@ -17,7 +17,7 @@ class UserRegistrationRouter {
         $user_ids = $current_user->getAuthIds( 'user' );
 
         // get all the users information
-        $users = User::find( $user_ids, 
+        $users = Soldier::find( $user_ids, 
             ['include' => [ 'school', 'platoon' ] ] 
         );
         $users = is_array( $users ) ? $users : [ $users ];
@@ -100,7 +100,7 @@ class UserRegistrationRouter {
             $totals[$info['registration_type']] += $info['paid'];
         }
         // get all the user models
-        $users = User::find( $user_ids );
+        $users = Soldier::find( $user_ids );
         if ( !is_array( $users ) ) $users = [ $users ]; // force an array, even if it is just one user
         
         $totals_string = '';

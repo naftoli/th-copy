@@ -49,7 +49,7 @@ if ($last != "")
 if (isset($_GET['registered']))
 	$sql = $sql . " AND (user_registered is null or user_registered = 0) ";
 
-$users = User::all( [ 
+$users = Soldier::all( [ 
     'conditions' => [$sql], 'include' => ['platoon'],
     'order' => 'last, first'
 ]);

@@ -7,7 +7,7 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
     static $table_name = 'classes';
     // relationships
     static $belongs_to = [ [ 'school' ] ];
-    static $has_many = [ [ 'users', 'foreign_key' => 'class_id' ] ];
+    static $has_many = [ [ 'soldiers', 'foreign_key' => 'class_id' ] ];
 
     static $before_destroy = ['canDestroy'];
 
@@ -55,7 +55,7 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
         return $this->to_array([
             // 'only' => [ 'class_id' ],
             'methods' => [ 'name', 'staff' ],
-            'include' => [ 'users' => [
+            'include' => [ 'soldiers' => [
                 'only' => [ 'user_id', 'first', 'last', 'user_serial' ],
                 'methods' => [ 'rank', 'profilePicture' ]
             ]]

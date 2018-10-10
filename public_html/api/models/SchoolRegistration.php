@@ -2,7 +2,7 @@
 
 class SchoolRegistration extends ActiveRecord\Model implements JsonSerializable {
 
-    static $belongs_to = [ ['school'], ['admin'], ['user'] ];
+    static $belongs_to = [ ['school'], ['admin'], ['soldier'] ];
     // validations
     static $validates_uniqueness_of = [
         [ ['school_id', 'year'], 'message' => '- duplicate record' ]
