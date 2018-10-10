@@ -277,7 +277,7 @@ if(!empty($action)) {
 			}
 			elseif ($admin_user['auth'] == 'super' && gri('user_registered_not', 0)) {
 				$reg = ', user_registered = NULL, user_start_date = IF(user_start_date > ' . (unixtojd()-10) . ', NULL, user_start_date)';
-				mq('DELETE FROM user_registration WHERE year = '. GlobalSettings::getRegistrationYear() .' AND user_id = ' . gri('user_id', -1)) . ' AND admin_id = 0';
+				mq('DELETE FROM user_registration WHERE year = '. GlobalSettings::getRegistrationYear() .' AND user_id = ' . gri('user_id', -1));
 			}
 
 			$yan = isset($_POST['yan']) ? 1 : 0;
