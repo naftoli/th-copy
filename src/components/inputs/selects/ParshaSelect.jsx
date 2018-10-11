@@ -10,7 +10,7 @@ import { findOption } from 'functions/selects';
 // state
 import { getParshos } from 'store/missions/parshos/operations';
 
-export class SoldierSelect extends Component {
+export class ParshaSelect extends Component {
 
   static propTypes = {
     value: PropTypes.any,
@@ -81,4 +81,4 @@ const mapStateToProps = ({ missions }) => {
   };
 }
 
-export default connect( mapStateToProps, { getParshos } )( SoldierSelect );
+export default connect( mapStateToProps, { getParshos } )( ParshaSelect );
