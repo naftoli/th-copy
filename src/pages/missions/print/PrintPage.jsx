@@ -140,8 +140,7 @@ class PrintPage extends Component {
             <Col sm={12} xl={ 6 }>
               <label id='pages'>Number of pages</label>
               <UncontrolledTooltip placement="top" target="pages" autohide={ false }>
-                <strong>If entered,</strong> the print generator will generate blank pages to make sure that each soldier has this number of pages.<br/>
-                <strong>Additional Missions beyond this limit will not print.</strong>
+                <strong>If entered,</strong> the print generator will generate blank pages to make sure that each soldier has at least this number of pages.<br/>
               </UncontrolledTooltip>
               <Input name='pages' type='number' min={ double_sided ? 2 : 1 } step={ double_sided ? 2 : 1 }/>
             </Col>
