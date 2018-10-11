@@ -52,6 +52,8 @@ export class SoldierSelect extends Component {
       options = options.filter( soldier => soldier.class_id === classId );
     else if ( classIds.length > 0 )
       options = options.filter( soldier => classIds.includes( soldier.class_id ) );
+    else
+      options = options.filter( soldier => !!soldier.class_id );
     // limit to school ID
     if ( schoolId )
       options = options.filter( soldier => soldier.school_id === schoolId );
