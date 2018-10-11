@@ -21,6 +21,12 @@ if ( !$class_ids )
 if ( !$user_ids ) {
     $users = Soldier::find_all_by_class_id( $class_ids );
     $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
+// make sure the soldiers are in the selected platoons if provided with an array of soldiers.
+} else if ( $user_ids ) {
+    $users = Soldier::find( $user_ids );
+    $users = is_array( $users ) ? $users : [ $users ]; // make sure it is an array so we can filter it
+    $users = array_filter($users, function ($u) use ($class_ids) { return in_array( $u->class_id, $class_ids ); });
+    $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
 }
 
 if ( !$parsha_ids ) {
@@ -48,6 +54,11 @@ foreach ( $missions as $info ) {
     }
 }
 
+// * Convert the dates for the legacy system
+$dates_id = 1;
+if ( $dates == 'none' ) $dates_id = 0;
+if ( $dates == 'english' ) $dates_id = 2;
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -55,14 +66,29 @@ foreach ( $missions as $info ) {
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Print Missions</title>
     <link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" />
+    <style>
+        #stats{ text-align: center; margin: 10px 0px; }
+        #stats h2, #stats p { margin: 0px; }
+        #stats p#total { font-weight: bold; }
+        @media print { #stats{ display: none; } }
+        .schoolLogo > img { filter: drop-shadow(0px 0px 0 #000) saturate(0%); }
+        img.rank { filter: grayscale(100%); }
+    </style>
 </head>
 
 <body>
+    <div id='stats'>
+        <p>Soldiers Printed: <?= count( $user_ids ) ?> | Parshos Printed: <?= count( $parsha_ids ) ?></p>
+        <p id='total'>Total Mission Sheets Printed: <?= count( $user_ids ) * count( $parsha_ids ) ?></p>
+    </div>
+
     <?php
         // * Print the missions just like before
         foreach ( $objMissions as $obj ) {
-            // $obj->setDateDisplay( $showDate );
+            $obj->setDateDisplay( $dates_id );
             $obj->setDblSided( $double_sided );
+            $obj->setMinPages( $pages );
+
             $id = $obj->user_id;
             if ($obj->lang_id == 1) {
                 echo "<div class='userMission' id='user-" . $id . "' >";
@@ -77,7 +103,7 @@ foreach ( $missions as $info ) {
         }
     ?>
     <?php // ! *************************** Debug *************************** ?>
-    <!-- <details open="open">
+    <!-- <details id='debug'>
         <summary>Debug</summary>
         <pre>
         <?php
