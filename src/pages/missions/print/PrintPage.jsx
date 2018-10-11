@@ -138,7 +138,7 @@ class PrintPage extends Component {
             </Col>
 
             <Col sm={12} xl={ 6 }>
-              <label id='pages'>Number of pages</label>
+              <label id='pages'>Minimum Number of pages</label>
               <UncontrolledTooltip placement="top" target="pages" autohide={ false }>
                 <strong>If entered,</strong> the print generator will generate blank pages to make sure that each soldier has at least this number of pages.<br/>
               </UncontrolledTooltip>
