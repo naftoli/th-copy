@@ -50,7 +50,7 @@ export class SoldierSelect extends Component {
     // only soldiers in the classId from props
     if ( classId )
       options = options.filter( soldier => soldier.class_id === classId );
-    else if ( classIds.length > 0 )
+    else if ( classIds && classIds.length > 0 )
       options = options.filter( soldier => classIds.includes( soldier.class_id ) );
     else
       options = options.filter( soldier => !!soldier.class_id );

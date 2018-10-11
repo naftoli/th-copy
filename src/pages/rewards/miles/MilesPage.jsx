@@ -99,6 +99,7 @@ class MilesPage extends Component {
             <SoldierSelect
               showAllOption
               value={ user_id }
+              schoolId={ school_id }
               classId={ class_id }
               onChange={ this.onSelect('user_id') } />
           </Col>
