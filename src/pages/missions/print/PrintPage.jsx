@@ -30,20 +30,23 @@ class PrintPage extends Component {
     this.setState({ school_id });
     if ( class_id ) this.setState({ class_ids: [ class_id ] });
     // set the default parsha
-    if ( this.props.parshos.length > 0 ) this.setDefaultParsha();
+    if ( this.props.parshos.length > 0 )
+      this.setDefaultParsha();
   }
 
   componentDidUpdate( prevProps ) {
-    if ( prevProps.parshos !== this.props.parshos )
-      this.setDefaultParsha();
+    if ( 
+      prevProps.parshos !== this.props.parshos && 
+      this.props.parshos.length > 0 
+    ) this.setDefaultParsha();
   }
 
   setDefaultParsha() {
     const { parshos } = this.props;
     const today = parseInt( julian( new Date() ), 10 );
     // get the first week after the current week and select it
-    const parsha_id = parshos.find( parsha => today < parsha.start ).id;
-    this.setState({ parsha_ids: [ parsha_id ] });
+    const parsha = parshos.find( parsha => today < parsha.start );
+    this.setState({ parsha_ids: [ parsha.id ] });
   }
 
   showInstructions = () => {
@@ -83,6 +86,7 @@ class PrintPage extends Component {
               <label>Base</label>
               <BaseSelect name='school_id' isDisabled={ !isAdmin( login.code ) }
                 value={ school_id } onChange={ this.schoolChange } />
+              <input type='hidden' value={ school_id } name='school_id' />
             </Col>
 
             <Col sm={6}>
