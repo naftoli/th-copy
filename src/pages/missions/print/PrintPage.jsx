@@ -84,30 +84,34 @@ class PrintPage extends Component {
           <Row>
             <Col sm={6}>
               <label>Base</label>
-              <BaseSelect name='school_id' isDisabled={ !isAdmin( login.code ) }
-                value={ school_id } onChange={ this.schoolChange } />
+              <BaseSelect
+                name='school_id'    onChange={ this.schoolChange } 
+                value={ school_id } isDisabled={ !isAdmin( login.code ) } />
               <input type='hidden' value={ school_id } name='school_id' />
             </Col>
 
             <Col sm={6}>
               <label>Platoon(s)</label>
-              <PlatoonSelect isMulti isDisabled={ !isBC( login.code ) }
-                values={ class_ids } placeholder='All Platoons'
-                schoolId={ school_id } onChange={ this.multiSelectChange('class_ids') } />
+              <PlatoonSelect 
+                placeholder='All Platoons'  isMulti   values={ class_ids }
+                isDisabled={ !isBC( login.code ) }    openMenuOnFocus={ false }
+                schoolId={ school_id }      onChange={ this.multiSelectChange('class_ids') } />
               <input type='hidden' value={ class_ids } name='class_ids' />
             </Col>
 
             <Col sm={6}>
               <label>Soldier(s)</label>
-              <SoldierSelect values={ user_ids } isMulti registeredOnly 
-                schoolId={ school_id } classIds={ class_ids } openMenuOnFocus={ false } 
+              <SoldierSelect 
+                values={ user_ids }     isMulti registeredOnly 
+                schoolId={ school_id }  classIds={ class_ids }  openMenuOnFocus={ false } 
                 onChange={ this.multiSelectChange('user_ids') } placeholder='All Soldiers' />
               <input type='hidden' value={ user_ids } name='user_ids' />
             </Col>
 
             <Col sm={6}>
               <label>Parsha(s)</label>
-              <ParshaSelect isMulti values={ parsha_ids } 
+              <ParshaSelect 
+                isMulti values={ parsha_ids } 
                 onChange={ this.multiSelectChange('parsha_ids') } />
               <input type='hidden' value={ parsha_ids } name='parsha_ids'/>
             </Col>
@@ -116,23 +120,28 @@ class PrintPage extends Component {
           <Row>
             <Col sm={6} xl={ 3 }>
               <label>Double sided</label><br/>
-              <Radio name='double_sided' checked={ double_sided } value={ true } onChange={ this.toggleDoubleSided }>
+              <Radio name='double_sided' checked={ double_sided }
+                  value={ true } onChange={ this.toggleDoubleSided }>
                 I <strong>am</strong> printing double sided copies.
               </Radio><br/>
-              <Radio name='double_sided' checked={ !double_sided } value={ false } onChange={ this.toggleDoubleSided }>
+              <Radio name='double_sided' checked={ !double_sided }
+                  value={ false } onChange={ this.toggleDoubleSided }>
                 I am <strong>not</strong> printing double sided copies.
               </Radio>
             </Col>
 
             <Col sm={6} xl={ 3 }>
               <label>Dates</label><br/>
-              <Radio name='dates' checked={ dates === 'none' } value='none' onChange={ this.toggleDates }>
+              <Radio name='dates' checked={ dates === 'none' } 
+                  value='none' onChange={ this.toggleDates }>
                 <strong>No</strong> dates.
               </Radio>
-              <Radio name='dates' checked={ dates === 'hebrew' } value='hebrew' onChange={ this.toggleDates }>
+              <Radio name='dates' checked={ dates === 'hebrew' }
+                  value='hebrew' onChange={ this.toggleDates }>
                 <strong>Hebrew</strong> dates.
               </Radio><br/>
-              <Radio name='dates' checked={ dates === 'english' } value='english' onChange={ this.toggleDates }>
+              <Radio name='dates' checked={ dates === 'english' }
+                  value='english' onChange={ this.toggleDates }>
                 <strong>Hebrew and English</strong> dates.
               </Radio>
             </Col>
@@ -140,7 +149,8 @@ class PrintPage extends Component {
             <Col sm={12} xl={ 6 }>
               <label id='pages'>Minimum Number of pages</label>
               <UncontrolledTooltip placement="top" target="pages" autohide={ false }>
-                <strong>If entered,</strong> the print generator will generate blank pages to make sure that each soldier has at least this number of pages.<br/>
+                <strong>If entered,</strong> the print generator will generate blank pages{' '}
+                to make sure that each soldier has at least this number of pages.<br/>
               </UncontrolledTooltip>
               <Input name='pages' type='number' min={ double_sided ? 2 : 1 } step={ double_sided ? 2 : 1 }/>
             </Col>
