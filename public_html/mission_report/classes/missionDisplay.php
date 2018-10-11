@@ -1,4 +1,6 @@
 <?
+require_once( __DIR__ . '/../../api/header/db.php' );
+
 abstract class MissionDisplay {
 	protected $mission;
 	protected $settings;
@@ -8,6 +10,7 @@ abstract class MissionDisplay {
 	protected $dailyStickers;
 	protected $dateDisplay;
 	protected $dblSided;
+	protected $minPages;
 	protected $missionType;
 	protected $heDates;
 	protected $heDatesDisp;
@@ -18,6 +21,8 @@ abstract class MissionDisplay {
 	public $lang_id;
 	
 	public function __construct( $mission ) {
+		global $MASHPIA_DB;
+
 		$this->mission = $mission;
 		$this->user_id = $mission->user_id;
 		$this->lang_id = $mission->lang_id;
@@ -38,72 +43,46 @@ abstract class MissionDisplay {
 			$this->heDatesDisp[] = $heArr[0];
 		} while (++$temp <= $this->end);
 		
-		$sql = "select name from parshos where start = " . $this->start . " and end = " . $this->end;
-		$result = mysql_query($sql);
-		if (mysql_num_rows($result) > 0) {
-			$row = mysql_fetch_assoc($result);
-			$this->parsha = $row['name'];
-		} else {
-			$this->parsha = '';
-		}
+		$this->parsha = '';
+		$parsha_query = $MASHPIA_DB->query(
+			"SELECT name FROM parshos WHERE start = " . $this->start . " AND end = " . $this->end
+		);
+		if ( $parsha_query->rowCount() > 0)
+			$this->parsha = $parsha_query->fetch()['name'];
 
 		$this->days_of_week = array("F", "ש", "S", "M", "T", "W", "T");
 		
 		$this->campaignLogos = array(
-			1	=>	'Tehillim.gif',
-			4	=>	'Tefilla.gif',
-			12	=>	'Mivtzoim.gif',
-			13	=>	'Niggunim.gif',
-			16	=>	'hiskashrus.gif',
-			21	=>	'sefer-hamitzvos.gif',
-			27	=>	'tanya.gif',
-			40	=>	'Yom-Dipagra.gif',
-			41	=>	'Father-Son.gif',
-			42	=>	'Footsteps.gif',
-			45	=>	'Cheshbon-Hanefesh.gif',
-			90	=>	'Chitas.gif',
-			92	=>	'Niggunim.gif',
-			93	=>	'Mivtzoim.gif',
-			94	=>	'Yom-Dipagra.gif',
-			100	=>	'Brias-Haguf.gif'
+			1	=>	'Tehillim.gif',		4	=>	'Tefilla.gif',
+			12	=>	'Mivtzoim.gif',		13	=>	'Niggunim.gif',
+			16	=>	'hiskashrus.gif',	21	=>	'sefer-hamitzvos.gif',
+			27	=>	'tanya.gif',		40	=>	'Yom-Dipagra.gif',
+			41	=>	'Father-Son.gif',	42	=>	'Footsteps.gif',
+			45	=>	'Cheshbon-Hanefesh.gif',	90	=>	'Chitas.gif',
+			92	=>	'Niggunim.gif',		93	=>	'Mivtzoim.gif',
+			94	=>	'Yom-Dipagra.gif',	100	=>	'Brias-Haguf.gif'
 		);
 		
 		$this->stickerOutlines = array(
-			1	=>	'Shabbos Mevorchim Tehillim.gif', 
-			4	=>	'Tefillah.gif',
-			12	=>	'Mivtzoim.gif',
-			13	=>	'Niggunim.gif',
-			16	=>	'Sticker - Hiskashrus outline.png', 
-			21	=>	'sefer hamitzvos bw.png',
-			27	=>	'Tanya.gif',
-			40	=>	'Yomei Dipagra.gif',
-			41	=>	'Avos Ubonim.gif',
-			42	=>	'Vihalachta Bidrachov.gif',
-			45	=>	'Cheshbon Hanefesh.gif',
-			90	=>	'Chitas.gif',
-			92	=>	'Niggunim.gif',
-			93	=>	'Mivtzoim.gif',
-			94	=>	'Yomei Dipagra.gif',
-			100	=>	'Sticker - Brias Haguf_outline bw.png'
+			1	=>	'Shabbos Mevorchim Tehillim.gif', 	4	=>	'Tefillah.gif',
+			12	=>	'Mivtzoim.gif',				13	=>	'Niggunim.gif',
+			16	=>	'Sticker - Hiskashrus outline.png', 21	=>	'sefer hamitzvos bw.png',
+			27	=>	'Tanya.gif',				40	=>	'Yomei Dipagra.gif',
+			41	=>	'Avos Ubonim.gif',			42	=>	'Vihalachta Bidrachov.gif',
+			45	=>	'Cheshbon Hanefesh.gif',	90	=>	'Chitas.gif',
+			92	=>	'Niggunim.gif',				93	=>	'Mivtzoim.gif',
+			94	=>	'Yomei Dipagra.gif',		100	=>	'Sticker - Brias Haguf_outline bw.png'
 		);
 		
 		$this->dailyStickers = array(
-			1	=>	'tehillim 5 of 7.png', 
-			4	=>	'tefilah 5 of 7.png',
-			12	=>	'mivtzoyim 5 of 7.png',
-			13	=>	'niggunim 5 of 7.png',
-			16	=>	'hiskashrus 5 of 7.png', 
-			21	=>	'sefer hamitzvos 5 of 7.png',
-			27	=>	'tanya 5 of 7.png',
-			40	=>	'yoma dipagra 5 of 7.png',
-			41	=>	'avos ubanim 5 of 7.png',
-			42	=>	'halachta bdrachav5 of 7.png',
-			45	=>	'cheshbon hanefesh 5 of 7.png',
-			90	=>	'chitas 5 of 7.png',
-			92	=>	'niggunim 5 of 7.png',
-			93	=>	'mivtzoyim 5 of 7.png',
-			94	=>	'yoma dipagra 5 of 7.png',
-			100	=>	'brias haguf 5 of 7.png'
+			1	=>	'tehillim 5 of 7.png', 		4	=>	'tefilah 5 of 7.png',
+			12	=>	'mivtzoyim 5 of 7.png',		13	=>	'niggunim 5 of 7.png',
+			16	=>	'hiskashrus 5 of 7.png', 	21	=>	'sefer hamitzvos 5 of 7.png',
+			27	=>	'tanya 5 of 7.png',			40	=>	'yoma dipagra 5 of 7.png',
+			41	=>	'avos ubanim 5 of 7.png',	42	=>	'halachta bdrachav5 of 7.png',
+			45	=>	'cheshbon hanefesh 5 of 7.png',	90	=>	'chitas 5 of 7.png',
+			92	=>	'niggunim 5 of 7.png',		93	=>	'mivtzoyim 5 of 7.png',
+			94	=>	'yoma dipagra 5 of 7.png',	100	=>	'brias haguf 5 of 7.png'
 		);
 	}
 	
@@ -113,6 +92,10 @@ abstract class MissionDisplay {
 	
 	public function setDblSided( $val ) {
 		$this->dblSided = $val;
+	}
+
+	public function setMinPages( $val ) {
+		$this->minPages = $val;
 	}
 
 	public function setMissionType( $type ) {
@@ -203,112 +186,110 @@ abstract class MissionDisplay {
 	}
 
 	public function printMission($debug = false) {
-		// chdir("../");
+		global $MASHPIA_DB;
+
 		$user = $this->mission;
-		$numLabels = count($user->daily_labels) + count($user->weekly_labels) + count($user->shabbos_labels) + count($user->no_label_subjects);
+		$numLabels = 
+			count( $user->daily_labels ) + 
+			count( $user->weekly_labels ) + 
+			count( $user->shabbos_labels ) + 
+			count( $user->no_label_subjects );
 		$tracks = $user->user_tracks;
 		
 		$numTasks = 0;
-		$totalDaily = 0;
 		$rendered = 0;
-		$types = array('daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks');
-		foreach ($tracks as $track) {
-			foreach ($types as $type) {
-				if ($type == 'daily_tasks') $totalDaily += count($track->$type);
-				$numTasks += count($track->$type);
+		$totalDaily = 0;
+		$types = array( 'daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks' );
+
+		// calculate the total number of tasks
+		foreach ( $tracks as $track ) {
+			foreach ( $types as $type ) {
+				if ( $type == 'daily_tasks' )
+					$totalDaily += count($track->$type);
+					$numTasks += count($track->$type);
 			}
 		}
-		$totalRows = (floor($numLabels / 2)) + $numTasks;
+		$totalRows = ( floor( $numLabels / 2 ) ) + $numTasks;
+
+		$school = School::find( $user->school_class->school_id );
+		$platoon = Platoon::find( $user->school_class->class_id );
 		
-		if ($this->missionType == 2) {
+		if ( $this->missionType == 2 )
 			$taskClass = "mediumPicTask";
-		} else {
+		else
 			$taskClass = "task";
-		}
 		?> 
 		
 		<div class="firstContainer">
 			<div class="header">
 				<div class="userImg">
-					<? if (isset($user->mobile_pic)) : ?>
-						<img src="/mobile/reg/<?=$user->mobile_pic?>" width="60" alt=""/>
-					<? elseif (isset($user->user_photo_id)) : ?>
-						<img src="/file_view.php?id=<?=$user->user_photo_id?>" width="60" alt=""/>
-					<? else : ?>
-						<img src="" width="60" alt=""/> 
-					<? endif; ?>
+					<?php if ( isset( $user->mobile_pic ) ) { ?>
+						<img src="/mobile/reg/<?=$user->mobile_pic?>" width="60" alt=""
+							onerror="this.src = '/mobile/reg/images/profile-photo-default.jpg'"/>
+					<?php } elseif ( isset( $user->user_photo_id ) ) { ?>
+						<img src="/file_view.php?id=<?=$user->user_photo_id?>" width="60" alt=""
+							onerror="this.src = '/mobile/reg/images/profile-photo-default.jpg'"/>
+					<?php } else { ?>
+						<img src="/mobile/reg/images/profile-photo-default.jpg" width="60" alt=""/> 
+					<?php } ?>
 				</div>
-				<?
-				$sql = "select school_number from schools where school_id = " . $user->school_class->school_id;
-				$result = mysql_query($sql);
-				$row = mysql_fetch_assoc($result);
-				?>
 				<div class="schoolLogo">
-					<img src="/mission_report/schools/<?=$row['school_number']?>.png" width="80" alt=""/>
+					<img src="<?= $school->logoPath(); ?>" width="80" alt="<?= $school->school_number ?>"/>
 				</div>
 		    	<table>
 		    		<tr>
 		    			<td class="title">
 							<span class="sb">Platoon:</span> 
-							<?
-							$grade = $user->school_class->class_grade . (isset($user->school_class->class_sub) ? '-' . $user->school_class->class_sub : '');
-							echo $grade;
-							?>
+							<?= $platoon->name(); ?>
 							<br />
 							<span class="sb">Commander:</span><br>
-							<?=$user->school_class->class_teacher;?>
+							<?= $platoon->class_teacher; ?>
 		    			</td>
 		    			<td>
 		    				<div class="headerImg">
-		    					<? if ($this->lang_id == 1) : ?>
+		    					<?php if ( $this->lang_id == 1 ) { ?>
 		    						<img src="/mission_report/image/mission report logo.png" width="350" />
-		    					<? elseif ($this->lang_id == 2) : ?>
+								<?php } elseif ($this->lang_id == 2) { ?>
 		    						<img src="/mission_report/image/mission-report-yiddish.png" width="350" />
-		    					<? endif; ?>
+		    					<?php } ?>
 		    				</div>
 		    			</td>
 		    			<td class="title">
-							<?=$user->rank_name?><br />
+							<?= $user->rank_name ?><br />
 							<span class="b">
-								<?
-								if ($this->lang_id == 1) {
-									echo $user->first . ' ' . $user->last;
-								} else if ($this->lang_id == 2) {
-									if (!empty($user->first_he) || !empty($user->last_he)) {
-										echo $user->first_he . ' ' . $user->last_he;
-									} else {
+								<?php
+									if ($this->lang_id == 1)
 										echo $user->first . ' ' . $user->last;
+									else if ($this->lang_id == 2) {
+										if ( !empty( $user->first_he ) || !empty( $user->last_he ) )
+											echo $user->first_he . ' ' . $user->last_he;
+										else
+											echo $user->first . ' ' . $user->last;
 									}
-								}
-								echo "<p style='margin: 0px;'>(" . $user->user_serial . ")</p>";
+									echo "<p style='margin: 0px;'>(" . $user->user_serial . ")</p>";
 								?>
 							</span>
 		    			</td>
 		    		</tr>
 		    		<tr> 
 		    			<td colspan="3" class="line">
-						<? 
-						if ($this->dateDisplay > 0) {
-							if ($this->dateDisplay == 1) { 
-								?>
+							<?php if ( $this->dateDisplay == 0 ) { ?>
+								<span class="hebrew-text">פרשת <?=$this->parsha?></span>
+							<?php } else if ( $this->dateDisplay == 1 ) { ?>
 								<span class="hebrew-text">פרשת <?=$this->parsha?> 
-									<span style='font-size: 16px;'>and following week</span> &#10022; 
-									<?=$this->heDates[0]?> - <?=$this->heDates[6]?></span>
-							<? } else if ($this->dateDisplay == 2) { ?>
-								<b><?=date('M j', (jdtounix($this->start))) . ' - ' . date('M j, Y', (jdtounix($this->end)))?></b>
+								<span style='font-size: 16px;'>and following week</span> &#10022; 
+								<?=$this->heDates[0]?> - <?=$this->heDates[6]?></span>
+							<?php } else if ( $this->dateDisplay == 2 ) { ?>
+								<b><?=date( 'M j', ( jdtounix( $this->start ) ) ) . ' - ' . date( 'M j, Y', ( jdtounix( $this->end ) ) )?></b>
 								<span class="hebrew-text"> &#10022; פרשת <?=$this->parsha?> &#10022; <?=$this->heDates[0]?> - <?=$this->heDates[6]?></span>
-							<? } ?>
-							</span></td>
-						<? } else { ?>
-							<span class="hebrew-text">פרשת <?=$this->parsha?></span>
-						<? } ?>
+							<?php } ?>
 						</td>
 		    		</tr>
 			  </table>
 			</div>
 			
 			<div class="left">
-				<?
+			<?php
 				$totalRendered = 0;
 				$page = 1;
 				$labelAdded = 0;
@@ -771,7 +752,7 @@ abstract class MissionDisplay {
 				<input type="hidden" class="pages" value="<?=$page?>" />
 				<? if ($this->lang_id == 1) : ?>
 					<img class="rankLogo" src="/mission_report/image/rank report logo.png" />
-					<img class="rank" src="/rankPics/<?=$user->rank_ord;?>BW.png" height="70" />
+					<img class="rank" src="/mobile/img_new/ranks/<?=$user->rank_ord;?>.svg" height="70" />
 					<table class="footerInfo">
 						<tr style="vertical-align: bottom">
 							<td align="left" class="border"><span class="sb">
@@ -789,7 +770,7 @@ abstract class MissionDisplay {
 					</table> 
 				<? elseif ($this->lang_id == 2) : ?>
 					<img class="rankLogo" src="/mission_report/image/rank report yiddish.png" />
-					<img class="rank" src="/rankPics/<?=$user->rank_ord;?>BW.png" height="70" />
+					<img class="rank" src="/mobile/img_new/ranks/<?=$user->rank_ord;?>.svg" height="70" />
 					<table class="footerInfo">
 						<tr style="vertical-align: bottom">
 							<td align="right" class="border"><span class="sb">
@@ -815,11 +796,15 @@ abstract class MissionDisplay {
 				<div style="clear: both"></div>
 			</div> 
 		</div>
-		<? 
-		if ($page % 2 != 0 && $this->dblSided == 1) {
-			echo "<div style='page-break-after: always'>&nbsp;</div>";
+		<? // make sure that we have the minimum number of pages
+		if ( $this->minPages && $page < $this->minPages ) {
+			while( $page < $this->minPages ) {
+				$page += 1;
+				echo "<div style='page-break-after: always'>&nbsp;</div>";
+			}
 		}
-		// chdir("classes");
+		if ($page % 2 != 0 && $this->dblSided == 1)
+			echo "<div style='page-break-after: always'>&nbsp;</div>";
 	}
 
 	public function markMission() {
