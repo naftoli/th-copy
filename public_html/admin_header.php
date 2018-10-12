@@ -422,7 +422,42 @@ $bpOnly = [ 82 ];
 									<a href="/beta/bm/base"><?=T_('Base')?></a>
 								</li>
 							</ul>
-						<?php  } else { ?>
+
+							<li class="list_parent<?=isset($ui_type) && $ui_type == 'programs' ? ' current' : ''?>">
+								<a href="#" title="programs">
+									<div>
+										<span class="icon">
+											<img height="28" width="28" alt="Campaigns" src="/images/icon_admin_medal.png">
+										</span>
+										<?=T_('Missions')?>
+									</div>
+								</a>
+							</li>
+
+							<ul class='list_second'>
+								<li><a href="/beta/missions/print"><?=T_('Print')?></a></li>
+								<li><a href="/beta/missions/mark"><?=T_('Mark')?></a></li>
+								<li><a href="/beta/missions/personalize"><?=T_('Personalize')?></a></li>
+								<li><a href="/beta/missions/tasks"><?=T_('Add Task')?></a></li>
+								<li><a href="/beta/missions/report"><?=T_('Mission Report')?></a></li>
+							</ul>
+
+							<li class="list_parent<?=isset( $ui_type ) && $ui_type == 'programs' ? ' current' : '' ?>">
+								<a href="#" title="programs"><div>
+									<span class="icon">
+										<img height="28" width="28" alt="cart" src="/images/iconl_cart.png">
+									</span><?=T_('Rewards Program')?>
+								</div></a>
+							</li>
+								
+							<ul class='list_second'>
+								<li><a href="/beta/rewards/cards"><?=T_('Achievement Cards')?></a></li>
+								<li><a href="/beta/rewards/tasks"><?=T_('Tasks')?></a></li>
+								<li><a href="/beta/rewards/prizes"><?=T_('Prizes')?></a></li>
+								<li><a href="/beta/rewards/orders"><?=T_('Orders')?></a></li>
+								<li><a href="/beta/rewards/miles"><?=T_('Add / Subtract Miles')?></a></li>
+							</ul>
+						<?php } else { ?>
 							<ul class="list_second">
 								<li><a href="/yearly_prize/forms/staff_info.php">Staff Management</a></li>
 								<li>
@@ -478,48 +513,29 @@ $bpOnly = [ 82 ];
 									</ul>
 								</li>		
 							</ul>
-						<? } ?>
 
-						<li class="list_parent<?=isset($ui_type) && $ui_type == 'programs' ? ' current' : ''?>">
-							<a href="#" title="programs">
-								<div>
-									<span class="icon"><img height="28" width="28" alt="Campaigns" src="/images/icon_admin_medal.png"></span>
-									<?=T_('Missions')?>
-								</div>
-							</a>
-						</li>
-
-						<ul class='list_second'>
-							<!--<li><a href="summer_report.php"><?=T_('Mark Summer/Tishrei Missions')?></a>-->
-							<li><a href="/print_missions2.php"><?=T_('Print Missions')?></a>
-							<li><a href="/print_missionsYT.php"><?=T_('Print Succos Missions')?></a>
-							<!--<li><a href="/print_missionsYT2.php"><?=T_('Print Yom Kippur / Succos Missions')?></a>-->
-							<!-- <li><a href="/print_missions_summer.php"><?=T_('Print Summer Missions')?></a> -->
-							<li><a href="/mark_missions2.php"><?=T_('Mark Missions')?></a>
-							<li><a href="/sefer_hamitzvos.php"><?=T_('Mark Yahadus')?></a>
-							<li><a href="/task_customization.php">Personalize Your Missions</a></li>
-							<li><a href="/newTask.php">Add Tasks</a></li>
-							<li><a href="/mission_sheets_checklist.php"><?=T_("Teacher's Missions Checklist")?></a></li>
-							<li><a href="/missions_report.php"><?=T_('Missions Accomplished Report')?></a></li>
-						</ul>
-
-						<?php if ( $admin_user["beta"] ) { ?>
-							<li class="list_parent<?=isset( $ui_type ) && $ui_type == 'programs' ? ' current' : '' ?>">
-								<a href="#" title="programs"><div>
-									<span class="icon">
-										<img height="28" width="28" alt="cart" src="/images/iconl_cart.png">
-									</span><?=T_('Rewards Program')?>
-								</div></a>
+							<li class="list_parent<?=isset($ui_type) && $ui_type == 'programs' ? ' current' : ''?>">
+								<a href="#" title="programs">
+									<div>
+										<span class="icon"><img height="28" width="28" alt="Campaigns" src="/images/icon_admin_medal.png"></span>
+										<?=T_('Missions')?>
+									</div>
+								</a>
 							</li>
-								
+
 							<ul class='list_second'>
-								<li><a href="/beta/rewards/cards"><?=T_('Achievement Cards')?></a></li>
-								<li><a href="/beta/rewards/tasks"><?=T_('Tasks')?></a></li>
-								<li><a href="/beta/rewards/prizes"><?=T_('Prizes')?></a></li>
-								<li><a href="/beta/rewards/orders"><?=T_('Orders')?></a></li>
-								<li><a href="/beta/rewards/miles"><?=T_('Add / Subtract Miles')?></a></li>
+								<!--<li><a href="summer_report.php"><?=T_('Mark Summer/Tishrei Missions')?></a>-->
+								<li><a href="/print_missions2.php"><?=T_('Print Missions')?></a>
+								<li><a href="/print_missionsYT.php"><?=T_('Print Succos Missions')?></a>
+								<!--<li><a href="/print_missionsYT2.php"><?=T_('Print Yom Kippur / Succos Missions')?></a>-->
+								<!-- <li><a href="/print_missions_summer.php"><?=T_('Print Summer Missions')?></a> -->
+								<li><a href="/mark_missions2.php"><?=T_('Mark Missions')?></a>
+								<li><a href="/sefer_hamitzvos.php"><?=T_('Mark Yahadus')?></a>
+								<li><a href="/task_customization.php">Personalize Your Missions</a></li>
+								<li><a href="/newTask.php">Add Tasks</a></li>
+								<li><a href="/mission_sheets_checklist.php"><?=T_("Teacher's Missions Checklist")?></a></li>
+								<li><a href="/missions_report.php"><?=T_('Missions Accomplished Report')?></a></li>
 							</ul>
-						<?php } else { ?>
 							<li class="list_parent<?=isset( $ui_type ) && $ui_type == 'programs' ? ' current' : '' ?>">
 								<a href="#" title="programs"><div><span class="icon"><img height="28" width="28" alt="Campaigns" src="/images/icon_auction.png"></span><?=T_('Achievement Cards')?></div></a>
 							</li>
