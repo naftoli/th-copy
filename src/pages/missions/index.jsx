@@ -4,10 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 // sub pages
 import { Page404, Construction } from 'pages/errors';
 import PrintPage from './print/PrintPage';
-// import PlatoonPages from './platoons';
-// import ParentPages from './parents';
-// import StaffPages from './staff';
-// import BasePages from './base';
+import MarkPage from './mark';
 // functions
 import { isBC } from 'functions/login';
 
@@ -25,7 +22,7 @@ export class BaseManagmentIndexPage extends Component {
     return (
       <Switch>
         <Route path={`${path}/print`} component={ PrintPage } />
-        <Route path={`${path}/mark`} component={ Construction } />
+        <Route path={`${path}/mark`} component={ MarkPage } />
 
         { isBC( code ) && BCRoutes }
 
