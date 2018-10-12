@@ -3,7 +3,7 @@
 $menuSection = array('admin','school','programs','reports','logout');
 
 // get the school_id of the request if variable not already set.
-if ( !$school_id )
+if ( !isset($school_id) )
 	$school_id = gri('school_id', -1); 
 
 /** Set the admin if not loaded yet. */

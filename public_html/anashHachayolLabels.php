@@ -15,59 +15,6 @@ $parents = $m->getSortedAdmins();
 	<head>
 		<meta charset="UTF-8" />
 		<link href="admin_styles.css" rel="stylesheet" type="text/css">
-		<!--
-		<style type="text/css">
-            .label {
-                width: 2.3in;
-                height: .7in;
-                font-size: 10px;
-                padding: 5px;
-                float: left;
-                margin-left: .3in;
-                margin-top: .3in;
-            }
-            .space {
-                width: .25in;
-                height: .7in;
-                float: left;
-                padding: 3px;
-            }
-            .page-break {
-                clear: both;
-                page-break-after: always;
-            }
-            .medal {
-                width: 1in;
-                float: left;
-            }
-            .name {
-                width: 2in;
-            }
-            .topSpace {
-                height: 0.2in;
-                width: 7in;
-            }
-            .instructions {
-                width: 50%;
-            }
-            @media screen { 
-                #report_div {
-                    display: none;
-                }
-                .no-print {
-                    display: block;
-                }
-            }
-            @media print {
-                #report_div {
-                    display: block;
-                } 
-                .no-print {
-                    display: none;
-                }
-            }
-        </style>
-        -->
 		<style type="text/css">
             .label {
                 width: 2.15in;
