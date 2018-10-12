@@ -18,6 +18,11 @@ export class ParshaSelect extends Component {
     onChange: PropTypes.func,
   }
 
+  static defaultProps = {
+    endDate: false,
+    startDate: false
+  }
+
   componentDidMount(){ 
     this.loadSoldiers(); 
   }
@@ -28,15 +33,21 @@ export class ParshaSelect extends Component {
   }
 
   getOptions = () => {
-    const { parshos } = this.props;
+    const { parshos, endDate, startDate } = this.props;
+
+    let options = parshos;
+
+    if ( endDate )
+      options = options.filter( parsha => parsha.end <= endDate );
+
+    if ( startDate )
+      options = options.filter( parsha => parsha.start >= startDate )
 
     // map them to what react-select expects
-    let options = parshos.map( ({ id, name, start_date }) => ({
+    return options.map( ({ id, name, start_date }) => ({
       value: id,
       label: `${name} - ${ moment( start_date ).format( 'l' ) }`
     }) );
-
-    return options;
   }
 
   onChange = ( option ) => {
