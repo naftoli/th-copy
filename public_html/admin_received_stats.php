@@ -12,13 +12,14 @@ include('classes/user.php');
 include('classes/school_class.php');	
 
 $admin = new admin(null, $_SESSION['admin_id']);
+
 $admin->get_schools();
 
 $no_of_schools = count($admin->schools);
 
 if ($no_of_schools == 1) {
-	$school_id = $_SESSION['school_id'];
-	$admin->get_school($school_id);
+	$school_id = $admin->schools[0]->school_id;
+	$admin->get_school($admin->schools[0]->school_id);
 }
 else {
 	//print_r($_POST);
@@ -72,7 +73,7 @@ if (isset($_POST['go']) && $_POST['go'] == '1') {
     if ($school_id == 61)
         $sql .= "ORDER BY u.last, u.first";
     else 
-        $sql .= "ORDER BY c.class_grade, c.class_sub, u.last, u.first";
+		$sql .= "ORDER BY c.class_grade, c.class_sub, u.last, u.first";
 		
 	$query = mysql_query($sql);
 		
@@ -261,31 +262,31 @@ else
 				</script>
 				
 				<!--<FORM  name="admin_received_stats_form" id="admin_received_stats_form" action="admin_received_stats.php" method="get" accept-charset="UTF-8">-->
-				<FORM  name="admin_received_stats_form" id="admin_received_stats_form" action="admin_received_stats.php" method="post" accept-charset="UTF-8">				
+				<form  name="admin_received_stats_form" id="admin_received_stats_form" action="admin_received_stats.php" method="post" accept-charset="UTF-8">				
 					<input type="hidden" name="go" id="go" value="1">
 					<input type="hidden" id="hiddenClassId" name="hiddenClassId" value="">
 					
-					<? if ($no_of_schools > 1) : ?>
-					<P>
-						<LABEL>
-							Select Institution
-							<SELECT name="school_id">
-								<OPTION value="o">Choose a school</OPTION>
-								<? foreach ($admin->schools as $school) : ?>
-								<OPTION <? if ($school->school_id == $school_id) echo ' selected="selected" '; ?> value="<?=$school->school_id;?>"><?=$school->school_name;?></OPTION>
-								<? endforeach; ?>
-							</SELECT>
-						</LABEL>
-						
-						<INPUT class="submit" data="0" type="submit" name="submit" value="'Go'">
-					</P>
-					<? else : ?>
-					<P>
-						<LABEL>School:&nbsp;<?=$admin->schools[0]->school_name;?></LABEL>
-					</P>
-					<? endif; ?>
+					<?php if ($no_of_schools > 1) { ?>
+						<p>
+							<label>
+								Select Institution
+								<select name="school_id">
+									<option value="o">Choose a school</option>
+								<?php foreach ( $admin->schools as $school ) { ?>
+									<option <?php if ($school->school_id == $school_id) echo ' selected="selected" '; ?> value="<?=$school->school_id;?>"><?=$school->school_name;?></option>
+								<?php } ?>
+								</select>
+							</label>
+							
+							<input class="submit" data="0" type="submit" name="submit" value="'Go'">
+						</p>
+					<?php } else { ?>
+					<p>
+						<label>School:&nbsp;<?=$admin->schools[0]->school_name;?></label>
+					</p>
+					<?php } ?>
 					
-					<? if ($school_id > 0) : ?>
+					<?php if ($school_id > 0) { ?>
 						
 						Choose Subject
 						<SELECT name="subject_id">							
@@ -385,7 +386,9 @@ else
 						<INPUT class="submit" data="1" type="button" value="Go">
 						<? endif; ?>
 						
-					<? endif; ?>					
+					<? } else {
+						echo $school_id;
+					} ?>					
 					<!-- if ($school_id > 0)  -->
 					
 					<? if ($go == '1') : ?>

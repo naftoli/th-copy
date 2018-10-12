@@ -1,7 +1,10 @@
 <?
 // types of menues.
 $menuSection = array('admin','school','programs','reports','logout');
-$school_id = gri('school_id', -1); // get the school_id of the request.
+
+// get the school_id of the request if variable not already set.
+if ( !isset($school_id) )
+	$school_id = gri('school_id', -1); 
 
 /** Set the admin if not loaded yet. */
 if (!isset($admin)) {
@@ -556,8 +559,8 @@ $bpOnly = [ 82 ];
 							<!--<li><a href="/chidon_report.php">Registered for Chidon</a></li>-->
 							<li><a href="/reports/chidon/chidon_enrollment.php">Registered Report</a></li>
 							<li><a href="/reports/chidon/snapshot.php">Registered / Unregistered Report</a></li>
-							<li><a href="/reports/chidon/booklet_report.php">Booklet Report</a></li>
-							<li><a href="/reports/chidon/yahadus.php">Yahadus Report</a></li>
+							<li><a href="/reports/chidon/booklet_report.php">Study Guides</a></li>
+							<li><a href="/reports/chidon/yahadus.php">Yehadus Books</a></li>
 							<li><a href="/reports/chidon/shabbaton_enrollment.php">Shabbaton Enrolled Report</a></li>
 							<li><a href="/reports/chidon/walking_groups.php">Shabbaton Walking Report</a></li>
 							<li><a href="/chidon_tests.php">Enter Chidon Test Marks</a></li>

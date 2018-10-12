@@ -70,7 +70,7 @@ function get_hachayols($school_id, $start_date, $end_date){
                 'shipment'      => $shipping_info['name'],
                 'shipment_id'   => $shipping_info['shipment_id'],
                 // totals for rendering
-                'hachayol_qty'  => $hachayol_count_row['total'],
+                'hachayol_qty'  => $hachayol_count_row['total'] + $hachayol_count_row['teachers'],
                 'student_qty'   => $hachayol_count_row['total'],
                 'teacher_qty'   => $hachayol_count_row['teachers']
             ];

@@ -66,8 +66,8 @@ foreach($schools as $school_id => $school_name) {
     // render the school's shipping header?>
     <h1><?=$school_name?></h1>
     <h2>
-        <?=$school['school_address1'] ? $school['school_address1']."<br/>" : ""?>
-        <?=$school['school_city'] ? $school['school_city'].", ".$school['school_state']." ".$school['school_postal'].", ".$school['school_country'] : ""?>
+        <?=$school['shipping_address1']?>, <?=$school['shipping_address2']?><br/>
+        <?=$school['shipping_city'] ? $school['shipping_city'].", ".$school['shipping_state']." ".$school['shipping_postal'].", ".$school['shipping_country'] : ""?>
     </h2>
     <h3 class="quarter">
         <strong>Method:</strong> <?=$school['shipping_method'] == "deliver" ? "Delivery" : "Pickup"?>

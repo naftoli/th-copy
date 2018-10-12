@@ -14,17 +14,6 @@ $posters = array(
     472 => 0,   474 => 0,   475 => 0,   480 => 0
 );
 
-$types = array(
-    2	=> 'girls', 3	=> 'boys',  4	=> 'boys',  5	=> 'boys',  7	=> 'girls', 9	=> 'boys',  11	=> 'boys',
-    19	=> 'boys',  21	=> 'mixed', 30	=> 'girls', 33	=> 'boys',  37	=> 'girls', 39	=> 'mixed', 40	=> 'girls',
-    42	=> 'girls', 45	=> 'girls', 48	=> 'boys',  49	=> 'boys',  50	=> 'girls', 54	=> 'girls', 55	=> 'mixed',
-    58	=> 'boys',  60	=> 'boys',  61	=> 'mixed', 63	=> 'boys',  66	=> 'girls', 80	=> 'mixed', 81	=> 'mixed',
-    84	=> 'mixed', 86	=> 'mixed', 87	=> 'mixed', 89	=> 'mixed', 106	=> 'mixed', 105	=> 'girls', 110	=> 'mixed', 
-    112	=> 'boys',  162	=> 'girls', 176	=> 'girls', 185	=> 'mixed', 192	=> 'girls', 194	=> 'mixed', 255	=> 'boys',
-	263	=> 'mixed', 264	=> 'boys',  265	=> 'girls', 269	=> 'mixed', 427	=> 'mixed', 470	=> 'mixed', 471	=> 'boys',
-    472 => 'mixed', 474 => 'mixed', 475 => 'mixed', 480 => 'mixed'
-);
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -93,9 +82,7 @@ $types = array(
             <div class='info'>
                 <?=$school['name']?><br />
                 <?=$school['address']?><br /><br />
-                <?php if ( isset( $types[$id] ) ) { ?>
-                    Type of School: <?=$types[$id]?><br />
-                <?php } ?>
+                Type of School: <?=$school['type']?><br />
                 
                 Principal: <?=$school['principal']?><br />
                 <?php
@@ -141,8 +128,8 @@ $types = array(
             <?php $chidonNum = $h->getChidonNumber( $id ); ?>
             <h2>For Delivery</h2>
             <div class='info'>
-                <?=$school['name']?><br />
-                <?=$school['address']?><br /><br />
+                <?=$school['name'];?><br />
+                <?=$school['address'];?><br /><br />
                 Type of School: <?=$types[$id]?><br />
                 <?php
                 foreach( $school['admins'] as $admin ) {

@@ -148,10 +148,12 @@ class OrdersRouter {
         $ids = $_POST['user_prize_ids'];
 
         $query = $POINTS_DB->prepare(
-            'UPDATE pointsDB.user_prizes SET status="Redeemed", redeemed_by = ? WHERE user_prize_id IN ( ? )'
+            ' UPDATE pointsDB.user_prizes SET status="Redeemed", redeemed_by = ? '
+           .' WHERE user_prize_id IN ( '. implode( ', ', array_fill(0, count( $ids ), '?') ) .' )'
         );
-        if ( !$query->execute([ $current_user->admin_id, implode( ', ', $ids ) ]) )
-            return json_error( 'Server Error: Could Not Redeem Prizes. (REWARDS-ORDERS-54)' );
+        if ( !$query->execute( array_merge( [ $current_user->admin_id ], $ids ) ) )
+            return json_error( 'Server Error: Could Not Redeem Prizes. (REWARDS-ORDERS-155`)' );
+
         return json_response( false );
     }
 
@@ -161,10 +163,12 @@ class OrdersRouter {
         $ids = $_POST['user_prize_ids'];
         
         $query = $POINTS_DB->prepare(
-            'UPDATE pointsDB.user_prizes SET status="Checked Out", redeemed_by = null WHERE user_prize_id IN ( ? )'
+            ' UPDATE pointsDB.user_prizes SET status="Checked Out", redeemed_by = null '
+           .' WHERE user_prize_id IN ( '. implode( ', ', array_fill(0, count( $ids ), '?') ) .' )'
         );
-        if ( !$query->execute([ implode( ', ', $ids ) ]) )
-            return json_error( 'Server Error: Could Not Redeem Prizes. (REWARDS-ORDERS-66)' );
+        if ( !$query->execute( $ids ) )
+            return json_error( 'Server Error: Could Not Un-Redeem Prizes. (REWARDS-ORDERS-174)' );
+
         return json_response( false );
     }
 
