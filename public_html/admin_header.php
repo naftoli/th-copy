@@ -1,7 +1,10 @@
 <?
 // types of menues.
 $menuSection = array('admin','school','programs','reports','logout');
-$school_id = gri('school_id', -1); // get the school_id of the request.
+
+// get the school_id of the request if variable not already set.
+if ( !$school_id )
+	$school_id = gri('school_id', -1); 
 
 /** Set the admin if not loaded yet. */
 if (!isset($admin)) {
