@@ -192,7 +192,6 @@ if ( isset( $school->school_logo_id ) && $school->school_logo_id > 0 )
         <script type="text/javascript" src="mobile/reg/js/keyboard.js" charset="UTF-8"></script>
 		<script type="text/javascript">
 			var next_page = "<?=$next_page;?>";    
-			alert(next_page); 
             var chckbx_count = 0;
             var default_picked = false;
             var school_logo_id = <?=$school_logo_id;?>;
