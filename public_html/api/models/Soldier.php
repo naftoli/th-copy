@@ -50,6 +50,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
         return '/mobile/reg/images/profile-photo-default.jpg';
     }
+    // returns name based on language
+    public function name() {
+        // if ( $this->lang_id == 2 )
+        //     return ( $this->first_he ? $this->first_he : $this->first ) 
+        //         . ' ' . ( $this->last_he ? $this->last_he : $this->last );
+        return $this->first . ' ' . $this->last;
+    }
     // returns full barcode
     public function barcode(){
         return "3$this->user_code";
