@@ -84,7 +84,7 @@ if (isset($_POST["action"])) {
 		$sql = $sql . "SET school_name='" . mysql_real_escape_string($_POST["school_name"]) . "', ";
 		$sql = $sql . "school_name_he='" . mysql_real_escape_string($_POST["school_name_he"]) . "', ";
 		$sql = $sql . "inst_id = 10 ";
-        $sql .= ", chayolei = 0, chidon = 0, tanya = 0 ";
+        $sql .= ", chayolei = 1, chidon = 0, tanya = 0, rewards = 1 ";
 		if ( isset( $_POST['school_gender'] ) )	$sql = $sql . ", school_gender='" . mysql_real_escape_string($_POST["school_gender"]) . "'";
 		$sql = $sql . ", school_number=" . $school_number . ", ";
 		$sql = $sql . "school_address1='" . mysql_real_escape_string($_POST["school_address1"]) . "', ";
