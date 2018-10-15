@@ -49,7 +49,7 @@ if ((isset($_GET['school']) && isset($_GET['grade']) && isset($_GET['user']))) {
 }
 
 if ($user_id == -1) {
-	$sql = "select user_id from users where class_id = " . $class_id . " order by last, first limit 1";
+	$sql = "SELECT user_id FROM users WHERE class_id =  $class_id ORDER BY last, first LIMIT 1";
 	$result = mysql_query($sql);
 	$row = mysql_fetch_assoc($result);
 	$user_id = $row['user_id'];
@@ -63,8 +63,8 @@ $sql = "SELECT * FROM reports
 		AND visibility != 'none' 
 		and start_date >= $start 
 		and end_date <= $end 
-		ORDER BY start_date";    
-$query = mysql_query($sql);
+		ORDER BY start_date";
+$query = mysql_query( $sql );
 while ($row = mysql_fetch_assoc($query)) {
     $report = new report($row);
     array_push($reports, $report);
@@ -168,7 +168,7 @@ if (isset($_GET['he']) && $_GET['he'] == 1) {
 			<button id="changeUser">GO</button>
 		</div>
 		
-		<?
+		<?php
 		require_once 'classes/missions.php';
 		require_once 'classes/noPicMission.php';
 		require_once 'classes/picMission.php';
@@ -217,8 +217,8 @@ if (isset($_GET['he']) && $_GET['he'] == 1) {
 					$.post('getUserInfo.php', { user : user }, function( success ) {
 						var info = $.parseJSON( success );
 						var school = info.school;
-                        var grade = info.grade;
-                        var user_id = info.user;
+						var grade = info.grade;
+						var user_id = info.user;
 						var start = <?=$_GET['start']?>;
 						var end = <?=$_GET['end']?>;
 						var cols = 1;
