@@ -20,7 +20,8 @@ export class ParshaSelect extends Component {
 
   static defaultProps = {
     endDate: false,
-    startDate: false
+    startDate: false,
+    isDescending: false
   }
 
   componentDidMount(){ 
@@ -33,15 +34,21 @@ export class ParshaSelect extends Component {
   }
 
   getOptions = () => {
-    const { parshos, endDate, startDate } = this.props;
+    const { 
+      parshos, endDate, startDate, isDescending
+    } = this.props;
 
     let options = parshos;
 
+    // if an endDate is provided, find all parshos that start by that date
     if ( endDate )
       options = options.filter( parsha => parsha.end <= endDate );
-
+    // if a startDate is provided, find all parshos end on that date or later.
     if ( startDate )
       options = options.filter( parsha => parsha.start >= startDate )
+
+    if ( isDescending )
+      options.reverse();
 
     // map them to what react-select expects
     return options.map( ({ id, name, start_date }) => ({
