@@ -607,9 +607,13 @@ if (!empty($action)) { switch($action) {
 											--><br/>
 											<pre><?if($debug) print_r($customer_profile);?></pre>
 											<?
-											if ($action == "edit" && $customer_profile) {
-												$payment_profile = $customer_profile->paymentProfiles[0];
-												$cc = $payment_profile["payment"]["creditCard"];
+											if ($action == "edit" && isset($customer_profile) ) {
+												if ( count( $customer_profile->paymentProfiles ) > 0 ) {
+													$payment_profile = $customer_profile->paymentProfiles[0];
+													$cc = $payment_profile["payment"]["creditCard"];
+												} else {
+													$cc = false;
+												}
 											}
 											if ($admin_user['auth'] == 'super') {
 												$type = 'text';
@@ -620,7 +624,7 @@ if (!empty($action)) { switch($action) {
 											<? if ($action == "edit") {?>
 											<h3>Card on file</h3>
 											<p>
-												<? if ($customer_profile) { ?>
+												<? if ( isset($customer_profile) && $cc ) { ?>
 													<?echo $cc['cardType'];?>: <? echo $cc['cardNumber'];?>.
 													Billed to
 													<?=isset($payment_profile['billTo']['address']) ? $payment_profile['billTo']['address'] : "N/A";?>,
