@@ -1461,7 +1461,6 @@ abstract class MissionDisplay {
 	}
 
 	public function markMissionCol() {
-		chdir("../");
 		$user = $this->mission;
 		$numLabels = count($user->daily_labels) + count($user->weekly_labels) + count($user->shabbos_labels) + count($user->no_label_subjects);
 		$tracks = $user->user_tracks;
@@ -1473,6 +1472,9 @@ abstract class MissionDisplay {
 			}
 		}
 		$totalRows = (floor($numLabels / 2)) + $numTasks;
+
+		$school = School::find( $user->school_class->school_id );
+		$platoon = Platoon::find( $user->school_class->class_id );
 		
 		if ($this->missionType == 2) {
 			$taskClass = "mediumPicTask";
@@ -1484,21 +1486,18 @@ abstract class MissionDisplay {
 		<div class="firstContainer">
 			<div class="header">
 				<div class="userImg">
-					<? if (isset($user->mobile_pic)) : ?>
-						<img src="/mobile/reg/<?=$user->mobile_pic?>" width="60" alt=""/>
-					<? elseif (isset($user->user_photo_id)) : ?>
-						<img src="/file_view2.php?id=<?=$user->user_photo_id?>" width="60" alt=""/>
-					<? else : ?>
-						<img src="" width="60" alt=""/> 
-					<? endif; ?>
+					<?php if ( isset( $user->mobile_pic ) ) { ?>
+						<img src="/mobile/reg/<?=$user->mobile_pic?>" width="60" alt=""
+							onerror="this.src = '/mobile/reg/images/profile-photo-default.jpg'"/>
+					<?php } elseif ( isset( $user->user_photo_id ) ) { ?>
+						<img src="/file_view.php?id=<?=$user->user_photo_id?>" width="60" alt=""
+							onerror="this.src = '/mobile/reg/images/profile-photo-default.jpg'"/>
+					<?php } else { ?>
+						<img src="/mobile/reg/images/profile-photo-default.jpg" width="60" alt=""/> 
+					<?php } ?>
 				</div>
-				<?
-				$sql = "select school_number from schools where school_id = " . $user->school_class->school_id;
-				$result = mysql_query($sql);
-				$row = mysql_fetch_assoc($result);
-				?>
 				<div class="schoolLogo">
-					<img src="/mission_report/schools/<?=$row['school_number']?>.png" width="80" alt=""/>
+					<img src="<?= $school->logoPath(); ?>" width="80" alt="<?= $school->school_number ?>"/>
 				</div>
 		    	<table>
 		    		<tr>
@@ -2097,8 +2096,7 @@ abstract class MissionDisplay {
 				<div style="clear: both"></div>
 			</div> 
 		</div>
-		<?
-		chdir("classes");
+		<?php
 	}
 
 	abstract public function pager( $page, $totalRendered, $totalRows, $addLabel = 0 );	
