@@ -198,6 +198,10 @@
 																			<button class="btn btn-primary re_register">Register
                                                                                 {{#if this.reg_types.chayolei }}
                                                                                     Tzivos Hashem {{ this.reg_year }}
+                                                                                    {{#if this.reg_types.chidon }}
+                                                                                        / Chidon {{ this.chidon_year }}
+                                                                                    {{/if}}
+                                                                                    
                                                                                 {{else}}
                                                                                     {{#if this.reg_types.chidon }}
                                                                                         Chidon {{ this.chidon_year }}
