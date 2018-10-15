@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 session_start();
 //echo "<pre>"; print_r( $_SESSION ); echo "</pre>";
 if ( !isset( $_SESSION['admin_id'] ) ) {
@@ -190,7 +191,7 @@ if ( isset( $school->school_logo_id ) && $school->school_logo_id > 0 )
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script type="text/javascript" src="mobile/reg/js/keyboard.js" charset="UTF-8"></script>
 		<script type="text/javascript">
-		    var next_page = "<?=$next_page;?>";     
+			var next_page = "<?=$next_page;?>";    
             var chckbx_count = 0;
             var default_picked = false;
             var school_logo_id = <?=$school_logo_id;?>;
@@ -237,7 +238,7 @@ if ( isset( $school->school_logo_id ) && $school->school_logo_id > 0 )
 					}
 				});
 
-                var shliach = <?=$_SESSION['shliach']?>;
+                var shliach = <?=isset($_SESSION['shliach']) ? $_SESSION['shliach'] : 0?>;
                 if (shliach && shliach.mosdos) {
                     var mosdos = shliach.mosdos;
                     var html = '';

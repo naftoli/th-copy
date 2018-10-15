@@ -56,6 +56,8 @@ $start = $dates['start'];
 $end = $dates['end'];
 
 $school_id = 0;
+$class_id = 0;
+$user_id = 0;
 
 if (isset($_POST['school_id']))
     $school_id = $_POST['school_id'];
@@ -94,6 +96,7 @@ $schools_select = "";
 $classes_select = "";
 $users_select = "";
 $action = "";
+
 if (isset($_POST['action'])) {
     $action = $_POST['action'];
     
@@ -101,43 +104,27 @@ if (isset($_POST['action'])) {
     
     if (isset($_POST['class_id'])) 
         $class_id = $_POST['class_id'];
-    else
-        $class_id = 0;
             
     if (isset($_POST['user_id'])) 
         $user_id = $_POST['user_id'];
-    else
-        $user_id = 0;
             
     if (isset($_POST['date_list'])) {
         $date_list = explode(":", $_POST['date_list']);
         $start_date = $date_list[0]; 
         $end_date = $date_list[1];      
     }
-            
-    get_classes_select($school_id, $class_id);
-    get_users_select($school_id, $class_id, $user_id);
 	
     if ($action == "produce_report") {
     	$showDate = $_POST['showDate'];
 		$dblSided = $_POST['dblSided'];
-		/*
-		//find out if user needs english or yiddish missions
-		$sql = "select lang_id from users where user_id = " . $user_id;
-		$result = mysql_query($sql);
-		$row = mysql_fetch_assoc($result);
-		$lang = $row['lang_id'];
-		if ($lang == 2) {
-			header("Location: mission_report/newSchoolPrint.php?user=$user_id&school=$school_id&grade=$class_id&start=$start_date&end=$end_date&showDate=$showDate&dblSided=$dblSided&he=1");
-		} else {
-			header("Location: mission_report/newSchoolPrint.php?user=$user_id&school=$school_id&grade=$class_id&start=$start_date&end=$end_date&showDate=$showDate&dblSided=$dblSided");
-		}
-		*/
 		$location = "Location: mission_report/newSchoolPrint.php?user=$user_id&school=$school_id&grade=$class_id&start=$start_date&end=$end_date&showDate=$showDate&dblSided=$dblSided";
 		header($location);
 		exit;
 	}
 }
+
+get_classes_select($school_id, $class_id);
+get_users_select($school_id, $class_id, $user_id);
 
 function get_users_select($school_id, $class_id, $user_id) {
     global $users_select;

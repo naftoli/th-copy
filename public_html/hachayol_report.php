@@ -130,7 +130,7 @@ $posters = array(
             <div class='info'>
                 <?=$school['name'];?><br />
                 <?=$school['address'];?><br /><br />
-                Type of School: <?=$types[$id]?><br />
+                Type of School: <?=$school['type']?><br />
                 <?php
                 foreach( $school['admins'] as $admin ) {
                     $admin = trim($admin);
