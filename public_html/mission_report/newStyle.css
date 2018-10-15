@@ -689,3 +689,26 @@ img.rankLogo {
 		display: block;
 	}
 }
+
+#stats{
+	text-align: center;
+	margin: 10px 0px;
+}
+#stats h2, 
+#stats p { 
+	margin: 0px;
+}
+#stats p#total {
+	font-weight: bold;
+}
+@media print {
+	#stats{
+		display: none;
+	}
+}
+.schoolLogo > img {
+	filter: drop-shadow(0px 0px 0 #000) saturate(0%);
+}
+img.rank {
+	filter: grayscale(100%);
+}

@@ -47,7 +47,7 @@ foreach( $user_ids as $user_id ) {
 }
 
 // * Generate the printed sheets using the legacy code
-$objMissions = array();
+$objMissions = [];
 foreach ( $missions as $info ) {
     foreach ( $info as $mission ) {
         $type = $mission->pic_mission_type;
@@ -67,14 +67,6 @@ if ( $dates == 'english' ) $dates_id = 2;
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Print Missions</title>
     <link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" />
-    <style>
-        #stats{ text-align: center; margin: 10px 0px; }
-        #stats h2, #stats p { margin: 0px; }
-        #stats p#total { font-weight: bold; }
-        @media print { #stats{ display: none; } }
-        .schoolLogo > img { filter: drop-shadow(0px 0px 0 #000) saturate(0%); }
-        img.rank { filter: grayscale(100%); }
-    </style>
 </head>
 
 <body>
