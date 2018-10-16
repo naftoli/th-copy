@@ -88,21 +88,21 @@ while ( $row = mysql_fetch_assoc($result) ) {
 	$children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
 
 	// mivtza lulav 5779
-	$children[$row['user_id']]['mivtzaLulav'] = 0;
-	$lulavSchools = [];
-	$sqlLulav = "select school_id from schools where school_country in ('United States','US','USA') and school_id not in (61,269,19,471,81) and test_school = 0";
-	$resLulav = mysql_query( $sqlLulav );
-	while ( $rowLulav = mysql_fetch_assoc( $resLulav ) ) {
-		$lulavSchools[] = $rowLulav['school_id'];
-	}
+	// $children[$row['user_id']]['mivtzaLulav'] = 0;
+	// $lulavSchools = [];
+	// $sqlLulav = "select school_id from schools where school_country in ('United States','US','USA') and school_id not in (61,269,19,471,81) and test_school = 0";
+	// $resLulav = mysql_query( $sqlLulav );
+	// while ( $rowLulav = mysql_fetch_assoc( $resLulav ) ) {
+	// 	$lulavSchools[] = $rowLulav['school_id'];
+	// }
 
-	if ( $children[$row['user_id']]['schoolRegistered'] 
-		&& $children[$row['user_id']]['schoolTypeRegistered'] 
-		&& $children[$row['user_id']]['user_registered'] 
-		&& in_array( $row['school_id'], $lulavSchools )
-		) {
-		$children[$row['user_id']]['mivtzaLulav'] = 1;
-	}
+	// if ( $children[$row['user_id']]['schoolRegistered'] 
+	// 	&& $children[$row['user_id']]['schoolTypeRegistered'] 
+	// 	&& $children[$row['user_id']]['user_registered'] 
+	// 	&& in_array( $row['school_id'], $lulavSchools )
+	// 	) {
+	// 	$children[$row['user_id']]['mivtzaLulav'] = 1;
+	// }
 
 	// after Nov 8, 2017 registration is closed
 	//if (unixtojd() > 2458067 && !in_array($row['school_id'], array(61,269))) $children[$row['user_id']]['chidon'] = 0;
@@ -119,15 +119,18 @@ while ( $row = mysql_fetch_assoc($result) ) {
         $children[$row['user_id']]['reg_types']['chayolei'] = true;
     } 
     
-    // chidon regustration
-    if ( !$row['reg_chidon'] // if not in chidon
-		&& $row['class_grade'] >= 4 // and in grade 4+
-		&& $row['chidon'] // make sure the kid is in chidon
-		//&& in_array( $row['school_id'], $australia ) // and not in australia..
-    ) {
-        $children[ $row['user_id'] ]['needsReg'] = 1;
-        $children[ $row['user_id'] ]['reg_types']['chidon'] = true;
-    }
+	// chidon regustration
+	// only relevant until 10/16/2018 12:00am then close down chidon reg
+	if ( unixtojd() < 2458409 ) {
+		if ( !$row['reg_chidon'] // if not in chidon
+			&& $row['class_grade'] >= 4 // and in grade 4+
+			&& $row['chidon'] // make sure the kid is in chidon
+			//&& in_array( $row['school_id'], $australia ) // and not in australia..
+		) {
+			$children[ $row['user_id'] ]['needsReg'] = 1;
+			$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
+		}
+	}
     
     $children[$row['user_id']]['enrollShabbaton'] = 0;
     $children[$row['user_id']]['shabbatonRegistered'] = 0;

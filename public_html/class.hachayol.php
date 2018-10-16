@@ -37,11 +37,6 @@ class Hachayol {
             $method = $row['shipping_method'];
             $total = $row['total'];
             
-            // add 45 to montreal boys, 75 to houston, and 2 to London Girls
-            if ($school == 58) $total += 45;
-            if ($school == 84) $total += 75;
-            if ($school == 265) $total += 2;
-            
             $this->schools[$method][$school]['principal'] = $row['principal'];
             $this->schools[$method][$school]['name'] = $row['hachayol_name'] ? $row['hachayol_name'] : $row['school_name'];
             $this->schools[$method][$school]['total'] = $total;
