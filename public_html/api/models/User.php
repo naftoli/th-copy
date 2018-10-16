@@ -220,8 +220,8 @@ class User extends ActiveRecord\Model implements JsonSerializable {
             $result[ 'chayolei' ] = !!$row['user_reg_id'] && $row['paid'] > 0;
         }
         
-        // only add th_chidon_id if the user is in grade 4+
-        if ( $this->platoon && $this->platoon->class_grade >= 4 && $row['chidon'] )
+        // only add th_chidon_id if the user is in grade 4+ and we are before October 16, 2018 12:00am
+        if ( unixtojd() < 2458407.5 && $this->platoon && $this->platoon->class_grade >= 4 && $row['chidon'] )
             $result[ 'chidon' ] = !!$row[ 'th_chidon_id' ];
         return $result;
     }
