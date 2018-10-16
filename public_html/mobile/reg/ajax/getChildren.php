@@ -121,7 +121,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
     
 	// chidon regustration
 	// only relevant until 10/16/2018 12:00am then close down chidon reg
-	if ( unixtojd() < 2458407.5 ) {
+	if ( unixtojd() < 2458409 ) {
 		if ( !$row['reg_chidon'] // if not in chidon
 			&& $row['class_grade'] >= 4 // and in grade 4+
 			&& $row['chidon'] // make sure the kid is in chidon
