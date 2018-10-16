@@ -268,7 +268,7 @@ try {
 										<div class="lists form">
 											<ul>
 												<li>
-													<input name="submit" type="submit" value="Continue" class="button" onclick="return validate()"> 
+													<input name="submit" type="submit" value="Continue" class="button"> 
 												</li>
 											</ul>
 										</div>

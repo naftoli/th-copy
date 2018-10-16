@@ -95,7 +95,8 @@ if ($admin_user['admin_id'] > 0) {
     $_SESSION["admin_id"] = $admin_user['admin_id'];
 }
 
-if ( $admin->beta ) {
+$admin->check_ckids_school();
+if ( $admin->beta || $admin->ckids ) {
 	header( 'Location: /beta' );
 }
 // Note that T_() in the following html transalates the text if needed.

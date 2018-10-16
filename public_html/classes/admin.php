@@ -32,6 +32,7 @@ class admin {
     public $sponsors = array();
     public $auths = array();
     public $schools = array();
+    public $ckids;
 
     public $beta = false;
 
@@ -60,6 +61,7 @@ class admin {
         $this->reminders = $row["reminders"];
         $this->is_parent = $row["is_parent"];
         $this->beta = !!$row["beta"];
+        $this->ckids = 0;
     }
 
     public function get_admin_groups() {
@@ -188,6 +190,13 @@ class admin {
         $this->school_id = $row["id"];
     }
 
+    public function check_ckids_school() {
+        $sql = "select inst_id from schools where school_id = " . $this->school_id;
+        $result = mysql_query( $sql );
+        $row = mysql_fetch_assoc( $result );
+        if ( $row['inst_id'] == 10 ) $this->ckids = 1;
+    }
+
     public function get_schools() 
     {
         if ($this->auth == "super")
@@ -231,6 +240,6 @@ class admin {
             return "school";
         else
             return "";
-    }	
+    }
 }
 ?>

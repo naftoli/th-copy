@@ -132,35 +132,39 @@ if (isset($_POST["action"])) {
 					WHERE school_id = " . $school_id;
 			mysql_query( $sql );
             
-            // add mosdos info to db
-            foreach ($_POST['mosdosInfo'] as $mosadInfo) {
-                $mosad = json_decode( $mosadInfo );
-                $mosad_id = $mosad->id;
-                $sql = "INSERT IGNORE INTO chabad_mosad_info SET 
-                        mosad_id = " . mysql_real_escape_string( $mosad_id ) . ", 
-                        json_info = '" . $mosadInfo . "'";
-				//echo $sql . "<br />";
-				mysql_query( $sql );
+			// add mosdos info to db
+			if ( isset( $_POST['mosdosInfo'] ) ) {
+				foreach ($_POST['mosdosInfo'] as $mosadInfo) {
+					$mosad = json_decode( $mosadInfo );
+					$mosad_id = $mosad->id;
+					$sql = "INSERT IGNORE INTO chabad_mosad_info SET 
+							mosad_id = " . mysql_real_escape_string( $mosad_id ) . ", 
+							json_info = '" . $mosadInfo . "'";
+					//echo $sql . "<br />";
+					@mysql_query( $sql );
 
-                // add shliach / mosad relationship to db                
-                $sql = "INSERT INTO shliach_mosad_rel SET 
-                        shliach_id = " . mysql_real_escape_string( $shliach_id ) . ", 
-                        mosad_id = " . mysql_real_escape_string( $mosad_id );
-				//echo $sql . "<br />";
-				mysql_query( $sql );
-            }
+					// add shliach / mosad relationship to db                
+					$sql = "INSERT INTO shliach_mosad_rel SET 
+							shliach_id = " . mysql_real_escape_string( $shliach_id ) . ", 
+							mosad_id = " . mysql_real_escape_string( $mosad_id );
+					//echo $sql . "<br />";
+					@mysql_query( $sql );
+				}
+			}
 
-            // add school / mosad relationship to db
-            foreach ($_POST['mosdos'] as $mosad_id) {
-                $sql = "INSERT INTO school_mosad_rel SET 
-                        school_id = " . $school_id . ", 
-                        mosad_id = " . mysql_real_escape_string( $mosad_id );
-				//echo $sql . "<br />";
-				mysql_query( $sql );
-            }            
+			// add school / mosad relationship to db
+			if ( isset( $_POST['mosdos'] ) ) {
+				foreach ($_POST['mosdos'] as $mosad_id) {
+					$sql = "INSERT INTO school_mosad_rel SET 
+							school_id = " . $school_id . ", 
+							mosad_id = " . mysql_real_escape_string( $mosad_id );
+					//echo $sql . "<br />";
+					@mysql_query( $sql );
+				} 
+			}           
 		}
     }
-	
+
 	if ($message == "") {
 		$next_page = "true";
 	}
