@@ -23,6 +23,7 @@ class weekly_task {
 	public $medium_pic;
 	
 	public $grid_id;
+	public $points;
 	
 	function __construct($row){
 		$this->label_name = $row["label_name"];
@@ -38,6 +39,7 @@ class weekly_task {
 		$this->focus_task = $row["focus_task"];
 		$this->medium_pic = $row["medium_pic"];
 		$this->grid_id = $row['grid_id'];
+		$this->points = $row['points'];
 	}
 	
 	function set_subject_image_id($subject_image_id) {
