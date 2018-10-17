@@ -14,15 +14,15 @@ export class Label extends Component {
 
     const daily = missions[0].frequency_name === "Daily";
 
-    const tasks = missions.map( ( mission, index) => 
-      <Task 
-        key={ index } 
-        task={ mission } 
-        user_id={ user_id } />
-    );
+    // const tasks = missions.map( ( mission, index) => 
+    //   <Task 
+    //     key={ index } 
+    //     task={ mission } 
+    //     user_id={ user_id } />
+    // );
 
     return (
-      <Col md={ daily ? 12 : 6 } className='Label'>
+      <div className='Label'>
         <Row>
           <Col md={ daily ? 6 : 12 }>
             <div className='cell'>{ label }</div>
@@ -30,7 +30,7 @@ export class Label extends Component {
 
           { daily && 
             <Col md={ 6 } className='days'>
-              <div className="cell all">A</div>
+              <div className="cell all">All</div>
               <div className="cell">F</div>
               <div className="cell">ש</div>
               <div className="cell">S</div>
@@ -40,10 +40,19 @@ export class Label extends Component {
               <div className="cell">T</div>
             </Col>
           }
-          
-          { tasks }
         </Row>
-      </Col>
+
+        { missions.map( ( mission, index) => 
+          <Task 
+            daily={ daily }
+            task={ mission } 
+            user_id={ user_id } 
+            // use the updated key if present to force a re-render
+            key={ index } 
+            markMission={ this.props.markMission } />
+        ) }
+
+      </div>
     );
   }
 }
