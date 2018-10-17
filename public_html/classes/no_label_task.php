@@ -1,6 +1,7 @@
 <?
 class no_label_task {
 	public $date_task_id;
+	public $label_name;
 	public $short_name;
 	public $task_name;
 	public $mandatory_qty;
@@ -45,6 +46,7 @@ class no_label_task {
 	
 	function set_subject_name($subject_name) {
 		$this->subject_name = $subject_name;
+		$this->setLabel();
 	}
 	
 	function set_subject_image_id($subject_image_id) {
@@ -53,6 +55,7 @@ class no_label_task {
 	
 	function set_mission_name($mission_name) {
 		$this->mission_name = $mission_name;
+		$this->setLabel();
 	}
 	
 	function set_mission_number($mission_number) {
@@ -96,6 +99,11 @@ class no_label_task {
 			$this->mark_date = $today;
 		else
 			$this->mark_date = $end_date;
+	}
+
+	private function setLabel() {
+		if ( $this->mission_name && $this->subject_name )
+			$this->label_name = "$this->subject_name - $this->mission_name";
 	}
 } 
 ?>
