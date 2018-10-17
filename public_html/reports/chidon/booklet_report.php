@@ -6,7 +6,7 @@ require_once ( __DIR__ . '/../../class.globalSettings.php' );
 $year = GlobalSettings::getRegistrationYear();
 
 require_once ( __DIR__ . '/../../class.adminSchools.php' ); 
-$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // needed for including chidon only schools
 $schools = $as->getSchools();
 
 $booklet_users = [];
