@@ -52,7 +52,7 @@ if($debug) echo "</pre>";
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Tzivos Hashem | Student - Registered Soldier Parent Account Email Report</title>
+        <title>Tzivos Hashem | Registered parent email report</title>
         <link href="/admin_styles.css" rel="stylesheet" type="text/css"/>
         <link href="/styles/admin/loader.css" rel="stylesheet" type="text/css"/>
         <link href="/styles/admin/grey_select.css" rel="stylesheet" type="text/css"/>
@@ -65,7 +65,7 @@ if($debug) echo "</pre>";
     <body>
         <? include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php'); ?>
         
-        <h1>Student - Parent Email Report</h1>
+        <h1>Registered parent email report</h1>
         
         <div class="options">
             <a class="button" id="generate_csv"><i class="fa fa-save" aria-hidden="true"></i> Export to CSV</a>
