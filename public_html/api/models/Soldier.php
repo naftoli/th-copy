@@ -29,6 +29,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     private $miles; // total miles that the user has earned
     private $store_miles; // miles available for the store
     private $rank; // the users current rank
+    private $missions = [];
 
     // Access validation - takes a login and returns true or false if it can access the user
     public function validateAccess( $login ){
@@ -89,6 +90,50 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             return $this->store_miles;
         $points = new Points( $this->user_id );
         return $this->store_miles = intval( $points->getStorePoints() );
+    }
+
+    // ******************************* CHAYOLEI MISSIONS ******************************* //
+    public function missions( $parsha, $limit_to = ['daily', 'weekly', 'shabbos', 'no_label'] ) {
+        if ( isset( $this->missions[ $parsha->id ] ) )
+            return $this->missions[ $parsha->id ];
+        
+        require_once( API_ROOT . '/../mission_report/classes/missions.php' );
+        $legacy_missions = new Missions( $parsha->start, $parsha->end, $this->user_id);
+        $legacy_missions = $legacy_missions->getMissions()[0];
+        $this->missions[ $parsha->id ] = [];
+
+        // needless iteration due to not wanting to have duplicate code. When Missions is replced plase keep this code in mind
+        if ( in_array( 'daily', $limit_to ) )
+            foreach( $legacy_missions->sorted_daily_labels as $label ) {
+                $label = explode( ':', $label )[0];
+                foreach( $legacy_missions->daily_tasks as $task ) {
+                    if ( $task->label_name === $label ) $this->missions[ $parsha->id ][] = $task;
+                }
+            }
+        // weekly goes after daily
+        if ( in_array( 'weekly', $limit_to ) )
+            foreach( $legacy_missions->sorted_weekly_labels as $label ) {
+                foreach( $legacy_missions->weekly_tasks as $task ) {
+                    if ( $task->label_name === $label ) $this->missions[ $parsha->id ][] = $task;
+                }
+            }
+        // shabbos goes after weekly
+        if ( in_array( 'shabbos', $limit_to ) )
+            foreach( $legacy_missions->sorted_shabbos_labels as $label ) {
+                foreach( $legacy_missions->shabbos_tasks as $task ) {
+                    if ( $task->label_name === $label ) $this->missions[ $parsha->id ][] = $task;
+                }
+            }
+        // then comes everything else
+        if ( in_array( 'no_label', $limit_to ) || in_array( 'other', $limit_to ) )
+            foreach( $legacy_missions->no_label_subjects as $label ) {
+                $label = implode( ' - ', explode( ':', $label ) );
+                foreach( $legacy_missions->no_label_tasks as $task ) {
+                    if ( $task->label_name === $label ) $this->missions[ $parsha->id ][] = $task;
+                }
+            }
+
+        return $this->missions[ $parsha->id ];
     }
 
     // ******************************* CHAYOLEI BOARDS ******************************* //
