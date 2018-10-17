@@ -40,62 +40,72 @@ foreach ( $missions as $mission ) {
     <link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" />
     <style>
         span.checkmark { pointer-events: none; }
-        form#marking { padding: 4px 25px; }
+        div#marking { padding: 4px 25px; height: auto; }
         div#options { display: flex; justify-content: space-evenly; align-items: flex-end; }
+        div#lookup { text-align: center; margin-top: 16px; }
     </style>
 </head>
 
 <body>
     <input type='hidden' id='user_id' value='<?= $soldier->user_id; ?>'/>
-    <form method='post' id='marking'>
-        <div id='options'>
-            <div>
-                <label for='platoon'>Platoon</label>
+    <div id='marking'>
+        <form method='post' id='navigate'>
+            <div id='options'>
                 <div>
-                    <div class="arrow-left"></div>
-                    <select id='platoon'>
-                    <?php foreach( $soldier->school->platoons as $platoon ) { ?>
-                        <option value='<?=$platoon->class_id?>' <?= $platoon->class_id == $soldier->class_id ? 'selected' : ''?>>
-                            <?=$platoon->name()?>
-                        </option>
-                    <?php } ?>
-                    </select>
-                    <div class="arrow-right"></div>
-                </div>
-            </div>
-            <div>
-                <label for='soldier'>Soldier</label>
-                <div>
-                    <div class="arrow-left"></div>
-                    <select id='soldier' name='user_id'>
-                    <?php foreach( $soldier->platoon->soldiers as $student ) { ?>
-                        <?php if ( $student->user_registered ) { ?>
-                            <option value='<?=$student->user_id?>' <?= $student->user_id == $soldier->user_id ? 'selected' : ''?>>
-                                <?=$student->name()?>
+                    <label for='platoon'>Platoon</label>
+                    <div>
+                        <div class="arrow-left"></div>
+                        <select id='platoon'>
+                        <?php foreach( $soldier->school->platoons as $platoon ) { ?>
+                            <option value='<?=$platoon->class_id?>' <?= $platoon->class_id == $soldier->class_id ? 'selected' : ''?>>
+                                <?=$platoon->name()?>
                             </option>
                         <?php } ?>
-                    <?php } ?>
-                    </select>
-                    <div class="arrow-right"></div>
+                        </select>
+                        <div class="arrow-right"></div>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <label for='parsha'>Parsha</label>
                 <div>
-                    <div class="arrow-left"></div>
-                    <select id='parsha' name='parsha_id'>
-                    <?php foreach( $parshos as $option ) { ?>
-                        <option value='<?=$option->id?>' <?= $option->id == $parsha->id ? 'selected' : ''?>>
-                            <?=$option->name?>
-                        </option>
-                    <?php } ?>
-                    </select>
-                    <div class="arrow-right"></div>
+                    <label for='soldier'>Soldier</label>
+                    <div>
+                        <div class="arrow-left"></div>
+                        <select id='soldier' name='user_id'>
+                        <?php foreach( $soldier->platoon->soldiers as $student ) { ?>
+                            <?php if ( $student->user_registered ) { ?>
+                                <option value='<?=$student->user_id?>' <?= $student->user_id == $soldier->user_id ? 'selected' : ''?>>
+                                    <?=$student->name()?>
+                                </option>
+                            <?php } ?>
+                        <?php } ?>
+                        </select>
+                        <div class="arrow-right"></div>
+                    </div>
                 </div>
+                <div>
+                    <label for='parsha'>Parsha</label>
+                    <div>
+                        <div class="arrow-left"></div>
+                        <select id='parsha' name='parsha_id'>
+                        <?php foreach( $parshos as $option ) { ?>
+                            <option value='<?=$option->id?>' <?= $option->id == $parsha->id ? 'selected' : ''?>>
+                                <?=$option->name?>
+                            </option>
+                        <?php } ?>
+                        </select>
+                        <div class="arrow-right"></div>
+                    </div>
+                </div>
+                <button type='submit'>Load Missions</button>
             </div>
-            <button type='submit'>Load Missions</button>
+        </form>
+        <div id='lookup'>
+            <label for='lookup-user'>
+                <strong>Enter Serial Number:</strong>
+            </label>
+            <input id='lookup-user' placeholder='7XXXXXX'/>
+            <button id='lookup-button'>Lookup</button>
         </div>
-    </form>
+    </div>
 
     <!-- <div id='stats'>
         <p>Soldiers Printed: <?= count( $user_ids ) ?> | Parshos Printed: <?= count( $parsha_ids ) ?></p>

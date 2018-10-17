@@ -13,6 +13,7 @@ $( '.textInput input' ).keyup( onInputChanged );
 $( '#checkAll' ).click( function(){ toggleAll( true ) } );
 $( '#uncheckAll' ).click( function(){ toggleAll( false ) } );
 $( '.dailyRow' ).click( toggleRow );
+$( 'button#lookup-button' ).click( lookupSoldier )
 
 /**
  * Returns an event handler for the checkboxes on the page.
@@ -55,7 +56,7 @@ function onInputChanged( event ){
     var user_id = $('input#user_id').val();
 
     var val = div.value || 0;
-    var info = div.id.split( ':' );
+    var info = $( div ).parent()[0].id.split( ':' );
     var task = info[0];
     var date = info[1];
 
@@ -63,7 +64,7 @@ function onInputChanged( event ){
     url = "/add_functions.php?function_name=add_mark&parameters=" + parameters.join(',');
     
     $.getJSON( url, function( response ) {
-        if (success != 1)
+        if (response != 1)
             return alert("Update not performed. Please try again.");
 
         $.post('/ajax/updateMedalsRanks.php', { user : user_id });
@@ -181,6 +182,31 @@ function update( div ) {
     }
 }
 
+function lookupSoldier() {
+    var serial = $("#lookup-user").val();
+    if ( serial.match( '7[0-9]{6}' ) ) {
+        $.ajax({
+            method: 'POST',
+            url: '/api/core/users?action=findSerial', 
+            data: { serial: serial }, 
+            success: function( response ) {
+                if ( !response.success )
+                    return alert('Could not find serial number');
+                
+                var user = response.data;
+                $('#soldier').append('<option value="' + user.user_id + '">' + user.first + ' ' + user.last + '</option>')
+                $('#soldier').val( user.user_id );
+                $('#platoon').val( user.class_id );
+                $('form#navigate').submit();
+            },
+            error: function( xhr, textStatus ) {
+                return alert('Could not find serial number');
+            }
+        });
+    } else
+        alert('Invalid Serial Number (Must start with 7 and be 7 digits long)');
+}
+
 // footer is apparently not rendered.
 $(".userMission").each( function() {			
     var user = $(this).attr('id');	
@@ -242,7 +268,7 @@ $(".arrow-left").click( function() {
     $(this).parent().find('select').change();
 
     if ( ['soldier', 'parsha'].includes( type ) )
-        $('form#marking').submit();
+        $('form#navigate').submit();
 });
 
 $(".arrow-right").click( function() {
@@ -256,7 +282,7 @@ $(".arrow-right").click( function() {
     $(this).parent().find('select').change();
     
     if ( ['soldier', 'parsha'].includes( type ) )
-        $('form#marking').submit();
+        $('form#navigate').submit();
 });
 
 $("select#platoon").change( function() {
