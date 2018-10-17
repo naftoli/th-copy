@@ -66,7 +66,20 @@ class UsersRouter {
                 json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-65', 401 );
             json_response( $user );
         } catch ( Exception $e ) {
-            json_error( 'Soldier does not exist', 'CORE-USERS-68', 404 );
+            json_error( 'Soldier does not exist', 'CORE-USERS-69', 404 );
+        }
+    }
+
+    public function findSerial() {
+        global $current_user;
+        $serial = $_REQUEST['serial'];
+        try {
+            $soldier = Soldier::find_by_user_serial( $serial );
+            if ( !$soldier->validateAccess( $current_user->login ) )
+                json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-65', 401 );
+            json_response( $soldier );
+        } catch ( Exception $e ) {
+            json_error( 'Soldier does not exist', 'CORE-USERS-82', 404 );
         }
     }
 
