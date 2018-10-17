@@ -89,7 +89,7 @@ export class UsersPage extends Component {
   render() {
     const { current_login, soldiers, loading, match } = this.props;
     const { cropperModalShow, cropperModalSrc, uploadModalShow } = this.state;
-    const columns = getColumns( current_login.code, this.editPicture, this.updateToggle );
+    const columns = getColumns( current_login, this.editPicture, this.updateToggle );
     // page definition
     return (
       <div id='UsersPage'>

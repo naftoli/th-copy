@@ -8,7 +8,7 @@ import { isBC, isAdmin } from 'functions/login';
 import { DEFAULT_PROFILE } from 'components/constants';
 import { yesNoFilter, yesNoFilterRender } from 'functions/tables';
 
-export default ( code, editPicture, updateToggle ) => {
+export default ( login, editPicture, updateToggle ) => {
   // define the table for the page
   let columns = [
     {
@@ -40,7 +40,12 @@ export default ( code, editPicture, updateToggle ) => {
     }, {
       Header: 'Date Of Birth', accessor: 'dob', filterable: false,
       Cell: props => <DateDisplay value={ props.value } format = 'l'/>,
-    }, {
+    }
+  ];
+
+  // * Chayolei columns
+  if ( login.modules.chayolei ) { columns.push(
+    {
       Header: 'Registered', accessor: 'user_registered',
       Cell: props => <DateDisplay value={ props.value } format = 'l LT'/>,
       filterMethod: ( filter, row ) => {
@@ -60,22 +65,30 @@ export default ( code, editPicture, updateToggle ) => {
       Cell: ({ value, original }) => <Toggle checked={ !!value } 
         onChange={ updateToggle( 'chayolei', original.user_id ) } />,
       Filter: yesNoFilterRender(), filterMethod: yesNoFilter
-    },
-    { Header: 'Chidon', accessor: 'chidon',
-      Cell: ({ value, original }) => <Toggle checked={ !!value } 
-        onChange={ updateToggle( 'chidon', original.user_id ) } />,
-      Filter: yesNoFilterRender(), filterMethod: yesNoFilter
-    },
-  ];
+    }
+  )};
+
+  // * Chidon columns
+  if ( login.modules.chidon ) {
+    columns.push(
+      { Header: 'Chidon', accessor: 'chidon',
+        Cell: ({ value, original }) => <Toggle checked={ !!value } 
+          onChange={ updateToggle( 'chidon', original.user_id ) } />,
+        Filter: yesNoFilterRender(), filterMethod: yesNoFilter
+      }
+    );
+  }
   
-  if ( isBC( code ) ) {
+  // * Base Commander columns
+  if ( isBC( login.code ) ) {
     columns.push({
       id: 'platoon', Header: 'Platoon', 
       accessor: user => user.platoon ? user.platoon.name : '-'
     });
   }
 
-  if ( isAdmin( code ) ) {
+  // * Institution columns
+  if ( isAdmin( login.code ) ) {
     columns.push({
       id: 'base', Header: 'Base', accessor: user => user.school.school_name
     });
