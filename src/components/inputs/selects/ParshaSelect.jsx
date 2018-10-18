@@ -42,10 +42,10 @@ export class ParshaSelect extends Component {
 
     // if an endDate is provided, find all parshos that start by that date
     if ( endDate )
-      options = options.filter( parsha => parsha.end <= endDate );
+      options = options.filter( parsha => parsha.end < endDate );
     // if a startDate is provided, find all parshos end on that date or later.
     if ( startDate )
-      options = options.filter( parsha => parsha.start >= startDate )
+      options = options.filter( parsha => parsha.start > startDate )
 
     if ( isDescending )
       options.reverse();
