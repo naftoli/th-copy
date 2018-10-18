@@ -4,6 +4,7 @@ import { Row, Col, Input } from 'reactstrap';
 import { Checkbox } from 'components/inputs';
 import { Number, FontAwesome } from 'components/ui';
 
+import { toast } from 'react-toastify';
 import { LEGACY_URL } from 'components/constants';
 
 export class Task extends Component {
@@ -18,7 +19,8 @@ export class Task extends Component {
 
     this.props.markMission( 
       [ user_id ], task.grid_id, dates, mark 
-    );
+    )
+    .catch( e => toast.error( e.message ) );
   }
 
   toggleAll = e => {
