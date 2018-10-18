@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Collapse } from 'reactstrap';
 import { Callout } from 'components/ui';
 import { Label } from 'components/missions';
-import MissionsForm from './tabs/bc/MissionsForm';
+import MissionsForm from './includes/MissionsForm';
 // store and constants
 import { setMissions } from 'store/missions/mark/actions';
 import { markMission } from 'store/missions/mark/operations';
