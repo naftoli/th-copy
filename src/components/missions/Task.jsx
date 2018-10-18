@@ -13,28 +13,32 @@ export class Task extends Component {
     user_id: 0
   }
 
+  markMission = ( dates, mark ) => {
+    let { task, user_id } = this.props;
+
+    this.props.markMission( 
+      [ user_id ], task.grid_id, dates, mark 
+    );
+  }
+
   toggleAll = e => {
     let marked = e.target.checked;
-    let { date_task_id, date_task_marks } = this.props.task;
+    let { date_task_marks } = this.props.task;
     let dates = date_task_marks
       .filter( mark => !!mark.marked !== marked )
       .map( mark => mark.mark_date );
 
-    this.props.markMission( date_task_id, dates, marked );
+    this.markMission( dates, marked );
   }
 
   onChange = ( mark_date ) => e => {
     let marked = e.target.checked;
-    let { date_task_id } = this.props.task;
-
-    this.props.markMission( date_task_id, [ mark_date ], marked );
+    this.markMission( [ mark_date ], marked );
   }
 
   onInputChange = ( mark_date ) => e => {
-    let marked = e.target.value;
-    let { date_task_id } = this.props.task;
-
-    this.props.markMission( date_task_id, [ mark_date ], marked );
+    let mark = e.target.value;
+    this.markMission( [ mark_date ], mark );
   }
 
   render() {
@@ -44,7 +48,7 @@ export class Task extends Component {
       short_name, task_name,  mandatory_qty,
       quantity,   points,     date_task_mark,
       subject_id, needed,     date_task_marks, 
-      mark_date,
+      mark_date, start_date
     } = this.props.task;
 
     // remove more then one underscore from task details
@@ -72,7 +76,9 @@ export class Task extends Component {
               </p>
               <p className='task-name'>{ task_name }</p>
               <p className='miles'>
-                <Number value={ points } /> mile{ points !== 1 ? 's' : '' }
+                <Number value={ points } /> mile
+                { points !== 1 ? 's' : '' }
+                { daily ? '/day' : '' }
               </p>
             </div>
           </div>
@@ -92,6 +98,12 @@ export class Task extends Component {
                   onChange={ this.onChange( mark_date ) } />
               </div>
             )}
+            { date_task_marks.length < 7 && 
+              [...Array( 7 - date_task_marks.length )].map( ( number, index ) =>
+                <div className="cell" key={ index }>
+                  <Checkbox disabled />
+                </div>
+            )}
           </Col>
         }
 
@@ -100,7 +112,7 @@ export class Task extends Component {
             <div className="cell">
               <Checkbox 
                 checked={ marked } 
-                onChange={ this.onChange( mark_date ) } />
+                onChange={ this.onChange( mark_date || start_date ) } />
             </div>
           </Col>
         }
@@ -111,7 +123,7 @@ export class Task extends Component {
                 type='number'
                 placeholder={ quantity }
                 value={ date_task_mark.done_qty || '' }
-                onChange={ this.onInputChange( mark_date ) } />
+                onChange={ this.onInputChange( mark_date || start_date ) } />
             </div>
           </Col>
         }
