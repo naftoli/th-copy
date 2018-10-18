@@ -67,7 +67,7 @@ class rank_updater {
 		$info = $this->getInfo( $rank, $user );
 		require_once($_SERVER['DOCUMENT_ROOT']."/blog/wp-blog-header.php");
 		$this->import_promotion($info);
-		mysql_selectdb("mashpiadb");
+		@mysql_selectdb("mashpiadb");
 	}
 	
 	function getInfo( $rank, $user ) {
