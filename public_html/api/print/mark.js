@@ -100,8 +100,8 @@ function toggleAll( checked ){
     dates = dates.join(':');
 
     var data = { action: checked ? 'add' : 'delete', data:  [ user_id, tasks, dates ] };
-    $.post('/ajax/updateMarks.php', data, function( success ) {
-        if (success == false) {
+    $.post('/ajax/updateMarks.php', data, function( response ) {
+        if (response.success == false) {
             alert( 'Update not performed.' );
             $( '#loading' ).hide();
         } else {
@@ -149,7 +149,7 @@ function toggleRow( event ) {
     };
 
     $.post('/ajax/updateMarks.php', data, function( response ) {
-        if ( response == false )
+        if ( response.success == false )
             return alert( 'Update not performed.' );
         $.post( '/ajax/updateMedalsRanks.php', { user : user_id } );
         boxes.each( function( index, element ) {

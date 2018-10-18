@@ -474,8 +474,8 @@ if (isset($_GET['he']) && $_GET['he'] == 1) {
 				dates = dates.substring(0, dates.length - 1);
 								
 				var parameters = [user_id, tasks, dates];
-				$.post('/ajax/updateMarks.php', { action : 'add', data : parameters }, function( success ) {
-					if (success == false) {
+				$.post('/ajax/updateMarks.php', { action : 'add', data : parameters }, function( response ) {
+					if ( response.success == false ) {
                         alert("Update not performed.");
 						$("#loading").hide();
                     } else {
@@ -539,8 +539,8 @@ if (isset($_GET['he']) && $_GET['he'] == 1) {
 				dates = dates.substring(0, dates.length - 1);
 								
 				var parameters = [user_id, tasks, dates];				
-				$.post('/ajax/updateMarks.php', { action : 'delete', data : parameters }, function( success ) {
-					if (success == false) {
+				$.post('/ajax/updateMarks.php', { action : 'delete', data : parameters }, function( response ) {
+					if ( response.success == false ) {
                         alert("Update not performed.");
 						$("#loading").hide();
                     } else {

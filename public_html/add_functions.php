@@ -338,11 +338,9 @@ function add_daily_task_mark($parameters, $update = true)
 		return json_encode(true); // it's already been marked
 	}
 
-	$sql = "INSERT INTO date_tasks_marks SET date_task_id=" . $date_task_id . ", user_id=" . $user_id . ", mark_date=" . $mark_date . ", mark_points=" . $points . ",done_qty=1";
-	//if ($user_id == 51629) {
-	//	echo $sql;
-	//	exit;
-	//}
+	$sql = "INSERT INTO date_tasks_marks SET date_task_id= $date_task_id, "
+		." user_id= $user_id, mark_date=$mark_date, "
+		." mark_points= $points, done_qty = 1";
 	$query = mysql_query($sql);
 
 	if ($query)
@@ -355,16 +353,11 @@ function add_daily_task_mark($parameters, $update = true)
 			$sql = "SELECT * FROM date_tasks_marks WHERE user_id=" . $user_id . " AND date_task_id=" . $date_task_id;
 			$query = mysql_query($sql);
 			$num_rows = mysql_num_rows($query);
-			//if ($user_id == 50689) echo "done - " . $num_rows . " needed - " . $needed . "<br />";
 
 			// ***** If all of the daily tasks have been completed then we need to see if the mission has been completed ***** //
 			if ($num_rows >= $needed)
 			{
 				$done = check_tasks($user_id, $date_tasks_mission_id);
-				//if ($user_id == 50689) {
-				//	echo "done - " . $num_rows . " needed - " . $needed . "<br />";
-				//	echo "result of done var: " . $done;
-				//}
 
 				if ($done)
 				{
@@ -373,7 +366,6 @@ function add_daily_task_mark($parameters, $update = true)
 					$row = mysql_fetch_assoc($query);
 
 					$insert_sql = "INSERT INTO date_tasks_mission_marks SET user_id=" . $user_id . ", date_tasks_mission_id=" . $date_tasks_mission_id . ", subject_id=" . $row['subject_id'] . ", mission_value=" . $row['mission_value'] . ", mission_name='" . mysql_real_escape_string($row['mission_name']) . "', mark_date=" . $mark_date . ", mark_override=0";
-					//if ($user_id == 50689) echo $insert_sql;
 					$insert_query = mysql_query($insert_sql);
 					/*
 					if ($update) {
@@ -535,19 +527,16 @@ function check_tasks($user_id, $date_tasks_mission_id) {
 	$num_rows = mysql_num_rows($query);
 	// ***** Check to see if all non daily tasks were all completed ***** //
 
-	if ($num_rows > 0)
-	{
+	if ($num_rows > 0) {
 		$done = false;
 	}
-	else
-	{
+	else {
 		// ***** Check to see if all daily tasks were all completed ***** //
 		$sql = "SELECT * ";
 		$sql = $sql . "FROM date_tasks AS dt ";
 		$sql = $sql . "WHERE dt.date_tasks_mission_id=" . $date_tasks_mission_id . " ";
 		$sql = $sql . "AND daily_task=1 ";
 		$sql = $sql . "AND mandatory_qty=1 ";
-		//if ($user_id == 50689) echo $sql;
 		$query = mysql_query($sql);
 
 		while ($row = mysql_fetch_assoc($query)) {

@@ -50,28 +50,25 @@ if ($action == 'delete') {
     
     $medal_updater->update_medal_two($user_id);
     $rank_updater->update_rank_two($user_id);
-    
-    echo json_encode(true);
+	
+	header("Content-Type: application/json; charset=utf-8;");
+    echo json_encode([ 'success' => true ]);
     
 } else if ($action == 'add') {
     $user_id = $parameters[0];
 	$date_task_ids = explode(":", $parameters[1]);
 	$mark_dates = explode(":", $parameters[2]);
-	
-	//print_r($date_task_ids);
+
 	$subjects = array();
 	for ($dtmno = 0; $dtmno < count($date_task_ids); $dtmno++) {
 
 		$date_task_id = $date_task_ids[$dtmno];
 		$mark_date = $mark_dates[$dtmno];
-		//echo $date_task_id . "<br />" . $mark_date; exit;
 		
 		$sql = "SELECT dt.*, dtm.end_date, dtm.subject_id FROM date_tasks AS dt JOIN date_tasks_missions AS dtm USING (date_tasks_mission_id)  WHERE date_task_id=" . $date_task_id;			
 		$result = mysql_query($sql);
 		$row = mysql_fetch_assoc($result);
 		$daily_task = $row['daily_task'];
-		//if (!in_array($row['subject_id'], $subjects)) $subjects[] = $row['subject_id'];
-		//print_r($row);
 		
 		if ($daily_task) {
 			$parameters = array($user_id, $date_task_id, $mark_date);
@@ -83,14 +80,11 @@ if ($action == 'delete') {
 		}			
 	}
     
-    //foreach ($subjects as $subject) {
-    //    $mm->mission_marks_update_by_subject_id($user_id, $subject);
-    //}
-    
     $medal_updater->update_medal_two($user_id);
     $rank_updater->update_rank_two($user_id);
-    
-    echo json_encode(true);
+	
+	header("Content-Type: application/json; charset=utf-8;");
+    echo json_encode([ 'success' => true ]);
 }
 
 function add_task_mark($parameters) {
