@@ -39,7 +39,7 @@ class MarkRouter {
         // * Prepare All Queries
         // query to get the date_task_id from the grid id, mark date, and user_id
         $date_task_query = $MASHPIA_DB->prepare(
-             ' SELECT u.user_id, dt.date_task_id, dt.points, '
+             ' SELECT u.user_id, dt.date_task_id, dt.grid_id, dt.points, '
             .' dt.daily_task, dt.mandatory_qty, dt.needed, '
             .' dtm.date_tasks_mission_id, dtm.start_date, '
             .' dtm.end_date, dtm.subject_id, '
@@ -50,21 +50,10 @@ class MarkRouter {
             .' WHERE grid_id = :grid_id AND ut.user_id IN ('.$user_id_string.') '
             .' AND start_date <= :mark_date AND end_date >= :mark_date ; '
         );
-        // query to check if any users have marked it in a different language or level before
-        $check_marked_query = $MASHPIA_DB->prepare(
-             ' SELECT user_id FROM date_tasks_marks dtm '
-            .' JOIN date_tasks dt USING (date_task_id) '
-            .' WHERE dt.grid_id = :grid_id '
-            .' AND user_id IN ('.$user_id_string.') '
-            .' AND mark_date = :mark_date;'
-        );
 
         // TODO: design queries to prevent O(n) performance on dates.
         foreach( $dates as $mark_date ) {
             $query_array = [ 'grid_id' => $grid_id, 'mark_date' => $mark_date ];
-            // get an array of all user_id's already marked
-            $check_marked_query->execute( $query_array );
-            $already_marked = $check_marked_query->fetchAll( PDO::FETCH_COLUMN );
             // get the date_task_id for each soldier
             $date_task_ids = [];    $date_task_query->execute( $query_array );
             while( $row = $date_task_query->fetch() )
@@ -72,10 +61,7 @@ class MarkRouter {
             
             foreach( $date_task_ids as $user_task ) {
                 // update the task
-                $this->updateTask( 
-                    $user_task, $mark, 
-                    $mark_date, $already_marked
-                );
+                $this->updateTask( $user_task, $mark, $mark_date );
                 // update the mission
                 $this->updateMission( 
                     $user_task['user_id'], 
@@ -87,6 +73,7 @@ class MarkRouter {
             }
         }
 
+        // * Update each soldiers medal and rank
         foreach( $_POST['user_ids'] as $user_id ) {
             $medal = $medal_updater->update_medal_two( $user_id );
             $rank = $rank_updater->update_rank_two( $user_id );
@@ -98,43 +85,45 @@ class MarkRouter {
         return json_response( $soldiers_updated, true, true );
     }
 
-    private function updateTask( $user_task, $mark, $mark_date, $already_marked ) {
+    private function updateTask( $user_task, $mark, $mark_date ) {
         global $MASHPIA_DB;
 
-        // query to mark single tasks
-        $mark_task_query = $MASHPIA_DB->prepare(
-             ' INSERT INTO date_tasks_marks '
-            .' (date_task_id, user_id, mark_date, mark_points, done_qty) '
-            .' VALUES ( :date_task_id, :user_id, :mark_date, :mark_points, :done_qty );'
-        );
-        // unmark a single task
+        //delete any existing marks for this grid id on this day
         $unmark_task_query = $MASHPIA_DB->prepare(
-             ' DELETE FROM date_tasks_marks WHERE date_task_id = :date_task_id '
+             ' DELETE dtm FROM date_tasks_marks dtm '
+            .' JOIN date_tasks dt USING (date_task_id) '
+            .' WHERE dt.grid_id = :grid_id '
             .' AND user_id = :user_id AND mark_date = :mark_date;'
         );
-
+        // add the mark to the dbs if we need to
+        $mark_task_query = $MASHPIA_DB->prepare(
+            ' INSERT INTO date_tasks_marks '
+           .' (date_task_id, user_id, mark_date, mark_points, done_qty) '
+           .' VALUES ( :date_task_id, :user_id, :mark_date, :mark_points, :done_qty )'
+           .' ON DUPLICATE KEY UPDATE done_qty = :done_qty;'
+        );
+        // validate the data type of done_qty
         $done_qty = $mark;
         if ( $user_task['daily_task'] )
             $done_qty = $done_qty ? '1' : '0';
 
+        // delete any existing marks
+        $unmark_task_query->execute([
+            ':grid_id' => $user_task['grid_id'], 
+            ':user_id' => $user_task['user_id'], 
+            ':mark_date' => $mark_date,
+        ]);
+
+        // save the mark to the dbs if we have a mark to mark
         if ( $mark ) {
-            // skip soldiers that we have already marked.
-            if ( in_array( $user_task['user_id'], $already_marked ) )
-                return true;
-            // save the task to the dbs
-            return $mark_task_query->execute([
+            $mark_task_query->execute([
                 ':date_task_id' => $user_task['date_task_id'], 
                 ':user_id' => $user_task['user_id'], 
                 ':mark_date' => $mark_date,
                 ':mark_points' => $user_task['points'],
                 ':done_qty' => $done_qty
             ]);
-        } else
-            return $unmark_task_query->execute([
-                ':date_task_id' => $user_task['date_task_id'], 
-                ':user_id' => $user_task['user_id'], 
-                ':mark_date' => $mark_date,
-            ]);
+        }
     }
 
     // * Check if the mission was compleated and update it accordingly
