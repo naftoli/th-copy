@@ -65,13 +65,13 @@ class rank_updater {
 
 	function updateWP( $rank, $user ) {
 		$info = $this->getInfo( $rank, $user );
-		require_once($_SERVER['DOCUMENT_ROOT']."/blog/wp-blog-header.php");
+		require_once($_SERVER['DOCUMENT_ROOT']."/blog/wp-load.php");
 		$this->import_promotion($info);
-		@mysql_selectdb("mashpiadb");
+		@mysql_select_db("mashpiadb");
 	}
 	
 	function getInfo( $rank, $user ) {
-		mysql_select_db("mashpiadb");
+		@mysql_select_db("mashpiadb");
 		$sql = "select first, last, gender, school_name from users 
 				join schools using (school_id) 
 				where user_id = " . $user;
@@ -87,7 +87,7 @@ class rank_updater {
 		$result = mysql_query($sql);
 		$row = mysql_fetch_assoc($result);
 		$rankName = $row['rank_name'];
-		mysql_select_db("wp");
+		@mysql_select_db("wp");
 		
 		return array(
 			'user'		=>	$user, 
