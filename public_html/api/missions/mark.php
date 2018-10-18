@@ -89,11 +89,9 @@ class MarkRouter {
 
         foreach( $_POST['user_ids'] as $user_id ) {
             $medal = $medal_updater->update_medal_two( $user_id );
-            $soldiers_updated[ $user_id ]['medal'] = $medal ? $medal : false;
-            
-            if ( !$medal ) continue;
-
             $rank = $rank_updater->update_rank_two( $user_id );
+            
+            $soldiers_updated[ $user_id ]['medal'] = $medal ? $medal : false;
             $soldiers_updated[ $user_id ]['rank'] = $rank ? $rank : false;
         }
 
