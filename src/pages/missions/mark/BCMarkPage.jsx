@@ -6,12 +6,13 @@ import { Callout } from 'components/ui';
 import { Label } from 'components/missions';
 import MissionsForm from './tabs/bc/MissionsForm';
 // store and constants
-import { setMissions, markMission } from 'store/missions/mark/actions';
+import { setMissions } from 'store/missions/mark/actions';
+import { markMission } from 'store/missions/mark/operations';
 
 class BCMarkPage extends Component {
 
   state = {
-    user_id: 50631
+    user_id: false
   }
 
   componentWillUnmount(){

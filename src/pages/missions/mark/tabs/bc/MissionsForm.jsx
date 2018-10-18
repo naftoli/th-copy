@@ -6,12 +6,11 @@ import { InlineSync, FontAwesome } from 'components/ui';
 import { BaseSelect, PlatoonSelect, SoldierSelect, ParshaSelect } from 'components/inputs';
 // functions
 import julian from 'julian';
-import toast from 'react-toastify';
+import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
 // store and constants
 import { getMissions } from 'store/missions/mark/operations';
 import { LEGACY_URL } from 'components/constants';
-
 
 class MissionsForm extends Component {
 
@@ -66,8 +65,8 @@ class MissionsForm extends Component {
     if ( !soldier )
       return false;
     // load his missions
+    this.props.onSoldierChange( soldier.user_id );
     this.setState({
-      user_id: soldier.user_id,
       class_id: soldier.class_id,
       school_id: soldier.school_id,
     }, this.loadMissions );
@@ -148,7 +147,7 @@ class MissionsForm extends Component {
           <Row className='buttons'>
             <Col sm={6}>
               <Button color='primary' onClick={ this.loadMissions }
-                  disabled={ !user_id || !parsha_id } >
+                  disabled={ !user_id || !parsha_id || loading } >
                 <InlineSync loading={ loading } /> Load Missions
               </Button>
             </Col>
