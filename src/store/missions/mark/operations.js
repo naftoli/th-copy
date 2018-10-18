@@ -19,9 +19,8 @@ export const getMissions = ( user_id, parsha_id ) => dispatch => {
 export const markMission = ( user_ids, grid_id, dates, mark ) => dispatch => {
   let data = { user_ids, grid_id, dates, mark };
 
-  return Promise.resolve( dispatch(
-    actions.markMission( grid_id, dates, mark )
-  ))
-  .then( API.post( `/missions/mark`, data ) )
-  .then( handleAPIResponse )
+  dispatch( actions.markMission( grid_id, dates, mark ) );
+
+  return API.post( `/missions/mark`, data )
+  .then( handleAPIResponse );
 }
