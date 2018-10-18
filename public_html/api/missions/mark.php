@@ -2,7 +2,11 @@
 // define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
 
+// ! LEGACY CODE, USES mysql_query
 require_once( API_ROOT . '/../mission_report/classes/missions.php' );
+require_once( API_ROOT . '/../yearly_prize/classes/TotalWeeklyTasks.php' );
+require_once( API_ROOT . '/../classes/medal_updater.php' );
+require_once( API_ROOT . '/../classes/rank_updater.php' );
 
 class MarkRouter {
 
@@ -18,15 +22,19 @@ class MarkRouter {
     public function create() {
         global $MASHPIA_DB;
 
+        $medal_updater = new medal_updater();
+        $rank_updater = new rank_updater();
+        $soldiers_updated = [];
+
         // * Get the post paramaters.
-        $user_ids = [];
+        $user_id_string = [];
         $mark = $_POST['mark'];
         $dates = $_POST['dates'];
         $grid_id = $_POST['grid_id'];
         // escape user_ids
         foreach( $_POST['user_ids'] as $user_id )
             $user_ids[] = $MASHPIA_DB->quote( $user_id );
-        $user_ids = implode( ', ', $user_ids );
+        $user_id_string = implode( ', ', $user_ids );
 
         // * Prepare All Queries
         // query to get the date_task_id from the grid id, mark date, and user_id
@@ -39,7 +47,7 @@ class MarkRouter {
             .' FROM date_tasks dt JOIN date_tasks_missions dtm USING (date_tasks_mission_id) '
             .' JOIN user_tracks ut ON ut.level = dtm.level AND ut.subject_id = dtm.subject_id '
             .' JOIN users u ON ut.user_id = u.user_id AND dtm.school_type_id = u.school_type_id AND dtm.lang_id = u.lang_id '
-            .' WHERE grid_id = :grid_id AND ut.user_id IN ('.$user_ids.') '
+            .' WHERE grid_id = :grid_id AND ut.user_id IN ('.$user_id_string.') '
             .' AND start_date <= :mark_date AND end_date >= :mark_date ; '
         );
         // query to check if any users have marked it in a different language or level before
@@ -47,7 +55,7 @@ class MarkRouter {
              ' SELECT user_id FROM date_tasks_marks dtm '
             .' JOIN date_tasks dt USING (date_task_id) '
             .' WHERE dt.grid_id = :grid_id '
-            .' AND user_id IN ('.$user_ids.') '
+            .' AND user_id IN ('.$user_id_string.') '
             .' AND mark_date = :mark_date;'
         );
 
@@ -74,10 +82,22 @@ class MarkRouter {
                     $user_task['date_tasks_mission_id'], 
                     $mark_date
                 );
+                // update the cache as each mission is marked
+                TotalWeeklyTasks::updateUser( $user_task['user_id'], $mark_date, false );
             }
         }
 
-        return json_response( $date_task_ids, true, true );
+        foreach( $_POST['user_ids'] as $user_id ) {
+            $medal = $medal_updater->update_medal_two( $user_id );
+            $soldiers_updated[ $user_id ]['medal'] = $medal ? $medal : false;
+            
+            if ( !$medal ) continue;
+
+            $rank = $rank_updater->update_rank_two( $user_id );
+            $soldiers_updated[ $user_id ]['rank'] = $rank ? $rank : false;
+        }
+
+        return json_response( $soldiers_updated, true, true );
     }
 
     private function updateTask( $user_task, $mark, $mark_date, $already_marked ) {
