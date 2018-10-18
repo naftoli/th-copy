@@ -18,9 +18,9 @@ export const setMissions = missions => {
   }
 };
 
-export const markMission = ( date_task_id, dates, mark ) => {
+export const markMission = ( grid_id, dates, mark ) => {
   return {
     type: types.MARK_MISSON,
-    payload: { date_task_id, dates, mark }
+    payload: { grid_id, dates, mark }
   }
 };

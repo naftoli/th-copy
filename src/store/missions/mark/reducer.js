@@ -26,9 +26,9 @@ export default ( state = initialState, action ) => {
         ...state,
         missions: state.missions.map( mission => {
           // now that we are in a new scope, create some variables.
-          let { date_task_marks, frequency_name, date_task_id, quantity } = mission;
+          let { date_task_marks, frequency_name, grid_id, quantity } = mission;
           // do not touch other missions
-          if ( date_task_id !== action.payload.date_task_id )
+          if ( grid_id !== action.payload.grid_id )
             return mission;
           // update daily mission marks
           if ( frequency_name === "Daily" ) {
