@@ -5,7 +5,7 @@ import { Radio, Checkbox, Date } from 'components/inputs';
 // functions
 import julian from 'julian';
 import moment from 'moment';
-import { toJulian } from 'functions/utils';
+import { toJulian } from 'functions/dates';
 import { eventToUpdate, handleCheckbox } from 'functions/events';
 
 export class SettingsRow extends Component {
