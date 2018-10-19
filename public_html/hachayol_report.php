@@ -147,11 +147,11 @@ $posters = array(
                 } else if ($id != 162) { // for all other schools add the extras to the total
                     $extra = get_extra_hachayols($id, $school['teachers'] + $school['total']);
                     $total = $school['teachers'] + $school['total'] + $extra; 
+                    // find out if total should be overrided
+                    if ( isset( $exceptions[$id] ) ) $total = $exceptions[$id]; 
                 } else {
                     $extra = get_extra_hachayols($id, $school['total']);
                     $total = $school['total'] + $extra;
-                    // find out if total should be overrided
-                    if ( isset( $exceptions[$id] ) ) $total = $exceptions[$id]; 
                 }
 
                 if ( $extra !== 0 ) { ?>
