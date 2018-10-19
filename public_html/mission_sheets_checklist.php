@@ -10,8 +10,8 @@ $year = GlobalSettings::getCurrentYear();
 // get default dates
 $dates = array();
 $sql = "SELECT * FROM parshos 
-        WHERE start_date >= 2458292 
-        and end_date <= 2458753";        
+        WHERE start >= 2458292 
+        and end <= 2458753";        
 //year = " . $year;
     
 $result = mysql_query($sql);
