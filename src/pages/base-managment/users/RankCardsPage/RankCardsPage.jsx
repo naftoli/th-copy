@@ -15,7 +15,8 @@ import moment from 'moment';
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
 import { findOption } from 'functions/selects';
-import { setTitle, toJulian } from 'functions/utils';
+import { setTitle } from 'functions/utils';
+import { toJulian } from 'functions/dates';
 // state
 import { getRankCards, markPrinted } from 'store/base/soldiers/id_cards/operations';
 // styles
