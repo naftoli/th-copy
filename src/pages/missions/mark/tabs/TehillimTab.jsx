@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { LEGACY_URL } from 'components/constants';
 // components
-import { Row, Col, TabPane, Input } from 'reactstrap';
+import { TabPane } from 'reactstrap';
 
 class TehillimTab extends Component {
 
