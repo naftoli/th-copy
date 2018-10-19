@@ -1,0 +1,85 @@
+@import 'styles/colors';
+
+.Label {
+
+  padding: .4rem 0px;
+  
+  > .row:not(.Task) {
+    background: $primary-color;
+    color: #fff;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+
+    .cell { padding: .4rem 0px; }
+  }
+
+  .Task, pre { width: 100%; }
+
+  .Task {
+    width: 100%;
+    font-size: 1em;
+
+    .days .cell label.checkbox { font-size: 1.3em; }
+
+    .cell {
+      font-size: 1em;
+      height: 100%;
+      border: 1px solid #e0e0e0;
+
+      .form-control { 
+        margin: 5%;
+        padding: 0px 0.4rem;
+        max-width: 5em;
+        height: 3em;
+        border-color: #000;
+        border-width: 2px;
+        text-align: center;
+      }
+
+      label.checkbox { font-size: 1.8em; }
+      
+
+      &.info{ padding: .5rem .2rem .5rem .5rem; }
+      
+      > div { flex-grow: 1; }
+
+      p { margin-bottom: 0px; }
+
+      .short-name {
+        font-size: 1.1em;
+        font-weight: bold;
+      }
+
+      .task-name { font-size: .75em; }
+    }
+
+    img {
+      height: 50px;
+      margin-right: .5em;
+      transition: .25s linear;
+
+      &.unearned { 
+        filter: grayscale( 100% );
+      }
+    }
+  }
+
+  .row {
+    margin: 0px;
+    > div { padding: 0px; }
+  }
+
+  .days {
+    display: flex;
+  }
+
+  .cell {
+    flex-grow: 1;
+    width: 100%;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4em;
+  }
+}

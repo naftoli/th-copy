@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
 import { Task } from './Task';
 
+import './styles/Label.scss';
+
 export class Label extends Component {
 
   static defaultProps = {
