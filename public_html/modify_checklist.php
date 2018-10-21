@@ -10,9 +10,9 @@ $year = GlobalSettings::getCurrentYear();
 //get default dates
 $dates = array();
 $sql = "SELECT * FROM parshos 
-        WHERE year = " . $year;   
-//$sql = "SELECT * FROM parshos 
-//        WHERE year = " . $year;     
+        WHERE start >= 2458292 
+        and end <= 2458753";        
+//year = " . $year;      
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $dates[] = $row;

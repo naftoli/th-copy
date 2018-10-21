@@ -24,6 +24,7 @@ $posters = array(
 <style type='text/css'>
 .info {
 	font-size: 14px;
+    line-height: 1.3;
 }
 .page-break {
     page-break-after: always;
@@ -65,9 +66,9 @@ $posters = array(
 
     // hard coded totals
     $exceptions = array(
-        //54	=> 550,
         54	=> 580, // update requested via E-mail on 1/3/2018
-        176	=> 84 
+        176	=> 84, 
+        9   => 400
     );
 
 ?>
@@ -100,6 +101,8 @@ $posters = array(
                 } else { // for all other schools add the extras to the total
                     $extra = get_extra_hachayols($id, $school['teachers'] + $school['total']);
                     $total = $school['teachers'] + $school['total'] + $extra; 
+                    // find out if total should be overrided
+                    if ( isset( $exceptions[$id] ) ) $total = $exceptions[$id]; 
                 }
 
                 if ( $extra !== 0 ) { ?>
@@ -144,6 +147,8 @@ $posters = array(
                 } else if ($id != 162) { // for all other schools add the extras to the total
                     $extra = get_extra_hachayols($id, $school['teachers'] + $school['total']);
                     $total = $school['teachers'] + $school['total'] + $extra; 
+                    // find out if total should be overrided
+                    if ( isset( $exceptions[$id] ) ) $total = $exceptions[$id]; 
                 } else {
                     $extra = get_extra_hachayols($id, $school['total']);
                     $total = $school['total'] + $extra;

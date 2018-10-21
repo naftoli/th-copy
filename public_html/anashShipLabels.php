@@ -52,7 +52,7 @@ $heDates = $myshliach->getHeReportDates();
                 font-size: 14px;
             }
             .topSpace {
-                height: 0.2in;
+                height: 0.5in;
                 width: 7in;
             }
             .instructions {
