@@ -33,12 +33,14 @@ class ParentsRouter {
                 unset($parent['user_serial']); unset($parent['user_id']);
                 // create the children array and add this child
                 $parent['admin_id'] = intval( $parent['admin_id'] );
-                $parent['first'] = formatParentName( $parent['father'], $parent['mother'], $parent['first'] );
                 $parent['children'] = [ $child ];
                 $parent['father_pic'] = $parent['father_pic'] ? '/mobile/reg/' . $parent['father_pic'] : false;
                 $parent['mother_pic'] = $parent['mother_pic'] ? '/mobile/reg/' . $parent['mother_pic'] : false;
                 $parent['key'] = mashpia\api\auth\Auth::mobileKey( $parent['admin_id'] );
-                if ( $parent['first'] ) $parents[$parent['admin_id']] = $parent;
+                $parent['first'] = formatParentName( $parent['father'], $parent['mother'], $parent['first'] );
+                if ( !$parent['first'] )
+                    $parent['first'] = 'Mr. and Mrs.';
+                $parents[$parent['admin_id']] = $parent;
             // add to existing parent
             } else {
                 $parents[$parent['admin_id']]['children'][] = $child;
