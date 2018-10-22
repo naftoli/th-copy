@@ -9,7 +9,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     static $has_many = [
         [ 'school_registrations' ], 
         [ 'platoons', 'order' => 'class_grade, class_sub', ], 
-        [ 'soldiers' ] 
+        [ 'soldiers', 'order' => 'first, last' ] 
     ];
     static $belongs_to = [ 'institution' ];
 
