@@ -25,10 +25,10 @@ class ParshaSelect extends Component {
   }
 
   componentDidMount(){ 
-    this.loadSoldiers(); 
+    this.props.getParshos()
+    .catch( e => toast.error( e.message ) );
   }
 
-  // update if the login changed or the schoolId prop changed
   componentDidUpdate() {
     const { value, isClearable, isMulti } = this.props;
     // if we have a value and it is not selected, select it
@@ -40,11 +40,6 @@ class ParshaSelect extends Component {
       // if it is not clearable select the first value
       else if ( !isClearable && !isMulti ) this.onChange( options[0] );
     }
-  }
-
-  loadSoldiers = () => {
-    return this.props.getParshos()
-    .catch( e => toast.error( e.message ) );
   }
 
   getOptions = () => {
