@@ -38,18 +38,16 @@ class MarkRouter {
 
         // * Prepare All Queries
         // query to get the date_task_id from the grid id, mark date, and user_id
-        $date_task_query = $MASHPIA_DB->prepare(
-             ' SELECT u.user_id, dt.date_task_id, dt.grid_id, dt.points, '
-            .' dt.daily_task, dt.mandatory_qty, dt.needed, '
-            .' dtm.date_tasks_mission_id, dtm.start_date, '
-            .' dtm.end_date, dtm.subject_id, '
-            .' dtm.mission_value, dtm.mission_name '
+        $date_task_query = ' SELECT u.user_id, dt.date_task_id, dt.grid_id, '
+            .' dt.points, dt.daily_task, dt.mandatory_qty, dt.needed, '
+            .' dtm.date_tasks_mission_id, dtm.start_date, dtm.end_date, '
+            .' dtm.subject_id, dtm.mission_value, dtm.mission_name '
             .' FROM date_tasks dt JOIN date_tasks_missions dtm USING (date_tasks_mission_id) '
             .' JOIN user_tracks ut ON ut.level = dtm.level AND ut.subject_id = dtm.subject_id '
             .' JOIN users u ON ut.user_id = u.user_id AND dtm.school_type_id = u.school_type_id AND dtm.lang_id = u.lang_id '
             .' WHERE grid_id = :grid_id AND ut.user_id IN ('.$user_id_string.') '
-            .' AND start_date <= :mark_date AND end_date >= :mark_date ; '
-        );
+            .' AND start_date <= :mark_date AND end_date >= :mark_date ; ';
+        $date_task_query = $MASHPIA_DB->prepare( $date_task_query );
 
         // TODO: design queries to prevent O(n) performance on dates.
         foreach( $dates as $mark_date ) {
