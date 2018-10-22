@@ -8,7 +8,8 @@ import { NavigationTab } from 'components/navigation';
 import DailyTab from './tabs/DailyTab';
 import WeeklyTab from './tabs/WeeklyTab';
 import TehillimTab from './tabs/TehillimTab';
-
+// functions
+import { toast } from 'react-toastify';
 import { markTask, getGrid } from 'store/missions/grid/operations';
 
 class TeacherMarkPage extends Component {
@@ -19,13 +20,22 @@ class TeacherMarkPage extends Component {
 
   toggle = activeTab => this.setState({ activeTab });
 
+  getGrid = ( type, date ) => {
+    return this.props.getGrid( type, date )
+    .catch( e => toast.error( e.message ) );
+  }
+
+  markTask = ( type, user_ids, grid_id, date, mark ) => {
+    return this.props.markTask( type, user_ids, grid_id, date, mark )
+    .catch( e => toast.error( e.message ) );
+  }
+
   render() {
     const { activeTab } = this.state;
     const { daily, weekly, tehillim } = this.props.grid;
-    const { markTask, getGrid } = this.props;
 
     const navProps = { onClick: this.toggle, activeTab };
-    const tabProps = { markTask, getGrid };
+    const tabProps = { markTask: this.markTask, getGrid: this.getGrid };
 
     return (
       <div id='TeacherMarkPage'>
