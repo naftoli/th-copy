@@ -1,12 +1,13 @@
 <?php
 
 function rest_router( $router ){
+    global $current_user;
     // get ID from GET or POST
     $id = isset( $_GET['id'] ) ? $_GET['id'] : false;
     // if ( !$id ) $id = isset( $_POST['id'] ) ? $_POST['id'] : false;
     try {
         // authenticate()
-        if ( method_exists( $router, 'authenticate' ) && !$router->authenticate() ){
+        if ( method_exists( $router, 'authenticate' ) && !$router->authenticate( $current_user ) ){
             json_error( "Access Denied" );
         }
         // ?action=<action>
