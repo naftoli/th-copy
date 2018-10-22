@@ -10,7 +10,7 @@ import { findOption } from 'functions/selects';
 // state
 import { getParshos } from 'store/missions/parshos/operations';
 
-export class ParshaSelect extends Component {
+class ParshaSelect extends Component {
 
   static propTypes = {
     value: PropTypes.any,
@@ -28,6 +28,20 @@ export class ParshaSelect extends Component {
     this.loadSoldiers(); 
   }
 
+  // update if the login changed or the schoolId prop changed
+  componentDidUpdate() {
+    const { value, isClearable, isMulti } = this.props;
+    // if we have a value and it is not selected, select it
+    const options = this.getOptions();
+    const selected = findOption( options, value );
+    if ( !selected && options.length > 0 && value === false ) {
+      // if it is clearable and we have a value, clear it.
+      if ( isClearable && value ) this.onChange( false );
+      // if it is not clearable select the first value
+      else if ( !isClearable && !isMulti ) this.onChange( options[0] );
+    }
+  }
+
   loadSoldiers = () => {
     return this.props.getParshos()
     .catch( e => toast.error( e.message ) );
@@ -39,6 +53,8 @@ export class ParshaSelect extends Component {
     } = this.props;
 
     let options = parshos;
+    if ( options === undefined )
+      return [];
 
     // if an endDate is provided, find all parshos that start by that date
     if ( endDate )
