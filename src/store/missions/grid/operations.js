@@ -11,7 +11,7 @@ export const getGrid = ( type, date ) => dispatch => {
     dispatch( actions.setMissions( type, missions ) );
   })
   .catch( e => {
-    dispatch( actions.setLoading( false ))
+    dispatch( actions.setLoading( type, false ))
     return Promise.reject( e );
   });
 }
@@ -21,6 +21,8 @@ export const markTask = ( type, user_ids, grid_id, date, mark ) => dispatch => {
 
   dispatch( actions.markTask( type, user_ids, grid_id, date, mark ) );
 
-  return API.post( `/missions/mark`, data )
-  .then( handleAPIResponse );
+  if ( data.user_ids.length > 0 )
+    return API.post( `/missions/mark`, data )
+    .then( handleAPIResponse );
+  return Promise.resolve();
 }
