@@ -9,18 +9,23 @@ import DailyTab from './tabs/DailyTab';
 import WeeklyTab from './tabs/WeeklyTab';
 import TehillimTab from './tabs/TehillimTab';
 
+import { markTask, getGrid } from 'store/missions/grid/operations';
+
 class TeacherMarkPage extends Component {
 
   state = {
-    activeTab: 1
+    activeTab: 2
   }
 
   toggle = activeTab => this.setState({ activeTab });
 
   render() {
     const { activeTab } = this.state;
+    const { daily, weekly, tehillim } = this.props.grid;
+    const { markTask, getGrid } = this.props;
 
     const navProps = { onClick: this.toggle, activeTab };
+    const tabProps = { markTask, getGrid };
 
     return (
       <div id='TeacherMarkPage'>
@@ -47,11 +52,11 @@ class TeacherMarkPage extends Component {
 
         <TabContent activeTab={ activeTab }>
 
-          <DailyTab tabId={ 1 } />
+          <DailyTab tabId={ 1 } { ...daily } { ...tabProps } />
 
-          <WeeklyTab tabId={ 2 } />
+          <WeeklyTab tabId={ 2 } { ...weekly } { ...tabProps } />
 
-          <TehillimTab tabId={ 3 } />
+          <TehillimTab tabId={ 3 } { ...tehillim } { ...tabProps } />
 
         </TabContent>
       </div>
@@ -59,10 +64,14 @@ class TeacherMarkPage extends Component {
   }
 }
 
-const mapStateToProps = () => {
-  return {}
+const mapStateToProps = ({ missions }) => {
+  return {
+    grid: missions.grid
+  }
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  markTask, getGrid
+};
 
 export default connect( mapStateToProps, mapDispatchToProps )( TeacherMarkPage );
