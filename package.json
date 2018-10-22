@@ -72,7 +72,6 @@
     "start": "node scripts/start.js",
     "build": "PUBLIC_URL=/api/build node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-
     "build:beta": "PUBLIC_URL=/beta OUTPUT_FOLDER=beta node scripts/build.js",
     "build:prod": "PUBLIC_URL=/new OUTPUT_FOLDER=new node scripts/build.js"
   },
