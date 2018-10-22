@@ -15,7 +15,7 @@ import { markTask, getGrid } from 'store/missions/grid/operations';
 class TeacherMarkPage extends Component {
 
   state = {
-    activeTab: 2
+    activeTab: 1
   }
 
   toggle = activeTab => this.setState({ activeTab });
@@ -31,6 +31,7 @@ class TeacherMarkPage extends Component {
   }
 
   render() {
+    const { login } = this.props;
     const { activeTab } = this.state;
     const { daily, weekly, tehillim } = this.props.grid;
 
@@ -54,9 +55,11 @@ class TeacherMarkPage extends Component {
             Weekly
           </NavigationTab>
 
-          <NavigationTab tab={ 3 } icon='book' { ...navProps }>
-            Tehillim
-          </NavigationTab>
+          { login.modules.tehillim && 
+            <NavigationTab tab={ 3 } icon='book' { ...navProps }>
+              Tehillim
+            </NavigationTab>
+          }
 
         </Nav>
 
@@ -66,7 +69,9 @@ class TeacherMarkPage extends Component {
 
           <WeeklyTab tabId={ 2 } { ...weekly } { ...tabProps } />
 
-          <TehillimTab tabId={ 3 } { ...tehillim } { ...tabProps } />
+          { login.modules.tehillim && 
+            <TehillimTab tabId={ 3 } { ...tehillim } { ...tabProps } />
+          }
 
         </TabContent>
       </div>
@@ -74,9 +79,10 @@ class TeacherMarkPage extends Component {
   }
 }
 
-const mapStateToProps = ({ missions }) => {
+const mapStateToProps = ({ missions, login }) => {
   return {
-    grid: missions.grid
+    grid: missions.grid,
+    login: login.current_login
   }
 };
 
