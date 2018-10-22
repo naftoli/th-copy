@@ -57,8 +57,10 @@ class DailyTab extends Component {
               </Button>
           </Col>
           <Col sm={6}>
-              <Button color='primary' onClick={ this.load }>
-                <InlineSync /> Refresh Grid
+              <Button color='primary'
+                  onClick={ this.load }
+                  disabled={ !date || loading }>
+                <InlineSync loading={ loading }/> Refresh Grid
               </Button>
           </Col>
           <Col sm={6}>
