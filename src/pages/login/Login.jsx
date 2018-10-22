@@ -76,7 +76,7 @@ export class Login extends Component {
                 <InputGroupAddon addonType="prepend">
                   <img className="pt-icon" src={user} alt='username' width='26' height='26'/>
                 </InputGroupAddon>
-                <input className='form-control' placeholder='Username' autoFocus='true' required
+                <input className='form-control' placeholder='Username' autoFocus required
                   onChange={this.handleChange} value={this.state.username} name='username' />
               </InputGroup>
 
