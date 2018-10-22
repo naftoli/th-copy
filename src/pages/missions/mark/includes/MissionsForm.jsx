@@ -5,9 +5,9 @@ import { Row, Col, Button, Input } from 'reactstrap';
 import { InlineSync, FontAwesome } from 'components/ui';
 import { BaseSelect, PlatoonSelect, SoldierSelect, ParshaSelect } from 'components/inputs';
 // functions
-import julian from 'julian';
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
+import { julianToday } from 'functions/dates';
 // store and constants
 import { getMissions } from 'store/missions/mark/operations';
 import { LEGACY_URL } from 'components/constants';
@@ -38,7 +38,7 @@ class MissionsForm extends Component {
     if ( parshos.length === 0 )
       return false;
     
-    const today = parseInt( julian( new Date() ), 10 );
+    const today = julianToday();
     // get the first week after the current week and select it
     const parsha = parshos.filter( parsha => parsha.end < today ).pop();
     this.setState({ parsha_id: parsha.id });
@@ -53,7 +53,6 @@ class MissionsForm extends Component {
     if ( option && option.value ) this.props.onSoldierChange( option.value );
   }
   
-
   selectSerial = ({ target }) => {
     if ( !target.value.match('7[0-9]{6}') )
       return false;
@@ -80,7 +79,7 @@ class MissionsForm extends Component {
 
   render() {
     let { school_id, class_id, parsha_id } = this.state;
-    const today = parseInt( julian( new Date() ), 10 );
+    const today = julianToday();
     const { login, loading, user_id } = this.props;
 
     return (
