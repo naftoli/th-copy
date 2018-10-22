@@ -85,12 +85,15 @@ export class Grid extends Component {
         <thead>
           <tr className='Grid-row header'>
             <th>
-              Missions <FontAwesome icon='arrow-right' />
+              <span>Missions <FontAwesome icon='arrow-right' /></span>
               <hr/>
-              Soldiers <FontAwesome icon='arrow-down' />
+              <span>Soldiers <FontAwesome icon='arrow-down' /></span>
             </th>
             { missions.map( ( mission, index ) =>
-              <th key={ index }>{ mission.cat }</th>
+              <th key={ index }>
+                <span>{ mission.cat } </span>
+                { mission.mandatory_qty >= 1 && <FontAwesome icon='star' /> }
+              </th>
             )}
           </tr>
         </thead>

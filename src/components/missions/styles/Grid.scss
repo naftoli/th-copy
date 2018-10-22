@@ -6,6 +6,11 @@ $border-radius: .4rem;
 
   margin-bottom: 0px;
 
+  tr.Grid-row:first-child td {
+    border-bottom-width: 3px;
+    border-color: $primary-color;
+  }
+
   .checkbox {
     font-size: 1.4em;
     height: 1.4em;
@@ -19,6 +24,7 @@ $border-radius: .4rem;
     border-width: 2px;
     text-align: center;
     background: transparent;
+    display: inline-block;
   }
 
   th, td {
@@ -41,7 +47,7 @@ $border-radius: .4rem;
   thead:first-child {
     th:first-child {
       border-top-left-radius: $border-radius;
-      > hr { background-color: #fff; margin: 5% 0px;}
+      > hr { background-color: #fff; margin: 5px 0px;}
     }
     th:last-child { border-top-right-radius: $border-radius; }
   }
