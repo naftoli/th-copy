@@ -13,12 +13,17 @@
 #TeacherMarkPage {
   .th-callout { margin-bottom: .5em; }
 
-  #DailyTab { 
-    .react-datepicker-wrapper, .btn { margin: 3px; }
-    #options {
-      margin-bottom: 10px;
+  #options {
+    margin-bottom: 10px;
 
-      .btn { width: 100% }
+    .btn,
+    .react-datepicker-wrapper,
+    .react-select__control { 
+      margin: 3px;
+    }
+
+    .btn, .form-control {
+      width: calc( 100% - 6px );
     }
   }
 }
