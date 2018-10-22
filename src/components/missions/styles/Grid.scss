@@ -18,7 +18,8 @@ $border-radius: .4rem;
 
   .form-control { 
     padding: 0px 0.2rem;
-    width: 3.7em;
+    min-width: 3.7em;
+    max-width: 5em;
     height: 2em;
     border-color: #000;
     border-width: 2px;
