@@ -92,7 +92,7 @@ export class UsersPage extends Component {
     const columns = getColumns( current_login, this.editPicture, this.updateToggle );
     // page definition
     return (
-      <div id='UsersPage'>
+      <div id='UsersPage' className='full-height'>
         {/* User Guide */}
         <Callout title='View Soldiers'>
           Click a Soldier's name or serial number to view and edit their account.<br/>

@@ -92,7 +92,7 @@ class OrdersPage extends Component {
     let columns = getColumns( isBC( login.code, true ) );
 
     return (
-      <div id='OrdersPage'>
+      <div id='OrdersPage' className='full-height'>
         <Callout title='Store Orders'>
           <p>Create and manage orders coming in from Teachers, Kiosks and Parent Accounts</p>
           <strong>This page loads open orders. </strong>

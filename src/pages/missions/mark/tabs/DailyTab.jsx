@@ -20,11 +20,11 @@ class DailyTab extends Component {
 
   updateDate = date => {
     date = date ? toJulian( date ) : date;
-    this.setState({ date });
+    this.setState( { date }, this.load );
   }
 
-  setToday = () => this.setState({ date: julianToday() }, this.load );
-  setYesterday = () => this.setState({ date: julianToday() - 1 }, this.load );
+  setToday = () => this.setState( { date: julianToday() }, this.load );
+  setYesterday = () => this.setState( { date: julianToday() - 1 }, this.load );
 
   load = () => {
     this.props.getGrid( 'daily', this.state.date );

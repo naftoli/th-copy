@@ -68,7 +68,7 @@ class ParentsPage extends Component {
     ];
 
     return (
-      <div id='ParentsPage'>
+      <div id='ParentsPage' className='full-height'>
         <Callout title='View Parent Accounts'>
           <p>
             Parents are any account with direct access to a soldier via the Parent Portal.

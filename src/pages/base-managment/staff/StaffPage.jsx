@@ -52,7 +52,7 @@ class StaffPage extends Component {
     }
 
     return (
-      <div id='StaffPage'>
+      <div id='StaffPage' className='full-height'>
         <Callout title='View / Edit Staff Accounts'>
           <p>Staff accounts are any accounts connected to your base.</p>
         </Callout>

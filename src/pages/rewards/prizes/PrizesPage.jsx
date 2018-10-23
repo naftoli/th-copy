@@ -154,7 +154,7 @@ class PrizesPage extends Component {
     }
 
     return (
-      <div id='PrizesPage'>
+      <div id='PrizesPage' className='full-height'>
         <ButtonBar>
           { !isAdmin( login.code ) &&
             <Button className='btn btn-primary' onClick={ this.newPrize }>
