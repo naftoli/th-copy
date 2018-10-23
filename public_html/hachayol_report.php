@@ -66,7 +66,7 @@ $posters = array(
 
     // hard coded totals
     $exceptions = array(
-        54	=> 580, // update requested via E-mail on 1/3/2018
+        //54	=> 580, // update requested via E-mail on 1/3/2018
         176	=> 84, 
         9   => 400
     );
