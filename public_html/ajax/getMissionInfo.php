@@ -12,9 +12,9 @@ if($_GET['debug']){
 
 //set up array depending on whether it's a regular school or a yeshiva school
 if ( $type == 'All' ) {
-    $subjects = array( 1,4,12,13,16,21,27,40,41,45,90,100 );
+    $subjects = array( 1,4,12,13,16,21,27,40,41,42,45,90,100 );
 } else {
-    $subjects = array( 1,4,93,92,21,27,94,41,45,90,100 );
+    $subjects = array( 1,4,93,92,21,27,94,41,42,45,90,100 );
 }
 
 $missions = array();

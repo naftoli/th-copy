@@ -495,8 +495,8 @@ img.rankLogo {
 	margin-right: -0.3in;*/
 }
 .footer_info {
-    height: 55px;
-    width: 55px;
+    height: 50px;
+    width: 50px;
     text-align: center;
     float: right;
     font-family: "Myriad Pro It";
@@ -504,7 +504,7 @@ img.rankLogo {
     line-height: 1.2;
 }
 .footer_info img {
-    height: 55px;
+    height: 50px;
 }
 
 .he .boxer {
