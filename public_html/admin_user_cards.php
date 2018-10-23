@@ -20,7 +20,7 @@ foreach($admin_user['auths']['user'] as $user_id) {
 	array_push($soldiers, $soldier);
 	
 	if ($prev_school_id != $users_row['school_id']) 
-		array_push($schools, new school($users_row));
+		array_push($schools, new \classes\school($users_row));
 		
 	$prev_school_id = $users_row['school_id'];
 }

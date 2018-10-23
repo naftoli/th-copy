@@ -145,7 +145,7 @@ if ($school_id > 0) {
 	$sql = "SELECT * FROM schools WHERE school_id=" . $school_id;
 	$query = mysql_query($sql);
 	$row = mysql_fetch_assoc($query);
-	$school = new school($row);
+	$school = new \classes\school($row);
 }
 
 if ( isset( $school->school_logo_id ) && $school->school_logo_id > 0 ) 

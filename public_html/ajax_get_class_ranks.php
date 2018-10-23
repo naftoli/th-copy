@@ -33,7 +33,7 @@ require_once('classes/school.php');
 $sql = "SELECT * FROM schools WHERE school_id=" . $class->school_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-$school = new school($row);
+$school = new \classes\school($row);
 ?>
 
 <CENTER>

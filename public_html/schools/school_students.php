@@ -4,7 +4,7 @@ require('header.php');
 
 include('classes/school.php');
 $school_id = 82;
-$school = new school($school_id);
+$school = new \classes\school($school_id);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">

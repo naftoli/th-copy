@@ -15,7 +15,7 @@ include("camps/includes/classes/school.php");
 $sql = "SELECT * FROM schools WHERE school_id=" . $admin->school_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-$school = new school($row);
+$school = new \classes\school($row);
 
 $message = "";
 if (isset($_POST["action"])) {
@@ -555,7 +555,7 @@ for ($stno = 0; $stno < count($school_child_types); $stno++) {
 												<li>
 													<div class="box">
 														<h4>Rank Books ($10 value)</h4>
-														<p>Hard-earned medals are kept in an attractive rank book beginning with Private. When the book is full, it’s time for a promotion!</p>
+														<p>Hard-earned medals are kept in an attractive rank book beginning with Private. When the book is full, itï¿½s time for a promotion!</p>
 													</div>   
 												</li>
 												<li>

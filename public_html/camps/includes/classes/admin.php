@@ -123,27 +123,25 @@ class admin {
 		}
 	}
 	
-	function get_markable_children()
-	{
+	function get_markable_children() {
 		include_once("user.php");
-		include_once("school.php");
 		
-		$sql = "SELECT u.* ";
-		$sql = $sql . "FROM admin_auths AS aa ";
-		$sql = $sql . "JOIN users AS u ON (aa.id=u.user_id) ";
-		$sql = $sql . "WHERE admin_id=" . $this->admin_id . " ";
-		$sql = $sql . "AND aa.auth='user' ";
-		$sql = $sql . "AND u.parent_marking=1 ";
+		$sql  = "SELECT u.* ";
+		$sql .= "FROM admin_auths AS aa ";
+		$sql .= "JOIN users AS u ON (aa.id=u.user_id) ";
+		$sql .= "WHERE admin_id = " . $this->admin_id . " ";
+		$sql .= "AND aa.auth = 'user' ";
+		$sql .= "AND u.parent_marking = 1 ";
 		$sql .= "AND u.user_registered > 0";
 		//$sql .= "and u.school_id is not null and u.class_id is not null";
 		//echo $sql;
 		$query = mysql_query($sql);
 		while ($row = mysql_fetch_assoc($query)) {
 			$user = new user($row);
-			$user->get_school();			
+			$user->get_school();
 			if ($user->school_id && $user->school->school_settings != "home_school") {
 				$user->get_school_class();
-				$user->get_school_info();			
+				$user->get_school_info();
 			}
 			array_push($this->children, $user);
 		}
@@ -200,10 +198,10 @@ class admin {
 	
 	public function get_schools() {
 		$sql = "SELECT school_id, s.school_name ";
-		$sql = $sql . "FROM admin_auths AS aa ";
-		$sql = $sql . "JOIN schools AS s ON (aa.id=s.school_id) ";
-		$sql = $sql . "WHERE admin_id=" . $this->admin_id . " ";
-		$sql = $sql . "AND auth='school'";
+		$sql .= "FROM admin_auths AS aa ";
+		$sql .= "JOIN schools AS s ON (aa.id=s.school_id) ";
+		$sql .= "WHERE admin_id=" . $this->admin_id . " ";
+		$sql .= "AND auth='school'";
 		$query = mysql_query($sql);
 		
 		while ($row = mysql_fetch_assoc($query)) {

@@ -59,7 +59,7 @@ if ($admin->auth == "super")
 	$query = mysql_query($sql);
 	while ($row = mysql_fetch_assoc($query)) 
 	{
-		$school = new school($row);
+		$school = new \classes\school($row);
 		array_push($schools, $school);
 	}
 } 	
@@ -78,7 +78,7 @@ else
 	{
 		while ($row = mysql_fetch_assoc($query)) 
 		{
-			$school = new school($row);
+			$school = new \classes\school($row);
 			array_push($schools, $school);
 		}
 	}

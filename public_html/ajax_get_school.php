@@ -7,7 +7,7 @@ $school_id = $_GET['school_id'];
 $sql = "SELECT * FROM schools WHERE school_id=" . $school_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-$school = new school($row);
+$school = new \classes\school($row);
 
 $sql = "SELECT * FROM child_types";
 $query = mysql_query($sql);

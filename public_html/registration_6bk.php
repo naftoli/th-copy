@@ -37,7 +37,7 @@ include("camps/includes/classes/school.php");
 $sql = "SELECT * FROM schools WHERE school_id=" . $school_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-$school = new school($row);
+$school = new \classes\school($row);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

@@ -200,7 +200,7 @@ if ($admin->school_id > 0) {
 	if($row){
 		$_SESSION["new_school_registration"] = 'false';					
 	}
-	$school = new school($row);
+	$school = new \classes\school($row);
 }
 
 if ( isset( $school->school_logo_id ) && $school->school_logo_id > 0 ) 

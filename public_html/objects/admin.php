@@ -79,7 +79,7 @@ class admin {
 			$row_num++;
 			if ($row_num == 1)
 				$this->school_id = $row["school_id"];
-			$school = new school($row);
+			$school = new \classes\school($row);
 			array_push($this->schools, $school);
 		}
 	}
@@ -89,7 +89,7 @@ class admin {
 		$query = mysql_query($sql);
 
 		while ($row = mysql_fetch_assoc($query)) {
-			$this->school = new school($row);
+			$this->school = new \classes\school($row);
 			$this->school->get_subjects();
 			$this->school->get_classes();
 			$this->school->get_users();

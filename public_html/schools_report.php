@@ -8,7 +8,7 @@ $sql = "SELECT * FROM schools WHERE school_era IS NULL ORDER BY shipping_method,
 $query = mysql_query($sql);
 while ($row = mysql_fetch_assoc($query))
 {
-	$school = new school($row);
+	$school = new \classes\school($row);
 	$school->get_number_of_registered_students();
 	$school->get_number_of_teachers();
 	array_push($schools, $school);

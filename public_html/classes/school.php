@@ -1,5 +1,5 @@
 <?php
-
+namespace classes;
 // NOTE, THIS CLASS IS A MANUAL ORM, DEPENDS ON DB CONNECTION
 
 class school 
@@ -13,6 +13,7 @@ class school
 	public $package_id;
 	public $school_gender;
 	public $school_number;
+	public $logo;
 	public $school_logo_id;
 	public $school_logo_kiosk_id;
 	public $school_no_logo;
@@ -84,6 +85,7 @@ class school
 		$this->package_id = $row['package_id'];
 		$this->school_gender = $row['school_gender'];
 		$this->school_number = $row['school_number'];
+		$this->logo = $row['logo'];
 		$this->school_logo_id = $row['school_logo_id'];
 		$this->school_logo_kiosk_id = $row['school_logo_kiosk_id'];
 		$this->school_no_logo = $row['school_no_logo'];
@@ -125,6 +127,10 @@ class school
 		$this->cc_approval_number = $row['cc_approval_number'];
 		
 		$this->auction_students = 0;
+	}
+
+	public function logoPath(){
+		return "/schoolLogos/$this->logo";
 	}
 	
 	function get_student_rank_totals($ranks_totals)

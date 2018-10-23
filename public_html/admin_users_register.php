@@ -66,7 +66,7 @@ if ($admin->auth == "super") {
 	$sql = "SELECT * FROM schools ORDER BY school_name";
 	$query = mysql_query($sql);
 	while ( $row = mysql_fetch_assoc( $query ) ) {
-		$school = new school($row);
+		$school = new \classes\school($row);
 		array_push($schools, $school);
 	}
 } else {
@@ -80,7 +80,7 @@ if ($admin->auth == "super") {
 	
 	if ( $num_rows >= 1 ) {
 		while ( $row = mysql_fetch_assoc($query) ) {
-			$school = new school($row);
+			$school = new \classes\school($row);
 			array_push($schools, $school);
 		}
 	}
