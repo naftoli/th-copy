@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Table, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Checkbox } from 'components/inputs';
 import { FontAwesome } from 'components/ui';
+import { Checkbox } from 'components/inputs';
+import { Table, Input, Alert } from 'reactstrap';
 
 import './styles/Grid.scss';
 
@@ -78,8 +78,13 @@ export class Grid extends Component {
   }
 
   render(){
-    const { soldiers, missions } = this.props;
+    let { soldiers, missions } = this.props;
+    // hide disabled missions from the GUI
+    missions = missions.filter( mission => !mission.disabled );
 
+    if ( missions.length === 0 )
+      return <Alert color="danger">No Available Tasks</Alert>
+    
     return (
       <Table className='Grid' bordered striped hover responsive size="sm">
         <thead>
