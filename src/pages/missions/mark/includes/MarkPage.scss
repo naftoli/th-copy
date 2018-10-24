@@ -22,7 +22,7 @@
       margin: 3px;
     }
 
-    .btn, .form-control {
+    :not( .btn-group ) > .btn, .form-control {
       width: calc( 100% - 6px );
     }
   }

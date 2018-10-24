@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Date } from 'components/inputs';
 import { Grid } from 'components/missions/Grid';
 import { Row, Col, TabPane, Button } from 'reactstrap';
-import { FontAwesome, InlineSync, Spinner } from 'components/ui';
+import { FontAwesome, InlineSync, Spinner, ButtonBar } from 'components/ui';
 // functions
 import moment from 'moment';
 import { julianToday, julianToMoment, toJulian } from 'functions/dates';
@@ -46,16 +46,18 @@ class DailyTab extends Component {
               onChange={ this.updateDate }
               minDate={ moment().subtract( 1, 'years' ) } />
           </Col>
-          <Col xs={6} sm={3}>
+
+          <Col sm={6}>
+            <ButtonBar>
               <Button color='primary' onClick={ this.setToday }>
                 <FontAwesome icon='stopwatch' /> Today
               </Button>
-          </Col>
-          <Col xs={6} sm={3}>
               <Button color='primary' onClick={ this.setYesterday }>
                 <FontAwesome icon='clock' /> Yesterday
               </Button>
+            </ButtonBar>
           </Col>
+
           <Col sm={6}>
               <Button color='primary'
                   onClick={ this.load }
@@ -63,6 +65,7 @@ class DailyTab extends Component {
                 <InlineSync loading={ loading }/> Refresh Grid
               </Button>
           </Col>
+
           <Col sm={6}>
               <Button 
                   color='primary' 
