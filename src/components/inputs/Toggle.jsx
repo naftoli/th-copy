@@ -1,8 +1,9 @@
 import React from 'react';
+import classnames from 'classnames';
 import './styles/Toggle.scss';
 
 export const Toggle = ( props ) => {
-  let { className, setRef, on, off, ...inputProps } = props;
+  let { className, noAnimate, setRef, on, off, ...inputProps } = props;
   // toggle on pressing enter
   let inputRef = null;
   const onKeyPress = ( event ) => {
@@ -17,8 +18,14 @@ export const Toggle = ( props ) => {
     if ( setRef ) { setRef( ref ) };
   }
 
+  const classNames = classnames({
+    'toggle': true,
+    'no-animate': noAnimate,
+    [className]: className
+  })
+
   return (
-    <label className={`toggle ${ className || '' }`} onKeyPress={ onKeyPress }>
+    <label className={ classNames } onKeyPress={ onKeyPress }>
       <input type="checkbox" { ...inputProps } ref={ ref => { setupRef( ref ) } } />
       <div className="switchbox">
         <div className="switch" data-checked={ on || 'on' } data-unchecked={ off || 'off' }></div>
