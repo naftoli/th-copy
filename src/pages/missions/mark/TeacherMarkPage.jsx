@@ -8,21 +8,31 @@ import { NavigationTab } from 'components/navigation';
 import DailyTab from './tabs/DailyTab';
 import WeeklyTab from './tabs/WeeklyTab';
 import TehillimTab from './tabs/TehillimTab';
+import CustomizeModal from './includes/CustomizeModal';
 // functions
 import { toast } from 'react-toastify';
 import { markTask, getGrid } from 'store/missions/grid/operations';
+import { setMissions } from 'store/missions/grid/actions';
 
 class TeacherMarkPage extends Component {
 
   state = {
-    activeTab: 1
+    activeTab: 1,
+    modalOpen: false,
+    modalType: 'daily'
   }
 
-  toggle = activeTab => this.setState({ activeTab });
+  toggleTab = activeTab => this.setState({ activeTab });
 
   getGrid = ( type, date ) => {
     return this.props.getGrid( type, date )
     .catch( e => toast.error( e.message ) );
+  }
+
+  customizeGrid = ( missions ) => {
+    const { modalType: type } = this.state;
+    this.closeModal();
+    this.props.setMissions( type, missions );
   }
 
   markTask = ( type, user_ids, grid_id, date, mark ) => {
@@ -30,13 +40,25 @@ class TeacherMarkPage extends Component {
     .catch( e => toast.error( e.message ) );
   }
 
-  render() {
-    const { login } = this.props;
-    const { activeTab } = this.state;
-    const { daily, weekly, tehillim } = this.props.grid;
+  openModal = modalType => () => this.setState(
+    { modalOpen: !this.state.modalOpen, modalType }
+  );
 
-    const navProps = { onClick: this.toggle, activeTab };
-    const tabProps = { markTask: this.markTask, getGrid: this.getGrid };
+  closeModal = () => this.setState(
+    { modalOpen: !this.state.modalOpen }
+  );
+
+  render() {
+    const { login, grid } = this.props;
+    const { daily, weekly, tehillim } = grid;
+    const { activeTab, modalOpen, modalType } = this.state;
+
+    const navProps = { onClick: this.toggleTab, activeTab };
+    const tabProps = { 
+      markTask: this.markTask,
+      getGrid: this.getGrid, 
+      openModal: this.openModal
+    };
 
     return (
       <div id='TeacherMarkPage'>
@@ -74,6 +96,13 @@ class TeacherMarkPage extends Component {
           }
 
         </TabContent>
+
+        <CustomizeModal
+          type={ modalType }
+          isOpen={ modalOpen }
+          toggle={ this.closeModal } 
+          missions={ grid[ modalType ].missions }
+          customizeGrid={ this.customizeGrid } />
       </div>
     );
   }
@@ -87,7 +116,8 @@ const mapStateToProps = ({ missions, login }) => {
 };
 
 const mapDispatchToProps = {
-  markTask, getGrid
+  markTask, getGrid,
+  setMissions
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )( TeacherMarkPage );

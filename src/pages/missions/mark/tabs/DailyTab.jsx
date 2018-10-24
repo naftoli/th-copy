@@ -32,7 +32,7 @@ class DailyTab extends Component {
 
   render(){
     const { tabId, soldiers, missions, loading } = this.props;
-    const date = julianToMoment( this.state.date );
+    const date = julianToMoment( this.state.date ); // convert to moment
     // render form
     return (
       <TabPane tabId={ tabId } id='DailyTab'>
@@ -64,7 +64,10 @@ class DailyTab extends Component {
               </Button>
           </Col>
           <Col sm={6}>
-              <Button color='primary'>
+              <Button 
+                  color='primary' 
+                  disabled={ loading }
+                  onClick={ this.props.openModal( 'daily' ) } >
                 <FontAwesome icon='wrench' /> Customize Grid
               </Button>
           </Col>
@@ -73,6 +76,7 @@ class DailyTab extends Component {
         <hr/>
 
         { loading && <Spinner /> }
+
         { !loading && // not loading
           missions.length > 0 && // and we have missions
           soldiers.length > 0 && // and we have soldiers
@@ -82,6 +86,7 @@ class DailyTab extends Component {
             missions={ missions } 
             markTask={ this.props.markTask } />
         }
+
       </TabPane>
     );
   }

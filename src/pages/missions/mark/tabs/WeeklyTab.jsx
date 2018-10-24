@@ -46,7 +46,10 @@ class WeeklyTab extends Component {
               </Button>
           </Col>
           <Col sm={6} md={4}>
-              <Button color='primary'>
+              <Button 
+                color='primary'
+                disabled={ loading }
+                onClick={ this.props.openModal( 'weekly' ) } >
                 <FontAwesome icon='wrench' /> Customize Grid
               </Button>
           </Col>
