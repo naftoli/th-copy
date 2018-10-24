@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // components
 import { Grid } from 'components/missions/Grid';
 import { Row, Col, TabPane, Button } from 'reactstrap';
-import { FontAwesome, InlineSync, Spinner } from 'components/ui';
+import { InlineSync, Spinner } from 'components/ui';
 import { SMSelect } from 'components/inputs/selects';
 
 class TehillimTab extends Component {
@@ -28,21 +28,16 @@ class TehillimTab extends Component {
         <p className='title'>Grid Options</p>
 
         <Row id='options'>
-          <Col md={4}>
+          <Col sm={6}>
             <SMSelect
               value={ date }
               onChange={ this.updateDate } />
           </Col>
-          <Col sm={6} md={4}>
+          <Col sm={6}>
               <Button color='primary'
                   onClick={ this.load } 
                   disabled={ !date || loading }>
                 <InlineSync loading={ loading } /> Refresh Grid
-              </Button>
-          </Col>
-          <Col sm={6} md={4}>
-              <Button color='primary'>
-                <FontAwesome icon='wrench' /> Customize Grid
               </Button>
           </Col>
         </Row>
