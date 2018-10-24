@@ -21,7 +21,8 @@ class CustomizeModal extends Component {
   }
 
   state = {
-    missions: []
+    missions: [],
+    saving: false
   };
 
   componentDidUpdate({ isOpen }){
@@ -39,20 +40,10 @@ class CustomizeModal extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    this.props.customizeGrid( this.state.missions );
-    // // save the way the missions where sorted
-    // const mission_sort = missions.map( mission => mission.grid_id );
-    // // sort missions into enabled and disabled
-    // const mission_status = missions.reduce(
-    //   ( res, mission ) => {
-    //     const key = mission.disabled ? 'disabled' : 'enabled';
-    //     res[ key ] = [ ...res[ key ], mission.grid_id ];
-    //     return res
-    //   }, 
-    //   { enabled: [], disabled: [] }
-    // );
-    // // save the changes
-    // customizeGrid( mission_sort, mission_status );
+    this.setState({ saving: true });
+
+    Promise.resolve( this.props.customizeGrid( this.state.missions ) )
+    .then( () => this.setState({ saving: false }) );
   }
   // sort the items
   onSortEnd = ({oldIndex, newIndex}) => {
@@ -63,7 +54,7 @@ class CustomizeModal extends Component {
 
   render(){
     let { isOpen, toggle, type } = this.props;
-    let { missions } = this.state;
+    let { missions, saving } = this.state;
 
     return (
       <Modal isOpen={ isOpen } toggle={ toggle } centered id='CustomizeModal'>
@@ -85,7 +76,9 @@ class CustomizeModal extends Component {
           </ModalBody>
 
           <ModalFooter>
-            <SaveButton />
+
+            <SaveButton saving={ saving } />
+
           </ModalFooter>
 
         </form>
