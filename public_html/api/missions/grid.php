@@ -64,8 +64,45 @@ class GridRouter {
     }
 
     public function customize() {
-        $missions = $this->getTasks( $_POST['type'] );
-        json_response( $missions );
+        global $current_user; global $MASHPIA_DB;
+        $class_id = $current_user->login->class_id;
+
+        $mission_sort = implode( ',', $_POST['mission_sort'] );
+
+        $enabled_ids  = array_map( function( $id ) use ( $MASHPIA_DB ) {
+            return $MASHPIA_DB->quote( $id );
+        }, $_POST['mission_status']['enabled'] );
+        $enabled_ids = implode( ', ', $enabled_ids );
+
+        $disabled_marks = rtrim(
+            str_repeat( '( '.$class_id.', ? ),', count( $_POST['mission_status']['disabled'] ) ), 
+            ','
+        );
+
+        $sorting_query = $MASHPIA_DB->prepare(
+             ' INSERT INTO class_date_task_sorting ( class_id, grid_type, sorted_grid_ids ) '
+            .' VALUES ( '.$class_id.', :type, :mission_sort ) '
+            .' ON DUPLICATE KEY UPDATE sorted_grid_ids = :mission_sort;'
+        );
+        $enabled_query = $MASHPIA_DB->prepare(
+            'DELETE FROM class_date_tasks_disabled WHERE class_id = '.$class_id.' AND grid_id IN ('. $enabled_ids .')'
+        );
+        $disabled_query = $MASHPIA_DB->prepare(
+             ' INSERT INTO class_date_tasks_disabled ( class_id, grid_id ) VALUES '.$disabled_marks.' '
+            .' ON DUPLICATE KEY UPDATE grid_id=grid_id;'
+        );
+
+        $sorted = $sorting_query->execute([
+            ':type' => $_POST['type'], ':mission_sort' => $mission_sort
+        ]);
+        $enabled = $enabled_query->execute();
+        $disabled = $disabled_query->execute( $_POST['mission_status']['disabled'] );
+        
+        json_response([
+            'sorted' => $sorted,
+            'enabled' => $enabled,
+            'disabled' => $disabled
+        ]);
     }
 
     private function getTasks( $type, $date = false, $load_disabled = false ){
