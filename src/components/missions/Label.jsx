@@ -16,13 +16,6 @@ export class Label extends Component {
 
     const daily = missions[0].frequency_name === "Daily";
 
-    // const tasks = missions.map( ( mission, index) => 
-    //   <Task 
-    //     key={ index } 
-    //     task={ mission } 
-    //     user_id={ user_id } />
-    // );
-
     return (
       <div className='Label'>
         <Row>
