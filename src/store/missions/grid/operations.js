@@ -26,3 +26,24 @@ export const markTask = ( type, user_ids, grid_id, date, mark ) => dispatch => {
     .then( handleAPIResponse );
   return Promise.resolve();
 }
+
+export const customizeGrid = ( type, missions ) => dispatch => {
+  // * update the UI
+  dispatch( actions.setMissions( type, missions ) );
+  // * save the way the missions where sorted
+  const mission_sort = missions.map( mission => mission.grid_id );
+  // * sort missions into enabled and disabled
+  const mission_status = missions.reduce(
+    ( res, mission ) => {
+      const key = mission.disabled ? 'disabled' : 'enabled';
+      res[ key ] = [ ...res[ key ], mission.grid_id ];
+      return res
+    }, 
+    { enabled: [], disabled: [] }
+  );
+  // prepare for server
+  const data = { type, mission_sort, mission_status };
+  // * save the changes
+  return API.post( `/missions/grid?action=customize`, data )
+  .then( handleAPIResponse );
+}

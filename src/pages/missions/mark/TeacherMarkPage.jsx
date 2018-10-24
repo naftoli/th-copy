@@ -11,8 +11,7 @@ import TehillimTab from './tabs/TehillimTab';
 import CustomizeModal from './includes/CustomizeModal';
 // functions
 import { toast } from 'react-toastify';
-import { markTask, getGrid } from 'store/missions/grid/operations';
-import { setMissions } from 'store/missions/grid/actions';
+import { markTask, getGrid, customizeGrid } from 'store/missions/grid/operations';
 
 class TeacherMarkPage extends Component {
 
@@ -31,21 +30,22 @@ class TeacherMarkPage extends Component {
 
   customizeGrid = ( missions ) => {
     const { modalType: type } = this.state;
-    this.closeModal();
-    this.props.setMissions( type, missions );
+    ;
+    return this.props.customizeGrid( type, missions )
+      .then( this.closeModal );
   }
 
   markTask = ( type, user_ids, grid_id, date, mark ) => {
     return this.props.markTask( type, user_ids, grid_id, date, mark )
-    .catch( e => toast.error( e.message ) );
+      .catch( e => toast.error( e.message ) );
   }
 
   openModal = modalType => () => this.setState(
-    { modalOpen: !this.state.modalOpen, modalType }
+    { modalOpen: true, modalType }
   );
 
   closeModal = () => this.setState(
-    { modalOpen: !this.state.modalOpen }
+    { modalOpen: false }
   );
 
   render() {
@@ -65,6 +65,10 @@ class TeacherMarkPage extends Component {
         <Callout title='Mark Missions'>
           <p>The missions below are organized by how often they happen and displayed in an easy to mark grid for your convenience.</p>
           <p><strong>Please Note:</strong> Soldier's missions may be marked by their parents and base commanders as well.</p>
+          <p><strong>
+            Please Note: Not all soldiers have all the tasks below available to them. 
+            If a soldier does not have the task available to them the mark <em>will not save.</em>
+          </strong></p>
         </Callout>
 
         <Nav tabs>
@@ -116,8 +120,7 @@ const mapStateToProps = ({ missions, login }) => {
 };
 
 const mapDispatchToProps = {
-  markTask, getGrid,
-  setMissions
+  markTask, getGrid, customizeGrid
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )( TeacherMarkPage );
