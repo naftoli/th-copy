@@ -397,7 +397,7 @@ else
 							
 								<thead>							
 									<tr>
-										<th>User ID</th>
+										<th>Serial #</th>
 										<th>Soldier</th>
 										<th colspan="1">Grade</th>
 										<th colspan="1">Subject</th>
@@ -416,7 +416,7 @@ else
 								<!-- ********** USERS ********** -->
 								<? foreach ($report_users as $report_user) : ?>
 									<tr>
-										<td><?=$report_user->user_id?></td>
+										<td><?=$report_user->user_serial?></td>
 										<td style="white-space:nowrap; text-align:left">
 											<span style="color:blue;"><?=$report_user->last . "  - " . $report_user->first; ?></span>
 										</td>
