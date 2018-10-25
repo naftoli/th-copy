@@ -40,4 +40,4 @@ jobs:
       - run: pwd && ls -al
 
       - store_artifacts:
-          path: base-commander/build
+          path: build
