@@ -36,13 +36,16 @@ jobs:
       # run tests!
       - run: yarn test
 
-  deploy:
+  # deploy to /api/build
+  deploy_development:
     docker:
         # specify the version you desire here
       - image: circleci/node:8.12
 
     steps:
       - checkout
+
+      - run: ls -al
 
       # Download and cache dependencies
       - restore_cache:
@@ -60,11 +63,6 @@ jobs:
 
       - run: yarn build
 
-      # - run:
-      #     name: Deploy Over SSH
-      #     command: |
-      #       ssh $SSH_USER@$SSH_HOST "<remote deploy command>"
-
       - run:
            name: Add Mashpia.com to known_hosts
            command: ssh-keyscan -H mashpia.com >> ~/.ssh/known_hosts
@@ -74,12 +72,17 @@ jobs:
           command: |
             scp -r build/* mashpia@mashpia.com:dev/build
 
+      - run:
+          name: Run deploy script on server
+          command: |
+            ssh mashpia@mashpia.com "./dev/deploy-build.sh"
+
 workflows:
   version: 2
-  build-and-deploy:
+  build-development:
     jobs:
       - build
-      - deploy:
+      - deploy_development:
           requires:
             - build
           filters:
