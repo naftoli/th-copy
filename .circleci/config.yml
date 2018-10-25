@@ -66,6 +66,10 @@ jobs:
       #       ssh $SSH_USER@$SSH_HOST "<remote deploy command>"
 
       - run:
+           name: Add Mashpia.com to known_hosts
+           command: ssh-keyscan -H mashpia.com >> ~/.ssh/known_hosts
+
+      - run:
           name: Send build/* Over SSH to dev/build
           command: |
             scp -r build/* mashpia@mashpia.com:/dev/build
