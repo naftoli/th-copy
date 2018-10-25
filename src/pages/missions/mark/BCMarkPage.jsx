@@ -31,12 +31,9 @@ class BCMarkPage extends Component {
   }
 
   render() {
+    let { loading, markMission, missions } = this.props;
 
-    const { loading, markMission } = this.props;
-
-    const missions = this.props.missions.reduce( 
-      this.organizeByLabel, {}
-    );
+    missions = missions.reduce( this.organizeByLabel, {} );
     const labels = Object.keys( missions );
 
     return (
