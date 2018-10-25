@@ -803,8 +803,12 @@ abstract class MissionDisplay {
 				echo "<div style='page-break-after: always'>&nbsp;</div>";
 			}
 		}
-		if ($page % 2 != 0 && $this->dblSided == 1)
+		if ($page % 2 != 0 && $this->dblSided == 1) {
+			$page += 1;
 			echo "<div style='page-break-after: always'>&nbsp;</div>";
+		}
+			
+		return $page;
 	}
 
 	public function markMission() {
