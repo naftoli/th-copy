@@ -72,10 +72,14 @@ if ( $dates == 'english' ) $dates_id = 2;
 <body>
     <div id='stats'>
         <p>Soldiers Printed: <?= count( $user_ids ) ?> | Parshos Printed: <?= count( $parsha_ids ) ?></p>
-        <p id='total'>Total Mission Sheets Printed: <?= count( $user_ids ) * count( $parsha_ids ) ?></p>
+        <p id='total'>
+            Total Sheets: <?= count( $user_ids ) * count( $parsha_ids ) ?> |
+            Total Pages: <span id='total-pages'>&#x25cc;</span> 
+        </p>
     </div>
 
     <?php
+        $pages = 0;
         // * Print the missions just like before
         foreach ( $objMissions as $obj ) {
             $obj->setDateDisplay( $dates_id );
@@ -90,11 +94,16 @@ if ( $dates == 'english' ) $dates_id = 2;
             }
             $debug = false;
             if (isset($_GET['debug'])) $debug = true;
-            $obj->printMission( $debug );
+            $pages += $obj->printMission( $debug );
             echo "</div>";
             echo "<div style='clear: both; page-break-after: always'></div>";
         }
     ?>
+    <input type='hidden' id='pages-printed' value='<?=$pages?>' />
+    <script>
+        document.querySelector('#total-pages').innerText = document.querySelector('#pages-printed').value;
+        window.print();
+    </script>
     <?php // ! *************************** Debug *************************** ?>
     <!-- <details id='debug'>
         <summary>Debug</summary>
