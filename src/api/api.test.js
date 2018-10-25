@@ -131,7 +131,7 @@ describe( `API (default)`, () => {
     });
   });
 
-  xdescribe( `.delete`, () => {
+  describe( `.delete`, () => {
 
     let mock;
 
