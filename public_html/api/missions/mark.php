@@ -27,18 +27,14 @@ class MarkRouter {
         $soldiers_updated = [];
 
         // * Get the post paramaters.
-        $user_ids = [];
-        $grid_ids = [];
+        $user_id_string = [];
         $mark = $_POST['mark'];
         $dates = $_POST['dates'];
+        $grid_id = $_POST['grid_id'];
         // escape user_ids
         foreach( $_POST['user_ids'] as $user_id )
             $user_ids[] = $MASHPIA_DB->quote( $user_id );
         $user_id_string = implode( ', ', $user_ids );
-
-        foreach( $_POST['grid_ids'] as $user_id )
-            $grid_ids[] = $MASHPIA_DB->quote( $user_id );
-        $grid_id_string = implode( ', ', $grid_ids );
 
         // * Prepare All Queries
         // query to get the date_task_id from the grid id, mark date, and user_id
@@ -49,34 +45,29 @@ class MarkRouter {
             .' FROM date_tasks dt JOIN date_tasks_missions dtm USING (date_tasks_mission_id) '
             .' JOIN user_tracks ut ON ut.level = dtm.level AND ut.subject_id = dtm.subject_id '
             .' JOIN users u ON ut.user_id = u.user_id AND dtm.school_type_id = u.school_type_id AND dtm.lang_id = u.lang_id '
-            .' WHERE grid_id IN ('.$grid_id_string.') AND ut.user_id IN ('.$user_id_string.') '
+            .' WHERE grid_id = :grid_id AND ut.user_id IN ('.$user_id_string.') '
             .' AND start_date <= :mark_date AND end_date >= :mark_date ; ';
         $date_task_query = $MASHPIA_DB->prepare( $date_task_query );
 
         // TODO: design queries to prevent O(n) performance on dates.
         foreach( $dates as $mark_date ) {
+            $query_array = [ 'grid_id' => $grid_id, 'mark_date' => $mark_date ];
             // get the date_task_id for each soldier
-            $date_task_ids = [];
-            $date_task_query->execute([
-                'mark_date' => $mark_date
-            ]);
+            $date_task_ids = [];    $date_task_query->execute( $query_array );
             while( $row = $date_task_query->fetch() )
-                $date_task_ids[ $row['user_id'] ][] = $row;
+                $date_task_ids[ $row['user_id'] ] = $row;
             
-            // TODO: design queries to prevent O(n) performance on grid_ids.
-            foreach( $date_task_ids as $user_tasks ) {
-                foreach( $user_tasks as $user_task ) {
-                    // update the task
-                    $this->updateTask( $user_task, $mark, $mark_date );
-                    // update the mission
-                    $this->updateMission( 
-                        $user_task['user_id'], 
-                        $user_task['date_tasks_mission_id'], 
-                        $mark_date
-                    );
-                }
+            foreach( $date_task_ids as $user_task ) {
+                // update the task
+                $this->updateTask( $user_task, $mark, $mark_date );
+                // update the mission
+                $this->updateMission( 
+                    $user_task['user_id'], 
+                    $user_task['date_tasks_mission_id'], 
+                    $mark_date
+                );
                 // update the cache as each mission is marked
-                TotalWeeklyTasks::updateUser( $user_tasks[0]['user_id'], $mark_date, false );
+                TotalWeeklyTasks::updateUser( $user_task['user_id'], $mark_date, false );
             }
         }
 
