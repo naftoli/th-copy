@@ -62,8 +62,8 @@ jobs:
       - run:
           name: Build version based on branch
           command: |
-            if [ $CIRCLE_BRANCH = 'beta' ]; then yarn build:beta; | 
-            elif [ $CIRCLE_BRANCH = 'master' ]; then yarn build:prod; |
+            if [ $CIRCLE_BRANCH = 'beta' ]; then yarn build:beta;
+            elif [ $CIRCLE_BRANCH = 'master' ]; then yarn build:prod;
             elif [ $CIRCLE_BRANCH = 'alpha' ]; then yarn build; fi
 
       - run:
@@ -78,8 +78,8 @@ jobs:
       - run:
           name: Run correct deploy script on server
           command: |
-            if [ $CIRCLE_BRANCH = 'beta' ]; then ssh mashpia@mashpia.com "./dev/deploy-beta.sh"; | 
-            elif [ $CIRCLE_BRANCH = 'master' ]; then ssh mashpia@mashpia.com "./dev/deploy-master.sh"; |
+            if [ $CIRCLE_BRANCH = 'beta' ]; then ssh mashpia@mashpia.com "./dev/deploy-beta.sh";
+            elif [ $CIRCLE_BRANCH = 'master' ]; then ssh mashpia@mashpia.com "./dev/deploy-master.sh";
             elif [ $CIRCLE_BRANCH = 'alpha' ]; then ssh mashpia@mashpia.com "./dev/deploy-alpha.sh"; fi
             
 
