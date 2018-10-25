@@ -37,15 +37,13 @@ jobs:
       - run: yarn test
 
   # deploy to /api/build
-  deploy_development:
+  deploy:
     docker:
         # specify the version you desire here
       - image: circleci/node:8.12
 
     steps:
       - checkout
-
-      - run: ls -al
 
       # Download and cache dependencies
       - restore_cache:
@@ -61,7 +59,12 @@ jobs:
             - node_modules
           key: build-dependencies-{{ checksum "package.json" }}
 
-      - run: yarn build
+      - run:
+          name: Build version based on branch
+          command: |
+            if [ $CIRCLE_BRANCH = 'beta' ]; then yarn build:beta; | 
+            elif [ $CIRCLE_BRANCH = 'master' ]; then yarn build:prod; |
+            elif [ $CIRCLE_BRANCH = 'alpha' ]; then yarn build; fi
 
       - run:
            name: Add Mashpia.com to known_hosts
@@ -73,18 +76,21 @@ jobs:
             scp -r build/* mashpia@mashpia.com:dev/build
 
       - run:
-          name: Run deploy script on server
+          name: Run correct deploy script on server
           command: |
-            ssh mashpia@mashpia.com "./dev/deploy-build.sh"
+            if [ $CIRCLE_BRANCH = 'beta' ]; then ssh mashpia@mashpia.com "./dev/deploy-beta.sh"; | 
+            elif [ $CIRCLE_BRANCH = 'master' ]; then ssh mashpia@mashpia.com "./dev/deploy-master.sh"; |
+            elif [ $CIRCLE_BRANCH = 'alpha' ]; then ssh mashpia@mashpia.com "./dev/deploy-alpha.sh"; fi
+            
 
 workflows:
   version: 2
-  build-development:
+  build-and-deploy:
     jobs:
       - build
-      - deploy_development:
+      - deploy:
           requires:
             - build
           filters:
             branches:
-              only: development
+              only: (alpha|beta|master)
