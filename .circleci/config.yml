@@ -35,3 +35,7 @@ jobs:
         
       # run tests!
       - run: yarn test
+      - run: yarn build
+
+      - store_artifacts:
+          path: base-commander/build
