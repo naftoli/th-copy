@@ -37,7 +37,7 @@ jobs:
       # - run: yarn test
       - run: yarn build
 
-      - run: pwd && ls - al
+      - run: pwd && ls -al
 
       - store_artifacts:
           path: base-commander/build
