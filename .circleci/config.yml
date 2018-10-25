@@ -34,8 +34,10 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
-      - run: yarn test
+      # - run: yarn test
       - run: yarn build
+
+      - run: pwd && ls - al
 
       - store_artifacts:
           path: base-commander/build
