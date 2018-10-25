@@ -203,6 +203,7 @@
             var totalPrice = 0;
             var originalBal = 0;
     		var auction_id = 79;
+			var separator = '|';
             
             $.post('ajax/getBalance.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
                 var info = $.parseJSON(success);
@@ -237,7 +238,7 @@
     									<p class="onePerUser">' + prize.available + ' available.</p>\
                                     </div>\
                                     <div class="product-cart" id="' +
-    									prize.prize_id + ':' + prize.prize_points + ':' +	prize.prize_image_id + ':' + prize.prize_name + '">\
+    									prize.prize_id + separator + prize.prize_points + separator + prize.prize_image_id + separator + prize.prize_name + '">\
                                         <a href="#"><i class="fa fa-shopping-cart"></i> </a>\
     									<br /><div style="color: #333; margin-top: 5px;"><span class="cartNum">0</span> in cart</div>\
     								</div>\
@@ -333,7 +334,7 @@
 				
                 // get prize id and add to cart
                 var prizeInfo = $(this).attr('id');
-                var info = prizeInfo.split(':');
+                var info = prizeInfo.split(separator);
                 var id = parseInt(info[0]);
                 var price = parseInt(info[1]);
     			var image = info[2];
