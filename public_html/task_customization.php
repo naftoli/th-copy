@@ -13,7 +13,7 @@ if($_GET['debug']){
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getCurrentYear();
 $dates = GlobalSettings::getCurYearDates();
-$dates['start'] = 2458006;
+//$dates['start'] = 2458006;
 
 //get parshos
 $parshos = array();

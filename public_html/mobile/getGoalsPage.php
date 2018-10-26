@@ -34,7 +34,7 @@ $r = mysql_fetch_assoc($res);
 require_once '../class.globalSettings.php';
 $year = GlobalSettings::getCurrentYear();
 $dates = GlobalSettings::getCurYearDates();
-$dates['start'] = 2458006;
+//$dates['start'] = 2458006;
 
 //get today's day
 //$jd = unixtojd();
@@ -421,6 +421,8 @@ include 'inc/modals/enrollChild.php';
 					end : <?=$end?>,
 					lang : <?=$lang?>
 				}, function( data ) {
+					//alert( data );
+					console.log( data );
 					//alert( "Customized Tasks Saved." );
 					//history.go(0);
 					//window.location = 'goals.php';
