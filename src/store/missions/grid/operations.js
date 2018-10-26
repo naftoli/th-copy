@@ -1,11 +1,10 @@
-import API, { handleAPIResponse } from 'api/api';
+import API from 'api/api';
 import * as actions from './actions';
 
 export const getGrid = ( type, date ) => dispatch => {
   dispatch( actions.setLoading( type, true ) );
 
   return API.post( `/missions/grid?action=get`, { type, date } )
-  .then( handleAPIResponse )
   .then( ({ missions, soldiers}) => {
     dispatch( actions.setSoldiers( type, soldiers ) );
     dispatch( actions.setMissions( type, missions ) );
@@ -23,7 +22,7 @@ export const markTask = ( type, user_ids, grid_id, date, mark ) => dispatch => {
 
   if ( data.user_ids.length > 0 )
     return API.post( `/missions/mark`, data )
-    .then( handleAPIResponse );
+;
   return Promise.resolve();
 }
 
@@ -44,6 +43,5 @@ export const customizeGrid = ( type, missions ) => dispatch => {
   // prepare for server
   const data = { type, mission_sort, mission_status };
   // * save the changes
-  return API.post( `/missions/grid?action=customize`, data )
-  .then( handleAPIResponse );
+  return API.post( `/missions/grid?action=customize`, data );
 }

@@ -5,8 +5,7 @@ import PropTypes from 'prop-types';
 import { Select } from './Select';
 // functions
 import { findOption } from 'functions/selects';
-import { makeCancelable } from 'functions/utils/promises';
-import { getBaseList } from 'store/base/bases/operations';
+import { getBases } from 'store/base/bases/operations';
 
 class BaseSelect extends Component {
 
@@ -22,18 +21,11 @@ class BaseSelect extends Component {
     fetchAll: false
   }
 
-  state = { 
-    bases: [],
-    loading: false
-  }
-
-  apiRequest = null;
-
   componentDidMount(){
-    this.getBases( this.props.fetchAll );
+    if ( !this.props.bases.length )
+      this.props.getBases();
   }
 
-  // update if the login changed and we did not fetch all bases for this BC
   componentDidUpdate() {
     const { onChange, value, isClearable } = this.props;
     // actually select the first option if is not clearable
@@ -44,20 +36,9 @@ class BaseSelect extends Component {
     }
   }
 
-  componentWillUnmount(){
-    this.apiRequest && this.apiRequest.cancel();
-  }
-
-  getBases = ( fetchAll ) =>  {
-    this.setState({ loading: true });
-    this.apiRequest = makeCancelable( getBaseList( fetchAll ) );
-    return this.apiRequest.promise
-    .then( bases => this.setState({ bases, loading: false }) )
-  }
-
   getOptions = () => {
-    const { showAllOption } = this.props;
-    const options = this.state.bases.map( 
+    const { showAllOption, bases } = this.props;
+    const options = bases.map( 
       ({ school_name, school_id }) => ({ value: school_id, label: school_name })
     );
     if ( showAllOption ) options.unshift({ value: false, label: 'All Bases' });
@@ -66,8 +47,7 @@ class BaseSelect extends Component {
 
   // render
   render() {
-    const { onChange, value } = this.props;
-    const { loading } = this.state;
+    const { onChange, value, loading } = this.props;
     
     let options = this.getOptions();
     const selected = findOption( options, value );
@@ -80,8 +60,8 @@ class BaseSelect extends Component {
   }
 }
 
-const mapStateToProps = ( { login } ) => ({
-  login: login.current_login
+const mapStateToProps = ( { base } ) => ({
+  bases: base.bases.bases
 })
 
-export default connect( mapStateToProps )( BaseSelect );
+export default connect( mapStateToProps, { getBases } )( BaseSelect );

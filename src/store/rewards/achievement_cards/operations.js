@@ -1,4 +1,4 @@
-import API, { handleAPIResponse } from 'api/api';
+import API from 'api/api';
 import * as actions from './actions';
 
 // generate cards
@@ -6,7 +6,7 @@ export const generateAchievementCards = ( data ) => dispatch => {
   dispatch( actions.setCards([]) );
   dispatch( actions.setLoading( true ) );
   return API.post( `/rewards/achievement_cards`, data )
-    .then( handleAPIResponse )
+
     .then( ({ cards, miles }) => {
       dispatch( actions.setCards( cards ) );
       dispatch( actions.setMiles( miles ) );
@@ -26,7 +26,6 @@ export const getMiles = () => dispatch => {
 
 export const deleteUnused = delete_to => dispatch => {
   return API.delete( `/rewards/achievement_cards`, { delete_to } )
-  .then( handleAPIResponse )
   .then( ({ miles, cards_deleted }) => {
     dispatch( actions.setMiles( miles ) );
     dispatch( actions.setCards( [] ) );

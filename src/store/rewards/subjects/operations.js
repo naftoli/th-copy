@@ -5,7 +5,7 @@ import * as actions from './actions';
 export const getSubjects = () => dispatch => {
   dispatch( actions.setLoading( true ) );
   return API.get( `/rewards/subjects` )
-    .then( ({ data }) => {
+    .then( data => {
       dispatch( actions.setSubjects( data ) );
     }).catch( e => {
       dispatch( actions.setLoading( false ) );

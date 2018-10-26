@@ -16,7 +16,7 @@ export class ProfilePicture extends Component {
 
   static propTypes = {
     // absolute source around legacy_url
-    src: PropTypes.string.isRequired,
+    src: PropTypes.string,
     // rank_ord
     rank: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
     // misc props

@@ -40,17 +40,10 @@ const parseResponse = response => {
   if ( response.success === false && response.message ) {
     return Promise.reject( response );
   }
-  return response;
-}
-
-const handleAPIResponse = response => {
-  if ( !response.success ) { 
-    return Promise.reject( response );
-  }
   return response.data;
 }
 
-export { API_URL, headers, toJSON, parseResponse, handleAPIResponse };
+export { API_URL, headers, toJSON, parseResponse };
 
 export default {
   get( url ) {

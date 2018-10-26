@@ -8,14 +8,10 @@ import { setLoading, setPayments } from './actions';
 export const getPaymentProfiles = () => dispatch => {
   dispatch( setLoading( true ) );
   return API.get( '/payments/profiles.php' )
-  .then( response => {
-    dispatch( setLoading( false ) );
-    // go to catch if request has an issue
-    if ( !response.success ) 
-      return Promise.reject( response );
-    dispatch( setPayments( response.data ) );
+  .then( payments => {
+    dispatch( setPayments( payments ) );
     // pass data to the next .then();
-    return response.data;
+    return payments;
   }).catch( error => {
     dispatch( setLoading( false ) );
     return Promise.reject( error );

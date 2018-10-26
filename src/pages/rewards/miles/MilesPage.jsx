@@ -17,7 +17,7 @@ import './miles.scss';
 const updateMiles = data => {
   const toast_id = createNotifcation('Updating Miles...');
   API.post( '/rewards/miles?action=manual', data )
-  .then( res => updateNotifcation( toast_id, 'Miles Updated', res.error, res.success ) )
+  .then( () => updateNotifcation( toast_id, 'Miles Updated', '', true ) )
   .catch( e => updateNotifcation( toast_id, '', e.message, false ));
 }
 

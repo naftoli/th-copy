@@ -7,37 +7,30 @@ const cookies = new Cookies();
 
 export const login = ( username, password ) => dispatch => {
   dispatch( actions.setLoading( true ) );
-  return API.post('/auth/login.php', { username, password })
-    .then( response => {
-      if ( response.success ) {
-        const { legacy, mobile, id } = response.data;
+  return API.post( '/auth/login.php', { username, password } )
+    .then( ({ legacy, mobile, id }) => {
         dispatch( actions.setTokens( legacy, mobile, id ) );
         getCurrentUser()( dispatch ); // get the user
-      } else {
-        dispatch( actions.setLoading( false ) );
-        dispatch( actions.setErrors( response.error ) );
-      }
     })
     .catch( error => {
       dispatch( actions.setLoading( false ) );
-      dispatch( actions.setErrors( 'Could not log in. Please try again.' ));
+      dispatch( actions.setErrors( 
+        error.message || 'Could not log in. Please try again.' )
+      );
     });
 };
 
 export const getCurrentUser = () => dispatch => {
   dispatch( actions.setLoading( true ) );
   return API.get( '/auth/current_user.php' )
-    .then( response => {
+    .then( user => {
       dispatch( actions.setLoading( false ) );
-
-      if ( !response.success ) return dispatch( actions.logout() );
-
-      dispatch( actions.setUser( response.data ) );
+      dispatch( actions.setUser( user ) );
       
       return setLogin( dispatch );
     }).catch( error => {
       dispatch( actions.logout() );
-      dispatch( actions.setErrors(
+      dispatch( actions.setErrors( error.message || 
         'Could not get account info. Please clear your cookies and try again.'
       ));
       return Promise.reject( error );
@@ -49,17 +42,15 @@ export const updateCurrentUser = ( updates ) => dispatch => {
   const toast_id = createNotifcation('Updating Account');
 
   return API.post( '/auth/current_user.php', updates )
-    .then( response => {
-      updateNotifcation(
-        toast_id, 'Account Updated', response.message, response.success
-      );
-      dispatch( actions.setUser( response.data.account ) );
+    .then( data => {
+      updateNotifcation( toast_id, 'Account Updated', '', true );
+      dispatch( actions.setUser( data.account ) );
 
-      const { legacy, mobile, id } = response.data.tokens;
+      const { legacy, mobile, id } = data.tokens;
       dispatch( actions.setTokens( legacy, mobile, id ) );
 
       setLogin( dispatch );
-      return response.data;
+      return data;
     }).catch( error => {
       updateNotifcation( toast_id, '', error.message, false );
       return Promise.reject( error );

@@ -30,7 +30,7 @@ describe(`operations`, () => {
     it(`calls dispatch 3 times`, () => {
       fetchMock.get('*', { success: false } );
       return operations.getSoldiers()( dispatchMock ).then( () => {
-        expect( dispatchMock ).toHaveBeenCalledTimes( 3 );
+        expect( dispatchMock ).toHaveBeenCalledTimes( 2 );
       });
     });
 
