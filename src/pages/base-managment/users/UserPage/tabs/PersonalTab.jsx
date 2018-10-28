@@ -4,7 +4,7 @@ import { LEGACY_URL } from 'components/constants';
 import { Form } from 'components/inputs';
 import { AddressRow } from 'components/rows';
 import { SaveButton } from 'components/buttons';
-import { Row, Col, TabPane, Input } from 'reactstrap';
+import { Row, Col, TabPane } from 'reactstrap';
 import CropperModal from 'components/modals/CropperModal';
 import { ProfileRow, NameRow, DobRow, RegistrationRow } from '../rows';
 
@@ -33,7 +33,7 @@ class PersonalTab extends Component {
 
   render(){
     const { soldier, tabId, updated, onSubmit, onValidChange } = this.props;
-    let { user_serial, barcode, profilePicture, email } = soldier;
+    let { user_serial, barcode, profilePicture } = soldier;
     const profile_picture = profilePicture ? `${LEGACY_URL}${profilePicture}` : '';
     // render form
     return (
@@ -49,13 +49,6 @@ class PersonalTab extends Component {
 
             <DobRow soldier={ soldier } showHe onChange={ this.dateChange('dob') } />
 
-            <Row>
-              <Col xs={ 12 }>
-                <label htmlFor='email'>Parent E-mail</label>
-                <Input type='email' value={ email } id='email' onChange={ this.handleChange }/>
-                <div className='invalid-message'>Please enter a valid E-mail Address</div>
-              </Col>
-            </Row>
           </Col>
           <Col xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2'>
             <ProfileRow soldier={ soldier } toggle={ this.toggle } 
