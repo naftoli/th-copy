@@ -68,9 +68,9 @@ const getMenu = ( login ) => {
         {
           label: "Soldiers",
           items: [
-            { label: "View / Edit", path: '/bm/users' },
-            { label: "Registration", path: '/bm/users/registration', module: 'chayolei', user_types: [ 'BC' ] },
-            { label: "Rank Cards", path: '/bm/users/cards' },
+            { label: "View / Edit", path: '/bm/soldiers' },
+            { label: "Registration", path: '/bm/soldiers/registration', module: 'chayolei', user_types: [ 'BC' ] },
+            { label: "Rank Cards", path: '/bm/soldiers/cards' },
             { label: "Update Missions", legacy: true, path: '/add_missions.php' },
             { label: "Update Medals", legacy: true, path: '/add_medals.php' },
           ]
@@ -83,7 +83,7 @@ const getMenu = ( login ) => {
       ]
     },
     {
-      label: 'Platoon Management', user_types: [ 'TEACHER' ], path: '/bm/users',
+      label: 'Platoon Management', user_types: [ 'TEACHER' ], path: '/bm/soldiers',
       icon: <FontAwesome icon='chalkboard-teacher' />,
     },
     {

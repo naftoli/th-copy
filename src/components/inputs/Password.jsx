@@ -15,13 +15,11 @@ export class Password extends Component {
     tabToggle: false, // can they tab to the toggle
     defaultOpen: false, // can we see the password by default
   }
-  // use a constructor to set the default state
-  constructor( props ) {
-    super( props );
-    this.state = {
-      show_password: props.defaultOpen
-    }
+  
+  state = {
+    show_password: this.props.defaultOpen
   }
+
   // dom manimpulation works, if you render based on state it keeps re-rendering in the dom and will not work
   passwordRef = React.createRef();
 

@@ -11,7 +11,8 @@ import './styles/ProfilePicture.scss';
 export class ProfilePicture extends Component {
 
   static defaultProps = {
-    fallbackImage: DEFAULT_PROFILE
+    fallbackImage: DEFAULT_PROFILE,
+    src: ''
   }
 
   static propTypes = {

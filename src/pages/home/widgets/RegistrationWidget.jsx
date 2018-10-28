@@ -45,7 +45,7 @@ export class RegistrationWidget extends Component {
             <p>
               <strong>Soldiers Registered:</strong>
               { login.code === 'BC' &&
-                <Link to='/bm/users/registration'>{ soldier_status }</Link>
+                <Link to='/bm/soldiers/registration'>{ soldier_status }</Link>
               }
               { login.code !== 'BC' && <span>{ soldier_status }</span> }
             </p>

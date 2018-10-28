@@ -30,13 +30,13 @@ export default ( login, editPicture, updateToggle ) => {
       },
     }, {
       Header: "First Name", accessor: 'first',
-      Cell: props => <Link to={`/bm/users/${props.original.user_id}`} tabIndex={ -1 } >{props.value}</Link>,
+      Cell: props => <Link to={`/bm/soldiers/${props.original.user_id}`} tabIndex={ -1 } >{props.value}</Link>,
     }, {
       Header: "Last Name", accessor: 'last',
-      Cell: props => <Link to={`/bm/users/${props.original.user_id}`} tabIndex={ -1 } >{props.value}</Link>,
+      Cell: props => <Link to={`/bm/soldiers/${props.original.user_id}`} tabIndex={ -1 } >{props.value}</Link>,
     }, {
       Header: "Serial Number", accessor: 'user_serial',
-      Cell: props => <Link to={`/bm/users/${props.original.user_id}`}>{props.value}</Link>,
+      Cell: props => <Link to={`/bm/soldiers/${props.original.user_id}`}>{props.value}</Link>,
     }, {
       Header: 'Date Of Birth', accessor: 'dob', filterable: false,
       Cell: props => <DateDisplay value={ props.value } format = 'l'/>,

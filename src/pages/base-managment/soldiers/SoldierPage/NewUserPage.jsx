@@ -100,8 +100,9 @@ class NewUserPage extends Component {
     })
     .then( soldier => {
       this.setState({ loading: false });
-      this.props.getSoldiers(); // refresh the list of soldiers
-      this.props.history.push(`/bm/users/${soldier.user_id}`);
+      if ( response.success )
+        this.props.getSoldiers(); // refresh the list of soldiers
+        this.props.history.push(`/bm/soldiers/${response.data.user_id}`);
     })
     .catch( error => {
       toast.error( error.message );
@@ -119,7 +120,7 @@ class NewUserPage extends Component {
     let baseSelect, platoonSelect;
     if ( isAdmin( code ) ) {
       baseSelect = (
-        <Col xs='6'>
+        <Col xs={ 6 }>
           <label>Base</label>
           <BaseSelect value={ school_id } onChange={this.handleSelectChange('school_id')} />
         </Col>
@@ -127,7 +128,7 @@ class NewUserPage extends Component {
     }
     if ( isBC( code ) ) {
       platoonSelect = (
-        <Col xs={ isAdmin( code ) ? 6 : 12 }>
+        <Col xs={ isAdmin( code ) ? 6  : 12 }>
           <label>Platoon</label>
           <PlatoonSelect schoolId={ school_id } value={ class_id } 
             onChange={this.handleSelectChange('class_id')} />

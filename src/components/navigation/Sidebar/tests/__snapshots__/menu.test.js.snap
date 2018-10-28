@@ -34,11 +34,11 @@ Array [
         "items": Array [
           Object {
             "label": "View / Edit",
-            "path": "/bm/users",
+            "path": "/bm/soldiers",
           },
           Object {
             "label": "Rank Cards",
-            "path": "/bm/users/cards",
+            "path": "/bm/soldiers/cards",
           },
         ],
         "label": "Soldiers",
@@ -102,11 +102,11 @@ Array [
         "items": Array [
           Object {
             "label": "View / Edit",
-            "path": "/bm/users",
+            "path": "/bm/soldiers",
           },
           Object {
             "label": "Rank Cards",
-            "path": "/bm/users/cards",
+            "path": "/bm/soldiers/cards",
           },
         ],
         "label": "Soldiers",
