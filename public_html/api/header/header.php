@@ -14,8 +14,8 @@ include_once( __DIR__ . "/rest-router.php" );
 include_once( __DIR__ . "/db.php" );
 include_once( __DIR__ . '/getallheaders.php');
 // Import Authorize.net API functions into global space to be used in models
-require_once( dirname(__FILE__) . "/../../classes/authorize/CustomerProfile.php" );
-require_once( dirname(__FILE__) . "/../../classes/authorize/PaymentProfile.php" );
+require_once( __DIR__ . "/../../classes/authorize/CustomerProfile.php" );
+require_once( __DIR__ . "/../../classes/authorize/PaymentProfile.php" );
 // GlobalSettings
 include_once( __DIR__ . '/../../class.globalSettings.php');
 

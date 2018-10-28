@@ -52,7 +52,6 @@ class GridRouter {
                 'name' => $soldier->name(),
                 'user_id' => $soldier->user_id,
                 'user_serial' => $soldier->user_serial,
-                'profilePicture' => $soldier->profilePicture(),
                 'marks' => isset( $marks[ $soldier->user_id ] ) ? $marks[ $soldier->user_id ] : new stdClass
             ];
         }
