@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 // sub pages
 import { Page404 } from 'pages/errors';
-import UsersPages from './users';
+import SoldiersPages from './soldiers';
 import PlatoonPages from './platoons';
 import ParentPages from './parents';
 import StaffPages from './staff';
@@ -26,7 +26,7 @@ export class BaseManagmentIndexPage extends Component {
 
     return (
       <Switch>
-        <Route path={`${path}/users`} component={ UsersPages } />
+        <Route path={`${path}/soldiers`} component={ SoldiersPages } />
         {/* render BC only routes */}
         { isBC( code ) && BCRoutes }
         <Route component={ Page404 } />

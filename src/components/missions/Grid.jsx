@@ -121,7 +121,7 @@ export class Grid extends Component {
             <tr className='Grid-row' key={ index }>
               <td>
                 <small>{ soldier.rank.name }</small><br/>
-                <Link to={`/bm/users/${soldier.user_id}`}>{ soldier.name }</Link>
+                <Link to={`/bm/soldiers/${soldier.user_id}`}>{ soldier.name }</Link>
               </td>
               { missions.map( ( mission, index ) =>
                 <td key={ index } >

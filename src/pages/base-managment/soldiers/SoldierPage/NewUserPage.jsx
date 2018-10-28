@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // components
 import { FontAwesome } from 'components/ui';
 import { AddressRow } from 'components/rows';
-import { Row, Col, Button, Input } from 'reactstrap';
+import { Row, Col, Button } from 'reactstrap';
 import { ProfileRow, NameRow, DobRow } from './rows';
 import CropperModal from 'components/modals/CropperModal';
 import { PlatoonSelect, BaseSelect, Select } from 'components/inputs';
@@ -106,7 +106,7 @@ class NewUserPage extends Component {
       this.setState({ loading: false });
       if ( response.success )
         this.props.getSoldiers(); // refresh the list of soldiers
-        this.props.history.push(`/bm/users/${response.data.user_id}`);
+        this.props.history.push(`/bm/soldiers/${response.data.user_id}`);
     })
     .catch( error => {
       toast.error( error.message );
@@ -117,14 +117,14 @@ class NewUserPage extends Component {
   render() {
     const { code } = this.props.current_login;
     const { soldier, cropperModalShow, loading } = this.state;
-    const { gender, school_type_id, school_id, class_id, email } = soldier;
+    const { gender, school_type_id, school_id, class_id } = soldier;
     // generate the mission_type options
     let mission_type_options = missionTypeOptions( gender );
     // show the dropdown needed for the current login
     let baseSelect, platoonSelect;
     if ( isAdmin( code ) ) {
       baseSelect = (
-        <Col xs='6'>
+        <Col xs={ 6 }>
           <label>Base</label>
           <BaseSelect value={ school_id } onChange={this.handleSelectChange('school_id')} />
         </Col>
@@ -132,7 +132,7 @@ class NewUserPage extends Component {
     }
     if ( isBC( code ) ) {
       platoonSelect = (
-        <Col xs={ 6 }>
+        <Col xs={ isAdmin( code ) ? 6  : 12 }>
           <label>Platoon</label>
           <PlatoonSelect schoolId={ school_id } value={ class_id } 
             onChange={this.handleSelectChange('class_id')} />
@@ -157,12 +157,6 @@ class NewUserPage extends Component {
               </Col>
               { baseSelect }
               { platoonSelect }
-
-              <Col xs={ isAdmin( code ) ? 12 : 6 }>
-                <label htmlFor='email'>Parent E-mail</label>
-                <Input type='email' value={ email } id='email' onChange={ this.handleChangeEvent }/>
-                <div className='invalid-message'>Please enter a valid E-mail Address</div>
-              </Col>
 
             </DobRow>
             

@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import is from 'is_js';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // styles
-import './UsersPage.scss';
+import './SoldiersPage.scss';
 // state
 import { 
   getSoldiers, updateSoldier, uploadSpreadsheet 
@@ -19,7 +19,7 @@ import {
 // data
 import getColumns from './columns';
 
-export class UsersPage extends Component {
+export class SoldiersPage extends Component {
   // initial state
   state = { 
     cropperModalShow: false, cropperModalSrc: false, 
@@ -92,7 +92,7 @@ export class UsersPage extends Component {
     const columns = getColumns( current_login, this.editPicture, this.updateToggle );
     // page definition
     return (
-      <div id='UsersPage' className='full-height'>
+      <div id='SoldiersPage' className='full-height'>
         {/* User Guide */}
         <Callout title='View Soldiers'>
           Click a Soldier's name or serial number to view and edit their account.<br/>
@@ -121,7 +121,7 @@ export class UsersPage extends Component {
           columns={ columns } 
           data={ soldiers } 
           loading={ loading && !soldiers.length } 
-          pageId='UsersPage' />
+          pageId='SoldiersPage' />
         {/* Modal to edit images */}
         <CropperModal isOpen={ cropperModalShow } src={ cropperModalSrc } 
           toggle={ this.closeCropperModal } uploadImage={ this.updatePicture }/>
@@ -145,4 +145,4 @@ const mapStateToProps = ({ base, login }) => {
 
 export default connect( 
   mapStateToProps, { getSoldiers, updateSoldier, uploadSpreadsheet } 
-)( UsersPage );
+)( SoldiersPage );

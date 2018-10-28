@@ -14,9 +14,9 @@ import { filterUpdates } from 'functions/events';
 import { getSoldier, updateSoldier } from 'store/base/soldiers/operations';
 import { createNotifcation, updateNotifcation } from 'functions/notifications';
 // styles
-import './UserPage.scss';
+import './SoldierPage.scss';
 
-class UserPage extends Component {
+class SoldierPage extends Component {
   // initial state
   state = {
     soldier: {},  updates: {},
@@ -87,7 +87,7 @@ class UserPage extends Component {
     let { soldier, loading, updates, activeTab, valid } = this.state;
 
     // if we do not have the soldier...
-    if ( soldier === undefined ) return <Redirect to='/bm/users' />;
+    if ( soldier === undefined ) return <Redirect to='/bm/soldiers' />;
     // if loading return a LoadingScreen
     if ( loading ) return <LoadingScreen size='8' />;
 
@@ -96,7 +96,7 @@ class UserPage extends Component {
 
     // render the page and it's sub-pages ( tabs )
     return (
-      <div id='UserPage'>
+      <div id='SoldierPage'>
         <Prompt 
           when={ updated } 
           message="You have unsaved changes. Are you sure you want to leave?" />
@@ -152,4 +152,4 @@ const mapStateToProps = ( state ) => {
   };
 }
 
-export default connect( mapStateToProps, { getSoldier, updateSoldier } )( UserPage );
+export default connect( mapStateToProps, { getSoldier, updateSoldier } )( SoldierPage );
