@@ -11,12 +11,13 @@ import './styles/ProfilePicture.scss';
 export class ProfilePicture extends Component {
 
   static defaultProps = {
-    fallbackImage: DEFAULT_PROFILE
+    fallbackImage: DEFAULT_PROFILE,
+    src: ''
   }
 
   static propTypes = {
     // absolute source around legacy_url
-    src: PropTypes.string.isRequired,
+    src: PropTypes.string,
     // rank_ord
     rank: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
     // misc props

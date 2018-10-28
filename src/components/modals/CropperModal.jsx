@@ -97,7 +97,10 @@ class CropperModal extends Component {
       </div>;
     // if we do, render the cropper component
     if ( src ) 
-      body = <Cropper src={ src } onError={ this.handleError } cropper={ this.setCropper } viewMode={ viewMode }/>;
+      body = <Cropper src={ src } 
+        onError={ this.handleError } 
+        cropper={ this.setCropper } 
+        viewMode={ viewMode } />;
     // render the final modal
     return (
       <Modal isOpen={isOpen} id='cropper-modal'
@@ -107,10 +110,12 @@ class CropperModal extends Component {
           <input type="file" style={{display: 'none'}} ref={ this.uploadRef } onChange={ this.readImageFile }/>
           { body }
         </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={ this.openImage }>Change Image</Button>
-          <Button color="primary" onClick={ this.uploadImage }>Save / Replace</Button>
-        </ModalFooter>
+        { src &&
+          <ModalFooter>
+            <Button color="primary" onClick={ this.openImage }>Change Image</Button>
+            <Button color="primary" onClick={ this.uploadImage }>Save / Replace</Button>
+          </ModalFooter>
+        }
       </Modal>
     );
   }
