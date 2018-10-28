@@ -15,11 +15,11 @@ class Child extends Component {
       <Row className='child'>
         <Col xs={6} sm={{ size: 3, order: 1 }}>
           <strong>Serial Number: </strong>
-          <p><Link to={`/bm/users/${user_id}`}>{user_serial}</Link></p>
+          <p><Link to={`/bm/soldiers/${user_id}`}>{user_serial}</Link></p>
         </Col>
         <Col xs={{ size: 12, order: 12}} sm={{ size: 5, order: 2 }}>
           <strong>Full Name: </strong>
-          <p><Link to={`/bm/users/${user_id}`}>{first} {last}</Link></p>
+          <p><Link to={`/bm/soldiers/${user_id}`}>{first} {last}</Link></p>
         </Col>
         <Col xs={6} sm={{ size: 4, order: 3 }}>
           <Button color='danger' onClick={ this.remove }>

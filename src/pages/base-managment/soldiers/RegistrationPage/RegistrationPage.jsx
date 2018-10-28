@@ -80,11 +80,11 @@ export class RegistrationPage extends Component {
     // define table columns
     let columns = [
       { Header: 'First Name', accessor: 'first',
-        Cell: props => <Link to={`/bm/users/${props.original.user_id}`} tabIndex={-1}>{props.value}</Link> },
+        Cell: props => <Link to={`/bm/soldiers/${props.original.user_id}`} tabIndex={-1}>{props.value}</Link> },
       { Header: 'Last Name', accessor: 'last',
-        Cell: props => <Link to={`/bm/users/${props.original.user_id}`} tabIndex={-1}>{props.value}</Link> },
+        Cell: props => <Link to={`/bm/soldiers/${props.original.user_id}`} tabIndex={-1}>{props.value}</Link> },
       { Header: 'Serial Number', accessor: 'user_serial',
-        Cell: props => <Link to={`/bm/users/${props.original.user_id}`} tabIndex={-1}>{props.value}</Link> },
+        Cell: props => <Link to={`/bm/soldiers/${props.original.user_id}`} tabIndex={-1}>{props.value}</Link> },
       { Header: 'Registration Fee', accessor: 'fee' },
       { Header: 'Platoon', accessor: 'platoon' },
     ];
