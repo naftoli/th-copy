@@ -60,15 +60,19 @@ if ( isset( $_FILES['file'] ) ) {
                     ':parent_id'    =>  $admin_id
                 ]) 
             ) {
-                echo "Error inserting row<br />";
                 $success = false;
                 break;
             }
         }
     }
 
-    if ( $success ) $MASHPIA_DB->commit();
-    else $MASHPIA_DB->rollBack();
+    if ( $success ) {
+        $MASHPIA_DB->commit();
+        echo "Successfully updated.";
+    } else {
+        $MASHPIA_DB->rollBack();
+        echo "Error updating.";
+    }
 }
 ?>
 <!DOCTYPE html>
