@@ -17,7 +17,11 @@ function withDefaultProps( Select ){
     }
 
     getValue = () => {
-      if (this.props.value !== undefined) return this.props.value;
+      const { value } = this.props;
+      if ( value && value.value !== undefined)
+        return value.value;
+      if ( value !== undefined)
+        return value;
       return this.state.value || '';
     };
 
