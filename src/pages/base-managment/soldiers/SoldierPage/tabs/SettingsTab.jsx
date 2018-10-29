@@ -5,7 +5,7 @@ import { ParentRow } from '../rows';
 import { Form } from 'components/inputs';
 import { SaveButton } from 'components/buttons';
 import { Row, Col, Button, TabPane, UncontrolledTooltip } from 'reactstrap';
-import { Select, Checkbox, Toggle, MissionTypeSelect } from 'components/inputs';
+import { Select, Checkbox, MissionTypeSelect } from 'components/inputs';
 // functions
 import { isBC } from 'functions/login';
 import { findOption } from 'functions/selects';
