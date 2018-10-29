@@ -3,26 +3,19 @@
 #SoldierPage, #NewSoldierModal {
   .ProfileRow {
     text-align: center;
-    margin: 0px;
 
-    img.profile-img {
-      max-width: 125px;
-    }
     div#gender-row {
       font-size: 1.25em;
-      padding: 2px 0px 8px;
+      padding: 8px 0px 0px;
     }
 
     .profile-picture {
-      max-height: 210px;
+      max-height: 175px;
       max-width: fit-content;
       > img:not(.rank) {
-        max-height: 210px;
+        max-height: 175px;
         border-radius: 15px;
         border: 1px solid $primary-color;
-      }
-      @media ( max-width: 575px ) {
-        margin-bottom: 10px;
       }
     }
     .profile-picture.editable:not(.ie):hover:before,
@@ -31,13 +24,23 @@
       @media ( min-width: 500px ) { font-size: 2em; }
       @media ( min-width: 575px ) { font-size: 3em; }
     }
-    
-    border-bottom: 1px solid $primary-color;
+
+    @media ( max-width: 575px ) {
+      .profile-picture {
+        margin-bottom: 10px;
+        > img:not(.rank) { max-height: 150px; }
+      }
+      div#gender-row { padding: 0px 0px 8px; }
+    }
   }
 }
 
 #SoldierPage {
   padding-bottom: 10px;
+
+  #image-row > div {
+    align-self: center;
+  }
 
   div[dir=rtl] > label { font-size: .9em; }
 
@@ -45,6 +48,8 @@
   .form-check-input {
     position: relative; margin-left: 0px;
   }
+
+  .enrollment label { display: block; }
 
   .RankRow {
     text-align: center;

@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { ParentRow } from '../rows';
 import { Form } from 'components/inputs';
 import { SaveButton } from 'components/buttons';
-import { Row, Col, Button, Input, TabPane } from 'reactstrap';
-import { Select, PlatoonSelect, Checkbox } from 'components/inputs';
+import { Row, Col, Button, TabPane, UncontrolledTooltip } from 'reactstrap';
+import { Select, Checkbox, Toggle, MissionTypeSelect } from 'components/inputs';
 // functions
 import { isBC } from 'functions/login';
-import { findOption, missionTypeOptions } from 'functions/selects';
+import { findOption } from 'functions/selects';
 import { deleteSoldier, getSoldiers } from 'store/base/soldiers/operations';
 import { FontAwesome } from 'components/ui/Icons';
 
@@ -18,14 +18,13 @@ class SettingsTab extends Component {
     this.props.handleChange( { [event.target.id]: event.target.checked ? 1 : 0 } );
   }
   // handle react-select change events
-  handleSelectChange = ( id ) => ( option ) => {
+  onSelectChange = ( id ) => ( option ) => {
     this.props.handleChange( { [id]: option && option.value } );
   }
 
   delete = () => {
     if ( window.confirm( 'Are you sure you want to delete this soldier?') ) {
       this.props.deleteSoldier( this.props.soldier.user_id )
-      .then( () => this.props.getSoldiers() ) // refresh the main list
       .then( () => this.props.getSoldier() ); // refresh the single soldier
     }
   }
@@ -34,62 +33,76 @@ class SettingsTab extends Component {
   render() {
     const { soldier, tabId, updated, onSubmit, onValidChange } = this.props;
     let { 
-      user_id, class_id, school_id, chayolei, yan, chidon,
-      allow_parent_tasks, print_parent_tasks, gender,
-      school_type_id, lang_id, parentAccount, school
+      user_id,  chayolei, yan,  chidon, lang_id,
+      parentAccount,  allow_parent_tasks, print_parent_tasks,
     } = soldier;
-    // mission_type_options
-    const mission_type_options = missionTypeOptions( gender );
     // language options
     const language_options = [
       { value: 1, label: 'English' },
       { value: 2, label: 'Yiddish' },
       { value: 3, label: 'French' }
     ];
+    const checkboxProps = {
+      onChange: this.handleCheckbox
+    }
     // render the settings tab
     return (
       <TabPane tabId = { tabId }>
         <Form id='SettingsTab' onSubmit={ onSubmit } onValidChange={ onValidChange }>
+
+          <p className='title'>Mission Settings</p>
           <Row>
-            <Col xs='12' sm='6'>
-              <label>Base</label>
-              <Input disabled value={ school ? school.school_name : 'N / A' } />
-            </Col>
-            <Col xs='12' sm='6'>
-              <label>Platoon</label>
-              <PlatoonSelect schoolId={ school_id } value={ class_id } isClearable 
-                onChange={this.handleSelectChange('class_id')} />
+            <Col xs='6'>
+              <label htmlFor='mission_type'>Mission Type</label>
+              <MissionTypeSelect
+                required id='mission_type'
+                gender={ soldier.gender }
+                value={ soldier.school_type_id }
+                onChange={ this.onSelectChange( 'school_type_id' ) } />
             </Col>
             <Col xs='6'>
-              <label>Mission Type</label>
-              <Select options={mission_type_options} onChange={this.handleSelectChange('school_type_id')}
-                value={findOption( mission_type_options, school_type_id )} />
-            </Col>
-            <Col xs='6'>
-              <label>Mission Language</label>
-              <Select options={language_options} onChange={this.handleSelectChange('lang_id')}
-                value={findOption( language_options, lang_id )} />
+              <label htmlFor='mission_lang'>Mission Language</label>
+              <Select
+                required id='mission_lang'
+                options={language_options}
+                onChange={ this.onSelectChange('lang_id') }
+                value={ findOption( language_options, lang_id ) } />
             </Col>
           </Row>
-          <Row>
+
+          <Row className='enrollment'>
             <Col xs='12' sm='6'>
-              <label>Enrolled in:</label><br/>
-              <Checkbox checked={!!chayolei} id='chayolei' onChange={this.handleCheckbox}>
-                Chayolei
+              <label id='enrolled'>Enrolled in:</label>
+              <UncontrolledTooltip placement="top" target="enrolled" autohide={ false }>
+                Control what this soldier is enrolled in.
+                <strong>Warning: This overrides any registration</strong>
+              </UncontrolledTooltip>
+
+              <Checkbox checked={!!chayolei} id='chayolei' { ...checkboxProps }>
+                Chayolei Tzivos Hashem (CTH)
               </Checkbox>
-              <Checkbox checked={!!chidon} id='chidon' onChange={this.handleCheckbox}>
+
+              <Checkbox checked={!!chidon} id='chidon' { ...checkboxProps }>
                 Chidon
               </Checkbox>
-              <Checkbox checked={!!yan} id='yan' onChange={this.handleCheckbox}>
+
+              <Checkbox checked={!!yan} id='yan' { ...checkboxProps }>
                 Tanya
               </Checkbox>
             </Col>
+
             <Col xs='12' sm='6'>
-              <label>Custom Parent Tasks</label><br/>
-              <Checkbox checked={!!allow_parent_tasks} id='allow_parent_tasks' onChange={this.handleCheckbox}>
+              <label id='customize'>Custom Parent Tasks</label>
+              <UncontrolledTooltip placement="top" target="customize" autohide={ false }>
+                Allow parents to create completely custom tasks for this soldier.
+                Custom tasks are worth 0.5 miles per day/week
+              </UncontrolledTooltip>
+
+              <Checkbox checked={!!allow_parent_tasks} id='allow_parent_tasks' { ...checkboxProps }>
                 Allow
               </Checkbox>
-              <Checkbox checked={!!print_parent_tasks} id='print_parent_tasks' onChange={this.handleCheckbox}>
+
+              <Checkbox checked={!!print_parent_tasks} id='print_parent_tasks' { ...checkboxProps }>
                 Print on Mission Sheets
               </Checkbox>
             </Col>
@@ -97,7 +110,7 @@ class SettingsTab extends Component {
           
           <SaveButton show={ updated } />
 
-          <p className='title'>Parent Account</p>
+          <p className='title'>Connected Parent Account</p>
           <ParentRow parentAccount={parentAccount} userId={user_id} refresh={this.props.getSoldier}/> 
             
           { isBC( this.props.login.code ) &&
