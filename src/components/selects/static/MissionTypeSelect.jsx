@@ -13,6 +13,16 @@ export class MissionTypeSelect extends Component {
     onChange: PropTypes.func,
   }
 
+  componentDidUpdate({ gender }) {
+    // if the gender changes...
+    if ( this.props.gender !== gender ) {
+      // compute the correct value ( e.g. 12 becomes 13 )
+      const option = this.getSelected( this.getOptions() );
+      if ( option && option.value !== this.props.value )
+        this.props.onChange( option ); // and update it
+    }
+  }
+
   getOptions = () => {
     const offset = this.props.gender === 'F' ? 1 : 0;
     return [
@@ -25,12 +35,7 @@ export class MissionTypeSelect extends Component {
   getSelected = options => {
     const ending = this.props.gender === 'F' ? 3 : 2;
     const option = parseInt( this.props.value / 10, 10 ) * 10;
-    const value = option + ending;
-
-    if ( value && value !== this.props.value )
-      this.props.onChange( value );
-
-    return findOption( options, value );
+    return findOption( options, option + ending );
   }
   
   render() {
