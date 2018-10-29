@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 // components
 import { Grid } from 'components/missions/Grid';
+import { ParshaSelect } from 'components/selects';
 import { Row, Col, TabPane, Button } from 'reactstrap';
 import { FontAwesome, InlineSync, Spinner } from 'components/ui';
-import ParshaSelect from 'components/inputs/selects/ParshaSelect';
 // functions
 import { julianToday } from 'functions/dates';
 

@@ -6,7 +6,8 @@ import { AddressRow } from 'components/rows';
 import { SaveButton } from 'components/buttons';
 import { Row, Col, TabPane } from 'reactstrap';
 import CropperModal from 'components/modals/CropperModal';
-import { ProfileRow, NameRow, DobRow, RegistrationRow } from '../rows';
+import { ProfileRow, DobRow, RegistrationRow } from '../rows';
+import { NameRow } from '../../components';
 
 class PersonalTab extends Component {
   // initial state
@@ -47,7 +48,9 @@ class PersonalTab extends Component {
 
             <NameRow soldier={ soldier } onChange={ this.handleChange } />
 
-            <DobRow soldier={ soldier } showHe onChange={ this.dateChange('dob') } />
+            <DobRow showHe
+              soldier={ soldier }
+              onChange={ this.dateChange('dob') } />
 
           </Col>
           <Col xs='12' sm={{ size: 4, order: 12 }} lg='3' xl='2'>
