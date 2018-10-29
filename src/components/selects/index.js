@@ -1,4 +1,5 @@
 export * from './static/Select';
+export * from './static/MissionTypeSelect';
 export { default as SMSelect } from './redux/SMSelect';
 export { default as BaseSelect } from './redux/BaseSelect';
 export { default as PlatoonSelect } from './PlatoonSelect';
