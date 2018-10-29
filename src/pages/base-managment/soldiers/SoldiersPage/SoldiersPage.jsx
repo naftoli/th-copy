@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Button } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import CropperModal from 'components/modals/CropperModal';
 import { ButtonBar, Table, InlineSync, FontAwesome } from 'components/ui';
 // local modals
@@ -101,7 +100,7 @@ export class SoldiersPage extends Component {
 
   // render the page
   render() {
-    const { current_login, soldiers, loading, match } = this.props;
+    const { current_login, soldiers, loading } = this.props;
     const { cropper, upload, create } = this.state;
     const columns = getColumns( current_login, this.editPicture, this.updateToggle );
     // page definition
