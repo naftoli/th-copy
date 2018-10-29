@@ -20,7 +20,7 @@ class SoldierPage extends Component {
   // initial state
   state = {
     soldier: {},  updates: {},
-    loading: true,  activeTab: 2,
+    loading: true,  activeTab: 1,
     valid: {
       soldier: true, settings: true
     }
