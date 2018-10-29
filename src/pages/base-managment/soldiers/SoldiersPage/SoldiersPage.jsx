@@ -15,7 +15,8 @@ import { showError } from 'functions/notifications';
 import './SoldiersPage.scss';
 // state
 import { 
-  getSoldiers, updateSoldier, uploadSpreadsheet 
+  uploadProfile, getSoldiers, createSoldier,
+  updateSoldier, uploadSpreadsheet 
 } from 'store/base/soldiers/operations';
 // data
 import getColumns from './columns';
@@ -31,7 +32,7 @@ export class SoldiersPage extends Component {
       ...defaultCropperModalSettings
     },
     upload: { show: false },
-    create: { show: true },
+    create: { show: false, image: {} },
   }
   // load the contents if we do not have any
   componentDidMount(){
@@ -49,7 +50,7 @@ export class SoldiersPage extends Component {
   } } );
   // toggle the modals
   toggleModal = key => () => this.setState({
-    [ key ]: { show: !this.state[ key ].show }
+    [ key ]: { ...this.state[ key ], show: !this.state[ key ].show }
   });
 
   // handler for pressing the picture
@@ -59,21 +60,20 @@ export class SoldiersPage extends Component {
 
   // handler for when images are updated
   updatePicture = formData => {
-    const { id } = this.state.cropper;
-    if ( id )
-      this.props.updateSoldier( id, formData );
-    else {
-      debugger;
-    }
+    const { cropper, create } = this.state;
+    if ( cropper.id )
+      this.props.updateSoldier( cropper.id, formData );
+    else
+      this.props.uploadProfile( formData )
+      .then( res => this.setState({ create: { ...create, image: res } }) );
+    // close the cropper modal
     this.closeCropperModal();
   }
-
-  updateToggle = ( key, id ) => e => {
-    return showError( this.props.updateSoldier(
+  // update soldiers when the toggle is changed
+  updateToggle = ( key, id ) => e => showError(
+    this.props.updateSoldier(
       id, { [key]: e.target.checked ? 1 : 0 }
     ));
-  }
-
   // handler for uploding the excel file
   uploadSpreadsheet = ( formData ) => showError( 
     this.props.uploadSpreadsheet( formData )
@@ -82,6 +82,11 @@ export class SoldiersPage extends Component {
       return this.getSoldiers();
     })
   );
+  // create a new soldier
+  createSoldier = soldier => {
+    return this.props.createSoldier( soldier )
+    .then( () => this.setState({ create: { show: false, image: {} } } ) );
+  }
 
   // download the content as a CSV
   toCSV = () => {
@@ -138,8 +143,11 @@ export class SoldiersPage extends Component {
           uploadImage={ this.updatePicture } />
 
         <NewSoldierModal
-          isOpen={ create.show } 
-          toggle={ this.toggleModal('create') } />
+          image={ create.image }
+          isOpen={ create.show }
+          onSubmit={ this.createSoldier }
+          toggle={ this.toggleModal('create') }
+          editPicture={ this.editPicture( false ) } />
 
         {/* Only show the uploader for base commanders */ 
           current_login.code === 'BC' &&
@@ -161,6 +169,9 @@ const mapStateToProps = ({ base, login }) => {
   };
 }
 
-export default connect( 
-  mapStateToProps, { getSoldiers, updateSoldier, uploadSpreadsheet } 
-)( SoldiersPage );
+const mapDispatchToProps = {
+  uploadProfile, getSoldiers, createSoldier,
+  updateSoldier, uploadSpreadsheet
+}
+
+export default connect( mapStateToProps, mapDispatchToProps )( SoldiersPage );
