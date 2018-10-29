@@ -506,7 +506,7 @@ body,td,th {
 				function generateLinks( $start, $end ) {
 					global $links;
 					?>
-					- <a class="showDetails">Show Unit Details</a><br />
+					- <a class="showDetails">Show / Hide Individual Units</a><br />
 					<div class="details" style="display: none; margin-left: 20px;">
 						<?php 
 						for ($i = $start; $i < $end; $i++) {
