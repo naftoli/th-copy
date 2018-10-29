@@ -12,13 +12,13 @@ export const NameRow = ( { soldier, onChange } ) => {
       <Col sm='6'>
         <label htmlFor='first'>First Name</label>
         <Input id='first' required value={ first } { ...inputProps }
-          pattern='^[\w\s]{3,128}$' title="3-128 letters"/>
+          pattern='^[\D\s]{3,128}$' title="3-128 letters"/>
         <div className='invalid-message'>3-128 letters</div>
       </Col>
       <Col sm='6'>
         <label htmlFor='last'>Last Name</label>
         <Input id='last' required value={ last } { ...inputProps }
-          pattern='^[\w\s]{3,128}$' title="3-128 letters"/>
+          pattern='^[\D\s]{3,128}$' title="3-128 letters"/>
         <div className='invalid-message'>3-128 letters</div>
       </Col>
       <Col sm='6' dir='rtl'>

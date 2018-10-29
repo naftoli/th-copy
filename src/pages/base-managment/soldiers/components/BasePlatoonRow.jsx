@@ -7,10 +7,10 @@ import { isAdmin, isBC } from 'functions/login';
 export const BasePlatoonRow = props => {
   const {
     code, schoolId, classId, 
-    onChange, required 
+    onChange, required, isClearable 
   } = props;
   // change the hebrew text
-  const inputProps = { required };
+  const inputProps = { isClearable, required };
 
   return (
     <Row>
@@ -26,6 +26,7 @@ export const BasePlatoonRow = props => {
       <Col sm={ 6 }>
         <label>Platoon</label>
         <PlatoonSelect
+          { ...inputProps }
           value={ classId }
           schoolId={ schoolId }
           isDisabled={ !isBC( code ) }

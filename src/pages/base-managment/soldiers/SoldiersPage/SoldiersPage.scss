@@ -39,4 +39,18 @@
 
 #NewSoldierModal {
   max-width: 600px;
+
+  .ProfileRow {
+    margin: 0px;
+    border-bottom: 1px solid $primary-color;
+
+    div#gender-row {
+      font-size: 1.25em;
+      padding: 8px 0px 8px;
+    }
+
+    img.profile-img {
+      max-width: 125px;
+    }
+  }
 }

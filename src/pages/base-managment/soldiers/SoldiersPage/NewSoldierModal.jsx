@@ -87,7 +87,7 @@ class NewSoldierModal extends Component {
           <ModalBody>
 
             <ProfileRow
-              src={ image && image.profilePicture }
+              src={ image.profilePicture }
               gender={ soldier.gender }
               onImageClick={ editPicture }
               onGenderChange={ this.onInputChange } />
