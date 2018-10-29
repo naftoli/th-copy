@@ -9,7 +9,8 @@
       max-width: 125px;
     }
     div#gender-row {
-      padding: 8px 0px;
+      font-size: 1.25em;
+      padding: 2px 0px 8px;
     }
 
     .profile-picture {
@@ -43,14 +44,6 @@
   > .row { margin-bottom: .7em; }
   .form-check-input {
     position: relative; margin-left: 0px;
-  }
-
-  #gender-row {
-    font-size: 1.35em;
-    > label {
-      user-select: none; margin: 0px 10px 0px 0px;
-      &:hover { cursor: pointer; }
-    }
   }
 
   .RankRow {
