@@ -61,7 +61,7 @@ class BaseSelect extends Component {
 }
 
 const mapStateToProps = ( { base } ) => ({
-  bases: base.bases.bases
+  ...base.bases,
 })
 
 export default connect( mapStateToProps, { getBases } )( BaseSelect );
