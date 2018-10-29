@@ -20,7 +20,7 @@ class SoldierPage extends Component {
   // initial state
   state = {
     soldier: {},  updates: {},
-    loading: true,  activeTab: 1,
+    loading: true,  activeTab: 2,
     valid: {
       soldier: true, settings: true
     }
@@ -70,9 +70,9 @@ class SoldierPage extends Component {
     // update the soldier
     const toast_id = createNotifcation('Updating Soldier');
     this.props.updateSoldier( soldier.user_id, updates )
-    .then( res => {
-      updateNotifcation( toast_id, 'Soldier Updated!', res.message, res.success )
-      this.setState({ updates: {}, soldier: res.data })
+    .then( soldier => {
+      updateNotifcation( toast_id, 'Soldier Updated!', '', true )
+      this.setState({ updates: {}, soldier })
     })
     .catch( error => updateNotifcation( toast_id, '', error.message, false ) );
   }
@@ -84,10 +84,12 @@ class SoldierPage extends Component {
   }
   // render the page
   render(){
+    const { login } = this.props;
     let { soldier, loading, updates, activeTab, valid } = this.state;
 
     // if we do not have the soldier...
-    if ( soldier === undefined ) return <Redirect to='/bm/soldiers' />;
+    if ( soldier === undefined )
+      return <Redirect to='/bm/soldiers' />;
     // if loading return a LoadingScreen
     if ( loading ) return <LoadingScreen size='8' />;
 
@@ -119,6 +121,7 @@ class SoldierPage extends Component {
           
           <PersonalTab
             tabId={ 1 }
+            login={ login }
             soldier={ soldier }
             updated={ updated } 
             onSubmit={ this.saveChanges }
@@ -148,8 +151,12 @@ class SoldierPage extends Component {
 
 const mapStateToProps = ( state ) => {
   return {
-    current_login: state.login.current_login
+    login: state.login.current_login
   };
 }
 
-export default connect( mapStateToProps, { getSoldier, updateSoldier } )( SoldierPage );
+const mapDispatchToProps = {
+  getSoldier, updateSoldier
+}
+
+export default connect( mapStateToProps, mapDispatchToProps )( SoldierPage );

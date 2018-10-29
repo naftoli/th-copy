@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // components
-import { Select } from './Select';
+import { Select } from '../static/Select';
 // functions
 import { findOption } from 'functions/selects';
 import { getBases } from 'store/base/bases/operations';
@@ -61,7 +61,7 @@ class BaseSelect extends Component {
 }
 
 const mapStateToProps = ( { base } ) => ({
-  bases: base.bases.bases
+  ...base.bases,
 })
 
 export default connect( mapStateToProps, { getBases } )( BaseSelect );

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // components
-import { Select } from './Select';
+import { Select } from '../static/Select';
 // functions
 import moment from 'moment';
 import { toast } from 'react-toastify';

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Grid } from 'components/missions/Grid';
 import { Row, Col, TabPane, Button } from 'reactstrap';
 import { InlineSync, Spinner } from 'components/ui';
-import { SMSelect } from 'components/inputs/selects';
+import { SMSelect } from 'components/selects';
 
 class TehillimTab extends Component {
 

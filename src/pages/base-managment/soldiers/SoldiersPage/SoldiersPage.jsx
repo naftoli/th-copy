@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Button } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import BulkUploadModal from './BulkUploadModal';
 import CropperModal from 'components/modals/CropperModal';
 import { ButtonBar, Table, InlineSync, FontAwesome } from 'components/ui';
+// local modals
+import BulkUploadModal from './BulkUploadModal';
+import NewSoldierModal from './NewSoldierModal';
 // functions
 import is from 'is_js';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
@@ -14,7 +15,8 @@ import { showError } from 'functions/notifications';
 import './SoldiersPage.scss';
 // state
 import { 
-  getSoldiers, updateSoldier, uploadSpreadsheet 
+  uploadProfile, getSoldiers, createSoldier,
+  updateSoldier, uploadSpreadsheet 
 } from 'store/base/soldiers/operations';
 // data
 import getColumns from './columns';
@@ -29,11 +31,8 @@ export class SoldiersPage extends Component {
     cropper: {
       ...defaultCropperModalSettings
     },
-    upload: {
-      show: false
-    },
-    // cropperModalShow: false, cropperModalSrc: false, 
-    // cropperModalId: false,  uploadModalShow: false
+    upload: { show: false },
+    create: { show: false, image: {} },
   }
   // load the contents if we do not have any
   componentDidMount(){
@@ -49,9 +48,9 @@ export class SoldiersPage extends Component {
   closeCropperModal = () => this.setState({ cropper: {
     ...defaultCropperModalSettings
   } } );
-  // toggle the uploadier
-  toggleUploadModal = () => this.setState({
-    upload: { show: !this.state.upload.show }
+  // toggle the modals
+  toggleModal = key => () => this.setState({
+    [ key ]: { ...this.state[ key ], show: !this.state[ key ].show }
   });
 
   // handler for pressing the picture
@@ -61,21 +60,20 @@ export class SoldiersPage extends Component {
 
   // handler for when images are updated
   updatePicture = formData => {
-    const { id } = this.state.cropper;
-    if ( id )
-      this.props.updateSoldier( id, formData );
-    else {
-      debugger;
-    }
+    const { cropper, create } = this.state;
+    if ( cropper.id )
+      this.props.updateSoldier( cropper.id, formData );
+    else
+      this.props.uploadProfile( formData )
+      .then( res => this.setState({ create: { ...create, image: res } }) );
+    // close the cropper modal
     this.closeCropperModal();
   }
-
-  updateToggle = ( key, id ) => e => {
-    return showError( this.props.updateSoldier(
+  // update soldiers when the toggle is changed
+  updateToggle = ( key, id ) => e => showError(
+    this.props.updateSoldier(
       id, { [key]: e.target.checked ? 1 : 0 }
     ));
-  }
-
   // handler for uploding the excel file
   uploadSpreadsheet = ( formData ) => showError( 
     this.props.uploadSpreadsheet( formData )
@@ -84,6 +82,11 @@ export class SoldiersPage extends Component {
       return this.getSoldiers();
     })
   );
+  // create a new soldier
+  createSoldier = soldier => {
+    return this.props.createSoldier( soldier )
+    .then( () => this.setState({ create: { show: false, image: {} } } ) );
+  }
 
   // download the content as a CSV
   toCSV = () => {
@@ -102,22 +105,22 @@ export class SoldiersPage extends Component {
 
   // render the page
   render() {
-    const { current_login, soldiers, loading, match } = this.props;
-    const { cropper, upload } = this.state;
+    const { current_login, soldiers, loading } = this.props;
+    const { cropper, upload, create } = this.state;
     const columns = getColumns( current_login, this.editPicture, this.updateToggle );
     // page definition
     return (
       <div id='SoldiersPage' className='full-height'>
-        {/* Action buttons */}
+
         <ButtonBar>
-          <Link to={`${match.path}/new`} className='btn btn-primary' role='button'>
+          <Button color='primary' onClick={ this.toggleModal('create') }>
            <FontAwesome icon='plus' /> Add Soldier
-          </Link>
+          </Button>
           <Button color='primary' onClick={ this.getSoldiers }>
             <InlineSync loading={ loading } /> Refresh
           </Button>
           { current_login.code === 'BC' && is.not.mobile() && is.not.ios() && // only Base Commanders on desktops/tablets can upload
-            <Button color='primary' onClick={ this.toggleUploadModal }>
+            <Button color='primary' onClick={ this.toggleModal('upload') }>
               <FontAwesome icon='file-upload' /> Upload Soldier List
             </Button>
           } { canDownload( soldiers ) &&
@@ -126,24 +129,32 @@ export class SoldiersPage extends Component {
             </Button>
           }
         </ButtonBar>
-        {/* Table with data */}
+
         <Table 
           columns={ columns } 
           data={ soldiers } 
           loading={ loading && !soldiers.length } 
           pageId='SoldiersPage' />
-        {/* Modal to edit images */}
+
         <CropperModal
           src={ cropper.src } 
           isOpen={ cropper.show }
           toggle={ this.closeCropperModal }
           uploadImage={ this.updatePicture } />
-        {/* Modal to upload soldiers */ 
+
+        <NewSoldierModal
+          image={ create.image }
+          isOpen={ create.show }
+          onSubmit={ this.createSoldier }
+          toggle={ this.toggleModal('create') }
+          editPicture={ this.editPicture( false ) } />
+
+        {/* Only show the uploader for base commanders */ 
           current_login.code === 'BC' &&
           <BulkUploadModal
             isOpen={ upload.show }
-            toggle={ this.toggleUploadModal }
-            upload={ this.uploadSpreadsheet }/>
+            upload={ this.uploadSpreadsheet }
+            toggle={ this.toggleModal('upload') } />
         }
       </div>
     );
@@ -158,6 +169,9 @@ const mapStateToProps = ({ base, login }) => {
   };
 }
 
-export default connect( 
-  mapStateToProps, { getSoldiers, updateSoldier, uploadSpreadsheet } 
-)( SoldiersPage );
+const mapDispatchToProps = {
+  uploadProfile, getSoldiers, createSoldier,
+  updateSoldier, uploadSpreadsheet
+}
+
+export default connect( mapStateToProps, mapDispatchToProps )( SoldiersPage );

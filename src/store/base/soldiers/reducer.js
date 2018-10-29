@@ -24,6 +24,13 @@ export default ( state = initialState, action ) => {
         loading: false,
         registration_soldiers: action.payload
       };
+    // add a soldier to the state at the top of the list
+    case types.ADD_SOLDIER:
+      return { 
+        ...state,
+        loading: false,
+        soldiers: [ action.payload, ...state.soldiers ]
+      };
     // update the soldier if he exists
     case types.UPDATE_SOLDIER:
       let updated_soldiers = state.soldiers.map( 
