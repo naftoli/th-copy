@@ -502,6 +502,20 @@ body,td,th {
 					'https://www.dropbox.com/s/kcyjfe9fozrb7st/UNIT%20256.mp3?dl=0',
 					'https://www.dropbox.com/s/phubavejxrqnslv/UNIT%20257.mp3?dl=0'
 				];
+
+				function generateLinks( $start, $end ) {
+					global $links;
+					?>
+					- <a class="showDetails">Show Unit Details</a><br />
+					<div class="details" style="display: none; margin-left: 20px;">
+						<?php 
+						for ($i = $start; $i < $end; $i++) {
+							echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
+						}
+						?>
+					</div>
+					<?php
+				}
 				?>
                 
                 <div class="resp-tabs-container sub_1">
@@ -516,163 +530,58 @@ body,td,th {
                         <i>Click on a link to listen to and download the Audio Book.</i><br />
 						<br />
 						<span class="chidon-grade-title">Grade 4 - Book 1</span><br />
-						<a href="https://www.dropbox.com/s/cmgpe1wjkjv801x/Test%201%20Units%201-16.mp3?dl=0">Test 1</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for ($i = 1; $i < 17; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/cmgpe1wjkjv801x/Test%201%20Units%201-16.mp3?dl=0">Test 1</a>
+						<?php generateLinks( 1, 17 ); ?>
 
-						<a href="https://www.dropbox.com/s/mesoqo11j01mf6w/Test%202%20Units%2017-30.mp3?dl=0">Test 2</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for (; $i < 31; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/mesoqo11j01mf6w/Test%202%20Units%2017-30.mp3?dl=0">Test 2</a>
+						<?php generateLinks( 17, 31 ); ?>
 
-						<a href="https://www.dropbox.com/s/k20st6aeru4hons/Test%203%20Units%2031-45.mp3?dl=0">Test 3</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for (; $i < 46; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/k20st6aeru4hons/Test%203%20Units%2031-45.mp3?dl=0">Test 3</a>
+						<?php generateLinks( 31, 46 ); ?>
 
 						<br />
 						<span class="chidon-grade-title">Grade 5 - Book 2</span><br />
-                        <a href="https://www.dropbox.com/s/gm8kv4gd1gf630x/Test%201%20Units%2046-62.mp3?dl=0">Test 1</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for (; $i < 63; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/gm8kv4gd1gf630x/Test%201%20Units%2046-62.mp3?dl=0">Test 1</a>
+						<?php generateLinks( 46, 63 ); ?>
 
-						<a href="https://www.dropbox.com/s/0be14q6t7t0aves/Test%202%20Units%2063-80.mp3?dl=0">Test 2</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for (; $i < 81; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/0be14q6t7t0aves/Test%202%20Units%2063-80.mp3?dl=0">Test 2</a>
+						<?php generateLinks( 63, 81 ); ?>
 
-						<a href="https://www.dropbox.com/s/7kmv65ojon428hg/Test%203%20Unit%2081-99.mp3?dl=0">Test 3</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for (; $i < 100; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/7kmv65ojon428hg/Test%203%20Unit%2081-99.mp3?dl=0">Test 3</a>
+						<?php generateLinks( 81, 100 ); ?>
 
 						<br />
 						<span class="chidon-grade-title">Grade 6 - Book 3</span><br />
-                        <a href="https://www.dropbox.com/s/17qn5bt9idtl36z/Test%201%20Units%20100-117.mp3?dl=0">Test 1</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for (; $i < 118; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/17qn5bt9idtl36z/Test%201%20Units%20100-117.mp3?dl=0">Test 1</a>
+						<?php generateLinks( 100, 118 ); ?>
 
-						<a href="https://www.dropbox.com/s/9fg8s7kczanvhsu/Test%202%20Units%20118-135.mp3?dl=0">Test 2</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for (; $i < 136; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/9fg8s7kczanvhsu/Test%202%20Units%20118-135.mp3?dl=0">Test 2</a>
+						<?php generateLinks( 118, 136 ); ?>
 
-						<a href="https://www.dropbox.com/s/ztdvzqbr4dt9450/Test%203%20Units%20136-156.mp3?dl=0">Test 3</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for (; $i < 157; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/ztdvzqbr4dt9450/Test%203%20Units%20136-156.mp3?dl=0">Test 3</a>
+						<?php generateLinks( 136, 157 ); ?>
 
 						<br />
 						<span class="chidon-grade-title">Grade 7 - Book 4</span><br />
-                        <a href="https://www.dropbox.com/s/vp6tmfby1pmixm8/Test%201%20Units%20157-173.mp3?dl=0">Test 1</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for (; $i < 174; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/vp6tmfby1pmixm8/Test%201%20Units%20157-173.mp3?dl=0">Test 1</a>
+						<?php generateLinks( 157, 174 ); ?>
 
-						<a href="https://www.dropbox.com/s/vcvejzvxudl07iy/Test%202%20Units%20174-192.mp3?dl=0">Test 2</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for (; $i < 193; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/vcvejzvxudl07iy/Test%202%20Units%20174-192.mp3?dl=0">Test 2</a>
+						<?php generateLinks( 174, 193 ); ?>
 
-						<a href="https://www.dropbox.com/s/izx0wh6qz6rhyd7/Test%203%20Units%20193-208.mp3?dl=0">Test 3</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for (; $i < 209; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/izx0wh6qz6rhyd7/Test%203%20Units%20193-208.mp3?dl=0">Test 3</a>
+						<?php generateLinks( 193, 209 ); ?>
 
 						<br />
 						<span class="chidon-grade-title">Grade 8 - Book 5</span><br />
-                        <a href="https://www.dropbox.com/s/ajfejmuz9f71iv3/Test%201%20Units%20209-225.mp3?dl=0">Test 1</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for (; $i < 226; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/ajfejmuz9f71iv3/Test%201%20Units%20209-225.mp3?dl=0">Test 1</a>
+						<?php generateLinks( 209, 226 ); ?>
 
-						<a href="https://www.dropbox.com/s/kapteird8si8dk6/Test%202%20Units%20226-239.mp3?dl=0">Test 2</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for (; $i < 240; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/kapteird8si8dk6/Test%202%20Units%20226-239.mp3?dl=0">Test 2</a>
+						<?php generateLinks( 226, 240 ); ?>
 
-						<a href="https://www.dropbox.com/s/ka6yfbmqvp9hohg/Test%203%20Units%20240-257.mp3?dl=0">Test 3</a> - 
-						<a class="showDetails">Show Unit Details</a><br />
-						<div class="details" style="display: none; margin-left: 20px;">
-							<?php 
-							for (; $i < 258; $i++) {
-								echo "<a href='" . $links[$i] . "'>Unit " . $i . "</a><br />";
-							}
-							?>
-						</div>
+						<a href="https://www.dropbox.com/s/ka6yfbmqvp9hohg/Test%203%20Units%20240-257.mp3?dl=0">Test 3</a>
+						<?php generateLinks( 240, 258 ); ?>
 
 						<script>
 							$(".showDetails").click( function() {
