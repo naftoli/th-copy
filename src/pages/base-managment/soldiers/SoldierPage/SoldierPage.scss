@@ -36,7 +36,6 @@
 }
 
 #SoldierPage {
-  padding-bottom: 10px;
 
   #image-row > div {
     align-self: center;
@@ -50,6 +49,36 @@
   }
 
   .enrollment label { display: block; }
+
+  #RankTab label,
+  #RegistrationTab label {
+    margin-top: 0px;
+  }
+
+  #RegistrationTab {
+    .registration-charge {
+      border: 1px solid#ccc;
+      border-radius: 5px;
+      padding: 8px;
+      margin-bottom: 15px;
+
+      p {
+        margin: .5rem;
+        border-bottom: 1px dashed;
+        text-align: right;
+        // clear after each line
+        &:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        strong {
+          float: left;
+        }
+      }
+    }
+  }
 
   .RankRow {
     text-align: center;

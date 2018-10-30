@@ -6,13 +6,17 @@ import { Redirect } from 'react-router-dom';
 import { TabContent, Nav } from 'reactstrap';
 import { LoadingScreen, FontAwesome } from 'components/ui';
 import { NavigationTab } from 'components/navigation';
-import { PersonalTab, SettingsTab, RankTab } from './tabs';
+import {
+  PersonalTab,  RankTab,
+  SettingsTab,  RegistrationTab,
+} from './tabs';
 // functions
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
-import { getSoldier, updateSoldier } from 'store/base/soldiers/operations';
+import { removeAuth, createAuth } from 'store/base/staff/operations';
 import { createNotifcation, updateNotifcation } from 'functions/notifications';
+import { getSoldier, updateSoldier, deleteSoldier } from 'store/base/soldiers/operations';
 // styles
 import './SoldierPage.scss';
 
@@ -46,15 +50,28 @@ class SoldierPage extends Component {
       this.setState({ soldier: undefined }); }
     );
   }
+  // delete soldier
+  deleteSoldier = user_id =>
+    this.props.deleteSoldier( user_id )
+    .then( this.getSoldier );
+  
+  createAuth = auth =>
+    this.props.createAuth( auth )
+    .then( this.getSoldier );
+  
+  removeAuth = auth =>
+    this.props.removeAuth( auth )
+    .then( this.getSoldier );
+
   // handle tabs
-  toggle = ( activeTab ) => () => {
+  toggleTab = activeTab =>
     this.setState({ activeTab });
-  }
   // handle form changes
   onUpdate = ( update ) => {
     const updates = filterUpdates( this.state.soldier, { ...this.state.updates, ...update } );
     this.setState({ updates });
   }
+  // update if the tab is valid or not
   updateValid = tab => status => {
     if ( this.state.valid[tab] !== status ) {
       this.setState({ valid: { ...this.state.valid, [tab]: status } })
@@ -96,6 +113,8 @@ class SoldierPage extends Component {
     soldier = { ...soldier, ...updates };
     const updated = Object.keys( updates ).length > 0;
 
+    const navProps = { onClick: this.toggleTab, activeTab };
+
     // render the page and it's sub-pages ( tabs )
     return (
       <div id='SoldierPage'>
@@ -104,16 +123,20 @@ class SoldierPage extends Component {
           message="You have unsaved changes. Are you sure you want to leave?" />
         <Nav tabs>
           
-          <NavigationTab active={activeTab === 1} onClick={this.toggle(1)}>
-           { valid.soldier || <FontAwesome icon='exclamation'/> } Soldier <FontAwesome icon='user'/>
+          <NavigationTab tab={1} icon='user' { ...navProps }>
+           { valid.soldier || <FontAwesome icon='exclamation'/> } Soldier
           </NavigationTab>
           
-          <NavigationTab active={activeTab === 2} onClick={this.toggle(2)}>
-           { valid.settings || <FontAwesome icon='exclamation'/> } Settings <FontAwesome icon='sliders-h'/>
+          <NavigationTab tab={2} icon='sliders-h' { ...navProps }>
+           { valid.settings || <FontAwesome icon='exclamation'/> } Settings
           </NavigationTab>
           
-          <NavigationTab active={activeTab === 3} onClick={this.toggle(3)}>
-            Rank <FontAwesome icon='medal'/>
+          <NavigationTab tab={3} icon='medal' { ...navProps }>
+            Rank
+          </NavigationTab>
+
+          <NavigationTab tab={4} icon='registered' { ...navProps }>
+            Registration
           </NavigationTab>
 
         </Nav>
@@ -132,15 +155,22 @@ class SoldierPage extends Component {
           
           <SettingsTab 
             tabId={ 2 }
+            login={ login }
             soldier={ soldier }
             updated={ updated } 
             onSubmit={ this.saveChanges }
-            handleChange={ this.onUpdate } 
-            getSoldier={ this.getSoldier } 
+            removeAuth={ this.removeAuth }
+            createAuth={ this.createAuth }
+            handleChange={ this.onUpdate }
+            deleteSoldier={ this.deleteSoldier }
             onValidChange={ this.updateValid('settings') } />
           
           <RankTab 
             tabId={ 3 } 
+            soldier={ soldier } />
+
+          <RegistrationTab 
+            tabId={ 4 } 
             soldier={ soldier } />
 
         </TabContent>
@@ -156,7 +186,8 @@ const mapStateToProps = ( state ) => {
 }
 
 const mapDispatchToProps = {
-  getSoldier, updateSoldier
+  removeAuth, createAuth,
+  getSoldier, updateSoldier, deleteSoldier
 }
 
 export default connect( mapStateToProps, mapDispatchToProps )( SoldierPage );
