@@ -252,6 +252,18 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
         return $result;
     }
+    //get all of the soldiers registration charges
+    public function registrationCharges() {
+        global $MASHPIA_DB;
+        $query = $MASHPIA_DB->query(
+            'SELECT rc.type, rc.year, rc.amount, rc.date, s.school_id, s.school_number, s.school_name, '
+            .'t.trans_id, t.description, t.amount as total, t.response FROM registration_charges rc '
+            .'LEFT JOIN schools s USING (school_id) LEFT JOIN transactions t USING (trans_id) '
+            .'WHERE rc.user_id = '.$this->user_id.' ORDER BY date DESC;'
+        );
+        return $query->fetchAll();
+    }
+
     // returns array with the status of the various registration types for the current year.
     public function registrationStatus( $year = false, $chidon_year = false, $isBC = false ) {
         global $MASHPIA_DB;
@@ -417,11 +429,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             'only' => [
                 'user_id', 'user_serial', 'first', 'last', 'first_he', 'last_he', 'lang_id', 'dob', 'dob_he',
                 'school_type_id', 'user_address1', 'user_address2', 'user_city', 'user_state',
-                'user_postal', 'user_country', 'user_phone', 'gender', 
+                'user_postal', 'user_country', 'user_phone', 'gender', 'user_registered', 
                 'chayolei', 'yan', 'chidon', 'allow_parent_tasks', 'print_parent_tasks', 'mobile_pic',
                 'school_id', 'class_id', 'school_type_id', 'user_code', 'email'
             ],
-            'methods' => [ 'profilePicture', 'barcode', 'rankBoard', 'miles', 'parentAccount' ],
+            'methods' => [ 'profilePicture', 'barcode', 'rankBoard', 'miles', 'parentAccount', 'registrationCharges' ],
             'include' => [ 
                 'school' => [ 
                     'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ]                     
@@ -431,8 +443,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         ]);
         // other functions
         $result['start_date'] = dateToHebrew($this->user_start_date);
-        $result['registered_at'] = $this->user_registered ? // format the date if we have it
-            ( new DateTime( $this->user_registered ) )->format('n/j/Y g:i A') : false;
 
         return $result;
     }

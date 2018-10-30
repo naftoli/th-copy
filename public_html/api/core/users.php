@@ -47,7 +47,7 @@ class UsersRouter {
             $user = Soldier::find( $id );
             if ( !$user->validateAccess( $current_user->login ) )
                 json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-65', 401 );
-            json_response( $user );
+            json_response( $user, true, true );
         } catch ( Exception $e ) {
             json_error( 'Soldier does not exist', 'CORE-USERS-69', 404 );
         }
