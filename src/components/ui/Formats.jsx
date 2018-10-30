@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 
 // Format number as per the locale
-export const Number = ({ value, className, ...opts }) => {
+export const NumberDisplay = ({ value, className, ...opts }) => {
   if ( typeof value === 'number' ) 
     value = value.toLocaleString( navigator.language, opts );
   return <span className={ className }>{value}</span>

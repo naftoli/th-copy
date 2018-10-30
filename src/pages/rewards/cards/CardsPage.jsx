@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import AchievementCard from './AchievementCard';
 import { Row, Col, Input, Button, ButtonGroup } from 'reactstrap';
 import { SubjectSelect, AchievementTaskSelect, Date } from 'components/inputs';
-import { ButtonBar, InlineSync, FontAwesome, Number, Callout } from 'components/ui';
+import { ButtonBar, InlineSync, FontAwesome, NumberDisplay, Callout } from 'components/ui';
 // functions
 import moment from 'moment';
 import { toast } from 'react-toastify';
@@ -119,7 +119,7 @@ class CardsPage extends Component {
 
           { isTeacher( login.code ) && 
             <h2 id='available-miles'>
-              <Number value={ miles || 0 } /> Available Miles
+              <NumberDisplay value={ miles || 0 } /> Available Miles
             </h2>
           }
 

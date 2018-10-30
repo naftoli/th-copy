@@ -6,7 +6,7 @@ import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import CropperModal from 'components/modals/CropperModal';
 import { 
-  ButtonBar, Table, InlineSync, FontAwesome, Number, ProfilePicture
+  ButtonBar, Table, InlineSync, FontAwesome, NumberDisplay, ProfilePicture
 } from 'components/ui';
 // functions
 import { isAdmin } from 'functions/login';
@@ -71,7 +71,7 @@ class BasesPage extends Component {
       { Header: 'Chidon', id: 'chidon', accessor: base => base.chidon ? 'Yes' : 'No' },
       { Header: 'WWTC', id: 'tehillim', accessor: base => base.tehillim ? 'Yes' : 'No' },
       { Header: 'Tanya', id: 'tanya', accessor: base => base.tanya ? 'Yes' : 'No' },
-      { Header: 'Soldiers', accessor: 'soldier_count', Cell: props => <Number value={props.value}/> },
+      { Header: 'Soldiers', accessor: 'soldier_count', Cell: props => <NumberDisplay value={props.value}/> },
     ];
 
     return (
