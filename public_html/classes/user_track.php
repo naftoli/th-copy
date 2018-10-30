@@ -129,7 +129,7 @@ class user_track
 		if(!$print_parent_tasks) $sql .= " AND created_by_parent IS NULL";
 		$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name"; // place custom parent tasks at the bottom...
 		//echo "<input type='hidden' name='SQL ONE' value='" . $sql . "'>";
-		// if ($this->subject_id == 41 && $this->user_id == 51364) echo $sql . "<br />";
+		//if ($this->subject_id == 100 && $this->user_id == 55248) echo $sql . "<br />";
 		//if($this->subject_id == 45) echo "<input type='hidden' name='SQL ONE' value='" . $sql . "'>";
                 
         include_once dirname(__FILE__) . '/../class.defaults.php';

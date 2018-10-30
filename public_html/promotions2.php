@@ -139,6 +139,7 @@ echo "<table><tr><th>School</th>";
 foreach( $ranks as $rank ) {
 	echo "<th>" . $rank . "</th>";
 }
+echo "<th>Total</th>";
 echo "</tr>";
 
 foreach ( $users as $id => $more ) {
@@ -152,9 +153,11 @@ foreach ( $users as $id => $more ) {
 				else if ($type == 'F') echo " Girls";
 			}
 			echo "</td>";
+			$total = 0;
 			foreach( $ranks as $rank => $abbr ) {
 				$str = "";
 				if ( isset( $info[$rank] ) ) {
+					$total += count( $info[$rank] );
 					if ($rank < 9) {
 						$num = count($info[$rank]);
 						$str = $num . ' ' . $abbr;
@@ -166,6 +169,7 @@ foreach ( $users as $id => $more ) {
 				}
 				echo "<td>" . $str . "</td>";
 			}
+			echo "<td>" . $total . "</td>";
 			echo "</tr>";
 		}
 	}

@@ -11,25 +11,21 @@ include('classes/school.php');
 include('classes/user.php');
 include('classes/school_class.php');	
 
-$admin = new admin(null, $_SESSION['admin_id']);
+if ( !isset( $_SESSION['admin_id'] ) && isset( $admin_user['admin_id'] ) )
+	$_SESSION['admin_id'] = $admin_user['admin_id'];
+
+$admin = new admin(null, $admin_user['admin_id']);
 
 $admin->get_schools();
 
 $no_of_schools = count($admin->schools);
 
-if ($no_of_schools == 1) {
+if ( isset( $_POST['school_id'] ) ) {
+	$school_id = $_POST['school_id'];
+	$admin->get_school($school_id);
+} else {
 	$school_id = $admin->schools[0]->school_id;
 	$admin->get_school($admin->schools[0]->school_id);
-}
-else {
-	//print_r($_POST);
-	if (isset($_POST['school_id'])) {
-		$school_id = $_POST['school_id'];
-		$admin->get_school($school_id);
-	}
-	else {
-		$school_id = 0;
-	}
 }
 
 $go = '0';	
@@ -43,7 +39,7 @@ $to_awarded = unixtojd();
 $from_promoted = 2456305;
 $to_promoted = unixtojd();
 	
-if (isset($_POST['go']) && $_POST['go'] == '1') {
+if (isset($_POST['go']) && $_POST['go'] == '1' && isset($_POST['from_awarded'])) {
 	$go = $_POST['go'];
 	$user_id = $_POST['user_id'];
 	
@@ -271,7 +267,6 @@ else
 							<label>
 								Select Institution
 								<select name="school_id">
-									<option value="o">Choose a school</option>
 								<?php foreach ( $admin->schools as $school ) { ?>
 									<option <?php if ($school->school_id == $school_id) echo ' selected="selected" '; ?> value="<?=$school->school_id;?>"><?=$school->school_name;?></option>
 								<?php } ?>
@@ -402,7 +397,7 @@ else
 							
 								<thead>							
 									<tr>
-										<th>User ID</th>
+										<th>Serial #</th>
 										<th>Soldier</th>
 										<th colspan="1">Grade</th>
 										<th colspan="1">Subject</th>
@@ -421,7 +416,7 @@ else
 								<!-- ********** USERS ********** -->
 								<? foreach ($report_users as $report_user) : ?>
 									<tr>
-										<td><?=$report_user->user_id?></td>
+										<td><?=$report_user->user_serial?></td>
 										<td style="white-space:nowrap; text-align:left">
 											<span style="color:blue;"><?=$report_user->last . "  - " . $report_user->first; ?></span>
 										</td>

@@ -70,7 +70,7 @@ class date_tasks_mission {
 		//$sql .= "ORDER BY dt.ord, dt.label_ord";
 		$sql .= "ORDER BY dt.label_ord, dt.grid_id";
 		//echo "<input type='hidden' name='SQL TWO' value='" . $sql . "'>\n";
-		//if ($user_id == 51364){ echo $sql . "<br />" ; exit;}
+		//if ($subject_id == 100 && $user_id == 55248) echo $sql . "<br />";
 
 		$query = mysql_query($sql);
         $d = new Defaults($user_id);

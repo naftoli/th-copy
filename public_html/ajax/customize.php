@@ -69,13 +69,13 @@ if ( !empty( $campaignsAdded ) ) {
     }
 }
 
-print_r( $campaigns );
-print_r( $tasks );
-print_r( $missions );
+// print_r( $campaigns );
+// print_r( $tasks );
+// print_r( $missions );
 
-print_r( $campaignsAdded );
-print_r( $tasksAdded );
-print_r( $missionsAdded );
+// print_r( $campaignsAdded );
+// print_r( $tasksAdded );
+// print_r( $missionsAdded );
 
 $tc->setStart( $start );
 $tc->setEnd( $end );

@@ -145,7 +145,7 @@ class school
 		$query = mysql_query($sql);
 		while ($row = mysql_fetch_assoc($query)) 
 		{
-			$rank = new rank($row);
+			$rank = new \rank($row);
 			array_push($ranks, $rank);
 		}		
 		
@@ -183,7 +183,7 @@ class school
 		$query = mysql_query($sql);
 		while ($row = mysql_fetch_assoc($query))
 		{
-			$class = new school_class($row);
+			$class = new \school_class($row);
 			array_push($this->classes, $class);
 		}	
 	}
@@ -201,7 +201,7 @@ class school
 		$sql = "SELECT * FROM users WHERE school_id=" . $this->school_id . " AND user_registered > 0 ORDER BY first, last";
 		$query = mysql_query($sql);
 		while ($row = mysql_fetch_assoc($query)) {
-			$user = new user($row);
+			$user = new \user($row);
 			$user->get_school_class();
 			array_push($this->users, $user);
 		}	

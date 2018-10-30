@@ -21,7 +21,6 @@ class ProfilesRouter {
 
         json_response( $customer_profile->paymentProfiles );
     }
-
 }
 
 rest_router( new ProfilesRouter );

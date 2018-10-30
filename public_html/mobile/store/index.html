@@ -282,6 +282,7 @@
             var cartQty = 0;
             var totalPrice = 0;
             var originalBal = 0;
+			var separator = '|';
             
             $.post('ajax/getBalance.php', { user : user }, function( success ) {
                 var info = $.parseJSON(success);
@@ -335,8 +336,8 @@
 									<p class="product-price">' + parseInt( prize.points, 10 ).toLocaleString( navigator.language ) + ' Mile' + ( prize.points > 1 ? 's' : '' ) + '</p>\
 								</div>\
 								<div class="product-cart" id="' +
-								prize.prize_id + ':' + prize.points + ':' +	prize.image_id + ':' +
-								prize.prize_name + ':' + prize.one_per_user + ':' + prize.prize_count + '">\
+								prize.prize_id + separator + prize.points + separator +	prize.image_id + separator +
+								prize.prize_name + separator + prize.one_per_user + separator + prize.prize_count + '">\
 									<a href="#"><i class="fa fa-shopping-cart"></i> </a>\
 								</div>';
     							if (parseInt(prize.one_per_user) == 1) {
@@ -424,7 +425,7 @@
                 */
             }
             
-            function calcBalance() {
+            function calcBalance() { 
                 bal = originalBal - totalPrice;
 				$('#balance').text( bal );
                 $("#balance-display").text(bal.toLocaleString( navigator.language ));
@@ -433,7 +434,7 @@
             $(document).on('click', '.product-cart', function() {
                 // get prize id and add to cart
                 var prizeInfo = $(this).attr('id');
-                var info = prizeInfo.split(':');
+                var info = prizeInfo.split(separator);
                 var id = parseInt(info[0]);
                 var price = parseInt(info[1]);
     			var image = info[2];

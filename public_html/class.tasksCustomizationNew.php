@@ -431,6 +431,7 @@ class TasksCustomizationNew {
                     and dtm.lang_id = " . $this->lang;
         }
         $sql .= $orderBy;
+        //if ($this->id == 55248) echo $sql;
         //echo "<input type='hidden' name='sql' value='" . $sql . "' />";
 		//if ($debug) echo $sql; exit;
 
@@ -1021,6 +1022,7 @@ class TasksCustomizationNew {
                     and (dtm.created_by_school is null or dtm.created_by_school = " .$this->school_id . ") 
                     and dtm.lang_id = " . $this->lang . " 
                     and dt.cat = \"" . mysql_real_escape_string($task) . "\"";
+            //echo $sql . "<br />";
             /*
             $sql = "select distinct dt.date_task_id from date_tasks dt 
                     join date_tasks_missions dtm using (date_tasks_mission_id) 
@@ -1094,6 +1096,7 @@ class TasksCustomizationNew {
 				}
             }
         }
+        //echo $sql;
 		//if ($this->debug) {
 		//	echo $sql . "<br />";
 		//} else {
@@ -1352,7 +1355,8 @@ class TasksCustomizationNew {
         $defaults = $arrTasks[0];
 		$exceptions = $arrTasks[1];
 		
-		//add tasks that are off by default to defaults table
+        //add tasks that are off by default to defaults table
+        //echo "<pre>"; print_r( $defaults ); echo "</pre>";
 		foreach ($defaults as $id) {
             $this->d->addOn($id, 'task');
         }
