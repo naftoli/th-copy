@@ -11,7 +11,7 @@ export const NumberDisplay = ({ value, className, ...opts }) => {
 export const DateDisplay = ({ value, calendar = false, fromNow = false, format = 'l' }) => {
   // format correctly
   if ( value ){
-    value = moment( value );
+    value = moment.utc( value );
 
     if ( calendar )
       value = value.calendar();
@@ -20,7 +20,7 @@ export const DateDisplay = ({ value, calendar = false, fromNow = false, format =
       value = value.fromNow();
 
     else if ( format )
-      value = value.format( format );
+      value = value.local().format( format );
     
   }
 
