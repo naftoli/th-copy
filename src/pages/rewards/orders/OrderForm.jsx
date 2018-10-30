@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Number } from 'components/ui';
+import { NumberDisplay } from 'components/ui';
 import { Select } from 'components/inputs';
 import { SaveButton } from 'components/buttons';
 import { Row, Col, Label, Input } from 'reactstrap';
@@ -59,7 +59,7 @@ export class OrderForm extends Component {
             <Label>Qty</Label>
             <Input type='number' min={ 1 } max={ max } required
               value={ qty } onChange={ props.updateQty } />
-            { max > 0 && !prize.one_per_user && <div className='invalid-message'>1 - <Number value={ max } /></div> }
+            { max > 0 && !prize.one_per_user && <div className='invalid-message'>1 - <NumberDisplay value={ max } /></div> }
             { one_per_user_invalid && <div className='invalid-message'>1 per soldier</div> }
           </Col>
         </Row>
@@ -67,12 +67,12 @@ export class OrderForm extends Component {
         <Row id='total-row'>
           <Col xs={ 6 } sm={ 4 }>
             <Label>Soldier's Miles</Label>
-            <Number className='total' value={ store.miles } />
+            <NumberDisplay className='total' value={ store.miles } />
           </Col>
   
           <Col xs={ 6 } sm={ 4 }>
             <Label>Final Price</Label>
-            <Number className='total' value={ total } />
+            <NumberDisplay className='total' value={ total } />
           </Col>
   
           <Col xs={ 12 } sm={ 4 }>

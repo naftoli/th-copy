@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Row, Col, Input } from 'reactstrap';
 import { Checkbox } from 'components/inputs';
-import { Number, FontAwesome } from 'components/ui';
+import { NumberDisplay, FontAwesome } from 'components/ui';
 
 import { toast } from 'react-toastify';
 import { LEGACY_URL } from 'components/constants';
@@ -78,7 +78,7 @@ export class Task extends Component {
               </p>
               <p className='task-name'>{ task_name }</p>
               <p className='miles'>
-                <Number value={ points } /> mile
+                <NumberDisplay value={ points } /> mile
                 { points !== 1 ? 's' : '' }
                 { daily ? '/day' : '' }
               </p>

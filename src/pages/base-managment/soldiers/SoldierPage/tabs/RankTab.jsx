@@ -1,15 +1,25 @@
 import React, { Component } from 'react';
 import { LEGACY_URL } from 'components/constants';
 import { Row, Col, TabPane } from 'reactstrap';
-import { DateDisplay } from 'components/ui';
+import { NumberDisplay, DateDisplay } from 'components/ui';
 
 class RankTab extends Component {
   render() {
     let { rankBoard, miles } = this.props.soldier;
     return (
       <TabPane id='RankTab' tabId= { this.props.tabId }>
-        <h4>Rank: {rankBoard.name}</h4>
-        <h4>Miles: {miles.toLocaleString( navigator.language )}</h4>
+
+        <Row>
+          <Col sm={6}>
+            <label>Rank:</label>
+            <h4>{ rankBoard.name || 'N/A' }</h4>
+          </Col>
+          <Col sm={6}>
+            <label>Miles: </label>
+            <h4><NumberDisplay value={ miles }/></h4>
+          </Col>
+        </Row>
+
         { rankBoard.ranks.map( (rank, index) => <RankRow rank={rank} key={index} />) }
       </TabPane>
     )

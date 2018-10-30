@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 // components
-import { Row, Col, Input, InputGroup, InputGroupAddon, Button } from 'reactstrap';
+import {
+  Row, Col, Input, InputGroup, InputGroupAddon, Button
+} from 'reactstrap';
 import { FontAwesome } from 'components/ui';
 // functions
+import is from 'is_js';
 import { mobileLogin } from 'functions/login';
-import { connect } from 'react-redux';
-import { removeChild, addChild } from 'store/base/parents/operations';
-import { toast } from 'react-toastify';
+import { showError } from 'functions/notifications';
 
 const styles = {
   buttonColumn: {
@@ -17,38 +19,49 @@ const styles = {
 
 export class ParentRow extends Component {
   // props we are expecting for this component
+  static propTypes = {
+    createAuth: PropTypes.func.isRequired,
+    removeAuth: PropTypes.func.isRequired,
+  }
   static defaultProps = {
     parentAccount: false, // object with first, last, phone, email and key props
     userId: false, // integer
-    refresh: () => {} // function when something worth refreshing happens
   }
   // handle parent username input
-  state = { username: '' }
-  usernameRef = React.createRef();
-  updateUsername = ( event ) => { this.setState({username: event.target.value}) }
-
-  changeLogin = () => {
-    mobileLogin( this.props.parentAccount.key );
+  state = {
+    username: ''
   }
 
+  usernameRef = React.createRef();
+
+  updateUsername = e =>
+    this.setState({ username: e.target.value });
+
+  changeLogin = () =>
+    mobileLogin( this.props.parentAccount.key );
+
   addToAccount = () => {
+    const auth = 'user';
     const { username } = this.state;
-    const { userId: user_id, addChild } = this.props;
+    const { userId: id, createAuth } = this.props;
     // make sure something was typed
     if ( username === '' && this.usernameRef.current ) 
       return this.usernameRef.current.focus();
-    // add child and update the UI based on it's result
-    addChild( username, user_id )
-    .then( this.props.refresh )
-    .catch( error => { toast.error( error.message ) });
+    // valid emails we look for the email address
+    if ( is.email( username ) )
+      return showError( createAuth({ id, auth, email: username }) );
+    // otherwise look for the username
+    return showError( createAuth({ id, auth, username }) );
   }
 
-  remove = ( event ) => {
-    const { userId: user_id, parentAccount } = this.props;
+  remove = () => {
+    const { userId: id, parentAccount } = this.props;
     const admin_id = parseInt( parentAccount.admin_id, 10 );
-    this.props.removeChild( admin_id, user_id )
-    .then( this.props.refresh )
-    .catch( error => { toast.error( error.message ) });
+    
+    showError(
+      this.props.removeAuth({ admin_id, id, auth: 'user' })
+      // .then( this.props.refresh )
+    );
   }
 
   render() {
@@ -84,10 +97,10 @@ export class ParentRow extends Component {
       return (
         <Row>
           <Col xs='12'>
-            <label>Add to parent account by parents username</label>
+            <label>Add to parent account by parents username / email</label>
             <InputGroup>
               <input onChange={this.updateUsername} value={this.state.username} 
-                placeholder='Username' ref={ this.usernameRef } className='form-control'/>
+                placeholder='Username / Email' ref={ this.usernameRef } className='form-control'/>
               <InputGroupAddon addonType="append">
                 <Button onClick={ this.addToAccount } color='primary' outline tabIndex={0}>
                   <FontAwesome icon='user-plus' /> Add Soldier
@@ -100,5 +113,3 @@ export class ParentRow extends Component {
     }
   }
 }
-
-export default connect(null, { removeChild, addChild })( ParentRow );

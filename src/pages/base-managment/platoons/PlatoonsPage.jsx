@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import NewPlatoonModal from './newPlatoonModal';
 import { 
-  InlineSync, ButtonBar, Table, Callout, FontAwesome, Number
+  InlineSync, ButtonBar, Table, Callout, FontAwesome, NumberDisplay
 } from 'components/ui';
 // functions
 import { isAdmin } from 'functions/login';
@@ -50,7 +50,7 @@ export class PlatoonsPage extends Component {
       { Header: 'Soldiers', accessor: 'soldier_count' },
       { Header: 'Staff', accessor: 'staff_count' },
       { Header: 'Miles Balance', accessor: 'miles_balance',
-       Cell: props => <Number value={props.value}/> },
+       Cell: props => <NumberDisplay value={props.value}/> },
     ];
     if ( isAdmin(login.code) ) {
       columns.push( { Header: 'Base', accessor: 'school_name' } );

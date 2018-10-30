@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Select, PhoneNumber } from 'components/inputs';
 import { Row, Col, Input, Button } from 'reactstrap';
 import { findOption } from 'functions/selects';
-import { FontAwesome, Number } from 'components/ui';
+import { FontAwesome, NumberDisplay } from 'components/ui';
 
 export class PlatoonRow extends Component {
 
@@ -56,7 +56,7 @@ export class PlatoonRow extends Component {
           <Input 
             type='number' name='miles_balance'  min='0' max='99999999999'
             value={ miles_balance } { ...inputProps } />
-          <div className='invalid-message'>0 to <Number value={ 99999999999 } /></div>
+          <div className='invalid-message'>0 to <NumberDisplay value={ 99999999999 } /></div>
         </Col>
         { users && users.length === 0 && 
           <Col xs={6}>

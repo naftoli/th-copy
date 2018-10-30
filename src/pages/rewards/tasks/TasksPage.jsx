@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import TaskModal from './TaskModal';
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { ButtonBar, Table, InlineSync, FontAwesome, Number } from 'components/ui';
+import { ButtonBar, Table, InlineSync, FontAwesome, NumberDisplay } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { isBC, isAdmin } from 'functions/login';
@@ -105,7 +105,7 @@ class TasksPage extends Component {
           return value;
         }
       },
-      { Header: 'Miles', accessor: 'points', Cell: ({ value }) => <Number value={ value }/> },
+      { Header: 'Miles', accessor: 'points', Cell: ({ value }) => <NumberDisplay value={ value }/> },
       { Header: 'Campaign', id: 'subject', accessor: ({ subject }) => subject && subject.subject_name },
     ];
     if ( isAdmin( login.code ) ) columns.push(

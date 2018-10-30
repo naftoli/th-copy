@@ -1,18 +1,26 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 // components
-import { ParentRow } from '../rows';
+import { ParentRow } from '../../components';
 import { Form } from 'components/inputs';
 import { SaveButton } from 'components/buttons';
-import { Row, Col, Button, TabPane, UncontrolledTooltip } from 'reactstrap';
 import { Select, Checkbox, MissionTypeSelect } from 'components/inputs';
+import { Row, Col, Button, TabPane, UncontrolledTooltip } from 'reactstrap';
 // functions
 import { isBC } from 'functions/login';
 import { findOption } from 'functions/selects';
-import { deleteSoldier, getSoldiers } from 'store/base/soldiers/operations';
 import { FontAwesome } from 'components/ui/Icons';
 
 class SettingsTab extends Component {
+  // props we are expecting for this component
+  static propTypes = {
+    login: PropTypes.object,
+    soldier: PropTypes.object,
+    createAuth: PropTypes.func.isRequired,
+    removeAuth: PropTypes.func.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    deleteSoldier: PropTypes.func.isRequired,
+  }
   // handle checkbox events
   handleCheckbox = ( event ) => {
     this.props.handleChange( { [event.target.id]: event.target.checked ? 1 : 0 } );
@@ -21,12 +29,10 @@ class SettingsTab extends Component {
   onSelectChange = ( id ) => ( option ) => {
     this.props.handleChange( { [id]: option && option.value } );
   }
-
+  // delete a soldier
   delete = () => {
-    if ( window.confirm( 'Are you sure you want to delete this soldier?') ) {
-      this.props.deleteSoldier( this.props.soldier.user_id )
-      .then( () => this.props.getSoldier() ); // refresh the single soldier
-    }
+    if ( window.confirm( 'Are you sure you want to delete this soldier?') )
+      this.props.deleteSoldier( this.props.soldier.user_id );
   }
 
   // render the page
@@ -111,7 +117,11 @@ class SettingsTab extends Component {
           <SaveButton show={ updated } />
 
           <p className='title'>Connected Parent Account</p>
-          <ParentRow parentAccount={parentAccount} userId={user_id} refresh={this.props.getSoldier}/> 
+          <ParentRow
+            userId={ user_id }
+            parentAccount={ parentAccount }
+            createAuth={ this.props.createAuth }
+            removeAuth={ this.props.removeAuth } /> 
             
           { isBC( this.props.login.code ) &&
             <Row>
@@ -130,8 +140,4 @@ class SettingsTab extends Component {
   }
 }
 
-const mapStateToProps = ({ login }) => ({
-  login: login.current_login
-});
-
-export default connect( mapStateToProps, { deleteSoldier, getSoldiers } )( SettingsTab );
+export default SettingsTab;

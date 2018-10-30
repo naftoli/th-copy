@@ -6,7 +6,6 @@ import { AddressRow } from 'components/rows';
 import { SaveButton } from 'components/buttons';
 import { Row, Col, TabPane, Input } from 'reactstrap';
 import CropperModal from 'components/modals/CropperModal';
-import { RegistrationRow } from '../rows';
 import { DobCol, NameRow, ProfileRow, BasePlatoonRow } from '../../components';
 
 class PersonalTab extends Component {
@@ -96,8 +95,6 @@ class PersonalTab extends Component {
           prefix='user_'
           { ...soldier }
           onChange={ this.handleChange } />
-
-        <RegistrationRow soldier={ soldier } />
 
         <SaveButton show={ updated } />
 
