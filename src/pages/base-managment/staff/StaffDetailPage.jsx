@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
 import { setTitle } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
+import { showError } from 'functions/notifications';
 // state
 import { getStaff, updateStaff, createAuth } from 'store/base/staff/operations';
 
@@ -36,7 +37,7 @@ class StaffDetailPage extends Component {
       this.setState({ updates: {} });
   }
   // wrapper / alias for prop
-  loadStaff = () => { this.props.getStaff(); };
+  loadStaff = () => showError( this.props.getStaff() );
   
   // cache the result for performance
   findStaff = memoize( ( staff, admin_id ) => staff.find( staff => staff.admin_id === admin_id ) );

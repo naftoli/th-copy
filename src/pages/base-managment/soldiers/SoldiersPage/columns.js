@@ -82,15 +82,16 @@ export default ( login, editPicture, updateToggle ) => {
   // * Base Commander columns
   if ( isBC( login.code ) ) {
     columns.push({
-      id: 'platoon', Header: 'Platoon', 
-      accessor: user => user.platoon ? user.platoon.name : '-'
+      Header: "Platoon", id: 'platoon', accessor: user => user.platoon ? user.platoon.name : '-',
+      Cell: props => props.value ? <Link to={`/bm/platoons/${props.original.class_id}`} tabIndex={ -1 }>{props.value}</Link> : null,
     });
   }
 
   // * Institution columns
   if ( isAdmin( login.code ) ) {
     columns.push({
-      id: 'base', Header: 'Base', accessor: user => user.school.school_name
+      Header: "Base", id: 'base', accessor: user => user.school.school_name,
+      Cell: props => <Link to={`/bm/base/${props.original.school_id}`} tabIndex={ -1 }>{props.value}</Link>,
     });
   }
 
