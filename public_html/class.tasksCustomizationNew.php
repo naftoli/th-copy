@@ -49,7 +49,7 @@ class TasksCustomizationNew {
 
         //if we're coming from a parent account
         if ( $user > 0 && $school == 0 ) {
-            $sql = "select school_id from users where user_id = " . $user;
+            $sql = "SELECT school_id FROM users WHERE user_id = " . $user;
             $result = mysql_query( $sql );
             $row = mysql_fetch_assoc( $result );
             $school = $row['school_id'];
@@ -430,10 +430,7 @@ class TasksCustomizationNew {
 					and dtm.personal = 0                        
                     and dtm.lang_id = " . $this->lang;
         }
-        $sql .= $orderBy;
-        //if ($this->id == 55248) echo $sql;
-        //echo "<input type='hidden' name='sql' value='" . $sql . "' />";
-		//if ($debug) echo $sql; exit;
+        $sql .= ' GROUP BY name, level '.$orderBy;
 
         $result = mysql_query( $sql );
         if (!$result) {
@@ -519,15 +516,6 @@ class TasksCustomizationNew {
 		                        $isOn = true;
 								break;
 							}
-							/*
-							foreach ($defaults as $id) {
-								if ($def->isOn($id, 'task')) {
-			                        $isOn = true;
-									//echo $task . '-' . $id; exit;
-			                        break 2;
-			                    } 
-							}
-							*/
 						}
 						
 						if (!$isOn) {
@@ -539,15 +527,6 @@ class TasksCustomizationNew {
 				                        $isOn = true;
 										break 2;
 									}
-									/*
-									foreach ($defaults as $id) {
-										if ($def->isOn($id, 'task')) {
-					                        $isOn = true;
-											//echo $task . '-' . $id; exit;
-					                        break 3;
-					                    } 
-									}
-									*/
 								}
 							}
 						}
@@ -568,87 +547,15 @@ class TasksCustomizationNew {
 		foreach ($tasks as $task => $on) {
 			if ($on) {
             	$ids = $this->getTaskIDs( $task, array(), $subject_id );
-				//print_r($ids)
 	            if ( $this->isException( $ids ) ) {
-	            	//echo $task . " has exception.";
-					//exit;
 	                $tasks[$task] = 0;
 	            }
 			}
 		}
-		if ($debug) {
-			//echo "<pre>"; print_r( $tasks ); echo "</pre>"; exit;
-		}
-        /*
-        //check that user/class/school is enrolled to campaign     
-        if ( $this->type == 'user' ) {
-            $userEnrolled = array();
-            $sql = "select dt.cat, ut.enrolled from date_tasks dt 
-                    join date_tasks_missions dtm using (date_tasks_mission_id) 
-                    join user_tracks ut using (subject_id, level, track_id) 
-                    join users u using (user_id) 
-                    where dtm.subject_id = " . $subject_id . "  
-                    and ut.user_id = $this->id  
-                    and dtm.school_type_id = u.school_type_id 
-                    and dtm.start_date >= $this->start 
-                    and dtm.end_date <= $this->end 
-                    and ut.enrolled = 1 
-                    and dtm.lang_id = " . $this->lang . " 
-                    group by dt.cat";
-            //echo $sql;
-            $result = mysql_query( $sql );
-            while ( $row = mysql_fetch_assoc( $result ) ) {
-                $userEnrolled[] = $row['cat'];
-            }
-            //find out which tasks user is not enrolled into remove from tasks array
-            foreach( $tasks as $task => $on ) {
-                if ( !in_array( $task, $userEnrolled ) ) {
-                    //remove task from tasks array and info array
-                    unset( $tasks[$task] );
-                    unset( $info[$task] );
-                }
-            }
-        } else if ($this->type == 'class') {
-            //make sure that at least 'one' child is enrolled from class
-            $users = $this->getUsersInGrade($this->id);
-            $classEnrolled = array();
-            foreach ($users as $user) {
-                $sql = "select dt.cat, ut.enrolled from date_tasks dt 
-                        join date_tasks_missions dtm using (date_tasks_mission_id) 
-                        join user_tracks ut using (subject_id, level, track_id) 
-                        join users u using (user_id) 
-                        where dtm.subject_id = " . $subject_id . "  
-                        and ut.user_id = $user  
-                        and dtm.school_type_id = u.school_type_id 
-                        and dtm.start_date >= $this->start 
-                        and dtm.end_date <= $this->end 
-                        and dtm.personal = 0 
-                        and ut.enrolled = 1 
-                    	and dtm.lang_id = " . $this->lang . " 
-                        group by dt.cat";
-                //echo $sql;
-                $result = mysql_query( $sql );
-                while ($row = mysql_fetch_assoc($result)) {
-                    if (!in_array($row['cat'], $classEnrolled)) {
-                        $classEnrolled[] = $row['cat'];
-                    }
-                }
-            }
-            //find out which tasks class is not enrolled into
-            foreach( $tasks as $task => $on ) {
-                if (!in_array( $task, $classEnrolled )) {
-                    //set task to unenrolled
-                    //$tasks[$task] = 0;
-                    //remove task from tasks array and info array
-                    unset( $tasks[$task] );
-                    unset( $info[$task] );
-                }
-            }
-        }
-        */
+
         if ($debug) {
 			echo $sql;
-			echo "<pre>"; print_r( $tasks ); echo "</pre>"; //exit;
+			echo "<pre>"; print_r( $tasks ); echo "</pre>";
 		}
 
         //create user friendly info array
@@ -665,10 +572,12 @@ class TasksCustomizationNew {
         );
 
         $types = array(
-            '2'	=> 'Yeshiva Boys', 
-            '3'	=> 'Yeshiva Girls', 
-            '12'=> 'Hebrew School Boys', 
-            '13'=> 'Hebrew School Girls'
+            '2'	=> 'Chabad Boys', 
+            '3'	=> 'Chabad Girls', 
+            '12'=> 'Frum Boys', 
+            '13'=> 'Frum Girls',
+            '22'=> 'C-Kids Boys', 
+            '33'=> 'C-Kids Girls'
         );
         
         $friendly = array();
@@ -676,13 +585,12 @@ class TasksCustomizationNew {
             foreach( $arr as $name => $arr2 ) {
                 foreach( $arr2 as $type => $arr3 ) { 
                     foreach( $arr3 as $level => $quantity ) {
-                        $friendly[$task][$name][$types[$type]][$levels[$level]] = $quantity;
+                        @$friendly[ $task ][ $name ][ $types[ $type ] ][ $levels[ $level ] ] = $quantity;
                     }
                 }
-            }				
+            }
         }
-        //print_r( $friendly );        
-
+        
         //put all info together into one array
         $allInfo = array();
         foreach( $tasks as $task => $enrolled ) {
@@ -1209,7 +1117,7 @@ class TasksCustomizationNew {
 			$cat = substr($cat, ($pos+1));
     	}
         $missions = array();
-        $sql = "select dtm.mission_name, dtm.start_date, dtm.end_date, dt.mandatory_qty from date_tasks dt 
+        $sql = "SELECT dtm.mission_name, dtm.start_date, dtm.end_date, dt.mandatory_qty from date_tasks dt 
                 join date_tasks_missions dtm using (date_tasks_mission_id) 
                 where dt.cat = \"" . mysql_real_escape_string( $cat ) . "\"  
                 and dtm.start_date >= " . $this->start . " 
@@ -1221,8 +1129,7 @@ class TasksCustomizationNew {
 			$sql .= " and dtm.personal = 0";
 		}
         $sql .= " group by dtm.mission_name order by dtm.start_date";
-        //$sql .= " group by dtm.start_date order by dtm.start_date";
-        //echo "<meta charset='UTF8' />" . $sql; exit;
+
         $result = mysql_query($sql);
 		//echo mysql_num_rows($result);
         while ($row = mysql_fetch_assoc($result)) {
@@ -1233,6 +1140,9 @@ class TasksCustomizationNew {
             $heEnd = cal_from_jd($row['end_date'], CAL_JEWISH);
             $missions[$mission]['start'] = $heStart['day'] . ' ' . $heStart['monthname'];
             $missions[$mission]['end'] = $heEnd['day'] . ' ' . $heEnd['monthname'];
+
+            $missions[$mission]['start_date']   = $row['start_date'];
+            $missions[$mission]['end_date']     = $row['end_date'];
         }
 
         //to find exceptions we need to check all task ids for each mission within each category  
