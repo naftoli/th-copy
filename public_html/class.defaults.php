@@ -75,19 +75,21 @@ class Defaults {
             }
         } else if (!$this->user) {
         	if (is_array( $id )) {
-        		$sql2 = "select * from class_{$table}s where class_id = $this->class and {$table}_id in (" . implode(',', $id) . ")";
-				$sql3 = "select * from school_{$table}s where school_id = $this->school and {$table}_id (" . implode(',', $id) . ")";
+        		$sql2 = "SELECT * from class_{$table}s where class_id = $this->class and {$table}_id in (" . implode(',', $id) . ")";
+				$sql3 = "SELECT * from school_{$table}s where school_id = $this->school and {$table}_id (" . implode(',', $id) . ")";
 			} else {
-            	$sql2 = "select * from class_{$table}s where class_id = $this->class and {$table}_id = " . $id;
-            	$sql3 = "select * from school_{$table}s where school_id = $this->school and {$table}_id = " . $id;
+            	$sql2 = "SELECT * from class_{$table}s where class_id = $this->class and {$table}_id = " . $id;
+            	$sql3 = "SELECT * from school_{$table}s where school_id = $this->school and {$table}_id = " . $id;
 			}
             $result2 = mysql_query($sql2);
             $result3 = mysql_query($sql3);
-            if (mysql_num_rows($result2) > 0 || mysql_num_rows($result3) > 0) {
-                return true;
-            } else {
+
+            if (
+                ( $result2 && mysql_num_rows( $result2 ) > 0 ) || 
+                ( $result3 && mysql_num_rows( $result3 ) > 0 )
+            ) return true;
+            else
                 return false;
-            }
         } else {
             //find out if user or user's class or user's school is default on
             if (is_array( $id )) {

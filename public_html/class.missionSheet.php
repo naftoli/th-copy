@@ -1,15 +1,15 @@
 <?
 class MissionSheet {
-    private $weeks;
-	
-    public function __construct() {
-        $this->weeks = array();
-    }
-    
-    public function marked( $user, $week, $start = 0, $end = 0 ) {
-        //find out start and end dates of week
-        if ( $week ) {
-        	if ( !array_key_exists( $week, $this->weeks ) ) {
+	private $weeks;
+
+	public function __construct() {
+		$this->weeks = array();
+	}
+
+	public function marked( $user, $week, $start = 0, $end = 0 ) {
+		//find out start and end dates of week
+		if ( $week ) {
+			if ( !array_key_exists( $week, $this->weeks ) ) {
 		        $sql = "select start_date, end_date from reports where report_id = " . $week;
 		        $result = mysql_query( $sql );
 		        $row = mysql_fetch_assoc( $result );
@@ -23,28 +23,10 @@ class MissionSheet {
 			}
 		}
 		//print_r($this->weeks); exit;
-        
-        //only find out whether tasks were accomplished for past weeks up to and including current week
-        $today = unixtojd();
-        if ( $today >= $end || ( $today < $end && $today >= $start ) ) {        
-            
-//            //get list of accomplished task ids for this user
-//            $sql = "select date_task_id 
-//                    from date_tasks_marks dtmm 
-//                    join date_tasks dt using (date_task_id) 
-//                    join date_tasks_missions dtm using (date_tasks_mission_id) 
-//                    where user_id = $user 
-//                    and dtm.start_date >= $start 
-//                    and dtm.end_date <= $end
-//					and dtmm.done_qty >= 1";
-//			//echo $sql . "<br />"; return;
-//			
-//            $result = mysql_query( $sql ) or die( mysql_error() );            
-//            //if there are any done tasks, return true, otherwise return false        
-//            if ( mysql_num_rows( $result ) )
-//                return true; 
-//            else 
-//                return false;
+		
+		//only find out whether tasks were accomplished for past weeks up to and including current week
+		$today = unixtojd();
+		if ( $today >= $end || ( $today < $end && $today >= $start ) ) {        
 			
 			 // check if there is any marks during the week period
 			$sql = "select dtmarks.date_task_id, count(*) as 'total', dtmarks.done_qty, dt.needed, dt.quantity from user_tracks ut "

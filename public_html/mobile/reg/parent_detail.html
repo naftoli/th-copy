@@ -133,11 +133,11 @@
 															{{#if this.needsReg}}
 																{{#if this.allowRemove}}
 																{{else}}
-																	<a href="medals/index.html?id={{@key}}">
+																	<a href="medals/?id={{@key}}">
 																{{/if}}
 															{{else}}
 																{{#if this.chayolei}}
-																	<a href="medals/index.html?id={{@key}}">
+																	<a href="medals/?id={{@key}}">
 																{{/if}}
 															{{/if}}
 															{{#if this.mobile_pic}}
@@ -172,11 +172,11 @@
 															{{#if this.needsReg}}
 																{{#if this.allowRemove}}
 																{{else}}
-																	<a href="medals/index.html?id={{@key}}">
+																	<a href="medals/?id={{@key}}">
 																{{/if}}
 															{{else}}
 																{{#if this.chayolei}}
-																	<a href="medals/index.html?id={{@key}}">
+																	<a href="medals/?id={{@key}}">
 																{{/if}}
 															{{/if}}
 																<div class="childrens-content-h1"><b>{{rank}}</b> {{first}} {{last}}</div>
@@ -371,7 +371,7 @@
 						var h = new Hammer( this );
 						var id = $(this).find("table td:last-child").attr('id');
 						h.on("swipe", function() {
-                            location.href = "medals/index.html?id=" + id;
+                            location.href = "medals/?id=" + id;
 						});
 					});
 				}
@@ -557,7 +557,7 @@
                             }
                         }
                     }
-                    if (!shliach) location.href = "/mobile/chidon/index.html?id=" + id;
+                    if (!shliach) location.href = "/mobile/chidon/?id=" + id;
                 });
                 
                 /*

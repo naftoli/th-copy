@@ -353,8 +353,8 @@
     			$("#rank").text( user.rank_name ? user.rank_name : 'Private' );
     			$("#name").text( user.lang_id === "2" ? user.first_he + ' ' + user.last_he : user.first + ' ' + user.last );
 				$("#serial").text( user.user_serial );
-    			$("#grade").text( grade );
-    			$("#teacher").text( user.class_teacher );
+    			$("#grade").text( grade || 'N / A' );
+    			$("#teacher").text( user.class_teacher || 'N / A' );
     			// set the users profile picture
     			if (user.mobile_pic) {
     				$("#userImg").attr('src', '../' + user.mobile_pic);

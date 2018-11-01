@@ -359,7 +359,7 @@ $bpOnly = [ 82 ];
 						</li>
 						<?php if ( !$admin_user["beta"] ) { ?>
 							<li>
-								<a href="http://mashpia.com/v2/login/frommashpia/school_id/<?=$admin->school_id ? $admin->school_id : $admin_user['auths']['school'][0]?>/admin_id/<?=$admin_user['admin_id']?>">
+								<a href="//mashpia.com/v2/login/frommashpia/school_id/<?=$admin->school_id ? $admin->school_id : $admin_user['auths']['school'][0]?>/admin_id/<?=$admin_user['admin_id']?>">
 									<span class="icon">
 										<img src="/images/icon_auction.png" width="28" height="28" alt="Dashboard" />Mileage Program
 									</span>
@@ -820,7 +820,7 @@ $bpOnly = [ 82 ];
 
 						<?php if ($school_store > 0 && false) { ?>
 							<li class="list_parent">
-								<a href="http://v2.mashpia.com/login/auto/user_id/<?=$admin->admin_id;?>/email/<?=$admin->admin_email;?>/password/<?=MD5($admin->password);?>">
+								<a href="//v2.mashpia.com/login/auto/user_id/<?=$admin->admin_id;?>/email/<?=$admin->admin_email;?>/password/<?=MD5($admin->password);?>">
 									<span class="icon">
 										<img src="/images/icon_dashboard.png" width="28" height="28" alt="Dashboard" />
 									</span>
@@ -842,7 +842,7 @@ $bpOnly = [ 82 ];
 						</li>
 						<?php if ( !$admin_user["beta"] ) { ?>
 							<li>
-								<a href="http://mashpia.com/v2/login/frommashpia/school_id/<?=$admin->school_id ? $admin->school_id : $admin_user['auths']['school'][0]?>/admin_id/<?=$admin_user['admin_id']?>">
+								<a href="//mashpia.com/v2/login/frommashpia/school_id/<?=$admin->school_id ? $admin->school_id : $admin_user['auths']['school'][0]?>/admin_id/<?=$admin_user['admin_id']?>">
 									<span class="icon">
 										<img src="/images/icon_auction.png" width="28" height="28" alt="Dashboard" />
 										Mileage Program

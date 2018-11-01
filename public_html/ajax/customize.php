@@ -4,7 +4,6 @@ $class = isset( $_POST['grade'] ) ? $_POST['grade'] : 0;
 $user = $_POST['user'];
 $start = $_POST['start'];
 $end = $_POST['end'];
-$exceptions = isset($_POST['exceptions']) ? $_POST['exceptions'] : array();
 
 $campaigns = isset( $_POST['campaigns'] ) ? $_POST['campaigns'] : array();
 $tasks = isset( $_POST['tasks'] ) ? $_POST['tasks'] : array();
@@ -47,7 +46,7 @@ if ( !empty( $campaigns ) ) {
         //$tc->unenrollSchool( $school, $campaigns );
         $users = $tc->getAllUsers($school);
         $tc->unenroll($users, $campaigns);
-    }	
+    }
 }
 
 if ( !empty( $campaignsAdded ) ) {
@@ -69,13 +68,14 @@ if ( !empty( $campaignsAdded ) ) {
     }
 }
 
-// print_r( $campaigns );
-// print_r( $tasks );
-// print_r( $missions );
+print_r( $campaigns );
+print_r( $tasks );
+print_r( $missions );
 
-// print_r( $campaignsAdded );
-// print_r( $tasksAdded );
-// print_r( $missionsAdded );
+print_r( $campaignsAdded );
+print_r( $tasksAdded );
+print_r( $missionsAdded );
+die();
 
 $tc->setStart( $start );
 $tc->setEnd( $end );
@@ -97,8 +97,4 @@ if ( !empty( $missions ) ) {
     $tc->setMissionExceptions( $missions );
 }
 
-if (!empty($exceptions)) {
-    $tc->enrollSchool($school, $exceptions);
-    $tc->enroll($tc->getAllUsers($school), $exceptions);
-}
 ?>

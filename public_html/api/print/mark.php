@@ -40,7 +40,10 @@ foreach ( $missions as $mission ) {
     <link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" />
     <style>
         span.checkmark { pointer-events: none; }
-        div#marking { padding: 4px 25px; height: auto; }
+        div#marking {
+            padding: 4px 25px 15px; height: auto; background: #fff; 
+            border-radius: 0px; border: 0px; border-bottom: 3px dashed;
+        }
         div#options { display: flex; justify-content: space-evenly; align-items: flex-end; }
         div#lookup { text-align: center; margin-top: 16px; }
     </style>

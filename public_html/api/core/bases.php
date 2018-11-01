@@ -22,21 +22,6 @@ class BaseRouter {
         json_response( $bases, true, true );
     }
 
-    public function small() {
-        global $MASHPIA_DB;
-        $all = isset( $_POST['all'] ) ? $_POST['all'] : false;
-        $filters = $this->getFilters( $all );
-        if ( !$filters ) return json_error('Access Deinied');
-        // generate the SQL
-        $query = $MASHPIA_DB->prepare( 
-            "SELECT s.school_id, s.school_name FROM schools s LEFT JOIN classes c USING (school_id)"
-            ." WHERE $filters GROUP BY school_id ORDER BY school_name;"
-        );
-        $query->execute();
-        $bases = $query->fetchAll();
-        json_response( $bases, true, true );
-    }
-
     public function show( $id ) {
         $base = School::find( $id );
         json_response( $base );
