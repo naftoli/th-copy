@@ -20,6 +20,11 @@ try {
     $_GLOBALS['log']->log( "mysql_connect Failed. Error: " . $e );
 }
 
+// mysqli connection, for easy migration of legacy code to PHP 7
+$mysqli = mysqli_connect( $global_db_host, $global_db_user, $global_db_pass, 'mashpiadb' );
+mysqli_query('SET NAMES utf8');
+mysqli_query('SET CHARACTER_SET utf8');
+
 // Connect mashpiadb to PDO
 $MASHPIA_DB = new \PDO( "mysql:host=$global_db_host;dbname=mashpiadb", $global_db_user, $global_db_pass );
 $MASHPIA_DB->exec( "SET NAMES utf8" ); // fix utf8
