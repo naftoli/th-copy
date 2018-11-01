@@ -20,9 +20,9 @@ class PersonalizePage extends Component {
 
   state = { 
     school_id:  false,  class_id:   false,
-    user_id:    false,  parsha_id:  false,
+    user_id:    false,  parsha_id:  false,  lang: '1',
     // keep track of what is loading and what the selected options are
-    loading:    false,     current_options:  {}
+    loading:    false,  current_options:  {},
   };
 
   componentDidMount() {
@@ -40,6 +40,8 @@ class PersonalizePage extends Component {
   onSelectChange = key => option =>
     this.setState({ [key]: option ? option.value : false });
 
+  onLangChange = ({ target }) =>
+    this.setState({ lang: target.value || '1' });
 
   getCampaigns = () => {
     let { current_options, loading, ...data } = this.state;
@@ -75,6 +77,7 @@ class PersonalizePage extends Component {
         <OptionsRow
           login={ login }
           { ...this.state }
+          onLangChange={ this.onLangChange }
           onSelectChange={ this.onSelectChange } />
         
         <Row className='buttons'>

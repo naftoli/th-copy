@@ -1,13 +1,15 @@
 import React from 'react';
 
 import { Row, Col } from 'reactstrap';
+import { Radio } from 'components/inputs';
 import { isAdmin, isBC } from 'functions/login';
 import { PlatoonSelect, SoldierSelect, ParshaSelect, BaseSelect } from 'components/selects';
 
 const OptionsRow = props => {
   const { 
     login,    school_id,  class_id,
-    user_id,  parsha_id,  onSelectChange
+    user_id,  parsha_id,  lang,
+    onSelectChange,       onLangChange
   } = props;
 
   return (
@@ -53,6 +55,24 @@ const OptionsRow = props => {
           value={ parsha_id }
           placeholder='Entire Year' 
           onChange={ onSelectChange('parsha_id') } />
+      </Col>
+
+      <Col sm={{ size: 6, offset: 3 }} className='lang-options'>
+        <strong>Language</strong>
+        <Radio
+            value='1'
+            name='lang'
+            checked={ lang === '1' }
+            onChange={ onLangChange }>
+          English
+        </Radio>
+        <Radio
+            value='2'
+            name='lang'
+            checked={ lang === '2' }
+            onChange={ onLangChange }>
+          Yiddish
+        </Radio>
       </Col>
     </Row>
   )
