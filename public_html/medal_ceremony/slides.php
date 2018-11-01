@@ -12,7 +12,7 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
 function getRank($user) {
-	$sql = "select rank_name 
+	$sql = "select rank_name, rank_image_id  
 			from ranks r 
 			join rank_marks rm 
 			using (rank_ord) 
@@ -21,9 +21,9 @@ function getRank($user) {
 			where u.user_id = " . $user . " 
 			order by rm.rank_ord desc 
 			limit 0,1";
-	$result = mysql_query( $sql ) or die( mysql_error() );
+    $result = mysql_query( $sql );
 	$row = mysql_fetch_assoc( $result );
-	return $row['rank_name'];
+	return $row;
 }
 
 function getMedal( $subject_id, $medal ) {
@@ -40,6 +40,21 @@ function getMedal( $subject_id, $medal ) {
         return 'images/backs/weekly/'.$medal_name.'.gif';
 }
 
+function getUserPhoto( $user_id ) {
+    $sql = "select u.mobile_pic, u.user_photo_id, t.thumb 
+            from users u 
+            left join thumbs t on u.user_photo_id = t.file_id 
+            where u.user_id = " . $user_id;
+    $result = mysql_query( $sql );
+    if ( mysql_num_rows( $result ) > 0 ) {
+        $row = mysql_fetch_assoc( $result );
+        if ( $row['thumb'] && file_exists('https://mashpia.com/mobile/reg/thumbs/' . $row['thumb']) ) return 'https://mashpia.com/mobile/reg/thumbs/' . $row['thumb'];
+        else if ( $row['mobile_pic'] ) return 'https://mashpia.com/mobile/reg/' . $row['mobile_pic'];
+        else if ( $row['user_photo_id'] ) return 'https://mashpia.com/file_view.php?id=' . $row['user_photo_id'];
+    }
+    return '';
+}
+
 // determine which subjects go in which row / column for css styling / positioning
 $positioning = [
     [0,0,0,41],
@@ -52,50 +67,7 @@ $positioning = [
 <html>
     <head>
         <meta charset='utf8' />
-        <style>
-            .slide {
-                background-image: url("Medal_Ceremony.jpg");
-                background-repeat: no-repeat;
-                width: 1200px;
-                height: 750px;
-            }
-            .heDate {
-                direction: rtl;
-                width: 1200px;
-                margin: auto;
-                text-align: center;
-                padding-top: 100px;
-                font-size: 30px;
-            }
-            .medal {
-                float: left;
-                position: absolute;
-            }
-            .row1 {
-                margin-top: -25px;
-            }
-            .row2 {
-                margin-top: 115px;
-            }
-            .row3 {
-                margin-top: 252px;
-            }
-            .row4 {
-                margin-top: 390px;
-            }
-            .column1 {
-                margin-left: 255px;
-            }
-            .column2 {
-                margin-left: 515px;
-            }
-            .column3 {
-                margin-left: 780px;
-            }
-            .column4 {
-                margin-left: 1060px;
-            }
-        </style>
+        <link rel="stylesheet" href="slide.css" />
     </head>
 
     <body>
@@ -107,17 +79,20 @@ $positioning = [
             $userInfo = $m->getUserInfo();
             $subjects = $m->getSubjects();
 
-            if (count($details)) {
+            if ( count($details) ) {
                 foreach ( $details as $school => $line ) {
                     if ( $school != $school_name ) continue;
                     foreach ( $line as $teacher => $class ) {
                         foreach ( $class as $grade => $info ) {
                             foreach ( $info as $user => $medals ) {
+                                $rankInfo = getRank( $user );
                                 echo "<div class='slide'>";
                                 echo "<div class='heDate'>" . $heDatesMedals['start_he'] . ' - ' . $heDatesMedals['end_he'] . "</div>";
-                                echo "<div class='rank'>" . getRank( $user ) . "</div>";
+                                echo "<div class='photo'><img src='" . getUserPhoto( $user ) . "' /></div>";
+                                echo "<div class='userInfo'><div class='rank'><img src='https://mashpia.com/file_view.php?id=" . $rankInfo['rank_image_id'] . "' />" . 
+                                    $rankInfo['rank_name'] . "</div>";
                                 echo "<div class='user'>" . $userInfo[$user] . "</div>";
-                                echo "<div class='info'>Grade " . $grade . " * " . $teacher . " * " . $school . "</div>";
+                                echo "<div class='info'>Grade " . $grade . " &#9679; " . $teacher . " &#9679; " . $school . "</div></div>";
                                 foreach ( $medals as $subject => $more ) {
                                     // figure out which row and column the subject belongs in 
                                     for ($row = 0; $row < 4; $row++) {
