@@ -25,15 +25,8 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 if ( isset( $_POST['submit'] ) && $_POST['submit'] == 'Go' ) {
-    echo "<pre>";
-    //print_r( $_POST );
-    echo "</pre>";
-    //exit;
 
     $school = $_POST['school'];
-    //if ($school == 54) {
-    //  echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
-    //}
     $class = isset( $_POST['class'] ) ? $_POST['class'] : 0;
     $user = isset( $_POST['user'] ) ? $_POST['user'] : 0;
     $start_date = $_POST['start_date'];
@@ -41,14 +34,14 @@ if ( isset( $_POST['submit'] ) && $_POST['submit'] == 'Go' ) {
 
     require 'class.tasksCustomizationNew.php';
     $tc = new TasksCustomizationNew;
-if ($user > 0) {
-$both = $tc->getCampaignsForChild( $user, true ); // included unenrolled campaigns
-$campaigns = $both['campaigns'];
-$enrolled = $both['enrolled'];
-} else {
-$campaigns = $tc->getCampaigns( $school );
-$enrolled = $tc->getCampaignsEnrolled( $school, $class, $user );
-}
+    if ($user > 0) {
+        $both = $tc->getCampaignsForChild( $user, true ); // included unenrolled campaigns
+        $campaigns = $both['campaigns'];
+        $enrolled = $both['enrolled'];
+    } else {
+        $campaigns = $tc->getCampaigns( $school );
+        $enrolled = $tc->getCampaignsEnrolled( $school, $class, $user );
+    }
 }
 ?>
 <html>
@@ -760,7 +753,7 @@ $enrolled = $tc->getCampaignsEnrolled( $school, $class, $user );
                         //alert( data );
                         alert( "Saved." );
                         //history.go(0);
-                        window.location = 'task_customization.php';
+                        // window.location = 'task_customization.php';
                     });
                 }
             });
