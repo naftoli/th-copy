@@ -23,15 +23,13 @@ $rankNames = $rr->getRankNames();
 $heDatesRanks = $rr->getHeReportDates();
 
 function getRank($user) {
-	$name = explode(" ", $user);  
 	$sql = "select rank_name 
 			from ranks r 
 			join rank_marks rm 
 			using (rank_ord) 
 			join users u 
 			using (user_id) 
-			where u.last = \"" . mysql_real_escape_string($name[1]) . "\"   
-			and u.first = \"" . mysql_real_escape_string($name[0]) . "\"  
+			where u.user_id = " . $user . " 
 			order by rm.rank_ord desc 
 			limit 0,1";
 	$result = mysql_query( $sql ) or die( mysql_error() );
@@ -129,7 +127,8 @@ function getRank($user) {
                 $m->setMedalSummary();
                 $summary = $m->getMedalSummary();
                 $totals = $m->getMedalTotals();
-                $medalsTotal = $m->getMedalsTotal();
+				$medalsTotal = $m->getMedalsTotal();
+				$userInfo = $m->getUserInfo();
                 
                 $rr->setRanks('byRank');
                 $ranks = $rr->getRanks();
@@ -167,7 +166,7 @@ function getRank($user) {
 							foreach ( $class as $grade => $info ) {
 								foreach ( $info as $user => $medals ) {
 									echo "<tr><td>" . $teacher . "</td><td>" . $grade . "</td>";
-									echo "<td>" . getRank($user) . " " . $user . "</td><td>";
+									echo "<td>" . getRank($user) . " " . $userInfo[$user] . "</td><td>";
 									foreach ( $medals as $subject => $more ) {
 										foreach ($more as $medal) {
 											echo $subject . "-" . $medal . "<br />";
