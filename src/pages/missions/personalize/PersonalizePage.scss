@@ -1,0 +1,153 @@
+@import 'styles/colors';
+
+#PersonalizePage {
+  .buttons {
+    margin-top: 16px;
+    .btn {
+      width: 100%;
+    }
+  }
+
+  .open {
+    > .btn {
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+    > .btn i,
+    > p i { transform: rotate( 90deg ); }
+  }
+
+  .tasks {
+    display: grid;  gap: 10px;
+    grid-template-columns: repeat( auto-fill, minmax(455px, 1fr) );
+    
+    @media ( max-width: 515px ) {
+      grid-template-columns: repeat( 1, 100% );
+    }
+  }
+
+  .missions {
+    display: grid;
+    grid-template-columns: repeat( auto-fill, minmax(135px, 1fr) );
+    gap: 15px;
+  }
+
+  .Campaign {
+
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+    margin-bottom: 12px;
+
+    @media ( min-width: 1921px ) {
+      width: 50%;
+      padding: 4px;
+    }
+    
+    .btn {
+      text-align: left;
+      font-size: 1em;
+      width: 100%;
+    }
+
+    i {
+      font-size: 1.2em;
+      transition: .25s;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .toggle {
+      float: right;
+      margin-left: 1em;
+    }
+
+    .alert {
+      margin: 0px; 
+    }
+
+    > .collapse, > .collapsing {
+      > .campaign-content {
+        transition: .25s;
+        padding: 6px 8px 6px;
+        border: 1px solid $primary-color;
+        border-top: 0px;
+
+        border-bottom-left-radius: .3rem;
+        border-bottom-right-radius: .3rem;
+      }
+      // border-bottom: 1px solid rgb(204, 204, 204);
+    }
+  }
+
+  .Task {
+    padding: .5rem; width: 100%;
+    border: 1px solid #ccc; border-radius: 5px;
+
+    div.Label {
+      padding: 0px 1em;
+      &:not( :first-of-type ) {
+        border-top: 1px dashed;
+        margin-top: .4rem;
+        padding-top: .4rem;
+      }
+    }
+    
+    p { margin-bottom: .2rem; }
+    p.task {
+      font-size: 1.2em;
+      border-bottom: 1px solid #888;
+      padding-bottom: 6px;
+      cursor: pointer;
+      user-select: none;
+      transition: .25s;
+      &:hover{ font-weight: bolder; }
+    }
+
+    .label-quota-type {
+        font-size: 1.1em;
+        border-bottom: 1px solid #ccc;
+        margin-top: .5em;
+    }
+
+    .label-quota-grid {
+      display: grid;  gap: 2px 20px;
+      grid-template-columns: repeat( auto-fit, minmax( 80px, 1fr ) );
+    }
+
+    .label-quota strong {
+      float: right;
+    }
+
+    .label-grades,
+    .label-quotas {
+      font-size: .8em;
+
+      > strong {
+        display: block;
+      }
+
+      p.label-grade {
+        display: inline-block;
+        margin-left: 1em;
+      }
+    }
+
+    .Mission {
+      // width: calc( 100% / 3 );
+      // display: inline-block;
+      // padding: 3px;
+  
+      label.checkbox {
+        display: block;
+        // height: 1.2em;
+      }
+  
+      small {
+        margin-left: 2em;
+        font-size: .6em;
+        display: block;
+      }
+    }
+  }
+}

@@ -27,8 +27,8 @@ describe(`operations`, () => {
       expect( fetchMock.lastUrl() ).toBe( `${API_URL}/core/users` );
     });
 
-    it(`calls dispatch 3 times`, () => {
-      fetchMock.get('*', { success: false } );
+    it(`calls dispatch 2 times`, () => {
+      fetchMock.get('*', { success: true } );
       return operations.getSoldiers()( dispatchMock ).then( () => {
         expect( dispatchMock ).toHaveBeenCalledTimes( 2 );
       });

@@ -37,9 +37,10 @@ const toJSON = response => {
 }
 
 const parseResponse = response => {
-  if ( response.success === false && response.message ) {
+  if ( response.success === false && response.message )
     return Promise.reject( response );
-  }
+  if ( response.success === false )
+    return Promise.reject( new Error('Unknown Server Error') );
   return response.data;
 }
 

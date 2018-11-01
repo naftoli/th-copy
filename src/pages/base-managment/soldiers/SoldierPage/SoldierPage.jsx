@@ -97,7 +97,7 @@ class SoldierPage extends Component {
   updateProfile = ( formData ) => {
     const { soldier } = this.state;
     this.props.updateSoldier( soldier.user_id, formData )
-    .then( ({ data }) => this.setState({ updates: {}, soldier: data }) );
+    .then( soldier => this.setState({ updates: {}, soldier }) );
   }
   // render the page
   render(){

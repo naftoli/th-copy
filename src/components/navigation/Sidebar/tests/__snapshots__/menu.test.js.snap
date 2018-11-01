@@ -159,6 +159,11 @@ Array [
       Object {
         "label": "Add Task",
         "path": "/missions/tasks",
+        "user_types": Array [
+          "HQ",
+          "INST",
+          "BC",
+        ],
       },
       Object {
         "label": "Mission Report",

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 // sub pages
+import PersonalizePage from './personalize/PersonalizePage';
 import { Page404, Construction } from 'pages/errors';
 import PrintPage from './print/PrintPage';
 import MarkPage from './mark';
@@ -13,20 +14,17 @@ export class BaseManagmentIndexPage extends Component {
   render() {
     const { code } = this.props.login;
     const { path } = this.props.match;
-    // pages only Base Commanders can access
-    const BCRoutes = [
-      <Route key={1} path={`${path}/personalize`} component={ Construction } />,
-      <Route key={2} path={`${path}/tasks`} component={ Construction } />,
-    ];
 
     return (
       <Switch>
-        <Route path={`${path}/print`} component={ PrintPage } />
-        <Route path={`${path}/mark`} component={ MarkPage } />
+        <Route path={`${path}/print`}       component={ PrintPage } />
+        <Route path={`${path}/mark`}        component={ MarkPage } />
+        <Route path={`${path}/personalize`} component={ PersonalizePage } />
+        <Route path={`${path}/report`}      component={ Construction } />
 
-        { isBC( code ) && BCRoutes }
+        { isBC( code ) &&
+          <Route path={`${path}/tasks`}     component={ Construction } /> }
 
-        <Route path={`${path}/report`} component={ Construction } />
         <Route component={ Page404 } />
       </Switch>
     )

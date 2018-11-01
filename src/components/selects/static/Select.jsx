@@ -31,7 +31,7 @@ function withDefaultProps( Select ){
       const enableRequired = required && !isDisabled;
 
       return (
-        <div className='Select'>
+        <div className='Select' style={{ flexGrow: 1 }}>
           <Select
             { ...props }
             openMenuOnFocus
