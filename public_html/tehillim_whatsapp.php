@@ -70,9 +70,19 @@ require_once( dirname(__FILE__) . '/whatsapp.php' );
                     <?php
                     $totals = array();
                     $indx = 0;
+                    $first = true; // flag to know when to initialize total variables
+                    $prevPercent = 0;
                     foreach ($info as $id => $percent) { ?>
                         <tr>
-                            <td> <?= $indx + 1 ?></td>
+                            <td>
+                                <?php
+                                if ($prevPercent != $percent) {
+                                    $indx++;
+                                    $prevPercent = $percent;
+                                } 
+                                echo $indx;
+                                ?>
+                            </td>
                             <td class='left'><?=$schoolInfo[$id]?></td>
                             <td class='left'><?=$classes[$id]['teacher']?></td>
                             <td><?=$totalUsers[$id]?></td>
@@ -83,13 +93,14 @@ require_once( dirname(__FILE__) . '/whatsapp.php' );
                             <td><?=empty( $done['Minutes'][ $date ][ $id ] ) ? 0 : $done['Minutes'][ $date ][ $id ]?></td>
                         </tr>
                     <?php
-                        if (!$indx) { // for the first row, initialize the totals
+                        if ($first) { // for the first row, initialize the totals
                             $totals['numUsers'] = $totalUsers[$id];
                             $totals['quota'] = $doneQuotas['Kapitelach'][$id];
                             $totals['goalK'] = $goal['Kapitelach'][$date][$id];
                             $totals['goalM'] = $goal['Minutes'][$date][$id];
                             $totals['doneK'] = $done['Kapitelach'][$date][$id];
                             $totals['doneM'] = $done['Minutes'][$date][$id];
+                            $first = false;
                         } else { // for the rest add the amounts to the totals
                             $totals['numUsers'] += $totalUsers[$id];
                             $totals['quota'] += $doneQuotas['Kapitelach'][$id];
@@ -98,7 +109,6 @@ require_once( dirname(__FILE__) . '/whatsapp.php' );
                             $totals['doneK'] += $done['Kapitelach'][$date][$id];
                             $totals['doneM'] += $done['Minutes'][$date][$id];
                         }
-                        $indx++;
                     } ?>
                     <tr>
                         <th colspan='3'>Totals</th>

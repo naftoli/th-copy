@@ -1,0 +1,271 @@
+%!Adobe-FontList 1.16
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:AdobeHebrew-Regular
+FamilyName:Adobe Hebrew
+StyleName:Regular
+FullName:Adobe Hebrew Regular
+MenuName:Adobe Hebrew
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Regular
+FullNameNative:
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Shimmy\Dropbox\CTH\Rallies 5779\Medal Ceremony\Medal Ceremony Slide\Document fonts\AdobeHebrew-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:73124
+FileModTime:1399003606
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,Adobe Hebrew
+NameArray:0,Mac,4,Adobe Hebrew Regular
+NameArray:0,Win,1,Adobe Hebrew
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbCarizmaBook-Medium
+FamilyName:FbCarizmaBook
+StyleName:Medium
+FullName:FbCarizmaBook-Medium
+MenuName:FbCarizmaBook Medium
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Medium
+FullNameNative:
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Shimmy\Dropbox\CTH\Rallies 5779\Medal Ceremony\Medal Ceremony Slide\Document fonts\FbCarizmaBook-Medium.otf
+DataFormat:sfntData
+FileLength:67788
+FileModTime:1267555332
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,FbCarizmaBook Medium
+NameArray:0,Win,1,FbCarizmaBook Medium
+NameArray:0,Win,16,FbCarizmaBook
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbGushpanka-Bold
+FamilyName:Fb Gushpanka
+StyleName:Bold
+FullName:FbGushpanka Bold
+MenuName:Fb Gushpanka
+StyleBits:2
+FamilyNameNative:
+StyleNameNative:Bold
+FullNameNative:
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Shimmy\Dropbox\CTH\Rallies 5779\Medal Ceremony\Medal Ceremony Slide\Document fonts\FbGushpanka-Bold.otf
+DataFormat:sfntData
+FileLength:48280
+FileModTime:1492780333
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,FbGushpanka Bold
+NameArray:0,Win,1,Fb Gushpanka
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbRimona-Black
+FamilyName:FbRimona
+StyleName:Black
+FullName:FbRimona-Black
+MenuName:FbRimona Black
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Black
+FullNameNative:
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Shimmy\Dropbox\CTH\Rallies 5779\Medal Ceremony\Medal Ceremony Slide\Document fonts\FbRimona-Black.otf
+DataFormat:sfntData
+FileLength:64952
+FileModTime:1267556568
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,FbRimona Black
+NameArray:0,Win,1,FbRimona Black
+NameArray:0,Win,16,FbRimona
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbTrampolina-Regular
+FamilyName:FbTrampolina
+StyleName:Regular
+FullName:FbTrampolina-Regular
+MenuName:FbTrampolina Regular
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Regular
+FullNameNative:
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Shimmy\Dropbox\CTH\Rallies 5779\Medal Ceremony\Medal Ceremony Slide\Document fonts\FbTrampolina-Regular.otf
+DataFormat:sfntData
+FileLength:62048
+FileModTime:1342631755
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,FbTrampolina Regular
+NameArray:0,Win,1,FbTrampolina Regular
+NameArray:0,Win,16,FbTrampolina
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:GothamNarrow-Black
+FamilyName:Gotham Narrow
+StyleName:Black
+FullName:Gotham Narrow Black
+MenuName:Gotham Narrow Black
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Shimmy\Dropbox\CTH\Rallies 5779\Medal Ceremony\Medal Ceremony Slide\Document fonts\GothamNarrow-Black.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:157052
+FileModTime:1221235428
+WeightClass:450
+WidthClass:3
+AngleClass:0
+NameArray:0,Mac,4,Gotham Narrow Black
+NameArray:0,Win,1,Gotham Narrow Black
+NameArray:0,Win,16,Gotham Narrow
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:GothamNarrow-Bold
+FamilyName:Gotham Narrow
+StyleName:Bold
+FullName:Gotham Narrow Bold
+MenuName:Gotham Narrow Bold
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Shimmy\Dropbox\CTH\Rallies 5779\Medal Ceremony\Medal Ceremony Slide\Document fonts\GothamNarrow-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:176412
+FileModTime:1221168868
+WeightClass:400
+WidthClass:3
+AngleClass:0
+NameArray:0,Mac,4,Gotham Narrow Bold
+NameArray:0,Win,1,Gotham Narrow Bold
+NameArray:0,Win,16,Gotham Narrow
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:GothamNarrow-Book
+FamilyName:Gotham Narrow
+StyleName:Book
+FullName:Gotham Narrow Book
+MenuName:Gotham Narrow Book
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Shimmy\Dropbox\CTH\Rallies 5779\Medal Ceremony\Medal Ceremony Slide\Document fonts\GothamNarrow-Book.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:177824
+FileModTime:1222977610
+WeightClass:325
+WidthClass:3
+AngleClass:0
+NameArray:0,Mac,4,Gotham Narrow Book
+NameArray:0,Win,1,Gotham Narrow Book
+NameArray:0,Win,16,Gotham Narrow
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:GothamNarrow-Medium
+FamilyName:Gotham Narrow
+StyleName:Medium
+FullName:Gotham Narrow Medium
+MenuName:Gotham Narrow Medium
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Shimmy\Dropbox\CTH\Rallies 5779\Medal Ceremony\Medal Ceremony Slide\Document fonts\GothamNarrow-Medium_0.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:178648
+FileModTime:1221168822
+WeightClass:350
+WidthClass:3
+AngleClass:0
+NameArray:0,Mac,4,Gotham Narrow Medium
+NameArray:0,Win,1,Gotham Narrow Medium
+NameArray:0,Win,16,Gotham Narrow
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Interstate-Black
+FamilyName:Interstate
+StyleName:Black
+FullName:Interstate-Black
+MenuName:Interstate
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:C:\Users\Shimmy\Dropbox\CTH\Rallies 5779\Medal Ceremony\Medal Ceremony Slide\Document fonts\INTERSTATE-BLACK 6.ttf
+DataFormat:sfntData
+FileLength:20160
+FileModTime:1425022123
+WeightClass:900
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Interstate-Black
+NameArray:0,Win,1,Interstate
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Sucrose-Bold
+FamilyName:Sucrose
+StyleName:Bold
+FullName:Sucrose Bold
+MenuName:Sucrose
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:C:\Users\Shimmy\Dropbox\CTH\Rallies 5779\Medal Ceremony\Medal Ceremony Slide\Document fonts\Yellow Design Studio - Sucrose-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:94860
+FileModTime:1503948388
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,Sucrose Bold
+NameArray:0,Mac,4,Sucrose Bold
+NameArray:0,Win,1,Sucrose
+NameArray:0,Win,16,Sucrose
+%EndFont
+

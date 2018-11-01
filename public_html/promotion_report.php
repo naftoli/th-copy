@@ -35,6 +35,9 @@ table, tr, th, td {
 th, td {
 	padding: 8px;
 }
+body {
+	line-height: 1.4;
+}
 .list ol{
 	list-style-type: decimal;
 }
@@ -136,13 +139,15 @@ if (isset($_POST['submit'])) {
 	echo "<br />";
 	echo "<h3>Picture Guidlines</h3>";
 	echo "<ul>";
-	echo "<ol>1. use a good camera, on the highest quality settings";
-	echo "<ol>2. the camera should be held at landscape";
-	echo "<ol>3. there should be <b>one</b> picture per school, including all the Chayolim who were promoted to that rank";
-	echo "<ol>4. chayolim should be holding their new rank books and smiling 
+	echo "<ol>1. Read the manual for clear instructions if this is your first time. We are unable to feature schools done incorrectly.</ol>";
+	echo "<ol>2. use a good camera, on the highest quality settings</ol>";
+	echo "<ol>3. the camera should be held at landscape</ol>";
+	echo "<ol>4. there should be <b>one</b> picture per school, including all the Chayolim who were promoted to that rank, but with clear differentiation of ranks</ol>";
+	echo "<ol>5. Take a separate picture of each general. After uploading to dropbox, be sure to name that picture with that child's rank and name</ol>";
+	echo "<ol>6. chayolim should be holding their new rank books and smiling 
 	(please note: the rank books are not to be awarded until the rally, 
-	however for the purposes of the picture you can distribute rank books)";
-	echo "<ol>5. the picture should be taken in front of a plain white wall";
+	however for the purposes of the picture you can distribute rank books)</ol>";
+	echo "<ol>7. the picture should be taken in front of a plain white wall</ol>";
 	echo "</ul>";
 	echo "</div>";
     echo "<br />";
