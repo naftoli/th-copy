@@ -140,7 +140,7 @@ class PersonalizeRouter {
             if ( $user_id )
                 $user_ids = [ $user_id ];
             else if ( $class_id )
-                $user_ids = $this->tc->getUsersInGrade( $class );
+                $user_ids = $this->tc->getUsersInGrade( $class_id );
             else if ( $school_id )
                 $user_ids = $this->tc->getAllUsers( $school_id );
 
