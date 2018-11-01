@@ -20,7 +20,7 @@ class PersonalizePage extends Component {
 
   state = { 
     school_id:  false,  class_id:   false,
-    user_id:    15000,  parsha_id:  false,
+    user_id:    false,  parsha_id:  false,
     // keep track of what is loading and what the selected options are
     loading:    false,     current_options:  {}
   };
@@ -32,8 +32,6 @@ class PersonalizePage extends Component {
     this.setState({ school_id });
     if ( class_id )
       this.setState({ class_id });
-
-    this.getCampaigns();
   }
 
   /**
