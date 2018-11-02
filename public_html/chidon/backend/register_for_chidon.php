@@ -41,27 +41,38 @@ if ( isset( $_FILES['file'] ) ) {
         $user_id = $result['user_id'];
 
         if ( $user_id > 0 ) {
-            $handle = $MASHPIA_DB->prepare("select admin_id from admin_auths where id = :user_id");
-            $result = $handle->execute([':user_id' => $user_id]);
-            $admin_id = $result['admin_id'];
+            // first find out if user already is registered in chidon db
+            $handle = $MASHPIA_DB->prepare("select * from th_chidon where year = :year and school_id = :school and user_id = :user");
+            $result = $handle->execute([
+                ':year'     =>  $year, 
+                ':school'   =>  $school_id, 
+                ':user'     =>  $user_id
+            ]);
+            $found = $result->fetchAll();
 
-            $handle = $MASHPIA_DB->prepare("insert into th_chidon 
-                                            set year = :year, 
-                                            school_id = :school_id, 
-                                            user_id = :user_id, 
-                                            size = :size, 
-                                            parent_id = :parent_id");
-            if ( 
-                !$handle->execute([
-                    ':year'         =>  $year, 
-                    ':school_id'    =>  $school_id, 
-                    ':user_id'      =>  $user_id, 
-                    ':size'         =>  'children l', 
-                    ':parent_id'    =>  $admin_id
-                ]) 
-            ) {
-                $success = false;
-                break;
+            if ( empty( $found ) ) {
+                $handle = $MASHPIA_DB->prepare("select admin_id from admin_auths where id = :user_id");
+                $result = $handle->execute([':user_id' => $user_id]);
+                $admin_id = $result['admin_id'];
+
+                $handle = $MASHPIA_DB->prepare("insert into th_chidon 
+                                                set year = :year, 
+                                                school_id = :school_id, 
+                                                user_id = :user_id, 
+                                                size = :size, 
+                                                parent_id = :parent_id");
+                if ( 
+                    !$handle->execute([
+                        ':year'         =>  $year, 
+                        ':school_id'    =>  $school_id, 
+                        ':user_id'      =>  $user_id, 
+                        ':size'         =>  'children l', 
+                        ':parent_id'    =>  $admin_id
+                    ]) 
+                ) {
+                    $success = false;
+                    break;
+                }
             }
         }
     }
