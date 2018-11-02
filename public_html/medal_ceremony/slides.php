@@ -86,6 +86,13 @@ $positioning = [
             $userInfo = $m->getUserInfo();
             $subjects = $m->getSubjects();
 
+            // sort details array by user name
+            foreach ( $details as $school => $line ) {
+                foreach ( $line as $teacher => $class ) {
+                    ksort( $details[$school][$teacher] );
+                }
+            }
+
             if ( count($details) ) {
                 foreach ( $details as $school => $line ) {
                     if ( $school != $school_name ) continue;
