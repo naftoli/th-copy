@@ -24,6 +24,14 @@
     width: 1200px;
     height: 750px;
 }
+.logo {
+    float: right;
+    margin-right: 30px;
+    margin-top: 30px;
+}
+.logo img {
+    max-height: 100px;
+}
 .heDate {
     direction: rtl;
     width: 1200px;

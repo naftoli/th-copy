@@ -11,6 +11,13 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
+function getLogo( $school_id ) {
+    $sql = "select logo from schools where school_id = " . $school_id;
+    $result = mysql_query( $sql );
+    $row = mysql_fetch_assoc( $result );
+    return $row['logo'];
+}
+
 function getRank($user) {
 	$sql = "select rank_name, rank_image_id  
 			from ranks r 
@@ -87,6 +94,7 @@ $positioning = [
                             foreach ( $info as $user => $medals ) {
                                 $rankInfo = getRank( $user );
                                 echo "<div class='slide'>";
+                                echo "<div class='logo'><img src='https://mashpia.com/schoolLogos/" . getLogo( $school_id ) . "' /></div>";
                                 echo "<div class='heDate'>" . $heDatesMedals['start_he'] . ' - ' . $heDatesMedals['end_he'] . "</div>";
                                 echo "<div class='photo'><img src='" . getUserPhoto( $user ) . "' /></div>";
                                 echo "<div class='userInfo'><div class='rank'><img src='https://mashpia.com/file_view.php?id=" . $rankInfo['rank_image_id'] . "' />" . 
