@@ -56,7 +56,7 @@ function createStartArray( $val, $subject_id ) {
         $jd = jewishtojd($arrTemp[0], $arrTemp[1], $year);
         $arrStart[] = $jd;
         if ( $subject_id == 27 ) { // end date is 6 days later
-            $arrEnd = $jd + 6;
+            $arrEnd[] = $jd + 6;
         } else {
             $arrEnd[] = $jd;
         }
