@@ -10,14 +10,10 @@ class SubjectsRouter {
         $subjects = Subject::all([
             'conditions' => [
                 'inst_id IN ( 0, ? ) '
-                .'AND subject_type IN ( "" , "WWTC", "Tanya", "achievement" )', 
+                .'AND subject_type IN ( "" , "WWTC", "Tanya" )', 
                 $current_user->login->inst_id
             ]
         ]);
-
-        $subjects = array_map( function( $subject ) use ( $current_user ) {
-            return $subject->includeTasksJSON( $current_user->login );
-        }, $subjects);
 
         json_response( $subjects, true, true );
     }
