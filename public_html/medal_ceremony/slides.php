@@ -3,7 +3,7 @@ $admin_auth = array('school');
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.medalReport.php';
-$m = new MedalReport();
+$m = new MedalReport( true ); // show previous rally info
 $dates = $m->getReportDates();
 $heDatesMedals = $m->getHeReportDates();
 
@@ -164,7 +164,11 @@ $positioning = [
     </body>
     <script>
         $("#school").change( function() {
-            var school = $(this).val();
+            updateGrades();
+        });
+
+        function updateGrades() {
+            var school = $("#school").val();
             var pos = school.indexOf('|');
             var id = 0;
             if ( pos > 0 ) {
@@ -189,6 +193,11 @@ $positioning = [
             } else {
                 $("#grades").empty();
             }
+        }
+
+        $( function() {
+            var school = $("#school").val();
+            if (school.indexOf('|') !== -1) updateGrades();
         });
     </script>
 </html>
