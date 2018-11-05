@@ -162,7 +162,7 @@ $positioning = [
         }
         ?>
     </body>
-    <?php if (!isset($_POST)) : ?>
+    <?php if ( !isset( $_POST['school'] ) ) : ?>
     <script>
         $("#school").change( function() {
             updateGrades();
