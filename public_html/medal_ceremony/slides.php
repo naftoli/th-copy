@@ -74,13 +74,39 @@ $positioning = [
 <html>
     <head>
         <meta charset='utf8' />
+        <script
+            src="https://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+            crossorigin="anonymous"></script>
         <link rel="stylesheet" href="slide.css" />
     </head>
 
     <body>
+        <?php if ( !isset( $_POST['school'] ) ) { ?>
+        <form method="post" action="slides.php">
+            School: <select name="school" id="school">
+                <?php
+                if ( count($schools) > 1 ) {
+                    echo "<option value='-1'>All Schools</option>";
+                }
+                foreach ( $schools as $id => $name ) {
+                    echo "<option value='" . $id . "|" . $name . "'>" . $name . "</option>";
+                }
+                ?>
+            </select><br /><br />
+            Grade: <select name="grades" id="grades">
+                <option value='0'>None Selected</option>
+            </select><br /><br />
+            <input type="submit" name="submit" value="submit" />
+        </form>
         <?php
-        foreach ( $schools as $school_id => $school_name ) {
+        } else {
+            $schoolInfo = explode('|', $_POST['school']);
+            $school_id = $schoolInfo[0];
+            $school_name = $schoolInfo[1];
+
             $m->setSchoolId( $school_id );
+            if ( $_POST['grades'] > 0 ) $m->setGrades( $_POST['grades'] );
             $m->setMedalDetails();
             $details = $m->getMedalDetails();
             $userInfo = $m->getUserInfo();
@@ -136,4 +162,33 @@ $positioning = [
         }
         ?>
     </body>
+    <script>
+        $("#school").change( function() {
+            var school = $(this).val();
+            var pos = school.indexOf('|');
+            var id = 0;
+            if ( pos > 0 ) {
+                id = school.substring(0,pos);
+            }
+            if ( id > 0 ) {
+                $.get("/ajax/getClasses.php", {
+                    id: id,
+                    flat: false,
+                    named: false,
+                    extra: ''
+                }, function( info ) {
+                    var grades = JSON.parse( info );
+                    var html = "<option value='-1'>All Grades</option>";
+                    for (var g in grades) {
+                        var grade = grades[g];
+                        html += "<option value='" + grade[0] + "'>" + grade[1] + "</option>";
+                    }
+                    $("#grades").empty()
+                    $("#grades").append( html );
+                });
+            } else {
+                $("#grades").empty();
+            }
+        });
+    </script>
 </html>
