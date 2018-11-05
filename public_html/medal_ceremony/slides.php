@@ -1,9 +1,10 @@
 <?php
+ini_set('display_errors',1);
 $admin_auth = array('school'); 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.medalReport.php';
-$m = new MedalReport( true ); // show previous rally info
+require_once 'class.slides.php';
+$m = new Slides( true ); // show previous rally info
 $dates = $m->getReportDates();
 $heDatesMedals = $m->getHeReportDates();
 
@@ -82,8 +83,8 @@ $positioning = [
     </head>
 
     <body>
-        <?php if ( !isset( $_POST['school'] ) ) { ?>
-        <form method="post" action="slides.php">
+        <?php //if ( !isset( $_POST['school'] ) ) { ?>
+        <!-- <form method="post" action="slides.php">
             School: <select name="school" id="school">
                 <?php
                 if ( count($schools) > 1 ) {
@@ -98,32 +99,32 @@ $positioning = [
                 <option value='0'>None Selected</option>
             </select><br /><br />
             <input type="submit" name="submit" value="submit" />
-        </form>
+        </form> -->
         <?php
-        } else {
-            $schoolInfo = explode('|', $_POST['school']);
-            $school_id = $schoolInfo[0];
-            $school_name = $schoolInfo[1];
-
+        //} else {
+            // $schoolInfo = explode('|', $_POST['school']);
+            // $school_id = $schoolInfo[0];
+            // $school_name = $schoolInfo[1];
+        foreach ( $schools as $school_id => $school_name ) {
             $m->setSchoolId( $school_id );
-            if ( $_POST['grades'] > 0 ) $m->setGrades( $_POST['grades'] );
+            //if ( $_POST['grades'] > 0 ) $m->setGrades( $_POST['grades'] );
             $m->setMedalDetails();
             $details = $m->getMedalDetails();
             $userInfo = $m->getUserInfo();
             $subjects = $m->getSubjects();
 
             // sort details array by user name
-            foreach ( $details as $school => $line ) {
-                foreach ( $line as $teacher => $class ) {
-                    ksort( $details[$school][$teacher] );
-                }
-            }
+            // foreach ( $details as $school => $line ) {
+            //     foreach ( $line as $teacher => $class ) {
+            //         ksort( $details[$school][$teacher] );
+            //     }
+            // }
 
             if ( count($details) ) {
                 foreach ( $details as $school => $line ) {
                     if ( $school != $school_name ) continue;
-                    foreach ( $line as $teacher => $class ) {
-                        foreach ( $class as $grade => $info ) {
+                    foreach ( $line as $grade => $class ) {
+                        foreach ( $class as $teacher => $info ) {
                             foreach ( $info as $user => $medals ) {
                                 $rankInfo = getRank( $user );
                                 echo "<div class='slide'>";
@@ -162,8 +163,8 @@ $positioning = [
         }
         ?>
     </body>
-    <?php if ( !isset( $_POST['school'] ) ) : ?>
-    <script>
+    <?php //if ( !isset( $_POST['school'] ) ) : ?>
+    <!-- <script>
         $("#school").change( function() {
             updateGrades();
         });
@@ -200,6 +201,6 @@ $positioning = [
             var school = $("#school").val();
             if (school.indexOf('|') !== -1) updateGrades();
         });
-    </script>
-    <?php endif; ?>
+    </script> -->
+    <?php //endif; ?>
 </html>
