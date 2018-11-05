@@ -162,6 +162,7 @@ $positioning = [
         }
         ?>
     </body>
+    <?php if (!isset($_POST)) : ?>
     <script>
         $("#school").change( function() {
             updateGrades();
@@ -200,4 +201,5 @@ $positioning = [
             if (school.indexOf('|') !== -1) updateGrades();
         });
     </script>
+    <?php endif; ?>
 </html>
