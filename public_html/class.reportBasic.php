@@ -37,10 +37,9 @@ class ReportBasic {
 		
 		//if ($previousStart && $start == 2456689) {
 		if ($previousStart) {
-			$k = array_search(($start-1), $this->dates);
-			$start = $this->dates[$k-1];
-			$start++;
-			$end = $this->dates[$k];
+            $k = array_search(($start-1), $this->dates);
+            $end = $this->dates[$k];
+			$start = $this->dates[--$k]+1;;
 		}
 			
         $this->reportDates['start'] = $start;
@@ -75,7 +74,7 @@ class ReportBasic {
     public function setPreviousDates() {
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
-        $first = array_search( $start, $this->dates );
+        $first = array_search( $start-1, $this->dates );
         $second = array_search( $end, $this->dates );
         if ( $first != 0 ) {
             $this->reportDates['start'] = $this->dates[$first-1]+1;
@@ -95,7 +94,7 @@ class ReportBasic {
     public function setNextDates() {
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
-        $first = array_search( $start, $this->dates );
+        $first = array_search( $start-1, $this->dates );
         $second = array_search( $end, $this->dates );
         $this->reportDates['start'] = $this->dates[$first+1]+1;
         $this->reportDates['end'] = $this->dates[$second+1];

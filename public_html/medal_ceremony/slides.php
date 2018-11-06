@@ -34,6 +34,7 @@ if ( isset( $_POST['type'] ) ) {
 
 require_once 'class.slides.php';
 $m = new Slides( $prevMedals, $prevMedalsLight, $prevDates ); 
+if ( isset( $_POST['currentOnly'] ) ) $m->setToCurrentOnly();
 $dates = $m->getReportDates();
 $heDatesMedals = $m->getHeReportDates();
 
