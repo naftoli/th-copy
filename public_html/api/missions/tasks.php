@@ -20,14 +20,8 @@ class PersonalizeRouter {
         $inst_id = $current_user->login->inst_id;
         $school_id = $current_user->login->school_id;
 
-        $tasks_sql = 'SELECT dt.grid_id, dtm.lang_id, s.subject_name, '
-            .'dt.short_name, dt.name, dt.points, dt.cat, dt.mission_marking, '
-            .'dt.grid_marking, l.label_name, dt.label_id, dtm.created_by_school, b.school_name '
-            .'FROM date_tasks dt '
-            .'JOIN date_tasks_missions dtm USING (date_tasks_mission_id) '
-            .'JOIN labels l USING (label_id) '
-            .'LEFT JOIN schools b ON b.school_id = dtm.created_by_school '
-            .'LEFT JOIN subjects s USING (subject_id) '
+        $tasks_sql = 'SELECT ' . $this->getColumns() . ' '
+            .'FROM '. $this->getJoins() . ' '
             .'WHERE grid_id IS NOT NULL '
             .'AND created_by_parent IS NULL '
             .( $school_id || $inst_id ?
@@ -60,6 +54,47 @@ class PersonalizeRouter {
         $tasks = $tasks_query->fetchAll();
 
         json_response( $tasks, true, true );
+    }
+
+    public function update() {
+        global $MASHPIA_DB;
+        // get the id's that we need
+        $grid_id = $_POST['grid_id'];
+        $lang_id = $_POST['lang_id'];
+        // get the data that we can update
+        $name = $_POST['name'];
+        $label_id = $_POST['label_id'];
+        $short_name = $_POST['short_name'];
+        // * update the task and protect agains SQL injection (yes this is a thing that we are open to)
+        $update_query = $MASHPIA_DB->prepare(
+            'UPDATE date_tasks dt JOIN date_tasks_missions dtm USING (date_tasks_mission_id) '
+            .'SET dt.short_name = :short_name, '
+            .'name = :name, label_id = :label_id '
+            .'WHERE dt.grid_id = :grid_id AND dtm.lang_id = :lang_id '
+        );
+        // * update the task
+        $status = $update_query->execute([
+            ':short_name' => $short_name,
+            ':label_id' => $label_id,   ':name' => $name,
+            ':grid_id' => $grid_id,     ':lang_id' => $lang_id,
+        ]);
+        // * send errors to user
+        if ( !$status )
+            return json_error( 'Could not update task' );
+        // * load up all the details again for the resposne
+        $response_query = $MASHPIA_DB->prepare(
+            'SELECT '. $this->getColumns() .' '
+            .'FROM '. $this->getJoins() . ' '
+            .'WHERE dt.grid_id = :grid_id AND dtm.lang_id = :lang_id '
+            .'GROUP BY grid_id, lang_id '
+            .'ORDER BY grid_id, name;'
+        );
+        
+        $response_query->execute([
+            ':grid_id' => $grid_id, ':lang_id' => $lang_id,
+        ]);
+        // send the response to the client
+        json_response( $response_query->fetch(), true, true );
     }
 
     /**
@@ -95,6 +130,20 @@ class PersonalizeRouter {
             $grid_marking,  $grades,        $parsha_ids,
             $school_id,     $school_type_id
         ), true, true );
+    }
+
+    private function getColumns() { 
+        return ' dt.grid_id, dtm.lang_id, s.subject_name, dt.short_name, '
+            .'dt.name, dt.points, dt.cat, dt.mission_marking, dt.grid_marking, '
+            .'l.label_name, dt.label_id, dtm.created_by_school, b.school_name ';
+    }
+
+    private function getJoins() { 
+        return ' date_tasks dt '
+            .'JOIN date_tasks_missions dtm USING (date_tasks_mission_id) '
+            .'JOIN labels l USING (label_id) '
+            .'LEFT JOIN schools b ON b.school_id = dtm.created_by_school '
+            .'LEFT JOIN subjects s USING (subject_id) ';
     }
 }
 
