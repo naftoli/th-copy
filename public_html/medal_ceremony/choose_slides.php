@@ -2,6 +2,18 @@
 <html>
     <head>
         <meta charset="utf8" />
+        <style>
+            fieldset {
+                width: 50%;
+                margin: auto;
+                padding: 15px;
+                border-radius: 20px;
+                border: 2px solid #73AD21; 
+            }
+            legend {
+                margin-left: 20px;
+            }
+        </style>
     </head>
     <body>
         <form method="post" action="slides.php">
