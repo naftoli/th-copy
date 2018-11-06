@@ -6,11 +6,13 @@ class ReportBasic {
     protected $users;
     protected $school_id;
     protected $exceptions;
+    protected $grades;
     
     public function __construct() {
         $this->users = array();
         $this->school_id = null;
         $this->exceptions = array(61, 82, 66, 112, 110, 180, 269);
+        $this->grades = [];
 	}
     
     public function setReportDates($previousStart) {
@@ -112,6 +114,11 @@ class ReportBasic {
     public function setSchoolId( $id ) {
         $this->school_id = $id;
     }
+
+    public function setGrades( $grades ) {
+        if ( is_array( $grades ) ) $this->grades = $grades;
+        else $this->grades = [$grades];
+    }
     
     protected function setUsers() {
         $sql = "
@@ -126,13 +133,20 @@ class ReportBasic {
             $sql .= "
                 AND s.school_era IS NULL 
                 AND s.school_id not in (" . implode(',', $this->exceptions) . ") 
-                order by s.school_name, c.class_grade, c.class_sub, u.last, u.first 
+                ORDER BY s.school_name, c.class_grade, c.class_sub, u.last, u.first 
             ";
         } else {
-            $sql .= "
-                AND s.school_id = $this->school_id  
-                order by c.class_grade, c.class_sub, u.last, u.first;
-            ";
+            if ( empty( $this->grades ) ) {
+                $sql .= "
+                    AND s.school_id = $this->school_id  
+                    ORDER BY c.class_grade, c.class_sub, u.last, u.first
+                ";
+            } else {
+                $sql .= "
+                    AND c.class_id in (" . implode(',', $this->grades) . ") 
+                    ORDER BY c.class_grade, c.class_sub, u.last, u.first
+                ";
+            }
         }
         
         $result = mysql_query( $sql );

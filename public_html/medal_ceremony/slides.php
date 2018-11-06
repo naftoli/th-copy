@@ -2,14 +2,47 @@
 $admin_auth = array('school'); 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.medalReport.php';
-$m = new MedalReport();
+if ( !isset( $_POST['type'] ) ) {
+    header("Location: choose_slides.php");
+    exit;
+}
+
+// figure out what type of slide we want
+if ( isset( $_POST['type'] ) ) {
+    switch ( $_POST['type'] ) {
+        case 1:
+            $prevMedals = false;
+            $prevMedalsLight = false;
+            $prevDates = true;
+            break;
+        case 2:
+            $prevMedals = true;
+            $prevMedalsLight = false;
+            $prevDates = true;
+            break;
+        case 3:
+            $prevMedals = true;
+            $prevMedalsLight = true;
+            $prevDates = true;
+            break;
+    }
+} else {
+    $prevMedals = false;
+    $prevMedalsLight = false;
+    $prevDates = true;
+}
+
+require_once 'class.slides.php';
+$m = new Slides( $prevMedals, $prevMedalsLight, $prevDates ); 
 $dates = $m->getReportDates();
 $heDatesMedals = $m->getHeReportDates();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';      
-$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
-$schools = $as->getSchools();
+function getLogo( $school_id ) {
+    $sql = "select logo from schools where school_id = " . $school_id;
+    $result = mysql_query( $sql );
+    $row = mysql_fetch_assoc( $result );
+    return $row['logo'];
+}
 
 function getRank($user) {
 	$sql = "select rank_name, rank_image_id  
@@ -57,10 +90,10 @@ function getUserPhoto( $user_id ) {
 
 // determine which subjects go in which row / column for css styling / positioning
 $positioning = [
-    [0,0,0,41],
-    [40,100,90,42],
-    [1,4,27,13],
-    [12,45,21,16]
+    [ 0 , 0  , 0 , 41 ],
+    [ 40, 100, 90, 42 ],
+    [ 1 , 4  , 27, 13 ],
+    [ 12, 45 , 21, 16 ]
 ];
 ?>
 <!DOCTYPE html>
@@ -72,48 +105,62 @@ $positioning = [
 
     <body>
         <?php
-        foreach ( $schools as $school_id => $school_name ) {
-            $m->setSchoolId( $school_id );
-            $m->setMedalDetails();
-            $details = $m->getMedalDetails();
-            $userInfo = $m->getUserInfo();
-            $subjects = $m->getSubjects();
+        $schoolInfo = explode('|', $_POST['school']);
+        $school_id = $schoolInfo[0];
+        $school_name = $schoolInfo[1]; 
+        $m->setSchoolId( $school_id );
+        if ( $_POST['grades'] > 0 ) $m->setGrades( $_POST['grades'] );
+        $m->setNameLang( $_POST['name'] );
+        $m->setMedalDetails();
+        $details = $m->getMedalDetails();
+        $userInfo = $m->getUserInfo();
+        $subjects = $m->getSubjects();
 
-            if ( count($details) ) {
-                foreach ( $details as $school => $line ) {
-                    if ( $school != $school_name ) continue;
-                    foreach ( $line as $teacher => $class ) {
-                        foreach ( $class as $grade => $info ) {
-                            foreach ( $info as $user => $medals ) {
-                                $rankInfo = getRank( $user );
-                                echo "<div class='slide'>";
-                                echo "<div class='heDate'>" . $heDatesMedals['start_he'] . ' - ' . $heDatesMedals['end_he'] . "</div>";
-                                echo "<div class='photo'><img src='" . getUserPhoto( $user ) . "' /></div>";
-                                echo "<div class='userInfo'><div class='rank'><img src='https://mashpia.com/file_view.php?id=" . $rankInfo['rank_image_id'] . "' />" . 
-                                    $rankInfo['rank_name'] . "</div>";
-                                echo "<div class='user'>" . $userInfo[$user] . "</div>";
-                                echo "<div class='info'>Grade " . $grade . " &#9679; " . $teacher . " &#9679; " . $school . "</div></div>";
-                                foreach ( $medals as $subject => $more ) {
-                                    // figure out which row and column the subject belongs in 
-                                    for ($row = 0; $row < 4; $row++) {
-                                        for ($column = 0; $column < 4; $column++) {
-                                            if ( $subjects[$subject] == $positioning[$row][$column] ) {
-                                                break 2;
-                                            }
+        if ( count($details) ) {
+            foreach ( $details as $school => $line ) {
+                foreach ( $line as $grade => $class ) {
+                    foreach ( $class as $teacher => $info ) {
+                        foreach ( $info as $user => $medals ) {
+                            $rankInfo = getRank( $user );
+                            echo "<div class='slide'>";
+                            echo "<div class='logo'><img src='https://mashpia.com/schoolLogos/" . getLogo( $school_id ) . "' /></div>";
+                            echo "<div class='heDate'>" . $heDatesMedals['start_he'] . ' - ' . $heDatesMedals['end_he'] . "</div>";
+                            echo "<div class='photo'><img src='" . getUserPhoto( $user ) . "' /></div>";
+                            echo "<div class='userInfo'><div class='rank'><img src='https://mashpia.com/file_view.php?id=" . $rankInfo['rank_image_id'] . "' />" . 
+                                $rankInfo['rank_name'] . "</div>";
+                            
+                            $user_name = $userInfo[$user];
+                            // style name differently depending on if it's en or he
+                            $css = '';
+                            if ( $_POST['name'] == 'he' ) $css = 'he';
+
+                            echo "<div class='user $css'>" . $user_name . "</div>";
+                            echo "<div class='info'>Grade " . $grade . " &#9679; " . $teacher . " &#9679; " . $school . "</div></div>";
+                            foreach ( $medals as $subject => $more ) {
+                                // figure out which row and column the subject belongs in 
+                                for ($row = 0; $row < 4; $row++) {
+                                    for ($column = 0; $column < 4; $column++) {
+                                        if ( $subjects[$subject] == $positioning[$row][$column] ) {
+                                            break 2;
                                         }
                                     }
-                                    $row_pos = "row" . ++$row;
-                                    $col_pos = "column" . ++$column;
-
-                                    // get highest medal
-                                    $max = count( $more );
-                                    $medal = $more[$max-1];
-                                    $image = "/mobile/reg/" . getMedal( $subjects[$subject], $medal );
-                                    echo "<div class='medal " . $row_pos . ' ' . $col_pos . "'><img src='" . $image . "' /></div>";
                                 }
-                                echo "</div>";
-                                echo "<div style='page-break-after: always'></div>";
+                                $row_pos = "row" . ++$row;
+                                $col_pos = "column" . ++$column;
+
+                                // get highest medal
+                                $max = count( $more );
+                                $medalInfo = explode('|', $more[$max-1]);
+                                // extract name and whether to show it regular or greyed out
+                                $medal = $medalInfo[0];
+                                $showLight = intval($medalInfo[1]);
+                                $image = "/mobile/reg/" . getMedal( $subjects[$subject], $medal );
+                                echo "<div class='medal " . $row_pos . ' ' . $col_pos . "'><img src='" . $image . "' ";
+                                if ( $showLight == 1 ) echo "class='light'";
+                                echo "/></div>";
                             }
+                            echo "</div>";
+                            echo "<div style='page-break-after: always'></div>";
                         }
                     }
                 }
