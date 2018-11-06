@@ -2,6 +2,11 @@
 $admin_auth = array('school'); 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
+if ( !isset( $_POST['type'] ) ) {
+    header("Location: choose_slides.php");
+    exit;
+}
+
 // figure out what type of slide we want
 if ( isset( $_POST['type'] ) ) {
     switch ( $_POST['type'] ) {
@@ -128,7 +133,7 @@ $positioning = [
                             // style name differently depending on if it's en or he
                             $css = '';
                             if ( $_POST['name'] == 'he' ) $css = 'he';
-                            
+
                             echo "<div class='user $css'>" . $user_name . "</div>";
                             echo "<div class='info'>Grade " . $grade . " &#9679; " . $teacher . " &#9679; " . $school . "</div></div>";
                             foreach ( $medals as $subject => $more ) {
