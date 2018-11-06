@@ -572,12 +572,12 @@ class TasksCustomizationNew {
         );
 
         $types = array(
-            '2'	=> 'Chabad Boys', 
-            '3'	=> 'Chabad Girls', 
-            '12'=> 'Frum Boys', 
-            '13'=> 'Frum Girls',
-            '22'=> 'C-Kids Boys', 
-            '33'=> 'C-Kids Girls'
+            '2'	=> 'Chabad Girls', 
+            '3'	=> 'Chabad Boys', 
+            '12'=> 'Frum Girls', 
+            '13'=> 'Frum Boys',
+            '22'=> 'C-Kids Girls', 
+            '23'=> 'C-Kids Boys'
         );
         
         $friendly = array();

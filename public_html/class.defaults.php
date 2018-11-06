@@ -30,18 +30,18 @@ class Defaults {
 
     public function addOn($id, $table) {
         $typeID = $this->{$this->type};
-        $sql = "insert ignore into {$this->type}_{$table}s values ($typeID, $id)"; // inserts row into the join table if it does not exist
-		//echo $sql;
+        // inserts row into the join table if it does not exist
+        $sql = "INSERT ignore into {$this->type}_{$table}s values ($typeID, $id)";
         mysql_query($sql);
         //add default also to mission
-        $sql = "select date_tasks_mission_id from date_tasks where date_task_id = " . $id;
+        $sql = "SELECT date_tasks_mission_id FROM date_tasks WHERE date_task_id = " . $id;
         //echo $sql;
         $result = mysql_query($sql);
         if (mysql_num_rows($result) > 0) {
             $row = mysql_fetch_assoc($result);
             $missionID = $row['date_tasks_mission_id'];
-            $sql2 = "insert ignore into {$this->type}_missions values ($typeID, $missionID)"; // insert it again into the _missions join table (ignore errors if duplicate)
-            //echo $sql2 . "<br />\n";
+            // insert it again into the _missions join table (ignore errors if duplicate)
+            $sql2 = "INSERT ignore INTO {$this->type}_missions VALUES ($typeID, $missionID)";
             mysql_query($sql2);
         }
     }

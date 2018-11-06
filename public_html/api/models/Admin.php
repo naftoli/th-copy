@@ -31,6 +31,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     ];
     // internalCaches
     private $customer_profile;
+    private $logins = [];
     public $login = false;
 
     public function name( $withTitle = true ) {
@@ -74,29 +75,30 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     //******************************* LOGIN *******************************/
     // get all logins
     public function logins(){
-        $logins = [];
+        if ( $this->logins )
+            return $this->logins;
         // Special HQ login
         if ( $this->isHQ() )
-            try { $logins[] = new Login( 'HQ', $this->admin_id, $this ); }
+            try { $this->logins[] = new Login( 'HQ', $this->admin_id, $this ); }
             catch ( \ActiveRecord\RecordNotFound $e ) {}
         // add all the institutions
         foreach( $this->getAuthIds( 'institution' ) as $inst_id )
-            try { $logins[] = new Login( 'institution', $inst_id ); }
+            try { $this->logins[] = new Login( 'institution', $inst_id ); }
             catch ( \ActiveRecord\RecordNotFound $e ) {}
         // add all the schools
         foreach( $this->getAuthIds( 'school' ) as $school_id )
-            try { $logins[] = new Login( 'school', $school_id ); }
+            try { $this->logins[] = new Login( 'school', $school_id ); }
             catch ( \ActiveRecord\RecordNotFound $e ) {}
         // add all classes
         foreach( $this->getAuthIds( 'class' ) as $class_id )
-            try { $logins[] = new Login( 'class', $class_id ); }
+            try { $this->logins[] = new Login( 'class', $class_id ); }
             catch ( \ActiveRecord\RecordNotFound $e ) {}
         // add parent account
-        if ( count( $this->getAuthIds( 'user') ) > 0 || count( $logins ) === 0 ) {
-            try { $logins[] = new Login( 'PARENT', $this->admin_id, $this ); }
+        if ( count( $this->getAuthIds( 'user') ) > 0 || count( $this->logins ) === 0 ) {
+            try { $this->logins[] = new Login( 'PARENT', $this->admin_id, $this ); }
             catch ( \ActiveRecord\RecordNotFound $e ) {}
         }
-        return $logins;
+        return $this->logins;
     }
     // set the current login
     public function setLogin( $type = false, $id = false ){

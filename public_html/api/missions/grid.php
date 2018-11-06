@@ -132,7 +132,7 @@ class GridRouter {
 
         // * Final Query
         // Query used to fetch tasks for grid.
-        $missions_sql = 'SELECT dt.cat, dt.points AS points, dt.grid_id, dt.quantity, '
+        $missions_sql = 'SELECT dt.short_name as cat, dt.points AS points, dt.grid_id, dt.quantity, '
             .$mark_date.' AS mark_date, dtm.subject_id, dtm.start_date, dtm.end_date, '
             .' s.subject_id, s.subject_name, dt.mandatory_qty, IFNULL( disabled, 0 ) as disabled '
             .' FROM mashpiadb.date_tasks dt '
@@ -143,7 +143,8 @@ class GridRouter {
             .') AS cdtd USING (grid_id) '
             // * Misc limits used for keeping the data clean
             .' WHERE dtm.personal = 0 '
-            .' AND dt.cat != \'\' AND dt.grid_id IS NOT NULL AND dt.grid_marking = 1 '
+            .' AND dt.cat != \'\' AND dt.short_name != \'\' '
+            .' AND dt.grid_id IS NOT NULL AND dt.grid_marking = 1 '
             // * Limits based on :start_date, :end_date and :daily_task
             .' AND dt.daily_task = :daily_task '
             .' AND ' . $dates_filter // add date filter if we are limiting by dates
