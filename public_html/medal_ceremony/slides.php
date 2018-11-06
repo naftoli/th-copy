@@ -1,10 +1,34 @@
 <?php
-ini_set('display_errors',1);
 $admin_auth = array('school'); 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
+// figure out what type of slide we want
+if ( isset( $_POST['type'] ) ) {
+    switch ( $_POST['type'] ) {
+        case 1:
+            $prevMedals = false;
+            $prevMedalsLight = false;
+            $prevDates = true;
+            break;
+        case 2:
+            $prevMedals = true;
+            $prevMedalsLight = false;
+            $prevDates = true;
+            break;
+        case 3:
+            $prevMedals = true;
+            $prevMedalsLight = true;
+            $prevDates = true;
+            break;
+    }
+} else {
+    $prevMedals = false;
+    $prevMedalsLight = false;
+    $prevDates = true;
+}
+
 require_once 'class.slides.php';
-$m = new Slides( true ); // show previous rally info
+$m = new Slides( $prevMedals, $prevMedalsLight, $prevDates ); 
 $dates = $m->getReportDates();
 $heDatesMedals = $m->getHeReportDates();
 
@@ -65,10 +89,10 @@ function getUserPhoto( $user_id ) {
 
 // determine which subjects go in which row / column for css styling / positioning
 $positioning = [
-    [0,0,0,41],
-    [40,100,90,42],
-    [1,4,27,13],
-    [12,45,21,16]
+    [ 0 , 0  , 0 , 41 ],
+    [ 40, 100, 90, 42 ],
+    [ 1 , 4  , 27, 13 ],
+    [ 12, 45 , 21, 16 ]
 ];
 ?>
 <!DOCTYPE html>
@@ -133,7 +157,12 @@ $positioning = [
                                 echo "<div class='photo'><img src='" . getUserPhoto( $user ) . "' /></div>";
                                 echo "<div class='userInfo'><div class='rank'><img src='https://mashpia.com/file_view.php?id=" . $rankInfo['rank_image_id'] . "' />" . 
                                     $rankInfo['rank_name'] . "</div>";
-                                echo "<div class='user'>" . $userInfo[$user] . "</div>";
+                                // figure out if name is in english or hebrew
+                                $user_name = $userInfo[$user];
+                                $char = substr($user_name, 0, 1);
+                                if ( ord( $char ) > 127 ) $css = "he";
+                                else $css = '';
+                                echo "<div class='user $css'>" . $user_name . "</div>";
                                 echo "<div class='info'>Grade " . $grade . " &#9679; " . $teacher . " &#9679; " . $school . "</div></div>";
                                 foreach ( $medals as $subject => $more ) {
                                     // figure out which row and column the subject belongs in 
@@ -149,9 +178,14 @@ $positioning = [
 
                                     // get highest medal
                                     $max = count( $more );
-                                    $medal = $more[$max-1];
+                                    $medalInfo = explode('|', $more[$max-1]);
+                                    // extract name and whether to show it regular or greyed out
+                                    $medal = $medalInfo[0];
+                                    $showLight = intval($medalInfo[1]);
                                     $image = "/mobile/reg/" . getMedal( $subjects[$subject], $medal );
-                                    echo "<div class='medal " . $row_pos . ' ' . $col_pos . "'><img src='" . $image . "' /></div>";
+                                    echo "<div class='medal " . $row_pos . ' ' . $col_pos . "'><img src='" . $image . "' ";
+                                    if ( $showLight == 1 ) echo "class='light'";
+                                    echo "/></div>";
                                 }
                                 echo "</div>";
                                 echo "<div style='page-break-after: always'></div>";

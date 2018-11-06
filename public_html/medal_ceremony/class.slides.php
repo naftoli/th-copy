@@ -2,10 +2,16 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.medalReport.php';
 
 class Slides extends MedalReport {
-    public function __construct( $previousStart = false ) {
+    protected $showPrevMedals;
+    protected $showPrevMedalsLight;
+
+    public function __construct( $showPrevMedals = false, $showLight = false, $previousStart = false ) {
         parent::__construct( $previousStart );
+        $this->showPrevMedals = $showPrevMedals;
+        $this->showPrevMedalsLight = $showLight;
     }
 
+    // override setMedalsDetails function
     public function setMedalDetails() {
         $this->setUsers();
 		        
@@ -16,7 +22,7 @@ class Slides extends MedalReport {
             foreach ( $school as $name => $user ) {
             	$students = $this->users[$school_id][$name];
                 $sql = "
-                    SELECT s.subject_name, m.medal_name, u.user_id, u.last, u.first, 
+                    SELECT s.subject_name, m.medal_name, u.user_id, u.last, u.first, u.first_he, u.last_he, u.lang_id,  
                     c.class_grade, c.class_sub, c.class_teacher, mm.*, s.subject_id
                     FROM medal_marks mm
                     JOIN medals m
@@ -27,9 +33,8 @@ class Slides extends MedalReport {
                     USING ( subject_id )
                     JOIN schools sch
                     USING ( school_id ) 
-                    LEFT JOIN classes c using (class_id)  
-                    WHERE mm.date_awarded >= $start 
-                    AND mm.date_awarded <= $end  
+                    JOIN classes c using (class_id)  
+                    WHERE mm.date_awarded <= $end  
                     and sch.school_id = $school_id  
                     and u.user_id in (" . implode(',', $students) . ")
                     and s.subject_id != 106 
@@ -38,14 +43,29 @@ class Slides extends MedalReport {
                 //echo $sql . "<br />"; continue;
                 $result = mysql_query($sql) or die(mysql_error());
                 while ($row = mysql_fetch_assoc($result)) {
-                    if ($row['last'] != "") {
+                    // figure out if we are only showing currently earned medals or all medals
+                    if ( $this->showPrevMedals ||
+                       ( !$this->showPrevMedals && $row['date_awarded'] >= $start )
+                    ) {
+                        // figure out which language to show name
+                        if ( $row['lang_id'] == 2 ) {
+                            $user_name = $row['first_he'] . ' ' . $row['last_he'];
+                        } else {
+                            $user_name = $row['first'] . ' ' . $row['last'];
+                        }
                         $user_id = $row['user_id'];
                         $teacher = $row['class_teacher']; 
                         $grade = $row['class_grade'] . (empty( $row['class_sub']) ? '' : "-" . $row['class_sub']);
-                        $user_name = $row['first'] . " " . $row['last']; 
                         $subject = $row['subject_name'];
                         if ( $subject == 'שבת מברכים תהילים' ) $subject = "WWTC";
-                        $this->medalDetails[$name][$grade][$teacher][$user_id][$subject][] = $row['medal_name']; 
+
+                        // in order to know if medal should be greyed out or not, we will append a 0 or 1 to the medal name
+                        // and then extract that info later. 1 means to grey out; 0 means regular
+                        $medal = $row['medal_name'];
+                        if ( $this->showPrevMedals && $this->showPrevMedalsLight && $row['date_awarded'] < $start ) $medal .= "|1";
+                        else $medal .= "|0";
+
+                        $this->medalDetails[$name][$grade][$teacher][$user_id][$subject][] = $medal; 
                         $this->userInfo[$user_id] = $user_name;
                     }
                 }

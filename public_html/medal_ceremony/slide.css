@@ -69,6 +69,9 @@
     font-family: nameEnFont;
     font-size: 34px;
 }
+.user .he {
+    font-family: nameHeFont;
+}
 .info {
     font-family: infoFont;
     font-size: 20px;
@@ -76,6 +79,9 @@
 .medal {
     float: left;
     position: absolute;
+}
+.medal img.light {
+    opacity: 0.3;
 }
 .row1 {
     margin-top: 33px;
