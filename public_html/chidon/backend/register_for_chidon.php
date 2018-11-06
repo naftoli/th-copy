@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 $admin_auth = array('school');
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
@@ -26,8 +27,12 @@ if ( isset( $_FILES['file'] ) ) {
 
     //echo "<pre>"; print_r( $info ); echo "</pre>";
 
+    $MASHPIA_DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     $MASHPIA_DB->beginTransaction();
     $success = true;
+    $error = false;
+    $updated = 0;
+    $missingParentAccounts = [];
     
     // loop through info array and register kids
     // index 0 is the user serial and index 1 is the school id
@@ -36,53 +41,90 @@ if ( isset( $_FILES['file'] ) ) {
         $school_id = $values[1];
 
         // find out what the user id is
-        $handle = $MASHPIA_DB->prepare("select user_id from users where user_serial = :serial");
-        $result = $handle->execute([':serial' => $user_serial]);
-        $user_id = $result['user_id'];
+        if ( $handle = $MASHPIA_DB->prepare("select user_id from users where user_serial = :serial") ) {
+            if ( $handle->execute([':serial' => $user_serial]) ) {
+                $result = $handle->fetch();
+                $user_id = $result['user_id'];
 
-        if ( $user_id > 0 ) {
-            // first find out if user already is registered in chidon db
-            $handle = $MASHPIA_DB->prepare("select * from th_chidon where year = :year and school_id = :school and user_id = :user");
-            $result = $handle->execute([
-                ':year'     =>  $year, 
-                ':school'   =>  $school_id, 
-                ':user'     =>  $user_id
-            ]);
-            $found = $result->fetchAll();
+                if ( $user_id > 0 ) {
+                    // first find out if user already is registered in chidon db
+                    if ( $handle = $MASHPIA_DB->prepare("select * from th_chidon where year = :year and user_id = :user") ) {
+                        if ( $handle->execute([
+                            ':year'     =>  $year, 
+                            ':user'     =>  $user_id
+                        ]) ) {
 
-            if ( empty( $found ) ) {
-                $handle = $MASHPIA_DB->prepare("select admin_id from admin_auths where id = :user_id");
-                $result = $handle->execute([':user_id' => $user_id]);
-                $admin_id = $result['admin_id'];
+                            $found = $handle->fetch();
+                            if ( empty( $found ) ) {
+                                if ( $handle = $MASHPIA_DB->prepare("select admin_id from admin_auths where id = :user_id") ) {
+                                    if ( $handle->execute([':user_id' => $user_id]) ) {
+                                        $result = $handle->fetch();
+                                        if ( empty( $result ) ) {
+                                            $missingParentAccounts[] = $user_id;
+                                            continue;
+                                        }
+                                        $admin_id = $result['admin_id'];
 
-                $handle = $MASHPIA_DB->prepare("insert into th_chidon 
-                                                set year = :year, 
-                                                school_id = :school_id, 
-                                                user_id = :user_id, 
-                                                size = :size, 
-                                                parent_id = :parent_id");
-                if ( 
-                    !$handle->execute([
-                        ':year'         =>  $year, 
-                        ':school_id'    =>  $school_id, 
-                        ':user_id'      =>  $user_id, 
-                        ':size'         =>  'children l', 
-                        ':parent_id'    =>  $admin_id
-                    ]) 
-                ) {
-                    $success = false;
-                    break;
+                                        if ( $handle = $MASHPIA_DB->prepare("insert into th_chidon 
+                                                                        set year = :year, 
+                                                                        school_id = :school_id, 
+                                                                        user_id = :user_id, 
+                                                                        size = :size, 
+                                                                        parent_id = :parent_id") ) {
+                                            if ( 
+                                                !$handle->execute([
+                                                    ':year'         =>  $year, 
+                                                    ':school_id'    =>  $school_id, 
+                                                    ':user_id'      =>  $user_id, 
+                                                    ':size'         =>  'children l', 
+                                                    ':parent_id'    =>  $admin_id
+                                                ]) 
+                                            ) {
+                                                $error = true;
+                                                $success = false;
+                                                break;
+                                            } else {
+                                                $updated++;
+                                            }
+                                        } else {
+                                            $error = true;
+                                        }
+                                    } else {
+                                        $error = true;
+                                    }
+                                } else {
+                                    $error = true;
+                                }
+                            }
+                        } else {
+                            $error = true;
+                        }                        
+                    } else {
+                        $error = true;
+                    }
                 }
+            } else {
+                $error = true;
             }
+        } else {
+            $error = true;
         }
+    }
+
+    if ( $error ) {
+        echo "<pre>"; print_r( $MASHPIA_DB->errorInfo() ); echo "</pre>";
     }
 
     if ( $success ) {
         $MASHPIA_DB->commit();
-        echo "Successfully updated.";
+        echo "Successfully updated " . $updated . " entries.";
     } else {
         $MASHPIA_DB->rollBack();
         echo "Error updating.";
+    }
+    if ( !empty( $missingParentAccounts ) ) {
+        echo "<br />Missing Parent Accounts:";
+        echo "<pre>"; print_r( $missingParentAccounts ); echo "</pre>";
     }
 }
 ?>
