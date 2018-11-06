@@ -55,9 +55,9 @@ class Slides extends MedalReport {
                 $result = mysql_query($sql) or die(mysql_error());
                 while ($row = mysql_fetch_assoc($result)) {
                     // figure out if we are only showing currently earned medals or all medals
-                    // if ( $this->showPrevMedals ||
-                    //    ( !$this->showPrevMedals && $row['date_awarded'] >= $start )
-                    // ) {
+                    if ( $this->showPrevMedals ||
+                       ( !$this->showPrevMedals && $row['date_awarded'] >= $start )
+                    ) {
                         // figure out which language to show name
                         if ( $this->nameLang == 'he' ) {
                             $user_name = $row['first_he'] . ' ' . $row['last_he'];
@@ -78,7 +78,7 @@ class Slides extends MedalReport {
 
                         $this->medalDetails[$name][$grade][$teacher][$user_id][$subject][] = $medal; 
                         $this->userInfo[$user_id] = $user_name;
-                    //}
+                    }
                 }
             }
         }
