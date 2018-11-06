@@ -26,11 +26,18 @@ function create_task(
     $daily = $label->isDaily();
 
     // * generate grid_id
+    // changed to randomly generate since two tasks being created at once can have the same grid id...
     $min_grid_id = 1000000; // 1,000,000+ is the base grid id for custom tasks
-    $grid_id_query = 'SELECT max(grid_id) + 1 as grid_id FROM date_tasks WHERE grid_id > ?';
+    // randomly select an available 7 digit number
+    $grid_id_query = 'SELECT grid_id FROM ('
+        .'SELECT ROUND(RAND() * 9999999) AS grid_id FROM date_tasks WHERE \'grid_id\' NOT IN ('
+            .'SELECT DISTINCT grid_id FROM date_tasks WHERE grid_id >= :grid_id '
+        .')'
+    .') AS numbers HAVING grid_id > :grid_id AND LENGTH(grid_id) = 7 LIMIT 1;';
+    //run the query
     $grid_id_query = $MASHPIA_DB->prepare( $grid_id_query );
-    $grid_id_query->execute([ $min_grid_id ]);
-
+    $grid_id_query->execute([ ':grid_id' => $min_grid_id ]);
+    // fetch the result, if all else fails use the minimum grid id
     $grid_id = $grid_id_query->fetch()['grid_id'];
     $grid_id = $grid_id ? $grid_id : $min_grid_id; // set to min if grid_id is not set yet.
 
@@ -245,9 +252,10 @@ function create_task(
         'name' => $task,
         'points' => 0.5,
         'cat' => $category,
-        'mission_marking' => $mission_marking,
-        'grid_marking' => $grid_marking,
+        'mission_marking' => $mission_marking ? 1 : 0,
+        'grid_marking' => $grid_marking ? 1 : 0,
         'label_name' => $label->label_name,
+        'label_id' => $label->label_id,
         'created_by_school' => $school_id,
         'school_name' => $school->school_name
     ];
