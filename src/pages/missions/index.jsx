@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 import PersonalizePage from './personalize/PersonalizePage';
 import { Page404, Construction } from 'pages/errors';
 import PrintPage from './print/PrintPage';
+import TasksPage from './tasks/TasksPage';
 import MarkPage from './mark';
 // functions
 import { isBC } from 'functions/login';
@@ -23,7 +24,7 @@ export class BaseManagmentIndexPage extends Component {
         <Route path={`${path}/report`}      component={ Construction } />
 
         { isBC( code ) &&
-          <Route path={`${path}/tasks`}     component={ Construction } /> }
+          <Route path={`${path}/tasks`}     component={ TasksPage } /> }
 
         <Route component={ Page404 } />
       </Switch>

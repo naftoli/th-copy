@@ -20,6 +20,7 @@ import {
 } from 'store/base/soldiers/operations';
 // data
 import getColumns from './columns';
+import { isBC } from 'functions/login';
 
 const defaultCropperModalSettings = {
   show: false,  src: false, id: false
@@ -105,9 +106,9 @@ export class SoldiersPage extends Component {
 
   // render the page
   render() {
-    const { current_login, soldiers, loading } = this.props;
+    const { login, soldiers, loading } = this.props;
     const { cropper, upload, create } = this.state;
-    const columns = getColumns( current_login, this.editPicture, this.updateToggle );
+    const columns = getColumns( login, this.editPicture, this.updateToggle );
     // page definition
     return (
       <div id='SoldiersPage' className='full-height'>
@@ -119,11 +120,12 @@ export class SoldiersPage extends Component {
           <Button color='primary' onClick={ this.getSoldiers }>
             <InlineSync loading={ loading } /> Refresh
           </Button>
-          { current_login.code === 'BC' && is.not.mobile() && is.not.ios() && // only Base Commanders on desktops/tablets can upload
+          { isBC( login.code, true ) && is.not.mobile() && is.not.ios() && // only Base Commanders on desktops/tablets can upload
             <Button color='primary' onClick={ this.toggleModal('upload') }>
               <FontAwesome icon='file-upload' /> Upload Soldier List
             </Button>
-          } { canDownload( soldiers ) &&
+          }
+          { canDownload( soldiers ) &&
             <Button color='primary' onClick={ this.toCSV }>
               <FontAwesome icon='file-download' /> Download Soldiers (CSV/Excel)
             </Button>
@@ -150,7 +152,7 @@ export class SoldiersPage extends Component {
           editPicture={ this.editPicture( false ) } />
 
         {/* Only show the uploader for base commanders */ 
-          current_login.code === 'BC' &&
+          login.code === 'BC' &&
           <BulkUploadModal
             isOpen={ upload.show }
             upload={ this.uploadSpreadsheet }
@@ -165,7 +167,7 @@ export class SoldiersPage extends Component {
 const mapStateToProps = ({ base, login }) => {
   return {
     ...base.soldiers,
-    current_login: login.current_login
+    login: login.current_login
   };
 }
 

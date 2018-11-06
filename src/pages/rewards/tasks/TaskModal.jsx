@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // components
 import { SaveButton } from 'components/buttons';
-import { SubjectSelect } from 'components/inputs';
+import { RewardSubjectSelect } from 'components/inputs';
 import { 
   Modal, ModalHeader, ModalBody, ModalFooter,
   Row, Col, Label, Input
@@ -88,7 +88,7 @@ class TaskModal extends Component {
               <Col xs={ 8 }>
 
                 <Label>Campaign</Label>
-                <SubjectSelect 
+                <RewardSubjectSelect 
                   filter={ filter }
                   value={ task.subject_id }
                   onChange={ this.onSubjectChange } />

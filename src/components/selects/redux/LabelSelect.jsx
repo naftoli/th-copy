@@ -6,9 +6,9 @@ import { Select } from '../static/Select';
 // functions
 import { findOption } from 'functions/selects';
 import { showError } from 'functions/notifications';
-import { getSubjects } from 'store/missions/subjects/operations';
+import { getLabels } from 'store/missions/subjects/operations';
 
-class SubjectSelect extends Component {
+class LabelSelect extends Component {
 
   static propTypes = {
     onChange: PropTypes.func,
@@ -17,18 +17,18 @@ class SubjectSelect extends Component {
   }
 
   componentDidMount(){ 
-    showError( this.props.getSubjects() )
+    showError( this.props.getLabels() )
   }
 
   getOptions = () => {
-    let { subjects, filter } = this.props;
+    let { labels, filter } = this.props;
     
     if ( filter )
-      subjects = subjects.filter( filter );
+      labels = labels.filter( filter );
     
-    return subjects.map( subject => ({
-      value: subject.subject_id, 
-      label: subject.subject_name
+    return labels.map( label => ({
+      value: label.label_id, 
+      label: `${ label.label_name } - ${ label.frequency.frequency_name }`
     }));
   }
 
@@ -53,11 +53,11 @@ class SubjectSelect extends Component {
 }
 
 const mapStateToProps = ({ missions }) => {
-  const { subjects, loading } = missions.subjects;
+  const { labels, loading } = missions.subjects;
   return { 
-    subjects, 
-    loading: !!loading.subjects 
+    labels, 
+    loading: !!loading.labels 
   };
 }
 
-export default connect( mapStateToProps, { getSubjects } )( SubjectSelect );
+export default connect( mapStateToProps, { getLabels } )( LabelSelect );

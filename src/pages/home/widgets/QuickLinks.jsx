@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+
+import { Link } from 'react-router-dom';
 import { FontAwesome } from 'components/ui';
 import { LEGACY_URL } from 'components/constants';
 // components
@@ -13,14 +15,14 @@ export class QuickLinks extends Component {
           <h2>Quick Links</h2>
 
           <div id='links'>
-            <a href={`${LEGACY_URL}/print_missions2.php`} target='_blank' rel="noopener noreferrer">
+            <Link to='/missions/print'>
               <FontAwesome icon='print' />
               Print Missions
-            </a>
-            <a href={`${LEGACY_URL}/mark_missions2.php`} target='_blank' rel="noopener noreferrer">
+            </Link>
+            <Link to='/missions/mark'>
               <FontAwesome icon='check-circle' regular />
               Mark Missions
-            </a>
+            </Link>
             <a href={`${LEGACY_URL}/api/beta`}>
               <FontAwesome icon='door-open' />
               Leave Beta

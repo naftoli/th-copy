@@ -2,6 +2,7 @@
 export const types = {
   SET_LOADING: 'missions/subjects/set_loading',
   SET_SUBJECTS: 'missions/subjects/set_subjects',
+  SET_LABELS: 'missions/subjects/set_labels',
 }
 
 /**
@@ -11,10 +12,10 @@ export const types = {
  * 
  * @param {boolean} loading loading state
  */
-export const setLoading = loading => {
+export const setLoading = ( type, loading ) => {
   return {
     type: types.SET_LOADING,
-    payload: loading
+    payload: { type, loading }
   }
 };
 
@@ -29,5 +30,19 @@ export const setSubjects = subjects => {
   return {
     type: types.SET_SUBJECTS,
     payload: subjects
+  }
+};
+
+/**
+ * setLabels( labels )
+ * 
+ * set the value of the labels reducer
+ * 
+ * @param {array} labels labels that we are setting
+ */
+export const setLabels = labels => {
+  return {
+    type: types.SET_LABELS,
+    payload: labels
   }
 };

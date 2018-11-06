@@ -53,7 +53,8 @@ const OptionsRow = props => {
         <ParshaSelect
           isClearable
           value={ parsha_id }
-          placeholder='Entire Year' 
+          placeholder='Entire Year'
+          openMenuOnFocus={ false }
           onChange={ onSelectChange('parsha_id') } />
       </Col>
 

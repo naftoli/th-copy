@@ -18,11 +18,17 @@ function withDefaultProps( Select ){
 
     getValue = () => {
       const { value } = this.props;
-      if ( value && value.value !== undefined)
+
+      if ( value && value.value !== undefined )
         return value.value;
-      if ( value !== undefined)
+
+      if ( value !== undefined && value !== null )
         return value;
-      return this.state.value || '';
+
+      if ( this.state.value !== undefined && this.state.value !== null )
+        return this.state.value;
+
+      return ''
     };
 
     render() {
@@ -33,13 +39,14 @@ function withDefaultProps( Select ){
       return (
         <div className='Select' style={{ flexGrow: 1 }}>
           <Select
-            { ...props }
             openMenuOnFocus
             menuPlacement='auto'
             ref={ this.selectRef }
             components={ makeAnimated() }
             classNamePrefix='react-select'
-            id={ enableRequired ? undefined : id } />
+            id={ enableRequired ? undefined : id }
+            
+            { ...props } />
 
           { enableRequired && 
             <input 

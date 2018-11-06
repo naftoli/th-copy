@@ -18,10 +18,7 @@ export const generateAchievementCards = ( data ) => dispatch => {
 
 export const getMiles = () => dispatch => {
   return API.get( `/rewards/achievement_cards` )
-  .then( ({ data }) => { 
-    dispatch( actions.setMiles( data.miles ) ); 
-    return data;
-  });
+  .then( miles => dispatch( actions.setMiles( miles ) ) );
 }
 
 export const deleteUnused = delete_to => dispatch => {

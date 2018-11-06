@@ -157,7 +157,7 @@ Array [
         "path": "/missions/personalize",
       },
       Object {
-        "label": "Add Task",
+        "label": "Tasks",
         "path": "/missions/tasks",
         "user_types": Array [
           "HQ",

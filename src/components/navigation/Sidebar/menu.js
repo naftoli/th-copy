@@ -93,7 +93,7 @@ const getMenu = ( login ) => {
         { label: 'Print', path: '/missions/print' },
         { label: 'Mark', path: '/missions/mark' },
         { label: 'Personalize', path: '/missions/personalize' },
-        { label: 'Add Task', path: '/missions/tasks', user_types: DEFAULT_USER_TYPES },
+        { label: 'Tasks', path: '/missions/tasks', user_types: DEFAULT_USER_TYPES },
         { label: 'Mission Report', path: '/missions/report' }
       ]
     },

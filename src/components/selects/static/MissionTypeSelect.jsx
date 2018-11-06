@@ -24,17 +24,29 @@ export class MissionTypeSelect extends Component {
   }
 
   getOptions = () => {
-    const offset = this.props.gender === 'F' ? 1 : 0;
+    let offset = 0;
+
+    if ( this.props.gender === 'F' )
+      offset = 3;
+
+    if ( this.props.gender === 'M' )
+      offset = 2;
+    
     return [
-      { value:  2 + offset, label: 'Chabad' },
-      { value: 12 + offset, label: 'Frum' },
-      { value: 22 + offset, label: 'C-Kids' }
+      { value:  0 + offset, label: 'Chabad' },
+      { value: 10 + offset, label: 'Frum' },
+      { value: 20 + offset, label: 'C-Kids' }
     ];
   }
 
   getSelected = options => {
-    const ending = this.props.gender === 'F' ? 3 : 2;
+    let ending = 0;
+
+    if ( this.props.gender )
+      ending = this.props.gender === 'F' ? 3 : 2;
+
     const option = parseInt( this.props.value / 10, 10 ) * 10;
+    
     return findOption( options, option + ending );
   }
   

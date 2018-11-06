@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`types matches snapshot 1`] = `
+Object {
+  "SET_LABELS": "missions/subjects/set_labels",
+  "SET_LOADING": "missions/subjects/set_loading",
+  "SET_SUBJECTS": "missions/subjects/set_subjects",
+}
+`;

@@ -6,14 +6,19 @@ import { Select } from '../static/Select';
 // functions
 import { findOption } from 'functions/selects';
 import { showError } from 'functions/notifications';
-import { getSubjects } from 'store/missions/subjects/operations';
+import { getSubjects } from 'store/rewards/subjects/operations';
 
-class SubjectSelect extends Component {
+class RewardSubjectSelect extends Component {
 
   static propTypes = {
     onChange: PropTypes.func,
     filter: PropTypes.func,
     value: PropTypes.any,
+    showTasks: PropTypes.bool
+  }
+
+  static defaultProps = {
+    showTasks: false
   }
 
   componentDidMount(){ 
@@ -28,12 +33,25 @@ class SubjectSelect extends Component {
     
     return subjects.map( subject => ({
       value: subject.subject_id, 
-      label: subject.subject_name
+      label: this.getLabel( subject )
     }));
   }
 
-  onChange = ( option ) => 
-    this.props.onChange && this.props.onChange( option );
+  getLabel = ({ subject_name, achievement_tasks }) => {
+    const { showTasks } = this.props;
+    if ( showTasks ) {
+      return (
+        <span>
+          <span className='hebrew'>{subject_name}</span> ({ achievement_tasks.length } tasks)
+        </span>
+      );
+    }
+    return subject_name;
+  }
+
+  onChange = ( option ) => {
+    return this.props.onChange && this.props.onChange( option );
+  }
   
   render() {
     const { value, loading } = this.props;
@@ -52,12 +70,8 @@ class SubjectSelect extends Component {
   }
 }
 
-const mapStateToProps = ({ missions }) => {
-  const { subjects, loading } = missions.subjects;
-  return { 
-    subjects, 
-    loading: !!loading.subjects 
-  };
+const mapStateToProps = ({ rewards }) => {
+  return { ...rewards.subjects };
 }
 
-export default connect( mapStateToProps, { getSubjects } )( SubjectSelect );
+export default connect( mapStateToProps, { getSubjects } )( RewardSubjectSelect );

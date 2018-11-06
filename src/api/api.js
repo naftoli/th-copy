@@ -29,8 +29,13 @@ const toJSON = response => {
   .then( text => {
     try {
       return JSON.parse( text );
+    // catch json parsing errors
     } catch ( e ) {
       text = striptags( text );
+      // if there is no text in the response
+      if ( !text || text.length === 0 )
+        text = response.status + ' Server Error';
+      // reject with the correct error
       return Promise.reject( new Error( text ) );
     }
   });

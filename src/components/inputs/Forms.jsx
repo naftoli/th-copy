@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 
 export class Form extends Component {
 
@@ -20,4 +21,18 @@ export class Form extends Component {
       </form>
     );
   }
+}
+
+export const Label = ({ className, children, ...props }) => {
+  // combine full-width with the existing classnames
+  const classNames = classnames({
+    'full-width': true,
+    [ className ]: !!className
+  });
+  
+  return (
+    <label className={ classNames } { ...props }>
+      { children }
+    </label>
+  );
 }
