@@ -106,7 +106,7 @@ class Slides extends MedalReport {
         // if we are only pulling children that are current or that have recieved at least one current medal
         if ( $this->showPrevForCurrentOnly || !$this->showPrevMedals ) {
             $sql .= "
-                JOIN rank_marks rm using (user_id) 
+                JOIN medal_marks mm using (user_id) 
             ";
         }
         $sql .= " 
@@ -122,8 +122,8 @@ class Slides extends MedalReport {
             // if we are only pulling children that are current or that have recieved at least one current medal
             if ( $this->showPrevForCurrentOnly || !$this->showPrevMedals ) {
                 $sql .= "
-                    AND rm.date_promoted >= " . $this->reportDates['start'] . " 
-                    AND rm.date_promoted <= " . $this->reportDates['end'];
+                    AND mm.date_awarded >= " . $this->reportDates['start'] . " 
+                    AND mm.date_awarded <= " . $this->reportDates['end'];
             }
 
             if ( empty( $this->grades ) ) {
@@ -138,6 +138,7 @@ class Slides extends MedalReport {
                 ";
             }
         }
+        echo $sql; exit;
         
         $result = mysql_query( $sql );
         while ($row = mysql_fetch_assoc($result)) {
