@@ -10,10 +10,7 @@ $parshos = array();
 $sql1 = "select * from parshos where year = " . $year . " and start >= " . unixtojd();
 $result1 = mysql_query($sql1);
 while ($row1 = mysql_fetch_assoc($result1)) {
-    $parshos[][$row1['name']] = array( 
-        'start' => $row1['start'], 
-        'end'   => $row1['end']
-    );
+    $parshos[][$row1['name']] = $row1['id'];
 }
 // get the schools for the user (chayolei for supers and account tied for other admins)
 require_once 'class.adminSchools.php';
@@ -23,7 +20,7 @@ $schools = $as->getSchools(); //gets an array of all the school names with their
 require_once 'class.missionsDone.php';
 $missions = MissionsDone::getAllMissions(); // gets array of all mission names with their id as the keys
 // select all the public labels
-$sql2 = "select label_id, label_name from labels where label_id > 29 and label_id not in (31,35,37,42) order by label_name";
+$sql2 = "SELECT label_id, label_name FROM labels WHERE active = 1 ORDER BY label_name";
 $result2 = mysql_query($sql2);
 $labels = array();
 //$temp = array();
@@ -63,16 +60,6 @@ while ($row2 = mysql_fetch_assoc($result2)) {
                 // master toggle swtich should click all the parshios in the list
                 $("#toggleParshos").click( function() {
                     $(".parshos input").trigger('click');
-                });
-                // campaign dropdown onclick listener
-                $("#campaign").change( function() {
-                    if ($(this).val() == '99') {// if the campaign is set to 99 (not always in list)
-                        $("#opt").trigger('click'); // then trigger the optional box
-                        $("#mandatory").hide(); // and hide the option entierly
-                    } else {
-                        $("#mand").trigger('click'); // otherwise default to mandatory
-                        $("#mandatory").show(); // and make sure to show the box
-                    }
                 });
                 // creation of the compaign
                 $("#submit").click( function() {
@@ -224,22 +211,26 @@ while ($row2 = mysql_fetch_assoc($result2)) {
                 </select>
             </p>
             
-            <p id="mandatory">
-                This task should be:<br />
-                <input type='radio' name='mandatory' id="mand" value='1' checked /> Mandatory <br />
-                <input type='radio' name='mandatory' id="opt" value='0' /> Optional <br />
-            </p>
-            
             <p>
                 Task Label for mission sheets:<br />
                 (You must choose which label in order to know where to place it on the mission sheets.)<br />
                 <select name='label' id='label'>
-                    <option value="0" selected="selected">Choose a label</option>
+                    <option value="0">Choose a label</option>
                     <?
                     foreach ($labels as $id => $label) {// render each label (from lines 28-32) as an option with the id as the value.
                         echo "<option value=" . $id . ">" . $label . (in_array($id, array(30,32,38)) ? " (Daily)" : "") . "</option>"; // and if that id is 30, 32, or 38 add (Daily) to the end
                     }
                     ?>
+                </select>
+            </p>
+
+            <p>
+                Mission Type<br />
+                (You must choose which soldier type this will show up for)<br />
+                <select name='school_type_id' id='school_type_id'>
+                    <option value="0">  Chabad  </option>
+                    <option value="10"> Frum    </option>
+                    <option value="20"> CKids   </option>
                 </select>
             </p>
             
@@ -312,12 +303,12 @@ while ($row2 = mysql_fetch_assoc($result2)) {
                 $i = 0;
                 echo "<div class='parshos'>"; // start the first div
 				foreach ($parshos as $info) {
-	                foreach ($info as $name => $dates) {                           
+	                foreach ($info as $name => $parsha_id) {                           
 	                    if (++$i > $cutoff) { // if i is above the cutoff point...
 	                        echo "</div><div class='parshos'>"; // close the div and open a new one with the same class
 	                        $i = 1; // reset i to 1. Not 0 (since we are using ++i not i++).
 	                    }
-	                    echo "<input type='checkbox' class='mission' name='missions[]' value='" . $name . "' checked>" . $name . "<br />"; // render a checkbox for each parsha
+	                    echo "<input type='checkbox' class='mission' name='parsha_ids[]' value='" . $parsha_id . "' checked>" . $name . "<br />"; // render a checkbox for each parsha
 	                }
 				}
                 echo "</div>"; // end the last div
