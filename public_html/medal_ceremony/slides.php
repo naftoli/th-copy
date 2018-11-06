@@ -32,10 +32,6 @@ $m = new Slides( $prevMedals, $prevMedalsLight, $prevDates );
 $dates = $m->getReportDates();
 $heDatesMedals = $m->getHeReportDates();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';      
-$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
-$schools = $as->getSchools();
-
 function getLogo( $school_id ) {
     $sql = "select logo from schools where school_id = " . $school_id;
     $result = mysql_query( $sql );
@@ -99,97 +95,67 @@ $positioning = [
 <html>
     <head>
         <meta charset='utf8' />
-        <script
-            src="https://code.jquery.com/jquery-1.12.4.min.js"
-            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-            crossorigin="anonymous"></script>
         <link rel="stylesheet" href="slide.css" />
     </head>
 
     <body>
-        <?php //if ( !isset( $_POST['school'] ) ) { ?>
-        <!-- <form method="post" action="slides.php">
-            School: <select name="school" id="school">
-                <?php
-                if ( count($schools) > 1 ) {
-                    echo "<option value='-1'>All Schools</option>";
-                }
-                foreach ( $schools as $id => $name ) {
-                    echo "<option value='" . $id . "|" . $name . "'>" . $name . "</option>";
-                }
-                ?>
-            </select><br /><br />
-            Grade: <select name="grades" id="grades">
-                <option value='0'>None Selected</option>
-            </select><br /><br />
-            <input type="submit" name="submit" value="submit" />
-        </form> -->
         <?php
-        //} else {
-            // $schoolInfo = explode('|', $_POST['school']);
-            // $school_id = $schoolInfo[0];
-            // $school_name = $schoolInfo[1];
-        foreach ( $schools as $school_id => $school_name ) {
-            $m->setSchoolId( $school_id );
-            //if ( $_POST['grades'] > 0 ) $m->setGrades( $_POST['grades'] );
-            $m->setMedalDetails();
-            $details = $m->getMedalDetails();
-            $userInfo = $m->getUserInfo();
-            $subjects = $m->getSubjects();
+        $schoolInfo = explode('|', $_POST['school']);
+        $school_id = $schoolInfo[0];
+        $school_name = $schoolInfo[1]; 
+        $m->setSchoolId( $school_id );
+        if ( $_POST['grades'] > 0 ) $m->setGrades( $_POST['grades'] );
+        $m->setNameLang( $_POST['name'] );
+        $m->setMedalDetails();
+        $details = $m->getMedalDetails();
+        $userInfo = $m->getUserInfo();
+        $subjects = $m->getSubjects();
 
-            // sort details array by user name
-            // foreach ( $details as $school => $line ) {
-            //     foreach ( $line as $teacher => $class ) {
-            //         ksort( $details[$school][$teacher] );
-            //     }
-            // }
-
-            if ( count($details) ) {
-                foreach ( $details as $school => $line ) {
-                    if ( $school != $school_name ) continue;
-                    foreach ( $line as $grade => $class ) {
-                        foreach ( $class as $teacher => $info ) {
-                            foreach ( $info as $user => $medals ) {
-                                $rankInfo = getRank( $user );
-                                echo "<div class='slide'>";
-                                echo "<div class='logo'><img src='https://mashpia.com/schoolLogos/" . getLogo( $school_id ) . "' /></div>";
-                                echo "<div class='heDate'>" . $heDatesMedals['start_he'] . ' - ' . $heDatesMedals['end_he'] . "</div>";
-                                echo "<div class='photo'><img src='" . getUserPhoto( $user ) . "' /></div>";
-                                echo "<div class='userInfo'><div class='rank'><img src='https://mashpia.com/file_view.php?id=" . $rankInfo['rank_image_id'] . "' />" . 
-                                    $rankInfo['rank_name'] . "</div>";
-                                // figure out if name is in english or hebrew
-                                $user_name = $userInfo[$user];
-                                $char = substr($user_name, 0, 1);
-                                if ( ord( $char ) > 127 ) $css = "he";
-                                else $css = '';
-                                echo "<div class='user $css'>" . $user_name . "</div>";
-                                echo "<div class='info'>Grade " . $grade . " &#9679; " . $teacher . " &#9679; " . $school . "</div></div>";
-                                foreach ( $medals as $subject => $more ) {
-                                    // figure out which row and column the subject belongs in 
-                                    for ($row = 0; $row < 4; $row++) {
-                                        for ($column = 0; $column < 4; $column++) {
-                                            if ( $subjects[$subject] == $positioning[$row][$column] ) {
-                                                break 2;
-                                            }
+        if ( count($details) ) {
+            foreach ( $details as $school => $line ) {
+                foreach ( $line as $grade => $class ) {
+                    foreach ( $class as $teacher => $info ) {
+                        foreach ( $info as $user => $medals ) {
+                            $rankInfo = getRank( $user );
+                            echo "<div class='slide'>";
+                            echo "<div class='logo'><img src='https://mashpia.com/schoolLogos/" . getLogo( $school_id ) . "' /></div>";
+                            echo "<div class='heDate'>" . $heDatesMedals['start_he'] . ' - ' . $heDatesMedals['end_he'] . "</div>";
+                            echo "<div class='photo'><img src='" . getUserPhoto( $user ) . "' /></div>";
+                            echo "<div class='userInfo'><div class='rank'><img src='https://mashpia.com/file_view.php?id=" . $rankInfo['rank_image_id'] . "' />" . 
+                                $rankInfo['rank_name'] . "</div>";
+                            
+                            $user_name = $userInfo[$user];
+                            // style name differently depending on if it's en or he
+                            $css = '';
+                            if ( $_POST['name'] == 'he' ) $css = 'he';
+                            
+                            echo "<div class='user $css'>" . $user_name . "</div>";
+                            echo "<div class='info'>Grade " . $grade . " &#9679; " . $teacher . " &#9679; " . $school . "</div></div>";
+                            foreach ( $medals as $subject => $more ) {
+                                // figure out which row and column the subject belongs in 
+                                for ($row = 0; $row < 4; $row++) {
+                                    for ($column = 0; $column < 4; $column++) {
+                                        if ( $subjects[$subject] == $positioning[$row][$column] ) {
+                                            break 2;
                                         }
                                     }
-                                    $row_pos = "row" . ++$row;
-                                    $col_pos = "column" . ++$column;
-
-                                    // get highest medal
-                                    $max = count( $more );
-                                    $medalInfo = explode('|', $more[$max-1]);
-                                    // extract name and whether to show it regular or greyed out
-                                    $medal = $medalInfo[0];
-                                    $showLight = intval($medalInfo[1]);
-                                    $image = "/mobile/reg/" . getMedal( $subjects[$subject], $medal );
-                                    echo "<div class='medal " . $row_pos . ' ' . $col_pos . "'><img src='" . $image . "' ";
-                                    if ( $showLight == 1 ) echo "class='light'";
-                                    echo "/></div>";
                                 }
-                                echo "</div>";
-                                echo "<div style='page-break-after: always'></div>";
+                                $row_pos = "row" . ++$row;
+                                $col_pos = "column" . ++$column;
+
+                                // get highest medal
+                                $max = count( $more );
+                                $medalInfo = explode('|', $more[$max-1]);
+                                // extract name and whether to show it regular or greyed out
+                                $medal = $medalInfo[0];
+                                $showLight = intval($medalInfo[1]);
+                                $image = "/mobile/reg/" . getMedal( $subjects[$subject], $medal );
+                                echo "<div class='medal " . $row_pos . ' ' . $col_pos . "'><img src='" . $image . "' ";
+                                if ( $showLight == 1 ) echo "class='light'";
+                                echo "/></div>";
                             }
+                            echo "</div>";
+                            echo "<div style='page-break-after: always'></div>";
                         }
                     }
                 }
@@ -197,44 +163,4 @@ $positioning = [
         }
         ?>
     </body>
-    <?php //if ( !isset( $_POST['school'] ) ) : ?>
-    <!-- <script>
-        $("#school").change( function() {
-            updateGrades();
-        });
-
-        function updateGrades() {
-            var school = $("#school").val();
-            var pos = school.indexOf('|');
-            var id = 0;
-            if ( pos > 0 ) {
-                id = school.substring(0,pos);
-            }
-            if ( id > 0 ) {
-                $.get("/ajax/getClasses.php", {
-                    id: id,
-                    flat: false,
-                    named: false,
-                    extra: ''
-                }, function( info ) {
-                    var grades = JSON.parse( info );
-                    var html = "<option value='-1'>All Grades</option>";
-                    for (var g in grades) {
-                        var grade = grades[g];
-                        html += "<option value='" + grade[0] + "'>" + grade[1] + "</option>";
-                    }
-                    $("#grades").empty()
-                    $("#grades").append( html );
-                });
-            } else {
-                $("#grades").empty();
-            }
-        }
-
-        $( function() {
-            var school = $("#school").val();
-            if (school.indexOf('|') !== -1) updateGrades();
-        });
-    </script> -->
-    <?php //endif; ?>
 </html>

@@ -4,11 +4,16 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.medalReport.php';
 class Slides extends MedalReport {
     protected $showPrevMedals;
     protected $showPrevMedalsLight;
+    protected $nameLang;
 
     public function __construct( $showPrevMedals = false, $showLight = false, $previousStart = false ) {
         parent::__construct( $previousStart );
         $this->showPrevMedals = $showPrevMedals;
         $this->showPrevMedalsLight = $showLight;
+    }
+
+    public function setNameLang( $lang ) {
+        $this->nameLang = $lang;
     }
 
     // override setMedalsDetails function
@@ -48,9 +53,9 @@ class Slides extends MedalReport {
                        ( !$this->showPrevMedals && $row['date_awarded'] >= $start )
                     ) {
                         // figure out which language to show name
-                        if ( $row['lang_id'] == 2 ) {
+                        if ( $this->nameLang == 'he' ) {
                             $user_name = $row['first_he'] . ' ' . $row['last_he'];
-                        } else {
+                        } else if ( $this->nameLang == 'en' ) {
                             $user_name = $row['first'] . ' ' . $row['last'];
                         }
                         $user_id = $row['user_id'];
