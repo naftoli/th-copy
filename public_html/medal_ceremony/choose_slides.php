@@ -55,7 +55,8 @@ $schools = $as->getSchools();
                 <legend>Medal Options</legend>
                 <input type="radio" name="type" value="1" checked /> Show only current medals earned<br />
                 <input type="radio" name="type" value="2" /> Show all medals earned<br />
-                <input type="radio" name="type" value="3" /> Show all medals earned but show old medals as greyed out
+                <input type="radio" name="type" value="3" /> Show all medals earned but show old medals as greyed out<br /><br />
+                <input type="checkbox" name="currentOnly" value="1" /> Only show children that earned at least one medal this period
             </fieldset>
             <br />
             <div align="center">
