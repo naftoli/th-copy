@@ -107,9 +107,3 @@
 .column4 {
     margin-left: 1060px;
 }
-
-@media print {
-    .slide {
-        margin-top: 60px;
-    }
-}
