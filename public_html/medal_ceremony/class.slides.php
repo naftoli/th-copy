@@ -138,7 +138,6 @@ class Slides extends MedalReport {
                 ";
             }
         }
-        echo $sql; exit;
         
         $result = mysql_query( $sql );
         while ($row = mysql_fetch_assoc($result)) {
