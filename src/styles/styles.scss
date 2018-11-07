@@ -21,12 +21,15 @@ $print-body-min-width: auto;
 // $rccs-name-font-size: 15px;
 // $rccs-number-font-size: 1.2em;
 
+@import '~bootstrap/scss/bootstrap';
+@import '~react-credit-cards/es/styles.scss';
+
+@import '~rc-slider/assets/index.css';
 @import '~cropperjs/dist/cropper.css';
 @import '~react-table/react-table.css';
+
 @import '~react-toastify/dist/ReactToastify.min.css';
 @import '~react-datepicker/dist/react-datepicker.css';
-@import '~react-credit-cards/es/styles.scss';
-@import '~bootstrap/scss/bootstrap';
 
 @import 'branding.scss';
 @import 'index.css';
