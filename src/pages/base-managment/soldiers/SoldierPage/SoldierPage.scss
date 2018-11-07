@@ -80,6 +80,10 @@
     }
   }
 
+}
+
+.RankBoard {
+
   .RankRow {
     text-align: center;
     border-top: 1px dashed $primary-color-focus;
@@ -87,29 +91,53 @@
     padding: 10px 0px;
   
     .RankRow-rank {
-      p { margin-top: .2rem; margin-bottom: 0px; }
-      img{ max-width: 150px; }
+      p {
+        font-size: .7em;
+        margin-bottom: 0px;
+      }
+      img {
+        max-width: 100px;
+      }
     }
   
     .RankRow-medals {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat( auto-fill, minmax(65px, 1fr) );
+      align-items: center;
+      justify-items: center;
+
+      @media ( min-width: 390px ) {
+        grid-template-columns: repeat( auto-fill, minmax(75px, 1fr) );
+      }
+
+      @media ( min-width: 835px ) {
+        grid-template-columns: repeat( auto-fill, minmax(85px, 1fr) );
+      }
+
+      @media ( min-width: 1024px ) {
+        grid-template-columns: repeat( auto-fill, minmax(95px, 1fr) );
+      }
   
       div {
-        display: inline-block;
         margin: 10px;
         max-width: 90px;
         transition: .25s;
-        img { width: 100%; }
-        p { font-size: .8em; margin-top: .4rem; margin-bottom: 0px; }
-        @media ( max-width: 630px ) {
-          max-width: 70px;
+
+        font-size: .75em;
+
+        img {
+          width: 100%;
+          max-height: inherit;
+          margin-bottom: .4rem;
         }
-        @media ( max-width: 414px ) {
-          max-width: 65px;
-          p { font-size: .65em; }
+
+        p {
+          font-size: .8em;
+          margin-bottom: 0px;
         }
       }
+
     }
   }
+
 }

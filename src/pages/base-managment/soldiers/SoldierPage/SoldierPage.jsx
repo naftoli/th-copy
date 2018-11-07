@@ -135,7 +135,11 @@ class SoldierPage extends Component {
             Rank
           </NavigationTab>
 
-          <NavigationTab tab={4} icon='registered' { ...navProps }>
+          <NavigationTab tab={4} icon='award' { ...navProps }>
+            Medals
+          </NavigationTab>
+
+          <NavigationTab tab={5} icon='registered' { ...navProps }>
             Registration
           </NavigationTab>
 
@@ -167,10 +171,11 @@ class SoldierPage extends Component {
           
           <RankTab 
             tabId={ 3 } 
-            soldier={ soldier } />
+            miles={ soldier.miles }
+            board={ soldier.rankBoard } />
 
           <RegistrationTab 
-            tabId={ 4 } 
+            tabId={ 5 } 
             soldier={ soldier } />
 
         </TabContent>
