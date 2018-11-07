@@ -560,7 +560,7 @@ function add_mark($parameters, $update = true)
 	$user_id = $parameters[0];
 	$date_task_id = $parameters[1];
 	$mark_date = $parameters[2];
-	$user_mark = $parameters[3];
+	$user_mark = intval($parameters[3]);
 
 	$inserted_or_updated = false;
 
