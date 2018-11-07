@@ -21,9 +21,11 @@
     align-self: center; text-align: center;
     .profile-picture img {
       filter: drop-shadow( 0 0 0.2rem $primary-color-light );
+      max-height: 225px;
     }
     .profile-picture:hover img, .profile-picture:focus img {
       filter: grayscale(100%) brightness(60%) drop-shadow( 0 0 0.2rem $primary-color-light );
+      transform: scale( 0.95 );
     }
   }
 
