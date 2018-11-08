@@ -41,7 +41,9 @@ while($row = mysql_fetch_assoc($users_query)){
 /***************** RENDER REPORT **********************/
 if($debug) echo "</pre>";
 
-if (count($users) > 0) { ?>
+if (count($users) > 0) { 
+    $totals = [];
+    ?>
     <table>
         <thead>
             <?php if ($school_id < 0) : ?>
@@ -50,14 +52,19 @@ if (count($users) > 0) { ?>
             <th>Grade</th><th colspan='2'>Name</th><th colspan='2'>Hebrew Name</th><th>Father Cell</th><th>Mother Cell</th>
         </thead>
         <tbody>
-            <? foreach($users as $user) {?>
+            <?php 
+            foreach($users as $user) {
+                $grade = $user['class_grade'] . ($user['class_sub'] ? " - " . $user['class_sub'] : "");
+                if ( isset( $totals[$grade] ) ) $totals[$grade]++;
+                else $totals[$grade] = 1;
+            ?>
             <tr class="users">
                 <?php 
                 if ($school_id < 0) {
                     echo "<td>" . $user['school_name'] . "</td>";
                 }
                 ?>
-                <td><?=$user['class_grade'] . ($user['class_sub'] ? " - " . $user['class_sub'] : "")?></td>
+                <td><?=$grade?></td>
                 <td><?=$user['first']?></td>
                 <td><?=$user['last']?></td>
                 <td><?=$user['first_he']?></td>
@@ -66,6 +73,25 @@ if (count($users) > 0) { ?>
                 <td><?=$user['admin_phone_mobile2']?></td>
             </tr>
             <?}?>
+        </tbody>
+    </table>
+    <h2>Totals Per Grade</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Grade</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+        $grandTotal = 0;
+        foreach ( $totals as $grade => $total ) {
+            $grandTotal += $total;
+            echo "<tr><td>" . $grade . "</td><td>" . $total . "</td></tr>";
+        }
+        echo "<tr><th style='text-align: right'>Grand Total:</th><th>" . $grandTotal . "</th></tr>";
+        ?>
         </tbody>
     </table>
 <? } else { // if there are no students found... ?>

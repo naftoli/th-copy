@@ -64,8 +64,8 @@ if(count($schools) == 1){
     $has_chaps  = mysql_num_rows($chap_check) != 0;
 }
 
-require_once('chidon_shutdown_vars.php'); // get the deadlines
-$exceptions = array(13,61,269);
+// require_once('chidon_shutdown_vars.php'); // get the deadlines
+// $exceptions = array(13,61,269);
 
 $users = array();
 foreach ($schools as $id => $school) {
@@ -385,7 +385,7 @@ foreach ($schools as $id => $school) {
                 $.post('ajax/setReps.php', { year : year, school : school }, handleSetResponse);
             });
             
-            <? if(!$has_chaps) { ?>
+            <? if(isset($has_chaps) && !$has_chaps) { ?>
                 $("a#next_page").click(function(event){
                     event.preventDefault();
                     alert('It appears that you have not setup any Chaperones yet!. Redirecting you to Chaperones page...');
