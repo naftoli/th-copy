@@ -7,7 +7,7 @@ import {
   Row, Col
 } from 'reactstrap';
 // rows
-import PlatoonRow from './rows/PlatoonRow';
+import { PlatoonRow } from './tabs/PlatoonRow';
 // functions
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';

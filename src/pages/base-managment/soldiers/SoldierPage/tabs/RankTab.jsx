@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import RankBoard from '../includes/RankBoard';
+import RankBoard from '../../components/RankBoard';
 import { NumberDisplay } from 'components/ui';
 import { Row, Col, TabPane } from 'reactstrap';
 

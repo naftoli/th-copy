@@ -11,7 +11,7 @@ export class PlatoonRow extends Component {
     const { inputProps, selectProps, onDelete } = this.props;
     const { 
       class_grade, class_sub, class_teacher, cell, email,
-      users, miles_per_soldier, miles_balance,
+      soldiers, miles_per_soldier, miles_balance,
     } = this.props.platoon;
 
     let grades = [
@@ -23,43 +23,45 @@ export class PlatoonRow extends Component {
 
     return (
       <Row>
-        <Col xs={6}>
+        <Col sm={6}>
           <label>Grade</label>
           <Select options={ grades } id='class_grade' value={ selectedGrade } { ...selectProps } />
         </Col>
-        <Col xs={6}>
+        <Col sm={6}>
           <label>Sub (optional details, e.g. 'Boys' or 'א‬'.)</label>
           <Input name='class_sub' value={ class_sub || '' } { ...inputProps } required={ false }/>
         </Col>
-        <Col xs={12}>
+        <Col sm={12}>
           <label>Teacher Name</label>
           <Input name='class_teacher' value={ class_teacher || '' } { ...inputProps } />
         </Col>
-        <Col xs={6}>
+        <Col sm={6}>
           <label>Teacher Phone</label>
           <PhoneNumber name='cell' value={ cell || '' } { ...inputProps } />
           <div className='invalid-message'>Please enter a valid phone number</div>
         </Col>
-        <Col xs={6}>
+        <Col sm={6}>
           <label>Teacher E-Mail</label>
           <Input name='email' type='email' value={ email || '' } { ...inputProps } />
           <div className='invalid-message'>Please enter a valid E-mail address</div>
         </Col>
-        <Col xs={6}>
+        <Col sm={6}>
           <label>Miles per Soldier (per month)</label>
           <Input 
             type='number' name='miles_per_soldier' 
             value={ miles_per_soldier } { ...inputProps } />
         </Col>
-        <Col xs={6}>
+        <Col sm={6}>
           <label>Current Miles Balance</label>
           <Input 
             type='number' name='miles_balance'  min='0' max='99999999999'
             value={ miles_balance } { ...inputProps } />
           <div className='invalid-message'>0 to <NumberDisplay value={ 99999999999 } /></div>
         </Col>
-        { users && users.length === 0 && 
-          <Col xs={6}>
+
+
+        { soldiers && soldiers.length === 0 && 
+          <Col sm={12}>
             <Button color='danger' onClick={ onDelete } id='delete'>
               <FontAwesome icon='trash' /> Delete Platoon
             </Button>
@@ -69,5 +71,3 @@ export class PlatoonRow extends Component {
     );
   }
 }
-
-export default PlatoonRow;

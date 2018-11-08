@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { TabPane } from 'reactstrap';
 import { Prompt } from 'react-router';
-import { MedalBoard } from '../includes/MedalBoard';
+import { MedalBoard } from '../../components/MedalBoard';
 import { SaveButton } from 'components/buttons/index';
 
 class MedalsTab extends Component {

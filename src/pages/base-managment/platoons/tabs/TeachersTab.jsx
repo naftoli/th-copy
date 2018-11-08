@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // components
-import { NewStaffRow, StaffRow } from '../rows';
 import { TabPane } from 'reactstrap';
+import { NewStaffRow, StaffRow } from 'components/rows';
 // functions
 import { toast } from 'react-toastify';
 
