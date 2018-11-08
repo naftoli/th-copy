@@ -467,7 +467,7 @@ else
 			
 			if ($cols['s']) 
 			{
-				$sql = "SELECT user_id, subject_id, SUM(mission_count) AS missions "; 
+				$sql = "SELECT user_id, subject_id, SUM( mission_count ) AS missions "; 
 				$sql = $sql . "FROM users ";
 				$sql = $sql . "JOIN subjects ";
 				$sql = $sql . "JOIN date_tasks_mission_marks USING (user_id, subject_id) ";
@@ -487,6 +487,7 @@ else
 				$sql = $sql . "GROUP BY user_id, subject_id";
 				echo "<input type='hidden' name='MISSIONS' value='$sql'>";
 				$missions = mysql_fetch_column_tuple(mq($sql));
+				$missions = $missions >= 0 ? $missions : 0;
 			}
 			
 			if($cols['m']) $medals = mysql_fetch_column_tuple(mq("SELECT user_id, subject_id, medal_ord, medal_name FROM (SELECT MAX(medal_ord) medal_ord, user_id, subject_id FROM medal_marks GROUP BY user_id, subject_id) medal JOIN medals USING (medal_ord) JOIN users USING (user_id) $class_query"));
@@ -508,7 +509,7 @@ else
 			  
 				if ($cols['s']) 
 				{
-					$sql = "SELECT class_id, subject_id, SUM(mission_count) AS missions ";
+					$sql = "SELECT class_id, subject_id, SUM( mission_count ) AS missions ";
 					$sql = $sql . "FROM users ";
 					$sql = $sql . "JOIN subjects ";
 					$sql = $sql . "JOIN date_tasks_mission_marks USING (user_id, subject_id) " . $class_query . " " . $subject_query . " ";
@@ -525,7 +526,8 @@ else
 							$sql = $sql . " AND end_date <= " . $end_date . " ";				
 					}
 					
-					$missions_class = mysql_fetch_column_tuple(mq($sql));					
+					$missions_class = mysql_fetch_column_tuple(mq($sql));
+					$missions_class = $missions_class >= 0 ? $missions_class : 0;
 				}
 			  $points_class = mysql_fetch_column_tuple(mq(totalMarks("JOIN users USING (user_id) $class_query $subject_query AND $date_query", 'class_id, subject_id')));
 
