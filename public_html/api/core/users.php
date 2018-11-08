@@ -148,6 +148,10 @@ class UsersRouter {
         }
         json_error('Server did not get the profile picture :-(.');
     }
+
+    public function updateMissions() {
+        json_response( $_POST );
+    }
 }
 
 rest_router( new UsersRouter );
