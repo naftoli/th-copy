@@ -67,6 +67,23 @@ class UsersRouter {
         }
     }
 
+    public function small(){
+        global $MASHPIA_DB;
+        // get the class_id
+        $class_id = isset( $_POST['class_id'] ) ? $_POST['class_id'] : false;
+        if ( !$class_id ) return json_response([]);
+        // get the platoons
+        $query = $MASHPIA_DB->prepare( 'SELECT class_id, user_id, user_serial, first, last FROM users WHERE class_id=:class_id;' );
+        $query->execute([':class_id' => $class_id]);
+        $soldiers = $query->fetchAll();
+        // serialize the platoons
+        $soldiers = array_map(function ( $soldier ){
+            $soldier['name'] = $soldier['user_serial'].': '.$soldier['first'].', '.$soldier['last'];
+            return $soldier;
+        }, $soldiers );
+        return json_response( $soldiers, true, true );
+    }
+
     public function create() {
         global $current_user;
         $user = Soldier::build( $_POST );
@@ -150,7 +167,27 @@ class UsersRouter {
     }
 
     public function updateMissions() {
-        json_response( $_POST );
+        $updated = 0;   $errors = [];
+        $ids = [];
+        $soldier = Soldier::find( $_POST['user_id'] );
+        // go through all the updates and update each subject
+        foreach( $_POST['subjects'] as $update ) {
+            $subject = Subject::find( $update[ 'subject_id' ] );
+            // try to update the missions
+            try {
+                $ids[] = $subject->setMissions( $soldier->user_id, $update[ 'missions' ] );
+                $updated += 1;
+            } catch ( Exception $e ) {
+                $errors[] = $e->getMessage();
+            }
+        }
+        // update the missions
+        json_response([
+            'ids' => $ids,
+            'errors' => $errors,
+            'updated' => $updated,
+            'medalBoard' => $soldier->medalBoard(),
+        ]);
     }
 }
 

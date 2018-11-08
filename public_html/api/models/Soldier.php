@@ -141,7 +141,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     // ******************************* CHAYOLEI BOARDS ******************************* //
     // returns the current rank and how they got there
     public function rankBoard() {
-        global $MASHPIA_DB;
+        global $MASHPIA_DB; $result = [];
         // get all ranks earned
         $rank_query = $MASHPIA_DB->prepare(
             "SELECT r.rank_ord, r.rank_name, r.rank_color, r.medals_required, date_promoted "
@@ -175,7 +175,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // get all the ranks
         $rank_query->execute( [ $this->user_id ] );
         $ranks = $rank_query->fetchAll();
-
+        // set the current rank
+        $result['rank'] = intval( end( $ranks )['rank_ord'] );
+        $result['name'] = end( $ranks )['rank_name'];
         // update the rank contents
         $medals_index = 0;
         foreach( $ranks as $index => $rank ){
@@ -188,8 +190,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             while( isset( $medals[ $medals_index ] ) && $medals_index < $medals_in_rank )
                 $ranks[$index]['medals'][] = $medals[ $medals_index++ ];
         };
-        
-        return $ranks;
+        $result['ranks'] = $ranks;
+        return $result;
     }
     // returns the medal board
     public function medalBoard() {
@@ -206,7 +208,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $marks_query = $MASHPIA_DB->query(
             'SELECT subject_id, subject_name, IFNULL( earned, 0 ) as earned '
             .'FROM subjects LEFT JOIN ('
-                .'SELECT subject_id, SUM( mission_count ) AS earned FROM date_tasks_mission_marks '
+                .'SELECT subject_id, COUNT(*) AS earned FROM date_tasks_mission_marks '
                 .'WHERE user_id = '. $this->user_id .' GROUP BY subject_id '
             .') as marks USING (subject_id) '
             .'WHERE subject_id IN (' . $subject_ids . ') '
