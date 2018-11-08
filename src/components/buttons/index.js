@@ -7,11 +7,11 @@ import { chabad, google } from 'img/logos';
 import './styles.scss';
 
 export const SaveButton = ({
-  show, text = 'Save Changes', saving = false, ...props 
+  show, children, text = 'Save Changes', saving = false, ...props 
 }) => {
   const button = (
     <Button color='primary' { ...props }>
-      {!saving && <span><FontAwesome icon='save'/> { text }</span> }
+      {!saving && <span><FontAwesome icon='save'/> { children || text }</span> }
       { saving && <span><InlineSync loading /> Saving...</span> }
     </Button>
   );
