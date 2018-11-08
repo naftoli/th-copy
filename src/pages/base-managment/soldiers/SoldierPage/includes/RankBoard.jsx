@@ -6,7 +6,8 @@ import { DateDisplay } from 'components/ui';
 const RankBoard = ({ board }) => {
   return (
     <div className='RankBoard'>
-      { board.ranks.map( (rank, index) => 
+      { Array.isArray( board ) && 
+        board.map( (rank, index) => 
         <RankRow rank={ rank } key={ index }/>
       )}
     </div>

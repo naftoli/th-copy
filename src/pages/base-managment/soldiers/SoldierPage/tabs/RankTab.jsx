@@ -6,7 +6,7 @@ import { Row, Col, TabPane } from 'reactstrap';
 
 class RankTab extends Component {
   render() {
-    let { board, miles } = this.props;
+    let { board, miles, rank } = this.props;
 
     return (
       <TabPane id='RankTab' tabId= { this.props.tabId }>
@@ -14,7 +14,7 @@ class RankTab extends Component {
         <Row>
           <Col sm={6}>
             <label>Rank:</label>
-            <h4>{ board.name || 'N/A' }</h4>
+            <h4>{ rank.name || 'N/A' }</h4>
           </Col>
           <Col sm={6}>
             <label>Miles: </label>

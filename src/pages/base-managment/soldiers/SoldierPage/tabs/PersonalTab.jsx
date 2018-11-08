@@ -44,7 +44,7 @@ class PersonalTab extends Component {
       login, soldier, tabId, updated, 
       onSubmit, onValidChange 
     } = this.props;
-    let { user_serial, barcode, profilePicture } = soldier;
+    let { user_serial, barcode, profilePicture, rank } = soldier;
     // link to the old website if we have a profile picture
     const profile_picture = profilePicture ? `${LEGACY_URL}${profilePicture}` : '';
     // render form
@@ -65,6 +65,7 @@ class PersonalTab extends Component {
 
             <ProfileRow
               src={ profilePicture }
+              rank={ rank.rank_ord }
               gender={ soldier.gender }
               onImageClick={ this.toggle }
               onGenderChange={ this.onInputChange } />

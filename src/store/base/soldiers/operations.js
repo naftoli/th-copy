@@ -14,11 +14,13 @@ export const getSoldiers = () => dispatch => {
       return Promise.reject( e );
     });
 }
+
 // create new soldier
 export const createSoldier = data => dispatch => {
   return API.post( '/core/users', data )
     .then( soldier => dispatch( actions.addSoldier( soldier ) ) );
 }
+
 // update a single soldier
 export const updateSoldier = ( id, data ) => dispatch => {
   return API.post( `/core/users?id=${id}`, data )
@@ -28,19 +30,27 @@ export const updateSoldier = ( id, data ) => dispatch => {
     });
 }
 
+
 export const deleteSoldier = ( id ) => dispatch => {
   return API.delete( `/core/users?id=${id}`);
 }
 
 /********************** NON STORE API OPERATIONS **********************/
+
 // load a single soldier - not added to state
 export const getSoldier = ( id ) => dispatch => {
   return API.get( `/core/users?id=${id}` )
 }
+
 // upload a profile picture. does not deal with store
 export const uploadProfile = ( formData ) => dispatch => {
   return API.post( '/core/users?action=uploadProfile', formData );
 }
+
+export const updateMissions = ( user_id, subjects ) => dispatch => {
+  return API.post( '/core/users?action=updateMissions', { user_id, subjects } );
+}
+
 // upload a users spreadsheet
 export const uploadSpreadsheet = ( data ) => dispatch => {
   const toast_id = createNotifcation('Uploading user spreadsheet...');
@@ -52,11 +62,4 @@ export const uploadSpreadsheet = ( data ) => dispatch => {
       updateNotifcation( toast_id, '', error.message, false );
       return Promise.reject( error );
     });
-}
-
-/**
- * this function is used in platoonSelect only
- */
-export const getSoldierList = ( class_id = false ) => {
-  return API.post( `/core/users?action=small`, { class_id } );
 }
