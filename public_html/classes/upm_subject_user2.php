@@ -40,7 +40,7 @@ class upm_subject_user {
 	
 	function get_completed_missions($subject_id)
 	{
-		$sql = "SELECT count(*) AS completed_missions ";
+		$sql = "SELECT SUM( mission_count ) AS completed_missions ";
 		$sql = $sql . "FROM user_tracks AS ut ";
 		$sql = $sql . "JOIN date_tasks_mission_marks AS dtmm ON (dtmm.user_id=" . $this->user_id . " AND dtmm.subject_id=" . $subject_id . ") ";
 		$sql = $sql . "WHERE ut.user_id=" . $this->user_id . " ";

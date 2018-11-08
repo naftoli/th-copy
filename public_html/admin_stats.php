@@ -467,7 +467,7 @@ else
 			
 			if ($cols['s']) 
 			{
-				$sql = "SELECT user_id, subject_id, count(*) AS missions "; 
+				$sql = "SELECT user_id, subject_id, SUM(mission_count) AS missions "; 
 				$sql = $sql . "FROM users ";
 				$sql = $sql . "JOIN subjects ";
 				$sql = $sql . "JOIN date_tasks_mission_marks USING (user_id, subject_id) ";
@@ -508,7 +508,7 @@ else
 			  
 				if ($cols['s']) 
 				{
-					$sql = "SELECT class_id, subject_id, count(*) AS missions ";
+					$sql = "SELECT class_id, subject_id, SUM(mission_count) AS missions ";
 					$sql = $sql . "FROM users ";
 					$sql = $sql . "JOIN subjects ";
 					$sql = $sql . "JOIN date_tasks_mission_marks USING (user_id, subject_id) " . $class_query . " " . $subject_query . " ";

@@ -20,7 +20,7 @@ $tehillim_info_query = mysql_query(
 );
 
 $tehillim_mission_query = mysql_query(
-     " SELECT COUNT(*) AS total FROM date_tasks_mission_marks WHERE subject_id = 1 "
+     " SELECT SUM( mission_count ) AS total FROM date_tasks_mission_marks WHERE subject_id = 1 "
     ." AND mark_date >= " . $dates['start']
 );
 

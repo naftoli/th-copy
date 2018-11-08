@@ -6,6 +6,7 @@ include_once( __DIR__ . '/traits/BuildModel.php' );
 // LEGACY CODE
 require_once( __DIR__ . '/../../calendar.php' );
 require_once( __DIR__ . '/../../class.points.php' );
+require_once( __DIR__ . '/../../class.campaignEnrollment.php');
 
 class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     use \traits\BuildModel;
@@ -42,7 +43,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     }
     
     // ******************************* HELPER FUNCTIONS *******************************
-    // returns profile picture path from (mashpia.com)/
+    // * returns profile picture path from (mashpia.com)/
     public function profilePicture() {
         if ( $this->mobile_pic ) {
             return '/mobile/reg/' . $this->mobile_pic;
@@ -51,40 +52,41 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
         return '/mobile/reg/images/profile-photo-default.jpg';
     }
-    // returns name based on language
+    // *returns name based on language?
     public function name() {
-        // if ( $this->lang_id == 2 )
-        //     return ( $this->first_he ? $this->first_he : $this->first ) 
-        //         . ' ' . ( $this->last_he ? $this->last_he : $this->last );
         return $this->first . ' ' . $this->last;
     }
-    // returns full barcode
+    // * returns full barcode
     public function barcode(){
         return "3$this->user_code";
     }
-    // returns the current rank
+    // * returns the current rank
     public function rank( $cache = false ) {
         global $MASHPIA_DB;
 
-        if ( $cache ) $this->rank = $cache;
-        if ( $this->rank ) return $this->rank;
+        if ( $cache )
+            $this->rank = $cache;
+
+        if ( $this->rank )
+            return $this->rank;
 
         $query = $MASHPIA_DB->prepare(
-             ' SELECT rank_ord, rank_name as name FROM rank_marks JOIN ranks USING (rank_ord) '
-            .' WHERE user_id = ? ORDER BY rank_ord DESC LIMIT 1'
+             'SELECT rank_ord, rank_name as name FROM rank_marks JOIN ranks USING (rank_ord) '
+            .'WHERE user_id = ? ORDER BY rank_ord DESC LIMIT 1'
         );
         $query->execute([ $this->user_id ]);
+
         return $this->rank = $query->fetch();
     }
 
-    // get the current miles
+    // * get the current miles
     public function miles( $force_refresh = false ) {
         if ( $this->miles && !$force_refresh )
             return $this->miles;
         $points = new Points( $this->user_id );
         return $this->miles = intval( $points->getTotalPoints() );
     }
-    // get what they can spend in the store
+    // * get what they can spend in the store
     public function storeMiles( $force_refresh = false ) {
         if ( $this->store_miles && !$force_refresh )
             return $this->store_miles;
@@ -139,13 +141,14 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     // ******************************* CHAYOLEI BOARDS ******************************* //
     // returns the current rank and how they got there
     public function rankBoard() {
-        global $MASHPIA_DB; $result = [];
+        global $MASHPIA_DB;
         // get all ranks earned
         $rank_query = $MASHPIA_DB->prepare(
             "SELECT r.rank_ord, r.rank_name, r.rank_color, r.medals_required, date_promoted "
             ."FROM rank_marks JOIN ranks AS r USING(rank_ord) "
             ."WHERE user_id=? ORDER BY rank_ord"
         );
+
         // get all medals earned
         $medals_query = $MASHPIA_DB->prepare(
             "SELECT ms.*, date_awarded FROM medal_marks "
@@ -162,35 +165,92 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 '/kiosk/images/medals/holder.png';
             $medals[] = $medal;
         }
+
         // get the amounts for each rank
         $medals_required = $MASHPIA_DB->query(
             "SELECT medals_required FROM ranks ORDER BY rank_ord"
         )->fetchAll( PDO::FETCH_COLUMN, 0 ); // fetch from the dbs
-        $medals_required[] = count($medals) > 133 ? count($medals) : 133;
+        $medals_required[] = count( $medals ) > 133 ? count( $medals ) : 133;
+
         // get all the ranks
         $rank_query->execute( [ $this->user_id ] );
         $ranks = $rank_query->fetchAll();
-        // set the current rank
-        $result['rank'] = intval( end( $ranks )['rank_ord'] );
-        $result['name'] = end( $ranks )['rank_name'];
+
         // update the rank contents
         $medals_index = 0;
         foreach( $ranks as $index => $rank ){
             $ranks[$index]['medals'] = [];
-            $ranks[$index]['date_promoted'] = date('Y-m-d H:i:s', jdtounix( $rank['date_promoted'] ));
+            $ranks[$index]['date_promoted'] = date( SQL_DATE_FORMAT, jdtounix( $rank['date_promoted'] ) );
+
             $medals_in_rank = intval( $medals_required[ $index + 1 ] );
             $ranks[$index]['total_medals'] = $medals_in_rank;
-            while( isset( $medals[ $medals_index ] ) && $medals_index < $medals_in_rank ) {
+
+            while( isset( $medals[ $medals_index ] ) && $medals_index < $medals_in_rank )
                 $ranks[$index]['medals'][] = $medals[ $medals_index++ ];
-            }
         };
-        $result['ranks'] = $ranks;
         
-        return $result;
+        return $ranks;
+    }
+    // returns the medal board
+    public function medalBoard() {
+        global $MASHPIA_DB; $medal_board = [];
+
+        try {
+            $c = new CampaignEnrollment( $this->user_id );
+            $c->setType( $this->school_type_id );
+            $subject_ids = implode( ', ', $c->getCampaigns() );
+        } catch (EnrollmentException $e) {
+            return false;
+        }
+        // * load what the soldier did
+        $marks_query = $MASHPIA_DB->query(
+            'SELECT subject_id, subject_name, IFNULL( earned, 0 ) as earned '
+            .'FROM subjects LEFT JOIN ('
+                .'SELECT subject_id, SUM( mission_count ) AS earned FROM date_tasks_mission_marks '
+                .'WHERE user_id = '. $this->user_id .' GROUP BY subject_id '
+            .') as marks USING (subject_id) '
+            .'WHERE subject_id IN (' . $subject_ids . ') '
+        );
+        while( $subject = $marks_query->fetch() ) {
+            $subject['medals'] = [];
+            $medal_board[ $subject['subject_id'] ] = $subject;
+        }
+            
+        // * load the data for each medal
+        $medals_query = $MASHPIA_DB->query(
+             'SELECT subject_id, missions_required, profile_photo_id, medal_name '
+            .'FROM medals_subjects JOIN medals USING (medal_ord) '
+            .'WHERE subject_id IN (' . $subject_ids . ') ORDER BY subject_id, medal_ord ASC;'
+        );
+        // * parse the data for each medal
+        $subject_total = 0;
+        while( $medal = $medals_query->fetch() ) {
+            // if we do not have any data for this subject,
+            if ( count( $medal_board[ $medal[ 'subject_id' ] ][ 'medals' ] ) === 0 ) {
+                $subject_total = 0;
+                $medal_board[ $medal[ 'subject_id' ] ][ 'medals' ][] = [
+                    'missions' => 0,   'color' => 'No',
+                    'picture' => '/kiosk/images/medals/holder.png'
+                ];
+            }
+            // compound the missions_required
+            $subject_total += intval( $medal['missions_required'] );
+            // get the picture
+            $picture = '/images/stickers/campaigns/'.$medal[ 'subject_id' ].'.gif';
+            if ( $medal['profile_photo_id'] )
+                $picture = '/file_view.php?id='.$medal['profile_photo_id'];
+            // get the medal_board
+            $medal_board[ $medal[ 'subject_id' ] ][ 'medals' ][] = [
+                'picture' => $picture,
+                'missions' => $subject_total,
+                'color' => $medal['medal_name'],
+            ];
+        }
+        return array_values( $medal_board );
     }
 
     // ******************************* PARENT ACCOUNT ******************************* //
-    // get parent account
+    // * get parent account
     public function parentAccount() {
         global $MASHPIA_DB;
         $query = $MASHPIA_DB->prepare(
@@ -350,7 +410,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
     // ******************************* SETUP WITH EXTERNAL CODE *******************************
     public function enrollInCampaigns() {
-        require_once( __DIR__ . '/../../class.campaignEnrollment.php');
         try {
             $c = new CampaignEnrollment($this->user_id);
             $c->enroll();
@@ -428,12 +487,37 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $result = $this->to_array([
             'only' => [
                 'user_id', 'user_serial', 'first', 'last', 'first_he', 'last_he', 'lang_id', 'dob', 'dob_he',
+                'school_type_id', 'gender', 'user_registered', 'allow_parent_tasks', 'print_parent_tasks',
+                'chayolei', 'yan', 'chidon', 'mobile_pic', 'school_id', 'class_id'
+            ],
+            'methods' => [ 'profilePicture', 'barcode', 'miles', 'rank' ],
+            'include' => [ 
+                'school' => [ 
+                    'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ]                     
+                ],
+                'platoon' => [ 'only' => [ 'class_id', 'class_grade', 'class_sub' ], 'methods' => [ 'name' ] ]
+            ]
+        ]);
+        // other functions
+        $result['start_date'] = dateToHebrew($this->user_start_date);
+
+        return $result;
+    }
+
+    public function fullDetailSerialize(){
+        $result = $this->to_array([
+            'only' => [
+                'user_id', 'user_serial', 'first', 'last', 'first_he', 'last_he', 'lang_id', 'dob', 'dob_he',
                 'school_type_id', 'user_address1', 'user_address2', 'user_city', 'user_state',
                 'user_postal', 'user_country', 'user_phone', 'gender', 'user_registered', 
                 'chayolei', 'yan', 'chidon', 'allow_parent_tasks', 'print_parent_tasks', 'mobile_pic',
-                'school_id', 'class_id', 'school_type_id', 'user_code'
+                'school_id', 'class_id'
             ],
-            'methods' => [ 'profilePicture', 'barcode', 'rankBoard', 'miles', 'parentAccount', 'registrationCharges' ],
+            'methods' => [ 
+                'profilePicture', 'barcode', 'miles', 'rank',
+                'rankBoard', 'medalBoard', 
+                'parentAccount', 'registrationCharges'
+            ],
             'include' => [ 
                 'school' => [ 
                     'only' => [ 'school_id', 'school_name', 'shipping_city', 'school_era' ]                     

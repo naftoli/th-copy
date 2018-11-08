@@ -224,7 +224,7 @@ unset($out);
 <DIV id="Awards" style="display: none; background-image: url(images/Camouflage-Background-Orange.png);">
 <H3><?=T_('Awards and Miles')?></H3>
 <UL>
-<!-- <LI><A HREF="admin_report_hakhel.php?mission=current" target="_blank"><?=T_('Your current Hakhel Report')?></A> -->
+<!-- 
 <!-- <LI><A HREF="admin_print_pdf.php?type=tbp_progress_report&amp;week_num=-1" target="_blank"><?=T_('Tanya Baal Peh Weekly Quota Report')?></A> -->
 <!-- <LI><A HREF="admin_print_pdf.php?type=tbp_yearly_progress" target="_blank"><?=T_('Tanya Baal Peh Yearly Progress Chart')?></A> -->
 <!-- <LI><A HREF="admin_tanya_lines_print.php" target="_blank"><?=T_('Tanya Lines')?></A> -->

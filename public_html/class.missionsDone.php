@@ -59,7 +59,7 @@ class MissionsDone {
     
     public function setMissionsDone( $missions = array(), $children = array(), $all = false ) {
     	if ( empty( $children ) ) { 
-	        $sql = "select c.class_grade, c.class_sub, u.user_id, u.user_code, u.first, u.last, su.subject_id, su.subject_name, count( mm.date_tasks_mission_id ) as total  
+	        $sql = "SELECT c.class_grade, c.class_sub, u.user_id, u.user_code, u.first, u.last, su.subject_id, su.subject_name, SUM( mm.mission_count ) as total  
 	                from date_tasks_mission_marks mm 
 	                join users u using (user_id) 
 	                join schools s using (school_id) 
@@ -110,7 +110,7 @@ class MissionsDone {
 				$this->users[$userID] = $userName;
 			}
 	    } else {
-	    	$sql = "select u.user_id, u.user_code, u.first, u.last, su.subject_id, su.subject_name, count( mm.date_tasks_mission_id ) as total  
+	    	$sql = "SELECT u.user_id, u.user_code, u.first, u.last, su.subject_id, su.subject_name, SUM( mm.mission_count ) as total  
 	                from date_tasks_mission_marks mm 
 	                join users u using (user_id) 
 	                join subjects su using (subject_id) 
@@ -166,7 +166,7 @@ class MissionsDone {
 		} while (($start += 7) < $end);
 		
     	foreach ($this->weeks as $week) {
-	        $sql = "select c.class_grade, c.class_sub, u.user_id, u.user_code, u.first, u.last, su.subject_id, su.subject_name, count( mm.date_tasks_mission_id ) as total  
+	        $sql = "SELECT c.class_grade, c.class_sub, u.user_id, u.user_code, u.first, u.last, su.subject_id, su.subject_name, SUM( mm.mission_count ) as total  
 	                from date_tasks_mission_marks mm 
 	                join users u using (user_id) 
 	                join schools s using (school_id) 

@@ -18,7 +18,7 @@ if ( $type == 'All' ) {
 }
 
 $missions = array();
-$sql = "SELECT subject_id, mark_date, COUNT( * ) AS total 
+$sql = "SELECT subject_id, mark_date, SUM(mission_count) AS total 
 		FROM user_tracks ut
 		LEFT JOIN date_tasks_mission_marks dtmm
 		USING ( user_id, subject_id ) 
@@ -96,5 +96,6 @@ foreach ( $subjects as $subject ) {
     }
 }
 
+header("Content-Type: application/json; charset=utf-8;");
 echo json_encode($info);
 ?>

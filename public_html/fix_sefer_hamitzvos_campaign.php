@@ -26,7 +26,7 @@ $new = array(
 );
 
 $correctMedals = array();
-$sql = "select user_id, count(*) as total from date_tasks_mission_marks where subject_id = 21 group by user_id";
+$sql = "SELECT user_id, SUM( mission_count ) as total from date_tasks_mission_marks where subject_id = 21 group by user_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $num = $row['total'];

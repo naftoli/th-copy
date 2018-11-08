@@ -22,7 +22,7 @@ class MissionsEarned extends Earned
 					$s = (string)$subject_id;
 				}
                 //get sum of missions earned per year per subject
-                $sql = "select count(date_tasks_mission_id) as total from date_tasks_mission_marks  
+                $sql = "select SUM( mission_count ) as total from date_tasks_mission_marks  
                         where subject_id in (" . $s . ")
                         and mark_date >= $date";
                 if (isset($this->dates[$year+1])) 

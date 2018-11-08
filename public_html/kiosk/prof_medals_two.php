@@ -153,10 +153,10 @@ function get_missions($track_level_school_type) {
 
 function get_number_of_finished_missions($user_id, $subject_id)
 {
-	$sql = "SELECT count(*) as finished_missions ";
-	$sql = $sql . "FROM date_tasks_mission_marks AS dtmm ";
-	$sql = $sql . "WHERE dtmm.user_id=" . $user_id . " ";
-	$sql = $sql . "AND dtmm.subject_id=" . $subject_id;
+	$sql = "SELECT SUM( mission_count ) as finished_missions ";
+	$sql .= "FROM date_tasks_mission_marks AS dtmm ";
+	$sql .= "WHERE dtmm.user_id=" . $user_id . " ";
+	$sql .= "AND dtmm.subject_id=" . $subject_id;
 	$query = mysql_query($sql);
 	$row = mysql_fetch_assoc($query);
 	$finished_missions = $row['finished_missions'];

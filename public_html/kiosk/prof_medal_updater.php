@@ -162,15 +162,15 @@ function get_tlses() {
 	$tlses = array();
 		
 	$sql = "SELECT dtm.track_id, dtm.level, school_type_id, start_date ";
-	$sql = $sql . " FROM date_tasks_mission_marks AS dtmm ";
-	$sql = $sql . " JOIN date_tasks_missions AS dtm USING (date_tasks_mission_id) ";
-	$sql = $sql . " JOIN user_tracks AS ut ON ( ut.user_id = dtmm.user_id 
+	$sql .= " FROM date_tasks_mission_marks AS dtmm ";
+	$sql .= " JOIN date_tasks_missions AS dtm USING (date_tasks_mission_id) ";
+	$sql .= " JOIN user_tracks AS ut ON ( ut.user_id = dtmm.user_id 
 					AND ut.subject_id = dtmm.subject_id
 					AND ut.track_id = dtm.track_id ) "; //added to stick to user defined ladder
-	$sql = $sql . " WHERE dtmm.user_id=" . $user_id . "  ";
-	$sql = $sql . " AND dtmm.subject_id=" . $subject_id . " "; 
-	$sql = $sql . " GROUP BY dtm.track_id, dtm.level, school_type_id, start_date ";
-	$sql = $sql . " ORDER BY start_date ";
+	$sql .= " WHERE dtmm.user_id=" . $user_id . "  ";
+	$sql .= " AND dtmm.subject_id=" . $subject_id . " "; 
+	$sql .= " GROUP BY dtm.track_id, dtm.level, school_type_id, start_date ";
+	$sql .= " ORDER BY start_date ";
 	echo "<input type='hidden' name='TLS' value='" . $sql . "'>\n";
 	
 	$rows = mysql_query($sql);
@@ -195,19 +195,19 @@ function get_missions($track_level_school_type) {
 	global $completed_missions;
 	
 	$sql = "SELECT distinct dtm.*, dtmm.mark_date "; //added distinct to get only mission numbers
-	$sql = $sql . " FROM date_tasks_missions AS dtm ";	
-	//$sql = $sql . " LEFT JOIN date_tasks_mission_marks AS dtmm ON dtmm.user_id=" . $user_id . " ";
-	$sql = $sql . " JOIN date_tasks_mission_marks AS dtmm ON dtmm.user_id=" . $user_id . " ";
-	$sql = $sql . " AND dtm.date_tasks_mission_id=dtmm.date_tasks_mission_id "; 
-	$sql = $sql . " JOIN date_tasks AS dt ON dtmm.date_tasks_mission_id = dt.date_tasks_mission_id "; //added to get only missions with tasks
-	$sql = $sql . " WHERE dtm.subject_id=" . $track_level_school_type->subject_id . " ";
-	$sql = $sql . " AND dtm.track_id<=" . $track_level_school_type->track_id . " ";
-	$sql = $sql . " AND dtm.level<=" . $track_level_school_type->level . " ";
-	$sql = $sql . " AND dtm.school_type_id=" . $track_level_school_type->school_type_id . " ";
-	//$sql = $sql . " AND dtm.start_date >= " . $track_level_school_type->start_date . " ";
-	//$sql = $sql . " AND dtm.start_date < " . $track_level_school_type->end_date . " ";
-	//$sql = $sql . " AND dtm.start_date <= " . $birth_date . " ";
-	$sql = $sql . " ORDER BY dtm.start_date ";	
+	$sql .= " FROM date_tasks_missions AS dtm ";	
+	//$sql .= " LEFT JOIN date_tasks_mission_marks AS dtmm ON dtmm.user_id=" . $user_id . " ";
+	$sql .= " JOIN date_tasks_mission_marks AS dtmm ON dtmm.user_id=" . $user_id . " ";
+	$sql .= " AND dtm.date_tasks_mission_id=dtmm.date_tasks_mission_id "; 
+	$sql .= " JOIN date_tasks AS dt ON dtmm.date_tasks_mission_id = dt.date_tasks_mission_id "; //added to get only missions with tasks
+	$sql .= " WHERE dtm.subject_id=" . $track_level_school_type->subject_id . " ";
+	$sql .= " AND dtm.track_id<=" . $track_level_school_type->track_id . " ";
+	$sql .= " AND dtm.level<=" . $track_level_school_type->level . " ";
+	$sql .= " AND dtm.school_type_id=" . $track_level_school_type->school_type_id . " ";
+	//$sql .= " AND dtm.start_date >= " . $track_level_school_type->start_date . " ";
+	//$sql .= " AND dtm.start_date < " . $track_level_school_type->end_date . " ";
+	//$sql .= " AND dtm.start_date <= " . $birth_date . " ";
+	$sql .= " ORDER BY dtm.start_date ";	
 	echo "<input type='hidden' name='MISSIONS' value='" . $sql . "'>\n";
 	
 	/*

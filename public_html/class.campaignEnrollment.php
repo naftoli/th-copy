@@ -34,20 +34,25 @@ class CampaignEnrollment {
         }
     }
     
-    public function setType() {
-        $sql = "SELECT * FROM users WHERE user_id = " . $this->user_id;
-        $result = mysql_query($sql);
-        $row = mysql_fetch_assoc($result);
-        $this->userInfo = $row;
-        switch ($row['school_type_id']) {
-            case 2:
-            case 3:
+    public function setType( $school_type_id = false ) {
+        if ( !$school_type_id ) {
+            $sql = "SELECT * FROM users WHERE user_id = " . $this->user_id;
+            $result = mysql_query($sql);
+            $row = mysql_fetch_assoc($result);
+            $this->userInfo = $row;
+            $school_type_id = $row['school_type_id'];
+        }
+        
+        switch ($school_type_id) {
+            case 2: case 3:
                 $this->type = 'chabad';
                 break;
-            case 12:
-            case 13:
+            case 12:    case 13:
                 $this->type = 'frum';
                 break;
+            // case 22:    case 23:
+            //     $this->type = 'ckids';
+            //     break;
             default:
                 $this->type = 'chabad';
                 break;
@@ -106,15 +111,15 @@ class CampaignEnrollment {
                 $track = 1;
             }                
             $qrys[] = "insert ignore into user_tracks
-                        set subject_id = " . $subject . ",
-                        level = " . $this->year . ",
-                        user_id = " . $this->user_id . ",
-                        track_id = " . $track . ", 
-                        enrolled = 1 
-                        on duplicate key update
-                        enrolled = 1,
-                        level = " . $this->year . ",
-                        track_id = " . $track;
+                set subject_id = " . $subject . ",
+                level = " . $this->year . ",
+                user_id = " . $this->user_id . ",
+                track_id = " . $track . ", 
+                enrolled = 1 
+                on duplicate key update
+                enrolled = 1,
+                level = " . $this->year . ",
+                track_id = " . $track;
         }
         
         $success = true;

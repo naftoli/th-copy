@@ -536,14 +536,7 @@ $role_id = $row["role_id"];
 					</li>
 
 					<ul class="list_second">
-	<!--					<li>
-							<a href="#"><?=T_('Soldier Reports')?></a>
-							<ul>
-								<li><a href="admin_stats.php<?=$url_id2?>subjects=army&amp;start_date=0&amp;cols[s]=1&amp;cols[m]=1&amp;cols[r]=1&amp;order_by=.r&amp;registered_only=1&amp;report_type=rank&amp;view=1"><?=T_('Base Rank Report')?></a></li>
-								<li><a href="admin_stats.php<?=$url_id2?>subjects=army&amp;start_date=0&amp;cols[s]=1&amp;cols[m]=1&amp;cols[r]=1&amp;order_by=cr&amp;report_type=rank_class&amp;view=1"><?=T_('Platoon Rank Report')?></a></li>
-							</ul>
-						</li>
-	-->						
+
 						<li><a href="names_report.php">Birthday Report</a></li>
 						
 						<li><a href="find_birthdays_report.php">Birthdays By Date Range</a></li>
@@ -583,32 +576,7 @@ $role_id = $row["role_id"];
                         <li><a href="stickers_report_by_week.php"><?=T_('Stickers Report By Date')?></a></li>
                         
                         <li><a href="rank_report.php"><?=T_('Rank Report')?></a></li>                        
-						
-						<!--
-						<li>
-							<a href="#"><?=T_('Mileage')?></a>
-							<ul>
-								<li><a href="admin_stats.php<?=$url_id2?>subjects=all&amp;start_date=<?=chaiElul()?>&amp;cols[p]=1&amp;cols[y]=1&amp;cols[u]=1&amp;cols[w]=1&amp;order_by=.y&amp;registered_only=1&amp;report_type=points&amp;view=1"><?=T_('Base Mileage Report')?></a></li>
-								<li><a href="admin_stats.php<?=$url_id2?>subjects=all&amp;start_date=<?=chaiElul()?>&amp;cols[p]=1&amp;cols[y]=1&amp;cols[u]=1&amp;cols[w]=1&amp;order_by=cy&amp;report_type=points_class&amp;view=1"><?=T_('Platoon Mileage Report')?></a></li>
-							</ul>
-						</li>
-						
-						<li>
-							<a href="#"><?=T_('Medal/Rank')?></a>
-							<ul>
-								<li><a href="admin_medal_report.php<?=$url_id?>"><?=T_('Medal Report')?></a></li>
-								<li><a href="admin_rank_report.php<?=$url_id?>"><?=T_('Rank Report')?></a></li>
-							</ul>
-						</li>
-                   
-						<li>
-							<a href="#"><?=T_('Create')?></a>
-							<ul>
-								<li><a href="admin_stats.php<?=$url_id?>"><?=T_('Create your own Stats Report')?></a></li>
-							<li><a href="admin_mission_report.php<?=$url_id?>"><?=T_('Mission Report')?></a></li>
-							</ul>
-						</li>
-                        -->
+
 					</ul>
 				
 					<li class="list_parent<?=isset($ui_type) && $ui_type == 'info' ? ' current' : ''?>">

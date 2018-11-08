@@ -150,7 +150,7 @@ class user_track {
 	
 	function get_completed_missions()
 	{
-		$sql = "SELECT count(*) AS completed_missions ";
+		$sql = "SELECT SUM( mission_count ) AS completed_missions ";
 		$sql = $sql . "FROM user_tracks AS ut ";
 		$sql = $sql . "JOIN date_tasks_mission_marks AS dtmm ON (dtmm.user_id=" . $this->user_id . " AND dtmm.subject_id=" . $this->subject_id . ") ";
 		$sql = $sql . "WHERE ut.user_id=" . $this->user_id . " ";

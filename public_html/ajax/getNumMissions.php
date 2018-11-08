@@ -1,9 +1,10 @@
 <?
+// ! Used in add_missions.php. TODO delete
 require '../db.php';
 $user = $_POST['user_id'];
 $subject = $_POST['subject_id'];
 
-$sql = "SELECT COUNT( * ) AS total
+$sql = "SELECT SUM( mission_count ) AS total
 		from date_tasks_mission_marks  
 		WHERE user_id = $user 
 		and subject_id = $subject";

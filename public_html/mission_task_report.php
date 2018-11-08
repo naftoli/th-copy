@@ -48,7 +48,7 @@ if (isset($_GET['id'])) {
         $row = mysql_fetch_assoc($result);
         $info[$student['user_id']]['tasks'] = $row['tasks'];
         
-        $sql = "select count(*) as missions from date_tasks_mission_marks 
+        $sql = "SELECT SUM( mission_count ) as missions from date_tasks_mission_marks 
                 where mark_date >= " . $start . "
                 and mark_date <= " . $end . "
                 and user_id = " . $student['user_id'];

@@ -22,7 +22,7 @@ require('header.php');
 <?
 include_once('db.php');
 
-$sql = "SELECT s.subject_name, COUNT( dtmm.date_tasks_mission_id ) 
+$sql = "SELECT s.subject_name, SUM( dtmm.mission_count )
 	FROM  `date_tasks_mission_marks` AS dtmm, subjects AS s, date_tasks_missions AS dtm
 	WHERE dtm.start_date >2455437
 	AND s.subject_id = dtmm.subject_id

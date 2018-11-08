@@ -177,12 +177,12 @@ function get_tlses() {
 
 	$tlses = array();
 
-	$sql = "SELECT track_id, level, school_type_id, start_date ";
-	$sql = $sql . " FROM date_tasks_mission_marks AS dtmm ";
-	$sql = $sql . " JOIN date_tasks_missions AS dtm USING (date_tasks_mission_id) ";
-	$sql = $sql . " WHERE dtmm.user_id=" . $user_id . "  ";
-	$sql = $sql . " AND dtmm.subject_id=" . $subject_id . " ";
-	$sql = $sql . " ORDER BY start_date ";
+	$sql  = "SELECT track_id, level, school_type_id, start_date ";
+	$sql .= " FROM date_tasks_mission_marks AS dtmm ";
+	$sql .= " JOIN date_tasks_missions AS dtm USING (date_tasks_mission_id) ";
+	$sql .= " WHERE dtmm.user_id=" . $user_id . "  ";
+	$sql .= " AND dtmm.subject_id=" . $subject_id . " ";
+	$sql .= " ORDER BY start_date ";
 	$rows = mysql_query($sql);
 	while ($row = mysql_fetch_assoc($rows)) {
 		$tls = new tls($user_id, $subject_id, $row['track_id'], $row['level'], $row['school_type_id'], $row['start_date']);
@@ -205,17 +205,17 @@ function get_missions($track_level_school_type) {
 	global $completed_missions;
 
 	$sql = "SELECT dtm.*, dtmm.mark_date ";
-	$sql = $sql . " FROM date_tasks_missions AS dtm ";
-	$sql = $sql . " LEFT JOIN date_tasks_mission_marks AS dtmm ON dtmm.user_id=" . $user_id . " ";
-	$sql = $sql . " AND dtm.date_tasks_mission_id=dtmm.date_tasks_mission_id ";
-	$sql = $sql . " WHERE dtm.subject_id=" . $track_level_school_type->subject_id . " ";
-	$sql = $sql . " AND dtm.track_id=" . $track_level_school_type->track_id . " ";
-	$sql = $sql . " AND dtm.level=" . $track_level_school_type->level . " ";
-	$sql = $sql . " AND dtm.school_type_id=" . $track_level_school_type->school_type_id . " ";
-	$sql = $sql . " AND dtm.start_date >= " . $track_level_school_type->start_date . " ";
-	$sql = $sql . " AND dtm.start_date < " . $track_level_school_type->end_date . " ";
-	$sql = $sql . " AND dtm.start_date <= " . $birth_date . " ";
-	$sql = $sql . " ORDER BY dtm.start_date ";
+	$sql .= " FROM date_tasks_missions AS dtm ";
+	$sql .= " LEFT JOIN date_tasks_mission_marks AS dtmm ON dtmm.user_id=" . $user_id . " ";
+	$sql .= " AND dtm.date_tasks_mission_id=dtmm.date_tasks_mission_id ";
+	$sql .= " WHERE dtm.subject_id=" . $track_level_school_type->subject_id . " ";
+	$sql .= " AND dtm.track_id=" . $track_level_school_type->track_id . " ";
+	$sql .= " AND dtm.level=" . $track_level_school_type->level . " ";
+	$sql .= " AND dtm.school_type_id=" . $track_level_school_type->school_type_id . " ";
+	$sql .= " AND dtm.start_date >= " . $track_level_school_type->start_date . " ";
+	$sql .= " AND dtm.start_date < " . $track_level_school_type->end_date . " ";
+	$sql .= " AND dtm.start_date <= " . $birth_date . " ";
+	$sql .= " ORDER BY dtm.start_date ";
 
 	$rows = mysql_query($sql);
 	while ($row = mysql_fetch_assoc($rows)) {
