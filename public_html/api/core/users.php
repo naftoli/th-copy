@@ -47,7 +47,8 @@ class UsersRouter {
             $user = Soldier::find( $id );
             if ( !$user->validateAccess( $current_user->login ) )
                 json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-65', 401 );
-            json_response( $user ); // ! do not add true true here as PHP cannot handle the barcode as a number
+            // ! do not add true true here as PHP cannot handle the barcode as a number
+            json_response( $user->fullDetailSerialize() );
         } catch ( Exception $e ) {
             json_error( 'Soldier does not exist', 'CORE-USERS-69', 404 );
         }
@@ -110,7 +111,7 @@ class UsersRouter {
             }
         }
 
-        json_response( $user );
+        json_response( $user->fullDetailSerialize() );
     }
 
     public function destroy( $id ) {

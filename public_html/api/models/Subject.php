@@ -7,6 +7,16 @@ class Subject extends ActiveRecord\Model implements JsonSerializable {
 
     private $achievement_tasks = [];
 
+    // * get the name for the campaign
+    public function name() {
+        if ( $this->subject_id == 1 ) 
+            return "תהילים";
+        else if ( $this->subject_id == 27 ) 
+            return "תניא";
+        return $this->subject_name;
+    }
+
+    // * logoPath
     public function logoPath() {
         if ( $this->subject_logo )
             return '/mobile/img_new/campaign-logos-bw/'.$this->subject_logo;
@@ -15,6 +25,7 @@ class Subject extends ActiveRecord\Model implements JsonSerializable {
         return '/mobile/img_new/campaign-logos-bw/Footsteps.gif';
     }
 
+    // * get the achivement tasks that are tied to this campaign
     public function getAchievementTasks( $login ) {
         $inst_id = 2; // default institution id.
         $base_filter = 'base = 1 ';
