@@ -84,7 +84,7 @@ $toKeep = array();
 $toDelete = array();
 
 foreach ($users as $user) { 
-	$sql = "SELECT subject_id, subject_name, mission_name, mark_date, COUNT(*) AS total
+	$sql = "SELECT subject_id, subject_name, mission_name, mark_date, SUM( mission_count ) AS total
 			FROM date_tasks_mission_marks  
 			JOIN users USING (user_id) 
 			JOIN subjects USING (subject_id) 

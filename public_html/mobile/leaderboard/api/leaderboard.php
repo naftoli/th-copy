@@ -29,7 +29,7 @@ $leaderboard_sql =
      " SELECT user_id, first, last, rank, medal_count, mission_count FROM users u "
     ." JOIN (SELECT user_id, MAX(rank_ord) AS rank, date_promoted FROM rank_marks GROUP BY user_id) rm USING (user_id) "
     ." JOIN (SELECT user_id, COUNT(*) AS medal_count FROM medal_marks GROUP BY user_id) mm USING (user_id) "
-    ." JOIN (SELECT user_id, COUNT(*) AS mission_count FROM date_tasks_mission_marks GROUP BY user_id) dtmm USING (user_id) "
+    ." JOIN (SELECT user_id, SUM( mission_count ) AS mission_count FROM date_tasks_mission_marks GROUP BY user_id) dtmm USING (user_id) "
     ." WHERE u.user_registered IS NOT NULL ";
 if ( $gender )
     $leaderboard_sql .= " AND u.gender = '$gender' ";

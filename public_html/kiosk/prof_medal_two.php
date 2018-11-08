@@ -66,12 +66,12 @@ $last_medal = $_POST['last_medal'];
 
 // ***** START DATE ***** //
 $sql = "SELECT dtm.date_tasks_mission_id, dtm.start_date ";
-$sql = $sql . "FROM date_tasks_mission_marks AS dtmm ";
-$sql = $sql . "JOIN date_tasks_missions AS dtm ON (dtmm.date_tasks_mission_id=dtm.date_tasks_mission_id) ";
-$sql = $sql . "WHERE dtmm.user_id=" . $user->user_id . "  ";
-$sql = $sql . "AND dtmm.subject_id=" . $subject_id . " "; 
-$sql = $sql . "ORDER BY dtm.start_date ASC ";
-$sql = $sql . "LIMIT 1";
+$sql .= "FROM date_tasks_mission_marks AS dtmm ";
+$sql .= "JOIN date_tasks_missions AS dtm ON (dtmm.date_tasks_mission_id=dtm.date_tasks_mission_id) ";
+$sql .= "WHERE dtmm.user_id=" . $user->user_id . "  ";
+$sql .= "AND dtmm.subject_id=" . $subject_id . " "; 
+$sql .= "ORDER BY dtm.start_date ASC ";
+$sql .= "LIMIT 1";
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
 $start_date = $row['start_date'];
@@ -82,11 +82,11 @@ $date_tasks_mission_id = $row['date_tasks_mission_id'];
 // ***** COMPLETED MISSIONS ***** //
 $completed_missions = array();
 $sql = "SELECT dtm.* ";
-$sql = $sql . "FROM date_tasks_mission_marks AS dtmm ";
-$sql = $sql . "JOIN date_tasks_missions AS dtm USING (date_tasks_mission_id) ";
-$sql = $sql . "WHERE dtmm.user_id=" . $user->user_id . " ";
-$sql = $sql . "AND dtmm.subject_id=" . $subject_id . " ";
-$sql = $sql . "ORDER BY dtm.start_date ";
+$sql .= "FROM date_tasks_mission_marks AS dtmm ";
+$sql .= "JOIN date_tasks_missions AS dtm USING (date_tasks_mission_id) ";
+$sql .= "WHERE dtmm.user_id=" . $user->user_id . " ";
+$sql .= "AND dtmm.subject_id=" . $subject_id . " ";
+$sql .= "ORDER BY dtm.start_date ";
 $query = mysql_query($sql);
 $row_num = 0;
 while ($row = mysql_fetch_assoc($query))

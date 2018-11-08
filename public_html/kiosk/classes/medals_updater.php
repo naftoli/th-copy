@@ -37,16 +37,16 @@ function get_tlses($subject_id) {
 	
 	$tlses = array();
 	
-	$sql = "SELECT dtm.track_id, dtm.level, school_type_id, start_date ";
-	$sql = $sql . " FROM date_tasks_mission_marks AS dtmm ";
-	$sql = $sql . " JOIN date_tasks_missions AS dtm USING (date_tasks_mission_id) ";
-	$sql = $sql . " JOIN user_tracks AS ut ON ( ut.user_id = dtmm.user_id
+	$sql  = "SELECT dtm.track_id, dtm.level, school_type_id, start_date ";
+	$sql .= " FROM date_tasks_mission_marks AS dtmm ";
+	$sql .= " JOIN date_tasks_missions AS dtm USING (date_tasks_mission_id) ";
+	$sql .= " JOIN user_tracks AS ut ON ( ut.user_id = dtmm.user_id
 					AND ut.subject_id = dtmm.subject_id
 					AND ut.track_id = dtm.track_id ) "; //added to stick to user defined ladder
-	$sql = $sql . " WHERE dtmm.user_id=" . $user_id . "  ";
-	$sql = $sql . " AND dtmm.subject_id=" . $subject_id . " "; 
-	$sql = $sql . " GROUP BY dtm.track_id, dtm.level, school_type_id, start_date ";
-	$sql = $sql . " ORDER BY start_date ";
+	$sql .= " WHERE dtmm.user_id=" . $user_id . "  ";
+	$sql .= " AND dtmm.subject_id=" . $subject_id . " "; 
+	$sql .= " GROUP BY dtm.track_id, dtm.level, school_type_id, start_date ";
+	$sql .= " ORDER BY start_date ";
 		
 	$rows = mysql_query($sql);
 	while ($row = mysql_fetch_assoc($rows)) {
@@ -111,11 +111,11 @@ function get_missions($track_level_school_type) {
 	
 	$mission_count = 0;
 	
-	$sql = "SELECT * ";
-	$sql = $sql . " FROM date_tasks_missions AS dtm ";	
-	$sql = $sql . " WHERE dtm.subject_id=" . $track_level_school_type->subject_id . " ";
-	$sql = $sql . " AND dtm.school_type_id=" . $track_level_school_type->school_type_id . " ";	
-	$sql = $sql . " ORDER BY dtm.start_date ";	
+	$sql  = "SELECT * ";
+	$sql .= " FROM date_tasks_missions AS dtm ";	
+	$sql .= " WHERE dtm.subject_id=" . $track_level_school_type->subject_id . " ";
+	$sql .= " AND dtm.school_type_id=" . $track_level_school_type->school_type_id . " ";	
+	$sql .= " ORDER BY dtm.start_date ";	
 	
 	$rows = mysql_query($sql);
 	$mission_count = mysql_num_rows($rows);
@@ -124,7 +124,7 @@ function get_missions($track_level_school_type) {
 
 function get_number_of_finished_missions($user_id, $subject_id)
 {
-	$sql = "SELECT count( * ) AS finished_missions
+	$sql = "SELECT SUM( mission_count ) AS finished_missions
 			FROM date_tasks_mission_marks AS dtmm
 			JOIN date_tasks_missions AS dtm
 			USING ( date_tasks_mission_id ) 

@@ -206,7 +206,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $marks_query = $MASHPIA_DB->query(
             'SELECT subject_id, subject_name, IFNULL( earned, 0 ) as earned '
             .'FROM subjects LEFT JOIN ('
-                .'SELECT subject_id, COUNT(*) AS earned FROM date_tasks_mission_marks '
+                .'SELECT subject_id, SUM( mission_count ) AS earned FROM date_tasks_mission_marks '
                 .'WHERE user_id = '. $this->user_id .' GROUP BY subject_id '
             .') as marks USING (subject_id) '
             .'WHERE subject_id IN (' . $subject_ids . ') '

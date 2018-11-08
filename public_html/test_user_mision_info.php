@@ -17,7 +17,7 @@ if ( $type == 'All' ) {
 }
 
 $missions = array();
-$sql = "select subject_id, count(*) as total from date_tasks_mission_marks where user_id = " . $user . " group by subject_id";
+$sql = "SELECT subject_id, SUM( mission_count ) as total from date_tasks_mission_marks where user_id = " . $user . " group by subject_id";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $subject = $row['subject_id'];

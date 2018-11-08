@@ -11,7 +11,7 @@ if ( $type == 'All' ) {
 }
 
 $missions = array();
-$sql = "SELECT subject_id, COUNT( * ) AS total
+$sql = "SELECT subject_id, SUM( mission_count ) AS total
 		FROM user_tracks ut
 		LEFT JOIN date_tasks_mission_marks dtmm
 		USING ( user_id, subject_id ) 

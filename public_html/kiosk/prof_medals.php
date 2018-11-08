@@ -55,19 +55,6 @@ function get_tlses($subject_id) {
 	global $user_id;
 	
 	$tlses = array();
-	/*
-	$sql = "SELECT ut.track_id, ut.level, school_type_id, start_date ";
-	$sql = $sql . " FROM date_tasks_mission_marks AS dtmm ";
-	$sql = $sql . " JOIN date_tasks_missions AS dtm USING (date_tasks_mission_id) ";
-	$sql = $sql . " JOIN user_tracks AS ut ON ( ut.user_id = dtmm.user_id
-					AND ut.level = dtm.level
-					AND ut.subject_id = dtmm.subject_id
-					AND ut.track_id = dtm.track_id ) "; //added to stick to user defined ladder
-	$sql = $sql . " WHERE dtmm.user_id=" . $user_id . "  ";
-	$sql = $sql . " AND dtmm.subject_id=" . $subject_id . " "; 
-	$sql = $sql . " GROUP BY ut.track_id, ut.level, school_type_id, start_date ";
-	$sql = $sql . " ORDER BY start_date ";
-	*/
 	
 	$sql = "SELECT dtm.track_id, dtm.level, school_type_id, start_date ";
 	$sql = $sql . " FROM date_tasks_mission_marks AS dtmm ";
@@ -167,22 +154,12 @@ function get_missions($track_level_school_type) {
 
 function get_number_of_finished_missions($user_id, $subject_id)
 {
-	/*
-	$sql = "SELECT count(*) as finished_missions ";
-	$sql = $sql . "FROM date_tasks_mission_marks AS dtmm, ";
-	$sql = $sql . "user_tracks as ut ";
-	$sql = $sql . "WHERE dtmm.user_id = ut.user_id ";
-	$sql = $sql . "AND dtmm.subject_id = ut.subject_id ";
-	$sql = $sql . "AND ut.enrolled = 1 ";
-	$sql = $sql . "AND dtmm.user_id=" . $user_id . " ";
-	$sql = $sql . "AND dtmm.subject_id=" . $subject_id;
-	*/
 	//update completed missions
 	//require_once("../classes/mission_marks_updater.php");
 	//$mission_marks_updater = new mission_marks_updater();
 	//$mission_marks_updater->check_missions_by_subject($user_id, $subject_id);
 	
-	$sql = "SELECT count( * ) AS finished_missions
+	$sql = "SELECT SUM( mission_count ) AS finished_missions
 			FROM date_tasks_mission_marks AS dtmm
 			LEFT JOIN date_tasks_missions AS dtm
 			USING ( date_tasks_mission_id ) 

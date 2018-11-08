@@ -24,7 +24,7 @@ while ($row = mysql_fetch_assoc( $result )) {
 }
 // get the missions
 $missions = array();
-$sql = "SELECT subject_id, COUNT( * ) AS total
+$sql = "SELECT subject_id, SUM( mission_count ) AS total
 		FROM date_tasks_mission_marks 
 		WHERE user_id = $user 
 		GROUP BY subject_id";

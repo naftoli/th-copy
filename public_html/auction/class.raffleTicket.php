@@ -24,44 +24,8 @@ class RaffleTicket {
 	
 	public function calculateTickets() {
 		$userTickets = array();
-		//require_once '../class.missionSheet.php';
-		//$m = new MissionSheet;
 		foreach ( $this->users as $user ) {
-			/*
-			$sql = "select count(date_task_id) as total  
-                    from date_tasks_marks 
-                    join date_tasks dt using (date_task_id) 
-                    join date_tasks_missions dtm using (date_tasks_mission_id) 
-                    where user_id = " . $user . " 
-                    and dtm.start_date >= " . $this->start . "  
-                    and dtm.end_date <= " . $this->end;
-			*/
-			/*
-			$sql = "select date_task_id   
-                    from date_tasks_marks 
-                    where user_id = " . $user . " 
-                    and mark_date >= " . $this->start . "  
-                    and mark_date <= " . $this->end . " limit 1";
-			$result = mysql_query( $sql );
-			if ( mysql_num_rows( $result ) ) {
-				//$row = mysql_fetch_assoc( $result );
-				//$total = (int) ceil( $row['total'] / 7 ) ;
-				//$total = $row['total'];
-				//if ( $total > 5 ) $total = 5; //limit child to 5 tickets
-				//for ( $i = 0; $i < $total; $i++ ) {
-					$userTickets[] = $user;
-				//}
-			}
-			*/
-			/*
-			foreach ( $this->reports as $report ) {
-				if ( $m->marked( $user, $report ) ) {
-					$userTickets[] = $user;
-				}
-			}
-			 * 
-			 */
-			$sql = "select count(*) as total from date_tasks_mission_marks
+			$sql = "select SUM( mission_count ) as total from date_tasks_mission_marks
 					where mark_date >= " . $this->start . "
 					and mark_date <= " . $this->end . "
 					and user_id = " . $user;

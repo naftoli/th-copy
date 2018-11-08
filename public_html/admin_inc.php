@@ -179,7 +179,7 @@ if (!isset($menu_type))
 			<LI><A HREF="admin_users_register.php<?=$url_id?>"><?=T_("Soldiers' Registration")?></A>
 			<LI><A HREF="admin_users_subject.php<?=$url_id?>"><?=T_("Soldiers' Program Enrollment")?></A>
 			<LI><BR>
-		<!--<LI><A HREF="admin_report_hakhel.php<?=$url_id?>"><?=T_("Soldiers Hakhel Report")?></A>
+		<!--
 			<LI><A HREF="admin_report_wwtc.php<?=$url_id?>"><?=T_("Soldiers WWTC Report")?></A>
 			<LI><A HREF="admin_report_auction.php<?=$url_id?>"><?=T_("Soldiers Auction Report")?></A>
 			<LI><BR>

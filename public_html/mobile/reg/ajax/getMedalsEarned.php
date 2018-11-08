@@ -12,7 +12,7 @@ while ($row = mysql_fetch_assoc( $result )) {
 }
 $info['medals'] = $medals;
 
-$sql = "select count(*) as total from date_tasks_mission_marks where user_id = " . $user_id . " and subject_id = " . $subject;
+$sql = "SELECT SUM( mission_count ) as total from date_tasks_mission_marks where user_id = " . $user_id . " and subject_id = " . $subject;
 $result = mysql_query($sql);
 $row = mysql_fetch_assoc($result);
 $info['total'] = $row['total'];

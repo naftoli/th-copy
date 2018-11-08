@@ -65,18 +65,18 @@ class user_track
 	
 		$today = gregoriantojd(date("n"), date("j"), date("Y"));
 		
-		$sql = "SELECT dtm.* ";
-		$sql = $sql . "FROM date_tasks_missions AS dtm ";
-		$sql = $sql . "LEFT JOIN date_tasks_mission_marks as dtmm ON (dtm.date_tasks_mission_id = dtmm.date_tasks_mission_id and dtmm.user_id = " . $this->user_id . ") ";
-		//$sql = $sql . "join date_tasks as dt on (dt.date_tasks_mission_id = dtm.date_tasks_mission_id) "; //added in order not to get missions that only have bonus tasks
-		$sql = $sql . "WHERE dtm.school_type_id=" . $this->school_type_id . " ";
-		$sql = $sql . "AND dtm.subject_id=" . $this->subject_id . " ";
-		$sql = $sql . "AND dtm.track_id=" . $this->track_id . " ";
-		$sql = $sql . "AND dtm.level=" . $this->level . " ";
-		$sql = $sql . "AND dtm.start_date < " . $today . " ";
-		$sql = $sql . "AND dtmm.date_tasks_mission_id is null ";
-		//$sql = $sql . "AND dt.mandatory_qty = 1 "; //added in order not to get missions that only have bonus tasks
-		$sql = $sql . "ORDER BY dtm.mission_number";
+		$sql  = "SELECT dtm.* ";
+		$sql .= "FROM date_tasks_missions AS dtm ";
+		$sql .= "LEFT JOIN date_tasks_mission_marks as dtmm ON (dtm.date_tasks_mission_id = dtmm.date_tasks_mission_id and dtmm.user_id = " . $this->user_id . ") ";
+		//$sql .= "join date_tasks as dt on (dt.date_tasks_mission_id = dtm.date_tasks_mission_id) "; //added in order not to get missions that only have bonus tasks
+		$sql .= "WHERE dtm.school_type_id=" . $this->school_type_id . " ";
+		$sql .= "AND dtm.subject_id=" . $this->subject_id . " ";
+		$sql .= "AND dtm.track_id=" . $this->track_id . " ";
+		$sql .= "AND dtm.level=" . $this->level . " ";
+		$sql .= "AND dtm.start_date < " . $today . " ";
+		$sql .= "AND dtmm.date_tasks_mission_id is null ";
+		//$sql .= "AND dt.mandatory_qty = 1 "; //added in order not to get missions that only have bonus tasks
+		$sql .= "ORDER BY dtm.mission_number";
 		//echo "<input type='hidden' name='updater' value='" . $sql . "'>";
 		//exit;
 		$query = mysql_query($sql);		
@@ -267,12 +267,12 @@ class user_track
 	
 	function get_completed_missions()
 	{
-		$sql = "SELECT count(*) AS completed_missions ";
-		$sql = $sql . "FROM user_tracks AS ut ";
-		$sql = $sql . "JOIN date_tasks_mission_marks AS dtmm ON (dtmm.user_id=" . $this->user_id . " AND dtmm.subject_id=" . $this->subject_id . ") ";
-		$sql = $sql . "WHERE ut.user_id=" . $this->user_id . " ";
-		$sql = $sql . "AND ut.subject_id=" . $this->subject_id . " ";
-		$sql = $sql . "GROUP BY ut.user_id, ut.subject_id  ";
+		$sql  = "SELECT SUM( mission_count ) AS completed_missions ";
+		$sql .= "FROM user_tracks AS ut ";
+		$sql .= "JOIN date_tasks_mission_marks AS dtmm ON (dtmm.user_id=" . $this->user_id . " AND dtmm.subject_id=" . $this->subject_id . ") ";
+		$sql .= "WHERE ut.user_id=" . $this->user_id . " ";
+		$sql .= "AND ut.subject_id=" . $this->subject_id . " ";
+		$sql .= "GROUP BY ut.user_id, ut.subject_id  ";
 		
 		$query = mysql_query($sql);
 		$row = mysql_fetch_assoc($query);

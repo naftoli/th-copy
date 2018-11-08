@@ -4,7 +4,7 @@ class medal_updater {
 	function update_medal_two( $user_id ) {
 		$user_id = intval( $user_id );
 		// ***** Get the number of finished missions ***** //
-		$sql1 = "SELECT s.subject_id, u.user_id, s.subject_name, COUNT(*) AS finished_missions ";
+		$sql1 = "SELECT s.subject_id, u.user_id, s.subject_name, SUM( mission_count ) AS finished_missions ";
 		$sql1 .= "FROM users AS u ";
 		$sql1 .= "JOIN user_tracks AS ut USING (user_id) ";
 		$sql1 .= "JOIN date_tasks_mission_marks AS dtmm ON (u.user_id=dtmm.user_id AND ut.subject_id=dtmm.subject_id)  ";

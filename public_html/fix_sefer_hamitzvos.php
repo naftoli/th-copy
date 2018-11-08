@@ -29,7 +29,7 @@ while ($row = mysql_fetch_assoc($result)) {
 //find out how many missions user completed
 $missions = array();
 foreach ($users as $id) {
-	$sql = "select count(dtmm.date_tasks_mission_id) as total from date_tasks_mission_marks dtmm 
+	$sql = "select SUM( dtmm.mission_count ) as total from date_tasks_mission_marks dtmm 
 			join users u using (user_id) 
 			where dtmm.subject_id = 21 
 			and u.user_id = " . $id;
