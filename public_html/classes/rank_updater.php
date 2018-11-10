@@ -4,9 +4,9 @@ class rank_updater {
 	function update_rank_two($user_id, $debug = false) {
 		$response = false;
 		// ***** Get the number of medals aquired ***** //
-		$sql1 = "SELECT u.user_id, count(*) AS medals_aquired ";
+		$sql1 = "SELECT u.user_id, COUNT( medal_ord ) AS medals_aquired ";
 		$sql1 = $sql1 . "FROM users AS u ";
-		$sql1 = $sql1 . "JOIN medal_marks AS mm USING (user_id) ";
+		$sql1 = $sql1 . "LEFT JOIN medal_marks AS mm USING (user_id) ";
 
 		if ($user_id > 0)
 			$sql1 = $sql1 . "WHERE user_id=" . $user_id . " ";

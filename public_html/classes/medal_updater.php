@@ -5,10 +5,10 @@ class medal_updater {
 		$user_id = intval( $user_id );
 		$response = false;
 		// ***** Get the number of finished missions ***** //
-		$sql1  = "SELECT s.subject_id, u.user_id, s.subject_name, SUM( mission_count ) AS finished_missions ";
+		$sql1  = "SELECT s.subject_id, u.user_id, s.subject_name, IFNULL( SUM(mission_count), 0) AS finished_missions ";
 		$sql1 .= "FROM users AS u ";
 		$sql1 .= "JOIN user_tracks AS ut USING (user_id) ";
-		$sql1 .= "JOIN date_tasks_mission_marks AS dtmm ON (u.user_id=dtmm.user_id AND ut.subject_id=dtmm.subject_id) ";
+		$sql1 .= "LEFT JOIN date_tasks_mission_marks AS dtmm ON (u.user_id=dtmm.user_id AND ut.subject_id=dtmm.subject_id) ";
 		$sql1 .= "JOIN subjects AS s ON (ut.subject_id=s.subject_id) ";
 		$sql1 .= "WHERE u.school_id > 0 ";
 		$sql1 .= "AND u.school_type_id > 0 ";
@@ -21,7 +21,7 @@ class medal_updater {
 		// ***** Get the number of finished missions ***** //
 		
 		//if ($row1) {
-		while ($row1 = mysql_fetch_assoc($query1)) {
+		while ($row1 = mysql_fetch_assoc( $query1 )) {
 			$finished_missions = $row1['finished_missions'];
 			// ***** Get the number of medals required to achieve medal mark ***** //
 			$missions_required = 0;

@@ -185,6 +185,7 @@ class UsersRouter {
             'errors' => $errors,
             'updated' => $updated,
             'medalBoard' => $soldier->medalBoard(),
+            'rankBoard' => $soldier->rankBoard(),
         ]);
     }
 }
