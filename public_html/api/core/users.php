@@ -168,14 +168,13 @@ class UsersRouter {
 
     public function updateMissions() {
         $updated = 0;   $errors = [];
-        $ids = [];
         $soldier = Soldier::find( $_POST['user_id'] );
         // go through all the updates and update each subject
         foreach( $_POST['subjects'] as $update ) {
             $subject = Subject::find( $update[ 'subject_id' ] );
             // try to update the missions
             try {
-                $ids[] = $subject->setMissions( $soldier->user_id, $update[ 'missions' ] );
+                $subject->setMissions( $soldier->user_id, $update[ 'missions' ] );
                 $updated += 1;
             } catch ( Exception $e ) {
                 $errors[] = $e->getMessage();
@@ -183,7 +182,6 @@ class UsersRouter {
         }
         // update the missions
         json_response([
-            'ids' => $ids,
             'errors' => $errors,
             'updated' => $updated,
             'medalBoard' => $soldier->medalBoard(),
