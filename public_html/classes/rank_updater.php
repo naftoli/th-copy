@@ -2,37 +2,34 @@
 class rank_updater {
 	
 	function update_rank_two($user_id, $debug = false) {
+		$response = false;
 		// ***** Get the number of medals aquired ***** //
 		$sql1 = "SELECT u.user_id, count(*) AS medals_aquired ";
 		$sql1 = $sql1 . "FROM users AS u ";
 		$sql1 = $sql1 . "JOIN medal_marks AS mm USING (user_id) ";
-		if ($user_id > 0) {
+
+		if ($user_id > 0)
 			$sql1 = $sql1 . "WHERE user_id=" . $user_id . " ";
-		}
+
 		$sql1 = $sql1 . "GROUP BY u.user_id ";
-		if ($debug) {
-			echo $sql1 . "<br />";
-		}
 		$query1 = mysql_query($sql1);
+
 		// ***** Get the number of medals aquired ***** //
-		
 		while ($row1 = mysql_fetch_assoc($query1)) {
 			$medals_aquired = $row1['medals_aquired'];
 					
 			// ***** Get the number of medals required for each rank ***** //
 			$sql2 = "SELECT * FROM ranks ORDER BY rank_ord";
-			if ($debug) {
-				echo $sql2 . "<br />";
-			}
 			$query2 = mysql_query($sql2);
+
 			while ($row2 = mysql_fetch_assoc($query2)) {
 				$rank_ord = $row2['rank_ord'];
 				$medals_required = $row2['medals_required'];
 					
 				// ***** If the number of medals required has been reached the add the rank ***** //
 				if ($medals_aquired >= $medals_required) {
+					
 					$sql3 = "SELECT count(*) AS rank_exists FROM rank_marks WHERE rank_ord=" . $rank_ord . " AND user_id=" . $user_id;
-					if ($debug) echo $sql3 . "<br />";
 					$query3 = mysql_query($sql3);
 					$row3 = mysql_fetch_assoc($query3);
 						
@@ -48,7 +45,7 @@ class rank_updater {
 						
 						$this->updateWP($rank_ord, $user_id);
 						
-						return ['rank_ord' => $rank_ord ];
+						$response = ['rank_ord' => $rank_ord ];
 					}
 				}
 				// ***** If the number of medals required has NOT been reached the delete the rank ***** //
@@ -60,7 +57,7 @@ class rank_updater {
 			}
 			// ***** Get the number of medals required for each rank ***** //
 		}
-			
+		return $response;
 	}
 
 	function updateWP( $rank, $user ) {

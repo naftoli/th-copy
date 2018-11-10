@@ -1,6 +1,8 @@
 <?php
-
 include_once( __DIR__ . '/traits/BuildModel.php' );
+// ! Legacy Code!!
+require_once( API_ROOT . '/../classes/rank_updater.php' );
+require_once( API_ROOT . '/../classes/medal_updater.php' );
 
 class Subject extends ActiveRecord\Model implements JsonSerializable {
     use \traits\BuildModel;
@@ -28,27 +30,31 @@ class Subject extends ActiveRecord\Model implements JsonSerializable {
     // * setMissions - update the missions for the given user
     // TODO: update his medals/ranks
     public function setMissions( $user_id, $missions ) {
-        $remove_negative_query = $MASHPIA_DB->prepare(
+        global $MASHPIA_DB;
+        // remove all previous manual changes
+        $remove_previous_query = $MASHPIA_DB->prepare(
              'DELETE FROM date_tasks_mission_marks WHERE user_id = :user_id '
-            .'AND date_tasks_mission_id = :mission_id AND mission_count < 1;'
+            .'AND date_tasks_mission_id = :mission_id;'
         );
+        // insert the new change into the dbs
         $insert_query = $MASHPIA_DB->prepare(
             'INSERT INTO date_tasks_mission_marks SET '
                 .'date_tasks_mission_id = :mission_id, '
                 .'user_id = :user_id, subject_id = :subject_id, '
-                .'mission_count = :count, mark_date = :date;'
+                .'mission_value = :count, mission_count = :count, '
+                .'mark_date = :date;'
         );
-
+        // get the mission id that we add fake missions to for this task
         $mission_id = $this->getCustomizedId();
-
-        $remove_negative_query->execute([
+        // remove all previous marks for that mission
+        $remove_previous_query->execute([
             ':mission_id' => $mission_id,
             ':user_id' => $user_id
         ]);
-
+        // load how many they actually did and what the difference is
         $compleated = $this->getCompleatedMissions( $user_id );
         $count = intval( $missions ) - intval( $compleated );
-
+        // insert the change if we need to
         if ( $count !== 0 )
             $insert_query->execute([
                 ':subject_id' => $this->subject_id,
@@ -57,6 +63,12 @@ class Subject extends ActiveRecord\Model implements JsonSerializable {
                 ':date' => unixtojd(),
                 ':count' => $count
             ]);
+        // update the medal
+        $medal_updater = new medal_updater();
+        $medal_updater->update_medal_two( $user_id );
+        // update the rank
+        $rank_updater = new rank_updater();
+        $rank_updater->update_rank_two( $user_id );
 
         return true;
     }
