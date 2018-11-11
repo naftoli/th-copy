@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
 import { removeAuth, createAuth } from 'store/base/staff/operations';
-import { createNotifcation, updateNotifcation, showError } from 'functions/notifications';
+import { showError } from 'functions/notifications';
 import { 
   getSoldier,     updateSoldier, 
   deleteSoldier,  updateMissions 
@@ -28,7 +28,8 @@ class SoldierPage extends Component {
   // initial state
   state = {
     soldier: {},    updates: {},
-    loading: true,  activeTab: 1,
+    loading: true,  saving: false,
+    activeTab: 1,
     valid: {
       soldier: true, settings: true
     }
@@ -114,30 +115,36 @@ class SoldierPage extends Component {
     event && event.preventDefault();
     const { soldier, updates, valid } = this.state;
 
+    if ( this.state.saving )
+      return true;
+
     // validate form
     const isInvalid = Object.values( valid ).includes( false );
     if ( isInvalid )
       return toast.error( 'Please correct all invalid feilds' );
 
     // update the soldier
-    const toast_id = createNotifcation('Updating Soldier');
-
-    this.props.updateSoldier( soldier.user_id, updates )
-    .then( soldier => {
-      updateNotifcation( toast_id, 'Soldier Updated!', '', true )
-      this.setState({ updates: {}, soldier })
-    })
-    .catch( error => updateNotifcation( toast_id, '', error.message, false ) );
+    this.setState({ saving: true });
+    // show errors from updating to the user
+    showError( this.props.updateSoldier( soldier.user_id, updates )
+      .then( soldier => {
+        this.setState({ updates: {}, soldier })
+      })
+    ).then( () => this.setState({ saving: false }) );
   }
 
   // render the page
   render(){
     const { login } = this.props;
-    let { soldier, loading, updates, activeTab, valid } = this.state;
+    let { 
+      soldier,  loading, updates, 
+      activeTab, valid,  saving 
+    } = this.state;
 
     // if we do not have the soldier...
     if ( soldier === undefined )
       return <Redirect to='/bm/soldiers' />;
+
     // if loading return a LoadingScreen
     if ( loading ) return <LoadingScreen size='8' />;
 
@@ -182,8 +189,9 @@ class SoldierPage extends Component {
           <PersonalTab
             tabId={ 1 }
             login={ login }
+            saving={ saving }
             soldier={ soldier }
-            updated={ updated } 
+            updated={ updated }
             onSubmit={ this.saveChanges }
             handleChange={ this.onUpdate } 
             updateProfile={ this.updateProfilePicture }
@@ -192,6 +200,7 @@ class SoldierPage extends Component {
           <SettingsTab 
             tabId={ 2 }
             login={ login }
+            saving={ saving }
             soldier={ soldier }
             updated={ updated }
             onSubmit={ this.saveChanges }

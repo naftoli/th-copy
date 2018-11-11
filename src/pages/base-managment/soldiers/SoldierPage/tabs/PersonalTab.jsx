@@ -41,8 +41,8 @@ class PersonalTab extends Component {
 
   render(){
     const { 
-      login, soldier, tabId, updated, 
-      onSubmit, onValidChange 
+      login,    soldier,  updated,    tabId,
+      onSubmit, saving,   onValidChange,
     } = this.props;
     let { user_serial, barcode, profilePicture, rank } = soldier;
     // link to the old website if we have a profile picture
@@ -97,7 +97,10 @@ class PersonalTab extends Component {
           { ...soldier }
           onChange={ this.handleChange } />
 
-        <SaveButton show={ updated } />
+        <SaveButton
+          show={ updated }
+          saving={ saving }
+          disabled={ saving } />
 
       </Form>
       

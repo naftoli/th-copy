@@ -38,7 +38,7 @@ class SettingsTab extends Component {
   render() {
     const { 
       soldier,  tabId,  updated,  login,
-      onSubmit, onValidChange 
+      onSubmit, saving, onValidChange 
     } = this.props;
     let { 
       user_id,  chayolei, yan,  chidon, lang_id,  pic_mission_type,
@@ -149,7 +149,10 @@ class SettingsTab extends Component {
           </Col>
           </Row>
           
-          <SaveButton show={ updated } />
+          <SaveButton
+            show={ updated }
+            saving={ saving } 
+            disabled={ saving } />
 
           <p className='title'>Connected Parent Account</p>
           <ParentRow
