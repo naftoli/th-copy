@@ -21,7 +21,7 @@ $( 'button#lookup-button' ).click( lookupSoldier );
 $( '.dailyRow' ).click( toggleRow );
 // always bring focus to the barcode/serial input
 $( document ).click( function() { $('#lookup-user').focus() });
-$( '.textInput input' ).click( function( e ) { e.stopPropagation() });
+$( '#checkAll, #uncheckAll, .textInput input' ).click( function( e ) { e.stopPropagation() });
 
 /**
  * Returns an event handler for the checkboxes on the page.
@@ -30,6 +30,7 @@ $( '.textInput input' ).click( function( e ) { e.stopPropagation() });
  */
 function onCheckboxClicked( daily ) {
     return function( event ) {
+        event.stopPropagation();
         var user_id = $('input#user_id').val();
         var div = event.target;
         // get the task_id and the date for the task
@@ -130,6 +131,8 @@ function toggleAll( checked ){
  * @param {event} event 
  */
 function toggleRow( event ) {
+    event.stopPropagation();
+    
     var tasks = [];
     var dates = [];
 
