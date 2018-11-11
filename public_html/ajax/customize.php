@@ -75,7 +75,7 @@ print_r( $missions );
 print_r( $campaignsAdded );
 print_r( $tasksAdded );
 print_r( $missionsAdded );
-die();
+//die();
 
 $tc->setStart( $start );
 $tc->setEnd( $end );
