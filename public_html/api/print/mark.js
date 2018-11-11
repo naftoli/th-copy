@@ -5,15 +5,22 @@
  * 
  * jQuery and functions.php are pre-loaded.
  */
-// * SETUP EVENT LISTENERS
 $( '#oneCol' ).hide();
+
+// * SETUP EVENT LISTENERS
 $( '.checkboxDaily' ).click( onCheckboxClicked( true ) );
 $( '.checkbox' ).not( '.textInput' ).click( onCheckboxClicked( false ) );
 $( '.textInput input' ).keyup( onInputChanged );
 $( '#checkAll' ).click( function(){ toggleAll( true ) } );
 $( '#uncheckAll' ).click( function(){ toggleAll( false ) } );
 $( '.dailyRow' ).click( toggleRow );
-$( 'button#lookup-button' ).click( lookupSoldier )
+
+$( '#lookup' ).submit( lookupSoldier );
+$( 'button#lookup-button' ).click( lookupSoldier );
+
+$( '.dailyRow' ).click( toggleRow );
+// always bring focus to the barcode/serial input
+$( document ).click( function() { $('#lookup-user').focus() });
 
 /**
  * Returns an event handler for the checkboxes on the page.
@@ -201,6 +208,25 @@ function lookupSoldier() {
             },
             error: function( xhr, textStatus ) {
                 return alert('Could not find serial number');
+            }
+        });
+    } else if ( serial.match( '3[0-9]{19}' ) ) {
+        $.ajax({
+            method: 'POST',
+            url: '/api/core/users?action=findBarcode', 
+            data: { barcode: serial }, 
+            success: function( response ) {
+                if ( !response.success )
+                    return alert('Could not find barcode');
+                
+                var user = response.data;
+                $('#soldier').append('<option value="' + user.user_id + '">' + user.first + ' ' + user.last + '</option>')
+                $('#soldier').val( user.user_id );
+                $('#platoon').val( user.class_id );
+                $('form#navigate').submit();
+            },
+            error: function( xhr, textStatus ) {
+                return alert('Could not find barcode');
             }
         });
     } else
