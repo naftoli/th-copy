@@ -1435,10 +1435,10 @@ class TasksCustomizationNew {
 			$classTasks = array();
 			$class_id = $this->getClassID($this->id);
 			$sql = "select * from class_{$table} where class_id = $class_id and {$field} in (" . $dt . ")";
-			$result = mysql_query($sql);
-			while ($row = mysql_fetch_assoc($result)) {
-				$classTasks[] = $row["$field"];
-			}
+            $result = mysql_query($sql);
+            if ( $result )
+			    while ($row = mysql_fetch_assoc($result))
+				    $classTasks[] = $row["$field"];
 			
 			//delete from class
 			$sql = "delete from class_{$table} where class_id = $class_id and {$field} in (" . $dt . ")";
