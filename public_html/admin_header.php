@@ -162,10 +162,8 @@ $bpOnly = [ 82 ];
 							<li>
 								<a href="#"><?=T_('Soldiers')?></a>
 								<ul>
-									<li><a href="/beta/bm/users"><?=T_('View / Edit')?></a></li>
-									<li><a href="/beta/bm/users/cards"><?=T_('Rank Cards')?></a></li>
-									<li><a href="/add_missions.php"><?=T_('Update Soldier\'s Missions')?></a></li>
-									<li><a href="/add_medals.php"><?=T_('Update Soldier\'s Medals')?></a></li>
+									<li><a href="/beta/bm/soldiers"><?=T_('View / Edit')?></a></li>
+									<li><a href="/beta/bm/soldiers/cards"><?=T_('Rank Cards')?></a></li>
 								</ul>
 							</li>
 							<li>
@@ -180,6 +178,22 @@ $bpOnly = [ 82 ];
 							<li>
 								<a href="/beta/bm/base"><?=T_('Base')?></a>
 							</li>
+						</ul>
+
+						<li class="list_parent<?=isset( $ui_type ) && $ui_type == 'programs' ? ' current' : '' ?>">
+							<a href="#" title="programs"><div>
+								<span class="icon">
+									<img height="28" width="28" alt="cart" src="/images/iconl_cart.png">
+								</span><?=T_('Rewards Program')?>
+							</div></a>
+						</li>
+							
+						<ul class='list_second'>
+							<li><a href="/beta/rewards/cards"><?=T_('Achievement Cards')?></a></li>
+							<li><a href="/beta/rewards/tasks"><?=T_('Tasks')?></a></li>
+							<li><a href="/beta/rewards/prizes"><?=T_('Prizes')?></a></li>
+							<li><a href="/beta/rewards/orders"><?=T_('Orders')?></a></li>
+							<li><a href="/beta/rewards/miles"><?=T_('Add / Subtract Miles')?></a></li>
 						</ul>
 					<?php  } else { ?>
 						<ul class="list_second">
@@ -211,24 +225,6 @@ $bpOnly = [ 82 ];
 							<?php } // end if school is a chidon school ?>
 						</ul>	
 					<? } ?>
-
-					<?php if ( $admin_user["beta"] ) { ?>
-						<li class="list_parent<?=isset( $ui_type ) && $ui_type == 'programs' ? ' current' : '' ?>">
-							<a href="#" title="programs"><div>
-								<span class="icon">
-									<img height="28" width="28" alt="cart" src="/images/iconl_cart.png">
-								</span><?=T_('Rewards Program')?>
-							</div></a>
-						</li>
-							
-						<ul class='list_second'>
-							<li><a href="/beta/rewards/cards"><?=T_('Achievement Cards')?></a></li>
-							<li><a href="/beta/rewards/tasks"><?=T_('Tasks')?></a></li>
-							<li><a href="/beta/rewards/prizes"><?=T_('Prizes')?></a></li>
-							<li><a href="/beta/rewards/orders"><?=T_('Orders')?></a></li>
-							<li><a href="/beta/rewards/miles"><?=T_('Add / Subtract Miles')?></a></li>
-						</ul>
-					<?php } ?>
 				
 					<li class="list_parent<?=isset($ui_type) && $ui_type == 'programs' ? ' current' : ''?>">
 						<a href="#" title="programs">
@@ -403,15 +399,13 @@ $bpOnly = [ 82 ];
 								<li>
 									<a href="#"><?=T_('Soldiers')?></a>
 									<ul>
-										<li><a href="/beta/bm/users"><?=T_('View / Edit')?></a></li>
+										<li><a href="/beta/bm/soldiers"><?=T_('View / Edit')?></a></li>
 										<?php if ($admin_user['auth'] == 'super') { ?>
 											<li><a href="/admin_users_register.php<?=$url_id?>"><?=T_("Registration")?></a></li> 
 										<?php } else { ?>
-											<li><a href="/beta/bm/uses/registration"><?=T_("Registration")?></a></li> 
+											<li><a href="/beta/bm/soldiers/registration"><?=T_("Registration")?></a></li> 
 										<?php } ?>
-										<li><a href="/beta/bm/users/cards"><?=T_('Rank Cards')?></a></li>
-										<li><a href="/add_missions.php"><?=T_('Update Soldier\'s Missions')?></a></li>
-										<li><a href="/add_medals.php"><?=T_('Update Soldier\'s Medals')?></a></li>
+										<li><a href="/beta/bm/soldiers/cards"><?=T_('Rank Cards')?></a></li>
 									</ul>
 								</li>
 								<li>
@@ -444,7 +438,8 @@ $bpOnly = [ 82 ];
 								<li><a href="/beta/missions/mark"><?=T_('Mark')?></a></li>
 								<li><a href="/beta/missions/personalize"><?=T_('Personalize')?></a></li>
 								<li><a href="/beta/missions/tasks"><?=T_('Add Task')?></a></li>
-								<li><a href="/beta/missions/report"><?=T_('Mission Report')?></a></li>
+								<li><a href="/mission_sheets_checklist.php"><?=T_('Mission Checklist')?></a></li>
+								<li><a href="/missions_report.php"><?=T_('Mission Report')?></a></li>
 							</ul>
 
 							<li class="list_parent<?=isset( $ui_type ) && $ui_type == 'programs' ? ' current' : '' ?>">
