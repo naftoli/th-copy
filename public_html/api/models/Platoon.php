@@ -10,6 +10,7 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
     static $has_many = [ [ 'soldiers', 'order' => 'first, last', 'foreign_key' => 'class_id' ] ];
 
     static $before_destroy = ['canDestroy'];
+    static $before_update = [ 'updateSoldiers' ];
 
     // ******************************* HELPER FUNCTIONS *******************************
     public function name() {
@@ -40,7 +41,31 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
 
     // ******************************* ONDELETE FUNCTIONS *******************************
     public function canDestroy(){
-        return count( $this->users ) == 0;
+        return count( $this->soldiers ) == 0;
+    }
+    
+    public function updateSoldiers() {
+        global $MASHPIA_DB;
+        // allow_parent_tasks
+        if ( $this->attribute_is_dirty('allow_parent_tasks') ){
+            $update = 'UPDATE users SET allow_parent_tasks = ? WHERE class_id = ?';
+            $update = $MASHPIA_DB->prepare( $update );
+            $update->execute([ $this->allow_parent_tasks, $this->class_id ]);
+        }
+        // print_parent_tasks
+        if ( $this->attribute_is_dirty('print_parent_tasks') ){
+            $update = 'UPDATE users SET print_parent_tasks = ? WHERE class_id = ?';
+            $update = $MASHPIA_DB->prepare( $update );
+            $update->execute([ $this->print_parent_tasks, $this->class_id ]);
+        }
+        // pic_mission_type
+        if ( $this->attribute_is_dirty('pic_mission_type') ){
+            $update = 'UPDATE users SET pic_mission_type = ? WHERE class_id = ?';
+            $update = $MASHPIA_DB->prepare( $update );
+            $update->execute([ $this->pic_mission_type, $this->class_id ]);
+        }
+        // save the platoon to the dbs
+        return true;
     }
 
     // ******************************* SERIALIZERS *******************************

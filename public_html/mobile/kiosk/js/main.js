@@ -10,7 +10,13 @@ $("#manual-scanner #scanner").keyup( function( event ) {
     } else if ( event.target.value.length > 20) {
         event.target.value = event.target.value.slice(0, 20);
     }
+});
+
+$("#cardForm").submit( function( event ){
+    event.preventDefault();
+    checkNumber( $('#scanner').val() )
 })
+
 
 Quagga.onDetected( function( data ) {
     if ( !checkNumber( data.codeResult.code ) ) {
@@ -24,10 +30,10 @@ Quagga.onProcessed( showScanningBox );
 
 // check the number as a user posts it
 function checkNumber( cardNumber ) {
-    if ( cardNumber.length == 20 ) {
+    if ( cardNumber.match(/^3{1}\d{19}$/) ) {
         $.post( 'api/checkID.php', { card : cardNumber }, login );
     } else {
-        console.error( "Invalid Size: ", cardNumber );
+        console.error( "Invalid. Detected: ", cardNumber );
     }
 }
 
@@ -91,9 +97,10 @@ function setupScanner( mode ){
 
     var setup = function( error ){
         if ( error ) {
-            showError( "Sorry, it seems we cannot scan cards on your device. Please enter in the card number by hand." );
+            // showError( "Sorry, it seems we cannot scan cards on your device. Please enter in the card number by hand." );
             $("#barcode_scanner").hide();
             $("#manual-scanner").show(); // show the manual scanner
+            $('#manual-scanner #scanner').focus(); // focus for barcode readers
             // setup the listener
         } else {
             $("#toggle-manual").show();

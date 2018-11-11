@@ -141,7 +141,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     // ******************************* CHAYOLEI BOARDS ******************************* //
     // returns the current rank and how they got there
     public function rankBoard() {
-        global $MASHPIA_DB;
+        global $MASHPIA_DB; $result = [];
         // get all ranks earned
         $rank_query = $MASHPIA_DB->prepare(
             "SELECT r.rank_ord, r.rank_name, r.rank_color, r.medals_required, date_promoted "
@@ -175,7 +175,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // get all the ranks
         $rank_query->execute( [ $this->user_id ] );
         $ranks = $rank_query->fetchAll();
-
+        // set the current rank
+        $result['rank'] = intval( end( $ranks )['rank_ord'] );
+        $result['name'] = end( $ranks )['rank_name'];
         // update the rank contents
         $medals_index = 0;
         foreach( $ranks as $index => $rank ){
@@ -188,8 +190,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             while( isset( $medals[ $medals_index ] ) && $medals_index < $medals_in_rank )
                 $ranks[$index]['medals'][] = $medals[ $medals_index++ ];
         };
-        
-        return $ranks;
+        $result['ranks'] = $ranks;
+        return $result;
     }
     // returns the medal board
     public function medalBoard() {
@@ -511,7 +513,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 'school_type_id', 'user_address1', 'user_address2', 'user_city', 'user_state',
                 'user_postal', 'user_country', 'user_phone', 'gender', 'user_registered', 
                 'chayolei', 'yan', 'chidon', 'allow_parent_tasks', 'print_parent_tasks', 'mobile_pic',
-                'school_id', 'class_id'
+                'school_id', 'class_id', 'pic_mission_type'
             ],
             'methods' => [ 
                 'profilePicture', 'barcode', 'miles', 'rank',

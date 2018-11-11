@@ -572,12 +572,12 @@ class TasksCustomizationNew {
         );
 
         $types = array(
-            '2'	=> 'Chabad Girls', 
-            '3'	=> 'Chabad Boys', 
-            '12'=> 'Frum Girls', 
-            '13'=> 'Frum Boys',
-            '22'=> 'C-Kids Girls', 
-            '23'=> 'C-Kids Boys'
+            '2'	=> 'Chabad Boys', 
+            '3'	=> 'Chabad Girls', 
+            '12'=> 'Frum Boys', 
+            '13'=> 'Frum Girls',
+            '22'=> 'C-Kids Boys', 
+            '23'=> 'C-Kids Girls'
         );
         
         $friendly = array();
@@ -1410,10 +1410,10 @@ class TasksCustomizationNew {
 			//first take away from school and give to classes		
 			$schoolTasks = array();
 			$sql = "select * from school_{$table} where school_id = $this->school_id and {$field} in (" . $dt . ")";
-			$result = mysql_query($sql);
-			while ($row = mysql_fetch_assoc($result)) {
-				$schoolTasks[] = $row["$field"];
-			}
+            $result = mysql_query($sql);
+            if ( $result )
+			    while ($row = mysql_fetch_assoc($result))
+			        $schoolTasks[] = $row["$field"];
 			
 			//delete from school
 			$sql = "delete from school_{$table} where school_id = $this->school_id and {$field} in (" . $dt . ")";
