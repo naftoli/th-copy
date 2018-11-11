@@ -513,7 +513,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 'school_type_id', 'user_address1', 'user_address2', 'user_city', 'user_state',
                 'user_postal', 'user_country', 'user_phone', 'gender', 'user_registered', 
                 'chayolei', 'yan', 'chidon', 'allow_parent_tasks', 'print_parent_tasks', 'mobile_pic',
-                'school_id', 'class_id'
+                'school_id', 'class_id', 'pic_mission_type'
             ],
             'methods' => [ 
                 'profilePicture', 'barcode', 'miles', 'rank',
