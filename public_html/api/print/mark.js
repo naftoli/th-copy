@@ -21,6 +21,7 @@ $( 'button#lookup-button' ).click( lookupSoldier );
 $( '.dailyRow' ).click( toggleRow );
 // always bring focus to the barcode/serial input
 $( document ).click( function() { $('#lookup-user').focus() });
+$( '.textInput input' ).click( function( e ) { e.stopPropagation() });
 
 /**
  * Returns an event handler for the checkboxes on the page.
