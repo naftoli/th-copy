@@ -64,7 +64,7 @@ if(count($schools) == 1){
     $has_chaps  = mysql_num_rows($chap_check) != 0;
 }
 
-// require_once('chidon_shutdown_vars.php'); // get the deadlines
+require_once('chidon_shutdown_vars.php'); // get the deadlines
 // $exceptions = array(13,61,269);
 
 $users = array();
