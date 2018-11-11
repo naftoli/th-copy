@@ -10,6 +10,7 @@ export class SettingsTab extends Component {
 
   static propTypes = {
     base: PropTypes.object.isRequired,
+    login: PropTypes.object.isRequired,
     tabId: PropTypes.number.isRequired,
     onUpdate: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
@@ -18,7 +19,8 @@ export class SettingsTab extends Component {
 
   render(){
     const { 
-      updated, tabId, base, onSubmit, onValidChange, onUpdate
+      updated, tabId, base,   onSubmit, 
+      onValidChange,  login,  onUpdate,
     } = this.props;
 
     return (
@@ -27,6 +29,7 @@ export class SettingsTab extends Component {
 
           <SettingsRow
             base={ base }
+            login={ login }
             onUpdate={ onUpdate } />
 
           <SaveButton show={ updated } />

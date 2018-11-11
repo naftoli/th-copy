@@ -165,10 +165,6 @@ Array [
           "BC",
         ],
       },
-      Object {
-        "label": "Mission Report",
-        "path": "/missions/report",
-      },
     ],
     "label": "Missions",
     "module": "chayolei",

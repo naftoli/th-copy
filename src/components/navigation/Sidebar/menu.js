@@ -70,9 +70,7 @@ const getMenu = ( login ) => {
           items: [
             { label: "View / Edit", path: '/bm/soldiers' },
             { label: "Registration", path: '/bm/soldiers/registration', module: 'chayolei', user_types: [ 'BC' ] },
-            { label: "Rank Cards", path: '/bm/soldiers/cards' },
-            { label: "Update Missions", legacy: true, path: '/add_missions.php' },
-            { label: "Update Medals", legacy: true, path: '/add_medals.php' },
+            { label: "Rank Cards", path: '/bm/soldiers/cards' }
           ]
         },
         { label: "Platoons", path: '/bm/platoons' },
@@ -94,7 +92,10 @@ const getMenu = ( login ) => {
         { label: 'Mark', path: '/missions/mark' },
         { label: 'Personalize', path: '/missions/personalize' },
         { label: 'Tasks', path: '/missions/tasks', user_types: DEFAULT_USER_TYPES },
-        { label: 'Mission Report', path: '/missions/report' }
+        
+        { label: "Mission Checklist (old)", legacy: true, path: '/mission_sheets_checklist.php' },
+        { label: "Mission Report (old)", legacy: true, path: '/missions_report.php' },
+        // { label: 'Mission Report', path: '/missions/report' }
       ]
     },
     {

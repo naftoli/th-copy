@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 // components
 import { Row, Col, Input } from 'reactstrap';
 // functions
-import { eventToUpdate } from 'functions/events';
+import { onInputChange } from 'functions/events';
 
 export class BaseRow extends Component {
 
-  onChange = ({ target }) => {
-    this.props.onUpdate( eventToUpdate( target, 'name' ) );
-  }
+  onChange = onInputChange( this.props.onUpdate );
 
   render () {
     let { 

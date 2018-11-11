@@ -33,6 +33,29 @@ describe(`operations`, () => {
         expect( dispatchMock ).toHaveBeenCalledTimes( 2 );
       });
     });
-
   });
+
+  describe( `updateMissions( user_id, subjects )`, () => {
+    it( `sends a POST request to /core/users?action=updateMissions`, () => {
+      const response = { success: true, data: [ 'a', 'b' ] };
+      const mock = fetchMock.post('*', response );
+
+      operations.updateMissions( {} )( dispatchMock );
+
+      expect( mock.called() ).toBe( true );
+      expect( fetchMock.lastUrl() ).toBe( `${API_URL}/core/users?action=updateMissions` );
+    });
+
+    it( `sends the argument as the request body`, () => {
+      const response = { success: true, data: [ 'a', 'b' ] };
+      const mock = fetchMock.post('*', response );
+      const data = { user_id: 991234, subjects: [ 'a', 'b', 'c' ] };
+
+      operations.updateMissions( data.user_id, data.subjects )( dispatchMock );
+
+      expect( mock.called() ).toBe( true );
+      expect( fetchMock.lastOptions().body ).toEqual( JSON.stringify( data ) );
+    });
+  });
+
 })

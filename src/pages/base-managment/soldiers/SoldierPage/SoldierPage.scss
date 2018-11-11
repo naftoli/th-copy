@@ -80,6 +80,10 @@
     }
   }
 
+}
+
+.RankBoard {
+
   .RankRow {
     text-align: center;
     border-top: 1px dashed $primary-color-focus;
@@ -87,29 +91,138 @@
     padding: 10px 0px;
   
     .RankRow-rank {
-      p { margin-top: .2rem; margin-bottom: 0px; }
-      img{ max-width: 150px; }
+      p {
+        font-size: .7em;
+        margin-bottom: 0px;
+      }
+      img {
+        max-width: 100px;
+      }
     }
   
     .RankRow-medals {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat( auto-fill, minmax(65px, 1fr) );
+      align-items: center;
+      justify-items: center;
+
+      @media ( min-width: 390px ) {
+        grid-template-columns: repeat( auto-fill, minmax(75px, 1fr) );
+      }
+
+      @media ( min-width: 835px ) {
+        grid-template-columns: repeat( auto-fill, minmax(85px, 1fr) );
+      }
+
+      @media ( min-width: 1024px ) {
+        grid-template-columns: repeat( auto-fill, minmax(95px, 1fr) );
+      }
   
       div {
-        display: inline-block;
         margin: 10px;
         max-width: 90px;
         transition: .25s;
-        img { width: 100%; }
-        p { font-size: .8em; margin-top: .4rem; margin-bottom: 0px; }
-        @media ( max-width: 630px ) {
-          max-width: 70px;
+
+        font-size: .75em;
+
+        img {
+          width: 100%;
+          max-height: inherit;
+          margin-bottom: .4rem;
         }
-        @media ( max-width: 414px ) {
-          max-width: 65px;
-          p { font-size: .65em; }
+
+        p {
+          font-size: .8em;
+          margin-bottom: 0px;
         }
       }
+
+    }
+  }
+
+}
+
+.MedalBoard {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  
+  .Medal {
+    width: 315px;
+
+    flex-grow: 1;
+    padding: 6px;
+    margin: 6px;
+
+    text-align: center;
+
+    box-shadow: 1px 1px 10px #ccc;
+    border-radius: .3rem;
+
+    .actions {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+
+      .btn {
+        padding: 0.175rem 0.5rem;
+        border: 0px;
+        width: 60px;
+
+        &.disabled {
+          color: #ccc;
+        }
+        > span {
+          display: block;
+          font-size: .6em;
+          white-space: pre-wrap;
+        }
+      }
+
+      img {
+        height: 100px;
+        width: 96px;
+      }
+    }
+    // allow them to type it in
+    input[type="number"] {
+      width: 3.4em;
+      border: 0px;
+      text-align: right;
+      font-weight: bold;
+      border-bottom: 1px solid #ccc
+    }
+
+    .rc-slider-box {
+      padding: 10px 10px;
+    }
+    
+    .rc-slider {
+      height: 4px;
+      padding: 0px;
+      margin: 0px;
+    }
+    
+    .rc-slider-track { 
+      background-color: $primary-color;
+    }
+
+    .rc-slider-track,
+    .rc-slider-dot {
+      transition: .1s;
+    }
+    
+    .rc-slider-dot-active, .rc-slider-handle {
+      border-color: $primary-color-dark;
+    }
+    
+    .rc-slider-handle:hover, .rc-slider-handle:focus {
+      border-color: $primary-color-focus;
+    }
+    
+    .rc-slider-handle:focus {
+      box-shadow: 0 0 0 3px $primary-color-focus;
     }
   }
 }

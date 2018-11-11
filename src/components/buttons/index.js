@@ -7,15 +7,23 @@ import { chabad, google } from 'img/logos';
 import './styles.scss';
 
 export const SaveButton = ({
-  show = true, text = 'Save Changes', saving = false, ...props 
-}) => (
-  <Collapse isOpen={ show } id='save'>
+  show, children, text = 'Save Changes', saving = false, ...props 
+}) => {
+  const button = (
     <Button color='primary' { ...props }>
-      {!saving && <span><FontAwesome icon='save'/> { text }</span> }
+      {!saving && <span><FontAwesome icon='save'/> { children || text }</span> }
       { saving && <span><InlineSync loading /> Saving...</span> }
     </Button>
-  </Collapse>
-);
+  );
+  if ( show === undefined )
+    return button;
+
+  return (
+    <Collapse isOpen={ show } id='save'>
+      { button }
+    </Collapse>
+  );
+}
 
 export const ErrorButton = ({ show = true, ...props }) => (
   <Collapse isOpen={ show } id='save'>

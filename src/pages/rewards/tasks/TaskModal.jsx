@@ -8,7 +8,7 @@ import {
   Row, Col, Label, Input
 } from 'reactstrap';
 // functions
-import { filterUpdates } from 'functions/events';
+import { filterUpdates, onInputChange } from 'functions/events';
 
 class TaskModal extends Component {
 
@@ -43,8 +43,9 @@ class TaskModal extends Component {
   };
 
   // event handlers
-  onChange = ({ target }) => { this.onUpdate({ [target.name]: target.value }) }
+  onChange = onInputChange( this.onUpdate );
   onSubjectChange = ({ value }) => { this.onUpdate({ subject_id: value }) }
+  
   onSubmit = ( e ) => {
     e.preventDefault();
     let task = { ...this.props.task, ...this.state.updates };

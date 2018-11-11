@@ -1,16 +1,27 @@
 @import 'styles/colors';
 
-#PlatoonPage, #NewPlatoonPage {
+#NewPlatoonModal {
+  max-width: 650px;
+}
 
-  #save { margin-top: .5rem; }
+#PlatoonsPage {
+  height: 100%;
+  min-height: 350px;
+  
+  .ReactTable {
+    height: calc( 100% - 130px );
+    @media ( max-width: 412px ) {
+      height: 100%; // top of the page takes up 50px
+    }
+  }
+}
+
+
+#PlatoonPage {
 
   .alert-info { margin-bottom: 5px; }
 
   #connect-new-staff { margin-bottom: .5rem; }
-  
-}
-
-#PlatoonPage {
 
   #SoldiersTab h2 {
     text-align: center;
@@ -54,22 +65,6 @@
 
   #delete {
     margin-top: 8px;
+    width: 100%;
   }
-}
-
-#NewPlatoonModal {
-  max-width: 650px;
-}
-
-#PlatoonsPage {
-  height: 100%;
-  min-height: 350px;
-  
-  .ReactTable {
-    height: calc( 100% - 130px );
-    @media ( max-width: 412px ) {
-      height: 100%; // top of the page takes up 50px
-    }
-  }
-
 }

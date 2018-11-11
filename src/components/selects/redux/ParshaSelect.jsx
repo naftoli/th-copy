@@ -36,9 +36,9 @@ class ParshaSelect extends Component {
     const selected = findOption( options, value );
     if ( !selected && options.length > 0 && value === false ) {
       // if it is clearable and we have a value, clear it.
-      if ( isClearable && value ) this.onChange( false );
+      if ( isClearable && value ) this.props.onChange( false );
       // if it is not clearable select the first value
-      else if ( !isClearable && !isMulti ) this.onChange( options[0] );
+      else if ( !isClearable && !isMulti ) this.props.onChange( options[0] );
     }
   }
 
@@ -66,10 +66,6 @@ class ParshaSelect extends Component {
       value: id,
       label: `${name} - ${ moment( start_date ).format( 'l' ) }`
     }) );
-  }
-
-  onChange = ( option ) => {
-    return this.props.onChange && this.props.onChange( option );
   }
 
   filter = ( option, value ) => option.label.toLowerCase().includes( value.toLowerCase() );

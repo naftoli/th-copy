@@ -21,6 +21,7 @@ import { toJulian } from 'functions/dates';
 import { getRankCards, markPrinted } from 'store/base/soldiers/id_cards/operations';
 // styles
 import './RankCardsPage.scss';
+import { onCheckboxChange, onJSONChange, onSelectChange, onInputChange, onJulianDateChange } from 'functions/events';
 
 export class RegistrationPage extends Component {
   // initial state with default options
@@ -51,20 +52,20 @@ export class RegistrationPage extends Component {
     .catch( error => { toast.error( error.message ) } );
   }
   // change one or more options in the state
-  changeOption( changes ) {
-    const options = Object.assign({}, this.state.options, changes);
+  changeOption = changes => {
+    const options = { ...this.state.options, ...changes };
     this.setState({ options });
   }
   // standard input event handler
-  handleInputChange = ( event ) => { this.changeOption({ [event.target.name]: event.target.value }); }
+  handleInputChange = onInputChange( this.changeOption );
   // Select returns an option, capture the key we are updating first
-  handleSelectChange = ( key ) => ( option ) => { this.changeOption({ [key]: option.value }); }
+  handleSelectChange = onSelectChange( this.changeOption );
   // cast the radio buttons value to JSON
-  handleRadioChange = ( event ) => { this.changeOption({ [event.target.name]: JSON.parse( event.target.value ) }); }
+  handleRadioChange = onJSONChange( this.changeOption );
   // get the state of the checkbox
-  handleCheckboxChange = ( event ) => { this.changeOption({ [event.target.name]: event.target.checked }); }
+  handleCheckboxChange = onCheckboxChange( this.changeOption, false );
   // convert the date selected to a julian date
-  handleDateChange = ( date ) => { this.changeOption({ earned_before: toJulian( date ) }); }
+  handleDateChange = onJulianDateChange( this.changeOption );
 
   // handle marking that an item was printed
   handlePrintedChange = ( user_id, rank_ord, printed ) => {
@@ -154,19 +155,35 @@ export class RegistrationPage extends Component {
           </Col>
           <Col xs='12' sm='6'>
             <label>Show ranks:</label><br/>
-            <Radio name='current' value={true} checked={ current } onChange={ this.handleRadioChange }>
+            <Radio
+                value={true} 
+                name='current'
+                checked={ current } 
+                onChange={ this.handleRadioChange }>
               Current rank only
             </Radio>
-            <Radio name='current' value={false} checked={ !current } onChange={ this.handleRadioChange }>
+            <Radio
+                value={false}
+                name='current'
+                checked={ !current }
+                onChange={ this.handleRadioChange }>
               All ranks earned
             </Radio>
           </Col>
           <Col xs='12' sm='6'>
             <label>Print type:</label><br/>
-            <Radio name='permanent' value={false} checked={ !permanent } onChange={ this.handleRadioChange }>
+            <Radio
+                value={false}
+                name='permanent'
+                checked={ !permanent }
+                onChange={ this.handleRadioChange }>
               Temporary
             </Radio>
-            <Radio name='permanent' value={true} checked={ permanent } onChange={ this.handleRadioChange }>
+            <Radio 
+                value={true}
+                name='permanent'
+                checked={ permanent }
+                onChange={ this.handleRadioChange }>
               Permanent
             </Radio>
           </Col>
@@ -174,8 +191,8 @@ export class RegistrationPage extends Component {
             <label>Ranks earned on or before:</label><br/>
             <Date 
               maxDate={ moment() }
-              value={ moment( julian.toDate( earned_before ) ) } 
-              onChange={ this.handleDateChange } />
+              value={ moment( julian.toDate( earned_before ) ) }
+              onChange={ this.handleDateChange('earned_before') } />
           </Col>
           <Col xs='12' sm='6'>
             <label>Other Options:</label><br/>

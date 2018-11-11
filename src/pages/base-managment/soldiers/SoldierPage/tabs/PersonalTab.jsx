@@ -41,10 +41,10 @@ class PersonalTab extends Component {
 
   render(){
     const { 
-      login, soldier, tabId, updated, 
-      onSubmit, onValidChange 
+      login,    soldier,  updated,    tabId,
+      onSubmit, saving,   onValidChange,
     } = this.props;
-    let { user_serial, barcode, profilePicture } = soldier;
+    let { user_serial, barcode, profilePicture, rank } = soldier;
     // link to the old website if we have a profile picture
     const profile_picture = profilePicture ? `${LEGACY_URL}${profilePicture}` : '';
     // render form
@@ -65,6 +65,7 @@ class PersonalTab extends Component {
 
             <ProfileRow
               src={ profilePicture }
+              rank={ rank.rank_ord }
               gender={ soldier.gender }
               onImageClick={ this.toggle }
               onGenderChange={ this.onInputChange } />
@@ -96,7 +97,10 @@ class PersonalTab extends Component {
           { ...soldier }
           onChange={ this.handleChange } />
 
-        <SaveButton show={ updated } />
+        <SaveButton
+          show={ updated }
+          saving={ saving }
+          disabled={ saving } />
 
       </Form>
       

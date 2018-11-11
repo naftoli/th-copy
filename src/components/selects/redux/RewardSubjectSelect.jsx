@@ -48,10 +48,6 @@ class RewardSubjectSelect extends Component {
     }
     return subject_name;
   }
-
-  onChange = ( option ) => {
-    return this.props.onChange && this.props.onChange( option );
-  }
   
   render() {
     const { value, loading } = this.props;
@@ -64,8 +60,7 @@ class RewardSubjectSelect extends Component {
         {...this.props}
         value={ selected }
         options={ options }
-        isLoading={ loading }
-        onChange={ this.onChange } />
+        isLoading={ loading } />
     );
   }
 }
