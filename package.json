@@ -40,6 +40,7 @@
     "promise": "8.0.1",
     "prop-types": "^15.6.2",
     "raf": "3.4.0",
+    "rc-slider": "^8.6.3",
     "react": "^16.4.0",
     "react-barcode": "^1.3.4",
     "react-credit-cards": "^0.7.0",
@@ -50,6 +51,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-select": "^2.0.0",
+    "react-sortable-hoc": "^0.8.3",
     "react-table": "^6.8.6",
     "react-text-mask": "^5.4.2",
     "react-toastify": "^4.1.0",
@@ -72,9 +74,8 @@
     "start": "node scripts/start.js",
     "build": "PUBLIC_URL=/api/build node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-
-    "build:beta": "PUBLIC_URL=/beta OUTPUT_FOLDER=beta node scripts/build.js",
-    "build:prod": "PUBLIC_URL=/new OUTPUT_FOLDER=new node scripts/build.js"
+    "build:beta": "PUBLIC_URL=/beta node scripts/build.js",
+    "build:prod": "PUBLIC_URL=/new  node scripts/build.js"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/src/tests/setupTests.js",

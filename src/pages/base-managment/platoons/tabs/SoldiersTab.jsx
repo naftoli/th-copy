@@ -15,11 +15,11 @@ const Soldier = props => {
         <Row>
           <Col xs={ 12 } xl={ 4 }>
             <strong>Serial Number: </strong>
-            <p className='s-number'><Link to={`/bm/users/${user_id}`}>{user_serial}</Link></p>
+            <p className='s-number'><Link to={`/bm/soldiers/${user_id}`}>{user_serial}</Link></p>
           </Col>
           <Col xs={ 12 } xl={ 8 }>
             <strong>Full Name: </strong>
-            <p><Link to={`/bm/users/${user_id}`}>{ rank.name } {first} {last}</Link></p>
+            <p><Link to={`/bm/soldiers/${user_id}`}>{ rank.name } {first} {last}</Link></p>
           </Col>
         </Row>
       </Col>

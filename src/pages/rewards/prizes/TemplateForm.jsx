@@ -3,19 +3,14 @@ import React, { Component } from 'react';
 import { StorePrize } from 'components/ui';
 import { Row, Col, Input } from 'reactstrap';
 import { Toggle } from 'components/inputs';
-// functions
-import { eventToUpdate } from 'functions/events';
+import { onInputChange, onCheckboxChange } from 'functions/events';
+
 
 export class TemplateForm extends Component {
-
-  onChange = ({ target }) => {
-    this.props.onUpdate( eventToUpdate( target, 'name' ) );
-  }
-
-  // handle toggle's on the page
-  onToggleChange = ({ target }) => {
-    this.props.onUpdate({ [target.name]: target.checked ? 1 : 0 });
-  }
+  
+  // * create event listeners
+  onChange = onInputChange( this.props.onUpdate );
+  onToggleChange = onCheckboxChange( this.props.onUpdate );
 
   render () {
     let { onImageEdit, prize } = this.props;

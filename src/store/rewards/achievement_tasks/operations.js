@@ -5,8 +5,8 @@ import * as actions from './actions';
 export const getTasks = () => dispatch => {
   dispatch( actions.setLoading( true ) );
   return API.get( `/rewards/achievement_tasks` )
-    .then( response => {
-      dispatch( actions.setTasks( response.data ) );
+    .then( tasks => {
+      dispatch( actions.setTasks( tasks ) );
     }).catch( e => {
       dispatch( actions.setLoading( false ) );
       return Promise.reject( e );
@@ -15,16 +15,16 @@ export const getTasks = () => dispatch => {
 
 export const updateTask = ( id, data ) => dispatch => {
   return API.post( `/rewards/achievement_tasks?id=${id}`, data )
-  .then( ({ data }) => { 
-    dispatch( actions.updateTask( id, data ) ); 
-    return data;
+  .then( task => { 
+    dispatch( actions.updateTask( id, task ) ); 
+    return task;
   });
 }
 
-export const createTask = ( data ) => dispatch => {
+export const createTask = data => dispatch => {
   return API.post( `/rewards/achievement_tasks`, data )
-  .then( ({ data }) => { 
-    dispatch( actions.addTask( data ) ); 
-    return data;
+  .then( task => { 
+    dispatch( actions.addTask( task ) ); 
+    return task;
   });
 }

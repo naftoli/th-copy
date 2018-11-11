@@ -87,7 +87,7 @@ export class PlatoonPage extends Component {
           <NavigationTab active={activeTab === 2} onClick={this.toggle( 2 )}>
             Teacher Accounts <FontAwesome icon='user-lock'/>
           </NavigationTab>
-          { platoon.users.length > 0 &&
+          { platoon.soldiers.length > 0 &&
             <NavigationTab active={activeTab === 3} onClick={this.toggle( 3 )}>
               Soldiers <FontAwesome icon='users'/>
             </NavigationTab>
@@ -112,7 +112,7 @@ export class PlatoonPage extends Component {
 
           <SoldiersTab 
             tabId={ 3 }
-            users={ platoon.users } />
+            users={ platoon.soldiers } />
 
         </TabContent>
 

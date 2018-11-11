@@ -14,7 +14,8 @@ import memoize from 'memoize-one';
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
 import { setTitle } from 'functions/utils';
-import { filterUpdates } from 'functions/events';
+import { filterUpdates, onInputChange } from 'functions/events';
+import { showError } from 'functions/notifications';
 // state
 import { getStaff, updateStaff, createAuth } from 'store/base/staff/operations';
 
@@ -36,7 +37,7 @@ class StaffDetailPage extends Component {
       this.setState({ updates: {} });
   }
   // wrapper / alias for prop
-  loadStaff = () => { this.props.getStaff(); };
+  loadStaff = () => showError( this.props.getStaff() );
   
   // cache the result for performance
   findStaff = memoize( ( staff, admin_id ) => staff.find( staff => staff.admin_id === admin_id ) );
@@ -47,7 +48,9 @@ class StaffDetailPage extends Component {
     updates = filterUpdates( this.getStaff(), { ...this.state.updates, ...updates } );
     this.setState({ updates });
   };
-  onChange = ({ target }) => { this.handleUpdates({ [target.name]: target.value }) };
+  
+  onChange = onInputChange( this.handleUpdates );
+
   save = () => {
     this.props.updateStaff( parseInt( this.props.match.params.id, 10 ), this.state.updates )
     .catch( error => toast.error( error.message ) );

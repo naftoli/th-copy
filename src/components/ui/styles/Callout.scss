@@ -1,4 +1,4 @@
-@import '../../../styles/colors.scss';
+@import 'styles/colors.scss';
 
 .th-callout {
   padding: 10px 12px 9px;
@@ -14,11 +14,12 @@
   }
 
   h4 {
-    margin-bottom: 5px;
+    margin-bottom: .3em;
     line-height: 20px;
   }
 
-  p { margin-bottom: .5em; }
+  p { margin-bottom: .3em; }
+  p:last-child { margin-bottom: 0px; }
 
   &.th-callout-icon {
     padding-left: 40px;

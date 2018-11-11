@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`reducer actions.setMissions: updates the missions on campaign.tasks with the correct subject_id and task 1`] = `
+Array [
+  Object {
+    "subject_id": 5,
+    "tasks": Array [
+      Object {
+        "missions": Array [
+          Object {
+            "name": "אבות ובנים",
+          },
+          Object {
+            "name": "Avos Ubanim",
+          },
+        ],
+        "task": "Do Homework",
+      },
+    ],
+  },
+  Object {
+    "subject_id": 9,
+    "tasks": Array [
+      Object {
+        "task": "Do Homework",
+      },
+    ],
+  },
+]
+`;
+
+exports[`reducer actions.setMissions: updates the missions on campaign.tasks with the correct subject_id and task 2`] = `
+Array [
+  Object {
+    "subject_id": 5,
+    "tasks": Array [
+      Object {
+        "task": "Do Homework",
+      },
+    ],
+  },
+  Object {
+    "subject_id": 9,
+    "tasks": Array [
+      Object {
+        "task": "Do Homework",
+      },
+    ],
+  },
+]
+`;
+
+exports[`reducer actions.setTasks: updates the campaigns on the campaign with the correct subject_id 1`] = `
+Array [
+  Object {
+    "subject_id": 5,
+    "tasks": Array [
+      Object {
+        "task": "Do Homework",
+      },
+      Object {
+        "task": "Wash Dishes",
+      },
+    ],
+  },
+  Object {
+    "subject_id": 9,
+  },
+]
+`;
+
+exports[`reducer actions.setTasks: updates the campaigns on the campaign with the correct subject_id 2`] = `
+Array [
+  Object {
+    "subject_id": 5,
+  },
+  Object {
+    "subject_id": 9,
+  },
+]
+`;

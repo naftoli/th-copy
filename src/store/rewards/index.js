@@ -7,8 +7,8 @@ import prizes from './prizes/reducer';
 import orders from './orders/reducer';
 
 const reducer = combineReducers({
-  achievement_tasks, achievement_cards,
-  orders, subjects, prizes
+  achievement_tasks,  prizes,
+  achievement_cards,  orders, subjects
 });
 
 export default reducer;

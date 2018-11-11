@@ -12,7 +12,7 @@ import { removeAuth } from 'store/base/staff/operations';
 import { updateCurrentUser, getCurrentUser } from 'store/login/operations';
 // functions
 import { setTitle } from 'functions/utils';
-import { filterUpdates } from 'functions/events';
+import { filterUpdates, onInputChange } from 'functions/events';
 // style
 import './AccountPage.scss';
 
@@ -59,7 +59,9 @@ class AccountPage extends Component {
     updates = filterUpdates( account, { ...this.state.updates, ...updates } );
     this.setState({ updates });
   };
-  onChange = ({ target }) => { this.handleUpdates({ [target.name]: target.value }) };
+
+  onChange = onInputChange( this.handleUpdates );
+
   onSubmit = ( e ) => {
     e && e.preventDefault();
     this.props.updateCurrentUser( this.state.updates )

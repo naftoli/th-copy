@@ -20,8 +20,11 @@ export default ( state = initialState, action ) => {
 
     case types.UPDATE_BASE:
       return {
-        bases: state.bases.map( 
-          base => ( base.school_id === action.payload.id ? { ...base, ...action.payload.updates } : base )
+        bases: state.bases.map(
+          // only update the base with the correct id, otherwise just map back to the base that we have
+          base => ( base.school_id === action.payload.id ? 
+            { ...base, ...action.payload.updates } : base 
+          )
         )
       };
 

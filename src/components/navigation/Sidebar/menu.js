@@ -68,11 +68,9 @@ const getMenu = ( login ) => {
         {
           label: "Soldiers",
           items: [
-            { label: "View / Edit", path: '/bm/users' },
-            { label: "Registration", path: '/bm/users/registration', module: 'chayolei', user_types: [ 'BC' ] },
-            { label: "Rank Cards", path: '/bm/users/cards' },
-            { label: "Update Missions", legacy: true, path: '/add_missions.php' },
-            { label: "Update Medals", legacy: true, path: '/add_medals.php' },
+            { label: "View / Edit", path: '/bm/soldiers' },
+            { label: "Registration", path: '/bm/soldiers/registration', module: 'chayolei', user_types: [ 'BC' ] },
+            { label: "Rank Cards", path: '/bm/soldiers/cards' }
           ]
         },
         { label: "Platoons", path: '/bm/platoons' },
@@ -83,21 +81,21 @@ const getMenu = ( login ) => {
       ]
     },
     {
-      label: 'Platoon Management', user_types: [ 'TEACHER' ], path: '/bm/users',
+      label: 'Platoon Management', user_types: [ 'TEACHER' ], path: '/bm/soldiers',
       icon: <FontAwesome icon='chalkboard-teacher' />,
     },
     {
       label: "Missions", user_types: ALL_USER_TYPES, module: 'chayolei',
       icon: <FontAwesome icon='award' />,
       items: [
-        { label: 'Print Missions', legacy: true, path: '/print_missions2.php', user_types: ALL_USER_TYPES },
-        { label: 'Print Summer Missions', legacy: true, path: '/print_missions_summer.php' },
-        { label: 'Mark Missions', legacy: true, path: '/mark_missions2.php', user_types: ALL_USER_TYPES },
-        { label: 'Mark Yahadus', legacy: true, path: '/sefer_hamitzvos.php' },
-        { label: 'Personalize Your Missions', legacy: true, path: '/task_customization.php' },
-        { label: 'Add Tasks', legacy: true, path: '/newTask.php' },
-        { label: 'Teachers Mission Checklist', legacy: true, path: '/mission_sheets_checklist.php' },
-        { label: 'Missions Accomplished Report', legacy: true, path: '/missions_report.php' }
+        { label: 'Print', path: '/missions/print' },
+        { label: 'Mark', path: '/missions/mark' },
+        { label: 'Personalize', path: '/missions/personalize' },
+        { label: 'Tasks', path: '/missions/tasks', user_types: DEFAULT_USER_TYPES },
+        
+        { label: "Mission Checklist (old)", legacy: true, path: '/mission_sheets_checklist.php' },
+        { label: "Mission Report (old)", legacy: true, path: '/missions_report.php' },
+        // { label: 'Mission Report', path: '/missions/report' }
       ]
     },
     {

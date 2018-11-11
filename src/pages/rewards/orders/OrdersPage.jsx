@@ -92,7 +92,7 @@ class OrdersPage extends Component {
     let columns = getColumns( isBC( login.code, true ) );
 
     return (
-      <div id='OrdersPage'>
+      <div id='OrdersPage' className='full-height'>
         <Callout title='Store Orders'>
           <p>Create and manage orders coming in from Teachers, Kiosks and Parent Accounts</p>
           <strong>This page loads open orders. </strong>
@@ -146,16 +146,14 @@ class OrdersPage extends Component {
 
         <SelectTable 
           data={ orders } 
-          columns={ columns }
-          pageId='OrdersPage' 
-          
-          loading={ loading }
-
           getId={ this.getId }
+          pageId='OrdersPage'
+          columns={ columns }
+          loading={ loading }
           selection={ selection }
-          maxSelectionSize={ orders.length }
           toggleRow={ this.toggleRow }
-          toggleAll={ this.toggleAll } />
+          toggleAll={ this.toggleAll }
+          maxSelectionSize={ orders.length } />
 
         <OrderModal
           login={ login }

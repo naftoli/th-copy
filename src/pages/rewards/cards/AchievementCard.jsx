@@ -1,7 +1,7 @@
 import React from 'react';
 // components
 import Barcode from 'react-barcode';
-import { Number, BaseLogo } from 'components/ui';
+import { NumberDisplay, BaseLogo } from 'components/ui';
 
 import achieivement_card from 'img/rewards/achieivement_card.png';
 
@@ -19,7 +19,7 @@ const AchievementCard = props => {
             <p className='campaign'>{ props.campaign }</p>
             <p className='task'>{ props.task }</p>
             <p className='miles'>
-              <Number value={ props.miles } /> Miles
+              <NumberDisplay value={ props.miles } /> Miles
             </p>
           </div>
           <BaseLogo src={ props.campaignLogo } alt='campaign' id='campaign' />

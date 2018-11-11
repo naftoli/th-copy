@@ -9,12 +9,11 @@ label.checkbox {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     &:before { content: "\f0c8"; }
-    
+    &:hover { cursor: pointer; }
   }
-  &:hover {
-    cursor: pointer; 
-    // span.checkbox-state:before { font-weight: 900; content: "\f14a"; }
-  }
+  
   input:indeterminate + span.checkbox-state::before { font-weight: normal; content: "\f146"; }
   input:checked + span.checkbox-state::before { font-weight: normal; content: "\f14a"; }
+  input:disabled + span.checkbox-state::before { opacity: 0.5; }
+  input:disabled + span.checkbox-state:hover { cursor: default; }
 }

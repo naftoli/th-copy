@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { 
   LEGACY_URL, DEFAULT_LOGO, DEFAULT_PROFILE,
   DEFAULT_PRIZE
@@ -10,7 +11,19 @@ import './styles/ProfilePicture.scss';
 export class ProfilePicture extends Component {
 
   static defaultProps = {
-    fallbackImage: DEFAULT_PROFILE
+    fallbackImage: DEFAULT_PROFILE,
+    src: ''
+  }
+
+  static propTypes = {
+    // absolute source around legacy_url
+    src: PropTypes.string,
+    // rank_ord
+    rank: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
+    // misc props
+    onClick: PropTypes.func,
+    tabIndex: PropTypes.number,
+    fallbackImage: PropTypes.string,
   }
   
   onKeyPress = event => {

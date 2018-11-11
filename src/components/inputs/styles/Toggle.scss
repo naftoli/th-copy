@@ -163,6 +163,14 @@ label.toggle {
   // Default values for .toggle class
   @include toggle-branding; 
   @include toggle-appearance; 
+
+  // disable animations
+  &.no-animate {
+    .switchbox .switch,
+    .switchbox .switch:after {
+      transition: none;
+    }
+  }
   
   // Create toggles of different sizes by overriding the toggle-appearance mixin defaults  
   &.large {

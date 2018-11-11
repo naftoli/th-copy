@@ -1,5 +1,3 @@
-import julian from 'julian';
-
 const hebrew_map = {
   "q": "/", "w": "'", "e": "ק", "r": "ר", "t": "א", "y": "ט", "u": "ו", "i": "ן", "o": "ם", "p": "פ",
   "a": "ש", "s": "ד", "d": "ג", "f": "כ", "g": "ע", "h": "י", "j": "ח", "k": "ל", "l": "ך", ";": "ף", "'": ",",
@@ -12,8 +10,6 @@ export const toHebrew = ( text ) => {
     .map( character => hebrew_map[ character ] || character )
     .join('')
 }
-
-export const toJulian = date => parseInt( julian( date.toDate() ), 10 );
 
 // read a file as a data url
 export const readFile = ( file ) => {

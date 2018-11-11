@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 // components
 import { Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Number } from 'components/ui';
+import { NumberDisplay } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 // constants
@@ -28,7 +28,7 @@ export class RegistrationWidget extends Component {
     // x of y soldiers registered
     let soldier_status = 'Loading...';
     if ( status ) {
-      soldier_status = <span><Number value={ total || 0 } /> of <Number value={ soldiers || 0 } /></span>;
+      soldier_status = <span><NumberDisplay value={ total || 0 } /> of <NumberDisplay value={ soldiers || 0 } /></span>;
     }
 
     return (
@@ -45,7 +45,7 @@ export class RegistrationWidget extends Component {
             <p>
               <strong>Soldiers Registered:</strong>
               { login.code === 'BC' &&
-                <Link to='/bm/users/registration'>{ soldier_status }</Link>
+                <Link to='/bm/soldiers/registration'>{ soldier_status }</Link>
               }
               { login.code !== 'BC' && <span>{ soldier_status }</span> }
             </p>

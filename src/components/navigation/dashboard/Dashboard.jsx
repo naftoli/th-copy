@@ -30,7 +30,7 @@ export class Dashboard extends Component {
       this.setState({ hasError: false, active });
 
       // Google Anylitics
-      if ( window.ga ) {
+      if ( window.ga && location ) {
         window.ga('set', 'page', location.pathname + location.search);
         window.ga('send', 'pageview', location.pathname + location.search);
       }
@@ -61,7 +61,7 @@ export class Dashboard extends Component {
     let { current_user, login, changeLogin, location, title, children } = this.props;
 
     // if we are a user and not logging out - redirect to legacy parent portal
-    if ( location.pathname !== '/logout' ) {
+    if ( location && location.pathname !== '/logout' ) {
       if ( login.type === 'PARENT' ) {
         window.location.href = `${LEGACY_URL}/mobile/reg/parent_detail.html`;
         return null;

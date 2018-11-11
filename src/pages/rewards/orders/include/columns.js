@@ -1,7 +1,6 @@
 import React from 'react';
 // components
-// import { Toggle } from 'components/inputs';
-import { Number, DateDisplay } from 'components/ui';
+import { NumberDisplay, DateDisplay } from 'components/ui';
 
 export function getColumns( bc ) {
   const columns = [
@@ -9,8 +8,8 @@ export function getColumns( bc ) {
     { Header: 'First Name', accessor: 'first' },
     { Header: 'Last Name', accessor: 'last' },
 
-    { Header: 'Qty', accessor: 'quantity', Cell: props => <Number value={props.value}/> },
-    { Header: 'Total Miles', accessor: 'total', Cell: props => <Number value={ props.value * -1 }/> },
+    { Header: 'Qty', accessor: 'quantity', Cell: props => <NumberDisplay value={props.value}/> },
+    { Header: 'Total Miles', accessor: 'total', Cell: props => <NumberDisplay value={ props.value * -1 }/> },
   ];
 
   if ( bc ) {

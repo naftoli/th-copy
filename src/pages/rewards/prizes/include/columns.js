@@ -3,7 +3,7 @@ import { DEFAULT_PRIZE } from 'components/constants';
 // components
 import { Stock } from './components';
 import { Toggle } from 'components/inputs';
-import { Number, StorePrize } from 'components/ui';
+import { NumberDisplay, StorePrize } from 'components/ui';
 // functions
 import { yesNoFilter, yesNoFilterRender } from 'functions/tables';
 
@@ -42,14 +42,14 @@ export function getColumns({
     },
   
     { Header: isTemplate ? 'Default Miles' : 'Miles', 
-      accessor: 'points', Cell: props => <Number value={props.value}/> },
+      accessor: 'points', Cell: props => <NumberDisplay value={props.value}/> },
   ];
 
   // add the toggles
   if ( !isTemplate ) {
     columns.push(
       { Header: 'In Stock', accessor: 'prize_count', 
-        Cell: ({ value }) => isTemplate ? <Number value={value}/> : <Stock value={ value }/> },
+        Cell: ({ value }) => isTemplate ? <NumberDisplay value={value}/> : <Stock value={ value }/> },
 
       { Header: 'Status', accessor: 'is_active', 
         Filter: dropdown, filterMethod: yesNoFilter,

@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // components
 import { SaveButton } from 'components/buttons';
-import { SubjectSelect } from 'components/inputs';
+import { RewardSubjectSelect } from 'components/inputs';
 import { 
   Modal, ModalHeader, ModalBody, ModalFooter,
   Row, Col, Label, Input
 } from 'reactstrap';
 // functions
-import { filterUpdates } from 'functions/events';
+import { filterUpdates, onInputChange } from 'functions/events';
 
 class TaskModal extends Component {
 
@@ -43,8 +43,9 @@ class TaskModal extends Component {
   };
 
   // event handlers
-  onChange = ({ target }) => { this.onUpdate({ [target.name]: target.value }) }
+  onChange = onInputChange( this.onUpdate );
   onSubjectChange = ({ value }) => { this.onUpdate({ subject_id: value }) }
+  
   onSubmit = ( e ) => {
     e.preventDefault();
     let task = { ...this.props.task, ...this.state.updates };
@@ -88,7 +89,7 @@ class TaskModal extends Component {
               <Col xs={ 8 }>
 
                 <Label>Campaign</Label>
-                <SubjectSelect 
+                <RewardSubjectSelect 
                   filter={ filter }
                   value={ task.subject_id }
                   onChange={ this.onSubjectChange } />

@@ -7,6 +7,13 @@ export const setLoading = loading => {
   }
 };
 
+export const addSoldier = soldier => {
+  return {
+    type: types.ADD_SOLDIER,
+    payload: soldier
+  }
+}
+
 export const setSoldiers = soldiers => {
   return {
     type: types.SET_SOLDIERS,

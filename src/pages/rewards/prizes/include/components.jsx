@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import { Number } from 'components/ui';
+import { NumberDisplay } from 'components/ui';
 
 export const Stock = ({ value, className, ...props }) => {
   let status;
@@ -15,5 +15,5 @@ export const Stock = ({ value, className, ...props }) => {
     [className]: !!className,
   });
 
-  return <Number { ...props } className={ className } value={ value } />
+  return <NumberDisplay { ...props } className={ className } value={ value } />
 }

@@ -9,7 +9,7 @@ export const Date = ({ value, ...props }) => {
 
   return (
     <DatePicker 
-      className='form-control'
+      className='form-control' autoComplete='off'
       // display formats
       dateFormat='l' placeholderText={ moment().format( props.dateFormat || 'l' ) }
       // dropdowns

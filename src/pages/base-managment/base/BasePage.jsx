@@ -88,6 +88,7 @@ class BasesPage extends Component {
   
 
   render() {
+    const { login } = this.props;
     let { loading, base, updates, activeTab, valid } = this.state;
     // return a spinner when loading
     if ( loading ) return <LoadingScreen />;
@@ -120,7 +121,7 @@ class BasesPage extends Component {
 
           <BaseTab 
             tabId={ 1 }
-            base={ base } 
+            base={ base }
             updated={ updated }
             onUpdate={ this.onUpdate } 
             onSubmit={ this.saveChanges }
@@ -130,6 +131,7 @@ class BasesPage extends Component {
           <SettingsTab 
             tabId={ 2 } 
             base={ base }
+            login={ login }
             updated={ updated }
             refresh={ this.loadBase }
             onUpdate={ this.onUpdate } 
@@ -151,7 +153,7 @@ class BasesPage extends Component {
             schoolId={ base.school_id }
             refresh={ this.loadBase }
             profile={ base.customerProfile }
-            isAdmin={ isAdmin( this.props.login.code ) } />
+            isAdmin={ isAdmin( login.code ) } />
 
           <StaffTab 
             tabId={ 5 } 

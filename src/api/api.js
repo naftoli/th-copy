@@ -29,28 +29,27 @@ const toJSON = response => {
   .then( text => {
     try {
       return JSON.parse( text );
+    // catch json parsing errors
     } catch ( e ) {
       text = striptags( text );
+      // if there is no text in the response
+      if ( !text || text.length === 0 )
+        text = response.status + ' Server Error';
+      // reject with the correct error
       return Promise.reject( new Error( text ) );
     }
   });
 }
 
 const parseResponse = response => {
-  if ( response.success === false && response.message ) {
+  if ( response.success === false && response.message )
     return Promise.reject( response );
-  }
-  return response;
-}
-
-const handleAPIResponse = response => {
-  if ( !response.success ) { 
-    return Promise.reject( response );
-  }
+  if ( response.success === false )
+    return Promise.reject( new Error('Unknown Server Error') );
   return response.data;
 }
 
-export { API_URL, headers, toJSON, parseResponse, handleAPIResponse };
+export { API_URL, headers, toJSON, parseResponse };
 
 export default {
   get( url ) {

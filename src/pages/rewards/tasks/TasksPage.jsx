@@ -5,19 +5,19 @@ import PropTypes from 'prop-types';
 import TaskModal from './TaskModal';
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { ButtonBar, Table, InlineSync, FontAwesome, Number } from 'components/ui';
+import { ButtonBar, Table, InlineSync, FontAwesome, NumberDisplay } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { isBC, isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
-import { getSubjects } from 'store/rewards/subjects/operations';
 import { 
   getTasks, updateTask, createTask 
 } from 'store/rewards/achievement_tasks/operations';
 // style
 import './tasks.scss';
 import { Promise } from 'core-js';
+import { showError } from 'functions/notifications';
 
 class TasksPage extends Component {
 
@@ -37,19 +37,11 @@ class TasksPage extends Component {
 
   componentDidMount() {
     setTitle( 'Achievement Tasks' );
-    this.loadSubjects();
     this.loadTasks(); 
   }
 
-  // network
-  loadSubjects = () => {
-    this.props.getSubjects()
-    .catch( e => toast.error( e.message ) );
-  }
-
   loadTasks = () => {
-    this.props.getTasks()
-    .catch( e => toast.error( e.message ) );
+    showError( this.props.getTasks() );
   }
 
   saveTask = task => {
@@ -105,7 +97,7 @@ class TasksPage extends Component {
           return value;
         }
       },
-      { Header: 'Miles', accessor: 'points', Cell: ({ value }) => <Number value={ value }/> },
+      { Header: 'Miles', accessor: 'points', Cell: ({ value }) => <NumberDisplay value={ value }/> },
       { Header: 'Campaign', id: 'subject', accessor: ({ subject }) => subject && subject.subject_name },
     ];
     if ( isAdmin( login.code ) ) columns.push(
@@ -175,7 +167,7 @@ const mapStateToProps = ({ rewards, login }) => {
 };
 
 const mapDispatchToProps = {
-  getSubjects, getTasks, updateTask, createTask
+  getTasks, updateTask, createTask
 };
 
 export default connect(

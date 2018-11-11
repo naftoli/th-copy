@@ -13,3 +13,7 @@ export const updateNotifcation = ( toast_id, message, error = '', success = true
   }); 
   return success;
 }
+
+export const showError = ( promise ) => {
+  return promise.catch( e => toast.error( e.message ) );
+}

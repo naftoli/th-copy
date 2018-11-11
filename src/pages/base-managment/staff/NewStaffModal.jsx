@@ -50,8 +50,6 @@ class NewStaffModal extends Component {
     .then( () => this.setState({ saving: false }) );
 
   }
-  // onChange event handler
-  onChange = ({ target }) => { this.setState({ [target.id]: target.value }) }
 
   render(){
     const { isOpen, toggle, login } = this.props;
@@ -59,29 +57,30 @@ class NewStaffModal extends Component {
 
     return (
       <Modal isOpen={ isOpen } toggle={ toggle } centered id='NewStaffModal'>
-        <ModalHeader toggle={ toggle }>Create Staff Account</ModalHeader>
+        
+        <ModalHeader toggle={ toggle }>
+          Create Staff Account
+        </ModalHeader>
+        
         <form onSubmit={ this.createStaff }>
           <ModalBody>
-            
-            <EditStaffRow 
-              { ...staff }
+            <EditStaffRow
               required
-              onChange={ this.updateStaff }
-              />
+              { ...staff }
+              onChange={ this.updateStaff } />
 
             <CreatePositionRow 
-              onChange={ this.setAuth }
               login={ login }
-              isAdmin={ isAdmin( login.code ) }
-              />
+              onChange={ this.setAuth }
+              isAdmin={ isAdmin( login.code ) } />
 
             <Collapse isOpen={ !!error }>
               <div id='errors'>
                 <Alert color='danger'>{ error }</Alert>
               </div>
             </Collapse>
-
           </ModalBody>
+
           <ModalFooter>
             <SaveButton text='Create' saving={ saving } />
           </ModalFooter>

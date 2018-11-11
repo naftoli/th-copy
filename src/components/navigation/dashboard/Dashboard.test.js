@@ -2,8 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Dashboard } from './Dashboard';
 import { MemoryRouter } from 'react-router';
-import Sidebar from 'components/navigation/Sidebar';
-import Navbar from 'components/navigation/Navbar/Navbar';
+import { Sidebar, Navbar } from 'components/navigation';
 
 describe("Dashboard", () => {
   // BOILERPLATE
@@ -58,18 +57,14 @@ describe("Dashboard", () => {
     
     describe('.active', () => {
 
-      it(`defaults to false if device width is <= 768px`, () => {
-        window.innerWidth = 768;
+      it(`defaults to false`, () => {
         expect( dashboard().state().active ).toBe( false );
       });
 
-      it(`defaults to true if device width is > 768px`, () => {
-        expect( dashboard().state().active ).toBe( true );
-      });
-
       it('toggles the sidebar when the Navbar is clicked', () => {
+        expect( dashboard().state().active ).toBe( false );
         dashboard().find( Navbar ).simulate('click')
-        expect( dashboard().state().active ).toBe( false )
+        expect( dashboard().state().active ).toBe( true );
       });
 
       it('does not toggle the sidebar when the Navbar is clicked and the screen is above 1024px', () => {
@@ -108,16 +103,17 @@ describe("Dashboard", () => {
         expect( listen ).toBeCalledWith( expect.any( Function ) );
       });
       
-      it( 'sets state.active to false when recived function is called and display is 768px', () => {
+      it( 'sets state.active to false when recived function is called and display is 1024px', () => {
         window.innerWidth = 768;
         dashboard(); listen.mock.calls[0][0]();
         expect( dashboard().state().active ).toBe( false );
       });
 
 
-      it( 'does nothing when recived function is called and display is greater then 768px', () => {
+      it( 'does nothing when recived function is called and display is greater then 1024px', () => {
+        window.innerWidth = 1025;
         dashboard(); listen.mock.calls[0][0]();
-        expect( dashboard().state().active ).toBe( true );
+        expect( dashboard().state().active ).toBe( false );
       });
 
     });

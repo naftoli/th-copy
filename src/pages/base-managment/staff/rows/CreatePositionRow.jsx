@@ -7,6 +7,7 @@ import { Row, Col, Input, Button } from 'reactstrap';
 // functions
 import classnames from 'classnames';
 import { findOption } from 'functions/selects';
+import { onInputChange, onSelectChange } from 'functions/events';
 
 class CreatePositionRow extends Component {
   // props we expect
@@ -34,9 +35,9 @@ class CreatePositionRow extends Component {
     );
   }
   // handle when a select is changed
-  handleOptionChange = id => option => this.handleUpdates({ [id]: option.value });
+  handleOptionChange = onSelectChange( this.handleUpdates );
   // handle when the target is blank
-  handleInputChange = ({ target }) => this.handleUpdates({ [target.name]: target.value });
+  handleInputChange = onInputChange( this.handleUpdates );
 
   getAuth = () => {
     let { school_id, class_id , ...auth } = this.state;

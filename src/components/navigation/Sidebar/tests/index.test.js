@@ -1,4 +1,4 @@
-import indexSidebar, { getMenu as indexGetMenu } from '../index';
+import { Sidebar as indexSidebar, getMenu as indexGetMenu } from '../../index';
 import Sidebar from '../Sidebar';
 import getMenu from '../menu';
 

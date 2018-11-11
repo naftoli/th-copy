@@ -26,8 +26,15 @@ class StaffPage extends Component {
   toggle = () => this.setState({ showModal: !this.state.showModal });
 
   toCSV = () => {
-    const headers = [];
-    const rows = this.props.staff.map( staff => [] );
+    const headers = [
+      'Username',   'First Name', 'Last Name', 'E-mail Address',
+      'Cell Phone', 'Position',   'Platoon'
+    ];
+    const rows = this.props.staff.map( staff => [
+      staff.username,   staff.first,  staff.last,
+      staff.email,      staff.cell,   staff.position,
+      staff.platoon
+    ]);
     arrayToCSV( headers, rows, 'staff' );
   }
 
@@ -52,7 +59,7 @@ class StaffPage extends Component {
     }
 
     return (
-      <div id='StaffPage'>
+      <div id='StaffPage' className='full-height'>
         <Callout title='View / Edit Staff Accounts'>
           <p>Staff accounts are any accounts connected to your base.</p>
         </Callout>

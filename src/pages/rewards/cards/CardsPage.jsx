@@ -3,21 +3,21 @@ import { connect } from 'react-redux';
 // components
 import AchievementCard from './AchievementCard';
 import { Row, Col, Input, Button, ButtonGroup } from 'reactstrap';
-import { SubjectSelect, AchievementTaskSelect, Date } from 'components/inputs';
-import { ButtonBar, InlineSync, FontAwesome, Number, Callout } from 'components/ui';
+import { RewardSubjectSelect, AchievementTaskSelect, Date } from 'components/inputs';
+import { ButtonBar, InlineSync, FontAwesome, NumberDisplay, Callout } from 'components/ui';
 // functions
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { isTeacher, isBC, isAdmin } from 'functions/login';
 import { setTitle } from 'functions/utils';
 // state
-import { getSubjects } from 'store/rewards/subjects/operations';
 import { getTasks } from 'store/rewards/achievement_tasks/operations';
 import { 
   getMiles, generateAchievementCards, deleteUnused
 } from 'store/rewards/achievement_cards/operations';
 // style
 import './cards.scss';
+import { showError } from 'functions/notifications';
 
 class CardsPage extends Component {
 
@@ -37,20 +37,12 @@ class CardsPage extends Component {
   componentDidMount() {
     setTitle( 'Achievement Cards' );
     this.props.getMiles(); // load my miles limit
-    this.loadSubjects(); // refresh the subjects
     this.loadTasks(); // refresh all tasks
   }
-
-  // load all subjects
-  loadSubjects = () => {
-    this.props.getSubjects()
-    .catch( e => toast.error( e.message ) );
-  }
   // load all tasks
-  loadTasks = () => {
-    this.props.getTasks()
-    .catch( e => toast.error( e.message ) );
-  }
+  loadTasks = () =>
+    showError( this.props.getTasks() );
+
   // cards
   generateCards = e => {
     e.preventDefault();
@@ -91,7 +83,7 @@ class CardsPage extends Component {
     let { loading, miles, cards, login } = this.props;
     const { subject_id, task_id, card_count, delete_to } = this.state;
 
-    const subjectFilter = subject => subject.tasks > 0;
+    const subjectFilter = subject => subject.achievement_tasks.length > 0;
     const taskFilter = task => {
       // limits based on rank
       if ( isBC( login.code ) && task.platoon > 1 )
@@ -119,7 +111,7 @@ class CardsPage extends Component {
 
           { isTeacher( login.code ) && 
             <h2 id='available-miles'>
-              <Number value={ miles || 0 } /> Available Miles
+              <NumberDisplay value={ miles || 0 } /> Available Miles
             </h2>
           }
 
@@ -128,7 +120,7 @@ class CardsPage extends Component {
 
               <Col sm={ 6 } xl={3}>
                 <label>Campaign</label>
-                <SubjectSelect 
+                <RewardSubjectSelect 
                   showTasks
                   filter={ subjectFilter }
                   value={ subject_id }
@@ -208,7 +200,7 @@ const mapStateToProps = ({ rewards, login }) => {
 };
 
 const mapDispatchToProps = {
-  getSubjects, getTasks, deleteUnused,
+  getTasks, deleteUnused,
   getMiles, generateAchievementCards
 };
 

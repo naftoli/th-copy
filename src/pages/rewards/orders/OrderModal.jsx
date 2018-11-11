@@ -108,7 +108,8 @@ class OrderModal extends Component {
                 <Label>Soldier</Label>
                 <SoldierSelect 
                   value={ user_id }
-                  classId={ bc ? class_id : login.id }
+                  schoolId={ login.school_id }
+                  classId={ class_id || login.class_id }
                   onChange={ this.updateSoldier }/>
               </Col>
             </Row>
@@ -125,7 +126,8 @@ class OrderModal extends Component {
   }
 }
 
-const mapStateToProps = ({ rewards }) => ({
+const mapStateToProps = ({ rewards, login }) => ({
+  login: login.current_login,
   store: rewards.orders.store
 });
 

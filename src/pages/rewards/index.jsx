@@ -33,5 +33,3 @@ export class BaseManagmentIndexPage extends Component {
 }
 
 export default BaseManagmentIndexPage;
-// export link to legacy system
-export { default as V2 } from './v2';
