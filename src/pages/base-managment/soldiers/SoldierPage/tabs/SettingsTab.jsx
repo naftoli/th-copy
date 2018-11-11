@@ -132,21 +132,21 @@ class SettingsTab extends Component {
             </Col>
 
             <Col xs={12} sm={6} xl={4}>
-            <Label>Mission Sheet Type</Label>
-            <Radio value='1'
-                name='pic_mission_type'
-                onChange={ this.onInputChange }
-                checked={ pic_mission_type === 1 } >
-              No Pictures
-            </Radio>
+              <Label>Mission Sheet Type</Label>
+              <Radio value='1'
+                  name='pic_mission_type'
+                  onChange={ this.onInputChange }
+                  checked={ pic_mission_type === 1 } >
+                No Pictures
+              </Radio>
 
-            <Radio value='2'
-                name='pic_mission_type'
-                onChange={ this.onInputChange }
-                checked={ pic_mission_type === 2 }>
-              Small Pictures
-            </Radio>
-          </Col>
+              <Radio value='2'
+                  name='pic_mission_type'
+                  onChange={ this.onInputChange }
+                  checked={ pic_mission_type === 2 }>
+                Small Pictures
+              </Radio>
+            </Col>
           </Row>
           
           <SaveButton

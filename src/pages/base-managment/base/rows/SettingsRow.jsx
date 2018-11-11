@@ -7,6 +7,7 @@ import julian from 'julian';
 import moment from 'moment';
 import { toJulian } from 'functions/dates';
 import { onCheckboxChange, onInputChange } from 'functions/events';
+import { isHQ } from 'functions/login';
 
 export class SettingsRow extends Component {
 
@@ -25,12 +26,12 @@ export class SettingsRow extends Component {
   }
 
   render () {
+    const { base, login } = this.props;
     let { 
-      pic_mission_type,     store_reset,
-      allow_parent_tasks,   school_gender,
-      print_parent_tasks,   chayolei,
-      chidon,     tanya,    tehillim
-    } = this.props.base;
+      pic_mission_type,   store_reset,  allow_parent_tasks,
+      chidon,   tanya,    chayolei,     tehillim,
+      school_gender,      print_parent_tasks,
+    } = base;
 
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
     // props for all inputs
@@ -100,23 +101,28 @@ export class SettingsRow extends Component {
           </Col>
         </Row>
 
-        <hr/>
-
-        {/* <Col xs={12} sm={6}>
-          <Label>Base Enrolled in:</Label>
-          <Checkbox checked={!!chayolei} name='chayolei' { ...checkboxProps} >
-            Chayolei
-          </Checkbox>
-          <Checkbox checked={!!chidon} name='chidon' { ...checkboxProps} >
-            Chidon
-          </Checkbox>
-          <Checkbox checked={!!tanya} name='tanya' { ...checkboxProps} >
-            Tanya
-          </Checkbox>
-          <Checkbox checked={!!tehillim} name='tehillim' { ...checkboxProps} >
-            WWTC
-          </Checkbox>
-        </Col> */}
+        { isHQ( login.code ) && 
+          <div id='hq-options'>
+            <hr/>
+            <Row>
+              <Col xs={12}>
+                <Label><strong>Base Enrolled in:</strong></Label>
+                <Checkbox checked={!!chayolei} name='chayolei' { ...checkboxProps} >
+                  Chayolei
+                </Checkbox>
+                <Checkbox checked={!!chidon} name='chidon' { ...checkboxProps} >
+                  Chidon
+                </Checkbox>
+                <Checkbox checked={!!tanya} name='tanya' { ...checkboxProps} >
+                  Tanya
+                </Checkbox>
+                <Checkbox checked={!!tehillim} name='tehillim' { ...checkboxProps} >
+                  WWTC
+                </Checkbox>
+              </Col>
+            </Row>
+          </div>
+        }
       </div>
     );
   }

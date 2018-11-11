@@ -7,15 +7,15 @@ import { Checkbox, Toggle, Radio, Label } from 'components/inputs';
 export class SettingsRow extends Component {
 
   render() {
-    const { inputProps, checkProps } = this.props;
+    const { inputProps, checkProps, onJSONChange } = this.props;
     const { 
-      allow_parent_tasks, whatsapp,
-      print_parent_tasks, class_gender
+      pic_mission_type,   allow_parent_tasks,
+      print_parent_tasks, class_gender,   whatsapp,
     } = this.props.platoon;
 
     return (
       <Row>
-        <Col sm='6' xl='3'>
+        <Col sm={6} xl={3}>
           <Label>Show on Whatsapp Reports</Label>
           <Toggle
             name='whatsapp'
@@ -23,7 +23,7 @@ export class SettingsRow extends Component {
             checked={ !!whatsapp } />
         </Col>
         
-        <Col sm='6' xl='3'>
+        <Col sm={6} xl={3}>
           <Label>Class Gender</Label>
           <Radio 
             value='M'
@@ -44,7 +44,7 @@ export class SettingsRow extends Component {
           </Radio>
         </Col>
 
-        <Col sm='6' xl='6'>
+        <Col sm={6} xl={3}>
           <Label id='customize'>Custom Parent Tasks</Label>
           <UncontrolledTooltip placement="top" target="customize" autohide={ false }>
             Allow parents to create completely custom tasks for this soldier.
@@ -65,6 +65,23 @@ export class SettingsRow extends Component {
 
             Print on Mission Sheets
           </Checkbox>
+        </Col>
+
+        <Col sm={6} xl={3}>
+          <Label>Mission Sheet Type</Label>
+          <Radio value='1'
+              name='pic_mission_type'
+              onChange={ onJSONChange }
+              checked={ pic_mission_type === 1 } >
+            No Pictures
+          </Radio>
+
+          <Radio value='2'
+              name='pic_mission_type'
+              onChange={ onJSONChange }
+              checked={ pic_mission_type === 2 }>
+            Small Pictures
+          </Radio>
         </Col>
       </Row>
     );

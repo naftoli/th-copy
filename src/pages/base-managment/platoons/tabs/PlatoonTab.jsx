@@ -6,13 +6,14 @@ import { Callout } from 'components/ui';
 
 import { SaveButton } from 'components/buttons';
 import { SettingsRow } from './SettingsRow';
-import { onSelectChange, onCheckboxChange, onInputChange } from 'functions/events';
+import { onSelectChange, onCheckboxChange, onInputChange, onJSONChange } from 'functions/events';
 // functions
 
 export class PlatoonTab extends Component {
   
   // handle selects
   onChange = onInputChange( this.props.onUpdate );
+  onJSONChange = onJSONChange( this.props.onUpdate );
   onSelectChange = onSelectChange( this.props.onUpdate );
   onCheckChange = onCheckboxChange( this.props.onUpdate );
 
@@ -48,7 +49,8 @@ export class PlatoonTab extends Component {
           <SettingsRow
             platoon={ platoon } 
             inputProps={ inputProps }
-            checkProps={ checkProps } />
+            checkProps={ checkProps }
+            onJSONChange={ this.onJSONChange } />
 
           <SaveButton show={ updated } />
 
