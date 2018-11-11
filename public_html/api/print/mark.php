@@ -45,7 +45,7 @@ foreach ( $missions as $mission ) {
             border-radius: 0px; border: 0px; border-bottom: 3px dashed;
         }
         div#options { display: flex; justify-content: space-evenly; align-items: flex-end; }
-        div#lookup { text-align: center; margin-top: 16px; }
+        form#lookup { text-align: center; margin-top: 16px; }
     </style>
 </head>
 
@@ -101,13 +101,13 @@ foreach ( $missions as $mission ) {
                 <button type='submit'>Load Missions</button>
             </div>
         </form>
-        <div id='lookup'>
+        <form id='lookup'>
             <label for='lookup-user'>
-                <strong>Enter Serial Number:</strong>
+                <strong>Enter Serial Number / Barcode Scan:</strong>
             </label>
-            <input id='lookup-user' placeholder='7XXXXXX'/>
+            <input id='lookup-user' placeholder='7XXXXXX / 3XXXXXXXXXXXXXXXXXXXX' autofocus />
             <button id='lookup-button'>Lookup</button>
-        </div>
+        </form>
     </div>
 
     <!-- <div id='stats'>
