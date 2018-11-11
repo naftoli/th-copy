@@ -1410,10 +1410,10 @@ class TasksCustomizationNew {
 			//first take away from school and give to classes		
 			$schoolTasks = array();
 			$sql = "select * from school_{$table} where school_id = $this->school_id and {$field} in (" . $dt . ")";
-			$result = mysql_query($sql);
-			while ($row = mysql_fetch_assoc($result)) {
-				$schoolTasks[] = $row["$field"];
-			}
+            $result = mysql_query($sql);
+            if ( $result )
+			    while ($row = mysql_fetch_assoc($result))
+			        $schoolTasks[] = $row["$field"];
 			
 			//delete from school
 			$sql = "delete from school_{$table} where school_id = $this->school_id and {$field} in (" . $dt . ")";
