@@ -189,11 +189,12 @@ function update( div ) {
     }
 }
 
-function lookupSoldier() {
+function lookupSoldier( event ) {
+    event.preventDefault();
     var serial = $("#lookup-user").val();
-    if ( serial.match( '7[0-9]{6}' ) ) {
+    if ( serial.match( '^7[0-9]{6}$' ) ) {
         $.ajax({
-            method: 'POST',
+            type: 'POST',
             url: '/api/core/users?action=findSerial', 
             data: { serial: serial }, 
             success: function( response ) {
@@ -210,9 +211,9 @@ function lookupSoldier() {
                 return alert('Could not find serial number');
             }
         });
-    } else if ( serial.match( '3[0-9]{19}' ) ) {
+    } else if ( serial.match( '^3[0-9]{19}$' ) ) {
         $.ajax({
-            method: 'POST',
+            type: 'POST',
             url: '/api/core/users?action=findBarcode', 
             data: { barcode: serial }, 
             success: function( response ) {

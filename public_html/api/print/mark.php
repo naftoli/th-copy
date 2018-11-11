@@ -45,7 +45,7 @@ foreach ( $missions as $mission ) {
             border-radius: 0px; border: 0px; border-bottom: 3px dashed;
         }
         div#options { display: flex; justify-content: space-evenly; align-items: flex-end; }
-        div#lookup { text-align: center; margin-top: 16px; }
+        form#lookup { text-align: center; margin-top: 16px; }
     </style>
 </head>
 
