@@ -67,21 +67,17 @@ class UsersRouter {
         }
     }
 
-    public function small(){
-        global $MASHPIA_DB;
-        // get the class_id
-        $class_id = isset( $_POST['class_id'] ) ? $_POST['class_id'] : false;
-        if ( !$class_id ) return json_response([]);
-        // get the platoons
-        $query = $MASHPIA_DB->prepare( 'SELECT class_id, user_id, user_serial, first, last FROM users WHERE class_id=:class_id;' );
-        $query->execute([':class_id' => $class_id]);
-        $soldiers = $query->fetchAll();
-        // serialize the platoons
-        $soldiers = array_map(function ( $soldier ){
-            $soldier['name'] = $soldier['user_serial'].': '.$soldier['first'].', '.$soldier['last'];
-            return $soldier;
-        }, $soldiers );
-        return json_response( $soldiers, true, true );
+    public function findBarcode() {
+        global $current_user;
+        $barcode = substr($_POST['barcode'], 1);
+        try {
+            $soldier = Soldier::find_by_user_code( $barcode );
+            if ( !$soldier->validateAccess( $current_user->login ) )
+                json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-65', 401 );
+            json_response( $soldier );
+        } catch ( Exception $e ) {
+            json_error( 'Soldier does not exist', 'CORE-USERS-82', 404 );
+        }
     }
 
     public function create() {
