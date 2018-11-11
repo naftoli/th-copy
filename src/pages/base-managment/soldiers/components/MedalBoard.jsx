@@ -85,7 +85,7 @@ class Medal extends Component {
       intval = 0;
 
     // * get the current medal and the max value
-    let medal = this.getMedal( intval || earned );
+    let medal = this.getMedal( intval );
     const max = medals[ medals.length - 1 ].missions;
     // reduce the marks into dots on the slider
     const marks = medals.reduce( ( marks, medal ) => {

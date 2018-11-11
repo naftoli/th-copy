@@ -5,13 +5,11 @@ import { AddressRow } from 'components/rows';
 import { SaveButton } from 'components/buttons';
 import { Row, Col, Input, Label, TabPane } from 'reactstrap';
 // functions
-import { eventToUpdate } from 'functions/events';
+import { onInputChange } from 'functions/events';
 
 export class ShippingTab extends Component {
 
-  onChange = ({ target }) => {
-    this.props.onUpdate( eventToUpdate( target, 'name' ) );
-  }
+  onChange = onInputChange( this.props.onUpdate );
 
   render(){
     const { updated, tabId, onSubmit, onValidChange } = this.props;

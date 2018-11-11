@@ -31,9 +31,6 @@ class SubjectSelect extends Component {
       label: subject.subject_name
     }));
   }
-
-  onChange = ( option ) => 
-    this.props.onChange && this.props.onChange( option );
   
   render() {
     const { value, loading } = this.props;
@@ -46,8 +43,7 @@ class SubjectSelect extends Component {
         {...this.props}
         value={ selected }
         options={ options }
-        isLoading={ loading }
-        onChange={ this.onChange } />
+        isLoading={ loading } />
     );
   }
 }

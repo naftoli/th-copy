@@ -11,6 +11,7 @@ import { PlatoonRow } from './tabs/PlatoonRow';
 // functions
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
+import { onInputChange, onSelectChange } from 'functions/events';
 
 const initialState = {
   platoon: {
@@ -25,15 +26,11 @@ class NewPlatoonModal extends Component {
 
   state = { ...initialState }
   
-  onChange = ({ target }) => {
-    this.setState({ platoon: { ...this.state.platoon, [target.name]: target.value } });
-  }
-  onSelectChange = ( option ) => {
-    this.setState({ platoon: { ...this.state.platoon, [option.id]: option.value } });
-  };
-  onBaseChange = ( option ) => {
-    this.onSelectChange({ id: 'school_id', ...option })
-  };
+  onUpdate = updates =>
+    this.setState({ platoon: { ...this.state.platoon, ...updates }});
+
+  onChange = onInputChange( this.onUpdate );
+  onSelectChange = onSelectChange( this.onUpdate );
 
   submit = e => {
     e.preventDefault();
@@ -60,7 +57,6 @@ class NewPlatoonModal extends Component {
     const { platoon, saving } = this.state;
 
     const inputProps = { onChange: this.onChange, required: true };
-    const selectProps = { onChange: this.onSelectChange };
 
     let baseSelect;
     if ( isAdmin( login.code ) ) {
@@ -69,7 +65,7 @@ class NewPlatoonModal extends Component {
           <Col xs='12'>
             <label>Base</label>
             <BaseSelect value={ this.state.platoon.school_id } 
-              onChange={ this.onBaseChange } />
+              onChange={ this.onSelectChange('school_id') } />
           </Col>
         </Row>
       );
@@ -86,7 +82,7 @@ class NewPlatoonModal extends Component {
           <PlatoonRow 
             platoon={ platoon } 
             inputProps={ inputProps } 
-            selectProps={ selectProps } />
+            onSelectChange={ this.onSelectChange } />
 
           </ModalBody>
           <ModalFooter>

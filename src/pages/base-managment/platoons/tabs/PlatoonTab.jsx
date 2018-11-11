@@ -6,26 +6,21 @@ import { Callout } from 'components/ui';
 
 import { SaveButton } from 'components/buttons';
 import { SettingsRow } from './SettingsRow';
+import { onSelectChange, onCheckboxChange, onInputChange } from 'functions/events';
 // functions
 
 export class PlatoonTab extends Component {
   
   // handle selects
-  onChange = ({ target }) => 
-    this.props.onUpdate({ [target.name]: target.value });
-
-  onSelectChange = ( option ) =>
-    this.props.onUpdate({ [option.id]: option.value });
-
-  onCheckChange = ({ target }) => 
-    this.props.onUpdate({ [target.name]: target.checked ? 1 : 0 });
+  onChange = onInputChange( this.props.onUpdate );
+  onSelectChange = onSelectChange( this.props.onUpdate );
+  onCheckChange = onCheckboxChange( this.props.onUpdate );
 
   render(){
     const { platoon, tabId, updated, onSubmit, onDelete } = this.props;
 
     const inputProps = { onChange: this.onChange };
     const checkProps = { onChange: this.onCheckChange };
-    const selectProps = { onChange: this.onSelectChange };
 
     return (
       <TabPane tabId={ tabId } id='PlatoonTab'>
@@ -46,7 +41,7 @@ export class PlatoonTab extends Component {
             platoon={ platoon } 
             onDelete={ onDelete } 
             inputProps={ inputProps }
-            selectProps={ selectProps } />
+            onSelectChange={ this.onSelectChange } />
 
           <p className='title'>Platoon Settings</p>
 

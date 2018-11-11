@@ -71,10 +71,6 @@ export class SoldierSelect extends Component {
     return options;
   }
 
-  onChange = ( option ) => {
-    return this.props.onChange && this.props.onChange( option );
-  }
-
   filter = ( option, value ) => option.label.toLowerCase().includes( value.toLowerCase() );
   
   render() {

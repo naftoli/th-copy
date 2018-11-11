@@ -9,7 +9,7 @@ import { SaveButton } from 'components/buttons';
 import { Row, Col, Input, TabPane } from 'reactstrap';
 import CropperModal from 'components/modals/CropperModal';
 // functions
-import { eventToUpdate } from 'functions/events';
+import { onInputChange } from 'functions/events';
 
 export class BaseTab extends Component {
 
@@ -17,15 +17,13 @@ export class BaseTab extends Component {
     showModal: false
   }
 
+  onChange = onInputChange( this.props.onUpdate );
+
   toggle = () => this.setState({ showModal: !this.state.showModal });
   
   updateLogo = formData => {
     this.toggle();
     this.props.updateBase( formData );
-  }
-
-  onChange = ({ target }) => {
-    this.props.onUpdate( eventToUpdate( target, 'name' ) );
   }
 
   render(){

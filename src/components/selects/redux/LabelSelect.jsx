@@ -31,9 +31,6 @@ class LabelSelect extends Component {
       label: `${ label.label_name } - ${ label.frequency.frequency_name }`
     }));
   }
-
-  onChange = ( option ) => 
-    this.props.onChange && this.props.onChange( option );
   
   render() {
     const { value, loading } = this.props;
@@ -46,8 +43,7 @@ class LabelSelect extends Component {
         {...this.props}
         value={ selected }
         options={ options }
-        isLoading={ loading }
-        onChange={ this.onChange } />
+        isLoading={ loading } />
     );
   }
 }

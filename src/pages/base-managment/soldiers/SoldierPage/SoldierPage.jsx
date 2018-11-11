@@ -96,9 +96,9 @@ class SoldierPage extends Component {
     let { soldier } = this.state;
     // update the missions
     return showError( this.props.updateMissions( soldier.user_id, updates )
-      .then( ({ errors, updated, medalBoard }) => {
+      .then( ({ errors, updated, medalBoard, rankBoard }) => {
         // update the soldier
-        soldier = { ...soldier, medalBoard };
+        soldier = { ...soldier, medalBoard, rankBoard };
         this.setState({ soldier });
         // show what was updated
         if ( updated > 0 )

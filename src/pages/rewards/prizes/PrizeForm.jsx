@@ -4,14 +4,12 @@ import { StorePrize } from 'components/ui';
 import { Row, Col, Input, UncontrolledTooltip } from 'reactstrap';
 import { PlatoonSelect, Toggle, Creatable } from 'components/inputs';
 // functions
-import { eventToUpdate } from 'functions/events';
+import { onInputChange } from 'functions/events';
 import { isBC } from 'functions/login';
 
 export class PrizeForm extends Component {
 
-  onChange = ({ target }) => {
-    this.props.onUpdate( eventToUpdate( target, 'name' ) );
-  }
+  onChange = onInputChange( this.props.onUpdate );
 
   onTemplateChange = option => {
     let { value, label, prize_id, ...template } = option;

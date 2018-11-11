@@ -146,16 +146,14 @@ class OrdersPage extends Component {
 
         <SelectTable 
           data={ orders } 
-          columns={ columns }
-          pageId='OrdersPage' 
-          
-          loading={ loading }
-
           getId={ this.getId }
+          pageId='OrdersPage'
+          columns={ columns }
+          loading={ loading }
           selection={ selection }
-          maxSelectionSize={ orders.length }
           toggleRow={ this.toggleRow }
-          toggleAll={ this.toggleAll } />
+          toggleAll={ this.toggleAll }
+          maxSelectionSize={ orders.length } />
 
         <OrderModal
           login={ login }

@@ -42,10 +42,6 @@ class AchievementTaskSelect extends Component {
     }
     return task;
   }
-
-  onChange = ( option ) => {
-    return this.props.onChange && this.props.onChange( option );
-  }
   
   render() {
     const { value, loading } = this.props;
@@ -58,8 +54,7 @@ class AchievementTaskSelect extends Component {
         {...this.props}
         value={ selected }
         options={ options }
-        isLoading={ loading }
-        onChange={ this.onChange } />
+        isLoading={ loading } />
     );
   }
 }

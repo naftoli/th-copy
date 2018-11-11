@@ -33,7 +33,7 @@ export class Task extends Component {
     this.markMission( dates, marked );
   }
 
-  onChange = ( mark_date ) => e => {
+  onChange = mark_date => e => {
     let marked = e.target.checked;
     this.markMission( [ mark_date ], marked );
   }

@@ -7,14 +7,7 @@ import ReactSelectCreatable from 'react-select/lib/Creatable';
 function withDefaultProps( Select ){
   return class extends Component {
 
-    state = { value: this.props.value || '' }
-
     selectRef = React.createRef();
-
-    onChange = ( value, actionMeta ) => {
-      this.props.onChange( value, actionMeta );
-      this.setState({ value });
-    }
 
     getValue = () => {
       const { value } = this.props;
@@ -24,9 +17,6 @@ function withDefaultProps( Select ){
 
       if ( value !== undefined && value !== null )
         return value;
-
-      if ( this.state.value !== undefined && this.state.value !== null )
-        return this.state.value;
 
       return ''
     };

@@ -10,7 +10,7 @@ import {
 // functions
 import { toast } from 'react-toastify';
 import { getChildOptions } from './misc/functions';
-import makeAnimated from 'react-select/lib/animated';
+import { onInputChange, onMultiSelectChange } from 'functions/events';
 import { getParents, createParent } from 'store/base/parents/operations';
 
 const initialState = {
@@ -22,6 +22,9 @@ const initialState = {
 class NewParentModal extends Component {
 
   state = { ...initialState };
+
+  onUpdate = update =>
+    this.setState( update );
 
   createParent = ( e ) => {
     e.preventDefault();
@@ -49,14 +52,9 @@ class NewParentModal extends Component {
     .then( () => this.setState({ saving: false }) );
   }
   // handle input changes
-  onChange = ({ target }) => {
-    this.setState({ [target.id]: target.value });
-  }
+  onChange = onInputChange( this.onUpdate );
   // handle when they select children
-  onSelectChange = ( options ) => {
-    const children = options.map( option => option.value );
-    this.setState({ children });
-  }
+  onSelectChange = onMultiSelectChange( this.onUpdate );
 
   render(){
     const { isOpen, toggle } = this.props;
@@ -73,38 +71,45 @@ class NewParentModal extends Component {
             <Row>
               <Col xs={12}>
                 <Label>E-Mail Address / Username</Label>
-                <Input id='email' value={ email } type='email' {...inputProps} required />
+                <Input name='email' value={ email } type='email' {...inputProps} required />
                 <div className='invalid-message'>Please enter a valid E-mail address</div>
               </Col>
+              
               <Col xs={6}>
                 <Label>Father</Label>
-                <Input id='father' value={ father } {...inputProps} pattern='^[a-zA-Z\s.]{2,}$' title="Two or more letters"/>
+                <Input name='father' value={ father } {...inputProps} pattern='^[a-zA-Z\s.]{2,}$' title="Two or more letters"/>
                 <div className='invalid-message'>Please enter 2 or more letters</div>
               </Col>
+
               <Col xs={6}>
                 <Label>Mother</Label>
-                <Input id='mother' value={ mother } {...inputProps} pattern='^[a-zA-Z\s.]{2,}$' title="Two or more letters"/>
+                <Input name='mother' value={ mother } {...inputProps} pattern='^[a-zA-Z\s.]{2,}$' title="Two or more letters"/>
                 <div className='invalid-message'>Please enter 2 or more letters</div>
               </Col>
+
               <Col xs={12}>
                 <Label>Last Name</Label>
-                <Input id='last' value={ last } {...inputProps} required pattern='^[a-zA-Z\s.]{3,}$' title="Three or more letters"/>
+                <Input name='last' value={ last } {...inputProps} required pattern='^[a-zA-Z\s.]{3,}$' title="Three or more letters"/>
                 <div className='invalid-message'>Please enter 3 or more letters</div>
               </Col>
+
               <Col xs={6}>
                 <Label>Cell Phone</Label>
-                <PhoneNumber id='home' value={ home } {...inputProps} required />
+                <PhoneNumber name='home' value={ home } {...inputProps} required />
                 <div className='invalid-message'>Please enter a valid phone number</div>
               </Col>
+
               <Col xs={6}>
                 <Label>Home Phone</Label>
-                <PhoneNumber id='cell' value={ cell } {...inputProps} required />
+                <PhoneNumber name='cell' value={ cell } {...inputProps} required />
                 <div className='invalid-message'>Please enter a valid phone number</div>
               </Col>
+
               <Col xs={12}>
                 <Label>Children</Label>
-                <Select options={options} onChange={ this.onSelectChange } isMulti 
-                  tabSelectsValue={ false } components={makeAnimated()} />
+                <Select isMulti
+                  options={ options } tabSelectsValue={ false }
+                  onChange={ this.onSelectChange('children') } />
               </Col>
               { error && 
                 <div id='errors'>

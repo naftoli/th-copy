@@ -30,7 +30,6 @@ export class PlatoonPage extends Component {
 
   // non-destructivly update the state
   onUpdate = ( update ) => {
-    console.log( update );
     const updates = filterUpdates( this.state.platoon, { ...this.state.updates, ...update } );
     this.setState({ updates });
   }
