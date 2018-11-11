@@ -143,13 +143,29 @@ abstract class MissionDisplay {
 						<div class="box">
 							<p><b>2.</b> Daily missions are completed when the task is done five out of seven times a week.</p> 
 						</div>
-						<div class="box">
+						<!-- <div class="box">
 							<p><b>3.</b> An <img src="/mission_report/image/31204.png" width="40" height="10" alt=""/> icon near a task means you earn a charge card for completing the mission.</p> 
+						</div> -->
+						<div class="box">
+							<p><b>3.</b> A “quota” means your assigned goal, decided upon with your commanders.</p>
 						</div>
 						<div class="box">
-							<p><b>4.</b> A “quota” means your assigned goal, decided upon with your commanders.</p>
+							<p><b>4.</b> If circumstances prevent you from completing a task, speak to your Base Commander.</p>
 						</div>
-						<div class="box"><p><b>5.</b> If circumstances prevent you from completing a task, speak to your Base Commander.</p></div>
+						<div class="box">
+							<!-- <small>( Barcode for marking )</small> -->
+							<!-- <p><img style='width: 130px' src='/barcode.php/<?= $this->mission->user_serial ?>' alt='serial'/></p> -->
+							<svg class="barcode" style='width: 150px'
+								jsbarcode-format="code128"
+								jsbarcode-value="<?= $this->mission->user_serial ?>"
+								jsbarcode-width="2"
+								jsbarcode-height="50"
+								jsbarcode-margin="0"
+								jsbarcode-displayValue="false"
+								jsbarcode-textmargin="0"
+								jsbarcode-fontoptions="bold">
+							</svg>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -807,9 +823,12 @@ abstract class MissionDisplay {
 			$page += 1;
 			echo "<div style='page-break-after: always'>&nbsp;</div>";
 		}
+
+		echo "<script src='/scripts/JSBarcode.all.min.js'></script>";
+		echo "<script>JsBarcode('.barcode').init();</script>";
 			
 		return $page;
-	}
+	} // end printMission
 
 	public function markMission() {
 		chdir("../");
