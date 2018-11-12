@@ -12,6 +12,7 @@
 					<h3 class="cinema travel"><a href="registration.php">Registration</a></h3>
 					<h3 class="cinema travel"><a href="ordering.php">Textbooks</a></h3>
 					<h3 class="cinema travel"><a href="learning.php">Studying</a></h3>
+					<h3 class="cinema travel"><a href="mitzva_maven.php">Mitzvah Maven</a></h3>
 					<h3 class="cinema travel"><a href="qualifying.php">Qualifying for Chidon</a></h3>
 					<h3 class="cinema travel"><a href="awards.php">Awards</a></h3>
 					<h3 class="cinema travel"><a href="shabbaton.php">Shabbaton</a></h3>		
