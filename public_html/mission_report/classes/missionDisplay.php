@@ -143,13 +143,29 @@ abstract class MissionDisplay {
 						<div class="box">
 							<p><b>2.</b> Daily missions are completed when the task is done five out of seven times a week.</p> 
 						</div>
-						<div class="box">
+						<!-- <div class="box">
 							<p><b>3.</b> An <img src="/mission_report/image/31204.png" width="40" height="10" alt=""/> icon near a task means you earn a charge card for completing the mission.</p> 
+						</div> -->
+						<div class="box">
+							<p><b>3.</b> A “quota” means your assigned goal, decided upon with your commanders.</p>
 						</div>
 						<div class="box">
-							<p><b>4.</b> A “quota” means your assigned goal, decided upon with your commanders.</p>
+							<p><b>4.</b> If circumstances prevent you from completing a task, speak to your Base Commander.</p>
 						</div>
-						<div class="box"><p><b>5.</b> If circumstances prevent you from completing a task, speak to your Base Commander.</p></div>
+						<div class="box">
+							<!-- <small>( Barcode for marking )</small> -->
+							<!-- <p><img style='width: 130px' src='/barcode.php/<?= $this->mission->user_serial ?>' alt='serial'/></p> -->
+							<svg class="barcode" style='width: 150px'
+								jsbarcode-format="code128"
+								jsbarcode-value="<?= $this->mission->user_serial ?>"
+								jsbarcode-width="2"
+								jsbarcode-height="48"
+								jsbarcode-margin="0"
+								jsbarcode-displayValue="false"
+								jsbarcode-textmargin="0"
+								jsbarcode-fontoptions="bold">
+							</svg>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -807,9 +823,12 @@ abstract class MissionDisplay {
 			$page += 1;
 			echo "<div style='page-break-after: always'>&nbsp;</div>";
 		}
+
+		echo "<script src='/scripts/JSBarcode.all.min.js'></script>";
+		echo "<script>JsBarcode('.barcode').init();</script>";
 			
 		return $page;
-	}
+	} // end printMission
 
 	public function markMission() {
 		chdir("../");
@@ -969,9 +988,9 @@ abstract class MissionDisplay {
 									    ?>
 									    
 									    <? if ($this->lang_id == 2) : ?>
-									    	<div style="float: right; margin-right: -20px; margin-top: 14px;">
+									    	<div style="float: right; margin-right: -20px; margin-top: 6px; display: inline-block;">
 									    <? else : ?>
-									   		<div style="float: left; margin-left: -20px; margin-top: 14px;">
+									   		<div style="float: left; margin-left: -20px; margin-top: 6px; display: inline-block;">
 									   	<? endif; ?>
 									    	<input type="checkbox" class="dailyRow" />
 									    </div>
@@ -984,7 +1003,7 @@ abstract class MissionDisplay {
 										}
 										?>
 									    <div class="dailyBoxes">
-											<table>
+											<table style='display: inline-block'> 
 												<tr>
 													<? foreach ($this->days_of_week as $index => $day) : ?>
 														<td>
@@ -1488,6 +1507,7 @@ abstract class MissionDisplay {
 		?> 
 		
 		<div class="firstContainer">
+			<style>.row{ line-height: inherit; }</style>
 			<div class="header">
 				<div class="userImg">
 					<?php if ( isset( $user->mobile_pic ) ) { ?>
@@ -1619,14 +1639,6 @@ abstract class MissionDisplay {
 									    	echo "'><img src=\"/mission_report/5of7stickers/" . $this->dailyStickers[$daily_task->subject_id] . "\" /></div>";
 									    }
 									    ?>
-									    
-									    <? if ($this->lang_id == 2) : ?>
-									    	<div style="float: right; margin-right: -20px; margin-top: 14px;">
-									    <? else : ?>
-									   		<div style="float: left; margin-left: -20px; margin-top: 14px;">
-									   	<? endif; ?>
-									    	<input type="checkbox" class="dailyRow" />
-									    </div>
 											
 										<?php
 										// find out the marks dates to know if this task is only on specific dates
@@ -1636,7 +1648,7 @@ abstract class MissionDisplay {
 										}
 										?>
 									    <div class="dailyBoxes">
-											<table>
+											<table style='display: inline-block'>
 												<tr>
 													<? foreach ($this->days_of_week as $index => $day) : ?>
 														<td>
@@ -1667,6 +1679,14 @@ abstract class MissionDisplay {
 													<? endforeach; ?>
 												</tr>
 											</table>
+
+											<? if ($this->lang_id == 2) : ?>
+												<div style="float: right; margin-right: -20px; margin-top: 14px; display: inline-block;">
+											<? else : ?>
+												<div style="float: left; margin-left: -20px; margin-top: 6px; display: inline-block;">
+											<? endif; ?>
+												<input type="checkbox" class="dailyRow" />
+											</div>
 										 </div>
 										 
 										 <div style="clear: both"></div>
