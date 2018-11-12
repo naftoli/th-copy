@@ -20,8 +20,8 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true
 $schools = $as->getSchools();
 if ($admin_user['auth'] == 'super') {
     $schools[82] = "Avrohom Academy";
-    $allSchools = $schools;
 }
+if ( count($schools) > 1 ) $allSchools = $schools;
 
 if (isset($_POST['submit'])) {
     //echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
@@ -149,7 +149,7 @@ foreach ($schools as $id => $school) {
         </p>-->
         <? //} // end if user is superuser ?>
         
-        <? if ($admin_user['auth'] == 'super') { ?>
+        <? if ($admin_user['auth'] == 'super' || count($schools) > 1) { ?>
             <form method="post" action="chidon_tests.php" style="text-align: center;">
                 Choose School: 
                 <select name="school">
