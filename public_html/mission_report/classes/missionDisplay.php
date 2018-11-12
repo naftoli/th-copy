@@ -159,7 +159,7 @@ abstract class MissionDisplay {
 								jsbarcode-format="code128"
 								jsbarcode-value="<?= $this->mission->user_serial ?>"
 								jsbarcode-width="2"
-								jsbarcode-height="50"
+								jsbarcode-height="48"
 								jsbarcode-margin="0"
 								jsbarcode-displayValue="false"
 								jsbarcode-textmargin="0"
