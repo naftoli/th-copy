@@ -8,7 +8,7 @@ import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
 // state
 import { login } from 'store/login/operations';
 // styles and images
-import './Login.scss';
+import './includes/Login.scss';
 import { logo } from 'img/logos';
 import { user } from 'img/icons';
 import { LEGACY_URL } from 'components/constants';
