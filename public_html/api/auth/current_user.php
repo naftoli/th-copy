@@ -10,9 +10,13 @@ class ProfilesRouter {
             $this->serializeAccount( $current_user )
         );
     }
+
     // functions as update
     public function create() {
         global $current_user;
+
+        if ( isset( $_POST['password']) && $_POST['old_password'] !== $current_user->password )
+            return json_error('Invalid Password. No updates applied');
 
         $current_user->bulkUpdate( $_POST );
 
