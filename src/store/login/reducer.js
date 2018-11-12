@@ -1,4 +1,4 @@
-import * as types from './types';
+import { types } from './actions';
 // TODO handle when positions change in the UI
 // import { REMOVE_AUTH } from '../staff/types';
 import Cookies from 'universal-cookie';

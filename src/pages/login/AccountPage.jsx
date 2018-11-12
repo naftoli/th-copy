@@ -42,10 +42,17 @@ class AccountPage extends Component {
   // * submit the event
   onSubmit = event => {
     event.preventDefault();
+    // do not double submit
+    if ( this.state.saving )
+      return true;
+    // update the state
+    this.setState({ saving: true });
+    // update the user, showing any errors
     showError(
       this.props.updateCurrentUser( this.state.updates )
         .then( () => this.setState({ updates: {} }) )
-    );
+    )
+    .then( () => this.setState({ saving: false }) );
   }
 
   // * disconnect logins
@@ -59,17 +66,18 @@ class AccountPage extends Component {
   filterKeys = key => ![ 'old_password' ].includes( key );
 
   render() {
+    const { updates, saving } = this.state;
     let { account } = this.props; // load the account and the updates
-    account = { ...account, ...this.state.updates };
+    account = { ...account, ...updates };
     // and check if any of the updates require saving
-    const updated = Object.keys( this.state.updates )
+    const updated = Object.keys( updates )
       .filter( this.filterKeys ).length > 0;
     // extract props
     let {
       username, password,   old_password,
       title,    first,      admin_email,
       logins,   last,       admin_phone_work,
-      admin_phone_mobile,   customerProfile,  ...address
+      admin_phone_mobile,   ...address
     } = account;
     // *only show some logins
     logins = logins.filter(
@@ -111,7 +119,10 @@ class AccountPage extends Component {
             title={ false }
             onChange={ this.onChange } />
 
-          <SaveButton show={ updated } />
+          <SaveButton
+            show={ updated }
+            saving={ saving }
+            disabled={ saving } />
         </form>
 
         <p className='title'>

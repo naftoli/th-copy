@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 // components
 import { Row, Col, Input } from 'reactstrap';
 import { PhoneNumber, Password } from 'components/inputs';

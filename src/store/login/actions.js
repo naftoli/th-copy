@@ -1,19 +1,25 @@
-import { 
-  SET_LOADING, SET_ERRORS, SET_TOKENS, 
-  SET_USER, LOGOUT, CHANGE_LOGIN, SET_TITLE
-} from './types';
+export const types = {
+  CHANGE_LOGIN: `login/change_login`,
+  SET_LOADING:  `login/set_loading`,
+  RESET_STATE:  `login/reset_state`,
+  SET_ERRORS:   `login/set_errors`,
+  SET_TOKENS:   `login/set_tokens`,
+  SET_TITLE:    `login/set_title`,
+  SET_USER:     `login/set_user`,
+  LOGOUT:       `login/logout`,
+}
 
 //** Action Creators */
 export const setLoading = loading => {
   return {
-    type: SET_LOADING,
+    type: types.SET_LOADING,
     payload: loading
   }
 };
 
 export const setTokens = ( legacy, mobile, id ) => {
   return {
-    type: SET_TOKENS,
+    type: types.SET_TOKENS,
     payload: { legacy, mobile, id }
   }
 };
@@ -22,32 +28,38 @@ export const setErrors = errors => {
   // convert single emements to an array
   errors = Array.isArray( errors ) ? errors : [ errors ];
   return {
-    type: SET_ERRORS,
+    type: types.SET_ERRORS,
     payload: errors
   }
 };
 
 export const setUser = user => {
   return {
-    type: SET_USER,
+    type: types.SET_USER,
     payload: user
   }
 };
 
 export const logout = () => ({ 
-  type: LOGOUT 
+  type: types.LOGOUT 
 });
 
 export const changeLogin = ( type, id ) => {
   return {
-    type: CHANGE_LOGIN,
+    type: types.CHANGE_LOGIN,
     payload: { type, id }
+  }
+}
+
+export const resetState = () => {
+  return {
+    type: types.RESET_STATE
   }
 }
 
 export const setTitle = title => {
   return {
-    type: SET_TITLE,
+    type: types.SET_TITLE,
     payload: title
   }
 }

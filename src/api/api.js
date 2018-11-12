@@ -48,7 +48,7 @@ const parseResponse = response => {
     return Promise.reject( new Error('Unknown Server Error') );
   return response.data;
 }
-
+// export for testing
 export { API_URL, headers, toJSON, parseResponse };
 
 export default {

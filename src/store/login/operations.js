@@ -1,7 +1,7 @@
 import API from 'api/api';
 import * as actions from './actions';
 import Cookies from 'universal-cookie';
-import { createNotifcation, updateNotifcation } from 'functions/notifications';
+import store from 'store/index';
 
 const cookies = new Cookies();
 
@@ -39,11 +39,8 @@ export const getCurrentUser = () => dispatch => {
 
 export const updateCurrentUser = ( updates ) => dispatch => {
 
-  const toast_id = createNotifcation('Updating Account');
-
   return API.post( '/auth/current_user.php', updates )
     .then( data => {
-      updateNotifcation( toast_id, 'Account Updated', '', true );
       dispatch( actions.setUser( data.account ) );
 
       const { legacy, mobile, id } = data.tokens;
@@ -52,7 +49,6 @@ export const updateCurrentUser = ( updates ) => dispatch => {
       setLogin( dispatch );
       return data;
     }).catch( error => {
-      updateNotifcation( toast_id, '', error.message, false );
       return Promise.reject( error );
     });
 }
@@ -63,5 +59,34 @@ const setLogin = dispatch => {
     return dispatch( actions.changeLogin( type, parseInt(id, 10) ) );
   } else { 
     return dispatch( actions.changeLogin() );
+  }
+}
+
+/**
+ * validateLogin
+ * 
+ * validate that the current login is correct and update it if not.
+ */
+export const validateLogin = () => {
+  const { current_login } = store.getState().login;
+
+  // * conditions under which we do nothing
+  if (
+    !current_login    ||  !cookies.get( 'login' ) ||
+    !current_login.id ||  !current_login.type
+  ) return true;
+
+  // * get the current tokens
+  const current_tokens = cookies.get( 'login' ).split('-');
+  // extract the data
+  const type = current_tokens[0];
+  const id = parseInt( current_tokens[1], 10 );
+  
+  // * check for changes
+  if ( // if the type or id no longer match
+    current_login.id !== id ||
+    current_login.type !== type
+  ) { // then update this instance to match the correct login type
+    getCurrentUser()( store.dispatch );
   }
 }

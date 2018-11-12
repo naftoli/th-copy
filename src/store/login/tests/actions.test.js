@@ -1,5 +1,12 @@
 import * as actions from '../actions';
-import * as types from '../types';
+// get the types
+const types = actions.types;
+
+describe(`types`, () => {
+  it(`matches snapshot`, () =>{
+    expect( types ).toMatchSnapshot();
+  });
+});
 
 describe(`actions`, () => {
 

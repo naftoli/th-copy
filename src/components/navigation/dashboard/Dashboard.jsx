@@ -4,7 +4,7 @@ import { LEGACY_URL } from 'components/constants';
 import { FontAwesome } from 'components/ui';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { changeLogin } from 'store/login/actions';
+import { changeLogin, resetState } from 'store/login/actions';
 import { ClientError } from 'pages/errors';
 import './Dashboard.scss';
 import { RegistrationPage } from 'pages/registration/RegistrationPage';
@@ -50,6 +50,10 @@ export class Dashboard extends Component {
     // console.warn( error, info );
   }
 
+  onLoginChange = ( type, id ) => {
+    this.props.changeLogin( type, id );
+  }
+
   // only toggle the sidebar if the screen is small enough
   toggle = () => {
     if ( window.innerWidth <= threshold ) {
@@ -58,14 +62,18 @@ export class Dashboard extends Component {
   }
 
   render() {
-    let { current_user, login, changeLogin, location, title, children } = this.props;
+    let {     children,   login,
+      title,  location,   current_user,
+    } = this.props;
 
     // if we are a user and not logging out - redirect to legacy parent portal
     if ( location && location.pathname !== '/logout' ) {
+
       if ( login.type === 'PARENT' ) {
         window.location.href = `${LEGACY_URL}/mobile/reg/parent_detail.html`;
         return null;
       }
+
       if ( !login.active ) {
         if ( login.code === 'BC' ) {
           const { legacy, id } = login;
@@ -87,15 +95,24 @@ export class Dashboard extends Component {
 
     return (
       <div id="dashboard">
-        <Navbar onClick={ this.toggle } onLoginChange={ changeLogin }
-          logins={ current_user.logins } currentLogin={ login }
-          title={ title } />
+
+        <Navbar 
+          title={ title } 
+          currentLogin={ login }
+          onClick={ this.toggle }
+          logins={ current_user.logins }
+          onLoginChange={ this.onLoginChange } />
+
         <div id="dashboard-body">
-          <Sidebar menu={ menu } active={ this.state.active } />
+
+          <Sidebar menu={ menu }
+            active={ this.state.active } />
+
           <div id="dashboard-content">
             { this.state.hasError && <ClientError/> }
             { !this.state.hasError && children }
           </div>
+
         </div>
       </div>
     )
@@ -108,6 +125,10 @@ const mapStateToProps = ({ login }) => ({
   title: login.title
 });
 
+const mapDispatchToProps = {
+  changeLogin,  resetState
+}
+
 export default withRouter(
-  connect( mapStateToProps, { changeLogin } )( Dashboard )
+  connect( mapStateToProps, mapDispatchToProps )( Dashboard )
 );
