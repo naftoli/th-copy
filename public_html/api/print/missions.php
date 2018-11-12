@@ -100,6 +100,10 @@ if ( $dates == 'english' ) $dates_id = 2;
         }
     ?>
     <input type='hidden' id='pages-printed' value='<?=$pages?>' />
+    
+    <script src="/scripts/functions.js"></script>
+    <script src="/jquery.js"></script>
+    <script src="missions.js"></script>
     <script>
         document.querySelector('#total-pages').innerText = document.querySelector('#pages-printed').value;
         window.print();

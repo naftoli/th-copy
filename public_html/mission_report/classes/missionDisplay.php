@@ -988,9 +988,9 @@ abstract class MissionDisplay {
 									    ?>
 									    
 									    <? if ($this->lang_id == 2) : ?>
-									    	<div style="float: right; margin-right: -20px; margin-top: 14px;">
+									    	<div style="float: right; margin-right: -20px; margin-top: 6px; display: inline-block;">
 									    <? else : ?>
-									   		<div style="float: left; margin-left: -20px; margin-top: 14px;">
+									   		<div style="float: left; margin-left: -20px; margin-top: 6px; display: inline-block;">
 									   	<? endif; ?>
 									    	<input type="checkbox" class="dailyRow" />
 									    </div>
@@ -1003,7 +1003,7 @@ abstract class MissionDisplay {
 										}
 										?>
 									    <div class="dailyBoxes">
-											<table>
+											<table style='display: inline-block'> 
 												<tr>
 													<? foreach ($this->days_of_week as $index => $day) : ?>
 														<td>
@@ -1507,6 +1507,7 @@ abstract class MissionDisplay {
 		?> 
 		
 		<div class="firstContainer">
+			<style>.row{ line-height: inherit; }</style>
 			<div class="header">
 				<div class="userImg">
 					<?php if ( isset( $user->mobile_pic ) ) { ?>
@@ -1638,14 +1639,6 @@ abstract class MissionDisplay {
 									    	echo "'><img src=\"/mission_report/5of7stickers/" . $this->dailyStickers[$daily_task->subject_id] . "\" /></div>";
 									    }
 									    ?>
-									    
-									    <? if ($this->lang_id == 2) : ?>
-									    	<div style="float: right; margin-right: -20px; margin-top: 14px;">
-									    <? else : ?>
-									   		<div style="float: left; margin-left: -20px; margin-top: 14px;">
-									   	<? endif; ?>
-									    	<input type="checkbox" class="dailyRow" />
-									    </div>
 											
 										<?php
 										// find out the marks dates to know if this task is only on specific dates
@@ -1655,7 +1648,7 @@ abstract class MissionDisplay {
 										}
 										?>
 									    <div class="dailyBoxes">
-											<table>
+											<table style='display: inline-block'>
 												<tr>
 													<? foreach ($this->days_of_week as $index => $day) : ?>
 														<td>
@@ -1686,6 +1679,14 @@ abstract class MissionDisplay {
 													<? endforeach; ?>
 												</tr>
 											</table>
+
+											<? if ($this->lang_id == 2) : ?>
+												<div style="float: right; margin-right: -20px; margin-top: 14px; display: inline-block;">
+											<? else : ?>
+												<div style="float: left; margin-left: -20px; margin-top: 6px; display: inline-block;">
+											<? endif; ?>
+												<input type="checkbox" class="dailyRow" />
+											</div>
 										 </div>
 										 
 										 <div style="clear: both"></div>

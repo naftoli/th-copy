@@ -19,9 +19,18 @@ $( '#lookup' ).submit( lookupSoldier );
 $( 'button#lookup-button' ).click( lookupSoldier );
 
 $( '.dailyRow' ).click( toggleRow );
+
+$(".arrow-left").click( goLeft );
+$(".arrow-right").click( goRight );
+$("select#platoon").change( loadSoldiers );
+
+$("select#soldier").change( function( e ){
+    $('#navigate').submit(); // submit the find section
+});
+
 // always bring focus to the barcode/serial input
-$( document ).click( function() { $('#lookup-user').focus() });
-$( '#checkAll, #uncheckAll, .textInput input' ).click( function( e ) { e.stopPropagation() });
+$( '.userMission' ).click( function() { $('#lookup-user').focus() });
+$( '.checkboxDaily, .dailyRow, .checkbox, #checkAll, #uncheckAll, .textInput input' ).click( function( e ) { e.stopPropagation() });
 
 /**
  * Returns an event handler for the checkboxes on the page.
@@ -238,6 +247,48 @@ function lookupSoldier( event ) {
         alert('Invalid Serial Number (Must start with 7 and be 7 digits long)');
 }
 
+function goLeft() {
+    var val = $( this ).parent().find( "option:selected" ).prev().val();
+    var type = $(this).parent().find('select')[0].id;
+    if ( val === undefined ) {
+        alert( "There are no previous " + type + "s." );
+        return;
+    }
+    $(this).parent().find('select').val( val );
+    $(this).parent().find('select').change();
+
+    if ( ['soldier', 'parsha'].includes( type ) )
+        $('form#navigate').submit();
+};
+
+function goRight() {
+    var val = $( this ).parent().find( "option:selected" ).next().val();
+    var type = $(this).parent().find('select')[0].id;
+    if ( val === undefined ) {
+        alert( "There are no more " + type + "s." );
+        return;
+    }
+    $(this).parent().find('select').val( val );
+    $(this).parent().find('select').change();
+    
+    if ( ['soldier', 'parsha'].includes( type ) )
+        $('form#navigate').submit();
+};
+
+function loadSoldiers() {
+    $.get('/ajax/getUsers.php', { id: $(this).val() }, function( data ) {
+        if (data) {
+            $("select#soldier").empty();
+            var str = '';
+            var users = $.parseJSON( data );
+            for (key in users) {
+                str += "<option value=" + key + ">" + users[key] + "</option>";
+            }
+            $("select#soldier").append( str );
+        }
+    });
+};
+
 // footer is apparently not rendered.
 $(".userMission").each( function() {			
     var user = $(this).attr('id');	
@@ -286,46 +337,4 @@ $(".userMission").each( function() {
             $(elem).find("#" + user_id).append(str);
         }
     );
-});
-
-$(".arrow-left").click( function() {
-    var val = $( this ).parent().find( "option:selected" ).prev().val();
-    var type = $(this).parent().find('select')[0].id;
-    if ( val === undefined ) {
-        alert( "There are no previous " + type + "s." );
-        return;
-    }
-    $(this).parent().find('select').val( val );
-    $(this).parent().find('select').change();
-
-    if ( ['soldier', 'parsha'].includes( type ) )
-        $('form#navigate').submit();
-});
-
-$(".arrow-right").click( function() {
-    var val = $( this ).parent().find( "option:selected" ).next().val();
-    var type = $(this).parent().find('select')[0].id;
-    if ( val === undefined ) {
-        alert( "There are no more " + type + "s." );
-        return;
-    }
-    $(this).parent().find('select').val( val );
-    $(this).parent().find('select').change();
-    
-    if ( ['soldier', 'parsha'].includes( type ) )
-        $('form#navigate').submit();
-});
-
-$("select#platoon").change( function() {
-    $.get('/ajax/getUsers.php', { id: $(this).val() }, function( data ) {
-        if (data) {
-            $("select#soldier").empty();
-            var str = '';
-            var users = $.parseJSON( data );
-            for (key in users) {
-                str += "<option value=" + key + ">" + users[key] + "</option>";
-            }
-            $("select#soldier").append( str );
-        }
-    });
 });
