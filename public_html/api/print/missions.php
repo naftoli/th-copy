@@ -12,7 +12,6 @@ $parsha_ids = $_POST['parsha_ids'] ? explode( ',', $_POST['parsha_ids'] ) : fals
 
 $double_sided = isset( $_POST['double_sided'] ) && $_POST['double_sided'] === 'true';
 $dates = $_POST['dates'];
-$pages = $_POST['pages'];
 
 // * Set class_ids and user_ids if not set by client
 if ( !$class_ids )
@@ -84,7 +83,9 @@ if ( $dates == 'english' ) $dates_id = 2;
         foreach ( $objMissions as $obj ) {
             $obj->setDateDisplay( $dates_id );
             $obj->setDblSided( $double_sided );
-            $obj->setMinPages( $pages );
+
+            if ( $_POST['pages'] )
+                $obj->setMinPages( $_POST['pages'] );
 
             $id = $obj->user_id;
             if ($obj->lang_id == 1) {
