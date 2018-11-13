@@ -70,50 +70,56 @@ export class App extends Component {
   
   // render the page
   render() {
-    if ( this.props.logged_in ) {
-      const { message, isOpen, refreshing } = this.state;
-      // make sure we are not "refreshing"
-      
-      // render the core dashboard
+    if ( !this.props.logged_in ) {
       return (
-        <Router
-            basename={ process.env.PUBLIC_URL }
-            getUserConfirmation={ this.showDialog }>
-          <Dashboard>
-
-            { refreshing &&  <LoadingScreen /> }
-
-            { !refreshing && 
-              <Switch>
-                <Route path={`/`} exact component={ HomePage }/>
-                <Route path={`/rewards`} component={ Rewards } />
-                <Route path={`/bm`} component={ BaseManagment } />
-                <Route path={`/missions`} component={ Missions } />
-                
-                <Route path={`/myaccount`} exact component={ AccountPage }/>
-                {/* Action only pages */}
-                <Route path={`/logout`} component={Logout}/>
-                <Route component={Page404} />
-              </Switch>
-            }
-            
-            <ToastContainer 
-              position="bottom-right" 
-              autoClose={ 5000 } 
-              closeOnClick={ false } 
-              draggablePercent={ 40 } />
-
-            <ConfirmationModal 
-              isOpen={ isOpen } 
-              message={ message } 
-              callback={ this.handleCallback } />
-
-          </Dashboard>
+        <Router basename={ process.env.PUBLIC_URL }>
+          <Switch>
+            <Route path={`/forgot`} exact component={ Page404 }/>
+            <Route path={`/signup`} exact component={ Page404 }/>
+            <Route component={ Login } />
+          </Switch>
         </Router>
       );
-    } else {
-      return <Login />;
     }
+    const { message, isOpen, refreshing } = this.state;
+      
+    // render the core dashboard
+    return (
+      <Router
+          basename={ process.env.PUBLIC_URL }
+          getUserConfirmation={ this.showDialog }>
+
+        <Dashboard>
+          { refreshing &&  <LoadingScreen /> }
+
+          { !refreshing && 
+            <Switch>
+              <Route path={`/`} exact component={ HomePage }/>
+              <Route path={`/rewards`} component={ Rewards } />
+              <Route path={`/bm`} component={ BaseManagment } />
+              <Route path={`/missions`} component={ Missions } />
+              
+              <Route path={`/myaccount`} exact component={ AccountPage }/>
+              {/* Action only pages */}
+              <Route path={`/logout`} component={Logout}/>
+              <Route component={ Page404 } />
+            </Switch>
+          }
+
+          <ToastContainer 
+            position="bottom-right" 
+            autoClose={ 5000 } 
+            closeOnClick={ false } 
+            draggablePercent={ 40 } />
+
+          <ConfirmationModal 
+            isOpen={ isOpen } 
+            message={ message } 
+            callback={ this.handleCallback } />
+
+        </Dashboard>
+      </Router>
+    );
   }
 }
 
