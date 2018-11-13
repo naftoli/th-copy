@@ -1,5 +1,5 @@
 <?php
-require '../db.php';
+require_once ( __DIR__ . '/../../api/header/db.php' );
 
 class ChabadMosad
 {
@@ -19,12 +19,15 @@ class ChabadMosad
     }
 
     private function getTypes() {
+        global $MASHPIA_DB;
+
         $sql = "SELECT mosad_type FROM chabad_mosdos 
                 WHERE mosad_id = " . $this->id;
-        $result = mysql_query( $sql );
-        if ( mysql_num_rows( $result ) > 0 ) {
+                
+        $result = $MASHPIA_DB->query( $sql );
+        if ( $result->rowCount() > 0 ) {
             $this->hasTypes = true;
-            while ( $row = mysql_fetch_assoc( $result ) ) {
+            while ( $row = $result->fetch() ) {
                 $this->types[] = $row['mosad_type'];
             }
         } else {

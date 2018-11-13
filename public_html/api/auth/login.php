@@ -5,20 +5,25 @@ require_once( __DIR__ . '/classes/Auth.php' );
 if ( $_SERVER['REQUEST_METHOD'] !== 'POST' )
     json_error( "Invalid Request" );
 
-// validate the presence of the correct paramaters
-if ( !isset($_POST['username']) || !isset($_POST['password']) )
-    json_error( "Invalid Request");
-
-// clear all cookies
+// * clear all cookies
 $past = time() - 3600;
 foreach ( $_COOKIE as $key => $value ) {
     setcookie( $key, $value, $past, '/' );
 }
 
-$login = \mashpia\api\auth\Auth::login(
-    $_POST['username'], $_POST['password']
-);
+$login = false;
 
-if ( !$login ) json_error( "Invalid Login" );
+// * try to use the username and password first
+if ( isset($_POST['username']) && isset($_POST['password']) )
+    $login = \mashpia\api\auth\Auth::login(
+        $_POST['username'], $_POST['password']
+    );
+else if ( isset( $_POST['chabad_key'] ) )
+    $login = $login = \mashpia\api\auth\Auth::chabadLogin(
+        $_POST['chabad_key']
+    );
+
+if ( !$login )
+    json_error( "Invalid Username and/or Password");
 
 json_response( $login );

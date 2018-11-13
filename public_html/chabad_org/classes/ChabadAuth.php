@@ -17,12 +17,11 @@ class ChabadAuth
         curl_setopt ($Curl_Session, CURLOPT_POST, true);
         curl_setopt ($Curl_Session, CURLOPT_POSTFIELDS, "Key=" . urlencode($key));
         curl_setopt ($Curl_Session, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($Curl_Session, CURLOPT_HTTPHEADER, array
-            (
-                    'Accept: text/json',
-                    'Content-Type: application/x-www-form-urlencoded',
-                    "Authorization: h=$PublicKey|$timestamp; s=$signature"
-            )
+        curl_setopt ($Curl_Session, CURLOPT_HTTPHEADER, [
+                'Accept: text/json',
+                'Content-Type: application/x-www-form-urlencoded',
+                "Authorization: h=$PublicKey|$timestamp; s=$signature"
+            ]
         );
 
         $result = curl_exec($Curl_Session);

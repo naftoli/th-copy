@@ -1,5 +1,6 @@
 <?php
 namespace mashpia\api\auth;
+require_once( __DIR__ . '/../../../chabad_org/classes/ChabadShliach.php' );
 
 class Auth {
     /**
@@ -20,16 +21,38 @@ class Auth {
 
     public static function login( $username, $password ) {
         global $MASHPIA_DB;
+        // cast the username to lowercase
         $username = strtolower( $username );
-
-        $user_query = $MASHPIA_DB->prepare(
+        // find the account with the username and password
+        $login_query  = $MASHPIA_DB->prepare(
             "SELECT admin_id, username, password FROM admins WHERE username = ? and password = ?"
         );
-        $user_query->execute([ $username, $password ]);
+        $login_query ->execute([ $username, $password ]);
+        // generate the keys
+        return self::generateKeys( $login_query  );
+    }
 
-        if ( $user_query->rowCount() == 0 ) return false;
+    public static function chabadLogin( $key ) {
+        global $MASHPIA_DB;
+        $shliach = new \ChabadShliach( $key );
+        // make sure the token is valid
+        if ( !$shliach->authenticate() )
+            return false;
 
-        $row = $user_query->fetch();
+        // find the shliach in our system
+        $login_query = $MASHPIA_DB->prepare(
+            "SELECT admin_id, username, password FROM admins WHERE chabad_org_shliach_id = ?;"
+        );
+        $login_query->execute([ $shliach->shliachID ]);
+        // make sure we have an account for this shliach
+        return self::generateKeys( $login_query );
+    }
+
+    private static function generateKeys( $query ){
+        if ( $query->rowCount() == 0 )
+            return false;
+
+        $row = $query->fetch();
         // generate the keys
         $legacy = self::legacyKey( $row['username'], $row['password'] );
         $mobile = self::mobileKey( $row['admin_id'] );

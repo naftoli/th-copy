@@ -18,8 +18,6 @@ $( '.dailyRow' ).click( toggleRow );
 $( '#lookup' ).submit( lookupSoldier );
 $( 'button#lookup-button' ).click( lookupSoldier );
 
-$( '.dailyRow' ).click( toggleRow );
-
 $(".arrow-left").click( goLeft );
 $(".arrow-right").click( goRight );
 $("select#platoon").change( loadSoldiers );
@@ -30,7 +28,7 @@ $("select#soldier").change( function( e ){
 
 // always bring focus to the barcode/serial input
 $( '.userMission' ).click( function() { $('#lookup-user').focus() });
-$( '.checkboxDaily, .dailyRow, .checkbox, #checkAll, #uncheckAll, .textInput input' ).click( function( e ) { e.stopPropagation() });
+$( '.checkboxDaily, .checkbox, #checkAll, #uncheckAll, .textInput input' ).click( function( e ) { e.stopPropagation() });
 
 /**
  * Returns an event handler for the checkboxes on the page.
@@ -140,6 +138,7 @@ function toggleAll( checked ){
  * @param {event} event 
  */
 function toggleRow( event ) {
+    debugger;
     event.stopPropagation();
     
     var tasks = [];

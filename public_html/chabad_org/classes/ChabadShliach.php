@@ -1,6 +1,6 @@
 <?php
-require 'ChabadAuth.php';
-require 'ChabadMosad.php';
+require_once( __DIR__ . '/ChabadAuth.php' );
+require_once( __DIR__ . '/ChabadMosad.php' );
 
 class ChabadShliach 
 {
