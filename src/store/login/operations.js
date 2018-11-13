@@ -7,10 +7,11 @@ const cookies = new Cookies();
 
 export const login = opts => dispatch => {
   dispatch( actions.setLoading( true ) );
+  
   return API.post( '/auth/login.php', opts )
     .then( ({ legacy, mobile, id }) => {
         dispatch( actions.setTokens( legacy, mobile, id ) );
-        getCurrentUser()( dispatch ); // get the user
+        return getCurrentUser()( dispatch ); // get the user
     })
     .catch( error => {
       dispatch( actions.setLoading( false ) );

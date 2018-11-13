@@ -73,8 +73,8 @@ describe( 'Login', () => {
         expect( props.login ).toHaveBeenCalled();
       });
 
-      it('calls props.login with the username and password', () => {
-        expect( props.login ).toHaveBeenCalledWith( 'username', 'password' );
+      it('calls props.login with { username password }', () => {
+        expect( props.login ).toHaveBeenCalledWith({ username: 'username', password: 'password' });
       });
       
     });
