@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { Password } from 'components/inputs';
 import { Spinner, FontAwesome } from 'components/ui';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
-// import { GoogleButton, ChabadOrgButton } from 'components/buttons';
+import { ChabadOrgButton } from 'components/buttons';
 // state
 import { login } from 'store/login/operations';
 // styles and images
-import './includes/Login.scss';
+import './Login.scss';
 import { logo } from 'img/logos';
 import { user } from 'img/icons';
 import { LEGACY_URL } from 'components/constants';
@@ -52,7 +52,15 @@ export class Login extends Component {
   handleLoginForm = ( event ) => {
     event.preventDefault();
     this.setState( { show_password: false } ); // reset the show-password state
-    this.props.login( this.state.username, this.state.password )
+    // and log the user in
+    this.props.login({
+      username: this.state.username,
+      password: this.state.password
+    })
+  }
+
+  onChabadOrgLogin = chabad_key => {
+    this.props.login({ chabad_key })
   }
 
   render(){
@@ -89,11 +97,11 @@ export class Login extends Component {
               </Button>
             </form>
 
-            {/* <strong>Sign In With:</strong>
+            <strong>-- OR --</strong>
             <div id='sign-in-with'>
-              <ChabadOrgButton size="lg" />
-              <GoogleButton size='lg'/>
-            </div> */}
+              <ChabadOrgButton 
+                onLogin={ this.onChabadOrgLogin }/>
+            </div>
           </div>
           }
         </div>

@@ -2,9 +2,11 @@ import React from 'react';
 import { FontAwesome, InlineSync } from 'components/ui';
 import { Button, Collapse } from 'reactstrap';
 // images
-import { chabad, google } from 'img/logos';
+import { google } from 'img/logos';
 // styles
 import './styles.scss';
+
+export * from './ChabadOrgButton';
 
 export const SaveButton = ({
   show, children, text = 'Save Changes', saving = false, ...props 
@@ -40,14 +42,6 @@ export const GoogleButton = props => {
       className='GoogleButton' color='primary' outline 
       { ...props } role='button'>
       <img src={ google } alt='google'/> Sign In With Google
-    </Button>
-  );
-}
-
-export const ChabadOrgButton = props => {
-  return (
-    <Button className='ChabadOrgButton' color='primary' outline { ...props }>
-      <img src={ chabad } alt='chabad.org' />
     </Button>
   );
 }

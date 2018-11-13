@@ -42,9 +42,11 @@ export default ( state = initialState, action ) => {
         const login = action.payload.logins[0];
         cookies.set( 'login', `${login.type}-${login.id}`, { path: '/' } );
       }
-      return Object.assign({}, state, {
+      return {
+        ...state,
+        loading: false,
         current_user: action.payload
-      });
+      };
 
     // set the page title
     case types.SET_TITLE:

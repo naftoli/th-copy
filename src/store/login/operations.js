@@ -5,9 +5,9 @@ import store from 'store/index';
 
 const cookies = new Cookies();
 
-export const login = ( username, password ) => dispatch => {
+export const login = opts => dispatch => {
   dispatch( actions.setLoading( true ) );
-  return API.post( '/auth/login.php', { username, password } )
+  return API.post( '/auth/login.php', opts )
     .then( ({ legacy, mobile, id }) => {
         dispatch( actions.setTokens( legacy, mobile, id ) );
         getCurrentUser()( dispatch ); // get the user
@@ -24,9 +24,7 @@ export const getCurrentUser = () => dispatch => {
   dispatch( actions.setLoading( true ) );
   return API.get( '/auth/current_user.php' )
     .then( user => {
-      dispatch( actions.setLoading( false ) );
       dispatch( actions.setUser( user ) );
-      
       return setLogin( dispatch );
     }).catch( error => {
       dispatch( actions.logout() );
