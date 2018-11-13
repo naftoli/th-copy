@@ -105,7 +105,7 @@ foreach ( $missions as $mission ) {
             <label for='lookup-user'>
                 <strong>Enter Serial Number / Barcode Scan:</strong>
             </label>
-            <input id='lookup-user' placeholder='7XXXXXX / 3XXXXXXXXXXXXXXXXXXXX' autofocus />
+            <input id='lookup-user' autofocus />
             <button id='lookup-button'>Lookup</button>
         </form>
     </div>
