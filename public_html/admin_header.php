@@ -241,6 +241,7 @@ $bpOnly = [ 82 ];
 						<li><a href="/reports/chidon/booklet_report.php">Study Guides</a></li>
 						<li><a href="/reports/chidon/yahadus.php">Yahadus Books</a></li>
 						<li><a href="/chidon_tests.php">Enter Chidon Test Marks</a></li>
+						<li><a href="/chidon_mm_tests.php">Enter Mitzvah Maven Marks</a></li>
 						<li><a href="/chidon_school_reg.php">Enroll Chaperones</a></li>
 
 						<?php if ($admin_user['auth'] == 'super') { ?>
@@ -561,6 +562,7 @@ $bpOnly = [ 82 ];
 							<li><a href="/reports/chidon/shabbaton_enrollment.php">Shabbaton Enrolled Report</a></li>
 							<li><a href="/reports/chidon/walking_groups.php">Shabbaton Walking Report</a></li>
 							<li><a href="/chidon_tests.php">Enter Chidon Test Marks</a></li>
+							<li><a href="/chidon_mm_tests.php">Enter Mitzvah Maven Marks</a></li>
 							<li><a href="/chidon_school_reg.php">Enroll Chaperones</a></li>
 
 							<?php if ($admin_user['auth'] == 'super') { ?>
