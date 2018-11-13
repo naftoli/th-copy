@@ -678,6 +678,7 @@ $bpOnly = [ 82 ];
 						<ul class="list_second">
 							<li><a href="/promotion_report.php"><?=T_('Promotion Picture Report')?></a></li>
 							<li><a href="/medal_rank_ceremony3.php"><?=T_("Teacher's Medal Ceremony Report")?></a></li>
+							<li><a href="/medal_ceremony/choose_slides.php">Medal Ceremony Slideshow</a></li>
 							<li><a href="/raffles/shared/forms/winners_form.php"><?=T_("Raffle Winners")?></a></li>
 							<?php if ($admin_user['auth'] == 'super') { ?>
 								<li><a href="/missing_medals.php">Missing Medals</a></li>
