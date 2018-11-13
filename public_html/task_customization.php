@@ -53,6 +53,12 @@ if ( isset( $_POST['submit'] ) && $_POST['submit'] == 'Go' ) {
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/redmond/jquery-ui.css" />
         <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+        <link rel="stylesheet" href="/styles/admin/grey_select.css" />
+        <style>
+            .select_box { width: 47%; }
+            .select_box select { width: 100%; }
+        </style>
     </head>
 
     <body>
@@ -86,106 +92,101 @@ if ( isset( $_POST['submit'] ) && $_POST['submit'] == 'Go' ) {
                     <? endif; ?>
                     </div>
                     
-                    <? //if (count($schools) > 1) : ?>
-                    <div style="margin-left: 10% !important">    
-                    <div class="school_list select_box sSelect">
-                        <!--
-                        <a class="prev button">
-                            <span class="icon"></span>
-                            <span class="label"><?=T_('Previous School')?></span>
-                        </a>
-                        -->
-                        <SELECT name="school" id="school">
-                            <OPTION value="0">Please select a school</OPTION>
-                            <? 
-                            foreach ($schools as $id => $school) {
-                                if (count($schools) == 1 || (isset($_POST['school']) && $id == $_POST['school'])) {
-                                    echo "<option value='$id' selected='selected'>$school</option>"; 
-                                } else {
-                                    echo "<option value='$id'>$school</option>"; 
-                                }               
-                            }
-                            ?>
-                        </SELECT>               
-                        <!--
-                        <a class="next button">
-                            <span class="icon"></span>
-                            <span class="label"><?=T_('Next School')?></span>
-                        </a>  
-                        -->                      
-                    </div>
-                    <? //endif; ?>
                     
-                    <div class="class_list_div select_box">
-                        <!--
-                        <a class="prev button">
-                            <span class="icon"></span>
-                            <span class="label"><?=T_('Previous Class')?></span>
-                        </a>
-                        -->
-                        <SELECT name="class" id="class">
-                            <OPTION value="0">Please select a class</OPTION>
-                            <option value="-1">All</option>
-                        </SELECT>               
-                        <!--
-                        <a class="next button">
-                            <span class="icon"></span>
-                            <span class="label"><?=T_('Next Class')?></span>
-                        </a> 
-                        -->                       
-                    </div>
-                    
-                    <? 
-                    if (isset($_POST['submit']) && $_POST['submit'] == 'Go') {
-                        echo "<br /><br />";
-                    }
-                    ?>
-                    
-                    <div class="user_list_div select_box">
-                        <!--
-                        <a class="prev button">
-                            <span class="icon"></span>
-                            <span class="label"><?=T_('Previous Student')?></span>
-                        </a>
-                        -->
-                        <SELECT name="user" id="user">
-                            <OPTION value="0">Please select a student</OPTION>
-                            <option value="-1">All</option>
-                        </SELECT>               
-                        <!--
-                        <a class="next button">
-                            <span class="icon"></span>
-                            <span class="label"><?=T_('Next Student')?></span>
-                        </a>
-                        -->
-                    </div>
-                    
-                    <div class="date_list select_box">   
-                        <!--               
-                        <a class="prev button">
-                            <span class="icon"></span>
-                            <span class="label"><?=T_('Previous Week')?></span>
-                        </a>
-                        -->
-                        <SELECT name="parsha" id="parsha">
-                            <option value="0">Please select Parsha or choose dates</option>
-                            <?
-                            foreach ($parshos as $parsha => $info) {
-                                echo "<option value='" . $info['start'] . ':' . $info['end'] . "'";
-                                if (isset($_POST['parsha']) && ($_POST['parsha'] == ($info['start'] . ':' . $info['end']))) {
-                                    echo " selected='selected' ";
+                    <div style="margin-left: 10% !important">
+                        <div class="school_list select_box sSelect">
+                            <!--
+                            <a class="prev button">
+                                <span class="icon"></span>
+                                <span class="label"><?=T_('Previous School')?></span>
+                            </a>
+                            -->
+                            <SELECT name="school" id="school">
+                                <OPTION value="0">Please select a school</OPTION>
+                                <? 
+                                foreach ($schools as $id => $school) {
+                                    if (count($schools) == 1 || (isset($_POST['school']) && $id == $_POST['school'])) {
+                                        echo "<option value='$id' selected='selected'>$school</option>"; 
+                                    } else {
+                                        echo "<option value='$id'>$school</option>"; 
+                                    }               
                                 }
-                                echo ">" . $parsha . "</option>";
-                            }
-                            ?>
-                        </SELECT>               
-                        <!--
-                        <a class="next button">
-                            <span class="icon"></span>
-                            <span class="label"><?=T_('Next Week')?></span>
-                        </a>
-                        -->
-                    </div>
+                                ?>
+                            </SELECT>               
+                            <!--
+                            <a class="next button">
+                                <span class="icon"></span>
+                                <span class="label"><?=T_('Next School')?></span>
+                            </a>  
+                            -->                      
+                        </div>
+                    
+                        <div class="class_list_div select_box">
+                            <!--
+                            <a class="prev button">
+                                <span class="icon"></span>
+                                <span class="label"><?=T_('Previous Class')?></span>
+                            </a>
+                            -->
+                            <SELECT name="class" id="class">
+                                <OPTION value="0">Please select a class</OPTION>
+                                <option value="-1">All</option>
+                            </SELECT>               
+                            <!--
+                            <a class="next button">
+                                <span class="icon"></span>
+                                <span class="label"><?=T_('Next Class')?></span>
+                            </a> 
+                            -->                       
+                        </div>
+                    
+                        <br /><br />
+                    
+                        <div class="user_list_div select_box">
+                            <!--
+                            <a class="prev button">
+                                <span class="icon"></span>
+                                <span class="label"><?=T_('Previous Student')?></span>
+                            </a>
+                            -->
+                            <SELECT name="user" id="user">
+                                <OPTION value="0">Please select a student</OPTION>
+                                <option value="-1">All</option>
+                            </SELECT>               
+                            <!--
+                            <a class="next button">
+                                <span class="icon"></span>
+                                <span class="label"><?=T_('Next Student')?></span>
+                            </a>
+                            -->
+                        </div>
+                    
+                        <div class="date_list select_box">   
+                            <!--               
+                            <a class="prev button">
+                                <span class="icon"></span>
+                                <span class="label"><?=T_('Previous Week')?></span>
+                            </a>
+                            -->
+                            <SELECT name="parsha" id="parsha">
+                                <option value="0">Please select Parsha or choose dates</option>
+                                <?
+                                foreach ($parshos as $parsha => $info) {
+                                    echo "<option value='" . $info['start'] . ':' . $info['end'] . "'";
+                                    if (isset($_POST['parsha']) && ($_POST['parsha'] == ($info['start'] . ':' . $info['end']))) {
+                                        echo " selected='selected' ";
+                                    }
+                                    echo ">" . $parsha . "</option>";
+                                }
+                                ?>
+                            </SELECT>               
+                            <!--
+                            <a class="next button">
+                                <span class="icon"></span>
+                                <span class="label"><?=T_('Next Week')?></span>
+                            </a>
+                            -->
+                        </div>
                     </div>
                     
                     <div style="clear:both"></div>
@@ -334,12 +335,12 @@ if ( isset( $_POST['submit'] ) && $_POST['submit'] == 'Go' ) {
                         val = val[1];
                         var selected = '';
                         <? if ( isset( $_POST['class'] ) ) { ?>
-                        if ( key == <?=$_POST['class']?> ) selected = "selected='selected'"; 
+                            if ( key == <?=$_POST['class']?> ) selected = "selected='selected'"; 
                         <? } ?>
                         var str = "<option value=" + key + ' ' + selected + ">" + val + "</option>";
                         $("#class").append( str );
                         if ( selected != '' ) {
-                            $("#class").trigger('change');
+                            $("#class").change();
                         }
                     });
                     <? if (!isset($_POST['submit'])) { ?>
@@ -347,9 +348,9 @@ if ( isset( $_POST['submit'] ) && $_POST['submit'] == 'Go' ) {
                     <? } ?>
                     if ($("#submit").val() == 'Go') {
                         $("#class").next('div.newListSelected').remove();
-                        $("#class").sSelect();
+                        // $("#class").sSelect();
                         $("#user").next('div.newListSelected').remove();
-                        $("#user").sSelect();
+                        // $("#user").sSelect();
                     }
                 });
             });
@@ -357,12 +358,13 @@ if ( isset( $_POST['submit'] ) && $_POST['submit'] == 'Go' ) {
             $("#class").change( function() {
                 $("#user").empty();
                 $("#user").append("<option value='-1'>All</option>");
-                var id = $(this).val();
-                $.getJSON('ajax/getUsers.php', {id : id, registered : 1}, function( data ) {
+                var id = this.value;
+                var dropdown = this;
+                $.getJSON('ajax/getUsers.php', { id: id, registered: 1}, function( data ) {
                     $.each( data, function( key, val ) { 
                         var selected = '';
                         <? if ( isset( $_POST['user'] ) ) { ?>
-                        if ( key == <?=$_POST['user']?> ) selected = "selected='selected'"; 
+                            if ( key == <?=$_POST['user']?> ) selected = "selected='selected'"; 
                         <? } ?>
                         var str = "<option value=" + key + ' ' + selected + ">" + val + "</option>";
                         $("#user").append( str );
@@ -372,7 +374,7 @@ if ( isset( $_POST['submit'] ) && $_POST['submit'] == 'Go' ) {
                     <? } ?>
                     if ($("#submit").val() == 'Go') {
                         $("#user").next('div.newListSelected').remove();
-                        $("#user").sSelect();
+                        // $("#user").sSelect();
                     }
                 });
             });
@@ -793,10 +795,10 @@ if ( isset( $_POST['submit'] ) && $_POST['submit'] == 'Go' ) {
                 if ($("#school").val() > 0) {
                     $("#school").trigger('change');
                 }
-                $("#school").sSelect();
-                $("#class").sSelect();
-                $("#user").sSelect();
-                $("#parsha").sSelect();
+                // $("#school").sSelect();
+                // $("#class").sSelect();
+                // $("#user").sSelect();
+                // $("#parsha").sSelect();
             } else {
                 //$("#selection").hide();
                 $("#selection").before("<a href='#' id='toggleSelection'>Click here to view/hide your current selection</a>");
