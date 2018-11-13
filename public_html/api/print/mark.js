@@ -138,7 +138,6 @@ function toggleAll( checked ){
  * @param {event} event 
  */
 function toggleRow( event ) {
-    debugger;
     event.stopPropagation();
     
     var tasks = [];
@@ -147,7 +146,7 @@ function toggleRow( event ) {
     var div = event.target;
     var checked = div.checked;
     var user_id = $('input#user_id').val();
-    var boxes = $( div ).parent().next( '.dailyBoxes' ).find( '.checkboxDaily' );
+    var boxes = $( div ).parent().parent().find( '.checkboxDaily' );
 
     boxes.each( function( index, element ) {
         if ( $( element ).hasClass( checked ? 'unmarked' : 'marked' ) ) {

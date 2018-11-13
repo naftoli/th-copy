@@ -986,15 +986,6 @@ abstract class MissionDisplay {
 									    	echo "'><img src=\"/mission_report/5of7stickers/" . $this->dailyStickers[$daily_task->subject_id] . "\" /></div>";
 									    }
 									    ?>
-									    
-									    <? if ($this->lang_id == 2) : ?>
-									    	<div style="float: right; margin-right: -20px; margin-top: 6px; display: inline-block;">
-									    <? else : ?>
-									   		<div style="float: left; margin-left: -20px; margin-top: 6px; display: inline-block;">
-									   	<? endif; ?>
-									    	<input type="checkbox" class="dailyRow" />
-									    </div>
-											
 										<?php
 										// find out the marks dates to know if this task is only on specific dates
 										$dates = array();
@@ -1034,46 +1025,18 @@ abstract class MissionDisplay {
 													<? endforeach; ?>
 												</tr>
 											</table>
+
+											<? if ($this->lang_id == 2) : ?>
+												<div style="float: right; margin-top: 6px; display: inline-block;">
+											<? else : ?>
+												<div style="float: left; margin-top: 6px; display: inline-block;">
+											<? endif; ?>
+												<input type="checkbox" class="dailyRow" />
+											</div>
 										 </div>
 										 
 										 <div style="clear: both"></div>
-										<?
-										/*
-										$totalRendered++;
-										$addLabel = floor($labelAdded / 2);
-										//echo $totalRendered;
-										$split = $this->pager($page, $totalRendered, $totalRows, $addLabel); 
-										if ($split == 2) {
-											echo "</div>";
-											if ($page == 1)
-												$this->createFooter();
-											else {
-												$this->createPager( $user, $page );
-											}
-											$page++;
-											$totalRendered = 0;
-											$labelAdded = 0;
-											?>
-											</div>
-											<div style="clear: both"></div>
-											<hr />
-											
-											<div class="container">
-											<div class="left">
-											<?
-										}
-										else if ($split == 1) {
-											$firstRow = true;
-											$totalRendered += floor($labelAdded / 2);
-											$labelAdded = 0;
-											$firstColumn = false;
-											?>
-											</div><!-- .left-sidebar -->
-											<div class="right">
-											<?
-										}
-										 * 
-										 */
+									<?php
 									}
 								}
 							}
@@ -1681,9 +1644,9 @@ abstract class MissionDisplay {
 											</table>
 
 											<? if ($this->lang_id == 2) : ?>
-												<div style="float: right; margin-right: -20px; margin-top: 14px; display: inline-block;">
+												<div style="float: right; margin-top: 6px; display: inline-block;">
 											<? else : ?>
-												<div style="float: left; margin-left: -20px; margin-top: 6px; display: inline-block;">
+												<div style="float: left; margin-top: 6px; display: inline-block;">
 											<? endif; ?>
 												<input type="checkbox" class="dailyRow" />
 											</div>

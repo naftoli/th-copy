@@ -584,7 +584,7 @@ if (isset($_GET['he']) && $_GET['he'] == 1) {
 				var checked = $(this).is(":checked");
 				var tasks = '';
 				var dates = '';
-				var boxes = $(this).parent().next('.dailyBoxes').find('.checkboxDaily');
+				var boxes = $(this).parent().parent().find('.checkboxDaily');
 				
 				$(boxes).each( function() {
 					var info = $(this).attr('id');

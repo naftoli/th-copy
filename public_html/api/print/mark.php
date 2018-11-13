@@ -1,16 +1,12 @@
 <?php
+define( 'MASHPIA_AUTH_REQUIRED', true );
 require_once( '../header/header.php' ); // load header
 
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/missions.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/noPicMission.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/picMission.php' );
 
-try {
-    $soldier = Soldier::find( $_POST['user_id'] );
-    $parsha = Parsha::find( $_POST['parsha_id'] );
-} catch ( ActiveRecord\RecordNotFound $e ) {
-    echo '<h1>Error: Soldier or Parsha Invalid</h1>'; die();
-}
+$objMissions = [];
 
 // * Get the list of parshos for the dropdown
 $year = GlobalSettings::getCurrentYear();
@@ -20,12 +16,25 @@ $parshos = Parsha::all([
     'order' => 'end DESC'
 ]);
 
+if ( !isset( $_POST['user_id'] ) )
+    $_POST['user_id'] = 0;
+
+if ( !isset( $_POST['parsha_id'] ) )
+    $_POST['parsha_id'] = $parshos[0]->id;
+
+try {
+    $soldier = Soldier::find( $_POST['user_id'] );
+    $parsha = Parsha::find( $_POST['parsha_id'] );
+} catch ( ActiveRecord\RecordNotFound $e ) {
+    // fallback to first available option
+    $parsha = $parshos[0];
+    $soldier = $current_user->login->model->soldiers[0];
+}
+
 // * Generate the missions using the legacy code
 $missions = new Missions( $parsha->start, $parsha->end, $soldier->user_id);
 $missions = $missions->getMissions();
 
-// * Generate the printed sheets using the legacy code
-$objMissions = [];
 foreach ( $missions as $mission ) {
     $type = $mission->pic_mission_type;
     $objMissions[] = MissionDisplay::getInstance( $type, $mission );
@@ -109,11 +118,6 @@ foreach ( $missions as $mission ) {
             <button id='lookup-button'>Lookup</button>
         </form>
     </div>
-
-    <!-- <div id='stats'>
-        <p>Soldiers Printed: <?= count( $user_ids ) ?> | Parshos Printed: <?= count( $parsha_ids ) ?></p>
-        <p id='total'>Total Mission Sheets Printed: <?= count( $user_ids ) * count( $parsha_ids ) ?></p>
-    </div> -->
 
     <?php
         // * Print the missions just like before
