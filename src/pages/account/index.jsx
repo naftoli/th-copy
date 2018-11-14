@@ -5,21 +5,21 @@ import AccountPage from './AccountPage';
 // import BasesPage from './BasesPage';
 import { Page404 } from 'pages/errors';
 
+import './includes/styles.scss';
+
 const AccountIndexPage = props => {
   const { path } = props.match;
 
   return (
-    <Switch>
-      <Route path={ path } exact component={ AccountPage } />
-      
-      <Route path={`${path}/login`} exact render={ () => <h1>Login Settings</h1> } />
-      
-      <Route path={`${path}/payments`} exact render={ () => <h1>Payment Settings</h1> } />
-      
-      <Route path={`${path}/info`} exact render={ () => <h1>Account Info Settings</h1> } />
-      {/* 404 page */}
-      <Route component={ Page404 } />
-    </Switch>
+    <div id='AccountsPages'>
+      <Switch>
+        <Route path={ path } exact component={ AccountPage } />
+
+        <Route path={`${path}/login`} exact render={ () => <h1>Login Settings</h1> } />
+        
+        <Route component={ Page404 } />
+      </Switch>
+    </div>
   );
 }
 

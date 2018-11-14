@@ -10,5 +10,6 @@ Object {
   "SET_TITLE": "login/set_title",
   "SET_TOKENS": "login/set_tokens",
   "SET_USER": "login/set_user",
+  "UPDATE_USER": "login/update_user",
 }
 `;

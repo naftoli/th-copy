@@ -52,6 +52,16 @@ export const updateCurrentUser = ( updates ) => dispatch => {
     });
 }
 
+export const connectChabad = key => dispatch => {
+  return API.post( '/auth/current_user.php?action=connectChabad', { key } )
+    .then( updates => dispatch( actions.updateUser( updates ) ) );
+}
+
+export const disconnectChabad = key => dispatch => {
+  return API.post( '/auth/current_user.php?action=disconnectChabad', { key } )
+    .then( updates => dispatch( actions.updateUser( updates ) ) );
+}
+
 const setLogin = dispatch => {
   if ( cookies.get( 'login' ) ) {
     const [ type, id ] = cookies.get( 'login' ).split('-');

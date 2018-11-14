@@ -1,42 +1,87 @@
 import React from 'react';
 // components
-import { Row, Col, Input } from 'reactstrap';
-import { PhoneNumber, Password } from 'components/inputs';
+import { Link } from 'react-router-dom';
+import { Row, Col, Input, Button } from 'reactstrap';
+import { PhoneNumber } from 'components/inputs';
+import { ChabadOrgButton } from 'components/buttons';
 
 export const LoginRow = ( props ) => {
-  const { onChange, username, password, old_password } = props;
+  const { 
+    onChabadOrgLogin,   username, 
+    onChabadDisconnect, shliach_id,
+  } = props;
+
   return (
-    <Row>
-      <Col xs={12} sm={12} xl={4}>
-        <label>Username</label>
-        <Input required
-          name='username' 
-          value={ username }
-          onChange={ onChange } />
-      </Col>
+    <div className='LoginRow'>
+      <Row>
+        <Col sm={6}>
+          <p><strong>Username & Password</strong></p>
+          <p>{ username }</p>
+        </Col>
 
-      <Col xs={12} sm={6} xl={4}>
-        <label>Current Password</label>
-        <Password
-          tabToggle
-          defaultOpen
-          name='old_password'
-          onChange={ onChange }
-          value={ old_password }
-          placeholder='Old Password' />
-      </Col>
+        <Col sm={6}>
+          <Link
+            to={'/myaccount/login'}
+            className='btn btn-outline-primary'>
 
-      <Col xs={12} sm={6} xl={4}>
-        <label>New Password</label>
-        <Password
-          tabToggle
-          name='password'
-          value={ password }
-          onChange={ onChange }
-          disabled={ !old_password }
-          placeholder='New Password' />
-      </Col>
-    </Row>
+            Change Username & Password
+          </Link>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col sm={6}>
+          <p><strong>Chabad.org</strong></p>
+          <p>{ shliach_id ? 'Connnected' : 'Not Connected' }</p>
+        </Col>
+
+        <Col sm={6}>
+          { shliach_id && 
+            <Button outline 
+              color='danger'
+              onClick={ onChabadDisconnect }>
+              Disconnect
+            </Button>
+          }
+
+          { !shliach_id && 
+            <ChabadOrgButton
+              onLogin={ onChabadOrgLogin }/>
+          }
+        </Col>
+      </Row>
+    </div>
+    // <Row>
+    //   <Col xs={12} sm={12} xl={4}>
+    //     <label>Username</label>
+    //     <Input required
+    //       name='username' 
+    //       value={ username }
+    //       onChange={ onChange } />
+    //   </Col>
+
+    //   <Col xs={12} sm={6} xl={4}>
+    //     <label>Current Password</label>
+    //     <Password
+    //       tabToggle
+    //       defaultOpen
+    //       name='old_password'
+    //       onChange={ onChange }
+    //       value={ old_password }
+    //       placeholder='Old Password' />
+    //   </Col>
+
+    //   <Col xs={12} sm={6} xl={4}>
+    //     <label>New Password</label>
+    //     <Password
+    //       tabToggle
+    //       name='password'
+    //       value={ password }
+    //       onChange={ onChange }
+    //       disabled={ !old_password }
+    //       placeholder='New Password' />
+    //   </Col>
+    // </Row>
   );
 }
 
@@ -48,6 +93,18 @@ export const InformationRow = ( props ) => {
   } = props;
   return (
     <Row>
+
+      <Col xs={12}>
+        <label>E-Mail Address (unique)</label>
+        <Input type='email'
+          name='admin_email'
+          value={ admin_email }
+          onChange={ onChange } />
+        <div className='invalid-message'>
+          Please enter a valid E-mail address
+        </div>
+      </Col>
+
       <Col xs={4} xl={3}>
         <label>Title</label>
         <Input 
@@ -70,17 +127,6 @@ export const InformationRow = ( props ) => {
           name='last'
           value={ last }
           onChange={ onChange } />
-      </Col>
-
-      <Col xs={12}>
-        <label>E-Mail Address</label>
-        <Input type='email'
-          name='admin_email'
-          value={ admin_email }
-          onChange={ onChange } />
-        <div className='invalid-message'>
-          Please enter a valid E-mail address
-        </div>
       </Col>
 
       <Col xs={12} sm={6}>

@@ -48,6 +48,13 @@ export default ( state = initialState, action ) => {
         current_user: action.payload
       };
 
+    case types.UPDATE_USER:
+      return {
+        ...state,
+        loading: false,
+        current_user: { ...state.current_user, ...action.payload }
+      };
+
     // set the page title
     case types.SET_TITLE:
       return { ...state, title: action.payload }

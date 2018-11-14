@@ -3,18 +3,21 @@ import { connect } from 'react-redux';
 // components
 import { Prompt } from 'react-router';
 import { Account } from './includes/Account';
-import { AddressRow } from 'components/rows';
 import { SaveButton } from 'components/buttons';
 import { LoginRow, InformationRow } from './includes/Rows';
 // state
 import { removeAuth } from 'store/base/staff/operations';
-import { updateCurrentUser, getCurrentUser } from 'store/login/operations';
+import { 
+  connectChabad,  disconnectChabad,
+  getCurrentUser, updateCurrentUser,
+} from 'store/login/operations';
 // functions
 import { setTitle } from 'functions/utils';
 import { showError } from 'functions/notifications';
 import { filterUpdates, onInputChange } from 'functions/events';
 // style
 import './AccountPage/AccountPage.scss';
+import { toast } from 'react-toastify';
 
 class AccountPage extends Component {
 
@@ -62,22 +65,29 @@ class AccountPage extends Component {
       .then( this.props.getCurrentUser );
   }
 
-  // * do not update when only these keys have changed
-  filterKeys = key => ![ 'old_password' ].includes( key );
+  // * connect account to chabad.org
+  connectToChabadOrg = key => showError(
+    this.props.connectChabad( key )
+    .then( () => toast.info( 'Chabad.org Login Connected' ) )
+  );
+
+  // * disconnect from chabad.org account
+  disconnectChabad = () => showError(
+    this.props.disconnectChabad()
+    .then( () => toast.info( 'Chabad.org Login Removed' ) )
+  );
 
   render() {
     const { updates, saving } = this.state;
     let { account } = this.props; // load the account and the updates
     account = { ...account, ...updates };
     // and check if any of the updates require saving
-    const updated = Object.keys( updates )
-      .filter( this.filterKeys ).length > 0;
+    const updated = Object.keys( updates ).length > 0;
     // extract props
     let {
-      username, password,   old_password,
-      title,    first,      admin_email,
-      logins,   last,       admin_phone_work,
-      admin_phone_mobile,   ...address
+      username, title,  first,    admin_email,   last,
+      logins,   admin_phone_work, admin_phone_mobile,
+      chabad_org_shliach_id
     } = account;
 
     // * only show some logins
@@ -90,20 +100,23 @@ class AccountPage extends Component {
         <Prompt when={ updated } 
           message="You have unsaved changes. Are you sure you want to leave?" />
         
+        <h1>My Tzivos Hashem Account</h1>
+
+        <hr/>
+
+        <h4>Login Methods</h4>
+
+        <LoginRow
+          username={ username }
+          shliach_id={ chabad_org_shliach_id }
+          onChabadOrgLogin={ this.connectToChabadOrg }
+          onChabadDisconnect={ this.disconnectChabad } />
+
+        <hr/>
+
+        <h4>Account Information</h4>
+
         <form onSubmit={ this.onSubmit }>
-          
-          <h1>My Account</h1>
-
-          <LoginRow
-            username={ username }
-            password={ password }
-            onChange={ this.onChange }
-            old_password={ old_password } />
-
-          <p className='title'>
-            Personal Information
-          </p>
-
           <InformationRow
             first={ first }
             last={ last }
@@ -113,28 +126,25 @@ class AccountPage extends Component {
             admin_phone_work={ admin_phone_work }
             admin_phone_mobile={ admin_phone_mobile } />
 
-          <AddressRow
-            { ...address } 
-            prefix='admin_'
-            title={ false }
-            onChange={ this.onChange } />
-
           <SaveButton
             show={ updated }
             saving={ saving }
             disabled={ saving } />
         </form>
 
-        <p className='title'>
-          Account Access
-        </p>
+        <hr/>
+
+        <h4>Account Access</h4>
 
         <div id='accounts'>
           { logins.map( ( login, index ) => 
-            <Account key={ index } { ...login }
+            <Account 
+              { ...login }
+              key={ index }
               disconnect={ this.disconnect } />
           ) }
         </div>
+
       </div>
     )
   }
@@ -145,7 +155,8 @@ const mapStateToProps = ({ login }) => ({
 })
 
 const mapDispatchToProps = {
-  updateCurrentUser, getCurrentUser, removeAuth
+  connectChabad,      removeAuth,
+  disconnectChabad,   getCurrentUser,   updateCurrentUser,
 }
 
 export default connect(

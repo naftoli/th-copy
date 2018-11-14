@@ -1,37 +1,42 @@
-#accounts {
+#AccountPage {
 
-  display: flex;
-  flex-wrap: wrap;
+  .LoginRow {
+    p { margin-bottom: 0px;}
 
-  .Account {
-    width: 98%;
-    margin: 1%;
-    padding: 1%;
-    justify-content: center;
+    h4 { margin-bottom: 14px;}
 
-    @media ( min-width: 1024px ) {
-      width: 48%;
-      .name { font-size: 1.1em; }
+    .row {
+      align-items: center;
+      margin-bottom: .5em;
     }
+  }
 
-    @media ( min-width: 1500px ) {
-      width: 31%;
-      .name { font-size: 1.3em; }
-    }
-    @media ( min-width: 2150px ) {
-      width: 23%;
-      .name { font-size: 1.5em; }
-    }
+  #accounts {
+    .Account {
 
-    > .row { align-items: center; }
+      padding-bottom: .5em;
+      margin-bottom: 1em;
+      border-bottom: 1px solid #ccc;
 
-    img {
-      width: 100%;
-      max-width: 100px;
-    }
+      .row {
+        align-items: center;
+        > div {
+          margin-bottom: .5em;
+        }
+      }
 
-    .btn {
-      white-space: normal;
+      label { 
+        margin: 0px;
+        display: block; 
+      }
+      .name {
+        font-size: 1.3em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+      }
     }
   }
 }
