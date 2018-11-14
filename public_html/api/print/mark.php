@@ -48,13 +48,27 @@ foreach ( $missions as $mission ) {
     <title>Mark Printed Missions</title>
     <link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" />
     <style>
-        span.checkmark { pointer-events: none; }
         div#marking {
             padding: 4px 25px 15px; height: auto; background: #fff; 
             border-radius: 0px; border: 0px; border-bottom: 3px dashed;
         }
         div#options { display: flex; justify-content: space-evenly; align-items: flex-end; }
         form#lookup { text-align: center; margin-top: 16px; }
+
+        div#scanNext {
+            position: fixed;
+            background: #ccc;
+            padding: 15px;
+            width: 75px;
+            text-align: center;
+            border-radius: 15px;
+            bottom: 15px;
+            right: 15px;
+        }
+
+        div#scanNext:hover {
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -119,6 +133,10 @@ foreach ( $missions as $mission ) {
         </form>
     </div>
 
+    <div id='scanNext'>
+        Scan Next Soldier
+    </div>
+
     <?php
         // * Print the missions just like before
         foreach ( $objMissions as $obj ) {
@@ -132,6 +150,7 @@ foreach ( $missions as $mission ) {
             echo "</div>";
         }
     ?>
+
     <div style="clear: both"></div>
     <br /><br />
     
