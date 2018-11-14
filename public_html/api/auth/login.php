@@ -19,7 +19,7 @@ if ( isset($_POST['username']) && isset($_POST['password']) )
         $_POST['username'], $_POST['password']
     );
 else if ( isset( $_POST['chabad_key'] ) )
-    $login = $login = \mashpia\api\auth\Auth::chabadLogin(
+    $login = \mashpia\api\auth\Auth::chabadLogin(
         $_POST['chabad_key']
     );
 

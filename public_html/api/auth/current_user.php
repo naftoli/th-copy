@@ -2,6 +2,8 @@
 define( 'MASHPIA_AUTH_REQUIRED', true );
 require_once( __DIR__ . '/../header/header.php' );
 
+require_once( __DIR__ . '/../../chabad_org/classes/ChabadShliach.php' );
+
 class ProfilesRouter {
 
     public function index() {
@@ -35,14 +37,42 @@ class ProfilesRouter {
         ]);
     }
 
+    // * connects the current_user account to the correct chabad.org shliach_id
+    public function connectChabad() {
+        global $current_user; global $MASHPIA_DB;
+
+        $key = $_POST['key'];
+
+        $shliach = new \ChabadShliach( $key );
+        // make sure the token is valid
+        if ( !$shliach->authenticate() )
+            return json_error('Chabad.org key invalid');
+
+        $current_user->shliach_id = $shliach->shliachID;
+
+        if ( !$current_user->is_valid() || !$current_user->save() )
+            return json_error('Another account is already this Chabad.org account to login.');
+
+        return json_response([ 'chabad_org_shliach_id' => $current_user->shliach_id ]);
+    }
+
+    public function disconnectChabad() {
+        global $current_user;
+
+        $current_user->shliach_id = null;
+
+        if ( !$current_user->is_valid() || !$current_user->save() )
+            return json_error('Could not disconnect Chabad.org Account Access');
+
+        return json_response([ 'chabad_org_shliach_id' => $current_user->shliach_id ]);
+    }
+
     private function serializeAccount( $admin ) {
         return $admin->to_array([
             'only' => [
                 'admin_id', 'username', 'title', 'first', 'last', 'lang',
                 'home_phone', 'cell_phone', 'admin_email', 'chabad_org_shliach_id',
                 'admin_phone_work', 'admin_phone_mobile', 'photo',
-                'admin_address1', 'admin_address2', 'admin_city', 'admin_state', 
-                'admin_postal', 'admin_country'
             ],
             'methods' => [ 'logins', /* 'customerProfile' */ ]
         ]);
