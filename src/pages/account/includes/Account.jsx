@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 // components
-import { Row, Col, Button, Card } from 'reactstrap';
-import { BaseLogo, FontAwesome } from 'components/ui';
+import { Row, Col, Button } from 'reactstrap';
 
 export class Account extends Component {
 
@@ -10,23 +9,28 @@ export class Account extends Component {
   }
 
   render() {
-    const { name, img } = this.props;
+    const { name, role } = this.props;
+
     return (
-      <Card className='Account'>
+      <div className='Account'>
         <Row>
-          <Col xs={3} xl={2}>
-            <BaseLogo src={ img } />
-          </Col>
-          <Col xs={5} xl={6}>
+          <Col sm={4}>
+            <label>Connects To</label>
             <span className='name'>{ name }</span>
           </Col>
-          <Col xs={4}>
-            <Button color='danger' onClick={ this.onClick }>
-              <FontAwesome icon='trash'/> Remove
+
+          <Col sm={4}>
+            <label>Role</label>
+            <span className='name'>{ role }</span>
+          </Col>
+          
+          <Col sm={4}>
+            <Button outline color='danger' onClick={ this.onClick }>
+              Remove Access
             </Button>
           </Col>
         </Row>
-      </Card>
+      </div>
     );
   }
 }

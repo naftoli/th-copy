@@ -2,6 +2,7 @@ export const types = {
   CHANGE_LOGIN: `login/change_login`,
   SET_LOADING:  `login/set_loading`,
   RESET_STATE:  `login/reset_state`,
+  UPDATE_USER:  `login/update_user`,
   SET_ERRORS:   `login/set_errors`,
   SET_TOKENS:   `login/set_tokens`,
   SET_TITLE:    `login/set_title`,
@@ -33,33 +34,30 @@ export const setErrors = errors => {
   }
 };
 
-export const setUser = user => {
-  return {
-    type: types.SET_USER,
-    payload: user
-  }
-};
+export const setUser = user => ({
+  type: types.SET_USER,
+  payload: user
+});
+
+export const updateUser = updates => ({
+  type: types.UPDATE_USER,
+  payload: updates
+})
 
 export const logout = () => ({ 
   type: types.LOGOUT 
 });
 
-export const changeLogin = ( type, id ) => {
-  return {
-    type: types.CHANGE_LOGIN,
-    payload: { type, id }
-  }
-}
+export const changeLogin = ( type, id ) => ({
+  type: types.CHANGE_LOGIN,
+  payload: { type, id }
+});
 
-export const resetState = () => {
-  return {
-    type: types.RESET_STATE
-  }
-}
+export const resetState = () => ({
+  type: types.RESET_STATE
+});
 
-export const setTitle = title => {
-  return {
-    type: types.SET_TITLE,
-    payload: title
-  }
-}
+export const setTitle = title => ({
+  type: types.SET_TITLE,
+  payload: title
+});
