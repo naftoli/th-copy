@@ -9,11 +9,12 @@
 
     img#logo {
       width: 20%;
+      margin-top: 1%;
       max-width: 250px;
     }
 
     #login-form {
-      margin-top: 2%;
+      margin-top: 1%;
       text-align: center;
       width: 90%;
       max-width: 520px;
@@ -49,25 +50,33 @@
       }
       // animate the login button
       button#login {
-        width: 100%; margin-bottom: 15px;
+        width: 100%;
         transition: .25s;
         &:hover, &:focus { word-spacing: .5em; }
       }
 
       > strong { 
         display: block;
-        font-size: .9em; 
+        font-size: 1.3em; 
         margin-top: 12px;
       }
 
-      #sign-in-with {      
+      #sign-in-with {
         display: inline-flex;
         flex-wrap: wrap;
         justify-content: space-around;
+        align-items: center;
 
-        margin-top: 4px; width: 100%;
+        width: 100%;
+        margin-top: 15px;
 
-        .btn { margin-bottom: 15px; width: 250px; }
+        .ChabadOrgButton {
+          margin: 5px 0px;
+        }
+
+        .ChabadOrgButton, .btn {
+          margin-bottom: 15px;
+        }
       }
     }
 

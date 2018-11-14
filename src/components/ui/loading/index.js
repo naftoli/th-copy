@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FontAwesome } from '../';
-import { logo } from 'img/logos';
+import logo from 'img/logos/th.svg';
 import './Spinner.scss';
 import './LoadingScreen.scss';
 

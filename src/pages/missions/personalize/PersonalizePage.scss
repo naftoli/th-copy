@@ -53,6 +53,14 @@
       text-align: left;
       font-size: 1em;
       width: 100%;
+
+      border-color: $primary-color;
+      background: none;
+      color: #000;
+
+      &:focus, &:active {
+        box-shadow: 0 0 0 0.2rem rgba(62, 109, 196, 0.5)
+      }
     }
 
     i {

@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 import { Password } from 'components/inputs';
 import { Spinner, FontAwesome } from 'components/ui';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
-// import { GoogleButton, ChabadOrgButton } from 'components/buttons';
+import { ChabadOrgButton } from 'components/buttons';
 // state
 import { login } from 'store/login/operations';
 // styles and images
 import './Login.scss';
-import { logo } from 'img/logos';
+import logo from 'img/logos/th.svg';
 import { user } from 'img/icons';
-import { LEGACY_URL } from 'components/constants';
+// import { LEGACY_URL } from 'components/constants';
 
 export class Login extends Component {
   constructor( props ){
@@ -52,7 +52,15 @@ export class Login extends Component {
   handleLoginForm = ( event ) => {
     event.preventDefault();
     this.setState( { show_password: false } ); // reset the show-password state
-    this.props.login( this.state.username, this.state.password )
+    // and log the user in
+    this.props.login({
+      username: this.state.username,
+      password: this.state.password
+    })
+  }
+
+  onChabadOrgLogin = chabad_key => {
+    this.props.login({ chabad_key })
   }
 
   render(){
@@ -80,7 +88,10 @@ export class Login extends Component {
                   onChange={this.handleChange} value={this.state.username} name='username' />
               </InputGroup>
 
-              <Password size="lg" value={this.state.password} showIcon onChange={this.handleChange} />
+              <Password
+                showIcon  size="lg"
+                value={ this.state.password } 
+                onChange={ this.handleChange } />
 
               { errors }
 
@@ -89,19 +100,23 @@ export class Login extends Component {
               </Button>
             </form>
 
-            {/* <strong>Sign In With:</strong>
             <div id='sign-in-with'>
-              <ChabadOrgButton size="lg" />
-              <GoogleButton size='lg'/>
-            </div> */}
+
+              <ChabadOrgButton 
+                onLogin={ this.onChabadOrgLogin }/>
+
+              {/* <GoogleButton
+                size="lg" /> */}
+
+            </div>
           </div>
           }
         </div>
-        <div id='links'>
+        {/* <div id='links'>
           <a href={LEGACY_URL + '/mobile/reg/forgot.html'}> Forgot Password </a>|
           <a href={LEGACY_URL + '/registration.php'}> New Base </a>|
           <a href={LEGACY_URL + '/mobile/reg/parent_register.html'}> New Parent Account </a>
-        </div>
+        </div> */}
       </div>
     );
   }

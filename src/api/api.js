@@ -48,7 +48,7 @@ const parseResponse = response => {
     return Promise.reject( new Error('Unknown Server Error') );
   return response.data;
 }
-
+// export for testing
 export { API_URL, headers, toJSON, parseResponse };
 
 export default {
@@ -56,6 +56,7 @@ export default {
     return fetch(`${API_URL}${url}`, {
       method: 'GET',
       headers: headers(),
+      cache: 'no-store',
       credentials: credentials
     }).then( toJSON ) // convert to json
       .then( parseResponse ) // understand the response
@@ -70,6 +71,7 @@ export default {
       method: 'POST',
       headers: headers( content_type ),
       credentials: credentials,
+      cache: 'no-store',
       body
     }).then( toJSON ) // convert to json
       .then( parseResponse ) // understand the response
@@ -84,6 +86,7 @@ export default {
       method: 'PATCH',
       headers: headers( content_type ),
       credentials: credentials,
+      cache: 'no-store',
       body
     }).then( toJSON ) // convert to json
       .then( parseResponse ) // understand the response
@@ -95,6 +98,7 @@ export default {
       method: 'DELETE',
       headers: headers(),
       credentials: credentials,
+      cache: 'no-store',
       body
     }).then( toJSON ) // convert to json
       .then( parseResponse ) // understand the response

@@ -39,7 +39,7 @@ class Campaign extends Component {
 
     return (
       <div className={ classNames }>
-        <Button color='primary' onClick={ this.toggle }>
+        <Button onClick={ this.toggle }>
           <Toggle 
             className='small'
             checked={ enrolled } 

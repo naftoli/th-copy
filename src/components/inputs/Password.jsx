@@ -27,6 +27,7 @@ export class Password extends Component {
     this.setState({
       show_password: !this.state.show_password
     }, () => {
+      // use the dom to avoid a re-render
       const password = this.passwordRef.current;
       if ( password ) {
         password.type = this.state.show_password ? 'text' : 'password';
@@ -37,9 +38,11 @@ export class Password extends Component {
 
   render() {
     const { 
-      size, required, value, onChange, 
-      showIcon, showToggle, tabToggle, defaultOpen
+      name,   showIcon,     required,
+      size,   placeholder,  onChange,   disabled,
+      value,  showToggle,   tabToggle,  defaultOpen
     } = this.props;
+
     const inputType = defaultOpen ? 'text' : 'password';
 
     return (
@@ -49,13 +52,30 @@ export class Password extends Component {
             <img src={lock} alt='lock' width='26' height='26'/>
           </InputGroupAddon>
         }
-        <input className='form-control' placeholder='Password' type={ inputType } required={ required }
-          onChange={ onChange } value={ value } name='password' ref={ this.passwordRef } />
+
+        <input 
+          value={ value }
+          type={ inputType }
+          disabled={ disabled }
+          required={ required }
+          onChange={ onChange }
+          className='form-control'
+          ref={ this.passwordRef }
+          name={ name || 'password' }
+          placeholder={ placeholder || 'Password' } />
+
         { showToggle &&
           <InputGroupAddon addonType="append">
-            <Button color='primary' onClick={ this.togglePassword } id='toggle-password' 
-              tabIndex={ tabToggle ? 0 : -1 } outline >
+
+            <Button outline
+              color='primary'
+              disabled={ disabled }
+              className='toggle-password'
+              onClick={ this.togglePassword }
+              tabIndex={ tabToggle ? 0 : -1 }>
+
               <FontAwesome icon={ this.state.show_password ? 'eye' : 'eye-slash' } />
+
             </Button>
           </InputGroupAddon>
         }

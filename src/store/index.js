@@ -1,5 +1,5 @@
 import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
-import { LOGOUT, CHANGE_LOGIN } from './login/types';
+import { types } from './login/actions';
 import thunk from 'redux-thunk';
 
 import home from 'store/home/reducer';
@@ -21,14 +21,18 @@ export const reducer = combineReducers({
 
 const rootReducer = ( state, action ) => {
   // reset the state on logout
-  if ( action.type === LOGOUT ) { state = undefined; }
+  if ( action.type === types.LOGOUT )
+    state = undefined;
   // reset all non-login state when login is changed
-  if ( action.type === CHANGE_LOGIN ) { state = Object.assign({}, { login: state.login }); }
-
+  if ( action.type === types.CHANGE_LOGIN )
+    state = Object.assign({}, { login: state.login });
+  // return the reducer
   return reducer( state, action );
 }
 
 export default createStore( rootReducer, compose(
   applyMiddleware( thunk ),
+  // only connect to devtools in development
+  process.env.NODE_ENV === "production" ||
   window.devToolsExtension ? window.devToolsExtension() : f => f
 ));

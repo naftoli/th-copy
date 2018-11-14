@@ -1,4 +1,4 @@
-import * as types from './types';
+import { types } from './actions';
 // TODO handle when positions change in the UI
 // import { REMOVE_AUTH } from '../staff/types';
 import Cookies from 'universal-cookie';
@@ -42,9 +42,18 @@ export default ( state = initialState, action ) => {
         const login = action.payload.logins[0];
         cookies.set( 'login', `${login.type}-${login.id}`, { path: '/' } );
       }
-      return Object.assign({}, state, {
+      return {
+        ...state,
+        loading: false,
         current_user: action.payload
-      });
+      };
+
+    case types.UPDATE_USER:
+      return {
+        ...state,
+        loading: false,
+        current_user: { ...state.current_user, ...action.payload }
+      };
 
     // set the page title
     case types.SET_TITLE:

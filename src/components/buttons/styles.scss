@@ -1,11 +1,61 @@
-
-.ChabadOrgButton { 
-  img { height: 30px; }
-}
-
 .GoogleButton {
-  padding: 0px;
-  padding-right: 16px;
+  border-radius: .1rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 1px .6em 1px 1px;
+
   font-family: 'Roboto', sans-serif;
-  color: #000;
+  font-weight: 600;
+
+  > img {
+    width: 2em;
+    height: 2em;
+
+    padding: .53em;
+    margin-right: .6em;
+
+    background: #fff;
+    vertical-align: top;
+
+    border-radius: .1rem;
+  }
+
+  // span {
+  //   font-size: .78em;
+  // }
+  
+  &:disabled {
+    color: #8c8c8c;
+    background: #eaeaea;
+    border-color: #eaeaea;
+    
+
+    img {
+      background: none;
+      filter: grayscale( 100% )
+    }
+  }
+
+  &:not(:disabled):not(.disabled) {
+
+    box-shadow: 0 0 5px #888;
+
+    &, &:focus, &:hover {
+      background: #4989ee;
+      border-color: #4989ee;
+    }
+  
+    &:active {
+      background: #396dd0 !important;
+      border-color: #396dd0 !important;
+      box-shadow: 0 0 5px #333 !important;
+    }
+  
+    &:focus, &:hover {
+      box-shadow:
+        0 2px 3px #999,
+        0 0 2px .175rem rgb(197, 217, 248),
+        ;
+    }
+  }
 }

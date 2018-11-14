@@ -11,7 +11,7 @@ import './Navbar.scss';
 import { loginStoreChanged } from 'functions/login';
 // icons
 import user from 'img/user.svg';
-import { logo } from 'img/logos';
+import logo from 'img/logos/th.svg';
 
 class Navbar extends Component {
 

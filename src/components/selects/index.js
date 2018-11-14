@@ -1,4 +1,5 @@
 export * from './static/Select';
+export * from './static/RoleSelect';
 export * from './static/GradeSelect';
 export * from './static/MissionTypeSelect';
 // redux connected components

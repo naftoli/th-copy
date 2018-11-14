@@ -1,0 +1,42 @@
+#AccountPage {
+
+  .LoginRow {
+    p { margin-bottom: 0px;}
+
+    h4 { margin-bottom: 14px;}
+
+    .row {
+      align-items: center;
+      margin-bottom: .5em;
+    }
+  }
+
+  #accounts {
+    .Account {
+
+      padding-bottom: .5em;
+      margin-bottom: 1em;
+      border-bottom: 1px solid #ccc;
+
+      .row {
+        align-items: center;
+        > div {
+          margin-bottom: .5em;
+        }
+      }
+
+      label { 
+        margin: 0px;
+        display: block; 
+      }
+      .name {
+        font-size: 1.3em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+  }
+}
