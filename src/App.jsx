@@ -131,7 +131,7 @@ export class App extends Component {
 const mapStateToProps = ( state ) => {
   const { current_login, current_user } = state.login;
   return {
-    logged_in: !!current_login && !!current_user,
+    logged_in: Object.keys( current_login ).length > 0 && !!current_user,
     login: current_login
   }
 }
