@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Password } from 'components/inputs';
 import { Spinner, FontAwesome } from 'components/ui';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
-import { ChabadOrgButton } from 'components/buttons';
+import { GoogleButton, ChabadOrgButton } from 'components/buttons';
 // state
 import { login } from 'store/login/operations';
 // styles and images
@@ -103,6 +103,7 @@ export class Login extends Component {
             <div id='sign-in-with'>
 
               <ChabadOrgButton 
+                size="lg" 
                 onLogin={ this.onChabadOrgLogin }/>
 
               {/* <GoogleButton
