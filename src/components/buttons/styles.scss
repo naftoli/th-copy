@@ -21,18 +21,22 @@
 
 .ChabadOrgButton {
 
-  $chabad-blue: #b1cbd9;
+  $chabad-blue: #306ea2;
   $chabad-text-blue: #0A3359;
 
-
-  padding: 1px 1px 1px .6em;
-
   font-weight: 600;
+  border-radius: .1rem;
+  padding: 1px 1px 1px .6em;
 
   img { 
     height: 2em;
-    padding: .3em;
-    padding-top: 0px;
+    padding: .4em;
+    
+    // padding-top: .1em;
+  }
+
+  span {
+    font-size: .78em;
   }
 
   &:disabled {
@@ -48,9 +52,10 @@
   &:not(:disabled):not(.disabled) {
 
     &, &:focus, &:hover {
-      color: $chabad-text-blue;
-      background: $chabad-blue;
-      border-color: $chabad-text-blue;
+      // color: $chabad-text-blue;
+      color: #fff;
+      background: linear-gradient($chabad-blue, #1e4f79);
+      border: none;
     }
   
     &:active {
