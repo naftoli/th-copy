@@ -8,16 +8,18 @@ export class ChabadOrgButton extends Component {
   myChabadLoginWindow = null;
 
   onClick = () => {
-    window.onLoginComplete = this.onStatusChange;
+    // window.onLoginComplete = this.onStatusChange;
 
-    if ( this.myChabadLoginWindow && !this.myChabadLoginWindow.closed )
+    if ( this.myChabadLoginWindow && !this.myChabadLoginWindow.closed ) {
       this.myChabadLoginWindow.focus();
-    else
+    } else {
+      let params = `p=${ window.location.protocol.substr(0, window.location.protocol.length - 1 )}&d=${encodeURIComponent( window.location.host ) }`
       this.myChabadLoginWindow = window.open(
-        'https://www.chabad.org/api/login/form?474DBD09-F59F-433D-A755-5A97594FC4E1', 
-        'MyChabadLoginWindow', 
+        `https://www.chabad.org/api/login/form?474DBD09-F59F-433D-A755-5A97594FC4E1&${ params }`,
+        'MyChabadLoginWindow',
         'width=390,height=420,resizable=no,scrollbars=0,location=yes'
       );
+    }
   }
 
   // handle when the chabad.org status changes
