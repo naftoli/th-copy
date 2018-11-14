@@ -40,7 +40,7 @@ export const LoginRow = ( props ) => {
   );
 }
 
-export const AccountRow = ( props ) => {
+export const InformationRow = ( props ) => {
   const {
     last, title,  first,
     onChange,     admin_phone_work,

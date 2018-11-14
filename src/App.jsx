@@ -4,12 +4,13 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 // screens
 import { Page404 } from 'pages/errors';
-import { Login, Logout, AccountPage } from 'pages/login';
+import { Login, Logout } from 'pages/login';
 // pages
 import HomePage from 'pages/home/HomePage';
 import Rewards from 'pages/rewards';
 import BaseManagment from 'pages/base-managment';
 import Missions from 'pages/missions';
+import Account from 'pages/account';
 // components
 import { Dashboard } from 'components/navigation';
 import { LoadingScreen } from 'components/ui';
@@ -95,13 +96,17 @@ export class App extends Component {
           { !refreshing && 
             <Switch>
               <Route path={`/`} exact component={ HomePage }/>
+
               <Route path={`/rewards`} component={ Rewards } />
+
               <Route path={`/bm`} component={ BaseManagment } />
+
               <Route path={`/missions`} component={ Missions } />
               
-              <Route path={`/myaccount`} exact component={ AccountPage }/>
+              <Route path={`/myaccount`} component={ Account }/>
               {/* Action only pages */}
               <Route path={`/logout`} component={Logout}/>
+              
               <Route component={ Page404 } />
             </Switch>
           }

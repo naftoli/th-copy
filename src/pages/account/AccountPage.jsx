@@ -5,7 +5,7 @@ import { Prompt } from 'react-router';
 import { Account } from './includes/Account';
 import { AddressRow } from 'components/rows';
 import { SaveButton } from 'components/buttons';
-import { LoginRow, AccountRow } from './includes/Rows';
+import { LoginRow, InformationRow } from './includes/Rows';
 // state
 import { removeAuth } from 'store/base/staff/operations';
 import { updateCurrentUser, getCurrentUser } from 'store/login/operations';
@@ -14,7 +14,7 @@ import { setTitle } from 'functions/utils';
 import { showError } from 'functions/notifications';
 import { filterUpdates, onInputChange } from 'functions/events';
 // style
-import './includes/AccountPage.scss';
+import './AccountPage/AccountPage.scss';
 
 class AccountPage extends Component {
 
@@ -79,7 +79,8 @@ class AccountPage extends Component {
       logins,   last,       admin_phone_work,
       admin_phone_mobile,   ...address
     } = account;
-    // *only show some logins
+
+    // * only show some logins
     logins = logins.filter(
       login => [ 'INST', 'BC', 'TEACHER' ].includes( login.code )
     );
@@ -90,9 +91,8 @@ class AccountPage extends Component {
           message="You have unsaved changes. Are you sure you want to leave?" />
         
         <form onSubmit={ this.onSubmit }>
-          <p className='title'>
-            Login Information
-          </p>
+          
+          <h1>My Account</h1>
 
           <LoginRow
             username={ username }
@@ -104,7 +104,7 @@ class AccountPage extends Component {
             Personal Information
           </p>
 
-          <AccountRow
+          <InformationRow
             first={ first }
             last={ last }
             title={ title }
