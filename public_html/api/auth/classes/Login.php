@@ -22,6 +22,8 @@ class Login implements \JsonSerializable {
     public $school_id = false; // cache the school id
     public $class_id = false; // cache the class id
 
+    public $role = false;
+
     const LEGACY_ID = 2; // School institution
 
     /**
@@ -82,6 +84,7 @@ class Login implements \JsonSerializable {
             $this->name = 'Tzivos Hashem Headquarters';
             $this->img = '/mobile/img_new/TH Logo-colorful-svg.svg';
             $this->code = 'HQ';
+            $this->role = 'Headquarters';
 
             $this->active = true;
             $this->legacy = true;
@@ -90,6 +93,7 @@ class Login implements \JsonSerializable {
             $this->name = $this->model->name;
             $this->img = $this->model->logo();
             $this->code = 'INST';
+            $this->role = 'Institution Manager';
 
             $this->active = true;
             $this->legacy = $this->model->inst_id === self::LEGACY_ID;
@@ -100,6 +104,7 @@ class Login implements \JsonSerializable {
             $this->name = $this->model->name;
             $this->img = $this->model->logoPath();
             $this->code = 'BC';
+            $this->role = 'Base Commander';
 
             $this->active = is_null( $this->model->school_era );
             $this->legacy = $this->model->inst_id === self::LEGACY_ID;
@@ -111,6 +116,7 @@ class Login implements \JsonSerializable {
             $this->name = $this->model->name();
             $this->img = $this->model->school->logoPath();
             $this->code = 'TEACHER';
+            $this->role = 'Teacher';
 
             $this->active = is_null( $this->model->school->school_era );
             $this->legacy = $this->model->school->inst_id === self::LEGACY_ID;
@@ -123,6 +129,7 @@ class Login implements \JsonSerializable {
             $this->name = 'My Parent Portal';
             $this->img = '/mobile/img_new/TH Logo-colorful-svg.svg';
             $this->code = 'PARENT';
+            $this->role = 'Parent';
 
             $this->active = true;
             $this->legacy = true;
@@ -178,7 +185,7 @@ class Login implements \JsonSerializable {
             'img' => $this->img,            'legacy' => $this->legacy,
             'active' => $this->active,      'school_id' => $this->school_id,
             'inst_id' => $this->inst_id,    'class_id' => $this->class_id,
-            'modules' => $this->modules,
+            'modules' => $this->modules,    'role'  => $this->role
         ];
         // add the login key for parent accounts to the parent portal
         if ( $this->type == 'PARENT' )

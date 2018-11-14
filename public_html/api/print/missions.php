@@ -5,6 +5,10 @@ require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/missions.php'
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/noPicMission.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/picMission.php' );
 
+if ( !isset( $_POST['school_id'] ) ) {
+    header('Location: /beta/missions/print' ); die();
+}
+
 $school = School::find( $_POST['school_id'] );
 $user_ids = $_POST['user_ids'] ? explode( ',', $_POST['user_ids'] ) : false;
 $class_ids = $_POST['class_ids'] ? explode( ',', $_POST['class_ids'] ) : false;

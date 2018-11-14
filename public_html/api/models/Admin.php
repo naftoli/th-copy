@@ -27,7 +27,8 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     static $alias_attribute = [ 
         'email' => 'admin_email', 
         'work' => 'admin_phone_work',
-        'cell' => 'admin_phone_mobile' 
+        'cell' => 'admin_phone_mobile',
+        'shliach_id' => 'chabad_org_shliach_id' 
     ];
     // internalCaches
     private $customer_profile;
@@ -220,7 +221,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             'only' => [
                 'admin_id', 'username', 'title', 'first', 'last', 'lang', 
                 'father', 'mother', 'father_pic', 'mother_pic',
-                'home_phone', 'cell_phone', 'admin_email'
+                'home_phone', 'cell_phone', 'admin_email',  'chabad_org_shliach_id'
             ],
             'methods' => [ 'logins' ]
         ]);
