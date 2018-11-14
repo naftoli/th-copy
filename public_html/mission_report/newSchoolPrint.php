@@ -334,8 +334,8 @@ if (isset($_GET['he']) && $_GET['he'] == 1) {
 				window.location.href = "newSchoolPrint.php?school=" + school + "&grade=" + grade + "&user=" + student + "&start=" + start + "&end=" + end + "&dblSided=" + dblSided + "&showDate=" + showDate;
 			});
 			
-			$(".userMission").each( function() {			
-				var user = $(this).attr('id');	
+			$(".userMission").each( function() {
+				var user = $(this).attr('id');
 				var user_id = user.substring(user.indexOf('-') + 1);
 		    	var image = 'All';
 		    	var elem = this;

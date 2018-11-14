@@ -5,11 +5,13 @@ $(".userMission").each( function() {
     var image = 'All';
     var elem = this;
 
-    $.get( 
-        '/ajax/getMissionInfo.php',
-        {user_id : user_id, type : image}, 
-        function( data ) {
-            data = $.parseJSON(data);
+    $.ajax({
+        url: '/ajax/getMissionInfo.php', 
+        async: false, 
+        data: {user_id : user_id, type : image}, 
+        success: function( data ) {
+            if ( typeof data == 'string' )
+                data = $.parseJSON(data);
             
             var stickers = {
                 1	: 'Shabbos Mevorchim Tehillim.gif', 
@@ -45,5 +47,5 @@ $(".userMission").each( function() {
             str += "</div>";
             $(elem).find("#" + user_id).append(str);
         }
-    );
+    });
 });

@@ -96,6 +96,5 @@ foreach ( $subjects as $subject ) {
     }
 }
 
-header("Content-Type: application/json; charset=utf-8;");
 echo json_encode($info);
 ?>
