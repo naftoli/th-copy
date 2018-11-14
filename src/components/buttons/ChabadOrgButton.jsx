@@ -32,9 +32,16 @@ export class ChabadOrgButton extends Component {
     // check if API is present
     if ( !window.MyChabadApi )
       return false;
+
     // this does not seem to be working.
-    // TODO contact chabad.org and investigate.
-    window.MyChabadApi.Events.RemoveEventListener( 'statusUpdated', this.onStatusChange, this );
+    // TODO wait for bugfix from chabad.org and use official api
+    // window.MyChabadApi.Events.RemoveEventListener( 'statusUpdated', this.onStatusChange, this );
+    // * remove the listener manually untill they fix the bug
+    for ( let i = 0; i < window.MyChabadApi.Events.Listeners['statusupdated'].length; i++ ) {
+      let listener = window.MyChabadApi.Events.Listeners['statusupdated'][i];
+      if ( listener.callback === this.onStatusChange && listener.thisObj === this )
+        window.MyChabadApi.Events.Listeners['statusupdated'].splice( i, 1 );
+    }
   }
   // handle when the chabad.org status changes
   onStatusChange = event => {
@@ -58,11 +65,6 @@ export class ChabadOrgButton extends Component {
       <div
         className='ChabadOrgButton'
         ref={ this.spanref } />
-      // <span
-      //   view="login"
-      //   ref={ this.spanref }
-      //   className="mychabad"
-      //   settings="viewStyle=button" />
     );
   }
 }
