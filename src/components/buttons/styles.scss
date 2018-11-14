@@ -1,5 +1,73 @@
+@import 'styles/colors';
+
+.GoogleButton,
+.ChabadOrgButton {
+  &:not(:disabled):not(.disabled) {
+
+    box-shadow: 0 0 5px #888;
+  
+    &:active {
+      box-shadow: 0 0 5px #333 !important;
+    }
+  
+    &:focus, &:hover {
+      box-shadow:
+        0 2px 3px #999,
+        0 0 2px .175rem rgb(197, 217, 248),
+        ;
+    }
+  }
+}
+
+.ChabadOrgButton {
+
+  $chabad-blue: #b1cbd9;
+  $chabad-text-blue: #0A3359;
+
+
+  padding: 1px 1px 1px .6em;
+
+  font-weight: 600;
+
+  img { 
+    height: 2em;
+    padding: .3em;
+    padding-top: 0px;
+  }
+
+  &:disabled {
+    color: #8c8c8c;
+    background: #eaeaea;
+    border-color: #eaeaea;
+  
+    img {
+      filter: grayscale( 100% )
+    }
+  }
+
+  &:not(:disabled):not(.disabled) {
+
+    &, &:focus, &:hover {
+      color: $chabad-text-blue;
+      background: $chabad-blue;
+      border-color: $chabad-text-blue;
+    }
+  
+    &:active {
+      background: darken( $chabad-blue, 10% );
+    }
+  }
+}
+
 .GoogleButton {
-  border-radius: .1rem;
+
+  $google-blue: #4989ee;
+  $google-focus-blue: #396dd0;
+  $google-text-grey: #8c8c8c;
+  $google-disabled-grey: #eaeaea;
+  $google-border-radius: .1rem;
+
+  border-radius: $google-border-radius;
   display: inline-flex;
   align-items: center;
   padding: 1px .6em 1px 1px;
@@ -17,7 +85,7 @@
     background: #fff;
     vertical-align: top;
 
-    border-radius: .1rem;
+    border-radius: $google-border-radius;
   }
 
   // span {
@@ -25,11 +93,10 @@
   // }
   
   &:disabled {
-    color: #8c8c8c;
-    background: #eaeaea;
-    border-color: #eaeaea;
+    color: $google-text-grey;
+    background: $google-disabled-grey;
+    border-color: $google-disabled-grey;
     
-
     img {
       background: none;
       filter: grayscale( 100% )
@@ -38,24 +105,14 @@
 
   &:not(:disabled):not(.disabled) {
 
-    box-shadow: 0 0 5px #888;
-
     &, &:focus, &:hover {
-      background: #4989ee;
-      border-color: #4989ee;
+      background: $google-blue;
+      border-color: $google-blue;
     }
   
     &:active {
-      background: #396dd0 !important;
-      border-color: #396dd0 !important;
-      box-shadow: 0 0 5px #333 !important;
-    }
-  
-    &:focus, &:hover {
-      box-shadow:
-        0 2px 3px #999,
-        0 0 2px .175rem rgb(197, 217, 248),
-        ;
+      background: $google-focus-blue;
+      border-color: $google-focus-blue;
     }
   }
 }
