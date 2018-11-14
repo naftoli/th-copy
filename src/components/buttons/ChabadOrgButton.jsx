@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 
-import chabad from 'img/logos/chabad.png'
+import chabad from 'img/logos/chabad_2.png'
 
 export class ChabadOrgButton extends Component {
 
