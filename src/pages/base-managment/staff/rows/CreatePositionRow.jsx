@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // components
-import { Select, BaseSelect, PlatoonSelect } from 'components/inputs'
+import { BaseSelect, PlatoonSelect } from 'components/inputs';
+import { RoleSelect } from 'components/selects';
 import { ButtonBar, FontAwesome } from 'components/ui';
 import { Row, Col, Input, Button } from 'reactstrap';
 // functions
 import classnames from 'classnames';
-import { findOption } from 'functions/selects';
 import { onInputChange, onSelectChange } from 'functions/events';
 
 class CreatePositionRow extends Component {
@@ -56,27 +56,26 @@ class CreatePositionRow extends Component {
     const { showCreateButton, isAdmin, login } = this.props;
     let { auth, school_id, class_id, position } = this.state;
 
-    const roleOptions = [
-      { value: 'staff', label: 'Staff Member' },
-      { value: 'class', label: 'Teacher' },
-      { value: 'school', label: 'Base Commander' }
-    ];
-    const selectedRole = findOption( roleOptions, auth );
     const platoonClassnames = classnames('platoon', { 'hide': auth !== 'class' } );
 
     let baseSelect;
+
     if ( isAdmin ) 
       baseSelect = <BaseSelect value={ school_id } onChange={ this.handleOptionChange('school_id') } />;
 
-    if ( !school_id ) school_id = login.school_id;
-    if ( !class_id ) class_id = login.class_id;
+    if ( !school_id )
+      school_id = login.school_id;
+
+    if ( !class_id )
+      class_id = login.class_id;
 
     return (
       <div className='CreatePositionRow'>
         <Row>
           <Col xs={6}>
             <label>Role</label>
-            <Select options={ roleOptions } value={ selectedRole } 
+            <RoleSelect
+              value={ auth } 
               onChange={ this.handleOptionChange('auth') } />
           </Col>
           <Col xs={6}>
