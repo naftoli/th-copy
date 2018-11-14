@@ -9,9 +9,9 @@ import { ChabadOrgButton } from 'components/buttons';
 import { login } from 'store/login/operations';
 // styles and images
 import './Login.scss';
-import { logo } from 'img/logos';
+import logo from 'img/logos/th.svg';
 import { user } from 'img/icons';
-import { LEGACY_URL } from 'components/constants';
+// import { LEGACY_URL } from 'components/constants';
 
 export class Login extends Component {
   constructor( props ){
@@ -88,7 +88,10 @@ export class Login extends Component {
                   onChange={this.handleChange} value={this.state.username} name='username' />
               </InputGroup>
 
-              <Password size="lg" value={this.state.password} showIcon onChange={this.handleChange} />
+              <Password
+                showIcon  size="lg"
+                value={ this.state.password } 
+                onChange={ this.handleChange } />
 
               { errors }
 
@@ -97,19 +100,23 @@ export class Login extends Component {
               </Button>
             </form>
 
-            <strong>-- OR --</strong>
             <div id='sign-in-with'>
+
               <ChabadOrgButton 
                 onLogin={ this.onChabadOrgLogin }/>
+
+              {/* <GoogleButton
+                size="lg" /> */}
+
             </div>
           </div>
           }
         </div>
-        <div id='links'>
+        {/* <div id='links'>
           <a href={LEGACY_URL + '/mobile/reg/forgot.html'}> Forgot Password </a>|
           <a href={LEGACY_URL + '/registration.php'}> New Base </a>|
           <a href={LEGACY_URL + '/mobile/reg/parent_register.html'}> New Parent Account </a>
-        </div>
+        </div> */}
       </div>
     );
   }
