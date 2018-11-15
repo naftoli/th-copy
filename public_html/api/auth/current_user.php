@@ -17,8 +17,23 @@ class ProfilesRouter {
     public function create() {
         global $current_user;
 
-        if ( isset( $_POST['password']) && $_POST['old_password'] !== $current_user->password )
-            return json_error('Invalid Password. No updates applied');
+        if ( isset( $_POST['password']) && !$_POST['password'] )
+            unset( $_POST['password'] );
+
+        if ( isset( $_POST['username']) && !$_POST['username'] )
+            unset( $_POST['username'] );
+        
+        // old validation code TODO remove
+        if ( isset( $_POST['password']) &&
+            isset( $_POST['old_password'] ) &&
+            $_POST['old_password'] !== $current_user->password
+        ) return json_error('Invalid Password. No updates applied');
+
+        // current validation code. TODO refactor
+        if ( ( isset( $_POST['password']) || isset( $_POST['username']) ) &&
+            isset( $_POST['current_password'] ) &&
+            $_POST['current_password'] !== $current_user->password
+        ) return json_error('Current Password incorrect. No updates applied');
 
         $current_user->bulkUpdate( $_POST );
 
