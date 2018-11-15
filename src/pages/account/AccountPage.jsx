@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
 import { Prompt } from 'react-router';
-import { Account } from './includes/Account';
 import { SaveButton } from 'components/buttons';
-import { LoginRow, InformationRow } from './includes/Rows';
+import { LoginRow, InformationRow, AccessRow } from './includes/Rows';
 // state
 import { removeAuth } from 'store/base/staff/operations';
 import { 
@@ -12,17 +11,20 @@ import {
   getCurrentUser, updateCurrentUser,
 } from 'store/login/operations';
 // functions
+import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { showError } from 'functions/notifications';
 import { filterUpdates, onInputChange } from 'functions/events';
 // style
 import './AccountPage/AccountPage.scss';
-import { toast } from 'react-toastify';
+import LoginModal from './LoginModal';
 
 class AccountPage extends Component {
 
   state = {
-    updates: {}
+    updates: {},
+    saving: false,
+    isOpen: false, // is the username & password modal open or not
   };
 
   componentDidMount() {
@@ -58,6 +60,11 @@ class AccountPage extends Component {
     .then( () => this.setState({ saving: false }) );
   }
 
+  // toggle the modal
+  toggle = () => this.setState({
+    isOpen: !this.state.isOpen
+  });
+
   // * disconnect logins
   disconnect = ( auth, id ) => {
     const { admin_id } = this.props.account;
@@ -78,7 +85,7 @@ class AccountPage extends Component {
   );
 
   render() {
-    const { updates, saving } = this.state;
+    const { updates, saving, isOpen } = this.state;
     let { account } = this.props; // load the account and the updates
     account = { ...account, ...updates };
     // and check if any of the updates require saving
@@ -108,6 +115,7 @@ class AccountPage extends Component {
 
         <LoginRow
           username={ username }
+          editPassword={ this.toggle }
           shliach_id={ chabad_org_shliach_id }
           onChabadOrgLogin={ this.connectToChabadOrg }
           onChabadDisconnect={ this.disconnectChabad } />
@@ -136,14 +144,14 @@ class AccountPage extends Component {
 
         <h4>Account Access</h4>
 
-        <div id='accounts'>
-          { logins.map( ( login, index ) => 
-            <Account 
-              { ...login }
-              key={ index }
-              disconnect={ this.disconnect } />
-          ) }
-        </div>
+        <AccessRow
+          logins={ logins }
+          disconnect={ this.disconnect } />
+
+        <LoginModal
+          isOpen={ isOpen }
+          toggle={ this.toggle }
+          username={ username } />
 
       </div>
     )
