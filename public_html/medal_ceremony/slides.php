@@ -105,6 +105,9 @@ $positioning = [
     </head>
 
     <body>
+        <div class="instructions">
+            To save the slideshow as a pdf, click print (or control P), then save as pdf
+        </div>
         <?php
         $schoolInfo = explode('|', $_POST['school']);
         $school_id = $schoolInfo[0];
