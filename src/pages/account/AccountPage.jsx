@@ -150,7 +150,8 @@ class AccountPage extends Component {
 
         <LoginModal
           isOpen={ isOpen }
-          toggle={ this.toggle } />
+          toggle={ this.toggle }
+          username={ username } />
 
       </div>
     )
