@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
+import { Link } from 'react-router-dom';
 import { Password } from 'components/inputs';
 import { Spinner, FontAwesome } from 'components/ui';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
@@ -72,12 +73,11 @@ export class Login extends Component {
     
     return (
       <div id='Login'>
-        <div id='login-page'>
-          <img src={logo} id='logo' alt='logo' />
+        <img src={logo} id='logo' alt='logo' />
 
-          { loading && <Spinner size={ 8 } /> }
+        { loading && <Spinner size={ 8 } /> }
 
-          { !loading &&
+        { !loading &&
           <div id='login-form'>
             <form onSubmit={ this.handleLoginForm }>
               <InputGroup size="lg">
@@ -109,14 +109,14 @@ export class Login extends Component {
                 size="lg" /> */}
 
             </div>
+
+            <div id='links' className='clearfix'>
+              <Link to='/forgot'>Forgot Password</Link>
+              <Link to='/signup'>New Account</Link>
+            </div>
+
           </div>
-          }
-        </div>
-        {/* <div id='links'>
-          <a href={LEGACY_URL + '/mobile/reg/forgot.html'}> Forgot Password </a>|
-          <a href={LEGACY_URL + '/registration.php'}> New Base </a>|
-          <a href={LEGACY_URL + '/mobile/reg/parent_register.html'}> New Parent Account </a>
-        </div> */}
+        }
       </div>
     );
   }

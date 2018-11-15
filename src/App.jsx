@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 // screens
 import { Page404 } from 'pages/errors';
-import { Login, Logout } from 'pages/login';
+import Login, { Logout } from 'pages/login';
 // pages
 import HomePage from 'pages/home/HomePage';
 import Rewards from 'pages/rewards';
@@ -56,9 +56,9 @@ export class App extends Component {
       }
     }
   }
-  
   // show the confirmation modal for react-router
   callback = false;
+
   showDialog = ( message, callback ) => {
     this.callback = callback;
     this.setState({ message: message, isOpen: true });
@@ -71,17 +71,9 @@ export class App extends Component {
   
   // render the page
   render() {
-    if ( !this.props.logged_in ) {
-      return (
-        <Router basename={ process.env.PUBLIC_URL }>
-          <Switch>
-            <Route path={`/forgot`} exact component={ Page404 }/>
-            <Route path={`/signup`} exact component={ Page404 }/>
-            <Route component={ Login } />
-          </Switch>
-        </Router>
-      );
-    }
+    if ( !this.props.logged_in )
+      return <Login />
+
     const { message, isOpen, refreshing } = this.state;
       
     // render the core dashboard
