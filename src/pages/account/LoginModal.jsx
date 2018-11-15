@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Password, Label } from 'components/inputs';
 import { SaveButton } from 'components/buttons';
 import { 
-  Input,  Row,    Col,  ModalBody,
+  Input,  Row,  Alert,  Col,  ModalBody,
   Modal,  ModalHeader,  ModalFooter,
 } from 'reactstrap';
 // state
@@ -13,10 +13,10 @@ import { updateCurrentUser } from 'store/login/operations';
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { onInputChange } from 'functions/events';
-import { showError } from 'functions/notifications';
 // style
 
 const initialState = {
+  error: false,
   saving: false,
   username: '',
   password: '',
@@ -41,13 +41,12 @@ class LoginModal extends Component {
   // * submit the event
   onSubmit = event => {
     event.preventDefault();
-    this.setState({ saving: true });
+    this.setState({ saving: true, error: false });
 
     const { username, password, current_password } = this.state;
     const updates = { username, password, current_password };
 
-    showError(
-      this.props.updateCurrentUser( updates )
+    this.props.updateCurrentUser( updates )
       .then( () => {
         // update the state
         this.setState({ ...initialState });
@@ -57,12 +56,12 @@ class LoginModal extends Component {
         if ( !password )  updated = 'Username';
         toast.success(`${ updated } Updated`);
       })
-    ).then( () => this.setState({ saving: false }) );
+      .catch( e => this.setState({ saving: false, error: e.message }) )
   }
 
   render() {
     let { isOpen, toggle } = this.props; // load the account and the updates
-    let { saving, username, password, current_password } = this.state;
+    let { saving, error, username, password, current_password } = this.state;
 
     return (
       <Modal id='LoginModal'  centered
@@ -109,6 +108,9 @@ class LoginModal extends Component {
                 placeholder='New Password' />
             </Col>
           </Row>
+
+          { error &&
+            <Alert color='danger'>Error: { error }</Alert> }
         </ModalBody>
 
         <ModalFooter>
