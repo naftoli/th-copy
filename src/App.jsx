@@ -103,7 +103,7 @@ export class App extends Component {
 
               <Route path={`/missions`} component={ Missions } />
               
-              <Route path={`/myaccount`} component={ Account }/>
+              <Route path={`/myaccount`} exact component={ Account }/>
               {/* Action only pages */}
               <Route path={`/logout`} component={Logout}/>
               

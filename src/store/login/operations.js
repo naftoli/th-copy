@@ -8,7 +8,7 @@ const cookies = new Cookies();
 export const login = opts => dispatch => {
   dispatch( actions.setLoading( true ) );
   
-  return API.post( '/auth/login.php', opts )
+  return API.post( '/auth/login', opts )
     .then( ({ legacy, mobile, id }) => {
         dispatch( actions.setTokens( legacy, mobile, id ) );
         return getCurrentUser()( dispatch ); // get the user
@@ -23,7 +23,8 @@ export const login = opts => dispatch => {
 
 export const getCurrentUser = () => dispatch => {
   dispatch( actions.setLoading( true ) );
-  return API.get( '/auth/current_user.php' )
+  
+  return API.get( '/auth/current_user' )
     .then( user => {
       dispatch( actions.setUser( user ) );
       return setLogin( dispatch );
@@ -38,7 +39,7 @@ export const getCurrentUser = () => dispatch => {
 
 export const updateCurrentUser = ( updates ) => dispatch => {
 
-  return API.post( '/auth/current_user.php', updates )
+  return API.post( '/auth/current_user', updates )
     .then( data => {
       dispatch( actions.setUser( data.account ) );
 
@@ -53,12 +54,12 @@ export const updateCurrentUser = ( updates ) => dispatch => {
 }
 
 export const connectChabad = key => dispatch => {
-  return API.post( '/auth/current_user.php?action=connectChabad', { key } )
+  return API.post( '/auth/current_user?action=connectChabad', { key } )
     .then( updates => dispatch( actions.updateUser( updates ) ) );
 }
 
 export const disconnectChabad = key => dispatch => {
-  return API.post( '/auth/current_user.php?action=disconnectChabad', { key } )
+  return API.post( '/auth/current_user?action=disconnectChabad', { key } )
     .then( updates => dispatch( actions.updateUser( updates ) ) );
 }
 

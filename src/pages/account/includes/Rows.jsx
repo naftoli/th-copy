@@ -1,12 +1,15 @@
 import React from 'react';
 // components
-import { Link } from 'react-router-dom';
-import { Row, Col, Input, Button } from 'reactstrap';
+import { Account } from './Account';
 import { PhoneNumber } from 'components/inputs';
 import { ChabadOrgButton } from 'components/buttons';
+import { Row, Col, Input, Button } from 'reactstrap';
+// import the chabad.org logo
+import chabad from 'img/logos/chabad.png';
 
-export const LoginRow = ( props ) => {
+export const LoginRow = props => {
   const { 
+    editPassword,
     onChabadOrgLogin,   username, 
     onChabadDisconnect, shliach_id,
   } = props;
@@ -20,18 +23,19 @@ export const LoginRow = ( props ) => {
         </Col>
 
         <Col sm={6}>
-          <Link
-            to={'/myaccount/login'}
-            className='btn btn-outline-primary'>
-
+          <Button outline
+              color='primary'
+              onClick={ editPassword }>
             Change Username & Password
-          </Link>
+          </Button>
         </Col>
       </Row>
 
       <Row>
         <Col sm={6}>
-          <p><strong>Chabad.org</strong></p>
+          <img src={ chabad }
+            alt='chabad.org'
+            className='chabad-logo' />
           <p>{ shliach_id ? 'Connnected' : 'Not Connected' }</p>
         </Col>
 
@@ -51,41 +55,10 @@ export const LoginRow = ( props ) => {
         </Col>
       </Row>
     </div>
-    // <Row>
-    //   <Col xs={12} sm={12} xl={4}>
-    //     <label>Username</label>
-    //     <Input required
-    //       name='username' 
-    //       value={ username }
-    //       onChange={ onChange } />
-    //   </Col>
-
-    //   <Col xs={12} sm={6} xl={4}>
-    //     <label>Current Password</label>
-    //     <Password
-    //       tabToggle
-    //       defaultOpen
-    //       name='old_password'
-    //       onChange={ onChange }
-    //       value={ old_password }
-    //       placeholder='Old Password' />
-    //   </Col>
-
-    //   <Col xs={12} sm={6} xl={4}>
-    //     <label>New Password</label>
-    //     <Password
-    //       tabToggle
-    //       name='password'
-    //       value={ password }
-    //       onChange={ onChange }
-    //       disabled={ !old_password }
-    //       placeholder='New Password' />
-    //   </Col>
-    // </Row>
   );
 }
 
-export const InformationRow = ( props ) => {
+export const InformationRow = props => {
   const {
     last, title,  first,
     onChange,     admin_phone_work,
@@ -93,7 +66,6 @@ export const InformationRow = ( props ) => {
   } = props;
   return (
     <Row>
-
       <Col xs={12}>
         <label>E-Mail Address (unique)</label>
         <Input type='email'
@@ -152,4 +124,17 @@ export const InformationRow = ( props ) => {
       </Col>
     </Row>
   );
+}
+
+export const AccessRow = props => {
+  return (
+    <div id='accounts'>
+      { props.logins.map( ( login, index ) => 
+        <Account 
+          { ...login }
+          key={ index }
+          disconnect={ props.disconnect } />
+      ) }
+    </div>
+  )
 }

@@ -30,9 +30,11 @@ const rootReducer = ( state, action ) => {
   return reducer( state, action );
 }
 
+let extension = f => f;
+// * only connect to devtools in development
+if ( window.devToolsExtension && process.env.NODE_ENV !== 'production' )
+  extension = window.devToolsExtension();
+
 export default createStore( rootReducer, compose(
-  applyMiddleware( thunk ),
-  // only connect to devtools in development
-  process.env.NODE_ENV === "production" ||
-  window.devToolsExtension ? window.devToolsExtension() : f => f
+  applyMiddleware( thunk ), extension
 ));
