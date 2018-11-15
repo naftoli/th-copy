@@ -27,7 +27,7 @@ class IdCardsRouter {
             $filters[] = 'rm.date_promoted <= ?'; $params[] = $_POST['earned_before'];
         }
         // combine the filters
-        // $filters[] = 'u.user_registered IS NOT NULL';
+        $filters[] = 'u.user_registered IS NOT NULL';
         $filters[] = 'u.chayolei = 1 AND s.chayolei = 1';
         $filters = implode( ' AND ', $filters );
 
