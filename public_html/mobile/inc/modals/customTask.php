@@ -73,7 +73,8 @@ while ($label = mysql_fetch_assoc($labels_query)) {
                         <select name='campaign' id='campaign' class="form-control" required>
                             <option disabled value="" selected hidden>Choose Campaign</option>
                             <?foreach ($campaigns as $id => $campaign) {
-                                echo "<option value='$id'>" . $campaign . "</option>";
+                                if ( !in_array( $id, [ 1, '1', 40, '40', 94, '94' ] ) )
+                                    echo "<option value='$id'>" . $campaign . "</option>";
                             } // end foreach campaign?>
                         </select>
                     </div>

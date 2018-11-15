@@ -27,8 +27,7 @@ $("select#soldier").change( function( e ){
 });
 
 // always bring focus to the barcode/serial input
-$( '.userMission' ).click( function() { $('#lookup-user').focus() });
-$( '.checkboxDaily, .checkbox, #checkAll, #uncheckAll, .textInput input' ).click( function( e ) { e.stopPropagation() });
+$( '#scanNext' ).click( function() { $('#lookup-user').val('').focus() });
 
 /**
  * Returns an event handler for the checkboxes on the page.
