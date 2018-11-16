@@ -75,13 +75,10 @@ export class Forgot extends Component {
               </Button>
             </ButtonBar>
 
-            { error &&
-              <Alert color='danger'>{ error }</Alert>
-            }
+            <Alert color='danger' isOpen={ !!error }>{ error }</Alert>
 
-            { notice &&
-              <Alert color='success'>{ notice }</Alert>
-            }
+            <Alert color='success' isOpen={ !!notice }>{ notice }</Alert>
+
           </form>
         </div>
       </div>

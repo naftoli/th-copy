@@ -1,5 +1,51 @@
 @import 'styles/colors.scss';
 
+#Login {
+  // style the toggle
+  #toggle-password:not(:hover) { color: #888; }
+  // animate the login button
+  .form .btn { width: 100%; }
+  // sign in button section
+  #sign-in-with {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+
+    width: 100%;
+    margin-bottom: 15px;
+
+    .ChabadOrgButton { margin: 5px 0px; }
+  }
+
+  div#links {
+    text-align: center;
+    font-size: 1em;
+    margin: 0px 0 12px;
+    opacity: .7;
+
+    display: flex;
+
+    a {
+      flex-grow: 1;
+
+      &:first-child { text-align: left; }
+      &:last-child { text-align: right; border-right:none; }
+    }
+  }
+}
+
+#Forgot {
+  .form .btn {
+    width: calc( 50% - 4px );
+    margin: 0px;
+    margin-bottom: 10px;
+    
+    &:first-child { margin-right: 4px; }
+    &:last-child { margin-left: 4px; }
+  }
+}
+
 #Login, #Forgot {
   display: flex;
   flex-direction: column;
@@ -57,7 +103,7 @@
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 500px) {
 
     img#logo { width: 200px; }
 
@@ -70,54 +116,8 @@
     }
 
     div#links {
-      margin-top: 8px;
-      font-size: .7em;
+      margin-top: 0px;
+      font-size: .8em;
     }
-  }
-}
-
-#Login {
-  // style the toggle
-  #toggle-password:not(:hover) { color: #888; }
-  // animate the login button
-  .form .btn { width: 100%; }
-  // sign in button section
-  #sign-in-with {
-    display: inline-flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-
-    width: 100%;
-    margin-bottom: 15px;
-
-    .ChabadOrgButton { margin: 5px 0px; }
-  }
-
-  div#links {
-    text-align: center;
-    font-size: 1em;
-    margin: 0px 0 12px;
-    opacity: .7;
-
-    display: flex;
-
-    a {
-      flex-grow: 1;
-
-      &:first-child { text-align: left; }
-      &:last-child { text-align: right; border-right:none; }
-    }
-  }
-}
-
-#Forgot {
-  .form .btn {
-    width: calc( 50% - 4px );
-    margin: 0px;
-    margin-bottom: 10px;
-    
-    &:first-child { margin-right: 4px; }
-    &:last-child { margin-left: 4px; }
   }
 }

@@ -93,6 +93,7 @@ export class Login extends Component {
               </InputGroup>
 
               <Password
+                required
                 showIcon  size="lg"
                 value={ this.state.password } 
                 onChange={ this.handleChange } />
