@@ -3,10 +3,6 @@ require_once( __DIR__ . '/../header/header.php' );
 
 class ProfilesRouter {
 
-    public function index() {
-        
-    }
-
     // functions as update
     public function create() {
         
