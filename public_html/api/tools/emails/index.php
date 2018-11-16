@@ -6,14 +6,15 @@ class MashpiaEmails {
      * send password reset email
      * 
      */
-    public static function passwordReset( $email, $url ) {
+    public static function passwordReset( $email, $username, $url ) {
         $subject = 'Your password reset link';
 
-        $message = '<p>We recieved a password reset request. The link to reset your password is below. ';
-        $message .= 'If you did not make this request, you can ignore this email</p>';
-        $message .= '<p>Here is your password reset link:</br>';
+        $message = '<p>We recieved a password reset request for your account. As a reminder, your username is '.$username.'</p>'
+		.'<p>If you did not make this request, you can ignore this email.</p>'
+       		.'<p>Follow This link to Reset your Password. Please note that it expires in one hour: ';
         $message .= sprintf('<a href="%s">%s</a></p>', $url, $url);
-        $message .= '<p>Thanks!</p>';
+        $message .= '<p>Best Regards,</p>'
+		.'<p>Chayolei Tzivos Hashem.</p>';
 
         return self::sendEmail( 'noreply@mashpia.com', $email, $subject, $message );
     }

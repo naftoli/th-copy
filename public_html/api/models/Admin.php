@@ -109,7 +109,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         $reset = $MASHPIA_DB->prepare( $reset );
         $reset->execute([ $this->admin_id, $selector, hash('sha256', $token), $expires->format('U') ]);
 
-        return MashpiaEmails::passwordReset( $this->email, $url );
+        return MashpiaEmails::passwordReset( $this->email, $this->username, $url );
     }
 
     //*********************************************************************/
