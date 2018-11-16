@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
+import { Link } from 'react-router-dom';
 import { Password } from 'components/inputs';
 import { Spinner, FontAwesome } from 'components/ui';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
@@ -8,19 +9,15 @@ import { ChabadOrgButton } from 'components/buttons';
 // state
 import { login } from 'store/login/operations';
 // styles and images
-import './Login.scss';
 import logo from 'img/logos/th.svg';
 import { user } from 'img/icons';
-// import { LEGACY_URL } from 'components/constants';
 
 export class Login extends Component {
-  constructor( props ){
-    super( props );
-    this.state = {
-      username: '',
-      password: '',
-      show_password: false
-    }
+
+  state = {
+    username: '',
+    password: '',
+    show_password: false
   }
 
   static defaultProps = {
@@ -72,20 +69,27 @@ export class Login extends Component {
     
     return (
       <div id='Login'>
-        <div id='login-page'>
-          <img src={logo} id='logo' alt='logo' />
+        <img src={logo} id='logo' alt='logo' />
 
-          { loading && <Spinner size={ 8 } /> }
+        { loading && <Spinner size={ 8 } /> }
 
-          { !loading &&
-          <div id='login-form'>
+        { !loading &&
+          <div className='form' id='login-form'>
             <form onSubmit={ this.handleLoginForm }>
               <InputGroup size="lg">
+
                 <InputGroupAddon addonType="prepend">
-                  <img className="pt-icon" src={user} alt='username' width='26' height='26'/>
+                  <img src={ user } alt='username' />
                 </InputGroupAddon>
-                <input className='form-control' placeholder='Username' autoFocus required
-                  onChange={this.handleChange} value={this.state.username} name='username' />
+
+                <input
+                  name='username'
+                  autoFocus required
+                  placeholder='Username'
+                  className='form-control'
+                  value={ this.state.username }
+                  onChange={ this.handleChange } />
+
               </InputGroup>
 
               <Password
@@ -100,6 +104,11 @@ export class Login extends Component {
               </Button>
             </form>
 
+            <div id='links' className='clearfix'>
+              <Link to='/forgot'>Forgot Username/Password?</Link>
+              <Link to='/signup'>New Account</Link>
+            </div>
+
             <div id='sign-in-with'>
 
               <ChabadOrgButton 
@@ -109,14 +118,9 @@ export class Login extends Component {
                 size="lg" /> */}
 
             </div>
+
           </div>
-          }
-        </div>
-        {/* <div id='links'>
-          <a href={LEGACY_URL + '/mobile/reg/forgot.html'}> Forgot Password </a>|
-          <a href={LEGACY_URL + '/registration.php'}> New Base </a>|
-          <a href={LEGACY_URL + '/mobile/reg/parent_register.html'}> New Parent Account </a>
-        </div> */}
+        }
       </div>
     );
   }
