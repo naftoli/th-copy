@@ -55,9 +55,6 @@ class MashpiaEmails {
         $headers  = "From: $from <$from>\r\n";
         $headers .= "Reply-to: $from\r\n";
         $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
-    
-        echo '<pre>';
-        print_r([ $to, $subject, $msg, $headers ]);
 
         return mail( $to, $subject, $msg, $headers );
     }
