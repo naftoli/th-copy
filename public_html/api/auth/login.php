@@ -13,17 +13,23 @@ foreach ( $_COOKIE as $key => $value ) {
 
 $login = false;
 
+$error = 'Unknown Login Error';
+
 // * try to use the username and password first
-if ( isset($_POST['username']) && isset($_POST['password']) )
+if ( isset($_POST['username']) && isset($_POST['password']) ) {
     $login = \mashpia\api\auth\Auth::login(
         $_POST['username'], $_POST['password']
     );
-else if ( isset( $_POST['chabad_key'] ) )
+    $error = 'Invalid Username and/or Password';
+
+} else if ( isset( $_POST['chabad_key'] ) ) {
     $login = \mashpia\api\auth\Auth::chabadLogin(
         $_POST['chabad_key']
     );
+    $error = 'No Chabad.org Connected Account Found';
+}
 
 if ( !$login )
-    json_error( "Invalid Username and/or Password");
+    json_error( $error );
 
 json_response( $login );
