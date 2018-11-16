@@ -14,7 +14,8 @@ export class Forgot extends Component {
   state = {
     email: '',
     error: '',
-    notice: ''
+    notice: '',
+    sending: false
   }
 
   static defaultProps = {
@@ -28,14 +29,16 @@ export class Forgot extends Component {
 
   handleLoginForm = event => {
     event.preventDefault();
+    this.setState({ sending: true })
     // send the reset request to the server
     sendResetRequest( this.state.email )
     .then( notice => this.setState({ error: '', notice }) )
-    .catch( error => this.setState({ notice: '', error: error.message }) );
+    .catch( error => this.setState({ notice: '', error: error.message }) )
+    .then( () => this.setState({ sending: false, email: '' }));
   }
 
   render(){
-    let { error, email, notice } = this.state;
+    let { error, email, notice, sending } = this.state;
     
     return (
       <div id='Forgot'>
@@ -58,22 +61,24 @@ export class Forgot extends Component {
             </InputGroup>
 
             <ButtonBar>
-              <Link tabIndex='3' className='btn btn-primary btn-lg' to='/'>
+              <Link tabIndex='3' to='/'
+                  className='btn btn-primary btn-lg'>
                 <FontAwesome icon='angle-double-left'/> Login
               </Link>
 
-              <Button tabIndex='2' size="lg" color='primary'>
-                Send <FontAwesome icon='angle-double-right'/>
+              <Button size="lg"   tabIndex='2'  
+                  color='primary' disabled={ sending }>
+
+                Send <FontAwesome spin={ sending } 
+                  icon={ sending ? 'sync-alt' : 'angle-double-right' } />
+
               </Button>
             </ButtonBar>
 
-            { error &&
-              <Alert color='danger'>{ error }</Alert>
-            }
+            <Alert color='danger' isOpen={ !!error }>{ error }</Alert>
 
-            { notice &&
-              <Alert color='success'>{ notice }</Alert>
-            }
+            <Alert color='success' isOpen={ !!notice }>{ notice }</Alert>
+
           </form>
         </div>
       </div>
