@@ -33,10 +33,10 @@ export class App extends Component {
   }
   // clear the intervals
   componentWillUnmount(){
-    console.log( this.interval, this.timeout );
-    debugger;
-    clearInterval( this.interval );
     clearTimeout( this.timeout );
+    clearInterval( this.interval );
+
+    console.log({ interval: this.interval, timeout: this.timeout });
   }
 
   /**

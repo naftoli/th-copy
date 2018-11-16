@@ -41,6 +41,12 @@ input:invalid:not([value=""]) + div.invalid-message { max-height: 50px; transiti
   height: 100vh;
 }
 
+.alert {
+  word-break: break-word;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .clearfix:after {
   content: "";
   display: table;

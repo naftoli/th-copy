@@ -5,6 +5,10 @@ import store from 'store/index';
 
 const cookies = new Cookies();
 
+/**
+ * try to login with these credentials
+ * @param {object} opts params to send to auth/login
+ */
 export const login = opts => dispatch => {
   dispatch( actions.setLoading( true ) );
   
@@ -21,6 +25,17 @@ export const login = opts => dispatch => {
     });
 };
 
+/**
+ * send a reset email to this account.
+ * @param {string} email email address
+ */
+export const sendResetRequest = email => {
+  return API.post( '/auth/forgot', { email } )
+}
+
+/**
+ * load the information for the current user
+ */
 export const getCurrentUser = () => dispatch => {
   dispatch( actions.setLoading( true ) );
   
@@ -37,7 +52,11 @@ export const getCurrentUser = () => dispatch => {
     });
 }
 
-export const updateCurrentUser = ( updates ) => dispatch => {
+/**
+ * update the current user
+ * @param {object} updates the parts of the current user we want to update
+ */
+export const updateCurrentUser = updates => dispatch => {
 
   return API.post( '/auth/current_user', updates )
     .then( data => {
@@ -53,16 +72,27 @@ export const updateCurrentUser = ( updates ) => dispatch => {
     });
 }
 
+/**
+ * connect the chabad.org key to this account
+ * @param {string} key chabad.org login key
+ */
 export const connectChabad = key => dispatch => {
   return API.post( '/auth/current_user?action=connectChabad', { key } )
     .then( updates => dispatch( actions.updateUser( updates ) ) );
 }
 
-export const disconnectChabad = key => dispatch => {
-  return API.post( '/auth/current_user?action=disconnectChabad', { key } )
+/**
+ * disconnect the chabad.org key from this account
+ */
+export const disconnectChabad = () => dispatch => {
+  return API.post( '/auth/current_user?action=disconnectChabad' )
     .then( updates => dispatch( actions.updateUser( updates ) ) );
 }
 
+/**
+ * set the current login, used in functions above.
+ * @param {function} dispatch the dispatch callback from the store
+ */
 const setLogin = dispatch => {
   if ( cookies.get( 'login' ) ) {
     const [ type, id ] = cookies.get( 'login' ).split('-');
@@ -73,7 +103,7 @@ const setLogin = dispatch => {
 }
 
 /**
- * validateLogin
+ * validateLogin ( runs every few seconds )
  * 
  * validate that the current login is correct and update it if not.
  */

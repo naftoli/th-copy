@@ -9,19 +9,15 @@ import { ChabadOrgButton } from 'components/buttons';
 // state
 import { login } from 'store/login/operations';
 // styles and images
-import './Login.scss';
 import logo from 'img/logos/th.svg';
 import { user } from 'img/icons';
-// import { LEGACY_URL } from 'components/constants';
 
 export class Login extends Component {
-  constructor( props ){
-    super( props );
-    this.state = {
-      username: '',
-      password: '',
-      show_password: false
-    }
+
+  state = {
+    username: '',
+    password: '',
+    show_password: false
   }
 
   static defaultProps = {
@@ -78,14 +74,22 @@ export class Login extends Component {
         { loading && <Spinner size={ 8 } /> }
 
         { !loading &&
-          <div id='login-form'>
+          <div className='form' id='login-form'>
             <form onSubmit={ this.handleLoginForm }>
               <InputGroup size="lg">
+
                 <InputGroupAddon addonType="prepend">
-                  <img className="pt-icon" src={user} alt='username' width='26' height='26'/>
+                  <img src={ user } alt='username' />
                 </InputGroupAddon>
-                <input className='form-control' placeholder='Username' autoFocus required
-                  onChange={this.handleChange} value={this.state.username} name='username' />
+
+                <input
+                  name='username'
+                  autoFocus required
+                  placeholder='Username'
+                  className='form-control'
+                  value={ this.state.username }
+                  onChange={ this.handleChange } />
+
               </InputGroup>
 
               <Password
@@ -100,6 +104,11 @@ export class Login extends Component {
               </Button>
             </form>
 
+            <div id='links' className='clearfix'>
+              <Link to='/forgot'>Forgot Username/Password?</Link>
+              <Link to='/signup'>New Account</Link>
+            </div>
+
             <div id='sign-in-with'>
 
               <ChabadOrgButton 
@@ -108,11 +117,6 @@ export class Login extends Component {
               {/* <GoogleButton
                 size="lg" /> */}
 
-            </div>
-
-            <div id='links' className='clearfix'>
-              <Link to='/forgot'>Forgot Password</Link>
-              <Link to='/signup'>New Account</Link>
             </div>
 
           </div>
