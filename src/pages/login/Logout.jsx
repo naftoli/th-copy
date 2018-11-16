@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { logout } from 'store/login/actions';
 
-class Logout extends Component {
+export class Logout extends Component {
   // log the user out
   componentDidMount() {
     this.props.logout();
