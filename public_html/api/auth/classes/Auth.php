@@ -20,49 +20,46 @@ class Auth {
     }
 
     public static function login( $username, $password ) {
-        global $MASHPIA_DB;
         // cast the username to lowercase
         $username = strtolower( $username );
         // find the account with the username and password
-        $login_query  = $MASHPIA_DB->prepare(
-            "SELECT admin_id, username, password FROM admins WHERE username = ? and password = ?"
-        );
-        $login_query ->execute([ $username, $password ]);
-        // generate the keys
-        return self::generateKeys( $login_query  );
+        $admin = \Admin::find_by_username( $username );
+
+        if ( $admin && $admin->authenticate( $password ) );
+            return self::generateKeys( $admin  );
+
+        return false;
     }
 
     public static function chabadLogin( $key ) {
-        global $MASHPIA_DB;
-        $shliach = new \ChabadShliach( $key );
         // make sure the token is valid
+        $shliach = new \ChabadShliach( $key );
         if ( !$shliach->authenticate() )
             return false;
 
-        // find the shliach in our system
-        $login_query = $MASHPIA_DB->prepare(
-            "SELECT admin_id, username, password FROM admins WHERE chabad_org_shliach_id = ?;"
-        );
-        $login_query->execute([ $shliach->shliachID ]);
-        // make sure we have an account for this shliach
-        return self::generateKeys( $login_query );
+        $admin = \Admin::find_by_chabad_org_shliach_id( $shliach->shliachID );
+
+        if ( $admin ) // check if there is even a single admin
+            return self::generateKeys( $admin );
+        
+        return false;
     }
 
-    private static function generateKeys( $query ){
-        if ( $query->rowCount() == 0 )
+    private static function generateKeys( $admin ){
+        // make sure we have an admin
+        if ( !$admin instanceof \Admin )
             return false;
 
-        $row = $query->fetch();
         // generate the keys
-        $legacy = self::legacyKey( $row['username'], $row['password'] );
-        $mobile = self::mobileKey( $row['admin_id'] );
+        $legacy = self::legacyKey( $admin->username, $admin->password );
+        $mobile = self::mobileKey( $admin->admin_id );
         // set the cookies
-        $_COOKIE['admin'] = $row['admin_id'];
+        $_COOKIE['admin'] = $admin->admin_id;
         $_COOKIE['admin_id'] = $mobile;
         $_COOKIE['admin_auth'] = $legacy;
         // return the results
         return [
-            'id' => $row['admin_id'],
+            'id' => $admin->admin_id,
             'legacy' => $legacy,
             'mobile' => $mobile
         ];

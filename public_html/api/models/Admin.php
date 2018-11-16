@@ -36,45 +36,85 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     private $logins = [];
     public $login = false;
 
+    //**********************************************************************/
+    //****************************** HELPERS *******************************/
+    //**********************************************************************/
+    /**
+     * name([ $withTitle = true ])
+     * @return string the name with the title by default ( pass false to remove )
+     */
     public function name( $withTitle = true ) {
         $name = $this->first . ' ' . $this->last;
         if ( $withTitle ) return $this->title . ' ' . $name;
         return $name;
     }
 
-    //******************************* AUTH *******************************/
+    //*******************************************************************************/
+    //********************************** CALLBACKS **********************************/
+    //*******************************************************************************/
     /**
-     * getAuthTypes
-     * 
-     * returns array of auth types ('user', 'school', 'class', 'camp')
-     * 
-     * @return array
+     * call the correct functions when specific attributes are changed
      */
-    public function getAuthTypes(){
-        $types = [];
-        foreach( $this->admin_auths as $auth ) {
-            if ( !in_array( $auth->auth, $types ) ) $types[] = $auth->auth;
-        }
-        return $types;
-    }
-    /**
-     * getAuthIds
-     * 
-     * return all id's for a given auth type
-     *
-     * @param string $auth_type
-     * @return void
-     */
-    public function getAuthIds( $auth_type ) {
-        $auth_ids = [];
-        if ( !$this->admin_auths ) return $auth_ids;
-        foreach( $this->admin_auths as $auth ){
-            if ( $auth->auth === $auth_type ) $auth_ids[] = $auth->id;
-        }
-        return $auth_ids;
+    public function handleChanges() {
+        if ( $this->attribute_is_dirty('admin_email') ){} 
+        else if ( $this->attribute_is_dirty('username') || $this->attribute_is_dirty('password') ) {}
+        return true;
     }
 
+    /**
+     * createHelpdeskAccount
+     * creates a Helpdesk account for the admin. Called when admin is created in the DBS
+     * @return boolean
+     */
+    public function createHelpdeskAccount(){
+        if ( !isset( $_SERVER['DOCUMENT_ROOT'] ) ) return false;
+        // import the required functions
+        require_once($_SERVER["DOCUMENT_ROOT"].'/helpdesk/control/connect.php');
+        require_once($_SERVER["DOCUMENT_ROOT"].'/helpdesk/control/functions.php');
+        require_once($_SERVER["DOCUMENT_ROOT"].'/tasks/forms/functions/helpdesk_account_migration.php');
+        // create the admin
+        return create_admin( $this->to_array([
+            'only' => ['first', 'last', 'admin_email', 'password' ]
+        ]) );
+    }
+
+    //*******************************************************************************/
+    //*********************************** SECURITY **********************************/
+    //*******************************************************************************/
+
+    public function authenticate( $password ){
+        return $password === $this->password;
+    }
+
+    public function resetPassword() {
+        global $MASHPIA_DB;
+        // generate an 8 digit selector and a 32 digit token
+        $selector = bin2hex(random_bytes(8));
+        $token = random_bytes(32);
+
+        $url = sprintf('%s/api/password_reset?%s', MASHPIA_ABS_URL, http_build_query([
+            'selector' => $selector,
+            'validator' => bin2hex($token)
+        ]));
+
+        // Token expires in one hour
+        $expires = new DateTime('NOW');
+        $expires->add(new DateInterval('PT01H')); // 1 hour
+
+        // delete any existing password reset requests
+        $MASHPIA_DB->exec( 'DELETE FROM password_reset WHERE admin_id = '.$this->admin_id.';' );
+        
+        // insert the password_reset request into the database
+        $reset = 'INSERT INTO password_reset ( admin_id, selector, token, expires ) VALUES ( ?, ?, ?, ? )';
+        $reset = $MASHPIA_DB->prepare( $reset );
+        $reset->execute([ $this->admin_id, $selector, hash('sha256', $token), $expires->format('U') ]);
+
+        return MashpiaEmails::passwordReset( $this->email, $url );
+    }
+
+    //*********************************************************************/
     //******************************* LOGIN *******************************/
+    //*********************************************************************/
     // get all logins
     public function logins(){
         if ( $this->logins )
@@ -102,6 +142,24 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         }
         return $this->logins;
     }
+
+    /**
+     * getAuthIds
+     * 
+     * return all id's for a given auth type
+     *
+     * @param string $auth_type
+     * @return void
+     */
+    public function getAuthIds( $auth_type ) {
+        $auth_ids = [];
+        if ( !$this->admin_auths ) return $auth_ids;
+        foreach( $this->admin_auths as $auth ){
+            if ( $auth->auth === $auth_type ) $auth_ids[] = $auth->id;
+        }
+        return $auth_ids;
+    }
+
     // set the current login
     public function setLogin( $type = false, $id = false ){
         $logins = $this->logins();
@@ -112,10 +170,12 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         }
         return $this->login = $logins[0];
     }
+
     // are we HQ?
     public function isHQ() {
         return $this->auth === 'super';
     }
+
     /**
      * shippingZone
      * 
@@ -148,6 +208,18 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         }
         return $this->customer_profile;
     }
+
+    /**
+     * createPaymentProfile
+     * 
+     * adds this payment profile with the payment procesor. Creates Authorize.net account if one does not already exist.
+     * 
+     * @param array $payment_profile [ cc-number, cc-exp, x_card_code ]
+     * 
+     * @return
+     *      success: classes\authorize\PaymentProfile
+     *      error: string
+     */
     public function createPaymentProfile( $payment_info ) {
         // if we do not have a customer profile
         if ( !$this->customerProfile() instanceof classes\authorize\CustomerProfile ) {
@@ -181,42 +253,9 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         }
     }
 
-    // OTHER
-    /**
-     * createHelpdeskAccount
-     * 
-     * creates a Helpdesk account for the admin. Called when admin is created in the DBS
-     *
-     * @return boolean
-     */
-    public function createHelpdeskAccount(){
-        if ( !isset( $_SERVER['DOCUMENT_ROOT'] ) ) return false;
-        // import the required functions
-        require_once($_SERVER["DOCUMENT_ROOT"].'/helpdesk/control/connect.php');
-        require_once($_SERVER["DOCUMENT_ROOT"].'/helpdesk/control/functions.php');
-        require_once($_SERVER["DOCUMENT_ROOT"].'/tasks/forms/functions/helpdesk_account_migration.php');
-        // create the admin
-        return create_admin( $this->to_array([
-            'only' => ['first', 'last', 'admin_email', 'password' ]
-        ]) );
-    }
-    // send the admin any emails if we need to
-    public function handleChanges() {
-        if ( $this->attribute_is_dirty('admin_email') ){} 
-        else if ( $this->attribute_is_dirty('username') || $this->attribute_is_dirty('password') ) {}
-        return true;
-    }
-    // E-mails
-    public function sendParentEmail() {
-        return MashpiaEmails::sendParentEmail( $this->admin_email, $this->username, $this->password );
-    }
-    public function sendNewBCEmail( $auth, $base ) {
-        return MashpiaEmails::newBC( $this->admin_email, $base, 
-            $this->first . " " . $this->last, $this->username, $this->password 
-        );
-    }
-
-    // SERIALIZERS
+    //*********************************************************************************/
+    //********************************** SERIALIZERS **********************************/
+    //*********************************************************************************/
     public function jsonSerialize() {
         return $this->to_array([
             'only' => [

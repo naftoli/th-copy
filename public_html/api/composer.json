@@ -1,6 +1,7 @@
 {
     "require": {
-        "php-activerecord/php-activerecord": "^1.2"
+        "php-activerecord/php-activerecord": "^1.2",
+        "paragonie/random_compat": "<9.99"
     },
     "require-dev": {
         "phpunit/phpunit": "^4"

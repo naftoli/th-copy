@@ -1,10 +1,5 @@
 <?php
 require_once( __DIR__ . '/../../../includes/globals.php' );
-
-$domain = 'http' . $_SERVER['HTTPS'] ? 's' : '' . '://' . $_SERVER['HTTP_HOST'];
-
-if ( $development )
-    $domain = 'http://localhost:3000';
 ?>
 
 <!DOCTYPE html>
@@ -22,6 +17,7 @@ if ( $development )
 
     <style>
         body{ background: #fcfcfc; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0px; }
+        strong{ font-family: 'Helvetica', sans-serif; }
     </style>
 </head>
 <body>

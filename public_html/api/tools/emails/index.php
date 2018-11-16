@@ -2,6 +2,22 @@
 
 class MashpiaEmails {
 
+    /**
+     * send password reset email
+     * 
+     */
+    public static function passwordReset( $email, $url ) {
+        $subject = 'Your password reset link';
+
+        $message = '<p>We recieved a password reset request. The link to reset your password is below. ';
+        $message .= 'If you did not make this request, you can ignore this email</p>';
+        $message .= '<p>Here is your password reset link:</br>';
+        $message .= sprintf('<a href="%s">%s</a></p>', $url, $url);
+        $message .= '<p>Thanks!</p>';
+
+        return self::sendEmail( 'noreply@mashpia.com', $email, $subject, $message );
+    }
+
     public static function passwordChanged( $to, $name ) {
         $subject = 'Your Password has been changed.';
         $email = self::load('templates/passwordChanged.html');
@@ -36,12 +52,14 @@ class MashpiaEmails {
     }
 
     public static function sendEmail( $from, $to, $subject, $msg ) {
-        $headers  = "MIME-Version: 1.0\r\n";
-        $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
-        $headers .= "From: Tzivos Hashem <$from>\r\n";
+        $headers  = "From: $from <$from>\r\n";
         $headers .= "Reply-to: $from\r\n";
+        $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
     
-        return @mail( $to, $subject, $msg, $headers );
+        echo '<pre>';
+        print_r([ $to, $subject, $msg, $headers ]);
+
+        return mail( $to, $subject, $msg, $headers );
     }
 
     public static function load( $template ) {
