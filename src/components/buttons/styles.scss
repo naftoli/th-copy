@@ -42,23 +42,19 @@
     background: #eaeaea;
     border-color: #eaeaea;
   
-    img {
-      filter: grayscale( 100% )
-    }
+    img { filter: contrast(0); }
   }
 
   &:not(:disabled):not(.disabled) {
 
     &, &:hover {
-      color: #fff;
-      // background: linear-gradient($chabad-blue, #1e4f79);
-      background-color: $chabad-blue;
       border: none;
+      color: #fff;
+      background-color: $chabad-blue;
     }
   
     &:active, &:focus {
       background-color: darken( $chabad-blue, 10% );
-      // background: linear-gradient( darken( $chabad-blue, 10% ), darken(#1e4f79, 10%) );
     }
   }
 }

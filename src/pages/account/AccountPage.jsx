@@ -7,8 +7,8 @@ import { LoginRow, InformationRow, AccessRow } from './includes/Rows';
 // state
 import { removeAuth } from 'store/base/staff/operations';
 import { 
-  connectChabad,  disconnectChabad,
-  getCurrentUser, updateCurrentUser,
+  connectAccount,   disconnectAccount,
+  getCurrentUser,   updateCurrentUser,
 } from 'store/login/operations';
 // functions
 import { toast } from 'react-toastify';
@@ -20,7 +20,7 @@ import './AccountPage/AccountPage.scss';
 import LoginModal from './LoginModal';
 
 class AccountPage extends Component {
-
+  // default state
   state = {
     updates: {},
     saving: false,
@@ -41,7 +41,6 @@ class AccountPage extends Component {
     // and update the state
     this.setState({ updates });
   };
-
   onChange = onInputChange( this.handleUpdates );
 
   // * submit the event
@@ -60,28 +59,26 @@ class AccountPage extends Component {
     .then( () => this.setState({ saving: false }) );
   }
 
-  // toggle the modal
+  // * toggle the modal
   toggle = () => this.setState({
     isOpen: !this.state.isOpen
   });
 
   // * disconnect logins
-  disconnect = ( auth, id ) => {
+  disconnectLogin = ( auth, id ) => {
     const { admin_id } = this.props.account;
     this.props.removeAuth({ auth, id, admin_id })
       .then( this.props.getCurrentUser );
   }
-
-  // * connect account to chabad.org
-  connectToChabadOrg = key => showError(
-    this.props.connectChabad( key )
-    .then( () => toast.info( 'Chabad.org Login Connected' ) )
+  // * connect to an external account
+  connectAccount = type => key => showError(
+    this.props.connectAccount( type, key )
+    .then( () => toast.info(`${type} account connected`) )
   );
-
-  // * disconnect from chabad.org account
-  disconnectChabad = () => showError(
-    this.props.disconnectChabad()
-    .then( () => toast.info( 'Chabad.org Login Removed' ) )
+  // * disconnect from an external account
+  disconnectAccount = type => () => showError(
+    this.props.disconnectAccount( type )
+    .then( () => toast.info(`${type} account removed`) )
   );
 
   render() {
@@ -94,7 +91,7 @@ class AccountPage extends Component {
     let {
       username, title,  first,    admin_email,   last,
       logins,   admin_phone_work, admin_phone_mobile,
-      chabad_org_shliach_id
+      chabad_org_shliach_id,      google_id
     } = account;
 
     // * only show some logins
@@ -115,10 +112,12 @@ class AccountPage extends Component {
 
         <LoginRow
           username={ username }
-          editPassword={ this.toggle }
+          google_id={ google_id }
           shliach_id={ chabad_org_shliach_id }
-          onChabadOrgLogin={ this.connectToChabadOrg }
-          onChabadDisconnect={ this.disconnectChabad } />
+
+          editPassword={ this.toggle }
+          onConnect={ this.connectAccount }
+          onDisconnect={ this.disconnectAccount } />
 
         <hr/>
 
@@ -146,7 +145,7 @@ class AccountPage extends Component {
 
         <AccessRow
           logins={ logins }
-          disconnect={ this.disconnect } />
+          disconnect={ this.disconnectLogin } />
 
         <LoginModal
           isOpen={ isOpen }
@@ -163,8 +162,8 @@ const mapStateToProps = ({ login }) => ({
 })
 
 const mapDispatchToProps = {
-  connectChabad,      removeAuth,
-  disconnectChabad,   getCurrentUser,   updateCurrentUser,
+  connectAccount,   disconnectAccount,
+  getCurrentUser,   updateCurrentUser,  removeAuth,
 }
 
 export default connect(

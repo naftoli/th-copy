@@ -12,3 +12,6 @@ export const LEGACY_URL = process.env.NODE_ENV === "production" ? "" : "//mashpi
 export const DEFAULT_PROFILE = '/mobile/reg/images/profile-photo-default.jpg';
 export const DEFAULT_LOGO = '/schoolLogos/logo.png';
 export const DEFAULT_PRIZE = '/v2/images/imgsrepo/default.png';
+
+// api keys
+export const GOOGLE_CLIENT_ID = '356394568289-o9uqieb96qevc8a1plmm5voa6so0l2fd.apps.googleusercontent.com';

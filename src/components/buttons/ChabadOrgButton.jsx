@@ -13,12 +13,12 @@ export class ChabadOrgButton extends Component {
     if ( this.myChabadLoginWindow && !this.myChabadLoginWindow.closed ) {
       this.myChabadLoginWindow.focus();
     } else {
-      let params = `p=${ window.location.protocol.substr(0, window.location.protocol.length - 1 )}&d=${encodeURIComponent( window.location.host ) }`
-      this.myChabadLoginWindow = window.open(
-        `https://www.chabad.org/api/login/form?474DBD09-F59F-433D-A755-5A97594FC4E1&${ params }`,
-        'MyChabadLoginWindow',
-        'width=390,height=420,resizable=no,scrollbars=0,location=yes'
-      );
+      // let params = `p=${ window.location.protocol.substr(0, window.location.protocol.length - 1 )}&d=${encodeURIComponent( window.location.host ) }`
+      // this.myChabadLoginWindow = window.open(
+      //   `https://www.chabad.org/api/login/form?474DBD09-F59F-433D-A755-5A97594FC4E1&${ params }`,
+      //   'MyChabadLoginWindow',
+      //   'width=390,height=420,resizable=no,scrollbars=0,location=yes'
+      // );
     }
   }
 
@@ -39,6 +39,7 @@ export class ChabadOrgButton extends Component {
     return (
       <Button
         { ...props }
+        disabled
         onClick={ this.onClick }
         className='ChabadOrgButton'>
 
