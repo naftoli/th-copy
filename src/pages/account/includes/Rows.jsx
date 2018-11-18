@@ -2,17 +2,37 @@ import React from 'react';
 // components
 import { Account } from './Account';
 import { PhoneNumber } from 'components/inputs';
-import { ChabadOrgButton } from 'components/buttons';
+import { GoogleButton, ChabadOrgButton } from 'components/buttons';
 import { Row, Col, Input, Button } from 'reactstrap';
 // import the chabad.org logo
 import chabad from 'img/logos/chabad.png';
-
+import google from 'img/logos/google.png';
+// do nothing
+const noop = () => {};
+// generic disconnect button
+const DisconnectButton = ({ onClick }) => {
+  return (
+    <Button outline color='danger' onClick={ onClick }>Disconnect</Button>
+  )
+}
+// row to handle login information
 export const LoginRow = props => {
   const { 
-    editPassword,
-    onChabadOrgLogin,   username, 
-    onChabadDisconnect, shliach_id,
+    username,     shliach_id,         google_id,
+    editPassword, onConnect = noop,   onDisconnect = noop,  
   } = props;
+  // chabad.org button defaults to disconnect
+  let chabad_button = 
+    <DisconnectButton onClick={ onDisconnect('chabad') } />;
+  // google button defaults to disconnect
+  let google_button = 
+    <DisconnectButton onClick={ onDisconnect('google') } />;
+  // if we are not connected to chabad.org then show the chabad.org button
+  if ( !shliach_id )
+    chabad_button = <ChabadOrgButton onLogin={ onConnect('chabad') } />;
+  // if 
+  if ( !google_id )
+    google_button = <GoogleButton tokenOnly onSuccess={ onConnect('google') } />;
 
   return (
     <div className='LoginRow'>
@@ -33,25 +53,23 @@ export const LoginRow = props => {
 
       <Row>
         <Col sm={6}>
-          <img src={ chabad }
-            alt='chabad.org'
-            className='chabad-logo' />
+          <img src={ chabad } alt='chabad.org' className='chabad-logo' />
           <p>{ shliach_id ? 'Connnected' : 'Not Connected' }</p>
         </Col>
 
         <Col sm={6}>
-          { shliach_id && 
-            <Button outline 
-              color='danger'
-              onClick={ onChabadDisconnect }>
-              Disconnect
-            </Button>
-          }
+          { chabad_button }
+        </Col>
+      </Row>
 
-          { !shliach_id && 
-            <ChabadOrgButton
-              onLogin={ onChabadOrgLogin }/>
-          }
+      <Row>
+        <Col sm={6}>
+          <img src={ google } alt='google' className='chabad-logo' />
+          <p>{ google_id ? 'Connnected' : 'Not Connected' }</p>
+        </Col>
+
+        <Col sm={6}>
+          { google_button }
         </Col>
       </Row>
     </div>

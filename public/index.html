@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Dashboard for Schools and Teachers enrolled in Tzivos Hashem">
     <meta name="theme-color" content="#000000">
+
+    <meta name="google-signin-client_id" content="356394568289-o9uqieb96qevc8a1plmm5voa6so0l2fd.apps.googleusercontent.com">
     <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
@@ -53,16 +55,14 @@
     -->
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-71974937-2"></script>
-    <script async>
+    <script async defer src="https://www.googletagmanager.com/gtag/js?id=UA-71974937-2"></script>
+    <script async defer>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'UA-71974937-2');
     </script>
-
-    <script language="javascript" type="text/javascript" 
-      src="https://chabadorg.clhosting.org/scripts/js/api/baseapi.js.asp?474DBD09-F59F-433D-A755-5A97594FC4E1">
-    </script>
+    <!-- load google api's for Login with Google -->
+    <script src="https://apis.google.com/js/platform.js"></script>
   </body>
 </html>

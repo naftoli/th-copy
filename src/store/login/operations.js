@@ -73,19 +73,21 @@ export const updateCurrentUser = updates => dispatch => {
 }
 
 /**
- * connect the chabad.org key to this account
+ * connect the chabad.org or google key to this account
+ * @param {string} type google or chabad
  * @param {string} key chabad.org login key
  */
-export const connectChabad = key => dispatch => {
-  return API.post( '/auth/current_user?action=connectChabad', { key } )
+export const connectAccount = ( type, key ) => dispatch => {
+  return API.post( '/auth/current_user?action=connectAccount', { type, key } )
     .then( updates => dispatch( actions.updateUser( updates ) ) );
 }
 
 /**
  * disconnect the chabad.org key from this account
+ * @param {string} type google or chabad
  */
-export const disconnectChabad = () => dispatch => {
-  return API.post( '/auth/current_user?action=disconnectChabad' )
+export const disconnectAccount = type => dispatch => {
+  return API.post( '/auth/current_user?action=disconnectAccount', { type } )
     .then( updates => dispatch( actions.updateUser( updates ) ) );
 }
 

@@ -5,47 +5,34 @@ import { Link } from 'react-router-dom';
 import { Password } from 'components/inputs';
 import { Spinner, FontAwesome } from 'components/ui';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
-import { ChabadOrgButton } from 'components/buttons';
+import { GoogleButton, ChabadOrgButton } from 'components/buttons';
 // state
 import { login } from 'store/login/operations';
 // styles and images
 import logo from 'img/logos/th.svg';
 import { user } from 'img/icons';
 
+// export for tests
 export class Login extends Component {
-
+  // default state
   state = {
     username: '',
     password: '',
     show_password: false
   }
-
+  // default props
   static defaultProps = {
     loading: false,
     errors: [],
     login: () => {}
   }
-
+  // update the state
   handleChange = ({ target }) => {
     this.setState({
       [target.name]: target.value
     });
   }
-
-  togglePassword = () => {
-    // update the state
-    this.setState({
-      show_password: !this.state.show_password
-    }, () => {
-      // update the feild without re-rendering the component ( If we have access to the dom )
-      const password = document.querySelector('#login-form #password');
-      if ( password ) {
-        password.type = this.state.show_password ? 'text' : 'password';
-        password.focus();
-      }
-    });
-  }
-
+  // handle username/password login
   handleLoginForm = ( event ) => {
     event.preventDefault();
     this.setState( { show_password: false } ); // reset the show-password state
@@ -55,11 +42,14 @@ export class Login extends Component {
       password: this.state.password
     })
   }
+  // handle chabad.org login
+  onChabadOrgLogin = chabad_key =>
+    this.props.login({ chabad_key });
+  // handle google.com login
+  onGoogleLogin = google_key =>
+    this.props.login({ google_key });
 
-  onChabadOrgLogin = chabad_key => {
-    this.props.login({ chabad_key })
-  }
-
+  // * render the page.
   render(){
     let { errors, loading } = this.props;
 
@@ -112,11 +102,11 @@ export class Login extends Component {
 
             <div id='sign-in-with'>
 
-              <ChabadOrgButton 
+              <ChabadOrgButton size="lg"
                 onLogin={ this.onChabadOrgLogin }/>
 
-              {/* <GoogleButton
-                size="lg" /> */}
+              <GoogleButton size="lg" tokenOnly
+                onSuccess={ this.onGoogleLogin } />
 
             </div>
 
