@@ -15,7 +15,7 @@
     width: 100%;
     margin-bottom: 15px;
 
-    .ChabadOrgButton { margin: 5px 0px; }
+    .btn { width: auto; margin: 0px 0px 12px; }
   }
 
   div#links {
@@ -96,7 +96,7 @@
     input { font-size: 1.5em; }
     
     // animate the login button
-    .btn {
+    .btn#login {
       transition: .25s;
       margin-bottom: 10px;
       &:hover, &:focus { word-spacing: .5em; }

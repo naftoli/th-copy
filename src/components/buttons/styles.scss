@@ -49,15 +49,16 @@
 
   &:not(:disabled):not(.disabled) {
 
-    &, &:focus, &:hover {
-      // color: $chabad-text-blue;
+    &, &:hover {
       color: #fff;
-      background: linear-gradient($chabad-blue, #1e4f79);
+      // background: linear-gradient($chabad-blue, #1e4f79);
+      background-color: $chabad-blue;
       border: none;
     }
   
-    &:active {
-      background: darken( $chabad-blue, 10% );
+    &:active, &:focus {
+      background-color: darken( $chabad-blue, 10% );
+      // background: linear-gradient( darken( $chabad-blue, 10% ), darken(#1e4f79, 10%) );
     }
   }
 }

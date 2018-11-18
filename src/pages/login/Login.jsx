@@ -112,12 +112,10 @@ export class Login extends Component {
 
             <div id='sign-in-with'>
 
-              <ChabadOrgButton 
-                size="lg" 
+              <ChabadOrgButton size="lg" 
                 onLogin={ this.onChabadOrgLogin }/>
 
-              {/* <GoogleButton
-                size="lg" /> */}
+              <GoogleButton disabled size="lg" />
 
             </div>
 
