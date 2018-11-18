@@ -1,6 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { Login } from '../Login'; // import the compenent not connected to the store
+import { Login } from '../Login';
+import { Password } from 'components/inputs';
+import { MemoryRouter } from 'react-router'; // import the compenent not connected to the store
+
 
 describe( 'Login', () => {
   // BOILERPLATE
@@ -8,8 +11,10 @@ describe( 'Login', () => {
   // Component singleton
   const login = () => {
     return mountedComponent ? mountedComponent : mountedComponent = mount(
-      <Login {...props} />
-    );
+      <MemoryRouter>
+        <Login {...props} />
+      </MemoryRouter>
+    ).find( Login );
   }
   // clear global variables before each test
   beforeEach(() => {
@@ -20,10 +25,6 @@ describe( 'Login', () => {
    // TESTS
   describe('renders', () => {
     
-    it(`renders in one #login-page`, () => {
-      expect( login().find('#login-page').length ).toBe( 1 );
-    });
-
     it(`renders one div#login-form`, () => {
       expect( login().find('div#login-form').length ).toBe( 1 );
     });
@@ -32,8 +33,8 @@ describe( 'Login', () => {
       expect( login().find(`input[name='username']`).length ).toBe( 1 );
     });
 
-    it(`renders one one input[name='password']`, () => {
-      expect( login().find(`input[name='password']`).length ).toBe( 1 );
+    it(`renders one one Password Component`, () => {
+      expect( login().find( Password ).length ).toBe( 1 );
     });
 
   });
@@ -76,7 +77,6 @@ describe( 'Login', () => {
       it('calls props.login with { username password }', () => {
         expect( props.login ).toHaveBeenCalledWith({ username: 'username', password: 'password' });
       });
-      
     });
   });
 })

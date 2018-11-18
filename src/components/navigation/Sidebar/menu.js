@@ -29,7 +29,7 @@ export const menuReducer = ( login, defaults = DEFAULT_USER_TYPES ) => ( filtere
 
   if (
     ( !legacy && item.legacy ) // hide legacy links from new institutions
-    || ( item.module && !modules[ item.module ] ) // hide menu if login does not have access to this module
+    || ( item.module && modules && !modules[ item.module ] ) // hide menu if login does not have access to this module
   ) return filtered;
   
   // if the item is enabled for that code, add it to the sidebar

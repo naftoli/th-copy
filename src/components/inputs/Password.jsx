@@ -49,7 +49,7 @@ export class Password extends Component {
       <InputGroup size={ size } className='Password'>
         { showIcon && 
           <InputGroupAddon addonType="prepend">
-            <img src={lock} alt='lock' width='26' height='26'/>
+            <img src={lock} alt='lock' />
           </InputGroupAddon>
         }
 

@@ -1,0 +1,123 @@
+@import 'styles/colors.scss';
+
+#Login {
+  // style the toggle
+  #toggle-password:not(:hover) { color: #888; }
+  // animate the login button
+  .form .btn { width: 100%; }
+  // sign in button section
+  #sign-in-with {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+
+    width: 100%;
+    margin-bottom: 15px;
+
+    .ChabadOrgButton { margin: 5px 0px; }
+  }
+
+  div#links {
+    text-align: center;
+    font-size: 1em;
+    margin: 0px 0 12px;
+    opacity: .7;
+
+    display: flex;
+
+    a {
+      flex-grow: 1;
+
+      &:first-child { text-align: left; }
+      &:last-child { text-align: right; border-right:none; }
+    }
+  }
+}
+
+#Forgot {
+  .form .btn {
+    width: calc( 50% - 4px );
+    margin: 0px;
+    margin-bottom: 10px;
+    
+    &:first-child { margin-right: 4px; }
+    &:last-child { margin-left: 4px; }
+  }
+}
+
+#Login, #Forgot {
+  display: flex;
+  flex-direction: column;
+  align-items: center; justify-content: center;
+  height: 100vh;
+
+  img#logo {
+    width: 20%;
+    margin-top: 1%;
+    max-width: 250px;
+    min-width: 200px;
+  }
+
+  .form {
+    margin-top: 2%;
+    text-align: center;
+    width: 90%;
+    max-width: 520px;
+    transition: .25s;
+    // space the inputs
+    .input-group { margin: 10px 0px; }
+    // put the icon in the input
+    .input-group-prepend {
+      // define the width to match the height
+      width: 48px;
+      // center the content
+      justify-content: center;
+      align-items: center;
+      // set the border
+      position: absolute;
+      height: 100%;
+      z-index: 10;
+
+      img {
+        height: 1.5em;
+      }
+      i {
+        font-size: 1.5em;
+        opacity: .5;
+      }
+    }
+    // eliminate border on input
+    input.form-control:not(:first-child) {
+      padding-left: 56px;
+      border-radius: .3rem;
+    }
+    // increase the font size
+    input { font-size: 1.5em; }
+    
+    // animate the login button
+    .btn {
+      transition: .25s;
+      margin-bottom: 10px;
+      &:hover, &:focus { word-spacing: .5em; }
+    }
+  }
+
+  @media (max-width: 500px) {
+
+    img#logo { width: 200px; }
+
+    .form{
+      margin-top: 4%;
+      max-width: 300px;
+      input {
+        font-size: 1.2em;
+      }
+    }
+
+    div#links {
+      margin-top: 0px;
+      font-size: .8em;
+    }
+  }
+}
