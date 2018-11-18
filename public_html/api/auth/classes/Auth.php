@@ -48,6 +48,24 @@ class Auth {
         return false;
     }
 
+    public static function googleLogin( $id_token ) {
+        // load the google client
+        $client = new \Google_Client([ 'client_id' => GOOGLE_CLIENT_ID, 'client_secret' => GOOGLE_CLIENT_SECRET ]);
+        // parse the JSON web token
+        $payload = $client->verifyIdToken( $id_token );
+        // make sure it has a payload
+        if ( !$payload )
+            return false;
+        // get the google_id
+        $google_id = $payload['sub'];
+        $admin = \Admin::find_by_google_id( $google_id );
+
+        if ( $admin ) // check if there is even a single admin
+            return self::generateKeys( $admin );
+        
+        return false;
+    }
+
     private static function generateKeys( $admin ){
         // make sure we have an admin
         if ( !$admin instanceof \Admin )
