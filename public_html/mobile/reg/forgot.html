@@ -33,7 +33,9 @@
                 </div>
                 <div class="form-group no-border error-box" style="font-weight: bold; text-align: center;">
                     <span class="color-red"><b>Oops!</b></span>
-                    <span class="color-grey">Forgot your username / password?</span>
+                    <span class="color-grey">I Forgot my username / password.</span><br/>
+                    <span>Please send me a password reset link.</span><br/>
+                    <small style='font-size: .6em; font-weight: normal;'>(Please note that we will <strong>only</strong> send an email if we <strong>have your email address</strong> on file)</small>
                 </div>
                 <div class="login-box"> 
                     <div class="login-box-body" style="margin-bottom: 50px;">
@@ -94,8 +96,8 @@
                                 email = $form.find( "input[name='forgot']" ).val(),
                                 url = $form.attr( "action" );
                                 
-                        $.post('ajax/reminder.php', { email : email }, function( success ) {
-                            if (success == 1) {
+                        $.post('/api/auth/forgot', { email: email }, function( data ) {
+                            if ( data.success ) {
                                 $('.check_mark').show();
                                 $("#send").html("SENT");
                                 window.location.href = "http://mashpia.com/mobile/reg";
@@ -105,39 +107,6 @@
                                 $form.find( "input[name='forgot']" ).focus();
                             }
                         });
-                        
-                        $(".decline_mark").click( function() {
-                            $(this).hide();
-                            $('#error-block').hide();
-                            $("#send").text("SEND");
-                            $("input[name='forgot']").focus();
-                        });      
-                        /*
-                        //pour le moment on ne fait pas d'appel serveur
-                        //on va imaginer que le login,pwd c'est invite@opticemarket.com, invite
-                        if ($('#send').text() == 'DECLINE') {window.location.href = "login.html";}
-                        $.ajax({
-                            type: "POST",
-                            url: "/echo/json/",
-                            cache: false,
-                            contentType: "application/json; charset=utf-8",
-                            data: "{ 'body': login and password forgotten '" +  "'," + "'from': '" + $("#inputEmail").val() + "'," + "'subject: 'email from" + $("#inputName").val() + "'" + "}",
-                            dataType: "json",
-                            complete: function(transport) {
-                                if (email != 'shimmyweinbaum@gmail.com') transport.status = 100;
-
-                                if (transport.status == 200) {
-                                } else if (transport.status == 100) {
-                                    $('.decline_mark').show();
-                                    $('#error-block').show();
-                                    $("#send").html("DECLINE");
-                                } else {
-                                    $('.check_mark').show();
-                                    $("#send").html("SENT");
-                                }
-                            }
-                        });
-                        */
                     });
                 });
             });

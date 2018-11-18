@@ -231,34 +231,9 @@ if (isset($admin_auth))
 									<div class="module_content">
 									
 										<div class="list form">
-											
 											<form action="" method="post" accept-charset="UTF-8" name="login"> 
-												<input type="hidden" name="login_action" value="admin_login">
-												
+												<input type="hidden" name="login_action" value="admin_login" />
 												<ul>
-													<li>
-														<div>
-															<p><a href="#" id="forgot_password" name="forgot_password" onclick="show_table();">Forgot Username or Password</a></p>
-															<!--
-															<p>
-																<a href="#" id="forgot_username" name="forgot_username" onclick="show_reminder();">Forgot Username or Password</a>
-															</p>
-															<div id="remind_username" style="display:none;">
-																Please enter your email and you will be emailed your username and password.<br />
-																<input type="text" name="username" id="rem_username" />
-																<input type="submit" name="submit" value="submit" onclick="remind();" />
-															</div>
-															-->
-														</div>
-													</li>
-													<li id="email_address_div" style="display:none;">
-														<div>
-															Please enter your email address and we will send you your username / password.<br />
-															<input type="text" name="email_address" id="email_address" style="width:180px;"><br />
-															<input type="button" value="Remind Me" class="submit" onclick="get_password();">
-														</div>
-													</li>
-													
 													<li>
 														<span class="icon bullet"></span>
 														<span class="label"><label for="username">Username</label></span>
@@ -279,7 +254,23 @@ if (isset($admin_auth))
 													</li>
 												</ul>
 											</form> 
-											
+											<ul>
+												<li>
+													<div>
+														<p><a href="#" id="forgot_password" name="forgot_password" onclick="show_table();">Forgot Username or Password</a></p>
+													</div>
+												</li>
+												<form onsubmit="get_password( event );">
+													<li id="email_address_div" style="display:none;">
+														<div>
+															Please enter your email address.<br/>
+															<strong>If you have an account: </strong>You will be sent your username and a link to reset your password.<br />
+															<input type="email" required name="email_address" id="email_address" style="width:80%;">
+															<input type="submit" value="Reset Password" class="submit">
+														</div>
+													</li>
+												</form>
+											</ul>
 										</div>
 									</div>
 								</div>
@@ -308,25 +299,18 @@ if (isset($admin_auth))
 											<li>
 												<script>
 													
-													function get_password() { 
-														var function_name = "get_password";
-														var parameters = [document.getElementById("email_address").value];
-														if ( parameters == "" ) {
-															alert("No email address was entered.\nPlease try again.");
-															return;
-														}
-														var url = "camps/includes/get_functions.php?function_name=" + function_name + "&parameters=" + parameters;
-														$.getJSON(url, function(success) {
-															if (success == 0) {
-																alert("Email address does not exist. Please enter another one.");
+													function get_password( event ) {
+														event.preventDefault();
+														var email = document.getElementById("email_address").value;
+
+														$.post('/api/auth/forgot', { email: email }, function( response ) {
+															if ( response.success ) {
+																alert( response.data );
+															} else {
+																alert( response.message || "No email address was entered.\nPlease try again." );
 															}
-															else {
-																document.getElementById("email_address_div").style.display = "none";
-																alert("Your username and password were sent to " + document.getElementById("email_address").value);
-															}
-														});												
+														});
 													}
-													
 										
 													function show_table() {
 														var e = document.getElementById("email_address_div");
