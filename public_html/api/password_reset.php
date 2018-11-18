@@ -1,11 +1,12 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
+// loads some globals as well as the functions that we need to polyfill from php 7
 require_once( __DIR__ . '/header/header.php' );
 
 // https://stackoverflow.com/questions/27728674/php-call-of-undefined-function-hash-equals
-// add hash_equals for php 5.4 and 5.5
+// * add hash_equals for php 5.4 and 5.5
 if(!function_exists('hash_equals')) {
     function hash_equals($str1, $str2) {
         if(strlen($str1) != strlen($str2)) {
@@ -21,7 +22,9 @@ if(!function_exists('hash_equals')) {
     }
 }
 
-
+/**
+ * gets the DBS query for the selector
+ */
 function getPasswordResetQuery( $selector ){
     global $MASHPIA_DB;
 
@@ -31,6 +34,13 @@ function getPasswordResetQuery( $selector ){
     return $query;
 }
 
+/**
+ * updatePassword - updates the password in the DBS if the selector, validator, and password are valid
+ * 
+ * @param selector      the selector for the password reset request
+ * @param validator     the hex version of the validator, converted to bin and hashed to check for validity
+ * @param password      non-blank password to update the admin with.
+ */
 function updatePassword( $selector, $validator, $password ) {
     global $MASHPIA_DB;
 
@@ -52,6 +62,10 @@ function updatePassword( $selector, $validator, $password ) {
     } catch ( Exception $e ) {
         return 'There was an error processing your request. Error Code: 004 (Account Not Found)';
     }
+
+    if ( !$password )
+        return 'There was an error processing your request. Error Code: 006 (Invalid/Blank Password)';
+
     // update the password
     $admin->password = $password;
     if ( !$admin->save() )
@@ -60,6 +74,9 @@ function updatePassword( $selector, $validator, $password ) {
     $MASHPIA_DB->exec( 'DELETE FROM password_reset WHERE admin_id = '. $admin->admin_id .';' );
     return false; // all is good.
 }
+
+// define variables used in JS and set in PHP
+$expired = false;       $expires = false;
 
 if( $_SERVER['REQUEST_METHOD'] == "POST" ) {
     $selector  = filter_input( INPUT_POST, 'selector'  );
@@ -76,7 +93,6 @@ if( $_SERVER['REQUEST_METHOD'] == "POST" ) {
     // get the keys
     $selector  = filter_input( INPUT_GET, 'selector'  );
     $validator = filter_input( INPUT_GET, 'validator' );
-    $expired = false;       $expires = false;
     
     if ( ctype_xdigit( $selector ) ) {
         $expired_query = getPasswordResetQuery( $selector );
@@ -84,7 +100,6 @@ if( $_SERVER['REQUEST_METHOD'] == "POST" ) {
         $expires = $expired_query->fetch()['expires'];
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -131,6 +146,8 @@ if( $_SERVER['REQUEST_METHOD'] == "POST" ) {
             80% { opacity: 0; } 99% { opacity: 1; }
         }
         .alert { margin-top: 12px; margin-bottom: 0px; }
+
+        .expires { margin: .5rem;}
     </style>
 </head>
 <body>
@@ -143,8 +160,9 @@ if( $_SERVER['REQUEST_METHOD'] == "POST" ) {
                         Sorry, your token is expired.
                     </div>
                 <?php } else if ( ctype_xdigit( $selector ) && ctype_xdigit( $validator ) ) { ?>
-                    <h4>Tzivos Hashem Password Reset</h4>
-                    <form method='post' action='/api/password_reset' onsubmit='submitForm(event)'>
+                    <form id='new-password' method='post' action='/api/password_reset' onsubmit='submitForm(event)'>
+                        <h4>Tzivos Hashem Password Reset</h4>
+
                         <input type='hidden' name='selector' value=<?= $selector ?> />
                         <input type='hidden' name='validator' value=<?= $validator ?> />
 
@@ -179,10 +197,14 @@ if( $_SERVER['REQUEST_METHOD'] == "POST" ) {
                             <i class="fas fa-ellipsis-h"></i><span class='pulse'>|</span>
                         </button>
 
-                        <div id='client-error' class='alert alert-danger fade'>
-                            Error: Passwords do not match.
-                        </div>
+                        <p class='expires'>
+                            Your token expires in <span id='expires-in'></span>
+                        </p>
                     </form>
+
+                    <div id='client-error' class='alert alert-danger fade'>
+                        Error: Passwords do not match.
+                    </div>
                 <?php } else { ?>
                     <div class='alert alert-danger fade show'>
                         Sorry, it appears that your tokens are invalid
@@ -196,7 +218,8 @@ if( $_SERVER['REQUEST_METHOD'] == "POST" ) {
         </div>
     </div>
 
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+    <!-- open source script for generating the countdown clock -->
+    <script src='/api/static/scripts/countdown.min.js'></script>
     <script>
         function togglePassword( element ) {
             var input = element.parentElement.parentElement.querySelector('input');
@@ -208,7 +231,7 @@ if( $_SERVER['REQUEST_METHOD'] == "POST" ) {
                 input.type = 'password';
                 icon.className = 'fas fa-eye-slash';
             }
-            input.focus();
+            // input.focus();
         }
 
         function submitForm( event ) {
@@ -218,10 +241,41 @@ if( $_SERVER['REQUEST_METHOD'] == "POST" ) {
             // validate that the passwords match client side
             if ( password.value !== confirm.value ){
                 event.preventDefault();
-                event.target.querySelector('#client-error').classList.add('show');
+                document.querySelector('#client-error').classList.add('show');
                 confirm.focus();
             }
         }
+        <?php if ( $_SERVER['REQUEST_METHOD'] == "GET" && $expires ) { ?>
+            var app = function() {
+                var expires = parseInt( <?= json_encode( $expires )?>, 10 );
+                var ts = Math.round((new Date()).getTime() / 1000);
+
+                function updateUI() {
+                    var countdownObj = countdown( new Date( expires * 1000 ) ); // for formatting the text
+                    document.querySelector('#expires-in').innerText = countdownObj.toString();
+                }
+                // if the token is not expired
+                if ( ts < expires ){
+                    // update the UI every second
+                    var interval = setInterval( function() {
+                        console.log( 'UI update interval ran' );
+                        // get the current timestamp
+                        var ts = Math.round((new Date()).getTime() / 1000);
+
+                        if ( ts >= expires ) {
+                            document.querySelector('form#new-password').style.display = 'none';
+                            document.querySelector('#client-error').innerText = 'Sorry, your token is expired.';
+                            document.querySelector('#client-error').classList.add('show');
+                            return clearInterval( interval );
+                        } else {
+                            updateUI();
+                        }
+                    }, 1000);
+                }
+                // update the UI
+                updateUI();
+            }();
+        <?php } ?>
     </script>
 </body>
 </html>
