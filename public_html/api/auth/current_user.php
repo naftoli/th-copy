@@ -52,34 +52,54 @@ class ProfilesRouter {
         ]);
     }
 
-    // * connects the current_user account to the correct chabad.org shliach_id
-    public function connectChabad() {
-        global $current_user; global $MASHPIA_DB;
-
-        $key = $_POST['key'];
-
-        $shliach = new \ChabadShliach( $key );
-        // make sure the token is valid
-        if ( !$shliach->authenticate() )
-            return json_error('Chabad.org key invalid');
-
-        $current_user->shliach_id = $shliach->shliachID;
-
+    public function connectAccount() {
+        global $current_user;
+        $key = $_POST['key'];   $type = $_POST['type'];
+        // connect chabad.org account
+        if ( $type === 'chabad' ) {
+            $shliach = new \ChabadShliach( $key );
+            // make sure the token is valid
+            if ( !$shliach->authenticate() )
+                return json_error('Chabad.org key invalid');
+            // set the shliach id
+            $current_user->shliach_id = $shliach->shliachID;
+        // connect google account
+        } else if ( $type === 'google' ) {
+            $client = new \Google_Client([ 'client_id' => GOOGLE_CLIENT_ID, 'client_secret' => GOOGLE_CLIENT_SECRET ]);
+            $payload = $client->verifyIdToken( $key );
+            // make sure the token was valid
+            if ( !$payload )
+                return json_error('Google token invalid');
+            // get the google_id
+            $current_user->google_id = $payload['sub'];
+        }
+        // save the updates
         if ( !$current_user->is_valid() || !$current_user->save() )
-            return json_error('Another account is already this Chabad.org account to login.');
-
-        return json_response([ 'chabad_org_shliach_id' => $current_user->shliach_id ]);
+            return json_error('Another account is already this external account for login.');
+        // return the status of both keys
+        return json_response([
+            'google_id' => $current_user->google_id,
+            'chabad_org_shliach_id' => $current_user->shliach_id
+        ]);
     }
 
-    public function disconnectChabad() {
+    public function disconnectAccount() {
         global $current_user;
-
-        $current_user->shliach_id = null;
-
+        $key = $_POST['key'];   $type = $_POST['type'];
+        // connect chabad.org account
+        if ( $type === 'chabad' )
+            $current_user->shliach_id = null;
+        // connect google account
+        else if ( $type === 'google' )
+            $current_user->google_id = null;
+        // make sure that we can save
         if ( !$current_user->is_valid() || !$current_user->save() )
-            return json_error('Could not disconnect Chabad.org Account Access');
-
-        return json_response([ 'chabad_org_shliach_id' => $current_user->shliach_id ]);
+            return json_error('Could not disconnect external account access');
+        // save update
+        return json_response([
+            'google_id' => $current_user->google_id,
+            'chabad_org_shliach_id' => $current_user->shliach_id
+        ]);
     }
 
     private function serializeAccount( $admin ) {
@@ -87,7 +107,7 @@ class ProfilesRouter {
             'only' => [
                 'admin_id', 'username', 'title', 'first', 'last', 'lang',
                 'home_phone', 'cell_phone', 'admin_email', 'chabad_org_shliach_id',
-                'admin_phone_work', 'admin_phone_mobile', 'photo',
+                'admin_phone_work', 'admin_phone_mobile', 'photo', 'google_id'
             ],
             'methods' => [ 'logins', /* 'customerProfile' */ ]
         ]);

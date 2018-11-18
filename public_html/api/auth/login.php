@@ -21,12 +21,18 @@ if ( isset($_POST['username']) && isset($_POST['password']) ) {
         $_POST['username'], $_POST['password']
     );
     $error = 'Invalid Username and/or Password';
-
+// sign-in with Chabad.org
 } else if ( isset( $_POST['chabad_key'] ) ) {
     $login = \mashpia\api\auth\Auth::chabadLogin(
         $_POST['chabad_key']
     );
-    $error = 'No Chabad.org Connected Account Found';
+    $error = 'No Tzivos Hashem Account is currently connected to this Chabad.org Account.';
+// sign in with Google
+} else if ( isset( $_POST['google_key'] ) ) {
+    $login = \mashpia\api\auth\Auth::googleLogin(
+        $_POST['google_key']
+    );
+    $error = 'No Tzivos Hashem Account is currently connected to this Google Account.';
 }
 
 if ( !$login )

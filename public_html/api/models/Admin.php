@@ -19,6 +19,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         [ 'username', 'message' => 'must be unique' ],
         [ 'admin_email', 'message' => 'addresses must be unique' ],
         [ 'chabad_org_shliach_id', 'message' => 'connections must be unique' ],
+        [ 'google_id', 'message' => 'connections must be unique' ],
     ];
     // static $validates_format_of = [
     //     [ 'admin_email', 'message' => 'addresses must be valid',
