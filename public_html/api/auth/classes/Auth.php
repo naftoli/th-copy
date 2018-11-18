@@ -24,7 +24,10 @@ class Auth {
         $username = strtolower( $username );
         // find the account with the username and password
         $admin = \Admin::find_by_username( $username );
-
+        // if the username does not exist, try to find the account with that email
+        if ( !$admin )
+            $admin = \Admin::find_by_admin_email( $username );
+        // if the password is valid, authenticate the user
         if ( $admin && $admin->authenticate( $password ) );
             return self::generateKeys( $admin  );
 
