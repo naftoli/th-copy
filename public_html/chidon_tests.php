@@ -314,7 +314,7 @@ foreach ($schools as $id => $school) {
     <script>
         $(function() {
             $("#submit_marks_button").click(function(){
-                alert("Please contact HQ to choose your contestants and representatives.");
+                //alert("Please contact HQ to choose your contestants and representatives.");
             });
             
             var year = <?=$year?>;
