@@ -59,7 +59,7 @@ foreach ( $schoolsUsers as $school => $users ) {
         echo "<tr><td>" . $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] ) . 
             "</td><td>" . $user['first'] . " " . $user['last'];
         if( $report_mode ){
-            $user_ids = $raffle->get_eligable_user_ids($user['user_id']); // in test mode run the full raffle check
+            $user_ids = $raffle->get_eligable_user_ids($user['user_id'], false, false, true); // in test mode run the full raffle check
             echo "<td class='". ( isset($user_ids[$user['user_id']]) ? "green'>✓" : "red'>x" ) ."</td>"; // determine the class and content
         } else {
             $user_ids = $raffle->get_raffle_eligable_user_ids($user['user_id']); // pass the school id in to only get the students that we need

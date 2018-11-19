@@ -217,7 +217,7 @@ class Raffle {
      *
      * TODO: check even if the user is not in the table based off of doc
      */
-    public function get_eligable_user_ids($user_id=false, $log=false, $group_by_school=false){
+    public function get_eligable_user_ids($user_id=false, $log=false, $group_by_school=false, $report = false ){
         $year = $this->year;
         $this->eligable_user_ids = [];
         // first add the users that where marked as eligibile - excluding users that have won in the past. should we bring them in if they have been marked?
@@ -226,8 +226,10 @@ class Raffle {
             " JOIN users u USING (user_id) ".
             " LEFT JOIN admin_auths aa ON u.user_id = aa.id and aa.auth='user' ".
             " WHERE re.raffle_id = ".$this->raffle_id." ".
-            " AND re.eligible = 1 ".
-            " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners JOIN raffles USING (raffle_id) WHERE year = $year )";
+            " AND re.eligible = 1 ";
+        // on non-reports we need to hide the people who already won
+        if ( !$report )
+            $sql .= " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners JOIN raffles USING (raffle_id) WHERE year = $year )";
         // add the sorting by the user_id
         if($user_id) $sql .= "AND u.user_id=$user_id ";
         $sql .= "GROUP BY u.user_id;";
@@ -248,10 +250,12 @@ class Raffle {
         // get all users not marked in raffle_eligibility and who are registerd
         $sql = "SELECT u.user_id, u.school_id, aa.admin_id FROM users u LEFT JOIN admin_auths aa ON aa.auth = 'user' AND u.user_id = aa.id ".
             " LEFT JOIN admins a USING ( admin_id ) ".
-            " WHERE u.user_registered IS NOT NULL AND u.school_id IS NOT NULL ".
-            " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners JOIN raffles USING (raffle_id) WHERE year = $year )";
+            " WHERE u.user_registered IS NOT NULL AND u.school_id IS NOT NULL ";
+        // on reports we need to hide the soldiers who already won
+        if ( !$report )
+            $sql .= " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners JOIN raffles USING (raffle_id) WHERE year = $year )";
         // if a user is passed in, then limit it to this user
-        if($user_id) $sql .= " AND u.user_id=$user_id";
+        if( $user_id ) $sql .= " AND u.user_id=$user_id";
         // sort by the user_id
         $sql .= " GROUP BY u.user_id ORDER BY u.user_id;"; // LIMIT 250 only for testing
         $query = mysql_query($sql); // run the query
