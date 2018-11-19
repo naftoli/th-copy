@@ -85,7 +85,7 @@ class ProfilesRouter {
 
     public function disconnectAccount() {
         global $current_user;
-        $key = $_POST['key'];   $type = $_POST['type'];
+        $type = $_POST['type'];
         // connect chabad.org account
         if ( $type === 'chabad' )
             $current_user->shliach_id = null;
