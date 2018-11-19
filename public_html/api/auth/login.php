@@ -26,13 +26,13 @@ if ( isset($_POST['username']) && isset($_POST['password']) ) {
     $login = \mashpia\api\auth\Auth::chabadLogin(
         $_POST['chabad_key']
     );
-    $error = 'No Connected TH Account Found. Please login and connect your accounts or create a new account below.';
+    $error = 'No Connected TH Account Found. Please login and connect your Chabad.org Account or create a new account below.';
 // sign in with Google
 } else if ( isset( $_POST['google_key'] ) ) {
     $login = \mashpia\api\auth\Auth::googleLogin(
         $_POST['google_key']
     );
-    $error = 'No Connected TH Account Found. Please login and connect your accounts or create a new account below.';
+    $error = 'No Connected TH Account Found. Please login and connect your Google Account or create a new account below.';
 }
 
 if ( !$login )

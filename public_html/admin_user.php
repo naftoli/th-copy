@@ -441,9 +441,8 @@ $class_result = mq($qry);
 		<link href="admin_styles.css" rel="stylesheet" type="text/css" />
 		<link href="styles/admin/grey_select.css" rel="stylesheet" type="text/css" />
 		<style>
-		<!--
-		.photo {float:right;}
-		-->
+		.photo {float:right; max-width: 250px;}
+		img{ max-width: 100%; }
         .soldierType {
             margin-left: 30px;
         }
