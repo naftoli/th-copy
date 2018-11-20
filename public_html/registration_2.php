@@ -55,11 +55,6 @@ if (isset($_POST["action"])) {
 		else 
 			$sql = substr($sql, 0, strlen($sql) - 2);
 			
-		// add number of students
-		if (intval($_POST['total_children']) > 0) {
-			$sql .= ", num_students = " . intval($_POST['total_children']);
-		}
-			
 		$sql = $sql . " WHERE school_id=" . $school_id;
 		$query = mysql_query($sql);
 		// ****************************** SCHOOL UPDATE ****************************** //
@@ -71,6 +66,7 @@ if (isset($_POST["action"])) {
 	}
 	else {
 		// create new school
+		// ! generate school_number column
 		$sql = "SELECT school_number FROM schools ORDER BY school_number DESC LIMIT 1";
 		$query = mysql_query($sql);
 		$row = mysql_fetch_assoc($query);
@@ -370,13 +366,6 @@ if ( isset( $school->school_logo_id ) && $school->school_logo_id > 0 )
 												<li>
 													<span class="label"><label for="phone">Phone</label></span>
 													<span class="input"><input id="phone" name="school_phone" type="text" value="<?=isset($school)?$school->school_phone:'';?>" required /></span>
-												</li>
-												
-												<li>
-													<p style="font-size: 16px; font-weight: bold;">
-														How many students does your school have (roughly)?<br />
-														<span class="input"><input type="text" name="total_children" style="width: 100px" /></span>
-													</p>
 												</li>
 											</ul>
 										</div>

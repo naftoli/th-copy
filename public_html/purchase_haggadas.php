@@ -1,6 +1,8 @@
 <?
-include 'db.php';
+include __DIR__ . '/api/header/db.php';
 $price = 14.99;
+
+// TODO, update to Authorize.net API.
 
 //parse post and find which school ordered how much
 $orders = array();
@@ -12,35 +14,27 @@ foreach ( $_POST as $key => $value ) {
 }
 
 foreach ( $orders as $id => $qty ) {
+    $school = School::find( $id );
     //charge cc for added amount of haggadas
-    $sql = "select * from schools where school_id = " . $id;
-    $result = mysql_query( $sql );
-    $row = mysql_fetch_assoc( $result );
-    $card_num = $row['cc_number'];
-    $exp_date = $row['cc_exp'];
     $amount = $qty * $price;
     $description = "Purchase of an extra " . $qty . " haggadas at " . $price . "/ea.";
-    $first_name = $row['cc_first'];
-    $last_name = $row['cc_last'];
-    $address = $row['cc_address'];
-    $state = $row['cc_state'];
-    $zip = $row['cc_zip'];
-    
-    require "authorize.php";
-    
-    $response = "";
     $charged = false;
-    if ( $response_array[0] == 1 ) {  
-        $response .= $response_array[0] . "\n";
-        $response .= $response_array[3] . "\n";
-        $response .= $response_array[4] . "\n";
-        $response .= $response_array[6] . "\n";
-        $response .= $response_array[9] . "\n";
-        $charged = true;
-    }
-    else {
-        $response .= $response_array[3] . "\n";          
-    }
+    
+    // require "authorize.php";
+    
+    // $response = "";
+    
+    // if ( $response_array[0] == 1 ) {  
+    //     $response .= $response_array[0] . "\n";
+    //     $response .= $response_array[3] . "\n";
+    //     $response .= $response_array[4] . "\n";
+    //     $response .= $response_array[6] . "\n";
+    //     $response .= $response_array[9] . "\n";
+    //     $charged = true;
+    // }
+    // else {
+    //     $response .= $response_array[3] . "\n";          
+    // }
     
     if ( $charged ) {
         $sql = "insert into haggada_purchases set 
