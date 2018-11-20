@@ -171,7 +171,8 @@ if( $_SERVER['REQUEST_METHOD'] == "POST" ) {
                             <div class="input-group-prepend">
                                 <i class="fas fa-lock"></i>
                             </div>
-                            <input required type="password" id='password' class="form-control" name="password" placeholder="New Password">
+                            <input required id='password'    class="form-control"        name="password" 
+                                autofocus   type="password"  placeholder="New Password"  autocomplete="new-password">
                             <div class="input-group-append">
                                 <button type="button" class="toggle-password btn btn-outline-primary" onclick='togglePassword( this )'>
                                     <i class="fas fa-eye-slash"></i>
@@ -184,7 +185,8 @@ if( $_SERVER['REQUEST_METHOD'] == "POST" ) {
                             <div class="input-group-prepend">
                                 <i class="fas fa-lock"></i>
                             </div>
-                            <input required type="password" id='confirm' class="form-control" name="confirm" placeholder="Confirm Password">
+                            <input required      id='confirm'   name="confirm"  class="form-control" 
+                                type="password"  placeholder="New Password"     autocomplete="new-password">
                             <div class="input-group-append">
                                 <button type="button" class="toggle-password btn btn-outline-primary" onclick='togglePassword( this )'>
                                     <i class="fas fa-eye-slash"></i>
