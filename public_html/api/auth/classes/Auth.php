@@ -45,7 +45,10 @@ class Auth {
         if ( $admin ) // check if there is even a single admin
             return self::generateKeys( $admin );
         
-        return false;
+        $shliach->setPersonalInfo();
+        $shliach->setMosdos();
+
+        return $shliach;
     }
 
     public static function googleLogin( $id_token ) {

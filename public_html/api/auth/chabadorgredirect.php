@@ -18,6 +18,7 @@ require_once( __DIR__ . '/../../../includes/globals.php' );
     <style>
         body{ background: #fcfcfc; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0px; }
         strong{ font-family: 'Helvetica', sans-serif; }
+        img { max-width: 100%; }
     </style>
 </head>
 <body>
