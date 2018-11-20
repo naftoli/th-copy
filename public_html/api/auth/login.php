@@ -14,6 +14,7 @@ foreach ( $_COOKIE as $key => $value ) {
 $login = false;
 
 $error = 'Unknown Login Error';
+$data = false;
 
 // * try to use the username and password first
 if ( isset($_POST['username']) && isset($_POST['password']) ) {
@@ -26,6 +27,10 @@ if ( isset($_POST['username']) && isset($_POST['password']) ) {
     $login = \mashpia\api\auth\Auth::chabadLogin(
         $_POST['chabad_key']
     );
+    // if we are given a shliach, send that as the data of the error
+    if ( $login instanceof \ChabadShliach ) {
+        $data = $login;     $login = false;
+    }
     $error = 'No Connected TH Account Found. Please login and connect your Chabad.org Account or create a new account below.';
 // sign in with Google
 } else if ( isset( $_POST['google_key'] ) ) {
@@ -36,6 +41,6 @@ if ( isset($_POST['username']) && isset($_POST['password']) ) {
 }
 
 if ( !$login )
-    json_error( $error );
+    json_error( $error, $data );
 
 json_response( $login );
