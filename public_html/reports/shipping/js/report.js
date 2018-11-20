@@ -182,7 +182,7 @@ var report = {
     
     mark_missing: function(event) {
         var ajax_info = event.target.dataset.ajax; // and the pre-minified params
-        $.post("../ajax/mark_shipped.php", {checked: false, params: ajax_info, qty: 0}, function(data){
+        $.post("../ajax/mark_shipped.php", {checked: false, params: [ ajax_info ], qty: 0}, function(data){
             if (debug) {console.log(data);} // log the response to the console if we are in debug mode
             data = JSON.parse(data); // parse the data as JSON
             if (data.success === false) { // if the server could not update the shipping status
