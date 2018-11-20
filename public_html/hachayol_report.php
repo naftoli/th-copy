@@ -160,7 +160,9 @@ $posters = array(
 
                 Total: <?=$total?><br />
                 Already Registered for Chidon: <?=$school['chidonReg']?><br />
-                Number of posters: <?=$posters[$id]?><br />
+                <?php if ( isset( $posters[$id] ) ) { ?>
+                    Number of posters: <?=$posters[$id]?><br />
+                <?php } ?>
                 Possible Chidon Children: <?=$chidonNum?><br />
                 Shipping Requests: <?=$school['shipping_requests']?><br /><br />
                 <?php
