@@ -1,4 +1,8 @@
 <?
+// TODO, update ./purchas_siddurim.php to use the new models to charge the card.
+include_once( __DIR__ .'/under_construction.php' );
+die();
+
 $admin_auth = array('school'); 
 require('header.php');
 ?>

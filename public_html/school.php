@@ -29,14 +29,6 @@ class school {
 		$this->school_country = $row['school_country'];
 		$this->school_postal = $row['school_postal'];
 		$this->school_phone = $row['school_phone']; 
-		$this->cc_first = $row['cc_first'];
-		$this->cc_last = $row['cc_last']; 
-		$this->cc_address = $row['cc_address'];
-		$this->cc_state = $row['cc_state'];
-		$this->cc_zip = $row['cc_zip'];
-		$this->cc_number = $row['cc_number'];
-		$this->cc_exp = $row['cc_exp'];
-		$this->cc_cvv = $row['cc_cvv'];
 		$this->kiosk_print = $row['kiosk_print'];
 		$this->school_era = $row['school_era'];
 		$this->shipping_method = $row['shipping_method'];

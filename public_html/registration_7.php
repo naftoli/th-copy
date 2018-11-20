@@ -67,22 +67,17 @@ if (isset($_POST['action'])) {
 	
 	if ($action == "update_credit_card") {
 		$sql = "UPDATE schools SET "
-			."cc_first 		='" . clean_character($_POST['cc_first_name']) . "', "
-			."cc_last 		='" . clean_character($_POST['cc_last_name']) . "', "
-			."cc_address 	='" . clean_character($_POST['cc_address']) . "', "
-			."cc_state 		='" . clean_character($_POST['cc_state']) . "', "
-			."cc_zip 		='" . clean_character($_POST['cc_zip']) . "', "
 			."accounting_name = '" . mysql_real_escape_string($_POST['contact_name']) . "', "
 			."accounting_number = '" . mysql_real_escape_string($_POST['contact_number']) . "', "
 			."accounting_email = '" . mysql_real_escape_string($_POST['contact_email']) . "' "
 			."WHERE school_id=" . $school_id;
 		$query = mysql_query($sql);
 		// create the bill to array
-		$billto = [
-			"address" => clean_character($_POST['cc_address']),
-			"state" => clean_character($_POST['cc_state']),
-			"zip" => clean_character($_POST['cc_zip'])
-		];
+		// $billto = [
+		// 	"address" => clean_character($_POST['cc_address']),
+		// 	"state" => clean_character($_POST['cc_state']),
+		// 	"zip" => clean_character($_POST['cc_zip'])
+		// ];
 		
 		// make sure the DBS was updated....
 		if (!$query) {
@@ -98,7 +93,7 @@ if (isset($_POST['action'])) {
 			$payment_profile->cardNumber 		= clean_character($_POST['cc_number']);
 			$payment_profile->expirationDate 	= clean_character($_POST['cc_exp']);
 			$payment_profile->cardCode 			= clean_character($_POST['cc_cvv']);
-			$payment_profile->billTo = $billto;
+			// $payment_profile->billTo = $billto;
 			// submit the updated info and check for errors....
 			$errors = $payment_profile->update();
 			
@@ -112,8 +107,8 @@ if (isset($_POST['action'])) {
 			$payment_profile = PaymentProfile::createBasicArray(
 				clean_character($_POST['cc_number']),
 				clean_character($_POST['cc_exp']),
-				clean_character($_POST['cc_cvv']),
-			$billto, true);
+				clean_character($_POST['cc_cvv'])
+			);
 
 			// get the email from the admin
 			// create the payment profile
@@ -206,33 +201,8 @@ function clean_character($string)
 			
 			// perform validation
 			function perform_validation()
-			{			
-				if ($("#cc_first_name").val() == "") {
-					document.getElementById("cc_first_name").focus();
-					alert("You must enter First Name as it appears on credit card");
-					return false;					
-				}
-				else if ($("#cc_last_name").val() == "") {
-					document.getElementById("cc_last_name").focus();
-					alert("You must enter Last Name as it appears on credit card");
-					return false;					
-				}
-				else if ($("#cc_address").val() == "") {
-					document.getElementById("cc_address").focus();
-					alert("You must enter Address.");
-					return false;					
-				}
-				else if ($("#cc_state").val() == "") {
-					document.getElementById("cc_state").focus();
-					alert("You must enter State/Province code.");
-					return false;					
-				}
-				else if ($("#cc_zip").val() == "") {
-					document.getElementById("cc_zip").focus();
-					alert("You must enter Zip/Postal Code.");
-					return false;					
-				}
-				else if ($("#ccnum").val() == "") {
+			{
+				if ($("#ccnum").val() == "") {
 					document.getElementById("ccnum").focus();
 					alert("You must enter Valid Credit Card Number.");
 					return false;					
@@ -291,11 +261,9 @@ function clean_character($string)
 		
 			// populate test data
 			function test_data() {			
-				$('#cc_first_name').val("Mordechai Moshe");
-				$('#cc_last_name').val("Mutawalli");
-				$('#cc_address').val("12345 Park Avenue");
-				$('#cc_state').val("NY");
-				$('#cc_zip').val("11213");
+				// $('#cc_address').val("12345 Park Avenue");
+				// $('#cc_state').val("NY");
+				// $('#cc_zip').val("11213");
 				$('#ccnum').val("4111111111111111");
 				$('#ccexp').val("0115");
 				$('#cccvv').val("123");
@@ -390,27 +358,18 @@ function clean_character($string)
 									<div class="module_content">
 										<div class="lists form">
 											<ul>
-												<li>
-													<input type="hidden" id="cc_amount" value="<?=$total_fee;?>"> 
-													<span class="label"><label for="cc_first_name">First Name on Credit Card</label></span>
-													<span class="input"><input id="cc_first_name" class="required" name="cc_first_name" type="text" value="<?=$row['cc_first']?>"/></span>
-												</li>
-												<li>
-													<span class="label"><label for="cc_last_name">Last Name on Credit Card</label></span>
-													<span class="input"><input id="cc_last_name" class="required" name="cc_last_name" type="text" value="<?=$row['cc_last']?>"  /></span>
-												</li>
-												<li>
+												<!-- <li>
 													<span class="label"><label for="cc_address">Address</label></span>
-													<span class="input"><input id="cc_address" name="cc_address" type="text" value="<?=$row['cc_address']?>" /></span>
+													<span class="input"><input id="cc_address" name="cc_address" type="text" /></span>
 												</li>
 												<li>
 													<span class="label"><label for="cc_state">State/Province Code</label></span>
-													<span class="input"><input id="cc_state" name="cc_state" type="text" value="<?=$row['cc_state']?>" /></span>
+													<span class="input"><input id="cc_state" name="cc_state" type="text" /></span>
 												</li>
 												<li>
 													<span class="label"><label for="cc_zip">Zip/Postal Code</label></span>
-													<span class="input"><input id="cc_zip" name="cc_zip" type="text" value="<?=$row['cc_zip']?>" /></span>
-												</li>
+													<span class="input"><input id="cc_zip" name="cc_zip" type="text" /></span>
+												</li> -->
 												<li>
 													<span class="label"><label for="ccnum">Credit Card Number</label></span>
 													<span class="input">

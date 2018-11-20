@@ -103,13 +103,6 @@ if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['
 				</form>
 			</p>
 		</div>
-		
-		<!--Embedding CC information in the page when loaded over ajax.-->
-        <input type="hidden" id="cc_first" value="<?=$school->cc_first?>"/> 
-        <input type="hidden" id="cc_last" value="<?=$school->cc_last?>"/> 		    
-		<input type="hidden" id="cc_number" value="<?=$school->cc_number;?>"/> 
-		<input type="hidden" id="cc_exp" value="<?=$school->cc_exp?>"/> 
-		<input type="hidden" id="cc_cvv" value="<?=$school->cc_cvv;?>"/>
         <!-- Registration Rate -->
         <input type="hidden" id="reg_fee" value="<?=$reg_fee?>"/> 
 		<!-- Authorize.net credentials for user -->
@@ -269,5 +262,5 @@ if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['
 			<input type="button" value="Review CC settings" name="school_cc_review" id="school_cc_review" />
 		</div>
 	</div>
-		</div>
-				
+</div>
+

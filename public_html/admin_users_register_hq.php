@@ -315,7 +315,7 @@ else
 				} 		
 				
 				$('#school_review').live('click', function() {	
-					window.location = "/admin_school_new.php?school_id=" + $("#school_id").val() + "&action=edit";	
+					window.location = "/admin_school2.php?school_id=" + $("#school_id").val() + "&action=edit";	
 				});
 			
 				// ********** REGISTARTION FEES ********** //
@@ -553,7 +553,7 @@ else
 				
 				
 				$("#school_id").change(function() {
-					$("#school_review").attr("href", "/admin_school_new.php?school_id=" + $(this).val() + "&action=edit");
+					$("#school_review").attr("href", "/admin_school2.php?school_id=" + $(this).val() + "&action=edit");
 					get_students();
 				});
 				

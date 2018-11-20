@@ -734,10 +734,10 @@ if (!empty($action)) { switch($action) {
 							//echo $sql;
 							$result = mysql_query($sql);
 						?>
-							<a href="admin_school_new.php?action=export_schools"><?=T_('Export Institutions')?></a><br/>
-							<a href="admin_school_new.php?action=export_teachers"><?=T_('Export Teachers')?></a><br/>
-							<a href="admin_school_new.php?action=export_users"><?=T_('Export All Soldiers')?></a><br/>
-							<a href="admin_school_new.php?action=add"><?=T_('Add new institution')?></a>
+							<a href="admin_school2.php?action=export_schools"><?=T_('Export Institutions')?></a><br/>
+							<a href="admin_school2.php?action=export_teachers"><?=T_('Export Teachers')?></a><br/>
+							<a href="admin_school2.php?action=export_users"><?=T_('Export All Soldiers')?></a><br/>
+							<a href="admin_school2.php?action=add"><?=T_('Add new institution')?></a>
 							<table CLASS="list list_<?=$align_start?>" style="font-size:12px;">
 								<thead>
 									<tr>
