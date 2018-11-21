@@ -1,12 +1,13 @@
 import React from 'react';
-import MaskedInput from 'react-text-mask';
-// data
-import masks from 'components/masks';
+import Cleave from 'cleave.js/react';
+// To large, we need to make a custom smaller version once we can
+import 'cleave.js/dist/addons/cleave-phone.i18n';
 
 export const PhoneNumber = ( props ) => 
-  <MaskedInput 
-    {...props} 
-    mask={ masks.phone } 
+  <Cleave 
+    type='tel'
+    { ...props }
     className='form-control'
-    pattern='^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$' 
-    title='Please enter a valid Phone Number' />
+    options={{ phone: true, phoneRegionCode: 'US' }}
+    title='Please enter a valid 9+ digit Phone Number'
+    pattern='^(\+[0-9]{1,3}[0-9 ]{9,})|((?:1 )?[0-9]{3}(?: )?[0-9]{3}(?: )?[0-9]{4})$' />

@@ -14,16 +14,25 @@ export const login = opts => dispatch => {
   
   return API.post( '/auth/login', opts )
     .then( ({ legacy, mobile, id }) => {
-        dispatch( actions.setTokens( legacy, mobile, id ) );
-        return getCurrentUser()( dispatch ); // get the user
+        return dispatch( actions.setTokens( legacy, mobile, id ) );
+        // return getCurrentUser()( dispatch ); // get the user
     })
     .catch( error => {
       dispatch( actions.setLoading( false ) );
-      dispatch( actions.setErrors( 
-        error.message || 'Could not log in. Please try again.' )
-      );
+      return Promise.reject( error );
     });
 };
+
+export const createAccount = opts => dispatch => {
+  return API.post( '/auth/new_account', opts )
+    .then( ({ account, tokens }) => {
+      // set the tokens to log the user in
+      dispatch( actions.setTokens( tokens.legacy, tokens.mobile, tokens.id ) );
+      // and set the users account information at the same time
+      dispatch( actions.setUser( account ) );
+      return setLogin( dispatch );
+    });
+}
 
 /**
  * send a reset email to this account.
@@ -45,9 +54,9 @@ export const getCurrentUser = () => dispatch => {
       return setLogin( dispatch );
     }).catch( error => {
       dispatch( actions.logout() );
-      dispatch( actions.setErrors( error.message || 
-        'Could not get account info. Please clear your cookies and try again.'
-      ));
+      // dispatch( actions.setErrors( error.message || 
+      //   'Could not get account info. Please clear your cookies and try again.'
+      // ));
       return Promise.reject( error );
     });
 }
@@ -77,7 +86,7 @@ export const updateCurrentUser = updates => dispatch => {
  * @param {string} type google or chabad
  * @param {string} key chabad.org login key
  */
-export const connectAccount = ( type, key ) => dispatch => {
+export const connectExternalAccount = ( type, key ) => dispatch => {
   return API.post( '/auth/current_user?action=connectAccount', { type, key } )
     .then( updates => dispatch( actions.updateUser( updates ) ) );
 }
@@ -86,7 +95,7 @@ export const connectAccount = ( type, key ) => dispatch => {
  * disconnect the chabad.org key from this account
  * @param {string} type google or chabad
  */
-export const disconnectAccount = type => dispatch => {
+export const disconnectExternalAccount = type => dispatch => {
   return API.post( '/auth/current_user?action=disconnectAccount', { type } )
     .then( updates => dispatch( actions.updateUser( updates ) ) );
 }

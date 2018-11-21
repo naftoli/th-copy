@@ -38,7 +38,7 @@ export class Password extends Component {
 
   render() {
     const { 
-      name,   showIcon,     required,
+      name,   showIcon,     required,   autoComplete,
       size,   placeholder,  onChange,   disabled,
       value,  showToggle,   tabToggle,  defaultOpen
     } = this.props;
@@ -62,6 +62,7 @@ export class Password extends Component {
           className='form-control'
           ref={ this.passwordRef }
           name={ name || 'password' }
+          autoComplete={ autoComplete || 'current-password' }
           placeholder={ placeholder || 'Password' } />
 
         { showToggle &&

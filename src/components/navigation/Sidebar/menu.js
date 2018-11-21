@@ -58,7 +58,7 @@ const getMenu = ( login ) => {
   // Define the shape of the menu
   const menu = [
     {
-      label: 'Home', path: '/', user_types: ALL_USER_TYPES,
+      label: 'Home', path: '/', user_types: [ ...ALL_USER_TYPES, 'BLANK' ],
       icon: <FontAwesome icon='home'/>
     },
     {

@@ -1,0 +1,60 @@
+#NewAccount {
+
+  padding: 24px 0px;
+  
+  > img#logo {
+    max-width: 200px !important;
+  }
+
+  h3 { margin-bottom: 0px; }
+
+  hr {
+    margin-bottom: .5rem;
+  }
+
+  #create-form {
+    padding: 6px 15px;
+    max-width: 650px;
+
+    > .alert {
+      margin-bottom: 0px;
+      margin-top: .5em;
+    }
+  }
+
+  // sign in button section
+  #sign-in-with {
+    width: 100%;
+    flex-wrap: wrap;
+    align-items: center;
+    display: inline-flex;
+    justify-content: space-between;
+
+    .btn {
+      width: auto;
+      font-size: .9em;
+      margin-bottom: .5em;
+    }
+  }
+
+  #account-login .title {
+    margin-top: 0px;
+  }
+
+  .th-callout {
+    margin-bottom: .75em;
+  }
+
+  .Mosad label {
+    width: 100%;
+    font-size: 1.1em;
+    margin-bottom: .25em;
+    padding-bottom: .25em;
+    border-bottom: 1px solid #ccc;
+  }
+
+  #actions .btn {
+    width: 100%;
+    margin-top: 8px;
+  }
+}

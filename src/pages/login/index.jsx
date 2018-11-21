@@ -1,21 +1,19 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 // sub pages
 import Login from './Login';
 import Forgot from './Forgot';
-import { Construction } from 'pages/errors';
-
+import NewAccount from './NewAccount';
+// import the style sheet
 import './includes/style.scss';
 
 const LoginIndexPage = () => {
   return (
-    <Router basename={ process.env.PUBLIC_URL }>
-      <Switch>
-        <Route path={`/forgot`} exact component={ Forgot }/>
-        <Route path={`/signup`} exact component={ Construction }/>
-        <Route component={ Login } />
-      </Switch>
-    </Router>
+    <Switch>
+      <Route path={`/forgot`} exact component={ Forgot }/>
+      <Route path={`/signup`} exact component={ NewAccount }/>
+      <Route component={ Login } />
+    </Switch>
   );
 }
 

@@ -1,0 +1,10 @@
+#Forgot {
+  .form .btn {
+    width: calc( 50% - 4px );
+    margin: 0px;
+    margin-bottom: 10px;
+    
+    &:first-child { margin-right: 4px; }
+    &:last-child { margin-left: 4px; }
+  }
+}

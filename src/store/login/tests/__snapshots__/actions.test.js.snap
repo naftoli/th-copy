@@ -4,7 +4,6 @@ exports[`types matches snapshot 1`] = `
 Object {
   "CHANGE_LOGIN": "login/change_login",
   "LOGOUT": "login/logout",
-  "RESET_STATE": "login/reset_state",
   "SET_ERRORS": "login/set_errors",
   "SET_LOADING": "login/set_loading",
   "SET_TITLE": "login/set_title",

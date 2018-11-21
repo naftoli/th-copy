@@ -9,12 +9,16 @@
   color: #fff;
   height: $navbar-height;
   align-content: center;
-  @media( max-width: 1024px ) { height: $navbar-height-mobile; }
+
+  @media( max-width: 1024px ) {
+    height: $navbar-height-mobile;
+    align-items: flex-start;
+  }
   // Logo section
   .navbar-brand {
     width: 200px; user-select: none;
     @media ( max-width: 1025px ) {
-      width: 200px;
+      width: auto;
     }
     @media ( max-width: 767px ) { width: auto; }
 
@@ -22,8 +26,10 @@
     // logo
     img { height: 46px; transition: all .3s; }
     // Menu text
-    span { margin-left: .5em; font-size: 1.3em; 
-      vertical-align: middle; transition: all .3s; }
+    span { 
+      margin-left: .5em;      font-size: 1.3em; 
+      vertical-align: middle; transition: all .3s;
+    }
     // changes on mobile
     @media( max-width: 1024px ){
       &:hover { cursor: pointer; }
@@ -31,14 +37,17 @@
       span { font-size: 1em; }
     }
   }
-
-  
   
   // Page title
   #navbar-title {
     font-size: 1.7em;
-    @media( max-width: 1024px ){ font-size: 1.2em; }
-    @media( max-width: 767px ) { display: none; }
+    @media( max-width: 1024px ){
+      font-size: 1.2em;
+      align-self: center;
+    }
+    @media( max-width: 767px ) {
+      display: none;
+    }
   }
   // Account selector
   ul#navbar-menu {

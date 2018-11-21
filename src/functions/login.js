@@ -11,9 +11,15 @@ export const loginStoreChanged = ( old_login ) => {
   return type !== prevType || prevId !== id;
 }
 // login to the mobile site with a given key
-export const mobileLogin = ( key ) => {
+export const mobileLogin = ( key, newTab = true ) => {
   COOKIES.set('admin', key, { path: '/', EXPIRES } );
-  window.open( `${LEGACY_URL}/mobile/reg/parent_detail.html`, '_blank' ).focus();
+  const url = `${LEGACY_URL}/mobile/reg/parent_detail.html`;
+
+  if ( newTab ) {
+    window.open( url, '_blank' ).focus();
+  } else {
+    window.document.location.href = url;
+  }
 }
 
 
@@ -33,4 +39,8 @@ export const isBC = ( code, only = false ) => {
 
 export const isTeacher = code => {
   return code === 'TEACHER';
+}
+
+export const isBlank = code => {
+  return code === 'BLANK';
 }

@@ -11,7 +11,7 @@ describe("Navbar", () => {
   const navbar = () => {
     return mountedComponent ? mountedComponent : mountedComponent = mount(
       <MemoryRouter>
-        <Navbar {...props} />
+        <Navbar { ...props } />
       </MemoryRouter>
     ).find( Navbar );
   }
@@ -47,7 +47,7 @@ describe("Navbar", () => {
     describe('.title', () => {
 
       it('has a default value (\'Tzivos Hashem\')', () => {
-        expect( navbar().props().title ).toBe( "Tzivos Hashem" );
+        expect( navbar().find('#navbar-title').text() ).toBe( "Tzivos Hashem" );
       })
       
       it('renders as the text of #navbar-title', () => {

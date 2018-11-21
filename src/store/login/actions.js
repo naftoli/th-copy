@@ -1,7 +1,6 @@
 export const types = {
   CHANGE_LOGIN: `login/change_login`,
   SET_LOADING:  `login/set_loading`,
-  RESET_STATE:  `login/reset_state`,
   UPDATE_USER:  `login/update_user`,
   SET_ERRORS:   `login/set_errors`,
   SET_TOKENS:   `login/set_tokens`,
@@ -51,10 +50,6 @@ export const logout = () => ({
 export const changeLogin = ( type, id ) => ({
   type: types.CHANGE_LOGIN,
   payload: { type, id }
-});
-
-export const resetState = () => ({
-  type: types.RESET_STATE
 });
 
 export const setTitle = title => ({

@@ -41,16 +41,6 @@ describe("Dashboard", () => {
     it(`renders one div with the id #dashboard-content`, () => {
       expect( dashboard().find('#dashboard-content').length ).toBe( 1 );
     });
-
-    it(`renders one Sidebar component`, () => {
-      expect( dashboard().find( Sidebar ).length ).toBe( 1 );
-    });
-
-    it(`renders it's children`, () => {
-      const Sample = () => <div id="sample"></div>;
-      children = <Sample />;
-      expect( dashboard().find( Sample ).length ).toBe( 1 );
-    });
   });
 
   describe('state', () => {
@@ -62,6 +52,7 @@ describe("Dashboard", () => {
       });
 
       it('toggles the sidebar when the Navbar is clicked', () => {
+        props.login = { active: true };
         expect( dashboard().state().active ).toBe( false );
         dashboard().find( Navbar ).simulate('click')
         expect( dashboard().state().active ).toBe( true );
@@ -69,12 +60,48 @@ describe("Dashboard", () => {
 
       it('does not toggle the sidebar when the Navbar is clicked and the screen is above 1024px', () => {
         window.innerWidth = 1025;
+        props.login = { active: true };
         dashboard().find( Navbar ).simulate('click');
         expect( dashboard().state().active ).toBe( true );
       });
       
     });
   });
+
+  describe('props', () => {
+
+    describe('login', () => {
+
+      describe('.active = true', () => {
+        
+        it(`renders a Sidebar component`, () => {
+          props.login = { active: true };
+          expect( dashboard().find( Sidebar ).length ).toBe( 1 );
+        });
+
+        it(`renders it's children`, () => {
+          props.login = { active: true };
+          const Sample = () => <div id="sample"></div>;
+          children = <Sample />;
+          expect( dashboard().find( Sample ).length ).toBe( 1 );
+        });
+
+      });
+
+      describe('.active = false', () => {
+        
+        it(`does not render a Sidebar component`, () => {
+          expect( dashboard().find( Sidebar ).length ).toBe( 0 );
+        });
+
+        it(`does render it's children`, () => {
+          const Sample = () => <div id="sample"></div>;
+          children = <Sample />;
+          expect( dashboard().find( Sample ).length ).toBe( 1 );
+        });
+      });
+    })
+  })
 
   describe('lifecylce', () => {
     

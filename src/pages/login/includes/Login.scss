@@ -1,0 +1,39 @@
+#Login {
+  // style the toggle
+  #toggle-password:not(:hover) { color: #888; }
+  // animate the login button
+  .form .btn { width: 100%; }
+
+  .alert { margin-bottom: .5em; }
+  // sign in button section
+  #sign-in-with {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+
+    .btn { width: auto; }
+
+    > button, > div {
+      margin-bottom: 15px;
+    }
+  }
+
+  div#links {
+    text-align: center;
+    margin: 0px 0 12px;
+    opacity: .7;
+
+    display: flex;
+
+    a {
+      flex-grow: 1;
+      width: 50%;
+
+      &:first-child { text-align: left; }
+      &:last-child { text-align: right; border-right:none; }
+    }
+  }
+}

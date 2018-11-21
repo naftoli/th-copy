@@ -19,6 +19,13 @@
   }
 }
 
+.ChabadOrgLegacy {
+  &.disabled {
+    pointer-events: none;
+    filter: opacity(.5) grayscale(100%);
+  }
+}
+
 .ChabadOrgButton {
 
   $chabad-blue: #306ea2;
@@ -26,15 +33,16 @@
 
   font-weight: 600;
   border-radius: .1rem;
-  padding: 1px 1px 1px .6em;
+  padding: 1px;
 
   img { 
-    height: 2em;
-    padding: .5em .4em .6em .4em;
+    height: 2.1em;
+    padding: .5em .4em .6em 0em;
   }
 
   span {
     font-size: .78em;
+    padding-left: .6em;
   }
 
   &:disabled {
@@ -55,6 +63,14 @@
   
     &:active, &:focus {
       background-color: darken( $chabad-blue, 10% );
+    }
+  }
+
+  @media ( max-width: 500px ) {
+    &.shrink {
+      padding: 1px;
+      span { display: none; }
+      img { padding-left: .4em; }
     }
   }
 }
@@ -87,10 +103,6 @@
 
     border-radius: $google-border-radius;
   }
-
-  // span {
-  //   font-size: .78em;
-  // }
   
   &:disabled {
     color: $google-text-grey;
@@ -113,6 +125,12 @@
     &:active {
       background: $google-focus-blue;
       border-color: $google-focus-blue;
+    }
+  }
+
+  @media ( max-width: 500px ) {
+    &.shrink {
+      .sign-in-with { display: none; }
     }
   }
 }

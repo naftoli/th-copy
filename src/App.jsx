@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -6,11 +6,12 @@ import { ToastContainer } from 'react-toastify';
 import { Page404 } from 'pages/errors';
 import Login, { Logout } from 'pages/login';
 // pages
-import HomePage from 'pages/home/HomePage';
-import Rewards from 'pages/rewards';
-import BaseManagment from 'pages/base-managment';
-import Missions from 'pages/missions';
 import Account from 'pages/account';
+import Rewards from 'pages/rewards';
+import Missions from 'pages/missions';
+import HomePage from 'pages/home/HomePage';
+import BaseManagment from 'pages/base-managment';
+import RegistrationPage from 'pages/registration/RegistrationPage';
 // components
 import { Dashboard } from 'components/navigation';
 import { LoadingScreen } from 'components/ui';
@@ -25,6 +26,13 @@ export class App extends Component {
     message: '',
     isOpen: false,
     refreshing: true, // by default the app is refreshing as we have nothing in redux
+  }
+
+  static defaultProps = {
+    title: '',
+    login: {},
+    current_user: false,
+    logged_in: false
   }
 
   // validate the login every 5 seconds
@@ -71,60 +79,78 @@ export class App extends Component {
   
   // render the page
   render() {
-    if ( !this.props.logged_in )
-      return <Login />
-
     const { message, isOpen, refreshing } = this.state;
+    const { title, login, current_user, logged_in } = this.props;
+
+    const dashbardProps = { title, login, current_user };
+
+    let routes = [
+      { path: `/`, exact: true, component: HomePage },
+      { path: `/myaccount`, exact: true, component: Account },
+      { path: `/logout`, component: Logout },
+      { component: RegistrationPage }
+    ];
+
+    if ( login.active ) {
+      routes = [
+          { path: `/`, exact: true, component:  HomePage },
+          { path: `/rewards`, component:  Rewards },
+          { path: `/bm`, component:  BaseManagment },
+          { path: `/missions`, component:  Missions },
+          { path: `/myaccount`, exact: true, component:  Account},
+          { path: `/logout`, component: Logout },
+          { component:  Page404 }
+      ];
+    }
       
     // render the core dashboard
     return (
       <Router
           basename={ process.env.PUBLIC_URL }
           getUserConfirmation={ this.showDialog }>
+        
+        <Fragment>
+          { !logged_in &&
+            <Login /> }
 
-        <Dashboard>
-          { refreshing &&  <LoadingScreen /> }
+          { logged_in && 
+            <Dashboard
+              { ...dashbardProps }>
+              { refreshing &&  <LoadingScreen /> }
 
-          { !refreshing && 
-            <Switch>
-              <Route path={`/`} exact component={ HomePage }/>
+              { !refreshing && 
+                <Switch>
+                  { routes.map( ( props, index ) => 
+                    <Route { ...props } key={ index } />
+                  )}
+                </Switch>
+              }
 
-              <Route path={`/rewards`} component={ Rewards } />
+              <ToastContainer 
+                position="bottom-right" 
+                autoClose={ 5000 } 
+                closeOnClick={ false } 
+                draggablePercent={ 40 } />
 
-              <Route path={`/bm`} component={ BaseManagment } />
+              <ConfirmationModal 
+                isOpen={ isOpen } 
+                message={ message } 
+                callback={ this.handleCallback } />
 
-              <Route path={`/missions`} component={ Missions } />
-              
-              <Route path={`/myaccount`} exact component={ Account }/>
-              {/* Action only pages */}
-              <Route path={`/logout`} component={Logout}/>
-              
-              <Route component={ Page404 } />
-            </Switch>
+            </Dashboard>
           }
-
-          <ToastContainer 
-            position="bottom-right" 
-            autoClose={ 5000 } 
-            closeOnClick={ false } 
-            draggablePercent={ 40 } />
-
-          <ConfirmationModal 
-            isOpen={ isOpen } 
-            message={ message } 
-            callback={ this.handleCallback } />
-
-        </Dashboard>
+        </Fragment>
       </Router>
     );
   }
 }
 
 const mapStateToProps = ( state ) => {
-  const { current_login, current_user } = state.login;
+  const { current_login, current_user, title } = state.login;
   return {
+    current_user, title,
+    login: current_login,
     logged_in: Object.keys( current_login ).length > 0 && !!current_user,
-    login: current_login
   }
 }
 

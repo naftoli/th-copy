@@ -1,66 +1,23 @@
 @import 'styles/colors.scss';
+@import './Login.scss';
+@import './Forgot.scss';
+@import './NewAccount.scss';
 
-#Login {
-  // style the toggle
-  #toggle-password:not(:hover) { color: #888; }
-  // animate the login button
-  .form .btn { width: 100%; }
-  // sign in button section
-  #sign-in-with {
-    display: inline-flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-
-    width: 100%;
-    margin-bottom: 15px;
-
-    .btn { width: auto; margin: 0px 0px 12px; }
-  }
-
-  div#links {
-    text-align: center;
-    font-size: 1em;
-    margin: 0px 0 12px;
-    opacity: .7;
-
-    display: flex;
-
-    a {
-      flex-grow: 1;
-
-      &:first-child { text-align: left; }
-      &:last-child { text-align: right; border-right:none; }
-    }
-  }
-}
-
-#Forgot {
-  .form .btn {
-    width: calc( 50% - 4px );
-    margin: 0px;
-    margin-bottom: 10px;
-    
-    &:first-child { margin-right: 4px; }
-    &:last-child { margin-left: 4px; }
-  }
-}
-
-#Login, #Forgot {
+#Login, #Forgot, #NewAccount {
   display: flex;
   flex-direction: column;
   align-items: center; justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
 
   img#logo {
     width: 20%;
     margin-top: 1%;
+    margin-bottom: 2%;
     max-width: 250px;
     min-width: 200px;
   }
 
   .form {
-    margin-top: 2%;
     text-align: center;
     width: 90%;
     max-width: 520px;
@@ -105,10 +62,9 @@
 
   @media (max-width: 500px) {
 
-    img#logo { width: 200px; }
+    img#logo { min-width: auto; width: 150px; }
 
     .form{
-      margin-top: 4%;
       max-width: 300px;
       input {
         font-size: 1.2em;
@@ -117,7 +73,9 @@
 
     div#links {
       margin-top: 0px;
-      font-size: .8em;
+
+      // a { font-size: .9em; }
+      // a:first-child { font-size: .8em; }
     }
   }
 }

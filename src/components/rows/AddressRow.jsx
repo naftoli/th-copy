@@ -9,13 +9,11 @@ export class AddressRow extends Component {
     prefix: '',
   }
 
-  getName = ( key ) => {
-    return `${this.props.prefix}${key}`;
-  }
+  getName = ( key ) =>
+    `${this.props.prefix}${key}`;
 
-  getValue = ( key ) => {
-    return this.props[`${this.props.prefix}${key}`] || '';
-  }
+  getValue = ( key ) =>
+    this.props[`${this.props.prefix}${key}`] || '';
 
   render() {
     const { getName, getValue } = this;

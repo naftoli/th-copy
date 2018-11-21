@@ -44,6 +44,8 @@ export class Forgot extends Component {
       <div id='Forgot'>
         <img src={logo} id='logo' alt='logo' />
 
+        <h2>Reset Password</h2>
+
         <div className='form' id='forgot-form'>
           <form onSubmit={ this.handleLoginForm }>
             <InputGroup size="lg">

@@ -1,5 +1,7 @@
 label.checkbox {
   margin: 0px 5px;
+  padding-left: 1.2em;
+
   input[type="checkbox"] { display: none; }
   span.checkbox-state {
     display: inline-block;
@@ -10,6 +12,8 @@ label.checkbox {
     -moz-osx-font-smoothing: grayscale;
     &:before { content: "\f0c8"; }
     &:hover { cursor: pointer; }
+
+    margin-left: -1em;
   }
   
   input:indeterminate + span.checkbox-state::before { font-weight: normal; content: "\f146"; }

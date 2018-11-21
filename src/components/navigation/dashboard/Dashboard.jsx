@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { Navbar, Sidebar, getMenu } from '../index';
-import { LEGACY_URL } from 'components/constants';
-import { FontAwesome } from 'components/ui';
-import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { changeLogin, resetState } from 'store/login/actions';
+import { withRouter } from 'react-router';
+import { FontAwesome } from 'components/ui';
+// other
+import { LEGACY_URL } from 'components/constants';
+import { Navbar, Sidebar, getMenu } from '../index';
+import { changeLogin } from 'store/login/actions';
+// pages
 import { ClientError } from 'pages/errors';
+// styles
 import './Dashboard.scss';
-import { RegistrationPage } from 'pages/registration/RegistrationPage';
 
 const threshold = 1025; // anything larger then an ipad
 
@@ -56,7 +58,7 @@ export class Dashboard extends Component {
 
   // only toggle the sidebar if the screen is small enough
   toggle = () => {
-    if ( window.innerWidth <= threshold ) {
+    if ( window.innerWidth <= threshold && this.props.login.active ) {
       this.setState({ active: !this.state.active });
     }
   }
@@ -65,52 +67,53 @@ export class Dashboard extends Component {
     let {     children,   login,
       title,  location,   current_user,
     } = this.props;
+    const { active, hasError } = this.state;
 
-    // if we are a user and not logging out - redirect to legacy parent portal
-    if ( location && location.pathname !== '/logout' ) {
+    let content = children;
+    let sidebar = null;
 
-      if ( login.type === 'PARENT' ) {
-        window.location.href = `${LEGACY_URL}/mobile/reg/parent_detail.html`;
-        return null;
-      }
-
-      if ( !login.active ) {
-        if ( login.code === 'BC' ) {
-          const { legacy, id } = login;
-          const { admin_id } = current_user;
-          window.location.href = `${LEGACY_URL}/registration${!legacy ? '_ckids' : ''}.php?school_id=${id}&admin_id=${admin_id}`;
-          return null;
-        } else {
-          children = <RegistrationPage />;
-        }
-      }
+    if ( hasError ) {
+      content = <ClientError/>;
     }
-    
+
     const menu = getMenu( login );
+
     // add a logout button
     menu.push({
       label: 'Logout', path: '/logout',
       icon: <FontAwesome icon='sign-out-alt' />
     });
 
+    // if we are a user and not logging out - redirect to legacy parent portal
+    if ( location && location.pathname !== '/logout' ) {
+      if ( login.type === 'PARENT' ) {
+        window.location.href = `${LEGACY_URL}/mobile/reg/parent_detail.html`;
+        return null;
+      }
+    }
+
+    // if the login is active, show the sidebar
+    if ( login.active ) {
+      sidebar = <Sidebar menu={ menu } active={ active } />
+    }
+
     return (
       <div id="dashboard">
 
         <Navbar 
-          title={ title } 
+          title={ title }
           currentLogin={ login }
           onClick={ this.toggle }
+          showMenu={ login.active }
           logins={ current_user.logins }
           onLoginChange={ this.onLoginChange } />
 
         <div id="dashboard-body">
 
-          <Sidebar menu={ menu }
-            active={ this.state.active } />
+          { sidebar }
 
           <div id="dashboard-content">
-            { this.state.hasError && <ClientError/> }
-            { !this.state.hasError && children }
+            { content }
           </div>
 
         </div>
@@ -119,16 +122,8 @@ export class Dashboard extends Component {
   }
 }
 
-const mapStateToProps = ({ login }) => ({
-  current_user: login.current_user,
-  login: login.current_login,
-  title: login.title
-});
-
-const mapDispatchToProps = {
-  changeLogin,  resetState
-}
+const mapDispatchToProps = { changeLogin }
 
 export default withRouter(
-  connect( mapStateToProps, mapDispatchToProps )( Dashboard )
+  connect( null, mapDispatchToProps )( Dashboard )
 );

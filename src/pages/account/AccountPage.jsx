@@ -7,8 +7,8 @@ import { LoginRow, InformationRow, AccessRow } from './includes/Rows';
 // state
 import { removeAuth } from 'store/base/staff/operations';
 import { 
-  connectAccount,   disconnectAccount,
-  getCurrentUser,   updateCurrentUser,
+  connectExternalAccount,     getCurrentUser,
+  disconnectExternalAccount,  updateCurrentUser,
 } from 'store/login/operations';
 // functions
 import { toast } from 'react-toastify';
@@ -71,13 +71,13 @@ class AccountPage extends Component {
       .then( this.props.getCurrentUser );
   }
   // * connect to an external account
-  connectAccount = type => key => showError(
-    this.props.connectAccount( type, key )
+  connectExternalAccount = type => key => showError(
+    this.props.connectExternalAccount( type, key )
     .then( () => toast.info(`${type} account connected`) )
   );
   // * disconnect from an external account
-  disconnectAccount = type => () => showError(
-    this.props.disconnectAccount( type )
+  disconnectExternalAccount = type => () => showError(
+    this.props.disconnectExternalAccount( type )
     .then( () => toast.info(`${type} account removed`) )
   );
 
@@ -116,8 +116,8 @@ class AccountPage extends Component {
           shliach_id={ chabad_org_shliach_id }
 
           editPassword={ this.toggle }
-          onConnect={ this.connectAccount }
-          onDisconnect={ this.disconnectAccount } />
+          onConnect={ this.connectExternalAccount }
+          onDisconnect={ this.disconnectExternalAccount } />
 
         <hr/>
 
@@ -141,7 +141,9 @@ class AccountPage extends Component {
 
         <hr/>
 
-        <h4>Account Access</h4>
+        { logins.length > 0 && 
+          <h4>Account Access</h4>
+        }
 
         <AccessRow
           logins={ logins }
@@ -162,8 +164,8 @@ const mapStateToProps = ({ login }) => ({
 })
 
 const mapDispatchToProps = {
-  connectAccount,   disconnectAccount,
-  getCurrentUser,   updateCurrentUser,  removeAuth,
+  connectExternalAccount,     getCurrentUser,
+  disconnectExternalAccount,  updateCurrentUser,  removeAuth,
 }
 
 export default connect(

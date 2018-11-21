@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 // components
 import { Link } from 'react-router-dom';
 import { FontAwesome, BaseLogo } from 'components/ui';
@@ -19,22 +20,41 @@ class Navbar extends Component {
     title: "Tzivos Hashem",
     currentLogin: {},
     logins: [], 
+    showMenu: true,
     onLoginChange: () => {}
   }
 
-  onLoginChange = ( type, id ) => () => {
-    if ( loginStoreChanged( { type, id } ) )
+  onLoginChange = ( login ) => () => {
+    const { type, id } = login;
+    // check if it is blank, if so take them to the homepage
+    if ( this.props.location.pathname === '/myaccount' ) {
+      this.props.history.push('/');
+    }
+    // and change it if it changed
+    if ( loginStoreChanged( { type, id } ) ) {
       this.props.onLoginChange( type, id );
+    }
+  }
+
+  isActive( login ) {
+    const { currentLogin, location } = this.props;
+    // nothing is selected on the myaccount page
+    if ( location.pathname === '/myaccount' ) {
+      return false
+    // valid accounts are highlighted normally
+    } else {
+      return login.type === currentLogin.type && login.id === currentLogin.id;
+    }
   }
 
   render(){
-    const { title, currentLogin, logins } = this.props;
+    const { title, currentLogin, logins, showMenu } = this.props;
     // only render the dropdown if there are options
     const loginItems = logins.map( ( login, index ) => {
-      const active = login.type === currentLogin.type &&  login.id === currentLogin.id;
+      const active = this.isActive( login );
       return (
         <DropdownItem key={ index } className={ active ? 'active' : ''}
-            onClick={ this.onLoginChange( login.type, login.id ) } >
+            onClick={ this.onLoginChange( login ) } >
           <BaseLogo src={ login.img } alt="logo" />
           <span>{ login.name }</span>
         </DropdownItem>
@@ -46,7 +66,7 @@ class Navbar extends Component {
 
         <NavbarBrand onClick={ this.props.onClick }>
           <img src={ logo } alt="logo" />
-          <span>Menu</span>
+          <span>{ showMenu ? 'Menu' : 'TH'}</span>
         </NavbarBrand>
 
         <div id="navbar-title" className="mx-auto">{ title }</div>
@@ -62,7 +82,7 @@ class Navbar extends Component {
             <DropdownMenu right>
               <DropdownItem header>Logins</DropdownItem>
               { loginItems }
-              <DropdownItem divider />
+              <DropdownItem header>Links</DropdownItem>
 
               <Link to={'/myaccount'}>
                 <DropdownItem>
@@ -86,4 +106,4 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+export default withRouter( Navbar );

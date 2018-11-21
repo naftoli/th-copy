@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
+import classnames from 'classnames';
 import { Button } from 'reactstrap';
 import { GOOGLE_CLIENT_ID } from 'components/constants';
-
 import google from 'img/logos/google.svg';
 
 const noop = () => {};
@@ -42,6 +42,13 @@ export class GoogleButton extends Component {
     });
   };
 
+  componentDidUpdate( prevProps ) {
+    if ( 
+      prevProps.disabled !== this.props.disabled &&
+      this.state.disabled !== this.props.disabled
+    ) this.setState({ disabled: this.props.disabled });
+  }
+
   // enable the button once google's api has been loaded up
   enableButton = () => this.setState({
     disabled: this.props.disabled || false
@@ -79,21 +86,28 @@ export class GoogleButton extends Component {
 
   // render the page
   render() {
-    const { size } = this.props;
+    let { size, shrink, className } = this.props;
     const { disabled } = this.state;
+
+    className = classnames({
+      'shrink': shrink,
+      'GoogleButton': true,
+      [className]: className
+    });
 
     return (
       <Button
         size={ size }
         disabled={ disabled }
         onClick={ this.signIn }
-        className='GoogleButton'>
+        className={ className }>
   
         <img 
           alt='google' 
           src={ google } />
           
-        <span>Sign in with Google</span>
+        <span className='sign-in-with'>Sign in with&nbsp;</span>
+        <span>Google</span>
       </Button>
     );
   }

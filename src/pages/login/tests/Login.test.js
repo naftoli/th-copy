@@ -63,6 +63,8 @@ describe( 'Login', () => {
       
       beforeEach(() => {
         props = { login: jest.fn() };
+        props.login.mockRejectedValue({ message: 'server does not exist' });
+
         login().find(`input[name='username']`).instance().value = 'username';
         login().find(`input[name='username']`).simulate('change');
         login().find(`input[name='password']`).instance().value = 'password';
@@ -79,4 +81,4 @@ describe( 'Login', () => {
       });
     });
   });
-})
+});

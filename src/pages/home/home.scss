@@ -59,4 +59,45 @@
       > i { font-size: 2em; }
     }
   }
+
+  &.select-account-type {
+    text-align: center;
+
+    .account-type-option {
+      padding: 16px 8px;
+      margin: 5% 2% 1%;
+      box-shadow: 0px 5px 15px #ccc;
+
+      max-width: 500px;
+      transition: .5s;
+
+      &:hover {
+        cursor: pointer;
+        transform: scale( .9 );
+      }
+
+      a {
+        color: inherit;
+        &:hover { text-decoration: none; }
+      }
+
+      img {
+        max-width: 70%;
+        margin-bottom: 12px;
+      }
+
+      @media ( min-width: 570px ) {
+        width: 46%;
+        vertical-align: top;
+        display: inline-block;
+      }
+    }
+
+    #legal {
+      margin-top: 6%;
+      font-size: .6em;
+      opacity: .5;
+      a { color: #000; }
+    }
+  }
 }

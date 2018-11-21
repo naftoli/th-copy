@@ -10,7 +10,7 @@ import MarkPage from './mark';
 // functions
 import { isBC } from 'functions/login';
 
-export class BaseManagmentIndexPage extends Component {
+export class MissionsIndexPage extends Component {
 
   render() {
     const { code } = this.props.login;
@@ -36,4 +36,4 @@ const mapStateToProps = ({ login }) => ({
   login: login.current_login
 })
 
-export default connect( mapStateToProps )( BaseManagmentIndexPage );
+export default connect( mapStateToProps )( MissionsIndexPage );
