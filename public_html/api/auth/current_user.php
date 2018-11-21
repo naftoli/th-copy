@@ -8,9 +8,7 @@ class ProfilesRouter {
 
     public function index() {
         global $current_user;
-        return json_response(
-            $this->serializeAccount( $current_user )
-        );
+        return json_response( $current_user );
     }
 
     // functions as update
@@ -44,7 +42,7 @@ class ProfilesRouter {
             return json_error( 'Could not update account information' );
 
         return json_response([
-            'account' => $this->serializeAccount( $current_user ),
+            'account' => $current_user,
             'tokens' => mashpia\api\auth\Auth::login(
                 $current_user->username,
                 $current_user->password
@@ -99,17 +97,6 @@ class ProfilesRouter {
         return json_response([
             'google_id' => $current_user->google_id,
             'chabad_org_shliach_id' => $current_user->shliach_id
-        ]);
-    }
-
-    private function serializeAccount( $admin ) {
-        return $admin->to_array([
-            'only' => [
-                'admin_id', 'username', 'title', 'first', 'last', 'lang',
-                'home_phone', 'cell_phone', 'admin_email', 'chabad_org_shliach_id',
-                'admin_phone_work', 'admin_phone_mobile', 'photo', 'google_id'
-            ],
-            'methods' => [ 'logins', /* 'customerProfile' */ ]
         ]);
     }
 }

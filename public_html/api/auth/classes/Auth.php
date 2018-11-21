@@ -71,7 +71,7 @@ class Auth {
         return false;
     }
 
-    private static function generateKeys( $admin ){
+    public static function generateKeys( $admin ){
         // make sure we have an admin
         if ( !$admin instanceof \Admin )
             return false;

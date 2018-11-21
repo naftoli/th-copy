@@ -26,11 +26,12 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     //         'with' => '/^[^0-9][A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/' ]
     // ];
     // prop mapping
-    static $alias_attribute = [ 
-        'email' => 'admin_email', 
-        'work' => 'admin_phone_work',
-        'cell' => 'admin_phone_mobile',
-        'shliach_id' => 'chabad_org_shliach_id' 
+    public static $alias_attribute = [
+        'city' => 'admin_city',          'zip' => 'admin_postal',
+        'state' => 'admin_state',        'email' => 'admin_email',
+        'country' => 'admin_country',    'work' => 'admin_phone_work',
+        'cell' => 'admin_phone_mobile',  'address' => 'admin_address1',
+        'address2' => 'admin_address2',  'shliach_id' => 'chabad_org_shliach_id'
     ];
     // internalCaches
     private $customer_profile;
@@ -137,8 +138,13 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             try { $this->logins[] = new Login( 'class', $class_id ); }
             catch ( \ActiveRecord\RecordNotFound $e ) {}
         // add parent account
-        if ( count( $this->getAuthIds( 'user') ) > 0 || count( $this->logins ) === 0 ) {
+        if ( count( $this->getAuthIds( 'user') ) > 0 || $this->is_parent ) {
             try { $this->logins[] = new Login( 'PARENT', $this->admin_id, $this ); }
+            catch ( \ActiveRecord\RecordNotFound $e ) {}
+        }
+        // if there are no logins, send a 'BLANK' login code to the client
+        if ( count( $this->logins ) === 0 ) {
+            try { $this->logins[] = new Login( 'BLANK', $this->admin_id, $this ); }
             catch ( \ActiveRecord\RecordNotFound $e ) {}
         }
         return $this->logins;
@@ -164,12 +170,15 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     // set the current login
     public function setLogin( $type = false, $id = false ){
         $logins = $this->logins();
-        if ( !$type || !$id )
+        if ( ( !$type || !$id ) && count( $logins ) > 0 )
             return $this->login = $logins[0]; // default to the first login
+        
         foreach( $logins as $login ) {
             if ( $login->id == $id && $login->type == $type ) return $this->login = $login;
         }
-        return $this->login = $logins[0];
+
+        if ( count( $logins ) > 0 )
+            return $this->login = $logins[0];
     }
 
     // are we HQ?
@@ -260,9 +269,9 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     public function jsonSerialize() {
         return $this->to_array([
             'only' => [
-                'admin_id', 'username', 'title', 'first', 'last', 'lang', 
-                'father', 'mother', 'father_pic', 'mother_pic',
-                'home_phone', 'cell_phone', 'admin_email',  'chabad_org_shliach_id'
+                'admin_id', 'username',         'title',        'first',        'last',
+                'lang',     'home_phone',       'cell_phone',   'admin_email',  'chabad_org_shliach_id',
+                'photo',    'admin_phone_work', 'google_id',    'admin_phone_mobile',  
             ],
             'methods' => [ 'logins' ]
         ]);
