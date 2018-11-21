@@ -6,7 +6,7 @@ import { Button, Collapse } from 'reactstrap';
 // styles
 import './styles.scss';
 
-export * from './ChabadOrgLegacy';
+export * from './ChabadOrgButton';
 export * from './GoogleButton';
 
 export const SaveButton = rawProps => {

@@ -24,9 +24,9 @@ export class ChabadOrgButton extends Component {
     } else {
       // let params = `p=${ window.location.protocol.substr(0, window.location.protocol.length - 1 )}&d=${encodeURIComponent( window.location.host ) }`
       this.myChabadLoginWindow = window.open(
-        `https://www.pcgeekbrain.com/redirect.php`,
+        `https://www.chabad.org/api/login/form/sso?474DBD09-F59F-433D-A755-5A97594FC4E1`,
         'MyChabadLoginWindow',
-        'width=390,height=420,resizable=no,scrollbars=0,location=yes'
+        'width=410,height=669,resizable=no,scrollbars=0,location=yes'
       );
     }
   }
