@@ -5,6 +5,7 @@ trait BuildModel {
     public static function build( $attributes ) {
         $instance = new self( [], true, false, true );
         $valid_attributes = $instance->attributes();
+        $valid_attributes = array_merge( $valid_attributes, $instance::$alias_attribute );
         foreach( $attributes as $key => $value ){
             if ( array_key_exists( $key, $valid_attributes ) )
                 $instance->{ $key } = $value;
