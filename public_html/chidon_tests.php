@@ -240,32 +240,38 @@ foreach ($schools as $id => $school) {
                                         <td><?=$name?></td>
                                         <td>
                                             <input type='text' name='t1a[<?=$user_id?>]' value='<?=$t1a?>'
-                                                <?= $admin_user['auth'] != 'super' && $shutdown1 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
+                                                <?//= $admin_user['auth'] != 'super' && $shutdown1 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
+                                                <?= $admin_user['auth'] != 'super' && $shutdown1 ? "disabled"  : ""?>
                                             />
                                         </td>
                                         <td>
                                             <input type='text' name='t1b[<?=$user_id?>]' value='<?=$t1b?>'
-                                                <?= $admin_user['auth'] != 'super' && $shutdown1 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
+                                                <?//= $admin_user['auth'] != 'super' && $shutdown1 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
+                                                <?= $admin_user['auth'] != 'super' && $shutdown1 ? "disabled"  : ""?>
                                             />
                                         </td>
                                         <td>
                                             <input type='text' name='t2a[<?=$user_id?>]' value='<?=$t2a?>'
-                                                <?= $admin_user['auth'] != 'super' && $shutdown2 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
+                                                <?//= $admin_user['auth'] != 'super' && $shutdown2 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
+                                                <?= $admin_user['auth'] != 'super' && $shutdown2 ? "disabled"  : ""?>
                                             />
                                         </td>
                                         <td>
                                             <input type='text' name='t2b[<?=$user_id?>]' value='<?=$t2b?>'
-                                                <?= $admin_user['auth'] != 'super' && $shutdown2 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
+                                                <?//= $admin_user['auth'] != 'super' && $shutdown2 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
+                                                <?= $admin_user['auth'] != 'super' && $shutdown2 ? "disabled"  : ""?>
                                             />
                                         </td>
                                         <td>
                                             <input type='text' name='t3a[<?=$user_id?>]' value='<?=$t3a?>'
-                                                <?= $admin_user['auth'] != 'super' && $shutdown3 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
+                                                <?//= $admin_user['auth'] != 'super' && $shutdown3 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
+                                                <?= $admin_user['auth'] != 'super' && $shutdown3 ? "disabled"  : ""?>
                                             />
                                         </td>
                                         <td>
                                             <input type='text' name='t3b[<?=$user_id?>]' value='<?=$t3b?>'
-                                                <?= $admin_user['auth'] != 'super' && $shutdown3 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
+                                                <?//= $admin_user['auth'] != 'super' && $shutdown3 && !in_array($school_id, $exceptions) ? "disabled"  : ""?>
+                                                <?= $admin_user['auth'] != 'super' && $shutdown3 ? "disabled"  : ""?>
                                             />
                                         </td>
                                         <td><?=number_format($avg1, 2)?></td>
