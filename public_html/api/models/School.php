@@ -13,14 +13,31 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     ];
     static $belongs_to = [ 'institution' ];
     // callbacks
+    static $before_create = [ 'generateSchoolNumber' ];
     static $before_update = [ 'updateSoldiers' ];
     // valdiations and aliases
-    static $alias_attribute = [ 
-        'name' => 'school_name', 
+    public static $alias_attribute = [
+        'name' => 'school_name',          'city' => 'school_city',
+        'state' => 'school_state',        'zip' => 'school_postal',
+        'country' => 'school_country',    'phone' => 'school_phone',
+        'address' => 'school_address1',   'address2' => 'school_address2',
+        'initials' => 'school_initials',
     ];
+
     static $validates_uniqueness_of = [ [ 'school_number' ] ];
 
     // ******************************* HELPER FUNCTIONS *******************************
+    public function copyAddressToShipping(){
+        $this->shipping_address1 = $this->address;  $this->shipping_address2 = $this->address2;
+        $this->shipping_city = $this->city;         $this->shipping_state = $this->state;
+        $this->shipping_postal = $this->zip;        $this->shipping_country = $this->country;
+    }
+
+    public function generateInitials() {
+        preg_match_all('/(?<=\s|^)[a-z]/i', $this->name, $matches);
+        $this->initials = strtoupper( implode('', $matches[0]) );
+    }
+
     public function staff() {
         global $MASHPIA_DB;
         $staff_query = $MASHPIA_DB->prepare(
@@ -32,6 +49,16 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     }
 
     // **************************** CALLBACKS ***********************************
+    public function generateSchoolNumber(){
+        global $MASHPIA_DB;
+        if ( !$this->school_number ) {
+            $query = $MASHPIA_DB->query(
+                "SELECT IFNULL( MAX( school_number ), 613769 ) + 1 AS school_number FROM schools"
+            );
+            $this->school_number = $query->fetch()['school_number'];
+        }
+    }
+
     public function updateSoldiers() {
         global $MASHPIA_DB;
 

@@ -5,9 +5,9 @@ require_once( __DIR__ . '/Auth.php' );
 
 class Login implements \JsonSerializable {
 
-    public $id; // the ID for the login to be sent on the wire.
-    public $code; // code to use in interface
-    public $type; // the type of login that this is
+    public $id = false; // the ID for the login to be sent on the wire.
+    public $code = 'BLANK'; // code to use in interface
+    public $type = false; // the type of login that this is
 
     public $model; // model that the login refers to
     public $modules;
@@ -33,12 +33,17 @@ class Login implements \JsonSerializable {
      * @param $model ( optional ) provide prefetched model.
      * ! Throws \ActiveRecord\RecordNotFound if model cannot be found
      */
-    public function __construct( $type, $id, $model = false ) {
+    public function __construct( $type = 'BLANK', $id = false, $model = false ) {
+        global $current_user;
         $this->type = $type;
-        $this->id = $id;
+        // set the id or fallback to the current user
+        $this->id = $id ? $id : ( $current_user ? $current_user->admin_id : false );
         // set the model
-        if ( $model ) $this->model = $model;
-        else $this->setModel();
+        if ( $model ) {
+            $this->model = $model;
+        } else {
+            $this->setModel();
+        }
         // setup the details
         $this->setup();
         $this->setModules();
@@ -61,14 +66,15 @@ class Login implements \JsonSerializable {
      * * Sets the model for the login based on the id.
      */
     private function setModel() {
-        if ( $this->type == 'HQ' || $this->type == 'PARENT' )
-            $this->model = \Admin::find( $this->id );
-        if ( $this->type == 'institution' )
+        if ( $this->type == 'institution' ) {
             $this->model = \Institution::find( $this->id );
-        if ( $this->type == 'school' )
+        } else if ( $this->type == 'school' ) {
             $this->model = \School::find( $this->id );
-        if ( $this->type == 'class' )
+        } else if ( $this->type == 'class' ) {
             $this->model = \Platoon::find( $this->id, ['include' => ['school']] );
+        } else if ( $this->id ) {
+            $this->model = \Admin::find( $this->id );
+        }
     }
 
     /**
@@ -135,32 +141,45 @@ class Login implements \JsonSerializable {
             $this->legacy = true;
 
             $this->key = Auth::mobileKey( $this->model->admin_id );
+        } else {
+            $this->name = 'Select Account';
+            $this->img = '/mobile/reg/images/boy.png';
+            $this->code = 'BLANK';
+
+            $this->active = false;
+            $this->legacy = false;
+
+            $this->key = Auth::mobileKey( $this->model->admin_id );
         }
     }
 
     /**
-     * setup
+     * setModules
      * 
      * sets the internal variables based on the internal model
      */
     private function setModules() {
         if ( !$this->model )
-            return false;
-        // Tzivos Hashem Offices
+            return $this->modules = [
+                'chayolei' => false, 'chidon' => false,
+                'tehillim' => false, 'tanya' => false,
+                'rewards'  => false
+            ];
+        // Tzivos Hashem Offices and Institutions have access to everything
         if ( in_array( $this->type, [ 'HQ', 'institution' ] ) )
             $this->modules = [
                 'chayolei' => true, 'chidon' => true,
                 'tehillim' => true, 'tanya' => true,
                 'rewards'  => true
             ];
-        // Tzivos Hashem Bases
+        // Tzivos Hashem Bases - get what they pay for
         else if ( $this->type == 'school' )
             $this->modules = [
                 'chayolei' => !!$this->model->chayolei, 'chidon' => !!$this->model->chidon,
                 'tehillim' => !!$this->model->tehillim, 'tanya' => !!$this->model->tanya,
                 'rewards'  => !!$this->model->rewards
             ];
-        // Tzivos Hashem Platoons
+        // Tzivos Hashem Platoons - get what their base paid for
         else if ( $this->type == 'class' ) {
             $school = $this->model->school;
             $this->modules = [
@@ -168,7 +187,6 @@ class Login implements \JsonSerializable {
                 'tehillim' => !!$school->tehillim, 'tanya' => !!$school->tanya,
                 'rewards'  => !!$school->rewards
             ];
-        // Tzivos Hashem Parents
         }
     }
     
