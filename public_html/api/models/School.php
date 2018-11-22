@@ -225,7 +225,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                 'school_makeup_id', 'school_settings', 'package_id', 'school_logo_id', 'school_logo_kiosk_id',
                 'school_no_logo', 'school_file_id', 'kiosk_print', 'school_store', 'camp_id', 'add_on_one',
                 'add_on_two', 'big_prizes_won', 'store_only', 'he_name_principal', 'he_name_p2', 'conf_pushka_users',
-                'tanya_ord', 'tanya_cat_ord', 'school_type', 'col_show', 'tuition', 'reg_type', 'authorize_customer_profile_id', 
+                'tanya_ord', 'school_type', 'col_show', 'tuition', 'reg_type', 'authorize_customer_profile_id', 
             ],
             'methods' => [ 'registrationSettings', 'logoPaths', 'customerProfile', 'staff' ]
         ]);
