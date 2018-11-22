@@ -142,7 +142,7 @@ class Login implements \JsonSerializable {
 
             $this->key = Auth::mobileKey( $this->model->admin_id );
         } else {
-            $this->name = 'Select Account';
+            $this->name = 'Select Account Type';
             $this->img = '/mobile/reg/images/boy.png';
             $this->code = 'BLANK';
 

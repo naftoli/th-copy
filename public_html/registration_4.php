@@ -19,7 +19,7 @@ $year = GlobalSettings::getRegistrationYear();
 // get the registration info for the school
 try {
     $schoolInfo = School::find( $school_id, [ 'include' => 'school_registrations' ] );
-    $schoolInfo = $schoolInfo->getRegInfo( $year );
+    $schoolInfo = $schoolInfo->registrationSettings( $year );
 } catch ( \Exception $e ) {
     $query = mysql_query("SELECT reg_type FROM schools WHERE school_id=" . $school_id);
     $type = mysql_fetch_assoc($query)['reg_type'];

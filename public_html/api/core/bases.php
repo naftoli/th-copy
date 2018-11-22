@@ -6,7 +6,7 @@ class BaseRouter {
 
     public function index(){
         global $MASHPIA_DB;
-        $filters = $this->getFilters( false );
+        $filters = $this->getFilters( true );
         if ( !$filters ) return json_error('Access Deinied');
         $query = $MASHPIA_DB->prepare( 
              " SELECT s.school_number, s.logo, s.school_id, s.school_name, s.school_city, s.school_state, s.school_country, "

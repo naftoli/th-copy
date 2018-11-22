@@ -42,7 +42,7 @@ class SchoolRegistrationRouter {
         $year = GlobalSettings::getRegistrationYear();
         $school = School::find( $school_id, [ 'include' => 'school_registrations' ] );
         $school->school_era = null;
-        $schoolInfo = $school->getRegInfo( $year );
+        $schoolInfo = $school->registrationSettings( $year );
         // update the registration info
         $schoolInfo->amount_paid = $amount;
         $schoolInfo->date_paid = new \DateTime();

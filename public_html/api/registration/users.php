@@ -108,7 +108,7 @@ class UsersRouter {
         $updated = $finish_transaction_query->execute([json_encode($payment_response), $trans_id]);
 
         $errors = [];
-        $fee = $school->getRegInfo( $year )->getChildFee( true );
+        $fee = $school->registrationSettings( $year )->getChildFee( true );
         foreach( $users as $user ) {
             $user_errors = $user->registerChayolei(
                 $current_user->admin_id, $year, $fee
