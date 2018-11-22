@@ -23,6 +23,6 @@ require_once( __DIR__ . '/../../../includes/globals.php' );
 </head>
 <body>
     <img src='sending.gif' alt='sending'>
-    <strong>Sending key to Tzivos Hashem.</strong>
+    <strong>Logging you in to Tzivos Hashem...</strong>
 </body>
 </html>
