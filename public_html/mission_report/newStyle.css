@@ -348,7 +348,8 @@ body {
 
 .checkmark {
 	font-size: 14px;
-	position: relative; 
+	position: relative;
+	pointer-events: none;
 }
 
 .checkboxDaily .checkmark {

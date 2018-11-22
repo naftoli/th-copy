@@ -41,7 +41,8 @@
 				max-width: 200px;
 			}
 			.innerImg p {
-				max-width: 70%;
+				width: 60%;
+				max-width: 330px;
 				padding-top: 100px;
 			}
 			#page-title{
@@ -108,7 +109,7 @@
 				</div>
                 
                 <div id="main" class="alert alert-warning">
-                    <div align="center">
+                    <form align="center" id="scan" >
                         <!--<img class="img-responsive" src="/kiosk/images/scan_cover.png" /><br />-->
 						<div class="innerImg">
 							<p>Type in your achievement card barcode number here.</p>
@@ -116,8 +117,8 @@
 								<input type="text" class="form-control" id="scanner" placeholder="Enter Digits" autofocus>
 							</div>
 						</div>
-                        <button type="submit" id="scan" class="btn btn-danger">Submit</button>
-                    </div>
+                        <button type="submit" class="btn btn-danger">Submit</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -208,7 +209,8 @@
                 $(".bug-report img").data("user_id", user);
 	        });
 	        
-	        $("#scan").click( function() {
+	        $("#scan").submit( function( e ) {
+				e.preventDefault();
 	            var card = $("#scanner").val();
 	            if (card.length == 20) {
 	                $.post('ajax/checkCard.php', { admin : Cookies.get("admin"), user : user, card : card }, function( success ) {

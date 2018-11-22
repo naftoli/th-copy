@@ -39,6 +39,10 @@ function onCheckboxClicked( daily ) {
         event.stopPropagation();
         var user_id = $('input#user_id').val();
         var div = event.target;
+        // go to the div if the checkbox was the event
+        if ( div.className === 'checkmark' ) {
+            div = div.parentElement;
+        }
         // get the task_id and the date for the task
         var info = div.id.split(':');
         var task = info[0];
