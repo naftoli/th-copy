@@ -21,7 +21,7 @@ class SchoolRegistrationRouter implements RestRouter {
                 'only' => [ 'school_id', 'school_name', 'school_era' ],
                 // 'include' => [ 'school_registrations' ],
             ]);
-            $array['reg_info'] = $school->getRegInfo( $year );
+            $array['reg_info'] = $school->registrationSettings( $year );
             return $array;
         }, $schools ) );
     }
