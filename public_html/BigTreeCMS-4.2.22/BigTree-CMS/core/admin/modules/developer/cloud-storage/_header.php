@@ -1,3 +1,0 @@
-<?
-	$cloud = new BigTreeCloudStorage;
-?>

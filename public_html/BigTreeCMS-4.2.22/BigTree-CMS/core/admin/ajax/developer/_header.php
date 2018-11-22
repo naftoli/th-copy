@@ -1,3 +1,0 @@
-<?
-	$admin->requireLevel(2);
-?>
