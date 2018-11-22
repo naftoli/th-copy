@@ -36,7 +36,6 @@ $( '#scanNext' ).click( function() { $('#lookup-user').val('').focus() });
  */
 function onCheckboxClicked( daily ) {
     return function( event ) {
-        event.stopPropagation();
         var user_id = $('input#user_id').val();
         var div = event.target;
         // go to the div if the checkbox was the event
@@ -141,8 +140,6 @@ function toggleAll( checked ){
  * @param {event} event 
  */
 function toggleRow( event ) {
-    event.stopPropagation();
-    
     var tasks = [];
     var dates = [];
 
@@ -160,7 +157,7 @@ function toggleRow( event ) {
     });
 
     if ( tasks.length == 0 )
-        return false;
+        return true;
 
     tasks = tasks.join(':');
     dates = dates.join(':');
