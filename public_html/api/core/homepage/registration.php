@@ -34,7 +34,7 @@ class RegistrationRouter {
         } else if ( $current_user->login->code === 'BC' ) {
             $school = $current_user->login->model;
             $year = GlobalSettings::getRegistrationYear( $school->school_id );
-            $reg_info = $school->getRegInfo( $year );
+            $reg_info = $school->registrationSettings( $year );
             $reg_open = !$reg_info->default && !$reg_info->date_paid;
             $status = $school->getRegStatus( $year );
         } else if ( $current_user->login->code === 'TEACHER' ) {

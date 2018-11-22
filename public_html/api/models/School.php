@@ -88,7 +88,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
 
     // ******************************* GETTERS *******************************
     /**
-     * getRegInfo
+     * registrationSettings
      * 
      * get the current registratio info object for the school.
      * Returns defaults if none exist
@@ -96,7 +96,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
      * @param string $year
      * @return SchoolRegistration
      */
-    public function getRegInfo( $year = false ){
+    public function registrationSettings( $year = false ){
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
         $reg_info = SchoolRegistration::getDefault( $this->school_id, $this->reg_type, $year );
         // check for non-default option
@@ -109,7 +109,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     }
 
     public function getRegStatus( $year = false ) {
-        $reg_info = $this->getRegInfo( $year );
+        $reg_info = $this->registrationSettings( $year );
         if ( $reg_info->default ) return 'Registration Closed';
         if ( !$reg_info->date_paid ) return 'Base Registration Open';
         return 'Registration Open';
@@ -227,7 +227,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                 'add_on_two', 'big_prizes_won', 'store_only', 'he_name_principal', 'he_name_p2', 'conf_pushka_users',
                 'tanya_ord', 'tanya_cat_ord', 'school_type', 'col_show', 'tuition', 'reg_type', 'authorize_customer_profile_id', 
             ],
-            'methods' => [ 'logoPaths', 'customerProfile', 'staff' ]
+            'methods' => [ 'registrationSettings', 'logoPaths', 'customerProfile', 'staff' ]
         ]);
     }
 
