@@ -295,14 +295,9 @@ if (!isset($menu_type))
 				<LI><A HREF="admin_campaign_tasks.php?admin_id=<?=$admin_user['admin_id'];?>"><?//=T_('Manage Tasks')?></A>
 				<LI><A HREF="admin_print_camp_cards.php?admin_id=<?=$admin_user['admin_id'];?>"><?//=T_('Print Camp Achievement Cards')?></A>
 				<LI><A HREF="admin_global_tasks.php?admin_id=<?=$admin_user['admin_id'];?>"><?//=T_('Global Tasks')?></A>
-				<LI></LI>
 				<LI><A HREF="admin_camp_members.php?admin_id=<?=$admin_user['admin_id'];?>"><?//=T_('Camp Members')?></A>
 				<LI><A HREF="admin_camp_employees.php?admin_id=<?=$admin_user['admin_id'];?>"><?//=T_('Employees')?></A>
-				<LI></LI>
-				<LI><A HREF="admin_assign_group_points.php?admin_id=<?=$admin_user['admin_id'];?>"><?//=T_('Assign Group Points')?></A>				
-				<LI><A HREF="admin_assign_member_points.php?admin_id=<?=$admin_user['admin_id'];?>"><?//=T_('Assign Member Points')?></A>-->				
 				<LI><A HREF="admin_print_camp_cards.php?admin_id=<?=$admin_user['admin_id'];?>"><?=T_('Print Camp Achievement Cards')?></A>	
-				<LI><A HREF="admin_assign_group_points.php?admin_id=<?=$admin_user['admin_id'];?>"><?=T_('Assign Group Points')?></A>
 				<LI><A HREF="admin_assign_member_points.php?admin_id=<?=$admin_user['admin_id'];?>"><?=T_('Assign Member Points')?></A>
 				
 				<!-- MT Working with backend functions -->
@@ -319,7 +314,6 @@ if (!isset($menu_type))
 				
 				<LI>--------------------------------------------------------------------------------</LI>
 				<LI><A HREF="admin_camp_members.php?admin_id=<?=$admin_user['admin_id'];?>"><?=T_('Members')?></A>
-				<LI><A HREF="admin_assign_group_tasks.php?admin_id=<?=$admin_user['admin_id'];?>"><?=T_('Assign Tasks')?></A>				
 				<LI>--------------------------------------------------------------------------------</LI>
 				<LI><A HREF="admin_staff.php?admin_id=<?=$admin_user['admin_id'];?>"><?=T_('Staff')?></A>
 				<LI><A HREF="admin_employee_roles.php?admin_id=<?=$admin_user['admin_id'];?>"><?=T_('Staff Roles')?></A>				

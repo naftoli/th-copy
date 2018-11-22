@@ -1,6 +1,0 @@
-body {
-  content: 'This is a \
-	multiline string.';
-  content: "This is a \
-	multiline string.";
-}

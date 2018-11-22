@@ -50,7 +50,7 @@ while ($row = mysql_fetch_assoc($query))
 		<script type="text/javascript" src="scripts/jquery.styleselect.js"></script>
 		<script type="text/javascript">	
 			$(document).ready(function() {
-				var url = "http://mashpia.com/auction_ajax_numbers.php?auction_id=" + $(".auction_id select").val() + "&school_id=0";
+				var url = "//mashpia.com/auction_ajax_numbers.php?auction_id=" + $(".auction_id select").val() + "&school_id=0";
 				//alert(url);
 				
 				$.ajax({
@@ -81,13 +81,13 @@ while ($row = mysql_fetch_assoc($query))
 					sql = sql + "AND auctions.auction_ran=1 ";
 					sql = sql + "ORDER BY prizes_auction.prize_number, auction_winners.prize_id, school_name, classes.class_grade, classes.class_sub, class_id, users.last, users.first, auction_winners.auction_id";
 					
-					var url = "http://mashpia.com/export_winners.php?school_id=" +  $("#school_id").val() + "&auction_id=" + $("#auction_id").val();
+					var url = "//mashpia.com/export_winners.php?school_id=" +  $("#school_id").val() + "&auction_id=" + $("#auction_id").val();
 										
 					$.ajax({
 						url: url,
 						success: function(data) 
 						{
-							window.location = "http://mashpia.com/exports/auction_winners.csv";
+							window.location = "//mashpia.com/exports/auction_winners.csv";
 						}
 					});			
 					
@@ -108,7 +108,7 @@ while ($row = mysql_fetch_assoc($query))
 			
 				$(".school_id select").sSelect().change(function () {
 
-					var url = "http://mashpia.com/auction_ajax_numbers.php?auction_id=" + $("#auction_id").val() + "&school_id=" + $(this).val();
+					var url = "//mashpia.com/auction_ajax_numbers.php?auction_id=" + $("#auction_id").val() + "&school_id=" + $(this).val();
 					
 					$.ajax({
 						url: url,
@@ -121,7 +121,7 @@ while ($row = mysql_fetch_assoc($query))
 			
 				$(".auction_id select").sSelect().change(function () {
 					
-					var url = "http://mashpia.com/auction_ajax_numbers.php?auction_id=" + $(this).val() + "&school_id=" + $("#school_id").val();
+					var url = "//mashpia.com/auction_ajax_numbers.php?auction_id=" + $(this).val() + "&school_id=" + $("#school_id").val();
 					
 					$.ajax({
 						url: url,
