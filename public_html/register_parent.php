@@ -51,8 +51,7 @@ if ($submit_form)
 		if ($admin_id > 0) {				
 			send_parent_registration_confirmation_email(mysql_real_escape_string(trim($_POST['admin_email'])));		
 			$_SESSION["admin_id"] = $admin_id;
-			$next_page = "true";												
-			// header("Location: http://www.mashpia.com/register_parent_2.php");			
+			$next_page = "true";
 		}
 		else {
 			$message = "Insert failed. Please try again.";
@@ -62,7 +61,6 @@ if ($submit_form)
 	elseif ($action == 'update')	{
 		update_admins();
 		$next_page = "true";
-		//header("Location: register_parent_2.php");
 	}
 }
 	
@@ -373,7 +371,15 @@ function send_parent_registration_confirmation_email($parent_email) {
 				<div class="col_title_bg"></div>
 				<div class="col_title">Menu</div>
 				<? $curr = 1; ?>
-				<? include("register_parent_menu.php"); ?>
+				<ul class="list_first">
+					<li class="list_parent<?=($curr==1)?' current':''?>"><a href="#"><img src="images/icon_pr_user.png" width="28" height="28" alt="Login" />New Parent Account</a></li>
+					<!--
+					<li class="list_parent<?=($curr==2)?' current':''?>"><a href="#"><img src="images/icon_pr_children.png" width="28" height="28" alt="Login" />Add Children</a></li>
+					<li class="list_parent<?=($curr==3)?' current':''?>"><a href="#"><img src="images/icon_pr_register.png" width="28" height="28" alt="Login" />Child Registration</a></li>
+					<li class="list_parent<?=($curr==4)?' current':''?>"><a href="#"><img src="images/icon_pr_checkout.png" width="28" height="28" alt="Login" />Checkout</a></li>
+					<li class="list_parent<?=($curr==5)?' current':''?>"><a href="#"><img src="images/icon_pr_summary.png" width="28" height="28" alt="Login" />Summary</a></li>
+					-->
+				</ul>
 			</div>
 			
 			<div id="content">

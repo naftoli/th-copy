@@ -228,7 +228,6 @@ unset($out);
 <!-- <LI><A HREF="admin_print_pdf.php?type=tbp_progress_report&amp;week_num=-1" target="_blank"><?=T_('Tanya Baal Peh Weekly Quota Report')?></A> -->
 <!-- <LI><A HREF="admin_print_pdf.php?type=tbp_yearly_progress" target="_blank"><?=T_('Tanya Baal Peh Yearly Progress Chart')?></A> -->
 <!-- <LI><A HREF="admin_tanya_lines_print.php" target="_blank"><?=T_('Tanya Lines')?></A> -->
-<!-- <LI><A HREF="admin_auction_print.php" target="_blank"><?=T_('Chinese Auction Prize Cards')?></A> -->
 <!-- <LI><A HREF="admin_report_auction.php" target="_blank"><?=T_('Auction Prize Entry Sheet')?></A> -->
 </UL>
 </DIV>
