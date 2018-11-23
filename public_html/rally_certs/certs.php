@@ -53,13 +53,15 @@ foreach ( $ids as $school_id => $grades ) {
         <?php 
         foreach ( $info as $school_name => $names ) {
             foreach ( $names as $name ) {
-                ?>
-                <div class="cert">
-                    <div class="name"><?= $name ?></div>
-                    <div class="school"><?= $school_name ?></div>
-                </div>
-                <div style="clear: both; page-break-after: always"></div>
-                <?
+                if ( !empty( $name ) ) {
+                    ?>
+                    <div class="cert">
+                        <div class="name"><?= $name ?></div>
+                        <div class="school"><?= $school_name ?></div>
+                    </div>
+                    <div style="clear: both; page-break-after: always"></div>
+                    <?
+                }
             }
         }
         ?>
