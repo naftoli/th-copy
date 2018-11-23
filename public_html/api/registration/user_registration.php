@@ -11,25 +11,24 @@ class UserRegistrationRouter {
 
     // get all the users that the parent has, serialized for the registration pages.
     public function getUsers(){
-        global $current_user;   
+        global $current_user;
         // global $MASHPIA_DB;
         // load all his user id's
         $user_ids = $current_user->getAuthIds( 'user' );
 
         // get all the users information
-        $users = Soldier::find( $user_ids, 
-            ['include' => [ 'school', 'platoon' ] ] 
+        $users = Soldier::find( $user_ids,
+            ['include' => [ 'school', 'platoon' ] ]
         );
         $users = is_array( $users ) ? $users : [ $users ];
 
         $available_users = [];
         foreach( $users as $user ){
             if ( !$user->school_id ) continue;
-            $reg_info = $user->school->registrationSettings();
-            if ( $reg_info->default // and make sure it is not on the default
-                || !$reg_info->date_paid  // make sure the school paid
-            ) continue; 
-            $available_users[] = $user;
+            $reg_info = $user->school->registration();
+            // make sure they paid for this year
+            if ( $reg_info && $reg_info->date_paid )
+                $available_users[] = $user;
         }
 
         json_response([
@@ -86,30 +85,34 @@ class UserRegistrationRouter {
         global $current_user; global $MASHPIA_DB;
 
         /******************************** SETUP ********************************/
+        // * get the post data
         $payment_info = $_POST['payment'];
         $total = intval( $payment_info['total'] );
-
         $registrations = $_POST['registrations'];
         $shipping_info = $_POST['shipping'];
         $shipping_charges = intval($shipping_info['shipping_charges']);
-        // get all the users that we are registering
+        
+        // * get all the users that we are registering
         $totals = [ 'chayolei' => 0, 'chidon' => 0, 'yahadus' => 0, 'shipping' => $shipping_charges ];
         $user_ids = [];
+        
+        // * get each registration
         foreach( $registrations as $info ){
             if( !in_array( $info['user_id'], $user_ids ) ) $user_ids[] = $info['user_id'];
             $totals[$info['registration_type']] += $info['paid'];
         }
-        // get all the user models
-        $users = Soldier::find( $user_ids );
+        
+        // * get all the user models
+        $users = Soldier::find( $user_ids, [ 'include' => 'school' ] );
         if ( !is_array( $users ) ) $users = [ $users ]; // force an array, even if it is just one user
         
+        // * get the transaction description
         $totals_string = '';
         foreach( $totals as $k => $v ) {
-            if ( $v > 0 ) $totals_string .= "$k: $v";
+            if ( $v > 0 ) $totals_string .= "$k: $v ";
         }
         $totals_string = trim( $totals_string );
-
-        // setup the variables we will need later
+        // get the description four our database
         $user_serials = array_map( function( $user ){ return $user->user_serial; }, $users);
         $year = GlobalSettings::getRegistrationYear( $users[0]->school_id );
         $description = "Parent Registration ($totals_string) $year: " . implode( ", ", $user_serials );
@@ -149,21 +152,21 @@ class UserRegistrationRouter {
         } else {
             $payment_response = 'N/A'; $trans_id = false;
         }
+
         try {
             // register all the users...
             $errors = [];   $registration_table_users = [];
-            $registration_info_query = $MASHPIA_DB->prepare(
-                "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
-                ."VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year )"
-            );
+            
             // add shipping to the registration_charges table
             if ( $shipping_charges > 0 ) {
-                $registration_info_query->execute([
-                    'trans_id' => ( $trans_id ? $trans_id : '' ), 
+                $shipping_charge_query = $MASHPIA_DB->prepare(
+                    "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year) "
+                    ."VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year )"
+                );
+                $shipping_charge_query->execute([
+                    'trans_id' => $trans_id, 'school_id' => 269, // only school with shipping at the moment. TODO update later.. 
                     'user_id' => ( count( $users ) == 1 ? $users[0]->user_id : 0 ), 
-                    'school_id' => 269, // only school with shipping at the moment. TODO update later.. 
-                    'type' => 'shipping',
-                    'amount' => $shipping_charges, 
+                    'type' => 'shipping',   'amount' => $shipping_charges, 
                     'year' => GlobalSettings::getRegistrationYear()
                 ]);
             }
@@ -171,24 +174,22 @@ class UserRegistrationRouter {
             foreach ( $users as $user ) {
                 $user_errors = [];
                 foreach( $registrations as $registration ){
-                    if ( !($user->user_id == $registration['user_id']) ) continue;
+
+                    if ( !($user->user_id == $registration['user_id']) )
+                        continue;
+
                     // set the year based on the school id for chayolei only
                     $year = $registration['registration_type'] == 'chayolei' ? 
                         GlobalSettings::getRegistrationYear( $user->school_id ) : 
                         GlobalSettings::getRegistrationYear();
-                    // insert a record into the registration_charges table.
-                    $registration_info_query->execute([
-                        'trans_id' => ( $trans_id ? $trans_id : '' ), 
-                        'user_id' => $user->user_id, 
-                        'school_id' => $user->school_id, 
-                        'type' => $registration['registration_type'],
-                        'amount' => $registration['paid'], 
-                        'year' => $year
-                    ]);
+                    // if they do not pay, the value is null
+                    $amount = $registration['paid'];
+                    if ( $user->school->reg_type == 1 )
+                        $amount = $amount > 0 ? $amount : null;
                     // Chayolei Registration
                     if ( $registration['registration_type'] == 'chayolei' ) {
                         array_merge( $user_errors, $user->registerChayolei(
-                            $current_user->admin_id, $year, $registration['paid']
+                            $current_user->admin_id, $year, $amount
                         ) );
                         if ( in_array( $user->school_id, [ '269', '61' ] ) )
                             $registration_table_users[ $user->school_id ][] = $user->user_id;
@@ -196,6 +197,14 @@ class UserRegistrationRouter {
                     } else if ( $registration['registration_type'] == 'chidon' ) {
                         if ( !$user->registerChidon( $year, $registration['size'], $current_user->admin_id ) )
                             $user_errors[] = "Could not register ".$user->user_id." for chidon";
+                    // other registrations
+                    } else {
+                        // add the registration charge
+                        $user->registrationCharge(
+                            $registration['registration_type'],
+                            floatval( $amount ),
+                            $trans_id, $year
+                        );
                     }
                 }
                 if ( count( $user_errors ) > 0 ) 

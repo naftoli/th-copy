@@ -12,16 +12,8 @@ require_once( __DIR__ . '/api/header/db.php' ); // import ActiveRecord and PDO
 require 'class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
 // get the registration info for the school
-try {
-    $schoolInfo = School::find( $school_id, [ 'include' => 'school_registrations' ] );
-    $schoolInfo = $schoolInfo->registrationSettings( $year );
-} catch ( \Exception $e ) {
-    $query = mysql_query("SELECT reg_type FROM schools WHERE school_id=" . $school_id);
-    $type = mysql_fetch_assoc($query)['reg_type'];
-    $schoolInfo = SchoolRegistration::getDefault( $school_id, $type, $year );
-};
-
-$total = $schoolInfo->fee + $schoolInfo->balance;
+$school = School::find( $school_id );
+$total = $school->chayolei_fee + $school->balance;
 
 // ***** SEND THE CONFIRMATION EMAIL ***** //
 $confirmation = "";
@@ -33,7 +25,7 @@ $row2 = mysql_fetch_assoc($result2);
 
 // make sure there's an authorize profile created
 if (!isset( $_SESSION['skipCC'] ) || $_SESSION['skipCC'] !== 'yes') {
-	if (empty($row2['authorize_customer_profile_id']) || empty($row2['authorize_payment_profile_id'])) {
+	if (empty($school->authorize_customer_profile_id) || empty($school->authorize_payment_profile_id)) {
 		header("Location: registration_7.php");
 		exit;
 	}
@@ -58,8 +50,8 @@ if (!isset( $_SESSION['skipCC'] ) || $_SESSION['skipCC'] !== 'yes') {
 			// jquery
 			$(document).ready( function() {
 				// pop up for outstanding balance
-                <? if ( $schoolInfo->balance > 0 ) { ?>
-                    alert("Your base has a previous outstanding balance of $<?=$schoolInfo->balance?>. This amount will be added to your registration fee. If you have any questions please contact accounting@tzivoshashem.org.");
+                <? if ( $school->balance > 0 ) { ?>
+                    alert("Your base has a previous outstanding balance of $<?=$school->balance?>. This amount will be added to your registration fee. If you have any questions please contact accounting@tzivoshashem.org.");
                 <? } ?>
 
 				// hide return button
@@ -124,11 +116,11 @@ if (!isset( $_SESSION['skipCC'] ) || $_SESSION['skipCC'] !== 'yes') {
 
 					// cast the json into a post params list
 					var dataToSend = $.param({
-						school_id: <?=$row2['school_id'];?>,
-						description: "school registration for: " + '<?=$row2['school_name'];?>',
+						school_id: <?=$school->school_id;?>,
+						description: "school registration for: " + '<?=$school->school_name;?>',
 						amount: $('#trans_total').val(),
-						customer_profile_id: <?=$row2['authorize_customer_profile_id'];?>,
-						payment_profile_id: <?=$row2['authorize_payment_profile_id'];?>
+						customer_profile_id: <?=$school->authorize_customer_profile_id;?>,
+						payment_profile_id: <?=$school->authorize_payment_profile_id;?>
                     });
                     
 					$.post(

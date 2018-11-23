@@ -86,33 +86,73 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return true;
     }
 
-    // ******************************* GETTERS *******************************
+    // ******************************* REGISTRATION *******************************
     /**
-     * registrationSettings
+     * soldierFee
      * 
-     * get the current registratio info object for the school.
-     * Returns defaults if none exist
-     *
-     * @param string $year
-     * @return SchoolRegistration
+     * @param bollean $to_soldier are we returning this fee to a soldier or not?
+     * @param int $for_type 1, 2, or 3.
+     * @param bollean $no_discount should we disable the discounts
      */
-    public function registrationSettings( $year = false ){
-        $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
-        $reg_info = SchoolRegistration::getDefault( $this->school_id, $this->reg_type, $year );
-        // check for non-default option
-        foreach( $this->school_registrations as $custom_reg_info ){
-            if ( $custom_reg_info->year == $year ) 
-                return $reg_info = $custom_reg_info;
-        }
-        // return the reg info
-        return $reg_info;
+    public function soldierFee( $to_soldier = false, $for_type = false, $no_discount = false ) {
+        if ( !$for_type )
+            $for_type = $this->reg_type;
+
+        $early_bird = $this->early_bird > new DateTime();
+        
+        return GlobalSettings::calculateChildFee(
+            $for_type,      $this->child_fee,
+            $to_soldier,    $early_bird,    $no_discount
+        );
     }
 
     public function getRegStatus( $year = false ) {
-        $reg_info = $this->registrationSettings( $year );
-        if ( $reg_info->default ) return 'Registration Closed';
-        if ( !$reg_info->date_paid ) return 'Base Registration Open';
-        return 'Registration Open';
+        $reg_info = $this->registration( $year );
+        if ( !$reg_info ) return 'Base Registration Pending';
+        return 'Soldier Registration Open';
+    }
+
+    /**
+     * registration
+     * 
+     * get the registration recepit for a given year
+     *
+     * @param string $year
+     * @return SchoolRegistration/false
+     */
+    public function registration( $year = false ){
+        $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
+        // check for non-default option
+        foreach( $this->school_registrations as $reg_info ){
+            if ( $reg_info->year == $year ) 
+                return $reg_info;
+        }
+        // return the reg info
+        return false;
+    }
+
+    public function register( $year, $amount, $admin_id ) {
+        $this->school_era = null;
+
+        $registration = new SchoolRegistration([
+            'school_id' => $this->school_id,
+            'year' => $year,
+            'type' => $this->reg_type, 
+            'fee' => $this->chayolei_fee, 
+            'balance' => $this->balance, 
+            'early_bird' => $this->earlyBird(),
+            'amount_paid' => $amount,
+            'admin_id' => $admin_id,
+            'date_paid' => new DateTime()
+        ]);
+
+        return $registration->save() && $this->save();
+    }
+
+    public function earlyBird() {
+        if ( $this->early_bird )
+            return $this->early_bird;
+        return new DateTime( '2018-09-07 00:00:00' );
     }
 
     // ******************************* LOGOS *******************************
@@ -174,6 +214,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         }
         return $this->customer_profile;
     }
+
     // create a payment profile
     public function createPaymentProfile( $payment_info, $email = false ) {
         $email = $email ? $email : $this->accounting_email;
@@ -225,9 +266,9 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                 'school_makeup_id', 'school_settings', 'package_id', 'school_logo_id', 'school_logo_kiosk_id',
                 'school_no_logo', 'school_file_id', 'kiosk_print', 'school_store', 'camp_id', 'add_on_one',
                 'add_on_two', 'big_prizes_won', 'store_only', 'he_name_principal', 'he_name_p2', 'conf_pushka_users',
-                'tanya_ord', 'tanya_cat_ord', 'school_type', 'col_show', 'tuition', 'reg_type', 'authorize_customer_profile_id', 
+                'tanya_ord', 'school_type', 'col_show', 'tuition', 'reg_type', 'authorize_customer_profile_id', 
             ],
-            'methods' => [ 'registrationSettings', 'logoPaths', 'customerProfile', 'staff' ]
+            'methods' => [ 'registration', 'logoPaths', 'customerProfile', 'staff' ]
         ]);
     }
 

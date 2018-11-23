@@ -59,9 +59,8 @@ $row_no = 0;
 
 require_once( __DIR__ . '/class.globalSettings.php' );
 $year = GlobalSettings::getRegistrationYear( $school->school_id );
-// 
-$reg_info = $school->registrationSettings( $year );
-$reg_fee = $reg_info->getChildFee( true );
+// get the registration fee
+$reg_fee = $school->soldierFee();
 
 // if the GET request has a fee set in it use that fee
 if ( isset( $_GET['fee'] ) && $admin_user['auth'] == 'super') $reg_fee = $_GET['fee'];

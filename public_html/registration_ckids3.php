@@ -18,14 +18,8 @@ require_once( __DIR__ . '/api/header/db.php' ); // import ActiveRecord and PDO
 require 'class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
 // get the registration info for the school
-try {
-    $schoolInfo = School::find( $school_id, [ 'include' => 'school_registrations' ] );
-    $schoolInfo = $schoolInfo->registrationSettings( $year );
-} catch ( \Exception $e ) {
-    $query = mysql_query("SELECT reg_type FROM schools WHERE school_id=" . $school_id);
-    $type = mysql_fetch_assoc($query)['reg_type'];
-    $schoolInfo = SchoolRegistration::getDefault( $school_id, $type, $year );
-};
+$school= School::find( $school_id );
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -145,8 +139,8 @@ try {
 								<p>Once your school is registered, you can begin registering individual students, or have parents enroll their children.</p>
 								<p>
                                     For ONLY $<span class="regAmount"><?
-                                    if ( $schoolInfo->type == '1' ) { echo $schoolInfo->getChildFee( true ); }
-                                    else { echo $schoolInfo->getChildFee( true )?>/<?=$schoolInfo->getChildFee( true, false, true ); }
+									if ( $school->reg_type == '1' ) { echo $school->soldierFee( false ); }
+									else { echo $school->soldierFee( false ); ?> / <?= $school->soldierFee( false, false, true ); }
                                     ?></span> each registered student will receive:
                                 </p>
 								
@@ -252,8 +246,8 @@ try {
 													<div class="box">
 														<h4>
                                                             Your Price: $<span class="regAmount"><?
-                                                            if ( $schoolInfo->type == '1' ) { echo $schoolInfo->getChildFee( true ); }
-                                                            else { echo $schoolInfo->getChildFee( true )?>/<?=$schoolInfo->getChildFee( true, false, true ); }
+                                                            if ( $school->reg_type == '1' ) { echo $school->soldierFee( false ); }
+															else { echo $school->soldierFee( false ); ?> / <?= $school->soldierFee( false, false, true ); }
                                                             ?></span>
                                                         </h4>
 													</div>   
