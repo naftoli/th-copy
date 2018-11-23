@@ -64,6 +64,7 @@ foreach ( $ids as $school_id => $grades ) {
                     <?
                 }
             }
+            echo "<div style='height: 50px'></div><div style='clear: both; page-break-after: always'></div>";
         }
         ?>
     </body>
