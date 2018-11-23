@@ -29,11 +29,12 @@ foreach ( $ids as $school_id => $grades ) {
     while ( $row = mysql_fetch_assoc( $result ) ) {
         $info[$school_name][] = $row['first'] . ' ' . $row['last'];
     }
+
     foreach ( $grades as $class_id ) {
         $sql = "select a.first, a.last  
                 from admin_auths aa 
                 join admins a using (admin_id) 
-                where aa.auth = 'school' 
+                where aa.auth = 'class' 
                 and aa.id = " . $class_id;
         $result = mysql_query( $sql );
         while ( $row = mysql_fetch_assoc( $result ) ) {
