@@ -51,6 +51,7 @@ foreach ( $ids as $school_id => $grades ) {
             tr, th, td {
                 padding: 10px;
                 font-size: 14px;
+                font-family: Verdana;
             }
         </style>
     </head>
@@ -64,7 +65,7 @@ foreach ( $ids as $school_id => $grades ) {
             <?php 
             foreach ( $info as $school_name => $names ) {
                 foreach ( $names as $name ) {
-                    if ( !empty( $name ) ) {
+                    if ( !empty( trim ( $name  ) ) ) {
                         echo "<tr><td>" . $school_name . "</td><td>" . $name . "</td></tr>";
                     }
                 }

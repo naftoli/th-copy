@@ -54,7 +54,7 @@ foreach ( $ids as $school_id => $grades ) {
         <?php 
         foreach ( $info as $school_name => $names ) {
             foreach ( $names as $name ) {
-                if ( !empty( $name ) ) {
+                if ( !empty( trim( $name ) ) ) {
                     ?>
                     <div class="cert">
                         <div class="name"><?= $name ?></div>
