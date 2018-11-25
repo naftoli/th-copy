@@ -65,7 +65,7 @@ foreach ( $ids as $school_id => $grades ) {
             <?php 
             foreach ( $info as $school_name => $names ) {
                 foreach ( $names as $name ) {
-                    if ( !empty( trim( $name  ) ) ) {
+                    if ( !empty( $name ) ) {
                         echo "<tr><td>" . $school_name . "</td><td>" . $name . "</td></tr>";
                     }
                 }
