@@ -60,10 +60,11 @@ class CampaignEnrollment {
     }
     
     public function getCampaigns() {
-        // skip hakhel and viholachto for now
-        $campaigns = array();
-        foreach ($this->campaigns[$this->type] as $id) {
-            if (!in_array($id, array(15,42))) $campaigns[] = $id;
+        // skip hakhel for now
+        $skip = [15];
+        $campaigns = [];
+        foreach ( $this->campaigns[$this->type] as $id ) {
+            if ( !in_array( $id, $skip ) ) $campaigns[] = $id;
         }
         return $campaigns;
     }
