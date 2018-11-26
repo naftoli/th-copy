@@ -23,10 +23,7 @@ class GlobalSettings {
     public static function getRegistrationYear( $school_id = false ) {
         if ( self::isAustralian( $school_id ) )
             return 5778;
-        $sql = "select `val` from global_settings where `key` = 'registration_year'";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_assoc($result);
-        return $row['val'];
+        return 5779; // don't bother to load key from DBS each time
     }
     
     public static function getChidonYear() {
@@ -62,14 +59,14 @@ class GlobalSettings {
      * @param boolean $school
      * @return integer
      */
-    public static function getRegCost( $type, $school = false ) {
+    public static function getRegCost( $type ) {
         if ( $type == 1 ) { // In Tuition
-            return $school ? 45 : 0;
+            return 45.0;
         } else if ( $type == 2 ) { // Guarranteed, they get a bit of a discount ($45, calculated elsewhere )
-            return 55;
+            return 55.0;
         }
         // everyone else / default return
-        return 55;
+        return 55.0;
     }
 
     /**
@@ -79,16 +76,27 @@ class GlobalSettings {
      *
      * @param integer $type
      * @param integer $fee
-     * @param boolean $is_school
+     * @param boolean $is_soldier
      * @param boolean $early_bird
      * @param boolean $no_discount
      * @return integer
      */
-    public static function calculateChildFee( $type, $fee = 0, $is_school = false, $early_bird = false, $no_discount = false ) {
-        // get the default fee
-        $fee = $fee > 0 ? $fee : self::getRegCost( $type, $is_school );
+    public static function calculateChildFee(
+        $type,  $fee = null,    $is_soldier = false, 
+        $early_bird = false,    $no_discount = false
+    ) {
+        // type 1 soldiers pay nothing
+        if ( $type == 1 && $is_soldier ) {
+            $fee = 0;
+        // if the fee is null, get the default fee
+        } else if ( is_null( $fee ) ) {
+            $fee = self::getRegCost( $type );
+        }
+        // cast it to a float value
+        $fee = floatval( $fee );
         // return the final rate if requested
-        if ( $no_discount ) return $fee >= 0 ? $fee : 0;
+        if ( $no_discount )
+            return $fee >= 0 ? $fee : 0;
         // add early bird discount ( not for type 1 )
         if ( $type != 1 && $early_bird )
             $fee -= self::getEarlyBird();

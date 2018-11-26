@@ -1,4 +1,6 @@
 <?php
+namespace camps\classes;
+
 class admin {
   	public $admin_id;
 	public $username;

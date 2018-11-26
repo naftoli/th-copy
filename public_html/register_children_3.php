@@ -21,7 +21,7 @@ $admin_id = $_SESSION['admin_id'];
 $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-$admin = new admin($row);
+$admin = new \camps\classes\admin($row);
 $admin->get_children();
 $admin->get_sponsors();
 // ***** GET THE ADMIN AND SCHOOL INFO ***** //

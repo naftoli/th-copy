@@ -1,7 +1,10 @@
 <?php
 //ini_set('display_errors',1);
-require '../db.php';
-require '../class.globalSettings.php';
+
+$ROOT_DIR = __DIR__ . '/../../';
+
+require $ROOT_DIR . 'db.php';
+require $ROOT_DIR . 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 // get campaigns for current year
@@ -48,7 +51,7 @@ foreach ($info as $id => $desc) {
 }
 //echo "<pre>"; print_r($regInfo); echo "</pre>"; exit;
 
-require_once '../class.bpSummary.php';
+require_once $ROOT_DIR . 'class.bpSummary.php';
 //require_once '../class.balPehCampaign.php';
 $results = [];
 $child_count = [];

@@ -16,7 +16,7 @@ include("classes/admin.php");
 $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-$admin = new admin($row);
+$admin = new \classes\admin($row);
 
 // if school id is 0 then this is a first time registration
 $_SESSION["new_school_registration"] = $school_id > 0 ? 0 : 1;

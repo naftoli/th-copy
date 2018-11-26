@@ -21,7 +21,7 @@ include("classes/user.php");
 $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-$admin = new admin($row);
+$admin = new \classes\admin($row);
 
 $heYear = 5777;
 $admin->getUnregisteredForYear($heYear);

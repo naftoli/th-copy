@@ -26,7 +26,7 @@ class PlatoonRouter {
             ."class_teacher as teacher, c.cell, c.email, COUNT(user_id) as soldier_count, staff_count "
             ."FROM classes c JOIN schools s USING (school_id) LEFT JOIN users u USING ( class_id ) "
             ."LEFT JOIN ( SELECT count(*) as staff_count, id FROM admin_auths WHERE auth='class' GROUP BY id ) s ON s.id = c.class_id "
-            ." $filters GROUP BY class_id ORDER BY school_name, class_grade, class_sub ";
+            ." $filters GROUP BY class_id ORDER BY school_name, class_grade, class_sub;";
         $query = $MASHPIA_DB->prepare( $sql );
         $query->execute( $params );
 

@@ -41,14 +41,9 @@ class SchoolRegistrationRouter {
         // get the current registration info
         $year = GlobalSettings::getRegistrationYear();
         $school = School::find( $school_id, [ 'include' => 'school_registrations' ] );
-        $school->school_era = null;
-        $schoolInfo = $school->registrationSettings( $year );
-        // update the registration info
-        $schoolInfo->amount_paid = $amount;
-        $schoolInfo->date_paid = new \DateTime();
-        $schoolInfo->admin_id = $current_user->admin_id;
-        // update the DBS
-        $statusRegistration = $schoolInfo->save() && $school->save();
+        
+        $statusRegistration = $school->register( $year, $amount, $current_user->admin_id );
+        $registration = $school->registration( $year );
 
         // send email to office
         $to = "cth@tzivoshashem.org";
@@ -57,11 +52,11 @@ class SchoolRegistrationRouter {
         $headers = 'From: admin@mashpia.com' . "\r\n";
         $headers .= 'Reply-to: cth@tzivoshashem.org' . "\r\n";
 
-        if ($schoolInfo->type == 1)
+        if ($registration->type == 1)
             $msg .= " They have indicated that they are a tuition school that pays for all their students.";
-        if ($schoolInfo->type == 2)
-            $msg .= " They have indicated that they are a school that guarentees that all children will register by " . $schoolInfo->early_bird->format('F j') . ".";
-        if ($schoolInfo->type == 3)
+        if ($registration->type == 2)
+            $msg .= " They have indicated that they are a school that guarentees that all children will register by " . $school->earlyBird()->format('F j') . ".";
+        if ($registration->type == 3)
             $msg .= " They have indicated that they are not a tuition school and parents need to pay complete fee.";
         @mail($to, $subject, $msg, $headers);
 

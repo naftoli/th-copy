@@ -55,7 +55,7 @@ include("classes/admin.php");
 $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_user['admin_id'];
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-$admin = new admin($row);
+$admin = new \classes\admin($row);
 if ($admin->auth != "super") {
     $admin->get_schools();
     if (count($admin->schools) == 1) {

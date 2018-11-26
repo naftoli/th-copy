@@ -94,7 +94,7 @@ function update_admin($params) {
 	$value = $params[2];
 	
 	include ("classes/admin.php");
-	$admin = new admin();
+	$admin = new \camps\classes\admin();
 	return $admin->update_item($admin_id, $field_name, $value);
 }
 

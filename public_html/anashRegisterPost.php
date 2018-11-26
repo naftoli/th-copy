@@ -56,7 +56,7 @@ if ($p->action($_POST)) {
 		
 		//create admin object
 		require 'classes/admin.php';
-		$parent = new Admin($row);
+		$parent = new \classes\admin($row);
 		
 		require 'newClasses/newSoldier.php';
 		$add = $_POST['addChildren'];

@@ -11,17 +11,17 @@ class SchoolRegistrationRouter implements RestRouter {
 
     // return all schools with their registration info
     function index(){
-        $year = isset( $_GET['year'] ) && $_GET['year'] ? $_GET['year'] : '5779';
         $schools = School::find( 'all', [
             'include' => 'school_registrations', 'order' => 'school_name',
             'conditions' => "test_school = 0"
         ] );
-        json_response( array_map( function( $school ) use ( $year ) {
+        json_response( array_map( function( $school ) {
             $array = $school->to_array([
-                'only' => [ 'school_id', 'school_name', 'school_era' ],
-                // 'include' => [ 'school_registrations' ],
+                'only' => [
+                    'school_id', 'school_name', 'school_era'
+                ],
             ]);
-            $array['reg_info'] = $school->registrationSettings( $year );
+            $array['reg_info'] = $school->registration( $year );
             return $array;
         }, $schools ) );
     }

@@ -10,7 +10,7 @@ $admins = array();
 $sql = "SELECT * FROM admins WHERE camp_id=" . $camp_id . " AND staff_type_id IS NULL";
 $query = mysql_query($sql);
 while ($row = mysql_fetch_assoc($query)) {
-	$admin = new admin($row);
+	$admin = new \camps\classes\admin($row);
 	array_push($admins, $admin);
 }
 ?>

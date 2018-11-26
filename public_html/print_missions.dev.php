@@ -63,7 +63,7 @@ include("classes/admin.php");
 $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_user['admin_id'];
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-$admin = new admin($row); // set up the admin from the DBS row
+$admin = new \classes\admin($row); // set up the admin from the DBS row
 
 // if the admin is not a super set the school id to their school id
 if ($admin->auth != "super") {

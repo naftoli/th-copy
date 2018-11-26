@@ -9,7 +9,7 @@ require_once( __DIR__ . "/classes/school_class.php" );
 $query = mysql_query(
     "SELECT * FROM admins WHERE admin_id=" . $admin_user['admin_id']
 );
-$admin = new admin( mysql_fetch_assoc( $query ) );
+$admin = new \classes\admin( mysql_fetch_assoc( $query ) );
 $admin->get_schools();
 
 if( count($_POST) > 0 && isset( $_POST['teachers'] ) ) {

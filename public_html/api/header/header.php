@@ -26,9 +26,11 @@ header("Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS, DELETE");
 header('Access-Control-Allow-Headers: mobile, Content-Type, Authorization, login');
 header("Content-Type: text/html; charset=utf-8;");
 
-if ($_SERVER['REQUEST_METHOD'] == "OPTIONS") json_response( false );
+if ( isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "OPTIONS")
+    json_response( false );
 
-$data = json_decode( file_get_contents('php://input'), true );
+$raw_data = file_get_contents('php://input');
+$data = json_decode( $raw_data, true );
 if ( is_array( $data ) ) {
     $_POST = $data;
 }

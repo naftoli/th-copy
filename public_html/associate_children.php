@@ -10,7 +10,7 @@ $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
 $parent_name = " <i>" . $row['first'] ." " . $row['last'] . "</i>";
-$admin = new admin($row);
+$admin = new \camps\classes\admin($row);
 $admin->get_children();
 
 $regChildren = array();

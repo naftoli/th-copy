@@ -1,4 +1,6 @@
 <?php
+namespace classes;
+
 class admin {
     public $admin_id;
     public $username;
@@ -71,7 +73,7 @@ class admin {
         $sql = $sql . "WHERE admin_id=" . $this->admin_id;	
         $query = mysql_query($sql);
         while ($row = mysql_fetch_assoc($query)) {
-            $group = new group($row);
+            $group = new \group($row);
             $group->get_division();
             $group->division->get_group_type();
             array_push($this->groups, $group);
@@ -96,7 +98,7 @@ class admin {
         //echo $sql;
         $query = mysql_query($sql);
         while ($row = mysql_fetch_assoc($query)) {
-            $user = new user($row);
+            $user = new \user($row);
             if ($user->school_id) {
                 $user->get_school();			
                 if ($user->school->school_settings != "home_school") {
@@ -124,7 +126,7 @@ class admin {
         
         $query = mysql_query($sql);
         while ($row = mysql_fetch_assoc($query)) {
-            $user = new user($row);
+            $user = new \user($row);
             $user->get_school();			
             if ($user->school_id && $user->school->school_settings != "home_school") {
                 $user->get_school_class();
@@ -146,7 +148,7 @@ class admin {
         $sql = "SELECT u.* FROM admin_auths AS aa JOIN users AS u ON (aa.id=u.user_id) WHERE admin_id=" . $this->admin_id . " AND auth='user' AND u.user_registered IS NULL";
         $query = mysql_query($sql);
         while ($row = mysql_fetch_assoc($query)) {
-            $user = new user($row);
+            $user = new \user($row);
             $user->get_school_class();
             $user->get_school_info();			
             array_push($this->children, $user);
@@ -164,7 +166,7 @@ class admin {
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
             if ( $row['year'] != $year && is_null($row['user_registered']) ) {
-                $user = new user($row);
+                $user = new \user($row);
                 $user->get_school_class();
                 $user->get_school_info();			
                 array_push($this->children, $user);

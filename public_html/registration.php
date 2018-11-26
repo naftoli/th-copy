@@ -142,7 +142,7 @@ else {
 	$sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 	$query = mysql_query($sql);
 	$row = mysql_fetch_assoc($query);
-	$admin = new admin($row);	
+	$admin = new \classes\admin($row);	
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

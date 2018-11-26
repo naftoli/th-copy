@@ -16,17 +16,14 @@ require_once( __DIR__ . '/api/header/db.php' ); // import ActiveRecord and PDO
 
 require 'class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
-// get the registration info for the school
-try {
-    $schoolInfo = School::find( $school_id, [ 'include' => 'school_registrations' ] );
-    $schoolInfo = $schoolInfo->registrationSettings( $year );
-} catch ( \Exception $e ) {
-    $query = mysql_query("SELECT reg_type FROM schools WHERE school_id=" . $school_id);
-    $type = mysql_fetch_assoc($query)['reg_type'];
-    $schoolInfo = SchoolRegistration::getDefault( $school_id, $type, $year );
-};
 
 $message = "";
+try {
+    $school = School::find( $school_id );
+} catch ( \Exception $e ) {
+    $message = 'Fatal Error: Could not load school. Please contact support'; die();
+};
+
 if (isset($_POST['submit'])) {
 
 	if (!isset($_POST['reg_type']) || !isset($_POST['store_points'])) {
@@ -58,12 +55,9 @@ if (isset($_POST['submit'])) {
 		}
 
 		if ( !$message ) {
-			$sql = "UPDATE schools 
-					SET reg_type = " . mysql_real_escape_string($_POST['reg_type']) . ", 
-					store_reset = " . $reset_points . " 
-					WHERE school_id = " . $school_id;
-			$schoolInfo->type = $_POST['reg_type'];
-			if ( !mysql_query($sql) || !$schoolInfo->save() ) {
+			$school->reg_type = $_POST['reg_type'];
+			$school->store_reset = $reset_points;
+			if ( !$school->save() ) {
 				$message = "Error updating school.";
 			}
 		}
@@ -110,11 +104,11 @@ if (isset($_POST['submit'])) {
 				$(".reg_type").click( function() {
 					var val = $(this).val();
 					if (val == 3) {
-						$(".regAmount").text('<?=$schoolInfo->getChildFee( true, 3 ) .'/'. $schoolInfo->getChildFee( true, 3, true )?>');
+						$(".regAmount").text('<?=$school->soldierFee( false, 3 ) .' / '. $school->soldierFee( false, 3, true )?>');
 					} else if ( val == 2 ) {
-						$(".regAmount").text('<?=$schoolInfo->getChildFee( true, 2 ) .'/'. $schoolInfo->getChildFee( true, 2, true )?>');
+						$(".regAmount").text('<?=$school->soldierFee( false, 2 ) .' / '. $school->soldierFee( false, 2, true )?>');
 					} else {
-                        $(".regAmount").text(<?=$schoolInfo->getChildFee( true, 1 )?>);
+                        $(".regAmount").text(<?=$school->soldierFee( false, 1 )?>);
                     }
 				});
 			});
@@ -187,18 +181,18 @@ if (isset($_POST['submit'])) {
 												<li>
 													<h4>
                                                         <input type="radio" name="reg_type" class="reg_type" value="1" 
-													        <?php if ($schoolInfo->type == 1) echo "checked" ?> /> 
+													        <?php if ($school->reg_type == 1) echo "checked" ?> /> 
                                                         Tzivos Hashem registration is included in school tuition
                                                     </h4>
-                                                    $<?=$schoolInfo->getChildFee( true, 1 )?> included in each child’s tuition; 
+                                                    $<?=$school->soldierFee( false, 1 )?> included in each child’s tuition; 
 													parents still complete the registration process on their own without additional payment. 
 													<strong>School credit card gets automatically charged at once for all unregistered students by 24 Elul (Sep 4).</strong>
 												</li>
 												<li>
 													 <h4>
                                                         <input type="radio" name="reg_type" class="reg_type" value="2" 
-                                                            <?php if ($schoolInfo->type == 2) echo "checked" ?> />
-															$<?=$schoolInfo->getChildFee( true, 1 )?> per student. 
+                                                            <?php if ($school->reg_type == 2) echo "checked" ?> />
+															$<?=$school->soldierFee( false, 1 )?> per student. 
 															Tzivos Hashem is not included in tuition, yet every child in our school will be registered
                                                     </h4>
                                                     Since we guarantee that every child will register, 
@@ -207,26 +201,26 @@ if (isset($_POST['submit'])) {
                                                     If all children are not registered by 
                                                     <?=
                                                     iconv ('WINDOWS-1255', 'UTF-8', substr(  
-                                                        jdtojewish( unixtojd( $schoolInfo->early_bird->getTimestamp() ) + 1, true ), 0, -6
+                                                        jdtojewish( unixtojd( $school->earlyBird()->getTimestamp() ) + 1, true ), 0, -6
                                                     ));
                                                     ?>
-                                                    (<?= $schoolInfo->early_bird->format('F j') ?>)
+                                                    (<?= $school->earlyBird()->format('F j') ?>)
                                                     <!--Chof Gimmel Elul (September 14)--> 
                                                     then Tzivos Hashem will automatically charge the school credit card on file for the additional discount provided ($<?=GlobalSettings::getGuarenteedDiscount()?> per child registered).
 												</li>
 												<li>
                                                     <h4><input type="radio" name="reg_type" class="reg_type" value="3" 
-                                                    <?php if ($schoolInfo->type == 3) echo "checked" ?>
+                                                    <?php if ($school->reg_type == 3) echo "checked" ?>
                                                     /> Each student will register on their own</h4>
                                                     Registration is not included in tuition; 
-                                                    each child registers individually for the early-bird price of $<?=$schoolInfo->getChildFee( true, 3 )?>
-                                                    or regular price of $<?=$schoolInfo->getChildFee( true, 3, true )?> from 
+                                                    each child registers individually for the early-bird price of $<?=$school->soldierFee( false, 3 )?>
+                                                    or regular price of $<?=$school->soldierFee( false, 3, true )?> from 
                                                     <?=
                                                     iconv ('WINDOWS-1255', 'UTF-8', substr(  
-                                                        jdtojewish( unixtojd( $schoolInfo->early_bird->getTimestamp() ) + 1, true ), 0, -6
+                                                        jdtojewish( unixtojd( $school->earlyBird()->getTimestamp() ) + 1, true ), 0, -6
                                                     ));
                                                     ?>
-                                                    (<?= $schoolInfo->early_bird->format('F j') ?>) onward.
+                                                    (<?= $school->earlyBird()->format('F j') ?>) onward.
 												</li>
 											</ul>
 										</div>
@@ -236,7 +230,7 @@ if (isset($_POST['submit'])) {
 								<h2>School Yearly Membership Benefits and Fees</h2> 
 								<p>Click <a href="https://docs.google.com/document/d/1W9-gsHpu2yiEvKpNdmJJ_A4aCUPLnGgUFyqNzJq_vuk/edit" target="_blank">here</a> 
 								to see what’s included in the school and child registration packages</p>
-								<p>Register your school for ONLY $<?=$schoolInfo->fee?> and you receive:</p>
+								<p>Register your school for ONLY $<?=number_format( $school->chayolei_fee )?> and you receive:</p>
 
 								<div class="module list_expand" id="module-info">
 									<div class="module_content">
@@ -268,12 +262,12 @@ if (isset($_POST['submit'])) {
 												</li>
 												<li class="right">
 													<div class="box">
-														<h4>Total Value: $1000</h4>
+														<h4>Total Value: $1,000</h4>
 													</div>   
 												</li>
 												<li class="right">
 													<div class="box">
-														<h4>Your Price: $<?=$schoolInfo->fee?></h4>
+														<h4>Your Price: $<?=number_format( $school->chayolei_fee )?></h4>
 													</div>   
 												</li>
 											</ul>
@@ -285,8 +279,8 @@ if (isset($_POST['submit'])) {
 								<p>Once your school is registered, you can begin registering individual students, or have parents enroll their children.</p>
 								<p>
                                     For ONLY $<span class="regAmount"><?
-                                    if ( $schoolInfo->type == '1' ) { echo $schoolInfo->getChildFee( true ); }
-                                    else { echo $schoolInfo->getChildFee( true )?>/<?=$schoolInfo->getChildFee( true, false, true ); }
+                                    if ( $school->reg_type == '1' ) { echo $school->soldierFee( false ); }
+                                    else { echo $school->soldierFee( false ); ?> / <?= $school->soldierFee( false, false, true ); }
                                     ?></span> each registered student will receive:
                                 </p>
 								
@@ -392,8 +386,8 @@ if (isset($_POST['submit'])) {
 													<div class="box">
 														<h4>
                                                             Your Price: $<span class="regAmount"><?
-                                                            if ( $schoolInfo->type == '1' ) { echo $schoolInfo->getChildFee( true ); }
-                                                            else { echo $schoolInfo->getChildFee( true )?>/<?=$schoolInfo->getChildFee( true, false, true ); }
+                                                            if ( $school->reg_type == '1' ) { echo $school->soldierFee( false ); }
+															else { echo $school->soldierFee( false ); ?> / <?= $school->soldierFee( false, false, true ); }
                                                             ?></span>
                                                         </h4>
 													</div>   

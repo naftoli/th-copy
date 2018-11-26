@@ -1,137 +1,65 @@
-// polyfill for [].find
-Array.prototype.find=Array.prototype.find||function(r){if(null===this)throw new TypeError("Array.prototype.find called on null or undefined");if("function"!=typeof r)throw new TypeError("callback must be a function");for(var n=Object(this),t=n.length>>>0,o=arguments[1],e=0;e<t;e++){var f=n[e];if(r.call(o,f,e,n))return f}};
+// hide everything from the global DOM
+var registration_info = function() {
+    // setup event listeners
+    $('.base input, .base select').change( onChange );
+    $('.base button.deactivate').click( deactivate );
+    $('.base button.save').click( save );
+    
+    // show the save changes button once anything has been changed
+    function onChange( event ) {
+        var tr = $( event.target ).parent().parent();
+        tr.find('.save').attr('disabled', false)
+    }
 
-var registration_info = function(){
+    // deactivate the base, locking them out of their account.
+    function deactivate( event ) {
+        var tr = $( event.target ).parent().parent();
+        var school_id = tr[0].dataset.school_id;
+        var year = tr[0].dataset.year;
+        // update the base
+        updateBase( school_id, { school_era: year } )
+            .then( function( response ) {
+                if ( response.success )
+                    event.target.parentElement.innerHTML = 'Inactive';
+            });
+    }
 
-    var state = { schools: [] };
+    // save changes
+    function save( event ) {
+        var tr = $( event.target ).parent().parent();
+        var school_id = tr[0].dataset.school_id;
+        const updates = tr.find('select, input').toArray()
+            .reduce( function( obj, input ) {
+                return Object.assign( {}, obj, { [input.name]: input.value } )
+            }, {} );
 
-    function loadTable(){
-        $('#report').html('<div class="loader"></div>');
-        var postData = {
-            year: $("#year").val() || 5779
+        if ( updates.child_fee == '' ) {
+            updates.child_fee = null;
         }
-        $.get( '/api/registration/school_configuration.php', postData, function( response ){
-            state.schools = response.data;
-            renderTable();
+        // update the base
+        updateBase( school_id, updates )
+            .then( function( response ) {
+                if ( response.success ) {
+                    event.target.disabled = true;
+                    alert( 'Base Updated' );
+                } else {
+                    alert( resposne.message );
+                }
+            });
+    }
+
+    function updateBase( school_id, updates ) {
+        return new Promise( function( resolve, reject ){
+            $.ajax({
+                url: '/api/core/bases?id=' + school_id,
+                type: 'POST',
+                data: JSON.stringify( updates ),
+                error: reject,
+                dataType:"json",
+                success: resolve,
+                contentType:"application/json; charset=utf-8",
+            });
         });
     }
 
-    loadTable();
-    $('#year').change(loadTable);
-
-    function renderTable(){
-        var html = '<table><tbody>';
-        html += '<tr><th>Base Name</th><th>Type</th><th>Base Fee</th><th>Balance</th>'
-            + '<th>Soldier Fee</th><th>Early Bird / Deadline</th><th>Live</th><th></th><th>Status</th></tr>';
-        state.schools.forEach( function( school ) {
-            var reg_info = school.reg_info;
-            reg_info.school_registration_id = reg_info.school_registration_id || '';
-            // render the row
-            html += '<tr data-school_registration_id="' + reg_info.school_registration_id + '" data-school_id="' + school.school_id + '">'
-            html += '<td>' + school.school_name + '</td>';
-
-            html += '<td>' + formatType(reg_info.type) + '</td>';
-            html += '<td>' + formatNumber(reg_info.fee, 'fee') + '</td>';
-            html += '<td>' + formatNumber(reg_info.balance, 'balance') + '</td>';
-            html += '<td>' + formatNumber(reg_info.child_fee, 'child_fee') + '</td>';
-            html += '<td>' + formatDate(reg_info.early_bird, 'early_bird') + '</td>';
-
-            html += '<td class="saved">' + ( reg_info.default ? "No" : "Yes" ) + '</td>';
-
-            html += '<td><button class="button save-row">' + ( reg_info.default ? "Make Live" : "Update" ) + '</button></td>';
-
-            html += '<td>' + ( 
-                !reg_info.default && !school.school_era && !reg_info.date_paid ? 
-                    '<button class="button disable-base" data-school_id='+(school.school_id)+'>Lock base</button>' : 
-                    ( reg_info.date_paid ? 'paid' : ( reg_info.default ? 'Not Live' : 'Locked' ) )
-                ) 
-                + '</td>';
-
-            html += '</tr>';
-        });
-
-        html += '</tbody></table>';
-        $("#report").html( html );
-        $("select[name='type']").change( toggleSaved );
-        $("#report input").change( toggleSaved );
-        $("#report .save-row").click( saveRow );
-        $("#report .disable-base").click( disableBase );
-    }
-
-    function formatDate( date, name, disabled ){
-        date = date ? date : '';
-        return '<input type="date" name="' + name + '" value="' + date.split(' ')[0] + '" ' +  
-            ( disabled ? "disabled='true'" : "") + '"/>';
-    }
-
-    function formatNumber( number, name ){
-        number = number ? number : 0;
-        return '<input type="number" name="' + name + '" value="' + number + '"/>';
-    }
-
-    function formatType( type ) {
-        type = type ? type : 0;
-        var html = '<select name="type">';
-        html += '<option value="0" ' + ( type == 0 ? 'selected' : '') + ' disabled>N/A</option>';
-        html += '<option value="1" ' + ( type == 1 ? 'selected' : '') + '>In Tuiton</option>';
-        html += '<option value="2" ' + ( type == 2 ? 'selected' : '') + '>Guaranteed</option>';
-        html += '<option value="3" ' + ( type == 3 ? 'selected' : '') + '>By Parent</option>';
-        html += '</select>';
-        return html;
-    }
-
-    function toggleSaved( event ){
-        $(event.target).parent().parent().find( 'td.saved' ).text("No");
-    }
-
-    function saveRow( event ){
-        $(event.target).text( "Saving..." );
-        var row = $(event.target).parent().parent();
-        var id = row[0].dataset.school_registration_id;
-        var year = $("#year").val() || 5779;
-
-        var postData = {
-            year: year,
-            school_id: row[0].dataset.school_id,
-            type:   row.find( 'select[name="type"]' ).val(),
-            fee:   row.find( 'input[name="fee"]' ).val(),
-            balance:   row.find( 'input[name="balance"]' ).val(),
-            child_fee:   row.find( 'input[name="child_fee"]' ).val(),
-            early_bird:   row.find( 'input[name="early_bird"]' ).val(),
-        }
-
-        var url = "/api/registration/school_configuration.php";
-        url = id == '0' ? url : url + '?id=' + id;
-
-        function handleResponse( response ){
-            $(event.target).text( "Update" );
-            if( !response.success ) {
-                return alert( response.error + '\n\n' + response.data.join('\n') )
-            }
-            row.find( 'td.saved' ).text("Yes");
-            row[0].dataset.school_registration_id = response.data.school_registration_id;
-        }
-
-        $.ajax({
-            url: url, 
-            type: 'post',
-            data: postData, 
-            success: handleResponse,
-            error: function( xhr ) { handleResponse( JSON.parse( xhr.response ) ) }
-        });
-    }
-
-    function disableBase( event ) {
-        var button = event.target;
-        var postData = { school_id: button.dataset.school_id };
-        $.post( '/api/registration/school_configuration?action=disableSchool', postData, function( response ) {
-            if ( response.success ) 
-                return $(button).parent().html('Locked');
-        });
-    }
-
-    return {
-        getState: () => { return state }
-    }
 }();
-

@@ -14,7 +14,7 @@ include("camps/includes/classes/admin.php");
 $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_user['admin_id'];
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-$admin = new admin($row);
+$admin = new \camps\classes\admin($row);
 unset($_SESSION['admin']);
 $_SESSION['admin_id'] = $admin_user['admin_id']; 
 $admin->get_school_id();
