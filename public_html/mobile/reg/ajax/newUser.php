@@ -27,7 +27,7 @@ require 'classes/admin.php';
 $sql = "select * from admins where admin_id = " . $admin_id;
 $result = mysql_query( $sql );
 $row = mysql_fetch_assoc( $result );
-$parent = new admin( $row );
+$parent = new \classes\admin( $row );
 
 require 'newClasses/newSoldier.php';
 if (!empty($photo)) 

@@ -15,7 +15,7 @@ elseif ($staff_type_id == -1)
 $sql = $sql . " ORDER BY first, last";
 $query = mysql_query($sql);
 while ($row = mysql_fetch_assoc($query)) {
-	$admin = new admin($row);
+	$admin = new \camps\classes\admin($row);
 	array_push($admins, $admin);
 }
 

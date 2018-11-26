@@ -266,7 +266,7 @@ class user {
 		$sql = $sql . "WHERE aa.auth='user' AND aa.id=" . $this->user_id;	
 		$query = mysql_query($sql);
 		$row = mysql_fetch_assoc($query);
-		$this->childs_parent = new admin($row);
+		$this->childs_parent = new \camps\classes\admin($row);
 	}
 	
 	function get_rank() {

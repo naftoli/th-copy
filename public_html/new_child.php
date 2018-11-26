@@ -9,7 +9,7 @@ $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
 $parent_name = "<i>" . $row['first'] ." " . $row['last'] . "</i>";
-$admin = new admin($row);
+$admin = new \classes\admin($row);
 
 if (isset($_POST['submit'])) {
 	foreach ($_POST as $k => $v) {

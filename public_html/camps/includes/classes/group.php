@@ -102,7 +102,7 @@ class group {
 		$sql = "SELECT * FROM staff_groups WHERE group_id=" . $this->group_id;
 		$query = mysql_query($sql);
 		while ($row = mysql_fetch_assoc($query)) {
-			$admin = new admin($row);
+			$admin = new \camps\classes\admin($row);
 			array_push($this->admins, $admin);		
 		}		
 	}

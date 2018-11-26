@@ -15,7 +15,7 @@ $sql = $sql . "LEFT JOIN staff_groups AS sg ON (sg.admin_id=a.admin_id AND sg.gr
 $sql = $sql . "WHERE aa.auth='camp' AND aa.id=" . $camp_id . " AND sg.staff_group_id IS NULL ";
 $query = mysql_query($sql);
 while ($row = mysql_fetch_assoc($query)) {
-	$admin = new admin($row);
+	$admin = new \camps\classes\admin($row);
 	array_push($admins, $admin);
 }
  ?>

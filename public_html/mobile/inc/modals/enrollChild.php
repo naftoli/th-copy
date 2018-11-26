@@ -12,7 +12,7 @@ require_once(dirname(__FILE__)."/../../reg/ajax/encrypt.php");
 $admin_id = encrypt_decrypt('decrypt', $_COOKIE['admin']);
 //include($_SERVER['DOCUMENT_ROOT']."/classes/admin.php");
 //$admin_row = mysql_fetch_assoc(mysql_query("SELECT * FROM admins WHERE admin_id=".$admin_id));
-//$admin = new admin($admin_row);
+//$admin = new \classes\admin($admin_row);
 //$admin->get_markable_children(); // get the children he can mark...
 
 /**************** GET THE CURRENT YEAR ********************/

@@ -9,7 +9,7 @@ assure_id_school('school_id'); // this will only allow the school logged in to s
 include('objects/admin.php');
 include('classes/school.php');
 include('classes/user.php');
-include('classes/school_class.php');	
+include('classes/school_class.php');
 
 if ( !isset( $_SESSION['admin_id'] ) && isset( $admin_user['admin_id'] ) )
 	$_SESSION['admin_id'] = $admin_user['admin_id'];

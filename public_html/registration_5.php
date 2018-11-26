@@ -12,7 +12,7 @@ include("camps/includes/classes/admin.php");
 $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-$admin = new admin($row);
+$admin = new \camps\classes\admin($row);
 $admin->get_school_id();
 $school_id = $admin->school_id;
 

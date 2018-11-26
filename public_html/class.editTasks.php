@@ -35,7 +35,7 @@ class EditTasks {
 			$sql = "SELECT * FROM admins WHERE admin_id = " . $this->id;
 			$query = mysql_query($sql);
 			$row = mysql_fetch_assoc($query);
-			$admin = new admin($row);
+			$admin = new \classes\admin($row);
 			$admin->get_children();
 			if (!empty($admin->children)) {
 				$sql = "select dt.date_task_id, dt.name, s.subject_name from date_tasks dt 

@@ -20,7 +20,7 @@ include("camps/includes/classes/user.php");
 $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-$admin = new admin($row);
+$admin = new \camps\classes\admin($row);
 $admin->get_unregistered_children();
 //////////if (count($admin->children) == 0) {
 //////////	header("Location: admin.php?p=true");

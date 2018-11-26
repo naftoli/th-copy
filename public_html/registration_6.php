@@ -13,7 +13,7 @@ include("classes/admin.php");
 $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
-$admin = new admin($row);
+$admin = new \classes\admin($row);
 	
 $message = "";	
 if (isset($_POST["action"])) {

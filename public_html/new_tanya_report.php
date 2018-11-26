@@ -44,7 +44,7 @@ if ($admin_user['auths']['school']) {
 	$sql = "SELECT * FROM admins WHERE admin_id=" . $admin_user['admin_id'];
 	$query = mysql_query($sql);
 	$row = mysql_fetch_assoc($query);
-	$admin = new admin($row);
+	$admin = new \classes\admin($row);
 	$admin->get_children();
 	foreach ($admin->children as $child) {
 		$schools[$child->school_id] = $child->school_name;

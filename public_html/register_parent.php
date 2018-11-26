@@ -70,7 +70,7 @@ if ($admin_id > 0) {
 	$sql = "SELECT * FROM admins WHERE admin_id='" . mysql_real_escape_string($admin_id) . "'" ;		
 	$query = mysql_query($sql);
 	$row = mysql_fetch_assoc($query);	
-	$admin = new admin($row);
+	$admin = new \classes\admin($row);
 }
 
 // update admins record

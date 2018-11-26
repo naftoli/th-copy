@@ -912,7 +912,7 @@ function get_children_of_admin_id($parameters) {
 	$sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 	$query = mysql_query($sql);
 	$row = mysql_fetch_assoc($query);
-	$admin = new admin($row);
+	$admin = new \camps\classes\admin($row);
 	$admin->get_children();
 	
 	for ($cno = 0; $cno < count($admin->children); $cno++) {
