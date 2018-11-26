@@ -5,8 +5,10 @@ if (!isset($_GET['class_id'])) {
     exit;
 }
 
-require '../db.php';
-require '../class.globalSettings.php';
+$ROOT_DIR = __DIR__ . '/../../';
+
+require $ROOT_DIR . 'db.php';
+require $ROOT_DIR . 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 // get campaigns for current year
@@ -24,7 +26,7 @@ while ($row = mysql_fetch_assoc( $result )) {
     $users[$row['user_id']] = $row['first'] . ' ' . $row['last'];
 }
 
-require_once '../class.bpSummary.php';
+require_once $ROOT_DIR . 'class.bpSummary.php';
 //require_once '../class.balPehCampaign.php';
 $results = array();
 foreach ($campaigns as $id => $campaign) {

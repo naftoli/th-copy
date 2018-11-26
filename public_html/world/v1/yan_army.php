@@ -4,7 +4,9 @@ $campaigns = array(
 	6 => 'mishna'
 ); //tanya, mishna yud alef nissan 5775
 
-include '../db.php';
+$ROOT_DIR = __DIR__ . '/../../';
+include $ROOT_DIR . 'db.php';
+
 $schools = array();
 $sql = "select school_id, school_name from schools where school_era is null and school_id not in (79,82,198,199) order by school_name";
 $result = mysql_query($sql);
@@ -21,8 +23,8 @@ foreach ($schools as $id => $school) {
 	$regInfo[$id] = $registered ? $registered : 0;
 }
 
-require_once '../class.bpSummary.php';
-require_once '../class.balPehCampaign.php';
+require_once $ROOT_DIR . 'class.bpSummary.php';
+require_once $ROOT_DIR . 'class.balPehCampaign.php';
 $results = array();
 foreach ($campaigns as $id => $campaign) {
 	$bp = BalPehCampaign::getInstance( $id );
@@ -145,7 +147,7 @@ foreach ($campaigns as $id => $campaign) {
 		echo "</tr>";
 		
 		echo "<tr><th colspan='6'>";
-		include '../yan_footer.php';
+		include $ROOT_DIR . 'yan_footer.php';
 		echo "</th></tr>";
     	?>
     </table>

@@ -5,19 +5,22 @@ if (!isset($_GET['school_id'])) {
     exit;
 }
 
-require '../db.php';
-require '../class.globalSettings.php';
+$ROOT_DIR = __DIR__ . '/../../';
+
+require $ROOT_DIR . 'db.php';
+require $ROOT_DIR . 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 // get campaigns for current year
-$sql = "select * from line_campaigns where year = " . $year;
+$sql = "SELECT * from line_campaigns where year = " . $year;
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
 	$campaigns[$row['id']] = strtolower( $row['type'] );
 }
 
 $school_id = mysql_real_escape_string( $_GET['school_id'] );
-require '../class.schoolClasses.php';
+
+require $ROOT_DIR . 'class.schoolClasses.php';
 $sc = new SchoolClasses( $school_id );
 $grades = $sc->getClasses();
 
@@ -30,7 +33,7 @@ foreach ($grades as $grade) {
 	$regInfo[$grade['class_id']] = $registered ? $registered : 0;
 }
 
-require_once '../class.bpSummary.php';
+require_once $ROOT_DIR . 'class.bpSummary.php';
 //require_once '../class.balPehCampaign.php';
 $results = array();
 foreach ($campaigns as $id => $campaign) {
