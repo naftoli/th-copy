@@ -8,7 +8,7 @@ $campaigns = array(
 ); //tanya, mishna yud alef nissan 5776
 
 $schools = array();
-$sql = "select school_id, school_name from schools where tanya = 1 order by tanya_cat_ord, tanya_ord";
+$sql = "select school_id, school_name from schools where tanya = 1 order by tanya_ord";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
 	$schools[] = $row['school_id'];

@@ -1,6 +1,6 @@
 <?
 require_once 'class.adminSchools.php';
-$sql = "select school_id from schools where tanya = 1 order by tanya_cat_ord, tanya_ord";
+$sql = "select school_id from schools where tanya = 1 order by tanya_ord";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
 	$schoolIDs[] = $row['school_id'];

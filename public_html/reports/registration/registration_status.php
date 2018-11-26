@@ -5,9 +5,8 @@ require_once ( __DIR__ . '/../../header.php' );
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
 $year = GlobalSettings::getRegistrationYear();
 
-$main_query = mysql_query(
-    "SELECT s.school_id, s.school_number, s.school_name, !ISNULL(sr.type) as live, sr.date_paid, sr.amount_paid, total, "
-    ."total_registered, not_chayolei, classes_unconfirmed "
+$main_query = "SELECT s.school_id, s.school_number, s.school_name, !ISNULL(sr.type) as live, sr.date_paid, sr.amount_paid, total, "
+    ."total_registered, not_chayolei "
     ."FROM schools s LEFT JOIN school_registrations sr USING (school_id) "
     ."LEFT JOIN ( "
         ."SELECT  school_id, COUNT(*) AS total FROM users GROUP BY school_id "
@@ -15,10 +14,8 @@ $main_query = mysql_query(
         ."SELECT school_id, COUNT(*) AS not_chayolei FROM users WHERE chayolei = 0 GROUP BY school_id"
     .") nc USING (school_id) LEFT JOIN ("
         ."SELECT school_id, COUNT(*) AS total_registered FROM user_registration WHERE year = $year GROUP BY school_id"
-    .") ur USING (school_id) LEFT JOIN ("
-        ."SELECT school_id, COUNT(*) AS classes_unconfirmed FROM classes WHERE confirmed = 0 GROUP BY school_id"
-    .") c USING (school_id) WHERE ( sr.year = $year OR sr.year IS NULL ) AND test_school=0 GROUP BY school_id ORDER BY school_name"
-);
+    .") ur USING (school_id) WHERE ( sr.year = $year OR sr.year IS NULL ) AND test_school=0 GROUP BY school_id ORDER BY school_name";
+$main_query = mysql_query( $main_query );
 $data = [];
 while( $row = mysql_fetch_assoc( $main_query ) ) $data[] = $row;
 ?>
@@ -41,13 +38,11 @@ while( $row = mysql_fetch_assoc( $main_query ) ) $data[] = $row;
     <h2>Details</h2>
     <table>
         <thead>
-            <th>Base #</th>
-            <th>Base</th>
+            <th colspan='2'>Base</th>
             <th>Registered</th>
             <th>Amount Paid</th>
             <th>Soldiers Registered</th>
             <th>Chidon Only Soldiers</th>
-            <th>Confirmed Platoon Info</th>
         </thead>
         <tbody>
             <?php
@@ -62,9 +57,8 @@ while( $row = mysql_fetch_assoc( $main_query ) ) $data[] = $row;
                             ( $base['live'] ? 'Not Registered' : 'Registration Not Live' ); 
                         ?></td>
                         <td>$<?= number_format($base['amount_paid'], 0) ?></td>
-                        <td><?= $base['total_registered'] .'/'. ( $base['total'] - $base['not_chayolei'] ) ?></td>
+                        <td><?= number_format($base['total_registered']) .' / '. number_format( $base['total'] - $base['not_chayolei'] ) ?></td>
                         <td><?= $base['not_chayolei'] ?></td>
-                        <td><?= $base['classes_unconfirmed'] ? 'No' : 'Yes' ?></td>
                     </tr>
                 <?php 
                 } 
