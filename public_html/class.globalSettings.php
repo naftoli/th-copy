@@ -23,10 +23,7 @@ class GlobalSettings {
     public static function getRegistrationYear( $school_id = false ) {
         if ( self::isAustralian( $school_id ) )
             return 5778;
-        $sql = "select `val` from global_settings where `key` = 'registration_year'";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_assoc($result);
-        return $row['val'];
+        return 5779; // don't bother to load key from DBS each time
     }
     
     public static function getChidonYear() {

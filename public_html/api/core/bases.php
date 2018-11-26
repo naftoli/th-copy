@@ -42,7 +42,7 @@ class BaseRouter {
                 json_error( $e->getMessage() );
             }
         }
-
+        
         $base->bulkUpdate( $_POST );
         if ( !$base->save() ) json_error( 'Could not save base' );
 
