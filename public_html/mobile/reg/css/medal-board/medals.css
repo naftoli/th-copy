@@ -6,6 +6,7 @@
 .medal-board {
     max-width: 994px;
     margin: 0 auto 10px;
+    text-align: center;
 }
 
 .medal-board .medal {
