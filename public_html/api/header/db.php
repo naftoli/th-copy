@@ -10,14 +10,16 @@ $connections = [
     'pointsDB' => "mysql://$global_db_user:$global_db_pass@$global_db_host/pointsDB?charset=utf8"
 ];
 
-// Connect to legacy MySQL
-try {
-    @mysql_connect($global_db_host.":3306", $global_db_user, $global_db_pass);
-    mysql_query('SET NAMES utf8');
-    mysql_query('SET CHARACTER_SET utf8');
-    mysql_select_db('mashpiadb');
-} catch ( Exception $e ) {
-    $_GLOBALS['log']->log( "mysql_connect Failed. Error: " . $e );
+// Connect to legacy MySQL if we are running below php 7
+if ( floatval( phpversion() ) < 7 ) {
+    try {
+        @mysql_connect($global_db_host.":3306", $global_db_user, $global_db_pass);
+        mysql_query('SET NAMES utf8');
+        mysql_query('SET CHARACTER_SET utf8');
+        mysql_select_db('mashpiadb');
+    } catch ( Exception $e ) {
+        $_GLOBALS['log']->log( "mysql_connect Failed. Error: " . $e );
+    }
 }
 
 // mysqli connection, for easy migration of legacy code to PHP 7
