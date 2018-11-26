@@ -8,40 +8,19 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.schoolClasses.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
-$ids = [];
+$info = [];
 foreach ( $schools as $school_id => $school ) {
     $sc = new SchoolClasses( $school_id );
     $grades = $sc->getClasses();
+    $prevTeacher = '';
     foreach ( $grades as $grade ) {
-        $ids[$school_id][] = $grade['class_id'];
-    }
-}
-//echo "<pre>"; print_r( $ids ); echo "</pre>";
-$info = [];
-foreach ( $ids as $school_id => $grades ) {
-    $school_name = $schools[$school_id];
-    $sql = "select a.first, a.last  
-            from admin_auths aa 
-            join admins a using (admin_id) 
-            where aa.auth in ('school','staff') 
-            and aa.id = " . $school_id;
-    $result = mysql_query( $sql );
-    while ( $row = mysql_fetch_assoc( $result ) ) {
-        $info[$school_name][] = $row['first'] . ' ' . $row['last'];
-    }
-
-    foreach ( $grades as $class_id ) {
-        $sql = "select a.first, a.last  
-                from admin_auths aa 
-                join admins a using (admin_id) 
-                where aa.auth = 'class' 
-                and aa.id = " . $class_id;
-        $result = mysql_query( $sql );
-        while ( $row = mysql_fetch_assoc( $result ) ) {
-            $info[$school_name][] = $row['first'] . ' ' . $row['last'];
+        if ( $grade['class_teacher'] != $prevTeacher ) {
+            $info[$school][] = $grade['class_teacher'];
+            $prevTeacher = $grade['class_teacher'];
         }
     }
 }
+//echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
