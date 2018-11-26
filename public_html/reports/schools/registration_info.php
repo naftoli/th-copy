@@ -15,7 +15,7 @@ require_once( __DIR__ .'/../../class.globalSettings.php' );
 $year = GlobalSettings::getRegistrationYear();
 // get all chayolei schools
 $schools = \School::find_all_by_chayolei_and_test_school(
-    1, 1, ['order' => 'school_name']
+    1, 0, ['order' => 'school_name']
 );
 ?>
 <!DOCTYPE html>
