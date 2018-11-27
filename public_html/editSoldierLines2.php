@@ -254,7 +254,7 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 		// $("button").attr('disabled', true);
 		// $("input").attr('disabled', true);
 	</script>
-	<!--<script src="/js/admin/components/modal.js"></script>
-	<script src="/js/admin/editSoldierLines2.js"></script>-->
+	<script src="/js/admin/components/modal.js"></script>
+	<script src="/js/admin/editSoldierLines2.js"></script>
 	</body>
 </html>
