@@ -1,7 +1,8 @@
 <?php
-require_once(dirname(__FILE__)."/../classes/Shipment.php"); // load up the shipments class....
-require_once ($_SERVER["DOCUMENT_ROOT"].'/class.globalSettings.php'); // require the global settings class
-require_once(dirname(__FILE__)."/get_parshos.php"); // import the get_parshos function...
+require_once( __DIR__ ."/../classes/Shipment.php"); // load up the shipments class....
+require_once( $_SERVER["DOCUMENT_ROOT"] . '/api/header/db.php'); // require the global settings class
+require_once( $_SERVER["DOCUMENT_ROOT"] . '/class.globalSettings.php');
+require_once( __DIR__ ."/get_parshos.php"); // import the get_parshos function...
 
 function get_hachayol_prints( $year, $start= false, $end = false ) {
     $sql = "SELECT * FROM hachayols WHERE year=$year ";
@@ -96,13 +97,21 @@ function get_hachayol_shipping($school_id, $hachayol_id = false){
 }
 
 function get_extra_hachayols($school_id, $current_amount=false){
-    $extras = [
-        265 => reduce_to_total($current_amount, 65),  // Lubavitch Girls London requested only 65 via email to shipping@tzivoshashem.org
-        // 54  => reduce_to_total($current_amount, 580),  // wants 580 (550 before 1/3/2018) in each shipment. no matter what
-        3   => reduce_to_total($current_amount, 110), // Lubavitch Boys London
-        9   => 20   // Lubavitcher Yeshiva, Crown Heights => requested by Ester Zachar via Email to bugs@tzivoshashem.org on 2/27/2018
-    ];
-    return isset($extras[$school_id]) ? $extras[$school_id] : 0; // return the extras or 0
+    global $MASHPIA_DB;
+
+    $sql = "SELECT hachayol_extra, hachayol_extra_total FROM schools WHERE school_id = ?;";
+    $query = $MASHPIA_DB->prepare( $sql );
+    $query->execute([ $school_id ]);
+
+    if ( $query->rowCount() == 0 )
+        return 0;
+
+    $row = $query->fetch();
+
+    if ( $row['hachayol_extra_total'] )
+        return reduce_to_total( $current_amount, intval( $row['hachayol_extra'] ) );
+
+    return intval( $row['hachayol_extra'] );
 }
 
 /*
