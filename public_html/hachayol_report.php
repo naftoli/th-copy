@@ -68,7 +68,8 @@ $posters = array(
     $exceptions = array(
         //54	=> 580, // update requested via E-mail on 1/3/2018
         176	=> 84, 
-        9   => 400
+        9   => 400, 
+        265 => 70
     );
 
 ?>
