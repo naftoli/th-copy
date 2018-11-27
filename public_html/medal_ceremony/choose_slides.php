@@ -45,6 +45,13 @@ $schools = $as->getSchools();
             <br />
 
             <fieldset>
+                <legend>Date Options</legend>
+                <input type="radio" name="date" value="1" checked /> Show current rally dates<br />
+                <input type="radio" name="date" value="2" /> Show previous rally dates<br />
+            </fieldset>
+            <br />
+
+            <fieldset>
                 <legend>Name Options</legend>
                 <input type="radio" name="name" value="en" checked /> Show names of chayolim in english<br />
                 <input type="radio" name="name" value="he" /> Show names of chayolim in hebrew
