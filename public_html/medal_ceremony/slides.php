@@ -13,23 +13,23 @@ if ( isset( $_POST['type'] ) ) {
         case 1:
             $prevMedals = false;
             $prevMedalsLight = false;
-            $prevDates = true;
+            $prevDates = false;
             break;
         case 2:
             $prevMedals = true;
             $prevMedalsLight = false;
-            $prevDates = true;
+            $prevDates = false;
             break;
         case 3:
             $prevMedals = true;
             $prevMedalsLight = true;
-            $prevDates = true;
+            $prevDates = false;
             break;
     }
 } else {
     $prevMedals = false;
     $prevMedalsLight = false;
-    $prevDates = true;
+    $prevDates = false;
 }
 
 require_once 'class.slides.php';
