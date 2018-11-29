@@ -14,7 +14,7 @@ class TehillimBackup {
             2458383, // tishrei 5778
             2458404, 
             2458431, 
-            2458459,
+            2458463,
             2458494,
             2458524,
             2458550,
@@ -24,17 +24,6 @@ class TehillimBackup {
             2458669,
             2458697
         );
-        // $this->dates = array(
-        //     0, 0, // no dates provided for the first two months
-        //     2458091,
-        //     2458122,
-        //     2458142,
-        //     2458170,
-        //     2458198,
-        //     2458233,
-        //     2458264,
-        //     2458289
-        // );
         $this->errors = array();
     }
     
