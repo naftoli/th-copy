@@ -22,6 +22,20 @@ class BaseRouter {
         json_response( $bases, true, true );
     }
 
+    public function defaults() {
+        global $MASHPIA_DB;
+        // get the defaults from the database where they exist
+        $query = $MASHPIA_DB->query(
+            "SHOW COLUMNS FROM `schools` WHERE `Default` IS NOT NULL"
+        );
+        $base = [];
+        while( $row = $query->fetch() ) {
+            $base[ $row['Field'] ] = $row['Default'];
+        }
+        // format the response
+        json_response( $base, true, true );
+    }
+
     public function show( $id ) {
         $base = School::find( $id );
         json_response( $base );

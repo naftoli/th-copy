@@ -45,7 +45,6 @@ class school {
 		$this->camp_id = $row['camp_id'];
 		$this->add_on_one = $row['add_on_one'];
 		$this->add_on_two = $row['add_on_two'];
-		$this->last_register_date = $row['last_register_date'];
 		$this->cc_approval_number = $row['cc_approval_number'];
 	}
 	

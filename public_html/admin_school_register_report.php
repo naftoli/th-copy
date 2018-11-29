@@ -127,9 +127,6 @@ else  $default_to = 'YYYY/MM/DD HH:MM:SS';
 // -----------------------------------------------------
 // show list of Schools
 // -----------------------------------------------------
-
-//$sql = "SELECT * from schools ORDER by school_era ASC, last_register_date ASC, school_id ASC" ;		
-
 $sql = "SELECT s.* , 
 		(SELECT count( * )
 		FROM users u
@@ -160,7 +157,6 @@ $query = mysql_query($sql);
 // }
 
 echo "<table width='95%'>";
-echo "<th class='student'>Last Register Date</th>";
 echo "<th class='student'>School ID</th>";
 echo "<th class='student'>Name</th>";
 echo "<th class='student'>City,State</th>";
@@ -177,7 +173,6 @@ $unregistered_student_grand_total = 0;
 
 while($row = mysql_fetch_assoc($query)){		
 	echo "<tr>";
-	echo "<td class='student'>" . $row['last_register_date']  . "</td>"; 	
 	echo "<td class='student'>" . $row['school_id']  . "</td>"; 
 	echo "<td class='student'>" . $row['school_name']  . "</td>"; 
 	echo "<td class='student'>" . $row['school_city'] .", " . $row['school_state']  . "</td>"; 		
@@ -234,7 +229,6 @@ $query = mysql_query($sql);
 // }
 
 echo "<table width='95%'>";
-echo "<th class='student'>Last Register Date</th>";
 echo "<th class='student'>School ID</th>";
 echo "<th class='student'>Name</th>";
 echo "<th class='student'>City,State</th>";
@@ -251,7 +245,6 @@ $unregistered_student_grand_total = 0;
 
 while($row = mysql_fetch_assoc($query)){		
 	echo "<tr>";
-	echo "<td class='student'>" . $row['last_register_date']  . "</td>"; 	
 	echo "<td class='student'>" . $row['school_id']  . "</td>"; 
 	echo "<td class='student'>" . $row['school_name']  . "</td>"; 
 	echo "<td class='student'>" . $row['school_city'] .", " . $row['school_state']  . "</td>"; 		
@@ -305,7 +298,6 @@ $query = mysql_query($sql);
 echo "<br/><h2>List of Supervisors by school</h2><br>";
 echo "<table width='95%'>";
 echo "<th class='student'>School Year</th>";
-echo "<th class='student'>Last Register Date</th>";
 echo "<th class='student'>School ID</th>";
 echo "<th class='student'>Name</th>";
 echo "<th class='student'>City,State</th>";
@@ -321,7 +313,6 @@ while($row = mysql_fetch_assoc($query)){
 	echo "<tr>";
 	echo "<td class='student'>" . $row['school_name']  . "</td>"; 
 	echo "<td class='student'>" . $row['school_era']  . "</td>"; 
-	echo "<td class='student'>" . $row['last_register_date']  . "</td>"; 	
 	echo "<td class='student'>" . $row['school_id']  . "</td>"; 
 	echo "<td class='student'>" . $row['school_city'] .", " . $row['school_state']  . "</td>"; 			
 	echo "<td class='student'>" . $row['role_id'] ."</td>"; 	

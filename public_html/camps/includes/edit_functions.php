@@ -22,8 +22,7 @@ function set_school_era($parameters) {
 	$school_id = $parameters;	
 	$sql = "UPDATE schools 
 			SET school_era = NULL,
-				last_register_date = NOW() 
-			WHERE school_id=" . $school_id ;	
+			WHERE school_id=" . $school_id;
 	$query = mysql_query($sql);
 	if ($query) {				
 		return "true";
