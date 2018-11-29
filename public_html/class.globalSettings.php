@@ -102,7 +102,7 @@ class GlobalSettings {
             $fee -= self::getEarlyBird();
         // add type 2 discount
         if ( $type == 2 && $early_bird ) {
-            $fee -= self::getGuarenteedDiscount();
+            $fee -= self::getGuaranteedDiscount();
         }
         // do not allow negative numbers
         return $fee >= 0 ? $fee : 0;
@@ -140,7 +140,7 @@ class GlobalSettings {
      *
      * @return int
      */
-    public static function getGuarenteedDiscount(){
+    public static function getGuaranteedDiscount(){
         return 5;
     }
 
