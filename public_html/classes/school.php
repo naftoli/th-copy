@@ -43,7 +43,6 @@ class school
 	public $camp_id;
 	public $add_on_one;
 	public $add_on_two;
-	public $last_register_date;
 	public $cc_approval_number;
 	
 	public $add_on_one_grades = array();
@@ -107,7 +106,6 @@ class school
 		$this->camp_id = $row['camp_id'];
 		$this->add_on_one = $row['add_on_one'];
 		$this->add_on_two = $row['add_on_two'];
-		$this->last_register_date = $row['last_register_date'];
 		$this->cc_approval_number = $row['cc_approval_number'];
 		
 		$this->auction_students = 0;

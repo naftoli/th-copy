@@ -21,7 +21,7 @@ class Institution extends ActiveRecord\Model implements JsonSerializable {
     public function jsonSerialize() {
         return $this->to_array([
             'only' => [
-                'inst_id', 'name'
+                'inst_id', 'inst_name'
             ],
             'methods' => [ 'logo' ]
         ]);
