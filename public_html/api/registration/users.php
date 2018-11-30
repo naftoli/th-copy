@@ -78,19 +78,16 @@ class UsersRouter {
         $payment_response = false;
         // if we need to charge them
         if ( $total > 0 ) {
-             // * get the payment information
-            if ( !isset( $_POST[ 'payment' ] ) ) {
-                json_error( 'Please select a Credit Card' );
-            } else if ( isset($_POST['payment']['payment_profile_id']) ){
+            if ( !isset( $_POST[ 'payment' ] ) )
+                json_error( 'No payment information provided' );
+            // attempt to get the payment profile
+            try {
+                $payment_profile_id = $school->getPaymentProfileId( $_POST['payment'] );
                 $customer_profile = $school->customerProfile();
-                $payment_profile_id = $_POST['payment']['payment_profile_id'];
-            } else {
-                $payment_profile  = $school->createPaymentProfile( $_POST['payment'], $current_user->admin_email );
-                $customer_profile = $school->customerProfile();
-                if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
-                    json_error( $payment_profile );
-                $payment_profile_id = $payment_profile->customerPaymentProfileId; 
+            } catch ( Exception $e ) {
+                json_error( $e );
             }
+            
             // * setup the queries
             $description = "Soldier Registration ( Base ) for $year: " . count( $users ) . " Soldiers. ";
 
