@@ -254,6 +254,22 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return $this->customer_profile;
     }
 
+    public function getPaymentProfileId( $payment_info ) {
+        global $current_user;
+        // check if we are given an id
+        if ( $payment_info['payment_profile_id'] ) {
+            $payment_profile_id = $payment_info['payment_profile_id'];
+        // or connect the card to this account, throw any errros and get the profile id
+        } else {
+            $payment_profile  = $this->createPaymentProfile( $payment_info );
+            if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
+                throw new Exception( $payment_profile );
+            // set the id
+            $payment_profile_id = $payment_profile->customerPaymentProfileId; 
+        }
+        return $payment_profile_id;
+    }
+
     // create a payment profile
     public function createPaymentProfile( $payment_info, $email = false ) {
         $email = $email ? $email : $this->accounting_email;
