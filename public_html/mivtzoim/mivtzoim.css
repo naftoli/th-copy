@@ -1,0 +1,7 @@
+tr, th, td {
+    font-size: 14px;
+    padding: 6px;
+}
+input.disabled {
+    color: grey !important;
+}
