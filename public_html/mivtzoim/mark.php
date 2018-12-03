@@ -99,12 +99,8 @@ if ( $grade && $mivtzoim_id && $parsha ) {
                     $grid_ids[] = $task['grid_id'];
                 }
             }
-            // find out the user ids
-            $user_ids = [];
-            foreach ( $users as $user ) {
-                $user_ids[] = $user['user_id'];
-            }
-            $marks = $m->getMarks( $grid_ids, $user_ids );
+            $marks = $m->getMarks( $grid_ids );
+            //echo "<pre>"; print_r( $marks ); echo "</pre>";
 
             echo "<table><thead><tr><th>Student</th>";
             foreach ( $tasks as $short_name => $details ) {

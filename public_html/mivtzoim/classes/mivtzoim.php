@@ -166,36 +166,34 @@ class Mivtzoim {
     }
 
     /*
-    * returns marks found in date_tasks_marks table for users in array based on grid id
+    * returns marks found in date_tasks_marks table for passed in grid ids
     */
-    public function getMarks( array $grid_ids, array $user_ids ) {
+    public function getMarks( array $grid_ids ) {
         global $MASHPIA_DB;
         $marks = [];
-        foreach ( $grid_ids as $grid_id ) {
-            $sth = $MASHPIA_DB->prepare("
-                SELECT 
-                    dtm.user_id, dtm.done_qty
-                FROM
-                    date_tasks_marks dtm
-                        JOIN
-                    date_tasks dt USING (date_task_id)
-                        JOIN
-                    date_tasks_missions dtmm USING (date_tasks_mission_id)
-                WHERE
-                    dtm.user_id in (:user)  
-                        AND dt.grid_id = :grid
-                        AND dtmm.start_date >= :start
-                        AND dtmm.end_date <= :end
-            ");
-            $sth->execute([
-                ':user'     =>  implode(',', $user_ids),
-                ':grid'     =>  $grid_id, 
-                ':start'    =>  $this->start, 
-                ':end'      =>  $this->end
-            ]);
-            if ( $rows = $sth->fetchAll() ) {
-                foreach ( $rows as $row ) {
-                    $marks[$grid_id][$row['user_id']] = $row['done_qty'];
+        $sth = $MASHPIA_DB->prepare("
+            SELECT DISTINCT
+                dt.grid_id, dtm.user_id, dtm.done_qty
+            FROM
+                date_tasks dt
+                    JOIN
+                date_tasks_missions dtmm USING (date_tasks_mission_id)
+                    LEFT JOIN
+                date_tasks_marks dtm USING (date_task_id)
+            WHERE
+                dt.grid_id IN (:grid)
+                    AND dtmm.start_date >= :start
+                    AND dtmm.end_date <= :end
+        ");
+        $sth->execute([
+            ':grid'     =>  implode(',', $grid_ids), 
+            ':start'    =>  $this->start, 
+            ':end'      =>  $this->end
+        ]);
+        if ( $rows = $sth->fetchAll() ) {
+            foreach ( $rows as $row ) {
+                if ( $row['user_id'] && $row['done_qty'] ) {
+                    $marks[$row['grid_id']][$row['user_id']] = $row['done_qty'];
                 }
             }
         }
