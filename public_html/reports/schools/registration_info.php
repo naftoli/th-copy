@@ -66,7 +66,7 @@ $schools = \School::find_all_by_chayolei_and_test_school(
         <ol>
             <li><strong>In Tuition:</strong> The base charges parents for registration in Tuition.</li>
             <li><strong>Guaranteed:</strong> 
-                Parents are given an additional $<?=GlobalSettings::getGuarenteedDiscount()?> discount as base guarantees all parents will register. 
+                Parents are given an additional $<?=GlobalSettings::getGuaranteedDiscount()?> discount as base guarantees all parents will register. 
                 If some parents do not register the base is charged for the discount given to all soldiers who registered.</li>
             <li><strong>By Parent:</strong> Parents pay for registration as they wish.</li>
         </ol>

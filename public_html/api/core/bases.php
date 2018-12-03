@@ -12,7 +12,7 @@ class BaseRouter {
              " SELECT s.school_number, s.logo, s.school_id, s.school_name, s.school_city, s.school_state, s.school_country, "
             ." s.chayolei, s.chidon, s.tanya, s.tehillim, "
             ." IFNULL( soldier_count, 0 ) as soldier_count "
-            ." FROM schools s LEFT JOIN classes c USING (school_id) LEFT JOIN ( "
+            ." FROM schools s LEFT JOIN ( "
                 ." SELECT COUNT(*) AS soldier_count, school_id FROM users GROUP BY school_id "
             ." ) soldiers USING (school_id) "
             ." WHERE $filters GROUP BY school_id ORDER BY school_name;"
@@ -23,22 +23,14 @@ class BaseRouter {
     }
 
     public function defaults() {
-        global $MASHPIA_DB;
-        // get the defaults from the database where they exist
-        $query = $MASHPIA_DB->query(
-            "SHOW COLUMNS FROM `schools` WHERE `Default` IS NOT NULL"
-        );
-        $base = [];
-        while( $row = $query->fetch() ) {
-            $base[ $row['Field'] ] = $row['Default'];
-        }
+        $base = new \School();
         // format the response
         json_response( $base, true, true );
     }
 
     public function show( $id ) {
         $base = School::find( $id );
-        json_response( $base );
+        json_response( $base, true, true );
     }
 
     public function update( $id ) {
@@ -60,7 +52,7 @@ class BaseRouter {
         $base->bulkUpdate( $_POST );
         if ( !$base->save() ) json_error( 'Could not save base' );
 
-        json_response( $base );
+        json_response( $base, true, true );
     }
 
     public function deletePayment() {

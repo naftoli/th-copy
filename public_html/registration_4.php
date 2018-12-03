@@ -196,7 +196,7 @@ if (isset($_POST['submit'])) {
 															Tzivos Hashem is not included in tuition, yet every child in our school will be registered
                                                     </h4>
                                                     Since we guarantee that every child will register, 
-                                                    parents will receive an additional discount of $<?=GlobalSettings::getGuarenteedDiscount()?> 
+                                                    parents will receive an additional discount of $<?=GlobalSettings::getGuaranteedDiscount()?> 
                                                     (above the early bird discount of $<?=GlobalSettings::getEarlyBird()?>).
                                                     If all children are not registered by 
                                                     <?=
@@ -206,7 +206,7 @@ if (isset($_POST['submit'])) {
                                                     ?>
                                                     (<?= $school->earlyBird()->format('F j') ?>)
                                                     <!--Chof Gimmel Elul (September 14)--> 
-                                                    then Tzivos Hashem will automatically charge the school credit card on file for the additional discount provided ($<?=GlobalSettings::getGuarenteedDiscount()?> per child registered).
+                                                    then Tzivos Hashem will automatically charge the school credit card on file for the additional discount provided ($<?=GlobalSettings::getGuaranteedDiscount()?> per child registered).
 												</li>
 												<li>
                                                     <h4><input type="radio" name="reg_type" class="reg_type" value="3" 

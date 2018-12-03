@@ -4,7 +4,9 @@ include_once( __DIR__ . '/../tools/functions/files/images.php' );
 
 class School extends ActiveRecord\Model implements JsonSerializable {
     use traits\BuildModel;
+
     private $customer_profile;
+    private $soldier_count_cache;
     // relationships
     static $has_many = [
         [ 'school_registrations' ], 
@@ -13,7 +15,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     ];
     static $belongs_to = [ 'institution' ];
     // callbacks
-    static $before_create = [ 'generateSchoolNumber' ];
+    static $before_create = [ 'generateSchoolNumber', 'generateInitials' ];
     static $before_update = [ 'updateSoldiers' ];
     // valdiations and aliases
     public static $alias_attribute = [
@@ -32,20 +34,32 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         $this->shipping_city = $this->city;         $this->shipping_state = $this->state;
         $this->shipping_postal = $this->zip;        $this->shipping_country = $this->country;
     }
-
-    public function generateInitials() {
-        preg_match_all('/(?<=\s|^)[a-z]/i', $this->name, $matches);
-        $this->initials = strtoupper( implode('', $matches[0]) );
-    }
-
+    // get the staff accounts that have access to this account
     public function staff() {
         global $MASHPIA_DB;
+        
+        if ( !$this->school_id )
+            return [];
+        
         $staff_query = $MASHPIA_DB->prepare(
             'SELECT a.first, a.last, a.username, a.admin_email as email, a.admin_id FROM admins a '
             .'JOIN admin_auths aa USING( admin_id ) WHERE aa.auth="school" AND aa.id=?;'
         );
         $staff_query->execute([ $this->school_id ]);
         return $staff_query->fetchAll();
+    }
+    // get the soldier count
+    public function soldier_count( $cache ) {
+        global $MASHPIA_DB;
+        // if we are provided with a precached total, cache it
+        if ( $cache )
+            return $this->soldier_count_cache = $cache;
+        // if we loaded it before, return that value
+        if ( $this->soldier_count_cache )
+            return $this->soldier_count_cache;
+        // load the total number of soldiers with this school id
+        $query = $MASHPIA_DB->query( 'SELECT COUNT(*) AS soldier_count FROM users WHERE school_id = '.$this->school_id );
+        return $this->soldier_count_cache = $query->fetch()['soldier_count'];
     }
 
     // **************************** CALLBACKS ***********************************
@@ -58,7 +72,14 @@ class School extends ActiveRecord\Model implements JsonSerializable {
             $this->school_number = $query->fetch()['school_number'];
         }
     }
-
+    // generate initials for the school when it is created
+    public function generateInitials() {
+        if ( !$this->initials ) {
+            preg_match_all('/(?<=\s|^)[a-z]/i', $this->name, $matches);
+            $this->initials = strtoupper( implode('', $matches[0]) );
+        }
+    }
+    // update the soldiers and platoons that are connected to this base
     public function updateSoldiers() {
         global $MASHPIA_DB;
 
@@ -98,7 +119,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         if ( !$for_type )
             $for_type = $this->reg_type;
 
-        $early_bird = $this->early_bird > new DateTime();
+        $early_bird = $this->earlyBird() > new DateTime();
         
         return GlobalSettings::calculateChildFee(
             $for_type,      $this->child_fee,
@@ -123,14 +144,16 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     public function registration( $year = false ){
         $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
         // check for non-default option
-        foreach( $this->school_registrations as $reg_info ){
-            if ( $reg_info->year == $year ) 
-                return $reg_info;
+        if ( $this->school_registrations ) {
+            foreach( $this->school_registrations as $reg_info ){
+                if ( $reg_info->year == $year ) 
+                    return $reg_info;
+            }
         }
         // return the reg info
         return false;
     }
-
+    // register the school
     public function register( $year, $amount, $admin_id ) {
         $this->school_era = null;
 
@@ -148,11 +171,27 @@ class School extends ActiveRecord\Model implements JsonSerializable {
 
         return $registration->save() && $this->save();
     }
-
+    // get the early bird, or the default
     public function earlyBird() {
         if ( $this->early_bird )
             return $this->early_bird;
         return new DateTime( '2018-09-07 00:00:00' );
+    }
+
+    public function currentRegPrices() {
+        // available discounts
+        $discounts = [
+            'early_bird' => GlobalSettings::getEarlyBird(),
+            'guaranteed' => GlobalSettings::getGuaranteedDiscount()
+        ];
+        // rates for all 3 registration types, by index (minus 1)
+        $rates = [
+            GlobalSettings::getRegCost( 1 ),
+            GlobalSettings::getRegCost( 2 ),
+            GlobalSettings::getRegCost( 3 )
+        ];
+
+        return [ 'discounts' => $discounts, 'rates' => $rates ];
     }
 
     // ******************************* LOGOS *******************************
@@ -215,6 +254,22 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return $this->customer_profile;
     }
 
+    public function getPaymentProfileId( $payment_info ) {
+        global $current_user;
+        // check if we are given an id
+        if ( $payment_info['payment_profile_id'] ) {
+            $payment_profile_id = $payment_info['payment_profile_id'];
+        // or connect the card to this account, throw any errros and get the profile id
+        } else {
+            $payment_profile  = $this->createPaymentProfile( $payment_info );
+            if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
+                throw new Exception( $payment_profile );
+            // set the id
+            $payment_profile_id = $payment_profile->customerPaymentProfileId; 
+        }
+        return $payment_profile_id;
+    }
+
     // create a payment profile
     public function createPaymentProfile( $payment_info, $email = false ) {
         $email = $email ? $email : $this->accounting_email;
@@ -266,9 +321,11 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                 'school_makeup_id', 'school_settings', 'package_id', 'school_logo_id', 'school_logo_kiosk_id',
                 'school_no_logo', 'school_file_id', 'kiosk_print', 'school_store', 'camp_id', 'add_on_one',
                 'add_on_two', 'big_prizes_won', 'store_only', 'he_name_principal', 'he_name_p2', 'conf_pushka_users',
-                'tanya_ord', 'school_type', 'col_show', 'tuition', 'authorize_customer_profile_id', 
+                'tanya_ord', 'school_type', 'col_show', 'tuition', 'authorize_customer_profile_id',  'early_bird'
             ],
-            'methods' => [ 'registration', 'logoPaths', 'customerProfile', 'staff' ]
+            'methods' => [ 
+                'earlyBird', 'registration', 'logoPaths', 'customerProfile', 'staff', 'currentRegPrices'
+            ]
         ]);
     }
 
