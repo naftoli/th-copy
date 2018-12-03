@@ -18,13 +18,18 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'mark' ) {
 
     // build marks array
     $marks = [];
-    foreach ( $_POST as $k => $v ) {
+    foreach ( $_POST as $k => $more ) {
         if ( strpos( $k, '|' ) === false ) continue;
         $info = explode('|', $k);
         $grid_id = $info[0];
         $user_id = $info[1];
-        if ( $v == 'on' ) $marks[$grid_id][$user_id] = 1;
-        else if ( $v != ''  ) $marks[$grid_id][$user_id] = $v;
+        if ( is_array( $more ) ) {
+            // only get first value of $more 
+            // if there's 2 values, the second one will be discarded so that it won't overwrite the first one
+            $v = $more[0];
+            if ( $v == 'on' ) $marks[$grid_id][$user_id] = 1;
+            else if ( $v != '' ) $marks[$grid_id][$user_id] = $v;
+        }
     }
     $m->markTasks( $marks );
 }
@@ -117,13 +122,14 @@ if ( $grade && $mivtzoim_id && $parsha ) {
                         echo "<td>";
                         // figure out if input is checkbox or value
                         if ( $task['quantity'] >= 1 ) {
-                            echo "<input type='text' name='" . $identifier . "' size='4' ";
+                            echo "<input type='text' name='" . $identifier . "[]' size='4' ";
                             if ( isset( $marks[$task['grid_id']][$user['user_id']] ) ) echo "value='" . $marks[$task['grid_id']][$user['user_id']] . "' ";
                             echo "/>";
                         } else {
-                            echo "<input type='checkbox' name='" . $identifier . "'";
-                            if ( isset( $marks[$task['grid_id']][$user['user_id']] ) ) echo " checked";
+                            echo "<input type='checkbox' name='" . $identifier . "[]'";
+                            if ( isset( $marks[$task['grid_id']][$user['user_id']] ) ) echo "value='1' checked";
                             echo " />";
+                            echo "<input type='hidden' name='" . $identifier . "[]' value='0' />";
                         }
                         echo "</td>";
                     } 
