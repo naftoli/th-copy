@@ -22,8 +22,9 @@ class BirthdayRouter {
             ." JOIN schools s USING (school_id) JOIN classes c USING (class_id) "
             ." WHERE rank_ord > 1 AND date_promoted > $start_date AND date_promoted <= $end_date "
             ." AND $filter "
-            ." GROUP BY user_id ORDER BY date_promoted DESC, first, last;"
+            ." GROUP BY user_id ORDER BY date_promoted DESC, rank_ord DESC, last, first;"
         );
+
         $query->execute();
         $promotions = [];
         while( $row = $query->fetch() ) {
