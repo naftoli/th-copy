@@ -7,7 +7,8 @@ include_once( dirname(__FILE__) . "/../../../classes/user.php" );
 // POST / creates new user
 // POST /?user_id=<id> updates user
 if ( $_SERVER['REQUEST_METHOD'] == "POST" ) {
-    $user_id = mysql_real_escape_string( $_GET['user_id'] );
+    $user_id = isset( $_GET['user_id'] ) ? mysql_real_escape_string( $_GET['user_id'] ) : false;
+
     if ( !$user_id )
         create_user( $admin_id );
     else
@@ -55,7 +56,7 @@ function create_user( $admin_id ){
     $parent_query = mysql_query(
         "SELECT * FROM admins WHERE admin_id = $admin_id"
     );
-    $parent = new admin( mysql_fetch_assoc( $parent_query ) );
+    $parent = new \classes\admin( mysql_fetch_assoc( $parent_query ) );
     // get the post data ( cleaned in the header )
     $school_id = $_POST['school_id']; $class_id = $_POST['class_id'];
     $first = $_POST['first'];       $last = $_POST['last'];

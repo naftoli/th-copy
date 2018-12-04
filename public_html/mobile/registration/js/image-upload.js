@@ -43,10 +43,12 @@ var image_upload = function( options, uploadCallback ) {
                 $( state.image ).attr("src", fr.result);
                 // toggle the UI
                 toggleCropper();
+
+                event.target.value = target.value = null;
             }
             fr.readAsDataURL(files[0]);
         } else { // this is not supported
-            
+            window.alert('Your browser does not support uploading images. Please upgrade to a newer version.');
         }
     }
 
