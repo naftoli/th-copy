@@ -25,10 +25,12 @@ trait BuildModel {
     }
 
     public function bulkUpdate( $updates ) {
-        $columns = array_keys( self::table()->columns );
-        foreach( $updates as $key => $value ) {
-            if ( in_array( $key, $columns ) )
-                $this->{ $key } = $updates[ $key ];
+        $valid_attributes = $this->attributes();
+        $valid_attributes = array_merge( $valid_attributes, $this::$alias_attribute );
+        foreach( $updates as $key => $value ){
+            if ( array_key_exists( $key, $valid_attributes ) )
+                $this->{ $key } = $value;
         }
+        return $this;
     }
 }

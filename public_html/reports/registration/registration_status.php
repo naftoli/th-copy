@@ -5,7 +5,7 @@ require_once ( __DIR__ . '/../../header.php' );
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
 $year = GlobalSettings::getRegistrationYear();
 
-$main_query = "SELECT s.school_id, s.school_number, s.school_name, !ISNULL(sr.type) as live, sr.date_paid, sr.amount_paid, total, "
+$main_query = "SELECT s.school_id, s.school_number, s.school_name, sr.date_paid, sr.amount_paid, total, "
     ."total_registered, not_chayolei "
     ."FROM schools s LEFT JOIN school_registrations sr USING (school_id) "
     ."LEFT JOIN ( "
@@ -54,7 +54,7 @@ while( $row = mysql_fetch_assoc( $main_query ) ) $data[] = $row;
                         <td><?= $base['school_name'] ?></td>
                         <td><?= $base[ 'date_paid' ] ? 
                             ( new DateTime($base[ 'date_paid' ]) )->format( 'm/d/Y g:i:s' ) : 
-                            ( $base['live'] ? 'Not Registered' : 'Registration Not Live' ); 
+                            'Not Registered'; 
                         ?></td>
                         <td>$<?= number_format($base['amount_paid'], 0) ?></td>
                         <td><?= number_format($base['total_registered']) .' / '. number_format( $base['total'] - $base['not_chayolei'] ) ?></td>

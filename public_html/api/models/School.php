@@ -154,23 +154,82 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return false;
     }
     // register the school
-    public function register( $year, $amount, $admin_id ) {
-        $this->school_era = null;
+    public function register( $cart, $total, $cc, $admin_id, $year = false ) {
+        // set the default year
+        if ( !$year ) {
+            $year = GlobalSettings::getRegistrationYear( $this->school_id );
+        }
 
-        $registration = new SchoolRegistration([
-            'school_id' => $this->school_id,
-            'year' => $year,
-            'type' => $this->reg_type, 
-            'fee' => $this->chayolei_fee, 
-            'balance' => $this->balance, 
-            'early_bird' => $this->earlyBird(),
-            'amount_paid' => $amount,
-            'admin_id' => $admin_id,
-            'date_paid' => new DateTime()
+        $registration = $this->registration( $year );
+        // if we do not have an existing registration, generate a new one.
+        if ( !$registration ) {
+            $registration = new SchoolRegistration([
+                'school_id' => $this->school_id,    'year' => $year,
+            ]);
+        }
+        // update the cart total
+        $cart_total = 0;
+        foreach( $cart as $item ) {
+            // update the cart total
+            $cart_total += $item['price'];
+            // validate that it matches the settings for this base, if not throw an error.
+            if ( $this->{ $item['name'] . '_fee' } != $item['price'] ) {
+                throw new Exception('Invalid Total: '.$item['name'].' price incorrect. ');
+            }
+        }
+
+        if ( $total != $cart_total + $this->balance ) {
+            throw new Exception(
+                "Invalid Total: Total ($total) does not match cart (".( $cart_total + $this->balance ).")"
+            );
+        }
+
+        if ( $total > 0 ) {
+            global $MASHPIA_DB;
+            // create Transaction
+            $create_transaction_query = $MASHPIA_DB->prepare(
+                "INSERT INTO transactions (school_id, trans_date, description, amount, admin_id, zip, response) "
+                ."VALUES (?, NOW(), ?, ?, ?, ?, ?)"
+            );
+            // get dat for transactions
+            $description = "Base Registration for $year";
+            $payment_profile_id = $this->getPaymentProfileId( $cc );
+            // * submit the transaction
+            $payment_response = $this->customerProfile()->chargeCard(
+                $total, $payment_profile_id, null, null, $description
+            );
+            // * make sure we get a valid response
+            if ( !is_array( $payment_response ) ) {
+                throw new Exception( $payment_response );
+            }
+            // * save the transaction to our dbs
+            $create_transaction_query->execute([
+                $this->school_id,   $description,   $total,
+                $admin_id,  $this->shipping_postal, json_encode( $payment_response ),
+            ]);
+        }
+
+        // update the balances
+        $registration->fee += $cart_total;
+        $registration->balance += $this->balance;
+        $registration->amount_paid += $total;
+
+        $registration->bulkUpdate([
+            'type' => $this->reg_type,  'early_bird' => $this->earlyBird(),
+            'admin_id' => $admin_id,    'date_paid' => new DateTime(),
+            'modules' => json_encode([
+                'chayolei'  =>  !!$this->chayolei,  'chidon'    =>  !!$this->chidon,
+                'tanya'     =>  !!$this->tanya,     'rewards'   =>  !!$this->rewards
+            ])
         ]);
+        // update the school_era
+        $this->school_era = null;
+        // check that the balance is paid
+        $this->balance = 0;
 
         return $registration->save() && $this->save();
     }
+
     // get the early bird, or the default
     public function earlyBird() {
         if ( $this->early_bird )
@@ -178,6 +237,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return new DateTime( '2018-09-07 00:00:00' );
     }
 
+    // get the current registration prices, subject to change at any time
     public function currentRegPrices() {
         // available discounts
         $discounts = [
@@ -200,6 +260,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         // update the mobile_pic column
         $this->{ $logo_name } = $filename;
     }
+
     // validates and moves the uploaded profile picture...
     public static function uploadLogo( $school_id, $logo_name, $file ){
         $type = exif_imagetype( $file['tmp_name'] );
@@ -223,8 +284,10 @@ class School extends ActiveRecord\Model implements JsonSerializable {
 
     // default name
     public function name(){ return $this->school_name; }
+
     // logo
     public function logoPath(){ return "/schoolLogos/$this->logo"; }
+
     // all logos
     public function logoPaths() {
         return [
@@ -257,7 +320,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     public function getPaymentProfileId( $payment_info ) {
         global $current_user;
         // check if we are given an id
-        if ( $payment_info['payment_profile_id'] ) {
+        if ( isset( $payment_info['payment_profile_id'] ) && $payment_info['payment_profile_id'] ) {
             $payment_profile_id = $payment_info['payment_profile_id'];
         // or connect the card to this account, throw any errros and get the profile id
         } else {

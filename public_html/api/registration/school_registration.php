@@ -39,10 +39,10 @@ class SchoolRegistrationRouter {
             $response = false;
         }
         // get the current registration info
-        $year = GlobalSettings::getRegistrationYear();
+        $year = GlobalSettings::getRegistrationYear( $school_id );
         $school = School::find( $school_id, [ 'include' => 'school_registrations' ] );
         
-        $statusRegistration = $school->register( $year, $amount, $current_user->admin_id );
+        $statusRegistration = $school->register( $amount, $current_user->admin_id );
         $registration = $school->registration( $year );
 
         // send email to office

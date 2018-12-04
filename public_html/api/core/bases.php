@@ -55,6 +55,30 @@ class BaseRouter {
         json_response( $base, true, true );
     }
 
+    public function register() {
+        global $current_user;
+
+        $cc = isset( $_POST['cc'] ) ? $_POST['cc'] : false;
+        $cart = isset( $_POST['cart'] ) ? $_POST['cart'] : false;
+        $total = isset( $_POST['total'] ) ? $_POST['total'] : false;
+        $base = isset( $_POST['base'] ) ? $_POST['base'] : false;
+        
+        if ( !$base )
+            return json_error('CORE-BASE-63: No Base Information Provided');
+        
+        if ( $base['school_id'] ) {
+            $base = \School::find( $base['school_id'] );
+            $base->bulkUpdate( $_POST['base'] );
+        } else {
+            $base = \School::build( $base );
+            // $base->save();
+        }
+
+        $base->register( $cart, $total, $cc, $current_user->admin_id );
+
+        json_response( $base, true, true );
+    }
+
     public function deletePayment() {
         // get the base
         $school = $this->getBase();
@@ -102,8 +126,11 @@ class BaseRouter {
             }
         }
         // get the school
-        try { return School::find( $id ); } 
-        catch ( Exception $e ) { return json_error( 'CORE-BASE-85: Base not found' ); }
+        try {
+            return School::find( $id );
+        } catch ( Exception $e ) {
+            return json_error( 'CORE-BASE-85: Base not found' );
+        };
     }
 
     private function getFilters( $all ){

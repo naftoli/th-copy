@@ -98,7 +98,7 @@ class UsersRouter {
             );
             // * submit the transaction
             $payment_response = $customer_profile->chargeCard(
-                $total, $payment_profile_id, null, $trans_id, $description
+                $total, $payment_profile_id, null, null, $description
             );
             // * make sure we get a valid response
             if ( !is_array( $payment_response ) ) {
@@ -106,7 +106,7 @@ class UsersRouter {
             }
             // * save the transaction to our dbs
             $create_transaction_query->execute([
-                $school->school_id,             $description,   $total, 
+                $school->school_id,             $description,   $total,
                 $current_user->admin_id,        $school->shipping_postal,
                 json_encode($payment_response), implode( ', ', $_POST['user_ids'] )
             ]);
