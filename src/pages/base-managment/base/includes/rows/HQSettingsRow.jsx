@@ -45,15 +45,15 @@ export class HQSettingsRow extends Component {
         <Col xl={6}>
           <Label>Registration Type</Label>
           <Radio value='1' { ...regTypeProps }
-            checked={ base.reg_type === 1 }>
+            checked={ base.reg_type === '1' }>
             In Tuition
           </Radio>
           <Radio value='2' { ...regTypeProps }
-            checked={ base.reg_type === 2 }>
+            checked={ base.reg_type === '2' }>
             Guaranteed
           </Radio>
           <Radio value='3' { ...regTypeProps }
-            checked={ base.reg_type === 3 }>
+            checked={ base.reg_type === '3' }>
             By Parent
           </Radio>
         </Col>
