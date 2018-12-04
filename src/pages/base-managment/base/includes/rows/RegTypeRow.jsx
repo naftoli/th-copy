@@ -24,7 +24,7 @@ export class RegTypeRow extends Component {
         <div className='registration-option'>
           <Radio value='1'
               name='reg_type'
-              checked={ regType === 1 }
+              checked={ regType === '1' }
               onChange={ this.onChange }>
             In Tuition
           </Radio>
@@ -49,7 +49,7 @@ export class RegTypeRow extends Component {
         <div className='registration-option'>
           <Radio value='2'
               name='reg_type'
-              checked={ regType === 2 }
+              checked={ regType === '2' }
               onChange={ this.onChange }>
             Guaranteed by Base
           </Radio>
@@ -75,7 +75,7 @@ export class RegTypeRow extends Component {
         <div className='registration-option'>
             <Radio value='3'
               name='reg_type'
-              checked={ regType === 3 }
+              checked={ regType === '3' }
               onChange={ this.onChange }>
             Paid by Parents
           </Radio>
