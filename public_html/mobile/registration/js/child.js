@@ -125,11 +125,11 @@ var childApp = function(){
             return showError( "Please enter a valid Date of Birth (YYYY-MM-DD)" );
         }
 
-        if( !postData.gender ){
+        if ( !postData.gender ){
             return showError( "Please select your child's Gender." );
         }
 
-        if( !postData.mobile_pic) {
+        if ( !postData.mobile_pic ) {
             return showError( "Please upload a profile picture for your child." );
         }
 
@@ -139,7 +139,7 @@ var childApp = function(){
                 $( "#fee-not-paid" ).show();         
                 $( '#successModal' ).modal('show');
             } else {
-                showError( response.error );
+                showError( response.error || response );
             }
         });
     }

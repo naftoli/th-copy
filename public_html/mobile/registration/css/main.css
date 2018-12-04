@@ -126,7 +126,7 @@ input:checked + span.checkbox {
     opacity: 1;
 }
 #errorModal .modal-body{
-    text-align: center; font-size: 1.5em;
+    text-align: center; font-size: 1.5em; word-break: break-all;
 }
 
 /* success modal  */
