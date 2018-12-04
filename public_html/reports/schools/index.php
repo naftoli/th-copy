@@ -73,6 +73,16 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
+
+        <h2>Teacher Certificates</h2>
+        <div id="action-links">
+            <a href="/rally_certs/certs.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/v2/images/back-end/admin/Teachers resources icon.jpg" height="32" alt="tickets"/>
+                    <span class="link-text">Teacher Certificates</span>
+                </div>
+            </a>
+        </div>
         <?} // end admin only links ?>
         </div>
         
