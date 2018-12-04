@@ -7,7 +7,6 @@ import { NumberDisplay } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 // constants
-import { LEGACY_URL } from 'components/constants';
 
 export class RegistrationWidget extends Component {
 
@@ -39,7 +38,7 @@ export class RegistrationWidget extends Component {
           <div>
             <p>
               <strong>Base Status:</strong> 
-              { reg_open && <a href={`${LEGACY_URL}/registration.php`}>{ status || 'Loading...' }</a> }
+              { reg_open && <Link to='/register'>{ status || 'Loading...' }</Link> }
               { !reg_open && <span>{ status || 'Loading...' }</span> }
             </p>
             <p>
