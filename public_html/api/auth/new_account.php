@@ -58,7 +58,7 @@ class NewAdminRouter {
         json_response([
             'account' => $admin,
             'tokens' => Auth::generateKeys( $admin )
-        ]);
+        ], true, true);
     }
 }
 
