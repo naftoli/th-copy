@@ -19,18 +19,18 @@ class BaseRouter {
         );
         $query->execute();
         $bases = $query->fetchAll();
-        json_response( $bases, true, true );
+        json_response( $bases );
     }
 
     public function defaults() {
         $base = new \School();
         // format the response
-        json_response( $base, true, true );
+        json_response( $base );
     }
 
     public function show( $id ) {
         $base = School::find( $id );
-        json_response( $base, true, true );
+        json_response( $base );
     }
 
     public function update( $id ) {
@@ -52,7 +52,7 @@ class BaseRouter {
         $base->bulkUpdate( $_POST );
         if ( !$base->save() ) json_error( 'Could not save base' );
 
-        json_response( $base, true, true );
+        json_response( $base );
     }
 
     public function register() {
@@ -81,7 +81,7 @@ class BaseRouter {
 
         $base->register( $current_user->admin_id, $cart, $total, $cc );
 
-        json_response( $base, true, true );
+        json_response( $base );
     }
 
     public function deletePayment() {

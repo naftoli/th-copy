@@ -51,6 +51,6 @@ if ( !$connect_accounts_query )
     );
 
 // let the user know that all is good...
-render_json_response( [
+json_response( [
     "tuition" => $user['tuition'] == 1 ? true : false
 ] );

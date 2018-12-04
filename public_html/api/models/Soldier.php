@@ -34,11 +34,17 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
     // Access validation - takes a login and returns true or false if it can access the user
     public function validateAccess( $login ){
-        if ( $login->code === 'HQ' ) return true;
-        if ( $login->code === 'INST' ) return !!$this->school->inst_id == $login->id;
-        if ( $login->code === 'BC' ) return $this->school_id == $login->id;
-        if ( $login->code === 'TEACHER' ) return $this->class_id == $login->id;
-        if ( $login->code === 'PARENT' ) return false; // TODO, check if parent can access child
+        if ( $login->code === 'HQ' ) {
+            return true;
+        } else if ( $login->code === 'INST' ) {
+            return !!$this->school->inst_id == $login->id;
+        } else if ( $login->code === 'BC' ) {
+            return $this->school_id == $login->id;
+        } else if ( $login->code === 'TEACHER' ) {
+            return $this->class_id == $login->id;
+        } else if ( $login->code === 'PARENT' ) {
+            return !!\AdminAuth::findAuth( $login->id, 'user', $this->user_id );
+        }
         return false;
     }
     
