@@ -12,7 +12,7 @@ if ( $_SERVER['REQUEST_METHOD'] == "GET" ) {
 
     $schools = fetch_results_assoc( $schools_query );
     if ( $schools )
-        render_json_response( $schools );
+        json_response( $schools );
     else
         render_json_error( "Could not load schools" );
 }

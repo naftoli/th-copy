@@ -9,6 +9,9 @@ if ( $_SERVER['REQUEST_METHOD'] != "POST" )
 // get the file
 $file = $_FILES['profile'];
 
+if ( !$file['tmp_name'] )
+    render_json_error('File upload error. File likely too large or corrupt.');
+
 // get the type of image
 $type = exif_imagetype( $file['tmp_name'] );
 $extension = image_type_to_extension($type);
@@ -37,34 +40,10 @@ if ( !$result )
 // limit to 500x500px
 shrink_image( $target_file );
 // show the response
-render_json_response([
+return json_response([
     "location" => "/mobile/reg/$file_name",
     "filename" => $file_name
 ]);
-
-/**
- * codeToMessage
- * 
- * convert image error codes to error messages
- *
- * @param int $code
- * @return string
- */
-function codeToMessage( $code ) {
-    $errors = array(
-        UPLOAD_ERR_INI_SIZE     => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
-        UPLOAD_ERR_FORM_SIZE    => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form',
-        UPLOAD_ERR_PARTIAL      => 'The uploaded file was only partially uploaded',
-        UPLOAD_ERR_NO_FILE      => 'No file was uploaded',
-        UPLOAD_ERR_NO_TMP_DIR   => 'Missing a temporary folder',
-        UPLOAD_ERR_CANT_WRITE   => 'Failed to write file to disk',
-        UPLOAD_ERR_EXTENSION    => 'File upload stopped by extension',
-    );
-    // return the error if we have one.
-    if (array_key_exists($code, $errors))
-        return $errors[$code];
-    return 'Unknown upload error';
-}
 
 /**
  * getDestination

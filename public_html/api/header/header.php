@@ -43,9 +43,14 @@ if ( $development && !defined('AUTHORIZE_NET_SANDBOX') ) {
 if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
     include_once( API_ROOT . "/auth/classes/Auth.php" );
     $headers = getallheaders();
-    // detect if we are on mobile
+
+    // check if we are explicitly told that we are on mobile
     $mobile = false;
-    if ( // check if we have the proper header set or are coming from /mobile
+    if ( defined('MASHPIA_AUTH_MOBILE') && MASHPIA_AUTH_MOBILE )
+        $mobile = true;
+
+    // check if we have the proper header set or are coming from /mobile
+    if (
         ( isset( $headers['mobile'] ) && $headers['mobile'] === 'true' ) || 
         ( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], '/mobile' ) > 0 )
     ) $mobile = true;
@@ -85,13 +90,17 @@ if ( defined( "MASHPIA_AUTH_REQUIRED" ) && MASHPIA_AUTH_REQUIRED ){
         json_error( "Invalid Credentials", false, 401 );
     }
 
-    // get the current login
-    if ( isset( $headers['login'] ) ) {
-        $login_parts = explode('-', $headers['login']);
-        if ( count($login_parts) == 2 ) $current_user->setLogin( $login_parts[0], $login_parts[1] );
-    } else if ( isset( $_COOKIE['login'] ) ) {
-        $login_parts = explode('-', $_COOKIE['login']);
-        if ( count($login_parts) == 2 ) $current_user->setLogin( $login_parts[0], $login_parts[1] );
+    if ( !$mobile ) { // get the current login
+        if ( isset( $headers['login'] ) ) {
+            $login_parts = explode('-', $headers['login']);
+            if ( count($login_parts) == 2 ) $current_user->setLogin( $login_parts[0], $login_parts[1] );
+        } else if ( isset( $_COOKIE['login'] ) ) {
+            $login_parts = explode('-', $_COOKIE['login']);
+            if ( count($login_parts) == 2 ) $current_user->setLogin( $login_parts[0], $login_parts[1] );
+        }
+    // for mobile make sure it is the parent login (even if it does not exist yet)
+    } else {
+        $current_user->setLogin( 'PARENT', $current_user->admin_id, true );
     }
     // make sure we always have a login
     if ( !$current_user->login ) {

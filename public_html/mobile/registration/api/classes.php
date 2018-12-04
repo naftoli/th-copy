@@ -5,8 +5,8 @@ include_once( dirname(__FILE__) . "/../../../classes/platton.php" );
 // GET /, return all schools
 if ( $_SERVER['REQUEST_METHOD'] == "GET" ) {
     // we expect ?school_id to be set to a valid school_id
-    $school_id = mysql_real_escape_string( $_GET['school_id'] );
-    $class_id  = mysql_real_escape_string( $_GET['class_id']  );
+    $school_id = isset( $_GET['school_id'] ) ? mysql_real_escape_string( $_GET['school_id'] ) : false;
+    $class_id  = isset( $_GET['class_id'] )  ? mysql_real_escape_string( $_GET['class_id'] )  : false;
     
     if ( $school_id )
         index( $school_id );
@@ -42,7 +42,7 @@ function index( $school_id ) {
         $classes[$index]['name'] = $class['class_grade'] . ($class['class_sub'] ? " - " . $class['class_sub'] : "");
     }
 
-    render_json_response( $classes );
+    return json_response( $classes );
 }
 
 /**
@@ -59,7 +59,7 @@ function show( $class_id ){
     try {
         $class = platton::Load( $class_id );
         $class->getUsers();
-        render_json_response( $class );
+        return json_response( $class );
     } catch( Exception $e ){
         render_json_error( "Could not load class" );
     }

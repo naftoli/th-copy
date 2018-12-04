@@ -379,7 +379,7 @@ var registrationApp = function() {
     // TODO, update to point to unified core API
     function updateUser( user_id, postData ){
         return new Promise( function( resolve, reject ){
-            $.post("api/users.php?user_id=" + user_id, postData, function( response ) {
+            $.post("/api/core/users?id=" + user_id, postData, function( response ) {
                 if ( !response.success ) {
                     showError( "There was an error while updating your child. Please try again later." );
                 }
@@ -428,7 +428,7 @@ var registrationApp = function() {
         $("input#mobile_pic").val( data.filename );
         $("img#user-img, #child-" + user_id + " img").attr( "src", data.location );
         
-        $.post("api/users.php?user_id=" + user_id, { mobile_pic: data.filename }, function( response ){
+        $.post("/api/core/users?id=" + user_id, { mobile_pic: data.filename }, function( response ){
             if ( !response.success ){
                 showError( "Could not update Profile Picture. We will try again when pressing 'Confirm'.");
             };

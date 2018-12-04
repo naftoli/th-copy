@@ -102,7 +102,8 @@ var childApp = function(){
 
         $.post( "api/tasks/addChild.php", postData, function( response ){
             // show any API errors...
-            if( !response.success ) return showError( response.error );
+            if( !response.success )
+                return showError( response.message );
             // show the user if the fee is paid for
             if ( response.data.tuition ){
                 $( "#tuition-paid" ).show();
@@ -132,14 +133,15 @@ var childApp = function(){
         if ( !postData.mobile_pic ) {
             return showError( "Please upload a profile picture for your child." );
         }
-
-        $.post("api/users.php", postData, function( response ){
+        debugger;
+        $.post("/api/core/users", postData, function( response ){
+            debugger;
             if( response.success ){
                 $( "#tuition-paid" ).hide();
                 $( "#fee-not-paid" ).show();         
                 $( '#successModal' ).modal('show');
             } else {
-                showError( response.error || response );
+                showError( response.message || response );
             }
         });
     }

@@ -168,13 +168,24 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     }
 
     // set the current login
-    public function setLogin( $type = false, $id = false ){
+    public function setLogin( $type = false, $id = false, $override = false ){
         $logins = $this->logins();
-        if ( ( !$type || !$id ) && count( $logins ) > 0 )
+
+        if ( $override ) {
+            $this->login = new Login( $type, $id );
+            $this->logins[] = $this->login;
+            return $this->login;
+        }
+
+        if ( ( !$type || !$id ) && count( $logins ) > 0 ) {
             return $this->login = $logins[0]; // default to the first login
+        }
+            
         
         foreach( $logins as $login ) {
-            if ( $login->id == $id && $login->type == $type ) return $this->login = $login;
+            if ( $login->id == $id && $login->type == $type ) {
+                return $this->login = $login;
+            }
         }
 
         if ( count( $logins ) > 0 )

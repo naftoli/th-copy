@@ -6,23 +6,11 @@ function post_param( $param_name ) {
     else
         return false;
 }
-// Standard JSON response functions
-function render_json_response( $data ) {
-    header('Content-type: application/json');
-    echo json_encode([
-        "success"   => true,
-        "data"      => $data
-    ]);
-}
+
 function render_json_error( $msg, $data = false ) {
-    header('Content-type: application/json');
-    echo json_encode([
-        "success"   => false,
-        "error"     => $msg,
-        "details"   => $data
-    ]);
-    die();
+    return json_error( $msg, $data, 200, true );
 }
+
 // Fetch all results from the DBS and return them in an array
 function fetch_results_assoc( $query ) {
     // we want to return false if we have nothing to fetch

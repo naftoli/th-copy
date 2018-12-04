@@ -83,15 +83,27 @@ class UsersRouter {
     public function create() {
         global $current_user;
         $user = Soldier::build( $_POST );
+        // if it is a teacher, set the school id to the platoons school id
         if ( $current_user->login->code === 'TEACHER' ) {
             $user->school_id = $current_user->login->model->school_id;
+        // make sure the class is in the grade
         } else {
             $platoon_school_id = Platoon::find( $user->class_id )->school_id;
             if ( $platoon_school_id !== $user->school_id )
-                json_error( 'Please Select a valid Platoon' );
+                json_error( 'Platoon is not in Base' );
         }
+        // save and create the soldier
         if ( !$user->is_valid() || !$user->save() )
-            json_error( 'Could not create Soldier. (CODE: CORE-USERS-79)' );
+            json_error( 'Could not create Soldier. (CODE: CORE-USERS-79)' )
+;
+        // parents get auto connected to their kids
+        if ( $current_user->login->code === 'PARENT' ) {
+            $auth = \AdminAuth::create([
+                'admin_id' => $current_user->admin_id,
+                'id' => $user->user_id,     'auth' => 'user'
+            ]);
+        }
+        // send the full soldier to the client
         json_response( $user );
     }
 

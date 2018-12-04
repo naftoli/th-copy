@@ -13,6 +13,7 @@ if ( !showError ) showError = function(){}
 var image_upload = function( options, uploadCallback ) {
     // set the defauls to the state
     var state = {
+        file_name: 'unknown',
         file_input: options && options.file_input ? options.file_input : "#profile",
         modal:      options && options.modal  ? options.modal   : "#cropperModal",
         image:      options && options.image  ? options.image   : "#cropper-image",
@@ -44,9 +45,10 @@ var image_upload = function( options, uploadCallback ) {
                 // toggle the UI
                 toggleCropper();
 
-                event.target.value = target.value = null;
+                event.target.value = null;
             }
-            fr.readAsDataURL(files[0]);
+            state.file_name = files[0].name;
+            fr.readAsDataURL( files[0] );
         } else { // this is not supported
             window.alert('Your browser does not support uploading images. Please upgrade to a newer version.');
         }
@@ -66,9 +68,9 @@ var image_upload = function( options, uploadCallback ) {
 
     // upload the image when "done"
     function uploadImage(){
-        $( state.image ).cropper( 'getCroppedCanvas' ).toBlob( function( blob ){
+        $( state.image ).cropper( 'getCroppedCanvas', { width: 500, height: 500 } ).toBlob( function( blob ){
             var formData = new FormData();
-            formData.append('profile', blob, $( state.file_input )[0].files[0].name );
+            formData.append('profile', blob, state.file_name );
 
             $( state.modal + " #cropper-image-container " ).hide();
             $( state.modal + " #cropper-image-loader " ).show();
@@ -83,7 +85,7 @@ var image_upload = function( options, uploadCallback ) {
                         $( state.modal ).modal('hide');
                         state.uploadCallback( response.data );
                     } else {
-                        closeAndShowError( response.error );
+                        closeAndShowError( response.message );
                     }
                 },
                 error: function ( error ) {
