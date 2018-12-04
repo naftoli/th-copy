@@ -154,7 +154,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return false;
     }
     // register the school
-    public function register( $cart, $total, $cc, $admin_id, $year = false ) {
+    public function register( $admin_id, $cart, $total, $cc, $year = false ) {
         // set the default year
         if ( !$year ) {
             $year = GlobalSettings::getRegistrationYear( $this->school_id );
@@ -167,21 +167,25 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                 'school_id' => $this->school_id,    'year' => $year,
             ]);
         }
+
         // update the cart total
         $cart_total = 0;
-        foreach( $cart as $item ) {
-            // update the cart total
-            $cart_total += $item['price'];
-            // validate that it matches the settings for this base, if not throw an error.
-            if ( $this->{ $item['name'] . '_fee' } != $item['price'] ) {
-                throw new Exception('Invalid Total: '.$item['name'].' price incorrect. ');
+        // only if we have a cart
+        if ( $cart ) {
+            foreach( $cart as $item ) {
+                // update the cart total
+                $cart_total += $item['price'];
+                // validate that it matches the settings for this base, if not throw an error.
+                if ( $this->{ $item['name'] . '_fee' } != $item['price'] ) {
+                    throw new Exception('Invalid Total: '.$item['name'].' price incorrect. ');
+                }
             }
-        }
 
-        if ( $total != $cart_total + $this->balance ) {
-            throw new Exception(
-                "Invalid Total: Total ($total) does not match cart (".( $cart_total + $this->balance ).")"
-            );
+            if ( $total != $cart_total + $this->balance ) {
+                throw new Exception(
+                    "Invalid Total: Total ($total) does not match cart (".( $cart_total + $this->balance ).")"
+                );
+            }
         }
 
         if ( $total > 0 ) {

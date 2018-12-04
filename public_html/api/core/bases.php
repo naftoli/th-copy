@@ -71,10 +71,15 @@ class BaseRouter {
             $base->bulkUpdate( $_POST['base'] );
         } else {
             $base = \School::build( $base );
-            // $base->save();
+            $base->save();
+            // connect the two
+            \AdminAuth::create([
+                'admin_id' => $current_user->admin_id,
+                'auth' => 'school', 'id' => $base->school_id
+            ]);
         }
 
-        $base->register( $cart, $total, $cc, $current_user->admin_id );
+        $base->register( $current_user->admin_id, $cart, $total, $cc );
 
         json_response( $base, true, true );
     }
