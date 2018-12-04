@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 // components
 import { Prompt } from 'react-router';
 import { TabContent, Nav } from 'reactstrap';
-import { NavigationTab } from 'components/navigation';
-import { FontAwesome, LoadingScreen } from 'components/ui';
+import { NavigationTabs } from 'components/navigation';
+import { LoadingScreen } from 'components/ui';
 // tabs
 import { 
   BaseTab, PaymentsTab, ShippingTab, 
   SettingsTab, StaffTab
-} from './tabs';
+} from './includes/tabs';
 // state
 import { getBase, updateBase } from 'store/base/bases/operations';
 import { removeAuth, createAuth } from 'store/base/staff/operations';
@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
 import { filterUpdates } from 'functions/events';
 import { isAdmin } from 'functions/login';
+import { showError } from 'functions/notifications';
 
 class BasesPage extends Component {
 
@@ -60,12 +61,15 @@ class BasesPage extends Component {
   }
 
   /********************************* EVENT HANDLERS *********************************/
-  toggle = activeTab => () => this.setState({ activeTab });
+  toggle = activeTab => {
+    this.setState({ activeTab })
+  };
   // input changed
   onUpdate = updates => {
     updates = filterUpdates( this.state.base, { ...this.state.updates, ...updates } );
     this.setState({ updates });
   };
+  // update the validity of the forms
   updateValid = tab => status => {
     if ( this.state.valid[tab] !== status ) {
       this.setState({ valid: { ...this.state.valid, [tab]: status } })
@@ -81,9 +85,12 @@ class BasesPage extends Component {
     this.updateBase( this.state.updates )
     .then( () => this.setState({ updates: {} }) );
   }
+  // update the base
   updateBase = updates => {
-    return this.props.updateBase( this.state.base.school_id, updates )
-    .then( base => this.setState({ base }) );
+    return showError(
+      this.props.updateBase( this.state.base.school_id, updates )
+      .then( base => this.setState({ base }) )
+    );
   }
   
 
@@ -97,26 +104,23 @@ class BasesPage extends Component {
     // is the form updated and valid
     const updated = Object.keys( updates ).length > 0;
 
+    const navProps = { activeTab, onClick: this.toggle };
+    const tabs = [
+      { tab: 1, ...navProps, icon: 'school',    title: 'Base', valid: valid.base },
+      { tab: 2, ...navProps, icon: 'sliders-h', title: 'Settings', valid: valid.settings },
+      { tab: 3, ...navProps, icon: 'truck',     title: 'Shipping', valid: valid.shipping },
+      { tab: 4, ...navProps, icon: 'credit-card', title: 'Credit Cards' },
+      { tab: 5, ...navProps, icon: 'users',     title: 'Commanders' }
+    ]
+
     return (
       <div id='BasePage'>
         <Prompt when={ updated } message="You have unsaved changes. Are you sure you want to leave?" />
+        
         <Nav tabs>
-          <NavigationTab active={activeTab === 1} onClick={this.toggle(1)}>
-            { valid.base || <FontAwesome icon='exclamation'/> } Base <FontAwesome icon='school'/>
-          </NavigationTab>
-          <NavigationTab active={activeTab === 2} onClick={this.toggle(2)}>
-            { valid.settings || <FontAwesome icon='exclamation'/> } Settings <FontAwesome icon='sliders-h'/>
-          </NavigationTab>
-          <NavigationTab active={activeTab === 3} onClick={this.toggle(3)}>
-            { valid.shipping || <FontAwesome icon='exclamation'/> } Shipping <FontAwesome icon='shipping-fast'/>
-          </NavigationTab>
-          <NavigationTab active={activeTab === 4} onClick={this.toggle(4)}>
-            Payments <FontAwesome icon='credit-card'/>
-          </NavigationTab>
-          <NavigationTab active={activeTab === 5} onClick={this.toggle(5)}>
-            Commanders <FontAwesome icon='users'/>
-          </NavigationTab>
+          <NavigationTabs tabs={ tabs } />
         </Nav>
+
         <TabContent activeTab={ activeTab }>
 
           <BaseTab 

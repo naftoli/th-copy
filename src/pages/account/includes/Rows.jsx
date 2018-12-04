@@ -88,7 +88,7 @@ export const InformationRow = props => {
         <label>E-Mail Address (unique)</label>
         <Input type='email'
           name='admin_email'
-          value={ admin_email }
+          value={ admin_email || '' }
           onChange={ onChange } />
         <div className='invalid-message'>
           Please enter a valid E-mail address
@@ -99,7 +99,7 @@ export const InformationRow = props => {
         <label>Title</label>
         <Input 
           name='title' 
-          value={ title }
+          value={ title || '' }
           onChange={ onChange } />
       </Col>
 
@@ -107,7 +107,7 @@ export const InformationRow = props => {
         <label>First Name</label>
         <Input required
           name='first'
-          value={ first } 
+          value={ first || '' } 
           onChange={ onChange } />
       </Col>
 
@@ -115,7 +115,7 @@ export const InformationRow = props => {
         <label>Last Name</label>
         <Input required
           name='last'
-          value={ last }
+          value={ last || '' }
           onChange={ onChange } />
       </Col>
 
@@ -124,7 +124,7 @@ export const InformationRow = props => {
         <PhoneNumber 
           onChange={ onChange }
           name='admin_phone_work'
-          value={ admin_phone_work } />
+          value={ admin_phone_work || '' } />
         <div className='invalid-message'>
           Please enter a valid phone number
         </div>
@@ -135,7 +135,7 @@ export const InformationRow = props => {
         <PhoneNumber
           onChange={ onChange }
           name='admin_phone_mobile'
-          value={ admin_phone_mobile } />
+          value={ admin_phone_mobile || '' } />
         <div className='invalid-message'>
           Please enter a valid phone number
         </div>

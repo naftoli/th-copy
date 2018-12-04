@@ -1,2 +1,2 @@
-export { default as ProfileForm } from './ProfileForm';
+export * from './PaymentForm';
 export { default as CCForm } from './CCForm';

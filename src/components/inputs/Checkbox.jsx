@@ -18,7 +18,10 @@ export const Checkbox = ( props ) => {
     if ( setRef ) { setRef( ref ) };
   }
 
-  const classNames = classnames('checkbox', { [className]: className });
+  const classNames = classnames('checkbox', {
+    [className]: className,
+    'disabled': inputProps.disabled
+  });
 
   return (
     <label className={ classNames } tabIndex={ inputProps.disabled ? -1 : 0 } onKeyPress={onKeyPress}>

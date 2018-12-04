@@ -23,8 +23,11 @@ a[tabindex]:hover { cursor: pointer; }
     // box-shadow: 0 0 0 0.2rem rgba(0, 97, 202, 0.5);
   }
 }
-.nav-tabs a.nav-link { color: inherit; }
-.nav-tabs .nav-link:hover { color: $primary-color-hover; }
+
+.tooltip-inner a {
+  color: #FFF;
+}
+
 // modal headers should use it as well
 .modal-header {
   background-color: $primary-color;
@@ -131,12 +134,15 @@ div.react-select__multi-value { background-color: $primary-color-light; }
   overflow-x: auto; flex-wrap: nowrap; border-color: $primary-color;
   
   .nav-item { margin-bottom: 0px; flex-grow: 1; text-align: center; }
-  .nav-link:hover{ cursor: pointer; color: $primary-color; }
 
   .nav-link:not(.active) i.fas.fa-exclamation { color: red; }
   
-  a.nav-link { white-space: nowrap; font-weight: bold; transition: .1s; }
+  a.nav-link { color: inherit; white-space: nowrap; font-weight: bold; transition: .1s; }
   a.active.nav-link { background-color: $primary-color; color: #fff; border-color: $primary-color; }
+  
+  .nav-link:not( .disabled ):not( .active ):hover {
+    cursor: pointer; color: $primary-color-hover;
+  }
 }
 .tab-content { padding: 10px; margin-bottom: 10px; border: 1px solid $primary-color; border-top: none; }
 

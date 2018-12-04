@@ -18,6 +18,11 @@ export const getBase = id => dispatch => {
   return API.get( `/core/bases?id=${id}` )
 }
 
+// get a single base
+export const getDefaults = () => dispatch => {
+  return API.get( `/core/bases?action=defaults` )
+}
+
 // update a single base
 export const updateBase = ( id, data ) => dispatch => {
   return API.post( `/core/bases?id=${id}`, data )
@@ -25,6 +30,11 @@ export const updateBase = ( id, data ) => dispatch => {
     dispatch( actions.updateBase( id, base ) ); 
     return base;
   });
+}
+
+// register a base
+export const registerBase = data => dispatch => {
+  return API.post(`/core/bases?action=register`, data )
 }
 
 //********************** DOES NOT CONNECT TO REDUX **********************/

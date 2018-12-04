@@ -32,8 +32,9 @@ const rootReducer = ( state, action ) => {
 
 let extension = f => f;
 // * only connect to devtools in development
-if ( window.devToolsExtension && process.env.NODE_ENV !== 'production' )
-  extension = window.devToolsExtension();
+if ( window.__REDUX_DEVTOOLS_EXTENSION__ && process.env.NODE_ENV !== 'production' ) {
+  extension = window.__REDUX_DEVTOOLS_EXTENSION__();
+}
 
 export default createStore( rootReducer, compose(
   applyMiddleware( thunk ), extension

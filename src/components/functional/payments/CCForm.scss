@@ -1,7 +1,7 @@
 .CCForm {
   padding: 0px 5px;
   margin: 15px 0px;
-  overflow: hidden;
+  // overflow: hidden;
 
   transition: .25s ease-in;
 
@@ -32,7 +32,7 @@
     flex-wrap: wrap;
     > form { max-width: 100%; }
   }
-  @media ( max-width: 630px ) {
+  @media ( max-width: 600px ) {
     #preview { margin: 0px; }
   }
 
@@ -51,5 +51,7 @@
     }
   }
 
-  .rccs__card--front, .rccs__card--back { box-shadow: none; }
+  .rccs__card--front, .rccs__card--back {
+    box-shadow: none;
+  }
 }

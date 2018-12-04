@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import doubt from 'img/doubt.svg';
 
-class Page404 extends Component {
+export class Page404 extends Component {
   render() {
     return (
       <div id='Page404' className='error'>
@@ -24,5 +24,3 @@ class Page404 extends Component {
     );
   } 
 }
-
-export default Page404;

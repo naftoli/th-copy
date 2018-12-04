@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { Row, Col, TabPane, Alert } from 'reactstrap';
-import { NumberDisplay, DateDisplay } from 'components/ui';
+import { CurrencyDisplay, DateDisplay } from 'components/ui';
 
 export class RegistrationTab extends Component {
   // props we are expecting for this component
@@ -66,7 +66,7 @@ const RegistrationCharge = props => {
           <strong>Registration Type:</strong> { type } { year }
         </p>
         <p>
-          <strong>Amount Paid: </strong><NumberDisplay value={ amount } opts={{ style: 'currency', currency: 'USD' }} />
+          <strong>Amount Paid: </strong><CurrencyDisplay value={ amount } />
         </p>
         <p>
           <strong>Date Paid: </strong><DateDisplay value={ date } format='l LT' />

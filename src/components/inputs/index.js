@@ -3,7 +3,7 @@ export * from './FileInput';
 export * from './Password';
 export * from './Checkbox';
 export * from '../selects';
+export * from './Toggle';
 export * from './Radio';
 export * from './Forms';
 export * from './Date';
-export * from './Toggle';

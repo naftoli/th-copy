@@ -19,7 +19,9 @@ export class BaseTab extends Component {
 
   onChange = onInputChange( this.props.onUpdate );
 
-  toggle = () => this.setState({ showModal: !this.state.showModal });
+  toggle = () => this.setState({
+    showModal: !this.state.showModal
+  });
   
   updateLogo = formData => {
     this.toggle();
@@ -51,8 +53,8 @@ export class BaseTab extends Component {
           <AddressRow { ...base } showPhone prefix='school_' onChange={ this.onChange } />
 
           <p className='title'>Notes</p>
-          <Input type="textarea" name='notes' rows='8'
-            value={ base.notes } onChange={ this.onChange } />
+          <Input type="textarea" name='notes' rows='6'
+            value={ base.notes || '' } onChange={ this.onChange } />
 
           <SaveButton show={ updated } />
 

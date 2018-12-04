@@ -1,44 +1,62 @@
-import React from 'react';
-import classnames from 'classnames';
+import React, { Component } from 'react';
 import { FontAwesome } from 'components/ui';
 import { NavItem, NavLink } from 'reactstrap';
 
-const NavigationTab = ( initialProps ) => {
-  let { 
-    onClick,  active, className,  activeTab,
-    children, tab,    valid,      icon,     ...props
-  } = initialProps;
+export class NavigationTab extends Component {
 
-  className = classnames({
-    'active': !!active,
-    [className]: !!className
-  });
-
-  const toggle = () => onClick( tab );
-
-  if ( activeTab && tab )
-    active = activeTab === tab;
-
-  const click = activeTab && tab ? toggle : onClick;
-
-  const onKeyPress = ( event ) => {
-    if ( event.key === 'Enter' )
-      click();
+  static defaultProps = {
+    valid: true
   }
 
-  return (
-    <NavItem>
-      <NavLink { ...props } 
-          tabIndex = { 0 }
-          active = { active }
-          onClick = { click } 
-          className = { className } 
-          onKeyPress = { onKeyPress }>
-        { children }{' '}
-        { icon && <FontAwesome icon={ icon } /> }
-      </NavLink>
-    </NavItem>
-  );
+  click = e => {
+    const { activeTab, tab, disabled, onClick } = this.props;
+    // if we have the tab props set, attempt to just jump to that tab
+    if ( activeTab && tab ) {
+      if ( !disabled )
+        return onClick( tab );
+    }
+    // return the standard onclick event
+    return onClick( e );
+  }
+
+  onKeyPress = e => {
+    if ( e.key === 'Enter' ) {
+      this.click( e );
+    }
+  }
+
+  render() {
+    let {
+      tab,  active, disabled, activeTab,  title,
+      icon, valid,  children, ...props
+    } = this.props;
+    // if we have these props, update the active prop
+    if ( activeTab && tab ) {
+      active = activeTab === tab;
+    }
+
+    const tabIndex = disabled ? -1 : 0;
+
+    return (
+      <NavItem>
+        <NavLink     { ...props }   active={ active }
+            disabled={ disabled }   onClick={ this.click }
+            tabIndex={ tabIndex }   onKeyPress={ this.onKeyPress }>
+
+          { !valid && <FontAwesome icon='exclamation' /> }
+
+          {' '}{ title || children }{' '}
+
+          { icon && <FontAwesome icon={ icon } /> }
+          
+        </NavLink>
+      </NavItem>
+    );
+  }
 }
 
-export { NavigationTab }
+export const NavigationTabs = ({ tabs }) => {
+  return tabs.map( ( tab, index ) =>
+    <NavigationTab { ...tab } key={ index } />
+  );
+}

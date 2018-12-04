@@ -13,6 +13,7 @@ import { loginStoreChanged } from 'functions/login';
 // icons
 import user from 'img/user.svg';
 import logo from 'img/logos/th.svg';
+import { LEGACY_URL } from 'components/constants';
 
 class Navbar extends Component {
 
@@ -90,6 +91,13 @@ class Navbar extends Component {
                   <span>My Account</span>
                 </DropdownItem>
               </Link>
+
+              <a href={`${ LEGACY_URL }/helpdesk/?p=open`} >
+                <DropdownItem>
+                  <FontAwesome icon="life-ring" regular />
+                  <span>Technical Support</span>
+                </DropdownItem>
+              </a>
 
               <Link to={'/logout'}>
                 <DropdownItem>

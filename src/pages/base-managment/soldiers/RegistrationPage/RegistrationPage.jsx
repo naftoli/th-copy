@@ -9,6 +9,8 @@ import { ButtonBar, SelectTable, Callout, InlineSync, FontAwesome } from 'compon
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+// state
+import { getPaymentProfiles } from 'store/payments/operations';
 import { getSoldiers, registerSoldiers } from 'store/base/soldiers/registration/operations';
 // styles
 import './RegistrationPage.scss';
@@ -23,8 +25,11 @@ export class RegistrationPage extends Component {
   
   componentDidMount(){ 
     setTitle('Soldier Registration');
+    // if the soldiers are empty then get the soldiers
     if ( this.props.soldiers.length === 0 )
       this.getSoldiers();
+    // get the current payment profiles
+    this.props.getPaymentProfiles();
   }
 
   toCSV = () => {
@@ -37,11 +42,19 @@ export class RegistrationPage extends Component {
     ]);
     arrayToCSV( headers, rows, 'not_registered_soldiers' );
   }
-
-  toggleModal = () => this.setState({ showModal: !this.state.showModal });
-
+  // close the modal
+  closeModal = () => this.setState({ showModal: false });
+  // open the modal or just register the soldiers
+  payAndRegister = () => {
+    if ( this.state.total > 0 ) {
+      return this.setState({ showModal: true });
+    } else {
+      return this.registerSoldiers();
+    }
+  }
+  // get the id
   getId = row => row.user_id;
-
+  // toggle a row in the table
   toggleRow = ( selection, { fee } ) => {
     if ( this.state.selection.length > selection.length )
       fee = -Math.abs(fee); // update the fee to a negative number if we reduced the length of items
@@ -49,7 +62,7 @@ export class RegistrationPage extends Component {
     const total = this.state.total + fee;
     this.setState({ selection, total });
   };
-
+  // toggle all the rows in the table
   toggleAll = ( selection, currentRecords ) => {
     let total = 0;
     if ( currentRecords.length > 0 )
@@ -57,26 +70,30 @@ export class RegistrationPage extends Component {
       
     this.setState({ selection, total });
   };
-
+  // get the soldiers
   getSoldiers = () => {
     this.props.getSoldiers()
     .catch( e => toast.error( e.message ) );
   }
-
-  registerUsers = ( payment ) => {
+  // register the soldiers
+  registerSoldiers = ( payment = false ) => {
     this.setState({ showModal: false });
+    // make sure there is more then one soldier
     if ( this.state.selection.length === 0 ) {
       return toast.error('Cannot Register 0 Soldiers.');
     }
+    // register the soldiers
     this.props.registerSoldiers( this.state.selection, payment, this.state.total )
-    .then( this.props.getSoldiers )
-    .catch( e => toast.error( e.message ) );
+      .then( this.props.getSoldiers )
+      .catch( e => toast.error( e.message ) );
   }
 
   render() {
-    const { login, loading, soldiers } = this.props;
     const { total, selection, showModal } = this.state;
-    const { toCSV, toggleModal } = this;
+    const { login, loading, soldiers, payments } = this.props;
+
+    console.log( payments );
+
     // define table columns
     let columns = [
       { Header: 'First Name', accessor: 'first',
@@ -101,19 +118,25 @@ export class RegistrationPage extends Component {
           Please select the Soldiers you are registering.
         </Callout>
         
-        <ButtonBar style={{ margin: '10px 0px', width: '100%', justifyContent: 'flex-end' }}>
-          <Button color='primary' onClick={toggleModal}>
+        <ButtonBar>
+          <Button
+              color='primary'
+              onClick={ this.payAndRegister }
+              disabled={ selection.length === 0 }>
             <FontAwesome icon='dollar-sign' /> Pay and Register
           </Button>
+
           <Button color='primary' onClick={ this.getSoldiers }>
             <InlineSync loading={ loading } /> Refresh
           </Button>
+
           { canDownload( soldiers ) &&
-            <Button color='primary' onClick={ toCSV }>
+            <Button color='primary' onClick={ this.toCSV }>
               <FontAwesome icon='file-download' /> Download Page (CSV/Excel)
             </Button>
           }
         </ButtonBar>
+
         <Row>
           <Col xs='12' sm='6'>
             <h2 id='total'>
@@ -126,6 +149,7 @@ export class RegistrationPage extends Component {
             </h2>
           </Col>
         </Row>
+
         <SelectTable 
           pageId='RegistrationPage' 
           data={ soldiers } columns={ columns }
@@ -137,16 +161,27 @@ export class RegistrationPage extends Component {
           toggleRow={ this.toggleRow }
           toggleAll={ this.toggleAll } />
 
-        <RegistrationModal isOpen={showModal} toggle={toggleModal} onSubmit={ this.registerUsers }/>
+        <RegistrationModal
+          isOpen={ showModal }
+          payments={ payments }
+          toggle={ this.closeModal }
+          onSubmit={ this.registerSoldiers } />
       </div>
     )
   }
 }
 
-const mapStateToProps = ( { login, base } ) => ({
+const mapStateToProps = ( { login, base, payments } ) => ({
   login: login.current_login,
   soldiers: base.soldiers.registration_soldiers,
-  loading: base.soldiers.loading
+  loading: base.soldiers.loading,
+  payments: payments.payments
 });
 
-export default connect( mapStateToProps, { getSoldiers, registerSoldiers } )( RegistrationPage );
+const mapDispatchToProps = {
+  getSoldiers, registerSoldiers, getPaymentProfiles
+}
+
+export default connect(
+  mapStateToProps, mapDispatchToProps
+)( RegistrationPage );

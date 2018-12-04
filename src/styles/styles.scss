@@ -17,9 +17,10 @@ $print-body-min-width: auto;
 //   xl: 1480px
 // );
 
-// $rccs-size: 250px;
-// $rccs-name-font-size: 15px;
-// $rccs-number-font-size: 1.2em;
+$rccs-size: 250px;
+$rccs-name-font-size: 12px;
+$rccs-number-font-size: 17px;
+$rccs-cvc-font-size: 12px;
 
 @import '~bootstrap/scss/bootstrap';
 @import '~react-credit-cards/es/styles.scss';

@@ -211,10 +211,6 @@ const getMenu = ( login ) => {
       label: 'Setup Guide',  legacy: true, path: '/admin_setup_guide.php', module: 'chayolei',
       icon: <img src={`${LEGACY_URL}/images/icon_wizard.png`} alt="Setup Guide"/>
     },
-    {
-      label: 'Support', legacy: true, path: '/helpdesk/?p=open',
-      icon: <img src={`${LEGACY_URL}/images/parentIcons/support icon.gif`} alt="Support"/>
-    }
   ];
 
   // filter the menu and return it

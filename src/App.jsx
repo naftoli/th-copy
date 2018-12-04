@@ -11,7 +11,7 @@ import Rewards from 'pages/rewards';
 import Missions from 'pages/missions';
 import HomePage from 'pages/home/HomePage';
 import BaseManagment from 'pages/base-managment';
-import RegistrationPage from 'pages/registration/RegistrationPage';
+import RegistrationPage from 'pages/base-managment/base/RegisterBasePage';
 // components
 import { Dashboard } from 'components/navigation';
 import { LoadingScreen } from 'components/ui';
@@ -99,6 +99,7 @@ export class App extends Component {
           { path: `/missions`, component:  Missions },
           { path: `/myaccount`, exact: true, component:  Account},
           { path: `/logout`, component: Logout },
+          { path: `/register`, component: RegistrationPage },
           { component:  Page404 }
       ];
     }

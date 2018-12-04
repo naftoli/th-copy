@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Input } from 'reactstrap';
 import { PhoneNumber } from 'components/inputs';
+import memoize from 'memoize-one';
 
 export class AddressRow extends Component {
 
@@ -9,16 +10,18 @@ export class AddressRow extends Component {
     prefix: '',
   }
 
-  getName = ( key ) =>
-    `${this.props.prefix}${key}`;
+  getName = memoize( key => {
+    return `${this.props.prefix}${key}`
+  });
 
-  getValue = ( key ) =>
-    this.props[`${this.props.prefix}${key}`] || '';
+  getValue = memoize( key => {
+    return this.props[`${this.props.prefix}${key}`] || '';
+  });
 
   render() {
     const { getName, getValue } = this;
-    const { title, disabled, onChange, showPhone } = this.props;
-    const inputProps = { disabled, onChange };
+    const { title, disabled, required, onChange, showPhone } = this.props;
+    const inputProps = { disabled, required, onChange };
     return (
       <Row id='address-row'>
 
@@ -37,8 +40,9 @@ export class AddressRow extends Component {
 
         <Col xs={ 12 }>
           <label>Address 2</label>
-          <Input name={ getName( 'address2' ) } id={ getName( 'address2' ) } placeholder='5th Floor'
-            value={ getValue( 'address2' ) } {...inputProps} maxLength={ 255 } />
+          <Input name={ getName( 'address2' ) } id={ getName( 'address2' ) }
+            placeholder='5th Floor' value={ getValue( 'address2' ) }
+            { ...inputProps } required={ false }  maxLength={ 255 } />
         </Col>
 
         <Col xs={ 6 } xl={ showPhone ? 6 : 4 }>

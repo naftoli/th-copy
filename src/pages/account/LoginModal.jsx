@@ -66,61 +66,65 @@ class LoginModal extends Component {
     return (
       <Modal id='LoginModal'  centered
           isOpen={ isOpen }   toggle={ toggle }>
+
         <ModalHeader toggle={ toggle }>
           Change Username & Password
         </ModalHeader>
 
-        <ModalBody>
-          <Row>
-            <Col xs={12}>
-              <p>Your current password is required to change your username and password</p>
-              <Label>Current Password</Label>
-              <Password
-                required
-                tabToggle
-                name='current_password'
-                value={ current_password }
-                onChange={ this.onChange }
-                placeholder='Old Password' />
-            </Col>
-          </Row>
+        <form onSubmit={ this.onSubmit }>
+          <ModalBody>
+            <Row>
+              <Col xs={12}>
+                <p>Your current password is required to change your username and password</p>
+                <Label>Current Password</Label>
+                <Password
+                  required
+                  tabToggle
+                  name='current_password'
+                  value={ current_password }
+                  onChange={ this.onChange }
+                  placeholder='Old Password' />
+              </Col>
+            </Row>
 
-          <hr/>
+            <hr/>
+            
+            <Row>
+              <Col xs={12} sm={6}>
+                <Label>New Username (unique)</Label>
+                <Input
+                  name='username'
+                  value={ username }
+                  autoComplete='username'
+                  onChange={ this.onChange }
+                  placeholder={ this.props.username } />
+              </Col>
+
+              <Col xs={12} sm={6}>
+                <Label>New Password</Label>
+                <Password
+                  tabToggle
+                  defaultOpen
+                  name='password'
+                  value={ password }
+                  onChange={ this.onChange }
+                  autoComplete='new-password'
+                  placeholder='New Password' />
+              </Col>
+            </Row>
+
+            { error &&
+              <Alert color='danger'>Error: { error }</Alert> }
+          </ModalBody>
+
+          <ModalFooter>
+
+            <SaveButton
+              saving={ saving }
+              disabled={ !current_password || ( !username && !password ) } />
           
-          <Row>
-            <Col xs={12} sm={6}>
-              <Label>New Username (unique)</Label>
-              <Input
-                name='username' 
-                value={ username }
-                onChange={ this.onChange }
-                placeholder={ this.props.username } />
-            </Col>
-
-            <Col xs={12} sm={6}>
-              <Label>New Password</Label>
-              <Password
-                tabToggle
-                defaultOpen
-                name='password'
-                value={ password }
-                onChange={ this.onChange }
-                placeholder='New Password' />
-            </Col>
-          </Row>
-
-          { error &&
-            <Alert color='danger'>Error: { error }</Alert> }
-        </ModalBody>
-
-        <ModalFooter>
-
-          <SaveButton
-            saving={ saving }
-            onClick={ this.onSubmit }
-            disabled={ saving || !current_password || ( !username && !password ) } />
-        
-        </ModalFooter>
+          </ModalFooter>
+        </form>
       </Modal>
     );
   }

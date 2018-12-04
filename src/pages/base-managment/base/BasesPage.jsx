@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import PropTypes from 'prop-types';
 // components
 import { Button } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import CropperModal from 'components/modals/CropperModal';
-import { 
-  ButtonBar, Table, InlineSync, FontAwesome, NumberDisplay, ProfilePicture
-} from 'components/ui';
+import { ButtonBar, Table, InlineSync, FontAwesome } from 'components/ui';
 // functions
+import getColumns from './includes/columns';
 import { isAdmin } from 'functions/login';
 import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 // state
+import { showError } from 'functions/notifications';
 import { getBases, updateBase } from 'store/base/bases/operations';
 
 class BasesPage extends Component {
@@ -34,9 +32,19 @@ class BasesPage extends Component {
     this.props.getBases();
   }
   // update base logos from master page
-  toggle = () => this.setState({ modal: { ...this.state.modal, show: !this.state.modal.show } });
-  editPicture = id => ({ target }) => this.setState({ modal: { show: true, id, src: target.src } });
-  upload = formData => this.props.updateBase( this.state.modal.id, formData );
+  toggle = () =>
+    this.setState({ modal: { ...this.state.modal, show: !this.state.modal.show } });
+  // open the modal
+  editPicture = id => ({ target }) =>
+    this.setState({ modal: { show: true, id, src: target.src } });
+  // upload the picture and update the base
+  upload = formData => showError(
+    this.props.updateBase( this.state.modal.id, formData )
+  );
+  // update the the base in the background
+  updateToggle = ( key, id ) => event => showError(
+    this.props.updateBase( id, { [key]: event.target.checked ? 1 : 0 } )
+  );
 
   toCSV = () => {
     const headers = [
@@ -53,34 +61,12 @@ class BasesPage extends Component {
     const { bases, loading, match } = this.props;
     const { modal } = this.state;
 
-    let columns = [
-      {
-        Header: 'Logo',  accessor: 'logo',
-        Cell: props => <ProfilePicture src={ `/schoolLogos/${props.value}` } className='inline-profile' 
-                          onClick={ this.editPicture( props.original.school_id ) }/>,
-        className: 'profile-picture', width: 85, sortable: false, filterable: false
-      },
-      { Header: 'Base Number', accessor: 'school_number',
-        Cell: props => <Link to={`${match.path}/${props.original.school_id}`}>{props.value}</Link> },
-      { Header: 'Base Name', accessor: 'school_name',
-        Cell: props => <Link to={`${match.path}/${props.original.school_id}`}>{props.value}</Link> },
-      { Header: 'Base City', accessor: 'school_city' },
-      { Header: 'Base State', accessor: 'school_state' },
-      { Header: 'Base Country', accessor: 'school_country' },
-      { Header: 'CTH', id: 'chayolei', accessor: base => base.chayolei ? 'Yes' : 'No' },
-      { Header: 'Chidon', id: 'chidon', accessor: base => base.chidon ? 'Yes' : 'No' },
-      { Header: 'WWTC', id: 'tehillim', accessor: base => base.tehillim ? 'Yes' : 'No' },
-      { Header: 'Tanya', id: 'tanya', accessor: base => base.tanya ? 'Yes' : 'No' },
-      { Header: 'Soldiers', accessor: 'soldier_count', Cell: props => <NumberDisplay value={props.value}/> },
-    ];
+    let columns = getColumns( match.path, this.editPicture, this.updateToggle );
 
     return (
       <div id='BasesPage'>
       
         <ButtonBar>
-          {/* <Button onClick={this.toggle} className='btn btn-primary'>
-            <FontAwesome icon='plus' /> Create Base
-          </Button> */}
           <Button color='primary' onClick={ this.loadBases }>
             <InlineSync loading={ loading } /> Refresh
           </Button>

@@ -16,7 +16,7 @@ import { setTitle } from 'functions/utils';
 import { showError } from 'functions/notifications';
 import { filterUpdates, onInputChange } from 'functions/events';
 // style
-import './AccountPage/AccountPage.scss';
+import './includes/AccountPage.scss';
 import LoginModal from './LoginModal';
 
 class AccountPage extends Component {

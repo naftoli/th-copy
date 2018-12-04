@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import facepalm from 'img/facepalm.svg';
 import './styles/ClientError.scss';
 
-class ClientError extends Component {
+export class ClientError extends Component {
   render() {
     return (
       <div id='ClientError' className='error'>
@@ -24,5 +24,3 @@ class ClientError extends Component {
     );
   } 
 }
-
-export default ClientError;

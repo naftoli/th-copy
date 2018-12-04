@@ -19,7 +19,7 @@ export const onJSONChange = ( callback, key = 'name' ) => ({ target }) =>
 
 // * handle inputs that need to be converted to numbers
 export const onNumberChange = ( callback, key = 'name' ) => ({ target }) =>
-  callback && callback( { [ target[key] ]: parseInt( target.value, 10 ) } );
+  callback && callback( { [target.name]: target.value ? parseFloat( target.value, 10 ) : null } );
 
 // * convert date to Julian Date
 export const onJulianDateChange = callback => key => date =>

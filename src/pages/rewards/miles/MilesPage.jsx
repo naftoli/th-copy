@@ -46,7 +46,8 @@ class MilesPage extends Component {
     this.setState({ [key]: option.value });
   onPlatoonChange = ({ value }) =>
     this.setState({ class_id: value, user_id: false });
-  onNumberChange = ({ target }) => this.setState({ [target.name]: parseInt( target.value, 10 ) });
+  onNumberChange = ({ target }) =>
+    this.setState({ [target.name]: parseInt( target.value, 10 ) });
 
   // submit buttons
   addMiles = () => {

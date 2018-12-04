@@ -1,0 +1,235 @@
+@import 'styles/colors';
+
+#RegisterBasePage {
+  max-width: 1170px;
+  margin: 0 auto;
+  // style the header
+  > h2 {
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+
+  span.cross-out {
+    text-decoration: line-through;
+    font-weight: normal;
+  }
+
+  .NavigationRow {
+    margin-top: 1rem;
+    .btn { width: 100%; margin-bottom: .5rem; }
+  }
+
+  ul.checkboxes {
+    list-style: none;
+    padding-left: 1em;
+
+    li {
+      display: flex;
+      align-items: center;
+      padding-top: .25rem;
+    }
+
+    li:before {
+      content: "\F14A";
+      font: normal normal normal 14px/1 Font Awesome\ 5 Free;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+
+      font-size: 1.3em;
+      margin-top: .1rem;
+      margin-right: 5px;
+      align-self: flex-start;
+    }
+  }
+  #ModulesTab {
+
+    .modules {
+      display: grid;
+
+      @media ( min-width: 536px ) {
+        grid-template-columns: repeat( auto-fill, minmax( 485px, 1fr ) );
+      }
+      
+    }
+
+    .module.paid:before {
+      content: 'Paid';
+      position: absolute;
+      background: $primary-color;
+      color: #fff;
+      top: 0;
+      right: 0;
+      padding: 30px;
+      transform: rotate(45deg) scale(1) skew(0) translate(0);
+      width: 120px;
+      text-align: center;
+      vertical-align: bottom;
+      top: -17px;
+      right: -42px;
+      font-size: 1.3em;
+      padding-bottom: 10px;
+    }
+
+    .module {
+      position: relative;
+      overflow: hidden;
+
+      padding: .8rem;
+      margin: .5rem;
+      border: 1px solid #ccc;
+      border-radius: .3rem;
+
+      display: flex;
+      flex-direction: column;
+
+      > label.checkbox {
+        display: block;
+        font-size: 1.2em;
+        margin-bottom: .3rem;
+        padding-bottom: .3rem;
+        border-bottom: 1px solid #ccc;
+      }
+
+      .details {
+        flex-grow: 1;
+        
+        > p:first-child {
+          font-weight: bolder;
+          margin-bottom: .2rem;
+        }
+
+        > ul {
+          font-size: .8em;
+          margin-bottom: .3rem;
+
+          li {
+            border-bottom: 1px solid #ccc;
+          }
+        }
+      }
+
+      .price {
+        margin-top: .5rem;
+        text-align: right;
+        font-size: 1em;
+        > span { display: block; }
+        > span:last-child {
+          font-size: 1.15em;
+          span { font-weight: bold; }
+        }
+      }
+    }
+
+    .total {
+      text-align: right;
+      font-size: 1.3em;
+      margin-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #ccc;
+
+      span { font-weight: bold; }
+    }
+  }
+
+  .RegTypeRow {
+    margin: 0px;
+    display: grid;
+    grid-gap: .5rem;
+
+    @media ( min-width: 825px ) {
+      grid-template-columns: repeat( auto-fill, minmax( 375px, 1fr ) );
+    }
+
+    @media ( min-width: 825px ) and ( max-width: 1192px ) {
+      .registration-option:last-child {
+        grid-column: 1 / 3
+      }
+    }
+  }
+
+  .registration-option {
+    padding: .25rem .75rem;
+    border: 1px solid #ccc;
+    display: inline-flex;
+    flex-direction: column;
+  
+    > label.radio {
+      display: block;
+      font-size: 1.1em;
+      margin-bottom: .3rem;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .details {
+      flex-grow: 1;
+      font-size: .8em;
+      padding-bottom: .25rem;
+
+      list-style: none;
+      padding-left: .5em;
+      margin-bottom: 0px;
+    }
+
+    .discounts {
+      text-align: center;
+      padding-top: .2rem;
+      ul {
+        padding: 0px; margin: 0px;
+
+        border-top: 1px solid #ccc;
+        margin: .25rem 0px;
+        padding-top: .25rem;
+
+        display: flex;
+        justify-content: space-around;
+        
+        li {
+          display: inline-block;
+          padding: 0px .25em;
+          font-size: .9em;
+        }
+      }
+    }
+
+    .price { text-align: right; }
+    .rate { font-weight: bold; }
+  }
+
+  .terms {
+    margin-bottom: 1rem;
+
+    ul { font-size: .9em; margin-bottom: .5rem; }
+    .checkbox {
+      margin-top: .5rem;
+      width: 100%; text-align: center;
+      font-size: 1.3em; padding: 0px;
+    }
+  }
+
+  ul.cart {
+    list-style: none;
+    text-transform: capitalize;
+    padding: 0px .5em;
+
+    #balance {
+      text-decoration: underline;
+    }
+
+    li {
+      border-bottom: 1px solid #ccc;
+      padding: .15em .5em;
+    }
+
+    li.total {
+      border-bottom: 0px;
+      font-size: 1.1em;
+      padding-top: .15em;
+    }
+
+    li span {
+      float: right;
+      font-weight: bold;
+    }
+  }
+}

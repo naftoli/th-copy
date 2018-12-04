@@ -18,13 +18,14 @@ import './home.scss';
 import { man, woman } from 'img/th';
 import school from 'img/icons/school.svg';
 import parents from 'img/icons/parents.svg';
-import RegistrationPage from 'pages/registration/RegistrationPage';
+import RegistrationPage from 'pages/base-managment/base/RegisterBasePage';
 
 
 class HomePage extends Component {
 
   componentDidMount() {
-    setTitle( 'Home Page' );
+    if ( this.props.login.active )
+      setTitle( 'Home Page' );
   }
 
   openParentPortal = () => {

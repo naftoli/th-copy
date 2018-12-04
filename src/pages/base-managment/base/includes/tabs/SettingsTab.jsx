@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 // components
 import { TabPane } from 'reactstrap';
-import { SettingsRow } from '../rows';
+import { isHQ } from 'functions/login';
 import { Form } from 'components/inputs';
 import { SaveButton } from 'components/buttons';
+import { HQSettingsRow, SettingsRow } from '../rows';
 
 export class SettingsTab extends Component {
 
@@ -29,8 +30,17 @@ export class SettingsTab extends Component {
 
           <SettingsRow
             base={ base }
-            login={ login }
             onUpdate={ onUpdate } />
+
+          { isHQ( login.code ) && 
+            <Fragment>
+              <p className='title'>HQ only settings</p>
+
+              <HQSettingsRow
+                base={ base }
+                onUpdate={ onUpdate } />
+            </Fragment>
+          }
 
           <SaveButton show={ updated } />
 

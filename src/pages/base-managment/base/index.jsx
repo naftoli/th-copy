@@ -5,7 +5,7 @@ import BasePage from './BasePage';
 import BasesPage from './BasesPage';
 import { Page404 } from 'pages/errors';
 // styles for all base pages
-import './base.scss'; 
+import './includes/base.scss'; 
 
 class BaseIndexPage extends Component {
   render() {

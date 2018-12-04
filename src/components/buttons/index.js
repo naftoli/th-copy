@@ -11,8 +11,9 @@ export * from './GoogleButton';
 
 export const SaveButton = rawProps => {
   let {
-    show, children, text = 'Save Changes', 
-    saving = false, icon, className, ...props 
+    show,   children,   icon,   className, 
+    saving = false,     text = 'Save Changes', 
+    disabled,           ...props 
   } = rawProps;
   // set the classnames
   className = classnames({
@@ -21,7 +22,11 @@ export const SaveButton = rawProps => {
   })
   // define the button
   const button = (
-    <Button color='primary' className={ className } { ...props }>
+    <Button
+        color='primary'
+        { ...props }
+        className={ className }
+        disabled={ saving || disabled }>
       {!saving && <span><FontAwesome icon={ icon || 'save' }/> { children || text }</span> }
       { saving && <span><InlineSync loading /> Saving...</span> }
     </Button>

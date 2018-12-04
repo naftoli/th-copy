@@ -11,14 +11,12 @@ class BaseSelect extends Component {
 
   static propTypes = {
     showAllOption: PropTypes.bool,
-    fetchAll: PropTypes.bool,
     onChange: PropTypes.func,
     value: PropTypes.any
   }
 
   static defaultProps = {
-    showAllOption: false,
-    fetchAll: false
+    showAllOption: false
   }
 
   componentDidMount(){

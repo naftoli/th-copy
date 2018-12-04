@@ -43,7 +43,7 @@ class CCForm extends Component {
   handleInputChange = ({ target }) => {
     let { value, onChange } = this.props;
     // update the correct section
-    value[target.name] = target.value;
+    value = { ...value, [target.name]: target.value };
     
     onChange( value );
   };
