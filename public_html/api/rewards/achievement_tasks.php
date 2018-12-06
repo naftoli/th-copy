@@ -55,7 +55,7 @@ class TasksRouter {
         if ( $login->code == 'BC' ) {
             $task->base = $login->id;
         } else if ( $login->code == 'TEACHER') {
-            $task->base = Platoon::find( $login->id )->school->school_id;
+            $task->base = $login->model->school_id;
             $task->platoon = $login->id;
         }
 
@@ -63,7 +63,7 @@ class TasksRouter {
             json_error( 'Cannot create a Task without a Campaign' );
         
         if ( $login->code == 'INST' ) {
-            $subject = Subject::find( $task->subject_id );
+            $subject = \Subject::find([ $task->subject_id ]);
             if ( $subject->inst_id != $login->id )
                 return json_error('You do not have permission to create Tasks for this Campaign. Please select another one.');
         }
@@ -74,7 +74,7 @@ class TasksRouter {
     }
 
     public function update( $id ) {
-        $task = AchievementTask::find( $id );
+        $task = \AchievementTask::find([ $id ]);
 
         $keys = ['subject_id', 'task', 'points'];
         foreach( $keys as $key ){

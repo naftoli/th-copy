@@ -15,13 +15,13 @@ class PrizesRouter {
         if ( $login->code == 'INST' ) {
             $filter = 'institution_id IN ( SELECT school_id FROM mashpiadb.schools WHERE inst_id = '. $login->id .' ) ';
         } else if ( $login->code == 'BC' ) {
-            $school_store = !!School::find( $current_user->login->school_id )->school_store;
+            $school_store = !!$login->model->school_store;
             $filter = 'institution_id = '. $login->school_id .' ';
         } else if ( $login->code == 'TEACHER' ) {
             $filter = 'institution_id = '. $login->school_id;
         }
 
-        $prizes = StorePrize::find('all', [
+        $prizes = StorePrize::all([
             'conditions' => $filter,
             'order' => 'is_active DESC, prize_count ASC, prize_name ASC', 
             'include' => [ 'school' ]
@@ -54,7 +54,7 @@ class PrizesRouter {
     }
 
     public function show( $id ){
-        $prize = StorePrize::find( $id );
+        $prize = \StorePrize::find([ $id ]);
         json_response( $prize );
     }
 
@@ -98,7 +98,7 @@ class PrizesRouter {
 
     public function update( $id ) {
         try {
-            $prize = StorePrize::find( $id );
+            $prize = \StorePrize::find([ $id ]);
             // update profile picture
             if( isset( $_FILES['image'] ) ) {
                 $prize->setImage( $_FILES['image'] );
@@ -138,7 +138,11 @@ class PrizesRouter {
     public function setStoreOpen() {
         global $current_user;
 
-        $school = School::find( $current_user->login->id );
+        $school = $current_user->login->model;
+
+        if ( !$school instanceof \School ) {
+            json_error('Invalid Login. You do not have access to a base.');
+        }
 
         $school->school_store = $_POST['school_store'];
         $school->save();

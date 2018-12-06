@@ -132,7 +132,7 @@ class StaffRouter {
 
     public function update( $id ) {
         try { // find the admin
-            $admin = Admin::find( $id );
+            $admin = \Admin::find([ $id ]);
             foreach( $_POST as $key => $value ) {
                 $admin->{ $key } = $value;
             }

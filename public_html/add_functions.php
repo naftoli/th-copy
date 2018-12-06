@@ -56,7 +56,7 @@ function add_ons() {
 
 function register_students($parameters) {
     require_once( __DIR__ . '/class.globalSettings.php' );
-	$admin_id = isset( $_COOKIE['admin_id'] ) ? mysql_real_escape_string( $_COOKIE['admin_id'] ) : 0;
+    $admin_id = isset( $_COOKIE['admin_id'] ) ? mysql_real_escape_string( $_COOKIE['admin_id'] ) : 0;
 
     // parse the params
     $parms = $parameters[0];
@@ -66,21 +66,21 @@ function register_students($parameters) {
     $transaction_info = explode( ";", array_pop( $users ) );
     $total = $transaction_info[0];
     $school_id = $transaction_info[1];
-	$total_registered = 0;
-	
-	$year = GlobalSettings::getRegistrationYear( $school_id );
+  $total_registered = 0;
+  
+  $year = GlobalSettings::getRegistrationYear( $school_id );
 
     $user_ids = []; $user_amounts = [];
     foreach( $users as $user ) {
         $user_info = explode( ";", $user );
         $user_ids[] = $user_info[ 0 ];
         $user_amounts[] = intval($user_info[ 1 ]);
-	}
+  }
 
     // load all the users in an array
-    $users = Soldier::find( $user_ids );
-	$users = is_array( $users ) ? $users : [ $users ];
-	$total_registered = count( $users );
+    $users = \Soldier::find( $user_ids );
+    $users = is_array( $users ) ? $users : [ $users ];
+    $total_registered = count( $users );
     // and register all the users
     foreach( $users as $index => $user ){
         $user->registerChayolei( $admin_id, $year, $user_amounts[$index] );

@@ -19,7 +19,7 @@ $year = GlobalSettings::getRegistrationYear();
 
 $message = "";
 try {
-    $school = School::find( $school_id );
+    $school = \School::find([ $school_id ]);
 } catch ( \Exception $e ) {
     $message = 'Fatal Error: Could not load school. Please contact support'; die();
 };

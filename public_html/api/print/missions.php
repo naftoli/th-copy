@@ -9,7 +9,7 @@ if ( !isset( $_POST['school_id'] ) ) {
     header('Location: /beta/missions/print' ); die();
 }
 
-$school = School::find( $_POST['school_id'] );
+$school = \School::find([ $_POST['school_id'] ]);
 $user_ids = $_POST['user_ids'] ? explode( ',', $_POST['user_ids'] ) : false;
 $class_ids = $_POST['class_ids'] ? explode( ',', $_POST['class_ids'] ) : false;
 $parsha_ids = $_POST['parsha_ids'] ? explode( ',', $_POST['parsha_ids'] ) : false;
@@ -22,12 +22,12 @@ if ( !$class_ids )
     $class_ids = array_map(function ($p) { return $p->class_id; }, $school->platoons);
 
 if ( !$user_ids ) {
-    $users = Soldier::find_all_by_class_id( $class_ids );
+    $users = \Soldier::find_all_by_class_id( $class_ids );
     $users = array_filter($users, function ($u) { return $u->user_registered; });
     $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
 // make sure the soldiers are in the selected platoons if provided with an array of soldiers.
 } else if ( $user_ids ) {
-    $users = Soldier::find( $user_ids );
+    $users = \Soldier::find([ $user_ids ]);
     $users = is_array( $users ) ? $users : [ $users ]; // make sure it is an array so we can filter it
     $users = array_filter($users, function ($u) use ($class_ids) { return in_array( $u->class_id, $class_ids ); });
     $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
@@ -37,7 +37,7 @@ if ( !$parsha_ids ) {
     echo 'Cannot Print 0 Parshos. Please select at least 1 parsha.'; die();
 }
 
-$parshos = Parsha::find( $parsha_ids );
+$parshos = \Parsha::find([ $parsha_ids ]);
 $parshos = is_array( $parshos ) ? $parshos : [ $parshos ]; // make sure it is an array of objects.
 
 // * Generate the missions using the legacy code

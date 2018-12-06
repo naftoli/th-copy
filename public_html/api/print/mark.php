@@ -23,8 +23,8 @@ if ( !isset( $_POST['parsha_id'] ) )
     $_POST['parsha_id'] = $parshos[0]->id;
 
 try {
-    $soldier = Soldier::find( $_POST['user_id'] );
-    $parsha = Parsha::find( $_POST['parsha_id'] );
+    $soldier = \Soldier::find([ $_POST['user_id'] ]);
+    $parsha = \Parsha::find([ $_POST['parsha_id'] ]);
 } catch ( ActiveRecord\RecordNotFound $e ) {
     // fallback to first available option
     $parsha = $parshos[0];

@@ -30,8 +30,8 @@ class CardsRouter {
         $card_count = intval( $_POST['card_count'] );
         $cards = []; $data = [];
         $fake_codes->execute([ $card_count ]);
-        $subject = Subject::find( intval( $_POST['subject_id'] ) );
-        $task = AchievementTask::find( intval( $_POST['task_id'] ) );
+        $subject = \Subject::find([ intval( $_POST['subject_id'] ) ]);
+        $task = \AchievementTask::find([ intval( $_POST['task_id'] ) ]);
         $miles = $this->getMiles(); 
         $miles_spent = $task->points * $card_count;
 
@@ -128,7 +128,7 @@ class CardsRouter {
         global $current_user;
 
         if ( $current_user->login->code === 'TEACHER' )
-            return Platoon::find( $current_user->login->id )->miles_balance;
+            return \Platoon::find([ $current_user->login->id ])->miles_balance;
         
         return false;
     }

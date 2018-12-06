@@ -169,9 +169,9 @@ class UsersUploadRouter {
 
         $school = false;
         if ( isset( $_POST['school_id'] ) ) {
-            $school = School::find( $_POST['school_id'] );
+            $school = \School::find([ $_POST['school_id'] ]);
         } else if ( $current_user->login->code == 'BC' ) {
-            $school = School::find( $current_user->login->id );
+            $school = \School::find([ $current_user->login->id ]);
         }
 
         // create all the users...

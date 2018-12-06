@@ -20,9 +20,9 @@ function create_task(
     $year = GlobalSettings::getCurrentYear();
 
     // * get the label
-    $label = Label::find( $label_id );
-    $school = School::find( $school_id );
-    $subject = Subject::find( $subject_id );
+    $label = \Label::find([ $label_id ]);
+    $school = \School::find([ $school_id ]);
+    $subject = \Subject::find([ $subject_id ]);
     $daily = $label->isDaily();
 
     // * generate grid_id

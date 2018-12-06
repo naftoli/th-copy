@@ -18,7 +18,7 @@ foreach ( $_POST as $key => $value ) {
 
 foreach ( $orders as $id => $qty ) {
 	// load model
-	$school = School::find( $id );
+	$school = \School::find([ $id ]);
 
 	$blue = 0;
 	$purple = 0; 

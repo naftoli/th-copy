@@ -181,7 +181,7 @@ class GridRouter {
     // * get start_date, end_date and value based on the date (parsha_id for weekly)
     private function getDates( $type, $value ) {
         if ( $type === 'weekly' ) {
-            $parsha = Parsha::find( $value );
+            $parsha = \Parsha::find([ $value ]);
             return [ 'start_date' => $parsha->start, 'mark_date' => 'start_date', 'end_date' => $parsha->end ];
         }
         return [ 'start_date' => $value, 'mark_date' => $value, 'end_date' => $value ];

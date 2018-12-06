@@ -54,9 +54,5 @@ $arrSystemPrices = array(
 	)
 );
 
-$arrDevRemotes = array(
-	"173.178.221.22" => 1
-);
-
 require "./application/bootstrap.php";
 ?>

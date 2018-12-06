@@ -23,17 +23,10 @@ if (
 	exit;
 }
 */
-$arrDevRemotes = array(
-	//"69.70.37.106" => 1
-);
-function is_dev()
-{
+function is_dev() {
 	return 1;
-	global $arrDevRemotes;
-	if (isset($arrDevRemotes[$_SERVER["REMOTE_ADDR"]]))
-		return 1;
-	return 0;
 }
+
 define("dev", is_dev());
 define("devel", FALSE);
 

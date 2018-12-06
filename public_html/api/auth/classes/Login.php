@@ -67,13 +67,13 @@ class Login implements \JsonSerializable {
      */
     private function setModel() {
         if ( $this->type == 'institution' ) {
-            $this->model = \Institution::find( $this->id );
+            $this->model = \Institution::find([ $this->id ]);
         } else if ( $this->type == 'school' ) {
-            $this->model = \School::find( $this->id );
+            $this->model = \School::find([ $this->id ]);
         } else if ( $this->type == 'class' ) {
-            $this->model = \Platoon::find( $this->id, ['include' => ['school']] );
+            $this->model = \Platoon::find([ $this->id ], ['include' => ['school']] );
         } else if ( $this->id ) {
-            $this->model = \Admin::find( $this->id );
+            $this->model = \Admin::find([ $this->id ]);
         }
     }
 

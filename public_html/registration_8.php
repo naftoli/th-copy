@@ -12,7 +12,7 @@ require_once( __DIR__ . '/api/header/db.php' ); // import ActiveRecord and PDO
 require 'class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
 // get the registration info for the school
-$school = School::find( $school_id );
+$school = School::find([ $school_id ]);
 $total = $school->chayolei_fee + $school->balance;
 
 // ***** SEND THE CONFIRMATION EMAIL ***** //

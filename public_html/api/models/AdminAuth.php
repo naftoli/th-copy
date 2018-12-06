@@ -46,9 +46,9 @@ class AdminAuth extends ActiveRecord\Model implements JsonSerializable {
 
     public function base() {
         if ( in_array( $this->auth, [ 'school', 'staff' ] ) )
-            return School::find( $this->id )->school_name;
+            return \School::find([ $this->id ])->school_name;
         else if ( $this->auth == 'class' )
-            return Platoon::find( $this->id )->school->school_name;
+            return \Platoon::find([ $this->id ])->school->school_name;
         return 'N/A';
     }
 
@@ -56,7 +56,7 @@ class AdminAuth extends ActiveRecord\Model implements JsonSerializable {
         if ( in_array( $this->auth, [ 'school', 'staff' ] ) )
             return 'All Platoons';
         else if ( $this->auth == 'class' )
-            return Platoon::find( $this->id )->name();
+            return \Platoon::find([ $this->id ])->name();
         return 'N/A';
     }
 
