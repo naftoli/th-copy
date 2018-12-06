@@ -393,18 +393,6 @@ class user {
         }
         return $this->prizes_won;
     }
-    
-    /**
-     * get_registration_fee
-     *
-     * Gets the registration fee for the user object using the registration_rate function
-     * 
-     * @return number
-     */
-    public function get_registration_fee(){
-        require_once( dirname(__FILE__) . "/../functions/registration_rate.php" );
-        return $this->registration_fee = registration_rate( $this->user_id );
-    }
 	
 	public function get_parent() {
 		$this->parent_id = 0;
