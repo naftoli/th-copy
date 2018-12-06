@@ -56,7 +56,7 @@ class PlatoonRouter {
         $platoons = array_map(function ( $platoon ){
             $platoon['name'] = $this->getName($platoon); return $platoon;
         }, $platoons );
-        return json_response( $platoons, true, true );
+        return json_response( $platoons );
     }
 
     public function show( $id ) {
