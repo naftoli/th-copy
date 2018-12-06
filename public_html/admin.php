@@ -110,12 +110,11 @@ if ( $admin->beta || $admin->ckids ) {
 		<TITLE><?=T_('Admin Menu'), ' - ', T_('Tzivos Hashem Management System')?></TITLE>
 		<LINK href="admin_styles.css" rel="stylesheet" type="text/css">
 		<SCRIPT type="text/javascript" src="jquery.js"></SCRIPT>
-		<LINK rel="stylesheet" type="text/css" href="css/admin/admin.php.css"/> <!--chrome says this is not used by the page-->
+		<LINK rel="stylesheet" type="text/css" href="/styles/admin/admin.php.css"/> <!--chrome says this is not used by the page-->
 		<STYLE type="text/css">
 			.points tbody th {
 				text-align: <?=$align_start?>;
 			}
-	/*			The styles from here where moved to css/admin/admin.php.css Chrome audit found that none of it was used. - hornbacher */
 		</STYLE>
 		
 		<script>

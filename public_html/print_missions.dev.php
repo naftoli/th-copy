@@ -242,7 +242,7 @@ $school_id_temp = $school_id;
         <title>Tzivos Hashem | Print Mission Sheets</title>
         <link href="admin_styles.css" rel="stylesheet" type="text/css">
 		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-		<link href="/css/utils/custom_multi_dropdown.css" rel="stylesheet">
+		<link href="/styles/utils/custom_multi_dropdown.css" rel="stylesheet">
 		<link href="/styles/admin/fancy-checkbox.css" rel="stylesheet" type="text/css"/>
         <style>
         div#school_list {width: 100%;height: 40px;}
