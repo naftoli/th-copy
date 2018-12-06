@@ -406,8 +406,91 @@ class MivtzoimSetup {
 
 class MivtzoimReport {
     private $m;
+    private $schools;
+    private $classes;
+    private $schoolReg;
+    private $classReg;
 
     public function __construct( Mivtzoim $m ) {
         $this->m = $m;
+        $this->schools = [];
+        $this->classes = [];
+        $this->schoolReg = [];
+        $this->classReg = [];
+    }
+
+    public function setSchools( array $schools ) {
+        $this->schools = $schools;
+    }
+
+    public function setClasses( array $classes ) {
+        $this->classes = $classes;
+    }
+
+    public function calculateSchoolReg() {
+        global $MASHPIA_DB;
+
+        if ( $this->schools ) {
+            // school array should be a map of ids => school names
+            $ids = implode(',', array_keys( $this->schools ));
+            $sth = $MASHPIA_DB->prepare("
+                SELECT 
+                    school_id, COUNT(*) AS total
+                FROM
+                    users
+                WHERE
+                    user_registered > 0
+                        AND school_id IN (:schools)
+                GROUP BY school_id
+            ");
+            $sth->execute([
+                ':schools'  =>  $ids
+            ]);
+            if ( $result = $sth->fetchAll() ) {
+                foreach ( $result as $row ) {
+                    $this->schoolReg[$row['school_id']] = $row['total'];
+                }
+            }
+        }
+    }
+
+    public function calculateClassReg() {
+        global $MASHPIA_DB;
+
+        if ( $this->classes ) {
+            // class array should be a list of ids
+            $sth = $MASHPIA_DB->prepare("
+                SELECT 
+                    school_id, COUNT(*) AS total
+                FROM
+                    users
+                WHERE
+                    user_registered > 0
+                        AND class_id IN (:classes)
+                GROUP BY class_id
+            ");
+            $sth->execute([
+                ':classes'  =>  implode(',', $this->classes)
+            ]);
+            $this->classReg = $sth->fetchAll();
+        }
+    }
+
+    public function createLeaderBoard() {
+        echo "<pre>";
+        // find out number of registered users per school / grade
+        $this->calculateSchoolReg();
+        $this->calculateClassReg();
+        
+        //print_r( $this->schools );
+        print_r( $this->schoolReg );
+        echo "</pre>"; 
+        exit;
+
+        // figure out totals of tasks done per school / grade
+        $this->calculateSchoolDone();
+        $this->calculateClassDone();
+
+        // output html
     }
 }
