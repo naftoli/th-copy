@@ -14,7 +14,7 @@ foreach ( $_POST as $key => $value ) {
 }
 
 foreach ( $orders as $id => $qty ) {
-    $school = School::find( $id );
+    $school = \School::find([ $id ]);
     //charge cc for added amount of haggadas
     $amount = $qty * $price;
     $description = "Purchase of an extra " . $qty . " haggadas at " . $price . "/ea.";

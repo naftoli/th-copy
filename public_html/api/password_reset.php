@@ -58,7 +58,7 @@ function updatePassword( $selector, $validator, $password ) {
         return 'There was an error processing your request. Error Code: 003 (Invalid Token)';
 
     try { 
-        $admin = \Admin::find( $row['admin_id'] );
+        $admin = \Admin::find([ $row['admin_id'] ]);
     } catch ( Exception $e ) {
         return 'There was an error processing your request. Error Code: 004 (Account Not Found)';
     }

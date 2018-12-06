@@ -227,8 +227,8 @@ abstract class MissionDisplay {
 		}
 		$totalRows = ( floor( $numLabels / 2 ) ) + $numTasks;
 
-		$school = \School::find( $user->school_class->school_id );
-		$platoon = \Platoon::find( $user->school_class->class_id );
+		$school = \School::find([ $user->school_class->school_id ]);
+		$platoon = \Platoon::find([ $user->school_class->class_id ]);
 		
 		if ( $this->missionType == 2 )
 			$taskClass = "mediumPicTask";
@@ -1459,8 +1459,8 @@ abstract class MissionDisplay {
 		}
 		$totalRows = (floor($numLabels / 2)) + $numTasks;
 
-		$school = School::find( $user->school_class->school_id );
-		$platoon = Platoon::find( $user->school_class->class_id );
+		$school = \School::find([ $user->school_class->school_id ]);
+		$platoon = \Platoon::find([ $user->school_class->class_id ]);
 		
 		if ($this->missionType == 2) {
 			$taskClass = "mediumPicTask";

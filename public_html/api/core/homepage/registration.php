@@ -38,7 +38,7 @@ class RegistrationRouter {
             $reg_open = !$reg_info; // TODO, add option for HQ to disable schools from registering?
             $status = $school->getRegStatus( $year );
         } else if ( $current_user->login->code === 'TEACHER' ) {
-            $platoon = Platoon::find( $current_user->login->id );
+            $platoon = $current_user->login->model;
             $year = GlobalSettings::getRegistrationYear( $platoon->school_id );
             $status = $platoon->school->getRegStatus( $year );
             $reg_open = false;

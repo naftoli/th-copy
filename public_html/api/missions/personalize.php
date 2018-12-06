@@ -190,7 +190,7 @@ class PersonalizeRouter {
         $params['task']       = isset( $_POST['task'] )       && $_POST['task']       ? $_POST['task']       : false;
 
         if ( isset( $_POST['parsha_id'] ) && $_POST['parsha_id'] > 0 ) {
-            $parsha = Parsha::find( $_POST['parsha_id'] );
+            $parsha = \Parsha::find([ $_POST['parsha_id'] ]);
             $params['start'] = $parsha->start;
             $params['end']   = $parsha->end;
         } else

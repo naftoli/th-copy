@@ -12,11 +12,11 @@ class AdminAuthRouter {
         // make sure we have an admin ( first by Id then email )
         try {
             if ( isset($_POST['admin_id']) ) {
-                $admin = Admin::find( intval( $_POST['admin_id'] ) ); 
+                $admin = \Admin::find([ intval( $_POST['admin_id'] ) ]);
             } else if ( isset($_POST['email']) ) {
-                $admin = Admin::find_by_admin_email( $_POST['email'] ); 
+                $admin = \Admin::find_by_admin_email( $_POST['email'] ); 
             } else if ( isset($_POST['username']) ) {
-                $admin = Admin::find_by_username( $_POST['username'] ); 
+                $admin = \Admin::find_by_username( $_POST['username'] ); 
             } else {
                 return json_error('Admin account not found.');
             }

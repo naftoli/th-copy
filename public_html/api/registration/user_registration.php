@@ -17,7 +17,7 @@ class UserRegistrationRouter {
         $user_ids = $current_user->getAuthIds( 'user' );
 
         // get all the users information
-        $users = Soldier::find( $user_ids,
+        $users = \Soldier::find( $user_ids,
             ['include' => [ 'school', 'platoon' ] ]
         );
         $users = is_array( $users ) ? $users : [ $users ];
@@ -103,7 +103,7 @@ class UserRegistrationRouter {
         }
         
         // * get all the user models
-        $users = Soldier::find( $user_ids, [ 'include' => 'school' ] );
+        $users = \Soldier::find( $user_ids, [ 'include' => 'school' ] );
         if ( !is_array( $users ) ) $users = [ $users ]; // force an array, even if it is just one user
         
         // * get the transaction description

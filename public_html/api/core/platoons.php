@@ -62,7 +62,7 @@ class PlatoonRouter {
     public function show( $id ) {
         global $current_user;
         try {
-            $platoon = Platoon::find( $id );
+            $platoon = \Platoon::find([ $id ]);
             if ( !$platoon->validateAccess( $current_user->login ) )
                 return json_error( 'Your current login does not have access to this platoon.', 'CORE-PLATOONS-54', 401 );
         } catch ( ActiveRecord\RecordNotFound $e ) {
@@ -89,7 +89,7 @@ class PlatoonRouter {
     public function update( $id ) {
         global $current_user;
 
-        $platoon = Platoon::find( $id );
+        $platoon = \Platoon::find([ $id ]);
         if ( !$platoon->validateAccess( $current_user->login ) )
             json_error( 'Your current login does not have access to this platoon.', 'CORE-PLATOONS-99', 401 );
         
@@ -106,7 +106,7 @@ class PlatoonRouter {
     public function destroy( $id ) {
         global $current_user;
 
-        $platoon = Platoon::find( $id );
+        $platoon = \Platoon::find([ $id ]);
         if ( !$platoon->delete() )
             return json_error( 'Cannot Delete Platoon', 'CORE-PLATOONS-116' );
         

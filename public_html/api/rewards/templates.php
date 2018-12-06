@@ -9,7 +9,7 @@ class TemplatesRouter {
         $login = $current_user->login;
         $IMG_PATH = StorePrize::IMG_PATH;
 
-        $prizes = StorePrize::find('all', [
+        $prizes = StorePrize::all([
             'conditions' => "prize_name != '' AND prize_type = 'Template' AND parent_prize_id = 0",
             'order' => 'prize_name ASC'
         ]);
@@ -55,7 +55,7 @@ class TemplatesRouter {
             return json_error('This Login Cannot Edit Templates');
 
         try {
-            $template = StorePrize::find( $id );
+            $template = \StorePrize::find([ $id ]);
 
             if ( $template->prize_type !== 'Template' )
                 return json_error('This Prize is not a Template');

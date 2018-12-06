@@ -126,7 +126,7 @@ class ParentsRouter {
         if ( !isset($_POST['user_id']) ) json_error('Need a child to add');
         if ( !isset($_POST['username']) ) json_error('Need a parent to add from');
         
-        $user = Soldier::find( $_POST['user_id'] );
+        $user = Soldier::find([ $_POST['user_id'] ]);
         if ( !$user ) json_error( 'Invalid User ID' );
 
         $admin = Admin::find_by_username( $_POST['username'] );        

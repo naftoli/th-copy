@@ -12,8 +12,8 @@ class MarkRouter {
 
     public function get() {
 
-        $soldier = Soldier::find( $_POST['user_id'] );
-        $parsha = Parsha::find( $_POST['parsha_id'] );
+        $soldier = \Soldier::find([ $_POST['user_id'] ]);
+        $parsha = \Parsha::find([ $_POST['parsha_id'] ]);
 
         // * Generate the missions using the legacy code
         json_response( $soldier->missions( $parsha ), true, true );

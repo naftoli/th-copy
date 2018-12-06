@@ -48,9 +48,9 @@ class OrdersRouter {
         if ( !isset( $_POST['user_id']) )
             return json_error('Missing user id');
 
-        $user = Soldier::find( $_POST['user_id'] );
+        $user = \Soldier::find([ $_POST['user_id'] ]);
 
-        $prizes = StorePrize::find('all', [
+        $prizes = \StorePrize::all([
             'select' => 'prizes.*, COUNT(user_prize_id) AS ordered ',
             'conditions' => 'is_active = 1 AND prize_count > 0 '
                 .' AND prizes.institution_id = '.$user->school_id
@@ -74,7 +74,7 @@ class OrdersRouter {
     public function order() {
         global $POINTS_DB;
         // get the post params
-        $user = Soldier::find( $_POST['user_id'] );
+        $user = \Soldier::find([ $_POST['user_id'] ]);
         $qty = intval( $_POST['qty'] );
         $prize = $_POST['prize'];
         if ( $qty <= 0 )

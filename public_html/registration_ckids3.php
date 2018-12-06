@@ -18,7 +18,7 @@ require_once( __DIR__ . '/api/header/db.php' ); // import ActiveRecord and PDO
 require 'class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
 // get the registration info for the school
-$school= School::find( $school_id );
+$school= School::find([ $school_id ]);
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

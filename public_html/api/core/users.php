@@ -13,6 +13,7 @@ class UsersRouter {
             ."JOIN schools s USING ( school_id ) "
             ."LEFT JOIN classes c USING ( class_id ) WHERE $filters "
             ."ORDER BY school_name, class_grade, class_sub, last, first";
+
         $query = $MASHPIA_DB->prepare( $sql );
         $query->execute();
 
@@ -44,7 +45,7 @@ class UsersRouter {
     public function show( $id ) {
         global $current_user;
         try {
-            $user = Soldier::find( $id );
+            $user = \Soldier::find([ $id ]);
             if ( !$user->validateAccess( $current_user->login ) )
                 json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-65', 401 );
             // ! do not add true true here as PHP cannot handle the barcode as a number
@@ -88,7 +89,7 @@ class UsersRouter {
             $user->school_id = $current_user->login->model->school_id;
         // make sure the class is in the grade
         } else {
-            $platoon_school_id = Platoon::find( $user->class_id )->school_id;
+            $platoon_school_id = $user->platoon->school_id;
             if ( $platoon_school_id !== $user->school_id )
                 json_error( 'Platoon is not in Base' );
         }
@@ -110,7 +111,7 @@ class UsersRouter {
     public function update( $id ) {
         global $current_user;
 
-        $user = Soldier::find( $id );
+        $user = \Soldier::find([ $id ]);
         if ( !$user->validateAccess( $current_user->login ) )
             json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-77', 401 );
         
@@ -142,7 +143,7 @@ class UsersRouter {
     public function destroy( $id ) {
         global $current_user; global $MASHPIA_DB;
         try {
-            $user = Soldier::find( $id );
+            $user = \Soldier::find([ $id ]);
             if ( !$user->validateAccess( $current_user->login ) )
                 json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-126', 401 );
             if ( !in_array( $current_user->login->code, ['BC', 'HQ', 'INST'] ) ) {
@@ -176,10 +177,10 @@ class UsersRouter {
 
     public function updateMissions() {
         $updated = 0;   $errors = [];
-        $soldier = Soldier::find( $_POST['user_id'] );
+        $soldier = \Soldier::find([ $_POST['user_id'] ]);
         // go through all the updates and update each subject
         foreach( $_POST['subjects'] as $update ) {
-            $subject = Subject::find( $update[ 'subject_id' ] );
+            $subject = \Subject::find([ $update[ 'subject_id' ] ]);
             // try to update the missions
             try {
                 $subject->setMissions( $soldier->user_id, $update[ 'missions' ] );

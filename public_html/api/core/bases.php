@@ -29,12 +29,12 @@ class BaseRouter {
     }
 
     public function show( $id ) {
-        $base = School::find( $id );
+        $base = \School::find([ $id ]);
         json_response( $base );
     }
 
     public function update( $id ) {
-        $base = School::find( $id );
+        $base = \School::find([ $id ]);
 
         if ( count( $_FILES ) > 0 ) {
             try {
@@ -67,7 +67,7 @@ class BaseRouter {
             return json_error('CORE-BASE-63: No Base Information Provided');
         
         if ( $base['school_id'] ) {
-            $base = \School::find( $base['school_id'] );
+            $base = \School::find([ $base['school_id'] ]);
             $base->bulkUpdate( $_POST['base'] );
         } else {
             $base = \School::build( $base );
@@ -132,7 +132,7 @@ class BaseRouter {
         }
         // get the school
         try {
-            return School::find( $id );
+            return \School::find([ $id ]);
         } catch ( Exception $e ) {
             return json_error( 'CORE-BASE-85: Base not found' );
         };
