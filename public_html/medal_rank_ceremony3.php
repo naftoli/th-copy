@@ -317,7 +317,7 @@ $special = array( // rare missions
 			// old post requst. used input.missingInfo params
             //$.post('ajax/saveMissingMedal.php', { info : val, checked : on });
 			
-			$.post("ajax/medal_rank_ceremony/mark_medal_shipped.php", {params: val, shipped: on}, function(data) {
+			$.post("ajax/mark_medal_shipped.php", {params: val, shipped: on}, function(data) {
 				data = JSON.parse(data);
 				if (!data.success) {
                     event.target.checked = !event.target.checked;
