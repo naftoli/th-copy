@@ -94,8 +94,6 @@ if (isset($_GET['school_id'])) {
 			Mission Report Language<br />
 			<input type="radio" name="settingChoice" class="settingChoice" value="4"> 
 			Set Tehillim Whatsapp per Class<br />
-			<input type="radio" name="settingChoice" class="settingChoice" value="5"> 
-			Control Custom Parent Tasks<br />
         </fieldset>
         
         <br />
@@ -209,55 +207,7 @@ if (isset($_GET['school_id'])) {
 				</table>
 			<? } ?>
         </fieldset>
-		
-<!--		Custom Parent Tasks-->
-		<fieldset id="customParentTasks">
-        	<legend>Custom Parent Tasks</legend>
-			<p>
-				<strong>Disclaimer:</strong> These settings control the custom tasks that parents will be able to create from their parent accounts in the coming weeks.
-				This setting does <strong><em>not control tasks that are created by you or HQ</em></strong>. Even if they are disabled by default.
-			</p>
-			<br/>
-        	Please select one of the following filters:<br />
-        	<input type="radio" name="customParentTasksChoice" class="customParentTasksChoice" value="school"> 
-    		Entire School
-    		<input type="radio" name="customParentTasksChoice" class="customParentTasksChoice" value="platoon"> 
-    		By Platoon
-    		<input type="radio" name="customParentTasksChoice" class="customParentTasksChoice" value="student"> 
-    		By Soldier
-        </fieldset>
-		
-		<fieldset id="schoolCustomParentTasks">
-        	<legend>Entire School</legend>
-			<strong>Please note that changing this setting will reset all Soldiers in the school</strong> <br/><br/>
-			<span>Allow Custom Tasks</span>
-        	<label class="fancy-check-container">
-				<input class="custom_tasks" data-level="school" data-school_id="<?=$school_id?>" type="checkbox"
-					<?=$school_custom_task_settings['allow_parent_tasks'] == 1 ? "checked": "";?>/>
-				<span class="fancy-check"></span>
-			</label>
-			<br/><br/>
-			<span>Print Custom Tasks</span>
-			<label class="fancy-check-container">
-				<input class="print_custom_tasks" data-level="school" data-school_id="<?=$school_id?>" type="checkbox"
-					<? echo $school_custom_task_settings['print_parent_tasks'] == 1 ? "checked": "";?>/>
-				<span class="fancy-check"></span>
-			</label>
-        </fieldset>
-		
-		<fieldset id="platoonCustomParentTasks">
-        	<legend>By Platoon</legend>
-			<strong>Please note that changing this setting will reset all Soldiers in the school</strong> <br/><br/>
-			<div></div>
-        </fieldset>
-        
-        <fieldset id="studentCustomParentTasks">
-        	<legend>By Student</legend>
-			<div></div>
-        </fieldset>
-		
 	</body>
-	<script src="scripts/settings/customParentTasks.js?v=2.1"></script>
     <script type="text/javascript">
     	$( function() {
     		var id = <?=(int)$_GET['school_id']?>;
@@ -268,14 +218,7 @@ if (isset($_GET['school_id'])) {
 					alert(success);
 				});
 			});
-			/*
-			$(".whatsapp").click( function() {
-				var val = $(this).val();
-				$.post('ajax/updateWhatsapp.php', { val : val, school : id }, function(success) {
-					alert(success);
-				});
-			});
-    		*/
+			
     		hideAllMissions();
     		hideAllMarking();
     		hideAllLang();
@@ -304,7 +247,6 @@ if (isset($_GET['school_id'])) {
     		}
     		
 			function hideAllCustomParentTasks() {
-                $("#customParentTasks").hide();
     			$("#schoolCustomParentTasks").hide();
     			$("#platoonCustomParentTasks").hide();
     			$("#studentCustomParentTasks").hide();
@@ -351,10 +293,6 @@ if (isset($_GET['school_id'])) {
 					hideAllMarking();
 					hideAllLang();
 					$("#whatsapp").hide();
-					$(".customParentTasksChoice").each( function() {
-    					$(this).attr('checked', false);
-    				});
-					$("#customParentTasks").show();
                 }
     		});
     		
@@ -393,22 +331,6 @@ if (isset($_GET['school_id'])) {
     				$("#platoonLang").hide();
     			}
     		});
-			
-			$(".customParentTasksChoice").click(function(event){
-				var options = ['school', 'platoon', 'student'];
-				for(var i = 0; i < options.length; i++){
-					var option = options[i];
-					if (option == event.target.value) {
-                        $("#" + option + "CustomParentTasks").show();
-						// load up the platoon info...
-						if (option == "platoon") {customParentTasks.loadPlatoons(id);}
-						// load up the student info...
-						if (option == "student") {customParentTasks.loadStudents(id);}
-                    } else {
-						$("#" + option + "CustomParentTasks").hide();
-					}
-				}
-			});
     		
     		$(".lang").click( function() {
     			var val = $(this).val();
@@ -425,9 +347,6 @@ if (isset($_GET['school_id'])) {
     				}
     			});
     		});
-			
-			customParentTasks.setupListeners();
-			
     		
     		function getPlatoonsForLang() {
     			$("#platoonLang").empty();
