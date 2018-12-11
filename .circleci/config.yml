@@ -140,8 +140,8 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - run: pwd
-      - run: ls -al ~
       - run: ls -al
+      - run: ls -al base-commander
 
 workflows:
   version: 2
