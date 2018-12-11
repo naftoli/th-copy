@@ -1,0 +1,81 @@
+@import 'styles/colors.scss';
+@import './Login.scss';
+@import './Forgot.scss';
+@import './NewAccount.scss';
+
+#Login, #Forgot, #NewAccount {
+  display: flex;
+  flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 100vh;
+
+  img#logo {
+    width: 20%;
+    margin-top: 1%;
+    margin-bottom: 2%;
+    max-width: 250px;
+    min-width: 200px;
+  }
+
+  .form {
+    text-align: center;
+    width: 90%;
+    max-width: 520px;
+    transition: .25s;
+    // space the inputs
+    .input-group { margin: 10px 0px; }
+    // put the icon in the input
+    .input-group-prepend {
+      // define the width to match the height
+      width: 48px;
+      // center the content
+      justify-content: center;
+      align-items: center;
+      // set the border
+      position: absolute;
+      height: 100%;
+      z-index: 10;
+
+      img {
+        height: 1.5em;
+      }
+      i {
+        font-size: 1.5em;
+        opacity: .5;
+      }
+    }
+    // eliminate border on input
+    input.form-control:not(:first-child) {
+      padding-left: 56px;
+      border-radius: .3rem;
+    }
+    // increase the font size
+    input { font-size: 1.5em; }
+    
+    // animate the login button
+    .btn#login {
+      transition: .25s;
+      margin-bottom: 10px;
+      &:hover, &:focus { word-spacing: .5em; }
+    }
+  }
+
+  @media (max-width: 500px) {
+
+    img#logo { min-width: auto; width: 150px; }
+
+    .form{
+      max-width: 300px;
+      input {
+        font-size: 1.2em;
+      }
+    }
+
+    div#links {
+      margin-top: 0px;
+
+      // a { font-size: .9em; }
+      // a:first-child { font-size: .8em; }
+    }
+  }
+}

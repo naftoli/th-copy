@@ -1,0 +1,57 @@
+.CCForm {
+  padding: 0px 5px;
+  margin: 15px 0px;
+  // overflow: hidden;
+
+  transition: .25s ease-in;
+
+  display: flex; flex-wrap: wrap; justify-content: center;
+  
+  &.has-add { align-items: center; }
+
+  label, .btn { margin-top: 6px; margin-bottom: 0px; }
+
+  #preview {
+    margin-left: 15px;
+  }
+
+  > form {
+    min-width: 250px;
+    width: calc( 100% - 350px );
+    max-width: 350px;
+    margin-bottom: 20px;
+    
+    input { 
+      font-family: Consolas, Courier, monospace; 
+      font-size: 1.2em;
+    }
+  }
+
+  @media ( max-width: 642px ) {
+    transition: .5s ease-in;
+    flex-wrap: wrap;
+    > form { max-width: 100%; }
+  }
+  @media ( max-width: 600px ) {
+    #preview { margin: 0px; }
+  }
+
+  > .col-12 {
+    padding-top: 15px;
+    padding-bottom: 10px;
+  }
+
+  // input { margin-bottom: 8px; }
+
+  .save {
+    align-self: flex-end;
+    .btn {
+      width: 100%;
+      white-space: pre-wrap;
+    }
+  }
+
+  .rccs__card--front, .rccs__card--back {
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,23 @@
+#RankCardsPage {
+
+  label.radio, label.checkbox {
+    font-size: 1.1em;
+  }
+
+  .btn-group { 
+    margin-top: 10px;
+  }
+
+  #rank-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 10px;
+    @media print { display: block; margin-top: 0px; }
+  }
+
+  .alert-danger { 
+    text-align: center;
+    margin-top: 15px;
+  }
+}

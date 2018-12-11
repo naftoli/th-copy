@@ -1,0 +1,89 @@
+#BCMarkPage {
+  .buttons {
+    margin-top: 8px;
+    .btn { width: 100%; margin: 4px 0px; }
+  }
+
+  #missions {
+    margin-top: 15px;
+    padding-bottom: 15px;
+  }
+}
+
+#TeacherMarkPage {
+  .th-callout { margin-bottom: .5em; }
+
+  #options {
+    margin-bottom: 10px;
+
+    .btn,
+    .react-datepicker-wrapper,
+    .react-select__control { 
+      margin: 3px;
+    }
+
+    :not( .btn-group ) > .btn, .form-control {
+      width: calc( 100% - 6px );
+    }
+  }
+}
+
+#CustomizeModal {
+  div#header {
+    display: flex;
+    border-bottom: 2px solid;
+    font-size: 1.2em; font-weight: bold;
+    #task { text-align: center; flex-grow: 1; }
+    #miles { width: 20%; border-left: 1px solid; padding-left: .5em; }
+    #active { width: 18%; text-align: center; }
+  }
+
+  .MissionList {
+    max-height: 70vh;
+    overflow: auto;
+    // support scrolling by just draging it beyond the box
+    scroll-behavior: auto !important;
+  }
+}
+
+// * These items can be portaled out and need their styles in the global space
+.MissionItem {
+  background: #fff;
+  z-index: 1100; // put on top of bootstrap modals
+
+  padding: .5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: .5rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .DragHandle {
+    padding-right: 1em;
+
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+  }
+  
+  .campaign {
+    width: 25px;
+    margin-right: .5em;
+  }
+
+  .name {
+    flex-grow: 1;
+    padding: 0px .5em 0px 0px;
+  }
+
+  .miles {
+    min-width: 25%;
+    width: 25%;
+    max-width: 25%;
+    border-left: 1px solid;
+    padding-left: .5em;
+  }
+}

@@ -1,0 +1,114 @@
+// Variables
+@import "styles/colors";
+@import "styles/variables";
+
+#mashpia-navbar{
+  @media print { display: none; }
+  // font-family: 'Poppins', sans-serif;
+  background-color: $primary-color-dark;
+  color: #fff;
+  height: $navbar-height;
+  align-content: center;
+
+  @media( max-width: 1024px ) {
+    height: $navbar-height-mobile;
+    align-items: flex-start;
+  }
+  // Logo section
+  .navbar-brand {
+    width: 200px; user-select: none;
+    @media ( max-width: 1025px ) {
+      width: auto;
+    }
+    @media ( max-width: 767px ) { width: auto; }
+
+    transition: all .3s;
+    // logo
+    img { height: 46px; transition: all .3s; }
+    // Menu text
+    span { 
+      margin-left: .5em;      font-size: 1.3em; 
+      vertical-align: middle; transition: all .3s;
+    }
+    // changes on mobile
+    @media( max-width: 1024px ){
+      &:hover { cursor: pointer; }
+      img { height: 26px; }
+      span { font-size: 1em; }
+    }
+  }
+  
+  // Page title
+  #navbar-title {
+    font-size: 1.7em;
+    @media( max-width: 1024px ){
+      font-size: 1.2em;
+      align-self: center;
+    }
+    @media( max-width: 767px ) {
+      display: none;
+    }
+  }
+  // Account selector
+  ul#navbar-menu {
+    margin: 0px; // clear margins
+    // dropdown item
+    a#nav-login {
+      width: 350px;
+      @media ( max-width: 1024px ) { width: 200px; }
+      
+      padding-right: 20px; display: inline-block;
+      overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+      color: #fff; transition: .3s; text-align: right;
+      &:hover { cursor: pointer; }
+      // caret
+      &::before {
+        display: block; position: absolute; right: 4px; top: 8px;
+        font-family: Font Awesome\ 5 Free; font-weight: 900; 
+        font-style: normal; font-variant: normal;
+        content: "\f0d7"; transition: transform .25s;
+        -moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; 
+        text-rendering: auto;
+      }
+      @media ( min-width: 1025px ) { &::before { top: 12px; } }
+    }
+    // flip the caret when the dropdown is shown
+    .dropdown.show a#nav-login::before{ transform: rotate(180deg); }
+    // make the dropdown always stay the same size 
+    .dropdown-menu {
+      min-width: 300px; padding: 0px;
+      a:hover { text-decoration: none; }
+    }
+    // center the text 
+    span { vertical-align: middle; }
+    // limit the height of images on the navbar
+    img {
+      display: inline-block; height: 25px; margin-right: 5px;
+    }
+    @media ( min-width: 1025px ) {
+      img { height: 36px; }
+    }
+
+    .dropdown-item.active, .dropdown-item:active {
+      background: $primary-color;
+    }
+
+    .dropdown-item {
+      // allow multi-line text after the image
+      display: flex; align-items: center; white-space: initial; 
+      padding: .75rem 1.5rem;
+      &:hover { cursor: pointer; }
+      // the image for the login
+      img, i {
+        height: 35px; max-width: 35px; margin-right: 10px;
+      }
+      > i {
+        font-size: 28px; width: 35px; display: flex; align-items: center; justify-content: center;
+      }
+      // show ... if text overflows in the div.
+      > span {
+        overflow: hidden; text-overflow: ellipsis;
+      }
+    }
+  }
+}

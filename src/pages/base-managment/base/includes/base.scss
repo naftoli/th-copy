@@ -1,0 +1,81 @@
+@import 'styles/colors';
+
+#BasesPage {
+  height: 100%;
+
+  .ReactTable {
+    height: calc( 100% - 65px ); // top of the page takes up 50px
+  }
+
+  .inline-profile {
+    max-height: 65px;
+    width: 65px;
+  }
+
+}
+
+.special-options label.checkbox {
+  margin-top: .4em;
+}
+
+#BasePage {
+
+  #logo {
+    align-self: center; text-align: center;
+    .profile-picture img {
+      filter: drop-shadow( 0 0 0.2rem $primary-color-light );
+      max-height: 225px;
+    }
+    .profile-picture:hover img, .profile-picture:focus img {
+      filter: grayscale(100%) brightness(60%) drop-shadow( 0 0 0.2rem $primary-color-light );
+      transform: scale( 0.95 );
+    }
+  }
+
+  @media ( max-width: 575px ) {
+    #logo  {
+      transition: none; margin-bottom: 15px;
+      img { max-height: 125px; }
+    }
+    h3 { text-align: center; }
+  }
+
+  .tab-content { margin-bottom: 0px; }
+
+  p.input-message {
+    font-size: .7em;
+    margin-bottom: 0px;
+    text-align: center;
+  }
+
+  #payment-profile > .row {
+    margin-left: -5px;
+  }
+
+  #credit-cards {
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+    margin: 0px;
+
+    .CardDisplay {
+      padding: 10px;
+      text-align: center;
+
+      .rccs__card--front, .rccs__card--back { box-shadow: none; }
+    }
+
+    .btn { width: 290px; margin-top: 8px; }
+  }
+
+  @media ( min-width: 2200px ) {
+    #add-card:not(:last-child) {
+      width: 30%;
+      display: inline-block;
+      vertical-align: top;
+    }
+    #on-file {
+      width: 70%;
+      display: inline-block;
+    }
+  }
+}

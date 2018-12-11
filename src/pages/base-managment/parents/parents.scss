@@ -1,0 +1,73 @@
+@import 'styles/colors';
+
+#ParentsPage {
+  height: 100%;
+  margin-bottom: 10px;
+  
+  .ReactTable {
+    height: calc( 100% - 180px );
+    min-height: 500px;
+    @media ( max-width: 1024px ) {
+      height: calc( 100% - 40px );
+    }
+  }
+}
+
+// modal is portald out of parent for browser support
+#NewParentModal {
+  div#errors {
+    width: 100%;
+    padding: 10px 15px 0px;
+    text-align: center;
+  }
+}
+
+#ParentPage {
+  height: auto !important;
+  margin-bottom: 1rem;
+
+  .btn {
+    white-space: pre-wrap;
+  }
+
+  #profile {
+    text-align: center;
+
+    .profile-picture { margin-bottom: 10px; }
+
+    .profile-img {
+      height: 15vh;
+      width: 15vh;
+      border-radius: 50%;
+      border: 3px solid #3f6dc4;
+    }
+
+    p {
+      margin-bottom: .5rem;
+      font-size: 1.25em;
+    }
+  }
+
+  #login.btn {
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  .row {
+    align-items: flex-end;
+  }
+
+  #add-child {
+    margin-bottom: .5rem;
+  }
+
+  .child {
+    margin: 0px; margin-bottom: .5rem;
+    padding: 10px 0px;
+    align-items: flex-start;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+    p { margin-bottom: 0px; }
+  }
+}

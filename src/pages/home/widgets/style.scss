@@ -1,0 +1,111 @@
+@import 'styles/colors';
+
+#QuickLinks {
+  #links {
+    display: flex;
+    font-size: 1em;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    
+    a {
+      color: #000;
+      transition: transform .25s;
+      margin: 10px 5px;
+      &:hover, &:focus {
+        text-decoration: none;
+        transform: scale( 1.1 );
+      }
+      > i {
+        font-size: 4em;
+        display: block;
+        text-align: center;
+      }
+    }
+  }
+}
+
+#RegistrationWidget {
+  // > div {
+  //   display: flex;
+  //   flex-wrap: wrap;
+  // }
+
+  p {
+    margin-bottom: 3px;
+    font-size: 1.5em;
+    padding: 0px 3%;
+
+    strong { display: block; font-size: .7em; }
+  }
+}
+
+#Resources {
+  text-align: center;
+  #links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    a {
+      display: inline-block; width: 50%; max-width: 120px;
+      padding-bottom: 0px; padding: 3%;
+      text-align: center; color: #000;
+      font-size: .8em; transition: .25s;
+
+      img {
+        max-height: 100px;
+      }
+
+      &:hover{ transform: scale( 1.1 ); }
+
+      @media ( min-width: 1921px ) {
+        max-width: 25%;
+      }
+    }
+  }
+}
+
+#BirthdaysWidget .birthdays, #PromotionsWidget .promotions {
+  max-height: 375px; 
+  overflow-x: hidden; 
+  overflow-y: auto;
+  padding: 0px 6px;
+
+  h3 {
+    margin-top: .5rem;
+    text-align: center;
+    border-bottom: 1px solid $primary-color;
+    font-family: 'Alef', sans-serif;
+  }
+
+  .row {
+    padding-bottom: .25rem; margin-bottom: .25em;
+    border-bottom: 1px dashed $primary-color-light;
+    > div a:first-child { 
+      font-size: 1.2em;
+    }
+  }
+
+  .date .col-9.col-xl-10 {
+    align-self: center;
+  }
+    
+
+  .profile-picture {
+    padding: 5%; text-align: center;
+    max-width: 100px;
+    > img.profile-img {
+      border-radius: 5px;
+      border: 1px solid $primary-color;
+    }
+  }
+
+  // &::-webkit-scrollbar { height: 6px; width: 6px; }
+  // &::-webkit-scrollbar-thumb { background: $primary-color; }
+  // &::-webkit-scrollbar-track { 
+  //   background: #dee2e6; 
+  //   box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+  // }
+}
+

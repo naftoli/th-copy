@@ -1,0 +1,36 @@
+@import 'colors.scss';
+@import 'lib/animate.css';
+
+$theme-colors: (
+  "primary": $primary-color,
+  "danger": $danger
+);
+// clear bootstrap page settings for printing
+$print-page-size: auto;
+$print-body-min-width: auto;
+// custom grid sizes
+// $grid-breakpoints: (
+//   xs: 0,
+//   sm: 600px,
+//   md: 1000px,
+//   lg: 1280px,
+//   xl: 1480px
+// );
+
+$rccs-size: 250px;
+$rccs-name-font-size: 12px;
+$rccs-number-font-size: 17px;
+$rccs-cvc-font-size: 12px;
+
+@import '~bootstrap/scss/bootstrap';
+@import '~react-credit-cards/es/styles.scss';
+
+@import '~rc-slider/assets/index.css';
+@import '~cropperjs/dist/cropper.css';
+@import '~react-table/react-table.css';
+
+@import '~react-toastify/dist/ReactToastify.min.css';
+@import '~react-datepicker/dist/react-datepicker.css';
+
+@import 'branding.scss';
+@import 'index.css';

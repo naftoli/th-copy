@@ -1,0 +1,110 @@
+$colors: (
+  1: green, 2: red, 3: Orange,  4: #f0c62c,  5: Green,
+  6: Blue,  7: purple,  8: Brown, 9: Gray,  10: Black,
+  11: Grey, 12: #cd7f32,  13: Silver, 14: gold
+);
+
+.RankCard {
+  // permenent cards are different
+  @media print {
+    border: 1px dashed; padding: 8px;
+    &.permanent{
+      page-break-after: always; display: block;
+      .rank-card .top { opacity: 0; }
+      border: none; padding: 0px;
+    }
+  }
+  
+  display: inline-block;
+  // Colors - go through each rank number and add the color to CSS
+  @each $rank, $rank_color in $colors {
+    .rank-card.rank-#{$rank} {
+      .top { background-color: $rank_color }
+      .sig, .photo img { border-color: $rank_color }
+      span.rank { color: $rank_color }
+    }
+  }
+
+  p { margin: 0px; }
+  > .no-print { text-align: center; }
+
+  .rank-card {
+    width: 3.37in; height: 2.12in;
+    font-size: 2mm; position: relative; display: inline-block;
+    padding: 0px; vertical-align: top; margin: auto;
+    font-family: "Myriad Pro", Arial, Helvetica, sans-serif;
+    
+    @media screen {
+      border: 1px solid #000;
+      margin: 10px; margin-top: 0px;
+    }
+    
+    .top {
+      text-align: center; font-weight: bold; color: #fff; 
+      height: .3in; line-height: .3in; font-size: 1.85mm;
+    }
+    
+    .sig {
+      height: .33in;
+      background-color: #fff; text-align: right; padding-right: 0.1in;
+      .rank-row {
+        text-transform: uppercase; padding: 0mm; margin: 0mm; font-weight: bold; 
+        font-size: .1in; line-height: .125in;
+      }
+      .rank { text-transform: uppercase; font-style: normal; font-weight: 700; }
+    }
+    
+    .info { display: flex; align-items: center; justify-content: space-between; }
+    
+    .logo img { height: .75in; padding: 0px .04in; }
+    
+    .base { 
+      flex-grow: 1; line-height: 3mm; 
+      strong { font-size: 3mm; }
+    }
+    
+    .profile-picture { 
+      height: 1in; padding: .05in;
+      img {
+        border: .02in solid;
+        border-radius: 5px;
+      }
+    }
+    
+    .barcode {
+      display: flex;
+      .code {
+        width: 2.47in;
+        
+        font-size: .14in;
+        line-height: .2in;
+        font-family: 'Source Code Pro', monospace;
+
+        text-align: center; 
+        vertical-align: middle;
+        padding-top: .02in;
+        padding-left: .04in;
+        margin-bottom: 0px;
+
+        img { width: 2.43in; height: .25in; }
+      }
+      .stats {
+        text-align: center;
+        flex-grow: 1;
+        padding-right: .04in;
+        padding-top: .02in;
+        p {
+          font-size: .08in;
+          line-height: .09in;
+          text-align: left;
+          font-weight: bold;
+          text-align: center;
+          margin: 0px;
+          padding: 0px;
+          padding-bottom: .04in;
+        }
+      }
+    }
+  }
+
+}

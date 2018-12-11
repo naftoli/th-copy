@@ -1,0 +1,56 @@
+@import 'styles/colors.scss';
+
+#SoldiersPage {
+  height: 100%;
+  margin-bottom: 10px;
+
+  .btn-group {
+    margin-top: 0px !important;
+  }
+
+  .inline-profile {
+    max-height: 65px;
+    width: 65px;
+    border-radius: 15%;
+    border: 1px solid $primary-color;
+  }
+  
+  .ReactTable {
+    height: calc( 100% - 50px );
+    min-height: 450px;
+    // page height grows as content shrinks
+    @media ( max-width: 1024px ) {
+      height: calc( 100% - 40px );
+    }
+    @media ( max-width: 412px ) {
+      height: 100%;
+    }
+  }
+}
+
+#bulk-upload-modal {
+  max-width: 650px;
+
+  #warning {
+    font-size: 1.3em; font-weight: 500;
+    color: #c23030;
+  }
+}
+
+#NewSoldierModal {
+  max-width: 600px;
+
+  .ProfileRow {
+    margin: 0px;
+    border-bottom: 1px solid $primary-color;
+
+    div#gender-row {
+      font-size: 1.25em;
+      padding: 8px 0px 8px;
+    }
+
+    img.profile-img {
+      max-width: 125px;
+    }
+  }
+}

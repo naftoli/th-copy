@@ -1,0 +1,136 @@
+@import 'styles/colors';
+
+.GoogleButton,
+.ChabadOrgButton {
+  &:not(:disabled):not(.disabled) {
+
+    box-shadow: 0 0 5px #888;
+  
+    &:active {
+      box-shadow: 0 0 5px #333 !important;
+    }
+  
+    &:focus, &:hover {
+      box-shadow:
+        0 2px 3px #999,
+        0 0 2px .175rem rgb(197, 217, 248),
+        ;
+    }
+  }
+}
+
+.ChabadOrgLegacy {
+  &.disabled {
+    pointer-events: none;
+    filter: opacity(.5) grayscale(100%);
+  }
+}
+
+.ChabadOrgButton {
+
+  $chabad-blue: #306ea2;
+  $chabad-text-blue: #0A3359;
+
+  font-weight: 600;
+  border-radius: .1rem;
+  padding: 1px;
+
+  img { 
+    height: 2.1em;
+    padding: .5em .4em .6em 0em;
+  }
+
+  span {
+    font-size: .78em;
+    padding-left: .6em;
+  }
+
+  &:disabled {
+    color: #8c8c8c;
+    background: #eaeaea;
+    border-color: #eaeaea;
+  
+    img { filter: contrast(0); }
+  }
+
+  &:not(:disabled):not(.disabled) {
+
+    &, &:hover {
+      border: none;
+      color: #fff;
+      background-color: $chabad-blue;
+    }
+  
+    &:active, &:focus {
+      background-color: darken( $chabad-blue, 10% );
+    }
+  }
+
+  @media ( max-width: 500px ) {
+    &.shrink {
+      padding: 1px;
+      span { display: none; }
+      img { padding-left: .4em; }
+    }
+  }
+}
+
+.GoogleButton {
+
+  $google-blue: #4989ee;
+  $google-focus-blue: #396dd0;
+  $google-text-grey: #8c8c8c;
+  $google-disabled-grey: #eaeaea;
+  $google-border-radius: .1rem;
+
+  border-radius: $google-border-radius;
+  display: inline-flex;
+  align-items: center;
+  padding: 1px .6em 1px 1px;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 600;
+
+  > img {
+    width: 2em;
+    height: 2em;
+
+    padding: .53em;
+    margin-right: .6em;
+
+    background: #fff;
+    vertical-align: top;
+
+    border-radius: $google-border-radius;
+  }
+  
+  &:disabled {
+    color: $google-text-grey;
+    background: $google-disabled-grey;
+    border-color: $google-disabled-grey;
+    
+    img {
+      background: none;
+      filter: grayscale( 100% )
+    }
+  }
+
+  &:not(:disabled):not(.disabled) {
+
+    &, &:focus, &:hover {
+      background: $google-blue;
+      border-color: $google-blue;
+    }
+  
+    &:active {
+      background: $google-focus-blue;
+      border-color: $google-focus-blue;
+    }
+  }
+
+  @media ( max-width: 500px ) {
+    &.shrink {
+      .sign-in-with { display: none; }
+    }
+  }
+}

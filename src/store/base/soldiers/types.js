@@ -1,0 +1,6 @@
+export const SET_LOADING = `soldiers/set_loading`;
+export const ADD_SOLDIER = `soldiers/add_soldier`;
+export const SET_SOLDIERS = `soldiers/set_soldiers`;
+export const UPDATE_SOLDIER = `soldiers/update_soldier`;
+export const DELETE_SOLDIER = `soldiers/delete_soldier`;
+export const SET_REGISTRATION_SOLDIERS = `soldiers/set_registration_soldiers`;

@@ -1,0 +1,54 @@
+/* Settings on the body element */
+body {
+  margin: 0;
+  padding: 0;
+  min-width: 350px;
+}
+/* Make scrolling on the entire site as smooth as currently possible */
+* {
+  scroll-behavior: smooth !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+.react-select__menu, .react-select__menu-list {
+  scroll-behavior: unset !important;
+  z-index: 10 !important;
+}
+/* Images cannot go beyond their parent containers */
+img { 
+  max-width: 100%;
+  max-height: 100%;
+}
+
+@media print {
+  .no-print { display: none !important; }
+}
+
+/* Form Validation */
+div.invalid-message { 
+  padding-top: .2em; max-height: 0px; transition: .25s;
+  overflow: hidden; color: #ff3c3c; 
+}
+/* input:invalid[value=""] { border-color: #dcc1c1; } */
+input:invalid:not([value=""]) { border-color: #ff3c3c; }
+input:invalid:not([value=""]) + div.invalid-message { max-height: 50px; transition-delay: .25s; }
+
+#save > button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+#root {
+  height: 100vh;
+}
+
+.alert {
+  word-break: break-word;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}

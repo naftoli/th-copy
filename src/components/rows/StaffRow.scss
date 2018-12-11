@@ -1,0 +1,31 @@
+.StaffRow {
+  padding: 10px;
+  margin: .5rem;
+  display: inline-block;
+
+  @media ( min-width: 730px ) {
+    width: calc( 50% - 1rem );
+    &:first-child { flex-grow: 1; }
+  }
+
+  > .row { 
+    align-items: flex-end;
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    word-wrap: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  p.staff-name {
+    margin-bottom: .4rem;
+    font-size: 1.4em;
+  }
+}
+
+.NewStaffRow {
+  margin-bottom: 10px;
+}

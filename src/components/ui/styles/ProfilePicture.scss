@@ -1,0 +1,44 @@
+.profile-picture {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  max-height: 100%;
+
+  img.profile-img {
+    transition: .25s;
+  }
+
+  img.rank {
+    position: absolute;
+    right: -8%; bottom: -10%;
+    height: 50%; pointer-events: none;
+  }
+}
+
+.profile-picture.editable:not(.ie) {
+  &:focus { outline: none; }
+  &:hover:before, &:focus:before {
+    content: '\f030'; position: absolute; display: flex;
+    height: 100%; width: 100%; pointer-events: none;
+    z-index: 2; color: #fff; font-size: 1.5em;
+    align-items: center; justify-content: center;
+    font-family: Font Awesome\ 5 Free; font-weight: 900;
+    -webkit-font-smoothing: antialiased; text-rendering: auto;
+  }
+  &:hover img.profile-img, &:focus img.profile-img {
+    cursor: pointer;
+    filter: grayscale(100%) brightness(60%);
+  }
+}
+
+.profile-picture.editable.ie {
+  &:hover { cursor: pointer; }
+  &:hover:before, &:focus:before {
+    content: '\f030'; position: absolute; display: flex;
+    height: 100%; width: 100%; pointer-events: none;
+    z-index: 2; color: #000; font-size: 2em;
+    align-items: center; justify-content: center;
+    font-family: Font Awesome\ 5 Free; font-weight: 900;
+    -webkit-font-smoothing: antialiased; text-rendering: auto;
+  }
+}

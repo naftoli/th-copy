@@ -1,0 +1,229 @@
+@import "styles/colors";
+
+#SoldierPage, #NewSoldierModal {
+  .ProfileRow {
+    text-align: center;
+
+    div#gender-row {
+      font-size: 1.25em;
+      padding: 8px 0px 0px;
+    }
+
+    .profile-picture {
+      max-height: 175px;
+      max-width: fit-content;
+      > img:not(.rank) {
+        max-height: 175px;
+        border-radius: 15px;
+        border: 1px solid $primary-color;
+      }
+    }
+    .profile-picture.editable:not(.ie):hover:before,
+    .profile-picture.editable:not(.ie):focus:before {
+      transition: .5s;
+      @media ( min-width: 500px ) { font-size: 2em; }
+      @media ( min-width: 575px ) { font-size: 3em; }
+    }
+
+    @media ( max-width: 575px ) {
+      .profile-picture {
+        margin-bottom: 10px;
+        > img:not(.rank) { max-height: 150px; }
+      }
+      div#gender-row { padding: 0px 0px 8px; }
+    }
+  }
+}
+
+#SoldierPage {
+
+  #image-row > div {
+    align-self: center;
+  }
+
+  div[dir=rtl] > label { font-size: .9em; }
+
+  > .row { margin-bottom: .7em; }
+  .form-check-input {
+    position: relative; margin-left: 0px;
+  }
+
+  .enrollment label { display: block; }
+
+  #RankTab label,
+  #RegistrationTab label {
+    margin-top: 0px;
+  }
+
+  #RegistrationTab {
+    .registration-charge {
+      border: 1px solid#ccc;
+      border-radius: 5px;
+      padding: 8px;
+      margin-bottom: 15px;
+
+      p {
+        margin: .5rem;
+        border-bottom: 1px dashed;
+        text-align: right;
+        // clear after each line
+        &:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        strong {
+          float: left;
+        }
+      }
+    }
+  }
+
+}
+
+.RankBoard {
+
+  .RankRow {
+    text-align: center;
+    border-top: 1px dashed $primary-color-focus;
+    margin: 0px -10px;
+    padding: 10px 0px;
+  
+    .RankRow-rank {
+      p {
+        font-size: .7em;
+        margin-bottom: 0px;
+      }
+      img {
+        max-width: 100px;
+      }
+    }
+  
+    .RankRow-medals {
+      display: grid;
+      grid-template-columns: repeat( auto-fill, minmax(65px, 1fr) );
+      align-items: center;
+      justify-items: center;
+
+      @media ( min-width: 390px ) {
+        grid-template-columns: repeat( auto-fill, minmax(75px, 1fr) );
+      }
+
+      @media ( min-width: 835px ) {
+        grid-template-columns: repeat( auto-fill, minmax(85px, 1fr) );
+      }
+
+      @media ( min-width: 1024px ) {
+        grid-template-columns: repeat( auto-fill, minmax(95px, 1fr) );
+      }
+  
+      div {
+        margin: 10px;
+        max-width: 90px;
+        transition: .25s;
+
+        font-size: .75em;
+
+        img {
+          width: 100%;
+          max-height: inherit;
+          margin-bottom: .4rem;
+        }
+
+        p {
+          font-size: .8em;
+          margin-bottom: 0px;
+        }
+      }
+
+    }
+  }
+
+}
+
+.MedalBoard {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  
+  .Medal {
+    width: 315px;
+    max-width: 478px;
+
+    flex-grow: 1;
+    padding: 6px;
+    margin: 6px;
+
+    text-align: center;
+
+    box-shadow: 1px 1px 10px #ccc;
+    border-radius: .3rem;
+
+    .actions {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+
+      .btn {
+        padding: 0.175rem 0.5rem;
+        border: 0px;
+        width: 60px;
+
+        &.disabled {
+          color: #ccc;
+        }
+        > span {
+          display: block;
+          font-size: .6em;
+          white-space: pre-wrap;
+        }
+      }
+
+      img {
+        height: 100px;
+        width: 96px;
+      }
+    }
+    // allow them to type it in
+    input[type="number"] {
+      width: 3.4em;
+      border: 0px;
+      text-align: right;
+      font-weight: bold;
+      border-bottom: 1px solid #ccc
+    }
+
+    .rc-slider-box {
+      padding: 10px 10px;
+    }
+    
+    .rc-slider {
+      height: 4px;
+      padding: 0px;
+      margin: 0px;
+    }
+    
+    .rc-slider-track { 
+      background-color: $primary-color;
+    }
+
+    .rc-slider-track,
+    .rc-slider-dot {
+      transition: .1s;
+    }
+    
+    .rc-slider-dot-active, .rc-slider-handle {
+      border-color: $primary-color-dark;
+    }
+    
+    .rc-slider-handle:hover, .rc-slider-handle:focus {
+      border-color: $primary-color-focus;
+    }
+    
+    .rc-slider-handle:focus {
+      box-shadow: 0 0 0 3px $primary-color-focus;
+    }
+  }
+}

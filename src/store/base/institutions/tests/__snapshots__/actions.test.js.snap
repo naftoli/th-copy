@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`actions .setInstitutions matches snapshot 1`] = `
+Object {
+  "payload": Array [
+    Object {
+      "foo": "bar",
+    },
+  ],
+  "type": "base/institutions/set_insts",
+}
+`;
+
+exports[`actions .setLoading matches snapshot 1`] = `
+Object {
+  "payload": false,
+  "type": "base/institutions/set_loading",
+}
+`;
+
+exports[`actions .setLoading matches snapshot 2`] = `
+Object {
+  "payload": true,
+  "type": "base/institutions/set_loading",
+}
+`;
+
+exports[`types matches snapshot 1`] = `
+Object {
+  "SET_INSTS": "base/institutions/set_insts",
+  "SET_LOADING": "base/institutions/set_loading",
+}
+`;

@@ -1,0 +1,35 @@
+@import 'styles/colors.scss';
+
+#OrdersPage {
+  height: 100%;
+  
+  .ReactTable {
+    max-height: calc( 100% - 40px );
+    min-height: 80%;
+    @media ( max-width: 500px ) {
+      height: 100%;
+    }
+    margin-bottom: 8px;
+  }
+}
+
+#OrderModal {
+  max-width: 700px;
+
+  label { margin-top: 0px; }
+
+  #total-row {
+    align-items: flex-end;
+    margin-bottom: 0px;
+    label { margin-bottom: 0px; margin-top: 8px; }
+    span.total {
+      display: block;
+      margin-bottom: 0px;
+      font-weight: bold;
+      font-size: 1.5em;
+      font-family: monospace;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

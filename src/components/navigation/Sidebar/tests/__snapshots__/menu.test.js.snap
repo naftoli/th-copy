@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getMenu returns the expected array for BC's 1`] = `
+Array [
+  Object {
+    "icon": <FontAwesome
+      brand={false}
+      icon="home"
+      light={false}
+      regular={false}
+      solid={false}
+      spin={false}
+    />,
+    "label": "Home",
+    "path": "/",
+    "user_types": Array [
+      "HQ",
+      "INST",
+      "BC",
+      "TEACHER",
+      "BLANK",
+    ],
+  },
+  Object {
+    "icon": <FontAwesome
+      brand={false}
+      icon="school"
+      light={false}
+      regular={false}
+      solid={false}
+      spin={false}
+    />,
+    "items": Array [
+      Object {
+        "items": Array [
+          Object {
+            "label": "View / Edit",
+            "path": "/bm/soldiers",
+          },
+          Object {
+            "label": "Rank Cards",
+            "path": "/bm/soldiers/cards",
+          },
+        ],
+        "label": "Soldiers",
+      },
+      Object {
+        "label": "Platoons",
+        "path": "/bm/platoons",
+      },
+      Object {
+        "label": "Parents",
+        "path": "/bm/parents",
+      },
+      Object {
+        "label": "Staff",
+        "path": "/bm/staff",
+      },
+      Object {
+        "label": "Base",
+        "path": "/bm/base/undefined",
+        "user_types": Array [
+          "BC",
+        ],
+      },
+    ],
+    "label": "Base Management",
+  },
+]
+`;
+
+exports[`getMenu returns the expected array for HQ 1`] = `
+Array [
+  Object {
+    "icon": <FontAwesome
+      brand={false}
+      icon="home"
+      light={false}
+      regular={false}
+      solid={false}
+      spin={false}
+    />,
+    "label": "Home",
+    "path": "/",
+    "user_types": Array [
+      "HQ",
+      "INST",
+      "BC",
+      "TEACHER",
+      "BLANK",
+    ],
+  },
+  Object {
+    "icon": <FontAwesome
+      brand={false}
+      icon="school"
+      light={false}
+      regular={false}
+      solid={false}
+      spin={false}
+    />,
+    "items": Array [
+      Object {
+        "items": Array [
+          Object {
+            "label": "View / Edit",
+            "path": "/bm/soldiers",
+          },
+          Object {
+            "label": "Rank Cards",
+            "path": "/bm/soldiers/cards",
+          },
+        ],
+        "label": "Soldiers",
+      },
+      Object {
+        "label": "Platoons",
+        "path": "/bm/platoons",
+      },
+      Object {
+        "label": "Parents",
+        "path": "/bm/parents",
+      },
+      Object {
+        "label": "Staff",
+        "path": "/bm/staff",
+      },
+      Object {
+        "label": "Bases",
+        "path": "/bm/base",
+        "user_types": Array [
+          "HQ",
+          "INST",
+        ],
+      },
+    ],
+    "label": "Base Management",
+  },
+  Object {
+    "icon": <FontAwesome
+      brand={false}
+      icon="award"
+      light={false}
+      regular={false}
+      solid={false}
+      spin={false}
+    />,
+    "items": Array [
+      Object {
+        "label": "Print",
+        "path": "/missions/print",
+      },
+      Object {
+        "label": "Mark",
+        "path": "/missions/mark",
+      },
+      Object {
+        "label": "Personalize",
+        "path": "/missions/personalize",
+      },
+      Object {
+        "label": "Tasks",
+        "path": "/missions/tasks",
+        "user_types": Array [
+          "HQ",
+          "INST",
+          "BC",
+        ],
+      },
+    ],
+    "label": "Missions",
+    "module": "chayolei",
+    "user_types": Array [
+      "HQ",
+      "INST",
+      "BC",
+      "TEACHER",
+    ],
+  },
+]
+`;
