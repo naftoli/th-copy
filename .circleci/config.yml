@@ -90,12 +90,22 @@ jobs:
       # run tests!
       - run: yarn build:prod
 
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - build/*
+
   deploy-staging:
     docker:
       - image: circleci/node:8.12
+    
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: pwd
+      - run: ls -al /
       - run: ls -al
-      - run: ls base-commander -al
+      - run: ls -al /tmp/workspace
 
 workflows:
   version: 2
