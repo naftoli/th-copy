@@ -143,7 +143,9 @@ jobs:
       
       - run:
            name: Add Test.Mashpia.com to known_hosts
-           command: ssh-keyscan -H test.mashpia.com >> ~/.ssh/known_hosts
+           command: |
+            mkdir -p ~/.ssh;
+            ssh-keyscan -H test.mashpia.com >> ~/.ssh/known_hosts;
 
       - run:
           name: Send the react build Over SSH to deploy/build
@@ -168,7 +170,9 @@ jobs:
       
       - run:
            name: Add Mashpia.com to known_hosts
-           command: ssh-keyscan -H mashpia.com >> ~/.ssh/known_hosts
+           command: |
+            mkdir -p ~/.ssh;
+            ssh-keyscan -H mashpia.com >> ~/.ssh/known_hosts
 
       - run:
           name: Send the react build Over SSH to deploy/build
