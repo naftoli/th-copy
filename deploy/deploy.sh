@@ -1,0 +1,5 @@
+echo 'Deploying...'
+
+pwd
+
+tree .

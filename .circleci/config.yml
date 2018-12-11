@@ -122,27 +122,65 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-      
+      # run the build
       - run: yarn build:prod
-
+      # save the results to the worksspace
       - persist_to_workspace:
           root: ~/repo
           paths:
             - base-commander/build/*
 
+  # deploy build artifacts to staging
   deploy-staging:
     docker:
       - image: circleci/node:8.12
-
-    working_directory: ~/repo/
+    # work in the repository
+    working_directory: ~/repo
     
     steps:
       - attach_workspace:
           at: ~/repo
+      
+      - run:
+           name: Add Test.Mashpia.com to known_hosts
+           command: ssh-keyscan -H test.mashpia.com >> ~/.ssh/known_hosts
 
-      - run: sudo apt install tree
-      - run: pwd
-      - run: tree
+      - run:
+          name: Send the react build Over SSH to deploy/build
+          command: |
+            scp -r build/* mashtest@test.mashpia.com:tzivos-hashem/deploy/build
+
+      - run:
+          name: Run the Deployment script
+          command: |
+            ssh mashtest@test.mashpia.com "./tzivos-hashem/deploy/deploy.sh"
+
+  # deploy build artifacts to staging
+  deploy-production:
+    docker:
+      - image: circleci/node:8.12
+    # work in the repository
+    working_directory: ~/repo
+    
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      
+      - run:
+           name: Add Mashpia.com to known_hosts
+           command: ssh-keyscan -H mashpia.com >> ~/.ssh/known_hosts
+
+      - run:
+          name: Send the react build Over SSH to deploy/build
+          command: |
+            scp -r build/* mashpia@mashpia.com:tzivos-hashem/deploy/build
+
+      - run:
+          name: Run the Deployment script
+          command: |
+            ssh mashpia@mashpia.com "./tzivos-hashem/deploy/deploy.sh"
+
+      
 
 workflows:
   version: 2
@@ -169,3 +207,11 @@ workflows:
             branches:
               only:
                 - staging
+
+      - deploy-staging:
+          requires:
+            - build-react
+          filters:
+            branches:
+              only:
+                - master
