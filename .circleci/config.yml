@@ -74,6 +74,9 @@ jobs:
     steps:
       - checkout:
           path: ~/repo
+          
+      - attach_workspace:
+          at: ~/repo
       # cache dependencies
       - restore_cache:
           keys:
@@ -91,19 +94,21 @@ jobs:
       - run: yarn build:prod
 
       - persist_to_workspace:
-          root: ~/repo/base-commander
+          root: ~/repo
           paths:
-            - build/*
+            - ~/repo/base-commander/build/*
 
   deploy-staging:
     docker:
       - image: circleci/node:8.12
+
+    working_directory: ~/repo/
     
     steps:
       - attach_workspace:
-          at: ~/repo/base-commander
+          at: ~/repo
       - run: pwd
-      - run: ls -al /
+      - run: ls -al ~
       - run: ls -al
 
 workflows:
