@@ -11,8 +11,20 @@ jobs:
     working_directory: ~/repo/base-commander
     
     steps:
+      # attempt to load the repo from the cache
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      # checkout the code
       - checkout:
           path: ~/repo
+      # save the code to the cache to speed up later steps
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
 
       # cache dependencies
       - restore_cache:
@@ -41,8 +53,21 @@ jobs:
     working_directory: ~/repo/mashpia.com
     # run the tests
     steps:
+      # attempt to load the repo from the cache
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      # checkout the code
       - checkout:
           path: ~/repo
+      # save the code to the cache to speed up later steps
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -71,32 +96,39 @@ jobs:
       - image: circleci/node:8.12
     # use the base-commander project as the working directory
     working_directory: ~/repo/base-commander
+
     steps:
+      # attempt to load the repo from the cache
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      # checkout the code
       - checkout:
           path: ~/repo
-          
+      # save the code to the cache to speed up later steps
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
       - attach_workspace:
           at: ~/repo
-      # cache dependencies
+
+      # load cached dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-      # # Download dependencies
-      # - run: yarn install
-      # # Save the cache if it chages
-      # - save_cache:
-      #     paths:
-      #       - node_modules
-      #     key: v1-dependencies-{{ checksum "package.json" }}
-      # run tests!
+      
       - run: yarn build:prod
 
       - persist_to_workspace:
           root: ~/repo
           paths:
-            - ~/repo/base-commander/build/*
+            - base-commander/build/*
 
   deploy-staging:
     docker:
