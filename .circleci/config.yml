@@ -36,7 +36,7 @@ jobs:
   test-php:
     # use php 7.2 for testing
     docker:
-      - image: circleci/php:7.2-apache-node-browsers-legacy
+      - image: circleci/php:7.2-apache
     # do all the work in mashpia.com
     working_directory: ~/repo/mashpia.com
     # run the tests
