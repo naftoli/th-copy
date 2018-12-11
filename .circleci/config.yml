@@ -64,13 +64,61 @@ jobs:
           key: composer-v1-dependencies-{{ checksum "composer.json" }}
       # run tests in tests folder
       - run: ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests
+  
+  build-react:
+    # Use node to build the react client
+    docker:
+      - image: circleci/node:8.12
+    # use the base-commander project as the working directory
+    working_directory: ~/repo/base-commander
+    steps:
+      - checkout:
+          path: ~/repo
+      # cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      # Download dependencies
+      - run: yarn install
+      # Save the cache if it chages
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      # run tests!
+      - run: yarn build:prod
+
+  deploy-staging:
+    docker:
+      - image: circleci/node:8.12
+    steps:
+      - run: ls -al
+      - run: ls base-commander -al
 
 workflows:
   version: 2
   
-  test:
+  test-deploy:
     jobs:
       - test-php
-      - test-react:
+      - test-react
+
+      - build-react:
           requires:
             - test-php
+            - test-react
+          filters:
+            branches:
+              only:
+                - master
+                - staging
+
+      - deploy-staging:
+          requires:
+            - build-react
+          filters:
+            branches:
+              only:
+                - staging
