@@ -139,9 +139,10 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
+
+      - run: sudo apt install tree
       - run: pwd
-      - run: ls -al
-      - run: tree base-commander
+      - run: tree
 
 workflows:
   version: 2
