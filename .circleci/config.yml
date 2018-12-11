@@ -208,7 +208,7 @@ workflows:
               only:
                 - staging
 
-      - deploy-staging:
+      - deploy-production:
           requires:
             - build-react
           filters:
