@@ -63,7 +63,7 @@ jobs:
             - vendor
           key: composer-v1-dependencies-{{ checksum "composer.json" }}
       # run tests in tests folder
-      - run: phpunit tests
+      - run: ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests
 
 workflows:
   version: 2
