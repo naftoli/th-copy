@@ -36,7 +36,7 @@ if [ -d build ]; then
   fi;
 
   # copy over and deploy the changes
-  mkdir ../maspia.com/public/new
+  mkdir ../mashpia.com/public/new
   mv build/* ../mashpia.com/public/new/;
   mv build/.[!.]* ../mashpia.com/public/new/;
   rm -rf build; # delete the build folder
