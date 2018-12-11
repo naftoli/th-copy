@@ -24,7 +24,7 @@ jobs:
       - save_cache:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
-            - ".git"
+            - "~/repo/.git"
 
       # cache dependencies
       - restore_cache:
@@ -66,7 +66,7 @@ jobs:
       - save_cache:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
-            - ".git"
+            - "~/repo/.git"
 
       # Download and cache dependencies
       - restore_cache:
@@ -111,7 +111,7 @@ jobs:
       - save_cache:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
-            - ".git"
+            - "~/repo/.git"
 
       - attach_workspace:
           at: ~/repo
@@ -141,7 +141,7 @@ jobs:
           at: ~/repo
       - run: pwd
       - run: ls -al
-      - run: ls -al base-commander
+      - run: tree base-commander
 
 workflows:
   version: 2
