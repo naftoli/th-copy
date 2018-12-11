@@ -150,40 +150,12 @@ jobs:
       - run:
           name: Send the react build Over SSH to deploy/build
           command: |
-            scp -r build/* mashtest@test.mashpia.com:tzivos-hashem/deploy/build
+            scp -r base-commander/build/* mashtest@test.mashpia.com:tzivos-hashem/deploy/build
 
       - run:
           name: Run the Deployment script
           command: |
             ssh mashtest@test.mashpia.com "./tzivos-hashem/deploy/deploy.sh"
-
-  # deploy build artifacts to staging
-  deploy-production:
-    docker:
-      - image: circleci/node:8.12
-    # work in the repository
-    working_directory: ~/repo
-    
-    steps:
-      - attach_workspace:
-          at: ~/repo
-      
-      - run:
-           name: Add Mashpia.com to known_hosts
-           command: |
-            mkdir -p ~/.ssh;
-            ssh-keyscan -H mashpia.com >> ~/.ssh/known_hosts
-
-      - run:
-          name: Send the react build Over SSH to deploy/build
-          command: |
-            scp -r build/* mashpia@mashpia.com:tzivos-hashem/deploy/build
-
-      - run:
-          name: Run the Deployment script
-          command: |
-            ssh mashpia@mashpia.com "./tzivos-hashem/deploy/deploy.sh"
-
       
 
 workflows:
@@ -212,10 +184,10 @@ workflows:
               only:
                 - staging
 
-      - deploy-production:
-          requires:
-            - build-react
-          filters:
-            branches:
-              only:
-                - master
+      # - deploy-production:
+      #     requires:
+      #       - build-react
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master
