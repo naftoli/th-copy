@@ -1,27 +1,73 @@
 {
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
+  
+  // debug client and server at once
+  "compounds": [
+    {
+        "name": "React + XDebug",
+        "configurations": [ "PHP - XDebug", "Chrome - React" ]
+    },
+    {
+      "name": "Legacy + XDebug",
+      "configurations": [ "PHP - XDebug", "Chrome - Legacy" ]
+    }
+  ],
+
   "configurations": [
-        {
-            "name": "Chrome",
-            "type": "chrome",
-            "request": "launch",
-            "url": "http://localhost:3000",
-            "webRoot": "${workspaceRoot}/src"
-        },
-        {
-            "name": "Debug Jest Tests",
-            "type": "node",
-            "request": "launch",
-            "runtimeArgs": [
-                "--inspect-brk",
-                "${workspaceRoot}/node_modules/.bin/jest",
-                "--runInBand",
-                "--env=jsdom"
-            ],
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "port": 9229,
-            "envFile": "${workspaceFolder}/.env"
-        }
-    ]
+
+    {
+      "name": "PHP - XDebug",
+      "type": "php",
+      "request": "launch",
+      "port": 9001, // Do not confilct with PHP FPM
+      "pathMappings": {
+        "/media/sf_tzivos-hashem/": "${workspaceRoot}"
+      }
+    },
+
+    {
+      "name": "Chrome - React",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceRoot}/base-commander/src"
+    },
+
+    {
+      "name": "Chrome - Legacy",
+      "type": "chrome",
+      "request": "launch",
+      "url": "https://tzivos.local",
+      "webRoot": "${workspaceRoot}/mashpia.com/public"
+    },
+
+    {
+      "name": "Debug Jest Tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+          "--inspect-brk",
+          "${workspaceRoot}/base-commander/node_modules/.bin/jest",
+          "--runInBand",
+          "--env=jsdom"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "port": 9229,
+      "envFile": "${workspaceRoot}/base-commander/.env",
+      "cwd": "${workspaceRoot}/base-commander/"
+    }
+
+    // {
+    //   "name": "Launch currently open script",
+    //   "type": "php",
+    //   "request": "launch",
+    //   "program": "${file}",
+    //   "cwd": "${fileDirname}",
+    //   "port": 9001
+    // }
+  ]
 }
