@@ -80,18 +80,18 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-      # Download dependencies
-      - run: yarn install
-      # Save the cache if it chages
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+      # # Download dependencies
+      # - run: yarn install
+      # # Save the cache if it chages
+      # - save_cache:
+      #     paths:
+      #       - node_modules
+      #     key: v1-dependencies-{{ checksum "package.json" }}
       # run tests!
       - run: yarn build:prod
 
       - persist_to_workspace:
-          root: /tmp/workspace
+          root: ~/repo/base-commander
           paths:
             - build/*
 
@@ -101,11 +101,10 @@ jobs:
     
     steps:
       - attach_workspace:
-          at: /tmp/workspace
+          at: ~/repo/base-commander
       - run: pwd
       - run: ls -al /
       - run: ls -al
-      - run: ls -al /tmp/workspace
 
 workflows:
   version: 2
