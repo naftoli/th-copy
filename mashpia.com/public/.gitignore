@@ -1,0 +1,119 @@
+# content in public_html that we do not want on github
+/.settings/*
+.well-known/*
+/_backup/*
+/mobile.zip
+/deleted/*
+/thumbs/*
+/ds
+/nr
+/exports/*
+hesk/*
+
+# ignore these folders...
+cert/
+cgi-bin
+/downloads/*
+/images/staff/*
+/images/*.zip
+/intl/*
+/kiosk.very.old/*
+/Komodo/*
+/letters/*
+/mystoryteller/files/
+/OldTasks/
+/optimized/
+/org_netbeans_saas/
+/pics/
+/resources/
+/schoolLogos/
+/siddurim/
+/SystemTasks/
+/SystemTasksOld/
+/TBP/
+/stats/
+/uploads/
+/yan/
+/youtrack/
+/v2/stats
+/chidon/attendance/db-seeder/vendor
+
+# ignore image cache
+/camps/includes/imagecache/
+
+# ignore v2 images
+/v2/images/imgsrepo
+/v2/images/uploads
+/v2/images/testing
+
+# ignore images on the mobile site
+/mobile/reg/img/
+/mobile/reg/img_android/
+/mobile/reg/parents/
+/mobile/chidon/img/
+
+# raffles - ignore the logs and images
+/raffles/tasks/logs/
+/raffles/img/
+/raffles/thumb/
+
+# general files we do not want in the codebase...
+error_log
+errors.log
+Makefile
+.ftpquota
+cookiefile
+awstats*
+*.xls
+*.xlsx
+*.csv
+
+# bower files should be ignored as they can and should be re-pulled
+bower_components
+
+# achos gitignore options...
+achos/images/staff/*
+achos/images/*.zip
+achos/dtm.sql
+
+# ignore wordpress content...
+blog/wp-content/
+
+# ignore extra wordpress installs
+/wp/
+/wp2/
+
+# ignore wamp stack in camps/sudoku...
+wamp/
+
+# chidon ignore files
+chidon/*.mp4
+chidon/photos/*
+chidon/cropper/avatar/img/*.png
+chidon/img/*
+chidon/IDcards/certs/*
+
+# ignore the hakel videos and pdfs
+hakhel/*.mp4
+hakhel/*.m4a
+hakhel/*.pdf
+hakhel/*.png
+
+# ignore these folders for now
+/chidon2/
+/countdown/
+/dompdf/
+/download/
+/labels_update/
+/logos/
+/mission_report2/
+/mobile2/
+/mobileDev/
+/xcart5/
+
+# ignore attachments in HelpDesk
+/helpdesk/content/attachments/*
+
+# ignore the beta folder
+/beta/*
+/new/*

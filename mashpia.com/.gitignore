@@ -1,0 +1,52 @@
+# primary folders on the server that we do not care about
+/bin/*
+/cache/*
+/.cpanel/*
+/.cphorde/*
+/etc/*
+/.elinks/*
+/.htpasswords/*
+/.local/*
+/logs/*
+/mail/*
+/perl/*
+/perl5/*
+/php/*
+/public_ftp/*
+/.softaculous/*
+/.ssh/*
+/ssl/*
+/.subaccounts/
+/tmp/*
+
+# composer vendro folders
+vendor/
+
+# files that we do not care about above index.html
+/access-logs
+/.bash*
+/.contactemail
+/cpbackup-exclude.conf
+/.ftpquota
+/.gemrc
+/.lastlogin
+/.mysql_history
+/.pearrc
+/.viminfo
+/www
+/youfile.txt
+/.zshrc
+/.gitconfig
+.git-credentials
+# composer folders
+/.cache/*
+/.config/*
+
+# dependency managment files that we do not want
+composer.lock
+error_log
+.ftpquota
+.vscode
+.vim
+
+mysql.log

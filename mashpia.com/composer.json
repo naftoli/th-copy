@@ -1,0 +1,19 @@
+{
+    "name": "Mashpia.com",
+    "description": "Tzivos Hashem Private Source Code",
+    "config": {
+        "platform": {
+            "php": "7.2"
+        }
+    },
+    "require": {
+        "dshafik/php7-mysql-shim": "^0.2.0",
+        "php-activerecord/php-activerecord": "^1.2",
+        "google/apiclient": "^2.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8",
+        "phpunit/dbunit": "^2.0",
+        "phpunit/php-invoker": "^1.1"
+    }
+}
