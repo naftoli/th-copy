@@ -150,7 +150,7 @@ jobs:
       - run:
           name: Send the react build Over SSH to deploy/build
           command: |
-            scp -r base-commander/build/* mashtest@test.mashpia.com:tzivos-hashem/deploy/build
+            scp -r base-commander/build mashtest@test.mashpia.com:tzivos-hashem/deploy
 
       - run:
           name: Run the Deployment script
