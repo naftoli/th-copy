@@ -303,13 +303,10 @@ function delFiles($file_id) {
 function linkImgFile($id, $width=NULL, $height=NULL, $extra = '') 
 {
 	$result = mysql_unbuffered_query("SELECT file_name FROM files WHERE file_id = $id");
-    if(!isset($result) || $result == "" || $result == 0) 
-    {
+    if( !isset($result) || !$result ) {
         $row = array();
         $row['file_name'] = "";
-    } 
-    else
-    {
+    } else {
         $row = mysql_fetch_assoc($result);
     } 
     if(!is_null($width)) $width = "WIDTH='$width'";
