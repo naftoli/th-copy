@@ -821,7 +821,7 @@ function header_points($arrParams) {
 		print "Sorry, there was an error: H-HIP101-SA87DS";
 		exit;
 	}
-	$strUrl = 'http://mashpia.com/v2/legacy/userpoints';
+	$strUrl = 'http://'.$_SERVER['SERVER_NAME'].'/v2/legacy/userpoints';
 	if (isset($arrParams["no_negs"])) {
 		$strUrl .= "/no_negs/" . $arrParams["no_negs"];
 	}
@@ -854,9 +854,16 @@ function header_points($arrParams) {
 	{
 		print "Sorry, there was an error: H-HIP102-23R3RR";
 		exit;
-	} 
-	$arrResults = @unserialize($strResult);
-	return $arrResults;
+	}
+
+	if ( $strResult ) {
+		$arrResults = @unserialize($strResult);
+		return $arrResults;
+	} else {
+		return [
+			$arrParams['user_code'] => null
+		];
+	}
 }
 
 function header_total_points($arrParams) {
