@@ -6,7 +6,7 @@ $months = array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 
 $strrpos = strrpos($_GET['task_date'], "/");  
 if ($strrpos > -1) {
-	$date_array = split("/", $_GET['task_date']); 
+	$date_array =explode("/", $_GET['task_date']); 
 	$task_date = gregoriantojd($date_array[0], $date_array[1], $date_array[2]);    // gregoriantojd 
 	$title = $months[$date_array[0] - 1] . " " . $date_array[1] . ", " . $date_array[2];	
 }

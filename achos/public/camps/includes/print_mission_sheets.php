@@ -11,7 +11,7 @@ $end_date = $_GET['end_date'];
 
 $mission_sheets = array();
 
-$date_array = split("/", $start_date); 
+$date_array =explode(("/", $start_date); 
 $start_date = gregoriantojd($date_array[0], $date_array[1], $date_array[2]);
 
 $mission_sheet = new mission_sheet();
@@ -20,7 +20,7 @@ $mission_sheet->get_groups($group_type_id);
 $mission_sheet->get_missions($group_type_id);
 array_push($mission_sheets, $mission_sheet);
 
-$date_array = split("/", $end_date);
+$date_array =explode(("/", $end_date);
 $end_date = gregoriantojd($date_array[0], $date_array[1], $date_array[2]);
 
 for ($dno = 1; $dno < ($end_date - $start_date + 1); $dno++) {

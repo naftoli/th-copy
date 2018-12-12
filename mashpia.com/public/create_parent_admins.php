@@ -18,7 +18,7 @@ $arrRows = preg_split("/[\n\r]+/", $contents);
 
 $num = 0;
 foreach ($arrRows as $strLine) {
-    $data = split("\t", $strLine);  
+    $data =explode("\t", $strLine);  
 
     $i = 0;
     $last = $data[$i++];

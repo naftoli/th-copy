@@ -47,7 +47,7 @@ class Tanya {
 		$this->objUserHandle->intLadder = $objRow["ladder"];
 		$this->objUserHandle->intEnrolled = $objRow["enrolled"];
 		$this->objUserHandle->intEnrolledDate = $objRow["enrolled_date"];
-		list($intYear, $intMonth, $intDay) = split("-", $user_row["dob"]);
+		list($intYear, $intMonth, $intDay) =explode("-", $user_row["dob"]);
 		$this->objUserHandle->intBirthDate = mktime(0,0,0,$intMonth,$intDay,$intYear);
 		$this->objUserHandle->intDateCreated = $objRow["date_created"];
 		$this->objDBIHandle->close();
@@ -496,7 +496,7 @@ class TanyaUser {
 	}
 
 	protected function parseDate($strDate) {
-		$arrDate = split("/", $strDate);
+		$arrDate =explode("/", $strDate);
 		if (
 			isset($arrDate[0])
 			&& is_numeric($arrDate[0])

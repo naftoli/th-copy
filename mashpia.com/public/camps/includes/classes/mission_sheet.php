@@ -14,7 +14,7 @@ class mission_sheet {
 		$months = array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep". "Oct", "Nov", "Dec");
 		$this->task_date = $task_date;
 		$this->greg_task_date = jdtogregorian($task_date);
-		$date_array = split("/", $this->greg_task_date); 
+		$date_array =explode("/", $this->greg_task_date); 
 		$this->date_title = $months[$date_array[0] - 1] . " " . $date_array[1] . ", " . $date_array[2];
 	}
 	

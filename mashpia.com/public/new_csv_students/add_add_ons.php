@@ -18,7 +18,7 @@ $added = 0;
 $contents = stream_get_contents($new_students);
 $arrRows = preg_split("/[\n\r]+/", $contents);
 foreach ($arrRows as $strLine) {
-	$data = split(",", $strLine);
+	$data =explode(",", $strLine);
 	$row_num++;
 	if ($row_num > 0) {	
 		$size = $data[0];

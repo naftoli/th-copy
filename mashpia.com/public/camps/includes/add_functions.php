@@ -490,12 +490,12 @@ function assign_group_tasks($parameters) {
 	$strrpos = strrpos($groups, "division");
 	if ($strrpos > -1) {
 		$division = true;
-		$info = split("_", $groups);
+		$info =explode("_", $groups);
 		$division_id = $info[1];
 		$sql = "SELECT * FROM groups WHERE division_id=" . $division_id . " ORDER BY group_id";
 	}
 	else {
-		$info = split("_", $groups);
+		$info =explode("_", $groups);
 		$group_type_id = $info[2];	
 		$sql = "SELECT * FROM divisions AS d JOIN groups AS g USING (division_id) WHERE d.group_type_id=" . $group_type_id . " ORDER BY d.division_id, g.group_id ";
 	}

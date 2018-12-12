@@ -6,7 +6,7 @@ $new_students = fopen("boysInfo.csv", "r");
 $contents = stream_get_contents($new_students);
 $arrRows = preg_split("/[\n\r]+/", $contents);
 foreach ($arrRows as $strLine) {
-	$data = split(",", $strLine);	
+	$data =explode(",", $strLine);	
 	$sql[] = "update chidon_reg 
 			set bus_number = '" . $data[1] . "', 
 			walking_group = '" . $data[2] . "', 

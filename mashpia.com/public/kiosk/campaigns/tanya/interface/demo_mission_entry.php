@@ -14,7 +14,7 @@ if (
 	$arrPostChecked = array();
 	foreach ($_POST as $strKey => $strValue) {
 		if (preg_match("/^line\-([_0-9]+)\-([0-9]+)$/", $strKey, $arrMatched)) {
-			$arrMissions = split("_", $arrMatched[1]);
+			$arrMissions =explode("_", $arrMatched[1]);
 			for ($intMission=$arrMissions[0];$intMission!=(isset($arrMissions[1]) ? $arrMissions[1]+1 : $arrMissions[0]+1);$intMission++) {
 				$arrChecked[1][$intMission][] = $arrMatched[2];
 				$arrPostChecked[$intMission][$arrMatched[2]-1] = 1;
