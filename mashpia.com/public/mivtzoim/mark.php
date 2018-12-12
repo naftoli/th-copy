@@ -127,13 +127,17 @@ if ( $school && $grade && $mivtzoim_id ) {
             $marks = $m->getMarks( $grid_ids );
             //echo "<pre>"; print_r( $marks ); echo "</pre>";
 
-            
-            $numTasksWithQty = 0; // only show total if we have more than one task with qty
             echo "<table><thead><tr><th>Grade</th><th>Student</th>";
             foreach ( $tasks as $short_name => $details ) {
                 if ( $task > 0 && $names[$task] != $short_name ) continue;
-                foreach ( $details as $row ) {
-                    echo "<th>" . $row['name'] . "</th>";
+                $numTasksWithQty = 0; // only show total if we have more than one task with qty
+                $numTasks = count( $details );
+                foreach ( $details as $index => $row ) {
+                    echo "<th>" . $row['name'];
+                    if ( $numTasks > 1 ) {
+                        echo "<br /><i>Week " . ($index + 1) . "</i>";
+                    }
+                    echo "</th>";
                     if ( $row['quantity'] >= 1 ) $numTasksWithQty++;
                 } 
                 if ( $numTasksWithQty > 1 ) echo "<th>Total</th>";
@@ -144,6 +148,7 @@ if ( $school && $grade && $mivtzoim_id ) {
                     echo "<tr><td>" . $grade . "</td><td>" . $user['first'] . ' ' . $user['last'] . "</td>";
                     foreach ( $tasks as $short_name => $details ) {
                         if ( $task > 0 && $names[$task] != $short_name ) continue;
+                        $numTasksWithQty = 0; // only show total if we have more than one task with qty
                         $totalQty = 0;
                         foreach ( $details as $row ) {
                             $mark_id = $row['start_date'] . '|' . $row['end_date']; // for finding corrent mark in marks array
@@ -151,6 +156,7 @@ if ( $school && $grade && $mivtzoim_id ) {
                             echo "<td>";
                             // figure out if input is checkbox or value
                             if ( $row['quantity'] >= 1 ) {
+                                $numTasksWithQty++;
                                 echo "<input type='text' name='" . $identifier . "[]' size='4' ";
                                 if ( isset( $marks[$row['grid_id']][$user['user_id']][$mark_id] ) ) {
                                     echo "value='" . $marks[$row['grid_id']][$user['user_id']][$mark_id] . "' ";
