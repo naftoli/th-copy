@@ -8,13 +8,16 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim/classes/mivtzoim.php';
+
+// get all Tzivos Hashem Schools
+$sth = $MASHPIA_DB->query("select school_id, school_name from schools where chayolei = 1 order by school_name and test_school = 0");
+while ( $row = $sth->fetch() ) {
+    $schools[$row['school_id']] = $row['school_name'];
+}
 
 $m = new Mivtzoim( $_POST['mivtzoim_id'] );
 $r = new MivtzoimReport( $m );
-$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
-$schools = $as->getSchools();
 $r->setSchools( $schools );
 ?>
 <!DOCTYPE html>
@@ -52,6 +55,7 @@ $r->setSchools( $schools );
     <script>
         $(document).ready(function () {
             $('#leaderboard').DataTable({
+                'pageLength': 100,
                 'order': [[3, 'desc']]
             });
         });
