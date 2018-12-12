@@ -35,9 +35,9 @@ $camp_mission_id = 0;
 $action = gr('action', '');
 
 if ($action == "copy") {
-	$campaign_ids = split(":", gr("campaign_ids"));
-	$campaign_mission_ids = split(":", gr("campaign_mission_ids"));
-	$task_ids = split(":", gr("task_ids"));
+	$campaign_ids =explode(":", gr("campaign_ids"));
+	$campaign_mission_ids =explode(":", gr("campaign_mission_ids"));
+	$task_ids =explode(":", gr("task_ids"));
 
 	// ********** CAMPAIGNS ********** //
 	for ($cntr1 = 0; $cntr1 < count($campaign_ids); $cntr1++) {	

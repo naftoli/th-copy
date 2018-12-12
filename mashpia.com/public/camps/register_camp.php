@@ -22,9 +22,9 @@ if (isset($_POST["action"])) {
 	$title = $_POST['title'];
 	$first = $_POST['first'];
 	$last = $_POST['last'];
-	$date_array = split("/", $_POST['start_date']);
+	$date_array =explode("/", $_POST['start_date']);
 	$start_date = gregoriantojd($date_array[0], $date_array[1], $date_array[2]);    
-	$date_array = split("/", $_POST['end_date']);
+	$date_array =explode("/", $_POST['end_date']);
 	$end_date = gregoriantojd($date_array[0], $date_array[1], $date_array[2]);    
 
 	$admin_phone_mobile = $_POST['admin_phone_mobile'];

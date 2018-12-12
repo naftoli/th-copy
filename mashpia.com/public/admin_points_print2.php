@@ -52,13 +52,13 @@ elseif(!is_null($medal_stage)) {
 } 
 elseif(gr('subject_mission_series')) {
   // Global AKA mission cards
-  @list($subject_id, $mission_number_series) = split('/', gr('subject_mission_series', '-1/-1'));
+  @list($subject_id, $mission_number_series) =explode('/', gr('subject_mission_series', '-1/-1'));
   $subject_id = intval($subject_id);
   $mission_number_series = intval($mission_number_series);
   // $is_bonus
 } else {
   // Global AKA mission cards
-  @list($subject_id, $mission_number) = split('/', gr('subject_mission', '-1/-1'));
+  @list($subject_id, $mission_number) =explode('/', gr('subject_mission', '-1/-1'));
   $subject_id = intval($subject_id);
   $mission_number = floatval($mission_number);
   // $is_bonus

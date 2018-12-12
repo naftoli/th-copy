@@ -47,7 +47,8 @@ $chay_elul = cal_to_jd(CAL_JEWISH, 13, 18, $today['year']-($today['month']==13 &
 //else 
 $cur_points = floatval(mysql_result(mq(totalMarks("WHERE user_id = {$user['user_id']}")), 0));
 
-$intUserStorePoints = reset(header_store_points(array("user_code" => $user_row['user_code'])));
+$intUserStorePoints = header_store_points(array("user_code" => $user_row['user_code']));
+$intUserStorePoints = reset( $intUserStorePoints );
 $arrPointsEarned = header_icorpa_points( array( "user_code" => $user_row['user_code'], "no_negs" => 1 ) );
 
 function get_rank_class ($rank_ord, $user_rank)
@@ -155,8 +156,6 @@ function print_ranks_list ($bot_start, $user_rank)
                         	<li><label>Serial #:</label> <span><?=$user_row['user_serial']?></span></li>
                         	<li><label>Platoon:</label> <span><?=$user_row['class_grade']?><?=$user_row['class_sub']?></span></li>
                         	<li><label>Teacher:</label> <span><?=$user_row['class_teacher']?></span></li>
-                        	<!--<li><label>Platoon Average:</label> <span><?=$user_row['class_average']?></span></li>
-                        	<li><label>Base Average:</label> <span><?=$user_row['school_average']?></span></li>-->
                             <li><label>Total Miles Earned:</label> <span id="total_miles"><?=$user_row['total_miles']?></span></li>
                             <li><label>Total Miles Available:</label> <span id="year_miles"><?=$cur_points?></span></li>
                         </ul>

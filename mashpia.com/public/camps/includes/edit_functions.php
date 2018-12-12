@@ -165,7 +165,7 @@ function update_group_task($parameters) {
 
 
 function update_group_tasks($parameters) {
-	$group_task_date_ids = split(":", $parameters[0]);
+	$group_task_date_ids =explode(":", $parameters[0]);
 	$completed = $parameters[1];
 
 	$success = true;
@@ -356,7 +356,7 @@ function update_member_task($parameters) {
 }
 
 function update_member_tasks($parameters) {
-	$member_task_ids = split(":", $parameters[0]);
+	$member_task_ids =explode(":", $parameters[0]);
 	$completed = $parameters[1];
 	
 	$success = true;

@@ -3,7 +3,7 @@ include ("get_camp_id.php");
 $camp_id = get_camp_id();
 
 $months = array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
-$date_array = split("/", $_GET['task_date']); 
+$date_array =explode(("/", $_GET['task_date']); 
 $title = $months[$date_array[0] - 1] . " " . $date_array[1] . ", " . $date_array[2];
 $task_date = gregoriantojd($date_array[0], $date_array[1], $date_array[2]);
 $group_type_id = $_GET['group_type_id'];

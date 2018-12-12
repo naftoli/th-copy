@@ -7,7 +7,7 @@ $arrRows = preg_split("/[\n\r]+/", $content);
 
 $qrys = array();
 foreach ($arrRows as $strLine) {
-	$data = split(",", $strLine);	
+	$data =explode(",", $strLine);	
     $points = $data[0];
     $prize_id = $data[1];
     $qty = $data[2];
