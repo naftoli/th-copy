@@ -1,99 +1,220 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
+# CircleCI 2.0 configuration file for this project
 version: 2
+
 jobs:
-  build:
+  test-react:
+    # use node js
     docker:
-      # specify the version you desire here
       - image: circleci/node:8.12
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/repo
-
+    
+    # use the base-commander project as the working directory
+    working_directory: ~/repo/base-commander
+    
     steps:
-      - checkout
+      # attempt to load the repo from the cache
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      # checkout the code
+      - checkout:
+          path: ~/repo
+      # save the code to the cache to speed up later steps
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - "~/repo/.git"
 
-      # Download and cache dependencies
+      # cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
+      # Download dependencies
       - run: yarn install
 
+      # Save the cache if it chages
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-        
+
       # run tests!
       - run: yarn test
 
-  # deploy to /api/build
-  deploy:
+  test-php:
+    # use php 7.2 for testing
     docker:
-        # specify the version you desire here
-      - image: circleci/node:8.12
-
+      - image: circleci/php:7.2
+    # do all the work in mashpia.com
+    working_directory: ~/repo/mashpia.com
+    # run the tests
     steps:
-      - checkout
+      # attempt to load the repo from the cache
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      # checkout the code
+      - checkout:
+          path: ~/repo
+      # save the code to the cache to speed up later steps
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - "~/repo/.git"
 
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - build-dependencies-{{ checksum "package.json" }}
+          - composer-v1-dependencies-{{ checksum "composer.json" }}
           # fallback to using the latest cache if no exact match is found
-          - build-dependencies-
-
-      - run: yarn install
-
+          - composer-v1-dependencies-
+      # install required PHP extensions
+      - run:
+          name: Install PHP extensions
+          command: |
+            sudo docker-php-ext-install mysqli pcntl
+            sudo docker-php-ext-enable mysqli pcntl
+      # install the dependencies as fast as possible
+      - run: composer install -n --prefer-dist
+      # and save the cache
       - save_cache:
           paths:
-            - node_modules
-          key: build-dependencies-{{ checksum "package.json" }}
+            - vendor
+          key: composer-v1-dependencies-{{ checksum "composer.json" }}
+      # run tests in tests folder
+      - run: ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests
+  
+  build-react:
+    # Use node to build the react client
+    docker:
+      - image: circleci/node:8.12
+    # use the base-commander project as the working directory
+    working_directory: ~/repo/base-commander
+
+    steps:
+      # attempt to load the repo from the cache
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      # checkout the code
+      - checkout:
+          path: ~/repo
+      # save the code to the cache to speed up later steps
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - "~/repo/.git"
+
+      - attach_workspace:
+          at: ~/repo
+
+      # load cached dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      # run the build
+      - run: yarn build:prod
+      # save the results to the worksspace
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - base-commander/build/*
+
+  # deploy build artifacts to staging
+  deploy-staging:
+    docker:
+      - image: circleci/node:8.12
+    # work in the repository
+    working_directory: ~/repo
+    
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      
+      - run:
+           name: Add Test.Mashpia.com to known_hosts
+           command: |
+            mkdir -p ~/.ssh;
+            ssh-keyscan -H test.mashpia.com >> ~/.ssh/known_hosts;
 
       - run:
-          name: Build version based on branch
+          name: Send the react build Over SSH to deploy/build
           command: |
-            if [ $CIRCLE_BRANCH = 'beta' ]; then yarn build:beta;
-            elif [ $CIRCLE_BRANCH = 'master' ]; then yarn build:prod;
-            elif [ $CIRCLE_BRANCH = 'alpha' ]; then yarn build; fi
+            scp -r base-commander/build mashtest@test.mashpia.com:tzivos-hashem/deploy
 
+      - run:
+          name: Run the Deployment script
+          command: |
+            ssh mashtest@test.mashpia.com "./tzivos-hashem/deploy/deploy.sh"
+
+  # deploy build artifacts to staging
+  deploy-production:
+    docker:
+      - image: circleci/node:8.12
+    # work in the repository
+    working_directory: ~/repo
+    
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      
       - run:
            name: Add Mashpia.com to known_hosts
-           command: ssh-keyscan -H mashpia.com >> ~/.ssh/known_hosts
+           command: |
+            mkdir -p ~/.ssh;
+            ssh-keyscan -H mashpia.com >> ~/.ssh/known_hosts;
 
       - run:
-          name: Send build/* Over SSH to dev/build
+          name: Send the react build Over SSH to deploy/build
           command: |
-            scp -r build/* mashpia@mashpia.com:dev/build
+            scp -r base-commander/build mashpia@mashpia.com:tzivos-hashem/deploy
 
       - run:
-          name: Run correct deploy script on server
+          name: Run the Deployment script
           command: |
-            if [ $CIRCLE_BRANCH = 'beta' ]; then ssh mashpia@mashpia.com "./dev/deploy-beta.sh";
-            elif [ $CIRCLE_BRANCH = 'master' ]; then ssh mashpia@mashpia.com "./dev/deploy-master.sh";
-            elif [ $CIRCLE_BRANCH = 'alpha' ]; then ssh mashpia@mashpia.com "./dev/deploy-alpha.sh"; fi
-            
+            ssh mashpia@mashpia.com "./tzivos-hashem/deploy/deploy.sh"
+      
 
 workflows:
   version: 2
-  build-and-deploy:
+  
+  test-deploy:
     jobs:
-      - build
-      - deploy:
+      - test-php
+      - test-react
+
+      - build-react:
           requires:
-            - build
+            - test-php
+            - test-react
           filters:
             branches:
-              only: 
-                - alpha
-                - beta
+              only:
+                - master
+                - staging
+
+      - deploy-staging:
+          requires:
+            - build-react
+          filters:
+            branches:
+              only:
+                - staging
+
+      - deploy-production:
+          requires:
+            - build-react
+          filters:
+            branches:
+              only:
                 - master

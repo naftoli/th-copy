@@ -43,13 +43,13 @@ class Mivtzoim {
     */    
     private function setShortNames() {
         global $MASHPIA_DB;
-        $sth = $MASHPIA_DB->prepare("select short_name from mivtzoim_tasks where mivtzoim_id = :id");
+        $sth = $MASHPIA_DB->prepare("select * from mivtzoim_tasks where mivtzoim_id = :id");
         $sth->execute([
             ':id'   =>  $this->id
         ]);
         if ( $rows = $sth->fetchAll() ) {
             foreach ( $rows as $row ) {
-                $this->short_names[] = $row['short_name'];
+                $this->short_names[$row['mivtzoim_task_id']] = $row['short_name'];
             }
         } 
     }
@@ -119,7 +119,7 @@ class Mivtzoim {
     }
 
     /*
-    * gets list of grid ids based on short names / dates for marking
+    * gets list of tasks based on short names / dates for marking
     */
     public function getTasks() { 
         global $MASHPIA_DB;
@@ -132,19 +132,19 @@ class Mivtzoim {
 
         foreach ( $this->short_names as $name ) {
             $sth = $MASHPIA_DB->prepare("
-                SELECT 
-                    grid_id, name, quantity    
+                SELECT DISTINCT
+                    start_date, end_date, grid_id, name, quantity
                 FROM
-                    date_tasks dt 
+                    date_tasks dt
                         JOIN
                     date_tasks_missions dtm USING (date_tasks_mission_id)
                 WHERE
-                    short_name = :short_name 
-                        AND dtm.start_date >= :start 
-                        AND dtm.end_date <= :end 
-                        AND dtm.subject_id = :subject 
-                        AND dtm.lang_id = :lang 
-                GROUP BY name                
+                    short_name = :short_name
+                        AND dtm.start_date >= :start
+                        AND dtm.end_date <= :end
+                        AND dtm.subject_id = :subject
+                        AND dtm.lang_id = :lang
+                ORDER BY start_date           
             ");
             $sth->execute([
                 ':short_name'   =>  $name, 
@@ -173,7 +173,7 @@ class Mivtzoim {
         $marks = [];
         $sth = $MASHPIA_DB->prepare("
             SELECT DISTINCT
-                dt.grid_id, dtm.user_id, dtm.done_qty
+                dtmm.start_date, dtmm.end_date, dt.grid_id, dtm.user_id, dtm.done_qty
             FROM
                 date_tasks dt
                     JOIN
@@ -193,7 +193,8 @@ class Mivtzoim {
         if ( $rows = $sth->fetchAll() ) {
             foreach ( $rows as $row ) {
                 if ( $row['user_id'] && $row['done_qty'] ) {
-                    $marks[$row['grid_id']][$row['user_id']] = $row['done_qty'];
+                    $dates = $row['start_date'] . '|' . $row['end_date'];
+                    $marks[$row['grid_id']][$row['user_id']][$dates] = $row['done_qty'];
                 }
             }
         }
@@ -212,95 +213,99 @@ class Mivtzoim {
             // get personal information on each user
             $user_info = $this->getUserInfo( $users );
             
-            foreach ( $users as $id => $mark ) {
-                // find out if mark already exists for user
-                // using grid id instead of finding task id 
-                // b/c user may have marked in different lang/level/etc
-                $sth2 = $MASHPIA_DB->prepare("
-                    SELECT 
-                        dtm.date_task_id 
-                    FROM
-                        date_tasks_marks dtm
-                            JOIN
-                        date_tasks dt USING (date_task_id)
-                    WHERE
-                        dt.grid_id = :grid 
-                            AND dtm.mark_date >= :start
-                            AND dtm.mark_date <= :end
-                            AND dtm.user_id = :user
-                ");
-                $sth2->execute([
-                    ':grid'     =>  $grid_id, 
-                    ':start'    =>  $this->start, 
-                    ':end'      =>  $this->end, 
-                    ':user'     =>  $id 
-                ]);
-                if ( $sth2->rowCount() > 0 ) {
-                    $row = $sth2->fetch();
-                    $task_id = $row['date_task_id'];
-
-                    if ( $mark > 0 ) {
-                        // do an update
-                        $sth3 = $MASHPIA_DB->prepare("update date_tasks_marks set done_qty = :qty where date_task_id = :task and user_id = :user");
-                        $sth3->execute([
-                            ':qty'  =>  $mark, 
-                            ':task' =>  $task_id, 
-                            ':user' =>  $id
-                        ]);
-                    } else if ( $mark == 0 ) {
-                        // delete mark
-                        $sth3 = $MASHPIA_DB->prepare("delete from date_tasks_marks where user_id = :user and date_task_id = :task");
-                        $sth3->execute([
-                            ':user' =>  $id, 
-                            ':task' =>  $task_id
-                        ]);
-                    }
-                } else {
-                    // do an insert
-                    if ( $mark > 0 ) {
-                        $school_type_id = $user_info[$id]['school_type_id'];
-                        $lang_id = $user_info[$id]['lang_id'];
-                        $level = $user_info[$id]['level'];
-                        
-                        // find out what the correct task id is 
-                        $sth = $MASHPIA_DB->prepare("
+            foreach ( $users as $id => $more ) {
+                foreach ( $more as $start => $other ) {
+                    foreach ( $other as $end => $mark ) {
+                        // find out if mark already exists for user
+                        // using grid id instead of finding task id 
+                        // b/c user may have marked in different lang/level/etc
+                        $sth2 = $MASHPIA_DB->prepare("
                             SELECT 
-                                dt.date_task_id
+                                dtm.date_task_id 
                             FROM
-                                date_tasks dt
+                                date_tasks_marks dtm
                                     JOIN
-                                date_tasks_missions dtm USING (date_tasks_mission_id)
+                                date_tasks dt USING (date_task_id)
                             WHERE
                                 dt.grid_id = :grid 
-                                    AND dtm.start_date >= :start
-                                    AND dtm.end_date <= :end
-                                    AND dtm.subject_id = :subject
-                                    AND dtm.level = :level
-                                    AND dtm.lang_id = :lang
-                                    AND dtm.school_type_id = :type
+                                    AND dtm.mark_date >= :start
+                                    AND dtm.mark_date <= :end
+                                    AND dtm.user_id = :user
                         ");
-                        $sth->execute([
+                        $sth2->execute([
                             ':grid'     =>  $grid_id, 
-                            ':start'    =>  $this->start, 
-                            ':end'      =>  $this->end, 
-                            ':subject'  =>  $this->subject_id, 
-                            ':level'    =>  $level, 
-                            ':lang'     =>  $lang_id, 
-                            ':type'     =>  $school_type_id
+                            ':start'    =>  $start, 
+                            ':end'      =>  $end, 
+                            ':user'     =>  $id 
                         ]);
-                        if ( $row = $sth->fetch() ) {
+                        if ( $sth2->rowCount() > 0 ) {
+                            $row = $sth2->fetch();
                             $task_id = $row['date_task_id'];
-                            $mark_date = unixtojd();
-                            if ( $mark_date < $this->start ) $mark_date = $this->start;
-                            if ( $mark_date > $this->end ) $mark_date = $this->end;
-                            $sth3 = $MASHPIA_DB->prepare("insert into date_tasks_marks set done_qty = :qty, date_task_id = :task, user_id = :user, mark_date = :date, mark_points = :points");
-                            $result = $sth3->execute([
-                                ':qty'  =>  $mark, 
-                                ':task' =>  $task_id, 
-                                ':user' =>  $id,
-                                ':date' =>  $mark_date,
-                                ':points' => 0.5
-                            ]);
+
+                            if ( $mark > 0 ) {
+                                // do an update
+                                $sth3 = $MASHPIA_DB->prepare("update date_tasks_marks set done_qty = :qty where date_task_id = :task and user_id = :user");
+                                $sth3->execute([
+                                    ':qty'  =>  $mark, 
+                                    ':task' =>  $task_id, 
+                                    ':user' =>  $id
+                                ]);
+                            } else if ( $mark == 0 ) {
+                                // delete mark
+                                $sth3 = $MASHPIA_DB->prepare("delete from date_tasks_marks where user_id = :user and date_task_id = :task");
+                                $sth3->execute([
+                                    ':user' =>  $id, 
+                                    ':task' =>  $task_id
+                                ]);
+                            }
+                        } else {
+                            // do an insert
+                            if ( $mark > 0 ) {
+                                $school_type_id = $user_info[$id]['school_type_id'];
+                                $lang_id = $user_info[$id]['lang_id'];
+                                $level = $user_info[$id]['level'];
+                                
+                                // find out what the correct task id is 
+                                $sth = $MASHPIA_DB->prepare("
+                                    SELECT 
+                                        dt.date_task_id
+                                    FROM
+                                        date_tasks dt
+                                            JOIN
+                                        date_tasks_missions dtm USING (date_tasks_mission_id)
+                                    WHERE
+                                        dt.grid_id = :grid 
+                                            AND dtm.start_date >= :start
+                                            AND dtm.end_date <= :end
+                                            AND dtm.subject_id = :subject
+                                            AND dtm.level = :level
+                                            AND dtm.lang_id = :lang
+                                            AND dtm.school_type_id = :type
+                                ");
+                                $sth->execute([
+                                    ':grid'     =>  $grid_id, 
+                                    ':start'    =>  $start, 
+                                    ':end'      =>  $end, 
+                                    ':subject'  =>  $this->subject_id, 
+                                    ':level'    =>  $level, 
+                                    ':lang'     =>  $lang_id, 
+                                    ':type'     =>  $school_type_id
+                                ]);
+                                if ( $row = $sth->fetch() ) {
+                                    $task_id = $row['date_task_id'];
+                                    $mark_date = unixtojd();
+                                    if ( $mark_date < $this->start ) $mark_date = $this->start;
+                                    if ( $mark_date > $this->end ) $mark_date = $this->end;
+                                    $sth3 = $MASHPIA_DB->prepare("insert into date_tasks_marks set done_qty = :qty, date_task_id = :task, user_id = :user, mark_date = :date, mark_points = :points");
+                                    $result = $sth3->execute([
+                                        ':qty'  =>  $mark, 
+                                        ':task' =>  $task_id, 
+                                        ':user' =>  $id,
+                                        ':date' =>  $mark_date,
+                                        ':points' => 0.5
+                                    ]);
+                                }
+                            }
                         }
                     }
                 }
@@ -330,6 +335,12 @@ class Mivtzoim {
             $info[$user_id] = $row;
         }
         return $info;
+    }
+
+    public static function getAll() {
+        global $MASHPIA_DB;
+        $sth = $MASHPIA_DB->query("select * from mivtzoim");
+        return $sth->fetchAll();
     }
 }
 
@@ -387,7 +398,8 @@ class MivtzoimSetup {
                     AND dtm.start_date >= :start
                     AND dtm.end_date <= :end
                     AND dtm.personal = 0
-            GROUP BY short_name
+            GROUP BY short_name 
+            ORDER BY short_name
         ");
         $sth->execute([
             ':subject'  =>  $this->subject_id, 
@@ -402,6 +414,46 @@ class MivtzoimSetup {
         }
         return $short_names;
     }
+
+    /*
+    * gets list of short names with tasks so that HQ can accurately 
+    * determine which short names to choose from
+    */
+    public function availableShortNamesWithTasks() { 
+        global $MASHPIA_DB;
+
+        $tasks = [];
+        $lang_id = 1;
+
+        $sth = $MASHPIA_DB->prepare("
+            SELECT 
+                dt.short_name, dt.name 
+            FROM
+                date_tasks dt
+                    JOIN
+                date_tasks_missions dtm USING (date_tasks_mission_id)
+            WHERE
+                dtm.subject_id = :subject
+                    AND dtm.lang_id = :lang
+                    AND dtm.start_date >= :start
+                    AND dtm.end_date <= :end
+                    AND dtm.personal = 0
+            GROUP BY name
+            ORDER BY short_name
+        ");
+        $sth->execute([
+            ':subject'  =>  $this->subject_id, 
+            ':lang'     =>  $lang_id, 
+            ':start'    =>  $this->start, 
+            ':end'      =>  $this->end
+        ]);
+        if ( $rows = $sth->fetchAll() ) {
+            foreach ( $rows as $row ) {
+                $tasks[$row['short_name']][] = $row['name'];
+            }
+        }
+        return $tasks;
+    }
 }
 
 class MivtzoimReport {
@@ -410,6 +462,8 @@ class MivtzoimReport {
     private $classes;
     private $schoolReg;
     private $classReg;
+    private $schoolMarks;
+    private $classMarks;
 
     public function __construct( Mivtzoim $m ) {
         $this->m = $m;
@@ -417,6 +471,8 @@ class MivtzoimReport {
         $this->classes = [];
         $this->schoolReg = [];
         $this->classReg = [];
+        $this->schoolMarks = [];
+        $this->classMarks = [];
     }
 
     public function setSchools( array $schools ) {
@@ -433,23 +489,19 @@ class MivtzoimReport {
         if ( $this->schools ) {
             // school array should be a map of ids => school names
             $ids = implode(',', array_keys( $this->schools ));
-            $sth = $MASHPIA_DB->prepare("
+            $sth = $MASHPIA_DB->query("
                 SELECT 
                     school_id, COUNT(*) AS total
                 FROM
                     users
                 WHERE
                     user_registered > 0
-                        AND school_id IN (:schools)
+                        AND school_id IN ( $ids )
                 GROUP BY school_id
             ");
-            $sth->execute([
-                ':schools'  =>  $ids
-            ]);
-            if ( $result = $sth->fetchAll() ) {
-                foreach ( $result as $row ) {
-                    $this->schoolReg[$row['school_id']] = $row['total'];
-                }
+            $result = $sth->fetchAll();
+            foreach ( $result as $row ) {
+                $this->schoolReg[$row['school_id']] = $row['total'];
             }
         }
     }
@@ -476,21 +528,87 @@ class MivtzoimReport {
         }
     }
 
+    /*
+    * retrieve total marks per short name per school
+    */
+    public function calculateSchoolMarks() {
+        global $MASHPIA_DB;
+
+        $grid_ids = [];
+        $tasks = $this->m->getTasks();
+        foreach ( $tasks as $name => $info ) {
+            foreach ( $info as $row ) {
+                $grid_ids[$name][$row['grid_id']] = 1;
+            }
+        }
+        foreach ( $grid_ids as $name => $grids ) {
+            $ids = implode(',', array_keys( $grids ));
+            $sth = $MASHPIA_DB->prepare("
+                SELECT 
+                    u.school_id, SUM(dtm.done_qty) AS total
+                FROM
+                    date_tasks dt
+                        JOIN
+                    date_tasks_missions dtmm USING (date_tasks_mission_id)
+                        LEFT JOIN
+                    date_tasks_marks dtm USING (date_task_id)
+                        LEFT JOIN
+                    users u USING (user_id)
+                WHERE
+                    dt.grid_id IN ($ids) 
+                        AND dtmm.start_date >= :start
+                        AND dtmm.end_date <= :end
+                GROUP BY u.school_id
+            ");
+            $dates = $this->m->getDates();
+            $sth->execute([
+                ':start'        =>  $dates['start'], 
+                ':end'          =>  $dates['end']
+            ]);
+            $result = $sth->fetchAll();
+            foreach ( $result as $row ) {
+                $this->schoolMarks[$row['school_id']][$name] = $row['total'];
+            }
+        }
+    }
+
+    public function calculateClassMarks() {
+
+    }
+
     public function createLeaderBoard() {
-        echo "<pre>";
+        //echo "<pre>";
         // find out number of registered users per school / grade
         $this->calculateSchoolReg();
-        $this->calculateClassReg();
+        //$this->calculateClassReg();
         
         //print_r( $this->schools );
-        print_r( $this->schoolReg );
-        echo "</pre>"; 
-        exit;
+        //print_r( $this->schoolReg );
+        // echo "</pre>"; 
+        // exit;
 
         // figure out totals of tasks done per school / grade
-        $this->calculateSchoolDone();
-        $this->calculateClassDone();
+        $this->calculateSchoolMarks();
+        // $this->calculateClassDone();
 
         // output html
+        $names = $this->m->getShortNames();
+        echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead><tr>";
+        echo "<th>School</th>";
+        echo "<th>Registered Chayolim</th>";
+        foreach ( $names as $name ) {
+            echo "<th>" . $name . "</th>";
+            echo "<th>Avg Per Chayol</th>";
+        }
+        echo "</tr></thead><tbody>";
+        foreach ( $this->schoolReg as $school => $reg ) {
+            echo "<tr><td>" . $this->schools[$school] . "</td><td>" . $this->schoolReg[$school] . "</td>";
+            foreach ( $names as $name ) {
+                $mark = isset( $this->schoolMarks[$school][$name] ) ? $this->schoolMarks[$school][$name] : 0;
+                echo "<td>" . $mark . "</td><td>" . round( $mark / $reg ) . "</td>";
+            }
+            echo "</tr>";
+        } 
+        echo "</tbody></table>";        
     }
 }

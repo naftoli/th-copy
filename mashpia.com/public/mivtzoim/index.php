@@ -4,8 +4,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.parshos.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 // retrieve all mivtzoim rows from dbs
 $sth = $MASHPIA_DB->query("select * from mivtzoim");
@@ -13,8 +11,6 @@ $mivtzoim = $sth->fetchAll();
 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
-
-$parshos = Parshos::getParshos( GlobalSettings::getCurrentYear() );
 //echo "<pre>"; print_r( $parshos ); echo "</pre>";
 ?>
 <!DOCTYPE html>
@@ -55,10 +51,8 @@ $parshos = Parshos::getParshos( GlobalSettings::getCurrentYear() );
             </select>
             <br /><br />
 
-            <div id="parshaDisplay" style="display: none;">
-                <select name="parsha" id="parsha">
-
-                </select>
+            <div id="taskDisplay" style="display: none;">
+                <select name="task" id="task"></select>
                 <br /><br />
             </div>
 
@@ -72,6 +66,7 @@ $parshos = Parshos::getParshos( GlobalSettings::getCurrentYear() );
             $.get('/ajax/getClasses.php?flat=true', { id : school }, function( info ) {
                 var grades = $.parseJSON( info );
                 var html = "<option value='0'>Choose Grade</option>";
+                html += "<option value='-1'>All Grades</option>";
                 for (var g in grades) {
                     html += "<option value='" + grades[g][0] + "'>" + grades[g][1] + "</option>";
                 }
@@ -86,34 +81,30 @@ $parshos = Parshos::getParshos( GlobalSettings::getCurrentYear() );
             $.post('ajax/mivtzoim.php', { id : id }, function( success ) {
                 var mivtzoim = JSON.parse( success );
                 console.log( mivtzoim );
-                if ( mivtzoim ) {
-                    var html = "<option value='0'>Choose Parsha</option>";
-                    for ( var m in mivtzoim ) {
-                        var mivtza = mivtzoim[m];
-                        var parshos = <?= json_encode( $parshos ); ?>;
-                        var count = 0; // keep track of how many weeks are actually being output
-                        for ( var p in parshos ) {
-                            var parsha = parshos[p];
-                            // only show relevant parshos
-                            if ( mivtza.start > parsha.end ) continue;
-                            if ( mivtza.end < parsha.start ) continue;
-                            html += "<option value='" + parsha.start + '|' + parsha.end + '|' + parsha.name +  "'>" + parsha.name + "</option>";
-                            count++;
-                        }
+                if ( !mivtzoim.error ) {
+                    var count = 0; // keep track of how many tasks are actually being output
+                    var html = "<option value='0'>All Tasks</option>";
+                    for ( var m in mivtzoim.data ) {
+                        html += "<option value='" + m +  "'>" + mivtzoim.data[m] + "</option>";
+                        count++;
                     }
-                    $("#parsha").empty();
-                    $("#parsha").append( html );
+                    $("#task").empty();
+                    $("#task").append( html );
                     if ( count > 1 ) {
-                        $("#parshaDisplay").show();
+                        $("#taskDisplay").show();
                         $("#submit").attr('disabled', false);
                         $("#submit").removeClass('disabled');
                     } else {
-                        $("#parshaDisplay").hide();
-                        var html = "<input type='hidden' name='parsha' value='" + parsha.start + '|' + parsha.end + '|' + parsha.name + "' />";
-                        $("#parshaDisplay").after(html);
+                        $("#taskDisplay").hide();
+                        var html = "<input type='hidden' name='task' value='" + m + "' />";
+                        $("#taskDisplay").after(html);
                         $("#submit").attr('disabled', false);
                         $("#submit").removeClass('disabled');
                     }
+                } else {
+                    alert( mivtzoim.data );
+                    $("#submit").attr('disabled', false);
+                    $("#submit").removeClass('disabled');
                 }
             });
         });

@@ -20,6 +20,7 @@ $start = $dates['start'];
 $end = $dates['end'];
 $ms = new MivtzoimSetup( $name, $start, $end );
 $short_names = $ms->availableShortNames();
+$namesWithTasks = $ms->availableShortNamesWithTasks();
 
 if ( isset( $_POST['submit'] ) ) {
     $tasks = [];
@@ -49,15 +50,26 @@ if ( isset( $_POST['submit'] ) ) {
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Short Name</th>
+                        <th>Task Category</th>
+                        <th>Tasks Included</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    foreach ( $short_names as $index => $name ) {
-                        echo "<tr><td><input type='checkbox' name='name[" . $index . "]'";
+                    // foreach ( $short_names as $index => $name ) {
+                    //     echo "<tr><td><input type='checkbox' name='name[" . $index . "]'";
+                    //     if ( $names && in_array( $name, $names ) ) echo " checked";
+                    //     echo " /></td><td>" . $name . "</td></tr>";
+                    // }
+                    $i = 0;
+                    foreach ( $namesWithTasks as $name => $rows ) {
+                        echo "<tr><td><input type='checkbox' name='name[" . $i++ . "]'";
                         if ( $names && in_array( $name, $names ) ) echo " checked";
-                        echo " /></td><td>" . $name . "</td></tr>";
+                        echo " /></td><td>" . $name . "</td><td>";
+                        foreach ( $rows as $name ) {
+                            echo $name . "<br />";
+                        }
+                        echo "</td></tr>";
                     }
                     ?>
                     <tr>
