@@ -52,7 +52,7 @@ if ($action != "") {
 	
 	switch($action) {
 		case "assign":
-			$group_ids = split(":", gr('group_ids'));
+			$group_ids =explode(":", gr('group_ids'));
 			for ($cntr = 0; $cntr < count($group_ids); $cntr++) {
 				$group = mysql_fetch_assoc(mq("SELECT g.group_id, g.division_id, d.group_type_id FROM groups AS g JOIN divisions AS d USING (division_id) WHERE g.group_id=" . $group_ids[$cntr]));
 				$row = mysql_fetch_assoc(mq("SELECT member_group_id FROM member_groups WHERE user_id=" . $user_id . " AND group_type_id=" . $group['group_type_id'] . " AND division_id=" . $group['division_id']));

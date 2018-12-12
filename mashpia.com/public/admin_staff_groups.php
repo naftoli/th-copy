@@ -21,7 +21,7 @@ if ($action != "") {
 	
 		case "assign":
 			if (gr("group_type_ids") != "") {
-				$group_type_ids = split(";", gr("group_type_ids"));
+				$group_type_ids =explode(";", gr("group_type_ids"));
 				for ($cntr = 0; $cntr < count($group_type_ids); $cntr++) {
 					$group_type_id = $group_type_ids[$cntr];
 					$num_rows = mysql_num_rows(mq("SELECT * FROM staff_group_types WHERE admin_id=" . $admin_id . " AND group_type_id=" . $group_type_id));
@@ -33,7 +33,7 @@ if ($action != "") {
 			}
 			
 			if (gr("group_ids") != "") {
-				$group_ids = split(";", gr("group_ids"));
+				$group_ids =explode(";", gr("group_ids"));
 				for ($cntr = 0; $cntr < count($group_ids); $cntr++) {
 					$group_id = $group_ids[$cntr];
 					$num_rows = mysql_num_rows(mq("SELECT * FROM staff_groups WHERE admin_id=" . $admin_id . " AND group_id=" . $group_id));
@@ -45,7 +45,7 @@ if ($action != "") {
 			}
 			
 			if (gr("division_ids") != "") {
-				$division_ids = split(";", gr("division_ids"));
+				$division_ids =explode(";", gr("division_ids"));
 				for ($cntr = 0; $cntr < count($division_ids); $cntr++) {
 					$division_id = $division_ids[$cntr];
 					$num_rows = mysql_num_rows(mq("SELECT * FROM staff_divisions WHERE admin_id=" . $admin_id . " AND division_id=" . $division_id));

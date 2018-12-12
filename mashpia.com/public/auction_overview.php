@@ -41,6 +41,12 @@ $(function () {
   $('.scroll-pane').jScrollPane({showArrows:true, scrollbarWidth: 42, arrowSize: 42});
 });
 </SCRIPT>
+<style>
+.overview::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+</style>
 </HEAD>
 <body class="lgreen">
   <div id="wrapper">
@@ -68,8 +74,8 @@ $(function () {
 
       <div class="three_column padding_top">
         <div class="content">
-          <div id="slider">
-            <ul class="overview">
+          <div id="slider" style='padding: 15px 0px;'>
+            <ul class="overview" style="height: 400px; overflow: auto; overflow-x: hidden; box-sizing: border-box;">
 
               <li>
                 <div class="slider_title"><?=T_('About Miles')?></div>

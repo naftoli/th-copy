@@ -21,8 +21,7 @@ $url = $_SERVER["REQUEST_URI"];
 $qryCounter = 0;
 if (!isset($_COOKIE["user"])) {
 	$qryTimes[$qryCounter]['start'] = time();
-	$user_row = mysql_fetch_assoc(mq("
-	SELECT user_id, first, last, user_code, first_he, last_he, username, gender, user_address1, user_address2,
+	$sql = "SELECT user_id, first, last, user_code, first_he, last_he, username, gender, user_address1, user_address2,
 		   user_city, user_state, user_postal, user_country, user_phone, camp_registered, user_start_date, users.add_on_two, 
 		   user_serial, user_photo_id, mobile_pic, class_id, class_grade, class_sub, class_teacher, team_id, team_name,
 		   users.school_id, school_name, school_number, school_store, school_city, school_state, school_makeup_id, school_logo_id, school_logo_kiosk_id, inst_logo_id, school_type_id, kiosk_edit,
@@ -36,8 +35,9 @@ if (!isset($_COOKIE["user"])) {
 		 LEFT JOIN ranks USING (rank_ord)
 		 LEFT JOIN camps ON (users.camp_id=camps.camp_id)
 	WHERE user_id = {$user['user_id']}
-	ORDER BY class_grade, class_sub, last, first
-	"));
+	ORDER BY class_grade, class_sub, last, first";
+
+	$user_row = mysql_fetch_assoc( mq( $sql ) );
 	$qryTimes[$qryCounter++]['end'] = time();
 }
 
@@ -439,7 +439,7 @@ require 'mobile/reg/ajax/encrypt.php';
                         <div class="member_badge">
 
 							<? if(!$camp_season) : ?>
-                            <?=!is_null($user_row['rank_image_id']) ? linkImgFile($user_row['rank_image_id'], 124, 100) : ''?>
+                            <?=!is_null($user_row['rank_image_id']) ? linkImgFile($user_row['rank_image_id'], 124 ) : ''?>
 							<? endif; ?>
                         </div>
                     </div>
@@ -459,8 +459,6 @@ require 'mobile/reg/ajax/encrypt.php';
                         	<li><label>Serial #:</label> <span><?=$user_row['user_serial']?></span></li>
                         	<li><label>Platoon:</label> <span><?=$user_row['class_grade']?><?=$user_row['class_sub']?></span></li>
                         	<li><label>Teacher:</label> <span><?=$user_row['class_teacher']?></span></li>
-                        	<!--<li><label>Platoon Average:</label> <span><?=$user_row['class_average']?></span></li>
-                        	<li><label>Base Average:</label> <span><?=$user_row['school_average']?></span></li>-->
                         	<li><label>Total Miles Earned:</label> <span id="total_miles"><?=$user_row['total_miles']?></span></li>
                         	<li><label>Total Miles Earned This Year:</label> <span id="year_miles"><?=$cur_points?></span></li>
                         </ul>

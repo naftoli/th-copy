@@ -198,7 +198,7 @@ function selectYear($today) {
 
 //covert yyyy-mm-dd to julian date
 function dateToJD($date) {
-  @list($year, $month, $day) = split('-', $date);
+  @list($year, $month, $day) =explode(('-', $date);
   $jd = cal_to_jd(CAL_GREGORIAN, intval($month), intval($day), intval($year));
   return $jd ? $jd : NULL;
 }

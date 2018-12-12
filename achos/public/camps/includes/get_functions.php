@@ -677,8 +677,8 @@ function check_admin_username($parameters) {
 
 function get_group_tasks($parameters) {
 	$task_date = $parameters[0]; 
-	$group_ids = split(":", $parameters[1]); 
-	$camp_task_ids = split(":", $parameters[2]);
+	$group_ids =explode((":", $parameters[1]); 
+	$camp_task_ids =explode((":", $parameters[2]);
 	
 	$tasks = array();
 	$groups = array();

@@ -37,7 +37,7 @@ $campaign_group_id = gri('campaign_group_id', -1);
 $task_id = gri('task_id', -1);
 
 if ($action == "add_tasks") {
-	$tasks_ids = split(":", gr('tasks_ids'));
+	$tasks_ids =explode(":", gr('tasks_ids'));
 	
 	for ($cntr = 0; $cntr < count($tasks_ids); $cntr++) {
 		$sql = "SELECT * FROM camps_tasks WHERE task_id=" . $tasks_ids[$cntr];

@@ -226,8 +226,8 @@ function update_group_task($params) {
 
 function group_date_tasks($params) {
 	$task_date = $params[0]; 
-	$group_ids = split(":", $params[1]); 
-	$camp_task_ids = split(":", $params[2]);
+	$group_ids =explode(":", $params[1]); 
+	$camp_task_ids =explode(":", $params[2]);
 	
 	$date_tasks = array();
 	$group_tasks = array();
@@ -402,12 +402,12 @@ function assign_group_tasks($params) {
 	$division = 0;
 	if ($strrpos > -1) {
 		$division = 1;
-		$info = split("_", $groups);
+		$info =explode("_", $groups);
 		$division_id = $info[1];
 		$sql = "SELECT * FROM groups WHERE division_id=" . $division_id . " ORDER BY group_id";
 	}
 	else {
-		$info = split("_", $groups);
+		$info =explode("_", $groups);
 		$group_type_id = $info[2];	
 		$sql = "SELECT * FROM divisions AS d JOIN groups AS g USING (division_id) WHERE d.group_type_id=" . $group_type_id . " ORDER BY d.division_id, g.group_id ";
 	}
@@ -597,8 +597,8 @@ function get_ranks($params) {
 
 function member_date_tasks($params) {
 	$task_date = $params[0];
-	$user_ids = split(":", $params[1]);
-	$camp_tasks_ids = split(":", $params[2]);
+	$user_ids =explode(":", $params[1]);
+	$camp_tasks_ids =explode(":", $params[2]);
 	
 	$member_tasks = array();
 	$tasks = array();
