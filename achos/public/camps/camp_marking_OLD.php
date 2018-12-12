@@ -168,8 +168,8 @@ function start_marking_session_missions($params) {
 // application/php/appInterface.php?action=start_marking_session_member_tasks&params=2455381,7536:7538,7:8:17
 function start_marking_session_member_tasks($params) {
 	$task_date = $params[0];
-	$user_ids = split(":", $params[1]);
-	$camp_tasks_ids = split(":", $params[2]);
+	$user_ids =explode((":", $params[1]);
+	$camp_tasks_ids =explode((":", $params[2]);
 	
 	$member_tasks = array();
 	$tasks = array();

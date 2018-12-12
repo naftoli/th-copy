@@ -516,6 +516,8 @@ class LegacyController extends Zend_Controller_Action
 				'user_id' => $objUser->user_id
 			)));
 			*/
+
+			$intPoints = 0;
 			
 			$objUser = first($objUsers->getMashpiaUser($intBarCode));
 			if ($boolNoNegs) {

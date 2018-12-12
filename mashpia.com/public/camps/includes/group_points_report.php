@@ -20,7 +20,7 @@ $query = mysql_query($sql);
 <?
 while ($row = mysql_fetch_assoc($query)) {
 	$greg_date = jdtogregorian($row["task_date"]);
-	$date_array = split("/", $greg_date); 
+	$date_array =explode("/", $greg_date); 
 	$month = $months[$date_array[0] - 1];
 	$day = $date_array[1];
 	$year = $date_array[2];

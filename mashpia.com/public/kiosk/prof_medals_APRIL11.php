@@ -194,7 +194,7 @@ function getHebrewYear($jdDate)
     //$jdDate = gregoriantojd($gregorianMonth,$gregorianDay,$gregorianYear);
     //$hebrewMonthName = jdmonthname($jdDate,4);
     //$hebrewDate = jdtojewish($jdDate);
-    //list($hebrewMonth, $hebrewDay, $hebrewYear) = split('/',$hebrewDate);
+    //list($hebrewMonth, $hebrewDay, $hebrewYear) =explode('/',$hebrewDate);
     $startdateh_arr = cal_from_jd($jdDate, CAL_JEWISH);
     return $startdateh_arr["year"];
 }

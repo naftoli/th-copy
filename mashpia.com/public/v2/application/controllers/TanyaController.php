@@ -49,7 +49,7 @@ class TanyaController extends Zend_Controller_Action
 			$arrItems = array();
 			foreach ($_POST as $strKey => $strValue)
 			{
-				$arrItemName = split("_", $strKey);
+				$arrItemName =explode("_", $strKey);
 				if (
 					$arrItemName[0] == "item"
 					&& preg_match("/^[0-9]+$/", $arrItemName[1])

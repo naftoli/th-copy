@@ -80,7 +80,7 @@ class Users
 		if($email == '')
 		{
 			$this->redirect('/');
-			break;
+			return;
 		}
 		// setup Zend_Auth adapter for a database table
 		$db = Zend_Registry::get('db');
@@ -1783,7 +1783,7 @@ class Users
 		if($user_id == '')
 		{
 			$this->redirect('/');
-			break;
+			return;
 		}
 		$strSql = '
 		SELECT ims_id FROM legacy_lookup
@@ -1877,7 +1877,7 @@ class Users
 				}
 		} else{
 			return 'Authentication Failed';
-			break;
+			return;
 		/*
 			// Not a valid user, get the error code & forward to failed login page
 			switch ($objResult->getCode())
