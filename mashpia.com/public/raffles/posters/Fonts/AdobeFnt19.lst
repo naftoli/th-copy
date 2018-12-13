@@ -1,0 +1,108 @@
+%!Adobe-FontList 1.19
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbCarizmaBook-Regular
+FamilyName:FbCarizmaBook
+StyleName:Regular
+FullName:FbCarizmaBook-Regular
+MenuName:FbCarizmaBook Regular
+StyleBits:0
+FamilyNameNative:FbCarizmaBook
+StyleNameNative:Regular
+FullNameNative:FbCarizmaBook Regular
+WritingScript:Hebrew
+OutlineFileName:C:\Users\chaim fieldsteel\Downloads\Weekly Prize Posters Template Folder\Document fonts\FbCarizmaBook-Regular.otf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:67832
+FileModTime:1515118916
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,FbCarizmaBook Regular
+NameArray:0,Win,1,FbCarizmaBook Regular
+NameArray:0,Win,16,FbCarizmaBook
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:GothamNarrow-Bold
+FamilyName:Gotham Narrow
+StyleName:Bold
+FullName:Gotham Narrow Bold
+MenuName:Gotham Narrow Bold
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\chaim fieldsteel\Downloads\Weekly Prize Posters Template Folder\Document fonts\GothamNarrow-Bold_1.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:176412
+FileModTime:1515118920
+WeightClass:400
+WidthClass:3
+AngleClass:0
+NameArray:0,Mac,4,Gotham Narrow Bold
+NameArray:0,Win,1,Gotham Narrow Bold
+NameArray:0,Win,16,Gotham Narrow
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Heebo-Regular
+FamilyName:Heebo
+StyleName:Regular
+FullName:Heebo-Regular
+MenuName:Heebo
+StyleBits:0
+FamilyNameNative:Heebo
+StyleNameNative:Regular
+FullNameNative:Heebo Regular
+WritingScript:Hebrew
+OutlineFileName:C:\Users\chaim fieldsteel\Downloads\Weekly Prize Posters Template Folder\Document fonts\Heebo-Regular.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:80092
+FileModTime:1486689661
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Heebo
+NameArray:0,Win,1,Heebo
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MinionPro-Regular
+FamilyName:Minion Pro
+StyleName:Regular
+FullName:Minion Pro
+MenuName:Minion Pro
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\chaim fieldsteel\Downloads\Weekly Prize Posters Template Folder\Document fonts\MinionPro-Regular_0.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:218640
+FileModTime:1515118928
+WeightClass:400
+WidthClass:5
+AngleClass:0
+DesignSize:110
+NameArray:0,Mac,4,Minion Pro
+NameArray:0,Win,1,Minion Pro
+%EndFont
+
