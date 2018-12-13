@@ -97,7 +97,7 @@ if ($admin_user['admin_id'] > 0) {
 
 $admin->check_ckids_school();
 if ( $admin->beta || $admin->ckids ) {
-	header( 'Location: /beta' );
+	header( 'Location: /new' );
 }
 // Note that T_() in the following html transalates the text if needed.
 ?>
