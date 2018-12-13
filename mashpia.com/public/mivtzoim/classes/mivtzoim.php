@@ -170,7 +170,9 @@ class Mivtzoim {
     */
     public function getMarks( array $grid_ids ) {
         global $MASHPIA_DB;
+
         $marks = [];
+        $grids =  implode(',', $grid_ids);
         $sth = $MASHPIA_DB->prepare("
             SELECT DISTINCT
                 dtmm.start_date, dtmm.end_date, dt.grid_id, dtm.user_id, dtm.done_qty
@@ -181,12 +183,11 @@ class Mivtzoim {
                     LEFT JOIN
                 date_tasks_marks dtm USING (date_task_id)
             WHERE
-                dt.grid_id IN (:grid)
+                dt.grid_id IN ($grids)
                     AND dtmm.start_date >= :start
                     AND dtmm.end_date <= :end
         ");
         $sth->execute([
-            ':grid'     =>  implode(',', $grid_ids), 
             ':start'    =>  $this->start, 
             ':end'      =>  $this->end
         ]);

@@ -99,6 +99,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Mishnos</span>
                 </div>
             </a>
+            <a href="/mivtzoim/admin/<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <span class="link-text">Mivtzoim</span>
+                </div>
+            </a>
         </div>
         <?if ($admin_user['auth'] == 'super') {?>
         <h2>Managment Links</h2>

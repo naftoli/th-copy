@@ -669,6 +669,13 @@ $bpOnly = [ 82 ];
 									<li><a href="quota_cards.php">Quota Cards</a></li>
 								</ul>
 							</li>
+							<li>
+								<a href="#">Mivtzoim</a>
+								<ul>
+									<li><a href="/mivtzoim">Marking</a></li>
+									<li><a href="mivtzoim/reports">Reports</a></li>
+								</ul>
+							</li>
 						</ul>
 						
 						<li class="list_parent<?=isset($ui_type) && $ui_type == 'info' ? ' current' : ''?>">
