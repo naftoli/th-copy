@@ -6,7 +6,7 @@ require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/noPicMission.
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/picMission.php' );
 
 if ( !isset( $_POST['school_id'] ) ) {
-    header('Location: /beta/missions/print' ); die();
+    header('Location: /new/missions/print' ); die();
 }
 
 $school = \School::find([ $_POST['school_id'] ]);
