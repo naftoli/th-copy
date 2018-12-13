@@ -1,4 +1,21 @@
 var gtag; // make sure gtag is a defined variable
+
+var toggle =  function(){
+    var on = false;
+
+    return function() {
+        if ( on ) {
+            $('#social-dropdown-link').css({ width: 0, opacity: 0 });
+            $('#browser-share').css({ width: '36px', opacity: 1 });
+        } else {
+            $('#social-dropdown-link').css({ width: '36px', opacity: 1 });
+            $('#browser-share').css({ width: 0, opacity: 0 });
+        }
+        
+        on = !on;
+    }
+}();
+
 // on page load
 $( document ).ready( function(){
     loadTable( false );
@@ -15,6 +32,24 @@ $( document ).ready( function(){
     $("#social-dropdown-link").click( function(){
         gtag('event', 'share');
     });
+
+    // if the share function is supported and we are on an SSL connection
+    if ( navigator.share && location.protocol === 'https:' ) {
+        $('#browser-share').css( 'max-width', '500px' );
+        $('#browser-share i').css({ width: '36px', opacity: 1, transform: 'scale(1)' });
+        // use navigator.share when the click
+        $('#browser-share').click( function() {
+            navigator.share({
+                title: 'Our Birthday Gift',
+                text: 'See the amazing gift the Chayolim gave the Rebbe for his 117th birthday at ourBirthdayGift.com',
+                url: 'https://ourbirthdaygift.com',
+            }).then( console.log )
+            .catch( console.error );
+        });
+    } else {
+        $('#social-dropdown-link').css( 'max-width', '500px' );
+        $('#social-dropdown-link i').css({ width: '36px', opacity: 1, transform: 'scale(1)' });
+    }
 
     function refreshTable() {
         // get the current grade
