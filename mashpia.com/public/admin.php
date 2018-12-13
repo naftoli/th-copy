@@ -12,7 +12,7 @@ if (!isset($_GET['fromMobile']) && !isset($_POST['fromMobile'])) {
 	require_once 'Mobile_Detect.php';
 	$detect = new Mobile_Detect;
 	if ( $detect->isMobile() || $detect->isTablet() ) {
-		header("Location: https://mashpia.com/mobile/reg");
+		header("Location: /mobile/reg");
 		exit;
 	}
 }
@@ -48,7 +48,7 @@ if ($admin->is_parent && !in_array($admin_user['admin_id'],$exceptions)) {
 	require 'mobile/reg/ajax/encrypt.php';
 	$value = encrypt_decrypt('encrypt', $admin_user['admin_id']);
 	setcookie('admin', $value);
-	header("Location: https://mashpia.com/mobile/reg/parent_detail.html");
+	header("Location: /mobile/reg/parent_detail.html");
 	exit;
 }
 
@@ -97,7 +97,7 @@ if ($admin_user['admin_id'] > 0) {
 
 $admin->check_ckids_school();
 if ( $admin->beta || $admin->ckids ) {
-	header( 'Location: /beta' );
+	header( 'Location: /new' );
 }
 // Note that T_() in the following html transalates the text if needed.
 ?>

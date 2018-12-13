@@ -27,18 +27,22 @@ class SimpleImage {
 
 	function load($filename) {
 
-	  $image_info = getimagesize($filename);
+		$this->image_type = false;
+		$this->image = false;
 
-	  $this->image_type = $image_info[2];
-	  if( $this->image_type == IMAGETYPE_JPEG ) {
+	  if ( file_exists( $filename ) ) {
+			$image_info = getimagesize( $filename );
 
-		 $this->image = imagecreatefromjpeg($filename);
-	  } elseif( $this->image_type == IMAGETYPE_GIF ) {
+			$this->image_type = $image_info[2];
+			if( $this->image_type == IMAGETYPE_JPEG ) {
+				$this->image = imagecreatefromjpeg($filename);
+			} elseif( $this->image_type == IMAGETYPE_GIF ) {
 
-		 $this->image = imagecreatefromgif($filename);
-	  } elseif( $this->image_type == IMAGETYPE_PNG ) {
-		 $this->image = imagecreatefrompng($filename);
-	  }
+				$this->image = imagecreatefromgif($filename);
+			} elseif( $this->image_type == IMAGETYPE_PNG ) {
+				$this->image = imagecreatefrompng($filename);
+			}
+		}
 	}
 
 	function save($filename, $image_type=IMAGETYPE_JPEG, $compression=75, $permissions=null) {
@@ -71,12 +75,14 @@ class SimpleImage {
 	  }
 	}
 	function getWidth() {
-
-	  return imagesx($this->image);
+		if ( $this->image )
+			return imagesx($this->image);
+		return 0;
 	}
 	function getHeight() {
-
-	  return imagesy($this->image);
+		if ( $this->image )
+			return imagesy($this->image);
+		return 0;
 	}
 	function resizeToHeight($height) {
 
@@ -86,9 +92,13 @@ class SimpleImage {
 	}
 
 	function resizeToWidth($width) {
-	  $ratio = $width / $this->getWidth();
-	  $height = $this->getheight() * $ratio;
-	  $this->resize($width,$height);
+		$ratio = 1;
+
+		if ( $this->getWidth() )
+	  	$ratio = $width / $this->getWidth();
+		$height = $this->getheight() * $ratio;
+		
+	  $this->resize( $width, $height );
 	}
 
 	function scale($scale) {
@@ -97,7 +107,10 @@ class SimpleImage {
 	  $this->resize($width,$height);
 	}
 
-	function resize($width,$height) {
+	function resize( $width, $height ) {
+		if ( !function_exists( 'imagecreatetruecolor') || $width == 0 || $height == 0 )
+			return false;
+
 		$new_image = imagecreatetruecolor($width, $height);
 		if($this->image_type == IMAGETYPE_GIF || $this->image_type == IMAGETYPE_PNG){
 			//imagecolortransparent($new_image, imagecolorallocatealpha($new_image, 0, 0, 0, 127));
