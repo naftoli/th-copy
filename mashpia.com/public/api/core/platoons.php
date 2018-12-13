@@ -49,7 +49,7 @@ class PlatoonRouter {
         $school_id = isset( $_POST['school_id'] ) ? $_POST['school_id'] : false;
         if ( !$school_id ) return json_response([]);
         // get the platoons
-        $query = $MASHPIA_DB->prepare( 'SELECT school_id, class_id, class_grade, class_sub FROM classes WHERE school_id=:school_id;' );
+        $query = $MASHPIA_DB->prepare( 'SELECT school_id, class_id, class_grade, class_sub FROM classes WHERE school_id=:school_id ORDER BY class_grade, class_sub;' );
         $query->execute(['school_id' => $school_id]);
         $platoons = $query->fetchAll();
         // serialize the platoons

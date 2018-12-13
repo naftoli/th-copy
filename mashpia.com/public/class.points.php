@@ -74,12 +74,6 @@ class Points
         $arrParams['user_code'] = $this->usercode;
         $arrParams['start_date'] = $reset_date;
         $arrPoints = header_store_points( $arrParams );
-        if ($this->debug) {
-            echo totalMarks("WHERE user_id = $this->user_id and mark_date >= " . $reset_date);
-            echo "<pre>";
-            print_r($arrPoints);
-            echo "</pre>";
-        }
         $points += $arrPoints[$arrParams['user_code']];
         return $points;
     }

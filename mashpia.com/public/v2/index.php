@@ -37,7 +37,10 @@ if (0&&!dev)
 }
 
 define('www', preg_match('/^www\./', $_SERVER['HTTP_HOST']) ? 'www.' : '');
-define('secure', @$_SERVER['REQUEST_SCHEME'] == 'https' || @$_SERVER['HTTPS'] == "on" ? 's' : '');
+define('secure',
+	@$_SERVER['REQUEST_SCHEME'] == 'https' || 
+	( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == "on" ? 's' : '' )
+);
 define('http', secure ? "https" : "http");
 
 define("IMAGE_UPLOADER_DIRECTORY", "/home/mashpia/public_html/v2/images/uploads");
@@ -50,7 +53,10 @@ define("imgs", bp . "/imgs/v");
 define("js", bp . "/js");
 define("css", bp . "/css");
 define("WEB_ROOT", "/v2");
-define("SERVER_ROOT", "/home/mashpia/public_html/v2/");
+define("SERVER_ROOT", isset( $_SERVER['DOCUMENT_ROOT'] ) ?
+	$_SERVER['DOCUMENT_ROOT']."/"."v2/"
+	: "/home/mashpia/public_html/v2/"
+);
 define("MASTER_PASSWORD_X32G0SS8P", "9CXVC9h39tASDSt4h8ta4K9");
 define("capture_start_date", mktime(0, 0, 0, 1, 6, 2013)); // school year start date
 define("capture_end_date", mktime(23, 59, 59, 12, 27, 2013)); // goal date
