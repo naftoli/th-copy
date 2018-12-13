@@ -162,21 +162,21 @@ $bpOnly = [ 82 ];
 							<li>
 								<a href="#"><?=T_('Soldiers')?></a>
 								<ul>
-									<li><a href="/beta/bm/soldiers"><?=T_('View / Edit')?></a></li>
-									<li><a href="/beta/bm/soldiers/cards"><?=T_('Rank Cards')?></a></li>
+									<li><a href="/new/bm/soldiers"><?=T_('View / Edit')?></a></li>
+									<li><a href="/new/bm/soldiers/cards"><?=T_('Rank Cards')?></a></li>
 								</ul>
 							</li>
 							<li>
-								<a href="/beta/bm/platoons"><?=T_('Platoons')?></a>
+								<a href="/new/bm/platoons"><?=T_('Platoons')?></a>
 							</li>
 							<li>
-								<a href="/beta/bm/parents"><?=T_('Parents')?></a>
+								<a href="/new/bm/parents"><?=T_('Parents')?></a>
 							</li>
 							<li>
-								<a href="/beta/bm/staff"><?=T_('Staff')?></a>
+								<a href="/new/bm/staff"><?=T_('Staff')?></a>
 							</li>
 							<li>
-								<a href="/beta/bm/base"><?=T_('Base')?></a>
+								<a href="/new/bm/base"><?=T_('Base')?></a>
 							</li>
 						</ul>
 
@@ -189,11 +189,11 @@ $bpOnly = [ 82 ];
 						</li>
 							
 						<ul class='list_second'>
-							<li><a href="/beta/rewards/cards"><?=T_('Achievement Cards')?></a></li>
-							<li><a href="/beta/rewards/tasks"><?=T_('Tasks')?></a></li>
-							<li><a href="/beta/rewards/prizes"><?=T_('Prizes')?></a></li>
-							<li><a href="/beta/rewards/orders"><?=T_('Orders')?></a></li>
-							<li><a href="/beta/rewards/miles"><?=T_('Add / Subtract Miles')?></a></li>
+							<li><a href="/new/rewards/cards"><?=T_('Achievement Cards')?></a></li>
+							<li><a href="/new/rewards/tasks"><?=T_('Tasks')?></a></li>
+							<li><a href="/new/rewards/prizes"><?=T_('Prizes')?></a></li>
+							<li><a href="/new/rewards/orders"><?=T_('Orders')?></a></li>
+							<li><a href="/new/rewards/miles"><?=T_('Add / Subtract Miles')?></a></li>
 						</ul>
 					<?php  } else { ?>
 						<ul class="list_second">
@@ -400,26 +400,26 @@ $bpOnly = [ 82 ];
 								<li>
 									<a href="#"><?=T_('Soldiers')?></a>
 									<ul>
-										<li><a href="/beta/bm/soldiers"><?=T_('View / Edit')?></a></li>
+										<li><a href="/new/bm/soldiers"><?=T_('View / Edit')?></a></li>
 										<?php if ($admin_user['auth'] == 'super') { ?>
 											<li><a href="/admin_users_register.php<?=$url_id?>"><?=T_("Registration")?></a></li> 
 										<?php } else { ?>
-											<li><a href="/beta/bm/soldiers/registration"><?=T_("Registration")?></a></li> 
+											<li><a href="/new/bm/soldiers/registration"><?=T_("Registration")?></a></li> 
 										<?php } ?>
-										<li><a href="/beta/bm/soldiers/cards"><?=T_('Rank Cards')?></a></li>
+										<li><a href="/new/bm/soldiers/cards"><?=T_('Rank Cards')?></a></li>
 									</ul>
 								</li>
 								<li>
-									<a href="/beta/bm/platoons"><?=T_('Platoons')?></a>
+									<a href="/new/bm/platoons"><?=T_('Platoons')?></a>
 								</li>
 								<li>
-									<a href="/beta/bm/parents"><?=T_('Parents')?></a>
+									<a href="/new/bm/parents"><?=T_('Parents')?></a>
 								</li>
 								<li>
-									<a href="/beta/bm/staff"><?=T_('Staff')?></a>
+									<a href="/new/bm/staff"><?=T_('Staff')?></a>
 								</li>
 								<li>
-									<a href="/beta/bm/base"><?=T_('Base')?></a>
+									<a href="/new/bm/base"><?=T_('Base')?></a>
 								</li>
 							</ul>
 
@@ -435,10 +435,10 @@ $bpOnly = [ 82 ];
 							</li>
 
 							<ul class='list_second'>
-								<li><a href="/beta/missions/print"><?=T_('Print')?></a></li>
-								<li><a href="/beta/missions/mark"><?=T_('Mark')?></a></li>
-								<li><a href="/beta/missions/personalize"><?=T_('Personalize')?></a></li>
-								<li><a href="/beta/missions/tasks"><?=T_('Add Task')?></a></li>
+								<li><a href="/new/missions/print"><?=T_('Print')?></a></li>
+								<li><a href="/new/missions/mark"><?=T_('Mark')?></a></li>
+								<li><a href="/new/missions/personalize"><?=T_('Personalize')?></a></li>
+								<li><a href="/new/missions/tasks"><?=T_('Add Task')?></a></li>
 								<li><a href="/mission_sheets_checklist.php"><?=T_('Mission Checklist')?></a></li>
 								<li><a href="/missions_report.php"><?=T_('Mission Report')?></a></li>
 							</ul>
@@ -452,11 +452,11 @@ $bpOnly = [ 82 ];
 							</li>
 								
 							<ul class='list_second'>
-								<li><a href="/beta/rewards/cards"><?=T_('Achievement Cards')?></a></li>
-								<li><a href="/beta/rewards/tasks"><?=T_('Tasks')?></a></li>
-								<li><a href="/beta/rewards/prizes"><?=T_('Prizes')?></a></li>
-								<li><a href="/beta/rewards/orders"><?=T_('Orders')?></a></li>
-								<li><a href="/beta/rewards/miles"><?=T_('Add / Subtract Miles')?></a></li>
+								<li><a href="/new/rewards/cards"><?=T_('Achievement Cards')?></a></li>
+								<li><a href="/new/rewards/tasks"><?=T_('Tasks')?></a></li>
+								<li><a href="/new/rewards/prizes"><?=T_('Prizes')?></a></li>
+								<li><a href="/new/rewards/orders"><?=T_('Orders')?></a></li>
+								<li><a href="/new/rewards/miles"><?=T_('Add / Subtract Miles')?></a></li>
 							</ul>
 						<?php } else { ?>
 							<ul class="list_second">

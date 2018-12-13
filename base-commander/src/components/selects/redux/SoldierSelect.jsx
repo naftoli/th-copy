@@ -48,15 +48,17 @@ export class SoldierSelect extends Component {
     let options = soldiers;
 
     // only soldiers in the classId from props
-    if ( classId )
+    if ( classId ) {
       options = options.filter( soldier => soldier.class_id === classId );
-    else if ( classIds && classIds.length > 0 )
+    } else if ( classIds && classIds.length > 0 ) {
       options = options.filter( soldier => classIds.includes( soldier.class_id ) );
-    else
+    } else {
       options = options.filter( soldier => !!soldier.class_id );
+    }
     // limit to school ID
-    if ( schoolId )
+    if ( schoolId ) {
       options = options.filter( soldier => soldier.school_id === schoolId );
+    }
 
     // limit to registered only
     if ( registeredOnly )

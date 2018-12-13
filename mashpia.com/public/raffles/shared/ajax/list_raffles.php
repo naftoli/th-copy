@@ -29,7 +29,12 @@ if ( $ran_only )
 if ( $admin_user['auth'] !== 'super' )
     $filter[] = 'year = '.GlobalSettings::getCurrentYear(); // only show raffles from this year
 
-$filter = 'WHERE '.implode( ' AND ', $filter ).' ORDER BY run_date DESC, type';
+if ( count( $filter ) > 0 ) {
+    $filter = 'WHERE '.implode( ' AND ', $filter ).' ORDER BY run_date DESC, type';
+} else {
+    $filter = 'ORDER BY run_date DESC, type';
+}
+
 
 $raffles = Raffle::loadAll($filter);
 

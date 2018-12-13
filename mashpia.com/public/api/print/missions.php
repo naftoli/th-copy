@@ -6,7 +6,7 @@ require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/noPicMission.
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/picMission.php' );
 
 if ( !isset( $_POST['school_id'] ) ) {
-    header('Location: /beta/missions/print' ); die();
+    header('Location: /new/missions/print' ); die();
 }
 
 $school = \School::find([ $_POST['school_id'] ]);
@@ -18,8 +18,9 @@ $double_sided = isset( $_POST['double_sided'] ) && $_POST['double_sided'] === 't
 $dates = $_POST['dates'];
 
 // * Set class_ids and user_ids if not set by client
-if ( !$class_ids )
-    $class_ids = array_map(function ($p) { return $p->class_id; }, $school->platoons);
+if ( !$class_ids ) {
+    $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );
+}
 
 if ( !$user_ids ) {
     $users = \Soldier::find_all_by_class_id( $class_ids );
@@ -37,7 +38,7 @@ if ( !$parsha_ids ) {
     echo 'Cannot Print 0 Parshos. Please select at least 1 parsha.'; die();
 }
 
-$parshos = \Parsha::find([ $parsha_ids ]);
+$parshos = \Parsha::find( $parsha_ids );
 $parshos = is_array( $parshos ) ? $parshos : [ $parshos ]; // make sure it is an array of objects.
 
 // * Generate the missions using the legacy code

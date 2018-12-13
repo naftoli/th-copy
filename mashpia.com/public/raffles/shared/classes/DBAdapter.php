@@ -84,7 +84,7 @@ class QueryAdapter implements DBQueryAdapter {
     // mock PDOStatement::num_rows
     public function num_rows(){
         if($this->isPDO){
-            return $this->query->num_rows(); // pass to the pdo version
+            return $this->query->numRows(); // pass to the pdo version
         } else {
             return mysql_num_rows($this->query); // pass to the mysql library
         }
@@ -92,7 +92,7 @@ class QueryAdapter implements DBQueryAdapter {
     // mock PDOStatement::fetch_assoc
     public function fetch_assoc() {
         if($this->isPDO){
-            return $this->query->fetch_assoc(); // pass to the pdo version
+            return $this->query->fetch(); // pass to the pdo version
         } else {
             return mysql_fetch_assoc($this->query); // pass to the mysql library
         }

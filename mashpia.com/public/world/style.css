@@ -46,12 +46,26 @@ nav {
 }
 
 .navbar-share {
+    width: 36px;
+    text-align: center;
     transition: .1s ease-in-out;
     font-size: 2em;
 }
 
-.navbar-share svg {
+.navbar-share i {
     color: #fff;
+    display: block;
+}
+
+#social-dropdown-link, #browser-share {
+    max-width: 0px;
+}
+
+#social-dropdown-link i, #browser-share i {
+    opacity: 0;
+    transition: .1s;
+    overflow: hidden;
+    transform: scale( 0 );
 }
 
 div#social-dropdown {
@@ -72,7 +86,6 @@ div#social-dropdown a.dropdown-item:hover{
 .fa-whatsapp { color: #128C7E; }
 .fa-twitter { color: #1DA1F2; }
 .fa-facebook-square { color: #3b5998; }
-.fa-google-plus { color: #dd4b39 }
 
 /* Text in the center of the navigation bar */
 .navbar-dark .navbar-title {
@@ -174,6 +187,11 @@ span.school_name {
     width: 100%;
     vertical-align: middle;
 }
+
+table.dataTable {
+    border-collapse: separate !important;
+}
+
 td.first{
     min-width: 90px;
 }

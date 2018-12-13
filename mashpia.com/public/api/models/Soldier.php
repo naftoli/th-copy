@@ -14,12 +14,12 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     static $table_name = 'users';
     static $primary_key = 'user_id';
     
-    static $before_create = ['generateSerial', 'generateBarcode'];
+    static $before_create = [ 'generateSchoolType', 'generateSerial', 'generateBarcode'];
     static $after_create = [ 
-        'generateRank','enrollInCampaigns', 'setupBirthdayMissions',
-        'afterCreate'
+        'enrollInCampaigns',        'generateRank',
+        'setupBirthdayMissions',    'afterCreate'
     ];
-    static $before_destroy = ['canDestroy'];
+    static $before_destroy = [ 'canDestroy' ];
 
     // relationships
     static $belongs_to = [
@@ -471,6 +471,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $this->user_serial = $query->fetch()['user_serial'];
         }
     }
+
     public function generateBarcode(){
         global $MASHPIA_DB;
         if ( !$this->user_code ) {
@@ -493,6 +494,19 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
         }
     }
+
+    public function generateSchoolType() {
+        // if we have a school type, return it
+        if ( $this->school_type_id != 0 )
+            return $this->school_type_id;
+        // if it is 0, then make it 2 for boys
+        if ( $this->gender == 'M' )
+            return $this->school_type_id = 2;
+        // and 3 for girls
+        if ( $this->gender == 'F' )
+            return $this->school_type_id = 3;
+    }
+
     public function generateRank(){
         global $MASHPIA_DB;
         // make sure we have at least one rank
