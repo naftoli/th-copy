@@ -2,9 +2,12 @@
 $admin_auth = array('school'); 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.report.php';
 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
+
+$r = new Report();
 ?>
 <!DOCTYPE html>
 <html>
@@ -46,8 +49,19 @@ $schools = $as->getSchools();
 
             <fieldset>
                 <legend>Date Options</legend>
-                <input type="radio" name="date" value="1" checked /> Show current rally dates<br />
-                <input type="radio" name="date" value="2" /> Show previous rally dates<br />
+                Choose the date period: 
+                <select name="date">
+                    <?php
+                    $r->setDateSelection();
+                    // flag to determine which drop down to have selected by default;
+                    $total = count( $r->date_selection );
+                    $i = 0;
+                    foreach ( $r->date_selection as $jd => $date ) {
+                        if ( $total == 1 || $i++ == ($total - 2) ) echo "<option value='" . $jd . "' selected>" . $date . "</option>";
+                        else echo "<option value='" . $jd . "'>" . $date . "</option>";
+                    }
+                    ?>
+                </select>
             </fieldset>
             <br />
 

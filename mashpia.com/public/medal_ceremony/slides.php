@@ -2,7 +2,7 @@
 $admin_auth = array('school'); 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
-if ( !isset( $_POST['type'] ) ) {
+if ( !isset( $_POST['type'] ) || !isset( $_POST['date'] ) ) {
     header("Location: choose_slides.php");
     exit;
 }
@@ -28,13 +28,16 @@ if ( isset( $_POST['type'] ) ) {
     $prevMedalsLight = false;
 }
 
-$prevDates = false;
-if ( isset( $_POST['date'] ) && $_POST['date'] == 2 ) {
-    $prevDates = true;
-}
-
 require_once 'class.slides.php';
-$m = new Slides( $prevMedals, $prevMedalsLight, $prevDates ); 
+$m = new Slides( $prevMedals, $prevMedalsLight ); 
+
+// figure out which dates to show
+$m->setDateSelection();
+$end = $_POST['date'];
+$key = array_search( $end, $m->dates );
+$start = $m->dates[$key - 1];
+$m->overrideDates( $start, $end );
+
 if ( isset( $_POST['currentOnly'] ) ) $m->setToCurrentOnly();
 $dates = $m->getReportDates();
 $heDatesMedals = $m->getHeReportDates();
