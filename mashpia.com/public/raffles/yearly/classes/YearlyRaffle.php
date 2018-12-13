@@ -84,13 +84,15 @@ class YearlyRaffle {
             ." AND mark_date < " . $this->deadline . " "
             ." AND user_id = '$user_id' "
         );
+
         // load all the eligible users
         while ( $row = $eligibility_query->fetch_assoc() ) {
-            $this->eligibility[$row['user_id']] = $row['days'];
+            $this->eligibility[ $user_id ] = $row['days'];
             // cache the user if they are eligible
             if ( intval($row['days']) > $this->DAY_COUNT )
-                $this->cacheUser( $row['user_id'], $row['days'] );
+                $this->cacheUser( $user_id, $row['days'] );
         }
+        
         return $this->eligibility;
     }
 

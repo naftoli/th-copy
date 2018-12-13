@@ -130,12 +130,11 @@ var childApp = function(){
             return showError( "Please select your child's Gender." );
         }
 
-        if ( !postData.mobile_pic ) {
-            return showError( "Please upload a profile picture for your child." );
-        }
-        debugger;
+        // if ( !postData.mobile_pic ) {
+        //     return showError( "Please upload a profile picture for your child." );
+        // }
+
         $.post("/api/core/users", postData, function( response ){
-            debugger;
             if( response.success ){
                 $( "#tuition-paid" ).hide();
                 $( "#fee-not-paid" ).show();         
