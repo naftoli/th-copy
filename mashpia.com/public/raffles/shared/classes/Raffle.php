@@ -109,7 +109,9 @@ class Raffle {
         $sql = "SELECT * FROM raffles $filter;"; // include the user filter in the query
         $query = $db_conn->query($sql);
         
-        //echo mysql_error();
+        if ( !$query ) {
+            return $raffles;
+        }
         
         while($row = $query->fetch_assoc()){
             $raffles[] = Raffle::loadFromRow($row); // generate the raffe instance and add it to the array

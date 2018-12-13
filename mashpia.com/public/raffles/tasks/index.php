@@ -1,6 +1,6 @@
 <?
 // enable debuging
-if ($_GET['debug']) {
+if ( isset( $_GET['debug'] ) ) {
     error_reporting(E_ALL);
     ini_set("display_errors", 1);
     $debug = true;
@@ -9,7 +9,7 @@ if ($_GET['debug']) {
 $admin_auth = array('school'); 
 require($_SERVER["DOCUMENT_ROOT"].'/header.php');
 
-if($_POST['action'] == "run_raffle" && isset($_POST['raffle_id'])){
+if( isset( $_POST['action'] ) && $_POST['action'] == "run_raffle" && isset($_POST['raffle_id'])){
     if($debug) { echo "Location: run_raffle/run_raffle.php?raffle_id=".$_POST['raffle_id']."&save=".$_POST['save']; die(); }
     header("Location: run_raffle/run_raffle.php?raffle_id=".$_POST['raffle_id']."&save=".$_POST['save']);
 }
@@ -55,8 +55,8 @@ if($_POST['action'] == "run_raffle" && isset($_POST['raffle_id'])){
         </form>
         
         <script>
-            var test_mode = <?=$_GET['test'] ? "true" : "false";?>;
-            var debug_mode = <?=$_GET['debug'] ? "true" : "false";?>;
+            var test_mode = <?= isset( $_GET['test'] ) ? "true" : "false";?>;
+            var debug_mode = <?=isset( $_GET['debug'] ) ? "true" : "false";?>;
             
             $.post("/raffles/shared/ajax/list_raffles.php", {type: ""}, function(data){
                 $("#raffle_select_container").html(data);
