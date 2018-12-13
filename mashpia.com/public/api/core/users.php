@@ -32,7 +32,7 @@ class UsersRouter {
                 'first' => $row['first'], 'last' => $row['last'], 'dob' => $dob, 'gender' => $row['gender'], 
                 'user_registered' => $user_registered,  'mobile_pic' => $row['mobile_pic'], 'profilePicture' => $profilePicture,
                 'chayolei' => intval($row['chayolei']), 'yan' => intval($row['yan']), 'chidon' => intval($row['chidon']), 
-                'school_id' => intval( $row['school_id'] ), 'class_id' => $row['class_id'] ? intval( $row['class_id'] ) : false, 
+                'school_id' => $row['school_id'], 'class_id' => $row['class_id'] ? $row['class_id'] : false,
                 'school' => [ 'school_id' => $row['school_id'], 'school_name' => $row['school_name'], 
                     'shipping_city' => $row['shipping_city'], 'school_era' => $row['school_era'] ],
                 'barcode' => '3'.$row['user_code'],
