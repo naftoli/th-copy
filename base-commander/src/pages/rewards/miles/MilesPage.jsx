@@ -35,9 +35,9 @@ class MilesPage extends Component {
     setTitle( 'Add / Subtract Miles' );
 
     if ( isBC( login.code, true ) ) {
-      this.setState({ school_id: login.id })
+      this.setState({ school_id: login.id.toString() })
     } else if ( isTeacher( login.code ) ) {
-      this.setState({ class_id: login.id })
+      this.setState({ class_id: login.id.toString() })
     }
   }
 

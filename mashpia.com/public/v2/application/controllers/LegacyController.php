@@ -506,16 +506,7 @@ class LegacyController extends Zend_Controller_Action
 		
 		$arrUsers = array();
 		$objUsers = new Users();
-		foreach ($arrBarCodes as $intBarCode)
-		{
-			/*
-			$objUser = first($query->users__select(array(
-				"bar_code" => strlen($intBarCode)==19 ? "3" . $intBarCode : $intBarCode
-			)));
-			$objPermission = first($query->permissions__select(array(
-				'user_id' => $objUser->user_id
-			)));
-			*/
+		foreach ($arrBarCodes as $intBarCode) {
 
 			$intPoints = 0;
 			

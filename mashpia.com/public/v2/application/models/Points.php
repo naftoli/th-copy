@@ -197,27 +197,8 @@ class Points
 			$strDate = $arrDate[2] . '-' . $arrDate[0] . '-' . $arrDate[1];
 			$strSql .= " and created >= '" . $strDate . "'";
 		}
-		//echo $strSql; exit;
 		$arrResult = first($this->_db->fetchAll($strSql));
 		return floor($arrResult->total);
-	
-		/*
-		$query = new QueryGen();
-		$arrUserPointsParams = array(
-			'_NOT' => array(
-				'resource_name' => array(
-					'admin_users_manual_total'
-				)
-			),
-			"_SUM" => "points",
-			"_GROUP_BY" => "user_id",
-			"user_id" => $arrParams["user_id"],
-			"institution_id" => $arrParams["institution_id"]
-		);
-		array_merge_push($arrUserPointsParams, $arrParams);
-		$objUserPoints = first($query->user_points__select($arrUserPointsParams));
-		return $objUserPoints->_sum_points;
-		*/
 	}
 
 	public function _user_points_select($arrParams)

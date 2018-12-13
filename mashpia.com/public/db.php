@@ -504,37 +504,19 @@ function datesToQuery($name, $start_date = null, $end_date = null) {
 }
 
 function totalMarks($extra='', $group='', $boolExtract=true) { //$extra can be used for joins or WHERE
-			
-	$subject_join = (strpos($group, 'subject_id') !== FALSE || strpos($extra, 'subject_id') !== FALSE); //will be confused by column named subject_ids - but that's unlikely to be a problem
+
+	$subject_join = ( strpos($group, 'subject_id') !== FALSE || strpos($extra, 'subject_id') !== FALSE ); //will be confused by column named subject_ids - but that's unlikely to be a problem
 	$group_by = $group ? "GROUP BY $group" : '';
-	if($group) $group .= ',';
-	$intPointsFromIMS = 0;
+	if( $group ) $group .= ',';
 	
 	$bp = $extra;
 	if ($pos = strpos(strtolower($extra), ' and') !== false)
 		$bp = substr($extra, 0, $pos);
-	/*
-	return "
-	SELECT $group IFNULL(SUM(mark_points) + " . intval($intPointsFromIMS) . ", 0) mark_points FROM
-	(
-	SELECT $group SUM(mark_points) mark_points FROM marks" . ($subject_join ? ' JOIN tasks USING (task_id)' : '') . " $extra $group_by
-	UNION ALL
-	SELECT $group SUM(mark_points) mark_points FROM date_tasks_marks JOIN ord ON (mark_inactive = 0 AND ord.num = 1)" . ($subject_join ? ' JOIN date_tasks USING (date_task_id) JOIN date_tasks_missions USING (date_tasks_mission_id)' : '') . " $extra $group_by
-	UNION ALL
-	SELECT $group SUM(mark_points) mark_points FROM chain_marks" . ($subject_join ? ' JOIN chain_items USING (chain_item_id)' : '') . " $extra $group_by
-	UNION ALL
-	SELECT $group SUM(award_points) mark_points FROM points " . str_replace(array('mark_date', 'mark_points'), array('award_date', 'award_points'), $extra) . " $group_by
-	) marks $group_by
-	";
-	
-	return "
-	SELECT $group IFNULL(SUM(mark_points) + " . intval($intPointsFromIMS) . ", 0) mark_points FROM
-	(
-	SELECT $group SUM(mark_points) mark_points FROM date_tasks_marks " . ($subject_join ? ' JOIN date_tasks USING (date_task_id) JOIN date_tasks_missions USING (date_tasks_mission_id)' : '') . " $extra $group_by
-	) marks $group_by
-	";
-	*/
-	return "SELECT $group SUM(mark_points) marks FROM date_tasks_marks " . ($subject_join ? ' JOIN date_tasks USING (date_task_id) JOIN date_tasks_missions USING (date_tasks_mission_id)' : '') . " $extra $group_by";
+
+	$sql = "SELECT $group SUM(mark_points) marks FROM date_tasks_marks "
+		.( $subject_join ? ' JOIN date_tasks USING (date_task_id) JOIN date_tasks_missions USING (date_tasks_mission_id)' : '' )
+		." $extra $group_by";
+	return $sql;
 }
 
 function userStatement($user_id, $start_date=null, $end_date=null, $subject_ids='', $order='DESC') {
@@ -844,12 +826,7 @@ function header_points($arrParams) {
 	curl_setopt($objCurl, CURLOPT_RETURNTRANSFER, 1);
 	$strResult = curl_exec($objCurl);
 	//echo $strResult; exit;
-	
-	if (0&&$_SERVER["REMOTE_ADDR"] == "173.176.48.60")
-	{
-		print $strResult;
-		exit;
-	}
+
 	if (0&&preg_match("/Sorry, there was an error/", $strResult))
 	{
 		print "Sorry, there was an error: H-HIP102-23R3RR";
