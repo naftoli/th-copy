@@ -673,7 +673,7 @@ $bpOnly = [ 82 ];
 								<a href="#">Mivtzoim</a>
 								<ul>
 									<li><a href="/mivtzoim">Marking</a></li>
-									<li><a href="mivtzoim/reports">Reports</a></li>
+									<li><a href="/mivtzoim/reports">Reports</a></li>
 								</ul>
 							</li>
 						</ul>
