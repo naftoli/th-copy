@@ -99,6 +99,11 @@ if ( $school && $grade && $mivtzoim_id ) {
         <?php require $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
         <h1>Mark Mivtzoim</h1>
 
+        <div class="infobox">
+            Syncs from parent accounts to this page. Whoever (parent/bc) enters an amount last, will be the amount that will show/save.<br />
+            If trying to delete a child's amount, you must write the number 0. Simply deleting the number, will not save as 0.
+        </div>
+
         <form action="mark.php" method="post">
             <input type='submit' name='submit' value='Save' />
             <input type="hidden" name="action" value="mark" />
@@ -135,7 +140,7 @@ if ( $school && $grade && $mivtzoim_id ) {
                 foreach ( $details as $index => $row ) {
                     echo "<th>" . $row['name'];
                     if ( $numTasks > 1 ) {
-                        echo "<br /><i>Week " . ($index + 1) . "</i>";
+                        echo "<br /><span style='color: blue'><i>Week " . ($index + 1) . "</i></span>";
                     }
                     echo "</th>";
                     if ( $row['quantity'] >= 1 ) $numTasksWithQty++;
