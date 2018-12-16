@@ -1,0 +1,318 @@
+%!Adobe-FontList 1.19
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:AdobeHebrew-Regular
+FamilyName:Adobe Hebrew
+StyleName:Regular
+FullName:Adobe Hebrew Regular
+MenuName:Adobe Hebrew
+StyleBits:0
+FamilyNameNative:Adobe Hebrew
+StyleNameNative:Regular
+FullNameNative:Adobe Hebrew Regular
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Progress Report\Progress Report Folder\Document fonts\AdobeHebrew-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:73124
+FileModTime:1399000006
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,Adobe Hebrew
+NameArray:0,Mac,4,Adobe Hebrew Regular
+NameArray:0,Win,1,Adobe Hebrew
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbCarizmaBook-Medium
+FamilyName:FbCarizmaBook
+StyleName:Medium
+FullName:FbCarizmaBook-Medium
+MenuName:FbCarizmaBook Medium
+StyleBits:0
+FamilyNameNative:FbCarizmaBook
+StyleNameNative:Medium
+FullNameNative:FbCarizmaBook Medium
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Progress Report\Progress Report Folder\Document fonts\FbCarizmaBook-Medium.otf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:67788
+FileModTime:1267551732
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,FbCarizmaBook Medium
+NameArray:0,Win,1,FbCarizmaBook Medium
+NameArray:0,Win,16,FbCarizmaBook
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbGushpanka-Bold
+FamilyName:Fb Gushpanka
+StyleName:Bold
+FullName:FbGushpanka Bold
+MenuName:Fb Gushpanka
+StyleBits:2
+FamilyNameNative:Fb Gushpanka
+StyleNameNative:Bold
+FullNameNative:Fb Gushpanka Bold
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Progress Report\Progress Report Folder\Document fonts\FbGushpanka-Bold.otf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:48280
+FileModTime:1492776733
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,FbGushpanka Bold
+NameArray:0,Win,1,Fb Gushpanka
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbGushpanka-Regular
+FamilyName:Fb Gushpanka
+StyleName:Regular
+FullName:Fb Gushpanka
+MenuName:Fb Gushpanka
+StyleBits:0
+FamilyNameNative:Fb Gushpanka
+StyleNameNative:Regular
+FullNameNative:Fb Gushpanka Regular
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Progress Report\Progress Report Folder\Document fonts\FbGushpanka-Regular.otf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:48048
+FileModTime:1463749930
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Fb Gushpanka
+NameArray:0,Win,1,Fb Gushpanka
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:GothamNarrow-Black
+FamilyName:Gotham Narrow
+StyleName:Black
+FullName:Gotham Narrow Black
+MenuName:Gotham Narrow Black
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Progress Report\Progress Report Folder\Document fonts\GothamNarrow-Black.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:157052
+FileModTime:1221231828
+WeightClass:450
+WidthClass:3
+AngleClass:0
+NameArray:0,Mac,4,Gotham Narrow Black
+NameArray:0,Win,1,Gotham Narrow Black
+NameArray:0,Win,16,Gotham Narrow
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:GothamNarrow-Bold
+FamilyName:Gotham Narrow
+StyleName:Bold
+FullName:Gotham Narrow Bold
+MenuName:Gotham Narrow Bold
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Progress Report\Progress Report Folder\Document fonts\GothamNarrow-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:176412
+FileModTime:1221165268
+WeightClass:400
+WidthClass:3
+AngleClass:0
+NameArray:0,Mac,4,Gotham Narrow Bold
+NameArray:0,Win,1,Gotham Narrow Bold
+NameArray:0,Win,16,Gotham Narrow
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:GothamNarrow-Book
+FamilyName:Gotham Narrow
+StyleName:Book
+FullName:Gotham Narrow Book
+MenuName:Gotham Narrow Book
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Progress Report\Progress Report Folder\Document fonts\GothamNarrow-Book.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:177824
+FileModTime:1222974010
+WeightClass:325
+WidthClass:3
+AngleClass:0
+NameArray:0,Mac,4,Gotham Narrow Book
+NameArray:0,Win,1,Gotham Narrow Book
+NameArray:0,Win,16,Gotham Narrow
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:GothamNarrow-BookItalic
+FamilyName:Gotham Narrow
+StyleName:Book Italic
+FullName:Gotham Narrow Book Italic
+MenuName:Gotham Narrow Book
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Progress Report\Progress Report Folder\Document fonts\GOTHAMNARROW-BOOKITALIC_0.OTF
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:198228
+FileModTime:1358885743
+WeightClass:325
+WidthClass:3
+AngleClass:1
+NameArray:0,Mac,4,Gotham Narrow Book Italic
+NameArray:0,Win,1,Gotham Narrow Book
+NameArray:0,Win,16,Gotham Narrow
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:GothamNarrow-Medium
+FamilyName:Gotham Narrow
+StyleName:Medium
+FullName:Gotham Narrow Medium
+MenuName:Gotham Narrow Medium
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Progress Report\Progress Report Folder\Document fonts\GothamNarrow-Medium_0.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:178648
+FileModTime:1221165222
+WeightClass:350
+WidthClass:3
+AngleClass:0
+NameArray:0,Mac,4,Gotham Narrow Medium
+NameArray:0,Win,1,Gotham Narrow Medium
+NameArray:0,Win,16,Gotham Narrow
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Interstate-Black
+FamilyName:Interstate
+StyleName:Black
+FullName:Interstate-Black
+MenuName:Interstate
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Progress Report\Progress Report Folder\Document fonts\INTERSTATE-BLACK 6.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:20160
+FileModTime:1425018523
+WeightClass:900
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Interstate-Black
+NameArray:0,Win,1,Interstate
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Sucrose-Bold
+FamilyName:Sucrose
+StyleName:Bold
+FullName:Sucrose Bold
+MenuName:Sucrose
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Progress Report\Progress Report Folder\Document fonts\Yellow Design Studio - Sucrose-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:94860
+FileModTime:1503944788
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,Sucrose Bold
+NameArray:0,Mac,4,Sucrose Bold
+NameArray:0,Win,1,Sucrose
+NameArray:0,Win,16,Sucrose
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Sucrose-Regular
+FamilyName:Sucrose
+StyleName:Regular
+FullName:Sucrose Regular
+MenuName:Sucrose
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Progress Report\Progress Report Folder\Document fonts\Yellow Design Studio - Sucrose-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:102684
+FileModTime:1503944788
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,Sucrose
+NameArray:0,Mac,4,Sucrose Regular
+NameArray:0,Win,1,Sucrose
+NameArray:0,Win,16,Sucrose
+%EndFont
+

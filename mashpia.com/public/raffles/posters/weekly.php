@@ -1,9 +1,9 @@
 <?php
 ini_set('display_errors',1);
 $admin_auth = array('school'); 
-require dirname(__FILE__) . '/../../header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
-require_once dirname(__FILE__) . '/../../class.adminSchools.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
@@ -110,7 +110,7 @@ echo "</pre>";
     <body>
         <?php
         foreach ($winners as $school => $info) {
-            echo "<h2 class='school'>School: " . $schools[$school] . "</h2>";
+            if ( isset( $schools[$school] ) ) echo "<h2 class='school'>School: " . $schools[$school] . "</h2>";
             foreach ($info as $raffle => $names) {                
                 echo "<div class='winner' id='week" . $weeks[$raffle] . "'><div class='names'>";
                 $j = 0;
