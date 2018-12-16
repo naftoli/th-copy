@@ -30,7 +30,7 @@ function getLogo( $school_id ) {
 }
 
 function getRank($user) {
-	$sql = "select rank_name, rank_image_id  
+	$sql = "select rank_ord, rank_name, rank_image_id    
 			from ranks r 
 			join rank_marks rm 
 			using (rank_ord) 
@@ -71,6 +71,13 @@ function getUserPhoto( $user_id ) {
         else if ( $row['user_photo_id'] ) return 'https://mashpia.com/file_view.php?id=' . $row['user_photo_id'];
     }
     return '';
+}
+
+function getTotalMedalsEarned( $user_id ) {
+    $sql = "select count(*) as total from medal_marks where user_id = " . $user_id;
+    $result = mysql_query( $sql );
+    $row = mysql_fetch_assoc( $result );
+    return isset( $row['total'] ) ? $row['total'] : 0;
 }
 
 // determine which subjects go in which column for css styling / positioning
@@ -118,25 +125,21 @@ $heDate = $heDateArr[1] . ' ' . $heMonths[ $heDateArr[0] ] . ' ' . $heDateArr[2]
                             echo "<div class='userInfo'><div class='user'>" . $rankInfo['rank_name'] . ' ' . $userInfo[$user] . "</div>";
                             echo "<div class='teacher'>Grade " . $grade . " &#9679; " . $teacher . "</div></div>";
                             echo "<div class='date'>" . $heDate . "</div>";
-
-                            // figure out total number of medals for child
-                            $numMedals = 0;
-                            foreach ( $medals as $subject => $more ) {
-                                $numMedals += count( $more );
-                            }
-                            echo "<div class='numMedals'>" . $numMedals . "</div>";
+                            echo "<div class='numMedals'>" . getTotalMedalsEarned( $user ) . "</div>";
                             echo "<div class='numMiles'>" . $p->getTotalPoints() . " Miles</div>";
 
                             // echo "<div class='heDate'>" . $heDatesMedals['start_he'] . ' - ' . $heDatesMedals['end_he'] . "</div>";
                             // echo "<div class='userInfo'><div class='rank'><img src='https://mashpia.com/file_view.php?id=" . $rankInfo['rank_image_id'] . "' />" . 
                             //     $rankInfo['rank_name'] . "</div>";
+                            $rank_pos = 'rank' . $rankInfo['rank_ord'];
+                            echo "<div class='rank $rank_pos'><img src='https://mashpia.com/file_view.php?id=" . $rankInfo['rank_image_id'] . "' /></div>";
 
                             foreach ( $positioning as $column => $subject ) {
                                 $col_pos = "column" . ++$column;
 
                                 // find name of subject to use for key in medals array
                                 $subject_name = array_search($subject, $subjects);
-                                
+
                                 $row = 0; // start at row 1, each medal goes 46 pixels higher
                                 foreach ( $medals[$subject_name] as $medal ) {
                                     $row_pos = "row" . ++$row;
