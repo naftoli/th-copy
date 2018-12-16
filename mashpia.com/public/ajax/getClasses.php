@@ -3,9 +3,9 @@ $grades = array();
 $school = $_GET['id'];
 $hasUsers = isset($_GET['hasUsers']) ? $_GET['hasUsers'] : 0;
 
-$flat_array = $_GET['flat'];
-$named_array = $_GET['named'];
-$extra = $_GET['extra'];
+$flat_array = isset( $_GET['flat'] ) ? $_GET['flat'] : 0;
+$named_array = isset( $_GET['named'] ) ? $_GET['named'] : 0;
+$extra = isset( $_GET['extra'] ) ? $_GET['extra'] : '';
 
 require_once '../db.php';
 if ($hasUsers) {
