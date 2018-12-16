@@ -62,12 +62,57 @@
     color: #00394a;
 }
 .rank {
-    font-size: 34px;
+    margin-top: 170px;
+    float: left;
+    position: absolute;
 }
 .rank img {
-    max-height: 45px;
-    margin-top: -15px;
+    max-height: 40px;
+    transform: rotate(-7deg);
 }
+.rank1 {
+    margin-left: 70px;
+}
+.rank2 {
+    margin-left: 145px;
+}
+.rank3 {
+    margin-left: 225px;
+}
+.rank4 {
+    margin-left: 305px;
+}
+.rank5 {
+    margin-left: 383px;
+}
+.rank6 {
+    margin-left: 462px;
+}
+.rank7 {
+    margin-left: 540px;
+}
+.rank8 {
+    margin-left: 620px;
+}
+.rank9 {
+    margin-left: 700px;
+}
+.rank10 {
+    margin-left: 780px;
+}
+.rank11 {
+    margin-left: 860px;
+}
+.rank12 {
+    margin-left: 940px;
+}
+.rank13 {
+    margin-left: 1020px;
+}
+.rank14 {
+    margin-left: 1100px;
+}
+
 .date, .numMiles {
     font-family: gotham;
     font-size: 10pt;
