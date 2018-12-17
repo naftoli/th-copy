@@ -28,7 +28,7 @@
 				<h3 class="module-header"><span class="icon"></span>Printing Instructions For <span id="browser-name"></span></h3>
 				<div class="list_expand">
 					<ul>
-						<li id="Chrome">
+						<li id="chrome">
 							<div class="images">
 								<img src="img/chrome.png" alt="chrome setup example"/>
 							</div>
@@ -50,7 +50,7 @@
 								<p>Note: As of version 63 the browser will no longer save these preferences for later use.</p>
 							</div>
 						</li>
-						<li id="Firefox">
+						<li id="firefox">
 							<div class="images">
 								<span>Image #1 - Open Print Preview</span>
 								<img src="img/firefox.png" alt="firefox setup example"/>
@@ -87,7 +87,7 @@
 								<p>Note: The browser will save these preferences for later use.</p>
 							</div>
 						</li>
-						<li id="IE">
+						<li id="ie">
 							<div class="images">
 								<img src="img/ie-1.png" alt="ie setup example"/>
 								<img src="img/ie-2.png" alt="ie setup example"/>
@@ -116,7 +116,7 @@
 								<p>Note: The browser will save these preferences for later use.</p>
 							</div>
 						</li>
-						<li id="Edge">
+						<li id="edge">
 							<div class="images">
 								<img src="img/edge.png" alt="edge setup example"/>
 							</div>
@@ -169,13 +169,22 @@
 		
 	</body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script src="/js/utils/browser_detect.js"></script>
+	<script src="/js/utils/is.js"></script>
 	<script>
-		$("#browser-name").text(browser_detect());
-		if (browser_detect() === "N/A" || browser_detect() == "Blink") {
-            $("li#default").css({"display": "inline-block"});
-        } else {
-			$("li#"+browser_detect()).css({"display": "inline-block"});
+		browser = 'default';
+
+		if ( is.chrome() ) {
+			browser = 'chrome';
+		} else if ( is.firefox() ) {
+			browser = 'firefox';
+		} else if ( is.edge() ) {
+			browser = 'edge';
+		} else if ( is.ie() ) {
+			browser = 'ie';
 		}
+
+		$("#browser-name").text( browser );
+		$("li#"+browser).css({"display": "inline-block"});
+
 	</script>
 </html>

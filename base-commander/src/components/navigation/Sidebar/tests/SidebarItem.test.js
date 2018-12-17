@@ -85,12 +85,7 @@ describe("SidebarItem", () => {
       it('has a default value (false)', () => {
         expect( sidebarItem().props().icon ).toBe( false );
       })
-
-      it('renders the provided element in the A tag', () => {
-        props.icon = <i id='test-icon' />;
-        expect( sidebarItem().find("a > #test-icon").length ).toBe( 1 );
-      })
-
+      
     })
 
     describe('.items', () => {
