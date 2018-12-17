@@ -28,7 +28,8 @@ class BaseSelect extends Component {
     const { onChange, value, isClearable } = this.props;
     // actually select the first option if is not clearable
     const options = this.getOptions();
-    const selected = findOption( options, value.toString() );
+    const selected = findOption( options, value && value.toString() );
+    // if not selected and there is more then one option and we cannot clear the dropdown
     if ( !selected && options.length > 0 && !isClearable ) {
       onChange( options[0] ); 
     }
@@ -46,15 +47,21 @@ class BaseSelect extends Component {
   // render
   render() {
     const { onChange, value, loading } = this.props;
-    
+    // get the dropdown options
     let options = this.getOptions();
-    const selected = findOption( options, value.toString() );
+    // get the selected option
+    const selected = findOption( options, value && value.toString() );
+    // if loading do not show the options
     options = loading ? [] : options;
-
+    // rethrn the select dropdown
     return (
-      <Select { ...this.props } options={ options } value={ selected }
-        isLoading={ loading } onChange={ onChange } />
-    )
+      <Select
+        { ...this.props }
+        value={ selected }
+        options={ options }
+        onChange={ onChange }
+        isLoading={ loading } />
+    );
   }
 }
 

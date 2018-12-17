@@ -48,7 +48,7 @@ class Medal extends Component {
 
   // handle slider changes
   onSliderChange = value =>
-    this.onChange( value.toString() );
+    this.onChange( value && value.toString() );
   // handle the input event
   onInputChange = ({ target }) =>
     this.onChange( target.value );
@@ -69,7 +69,7 @@ class Medal extends Component {
     value = value || earned;
     
     const nextValue = medals.find( medal => medal.missions > value ).missions;
-    this.onChange( nextValue.toString() );
+    this.onChange( nextValue && nextValue.toString() );
   }
 
   // render the page
