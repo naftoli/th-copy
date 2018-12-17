@@ -36,39 +36,52 @@ export class SoldierSelect extends Component {
   }
 
   getOptions = () => {
-    const { 
+    let { 
       showAllOption, isMulti, 
       schoolId, registeredOnly, 
       classId, classIds, soldiers 
     } = this.props;
-    
-    if ( !schoolId )
+
+    // make sure the school id is valid
+    if ( !schoolId ) {
       return [];
+    } else {
+      schoolId = schoolId.toString();
+    }
 
     let options = soldiers;
 
     // only soldiers in the classId from props
     if ( classId ) {
+      classId = classId.toString();
       options = options.filter( soldier => soldier.class_id === classId );
+    // allow for multi select
     } else if ( classIds && classIds.length > 0 ) {
+      classIds = classIds.map( id => id.toString() );
       options = options.filter( soldier => classIds.includes( soldier.class_id ) );
+    // make sure the soldier is in a platoon
     } else {
       options = options.filter( soldier => !!soldier.class_id );
     }
+
     // limit to school ID
     if ( schoolId ) {
       options = options.filter( soldier => soldier.school_id === schoolId );
     }
 
     // limit to registered only
-    if ( registeredOnly )
+    if ( registeredOnly ) {
       options = options.filter( soldier => !!soldier.user_registered );
+    }
 
     // map them to what react-select expects
-    options = options.map( ({ user_id, first, last }) => ({ value: user_id, label: `${first} ${last}` }) );
+    options = options.map( ({ user_id, first, last }) => (
+      { value: user_id, label: `${first} ${last}` }
+    ));
     // add special options
-    if ( showAllOption && !isMulti ) 
+    if ( showAllOption && !isMulti ) {
       options.unshift({ value: false, label: 'All Soldiers' });
+    }
     // and return the options
     return options;
   }

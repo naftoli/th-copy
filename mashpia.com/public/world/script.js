@@ -1,20 +1,14 @@
 var gtag; // make sure gtag is a defined variable
 
-var toggle =  function(){
-    var on = false;
+var formatNumber = function( number ) {
+    if ( typeof number == 'number' )
+        return number.toLocaleString( navigator.language );
+    return number;
+}
 
-    return function() {
-        if ( on ) {
-            $('#social-dropdown-link').css({ width: 0, opacity: 0 });
-            $('#browser-share').css({ width: '36px', opacity: 1 });
-        } else {
-            $('#social-dropdown-link').css({ width: '36px', opacity: 1 });
-            $('#browser-share').css({ width: 0, opacity: 0 });
-        }
-        
-        on = !on;
-    }
-}();
+var imgMissing = function( img ) {
+    img.src = '//mashpia.com/schoolLogos/logo.png';
+}
 
 // on page load
 $( document ).ready( function(){
@@ -113,7 +107,7 @@ $( document ).ready( function(){
                 html += "<tr>";
                 html +=     '<td class="first">';
                 if ( postData.level == 1 ){
-                    html += "<img class='school_logo' alt='school_logo' src='//mashpia.com/schoolLogos/" + 
+                    html += "<img class='school_logo' onerror='imgMissing(this)' alt='school_logo' src='//mashpia.com/schoolLogos/" + 
                         ( row.logo ? row.logo : "_logo.png" ) + "'/>";
                 }
                 html += '<span class="number"></span>';
@@ -130,11 +124,11 @@ $( document ).ready( function(){
                 var tanya_avg = row.campaigns.tanya.avg;
                 var mishna_avg = row.campaigns.mishna.avg;
 
-                html +=     '</td>';
-                html +=     '<td class="total">' + row.campaigns.tanya.learned + '</td>';
-                html +=     tanya_avg !== undefined ? '<td class="total ' + getColor( tanya_avg ) + '">' + tanya_avg + '</td>' : "";
-                html +=     '<td class="total">' + row.campaigns.mishna.learned + '</td>';
-                html +=     mishna_avg !== undefined ? '<td class="total ' + getColor( mishna_avg ) + '">' + mishna_avg + '</td>' : "";
+                html += '</td>';
+                html += '<td class="total">' + formatNumber( row.campaigns.tanya.learned ) + '</td>';
+                html += tanya_avg !== undefined ? '<td class="total ' + getColor( tanya_avg ) + '">' + formatNumber( tanya_avg ) + '</td>' : "";
+                html += '<td class="total">' + formatNumber( row.campaigns.mishna.learned ) + '</td>';
+                html += mishna_avg !== undefined ? '<td class="total ' + getColor( mishna_avg ) + '">' + formatNumber( mishna_avg ) + '</td>' : "";
                 // if the level is not 3, calculate and render the total average for both tanya and mishna combined
                 if ( postData.level !== 3 ) {
                     html += '<td class="total">';
