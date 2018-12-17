@@ -1,4 +1,4 @@
-import menu from './menu.json';
+import menu from 'data/menu.json';
 
 // constants
 const DEFAULT_USER_TYPES = [ 'HQ', 'INST', 'BC' ];
