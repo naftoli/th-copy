@@ -189,7 +189,7 @@ span.school_name {
 }
 
 table.dataTable {
-    border-collapse: separate !important;
+    border-collapse: collapse !important
 }
 
 td.first{
@@ -199,6 +199,7 @@ img.school_logo {
     display: inline-block;
     width: 50%;
     float: right;
+    max-width: 80px;
 }
 
 td.total {
@@ -208,10 +209,15 @@ td.total {
 
 div#report-table_wrapper, div.no-padding { padding: 0px;}
 
-td.red { background-color: #ff413b; }
-td.bronze { background: #e36700; }
-td.gold { background-color: #ffcf40; }
-td.silver { background: silver; }
+.red { background-color: #ff413b; }
+.bronze { background-color: #e36700; }
+.gold { background-color: #ffcf40; }
+.silver { background-color: silver; }
+
+td.red, td.bronze, td.gold, td.silver {
+    color: #fff;
+    border-top: none;
+}
 
 @media ( max-width: 992px ) {
     td.first{
@@ -273,4 +279,37 @@ h5.card-title {
 }
 .card-red .card-body {
     background: #d9534f !important;
+}
+
+.colors {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+}
+
+@media ( max-width: 993px ) {
+    .colors {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media ( max-width: 630px ) {
+    .colors {
+        grid-template-columns: 1fr;
+    }
+}
+
+.color {
+    font-size: 1.5em;
+    color: #fff;
+    padding: .5em;
+    border-radius: .3rem;
+
+    height: 100%;
+    width: 100%;
+    text-align: center;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
