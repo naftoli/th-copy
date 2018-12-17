@@ -217,6 +217,7 @@ class Mivtzoim {
             foreach ( $users as $id => $more ) {
                 foreach ( $more as $start => $other ) {
                     foreach ( $other as $end => $mark ) {
+                        $mark = intval( $mark );
                         // find out if mark already exists for user
                         // using grid id instead of finding task id 
                         // b/c user may have marked in different lang/level/etc
@@ -295,8 +296,8 @@ class Mivtzoim {
                                 if ( $row = $sth->fetch() ) {
                                     $task_id = $row['date_task_id'];
                                     $mark_date = unixtojd();
-                                    if ( $mark_date < $this->start ) $mark_date = $this->start;
-                                    if ( $mark_date > $this->end ) $mark_date = $this->end;
+                                    if ( $mark_date < $start ) $mark_date = $start;
+                                    if ( $mark_date > $end ) $mark_date = $end;
                                     $sth3 = $MASHPIA_DB->prepare("insert into date_tasks_marks set done_qty = :qty, date_task_id = :task, user_id = :user, mark_date = :date, mark_points = :points");
                                     $result = $sth3->execute([
                                         ':qty'  =>  $mark, 

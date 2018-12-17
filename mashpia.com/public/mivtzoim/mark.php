@@ -6,6 +6,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim/classes/mivtzoim.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 
+if ( !isset( $_POST['school'] ) || !isset( $_POST['grade'] ) || !isset( $_POST['mivtzoim'] ) ) {
+    header("Location: index.php");
+    exit;
+}
+
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
@@ -81,10 +86,7 @@ if ( $school && $grade && $mivtzoim_id ) {
         $class_name = $row['class_grade'] . (empty( $row['class_sub'] ) ? '' : '-' . $row['class_sub']);
         $users[$class_name][] = $row;
     }
-} else {
-    header("Location: index.php");
-    exit;
-}
+} 
 //echo "<pre>"; print_r( $users ); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
