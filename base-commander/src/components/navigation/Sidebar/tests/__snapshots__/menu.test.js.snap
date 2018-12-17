@@ -3,14 +3,7 @@
 exports[`getMenu returns the expected array for BC's 1`] = `
 Array [
   Object {
-    "icon": <FontAwesome
-      brand={false}
-      icon="home"
-      light={false}
-      regular={false}
-      solid={false}
-      spin={false}
-    />,
+    "icon": "home",
     "label": "Home",
     "path": "/",
     "user_types": Array [
@@ -22,14 +15,7 @@ Array [
     ],
   },
   Object {
-    "icon": <FontAwesome
-      brand={false}
-      icon="school"
-      light={false}
-      regular={false}
-      solid={false}
-      spin={false}
-    />,
+    "icon": "school",
     "items": Array [
       Object {
         "items": Array [
@@ -58,7 +44,7 @@ Array [
       },
       Object {
         "label": "Base",
-        "path": "/bm/base/undefined",
+        "path": "/bm/base",
         "user_types": Array [
           "BC",
         ],
@@ -72,14 +58,7 @@ Array [
 exports[`getMenu returns the expected array for HQ 1`] = `
 Array [
   Object {
-    "icon": <FontAwesome
-      brand={false}
-      icon="home"
-      light={false}
-      regular={false}
-      solid={false}
-      spin={false}
-    />,
+    "icon": "home",
     "label": "Home",
     "path": "/",
     "user_types": Array [
@@ -91,14 +70,7 @@ Array [
     ],
   },
   Object {
-    "icon": <FontAwesome
-      brand={false}
-      icon="school"
-      light={false}
-      regular={false}
-      solid={false}
-      spin={false}
-    />,
+    "icon": "school",
     "items": Array [
       Object {
         "items": Array [
@@ -137,14 +109,7 @@ Array [
     "label": "Base Management",
   },
   Object {
-    "icon": <FontAwesome
-      brand={false}
-      icon="award"
-      light={false}
-      regular={false}
-      solid={false}
-      spin={false}
-    />,
+    "icon": "award",
     "items": Array [
       Object {
         "label": "Print",
