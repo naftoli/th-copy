@@ -79,14 +79,8 @@ describe("SidebarDropdown", () => {
       it("has default value (false)", () => {
         expect( SidebarDropdown.defaultProps.icon ).toBe( false );
       });
-
-      it("accepts and renders element values", () => {
-        props.icon = <i id="test-icon" />
-        expect( sidebarDropdown().find("#test-icon").length ).toBe( 1 );
-      });
-
-    })
-
+    });
+    
   })
 
   describe("state", () => {
