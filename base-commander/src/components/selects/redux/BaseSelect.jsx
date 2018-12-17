@@ -28,8 +28,8 @@ class BaseSelect extends Component {
     const { onChange, value, isClearable } = this.props;
     // actually select the first option if is not clearable
     const options = this.getOptions();
-    const selected = findOption( options, value );
-    if ( !selected && options.length > 0 && !isClearable ) { 
+    const selected = findOption( options, value.toString() );
+    if ( !selected && options.length > 0 && !isClearable ) {
       onChange( options[0] ); 
     }
   }
@@ -48,7 +48,7 @@ class BaseSelect extends Component {
     const { onChange, value, loading } = this.props;
     
     let options = this.getOptions();
-    const selected = findOption( options, value );
+    const selected = findOption( options, value.toString() );
     options = loading ? [] : options;
 
     return (

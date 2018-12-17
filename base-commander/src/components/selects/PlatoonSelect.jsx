@@ -43,7 +43,8 @@ export class PlatoonSelect extends Component {
 
     // if we have a value and it is not selected, select it
     const options = this.getOptions();
-    const selected = findOption( options, value );
+    const selected = findOption( options, value && value.toString() );
+    
     if ( !selected && options.length > 0 ) {
       // if it is clearable and we have a value, clear it.
       if ( isClearable && value ) this.props.onChange( false );
@@ -76,18 +77,21 @@ export class PlatoonSelect extends Component {
   }
 
   getOptions = () => {
-    const { showAllOption, showNoneOption, schoolId } = this.props;
-    
+    let { showAllOption, showNoneOption, schoolId } = this.props;
+    // convert the school id to a string
+    schoolId = schoolId.toString();
+    // filter the platoons with the following criteria
     const options = this.state.platoons
-    // only platoons in the schoolId from props
-    .filter( platoon => platoon.school_id === schoolId )
-    // map them to what react-select expects
-    .map( ({ class_id, name }) => ({ value: class_id, label: name }) );
+      // only platoons in the schoolId from props
+      .filter( platoon => platoon.school_id === schoolId )
+      // map them to what react-select expects
+      .map( ({ class_id, name }) => ({ value: class_id, label: name }) );
     // add special options
-    if ( showAllOption ) 
+    if ( showAllOption ) {
       options.unshift({ value: false, label: 'All Platoons' });
-    else if ( showNoneOption ) 
+    } else if ( showNoneOption ) {
       options.unshift({ value: false, label: 'No Platoon' });
+    }
     // and return the options
     return options;
   }
@@ -102,13 +106,13 @@ export class PlatoonSelect extends Component {
     let selected;
     // support single value
     if ( value )
-      selected = findOption( options, value ) || null;
+      selected = findOption( options, value.toString() ) || null;
     // support multiple values
     if ( values )
       selected = values
-        .map( value => findOption( options, value ) || false )
+        .map( value => findOption( options, value.toString() ) || false )
         .filter( value => value !== false );
-    
+
     options = loading ? [] : options;
 
     return (
