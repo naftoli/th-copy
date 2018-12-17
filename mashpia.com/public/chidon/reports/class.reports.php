@@ -269,6 +269,18 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  array('test1b', 'test2b', 'test3b')
             ),
+            'mm_test1'      =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'mm_test1'
+            ),
+            'mm_test2'      =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'mm_test2'
+            ),
+            'mm_test3'      =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'mm_test3'
+            ),
             'paid'   =>  array(
                 'table'     =>  'th_chidon',
                 'column'    =>  'paid'

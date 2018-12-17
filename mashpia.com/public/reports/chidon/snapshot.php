@@ -18,13 +18,16 @@ $info = [
     'gender'		=>	'Gender',
     'dob'			=>	'Date of Birth',
     'class'			=>	'Class/Grade',
+    'test1a'        =>  'Test 1 Part 1',
+    'test1b'        =>  'Test 1 Part 2', 
+    'test2a'        =>  'Test 2 Part 1', 
+    'test2b'        =>  'Test 2 Part 2', 
+    'test3a'        =>  'Test 3 Part 1', 
+    'test3b'        =>  'Test 3 Part 2',
+    'mm_test1'      =>  'Mitzva Maven Test 1', 
+    'mm_test2'      =>  'Mitzva Maven Test 2', 
+    'mm_test3'      =>  'Mitzva Maven Test 3'
     // 'winner_type'	=>	'Contestant / School Rep.',
-    // 'test1a'		=>	'Test 1 Part 1',
-    // 'test1b'		=>	'Test 1 Part 2',
-    // 'test2a'		=>	'Test 2 Part 1',
-    // 'test2b'		=>	'Test 2 Part 2',
-    // 'test3a'		=>	'Test 3 Part 1',
-    // 'test3b'		=>	'Test 3 Part 2', 
     // 'history'		=>	'Previous history (years enrolled prior to 5777)',
     // 'date_paid'		=>	'Enrolled To Shabbaton',
     // 'paid'			=>	'Amount Paid',
@@ -183,7 +186,7 @@ $required = ['first_name', 'last_name', 'class', 'school'];
                     
                     //$("#qryBuilder").hide();
                     $("#report").html("<div class='loader'></div>");
-                    ajaxData = { school_id: school_id, years: years, fields: data, options: [showCTH, showUnreg] };
+                    ajaxData = { school_id: school_id, years: years, fields: data, options: [showCTH, showUnreg], niceFields: info };
                     $.post("ajax/snapshot.php", ajaxData, function( data ) {
                         $("#report").html(data);
                         //$("#generate_report").hide();

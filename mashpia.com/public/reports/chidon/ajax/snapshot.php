@@ -122,6 +122,8 @@ $users = $temp;
 // find out what the fields returned are
 $columns = array_keys( $users[0] );
 
+$niceFields = $_POST['niceFields'];
+
 /***************** RENDER REPORT **********************/
 if($debug) echo "</pre>";
 
@@ -144,7 +146,7 @@ if (count($users) > 0) {
                                 <th><?php if ($options[1] == 'true') echo "Enrolled into CTH"; ?></th>
                             <? endif; ?>
                             <?php foreach ( $columns as $column ) {
-                                if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub', 'class_teacher'] )) echo "<th>" . $column . "</th>"; 
+                                if (!in_array( $column, ['chidonReg', 'user_registered', 'class_grade', 'class_sub', 'class_teacher'] )) echo "<th>" . $niceFields[$column] . "</th>"; 
                             } 
                             ?>
                         </tr>
@@ -194,7 +196,7 @@ if (count($users) > 0) {
                         <th><?php if ($options[1] == 'true') echo "Enrolled into CTH"; ?></th>
                     <? endif; ?>
                     <?php foreach ( $columns as $column ) {
-                        if (!in_array( $column, ['chidonReg', 'user_registered', 'class_teacher'] )) echo "<th>" . $column . "</th>"; 
+                        if (!in_array( $column, ['chidonReg', 'user_registered', 'class_teacher'] )) echo "<th>" . $niceFields[$column] . "</th>"; 
                     }    
                     ?>
                 </tr>
