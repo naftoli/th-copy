@@ -269,16 +269,16 @@ class TasksCustomizationNew {
                 }
             } 
             $enrolled = $classEnrolled;
-        } else if ($school > 0) { //check that at least one student in school is enrolled
-            $users = $this->getAllUsers($school);
+        } else if ( $school > 0 ) { //check that at least one student in school is enrolled
+            $users = $this->getAllUsers( $school );
             $schoolEnrolled = array();
-            foreach ($enrolled as $subject) {
-                $sql = "select subject_id from user_tracks 
-                        where user_id in (" . implode(',', $users) . ") 
-                        and enrolled = 1 
-                        and subject_id = $subject";
+            foreach ( $enrolled as $subject ) {
+                $sql = "SELECT subject_id FROM user_tracks 
+                        WHERE user_id IN (" . implode( ',', $users ) . ") 
+                        AND enrolled = 1 
+                        AND subject_id = $subject";
                 $result = mysql_query($sql);
-                if (mysql_num_rows($result) > 0) {
+                if ( $result && mysql_num_rows($result) > 0 ) {
                     $schoolEnrolled[] = $subject;
                 }
             }
@@ -585,7 +585,9 @@ class TasksCustomizationNew {
             foreach( $arr as $name => $arr2 ) {
                 foreach( $arr2 as $type => $arr3 ) { 
                     foreach( $arr3 as $level => $quantity ) {
-                        @$friendly[ $task ][ $name ][ $types[ $type ] ][ $levels[ $level ] ] = $quantity;
+                        if ( isset( $levels[ $level ] ) ) {
+                            @$friendly[ $task ][ $name ][ $types[ $type ] ][ $levels[ $level ] ] = $quantity;
+                        }
                     }
                 }
             }

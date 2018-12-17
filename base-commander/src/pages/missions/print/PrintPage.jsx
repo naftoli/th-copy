@@ -28,10 +28,14 @@ class PrintPage extends Component {
     // set the default school id and class id
     const { school_id, class_id } = this.props.login;
     this.setState({ school_id });
-    if ( class_id ) this.setState({ class_ids: [ class_id ] });
+    // set the default class id
+    if ( class_id ) {
+      this.setState({ class_ids: [ class_id ] });
+    }
     // set the default parsha
-    if ( this.props.parshos.length > 0 )
+    if ( this.props.parshos.length > 0 ) {
       this.setDefaultParsha();
+    }
   }
 
   componentDidUpdate( prevProps ) {
@@ -56,17 +60,21 @@ class PrintPage extends Component {
     );
   }
 
-  schoolChange = ({ value }) => this.setState({ school_id: value });
+  schoolChange = ({ value }) => {
+    debugger;
+    this.setState({ school_id: value })
+  };
   multiSelectChange = key => values => this.setState({ [key]: values.map( val => val.value ) });
 
   toggleDates = ( e ) => this.setState({ dates: e.target.value });
   toggleDoubleSided = ( e ) => this.setState({ double_sided: JSON.parse( e.target.value ) });
 
   render() {
-    let { 
+    const {
       school_id, class_ids, user_ids, 
       parsha_ids, double_sided, dates
     } = this.state;
+
     const { login } = this.props;
 
     return (
