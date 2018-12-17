@@ -28,7 +28,7 @@ if ( !$user_ids ) {
     $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
 // make sure the soldiers are in the selected platoons if provided with an array of soldiers.
 } else if ( $user_ids ) {
-    $users = \Soldier::find([ $user_ids ]);
+    $users = \Soldier::find( $user_ids );
     $users = is_array( $users ) ? $users : [ $users ]; // make sure it is an array so we can filter it
     $users = array_filter($users, function ($u) use ($class_ids) { return in_array( $u->class_id, $class_ids ); });
     $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
