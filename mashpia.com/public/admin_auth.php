@@ -19,7 +19,9 @@ if (!function_exists('check_auth_admin')) {
 				// check the hash from the cookie
 				$auth_2 = hash_hmac('ripemd128', strtolower($row['username']) . $row['password'], '53fdc95857aac68970159dd07e7c3782'); // nice random seed
 				
-				if ($auth == hash_hmac('ripemd128', strtolower($row['username']) . $row['password'], '53fdc95857aac68970159dd07e7c3782')) {
+				if ( $auth == $auth_2 ) {
+					$_COOKIE['admin_id'] = $admin_id;
+					$_COOKIE['admin_auth'] = $auth_2;
 					// set the admin_user to the result of the query
 					$admin_user['username'] 	= $row['username'];
 					$admin_user['admin_id'] 	= $admin_id;
