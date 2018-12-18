@@ -21,7 +21,10 @@ $x21d6 = '&#x21d6;'; //double angle up-left
 $x21d7 = '&#x21d7;'; //double angle up-right
 $x21d8 = '&#x21d8;'; //double angle down-left
 $x21d9 = '&#x21d9;'; //double angle down-right
-	@include("langs/$lang.php");
+// only load the language if it exists
+if ( file_exists( "langs/$lang.php") ){
+  @include("langs/$lang.php");
+}
 $gettext = new gettext_reader(new FileReader("langs/$lang.mo"));
 
 $langs = array('en' => 'English', 'he' => 'עברית', 'yi' => 'יידיש');
