@@ -23,8 +23,12 @@ export const menuReducer = ( login, defaults = DEFAULT_USER_TYPES ) => ( filtere
         []
       )}
     );
+    // if there are no valid items, hide the dropdown
+    if ( item.items.length === 0 ) {
+      return filtered;
+    }
   }
-
+  // do not show this dropdown if we are hiding it
   if (
     ( !legacy && item.legacy ) // hide legacy links from new institutions
     || ( item.module && modules && !modules[ item.module ] ) // hide menu if login does not have access to this module
