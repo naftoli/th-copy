@@ -38,7 +38,7 @@ function getRank($user) {
 			using (user_id) 
 			where u.user_id = " . $user . " 
 			order by rm.rank_ord desc 
-			limit 0,1";
+			limit 1";
     $result = mysql_query( $sql );
 	$row = mysql_fetch_assoc( $result );
 	return $row;
@@ -112,6 +112,8 @@ $heDate = $heDateArr[1] . ' ' . $heMonths[ $heDateArr[0] ] . ' ' . $heDateArr[2]
         $subjects = $m->getSubjects();
         $missionsInfo = $m->getMissionsInfo();
 
+        $cssProps = ['','White','Red','Orange','Yellow','Green','Blue','Purple','Brown','Gray','Black']; // index for css color properties of mission totals
+
         if ( !empty($details) ) {
             foreach ( $details as $school => $line ) {
                 foreach ( $line as $grade => $class ) {
@@ -147,7 +149,8 @@ $heDate = $heDateArr[1] . ' ' . $heMonths[ $heDateArr[0] ] . ' ' . $heDateArr[2]
                                     echo "<div class='medal " . $col_pos . ' ' . $row_pos . "'><img src='" . $image . "' ";
                                     echo "/></div>";
                                 }
-                                echo "<div class='medal " . $col_pos . ' ' . " missionsDone'>" . $missionsInfo[$user][$subject]['done'];
+                                $css = $cssProps[$row];
+                                echo "<div class='medal " . $col_pos . ' ' . $css . " missionsDone'>" . $missionsInfo[$user][$subject]['done'];
                                 echo "/" . $missionsInfo[$user][$subject]['max'] . "</div>";
                                 echo "<div class='medal " . $col_pos . ' ' . " missionsLeft'>" . $missionsInfo[$user][$subject]['left'];
                                 if ( $missionsInfo[$user][$subject]['left'] != 'Completed!' ) echo ' to ' . $missionsInfo[$user][$subject]['color'];

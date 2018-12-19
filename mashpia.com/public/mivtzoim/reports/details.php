@@ -1,5 +1,5 @@
 <?php
-if ( !isset( $_REQUEST['id'] ) || $_REQUEST['id'] == 0 ) {
+if ( !isset( $_REQUEST['id'] ) || !isset( $_REQUEST['school'] ) || $_REQUEST['id'] == 0 || $_REQUEST['school'] == 0 ) {
     header("Location: index.php");
     exit;
 }
@@ -10,15 +10,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim/classes/mivtzoim.php';
 
-// get all Tzivos Hashem Schools
-$sth = $MASHPIA_DB->query("select school_id, school_name from schools where chayolei = 1 order by school_name and test_school = 0");
-while ( $row = $sth->fetch() ) {
-    $schools[$row['school_id']] = $row['school_name'];
-}
-
 $m = new Mivtzoim( $_REQUEST['id'] );
 $r = new MivtzoimReport( $m );
-$r->setSchools( $schools );
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,7 +33,8 @@ $r->setSchools( $schools );
         <h1>Mivtzoim Leaderboard</h1>
 
         <?php 
-        $r->createLeaderBoard();
+        $r->createIndividualBoard( $_REQUEST['school'] );
+        $num_users = $r->getNumUsers();
         ?>
     </body>
 
@@ -54,9 +48,9 @@ $r->setSchools( $schools );
 
     <script>
         $(document).ready(function () {
+            var num_users = <?= $num_users ?>;
             $('#leaderboard').DataTable({
-                'pageLength': 100,
-                'order': [[3, 'desc']]
+                'pageLength': num_users
             });
         });
     </script>

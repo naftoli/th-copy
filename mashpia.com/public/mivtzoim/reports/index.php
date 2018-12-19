@@ -4,7 +4,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim/classes/mivtzoim.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $mivtzoim = Mivtzoim::getAll();
+
+$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+$schools = $as->getSchools();
 ?>
 <!DOCTYPE html>
 <html>
@@ -18,8 +22,8 @@ $mivtzoim = Mivtzoim::getAll();
         <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
         <h1>Mivtzoim Leaderboard</h1>
 
-        <form action="report.php" method="post">
-            <select name="mivtzoim_id">
+        <form id="formSelection">
+            <select name="mivtzoim_id" id="mivtzoim_id"> 
                 <option value='0'>Choose Mivtzoim for Report</option>
                 <?php
                 foreach ( $mivtzoim as $row ) {
@@ -28,7 +32,50 @@ $mivtzoim = Mivtzoim::getAll();
                 ?>
             <select>
             <br /><br />
+            <select name="type" id="type">
+                <option value="1">School Leaderboard</option>
+                <option value="2">Individual Leaderboard</option>
+            </select>
+            <br /><br />
+            <div id="schoolSelection" style="display:none">
+                <select name="school" id="school">
+                    <option value="0">Select School</option>
+                    <?php
+                    foreach ( $schools as $id => $school ) {
+                        echo "<option value='" . $id . "'>" . $school . "</option>";
+                    }
+                    ?>
+                </select>
+                <br /><br />
+            </div>
             <input type="submit" name="submit" value="submit" />
         </form>
     </body>
+    <script>
+        $(function() {
+            $("#type").change( function() {
+                if ( $(this).val() == 2 ) {
+                    $("#schoolSelection").show();
+                } else {
+                    $("#schoolSelection").hide();
+                }
+            });
+
+            $("#formSelection").submit( function( e ) {
+                e.preventDefault();
+                var id = $("#mivtzoim_id").val();
+                var type = $("#type").val();
+                if ( id > 0 ) {
+                    switch ( type ) {
+                        case '1':
+                            location.href = 'report.php?id=' + id;
+                            break;
+                        case '2':
+                            location.href = 'details.php?id=' + id + '&school=' + $("#school").val();
+                            break;
+                    }
+                }
+            });
+        });
+    </script>
 </html>
