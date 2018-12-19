@@ -77,6 +77,12 @@ export class Dashboard extends Component {
 
     const menu = getMenu( login );
 
+    // add a logout button
+    menu.push({
+      label: 'Logout', path: '/logout',
+      icon: 'sign-out-alt'
+    });
+
     // if we are a user and not logging out - redirect to legacy parent portal
     if ( location && location.pathname !== '/logout' ) {
       if ( login.type === 'PARENT' ) {
