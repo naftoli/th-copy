@@ -229,44 +229,11 @@ $(document).ready(function()
 		<span><?php print ucwords($this->objUser->first . "&nbsp;" . $this->objUser->last); ?></span>
 	</div>
 	<div class="col_content" id="profileadmin">
-	<!--
-<?php
-	if ($strInstitutionImage=='0.gif' || $objUserSession->frommashpia)
-	{
-
-?>
-		<div class="module form institution_logo">
-			<div class="module_content">
-				<form>
-					<ul>
-						<li>
-							<h3>Institution logo</h3>
-							<input type="hidden" name="image_id" id="usereditor_image_id" value="<?php print $strInstitutionImage; ?>" />
-							<iframe src="<?php print $sn . "/imgs/smalluploader/current_image/" . $strInstitutionImage; ?>/resultid/usereditor_image_id" width="100%" height="80" scrolling="no">
-								<p>Your browser does not support iframes.</p>
-							</iframe>
-						</li>
-						<div class="processing_status"></div>
-						<li>
-							<span>
-								<a href="#" title="Save" class="button submit">Save</a>
-							</span>
-							<div class="clear"></div>
-						</li>
-					</ul>
-				</form>
-			</div>
-		</div>
-<?php
-	}
-?>
-	-->	
 		<div class="module lists forms">
 			<div class="module_content">
 				<h1 style="padding:6px"><strong><?php print $this->objInstitution->school_name; ?></strong><div style="margin-top:6px;margin-right: 8px" class="title_help info" title="This is your institution information. To edit it, click ‘Settings’ in the menu, and then ‘Edit Institution Info’."></div></h1>
 				<ul>
 					<li style="font-size: 12pt;margin-bottom: 6px;">
-						<!--<img style="float:right" src="<?php print $sn . "/imgs/v/src/" . $strInstitutionImage; ?>/w/100" height="100" />-->
 						<?php
 		print text('Welcome, ');
 		print ucfirst($this->objUser->first) . " " . ucfirst($this->objUser->last);
@@ -422,7 +389,7 @@ $(document).ready(function()
 									<div class="module_content">
 										<ul>
 <?php
-	if (!count($this->arrAwaitingActions))
+	if ( !$this->arrAwaitingActions || !count($this->arrAwaitingActions) )
 	{
 ?>
 											<li>

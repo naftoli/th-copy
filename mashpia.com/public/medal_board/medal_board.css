@@ -113,6 +113,37 @@
     margin-left: 1100px;
 }
 
+.White {
+    color: #fff;
+}
+.Red {
+    color: #ed1c24;
+}
+.Orange {
+    color: #f5821f;
+}
+.Yellow {
+    color: #f0c62e;
+}
+.Green {
+    color: #71bf43;
+}
+.Blue {
+    color: #0054a6;
+}
+.Purple {
+    color: #652c90;
+}
+.Brown {
+    color: #8f6037;
+}
+.Gray {
+    color: #848786;
+}
+.Black {
+    color: #000;
+}
+
 .date, .numMiles {
     font-family: gotham;
     font-size: 10pt;
@@ -144,6 +175,7 @@
     font-family: gothamBold;
     font-size: 7pt;
     width: 95px;
+    font-weight: bold;
 }
 .medalInfo {
     font-family: gothamMed;
