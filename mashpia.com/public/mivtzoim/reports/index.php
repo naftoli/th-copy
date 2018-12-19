@@ -41,6 +41,7 @@ $schools = $as->getSchools();
                 <select name="school" id="school">
                     <option value="0">Select School</option>
                     <?php
+                    if ( $admin_user['auth'] == 'super' ) echo "<option value='-1'>All Schools</option>";
                     foreach ( $schools as $id => $school ) {
                         echo "<option value='" . $id . "'>" . $school . "</option>";
                     }
