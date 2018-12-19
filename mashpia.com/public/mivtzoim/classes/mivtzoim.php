@@ -475,6 +475,9 @@ class MivtzoimReport {
         $this->classReg = [];
         $this->schoolMarks = [];
         $this->classMarks = [];
+        $this->users = [];
+        $this->userMarks = [];
+        $this->numUsers = 0;
     }
 
     public function setSchools( array $schools ) {
@@ -483,6 +486,34 @@ class MivtzoimReport {
 
     public function setClasses( array $classes ) {
         $this->classes = $classes;
+    }
+
+    public function setUsers( $school ) {
+        global $MASHPIA_DB;
+
+        $sth = $MASHPIA_DB->prepare("
+            SELECT 
+                user_id, first, last, class_grade, class_sub
+            FROM
+                users u
+                    JOIN
+                classes c ON c.class_id = u.class_id
+            WHERE
+                u.school_id = :school
+            ORDER BY class_grade , class_sub , last , first
+        ");
+        $sth->execute([':school' => $school]);
+        $rows = $sth->fetchAll();
+        $this->numUsers = count( $rows );
+        foreach ( $rows as $row ) {
+            $grade = $row['class_grade'] . (empty( $row['class_sub'] ) ? '' : '-' . $row['class_sub'] );
+            $name = $row['first'] . ' ' . $row['last'];
+            $this->users[$grade][$row['user_id']] = $name;
+        }
+    }
+
+    public function getNumUsers() {
+        return $this->numUsers;
     }
 
     public function calculateSchoolReg() {
@@ -567,8 +598,8 @@ class MivtzoimReport {
                 ':start'        =>  $dates['start'], 
                 ':end'          =>  $dates['end']
             ]);
-            $result = $sth->fetchAll();
-            foreach ( $result as $row ) {
+            $rows = $sth->fetchAll();
+            foreach ( $rows as $row ) {
                 $this->schoolMarks[$row['school_id']][$name] = $row['total'];
             }
         }
@@ -578,20 +609,57 @@ class MivtzoimReport {
 
     }
 
+    public function calculateUserMarks( $school ) {
+        global $MASHPIA_DB;
+
+        $grid_ids = [];
+        $tasks = $this->m->getTasks();
+        foreach ( $tasks as $name => $info ) {
+            foreach ( $info as $row ) {
+                $grid_ids[$name][$row['grid_id']] = 1;
+            }
+        }
+        foreach ( $grid_ids as $name => $grids ) {
+            $ids = implode(',', array_keys( $grids ));
+            $sth = $MASHPIA_DB->prepare("
+                SELECT 
+                    u.user_id, SUM(dtm.done_qty) AS total
+                FROM
+                    date_tasks dt
+                        JOIN
+                    date_tasks_missions dtmm USING (date_tasks_mission_id)
+                        LEFT JOIN
+                    date_tasks_marks dtm USING (date_task_id)
+                        LEFT JOIN
+                    users u USING (user_id)
+                        LEFT JOIN
+                    classes c ON c.class_id = u.class_id
+                WHERE
+                    dt.grid_id IN ($ids) 
+                        AND dtmm.start_date >= :start
+                        AND dtmm.end_date <= :end
+                        AND u.school_id = :school
+                GROUP BY u.user_id 
+            ");
+            $dates = $this->m->getDates();
+            $sth->execute([
+                ':start'        =>  $dates['start'], 
+                ':end'          =>  $dates['end'], 
+                ':school'       =>  $school
+            ]);
+            $result = $sth->fetchAll();
+            foreach ( $result as $row ) {
+                $this->userMarks[$name][$row['user_id']] = $row['total'];
+            }
+        }
+    }
+
     public function createLeaderBoard() {
-        //echo "<pre>";
         // find out number of registered users per school / grade
         $this->calculateSchoolReg();
-        //$this->calculateClassReg();
-        
-        //print_r( $this->schools );
-        //print_r( $this->schoolReg );
-        // echo "</pre>"; 
-        // exit;
 
         // figure out totals of tasks done per school / grade
         $this->calculateSchoolMarks();
-        // $this->calculateClassDone();
 
         // output html
         $names = $this->m->getShortNames();
@@ -612,5 +680,30 @@ class MivtzoimReport {
             echo "</tr>";
         } 
         echo "</tbody></table>";        
+    }
+
+    public function createIndividualBoard( $school ) {
+        $this->setUsers( $school );
+        $this->calculateUserMarks( $school );
+
+        $names = $this->m->getShortNames();
+        echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead><tr>";
+        echo "<th>Grade</th>";
+        echo "<th>Student</th>";
+        foreach ( $names as $name ) {
+            echo "<th>" . $name . "</th>";
+        }
+        echo "</tr></thead><tbody>";
+        foreach ( $this->users as $grade => $more ) { 
+            foreach ( $more as $user_id => $user ) {
+                echo "<tr><td>" . $grade . "</td><td>" . $user . "</td>";
+                foreach ( $names as $name ) {
+                    $mark = isset( $this->userMarks[$name][$user_id] ) ? $this->userMarks[$name][$user_id] : 0;
+                    echo "<td>" . $mark . "</td>";
+                }
+                echo "</tr>";
+            }            
+        } 
+        echo "</tbody></table>";     
     }
 }
