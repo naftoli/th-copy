@@ -1,32 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { LEGACY_URL } from 'components/constants';
 // components
-import AchievementCard from './AchievementCard';
-import { Row, Col, Input, Button, ButtonGroup } from 'reactstrap';
+import { Row, Col, Input, Button } from 'reactstrap';
+import { FontAwesome, NumberDisplay, Callout } from 'components/ui';
 import { RewardSubjectSelect, AchievementTaskSelect, Date } from 'components/inputs';
-import { ButtonBar, InlineSync, FontAwesome, NumberDisplay, Callout } from 'components/ui';
 // functions
 import moment from 'moment';
 import { toast } from 'react-toastify';
-import { isTeacher, isBC, isAdmin } from 'functions/login';
 import { setTitle } from 'functions/utils';
+import { showError } from 'functions/notifications';
+import { isTeacher } from 'functions/login';
 // state
 import { getTasks } from 'store/rewards/achievement_tasks/operations';
-import { 
-  getMiles, generateAchievementCards, deleteUnused
-} from 'store/rewards/achievement_cards/operations';
+import { getMiles, deleteUnusedCards } from 'store/rewards/miles/operations';
 // style
 import './cards.scss';
-import { showError } from 'functions/notifications';
 
 class CardsPage extends Component {
-
+  // default props
   static defaultProps = {
-    tasks: [],
-    loading: false,
-    subjects: []
+    login: {},
+    miles: false,
   }
-
+  // initial state
   state = { 
     subject_id: false,
     task_id: false,
@@ -34,39 +31,17 @@ class CardsPage extends Component {
     delete_to: moment()
   };
 
+  // when the page loads, get some data
   componentDidMount() {
     setTitle( 'Achievement Cards' );
     this.props.getMiles(); // load my miles limit
-    this.loadTasks(); // refresh all tasks
-  }
-  // load all tasks
-  loadTasks = () =>
     showError( this.props.getTasks() );
-
-  // cards
-  generateCards = e => {
-    e.preventDefault();
-    // do not keep generating tasks
-    if ( this.props.loading ) return false;
-    // validate input and generate cards
-    const { subject_id, task_id, card_count } = this.state;
-    const postData = { subject_id, task_id, card_count };
-    // make sure a subject was selected
-    if ( !postData.subject_id )
-      return toast.error('Cannot create Achievement Cards without a Campaign.');
-    // make sure a task was selected
-    if ( !postData.task_id )
-      return toast.error('Cannot create Achievement Cards without a Task.');
-    if ( !postData.card_count )
-      return toast.error('Cannot create unknown number of Achievement Cards.')
-    
-    return this.props.generateAchievementCards( postData )
-    .catch( e => toast.error( e.message ) );
   }
 
-  deleteUnused = () => {
+  // delete the unused cards
+  deleteUnusedCards = () => {
     if ( window.confirm('Are you sure you want to delete these achievement cards? Once they are deleted the numbers will be recycled and they cannot be recovered.') ) {
-      this.props.deleteUnused( this.state.delete_to.format() )
+      this.props.deleteUnusedCards( this.state.delete_to.format() )
       .then( cards_deleted => toast.info(`${ cards_deleted } Achievement Cards Deleted.`) )
       .catch( e => toast.error( e.message ) );
     }
@@ -77,26 +52,16 @@ class CardsPage extends Component {
   onTaskChange = ({ value }) => { this.setState({ task_id: value }) }
   onSubjectChange = ({ value }) => { this.setState({ subject_id: value, task_id: false }) }
   onDateChange = date => this.setState({ delete_to: date });
-  print = () => { window.print(); }
+
+  // filters
+  subjectFilter = subject => subject.achievement_tasks.length > 0;
 
   render() {
-    let { loading, miles, cards, login } = this.props;
+    let { miles, login } = this.props;
     const { subject_id, task_id, card_count, delete_to } = this.state;
-
-    const subjectFilter = subject => subject.achievement_tasks.length > 0;
-    const taskFilter = task => {
-      // limits based on rank
-      if ( isBC( login.code ) && task.platoon > 1 )
-        return false;
-      
-      if ( isAdmin( login.code ) && task.base > 1 )
-        return false;
-      
-      return task.subject_id === subject_id;
-    }
-
-    let max = 1500;
-
+    // maximum amount of cards to print.
+    const max = 1500;
+    // print the page
     return (
       <div id='AchievementsCardsPage'>
         <div className='no-print'>
@@ -115,55 +80,47 @@ class CardsPage extends Component {
             </h2>
           }
 
-          <form onSubmit={ this.generateCards }>
+          <form target='_blank' method='post'
+              action={`${LEGACY_URL}/api/print/achievement_cards`}>
             <Row id='options'>
-
               <Col sm={ 6 } xl={3}>
                 <label>Campaign</label>
-                <RewardSubjectSelect 
+                <RewardSubjectSelect
+                  required
                   showTasks
-                  filter={ subjectFilter }
+                  name='subject_id'
                   value={ subject_id }
+                  filter={ this.subjectFilter }
                   onChange={ this.onSubjectChange } />
               </Col>
 
               <Col sm={ 6 } xl={3}>
                 <label>Task</label>
                 <AchievementTaskSelect 
+                  required
                   showMiles
+                  name='task_id'
                   value={ task_id }
-                  filter={ taskFilter }
+                  subjectId={ subject_id }
                   onChange={ this.onTaskChange } />
               </Col>
 
               <Col sm={ 6 } xl={3}>
                 <label htmlFor='card_count'># Of Cards</label>
                 <Input
-                  type='number' id='card_count' 
-                  max={ max } min={ 1 } value={ card_count }
-                  onChange={ this.onChange } required />
+                  required        type='number'   id='card_count'   
+                  max={ max }     min={ 1 }       name='card_count' 
+                  onChange={ this.onChange }      value={ card_count } />
                 <div className='invalid-message'>You can only create up to { max } cards at once.</div>
               </Col>
 
               <Col sm={ 6 } xl={3}>
-                <ButtonBar>
-                  <Button color='primary'>
-                    <InlineSync loading={ loading } /> Create
-                  </Button>
-                  <Button onClick={ this.print } className='btn btn-primary'>
-                    <FontAwesome icon='print' /> Print
-                  </Button>
-                </ButtonBar>
+                <Button className='btn btn-primary'>
+                  <FontAwesome icon='print' /> Print
+                </Button>
               </Col>
-
             </Row>
           </form>
-        </div>
-
-        <div id='cards'>
-          { cards.map(
-            ( card, index ) => <AchievementCard { ...card } logo={ login.img } key={ index } />
-          ) }
         </div>
 
         <div className='no-print'>
@@ -177,31 +134,26 @@ class CardsPage extends Component {
                 onChange={ this.onDateChange } />
             </Col>
             <Col sm={ 6 }>
-              <ButtonGroup>
-                <Button color='danger' onClick={ this.deleteUnused }>
-                  <FontAwesome icon='trash' /> Delete Unused Cards
-                </Button>
-              </ButtonGroup>
+              <Button color='danger' onClick={ this.deleteUnusedCards }>
+                <FontAwesome icon='trash' /> Delete Unused Cards
+              </Button>
             </Col>
           </Row>
         </div>
-        
       </div>
     );
   }
 }
 
 const mapStateToProps = ({ rewards, login }) => {
-  const { achievement_cards } = rewards;
   return {
-    ...achievement_cards,
+    ...rewards.miles,
     login: login.current_login
   }
 };
 
 const mapDispatchToProps = {
-  getTasks, deleteUnused,
-  getMiles, generateAchievementCards
+  getTasks, deleteUnusedCards, getMiles
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )( CardsPage );

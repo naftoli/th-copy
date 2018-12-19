@@ -4,6 +4,13 @@ include_once( __DIR__ . "/../header/header.php" );
 
 class MilesRouter {
 
+    public function index() {
+        // Get available Miles (and other info?)
+        return json_response([
+            'miles' => $this->getMaxMiles(),
+        ]);
+    }
+
     public function manual() {
         global $POINTS_DB;
 
@@ -48,6 +55,15 @@ class MilesRouter {
         if ( !$success )
             return json_error( $query->errorInfo() );
         return json_response( 'Successfully '.$action.'ed miles' );
+    }
+
+    private function getMaxMiles(){
+        global $current_user;
+
+        if ( $current_user->login->code === 'TEACHER' )
+            return $current_user->login->model->miles_balance;
+        
+        return false;
     }
 }
 

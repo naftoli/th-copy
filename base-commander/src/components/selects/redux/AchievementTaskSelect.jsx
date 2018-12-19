@@ -20,10 +20,16 @@ class AchievementTaskSelect extends Component {
   }
 
   getOptions = () => {
-    let { tasks, filter } = this.props;
-    
-    if ( filter )
+    let { tasks, filter, subjectId } = this.props;
+
+    if ( filter ) {
       tasks = tasks.filter( filter );
+    }
+
+    if ( subjectId ) {
+      console.log( subjectId, tasks );
+      tasks = tasks.filter( task => task.subject_id === subjectId );
+    }
     
     return tasks.map( task => ({
       value: task.achievement_task_id, 
