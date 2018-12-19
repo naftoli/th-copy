@@ -61,7 +61,6 @@ class PrintPage extends Component {
   }
 
   schoolChange = ({ value }) => {
-    debugger;
     this.setState({ school_id: value })
   };
   multiSelectChange = key => values => this.setState({ [key]: values.map( val => val.value ) });

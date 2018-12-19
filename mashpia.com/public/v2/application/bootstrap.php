@@ -118,15 +118,18 @@ function itext($strCurrentText)
 {
 	return $strCurrentText;
 }
+
 function text($strCurrentText, $strResourceID=false)
 {
 	global $arrTextualContentData;
 	$intRand = rand(1000000, 9999999);
-	$strKey = "___:['textual_content;r:$intRand;i:" . count($arrTextualContentData) . ";']:___";
+	$total = is_array( $arrTextualContentData ) ? count( $arrTextualContentData ) : 0;
+
+	$strKey = "___:['textual_content;r:$intRand;i:" . $total . ";']:___";
 	$arrTextualContentData[] = array(
 		"strCurrentText" => $strCurrentText,
 		"strResourceID" => $strResourceID,
-		"intOrderFound" => count($arrTextualContentData)
+		"intOrderFound" => $total
 	);
 	return $strKey;
 }
@@ -508,7 +511,7 @@ function array_extract2()
 	{
 		$arrResult[$mixedKey] = array();
 	}
-	if (!count($arrData))
+	if (!count( (array) $arrData))
 		return $arrResult;
 	foreach ($arrData as $mixedKey => $mixedData)
 	{
@@ -516,7 +519,7 @@ function array_extract2()
 			is_array($mixedData)
 			|| is_object($mixedData)
 		) {
-			if (!count($mixedData))
+			if (!count( (array) $mixedData))
 				continue;
 		}
 		else if (!strlen($mixedData))
@@ -915,7 +918,7 @@ function array_merge_real_recursive() {
 
 	foreach ($arrays as $array) {
 		reset($base); //important
-		while (list($key, $value) = @each($array)) {
+		foreach( $array as $key => $value ) {
 			if (is_array($value) && @is_array($base[$key])) {
 				$base[$key] = array_merge_real_recursive($base[$key], $value);
 			} else {

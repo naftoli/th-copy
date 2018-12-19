@@ -192,6 +192,9 @@ table.dataTable {
     border-collapse: collapse !important
 }
 
+.table td {
+    vertical-align: middle;
+}
 td.first{
     min-width: 90px;
 }
@@ -210,8 +213,8 @@ td.total {
 div#report-table_wrapper, div.no-padding { padding: 0px;}
 
 .red { background-color: #ff413b; }
-.bronze { background-color: #e36700; }
-.gold { background-color: #ffcf40; }
+.bronze { background-color: #cd7f32; }
+.gold { background-color: #cc9900; }
 .silver { background-color: silver; }
 
 td.red, td.bronze, td.gold, td.silver {

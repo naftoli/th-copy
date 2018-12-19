@@ -79,7 +79,9 @@ export class PlatoonSelect extends Component {
   getOptions = () => {
     let { showAllOption, showNoneOption, schoolId } = this.props;
     // convert the school id to a string
-    schoolId = schoolId.toString();
+    if ( typeof schoolId === 'number' ) {
+      schoolId = schoolId.toString();
+    }
     // filter the platoons with the following criteria
     const options = this.state.platoons
       // only platoons in the schoolId from props
@@ -110,9 +112,11 @@ export class PlatoonSelect extends Component {
     // support multiple values
     if ( values )
       selected = values
-        .map( value => findOption( options, value.toString() ) || false )
+        // map to the options
+        .map( value => findOption( options, value && value.toString() ) || false )
+        // and filter out what is not valid
         .filter( value => value !== false );
-
+    // set options to an empty array when loading
     options = loading ? [] : options;
 
     return (
