@@ -21,6 +21,7 @@ unset($_COOKIE['comm100_27681']);
 */
 setcookie('user_id', '', time()-86400, '/');
 setcookie('auth', '', time()-86400, '/');
+setcookie('login', '', time()-86400, '/');
 setcookie('admin_id', '', time()-86400, '/');
 setcookie('admin_auth', '', time()-86400, '/');
 setcookie('admin_username_default','',time()-86400,'/');

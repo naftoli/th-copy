@@ -23,6 +23,7 @@ class Login implements \JsonSerializable {
     public $class_id = false; // cache the class id
 
     public $role = false;
+    public $key = false;
 
     const LEGACY_ID = 2; // School institution
 
@@ -207,7 +208,7 @@ class Login implements \JsonSerializable {
         ];
         // add the login key for parent accounts to the parent portal
         if ( $this->type == 'PARENT' )
-            $res['key'] = Auth::mobileKey( $this->model->admin_id );
+            $res['key'] = $this->key;
 
         return $res;
     }

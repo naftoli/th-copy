@@ -85,39 +85,13 @@ function check_login() {
 }
 }
 
-if(!isset($no_login)) {
-	if(!check_login() && !$dual_auth) {
-	  include('login.php');
+if( !isset( $no_login ) ) {
+	if( !check_login() && !$dual_auth ) {
+	  include( 'login.php' );
 	  exit;
 	}
-	/*
-	if($user['auth'] == 'super' || $user['auth'] == 'admin') {
-	  $auth_become = gri('auth_become');
-	  if($auth_become === -1) {
-		setcookie('auth_become', '', time() - 86400, '/');
-		$auth_become = NULL;
-		} elseif(!$auth_become) {
-		$auth_become = agri($_COOKIE, 'auth_become');
-	  }
-
-	  if($auth_become) {
-		$result = mysql_query("SELECT username, first, last, school_type_id, school_id, IFNULL(team_id, -1) team_id FROM users WHERE user_id = $auth_become" . ($user['auth'] != 'super' ? " AND school_id = {$user['school_id']}" : '')) or die('Query failed');
-		if($row = mysql_fetch_assoc($result)) {
-		  $ruser = $user;
-		  setcookie('auth_become', $auth_become, '/');
-		  $user['username'] = $row['username'];
-		  $user['user_id'] = $auth_become;
-		  $user['first'] = $row['first'];
-		  $user['last'] = $row['last'];
-		  $user['display'] = ($row['first'] ? $row['first'] . ' ' . $row['last'] : $row['username']);
-		  $user['school_type_id'] = $row['school_type_id'];
-		  $user['school_id'] = $row['school_id'];
-		  $user['team_id'] = $row['team_id'];
-		}
-	  }
-	}
-	*/
 }
+// include lang.php
 require('lang.php');
 
 //users school_type_setting must be ONE of $req_school_type_setting
