@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import './styles/Checkbox.scss';
 
 export const Checkbox = ( props ) => {
-  const { setRef, className, children, ...inputProps } = props;
+  const { setRef, className, children, id, ...inputProps } = props;
   // toggle on pressing enter
   let inputRef = null;
   const onKeyPress = ( event ) => {
@@ -24,9 +24,14 @@ export const Checkbox = ( props ) => {
   });
 
   return (
-    <label className={ classNames } tabIndex={ inputProps.disabled ? -1 : 0 } onKeyPress={onKeyPress}>
-      <input className='form-check-input' type='checkbox' { ...inputProps } ref={ ref => {setupRef( ref )}} />
+    <label id={ id } className={ classNames } 
+        tabIndex={ inputProps.disabled ? -1 : 0 } onKeyPress={onKeyPress}>
+
+      <input { ...inputProps } type='checkbox'
+          className='form-check-input' ref={ ref => {setupRef( ref )}} />
+
       <span className='checkbox-state' />{' '}
+      
       { children }
     </label>
   );

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // components
-import { Row, Col } from 'reactstrap';
+import { Row, Col, UncontrolledTooltip } from 'reactstrap';
 import { Radio, Checkbox, Date, Label } from 'components/inputs';
 // functions
 import julian from 'julian';
@@ -90,9 +90,13 @@ export class SettingsRow extends Component {
             onChange={ this.onDateChage } />
             
           <Checkbox checked={ !store_reset }
-              onChange={ this.disableSchoolReset }>
+              id='store_reset' onChange={ this.disableSchoolReset }>
             Allow soldiers to spend all their miles.
           </Checkbox>
+
+          <UncontrolledTooltip placement="top" target="store_reset" autohide={ false }>
+            This includes all miles from previous years
+          </UncontrolledTooltip>
         </Col>
       </Row>
     );
