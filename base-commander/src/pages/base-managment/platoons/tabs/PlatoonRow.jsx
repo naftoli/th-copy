@@ -50,8 +50,12 @@ export class PlatoonRow extends Component {
 
         <Col sm={6}>
           <label>Teacher E-Mail</label>
-          <Input name='email' type='email' value={ email || '' } { ...inputProps } />
-          <div className='invalid-message'>Please enter a valid E-mail address</div>
+
+          <Input name='email' { ...inputProps }  value={ email || '' }
+            title='1 or more valid E-mail addresses (, or ; seperated)'
+            pattern='^(\s?[^\s,]+@[^\s,]+\.[^\s,]+\s?[,;])*(\s?[^\s,]+@[^\s,]+\.[^\s,]+)$' />
+
+          <div className='invalid-message'>1 or more valid E-mail addresses (, or ; seperated)</div>
         </Col>
 
         <Col sm={6}>

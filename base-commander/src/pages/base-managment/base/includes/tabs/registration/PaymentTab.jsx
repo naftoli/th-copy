@@ -58,29 +58,29 @@ export class PaymentTab extends React.Component {
       <TabPane tabId={ tabId } id='PaymentTab'>
 
         <Callout title='Terms And Conditions' className='terms'>
-          <Checkbox checked={ terms.bc } name='bc' { ...checkboxProps }>
+          <Checkbox required checked={ terms.bc } name='bc' { ...checkboxProps }>
             I am the base commander responsible for supervising Tzivos Hashem, 
             and I pledge to fully understand the goal and mission of Tzivos Hashem
             and how it works with my base's (school's) curriculum.
           </Checkbox>
 
-          <Checkbox checked={ terms.meet } name='meet' { ...checkboxProps }>
+          <Checkbox required checked={ terms.meet } name='meet' { ...checkboxProps }>
             I am fully committed to the ongoing growth of Tzivos Hashem on our base (school)
             and will attend the monthly base commanders meetings.
           </Checkbox>
 
-          <Checkbox checked={ terms.tools } name='tools' { ...checkboxProps }>
+          <Checkbox required checked={ terms.tools } name='tools' { ...checkboxProps }>
             I ensure that I will provide all my teachers email addresses and cell phone
             numbers so Tzivos Hashem can be in touch with them to provide resources.
           </Checkbox>
 
-          <Checkbox checked={ terms.reg } name='reg' { ...checkboxProps }>
+          <Checkbox required checked={ terms.reg } name='reg' { ...checkboxProps }>
             I agree for my card to be charged the registration fee for every student that I register
             into the Tzivos Hashem program from my base (school).
             [Parents who register directly will pay their own registration fee(s).]
           </Checkbox>
 
-          <Checkbox checked={ terms.data } name='data' { ...checkboxProps }>
+          <Checkbox required checked={ terms.data } name='data' { ...checkboxProps }>
             I understand that Tzivos Hashem reserves the right to use and store any data that I upload
             for this base (school). And that they may do with that data whatever it wants to.
           </Checkbox>
