@@ -28,7 +28,7 @@ $r = new MivtzoimReport( $m );
         <h1>Mivtzoim Leaderboard</h1>
 
         <?php 
-        $r->createIndividualBoard( -1, [9062,9066] );
+        $r->createIndividualBoard( -1, "9062,9066" );
         $num_users = $r->getNumUsers();
         ?>
     </body>

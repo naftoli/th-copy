@@ -718,9 +718,9 @@ class MivtzoimReport {
         echo "</tbody></table>";        
     }
 
-    public function createIndividualBoard( $school ) {
+    public function createIndividualBoard( $school, $ids = '' ) {
         $this->setUsers( $school );
-        $this->calculateUserMarks( $school );
+        $this->calculateUserMarks( $school, $ids );
 
         $names = $this->m->getShortNames();
         if ( $school > 0 ) { // if we are showing an individual school
