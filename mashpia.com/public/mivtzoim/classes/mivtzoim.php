@@ -625,7 +625,7 @@ class MivtzoimReport {
 
     }
 
-    public function calculateUserMarks( $school, $specific_ids = [] ) {
+    public function calculateUserMarks( $school ) {
         global $MASHPIA_DB;
 
         $grid_ids = [];
@@ -661,7 +661,6 @@ class MivtzoimReport {
                     ':school'       =>  $school
                 ]);
             } else {
-                if ( !empty( $specific_ids ) ) $ids = $specific_ids;
                 $sth = $MASHPIA_DB->prepare("
                     SELECT 
                         u.user_id, SUM(dtm.done_qty) AS total
@@ -718,9 +717,9 @@ class MivtzoimReport {
         echo "</tbody></table>";        
     }
 
-    public function createIndividualBoard( $school, $ids = '' ) {
+    public function createIndividualBoard( $school, ) {
         $this->setUsers( $school );
-        $this->calculateUserMarks( $school, $ids );
+        $this->calculateUserMarks( $school );
 
         $names = $this->m->getShortNames();
         if ( $school > 0 ) { // if we are showing an individual school
