@@ -644,15 +644,13 @@ class MivtzoimReport {
                     FROM
                         date_tasks dt
                             JOIN
-                        date_tasks_missions dtmm USING (date_tasks_mission_id)
-                            JOIN
                         date_tasks_marks dtm USING (date_task_id)
                             JOIN
                         users u USING (user_id)
                     WHERE
                         dt.grid_id IN ($ids) 
-                            AND dtmm.start_date >= :start
-                            AND dtmm.end_date <= :end
+                            AND dtm.mark_date >= :start
+                            AND dtm.mark_date <= :end
                             AND u.school_id = :school
                     GROUP BY u.user_id 
                 ");
@@ -670,15 +668,13 @@ class MivtzoimReport {
                     FROM
                         date_tasks dt
                             JOIN
-                        date_tasks_missions dtmm USING (date_tasks_mission_id)
-                            JOIN
                         date_tasks_marks dtm USING (date_task_id)
                             JOIN
                         users u USING (user_id)
                     WHERE
                         dt.grid_id IN ($ids) 
-                            AND dtmm.start_date >= :start
-                            AND dtmm.end_date <= :end
+                            AND dtm.mark_date >= :start
+                            AND dtm.mark_date <= :end
                     GROUP BY u.user_id 
                 ");
                 $dates = $this->m->getDates();
