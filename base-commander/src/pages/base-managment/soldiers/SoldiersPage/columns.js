@@ -78,6 +78,17 @@ export default ( login, editPicture, updateToggle ) => {
       }
     );
   }
+
+  // * Tanya columns
+  if ( login.modules.tanya ) {
+    columns.push(
+      { Header: 'Tanya', accessor: 'yan',
+        Cell: ({ value, original }) => <Toggle checked={ !!value } 
+          onChange={ updateToggle( 'yan', original.user_id ) } />,
+        Filter: yesNoFilterRender(), filterMethod: yesNoFilter
+      }
+    );
+  }
   
   // * Base Commander columns
   if ( isBC( login.code ) ) {
