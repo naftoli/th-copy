@@ -11,7 +11,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim/classes/mivtzoim.php';
 
 $m = new Mivtzoim( $_REQUEST['id'] );
-$r = new MivtzoimReport( $m );
+$r = new MivtzoimReport( $m ); 
 ?>
 <!DOCTYPE html>
 <html>
