@@ -25,6 +25,10 @@ function getMenuReducer( $default_users = [ 'HQ', 'INST', 'BC' ] ) {
 			if ( count( $item['items'] ) == 0 )
 				return $menu;
 		}
+		// hide the item if we are not showing legacy links
+		if ( $current_user && isset( $item['legacy'] ) && !$current_user->login->legacy ) {
+			return $menu;
+		}
 		// hide the item if we are not enrolled in this module
 		if ( $current_user && isset( $item['module'] ) &&
 			!$current_user->login->modules[ $item['module'] ] ) {

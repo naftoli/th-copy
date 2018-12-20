@@ -47,7 +47,7 @@ export class PlatoonRow extends Component {
 
           <Input required name='cell' type='tel' value={ cell || '' }
             { ...inputProps } title='1 or more valid phone numbers (, or ; seperated)' // one or more valid phone numbers
-            pattern='^(((\+[0-9]{1,3}[0-9 ]{9,})|((?:1 |\()?[0-9]{3}(?: |\) )?[0-9]{3}(?: |-)?[0-9]{4}))[,;])*((\+[0-9]{1,3}[0-9 ]{9,})|((?:1 |\()?[0-9]{3}(?: |\) )?[0-9]{3}(?: |-)?[0-9]{4}))$'
+            pattern='^(((\+[0-9]{1,3}[0-9 ]{9,})|((?:1 |\()?[0-9]{3}(?: |\) |-)?[0-9]{3}(?: |-)?[0-9]{4}))[,;])*((\+[0-9]{1,3}[0-9 ]{9,})|((?:1 |\()?[0-9]{3}(?: |\) |-)?[0-9]{3}(?: |-)?[0-9]{4}))$'
             />
           <div className='invalid-message'>1 or more valid phone numbers (, or ; seperated)</div>
         </Col>

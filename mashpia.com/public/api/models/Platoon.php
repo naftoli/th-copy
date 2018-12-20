@@ -21,11 +21,13 @@ class Platoon extends ActiveRecord\Model implements JsonSerializable {
         return $grade . ( $sub ? ' - ' . $sub : ' ' );
     }
 
-    public function staff() {
+    public function staff( $include_password = false ) {
         global $MASHPIA_DB;
         $staff_query = $MASHPIA_DB->prepare(
-            'SELECT a.first, a.last, a.username, a.admin_email as email, a.admin_id FROM admins a '
-            .'JOIN admin_auths aa USING( admin_id ) WHERE aa.auth="class" AND aa.id=?;'
+            'SELECT a.title, a.first, a.last, a.username, a.admin_email as email, a.admin_id'
+            .( $include_password ? ', a.password' : '' )
+            .' FROM admins a'
+            .' JOIN admin_auths aa USING( admin_id ) WHERE aa.auth="class" AND aa.id=?;'
         );
         $staff_query->execute([ $this->class_id ]);
         return $staff_query->fetchAll();
