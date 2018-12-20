@@ -625,7 +625,7 @@ class MivtzoimReport {
 
     }
 
-    public function calculateUserMarks( $school ) {
+    public function calculateUserMarks( $school, $specific_ids = [] ) {
         global $MASHPIA_DB;
 
         $grid_ids = [];
@@ -663,6 +663,7 @@ class MivtzoimReport {
                     ':school'       =>  $school
                 ]);
             } else {
+                if ( !empty( $specific_ids ) ) $ids = $specific_ids;
                 $sth = $MASHPIA_DB->prepare("
                     SELECT 
                         u.user_id, SUM(dtm.done_qty) AS total
