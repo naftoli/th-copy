@@ -199,11 +199,15 @@
   .terms {
     margin-bottom: 1rem;
 
-    ul { font-size: .9em; margin-bottom: .5rem; }
+    font-size: 1em; margin-bottom: .5rem;
+
     .checkbox {
-      margin-top: .5rem;
-      width: 100%; text-align: center;
-      font-size: 1.3em; padding: 0px;
+      padding-top: .5rem;
+    }
+
+    .checkbox:not(:last-child) {
+      border-bottom: 1px solid;
+      padding-bottom: .5rem;
     }
   }
 

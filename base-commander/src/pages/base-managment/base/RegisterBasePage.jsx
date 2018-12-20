@@ -30,7 +30,7 @@ class RegistrationPage extends Component {
   state = {
     cc: {},       base: {},
     valid: {},    terms: false,
-    activeTab: 1, currentTab: 1
+    activeTab: 5, currentTab: 5
   }
   // props
   static propTypes = {
@@ -118,6 +118,7 @@ class RegistrationPage extends Component {
     // get the cart and total
     const cart = getCart( base );
     const total = getTotal( base, true );
+    
     // check if all valid props are set to true.
     const allValid = Object.keys( valid ).every( k =>  valid[k] );
     // if we have any invalid tabs, return an error
@@ -128,6 +129,7 @@ class RegistrationPage extends Component {
     if ( !terms ) {
       return toast.error('You must accept the Terms and Conditions.');
     }
+
     // if the total is greater then 0
     if ( total > 0 ) {
       promise = validateCC( cc )
@@ -136,6 +138,7 @@ class RegistrationPage extends Component {
     } else {
       promise = this.props.registerBase({ base, total });
     }
+
     // set the state
     this.setState({ registering: true });
     // reload the user data once the registration is compleate
@@ -223,7 +226,6 @@ class RegistrationPage extends Component {
             terms={ terms }
             register={ this.register }
             onStateUpdate={ this.onStateUpdate } />
-
         </TabContent>
       </div>
     );
