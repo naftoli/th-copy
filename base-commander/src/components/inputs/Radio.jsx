@@ -2,8 +2,8 @@ import React from 'react';
 import './styles/Radio.scss';
 
 export const Radio = ( props ) => {
-  const { onChange, checked, id, name, value, className } = props;
-  const inputProps = { onChange, checked, id, name, value };
+  const { onChange, checked, id, name, value, required, className } = props;
+  const inputProps = { onChange, checked, id, required, name, value };
   // toggle on pressing enter
   const ref = React.createRef();
   const onKeyPress = ( event ) => {

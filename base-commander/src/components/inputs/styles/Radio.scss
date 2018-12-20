@@ -1,7 +1,15 @@
 label.radio {
   // setup
   margin: 0px 5px;
-  input[type="radio"] { display: none; }
+  position: relative;
+
+  input[type="radio"] {
+    width: 1em;
+    opacity: 0;
+    height: 1px;
+    margin-left: 0px;
+    margin-top: .6em;
+  }
   // default state
   span.radio-state {
     display: inline-block;
