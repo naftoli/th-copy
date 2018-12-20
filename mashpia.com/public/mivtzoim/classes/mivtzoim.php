@@ -717,7 +717,7 @@ class MivtzoimReport {
         echo "</tbody></table>";        
     }
 
-    public function createIndividualBoard( $school, ) {
+    public function createIndividualBoard( $school ) {
         $this->setUsers( $school );
         $this->calculateUserMarks( $school );
 
