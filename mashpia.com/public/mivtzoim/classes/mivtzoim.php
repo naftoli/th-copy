@@ -491,24 +491,40 @@ class MivtzoimReport {
     public function setUsers( $school ) {
         global $MASHPIA_DB;
 
-        $sth = $MASHPIA_DB->prepare("
-            SELECT 
-                user_id, first, last, class_grade, class_sub
-            FROM
-                users u
-                    JOIN
-                classes c ON c.class_id = u.class_id
-            WHERE
-                u.school_id = :school
-            ORDER BY class_grade , class_sub , last , first
-        ");
-        $sth->execute([':school' => $school]);
+        if ( $school > 0 ) {
+            $sth = $MASHPIA_DB->prepare("
+                SELECT 
+                    user_id, first, last, class_grade, class_sub
+                FROM
+                    users u
+                        JOIN
+                    classes c ON c.class_id = u.class_id
+                WHERE
+                    u.school_id = :school
+                ORDER BY class_grade , class_sub , last , first
+            ");
+            $sth->execute([':school' => $school]);
+        } else {
+            $sth = $MASHPIA_DB->query("
+                SELECT 
+                    user_id, first, last, class_grade, class_sub, school_name
+                FROM
+                    users u
+                        JOIN
+                    classes c ON c.class_id = u.class_id
+                        JOIN 
+                    schools s ON s.school_id = u.school_id 
+                WHERE
+                    u.user_registered > 0 
+                ORDER BY school_name, class_grade , class_sub , last , first
+            ");
+        }
         $rows = $sth->fetchAll();
         $this->numUsers = count( $rows );
         foreach ( $rows as $row ) {
             $grade = $row['class_grade'] . (empty( $row['class_sub'] ) ? '' : '-' . $row['class_sub'] );
             $name = $row['first'] . ' ' . $row['last'];
-            $this->users[$grade][$row['user_id']] = $name;
+            $this->users[$row['school_name']][$grade][$row['user_id']] = $name;
         }
     }
 
@@ -621,32 +637,51 @@ class MivtzoimReport {
         }
         foreach ( $grid_ids as $name => $grids ) {
             $ids = implode(',', array_keys( $grids ));
-            $sth = $MASHPIA_DB->prepare("
-                SELECT 
-                    u.user_id, SUM(dtm.done_qty) AS total
-                FROM
-                    date_tasks dt
-                        JOIN
-                    date_tasks_missions dtmm USING (date_tasks_mission_id)
-                        LEFT JOIN
-                    date_tasks_marks dtm USING (date_task_id)
-                        LEFT JOIN
-                    users u USING (user_id)
-                        LEFT JOIN
-                    classes c ON c.class_id = u.class_id
-                WHERE
-                    dt.grid_id IN ($ids) 
-                        AND dtmm.start_date >= :start
-                        AND dtmm.end_date <= :end
-                        AND u.school_id = :school
-                GROUP BY u.user_id 
-            ");
-            $dates = $this->m->getDates();
-            $sth->execute([
-                ':start'        =>  $dates['start'], 
-                ':end'          =>  $dates['end'], 
-                ':school'       =>  $school
-            ]);
+            if ( $school > 0 ) {
+                $sth = $MASHPIA_DB->prepare("
+                    SELECT 
+                        u.user_id, SUM(dtm.done_qty) AS total
+                    FROM
+                        date_tasks dt
+                            JOIN
+                        date_tasks_marks dtm USING (date_task_id)
+                            JOIN
+                        users u USING (user_id)
+                    WHERE
+                        dt.grid_id IN ($ids) 
+                            AND dtm.mark_date >= :start
+                            AND dtm.mark_date <= :end
+                            AND u.school_id = :school
+                    GROUP BY u.user_id 
+                ");
+                $dates = $this->m->getDates();
+                $sth->execute([
+                    ':start'        =>  $dates['start'], 
+                    ':end'          =>  $dates['end'], 
+                    ':school'       =>  $school
+                ]);
+            } else {
+                $sth = $MASHPIA_DB->prepare("
+                    SELECT 
+                        u.user_id, SUM(dtm.done_qty) AS total
+                    FROM
+                        date_tasks dt
+                            JOIN
+                        date_tasks_marks dtm USING (date_task_id)
+                            JOIN
+                        users u USING (user_id)
+                    WHERE
+                        dt.grid_id IN ($ids) 
+                            AND dtm.mark_date >= :start
+                            AND dtm.mark_date <= :end
+                    GROUP BY u.user_id 
+                ");
+                $dates = $this->m->getDates();
+                $sth->execute([
+                    ':start'        =>  $dates['start'], 
+                    ':end'          =>  $dates['end'], 
+                ]);
+            }
             $result = $sth->fetchAll();
             foreach ( $result as $row ) {
                 $this->userMarks[$name][$row['user_id']] = $row['total'];
@@ -687,23 +722,48 @@ class MivtzoimReport {
         $this->calculateUserMarks( $school );
 
         $names = $this->m->getShortNames();
-        echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead><tr>";
-        echo "<th>Grade</th>";
-        echo "<th>Student</th>";
-        foreach ( $names as $name ) {
-            echo "<th>" . $name . "</th>";
-        }
-        echo "</tr></thead><tbody>";
-        foreach ( $this->users as $grade => $more ) { 
-            foreach ( $more as $user_id => $user ) {
-                echo "<tr><td>" . $grade . "</td><td>" . $user . "</td>";
-                foreach ( $names as $name ) {
-                    $mark = isset( $this->userMarks[$name][$user_id] ) ? $this->userMarks[$name][$user_id] : 0;
-                    echo "<td>" . $mark . "</td>";
+        if ( $school > 0 ) { // if we are showing an individual school
+            echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead><tr>";
+            echo "<th>Grade</th>";
+            echo "<th>Student</th>";
+            foreach ( $names as $name ) {
+                echo "<th>" . $name . "</th>";
+            }
+            echo "</tr></thead><tbody>";
+            foreach ( $this->users as $grade => $more ) { 
+                foreach ( $more as $user_id => $user ) {
+                    echo "<tr><td>" . $grade . "</td><td>" . $user . "</td>";
+                    foreach ( $names as $name ) {
+                        $mark = isset( $this->userMarks[$name][$user_id] ) ? $this->userMarks[$name][$user_id] : 0;
+                        echo "<td>" . $mark . "</td>";
+                    }
+                    echo "</tr>";
+                }            
+            } 
+            echo "</tbody></table>";
+        } else {
+            echo "<table id='leaderboard' class='table table-striped table-bordered table-hover sortable display'><thead><tr>";
+            echo "<th>School</th>";
+            echo "<th>Grade</th>";
+            echo "<th>Student</th>";
+            foreach ( $names as $name ) {
+                echo "<th>" . $name . "</th>";
+            }
+            echo "</tr></thead><tbody>";
+            foreach ( $this->users as $school => $other ) {
+                foreach ( $other as $grade => $more ) { 
+                    foreach ( $more as $user_id => $user ) {
+                        echo "<tr><td>" . $school . "</td><td>" . $grade . "</td><td>" . $user . "</td>";
+                        foreach ( $names as $name ) {
+                            $mark = isset( $this->userMarks[$name][$user_id] ) ? $this->userMarks[$name][$user_id] : 0;
+                            echo "<td>" . $mark . "</td>";
+                        }
+                        echo "</tr>";
+                    }            
                 }
-                echo "</tr>";
-            }            
-        } 
-        echo "</tbody></table>";     
+            } 
+            echo "</tbody></table>";     
+        }
     }
 }
+?>

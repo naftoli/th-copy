@@ -9,7 +9,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 if ( !isset( $_POST['school'] ) || !isset( $_POST['grade'] ) || !isset( $_POST['mivtzoim'] ) ) {
     header("Location: index.php");
     exit;
-}
+} 
 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();

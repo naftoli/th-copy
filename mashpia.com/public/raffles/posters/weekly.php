@@ -1,11 +1,15 @@
 <?php
 ini_set('display_errors',1);
+ini_set('max_execution_time', 300);
 $admin_auth = array('school'); 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
+$year = GlobalSettings::getRegistrationYear();
 
 // get logos for schools
 $logos = array();
@@ -20,7 +24,7 @@ foreach ($schools as $school_id => $school) {
 // get raffle id's
 $k = 1;
 $raffles = array();
-$sql = "select * from raffles where type = 'weekly' and date_ran > 0";
+$sql = "select * from raffles where type = 'weekly' and date_ran > 0 and year = " . $year;
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
     $raffles[$row['raffle_id']] = $row;
@@ -38,17 +42,12 @@ foreach ($schools as $school_id => $school) {
                 join raffle_winners rw using (user_id) 
                 where rw.raffle_id = " . $id . "
                 and u.school_id = " . $school_id;
-        $result = mysql_query( $sql );
+        $result = mysql_query( $sql ) or die( mysql_error() );
         while ($row = mysql_fetch_assoc( $result )) {
             $winners[$row['school_id']][$raffle['name']][] = $row;
         }
     }
 }
-
-echo "<pre>";
-//print_r( $weeks );
-//print_r( $winners );
-echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
@@ -97,14 +96,17 @@ echo "</pre>";
                 }
             }
             <?php
-            // generate 26 different id's with different background pics
-            for ($i = 1; $i <= 26; $i++) :
+            // generate 26 different ids with different background pics
+            for ( $i = 1; $i <= 26; $i++ ) {
+                $urls[$i] = "Weekly-Prize-Poster-Template_Part$i.jpg";
+            }
+            foreach ( $urls as $i => $url ) {
+                echo "#week$i {";
+                echo "background-image: url( $url );";
+                echo "backgound-repeat: no-repeat;";
+                echo "}";
+            } 
             ?>
-                #week<?=$i?> {
-                    background-image: url("Weekly-Prize-Poster-Template_Part<?=$i?>.jpg");
-                    background-repeat: no-repeat;
-                }
-            <?php endfor; ?>
         </style>
     </head>
     <body>
