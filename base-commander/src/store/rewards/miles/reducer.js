@@ -1,4 +1,4 @@
-import * as types from './types';
+import { types } from './actions';
 
 export const initialState = {
   miles: false

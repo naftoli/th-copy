@@ -27,7 +27,6 @@ class AchievementTaskSelect extends Component {
     }
 
     if ( subjectId ) {
-      console.log( subjectId, tasks );
       tasks = tasks.filter( task => task.subject_id === subjectId );
     }
     

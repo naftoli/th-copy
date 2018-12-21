@@ -47,6 +47,10 @@ class CardsPage extends Component {
     }
   }
 
+  onSubmit = () => {
+    setTimeout( this.props.getMiles, 1000 );
+  }
+
   // event handlers
   onChange = ({ target }) => { this.setState({ [target.id]: target.value }) }
   onTaskChange = ({ value }) => { this.setState({ task_id: value }) }
@@ -57,10 +61,21 @@ class CardsPage extends Component {
   subjectFilter = subject => subject.achievement_tasks.length > 0;
 
   render() {
-    let { miles, login } = this.props;
+    let { miles, login, tasks } = this.props;
     const { subject_id, task_id, card_count, delete_to } = this.state;
-    // maximum amount of cards to print.
-    const max = 1500;
+
+    let max = 100000; // 100,000 ( insanely high limit )
+    let disabled = !subject_id || !task_id || !card_count;
+    const task = tasks.find( task => task.achievement_task_id === task_id );
+
+    // if we have a task and miles, update the max and disabled
+    if ( task && miles ) {
+      max = Math.floor( miles / task.points );
+      disabled = disabled || miles < task.points * card_count;
+    }
+    // disable the button if miles is less then 0
+    if ( typeof miles === 'number' )
+      disabled = disabled || miles <= 0;
     // print the page
     return (
       <div id='AchievementsCardsPage'>
@@ -80,7 +95,7 @@ class CardsPage extends Component {
             </h2>
           }
 
-          <form target='_blank' method='post'
+          <form target='_blank' method='post' onSubmit={ this.onSubmit }
               action={`${LEGACY_URL}/api/print/achievement_cards`}>
             <Row id='options'>
               <Col sm={ 6 } xl={3}>
@@ -111,11 +126,13 @@ class CardsPage extends Component {
                   required        type='number'   id='card_count'   
                   max={ max }     min={ 1 }       name='card_count' 
                   onChange={ this.onChange }      value={ card_count } />
-                <div className='invalid-message'>You can only create up to { max } cards at once.</div>
+                <div className='invalid-message'>
+                  You can only create up to { max } cards.
+                </div>
               </Col>
 
               <Col sm={ 6 } xl={3}>
-                <Button className='btn btn-primary'>
+                <Button color='primary' disabled={ disabled }>
                   <FontAwesome icon='print' /> Print
                 </Button>
               </Col>
@@ -148,7 +165,8 @@ class CardsPage extends Component {
 const mapStateToProps = ({ rewards, login }) => {
   return {
     ...rewards.miles,
-    login: login.current_login
+    login: login.current_login,
+    tasks: rewards.achievement_tasks.tasks
   }
 };
 

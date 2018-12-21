@@ -122,8 +122,7 @@ class TasksPage extends Component {
     );
 
     return (
-      <div id='TasksPage'>
-      
+      <div id='TasksPage' className='full-height'>
         <ButtonBar>
           <Button onClick={this.newTask} className='btn btn-primary'>
             <FontAwesome icon='plus' /> Create Task

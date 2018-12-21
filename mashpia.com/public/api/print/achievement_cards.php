@@ -52,7 +52,7 @@ $card_type = $current_user->login->code == 'TEACHER' ? 'Teacher' : 'Institution 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title><?= $card_count ?> Achivement Cards - <?= date("Y-m-d G:i:s")?></title>
   <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Alef:400,700|Poppins:300,400,500,600,700|Source+Code+Pro|Roboto|Black+Ops+One' />
   <link rel="stylesheet" type="text/css" href='styles/achivement_cards.css' />
 </head>

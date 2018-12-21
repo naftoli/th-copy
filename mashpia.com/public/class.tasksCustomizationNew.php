@@ -596,11 +596,10 @@ class TasksCustomizationNew {
         //put all info together into one array
         $allInfo = array();
         foreach( $tasks as $task => $enrolled ) {
-            $allInfo[$task][$enrolled] = $friendly[$task];
+            if ( isset( $friendly[$task] ) ) {
+                $allInfo[$task][$enrolled] = $friendly[$task];
+            }
         }
-		if ($debug) {
-			//echo "<pre>"; print_r( $allInfo ); echo "</pre>"; exit;
-		}
         return $allInfo;
     }
 

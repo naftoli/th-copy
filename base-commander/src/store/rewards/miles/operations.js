@@ -8,7 +8,7 @@ import * as actions from './actions';
  */
 export const getMiles = () => dispatch => {
   return API.get( `/rewards/miles` )
-  .then( miles => dispatch( actions.setMiles( miles ) ) );
+  .then( ({ miles }) => dispatch( actions.setMiles( miles ) ) );
 }
 
 /**
