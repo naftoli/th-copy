@@ -114,6 +114,10 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         return MashpiaEmails::passwordReset( $this->email, $this->username, $url );
     }
 
+    public function sendParentEmail() {
+        return MashpiaEmails::sendParentEmail( $this->email, $this->username, $this->password );
+    }
+
     //*********************************************************************/
     //******************************* LOGIN *******************************/
     //*********************************************************************/

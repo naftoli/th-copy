@@ -11,15 +11,16 @@ import { Row, Col, Input, Button, InputGroup, InputGroupAddon } from 'reactstrap
 import memoize from 'memoize-one';
 import { toast } from 'react-toastify';
 import { setTitle } from 'functions/utils';
-import { mobileLogin } from 'functions/login';
+import { mobileLogin, isHQ } from 'functions/login';
 import { getChildOptions } from './misc/functions';
-import {
-  getParents, removeChild, addChild 
-} from 'store/base/parents/operations';
+import { getParents, removeChild, addChild } from 'store/base/parents/operations';
+import { findOption } from 'functions/selects';
 
 class ParentPage extends Component {
 
-  state = { selectedUserId: false }
+  state = {
+    user_serial: false
+  }
 
   componentDidMount() {
     setTitle( 'Parent Account' )
@@ -42,33 +43,39 @@ class ParentPage extends Component {
     mobileLogin( parent.key );
   }
 
-  removeChild = ( user_id ) => {
+  removeChild = ( user_serial ) => {
     const parent = this.getParent();
-    this.props.removeChild( parent.admin_id, user_id )
+    this.props.removeChild( parent.admin_id, user_serial )
     .catch( error => { toast.error( error.message ) });
   }
 
   addChild = () => {
-    const { selectedUserId: user_id } = this.state;
+    const { user_serial } = this.state;
     const parent = this.getParent();
-    if ( !user_id )
-      return toast.error('Please select a soldier to add as a child.');
-    else 
-      this.props.addChild( parent.username, user_id )
+
+    if ( !user_serial ) {
+      toast.error('Please select a soldier to add as a child.');
+    } else {
+      this.props.addChild( parent.username, user_serial )
+      .then( () => this.setState({ user_serial: false }) )
       .catch( error => toast.error( error.message ) );
+    }
   }
 
   onChildChange = ( option ) => {
-    this.setState({ selectedUserId: option && option.value });
+    this.setState({ user_serial: option && option.value });
   }
 
   render() {
-    const { loading } = this.props;
+    const { user_serial } = this.state;
+    const { loading, login } = this.props;
     // get the parent information
     const parent = this.getParent();
     // if we have nothing, end the function here and show a LoadingScreen
-    if ( loading && !parent ) return <LoadingScreen />;
-    else if ( !parent ) return <Page404 />;
+    if ( loading && !parent )
+      return <LoadingScreen />;
+    else if ( !parent )
+      return <Page404 />;
     // get the info from the parent
     const { 
       father_pic, mother_pic, father, mother, last,
@@ -117,20 +124,26 @@ class ParentPage extends Component {
 
         <p className='title'>Children</p>
         <Row id='add-child'>
-          <Col xs='12'>
-            <InputGroup>
-              <Select options={ options } onChange={ this.onChildChange } 
-                isClearable className='react-select form-control' />
-              <InputGroupAddon addonType="append">
-                <Button onClick={ this.addChild } color='primary' outline tabIndex={0}>
-                  <FontAwesome icon='user-plus' /> Add Child
-                </Button>
-              </InputGroupAddon>
-            </InputGroup>
-          </Col>
+          { !isHQ( login.code ) &&
+            <Col xs='12'>
+              <InputGroup>
+                <Select  options={ options }
+                  onChange={ this.onChildChange }
+                  value={ findOption( options, user_serial ) || false }
+                  isClearable className='react-select form-control' />
+
+                <InputGroupAddon addonType="append">
+                  <Button onClick={ this.addChild } color='primary' outline tabIndex={0}>
+                    <FontAwesome icon='user-plus' /> Add Child
+                  </Button>
+                </InputGroupAddon>
+              </InputGroup>
+            </Col>
+          }
         </Row>
-        { parent.children.map( 
-          (child, index) => <Child key={index} {...child} onRemove={ this.removeChild }/> 
+        
+        { parent.children.map( (child, index) => 
+          <Child key={index} {...child} onRemove={ this.removeChild }/>
         ) }
       </div>
     );
@@ -138,10 +151,10 @@ class ParentPage extends Component {
 }
 
 const mapStateToProps = ( { base, login } ) => ({
+  login: login.current_login,
   parents: base.parents.parents,
   loading: base.parents.loading,
   availableChildren: base.parents.children,
-  login: login.current_login
 })
 
 const mapDispatchToProps = {

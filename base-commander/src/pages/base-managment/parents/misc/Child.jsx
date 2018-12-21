@@ -6,7 +6,7 @@ import { Row, Col, Button } from 'reactstrap';
 class Child extends Component {
 
   remove = () => {
-    this.props.onRemove( this.props.user_id );
+    this.props.onRemove( this.props.user_serial );
   }
 
   render() {
@@ -22,6 +22,7 @@ class Child extends Component {
           <p><Link to={`/bm/soldiers/${user_id}`}>{first} {last}</Link></p>
         </Col>
         <Col xs={6} sm={{ size: 4, order: 3 }}>
+          <strong>Actions: </strong>
           <Button color='danger' onClick={ this.remove }>
             <FontAwesome icon='trash-alt' regular /> Remove From Account
           </Button>
