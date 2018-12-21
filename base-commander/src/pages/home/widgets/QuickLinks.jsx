@@ -23,10 +23,6 @@ export class QuickLinks extends Component {
               <FontAwesome icon='check-circle' regular />
               Mark Missions
             </Link>
-            <a href={`${LEGACY_URL}/api/beta`}>
-              <FontAwesome icon='door-open' />
-              Leave Beta
-            </a>
           </div>
         </div>
       </Col>
@@ -44,8 +40,8 @@ export class Resources extends Component {
 
           <div id='links'>
             <a href='//dropbox.com/sh/c2g76cp76it1bf6/AABw7AHHEKWfahv-yIFXV8Qsa?dl=0' target='_blank' rel="noopener noreferrer">
-              <img src={`${LEGACY_URL}/homeIcons/Hachayol.png`} alt='hachayol'/>
-              Hachayol
+              <img src={`${LEGACY_URL}/homeIcons/dropbox.svg`} alt='hachayol'/>
+              Resources
             </a>
             <a href='//dropbox.com/sh/41u2regs73kfp9h/AACJV58J9KD6elXXZisYz74Ia?dl=0' target='_blank' rel="noopener noreferrer">
               <img src={`${LEGACY_URL}/homeIcons/tanya.png`} alt='tanya'/>
