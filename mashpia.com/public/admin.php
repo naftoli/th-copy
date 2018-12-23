@@ -1,4 +1,12 @@
 <?php
+// if they have the mobile login but not the legacy/react login...
+if ( isset( $_COOKIE['admin'] ) && !isset( $_COOKIE['admin_auth'] ) ) {
+	header( "Location: /mobile/" ); // send them to the mobile site
+}
+// send them to the react app for the new homepage/login page.
+header( "Location: /new/" );
+die();
+
 // redirect to https if using http
 // if (!isset($_SERVER['HTTPS'])) {
 // 	$url = "https://". $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . "?" . $_SERVER['argv'][0];

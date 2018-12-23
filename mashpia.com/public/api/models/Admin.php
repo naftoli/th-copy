@@ -58,8 +58,11 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      * call the correct functions when specific attributes are changed
      */
     public function handleChanges() {
-        if ( $this->attribute_is_dirty('admin_email') ){} 
+        // if email was changed
+        if ( $this->attribute_is_dirty('admin_email') ){}
+        // if password was changed
         else if ( $this->attribute_is_dirty('username') || $this->attribute_is_dirty('password') ) {}
+        // all's good, return false to prevent update
         return true;
     }
 

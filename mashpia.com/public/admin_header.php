@@ -41,7 +41,7 @@ function getMenuReducer( $default_users = [ 'HQ', 'INST', 'BC' ] ) {
 			$menu[] = $item;
 		// make sure the user_type is valid
 		} else if ( $current_user && !isset( $item['user_types'] ) &&
-			array_search( $current_user->login->code, $default_users ) )
+			array_search( $current_user->login->code, $default_users ) !== false )
 		{
 			$menu[] = $item;
 		}
@@ -158,7 +158,7 @@ if ( !isset($_SESSION['program_name']) || $_SESSION['program_name'] != 'children
 				document.blog.submit();
 			});
 
-			$('.col_title_bg > select').click( function( e ) {
+			$('.col_title_bg > select').change( function( e ) {
 				var selected = $(':selected', this);
 				var label = selected.closest('optgroup').attr('id');
 				// if they selected a link, navigate to that link
