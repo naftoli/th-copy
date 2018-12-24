@@ -30,7 +30,7 @@ class RegistrationPage extends Component {
   state = {
     cc: {},       base: {},
     valid: {},    terms: false,
-    activeTab: 5, currentTab: 5
+    activeTab: 1, currentTab: 1
   }
   // props
   static propTypes = {
