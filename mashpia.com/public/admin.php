@@ -4,8 +4,8 @@ if ( isset( $_COOKIE['admin'] ) && !isset( $_COOKIE['admin_auth'] ) ) {
 	header( "Location: /mobile/" ); // send them to the mobile site
 }
 // send them to the react app for the new homepage/login page.
-header( "Location: /new/" );
-die();
+// header( "Location: /new/" );
+// die();
 
 // redirect to https if using http
 // if (!isset($_SERVER['HTTPS'])) {

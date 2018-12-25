@@ -8,6 +8,26 @@ if ( !isset( $current_user ) ) {
 	$current_user = setCurrentUser();
 }
 
+/** Get all the Tanya Only schools */
+$tanya_only_query = $MASHPIA_DB->query(
+	"SELECT school_id FROM schools WHERE tanya = 1 AND chayolei = 0"
+);
+$tanyaOnlySchools = array();
+while ($tanya_only = mysql_fetch_assoc($tanya_only_query)) {
+	$tanyaOnlySchools[] = $tanya_only['school_id'];
+}
+
+/** Get all the Chidon Only schools */
+$chidonSchools = array();
+$chidon_school_query = mysql_query(
+	"SELECT school_id FROM schools WHERE chidon = 1 AND chayolei = 0"
+);
+while ($rw = mysql_fetch_assoc($chidon_school_query)) {
+	$chidonSchools[] = $rw['school_id'];
+}
+// hardcode the ballpeh only schools
+$bpOnly = [ 82 ];
+
 // define function to get menu reducer
 function getMenuReducer( $default_users = [ 'HQ', 'INST', 'BC' ] ) {
 	return function( $menu, $item ) use ( $default_users ) {
@@ -158,27 +178,27 @@ if ( !isset($_SESSION['program_name']) || $_SESSION['program_name'] != 'children
 				document.blog.submit();
 			});
 
-			$('.col_title_bg > select').change( function( e ) {
-				var selected = $(':selected', this);
-				var label = selected.closest('optgroup').attr('id');
-				// if they selected a link, navigate to that link
-				if ( label === 'links-select' ) {
-					return window.location.href = e.target.value;
-				}
-				// change the login and refresh the page
-				var login = e.target.value;
-				var expires = new Date();
-				expires.setFullYear(new Date().getFullYear() + 10);
-				// set the login cookie
-				if ( login.split('-')[0] !== 'PARENT' ) {
-					Cookies.set( 'login', login, { path: '/', expires: expires } );
-					window.location.reload(); // refresh the page
-				// set the login key and navigate to the parent site
-				} else {
-					Cookies.set( 'admin', selected[0].dataset.key, { path: '/', expires: expires } );
-					window.location.href = '/mobile/reg/parent_detail.html';
-				}
-			});
+			// $('.col_title_bg > select').change( function( e ) {
+			// 	var selected = $(':selected', this);
+			// 	var label = selected.closest('optgroup').attr('id');
+			// 	// if they selected a link, navigate to that link
+			// 	if ( label === 'links-select' ) {
+			// 		return window.location.href = e.target.value;
+			// 	}
+			// 	// change the login and refresh the page
+			// 	var login = e.target.value;
+			// 	var expires = new Date();
+			// 	expires.setFullYear(new Date().getFullYear() + 10);
+			// 	// set the login cookie
+			// 	if ( login.split('-')[0] !== 'PARENT' ) {
+			// 		Cookies.set( 'login', login, { path: '/', expires: expires } );
+			// 		window.location.reload(); // refresh the page
+			// 	// set the login key and navigate to the parent site
+			// 	} else {
+			// 		Cookies.set( 'admin', selected[0].dataset.key, { path: '/', expires: expires } );
+			// 		window.location.href = '/mobile/reg/parent_detail.html';
+			// 	}
+			// });
 		});
 		// run correctHeight when the page loads
 		$( window ).load( function() {
@@ -222,20 +242,20 @@ if ( !isset($_SESSION['program_name']) || $_SESSION['program_name'] != 'children
 	<div id="content">
 		<div class="col_title_bg">
 
-			<select style="position: absolute; right: -0; height: 44px; background: none; border: none;">
+			<!-- <select style="position: absolute; right: -0; height: 44px; background: none; border: none;">
 				<optgroup label="Logins" id='logins-select'>
 
 					<?php // render the logins dropdown
-					foreach( $current_user->logins() as $login ) {
+					// foreach( $current_user->logins() as $login ) {
 						// the value of the option.
-						$value = $login->type.'-'.$login->id;
+						// $value = $login->type.'-'.$login->id;
 						// check if the value is selected.
-						$selected = $value == $current_user->login->type.'-'.$current_user->login->id ? 'selected' : '';
+						// $selected = $value == $current_user->login->type.'-'.$current_user->login->id ? 'selected' : '';
 						// check if the login is a parent login and add the login key.
-						$key = $login->type == 'PARENT' ? "data-key='$login->key'" : '';
+						// $key = $login->type == 'PARENT' ? "data-key='$login->key'" : '';
 						?>
-						<option value='<?= $value ?>' <?= $selected ?> <?= $key ?>>
-							<?= $login->name ?>
+						<option value='<?// $value ?>' <?// $selected ?> <?// $key ?>>
+							<?// $login->name ?>
 						</option>
 					<?php } ?>
 
@@ -247,7 +267,7 @@ if ( !isset($_SESSION['program_name']) || $_SESSION['program_name'] != 'children
 					<option value='/logout.php'>Logout</option>
 				</optgroup>
 				
-			</select>
+			</select> -->
 		</div>
 
 		<div class="slider_container">
