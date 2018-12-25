@@ -45,7 +45,15 @@ class KioskController extends Zend_Controller_Action
 			$start_date = $date;
 		} else {
 			$australian = array(55,66,110,112,180);
-			$start_date = in_array($objUser->school_id, $australian) ? 2457629 : 2457934;
+			// get start dates from dbs
+			$sql = "select * from global_settings where `key` in ('points_start','points_start_australia')";
+			$result = $db->query( $sql );
+			$rows = $result->fetchAll();
+			$dates = [];
+			foreach ( $rows as $row ) {
+				$dates[$row['key']] = $row['val'];
+			}
+			$start_date = in_array($objUser->school_id, $australian) ? $dates['points_start_australia'] : $dates['points_start'];
 		}
 		
 		$objPoints = new Points();
