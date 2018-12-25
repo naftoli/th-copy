@@ -257,7 +257,7 @@ if ( !isset($_SESSION['program_name']) || $_SESSION['program_name'] != 'children
 						<option value='<?// $value ?>' <?// $selected ?> <?// $key ?>>
 							<?// $login->name ?>
 						</option>
-					<?php } ?>
+					<?// } ?>
 
 				</optgroup>
 
