@@ -21,6 +21,15 @@ $result = mysql_query($sql);
 $row = mysql_fetch_assoc($result);
 $institution_id = $row['school_id'];
 
+// ensure there are no negative amounts in cart
+foreach ($cart as $item) {
+    $qty = intval( $item->qty );
+    if ( $qty < 0 ) {
+        echo "You cannot purchase negative amounts.";
+        exit;
+    }   
+}
+
 // ensure user has enough points for this purchase
 $p = new Points( $user );
 $availableP = $p->getStorePoints();
