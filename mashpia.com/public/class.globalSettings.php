@@ -47,6 +47,16 @@ class GlobalSettings {
         return $row['val'];
     }
 
+    public static function getPointsDates() {
+        $dates = [];
+        $sql = "select * from global_settings where `key` in ('points_start','points_start_australia')";
+        $result = mysql_query($sql);
+        while ( $row = mysql_fetch_assoc($result) ) {
+            $dates[$row['key']] = $row['val'];
+        }
+        return $dates;
+    }
+
     /**
      * GlobalSettings::getRegCost
      * 

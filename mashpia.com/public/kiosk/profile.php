@@ -35,9 +35,14 @@ require_once("../classes/rank_updater.php");
 $rank_updater = new rank_updater();
 $rank_updater->update_rank_two($user['user_id']);
 
+require '../class.points.php';
+$p = new Points( $user['user_id'] );
+$user_row['total_miles'] = $p->getTotalPoints();
+$cur_points = $p->getTotalThisYear();
+
 //$user_row['class_average'] = ( is_null($user_row['class_id']) ) ? T_('N/A') : @number_format(mysql_result(mq(totalMarks("JOIN users USING (user_id) WHERE school_id = {$user['school_id']} AND class_id = {$user_row['class_id']} AND user_start_date IS NOT NULL")), 0) / mysql_result(mq("SELECT COUNT(*) FROM users WHERE school_id = {$user['school_id']} AND class_id = {$user_row['class_id']} AND user_start_date IS NOT NULL"), 0), 2);
 //$user_row['school_average'] = ( is_null($user_row['class_id']) ) ? T_('N/A') : @number_format(mysql_result(mq(totalMarks("JOIN users USING (user_id) WHERE school_id = {$user['school_id']} AND user_start_date IS NOT NULL")), 0) / mysql_result(mq("SELECT COUNT(*) FROM users WHERE school_id = {$user['school_id']} AND user_start_date IS NOT NULL"), 0), 2);
-$user_row['total_miles'] = $user_miles = mysql_result(mq(totalMarks("WHERE user_id = {$user['user_id']}")), 0);
+//$user_row['total_miles'] = $user_miles = mysql_result(mq(totalMarks("WHERE user_id = {$user['user_id']}")), 0);
 
 $today = cal_from_jd(unixtojd(), CAL_JEWISH);
 $chay_elul = cal_to_jd(CAL_JEWISH, 13, 18, $today['year']-($today['month']==13 && $today['day']>=18 ? 0 : 1));
@@ -45,11 +50,11 @@ $chay_elul = cal_to_jd(CAL_JEWISH, 13, 18, $today['year']-($today['month']==13 &
 //if ($user_row['school_id'] == 61)
 //    $cur_points = floatval(mysql_result(mq(totalMarks("WHERE user_id = {$user['user_id']} AND mark_date >= " . dateThisYear(13, 18))), 0));
 //else 
-$cur_points = floatval(mysql_result(mq(totalMarks("WHERE user_id = {$user['user_id']}")), 0));
+// $cur_points = floatval(mysql_result(mq(totalMarks("WHERE user_id = {$user['user_id']}")), 0));
 
-$intUserStorePoints = header_store_points(array("user_code" => $user_row['user_code']));
-$intUserStorePoints = reset( $intUserStorePoints );
-$arrPointsEarned = header_icorpa_points( array( "user_code" => $user_row['user_code'], "no_negs" => 1 ) );
+// $intUserStorePoints = header_store_points(array("user_code" => $user_row['user_code']));
+// $intUserStorePoints = reset( $intUserStorePoints );
+// $arrPointsEarned = header_icorpa_points( array( "user_code" => $user_row['user_code'], "no_negs" => 1 ) );
 
 function get_rank_class ($rank_ord, $user_rank)
 {
@@ -143,10 +148,10 @@ function print_ranks_list ($bot_start, $user_rank)
                     </div>
                     
                     <?
-                    echo "<input type='hidden' name='oldPoints' value='" . $cur_points . "'>";
-                    $user_row['total_miles'] += $arrPointsEarned["hebrew_points"];
-                    echo "<input type='hidden' name='newPoints' value='" . $intUserStorePoints . "'>";
-                    $cur_points += $intUserStorePoints;
+                    // echo "<input type='hidden' name='oldPoints' value='" . $cur_points . "'>";
+                    // $user_row['total_miles'] += $arrPointsEarned["hebrew_points"];
+                    // echo "<input type='hidden' name='newPoints' value='" . $intUserStorePoints . "'>";
+                    // $cur_points += $intUserStorePoints;
                     ?>
 
                     <div class="member_info">
