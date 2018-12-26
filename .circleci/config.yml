@@ -123,7 +123,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
       # run the build
-      - run: yarn build:prod
+      - run: yarn build
       # save the results to the worksspace
       - persist_to_workspace:
           root: ~/repo

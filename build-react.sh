@@ -21,7 +21,7 @@ echo '';
 
 cd base-commander;
 yarn install;
-yarn build:prod;
+yarn build;
 
 # if we have a build folder
 if [ -d build ]; then
