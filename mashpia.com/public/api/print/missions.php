@@ -23,6 +23,7 @@ if ( !$class_ids ) {
 }
 
 $users = [];
+$user_ids = [];
 if ( !$user_ids ) {
     // do each class separately so that we can order the children alphabetically
     foreach ( $class_ids as $class_id ) {
