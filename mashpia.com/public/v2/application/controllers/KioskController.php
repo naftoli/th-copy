@@ -51,7 +51,7 @@ class KioskController extends Zend_Controller_Action
 			$rows = $result->fetchAll();
 			$dates = [];
 			foreach ( $rows as $row ) {
-				$dates[$row['key']] = $row['val'];
+				$dates[$row->key] = $row->val;
 			}
 			$start_date = in_array($objUser->school_id, $australian) ? $dates['points_start_australia'] : $dates['points_start'];
 		}
