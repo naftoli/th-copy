@@ -41,7 +41,7 @@ if ( !$user_ids ) {
     $users = \Soldier::find_all_by_class_id( $class_ids );
     $users = array_filter($users, function ($u) { return $u->user_registered; });
     // order users alphabetically
-    usort( $usersTmp, function( $a, $b ) {
+    usort( $users, function( $a, $b ) {
         return $a->last > $b->last;
     });
     $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
