@@ -9,4 +9,10 @@ $p->setDebugOn();
 echo "Total Points: " . $p->getTotalPoints() . "<br />";
 echo "Total this year: " . $p->getTotalThisYear() . "<br />";
 echo "Store Points: " . $p->getStorePoints();
+
+$taskDetails = $p->getTasksPointsDetails();
+$storeDetails = $p->getStorePointsDetails();
+echo "<pre>";
+print_r( $storeDetails );
+echo "</pre>";
 ?>
