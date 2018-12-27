@@ -33,8 +33,8 @@ if ( !$user_ids ) {
         usort( $usersTmp, function( $a, $b ) {
             return $a->last > $b->last;
         });
-        array_merge( $usersTmp, $users );
-        array_merge( $user_idsTmp, $user_ids );
+        array_merge( $users, $usersTmp );
+        array_merge( $user_ids, $user_idsTmp );
     }
 // make sure the soldiers are in the selected platoons if provided with an array of soldiers.
 } else if ( $user_ids ) {
@@ -43,7 +43,7 @@ if ( !$user_ids ) {
     $users = array_filter($users, function ($u) use ($class_ids) { return in_array( $u->class_id, $class_ids ); });
     $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
     // order users alphabetically
-    usort( $usersTmp, function( $a, $b ) {
+    usort( $users, function( $a, $b ) {
         return $a->last > $b->last;
     });
 }
