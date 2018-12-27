@@ -22,15 +22,38 @@ if ( !$class_ids ) {
     $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );
 }
 
+$users = [];
+$user_ids = [];
 if ( !$user_ids ) {
+    // do each class separately so that we can order the children alphabetically
+    // foreach ( $class_ids as $class_id ) {
+    //     $usersTmp = \Soldier::find_all_by_class_id( $class_id );
+    //     $usersTmp = array_filter($usersTmp, function ($u) { return $u->user_registered; });
+    //     // order users alphabetically
+    //     usort( $usersTmp, function( $a, $b ) {
+    //         return $a->last > $b->last;
+    //     });
+    //     $user_idsTmp = array_map(function ($u) { return $u->user_id; }, $usersTmp);
+
+    //     $users += $usersTmp;
+    //     $user_ids += $user_idsTmp;
+    // }
     $users = \Soldier::find_all_by_class_id( $class_ids );
     $users = array_filter($users, function ($u) { return $u->user_registered; });
+    // order users alphabetically
+    usort( $usersTmp, function( $a, $b ) {
+        return $a->last > $b->last;
+    });
     $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
 // make sure the soldiers are in the selected platoons if provided with an array of soldiers.
 } else if ( $user_ids ) {
     $users = \Soldier::find( $user_ids );
     $users = is_array( $users ) ? $users : [ $users ]; // make sure it is an array so we can filter it
     $users = array_filter($users, function ($u) use ($class_ids) { return in_array( $u->class_id, $class_ids ); });
+    // order users alphabetically
+    usort( $users, function( $a, $b ) {
+        return $a->last > $b->last;
+    });
     $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
 }
 
