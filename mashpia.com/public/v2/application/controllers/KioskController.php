@@ -46,7 +46,7 @@ class KioskController extends Zend_Controller_Action
 		} else {
 			$australian = array(55,66,110,112,180);
 			// get start dates from dbs
-			$sql = "select * from global_settings where `key` in ('points_start','points_start_australia')";
+			$sql = "select * from mashpiadb.global_settings where `key` in ('points_start','points_start_australia')";
 			$result = $db->query( $sql );
 			$rows = $result->fetchAll();
 			$dates = [];
