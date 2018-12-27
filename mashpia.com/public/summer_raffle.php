@@ -34,7 +34,8 @@ $sql = "
   WHERE
       dtmm.start_date >= 2458284
           AND dtmm.end_date <= 2458358
-  GROUP BY user_id
+  GROUP BY user_id 
+  ORDER BY total DESC
 ";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
