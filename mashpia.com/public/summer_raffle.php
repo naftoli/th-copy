@@ -23,19 +23,18 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 }
 
 $sql = "
-    SELECT 
-        dtm.user_id, COUNT(*) AS total
-    FROM
-        date_tasks_marks dtm
-            JOIN
-        date_tasks dt USING (date_task_id)
-            JOIN
-        date_tasks_missions dtmm USING (date_tasks_mission_id)
-    WHERE
-        dtmm.start_date >= 2458284
-            AND dtmm.end_date <= 2458358
-            AND dt.daily_task = 1
-    GROUP BY user_id
+  SELECT 
+      dtm.user_id, count(distinct mark_date) as total
+  FROM
+      date_tasks_marks dtm
+          JOIN
+      date_tasks dt USING (date_task_id)
+          JOIN
+      date_tasks_missions dtmm USING (date_tasks_mission_id)
+  WHERE
+      dtmm.start_date >= 2458284
+          AND dtmm.end_date <= 2458358
+  GROUP BY user_id
 ";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
@@ -66,7 +65,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           <th>Grade</th>
           <th>Student</th>
           <th>User ID</th>
-          <th>Total Missions Done</th>
+          <th>Total Days</th>
         </tr>
       </thead>
       <tbody>
