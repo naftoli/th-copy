@@ -24,15 +24,15 @@ class Points
         $this->store_reset = $row['store_reset'];
         $this->usercode = $row['user_code']; 
         $this->school_id = $row['school_id'];
-        $australian = array( 55, 66, 110, 112, 180 );
-        if (in_array($this->school_id, $australian)) $this->australian = true;
+        $australian = [ 55, 66, 110, 112, 180 ];
+        if ( in_array( $this->school_id, $australian ) ) $this->australian = true;
         $this->debug = false;
         $this->setPointsStart();
     }
 
     public function setPointsStart() {
         $dates = GlobalSettings::getPointsDates();
-        $this->yearStart = $this->australian ? $dates['points_start'] : $dates['points_start_australia'];
+        $this->yearStart = $this->australian ? $dates['points_start_australia'] : $dates['points_start'];
     }
     
     public function setDebugOn() {

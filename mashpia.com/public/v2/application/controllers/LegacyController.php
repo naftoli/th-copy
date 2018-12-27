@@ -502,7 +502,7 @@ class LegacyController extends Zend_Controller_Action
 		
 		$boolNoNegs = $this->_request->getParam("no_negs");
 		$date = $this->_request->getParam("date");
-		$start_date = $this->_request->getParam("start_date") ? $this->_request->getParam("start_date") : 0;
+		$start_date = $this->_request->getParam("start_date");
 		
 		$arrUsers = array();
 		$objUsers = new Users();
