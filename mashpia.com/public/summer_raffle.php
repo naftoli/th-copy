@@ -39,6 +39,7 @@ $sql = "
 ";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
+  if ( $row['total'] < 60 ) break;
   $marks[$row['user_id']] = $row['total'];
 }
 // echo "<pre>"; 
@@ -74,12 +75,10 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         foreach ( $users as $user_id => $info ) {
           if ( isset( $marks[$user_id] ) ) {
             $mark = $marks[$user_id];
-            if ( $mark >= 60 ) {
-              $school = $info['school_name'];
-              $grade = $info['class_grade'] . (empty( $info['class_sub'] ) ? '' : '-' . $info['class_sub']);
-              $user = $info['first'] . ' ' . $info['last'];
-              echo "<tr><td>" . $school . "</td><td>" . $grade . "</td><td>" . $user . "</td><td>" . $user_id . "</td><td>" . $mark . "</td></tr>";
-            }
+            $school = $info['school_name'];
+            $grade = $info['class_grade'] . (empty( $info['class_sub'] ) ? '' : '-' . $info['class_sub']);
+            $user = $info['first'] . ' ' . $info['last'];
+            echo "<tr><td>" . $school . "</td><td>" . $grade . "</td><td>" . $user . "</td><td>" . $user_id . "</td><td>" . $mark . "</td></tr>";
           }
         }
         ?>
