@@ -151,6 +151,10 @@ $( document ).ready( function(){
                 "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ],
                 "footerCallback": totalRow
             } );
+            // change 0s to n/a
+            $("#report").find('td.total').each( function() {
+                $(this).text( checkFor0( $(this).text() ) );
+            });
             // show index column as per docs here: https://datatables.net/examples/api/counter_columns.html
             reportTable.on( 'order.dt search.dt', function () {
                 reportTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
@@ -226,5 +230,14 @@ $( document ).ready( function(){
         // countup the mishna total
         var mishna_total = parseInt( $("#mishna_total").text().replace(",", "") );
         new CountUp("mishna_total", mishna_total, totals.mishna, 0, duration).start();
+    }
+
+    // change 0s to n/a
+    function checkFor0( $number ) {
+        if ( $number == '0' ) {
+            return 'n/a';
+        } else {
+            return $number;
+        }
     }
 });
