@@ -516,6 +516,7 @@ function totalMarks($extra='', $group='', $boolExtract=true) { //$extra can be u
 	$sql = "SELECT $group SUM(mark_points) marks FROM date_tasks_marks "
 		.( $subject_join ? ' JOIN date_tasks USING (date_task_id) JOIN date_tasks_missions USING (date_tasks_mission_id)' : '' )
 		." $extra $group_by";
+	echo "<input type='hidden' name='total marks sql' value='" . $sql . "' />";
 	return $sql;
 }
 
