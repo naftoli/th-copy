@@ -49,6 +49,10 @@ if (!($amount > 0)) {
 	exit;
 }
 
+foreach ( $_POST as $k => $v ) {
+	$_POST[$k] = trim($v);
+}
+
 $card_num 	= $_POST['ccnum'];
 $exp_date 	= $_POST['ccexp'];
 $first_name = $_POST['ccfname'];
@@ -60,6 +64,13 @@ $state		= $_POST['ccstate'];
 $zip		= $_POST['cczip'];
 $email 		= $_POST['email'];
 $phone		= $_POST['phone'];
+
+if (! ($card_num && $exp_date && $first_name && $last_name && $address && $city && $state && $zip && $email && $phone) ) {
+	$error = "All fields are mandatory, please try again.";
+	header("Location: https://mashpia.com/donate/index.php?error=" . urlencode( $error ));
+	exit;
+}
+
 
 //if ($email != 'naftolir@gmail.com') {
 	require_once 'authorize.php';
