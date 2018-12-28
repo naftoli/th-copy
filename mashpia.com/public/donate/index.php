@@ -61,7 +61,7 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
                         <input type="text" name="cclname" id="cclname" class="form-control" placeholder="Last Name on Card" required />
                     </div>
                     <div class="form-group">
-                        <input type="text" name="ccaddress" id="ccaddress" class="form-control" placeholder="Billing Address Line 1" />
+                        <input type="text" name="ccaddress" id="ccaddress" class="form-control" placeholder="Billing Address Line 1" required />
                     </div>
                     <div class="form-group">
                         <input type="text" name="ccaddress2" id="ccaddress2" class="form-control" placeholder="Billing Address Line 2" />
@@ -69,12 +69,12 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
 	              </div>
 	              <div class="col-xs-4">
                     <div class="form-group">
-                        <input type="text" name="cccity" id="cccity" class="form-control" placeholder="City" />
+                        <input type="text" name="cccity" id="cccity" class="form-control" placeholder="City" required />
                     </div>
 	              </div>
 	              <div class="col-xs-4">
                     <div class="form-group">
-                        <input type="text" name="ccstate" id="ccstate" class="form-control" placeholder="State" />
+                        <input type="text" name="ccstate" id="ccstate" class="form-control" placeholder="State" required />
                     </div>
 	              </div>
 	              <div class="col-xs-4">
@@ -99,7 +99,7 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
 	              </div>
 	              <div class="col-xs-6">
                     <div class="form-group">
-                        <input type="number" name="cccvv" id="cccvv" class="form-control" placeholder="CVV" />
+                        <input type="number" name="cccvv" id="cccvv" class="form-control" placeholder="CVV" required />
                     </div>
 	              </div>
 	              
