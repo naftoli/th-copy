@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 
 import Task from './Task';
+import { Collapse, Alert } from 'reactstrap';
 import { Toggle } from 'components/inputs/Toggle';
 import { FontAwesome, Spinner } from 'components/ui';
-import { Button, Collapse, Alert } from 'reactstrap';
 
 class Campaign extends Component {
 
@@ -13,7 +13,8 @@ class Campaign extends Component {
     isOpen: false
   };
 
-  toggle = () => {
+  toggle = e => {
+    e.stopPropagation();
     if ( !this.props.tasks && !this.state.isOpen )
       this.props.getTasks( this.props.subject_id );
     // update the dropdown
@@ -39,14 +40,14 @@ class Campaign extends Component {
 
     return (
       <div className={ classNames }>
-        <Button onClick={ this.toggle }>
+        <span className='btn' onClick={ this.toggle }>
           <Toggle 
             className='small'
             checked={ enrolled } 
             onChange={ this.personalize } />
 
           <FontAwesome icon='caret-right'/> { subject_name }
-        </Button>
+        </span>
 
         <Collapse isOpen={ this.state.isOpen }>
           <div className='campaign-content'>
