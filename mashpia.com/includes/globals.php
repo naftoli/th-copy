@@ -8,7 +8,10 @@ $global_db_host = $development ? "mashpia.com" : "localhost";
 $global_db_user = 'mashpia_cth';
 $global_db_pass = 'UlqKsfnTUq2A';
 
-$domain = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
+$domain = '';
+if ( isset( $_SERVER['REQUEST_SCHEME'] ) &&  isset( $_SERVER['HTTP_HOST'] ) ) {
+    $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
+}
 // define the absolute url
 if ( !defined( 'MASHPIA_ABS_URL' ) )
     define( 'MASHPIA_ABS_URL', $domain );
