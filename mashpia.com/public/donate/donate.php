@@ -4,7 +4,7 @@
 //echo "</pre>";
 //ini_set('display_errors',1);
 
-$ip = $_SERVER['REMOTE_ADDR']; 
+$ip = $_SERVER['SERVER_ADDR']; 
 if ($ip == '39.53.201.236') {
 	$msg = 'Go Away!';
 	header("Location: https://mashpia.com/donate/index.php?error=" . $msg);
