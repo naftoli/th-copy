@@ -298,11 +298,10 @@ function units2bytes($val) {
 	switch(strtolower($val{strlen($val)-1})) {
 		// The 'G' modifier is available since PHP 5.1.0
 		case 'g':
-			$val *= 1024;
 		case 'm':
-			$val *= 1024;
 		case 'k':
-			$val *= 1024;
+			@$val *= 1024;
+			break;
 	}
 	
 	return $val;
