@@ -9,9 +9,12 @@ import { ButtonBar, Table, Callout, FontAwesome } from 'components/ui';
 import NewParentModal from './NewParentModal';
 // functions
 import { toast } from 'react-toastify';
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { setTitle, canDownload } from 'functions/utils';
 // state
 import { getParents } from 'store/base/parents/operations';
+// csv react component
+import { CSVLink } from "react-csv";
+import { dataToCSV } from 'functions/utils/csv';
 
 class ParentsPage extends Component {
 
@@ -49,7 +52,8 @@ class ParentsPage extends Component {
       parent.email, parent.address, parent.city, parent.state,
       parent.zip, parent.country, getChildrenString( parent )
     ]);
-    arrayToCSV( headers, rows, 'parents' );
+    //arrayToCSV( headers, rows, 'parents' );
+    return dataToCSV( headers, rows );
   }
 
   render() {
@@ -85,9 +89,15 @@ class ParentsPage extends Component {
             <InlineSync loading={ loading } /> Refresh
           </Button>
           { canDownload( parents ) &&
-            <Button color='primary' onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Download Parents (CSV/Excel)
-            </Button>
+            <CSVLink
+              data = { this.toCsv() }
+              filename = { "parents.csv" }
+              target = "_blank"
+            >
+              <Button color='primary'>
+                <FontAwesome icon='file-download' /> Download Parents (CSV/Excel)              
+              </Button>
+            </CSVLink>
           }
         </ButtonBar>
 

@@ -9,7 +9,6 @@ import BulkUploadModal from './BulkUploadModal';
 import NewSoldierModal from './NewSoldierModal';
 // functions
 import is from 'is_js';
-//import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
 import { setTitle, canDownload } from 'functions/utils';
 import { showError } from 'functions/notifications';
 // styles
@@ -24,6 +23,7 @@ import getColumns from './columns';
 import { isBC } from 'functions/login';
 // csv react component
 import { CSVLink } from "react-csv";
+import { dataToCSV } from 'functions/utils/csv';
 
 const defaultCropperModalSettings = {
   show: false,  src: false, id: false
@@ -119,11 +119,7 @@ export class SoldiersPage extends Component {
       soldier.user_registered, soldier.chayolei, soldier.yan, soldier.chidon,
       soldier.platoon ? `="${soldier.platoon.name}"` : '-', soldier.school.school_name
     ]);
-    // generate the csv content
-    let csvContent = `${ headers.join(',') }\n`;
-    // Add each row to the CSV content 
-    rows.forEach( row => { csvContent += `${row.join(',')}\n` } );
-    return csvContent;
+    return dataToCSV( headers, rows );
   }
 
   // render the page
