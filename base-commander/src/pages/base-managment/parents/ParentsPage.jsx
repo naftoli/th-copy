@@ -90,7 +90,7 @@ class ParentsPage extends Component {
           </Button>
           { canDownload( parents ) &&
             <CSVLink
-              data = { this.toCsv() }
+              data = { this.toCSV() }
               filename = { "parents.csv" }
               target = "_blank"
             >

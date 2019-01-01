@@ -77,7 +77,7 @@ export class PlatoonsPage extends Component {
           </Button>
           { canDownload( platoons ) &&
             <CSVLink
-              data = { this.toCsv() }
+              data = { this.toCSV() }
               filename = { "platoons.csv" }
               target = "_blank"
             >

@@ -126,7 +126,7 @@ class TemplatesPage extends Component {
           </Button>
           { canDownload( templates ) &&
             <CSVLink
-              data = { this.toCsv() }
+              data = { this.toCSV() }
               filename = { "store_templates.csv" }
               target = "_blank"
             >
