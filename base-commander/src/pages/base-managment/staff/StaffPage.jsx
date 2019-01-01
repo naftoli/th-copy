@@ -8,7 +8,7 @@ import { Button } from 'reactstrap';
 import NewStaffModal from './NewStaffModal';
 // functions
 import { isAdmin } from 'functions/login';
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { setTitle, canDownload } from 'functions/utils';
 // state
 import { getStaff } from 'store/base/staff/operations';
 // csv react component
