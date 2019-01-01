@@ -77,7 +77,7 @@ class StaffPage extends Component {
           </Button>
           { canDownload( staff ) &&
             <CSVLink
-              data = { this.toCsv() }
+              data = { this.toCSV() }
               filename = { "staff.csv" }
               target = "_blank"
             >

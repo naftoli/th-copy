@@ -120,7 +120,7 @@ class OrdersPage extends Component {
 
           { canDownload( orders ) &&
             <CSVLink
-              data = { this.toCsv() }
+              data = { this.toCSV() }
               filename = { "store_orders.csv" }
               target = "_blank"
             >

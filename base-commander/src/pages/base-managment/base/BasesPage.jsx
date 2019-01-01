@@ -76,7 +76,7 @@ class BasesPage extends Component {
           </Button>
           { canDownload( bases ) &&
             <CSVLink
-              data = { this.toCsv() }
+              data = { this.toCSV() }
               filename = { "bases.csv" }
               target = "_blank"
             >

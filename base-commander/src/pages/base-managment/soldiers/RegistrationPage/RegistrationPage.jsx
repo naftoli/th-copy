@@ -136,7 +136,7 @@ export class RegistrationPage extends Component {
 
           { canDownload( soldiers ) &&
             <CSVLink
-              data = { this.toCsv() }
+              data = { this.toCSV() }
               filename = { "not_registered_soldiers.csv" }
               target = "_blank"
             >

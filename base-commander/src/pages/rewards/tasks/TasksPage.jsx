@@ -137,7 +137,7 @@ class TasksPage extends Component {
           </Button>
           { canDownload( tasks ) &&
             <CSVLink
-              data = { this.toCsv() }
+              data = { this.toCSV() }
               filename = { "achievement_tasks.csv" }
               target = "_blank"
             >

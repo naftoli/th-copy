@@ -173,7 +173,7 @@ class PrizesPage extends Component {
 
           { canDownload( prizes ) &&
             <CSVLink
-              data = { this.toCsv() }
+              data = { this.toCSV() }
               filename = { "store_prizes.csv" }
               target = "_blank"
             >
