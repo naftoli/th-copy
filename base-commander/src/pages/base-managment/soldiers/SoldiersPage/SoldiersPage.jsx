@@ -108,7 +108,7 @@ export class SoldiersPage extends Component {
   // }
 
   // download the content as a CSV
-  toCsv = () => {
+  toCSV = () => {
     const headers = [
       'Serial Number', 'First Name', 'Last Name', 'DOB', 'Gender', 'Registered', 
       'Chayolei', 'Tehillim', 'Chidon', 'Platoon', 'Base'
