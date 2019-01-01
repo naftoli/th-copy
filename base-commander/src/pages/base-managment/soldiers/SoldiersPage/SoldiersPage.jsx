@@ -9,7 +9,8 @@ import BulkUploadModal from './BulkUploadModal';
 import NewSoldierModal from './NewSoldierModal';
 // functions
 import is from 'is_js';
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+//import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { setTitle, canDownload } from 'functions/utils';
 import { showError } from 'functions/notifications';
 // styles
 import './SoldiersPage.scss';
@@ -21,7 +22,7 @@ import {
 // data
 import getColumns from './columns';
 import { isBC } from 'functions/login';
-
+// csv react component
 import { CSVLink } from "react-csv";
 
 const defaultCropperModalSettings = {
