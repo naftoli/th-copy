@@ -8,12 +8,15 @@ import { ButtonBar, SelectTable, Callout, InlineSync, FontAwesome } from 'compon
 // functions
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { setTitle, canDownload } from 'functions/utils';
 // state
 import { getPaymentProfiles } from 'store/payments/operations';
 import { getSoldiers, registerSoldiers } from 'store/base/soldiers/registration/operations';
 // styles
 import './RegistrationPage.scss';
+// csv react component
+import { CSVLink } from "react-csv";
+import { dataToCSV } from 'functions/utils/csv';
 
 export class RegistrationPage extends Component {
 
@@ -40,7 +43,8 @@ export class RegistrationPage extends Component {
       soldier.first, soldier.last, soldier.user_serial, soldier.fee,
       soldier.platoon ? `="${soldier.platoon}"` : ''
     ]);
-    arrayToCSV( headers, rows, 'not_registered_soldiers' );
+    //arrayToCSV( headers, rows, 'not_registered_soldiers' );
+    return dataToCSV( headers, rows );
   }
   // close the modal
   closeModal = () => this.setState({ showModal: false });
@@ -131,9 +135,15 @@ export class RegistrationPage extends Component {
           </Button>
 
           { canDownload( soldiers ) &&
-            <Button color='primary' onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Download Page (CSV/Excel)
-            </Button>
+            <CSVLink
+              data = { this.toCsv() }
+              filename = { "not_registered_soldiers.csv" }
+              target = "_blank"
+            >
+              <Button color='primary'>
+                <FontAwesome icon='file-download' /> Download Page (CSV/Excel)              
+              </Button>
+            </CSVLink>
           }
         </ButtonBar>
 

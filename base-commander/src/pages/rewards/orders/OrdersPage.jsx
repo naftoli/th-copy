@@ -9,12 +9,15 @@ import { ButtonBar, Callout, SelectTable, InlineSync, FontAwesome } from 'compon
 import { toast } from 'react-toastify';
 import { getColumns } from './include/columns';
 import { isBC, isAdmin } from 'functions/login';
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { setTitle, canDownload } from 'functions/utils';
 import { createNotifcation, updateNotifcation } from 'functions/notifications';
 // state
 import { getOrders, processOrders } from 'store/rewards/orders/operations';
 // styles
 import './include/orders.scss';
+// csv react component
+import { CSVLink } from "react-csv";
+import { dataToCSV } from 'functions/utils/csv';
 
 class OrdersPage extends Component {
 
@@ -78,7 +81,8 @@ class OrdersPage extends Component {
       order.prize_name, order.points, order.quantity, order.total * -1,
       order.platoon
     ]);
-    arrayToCSV( headers, rows, 'store_orders' );
+    //arrayToCSV( headers, rows, 'store_orders' );
+    return dataToCSV( headers, rows );
   }
 
   render() {
@@ -115,9 +119,15 @@ class OrdersPage extends Component {
           </Button>
 
           { canDownload( orders ) &&
-            <Button color='primary' onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Download Orders (CSV/Excel)
-            </Button>
+            <CSVLink
+              data = { this.toCsv() }
+              filename = { "store_orders.csv" }
+              target = "_blank"
+            >
+              <Button color='primary'>
+                <FontAwesome icon='file-download' /> Download Orders (CSV/Excel)              
+              </Button>
+            </CSVLink>
           }
 
           { redeemed && 

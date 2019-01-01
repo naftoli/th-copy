@@ -10,7 +10,7 @@ import { ButtonBar, Table, InlineSync, FontAwesome } from 'components/ui';
 import { toast } from 'react-toastify';
 import { getColumns } from './include/columns';
 import { isAdmin, isBC } from 'functions/login';
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { setTitle, canDownload } from 'functions/utils';
 // state
 import { 
   getPrizes, updatePrize, uploadImage,
@@ -18,7 +18,9 @@ import {
 } from 'store/rewards/prizes/operations';
 // styles
 import './include/prizes.scss';
-
+// csv react component
+import { CSVLink } from "react-csv";
+import { dataToCSV } from 'functions/utils/csv';
 
 class PrizesPage extends Component {
 
@@ -114,7 +116,8 @@ class PrizesPage extends Component {
       prize.is_active ? 'Yes' : 'No', prize.one_per_user ? 'Yes' : 'No', 
       prize.modified, prize.school.school_number, prize.school.school_name
     ]);
-    arrayToCSV( headers, rows, 'store_prizes' );
+    //arrayToCSV( headers, rows, 'store_prizes' );
+    return dataToCSV( headers, rows );
   }
 
   render() {
@@ -169,9 +172,15 @@ class PrizesPage extends Component {
           { isBC( login.code, true ) && storeButton }
 
           { canDownload( prizes ) &&
-            <Button color='primary' onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Download Prizes (CSV/Excel)
-            </Button>
+            <CSVLink
+              data = { this.toCsv() }
+              filename = { "store_prizes.csv" }
+              target = "_blank"
+            >
+              <Button color='primary'>
+                <FontAwesome icon='file-download' /> Download Prizes (CSV/Excel)              
+              </Button>
+            </CSVLink>
           }
         </ButtonBar>
 

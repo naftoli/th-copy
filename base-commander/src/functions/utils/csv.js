@@ -28,6 +28,14 @@ export function arrayToCSV( headers, rows, filename ) {
   });
 }
 
+export function dataToCSV( headers, rows ) {
+  // start with headers file
+  let csvContent = `${ headers.join(',') }\n`;
+  // Add each row to the CSV content 
+  rows.forEach( row => { csvContent += `${row.join(',')}\n` } );
+  return csvContent;
+}
+
 export function canDownload( array = false ) {
   return  is.not.edge() && 
           is.not.ie()   && 
