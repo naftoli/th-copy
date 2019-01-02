@@ -12,7 +12,7 @@ $today = date("Y-m-d H:i:s"); // date internal is 4 or 5 hrs ahead
 
 $date1 = "2018-11-21 05:00:00";
 //$date1 = "2018-12-23 05:00:00";
-$date2 = "2019-01-03 05:00:00";
+$date2 = "2019-01-11 05:00:00";
 $date3 = "2019-02-08 05:00:00";
 
 if ($today > $date1) {
