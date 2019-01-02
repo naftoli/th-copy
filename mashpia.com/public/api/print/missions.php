@@ -23,9 +23,9 @@ if ( !$class_ids ) {
     $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );
 }
 
-$users = [];
-$user_ids = [];
 if ( !$user_ids ) {
+    $users = [];
+    $user_ids = [];
     // do each class separately so that we can order the children alphabetically
     foreach ( $class_ids as $class_id ) {
         $usersTmp = \Soldier::find_all_by_class_id( [ $class_id ] );
