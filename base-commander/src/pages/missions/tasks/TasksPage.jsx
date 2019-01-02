@@ -10,10 +10,13 @@ import EditTaskModal from './EditTaskModal';
 import { toast } from 'react-toastify';
 import getColumns from './includes/columns';
 import { showError } from 'functions/notifications';
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { setTitle, canDownload } from 'functions/utils';
 import { getTasks, createTask, updateTask } from 'store/missions/tasks/operations';
 // styles
 import './includes/tasks.scss';
+// csv react component
+import { CSVLink } from "react-csv";
+import { dataToCSV } from 'functions/utils/csv';
 
 class TasksPage extends Component {
 
@@ -66,7 +69,8 @@ class TasksPage extends Component {
       task.grid_marking ? 'Y' : 'N',    task.label_name,
       task.school_name
     ]);
-    arrayToCSV( headers, rows, 'mission_tasks' );
+    //arrayToCSV( headers, rows, 'mission_tasks' );
+    return dataToCSV( headers, rows );
   }
 
   render() {
@@ -91,9 +95,15 @@ class TasksPage extends Component {
           </Button>
 
           { canDownload( tasks ) &&
-            <Button color='primary' onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Download Tasks (CSV/Excel)
-            </Button>
+            <CSVLink
+              data = { this.toCSV() }
+              filename = { "tasks.csv" }
+              target = "_blank"
+            >
+              <Button color='primary'>
+                <FontAwesome icon='file-download' /> Download Tasks (CSV/Excel)              
+              </Button>
+            </CSVLink>
           }
         </ButtonBar>
 

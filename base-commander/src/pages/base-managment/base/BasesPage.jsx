@@ -7,10 +7,13 @@ import { ButtonBar, Table, InlineSync, FontAwesome } from 'components/ui';
 // functions
 import getColumns from './includes/columns';
 import { isAdmin } from 'functions/login';
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { setTitle, canDownload } from 'functions/utils';
 // state
 import { showError } from 'functions/notifications';
 import { getBases, updateBase } from 'store/base/bases/operations';
+// csv react component
+import { CSVLink } from "react-csv";
+import { dataToCSV } from 'functions/utils/csv';
 
 class BasesPage extends Component {
 
@@ -54,7 +57,8 @@ class BasesPage extends Component {
     const rows = this.props.bases.map( base => [
       base.school_number, base.school_name, base.school_city, base.school_state, base.school_country, base.soldier_count
     ]);
-    arrayToCSV( headers, rows, 'bases' );
+    //arrayToCSV( headers, rows, 'bases' );
+    return dataToCSV( headers, rows );
   }
 
   render() {
@@ -71,9 +75,15 @@ class BasesPage extends Component {
             <InlineSync loading={ loading } /> Refresh
           </Button>
           { canDownload( bases ) &&
-            <Button color='primary' onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Download Bases (CSV/Excel)
-            </Button>
+            <CSVLink
+              data = { this.toCSV() }
+              filename = { "bases.csv" }
+              target = "_blank"
+            >
+              <Button color='primary'>
+                <FontAwesome icon='file-download' /> Download Bases (CSV/Excel)              
+              </Button>
+            </CSVLink>
           }
         </ButtonBar>
 

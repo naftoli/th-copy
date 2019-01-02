@@ -9,7 +9,7 @@ import { ButtonBar, Table, InlineSync, FontAwesome, NumberDisplay } from 'compon
 // functions
 import { toast } from 'react-toastify';
 import { isBC, isAdmin } from 'functions/login';
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { setTitle, canDownload } from 'functions/utils';
 // state
 import { 
   getTasks, updateTask, createTask 
@@ -18,6 +18,9 @@ import {
 import './tasks.scss';
 import { Promise } from 'core-js';
 import { showError } from 'functions/notifications';
+// csv react component
+import { CSVLink } from "react-csv";
+import { dataToCSV } from 'functions/utils/csv';
 
 class TasksPage extends Component {
 
@@ -80,7 +83,8 @@ class TasksPage extends Component {
       task.task, task.subject && task.subject.subject_name, 
       task.points, task.baseName, task.platoonName
     ]);
-    arrayToCSV( headers, rows, 'achievement_tasks' );
+    //arrayToCSV( headers, rows, 'achievement_tasks' );
+    return dataToCSV( headers, rows );
   }
 
   render() {
@@ -132,9 +136,15 @@ class TasksPage extends Component {
             <InlineSync loading={ loading } /> Refresh
           </Button>
           { canDownload( tasks ) &&
-            <Button color='primary' onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Download Tasks (CSV/Excel)
-            </Button>
+            <CSVLink
+              data = { this.toCSV() }
+              filename = { "achievement_tasks.csv" }
+              target = "_blank"
+            >
+              <Button color='primary'>
+                <FontAwesome icon='file-download' /> Download Tasks (CSV/Excel)              
+              </Button>
+            </CSVLink>
           }
         </ButtonBar>
 
