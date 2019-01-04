@@ -3619,7 +3619,7 @@ $qrys = [];
 foreach ( $tehillim as $ladder => $more ) {
   foreach ( $more as $age => $other ) {
     foreach ( $other as $month => $info ) {
-      $sql = "insert into tehillim 
+      $sql = "insert into tehillim_ladders  
               set ladder = " . $ladder . ", 
               age = " . $age . ", 
               month = " . ($month + 1) . ", 
@@ -3634,6 +3634,6 @@ foreach ( $tehillim as $ladder => $more ) {
 
 foreach ( $qrys as $qry ) {
   //echo $qry . "<br />";
-  mysql_qry( $qry ) or die( mysql_error() );
+  mysql_query( $qry ) or die( mysql_error() );
 }
 echo "done";
