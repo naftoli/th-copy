@@ -7,8 +7,10 @@ class BirthdayYi {
     private $ageTasks;
     private $errors;
 	private $year;
-    
+	private $enablePrev;
+	
     public function __construct( $user_id = 0 ) {
+		$this->enablePrev = false;
         if ( $user_id > 0 ) {
             $this->users = array( $user_id );
         } else {
@@ -51,7 +53,11 @@ class BirthdayYi {
 		// get the current jewish date from the julian date from the unix timestamp,
 		// then split that by the date seperator ("/") and get the year (the third item from index 0)
 		$this->year = explode("/", jdtojewish(unixtojd()))[2];
-    }
+	}
+	
+	public function enablePrevious() {
+		$this->enablePrev = true;
+	}
     
     private function setUsers() {
         $this->users = [];
@@ -112,10 +118,12 @@ class BirthdayYi {
 					}
 					
 					// check if the birhday is before the current date (so it is in the past and we need to add the birthday for next year)
-					$jNow = jdtojewish(unixtojd()); // get the current jewish date from the unix timestamp
-					$arrJNow = explode('/', $jNow); // split the year up into an array like so [m, d, y]
-					// if the month is before/equal to today and the date is before/equal to today
-					if ($arrJDate[0] <= $arrJNow[0] && $arrJDate[1] <= $arrJNow[1]) $this->year++; // then jump to next year
+					if ( !$this->enablePrev ) {
+						$jNow = jdtojewish(unixtojd()); // get the current jewish date from the unix timestamp
+						$arrJNow = explode('/', $jNow); // split the year up into an array like so [m, d, y]
+						// if the month is before/equal to today and the date is before/equal to today
+						if ($arrJDate[0] <= $arrJNow[0] && $arrJDate[1] <= $arrJNow[1]) $this->year++; // then jump to next year
+					}
 					
 					//find out if current year is leap year
 					if (((7 * $this->year + 1) % 19) < 7) {
