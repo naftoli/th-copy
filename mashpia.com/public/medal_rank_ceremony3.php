@@ -180,7 +180,7 @@ $special = array( // rare missions
                 $userInfo = $m->getUserInfo();
                 $userRankInfo = $rr->getUserInfo();
 				// if there are medal details (see line 162)
-				if (count($details)) {
+				if ( isset( $details ) &&  count( [ $details ] ) ) {
 					foreach ( $details as $school => $line ) { // for each school
 						if ( $school != $school_name ) continue; // make sure it is the current school....
 						
