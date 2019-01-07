@@ -9,7 +9,7 @@ import BulkUploadModal from './BulkUploadModal';
 import NewSoldierModal from './NewSoldierModal';
 // functions
 import is from 'is_js';
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { setTitle, canDownload } from 'functions/utils';
 import { showError } from 'functions/notifications';
 // styles
 import './SoldiersPage.scss';
@@ -21,6 +21,9 @@ import {
 // data
 import getColumns from './columns';
 import { isBC } from 'functions/login';
+// csv react component
+import { CSVLink } from "react-csv";
+import { dataToCSV } from 'functions/utils/csv';
 
 const defaultCropperModalSettings = {
   show: false,  src: false, id: false
@@ -90,6 +93,21 @@ export class SoldiersPage extends Component {
   }
 
   // download the content as a CSV
+  // toCSV = () => {
+  //   const headers = [
+  //     'Serial Number', 'First Name', 'Last Name', 'DOB', 'Gender', 'Registered', 
+  //     'Chayolei', 'Tehillim', 'Chidon', 'Platoon', 'Base'
+  //   ];
+  //   // get the data
+  //   const rows = this.props.soldiers.map( soldier => [
+  //     soldier.user_serial, soldier.first, soldier.last, soldier.dob, soldier.gender, 
+  //     soldier.user_registered, soldier.chayolei, soldier.yan, soldier.chidon,
+  //     soldier.platoon ? `="${soldier.platoon.name}"` : '-', soldier.school.school_name
+  //   ]);
+  //   arrayToCSV( headers, rows, 'soldiers' );
+  // }
+
+  // download the content as a CSV
   toCSV = () => {
     const headers = [
       'Serial Number', 'First Name', 'Last Name', 'DOB', 'Gender', 'Registered', 
@@ -101,7 +119,7 @@ export class SoldiersPage extends Component {
       soldier.user_registered, soldier.chayolei, soldier.yan, soldier.chidon,
       soldier.platoon ? `="${soldier.platoon.name}"` : '-', soldier.school.school_name
     ]);
-    arrayToCSV( headers, rows, 'soldiers' );
+    return dataToCSV( headers, rows );
   }
 
   // render the page
@@ -126,9 +144,15 @@ export class SoldiersPage extends Component {
             </Button>
           }
           { canDownload( soldiers ) &&
-            <Button color='primary' onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Download Soldiers (CSV/Excel)
-            </Button>
+            <CSVLink
+              data = { this.toCSV() }
+              filename = { "soldiers.csv" }
+              target = "_blank"
+            >
+              <Button color='primary'>
+                <FontAwesome icon='file-download' /> Download Soldiers (CSV/Excel)              
+              </Button>
+            </CSVLink>
           }
         </ButtonBar>
 

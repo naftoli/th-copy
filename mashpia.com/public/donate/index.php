@@ -4,6 +4,7 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
 	header("Location: https://mashpia.com/donate");
 	exit;
 }
+$ip = $_SERVER['SERVER_ADDR'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -61,7 +62,7 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
                         <input type="text" name="cclname" id="cclname" class="form-control" placeholder="Last Name on Card" required />
                     </div>
                     <div class="form-group">
-                        <input type="text" name="ccaddress" id="ccaddress" class="form-control" placeholder="Billing Address Line 1" />
+                        <input type="text" name="ccaddress" id="ccaddress" class="form-control" placeholder="Billing Address Line 1" required />
                     </div>
                     <div class="form-group">
                         <input type="text" name="ccaddress2" id="ccaddress2" class="form-control" placeholder="Billing Address Line 2" />
@@ -69,12 +70,12 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
 	              </div>
 	              <div class="col-xs-4">
                     <div class="form-group">
-                        <input type="text" name="cccity" id="cccity" class="form-control" placeholder="City" />
+                        <input type="text" name="cccity" id="cccity" class="form-control" placeholder="City" required />
                     </div>
 	              </div>
 	              <div class="col-xs-4">
                     <div class="form-group">
-                        <input type="text" name="ccstate" id="ccstate" class="form-control" placeholder="State" />
+                        <input type="text" name="ccstate" id="ccstate" class="form-control" placeholder="State" required />
                     </div>
 	              </div>
 	              <div class="col-xs-4">
@@ -99,7 +100,7 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
 	              </div>
 	              <div class="col-xs-6">
                     <div class="form-group">
-                        <input type="number" name="cccvv" id="cccvv" class="form-control" placeholder="CVV" />
+                        <input type="number" name="cccvv" id="cccvv" class="form-control" placeholder="CVV" required />
                     </div>
 	              </div>
 	              
@@ -154,8 +155,10 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
 		</div>
 		<br />
 		<script src="/mobile/reg/plugins/bootstrap-select/dist/js/bootstrap-select.js"></script>
-		<script>				
+		<script>
+			var ip = "<?=$ip?>";
 			$( function() {
+				checkFraud();
 				//$(".alert").hide();
 				$('.selectpicker').selectpicker();
 				
@@ -169,6 +172,12 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
 				});
 				
 				$("#submit").click( function(e) {
+					// check if same ip has been requesting this in the past few minutes more than 3 times
+					if ( checkFraud() ) {
+						alert("You cannot submit multiple requests in such a short time span.");
+						return false;
+					}
+
 					var val = parseInt($("#amount").val());
 					if (val == 0) {
 						alert("You have not chosen an amount!");
@@ -182,6 +191,64 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
 					}
 				});					
 			});
+
+			function checkFraud() {
+				let ips = [];
+				if (typeof( Storage ) !== 'undefined') {
+					if (! localStorage.getItem('ips') ) {
+						var d = new Date();
+						ips.push({
+							address: ip, 
+							requests: [ d ]
+						});
+						localStorage.setItem('ips', JSON.stringify( ips ));
+					} else {
+						let found = false;
+						console.log(  localStorage.getItem('ips') );
+						ips = JSON.parse( localStorage.getItem('ips') );
+						for (i in ips) {
+							let info = ips[i];
+							if ( info.address == ip ) {
+								found = true;
+								// loop through requests to see how many there are and how spaced out they are
+								let prevTime = 0;
+								let numRequests = 0;
+								for (r in info.requests) {
+									let request = info.requests[r];
+									let curTime = new Date(request).getTime();
+									if ( prevTime ) {
+										// check if previous request was within one minute of current request
+										let diff = (curTime - prevTime) / 1000;
+										if ( diff <= 60 ) {
+											numRequests++;
+										}
+										// if last time there was a request from this ip is more than 24 hours, empty the requests array
+										let day = 60 * 60 * 24;
+										if ( diff > day ) {
+											ips[i].requests = [];
+										}
+									}
+									prevTime = curTime;
+								}
+								if ( numRequests >= 5 ) {
+									alert("You cannot submit many donations in such a short amount of time.");
+									return false;
+								} else {
+									ips[i].requests.push( new Date() );
+								}
+							} 
+						}
+						if ( !found ) {
+							var d = new Date();
+							ips.push({
+								address: ip, 
+								requests: [ d ]
+							});
+						}
+						localStorage.setItem('ips', JSON.stringify( ips ));
+					}
+				}
+			}
 		</script>
 	</body>
 </html>

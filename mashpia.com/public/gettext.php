@@ -108,7 +108,7 @@ class gettext_reader {
     $MAGIC2 = (int) - 569244523;
 
     $this->STREAM = $Reader;
-    $magic = $this->readint();
+    $magic = @$this->readint();
     if ($magic == $MAGIC1) {
       $this->BYTEORDER = 0;
     } elseif ($magic == $MAGIC2) {
@@ -119,11 +119,11 @@ class gettext_reader {
     }
     
     // FIXME: Do we care about revision? We should.
-    $revision = $this->readint();
+    $revision = @$this->readint();
     
-    $this->total = $this->readint();
-    $this->originals = $this->readint();
-    $this->translations = $this->readint();
+    $this->total = @$this->readint();
+    $this->originals = @$this->readint();
+    $this->translations = @$this->readint();
   }
   
   /**

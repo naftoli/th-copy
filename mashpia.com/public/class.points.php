@@ -1,5 +1,6 @@
 <?php
 require_once( __DIR__ . '/db.php' ); // make sure that db.php is loaded in as we rely on some functions...
+require_once __DIR__ . '/class.globalSettings.php';
 
 class Points
 {
@@ -9,8 +10,9 @@ class Points
     private $debug;
     private $school_id;
     private $australian;
-    const YEARSTART = 2457934; // also need to update kiosk controller getHebrewPoints function with proper dates when year changes
-    const YEARSTARTAUSTRALIA = 2457629; // also need to update kiosk controller getHebrewPoints function with proper dates when year changes
+    private $yearStart;
+    // const YEARSTART = 2457934; // also need to update kiosk controller getHebrewPoints function with proper dates when year changes
+    // const YEARSTARTAUSTRALIA = 2457629; // also need to update kiosk controller getHebrewPoints function with proper dates when year changes
     
     public function __construct( $id ) {
         $this->user_id = $id;
@@ -22,9 +24,15 @@ class Points
         $this->store_reset = $row['store_reset'];
         $this->usercode = $row['user_code']; 
         $this->school_id = $row['school_id'];
-        $australian = array( 55, 66, 110, 112, 180 );
-        if (in_array($this->school_id, $australian)) $this->australian = true;
+        $australian = [ 55, 66, 110, 112, 180 ];
+        if ( in_array( $this->school_id, $australian ) ) $this->australian = true;
         $this->debug = false;
+        $this->setPointsStart();
+    }
+
+    public function setPointsStart() {
+        $dates = GlobalSettings::getPointsDates();
+        $this->yearStart = $this->australian ? $dates['points_start_australia'] : $dates['points_start'];
     }
     
     public function setDebugOn() {
@@ -35,19 +43,25 @@ class Points
         $points = $this->getTotalMarks("WHERE user_id = $this->user_id");
         $arrParams['user_code'] = $this->usercode;
         $arrPoints = header_total_points( $arrParams );
+        if ( $this->debug ) {
+            echo "<pre>";
+            print_r( $arrParams );
+            print_r( $arrPoints );
+            echo "</pre>";
+        }
         $points += $arrPoints[$arrParams['user_code']];
         return $points;
     }
     
     public function getTotalThisYear() {
-        if ($this->australian) $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= " . self::YEARSTARTAUSTRALIA);
-        else $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= " . self::YEARSTART);
+        $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= " . $this->yearStart);
         $arrParams['user_code'] = $this->usercode;
-        $arrParams['start_date'] = $this->australian ? self::YEARSTARTAUSTRALIA : self::YEARSTART;
+        $arrParams['start_date'] = $this->yearStart;
         $arrPoints = header_total_points( $arrParams );
-        if ($this->debug) {
+        if ( $this->debug ) {
             echo "<pre>";
-            print_r($arrPoints);
+            print_r( $arrParams );
+            print_r( $arrPoints );
             echo "</pre>";
         }
         $points += $arrPoints[$arrParams['user_code']];
@@ -74,6 +88,12 @@ class Points
         $arrParams['user_code'] = $this->usercode;
         $arrParams['start_date'] = $reset_date;
         $arrPoints = header_store_points( $arrParams );
+        if ( $this->debug ) {
+            echo "<pre>";
+            print_r( $arrParams );
+            print_r( $arrPoints );
+            echo "</pre>";
+        }
         $points += $arrPoints[$arrParams['user_code']];
         return $points;
     }
@@ -99,9 +119,36 @@ class Points
 		if ($this->store_reset > 0) { 
             $reset_date = $this->store_reset;
         } else {
-            if ($this->australian) $reset_date = self::YEARSTARTAUSTRALIA;
-            else $reset_date = self::YEARSTART;
+            $reset_date = $this->yearStart;
         }
         return $reset_date;
+    }
+
+    public function getTasksPointsDetails() {
+        $details = [];
+        $sql = "select * from date_tasks_marks 
+                where user_id = " . $this->user_id . " 
+                and mark_date >= " . $this->yearStart;
+        $result = mysql_query( $sql );
+        while ( $row = mysql_fetch_assoc( $result ) ) {
+            $details[] = $row;
+        }
+        return $details;
+    }
+
+    public function getStorePointsDetails() {
+        $details = [];
+        // figure out gregorian date
+        $gregDate = jdtogregorian( $this->yearStart );
+        $arrDate = explode('/', $gregDate);
+        $gregorian = $arrDate[2] . '-' . $arrDate[0] . '-' . $arrDate[1];
+        $sql = "select * from pointsDB.user_points  
+                where user_id = " . $this->user_id . " 
+                and created >= '" . $gregorian . "'";
+        $result = mysql_query( $sql );
+        while ( $row = mysql_fetch_assoc( $result ) ) {
+            $details[] = $row;
+        }
+        return $details;
     }
 }

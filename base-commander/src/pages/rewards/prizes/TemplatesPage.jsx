@@ -10,14 +10,16 @@ import { ButtonBar, Table, InlineSync, FontAwesome } from 'components/ui';
 import { toast } from 'react-toastify';
 import { getColumns } from './include/columns';
 import { isHQ } from 'functions/login';
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { setTitle, canDownload } from 'functions/utils';
 // state
 import { 
   getTemplates, createTemplate, updateTemplate, uploadImage
 } from 'store/rewards/prizes/operations';
 // styles
 import './include/prizes.scss';
-
+// csv react component
+import { CSVLink } from "react-csv";
+import { dataToCSV } from 'functions/utils/csv';
 
 class TemplatesPage extends Component {
 
@@ -94,7 +96,8 @@ class TemplatesPage extends Component {
       prize.is_active ? 'Active' : 'Disabled', prize.one_per_user ? 'Yes' : 'No', 
       prize.modified,
     ]);
-    arrayToCSV( headers, rows, 'store_prizes' );
+    //arrayToCSV( headers, rows, 'store_prizes' );
+    return dataToCSV( headers, rows );
   }
 
   render() {
@@ -122,9 +125,15 @@ class TemplatesPage extends Component {
             <InlineSync loading={ loading.templates } /> Refresh
           </Button>
           { canDownload( templates ) &&
-            <Button color='primary' onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Download Templates (CSV/Excel)
-            </Button>
+            <CSVLink
+              data = { this.toCSV() }
+              filename = { "store_templates.csv" }
+              target = "_blank"
+            >
+              <Button color='primary'>
+                <FontAwesome icon='file-download' /> Download Templates (CSV/Excel)              
+              </Button>
+            </CSVLink>
           }
         </ButtonBar>
 

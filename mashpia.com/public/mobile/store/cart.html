@@ -237,21 +237,32 @@
             }
             
             function checkBal(key, qty) {
-                var item = cart[key];
-                var extra = qty - item.qty;
-                if (extra > 0) {
-                    if ((extra * item.price) > bal) {
-                        alert('You do not have enough miles for this.');
-                        return false;
+                if ( qty > 0 ) {
+                    var item = cart[key];
+                    var extra = qty - item.qty;
+                    if (extra > 0) {
+                        if ((extra * item.price) > bal) {
+                            alert('You do not have enough miles for this.');
+                            return false;
+                        }
                     }
+                    return true;
+                } else {
+                    alert("You cannot purchase negative amounts.");
+                    return false;
                 }
-                return true;
             }
             
             $(document).on('click', '.update', function() {
                 var key = this.dataset.key
                 var input = $( this ).parent().parent().find( 'input' );
                 var val = parseInt( input.val(), 10 );
+                // make sure val is greater than 0 
+                if ( val < 0 ) {
+                    alert("You cannot purchase negative amounts.");
+                    input.val( 0 );
+                    return false;
+                }
                 // make sure there's enough stock and that it's not one per child
                 var item = cart[key];
                 var curQty = item.qty;

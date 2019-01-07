@@ -9,8 +9,11 @@ import {
 } from 'components/ui';
 // functions
 import { isAdmin } from 'functions/login';
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { setTitle, canDownload } from 'functions/utils';
 import { getPlatoons, createPlatoon } from 'store/base/platoons/operations';
+// csv react component
+import { CSVLink } from "react-csv";
+import { dataToCSV } from 'functions/utils/csv';
 import { LEGACY_URL } from 'components/constants';
 
 export class PlatoonsPage extends Component {
@@ -32,7 +35,8 @@ export class PlatoonsPage extends Component {
       platoon.class_grade, platoon.class_sub, platoon.teacher, platoon.cell,
       platoon.email, platoon.soldier_count, platoon.staff_count, platoon.school_name
     ]);
-    arrayToCSV( headers, rows, 'platoons' );
+    //arrayToCSV( headers, rows, 'platoons' );
+    return dataToCSV( headers, rows );
   }
 
   render() {
@@ -77,9 +81,15 @@ export class PlatoonsPage extends Component {
             <InlineSync loading={ loading } /> Refresh
           </Button>
           { canDownload( platoons ) &&
-            <Button color="primary" onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Download Platoons (CSV/Excel)
-            </Button>
+            <CSVLink
+              data = { this.toCSV() }
+              filename = { "platoons.csv" }
+              target = "_blank"
+            >
+              <Button color='primary'>
+                <FontAwesome icon='file-download' /> Download Platoons (CSV/Excel)              
+              </Button>
+            </CSVLink>
           }
         </ButtonBar>
 

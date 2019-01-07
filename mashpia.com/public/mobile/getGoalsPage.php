@@ -25,7 +25,7 @@ $allow_parent_tasks = $row['allow_parent_tasks'] == '1' && $row['parent_marking'
 $heDate = jdtojewish(unixtojd());
 $heMonth = $heDate[0];
 if ($heMonth == 13) $month = 1;
-else $month = $heMonth++;
+else $month = ++$heMonth;
 
 $qry = "select qty, minutes from tehillim_ladders where ladder = " . $ladder . " and age = " . $level . " and month = " . $month;
 $res = mysql_query($qry);

@@ -300,7 +300,7 @@ function units2bytes($val) {
 		case 'g':
 		case 'm':
 		case 'k':
-			$val *= 1024;
+			@$val *= 1024;
 			break;
 	}
 	

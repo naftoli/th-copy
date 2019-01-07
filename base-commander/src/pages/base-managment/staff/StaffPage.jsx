@@ -8,9 +8,12 @@ import { Button } from 'reactstrap';
 import NewStaffModal from './NewStaffModal';
 // functions
 import { isAdmin } from 'functions/login';
-import { arrayToCSV, setTitle, canDownload } from 'functions/utils';
+import { setTitle, canDownload } from 'functions/utils';
 // state
 import { getStaff } from 'store/base/staff/operations';
+// csv react component
+import { CSVLink } from "react-csv";
+import { dataToCSV } from 'functions/utils/csv';
 
 class StaffPage extends Component {
   // modal to create staff
@@ -35,7 +38,8 @@ class StaffPage extends Component {
       staff.email,      staff.cell,   staff.position,
       staff.platoon
     ]);
-    arrayToCSV( headers, rows, 'staff' );
+    //arrayToCSV( headers, rows, 'staff' );
+    return dataToCSV( headers, rows );
   }
 
   render() {
@@ -72,9 +76,15 @@ class StaffPage extends Component {
             <InlineSync loading={ loading } /> Refresh
           </Button>
           { canDownload( staff ) &&
-            <Button color='primary' onClick={ this.toCSV }>
-              <FontAwesome icon='file-download' /> Download Staff (CSV/Excel)
-            </Button>
+            <CSVLink
+              data = { this.toCSV() }
+              filename = { "staff.csv" }
+              target = "_blank"
+            >
+              <Button color='primary'>
+                <FontAwesome icon='file-download' /> Download Staff (CSV/Excel)              
+              </Button>
+            </CSVLink>
           }
         </ButtonBar>
 
