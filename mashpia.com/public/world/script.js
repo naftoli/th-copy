@@ -29,7 +29,7 @@ $( document ).ready( function(){
         $('#browser-share').click( function() {
             navigator.share({
                 title: 'Our Birthday Gift',
-                text: 'See the amazing gift the Chayolim gave the Rebbe for his 117th birthday at ourBirthdayGift.com',
+                text: 'See the amazing gift the Chayolim gave the Rebbe for his 118th birthday at ourBirthdayGift.com',
                 url: 'https://ourbirthdaygift.com',
             }).then( console.log )
             .catch( console.error );
@@ -51,16 +51,18 @@ $( document ).ready( function(){
     }
 
     function getColor( total ) {
-        if (total <= 0 ) {
+        if (total < 25 ) {
             return ""; // no color
-        } else if ( total <= 29 ) {
-            return "red";
         } else if ( total <= 49 ) {
+            return "red";
+        } else if ( total <= 74 ) {
             return "bronze";
         } else if ( total <= 99) {
             return "silver";
-        } else {
+        } else if ( total == 100) {
             return "gold";
+        } else {
+            return "platinum";
         }
     }
 
