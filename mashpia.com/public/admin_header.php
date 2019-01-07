@@ -54,6 +54,27 @@ function getMenuReducer( $default_users = [ 'HQ', 'INST', 'BC' ] ) {
 			!$current_user->login->modules[ $item['module'] ] ) {
 			return $menu;
 		}
+
+		// if beta access is controled (set to true or false)
+		if ( isset( $item['beta'] ) ) {
+			if ( // current user is in beta and the item is set to not show for beta users
+				( $current_user->beta && !$item['beta'] ) ||
+				// OR current user is not in beta and the item is set to only show for beta users
+				( !$current_user->beta && $item['beta'] )
+			) { // Then do not add the item to the menu
+				return $menu;
+			}
+		}
+
+		if ( $current_user->beta && isset( $item['beta'] ) &&
+			!$current_user->login->modules[ $item['module'] ] ) {
+			return $menu;
+		}
+
+		/**
+		 * Add items to menu here if not returned above.
+		 */
+
 		// make sure the custom user type is valid if present
 		if ( $current_user && isset( $item['user_types'] ) &&
 			array_search( $current_user->login->code, $item['user_types'] ) !== false )

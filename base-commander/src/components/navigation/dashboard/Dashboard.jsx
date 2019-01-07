@@ -75,7 +75,7 @@ export class Dashboard extends Component {
       content = <ClientError/>;
     }
 
-    const menu = getMenu( login );
+    const menu = getMenu( login, current_user );
 
     // add a logout button
     menu.push({

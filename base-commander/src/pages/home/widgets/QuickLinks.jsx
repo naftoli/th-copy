@@ -8,6 +8,10 @@ import { Col } from 'reactstrap';
 
 export class QuickLinks extends Component {
 
+  static defaultProps = {
+    beta: false
+  }
+
   render() {
     return (
       <Col xs={12} sm={6} xl={4}>
@@ -23,6 +27,10 @@ export class QuickLinks extends Component {
               <FontAwesome icon='check-circle' regular />
               Mark Missions
             </Link>
+            <a href={`${LEGACY_URL}/api/beta`}>
+              <FontAwesome icon='door-open' />
+              { this.props.beta ? 'Join' : 'Leave' } Beta
+            </a>
           </div>
         </div>
       </Col>

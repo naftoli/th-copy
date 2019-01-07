@@ -33,8 +33,8 @@ class HomePage extends Component {
   }
 
   render() {
-    const { login, home, getRegistration } = this.props;
-    const { name, img, code, active } = login;
+    const { name, img, code, active } = this.props.login;
+    const { login, home, getRegistration, current_user } = this.props;
 
     if ( isBlank( code ) ) {
       return (
@@ -85,7 +85,8 @@ class HomePage extends Component {
 
         <Row id='widgets'>
 
-          <QuickLinks />
+          <QuickLinks
+            beta={ !current_user.beta } />
 
           <RegistrationWidget
             login={ login }
@@ -110,6 +111,7 @@ class HomePage extends Component {
 
 const mapStateToProps = ({ login, home }) => ({
   login: login.current_login,
+  current_user: login.current_user,
   home,
 })
 

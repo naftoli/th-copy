@@ -289,7 +289,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             'only' => [
                 'admin_id', 'username',         'title',        'first',        'last',
                 'lang',     'home_phone',       'cell_phone',   'admin_email',  'chabad_org_shliach_id',
-                'photo',    'admin_phone_work', 'google_id',    'admin_phone_mobile',  
+                'photo',    'admin_phone_work', 'google_id',    'admin_phone_mobile', 'beta',
             ],
             'methods' => [ 'logins' ]
         ]);

@@ -13,13 +13,13 @@ const DEFAULT_USER_TYPES = [ 'HQ', 'INST', 'BC' ];
  * 
  * @returns {function} Returns a valid reducer to be passed to .reduce with an array as the initilaizer
  */
-export const menuReducer = ( login, defaults = DEFAULT_USER_TYPES ) => ( filtered = [], item ) => {
+export const menuReducer = ( login, current_user, defaults = DEFAULT_USER_TYPES ) => ( filtered = [], item ) => {
   const { code, legacy, modules } = login;
   // reduce the items down a bit
   if ( item.items ) {
     item = Object.assign( {}, item, 
       { items: item.items.reduce(
-        menuReducer( login, item.user_types || defaults ), 
+        menuReducer(login, current_user, item.user_types || defaults ), 
         []
       )}
     );
@@ -31,8 +31,20 @@ export const menuReducer = ( login, defaults = DEFAULT_USER_TYPES ) => ( filtere
   // do not show this dropdown if we are hiding it
   if (
     ( !legacy && item.legacy ) // hide legacy links from new institutions
-    || ( item.module && modules && !modules[ item.module ] ) // hide menu if login does not have access to this module
+    // OR hide menu if login does not have access to this module
+    || ( item.module && modules && !modules[ item.module ] )
   ) return filtered;
+
+  // If we are controlling for beta
+  if ( item.beta !== undefined ) {
+    if ( // the user is in beta and the link is not
+      ( current_user.beta && !item.beta ) ||
+      // OR the user is not in beta and the link is
+      ( !current_user.beta && item.beta )
+    ) {
+      return filtered;
+    }
+  }
   
   // if the item is enabled for that code, add it to the sidebar
   if ( item.user_types && item.user_types.indexOf( code ) > -1 ) {
@@ -52,7 +64,7 @@ export const menuReducer = ( login, defaults = DEFAULT_USER_TYPES ) => ( filtere
  * 
  * @param {string} user_type The type of user to get the menu for 
  */
-const getMenu = ( login ) => {
+const getMenu = ( login, current_user ) => {
 
   if ( Object.keys( login ).length === 0 )
     return [];
@@ -60,7 +72,7 @@ const getMenu = ( login ) => {
   // Define the shape of the menu
 
   // filter the menu and return it
-  return menu.reduce( menuReducer( login ), [] );
+  return menu.reduce( menuReducer( login, current_user ), [] );
 } // end getMenu function
 
 // export getMenu by default
