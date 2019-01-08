@@ -32,7 +32,7 @@ if (!isset($menu_type))
 <? if (!empty($admin_user) && isset($menu_type)) : ?>
 
 	<!-- if (basename($_SERVER['PHP_SELF']) != 'admin.php') : -->
-	<? if (basename($_SERVER['PHP_SELF']) != 'admin.php' && basename($_SERVER['PHP_SELF']) != 'hq_links.php') : ?>
+	<? if (basename($_SERVER['PHP_SELF']) != 'admin.php' && basename($_SERVER['PHP_SELF']) != 'admin_hq_menu.php') : ?>
 	<DIV>
 		<A HREF="admin.php" onClick="var menu=document.getElementById('left_menu_overlay'); if(menu.style.display == '') menu.style.display = 'none'; else menu.style.display = ''; return false;"><?=T_('Menu')?>
 		</A>
