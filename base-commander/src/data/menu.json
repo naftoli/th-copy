@@ -173,7 +173,7 @@
     "icon": "/images/parentIcons/support icon.gif"
   },
   {
-    "label": "HQ Links", "legacy": true, "path": "/admin.php", "user_types": [ "HQ" ], 
+    "label": "HQ Links", "legacy": true, "path": "/admin.php", "user_types": [ "HQ" ], "module": "chayolei",
     "icon": "/images/icon_admin_home.png"
   }
 ]
