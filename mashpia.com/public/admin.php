@@ -1,4 +1,12 @@
 <?php
+// if they have the mobile login but not the legacy/react login...
+if ( isset( $_COOKIE['admin'] ) && !isset( $_COOKIE['admin_auth'] ) ) {
+	header( "Location: /mobile/" ); // send them to the mobile site
+}
+// send them to the react app for the new homepage/login page.
+// header( "Location: /new/" );
+// die();
+
 // redirect to https if using http
 // if (!isset($_SERVER['HTTPS'])) {
 // 	$url = "https://". $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . "?" . $_SERVER['argv'][0];
@@ -8,17 +16,17 @@
 session_start();
 
 // redirect to mobile version if fromMobile is set
-if (!isset($_GET['fromMobile']) && !isset($_POST['fromMobile'])) {
-	require_once 'Mobile_Detect.php';
+if ( !isset( $_GET['fromMobile'] ) && !isset( $_POST['fromMobile'] ) ) {
+	require_once( __DIR__ . '/Mobile_Detect.php' );
 	$detect = new Mobile_Detect;
 	if ( $detect->isMobile() || $detect->isTablet() ) {
-		header("Location: /mobile/reg");
+		header( "Location: /new/" );
 		exit;
 	}
 }
 
 // set the $admin_auth for use in admin_auth.php (header.php will only require it if this variable is set)
-$admin_auth = array('school','user', 'class'); 
+$admin_auth = array( 'school','user', 'class' );
 $school_and_camp = false; // this is commented out on line 64 of admin_auth.php - Remove?
 require('header.php'); 
 
@@ -143,7 +151,7 @@ Localize.initialize({ key: 'seqkv59qMeLU8', rememberLanguage: true });
 
 		<? include('admin_header.php'); ?>
 
-		<DIV CLASS="body">          
+		<DIV CLASS="body">
 
 			<DIV class="admin">
 				<?php //this form is submitted with the code in ./js/admin/admin.php.js on line ~16 ?>
@@ -179,7 +187,7 @@ Localize.initialize({ key: 'seqkv59qMeLU8', rememberLanguage: true });
 					if ($row['store']) $store = 1;
 					?>
 					<script>
-						location.href = "/v2/login/frommashpia/school_id/<?=$school_id?>/admin_id/<?=$admin_id?>/class_id/<?=$class_id?>/achievement/<?=$printing?>/store/<?=$store?>";
+						location.href = "/new/";
 					</script>
 					<?
 				}

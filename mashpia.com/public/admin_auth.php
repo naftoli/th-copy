@@ -1,4 +1,7 @@
-<?
+<?php
+
+class AccessDeinedException extends Exception {}
+
 $admin_user = array();
 
 $lang = agr($_POST, 'login_lang', agr($_COOKIE, 'lang'));
@@ -19,7 +22,9 @@ if (!function_exists('check_auth_admin')) {
 				// check the hash from the cookie
 				$auth_2 = hash_hmac('ripemd128', strtolower($row['username']) . $row['password'], '53fdc95857aac68970159dd07e7c3782'); // nice random seed
 				
-				if ($auth == hash_hmac('ripemd128', strtolower($row['username']) . $row['password'], '53fdc95857aac68970159dd07e7c3782')) {
+				if ( $auth == $auth_2 ) {
+					$_COOKIE['admin_id'] = $admin_id;
+					$_COOKIE['admin_auth'] = $auth_2;
 					// set the admin_user to the result of the query
 					$admin_user['username'] 	= $row['username'];
 					$admin_user['admin_id'] 	= $admin_id;
@@ -33,11 +38,10 @@ if (!function_exists('check_auth_admin')) {
 					$admin_user["beta"] 		= $row["beta"];
 					$admin_user["no_of_children"] = 0;
 					
-					$allow = $row['auth'] == 'super'; //not super? then start at false, and check below
+					$allow = $row['auth'] == 'super'; // not super? then start at false, and check below
 
 					// check if user is in list of users allowed to access the page
 					foreach($admin_auth as $type) {
-
 						// if plain old users are here and they are a parent then let them in
 						if ($type == "user" && $admin_user["is_parent"] == true) {
 							$allow = true;
@@ -46,7 +50,9 @@ if (!function_exists('check_auth_admin')) {
 						$sql = "SELECT id FROM admin_auths WHERE admin_id=" . $admin_id . " AND auth=" . $type;
 						// mq defined: db.php#275 -> returns formatted error message if sql statement fails
 						// ms defined: db.php#270 -> runs mysql_real_escape_string and adds ' to each side of result
-						$admin_user['auths'][$type] = mysql_fetch_column(mq("SELECT id FROM admin_auths WHERE admin_id = $admin_id AND auth = " . ms($type)));
+						$admin_user['auths'][$type] = mysql_fetch_column(mq(
+							"SELECT id FROM admin_auths WHERE admin_id = $admin_id AND auth = " . ms( $type )
+						));
 						// if there is a row then the user has this permission class
 						if (count($admin_user['auths'][$type]) > 0) {
 							$allow = true;
@@ -56,26 +62,26 @@ if (!function_exists('check_auth_admin')) {
 							}
 						}
 					}
+
+					if ( isset( $_COOKIE['login'] ) && $row['auth'] != 'super' ) {
+						$type = explode( '-', $_COOKIE['login'] )[0];
+						$allow = in_array( $type, $admin_auth );
+					}
 					
-					//if ($row['camp_id'] > 0 && count($admin_user['auths']['school']) > 0) {
-					//	$school_and_camp = true;
-						//header("Location:http://www.mashpia.com/camps/index.php"); 
-					//}
-					
-					if (!$allow) {
-						die('Unauthorized. Your account type has no access to this page.');
+					if ( !$allow ) {
+						throw new \AccessDeinedException();
 					}
 					
 					$admin_user['inst_ids'] = mysql_fetch_column(mq("SELECT inst_id FROM schools JOIN admin_auths ON (schools.school_id = admin_auths.id) WHERE admin_id = $admin_id AND admin_auths.auth = 'school' UNION SELECT inst_id FROM classes JOIN schools USING (school_id) JOIN admin_auths ON (classes.class_id = admin_auths.id) WHERE admin_id = $admin_id AND admin_auths.auth = 'class' UNION SELECT inst_id FROM teams JOIN schools USING (school_id) JOIN admin_auths ON (teams.team_id = admin_auths.id) WHERE admin_id = $admin_id AND admin_auths.auth = 'team' UNION SELECT inst_id FROM users JOIN schools USING (school_id) JOIN admin_auths ON (users.user_id = admin_auths.id) WHERE admin_id = $admin_id AND admin_auths.auth = 'user'"));
 					
 					// log the user into the helpdesk system as well
-					if(!defined("USES_WORDPRESS")){
+					if( !defined("USES_WORDPRESS") ){
 						require_once($_SERVER["DOCUMENT_ROOT"].'/helpdesk/control/connect.php');
 						require_once($_SERVER["DOCUMENT_ROOT"].'/helpdesk/control/functions.php');
-						if(mswIsValidEmail($row['admin_email'])) {
+						if( mswIsValidEmail( $row['admin_email'] ) ) {
 							$portal_login_sql = mysql_query("SELECT * FROM tickets.msp_portal WHERE email='".$row['admin_email']."';");
-							if(mysql_num_rows($portal_login_sql) > 0){
-								$_SESSION[mswEncrypt(SECRET_KEY) . '_msw_support'] = $row['admin_email']; // set the correct key in the session to the users email address
+							if( mysql_num_rows( $portal_login_sql) > 0 ){
+								$_SESSION[ mswEncrypt(SECRET_KEY) . '_msw_support' ] = $row['admin_email']; // set the correct key in the session to the users email address
 							}
 						}
 					}
@@ -154,44 +160,43 @@ if (!function_exists('check_id_access')) {
 			}
 			return 'school';
 		}
-		//proposal: check each of the others in descending order, and if the person only has one, set it as the default. But if the person has eg. 2 class, and 1 user, user should not be the default. Because of ambiguities this is not implemented. If the pages had menus for the others types, then they could work like school - except if you have both class, and user, you should get both menus, which is not compatible with the design of this function.
-
-		//die('In general you have access to this page, but you must pass in the resource ID requested. Try accessing this page from your home page/main admin page.');
 	}
 }
 
 if(!function_exists('check_school_setting')) {
-function check_school_setting($user_id, $req_setting) {
-  $row = mysql_fetch_assoc(mq("SELECT school_id, school_settings FROM users JOIN schools USING (school_id) WHERE user_id = $user_id"));
-  $sql = "SELECT school_id, school_settings FROM users JOIN schools USING (school_id) WHERE user_id = $user_id";
-  //echo $sql;
-  if(!$row || $req_setting !== '' && !in_array($req_setting, explode(',', $row['school_settings'])) && $row['school_id'] != 61) die("This user's school is not configured to allow access to this page.");
-}
+	function check_school_setting($user_id, $req_setting) {
+		$row = mysql_fetch_assoc( mq(
+			"SELECT school_id, school_settings FROM users JOIN schools USING (school_id) WHERE user_id = $user_id"
+		) );
+		$sql = "SELECT school_id, school_settings FROM users JOIN schools USING (school_id) WHERE user_id = $user_id";
+		//echo $sql;
+		if( !$row || $req_setting !== '' && !in_array( $req_setting, explode(',', $row['school_settings'] ) ) && $row['school_id'] != 61)
+			die("This user's school is not configured to allow access to this page.");
+	}
 }
 
 //transitional function
 if (!function_exists('assure_id_school')) {
-	
 	function assure_id_school($name) {
 		check_id_access();
 	}
 }
 
-if (!function_exists('check_login_admin')) 
-{
-
-	function check_login_admin() 
-	{
+if (!function_exists('check_login_admin'))  {
+	function check_login_admin() {
 		global $login_message, $lang, $_GETPOST;
-		
-		if (isset($_POST['new_login']) && isset($_POST['login_username']) && isset($_POST['login_password'])) // if the user has posted a new username and password
-		{ // log them in
+		// if the user has posted a new username and password
+		if ( isset( $_POST['new_login'] ) && isset( $_POST['login_username'] ) && isset( $_POST['login_password'] ) ) {
+			// log them in
 			$username = $_POST['login_username'];
-			$password = $_POST['login_password'];			
+			$password = $_POST['login_password'];
 			// show the user Query Failed 2 if there is a database issue
-			$result = mysql_query('SELECT admin_id FROM admins WHERE username = ' . ms($username) . " AND password != '' AND password = " . ms($password)) or die('Query failed 2');
+			$result = mysql_query(
+				'SELECT admin_id FROM admins WHERE username = ' . ms($username)
+				." AND password != '' AND password = " . ms($password)
+			) or die('Query failed 2');
 			// get the first username and password (will return false if not)
-			if ($row = mysql_fetch_assoc($result)) {
+			if ( $row = mysql_fetch_assoc( $result ) ) {
 				// hash the usernamepasswod combo
 				$auth = hash_hmac('ripemd128', strtolower($username).$password, '53fdc95857aac68970159dd07e7c3782');
 				// set the relevent cookies
@@ -199,9 +204,8 @@ if (!function_exists('check_login_admin'))
 				setcookie('admin_auth', $auth, time()+90*24*60*60, '/');
 				setcookie('admin_username_default', $username, time()+90*24*60*60, '/');
 				// check if the user is valid (see above for function)
-				return check_auth_admin($row['admin_id'], $auth);
-			} 
-			else { // there is no record with that username and password. log the attempted login
+				return check_auth_admin( $row['admin_id'], $auth );
+			} else { // there is no record with that username and password. log the attempted login
 				error_log("Failed login u:$username p:$password\n", 3, '/tmp/.ht_login_errors');
 				// clear the cookies
 				setcookie('admin_id', '', time() - 86400, '/');
@@ -211,33 +215,25 @@ if (!function_exists('check_login_admin'))
 				$login_message = T_('Login failed');
 				//the user has not logged in
 				return false;
-			}			
-		} 
-		else 
-		{
-			//if ( isset($_SESSION['admin_id']) )
-			//{
-			//	echo "<input type='hidden' name='*** IS SET ***' value='*** IS SET ***'>\n";
-				//return check_auth_admin($_SESSION['admin_id'], $_SESSION['admin_auth']);
-			//}
-			//else
-			//{
-			//	echo "<input type='hidden' name='IS NOT SET' value='IS NOT SET'>\n";
-				return check_auth_admin(agri($_COOKIE, 'admin_id'), agr($_COOKIE, 'admin_auth'));
-			//}
+			}
+		} else {
+			return check_auth_admin( agri( $_COOKIE, 'admin_id' ), agr( $_COOKIE, 'admin_auth' ) );
 		}
-		
 	}
-	
 }
 
 if(!isset($no_login)) {
-	
-	if(!check_login_admin() && !$dual_auth) {  
-		include('login.php');
-		exit;
-	} elseif (!$admin_user['admin_email'] && !isset($_POST['email']) && count($admin_user['auths']['school']) > 0) { // if there is no email and one is not being sent and it is a school account
-		include('missing_email.php');
+
+	try {
+		if(!check_login_admin() && !$dual_auth) {  
+			include( __DIR__ . '/login.php' );
+			exit;
+		} elseif (!$admin_user['admin_email'] && !isset($_POST['email']) && count($admin_user['auths']['school']) > 0) { // if there is no email and one is not being sent and it is a school account
+			include( __DIR__ . '/missing_email.php' );
+			exit;
+		}
+	} catch ( AccessDeinedException $e ) {
+		include( __DIR__ . '/unauthorized.php' );
 		exit;
 	}
 }

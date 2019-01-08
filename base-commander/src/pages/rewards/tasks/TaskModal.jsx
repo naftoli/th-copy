@@ -9,6 +9,7 @@ import {
 } from 'reactstrap';
 // functions
 import { filterUpdates, onInputChange } from 'functions/events';
+import { isHQ } from 'functions/login';
 
 class TaskModal extends Component {
 
@@ -72,8 +73,12 @@ class TaskModal extends Component {
     
     // insitutions can only create tasks in their own campaigns.
     let filter;
-    if ( ( !task.base || task.base <= 1 ) && login.code === 'INST' )
-      filter = subject => subject.inst_id === login.id;
+    if ( ( !task.base || task.base <= 1 ) && !isHQ( login.code ) ) {
+      filter = subject => {
+        return subject.inst_id === 0 || subject.inst_id === login.inst_id;
+      }
+    }
+      
 
     return (
       <Modal isOpen={ isOpen } toggle={ this.toggle } centered id='TaskModal'>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { FontAwesome } from 'components/ui';
 // other
 import { LEGACY_URL } from 'components/constants';
 import { Navbar, Sidebar, getMenu } from '../index';
@@ -76,12 +75,12 @@ export class Dashboard extends Component {
       content = <ClientError/>;
     }
 
-    const menu = getMenu( login );
+    const menu = getMenu( login, current_user );
 
     // add a logout button
     menu.push({
       label: 'Logout', path: '/logout',
-      icon: <FontAwesome icon='sign-out-alt' />
+      icon: 'sign-out-alt'
     });
 
     // if we are a user and not logging out - redirect to legacy parent portal

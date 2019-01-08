@@ -5,10 +5,10 @@
     margin-top: 12px;
   }
 
-  .btn-group {
+  .btn {
     width: 100%;
     margin-top: 35.2px;
-    @media ( max-width: 500px ) { margin-top: 10px; }
+    @media ( max-width: 575px ) { margin-top: 10px; }
   }
 
   #cards {
@@ -17,77 +17,5 @@
     margin: 20px 0px;
     @media print { margin: 0px; text-align: left; }
     // grid-template-columns: repeat( auto-fit, minmax( 86mm, 1fr ) );
-  }
-
-  #delete{
-    align-items: flex-end;
-  }
-}
-
-.AchievementCard {
-  margin: 0 auto;
-  padding: 0mm 2mm 2mm;
-  display: inline-block;
-  text-align: center;
-
-  @media screen {
-    &:not(:first-child) { display: none; }
-  }
-  
-  .card {
-    height: 46.9mm;
-    width: 81.5mm;
-    font-size: .9em;
-  
-    border: 1px solid;
-    border-radius: 0px;
-    padding: 2mm;
-  
-    display: flex;
-    
-    flex-direction: column;
-
-    .icon img { height: 8mm; }
-  
-    .logos {
-      flex-grow: 1;
-      display: inline-flex;
-      align-items: center;
-  
-      img {
-        max-height: 15mm;
-        width: 15mm;
-      }
-  
-      p { margin-bottom: 0px; }
-  
-      .card-details {
-        flex-grow: 1;
-        text-align: center;
-        padding: 0px 2mm;
-      
-        p.campaign {
-          font-size: 1.1em;
-          font-weight: bold;
-          margin: .3mm 0px .8mm 0px ;
-        }
-  
-        p.task {
-          font-size: .7em;
-          flex-grow: 1;
-        }
-  
-        p.miles {
-          font-size: 1.2em;
-          font-weight: bold;
-          margin-top: 2.5mm;
-        }
-      }
-    }
-  
-    .barcode {
-      text-align: center;
-      height: 37px;
-    }
   }
 }

@@ -123,7 +123,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
       # run the build
-      - run: yarn build:prod
+      - run: yarn build
       # save the results to the worksspace
       - persist_to_workspace:
           root: ~/repo
@@ -148,14 +148,17 @@ jobs:
             ssh-keyscan -H test.mashpia.com >> ~/.ssh/known_hosts;
 
       - run:
+        name: Create deploy/build
+        command: ssh mashtest@test.mashpia.com "mkdir -p tzivos-hashem/deploy/build"
+
+      - run:
           name: Send the react build Over SSH to deploy/build
           command: |
-            scp -r base-commander/build mashtest@test.mashpia.com:tzivos-hashem/deploy
+            scp -r base-commander/build mashtest@test.mashpia.com:tzivos-hashem/deploy/build
 
       - run:
           name: Run the Deployment script
-          command: |
-            ssh mashtest@test.mashpia.com "./tzivos-hashem/deploy/deploy.sh"
+          command: ssh mashtest@test.mashpia.com "./tzivos-hashem/deploy/deploy.sh"
 
   # deploy build artifacts to staging
   deploy-production:
@@ -175,14 +178,17 @@ jobs:
             ssh-keyscan -H mashpia.com >> ~/.ssh/known_hosts;
 
       - run:
+        name: 'Create deploy/build folder'
+        command: ssh mashpia@mashpia.com "mkdir -p tzivos-hashem/deploy/build"
+
+      - run:
           name: Send the react build Over SSH to deploy/build
           command: |
-            scp -r base-commander/build mashpia@mashpia.com:tzivos-hashem/deploy
+            scp -r base-commander/build mashpia@mashpia.com:tzivos-hashem/deploy/build
 
       - run:
           name: Run the Deployment script
-          command: |
-            ssh mashpia@mashpia.com "./tzivos-hashem/deploy/deploy.sh"
+          command: ssh mashpia@mashpia.com "./tzivos-hashem/deploy/deploy.sh"
       
 
 workflows:

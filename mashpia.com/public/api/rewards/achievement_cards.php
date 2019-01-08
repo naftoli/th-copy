@@ -4,13 +4,6 @@ include_once( __DIR__ . "/../header/header.php" );
 
 class CardsRouter {
 
-    public function index() {
-        // Get available Miles (and other info?)
-        return json_response([
-            'miles' => $this->getMiles(),
-        ]);
-    }
-
     public function create() {
         global $current_user;   global $POINTS_DB;
         $login = $current_user->login;
@@ -100,16 +93,18 @@ class CardsRouter {
             ':class_id' => $login->class_id ? $login->class_id : 0,
         ];
 
-        $miles = $this->getMiles();
-        if ( $miles !== false ) {
+        $miles = false;
+
+        if ( $current_user->login->code === 'TEACHER' ) {
             $query = $POINTS_DB->prepare(
                 "SELECT SUM( card_points ) as total FROM achievement_cards WHERE $filters ORDER BY achievement_card_id DESC"
             );
             $query->execute( $params );
-            $miles += intval( $query->fetch()['total'] );
             $platoon = $current_user->login->model;
-            $platoon->miles_balance = $miles;
+            $platoon->miles_balance += intval( $query->fetch()['total'] );
             $platoon->save();
+
+            $miles = $platoon->miles_balance;
         }
 
         $query = $POINTS_DB->prepare(
@@ -122,15 +117,6 @@ class CardsRouter {
             'miles' => $miles,
             'cards_deleted' => $cards_deleted
         ]);
-    }
-
-    private function getMiles(){
-        global $current_user;
-
-        if ( $current_user->login->code === 'TEACHER' )
-            return \Platoon::find([ $current_user->login->id ])->miles_balance;
-        
-        return false;
     }
 }
 

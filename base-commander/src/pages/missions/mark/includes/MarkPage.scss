@@ -28,6 +28,12 @@
   }
 }
 
+#BCMarkPage, #TeacherMarkPage  {
+  .fa-star {
+    color: red;
+  }
+}
+
 #CustomizeModal {
   div#header {
     display: flex;

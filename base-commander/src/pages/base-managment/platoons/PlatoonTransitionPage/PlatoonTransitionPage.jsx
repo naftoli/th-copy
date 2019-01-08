@@ -88,8 +88,6 @@ class PlatoonTransitionPage extends Component {
           <p><strong>Press the button below to deploy all your transitions whenever you like!</strong></p>
         </Callout>
 
-        <Deploy onDeploy={ this.transition } />
-
         <Step1 { ...from }
           login={ login }
           loading={ loading }
@@ -107,6 +105,11 @@ class PlatoonTransitionPage extends Component {
           selection={ selection } 
           move={ this.move }
           discharge={ this.discharge } />
+
+        <p className='title'>
+          Step 4: Make all Transitions Live
+        </p>
+        <Deploy onDeploy={ this.transition } />
 
       </div>
     );

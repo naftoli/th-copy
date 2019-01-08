@@ -42,7 +42,24 @@ export class HQSettingsRow extends Component {
           </Checkbox>
         </Col>
 
-        <Col xl={6}>
+        <Col xl={6} className='special-options'>
+          <Label>Extra Hachayols</Label>
+
+          <Input type='number'
+            name='hachayol_extra'
+            onChange={ this.onNumberChange }
+            value={ base.hachayol_extra === null || base.hachayol_extra === undefined ? '' : base.hachayol_extra } />
+            
+          <Checkbox
+              name='hachayol_extra_total'
+              checked={ base.hachayol_extra_total || false }
+              onChange={ this.handleCheckbox }>
+            Make this the <strong>total</strong> number.
+          </Checkbox>
+        </Col>
+
+        <Col xs={12}>
+          <hr />
           <Label>Registration Type</Label>
           <Radio value='1' { ...regTypeProps }
             checked={ base.reg_type === '1' }>

@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import { getChildOptions } from './misc/functions';
 import { onInputChange, onMultiSelectChange } from 'functions/events';
 import { getParents, createParent } from 'store/base/parents/operations';
+import { isHQ } from 'functions/login';
 
 const initialState = {
   father: '', mother: '', last: '',   email: '',
@@ -57,8 +58,11 @@ class NewParentModal extends Component {
   onSelectChange = onMultiSelectChange( this.onUpdate );
 
   render(){
-    const { isOpen, toggle } = this.props;
-    const { error, saving, father, mother, last, cell, home, email } = this.state;
+    const { isOpen, toggle, login } = this.props;
+    const {
+      mother, cell, error, home,
+      father, last, email, saving, children
+    } = this.state;
     // props for all inputs
     const inputProps = { onChange: this.onChange };
     const options = getChildOptions( this.props.availableChildren );
@@ -71,46 +75,80 @@ class NewParentModal extends Component {
             <Row>
               <Col xs={12}>
                 <Label>E-Mail Address / Username</Label>
-                <Input name='email' value={ email } type='email' {...inputProps} required />
-                <div className='invalid-message'>Please enter a valid E-mail address</div>
+                <Input required name='email' 
+                  value={ email } type='email' {...inputProps} />
+                <div className='invalid-message'>
+                  Please enter a valid E-mail address
+                </div>
               </Col>
               
               <Col xs={6}>
                 <Label>Father</Label>
-                <Input name='father' value={ father } {...inputProps} pattern='^[a-zA-Z\s.]{2,}$' title="Two or more letters"/>
-                <div className='invalid-message'>Please enter 2 or more letters</div>
+                <Input name='father' value={ father } {...inputProps}
+                  pattern='^[a-zA-Z\s.]{2,}$' title="Two or more letters"/>
+                <div className='invalid-message'>
+                  Please enter 2 or more letters
+                </div>
               </Col>
 
               <Col xs={6}>
                 <Label>Mother</Label>
-                <Input name='mother' value={ mother } {...inputProps} pattern='^[a-zA-Z\s.]{2,}$' title="Two or more letters"/>
-                <div className='invalid-message'>Please enter 2 or more letters</div>
+                <Input name='mother' value={ mother } {...inputProps}
+                  pattern='^[a-zA-Z\s.]{2,}$' title="Two or more letters" />
+                <div className='invalid-message'>
+                  Please enter 2 or more letters
+                </div>
               </Col>
 
               <Col xs={12}>
                 <Label>Last Name</Label>
-                <Input name='last' value={ last } {...inputProps} required pattern='^[a-zA-Z\s.]{3,}$' title="Three or more letters"/>
-                <div className='invalid-message'>Please enter 3 or more letters</div>
+                <Input required name='last'
+                  value={ last } {...inputProps} 
+                  pattern='^[a-zA-Z\s.]{3,}$' title="Three or more letters" />
+                <div className='invalid-message'>
+                  Please enter 3 or more letters
+                </div>
               </Col>
 
               <Col xs={6}>
                 <Label>Cell Phone</Label>
-                <PhoneNumber name='home' value={ home } {...inputProps} required />
-                <div className='invalid-message'>Please enter a valid phone number</div>
+                <PhoneNumber required name='home'
+                  value={ home } {...inputProps} />
+                <div className='invalid-message'>
+                  Please enter a valid phone number
+                </div>
               </Col>
 
               <Col xs={6}>
                 <Label>Home Phone</Label>
-                <PhoneNumber name='cell' value={ cell } {...inputProps} required />
-                <div className='invalid-message'>Please enter a valid phone number</div>
+                <PhoneNumber required name='cell'
+                  value={ cell } {...inputProps} />
+                <div className='invalid-message'>
+                  Please enter a valid phone number
+                </div>
               </Col>
 
-              <Col xs={12}>
-                <Label>Children</Label>
-                <Select isMulti
-                  options={ options } tabSelectsValue={ false }
-                  onChange={ this.onSelectChange('children') } />
-              </Col>
+              { !isHQ( login.code ) &&
+                <Col xs={12}>
+                  <Label>Children</Label>
+                  <Select required isMulti selected={ children }
+                    options={ options } tabSelectsValue={ false }
+                    onChange={ this.onSelectChange('children') } />
+                </Col>
+              }
+
+              { isHQ( login.code ) &&
+                <Col xs={12}>
+                  <Label>Children: Serial numbers comma seperated.</Label>
+                  <Input required name='children'
+                    value={ children.toString() }
+                    pattern='^(7[0-9]{6},[ ]?)*(7[0-9]{6})$'/>
+                  <div className='invalid-message'>
+                    1 or more valid serial numbers
+                  </div>
+                </Col>
+              }
+
               { error && 
                 <div id='errors'>
                   <Alert color='danger'>{ error }</Alert>
@@ -127,8 +165,9 @@ class NewParentModal extends Component {
   }
 }
 
-const mapStateToProps = ({ base }) => ({
+const mapStateToProps = ({ base, login }) => ({
   availableChildren: base.parents.children,
+  login: login.current_login
 });
 
 const mapDispatchToProps = { getParents, createParent };

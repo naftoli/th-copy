@@ -270,8 +270,8 @@ while ($campaign = mysql_fetch_assoc( $campaign_query )) {
     $res = mysql_query($p);
     $pRow = mysql_fetch_assoc($res);
     $photo = $pRow['photo'];
-    if (!empty($photo)) { 
-        $size = getimagesize("images/staff/$photo"); 
+    if ( !empty( $photo ) && file_exists( "images/staff/$photo" ) ) { 
+        $size = getimagesize( "images/staff/$photo" ); 
         $width = $size[0];
         $height = $size[1];
         if ($width > 100) {

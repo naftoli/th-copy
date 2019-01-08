@@ -21,16 +21,16 @@ export const setChildren = children => {
   }
 };
 
-export const addChild = ( admin_id, user_id ) => {
+export const addChild = ( admin_id, user_serial ) => {
   return {
     type: types.ADD_CHILD,
-    payload: { admin_id, user_id }
+    payload: { admin_id, user_serial }
   }
 };
 
-export const removeChild = ( admin_id, user_id ) => {
+export const removeChild = ( admin_id, user_serial ) => {
   return {
     type: types.REMOVE_CHILD,
-    payload: { admin_id, user_id }
+    payload: { admin_id, user_serial }
   }
 };

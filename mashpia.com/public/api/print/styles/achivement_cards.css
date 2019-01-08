@@ -1,0 +1,84 @@
+body {
+  margin: 0px;
+}
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.AchievementCard {
+  margin: 0 auto;
+  padding: 0mm 2mm 2mm;
+  display: inline-block;
+  text-align: center;
+  font-family: Poppins,sans-serif;
+}
+.AchievementCard .card {
+  height: 46.9mm;
+  width: 81.5mm;
+  font-size: 0.9em;
+  border: 1px solid;
+  border-radius: 0px;
+  padding: 2mm;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.AchievementCard .card .icon img {
+  height: 8mm;
+}
+.AchievementCard .card .logos {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.AchievementCard .card .logos img {
+  max-height: 15mm;
+  width: 15mm;
+}
+.AchievementCard .card .logos p {
+  margin-bottom: 0px;
+}
+.AchievementCard .card .logos .card-details {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  text-align: center;
+  padding: 0px 2mm;
+}
+.AchievementCard .card .logos .card-details .campaign {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 0.3mm 0px 0.8mm 0px;
+}
+.AchievementCard .card .logos .card-details .task {
+  font-size: 0.7em;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+.AchievementCard .card .logos .card-details .miles {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-top: 2.5mm;
+}
+.AchievementCard .card .barcode {
+  text-align: center;
+  height: 26px;
+}
+
+.AchievementCard .card .barcode-text {
+  text-align: center;
+  height: 11px;
+  font-size: 10px;
+}
