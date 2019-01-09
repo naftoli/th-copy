@@ -317,3 +317,8 @@ h5.card-title {
     align-items: center;
     justify-content: center;
 }
+
+.colorName {
+    color: black;
+    font-size: 1.2em;
+}
