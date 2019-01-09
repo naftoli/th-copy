@@ -150,8 +150,9 @@
     "icon": "/images/parentIcons/Rally.gif",
     "items": [
       { "label": "Promotion Picture Report", "legacy": true, "path": "/promotion_report.php" },
-      { "label": "Teacher\"s Medal Ceremony Report", "legacy": true, "path": "/medal_rank_ceremony3.php" },
+      { "label": "Teacher's Medal Ceremony Report", "legacy": true, "path": "/medal_rank_ceremony3.php" },
       { "label": "Medal Ceremony Slideshow", "legacy": true, "path": "/medal_ceremony/choose_slides.php" },
+      { "label": "Personalized Medal Boards", "legacy": true, "path": "/medal_board/options.php" },
       { "label": "Raffle Winners", "legacy": true, "path": "/raffles/shared/forms/winners_form.php" },
       { "label": "Raffle Winners", "legacy": true, "path": "/missing_medals.php", "user_types": [ "HQ" ] }
     ]
