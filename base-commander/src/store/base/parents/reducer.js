@@ -37,9 +37,9 @@ export default ( state = initialState, action ) => {
       parents = state.parents.map( parent => {
         if ( parent.admin_id === action.payload.admin_id ) {
           // child defined on line 11
-          child = parent.children.find( child => child.user_id === action.payload.user_id );
+          child = parent.children.find( child => child.user_serial === action.payload.user_serial );
           return { ...parent, children: parent.children.filter( 
-            child => child.user_id !== action.payload.user_id
+            child => child.user_serial !== action.payload.user_serial
           )};
         }
         return parent; // not them
@@ -52,11 +52,11 @@ export default ( state = initialState, action ) => {
     case types.ADD_CHILD:
       // get the child
       child = state.children.find( 
-        child => child.user_id === action.payload.user_id 
+        child => child.user_serial === action.payload.user_serial 
       );
       // remove it from children
       children = state.children.filter( 
-        child => child.user_id !== action.payload.user_id
+        child => child.user_serial !== action.payload.user_serial
       );
       // add it to the parent
       parents = state.parents.map( 

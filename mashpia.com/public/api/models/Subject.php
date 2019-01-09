@@ -130,13 +130,13 @@ class Subject extends ActiveRecord\Model implements JsonSerializable {
     // serialize to json
     public function jsonSerialize() {
         return $this->to_array([
-            'only' => [ 'subject_name', 'subject_id', 'subject_type' ],
+            'only' => [ 'subject_name', 'subject_id', 'subject_type', 'inst_id' ],
         ]);
     }
 
     public function includeTasksJSON( $login ) {
         $res = $this->to_array([
-            'only' => [ 'subject_name', 'subject_id', 'subject_type' ],
+            'only' => [ 'subject_name', 'subject_id', 'subject_type', 'inst_id' ],
         ]);
 
         $res['achievement_tasks'] = $this->getAchievementTasks( $login );

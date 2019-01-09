@@ -14,6 +14,7 @@ import { getPlatoons, createPlatoon } from 'store/base/platoons/operations';
 // csv react component
 import { CSVLink } from "react-csv";
 import { dataToCSV } from 'functions/utils/csv';
+import { LEGACY_URL } from 'components/constants';
 
 export class PlatoonsPage extends Component {
 
@@ -72,6 +73,10 @@ export class PlatoonsPage extends Component {
           <Link to={`${match.path}/transition`} className="btn btn-primary" role="button">
             <FontAwesome icon='users' /> Platoon Transition
           </Link>
+          <a href={`${ LEGACY_URL }/teacher_letter.php`}
+              className="btn btn-primary"  target='_blank' role="button">
+            <FontAwesome icon='mail-bulk' /> Print Teacher Letters
+          </a>
           <Button color="primary" onClick={ this.getPlatoons }>
             <InlineSync loading={ loading } /> Refresh
           </Button>

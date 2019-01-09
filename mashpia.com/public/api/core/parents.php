@@ -10,10 +10,16 @@ class ParentsRouter {
 
         $filters = $current_user->login->getFilter( 's.', 'u.' );
 
+        // $parent_sql = "SELECT a.admin_id, a.username, a.title, a.first, a.father, a.mother, a.last, "
+        //     ." CONCAT(admin_address1, ' ', admin_address2) AS address, admin_city AS city, admin_state AS state, "
+        //     ." admin_postal AS zip, admin_country AS country, admin_phone_mobile AS cell, admin_email AS email, "
+        //     ." father_pic, mother_pic, u.first AS child_first, u.last AS child_last, u.user_id, u.user_serial "
+        //     ." FROM admins a JOIN admin_auths aa USING (admin_id) JOIN users u ON aa.auth = 'user' AND aa.id = u.user_id "
+        //     ." JOIN schools s USING (school_id) WHERE $filters;";
+        
         $parent_sql = "SELECT a.admin_id, a.username, a.title, a.first, a.father, a.mother, a.last, "
-            ." CONCAT(admin_address1, ' ', admin_address2) AS address, admin_city AS city, admin_state AS state, "
-            ." admin_postal AS zip, admin_country AS country, admin_phone_mobile AS cell, admin_email AS email, "
-            ." father_pic, mother_pic, u.first AS child_first, u.last AS child_last, u.user_id, u.user_serial "
+            ." admin_address1, admin_address2, admin_city, admin_state, admin_postal, admin_country, admin_phone_mobile AS cell, "
+            ." admin_email AS email, father_pic, mother_pic, u.first AS child_first, u.last AS child_last, u.user_id, u.user_serial "
             ." FROM admins a JOIN admin_auths aa USING (admin_id) JOIN users u ON aa.auth = 'user' AND aa.id = u.user_id "
             ." JOIN schools s USING (school_id) WHERE $filters;";
 
@@ -47,25 +53,25 @@ class ParentsRouter {
             }
         }
 
-        $children_query = "SELECT first, last, user_id, user_serial FROM users u "
+        if ( $current_user->login->code != 'HQ' ) {
+            $children_query = "SELECT first, last, user_id, user_serial FROM users u "
             ." JOIN schools s USING (school_id) "
             . "LEFT JOIN admin_auths aa ON id = user_id AND auth = 'user' "
             ." WHERE aa.admin_id IS NULL AND $filters";
-        // only registered soldiers for HQ to prevent the list from getting to long
-        if ( $current_user->login->code == 'HQ' )
-            $children_query .= ' AND u.user_registered IS NOT NULL;';
-        // run the query
-        $children_query = $MASHPIA_DB->prepare( $children_query );
-        $children_query->execute();
-
+            // run the query
+            $children_query = $MASHPIA_DB->prepare( $children_query );
+            $children_query->execute();
+            $children = $children_query->fetchAll();
+        }
+        
         json_response([
             'parents' => array_values( $parents ),
-            'children' => $children_query->fetchAll()
+            'children' => $children
         ], true, true );
     }
 
     public function create() {
-        global $current_user; global $MASHPIA_DB;
+        global $current_user, $MASHPIA_DB;
 
         $admin = new Admin([
             'username' => $_POST['email'],
@@ -87,22 +93,28 @@ class ParentsRouter {
         if ( !$admin->is_valid() )
             return json_error( implode(', ', $admin->errors->full_messages() ) );
 
+        $admin->sendParentEmail();
+
         if ( !$admin->save() )
             return json_error( 'Server Error CORE-PARENTS-87. Could not create parent account.');
 
-        $admin->sendParentEmail();
-
         $insert_query = $MASHPIA_DB->prepare(
-            'INSERT INTO admin_auths ( admin_id, auth, id, role_id, position ) '.
-            'VALUES( ?, "user", ?, 1, "parent");'
+            'INSERT INTO admin_auths '.
+            'SELECT ? as admin_id, "user" as auth, user_id as id, 1 as role_id, "parent" as position '.
+            'FROM users WHERE user_serial = ?;'
         );
         $has_parent_query = $MASHPIA_DB->prepare(
-            'SELECT * FROM admin_auths WHERE admin_id=? AND auth = "user" AND id=?'
+            'SELECT admin_id FROM admin_auths JOIN users ON auth = "user" AND id = user_id WHERE user_serial = ?;'
         );
-        foreach( $_POST['children'] as $user_id ) {
-            $has_parent_query->execute([ $admin->admin_id, $user_id ]);
+        // handle HQ special input
+        if ( $current_user->login->code == 'HQ' ) {
+            $_POST['children'] = preg_split( '/,[ ]?/', $_POST['children'] );
+        }
+        // add the serial numbers if they do not already have a parent
+        foreach( $_POST['children'] as $user_serial ) {
+            $has_parent_query->execute([ $user_serial ]);
             if ( $has_parent_query->rowCount() == 0 ) {
-                $insert_query->execute([ $admin->admin_id, $user_id ]);
+                $insert_query->execute([ $admin->admin_id, $user_serial ]);
             }
         }
         
@@ -111,26 +123,30 @@ class ParentsRouter {
 
     function removeChild() {
         global $MASHPIA_DB;
-        if ( !isset($_POST['user_id']) ) json_error('Need a child to remove');
+        if ( !isset($_POST['user_serial']) ) json_error('Need a child to remove');
         if ( !isset($_POST['admin_id']) ) json_error('Need a parent to remove from');
 
         $query = $MASHPIA_DB->prepare(
-            'DELETE FROM admin_auths WHERE admin_id = ? AND auth="user" AND id = ?'
+            'DELETE aa FROM admin_auths aa JOIN users u ON auth="user" AND id = user_id WHERE admin_id = ? AND user_serial = ?'
         );
-        $success = $query->execute([$_POST['admin_id'], $_POST['user_id']]);
+        
+        $success = $query->execute([$_POST['admin_id'], $_POST['user_serial']]);
+
         json_response( false, $success );
     }
 
     function addChild() {
         global $MASHPIA_DB;
-        if ( !isset($_POST['user_id']) ) json_error('Need a child to add');
+        if ( !isset($_POST['user_serial']) ) json_error('Need a child to add');
         if ( !isset($_POST['username']) ) json_error('Need a parent to add from');
         
-        $user = Soldier::find([ $_POST['user_id'] ]);
+        $user = Soldier::find_by_user_serial([ $_POST['user_serial'] ]);
         if ( !$user ) json_error( 'Invalid User ID' );
 
-        $admin = Admin::find_by_username( $_POST['username'] );        
-        if ( !$admin ) json_error( 'Cannot add Soldier to parent account. Username does not exist.' );
+        $admin = Admin::find_by_username( $_POST['username'] );
+
+        if ( !$admin )
+            json_error( 'Cannot add Soldier to parent account. Username does not exist.' );
 
         $query = $MASHPIA_DB->prepare(
             'INSERT INTO admin_auths ( admin_id, auth, id, role_id, position ) '.

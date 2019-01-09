@@ -161,7 +161,7 @@ if (!empty($action)) { switch($action) {
 			" SELECT school_id, school_name, school_name_he, school_makeup_id, "
 			." inst_id, school_settings, school_gender, logo, logo_girls, school_logo_kiosk_id, "
 			." school_no_logo, school_file_id, school_address1, school_address2, school_city, "
-			." school_state, school_postal, school_country, school_phone, cc_number, cc_exp, cc_cvv, "
+			." school_state, school_postal, school_country, school_phone, '' cc_number, '' cc_exp, '' cc_cvv, "
 			." authorize_customer_profile_id, authorize_payment_profile_id, kiosk_print, "
 			."shipping_method, shipping_first, shipping_last, shipping_phone, shipping_address1, "
 			." shipping_address2, shipping_city, shipping_state, shipping_postal, shipping_country, "
@@ -502,7 +502,6 @@ if (!empty($action)) { switch($action) {
 												</span>
 												<?=T_('PNG, GIF, or JPEG, but a transparent PNG is strongly recommended.')?><br/><br/>
 												<input type="file" name="logo" class="file"><br/>
-												<?=T_('Maximum file size')?>: <?=bytes2units(maxFileSize())?>B<br/>
 											</div>
 											<div class="girls_school_logo" <?=$edit_row['school_gender'] == "B" ? "" : "style='display: none;'"?>>
 												<hr style="display: block"/>
@@ -511,7 +510,6 @@ if (!empty($action)) { switch($action) {
 													<strong>Girls Logo:</strong><br/>
 													<?=T_('PNG, GIF, or JPEG, but a transparent PNG is strongly recommended.')?><br/><br/>
 													<input type="file" name="logo_girls" class="file"><br/>
-													<?=T_('Maximum file size')?>: <?=bytes2units(maxFileSize())?>B<br/>
 												</div>
 											</div>
 										</div>

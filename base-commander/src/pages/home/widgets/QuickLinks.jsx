@@ -8,6 +8,10 @@ import { Col } from 'reactstrap';
 
 export class QuickLinks extends Component {
 
+  static defaultProps = {
+    beta: false
+  }
+
   render() {
     return (
       <Col xs={12} sm={6} xl={4}>
@@ -25,7 +29,7 @@ export class QuickLinks extends Component {
             </Link>
             <a href={`${LEGACY_URL}/api/beta`}>
               <FontAwesome icon='door-open' />
-              Leave Beta
+              { this.props.beta ? 'Join' : 'Leave' } Beta
             </a>
           </div>
         </div>
@@ -44,8 +48,8 @@ export class Resources extends Component {
 
           <div id='links'>
             <a href='//dropbox.com/sh/c2g76cp76it1bf6/AABw7AHHEKWfahv-yIFXV8Qsa?dl=0' target='_blank' rel="noopener noreferrer">
-              <img src={`${LEGACY_URL}/homeIcons/Hachayol.png`} alt='hachayol'/>
-              Hachayol
+              <img src={`${LEGACY_URL}/homeIcons/dropbox.svg`} alt='hachayol'/>
+              Resources
             </a>
             <a href='//dropbox.com/sh/41u2regs73kfp9h/AACJV58J9KD6elXXZisYz74Ia?dl=0' target='_blank' rel="noopener noreferrer">
               <img src={`${LEGACY_URL}/homeIcons/tanya.png`} alt='tanya'/>

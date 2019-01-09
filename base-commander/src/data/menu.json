@@ -54,14 +54,22 @@
     "label": "Chidon", "legacy": true, "module": "chidon",
     "icon": "/images/chidon.png",
     "items": [
-      { "label": "Registered for Chidon", "legacy": true, "path": "/reports/chidon/chidon_enrollment.php" },
+      { "label": "Registered Report", "legacy": true, "path": "/reports/chidon/chidon_enrollment.php" },
+      { "label": "Registered / Unregistered Report", "legacy": true, "path": "/reports/chidon/snapshot.php" },
+      
+      { "label": "Study Guides", "legacy": true, "path": "/reports/chidon/booklet_report.php" },
+      { "label": "Yahadus Books", "legacy": true, "path": "/reports/chidon/yahadus.php" },
+
       { "label": "Shabbaton Enrolled Report", "legacy": true, "path": "/reports/chidon/shabbaton_enrollment.php" },
       { "label": "Shabbaton Walking Report", "legacy": true, "path": "/reports/chidon/walking_groups.php" },
+
       { "label": "Enter Chidon Test Marks", "legacy": true, "path": "/chidon_tests.php" },
+      { "label": "Enter Mitzvah Maven Marks", "legacy": true, "path": "/chidon_mm_tests.php" },
+
       { "label": "Enroll Chaperones", "legacy": true, "path": "/chidon_school_reg.php" },
       
-      { "label": "Activate Enrollment", "legacy": true, "user_types": ["BC"], "path": "/enrollment.php" },
-      { "label": "Activate Enrollment HQ", "legacy": true, "user_types": ["HQ"], "path": "/enrollment_hq.php" },
+      { "label": "Activate Enrollment", "legacy": true, "user_types": [ "BC" ], "path": "/enrollment.php" },
+      { "label": "Activate Enrollment HQ", "legacy": true, "user_types": [ "HQ" ], "path": "/enrollment_hq.php" },
       
       { "label": "Review Enrollment", "legacy": true, "path": "/review_enrollment.php" },
       { "label": "Print Enrollment Info", "legacy": true, "path": "/chidon_review.php" },
@@ -76,6 +84,7 @@
     "icon": "/images/icon_report.png",
     "items": [
       { "label": "Office Reports", "legacy": true, "path": "/reports/", "user_types": [ "HQ" ] },
+
       { "label": "Registered Report", "legacy": true, "path": "/registered_report.php" },
       { "label": "Parents Report", "legacy": true, "path": "/parent_report.php" },
       { "label": "Not Yet Registered Report", "legacy": true, "path": "/non_registered_report.php" },
@@ -105,7 +114,7 @@
     ]
   },
   {
-    "label": "Shipping Reports",  "legacy": true, "path": "/reports/shipping", "module": "chayolei",
+    "label": "Shipping Reports",  "legacy": true, "path": "/reports/shipping/", "module": "chayolei",
     "icon": "/images/icon_report.png"
   },
   {
@@ -124,7 +133,14 @@
           { "label": "Shabbos Mevorchim Report", "legacy": true, "path": "/choose_sm_report.php" },
           { "label": "Check Your Tehillim Quotas", "legacy": true, "path": "/tehillim_quotas.php" },
           { "label": "Change Tehillim Ladder/Quota", "legacy": true, "path": "/admin_users_track.php" },
-          { "label": "Shabbos Mevorchim Tutorial Video", "legacy": false, "path": "https://vimeo.com/195384916" }
+          { "label": "Shabbos Mevorchim Tutorial Video", "legacy": false, "path": "https://vimeo.com/195384916" },
+          { "label": "Qutoa Cards", "legacy": false, "path": "/quota_cards.php" }
+        ]
+      },
+      { "label": "Mivtzoim", "module": "chayolei",
+        "items": [
+          { "label": "Marking", "legacy": true, "path": "/mivtzoim" },
+          { "label": "Reports", "legacy": true, "path": "/mivtzoim/reports" }
         ]
       }
     ]
@@ -135,7 +151,9 @@
     "items": [
       { "label": "Promotion Picture Report", "legacy": true, "path": "/promotion_report.php" },
       { "label": "Teacher\"s Medal Ceremony Report", "legacy": true, "path": "/medal_rank_ceremony3.php" },
-      { "label": "Raffle Winners", "legacy": true, "path": "/raffles/shared/forms/winners_form.php" }
+      { "label": "Medal Ceremony Slideshow", "legacy": true, "path": "/medal_ceremony/choose_slides.php" },
+      { "label": "Raffle Winners", "legacy": true, "path": "/raffles/shared/forms/winners_form.php" },
+      { "label": "Raffle Winners", "legacy": true, "path": "/missing_medals.php", "user_types": [ "HQ" ] }
     ]
   },
   {
@@ -149,5 +167,13 @@
   {
     "label": "Setup Guide",  "legacy": true, "path": "/admin_setup_guide.php", "module": "chayolei",
     "icon": "/images/icon_wizard.png"
+  },
+  {
+    "label": "Support",  "legacy": true, "path": "/helpdesk/?p=open",
+    "icon": "/images/parentIcons/support icon.gif"
+  },
+  {
+    "label": "HQ Links", "legacy": true, "path": "/admin.php", "user_types": [ "HQ" ], "module": "chayolei",
+    "icon": "/images/icon_admin_home.png"
   }
 ]

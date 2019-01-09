@@ -80,9 +80,9 @@ class Auth {
         $legacy = self::legacyKey( $admin->username, $admin->password );
         $mobile = self::mobileKey( $admin->admin_id );
         // set the cookies
-        $_COOKIE['admin'] = $admin->admin_id;
-        $_COOKIE['admin_id'] = $mobile;
+        $_COOKIE['admin'] = $mobile;
         $_COOKIE['admin_auth'] = $legacy;
+        $_COOKIE['admin_id'] = $admin->admin_id;
         // return the results
         return [
             'id' => $admin->admin_id,

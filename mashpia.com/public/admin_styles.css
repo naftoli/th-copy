@@ -1082,8 +1082,11 @@ p {
 			#nav ul.list_first  li.list_parent.current li a  {
 				color:#000;
 			}
-			#nav ul.list_first  li  img  {
+			#nav ul.list_first  li  img, #nav ul.list_first  li  i  {
 				margin:2px 12px -8px 0;
+				width: 28px;
+				text-align: center;
+				font-size: 24px;
 			}
 			/*#nav ul.list_second, #nav ul.list_second ul   {*/
 			#nav ul.list_second ul, #nav .list_small .list_second   {
@@ -2202,8 +2205,8 @@ div.fakefile input {
 .fileinputs input.file {
 	position: relative;
 	text-align: right;
-	-moz-opacity:0 ;
-	filter:alpha(opacity: 0);
+	-moz-opacity:0;
+	filter:alpha( opacity = 0 );
 	opacity: 0;
 	z-index: 2;
 }

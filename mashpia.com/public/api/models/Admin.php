@@ -58,8 +58,11 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      * call the correct functions when specific attributes are changed
      */
     public function handleChanges() {
-        if ( $this->attribute_is_dirty('admin_email') ){} 
+        // if email was changed
+        if ( $this->attribute_is_dirty('admin_email') ){}
+        // if password was changed
         else if ( $this->attribute_is_dirty('username') || $this->attribute_is_dirty('password') ) {}
+        // all's good, return false to prevent update
         return true;
     }
 
@@ -112,6 +115,10 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         $reset->execute([ $this->admin_id, $selector, hash('sha256', $token), $expires->format('U'), $this->email ]);
 
         return MashpiaEmails::passwordReset( $this->email, $this->username, $url );
+    }
+
+    public function sendParentEmail() {
+        return MashpiaEmails::sendParentEmail( $this->email, $this->username, $this->password );
     }
 
     //*********************************************************************/
@@ -282,7 +289,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             'only' => [
                 'admin_id', 'username',         'title',        'first',        'last',
                 'lang',     'home_phone',       'cell_phone',   'admin_email',  'chabad_org_shliach_id',
-                'photo',    'admin_phone_work', 'google_id',    'admin_phone_mobile',  
+                'photo',    'admin_phone_work', 'google_id',    'admin_phone_mobile', 'beta',
             ],
             'methods' => [ 'logins' ]
         ]);

@@ -12,6 +12,7 @@ import { setErrors } from 'store/login/actions';
 // styles and images
 import logo from 'img/logos/th.svg';
 import { user } from 'img/icons';
+import { LEGACY_URL } from 'components/constants';
 
 const noop = () => {};
 
@@ -69,6 +70,10 @@ export class Login extends Component {
     errors = errors.map( (error, index) => 
       <UncontrolledAlert color='danger' key={index}>{ error }</UncontrolledAlert> 
     );
+
+    const linkProps = {
+      target: '_blank', rel: 'noopener noreferrer'
+    }
     
     return (
       <div id='Login'>
@@ -122,6 +127,21 @@ export class Login extends Component {
               <Link to='/forgot'>Forgot Password?</Link>
               <Link to='/signup'>New Account</Link>
             </div>
+
+            <footer>
+              <a { ...linkProps } href={`${ LEGACY_URL }/donate`}>
+                Donate
+              </a>
+              <a { ...linkProps } href={`${ LEGACY_URL }/our_mission.php`}>
+                Our Mission
+              </a>
+              <a { ...linkProps } href={`${ LEGACY_URL }/plan_of_action.php`}>
+                Plan of Action
+              </a>
+              <a { ...linkProps } href={`${ LEGACY_URL }/campaigns.php`}>
+                Campaigns
+              </a>
+            </footer>
           </div>
         }
       </div>

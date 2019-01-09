@@ -123,7 +123,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
       # run the build
-      - run: yarn build:prod
+      - run: yarn build
       # save the results to the worksspace
       - persist_to_workspace:
           root: ~/repo
@@ -142,10 +142,15 @@ jobs:
           at: ~/repo
       
       - run:
-           name: Add Test.Mashpia.com to known_hosts
-           command: |
+          name: Add Test.Mashpia.com to known_hosts
+          command: |
             mkdir -p ~/.ssh;
             ssh-keyscan -H test.mashpia.com >> ~/.ssh/known_hosts;
+
+      - run:
+          name: Create deploy/build
+          command: |
+            ssh mashtest@test.mashpia.com "mkdir -p tzivos-hashem/deploy/build"
 
       - run:
           name: Send the react build Over SSH to deploy/build
@@ -169,10 +174,15 @@ jobs:
           at: ~/repo
       
       - run:
-           name: Add Mashpia.com to known_hosts
-           command: |
+          name: Add Mashpia.com to known_hosts
+          command: |
             mkdir -p ~/.ssh;
             ssh-keyscan -H mashpia.com >> ~/.ssh/known_hosts;
+
+      - run:
+          name: 'Create deploy/build folder'
+          command: | 
+            ssh mashpia@mashpia.com "mkdir -p tzivos-hashem/deploy/build"
 
       - run:
           name: Send the react build Over SSH to deploy/build

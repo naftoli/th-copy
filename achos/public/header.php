@@ -17,7 +17,7 @@ if (get_magic_quotes_gpc()) {
 }
 
 $_GETPOST = $_POST + $_GET;
-require('db.php');
+require_once('db.php');
 
 if (!isset($dual_auth)) 
 	$dual_auth = false;

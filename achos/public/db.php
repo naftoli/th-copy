@@ -70,7 +70,7 @@ function mysql_enum_values($tableName,$fieldName)
 
     if (($fieldType=='enum' || $fieldType=='set') && ($ret_fieldName==$fieldName) )
     {
-      $fieldOptions =explode(("','",substr($fieldLen,1,-1));
+      $fieldOptions =explode( "','", substr( $fieldLen, 1, -1) );
       return $fieldOptions;
     }
   }

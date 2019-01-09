@@ -12,17 +12,18 @@ class Login implements \JsonSerializable {
     public $model; // model that the login refers to
     public $modules;
 
-    private $name; // The name displayed to the user
-    private $img; // the icon to accompany it
+    public $name; // The name displayed to the user
+    public $img; // the icon to accompany it
     
-    private $active; // Is this login active?
-    private $legacy; // Does this login have access to legacy systems?
+    public $active; // Is this login active?
+    public $legacy; // Does this login have access to legacy systems?
 
     public $inst_id = false; // cache the inst id
     public $school_id = false; // cache the school id
     public $class_id = false; // cache the class id
 
     public $role = false;
+    public $key = false;
 
     const LEGACY_ID = 2; // School institution
 
@@ -207,7 +208,7 @@ class Login implements \JsonSerializable {
         ];
         // add the login key for parent accounts to the parent portal
         if ( $this->type == 'PARENT' )
-            $res['key'] = Auth::mobileKey( $this->model->admin_id );
+            $res['key'] = $this->key;
 
         return $res;
     }

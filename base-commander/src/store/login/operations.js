@@ -15,7 +15,6 @@ export const login = opts => dispatch => {
   return API.post( '/auth/login', opts )
     .then( ({ legacy, mobile, id }) => {
         return dispatch( actions.setTokens( legacy, mobile, id ) );
-        // return getCurrentUser()( dispatch ); // get the user
     })
     .catch( error => {
       dispatch( actions.setLoading( false ) );
@@ -54,9 +53,6 @@ export const getCurrentUser = () => dispatch => {
       return setLogin( dispatch );
     }).catch( error => {
       dispatch( actions.logout() );
-      // dispatch( actions.setErrors( error.message || 
-      //   'Could not get account info. Please clear your cookies and try again.'
-      // ));
       return Promise.reject( error );
     });
 }

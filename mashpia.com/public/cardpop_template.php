@@ -13,14 +13,14 @@
 		});
 		</script>
 		 
-		<script type="text/javascript" src="http://mashpia.com/v2/js/back-end/admin/jquery2.js"></script>
+		<script type="text/javascript" src="/v2/js/back-end/admin/jquery2.js"></script>
 		
-		<link href="http://mashpia.com/v2/css/back-end/kiosk/reset.css" rel="stylesheet" type="text/css" />
-		<link href="http://mashpia.com/v2/css/back-end/kiosk/style.css" rel="stylesheet" type="text/css" />
-		<link href="http://mashpia.com/v2/css/back-end/kiosk/print.css" rel="stylesheet" type="text/css" media="print" />
+		<link href="/v2/css/back-end/kiosk/reset.css" rel="stylesheet" type="text/css" />
+		<link href="/v2/css/back-end/kiosk/style.css" rel="stylesheet" type="text/css" />
+		<link href="/v2/css/back-end/kiosk/print.css" rel="stylesheet" type="text/css" media="print" />
 
 		<!--[if IE]>
-		<link href="http://mashpia.com/v2/css/back-end/kiosk/style_ie.css" rel="stylesheet" type="text/css" />
+		<link href="/v2/css/back-end/kiosk/style_ie.css" rel="stylesheet" type="text/css" />
 		<![endif]-->
 		
         <style type="text/css">

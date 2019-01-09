@@ -16,7 +16,7 @@ export class SettingsRow extends Component {
     return (
       <Row>
         <Col sm={6} xl={3}>
-          <Label>Show on Whatsapp Reports</Label>
+          <Label>Show on WWTC Reports</Label>
           <Toggle
             name='whatsapp'
             { ...checkProps }
@@ -25,20 +25,21 @@ export class SettingsRow extends Component {
         
         <Col sm={6} xl={3}>
           <Label>Class Gender</Label>
-          <Radio 
-            value='M'
+          <Radio
+            required
+            value='m'
             { ...inputProps }
             name='class_gender'
-            checked={ class_gender === 'M' }>
+            checked={ class_gender === 'm' }>
 
             Boys <FontAwesome icon='male' />
           </Radio>
 
           <Radio
-            value='F'
+            value='f'
             { ...inputProps }
             name='class_gender'
-            checked={ class_gender === 'F' }>
+            checked={ class_gender === 'f' }>
 
             Girls <FontAwesome icon='female' />
           </Radio>

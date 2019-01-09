@@ -10,13 +10,19 @@ function withDefaultProps( Select ){
     selectRef = React.createRef();
 
     getValue = () => {
-      const { value } = this.props;
+      const { value, values, selected } = this.props;
 
       if ( value && value.value !== undefined )
         return value.value;
 
       if ( value !== undefined && value !== null )
         return value;
+
+      if ( values !== undefined && values !== null )
+        return values;
+
+      if ( selected !== undefined && selected !== null )
+        return selected;
 
       return ''
     };

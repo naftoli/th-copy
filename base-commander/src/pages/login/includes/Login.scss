@@ -22,18 +22,51 @@
   }
 
   div#links {
-    text-align: center;
-    margin: 0px 0 12px;
-    opacity: .7;
-
+    opacity: .9;
     display: flex;
+    margin: 0px 0 12px;
+    text-align: center;
 
     a {
-      flex-grow: 1;
       width: 50%;
+      flex-grow: 1;
 
       &:first-child { text-align: left; }
       &:last-child { text-align: right; border-right:none; }
+    }
+  }
+
+  footer {
+    display: flex;
+    opacity: .6;
+    font-size: .8em;
+
+    a {
+      flex-grow: 1;
+
+      &:not(:last-child) {
+        border-right: 1px solid $primary-color;
+      }
+    }
+
+    @media( max-width: 515px ) {
+      flex-wrap: wrap;
+
+      a {
+        width: 50%;
+        padding: 6px 3px;
+  
+        &:not(:last-child) { border: none; }
+        &:nth-child( 1 ),
+        &:nth-child( 3 ) {
+          border-right: 1px solid $primary-color;
+        }
+
+        &:nth-child( 1 ),
+        &:nth-child( 2 ) {
+          border-bottom: 1px solid $primary-color;
+        }
+      }
     }
   }
 }
