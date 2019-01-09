@@ -79,7 +79,7 @@ class TasksPage extends Component {
       'Task', 'Subject', 'Miles', 'Base', 'Platoon', 
     ];
     // get the data
-    const rows = this.props.bases.map( task => [
+    const rows = this.props.tasks.map( task => [
       task.task, task.subject && task.subject.subject_name, 
       task.points, task.baseName, task.platoonName
     ]);
