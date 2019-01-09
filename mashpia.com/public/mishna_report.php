@@ -1,4 +1,4 @@
-<?
+<?php
 $admin_auth = array('school');
 require_once 'header.php';
 require_once 'class.mishnaReport.php';

@@ -76,7 +76,6 @@ abstract class MishnaReport {
 		if ($type == 'army') {
 			require_once 'class.armyMishnaReport.php';
 			return new ArmyMishnaReport();
-			break;
 		} else {
 			require_once 'class.specificMishnaReport.php';
 			switch ($type) {
@@ -91,7 +90,6 @@ abstract class MishnaReport {
 					break;
 			}
 			return new SpecificMishnaReport($type, $field, $id);
-			break;
 		}
 	}
 }
