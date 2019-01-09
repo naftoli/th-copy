@@ -49,8 +49,8 @@ class ParentsPage extends Component {
     // generate rows
     const rows = this.props.parents.map( parent => [
       parent.first, parent.last, parent.username, parent.cell,
-      parent.email, parent.address, parent.city, parent.state,
-      parent.zip, parent.country, getChildrenString( parent )
+      parent.email, (parent.admin_address1 + parent.admin_address2), parent.admin_city, parent.admin_state,
+      parent.admin_postal, parent.admin_country, getChildrenString( parent )
     ]);
     //arrayToCSV( headers, rows, 'parents' );
     return dataToCSV( headers, rows );

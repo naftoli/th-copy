@@ -10,10 +10,16 @@ class ParentsRouter {
 
         $filters = $current_user->login->getFilter( 's.', 'u.' );
 
+        // $parent_sql = "SELECT a.admin_id, a.username, a.title, a.first, a.father, a.mother, a.last, "
+        //     ." CONCAT(admin_address1, ' ', admin_address2) AS address, admin_city AS city, admin_state AS state, "
+        //     ." admin_postal AS zip, admin_country AS country, admin_phone_mobile AS cell, admin_email AS email, "
+        //     ." father_pic, mother_pic, u.first AS child_first, u.last AS child_last, u.user_id, u.user_serial "
+        //     ." FROM admins a JOIN admin_auths aa USING (admin_id) JOIN users u ON aa.auth = 'user' AND aa.id = u.user_id "
+        //     ." JOIN schools s USING (school_id) WHERE $filters;";
+        
         $parent_sql = "SELECT a.admin_id, a.username, a.title, a.first, a.father, a.mother, a.last, "
-            ." CONCAT(admin_address1, ' ', admin_address2) AS address, admin_city AS city, admin_state AS state, "
-            ." admin_postal AS zip, admin_country AS country, admin_phone_mobile AS cell, admin_email AS email, "
-            ." father_pic, mother_pic, u.first AS child_first, u.last AS child_last, u.user_id, u.user_serial "
+            ." admin_address1, admin_address2, admin_city, admin_state, admin_postal, admin_country, admin_phone_mobile AS cell, "
+            ." admin_email AS email, father_pic, mother_pic, u.first AS child_first, u.last AS child_last, u.user_id, u.user_serial "
             ." FROM admins a JOIN admin_auths aa USING (admin_id) JOIN users u ON aa.auth = 'user' AND aa.id = u.user_id "
             ." JOIN schools s USING (school_id) WHERE $filters;";
 
