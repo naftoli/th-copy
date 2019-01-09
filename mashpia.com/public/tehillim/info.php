@@ -33,7 +33,7 @@ echo "</pre>";
       <tbody>
       <?php
       foreach ( $info as $row ) {
-        echo "<tr><td>" . $row['ladder'] . "</td><td>" . $row['age'] . "</td><td>" . $months[$row['month']] . "</td><td>" . $row['kapitelach'] . "</td><td>" . $row['qty'] . "</td></tr>";
+        echo "<tr><td>" . ($row['ladder']-2) . "</td><td>" . $row['age'] . "</td><td>" . $months[$row['month']] . "</td><td>" . $row['kapitelach'] . "</td><td>" . $row['qty'] . "</td></tr>";
       }
       ?>
       </tbody>
