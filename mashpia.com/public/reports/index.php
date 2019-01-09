@@ -121,6 +121,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Registration Reports</span>
                 </div>
             </a>
+            <a href="/raffles/posters/weekly.php">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="reports"/>
+                    <span class="link-text">Weekly Raffle Posters</span>
+                </div>
+            </a>
         </div>
         <?} // end admin only links ?>
         </div>
