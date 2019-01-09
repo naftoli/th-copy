@@ -9,7 +9,7 @@ if ( !isset( $current_user ) ) {
 }
 
 /** Get all the Tanya Only schools */
-$tanya_only_query = $MASHPIA_DB->query(
+$tanya_only_query = mysql_query(
 	"SELECT school_id FROM schools WHERE tanya = 1 AND chayolei = 0"
 );
 $tanyaOnlySchools = array();
