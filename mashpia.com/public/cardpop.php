@@ -36,8 +36,8 @@ if (strlen($_GET["card_id"]) == 6) {
 }
 
 $intUser = intval($_COOKIE["user_id"]);
-$objLink = mysql_connect('localhost', 'mashpia', 'ShJ1uWcT89Ek6E');
-mysql_select_db('mashpiadb');
+//$objLink = mysql_connect('localhost', 'mashpia', 'ShJ1uWcT89Ek6E');
+//mysql_select_db('mashpiadb');
 $strSql = "
 	SELECT
 		user_code, school_id  
@@ -46,8 +46,12 @@ $strSql = "
 	WHERE
 		user_id = " . $intUser;
 $objResult = mysql_query($strSql);
-$strBarCode = "3" . mysql_result($objResult, 0);
-$school_id = mysql_result($objResult, 1);
+$arrUser = mysql_fetch_assoc( $objResult );
+// $strBarCode = "3" . mysql_result($objResult, 0);
+// $school_id = mysql_result($objResult, 1);
+$strBarCode = $arrUser['user_code'];
+$school_id = $arrUser['school_id'];
+
 $objCurl = curl_init();
 curl_setopt($objCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
 curl_setopt($objCurl, CURLOPT_RETURNTRANSFER, TRUE);
@@ -59,7 +63,8 @@ curl_setopt($objCurl, CURLOPT_FOLLOWLOCATION, 1);
 
 //if (in_array($school_id, $australian)) $strURL = "https://v2.mashpia.com/v2/kiosk/auto-login/uc/" . $strBarCode;
 //else $strURL = "/v2/kiosk/auto-login/uc/" . $strBarCode;
-$strURL = "/v2/kiosk/auto-login/uc/" . $strBarCode . "/encrypted/0";
+//$strURL = "/v2/kiosk/auto-login/uc/" . $strBarCode . "/encrypted/0";
+$strURL = "https://mashpia.com/v2/kiosk/auto-login/uc/" . $strBarCode . "/encrypted/0";
 curl_setopt($objCurl, CURLOPT_URL, $strURL);
 curl_exec($objCurl);
 
@@ -67,7 +72,8 @@ ob_start();
 //if (in_array($school_id, $australian)) $strURL = "https://v2.mashpia.com/kiosk-main/cardpop/card_id/" . $_GET["card_id"];
 //else $strURL = "/v2/kiosk-main/cardpop/card_id/" . $_GET["card_id"];
 //echo $strURL; exit;
-$strURL = "/v2/kiosk-main/cardpop/card_id/" . $_GET["card_id"];
+//$strURL = "/v2/kiosk-main/cardpop/card_id/" . $_GET["card_id"];
+$strURL = "https://mashpia.com/v2/kiosk-main/cardpop/card_id/" . $_GET["card_id"];
 curl_setopt($objCurl, CURLOPT_URL, $strURL);
 
 if (isset($_POST["control"]))
@@ -81,5 +87,5 @@ $strResult = ob_get_contents();
 curl_close($objCurl);
 ob_end_clean();
 print $strResult;
-mysql_close($objLink);
+//mysql_close($objLink);
 ?> 
