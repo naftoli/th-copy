@@ -101,7 +101,7 @@ if ($admin_auth[0] == 'school') {
             echo "</form>";
        
         } else {
-            require 'class.points.php';
+            require_once 'class.points.php';
             ?>
             <div class='no-print'>
                 <div align='center'>
