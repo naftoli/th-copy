@@ -514,7 +514,7 @@ require 'mobile/reg/ajax/encrypt.php';
 		} else {
 			// open a welcome message as soon as the window loads
 			Shadowbox.open({
-				content:    '/cardpop.php?card_id=' + cardnum.value,
+				content:    '/cardpop.php?v=2&card_id=' + cardnum.value,
 				player:     "iframe",
 				width:      770,
 				height:     600// 430
