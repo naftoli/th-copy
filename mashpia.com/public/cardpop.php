@@ -4,37 +4,38 @@ ini_set('default_charset', 'UTF-8');
 mb_internal_encoding("UTF-8");
 error_reporting(E_ALL);
 setlocale(LC_MONETARY, 'en_US');
+require('header.php');
 	
-if (in_array(strlen($_GET["card_id"]), array(20)))
-{
-	require('header.php');
-	require_once('calendar.php');
-	require_once('file_save.php');
-	require_once('card_printer.php');
-	include('code_processor.php');
-	$scan_code = $_GET["card_id"];
-	$strResult = process_code($_GET["card_id"]);
-	if ($strResult != NULL && !is_array($strResult))
-	{
-		require_once("cardpop_template.php");
-		card_pop_template($strResult);
-		exit;
-	}
-	if (is_array($strResult))
-	{
-		require_once("cardpop_template.php");
-		card_pop_template($strResult["points"] . " point" . ($strResult["points"] > 1 ? "s have" : " has") . " been awarded to you!");
-		print '<script>window.parent.add_to_miles(' . $strResult["points"] . ');';
-		print '</script>';
-		exit;
-	}
-}
+// if (in_array(strlen($_GET["card_id"]), array(20)))
+// {
+// 	require_once('calendar.php');
+// 	require_once('file_save.php');
+// 	require_once('card_printer.php');
+// 	include('code_processor.php');
+// 	$scan_code = $_GET["card_id"];
+// 	$strResult = process_code($_GET["card_id"]);
+// 	if ($strResult != NULL && !is_array($strResult))
+// 	{
+// 		require_once("cardpop_template.php");
+// 		card_pop_template($strResult);
+// 		exit;
+// 	}
+// 	if (is_array($strResult))
+// 	{
+// 		require_once("cardpop_template.php");
+// 		card_pop_template($strResult["points"] . " point" . ($strResult["points"] > 1 ? "s have" : " has") . " been awarded to you!");
+// 		print '<script>window.parent.add_to_miles(' . $strResult["points"] . ');';
+// 		print '</script>';
+// 		exit;
+// 	}
+// }
 
-if (strlen($_GET["card_id"]) == 6) {
-	require_once("cardpop_template.php");
-	exit;
-}
+// if (strlen($_GET["card_id"]) == 6) {
+// 	require_once("cardpop_template.php");
+// 	exit;
+// }
 
+// all achievement cards come from v2 system
 $intUser = intval($_COOKIE["user_id"]);
 //$objLink = mysql_connect('localhost', 'mashpia', 'ShJ1uWcT89Ek6E');
 //mysql_select_db('mashpiadb');
@@ -64,7 +65,7 @@ curl_setopt($objCurl, CURLOPT_FOLLOWLOCATION, 1);
 //if (in_array($school_id, $australian)) $strURL = "https://v2.mashpia.com/v2/kiosk/auto-login/uc/" . $strBarCode;
 //else $strURL = "/v2/kiosk/auto-login/uc/" . $strBarCode;
 //$strURL = "/v2/kiosk/auto-login/uc/" . $strBarCode . "/encrypted/0";
-$strURL = "https://mashpia.com/v2/kiosk/auto-login/uc/" . $strBarCode . "/encrypted/0";
+$strURL = "https://mashpia.com/v2/kiosk/auto-login/uc/" . $strBarCode . "/encrypted/0/fromKiosk/1";
 curl_setopt($objCurl, CURLOPT_URL, $strURL);
 curl_exec($objCurl);
 
