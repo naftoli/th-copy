@@ -505,21 +505,21 @@ require 'mobile/reg/ajax/encrypt.php';
 		if (cardnum.value.match(/^ *$/))
 			return;
 		
-		if (cardnum.value.length == 6) {
-			var user = <?=$user_id?>;
-			$.post('ajax/setMaosChitimPledge.php', {user_id : user, number : cardnum.value}, function(data) {
-				 alert(data);
-				 return false;
-			});
-		} else {
+		// if (cardnum.value.length == 6) {
+		// 	var user = <?=$user_id?>;
+		// 	$.post('ajax/setMaosChitimPledge.php', {user_id : user, number : cardnum.value}, function(data) {
+		// 		 alert(data);
+		// 		 return false;
+		// 	});
+		// } else {
 			// open a welcome message as soon as the window loads
 			Shadowbox.open({
-				content:    '/cardpop.php?v=2&card_id=' + cardnum.value,
+				content:    '/cardpop.php?card_id=' + cardnum.value,
 				player:     "iframe",
 				width:      770,
 				height:     600// 430
 			});
-		}
+		//}
 		cardnum.value='';
 		return false;
 	}

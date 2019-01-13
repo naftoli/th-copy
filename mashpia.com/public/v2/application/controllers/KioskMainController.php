@@ -150,6 +150,7 @@ class KioskMainController extends Zend_Controller_Action
 		*/
 		else
 		{
+		
 			$this->_redirect('kiosk/logout/target/home');
 			exit;
 		}
