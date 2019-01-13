@@ -61,7 +61,7 @@ define("MASTER_PASSWORD_X32G0SS8P", "9CXVC9h39tASDSt4h8ta4K9");
 define("capture_start_date", mktime(0, 0, 0, 1, 6, 2013)); // school year start date
 define("capture_end_date", mktime(23, 59, 59, 12, 27, 2013)); // goal date
 define("date_milestone", "Chof Daled Teves");
-define("date_hebrew_year", 5777);
+define("date_hebrew_year", 5779);
 define("serial_offset", 454321);
 define("institution_offset", 1616161);
 define("NO_PUSH", "NO_PUSH_KEY_81a2457FG69h42s");
@@ -81,10 +81,8 @@ $arrAppDetails = array(
 		),
 		'default_institution_logo' => '/imgs/v/src/2157149_5970.jpg',
 		'admin_emails' => array(
-			'andyware@gmail.com',
 			'CTH@tzivoshashem.org',
 			'shimmy@jcm.museum',
-			'shamaichein@gmail.com',
 			'shayausa@gmail.com'
 		)
 	),
@@ -93,14 +91,12 @@ $arrAppDetails = array(
 		'terminology' => 'School',
 		'default_institution_logo' => '/imgs/v/src/0.gif',
 		'admin_emails' => array(
-			'andyware@gmail.com',
 			'thckids@chabadchildren.com',
 			'naftolir@gmail.com',
 			'shayausa@gmail.com',
 			'chasid@gmail.com',
 			'info@chabadchildren.com',
 			'Shimmy@jcm.museum',
-			'shamaichein@gmail.com',
 			'help@chabadchildren.com'
 		)
 	),
@@ -109,14 +105,12 @@ $arrAppDetails = array(
 		'terminology' => 'School',
 		'default_institution_logo' => '/imgs/v/src/0.gif',
 		'admin_emails' => array(
-			'andyware@gmail.com',
 			'thckids@chabadchildren.com',
 			'naftolir@gmail.com',
 			'shayausa@gmail.com',
 			'chasid@gmail.com',
 			'info@chabadchildren.com',
 			'Shimmy@jcm.museum',
-			'shamaichein@gmail.com',
 			'help@chabadchildren.com'
 		)
 	),
@@ -125,14 +119,12 @@ $arrAppDetails = array(
 		'terminology' => 'School',
 		'default_institution_logo' => '/imgs/v/src/9725046_3404.jpg',
 		'admin_emails' => array(
-			'andyware@gmail.com',
 			'thckids@chabadchildren.com',
 			'naftolir@gmail.com',
 			'shayausa@gmail.com',
 			'chasid@gmail.com',
 			'info@chabadchildren.com',
 			'Shimmy@jcm.museum',
-			'shamaichein@gmail.com',
 			'help@chabadchildren.com'
 		)
 	),
@@ -141,14 +133,12 @@ $arrAppDetails = array(
 		'terminology' => 'School',
 		'default_institution_logo' => '/imgs/v/src/0.gif',
 		'admin_emails' => array(
-			'andyware@gmail.com',
 			'thckids@chabadchildren.com',
 			'naftolir@gmail.com',
 			'shayausa@gmail.com',
 			'chasid@gmail.com',
 			'info@chabadchildren.com',
 			'Shimmy@jcm.museum',
-			'shamaichein@gmail.com',
 			'help@chabadchildren.com'
 		)
 	),
@@ -157,14 +147,12 @@ $arrAppDetails = array(
 		'terminology' => 'Camp',
 		'default_institution_logo' => '/imgs/v/src/3326716_6334.jpg',
 		'admin_emails' => array(
-			'andyware@gmail.com',
 			'thckids@chabadchildren.com',
 			'naftolir@gmail.com',
 			'shayausa@gmail.com',
 			'chasid@gmail.com',
 			'info@chabadchildren.com',
 			'Shimmy@jcm.museum',
-			'shamaichein@gmail.com',
 			'help@chabadchildren.com',
 			'office@chabadchildren.com'
 		)
@@ -173,14 +161,12 @@ $arrAppDetails = array(
 		"name" => "Legacy Schools",
 		'default_institution_logo' => '/imgs/v/src/0.gif',
 		'admin_emails' => array(
-			'andyware@gmail.com',
 			'thckids@chabadchildren.com',
 			'naftolir@gmail.com',
 			'shayausa@gmail.com',
 			'chasid@gmail.com',
 			'info@chabadchildren.com',
 			'Shimmy@jcm.museum',
-			'shamaichein@gmail.com',
 			'help@chabadchildren.com'
 		)
 	),
@@ -188,14 +174,12 @@ $arrAppDetails = array(
 		"name" => "Legacy Schools",
 		'default_institution_logo' => '/imgs/v/src/0.gif',
 		'admin_emails' => array(
-			'andyware@gmail.com',
 			'thckids@chabadchildren.com',
 			'naftolir@gmail.com',
 			'shayausa@gmail.com',
 			'chasid@gmail.com',
 			'info@chabadchildren.com',
 			'Shimmy@jcm.museum',
-			'shamaichein@gmail.com',
 			'help@chabadchildren.com'
 		)
 	),
@@ -203,14 +187,12 @@ $arrAppDetails = array(
 		"name" => "Camp Schools",
 		'default_institution_logo' => '/imgs/v/src/0.gif',
 		'admin_emails' => array(
-			'andyware@gmail.com',
 			'thckids@chabadchildren.com',
 			'naftolir@gmail.com',
 			'shayausa@gmail.com',
 			'chasid@gmail.com',
 			'info@chabadchildren.com',
 			'Shimmy@jcm.museum',
-			'shamaichein@gmail.com',
 			'help@chabadchildren.com'
 		)
 	),
@@ -222,14 +204,12 @@ $arrAppDetails = array(
 		),
 		'default_institution_logo' => '/imgs/v/src/5461539_1916.png',
 		'admin_emails' => array(
-			'andyware@gmail.com',
 			'thckids@chabadchildren.com',
 			'naftolir@gmail.com',
 			'shayausa@gmail.com',
 			'chasid@gmail.com',
 			'info@chabadchildren.com',
 			'Shimmy@jcm.museum',
-			'shamaichein@gmail.com',
 			'help@chabadchildren.com',
 			'office@chabadchildren.com'
 		)
@@ -258,14 +238,12 @@ $arrSystemPrices = array(
 );
 
 $arrAdministrationEmails = array(
-	'andyware@gmail.com',
 	'thckids@chabadchildren.com',
 	'naftolir@gmail.com',
 	'shayausa@gmail.com',
 	'chasid@gmail.com',
 	'info@chabadchildren.com',
 	'Shimmy@jcm.museum',
-	'shamaichein@gmail.com'
 );
 
 $arrInstituionDetails = array(

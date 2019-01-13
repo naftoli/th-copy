@@ -1273,17 +1273,22 @@ class KioskController extends Zend_Controller_Action
 		//$kiosk = new Kiosk();
 		//$objUsers = new Users();
 		//$objLegacy = new Legacy();
-		//$objConfig = new Config(); 
+		//$objConfig = new Config();
 
 		$user = new Zend_Session_Namespace("userInfo");
-		if ($this->_request->getParam('fromKiosk') == '1') $barcode = $this->_request->getParam('uc');
-		else $barcode = $this->encrypt_decrypt('decrypt', $this->_request->getParam('uc'));
-		$code = substr($barcode, 1);
-		$user->return_url = @$_SERVER["HTTP_REFERER"];
-		$user->barcode = $code;
-		$user->remote_balance = $this->encrypt_decrypt('decrypt', $this->_request->getParam('pb'));
-
-		if ($this->_request->getParam('fromKiosk') == '1') exit;
+		if ($this->_request->getParam('fromKiosk') == '1') {
+			$barcode = $this->_request->getParam('uc');
+			//$code = substr($barcode, 1);
+			$user->return_url = @$_SERVER["HTTP_REFERER"];
+			$user->barcode = $barcode;
+			exit;
+		} else {
+			$barcode = $this->encrypt_decrypt('decrypt', $this->_request->getParam('uc'));
+			$code = substr($barcode, 1);
+			$user->return_url = @$_SERVER["HTTP_REFERER"];
+			$user->barcode = $code;
+			$user->remote_balance = $this->encrypt_decrypt('decrypt', $this->_request->getParam('pb'));
+		}
 		/*
 		$date = NULL;
 		$strDate = "";
