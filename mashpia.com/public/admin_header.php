@@ -4,7 +4,7 @@ require_once( __DIR__ . '/api/header/db.php' );
 require_once( __DIR__ . '/api/header/setCurrentUser.php' );
 
 // set the current user
-if ( !isset( $current_user ) ) {
+if ( !isset( $current_user ) || !$current_user ) {
 	$current_user = setCurrentUser();
 }
 
@@ -147,7 +147,7 @@ function renderSidebarItem( $item, $nested = false ) {
 }
 
 // get the menu structure
-$string = file_get_contents( __DIR__ . "/../includes/menu.json");
+$string = file_get_contents( __DIR__ . "/../../base-commander/src/data/menu.json");
 $menu = json_decode( $string, true ); // will be nested arrays
 $menu = array_reduce( $menu, getMenuReducer(), [] );
 
