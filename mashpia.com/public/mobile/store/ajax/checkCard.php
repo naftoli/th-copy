@@ -28,8 +28,12 @@ if ($authorized) {
         WHERE
             user_id = " . $intUser;
     $objResult = mysql_query($strSql);
-    $strBarCode = "3" . mysql_result($objResult, 0);
-    $school_id = mysql_result($objResult, 1);
+    $arrUser = mysql_fetch_assoc( $objResult );
+    // $strBarCode = "3" . mysql_result($objResult, 0);
+    // $school_id = mysql_result($objResult, 1);
+    $strBarCode = $arrUser['user_code'];
+    $school_id = $arrUser['school_id'];
+
     $objCurl = curl_init();
     curl_setopt($objCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
     curl_setopt($objCurl, CURLOPT_RETURNTRANSFER, TRUE);
@@ -38,27 +42,22 @@ if ($authorized) {
     curl_setopt($objCurl, CURLOPT_COOKIEFILE, "cookiefile");
     curl_setopt($objCurl, CURLOPT_COOKIEJAR, "cookiefile");
     curl_setopt($objCurl, CURLOPT_FOLLOWLOCATION, 1); 
-    
+
     //if (in_array($school_id, $australian)) $strURL = "https://v2.mashpia.com/v2/kiosk/auto-login/uc/" . $strBarCode;
-    //else $strURL = "https://mashpia.com/v2/kiosk/auto-login/uc/" . $strBarCode;
+    //else $strURL = "/v2/kiosk/auto-login/uc/" . $strBarCode;
+    //$strURL = "/v2/kiosk/auto-login/uc/" . $strBarCode . "/encrypted/0";
     $strURL = "https://mashpia.com/v2/kiosk/auto-login/uc/" . $strBarCode . "/encrypted/0/fromKiosk/1";
     curl_setopt($objCurl, CURLOPT_URL, $strURL);
-    curl_exec($objCurl);
-    
+    $res = curl_exec($objCurl);
+
     ob_start();
     //if (in_array($school_id, $australian)) $strURL = "https://v2.mashpia.com/kiosk-main/cardpop/card_id/" . $_GET["card_id"];
-    //else $strURL = "https://mashpia.com/v2/kiosk-main/cardpop/card_id/" . $_GET["card_id"];
+    //else $strURL = "/v2/kiosk-main/cardpop/card_id/" . $_GET["card_id"];
     //echo $strURL; exit;
-    $strURL = "https://mashpia.com/v2/kiosk-main/cardpopmobile/card_id/" . $card;
+    //$strURL = "/v2/kiosk-main/cardpop/card_id/" . $_GET["card_id"];
+    $strURL = "https://mashpia.com/v2/kiosk-main/cardpop/mobileKiosk/1/card_id/" . $card;
     curl_setopt($objCurl, CURLOPT_URL, $strURL);
-    
-    if (isset($_POST["control"]))
-    {
-        curl_setopt($objCurl, CURLOPT_POST, 1);
-        curl_setopt($objCurl, CURLOPT_POSTFIELDS, $_POST);
-    }
     print curl_exec($objCurl);
-    
     $strResult = ob_get_contents();
     curl_close($objCurl);
     ob_end_clean();
