@@ -1,5 +1,4 @@
 <?php
-
 class KioskMainController extends Zend_Controller_Action
 {
 	private $_kiosk_user_session_data;
@@ -357,6 +356,10 @@ class KioskMainController extends Zend_Controller_Action
 					)
 				));
 			}
+		}
+		if ( $this->_request->getParam('mobileKiosk') == 1 ) {
+			echo $this->view->strScanCodeMessage;
+			exit;
 		}
 	}
 	
