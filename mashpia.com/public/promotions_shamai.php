@@ -58,6 +58,14 @@ $schools = array();
 $sql = "select school_id, school_name from schools where school_id != 82 and shamai_ord > 0 order by shamai_ord";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
+	switch ( $row['school_id'] ) {
+		case 58:
+			$row['school_name'] = 'Yeshiva Tomchei Temimim Lubavitch Montreal';
+			break;
+		case 87:
+			$row['school_name'] = 'Tzivos Hashem Long Beach';
+			break;
+	}
 	$schools[$row['school_id']] = $row['school_name'];
 }
 
