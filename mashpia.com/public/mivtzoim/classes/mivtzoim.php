@@ -494,7 +494,7 @@ class MivtzoimReport {
         if ( $school > 0 ) {
             $sth = $MASHPIA_DB->prepare("
                 SELECT 
-                    user_id, first, last, class_grade, class_sub
+                    user_id, first, last, class_grade, class_sub, school_name 
                 FROM
                     users u
                         JOIN
