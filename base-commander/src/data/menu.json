@@ -145,8 +145,6 @@
       },
       { "label": "Mishna", "module": "chayolei",
         "items": [
-          // { "label": "Setup Points Per Line", "legacy": true, "path": "/mishna_settings.php" },
-          // { "label": "Individual Mishna Marking", "legacy": true, "path": "/mark_mishnos_single.php" }, 
           { "label": "Mishna Marking", "legacy": true, "path": "/mark_mishnos.php" },
           { "label": "Mishna Report", "legacy": true, "path": "/mishna_report.php" }
         ]
