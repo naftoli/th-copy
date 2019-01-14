@@ -41,7 +41,7 @@ if ($authorized) {
     
     //if (in_array($school_id, $australian)) $strURL = "https://v2.mashpia.com/v2/kiosk/auto-login/uc/" . $strBarCode;
     //else $strURL = "https://mashpia.com/v2/kiosk/auto-login/uc/" . $strBarCode;
-    $strURL = "https://mashpia.com/v2/kiosk/auto-login/uc/" . $strBarCode . "/encrypted/0";
+    $strURL = "https://mashpia.com/v2/kiosk/auto-login/uc/" . $strBarCode . "/encrypted/0/fromKiosk/1";
     curl_setopt($objCurl, CURLOPT_URL, $strURL);
     curl_exec($objCurl);
     
