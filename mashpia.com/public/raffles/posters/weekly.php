@@ -66,6 +66,7 @@ foreach ($schools as $school_id => $school) {
                 width: 7.5in;
                 height: 10in;
                 page-break-after: always;
+                background-repeat: no-repeat;
             }
             .names {
                 top: 6in;
@@ -103,7 +104,6 @@ foreach ($schools as $school_id => $school) {
             foreach ( $urls as $i => $url ) {
                 echo "#week$i {";
                 echo "background-image: url( $url );";
-                echo "backgound-repeat: no-repeat;";
                 echo "}";
             } 
             ?>
