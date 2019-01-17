@@ -15,7 +15,7 @@ class Report extends ReportBasic {
         foreach ( $this->dates as $index => $jd ) {
             // skip first one b/c there's no from date
             if ( $index == 0 ) continue;
-            $from = $this->getDateForSelection( $this->dates[$index-1] );
+            $from = $this->getDateForSelection( $this->dates[$index-1]+1 );
             $to = $this->getDateForSelection( $this->dates[$index] );
             $this->date_selection[$jd] = $from . ' - ' . $to; // show from / to date in selection and keeps end julian date as key
             if ( unixtojd() < $jd ) break; // only show up to next date from today    
@@ -28,7 +28,5 @@ class Report extends ReportBasic {
         $date = $mm . ' ' . $arrDate[1] . ', ' . $arrDate[2];
         return $date;
     }
-
-
 }
 ?>
