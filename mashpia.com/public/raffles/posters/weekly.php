@@ -85,17 +85,17 @@ foreach ($schools as $school_id => $school) {
                 font-family: School;
                 font-size: 20px;
                 position: relative;
-                bottom: 1.3in;
+                bottom: 0.9in;
                 left: 5.5in;
                 width: 180px;
                 overflow-wrap: break-word;
             }
-            @media screen {
+            /* @media screen {
                 .winner {
                     padding-top: 20px;
                     padding-bottom: 20px;
                 }
-            }
+            } */
             <?php
             // generate 26 different ids with different background pics
             for ( $i = 1; $i <= 26; $i++ ) {
@@ -107,6 +107,9 @@ foreach ($schools as $school_id => $school) {
                 echo "}";
             } 
             ?>
+            #week1 {
+                margin-top: 50px;
+            }
         </style>
     </head>
     <body>
