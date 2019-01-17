@@ -87,9 +87,10 @@ foreach ($schools as $school_id => $school) {
                 font-size: 20px;
                 position: relative;
                 bottom: 1.3in;
-                left: 5.7in;
-                width: 180px;
+                left: 5.5in;
+                width: 200px;
                 overflow-wrap: break-word;
+                text-align: center;
             }
             /* @media screen {
                 .winner {
