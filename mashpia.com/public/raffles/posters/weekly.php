@@ -78,6 +78,8 @@ foreach ($schools as $school_id => $school) {
                 font-family: Gotham;
                 font-size: 30px;
                 text-align: center;
+                width: 6in;
+                margin-left: 90px;
             }
             .school {
                 page-break-after: always;
