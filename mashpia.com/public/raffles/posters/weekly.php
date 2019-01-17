@@ -67,7 +67,7 @@ foreach ($schools as $school_id => $school) {
                 height: 10in;
                 page-break-after: always;
                 background-repeat: no-repeat;
-                margin-left: 20px;
+                margin-left: 30px;
             }
             .names {
                 top: 6in;
@@ -87,7 +87,7 @@ foreach ($schools as $school_id => $school) {
                 font-size: 20px;
                 position: relative;
                 bottom: 1.3in;
-                left: 5.5in;
+                left: 5.7in;
                 width: 180px;
                 overflow-wrap: break-word;
             }
@@ -109,7 +109,7 @@ foreach ($schools as $school_id => $school) {
             } 
             ?>
             #week1 {
-                margin-top: 50px;
+                margin-top: 52px;
             }
         </style>
     </head>
