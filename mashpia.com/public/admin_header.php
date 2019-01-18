@@ -248,7 +248,7 @@ if ( !isset($_SESSION['program_name']) || $_SESSION['program_name'] != 'children
 				?>
 
 				<li>
-					<a heref='/logout.php'>
+					<a href='/logout.php'>
 						<span class='icon'>
 							<img src='/images/parentIcons/logout.gif' />
 							Logout
