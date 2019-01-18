@@ -67,6 +67,7 @@ foreach ($schools as $school_id => $school) {
                 height: 10in;
                 page-break-after: always;
                 background-repeat: no-repeat;
+                margin-left: 30px;
             }
             .names {
                 top: 6in;
@@ -77,6 +78,8 @@ foreach ($schools as $school_id => $school) {
                 font-family: Gotham;
                 font-size: 30px;
                 text-align: center;
+                width: 6in;
+                margin-left: 90px;
             }
             .school {
                 page-break-after: always;
@@ -85,10 +88,11 @@ foreach ($schools as $school_id => $school) {
                 font-family: School;
                 font-size: 20px;
                 position: relative;
-                bottom: 0.9in;
+                bottom: 1.3in;
                 left: 5.5in;
-                width: 180px;
+                width: 200px;
                 overflow-wrap: break-word;
+                text-align: center;
             }
             /* @media screen {
                 .winner {
@@ -108,7 +112,7 @@ foreach ($schools as $school_id => $school) {
             } 
             ?>
             #week1 {
-                margin-top: 50px;
+                margin-top: 52px;
             }
         </style>
     </head>
