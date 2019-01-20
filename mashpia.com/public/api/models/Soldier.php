@@ -408,9 +408,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // save the charge
         if ( !$this->registrationCharge( 'chayolei', $amount, $trans_id ) )
             $errors[] = "Could not insert into registration_charges.";
-        // update feilds to mark registered
-        $this->user_registered = new \Datetime();
-        if( !$this->user_start_date) $this->user_start_date = unixtojd();
+        // update fields to mark registered
+        if ( !$this->user_registered ) $this->user_registered = new \Datetime();
+        if ( !$this->user_start_date ) $this->user_start_date = unixtojd();
         $this->generateRank();
         $this->save();
         // create campaigns and birthday missions
@@ -522,7 +522,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // update the enrollment info to match the school
         $this->chayolei = $this->school->chayolei;
         $this->chidon = $this->school->chidon;
-        $this->yan = $this->school->tehillim;
+        $this->yan = $this->school->tanya;
         $this->save();
     }
 
