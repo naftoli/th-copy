@@ -1,5 +1,5 @@
 <?php
-class admin {
+class AdminLegacy {
 	
 	public $admin_id;
 	public $username;

@@ -355,6 +355,10 @@ class KioskMainController extends Zend_Controller_Action
 						"status" => "scanned"
 					)
 				));
+				if ( $this->_request->getParam('mobileKiosk') == 1 ) {
+					echo "You just earned " . $objCard->card_points . " points!";
+					exit;
+				}
 			}
 		}
 		if ( $this->_request->getParam('mobileKiosk') == 1 ) {

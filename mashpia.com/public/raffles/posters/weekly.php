@@ -66,6 +66,8 @@ foreach ($schools as $school_id => $school) {
                 width: 7.5in;
                 height: 10in;
                 page-break-after: always;
+                background-repeat: no-repeat;
+                margin-left: 30px;
             }
             .names {
                 top: 6in;
@@ -76,6 +78,8 @@ foreach ($schools as $school_id => $school) {
                 font-family: Gotham;
                 font-size: 30px;
                 text-align: center;
+                width: 6in;
+                margin-left: 90px;
             }
             .school {
                 page-break-after: always;
@@ -86,15 +90,16 @@ foreach ($schools as $school_id => $school) {
                 position: relative;
                 bottom: 1.3in;
                 left: 5.5in;
-                width: 180px;
+                width: 200px;
                 overflow-wrap: break-word;
+                text-align: center;
             }
-            @media screen {
+            /* @media screen {
                 .winner {
                     padding-top: 20px;
                     padding-bottom: 20px;
                 }
-            }
+            } */
             <?php
             // generate 26 different ids with different background pics
             for ( $i = 1; $i <= 26; $i++ ) {
@@ -103,10 +108,12 @@ foreach ($schools as $school_id => $school) {
             foreach ( $urls as $i => $url ) {
                 echo "#week$i {";
                 echo "background-image: url( $url );";
-                echo "backgound-repeat: no-repeat;";
                 echo "}";
             } 
             ?>
+            #week1 {
+                margin-top: 52px;
+            }
         </style>
     </head>
     <body>

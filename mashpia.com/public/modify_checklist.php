@@ -6,12 +6,13 @@ require_once('file_save.php');
 // get current working year
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getCurrentYear();
+$startEnd = GlobalSettings::getCurYearDates();
 
 //get default dates
 $dates = array();
 $sql = "SELECT * FROM parshos 
-        WHERE start >= 2458292 
-        and end <= 2458753";        
+        WHERE start >= " . $startEnd['start'] . " 
+        and end <= " . $startEnd['end'];        
 //year = " . $year;      
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -194,8 +195,9 @@ while ($row = mysql_fetch_assoc($result)) {
                             <input type="radio" name="weeks" value="set5" class='radio' />5th 12 weeks of year (פרשת קֹרַח - כִּי-תָבוֹא)<br />
                         </p>
                         <hr />
-                        <p><i>Option #2 - Choose your own weeks<br />
-                            Please note: You can only choose up to a 10 week period.</i></p>
+                        <p><i>Option #2 - Choose your own weeks
+                            <!-- Please note: You can only choose up to a 10 week period.-->
+                            </i></p>
                         From beginning of: <select name='from' id='from'>
                         <?
                         $today = unixtojd();

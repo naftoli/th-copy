@@ -14,7 +14,7 @@ include('classes/school_class.php');
 if ( !isset( $_SESSION['admin_id'] ) && isset( $admin_user['admin_id'] ) )
 	$_SESSION['admin_id'] = $admin_user['admin_id'];
 
-$admin = new admin(null, $admin_user['admin_id']);
+$admin = new AdminLegacy(null, $admin_user['admin_id']);
 
 $admin->get_schools();
 

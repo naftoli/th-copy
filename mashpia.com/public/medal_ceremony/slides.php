@@ -35,7 +35,7 @@ $m = new Slides( $prevMedals, $prevMedalsLight );
 $m->setDateSelection();
 $end = $_POST['date'];
 $key = array_search( $end, $m->dates );
-$start = $m->dates[$key - 1];
+$start = $m->dates[$key - 1] + 1;
 $m->overrideDates( $start, $end );
 
 if ( isset( $_POST['currentOnly'] ) ) $m->setToCurrentOnly();
