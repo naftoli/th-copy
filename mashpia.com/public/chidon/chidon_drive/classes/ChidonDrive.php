@@ -1,11 +1,16 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
+// interface will be used for family / school / community / global goals, and amounts raised, to have uniform functions
+interface iChidonDrive {
+  public function setGoal();
+  public function getGoal();
+  public function getAmountRaised();
+}
+
 class ChidonDrive {
   protected $year;
-  protected $goal;
   protected $goalPerChild;
-  protected $grant;
   protected $grantPerChild;
   protected $costPerChild;
   protected $regPerChild;
@@ -14,19 +19,28 @@ class ChidonDrive {
     $this->year = $year;
   }
 
-  public function setGoals( $goal, $goalPerChild ) {
-    $this->goal = $goal;
+  public function setAmounts( $goalPerChild, $grantPerChild, $costPerChild, $regPerChild ) {
     $this->goalPerChild = $goalPerChild;
-  }
-
-  public function setGrants( $grant, $grantPerChild ) {
-    $this->grant = $grant;
     $this->grantPerChild = $perChildAmount;
-  }
-
-  public function setCostRegPerChild( $costPerChild, $regPerChild ) {
     $this->costPerChild = $costPerChild;
     $this->regPerChild = $regPerChild;
+  }
+}
+
+class ChidonDriveGlobal extends ChidonDrive implements iChidonDrive {
+  private $goal;
+  private $grant;
+
+  public function __construct( $year ) {
+    parent::__construct( $year );
+  }
+
+  public function setGoal( $goal ) {
+    $this->goal = $goal;
+  }
+
+  public function setGrant( $grant ) {
+    $this->grant = $grant;
   }
 
   public function getGoal() {
@@ -36,7 +50,7 @@ class ChidonDrive {
   // find out how much was raised so far
   // throws error if there's an issue getting info from db
   public function getAmountRaised() {
-    $raised = $grant;
+    $raised = $this->grant;
     // find out sum of donations
     $MASHPIA_DB->prepare("
       SELECT 
@@ -58,11 +72,13 @@ class ChidonDrive {
     if ( !$res || !$row ) throw new \Error("Error fetching info from db.");
     return $raised;
   }
+
 }
 
-class ChidonDriveFamily extends ChidonDrive {
+class ChidonDriveFamily extends ChidonDrive implements iChidonDrive {
   private $parent_id;
   private $children = [];
+  private $goal;
 
   public function __construct( $year ) {
     parent::__construct( $year );
@@ -74,18 +90,18 @@ class ChidonDriveFamily extends ChidonDrive {
 
   // finds all children connected to this parent that is a contestant in the chidon
   // throws error if we have issues retrieving the children from the db
-  public function setChildren() {
+  public function setGoal() {
     $MASHPIA_DB->prepare("
-    SELECT 
-        aa.id
-    FROM
-        admin_auths aa
-            JOIN
-        th_chidon tc ON aa.id = tc.user_id
-    WHERE
-        aa.admin_id = :admin_id AND aa.role_id = 1
-            AND tc.year = :year
-            AND tc.contestant = 1
+      SELECT 
+          aa.id
+      FROM
+          admin_auths aa
+              JOIN
+          th_chidon tc ON aa.id = tc.user_id
+      WHERE
+          aa.admin_id = :admin_id AND aa.role_id = 1
+              AND tc.year = :year
+              AND tc.contestant = 1
     ");
     $res = $MASHPIA_DB->execute([
       ':admin_id' =>  $admin_id, 
@@ -96,18 +112,24 @@ class ChidonDriveFamily extends ChidonDrive {
       foreach ( $rows as $row ) {
         $this->children[] = $row['id'];
       }
+      $this->goal = count( $rows ) * $this->costPerChild;
     } else {
       throw new \Error("Error fetching children.");
     }
   }
 
-  public function getFamilyGoal() {
-    return count( $this->children ) * $this->costPerChild; 
+  public function getGoal() {
+    return $this->goal; 
+  }
+
+  public function getAmountRaised() {
+
   }
 }
 
-class ChidonDriveSchool extends ChidonDrive {
+class ChidonDriveSchool extends ChidonDrive implements iChidonDrive {
   private $school;
+  private $goal;
 
   public function __construct( $year ) {
     parent::__construct( $year );
@@ -118,7 +140,7 @@ class ChidonDriveSchool extends ChidonDrive {
   }
 
   // figures out community goal based on number of children eligible in school
-  public function getSchoolGoal() {
+  public function setGoal() {
     $MASHPIA_DB->prepare("
       SELECT 
           COUNT(*) AS total 
@@ -134,16 +156,25 @@ class ChidonDriveSchool extends ChidonDrive {
     ]);
     if ( $res ) {
       $row = $res->fetch();
-      return $row['total'] * $this->costPerChild;
+      $this->goal = $row['total'] * $this->costPerChild;
     } else {
       throw new \Error("Error computing school goal.");
     }
   }
+
+  public function getGoal() {
+    return $this->goal;
+  }
+
+  public function getAmountRaised() {
+
+  }
 }
 
-class ChidonDriveCommunity extends ChidonDrive {
+class ChidonDriveCommunity extends ChidonDrive implements iChidonDrive {
   private $community;
   private $schools;
+  private $goal;
 
   public function __construct( $year ) {
     parent::__construct( $year );
@@ -154,8 +185,8 @@ class ChidonDriveCommunity extends ChidonDrive {
     $this->schools = $schools;
   }
 
-  // figures out community goal based on number of children eligible in school
-  public function getCommunityGoal() {
+  // figures out community goal based on number of children eligible in schools
+  public function setGoal() {
     $school_ids = implode(',', $this->schools);
     $MASHPIA_DB->prepare("
       SELECT 
@@ -172,9 +203,17 @@ class ChidonDriveCommunity extends ChidonDrive {
     ]);
     if ( $res ) {
       $row = $res->fetch();
-      return $row['total'] * $this->costPerChild;
+      $this->goal = $row['total'] * $this->costPerChild;
     } else {
       throw new \Error("Error computing community goal.");
     }
+  }
+
+  public function getGoal() {
+    return $this->goal;
+  }
+
+  public function getAmountRaised() {
+    
   }
 }
