@@ -1,38 +1,12 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
-// interface will be used for family / school / community / global goals, and amounts raised, to have uniform functions
-interface iChidonDrive {
-  public function setGoal();
-  public function getGoal();
-  public function getAmountRaised();
-}
-
-class ChidonDrive {
-  protected $year;
-  protected $goalPerChild;
-  protected $grantPerChild;
-  protected $costPerChild;
-  protected $regPerChild;
-  
-  public function __construct( $year ) {
-    $this->year = $year;
-  }
-
-  public function setAmounts( $goalPerChild, $grantPerChild, $costPerChild, $regPerChild ) {
-    $this->goalPerChild = $goalPerChild;
-    $this->grantPerChild = $perChildAmount;
-    $this->costPerChild = $costPerChild;
-    $this->regPerChild = $regPerChild;
-  }
-}
-
-class ChidonDriveGlobal extends ChidonDrive implements iChidonDrive {
-  private $goal;
+class ChidonDriveGlobal {
+  private $year;
   private $grant;
 
   public function __construct( $year ) {
-    parent::__construct( $year );
+    $this->year = $year;
   }
 
   public function setGoal( $goal ) {
@@ -43,55 +17,111 @@ class ChidonDriveGlobal extends ChidonDrive implements iChidonDrive {
     $this->grant = $grant;
   }
 
-  public function getGoal() {
-    return $this->goal;
-  }
-
   // find out how much was raised so far
-  // throws error if there's an issue getting info from db
+  // overrrides parent method
   public function getAmountRaised() {
+    global $MASHPIA_DB;
+
     $raised = $this->grant;
     // find out sum of donations
-    $MASHPIA_DB->prepare("
+    $stmt = $MASHPIA_DB->prepare("
       SELECT 
-          SUM(donation_amount) AS total 
+          IFNULL( SUM(donation_amount), 0 ) AS total 
       FROM
           chidon_donations
       WHERE
           year = :year
     ");
-    $res = $MASHPIA_DB->execute([
+    $res = $stmt->execute([
       ':year' =>  $this->year
     ]);
     if ( $res ) {
-      $row = $res->fetch();
-      if ( $row ) {
-        $raised += $row['total'];
-      }
+      $row = $stmt->fetch();
+      $raised += $row['total'];
+    } else {
+      throw new Exception("Error calculating amount raised.");
     }
-    if ( !$res || !$row ) throw new \Error("Error fetching info from db.");
     return $raised;
   }
-
 }
 
-class ChidonDriveFamily extends ChidonDrive implements iChidonDrive {
-  private $parent_id;
-  private $children = [];
-  private $goal;
-
+abstract class ChidonDrive {
+  protected $year;
+  protected $goal;
+  protected $children = [];
+  protected $costPerChild;
+  protected $regPerChild;
+  protected $grantPerChild;
+  
   public function __construct( $year ) {
-    parent::__construct( $year );
+    $this->year = $year;
   }
 
-  public function setParent( $admin_id ) {
+  public function setAmounts( $costPerChild, $regPerChild, $grantPerChild ) {
+    $this->costPerChild = $costPerChild;
+    $this->regPerChild = $regPerChild;
+    $this->grantPerChild = $grantPerChild;
+  }
+
+  abstract public function setChildren();
+
+  public function setGoal() {
+    if ( !$this->costPerChild ) {
+      throw new Exception("You have not entered the cost per child.");
+    }
+    
+    $this->setChildren();
+    $this->goal = count( $this->children ) * $this->costPerChild;
+  }
+
+  public function getGoal() {
+    return $this->goal; 
+  }
+
+  public function getNumChildren() {
+    return count( $this->children );
+  }
+
+  // throws error if there's a problem getting info from db
+  public function getAmountRaised() {
+    global $MASHPIA_DB;
+
+    $users = implode(',', $this->children);
+    $stmt = $MASHPIA_DB->prepare("
+      SELECT 
+          IFNULL( SUM(subsidy_amount), 0 ) AS total 
+      FROM
+          chidon_user_subsidies
+      WHERE
+          chidon_year = :year 
+              AND user_id IN ($users)
+    ");
+    $res = $stmt->execute([
+      ':year'   =>  $this->year 
+    ]);
+    if ( $res ) {
+      $row = $stmt->fetch();
+      return $row['total'];
+    } else {
+      throw new Exception("Error calculating amount raised.");
+    }
+  }
+}
+
+class ChidonDriveFamily extends ChidonDrive {
+  private $parent_id;
+
+  public function __construct( $year, $admin_id ) {
+    parent::__construct( $year );
     $this->parent_id = $admin_id;
   }
 
   // finds all children connected to this parent that is a contestant in the chidon
   // throws error if we have issues retrieving the children from the db
-  public function setGoal() {
-    $MASHPIA_DB->prepare("
+  public function setChildren() {
+    global $MASHPIA_DB;
+
+    $stmt = $MASHPIA_DB->prepare("
       SELECT 
           aa.id
       FROM
@@ -103,117 +133,94 @@ class ChidonDriveFamily extends ChidonDrive implements iChidonDrive {
               AND tc.year = :year
               AND tc.contestant = 1
     ");
-    $res = $MASHPIA_DB->execute([
-      ':admin_id' =>  $admin_id, 
+    $res = $stmt->execute([
+      ':admin_id' =>  $this->parent_id, 
       ':year'     =>  $this->year
     ]);
+    //echo "<pre>"; $stmt->debugDumpParams(); echo "</pre>";
     if ( $res ) {
-      $rows = $res->fetchAll();
+      $rows = $stmt->fetchAll();
       foreach ( $rows as $row ) {
         $this->children[] = $row['id'];
       }
-      $this->goal = count( $rows ) * $this->costPerChild;
     } else {
-      throw new \Error("Error fetching children.");
+      throw new Exception("Error setting children.");
     }
-  }
-
-  public function getGoal() {
-    return $this->goal; 
-  }
-
-  public function getAmountRaised() {
-
   }
 }
 
-class ChidonDriveSchool extends ChidonDrive implements iChidonDrive {
+class ChidonDriveSchool extends ChidonDrive {
   private $school;
-  private $goal;
 
-  public function __construct( $year ) {
+  public function __construct( $year, $school_id ) {
     parent::__construct( $year );
-  }
-
-  public function setSchool( $school_id ) {
     $this->school = $school_id;
   }
 
-  // figures out community goal based on number of children eligible in school
-  public function setGoal() {
-    $MASHPIA_DB->prepare("
+  public function setChildren() {
+    global $MASHPIA_DB;
+
+    $stmt = $MASHPIA_DB->prepare("
       SELECT 
-          COUNT(*) AS total 
+          user_id  
       FROM
           th_chidon 
       WHERE
           year = :year AND contestant = 1
               AND school_id = :school
     ");
-    $res = $MASHPIA_DB->execute([
+    $res = $stmt->execute([
       ':year'     =>  $this->year, 
       ':school'   =>  $this->school 
     ]);
     if ( $res ) {
-      $row = $res->fetch();
-      $this->goal = $row['total'] * $this->costPerChild;
+      $rows = $stmt->fetchAll();
+      foreach ( $rows as $row ) {
+        $this->children[] = $row['user_id'];
+      }
     } else {
-      throw new \Error("Error computing school goal.");
+      throw new Exception("Error setting children.");
     }
-  }
-
-  public function getGoal() {
-    return $this->goal;
-  }
-
-  public function getAmountRaised() {
-
   }
 }
 
-class ChidonDriveCommunity extends ChidonDrive implements iChidonDrive {
+class ChidonDriveCommunity extends ChidonDrive {
   private $community;
   private $schools;
-  private $goal;
 
   public function __construct( $year ) {
     parent::__construct( $year );
   }
 
-  public function setCommunity( $community, $schools ) {
+  public function setCommunity( $community, array $schools ) {
     $this->community = $community;
     $this->schools = $schools;
   }
 
-  // figures out community goal based on number of children eligible in schools
-  public function setGoal() {
-    $school_ids = implode(',', $this->schools);
-    $MASHPIA_DB->prepare("
+  // figures out children based on community schools
+  public function setChildren() {
+    global $MASHPIA_DB;
+
+    $school_ids = implode(",", $this->schools);
+    $stmt = $MASHPIA_DB->prepare("
       SELECT 
-          COUNT(*) AS total 
+          user_id 
       FROM
           th_chidon 
       WHERE
           year = :year AND contestant = 1
-              AND school_id IN (:schools)
+              AND school_id IN ($school_ids)
     ");
-    $res = $MASHPIA_DB->execute([
-      ':year'     =>  $this->year, 
-      ':schools'  =>  $school_ids
+    $res = $stmt->execute([
+      ':year'     =>  $this->year
     ]);
     if ( $res ) {
-      $row = $res->fetch();
-      $this->goal = $row['total'] * $this->costPerChild;
+      $rows = $stmt->fetchAll();
+      foreach ( $rows as $row ) {
+        $this->children[] = $row['user_id'];
+      }
     } else {
-      throw new \Error("Error computing community goal.");
+      throw new Exception("Error setting children.");
     }
-  }
-
-  public function getGoal() {
-    return $this->goal;
-  }
-
-  public function getAmountRaised() {
-    
   }
 }

@@ -54,6 +54,7 @@
     "label": "Chidon", "legacy": true, "module": "chidon",
     "icon": "/images/chidon.png",
     "items": [
+      { "label": "Chidon Drive", "legacy": true, "path": "/chidon/chidon_drive/school_donation.php" },
       { "label": "Registered Report", "legacy": true, "path": "/reports/chidon/chidon_enrollment.php" },
       { "label": "Registered / Unregistered Report", "legacy": true, "path": "/reports/chidon/snapshot.php" },
       
