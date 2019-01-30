@@ -1,5 +1,6 @@
 <?php
 $admin_auth = ['school'];
+define( "MASHPIA_AUTH_REQUIRED", true );
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 
@@ -25,16 +26,17 @@ $stmt = $MASHPIA_DB->prepare("
           AND tc.contestant = 1
   ORDER BY u.school_id, c.class_grade , c.class_sub , u.last , u.first
 ");
-//echo "<pre>"; $stmt->debugDumpParams(); echo "</pre>";
 $res = $stmt->execute([
   ':year' => $year
 ]);
+//echo "<pre>"; $stmt->debugDumpParams(); echo "</pre>";
 if ( $res ) {
   $rows = $stmt->fetchAll();
   foreach ( $rows as $row ) {
     $users[] = $row;
   }
 }
+//echo "<pre>"; print_r( $users ); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
@@ -52,12 +54,38 @@ if ( $res ) {
     <?php require $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
     <h1>Chidon Drive</h1>
     <?php
-    if ( empty( $users ) ) echo "No eligible children found."; exit;
+    if ( empty( $users ) ) {
+      echo "No eligible children found."; 
+      exit;
+    }
     ?>
     <form id="school_donation_form">
-      Donation Amount: <input type="text" id="donation_amount" />
-      <button>Save</button>
-      <br /><br />
+      <table>
+        <tr>
+          <td>Name on Card</td>
+          <td><input type="text" id="cc_name" placeholder="First Last" required /></td>
+        </tr>
+        <tr>
+          <td>Card Number</td>
+          <td><input type="text" id="cc_num" placeholder="4565 2315 5698 4578" required /></td>
+        </tr>
+        <tr>
+          <td>Expiry</td>
+          <td><input type="text" id="cc_exp" placeholder="MM / YYYY" size="7" required /></td>
+        </tr>
+        <tr>
+          <td>CVC</td>
+          <td><input type="text" id="cc_cvc" placeholder="CVC" size="3" required /></td>
+        </tr>
+        <tr>
+          <td>Donation Amount</td>
+          <td>$<input type="text" id="donation_amount" size="5" required /></td>
+        </tr>
+        <tr>
+          <td colspan="2"><button>Donate</button></td>
+        </tr>
+      </table>
+      <br />
       <table>
         <thead>
           <tr>
@@ -84,6 +112,7 @@ if ( $res ) {
     $( function() {
       $("form").submit( function( evt ) {
         evt.preventDefault();
+
         let donation = parseInt( $("#donation_amount").val() );
         if ( isNaN( donation ) ) {
           alert("Donation must be a whole number.");
@@ -112,8 +141,14 @@ if ( $res ) {
         }
 
         // send donation and individual amounts to be processed
+        let cc = {};
+        cc.name = $("#cc_name").val();
+        cc.number = $("#cc_num").val();
+        cc.exp = $("#cc_exp").val();
+        cc.cvc = $("#cc_cvc").val();
+
         let year = <?=$year?>;
-        $.post('ajax/processDonation.php', { year: year, donation: donation, user_donations: user_donation_amounts }, function( result ) {
+        $.post('ajax/processDonation.php', { year: year, donation: donation, user_donations: user_donation_amounts, cc_info : cc }, function( result ) {
           console.log( result );
         });
       });
