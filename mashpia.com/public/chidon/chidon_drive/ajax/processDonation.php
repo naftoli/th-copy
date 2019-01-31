@@ -141,7 +141,7 @@ if ($response != null) {
             $MASHPIA_DB->commit();
           } else {
             $MASHPIA_DB->rollBack();
-            echo "There was an error saving the donation to the database. please contact HQ.";
+            echo "There was an error saving the donation to the database. Please contact HQ.";
 
             // send email to self with problem
             $to      = 'naftoli@tzivoshashem.org';
