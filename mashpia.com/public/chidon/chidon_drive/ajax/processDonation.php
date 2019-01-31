@@ -16,11 +16,11 @@ $cc_info['last'] = trim( $cc_info['name'] );
 if ( strpos( $cc_info['last'], ' ' ) !== false ) {
   $full_name = explode(' ', $cc_info['last']);
   $lastPos = count( $full_name ) - 1;
-  $cc_info['last'] = $last_name[$lastPos];
-  $cc_info['first'] = $last_name[0];
+  $cc_info['last'] = $full_name[$lastPos];
+  $cc_info['first'] = $full_name[0];
   if ( $lastPos > 1 ) {
     for ( $i = 1; $i < $lastPos; $i++ ) {
-      $cc_info['first'] += $last_name[$i];
+      $cc_info['first'] += $full_name[$i];
     }
   }
 }
@@ -28,22 +28,27 @@ if ( strpos( $cc_info['last'], ' ' ) !== false ) {
 // make sure cc info is valid
 $msg = '';
 $card_num = preg_replace('/\s+/', '', $cc_info['number']);
-if ( strlen( $card_num ) != 16 ) {
-  $msg .= "Credit Card Number must be 16 digits.\n"; 
+$length = strlen( $card_num );
+if ( $length < 15 || $length > 16 ) {
+  $msg .= "Credit Card Number must be 15 or 16 digits.\n"; 
 } else {
   $cc_info['number'] = $card_num;
 }
 
 if ( strpos( $cc_info['exp'], '/' ) === false ) {
-  $msg .= "Invalid Expiry Date Format.\n";
+  $msg .= "Expiry Date must be in the format MM / YYYY.\n";
 } else {
-  $expiry = explode('/', $cc_info['exp']);
-  // strip spaces 
-  foreach ( $expiry as $k => $v ) {
-    $expiry[$k] = trim( $v );
-  }
-  if ( strlen( $expiry[0] ) != 2 || strlen( $expiry[1] != 4 ) ) {
-    $msg .= "Invalid Expiry Date Format.\n";
+  // strip spaces and divide mm and yyyy
+  $expiry = explode('/', preg_replace('/\s+/', '', $cc_info['exp']));
+  $mm = $expiry[0];
+  $yy = $expiry[1];
+  if ( strlen( $mm ) != 2 || strlen( $yy ) != 4 ) {
+    echo strlen( $mm ) . "\n";
+    echo strlen( $yy ) . "\n";
+    $msg .= "Expiry Date must be in the format MM / YYYY.\n";
+  } else if ( intval( $mm ) > 12 || intval( $yy ) < 2019 ) {
+    if ( intval( $mm ) > 12 ) $msg .= "Expiry Month cannot be greater than 12.\n";
+    if ( intval( $yy ) < 2019 ) $msg .= "Expiry Year cannot be less than 2019.\n";
   } else {
     $exp = $expiry[1] . '-' . $expiry[0];
     $cc_info['exp'] = $exp;
@@ -52,15 +57,13 @@ if ( strpos( $cc_info['exp'], '/' ) === false ) {
 
 $cvc = $cc_info['cvc'];
 if ( !is_numeric( $cvc ) ) {
-  $msg .= "CVC must be a number.\n";
+  $msg .= "CVC can only have numbers.\n";
 }
 
 if ( !empty( $msg ) ) {
   echo $msg;
   exit;
 }
-
-exit;
 
 // process donation amount through authorize
 require 'authorize.php';

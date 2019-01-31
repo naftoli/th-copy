@@ -55,7 +55,10 @@ function chargeCreditCard( $amount, $cc_info )
     // Create the controller and get the response
     $controller = new AnetController\CreateTransactionController($request);
     //$response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
-    $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::PRODUCTION);
+    //$response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::PRODUCTION);
+    $response = $controller->executeWithApiResponse( Constants::GetApiEndpoint() );
+
+    echo Constants::GetApiEndpoint(); exit;
 
     if ($response != null) {
         // Check to see if the API request was successfully received and acted upon
