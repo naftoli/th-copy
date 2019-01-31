@@ -20,7 +20,7 @@ echo "Amount Raised: " . $c->getAmountRaised() . "<br /><br />";
 
 $c = new ChidonDriveCommunity( $year );
 $c->setAmounts( 350, 250, 100 );
-$schools = [ 255 ];
+$schools = [ 54, 255 ];
 $community = 'ny';
 $c->setCommunity( $community, $schools );
 $c->setGoal();
