@@ -14,7 +14,7 @@ echo "Amount Raised: " . $c->getAmountRaised() . "<br /><br />";
 $c = new ChidonDriveSchool( $year, 255 );
 $c->setAmounts( 350, 250, 100 );
 $c->setGoal();
-echo "Goal of school 61: " . $c->getGoal() . "<br />";
+echo "Goal of school 255: " . $c->getGoal() . "<br />";
 echo "Number of children: " . $c->getNumChildren() . "<br />";
 echo "Amount Raised: " . $c->getAmountRaised() . "<br /><br />";
 
