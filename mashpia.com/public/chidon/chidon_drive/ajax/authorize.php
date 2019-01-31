@@ -58,44 +58,5 @@ function chargeCreditCard( $amount, $cc_info )
     //$response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::PRODUCTION);
     $response = $controller->executeWithApiResponse( Constants::GetApiEndpoint() );
 
-    echo Constants::GetApiEndpoint(); exit;
-
-    if ($response != null) {
-        // Check to see if the API request was successfully received and acted upon
-        if ($response->getMessages()->getResultCode() == "Ok") {
-            // Since the API request was successful, look for a transaction response
-            // and parse it to display the results of authorizing the card
-            $tresponse = $response->getTransactionResponse();
-        
-            if ($tresponse != null && $tresponse->getMessages() != null) {
-                echo " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
-                echo " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
-                echo " Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n";
-                echo " Auth Code: " . $tresponse->getAuthCode() . "\n";
-                echo " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
-            } else {
-                echo "Transaction Failed \n";
-                if ($tresponse->getErrors() != null) {
-                    echo " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
-                    echo " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
-                }
-            }
-            // Or, print errors if the API request wasn't successful
-        } else {
-            echo "Transaction Failed \n";
-            $tresponse = $response->getTransactionResponse();
-        
-            if ($tresponse != null && $tresponse->getErrors() != null) {
-                echo " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
-                echo " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
-            } else {
-                echo " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
-                echo " Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n";
-            }
-        }
-    } else {
-        echo  "No response returned \n";
-    }
-
     return $response;
 }
