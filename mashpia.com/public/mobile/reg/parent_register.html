@@ -318,7 +318,7 @@
 							return false;
 						}
 						
-						$.post("ajax/validateEmail.php", {admin_id: Cookies.get('admin'), email: email}, function(response) {
+						$.post("ajax/validateEmail.php", {admin_id: Cookies.get('admin_id'), email: email}, function(response) {
 								response = JSON.parse(response);
 								if (!response.valid) {
 										email_error.text(response.message);
