@@ -43,8 +43,6 @@ if ( strpos( $cc_info['exp'], '/' ) === false ) {
   $mm = $expiry[0];
   $yy = $expiry[1];
   if ( strlen( $mm ) != 2 || strlen( $yy ) != 4 ) {
-    echo strlen( $mm ) . "\n";
-    echo strlen( $yy ) . "\n";
     $msg .= "Expiry Date must be in the format MM / YYYY.\n";
   } else if ( intval( $mm ) > 12 || intval( $yy ) < 2019 ) {
     if ( intval( $mm ) > 12 ) $msg .= "Expiry Month cannot be greater than 12.\n";
