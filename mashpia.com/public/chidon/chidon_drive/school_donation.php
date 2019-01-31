@@ -150,6 +150,7 @@ if ( $res ) {
         let year = <?=$year?>;
         $.post('ajax/processDonation.php', { year: year, donation: donation, user_donations: user_donation_amounts, cc_info : cc }, function( result ) {
           console.log( result );
+          alert( result );
         });
       });
     });
