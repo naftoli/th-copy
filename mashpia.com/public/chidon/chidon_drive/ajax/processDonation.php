@@ -90,7 +90,7 @@ if ($response != null) {
               ."VALUES (NOW(), ?, ?, ?)"
           );
           $statusTransaction = $transaction_query->execute([
-              $trans_info, $donation, json_encode( $response )
+              $cc_info['desc'], $donation, json_encode( $response )
           ]);
           $trans_db_id = $MASHPIA_DB->lastInsertId();
 
