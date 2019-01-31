@@ -9,6 +9,7 @@ $donation = $_POST['donation'];
 $user_donations = $_POST['user_donations'];
 $cc_info = $_POST['cc_info'];
 $cc_info['desc'] = "Chidon Drive " . $year;
+$dedication = $_POST['dedication'];
 
 // extract first and last name
 $cc_info['first'] = '';
@@ -36,19 +37,19 @@ if ( $length < 15 || $length > 16 ) {
 }
 
 if ( strpos( $cc_info['exp'], '/' ) === false ) {
-  $msg .= "Expiry Date must be in the format MM / YYYY.\n";
+  $msg .= "Expiry Date must be in the format MM/YY.\n";
 } else {
   // strip spaces and divide mm and yyyy
   $expiry = explode('/', preg_replace('/\s+/', '', $cc_info['exp']));
   $mm = $expiry[0];
   $yy = $expiry[1];
-  if ( strlen( $mm ) != 2 || strlen( $yy ) != 4 ) {
-    $msg .= "Expiry Date must be in the format MM / YYYY.\n";
-  } else if ( intval( $mm ) > 12 || intval( $yy ) < 2019 ) {
+  if ( strlen( $mm ) != 2 || strlen( $yy ) != 2 ) {
+    $msg .= "Expiry Date must be in the format MM/YY.\n";
+  } else if ( intval( $mm ) > 12 || intval( $yy ) < 19 ) {
     if ( intval( $mm ) > 12 ) $msg .= "Expiry Month cannot be greater than 12.\n";
     if ( intval( $yy ) < 2019 ) $msg .= "Expiry Year cannot be less than 2019.\n";
   } else {
-    $exp = $expiry[1] . '-' . $expiry[0];
+    $exp = '20' . $expiry[1] . '-' . $expiry[0];
     $cc_info['exp'] = $exp;
   }
 }
@@ -104,14 +105,16 @@ if ($response != null) {
             chidon_year = :year, 
             donation_amount = :donation,
             transaction_id = :trans_id, 
-            transaction_info = :trans_info
+            transaction_info = :trans_info, 
+            notes = :dedication
           ");
           $res = $stmt->execute([
             ':admin'    =>  $admin_user['admin_id'], 
             ':year'     =>  $year, 
             ':donation' =>  $donation, 
             ':trans_id' =>  $trans_id, 
-            ':trans_info' => $trans_info
+            ':trans_info' => $trans_info, 
+            ':dedication' => $dedication
           ]);
           if ( $res ) {
             $stmt = $MASHPIA_DB->prepare("
