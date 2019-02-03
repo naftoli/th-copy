@@ -82,6 +82,7 @@ function createChpaerones($chaperones, $year) {
     $chaperone_ids = [];
     // go through each chaperone
     foreach($chaperones as $chaperone) {
+        $full_program   = 1; // hardcoded as of 2019
         $school_id      = mysql_real_escape_string($chaperone['school_id']);
         $first_name     = mysql_real_escape_string($chaperone['first_name']);
         $last_name      = mysql_real_escape_string($chaperone['last_name']);
@@ -91,7 +92,7 @@ function createChpaerones($chaperones, $year) {
         $chidon_type    = mysql_real_escape_string($chaperone['chidon_type']);
         $vehicle        = intval(mysql_real_escape_string($chaperone['vehicle']));
         $sweater        = intval(mysql_real_escape_string($chaperone['sweater']));
-        $full_program   = intval(mysql_real_escape_string($chaperone['full_program']));
+        //$full_program   = intval(mysql_real_escape_string($chaperone['full_program']));
         // accomidation info...
         $acc_name       = mysql_real_escape_string($chaperone['acc_name']);
         $acc_address    = mysql_real_escape_string($chaperone['acc_address']);
@@ -119,9 +120,9 @@ function createChpaerones($chaperones, $year) {
             $chaperone_sql .= ", sweater = 1, sweater_size = '" . $sweater_size . "'";
         }
         
-        if(($full_program || $sweater) && !isset($_POST['cc_info'])) { // if they are getting a sweater or are in the program and did not pay....
-            render_json_error("Error CH-CHP-021: Payment info required but not provided.");
-        }
+        // if(($full_program || $sweater) && !isset($_POST['cc_info'])) { // if they are getting a sweater or are in the program and did not pay....
+        //     render_json_error("Error CH-CHP-021: Payment info required but not provided.");
+        // }
         
         if (mysql_query($chaperone_sql)) { // if we can create the chaperone...
             $chaperone_ids[] = mysql_insert_id(); // insert the ID into the array...

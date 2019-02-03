@@ -82,7 +82,8 @@ $year = GlobalSettings::getChidonYear();
         <h1>Chidon Chaperones</h1>
         
         <p class="warning">
-            <i>Disclaimer: Your students will not be able to enroll for shabbaton before you complete registration for your school's chaperones.</i>
+            <i>Disclaimer: Your students will not be able to enroll for shabbaton before you complete registration for your school's chaperones. 
+            You need to have at least one Chaperone for every 12 students coming.</i>
         </p>
         
         <? if(count($schools) == 1) { ?>
@@ -172,7 +173,7 @@ $year = GlobalSettings::getChidonYear();
                         <label>
                             Sweater Size<br/>
                             <select name="s_size" class="s_size">
-                                <option value="" disabled>Not Getting A Sweater</option>
+                                <option value="">Not Getting A Sweater</option>
                                 <option value="s">Small</option>
                                 <option value="m">Medium</option>
                                 <option value="l">Large</option>
@@ -208,7 +209,21 @@ $year = GlobalSettings::getChidonYear();
                     <div class="input_group input_half">
                         <label>
                             Cross Streets<br/>
-                            <input type="text" id="accCrossSt" name="accCrossSt" required />
+                            <select name="accCrossSt" id="accCrossSt">
+                            <?php
+                            // array of cross streets
+                            $cross1 = ['Nostrand', 'New York', 'Brooklyn', 'Kingston', 'Albany', 'Troy', 'Schenectady', 'Utica'];
+                            $cross2 = ['S Johns Place', 'Lincoln place', 'Eastern Parkway', 'Union Street', 'President Street', 'Carrol Street', 'Crown Street', 
+                                'Montgomery Street', 'Empire Blvd', 'Lefferts Avenue', 'East New York Avenue', 'Maple Street', 'Rutland'];
+                            for ( $i = 0; $i < count( $cross1 ); $i++ ) {
+                                for ( $j = 0; $j < count( $cross2 ); $j++ ) {
+                                    $street = $cross1[$i] . ' & ' . $cross2[$j];
+                                    echo "<option value='" . $street . "'>" . $street . "</option>";
+                                }
+                            }
+                            ?>
+                            </select>
+                            <!-- <input type="text" id="accCrossSt" name="accCrossSt" required /> -->
                         </label>
                     </div>
                     <div class="input_group input_half">
@@ -227,7 +242,7 @@ $year = GlobalSettings::getChidonYear();
                     
                     <div class="create_chidon_info">
                         <h3>Chidon Info</h3>
-                        <div class="fullProgram">
+                        <!-- <div class="fullProgram">
                             <strong>The full Chidon program includes:</strong><br />
                             Trips, Meals, Transportation and an awesome Sweatshirt!<br />
                         </div>
@@ -247,9 +262,9 @@ $year = GlobalSettings::getChidonYear();
                                     </select>
                                 </div>
                             </label>
-                        </div>
+                        </div> -->
 
-                        <div class="input_group input_full">
+                        <!-- <div class="input_group input_full">
                             <label>
                                 <input type="radio" name="full" class="full full_0" value="0" />
                                 NO, I will not be attending the full Chidon program with my students. However I understand that I will be on call in NY throughout the entire Shabbaton.
@@ -268,11 +283,27 @@ $year = GlobalSettings::getChidonYear();
                                 </div>
 
                             </label>
-                        </div>
+                        </div> -->
                         <div class="input_group input_full">
-                            <strong>Total Due: $<span class="total">0</span></strong>
+                            <label>
+                                <input type="radio" name="sweater" class="sweater" />
+                                I would like to order a Sweater.<br />
+                                <div class="s-size" style="display: none;">
+                                    My Sweater size is:
+                                    <select name="s_size" class="s_size">
+                                        <option value="s">Small</option>
+                                        <option value="m">Medium</option>
+                                        <option value="l">Large</option>
+                                        <option value="xl">XLarge</option>
+                                        <option value="xxl">XXLarge</option>
+                                    </select>
+                                </div>
+                            </label>
                         </div>
-                        <div class="showAgree" style="display:none">
+                        <!-- <div class="input_group input_full">
+                            <strong>Total Due: $<span class="total">0</span></strong>
+                        </div> -->
+                        <!-- <div class="showAgree" style="display:none">
                             <div class="input_group input_full">
                                 <label>
                                     Card Number<br/>
@@ -291,10 +322,10 @@ $year = GlobalSettings::getChidonYear();
                                     <input type="text" id="zip" name="zip" class="zip" placeholder="XXXXX" />
                                 </label>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="input_group input_full">
                             <input type="checkbox" name="terms" id="terms" /> 
-                            I have read <a href="https://docs.google.com/document/d/1ex-JrDYEq8hjUcusd4LQCbRn9QWjAQaHWCBoYPHsEkU/edit?usp=sharing" target="_blank">this page</a> and accept the responsibilities of the chaperone as well as pay any charges indicated above.
+                            I have read <a href="https://docs.google.com/document/d/1W7n8J_tbGh1hYTdIJTN5QBPMtUCF0Caxsano5MEXeIQ/edit?usp=sharing" target="_blank">this page</a> and accept the responsibilities of the chaperone as well as pay any charges indicated above.
                         </div>
                         
                         <div class="input_group input_full" style="text-align: center">

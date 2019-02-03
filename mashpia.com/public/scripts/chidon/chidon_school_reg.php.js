@@ -6,8 +6,9 @@ $(document).ready(function(){
     /********************** EVENT HANDLERS ********************/
     $("#generate_chaps_report").click(getChapsTable);
     $("select#school_id").change(getChapsTable);
-    $(".full").change(toggleSSize);
-    $("input.sweater").change(updateTotal);
+    //$(".full").click(toggleSSize);
+    //$("input.sweater").change(updateTotal);
+    $(".sweater").click( function() { $(".s-size").show() });
     $("#chap_modal .close").click(hideChapModal);
     $("a#create_chaperone").click(showChapModal);
     $("#chap_modal form").submit(submitChaperone);
@@ -65,7 +66,7 @@ $(document).ready(function(){
         $("#chap_modal input#dob").val(chap.dob);
         $("#chap_modal select.s_size").val(chap.sweater_size ? chap.sweater_size : "");
         // disable the sweater size if none was selected/paid for.
-        $("#chap_modal select.s_size").attr("disabled", !chap.sweater_size);
+        //$("#chap_modal select.s_size").attr("disabled", !chap.sweater_size);
         $("#chap_modal select.chidon_type").val(chap.chidon_type);
         // update the Accomidation info...
         $("#chap_modal input#accName").val(chap.acc_name);
@@ -79,16 +80,16 @@ $(document).ready(function(){
         }
         
         if ($("input#action").val() == "create") {
-            $('#chap_modal .full_' + chap.full_program).attr("checked", true);
-            $('#chap_modal .full_' + chap.full_program).change();
-            $("input.sweater").attr("checked", (chap.sweater && chap.full_program === 0)); // persist the swater check
-            $("input.sweater").change();
+            //$('#chap_modal .full_' + chap.full_program).attr("checked", true);
+            //$('#chap_modal .full_' + chap.full_program).change();
+            // $("input.sweater").attr("checked", (chap.sweater && chap.full_program === 0)); // persist the swater check
+            // $("input.sweater").change();
             // set the correct sweater size...
-            if (chap.sweater && chap.full_program === 0) {
-                $("select.s_size_no").val(chap.sweater_size);
-            } else if (chap.full_program == 1) {
-                $("select.s_size_yes").val(chap.sweater_size);
-            }
+            // if (chap.sweater && chap.full_program === 0) {
+            //     $("select.s_size_no").val(chap.sweater_size);
+            // } else if (chap.full_program == 1) {
+            //     $("select.s_size_yes").val(chap.sweater_size);
+            // }
         }
         
         // show the modal...
@@ -151,33 +152,44 @@ $(document).ready(function(){
             phone:          $("input#number").val(),
             email:          $("#chap_modal input#email").val(),
             dob:            $("#chap_modal input#dob").val(),
-            chidon_type:    $("select#chidon_type").val(),
+            chidon_type:    $("select.chidon_type").val(),
             acc_name:       $("#chap_modal input#accName").val(),
             acc_address:    $("#chap_modal input#accAddress").val(),
-            acc_cross_st:   $("#chap_modal input#accCrossSt").val(),
+            acc_cross_st:   $("#chap_modal select#accCrossSt").val(),
             acc_phone:      $("#chap_modal input#accPhone").val(),
             vehicle:        $("#chap_modal input.vehicle:checked").val(),
             total:          calcTotal() // get the total for just this chaperone and set it to the total when we are reading the form.
         };
+
         // get the sweater size...
         if (action == "edit") {
-            data.sweater_size   = $("select.s_size").val();
+            data.sweater_size = $(".edit_chidon_info select.s_size").val();
+            if ( data.sweater_size ) data.sweater = 1;
+            else data.sweater = 0;
             data.chap_id        = $("input#chap_id").val();
             return data; // we have all the information needed at this point for editing.. so lets just return the data....
+        } else {
+            if ($("input.sweater").is(":checked")) {
+                data.sweater = 1;
+                data.sweater_size = $(".create_chidon_info select.s_size").val();
+            } else {
+                data.sweater = 0;
+            }
         }
         
-        data.full_program = parseInt($('#chap_modal .full:checked').val());
+        //data.full_program = parseInt($('#chap_modal .full:checked').val());
+        data.full_program = 1; // automatically part of full program as of 2019
         
         // create a new chaperone...
-        if ($(".full:checked").val() == "0" && $("input.sweater").attr("checked")) { // if they are not signing up and are buying a sweater...
-            data.sweater_size = $("select.s_size_no").val();
-            data.sweater = 1;
-        } else if ($(".full:checked").val() == "1") {
-            data.sweater_size = $("select.s_size_yes").val();
-            data.sweater = 1;
-        } else {
-            data.sweater = 0;
-        }
+        // if ($(".full:checked").val() == "0" && $("input.sweater").attr("checked")) { // if they are not signing up and are buying a sweater...
+        //     data.sweater_size = $("select.s_size_no").val();
+        //     data.sweater = 1;
+        // } else if ($(".full:checked").val() == "1") {
+        //     data.sweater_size = $("select.s_size_yes").val();
+        //     data.sweater = 1;
+        // } else {
+        //     data.sweater = 0;
+        // }
         
         // validate that all fields are filled out.
         for (var field in data) {
@@ -191,9 +203,9 @@ $(document).ready(function(){
             alert('You must select if you have a vehicle or not for the record.'); return false;
         }
         
-        if (isNaN(data.full_program)) { // since this is parsed as an int we get NaN rather then undefined.
-            alert('You must select if you will be a part of the full program or not for the record.'); return false;
-        }
+        // if (isNaN(data.full_program)) { // since this is parsed as an int we get NaN rather then undefined.
+        //     alert('You must select if you will be a part of the full program or not for the record.'); return false;
+        // }
         
         if (!skip_validation) { // if we are not skipping the validations...
             if (!$('#chap_modal input#terms').attr("checked")) { // make sure that they aggree to the charge...
@@ -318,43 +330,43 @@ $(document).ready(function(){
     /********************** MODAL EVENTS ********************/
     // show/hide the sweater size when a .full is clicked...
     function toggleSSize(event) {
-        $(event.target).parent().find("div.s-size").show(); // show the options for the selected one
-        $(event.target).parent().parent().siblings().find("div.s-size").hide(); // hide all the other ones...
-        updateTotal();
+        //$(event.target).parent().find("div.s-size").show(); // show the options for the selected one
+        //$(event.target).parent().parent().siblings().find("div.s-size").hide(); // hide all the other ones...
+        //updateTotal();
     }
     
     /********************** HANDLE THE MONEY ********************/
     // update the total on the page...
     function updateTotal() {
-        var total = calcTotal(true);
-        $("span.total").text(total); //calculate the total and update the page with that info...
-        // show the CC info if there is money required
-        if (total) {
-            $("#chap_modal .showAgree input").attr('required', true);
-            $("#chap_modal .showAgree").show();
-            $("#chap_modal .submit").val("Pay for and Create " + (state.chaperones.length > 1 ? state.chaperones.length + " " : "") + "Chaperone(s)");
-        } else {
-            $("#chap_modal .showAgree input").attr('required', false);
-            $("#chap_modal .showAgree").hide();
-            $("#chap_modal .submit").val("Create " + (state.chaperones.length > 1 ? state.chaperones.length + " " : "") + "Chaperone(s)");
-        }
+        // var total = calcTotal(true);
+        // $("span.total").text(total); //calculate the total and update the page with that info...
+        // // show the CC info if there is money required
+        // if (total) {
+        //     $("#chap_modal .showAgree input").attr('required', true);
+        //     $("#chap_modal .showAgree").show();
+        //     $("#chap_modal .submit").val("Pay for and Create " + (state.chaperones.length > 1 ? state.chaperones.length + " " : "") + "Chaperone(s)");
+        // } else {
+        //     $("#chap_modal .showAgree input").attr('required', false);
+        //     $("#chap_modal .showAgree").hide();
+        //     $("#chap_modal .submit").val("Create " + (state.chaperones.length > 1 ? state.chaperones.length + " " : "") + "Chaperone(s)");
+        // }
     }
     // calculate the total payment...
     function calcTotal(grand_total) {
         var total = 0;
         // add all other chaperones to the newly computed total...
-        if (grand_total === true) {
-            for(var i = 0; i < state.chaperones.length; i++) {
-                if (i == state.index) {continue;}
-                total += state.chaperones[i].total;
-            }
-        }
-        // check if they are attending the chidon
-        if ($(".full:checked").val() === "1") {
-            total += 100;
-        } else if ($("input.sweater")[0].checked) { // check if they are just buying a sweater
-            total += 20;
-        }
+        // if (grand_total === true) {
+        //     for(var i = 0; i < state.chaperones.length; i++) {
+        //         if (i == state.index) {continue;}
+        //         total += state.chaperones[i].total;
+        //     }
+        // }
+        // // check if they are attending the chidon
+        // if ($(".full:checked").val() === "1") {
+        //     total += 100;
+        // } else if ($("input.sweater")[0].checked) { // check if they are just buying a sweater
+        //     total += 20;
+        // }
         return total; // return 0 by default....
     }
 
