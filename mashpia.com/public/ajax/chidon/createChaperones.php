@@ -2,6 +2,13 @@
 //ini_set('display_errors', 1);
 include($_SERVER['DOCUMENT_ROOT']."/reports/inc/header.php");
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/AuthorizeAPIRequest.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
+
+use classes\authorize\AuthorizeAPIRequest;
+use classes\authorize\CustomerProfile;
+
 $chaperones = isset($_POST["chaperones"]) ? $_POST["chaperones"] : false;
 $cc_info    = isset($_POST["cc_info"]) ? $_POST["cc_info"] : false;
 $school_id  = clean_post_param("school_id"); // get the school id
@@ -14,35 +21,40 @@ if(!$chaperones || !$school_id || count($chaperones) == 0) {
 require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
 $year = GlobalSettings::getChidonYear();
 
-//***************** REGISTER SCHOOL **********************/
-$school_exists = mysql_query(
-     " SELECT th_chidon_schools_id FROM th_chidon_schools "
-    ." WHERE school_id = " . $school_id . " "
-    ." AND year = " . $year . " "
-    ." AND registered = 1 "
-);
-if (mysql_num_rows($school_exists) == 0) {
-    mysql_query(
-         " INSERT INTO th_chidon_schools "
-        ." SET school_id = " . $school_id . ", "
-        ." year = " . $year . ", "
-        ." registered = 1"
-    );
-}
-
 // if credit card info was provided, charge the card....
 if($cc_info){
     // split out the data as authorize.php wants it...
     $amount     = mysql_real_escape_string($cc_info['amount']);
-    $card_num   = mysql_real_escape_string($cc_info['ccnum']);
-    $exp_date   = mysql_real_escape_string($cc_info['ccexp']);
-    $zip        = mysql_real_escape_string($cc_info['cczip']);
+    // $card_num   = mysql_real_escape_string($cc_info['ccnum']);
+    // $exp_date   = mysql_real_escape_string($cc_info['ccexp']);
+    // $zip        = mysql_real_escape_string($cc_info['cczip']);
+
     // data needed for authorize.php
     $first_name =''; $last_name = ''; $address = ''; $state = '';
     $description = "Chaperone Registration for Chidon Shabbaton " . $year . " - School #:" . $school_id . "; Number of Chaperones paid for: " . count($chaperones);
     
     if ($school_id != 82 || ($school_id == 82 && $card_num != 4111111111111111)) { // if this is not 4111 1111 1111 1111 for A Academy only....
-        require($_SERVER['DOCUMENT_ROOT'].'/authorize.php');
+        // find out what the customer profile id and payment profile id is
+        $school_sql = "select * from th_chidon_schools where year = " . $year . " and school_id = " . $school_id;
+        $school_result = mysql_query( $school_sql );
+        if ( !mysql_num_rows( $school_result ) ) {
+            render_json_error("School has not been registered yet and does not have a payment profile on file.");
+        } else {
+            $school = mysql_fetch_assoc( $school_result );
+            $customer_profile = $school['customer_profile_id'];
+            $payment_profile = $school['payment_profile_id'];
+        }
+
+        $customerProfile = new CustomerProfile( $customer_profile, false );
+        $payment_result = $customerProfile->chargeCard( $amount, $payment_profile, null, null, $description );
+        if ( is_array( $payment_result ) ) {
+            echo "<pre>"; print_r( $payment_result ); echo "</pre>";
+        } else {
+            echo $payment_result;
+        }
+        exit;
+
+        // require($_SERVER['DOCUMENT_ROOT'].'/authorize.php');
         if ($response_array[0] == 1) {
             // success
             $strResponse =  $response_array[3] . ':' . $response_array[4] . ':' . 

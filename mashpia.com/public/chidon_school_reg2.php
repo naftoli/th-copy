@@ -13,9 +13,22 @@ require_once 'class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 if ($admin_user['auth'] == 'super') $schools[82] = 'Avrohom Academy'; // add A Academy to test for superusers...
+
 // and get the chidon year....
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
+
+// check if school is registered for chidon already if not super user
+if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
+    $chidon_school = "select * from th_chidon_schools where year = " . $year . " and school_id = " . array_keys( $schools )[0];
+    $chidon_school_res = mysql_query( $chidon_school );
+    if ( mysql_num_rows( $chidon_school_res ) == 0 ) {
+        echo "You have not yet registered your school. You will be routed to the school registration page.";
+        sleep( 5 );
+        header("Location: chidon_school_reg.php");
+        exit;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>

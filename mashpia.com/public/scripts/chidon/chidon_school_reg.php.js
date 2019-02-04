@@ -146,6 +146,10 @@ $(document).ready(function(){
     // read the form in the modal....
     function readChaperoneForm(skip_validation) {
         var action = $("input#action").val();
+        if ( !$("#chap_modal input.chap_type:checked").length ) {
+            alert("You must indicate what type of chaperone you are creating (chaperone / walking counselor).");
+            return false;
+        }
         // setup the initial data block...
         var data = {
             school_id:      $("select#school_id").val(),
@@ -216,16 +220,19 @@ $(document).ready(function(){
             }
         }
         
+        state.cc_info = {};
         var amount = calcTotal(true);
-        
-        if (amount > 0) {
+        if ( amount ) {
             state.cc_info.amount = amount;
-            state.cc_info.ccnum = $("#chap_modal input#cardnumber").val().replace(/\D+/g, ""); // remove all non digit characters (whitespace and letters)
-            state.cc_info.ccexp = $("#chap_modal input#exp").val();
-            state.cc_info.cczip = $("#chap_modal input#zip").val();
-        } else {
-            state.cc_info = {};
         }
+        // if (amount > 0) {
+        //     state.cc_info.amount = amount;
+        //     state.cc_info.ccnum = $("#chap_modal input#cardnumber").val().replace(/\D+/g, ""); // remove all non digit characters (whitespace and letters)
+        //     state.cc_info.ccexp = $("#chap_modal input#exp").val();
+        //     state.cc_info.cczip = $("#chap_modal input#zip").val();
+        // } else {
+        //     state.cc_info = {};
+        // }
         
         return data;
     }
@@ -350,8 +357,8 @@ $(document).ready(function(){
         // show the CC info if there is money required
         //if (total) {
             var message = (total ? "Pay for and " : "") + "Create " + (state.chaperones.length > 1 ? state.chaperones.length + " " : "") + "Chaperone(s)"
-            $("#chap_modal .showAgree input").attr('required', true);
-            $("#chap_modal .showAgree").show();
+            // $("#chap_modal .showAgree input").attr('required', true);
+            // $("#chap_modal .showAgree").show();
             $("#chap_modal .submit").val( message );
         // } else {
         //     $("#chap_modal .showAgree input").attr('required', false);
@@ -370,9 +377,10 @@ $(document).ready(function(){
             }
         }
         // check if they are attending the chidon
-        if ($(".full:checked").val() === "1") {
-            total += 100;
-        } else if ($("input.sweater")[0].checked) { // check if they are just buying a sweater
+        // if ($(".full:checked").val() === "1") {
+        //     total += 100;
+        // } else 
+        if ($("input.sweater")[0].checked) { // check if they are just buying a sweater
             if ( $("#chap_modal input.chap_type:checked").val() == 2 ) total += 20;
         }
         return total; // return 0 by default....

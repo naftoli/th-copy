@@ -70,7 +70,7 @@ $year = GlobalSettings::getChidonYear();
                 <div class="row">
                     <i class="fa fa-university" aria-hidden="true"></i> School: 
                     <select id="school_id" name="school_id">
-                        <option value="" selected>All Schools</option>
+                        <option value="0" selected>All Schools</option>
                         <? foreach($schools as $school_id => $school_name){?>
                             <option value="<?=$school_id?>"><?=$school_name?></option>
                         <?}?>
@@ -89,8 +89,21 @@ $year = GlobalSettings::getChidonYear();
               <li>There is a $100 fee PER DAY PER CHAPERONE / WALKING COUNSELOR in the event that my chaperone / walking counselor is not by the program on time or does not follow their responsibilities. The fee will be charged to 
                 the credit card on file, or the one you provide us in the form below.</li>
             </ul>
-            <h2>Credit Card Info</h2>
+            
             <form>
+              <?php if ($admin_user['auth'] != 'super') : ?>
+              <h2>Bus Home</h2>
+              <div class="input_group input_full">
+                Please choose one of the following options:<br />
+                <input type="radio" name="bus" class="bus" value="1" /> My bus is leaving from the Chidon Event Venue to Newark Airport after the event.<br />
+                <input type="radio" name="bus" class="bus" value="2" /> My bus is leaving from the Chidon Event Venue to Crown Heights drop off location; President and Kingston after the event.<br />
+                <input type="radio" name="bus" class="bus" value="0" /> My bus is leaving from the Chidon Event Venue to our school and we dont need a bus from the Chidon Event.
+              </div>
+              <?php else : ?>
+              <input type="hidden" name="bus" class="bus" value="0" />
+              <?php endif; ?>
+
+              <h2>Credit Card Info</h2>
               <div id="ccOnFile">
                 <input type="radio" name="cc_info" class="cc_info" value="0" checked /> Use Credit Card on file<br />
                 <input type="radio" name="cc_info" class="cc_info" value="1" /> Use New Credit Card<br />
@@ -116,6 +129,7 @@ $year = GlobalSettings::getChidonYear();
               <h2>Terms</h2>
               <input type="checkbox" name="agreement" id="agreement" /> I accept the above mentioned responsibilities as well as any fees that we may incur.
             </form>
+
         </div>    
         
         <br />
@@ -135,6 +149,13 @@ $year = GlobalSettings::getChidonYear();
             return false;
           }
 
+          if ( !$(".bus:checked").length ) {
+            alert("You need to choose one of the three bus options.");
+            return false;
+          } else {
+            var bus = $(".bus:checked").val();
+          }
+
           if ( $(".cc_info:checked").val() == 1 ) {
             // cc info must be filled out
             let cardnum = $("#cardnumber").val().trim();
@@ -145,6 +166,15 @@ $year = GlobalSettings::getChidonYear();
               alert("All Card Info must be entered.");
               return false;
             }
+
+            // create new profile id
+          }
+
+          let school_id = $("#school_id").val();
+          if ( school_id ) {
+            // figure out payment that is to be used
+
+            $.post('/ajax/chidon/registerSchool.php', { school_id: school_id, bus: bus });
           }
           
           location.href = '/chidon_school_reg2.php';
@@ -152,17 +182,22 @@ $year = GlobalSettings::getChidonYear();
 
         function getCCInfo() {
           let school_id = $("#school_id").val();
-          $.post('ajax/chidon/getSchoolInfo.php', { school : school_id }, function( school_info ) {
-            let school = JSON.parse( school_info );
-            if ( !(school.authorize_customer_profile_id && school.authorize_payment_profile_id) ) {
-              alert("As you don't have any credit card on file, you will need to provide us with a credit card.");
-              $("#ccOnFile").hide();
-              $(".cc_info").eq(1).attr('checked', true);
-            } else {
-              $(".cc_info").eq(0).attr('checked', true);
-              $("#ccOnFile").show();
-            }
-          });
+          if ( school_id ) {
+            $.post('ajax/chidon/getSchoolInfo.php', { school : school_id }, function( school_info ) {
+              let school = JSON.parse( school_info );
+              if ( !(school.authorize_customer_profile_id && school.authorize_payment_profile_id) ) {
+                alert("As you don't have any credit card on file, you will need to provide us with a credit card.");
+                $("#ccOnFile").hide();
+                $(".cc_info").eq(1).attr('checked', true);
+              } else {
+                $(".cc_info").eq(0).attr('checked', true);
+                $("#ccOnFile").show();
+              }
+            });
+          } else {
+            $("#ccOnFile").hide();
+            $(".cc_info").eq(1).attr('checked', true);
+          }
         }
       });
     </script>
