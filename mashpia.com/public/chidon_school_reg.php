@@ -12,11 +12,11 @@ require('header.php');
 require_once 'class.adminSchools.php';       
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
-if ($admin_user['auth'] == 'super') {
-  // forward to chaperone page
-  // header("Location: chidon_school_reg2.php");
-  // exit;
-}
+// if ($admin_user['auth'] == 'super') {
+//   // forward to chaperone page
+//   header("Location: chidon_school_reg2.php");
+//   exit;
+// }
 
 // and get the chidon year....
 require_once 'class.globalSettings.php';
