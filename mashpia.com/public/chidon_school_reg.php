@@ -21,6 +21,14 @@ $schools = $as->getSchools();
 // and get the chidon year....
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/AuthorizeAPIRequest.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
+
+use classes\authorize\AuthorizeAPIRequest;
+use classes\authorize\CustomerProfile;
+use classes\authorize\PaymentProfile;
 ?>
 <!DOCTYPE html>
 <html>
@@ -122,8 +130,8 @@ $year = GlobalSettings::getChidonYear();
               </div>
               <div class="input_group input_half">
                   <label>
-                      Zip Code<br/>
-                      <input type="text" id="zip" name="zip" class="zip" placeholder="XXXXX" />
+                      Security Code<br/>
+                      <input type="text" id="cvc" name="cvc" class="cvc" placeholder="XXX" />
                   </label>
               </div>
               <h2>Terms</h2>
@@ -156,30 +164,56 @@ $year = GlobalSettings::getChidonYear();
             var bus = $(".bus:checked").val();
           }
 
+          let cc = {};
           if ( $(".cc_info:checked").val() == 1 ) {
             // cc info must be filled out
             let cardnum = $("#cardnumber").val().trim();
             let exp = $("#exp").val().trim();
-            let zip = $(".zip").val().trim();
+            let cvc = $(".cvc").val().trim();
 
-            if ( cardnum == '' || exp == '' || zip == '' ) {
+            if ( cardnum == '' || exp == '' || cvc == '' ) {
               alert("All Card Info must be entered.");
               return false;
             }
 
-            // create new profile id
-          }
+            cc.card = cardnum;
+            cc.exp = exp;
+            cc.cvc = cvc;
+          } 
 
-          let school_id = $("#school_id").val();
-          if ( school_id ) {
-            // figure out payment that is to be used
-
-            $.post('/ajax/chidon/registerSchool.php', { school_id: school_id, bus: bus }, function( info ) {
-              console.log( info );
+          var promise1, promise2;
+          if ( cc ) {
+            promise1 = new Promise( function( resolve, reject ) {
+              $.post('/ajax/chidon/createProfile.php', { school_id: $("#school_id").val(), cc_info: cc }, function( error ) {
+                if ( error ) reject( error );
+                else resolve("Profile created.");
+              });
             });
+          } else {
+            promise1 = Promise.resolve("Profile already exists.");
           }
-          
-          //location.href = '/chidon_school_reg2.php';
+
+          promise2 = new Promise( function( resolve, reject ) {
+            let school_id = $("#school_id").val();
+            if ( school_id ) $.post('/ajax/chidon/registerSchool.php', { school_id: school_id, bus: bus, customer_id: customer_id, payment_id: payment_id }, function( error ) {
+              if ( error ) reject( error );
+              else resolve("School is now Registered.");
+              }
+          });
+
+          Promise.all( [promise1, promise2] )
+            .then( function( msgs ) {
+              for ( m in msgs ) {
+                alert( msgs[m] );
+              }
+              // redirect
+              location.href = '/chidon_school_reg2.php';
+            }, 
+            function( error ) {
+              alert( error );
+              return false;
+            }
+          );
         });
 
         function getCCInfo() {

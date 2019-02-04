@@ -4,7 +4,6 @@ include($_SERVER['DOCUMENT_ROOT']."/reports/inc/header.php");
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/AuthorizeAPIRequest.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
 
 use classes\authorize\AuthorizeAPIRequest;
 use classes\authorize\CustomerProfile;
