@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 // redirect to https
 if ((empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off') || $_SERVER['SERVER_PORT'] != 443) {
-    header("Location: https://mashpia.com/chidon_school_reg.php");
+    header("Location: https://" . $_SERVER['DOCUMENT_ROOT'] . "/chidon_school_reg.php");
 }
 //********************* AUTHENTICATION *********************//
 $admin_auth = array('school'); 
