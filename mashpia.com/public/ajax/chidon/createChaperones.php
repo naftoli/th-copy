@@ -30,7 +30,7 @@ if($cc_info){
     // $zip        = mysql_real_escape_string($cc_info['cczip']);
 
     // data needed for authorize.php
-    $first_name =''; $last_name = ''; $address = ''; $state = '';
+    //$first_name =''; $last_name = ''; $address = ''; $state = '';
     $description = "Chaperone Registration for Chidon Shabbaton " . $year . " - School #:" . $school_id . "; Number of Chaperones paid for: " . count($chaperones);
     
     if ($school_id != 82 || ($school_id == 82 && $card_num != 4111111111111111)) { // if this is not 4111 1111 1111 1111 for A Academy only....
