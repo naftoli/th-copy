@@ -98,6 +98,7 @@ function createChpaerones($chaperones, $year) {
         $acc_address    = mysql_real_escape_string($chaperone['acc_address']);
         $acc_cross_st   = mysql_real_escape_string($chaperone['acc_cross_st']);
         $acc_phone      = mysql_real_escape_string($chaperone['acc_phone']);
+        $chap_type      = mysql_real_escape_string($chaperone['chap_type']);
         
         $chaperone_sql = "INSERT INTO th_chidon_chaps "
                 ." SET school_id = " . $school_id . ", "
@@ -113,6 +114,7 @@ function createChpaerones($chaperones, $year) {
                 ." vehicle = " . $vehicle . ", "
                 ." phone = '" . $phone . "', "
                 ." email = '" . $email . "', "
+                ." chap_type = " . $chap_type . ", "
                 ." full_program = " . $full_program;
         // get the sweater size if needed...
         if($sweater == 1){

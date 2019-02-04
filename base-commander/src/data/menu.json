@@ -67,7 +67,8 @@
       { "label": "Enter Chidon Test Marks", "legacy": true, "path": "/chidon_tests.php" },
       { "label": "Enter Mitzvah Maven Marks", "legacy": true, "path": "/chidon_mm_tests.php" },
 
-      { "label": "Enroll Chaperones", "legacy": true, "path": "/chidon_school_reg.php" },
+      { "label": "School Shabbaton Enrollment", "legacy": true, "path": "/chidon_school_reg.php" },
+      { "label": "Review / Create Chaperones", "legacy": true, "path": "/chidon_school_reg2.php" },
       
       { "label": "Activate Enrollment", "legacy": true, "user_types": [ "BC" ], "path": "/enrollment.php" },
       { "label": "Activate Enrollment HQ", "legacy": true, "user_types": [ "HQ" ], "path": "/enrollment_hq.php" },
