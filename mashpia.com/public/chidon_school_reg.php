@@ -174,10 +174,12 @@ $year = GlobalSettings::getChidonYear();
           if ( school_id ) {
             // figure out payment that is to be used
 
-            $.post('/ajax/chidon/registerSchool.php', { school_id: school_id, bus: bus });
+            $.post('/ajax/chidon/registerSchool.php', { school_id: school_id, bus: bus }, function( info ) {
+              console.log( info );
+            });
           }
           
-          location.href = '/chidon_school_reg2.php';
+          //location.href = '/chidon_school_reg2.php';
         });
 
         function getCCInfo() {
