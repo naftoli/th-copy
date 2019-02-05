@@ -21,14 +21,6 @@ $schools = $as->getSchools();
 // and get the chidon year....
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
-
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/AuthorizeAPIRequest.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
-
-use classes\authorize\AuthorizeAPIRequest;
-use classes\authorize\CustomerProfile;
-use classes\authorize\PaymentProfile;
 ?>
 <!DOCTYPE html>
 <html>
@@ -125,7 +117,7 @@ use classes\authorize\PaymentProfile;
               <div class="input_group input_half">
                   <label>
                       Expiration<br/>
-                      <input type="text" id="exp" name="exp" class="exp" placeholder="MMYY" />
+                      <input type="text" id="exp" name="exp" class="exp" placeholder="MM/YY" />
                   </label>
               </div>
               <div class="input_group input_half">
@@ -176,44 +168,28 @@ use classes\authorize\PaymentProfile;
               return false;
             }
 
+            if ( cardnum.length != 15 || cardnum.length != 16 ) {
+              alert("Cardnumber must be 15 or 16 digits.");
+              return false;
+            }
+
+            if ( exp.indexOf('/') == -1 || exp.length != 5 ) {
+              alert("Invalid Expiry format. No spaces allowed.");
+              return false;
+            }
+
             cc.card = cardnum;
             cc.exp = exp;
             cc.cvc = cvc;
-          } 
-
-          var promise1, promise2;
-          if ( cc ) {
-            promise1 = new Promise( function( resolve, reject ) {
-              $.post('/ajax/chidon/createProfile.php', { school_id: $("#school_id").val(), cc_info: cc }, function( error ) {
-                if ( error ) reject( error );
-                else resolve("Profile created.");
-              });
-            });
-          } else {
-            promise1 = Promise.resolve("Profile already exists.");
           }
 
-          promise2 = new Promise( function( resolve, reject ) {
-            let school_id = $("#school_id").val();
-            if ( school_id ) $.post('/ajax/chidon/registerSchool.php', { school_id: school_id, bus: bus, customer_id: customer_id, payment_id: payment_id }, function( error ) {
-              if ( error ) reject( error );
-              else resolve("School is now Registered.");
-              }
-          });
-
-          Promise.all( [promise1, promise2] )
-            .then( function( msgs ) {
-              for ( m in msgs ) {
-                alert( msgs[m] );
-              }
-              // redirect
-              location.href = '/chidon_school_reg2.php';
-            }, 
-            function( error ) {
-              alert( error );
-              return false;
-            }
-          );
+          let school_id = $("#school_id").val();
+          if ( school_id ) {
+            $.post('/ajax/chidon/registerSchool.php', { school_id: school_id, bus: bus, cc }, function( error ) {
+              if ( error ) alert( error );
+              else location.href = '/chidon_school_reg2.php'; // redirect
+            });
+          }
         });
 
         function getCCInfo() {
