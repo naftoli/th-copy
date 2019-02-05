@@ -1,0 +1,200 @@
+/* 
+ * Homepage stylesheet for Chidon
+ * 
+ * Date: 2/2/2019
+ * Author: Esty
+ */
+
+.section {
+	background-size: cover;
+	background-position: center center;
+}
+.section .wrapper {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: stretch;
+}
+.slide {
+	background-size: cover;
+	background-position: center center;
+}
+
+#section2 {
+	background-image: url(../img/home/leaderboard.jpg);
+	padding-top: 10rem;
+	text-align: center;
+}
+#section2 .leaders {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 3rem;
+}
+#section2 .leaders .leader {
+  width: 30%;
+  background: rgba(6, 9, 47, .7);
+  border-radius: .5rem;
+  padding: 2rem 3rem;
+}
+#section2 .leader-title h3 {
+	color: #e2bc57;
+	font-family: 'Russo One', sans-serif;
+	font-size: 2rem;
+}
+#section2 .leader-title h3 span {
+	color: #2253ac;
+	font-size: 3rem;
+	font-family: 'Russo One', sans-serif;
+}
+#section2 .leader-stats {
+	display: flex;
+	justify-content: space-around;
+	margin-top: 4rem;
+	color: #85abda;
+	font-weight: bold;
+}
+#section2 .leader-stats > div {
+	padding: 1rem;
+	text-align: center;
+}
+#section2 .leader-stats img {
+	display: inline-block;
+	margin-bottom: .5rem;
+}
+#section2 .button {
+	display: inline-block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 2rem;
+	background: #171a68;
+	color: #85abda;
+	border-radius: 2px;
+	border-color: #080c42;
+	text-align: left;
+	width: 15rem;
+	font-size: 1rem;
+}
+#section2 .button img {
+	top: 1.2rem;
+}
+
+/* School section */
+#section3 {
+	background-image: url(../img/home/leaderboard.jpg);
+	padding-top: 10rem;
+	text-align: center;
+}
+#section3 .wrapper {
+	justify-content: center;
+}
+.community {
+	margin: 1rem;
+}
+.community-info {
+	background: rgba(6,9,47,.7);
+	border-radius: 1rem;
+	padding: 2rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: relative;
+	cursor: pointer;
+}
+.community-info h4 {
+	color: #e3b949;
+	font-size: 1.5rem;
+}
+.community-info h4 span {
+	color: #2553ac;
+	font-size: 2.2rem;
+	font-family: 'Russo One', sans-serif;
+	margin-right: .5rem;
+}
+.community .children {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.community .children p {
+	color: #85abda;
+	font-weight: bold;
+	display: inline-block;
+	margin-left: .5rem;
+}
+.community .bar {
+	width: 30%;
+  margin-top: 0;
+  top: -1.5rem;
+}
+.community-info .bar {
+	margin-right: 2rem;
+}
+.community-info .more-button {
+	position: absolute;
+	right: 2rem;
+	transition: .2s;
+}
+.community.open .more-button {
+	transform: rotate(180deg);
+}
+.community-info .more-button::after {
+	content: '';
+	display: block;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 8px 5px 0 5px;
+	border-color: #85abda transparent transparent transparent;
+}
+.community-schools {
+  background: #06092f;
+  border-radius: 1rem;
+  padding: 0 2rem;
+  max-height: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+	transition: .2s;
+}
+.community.open .community-schools {
+	height: auto;
+	max-height: 100vh;
+	padding: 2rem 2rem;
+}
+.community-schools .school {
+	display: flex;
+	align-items: center;
+}
+.community-schools .school p {
+	color: #85abda;
+	font-weight: bold;
+	font-size: 1.5rem;
+}
+.community-schools .school .spacer {
+	flex-grow: 1;
+	border-bottom: 1px solid #85abda;
+	height: 1rem;
+	margin: .5rem;
+}
+.community-schools .school > img {
+  margin: 1rem;
+  max-width: 40px;
+}
+
+@media(max-width: 1200px) {
+	#section2 .leaders {
+		flex-wrap: wrap;
+		justify-content: space-around;
+	}
+	#section2 .leader {
+		min-width: 300px;
+		margin-top: 1rem;
+	}
+
+}
+
+@media(max-width: 860px) {
+	#section2, #section3, #section4, #section5 {
+		height: auto !important;
+	}
+}

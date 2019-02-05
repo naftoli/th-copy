@@ -103,6 +103,11 @@ $year = GlobalSettings::getChidonYear();
               <input type="hidden" name="bus" class="bus" value="0" />
               <?php endif; ?>
 
+              <h2>Food Trip Home</h2>
+              <div class="input_group input_full">
+                <input type="checkbox" name="food" id="food" /> Yes! I would like to receive food and snacks for the trip back home.
+              </div>
+
               <h2>Credit Card Info</h2>
               <div id="ccOnFile">
                 <input type="radio" name="cc_info" class="cc_info" value="0" checked /> Use Credit Card on file<br />
@@ -168,7 +173,8 @@ $year = GlobalSettings::getChidonYear();
               return false;
             }
 
-            if ( cardnum.length != 15 || cardnum.length != 16 ) {
+            if ( cardnum.length < 15 || cardnum.length > 16 ) {
+              alert( cardnum.length );
               alert("Cardnumber must be 15 or 16 digits.");
               return false;
             }
@@ -184,10 +190,14 @@ $year = GlobalSettings::getChidonYear();
           }
 
           let school_id = $("#school_id").val();
+          let food = $("#food").is(":checked");
           if ( school_id ) {
-            $.post('/ajax/chidon/registerSchool.php', { school_id: school_id, bus: bus, cc_info: cc }, function( error ) {
+            $.post('/ajax/chidon/registerSchool.php', { school_id: school_id, bus: bus, food: food, cc_info: cc }, function( error ) {
               if ( error ) alert( error );
-              else location.href = '/chidon_school_reg2.php'; // redirect
+              else {
+                alert("You have successfully enrolled your school to the Shabbaton.");
+                location.href = '/chidon_school_reg2.php'; // redirect
+              }
             });
           }
         });

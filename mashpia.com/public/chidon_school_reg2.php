@@ -19,14 +19,12 @@ require_once 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 // check if school is registered for chidon already if not super user
+$errorMsg = '';
 if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
     $chidon_school = "select * from th_chidon_schools where year = " . $year . " and school_id = " . array_keys( $schools )[0];
     $chidon_school_res = mysql_query( $chidon_school );
     if ( mysql_num_rows( $chidon_school_res ) == 0 ) {
-        echo "You have not yet registered your school. You will be routed to the school registration page.";
-        sleep( 5 );
-        header("Location: chidon_school_reg.php");
-        exit;
+        $errorMsg .= "You have not yet enrolled your school for the Shabbaton. You need to go back to the Shabatton Enrollment page.";
     }
 }
 ?>
@@ -93,9 +91,22 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
         <? include('admin_header.php'); ?>
         <?php include($_SERVER['DOCUMENT_ROOT']."/chidon_passwords.php"); // require a password to use this page... ?>
         <h1>Chidon Chaperones</h1>
+
+        <?php
+        if ( !empty( $errorMsg ) ) {
+            if ( count( $schools ) == 1 ) {
+                echo "<div style='color: red;'>";
+                echo $errorMsg;
+                echo "</div>";
+                echo "<br /><a class='button' id='prev_page' href='/chidon_school_reg.php'><i class='fa fa-arrow-left'></i> Enroll School to Shabbaton</a>";
+                exit;
+            }
+        }
+        ?>
         
         <p class="warning">
-            <i>Disclaimer: Your students will not be able to enroll for shabbaton before you complete registration for your school's chaperones.</i>
+            <i>Disclaimer: Your students will not be able to enroll for shabbaton before you complete registration for your school's chaperones.<br/>You need to have at least 
+                1 Full Time Chaperone, and Walking Counselors with a ratio of 1:12 (one counselor per 12 children).</i>
         </p>
         
         <? if(count($schools) == 1) { ?>
@@ -205,7 +216,7 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
                     
                     <div class="input_group input_half">
                         <label>
-                            Chidon Type Size<br/>
+                            Chidon Type<br/>
                             <select name="chidon_type" class="chidon_type">
                                 <option value="boys"> Boys </option>
                                 <option value="girls">Girls</option>
@@ -376,6 +387,7 @@ if ($admin_user['auth'] != 'super' && count( $schools ) == 1) {
             </div>
         </div>
         
+        <a class='button' id='prev_page' href='/chidon_school_reg.php'><i class='fa fa-arrow-left'></i> Enroll School to Shabbaton</a>
         <a class='button' id="next_page" href='/enrollment.php'>Activate Enrollment <i class="fa fa-arrow-right"></i></a>
         <script src="/js/admin/components/modal.js"></script>
         <script src="/scripts/chidon/chidon_school_reg.php.js"></script>

@@ -12,13 +12,22 @@ $year = GlobalSettings::getChidonYear();
 $year = 5778;
 
 // array to hold chap to student ratio per school
+$errorMsg = '';
 $schoolChaps = [];
+
 $userInfo = array();
 foreach ($schools as $sid => $schoolName) {
+    $numChaps = 0;
+    $numWalkingCounselors = 0;
     $chap_check = "select * from th_chidon_chaps where school_id = " . $sid . " and year = " . $year;
     $chap_res = mysql_query( $chap_check );
-    $numChaps = mysql_num_rows( $chap_res );
-
+    while ( $chap_row = mysql_fetch_assoc( $chap_res ) ) {
+        if ( $chap_row['chap_type'] == 1 ) $numChaps++;
+        else $numWalkingCounselors++;
+    }
+    if ( $numChaps == 0 ) {
+        $errorMsg .= $schoolName . " need to have at one chaperone registered.<br />";
+    }
     $sql = "SELECT tc.*, u.first, u.last, c.* "
             ."FROM th_chidon tc "
             ."JOIN users u USING (user_id) "
@@ -30,7 +39,7 @@ foreach ($schools as $sid => $schoolName) {
     $sql .= "ORDER BY class_grade, class_sub, tc.school_rep desc, u.last, u.first";
     //echo "<input type='hidden' name='sql' value=\"" . $sql . "\" />";
     $result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
-    $schoolChaps[$sid][$numChaps] = mysql_num_rows( $result );
+    $schoolChaps[$sid][$numWalkingCounselors] = mysql_num_rows( $result );
     while ($row = mysql_fetch_assoc($result)) {
         $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
         $name = $row['first'] . ' ' . $row['last'];
@@ -51,13 +60,12 @@ foreach ($schools as $sid => $schoolName) {
 }
 // echo "<pre>"; print_r($users); echo "</pre>";
 // check which schools don't have the needed ratio of 12:1 students to chaps
-$errorMsg = '';
 foreach ( $schoolChaps as $school_id => $chaps ) {
     foreach ( $chaps as $chapNum => $studentNum ) {
         $needed = floor( $studentNum / 12 );
         if ( $studentNum % 12 != 0 ) $needed++;
         if ( $chapNum < $needed ) {
-            $errorMsg .= $schools[$school_id] . " needs " . $needed . " chaperone(s) but only has " . $chapNum . " chaperone(s).<br />";
+            $errorMsg .= $schools[$school_id] . " needs to have " . $needed . " walking counselors(s) but only has " . $chapNum . " walking counselor(s).<br />";
         }
     }
 }
