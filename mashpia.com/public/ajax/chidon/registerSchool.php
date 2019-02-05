@@ -18,7 +18,7 @@ use classes\authorize\PaymentProfile;
 
 $school_id = mysql_real_escape_string( $_POST['school_id'] );
 $bus = mysql_real_escape_string( $_POST['bus'] );
-$cc = $_POST['cc_info'];
+$cc = isset( $_POST['cc_info'] ) ? $_POST['cc_info'] : [];
 
 // find out if the school has a customer id and profile id
 $sql = "select * from schools where school_id = " . $school_id;
@@ -27,8 +27,10 @@ $school = mysql_fetch_assoc( $result );
 $customer_id = $school['authorize_customer_profile_id'];
 $payment_id = $school['authorize_payment_profile_id'];
 
-$expArr = implode('/', $cc['exp']);
-$exp = '20' . $expArr[1] . '-' . $expArr[0];
+if ( $cc ) {
+    $expArr = implode('/', $cc['exp']);
+    $exp = '20' . $expArr[1] . '-' . $expArr[0];
+}
 
 if ( $customer_id ) {
     if ( $cc ) {
@@ -50,10 +52,15 @@ if ( $customer_id ) {
     $email = $row['admin_email'];
     $description = "Customer profile for " . $school['school_name'];
 
-    $paymentProfile = PaymentProfile::createBasicArray( $cc['card'], $exp, $cc['cvc'] );
-    $customerProfile = CustomerProfile::create( 'TH_' . $school_id, $email, $description, $paymentProfile);
-    $customer_id = $customerProfile->customerProfileId;
-    $payment_id = $paymentProfile->customerPaymentProfileId;
+    if ( !$payment_id ) {
+        $paymentProfile = PaymentProfile::createBasicArray( $cc['card'], $exp, $cc['cvc'] );
+        $payment_id = $paymentProfile->customerPaymentProfileId;
+    }
+    if ( !$customer_id ) {
+        $customerProfile = CustomerProfile::create( 'TH_' . $school_id, $email, $description, $paymentProfile);
+        $customer_id = $customerProfile->customerProfileId;
+    }
+    
     if ( !($customer_id && $payment_id) ) {
         echo "Error creating customer and profile id.";
         exit;
