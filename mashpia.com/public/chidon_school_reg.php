@@ -185,7 +185,7 @@ $year = GlobalSettings::getChidonYear();
 
           let school_id = $("#school_id").val();
           if ( school_id ) {
-            $.post('/ajax/chidon/registerSchool.php', { school_id: school_id, bus: bus, cc }, function( error ) {
+            $.post('/ajax/chidon/registerSchool.php', { school_id: school_id, bus: bus, cc_info: cc }, function( error ) {
               if ( error ) alert( error );
               else location.href = '/chidon_school_reg2.php'; // redirect
             });

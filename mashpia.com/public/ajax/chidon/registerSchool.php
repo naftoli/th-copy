@@ -18,7 +18,7 @@ use classes\authorize\PaymentProfile;
 
 $school_id = mysql_real_escape_string( $_POST['school_id'] );
 $bus = mysql_real_escape_string( $_POST['bus'] );
-$cc = $_POST['cc'];
+$cc = $_POST['cc_info'];
 
 // find out if the school has a customer id and profile id
 $sql = "select * from schools where school_id = " . $school_id;
