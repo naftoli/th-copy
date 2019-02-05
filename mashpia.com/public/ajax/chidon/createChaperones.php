@@ -46,18 +46,18 @@ if($cc_info){
 
         $customerProfile = new CustomerProfile( $customer_profile, false );
         $payment_result = $customerProfile->chargeCard( $amount, $payment_profile, null, null, $description );
-        if ( is_array( $payment_result ) ) {
-            echo "<pre>"; print_r( $payment_result ); echo "</pre>";
+        if ( !is_array( $payment_result ) ) {
+            render_json_error( $payment_result ); 
         } else {
-            echo $payment_result;
-        }
-        exit;
 
         // require($_SERVER['DOCUMENT_ROOT'].'/authorize.php');
-        if ($response_array[0] == 1) {
+        //if ($response_array[0] == 1) {
             // success
-            $strResponse =  $response_array[3] . ':' . $response_array[4] . ':' . 
-                            $response_array[6] . ':' . $response_array[9];
+            // $strResponse =  $response_array[3] . ':' . $response_array[4] . ':' . 
+            //                 $response_array[6] . ':' . $response_array[9];
+            $strResponse = $payment_result['transactionResponse']['transId'] . ":" . $payment_result['transactionResponse']['messages']['message'][0]['code'] . ":" . 
+            $payment_result['transactionResponse']['messages']['message'][0]['text'];
+
             // create the chaperones...
             $chaps = createChpaerones($chaperones, $year);
             $description .= " Chap IDs: " . implode(',', $chaps);
@@ -68,9 +68,10 @@ if($cc_info){
                 ." description = '" . $description . "'";
             if (mysql_query($sql)) echo json_encode(["success" => true]);
             else render_json_error("Could not save record of Credit Card transaction. Please email chidon@tzivoshashem.org");
-        } else {
-            render_json_error("Credit Card Error: ".$response_array[3]);
-        }
+        } 
+        // else {
+        //     render_json_error("Credit Card Error: ".$response_array[3]);
+        // }
     } else { // if this is the test account pretend that the transaction was a success...
         $chaps = createChpaerones($chaperones, $year);
         $description .= " Chap IDs: " . implode(',', $chaps);
