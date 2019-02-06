@@ -1,4 +1,4 @@
-<?php
+ <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 class ChidonDriveGlobal {
@@ -86,24 +86,28 @@ abstract class ChidonDrive {
   public function getAmountRaised() {
     global $MASHPIA_DB;
 
-    $users = implode(',', $this->children);
-    $stmt = $MASHPIA_DB->prepare("
-      SELECT 
-          IFNULL( SUM(subsidy_amount), 0 ) AS total 
-      FROM
-          chidon_user_subsidies
-      WHERE
-          chidon_year = :year 
-              AND user_id IN ($users)
-    ");
-    $res = $stmt->execute([
-      ':year'   =>  $this->year 
-    ]);
-    if ( $res ) {
-      $row = $stmt->fetch();
-      return $row['total'];
+    if ( !empty( $this->children ) ) {
+      $users = implode(',', $this->children);
+      $stmt = $MASHPIA_DB->prepare("
+        SELECT 
+            IFNULL( SUM(subsidy_amount), 0 ) AS total 
+        FROM
+            chidon_user_subsidies
+        WHERE
+            chidon_year = :year 
+                AND user_id IN ($users)
+      ");
+      $res = $stmt->execute([
+        ':year'   =>  $this->year 
+      ]);
+      if ( $res ) {
+        $row = $stmt->fetch();
+        return $row['total'];
+      } else {
+        throw new Exception("Error calculating amount raised.");
+      }
     } else {
-      throw new Exception("Error calculating amount raised.");
+      return 0;
     }
   }
 }
