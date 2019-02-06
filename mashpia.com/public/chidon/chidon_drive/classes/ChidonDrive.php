@@ -107,7 +107,7 @@ abstract class ChidonDrive {
         throw new Exception("Error calculating amount raised.");
       }
     } else {
-      return 0;
+      return 0; 
     }
   }
 }
@@ -159,6 +159,27 @@ class ChidonDriveSchool extends ChidonDrive {
   public function __construct( $year, $school_id ) {
     parent::__construct( $year );
     $this->school = $school_id;
+  }
+
+  public function getSchoolInfo() {
+    global $MASHPIA_DB;
+    $stmt = $MASHPIA_DB->prepare("
+      SELECT 
+          school_name, logo 
+      FROM
+          schools
+      WHERE
+          school_id = :school
+    ");
+    $res = $stmt->execute([
+      ':school'   =>  $this->school
+    ]);
+    if ( $res ) {
+      $row = $stmt->fetch();
+      return $row;
+    } else {
+      throw new Exception("Could not find school.");
+    }
   }
 
   public function setChildren() {
