@@ -11,24 +11,7 @@ $communities = $c->getCommunities();
 
 $schools = [];
 try {
-  // find out the stats for each school in community
-  foreach ( $schools as $school ) {
-    $cs = new ChidonDriveSchool( $year, $school );
-    $cs->setAmounts( 350, 250, 100 );
-    $cs->setGoal();
-    $goal = $cs->getGoal();
-    $raised = floatVal( $cs->getAmountRaised() );
-    $numChildren = $cs->getNumChildren();
-    $schoolInfo = $cs->getSchoolInfo();
-    $schools[$school][$percent][$community] = [
-      'name'    =>  $schoolInfo['school_name'], 
-      'logo'    =>  $schoolInfo['logo'],
-      'percent' =>  $percent, 
-      'goal'    =>  $goal, 
-      'raised'  =>  $raised, 
-      'numChildren' =>  $numChildren
-    ];
-  }
+  
 } catch ( Exception $e ) {
   echo json_encode([
     'success' =>  false,

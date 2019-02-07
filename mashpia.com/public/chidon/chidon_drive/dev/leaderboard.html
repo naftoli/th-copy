@@ -344,8 +344,8 @@
 							let i = 1;
 							for ( percent in info ) {
 								for ( community in info[percent] ) {
-									let stats = info[percent][community];
-									console.log( stats );
+									let stats = info[percent][community]['communityInfo'];
+									//console.log( stats );
 									if ( i < 4 ) {
 										htmlTop += `
 											<div class="leader" data-amount="${stats.raised}">
@@ -394,52 +394,29 @@
 													<a href="#" class="more-button"></a>
 												</div>
 												<div class="community-schools">
-													
+											`;
+											console.log( info[percent][community]['schools'] );
+											for ( schoolPercent in info[percent][community]['schools'] ) {
+												for ( schoolName in info[percent][community]['schools'][schoolPercent] ) {
+													let school = info[percent][community]['schools'][schoolPercent][schoolName];
+													htmlMain += `
 														<div class="school">
 															<img src="img/school.png" alt="Shool Logo" />
-															<p>South Florida Day School, 20 Children</p>
+															<p>${schoolName}, ${school.numChildren} Children</p>
 															<div class="spacer"></div>
-															<div class="bar" data-percent="50">
-																<div class="bar-percent"><span class="bar-percent__number">50%</span></div>
+															<div class="bar" data-percent="${school.percent}">
+																<div class="bar-percent"><span class="bar-percent__number">${school.percent}%</span></div>
 																<div class="bar-line">
 																	<div class="bar-line__bar"><div class="bar-line__circle"></div>
-																		<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$12,250</span></div>
+																		<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${school.raised}</span></div>
 																	</div>
 																</div>
 															</div>
 														</div>
-														
-														<div class="school">
-															<img src="img/school.png" alt="Shool Logo" />
-															<p>South Florida Day School, 20 Children</p>
-															<div class="spacer"></div>
-															<div class="bar" data-percent="50">
-																<div class="bar-percent"><span class="bar-percent__number">50%</span></div>
-																<div class="bar-line">
-																	<div class="bar-line__bar"><div class="bar-line__circle"></div>
-																		<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$12,250</span></div>
-																	</div>
-																</div>
-															</div>
-														</div>
-
-														<div class="school">
-															<img src="img/school.png" alt="Shool Logo" />
-															<p>South Florida Day School, 20 Children</p>
-															<div class="spacer"></div>
-															<div class="bar" data-percent="50">
-																<div class="bar-percent"><span class="bar-percent__number">50%</span></div>
-																<div class="bar-line">
-																	<div class="bar-line__bar"><div class="bar-line__circle"></div>
-																		<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$12,250</span></div>
-																	</div>
-																</div>
-															</div>
-														</div>
-
-												</div>
-											</div>
-										`;
+													`;
+												}
+											}
+										htmlMain += "</div></div>";
 									}
 								}
 							}
