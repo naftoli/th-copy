@@ -26,19 +26,9 @@ if ($today > $date3) {
 }
 
 /* 
-$date = "2017-02-16 05:00:00";
-if ($today >= $date) {
-    $shutdown = true;
-}
-
-$exceptions = array();
+$exceptions = [];
 // allow OT until thursday at 5pm
 if ($today < "2017-02-17 00:00:00") {
     $exceptions[] = 255;
-}
-
-// allow MyShliach until Mon. 02/21
-if ($today < "2017-02-21 05:00:00") {
-    $exceptions[] = 61;
 }
 */
