@@ -63,7 +63,7 @@ if ( $customer_id ) {
 
     if ( !$customer_id ) {
         $paymentProfile = PaymentProfile::createBasicArray( $cc['card'], $exp, $cc['cvc'] );
-        $customerProfile = CustomerProfile::create( 'TH_' . $school_id, $email, $description, $paymentProfile);
+        $customerProfile = CustomerProfile::create( 'TH_' . $school_id, $email, $description, $paymentProfile );
         if ( $customerProfile instanceof CustomerProfile ) {
             $customer_id = $customerProfile->customerProfileId;
             $payment_id = $customerProfile->paymentProfiles[0]['customerPaymentProfileId'];

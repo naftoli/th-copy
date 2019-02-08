@@ -1,9 +1,19 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
+$year = GlobalSettings::getChidonYear();
+$year = 5778;
 $donation = $_POST['donation_info'];
 
-//echo "<pre>"; print_r( $donation ); echo "</pre>";
+//*************** LOAD AUTHORIZE FUNCTIONS *********************/
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/AuthorizeAPIRequest.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
+
+use classes\authorize\AuthorizeAPIRequest;
+use classes\authorize\CustomerProfile;
+use classes\authorize\PaymentProfile;
 
 function checkMandatory( $values ) {
   $missing = [];
@@ -56,9 +66,35 @@ $field";
   exit;
 }
 
+// prepare variables for donor table
+$name = $donation['name'];
+$display_name = $donation['anonymous'] ? 'Anonymous' : $donation['display_name'];
+$email = $donation['email'];
+$phone = $donation['phone'];
+
+// prepare variables for donation table
+$amount = $donation['amount'];
+$forFamily = $donation['family'];
+$forChild = $donation['forChild'];
+
+// prepare variables for payment
+$cc_num = $donation['cc']['num'];
+$cc_exp = $donation['cc']['exp'];
+$cc_security = $donation['cc']['cvv'];
+
+// prepare billing address
+$billing = $donation['cc']['billing'];
+$address = $billing['address'] . ' ' . $billing['apt'];
+$city = $billing['city'];
+$state = $billing['state'];
+$zip = $billing['zip'];
+$country = $billing['country'];
+
+$success = true;
+$error_msg = [];
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        *
+        * 
     FROM
         chidon_donors
     WHERE
@@ -67,3 +103,101 @@ $stmt = $MASHPIA_DB->prepare("
 $res = $stmt->execute([
   ':email'  =>  $donation['email']
 ]);
+if ( !$res ) $error_msg[] = "Database Error.";
+else {
+  $row = $stmt->fetch();
+  if ( empty( $row ) ) {
+    // create donor
+    $qry = "
+      INSERT INTO chidon_donors 
+      SET 
+          name = :name,
+          display_name = :display_name,
+          phone = :phone, 
+          email = :email
+    ";
+    $stmt2 = $MASHPIA_DB->prepare( $qry );
+    $res2 = $stmt2->execute([
+      ':name'         =>  $name,
+      ':display_name' =>  $display_name,
+      ':phone'        =>  $phone,
+      ':email'        =>  $email
+    ]);
+    if ( $res2 ) {
+      $donor_id = $MASHPIA_DB->lastInsertId();
+
+      // create authorize profile and update table
+      $description = "Customer profile for " . $name;
+      $paymentProfile = PaymentProfile::createBasicArray( $cc_num, $cc_exp, $cc_security );
+      $customerProfile = CustomerProfile::create( 'Chidon_Drive_Donor_' . $donor_id, $email, $description, $paymentProfile );
+      if ( $customerProfile instanceof CustomerProfile ) {
+          $customer_id = $customerProfile->customerProfileId;
+          $payment_id = $customerProfile->paymentProfiles[0]['customerPaymentProfileId'];
+      } else {
+          $error_msg[] = $customerProfile['message'];
+      }
+      
+      if ( !($customer_id && $payment_id) ) {
+          $error_msg[] = "Error creating donor profile.";
+      } else {
+        // update table
+        $stmt3 = $MASHPIA_DB->prepare("
+          UPDATE chidon_donors 
+          SET 
+              authorize_customer_profile_id = :customer, 
+              authorize_payment_profile_id = :payment 
+          WHERE
+              chidon_donor_id = :id
+        ");
+        $res3 = $stmt3->execute([
+          ':customer'   =>  $customer_id, 
+          ':payment'    =>  $payment_id
+        ]);
+        if ( !$res3 ) {
+          $error_msg[] = "Error updating authorize profile for donor.";
+        }
+      }
+    } else {
+      $error_msg[] = "Error creating donor.";
+    }
+  } else {
+    $donor_id = $row['chidon_donor_id'];
+    $customer_id = $row['authorize_customer_profile_id'];
+    $payment_id = $row['authorize_payment_profile_id'];
+
+    // update donor
+    $qry = "
+      UPDATE chidon_donors 
+      SET 
+          name = :name,
+          display_name = :display_name,
+          phone = :phone
+      WHERE
+          chidon_donor_id = :id
+    ";
+    $stmt2 = $MASHPIA_DB->prepare( $qry );
+    $res2 = $stmt2->execute([
+      ':name'         =>  $name,
+      ':display_name' =>  $display_name,
+      ':phone'        =>  $phone,
+      ':id'           =>  $donor_id
+    ]);
+  }
+}
+
+if ( $success && $donor_id && $customer_id && $payment_id ) {
+  // now we can process the amount through authorize
+  
+}
+
+if ( count( $error_msg ) > 0 ) {
+  echo json_encode([
+    'success'   =>  false,
+    'message'   =>  $error_msg
+  ]);
+} else {
+  echo json_encode([
+    'success'   =>  true,
+    'message'   =>  "Thank you for your donation. You should be getting a confirmation email shortly with your transaction details."
+  ]);
+}
