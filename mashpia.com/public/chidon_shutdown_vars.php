@@ -15,8 +15,6 @@ $date1 = "2018-11-21 05:00:00";
 $date2 = "2019-01-11 05:00:00";
 $date3 = "2019-02-12 05:00:00";
 
-echo $date3; exit;
-
 if ($today > $date1) {
     $shutdown1 = true;
 }
