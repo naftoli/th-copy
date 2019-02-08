@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-define("AUTHORIZE_NET_SANDBOX", true);
+define("AUTHORIZE_NET_SANDBOX", false);
 
 require_once('../../AuthorizeAPIRequest.php');
 require_once('../../CustomerProfile.php');

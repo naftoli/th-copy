@@ -37,6 +37,10 @@ if ( $res ) {
   }
 }
 //echo "<pre>"; print_r( $users ); echo "</pre>";
+$skipAuth = 0;
+if ( isset( $_GET['skipAuth'] ) && $_GET['skipAuth'] == 5779 ) {
+  $skipAuth = 1;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -71,7 +75,7 @@ if ( $res ) {
         </tr>
         <tr>
           <td>Expiry</td>
-          <td><input type="text" id="cc_exp" placeholder="MM / YYYY" size="7" required /></td>
+          <td><input type="text" id="cc_exp" placeholder="MM/YY" size="3" required /></td>
         </tr>
         <tr>
           <td>CVC</td>
@@ -80,6 +84,10 @@ if ( $res ) {
         <tr>
           <td>Donation Amount</td>
           <td>$<input type="text" id="donation_amount" size="5" required /></td>
+        </tr>
+        <tr>
+          <td>Dedication</td>
+          <td><input type="text" id="dedication" size="40" placeholder="In honor of..." /></td>
         </tr>
         <tr>
           <td colspan="2"><button>Donate</button></td>
@@ -116,12 +124,18 @@ if ( $res ) {
         let donation = parseInt( $("#donation_amount").val() );
         if ( isNaN( donation ) ) {
           alert("Donation must be a whole number.");
+          $("#donation_amount").focus();
           return false;
         }
         let user_donations = $(".user_donation");
         let user_donation_amounts = [];
         for ( d in user_donations ) {
           let amount = parseInt( user_donations[d].value );
+          if ( amount > 350 ) {
+            alert("Maximum subsidy allowed per child is $350.");
+            $(user_donations[d]).focus();
+            return false;
+          }
           if ( amount ) {
             user_donation_amounts.push({
               user_id: $(user_donations[d]).attr('id'), 
@@ -146,11 +160,14 @@ if ( $res ) {
         cc.number = $("#cc_num").val();
         cc.exp = $("#cc_exp").val();
         cc.cvc = $("#cc_cvc").val();
+        cc.skip = <?=$skipAuth?>;
 
+        let dedication = $("#dedication").val();
         let year = <?=$year?>;
-        $.post('ajax/processDonation.php', { year: year, donation: donation, user_donations: user_donation_amounts, cc_info : cc }, function( result ) {
-          console.log( result );
-          alert( result );
+        $.post('ajax/processDonation.php', { year: year, donation: donation, user_donations: user_donation_amounts, cc_info : cc, dedication: dedication }, 
+          function( result ) {
+            console.log( result );
+            alert( result );
         });
       });
     });
