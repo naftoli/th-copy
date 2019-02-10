@@ -1,4 +1,4 @@
-<?
+<?php
 require '../../db.php';
 $gender = mysql_real_escape_string($_POST['gender']);
 $year = mysql_real_escape_string($_POST['year']);

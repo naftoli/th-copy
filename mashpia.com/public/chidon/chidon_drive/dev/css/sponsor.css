@@ -1,0 +1,223 @@
+/* 
+ * Homepage stylesheet for Chidon
+ * 
+ * Date: 2/2/2019
+ * Author: Esty
+ */
+
+.section {
+	background-size: cover;
+	background-position: center center;
+}
+.section:not(#section0):not(footer) .wrapper {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: stretch;
+}
+.slide {
+	background-size: cover;
+	background-position: center center;
+}
+
+#section0 {
+	background-image: url(../img/sponsor/sponsor.jpg);
+}
+#section0 h2 {
+	font-family: 'Russo One', sans-serif;
+	font-size: 3rem;
+	color: #85abda;
+	text-transform: uppercase;
+	position: absolute;
+	bottom: 5rem;
+	width: 100%;
+	text-align: center;
+}
+#section0 .wrapper {
+	position: relative;
+	height: 100%;
+}
+
+
+#section3{
+	background-image: url(../img/home/trophies.jpg);
+	padding-top: 10rem;
+	text-align: center;
+}
+#section3 .trophies-wrapper {
+	display: flex;
+	align-items: flex-end;
+  background: rgba(6, 9, 47, .7);
+  margin-top: 4rem;
+  padding: 2rem 0;
+}
+#section3 .trophies-wrapper h4 {
+	font-family: 'Rosso One', sans-serif;
+	color: #85adba;
+	text-transform: uppercase;
+  transform: rotate(-90deg);
+  font-weight: 900;
+  font-size: 1.5rem;
+  position: relative;
+  left: 2rem;
+  align-self: center;
+}
+#section3 .trophy {
+  width: 30%;
+  position: relative;
+  align-items: center;
+}
+#section3 .trophy .image-wrapper {
+  width: 25%;
+  margin: auto;
+  margin-bottom: .5rem;
+}
+#section3 .trophy .image-wrapper img {
+  width: 100%;
+}
+#section3 .trophy .text-wrapper {
+	width: 60%;
+	margin-left: 20%;
+	color: #e3b949;
+}
+#section3 .trophy.silver .text-wrapper {
+	color: #b7b1ae;
+}
+#section3 .trophy .text-wrapper {
+	color: #e39362;
+}
+#section3 .trophy .text-wrapper .trophy-type {
+	text-transform: uppercase;
+	font-size: 1.2rem;
+	font-weight: bold;
+}
+#section3 .trophy .text-wrapper .trophy-amount {
+	text-transform: uppercase;
+	font-size: 1.4rem;
+	font-weight: bold;
+	font-family: 'Russo One', sans-serif;
+}
+#section3 .trophy .text-wrapper h6 {
+	font-family: 'Russo One', sans-serif;
+	font-size: 1.5rem;
+	margin: .3rem;
+}
+#section3 .trophy .text-wrapper .trophy-credits {
+	font-size: 1rem;
+	font-style: italic;
+}
+#section3 .button {
+	display: inline-block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 3rem;
+	background: #171a68;
+	color: #85abda;
+	border-radius: 2px;
+	border-color: #080c42;
+	text-align: left;
+	width: 15rem;
+	font-size: 1rem;
+}
+#section3 .button img {
+	top: 1.2rem;
+}
+
+@media(max-width: 1200px) {
+	#section0 .buttons-wrapper {
+		right: 2rem;
+	}
+	#section1 .chidon {
+		padding-left: 2rem;
+	}
+	#section1 .family {
+		padding-right: 2rem;
+	}
+	#section2 .leaders {
+		flex-wrap: wrap;
+		justify-content: space-around;
+	}
+	#section2 .leader {
+		min-width: 300px;
+		margin-top: 1rem;
+	}
+
+	#section3 .trophy-wrapper {
+		display: flex;
+		justify-content: space-around;
+	}
+	#section3 .trophies-wrapper {
+		flex-direction: column;
+		width: 380px;
+	}
+	#section3 .trophies-wrapper h4 {
+		transform: rotate(0);
+	}
+	#section3 .trophies-wrapper .trophy {
+		width: 100%;
+    margin: 4rem 1rem;
+	}
+	#section3 .trophies-wrapper .trophy .image-wrapper {
+		width: 20%;
+	}
+	#section3 .trophies-wrapper .trophy .text-wrapper {
+		width: 70%;
+	}
+	#section5 .plaques-wrapper {
+		flex-wrap: wrap;
+		justify-content: space-around;
+	}
+	#section5 .plaques-wrapper .plaque-partner {
+		min-width: 210px;
+	}
+
+	#section6 .sponsors-wrapper .sponsor {
+		height: calc(100vw * .13);
+	}
+	#section6 .sponsors-wrapper.second .sponsor {
+		height: calc(100vw * .1);
+	}
+	#section6 .sponsors-wrapper.third .sponsor {
+		height: calc(100vw * .07);
+	}
+	#section6 .sponsors-wrapper.fourth .sponsor {
+		height: calc(100vw * .05);
+	}
+
+}
+
+@media(max-width: 860px) {
+	#section2, #section3, #section4, #section5 {
+		height: auto !important;
+	}
+	#section0 h2 {
+    bottom: 13rem;
+    right: 5rem;
+    text-align: right;
+  }
+  #section3 .trophy-wrapper {
+  	flex-wrap: wrap;
+  }
+  #section4 .medals-wrapper {
+  	flex-wrap: wrap;
+  	justify-content: space-around;
+  }
+  #section4 .medals-wrapper .medal-partner {
+  	min-width: 200px;
+  }
+}
+
+@media(max-width: 600px) {
+	#section0 h2 {
+		bottom: 20rem;
+	}
+	#section0 .button {
+		display: block;
+		margin-top: 1rem;
+	}
+	#section1 .half {
+		width: 100%;
+		height: 50%;
+	}
+}

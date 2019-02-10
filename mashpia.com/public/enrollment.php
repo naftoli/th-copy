@@ -9,9 +9,25 @@ $schools = $as->getSchools();
 
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
+$year = 5778;
+
+// array to hold chap to student ratio per school
+$errorMsg = '';
+$schoolChaps = [];
 
 $userInfo = array();
 foreach ($schools as $sid => $schoolName) {
+    $numChaps = 0;
+    $numWalkingCounselors = 0;
+    $chap_check = "select * from th_chidon_chaps where school_id = " . $sid . " and year = " . $year;
+    $chap_res = mysql_query( $chap_check );
+    while ( $chap_row = mysql_fetch_assoc( $chap_res ) ) {
+        if ( $chap_row['chap_type'] == 1 ) $numChaps++;
+        else $numWalkingCounselors++;
+    }
+    if ( $numChaps == 0 ) {
+        $errorMsg .= $schoolName . " need to have at one chaperone registered.<br />";
+    }
     $sql = "SELECT tc.*, u.first, u.last, c.* "
             ."FROM th_chidon tc "
             ."JOIN users u USING (user_id) "
@@ -23,6 +39,7 @@ foreach ($schools as $sid => $schoolName) {
     $sql .= "ORDER BY class_grade, class_sub, tc.school_rep desc, u.last, u.first";
     //echo "<input type='hidden' name='sql' value=\"" . $sql . "\" />";
     $result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
+    $schoolChaps[$sid][$numWalkingCounselors] = mysql_num_rows( $result );
     while ($row = mysql_fetch_assoc($result)) {
         $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
         $name = $row['first'] . ' ' . $row['last'];
@@ -42,6 +59,16 @@ foreach ($schools as $sid => $schoolName) {
     }
 }
 // echo "<pre>"; print_r($users); echo "</pre>";
+// check which schools don't have the needed ratio of 12:1 students to chaps
+foreach ( $schoolChaps as $school_id => $chaps ) {
+    foreach ( $chaps as $chapNum => $studentNum ) {
+        $needed = floor( $studentNum / 12 );
+        if ( $studentNum % 12 != 0 ) $needed++;
+        if ( $chapNum < $needed ) {
+            $errorMsg .= $schools[$school_id] . " needs to have " . $needed . " walking counselors(s) but only has " . $chapNum . " walking counselor(s).<br />";
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <HTML>
@@ -77,6 +104,19 @@ foreach ($schools as $sid => $schoolName) {
         <? include('admin_header.php'); ?>
         <?php include($_SERVER['DOCUMENT_ROOT']."/chidon_passwords.php"); ?>
         <h1>Shabbaton Eligibility</h1>
+
+        <?php
+        if ( !empty( $errorMsg ) ) {
+            echo "<div style='color: red;'>";
+            echo $errorMsg;
+            if ( count( $schools ) == 1 ) {
+                echo "You need to register more chaperones before you can enroll students.";
+                echo "</div>";
+                exit;
+            }
+            echo "</div>";
+        }
+        ?>
  
         <?php foreach ($userInfo as $sid => $info) { ?>
             <table class="tests">
@@ -161,7 +201,7 @@ foreach ($schools as $sid => $schoolName) {
                 
                 if(!response.chap) {
                     missing_chaperone = true;
-                    alert('It appears that you have not set up any Chaperones yet!. Redirecting you to Chaperones page.');
+                    alert('It appears that you have not set enough Chaperones yet!. Redirecting you to Chaperones page.');
                     location.href = "/chidon_school_reg.php";
                 } else if (!response.success) {
                     event.target.checked = !event.target.checked;

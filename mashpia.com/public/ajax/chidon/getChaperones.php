@@ -1,7 +1,7 @@
 <?php $debug = false;
 /***************** DEBUGGING **********************/
 // enable debuging
-if ($_POST['debug']) {
+if (isset($_POST['debug']) && $_POST['debug']) {
     error_reporting(E_ALL);
     ini_set("display_errors", 1);
     $debug = true; // set debug to true
@@ -55,7 +55,7 @@ if (count($chaps) > 0) { ?>
             <th>Last Name</th>
             <th>Email</th>
             <th>Phone</th>
-            <th>Full Program</th>
+            <!-- <th>Full Program</th> -->
             <th>Sweater Size</th>
             <?php if ($admin_user['auth'] == "super") {?>
                 <th></th>
@@ -72,7 +72,7 @@ if (count($chaps) > 0) { ?>
                 <td><?=$chap['last_name']?></td>
                 <td><?=$chap['email']?></td>
                 <td><?=$chap['phone']?></td>
-                <td><?=$chap['full_program'] ? 'yes' : 'no';?></td>
+                <!-- <td><?=$chap['full_program'] ? 'yes' : 'no';?></td> -->
                 <td><?=$chap['sweater_size']?></td>
                 <?php if ($admin_user['auth'] == "super") {?>
                 <td>
