@@ -83,7 +83,7 @@ $cc_info = [];
 $cc_info['number'] = $donation['cc']['num'];
 $cc_info['exp'] = $donation['cc']['exp'];
 $cc_info['cvc'] = $donation['cc']['cvv'];
-$cc_info['skip'] = $donation['skip'];
+$cc_info['skip'] = isset( $donation['skip'] ) ? $donation['skip'] : 0;
 
 // prepare billing address
 $billing = $donation['cc']['billing'];

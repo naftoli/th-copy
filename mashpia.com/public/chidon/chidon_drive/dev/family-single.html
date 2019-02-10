@@ -615,7 +615,6 @@
 						donation.email = $("#email").val();
 						donation.phone = $("#phone").val();
 						donation.dedication = $("#dedication").val();
-						donation.skip = 1;
 
 						//console.log( donation );
 						$.post('../ajax/processFamilyDonation.php', { donation_info: donation }, function( result ) {
