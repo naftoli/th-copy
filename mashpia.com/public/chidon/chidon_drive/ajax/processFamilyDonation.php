@@ -124,64 +124,74 @@ else {
       ':email'        =>  $email
     ]);
     if ( $res2 ) {
-      $donor_id = $MASHPIA_DB->lastInsertId();
-
-      // create authorize profile and update table
-      $description = "Customer profile for " . $name;
-      $paymentProfile = PaymentProfile::createBasicArray( $cc_num, $cc_exp, $cc_security );
-      $customerProfile = CustomerProfile::create( 'Chidon_Drive_Donor_' . $donor_id, $email, $description, $paymentProfile );
-      if ( $customerProfile instanceof CustomerProfile ) {
-          $customer_id = $customerProfile->customerProfileId;
-          $payment_id = $customerProfile->paymentProfiles[0]['customerPaymentProfileId'];
-      } else {
-          $error_msg[] = $customerProfile['message'];
-      }
-      
-      if ( !($customer_id && $payment_id) ) {
-          $error_msg[] = "Error creating donor profile.";
-      } else {
-        // update table
-        $stmt3 = $MASHPIA_DB->prepare("
-          UPDATE chidon_donors 
-          SET 
-              authorize_customer_profile_id = :customer, 
-              authorize_payment_profile_id = :payment 
-          WHERE
-              chidon_donor_id = :id
-        ");
-        $res3 = $stmt3->execute([
-          ':customer'   =>  $customer_id, 
-          ':payment'    =>  $payment_id
-        ]);
-        if ( !$res3 ) {
-          $error_msg[] = "Error updating authorize profile for donor.";
-        }
-      }
+        $donor_id = $MASHPIA_DB->lastInsertId();
     } else {
-      $error_msg[] = "Error creating donor.";
-    }
-  } else {
-    $donor_id = $row['chidon_donor_id'];
-    $customer_id = $row['authorize_customer_profile_id'];
-    $payment_id = $row['authorize_payment_profile_id'];
+      $donor_id = $row['chidon_donor_id'];
+      $customer_id = $row['authorize_customer_profile_id'];
 
-    // update donor
-    $qry = "
+      // update donor
+      $qry = "
+        UPDATE chidon_donors 
+        SET 
+            name = :name,
+            display_name = :display_name,
+            phone = :phone
+        WHERE
+            chidon_donor_id = :id
+      ";
+      $stmt2 = $MASHPIA_DB->prepare( $qry );
+      $res2 = $stmt2->execute([
+        ':name'         =>  $name,
+        ':display_name' =>  $display_name,
+        ':phone'        =>  $phone,
+        ':id'           =>  $donor_id
+      ]);
+    }
+  }
+}
+
+// create payment profile (and customer profile if needed)
+if ( !$customer_id ) {
+  $description = "Customer profile for " . $name;
+  $paymentProfile = PaymentProfile::createBasicArray( $cc_num, $cc_exp, $cc_security );
+  $customerProfile = CustomerProfile::create( 'Chidon_Drive_Donor_' . $donor_id, $email, $description, $paymentProfile );
+  if ( $customerProfile instanceof CustomerProfile ) {
+      $customer_id = $customerProfile->customerProfileId;
+      $payment_id = $customerProfile->paymentProfiles[0]['customerPaymentProfileId'];
+  } else {
+      $error_msg[] = $customerProfile['message'];
+  }
+
+  if ( !($customer_id && $payment_id) ) {
+      $error_msg[] = "Error creating donor profile.";
+  } else {
+    // update table
+    $stmt3 = $MASHPIA_DB->prepare("
       UPDATE chidon_donors 
       SET 
-          name = :name,
-          display_name = :display_name,
-          phone = :phone
+          authorize_customer_profile_id = :customer, 
+          authorize_payment_profile_id = :payment 
       WHERE
           chidon_donor_id = :id
-    ";
-    $stmt2 = $MASHPIA_DB->prepare( $qry );
-    $res2 = $stmt2->execute([
-      ':name'         =>  $name,
-      ':display_name' =>  $display_name,
-      ':phone'        =>  $phone,
-      ':id'           =>  $donor_id
+    ");
+    $res3 = $stmt3->execute([
+      ':customer'   =>  $customer_id, 
+      ':payment'    =>  $payment_id
     ]);
+    if ( !$res3 ) {
+      $error_msg[] = "Error updating authorize profile for donor.";
+    }
+  } else {
+    $error_msg[] = "Error creating donor.";
+  }
+} else {
+  // create a new payment profile
+  $paymentProfile = PaymentProfile::create( $cc_num, $cc_exp, $cc_security, $customer_id );
+  if ( $paymentProfile instanceof PaymentProfile ) {
+      $payment_id = $paymentProfile->customerPaymentProfileId;
+  } else {
+      // get error
+      $error_msg[] = $paymentProfile['messages']['message'][0]['text'];
   }
 }
 
