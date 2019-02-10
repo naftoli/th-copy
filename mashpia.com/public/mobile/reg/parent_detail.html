@@ -147,7 +147,7 @@
 																	{{#if this.thumb}} 
 																	<img src="/thumbs/{{thumb}}" class="children-avatar">
 																	{{else}}
-																	<img src="../../file_view.php?id={{photo}}" class="children-avatar">
+																	<img src="../../git cdh{{photo}}" class="children-avatar">
 																	{{/if}}
 																{{else}}
 																<img src="images/profile-photo-default.jpg" class="children-avatar">
@@ -510,10 +510,10 @@
                     }
                 });
 
-                $(document).on('click', '.shabbaton', function() {
-                    var id = $(this).parent().parent().parent().attr('id');
-                    location.href = "/mobile/chidon/index2.html?id=" + id;
-                });
+                // $(document).on('click', '.shabbaton', function() {
+                //     var id = $(this).parent().parent().parent().attr('id');
+                //     location.href = "/mobile/chidon/index2.html?id=" + id;
+                // });
                 
                 //$(document).on('click', '.shabbatonEdit', function() {
                 //	var id = $(this).parent().parent().parent().attr('id');
@@ -533,15 +533,15 @@
                     location.href = "/mobile/chidon/edit.html?id=" + id;
                 });
                 
-                $(document).on('click', '.enroll', function() {
-                    var id = $(this).parent().parent().parent().parent().attr('id');
-                    location.href = "/mobile/chidon/shabbaton.html?id=" + id;
-                });
+                // $(document).on('click', '.enroll', function() {
+                //     var id = $(this).parent().parent().parent().parent().attr('id');
+                //     location.href = "/mobile/chidon/shabbaton.html?id=" + id;
+                // });
                 
-                $(document).on('click', '.editEnrollment', function() {
-                    var id = $(this).parent().parent().parent().parent().attr('id');
-                    location.href = "/mobile/chidon/edit.html?id=" + id;
-                });
+                // $(document).on('click', '.editEnrollment', function() {
+                //     var id = $(this).parent().parent().parent().parent().attr('id');
+                //     location.href = "/mobile/chidon/edit.html?id=" + id;
+                // });
                 
                 $(document).on('click', '.chidon', function() {
                     var id = $(this).parent().parent().parent().attr('id');
