@@ -330,33 +330,39 @@
 					  styleText:           true
 					});
 
+					var calcAmount = () => {
+						let amount = 0;
+						let donation_type = $(".donation_type:checked").val();
+						switch ( donation_type ) {
+							case "1":
+								let numChildren = $('select.children option:selected').text();
+								if ( parseInt( numChildren ) > 0 ) amount = parseInt( numChildren * 100 );
+								break;
+							case "2":
+								amount = parseInt( $("#donation_amount").val() );
+								break;
+							case 3:
+								break;
+						}
+						return amount;
+					}
+
 					$("#donationForm").submit( function( e ) {
 						e.preventDefault();
 
-						// get all info together
-						let donation = {};
-
-						// figure out amount
-						var amount = 0;
 						if ( !$(".donation_type:checked").length ) {
 							alert("You have not indicated what type of donation you would like to give.");
 							return false;
-						} else {
-							let donation_type = $(".donation_type:checked").val();
-							switch ( donation_type ) {
-								case 1:
-									let numChildren = $('select.children option:selected').text();
-									if ( parseInt( numChildren ) > 0 ) amount = parseInt( numChildren * 100 );
-									break;
-								case 2:
-									amount = parseInt( $("#donation_amount").val() );
-									break;
-								case 3:
-									break;
-							}
 						}
 
-						alert( amount );
+						// get all info together
+						let donation = {};
+						let amount = calcAmount();
+						if ( !amount ) {
+							alert("You have not entered any amount.");
+							return false;
+						}
+
 						donation.amount = amount;
 						donation.name = $("#name").val();
 						donation.display_name = $("#display_name").val();
@@ -380,13 +386,15 @@
 						donation.email = $("#email").val();
 						donation.phone = $("#phone").val();
 						donation.dedication = $("#dedication").val();
+						donation.skip = 1;
 
 						//console.log( donation );
 						$.post('../ajax/processDonation.php', { donation_info: donation }, function( result ) {
 							console.log( result );
 							let res = JSON.parse( result );
-							if ( !res.success ) {
-								alert( res.message );
+							alert( res.message );
+							if ( res.success ) {
+								location.href = "thank-you.html";
 							}
 						});
 					});

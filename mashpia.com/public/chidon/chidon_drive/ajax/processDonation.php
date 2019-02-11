@@ -140,10 +140,12 @@ if ($response != null) {
           $error_msg .= " Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n";
       }
   }
-} 
+} else if ( $cc_info['skip'] ) {
+  $msg = "Success.";
+}
 
-if ( empty( $error_msg ) ) {
-  // add to donations table and user_subsidies tables
+if ( !empty( $msg ) ) {
+  // add to donations table 
   $stmt = $MASHPIA_DB->prepare("
     INSERT INTO chidon_donations 
     SET 
@@ -165,8 +167,8 @@ if ( empty( $error_msg ) ) {
   ]);
 } else {
   echo json_encode([
-    'success'   =>  true,
-    'error'     =>  $error_msg
+    'success'     =>  false,
+    'message'     =>  $error_msg
   ]);
 }
 exit;
