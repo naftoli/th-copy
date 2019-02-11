@@ -40,7 +40,7 @@
 				<div class="wrapper">
 					<h2 class="title">Leading Communities</h2>
 					<div class="leaders">
-						<div class="leader" data-amount="12,250">
+						<!-- <div class="leader" data-amount="12,250">
 							<div class="leader-title">
 								<h3><span>#1</span> Miami Florida</h3>
 							</div>
@@ -108,15 +108,15 @@
 									<p class="leader-stats__goal-number">Goal: $24,500</p>
 								</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>
 
 			<!-- School Stats -->
 			<div class="section" id="section3">
-				<div class="wrapper">
-					<div class="community">
+				<div class="wrapper mainLeaderboard">
+					<!-- <div class="community">
 						<div class="community-info">
 							<div class="title">
 								<h4><span>#4</span> North Miami Beach, Florida</h4>
@@ -241,7 +241,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 				</div>
 			</div>
@@ -325,11 +325,119 @@
 		    	$('header nav').toggleClass('open');
 		    });
 
-		    $('.community-info').click(function(e){
-		    	e.preventDefault();
-		    	$('.community').not($(this).closest('.community')).removeClass('open');
-		    	$(this).closest('.community').toggleClass('open');
-		    });
+		    // $('.community-info').click(function(e){
+		    // 	e.preventDefault();
+		    // 	$('.community').not($(this).closest('.community')).removeClass('open');
+		    // 	$(this).closest('.community').toggleClass('open');
+				// });
+				
+				$( function() {
+					$.post('../ajax/getCommunities.php', function( res ) {
+						let result = JSON.parse( res );
+						console.log( result );
+						if ( result.success ) {
+							let info = result.data;
+							let htmlTop = '';
+							let htmlMain = '';
+							let i = 1;
+							for ( percent in info ) {
+								for ( community in info[percent] ) {
+									let stats = info[percent][community]['communityInfo'];
+									//console.log( stats );
+									
+									htmlTop += `
+										<div class="leader" data-amount="${stats.raised}">
+											<div class="leader-title">
+												<h3><span>#${i++}</span> ${community}</h3>
+											</div>
+											<div class="bar" data-percent="${percent}" >
+												<div class="bar-percent"><span class="bar-percent__number">${percent}%</span></div>
+												<div class="bar-line">
+													<div class="bar-line__bar"><div class="bar-line__circle"></div>
+														<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${stats.raised}</span></div>
+													</div>
+												</div>
+											</div>
+											<div class="leader-stats">
+												<div class="leader-stats__children">
+													<img src="img/ppl.png" alt="Number of Children" />
+													<p class="leader-stats__children-number">${stats.numChildren} Children</p>
+												</div>
+												<div class="leader-stats__children">
+													<img src="img/flag.png" alt="Goal" />
+													<p class="leader-stats__goal-number">Goal: $${stats.goal}</p>
+												</div>
+											</div>
+										</div>
+									`;									
+									if ( i == 4 ) {
+										i = 1;
+										break;
+									}
+								}
+							}
+							for ( percent in info ) {
+								for ( community in info[percent] ) {
+									let stats = info[percent][community]['communityInfo'];
+									htmlMain += `
+										<div class="community" data-community=${community}>
+											<div class="community-info">
+												<div class="title">
+													<h4><span>#${i++}</span> ${community}</h4>
+												</div>
+												<div class="children">
+													<img src="img/ppl.png" alt="Children" />
+													<p>${stats.numChildren} Children</p>
+												</div>
+												<div class="bar" data-percent="${percent}">
+													<div class="bar-percent"><span class="bar-percent__number">${percent}%</span></div>
+													<div class="bar-line">
+														<div class="bar-line__bar"><div class="bar-line__circle"></div>
+															<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${stats.raised}</span></div>
+														</div>
+													</div>
+												</div>
+												<a href="#" class="more-button"></a>
+											</div>
+											<div class="community-schools">
+										`;
+										console.log( info[percent][community]['schools'] );
+										for ( schoolPercent in info[percent][community]['schools'] ) {
+											for ( schoolName in info[percent][community]['schools'][schoolPercent] ) {
+												let school = info[percent][community]['schools'][schoolPercent][schoolName];
+												htmlMain += `
+													<div class="school">
+														<img src="img/school.png" alt="Shool Logo" />
+														<p>${schoolName}, ${school.numChildren} Children</p>
+														<div class="spacer"></div>
+														<div class="bar" data-percent="${school.percent}">
+															<div class="bar-percent"><span class="bar-percent__number">${school.percent}%</span></div>
+															<div class="bar-line">
+																<div class="bar-line__bar"><div class="bar-line__circle"></div>
+																	<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${school.raised}</span></div>
+																</div>
+															</div>
+														</div>
+													</div>
+												`;
+											}
+										}
+									htmlMain += "</div></div>";
+								}
+							}
+							$(".leaders").append( htmlTop );
+							$(".mainLeaderboard").append( htmlMain );
+
+							$('.community-info').click( function(e){
+								e.preventDefault();
+								$('.community').not($(this).closest('.community')).removeClass('open');
+								$(this).closest('.community').toggleClass('open');
+							});
+						} else {
+							alert( result.message );
+						}
+					});
+				});
 		</script>
 	</body>
 </html>

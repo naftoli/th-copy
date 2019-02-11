@@ -129,6 +129,10 @@ class Reports
                 'column'    => 'class_teacher'
             ),
 
+            'chap_type'     =>  array(
+                'table'     =>  'th_chidon_chaps', 
+                'column'    =>  'chap_type'
+            ),
             'chap_name'     =>  array(
                 'table'     =>  'th_chidon_chaps',
                 'column'    =>  'name as chap_name',

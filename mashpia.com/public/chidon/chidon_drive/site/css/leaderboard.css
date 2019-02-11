@@ -84,6 +84,7 @@
 	background-image: url(../img/home/leaderboard.jpg);
 	padding-top: 10rem;
 	text-align: center;
+	height: auto !important;
 }
 #section3 .wrapper {
 	justify-content: center;

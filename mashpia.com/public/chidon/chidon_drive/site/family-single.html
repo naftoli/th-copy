@@ -37,9 +37,9 @@
 
 				<!-- Family info -->
 				<div class="family-info">
-					<h3>Drive Chidon for the <br><span>Katz</span> Family</h3>
+					<h3>Drive Chidon for the <br><span class="familyName"></span> Family</h3>
 					<div class="bio-wrapper">
-						<p><strong>Tzivi</strong>, <strong>Sholom Ber</strong> and <strong>Yankel</strong> have been working for months to master the 613 mitzvos. Why? So they can join an extraordinary four-day Chidon Shabbaton of fun, friendship and inspiration.</p>
+						<p><span id="childrenNames"></span> have been working for months to master the 613 mitzvos. Why? So they can join an extraordinary four-day Chidon Shabbaton of fun, friendship and inspiration.</p>
 						<p>Please donate today to make their dream come true.</p>
 					</div>
 				</div>
@@ -51,29 +51,29 @@
 							<div class="bar-circle">
 								<p id="simple-arc">Family Goal</p>
 								<div class="bar-circle__inner">
-									<span>$350</span>
+										$<span id="familyGoal"></span>
 								</div>
 							</div>
 							<div class="bar-bar">
 								<div class="bar-bar__wrapper">
-									<div class="bar-bar__line registration" data-percent="50">
+									<div class="bar-bar__line registration" data-percent="">
 										<div class="bar-bar__circle"></div>
 										<div class="bar-bar__marker">
 											<img src="img/marker-blue.png" />
-											<p>$150<br>Registration Fee</p>
+											<p>$<span id="totalRegFee"></span><br>Registration Fee</p>
 										</div>
 									</div>
-									<div class="bar-bar__line subsidy" data-percent="75">
+									<div class="bar-bar__line subsidy" data-percent="">
 										<div class="bar-bar__circle"></div>
 										<div class="bar-bar__marker">
 											<img src="img/marker.png" />
-											<p>$150<br>Rohr Subsidy</p>
+											<p>$<span id="totalRohrSubsidy"></span><br>Rohr Subsidy</p>
 										</div>
 									</div>
 
 									<div class="remaining">
 										<div class="bar-bar__marker">
-											<p>$100<br>Remaining</p>
+											<p>$<span id="remainingFee"></span><br>Remaining</p>
 										</div>
 									</div>
 								</div>
@@ -84,92 +84,93 @@
 					<!-- Options -->
 					<div class="options-wrapper">
 						<div class="option">
-							<p>I would like to donate <input type="text" /> towards the Chidon experience for</p>
+							<p>I would like to donate <input type="text" id="donationAmount" size="8" /> towards the Chidon experience for</p>
 
-							<p><label class="checkbox"><input type="checkbox" /><span></span></label> For all children in the Katz Family</p>
-							<p><label class="checkbox"><input type="checkbox" /><span></span></label> For child <select><option>Select</option></select></p>
+							<p><label class="checkbox"><input type="radio" name="donation" id="donationToAll" /><span></span></label> For all children in the <span class="familyName"></span> Family</p>
+							<p><label class="checkbox"><input type="radio" name="donation" id="donationToOne" /><span></span></label> For child 
+								<select id="childrenSelection"><option value="0">Select</option></select></p>
 						</div>
 					</div>
 				</div>
 
 				<div class="main-wrapper">
 					<div class="form">
-						<form>
+						<form id="donationForm">
 							<div class="field">
 								<label>Full Name <span>(for reciept)</span>:</label>
-								<input type="text" placeholder="Full Name" />
+								<input type="text" id="name" placeholder="Full Name" />
 							</div>
 							<div class="field">
 								<label>Name to be displayed:</label>
-								<input type="text" placeholder="Name to be displayed" />
+								<input type="text" id="display_name" placeholder="Name to be displayed" />
 							</div>
 							<div class="field">
-								<p><label class="checkbox"><input type="checkbox" /><span></span></label>Donate anonymously</p>
+								<p><label class="checkbox"><input type="checkbox" id="anonymous" /><span></span></label>Donate anonymously</p>
 							</div>
 							<div class="field">
 								<label>Email <span>(for reciept)</span>:</label>
-								<input type="text" placeholder="Email" />
+								<input type="text" id="email" placeholder="Email" />
 							</div>
 							<div class="field">
 								<label>Message or Dedication <span>(75 characters maximum)</span>:</label>
-								<input type="text" placeholder="Full Name" />
+								<input type="text" id="dedication" placeholder="Full Name" />
 							</div>
 							<h5>Payment Information</h5>
 							<div class="field">
 								<label>Card Number:</label>
-								<input type="text" placeholder="0000 0000 0000 0000" />
+								<input type="text" id="cc_num" placeholder="0000 0000 0000 0000" />
 							</div>
 							<div class="group">
 								<div class="field">
 									<label>Exp. Month:</label>
-									<select><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
+									<select id="exp_mm"><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
 								</div>
 								<div class="field">
 									<label>Exp. Year:</label>
-									<select><option>2018</option><option>2019</option><option>2020</option><option>2021</option></select>
+									<select id="exp_yy"><option>2018</option><option>2019</option><option>2020</option><option>2021</option></select>
 								</div>
 								<div class="field">
 									<label>CVV:</label>
-									<input type="text" placeholder="CVV" />
+									<input type="text" id="cc_cvv" placeholder="CVV" />
 								</div>
 							</div>
 							<h5>Billing Address</h5>						
 							<div class="field">
 								<label>Country:</label>
-								<select><option>United States</option><option>Canada</option></select>
+								<select id="bill_country"><option>United States</option><option>Canada</option></select>
 							</div>						
 							<div class="field">
 								<label>Address:</label>
-								<input type="text" placeholder="Address" />
+								<input type="text" id="bill_address" placeholder="Address" />
 							</div>						
 							<div class="field">
 								<label>Apt./Suite:</label>
-								<input type="text" placeholder="Apt./Suite (optional)" />
+								<input type="text" id="bill_apt" placeholder="Apt./Suite (optional)" />
 							</div>
 							<div class="group">
 								<div class="field">
 									<label>Zip/Postcode:</label>
-									<input type="text" placeholder="Zip/Postcode" />
+									<input type="text" id="bill_zip" placeholder="Zip/Postcode" />
 								</div>
 								<div class="field">
 									<label>City:</label>
-									<input type="text" placeholder="City" />
+									<input type="text" id="bill_city" placeholder="City" />
 								</div>
 								<div class="field">
 									<label>State/Prov/Region:</label>
-									<input type="text" placeholder="State/Prov/Region" />
+									<input type="text" id="bill_state" placeholder="State/Prov/Region" />
 								</div>							
 							</div>
 							<div class="field">
 								<label>Phone:</label>
-								<input type="text" placeholder="Phone (optional)" />
+								<input type="text" id="phone" placeholder="Phone (optional)" />
 							</div>
 							<input type="submit" class="button donate" value="Donate" />
 						</form>
 					</div>
 					<div class="activity">
 						<div class="family-charts">
-							<div class="kid">
+							<!-- <div class="kid">
 								<div class="bio">
 									<div class="image-wrapper">
 
@@ -328,13 +329,13 @@
 										</div>
 									</div>
 								</div>
-							</div>
+							</div> -->
 						</div>
 						<div class="recent">
 							<h5>Most Recent Sponsors</h5>
 							<div class="recent-chart">
 								<div class="sponsor-list">
-									<div class="recent-sponsor">
+									<!-- <div class="recent-sponsor">
 										<div class="sponsor-name">
 											<p class="sponsor-name">Mr. Josh Cohen</p>
 											<p class="sponsor-credit">in honor of his mother</p>
@@ -381,7 +382,7 @@
 										<div class="sponsor-amount">
 											<p>$50</p>
 										</div>
-									</div>	
+									</div>	 -->
 								</div>
 							</div>
 						</div>
@@ -454,19 +455,18 @@
 					const circleType = new CircleType(document.getElementById('simple-arc'));
 					circleType.radius(60);
 
-					// Animate bars
-		    	$('.bar-bar__line').each(function(index, i){
-		    		var percent = $(this).data('percent');
-		    		$(this).width(percent + '%');
-		    	});
+					// // Animate bars
+		    	// $('.bar-bar__line').each(function(index, i){
+		    	// 	var percent = $(this).data('percent');
+		    	// 	$(this).width(percent + '%');
+		    	// });
 
 		    	// Select 
-				  $('select').niceSelect();
-				  $('select.children').change(function(e){
-				  	var val = $(this).find('option:selected').text();
-				  	$('.children-change').val('$' + val + '.00');
-				  });
-
+				  // $('select').niceSelect();
+				  // $('select.children').change(function(e){
+				  // 	var val = $(this).find('option:selected').text();
+				  // 	$('.children-change').val('$' + val + '.00');
+				  // });
 
 				  var circlePercent = $('#circle-chart').data('percent');
 					var myCircle = Circles.create({
@@ -486,85 +486,282 @@
 					  styleText:           true
 					});
 
+					// get children info 
+					let url = window.location.href;
+					let pos = url.indexOf('=');
+					let admin_id = 0;
+					let children = []; // need to know user_id of children when creating the subsidies
+					if ( pos > 0 ) admin_id = url.substr( pos + 1 );
+					if ( admin_id ) {
+						$.post('../ajax/getFamilyInfo.php', { admin: admin_id }, function( result ) {
+							let info = JSON.parse( result );
+							console.log( info );
 
-					/* Scroll list */
-					// var times = ((($('window').height() / 48) - 1) / $('.sponsor-list .sponsor').length);
-					var times = (($(window).height() / 48)) / $('.sponsor-list .recent-sponsor').length;
-					for (i=0;i<times;i++){
-						$('.sponsor-list .recent-sponsor').each(function(e){
-							$(this).clone().appendTo('.sponsor-list');
-						})
-					}
+							if ( info.success ) {
+								// find out family goal
+								let numChildren = info.data.children.length;
+								let familyGoal = numChildren * 350;
+								$("#familyGoal").text( familyGoal );
 
+								let totalReg = numChildren * 150;
+								let totalRegPercent = ((totalReg / familyGoal) * 100);
+								$("#totalRegFee").text( totalReg );
+								$(".registration").attr('data-percent', totalRegPercent );
 
-					var doc = window.document,
-					  context = doc.querySelector('.sponsor-list'),
-					  clones = context.querySelectorAll('.is-clone'),
-					  disableScroll = false,
-					  scrollHeight = 0,
-					  scrollPos = 0,
-					  clonesHeight = 0,
-					  i = 0;
-					function getScrollPos () {
-					  return (context.pageYOffset || context.scrollTop) - (context.clientTop || 0);
-					}
-					function setScrollPos (pos) {
-					  context.scrollTop = pos;
-					}
-					function getClonesHeight () {
-					  clonesHeight = 0;
-					  for (i = 0; i < clones.length; i += 1) {
-					    clonesHeight = clonesHeight + clones[i].offsetHeight;
-					  }
-					  return clonesHeight;
-					}
-					function reCalc () {
-					  scrollPos = getScrollPos();
-					  scrollHeight = context.scrollHeight;
-					  clonesHeight = getClonesHeight();
-					  if (scrollPos <= 0) {
-					    setScrollPos(1); // Scroll 1 pixel to allow upwards scrolling
-					  }
-					}
-					function scrollUpdate () {
-					  if (!disableScroll) {
-					    scrollPos = getScrollPos();
-					    if (clonesHeight + scrollPos >= scrollHeight) {
-					      // Scroll to the top when you’ve reached the bottom
-					      setScrollPos(1); // Scroll down 1 pixel to allow upwards scrolling
-					      disableScroll = true;
-					    } else if (scrollPos <= 0) {
-					      // Scroll to the bottom when you reach the top
-					      setScrollPos(scrollHeight - clonesHeight);
-					      disableScroll = true;
-					    }
-					  }
-					  if (disableScroll) {
-					    // Disable scroll-jumping for a short time to avoid flickering
-					    window.setTimeout(function () {
-					      disableScroll = false;
-					    }, 40);
-					  }
-					}
-					function init () {
-					  reCalc();
-					  context.addEventListener('scroll', function () {
-					    window.requestAnimationFrame(scrollUpdate);
-					  }, false);
-					  window.addEventListener('resize', function () {
-					    window.requestAnimationFrame(reCalc);
-					  }, false);
-					}
-					if (document.readyState !== 'loading') {
-					  init()
+								let totalRohr = numChildren * 100;
+								let totalRohrPercent = (((totalRohr + totalReg) / familyGoal) * 100);
+								$("#totalRohrSubsidy").text( totalRohr );
+								$(".subsidy").attr('data-percent', totalRohrPercent );
+
+								let remaining = totalReg = totalRohr;
+								$("#remainingFee").text( remaining );
+
+								// Animate bars
+								$('.bar-bar__line').each(function(index, i){
+									var percent = $(this).data('percent');
+									$(this).width(percent + '%');
+								});
+
+								// first get parent info from first record
+								let adminInfo = info.data.children[0];
+								let father = adminInfo.father ? adminInfo.father : adminInfo.A_first;
+								let mother = adminInfo.mother ? adminInfo.mother : '';
+								let familyName = adminInfo.A_last;
+								$(".familyName").text( familyName );
+
+								let html = '';
+								let selection = '';
+								let familyCharts = '';
+								let childrenNames = [];
+								for ( i in info.data.children ) {
+									let child = info.data.children[i];
+									children.push( child.user_id );
+									let childName = child.first + ' ' + child.last;
+									childrenNames.push( childName );
+									let childPic = child.mobile_pic ? "/mobile/reg/" + child.mobile_pic : "/file_view.php?id=" + child.user_photo_id;
+
+									// create list of names
+									if ( info.data.children.length > 1 && (i == info.data.children.length - 1) ) {
+										html += " and ";
+									}
+									html += "<strong>" + childName + "</strong>, ";
+									
+									// create drop down selection of names
+									selection += "<option value='" + child.user_id + "'>" + childName + "</option>";
+
+									// figure out percent raised
+									let percent = ((child.total_donation / 350) * 100).toFixed(2);
+
+									// add to family charts 
+									familyCharts += `
+										<div class="kid">
+											<div class="bio">
+												<div class="image-wrapper">
+													<img src="${childPic}" style="border-radius: 50%; padding: 2px; width: 100%;" />
+												</div>
+												<div class="name">
+													<h5>${child.first}<br>${child.last}</h5>
+												</div>
+											</div>
+											<div class="bar">
+												<div class="bar-circle">
+													<div class="bar-circle__inner">
+														<span>$350</span>
+													</div>
+												</div>
+												<div class="bar-bar">
+													<div class="bar-bar__wrapper">
+														<div class="bar-bar__line registration" data-percent="50">
+															<div class="bar-bar__circle"></div>
+															<div class="bar-bar__marker">
+																<img src="img/marker-blue.png" />
+																<p>$150</p>
+															</div>
+														</div>
+														<div class="bar-bar__line subsidy" data-percent="${percent}">
+															<div class="bar-bar__circle"></div>
+															<div class="bar-bar__marker">
+																<img src="img/marker.png" />
+																<p>${child.total_donation}</p>
+															</div>
+														</div>
+														<div class="remaining">
+															<div class="bar-bar__marker">
+																<p>$100</p>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									`;
+								}	
+								$("#childrenNames").html( html );
+								$("#childrenSelection").append( selection );
+								$(".family-charts").append( familyCharts );
+
+								// Select 
+								$('select').niceSelect();
+								$('select.children').change(function(e){
+									var val = $(this).find('option:selected').text();
+									$('.children-change').val('$' + val + '.00');
+								});
+
+								$("#childrenSelection").change( function() {
+									let val = $(this).val();
+									if ( val ) {
+										$("#donationToOne").trigger('click');
+									} 
+								});
+
+								// list of sponsors
+								let sponsorList = '';
+								for ( i in info.data.sponsors ) {
+									let sponsor = info.data.sponsors[i];
+									let dedication = sponsor.notes ? sponsor.notes : '';
+									sponsorList += `
+										<div class="recent-sponsor">
+											<div class="sponsor-name">
+												<p class="sponsor-name">${sponsor.display_name}</p>
+												<p class="sponsor-credit">${dedication}</p>
+											</div>
+											<div class="sponsor-amount">
+												<p>$${sponsor.donation_amount}</p>
+											</div>
+										</div>
+									`;
+								}
+								$(".sponsor-list").append( sponsorList );
+
+								/* Scroll list */
+								// var times = ((($('window').height() / 48) - 1) / $('.sponsor-list .sponsor').length);
+								// var times = (($(window).height() / 48)) / $('.sponsor-list .recent-sponsor').length;
+								// for (i=0;i<times;i++){
+								// 	$('.sponsor-list .recent-sponsor').each(function(e){
+								// 		$(this).clone().appendTo('.sponsor-list');
+								// 	})
+								// }
+								
+								// var doc = window.document,
+								// 	context = doc.querySelector('.sponsor-list'),
+								// 	clones = context.querySelectorAll('.is-clone'),
+								// 	disableScroll = false,
+								// 	scrollHeight = 0,
+								// 	scrollPos = 0,
+								// 	clonesHeight = 0,
+								// 	i = 0;
+								// function getScrollPos () {
+								// 	return (context.pageYOffset || context.scrollTop) - (context.clientTop || 0);
+								// }
+								// function setScrollPos (pos) {
+								// 	context.scrollTop = pos;
+								// }
+								// function getClonesHeight () {
+								// 	clonesHeight = 0;
+								// 	for (i = 0; i < clones.length; i += 1) {
+								// 		clonesHeight = clonesHeight + clones[i].offsetHeight;
+								// 	}
+								// 	return clonesHeight;
+								// }
+								// function reCalc () {
+								// 	scrollPos = getScrollPos();
+								// 	scrollHeight = context.scrollHeight;
+								// 	clonesHeight = getClonesHeight();
+								// 	if (scrollPos <= 0) {
+								// 		setScrollPos(1); // Scroll 1 pixel to allow upwards scrolling
+								// 	}
+								// }
+								// function scrollUpdate () {
+								// 	if (!disableScroll) {
+								// 		scrollPos = getScrollPos();
+								// 		if (clonesHeight + scrollPos >= scrollHeight) {
+								// 			// Scroll to the top when you’ve reached the bottom
+								// 			setScrollPos(1); // Scroll down 1 pixel to allow upwards scrolling
+								// 			disableScroll = true;
+								// 		} else if (scrollPos <= 0) {
+								// 			// Scroll to the bottom when you reach the top
+								// 			setScrollPos(scrollHeight - clonesHeight);
+								// 			disableScroll = true;
+								// 		}
+								// 	}
+								// 	if (disableScroll) {
+								// 		// Disable scroll-jumping for a short time to avoid flickering
+								// 		window.setTimeout(function () {
+								// 			disableScroll = false;
+								// 		}, 40);
+								// 	}
+								// }
+								// function init () {
+								// 	reCalc();
+								// 	context.addEventListener('scroll', function () {
+								// 		window.requestAnimationFrame(scrollUpdate);
+								// 	}, false);
+								// 	window.addEventListener('resize', function () {
+								// 		window.requestAnimationFrame(reCalc);
+								// 	}, false);
+								// }
+								// if (document.readyState !== 'loading') {
+								// 	init()
+								// } else {
+								// 	doc.addEventListener('DOMContentLoaded', init, false)
+								// }
+
+								// setInterval(function(e){
+								// 	jQuery('.sponsor-list').scrollTop(jQuery('.sponsor-list').scrollTop() + 240);
+								// }, 1500)
+
+							} else {
+								alert( info.message );
+							}
+						});
 					} else {
-					  doc.addEventListener('DOMContentLoaded', init, false)
+						alert("Error retrieving family info.");
 					}
 
-					setInterval(function(e){
-						jQuery('.sponsor-list').scrollTop(jQuery('.sponsor-list').scrollTop() + 240);
-					}, 1500)
-		    })
+					$("#donationForm").submit( function( e ) {
+						e.preventDefault();
+
+						// get all info together
+						let donation = {};
+						donation.family = admin_id;
+						donation.amount = $("#donationAmount").val();
+						donation.forChild = $("#childrenSelection").val();
+						donation.children = children;
+						donation.name = $("#name").val();
+						donation.display_name = $("#display_name").val();
+						donation.anonymous = $("#anonymous").is(":checked") ? 1 : 0;
+
+						let cc = {}
+						cc.num = $("#cc_num").val();
+						cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val();
+						cc.cvv = $("#cc_cvv").val();
+
+						let billing = {}
+						billing.apt = $("#bill_apt").val();
+						billing.address = $("#bill_address").val();
+						billing.city = $("#bill_city").val();
+						billing.state = $("#bill_state").val();
+						billing.zip = $("#bill_zip").val();
+						billing.country = $("#bill_country").val();
+						cc.billing = billing;
+
+						donation.cc = cc;
+						donation.email = $("#email").val();
+						donation.phone = $("#phone").val();
+						donation.dedication = $("#dedication").val();
+
+						//console.log( donation );
+						$.post('../ajax/processFamilyDonation.php', { donation_info: donation }, function( result ) {
+							console.log( result );
+							let res = JSON.parse( result );
+							if ( !res.success ) {
+								alert( res.message );
+							} else {
+								location.href = "thank-you.html";
+							}
+						});
+					});
+		    });
 		</script>
 	</body>
 </html>

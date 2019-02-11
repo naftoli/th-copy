@@ -1,80 +1,109 @@
 <?php
-$admin_auth = ['school'];
-define( "MASHPIA_AUTH_REQUIRED", true );
-require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
-$year = $_POST['year'];
-$donation = $_POST['donation'];
-$user_donations = $_POST['user_donations'];
-$cc_info = $_POST['cc_info'];
-$cc_info['desc'] = "Chidon Drive " . $year;
-$dedication = $_POST['dedication'];
+$year = GlobalSettings::getChidonYear();
+$year = 5778;
+$donation = $_POST['donation_info'];
 
+//*************** LOAD AUTHORIZE FUNCTIONS *********************/
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/AuthorizeAPIRequest.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
+
+use classes\authorize\AuthorizeAPIRequest;
+use classes\authorize\CustomerProfile;
+use classes\authorize\PaymentProfile;
+
+function checkMandatory( $values ) {
+  $missing = [];
+
+  // map of needed fields with their more user friendly description
+  $mandatory = [
+    'email'           =>  'Email Address', 
+    'name'            =>  'Donor Name',
+    'display_name'    =>  'Display Name',
+    'num'             =>  'Credit Card Number',
+    'exp'             =>  'Credit Card Expiry',
+    'cvv'             =>  'Security Code',
+    'address'         =>  'Billing Address',
+    'city'            =>  'Billing City',
+    'state'           =>  'Billing State',
+    'zip'             =>  'Billing Zip',
+    'country'         =>  'Billing Country'
+  ];
+
+  foreach ( $values as $k => $v ) {
+    if ( is_array( $v ) ) $missing += checkMandatory( $v );
+    else {
+      if ( in_array( $k, array_keys( $mandatory ) ) ) {
+        $val = trim( $v );
+        if ( empty( $val ) ) {
+          $missing[] = $mandatory[$k];
+        }
+      }
+    }
+  }
+  return $missing;
+}
+
+$missing = checkMandatory( $donation );
+
+// in order to have the alert box show with line breaks, needs to be in this weird format
+if ( !empty( $missing ) ) {
+  $message = 
+'You have not filled out the following mandatory field(s).';
+foreach ( $missing as $field ) {
+  $message .= 
+"
+$field";
+}
+
+  echo json_encode([
+    'success'   =>  false, 
+    'message'   =>  $message
+  ]);
+  exit;
+}
+
+// prepare variables for donor table
+$name = $donation['name'];
+$display_name = $donation['anonymous'] ? 'Anonymous' : $donation['display_name'];
+$email = $donation['email'];
+$phone = $donation['phone'];
+
+// prepare variables for donation table
+$amount = $donation['amount'];
+
+// prepare variables for payment
+$cc_info = [];
+$cc_info['number'] = $donation['cc']['num'];
+$cc_info['exp'] = $donation['cc']['exp'];
+$cc_info['cvc'] = $donation['cc']['cvv'];
+$cc_info['skip'] = isset( $donation['skip'] ) ? $donation['skip'] : 0;
+
+// prepare billing address
+$billing = $donation['cc']['billing'];
+$cc_info['address'] = $billing['address'] . ' ' . $billing['apt'];
+$cc_info['city'] = $billing['city'];
+$cc_info['state'] = $billing['state'];
+$cc_info['zip'] = $billing['zip'];
+$cc_info['country'] = $billing['country'];
+
+// first process donation
 if ( $cc_info['skip'] ) {
   // don't process card at all
   $trans_id = 11111;
   $trans_info = "testing by skipping authorize.net transaction.";
   $response = null;
 } else {
-  // extract first and last name
-  $cc_info['first'] = '';
-  $cc_info['last'] = trim( $cc_info['name'] );
-  if ( strpos( $cc_info['last'], ' ' ) !== false ) {
-    $full_name = explode(' ', $cc_info['last']);
-    $lastPos = count( $full_name ) - 1;
-    $cc_info['last'] = $full_name[$lastPos];
-    $cc_info['first'] = $full_name[0];
-    if ( $lastPos > 1 ) {
-      for ( $i = 1; $i < $lastPos; $i++ ) {
-        $cc_info['first'] += $full_name[$i];
-      }
-    }
-  }
-
-  // make sure cc info is valid
-  $msg = '';
-  $card_num = preg_replace('/\s+/', '', $cc_info['number']);
-  $length = strlen( $card_num );
-  if ( $length < 15 || $length > 16 ) {
-    $msg .= "Credit Card Number must be 15 or 16 digits.\n"; 
-  } else {
-    $cc_info['number'] = $card_num;
-  }
-
-  if ( strpos( $cc_info['exp'], '/' ) === false ) {
-    $msg .= "Expiry Date must be in the format MM/YY.\n";
-  } else {
-    // strip spaces and divide mm and yyyy
-    $expiry = explode('/', preg_replace('/\s+/', '', $cc_info['exp']));
-    $mm = $expiry[0];
-    $yy = $expiry[1];
-    if ( strlen( $mm ) != 2 || strlen( $yy ) != 2 ) {
-      $msg .= "Expiry Date must be in the format MM/YY.\n";
-    } else if ( intval( $mm ) > 12 || intval( $yy ) < 19 ) {
-      if ( intval( $mm ) > 12 ) $msg .= "Expiry Month cannot be greater than 12.\n";
-      if ( intval( $yy ) < 2019 ) $msg .= "Expiry Year cannot be less than 2019.\n";
-    } else {
-      $exp = '20' . $expiry[1] . '-' . $expiry[0];
-      $cc_info['exp'] = $exp;
-    }
-  }
-
-  $cvc = $cc_info['cvc'];
-  if ( !is_numeric( $cvc ) ) {
-    $msg .= "CVC can only have numbers.\n";
-  }
-
-  if ( !empty( $msg ) ) {
-    echo $msg;
-    exit;
-  }
-
-  // process donation amount through authorize
   require 'authorize.php';
-  $response = chargeCreditCard( $donation, $cc_info );
+  $response = chargeCreditCard( $amount, $cc_info );
 }
 
+// check response
+$msg = '';
+$error_msg = '';
 if ($response != null) {
   // Check to see if the API request was successfully received and acted upon
   if ($response->getMessages()->getResultCode() == "Ok") {
@@ -83,113 +112,147 @@ if ($response != null) {
       $tresponse = $response->getTransactionResponse();
   
       if ($tresponse != null && $tresponse->getMessages() != null) {
-          echo " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
-          echo " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
-          echo " Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n";
-          echo " Auth Code: " . $tresponse->getAuthCode() . "\n";
-          echo " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
+          $msg .= " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
+          $msg .= " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
+          $msg .= " Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n";
+          $msg .= " Auth Code: " . $tresponse->getAuthCode() . "\n";
+          $msg .= " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
 
           $trans_id = $tresponse->getTransId();
           $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();          
       } else {
-          echo "Transaction Failed \n";
+          $error_msg .= "Transaction Failed \n";
           if ($tresponse->getErrors() != null) {
-              echo " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
-              echo " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+              $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+              $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
           }
       }
       // Or, print errors if the API request wasn't successful
   } else {
-      echo "Transaction Failed \n";
+      $error_msg .= "Transaction Failed \n";
       $tresponse = $response->getTransactionResponse();
   
       if ($tresponse != null && $tresponse->getErrors() != null) {
-          echo " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
-          echo " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+          $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+          $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
       } else {
-          echo " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
-          echo " Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n";
+          $error_msg .= " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
+          $error_msg .= " Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n";
       }
   }
-} else {
-  if ( !$cc_info['skip'] ) {
-    echo  "No response returned \n";
-    exit;
-  }
-}
+} 
 
-if ( $trans_id && $trans_info ) {
-  // save to transactions table.
-  $transaction_query = $MASHPIA_DB->prepare(
-    "INSERT INTO transactions (trans_date, description, amount, response) "
-    ."VALUES (NOW(), ?, ?, ?)"
-  );
-  $statusTransaction = $transaction_query->execute([
-      $cc_info['desc'], $donation, json_encode( $response )
-  ]);
-  $trans_db_id = $MASHPIA_DB->lastInsertId();
-
-  // add donation and user donations to db
-  $MASHPIA_DB->beginTransaction();
-
-  $success = true;
+if ( empty( $error_msg ) ) {
+  // add to donations table and user_subsidies tables
   $stmt = $MASHPIA_DB->prepare("
     INSERT INTO chidon_donations 
-    SET admin_id = :admin, 
-    chidon_year = :year, 
-    donation_amount = :donation,
-    transaction_id = :trans_id, 
-    transaction_info = :trans_info, 
-    notes = :dedication
+    SET 
+        chidon_year = :year, 
+        donation_amount = :amount, 
+        transaction_id = :trans_id, 
+        transaction_info = :trans_info 
   ");
   $res = $stmt->execute([
-    ':admin'    =>  $admin_user['admin_id'], 
-    ':year'     =>  $year, 
-    ':donation' =>  $donation, 
-    ':trans_id' =>  $trans_id, 
-    ':trans_info' => $trans_info, 
-    ':dedication' => $dedication
+    ':year'         =>  $year, 
+    ':amount'       =>  $amount, 
+    ':trans_id'     =>  $trans_id, 
+    ':trans_info'   =>  $trans_info
   ]);
-  if ( $res ) {
-    $stmt = $MASHPIA_DB->prepare("
-      INSERT INTO chidon_user_subsidies 
-      SET chidon_donation_id = :donation_id, 
-      chidon_year = :year,
-      user_id = :user,
-      subsidy_amount = :amount
-    ");
-    foreach ( $user_donations as $donation ) {
-      $res2 = $stmt->execute([
-        ':donation_id'  =>  $MASHPIA_DB->lastInsertId(), 
-        ':year'         =>  $year, 
-        ':user'         =>  $donation['user_id'], 
-        ':amount'       =>  $donation['amount']
-      ]);
-      if ( !$res2 ) {
-        $success = false;
-        break;
-      }
-    }
-  } else {
-    $success = false;
-  }
 
-  if ( $success ) {
-    $MASHPIA_DB->commit();
-    if ( $cc_info['skip'] ) echo "Donation has been successfully processed."; // only need to show message if we skipped the authorize.net transaction
-  } else {
-    $MASHPIA_DB->rollBack();
-    echo "There was an error saving the donation to the database. Please contact HQ.";
-
-    // send email to self with problem
-    $to      = 'naftoli@tzivoshashem.org';
-    $subject = 'Chidon Drive Error';
-    $message = 'Error in inserting donations into chidon drive db tables. Ref: ' . $trans_db_id;
-    $headers = array(
-        'From'     => 'cth@mashpia.com',
-        'Reply-To' => 'cth@mashpia.com'
-    );
-    @mail($to, $subject, $message, $headers);
-  }
+  echo json_encode([
+    'success'   =>  true,
+    'message'   =>  $msg
+  ]);
+} else {
+  echo json_encode([
+    'success'   =>  true,
+    'error'     =>  $error_msg
+  ]);
 }
-?>
+exit;
+// // try to make a profile and save it
+// $stmt = $MASHPIA_DB->prepare("
+//     SELECT 
+//         * 
+//     FROM
+//         chidon_donors
+//     WHERE
+//         email = :email
+// ");
+// $res = $stmt->execute([
+//   ':email'  =>  $donation['email']
+// ]);
+// if ( !$res ) $error_msg[] = "Error checking for donor.";
+// else {
+//   $row = $stmt->fetch();
+//   if ( empty( $row ) ) {
+//     // create donor
+//     $qry = "
+//       INSERT INTO chidon_donors 
+//       SET 
+//           name = :name,
+//           display_name = :display_name,
+//           phone = :phone, 
+//           email = :email
+//     ";
+//     $stmt2 = $MASHPIA_DB->prepare( $qry );
+//     $res2 = $stmt2->execute([
+//       ':name'         =>  $name,
+//       ':display_name' =>  $display_name,
+//       ':phone'        =>  $phone,
+//       ':email'        =>  $email
+//     ]);
+//     if ( $res2 ) {
+//         $donor_id = $MASHPIA_DB->lastInsertId();
+//     }
+//   } else {
+//     $donor_id = $row['chidon_donor_id'];
+//     $customer_id = $row['authorize_customer_profile_id'];
+
+//     // update donor
+//     $qry = "
+//       UPDATE chidon_donors 
+//       SET 
+//           name = :name,
+//           display_name = :display_name,
+//           phone = :phone
+//       WHERE
+//           chidon_donor_id = :id
+//     ";
+//     $stmt2 = $MASHPIA_DB->prepare( $qry );
+//     $res2 = $stmt2->execute([
+//       ':name'         =>  $name,
+//       ':display_name' =>  $display_name,
+//       ':phone'        =>  $phone,
+//       ':id'           =>  $donor_id
+//     ]);
+//   }
+// }
+
+// // create payment profile (and customer profile if needed)
+// $error_msg = [];
+// if ( !$customer_id ) {
+//   $description = "Customer profile for " . $name;
+//   $paymentProfile = PaymentProfile::createBasicArray( $cc_num, $cc_exp, $cc_security );
+//   $customerProfile = CustomerProfile::create( 'Chidon_Drive_Donor_' . $donor_id, $email, $description, $paymentProfile );
+//   if ( $customerProfile instanceof CustomerProfile ) {
+//       $customer_id = $customerProfile->customerProfileId;
+//       $payment_id = $customerProfile->paymentProfiles[0]['customerPaymentProfileId'];
+//   } else {
+//       $error_msg[] = $customerProfile['message'];
+//   }
+// } else {
+//   // create a new payment profile
+//   $paymentProfile = PaymentProfile::create( $cc_num, $cc_exp, $cc_security, $customer_id );
+//   if ( $paymentProfile instanceof PaymentProfile ) {
+//       $payment_id = $paymentProfile->customerPaymentProfileId;
+//   } else {
+//       // get error
+//       $error_msg[] = $paymentProfile['messages']['message'][0]['text'];
+//   }
+// }
+
+// if ( !empty( $error_msg ) && $donor_id && $customer_id && $payment_id ) {
+//   // update tables
+
+// }
