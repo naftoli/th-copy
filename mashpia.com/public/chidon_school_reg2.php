@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 // redirect to https
 if ((empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off') || $_SERVER['SERVER_PORT'] != 443) {
-    header("Location: https://" . $_SERVER['SERVER_NAME'] . "/chidon_school_reg.php");
+    header("Location: https://" . $_SERVER['SERVER_NAME'] . "/chidon_school_reg2.php");
 }
 //********************* AUTHENTICATION *********************//
 $admin_auth = array('school'); 
