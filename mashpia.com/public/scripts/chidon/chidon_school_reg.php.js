@@ -74,8 +74,11 @@ $(document).ready(function(){
         $("#chap_modal input#accAddress").val(chap.acc_address);
         //$("#chap_modal input#accCrossSt").val(chap.acc_cross_st);
         $("#chap_modal input#accPhone").val(chap.acc_phone);
-        $("#chap_modal input.vehicle_" + chap.vehicle).checked = true; // get the selected vechicle status and update it...
-        $("#chap_modal input.chap_type_" + chap.chap_type).checked = true; 
+
+        let type = chap.chidon_type;
+        $("#chap_modal input.chap_type_" + type).trigger('click');
+        let vehicle = chap.vehicle;
+        $("#chap_modal input.vehicle_" + vehicle).trigger('click');
 
         if (chap.chap_id) {
             $("#chap_modal input#chap_id").val(chap.chap_id);

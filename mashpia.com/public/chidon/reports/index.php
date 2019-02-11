@@ -74,6 +74,7 @@ $info = array(
 		'donations'		=>	'Number of Trips Sponsored'
 	),
 	'Chaperone Info'	=>	array(
+		'chap_type'		=>	'Chaperone / Walking Counselor',
 		'chap_name'		=>	'Name',
 		'chap_first_name'	=>	'Chap First Name',
 		'chap_last_name'	=>	'Chap Last Name',
@@ -264,6 +265,7 @@ if (isset($_POST['submit'])) {
 				<tbody>
 					<?php
 					$totals = array();
+					echo "<pre>"; print_r( $data ); echo "</pre>";
 					foreach ($report as $index => $row) {
 						echo "<tr>";
 						foreach ($data as $column) {
@@ -272,6 +274,9 @@ if (isset($_POST['submit'])) {
 									if (!empty($row[$column])) $history = explode(',', $row[$column]);
 									else $history = array();
 									echo "<td>" . count($history) . "</td>";
+								} else if ($column == 'chap_type') {
+									if ($row[$column] == 1) echo "<td>Chaperone</td>";
+									else echo "<td>Walking Counselor</td>";
 								} else if (in_array($column, array('avgTests','avgLow','avgHigh'))) {
 									// don't output anything they are just avgs for sql qry
 								} else {

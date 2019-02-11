@@ -164,7 +164,7 @@ if ( isset( $_GET['skipAuth'] ) && $_GET['skipAuth'] == 5779 ) {
 
         let dedication = $("#dedication").val();
         let year = <?=$year?>;
-        $.post('ajax/processDonation.php', { year: year, donation: donation, user_donations: user_donation_amounts, cc_info : cc, dedication: dedication }, 
+        $.post('ajax/processSchoolDonation.php', { year: year, donation: donation, user_donations: user_donation_amounts, cc_info : cc, dedication: dedication }, 
           function( result ) {
             console.log( result );
             alert( result );

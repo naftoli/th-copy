@@ -458,6 +458,7 @@
 					let url = window.location.href;
 					let pos = url.indexOf('=');
 					let admin_id = 0;
+					let children = []; // need to know user_id of children when creating the subsidies
 					if ( pos > 0 ) admin_id = url.substr( pos + 1 );
 					if ( admin_id ) {
 						$.post('../ajax/getFamilyInfo.php', { admin: admin_id }, function( result ) {
@@ -466,7 +467,8 @@
 
 							if ( info.success ) {
 								// find out family goal
-								let familyGoal = info.data.children.length * 350;
+								let numChildren = info.data.children.length;
+								let familyGoal = numChildren * 350;
 								$("#familyGoal").text( familyGoal );
 
 								// first get parent info from first record
@@ -482,6 +484,7 @@
 								let childrenNames = [];
 								for ( i in info.data.children ) {
 									let child = info.data.children[i];
+									children.push( child.user_id );
 									let childName = child.first + ' ' + child.last;
 									childrenNames.push( childName );
 									let childPic = child.mobile_pic ? "/mobile/reg/" + child.mobile_pic : "/file_view.php?id=" + child.user_photo_id;
@@ -589,6 +592,7 @@
 						donation.family = admin_id;
 						donation.amount = $("#donationAmount").val();
 						donation.forChild = $("#childrenSelection").val();
+						donation.children = children;
 						donation.name = $("#name").val();
 						donation.display_name = $("#display_name").val();
 						donation.anonymous = $("#anonymous").is(":checked") ? 1 : 0;
@@ -604,7 +608,7 @@
 						billing.city = $("#bill_city").val();
 						billing.state = $("#bill_state").val();
 						billing.zip = $("#bill_zip").val();
-						billing.county = $("#bill_country").val();
+						billing.country = $("#bill_country").val();
 						cc.billing = billing;
 
 						donation.cc = cc;

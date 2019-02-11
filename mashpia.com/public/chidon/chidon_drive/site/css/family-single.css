@@ -1,0 +1,565 @@
+/* 
+ * Donate page stylesheet for Chidon
+ * 
+ * Date: 2/3/2019
+ * Author: Esty
+ */
+
+ .main {
+ 	background: url(../img/donate/donate-bg.jpg);
+ 	background-size: cover;
+ 	padding-top: 10rem;
+ }
+ h2.title {
+ 	text-align: center;
+ }
+ .main .wrapper {
+ 	display: flex;
+ 	flex-wrap: wrap;
+ 	padding-top: 5rem;
+ }
+
+ .family-info {
+ 	width: 50%;
+ }
+ .family-info h3 {
+ 	font-size: 2rem;
+ 	color: #4f78bb;
+ 	line-height: 1.2em;
+ }
+ .family-info h3 span {
+ 	color: #85abda;
+ 	font-size: 3rem;
+ 	font-family: 'Russo One', sans-serif
+ }
+ .family-info .bio-wrapper {
+ 	color: #85abda;
+ 	max-width: 30rem;
+ 	margin-top: 5rem;
+ }
+ .family-info .bio-wrapper p, .family-info .bio-wrapper p strong {
+ 	font-size: 1.2rem;
+ 	line-height: 1.4em;
+ 	margin-bottom: 1rem;
+ }
+
+
+ .right {
+ 	width: 50%;
+ }
+.bar-row {
+	max-width: 900px;
+	margin: auto;
+	display: flex;
+	position: relative;
+	justify-content: center;
+}
+.bar {
+	position: relative;
+	padding-top: 2rem;
+	width: 100%;
+	max-width: 600px;
+	margin: 0 0 6rem;
+}
+.bar-circle {
+	position: absolute;
+	background: #afbdc4;
+	border-radius: 100%;
+	width: 84px;
+	height: 84px;
+	padding: 6px;
+	top: 0;
+	z-index: 5;
+}
+.bar-circle__inner {
+ 	background: #8fa3ad;
+ 	width: 72px;
+ 	height: 72px;
+ 	border-radius: 100%;
+ 	border: 1px solid #ffffff; 
+ 	padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bar-circle__inner span {
+ 	font-weight: bold;
+ 	font-size: 2rem;
+}
+.bar-circle__inner img {
+ 	display: inline-block;
+  margin-left: 1.7rem;
+  margin-top: .2rem;
+  margin-bottom: -.3rem;
+}
+#simple-arc {
+ 	color: #8fa3ad;
+ 	font-size: 1rem;
+ 	font-weight: bold;
+ 	position: absolute;
+ 	top: -20px;
+ 	left: 42px;
+}
+
+.bar-bar {
+	position: relative;
+	top: 0;
+	z-index: 1;
+}
+.bar-bar__wrapper {
+	width: calc(100% - 80px);
+	margin-left: 72px;
+	background: #8fa3ad;
+	border: 2px solid #afbdc4;
+	border-radius: 2rem;
+	position: relative;
+	margin-top: 1rem;
+}
+.bar-bar__wrapper .bar-bar__line {
+	background: #e3b848;
+	border-radius: 2rem;
+	height: 1.5rem;
+	width: 0%;
+	position: relative;
+	transition: .2s;
+}
+.bar-bar__wrapper .bar-bar__line.registration {
+	background: #4f78bb;
+	position: absolute;
+	z-index: 10;
+	top: 0;
+	left: 0;
+}
+.bar-bar__wrapper .bar-bar__line .bar-bar__circle {
+	width: 1.5rem;
+	height: 1.5rem;
+	border-radius: 100%;
+	background: #c4922c;
+	position: absolute;
+	right: 0;
+}
+.bar-bar__wrapper .bar-bar__line.registration .bar-bar__circle {
+	background: #3c65b0;
+}
+.bar-bar__wrapper .bar-bar__marker {
+	position: absolute;
+  left: calc(100% - 2.5rem);
+  top: -3rem;
+}
+.bar-bar__wrapper .bar-bar__marker p {    
+	position: absolute;
+  right: 2rem;
+  top: 0rem;
+  width: 100px;
+  font-weight: 800;
+  font-size: 90%;
+  color: #c4922c;
+  text-align: center;
+}
+.bar-bar__wrapper .registration .bar-bar__marker p {
+	color: #3c65b0;
+}
+
+.bar-row .badge {
+	width: 180px;
+	height: 180px;
+	border-radius: 100%;
+	background: rgba(19, 23, 108, .5);
+	padding: 2.5rem;
+}
+.bar-row .badge h6 {
+	font-family: 'Russo One', sans-serif;
+	font-size: 2rem;
+	color: #4f78bb;
+	line-height: 1.7em;
+}
+.bar-row .badge h6 span {
+	font-family: 'Russo One', sans-serif;
+	display: block;
+	font-size: 5rem;
+	text-align: center;
+}
+.bar-bar__wrapper .remaining p {
+	color: #85abda;
+	right: 0;
+}
+
+.options-wrapper .option {
+	background: rgba(6, 9, 47, .8);
+	border-radius: .5rem;
+	color: #85abda;
+	text-align: center;
+	padding: 2rem;
+	margin-top: 2rem;
+}
+.checkbox {
+	margin-top: 0;
+  position: relative;
+  vertical-align: middle;
+}
+.options-wrapper .option p {
+	font-family: 'Russo One', sans-serif;
+	font-weight: 400;
+	font-size: 1.5rem;
+	line-height: 1.5em;
+	text-align: left;
+	margin-bottom: 1rem;
+}
+.options-wrapper .option p:first-child {
+	margin: auto;
+	margin-bottom: 2rem;
+	max-width: 33rem;
+	text-align: center;
+}
+.options-wrapper .nice-select {
+	display: inline;
+	float: none;
+}
+.options-wrapper .nice-select .list {
+	width: 100%;
+}
+
+.nice-select {
+	background-color: #191c69;
+	border: none;
+	border-radius: 2px;
+	text-transform: uppercase;
+	font-weight: 600;
+	padding: .5rem 30px .5rem 18px;
+	height: 2rem;
+	line-height: 1em;
+}
+.nice-select .list {
+  background-color: #181c68;
+}
+.nice-select .option:hover, .nice-select .option.focus, .nice-select .option.selected.focus {
+  background-color: transparent;
+  padding: 0;
+  text-align: center;
+}
+.options-wrapper .nice-select .option {
+  background: transparent;
+  border-radius: 0;
+  color: #85abda;
+  text-align: center;
+  padding: 0 2rem;
+  border-top: 1px solid #85abda;
+  width: 100%;
+}
+
+.option .button {
+  padding: 0 2rem 0 1rem;
+  width: auto;
+  padding-right: 2rem;
+  font-size: 1rem;
+  background: #181c68;
+  border: none;
+  color: #85abda;
+  margin-left: .5rem;
+}
+.option .button img {
+  right: 0.8rem;
+  top: 0.5rem;
+}
+
+input {
+	background: #181c68;
+	border-radius: 2px;
+	color: #85abda;
+	border: none;
+	outline: none;
+	padding: .5rem;
+}
+.form {
+	background: rgba(6, 9, 47, .8);
+	border-radius: .5rem;
+	margin-top: 4rem;
+	width: 50%;
+	max-width: 500px;
+	padding: 2rem;
+}
+.form input {
+	width: 100%;
+}
+.form label, .form p {
+	font-weight: 600;
+	display: block;
+	color: #85abda;
+	margin-bottom: .5rem;
+	font-size: 1.2rem;
+	margin-top: 1rem;
+}
+.form label span {
+	font-weight: 200;
+	font-style: italic;
+}
+.form .field {
+	margin-bottom: 1rem;
+}
+.form h5 {
+	color: #85abda;
+	font-size: 1.2rem;
+	text-transform: uppercase;
+	margin-top: 3rem;
+}
+.form .group {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.form .group .field {
+	flex-grow: 1;
+  margin-left: 1rem;
+}
+.form .group .field:first-child {
+  margin-left: 0;
+}
+.form .group input {
+	width: 100%;
+}
+.form .nice-select {
+	width: 100%;
+	float: none;
+  color: #85abda;
+}
+.form .nice-select .option {
+  color: #85abda;
+}
+.form .nice-select.open .list {
+	width: 100%;
+}
+.form .nice-select .option:hover, .form .nice-select .option.focus, .form .nice-select .option.selected.focus {
+	text-align: left;
+	padding-left: 1rem;
+}
+
+.main-wrapper {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+.form .donate {
+	width: 10rem;
+	margin: auto;
+  display: block;
+  padding: .8rem;
+}
+
+
+input {
+	background: #181c68;
+	border-radius: 2px;
+	color: #85abda;
+	border: none;
+	outline: none;
+	padding: .5rem;
+}
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #85abda;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #85abda;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #85abda;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #85abda;
+}
+
+.circles-text {
+  font-size: 2rem !important;
+  font-weight: 800;
+  color: #85abda;
+  height: 50%;
+}
+.circles-text img {
+  bottom: 40px;
+  width: 40%;
+  position: absolute;
+  top: auto;
+  left: 30%;
+}
+.circles-text p {
+	font-size: 2.5rem;
+  position: absolute;
+  top: -30px;
+  width: 100%;
+  text-align: center;
+}
+
+.activity {
+	width: 50%;
+	margin: 4rem 2rem;
+	max-width: 550px;
+}
+.chart {
+  width: 180px;
+  margin: auto;
+}
+.activity h6 {
+	font-family: 'Russo One', sans-serif;
+	font-size: 3rem;
+	color: #85abda;
+  line-height: .6em;
+  text-align: center;
+  margin-top: 2rem;
+}
+.activity h6 span {
+	font-family: 'Russo One', sans-serif;
+	font-size: 1.5rem;
+	color: #4f78bb;
+}
+.activity h5 {
+	color: #85abda;
+	font-family: 'Russo One', sans-serif;
+	font-size: 2rem;
+	text-align: center;
+	margin-top: 3rem;
+	margin-bottom: 1rem;
+}
+.activity .recent-chart {
+	background: #1a1d69;
+	border-radius: .5rem;
+	padding: 2rem;
+	max-width: 360px;
+	margin: auto;
+}
+.activity .recent-chart {
+	background: #1a1d69;
+	border-radius: .5rem;
+	padding: 2rem;
+	max-width: 360px;
+	margin: auto;
+  overflow: hidden;
+}
+
+.sponsor-list {
+  height: 24rem;
+  overflow: scroll;
+}
+.sponsor-list::-webkit-scrollbar{
+	display: none;	
+}
+.activity .recent-chart .recent-sponsor {
+	display: flex;
+	justify-content: space-between;
+	color: #85abda;
+	margin: 1rem;
+	height: 4rem;
+}
+.activity .recent-chart .recent-sponsor p.sponsor-name {
+	font-weight: 600;
+	font-size: 1.2rem;
+}
+.activity .recent-chart .recent-sponsor .sponsor-credit {
+	font-size: .7rem;
+	font-style: italic;
+}
+.activity .recent-chart .recent-sponsor .sponsor-amount p {
+	font-family: 'Russo One', sans-serif;
+	font-weight: 800;
+}
+.activity .more-button {
+  color: #85abda;
+  text-transform: uppercase;
+  display: block;
+  margin: auto;
+  width: 7rem;
+}
+.activity .more-button::after{
+	content: '';
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 4px 4px 0 4px;
+	border-color: #4f78bb transparent transparent transparent;
+  position: relative;
+  top: 10px;
+  left: 5px;
+}
+
+.family-charts {
+	display: flex;
+	flex-wrap: wrap;
+}
+.family-charts .kid {
+  width: 50%;
+}
+.family-charts .image-wrapper {
+	width: 6rem;
+	height: 6rem;
+	border-radius: 100%;
+	background: #85abda;
+	margin: 1rem auto;
+}
+.family-charts h5 {
+	font-size: 1.5rem;
+	color: #4f78bb;
+	margin-top: 1rem;
+}
+.family-charts .bar {
+	padding-top: .75rem;
+	margin-top: 3rem;
+}
+.family-charts .bar-circle {
+	width: 60px;
+	height: 60px;
+}
+.family-charts .bar-circle__inner {
+	width: 48px;
+	height: 48px;
+}
+.family-charts .bar-circle__inner span {
+  font-size: 1.2rem;
+}
+.family-charts .bar-bar__wrapper {
+  width: calc(100% - 60px);
+  margin-left: 48px;
+}
+.family-charts .bar-bar__wrapper .bar-bar__marker p {
+  right: 2.5rem;
+  top: 1rem;
+  width: 3rem;
+}
+.family-charts .bar-bar__wrapper .remaining .bar-bar__marker p {
+  right: -1rem;
+}
+
+@media(max-width: 1200px){
+	.family-charts .kid {
+		width: 100%;
+		max-width: 400px;
+		margin: auto;
+	}
+}
+@media(max-width: 800px) {
+	.family-info {
+    width: 80%;
+    margin-bottom: 4rem;
+    margin: 0 auto 4rem;
+	}
+	.right {
+    width: 100%;
+	}
+
+	.options-wrapper {
+    max-width: 40rem;
+    margin: auto;
+	}
+	.main-wrapper {
+		justify-content: center;
+		flex-direction: column;
+		align-items: center;
+	}
+	
+	.form {
+		width: 100%;
+		margin: 4rem auto;
+	}	
+}
+@media(max-width: 600px) {
+	.activity {
+		width: 100%;
+	}
+}
