@@ -5,8 +5,6 @@ require '../classes/Communities.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 $year = GlobalSettings::getChidonYear();
-$year = 5778; // override for testing
-
 $c = new Communities;
 $communities = $c->getCommunities();
 
