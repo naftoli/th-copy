@@ -5,7 +5,7 @@ require '../../db.php';
 $info = array();
 $sql = "select u.first_he, u.last_he, tc.grade, tc.cert_number from users u
         join th_chidon tc using (user_id)
-        where tc.year = 5777
+        where tc.year = 5778
         and tc.shabbaton = 1
         and tc.paid > 0 
         and u.gender = 'M'
