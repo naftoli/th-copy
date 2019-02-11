@@ -5,8 +5,6 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 $year = GlobalSettings::getChidonYear();
-$year = 5778;
-
 $admin_id = mysql_real_escape_string( $_POST['admin'] );
 $data = [];
 
@@ -29,13 +27,17 @@ $stmt = $MASHPIA_DB->prepare("
       admin_auths aa USING (admin_id)
           JOIN
       users u ON u.user_id = aa.id
+          JOIN
+      th_chidon tc USING (user_id)
           LEFT JOIN
       chidon_user_subsidies cu USING (user_id)
   WHERE
       aa.admin_id = :admin
           AND (cu.chidon_year IS NULL
           OR cu.chidon_year = :year)
-          AND aa.role_id = 1
+          AND aa.role_id = 1 
+          AND tc.contestant = 1 
+          AND tc.year = :year
   GROUP BY u.user_id
 ");
 $res = $stmt->execute([
