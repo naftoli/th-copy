@@ -51,6 +51,7 @@ if (count($chaps) > 0) { ?>
             <? if (!$school_id) { ?>
                 <th>School</th>
             <? } ?>
+            <th>Chap Type</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
@@ -68,6 +69,12 @@ if (count($chaps) > 0) { ?>
                 <? if (!$school_id) { ?>
                     <td><?=$chap['school_name']?></td>
                 <? } ?>
+                <td>
+                    <?php
+                    if ( $chap['chap_type'] == 1 ) echo "Chaperone";
+                    else if ( $chap['chap_type'] == 2 ) echo "Walking Counselor";
+                    ?>
+                </td>
                 <td><?=$chap['first_name']?></td>
                 <td><?=$chap['last_name']?></td>
                 <td><?=$chap['email']?></td>
