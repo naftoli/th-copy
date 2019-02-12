@@ -50,7 +50,7 @@ $rows = $stmt->fetchAll();
         echo "<div class='flyer'>";
         echo "<img src='images/ChidonDrive-flyer-D3-no-link-1.jpg' />";
         echo "<div class='name'>Help Team " . $row['last'] . "</div>";
-        echo "<div class='link'>/" . ucfirst( $row['last'] ) . "/" . $row['admin_id'] . "</div>";
+        echo "<div class='link'>/" . ucfirst( trim( $row['last'] ) ) . "/" . $row['admin_id'] . "</div>";
         echo "<img src='images/ChidonDrive-flyer-D3-no-link-2.jpg' /></div>";
         ?>
         <div class="letter">
