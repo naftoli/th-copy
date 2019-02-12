@@ -71,9 +71,13 @@ $stmt = $MASHPIA_DB->prepare("
         chidon_donations
     WHERE
         for_family_id = :admin
+        AND chidon_year = :year
+    ORDER BY donation_date DESC
+    LIMIT 5
 ");
 $res = $stmt->execute([
-  ':admin'  =>  $admin_id
+  ':admin'  =>  $admin_id, 
+  ':year'   =>  $yeaer
 ]);
 if ( $res ) {
   $rows = $stmt->fetchAll();
