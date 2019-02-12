@@ -8,8 +8,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // needed for including chidon only schools
 $schools = $as->getSchools();
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
-$year = 5778;
+
 $users = [];
 $school_ids = implode(',', array_keys( $schools ));
 $stmt = $MASHPIA_DB->prepare("

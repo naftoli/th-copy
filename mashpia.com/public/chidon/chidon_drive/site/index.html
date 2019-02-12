@@ -41,7 +41,7 @@
 				<div class="slide" id="slide3"><div class="wrapper"><h2>This. is. <br>Empowerment.</h2></div></div>
 				<div class="slide" id="slide4"><div class="wrapper"><h2>This. is. <br>Chidon.</h2></div></div>
 				<div class="buttons-wrapper">
-					<a href="enroll.html" class="button">Shabbaton Enrollment <img src="img/arrow.png" /></a>
+					<a href="enroll.html" class="button" onclick="disableEnrollment(event)">Shabbaton Enrollment <img src="img/arrow.png" /></a>
 					<a href="donate.html" class="button">Donate <img src="img/arrow.png" /></a>
 				</div>
 			</div>
@@ -61,75 +61,7 @@
 				<div class="wrapper">
 					<h2 class="title">Leading Communities</h2>
 					<div class="leaders">
-						<div class="leader" data-percent="50" data-amount="12,250">
-							<div class="leader-title">
-								<h3><span>#1</span> Miami Florida</h3>
-							</div>
-							<div class="bar">
-								<div class="bar-percent"><span class="bar-percent__number">50%</span></div>
-								<div class="bar-line">
-									<div class="bar-line__bar"><div class="bar-line__circle"></div>
-										<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$12,250</span></div>
-									</div>
-								</div>
-							</div>
-							<div class="leader-stats">
-								<div class="leader-stats__children">
-									<img src="img/ppl.png" alt="Number of Children" />
-									<p class="leader-stats__children-number">70 Children</p>
-								</div>
-								<div class="leader-stats__children">
-									<img src="img/flag.png" alt="Goal" />
-									<p class="leader-stats__goal-number">Goal: $24,500</p>
-								</div>
-							</div>
-						</div>
-						<div class="leader" data-percent="30" data-amount="12,250">
-							<div class="leader-title">
-								<h3><span>#2</span> Miami Florida</h3>
-							</div>
-							<div class="bar">
-								<div class="bar-percent"><span class="bar-percent__number">50%</span></div>
-								<div class="bar-line">
-									<div class="bar-line__bar"><div class="bar-line__circle"></div>
-										<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$12,250</span></div>
-									</div>
-								</div>
-							</div>
-							<div class="leader-stats">
-								<div class="leader-stats__children">
-									<img src="img/ppl.png" alt="Number of Children" />
-									<p class="leader-stats__children-number">70 Children</p>
-								</div>
-								<div class="leader-stats__children">
-									<img src="img/flag.png" alt="Goal" />
-									<p class="leader-stats__goal-number">Goal: $24,500</p>
-								</div>
-							</div>
-						</div>
-						<div class="leader" data-percent="80" data-amount="12,250">
-							<div class="leader-title">
-								<h3><span>#3</span> Miami Florida</h3>
-							</div>
-							<div class="bar">
-								<div class="bar-percent"><span class="bar-percent__number">50%</span></div>
-								<div class="bar-line">
-									<div class="bar-line__bar"><div class="bar-line__circle"></div>
-										<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$12,250</span></div>
-									</div>
-								</div>
-							</div>
-							<div class="leader-stats">
-								<div class="leader-stats__children">
-									<img src="img/ppl.png" alt="Number of Children" />
-									<p class="leader-stats__children-number">70 Children</p>
-								</div>
-								<div class="leader-stats__children">
-									<img src="img/flag.png" alt="Goal" />
-									<p class="leader-stats__goal-number">Goal: $24,500</p>
-								</div>
-							</div>
-						</div>
+
 					</div>
 					<a href="leaderboard.html" class="button">View More <img src="img/arrow-blue.png" /></a>
 				</div>
@@ -407,6 +339,11 @@
 		<script src="js/fullpage.js"></script>
 		<script src="js/fullpage.continuousHorizontal.min.js"></script>
 		<script type="text/javascript">
+				let disableEnrollment = e => {
+					e.preventDefault();
+					alert("Coming Soon.");
+					return false;
+				}
 		    $('#fullpage').fullpage({
 		     		licenseKey: '1A33397E-DD2A498D-A23E76EB-6E563849',
 		        verticalCentered: false,
@@ -436,6 +373,56 @@
 		    $('#menu-opener').click(function(e){
 		    	$('header nav').toggleClass('open');
 		    });
+
+				$( function() {
+					$.post('../ajax/getCommunities.php', { getSchools: 0 }, function( res ) {
+						let result = JSON.parse( res );
+						console.log( result );
+						if ( result.success ) {
+							let info = result.data;
+							let html = '';
+							let i = 1;
+							for ( percent in info ) {
+								for ( community in info[percent] ) {
+									let stats = info[percent][community]['communityInfo'];
+									//console.log( stats );
+									html += `
+										<div class="leader" data-percent="${percent}" data-amount="${stats.raised}">
+											<div class="leader-title">
+												<h3><span>#${i++}</span> ${community}</h3>
+											</div>
+											<div class="bar">
+												<div class="bar-percent"><span class="bar-percent__number">${percent}%</span></div>
+												<div class="bar-line">
+													<div class="bar-line__bar"><div class="bar-line__circle"></div>
+														<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">${stats.raised}</span></div>
+													</div>
+												</div>
+											</div>
+											<div class="leader-stats">
+												<div class="leader-stats__children">
+													<img src="img/ppl.png" alt="Number of Children" />
+													<p class="leader-stats__children-number">${stats.numChildren} Children</p>
+												</div>
+												<div class="leader-stats__children">
+													<img src="img/flag.png" alt="Goal" />
+													<p class="leader-stats__goal-number">Goal: $${stats.goal}</p>
+												</div>
+											</div>
+										</div>
+									`;									
+									if ( i == 4 ) {
+										i = 1;
+										break;
+									}
+								}
+							}
+							$(".leaders").append( html );
+						} else {
+							alert( result.message );
+						}
+					});
+				});
 		</script>
 	</body>
 </html>

@@ -4,6 +4,8 @@ require '../classes/ChidonDrive.php';
 require '../classes/Communities.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
+$getSchools = isset( $_POST['getSchools'] ) && $_POST['getSchools'] == 0 ? 0 : 1; // flag to decide if we need the school info
+
 $year = GlobalSettings::getChidonYear();
 $c = new Communities;
 $communities = $c->getCommunities();
@@ -28,33 +30,34 @@ try {
       ];
       $communityPercent = $percent;
 
-      // get the breakdown of stats per school
-      $schoolsStats = [];
-      foreach ( $schools as $school ) {
-        $cs = new ChidonDriveSchool( $year, $school );
-        $cs->setAmounts( 350, 250, 100 );
-        $cs->setGoal();
-        $goal = $cs->getGoal();
-        if ( $goal > 0 ) {
-          $raised = floatVal( $cs->getAmountRaised() );
-          $percent = number_format( floatval( ($raised / $goal) * 100 ), 2 );
-          $numChildren = $cs->getNumChildren();
-          $schoolInfo = $cs->getSchoolInfo();
-          $schoolsStats[$percent][$schoolInfo['school_name']] = [
-            'logo'    =>  $schoolInfo['logo'],
-            'percent' =>  $percent, 
-            'goal'    =>  $goal, 
-            'raised'  =>  $raised, 
-            'numChildren' =>  $numChildren
-          ];
+      if ( $getSchools ) {
+        // get the breakdown of stats per school
+        $schoolsStats = [];
+        foreach ( $schools as $school ) {
+          $cs = new ChidonDriveSchool( $year, $school );
+          $cs->setAmounts( 350, 250, 100 );
+          $cs->setGoal();
+          $goal = $cs->getGoal();
+          if ( $goal > 0 ) {
+            $raised = floatVal( $cs->getAmountRaised() );
+            $percent = number_format( floatval( ($raised / $goal) * 100 ), 2 );
+            $numChildren = $cs->getNumChildren();
+            $schoolInfo = $cs->getSchoolInfo();
+            $schoolsStats[$percent][$schoolInfo['school_name']] = [
+              'logo'    =>  $schoolInfo['logo'],
+              'percent' =>  $percent, 
+              'goal'    =>  $goal, 
+              'raised'  =>  $raised, 
+              'numChildren' =>  $numChildren
+            ];
+          }
         }
-      }
-      foreach ( $schoolsStats as $percent => $more ) {
-        ksort( $schoolsStats[$percent] );
-      }
-      ksort( $schoolsStats );
-
-      $leaderboard[$communityPercent][$community]['schools'] = $schoolsStats;
+        foreach ( $schoolsStats as $percent => $more ) {
+          ksort( $schoolsStats[$percent] );
+        }
+        ksort( $schoolsStats );
+        $leaderboard[$communityPercent][$community]['schools'] = $schoolsStats;
+      }      
     }
   }
 } catch ( Exception $e ) {
