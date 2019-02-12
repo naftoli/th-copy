@@ -48,11 +48,13 @@ $rows = $stmt->fetchAll();
         }
 
         echo "<div class='flyer'>";
+        echo "<img src='images/ChidonDrive-flyer-D3-no-link-1.jpg' />";
         echo "<div class='name'>Help Team " . $row['last'] . "</div>";
         echo "<div class='link'>/" . ucfirst( $row['last'] ) . "/" . $row['admin_id'] . "</div>";
         echo "<img src='images/ChidonDrive-flyer-D3-no-link-2.jpg' /></div>";
         ?>
         <div class="letter">
+          <img src='images/Chidon Header 5779-01.jpg' />
           <h2>Thank you for being such a great partner!</h2>
   
           Dear <?=$row['Afirst'] . ' ' . $row['last']?>,
@@ -67,7 +69,7 @@ $rows = $stmt->fetchAll();
           Tzivos Hashem
         </div>
         <div style='page-break-after: always'></div>
-      <?php break; } ?>
+      <?php } ?>
     </div>
   </body>
 </html>
