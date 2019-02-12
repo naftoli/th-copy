@@ -54,7 +54,7 @@ $rows = $stmt->fetchAll();
         echo "<img src='images/ChidonDrive-flyer-D3-no-link-2.jpg' /></div>";
         ?>
         <div class="letter">
-          <img src='images/Chidon Header 5779-01.jpg' />
+          <img src='images/Chidon-Header-5779-01.jpg' />
           <h2>Thank you for being such a great partner!</h2>
   
           Dear <?=$row['Afirst'] . ' ' . $row['last']?>,
