@@ -64,7 +64,9 @@ foreach ( $info as $email => $names ) {
     ";
     // Mail it
     $email = 'naftolir@gmail.com';
-    @mail($email, $subject, $message, implode("\r\n", $headers));
+    if ( mail($email, $subject, $message, implode("\r\n", $headers)) ) {
+      echo "sent";
+    }
     break;
   }
 }
