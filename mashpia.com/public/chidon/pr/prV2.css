@@ -1,0 +1,57 @@
+@font-face {
+  font-family: Russo;
+  src: url('RussoOne-Regular.ttf');
+}
+@font-face {
+  font-family: Gotham;
+  src: url('GothamNarrow-Book.ttf');
+}
+#main {
+  width: 9in;
+  padding: 20px;
+}
+.flyer img {
+  width: 9in;
+  padding-top: 20px;
+}
+.name {
+  position: relative;
+  top: 6.95in;
+  left: 5.2in;
+  color: #4167b1;
+  width: 270px;
+  text-align: center;
+  font-style: italic;
+  font-size: 16px;
+  font-family: Gotham;
+}
+.link {
+  position: relative;
+  top: 8.35in;
+  left: 5.2in;
+  color: #364b9f;
+  font-size: 26px;
+  width: 270px;
+  text-align: center;
+  font-family: Russo;
+}
+.text {
+  margin-top: 3in;
+  text-align: center;
+  font-size: 72px;
+}
+.letter {
+  margin-top: 50px;
+  font-size: 16px;
+  line-height: 1.4;
+  text-align: justify;
+}
+.letter img {
+  width: 9in;
+  padding-top: 50px;
+}
+.letter .content {
+  padding-right: 1in;
+  padding-left: 1in;
+  padding-top: 0.5in;
+}
