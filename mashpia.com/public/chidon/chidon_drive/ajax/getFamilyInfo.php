@@ -1,8 +1,7 @@
 <?php
-ini_set('display_errors',1);
-require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+//ini_set('display_errors',1);
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 $year = GlobalSettings::getChidonYear();
 $admin_id = mysql_real_escape_string( $_POST['admin'] );
@@ -70,13 +69,15 @@ $stmt = $MASHPIA_DB->prepare("
         *
     FROM
         chidon_donations
-            JOIN
-        chidon_donors USING (chidon_donor_id)
     WHERE
         for_family_id = :admin
+        AND chidon_year = :year
+    ORDER BY donation_date DESC
+    LIMIT 5
 ");
 $res = $stmt->execute([
-  ':admin'  =>  $admin_id
+  ':admin'  =>  $admin_id, 
+  ':year'   =>  $yeaer
 ]);
 if ( $res ) {
   $rows = $stmt->fetchAll();

@@ -15,9 +15,11 @@ if ( $cc_info['skip'] ) {
   // don't process card at all
   $trans_id = 11111;
   $trans_info = "testing by skipping authorize.net transaction.";
+  $name = "No Name";
   $response = null;
 } else {
   // extract first and last name
+  $name = $cc_info['name'];
   $cc_info['first'] = '';
   $cc_info['last'] = trim( $cc_info['name'] );
   if ( strpos( $cc_info['last'], ' ' ) !== false ) {
@@ -135,7 +137,9 @@ if ( $trans_id && $trans_info ) {
   $success = true;
   $stmt = $MASHPIA_DB->prepare("
     INSERT INTO chidon_donations 
-    SET admin_id = :admin, 
+    SET name = :name, 
+    display_name = :name, 
+    admin_id = :admin, 
     chidon_year = :year, 
     donation_amount = :donation,
     transaction_id = :trans_id, 
@@ -143,6 +147,7 @@ if ( $trans_id && $trans_info ) {
     notes = :dedication
   ");
   $res = $stmt->execute([
+    ':name'     =>  $name,
     ':admin'    =>  $admin_user['admin_id'], 
     ':year'     =>  $year, 
     ':donation' =>  $donation, 

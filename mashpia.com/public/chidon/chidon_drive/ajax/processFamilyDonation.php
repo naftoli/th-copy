@@ -3,7 +3,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 $year = GlobalSettings::getChidonYear();
-$year = 5778;
 $donation = $_POST['donation_info'];
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
@@ -68,7 +67,8 @@ $field";
 
 // prepare variables for donor table
 $name = $donation['name'];
-$display_name = $donation['anonymous'] ? 'Anonymous' : $donation['display_name'];
+$display_name = $donation['display_name'];
+$anonymous = $donation['anonymous'];
 $email = $donation['email'];
 $phone = $donation['phone'];
 
@@ -150,6 +150,9 @@ if ( empty( $error_msg ) ) {
   $stmt = $MASHPIA_DB->prepare("
     INSERT INTO chidon_donations 
     SET 
+        name = :name, 
+        display_name = :display_name, 
+        anonymous = :anonymous, 
         chidon_year = :year, 
         donation_amount = :amount, 
         for_family_id = :family_id, 
@@ -157,6 +160,9 @@ if ( empty( $error_msg ) ) {
         transaction_info = :trans_info 
   ");
   $res = $stmt->execute([
+    ':name'         =>  $name, 
+    ':display_name' =>  $display_name, 
+    ':anonymous'    =>  $anonymous,
     ':year'         =>  $year, 
     ':amount'       =>  $amount, 
     ':family_id'    =>  $forFamily, 
@@ -207,90 +213,3 @@ if ( empty( $error_msg ) ) {
     'error'     =>  $error_msg
   ]);
 }
-exit;
-// // try to make a profile and save it
-// $stmt = $MASHPIA_DB->prepare("
-//     SELECT 
-//         * 
-//     FROM
-//         chidon_donors
-//     WHERE
-//         email = :email
-// ");
-// $res = $stmt->execute([
-//   ':email'  =>  $donation['email']
-// ]);
-// if ( !$res ) $error_msg[] = "Error checking for donor.";
-// else {
-//   $row = $stmt->fetch();
-//   if ( empty( $row ) ) {
-//     // create donor
-//     $qry = "
-//       INSERT INTO chidon_donors 
-//       SET 
-//           name = :name,
-//           display_name = :display_name,
-//           phone = :phone, 
-//           email = :email
-//     ";
-//     $stmt2 = $MASHPIA_DB->prepare( $qry );
-//     $res2 = $stmt2->execute([
-//       ':name'         =>  $name,
-//       ':display_name' =>  $display_name,
-//       ':phone'        =>  $phone,
-//       ':email'        =>  $email
-//     ]);
-//     if ( $res2 ) {
-//         $donor_id = $MASHPIA_DB->lastInsertId();
-//     }
-//   } else {
-//     $donor_id = $row['chidon_donor_id'];
-//     $customer_id = $row['authorize_customer_profile_id'];
-
-//     // update donor
-//     $qry = "
-//       UPDATE chidon_donors 
-//       SET 
-//           name = :name,
-//           display_name = :display_name,
-//           phone = :phone
-//       WHERE
-//           chidon_donor_id = :id
-//     ";
-//     $stmt2 = $MASHPIA_DB->prepare( $qry );
-//     $res2 = $stmt2->execute([
-//       ':name'         =>  $name,
-//       ':display_name' =>  $display_name,
-//       ':phone'        =>  $phone,
-//       ':id'           =>  $donor_id
-//     ]);
-//   }
-// }
-
-// // create payment profile (and customer profile if needed)
-// $error_msg = [];
-// if ( !$customer_id ) {
-//   $description = "Customer profile for " . $name;
-//   $paymentProfile = PaymentProfile::createBasicArray( $cc_num, $cc_exp, $cc_security );
-//   $customerProfile = CustomerProfile::create( 'Chidon_Drive_Donor_' . $donor_id, $email, $description, $paymentProfile );
-//   if ( $customerProfile instanceof CustomerProfile ) {
-//       $customer_id = $customerProfile->customerProfileId;
-//       $payment_id = $customerProfile->paymentProfiles[0]['customerPaymentProfileId'];
-//   } else {
-//       $error_msg[] = $customerProfile['message'];
-//   }
-// } else {
-//   // create a new payment profile
-//   $paymentProfile = PaymentProfile::create( $cc_num, $cc_exp, $cc_security, $customer_id );
-//   if ( $paymentProfile instanceof PaymentProfile ) {
-//       $payment_id = $paymentProfile->customerPaymentProfileId;
-//   } else {
-//       // get error
-//       $error_msg[] = $paymentProfile['messages']['message'][0]['text'];
-//   }
-// }
-
-// if ( !empty( $error_msg ) && $donor_id && $customer_id && $payment_id ) {
-//   // update tables
-
-// }
