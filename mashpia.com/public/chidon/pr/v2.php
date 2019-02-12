@@ -30,7 +30,7 @@ $rows = $stmt->fetchAll();
 <html>
   <head>
     <meta charset="utf8" />
-    <link rel="stylesheet" type="text/css" href="pr.css" />
+    <link rel="stylesheet" type="text/css" href="prV2.css" />
   </head>
   <body>
     <div id="main">
