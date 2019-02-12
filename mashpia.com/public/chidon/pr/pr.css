@@ -8,14 +8,15 @@
 }
 #main {
   width: 8.5in;
+  padding: 20px;
 }
 .flyer img {
   width: 8.5in;
-  margin-top: 20px;
+  padding-top: 20px;
 }
 .name {
   position: relative;
-  top: 6.5in;
+  top: 6.88in;
   left: 4.9in;
   color: #4167b1;
   width: 250px;
@@ -26,7 +27,7 @@
 }
 .link {
   position: relative;
-  top: 7.9in;
+  top: 8.25in;
   left: 4.95in;
   color: #364b9f;
   font-size: 24px;
@@ -44,5 +45,7 @@
   font-size: 16px;
   line-height: 1.4;
   text-align: justify;
-  padding: 20px;
+}
+.letter img {
+  width: 8.5in;
 }
