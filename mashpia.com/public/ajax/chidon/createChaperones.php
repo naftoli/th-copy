@@ -108,7 +108,6 @@ function createChpaerones($chaperones, $year) {
         // accomidation info...
         $acc_name       = mysql_real_escape_string($chaperone['acc_name']);
         $acc_address    = mysql_real_escape_string($chaperone['acc_address']);
-        $acc_cross_st   = mysql_real_escape_string($chaperone['acc_cross_st']);
         $acc_phone      = mysql_real_escape_string($chaperone['acc_phone']);
         $chap_type      = mysql_real_escape_string($chaperone['chap_type']);
         
@@ -121,7 +120,6 @@ function createChpaerones($chaperones, $year) {
                 ." dob = '" . $dob . "', "
                 ." acc_name = '" . $acc_name . "', "
                 ." acc_address = \"" . $acc_address . "\", "
-                ." acc_cross_st = \"" . $acc_cross_st . "\", "
                 ." acc_phone = '" . $acc_phone . "', "
                 ." vehicle = " . $vehicle . ", "
                 ." phone = '" . $phone . "', "
