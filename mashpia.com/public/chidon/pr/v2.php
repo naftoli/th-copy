@@ -71,7 +71,7 @@ $rows = $stmt->fetchAll();
           </div>
         </div>
         <div style='page-break-after: always'></div>
-      <?php break;} ?>
+      <?php } ?>
     </div>
   </body>
 </html>
