@@ -49,3 +49,8 @@
 .letter img {
   width: 8.5in;
 }
+.letter .content {
+  padding-right: 1in;
+  padding-left: 1in;
+  padding-top: 0.5in;
+}
