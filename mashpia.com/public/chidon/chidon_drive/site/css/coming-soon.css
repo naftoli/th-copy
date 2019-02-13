@@ -20,8 +20,8 @@
 }
 .section .wrapper img {
   margin: auto;
-  top: 50px;
-  max-width: 400px;
+  top: 55px;
+  max-width: 400px; 
 }
 .section .wrapper .title {
   font-size: 7rem;
