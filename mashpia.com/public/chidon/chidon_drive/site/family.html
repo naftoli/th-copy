@@ -40,9 +40,9 @@
 				<div class="wrapper">
 					<h2 class="title">Support a Family</h2>
 					<div class="search-wrapper">
-						<input type="text" /><a href="#" class="button">Go <img src="img/arrow.png" /></a>
+						<input type="text" id="familySearch" /><a href="#" class="button" id="go">Go <img src="img/arrow.png" /></a>
 						<div class="results">
-							<div class="result">
+							<!-- <div class="result">
 								<p>Feldman, Brooklyn 11213</p>
 							</div>
 							<div class="result">
@@ -50,7 +50,7 @@
 							</div>
 							<div class="result">
 								<p>Feldman, Brooklyn 11213</p>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -110,6 +110,8 @@
 		</div>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script src="js/fullpage.js"></script>
 		<script type="text/javascript">
 		    $('#fullpage').fullpage({
@@ -126,13 +128,45 @@
 		    	$('header nav').toggleClass('open');
 		    });
 
-		    $('.search-wrapper input').on('change keyup paste', function(e){
-		    	var val = $(this).val();
-		    	if (val.length > 2) {
-		    		console.log(val);
-		    		$('.search-wrapper .results').show();
-		    	} else { $('.search-wrapper .results').hide(); }
-		    })
+				// $.post('../ajax/getFamilyNames.php', function( info ) {
+				// 	let names = JSON.parse( info );
+				// 	html = '';
+				// 	for ( i in names ) {
+				// 		html += `
+				// 			<div class="result">
+				// 				<p>${names[i]}</p>
+				// 			</div>
+				// 		`;
+				// 	}
+				// 	$(".results").append( html );
+				// 	$('.search-wrapper input').on('change keyup paste', function(e){
+				// 		var val = $(this).val();
+				// 		if (val.length > 2) {
+				// 			console.log(val);
+				// 			$('.search-wrapper .results').show();
+				// 		} else { $('.search-wrapper .results').hide(); }
+				// 	});
+
+				// });
+				
+				$.post('../ajax/getFamilyNames.php', function( info ) {
+					let names = JSON.parse( info );
+					let lookup = [];
+					for ( i in names ) {
+						let name = names[i];
+						lookup.push( name.last + ', ' + name.admin_city + ' ' + name.admin_postal + ' (ID:' + name.admin_id + ')' );
+					}
+					$("#familySearch").autocomplete({
+						source: lookup
+					});
+				});
+
+				$("#go").click( function() {
+					let val = $(this).parent().find('input').val();
+					let pos = val.indexOf('ID:');
+					let id = val.substring( pos+3, val.length-1 );
+					location.href = "family-single.html?id=" + id;
+				});
 		</script>
 	</body>
 </html>
