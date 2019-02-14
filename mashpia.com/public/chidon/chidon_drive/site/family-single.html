@@ -328,13 +328,13 @@
 									// create drop down selection of names
 									selection += "<option value='" + child.user_id + "'>" + childName + "</option>";
 
-									// figure out calculations
-									let paid = child.paid > 0 ? parseInt(child.paid) : 0;
+									// figure out amounts
+									let regPaid = child.paid > 0 ? parseInt(child.paid) : 0;
+									let regPercent = regPaid ? ((regPaid / 350) * 100).toFixed(2) : 0;
 									let subsidy = parseInt(child.rohr_subsidy) ? 100 : 0;
-									let regPercent = ((paid / 350) * 100).toFixed(2);
+									let subsidyPercent = regPaid + subsidy ? ((( regPaid + subsidy ) / 350 ) * 100).toFixed(2): 0;
 									//let percent = (((child.total_donation + paid) / 350) * 100).toFixed(2);
-									let percent = ((( paid + subsidy ) / 350 ) * 100).toFixed(2);
-									let balance = 350 - child.total_donation - paid;
+									let balance = 350 - child.total_donation - regPaid - subsidy;
 
 									// add to family charts 
 									familyCharts += `
@@ -359,10 +359,10 @@
 															<div class="bar-bar__circle"></div>
 															<div class="bar-bar__marker">
 																<img src="img/marker-blue.png" />
-																<p>$${child.paid}</p>
+																<p>$${regPaid}</p>
 															</div>
 														</div>
-														<div class="bar-bar__line subsidy" data-percent="${percent}">
+														<div class="bar-bar__line subsidy" data-percent="${subsidyPercent}">
 															<div class="bar-bar__circle"></div>
 															<div class="bar-bar__marker">
 																<img src="img/marker.png" />
@@ -508,7 +508,7 @@
 							}
 						});
 					} else {
-						alert("Error retrieving family info.");
+						location.href = "/chidon/chidon_drive/site/";
 					}
 
 					$("#donationForm").submit( function( e ) {
