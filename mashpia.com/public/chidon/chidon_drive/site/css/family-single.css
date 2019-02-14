@@ -197,7 +197,7 @@
   position: relative;
   vertical-align: middle;
 }
-.options-wrapper .option p {
+.options-wrapper .option p, .options-wrapper .option p .familyName {
 	font-family: 'Russo One', sans-serif;
 	font-weight: 400;
 	font-size: 1.5rem;
@@ -519,7 +519,7 @@ input {
 }
 .family-charts .bar-bar__wrapper .bar-bar__marker p {
   right: 2.5rem;
-  top: 1rem;
+  /* top: 1rem; */
   width: 3rem;
 }
 .family-charts .bar-bar__wrapper .remaining .bar-bar__marker p {

@@ -249,19 +249,6 @@
 					const circleType = new CircleType(document.getElementById('simple-arc'));
 					circleType.radius(60);
 
-					// // Animate bars
-		    	// $('.bar-bar__line').each(function(index, i){
-		    	// 	var percent = $(this).data('percent');
-		    	// 	$(this).width(percent + '%');
-		    	// });
-
-		    	// Select 
-				  // $('select').niceSelect();
-				  // $('select.children').change(function(e){
-				  // 	var val = $(this).find('option:selected').text();
-				  // 	$('.children-change').val('$' + val + '.00');
-				  // });
-
 				  var circlePercent = $('#circle-chart').data('percent');
 					var myCircle = Circles.create({
 					  id:                  'circle-chart',
@@ -297,24 +284,22 @@
 								let familyGoal = numChildren * 350;
 								$("#familyGoal").text( familyGoal );
 
-								let totalReg = numChildren * 150;
+								let totalReg = 0;
+								let totalRohr = 0;
+								for ( i in info.data.children ) {
+									totalReg += info.data.children[i].paid > 0 ? parseInt(info.data.children[i].paid): 0;
+									totalRohr += parseInt(info.data.children[i].rohr_subsidy) ? 100 : 0;
+								}
 								let totalRegPercent = ((totalReg / familyGoal) * 100);
 								$("#totalRegFee").text( totalReg );
 								$(".registration").attr('data-percent', totalRegPercent );
 
-								let totalRohr = numChildren * 100;
 								let totalRohrPercent = (((totalRohr + totalReg) / familyGoal) * 100);
 								$("#totalRohrSubsidy").text( totalRohr );
 								$(".subsidy").attr('data-percent', totalRohrPercent );
 
-								let remaining = totalReg = totalRohr;
+								let remaining = familyGoal - totalReg - totalRohr;
 								$("#remainingFee").text( remaining );
-
-								// Animate bars
-								$('.bar-bar__line').each(function(index, i){
-									var percent = $(this).data('percent');
-									$(this).width(percent + '%');
-								});
 
 								// first get parent info from first record
 								let adminInfo = info.data.children[0];
@@ -343,8 +328,13 @@
 									// create drop down selection of names
 									selection += "<option value='" + child.user_id + "'>" + childName + "</option>";
 
-									// figure out percent raised
-									let percent = ((child.total_donation / 350) * 100).toFixed(2);
+									// figure out calculations
+									let paid = child.paid > 0 ? parseInt(child.paid) : 0;
+									let subsidy = parseInt(child.rohr_subsidy) ? 100 : 0;
+									let regPercent = ((paid / 350) * 100).toFixed(2);
+									//let percent = (((child.total_donation + paid) / 350) * 100).toFixed(2);
+									let percent = ((( paid + subsidy ) / 350 ) * 100).toFixed(2);
+									let balance = 350 - child.total_donation - paid;
 
 									// add to family charts 
 									familyCharts += `
@@ -365,23 +355,23 @@
 												</div>
 												<div class="bar-bar">
 													<div class="bar-bar__wrapper">
-														<div class="bar-bar__line registration" data-percent="50">
+														<div class="bar-bar__line registration" data-percent="${regPercent}">
 															<div class="bar-bar__circle"></div>
 															<div class="bar-bar__marker">
 																<img src="img/marker-blue.png" />
-																<p>$150</p>
+																<p>$${child.paid}</p>
 															</div>
 														</div>
 														<div class="bar-bar__line subsidy" data-percent="${percent}">
 															<div class="bar-bar__circle"></div>
 															<div class="bar-bar__marker">
 																<img src="img/marker.png" />
-																<p>${child.total_donation}</p>
+																<p>${subsidy}</p>
 															</div>
 														</div>
 														<div class="remaining">
 															<div class="bar-bar__marker">
-																<p>$100</p>
+																<p>$${balance}<br>Remaining</p>
 															</div>
 														</div>
 													</div>
@@ -393,6 +383,12 @@
 								$("#childrenNames").html( html );
 								$("#childrenSelection").append( selection );
 								$(".family-charts").append( familyCharts );
+
+								// Animate bars
+								$('.bar-bar__line').each(function(index, i){
+									var percent = $(this).data('percent');
+									$(this).width(percent + '%');
+								});
 
 								// Select 
 								$('select').niceSelect();
