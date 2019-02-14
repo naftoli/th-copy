@@ -216,19 +216,18 @@
                                                               <div class="chidonRegInfo">Registered for Chidon</div>
 															{{/if}}
 															
-															<!-- {{#if this.chidonRegistered}}
+															{{#if this.chidonRegistered}}
 																<div class="button-spacing">
-																	<div class="chidonRegInfo">Registered for Chidon</div>
 																	{{#if this.shabbatonRegistered}}
 																		{{#if this.shabbatonConfirmed}}
 																			<div class="chidonRegInfo" style="color: #17771c">Chidon Shabbaton Enrolled</div>
 																		{{else}}
 																			<div class="chidonRegInfo">Chidon Shabbaton Pending Enrollment</div>
-																			{{#if this.shabbatonEdit}}
+																			<!-- {{#if this.shabbatonEdit}}
 																				<div style="margin: 10px 0px">
 																					<button class="btn btn-danger editEnrollment">Edit Enrollment</button>
 																				</div>
-																			{{/if}}
+																			{{/if}} -->
 																		{{/if}}
 																	{{else}}
 																		{{#if this.enrollShabbaton}}
@@ -237,11 +236,11 @@
 																			</div>
 																		{{/if}}
 																	{{/if}}
-																	<div style="margin:10px 0px">
+																	<!-- <div style="margin:10px 0px">
 																		<button class="btn btn-primary editChidon">Edit Sweater Size</button>
-																	</div>
+																	</div> -->
 																</div>
-															{{/if}} -->
+															{{/if}}
 															<!--
 															{{#if this.chidon}}
 																{{#if this.chidonRegistered}}
@@ -392,6 +391,7 @@
                 });
                 
                 // load children
+                var parent_id;
                 var childrenToRegister = [];
                 $.post('ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
                     if ( success == -1 ) {
@@ -401,6 +401,7 @@
                         var parent = data.parent;
                         var children = data.children;
                         
+                        parent_id = parent.id;
                         var father = parent.father;
                         var mother = parent.mother;
                         
@@ -533,10 +534,12 @@
                     location.href = "/mobile/chidon/edit.html?id=" + id;
                 });
                 
-                // $(document).on('click', '.enroll', function() {
-                //     var id = $(this).parent().parent().parent().parent().attr('id');
-                //     location.href = "/mobile/chidon/shabbaton.html?id=" + id;
-                // });
+                $(document).on('click', '.enroll', function() {
+                    alert("Shabbaton enrollment will IYH open up on Monday February 18, 2019");
+                    // var id = $(this).parent().parent().parent().parent().attr('id');
+                    // location.href = "/mobile/chidon/shabbaton.html?id=" + id;
+                    // location.href = "/chidon/chidon_drive/site/family-single.html?id=" + parent_id;
+                });
                 
                 // $(document).on('click', '.editEnrollment', function() {
                 //     var id = $(this).parent().parent().parent().parent().attr('id');

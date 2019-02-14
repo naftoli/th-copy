@@ -22,6 +22,7 @@ $sql = "SELECT father, mother, father_pic, mother_pic FROM admins WHERE admin_id
 $result = mysql_query( $sql );
 $row = mysql_fetch_assoc( $result );
 
+$parent['id'] = $admin;
 $parent['fatherPic'] = $row['father_pic'];
 $parent['motherPic'] = $row['mother_pic'];
 $parent['father'] = $row['father'];
