@@ -18,6 +18,8 @@ $stmt = $MASHPIA_DB->prepare("
       u.last,
       u.mobile_pic,
       u.user_photo_id,
+      tc.paid,
+      tc.rohr_subsidy, 
       cu.chidon_donation_id,
       SUM(cu.subsidy_amount) AS total_donation
   FROM

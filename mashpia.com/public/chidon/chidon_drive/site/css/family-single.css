@@ -197,7 +197,7 @@
   position: relative;
   vertical-align: middle;
 }
-.options-wrapper .option p {
+.options-wrapper .option p, .options-wrapper .option p .familyName {
 	font-family: 'Russo One', sans-serif;
 	font-weight: 400;
 	font-size: 1.5rem;
