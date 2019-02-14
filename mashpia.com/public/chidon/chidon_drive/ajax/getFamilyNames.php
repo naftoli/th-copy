@@ -12,8 +12,8 @@ $stmt = $MASHPIA_DB->prepare("
           JOIN
       th_chidon tc ON tc.parent_id = a.admin_id
   WHERE
-      tc.contestant = 1 AND tc.year = :year
-          AND a.last != ''
+      tc.year = :year AND a.last != '' 
+          AND (tc.contestant = 1 or tc.school_rep = 1) 
   GROUP BY a.admin_id
   ORDER BY a.last
 ");

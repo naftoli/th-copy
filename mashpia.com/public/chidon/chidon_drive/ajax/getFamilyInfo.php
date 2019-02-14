@@ -37,7 +37,7 @@ $stmt = $MASHPIA_DB->prepare("
           AND (cu.chidon_year IS NULL
           OR cu.chidon_year = :year)
           AND aa.role_id = 1 
-          AND tc.contestant = 1 
+          AND (tc.contestant = 1 or tc.school_rep = 1) 
           AND tc.year = :year
   GROUP BY u.user_id
 ");
