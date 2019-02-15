@@ -317,7 +317,7 @@
 									children.push( child.user_id );
 									let childName = child.first + ' ' + child.last;
 									childrenNames.push( childName );
-									let childPic = child.mobile_pic ? "/mobile/reg/" + child.mobile_pic : "/file_view.php?id=" + child.user_photo_id;
+									let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
 
 									// create list of names
 									if ( info.data.children.length > 1 && (i == info.data.children.length - 1) ) {
@@ -523,6 +523,11 @@
 						donation.name = $("#name").val();
 						donation.display_name = $("#display_name").val();
 						donation.anonymous = $("#anonymous").is(":checked") ? 1 : 0;
+
+						if ( !donation.amount ) {
+							alert("You have not indicated how much you would like to donate.");
+							return false;
+						}
 
 						let cc = {}
 						cc.num = $("#cc_num").val();
