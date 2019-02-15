@@ -524,6 +524,11 @@
 						donation.display_name = $("#display_name").val();
 						donation.anonymous = $("#anonymous").is(":checked") ? 1 : 0;
 
+						if ( !donation.amount ) {
+							alert("You have not indicated how much you would like to donate.");
+							return false;
+						}
+
 						let cc = {}
 						cc.num = $("#cc_num").val();
 						cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val();
