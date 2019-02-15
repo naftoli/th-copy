@@ -209,7 +209,7 @@ if ( empty( $error_msg ) ) {
   ]);
 } else {
   echo json_encode([
-    'success'   =>  true,
+    'success'   =>  false,
     'error'     =>  $error_msg
   ]);
 }
