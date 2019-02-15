@@ -25,30 +25,29 @@ class AuthorizeConstants
 	
 	// get the login id (sandbox or production)
 	static function GetMerchantLoginID() {
-		if (defined("AUTHORIZE_NET_SANDBOX")){
-			return self::$MERCHANT_SANDBOX_LOGIN_ID;
-		} else {
+		// if (defined("AUTHORIZE_NET_SANDBOX")){
+		// 	return self::$MERCHANT_SANDBOX_LOGIN_ID;
+		// } else {
 			return self::$MERCHANT_LOGIN_ID;
-		}
+		//}
 	}
 	
 	// get the transaction key (sandbox or production)
 	static function GetMerchantTransactionKey() {
-		if (defined("AUTHORIZE_NET_SANDBOX")){
-			return self::$MERCHANT_SANDBOX_TRANSACTION_KEY;
-		} else {
+		// if (defined("AUTHORIZE_NET_SANDBOX")){
+		// 	return self::$MERCHANT_SANDBOX_TRANSACTION_KEY;
+		// } else {
 			return self::$MERCHANT_TRANSACTION_KEY;
-		}
+		//}
 	}
 	
 	// Set to the test endpoint, Please change before deployment
-	
 	static function GetApiEndpoint() {
-		if (defined("AUTHORIZE_NET_SANDBOX")){
-			return self::$SANDBOX_API_URL;
-		} else {
+		// if (defined("AUTHORIZE_NET_SANDBOX")){
+		// 	return self::$SANDBOX_API_URL;
+		// } else {
 			return self::$API_URL;
-		}
+		// }
 	}
 	
 	
