@@ -122,9 +122,11 @@ if ($response != null) {
           $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();          
 
           // send email confirmation
-          // $to = $email;
-          // $subject = "Chidon Drive Donation";
-          // $msg = "Thank you for your donation of $" . $amount . ". Your ";
+          $subject = "Chidon Drive Donation";
+          $msg = "Thank you for your donation of $" . $amount . ". Your transaction id is: " . $trans_id . ". Your donation will go a long way in helping us give the children the chayos that will drive them to learn even more. Thank you.";
+          $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
+                    'Reply-To: chidon@tzivoshashem.com' . "\r\n";
+          @mail( $emil, $subject, $msg, $headers );
         } else {
           $error_msg .= "Transaction Failed \n";
           if ($tresponse->getErrors() != null) {
