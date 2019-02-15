@@ -165,7 +165,9 @@ if ( !empty( $msg ) ) {
         chidon_year = :year, 
         donation_amount = :amount, 
         transaction_id = :trans_id, 
-        transaction_info = :trans_info 
+        transaction_info = :trans_info, 
+        email = :email, 
+        phone = :phone 
   ");
   $res = $stmt->execute([
     ':name'         =>  $name,
@@ -174,7 +176,9 @@ if ( !empty( $msg ) ) {
     ':year'         =>  $year, 
     ':amount'       =>  $amount, 
     ':trans_id'     =>  $trans_id, 
-    ':trans_info'   =>  $trans_info
+    ':trans_info'   =>  $trans_info, 
+    ':email'        =>  $email,
+    ':phone'        =>  $phone
   ]);
 
   echo json_encode([
