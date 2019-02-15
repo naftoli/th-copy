@@ -1,8 +1,8 @@
 <?php
 $admin_auth = ['school'];
 define( "MASHPIA_AUTH_REQUIRED", true );
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../../header.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../../api/header/header.php';
+require_once __DIR__ . '/../../../header.php';
+require_once __DIR__ . '/../../../api/header/header.php';
 
 $year = $_POST['year'];
 $donation = $_POST['donation'];
