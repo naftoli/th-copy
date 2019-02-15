@@ -1,7 +1,7 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/classes/ChidonDrive.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/classes/Communities.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/../../class.globalSettings.php';
+require __DIR__ . '/../classes/ChidonDrive.php';
+require __DIR__ . '/../classes/Communities.php';
+require __DIR__ . '/../../../class.globalSettings.php';
 
 $year = GlobalSettings::getChidonYear();
 $c = new Communities;
