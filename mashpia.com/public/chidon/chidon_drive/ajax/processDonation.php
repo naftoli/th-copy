@@ -120,7 +120,12 @@ if ($response != null) {
 
           $trans_id = $tresponse->getTransId();
           $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();          
-      } else {
+
+          // send email confirmation
+          // $to = $email;
+          // $subject = "Chidon Drive Donation";
+          // $msg = "Thank you for your donation of $" . $amount . ". Your ";
+        } else {
           $error_msg .= "Transaction Failed \n";
           if ($tresponse->getErrors() != null) {
               $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
