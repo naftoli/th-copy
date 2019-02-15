@@ -79,7 +79,9 @@
 				<div class="options-wrapper">
 					<div class="option">
 						<p><label class="checkbox"><input type="radio" name="donation_type" class="donation_type" value="1" /><span></span></label>Subsidize the last $100 for 
-							<select class="children"><option>Choose</option></option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select> 
+							<select class="children">
+								<option>Choose</option>
+							</select> 
 							children get to Chidon for a total of <input type="text" readonly class="children-change" /></p>
 					</div>
 					<div class="option">
@@ -247,6 +249,12 @@
 				});
 				
 		    $(document).ready(function(e){
+					let selection = '';
+					for ( i = 1; i <= 100; i++ ) {
+						selection += "<option>" + i + "</option>";
+					}
+					$(".children").append( selection );
+					
 		    	// Round text
 					const circleType = new CircleType(document.getElementById('simple-arc'));
 					circleType.radius(60);
