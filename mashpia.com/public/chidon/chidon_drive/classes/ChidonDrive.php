@@ -1,5 +1,5 @@
  <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../../api/header/db.php';
 
 class ChidonDriveGlobal {
   private $year;
