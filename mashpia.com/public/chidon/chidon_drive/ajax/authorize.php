@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../../api/header/header.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../../../includes/authorize_constants.php';
+require_once __DIR__ . '/../../../api/header/header.php';
+require_once __DIR__ . '/../../../../includes/authorize_constants.php';
 
 use net\authorize\api\contract\v1 as AnetAPI;
 use net\authorize\api\controller as AnetController;

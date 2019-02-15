@@ -1,14 +1,14 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../../api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../../class.globalSettings.php';
+require_once __DIR__ . '/../../../api/header/db.php';
+require_once __DIR__ . '/../../../class.globalSettings.php';
 
 $year = GlobalSettings::getChidonYear();
 $donation = $_POST['donation_info'];
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../../classes/authorize/AuthorizeAPIRequest.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../../classes/authorize/CustomerProfile.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../../classes/authorize/PaymentProfile.php';
+require_once __DIR__ . '/../../../classes/authorize/AuthorizeAPIRequest.php';
+require_once __DIR__ . '/../../../classes/authorize/CustomerProfile.php';
+require_once __DIR__ . '/../../../classes/authorize/PaymentProfile.php';
 
 use classes\authorize\AuthorizeAPIRequest;
 use classes\authorize\CustomerProfile;
@@ -81,6 +81,9 @@ $cc_info['number'] = $donation['cc']['num'];
 $cc_info['exp'] = $donation['cc']['exp'];
 $cc_info['cvc'] = $donation['cc']['cvv'];
 $cc_info['skip'] = isset( $donation['skip'] ) ? $donation['skip'] : 0;
+$cc_info['desc'] = $donation['dedication'];
+$cc_info['last'] = $name;
+$cc_info['first'] = '';
 
 // prepare billing address
 $billing = $donation['cc']['billing'];

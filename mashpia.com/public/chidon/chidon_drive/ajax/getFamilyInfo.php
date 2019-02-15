@@ -1,7 +1,7 @@
 <?php
 ini_set('display_errors',1);
-require $_SERVER['DOCUMENT_ROOT'] . '/../../api/header/db.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/../../class.globalSettings.php';
+require __DIR__ . '/../../../api/header/db.php';
+require __DIR__ . '/../../../class.globalSettings.php';
 
 $year = GlobalSettings::getChidonYear();
 $admin_id = mysql_real_escape_string( $_POST['admin'] );
@@ -79,7 +79,7 @@ $stmt = $MASHPIA_DB->prepare("
 ");
 $res = $stmt->execute([
   ':admin'  =>  $admin_id, 
-  ':year'   =>  $yeaer
+  ':year'   =>  $year
 ]);
 if ( $res ) {
   $rows = $stmt->fetchAll();

@@ -3,7 +3,7 @@ namespace classes\authorize;
 
 use classes\authorize;
 
-require_once( dirname(__FILE__) . "/../../../includes/authorize_constants.php" );
+require_once( __DIR__ . "/../../../includes/authorize_constants.php" );
 
 use includes\authorize\AuthorizeConstants as Constants;
 
