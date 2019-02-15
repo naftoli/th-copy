@@ -1,6 +1,6 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/../../api/header/db.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $names = [];

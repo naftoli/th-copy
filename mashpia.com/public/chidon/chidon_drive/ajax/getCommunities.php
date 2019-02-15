@@ -1,8 +1,8 @@
 <?php
 //ini_set('display_errors',1);
-require '../classes/ChidonDrive.php';
-require '../classes/Communities.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/classes/ChidonDrive.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/classes/Communities.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/../../class.globalSettings.php';
 
 $getSchools = isset( $_POST['getSchools'] ) && $_POST['getSchools'] == 0 ? 0 : 1; // flag to decide if we need the school info
 
