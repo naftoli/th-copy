@@ -317,7 +317,7 @@
 									children.push( child.user_id );
 									let childName = child.first + ' ' + child.last;
 									childrenNames.push( childName );
-									let childPic = child.mobile_pic ? "../../mobile/reg/" + child.mobile_pic : "/file_view.php?id=" + child.user_photo_id;
+									let childPic = child.mobile_pic ? "/mobile/reg/" + child.mobile_pic : "/file_view.php?id=" + child.user_photo_id;
 
 									// create list of names
 									if ( info.data.children.length > 1 && (i == info.data.children.length - 1) ) {
@@ -341,7 +341,7 @@
 										<div class="kid">
 											<div class="bio">
 												<div class="image-wrapper">
-													<img src="${childPic}" style="border-radius: 50%; padding: 2px; width: 100%;" />
+													<img src="http://www.mashpia.com/${childPic}" style="border-radius: 50%; padding: 2px; width: 100%;" />
 												</div>
 												<div class="name">
 													<h5>${child.first}<br>${child.last}</h5>
