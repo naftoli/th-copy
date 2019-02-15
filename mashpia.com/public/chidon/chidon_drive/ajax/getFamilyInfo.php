@@ -1,7 +1,7 @@
 <?php
-//ini_set('display_errors',1);
-require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+ini_set('display_errors',1);
+require $_SERVER['DOCUMENT_ROOT'] . '/../../api/header/db.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/../../class.globalSettings.php';
 
 $year = GlobalSettings::getChidonYear();
 $admin_id = mysql_real_escape_string( $_POST['admin'] );
