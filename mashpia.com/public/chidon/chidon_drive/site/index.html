@@ -339,6 +339,13 @@
 		<script src="js/fullpage.js"></script>
 		<script src="js/fullpage.continuousHorizontal.min.js"></script>
 		<script type="text/javascript">
+				if ( location.protocol != 'https:' ) {
+					let url = window.location.href;
+					let pos = url.indexOf(':');
+					let newUrl = 'https' + url.substring( pos );
+					location.href = newUrl;
+				}
+				
 		    $('#fullpage').fullpage({
 		     		licenseKey: '1A33397E-DD2A498D-A23E76EB-6E563849',
 		        verticalCentered: false,
