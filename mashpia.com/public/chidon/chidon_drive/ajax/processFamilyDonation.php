@@ -84,7 +84,7 @@ $cc_info['number'] = $donation['cc']['num'];
 $cc_info['exp'] = $donation['cc']['exp'];
 $cc_info['cvc'] = $donation['cc']['cvv'];
 $cc_info['skip'] = isset( $donation['skip'] ) ? $donation['skip'] : 0;
-$cc_info['desc'] = $donation['dedication'];
+$cc_info['desc'] = "Chidon Drive " . $year;
 $cc_info['last'] = $name;
 $cc_info['first'] = '';
 
@@ -167,7 +167,9 @@ if ( empty( $error_msg ) ) {
         donation_amount = :amount, 
         for_family_id = :family_id, 
         transaction_id = :trans_id, 
-        transaction_info = :trans_info 
+        transaction_info = :trans_info, 
+        email = :email, 
+        phone = :phone 
   ");
   $res = $stmt->execute([
     ':name'         =>  $name, 
@@ -177,7 +179,9 @@ if ( empty( $error_msg ) ) {
     ':amount'       =>  $amount, 
     ':family_id'    =>  $forFamily, 
     ':trans_id'     =>  $trans_id, 
-    ':trans_info'   =>  $trans_info
+    ':trans_info'   =>  $trans_info, 
+    ':email'        =>  $email,
+    ':phone'        =>  $phone
   ]);
   $donation_id = $MASHPIA_DB->lastInsertId();
 
