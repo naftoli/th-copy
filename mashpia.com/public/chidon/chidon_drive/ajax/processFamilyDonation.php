@@ -1,14 +1,14 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../../api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../../class.globalSettings.php';
 
 $year = GlobalSettings::getChidonYear();
 $donation = $_POST['donation_info'];
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/AuthorizeAPIRequest.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../../classes/authorize/AuthorizeAPIRequest.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../../classes/authorize/CustomerProfile.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../../classes/authorize/PaymentProfile.php';
 
 use classes\authorize\AuthorizeAPIRequest;
 use classes\authorize\CustomerProfile;
