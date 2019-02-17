@@ -61,12 +61,12 @@
 							<div class="enroll-item">
 								<h3>You can help us thrive:</h3>
 								<h4>Pay as much as you can.</h4>
-								<a href="#0" class="button">continue to payment</a>
+								<a href="payment-information.html" class="button">continue to payment</a>
 							</div>
 							<div class="enroll-item">
 								<h3>We can help you pay:</h3>
 								<h4>Share your page with family and <br> friends and enroll for FREE!</h4>
-								<a href="#0" class="button">continue to your page</a>
+								<a href="#" class="button family">continue to your page</a>
 							</div>
 						</div>
 					</div>
@@ -134,7 +134,12 @@
 		<script type="text/javascript">
 		    $('#menu-opener').click(function(e){
 		    	$('header nav').toggleClass('open');
-		    });
+				});
+				
+				let url = location.href;
+				let pos = url.indexOf('=');
+				let id = url.substring( pos + 1 );
+				$(".family").attr('href', 'family-single.html?id=' + id);
 		</script>
 	</body>
 </html>
