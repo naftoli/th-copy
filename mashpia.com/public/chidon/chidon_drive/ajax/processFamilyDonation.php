@@ -220,11 +220,11 @@ if ( empty( $error_msg ) ) {
 
   echo json_encode([
     'success'   =>  true,
-    'error'   =>  $msg
+    'message'   =>  $msg
   ]);
 } else {
   echo json_encode([
     'success'   =>  false,
-    'error'     =>  $error_msg
+    'message'     =>  $error_msg
   ]);
 }
