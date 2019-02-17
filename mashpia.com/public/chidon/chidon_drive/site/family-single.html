@@ -301,9 +301,9 @@
 								let totalRohr = 0;
 								let totalDonation = 0;
 								for ( i in info.data.children ) {
-									totalReg += info.data.children[i].paid > 0 ? parseInt(info.data.children[i].paid): 0;
+									totalReg += info.data.children[i].paid > 0 ? Math.round(info.data.children[i].paid): 0;
 									totalRohr += parseInt(info.data.children[i].rohr_subsidy) ? 100 : 0;
-									totalDonation += parseInt(info.data.children[i].total_donation); 
+									totalDonation += Math.round(info.data.children[i].total_donation); 
 								}
 								let totalRegPercent = totalReg ? ((totalReg / familyGoal) * 100).toFixed(2) : 0;
 								$("#totalRegFee").text( totalReg );
@@ -349,11 +349,11 @@
 									selection += "<option value='" + child.user_id + "'>" + childName + "</option>";
 
 									// figure out amounts
-									let regPaid = child.paid > 0 ? parseInt(child.paid) : 0;
+									let regPaid = child.paid > 0 ? Math.round(child.paid) : 0;
 									let regPercent = regPaid ? ((regPaid / 350) * 100).toFixed(2) : 0;
 									let subsidy = parseInt(child.rohr_subsidy) ? 100 : 0;
 									let subsidyPercent = regPaid + subsidy ? ((( regPaid + subsidy ) / 350 ) * 100).toFixed(2) : 0;
-									let donation = parseInt(child.total_donation);
+									let donation = Math.round(child.total_donation);
 									let donationPercent = regPaid + subsidy + donation ? ((( regPaid + subsidy + donation ) / 350 ) * 100).toFixed(2) : 0;
 									//let percent = (((child.total_donation + paid) / 350) * 100).toFixed(2);
 									let balance = 350 - donation - regPaid - subsidy;
