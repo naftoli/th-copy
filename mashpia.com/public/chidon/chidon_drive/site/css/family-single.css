@@ -116,7 +116,7 @@
 	margin-top: 1rem;
 }
 .bar-bar__wrapper .bar-bar__line {
-	background: #e3b848;
+	/* background: #e3b848; */
 	border-radius: 2rem;
 	height: 1.5rem;
 	width: 0%;
@@ -125,8 +125,22 @@
 }
 .bar-bar__wrapper .bar-bar__line.registration {
 	background: #4f78bb;
+	/* position: absolute; */
+	z-index: 3;
+	top: 0;
+	left: 0;
+}
+.bar-bar__wrapper .bar-bar__line.subsidy {
+	background: #e3b848;
 	position: absolute;
-	z-index: 10;
+	z-index: 2;
+	top: 0;
+	left: 0;
+}
+.bar-bar__wrapper .bar-bar__line.donation {
+	background: #4fabbb;
+	position: absolute;
+	z-index: 1;
 	top: 0;
 	left: 0;
 }
@@ -140,6 +154,9 @@
 }
 .bar-bar__wrapper .bar-bar__line.registration .bar-bar__circle {
 	background: #3c65b0;
+}
+.bar-bar__wrapper .bar-bar__line.donation .bar-bar__circle {
+	background: #244f57;
 }
 .bar-bar__wrapper .bar-bar__marker {
 	position: absolute;

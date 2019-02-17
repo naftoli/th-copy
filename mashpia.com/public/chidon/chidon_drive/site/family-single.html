@@ -70,6 +70,13 @@
 											<p>$<span id="totalRohrSubsidy"></span><br>Rohr Subsidy</p>
 										</div>
 									</div>
+									<div class="bar-bar__line donation" data-percent="">
+											<div class="bar-bar__circle"></div>
+											<div class="bar-bar__marker">
+												<img src="img/marker-blue.png" />
+												<p>$<span id="totalDonation"></span><br>Donation</p>
+											</div>
+										</div>
 
 									<div class="remaining">
 										<div class="bar-bar__marker">
@@ -289,24 +296,30 @@
 								// find out family goal
 								let numChildren = info.data.children.length;
 								let familyGoal = numChildren * 350;
-								$("#familyGoal").text( familyGoal );
 
 								let totalReg = 0;
 								let totalRohr = 0;
+								let totalDonation = 0;
 								for ( i in info.data.children ) {
 									totalReg += info.data.children[i].paid > 0 ? parseInt(info.data.children[i].paid): 0;
 									totalRohr += parseInt(info.data.children[i].rohr_subsidy) ? 100 : 0;
+									totalDonation += parseInt(info.data.children[i].total_donation); 
 								}
-								let totalRegPercent = ((totalReg / familyGoal) * 100);
+								let totalRegPercent = totalReg ? ((totalReg / familyGoal) * 100).toFixed(2) : 0;
 								$("#totalRegFee").text( totalReg );
 								$(".registration").attr('data-percent', totalRegPercent );
 
-								let totalRohrPercent = (((totalRohr + totalReg) / familyGoal) * 100);
+								let totalRohrPercent = totalRohr + totalReg ? (((totalRohr + totalReg) / familyGoal) * 100).toFixed(2) : 0;
 								$("#totalRohrSubsidy").text( totalRohr );
 								$(".subsidy").attr('data-percent', totalRohrPercent );
 
-								let remaining = familyGoal - totalReg - totalRohr;
+								let totalDonationPercent = totalReg + totalRohr + totalDonation ? (((totalReg + totalRohr + totalDonation) / familyGoal) * 100).toFixed(2) : 0;
+								$("#totalDonation").text( totalDonation );
+								$(".donation").attr('data-percent', totalDonationPercent);
+
+								let remaining = familyGoal - totalReg - totalRohr -  totalDonation;
 								$("#remainingFee").text( remaining );
+								$("#familyGoal").text( familyGoal );
 
 								// first get parent info from first record
 								let adminInfo = info.data.children[0];
@@ -339,9 +352,11 @@
 									let regPaid = child.paid > 0 ? parseInt(child.paid) : 0;
 									let regPercent = regPaid ? ((regPaid / 350) * 100).toFixed(2) : 0;
 									let subsidy = parseInt(child.rohr_subsidy) ? 100 : 0;
-									let subsidyPercent = regPaid + subsidy ? ((( regPaid + subsidy ) / 350 ) * 100).toFixed(2): 0;
+									let subsidyPercent = regPaid + subsidy ? ((( regPaid + subsidy ) / 350 ) * 100).toFixed(2) : 0;
+									let donation = parseInt(child.total_donation);
+									let donationPercent = regPaid + subsidy + donation ? ((( regPaid + subsidy + donation ) / 350 ) * 100).toFixed(2) : 0;
 									//let percent = (((child.total_donation + paid) / 350) * 100).toFixed(2);
-									let balance = 350 - child.total_donation - regPaid - subsidy;
+									let balance = 350 - donation - regPaid - subsidy;
 
 									// add to family charts 
 									familyCharts += `
@@ -374,6 +389,13 @@
 															<div class="bar-bar__marker">
 																<img src="img/marker.png" />
 																<p>${subsidy}</p>
+															</div>
+														</div>
+														<div class="bar-bar__line donation" data-percent="${donationPercent}">
+															<div class="bar-bar__circle"></div>
+															<div class="bar-bar__marker">
+																<img src="img/marker-blue.png" />
+																<p>$${donation}</p>
 															</div>
 														</div>
 														<div class="remaining">
