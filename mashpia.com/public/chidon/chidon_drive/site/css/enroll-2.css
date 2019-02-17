@@ -17,222 +17,173 @@
  	padding-top: 5rem;
  }
 
-.nice-select {
-	background-color: #191c69;
-	border: none;
-	border-radius: 2px;
-	text-transform: uppercase;
-	font-weight: 600;
-	padding: .5rem 30px .5rem 18px;
-	height: 2rem;
-	line-height: 1em;
-}
-.nice-select .list {
-  background-color: #181c68;
-}
-.nice-select .option:hover, .nice-select .option.focus, .nice-select .option.selected.focus {
-  background-color: transparent;
-  padding: 0;
-  text-align: center;
-}
-
-input {
-	background: #181c68;
-	border-radius: 2px;
-	color: #85abda;
-	border: none;
-	outline: none;
-	padding: .5rem;
-}
-.form {
-	background: rgba(6, 9, 47, .8);
-	border-radius: .5rem;
-	width: 100%;
-	max-width: 600px;
-	padding: 2rem;
-	margin: auto;
-	margin-top: 4rem;
-}
-.form input {
-	width: 100%;
-}
-.form textarea {
-	height: 5rem;
-	margin-bottom: 1rem;
-} 
-.form label, .form p {
-	font-weight: 600;
-	display: block;
-	color: #85abda;
-	margin-bottom: .5rem;
-	font-size: 1.2rem;
-	margin-top: 1rem;
-}
-.form p {
-	font-weight: normal;
-}
-.form label span {
-	font-weight: 200;
-	font-style: italic;
-}
-.form .field {
-	margin-bottom: 1rem;
-}
-.form h5 {
-	color: #85abda;
-	font-size: 1.2rem;
-	text-transform: uppercase;
-	margin-top: 2rem;
-	font-family: 'Gotham Narrow', sans-serif;
-}
-.form h5:first-child {
-	margin-top: 1rem;
-}
-.form .group {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-.form .group .field {
-	flex-grow: 1;
-  margin-left: 1rem;
-}
-.form .group .field:first-child {
-  margin-left: 0;
-}
-.form .group input {
-	width: 100%;
-}
-.form .nice-select {
-	width: 100%;
-	float: none;
-  color: #85abda;
-}
-.form .nice-select .option {
-  color: #85abda;
-}
-.form .nice-select.open .list {
-	width: 100%;
-}
-.form .nice-select .option:hover, .form .nice-select .option.focus, .form .nice-select .option.selected.focus {
-	text-align: left;
-	padding-left: 1rem;
-}
-.form .donate {
-	width: 10rem;
-	margin: auto;
-  display: block;
-  padding: .8rem;
-}
-
-.form.login p {
-  font-weight: normal;
-  text-align: center;
-  font-size: 1.5rem;
-  max-width: 30rem;
-  margin: 1rem auto 2rem;
-}
-.form.login input {
-  width: calc(100% - 6rem);
-  float: right;
-  margin-top: -5px;
-}
-.form.login .field {
-  margin-bottom: 1rem;
-  max-width: 25rem;
-  margin: .5rem auto;
-  padding: .1rem 0;
-  display: block;
-}
-.form.login input.button {
-	clear: both;
-}
-.form.login input.button {
-  clear: both;
-  float: none;
-  width: 8rem;
-  margin: 1rem auto;
-  display: block;
-  padding: .8rem;
-}
-
-
-
-.form.kids-wrapper {
-  display: flex;
-  justify-content: space-around;
-}
-.kids-wrapper .image-wrapper {
-  width: 7rem;
-  height: 7rem;
-  background: #85adba;
-  border-radius: 100%;
-  margin: auto;
-}
-.kids-wrapper .kid {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  flex-grow: 1;
-  max-width: 23%;
-}
-.kids-wrapper .kid h6 {
+.sub-title {
 	text-align: center;
-	margin: 1rem 0;
+	font-size: 32px;
+	font-family: 'Russo One', sans-serif;
 }
-.kids-wrapper .button {
+.offer {
+	padding: 40px 0;
+	color: #85abda;
+	text-align: center;
+	font-size: 25px;
+	font-family: 'Russo One', sans-serif;
+}
+.offer span {
+	color: #e3b949;
+	font-size: 38px;
+	font-family: 'Russo One', sans-serif;	
+}
+.blue-box {
+	padding: 40px 30px;
+	background: rgba(1, 1, 27, 0.7);
+}
+.chidon-drive {
+	max-width: 900px;
+	margin: 0 auto;
+	text-align: center;
+}
+.chidon-drive .blue-box {
+	width: 45.5%;
+	float: left;
+	min-height: 460px;
+	margin: 0 20px 30px;
+	-webkit-border-radius: 10px;
+	-ms-border-radius: 10px;
+	border-radius: 10px;
+}
+.chidon-drive .blue-box h3 {
+	padding-bottom: 50px;
+	font-family: 'Russo One', sans-serif;	
+	font-size: 25px;
+}
+.chidon-drive .blue-box h4 {
+	font-family: 'Gotham Narrow Book', sans-serif;
+	font-size: 20px;
+	font-weight: 400;
+}
+.drive-image {
+	padding-top: 40px;
+}
+.growth-image {
+	padding-top: 55px;
+}
+.percetage-image {
+	margin: -13px 0 -10px;
+}
+.chidon-drive .enroll-wrap .blue-box {
 	width: auto;
-	padding: .8rem;
+	float: none;
+	overflow: hidden;
+	clear: both;
+	padding: 30px 30px 40px;
+	min-height: 10px;
+}
+.enroll-item {
+	float: left;
+	width: 50%;
+}
+.blue-box .enroll-item h3 {
+	padding-bottom: 40px;
+	color: #4f78bb;
+	font-size: 22px;
+}
+.blue-box .enroll-item h4 {
+	padding-bottom: 20px;
+	min-height: 85px;
+}
+.enroll-item .button {
+	padding: 9px 15px;
+	width: 270px;
+	font-size: 20px;
+}
+.enroll-popup {
+	padding: 40px;
+	width: 385px;
+	margin: 0 0 0 auto;
+	background: #171a68;
 	text-align: center;
-	margin-top: 1rem;
+	-webkit-border-radius: 10px;
+	-ms-border-radius: 10px;
+	border-radius: 10px;
+}
+.enroll-popup h4 {
+	font-family: 'Gotham Narrow', sans-serif;
+	font-size: 23px;
+}
+.popup-wrap {
+	max-width: 860px;
+	margin: 0 auto;
 }
 
-.group .button {
-	margin-top: 3rem;
-	max-width: 45%;
+@media(max-width: 950px) {
+	.chidon-drive .blue-box {
+		width: 44.5%;
+	}
+}
+
+@media(max-width: 899px) {
+	.chidon-drive .blue-box {
+		width: auto;
+		float: none;
+		min-height: 10px;
+		margin: 0 0 30px;
+	}
+	.enroll-item {
+		float: none;
+		width: auto;
+	}
+	.blue-box .enroll-item {
+		padding-bottom: 30px;
+	}
+	.blue-box .enroll-item:last-child {
+		padding-bottom: 0;
+	}
+	.blue-box .enroll-item h3 {
+		padding-bottom: 20px;
+	}
+	.blue-box .enroll-item h4 {
+		min-height: 10px;
+	}
 }
 
 @media(max-width: 600px) {
-	.form.kids-wrapper {
-		flex-wrap: wrap;
+	.enroll-popup {
+		width: auto;
 	}
-	.kids-wrapper .kid {
-		width: 45%;
-		margin-bottom: 2rem;
-		max-width: 45%;
+	.sub-title {
+		font-size: 25px;
 	}
-}
-@media(max-width: 400px) {
-	.form.kids-wrapper {
-		flex-direction: column;
+	.offer span {
+		font-size: 22px;
 	}
-	.kids-wrapper .kid {
-		width: 100%;
+	.chidon-drive .blue-box {
+		padding: 20px;
+	}
+	.chidon-drive .blue-box h3 {
+		padding-bottom: 20px;
+		font-size: 20px;
+	}
+	.chidon-drive .blue-box h3 br {
+		display: none;
+	}
+	.chidon-drive img {
 		max-width: 100%;
-		max-width: none;
 	}
-}
-
-/* Date: 2/14/2019 */
-.next-btn {
-	padding-top: 40px;
-	padding-bottom: 20px;
-	text-align: center;
-}
-.next-btn .button {
-	padding: 10px;
-	width: 110px;
-}
-.form.blue-circle  {
-	padding: 30px 20px 40px;
-}
-.blue-circle .image-wrapper {
-	background: #4f78bb;
-}
-.save-detail {
-	text-align: center;
-}
-.group.save-detail .button {
-	width: 140px;
-	margin: 25px auto 0;
+	.chidon-drive .blue-box h4 {
+		font-size: 18px;
+	}
+	.enroll-item .button {
+		font-size: 14px;
+		width: auto;
+	}
+	.enroll-popup {
+		padding: 20px;
+	}
+	.enroll-popup h4 {
+		font-size: 18px;
+	}
+	.offer {
+		padding: 30px 0;
+	}
 }

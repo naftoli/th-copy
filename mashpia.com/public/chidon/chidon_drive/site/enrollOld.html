@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width">
 	  <meta charset="UTF-8">
 		<meta name="google" content="notranslate">
-		<title>Shabbaton Enrollment 1 | Chidon</title>
+		<title>Shabbaton Enrollment | Chidon</title>
 		<link rel="stylesheet" href="css/font.css" type="text/css" />
 		<link rel="stylesheet" href="css/style.css" type="text/css" />
 		<link rel="stylesheet" href="css/nice-select.css" type="text/css" />
@@ -36,7 +36,7 @@
 			<div class="wrapper">
 				<h2 class="title">Shabbaton Enrollment</h2>
 				<div class="form login">
-					<form id="loginForm">
+					<form>
 						<p>Please log in to your Mashpia.com account to proceed with Shabbaton enrollment</p>
 						<div class="field">
 							<label>Username: <input type="text" /></label>
@@ -47,33 +47,34 @@
 						<input type="submit" class="button" value="LOGIN" />
 					</form>
 				</div>
-				<div class="form kids-wrapper blue-circle" style="display: none;">
+				<div class="form kids-wrapper">
 					<div class="kid">
 						<div class="image-wrapper"></div>
 						<h6>Tzivi <br>Katz</h6>
-						<a href="#" class="button enroll">fill form</a>
+						<a href="#" class="button enroll">Enroll</a>
+						<a href="#" class="button update disabled">Update</a>
 					</div>
 					<div class="kid">
 						<div class="image-wrapper"></div>
 						<h6>Yankel <br>Katz</h6>
-						<a href="#" class="button enroll">fill form</a>
+						<a href="#" class="button enroll">Enroll</a>
+						<a href="#" class="button update disabled">Update</a>
 					</div>
 					<div class="kid">
 						<div class="image-wrapper"></div>
 						<h6>Sholom Ber <br>Katz</h6>
-						<a href="#" class="button enroll">fill form</a>
+						<a href="#" class="button enroll">Enroll</a>
+						<a href="#" class="button update disabled">Update</a>
 					</div>
 					<div class="kid">
 						<div class="image-wrapper"></div>
 						<h6>Menachem Mendel <br>Katz</h6>
-						<a href="#" class="button enroll">fill form</a>
+						<a href="#" class="button enroll">Enroll</a>
+						<a href="#" class="button update disabled">Update</a>
 					</div>
 				</div>
-				<div class="next-btn" style="display: none;">
-					<a href="#0" class="button">next child form</a>
-				</div>
-				<div class="form personal-information" style="display: none;">
-					<form id="personalInfo">
+				<div class="form">
+					<form>
 						<h5>Personal Information</h5>
 						<div class="field">
 							<label>First Name:</label>
@@ -194,8 +195,9 @@
 							<p><label class="checkbox"><input type="checkbox" /><span></span></label>	Please be aware that by participating in Chayolei Tzivos Hashem and its programs you consent to your children's names and pictures being used in any media produced by Tzivos Hashem, for publicity purposes or otherwise.</p>
 						</div>
 
-						<div class="group save-detail">
-							<input type="submit" class="button submit" value="save" />
+						<div class="group">
+							<input type="submit" class="button submit" value="Submit" />
+							<input type="submit" class="button continue" value="Continue to Payment" />
 						</div>
 					</form>
 				</div>
@@ -268,19 +270,7 @@
 				  	var val = $(this).find('option:selected').text();
 				  	$('.children-change').val('$' + val + '.00');
 				  });
-
-					$("#loginForm").submit( function( evt ) {
-						evt.preventDefault();
-						$(".login").hide();
-						$(".kids-wrapper").show();
-					});	
-
-					$(".enroll").click( function( evt ) {
-						evt.preventDefault();
-						$(".next-btn").show();
-						$(".personal-information").show();
-					});
-		    });
+		    })
 		</script>
 	</body>
 </html>
