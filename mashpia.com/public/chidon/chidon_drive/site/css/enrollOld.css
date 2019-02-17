@@ -212,27 +212,3 @@ input {
 		max-width: none;
 	}
 }
-
-/* Date: 2/14/2019 */
-.next-btn {
-	padding-top: 40px;
-	padding-bottom: 20px;
-	text-align: center;
-}
-.next-btn .button {
-	padding: 10px;
-	width: 200px;
-}
-.form.blue-circle  {
-	padding: 30px 20px 40px;
-}
-.blue-circle .image-wrapper {
-	background: #4f78bb;
-}
-.save-detail {
-	text-align: center;
-}
-.group.save-detail .button {
-	width: 140px;
-	margin: 25px auto 0;
-}
