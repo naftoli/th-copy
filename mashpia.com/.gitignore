@@ -49,3 +49,4 @@ error_log
 .vim
 
 mysql.log
+phplog
