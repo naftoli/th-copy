@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors',1);
+//ini_set('display_errors',1);
 require_once __DIR__ . '/../../../api/header/db.php';
 require_once __DIR__ . '/../../../class.globalSettings.php';
 
@@ -220,7 +220,7 @@ if ( empty( $error_msg ) ) {
 
   echo json_encode([
     'success'   =>  true,
-    'message'   =>  $msg
+    'error'   =>  $msg
   ]);
 } else {
   echo json_encode([
