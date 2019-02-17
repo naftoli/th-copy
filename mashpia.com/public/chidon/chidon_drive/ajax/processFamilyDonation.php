@@ -207,7 +207,7 @@ if ( empty( $error_msg ) ) {
       ]);
     } else {
       // divide amount by number of children
-      $perChildAmount = floor( $amount / count( $children ) );
+      $perChildAmount = number_format($amount / count( $children ), 2);
       if ( $perChildAmount > 350 ) $perChildAmount = 350;
       foreach ( $children as $user_id ) {
         $stmt->execute([
