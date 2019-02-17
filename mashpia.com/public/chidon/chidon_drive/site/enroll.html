@@ -35,39 +35,20 @@
 		<div class="main">
 			<div class="wrapper">
 				<h2 class="title">Shabbaton Enrollment</h2>
-				<div class="form login">
+				<div class="form login" style="display: none;">
 					<form id="loginForm">
 						<p>Please log in to your Mashpia.com account to proceed with Shabbaton enrollment</p>
 						<div class="field">
-							<label>Username: <input type="text" /></label>
+							<label>Username: <input type="text" id="username" /></label>
 						</div>
 						<div class="field">
-							<label>Password: <input type="password" /></label>
+							<label>Password: <input type="password" id="password" /></label>
 						</div>
 						<input type="submit" class="button" value="LOGIN" />
 					</form>
 				</div>
 				<div class="form kids-wrapper blue-circle" style="display: none;">
-					<div class="kid">
-						<div class="image-wrapper"></div>
-						<h6>Tzivi <br>Katz</h6>
-						<a href="#" class="button enroll">fill form</a>
-					</div>
-					<div class="kid">
-						<div class="image-wrapper"></div>
-						<h6>Yankel <br>Katz</h6>
-						<a href="#" class="button enroll">fill form</a>
-					</div>
-					<div class="kid">
-						<div class="image-wrapper"></div>
-						<h6>Sholom Ber <br>Katz</h6>
-						<a href="#" class="button enroll">fill form</a>
-					</div>
-					<div class="kid">
-						<div class="image-wrapper"></div>
-						<h6>Menachem Mendel <br>Katz</h6>
-						<a href="#" class="button enroll">fill form</a>
-					</div>
+
 				</div>
 				<div class="next-btn" style="display: none;">
 					<a href="#0" class="button">next child form</a>
@@ -257,27 +238,69 @@
 		<script src="js/circletype.min.js"></script>
 		<script src="js/jquery.nice-select.min.js"></script>
 		<script src='js/circles.min.js'></script>
+		<script src="js/js.cookie.js"></script>
 		<script type="text/javascript">
+				if ( Cookies.get('admin') ) getChildren( Cookies.get('admin') );
+				else $(".login").show();
+
 		    $('#menu-opener').click(function(e){
 		    	$('header nav').toggleClass('open');
-		    });
+				});
+				
+				function getChildren( admin ) {
+					$.post('../ajax/getChildren.php', { admin : admin }, function( result ) {
+						let info = JSON.parse( result );
+						if ( info.success ) {
+							let html = '';
+							numChildren = info.children.length;
+							for ( c in info.children ) {
+								let child = info.children[c];
+								let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
+								html += `
+									<div class="kid">
+										<div class="image-wrapper">
+												<img src="//mashpia.com/${childPic}" style="border-radius: 50%; padding: 2px; width: 100%;" />
+										</div>
+										<h6>${child.first} <br>${child.last}</h6>
+										<a href="#" class="button enroll">fill form</a>
+									</div>
+								`;
+							}
+							$(".login").hide();
+							$(".kids-wrapper").append( html );
+							$(".kids-wrapper").show();							
+						} else {
+							alert( info.error );
+						}
+					});
+				}
+				
 		    $(document).ready(function(e){
 		    	// Select 
 				  $('select').niceSelect();
 				  $('select.children').change(function(e){
 				  	var val = $(this).find('option:selected').text();
 				  	$('.children-change').val('$' + val + '.00');
-				  });
+					});
+					
+					var numChildren; // need global variable to track number of children
 
 					$("#loginForm").submit( function( evt ) {
 						evt.preventDefault();
-						$(".login").hide();
-						$(".kids-wrapper").show();
+						let user = $("#username").val();
+						let pass = $("#password").val();
+						$.post('../ajax/login.php', { username: user, password: pass }, function( result ) {
+							let info = JSON.parse( result );
+							if ( info.success ) {
+								Cookies.set('admin', info.admin);
+								getChildren( info.admin );
+							}
+						});
 					});	
 
-					$(".enroll").click( function( evt ) {
+					$(document).on('click', '.enroll', function( evt ) {
 						evt.preventDefault();
-						$(".next-btn").show();
+						if ( numChildren > 1 ) $(".next-btn").show();
 						$(".personal-information").show();
 					});
 		    });
