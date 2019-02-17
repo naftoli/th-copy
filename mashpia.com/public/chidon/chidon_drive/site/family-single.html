@@ -581,12 +581,10 @@
 						$.post('../ajax/processFamilyDonation.php', { donation_info: donation }, function( result ) {
 							console.log( result );
 							let res = JSON.parse( result );
-							if ( !res.success ) {
-								alert( res.error );
-							} else {
-								alert( res.message );
+							alert( res.message );
+							if ( res.success ) {
 								location.href = "thank-you.html";
-							}
+							} 
 						});
 					});
 		    });
