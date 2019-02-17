@@ -157,71 +157,78 @@ if ($response != null) {
 } 
 
 if ( empty( $error_msg ) ) {
-  // add to donations table and user_subsidies tables
-  $stmt = $MASHPIA_DB->prepare("
-    INSERT INTO chidon_donations 
-    SET 
-        name = :name, 
-        display_name = :display_name, 
-        anonymous = :anonymous, 
-        chidon_year = :year, 
-        donation_amount = :amount, 
-        for_family_id = :family_id, 
-        transaction_id = :trans_id, 
-        transaction_info = :trans_info, 
-        email = :email, 
-        phone = :phone 
-  ");
-  $res = $stmt->execute([
-    ':name'         =>  $name, 
-    ':display_name' =>  $display_name, 
-    ':anonymous'    =>  $anonymous,
-    ':year'         =>  $year, 
-    ':amount'       =>  $amount, 
-    ':family_id'    =>  $forFamily, 
-    ':trans_id'     =>  $trans_id, 
-    ':trans_info'   =>  $trans_info, 
-    ':email'        =>  $email,
-    ':phone'        =>  $phone
-  ]);
-  $donation_id = $MASHPIA_DB->lastInsertId();
-
-  // prepare entry into user_subsidies table
-  $stmt = $MASHPIA_DB->prepare("
-    INSERT INTO chidon_user_subsidies 
-    SET 
-        chidon_donation_id = :donation_id, 
-        chidon_year = :year, 
-        user_id = :user_id, 
-        subsidy_amount = :amount
-  ");
-  // if it was for specific child, then put the entire amount for that child
-  if ( $forChild ) {
-    if ( $amount > 350 ) $amount = 350;
-    $stmt->execute([
-      ':donation_id'  =>  $donation_id, 
+  if ( $trans_id && $trans_info ) {
+    // add to donations table and user_subsidies tables
+    $stmt = $MASHPIA_DB->prepare("
+      INSERT INTO chidon_donations 
+      SET 
+          name = :name, 
+          display_name = :display_name, 
+          anonymous = :anonymous, 
+          chidon_year = :year, 
+          donation_amount = :amount, 
+          for_family_id = :family_id, 
+          transaction_id = :trans_id, 
+          transaction_info = :trans_info, 
+          email = :email, 
+          phone = :phone 
+    ");
+    $res = $stmt->execute([
+      ':name'         =>  $name, 
+      ':display_name' =>  $display_name, 
+      ':anonymous'    =>  $anonymous,
       ':year'         =>  $year, 
-      ':user_id'      =>  $forChild, 
-      ':amount'       =>  $amount
+      ':amount'       =>  $amount, 
+      ':family_id'    =>  $forFamily, 
+      ':trans_id'     =>  $trans_id, 
+      ':trans_info'   =>  $trans_info, 
+      ':email'        =>  $email,
+      ':phone'        =>  $phone
     ]);
-  } else {
-    // divide amount by number of children
-    $perChildAmount = floor( $amount / count( $children ) );
-    if ( $perChildAmount > 350 ) $perChildAmount = 350;
-    foreach ( $children as $user_id ) {
+    $donation_id = $MASHPIA_DB->lastInsertId();
+
+    // prepare entry into user_subsidies table
+    $stmt = $MASHPIA_DB->prepare("
+      INSERT INTO chidon_user_subsidies 
+      SET 
+          chidon_donation_id = :donation_id, 
+          chidon_year = :year, 
+          user_id = :user_id, 
+          subsidy_amount = :amount
+    ");
+    // if it was for specific child, then put the entire amount for that child
+    if ( $forChild ) {
+      if ( $amount > 350 ) $amount = 350;
       $stmt->execute([
         ':donation_id'  =>  $donation_id, 
         ':year'         =>  $year, 
-        ':user_id'      =>  $user_id, 
-        ':amount'       =>  $perChildAmount
+        ':user_id'      =>  $forChild, 
+        ':amount'       =>  $amount
       ]);
+    } else {
+      // divide amount by number of children
+      $perChildAmount = floor( $amount / count( $children ) );
+      if ( $perChildAmount > 350 ) $perChildAmount = 350;
+      foreach ( $children as $user_id ) {
+        $stmt->execute([
+          ':donation_id'  =>  $donation_id, 
+          ':year'         =>  $year, 
+          ':user_id'      =>  $user_id, 
+          ':amount'       =>  $perChildAmount
+        ]);
+      }
     }
-  }
 
-  echo json_encode([
-    'success'   =>  true,
-    'message'   =>  $msg
-  ]);
+    echo json_encode([
+      'success'   =>  true,
+      'message'   =>  $msg
+    ]);
+  } else {
+    echo json_encode([
+      'success'   =>  false,
+      'message'   =>  'There was an error connecting to the credit card processor.'
+    ]);
+  }
 } else {
   echo json_encode([
     'success'   =>  false,
