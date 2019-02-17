@@ -101,7 +101,9 @@ body,td,th {
                 
                 <h4>Enrollment Deadline</h4>
                 <div class="indent">
-					Shabbaton Registration opens on <span style="font-weight: bold">Wednesday, Ches Adar 1 (February 13)</span>.<br />
+					<span style="font-weight: bold">Shabbaton Enrollment</span> will begin on <span style="font-weight: bold">
+					Monday, Yud Gimmel Adar 1 (Feb 18) at 1:00 PM EST</span> 
+					and end <span style="font-weight: bold">Monday, Chof Adar 1 (Feb 25) at 1:00 PM EST.</span>.
 					Enrollment and payment information must be submitted before <span style="font-weight: bold">Wednesday, Tes Vov Adar 1 (February 20) at 11:59 p.m.</span> 
 					We apologize in advance that there will be no exceptions. 
                 </div>

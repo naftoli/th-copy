@@ -107,7 +107,10 @@ body,td,th {
 				<br />
 
 				<div class="indent">
-					The cost for the Shabbaton if your child qualifies is $150. Shabbaton enrollment opens Wednesday Ches Adar Aleph (February 13).
+					The cost for the Shabbaton if your child qualifies is $150.<br /><br /> 
+					<span style="font-weight: bold">Shabbaton Enrollment</span> will begin on <span style="font-weight: bold">
+					Monday, Yud Gimmel Adar 1 (Feb 18) at 1:00 PM EST</span> 
+					and end <span style="font-weight: bold">Monday, Chof Adar 1 (Feb 25) at 1:00 PM EST.</span>.
 				</div>
 				<br />
 				
