@@ -10,7 +10,7 @@ $admin_id = encrypt_decrypt('decrypt', $admin);
 if ( $admin_id ) {
   $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        u.user_id, u.first, u.last, u.mobile_pic, u.user_photo_id 
+        u.user_id, u.first, u.last, u.first_he, u.last_he, u.mobile_pic, u.user_photo_id, tc.* 
     FROM
         users u
             JOIN
