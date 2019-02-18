@@ -37,7 +37,7 @@
 				<h2 class="title">Payment Information</h2>
 				<div class="payment-wrap">
 					<div class="payment-box textcenter">
-						<h4><label class="checkbox"><input type="checkbox"><span></span></label> I would like to opt-in to the <br> George Rohr Subsidy of $100 per child</h4>
+						<h4><label class="checkbox"><input type="checkbox" id="rohr"><span></span></label> I would like to opt-in to the <br> George Rohr Subsidy of $100 per child</h4>
 					</div>
 					<div class="payment-box textcenter">
 						<h4>Please select the amount you would like to <br> pay for which child:</h4>
@@ -53,6 +53,7 @@
 						<h4>PAYMENT INFORMATION</h4>
 						<div class="form">
 							<form id="paymentForm">
+								<input type="hidden" name="admin_name" id="admin_name" />
 								<div class="field">
 										<label>Card Number:</label>
 										<input type="text" id="cc_num" placeholder="0000 0000 0000 0000" required />
@@ -184,46 +185,93 @@
 					$(".children-change").val( totalAmount );
 				}
 
-		    $(document).ready(function(e){
-					$.post('../ajax/getChildren.php', { admin : admin }, function( result ) {
-						let info = JSON.parse( result );
-						if ( info.success ) {
-							let html = '';
-							for ( c in info.children ) {
-								let child = info.children[c];
-								html += `
-									<div class="select-item">
-										<h4><label class="checkbox"><input type="checkbox" class="child" onclick="calculateAmount()"><span></span></label>${child.first + ' ' + child.last}</h4>
-										<div class="group">
-											<div class="field">
-												<select class="amounts" onchange="calculateAmount()">
-											`;
-								for ( amount = 350; amount >= 150; amount -= 25 ) {
-									html += "<option value='" + amount + "'>" + amount + "</option>";
-								}
-								html += `
-												</select>
-											</div>
+				var children; // global variable to hold children info
+				function updateDropDown() {
+					let html = '';
+						for ( c in children ) {
+							let child = children[c];
+							html += `
+								<div class="select-item" id="${child.user_id}">
+									<h4><label class="checkbox"><input type="checkbox" class="child" onclick="calculateAmount()"><span></span></label>${child.first + ' ' + child.last}</h4>
+									<div class="group">
+										<div class="field">
+											<select class="amounts" onchange="calculateAmount()">
+										`;
+
+							let maxAmount = 350;
+							if ( $("#rohr").is(":checked") ) maxAmount = 250;
+							for ( amount = maxAmount; amount >= 150; amount -= 25 ) {
+								html += "<option value='" + amount + "'>" + amount + "</option>";
+							}
+							// find out if child has raised enough to have even less registration charge
+							let regFee = maxAmount - child.total_donation;
+							if ( regFee < 150 ) {
+								if ( regFee < 0 ) regFee = 0;
+								html += "<option value='" + regFee + "'>" + regFee + "</option>";
+							}
+
+							html += `
+											</select>
 										</div>
 									</div>
-								`;
-							}
-							$(".select-amount").append( html );
-
-							// Select 
-							$('select').niceSelect();
-						} else {
-							alert( info.error );
+								</div>
+							`;
 						}
+						$(".select-amount").empty();
+						$(".select-amount").append( html );
+						// Select 
+						$('select').niceSelect();
+				}
+
+		    $(document).ready(function(e){
+					$.post('../ajax/getFamilyInfo.php', { admin : admin, encrypted : 1, notYetPaid : 1 }, function( result ) {
+						let info = JSON.parse( result );
+						if ( info.success ) {
+							let adminInfo = info.data.children[0];
+							let name = adminInfo.A_first + ' ' + adminInfo.A_last;
+							$("#admin_name").val( name );
+
+							children = info.data.children;
+							updateDropDown();
+						} else {
+							alert( info.message );
+						}
+					});
+
+					$("#rohr").click( function() {
+						updateDropDown();
 					});
 
 					$("#paymentForm").submit( function( evt ) {
 						evt.preventDefault();
 
+						// make sure we have some children checked off
+						$checkedOff = 0;
+						$(".child").each( function() {
+							if ( $(this).is(":checked") ) $checkedOff++;
+						});
+						if ( !$checkedOff ) {
+							alert("You have not checked off any children to register.");
+							return false;
+						}
+
 						// get all info together
 						let donation = {};
-						donation.admin = admin;
 						donation.amount = totalAmount;
+						donation.name = $("#admin_name").val();
+
+						let regDetails = [];
+						$(".child").each( function() {
+							if ( $(this).is(":checked") ) {
+								let id = $(this).parent().parent().parent().attr('id');
+								let num = $(this).parent().parent().parent().find('.current').text();
+								regDetails.push({ 
+									'id': id, 
+									'amount': num
+								});
+							}
+						});
+						donation.regDetails = regDetails;
 
 						let cc = {}
 						cc.num = $("#cc_num").val();
@@ -238,8 +286,12 @@
 						billing.zip = $("#bill_zip").val();
 						billing.country = $("#bill_country").val();
 						cc.billing = billing;
-
 						donation.cc = cc;
+
+						$.post('../ajax/processPayment.php', { info : donation }, function( result ) {
+							let res = JSON.parse( result );
+							alert( res.message );
+						});
 					});
 		    });
 		</script>
