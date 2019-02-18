@@ -2,12 +2,16 @@
 //ini_set('display_errors',1);
 require __DIR__ . '/../../../api/header/db.php';
 require __DIR__ . '/../../../class.globalSettings.php';
+require __DIR__ . '/../encrypt.php';
 
 $year = GlobalSettings::getChidonYear();
 $admin_id = mysql_real_escape_string( $_POST['admin'] );
+$encrypted = isset( $_POST['encrypted'] ) ? intval( $_POST['encrypted'] ) : 0;
+if ( $encrypted ) $admin_id = encrypt_decrypt('decrypt', $admin_id);
+$notYetPaid = isset( $_POST['notYetPaid'] ) ? intval( $_POST['notYetPaid'] ) : 0;
 $data = [];
 
-$stmt = $MASHPIA_DB->prepare("
+$qry = "
   SELECT 
       a.first as A_first,
       a.last as A_last,
@@ -39,8 +43,12 @@ $stmt = $MASHPIA_DB->prepare("
           AND aa.role_id = 1 
           AND (tc.contestant = 1 or tc.school_rep = 1) 
           AND tc.year = :year
+";
+if ( $notYetPaid ) $qry .= " AND tc.date_paid is null ";
+$qry .= "
   GROUP BY u.user_id
-");
+";
+$stmt = $MASHPIA_DB->prepare( $qry );
 $res = $stmt->execute([
   ':admin'  =>  $admin_id, 
   ':year'   =>  $year

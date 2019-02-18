@@ -1,9 +1,14 @@
 <?php
+ini_set('display_errors',1);
 require_once __DIR__ . '/../../../api/header/db.php';
 require_once __DIR__ . '/../../../class.globalSettings.php';
+require __DIR__ . '/../encrypt.php';
+
+$admin = $_COOKIE['admin'];
+$admin_id = encrypt_decrypt('decrypt', $admin);
 
 $year = GlobalSettings::getChidonYear();
-$donation = $_POST['donation_info'];
+$donation = $_POST['info'];
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
 require_once __DIR__ . '/../../../classes/authorize/AuthorizeAPIRequest.php';
@@ -19,9 +24,6 @@ function checkMandatory( $values ) {
 
   // map of needed fields with their more user friendly description
   $mandatory = [
-    'email'           =>  'Email Address', 
-    'name'            =>  'Donor Name',
-    'display_name'    =>  'Display Name',
     'num'             =>  'Credit Card Number',
     'exp'             =>  'Credit Card Expiry',
     'cvv'             =>  'Security Code',
@@ -65,23 +67,17 @@ $field";
   exit;
 }
 
-// prepare variables for donor table
-$name = $donation['name'];
-$display_name = $donation['display_name'];
-$anonymous = $donation['anonymous'];
-$email = $donation['email'];
-$phone = $donation['phone'];
-
-// prepare variables for donation table
-$amount = $donation['amount'];
+//echo "<pre>"; print_r( $donation ); echo "</pre>";
 
 // prepare variables for payment
+$amount = $donation['amount'];
+$name = $donation['name'];
 $cc_info = [];
 $cc_info['number'] = $donation['cc']['num'];
 $cc_info['exp'] = $donation['cc']['exp'];
 $cc_info['cvc'] = $donation['cc']['cvv'];
 $cc_info['skip'] = isset( $donation['skip'] ) ? $donation['skip'] : 0;
-$cc_info['desc'] = "Chidon Drive " . $year;
+$cc_info['desc'] = "Chidon Shabbaton Registration " . $year . " for family (admin_id): " . $admin_id;
 $cc_info['last'] = $name;
 $cc_info['first'] = '';
 
@@ -96,12 +92,14 @@ $cc_info['country'] = $billing['country'];
 // first process donation
 if ( $cc_info['skip'] ) {
   // don't process card at all
-  $trans_id = 11111;
-  $trans_info = "testing by skipping authorize.net transaction.";
   $response = null;
 } else {
-  require 'authorize.php';
-  $response = chargeCreditCard( $amount, $cc_info );
+  if ( $amount > 0 ) {
+    require 'authorize.php';
+    $response = chargeCreditCard( $amount, $cc_info );
+  } else {
+    $response = null;
+  }
 }
 
 // check response
@@ -125,11 +123,11 @@ if ($response != null) {
           $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();          
 
           // send email confirmation
-          $subject = "Chidon Drive Donation";
-          $email_msg = "Thank you for your donation of $" . $amount . ". Your transaction id is: " . $trans_id . ". Your donation will go a long way in helping us give the children the chayos that will drive them to learn even more. Thank you.";
+          $subject = "Chidon Shabbaton Registration Payment";
+          $email_message = "Thank you for your payment of $" . $amount . ". Your transaction id is: " . $trans_id . ". Your child(ren) are now registered for the Shabbaton.";
           $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
                     'Reply-To: chidon@tzivoshashem.com' . "\r\n";
-          @mail( $emil, $subject, $email_msg, $headers );
+          @mail( $emil, $subject, $email_message, $headers );
         } else {
           $error_msg .= "Transaction Failed \n";
           if ($tresponse->getErrors() != null) {
@@ -150,41 +148,52 @@ if ($response != null) {
           $error_msg .= " Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n";
       }
   }
-} else if ( $cc_info['skip'] ) {
+} else if ( $cc_info['skip'] || $amount == 0 ) {
   $msg = "Success.";
 }
 
 if ( !empty( $msg ) ) {
-  // add to donations table 
+  // register children
   $stmt = $MASHPIA_DB->prepare("
-    INSERT INTO chidon_donations 
+    UPDATE th_chidon 
     SET 
-        name = :name, 
-        display_name = :display_name, 
-        anonymous = :anonymous,
-        chidon_year = :year, 
-        donation_amount = :amount, 
-        transaction_id = :trans_id, 
-        transaction_info = :trans_info, 
-        email = :email, 
-        phone = :phone 
+        paid = :amount,
+        date_paid = NOW(),
+        paid_by = :admin
+    WHERE
+        user_id = :user AND year = :year
   ");
-  $res = $stmt->execute([
-    ':name'         =>  $name,
-    ':display_name' =>  $display_name, 
-    ':anonymoust'   =>  $anonymous,
-    ':year'         =>  $year, 
-    ':amount'       =>  $amount, 
-    ':trans_id'     =>  $trans_id, 
-    ':trans_info'   =>  $trans_info, 
-    ':email'        =>  $email,
-    ':phone'        =>  $phone
-  ]);
+  $MASHPIA_DB->beginTransaction();
+  $success = true;
+  foreach ( $donation['regDetails'] as $child ) {
+    $res = $stmt->execute([
+      ':amount'   =>  $child['amount'], 
+      ':admin'    =>  $admin_id, 
+      ':user'     =>  $child['id'], 
+      ':year'     =>  $year
+    ]);
+    if ( !$res ) {
+      //echo "<pre>"; print_r( $stmt->debugDumpParams() ); echo "</pre>";
+      $success = false;
+      break;
+    }
+  }
 
-  echo json_encode([
-    'success'   =>  true,
-    'message'   =>  $msg
-  ]);
+  if ( $success ) {
+    $MASHPIA_DB->commit();
+    $msg .= "Your child(ren) have been successfully registered for the Chidon Shabbaton " . $year;
+    echo json_encode([
+      'success'   =>  true,
+      'message'   =>  $msg
+    ]);
+  } else {
+    $MASHPIA_DB->rollBack();
+    $error_msg .= "Your transaction has been processed but there was an error saving your child(ren)'s registration to our system. Please contact Tzivos Hashem HQ ASAP.";
+    echo json_encode([
+      'success'     =>  false,
+      'message'     =>  $error_msg
+    ]);
+  } 
 } else {
   echo json_encode([
     'success'     =>  false,
