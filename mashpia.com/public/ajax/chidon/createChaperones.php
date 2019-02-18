@@ -21,7 +21,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
 $year = GlobalSettings::getChidonYear();
 
 // if credit card info was provided, charge the card....
-if($cc_info){
+//if($cc_info){
     // split out the data as authorize.php wants it...
     $amount     = mysql_real_escape_string($cc_info['amount']);
     // $card_num   = mysql_real_escape_string($cc_info['ccnum']);
@@ -32,7 +32,8 @@ if($cc_info){
     //$first_name =''; $last_name = ''; $address = ''; $state = '';
     $description = "Chaperone Registration for Chidon Shabbaton " . $year . " - School #:" . $school_id . "; Number of Chaperones paid for: " . count($chaperones);
     
-    if ($school_id != 82 || ($school_id == 82 && $card_num != 4111111111111111)) { // if this is not 4111 1111 1111 1111 for A Academy only....
+    //if ($school_id != 82 || ($school_id == 82 && $card_num != 4111111111111111)) { // if this is not 4111 1111 1111 1111 for A Academy only....
+    if ( $school_id != 82 ) { // if this is not Avrohom Academy 
         // find out what the customer profile id and payment profile id is
         $school_sql = "select * from th_chidon_schools where year = " . $year . " and school_id = " . $school_id;
         $school_result = mysql_query( $school_sql );
@@ -84,10 +85,10 @@ if($cc_info){
         if (mysql_query($sql)) echo json_encode(["success" => true]);
         else render_json_error("Could not save record of Credit Card transaction. Please email chidon@tzivoshashem.org");
     }
-} else {
-    createChpaerones($chaperones, $year);
-    echo json_encode(["success" => true]);
-}
+// } else {
+//     createChpaerones($chaperones, $year);
+//     echo json_encode(["success" => true]);
+// }
 
 //***************** CREATE CHAPERONES **********************/
 function createChpaerones($chaperones, $year) {
