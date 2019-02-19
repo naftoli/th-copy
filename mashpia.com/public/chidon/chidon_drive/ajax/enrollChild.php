@@ -26,7 +26,8 @@ $stmt = $MASHPIA_DB->prepare("
       host_street = :street, 
       host_street_num = :street_num, 
       host_street_num_suffix = :street_num_suffix, 
-      host_street_apt = :street_apt
+      host_street_apt = :street_apt, 
+      walking_zone = :zone
   WHERE
       year = :year AND user_id = :user_id
 ");
@@ -53,7 +54,8 @@ $res = $stmt->execute([
   ':street'       =>  $childInfo['acc_street'], 
   ':street_num'   =>  $childInfo['acc_street_num'], 
   ':street_num_suffix'  =>  $childInfo['acc_street_num_suffix'], 
-  ':street_apt'   =>  $childInfo['acc_street_apt']
+  ':street_apt'   =>  $childInfo['acc_street_apt'], 
+  ':zone'         =>  $childInfo['walking_zone']
 ]);
 if ( $res ) {
   echo json_encode([
