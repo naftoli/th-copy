@@ -215,9 +215,13 @@
 								<p><label class="checkbox"><input type="checkbox" value="5778" class="history" /><span></span></label>5778</p>
 							</div>
 						</div>
+						<p>Important Notes:</p>
+						<div class="field">
+							<textarea id="chidonNotes"></textarea>
+						</div>
 						<p>What makes Chidon special to you? Please share.</p>
-						<div class="field" id="chidonNotes">
-							<textarea></textarea>
+						<div class="field">
+							<textarea id="chidonAnswer"></textarea>
 						</div>
 
 						<div class="field">
@@ -385,6 +389,9 @@
 							break;
 					}
 
+					$("#chidonNotes").val( child.notes );
+					$("#chidonAnswer").val( child.answers );
+
 					if ( $("terms1").is(":checked") ) $("#terms1").trigger('click');
 					if ( $("terms2").is(":checked") ) $("#terms2").trigger('click');
 
@@ -490,6 +497,8 @@
 						$(".history").each( function() {
 							if ( $(this).is(":checked") ) info.history.push( $(this).val() );
 						});
+						info.notes = $("#chidonNotes").val();
+						info.answer = $("#chidonAnswer").val();
 
 						if (!( info.first && info.last && info.heFirst && info.heLast && info.grade && info.book && info.sweater && info.shoe && info.sandwich 
 								&& info.acc_family && info.acc_address1 && info.acc_cross1 && info.acc_phone && info.test_lang )) {

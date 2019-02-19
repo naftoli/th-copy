@@ -22,7 +22,9 @@ $stmt = $MASHPIA_DB->prepare("
       sandwich = :sandwich,
       walking = :walking,
       shoe_size = :shoe,
-      test_lang = :test_lang
+      test_lang = :test_lang, 
+      notes = :notes, 
+      answers = :answer
   WHERE
       year = :year AND user_id = :user_id
 ");
@@ -43,7 +45,9 @@ $res = $stmt->execute([
   ':shoe'         =>  $childInfo['shoe'],
   ':test_lang'    =>  $childInfo['test_lang'],
   ':year'         =>  $year, 
-  ':user_id'      =>  $childInfo['user_id']
+  ':user_id'      =>  $childInfo['user_id'],
+  ':notes'        =>  $childInfo['notes'], 
+  ':answer'       =>  $childInfo['answer']
 ]);
 if ( $res ) {
   echo json_encode([
