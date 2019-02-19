@@ -40,16 +40,18 @@ $year = GlobalSettings::getChidonYear();
     //if ($school_id != 82 || ($school_id == 82 && $card_num != 4111111111111111)) { // if this is not 4111 1111 1111 1111 for A Academy only....
     if ( $school_id != 82 && $amount > 0 ) { // if this is not Avrohom Academy and there's an amount to charge
         // find out what the customer profile id and payment profile id is
-        $school_sql = "select * from th_chidon_schools where year = " . $year . " and school_id = " . $school_id;
+        $school_sql = "select tcs.*, s.authorize_customer_profile_id from th_chidon_schools tcs 
+                        join schools s using (school_id) 
+                        where year = " . $year . " and school_id = " . $school_id;
         $school_result = mysql_query( $school_sql );
         if ( !mysql_num_rows( $school_result ) ) {
             render_json_error("School has not been registered yet and does not have a payment profile on file.");
         } else {
             $school = mysql_fetch_assoc( $school_result );
-            $customer_profile = $school['customer_profile_id'];
+            $customer_profile = $school['authorize_customer_profile_id'];
             $payment_profile = $school['payment_profile_id'];
         }
-
+        
         $customerProfile = new CustomerProfile( $customer_profile, false );
         $payment_result = $customerProfile->chargeCard( $amount, $payment_profile, null, null, $description );
         if ( !is_array( $payment_result ) ) {
@@ -134,6 +136,8 @@ function createChpaerones($chaperones, $year) {
         // if(($full_program || $sweater) && !isset($_POST['cc_info'])) { // if they are getting a sweater or are in the program and did not pay....
         //     render_json_error("Error CH-CHP-021: Payment info required but not provided.");
         // }
+
+        echo $chaperone_sql; continue;
         
         if (mysql_query($chaperone_sql)) { // if we can create the chaperone...
             $chaperone_ids[] = mysql_insert_id(); // insert the ID into the array...
