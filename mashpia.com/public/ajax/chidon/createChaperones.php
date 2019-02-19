@@ -137,7 +137,7 @@ function createChpaerones($chaperones, $year) {
         //     render_json_error("Error CH-CHP-021: Payment info required but not provided.");
         // }
 
-        echo $chaperone_sql; continue;
+        //echo $chaperone_sql; continue;
         
         if (mysql_query($chaperone_sql)) { // if we can create the chaperone...
             $chaperone_ids[] = mysql_insert_id(); // insert the ID into the array...
