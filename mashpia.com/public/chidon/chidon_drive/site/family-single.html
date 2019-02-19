@@ -12,7 +12,7 @@
 		<link rel="stylesheet" href="css/family-single.css" type="text/css" />
 	</head>
 
-	<body>
+	<body id = "main" style="display: none;">
 
 		<header>
 			<div class="wrapper">
@@ -259,6 +259,11 @@
 		    	$('header nav').toggleClass('open');
 		    });
 		    $(document).ready(function(e){
+					// only show content if correct password is supplied
+					let password = prompt("Please enter the correct password to access this page.");
+					if ( password == 'chidondrive5779' ) $("#main").show();
+					else alert("Incorrect password.");
+
 		    	// Round text
 					const circleType = new CircleType(document.getElementById('simple-arc'));
 					circleType.radius(60);
