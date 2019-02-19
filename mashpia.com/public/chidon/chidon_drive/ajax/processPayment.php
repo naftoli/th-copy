@@ -99,6 +99,7 @@ if ( $cc_info['skip'] ) {
     $response = chargeCreditCard( $amount, $cc_info );
   } else {
     $response = null;
+    $trans_info "bypassing credit card processing";
   }
 }
 
@@ -159,7 +160,8 @@ if ( !empty( $msg ) ) {
     SET 
         paid = :amount,
         date_paid = NOW(),
-        paid_by = :admin
+        paid_by = :admin, 
+        approval = :approval
     WHERE
         user_id = :user AND year = :year
   ");
@@ -170,7 +172,8 @@ if ( !empty( $msg ) ) {
       ':amount'   =>  $child['amount'], 
       ':admin'    =>  $admin_id, 
       ':user'     =>  $child['id'], 
-      ':year'     =>  $year
+      ':year'     =>  $year, 
+      ':approval' =>  $trans_info
     ]);
     if ( !$res ) {
       //echo "<pre>"; print_r( $stmt->debugDumpParams() ); echo "</pre>";
