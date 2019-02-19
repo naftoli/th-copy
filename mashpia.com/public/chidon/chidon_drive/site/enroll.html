@@ -165,24 +165,40 @@
 						</div>
 						<div class="group">
 							<div class="field">
-								<label>Crown Heights Address:</label>
-								<input type="text" id="acc_address1" required />
+								<label>Street Number ONLY:</label>
+								<input type="text" id="acc_street_num" required />
 							</div>
 							<div class="field">
-								<label>Street Name:</label>
-								<input type="text" id="add_address2" />
+								<label>Street Number Suffix:</label>
+								<select id="acc_street_num_suffix">
+									<option></option>
+									<option>A</option>
+									<option>B</option>
+									<option>C</option>
+								</select>
+							</div>
+							<div class="field">
+								<label>Apt/Suite #</label>
+								<input type="text" id="acc_street_apt" />
 							</div>
 						</div>
 						<div class="group">
 							<div class="field">
-								<label>Cross Streets:</label>
-								<input type="text" id="acc_cross1" required />
-							</div>
-							<div class="field">
-								<label>and:</label>
-								<input type="text" id="acc_cross2" />
+								<label>Street Name:</label>
+								<select id="acc_street" required></select>
 							</div>
 						</div>
+						<div class="group">
+							<div class="field">
+								<label>Between:</label>
+								<input type="text" id="acc_cross1" required disabled />
+							</div>
+							<div class="field">
+								<label>And:</label>
+								<input type="text" id="acc_cross2" required disabled />
+							</div>
+						</div>
+						<input type="hidden" id="walking_zone" />
 						<div class="field">
 							<label>Crown Heights Phone Number:</label>
 							<input type="text" id="acc_phone" required />
@@ -225,10 +241,13 @@
 						</div>
 
 						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="terms1" /><span></span></label>I authorize my school chaperone to sign the trip waivers on my behalf. I understand that Chidon will not be responsible for any injury that may happen.</p>
+							<p><label class="checkbox"><input type="checkbox" id="terms1" /><span></span></label>	I understand that the way my child’s Hebrew name is written here is the way it will be printed on any plaque and certificate.</p>
 						</div>
 						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="terms2" /><span></span></label>	Please be aware that by participating in Chayolei Tzivos Hashem and its programs you consent to your children's names and pictures being used in any media produced by Tzivos Hashem, for publicity purposes or otherwise.</p>
+							<p><label class="checkbox"><input type="checkbox" id="terms2" /><span></span></label>I authorize my school chaperone to sign the trip waivers on my behalf. I understand that Chidon will not be responsible for any injury that may happen.</p>
+						</div>
+						<div class="field">
+							<p><label class="checkbox"><input type="checkbox" id="terms3" /><span></span></label>	Please be aware that by participating in Chayolei Tzivos Hashem and its programs you consent to your children's names and pictures being used in any media produced by Tzivos Hashem, for publicity purposes or otherwise.</p>
 						</div>
 
 						<div class="group save-detail">
@@ -297,7 +316,7 @@
 		<script src='js/circles.min.js'></script>
 		<script src="js/js.cookie.js"></script>
 		<script type="text/javascript">
-				if ( Cookies.get('admin') ) getChildren( Cookies.get('admin') );
+				if ( Cookies.get('chidon_admin') ) getChildren( Cookies.get('chidon_admin') );
 				else $(".login").show();
 
 		    $('#menu-opener').click(function(e){
@@ -370,8 +389,9 @@
 					}
 
 					$("#acc_family").val( child.host );
-					$("#acc_address1").val( child.host_address1 );
-					$("#acc_address2").val( child.host_address2 );
+					$("#acc_street_num").val( child.host_street_num );
+					$("#acc_street_num_suffix").val( child.host_street_num_suffix );
+					$("#acc_street_apt").val( child.host_street_apt );
 					$("#acc_cross1").val( child.between_streets1 );
 					$("#acc_cross2").val( child.between_streets2 );
 					$("#acc_phone").val( child.host_number );
@@ -394,6 +414,7 @@
 
 					if ( $("terms1").is(":checked") ) $("#terms1").trigger('click');
 					if ( $("terms2").is(":checked") ) $("#terms2").trigger('click');
+					if ( $("terms3").is(":checked") ) $("#terms2").trigger('click');
 
 					$("#first").focus();
 				}
@@ -427,6 +448,30 @@
 					return true;
 				}
 
+				function getCrossStreets( number, street ) {
+					if ( !number ) {
+						alert('You must enter a Street Number.');
+						return false;
+					} else if ( isNaN( number ) ) {
+						alert('Street numbers can only contain digits, no alphanumeric characters are allowed.');
+						return false;
+					} 
+
+					if ( street != 'Choose One' ) {
+						$.post('../ajax/getCrossStreets.php', { num: number, street: street }, function( result ) {
+							let info = JSON.parse( result );
+							if ( info.success ) {
+								let cross = info.data;
+								$("#acc_cross1").val( cross.cross1 );
+								$("#acc_cross2").val( cross.cross2 );
+								$("#walking_zone").val( cross.zone );
+							} else {	
+								alert( info.error );
+							}
+						});
+					}
+				}
+
 				var next = false;
 				var pay = false; // global variables to know if to continue to next child or to payment
 				$('.submit').click( function() {
@@ -440,6 +485,29 @@
 				});
 
 		    $(document).ready(function(e){
+					// get streets for dropdown
+					$.post('../ajax/getStreets.php', function( result ) {
+						let data = JSON.parse( result );
+						let html = '<option>Choose One</option>';
+						for ( s in data.streets ) {
+							html += "<option>" + data.streets[s].street + "</option>";
+						}
+						$("#acc_street").append( html );
+						$('select#acc_street').niceSelect('update');
+					});
+
+					$("#acc_street_num").blur( function() {
+						let number = $(this).val();
+						let street = $("#acc_street").val();
+						getCrossStreets( number, street );
+					});
+
+					$("#acc_street").change( function() {
+						let street = $(this).val();
+						let number = $("#acc_street_num").val();
+						getCrossStreets( number, street );
+					});
+
 		    	// Select 
 				  $('select').niceSelect();
 				  $('select.children').change(function(e){
@@ -454,7 +522,7 @@
 						$.post('../ajax/login.php', { username: user, password: pass }, function( result ) {
 							let info = JSON.parse( result );
 							if ( info.success ) {
-								Cookies.set('admin', info.admin);
+								Cookies.set('chidon_admin', info.admin);
 								getChildren( info.admin );
 							}
 						});
@@ -486,10 +554,15 @@
 						info.allergies = '';
 						if ( info.allergy ) info.allergies = $("#allergies").val();
 						info.acc_family = $("#acc_family").val();
-						info.acc_address1 = $("#acc_address1").val();
-						info.acc_address2 = $("#acc_address2").val();
+						// info.acc_address1 = $("#acc_address1").val();
+						// info.acc_address2 = $("#acc_address2").val();
+						info.acc_street = $("#acc_street").val();
+						info.acc_street_num = $("#acc_street_num").val();
+						info.acc_street_num_suffix = $("#acc_street_num_suffix").val();
+						info.acc_street_apt = $("#acc_street_apt").val();
 						info.acc_cross1 = $("#acc_cross1").val();
 						info.acc_cross2 = $("#acc_cross2").val();
+						info.walking_zone = $("#walking_zone").val();
 						info.acc_phone = $("#acc_phone").val();
 						info.walking = $("#walking").is(":checked") ? 1 : 0;
 						info.test_lang = $(".testLang:checked").val();
@@ -501,9 +574,10 @@
 						info.answer = $("#chidonAnswer").val();
 
 						if (!( info.first && info.last && info.heFirst && info.heLast && info.grade && info.book && info.sweater && info.shoe && info.sandwich 
-								&& info.acc_family && info.acc_address1 && info.acc_cross1 && info.acc_phone && info.test_lang )) {
+								&& info.acc_family && info.acc_street && info.acc_street_num && info.acc_cross1 && info.acc_cross2 && info.acc_phone && info.test_lang )) {
+							console.log( info );
 							alert("You must complete all fields.");
-							//return false;
+							return false;
 						}
 
 						if ( info.allergy ) {
@@ -513,7 +587,7 @@
 							}
 						}
 
-						if (! ($("#terms1:checked").length && $("#terms2:checked").length) ) {
+						if (! ($("#terms1:checked").length && $("#terms2:checked").length && $("#terms3:checked").length) ) {
 							alert("You must indicate your agreement to all terms.");
 							return false;
 						}

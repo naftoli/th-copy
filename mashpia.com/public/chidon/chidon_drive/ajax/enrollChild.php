@@ -13,8 +13,6 @@ $stmt = $MASHPIA_DB->prepare("
       grade = :grade,
       book = :book,
       host = :acc_family,
-      host_address1 = :acc_address1,
-      host_address2 = :acc_address2,
       between_streets1 = :acc_cross1,
       between_streets2 = :acc_cross2,
       host_number = :acc_phone,
@@ -24,7 +22,11 @@ $stmt = $MASHPIA_DB->prepare("
       shoe_size = :shoe,
       test_lang = :test_lang, 
       notes = :notes, 
-      answers = :answer
+      answers = :answer, 
+      host_street = :street, 
+      host_street_num = :street_num, 
+      host_street_num_suffix = :street_num_suffix, 
+      host_street_apt = :street_apt
   WHERE
       year = :year AND user_id = :user_id
 ");
@@ -47,7 +49,11 @@ $res = $stmt->execute([
   ':year'         =>  $year, 
   ':user_id'      =>  $childInfo['user_id'],
   ':notes'        =>  $childInfo['notes'], 
-  ':answer'       =>  $childInfo['answer']
+  ':answer'       =>  $childInfo['answer'], 
+  ':street'       =>  $childInfo['acc_street'], 
+  ':street_num'   =>  $childInfo['acc_street_num'], 
+  ':street_num_suffix'  =>  $childInfo['acc_street_num_suffix'], 
+  ':street_apt'   =>  $childInfo['acc_street_apt']
 ]);
 if ( $res ) {
   echo json_encode([
