@@ -9,7 +9,6 @@ use classes\authorize\AuthorizeAPIRequest;
 use classes\authorize\CustomerProfile;
 
 $chaperones = isset($_POST["chaperones"]) ? $_POST["chaperones"] : false;
-$cc_info    = isset($_POST["cc_info"]) ? $_POST["cc_info"] : false;
 $school_id  = clean_post_param("school_id"); // get the school id
 
 if(!$chaperones || !$school_id || count($chaperones) == 0) {
@@ -23,17 +22,23 @@ $year = GlobalSettings::getChidonYear();
 // if credit card info was provided, charge the card....
 //if($cc_info){
     // split out the data as authorize.php wants it...
-    $amount     = mysql_real_escape_string($cc_info['amount']);
+    // $amount     = mysql_real_escape_string($cc_info['amount']);
     // $card_num   = mysql_real_escape_string($cc_info['ccnum']);
     // $exp_date   = mysql_real_escape_string($cc_info['ccexp']);
     // $zip        = mysql_real_escape_string($cc_info['cczip']);
+    
+    // calculate total amount to charge
+    $amount = 0;
+    foreach ( $chaperones as $chaperone ) {
+        $amount += $chaperone['total'];
+    }
 
     // data needed for authorize.php
     //$first_name =''; $last_name = ''; $address = ''; $state = '';
     $description = "Chaperone Registration for Chidon Shabbaton " . $year . " - School #:" . $school_id . "; Number of Chaperones paid for: " . count($chaperones);
     
     //if ($school_id != 82 || ($school_id == 82 && $card_num != 4111111111111111)) { // if this is not 4111 1111 1111 1111 for A Academy only....
-    if ( $school_id != 82 ) { // if this is not Avrohom Academy 
+    if ( $school_id != 82 && $amount > 0 ) { // if this is not Avrohom Academy 
         // find out what the customer profile id and payment profile id is
         $school_sql = "select * from th_chidon_schools where year = " . $year . " and school_id = " . $school_id;
         $school_result = mysql_query( $school_sql );
@@ -76,12 +81,13 @@ $year = GlobalSettings::getChidonYear();
     } else { // if this is the test account pretend that the transaction was a success...
         $chaps = createChpaerones($chaperones, $year);
         $description .= " Chap IDs: " . implode(',', $chaps);
-        $strResponse = "TEST TRANSACTION"; // fake response....
+        $strResponse = "Nothing to charge"; // fake response....
         $sql = "INSERT INTO th_chidon_chap_payments "
             ." set school_id = " . $school_id . ", "
             ." paid = " . $amount . ", "
             ." approval = '" . $strResponse . "', "
             ." description = '" . $description . "'";
+        //echo $sql;
         if (mysql_query($sql)) echo json_encode(["success" => true]);
         else render_json_error("Could not save record of Credit Card transaction. Please email chidon@tzivoshashem.org");
     }
