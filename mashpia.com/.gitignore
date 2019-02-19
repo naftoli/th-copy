@@ -49,5 +49,6 @@ error_log
 .vim
 
 mysql.log
-phplog
 composer.lock
+
+public/chidon/chidon_drive/ajax/phplog
