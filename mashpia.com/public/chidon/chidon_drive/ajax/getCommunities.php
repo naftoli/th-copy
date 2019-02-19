@@ -71,7 +71,7 @@ try {
 foreach ( $leaderboard as $percent => $more ) {
   ksort( $leaderboard[$percent] );
 }
-asort( $leaderboard );
+krsort( $leaderboard );
 
 echo json_encode([
   'success' =>  true,

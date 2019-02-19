@@ -340,6 +340,7 @@
 							let htmlTop = '';
 							let htmlMain = '';
 							let i = 1;
+							outer_loop:
 							for ( percent in info ) {
 								for ( community in info[percent] ) {
 									let stats = info[percent][community]['communityInfo'];
@@ -372,7 +373,7 @@
 									`;									
 									if ( i == 4 ) {
 										i = 1;
-										break;
+										break outer_loop;
 									}
 								}
 							}
