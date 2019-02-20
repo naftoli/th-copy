@@ -538,7 +538,8 @@
                     //alert("Shabbaton enrollment will IYH open up on Monday February 18, 2019");
                     // var id = $(this).parent().parent().parent().parent().attr('id');
                     // location.href = "/mobile/chidon/shabbaton.html?id=" + id;
-                    let url = "/chidon/chidon_drive/ajax/loginFromMashpia.php?admin=" + admin;
+                    Cookies.set('chidon_admin', admin);
+                    let url = "/chidon/chidon_drive/site/enroll.html";
                     location.href = url;
                 });
                 
