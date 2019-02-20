@@ -64,19 +64,39 @@ $year = GlobalSettings::getChidonYear();
             // success
             // $strResponse =  $response_array[3] . ':' . $response_array[4] . ':' . 
             //                 $response_array[6] . ':' . $response_array[9];
-            $strResponse = $payment_result['transactionResponse']['transId'] . ":" . $payment_result['transactionResponse']['messages']['message'][0]['code'] . ":" . 
-            $payment_result['transactionResponse']['messages']['message'][0]['text'];
+            $strResponse = $payment_result['transactionResponse']['transId'] . ":" . $payment_result['transactionResponse']['messages'][0]['code'] . ":" . 
+                            $payment_result['transactionResponse']['messages'][0]['description'];
 
             // create the chaperones...
+            $created = false;
+            $inserted = false;
             $chaps = createChpaerones($chaperones, $year);
+            if ( $chaps ) $created = true;
             $description .= " Chap IDs: " . implode(',', $chaps);
             $sql = "INSERT INTO th_chidon_chap_payments "
                 ." set school_id = " . $school_id . ", "
                 ." paid = " . $amount . ", "
-                ." approval = '" . $strResponse . "', "
+                ." approval = \"" . $strResponse . "\", "
                 ." description = '" . $description . "'";
-            if (mysql_query($sql)) echo json_encode(["success" => true]);
-            else render_json_error("Could not save record of Credit Card transaction. Please email chidon@tzivoshashem.org");
+            if (@mysql_query($sql)) $inserted = true;
+
+            if ( $strResponse && $created && $inserted ) {
+                $finalMessage = "Chaperone(s) have been successfully created.\nHere is the reponse from the credit card processor:\n" . $strResponse;
+            } else if ( $strResponse && $inserted && !$created ) {
+                $finalMessage = "Your payment has gone through, however there was an error creating the chaperones on our system. Please contact HQ ASAP.\nHere is the response from the 
+                    credit card processor:\n" . $strResponse;
+            } else if ( $strResponse && $created && !$inserted ) {
+                $finalMessage = "Chaperone(s) have been successfully created. However, we could not save the record of the Credit Card transaction.\n
+                    Here is the reponse from the credit card processor:\n" . $strResponse;
+            } else if ( $strResponse && !$created && !$inserted ) {
+                $finalMessage = "Your credit card has been charged. However there was an error creating the chaperone(s), as well as saving the transaction to our database.
+                    Please contact HQ ASAP.\nHere is the reponse from the credit card processor:\n" . $strResponse;
+            }
+
+            echo json_encode([
+                "success" => true, 
+                "message" => $finalMessage
+            ]);
         } 
         // else {
         //     render_json_error("Credit Card Error: ".$response_array[3]);
@@ -84,7 +104,17 @@ $year = GlobalSettings::getChidonYear();
     } else { // if this is the test account pretend that the transaction was a success...
         $chaps = createChpaerones($chaperones, $year);
         $description .= " Chap IDs: " . implode(',', $chaps);
-        if ( $chaps ) echo json_encode(["success" => true]);
+        if ( $chaps ) {
+            echo json_encode([
+                "success" => true, 
+                "message" => "Chaperone(s) successfully created."
+            ]);
+        } else {
+            echo json_encode([
+                "success" => false, 
+                "error"   => "Error creating chaperone(s)."
+            ]);
+        }
     }
 // } else {
 //     createChpaerones($chaperones, $year);
