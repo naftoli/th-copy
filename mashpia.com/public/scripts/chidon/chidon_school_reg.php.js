@@ -119,6 +119,7 @@ $(document).ready(function(){
                 if (!response.success) {
                     alert(response.error);
                 } else {
+                    alert(response.message);
                     getChapsTable();
                     hideChapModal();
                 }
