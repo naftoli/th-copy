@@ -113,6 +113,8 @@ input {
 }
 .form .nice-select.open .list {
 	width: 100%;
+	overflow: scroll;
+	height: 600px;
 }
 .form .nice-select .option:hover, .form .nice-select .option.focus, .form .nice-select .option.selected.focus {
 	text-align: left;
