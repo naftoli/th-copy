@@ -574,48 +574,55 @@
 						info.notes = $("#chidonNotes").val();
 						info.answer = $("#chidonAnswer").val();
 
-						if (!( info.first && info.last && info.heFirst && info.heLast && info.grade && info.book && info.sweater && info.shoe && info.sandwich && 
-								info.acc_family && info.acc_street && info.acc_street_num && info.acc_cross1 && info.acc_cross2 && info.acc_phone && info.test_lang )) {
-							console.log( info );
-							alert("You must complete all fields.");
-							return false;
-						}
-
-						if ( !info.walking_zone ) {
-							alert('You have chosen an incorrect Street Number and Name, please fix.');
-							return false;
-						}
-
-						if ( info.allergy ) {
-							if ( !info.allergies ) {
-								alert("You have indicated that your child has allergies, but you have not entered what they are.");
-								return false;
+						let errors = [];
+						// if (!( info.first && info.last && info.heFirst && info.heLast && info.grade && info.book && info.sweater && info.shoe && info.sandwich && 
+						// 		info.acc_family && info.acc_street && info.acc_street_num && info.acc_cross1 && info.acc_cross2 && info.acc_phone && info.test_lang )) {
+							//console.log( info );
+							if ( !info.first ) errors.push("You must enter a first name.");
+							if ( !info.last ) errors.push("You must enter a last name.");
+							if ( !info.heFirst ) errors.push("You must enter a first hebrew name.");
+							if ( !info.heLast ) errors.push("You must enter a hebrew last name.");
+							if ( !info.sweater || info.sweater == '0' ) errors.push("You must choose a sweater size.");
+							if ( !info.shoe || info.shoe == '0' ) errors.push("You must choose a shoe size.");
+							if ( !info.sandwich || info.sandwich == '0' ) errors.push("You must choose a sandwich.");
+							if ( !info.acc_family ) errors.push("You must enter the family name of where you are staying.");
+							if ( !info.acc_street ) errors.push("You must enter which street you are staying on.");
+							if ( !info.acc_street_num ) errors.push("You must enter the address number of where your are staying.");
+							if ( !info.acc_cross1 || !info.acc_cross2 || !info.walking_zone ) error.push("You have chosen an incorrect Street Number and Street Name, please fix.");
+							if ( !info.acc_phone ) errors.push("You have not entered a phone number to where you are staying.");
+							if ( !info.test_lang ) errors.push("You have not indicated which language the test should be in.");
+							if ( info.allergy && !info.allergies ) {
+								errors.push("You have indicated that your child has allergies, but you have not entered what they are.");
 							}
-						}
+							if (! ($("#terms1:checked").length && $("#terms2:checked").length && $("#terms3:checked").length) ) {
+								errors.push("You must indicate your agreement to all terms.");
+							}
+							console.log( errors );
+						//}
 
-						if (! ($("#terms1:checked").length && $("#terms2:checked").length && $("#terms3:checked").length) ) {
-							alert("You must indicate your agreement to all terms.");
+						if ( errors.length ) {
+							alert( JSON.stringify( errors ) );
 							return false;
-						}
-
-						$.post('../ajax/enrollChild.php', { child : info }, function( result ) {
-							if ( !completed.includes( info.user_id ) ) completed.push( info.user_id ); // make sure to flag user as completed the form
-							let res = JSON.parse( result );
-							if ( res.success ) {
-								alert( res.message );
-								if ( next ) {					
-									// refresh children
-									getChildren( Cookies.get('chidon_admin') );					
-									alert('Showing form for next child.');
-									nextChild();
-								} else if ( pay ) {
-									if ( checkForms() )	location.href = "enroll-2.html";
-									else alert("You cannot go to payment until you have completed the form for all of your children.");
+						} else {
+							$.post('../ajax/enrollChild.php', { child : info }, function( result ) {
+								if ( !completed.includes( info.user_id ) ) completed.push( info.user_id ); // make sure to flag user as completed the form
+								let res = JSON.parse( result );
+								if ( res.success ) {
+									alert( res.message );
+									if ( next ) {					
+										// refresh children
+										getChildren( Cookies.get('chidon_admin') );					
+										alert('Showing form for next child.');
+										nextChild();
+									} else if ( pay ) {
+										if ( checkForms() )	location.href = "enroll-2.html";
+										else alert("You cannot go to payment until you have completed the form for all of your children.");
+									}
+								} else {
+									alert( res.error );
 								}
-							} else {
-								alert( res.error );
-							}
-						});
+							});
+						}
 					});
 		    });
 		</script>
