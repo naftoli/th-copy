@@ -323,6 +323,7 @@
 								$(".donation").attr('data-percent', totalDonationPercent);
 
 								let remaining = familyGoal - totalReg - totalRohr -  totalDonation;
+								if ( remaining < 0 ) remaining = 0;
 								$("#remainingFee").text( remaining );
 								$("#familyGoal").text( familyGoal );
 
@@ -362,6 +363,7 @@
 									let donationPercent = regPaid + subsidy + donation ? ((( regPaid + subsidy + donation ) / 350 ) * 100).toFixed(2) : 0;
 									//let percent = (((child.total_donation + paid) / 350) * 100).toFixed(2);
 									let balance = 350 - donation - regPaid - subsidy;
+									if ( balance < 0 ) balance = 0;
 
 									// add to family charts 
 									familyCharts += `
