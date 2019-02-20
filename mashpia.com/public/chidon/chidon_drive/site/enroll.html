@@ -574,34 +574,34 @@
 						info.notes = $("#chidonNotes").val();
 						info.answer = $("#chidonAnswer").val();
 
-						let errors = [];
+						let errors = '';
 						// if (!( info.first && info.last && info.heFirst && info.heLast && info.grade && info.book && info.sweater && info.shoe && info.sandwich && 
 						// 		info.acc_family && info.acc_street && info.acc_street_num && info.acc_cross1 && info.acc_cross2 && info.acc_phone && info.test_lang )) {
 							//console.log( info );
-							if ( !info.first ) errors.push("You must enter a first name.");
-							if ( !info.last ) errors.push("You must enter a last name.");
-							if ( !info.heFirst ) errors.push("You must enter a first hebrew name.");
-							if ( !info.heLast ) errors.push("You must enter a hebrew last name.");
-							if ( !info.sweater || info.sweater == '0' ) errors.push("You must choose a sweater size.");
-							if ( !info.shoe || info.shoe == '0' ) errors.push("You must choose a shoe size.");
-							if ( !info.sandwich || info.sandwich == '0' ) errors.push("You must choose a sandwich.");
-							if ( !info.acc_family ) errors.push("You must enter the family name of where you are staying.");
-							if ( !info.acc_street ) errors.push("You must enter which street you are staying on.");
-							if ( !info.acc_street_num ) errors.push("You must enter the address number of where your are staying.");
-							if ( !info.acc_cross1 || !info.acc_cross2 || !info.walking_zone ) error.push("You have chosen an incorrect Street Number and Street Name, please fix.");
-							if ( !info.acc_phone ) errors.push("You have not entered a phone number to where you are staying.");
-							if ( !info.test_lang ) errors.push("You have not indicated which language the test should be in.");
+							if ( !info.first ) errors += "You must enter a first name.\n";
+							if ( !info.last ) errors += "You must enter a last name.\n";
+							if ( !info.heFirst ) errors += "You must enter a first hebrew name.\n";
+							if ( !info.heLast ) errors += "You must enter a hebrew last name.\n";
+							if ( !info.sweater || info.sweater == '0' ) errors += "You must choose a sweater size.\n";
+							if ( !info.shoe || info.shoe == '0' ) errors += "You must choose a shoe size.\n";
+							if ( !info.sandwich || info.sandwich == '0' ) errors += "You must choose a sandwich.\n";
+							if ( !info.acc_family ) errors += "You must enter the family name of where you are staying.\n";
+							if ( !info.acc_street ) errors += "You must enter which street you are staying on.\n";
+							if ( !info.acc_street_num ) errors += "You must enter the address number of where your are staying.\n";
+							if ( !info.acc_cross1 || !info.acc_cross2 || !info.walking_zone ) error += "You have chosen an incorrect Street Number and Street Name, please fix.\n";
+							if ( !info.acc_phone ) errors += "You have not entered a phone number to where you are staying.\n";
+							if ( !info.test_lang ) errors += "You have not indicated which language the test should be in.\n";
 							if ( info.allergy && !info.allergies ) {
-								errors.push("You have indicated that your child has allergies, but you have not entered what they are.");
+								errors += "You have indicated that your child has allergies, but you have not entered what they are.\n";
 							}
 							if (! ($("#terms1:checked").length && $("#terms2:checked").length && $("#terms3:checked").length) ) {
-								errors.push("You must indicate your agreement to all terms.");
+								errors += "You must indicate your agreement to all terms.\n";
 							}
 							console.log( errors );
 						//}
 
 						if ( errors.length ) {
-							alert( JSON.stringify( errors ) );
+							alert( errors );
 							return false;
 						} else {
 							$.post('../ajax/enrollChild.php', { child : info }, function( result ) {
