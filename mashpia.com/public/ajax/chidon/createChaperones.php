@@ -157,6 +157,7 @@ function createChpaerones($chaperones, $year) {
                 ." phone = '" . $phone . "', "
                 ." email = '" . $email . "', "
                 ." chap_type = " . $chap_type . ", "
+                ." chidon_type = '" . $chidon_type . "', "
                 ." full_program = " . $full_program;
         // get the sweater size if needed...
         if($sweater == 1){
