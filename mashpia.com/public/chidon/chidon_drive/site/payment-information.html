@@ -219,7 +219,6 @@
 								if ( regFee < 0 ) regFee = 0;
 								html += "<option value='" + regFee + "'>" + regFee + "</option>";
 							}
-							html += "<option value='0'>0</option>";
 
 							html += `
 											</select>
@@ -248,6 +247,7 @@
 							let res = JSON.parse( result );
 							if ( res.success ) {
 								alert( res.message );
+								location.href = "/";
 							} else {	
 								alert( res.error );
 							}
