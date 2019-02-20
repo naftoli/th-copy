@@ -57,6 +57,7 @@ $res = $stmt->execute([
   ':street_apt'   =>  $childInfo['acc_street_apt'], 
   ':zone'         =>  $childInfo['walking_zone']
 ]);
+echo "<pre>"; echo $stmt->debugDumpParams(); echo "</pre>"; exit;
 if ( $res ) {
   echo json_encode([
     'success'   =>  true,
