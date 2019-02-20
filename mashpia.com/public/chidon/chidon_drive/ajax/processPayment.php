@@ -124,11 +124,11 @@ if ($response != null) {
           $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();          
 
           // send email confirmation
-          $subject = "Chidon Shabbaton Registration Payment";
-          $email_message = "Thank you for your payment of $" . $amount . ". Your transaction id is: " . $trans_id . ". Your child(ren) are now registered for the Shabbaton.";
-          $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
-                    'Reply-To: chidon@tzivoshashem.com' . "\r\n";
-          @mail( $emil, $subject, $email_message, $headers );
+          // $subject = "Chidon Shabbaton Registration Payment";
+          // $email_message = "Thank you for your payment of $" . $amount . ". Your transaction id is: " . $trans_id . ". Your child(ren) are now registered for the Shabbaton.";
+          // $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
+          //           'Reply-To: chidon@tzivoshashem.com' . "\r\n";
+          // @mail( $email, $subject, $email_message, $headers );
         } else {
           $error_msg .= "Transaction Failed \n";
           if ($tresponse->getErrors() != null) {
