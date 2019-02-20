@@ -129,7 +129,7 @@ if ($response != null) {
           $email_msg = "Thank you for your donation of $" . $amount . ". Your transaction id is: " . $trans_id . ". Your donation will go a long way in helping us give the children the chayos that will drive them to learn even more. Thank you.";
           $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
                     'Reply-To: chidon@tzivoshashem.com' . "\r\n";
-          @mail( $emil, $subject, $email_msg, $headers );
+          @mail( $email, $subject, $email_msg, $headers );
         } else {
           $error_msg .= "Transaction Failed \n";
           if ($tresponse->getErrors() != null) {
