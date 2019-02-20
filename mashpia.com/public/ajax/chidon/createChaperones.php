@@ -38,9 +38,9 @@ $year = GlobalSettings::getChidonYear();
     $description = "Chaperone Registration for Chidon Shabbaton " . $year . " - School #:" . $school_id . "; Number of Chaperones paid for: " . count($chaperones);
     
     //if ($school_id != 82 || ($school_id == 82 && $card_num != 4111111111111111)) { // if this is not 4111 1111 1111 1111 for A Academy only....
-    if ( $school_id != 82 && $amount > 0 ) { // if this is not Avrohom Academy and there's an amount to charge
+    if ( $amount > 0 ) { // if this is not Avrohom Academy and there's an amount to charge
         // find out what the customer profile id and payment profile id is
-        $school_sql = "select tcs.*, s.authorize_customer_profile_id from th_chidon_schools tcs 
+        $school_sql = "select tcs.*, s.authorize_customer_profile_id, s.authorize_payment_profile_id from th_chidon_schools tcs 
                         join schools s using (school_id) 
                         where year = " . $year . " and school_id = " . $school_id;
         $school_result = mysql_query( $school_sql );
@@ -49,7 +49,8 @@ $year = GlobalSettings::getChidonYear();
         } else {
             $school = mysql_fetch_assoc( $school_result );
             $customer_profile = $school['authorize_customer_profile_id'];
-            $payment_profile = $school['payment_profile_id'];
+            // if we have a specific profile for chidon, choose that, else use schools existing payment profile
+            $payment_profile = $school['payment_profile_id'] ? $school['payment_profile_id'] : $school['authorize_payment_profile_id']; 
         }
         
         $customerProfile = new CustomerProfile( $customer_profile, false );
