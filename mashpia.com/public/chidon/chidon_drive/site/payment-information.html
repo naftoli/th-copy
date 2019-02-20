@@ -324,7 +324,12 @@
 
 						$.post('../ajax/processPayment.php', { info : donation }, function( result ) {
 							let res = JSON.parse( result );
-							alert( res.message );
+							if ( res.success ) {
+								alert( res.message );
+								location.href = "/";
+							} else {
+								alert( res.error );
+							}
 						});
 					});
 		    });

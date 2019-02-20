@@ -62,7 +62,7 @@ $field";
 
   echo json_encode([
     'success'   =>  false, 
-    'message'   =>  $message
+    'error'     =>  $message
   ]);
   exit;
 }
@@ -194,12 +194,12 @@ if ( !empty( $msg ) ) {
     $error_msg .= "Your transaction has been processed but there was an error saving your child(ren)'s registration to our system. Please contact Tzivos Hashem HQ ASAP.";
     echo json_encode([
       'success'     =>  false,
-      'message'     =>  $error_msg
+      'error'       =>  $error_msg
     ]);
   } 
 } else {
   echo json_encode([
     'success'     =>  false,
-    'message'     =>  $error_msg
+    'error'       =>  $error_msg
   ]);
 }
