@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../../api/header/db.php';
 require_once __DIR__ . '/../../../class.globalSettings.php';
 require __DIR__ . '/../encrypt.php';
 
-$admin = $_COOKIE['admin'];
+$admin = $_COOKIE['chidon_admin'];
 $admin_id = encrypt_decrypt('decrypt', $admin);
 
 $year = GlobalSettings::getChidonYear();
@@ -99,7 +99,7 @@ if ( $cc_info['skip'] ) {
     $response = chargeCreditCard( $amount, $cc_info );
   } else {
     $response = null;
-    $trans_info "bypassing credit card processing";
+    $trans_info = "bypassing credit card processing";
   }
 }
 

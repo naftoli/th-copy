@@ -37,8 +37,6 @@ $res = $stmt->execute([
   ':grade'        =>  $childInfo['grade'], 
   ':book'         =>  $childInfo['book'], 
   ':acc_family'   =>  $childInfo['acc_family'], 
-  ':acc_address1' =>  $childInfo['acc_address1'],
-  ':acc_address2' =>  $childInfo['acc_address2'],
   ':acc_cross1'   =>  $childInfo['acc_cross1'], 
   ':acc_cross2'   =>  $childInfo['acc_cross2'], 
   ':acc_phone'    =>  $childInfo['acc_phone'], 
@@ -57,7 +55,7 @@ $res = $stmt->execute([
   ':street_apt'   =>  $childInfo['acc_street_apt'], 
   ':zone'         =>  $childInfo['walking_zone']
 ]);
-echo "<pre>"; echo $stmt->debugDumpParams(); echo "</pre>"; exit;
+//echo "<pre>"; echo $stmt->debugDumpParams(); echo "</pre>"; exit;
 if ( $res ) {
   echo json_encode([
     'success'   =>  true,

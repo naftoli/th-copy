@@ -39,10 +39,10 @@
 					<form id="loginForm">
 						<p>Please log in to your Mashpia.com account to proceed with Shabbaton enrollment</p>
 						<div class="field">
-							<label>Username: <input type="text" id="username" required /></label>
+							<label>Username: <input type="text" id="username" name="username" required /></label>
 						</div>
 						<div class="field">
-							<label>Password: <input type="password" id="password" required /></label>
+							<label>Password: <input type="password" id="password" name="password" required /></label>
 						</div>
 						<input type="submit" class="button" value="LOGIN" />
 					</form>
@@ -63,20 +63,20 @@
 						</div>
 						<div class="field">
 							<label>Last Name:</label>
-							<input type="text" placeholder="Last Name" id="last" required />
+							<input type="text" placeholder="Last Name" id="last" required name="last" />
 						</div>
 						<div class="field">
 							<label>Hebrew First Name:</label>
-							<input type="text" placeholder="Hebrew First Name" id="heFirst" required />
+							<input type="text" placeholder="Hebrew First Name" id="heFirst" name="heFirst" required />
 						</div>
 						<div class="field">
 							<label>Hebrew Last Name:</label>
-							<input type="text" placeholder="Hebrew Last Name" id="heLast" required />
+							<input type="text" placeholder="Hebrew Last Name" id="heLast" name="heLast" required />
 						</div>
 						<div class="group">
 							<div class="field">
 								<label>Grade:</label>
-								<select id="grade" required disabled>
+								<select id="grade" name="grade" required disabled>
 									<option value='4'>4th Grade</option>
 									<option value='5'>5th Grade</option>
 									<option value='6'>6th Grade</option>
@@ -86,7 +86,7 @@
 							</div>
 							<div class="field">
 								<label>Book:</label>
-								<select id="book" required disabled>
+								<select id="book" name="book" required disabled>
 									<option value="1">1</option>
 									<option value="2">2</option>
 									<option value="3">3</option>
@@ -100,7 +100,7 @@
 						<div class="group">
 							<div class="field">
 								<label>Sweater Size:</label>
-								<select id="sweater" required>
+								<select id="sweater" name="sweater" required>
 										<option value="0">Please Choose</option>
 										<option value="children s">Children S (6 - 8)</option>
 										<option value="children m">Children M (8 - 10)</option>
@@ -114,7 +114,7 @@
 							</div>
 							<div class="field">
 								<label>Shoe Size:</label>
-								<select id="shoe" required>
+								<select id="shoe" name="shoe" required>
 										<option value="0">Please Choose</option>
 										<option value='children 11'>Children 11</option>
 										<option value='children 12'>Children 12</option>
@@ -135,7 +135,7 @@
 						</div>
 						<div class="field">
 							<label>Sandwich Preference:</label>
-							<select id="sandwich" required>
+							<select id="sandwich" name="sandwich" required>
 									<option value="0">Please Choose</option>
 									<option value="tuna">Tuna</option>
 									<option value="egg">Egg</option>
@@ -161,12 +161,12 @@
 						<p>The address where my child will be staying in Crown Heights during the Shabbaton is:<br><span>(If you live in Crown Heights please provide your home address)</span></p><p class="smaller">Walking groups will be arranged within the Schenectady- Nostrand, Rutland- S Johns radius.</p><p class="tiny">*Please note there will be a $100 fee fore changes of address</p>
 						<div class="field">
 							<label>Crown Heights Family Name:</label>
-							<input type="text" id="acc_family" required />
+							<input type="text" id="acc_family" name="acc_family" required />
 						</div>
 						<div class="group">
 							<div class="field">
 								<label>Street Number ONLY:</label>
-								<input type="text" id="acc_street_num" required />
+								<input type="text" id="acc_street_num" name="acc_street_num" required />
 							</div>
 							<div class="field">
 								<label>Street Number Suffix:</label>
@@ -185,23 +185,23 @@
 						<div class="group">
 							<div class="field">
 								<label>Street Name:</label>
-								<select id="acc_street" required></select>
+								<select id="acc_street" name="acc_street" required></select>
 							</div>
 						</div>
 						<div class="group">
 							<div class="field">
 								<label>Between:</label>
-								<input type="text" id="acc_cross1" required disabled />
+								<input type="text" id="acc_cross1" name="acc_cross1" required disabled />
 							</div>
 							<div class="field">
 								<label>And:</label>
-								<input type="text" id="acc_cross2" required disabled />
+								<input type="text" id="acc_cross2" name="acc_cross2" required disabled />
 							</div>
 						</div>
-						<input type="hidden" id="walking_zone" />
+						<input type="hidden" name="walking_zone" id="walking_zone" />
 						<div class="field">
 							<label>Crown Heights Phone Number:</label>
-							<input type="text" id="acc_phone" required />
+							<input type="text" id="acc_phone" name="acc_phone" required />
 						</div>
 						<div class="field">
 							<p><label class="checkbox"><input type="checkbox" name="walking" id="walking" /><span></span></label>I allow my child to walk home alone at any time of the day/night.</p>
@@ -251,8 +251,7 @@
 						</div>
 
 						<div class="group save-detail">
-							<input type="submit" class="button submit next" value="save & next child" />
-							<input type="submit" class="button submit pay" value="save & go to payment" />
+							
 						</div>
 					</form>
 				</div>
@@ -326,14 +325,14 @@
 				var children = []; // global variable for children info
 				var children_ids = []; // global variable to keep track of order of children and ids
 				var completed = [] // global variable for making sure all children's forms have been completed
-				//var numChildren; // global variable to track number of children
+				var numChildren; // global variable to track number of children
 
 				function getChildren( admin ) {
 					$.post('../ajax/getChildren.php', { admin : admin }, function( result ) {
 						let info = JSON.parse( result );
 						if ( info.success ) {
 							let html = '';
-							//numChildren = info.children.length;
+							numChildren = info.children.length;
 							for ( c in info.children ) {
 								let child = info.children[c];
 								children[child.user_id] = child;
@@ -350,6 +349,7 @@
 								`;
 							}
 							$(".login").hide();
+							$(".kids-wrapper").empty();
 							$(".kids-wrapper").append( html );
 							$(".kids-wrapper").show();							
 						} else {
@@ -392,8 +392,10 @@
 					$("#acc_street_num").val( child.host_street_num );
 					$("#acc_street_num_suffix").val( child.host_street_num_suffix );
 					$("#acc_street_apt").val( child.host_street_apt );
+					$("#acc_street").val( child.host_street );
 					$("#acc_cross1").val( child.between_streets1 );
 					$("#acc_cross2").val( child.between_streets2 );
+					$("#walking_zone").val( child.walking_zone );
 					$("#acc_phone").val( child.host_number );
 					if ( parseInt(child.walking) ) $("#walking").trigger('click');
 					
@@ -412,10 +414,7 @@
 					$("#chidonNotes").val( child.notes );
 					$("#chidonAnswer").val( child.answers );
 
-					if ( $("terms1").is(":checked") ) $("#terms1").trigger('click');
-					if ( $("terms2").is(":checked") ) $("#terms2").trigger('click');
-					if ( $("terms3").is(":checked") ) $("#terms2").trigger('click');
-
+					$('select').niceSelect('update');
 					$("#first").focus();
 				}
 
@@ -457,7 +456,7 @@
 						return false;
 					} 
 
-					if ( street != 'Choose One' ) {
+					if ( street && street != 'Choose One' ) {
 						$.post('../ajax/getCrossStreets.php', { num: number, street: street }, function( result ) {
 							let info = JSON.parse( result );
 							if ( info.success ) {
@@ -471,18 +470,6 @@
 						});
 					}
 				}
-
-				var next = false;
-				var pay = false; // global variables to know if to continue to next child or to payment
-				$('.submit').click( function() {
-					if ( $(this).hasClass('next') ) {
-						next = true;
-						pay = false;
-					} else if ( $(this).hasClass('pay') ) {
-						pay = true;
-						next = false;
-					}
-				});
 
 		    $(document).ready(function(e){
 					// get streets for dropdown
@@ -532,12 +519,28 @@
 						evt.preventDefault();
 						let id = $(this).attr('id');
 						fillEnrollmentForm( id );
-						// if ( numChildren > 1 ) $(".next-btn").show();
+
+						let html = '';
+						if ( numChildren > 1 ) {
+							html += `<input type="submit" class="button submit next" value="save & next child" />
+													<input type="submit" class="button submit pay" value="save & go to payment" />`;
+						} else {
+							html += `<input type="submit" class="button submit pay" value="save & go to payment" />`;
+						}
+						$(".save-detail").append( html );
+
 						$(".personal-information").show();
 					});
 
 					$("#personalInfo").submit( function( evt ) {
 						evt.preventDefault();
+
+						// find out if we are going to next child or going to payment
+						let btn = $(this).find("input[type=submit]:focus").attr('class');
+						let next = false;
+						let pay = false;;
+						if ( btn.indexOf('next') != -1 ) next = true;
+						else if ( btn.indexOf('pay') != -1 ) pay = true;			
 
 						let info = {};
 						info.user_id = $("#user_id").val();
@@ -554,8 +557,6 @@
 						info.allergies = '';
 						if ( info.allergy ) info.allergies = $("#allergies").val();
 						info.acc_family = $("#acc_family").val();
-						// info.acc_address1 = $("#acc_address1").val();
-						// info.acc_address2 = $("#acc_address2").val();
 						info.acc_street = $("#acc_street").val();
 						info.acc_street_num = $("#acc_street_num").val();
 						info.acc_street_num_suffix = $("#acc_street_num_suffix").val();
@@ -566,17 +567,22 @@
 						info.acc_phone = $("#acc_phone").val();
 						info.walking = $("#walking").is(":checked") ? 1 : 0;
 						info.test_lang = $(".testLang:checked").val();
-						info.history = [];
+						info.history = '';
 						$(".history").each( function() {
-							if ( $(this).is(":checked") ) info.history.push( $(this).val() );
+							if ( $(this).is(":checked") ) info.history += $(this).val() + ',';
 						});
 						info.notes = $("#chidonNotes").val();
 						info.answer = $("#chidonAnswer").val();
 
-						if (!( info.first && info.last && info.heFirst && info.heLast && info.grade && info.book && info.sweater && info.shoe && info.sandwich 
-								&& info.acc_family && info.acc_street && info.acc_street_num && info.acc_cross1 && info.acc_cross2 && info.acc_phone && info.test_lang )) {
+						if (!( info.first && info.last && info.heFirst && info.heLast && info.grade && info.book && info.sweater && info.shoe && info.sandwich && 
+								info.acc_family && info.acc_street && info.acc_street_num && info.acc_cross1 && info.acc_cross2 && info.acc_phone && info.test_lang )) {
 							console.log( info );
 							alert("You must complete all fields.");
+							return false;
+						}
+
+						if ( !info.walking_zone ) {
+							alert('You have chosen an incorrect Street Number and Name, please fix.');
 							return false;
 						}
 
@@ -592,26 +598,24 @@
 							return false;
 						}
 
-						if ( next || (pay && checkForms()) ) {
-							$.post('../ajax/enrollChild.php', { child : info }, function( result ) {
-								if ( !completed.includes( info.user_id ) ) completed.push( info.user_id ); // make sure to flag user as completed the form
-								let res = JSON.parse( result );
-								if ( res.success ) {
-									alert( res.message );
-									if ( next ) {
-										alert('Showing form for next child.');
-										nextChild();
-									} else if ( pay ) {
-										location.href = "enroll-2.html";
-									}
-								} else {
-									alert( res.error );
+						$.post('../ajax/enrollChild.php', { child : info }, function( result ) {
+							if ( !completed.includes( info.user_id ) ) completed.push( info.user_id ); // make sure to flag user as completed the form
+							let res = JSON.parse( result );
+							if ( res.success ) {
+								alert( res.message );
+								if ( next ) {					
+									// refresh children
+									getChildren( Cookies.get('chidon_admin') );					
+									alert('Showing form for next child.');
+									nextChild();
+								} else if ( pay ) {
+									if ( checkForms() )	location.href = "enroll-2.html";
+									else alert("You cannot go to payment until you have completed the form for all of your children.");
 								}
-							});
-						} else if ( pay ) {
-							// forms weren't completed
-							alert("You cannot go to payment until you have completed the form for all of your children.");
-						}
+							} else {
+								alert( res.error );
+							}
+						});
 					});
 		    });
 		</script>

@@ -61,7 +61,7 @@ if ( $res ) {
   } else {
     echo json_encode([
       'success' =>  false,
-      'message' =>  'Could not find any children eligible for the chidon.'
+      'message' =>  "Could not find any children eligible for the chidon that haven't been paid yet."
     ]);
     exit;
   }
