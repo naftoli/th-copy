@@ -49,7 +49,7 @@
 						<label>TOTAL $</label>
 						<input type="text" readonly class="children-change" />
 					</div>
-					<div class="payment-box">
+					<div class="payment-box" id="paymentInfo">
 						<h4>PAYMENT INFORMATION</h4>
 						<div class="form">
 							<form id="paymentForm">
@@ -176,13 +176,23 @@
 				var totalAmount;
 				function calculateAmount() {
 					totalAmount = 0;
+					let checked = 0; // make sure at least one child is checked if hiding payment info
 					$(".child").each( function() {
 						if ( $(this).is(":checked") ) {
+							checked++;
 							let num = $(this).parent().parent().parent().find('.current').text();
 							totalAmount += parseInt( num );
 						}
 					});
 					$(".children-change").val( totalAmount );
+					if ( checked && totalAmount == 0 ) {
+						// no need for payment
+						$("#paymentInfo").hide();
+						if ( !$("#noCCEnrollment").length ) $(".total-amount").after("<div align='center' id='noCCEnrollment'><input type='submit' class='button donate enroll' value='complete enrollment' /></div>");
+					} else {
+						$("#noCCEnrollment").remove();
+						$("#paymentInfo").show();
+					}
 				}
 
 				var children; // global variable to hold children info
@@ -209,6 +219,7 @@
 								if ( regFee < 0 ) regFee = 0;
 								html += "<option value='" + regFee + "'>" + regFee + "</option>";
 							}
+							html += "<option value='0'>0</option>";
 
 							html += `
 											</select>
@@ -222,6 +233,29 @@
 						// Select 
 						$('select').niceSelect();
 				}
+
+				$(document).on('click', '.enroll', function() {
+					// get list of id's to enroll
+					let toEnroll = [];
+					$(".child").each( function() {
+						if ( $(this).is(":checked") ) { 
+							let id = $(this).parent().parent().parent().attr('id');
+							toEnroll.push( id );
+						}
+					});
+					if ( toEnroll.length ) {
+						$.post('../ajax/finalizeEnrollment.php', { ids : toEnroll }, function( result ) {
+							let res = JSON.parse( result );
+							if ( res.success ) {
+								alert( res.message );
+							} else {	
+								alert( res.error );
+							}
+						});
+					} else {
+						alert("No children have been selected.");
+					}
+				});
 
 		    $(document).ready(function(e){
 					$.post('../ajax/getFamilyInfo.php', { admin : admin, encrypted : 1, notYetPaid : 1 }, function( result ) {
