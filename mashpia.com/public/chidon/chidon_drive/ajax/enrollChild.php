@@ -6,6 +6,24 @@ $year = GlobalSettings::getChidonYear();
 $childInfo = $_POST['child'];
 
 $stmt = $MASHPIA_DB->prepare("
+  UPDATE users 
+  SET
+      first = :first, 
+      last = :last, 
+      first_he = :heFirst, 
+      last_he = :heLast
+  WHERE
+      user_id = :user
+");
+$stmt->execute([
+  ':first'    =>  $_POST['first'], 
+  ':last'     =>  $_POST['last'], 
+  ':heFirst'  =>  $_POST['heFirst'], 
+  ':heLast'   =>  $_POST['heLast'], 
+  ':user'     =>  $_POST['user_id']
+]);
+
+$stmt = $MASHPIA_DB->prepare("
   UPDATE th_chidon 
   SET 
       history = :history,
