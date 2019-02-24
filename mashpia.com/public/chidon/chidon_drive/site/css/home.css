@@ -74,8 +74,9 @@
 	font-weight: 700;
 	/* color: #6988c5; */
 	/* top: 3px; */
-	margin-top: 26.5px !important;
+	margin-top: -30px !important;
 	z-index: 99;
+	margin-left: 1px;
 }
 .thermometer-image .bar-line__other-number {
 	position: absolute;

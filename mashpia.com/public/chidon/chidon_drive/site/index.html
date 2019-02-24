@@ -415,7 +415,6 @@
 					console.log( res );
 					if ( res.success ) {
 						let total = res.total;
-						total = 200000;
 						let percent = ((total / 875000) * 100).toFixed(2);
 						for ( i = 1; i < 5; i++ ) {
 							$("#slide" + i + " div.leader").data('percent', percent);
@@ -439,11 +438,11 @@
 		        responsiveWidth: 860,
 		        recordHistory: true,
 		        anchors: ['home', 'support', 'leading-communities', 'trophy-partners', 'medal-partners', 'plaque-partners', 'corporate-sponsors', ''],
-		        afterRender: function () {
-		            setInterval(function () {
-		                $.fn.fullpage.moveSlideRight();
-		            }, 3000);
-		        }, 
+		        // afterRender: function () {
+		        //     setInterval(function () {
+		        //         $.fn.fullpage.moveSlideRight();
+		        //     }, 3000);
+		        // }, 
 		       	afterLoad: function(origin, destination, direction){
 							var loadedSection = this;
 
