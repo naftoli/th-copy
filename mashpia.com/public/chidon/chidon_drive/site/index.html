@@ -414,8 +414,8 @@
 					let res = JSON.parse( result );
 					console.log( res );
 					if ( res.success ) {
-						let total = res.total;
-						let percent = ((total / 875000) * 100).toFixed(2);
+						let total = Math.round( res.total );
+						let percent = Math.round( (total / 875000) * 100 );
 						for ( i = 1; i < 5; i++ ) {
 							$("#slide" + i + " div.leader").data('percent', percent);
 							$("#slide" + i + " div.leader").data('amount', total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
