@@ -22,7 +22,7 @@ foreach ($schools as $id => $school) {
         ."join admins a using (admin_id) "
         ."where tc.year = " . $year . " "
         ."and aa.auth = 'user' "
-        ."and (tc.contestant = 1 or tc.school_rep = 1) "
+        ."and tc.contestant = 1 "
         ."and tc.can_enroll = 1 "
         ."and tc.date_paid is not null "
         ."and u.school_id = " . $id;
