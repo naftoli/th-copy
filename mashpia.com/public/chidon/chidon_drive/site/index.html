@@ -438,11 +438,11 @@
 		        responsiveWidth: 860,
 		        recordHistory: true,
 		        anchors: ['home', 'support', 'leading-communities', 'trophy-partners', 'medal-partners', 'plaque-partners', 'corporate-sponsors', ''],
-		        // afterRender: function () {
-		        //     setInterval(function () {
-		        //         $.fn.fullpage.moveSlideRight();
-		        //     }, 3000);
-		        // }, 
+		        afterRender: function () {
+		            setInterval(function () {
+		                $.fn.fullpage.moveSlideRight();
+		            }, 3000);
+		        }, 
 		       	afterLoad: function(origin, destination, direction){
 							var loadedSection = this;
 
