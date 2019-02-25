@@ -5,7 +5,7 @@
  * Author: Esty
  */
 
- .section {
+.section {
 	background-size: cover;
 	background-position: center center;
 }
@@ -33,8 +33,7 @@
 }
 #section0 h2 {
 	position: absolute;
-	bottom: 14rem;
-	left: 0;
+	bottom: 5rem;
 }
 #section0 .buttons-wrapper {
   position: absolute;
@@ -205,7 +204,6 @@
   height: 220%;
   position: absolute;
   bottom: -30px;
-  left: -50px;
 }
 #section3 .trophy .image-wrapper img {
   width: auto;
@@ -227,7 +225,7 @@
 #section3 .trophy.silver .text-wrapper, #section3 .trophy.silver .text-wrapper h6 {
 	color: #b7b1ae;
 }
-#section3 .trophy.bronze .text-wrapper, #section3 .trophy.bronze .text-wrapper h6 {
+#section3 .trophy .text-wrapper, #section3 .trophy .text-wrapper h6 {
 	color: #e39362;
 }
 #section3 .trophy.bronze .text-wrapper .trophy-type {
@@ -420,7 +418,6 @@
 	}
 	#section3 .trophies-wrapper .trophy .image-wrapper {
 		width: 20%;
-		left: 0;
 	}
 	#section3 .trophies-wrapper .trophy .image-wrapper img {
 		width: 100%;
@@ -452,20 +449,16 @@
 	}
 
 }
-@media(max-width: 900px) {
-	#section0 h2 {
-    bottom: 21rem;
-  }
-  .thermometer-image {
-  	width: 43%;
-  	bottom: 16rem;
-  }
-}
 
 @media(max-width: 860px) {
 	#section2, #section3, #section4, #section5 {
 		height: auto !important;
 	}
+	#section0 h2 {
+    bottom: 13rem;
+    right: 5rem;
+    text-align: right;
+  }
   #section3 .trophy-wrapper {
   	flex-wrap: wrap;
   }
@@ -508,22 +501,6 @@
     min-height: 5rem;
 	}
 }
-
-@media(max-width: 767px) {
-	.thermometer-image {
-		display: none;
-	}
-	#section0 h2 {
-		bottom: 9rem;
-	}
-}
-
-@media(max-width: 575px) {
-	#section0 h2 {
-		bottom: 15rem;
-	}
-}
-
 @media(max-width: 400px){
 	#section6 {
     min-height: 375vw;
