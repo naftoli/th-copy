@@ -22,7 +22,8 @@
 }
 
 #section2 {
-	background-image: url(../img/home/leaderboard.jpg);
+	/* background-image: url(../img/home/leaderboard.jpg); */
+	background-image: url(../img/home/thumbs/leaderboard.jpg);
 	padding-top: 10rem;
 	text-align: center;
 }
@@ -81,7 +82,8 @@
 
 /* School section */
 #section3 {
-	background-image: url(../img/home/leaderboard.jpg);
+	/* background-image: url(../img/home/leaderboard.jpg); */
+	background-image: url(../img/home/thumbs/leaderboard.jpg);
 	padding-top: 10rem;
 	text-align: center;
 	height: auto !important;

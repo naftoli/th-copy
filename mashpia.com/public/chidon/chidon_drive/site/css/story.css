@@ -6,7 +6,8 @@
  */
 
  .main {
- 	background: url(../img/donate/donate-bg.jpg);
+ 	/* background: url(../img/donate/donate-bg.jpg); */
+ 	background: url(../img/donate/thumbs/donate-bg.jpg);
  	background-size: cover;
  	padding-top: 10rem;
  }

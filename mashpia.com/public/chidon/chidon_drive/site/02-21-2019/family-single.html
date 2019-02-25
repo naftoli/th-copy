@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta name="viewport" content="width=device-width">
+	  <meta charset="UTF-8">
+		<meta name="google" content="notranslate">
+		<title>Donate | Chidon</title>
+		<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+		<link rel="stylesheet" href="css/font.css" type="text/css" />
+		<link rel="stylesheet" href="css/style.css" type="text/css" />
+		<link rel="stylesheet" href="css/nice-select.css" type="text/css" />
+		<link rel="stylesheet" href="css/family-single.css" type="text/css" />
+	</head>
+
+	<body id = "main" style="display: none;">
+
+		<header>
+			<div class="wrapper">
+				<div class="left">
+					<a href="#" id="menu-opener"><span></span><span></span><span></span></a>
+					<a href="index.html" class="logo"><h1>Chidon</h1><img src="img/chidon.png" alt="Chidon" /></a>
+					<nav>
+						<a href="index.html">Home</a>
+						<a href="donate.html">Donate</a>
+						<a href="leaderboard.html">Leaderboard</a>
+						<a href="story.html">Our Story</a>
+					</nav>
+				</div>
+				<div class="icons">
+					<a href="#"><img src="img/merkos.png" alt="Merkas Linyonei Chinuch" /></a>
+					<a href="#"><img src="img/army.png" alt="Tzavaos Hashem" /></a>
+				</div>
+			</div>
+		</header>
+		<div class="main">
+			<div class="wrapper">
+
+				<!-- Family info -->
+				<div class="family-info">
+					<h3>Drive Chidon for the <br><span class="familyName"></span> Family</h3>
+					<div class="bio-wrapper">
+						<p><span id="childrenNames"></span> have been working for months to master the 613 mitzvos. Why? So they can join an extraordinary four-day Chidon Shabbaton of fun, friendship and inspiration.</p>
+						<p>Please donate today to make their dream come true.</p>
+					</div>
+				</div>
+
+				<div class="right">
+					<!-- Progress Bar -->
+					<div class="bar-row">
+						<div class="bar">
+							<div class="bar-circle">
+								<p id="simple-arc">Family Goal</p>
+								<div class="bar-circle__inner">
+										$<span id="familyGoal"></span>
+								</div>
+							</div>
+							<div class="bar-bar">
+								<div class="bar-bar__wrapper">
+									<div class="bar-bar__line registration" data-percent="">
+										<div class="bar-bar__circle"></div>
+										<div class="bar-bar__marker">
+											<img src="img/marker-blue.png" />
+											<p>$<span id="totalRegFee"></span><br>Registration Fee</p>
+										</div>
+									</div>
+									<div class="bar-bar__line subsidy" data-percent="">
+										<div class="bar-bar__circle"></div>
+										<div class="bar-bar__marker">
+											<img src="img/marker.png" />
+											<p>$<span id="totalRohrSubsidy"></span><br>Rohr Subsidy</p>
+										</div>
+									</div>
+									<div class="bar-bar__line donation" data-percent="">
+											<div class="bar-bar__circle"></div>
+											<div class="bar-bar__marker">
+												<img src="img/marker-blue.png" />
+												<p>$<span id="totalDonation"></span><br>Donation</p>
+											</div>
+										</div>
+
+									<div class="remaining">
+										<div class="bar-bar__marker">
+											<p>$<span id="remainingFee"></span><br>Remaining</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Options -->
+					<div class="options-wrapper">
+						<div class="option">
+							<p>I would like to donate <input type="text" id="donationAmount" size="8" /> towards the Chidon experience for</p>
+
+							<p><label class="checkbox"><input type="radio" name="donation" id="donationToAll" /><span></span></label> For all children in the <span class="familyName"></span> Family</p>
+							<p><label class="checkbox"><input type="radio" name="donation" id="donationToOne" /><span></span></label> For child 
+								<select id="childrenSelection"><option value="0">Select</option></select></p>
+						</div>
+					</div>
+				</div>
+
+				<div class="main-wrapper">
+					<div class="form">
+						<form id="donationForm">
+							<div class="field">
+								<label>Full Name <span>(for reciept)</span>:</label>
+								<input type="text" id="name" placeholder="Full Name" required />
+							</div>
+							<div class="field">
+								<label>Name to be displayed:</label>
+								<input type="text" id="display_name" placeholder="Name to be displayed" required />
+							</div>
+							<div class="field">
+								<p><label class="checkbox"><input type="checkbox" id="anonymous" /><span></span></label>Donate anonymously</p>
+							</div>
+							<div class="field">
+								<label>Email <span>(for reciept)</span>:</label>
+								<input type="text" id="email" placeholder="Email" required />
+							</div>
+							<div class="field">
+								<label>Message or Dedication <span>(75 characters maximum)</span>:</label>
+								<input type="text" id="dedication" placeholder="Full Name" />
+							</div>
+							<h5>Payment Information</h5>
+							<div class="field">
+								<label>Card Number:</label>
+								<input type="text" id="cc_num" placeholder="0000 0000 0000 0000" required />
+							</div>
+							<div class="group">
+								<div class="field">
+									<label>Exp. Month:</label>
+									<select id="exp_mm"><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
+								</div>
+								<div class="field">
+									<label>Exp. Year:</label>
+									<select id="exp_yy"><option>2019</option><option>2020</option><option>2021</option><option>2022</option><option>2023</option><option>2024</option><option>2025</option></select>
+								</div>
+								<div class="field">
+									<label>CVV:</label>
+									<input type="text" id="cc_cvv" placeholder="CVV" required />
+								</div>
+							</div>
+							<h5>Billing Address</h5>						
+							<div class="field">
+								<label>Country:</label>
+								<select id="bill_country"><option>United States</option><option>Canada</option></select>
+							</div>						
+							<div class="field">
+								<label>Address:</label>
+								<input type="text" id="bill_address" placeholder="Address" required />
+							</div>						
+							<div class="field">
+								<label>Apt./Suite:</label>
+								<input type="text" id="bill_apt" placeholder="Apt./Suite (optional)" />
+							</div>
+							<div class="group">
+								<div class="field">
+									<label>Zip/Postcode:</label>
+									<input type="text" id="bill_zip" placeholder="Zip/Postcode" required />
+								</div>
+								<div class="field">
+									<label>City:</label>
+									<input type="text" id="bill_city" placeholder="City" required />
+								</div>
+								<div class="field">
+									<label>State/Prov/Region:</label>
+									<input type="text" id="bill_state" placeholder="State/Prov/Region" required />
+								</div>							
+							</div>
+							<div class="field">
+								<label>Phone:</label>
+								<input type="text" id="phone" placeholder="Phone (optional)" />
+							</div>
+							<input type="submit" class="button donate" value="Donate" />
+						</form>
+					</div>
+					<div class="activity">
+						<div class="family-charts">
+							
+						</div>
+						<div class="recent">
+							<h5>Most Recent Sponsors</h5>
+							<div class="recent-chart">
+								<div class="sponsor-list">
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<footer>
+			<div class="wrapper">
+				<a href="#" id="top">Back to top</a>
+
+				<div class="credits">
+					<p>Dedicated by George Rohr in loving memory of Mrs. Sarah (Charlotte) Rohr</p>
+					<p>לע"נ הרב אליעזר בן הרב מרדכי ע"ה וונגר | לע"נ הרב יצחק בן הרב אליעזר צבי זאב ע"ה צירקינד
+	לזכות הרב יוסף יצחק שליט"א ראזענבלום</p>
+				</div>
+
+				<div class="footer-main">
+					<div class="footer-about">
+						<div class="icon-wrapper">
+							<img src="img/merkos-color.png" alt="Merkos Linyonei Chinuch" />
+						</div>
+						<div class="icon-wrapper">
+							<img src="img/army-color.png" alt="Tzavaos Hashem" />
+						</div>
+						<p>A project of Merkos L'inyonei Chinuch and Tzivos Hashem</p>
+					</div>
+					<nav>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="donate.html">Donate</a></li>
+							<li><a href="leaderboard.html">Leaderboard</a></li>
+							<li><a href="story.html">Our Story</a></li>
+						</ul>
+						<ul>
+							<li><h5>Quick Links</h5></li>
+							<li><a href="#">Find a Family</a></li>
+							<li><a href="#">Sponsors</a></li>
+							<li><a href="#">Enrollment Form</a></li>
+						</ul>
+						<ul>
+							<li><h5>Contact Us</h5></li>
+							<li><a href="mailto:chidon@tzivoshashem.org">chidon@tzivoshashem.org</a></li>
+							<li><a href="tel:7189078884">718.907.8884</a></li>
+						</ul>
+					</nav>
+				</div>
+
+				<div class="footer-bottom">
+					<div class="social">
+						<a href="https://www.instagram.com/tzivos_hashem_international/" target="blank"><span class="socicon socicon-instagram"></span></a>
+						<a href="https://www.facebook.com/TzivosHashemInternational/" target="blank"><span class="socicon socicon-facebook"></span></a>
+					</div>
+					<p>&copy; 2019 Tzivos Hashem - All Rights Reserved</p>
+				</div>
+			</div>
+		</footer>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="js/circletype.min.js"></script>
+		<script src="js/jquery.nice-select.min.js"></script>
+		<script src='js/circles.min.js'></script>
+		<script type="text/javascript">
+				if ( location.protocol != 'https:' ) {
+					let url = window.location.href;
+					let pos = url.indexOf(':');
+					let newUrl = 'https' + url.substring( pos );
+					location.href = newUrl;
+				}
+
+		    $('#menu-opener').click(function(e){
+		    	$('header nav').toggleClass('open');
+		    });
+		    $(document).ready(function(e){
+					// only show content if correct password is supplied
+					let password = prompt("Please enter the correct password to access this page.");
+					if ( password.toLowerCase() == 'chidondrive5779' ) $("#main").show();
+					else alert("Incorrect password.");
+
+		    	// Round text
+					const circleType = new CircleType(document.getElementById('simple-arc'));
+					circleType.radius(60);
+
+				  var circlePercent = $('#circle-chart').data('percent');
+					var myCircle = Circles.create({
+					  id:                  'circle-chart',
+					  radius:              90,
+					  value:               circlePercent,
+					  maxValue:            100,
+					  width:               20,
+					  text:                function(value){return '<p>'+value + '%</p><img src="img/percent-ppl.png">';},
+					  colors:              ['#8fa3ad', '#4f78bb'],
+					  duration:            400,
+					  wrpClass:            'circles-wrp',
+					  textClass:           'circles-text',
+					  valueStrokeClass:    'circles-valueStroke',
+					  maxValueStrokeClass: 'circles-maxValueStroke',
+					  styleWrapper:        true,
+					  styleText:           true
+					});
+
+					// get children info 
+					let url = window.location.href;
+					let pos = url.indexOf('=');
+					let admin_id = 0;
+					let children = []; // need to know user_id of children when creating the subsidies
+					if ( pos > 0 ) admin_id = url.substr( pos + 1 );
+					if ( admin_id ) {
+						$.post('../ajax/getFamilyInfo.php', { admin: admin_id }, function( result ) {
+							let info = JSON.parse( result );
+							console.log( info );
+
+							if ( info.success ) {
+								// find out family goal
+								let numChildren = info.data.children.length;
+								let familyGoal = numChildren * 350;
+
+								let totalReg = 0;
+								let totalRohr = 0;
+								let totalDonation = 0;
+								for ( i in info.data.children ) {
+									totalReg += info.data.children[i].paid > 0 ? Math.round(info.data.children[i].paid): 0;
+									totalRohr += parseInt(info.data.children[i].rohr_subsidy) ? 100 : 0;
+									totalDonation += Math.round(info.data.children[i].total_donation); 
+								}
+								let totalRegPercent = totalReg ? ((totalReg / familyGoal) * 100).toFixed(2) : 0;
+								$("#totalRegFee").text( totalReg );
+								$(".registration").attr('data-percent', totalRegPercent );
+
+								let totalRohrPercent = totalRohr + totalReg ? (((totalRohr + totalReg) / familyGoal) * 100).toFixed(2) : 0;
+								$("#totalRohrSubsidy").text( totalRohr );
+								$(".subsidy").attr('data-percent', totalRohrPercent );
+
+								let totalDonationPercent = totalReg + totalRohr + totalDonation ? (((totalReg + totalRohr + totalDonation) / familyGoal) * 100).toFixed(2) : 0;
+								$("#totalDonation").text( totalDonation );
+								$(".donation").attr('data-percent', totalDonationPercent);
+
+								let remaining = familyGoal - totalReg - totalRohr -  totalDonation;
+								$("#remainingFee").text( remaining );
+								$("#familyGoal").text( familyGoal );
+
+								// first get parent info from first record
+								let adminInfo = info.data.children[0];
+								let father = adminInfo.father ? adminInfo.father : adminInfo.A_first;
+								let mother = adminInfo.mother ? adminInfo.mother : '';
+								let familyName = adminInfo.A_last;
+								$(".familyName").text( familyName );
+
+								let html = '';
+								let selection = '';
+								let familyCharts = '';
+								let childrenNames = [];
+								for ( i in info.data.children ) {
+									let child = info.data.children[i];
+									children.push( child.user_id );
+									let childName = child.first + ' ' + child.last;
+									childrenNames.push( childName );
+									let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
+
+									// create list of names
+									if ( info.data.children.length > 1 && (i == info.data.children.length - 1) ) {
+										html += " and ";
+									}
+									html += "<strong>" + childName + "</strong>, ";
+									
+									// create drop down selection of names
+									selection += "<option value='" + child.user_id + "'>" + childName + "</option>";
+
+									// figure out amounts
+									let regPaid = child.paid > 0 ? Math.round(child.paid) : 0;
+									let regPercent = regPaid ? ((regPaid / 350) * 100).toFixed(2) : 0;
+									let subsidy = parseInt(child.rohr_subsidy) ? 100 : 0;
+									let subsidyPercent = regPaid + subsidy ? ((( regPaid + subsidy ) / 350 ) * 100).toFixed(2) : 0;
+									let donation = Math.round(child.total_donation);
+									let donationPercent = regPaid + subsidy + donation ? ((( regPaid + subsidy + donation ) / 350 ) * 100).toFixed(2) : 0;
+									//let percent = (((child.total_donation + paid) / 350) * 100).toFixed(2);
+									let balance = 350 - donation - regPaid - subsidy;
+
+									// add to family charts 
+									familyCharts += `
+										<div class="kid">
+											<div class="bio">
+												<div class="image-wrapper">
+													<img src="//mashpia.com/${childPic}" style="border-radius: 50%; padding: 2px; width: 100%;" />
+												</div>
+												<div class="name">
+													<h5>${child.first}<br>${child.last}</h5>
+												</div>
+											</div>
+											<div class="bar">
+												<div class="bar-circle">
+													<div class="bar-circle__inner">
+														<span>$350</span>
+													</div>
+												</div>
+												<div class="bar-bar">
+													<div class="bar-bar__wrapper">
+														<div class="bar-bar__line registration" data-percent="${regPercent}">
+															<div class="bar-bar__circle"></div>
+															<div class="bar-bar__marker">
+																<img src="img/marker-blue.png" />
+																<p>$${regPaid}</p>
+															</div>
+														</div>
+														<div class="bar-bar__line subsidy" data-percent="${subsidyPercent}">
+															<div class="bar-bar__circle"></div>
+															<div class="bar-bar__marker">
+																<img src="img/marker.png" />
+																<p>${subsidy}</p>
+															</div>
+														</div>
+														<div class="bar-bar__line donation" data-percent="${donationPercent}">
+															<div class="bar-bar__circle"></div>
+															<div class="bar-bar__marker">
+																<img src="img/marker-blue.png" />
+																<p>$${donation}</p>
+															</div>
+														</div>
+														<div class="remaining">
+															<div class="bar-bar__marker">
+																<p>$${balance}<br>Remaining</p>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									`;
+								}	
+								$("#childrenNames").html( html );
+								$("#childrenSelection").append( selection );
+								$(".family-charts").append( familyCharts );
+
+								// Animate bars
+								$('.bar-bar__line').each(function(index, i){
+									var percent = $(this).data('percent');
+									$(this).width(percent + '%');
+								});
+
+								// Select 
+								$('select').niceSelect();
+								$('select.children').change(function(e){
+									var val = $(this).find('option:selected').text();
+									$('.children-change').val('$' + val + '.00');
+								});
+
+								$("#childrenSelection").change( function() {
+									let val = $(this).val();
+									if ( val ) {
+										$("#donationToOne").trigger('click');
+									} 
+								});
+
+								// list of sponsors
+								let sponsorList = '';
+								console.log( info.data.sponsors );
+								for ( i in info.data.sponsors ) {
+									let sponsor = info.data.sponsors[i];
+									let dedication = sponsor.notes ? sponsor.notes : '';
+									let name = sponsor.display_name ? sponsor.display_name : sponsor.name;
+									if ( sponsor.anonymous ) name = "Anonymous";
+									sponsorList += `
+										<div class="recent-sponsor">
+											<div class="sponsor-name">
+												<p class="sponsor-name">${sponsor.display_name}</p>
+												<p class="sponsor-credit">${dedication}</p>
+											</div>
+											<div class="sponsor-amount">
+												<p>$${sponsor.donation_amount}</p>
+											</div>
+										</div>
+									`;
+								}
+								$(".sponsor-list").append( sponsorList );
+
+								/* Scroll list */
+								// var times = ((($('window').height() / 48) - 1) / $('.sponsor-list .sponsor').length);
+								// var times = (($(window).height() / 48)) / $('.sponsor-list .recent-sponsor').length;
+								// for (i=0;i<times;i++){
+								// 	$('.sponsor-list .recent-sponsor').each(function(e){
+								// 		$(this).clone().appendTo('.sponsor-list');
+								// 	})
+								// }
+								
+								// var doc = window.document,
+								// 	context = doc.querySelector('.sponsor-list'),
+								// 	clones = context.querySelectorAll('.is-clone'),
+								// 	disableScroll = false,
+								// 	scrollHeight = 0,
+								// 	scrollPos = 0,
+								// 	clonesHeight = 0,
+								// 	i = 0;
+								// function getScrollPos () {
+								// 	return (context.pageYOffset || context.scrollTop) - (context.clientTop || 0);
+								// }
+								// function setScrollPos (pos) {
+								// 	context.scrollTop = pos;
+								// }
+								// function getClonesHeight () {
+								// 	clonesHeight = 0;
+								// 	for (i = 0; i < clones.length; i += 1) {
+								// 		clonesHeight = clonesHeight + clones[i].offsetHeight;
+								// 	}
+								// 	return clonesHeight;
+								// }
+								// function reCalc () {
+								// 	scrollPos = getScrollPos();
+								// 	scrollHeight = context.scrollHeight;
+								// 	clonesHeight = getClonesHeight();
+								// 	if (scrollPos <= 0) {
+								// 		setScrollPos(1); // Scroll 1 pixel to allow upwards scrolling
+								// 	}
+								// }
+								// function scrollUpdate () {
+								// 	if (!disableScroll) {
+								// 		scrollPos = getScrollPos();
+								// 		if (clonesHeight + scrollPos >= scrollHeight) {
+								// 			// Scroll to the top when you’ve reached the bottom
+								// 			setScrollPos(1); // Scroll down 1 pixel to allow upwards scrolling
+								// 			disableScroll = true;
+								// 		} else if (scrollPos <= 0) {
+								// 			// Scroll to the bottom when you reach the top
+								// 			setScrollPos(scrollHeight - clonesHeight);
+								// 			disableScroll = true;
+								// 		}
+								// 	}
+								// 	if (disableScroll) {
+								// 		// Disable scroll-jumping for a short time to avoid flickering
+								// 		window.setTimeout(function () {
+								// 			disableScroll = false;
+								// 		}, 40);
+								// 	}
+								// }
+								// function init () {
+								// 	reCalc();
+								// 	context.addEventListener('scroll', function () {
+								// 		window.requestAnimationFrame(scrollUpdate);
+								// 	}, false);
+								// 	window.addEventListener('resize', function () {
+								// 		window.requestAnimationFrame(reCalc);
+								// 	}, false);
+								// }
+								// if (document.readyState !== 'loading') {
+								// 	init()
+								// } else {
+								// 	doc.addEventListener('DOMContentLoaded', init, false)
+								// }
+
+								// setInterval(function(e){
+								// 	jQuery('.sponsor-list').scrollTop(jQuery('.sponsor-list').scrollTop() + 240);
+								// }, 1500)
+
+							} else {
+								alert( info.message );
+							}
+						});
+					} else {
+						location.href = "site/";
+					}
+
+					$("#donationForm").submit( function( e ) {
+						e.preventDefault();
+
+						// get all info together
+						let donation = {};
+						donation.family = admin_id;
+						donation.amount = $("#donationAmount").val();
+						donation.forChild = $("#childrenSelection").val();
+						donation.children = children;
+						donation.name = $("#name").val();
+						donation.display_name = $("#display_name").val();
+						donation.anonymous = $("#anonymous").is(":checked") ? 1 : 0;
+
+						if ( !donation.amount ) {
+							alert("You have not indicated how much you would like to donate.");
+							return false;
+						}
+
+						let cc = {}
+						cc.num = $("#cc_num").val();
+						cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val();
+						cc.cvv = $("#cc_cvv").val();
+
+						let billing = {}
+						billing.apt = $("#bill_apt").val();
+						billing.address = $("#bill_address").val();
+						billing.city = $("#bill_city").val();
+						billing.state = $("#bill_state").val();
+						billing.zip = $("#bill_zip").val();
+						billing.country = $("#bill_country").val();
+						cc.billing = billing;
+
+						donation.cc = cc;
+						donation.email = $("#email").val();
+						donation.phone = $("#phone").val();
+						donation.dedication = $("#dedication").val();
+
+						//console.log( donation );
+						$.post('../ajax/processFamilyDonation.php', { donation_info: donation }, function( result ) {
+							console.log( result );
+							let res = JSON.parse( result );
+							alert( res.message );
+							if ( res.success ) {
+								location.href = "thank-you.html";
+							} 
+						});
+					});
+		    });
+		</script>
+	</body>
+</html>

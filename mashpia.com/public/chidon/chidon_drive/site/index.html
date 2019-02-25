@@ -6,6 +6,7 @@
 	  <meta charset="UTF-8">
 		<meta name="google" content="notranslate">
 		<title>Chidon</title>
+		<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 		<link rel="stylesheet" href="css/font.css" type="text/css" />
 		<link rel="stylesheet" href="css/style.css" type="text/css" />
 		<link rel="stylesheet" href="css/home.css" type="text/css" />
@@ -36,10 +37,10 @@
 		<div id="fullpage">
 			<!-- Home Section -->
 			<div class="section " id="section0">
-				<div class="slide" id="slide1"><div class="wrapper"><h2>This. is. <br>Passion.</h2></div></div>
-				<div class="slide" id="slide2"><div class="wrapper"><h2>This. is. <br>Belonging.</h2></div></div>
-				<div class="slide" id="slide3"><div class="wrapper"><h2>This. is. <br>Empowerment.</h2></div></div>
-				<div class="slide" id="slide4"><div class="wrapper"><h2>This. is. <br>Chidon.</h2></div></div>
+				<div class="slide asyncImage" data-src="img/home/passion.jpg" id="slide1"><div class="wrapper"><h2>This is <br>Passion</h2></div></div>
+				<div class="slide asyncImage" data-src="img/home/belonging.jpg" id="slide2"><div class="wrapper"><h2>This is <br>Belonging</h2></div></div>
+				<div class="slide asyncImage" data-src="img/home/empowerment.jpg" id="slide3"><div class="wrapper"><h2>This is <br>Empowerment</h2></div></div>
+				<div class="slide asyncImage" data-src="img/home/chidon.jpg" id="slide4"><div class="wrapper"><h2>This is <br>Chidon</h2></div></div>
 				<div class="buttons-wrapper">
 					<a href="enroll.html" class="button" onClick="alert('Shabbaton Enrollment will IYH open up on Tuesday February 19, 2019.\nThank you for your patience.'); return false;">Shabbaton Enrollment <img src="img/arrow.png" /></a>
 					<a href="donate.html" class="button">Donate <img src="img/arrow.png" /></a>
@@ -57,7 +58,7 @@
 			</div>
 
 			<!-- Leaderboard Section -->
-			<div class="section" id="section2">
+			<div class="section asyncImage" data-src="img/home/leaderboard.jpg" id="section2">
 				<div class="wrapper">
 					<h2 class="title">Leading Communities</h2>
 					<div class="leaders">
@@ -67,7 +68,7 @@
 				</div>
 			</div>
 
-			<div class="section" id="section3">
+			<div class="section asyncImage" id="section3" data-src="img/home/trophies.jpg">
 				<div class="wrapper">
 					<h2 class="title">Trophy Partners</h2>
 					<div class="trophy-wrapper">
@@ -130,7 +131,7 @@
 				</div>
 			</div>
 
-			<div class="section" id="section4">
+			<div class="section asyncImage" id="section4" data-src="img/home/medals.jpg">
 				<div class="wrapper">
 					<h2 class="title">Medal Partners</h2>
 					<div class="medals-wrapper">
@@ -174,7 +175,7 @@
 				</div>
 			</div>
 
-			<div class="section" id="section5">
+			<div class="section asyncImage" id="section5" data-src="img/home/plaques.jpg">
 				<div class="wrapper">
 					<h2 class="title">Plaque Partners</h2>
 					<div class="plaques-wrapper">
@@ -236,7 +237,7 @@
 				</div>
 			</div>
 
-			<div class="section" id="section6">
+			<div class="section asyncImage" id="section6" data-src="img/home/chidon.jpg">
 				<div class="wrapper">
 					<h2 class="title">Our Corporate Sponsors</h2>
 					<div class="sponsors-wrapper first">
@@ -446,6 +447,61 @@
 						}
 					});
 				});
+		
+		
+		</script>
+		<script>
+		(() => {
+  'use strict';
+  // Page is loaded
+  
+  const objects = document.getElementsByClassName('asyncImage');
+  Array.from(objects).map((item) => 
+  {
+    // Start loading image
+    const img = new Image();
+    img.src = item.dataset.src;	
+    // Once image is loaded replace the src of the HTML element
+    img.onload = () => 
+	{
+      item.classList.remove('asyncImage');
+	  console.log ('setting background '+item.dataset.src);
+      return item.nodeName === 'IMG' ? 
+        item.src = item.dataset.src :        
+        item.style.backgroundImage = `url(${item.dataset.src})`;
+    };
+  });
+})();
+	
+	/*
+	var img = new Image();
+    img.src = '/img/home/support-chidon-color.jpg';	
+	img.src = '/img/home/support-family-color.jpg';	
+    	
+    
+	$('#section1 .family').hover(function() 
+			{ 
+				$(this).css("background-image", "url('/img/home/support-family-color.jpg')"); 
+				<!-- alert ('hi'); -->
+			},
+			function() 
+			{ 
+				$(this).css("background-image", "url('/img/home/thumbs/support-family.jpg')"); 
+				<!-- alert ('hi'); -->
+			}); 
+	
+	$('#section1 .chidon').hover(function() 
+			{ 
+				$(this).css("background-image", "url('/img/home/support-chidon-color.jpg')"); 
+				<!-- alert ('hi'); -->
+			},
+			function() 
+			{ 
+				$(this).css("background-image", "url('/img/home/thumbs/support-chidon.jpg')"); 
+				<!-- alert ('hi'); -->
+			}); 
+
+	*/
 		</script>
 	</body>
 </html>

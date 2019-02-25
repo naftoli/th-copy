@@ -33,7 +33,8 @@
 }
 #section0 h2 {
 	position: absolute;
-	bottom: 5rem;
+	bottom: 14rem;
+	left: 0;
 }
 #section0 .buttons-wrapper {
   position: absolute;
@@ -71,10 +72,8 @@
 .thermometer-image .bar .bar-line__marker-number {
 	font-size: 18px;
 	font-weight: 700;
-	/* color: #6988c5; */
-	/* top: 3px; */
-	margin-top: -30px !important;
-	left: 1px;
+	color: #6988c5;
+	top: 3px;
 }
 .thermometer-image .bar-line__other-number {
 	position: absolute;
@@ -85,6 +84,7 @@
 	color: #6988c5;
 	z-index: 1;
 }
+
 
 #section1 .half {
 	width: 50%;
@@ -99,23 +99,29 @@
 	transition: .5s;
 }
 #section1 .chidon {
-	background-image: url(../img/home/support-chidon.jpg);
+	/* background-image: url(../img/home/support-chidon.jpg); */
+	background-image: url(../img/home/thumbs/support-chidon.jpg);
 	padding-left: calc(((100vw - 1200px) / 2) + 2rem);
 	justify-content: flex-start;
 }
+/*
 #section1 .chidon:hover {
 	background-image: url(../img/home/support-chidon-color.jpg);
 }
+*/
 #section1 .family {
-	background-image: url(../img/home/support-family.jpg);
+	/* background-image: url(../img/home/support-family.jpg); */
+	background-image: url(../img/home/thumbs/support-family.jpg);
 	padding-right: calc(((100vw - 1200px) / 2) + 2rem);
 }
+/*
 #section1 .family:hover {
 	background-image: url(../img/home/support-family-color.jpg);
 }
-
+*/
 #section2 {
-	background-image: url(../img/home/leaderboard.jpg);
+	/* background-image: url(../img/home/leaderboard.jpg); */
+	background-image: url(../img/home/thumbs/leaderboard.jpg);
 	padding-top: 10rem;
 	text-align: center;
 }
@@ -173,7 +179,8 @@
 }
 
 #section3{
-	background-image: url(../img/home/trophies.jpg);
+	/* background-image: url(../img/home/trophies.jpg); */
+	background-image: url(../img/home/thumbs/trophies.jpg);
 	padding-top: 10rem;
 	text-align: center;
 }
@@ -204,6 +211,7 @@
   height: 220%;
   position: absolute;
   bottom: -30px;
+  left: -50px;
 }
 #section3 .trophy .image-wrapper img {
   width: auto;
@@ -225,7 +233,7 @@
 #section3 .trophy.silver .text-wrapper, #section3 .trophy.silver .text-wrapper h6 {
 	color: #b7b1ae;
 }
-#section3 .trophy .text-wrapper, #section3 .trophy .text-wrapper h6 {
+#section3 .trophy.bronze .text-wrapper, #section3 .trophy.bronze .text-wrapper h6 {
 	color: #e39362;
 }
 #section3 .trophy.bronze .text-wrapper .trophy-type {
@@ -260,7 +268,8 @@
 }
 
 #section4 {
-	background-image: url(../img/home/medals.jpg);
+	/* background-image: url(../img/home/medals.jpg); */
+	background-image: url(../img/home/thumbs/medals.jpg);
 	padding-top: 10rem;
 	text-align: center;	
 }
@@ -284,7 +293,8 @@
 }
 
 #section5 {
-	background-image: url(../img/home/plaques.jpg);
+	/* background-image: url(../img/home/plaques.jpg); */
+	background-image: url(../img/home/thumbs/plaques.jpg);
 	padding-top: 10rem;
 	text-align: center;	
 }
@@ -316,7 +326,8 @@
 
 
 #section6 {
-	background-image: url(../img/home/chidon.jpg);
+	/* background-image: url(../img/home/chidon.jpg); */
+	background-image: url(../img/home/thumbs/chidon.jpg);
 	padding-top: 10rem;
 	text-align: center;	
 }
@@ -353,19 +364,23 @@
 
 
 #slide1{
-	background-image: url(../img/home/passion.jpg);
+	/* background-image: url(../img/home/passion.jpg); */
+	background-image: url(../img/home/thumbs/passion.jpg);
 	padding: 6% 0 0 0;
 }
 #slide2{
-	background-image: url(../img/home/belonging.jpg);
+	/* background-image: url(../img/home/belonging.jpg); */
+	background-image: url(../img/home/thumbs/belonging.jpg);
 	padding: 6% 0 0 0;
 }
 #slide3{
-	background-image: url(../img/home/empowerment.jpg);
+	/* background-image: url(../img/home/empowerment.jpg); */
+	background-image: url(../img/home/thumbs/empowerment.jpg);
 	padding: 6% 0 0 0;
 }
 #slide4{
-	background-image: url(../img/home/chidon.jpg);
+	/* background-image: url(../img/home/chidon.jpg); */
+	background-image: url(../img/home/thumbs/chidon.jpg);
 	padding: 6% 0 0 0;
 }
 
@@ -418,6 +433,7 @@
 	}
 	#section3 .trophies-wrapper .trophy .image-wrapper {
 		width: 20%;
+		left: 0;
 	}
 	#section3 .trophies-wrapper .trophy .image-wrapper img {
 		width: 100%;
@@ -449,16 +465,20 @@
 	}
 
 }
+@media(max-width: 900px) {
+	#section0 h2 {
+    bottom: 21rem;
+  }
+  .thermometer-image {
+  	width: 43%;
+  	bottom: 16rem;
+  }
+}
 
 @media(max-width: 860px) {
 	#section2, #section3, #section4, #section5 {
 		height: auto !important;
 	}
-	#section0 h2 {
-    bottom: 13rem;
-    right: 5rem;
-    text-align: right;
-  }
   #section3 .trophy-wrapper {
   	flex-wrap: wrap;
   }
@@ -501,6 +521,22 @@
     min-height: 5rem;
 	}
 }
+
+@media(max-width: 767px) {
+	.thermometer-image {
+		display: none;
+	}
+	#section0 h2 {
+		bottom: 9rem;
+	}
+}
+
+@media(max-width: 575px) {
+	#section0 h2 {
+		bottom: 15rem;
+	}
+}
+
 @media(max-width: 400px){
 	#section6 {
     min-height: 375vw;
