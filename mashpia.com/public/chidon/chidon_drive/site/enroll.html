@@ -421,6 +421,39 @@
 							break;
 					}
 
+					let history = [];
+					if ( child.history ) {
+						if ( child.history.indexOf(',') != -1 ) {
+							history = child.history.split(',');
+						} else {
+							history = [ child.history ];
+						}
+					}
+
+					console.log( history );
+
+					// reset all to unchecked
+					$(".history").each( function() {
+						if ( $(this).is(":checked") ) $(this).trigger('click');
+					}); 
+
+					for ( h in history ) {
+						switch ( history[h] ) {
+							case '5775':
+								$(".history").eq(0).trigger('click');
+								break;
+							case '5776':
+							$(".history").eq(1).trigger('click');
+								break;
+							case '5777':
+							$(".history").eq(2).trigger('click');
+								break;
+							case '5778':
+								$(".history").eq(3).trigger('click');
+								break;
+						}
+					}
+
 					$("#chidonNotes").val( child.notes );
 					$("#chidonAnswer").val( child.answers );
 
@@ -538,6 +571,7 @@
 						} else {
 							html += `<input type="submit" class="button submit pay" value="save & go to payment" />`;
 						}
+						$(".save-detail").empty();
 						$(".save-detail").append( html );
 
 						$(".personal-information").show();
