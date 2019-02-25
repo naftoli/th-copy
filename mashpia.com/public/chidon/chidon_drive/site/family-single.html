@@ -319,15 +319,15 @@
 									totalRohr += parseInt(info.data.children[i].rohr_subsidy) ? 100 : 0;
 									totalDonation += Math.round(info.data.children[i].total_donation); 
 								}
-								let totalRegPercent = totalReg ? ((totalReg / familyGoal) * 100).toFixed(2) : 0;
+								let totalRegPercent = totalReg ? Math.round((totalReg / familyGoal) * 100) : 0;
 								$("#totalRegFee").text( totalReg );
 								$(".registration").attr('data-percent', totalRegPercent );
 
-								let totalRohrPercent = totalRohr + totalReg ? (((totalRohr + totalReg) / familyGoal) * 100).toFixed(2) : 0;
+								let totalRohrPercent = totalRohr + totalReg ? Math.round(((totalRohr + totalReg) / familyGoal) * 100) : 0;
 								$("#totalRohrSubsidy").text( totalRohr );
 								$(".subsidy").attr('data-percent', totalRohrPercent );
 
-								let totalDonationPercent = totalReg + totalRohr + totalDonation ? (((totalReg + totalRohr + totalDonation) / familyGoal) * 100).toFixed(2) : 0;
+								let totalDonationPercent = totalReg + totalRohr + totalDonation ? Math.round(((totalReg + totalRohr + totalDonation) / familyGoal) * 100) : 0;
 								if ( totalDonationPercent > 100 ) totalDonationPercent = 100;
 								$("#totalDonation").text( totalDonation );
 								$(".donation").attr('data-percent', totalDonationPercent);
@@ -366,12 +366,12 @@
 
 									// figure out amounts
 									let regPaid = child.paid > 0 ? Math.round(child.paid) : 0;
-									let regPercent = regPaid ? ((regPaid / 350) * 100).toFixed(2) : 0;
+									let regPercent = regPaid ? Math.round((regPaid / 350) * 100) : 0;
 									if ( regPercent > 100 ) regPercent = 100;
 									let subsidy = parseInt(child.rohr_subsidy) ? 100 : 0;
-									let subsidyPercent = regPaid + subsidy ? ((( regPaid + subsidy ) / 350 ) * 100).toFixed(2) : 0;
+									let subsidyPercent = regPaid + subsidy ? Math.round((( regPaid + subsidy ) / 350 ) * 100) : 0;
 									let donation = Math.round(child.total_donation);
-									let donationPercent = regPaid + subsidy + donation ? ((( regPaid + subsidy + donation ) / 350 ) * 100).toFixed(2) : 0;
+									let donationPercent = regPaid + subsidy + donation ? Math.round((( regPaid + subsidy + donation ) / 350 ) * 100) : 0;
 									if ( donationPercent > 100 ) donationPercent = 100;
 									//let percent = (((child.total_donation + paid) / 350) * 100).toFixed(2);
 									let balance = 350 - donation - regPaid - subsidy;

@@ -345,6 +345,26 @@
 					let newUrl = 'https' + url.substring( pos );
 					location.href = newUrl;
 				}
+
+				$.post('../ajax/getTotalDonation.php', function( result ) {
+					let res = JSON.parse( result );
+					console.log( res );
+					if ( res.success ) {
+						let total = Math.round( res.total );
+						let percent = Math.round( (total / 875000) * 100 );
+						for ( i = 1; i < 5; i++ ) {
+							$("#slide" + i + " div.leader").data('percent', percent);
+							$("#slide" + i + " div.leader").data('amount', total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+							$("#slide" + i + " span.bar-line__marker-number").text('$' + total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+						}
+						$('#section0 .leader').each(function(index, i){
+							var percent = $(this).data('percent');
+							$(this).find('.bar-line__bar').width(percent + '%');
+						});	
+					} else {
+						alert( res.error );
+					}
+				});
 				
 		    $('#fullpage').fullpage({
 		     		licenseKey: '1A33397E-DD2A498D-A23E76EB-6E563849',

@@ -44,7 +44,47 @@
 #section0 .buttons-wrapper a {
 	margin-right: 1rem;
 }
-
+.thermometer-image {
+	position: absolute;
+	bottom: 9rem;
+	left: 0;
+	width: 33%;
+}
+.thermometer-image .bar .bar-percent {
+	top: -4px;
+	padding: 8px 8px 5px 8px;
+}
+.thermometer-image .bar .bar-percent .bar-percent__number {
+	width: 6rem;
+	height: 6rem;
+}
+.thermometer-image .bar .bar-line {
+	border-width: 4px;
+}
+.thermometer-image .bar .bar-line__bar {
+	height: 25px;
+}
+.thermometer-image .bar .bar-line__circle {
+	width: 2rem;
+	height: 2rem;
+}
+.thermometer-image .bar .bar-line__marker-number {
+	font-size: 18px;
+	font-weight: 700;
+	/* color: #6988c5; */
+	/* top: 3px; */
+	margin-top: -30px !important;
+	left: 1px;
+}
+.thermometer-image .bar-line__other-number {
+	position: absolute;
+	top: 3px;
+	right: -150px;
+	font-size: 18px;
+	font-weight: 700;
+	color: #6988c5;
+	z-index: 1;
+}
 
 #section1 .half {
 	width: 50%;
