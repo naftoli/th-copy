@@ -1,0 +1,235 @@
+/* 
+ * Donate page stylesheet for Chidon
+ * 
+ * Date: 2/3/2019
+ * Author: Esty
+ */
+
+ .main {
+ 	background: url(../img/donate/donate-bg.jpg);
+ 	background-size: cover;
+ 	padding-top: 10rem;
+ }
+ h2.title {
+ 	text-align: center;
+ }
+ .main .wrapper {
+ 	padding-top: 5rem;
+ }
+
+.nice-select {
+	background-color: #191c69;
+	border: none;
+	border-radius: 2px;
+	text-transform: uppercase;
+	font-weight: 600;
+	padding: .5rem 30px .5rem 18px;
+	height: 2rem;
+	line-height: 1em;
+}
+.nice-select .list {
+  background-color: #181c68;
+}
+.nice-select .option:hover, .nice-select .option.focus, .nice-select .option.selected.focus {
+  background-color: transparent;
+  padding: 0;
+  text-align: center;
+}
+
+input {
+	background: #181c68;
+	border-radius: 2px;
+	color: #85abda;
+	border: none;
+	outline: none;
+	padding: .5rem;
+}
+.form {
+	background: rgba(6, 9, 47, .8);
+	border-radius: .5rem;
+	width: 100%;
+	max-width: 600px;
+	padding: 2rem;
+	margin: auto;
+	margin-top: 4rem;
+}
+.form input {
+	width: 100%;
+}
+.form textarea {
+	height: 5rem;
+	margin-bottom: 1rem;
+} 
+.form label, .form p {
+	font-weight: 600;
+	display: block;
+	color: #85abda;
+	margin-bottom: .5rem;
+	font-size: 1.2rem;
+	margin-top: 1rem;
+}
+.form p {
+	font-weight: normal;
+}
+.form label span {
+	font-weight: 200;
+	font-style: italic;
+}
+.form .field {
+	margin-bottom: 1rem;
+}
+.form h5 {
+	color: #85abda;
+	font-size: 1.2rem;
+	text-transform: uppercase;
+	margin-top: 2rem;
+	font-family: 'Gotham Narrow', sans-serif;
+}
+.form h5:first-child {
+	margin-top: 1rem;
+}
+.form .group {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.form .group .field {
+	flex-grow: 1;
+  margin-left: 1rem;
+}
+.form .group .field:first-child {
+  margin-left: 0;
+}
+.form .group input {
+	width: 100%;
+}
+.form .nice-select {
+	width: 100%;
+	float: none;
+  color: #85abda;
+}
+.form .nice-select .option {
+  color: #85abda;
+}
+.form .nice-select .option:hover, .form .nice-select .option.focus, .form .nice-select .option.selected.focus {
+	text-align: left;
+	padding-left: 1rem;
+}
+.form .donate {
+	width: 10rem;
+	margin: auto;
+  display: block;
+  padding: .8rem;
+}
+
+.form.login p {
+  font-weight: normal;
+  text-align: center;
+  font-size: 1.5rem;
+  max-width: 30rem;
+  margin: 1rem auto 2rem;
+}
+.form.login input {
+  width: calc(100% - 6rem);
+  float: right;
+  margin-top: -5px;
+}
+.form.login .field {
+  margin-bottom: 1rem;
+  max-width: 25rem;
+  margin: .5rem auto;
+  padding: .1rem 0;
+  display: block;
+}
+.form.login input.button {
+	clear: both;
+}
+.form.login input.button {
+  clear: both;
+  float: none;
+  width: 8rem;
+  margin: 1rem auto;
+  display: block;
+  padding: .8rem;
+}
+
+
+
+.form.kids-wrapper {
+  display: flex;
+  justify-content: space-around;
+}
+.kids-wrapper .image-wrapper {
+  width: 7rem;
+  height: 7rem;
+  background: #85adba;
+  border-radius: 100%;
+  margin: auto;
+}
+.kids-wrapper .kid {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  max-width: 23%;
+}
+.kids-wrapper .kid h6 {
+	text-align: center;
+	margin: 1rem 0;
+}
+.kids-wrapper .button {
+	width: auto;
+	padding: .8rem;
+	text-align: center;
+	margin-top: 1rem;
+}
+
+.group .button {
+	margin-top: 3rem;
+	max-width: 45%;
+}
+
+@media(max-width: 600px) {
+	.form.kids-wrapper {
+		flex-wrap: wrap;
+	}
+	.kids-wrapper .kid {
+		width: 45%;
+		margin-bottom: 2rem;
+		max-width: 45%;
+	}
+}
+@media(max-width: 400px) {
+	.form.kids-wrapper {
+		flex-direction: column;
+	}
+	.kids-wrapper .kid {
+		width: 100%;
+		max-width: 100%;
+		max-width: none;
+	}
+}
+
+/* Date: 2/14/2019 */
+.next-btn {
+	padding-top: 40px;
+	padding-bottom: 20px;
+	text-align: center;
+}
+.next-btn .button {
+	padding: 10px;
+	width: 150px;
+}
+.form.blue-circle  {
+	padding: 30px 20px 40px;
+}
+.blue-circle .image-wrapper {
+	background: #4f78bb;
+}
+.save-detail {
+	text-align: center;
+}
+.group.save-detail .button {
+	width: 200px;
+	margin: 25px auto 0;
+}

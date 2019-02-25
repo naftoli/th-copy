@@ -6,10 +6,11 @@
 	  <meta charset="UTF-8">
 		<meta name="google" content="notranslate">
 		<title>Donate | Chidon</title>
+		<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 		<link rel="stylesheet" href="css/font.css" type="text/css" />
 		<link rel="stylesheet" href="css/style.css" type="text/css" />
 		<link rel="stylesheet" href="css/nice-select.css" type="text/css" />
-		<link rel="stylesheet" href="css/donate.css" type="text/css" />
+		<link rel="stylesheet" href="css/donate.css" type="text/css" />		
 	</head>
 
 	<body>
@@ -32,7 +33,7 @@
 				</div>
 			</div>
 		</header>
-		<div class="main">
+		<div class="main asyncImage" data-src="img/donate/donate-bg.jpg">
 			<div class="wrapper">
 				<h2 class="title">Support Chidon</h2>
 				<div class="bar-row">
@@ -138,16 +139,7 @@
 							<h5>Billing Address</h5>						
 							<div class="field">
 								<label>Country:</label>
-								<select id="bill_country">
-									<option>United States</option>
-									<option>Canada</option>
-									<option>England</option>
-									<option>Australia</option>
-									<option>S Africa</option>
-									<option>France</option>
-									<option>Europe</option>
-									<option>S America</option>
-								</select>
+								<select id="bill_country"><option>United States</option><option>Canada</option></select>
 							</div>						
 							<div class="field">
 								<label>Address:</label>
@@ -253,6 +245,20 @@
 		<script src="js/jquery.nice-select.min.js"></script>
 		<script src='js/circles.min.js'></script>
 		<script type="text/javascript">
+
+			$(function() {
+		    var header = $("header");
+		    $(window).scroll(function() {    
+		        var scroll = $(window).scrollTop();
+		    
+		        if (scroll >= 100) {
+		            header.addClass("header-alt");
+		        } else {
+		            header.removeClass('header-alt');
+		        }
+		    });
+		});
+			
 		    $('#menu-opener').click(function(e){
 		    	$('header nav').toggleClass('open');
 				});
@@ -492,6 +498,29 @@
 					// 	jQuery('.sponsor-list').scrollTop(jQuery('.sponsor-list').scrollTop() + 240);
 					// }, 1500)
 		    });
+		</script>
+		<script>
+		(() => {
+  'use strict';
+  // Page is loaded
+  
+  const objects = document.getElementsByClassName('asyncImage');
+  Array.from(objects).map((item) => 
+  {
+    // Start loading image
+    const img = new Image();
+    img.src = item.dataset.src;	
+    // Once image is loaded replace the src of the HTML element
+    img.onload = () => 
+	{
+      item.classList.remove('asyncImage');
+	  
+      return item.nodeName === 'IMG' ? 
+        item.src = item.dataset.src :        
+        item.style.backgroundImage = `url(${item.dataset.src})`;
+    };
+  });
+})();
 		</script>
 	</body>
 </html>

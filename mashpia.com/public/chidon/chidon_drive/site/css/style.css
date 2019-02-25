@@ -12,11 +12,17 @@
 	font-family: 'Gotham Narrow', sans-serif;
 	box-sizing: border-box;
 }
-.wrapper{
+.wrapper {
  	max-width: 1200px;
  	margin: auto;
  	padding: 2rem;
- 	overflow: hidden;
+}
+.wrapper:before, .wrapper:after {
+	display: table;
+	content: "";
+}
+.wrapper:after {
+	clear: both;
 }
 a {
 	text-decoration: none;
@@ -58,7 +64,7 @@ h2.title {
 
 /* Header */
 header {
-	position: absolute;
+	position: fixed;
 	width: 100%;
 	z-index: 100;
 }
@@ -110,6 +116,18 @@ header .icons a img {
 	max-width: 100px;
 	max-height: 60px;
 }
+.header-alt, .fp-enabled header {
+	background: #000932;
+}
+[class*="fp-viewing-home"] header {
+	background: transparent;
+}
+.fp-enabled .dark-nav header nav a {
+	color: #4f78bb;
+}
+.dark-nav[class*="fp-viewing-home"] header nav a {
+	color: #000000;
+}
 
 /* Form elements */
 .checkbox {
@@ -129,15 +147,22 @@ header .icons a img {
 	display: block;
 	width: 100%;
 	height: 100%;
-	background: #85abda;
+	background: url(../img/check.png);
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	background-size: 10px auto;
 	position: absolute;
 	top: 0;
 	left: 0;
+	-webkit-transform: scale(0);
+	-ms-transform: scale(0);
 	transform: scale(0);
 	transition: .2s;
   z-index: 2;
 }
 .checkbox input:checked ~ span {
+	-webkit-transform: scale(1);
+	-ms-transform: scale(1);
 	transform: scale(1);
 }
 
@@ -150,6 +175,9 @@ header .icons a img {
 	padding: .5rem 30px .5rem 18px;
 	height: 2rem;
 	line-height: 1em;
+}
+.nice-select:after {
+	border-color: #85abda !important;
 }
 .nice-select .list {
   background-color: #181c68;
@@ -319,7 +347,8 @@ input, textarea {
 }
 .bar .bar-line__marker {
 	position: absolute;
-	right: -10px;
+	/* right: -10px; */
+	right: -70px;
 	top: -30px;
 	width: 30px;
 }
@@ -453,13 +482,14 @@ footer .footer-bottom .social a {
     top: 10rem;
     left: 0;
     z-index: 200;
-	 	background: #000932;
-	 	display: flex;
-	 	flex-direction: column;
-	 	justify-content: space-around;
-	 	align-items: center;
-	 	overflow: hidden;
-	 	transition: .2s;
+	/* background: #000932; */
+	background: #EE9825;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	overflow: hidden;
+	transition: .2s;
 	}
 	header nav.open {
     height: calc(100vh - 10rem);
@@ -480,6 +510,19 @@ footer .footer-bottom .social a {
 	footer nav {
 		width: 100%;
 	}
+}
+
+@media(max-width: 767px) {
+body #section0 h2 {
+	left: 2rem;
+	font-size: 24px;
+	right: auto;
+}
+body #section0 .buttons-wrapper {
+	right: auto;
+	left: 2rem;
+	bottom: 3rem;
+}
 }
 
 @media(max-width: 500px) {
@@ -506,5 +549,45 @@ footer .footer-bottom .social a {
 	}
 	footer nav ul {
 		margin: 1rem 0;
+	}
+
+	footer .footer-bottom .social a {
+		margin-right: .2rem;
+	}
+	.two-btn-group {
+		flex-direction: column;
+	}
+	.form .group.two-btn-group input {
+		max-width: 100%;
+	}
+	.form .group.two-btn-group input.continue {
+		margin-top: 15px;
+	}
+}
+
+@media(max-width: 480px) {
+.select-amount .select-item .nice-select {
+	width: 100%;
+}
+.section .search-wrapper, .section .search-wrapper .button, .section .search-wrapper input {
+	width: 100%;
+}
+.section .search-wrapper .button {
+	margin-top: 8px;
+}
+body #section0 .buttons-wrapper {
+	right: auto;
+	left: 2rem;
+}
+body #section1 .half {
+	    justify-content: flex-start;
+	    padding-left: 2rem;
+}
+
+}
+
+@media(max-width: 359px) {
+	.form #donationForm label {
+		font-size: .9rem;
 	}
 }
