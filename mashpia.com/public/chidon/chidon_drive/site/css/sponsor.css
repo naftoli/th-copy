@@ -22,7 +22,8 @@
 }
 
 #section0 {
-	background-image: url(../img/sponsor/sponsor.jpg);
+	/* background-image: url(../img/sponsor/sponsor.jpg); */
+	background-image: url(../img/sponsor/thumbs/sponsor.jpg);
 }
 #section0 h2 {
 	font-family: 'Russo One', sans-serif;
@@ -41,7 +42,8 @@
 
 
 #section3{
-	background-image: url(../img/home/trophies.jpg);
+	/* background-image: url(../img/home/trophies.jpg); */
+	background-image: url(../img/home/thumbs/trophies.jpg);
 	padding-top: 10rem;
 	text-align: center;
 }

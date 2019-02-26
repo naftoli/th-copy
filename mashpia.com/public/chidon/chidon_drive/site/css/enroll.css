@@ -195,6 +195,12 @@ input {
 }
 
 @media(max-width: 600px) {
+.group .shoesize {
+	display:block !important;
+}
+.group .shoesize .field {
+	min-width:80%;
+}
 .save-detail {
 	display:block !important;
 }
@@ -213,7 +219,12 @@ input {
 	}
 }
 @media(max-width: 400px) {
-
+.group .shoesize {
+	display:block !important;
+}
+.group .shoesize .field {
+	min-width:80%;
+}
 .save-detail  {
 	display:block !important;
 }
