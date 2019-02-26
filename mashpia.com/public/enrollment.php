@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 1);
+//ini_set('display_errors', 1);
 $admin_auth = array('school'); 
 require('header.php');
 
@@ -9,7 +9,7 @@ $schools = $as->getSchools();
 
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
-$year = 5778;
+//$year = 5778;
 
 // array to hold chap to student ratio per school
 $errorMsg = '';
