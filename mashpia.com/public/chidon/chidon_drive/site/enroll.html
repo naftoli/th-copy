@@ -259,6 +259,11 @@
 								Safety of all our chayolim is most important. It is essential that staff knows where every finalist is at all times. Any finalist who leaves any activity without the consent of their counselor and safety officer will automatically be dismissed from the Shabbaton.	
 							</p>
 						</div>
+						<div class="field" id="walkingException" style="display: none;">
+							<p><label class="checkbox"><input type="checkbox" id="terms6" /><span></span></label>	
+								I will arrange pickup and drop off for my child for all Chidon programs.
+							</p>
+						</div>
 
 						<div class="group save-detail">
 							
@@ -499,7 +504,8 @@
 						return false;
 					} 
 
-					if ( street && street != 'Choose One' ) {
+					if ( street && street != 'Choose One' && street != 'East Flatbush (out of the walking zone)' ) {
+						$("#walkingException").hide();
 						$.post('../ajax/getCrossStreets.php', { num: number, street: street }, function( result ) {
 							let info = JSON.parse( result );
 							if ( info.success ) {
@@ -512,6 +518,8 @@
 								$("#walking_zone").val(0);
 							}
 						});
+					} else if ( street == 'East Flatbush (out of the walking zone)' ) {
+						$("#walkingException").show();
 					}
 				}
 
@@ -523,6 +531,7 @@
 						for ( s in data.streets ) {
 							html += "<option>" + data.streets[s].street + "</option>";
 						}
+						html += "<option>East Flatbush (out of the walking zone)</option>";
 						$("#acc_street").append( html );
 						$('select#acc_street').niceSelect('update');
 					});
@@ -555,6 +564,8 @@
 							if ( info.success ) {
 								Cookies.set('chidon_admin', info.admin);
 								getChildren( info.admin );
+							} else {
+								alert( info.error );
 							}
 						});
 					});	
@@ -633,13 +644,18 @@
 						if ( !info.acc_family ) errors += "You must enter the family name of where you are staying.\n";
 						if ( !info.acc_street || info.acc_street == 'Choose One' ) errors += "You must enter which street you are staying on.\n";
 						if ( !info.acc_street_num ) errors += "You must enter the address number of where your are staying.\n";
-						if ( !info.acc_cross1 || !info.acc_cross2 || !info.walking_zone || info.walking_zone == '0' ) errors += "You have chosen an incorrect Street Number and Street Name, please fix.\n";
+						if ( info.acc_street != 'East Flatbush (out of the walking zone)' &&
+							 !info.acc_cross1 || !info.acc_cross2 || !info.walking_zone || info.walking_zone == '0' ) 
+							 		errors += "You have chosen an incorrect Street Number and Street Name, please fix.\n";
 						if ( !info.acc_phone ) errors += "You have not entered a phone number to where you are staying.\n";
 						if ( !info.test_lang ) errors += "You have not indicated which language the test should be in.\n";
 						if ( info.allergy && !info.allergies ) {
 							errors += "You have indicated that your child has allergies, but you have not entered what they are.\n";
 						}
 						if (! ($("#terms1:checked").length && $("#terms2:checked").length && $("#terms3:checked").length && $("#terms4:checked").length && $("#terms5:checked").length) ) {
+							errors += "You must indicate your agreement to all terms.\n";
+						}
+						if ( info.acc_street == 'East Flatbush (out of the walking zone)' && !$(".terms6:checked").length ) {
 							errors += "You must indicate your agreement to all terms.\n";
 						}
 						console.log( errors );
