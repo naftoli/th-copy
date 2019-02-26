@@ -1,6 +1,7 @@
 <?php
 require '../../../db.php';
 require_once( __DIR__ . '/../../../class.globalSettings.php' );
+$chidon_year = GlobalSettings::getChidonYear();
 $CHIDON_ACTIVE = true; // change to activate chidon
 
 $admin = mysql_real_escape_string( $_POST['admin'] );
@@ -38,7 +39,7 @@ while ( $row = mysql_fetch_assoc($result) ) {
 }
 
 if ( !empty( $users ) ) {
-	$children = array();
+	$children = [];
 	//need to have multiple result rows to get highest rank
 	$sql = "select s.school_name, s.school_city, s.school_era, s.reg_type, s.shipping_method, c.class_grade, u.user_id, u.first, u.last, "
 		." u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, "
@@ -54,7 +55,6 @@ if ( !empty( $users ) ) {
 	$result = mysql_query( $sql );
 	while ( $row = mysql_fetch_assoc($result) ) {
 		$reg_year = GlobalSettings::getRegistrationYear( $row['school_id'] );
-		$chidon_year = GlobalSettings::getChidonYear( );
 		$children[$row['user_id']]['first'] 	= $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
 		$children[$row['user_id']]['last']  	= $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
 		$children[$row['user_id']]['school'] 	= $row['school_name'];
@@ -138,7 +138,7 @@ if ( !empty( $users ) ) {
 		$children[$row['user_id']]['shabbatonRegistered'] = 0;
 		$children[$row['user_id']]['shabbatonEdit'] = 0;
 		$children[$row['user_id']]['shabbatonConfirmed'] = 0;
-		$cSql = "SELECT * FROM th_chidon WHERE (contestant = 1 or school_rep = 1) and deleted = 0 and year = " . $year . " AND user_id = " . $row['user_id'];
+		$cSql = "SELECT * FROM th_chidon WHERE (contestant = 1 or school_rep = 1) and deleted = 0 and year = " . $chidon_year . " AND user_id = " . $row['user_id'];
 		$cRes = mysql_query($cSql);
 		if (mysql_num_rows($cRes) > 0) {
 			$cRow = mysql_fetch_assoc($cRes);
