@@ -99,7 +99,7 @@
 					<div class="form">
 						<form id="donationForm">
 							<div class="field">
-								<label>Full Name <span>(for reciept)</span>:</label>
+								<label>Full Name <span>(for receipt)</span>:</label>
 								<input type="text" id="name" placeholder="Full Name" required />
 							</div>
 							<div class="field">
@@ -107,10 +107,10 @@
 								<input type="text" id="display_name" placeholder="Name to be displayed" required />
 							</div>
 							<div class="field">
-								<p><label class="checkbox"><input type="checkbox" id="anonymous" /><span></span></label>Donate anonymously</p>
+								<p><label class="checkbox"><input type="checkbox" id="anonymous" /><span></span></label><span style="color:#85ABDA">Donate anonymously</span></p>
 							</div>
 							<div class="field">
-								<label>Email <span>(for reciept)</span>:</label>
+								<label>Email <span>(for receipt)</span>:</label>
 								<input type="text" id="email" placeholder="Email" required />
 							</div>
 							<div class="field">
@@ -253,6 +253,7 @@
 		    
 		        if (scroll >= 100) {
 		            header.addClass("header-alt");
+					console.log ('called');
 		        } else {
 		            header.removeClass('header-alt');
 		        }

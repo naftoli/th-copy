@@ -195,6 +195,14 @@ input {
 }
 
 @media(max-width: 600px) {
+.save-detail {
+	display:block !important;
+}
+
+.group .button {
+	min-width:80%;
+}	
+
 	.form.kids-wrapper {
 		flex-wrap: wrap;
 	}
@@ -205,6 +213,15 @@ input {
 	}
 }
 @media(max-width: 400px) {
+
+.save-detail  {
+	display:block !important;
+}
+
+
+.group .button {
+	min-width:80%;
+}
 	.form.kids-wrapper {
 		flex-direction: column;
 	}

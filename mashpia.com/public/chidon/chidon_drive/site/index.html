@@ -37,12 +37,76 @@
 		<div id="fullpage">
 			<!-- Home Section -->
 			<div class="section " id="section0">
-				<div class="slide asyncImage" data-src="img/home/passion.jpg" id="slide1"><div class="wrapper"><h2>This is <br>Passion</h2></div></div>
-				<div class="slide asyncImage" data-src="img/home/belonging.jpg" id="slide2"><div class="wrapper"><h2>This is <br>Belonging</h2></div></div>
-				<div class="slide asyncImage" data-src="img/home/empowerment.jpg" id="slide3"><div class="wrapper"><h2>This is <br>Empowerment</h2></div></div>
-				<div class="slide asyncImage" data-src="img/home/chidon.jpg" id="slide4"><div class="wrapper"><h2>This is <br>Chidon</h2></div></div>
+				<div class="slide asyncImage" data-src="img/home/passion.jpg" id="slide1">
+					<div class="wrapper">
+						<h2>This is <br>Passion.</h2>
+						<div class="thermometer-image">
+							<div class="leader" data-percent="50" data-amount="300,000">
+								<div class="bar">
+									<div class="bar-percent"><span class="bar-percent__number"></span></div>
+									<div class="bar-line">
+										<div class="bar-line__bar"><div class="bar-line__circle"></div>
+											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$300,000</span> <span class="bar-line__other-number">$875,000</span></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="slide asyncImage" data-src="img/home/belonging.jpg" id="slide2">
+					<div class="wrapper">
+						<h2>This is <br>Belonging.</h2>
+						<div class="thermometer-image">
+							<div class="leader" data-percent="50" data-amount="300,000">
+								<div class="bar">
+									<div class="bar-percent"><span class="bar-percent__number"></span></div>
+									<div class="bar-line">
+										<div class="bar-line__bar"><div class="bar-line__circle"></div>
+											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$300,000</span> <span class="bar-line__other-number">$875,000</span></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="slide asyncImage" data-src="img/home/empowerment.jpg" id="slide3">
+					<div class="wrapper">
+						<h2>This is <br>Empowerment.</h2>
+						<div class="thermometer-image">
+							<div class="leader" data-percent="50" data-amount="300,000">
+								<div class="bar">
+									<div class="bar-percent"><span class="bar-percent__number"></span></div>
+									<div class="bar-line">
+										<div class="bar-line__bar"><div class="bar-line__circle"></div>
+											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$300,000</span> <span class="bar-line__other-number">$875,000</span></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="slide asyncImage" data-src="img/home/chidon.jpg" id="slide4">
+					<div class="wrapper">
+						<h2>This is <br>Chidon.</h2>
+						<div class="thermometer-image">
+							<div class="leader" data-percent="50" data-amount="300,000">
+								<div class="bar">
+									<div class="bar-percent"><span class="bar-percent__number"></span></div>
+									<div class="bar-line">
+										<div class="bar-line__bar"><div class="bar-line__circle"></div>
+											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$300,000</span> <span class="bar-line__other-number">$875,000</span></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="buttons-wrapper">
-					<a href="enroll.html" class="button" onClick="alert('Shabbaton Enrollment will IYH open up on Tuesday February 19, 2019.\nThank you for your patience.'); return false;">Shabbaton Enrollment <img src="img/arrow.png" /></a>
+					<a href="enroll.html" class="button">Shabbaton Enrollment <img src="img/arrow.png" /></a>
 					<a href="donate.html" class="button">Donate <img src="img/arrow.png" /></a>
 				</div>
 			</div>
@@ -314,7 +378,7 @@
 								<li><h5>Quick Links</h5></li>
 								<li><a href="family.html">Find a Family</a></li>
 								<li><a href="sponsors.html">Sponsors</a></li>
-								<li><a href="#">Enrollment Form</a></li>
+								<li><a href="enroll.html">Enrollment Form</a></li>
 							</ul>
 							<ul>
 								<li><h5>Contact Us</h5></li>
@@ -346,26 +410,6 @@
 					let newUrl = 'https' + url.substring( pos );
 					location.href = newUrl;
 				}
-
-				$.post('../ajax/getTotalDonation.php', function( result ) {
-					let res = JSON.parse( result );
-					console.log( res );
-					if ( res.success ) {
-						let total = Math.round( res.total );
-						let percent = Math.round( (total / 875000) * 100 );
-						for ( i = 1; i < 5; i++ ) {
-							$("#slide" + i + " div.leader").data('percent', percent);
-							$("#slide" + i + " div.leader").data('amount', total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-							$("#slide" + i + " span.bar-line__marker-number").text('$' + total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-						}
-						$('#section0 .leader').each(function(index, i){
-							var percent = $(this).data('percent');
-							$(this).find('.bar-line__bar').width(percent + '%');
-						});	
-					} else {
-						alert( res.error );
-					}
-				});
 				
 		    $('#fullpage').fullpage({
 		     		licenseKey: '1A33397E-DD2A498D-A23E76EB-6E563849',
@@ -384,6 +428,12 @@
 							var loadedSection = this;
 
 							//using index
+							if(destination.index == 0){
+					    	$('#section0 .leader').each(function(index, i){
+					    		var percent = $(this).data('percent');
+					    		$(this).find('.bar-line__bar').width(percent + '%');
+					    	});	
+							}
 							if(destination.index == 2){
 					    	$('.leader').each(function(index, i){
 					    		var percent = $(this).data('percent');
@@ -416,7 +466,7 @@
 												<h3><span>#${i++}</span> ${community}</h3>
 											</div>
 											<div class="bar">
-												<div class="bar-percent"><span class="bar-percent__number">${percent}%</span></div>
+												<div class="bar-percent"><span class="bar-percent__number">${parseInt(percent,10)}%</span></div>
 												<div class="bar-line">
 													<div class="bar-line__bar"><div class="bar-line__circle"></div>
 														<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">${stats.raised}</span></div>
@@ -447,8 +497,6 @@
 						}
 					});
 				});
-		
-		
 		</script>
 		<script>
 		(() => {
@@ -472,36 +520,5 @@
     };
   });
 })();
-	
-	/*
-	var img = new Image();
-    img.src = '/img/home/support-chidon-color.jpg';	
-	img.src = '/img/home/support-family-color.jpg';	
-    	
-    
-	$('#section1 .family').hover(function() 
-			{ 
-				$(this).css("background-image", "url('/img/home/support-family-color.jpg')"); 
-				<!-- alert ('hi'); -->
-			},
-			function() 
-			{ 
-				$(this).css("background-image", "url('/img/home/thumbs/support-family.jpg')"); 
-				<!-- alert ('hi'); -->
-			}); 
-	
-	$('#section1 .chidon').hover(function() 
-			{ 
-				$(this).css("background-image", "url('/img/home/support-chidon-color.jpg')"); 
-				<!-- alert ('hi'); -->
-			},
-			function() 
-			{ 
-				$(this).css("background-image", "url('/img/home/thumbs/support-chidon.jpg')"); 
-				<!-- alert ('hi'); -->
-			}); 
-
-	*/
-		</script>
 	</body>
 </html>
