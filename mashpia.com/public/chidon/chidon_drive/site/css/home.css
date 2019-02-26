@@ -76,19 +76,23 @@
 	top: 3px;
 	/*override style.css*/
 	/* right:300%; */
-	top: 30px;
-	left: -10px;
+	/* top: 30px;
+	left: -10px; */
+	left: 40px;
+	width: 200px;
 	z-index: 99;
 }
 .thermometer-image .bar-line__other-number {
 	position: absolute;
-	top: 3px;
-	right: -200px;
-	/* right: -90px; */
+	/* top: 3px; */
+	/* right: -200px; */
+	top: 60px;
+	right: -300px;
 	font-size: 18px;
 	font-weight: 700;
 	color: #6988c5;
 	z-index: 1;
+	width: 200px;
 }
 
 

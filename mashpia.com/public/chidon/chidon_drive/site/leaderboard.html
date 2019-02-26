@@ -153,15 +153,15 @@
 									//console.log( stats );
 									
 									htmlTop += `
-										<div class="leader" data-amount="${stats.raised}">
+										<div class="leader" data-amount="${Math.round(stats.raised)}">
 											<div class="leader-title">
 												<h3><span>#${i++}</span> ${community}</h3>
 											</div>
-											<div class="bar" data-percent="${percent}" >
-												<div class="bar-percent"><span class="bar-percent__number">${Math.round(percent)}%</span></div>
+											<div class="bar" data-percent="${Math.ceil(percent)}" >
+												<div class="bar-percent"><span class="bar-percent__number">${Math.ceil(percent)}%</span></div>
 												<div class="bar-line">
-													<div class="bar-line__bar"><div class="bar-line__circle"></div>
-														<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${stats.raised}</span></div>
+													<div class="bar-line__bar" width="${Math.round(percent)}%"><div class="bar-line__circle"></div>
+														<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${Math.round(stats.raised)}</span></div>
 													</div>
 												</div>
 											</div>
@@ -196,11 +196,11 @@
 													<img src="img/ppl.png" alt="Children" />
 													<p>${stats.numChildren} Children</p>
 												</div>
-												<div class="bar" data-percent="${percent}">
-													<div class="bar-percent"><span class="bar-percent__number">${Math.round(percent)}%</span></div>
+												<div class="bar" data-percent="${Math.ceil(percent)}">
+													<div class="bar-percent"><span class="bar-percent__number">${Math.ceil(percent)}%</span></div>
 													<div class="bar-line">
 														<div class="bar-line__bar"><div class="bar-line__circle"></div>
-															<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${stats.raised}</span></div>
+															<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${Math.round(stats.raised)}</span></div>
 														</div>
 													</div>
 												</div>
@@ -217,11 +217,11 @@
 														<img src="img/school.png" alt="Shool Logo" />
 														<p>${schoolName}, ${school.numChildren} Children</p>
 														<div class="spacer"></div>
-														<div class="bar" data-percent="${school.percent}">
+														<div class="bar" data-percent="${Math.round(school.percent)}">
 															<div class="bar-percent"><span class="bar-percent__number">${Math.round(school.percent)}%</span></div>
 															<div class="bar-line">
 																<div class="bar-line__bar"><div class="bar-line__circle"></div>
-																	<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${school.raised}</span></div>
+																	<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${Math.round(school.raised)}</span></div>
 																</div>
 															</div>
 														</div>
@@ -234,6 +234,11 @@
 							}
 							$(".leaders").append( htmlTop );
 							$(".mainLeaderboard").append( htmlMain );
+
+				    	$('.bar').each(function(){
+				    		var percent = $(this).data('percent');
+				    		$(this).find('.bar-line__bar').width(percent + '%');
+				    	});
 
 							$('.community-info').click( function(e){
 								e.preventDefault();
