@@ -22,7 +22,7 @@ foreach ($schools as $id => $school) {
         ."join admins a using (admin_id) "
         ."where tc.year = " . $year . " "
         ."and aa.auth = 'user' "
-        ."and tc.contestant = 1 "
+        ."and (tc.contestant = 1 or tc.school_rep = 1) "
         ."and tc.can_enroll = 1 "
         ."and tc.date_paid is not null "
         ."and u.school_id = " . $id;
@@ -103,14 +103,15 @@ foreach ($schools as $id => $school) {
                 echo "Shoe Size: " . $user['shoe_size'] . "<br />";
                 echo "Sandwich: " . $user['sandwich'] . "<br />";
                 echo "Allergies: " . (empty($user['allergies']) ? 'none' : $user['allergies']) . "<br />";
-                echo "Allow walking home alone: ";
-                if ($user['walk_night']) echo "yes ";
-                else if ($user['walk_day']) echo "only by day ";
-                else echo "no ";
-                echo "<br />";
+                // echo "Allow walking home alone: ";
+                // if ($user['walk_night']) echo "yes ";
+                // else if ($user['walk_day']) echo "only by day ";
+                // else echo "no ";
+                // echo "<br />";
                 echo "Host Name: " . $user['host'] . "<br />";
-                echo "Host Address: " . $user['host_address1'] . (empty($user['host_address2']) ? '' : ' ' . $user['host_address2']) . "<br />";
-                echo "Between Streets: " . $user['between_streets'] . "<br />";
+                // echo "Host Address: " . $user['host_address1'] . (empty($user['host_address2']) ? '' : ' ' . $user['host_address2']) . "<br />";
+                // echo "Between Streets: " . $user['between_streets'] . "<br />";
+                echo "Host Address: " . $user['host_street_num'] . ' ' . $user['host_street_num_suffix'] . ' ' . $user['host_street'] . ' ' . $user['host_street_apt'] . "<br />";
                 echo "Host Phone Number: " . $user['host_number'] . "<br />";
                 echo "Parent Email: " . $user['admin_email'] . "<br />";
                 echo "Parent Contact Number(s): ";
