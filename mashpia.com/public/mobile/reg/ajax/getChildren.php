@@ -138,9 +138,7 @@ if ( !empty( $users ) ) {
 		$children[$row['user_id']]['shabbatonRegistered'] = 0;
 		$children[$row['user_id']]['shabbatonEdit'] = 0;
 		$children[$row['user_id']]['shabbatonConfirmed'] = 0;
-		$cSql = "SELECT * FROM th_chidon "
-			." WHERE (contestant = 1 or school_rep = 1) and deleted = 0 and year = " . $year . " "
-			." AND user_id = " . $row['user_id'];
+		$cSql = "SELECT * FROM th_chidon WHERE (contestant = 1 or school_rep = 1) and deleted = 0 and year = " . $year . " AND user_id = " . $row['user_id'];
 		$cRes = mysql_query($cSql);
 		if (mysql_num_rows($cRes) > 0) {
 			$cRow = mysql_fetch_assoc($cRes);
