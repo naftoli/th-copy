@@ -165,6 +165,10 @@ if ( !empty( $users ) ) {
 				$children[$row['user_id']]['shabbatonConfirmed'] = 1;
 			}
 		}
+
+		// don't open up enrollment yet
+		if ( in_array( $row['user_id'], [ 5455,5548,12749,15139,19085,58497] ) ) $children[$row['user_id']]['enrollShabbaton'] = 1;
+		else $children[$row['user_id']]['enrollShabbaton'] = 0;
 		
 		$pSql = "select thumb from thumbs t 
 				join users u on u.user_photo_id = t.file_id 
@@ -187,9 +191,6 @@ if ( !empty( $users ) ) {
 				$children[$row['user_id']]['auctionInfo'] = 160 - intval($numTasks) . " days of tasks to enter the yearly raffle";
 			}
 		}
-
-		// if ( in_array( $row['user_id'], [ 5455,5548,12749,15139,19085,58497] ) ) $children[$row['user_id']]['enrollShabbaton'] = 1;
-		// else $children[$row['user_id']]['enrollShabbaton'] = 0;
 		
 		//if ($row['user_id'] == 26598) {
 		//	$children[$row['user_id']]['chidonShow'] = 1;
