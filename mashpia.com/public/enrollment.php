@@ -33,7 +33,7 @@ foreach ($schools as $sid => $schoolName) {
             ."JOIN users u USING (user_id) "
             ."JOIN classes c ON u.class_id = c.class_id "
             ."WHERE tc.year = " . $year . " "
-            ."AND tc.contestant = 1 "
+            ."AND (tc.contestant = 1 or tc.school_rep = 1) "
             ."AND u.school_id = " . $sid . " "
             ."AND tc.deleted = 0 "; // only deleted kids
     $sql .= "ORDER BY class_grade, class_sub, tc.school_rep desc, u.last, u.first";
