@@ -34,11 +34,11 @@
 		</header>
 
 		<div id="fullpage">
-			<div class="section " id="section0">
+			<div class="section asyncImage" id="section0" data-src="img/sponsor/sponsor.jpg">
 				<div class="wrapper"><h2>Become a Chidon Event Sponsor.</h2></div>
 			</div>
 
-			<div class="section" id="section3">
+			<div class="section asyncImage" id="section3" data-src="img/home/trophies.jpg">
 				<div class="wrapper">
 					<h2 class="title">Trophy Partners</h2>
 					<div class="trophy-wrapper">
@@ -153,7 +153,7 @@
 								<li><h5>Quick Links</h5></li>
 								<li><a href="family.html">Find a Family</a></li>
 								<li><a href="sponsors.html">Sponsors</a></li>
-								<li><a href="#">Enrollment Form</a></li>
+								<li><a href="enroll.html">Enrollment Form</a></li>
 							</ul>
 							<ul>
 								<li><h5>Contact Us</h5></li>
@@ -191,6 +191,29 @@
 		    $('#menu-opener').click(function(e){
 		    	$('header nav').toggleClass('open');
 		    });
+		</script>
+		<script>
+		(() => {
+  'use strict';
+  // Page is loaded
+  
+  const objects = document.getElementsByClassName('asyncImage');
+  Array.from(objects).map((item) => 
+  {
+    // Start loading image
+    const img = new Image();
+    img.src = item.dataset.src;	
+    // Once image is loaded replace the src of the HTML element
+    img.onload = () => 
+	{
+      item.classList.remove('asyncImage');
+	  
+      return item.nodeName === 'IMG' ? 
+        item.src = item.dataset.src :        
+        item.style.backgroundImage = `url(${item.dataset.src})`;
+    };
+  });
+})();
 		</script>
 	</body>
 </html>
