@@ -103,11 +103,12 @@ foreach ($schools as $id => $school) {
                 echo "Shoe Size: " . $user['shoe_size'] . "<br />";
                 echo "Sandwich: " . $user['sandwich'] . "<br />";
                 echo "Allergies: " . (empty($user['allergies']) ? 'none' : $user['allergies']) . "<br />";
-                // echo "Allow walking home alone: ";
+                echo "Allow walking home alone: ";
+                if ( $user['walking'] ) echo "yes";
                 // if ($user['walk_night']) echo "yes ";
                 // else if ($user['walk_day']) echo "only by day ";
-                // else echo "no ";
-                // echo "<br />";
+                else echo "no ";
+                echo "<br />";
                 echo "Host Name: " . $user['host'] . "<br />";
                 // echo "Host Address: " . $user['host_address1'] . (empty($user['host_address2']) ? '' : ' ' . $user['host_address2']) . "<br />";
                 // echo "Between Streets: " . $user['between_streets'] . "<br />";
