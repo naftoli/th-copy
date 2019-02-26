@@ -41,12 +41,12 @@
 					<div class="wrapper">
 						<h2>This is <br>Passion.</h2>
 						<div class="thermometer-image">
-							<div class="leader" data-percent="50" data-amount="300,000">
+							<div class="leader" data-percent="0" data-amount="0">
 								<div class="bar">
 									<div class="bar-percent"><span class="bar-percent__number"></span></div>
 									<div class="bar-line">
 										<div class="bar-line__bar"><div class="bar-line__circle"></div>
-											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$300,000</span> <span class="bar-line__other-number">$875,000</span></div>
+											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$0</span> <span class="bar-line__other-number">$875,000</span></div>
 										</div>
 									</div>
 								</div>
@@ -58,12 +58,12 @@
 					<div class="wrapper">
 						<h2>This is <br>Belonging.</h2>
 						<div class="thermometer-image">
-							<div class="leader" data-percent="50" data-amount="300,000">
+							<div class="leader" data-percent="0" data-amount="0">
 								<div class="bar">
 									<div class="bar-percent"><span class="bar-percent__number"></span></div>
 									<div class="bar-line">
 										<div class="bar-line__bar"><div class="bar-line__circle"></div>
-											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$300,000</span> <span class="bar-line__other-number">$875,000</span></div>
+											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$0</span> <span class="bar-line__other-number">$875,000</span></div>
 										</div>
 									</div>
 								</div>
@@ -75,12 +75,12 @@
 					<div class="wrapper">
 						<h2>This is <br>Empowerment.</h2>
 						<div class="thermometer-image">
-							<div class="leader" data-percent="50" data-amount="300,000">
+							<div class="leader" data-percent="0" data-amount="0">
 								<div class="bar">
 									<div class="bar-percent"><span class="bar-percent__number"></span></div>
 									<div class="bar-line">
 										<div class="bar-line__bar"><div class="bar-line__circle"></div>
-											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$300,000</span> <span class="bar-line__other-number">$875,000</span></div>
+											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$0</span> <span class="bar-line__other-number">$875,000</span></div>
 										</div>
 									</div>
 								</div>
@@ -92,12 +92,12 @@
 					<div class="wrapper">
 						<h2>This is <br>Chidon.</h2>
 						<div class="thermometer-image">
-							<div class="leader" data-percent="50" data-amount="300,000">
+							<div class="leader" data-percent="0" data-amount="0">
 								<div class="bar">
 									<div class="bar-percent"><span class="bar-percent__number"></span></div>
 									<div class="bar-line">
 										<div class="bar-line__bar"><div class="bar-line__circle"></div>
-											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$300,000</span> <span class="bar-line__other-number">$875,000</span></div>
+											<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$0</span> <span class="bar-line__other-number">$875,000</span></div>
 										</div>
 									</div>
 								</div>
@@ -106,7 +106,7 @@
 					</div>
 				</div>
 				<div class="buttons-wrapper">
-					<a href="enroll.html" class="button">Shabbaton Enrollment <img src="img/arrow.png" /></a>
+					<a href="enroll.html" class="button" onclick="alert('Enrollment will open up Wednesday February 27 IYH.'); return false;">Shabbaton Enrollment <img src="img/arrow.png" /></a>
 					<a href="donate.html" class="button">Donate <img src="img/arrow.png" /></a>
 				</div>
 			</div>
@@ -447,7 +447,25 @@
 		    	$('header nav').toggleClass('open');
 		    });
 
+				function formatNumber(num) {
+					return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+				}
+
 				$( function() {
+					$.post('../ajax/getTotalDonation.php', function( result ) {
+						let res = JSON.parse( result );
+						if ( res.success ) {
+							let amount = res.total;
+							$('#section0 .leader').each(function(index, i){
+								$(this).data('amount', Math.round(amount));
+								$(this).data('percent', Math.round((amount / 875000) * 100));
+								var percent = $(this).data('percent');
+								$(this).find('.bar-line__bar').width(percent + '%');
+								$(this).find('.bar-line__marker-number').text('$' + formatNumber( Math.round(amount) ));
+							});	
+						}
+					});
+
 					$.post('../ajax/getCommunities.php', { getSchools: 0 }, function( res ) {
 						let result = JSON.parse( res );
 						console.log( result );
@@ -520,5 +538,6 @@
     };
   });
 })();
+		</script>
 	</body>
 </html>
