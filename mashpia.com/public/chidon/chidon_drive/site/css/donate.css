@@ -394,7 +394,7 @@ input {
 }
 
 .sponsor-list {
-  height: 24rem;
+  height: 45rem;
   overflow: scroll;
 }
 .sponsor-list::-webkit-scrollbar{
@@ -452,6 +452,15 @@ input {
     max-width: none;
 	}
 }
+@media(max-width: 600px) {
+	.activity 
+	{
+	width: 95%;
+	max-width: auto;
+	
+	}
+}
+
 @media(max-width: 800px) {
 	.bar {
 		width: 100%;
@@ -481,4 +490,9 @@ input {
   .form {
   	width: 100%;
   }
+  .activity {
+	width: 95%;
+	max-width: auto;
+	
+}
 }

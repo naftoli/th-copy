@@ -411,27 +411,21 @@
 																<p>$${regPaid}</p>
 															</div>`;
 															
-														familyCharts += `</div>`;
-														
-														if (subsidy>0)
-														familyCharts += `
+														familyCharts += `</div>
 														<div class="bar-bar__line subsidy" data-percent="${subsidyPercent}">
 															<div class="bar-bar__circle"></div>
 															<div class="bar-bar__marker">
 																<img src="img/marker.png" />
 																<p>${subsidy}</p>
 															</div>
-														</div>`;
-														if (donation>0)
-														familyCharts += `
+														</div>
 														<div class="bar-bar__line donation" data-percent="${donationPercent}">
 															<div class="bar-bar__circle"></div>
 															<div class="bar-bar__marker">
 																<img src="img/marker-blue.png" />
 																<p>$${donation}</p>
 															</div>
-														</div>`;
-														familyCharts += `
+														</div>
 														<div class="remaining">
 															<div class="bar-bar__marker">
 																<p>$${balance}<br>Remaining</p>

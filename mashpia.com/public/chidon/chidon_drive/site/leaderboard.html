@@ -37,7 +37,7 @@
 		<div id="fullpage">
 
 			<!-- Leaderboard Section -->
-			<div class="section asyncImage" id="section2" data-src="img/home/leaderboard.jpg" style="background-size:contain;background-attachment:fixed;">
+			<div class="section asyncImage" id="section2" data-src="img/home/leaderboard.jpg" style="background-size:cover;background-attachment:fixed;">
 				<div class="wrapper">
 					<h2 class="title">Leading Communities</h2>
 					<div class="leaders">						
@@ -83,7 +83,7 @@
 								<li><h5>Quick Links</h5></li>
 								<li><a href="family.html">Find a Family</a></li>
 								<li><a href="sponsors.html">Sponsors</a></li>
-								<li><a href="#">Enrollment Form</a></li>
+								<li><a href="enroll.html">Enrollment Form</a></li>
 							</ul>
 							<ul>
 								<li><h5>Contact Us</h5></li>
@@ -108,14 +108,29 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="js/fullpage.js"></script>
 		<script type="text/javascript">
-		    /*$('#fullpage').fullpage({
+		$(function() {
+		    var header = $("header");
+		    $(window).scroll(function() {    
+		        var scroll = $(window).scrollTop();
+		    
+		        if (scroll >= 100) {
+		            header.addClass("header-alt");
+					console.log ('called');
+		        } else {
+		            header.removeClass('header-alt');
+		        }
+		    });
+		});
+			/*
+		    $('#fullpage').fullpage({
 		     		licenseKey: '1A33397E-DD2A498D-A23E76EB-6E563849',
 		        verticalCentered: false,
 		        controlArrows: false,
 		        responsiveWidth: 860,
 		        recordHistory: true,
 		        anchors: ['home', 'leaderboard', 'communities', ''],
-		       	afterLoad: function(origin, destination, direction){
+		       	afterLoad: function(origin, destination, direction)
+				{
 							var loadedSection = this;
 
 							//using index
@@ -123,9 +138,12 @@
 				    		var percent = $(this).data('percent');
 				    		$(this).find('.bar-line__bar').width(percent + '%');
 				    	});
-						}
+				}
 		    });
 			*/
+			
+			
+						
 		    $('#menu-opener').click(function(e){
 		    	e.preventDefault();
 		    	$('header nav').toggleClass('open');
@@ -138,7 +156,8 @@
 				// });
 				
 				$( function() {
-					$.post('../ajax/getCommunities.php', function( res ) {
+					$.post('../ajax/getCommunities.php', function( res ) 
+					{
 						let result = JSON.parse( res );
 						console.log( result );
 						if ( result.success ) {
@@ -153,15 +172,15 @@
 									//console.log( stats );
 									
 									htmlTop += `
-										<div class="leader" data-amount="${Math.round(stats.raised)}">
+										<div class="leader" data-amount="${stats.raised}">
 											<div class="leader-title">
 												<h3><span>#${i++}</span> ${community}</h3>
 											</div>
-											<div class="bar" data-percent="${Math.ceil(percent)}" >
-												<div class="bar-percent"><span class="bar-percent__number">${Math.ceil(percent)}%</span></div>
+											<div class="bar" data-percent="${percent}" >
+												<div class="bar-percent"><span class="bar-percent__number">${parseInt(percent,10)}%</span></div>
 												<div class="bar-line">
-													<div class="bar-line__bar" width="${Math.round(percent)}%"><div class="bar-line__circle"></div>
-														<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${Math.round(stats.raised)}</span></div>
+													<div class="bar-line__bar"><div class="bar-line__circle"></div>
+														<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${stats.raised}</span></div>
 													</div>
 												</div>
 											</div>
@@ -196,11 +215,11 @@
 													<img src="img/ppl.png" alt="Children" />
 													<p>${stats.numChildren} Children</p>
 												</div>
-												<div class="bar" data-percent="${Math.ceil(percent)}">
-													<div class="bar-percent"><span class="bar-percent__number">${Math.ceil(percent)}%</span></div>
+												<div class="bar" data-percent="${percent}">
+													<div class="bar-percent"><span class="bar-percent__number">${parseInt(percent,10)}%</span></div>
 													<div class="bar-line">
 														<div class="bar-line__bar"><div class="bar-line__circle"></div>
-															<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${Math.round(stats.raised)}</span></div>
+															<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${stats.raised}</span></div>
 														</div>
 													</div>
 												</div>
@@ -217,11 +236,11 @@
 														<img src="img/school.png" alt="Shool Logo" />
 														<p>${schoolName}, ${school.numChildren} Children</p>
 														<div class="spacer"></div>
-														<div class="bar" data-percent="${Math.round(school.percent)}">
-															<div class="bar-percent"><span class="bar-percent__number">${Math.round(school.percent)}%</span></div>
+														<div class="bar" data-percent="${school.percent}">
+															<div class="bar-percent"><span class="bar-percent__number">${school.percent}%</span></div>
 															<div class="bar-line">
 																<div class="bar-line__bar"><div class="bar-line__circle"></div>
-																	<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${Math.round(school.raised)}</span></div>
+																	<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${school.raised}</span></div>
 																</div>
 															</div>
 														</div>
@@ -234,11 +253,12 @@
 							}
 							$(".leaders").append( htmlTop );
 							$(".mainLeaderboard").append( htmlMain );
-
-				    	$('.bar').each(function(){
-				    		var percent = $(this).data('percent');
-				    		$(this).find('.bar-line__bar').width(percent + '%');
-				    	});
+							
+							$('.bar').each(function(index, i)
+							{
+									var percent = $(this).data('percent');
+									$(this).find('.bar-line__bar').width(percent + '%');
+							});
 
 							$('.community-info').click( function(e){
 								e.preventDefault();
@@ -273,6 +293,8 @@
     };
   });
 })();
+
+
 		</script>
 	</body>
 </html>

@@ -25,7 +25,8 @@ header nav a {
 }
 
 #section0 {
-	background-image: url(../img/thank-you.jpg);
+	/* background-image: url(../img/thank-you.jpg); */
+	background-image: url(../img/thumbs/thank-you.jpg);
 }
 #section0 h2 {
 	font-family: 'Russo One', sans-serif;

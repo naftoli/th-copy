@@ -21,27 +21,6 @@
 	background-position: center center;
 }
 
-#section0 h2 {
-	font-family: 'Russo One', sans-serif;
-	font-size: 3rem;
-	color: #85abda;
-	text-transform: uppercase;
-}
-#section0 .wrapper {
-	position: relative;
-	height: 100%;
-}
-#section0 h2 {
-	position: absolute;
-	bottom: 14rem;
-	left: 0;
-}
-#section0 .buttons-wrapper {
-  position: absolute;
-  bottom: 5rem;
-  right: calc(((100vw - 1200px) / 2) + 2rem);
-  z-index: 100;
-}
 #section0 .buttons-wrapper a {
 	margin-right: 1rem;
 }
@@ -72,27 +51,74 @@
 .thermometer-image .bar .bar-line__marker-number {
 	font-size: 18px;
 	font-weight: 700;
-	/* color: #6988c5;
+	color: #6988c5;
 	top: 3px;
 	/*override style.css*/
-	/* right:300%; */
-	/* top: 30px;
-	left: -10px; */
-	left: 40px;
-	width: 200px;
-	z-index: 99;
+	right:300%;
 }
 .thermometer-image .bar-line__other-number {
 	position: absolute;
-	/* top: 3px; */
-	/* right: -200px; */
-	top: 60px;
-	right: -300px;
+	top: 3px;
+	/* right: -150px; */
+	right: -90px;
 	font-size: 18px;
 	font-weight: 700;
 	color: #6988c5;
 	z-index: 1;
-	width: 200px;
+}
+
+
+
+#section0 h2 {
+	font-family: 'Russo One', sans-serif;
+	font-size: 3rem;
+	color: #85abda;
+	text-transform: uppercase;
+}
+#section0 .wrapper {
+	position: relative;
+	height: 100%;
+}
+#section0 h2 {
+	position: absolute;
+	bottom: 14rem;
+	left: 0;
+}
+#section0 .buttons-wrapper {
+  position: absolute;
+  bottom: 5rem;
+  right: calc(((100vw - 1200px) / 2) + 2rem);
+  z-index: 100;
+}
+
+#section0 .thermometer-wrapper {
+  position: absolute;
+  bottom: 2rem;
+  left: calc(((100vw - 1200px) / 2) + 0rem);
+  z-index: 100;
+  border:1px solid yellow;
+}
+
+
+#section0 .thermometer-wrapper .thermometer-image .bar .bar-line__marker-number {
+	right: -250%;
+}
+
+#section0 .thermometer-wrapper .thermometer-image .bar-line__other-number {
+	position: absolute;
+	top: 70px;
+	right: -150px;
+	/* right: -180px; */
+	
+}
+
+
+#section0 .thermometer-wrapper .thermometer-image .bar .bar-line {
+	width: 350px;
+}
+
+#section0 .thermometer-wrapper .thermometer-image .bar .bar-line__marker {
+	right:100px;
 }
 
 
@@ -114,21 +140,21 @@
 	padding-left: calc(((100vw - 1200px) / 2) + 2rem);
 	justify-content: flex-start;
 }
-/*
+
 #section1 .chidon:hover {
 	background-image: url(../img/home/support-chidon-color.jpg);
 }
-*/
+
 #section1 .family {
 	/* background-image: url(../img/home/support-family.jpg); */
 	background-image: url(../img/home/thumbs/support-family.jpg);
 	padding-right: calc(((100vw - 1200px) / 2) + 2rem);
 }
-/*
+
 #section1 .family:hover {
 	background-image: url(../img/home/support-family-color.jpg);
 }
-*/
+
 #section2 {
 	/* background-image: url(../img/home/leaderboard.jpg); */
 	background-image: url(../img/home/thumbs/leaderboard.jpg);

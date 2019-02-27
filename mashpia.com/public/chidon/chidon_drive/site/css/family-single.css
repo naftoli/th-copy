@@ -543,6 +543,14 @@ input {
   right: -1rem;
 }
 
+
+
+.nice-select.childselection, .childselection ul.list {
+	min-width:200px;
+	width:200px;
+}
+
+
 @media(max-width: 1200px){
 	.family-charts .kid {
 		width: 100%;
