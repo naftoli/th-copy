@@ -73,6 +73,7 @@ $field";
 // prepare variables for payment
 $amount = $donation['amount'];
 $name = $donation['name'];
+$rohr = $donation['rohr'];
 $cc_info = [];
 $cc_info['number'] = $donation['cc']['num'];
 $cc_info['exp'] = $donation['cc']['exp'];
@@ -162,7 +163,8 @@ if ( !empty( $msg ) ) {
         paid = :amount,
         date_paid = NOW(),
         paid_by = :admin, 
-        approval = :approval
+        approval = :approval, 
+        rohr_subsidy = :rohr
     WHERE
         user_id = :user AND year = :year
   ");
@@ -174,7 +176,8 @@ if ( !empty( $msg ) ) {
       ':admin'    =>  $admin_id, 
       ':user'     =>  $child['id'], 
       ':year'     =>  $year, 
-      ':approval' =>  $trans_info
+      ':approval' =>  $trans_info, 
+      ':rohr'     =>  $rohr
     ]);
     if ( !$res ) {
       //echo "<pre>"; print_r( $stmt->debugDumpParams() ); echo "</pre>";
