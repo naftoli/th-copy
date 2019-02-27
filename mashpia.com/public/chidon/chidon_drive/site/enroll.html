@@ -133,16 +133,31 @@
 								</select>
 							</div>
 						</div>
-						<div class="field">
-							<label>Sandwich Preference:</label>
-							<select id="sandwich" name="sandwich" required>
-									<option value="0">Please Choose</option>
-									<option value="tuna">Tuna</option>
-									<option value="egg">Egg</option>
-									<option value="cc">Cream Cheese</option>
-									<option value="plain">Plain</option>
-									<option value="cheese">Hard Cheese</option>
-							</select>
+
+						<div class="group">
+							<div class="field">
+								<label>Sandwich Preference:</label>
+								<select id="sandwich" name="sandwich" required>
+										<option value="0">Please Choose</option>
+										<option value="tuna">Tuna</option>
+										<option value="egg">Egg</option>
+										<option value="cc">Cream Cheese</option>
+										<option value="plain">Plain</option>
+										<option value="cheese">Hard Cheese</option>
+								</select>
+							</div>
+
+							<div class="field" id="yarmulka_size" style="display: none;">
+								<input type="hidden" name="gender" id="gender" />
+								<label>Yarmulka Size:</label>
+								<select id="yarmulka" name="yarmulka" required>
+										<option value="0">Please Choose</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+								</select>
+							</div>
 						</div>
 
 						<h5>Allergies</h5>
@@ -158,7 +173,9 @@
 						</div>
 
 						<h5>Accommodation Information</h5>
-						<p>The address where my child will be staying in Crown Heights during the Shabbaton is:<br><span>(If you live in Crown Heights please provide your home address)</span></p><p class="smaller">Walking groups will be arranged within the Schenectady- Nostrand, Rutland- S Johns radius.</p><p class="tiny">*Please note there will be a $100 fee for changes of address</p>
+						<p>
+								I understand that the Chidon staff will supervise a safe drop-off from this location for all Chidon programs whether in Bais Rivkah, Oholei Torah, or the Jewish Children's Museum.<br/><br />
+							The address where my child will be staying in Crown Heights during the Shabbaton is:<br><span>(If you live in Crown Heights please provide your home address)</span></p><p class="smaller">Walking groups will be arranged within the Schenectady- Nostrand, Rutland- S Johns radius.</p><p class="tiny">*Please note there will be a $100 fee for changes of address</p>
 						<div class="field">
 							<label>Crown Heights Family Name:</label>
 							<input type="text" id="acc_family" name="acc_family" required />
@@ -395,6 +412,12 @@
 
 					$("#sandwich").val( child.sandwich );
 					$("#sandwich").niceSelect('update');
+
+					$("#gender").val( child.gender );
+					$("#yarmulka").val( child.yarmulka );
+					$("#yarmulka").niceSelect('update');
+					if ( child.gender == 'M' ) $("#yarmulka_size").show();
+					else $("#yarmulka_size").hide();
 					
 					if ( child.allergies ) {
 						$(".allergy").eq(1).trigger('click');
@@ -609,6 +632,7 @@
 						info.sweater = $("#sweater").val();
 						info.shoe = $("#shoe").val();
 						info.sandwich = $("#sandwich").val();
+						info.yarmulka = $("#yarmulka").val();
 						info.allergy = parseInt( $(".allergy:checked").val() );
 						info.allergies = '';
 						if ( info.allergy ) info.allergies = $("#allergies").val();
@@ -641,6 +665,7 @@
 						if ( !info.sweater || info.sweater == '0' ) errors += "You must choose a sweater size.\n";
 						if ( !info.shoe || info.shoe == '0' ) errors += "You must choose a shoe size.\n";
 						if ( !info.sandwich || info.sandwich == '0' ) errors += "You must choose a sandwich.\n";
+						if ( $("#gender").val() == 'M' && (!info.yarmulka || info.yarmulka == '0' )) errors += "You must choose a yarmulka size.\n";
 						if ( !info.acc_family ) errors += "You must enter the family name of where you are staying.\n";
 						if ( !info.acc_street || info.acc_street == 'Choose One' ) errors += "You must enter which street you are staying on.\n";
 						if ( !info.acc_street_num ) errors += "You must enter the address number of where your are staying.\n";
