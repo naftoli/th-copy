@@ -191,7 +191,7 @@
 						if ( $(this).is(":checked") ) {
 							checked++;
 							let num = $(this).parent().parent().parent().find('.current').text();
-							totalAmount += parseInt( num );
+							totalAmount += parseFloat( num );
 						}
 					});
 					$(".children-change").val( totalAmount );
@@ -225,6 +225,7 @@
 							}
 							// find out if child has raised enough to have even less registration charge
 							let regFee = maxAmount - child.total_donation;
+							//console.log( regFee );
 							if ( regFee < 150 ) {
 								if ( regFee < 0 ) regFee = 0;
 								html += "<option value='" + regFee + "'>" + regFee + "</option>";
@@ -267,7 +268,7 @@
 					}
 				});
 
-		    $(document).ready(function(e){
+		    $(document).ready(function(e){					
 					$.post('../ajax/getFamilyInfo.php', { admin : admin, encrypted : 1, notYetPaid : 1 }, function( result ) {
 						let info = JSON.parse( result );
 						if ( info.success ) {
