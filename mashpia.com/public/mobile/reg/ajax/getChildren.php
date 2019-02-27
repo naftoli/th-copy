@@ -167,8 +167,8 @@ if ( !empty( $users ) ) {
 		}
 
 		// don't open up enrollment yet
-		if ( in_array( $row['user_id'], [ 5455,5548,12749,15139,19085,58497] ) ) $children[$row['user_id']]['enrollShabbaton'] = 1;
-		else $children[$row['user_id']]['enrollShabbaton'] = 0;
+		// if ( in_array( $row['user_id'], [ 5455,5548,12749,15139,19085,58497] ) ) $children[$row['user_id']]['enrollShabbaton'] = 1;
+		// else $children[$row['user_id']]['enrollShabbaton'] = 0;
 		
 		$pSql = "select thumb from thumbs t 
 				join users u on u.user_photo_id = t.file_id 
