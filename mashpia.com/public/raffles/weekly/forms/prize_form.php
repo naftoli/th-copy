@@ -114,7 +114,7 @@ if ($action == "destroy"){
 }
 /*********** EDITING **********************/
 if ($action == "edit"){
-    if(!$prize) $prize = Prize::load($_GET['prize_id']); // if the prize has not loaded
+    if(!isset($prize)) $prize = Prize::load($_GET['prize_id']); // if the prize has not loaded
     if(!$prize) $action='add'; // redirect to add if the prize does not exist
 }
 /*********** DEBUGGING **********************/
@@ -208,16 +208,16 @@ if($debug) echo "</pre>"; // end debugging preformatting
                 
                 <tbody>
                 <?foreach($raffles as $raffle){ // render each prize option
-                    $raffle = $prize->raffles[$raffle->raffle_id] ? $prize->raffles[$raffle->raffle_id] : $raffle;?>
+                    $raffle = isset( $prize->raffles[$raffle->raffle_id] ) ? $prize->raffles[$raffle->raffle_id] : $raffle;?>
                     <tr>
                         <td><?=$raffle->name;?></td>
                         <td><?=$raffle->run_date->format("m/d/Y");?></td>
                         <td>
-                            <input type="checkbox" id="raffle_<?=$raffle->raffle_id?>" <?= $prize->raffles[$raffle->raffle_id] ? "checked ": ""; ?>/>
+                            <input type="checkbox" id="raffle_<?=$raffle->raffle_id?>" <?= isset( $prize->raffles[$raffle->raffle_id] ) ? "checked ": ""; ?>/>
                         </td> 
                         <td>
                             <input type="number" disabled
-                                id="qty-raffle_<?=$raffle->raffle_id?>" value="<?=$prize->raffles[$raffle->raffle_id]->qty ? $prize->raffles[$raffle->raffle_id]->qty : 0;?>"
+                                id="qty-raffle_<?=$raffle->raffle_id?>" value="<?=isset( $prize->raffles[$raffle->raffle_id]->qty ) ? $prize->raffles[$raffle->raffle_id]->qty : 0;?>"
                             />
                         </td>
                     </tr>
