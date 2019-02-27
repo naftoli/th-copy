@@ -164,7 +164,7 @@ class Prize {
                 $target = $_SERVER["DOCUMENT_ROOT"].'/raffles/img/' . $file_name; // move the file to the right place
             }
             
-            if(strlen($picture) > 100) return false; // varchar is limited to 100 chars
+            if(strlen($target) > 100) return false; // varchar is limited to 100 chars
             if (move_uploaded_file($file['tmp_name'], $target)) { // actually move it
                 try { // the image was uploaded. so lets try to scale it down
                     //create thumb from image
