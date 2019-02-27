@@ -16,11 +16,11 @@ $stmt = $MASHPIA_DB->prepare("
       user_id = :user
 ");
 $stmt->execute([
-  ':first'    =>  $_POST['first'], 
-  ':last'     =>  $_POST['last'], 
-  ':heFirst'  =>  $_POST['heFirst'], 
-  ':heLast'   =>  $_POST['heLast'], 
-  ':user'     =>  $_POST['user_id']
+  ':first'    =>  $childInfo['first'], 
+  ':last'     =>  $childInfo['last'], 
+  ':heFirst'  =>  $childInfo['heFirst'], 
+  ':heLast'   =>  $childInfo['heLast'], 
+  ':user'     =>  $childInfo['user_id']
 ]);
 
 $stmt = $MASHPIA_DB->prepare("

@@ -259,26 +259,26 @@
 						</div>
 
 						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="terms1" /><span></span></label>	I understand that the way my child’s Hebrew name is written here is the way it will be printed on any plaque and certificate.</p>
+							<p><label class="checkbox"><input type="checkbox" id="terms1" class="terms" /><span></span></label>	I understand that the way my child’s Hebrew name is written here is the way it will be printed on any plaque and certificate.</p>
 						</div>
 						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="terms2" /><span></span></label>I authorize my school chaperone to sign the trip waivers on my behalf. I understand that Chidon will not be responsible for any injury that may happen.</p>
+							<p><label class="checkbox"><input type="checkbox" id="terms2" class="terms" /><span></span></label>I authorize my school chaperone to sign the trip waivers on my behalf. I understand that Chidon will not be responsible for any injury that may happen.</p>
 						</div>
 						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="terms3" /><span></span></label>	Please be aware that by participating in Chayolei Tzivos Hashem and its programs you consent to your children's names and pictures being used in any media produced by Tzivos Hashem, for publicity purposes or otherwise.</p>
+							<p><label class="checkbox"><input type="checkbox" id="terms3" class="terms" /><span></span></label>	Please be aware that by participating in Chayolei Tzivos Hashem and its programs you consent to your children's names and pictures being used in any media produced by Tzivos Hashem, for publicity purposes or otherwise.</p>
 						</div>
 						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="terms4" /><span></span></label>	
+							<p><label class="checkbox"><input type="checkbox" id="terms4" class="terms" /><span></span></label>	
 								The Shabbaton will be full of fun, excitement, and inspiration. As chayolim, you need to remember you are representing the Rebbe the entire day. In the unfortunate circumstance that a chayol’s behavior does not live up to this expectation, they will need to remain at their host during the Shabbaton programs. The Shabbaton fee will not be refunded.
 							</p>
 						</div>
 						<div class="field">
-							<p><label class="checkbox"><input type="checkbox" id="terms5" /><span></span></label>	
+							<p><label class="checkbox"><input type="checkbox" id="terms5" class="terms" /><span></span></label>	
 								Safety of all our chayolim is most important. It is essential that staff knows where every finalist is at all times. Any finalist who leaves any activity without the consent of their counselor and safety officer will automatically be dismissed from the Shabbaton.	
 							</p>
 						</div>
 						<div class="field" id="walkingException" style="display: none;">
-							<p><label class="checkbox"><input type="checkbox" id="terms6" /><span></span></label>	
+							<p><label class="checkbox"><input type="checkbox" id="terms6" class="terms" /><span></span></label>	
 								I will arrange pickup and drop off for my child for all Chidon programs.
 							</p>
 						</div>
@@ -485,6 +485,11 @@
 
 					$("#chidonNotes").val( child.notes );
 					$("#chidonAnswer").val( child.answers );
+
+					// reset terms checkboxes
+					$(".terms").each( function() {
+						if ( $(this).is(":checked") ) $(this).trigger('click');
+					});
 
 					$('select').niceSelect('update');
 					$("#first").focus();
