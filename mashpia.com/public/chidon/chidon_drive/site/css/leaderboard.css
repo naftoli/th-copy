@@ -196,6 +196,9 @@
 	width: 30px;
 }
 
+.bar .bar-line {	
+	margin-left: 4.7rem;
+}
 
 
 @media(max-width: 1200px) {
