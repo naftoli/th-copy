@@ -175,7 +175,7 @@ class Prize {
                     try {// attempt to fix the rotation
                         if ((exif_imagetype($target) == IMAGETYPE_JPEG || exif_imagetype($target) == IMAGETYPE_TIFF_II || exif_imagetype($target) == IMAGETYPE_TIFF_MM ) && exif_read_data($target)){
                             $exif = @exif_read_data($target); // read the data
-                            $orientation = $exif['Orientation']; // get the orientation
+                            $orientation = isset( $exif['Orientation'] ) ? $exif['Orientation'] : false; // get the orientation
                             if($orientation){ // this will only run if orientation is set which can only happen if $_POST['action'] is set to fix
                                 switch($orientation) {  
                                     case 3: $image->rotateimage("#FFF", 180); $thumb->rotateimage("#FFF", 180); break; // upside down

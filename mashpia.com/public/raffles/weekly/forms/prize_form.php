@@ -29,7 +29,7 @@ require_once(dirname(__FILE__).'/../../shared/functions.php');
 if (!isset($_GET['action']) && !isset($_POST['action'])){ // if there is no action
     $action = "list"; // default action
 } else { // action was provided
-    $action = ($_POST['action'] ? $_POST['action'] : $_GET['action']); // prefer the post action
+    $action = (isset($_POST['action']) ? $_POST['action'] : $_GET['action']); // prefer the post action
 }
 /*********** DEBUGGING **********************/
 if($debug) echo "<pre>"; // if this is in debug mode, preformmat this whole section
