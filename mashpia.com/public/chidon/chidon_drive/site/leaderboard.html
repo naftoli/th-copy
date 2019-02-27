@@ -177,10 +177,10 @@
 												<h3><span>#${i++}</span> ${community}</h3>
 											</div>
 											<div class="bar" data-percent="${percent}" >
-												<div class="bar-percent"><span class="bar-percent__number">${parseInt(percent,10)}%</span></div>
+												<div class="bar-percent"><span class="bar-percent__number">${Math.round(percent)}%</span></div>
 												<div class="bar-line">
 													<div class="bar-line__bar"><div class="bar-line__circle"></div>
-														<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${stats.raised}</span></div>
+														<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${Math.round(stats.raised)}</span></div>
 													</div>
 												</div>
 											</div>
@@ -216,10 +216,10 @@
 													<p>${stats.numChildren} Children</p>
 												</div>
 												<div class="bar" data-percent="${percent}">
-													<div class="bar-percent"><span class="bar-percent__number">${parseInt(percent,10)}%</span></div>
+													<div class="bar-percent"><span class="bar-percent__number">${Math.round(percent)}%</span></div>
 													<div class="bar-line">
 														<div class="bar-line__bar"><div class="bar-line__circle"></div>
-															<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${stats.raised}</span></div>
+															<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${Math.round(stats.raised)}</span></div>
 														</div>
 													</div>
 												</div>
@@ -237,10 +237,10 @@
 														<p>${schoolName}, ${school.numChildren} Children</p>
 														<div class="spacer"></div>
 														<div class="bar" data-percent="${school.percent}">
-															<div class="bar-percent"><span class="bar-percent__number">${school.percent}%</span></div>
+															<div class="bar-percent"><span class="bar-percent__number">${Math.round(school.percent)}%</span></div>
 															<div class="bar-line">
 																<div class="bar-line__bar"><div class="bar-line__circle"></div>
-																	<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${school.raised}</span></div>
+																	<div class="bar-line__marker"><img src="img/marker.png" /><span class="bar-line__marker-number">$${Math.round.(school.raised)}</span></div>
 																</div>
 															</div>
 														</div>
