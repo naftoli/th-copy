@@ -107,9 +107,8 @@
 #section0 .thermometer-wrapper .thermometer-image .bar-line__other-number {
 	position: absolute;
 	top: 70px;
-	right: -150px;
-	/* right: -180px; */
-	
+	/* right: -150px; */
+	right: -250%;	
 }
 
 
@@ -118,7 +117,7 @@
 }
 
 #section0 .thermometer-wrapper .thermometer-image .bar .bar-line__marker {
-	right:100px;
+	/* right:100px; */
 }
 
 
