@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors',1);
+//ini_set('display_errors',1);
 require_once __DIR__ . '/../../../api/header/db.php';
 require_once __DIR__ . '/../../../class.globalSettings.php';
 require __DIR__ . '/../encrypt.php';
@@ -48,7 +48,8 @@ function checkMandatory( $values ) {
   return $missing;
 }
 
-$missing = checkMandatory( $donation );
+$missing = [];
+if ( $donation['amount'] > 0 ) $missing = checkMandatory( $donation );
 
 // in order to have the alert box show with line breaks, needs to be in this weird format
 if ( !empty( $missing ) ) {
