@@ -144,17 +144,18 @@ if ( !empty( $users ) ) {
 			$cRow = mysql_fetch_assoc($cRes);
 			$children[$row['user_id']]['chidonRegistered'] = 1;
 			$children[$row['user_id']]['allowRemove'] = 0;
+			$children[$row['user_id']]['enrollShabbaton'] = 1;
 			// make sure school indicated that child should enroll for shabbaton 
 			//if ($cRow['can_enroll'] && in_array($row['user_id'], [])) { // chidon registration is closed.
-			if ($cRow['can_enroll']) {
+			//if ($cRow['can_enroll']) {
 				// make sure school is registered to chidon
 				// $chapSql = "SELECT * FROM th_chidon_schools WHERE school_id = " . $row['school_id'] . " AND year = " . $year . " AND registered = 1";
 				// $chapRes = mysql_query( $chapSql );
 				// if (mysql_num_rows($chapRes) > 0) {
 				// 	$children[$row['user_id']]['enrollShabbaton'] = 1;
 				// }
-				$children[$row['user_id']]['enrollShabbaton'] = 1;
-			}
+				// $children[$row['user_id']]['enrollShabbaton'] = 1;
+			//}
 			if ($cRow['allow_edit']) {
 				$children[$row['user_id']]['shabbatonEdit'] = 1;
 			}
