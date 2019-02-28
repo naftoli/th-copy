@@ -18,7 +18,6 @@ if ( $admin_id ) {
     WHERE
         tc.year = :year AND tc.parent_id = :admin
             AND (tc.contestant = 1 or tc.school_rep = 1) 
-            AND tc.can_enroll = 1 
   ");
   $res = $stmt->execute([
     ':year'   =>  $year, 
@@ -34,7 +33,7 @@ if ( $admin_id ) {
     } else {
       echo json_encode([
         'success'   =>  false,
-        'error'     =>  "Could not find any children eligible for the chidon that haven't been paid yet and have been activated by the school."
+        'error'     =>  "Could not find any children eligible for the chidon that haven't been paid for."
       ]);
     }
   } else {

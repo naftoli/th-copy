@@ -42,7 +42,6 @@ $qry = "
           OR cu.chidon_year = :year)
           AND aa.role_id = 1 
           AND (tc.contestant = 1 or tc.school_rep = 1) 
-          AND tc.can_enroll = 1 
           AND tc.year = :year
 ";
 if ( $notYetPaid ) $qry .= " AND tc.date_paid is null ";
@@ -62,7 +61,7 @@ if ( $res ) {
   } else {
     echo json_encode([
       'success' =>  false,
-      'message' =>  "Could not find any children eligible for the chidon that haven't been paid yet and have been activated by the school."
+      'message' =>  "Could not find any children eligible for the chidon that haven't been paid for."
     ]);
     exit;
   }
