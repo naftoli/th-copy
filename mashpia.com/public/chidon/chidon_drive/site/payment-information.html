@@ -220,8 +220,12 @@
 										`;
 
 							let maxAmount = 350;
-							if ( $("#rohr").is(":checked") ) maxAmount = 250;
-							for ( amount = maxAmount; amount >= 150; amount -= 25 ) {
+							let minAmount = 250;
+							if ( $("#rohr").is(":checked") ) {
+								maxAmount = 250;
+								minAmount = 150;
+							}
+							for ( amount = maxAmount; amount >= minAmount; amount -= 25 ) {
 								html += "<option value='" + amount + "'>" + amount + "</option>";
 							}
 							// find out if child has raised enough to have even less registration charge

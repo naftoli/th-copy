@@ -686,7 +686,7 @@
 						if (! ($("#terms1:checked").length && $("#terms2:checked").length && $("#terms3:checked").length && $("#terms4:checked").length && $("#terms5:checked").length) ) {
 							errors += "You must indicate your agreement to all terms.\n";
 						}
-						if ( info.acc_street == 'East Flatbush (out of the walking zone)' && !$(".terms6:checked").length ) {
+						if ( info.acc_street == 'East Flatbush (out of the walking zone)' && !$("#terms6:checked").length ) {
 							errors += "You must indicate your agreement to all terms.\n";
 						}
 						console.log( errors );
