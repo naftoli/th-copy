@@ -24,6 +24,8 @@ function checkMandatory( $values ) {
 
   // map of needed fields with their more user friendly description
   $mandatory = [
+    'name'            =>  'Name on Credit Card', 
+    'email'           =>  'Email Address',
     'num'             =>  'Credit Card Number',
     'exp'             =>  'Credit Card Expiry',
     'cvv'             =>  'Security Code',
@@ -73,7 +75,9 @@ $field";
 // prepare variables for payment
 $amount = $donation['amount'];
 $name = $donation['name'];
+$email = $donation['email'];
 $rohr = $donation['rohr'];
+
 $cc_info = [];
 $cc_info['number'] = $donation['cc']['num'];
 $cc_info['exp'] = $donation['cc']['exp'];
@@ -126,11 +130,11 @@ if ($response != null) {
           $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();          
 
           // send email confirmation
-          // $subject = "Chidon Shabbaton Registration Payment";
-          // $email_message = "Thank you for your payment of $" . $amount . ". Your transaction id is: " . $trans_id . ". Your child(ren) are now registered for the Shabbaton.";
-          // $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
-          //           'Reply-To: chidon@tzivoshashem.com' . "\r\n";
-          // @mail( $email, $subject, $email_message, $headers );
+          $subject = "Shabbaton Enrollment " . $year;
+          $message = "Thank you for your registration fee of $" . $amount . ". Your transaction id is: " . $trans_id . ". Your child(ren) are now enrolled in the Chidon Shabbaton for " . $year;
+          $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
+                    'Reply-To: chidon@tzivoshashem.com' . "\r\n";
+          @mail( $email, $subject, $message, $headers );
         } else {
           $error_msg .= "Transaction Failed \n";
           if ($tresponse->getErrors() != null) {

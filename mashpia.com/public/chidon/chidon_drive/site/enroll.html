@@ -437,6 +437,7 @@
 					$("#walking_zone").val( child.walking_zone );
 					$("#acc_phone").val( child.host_number );
 					if ( parseInt(child.walking) ) $("#walking").trigger('click');
+					if ( child.host_street == 'East Flatbush (out of the walking zone)' ) $("#walkingException").show();
 					
 					switch ( child.test_lang ) {
 						case 'en':
