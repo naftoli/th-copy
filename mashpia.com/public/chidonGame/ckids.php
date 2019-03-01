@@ -288,8 +288,7 @@
     </section>
 	<!-- Pricing Table Section End -->
 	
-    <div style="margin-top: 100px;">
-        <?php for ( $i = 0; $i < 4; $i++ ) : ?>
+    <!-- <div style="margin-top: 100px;">
         <section id="pricing-table" style="padding-top: 20px; padding-bottom: 20px;">
         <div class="container">
             <div class="row">
@@ -352,8 +351,7 @@
             	</div>
             </div>
         </div>
-    </section>
-        <?php endfor; ?>
+    </section> -->
         <!-- Pricing Table Section -->
         <!-- <section id="pricing-table">
             <div class="container" style="width: 3250px;">
@@ -420,7 +418,7 @@
             </div>
         </section> -->
 		<!-- Pricing Table Section End -->
-	</div>
+	<!-- </div> -->
 	
     
     <script src="../jquery-1.8.1.min.js"></script>
