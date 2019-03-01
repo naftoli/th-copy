@@ -31,7 +31,7 @@
         	}
         	#teams {
         		margin: auto;
-        		width: 750px;
+        		width: 800px;
             margin-bottom: 50px;
             margin-top: 30px;
         	}
@@ -223,7 +223,7 @@
 	<!-- Pricing Table Section End -->
     	
     <!-- Pricing Table Section -->
-    <section id="pricing-table" style="width: 100%; padding-top: 50px; padding-left: 5px; padding-right: 5px;>
+    <section id="pricing-table" style="width: 100%; padding-top: 150px; padding-left: 20px; padding-right: 20px;>
         <div class="container">
             <div class="row">
                 <div class="pricing">
