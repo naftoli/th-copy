@@ -31,7 +31,7 @@
         	}
         	#teams {
         		margin: auto;
-        		width: 650px;
+        		width: 750px;
             margin-bottom: 50px;
             margin-top: 30px;
         	}
