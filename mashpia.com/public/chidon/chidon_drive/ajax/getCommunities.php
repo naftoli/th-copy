@@ -55,7 +55,7 @@ try {
         foreach ( $schoolsStats as $percent => $more ) {
           ksort( $schoolsStats[$percent] );
         }
-        ksort( $schoolsStats );
+        krsort( $schoolsStats );
         $leaderboard[$communityPercent][$community]['schools'] = $schoolsStats;
       }      
     }
