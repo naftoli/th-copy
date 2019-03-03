@@ -223,11 +223,11 @@
 																			<div class="chidonRegInfo" style="color: #17771c">Chidon Shabbaton Enrolled</div>
 																		{{else}}
 																			<div class="chidonRegInfo">Chidon Shabbaton Pending Enrollment</div>
-																			<!-- {{#if this.shabbatonEdit}}
+																			{{#if this.shabbatonEdit}}
 																				<div style="margin: 10px 0px">
 																					<button class="btn btn-danger editEnrollment">Edit Enrollment</button>
 																				</div>
-																			{{/if}} -->
+																			{{/if}}
 																		{{/if}}
 																	{{else}}
 																		{{#if this.enrollShabbaton}}
@@ -543,10 +543,13 @@
                     location.href = url;
                 });
                 
-                // $(document).on('click', '.editEnrollment', function() {
-                //     var id = $(this).parent().parent().parent().parent().attr('id');
-                //     location.href = "/mobile/chidon/edit.html?id=" + id;
-                // });
+                $(document).on('click', '.editEnrollment', function() {
+                    // var id = $(this).parent().parent().parent().parent().attr('id');
+                    // location.href = "/mobile/chidon/edit.html?id=" + id;
+                    Cookies.set('chidon_admin', admin);
+                    let url = "https://chidondrive.com/site/edit.html";
+                    location.href = url;
+                });
                 
                 $(document).on('click', '.chidon', function() {
                     var id = $(this).parent().parent().parent().attr('id');
