@@ -99,14 +99,14 @@ $year = GlobalSettings::getChidonYear();
                 <input type="radio" name="bus" class="bus" value="2" /> My bus is leaving from the Chidon Event Venue to Crown Heights drop off location; President and Kingston after the event.<br />
                 <input type="radio" name="bus" class="bus" value="0" /> My bus is leaving from the Chidon Event Venue to our school and we dont need a bus from the Chidon Event.
               </div>
-              <?php else : ?>
-              <input type="hidden" name="bus" class="bus" value="0" />
-              <?php endif; ?>
 
               <h2>Food Trip Home</h2>
               <div class="input_group input_full">
                 <input type="checkbox" name="food" id="food" /> Yes! I would like to receive food and snacks for the trip back home.
               </div>
+              <?php else : ?>
+              <input type="hidden" name="bus" class="bus" value="0" />
+              <?php endif; ?>
 
               <h2>Credit Card Info</h2>
               <div id="ccOnFile">
