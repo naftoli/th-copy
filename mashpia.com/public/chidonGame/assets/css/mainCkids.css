@@ -28,7 +28,7 @@ body{
   font-family: 'Robot', sans-serif;
 }
 #pricing-table .pricing .pricing-table {
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 #bottom-table .pricing .pricing-table {
   padding-bottom: 0;	

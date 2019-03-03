@@ -156,7 +156,13 @@
 					<br />
 					<button id="update">Update</button>
 				</td>
- 			</tr>
+             </tr>
+             <!-- <tr>
+ 				<td colspan="5">
+					<br />
+					<button id="round3">Change Boxes for Round 3</button>
+				</td>
+ 			</tr> -->
  		</tbody></table>     		
  	</div>
  	
@@ -669,6 +675,10 @@
     				$(".team" + num).text('0');
     			}
     		});
+
+            $("#round3").click( function() {
+
+            });
     	});
     	
     	function updateTable(id) {
