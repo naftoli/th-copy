@@ -362,6 +362,13 @@
 		</script>
 
 <script>
+	if ( location.protocol != 'https:' ) {
+		let url = window.location.href;
+		let pos = url.indexOf(':');
+		let newUrl = 'https' + url.substring( pos );
+		location.href = newUrl;
+	}
+	
 	$(function() {
 				var header = $("header");
 				$(window).scroll(function() {    
