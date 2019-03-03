@@ -104,8 +104,6 @@ $year = GlobalSettings::getChidonYear();
               <div class="input_group input_full">
                 <input type="checkbox" name="food" id="food" /> Yes! I would like to receive food and snacks for the trip back home.
               </div>
-              <?php else : ?>
-              <input type="hidden" name="bus" class="bus" value="0" />
               <?php endif; ?>
 
               <h2>Credit Card Info</h2>
@@ -146,6 +144,7 @@ $year = GlobalSettings::getChidonYear();
 
         $("#school_id").change( getCCInfo );
 
+        <?php if ($admin_user['auth'] != 'super') : ?>
         $("#next_page").click( function( evt ) {
           evt.preventDefault();
 
@@ -201,6 +200,7 @@ $year = GlobalSettings::getChidonYear();
             });
           }
         });
+        <?php endif; ?>
 
         function getCCInfo() {
           let school_id = $("#school_id").val();

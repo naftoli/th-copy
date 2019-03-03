@@ -20,7 +20,6 @@ foreach ($schools as $sid => $schoolName) {
             join admin_auths aa on aa.id = u.user_id 
             join admins a using (admin_id) 
             where tc.year = " . $year . "
-            and tc.can_enroll = 1
             and (tc.contestant = 1 or tc.school_rep = 1) 
             and tc.date_paid > 0 
             and aa.auth = 'user'
