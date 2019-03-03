@@ -128,7 +128,7 @@
  				<td><input type="radio" name="t1" value="0" checked=""> None</td>
  			</tr>
  			<tr>
- 				<td class="teamName">Tzedaka</td>
+ 				<td class="teamName">Tzedakah</td>
  				<td><input type="radio" name="t2" value="1" class="one"> Team 1</td>
  				<td><input type="radio" name="t2" value="2" class="two"> Team 2</td>
         <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>
@@ -223,7 +223,7 @@
 	<!-- Pricing Table Section End -->
     	
     <!-- Pricing Table Section -->
-    <section id="pricing-table" style="width: 100%; padding-top: 150px; padding-left: 20px; padding-right: 20px;>
+    <section id="pricing-table" style="width: 100%; padding-top: 150px; padding-left: 20px; padding-right: 20px;">
         <div class="container">
             <div class="row">
                 <div class="pricing">
