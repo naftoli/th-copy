@@ -14,7 +14,7 @@ $schools = $as->getSchools();
 $users = array();
 foreach ($schools as $id => $school) {
     $users[$id] = array();
-    $sql = "select tc.*, u.first, u.last, u.gender, u.first_he, u.last_he, c.*, a.admin_email, a.admin_phone_mobile, a.admin_phone_mobile2, a.admin_phone_home "
+    $sql = "select tc.*, u.first, u.last, u.gender, u.first_he, u.last_he, c.class_grade, c.class_sub, a.admin_email, a.admin_phone_mobile, a.admin_phone_mobile2, a.admin_phone_home "
         ."from th_chidon tc "
         ."join users u using (user_id) "
         ."join classes c on u.class_id = c.class_id "
@@ -93,6 +93,7 @@ foreach ($schools as $id => $school) {
                 echo "Hebrew Last Name: " . $user['last_he'] . "<br />";
                 echo "Book: " . $user['book'] . "<br />";
                 echo "Gender: " . $user['gender'] . "<br />";
+                echo "History: " . (strpos( $user['history'], ',' ) !== false ? explode(',', $user['history']) : $user['history']) . "<br />";
                 //echo "Avg Part 1: ";
                 //echo number_format(($user['test1a'] + $user['test2a'] + $user['test3a']) / 3, 2) . "<br />";
                 echo "Test Language: ";
