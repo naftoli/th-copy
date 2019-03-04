@@ -93,7 +93,7 @@ foreach ($schools as $id => $school) {
                 echo "Hebrew Last Name: " . $user['last_he'] . "<br />";
                 echo "Book: " . $user['book'] . "<br />";
                 echo "Gender: " . $user['gender'] . "<br />";
-                echo "History: " . (strpos( $user['history'], ',' ) !== false ? explode(',', $user['history']) : $user['history']) . "<br />";
+                echo "History: " . $user['history'] . "<br />";
                 //echo "Avg Part 1: ";
                 //echo number_format(($user['test1a'] + $user['test2a'] + $user['test3a']) / 3, 2) . "<br />";
                 echo "Test Language: ";
