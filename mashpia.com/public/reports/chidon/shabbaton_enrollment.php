@@ -3,7 +3,7 @@ include(dirname(__FILE__)."/../inc/header.php");
 
 /***************** LOAD SCHOOLS **********************/
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
-$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true );
 $schools = $as->getSchools();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
@@ -86,7 +86,7 @@ $schools = $as->getSchools();
                 
                 function generate_csv() {
                     var rows = []; // the rows for the csv export
-                    var csvContent = "Grade,Name,Hebrew Name,Host Name,Host Address,Host Cross Streets,Host Phone,Father Cell,Mother Cell,Allergies,Walk (day),Walk (night)\n"; //"Serial,First,Last,Grade,# Created\n"; // the baisc csv file
+                    var csvContent = "Grade,Name,Hebrew Name,Host Name,Host Address,Host Cross Streets,Host Phone,Father Cell,Mother Cell,Allergies,Walking\n"; //"Serial,First,Last,Grade,# Created\n"; // the baisc csv file
                     var universalBOM = "\uFEFF";
                     // TODO add headers
                     $.each($("tr"), function(index, tr) {

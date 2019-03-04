@@ -23,7 +23,7 @@ $school_id = mysql_real_escape_string($_POST['school_id']);
 $users_query = mysql_query(
     "SELECT u.first, u.last, u.first_he, u.last_he, u.user_id, "
     ." c.class_grade, c.class_sub, "
-    ." th.host, th.host_address1, th.host_address2, th.between_streets, th.host_number, th.allergies, th.walk_day, th.walk_night, "
+    ." th.*, "
     ." a.admin_phone_mobile, a.admin_phone_mobile2 "
     ." FROM th_chidon th "
     ." JOIN users u USING (user_id) "
@@ -44,7 +44,7 @@ if($debug) echo "</pre>";
 if (count($users) > 0) { ?>
     <table>
         <thead>
-            <th>Grade</th><th>Name</th><th>Hebrew Name</th><th>Host</th><th>Father Cell</th><th>Mother Cell</th><th>Allergies</th><th>Walk (Day)</th><th>Walk (Night)</th>
+            <th>Grade</th><th>Name</th><th>Hebrew Name</th><th>Host</th><th>Father Cell</th><th>Mother Cell</th><th>Allergies</th><th>Walking Alone</th>
         </thead>
         <tbody>
             <? foreach($users as $user) {?>
@@ -57,10 +57,10 @@ if (count($users) > 0) { ?>
                         Host: <?=$user['host']?>
                     </span>
                     <span class="host_info_item">
-                        <?=$user['host_address1'] . " " . $user['host_address2']?>.
+                        <?=$user['host_street_num'] . $user['host_street_suffix'] . ' ' . $user['host_street'] . ' ' . $user['host_street_apt']?>.
                     </span>
                     <span class="host_info_item">
-                        Cross Streets: <?=$user['between_streets']?>.
+                        Cross Streets: <?=$user['between_streets1'] . ' and ' . $user['between_streets2']?>.
                     </span>
                     <span class="host_info_item">
                         Phone number: <?=$user['host_number']?>
@@ -69,8 +69,7 @@ if (count($users) > 0) { ?>
                 <td><?=$user['admin_phone_mobile']?></td>
                 <td><?=$user['admin_phone_mobile2']?></td>
                 <td><?=$user['allergies']?></td>
-                <td><?=$user['walk_day'] ? "Yes" : "No"?></td>
-                <td><?=$user['walk_night'] ? "Yes" : "No"?></td>
+                <td><?=$user['walking'] ? "Yes" : "No"?></td>
             </tr>
             <?}?>
         </tbody>
