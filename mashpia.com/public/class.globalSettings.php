@@ -21,9 +21,13 @@ class GlobalSettings {
     }
     
     public static function getRegistrationYear( $school_id = false ) {
-        if ( self::isAustralian( $school_id ) )
-            return 5778;
-        return 5779; // don't bother to load key from DBS each time
+        $year = self::getCurrentYear();
+        if ( self::isAustralian( $school_id ) ) {
+            // find out current month
+            $month = date('m');
+            if ( $month > 8 ) return --$year;
+        } 
+        return $year;
     }
     
     public static function getChidonYear() {
