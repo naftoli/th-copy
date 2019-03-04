@@ -536,15 +536,15 @@
 				}
 
 				function getCrossStreets( number, street ) {
-					if ( !number ) {
-						alert('You must enter a Street Number.');
-						return false;
-					} else if ( isNaN( number ) ) {
-						alert('Street numbers can only contain digits, no alphanumeric characters are allowed.');
-						return false;
-					} 
-
 					if ( street && street != 'Choose One' && street != 'East Flatbush (out of the walking zone)' ) {
+						if ( !number ) {
+							alert('You must enter a Street Number.');
+							return false;
+						} else if ( isNaN( number ) ) {
+							alert('Street numbers can only contain digits, no alphanumeric characters are allowed.');
+							return false;
+						} 
+
 						$("#walkingException").hide();
 						$.post('../ajax/getCrossStreets.php', { num: number, street: street }, function( result ) {
 							let info = JSON.parse( result );
