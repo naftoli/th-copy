@@ -402,6 +402,7 @@
 					    	$('#section0 .leader').each(function(index, i){
 					    		var percent = $(this).data('percent');
 					    		$(this).find('.bar-line__bar').width(percent + '%');
+					    		console.log(percent);
 					    	});	
 							}
 							if(destination.index == 2){
@@ -432,6 +433,7 @@
 								var percent = $(this).data('percent');
 								$(this).find('.bar-line__bar').width(percent + '%');
 								$(this).find('.bar-line__marker-number').text('$' + formatNumber( Math.round(amount) ));
+								$(this).find('.bar-percent__number').text(percent + '%');
 							});	
 						}
 					});

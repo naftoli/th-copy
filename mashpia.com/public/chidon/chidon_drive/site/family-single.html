@@ -328,11 +328,19 @@
 								}
 								let totalRegPercent = totalReg ? Math.round((totalReg / familyGoal) * 100) : 0;
 								$("#totalRegFee").text( totalReg );
-								$(".registration").attr('data-percent', totalRegPercent );
+								if(totalRegPercent > 0){
+									$(".registration").attr('data-percent', totalRegPercent );									
+								} else {
+									$(".registration").hide();
+								}
 
 								let totalRohrPercent = totalRohr + totalReg ? Math.round(((totalRohr + totalReg) / familyGoal) * 100) : 0;
 								$("#totalRohrSubsidy").text( totalRohr );
-								$(".subsidy").attr('data-percent', totalRohrPercent );
+								if(totalRohrPercent < 0){
+									$(".subsidy").attr('data-percent', totalRohrPercent );
+								} else {
+									$(".subsidy").hide();
+								}
 
 								let totalDonationPercent = totalReg + totalRohr + totalDonation ? Math.round(((totalReg + totalRohr + totalDonation) / familyGoal) * 100) : 0;
 								if ( totalDonationPercent > 100 ) totalDonationPercent = 100;

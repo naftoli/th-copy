@@ -114,6 +114,7 @@
 	border-radius: 2rem;
 	position: relative;
 	margin-top: 1rem;
+	height: 22px;
 }
 .bar-bar__wrapper .bar-bar__line {
 	/* background: #e3b848; */
@@ -138,7 +139,7 @@
 	left: 0;
 }
 .bar-bar__wrapper .bar-bar__line.donation {
-	background: #4fabbb;
+	background: #4f78bb;
 	position: absolute;
 	z-index: 1;
 	top: 0;
@@ -156,7 +157,7 @@
 	background: #3c65b0;
 }
 .bar-bar__wrapper .bar-bar__line.donation .bar-bar__circle {
-	background: #244f57;
+	background: #3c65b0;
 }
 .bar-bar__wrapper .bar-bar__marker {
 	position: absolute;
@@ -173,7 +174,7 @@
   color: #c4922c;
   text-align: center;
 }
-.bar-bar__wrapper .registration .bar-bar__marker p {
+.bar-bar__wrapper .registration .bar-bar__marker p, .bar-bar__wrapper .donation .bar-bar__marker p {
 	color: #3c65b0;
 }
 

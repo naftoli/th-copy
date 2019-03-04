@@ -37,6 +37,8 @@
 .thermometer-image .bar .bar-percent .bar-percent__number {
 	width: 6rem;
 	height: 6rem;
+	text-align: center;
+	padding-top: 20px;
 }
 .thermometer-image .bar .bar-line {
 	border-width: 4px;
@@ -78,10 +80,11 @@
 #section0 .wrapper {
 	position: relative;
 	height: 100%;
+	max-width: 1200px;
 }
 #section0 h2 {
 	position: absolute;
-	bottom: 14rem;
+	bottom: 16rem;
 	left: 0;
 }
 #section0 .buttons-wrapper {
@@ -101,7 +104,8 @@
 
 
 #section0 .thermometer-wrapper .thermometer-image .bar .bar-line__marker-number {
-	right: -200%;
+	right: -230%;
+	top: 0;
 }
 
 #section0 .thermometer-wrapper .thermometer-image .bar-line__other-number {
@@ -114,6 +118,7 @@
 
 #section0 .thermometer-wrapper .thermometer-image .bar .bar-line {
 	width: 350px;
+	margin-left: 6rem;
 }
 
 #section0 .thermometer-wrapper .thermometer-image .bar .bar-line__marker {
@@ -240,6 +245,9 @@
   position: relative;
   display: flex;
   align-items: center;
+}
+#section3 .trophy.gold {
+  margin-left: 50px;
 }
 #section3 .trophy .image-wrapper {
   width: auto;
@@ -431,6 +439,15 @@
 	}
 }
 
+@media(max-width: 1240px) {
+	#section0 h2 {
+		left: 2rem;
+	}
+	#section0 .thermometer-wrapper {
+		left: 2rem;
+		bottom: 0;
+	}
+}
 @media(max-width: 1200px) {
 	#section0 .buttons-wrapper {
 		right: 2rem;
@@ -465,6 +482,9 @@
 	#section3 .trophies-wrapper .trophy {
 		width: 100%;
     margin: 4rem 1rem;
+	}
+	#section3 .trophy.gold {
+	  margin-left: 1rem;
 	}
 	#section3 .trophies-wrapper .trophy .image-wrapper {
 		width: 20%;
@@ -558,11 +578,18 @@
 }
 
 @media(max-width: 767px) {
-	.thermometer-image {
-		display: none;
+	.thermometer-wrapper {
+		bottom: 2.5rem;
 	}
-	#section0 h2 {
-		bottom: 9rem;
+	#section0 .thermometer-wrapper .thermometer-image .bar .bar-line {
+		max-width: calc(100vw - 10rem);
+	}
+	.thermometer-image {
+		/*display: none;*/
+	}
+	#section0 .slide .wrapper h2 {
+		bottom: 22rem;
+		font-size: 3rem;
 	}
 }
 
