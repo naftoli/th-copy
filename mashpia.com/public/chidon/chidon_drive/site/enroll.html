@@ -538,11 +538,11 @@
 				}
 
 				function checkForms() {
-					for ( id in children ) {
-						if ( !completed.includes( id ) ) {
-							return false;
-						}
-					}
+					// for ( id in children ) {
+					// 	if ( !completed.includes( id ) ) {
+					// 		return false;
+					// 	}
+					// }
 					return true;
 				}
 
@@ -719,7 +719,7 @@
 							return false;
 						} else {
 							$.post('../ajax/enrollChild.php', { child : info }, function( result ) {
-								if ( !completed.includes( info.user_id ) ) completed.push( info.user_id ); // make sure to flag user as completed the form
+								//if ( !completed.includes( info.user_id ) ) completed.push( info.user_id ); // make sure to flag user as completed the form
 								let res = JSON.parse( result );
 								if ( res.success ) {
 									alert( res.message );
@@ -729,8 +729,9 @@
 										alert('Showing form for next child.');
 										nextChild();
 									} else if ( pay ) {
-										if ( checkForms() )	location.href = "enroll-2.html";
-										else alert("You cannot go to payment until you have completed the form for all of your children.");
+										location.href = "enroll-2.html";
+										// if ( checkForms() )	location.href = "enroll-2.html";
+										// else alert("You cannot go to payment until you have completed the form for all of your children.");
 									}
 								} else {
 									alert( res.error );
