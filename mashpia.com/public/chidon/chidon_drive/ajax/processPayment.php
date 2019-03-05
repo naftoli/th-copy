@@ -130,11 +130,16 @@ if ($response != null) {
           $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();          
 
           // send email confirmation
+          // get parent email 
+          $stmt = $MASHPIA_DB->prepare("select admin_email from admins where admin_id = :admin");
+          $res = $stmt->execute([':admin' => $admin_id]);
+          $row = $stmt->fetch();
+          $parent_email = $row['admin_email'];
           $subject = "Shabbaton Enrollment " . $year;
           $message = "Thank you for your registration fee of $" . $amount . ". Your transaction id is: " . $trans_id . ". Your child(ren) are now enrolled in the Chidon Shabbaton for " . $year;
           $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
                     'Reply-To: chidon@tzivoshashem.com' . "\r\n";
-          @mail( $email, $subject, $message, $headers );
+          @mail( "$email, $parent_email", $subject, $message, $headers );
         } else {
           $error_msg .= "Transaction Failed \n";
           if ($tresponse->getErrors() != null) {
