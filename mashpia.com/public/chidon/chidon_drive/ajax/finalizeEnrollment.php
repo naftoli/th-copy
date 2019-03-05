@@ -40,6 +40,19 @@ foreach ( $ids as $id ) {
 
 if ( $success ) {
   $MASHPIA_DB->commit();
+
+  // send email to parent
+  // get parent email 
+  $stmt = $MASHPIA_DB->prepare("select admin_email from admins where admin_id = :admin");
+  $res = $stmt->execute([':admin' => $admin_id]);
+  $row = $stmt->fetch();
+  $email = $row['admin_email'];
+  $subject = "Shabbaton Enrollment " . $year;
+  $message = "Your child(ren) are now successfully enrolled in the Chidon Shabbaton for " . $year;
+  $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
+            'Reply-To: chidon@tzivoshashem.com' . "\r\n";
+  @mail( $email, $subject, $message, $headers );
+
   echo json_encode([
     'success'   =>  true,
     'message'   =>  "You have successfully registered your child(ren) to the Shabbaton."
