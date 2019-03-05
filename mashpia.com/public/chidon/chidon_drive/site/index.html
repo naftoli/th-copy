@@ -375,7 +375,7 @@
 		<script src="js/fullpage.continuousHorizontal.min.js"></script>
 		<script type="text/javascript">
 				if ( location.protocol != 'https:' ) {
-					let url = window.location.href;
+					var url = window.location.href;
 					let pos = url.indexOf(':');
 					let newUrl = 'https' + url.substring( pos );
 					location.href = newUrl;

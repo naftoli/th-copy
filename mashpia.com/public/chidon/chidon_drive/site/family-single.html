@@ -272,7 +272,7 @@
 		    $(document).ready(function(e){
 					// only show content if correct password is supplied
 					let password = prompt("Please enter the correct password to access this page.");
-					if ( password.toLowerCase() == 'chidondrive5779' ) $("#main").show();
+					if ( password.toLowerCase().trim() == 'chidondrive5779' ) $("#main").show();
 					else alert("Incorrect password.");
 
 		    	// Round text
