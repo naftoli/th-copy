@@ -310,13 +310,12 @@
 						}
 					});
 
-					// list of sponsors
-					$.post('../ajax/getSponsorInfo.php', function( info ) {
-						let result = JSON.parse( info );
-						console.log( result );
-						if ( result.success ) {
+					// find out total amount
+					$.post('../ajax/getTotalDonation.php', function( result ) {
+						let res = JSON.parse( result );
+						if ( res.success ) {
 							let totalGoal = 2500 * 350;
-							let totalAmount = Math.round(result.info.totalAmount);
+							let totalAmount = Math.round(res.total);
 							let percent = Math.round((totalAmount / totalGoal) * 100);
 							let numChildrenSponsored = Math.round(totalAmount / 350);
 							// let info = [totalGoal, totalAmount, percent, numChildrenSponsored];
@@ -341,7 +340,14 @@
 								styleWrapper:        true,
 								styleText:           true
 							});
+						}
+					});
 
+					// list of sponsors
+					$.post('../ajax/getSponsorInfo.php', function( info ) {
+						let result = JSON.parse( info );
+						console.log( result );
+						if ( result.success ) {
 							let sponsorList = '';
 							for ( i in result.info.sponsors ) {
 								let sponsor = result.info.sponsors[i];
