@@ -52,6 +52,7 @@ if ( $res ) {
 <html>
   <head>
     <meta charset="utf8" />
+    <meta http-equiv="refresh" content="5"/>
     <title>Chidon Drive Reporting</title>
     <style>
       tr, th, td {
