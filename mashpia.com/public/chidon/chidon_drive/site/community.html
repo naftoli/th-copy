@@ -39,7 +39,7 @@
 			<!-- Family Searchc Section -->
 			<div class="section" id="section2">
 				<div class="wrapper">
-					<h2 class="title">Support a Family</h2>
+					<h2 class="title">Support a Community</h2>
 					<div class="search-wrapper">
 						<input type="text" id="familySearch" /><a href="#" class="button" id="go">Go <img src="img/arrow.png" /></a>
 						<div class="results">
@@ -129,14 +129,6 @@
 		    	$('header nav').toggleClass('open');
 		    });
 
-				let url = location.href;
-				let pos = url.indexOf('?community=');
-				let community = '';
-				if ( pos != -1 ) {
-					community = url.substr( pos + 11 );
-					$("#section2 .title").append(" from the " + decodeURI( community ) + " Community");
-				}
-
 				// $.post('../ajax/getFamilyNames.php', function( info ) {
 				// 	let names = JSON.parse( info );
 				// 	html = '';
@@ -158,12 +150,12 @@
 
 				// });
 				
-				$.post('../ajax/getFamilyNames.php', { community : community }, function( info ) {
+				$.post('../ajax/getCommunityNames.php', function( info ) {
 					let names = JSON.parse( info );
 					let lookup = [];
 					for ( i in names ) {
 						let name = names[i];
-						lookup.push( name.last + ', ' + name.admin_city + ' ' + name.admin_postal + ' (ID:' + name.admin_id + ')' );
+						lookup.push( name );
 					}
 					$("#familySearch").autocomplete({
 						source: lookup
@@ -172,9 +164,7 @@
 
 				$("#go").click( function() {
 					let val = $(this).parent().find('input').val();
-					let pos = val.indexOf('ID:');
-					let id = val.substring( pos+3, val.length-1 );
-					location.href = "family-single.html?id=" + id;
+					location.href = "family.html?community=" + val;
 				});
 		</script>
 	</body>

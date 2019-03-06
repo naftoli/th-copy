@@ -1,10 +1,21 @@
 <?php
+ini_set('display_errors',1);
 require __DIR__ . '/../../../api/header/db.php';
 require __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+$schools = [];
+$community = $_POST['community'];
+if ( !empty( $community ) ) {
+  // get schools 
+  require __DIR__ . '/../classes/Communities.php';
+  $c = new Communities;
+  $communities = $c->getCommunities();
+  $schools = $communities[ urldecode($community) ];
+}
+
 $names = [];
-$stmt = $MASHPIA_DB->prepare("
+$qry = "
   SELECT 
       a.admin_id, a.last, a.admin_city, a.admin_postal
   FROM
@@ -14,9 +25,9 @@ $stmt = $MASHPIA_DB->prepare("
   WHERE
       tc.year = :year AND a.last != '' 
           AND (tc.contestant = 1 or tc.school_rep = 1) 
-  GROUP BY a.admin_id
-  ORDER BY a.last
-");
+";
+if ( !empty( $schools ) ) $qry .= " AND tc.school_id in (" . implode(',', $schools) . ")";
+$stmt = $MASHPIA_DB->prepare( $qry );
 $res = $stmt->execute([
   ':year' =>  $year
 ]);
