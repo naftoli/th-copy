@@ -36,7 +36,7 @@ if ( $res ) {
 $children = 0;
 $stmt = $MASHPIA_DB->prepare("
   SELECT 
-      COUNT(*)
+      COUNT(*) AS total 
   FROM
       th_chidon
   WHERE
