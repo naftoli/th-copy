@@ -75,7 +75,6 @@ if ( $res ) {
         <td><?=number_format($totals['donation'],2)?></td>
         <td><?=number_format($totals['reg'],2)?></td>
         <td><?=number_format($totals['rohr'] * 100, 2)?></td>
-        <td><?=$children?></td>
         <td>
         <?php
         $total = 0;
@@ -86,6 +85,7 @@ if ( $res ) {
         echo number_format( $total, 2 );
         ?>
         </td>
+        <td><?=$children?></td>
       </tr>
   </body>
 </html>
