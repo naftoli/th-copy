@@ -538,7 +538,6 @@
                     //alert("Shabbaton enrollment will IYH open up on Monday February 18, 2019");
                     // var id = $(this).parent().parent().parent().parent().attr('id');
                     // location.href = "/mobile/chidon/shabbaton.html?id=" + id;
-                    Cookies.set('chidon_admin', admin, { path: '/chidon/chidon_drive/site/' });
                     let url = "https://chidondrive.com/site/enroll.html";
                     location.href = url;
                 });
@@ -546,7 +545,6 @@
                 $(document).on('click', '.editEnrollment', function() {
                     // var id = $(this).parent().parent().parent().parent().attr('id');
                     // location.href = "/mobile/chidon/edit.html?id=" + id;
-                    Cookies.set('chidon_admin', admin, { path: '/chidon/chidon_drive/site/' });
                     let url = "https://chidondrive.com/site/edit.html";
                     location.href = url;
                 });
