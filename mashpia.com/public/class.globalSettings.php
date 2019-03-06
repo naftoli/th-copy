@@ -21,7 +21,7 @@ class GlobalSettings {
     }
     
     public static function getRegistrationYear( $school_id = false ) {
-        $year = self::getCurrentYear();
+        $year = self::getChidonYear();
         if ( self::isAustralian( $school_id ) ) {
             // find out current month
             $month = date('m');

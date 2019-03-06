@@ -32,6 +32,21 @@ if ( $res ) {
   $totals['rohr'] = $row['rohr'];
   $totals['reg'] = $row['reg'];
 }
+
+$children = 0;
+$stmt = $MASHPIA_DB->prepare("
+  SELECT 
+      COUNT(*)
+  FROM
+      th_chidon
+  WHERE
+      year = :year AND date_paid > 0
+");
+$res = $stmt->execute([':year' => $year]);
+if ( $res ) {
+  $row = $stmt->fetch();
+  $children = $row['total'];
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -54,11 +69,13 @@ if ( $res ) {
         <th>Shabbaton Fee</th>
         <th>Rohr Subsidy</th>
         <th>Grand Total</th>
+        <th>Children Enrolled</th>
       </tr>
       <tr>
         <td><?=number_format($totals['donation'],2)?></td>
         <td><?=number_format($totals['reg'],2)?></td>
         <td><?=number_format($totals['rohr'] * 100, 2)?></td>
+        <td><?=$children?></td>
         <td>
         <?php
         $total = 0;
