@@ -23,8 +23,8 @@ if (mysql_query($sql)) {
         $parentRow = mysql_fetch_assoc( $parentRes );
         
         $to      = $parentRow['admin_email'];
-        $subject = 'Chidon Shabbaton Enrollment';
-        $msg     = "Congratulations! Your child is now enrolled into the Chidon Shabbaton for " . $year . "!
+        $subject = 'Chidon Shabbaton ' . $year;
+        $msg     = "Congratulations! Your child is now fully enrolled into the Chidon Shabbaton for " . $year . "!
                     They will receive more information from their Chidon coordinator.";
         $headers = 'From: chidon@tzivoshashem.org' . "\r\n" .
                     'Reply-To: chidon@tzivoshashem.org' . "\r\n";    
