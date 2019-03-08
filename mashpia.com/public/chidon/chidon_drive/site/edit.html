@@ -291,6 +291,10 @@
 						</div>
 					</form>
 				</div>
+
+				<div align="center" style="padding-top: 20px;" id="logoffDiv" style="display: none;">
+						<a href="#" style="color: red; font-size: 18px;" id="logoff">Logoff</a>
+				</div>
 			</div>
 		</div>
 
@@ -358,8 +362,14 @@
 					location.href = newUrl;
 				}
 
-				if ( Cookies.get('chidon_admin') ) getChildren( Cookies.get('chidon_admin') );
-				else $(".login").show();
+				if ( Cookies.get('chidon_admin') ) {
+					getChildren( Cookies.get('chidon_admin') );
+					$("#logoffDiv").show();
+				}
+				else {
+					$(".login").show();
+					$("#logoffDiv").hide();
+				}
 
 		    $('#menu-opener').click(function(e){
 		    	$('header nav').toggleClass('open');
@@ -392,6 +402,7 @@
 								`;
 							}
 							$(".login").hide();
+							$("#logoffDiv").show();
 							$(".kids-wrapper").empty();
 							$(".kids-wrapper").append( html );
 							$(".kids-wrapper").show();							
@@ -705,6 +716,11 @@
 								}
 							});
 						}
+					});
+
+					$("#logoff").click( function() {
+						Cookies.remove('chidon_admin');
+						location.href = "enroll.html";
 					});
 		    });
 		</script>
