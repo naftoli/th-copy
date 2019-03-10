@@ -189,7 +189,7 @@ if (isset($_POST['submit'])) {
 	}
 	
 	$lookup = array(
-		'accomodations'	=>	array('host', 'host_street_num', 'host_street_num_suffix', 'host_steet', 'host_street_apt'),
+		'accomodations'	=>	array('host_street_num', 'host_street_num_suffix', 'host_street', 'host_street_apt'),
 		'between_streets'	=>	array('between_streets1', 'between_streets2'),
 		'winner_type'	=>	array('contestant', 'school_rep'),
 		'medal'			=>	array('medal', 'medal_number'),
@@ -265,8 +265,9 @@ if (isset($_POST['submit'])) {
 				<tbody>
 					<?php
 					$totals = array();
-					echo "<pre>"; print_r( $data ); echo "</pre>";
+					//echo "<pre>"; print_r( $data ); echo "</pre>";
 					foreach ($report as $index => $row) {
+						//echo "<pre>"; print_r( $row ); echo "</pre>"; continue;
 						echo "<tr>";
 						foreach ($data as $column) {
 							if (!array_key_exists($column, $lookup)) {
@@ -298,20 +299,16 @@ if (isset($_POST['submit'])) {
 									$numTests = 3;
 									$avg = $test > 0 ? number_format(($test / $numTests), 2) : 0;
 									$html .= $avg;
+								} else if ( $column == 'accomodations' ) {
+									foreach ( $lookup[$column] as $val ) {
+										$html .= $row[$val] . ' ';
+									}
 								} else if ($column == 'winner_type') {
 									if (intval($row[$lookup[$column][1]])) {
 										$html .= 'school rep.';
 									} else if (intval($row[$lookup[$column][0]])) {
 										$html .= 'contestant';
 									}
-								} else if ($column == 'walking') {
-									if (intval($row[$lookup[$column][1]]) == 1) {
-										$html .= "yes";
-									} else if (intval($row[$lookup[$column][0]]) == 1 && intval($row[$lookup[$column][1]]) == 0) {
-										$html .= "day only";
-									} else if (intval($row[$lookup[$column][0]]) == 0 && intval($row[$lookup[$column][1]]) == 0) {
-										$html .= "no";
-									} 
 								} else {
 									foreach ($lookup[$column] as $val) {
 										$html .= $row[$val] . ", ";

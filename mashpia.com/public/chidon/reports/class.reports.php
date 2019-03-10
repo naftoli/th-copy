@@ -73,7 +73,7 @@ class Reports
 
             'accomodations' =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  array('host', 'host_address1', 'host_address2')
+                'column'    =>  array('host_street_num', 'host_street_num_suffix', 'host_street', 'host_street_apt')
             ),
             'host_name' =>  array(
                 'table'     =>  'th_chidon',
@@ -588,6 +588,7 @@ class Reports
                     $sql .= " group by tc.user_id";
                 }
             }
+            //echo $sql; exit;
 
             return $sql;
         } else {
