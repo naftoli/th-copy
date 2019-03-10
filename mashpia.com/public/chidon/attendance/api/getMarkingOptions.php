@@ -6,6 +6,7 @@ require_once(dirname(__FILE__)."/functions/header.php");
 
 require_once ( $_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php' );
 $year = GlobalSettings::getChidonYear();
+$year = 5778;
 
 function get_times($type, $gender) {
     $times = [];

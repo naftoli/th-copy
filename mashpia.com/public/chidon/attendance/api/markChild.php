@@ -6,6 +6,7 @@ require_once(dirname(__FILE__)."/functions/header.php");
 
 require_once ( $_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php' );
 $year = GlobalSettings::getChidonYear();
+$year = 5778;
 
 // Authentication scheme
 require_once( $_SERVER['DOCUMENT_ROOT'].'/mobile/reg/ajax/encrypt.php' );
