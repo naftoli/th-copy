@@ -83,6 +83,22 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  'host_number'
             ),
+            'host_street'   =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'host_street'
+            ),
+            'host_street_num'   =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'host_street_num'
+            ), 
+            'host_street_num_suffix'    =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'host_street_num_suffix'
+            ), 
+            'host_street_apt'   =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'host_street_apt'
+            ),
             'between_streets'   =>  array(
                 'table'     =>  'th_chidon',
                 'column'    =>  array('between_streets1', 'between_streets2')
