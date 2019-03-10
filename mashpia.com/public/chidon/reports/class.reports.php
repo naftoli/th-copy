@@ -474,7 +474,7 @@ class Reports
         if (!empty($data)) {
             // build tables / columns
             $tables = array();
-            foreach ($data as $field) {
+            foreach ($data as $index => $field) {
                 if (isset($this->fields[$field])) {
                     $table = $this->fields[$field]['table'];
                     $tables[$table][] = $this->fields[$field]['column'];

@@ -128,13 +128,14 @@ if (isset($_POST['submit'])) {
 	$chidonType = '';
 	$byAvg = array();
 	foreach ($_POST as $k => $v) {
-        if ($k == 'submit') break;
+		if ($k == 'submit') break;
 		if ($k == 'year') $year = mysql_real_escape_string(intval($v));
 		else if ($k == 'genderLimit') $gender = mysql_real_escape_string($v);
 		else if ($k == 'limitTo') $limit = mysql_real_escape_string($v);
 		else if ($k == 'chidon_type') $chidonType = mysql_real_escape_string($v);
-        else $data[] = mysql_real_escape_string($k);
-    }
+		else if ( !in_array( $k, $data ) ) $data[] = mysql_real_escape_string($k);
+		if ( $k == 'accomodations' ) $data[] = 'between_streets'; // add between streets to accomodation info
+	}
     
 	$report = array();
     require_once 'class.reports.php';
@@ -306,6 +307,8 @@ if (isset($_POST['submit'])) {
 									foreach ( $lookup[$column] as $val ) {
 										$html .= $row[$val] . ' ';
 									}
+								} else if ( $column == 'between_streets' ) {
+									$html .= $row[$lookup[$column][0]] . ' and ' . $row[$lookup[$column][1]];
 								} else if ($column == 'winner_type') {
 									if (intval($row[$lookup[$column][1]])) {
 										$html .= 'school rep.';
