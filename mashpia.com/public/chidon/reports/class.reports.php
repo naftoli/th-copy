@@ -85,7 +85,7 @@ class Reports
             ),
             'between_streets'   =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  'between_streets'
+                'column'    =>  array('between_streets1', 'between_streets2')
             ),
             'allergies' =>  array(
                 'table'     =>  'th_chidon',
@@ -105,7 +105,7 @@ class Reports
             ),
             'walking'   =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  array('walk_day', 'walk_night')
+                'column'    =>  'walking',
             ),
             'walking_zone'   =>  array(
                 'table'     =>  'th_chidon',

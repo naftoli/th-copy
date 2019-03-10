@@ -31,7 +31,7 @@ $info = array(
 		'sweater_size'	=>	'Sweater Size',
 		'shoe_size'		=>	'Shoe Size',
 		'winner_type'	=>	'Contestant / School Rep.',
-		'walking'		=>	'Walk Alone',
+		'walking'			=>	'Walk Alone',
 		'walking_zone'	=>	'Walking Zone',
 		//'bus'			=>	'Bus Number',
 		//'seat'			=>	'Seat Number',
@@ -189,9 +189,9 @@ if (isset($_POST['submit'])) {
 	}
 	
 	$lookup = array(
-		'accomodations'	=>	array('host', 'host_address1', 'host_address2'),
+		'accomodations'	=>	array('host', 'host_street_num', 'host_street_num_suffix', 'host_steet', 'host_street_apt'),
+		'between_streets'	=>	array('between_streets1', 'between_streets2'),
 		'winner_type'	=>	array('contestant', 'school_rep'),
-		'walking'		=> 	array('walk_day', 'walk_night'),
 		'medal'			=>	array('medal', 'medal_number'),
 		'plaque'		=>	array('plaque', 'plaque_number'),
 		'parent_name'	=>	array('first', 'last'),
