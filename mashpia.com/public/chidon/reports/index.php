@@ -20,9 +20,9 @@ $info = array(
 		'book'			=>	'Book',
 		'grade'			=>	'Grade',
 		'school'		=>	'School',
-		'accomodations'	=>	'Accomodation Info',
 		'host_name'		=>	'Host Name',
 		'host_number'		=>	'Host Number',
+		'accomodations'	=>	'Accomodation Info',
 		'between_streets'	=>	'Cross Streets',
 		'admin_city'	=>	'City', 
 		'admin_state'	=>	'State', 
@@ -278,6 +278,9 @@ if (isset($_POST['submit'])) {
 								} else if ($column == 'chap_type') {
 									if ($row[$column] == 1) echo "<td>Chaperone</td>";
 									else echo "<td>Walking Counselor</td>";
+								} else if ( $column == 'walking' ) {
+									if ( intval( $row[$column] == 1 ) ) echo "<td>yes</td>"; 
+									else echo "<td>no</td>";
 								} else if (in_array($column, array('avgTests','avgLow','avgHigh'))) {
 									// don't output anything they are just avgs for sql qry
 								} else {
