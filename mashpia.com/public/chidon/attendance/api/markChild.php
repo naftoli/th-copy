@@ -26,7 +26,7 @@ if($checked) {
     $status = mysql_query(
          " INSERT INTO th_chidon_attendance_marks "
         ." (att_time_id, th_chidon_id, marked, marked_by) "
-        ." VALUES ('$time_id', '$th_chidon_id', 1, '".$user['staff_id']."') "
+        ." VALUES ('$time_id', '$th_chidon_id', 1, '".$login."') "
     );
 } else {
     $status = mysql_query(

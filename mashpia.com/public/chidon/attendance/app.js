@@ -47,11 +47,11 @@ var app = function() {
             renderDropdown( state.times );
             updateChildren( state.times[0].key );
             // refresh every 5 seconds....
-            setInterval(function(){
-                if (!debug) {
-                    updateChildren( $("select#timeDropdown").val() );
-                }
-            }, 5000);
+            // setInterval(function(){
+            //     if (!debug) {
+            //         updateChildren( $("select#timeDropdown").val() );
+            //     }
+            // }, 5000);
         });
     }
     
@@ -142,7 +142,7 @@ child_item.prototype.render = function() {
         html +=     '<div class="info">';
         html +=         'Host Family: ' + this.props.host + "<br/>";
         html +=         'Address: <strong>' + this.props.host_address1 + " " + this.props.host_address2 + " <br class='break-sm'/>";
-        html +=         'Between ' + this.props.between_streets + "</strong><br/>";
+        html +=         'Between ' + this.props.between_streets1 + "</strong><br/>";
         html +=         'Host Phone Number: ' + this.props.host_number + "<br/>";
         html +=     '</div>';
     }

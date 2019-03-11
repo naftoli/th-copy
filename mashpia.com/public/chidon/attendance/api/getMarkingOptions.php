@@ -44,7 +44,7 @@ if( $user['walking_zone'] ) {
     $times = array_merge($times, $walking_times);
 }
 
-if( $user['chap_chidon_type'] ) {
+if( $user['chidon_type'] ) {
     $chap_times = get_times('chap', $user_gender);
     $times = array_merge($times, $chap_times);
 }
