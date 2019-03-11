@@ -22,7 +22,8 @@ $info = array(
 		'school'		=>	'School',
 		'host_name'		=>	'Host Name',
 		'host_number'		=>	'Host Number',
-		'accomodations'	=>	'Accomodation Info',
+		'host_address_num'	=>	'Accomodation Address Number',
+		'host_address'	=>	'Accomodation Address',
 		'between_streets'	=>	'Cross Streets',
 		'admin_city'	=>	'City', 
 		'admin_state'	=>	'State', 
@@ -190,7 +191,8 @@ if (isset($_POST['submit'])) {
 	}
 	
 	$lookup = array(
-		'accomodations'	=>	array('host_street_num', 'host_street_num_suffix', 'host_street', 'host_street_apt'),
+		'host_address_num'	=>	array('host_street_num', 'host_street_num_suffix'),
+		'host_address'	=>	array('host_street', 'host_street_apt'),
 		'between_streets'	=>	array('between_streets1', 'between_streets2'),
 		'winner_type'	=>	array('contestant', 'school_rep'),
 		'medal'			=>	array('medal', 'medal_number'),
@@ -303,7 +305,7 @@ if (isset($_POST['submit'])) {
 									$numTests = 3;
 									$avg = $test > 0 ? number_format(($test / $numTests), 2) : 0;
 									$html .= $avg;
-								} else if ( $column == 'accomodations' ) {
+								} else if ( in_array( $column, ['host_address', 'host_address_num'] ) ) {
 									foreach ( $lookup[$column] as $val ) {
 										$html .= $row[$val] . ' ';
 									}

@@ -70,10 +70,13 @@ class Reports
                 'table'     =>  'users',
                 'column'    =>  'user_registered',
             ),
-
-            'accomodations' =>  array(
+            'host_address_num'   =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  array('host_street_num', 'host_street_num_suffix')
+            ),
+            'host_address' =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  array('host_street_num', 'host_street_num_suffix', 'host_street', 'host_street_apt')
+                'column'    =>  array('host_street', 'host_street_apt')
             ),
             'host_name' =>  array(
                 'table'     =>  'th_chidon',
