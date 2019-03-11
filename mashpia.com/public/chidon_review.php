@@ -118,7 +118,7 @@ foreach ($schools as $id => $school) {
                 echo "Parent Contact Number(s): ";
                 if (!empty($user['admin_phone_mobile'])) echo $user['admin_phone_mobile'] . ' ';
                 if (!empty($user['admin_phone_mobile2'])) echo $user['admin_phone_mobile2'] . ' ';
-                if (!empty($user['admin_phone_home'])) echo $user['admin_phone_home'] . ' ';
+                //if (!empty($user['admin_phone_home'])) echo $user['admin_phone_home'] . ' ';
                 echo "<br /><br />";
                 echo "Please verify above information and fix anything which is mistaken.<br /><br />";
                 echo "<input type='checkbox'> I verify that I have looked over the information above and fixed anything which is wrong.<br /><br />";
