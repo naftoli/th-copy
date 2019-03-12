@@ -110,8 +110,14 @@ body,td,th {
 			</script>
 		<!-- //requried-jsfiles-for owl -->
 			<!-- start content_slider -->
-		<h4>Register Today!</h4>
-		<p>Click <a href="registration.php#register">here</a> to register now for the Chidon.</p>	
+		<!-- <h4>Register Today!</h4> -->
+			<!-- <p>Click <a href="registration.php#register">here</a> to register now for the Chidon.</p>	 -->
+			<h4 style="line-height: 1.4;">
+				Purchase tickets for the Chidon Event! (coming soon)<br />
+				Girls Game Show: Sunday, Chof Daled Adar II (March 31)<br />
+				Boys Game Show: Sunday, Beis Nissan (April 7)
+			</h4>
+			<br />
 
         <div class="bases"><strong style="font-size: 30px; color: #22418e;">5778 Videos</strong></div>   
 

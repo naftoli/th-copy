@@ -14,7 +14,7 @@ $schools = $as->getSchools();
 $users = array();
 foreach ($schools as $id => $school) {
     $users[$id] = array();
-    $sql = "select tc.*, u.first, u.last, u.gender, u.first_he, u.last_he, c.*, a.admin_email, a.admin_phone_mobile, a.admin_phone_mobile2, a.admin_phone_home "
+    $sql = "select tc.*, u.first, u.last, u.gender, u.first_he, u.last_he, c.class_grade, c.class_sub, a.admin_email, a.admin_phone_mobile, a.admin_phone_mobile2, a.admin_phone_home "
         ."from th_chidon tc "
         ."join users u using (user_id) "
         ."join classes c on u.class_id = c.class_id "
@@ -23,12 +23,11 @@ foreach ($schools as $id => $school) {
         ."where tc.year = " . $year . " "
         ."and aa.auth = 'user' "
         ."and (tc.contestant = 1 or tc.school_rep = 1) "
-        ."and tc.can_enroll = 1 "
-        ."and tc.date_paid is not null "
+        ."and tc.date_paid > 0 "
         ."and u.school_id = " . $id;
     if (isset($_GET['id'])) $sql .= " and tc.th_chidon_id = " . $_GET['id'];
     $sql .= " order by class_grade, class_sub, u.last, u.first";
-    echo "<input type='hidden' name='sql' value='" . $sql . "' />";
+    //echo "<input type='hidden' name='sql' value='" . $sql . "' />";
     $result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
     while ($row = mysql_fetch_assoc($result)) {
         $users[$id][] = $row;
@@ -94,6 +93,7 @@ foreach ($schools as $id => $school) {
                 echo "Hebrew Last Name: " . $user['last_he'] . "<br />";
                 echo "Book: " . $user['book'] . "<br />";
                 echo "Gender: " . $user['gender'] . "<br />";
+                echo "History: " . $user['history'] . "<br />";
                 //echo "Avg Part 1: ";
                 //echo number_format(($user['test1a'] + $user['test2a'] + $user['test3a']) / 3, 2) . "<br />";
                 echo "Test Language: ";
@@ -118,7 +118,7 @@ foreach ($schools as $id => $school) {
                 echo "Parent Contact Number(s): ";
                 if (!empty($user['admin_phone_mobile'])) echo $user['admin_phone_mobile'] . ' ';
                 if (!empty($user['admin_phone_mobile2'])) echo $user['admin_phone_mobile2'] . ' ';
-                if (!empty($user['admin_phone_home'])) echo $user['admin_phone_home'] . ' ';
+                //if (!empty($user['admin_phone_home'])) echo $user['admin_phone_home'] . ' ';
                 echo "<br /><br />";
                 echo "Please verify above information and fix anything which is mistaken.<br /><br />";
                 echo "<input type='checkbox'> I verify that I have looked over the information above and fixed anything which is wrong.<br /><br />";

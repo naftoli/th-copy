@@ -212,9 +212,9 @@
 																	{{/if}}
 																</div>
                                                             {{/if}}
-                                                            {{#if this.chidonRegistered}}
+                                                            <!-- {{#if this.chidonRegistered}}
                                                               <div class="chidonRegInfo">Registered for Chidon</div>
-															{{/if}}
+															{{/if}} -->
 															
 															{{#if this.chidonRegistered}}
 																<div class="button-spacing">
@@ -230,11 +230,11 @@
 																			{{/if}} -->
 																		{{/if}}
 																	{{else}}
-																		{{#if this.enrollShabbaton}}
+																		<!-- {{#if this.enrollShabbaton}}
 																			<div class="button-spacing">
 																				<button class="btn btn-danger enroll">Enroll for Chidon Shabbaton</button>
 																			</div>
-																		{{/if}}
+																		{{/if}} -->
 																	{{/if}}
 																	<!-- <div style="margin:10px 0px">
 																		<button class="btn btn-primary editChidon">Edit Sweater Size</button>
@@ -534,19 +534,20 @@
                     location.href = "/mobile/chidon/edit.html?id=" + id;
                 });
                 
-                $(document).on('click', '.enroll', function() {
-                    //alert("Shabbaton enrollment will IYH open up on Monday February 18, 2019");
+                // $(document).on('click', '.enroll', function() {
+                //     //alert("Shabbaton enrollment will IYH open up on Monday February 18, 2019");
+                //     // var id = $(this).parent().parent().parent().parent().attr('id');
+                //     // location.href = "/mobile/chidon/shabbaton.html?id=" + id;
+                //     let url = "https://chidondrive.com/site/enroll.html";
+                //     location.href = url;
+                // });
+                
+                $(document).on('click', '.editEnrollment', function() {
                     // var id = $(this).parent().parent().parent().parent().attr('id');
-                    // location.href = "/mobile/chidon/shabbaton.html?id=" + id;
-                    Cookies.set('chidon_admin', admin);
-                    let url = "/chidon/chidon_drive/site/enroll.html";
+                    // location.href = "/mobile/chidon/edit.html?id=" + id;
+                    let url = "https://chidondrive.com/site/edit.html";
                     location.href = url;
                 });
-                
-                // $(document).on('click', '.editEnrollment', function() {
-                //     var id = $(this).parent().parent().parent().parent().attr('id');
-                //     location.href = "/mobile/chidon/edit.html?id=" + id;
-                // });
                 
                 $(document).on('click', '.chidon', function() {
                     var id = $(this).parent().parent().parent().attr('id');

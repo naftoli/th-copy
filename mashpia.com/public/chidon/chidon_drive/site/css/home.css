@@ -21,27 +21,6 @@
 	background-position: center center;
 }
 
-#section0 h2 {
-	font-family: 'Russo One', sans-serif;
-	font-size: 3rem;
-	color: #85abda;
-	text-transform: uppercase;
-}
-#section0 .wrapper {
-	position: relative;
-	height: 100%;
-}
-#section0 h2 {
-	position: absolute;
-	bottom: 14rem;
-	left: 0;
-}
-#section0 .buttons-wrapper {
-  position: absolute;
-  bottom: 5rem;
-  right: calc(((100vw - 1200px) / 2) + 2rem);
-  z-index: 100;
-}
 #section0 .buttons-wrapper a {
 	margin-right: 1rem;
 }
@@ -58,6 +37,8 @@
 .thermometer-image .bar .bar-percent .bar-percent__number {
 	width: 6rem;
 	height: 6rem;
+	text-align: center;
+	padding-top: 20px;
 }
 .thermometer-image .bar .bar-line {
 	border-width: 4px;
@@ -72,27 +53,76 @@
 .thermometer-image .bar .bar-line__marker-number {
 	font-size: 18px;
 	font-weight: 700;
-	/* color: #6988c5;
+	color: #6988c5;
 	top: 3px;
 	/*override style.css*/
-	/* right:300%; */
-	/* top: 30px;
-	left: -10px; */
-	left: 40px;
-	width: 200px;
-	z-index: 99;
+	right:300%;
 }
 .thermometer-image .bar-line__other-number {
 	position: absolute;
-	/* top: 3px; */
-	/* right: -200px; */
-	top: 60px;
-	right: -300px;
+	top: 3px;
+	/* right: -150px; */
+	right: -90px;
 	font-size: 18px;
 	font-weight: 700;
 	color: #6988c5;
 	z-index: 1;
-	width: 200px;
+}
+
+
+
+#section0 h2 {
+	font-family: 'Russo One', sans-serif;
+	font-size: 3rem;
+	color: #85abda;
+	text-transform: uppercase;
+}
+#section0 .wrapper {
+	position: relative;
+	height: 100%;
+	max-width: 1200px;
+}
+#section0 h2 {
+	position: absolute;
+	bottom: 16rem;
+	left: 0;
+}
+#section0 .buttons-wrapper {
+  position: absolute;
+  bottom: 5rem;
+  right: calc(((100vw - 1200px) / 2) + 2rem);
+  z-index: 100;
+}
+
+#section0 .thermometer-wrapper {
+  position: absolute;
+  bottom: 2rem;
+  left: calc(((100vw - 1200px) / 2) + 0rem);
+  z-index: 100;
+  border:1px solid yellow;
+}
+
+
+#section0 .thermometer-wrapper .thermometer-image .bar .bar-line__marker-number {
+	right: -230%;
+	top: 0;
+}
+
+#section0 .thermometer-wrapper .thermometer-image .bar-line__other-number {
+	position: absolute;
+	top: 70px;
+	/* right: -150px; */
+	right: -250%;	
+}
+
+
+#section0 .thermometer-wrapper .thermometer-image .bar .bar-line {
+	width: 350px;
+	margin-left: 6rem;
+}
+
+#section0 .thermometer-wrapper .thermometer-image .bar .bar-line__marker {
+	/* right:100px; */
 }
 
 
@@ -114,21 +144,21 @@
 	padding-left: calc(((100vw - 1200px) / 2) + 2rem);
 	justify-content: flex-start;
 }
-/*
+
 #section1 .chidon:hover {
 	background-image: url(../img/home/support-chidon-color.jpg);
 }
-*/
+
 #section1 .family {
 	/* background-image: url(../img/home/support-family.jpg); */
 	background-image: url(../img/home/thumbs/support-family.jpg);
 	padding-right: calc(((100vw - 1200px) / 2) + 2rem);
 }
-/*
+
 #section1 .family:hover {
 	background-image: url(../img/home/support-family-color.jpg);
 }
-*/
+
 #section2 {
 	/* background-image: url(../img/home/leaderboard.jpg); */
 	background-image: url(../img/home/thumbs/leaderboard.jpg);
@@ -215,6 +245,9 @@
   position: relative;
   display: flex;
   align-items: center;
+}
+#section3 .trophy.gold {
+  margin-left: 50px;
 }
 #section3 .trophy .image-wrapper {
   width: auto;
@@ -406,6 +439,15 @@
 	}
 }
 
+@media(max-width: 1240px) {
+	#section0 h2 {
+		left: 2rem;
+	}
+	#section0 .thermometer-wrapper {
+		left: 2rem;
+		bottom: 0;
+	}
+}
 @media(max-width: 1200px) {
 	#section0 .buttons-wrapper {
 		right: 2rem;
@@ -440,6 +482,9 @@
 	#section3 .trophies-wrapper .trophy {
 		width: 100%;
     margin: 4rem 1rem;
+	}
+	#section3 .trophy.gold {
+	  margin-left: 1rem;
 	}
 	#section3 .trophies-wrapper .trophy .image-wrapper {
 		width: 20%;
@@ -533,11 +578,18 @@
 }
 
 @media(max-width: 767px) {
-	.thermometer-image {
-		display: none;
+	.thermometer-wrapper {
+		bottom: 2.5rem;
 	}
-	#section0 h2 {
-		bottom: 9rem;
+	#section0 .thermometer-wrapper .thermometer-image .bar .bar-line {
+		max-width: calc(100vw - 10rem);
+	}
+	.thermometer-image {
+		/*display: none;*/
+	}
+	#section0 .slide .wrapper h2 {
+		bottom: 22rem;
+		font-size: 3rem;
 	}
 }
 

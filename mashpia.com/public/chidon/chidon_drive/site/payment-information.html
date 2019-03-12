@@ -6,6 +6,7 @@
 	  <meta charset="UTF-8">
 		<meta name="google" content="notranslate">
 		<title>Shabbaton Payment Information | Chidon</title>
+		<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 		<link rel="stylesheet" href="css/font.css" type="text/css" />
 		<link rel="stylesheet" href="css/style.css" type="text/css" />
 		<link rel="stylesheet" href="css/nice-select.css" type="text/css" />
@@ -53,7 +54,14 @@
 						<h4>PAYMENT INFORMATION</h4>
 						<div class="form">
 							<form id="paymentForm">
-								<input type="hidden" name="admin_name" id="admin_name" />
+								<div class="field">
+									<label>Name on Credit Card:</label>
+									<input type="text" id="name" placeholder="Full Name" required />
+								</div>
+								<div class="field">
+									<label>Email <span>(for receipt)</span>:</label>
+									<input type="text" id="email" placeholder="Email" required />
+								</div>
 								<div class="field">
 										<label>Card Number:</label>
 										<input type="text" id="cc_num" placeholder="0000 0000 0000 0000" required />
@@ -65,7 +73,8 @@
 										</div>
 										<div class="field">
 											<label>Exp. Year:</label>
-											<select id="exp_yy"><option>2019</option><option>2020</option><option>2021</option><option>2022</option><option>2023</option><option>2024</option><option>2025</option></select>
+											<select id="exp_yy"><option>2018</option><option>2019</option><option>2020</option><option>2021</option>
+												<option>2022</option><option>2023</option><option>2024</option><option>2025</option></select>
 										</div>
 										<div class="field">
 											<label>CVV:</label>
@@ -147,7 +156,7 @@
 								<li><h5>Quick Links</h5></li>
 								<li><a href="family.html">Find a Family</a></li>
 								<li><a href="sponsor.html">Sponsors</a></li>
-								<li><a href="enroll.html">Enrollment Form</a></li>
+								<!-- <li><a href="enroll.html">Enrollment Form</a></li> -->
 							</ul>
 						<ul>
 							<li><h5>Contact Us</h5></li>
@@ -190,10 +199,10 @@
 						if ( $(this).is(":checked") ) {
 							checked++;
 							let num = $(this).parent().parent().parent().find('.current').text();
-							totalAmount += parseInt( num );
+							totalAmount += parseFloat( num );
 						}
 					});
-					$(".children-change").val( totalAmount );
+					$(".children-change").val( totalAmount.toFixed(2) );
 					if ( checked && totalAmount == 0 ) {
 						// no need for payment
 						$("#paymentInfo").hide();
@@ -218,12 +227,17 @@
 										`;
 
 							let maxAmount = 350;
-							if ( $("#rohr").is(":checked") ) maxAmount = 250;
-							for ( amount = maxAmount; amount >= 150; amount -= 25 ) {
+							let minAmount = 250;
+							if ( $("#rohr").is(":checked") ) {
+								maxAmount = 250;
+								minAmount = 150;
+							}
+							for ( amount = maxAmount; amount >= minAmount; amount -= 25 ) {
 								html += "<option value='" + amount + "'>" + amount + "</option>";
 							}
 							// find out if child has raised enough to have even less registration charge
-							let regFee = maxAmount - child.total_donation;
+							let regFee = parseFloat( maxAmount - child.total_donation ).toFixed(2);
+							//console.log( regFee );
 							if ( regFee < 150 ) {
 								if ( regFee < 0 ) regFee = 0;
 								html += "<option value='" + regFee + "'>" + regFee + "</option>";
@@ -252,7 +266,8 @@
 						}
 					});
 					if ( toEnroll.length ) {
-						$.post('../ajax/finalizeEnrollment.php', { ids : toEnroll }, function( result ) {
+						let rohr = $("#rohr").is(":checked") ? 1 : 0;
+						$.post('../ajax/finalizeEnrollment.php', { ids : toEnroll, rohr: rohr }, function( result ) {
 							let res = JSON.parse( result );
 							if ( res.success ) {
 								alert( res.message );
@@ -266,14 +281,13 @@
 					}
 				});
 
-		    $(document).ready(function(e){
+		    $(document).ready(function(e){					
 					$.post('../ajax/getFamilyInfo.php', { admin : admin, encrypted : 1, notYetPaid : 1 }, function( result ) {
 						let info = JSON.parse( result );
 						if ( info.success ) {
-							let adminInfo = info.data.children[0];
-							let name = adminInfo.A_first + ' ' + adminInfo.A_last;
-							$("#admin_name").val( name );
-
+							// let adminInfo = info.data.children[0];
+							// let name = adminInfo.A_first + ' ' + adminInfo.A_last;
+							// $("#admin_name").val( name );
 							children = info.data.children;
 							updateDropDown();
 						} else {
@@ -302,7 +316,9 @@
 						// get all info together
 						let donation = {};
 						donation.amount = totalAmount;
-						donation.name = $("#admin_name").val();
+						donation.name = $("#name").val();
+						donation.email = $("#email").val();
+						donation.rohr = $("#rohr").is(":checked") ? 1 : 0;
 
 						let regDetails = [];
 						$(".child").each( function() {
@@ -344,5 +360,28 @@
 					});
 		    });
 		</script>
+
+<script>
+	if ( location.protocol != 'https:' ) {
+		let url = window.location.href;
+		let pos = url.indexOf(':');
+		let newUrl = 'https' + url.substring( pos );
+		location.href = newUrl;
+	}
+	
+	$(function() {
+				var header = $("header");
+				$(window).scroll(function() {    
+						var scroll = $(window).scrollTop();
+				
+						if (scroll >= 100) {
+								header.addClass("header-alt");
+					console.log ('called');
+						} else {
+								header.removeClass('header-alt');
+						}
+				});
+		});
+	</script>
 	</body>
 </html>

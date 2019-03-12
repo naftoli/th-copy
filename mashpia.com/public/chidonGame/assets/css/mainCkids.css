@@ -1,0 +1,174 @@
+/*Font Loded*/
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700);
+
+@font-face {
+	font-family: digi;
+	src: url(../fonts/DS-DIGIB.TTF);
+}
+
+body{
+  /*(background: url(../img/bg.jpg);*/
+}
+
+.btn-custom {
+  color: #bdc3c7;
+  font-size: 18px;
+  border: 1px solid #bdc3c7;
+}
+.btn-custom:hover {
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+#pricing-table {
+  padding-top: 50px;
+}
+#pricing-table .pricing {
+  margin: 0;
+  padding: 0;
+  font-family: 'Robot', sans-serif;
+}
+#pricing-table .pricing .pricing-table {
+  /* margin-bottom: 30px; */
+}
+#bottom-table .pricing .pricing-table {
+  padding-bottom: 0;	
+}
+#pricing-table .pricing .pricing-table .pricing-header {
+  position: relative;
+  /* background: #C80000 /*#34495e; */
+  /*padding: 18px 18px;*/
+  text-align: center;
+  border-bottom-right-radius: 14px;
+  border-bottom-left-radius: 14px;
+}
+.pricing-table .team1 {
+  background: #CCCC00;
+}
+.pricing-table .team2 {
+  background: #006633;
+}
+.pricing-table .team3 {
+  background: #C80000;
+}
+.pricing-table .team4 {
+  background: #0033CC;
+}
+#bottom-table #pricing-table .pricing .pricing-table .pricing-header {
+	padding: 0px;	
+}
+#pricing-table .pricing .pricing-table .pricing-header .pricing-title {
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 24px;
+  text-align: center;
+  font-weight: 700;
+}
+#pricing-table .pricing .pricing-table .pricing-header .pricing-rate {
+  font-size: 100px;
+  font-weight: 700;
+  color: #F3F781; /*ffffff;*/
+  position: relative;
+  text-align: center;
+  font-family: digi;
+}
+#bottom-table .pricing .pricing-table .pricing-header .pricing-rate { 
+  font-size: 260px;	
+  height: 360px;
+}
+#pricing-table .pricing .pricing-table .pricing-header .pricing-rate sup {
+  font-size: 24px;
+  position: relative;
+  top: -30px;
+  color: #bdc3c7;
+}
+#pricing-table .pricing .pricing-table .pricing-header .pricing-rate span {
+  font-size: 16px;
+  color: #bdc3c7;
+  text-transform: uppercase;
+}
+#pricing-table .pricing .pricing-list {
+  padding: 20px 0 20px 0;
+  background: #F8E0F7;
+  /*background: #ffffff;*/
+  border: 1px solid #e3e3e3;
+  border-top-right-radius: 14px;
+  border-top-left-radius: 14px;
+}
+/* .pricing-list.t1 {
+  background: #F8E0F7;
+}
+.pricing-list.t2 {
+  background: #66CCFF;
+}
+.pricing-list.t3 {
+  background: #99FF99;
+}
+.pricing-list.t4 {
+  background: #FFFFCC;
+} */
+
+#bottom-table #pricing-table .pricing .pricing-list { 
+	padding: 80px 0 80px 0;	
+}
+#pricing-table .pricing .pricing-list ul {
+  padding: 0px;
+  display: table;
+  margin: 0px auto;
+}
+#pricing-table .pricing .pricing-list ul li {
+  list-style: none;
+  border-bottom: 1px solid #EAECEB;
+  color: #bdc3c7;
+  font-size: 16px;
+  line-height: 42px;
+}
+#pricing-table .pricing .pricing-list ul li:last-child {
+  border: none;
+}
+#pricing-table .pricing .pricing-list ul li i {
+  margin-right: 12px;
+  color: #bdc3c7;
+}
+#pricing-table .pricing .pricing-list ul li span {
+  color: #34495e;
+  font-weight: bold;
+  font-size: 36px;
+}
+#bottom-table .pricing .pricing-list ul li span { 
+	font-size: 100px;	
+}
+
+#lower {
+	width: 80%;
+	margin: auto;
+}
+#lower table {
+	margin: auto;
+	text-align: center;
+	margin-bottom: 20px;
+}
+#lower table td {
+	padding: 5px 10px;
+}
+#lower .btn {
+	border: 1px solid black;
+	font-size: 22px;
+	margin-right: 20px;
+}
+#lower .chkAll, .unChkAll, .go {
+	border: 1px solid black;
+	font-size: 18px;
+}
+#lower .chk {
+	width: 20px;
+	height: 20px;
+}
+#buttons {
+	height: 200px;
+}
+#buttons span {
+	font-size; 14px;
+	padding: 10px;
+	right: 20px;
+}

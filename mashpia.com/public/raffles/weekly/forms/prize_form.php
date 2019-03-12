@@ -1,7 +1,8 @@
 <?php
 /***************** DEBUGGING **********************/
 // enable debuging
-if ($_GET['debug']) {
+$debug = false;
+if ( isset( $_GET['debug'] ) && $_GET['debug'] ) {
     error_reporting(E_ALL);
     ini_set("display_errors", 1);
     $debug = true; // set debug to true
@@ -28,7 +29,7 @@ require_once(dirname(__FILE__).'/../../shared/functions.php');
 if (!isset($_GET['action']) && !isset($_POST['action'])){ // if there is no action
     $action = "list"; // default action
 } else { // action was provided
-    $action = ($_POST['action'] ? $_POST['action'] : $_GET['action']); // prefer the post action
+    $action = (isset($_POST['action']) ? $_POST['action'] : $_GET['action']); // prefer the post action
 }
 /*********** DEBUGGING **********************/
 if($debug) echo "<pre>"; // if this is in debug mode, preformmat this whole section
@@ -113,7 +114,7 @@ if ($action == "destroy"){
 }
 /*********** EDITING **********************/
 if ($action == "edit"){
-    if(!$prize) $prize = Prize::load($_GET['prize_id']); // if the prize has not loaded
+    if(!isset($prize)) $prize = Prize::load($_GET['prize_id']); // if the prize has not loaded
     if(!$prize) $action='add'; // redirect to add if the prize does not exist
 }
 /*********** DEBUGGING **********************/
@@ -207,16 +208,16 @@ if($debug) echo "</pre>"; // end debugging preformatting
                 
                 <tbody>
                 <?foreach($raffles as $raffle){ // render each prize option
-                    $raffle = $prize->raffles[$raffle->raffle_id] ? $prize->raffles[$raffle->raffle_id] : $raffle;?>
+                    $raffle = isset( $prize->raffles[$raffle->raffle_id] ) ? $prize->raffles[$raffle->raffle_id] : $raffle;?>
                     <tr>
                         <td><?=$raffle->name;?></td>
                         <td><?=$raffle->run_date->format("m/d/Y");?></td>
                         <td>
-                            <input type="checkbox" id="raffle_<?=$raffle->raffle_id?>" <?= $prize->raffles[$raffle->raffle_id] ? "checked ": ""; ?>/>
+                            <input type="checkbox" id="raffle_<?=$raffle->raffle_id?>" <?= isset( $prize->raffles[$raffle->raffle_id] ) ? "checked ": ""; ?>/>
                         </td> 
                         <td>
                             <input type="number" disabled
-                                id="qty-raffle_<?=$raffle->raffle_id?>" value="<?=$prize->raffles[$raffle->raffle_id]->qty ? $prize->raffles[$raffle->raffle_id]->qty : 0;?>"
+                                id="qty-raffle_<?=$raffle->raffle_id?>" value="<?=isset( $prize->raffles[$raffle->raffle_id]->qty ) ? $prize->raffles[$raffle->raffle_id]->qty : 0;?>"
                             />
                         </td>
                     </tr>

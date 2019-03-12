@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors',1);
+//ini_set('display_errors',1);
 require_once __DIR__ . '/../../../api/header/db.php';
 require_once __DIR__ . '/../../../class.globalSettings.php';
 require __DIR__ . '/../encrypt.php';
@@ -24,6 +24,8 @@ function checkMandatory( $values ) {
 
   // map of needed fields with their more user friendly description
   $mandatory = [
+    'name'            =>  'Name on Credit Card', 
+    'email'           =>  'Email Address',
     'num'             =>  'Credit Card Number',
     'exp'             =>  'Credit Card Expiry',
     'cvv'             =>  'Security Code',
@@ -48,7 +50,8 @@ function checkMandatory( $values ) {
   return $missing;
 }
 
-$missing = checkMandatory( $donation );
+$missing = [];
+if ( $donation['amount'] > 0 ) $missing = checkMandatory( $donation );
 
 // in order to have the alert box show with line breaks, needs to be in this weird format
 if ( !empty( $missing ) ) {
@@ -72,6 +75,9 @@ $field";
 // prepare variables for payment
 $amount = $donation['amount'];
 $name = $donation['name'];
+$email = $donation['email'];
+$rohr = $donation['rohr'];
+
 $cc_info = [];
 $cc_info['number'] = $donation['cc']['num'];
 $cc_info['exp'] = $donation['cc']['exp'];
@@ -124,11 +130,16 @@ if ($response != null) {
           $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();          
 
           // send email confirmation
-          // $subject = "Chidon Shabbaton Registration Payment";
-          // $email_message = "Thank you for your payment of $" . $amount . ". Your transaction id is: " . $trans_id . ". Your child(ren) are now registered for the Shabbaton.";
-          // $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
-          //           'Reply-To: chidon@tzivoshashem.com' . "\r\n";
-          // @mail( $email, $subject, $email_message, $headers );
+          // get parent email 
+          $stmt = $MASHPIA_DB->prepare("select admin_email from admins where admin_id = :admin");
+          $res = $stmt->execute([':admin' => $admin_id]);
+          $row = $stmt->fetch();
+          $parent_email = $row['admin_email'];
+          $subject = "Shabbaton Enrollment " . $year;
+          $message = "Thank you for your registration fee of $" . $amount . ". Your transaction id is: " . $trans_id . ". Your child(ren) are now enrolled in the Chidon Shabbaton for " . $year;
+          $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
+                    'Reply-To: chidon@tzivoshashem.com' . "\r\n";
+          @mail( "$email, $parent_email", $subject, $message, $headers );
         } else {
           $error_msg .= "Transaction Failed \n";
           if ($tresponse->getErrors() != null) {
@@ -161,7 +172,8 @@ if ( !empty( $msg ) ) {
         paid = :amount,
         date_paid = NOW(),
         paid_by = :admin, 
-        approval = :approval
+        approval = :approval, 
+        rohr_subsidy = :rohr
     WHERE
         user_id = :user AND year = :year
   ");
@@ -173,7 +185,8 @@ if ( !empty( $msg ) ) {
       ':admin'    =>  $admin_id, 
       ':user'     =>  $child['id'], 
       ':year'     =>  $year, 
-      ':approval' =>  $trans_info
+      ':approval' =>  $trans_info, 
+      ':rohr'     =>  $rohr
     ]);
     if ( !$res ) {
       //echo "<pre>"; print_r( $stmt->debugDumpParams() ); echo "</pre>";

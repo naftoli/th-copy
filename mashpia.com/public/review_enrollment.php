@@ -13,14 +13,13 @@ $year = GlobalSettings::getChidonYear();
 
 $userInfo = array();
 foreach ($schools as $sid => $schoolName) {
-    $sql = "select tc.*, u.first, u.last, u.gender, c.*, a.admin_email, a.admin_phone_mobile, a.admin_phone_mobile2, a.admin_phone_home
+    $sql = "select tc.*, u.first, u.last, u.gender, c.class_grade, c.class_sub, a.admin_email, a.admin_phone_mobile, a.admin_phone_mobile2, a.admin_phone_home
             from th_chidon tc 
             join users u using (user_id)
             join classes c on u.class_id = c.class_id
             join admin_auths aa on aa.id = u.user_id 
             join admins a using (admin_id) 
             where tc.year = " . $year . "
-            and tc.can_enroll = 1
             and (tc.contestant = 1 or tc.school_rep = 1) 
             and tc.date_paid > 0 
             and aa.auth = 'user'
@@ -34,7 +33,7 @@ foreach ($schools as $sid => $schoolName) {
         $userInfo[$sid][$grade][$row['th_chidon_id']][$name] = $row;
     }
 }
-//echo "<pre>"; print_r($info); echo "</pre>";
+//echo "<pre>"; print_r($userInfo); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <HTML>

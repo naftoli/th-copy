@@ -94,9 +94,9 @@
 						<div class="option">
 							<p>I would like to donate <input type="text" id="donationAmount" size="8" /> towards the Chidon experience for</p>
 
-							<p><label class="checkbox"><input type="radio" name="donation" id="donationToAll" /><span></span></label> For all children in the <span class="familyName"></span> Family</p>
-							<p><label class="checkbox"><input type="radio" name="donation" id="donationToOne" /><span></span></label> For child 
-								<select id="childrenSelection"><option value="0">Select</option></select></p>
+							<p><label class="checkbox"><input type="radio" name="donation" id="donationToAll" /><span></span></label> all children in the <span class="familyName"></span> Family</p>
+							<p><label class="checkbox"><input type="radio" name="donation" id="donationToOne" /><span></span></label> child 
+								<select id="childrenSelection" class="childselection"><option value="0">Select</option></select></p>
 						</div>
 					</div>
 				</div>
@@ -135,7 +135,8 @@
 								</div>
 								<div class="field">
 									<label>Exp. Year:</label>
-									<select id="exp_yy"><option>2019</option><option>2020</option><option>2021</option><option>2022</option><option>2023</option><option>2024</option><option>2025</option></select>
+									<select id="exp_yy"><option>2018</option><option>2019</option><option>2020</option><option>2021</option>
+										<option>2022</option><option>2023</option><option>2024</option><option>2025</option></select>
 								</div>
 								<div class="field">
 									<label>CVV:</label>
@@ -231,9 +232,9 @@
 						</ul>
 						<ul>
 							<li><h5>Quick Links</h5></li>
-							<li><a href="#">Find a Family</a></li>
-							<li><a href="#">Sponsors</a></li>
-							<li><a href="#">Enrollment Form</a></li>
+							<li><a href="family.html">Find a Family</a></li>
+							<li><a href="sponsors.html">Sponsors</a></li>
+							<!-- <li><a href="enroll.html">Enrollment Form</a></li> -->
 						</ul>
 						<ul>
 							<li><h5>Contact Us</h5></li>
@@ -271,7 +272,7 @@
 		    $(document).ready(function(e){
 					// only show content if correct password is supplied
 					let password = prompt("Please enter the correct password to access this page.");
-					if ( password.toLowerCase() == 'chidondrive5779' ) $("#main").show();
+					if ( password.toLowerCase().trim() == 'chidondrive5779' ) $("#main").show();
 					else alert("Incorrect password.");
 
 		    	// Round text
@@ -295,6 +296,8 @@
 					  styleWrapper:        true,
 					  styleText:           true
 					});
+					
+
 
 					// get children info 
 					let url = window.location.href;
@@ -302,12 +305,15 @@
 					let admin_id = 0;
 					let children = []; // need to know user_id of children when creating the subsidies
 					if ( pos > 0 ) admin_id = url.substr( pos + 1 );
-					if ( admin_id ) {
+					if ( admin_id ) 
+					{
+						
 						$.post('../ajax/getFamilyInfo.php', { admin: admin_id }, function( result ) {
 							let info = JSON.parse( result );
 							console.log( info );
 
-							if ( info.success ) {
+							if ( info.success ) 
+							{							
 								// find out family goal
 								let numChildren = info.data.children.length;
 								let familyGoal = numChildren * 350;
@@ -322,11 +328,19 @@
 								}
 								let totalRegPercent = totalReg ? Math.round((totalReg / familyGoal) * 100) : 0;
 								$("#totalRegFee").text( totalReg );
-								$(".registration").attr('data-percent', totalRegPercent );
+								if(totalRegPercent > 0){
+									$(".registration").attr('data-percent', totalRegPercent );									
+								} else {
+									$(".registration").hide();
+								}
 
 								let totalRohrPercent = totalRohr + totalReg ? Math.round(((totalRohr + totalReg) / familyGoal) * 100) : 0;
 								$("#totalRohrSubsidy").text( totalRohr );
-								$(".subsidy").attr('data-percent', totalRohrPercent );
+								if(totalRohrPercent < 0){
+									$(".subsidy").attr('data-percent', totalRohrPercent );
+								} else {
+									$(".subsidy").hide();
+								}
 
 								let totalDonationPercent = totalReg + totalRohr + totalDonation ? Math.round(((totalReg + totalRohr + totalDonation) / familyGoal) * 100) : 0;
 								if ( totalDonationPercent > 100 ) totalDonationPercent = 100;
@@ -383,7 +397,7 @@
 										<div class="kid">
 											<div class="bio">
 												<div class="image-wrapper">
-													<img src="//mashpia.com/${childPic}" style="border-radius: 50%; padding: 2px; width: 100%; max-height: 73px;" />
+													<img src="//mashpia.com/${childPic}" style="border-radius: 50%; padding: 2px; width: 100%; max-height: 100%;" />
 												</div>
 												<div class="name">
 													<h5>${child.first}<br>${child.last}</h5>
@@ -398,26 +412,35 @@
 												<div class="bar-bar">
 													<div class="bar-bar__wrapper">
 														<div class="bar-bar__line registration" data-percent="${regPercent}">
-															<div class="bar-bar__circle"></div>
+															<div class="bar-bar__circle"></div>`;
+															if (regPaid>0)
+															familyCharts += `
 															<div class="bar-bar__marker">
 																<img src="img/marker-blue.png" />
 																<p>$${regPaid}</p>
-															</div>
-														</div>
+															</div>`;
+															
+														familyCharts += `</div>`;
+														
+														if (subsidy>0)
+														familyCharts += `
 														<div class="bar-bar__line subsidy" data-percent="${subsidyPercent}">
 															<div class="bar-bar__circle"></div>
 															<div class="bar-bar__marker">
 																<img src="img/marker.png" />
 																<p>${subsidy}</p>
 															</div>
-														</div>
+														</div>`;
+														if (donation>0)
+														familyCharts += `
 														<div class="bar-bar__line donation" data-percent="${donationPercent}">
 															<div class="bar-bar__circle"></div>
 															<div class="bar-bar__marker">
 																<img src="img/marker-blue.png" />
 																<p>$${donation}</p>
 															</div>
-														</div>
+														</div>`;
+														familyCharts += `
 														<div class="remaining">
 															<div class="bar-bar__marker">
 																<p>$${balance}<br>Remaining</p>
@@ -609,5 +632,20 @@
 					});
 		    });
 		</script>
+		<script>
+			$(function() {
+						var header = $("header");
+						$(window).scroll(function() {    
+								var scroll = $(window).scrollTop();
+						
+								if (scroll >= 100) {
+										header.addClass("header-alt");
+							console.log ('called');
+								} else {
+										header.removeClass('header-alt');
+								}
+						});
+				});
+			</script>
 	</body>
 </html>

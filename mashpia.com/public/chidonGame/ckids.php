@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Chidon Gameshow</title>
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+        
+        <!-- Main Style -->
+        <link rel="stylesheet" type="text/css" href="assets/css/mainCkids.css">
+
+        <!--Icon Fonts-->
+        <link rel="stylesheet" media="screen" href="assets/fonts/font-awesome/font-awesome.min.css">
+        
+        <style>
+        	.table h2 {
+        		margin: 0;
+        	}
+        	.table td {
+        		text-align: center;
+        	}
+       		#saveTeams {
+        		width: 200px;
+        		float: right;
+        	}
+        	#saveTeams button {
+        		padding: 10px;
+        		margin: 10px;
+        	}
+        	#teams {
+        		margin: auto;
+        		width: 800px;
+            margin-bottom: 50px;
+            margin-top: 30px;
+        	}
+        	#teamNames td:last-child {
+        		text-align: center;
+        	}
+        	.givePoints {
+        		text-align: center;
+        	}
+        	.givePoints label {
+        		margin-top: 10px;
+        		font-size: 16px;
+        	}
+        	.pricing-header p {
+        		margin: 0;
+        	}
+        </style>            
+      </head>
+
+    <body data-pinterest-extension-installed="cr1.39.1">
+    
+    <br>
+    <div class="container">
+		<table class="table table-bordered" id="round1">
+			<tbody><tr>
+				<th><h2>Round 1</h2></th>
+				<td>
+					<div class="tname t1n">Team 1</div>
+					<div class="tpoints t1p">0</div>
+				</td>
+				<td>
+					<div class="tname t2n">Team 2</div>
+					<div class="tpoints t2p">0</div>
+				</td>
+				<td>
+					<div class="tname t3n">Team 3</div>
+					<div class="tpoints t3p">0</div>
+        </td>
+        <td>
+					<div class="tname t4n">Team 4</div>
+					<div class="tpoints t4p">0</div>
+				</td>
+			</tr>
+		</tbody></table>
+		<table class="table table-bordered" id="round2">
+			<tbody><tr>
+				<th><h2>Round 2</h2></th>
+				<td>
+					<div class="tname t1n">Team 1</div>
+					<div class="tpoints t1p">0</div>
+				</td>
+				<td>
+					<div class="tname t2n">Team 2</div>
+					<div class="tpoints t2p">0</div>
+				</td>
+				<td>
+					<div class="tname t3n">Team 3</div>
+					<div class="tpoints t3p">0</div>
+        </td>
+        <td>
+					<div class="tname t4n">Team 4</div>
+					<div class="tpoints t4p">0</div>
+				</td>
+			</tr>
+		</tbody></table>
+		<table class="table table-bordered" id="round3">
+			<tbody><tr>
+				<th><h2>Round 3</h2></th>
+				<td colspan="2">
+					<div class="tname t1n">Team 1</div>
+					<div class="tpoints t1p">0</div>
+				</td>
+				<td colspan="2">
+					<div class="tname t2n">Team 2</div>
+					<div class="tpoints t2p">0</div>
+				</td>
+			</tr>
+		</tbody></table>
+	</div>
+    	 	
+ 	<div id="teams">
+	 		<div id="saveTeams">
+	 		<button id="save1">Save as Round 1</button>
+	 		<button id="save2">Save as Round 2</button>
+			<button id="save3">Save as Round 3</button>
+	 	</div>
+ 		<table id="teamNames">
+ 			<tbody><tr>
+ 				<td class="teamName">Ahavat Yisrael</td>
+ 				<td><input type="radio" name="t1" value="1" class="one"> Team 1</td>
+ 				<td><input type="radio" name="t1" value="2" class="two"> Team 2</td>
+        <td><input type="radio" name="t1" value="3" class="three"> Team 3</td>
+        <td><input type="radio" name="t1" value="4" class="four"> Team 4</td>
+ 				<td><input type="radio" name="t1" value="0" checked=""> None</td>
+ 			</tr>
+ 			<tr>
+ 				<td class="teamName">Tzedakah</td>
+ 				<td><input type="radio" name="t2" value="1" class="one"> Team 1</td>
+ 				<td><input type="radio" name="t2" value="2" class="two"> Team 2</td>
+        <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>
+        <td><input type="radio" name="t2" value="4" class="four"> Team 4</td>
+ 				<td><input type="radio" name="t2" value="0" checked=""> None</td>
+ 			</tr>
+ 			<tr>
+ 				<td class="teamName">Shabbat</td>
+ 				<td><input type="radio" name="t3" value="1" class="one"> Team 1</td>
+ 				<td><input type="radio" name="t3" value="2" class="two"> Team 2</td>
+        <td><input type="radio" name="t3" value="3" class="three"> Team 3</td>
+        <td><input type="radio" name="t3" value="4" class="four"> Team 4</td>
+ 				<td><input type="radio" name="t3" value="0" checked=""> None</td>
+ 			</tr>
+ 			<tr>
+ 				<td class="teamName">Kosher</td>
+ 				<td><input type="radio" name="t4" value="1" class="one"> Team 1</td>
+ 				<td><input type="radio" name="t4" value="2" class="two"> Team 2</td>
+        <td><input type="radio" name="t4" value="3" class="three"> Team 3</td>
+        <td><input type="radio" name="t4" value="4" class="four"> Team 4</td>
+ 				<td><input type="radio" name="t4" value="0" checked=""> None</td>
+ 			</tr>
+ 			<tr>
+ 				<td colspan="5">
+					<br />
+					<button id="update">Update</button>
+				</td>
+             </tr>
+             <!-- <tr>
+ 				<td colspan="5">
+					<br />
+					<button id="round3">Change Boxes for Round 3</button>
+				</td>
+ 			</tr> -->
+ 		</tbody></table>     		
+ 	</div>
+ 	
+    <!-- Pricing Table Section -->
+    <section id="pricing-table">
+        <div class="container">
+            <div class="row">
+                <div class="pricing">
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                    	<div class="givePoints" id="1">
+                    		<button class="plus">+100</button> 
+                            <button class="minus">-100</button> 
+                            <input type="text" size="3"> 
+                            <button>Go</button><br>
+                            <label for="points">Set Points</label>
+                            <input type="text" name="points" size="5">
+                            <button class="setPoints">Set</button>
+                            <button class="resetPoints">Reset</button>
+                    	</div>
+                    </div>
+                    
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="givePoints" id="2">
+                    		<button class="plus">+100</button> 
+                            <button class="minus">-100</button> 
+                            <input type="text" size="3"> 
+                            <button>Go</button><br>
+                            <label for="points">Set Points</label>
+                            <input type="text" name="points" size="5">
+                            <button class="setPoints">Set</button>
+                            <button class="resetPoints">Reset</button>
+                    	</div>
+                    </div>
+                    
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="givePoints" id="3">
+                    		<button class="plus">+100</button> 
+                            <button class="minus">-100</button> 
+                            <input type="text" size="3"> 
+                            <button>Go</button><br>
+                            <label for="points">Set Points</label>
+                            <input type="text" name="points" size="5">
+                            <button class="setPoints">Set</button>
+                            <button class="resetPoints">Reset</button>
+                    	</div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="givePoints" id="4">
+                    		<button class="plus">+100</button> 
+                            <button class="minus">-100</button> 
+                            <input type="text" size="3"> 
+                            <button>Go</button><br>
+                            <label for="points">Set Points</label>
+                            <input type="text" name="points" size="5">
+                            <button class="setPoints">Set</button>
+                            <button class="resetPoints">Reset</button>
+                    	</div>
+                    </div>
+            	</div>
+            </div>
+        </div>
+    </section>
+	<!-- Pricing Table Section End -->
+    	
+    <!-- Pricing Table Section -->
+    <section id="pricing-table" style="width: 100%; padding-top: 150px; padding-left: 20px; padding-right: 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="pricing">
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="pricing-table table1">
+                        	<div class="pricing-list t1">
+                                <ul>
+                                    <li><span>Team 1</span></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="pricing-header">
+                                <p class="pricing-rate team1" style="display: block;">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="pricing-table table2">
+                        	<div class="pricing-list t2">
+                                <ul>
+                                    <li><span>Team 2</span></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="pricing-header">
+                                <p class="pricing-rate team2" style="display: block;">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="pricing-table table3">
+                        	<div class="pricing-list t3">
+                                <ul>
+                                    <li><span>Team 3</span></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="pricing-header">
+                                <p class="pricing-rate team3">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="pricing-table table4">
+                        	<div class="pricing-list t4">
+                                <ul>
+                                    <li><span>Team 4</span></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="pricing-header">
+                                <p class="pricing-rate team4">0</p>
+                            </div>
+                        </div>
+                    </div>
+            	</div>
+            </div>
+        </div>
+    </section>
+	<!-- Pricing Table Section End -->
+	
+    <!-- <div style="margin-top: 100px;">
+        <section id="pricing-table" style="padding-top: 20px; padding-bottom: 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="pricing">
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="pricing-table table1">
+                        	<div class="pricing-list t1">
+                                <ul>
+                                    <li><span>Team 1</span></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="pricing-header">
+                                <p class="pricing-rate team1" style="display: block;">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="pricing-table table2">
+                        	<div class="pricing-list t2">
+                                <ul>
+                                    <li><span>Team 2</span></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="pricing-header">
+                                <p class="pricing-rate team2" style="display: block;">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="pricing-table table3">
+                        	<div class="pricing-list t3">
+                                <ul>
+                                    <li><span>Team 3</span></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="pricing-header">
+                                <p class="pricing-rate team3">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="pricing-table table4">
+                        	<div class="pricing-list t4">
+                                <ul>
+                                    <li><span>Team 4</span></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="pricing-header">
+                                <p class="pricing-rate team4">0</p>
+                            </div>
+                        </div>
+                    </div>
+            	</div>
+            </div>
+        </div>
+    </section> -->
+        <!-- Pricing Table Section -->
+        <!-- <section id="pricing-table">
+            <div class="container" style="width: 3250px;">
+                <div class="row">
+                    <div class="pricing">
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                            <div class="pricing-table table1">
+                            	<div class="pricing-list t1">
+                                    <ul>
+                                        <li><span>Team 1</span></li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="pricing-header">
+                                    <p class="pricing-rate team1" style="display: block;">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                            <div class="pricing-table table2">
+                            	<div class="pricing-list t2">
+                                    <ul>
+                                        <li><span>Team 2</span></li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="pricing-header">
+                                    <p class="pricing-rate team2" style="display: block;">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                            <div class="pricing-table table3">
+                            	<div class="pricing-list t3">
+                                    <ul>
+                                        <li><span>Team 3</span></li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="pricing-header">
+                                    <p class="pricing-rate team3">0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                            <div class="pricing-table table4">
+                            	<div class="pricing-list t3">
+                                    <ul>
+                                        <li><span>Team 4</span></li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="pricing-header">
+                                    <p class="pricing-rate team4">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                	</div>
+                </div>
+            </div>
+        </section> -->
+		<!-- Pricing Table Section End -->
+	<!-- </div> -->
+	
+    
+    <script src="../jquery-1.8.1.min.js"></script>
+    <script>
+    	$(function() { 
+    		$(".one").click( function(e) {
+    			var checked = 0;
+    			$(".one").each( function() {
+    				if ($(this).is(":checked")) checked++;
+    			});
+    			if (checked > 1) {
+    				e.preventDefault();
+    			}
+    		});
+    		
+    		$(".two").click( function(e) {
+    			var checked = 0;
+    			$(".two").each( function() {
+    				if ($(this).is(":checked")) checked++;
+    			});
+    			if (checked > 1) {
+    				e.preventDefault();
+    			}
+    		});
+    		
+    		$(".three").click( function(e) {
+    			var checked = 0;
+    			$(".three").each( function() {
+    				if ($(this).is(":checked")) checked++;
+    			});
+    			if (checked > 1) {
+    				e.preventDefault();
+    			}
+    		});
+
+        $(".four").click( function(e) {
+    			var checked = 0;
+    			$(".four").each( function() {
+    				if ($(this).is(":checked")) checked++;
+    			});
+    			if (checked > 1) {
+    				e.preventDefault();
+    			}
+    		});
+    		
+    		$("#update").click( function() {
+    			var t1, t2, t3, t4, tTotal = 0;
+    			$(".one").each( function() {
+    				if ($(this).is(":checked")) {
+    					t1 = $(this).parent().parent().find('.teamName').text();
+						tTotal++;
+    					return;
+    				}
+    			});
+    			$(".two").each( function() {
+    				if ($(this).is(":checked")) {
+    					t2 = $(this).parent().parent().find('.teamName').text();
+						tTotal++;
+    					return;
+    				}
+    			});
+    			$(".three").each( function() {
+    				if ($(this).is(":checked")) {
+    					t3 = $(this).parent().parent().find('.teamName').text();
+						tTotal++;
+    					return;
+    				}
+    			});
+          $(".four").each( function() {
+    				if ($(this).is(":checked")) {
+    					t4 = $(this).parent().parent().find('.teamName').text();
+						tTotal++;
+    					return;
+    				}
+    			});
+    			/*
+    			if (t1 == undefined || t2 == undefined || t3 == undefined) {
+    				alert('You have not chosen all three teams.');
+    				return;
+    			}
+    			*/        			
+    			$(".t1 span").text(t1);
+    			$(".t2 span").text(t2);
+          $(".t3 span").text(t3);
+          $(".t4 span").text(t4);
+
+          if (tTotal == 4) {
+            for (var n = 1; n < 5; n++) {
+              $("#" + n).show();
+              $(".table" + n).show();
+            }
+              $(".plus").text('100');
+              $(".minus").text('-100');
+          // } else {
+          //   // figure out which table to hide
+          //   if (t1 !== undefined && t2 !== undefined) {
+          //     $("#3").hide();
+          //     $(".table3").hide();
+          //     for (var n = 1; n < 3; n++) {
+          //       $("#" + n).show();
+          //       $(".table" + n).show();
+          //     }
+          //   }
+          //   else if (t1 !== undefined && t3 !== undefined) {
+          //     $("#2").hide();
+          //     $(".table2").hide();
+          //     for (var n = 1; n < 4; n++) {
+          //       if (n == 2) continue;
+          //       $("#" + n).show();
+          //       $(".table" + n).show();
+          //     }
+          //   }
+          //   else if (t2 !== undefined && t3 !== undefined) {
+          //     $("#1").hide();
+          //     $(".table1").hide();
+          //     for (var n = 2; n < 4; n++) {
+          //       $("#" + n).show();
+          //       $(".table" + n).show();
+          //     }
+          //   }
+            // $(".plus").text('1');
+            // $(".minus").text('-1');
+          }
+        });
+          
+          $(".setPoints").click( function() {
+            var points = parseInt($(this).prev('input').val());
+            if (!isNaN(points)) {
+              var team = '.team' + $(this).parent().attr('id');
+              $(team).fadeOut(300).delay().fadeIn().fadeOut(300).
+                delay().fadeIn().fadeOut(300).delay().fadeIn().text(points);
+            }
+          });
+          
+          $(".givePoints button").click( function() {
+            var val = $(this).text();
+            if (val == 'Go') {
+              val = $(this).prev('input').val();
+            } else if (val == 'Set') {
+              return;
+            }
+            
+            if (val != '') {
+              var points = parseInt(val);
+              var id = $(this).parent().attr('id');
+              var team = '.team' + id;
+              var curPoints = parseInt($(team).eq(0).text());
+              curPoints += points;
+              if (!isNaN(curPoints)) {
+                  $(team).fadeOut(300).delay().fadeIn().fadeOut(300).
+                    delay().fadeIn().fadeOut(300).delay().fadeIn().text(curPoints);
+                  //updateTable(id);
+                }
+            }
+          });
+    		
+    		$("#save1").click( function() {
+				var conf = confirm("Are you sure you want to save round 1?");
+				if (conf) {
+					var t1 = $(".t1").eq(0).text().trim();
+					var t2 = $(".t2").eq(0).text().trim();
+					var t3 = $(".t3").eq(0).text().trim();
+          var t4 = $(".t4").eq(0).text().trim();
+					
+					var team1 = $(".team1").eq(0).text();
+					var team2 = $(".team2").eq(0).text();
+					var team3 = $(".team3").eq(0).text();
+          var team4 = $(".team4").eq(0).text();
+					
+					$("#round1 .t1n").text(t1);       			
+					$("#round1 .t2n").text(t2);
+					$("#round1 .t3n").text(t3);
+          $("#round1 .t4n").text(t4);
+					
+					$("#round1 .t1p").text(team1);
+					$("#round1 .t2p").text(team2);
+					$("#round1 .t3p").text(team3);
+          $("#round1 .t4p").text(team4);
+				}
+    		});
+    		
+    		$("#save2").click( function() {
+				var conf = confirm("Are you sure you want to save round 2?");
+				if (conf) {
+					var t1 = $(".t1").eq(0).text().trim();
+					var t2 = $(".t2").eq(0).text().trim();
+					var t3 = $(".t3").eq(0).text().trim();
+          var t4 = $(".t4").eq(0).text().trim();
+					
+					var team1 = $(".team1").eq(0).text();
+					var team2 = $(".team2").eq(0).text();
+					var team3 = $(".team3").eq(0).text();
+          var team4 = $(".team4").eq(0).text();
+					
+					$("#round2 .t1n").text(t1);       			
+					$("#round2 .t2n").text(t2);
+					$("#round2 .t3n").text(t3);
+          $("#round2 .t4n").text(t4);
+					
+					$("#round2 .t1p").text(team1);
+					$("#round2 .t2p").text(team2);
+					$("#round2 .t3p").text(team3);
+          $("#round2 .t4p").text(team4);
+				}
+    		});
+			
+			$("#save3").click( function() {
+				var conf = confirm("Are you sure you want to save round 3?");
+				if (conf) {
+					var t1 = $(".t1").eq(0).text().trim();
+					var t2 = $(".t2").eq(0).text().trim();
+					//var t3 = $(".t3").eq(0).text().trim();
+					
+					var team1 = $(".team1").eq(0).text();
+					var team2 = $(".team2").eq(0).text();
+					//var team3 = $(".team3").eq(0).text();
+					
+					$("#round3 .t1n").text(t1);       			
+					$("#round3 .t2n").text(t2);
+					//$("#round3 .t3n").text(t3);
+					
+					$("#round3 .t1p").text(team1);
+					$("#round3 .t2p").text(team2);
+					//$("#round3 .t3p").text(team3);
+				}
+    		});
+    		
+    		$(".pricing-table").click( function() {
+    			var info = $(this).attr('class').split(' ');
+    			$(".pricing-list").css("background-color", "#F8E0F7");
+    			$(".pricing-header").css("background-color", "#C80000");
+    			
+    			if (info.length > 2) {
+    				$(this).removeClass('changed');
+    			} else {
+    				$(this).addClass('changed');
+	    			var table = info[1];
+					$(".pricing-table").not("." + table).removeClass('changed');
+	    			$("." + table + " .pricing-list").css("background-color", "#99e6ff");
+	    			$("." + table + " .pricing-header").css("background-color", "#0033cc");
+	    		}
+    		});
+    		
+    		$(".resetPoints").click( function() {
+    			var verify = confirm('Are you sure you want to reset the points to 0?');
+    			if (verify) {
+    				var num = $(this).parent().attr('id');
+    				$(".team" + num).text('0');
+    			}
+    		});
+
+            $("#round3").click( function() {
+
+            });
+    	});
+    	
+    	function updateTable(id) {
+    		setTimeout(function() {
+    			$(".table" + id).parent().find('.pricing-table').trigger('click')
+    		}, 3000);
+    	}
+    </script>
+    </body>
+</html>

@@ -123,16 +123,16 @@ if ( !empty( $users ) ) {
 		
 		// chidon regustration
 		// only relevant until 10/16/2018 12:00am then close down chidon reg
-		if ( unixtojd() < 2458409 ) {
-			if ( !$row['reg_chidon'] // if not in chidon
-				&& $row['class_grade'] >= 4 // and in grade 4+
-				&& $row['chidon'] // make sure the kid is in chidon
-				//&& in_array( $row['school_id'], $australia ) // and not in australia..
-			) {
-				$children[ $row['user_id'] ]['needsReg'] = 1;
-				$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
-			}
-		}
+		// if ( unixtojd() < 2458409 ) {
+		// 	if ( !$row['reg_chidon'] // if not in chidon
+		// 		&& $row['class_grade'] >= 4 // and in grade 4+
+		// 		&& $row['chidon'] // make sure the kid is in chidon
+		// 		//&& in_array( $row['school_id'], $australia ) // and not in australia..
+		// 	) {
+		// 		$children[ $row['user_id'] ]['needsReg'] = 1;
+		// 		$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
+		// 	}
+		// }
 		
 		$children[$row['user_id']]['enrollShabbaton'] = 0;
 		$children[$row['user_id']]['shabbatonRegistered'] = 0;
@@ -144,17 +144,18 @@ if ( !empty( $users ) ) {
 			$cRow = mysql_fetch_assoc($cRes);
 			$children[$row['user_id']]['chidonRegistered'] = 1;
 			$children[$row['user_id']]['allowRemove'] = 0;
+			$children[$row['user_id']]['enrollShabbaton'] = 1;
 			// make sure school indicated that child should enroll for shabbaton 
 			//if ($cRow['can_enroll'] && in_array($row['user_id'], [])) { // chidon registration is closed.
-			if ($cRow['can_enroll']) {
+			//if ($cRow['can_enroll']) {
 				// make sure school is registered to chidon
 				// $chapSql = "SELECT * FROM th_chidon_schools WHERE school_id = " . $row['school_id'] . " AND year = " . $year . " AND registered = 1";
 				// $chapRes = mysql_query( $chapSql );
 				// if (mysql_num_rows($chapRes) > 0) {
 				// 	$children[$row['user_id']]['enrollShabbaton'] = 1;
 				// }
-				$children[$row['user_id']]['enrollShabbaton'] = 1;
-			}
+				// $children[$row['user_id']]['enrollShabbaton'] = 1;
+			//}
 			if ($cRow['allow_edit']) {
 				$children[$row['user_id']]['shabbatonEdit'] = 1;
 			}
@@ -167,8 +168,8 @@ if ( !empty( $users ) ) {
 		}
 
 		// don't open up enrollment yet
-		if ( in_array( $row['user_id'], [ 5455,5548,12749,15139,19085,58497] ) ) $children[$row['user_id']]['enrollShabbaton'] = 1;
-		else $children[$row['user_id']]['enrollShabbaton'] = 0;
+		// if ( in_array( $row['user_id'], [ 5455,5548,12749,15139,19085,58497] ) ) $children[$row['user_id']]['enrollShabbaton'] = 1;
+		// else $children[$row['user_id']]['enrollShabbaton'] = 0;
 		
 		$pSql = "select thumb from thumbs t 
 				join users u on u.user_photo_id = t.file_id 

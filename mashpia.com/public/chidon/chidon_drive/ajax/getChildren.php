@@ -24,6 +24,7 @@ if ( $admin_id ) {
     ':year'   =>  $year, 
     ':admin'  =>  $admin_id
   ]);
+  //echo $stmt->debugDumpParams(); exit;
   if ( $res ) {
     $children = $stmt->fetchAll();
     if ( $children ) {

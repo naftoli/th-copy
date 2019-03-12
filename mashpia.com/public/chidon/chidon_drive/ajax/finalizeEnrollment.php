@@ -8,6 +8,7 @@ $admin_id = encrypt_decrypt('decrypt', $admin);
 $year = GlobalSettings::getChidonYear();
 
 $ids = $_POST['ids'];
+$rohr = $_POST['rohr'];
 
 $stmt = $MASHPIA_DB->prepare("
   UPDATE th_chidon 
@@ -15,7 +16,8 @@ $stmt = $MASHPIA_DB->prepare("
       paid = 0,
       date_paid = NOW(),
       paid_by = :admin, 
-      approval = :message
+      approval = :message, 
+      rohr_subsidy = :rohr
   WHERE
       year = :year AND user_id = :user_id
 ");
@@ -27,7 +29,8 @@ foreach ( $ids as $id ) {
     ':admin'    =>  $admin_id, 
     ':year'     =>  $year, 
     ':user_id'  =>  $id, 
-    ':message'  =>  "Child doesn't need to pay, he/she raised enough money to cover the shabbaton fee."
+    ':message'  =>  "Child doesn't need to pay, he/she raised enough money to cover the shabbaton fee.", 
+    ':rohr'     =>  $rohr
   ]);
   if ( !$res ) {
     $success = false;
@@ -37,6 +40,19 @@ foreach ( $ids as $id ) {
 
 if ( $success ) {
   $MASHPIA_DB->commit();
+
+  // send email to parent
+  // get parent email 
+  $stmt = $MASHPIA_DB->prepare("select admin_email from admins where admin_id = :admin");
+  $res = $stmt->execute([':admin' => $admin_id]);
+  $row = $stmt->fetch();
+  $email = $row['admin_email'];
+  $subject = "Shabbaton Enrollment " . $year;
+  $message = "Your child(ren) are now successfully enrolled in the Chidon Shabbaton for " . $year;
+  $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
+            'Reply-To: chidon@tzivoshashem.com' . "\r\n";
+  @mail( $email, $subject, $message, $headers );
+
   echo json_encode([
     'success'   =>  true,
     'message'   =>  "You have successfully registered your child(ren) to the Shabbaton."

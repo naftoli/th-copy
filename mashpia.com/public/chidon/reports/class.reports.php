@@ -70,10 +70,13 @@ class Reports
                 'table'     =>  'users',
                 'column'    =>  'user_registered',
             ),
-
-            'accomodations' =>  array(
+            'host_address_num'   =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  array('host_street_num', 'host_street_num_suffix')
+            ),
+            'host_address' =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  array('host', 'host_address1', 'host_address2')
+                'column'    =>  array('host_street', 'host_street_apt')
             ),
             'host_name' =>  array(
                 'table'     =>  'th_chidon',
@@ -83,9 +86,25 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  'host_number'
             ),
+            'host_street'   =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'host_street'
+            ),
+            'host_street_num'   =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'host_street_num'
+            ), 
+            'host_street_num_suffix'    =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'host_street_num_suffix'
+            ), 
+            'host_street_apt'   =>  array(
+                'table'     =>  'th_chidon', 
+                'column'    =>  'host_street_apt'
+            ),
             'between_streets'   =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  'between_streets'
+                'column'    =>  array('between_streets1', 'between_streets2')
             ),
             'allergies' =>  array(
                 'table'     =>  'th_chidon',
@@ -105,7 +124,7 @@ class Reports
             ),
             'walking'   =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  array('walk_day', 'walk_night')
+                'column'    =>  'walking',
             ),
             'walking_zone'   =>  array(
                 'table'     =>  'th_chidon',
@@ -458,7 +477,7 @@ class Reports
         if (!empty($data)) {
             // build tables / columns
             $tables = array();
-            foreach ($data as $field) {
+            foreach ($data as $index => $field) {
                 if (isset($this->fields[$field])) {
                     $table = $this->fields[$field]['table'];
                     $tables[$table][] = $this->fields[$field]['column'];
@@ -572,6 +591,7 @@ class Reports
                     $sql .= " group by tc.user_id";
                 }
             }
+            //echo $sql; exit;
 
             return $sql;
         } else {

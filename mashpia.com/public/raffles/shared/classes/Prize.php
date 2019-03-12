@@ -164,7 +164,7 @@ class Prize {
                 $target = $_SERVER["DOCUMENT_ROOT"].'/raffles/img/' . $file_name; // move the file to the right place
             }
             
-            if(strlen($picture) > 100) return false; // varchar is limited to 100 chars
+            if(strlen($target) > 100) return false; // varchar is limited to 100 chars
             if (move_uploaded_file($file['tmp_name'], $target)) { // actually move it
                 try { // the image was uploaded. so lets try to scale it down
                     //create thumb from image
@@ -175,7 +175,7 @@ class Prize {
                     try {// attempt to fix the rotation
                         if ((exif_imagetype($target) == IMAGETYPE_JPEG || exif_imagetype($target) == IMAGETYPE_TIFF_II || exif_imagetype($target) == IMAGETYPE_TIFF_MM ) && exif_read_data($target)){
                             $exif = @exif_read_data($target); // read the data
-                            $orientation = $exif['Orientation']; // get the orientation
+                            $orientation = isset( $exif['Orientation'] ) ? $exif['Orientation'] : false; // get the orientation
                             if($orientation){ // this will only run if orientation is set which can only happen if $_POST['action'] is set to fix
                                 switch($orientation) {  
                                     case 3: $image->rotateimage("#FFF", 180); $thumb->rotateimage("#FFF", 180); break; // upside down

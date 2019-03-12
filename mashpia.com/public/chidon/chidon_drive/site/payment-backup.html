@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta name="viewport" content="width=device-width">
+	  <meta charset="UTF-8">
+		<meta name="google" content="notranslate">
+		<title>Shabbaton Payment Information | Chidon</title>
+		<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+		<link rel="stylesheet" href="css/font.css" type="text/css" />
+		<link rel="stylesheet" href="css/style.css" type="text/css" />
+		<link rel="stylesheet" href="css/nice-select.css" type="text/css" />
+		<link rel="stylesheet" href="css/payment-information.css" type="text/css" />
+	</head>
+
+	<body>
+
+		<header>
+			<div class="wrapper">
+				<div class="left">
+					<a href="#" id="menu-opener"><span></span><span></span><span></span></a>
+					<a href="index.html" class="logo"><h1>Chidon</h1><img src="img/chidon.png" alt="Chidon" /></a>
+					<nav>
+						<a href="index.html">Home</a>
+						<a href="donate.html">Donate</a>
+						<a href="leaderboard.html">Leaderboard</a>
+						<a href="story.html">Our Story</a>
+					</nav>
+				</div>
+				<div class="icons">
+					<a href="#"><img src="img/merkos.png" alt="Merkas Linyonei Chinuch" /></a>
+					<a href="#"><img src="img/army.png" alt="Tzavaos Hashem" /></a>
+				</div>
+			</div>
+		</header>
+		<div class="main">
+			<div class="wrapper">
+				<h2 class="title">Payment Information</h2>
+				<div class="payment-wrap">
+					<div class="payment-box textcenter">
+						<h4><label class="checkbox"><input type="checkbox" id="rohr"><span></span></label> I would like to opt-in to the <br> George Rohr Subsidy of $100 per child</h4>
+					</div>
+					<div class="payment-box textcenter">
+						<h4>Please select the amount you would like to <br> pay for which child:</h4>
+						<div class="select-amount">
+							
+						</div>
+					</div>
+					<div class="total-amount">
+						<label>TOTAL $</label>
+						<input type="text" readonly class="children-change" />
+					</div>
+					<div class="payment-box" id="paymentInfo">
+						<h4>PAYMENT INFORMATION</h4>
+						<div class="form">
+							<form id="paymentForm">
+								<div class="field">
+									<label>Name on Credit Card:</label>
+									<input type="text" id="name" placeholder="Full Name" required />
+								</div>
+								<div class="field">
+									<label>Email <span>(for receipt)</span>:</label>
+									<input type="text" id="email" placeholder="Email" required />
+								</div>
+								<div class="field">
+										<label>Card Number:</label>
+										<input type="text" id="cc_num" placeholder="0000 0000 0000 0000" required />
+									</div>
+									<div class="group">
+										<div class="field">
+											<label>Exp. Month:</label>
+											<select id="exp_mm"><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
+										</div>
+										<div class="field">
+											<label>Exp. Year:</label>
+											<select id="exp_yy"><option>2018</option><option>2019</option><option>2020</option><option>2021</option>
+												<option>2022</option><option>2023</option><option>2024</option><option>2025</option></select>
+										</div>
+										<div class="field">
+											<label>CVV:</label>
+											<input type="text" id="cc_cvv" placeholder="CVV" required />
+										</div>
+									</div>
+									<h5>Billing Address</h5>						
+									<div class="field">
+										<label>Country:</label>
+										<select id="bill_country">
+												<option>United States</option>
+												<option>Canada</option>
+												<option>England</option>
+												<option>Australia</option>
+												<option>S Africa</option>
+												<option>France</option>
+												<option>Europe</option>
+												<option>S America</option>
+											</select>
+									</div>						
+									<div class="field">
+										<label>Address:</label>
+										<input type="text" id="bill_address" placeholder="Address" required />
+									</div>						
+									<div class="field">
+										<label>Apt./Suite:</label>
+										<input type="text" id="bill_apt" placeholder="Apt./Suite (optional)" />
+									</div>
+									<div class="group">
+										<div class="field">
+											<label>Zip/Postcode:</label>
+											<input type="text" id="bill_zip" placeholder="Zip/Postcode" required />
+										</div>
+										<div class="field">
+											<label>City:</label>
+											<input type="text" id="bill_city" placeholder="City" required />
+										</div>
+										<div class="field">
+											<label>State/Prov/Region:</label>
+											<input type="text" id="bill_state" placeholder="State/Prov/Region" required />
+										</div>							
+									</div>
+								<input type="submit" class="button donate" value="complete payment" />
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<footer>
+			<div class="wrapper">
+				<a href="#" id="top">Back to top</a>
+
+				<div class="credits">
+					<p>Dedicated by George Rohr in loving memory of Mrs. Sarah (Charlotte) Rohr</p>
+					<p>לע"נ הרב אליעזר בן הרב מרדכי ע"ה וונגר | לע"נ הרב יצחק בן הרב אליעזר צבי זאב ע"ה צירקינד
+	לזכות הרב יוסף יצחק שליט"א ראזענבלום</p>
+				</div>
+
+				<div class="footer-main">
+					<div class="footer-about">
+						<div class="icon-wrapper">
+							<img src="img/merkos-color.png" alt="Merkos Linyonei Chinuch" />
+						</div>
+						<div class="icon-wrapper">
+							<img src="img/army-color.png" alt="Tzavaos Hashem" />
+						</div>
+						<p>A project of Merkos L'inyonei Chinuch and Tzivos Hashem</p>
+					</div>
+					<nav>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="donate.html">Donate</a></li>
+							<li><a href="leaderboard.html">Leaderboard</a></li>
+							<li><a href="story.html">Our Story</a></li>
+						</ul>
+							<ul>
+								<li><h5>Quick Links</h5></li>
+								<li><a href="family.html">Find a Family</a></li>
+								<li><a href="sponsor.html">Sponsors</a></li>
+								<li><a href="enroll.html" onclick="return false;">Enrollment Form</a></li>
+							</ul>
+						<ul>
+							<li><h5>Contact Us</h5></li>
+							<li><a href="mailto:chidon@tzivoshashem.org">chidon@tzivoshashem.org</a></li>
+							<li><a href="tel:7189078884">718.907.8884</a></li>
+						</ul>
+					</nav>
+				</div>
+
+				<div class="footer-bottom">
+					<div class="social">
+						<a href="http://facebook.com"><span class="socicon socicon-facebook"></span></a>
+						<a href="http://instragram.com"><span class="socicon socicon-instagram"></span></a>
+					</div>
+					<p>&copy; 2019 Tzivos Hashem - All Rights Reserved</p>
+				</div>
+			</div>
+		</footer>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="js/jquery.nice-select.min.js"></script>
+		<script src="js/js.cookie.js"></script>
+		<script type="text/javascript">
+		    $('#menu-opener').click(function(e){
+		    	$('header nav').toggleClass('open');
+				});
+				
+				var admin;
+				if ( Cookies.get('chidon_admin') ) {
+					admin = Cookies.get('chidon_admin');
+				} else {
+					location.href = "enroll.html";
+				}
+
+				var totalAmount;
+				function calculateAmount() {
+					totalAmount = 0;
+					let checked = 0; // make sure at least one child is checked if hiding payment info
+					$(".child").each( function() {
+						if ( $(this).is(":checked") ) {
+							checked++;
+							let num = $(this).parent().parent().parent().find('.current').text();
+							totalAmount += parseFloat( num );
+						}
+					});
+					$(".children-change").val( totalAmount.toFixed(2) );
+					if ( checked && totalAmount == 0 ) {
+						// no need for payment
+						$("#paymentInfo").hide();
+						if ( !$("#noCCEnrollment").length ) $(".total-amount").after("<div align='center' id='noCCEnrollment'><input type='submit' class='button donate enroll' value='complete enrollment' /></div>");
+					} else {
+						$("#noCCEnrollment").remove();
+						$("#paymentInfo").show();
+					}
+				}
+
+				var children; // global variable to hold children info
+				function updateDropDown() {
+					let html = '';
+						for ( c in children ) {
+							let child = children[c];
+							html += `
+								<div class="select-item" id="${child.user_id}">
+									<h4><label class="checkbox"><input type="checkbox" class="child" onclick="calculateAmount()"><span></span></label>${child.first + ' ' + child.last}</h4>
+									<div class="group">
+										<div class="field">
+											<select class="amounts" onchange="calculateAmount()">
+										`;
+
+							let maxAmount = 350;
+							let minAmount = 250;
+							if ( $("#rohr").is(":checked") ) {
+								maxAmount = 250;
+								minAmount = 150;
+							}
+							for ( amount = maxAmount; amount >= minAmount; amount -= 25 ) {
+								html += "<option value='" + amount + "'>" + amount + "</option>";
+							}
+							// find out if child has raised enough to have even less registration charge
+							let regFee = maxAmount - child.total_donation;
+							//console.log( regFee );
+							if ( regFee < 150 ) {
+								if ( regFee < 0 ) regFee = 0;
+								html += "<option value='" + regFee + "'>" + regFee + "</option>";
+							}
+
+							html += `
+											</select>
+										</div>
+									</div>
+								</div>
+							`;
+						}
+						$(".select-amount").empty();
+						$(".select-amount").append( html );
+						// Select 
+						$('select').niceSelect();
+				}
+
+				$(document).on('click', '.enroll', function() {
+					// get list of id's to enroll
+					let toEnroll = [];
+					$(".child").each( function() {
+						if ( $(this).is(":checked") ) { 
+							let id = $(this).parent().parent().parent().attr('id');
+							toEnroll.push( id );
+						}
+					});
+					if ( toEnroll.length ) {
+						let rohr = $("#rohr").is(":checked") ? 1 : 0;
+						$.post('../ajax/finalizeEnrollment.php', { ids : toEnroll, rohr: rohr }, function( result ) {
+							let res = JSON.parse( result );
+							if ( res.success ) {
+								alert( res.message );
+								location.href = "/";
+							} else {	
+								alert( res.error );
+							}
+						});
+					} else {
+						alert("No children have been selected.");
+					}
+				});
+
+		    $(document).ready(function(e){					
+					$.post('../ajax/getFamilyInfo.php', { admin : admin, encrypted : 1, notYetPaid : 1 }, function( result ) {
+						let info = JSON.parse( result );
+						if ( info.success ) {
+							// let adminInfo = info.data.children[0];
+							// let name = adminInfo.A_first + ' ' + adminInfo.A_last;
+							// $("#admin_name").val( name );
+							children = info.data.children;
+							updateDropDown();
+						} else {
+							alert( info.message );
+						}
+					});
+
+					$("#rohr").click( function() {
+						updateDropDown();
+					});
+
+					$("#paymentForm").submit( function( evt ) {
+						evt.preventDefault();
+
+						// make sure we have some children checked off
+						$checkedOff = 0;
+						$(".child").each( function() {
+							if ( $(this).is(":checked") ) $checkedOff++;
+						});
+						if ( !$checkedOff ) {
+							alert("You have not checked off any children to register.");
+							return false;
+						}
+
+						// get all info together
+						let donation = {};
+						donation.amount = totalAmount;
+						donation.name = $("#name").val();
+						donation.email = $("#email").val();
+						donation.rohr = $("#rohr").is(":checked") ? 1 : 0;
+
+						let regDetails = [];
+						$(".child").each( function() {
+							if ( $(this).is(":checked") ) {
+								let id = $(this).parent().parent().parent().attr('id');
+								let num = $(this).parent().parent().parent().find('.current').text();
+								regDetails.push({ 
+									'id': id, 
+									'amount': num
+								});
+							}
+						});
+						donation.regDetails = regDetails;
+
+						let cc = {}
+						cc.num = $("#cc_num").val();
+						cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val();
+						cc.cvv = $("#cc_cvv").val();
+
+						let billing = {}
+						billing.apt = $("#bill_apt").val();
+						billing.address = $("#bill_address").val();
+						billing.city = $("#bill_city").val();
+						billing.state = $("#bill_state").val();
+						billing.zip = $("#bill_zip").val();
+						billing.country = $("#bill_country").val();
+						cc.billing = billing;
+						donation.cc = cc;
+
+						$.post('../ajax/processPayment.php', { info : donation }, function( result ) {
+							let res = JSON.parse( result );
+							if ( res.success ) {
+								alert( res.message );
+								location.href = "/";
+							} else {
+								alert( res.error );
+							}
+						});
+					});
+		    });
+		</script>
+
+<script>
+	$(function() {
+				var header = $("header");
+				$(window).scroll(function() {    
+						var scroll = $(window).scrollTop();
+				
+						if (scroll >= 100) {
+								header.addClass("header-alt");
+					console.log ('called');
+						} else {
+								header.removeClass('header-alt');
+						}
+				});
+		});
+	</script>
+	</body>
+</html>

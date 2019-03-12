@@ -6,6 +6,7 @@ require_once(dirname(__FILE__)."/functions/header.php");
 
 require_once ( $_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php' );
 $year = GlobalSettings::getChidonYear();
+$year = 5778;
 
 function get_times($type, $gender) {
     $times = [];
@@ -43,7 +44,7 @@ if( $user['walking_zone'] ) {
     $times = array_merge($times, $walking_times);
 }
 
-if( $user['chap_chidon_type'] ) {
+if( $user['chidon_type'] ) {
     $chap_times = get_times('chap', $user_gender);
     $times = array_merge($times, $chap_times);
 }

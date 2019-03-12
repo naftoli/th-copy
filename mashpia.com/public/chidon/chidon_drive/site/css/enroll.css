@@ -6,7 +6,8 @@
  */
 
  .main {
- 	background: url(../img/donate/donate-bg.jpg);
+ 	/* background: url(../img/donate/donate-bg.jpg); */
+ 	background: url(../img/donate/thumbs/donate-bg.jpg);
  	background-size: cover;
  	padding-top: 10rem;
  }
@@ -113,8 +114,8 @@ input {
 }
 .form .nice-select.open .list {
 	width: 100%;
-	overflow: scroll;
-	height: 600px;
+	/* overflow: scroll; */
+	/* height: 600px; */
 }
 .form .nice-select .option:hover, .form .nice-select .option.focus, .form .nice-select .option.selected.focus {
 	text-align: left;
@@ -195,11 +196,12 @@ input {
 }
 
 @media(max-width: 600px) {
-.group .shoesize {
+#shoesize {
 	display:block !important;
 }
-.group .shoesize .field {
+#shoesize .field {
 	min-width:80%;
+	margin-left:0px;
 }
 .save-detail {
 	display:block !important;
@@ -219,11 +221,12 @@ input {
 	}
 }
 @media(max-width: 400px) {
-.group .shoesize {
+#shoesize {
 	display:block !important;
 }
-.group .shoesize .field {
+#shoesize .field {
 	min-width:80%;
+	margin-left:0px;
 }
 .save-detail  {
 	display:block !important;

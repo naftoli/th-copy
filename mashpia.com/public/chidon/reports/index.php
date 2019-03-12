@@ -20,9 +20,10 @@ $info = array(
 		'book'			=>	'Book',
 		'grade'			=>	'Grade',
 		'school'		=>	'School',
-		'accomodations'	=>	'Accomodation Info',
 		'host_name'		=>	'Host Name',
 		'host_number'		=>	'Host Number',
+		'host_address_num'	=>	'Accomodation Address Number',
+		'host_address'	=>	'Accomodation Address',
 		'between_streets'	=>	'Cross Streets',
 		'admin_city'	=>	'City', 
 		'admin_state'	=>	'State', 
@@ -31,7 +32,7 @@ $info = array(
 		'sweater_size'	=>	'Sweater Size',
 		'shoe_size'		=>	'Shoe Size',
 		'winner_type'	=>	'Contestant / School Rep.',
-		'walking'		=>	'Walk Alone',
+		'walking'			=>	'Walk Alone',
 		'walking_zone'	=>	'Walking Zone',
 		//'bus'			=>	'Bus Number',
 		//'seat'			=>	'Seat Number',
@@ -128,13 +129,14 @@ if (isset($_POST['submit'])) {
 	$chidonType = '';
 	$byAvg = array();
 	foreach ($_POST as $k => $v) {
-        if ($k == 'submit') break;
+		if ($k == 'submit') break;
 		if ($k == 'year') $year = mysql_real_escape_string(intval($v));
 		else if ($k == 'genderLimit') $gender = mysql_real_escape_string($v);
 		else if ($k == 'limitTo') $limit = mysql_real_escape_string($v);
 		else if ($k == 'chidon_type') $chidonType = mysql_real_escape_string($v);
-        else $data[] = mysql_real_escape_string($k);
-    }
+		else if ( !in_array( $k, $data ) ) $data[] = mysql_real_escape_string($k);
+		if ( $k == 'accomodations' ) $data[] = 'between_streets'; // add between streets to accomodation info
+	}
     
 	$report = array();
     require_once 'class.reports.php';
@@ -189,9 +191,10 @@ if (isset($_POST['submit'])) {
 	}
 	
 	$lookup = array(
-		'accomodations'	=>	array('host', 'host_address1', 'host_address2'),
+		'host_address_num'	=>	array('host_street_num', 'host_street_num_suffix'),
+		'host_address'	=>	array('host_street', 'host_street_apt'),
+		'between_streets'	=>	array('between_streets1', 'between_streets2'),
 		'winner_type'	=>	array('contestant', 'school_rep'),
-		'walking'		=> 	array('walk_day', 'walk_night'),
 		'medal'			=>	array('medal', 'medal_number'),
 		'plaque'		=>	array('plaque', 'plaque_number'),
 		'parent_name'	=>	array('first', 'last'),
@@ -265,8 +268,9 @@ if (isset($_POST['submit'])) {
 				<tbody>
 					<?php
 					$totals = array();
-					echo "<pre>"; print_r( $data ); echo "</pre>";
+					//echo "<pre>"; print_r( $data ); echo "</pre>";
 					foreach ($report as $index => $row) {
+						//echo "<pre>"; print_r( $row ); echo "</pre>"; continue;
 						echo "<tr>";
 						foreach ($data as $column) {
 							if (!array_key_exists($column, $lookup)) {
@@ -277,6 +281,9 @@ if (isset($_POST['submit'])) {
 								} else if ($column == 'chap_type') {
 									if ($row[$column] == 1) echo "<td>Chaperone</td>";
 									else echo "<td>Walking Counselor</td>";
+								} else if ( $column == 'walking' ) {
+									if ( intval( $row[$column] == 1 ) ) echo "<td>yes</td>"; 
+									else echo "<td>no</td>";
 								} else if (in_array($column, array('avgTests','avgLow','avgHigh'))) {
 									// don't output anything they are just avgs for sql qry
 								} else {
@@ -298,20 +305,18 @@ if (isset($_POST['submit'])) {
 									$numTests = 3;
 									$avg = $test > 0 ? number_format(($test / $numTests), 2) : 0;
 									$html .= $avg;
+								} else if ( in_array( $column, ['host_address', 'host_address_num'] ) ) {
+									foreach ( $lookup[$column] as $val ) {
+										$html .= $row[$val] . ' ';
+									}
+								} else if ( $column == 'between_streets' ) {
+									$html .= $row[$lookup[$column][0]] . ' and ' . $row[$lookup[$column][1]];
 								} else if ($column == 'winner_type') {
 									if (intval($row[$lookup[$column][1]])) {
 										$html .= 'school rep.';
 									} else if (intval($row[$lookup[$column][0]])) {
 										$html .= 'contestant';
 									}
-								} else if ($column == 'walking') {
-									if (intval($row[$lookup[$column][1]]) == 1) {
-										$html .= "yes";
-									} else if (intval($row[$lookup[$column][0]]) == 1 && intval($row[$lookup[$column][1]]) == 0) {
-										$html .= "day only";
-									} else if (intval($row[$lookup[$column][0]]) == 0 && intval($row[$lookup[$column][1]]) == 0) {
-										$html .= "no";
-									} 
 								} else {
 									foreach ($lookup[$column] as $val) {
 										$html .= $row[$val] . ", ";

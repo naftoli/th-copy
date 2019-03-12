@@ -31,7 +31,7 @@ $stmt = $MASHPIA_DB->prepare("
   WHERE
       chidon_year = :year
   ORDER BY donation_date DESC
-  LIMIT 5
+  LIMIT 10
 ");
 $res = $stmt->execute([
   ':year' =>  $year
