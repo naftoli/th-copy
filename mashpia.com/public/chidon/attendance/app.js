@@ -52,6 +52,7 @@ var app = function() {
             //         updateChildren( $("select#timeDropdown").val() );
             //     }
             // }, 5000);
+            setupQuagga();
         });
     }
     
@@ -199,7 +200,7 @@ function register_service_worker() {
     }
 }
 
-$( function() {
+function setupQuagga() {
     // start the scanner
     Quagga.init({
         inputStream: {
@@ -232,14 +233,14 @@ $( function() {
     }, function(error) {
         if ( error ) {
             // TODO: allow the user to enter their barcode manually if we cannot scan it
-            console.error( error );
+            console.log( error );
             $("#barcode_scanner").hide();
             return;
         } else {
             $("#manual_scanner").hide();
             $("#barcode_scanner").show();
-            $("#barcode_scanner").addClass("show");
-            $(".container.body").addClass("shrink");
+            // $("#barcode_scanner").addClass("show");
+            // $(".container.body").addClass("shrink");
         }
         console.log( "Quagga JS initialized. Ready to start Scanning Cards" );
         Quagga.start();
@@ -295,8 +296,7 @@ $( function() {
     $("#cardForm").submit( function( event ){
         event.preventDefault();
         checkNumber( $('#scanner').val() )
-    })
-
+    });
 
     Quagga.onDetected( function( data ) {
         if ( !checkNumber( data.codeResult.code ) ) {
@@ -311,22 +311,11 @@ $( function() {
     // check the number as a user posts it
     function checkNumber( cardNumber ) {
         if ( cardNumber.match(/^3{1}\d{19}$/) ) {
-            $.post( 'api/checkID.php', { card : cardNumber }, login );
+            //$.post( 'api/checkID.php', { card : cardNumber }, login );
+            alert( cardNumber );
         } else {
             console.error( "Invalid. Detected: ", cardNumber );
         }
-    }
-
-    // login the user based on the response
-    function login( response ) {
-        response = $.parseJSON( response );
-        if ( !response.success ) return showError( response.body );
-        // log the user in
-        localStorage.setItem( "login", "user" );
-        localStorage.setItem( "id", response.user_id );
-        localStorage.setItem( "kiosk", true );
-        // and redirect to their profile page
-        location.href = "/mobile/reg/medals/index.html?id=" + response.user_id;
     }
 
     // show errors to the user in a nice, async way
@@ -403,4 +392,4 @@ $( function() {
             $("#barcode_scanner").hide();
         }
     }
-});
+}
