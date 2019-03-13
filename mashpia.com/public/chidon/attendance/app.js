@@ -370,13 +370,15 @@ function setupQuagga() {
 
         var setup = function( error ){
             if ( error ) {
-                showError( "Sorry, it seems we cannot scan cards on your device. Please enter in the card number by hand." );
+                // showError( "Sorry, it seems we cannot scan cards on your device. Please enter in the card number by hand." );
                 $("#barcode_scanner").hide();
                 $("#manual-scanner").show(); // show the manual scanner
                 $('#manual-scanner #scanner').focus(); // focus for barcode readers
                 // setup the listener
             } else {
                 //$("#toggle-manual").show();
+                $("#manual-scanner").hide();
+                $("#barcode_scanner").show();
                 console.log( "Quagga JS initialized. Ready to start Scanning Cards" );
                 Quagga.start();
             }
