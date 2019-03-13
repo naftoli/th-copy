@@ -29,7 +29,7 @@ $raffle_id = isset($_POST['raffle_id']) ? $_POST['raffle_id'] : false;
 $seperate_genders = isset($_POST['single_list']) ? false : true;
 
 // if no single raffle was given, get all of them
-if(!$raffle_id && $_GET['v'] == 2){
+if(!$raffle_id && isset( $_GET['v'] ) && $_GET['v'] == 2){
     $raffle_query = mysql_query("SELECT r.* "
                                 ."FROM raffles r WHERE show_on_mobile = 1 "
                                 ." ORDER BY date_ran DESC, type "

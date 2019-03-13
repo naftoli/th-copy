@@ -1,6 +1,7 @@
 <?
 // enable debuging
-if ($_GET['debug']) {
+$debug = false;
+if (isset( $_GET['debug'] ) ) {
     error_reporting(E_ALL);
     ini_set("display_errors", 1);
     $debug = true;
@@ -111,8 +112,8 @@ if($debug) echo "</pre>";
         <div id="winner_list_container"></div>
         
         <script>
-            var test_mode = <?=$_GET['test'] ? "true" : "false";?>;
-            var debug_mode = <?=$_GET['debug'] ? "true" : "false";?>;
+            var test_mode = <?=isset( $_GET['test'] ) ? "true" : "false";?>;
+            var debug_mode = <?=isset( $_GET['debug'] ) ? "true" : "false";?>;
         </script>
         <script src="/raffles/shared/js/winners_form.js?v=1.9.5"></script>
     </body>
