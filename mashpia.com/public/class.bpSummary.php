@@ -75,6 +75,7 @@ class BpSummary {
 					." WHERE user_id in ( "
 						." SELECT user_id FROM users "
 						." WHERE {$this->type}_id = " . mysql_real_escape_string($id) . " "
+						." AND yan = 1 " 
 					." ) "
 					." AND campaign_id = " . $this->campaign;
 
