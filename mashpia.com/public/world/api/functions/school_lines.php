@@ -37,7 +37,7 @@ function school_lines( $campaigns, $grade ) {
         $query = mysql_query(
             "SELECT school_id, school_name, chayolei, logo, COUNT(*) as classes FROM schools s
             LEFT JOIN classes c USING (school_id) 
-            WHERE s.school_era IS NULL AND tanya = 1
+            WHERE tanya = 1 AND test_school = 0 
             GROUP BY s.school_id
             ORDER BY s.school_name"
         );
