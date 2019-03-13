@@ -122,6 +122,8 @@ var app = function() {
                 // width: {min: 640, ideal: 1280, max: 1920},
                 // height: {min: 480, ideal: 720, max: 1280},
                 // aspectRatio: {min: 1, max: 100},
+                width: 200, 
+                height: 300,
                 area: {
                     top: "0%",
                     right: "0%",
