@@ -148,8 +148,8 @@ var app = function() {
             $("#barcode_scanner").hide();
             return;
         } else {
-            // $("#manual_scanner").hide();
-            // $("#barcode_scanner").show();
+            $("#manual_scanner").hide();
+            $("#barcode_scanner").show();
             // $("#barcode_scanner").addClass("show");
             // $(".container.body").addClass("shrink");
         }
