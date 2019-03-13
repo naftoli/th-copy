@@ -21,8 +21,8 @@ $rank_promotions_query = mysql_query(
     ." JOIN users u USING ( user_id ) "
     ." JOIN ranks r USING ( rank_ord ) "
     ." JOIN schools s USING ( school_id ) "
-    ." WHERE rm.date_promoted > '$from' "
-    ." AND rm.date_promoted < '$to' "
+    ." WHERE rm.date_promoted >= '$from' "
+    ." AND rm.date_promoted <= '$to' "
     ." AND rm.rank_ord > 1 "
     ." AND s.test_school = 0 "
     ." AND s.chayolei = 1 "
@@ -32,8 +32,8 @@ $rank_promotions_query = mysql_query(
 $totals_query = mysql_query(
     " SELECT r.rank_name, COUNT(*) as total FROM rank_marks rm "
     ." JOIN users u USING ( user_id ) JOIN ranks r USING ( rank_ord ) "
-    ." JOIN schools s USING ( school_id ) WHERE rm.date_promoted > '$from' "
-    ." AND rm.date_promoted < '$to' AND rm.rank_ord > 1 "
+    ." JOIN schools s USING ( school_id ) WHERE rm.date_promoted >= '$from' "
+    ." AND rm.date_promoted <= '$to' AND rm.rank_ord > 1 "
     ." AND s.test_school = 0 AND s.chayolei = 1 "
     ." GROUP BY rm.rank_ord ORDER BY r.rank_ord DESC"
 );

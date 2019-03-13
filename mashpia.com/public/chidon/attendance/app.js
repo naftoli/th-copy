@@ -111,51 +111,6 @@ var app = function() {
             }
         });
     }
-
-    // start the scanner
-    Quagga.init({
-        inputStream: {
-            name : "Live",
-            type : "LiveStream",
-            target: "#barcode_scanner",
-            constraints: {
-                width: {min: 640, ideal: 1280, max: 1920},
-                height: {min: 480, ideal: 720, max: 1280},
-                aspectRatio: {min: 1, max: 100},
-                area: {
-                    top: "0%",
-                    right: "0%",
-                    left: "0%",
-                    bottom: "0%"
-                },
-                facingMode: "environment" // or user
-            }
-        },
-        locator: {
-            patchSize: "medium",
-            halfSample: true
-        },
-        numOfWorkers: 2,
-        decoder: {
-            readers : ["code_128_reader"]
-        },
-        locate: true,
-        multiple: true
-    }, function(error) {
-        if ( error ) {
-            // TODO: allow the user to enter their barcode manually if we cannot scan it
-            console.error( error );
-            $("#barcode_scanner").hide();
-            return;
-        } else {
-            // $("#manual_scanner").hide();
-            // $("#barcode_scanner").show();
-            // $("#barcode_scanner").addClass("show");
-            // $(".container.body").addClass("shrink");
-        }
-        console.log( "Quagga JS initialized. Ready to start Scanning Cards" );
-        Quagga.start();
-    });
     
     return {
         login:      login,
@@ -253,9 +208,11 @@ function setupQuagga() {
             type : "LiveStream",
             target: "#barcode_scanner",
             constraints: {
-                width: {min: 640, ideal: 1280, max: 1920},
-                height: {min: 480, ideal: 720, max: 1280},
-                aspectRatio: {min: 1, max: 100},
+                // width: {min: 640, ideal: 1280, max: 1920},
+                // height: {min: 480, ideal: 720, max: 1280},
+                // aspectRatio: {min: 1, max: 100},
+                width: 200, 
+                height: 300, 
                 area: {
                     top: "0%",
                     right: "0%",
@@ -326,7 +283,7 @@ function setupQuagga() {
 
     // on page load
     setupScanner( "environment" );
-    $("#toggle-manual").click( toggleManual );
+    //$("#toggle-manual").click( toggleManual );
     // detect the info on the scanner input
     $("#manual-scanner #scanner").keyup( function( event ) {
         if ( event.target.value.match(/^3{1}\d{19}$/) ) {
@@ -391,9 +348,11 @@ function setupQuagga() {
             inputStream: {
                 name : "Live",  type : "LiveStream",    target: "#barcode_scanner",
                 constraints: {
-                    width: {min: 640, ideal: 1280, max: 1920},
-                    height: {min: 480, ideal: 720, max: 1280},
-                    aspectRatio: {min: 1, max: 100},
+                    // width: {min: 640, ideal: 1280, max: 1920},
+                    // height: {min: 480, ideal: 720, max: 1280},
+                    // aspectRatio: {min: 1, max: 100},
+                    width: 200,
+                    height: 300,
                     facingMode: mode // or user
                 }
             },
@@ -417,7 +376,9 @@ function setupQuagga() {
                 $('#manual-scanner #scanner').focus(); // focus for barcode readers
                 // setup the listener
             } else {
-                $("#toggle-manual").show();
+                //$("#toggle-manual").show();
+                $("#manual-scanner").hide();
+                $("#barcode_scanner").show();
                 console.log( "Quagga JS initialized. Ready to start Scanning Cards" );
                 Quagga.start();
             }
@@ -426,15 +387,15 @@ function setupQuagga() {
         Quagga.init( config, setup );
     }
 
-    function toggleManual( event ){
-        if ( $("#manual-scanner").is(":visible") ){
-            $("#toggle-manual img").attr("src", "/mobile/img_new/scanner-2-color-red-svg.svg" );
-            $("#manual-scanner").hide();
-            $("#barcode_scanner").show();
-        } else {
-            $("#toggle-manual img").attr("src", "/mobile/img_new/camera-color-red-svg.svg");
-            $("#manual-scanner").show();
-            $("#barcode_scanner").hide();
-        }
-    }
+    // function toggleManual( event ){
+    //     if ( $("#manual-scanner").is(":visible") ){
+    //         $("#toggle-manual img").attr("src", "/mobile/img_new/scanner-2-color-red-svg.svg" );
+    //         $("#manual-scanner").hide();
+    //         $("#barcode_scanner").show();
+    //     } else {
+    //         $("#toggle-manual img").attr("src", "/mobile/img_new/camera-color-red-svg.svg");
+    //         $("#manual-scanner").show();
+    //         $("#barcode_scanner").hide();
+    //     }
+    // }
 }
