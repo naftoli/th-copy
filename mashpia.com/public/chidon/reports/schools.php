@@ -1,7 +1,6 @@
 <?php
 require '../../db.php';
-require '../../class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+require 'vars.php';
 
 $schools = [];
 $sql = "select s.school_name, tc.* from th_chidon_schools tc 

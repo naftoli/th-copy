@@ -27,7 +27,7 @@ foreach ($schools as $id => $school) {
         ."and u.school_id = " . $id;
     if (isset($_GET['id'])) $sql .= " and tc.th_chidon_id = " . $_GET['id'];
     $sql .= " order by class_grade, class_sub, u.last, u.first";
-    //echo "<input type='hidden' name='sql' value='" . $sql . "' />";
+    echo $sql; exit;
     $result = mysql_query($sql) or die($sql . "<br />" . mysql_error());
     while ($row = mysql_fetch_assoc($result)) {
         $users[$id][] = $row;
