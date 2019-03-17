@@ -1,8 +1,7 @@
 <?php
 require '../../db.php';
-require '../../class.globalSettings.php';
+require 'vars.php';
 
-$year = GlobalSettings::getChidonYear();
 $info = array();
 $sql = "select * from th_chidon tc 
 			join users u using (user_id)

@@ -14,14 +14,16 @@ $columns = [
     'Hebrew Last Name'  => "u.last_he",
     'Book'              => "tc.book",
     'Grade'             => "tc.grade",
-    'Walking Zone'      => "tc.walking_zone",
-    'Walk Alone'        => "tc.walk_day, tc.walk_night",
+    'Walking Zone'      => "tc.walking_group",
+    'Walk Alone'        => "tc.walking",
     'Host Name'         => "tc.host",
     'Host Phone Number' => "tc.host_number",
-    'Host Address Number' => "tc.host_address1",
-    'Host Street Name'  => "tc.host_address2",
-    'Host Cross Street 1' => "tc.between_streets",
-    'Host Cross Street 2' => "tc.between_streets",
+    'Host Address Number' => "tc.host_street_num",
+    'Host Address Number Suffix' => "tc.host_street_num_suffix", 
+    'Host Street Name'  => "tc.host_street",
+    'Host Apt Number'   => "tc.host_street_apt", 
+    'Host Cross Street 1' => "tc.between_streets1",
+    'Host Cross Street 2' => "tc.between_streets2",
     'Team Name'         => "tc.team_id",
     'Bunk Number'       => "tc.bunk_id",
     'Thursday Buses'    => "tc.coach_bus",
@@ -48,7 +50,6 @@ if( $_POST['action'] == "generate" ) {
     
     $csv_info = [$headers]; // add the headers to the CSV file...
     while($user_info = mysql_fetch_assoc($load_info_query)) {
-        $cross_streets = explode(" and ", $user_info['between_streets']);
         $csv_info[] = [
             $user_info['th_chidon_id'], // Chidon ID
             $user_info['first'], // First Name
@@ -57,14 +58,16 @@ if( $_POST['action'] == "generate" ) {
             $user_info['last_he'], // Last Name Hebrew
             $user_info['book'],
             $user_info['grade'],
-            $user_info['walking_zone'],
-            $user_info['walk_day'] ? ($user_info['walk_night'] ? "yes" : "day only") : "no", // all 3 supported options....
+            $user_info['walking_group'],
+            intval( $user_info['walking'] ) ? "yes" : "no", 
             $user_info['host'], // host info....
             $user_info['host_number'],
-            $user_info['host_address1'],
-            $user_info['host_address2'],
-            $cross_streets[0],
-            isset($cross_streets[1]) ? $cross_streets[1] : "",
+            $user_info['host_street_num'], 
+            $user_info['host_street_num_suffix'],
+            $user_info['host_street'], 
+            $user_info['host_street_apt'],
+            $user_info['between_streets1'], 
+            $user_info['between_streets2'], 
             $teams_by_id[$user_info['team_id']],
             $user_info['bunk_id'] - $TEAM_OFFSET,
             $user_info['coach_bus'],
@@ -119,14 +122,14 @@ if( $_POST['action'] == "generate" ) {
             'u.last_he'         => $row[4],
             'tc.book'           => $row[5],
             'tc.grade'          => $row[6],
-            'tc.walking_zone'   => $row[7],
-            'tc.walk_day'       => in_array($row[8], ['yes', 'day only'])   ? "1" : "0",
-            'tc.walk_night'     => in_array($row[8], ['yes', 'night only']) ? "1" : "0",
+            'tc.walking_group'  => $row[7],
+            'tc.walking'        => intval( $row[8] )  ? "1" : "0",
             'tc.host'           => $row[9],
             'tc.host_number'    => $row[10],
             'tc.host_address1'  => $row[11],
             'tc.host_address2'  => $row[12],
-            'tc.between_streets'=> $row[13] . " and " . $row[14],
+            'tc.between_streets1' => $row[13],
+            'tc.between_streets2' => $row[14],
             'tc.team_id'        => $row[15] ? $teams[$row[15]] : false,
             'tc.bunk_id'        => $row[16] + $TEAM_OFFSET, // add 60 to the bunk number to get the bunk ID
             'tc.coach_bus'      => $row[17],

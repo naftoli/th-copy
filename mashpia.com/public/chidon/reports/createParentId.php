@@ -1,8 +1,9 @@
 <?php
 require '../../db.php';
+require 'vars.php';
 
 $info = array();
-$sql = 'select th_chidon_id, user_id from th_chidon where year = 5778';
+$sql = 'select th_chidon_id, user_id from th_chidon where year = ' . $year;
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
     $info[$row['th_chidon_id']] = $row['user_id'];

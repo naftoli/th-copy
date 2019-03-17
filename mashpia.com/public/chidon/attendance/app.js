@@ -142,7 +142,7 @@ child_item.prototype.render = function() {
     if (this.type === "walk") {
         html +=     '<div class="info">';
         html +=         'Host Family: ' + this.props.host + "<br/>";
-        html +=         'Address: <strong>' + this.props.host_address1 + " " + this.props.host_address2 + " <br class='break-sm'/>";
+        html +=         'Address: <strong>' + this.props.host_street_num + " " + this.props.host_street_num_suffix + " " + this.props.host_street + " " + this.props.host_street_apt + " <br class='break-sm'/>";
         html +=         'Between ' + this.props.between_streets1 + "</strong><br/>";
         html +=         'Host Phone Number: ' + this.props.host_number + "<br/>";
         html +=     '</div>';
