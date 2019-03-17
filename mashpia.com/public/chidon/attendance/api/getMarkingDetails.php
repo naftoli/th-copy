@@ -53,14 +53,14 @@ if( $type == 'walk' ) {
     }
 
     $qry = " SELECT school_name, first, last, tc.th_chidon_id, user_serial, user_id, walking_zone, "
-    ." host, host_address1, host_address2, between_streets1, between_streets2, host_number, tcam.marked "
+    ." host, host_street_num, host_street_num_suffix, host_street, host_street_apt, between_streets1, between_streets2, host_number, tcam.marked "
     ." FROM th_chidon tc "
     ." JOIN schools s USING (school_id) "
     ." JOIN users u USING (user_id) "
     ." LEFT JOIN th_chidon_attendance_marks tcam ON tcam.th_chidon_id = tc.th_chidon_id AND tcam.att_time_id = '$time_id' "
     ." WHERE year = '$year' AND walking_zone = '". $user['walking_zone'] ."' "
     . $grade_limit . $gender_limit
-    ." ORDER BY between_streets1, between_streets2, host_address1, host_address2, first, last; ";
+    ." ORDER BY between_streets1, between_streets2, host_street, host_street_num, host_street_num_suffix, host_street_apt, first, last";
 
     $child_list_query = mysql_query( $qry );
     while( $child = mysql_fetch_assoc($child_list_query) ) {
