@@ -65,6 +65,15 @@ class StaffManager
     return $this->personalInfo;
   }
 
+  public function getInfo() {
+    $this->setAssignments();
+    $this->setTypes();
+    return json_encode([
+      'assignments' =>  $this->assignments, 
+      'types'       =>  $this->types
+    ]);
+  }
+
   private function setAssignments() {
     if ( empty( $this->assignments ) ) {
       $stmt = $this->db->prepare("select * from th_chidon_staff_assignments where staff_id = :staff_id");
@@ -73,14 +82,18 @@ class StaffManager
     }
   }
 
-  public function getNumTypes() {
+  private function setTypes() {
     if ( empty( $this->types ) ) {
       $stmt = $this->db->prepare("
-        select st.type  
-        from th_chidon_staff_assignments sa 
-        join th_chidon_staff_types st on sa.type_id = st.th_chidon_staff_type_id 
-        where sa.staff_id = :staff_id 
-        group by st.type
+        SELECT 
+            t.type
+        FROM
+            th_chidon_staff_types st
+                JOIN
+            th_chidon_types t ON t.th_chidon_type_id = st.type_id
+        WHERE
+            st.staff_id = :staff_id
+        GROUP BY t.type
       ");
       $stmt->execute([ ':staff_id' =>  $this->staffID ]);
       $rows = $stmt->fetchAll();
@@ -88,7 +101,6 @@ class StaffManager
         $this->types[] = $row['type'];
       }
     } 
-    return count( $this->types );
   }
 
   public function getBunks() {

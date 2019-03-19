@@ -29,13 +29,32 @@ var app = function() {
                 if (!response.success) logout();
                 // set the user in the state to the current user...
                 state.user = response.user;
+                state.info = JSON.parse( response.info );
                 $("#user-name").text(state.user.name);
             }
         });
     }
+
+    function chooseButtons() {
+        let numTypes = state.info.types.length;
+        if ( numTypes ) {
+            $("#buttons").show();
+            if ( numTypes == 1 ) {
+                switch ( state.info.types[0] ) {
+                    case 'walking group':
+                        $("#mark_bunk").hide();
+                        break;
+                    case 'bunk':
+                        $("#mark_walking_group").hide();
+                        break;
+                }
+            }
+        }
+    }
     
     function setupApp() {
-        
+        chooseButtons();
+        return;
         $.post( "api/getMarkingOptions.php", { login: state.login }, function( response ) {
             try { response = JSON.parse(response); }
             catch (e) { console.error(e); }

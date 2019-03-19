@@ -174,7 +174,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     <section class="section is-medium">
       <div class="container">
         <div class="title">Existing Attendance Times</div>
-        <table>
+        <table class="table is-bordered">
           <thead>
             <tr>
               <th>Day of Week</th>
@@ -182,6 +182,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               <th>Type of Attendance</th>
               <th>Bunk</th>
               <th>Description</th>
+              <th>Action</th>
             </tr>
           </thead>
           <?php
