@@ -21,6 +21,11 @@
 	background-position: center center;
 }
 
+#section0 .event-wrapper a {
+	margin: 1rem;
+	text-align: center;
+}
+
 #section0 .buttons-wrapper a {
 	margin-right: 1rem;
 }
@@ -69,8 +74,6 @@
 	z-index: 1;
 }
 
-
-
 #section0 h2 {
 	font-family: 'Russo One', sans-serif;
 	font-size: 3rem;
@@ -87,6 +90,15 @@
 	bottom: 16rem;
 	left: 0;
 }
+
+#section0 .event-wrapper {
+	position: absolute;
+	margin: auto;
+	bottom: 350px;
+	right: 0;
+	z-index: 100;
+}
+
 #section0 .buttons-wrapper {
   position: absolute;
   bottom: 5rem;
@@ -439,6 +451,24 @@
 	}
 }
 
+@media(max-width: 1920px) {
+	#section0 .event-wrapper {
+		left: 35%;
+	}
+}
+
+@media(max-width: 1600px) {
+	#section0 .event-wrapper {
+		left: 30%;
+	}
+}
+
+@media(max-width: 1440px) {
+	#section0 .event-wrapper {
+		left: 30%;
+	}
+}
+
 @media(max-width: 1240px) {
 	#section0 h2 {
 		left: 2rem;
@@ -447,10 +477,16 @@
 		left: 2rem;
 		bottom: 0;
 	}
+	#section0 .event-wrapper {
+		left: 25%;
+	}
 }
 @media(max-width: 1200px) {
 	#section0 .buttons-wrapper {
 		right: 2rem;
+	}
+	#section0 .event-wrapper {
+		left: 24%;
 	}
 	#section1 .chidon {
 		padding-left: 2rem;
@@ -521,6 +557,9 @@
 
 }
 @media(max-width: 900px) {
+	#section0 .event-wrapper {
+		left: 15%;
+	}
 	#section0 h2 {
     bottom: 21rem;
   }
@@ -546,7 +585,35 @@
   }
 }
 
+@media(max-width: 767px) {
+	.thermometer-wrapper {
+		bottom: 2.5rem;
+	}
+	#section0 .thermometer-wrapper .thermometer-image .bar .bar-line {
+		max-width: calc(100vw - 10rem);
+	}
+	.thermometer-image {
+		/*display: none;*/
+	}
+	#section0 .slide .wrapper h2 {
+		bottom: 22rem;
+		font-size: 3rem;
+	}
+	#section0 .event-wrapper {
+		left: 9%;
+	}
+}
+
+@media(max-width: 660px) {
+	#section0 .event-wrapper {
+		left: 6%;
+	}
+}
+
 @media(max-width: 600px) {
+	#section0 .event-wrapper {
+		left: 1rem;
+	}
 	#section0 h2 {
     bottom: 15rem;
     right: 3rem;
@@ -574,22 +641,6 @@
     margin-top: 2rem;
     min-width: 5rem;
     min-height: 5rem;
-	}
-}
-
-@media(max-width: 767px) {
-	.thermometer-wrapper {
-		bottom: 2.5rem;
-	}
-	#section0 .thermometer-wrapper .thermometer-image .bar .bar-line {
-		max-width: calc(100vw - 10rem);
-	}
-	.thermometer-image {
-		/*display: none;*/
-	}
-	#section0 .slide .wrapper h2 {
-		bottom: 22rem;
-		font-size: 3rem;
 	}
 }
 
