@@ -35,6 +35,7 @@ var app = function() {
     }
     
     function setupApp() {
+        
         $.post( "api/getMarkingOptions.php", { login: state.login }, function( response ) {
             try { response = JSON.parse(response); }
             catch (e) { console.error(e); }

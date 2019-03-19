@@ -187,7 +187,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           <thead>
             <tr>
               <th>Day of Week</th>
-              <th>Time</th>
+              <th>Date / Time</th>
               <th>Type of Attendance</th>
               <th>Bunk</th>
               <th>Description</th>
@@ -221,7 +221,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         let res = JSON.parse( result );
         if ( res.success ) {
           alert('Deleted');
-          location.reload();
+          location.href = "times.php";
         } else {
           alert( 'Error deleting: ' + res.error );
         }
