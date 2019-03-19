@@ -113,7 +113,9 @@ body,td,th {
 		<!-- <h4>Register Today!</h4> -->
 			<!-- <p>Click <a href="registration.php#register">here</a> to register now for the Chidon.</p>	 -->
 			<h4 style="line-height: 1.4;">
-				Purchase tickets for the Chidon Event! (coming soon)<br />
+				Purchase tickets for the Chidon Event!<br />
+				<a href="https://chidon1.ticketspice.com/chidon">Girls Event</a><br />
+				<a href="https://chidon1.ticketspice.com/chidon-boys-event">Boys Event</a><br /><br />
 				Girls Game Show: Sunday, Chof Daled Adar II (March 31)<br />
 				Boys Game Show: Sunday, Beis Nissan (April 7)
 			</h4>
