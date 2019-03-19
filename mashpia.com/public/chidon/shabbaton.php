@@ -113,7 +113,15 @@ body,td,th {
                 <div class="indent">
                     Thanks to Tzivos Hashem and its sponsors, we are able to cut the original fee of $300 per child to $150.<br />
                     Please note: Fees do not include transportation to and from New York.
-                </div><br />
+				</div><br />
+				
+				<h4>Event Tickets</h4>
+                <div class="indent">
+					<a href="https://chidon1.ticketspice.com/chidon">Purchase Tickets for Girls Chidon Event</a><br />
+					<a href="https://chidon1.ticketspice.com/chidon-boys-event">Purchase Tickets for Boys Chidon Event</a>
+				</div><br />
+
+				
 				
 				<!-- <h4>Game Show</h4>
                 <div class="indent">
