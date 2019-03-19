@@ -59,15 +59,6 @@ if ( isset( $_POST['day'] ) ) {
   }
 }
 
-// get bunks
-$bunks = [];
-//$sql = "select * from th_chidon_bunks where year = " . $year;
-$sql = "select * from th_chidon_bunks where year = 5778";
-$result = mysql_query( $sql );
-while ( $row = mysql_fetch_assoc( $result ) ) {
-  $bunks[$row['bunk_id']] = $row['bunk_name'];
-}
-
 // get attendance times
 $info = [];
 $sql = "select * from th_chidon_attendance_times where year = " . $year;
@@ -102,11 +93,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             <div class="control">
               <label class="radio">
                 <input type="radio" name="gender" value="f" checked>
-                Girls Chidon
+                Girls Shabbaton
               </label><br />
               <label class="radio">
                 <input type="radio" name="gender" value="m">
-                Boys Chidon
+                Boys Shabbaton
               </label>
             </div>
           </div>
@@ -128,7 +119,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           <div class="field">
             <label class="label">Time</label>
             <div class="control">
-              Time: <input type="time" name="time" class="input is-primary" style="width: 140px;" />
+              <input type="time" name="time" class="input is-primary" style="width: 140px;" />
             </div>
           </div>
           <br />
@@ -152,8 +143,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             <div class="columns is-mobile">
               <?php
               $i = 1; // keep track of when to make a break
-              foreach ( $bunks as $id => $name ) {
-                echo "<div class='column is-one-fifth'><input type='checkbox' class='checkbox' name='bunks[" . $id . "]' /> " . $name . "</div>";
+              for ( $j = 1; $j <= 120; $j++ ) {
+                echo "<div class='column is-one-fifth'><input type='checkbox' class='checkbox' name='bunks[" . $j . "]' /> " . $j . "</div>";
                 if ( $i++ % 5 == 0 ) echo "</div><div class='columns is-mobile'>";
               }
               ?>
