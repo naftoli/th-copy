@@ -6,7 +6,7 @@ $year = GlobalSettings::getChidonYear();
 if ( isset( $_POST['day'] ) ) {
   //echo "<pre>"; print_r( $_POST ); echo "</pre>";
 
-  $gender = strtolower( $_POST['gender'] );
+  $gender = mysql_real_escape_string( $_POST['gender'] );
   $day = mysql_real_escape_string( strtolower( $_POST['day'] ) );
   $time = mysql_real_escape_string( $_POST['time'] );
   $desc = mysql_real_escape_string( $_POST['description'] );
@@ -16,14 +16,14 @@ if ( isset( $_POST['day'] ) ) {
     $bunks[] = $k;
   }
 
-  if ( $gender == 'f' ) {
+  if ( $gender == 'girls' ) {
      $dates = [
         'thursday' =>  '2019-03-28', 
         'friday'   =>  '2019-03-29',
         'motzei shabbos'  =>  '2019-03-30', 
         'sunday'   =>  '2019-03-31'
      ];
-  } else if ( $gender == 'm' ) {
+  } else if ( $gender == 'boys' ) {
     $dates = [
        'thursday' =>  '2019-04-04', 
        'friday'   =>  '2019-04-05',
@@ -41,7 +41,7 @@ if ( isset( $_POST['day'] ) ) {
               att_type = '" . $type . "', 
               att_type_id = " . $bunk . ", 
               description = '" . $desc . "', 
-              gender = '" . strtoupper( $gender ) . "', 
+              chidon_type = '" . $gender . "', 
               year = " . $year;
       //echo $qry . "<br />";
       mysql_query( $qry ) or die( mysql_error() . "<br />" . $qry );
@@ -52,7 +52,7 @@ if ( isset( $_POST['day'] ) ) {
               att_time = '" . $dates[$day] . " " . $time . ":00', 
               att_type = '" . $type . "', 
               description = '" . $desc . "', 
-              gender = '" . strtoupper( $gender ) . "', 
+              chidon_type = '" . $gender . "', 
               year = " . $year;
     //echo $qry . "<br />";
     mysql_query( $qry ) or die( mysql_error() . "<br />" . $qry );
@@ -92,11 +92,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           <div class="field">
             <div class="control">
               <label class="radio">
-                <input type="radio" name="gender" value="f" checked>
+                <input type="radio" name="gender" value="girls" checked>
                 Girls Shabbaton
               </label><br />
               <label class="radio">
-                <input type="radio" name="gender" value="m">
+                <input type="radio" name="gender" value="boys">
                 Boys Shabbaton
               </label>
             </div>
