@@ -76,9 +76,23 @@ class StaffManager
 
   private function setAssignments() {
     if ( empty( $this->assignments ) ) {
-      $stmt = $this->db->prepare("select * from th_chidon_staff_assignments where staff_id = :staff_id");
+      $stmt = $this->db->prepare("
+        SELECT 
+            *
+        FROM
+            th_chidon_staff_types st
+                JOIN
+            th_chidon_types t ON t.th_chidon_type_id = st.type_id
+                LEFT JOIN
+            th_chidon_staff_assignments s ON s.staff_type_id = st.th_chidon_staff_type_id
+        WHERE
+            st.staff_id = :staff_id
+      ");
       $stmt->execute([ ':staff_id' => $this->staffID ]);
-      $this->assignments = $stmt->fetchAll();
+      $rows = $stmt->fetchAll();
+      foreach ( $rows as $row ) {
+        $this->assignments[$row['type']][$row['role']][] = $row['group_number'];
+      }
     }
   }
 
@@ -117,7 +131,26 @@ class StaffManager
     return $this->walkingGroups;
   }
 
-  public function getChildren() {
-
+  public function getTimes( array $groups ) {
+    $times = [];
+    $listOfGroups = implode(',', $groups);
+    $stmt = $this->db->prepare("
+      SELECT 
+          t.*
+      FROM
+          th_chidon_attendance_times t
+              JOIN
+          th_chidon_staff_assignments sa ON sa.group_number = t.att_type_id
+              JOIN
+          th_chidon_staff_types st ON st.th_chidon_staff_type_id = sa.staff_type_id
+      WHERE
+          st.staff_id = :staff_id
+              AND t.att_type_id IN ($listOfGroups)
+    ");
+    $res = $stmt->execute([ ':staff_id' => $this->staffID ]);
+    if ( $res ) {
+      $times = $stmt->fetchAll();
+    }
+    return $times;
   }
 }

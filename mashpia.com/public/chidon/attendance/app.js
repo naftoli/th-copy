@@ -6,6 +6,16 @@ var app = function() {
         login: false,
         user: {} // user that is logged in....
     };
+
+    var super_admins = {
+        'bunk': [
+            'director', 
+            'head counselor'
+        ], 
+        'walking_group': [
+            
+        ]
+    }
     
     function logout() {
         localStorage.removeItem( 'attendance_login' );
@@ -34,28 +44,52 @@ var app = function() {
             }
         });
     }
-
-    function chooseButtons() {
-        let numTypes = state.info.types.length;
-        if ( numTypes ) {
-            $("#buttons").show();
-            if ( numTypes == 1 ) {
-                switch ( state.info.types[0] ) {
-                    case 'walking group':
-                        $("#mark_bunk").hide();
-                        break;
-                    case 'bunk':
-                        $("#mark_walking_group").hide();
-                        break;
-                }
-            }
-        }
-    }
     
     function setupApp() {
-        chooseButtons();
-        return;
-        $.post( "api/getMarkingOptions.php", { login: state.login }, function( response ) {
+        setupGroupInfo();
+
+        $("#buttons a").click( function() {
+            $("#groups").hide();
+            $("#buttons").hide();
+            // get checked off groups
+            let groupList = [];
+            $(".group").each( function() {
+                if ( $(this).is(":checked") ) {
+                    groupList.push( $(this).val() );
+                }
+            });
+            updateTimes( groupList );
+            $("#times").show();
+        });
+    }
+
+    function setupGroupInfo() {
+        let groups = state.info.assignments;
+        console.log( groups );
+        
+        for ( group_type in groups ) {
+            let html = '';
+            for ( role in groups[group_type] ) {
+                for ( group in groups[group_type][role] ) {
+                    if ( groups[group_type][role][group] ) {
+                        html += `
+                            <div class='column is-one-fifth'>
+                                <input type='checkbox' class='checkbox group' value='${groups[group_type][role][group]}' /> ${groups[group_type][role][group]}
+                            </div>
+                        `;
+                    }
+                } 
+            }
+            let type = "#" + group_type;
+            let details = type + " .details";
+            $( details ).append( html );
+            $( type ).show();
+        }
+        $("#buttons").show();
+    }
+
+    function updateTimes( groupList ) {
+        $.post( "api/getMarkingOptions.php", { login: state.login, groups: groupList }, function( response ) {
             try { response = JSON.parse(response); }
             catch (e) { console.error(e); }
             
@@ -65,14 +99,14 @@ var app = function() {
             
             state.times = response.times;
             renderDropdown( state.times );
-            updateChildren( state.times[0].key );
+            //updateChildren( state.times[0].key );
             // refresh every 5 seconds....
             // setInterval(function(){
             //     if (!debug) {
             //         updateChildren( $("select#timeDropdown").val() );
             //     }
             // }, 5000);
-            setupQuagga();
+            //setupQuagga();
         });
     }
     

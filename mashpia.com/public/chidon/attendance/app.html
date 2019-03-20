@@ -26,86 +26,110 @@
                 <h2> Welcome <span id="user-name"></span></h2>
             </section>
 
+            <section id="groups">
+                <div class="container" id="bunk" style="display: none;">
+                    <div class="field">
+                        <label class="label">Available Bunks to Mark</label>
+                        <div class="columns is-mobile details">
+                    
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="container" id="walking_group" style="display: none;">
+                    <div class="field">
+                        <label class="label">Available Walking Groups to Mark</label>
+                        <div class="columns is-mobile details">
+                    
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <section id="buttons" style="display: none;">
                 <br />
                 <nav class="level">
                     <p class="level-item has-text-centered" id="mark_bunk">
+                        <a class="button is-primary is-large is-outlined">Go To Marking</a>
+                    </p>
+                    <!-- <p class="level-item has-text-centered" id="mark_bunk">
                         <a class="button is-primary is-large is-outlined">Mark Bunk(s)</a>
                     </p>
                     <br />
                     <p class="level-item has-text-centered" id="mark_walking_group">
                         <a class="button is-primary is-large is-outlined">Mark Walking Group(s)</a>
-                    </p>
+                    </p> -->
                 </nav>
             </section>
 
-            <div id="main" style="display: none;">
+            <div id="times" style="display: none;">
             
-            <section id="dropdown">
-                <div class="select is-primary">
-                    <select id="timeDropdown"></select>
-                </div>
-            </section>
+                <section id="dropdown">
+                    <div class="select is-primary">
+                        <select id="timeDropdown"></select>
+                    </div>
+                </section>
 
-            <!--
-            <section class="barcode-scanner">
-                <div class="flex">
-                    <div class="manual" id="manual-scanner">
-                        <div class="alert alert-warning">
-                            <div class="scanner-background">
-                                <h2 style="padding-bottom: 6px;">Enter the digits underneath the barcode on your ID card:</h2>
-        
-                                <form name="cardForm" id="cardForm">
-                                    <input type="text" class="form-control" id="scanner" name="scanner" placeholder="ID Card Number" autocomplete="off" autofocus />
-                                </form>
+                <!--
+                <section class="barcode-scanner">
+                    <div class="flex">
+                        <div class="manual" id="manual-scanner">
+                            <div class="alert alert-warning">
+                                <div class="scanner-background">
+                                    <h2 style="padding-bottom: 6px;">Enter the digits underneath the barcode on your ID card:</h2>
+            
+                                    <form name="cardForm" id="cardForm">
+                                        <input type="text" class="form-control" id="scanner" name="scanner" placeholder="ID Card Number" autocomplete="off" autofocus />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="barcode_scanner" class="viewport" style="margin: auto;"></div>
+                        <!-- <div id="toggle-manual">
+                            <img src="/mobile/img_new/scanner-2-color-red-svg.svg" alt="manual" />
+                        </div> --><!--
+                    </div>
+                </section>
+                <div class="clearfix"></div>
+                <div class="modal" tabindex="-1" role="dialog" id="errorModal">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Error</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Modal body text goes here.</p>
                             </div>
                         </div>
                     </div>
-                    <div id="barcode_scanner" class="viewport" style="margin: auto;"></div>
-                    <!-- <div id="toggle-manual">
-                        <img src="/mobile/img_new/scanner-2-color-red-svg.svg" alt="manual" />
-                    </div> --><!--
                 </div>
-            </section>
-            <div class="clearfix"></div>
-            <div class="modal" tabindex="-1" role="dialog" id="errorModal">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Error</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
+            -->
+                
+                <section id="child-list">
+                    
+                    <label class="child">
+                        <div class="box">
+                            <input type="checkbox"/> <span class="checkbox"></span>
+                            <span class="name"></span>
+                            <div class="info"></div>
+                            <div class="clearfix"></div>
                         </div>
-                        <div class="modal-body">
-                            <p>Modal body text goes here.</p>
+                    </label>
+                    
+                    <label class="child">
+                        <div class="box">
+                            <input type="checkbox"/> <span class="checkbox"></span>
+                            <span class="name"></span>
+                            <div class="info"></div>
+                            <div class="clearfix"></div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        -->
-            
-            <section id="child-list">
-                
-                <label class="child">
-                    <div class="box">
-                        <input type="checkbox"/> <span class="checkbox"></span>
-                        <span class="name"></span>
-                        <div class="info"></div>
-                        <div class="clearfix"></div>
-                    </div>
-                </label>
-                
-                <label class="child">
-                    <div class="box">
-                        <input type="checkbox"/> <span class="checkbox"></span>
-                        <span class="name"></span>
-                        <div class="info"></div>
-                        <div class="clearfix"></div>
-                    </div>
-                </label>
-                
-            </section>
+                    </label>
+                    
+                </section>
+
             </div>
         </div>
     </body>
