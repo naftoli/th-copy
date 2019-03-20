@@ -177,6 +177,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         <table class="table is-bordered">
           <thead>
             <tr>
+              <th>Chidon Type</th>
               <th>Day of Week</th>
               <th>Date / Time</th>
               <th>Type of Attendance</th>
@@ -187,7 +188,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           </thead>
           <?php
           foreach ( $info as $row ) {
-            echo "<tr><tbody><td>" . $row['day_of_week'] . "</td><td>" . $row['att_time'] . "</td><td>" . $row['att_type'] . "</td><td>";
+            echo "<tr><tbody><td>" . $row['chidon_type'] . "</td><td>" . $row['day_of_week'] . "</td><td>" . $row['att_time'] . "</td><td>" . $row['att_type'] . "</td><td>";
             if ( $row['att_type'] == 'bunk' ) echo $row['att_type_id'];
             echo "</td><td>" . $row['description'] . "</td><td><a href='#' onclick='deleteTime(" . $row['att_time_id'] . ");'>delete</a></td></tbody></tr>";
           }
