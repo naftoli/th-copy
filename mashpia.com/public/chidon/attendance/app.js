@@ -61,6 +61,13 @@ var app = function() {
             updateTimes( groupList );
             $("#times").show();
         });
+
+        $("#timeDropdown").change( function() {
+            let val = $(this).val();
+            let type = $(this)[0].selectedOptions[0].dataset.type; 
+            alert( val + ',' + type );
+            updateChildren( val, type );
+        });
     }
 
     function setupGroupInfo() {
@@ -89,6 +96,7 @@ var app = function() {
     }
 
     function updateTimes( groupList ) {
+        state.selectedGroups = groupList;
         $.post( "api/getMarkingOptions.php", { login: state.login, groups: groupList }, function( response ) {
             try { response = JSON.parse(response); }
             catch (e) { console.error(e); }
@@ -123,8 +131,8 @@ var app = function() {
         } );
     }
     
-    function updateChildren( time_id ){
-        $.post("api/getMarkingDetails.php", { login: state.login, time_id: time_id }, function (response) {
+    function updateChildren( time_id, type ){
+        $.post("api/getMarkingDetails.php", { login: state.login, time_id: time_id, type: type, groups: state.selectedGroups }, function (response) {
             response = JSON.parse(response);
             
             if (!response.success) {

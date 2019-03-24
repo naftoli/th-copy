@@ -153,4 +153,44 @@ class StaffManager
     }
     return $times;
   }
+
+  public function getChildren( $time_id, $type, array $groups ) {
+    $field = null;
+    switch ( $type ) {
+      case 'bunk':
+        $field = "bunk_number";
+        break;
+      case 'walk':
+        $field = "walking_group";
+        break;
+    } 
+    $groupsList = implode(',', $groups);
+    $stmt = $this->db->prepare("
+      SELECT 
+          tc.*,
+          s.school_name,
+          u.first,
+          u.last,
+          u.user_serial,
+          u.user_id,
+          m.marked
+      FROM
+          th_chidon tc
+              JOIN
+          schools USING (school_id)
+              JOIN
+          users USING (user_id)
+              LEFT JOIN
+          th_chidon_attendance_marks m ON m.th_chidon_id = tc.th_chidon_id
+              AND m.att_time_id = :time_id
+      WHERE
+          year = :year AND $field IN ($groupsList)
+      ORDER BY $field , between_streets1 , between_streets2 , host_street , host_street_num , host_street_num_suffix , host_street_apt , first , last
+    ");
+    $res = $stmt->execute([ 
+      ':year'     =>  $this->year, 
+      ':time_id'  =>  $time_id 
+    ]);
+    if ( $res ) return $stmt->fetchAll();
+  }
 }

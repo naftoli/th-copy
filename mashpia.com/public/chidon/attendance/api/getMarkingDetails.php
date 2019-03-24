@@ -1,74 +1,93 @@
 <?php
-//header('Content-Type: application/json');
-// DBS connection.....
-require_once( $_SERVER['DOCUMENT_ROOT'].'/db.php' );
-require_once(dirname(__FILE__)."/functions/header.php");
-
-require_once ( $_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php' );
-$year = GlobalSettings::getChidonYear();
-$year = 5778;
-
+require_once __DIR__ . "/functions/header.php";
 // Authentication scheme
 require_once( $_SERVER['DOCUMENT_ROOT'].'/mobile/reg/ajax/encrypt.php' );
 $login = encrypt_decrypt('decrypt', $_POST['login']);
-if(!$login) render_json_error("Invalid Login");
+if(!$login) render_json_error("Invalid Login", $_POST);
 
-// get the user
-$user_query = mysql_query("SELECT walking_zone, door_number, chap_chidon_type FROM th_chidon_staff WHERE staff_id = '$login' LIMIT 1;"); // get the users info
+require "../classes/staffManager.php";
+$sm = new StaffManager();
+if ( !$sm->setStaffByID( $login ) ) render_json_error("Invalid Staff ID", $_POST);
 
-if(!$user_query || mysql_num_rows($user_query) == 0)
-    render_json_error("Invalid Login");
+$type = $_POST['type'];
+$marks = $sm->getChildren( $_POST['time_id'], $_POST['type'], $_POST['groups'] );
 
-$user = mysql_fetch_assoc($user_query);
+echo json_encode([
+    "success"   => true,
+    "type"      => $type,
+    "marks"     => $marks,
+]);
 
-// get the TIME ID
-$time_id = isset($_POST['time_id']) ? clean_post_param('time_id') : render_json_error("Invalid Request");
-// get the type of info to pull
-$type_query = mysql_query("SELECT att_type, gender FROM th_chidon_attendance_times WHERE att_time_id = '$time_id' LIMIT 1;"); // get the users info
+//header('Content-Type: application/json');
+// DBS connection.....
+// require_once( $_SERVER['DOCUMENT_ROOT'].'/db.php' );
+// require_once(dirname(__FILE__)."/functions/header.php");
 
-if(!$type_query || mysql_num_rows($type_query) == 0)
-    render_json_error("Invalid Request", "SELECT type FROM th_chidon_attendance_times WHERE att_time_id = '$time_id' LIMIT 1;");
+// require_once ( $_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php' );
+// $year = GlobalSettings::getChidonYear();
+// $year = 5778;
 
-$result = mysql_fetch_assoc($type_query);
-$type = $result['att_type'];
-$gender = $result['gender'];
+// // Authentication scheme
+// require_once( $_SERVER['DOCUMENT_ROOT'].'/mobile/reg/ajax/encrypt.php' );
+// $login = encrypt_decrypt('decrypt', $_POST['login']);
+// if(!$login) render_json_error("Invalid Login");
 
-// limit by gender
-if( $gender == "B" )
-    $gender_limit = "";
-else
-    $gender_limit = " AND u.gender = '$gender' ";
+// // get the user
+// $user_query = mysql_query("SELECT walking_zone, door_number, chap_chidon_type FROM th_chidon_staff WHERE staff_id = '$login' LIMIT 1;"); // get the users info
 
-// array to store the marks in
-$marks = [];
+// if(!$user_query || mysql_num_rows($user_query) == 0)
+//     render_json_error("Invalid Login");
 
-if( $type == 'walk' ) {
-    $child_list = [];
+// $user = mysql_fetch_assoc($user_query);
+
+// // get the TIME ID
+// $time_id = isset($_POST['time_id']) ? clean_post_param('time_id') : render_json_error("Invalid Request");
+// // get the type of info to pull
+// $type_query = mysql_query("SELECT att_type, gender FROM th_chidon_attendance_times WHERE att_time_id = '$time_id' LIMIT 1;"); // get the users info
+
+// if(!$type_query || mysql_num_rows($type_query) == 0)
+//     render_json_error("Invalid Request", "SELECT type FROM th_chidon_attendance_times WHERE att_time_id = '$time_id' LIMIT 1;");
+
+// $result = mysql_fetch_assoc($type_query);
+// $type = $result['att_type'];
+// $gender = $result['gender'];
+
+// // limit by gender
+// if( $gender == "B" )
+//     $gender_limit = "";
+// else
+//     $gender_limit = " AND u.gender = '$gender' ";
+
+// // array to store the marks in
+// $marks = [];
+
+// if( $type == 'walk' ) {
+//     $child_list = [];
     
-    $grade_limit = "";
-    if ( in_array( $time_id, ["31", "35"] ) ) {
-        $grade_limit = " AND tc.grade <= '5' ";
-    } elseif ( in_array( $time_id, ["36"] ) ) {
-        $grade_limit = " AND tc.walk_day = 0 ";
-    }
+//     $grade_limit = "";
+//     if ( in_array( $time_id, ["31", "35"] ) ) {
+//         $grade_limit = " AND tc.grade <= '5' ";
+//     } elseif ( in_array( $time_id, ["36"] ) ) {
+//         $grade_limit = " AND tc.walk_day = 0 ";
+//     }
 
-    $qry = " SELECT school_name, first, last, tc.th_chidon_id, user_serial, user_id, walking_zone, "
-    ." host, host_street_num, host_street_num_suffix, host_street, host_street_apt, between_streets1, between_streets2, host_number, tcam.marked "
-    ." FROM th_chidon tc "
-    ." JOIN schools s USING (school_id) "
-    ." JOIN users u USING (user_id) "
-    ." LEFT JOIN th_chidon_attendance_marks tcam ON tcam.th_chidon_id = tc.th_chidon_id AND tcam.att_time_id = '$time_id' "
-    ." WHERE year = '$year' AND walking_zone = '". $user['walking_zone'] ."' "
-    . $grade_limit . $gender_limit
-    ." ORDER BY between_streets1, between_streets2, host_street, host_street_num, host_street_num_suffix, host_street_apt, first, last";
+//     $qry = " SELECT school_name, first, last, tc.th_chidon_id, user_serial, user_id, walking_zone, "
+//     ." host, host_street_num, host_street_num_suffix, host_street, host_street_apt, between_streets1, between_streets2, host_number, tcam.marked "
+//     ." FROM th_chidon tc "
+//     ." JOIN schools s USING (school_id) "
+//     ." JOIN users u USING (user_id) "
+//     ." LEFT JOIN th_chidon_attendance_marks tcam ON tcam.th_chidon_id = tc.th_chidon_id AND tcam.att_time_id = '$time_id' "
+//     ." WHERE year = '$year' AND walking_zone = '". $user['walking_zone'] ."' "
+//     . $grade_limit . $gender_limit
+//     ." ORDER BY between_streets1, between_streets2, host_street, host_street_num, host_street_num_suffix, host_street_apt, first, last";
 
-    $child_list_query = mysql_query( $qry );
-    while( $child = mysql_fetch_assoc($child_list_query) ) {
-        $child_list[] = $child;
-    }
+//     $child_list_query = mysql_query( $qry );
+//     while( $child = mysql_fetch_assoc($child_list_query) ) {
+//         $child_list[] = $child;
+//     }
     
-    $marks = $child_list;
-}
+//     $marks = $child_list;
+// }
 
 //if( $type == 'door' ) {
 //    $child_list = [];
@@ -116,8 +135,8 @@ if( $type == 'walk' ) {
 //    $marks = $chap_list;
 //}
 
-echo json_encode([
-    "success"   => true,
-    "type"      => $type,
-    "marks"     => $marks,
-]);
+// echo json_encode([
+//     "success"   => true,
+//     "type"      => $type,
+//     "marks"     => $marks,
+// ]);
