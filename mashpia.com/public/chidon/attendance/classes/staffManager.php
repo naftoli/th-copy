@@ -131,20 +131,21 @@ class StaffManager
 
   public function getTimes( array $groups ) {
     $times = [];
-    $listOfGroups = implode(',', $groups);
+    $listOfGroups = implode('","', $groups);
     $stmt = $this->db->prepare("
       SELECT 
           t.*
       FROM
           th_chidon_attendance_times t
               JOIN
-          th_chidon_staff_assignments sa ON sa.group_number = t.att_type_id
+          th_chidon_staff_assignments sa ON sa.group_number = t.att_type_number
       WHERE
           sa.staff_id = :staff_id
-              AND t.att_type_id IN ($listOfGroups)
-      GROUP BY att_type , att_time
+              AND t.att_type_number IN (\"$listOfGroups\")
+      GROUP BY att_type, att_time
     ");
     $res = $stmt->execute([ ':staff_id' => $this->staffID ]);
+    //$debug = $stmt->debugDumpParams();
     if ( $res ) {
       $times = $stmt->fetchAll();
     }
@@ -182,13 +183,20 @@ class StaffManager
               AND m.att_time_id = :time_id
       WHERE
           year = :year AND $field IN ($groupsList)
-      ORDER BY $field , between_streets1 , between_streets2 , host_street , host_street_num , host_street_num_suffix , host_street_apt , first , last
+      ORDER BY $field, last, first
     ");
     $res = $stmt->execute([ 
       ':year'     =>  $this->year, 
       ':time_id'  =>  $time_id 
     ]);
     //return $stmt->debugDumpParams(); 
-    if ( $res ) return $stmt->fetchAll();
+    $children = [];
+    if ( $res ) {
+      $rows = $stmt->fetchAll();
+      foreach ( $rows as $row ) {
+        $children[$row[$field]][] = $row;
+      }
+    }
+    return $children;
   }
 }
