@@ -80,13 +80,11 @@ class StaffManager
         SELECT 
             *
         FROM
-            th_chidon_staff_types st
+            th_chidon_staff_assignments sa
                 JOIN
-            th_chidon_types t ON t.th_chidon_type_id = st.type_id
-                LEFT JOIN
-            th_chidon_staff_assignments s ON s.staff_type_id = st.th_chidon_staff_type_id
+            th_chidon_types t ON sa.staff_type_id = t.th_chidon_type_id
         WHERE
-            st.staff_id = :staff_id
+            sa.staff_id = :staff_id
       ");
       $stmt->execute([ ':staff_id' => $this->staffID ]);
       $rows = $stmt->fetchAll();
@@ -102,11 +100,11 @@ class StaffManager
         SELECT 
             t.type
         FROM
-            th_chidon_staff_types st
+            th_chidon_types t
                 JOIN
-            th_chidon_types t ON t.th_chidon_type_id = st.type_id
+            th_chidon_staff_assignments sa ON t.th_chidon_type_id = sa.staff_type_id
         WHERE
-            st.staff_id = :staff_id
+            sa.staff_id = :staff_id
         GROUP BY t.type
       ");
       $stmt->execute([ ':staff_id' =>  $this->staffID ]);
@@ -141,16 +139,56 @@ class StaffManager
           th_chidon_attendance_times t
               JOIN
           th_chidon_staff_assignments sa ON sa.group_number = t.att_type_id
-              JOIN
-          th_chidon_staff_types st ON st.th_chidon_staff_type_id = sa.staff_type_id
       WHERE
-          st.staff_id = :staff_id
+          sa.staff_id = :staff_id
               AND t.att_type_id IN ($listOfGroups)
+      GROUP BY att_type , att_time
     ");
     $res = $stmt->execute([ ':staff_id' => $this->staffID ]);
     if ( $res ) {
       $times = $stmt->fetchAll();
     }
     return $times;
+  }
+
+  public function getChildren( $time_id, $type, array $groups ) {
+    $field = null;
+    switch ( $type ) {
+      case 'bunk':
+        $field = "bunk_number";
+        break;
+      case 'walk':
+        $field = "walking_group";
+        break;
+    } 
+    $groupsList = implode(',', $groups);
+    $stmt = $this->db->prepare("
+      SELECT 
+          tc.*,
+          s.school_name,
+          u.first,
+          u.last,
+          u.user_serial,
+          u.user_id,
+          m.marked
+      FROM
+          th_chidon tc
+              JOIN
+          schools s USING (school_id)
+              JOIN
+          users u USING (user_id)
+              LEFT JOIN
+          th_chidon_attendance_marks m ON m.th_chidon_id = tc.th_chidon_id
+              AND m.att_time_id = :time_id
+      WHERE
+          year = :year AND $field IN ($groupsList)
+      ORDER BY $field , between_streets1 , between_streets2 , host_street , host_street_num , host_street_num_suffix , host_street_apt , first , last
+    ");
+    $res = $stmt->execute([ 
+      ':year'     =>  $this->year, 
+      ':time_id'  =>  $time_id 
+    ]);
+    //return $stmt->debugDumpParams(); 
+    if ( $res ) return $stmt->fetchAll();
   }
 }
