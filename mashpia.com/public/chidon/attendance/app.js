@@ -111,7 +111,7 @@ var app = function() {
             // refresh every 5 seconds....
             setInterval(function(){
                 if (!debug) {
-                    updateChildren( $("select#timeDropdown").val() );
+                    updateChildren( $("select#timeDropdown").val(), $("select#timeDropdown")[0].selectedOptions[0].dataset.type );
                 }
             }, 5000);
             //setupQuagga();
