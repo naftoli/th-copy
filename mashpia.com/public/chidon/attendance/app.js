@@ -65,7 +65,7 @@ var app = function() {
         $("#timeDropdown").change( function() {
             let val = $(this).val();
             let type = $(this)[0].selectedOptions[0].dataset.type; 
-            alert( val + ',' + type );
+            //alert( val + ',' + type );
             updateChildren( val, type );
         });
     }
@@ -107,13 +107,13 @@ var app = function() {
             
             state.times = response.times;
             renderDropdown( state.times );
-            //updateChildren( state.times[0].key );
+            updateChildren( state.times[0].key, state.times[0].type );
             // refresh every 5 seconds....
-            // setInterval(function(){
-            //     if (!debug) {
-            //         updateChildren( $("select#timeDropdown").val() );
-            //     }
-            // }, 5000);
+            setInterval(function(){
+                if (!debug) {
+                    updateChildren( $("select#timeDropdown").val() );
+                }
+            }, 5000);
             //setupQuagga();
         });
     }
@@ -122,17 +122,18 @@ var app = function() {
         rendered_options = "";
         for( var i = 0; i < options.length; i++ ) {
             var option = options[i];
-            rendered_options += "<option value='" + option.key + "' data-type='" + option.type + "'>" + option.description + "</option>";
+            rendered_options += "<option value='" + option.key + "' data-type='" + option.type + "'>" + option.type + '-' + option.description + "</option>";
         }
         
         $("select#timeDropdown").html( rendered_options );
-        $("select#timeDropdown").change( function(event) {
-            updateChildren(event.target.value);
-        } );
+        // $("select#timeDropdown").change( function(event) {
+        //     updateChildren(event.target.value);
+        // } );
     }
     
     function updateChildren( time_id, type ){
         $.post("api/getMarkingDetails.php", { login: state.login, time_id: time_id, type: type, groups: state.selectedGroups }, function (response) {
+            console.log( response );
             response = JSON.parse(response);
             
             if (!response.success) {

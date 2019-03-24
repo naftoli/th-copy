@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 require_once __DIR__ . "/functions/header.php";
 // Authentication scheme
 require_once( $_SERVER['DOCUMENT_ROOT'].'/mobile/reg/ajax/encrypt.php' );
