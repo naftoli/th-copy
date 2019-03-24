@@ -72,7 +72,7 @@ div#logout:hover{
 
 #app .name {
     margin-bottom: 10px;
-    max-width: 70%;
+    /* max-width: 70%; */
     display: inline-block;
     margin-left: 3%;
     padding-right: 2%;

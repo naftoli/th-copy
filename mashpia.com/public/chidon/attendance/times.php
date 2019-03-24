@@ -10,10 +10,11 @@ if ( isset( $_POST['day'] ) ) {
   $day = mysql_real_escape_string( strtolower( $_POST['day'] ) );
   $time = mysql_real_escape_string( $_POST['time'] );
   $desc = mysql_real_escape_string( $_POST['description'] );
+  $short_name = mysql_real_escape_string( $_POST['short_name'] );
   $type = mysql_real_escape_string( $_POST['type'] );
-  $bunks = [];
-  foreach ( $_POST['bunks'] as $k => $v ) {
-    $bunks[] = $k;
+  $groups = [];
+  foreach ( $_POST['groups'] as $k => $v ) {
+    $groups[] = $k;
   }
 
   if ( $gender == 'girls' ) {
@@ -33,27 +34,16 @@ if ( isset( $_POST['day'] ) ) {
   }
 
   // create attendance time in database
-  if ( $type == 'bunk' ) {
-    foreach ( $bunks as $bunk ) {
-      $qry = "insert into th_chidon_attendance_times 
-              set day_of_week = '" . $day . "', 
-              att_time = '" . $dates[$day] . " " . $time . ":00', 
-              att_type = '" . $type . "', 
-              att_type_id = " . $bunk . ", 
-              description = '" . $desc . "', 
-              chidon_type = '" . $gender . "', 
-              year = " . $year;
-      //echo $qry . "<br />";
-      mysql_query( $qry ) or die( mysql_error() . "<br />" . $qry );
-    }
-  } else {
+  foreach ( $groups as $group ) {
     $qry = "insert into th_chidon_attendance_times 
-              set day_of_week = '" . $day . "', 
-              att_time = '" . $dates[$day] . " " . $time . ":00', 
-              att_type = '" . $type . "', 
-              description = '" . $desc . "', 
-              chidon_type = '" . $gender . "', 
-              year = " . $year;
+            set day_of_week = '" . $day . "', 
+            att_time = '" . $dates[$day] . " " . $time . ":00', 
+            att_type = '" . $type . "', 
+            att_type_number = '" . $group . "', 
+            description = '" . $desc . "', 
+            short_name = '" . $short_name . "', 
+            chidon_type = '" . $gender . "', 
+            year = " . $year;
     //echo $qry . "<br />";
     mysql_query( $qry ) or die( mysql_error() . "<br />" . $qry );
   }
@@ -138,19 +128,41 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             </div>
           </div>
 
-          <div class="field" id="bunks" style="display: none;">
-            <label class="label">Choose Bunks</label>
+          <div class="field" id="walking_groups">
+            <label class="label">Choose Walking Groups</label>
             <div class="columns is-mobile">
               <?php
               $i = 1; // keep track of when to make a break
               for ( $j = 1; $j <= 120; $j++ ) {
-                echo "<div class='column is-one-fifth'><input type='checkbox' class='checkbox' name='bunks[" . $j . "]' /> " . $j . "</div>";
+                echo "<div class='column is-one-fifth'><input type='checkbox' class='checkbox' name='groups[" . $j . "]' /> " . $j . "</div>";
                 if ( $i++ % 5 == 0 ) echo "</div><div class='columns is-mobile'>";
               }
               ?>
             </div>
           </div>
 
+          <div class="field" id="bunks" style="display: none;">
+            <label class="label">Choose Bunks</label>
+            <div class="columns is-mobile">
+              <?php
+              $i = 1; // keep track of when to make a break
+              for ( $j = 1; $j <= 120; $j++ ) {
+                echo "<div class='column is-one-fifth'><input type='checkbox' class='checkbox' name='groups[" . $j . "]' /> " . $j . "</div>";
+                if ( $i++ % 5 == 0 ) echo "</div><div class='columns is-mobile'>";
+              }
+              ?>
+            </div>
+          </div>
+
+          <br />
+          <div class="field">
+            <label class="label">Short Name</label>
+            <div class="control">
+              <input type="text" name="short_name" class="input is-primary" placeholder="Short Name"></textarea>
+            </div>
+          </div>
+
+          <br />
           <div class="field">
             <label class="label">Description</label>
             <div class="control">
@@ -181,7 +193,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               <th>Day of Week</th>
               <th>Date / Time</th>
               <th>Type of Attendance</th>
-              <th>Bunk</th>
+              <th>Group Number</th>
+              <th>Short Name</th>
               <th>Description</th>
               <th>Action</th>
             </tr>
@@ -189,8 +202,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           <?php
           foreach ( $info as $row ) {
             echo "<tr><tbody><td>" . $row['chidon_type'] . "</td><td>" . $row['day_of_week'] . "</td><td>" . $row['att_time'] . "</td><td>" . $row['att_type'] . "</td><td>";
-            if ( $row['att_type'] == 'bunk' ) echo $row['att_type_id'];
-            echo "</td><td>" . $row['description'] . "</td><td><a href='#' onclick='deleteTime(" . $row['att_time_id'] . ");'>delete</a></td></tbody></tr>";
+            echo $row['att_type_number'] . "</td><td>" . $row['short_name'] . "</td><td>" . $row['description'] . 
+              "</td><td><a href='#' onclick='deleteTime(" . $row['att_time_id'] . ");'>delete</a></td></tbody></tr>";
           }
           ?>
         </table>
@@ -203,8 +216,13 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
       $(".type").click( function() {
         if ( $(this).is(":checked") ) {
           let type = $(this).val();
-          if ( type == 'bunk' ) $("#bunks").show();
-          else $("#bunks").hide();
+          if ( type == 'bunk' ) {
+            $("#walking_groups").hide();
+            $("#bunks").show();
+          } else {
+            $("#bunks").hide();
+            $("#walking_groups").show();
+          }
         }
       });
     });

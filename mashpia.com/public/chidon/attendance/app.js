@@ -6,16 +6,6 @@ var app = function() {
         login: false,
         user: {} // user that is logged in....
     };
-
-    var super_admins = {
-        'bunk': [
-            'director', 
-            'head counselor'
-        ], 
-        'walking_group': [
-            
-        ]
-    }
     
     function logout() {
         localStorage.removeItem( 'attendance_login' );
@@ -109,11 +99,11 @@ var app = function() {
             renderDropdown( state.times );
             updateChildren( state.times[0].key, state.times[0].type );
             // refresh every 5 seconds....
-            setInterval(function(){
-                if (!debug) {
-                    updateChildren( $("select#timeDropdown").val(), $("select#timeDropdown")[0].selectedOptions[0].dataset.type );
-                }
-            }, 5000);
+            // setInterval(function(){
+            //     if (!debug) {
+            //         updateChildren( $("select#timeDropdown").val(), $("select#timeDropdown")[0].selectedOptions[0].dataset.type );
+            //     }
+            // }, 5000);
             //setupQuagga();
         });
     }
@@ -146,17 +136,26 @@ var app = function() {
     
     function renderChildren( children, type ) {
         rendered_html = "";
-        for( var i = 0; i < children.length; i++ ) {
-            var child = children[i];
-            if (type == "chap") {
-                rendered_html += new chap_item( child, type ).render();
-            } else {
-                rendered_html += new child_item( child, type ).render();
+        for ( group_number in children ) {
+            rendered_html += "<div class='container'><div class='field'><div class='label'>" + (type + " " + group_number).toUpperCase() + "</div>";
+            rendered_html += "<button class='button is-primary'>Check / Uncheck All</button></div>";
+            for ( c in children[group_number] ) {
+                let child = children[group_number][c];
+                rendered_html += new child_item( group_number, child, type ).render();
             }
+            rendered_html += "</div>";
+            // if (type == "chap") {
+            //     rendered_html += new chap_item( child, type ).render();
+            // } else {
+            //    rendered_html += new child_item( child, type ).render();
+            //}
         }
         
         $("#child-list").html( rendered_html );
         $("#app label input.mark").change( updateMark );
+        $(".button").click( function() {
+            $(this).parent().parent().find(".mark").trigger('click');
+        });
     }
     
     function updateMark( event ) {
@@ -183,7 +182,8 @@ var app = function() {
 }();
 
 //********************** SINGLE CHILD COMPONENT ***********************//
-var child_item = function( props, type ) {
+var child_item = function( group, props, type ) {
+    this.group = group;
     this.props = props;
     this.type = type;
 };
