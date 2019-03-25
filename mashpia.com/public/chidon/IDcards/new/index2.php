@@ -52,9 +52,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
       width: 4.375in;
       height: 5.625in;
     }
+    .front {
+      background-image: url('background/KIDS-1.png');
+    }
     .front, .back {
       /* postion: relative; */
-      margin: 0.125in;
     }
     .rep {
       transform: rotate(-90deg);
@@ -62,7 +64,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
       font-size: 28pt;
       color: #fff;
       position: absolute;
-      left: -0.8in;
+      left: -1in;
       top: 2in;
     }
     .contestant {
@@ -71,7 +73,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
       font-size: 32pt;
       color: #fff;
       position: absolute;
-      left: -0.6in;
+      left: -0.8in;
       top: 2in;
     }
     .name {
@@ -108,9 +110,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
       font-family: gotham;
       font-size: 11pt;
       color: #fff;
-      top: 3.9in;
+      top: 3.85in;
       position: absolute;
-      left: 2.025in;
+      left: 1.9in;
       text-align: center;
       width: 0.8in;
       height: 0.25in;
@@ -119,9 +121,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
       font-family: gotham;
       font-size: 11pt;
       color: #fff;
-      top: 3.9in;
+      top: 3.85in;
       position: absolute;
-      left: 2.825in;
+      left: 2.7in;
       text-align: center;
       width: 0.7in;
       height: 0.25in;
@@ -130,9 +132,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
       font-family: gotham;
       font-size: 11pt;
       color: #fff;
-      top: 4.15in;
+      top: 4.1in;
       position: absolute;
-      left: 2.125in;
+      left: 2in;
       width: 1.6in;
       height: 0.25in;
       /* text-align: center; */
@@ -141,9 +143,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
       font-family: gotham;
       font-size: 8pt;
       top: 4.5in;
-      left: 0.5in;
+      left: 0.25in;
       position: absolute;
-      width: 90px;
+      width: 100px;
       height: 60px;
       text-align: center;
       color: #fff;
@@ -158,7 +160,6 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
   <div id="main">
     <?php foreach ( $info as $row ) : ?>
       <div class='front'>
-        <img src="background\KIDS-1.png" />
         <?php
         $class = 'contestant';
         if ( $row['school_rep'] ) $class = 'rep';
