@@ -35,14 +35,13 @@ while ($row = mysql_fetch_assoc($result)) {
                 height: 11.6in;
             }
             .name {
-                top: 580px;
+                top: 585px;
                 position: absolute; 
                 width: 865px;
                 color: #e9c25f;
                 font-family: tramp;
-                font-size: 48pt; 
+                font-size: 56pt; 
                 text-align: center;
-                line-height: 0.8;
             }
             .image { 
                 position: relative; 
@@ -63,8 +62,7 @@ while ($row = mysql_fetch_assoc($result)) {
         <?php
         foreach ($info as $row) {
             $grade = $row['grade'];
-            $name = $row['first_he'] . "<br />" . $row['last_he'];
-            $row['cert_number'] = 'A501-C';
+            $name = $row['first_he'] . " " . $row['last_he'];
             ?>
             <div class="image">
                 <img src="new\background\cert-<?=$grade?>-g.png" />
