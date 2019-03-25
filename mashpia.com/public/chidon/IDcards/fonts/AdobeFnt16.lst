@@ -1,0 +1,152 @@
+%!Adobe-FontList 1.16
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:AdobeHebrew-Regular
+FamilyName:Adobe Hebrew
+StyleName:Regular
+FullName:Adobe Hebrew Regular
+MenuName:Adobe Hebrew
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Regular
+FullNameNative:
+WritingScript:Hebrew
+OutlineFileName:C:\Users\nafto_000\Desktop\ID cards\Document fonts\AdobeHebrew-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:73124
+FileModTime:1489520988
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,Adobe Hebrew
+NameArray:0,Mac,4,Adobe Hebrew Regular
+NameArray:0,Win,1,Adobe Hebrew
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FbReforma-Medium
+FamilyName:FbReforma
+StyleName:Medium
+FullName:FbReforma-Medium
+MenuName:FbReforma Medium
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Medium
+FullNameNative:
+WritingScript:Hebrew
+OutlineFileName:C:\Users\nafto_000\Desktop\ID cards\Document fonts\FbReforma-Medium.otf
+DataFormat:sfntData
+FileLength:61376
+FileModTime:1489520988
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,FbReforma Medium
+NameArray:0,Win,1,FbReforma Medium
+NameArray:0,Win,16,FbReforma
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:FuturaStd-Book
+FamilyName:Futura Std
+StyleName:Book
+FullName:Futura Std Book
+MenuName:Futura Std Book
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\nafto_000\Desktop\ID cards\Document fonts\FuturaStd-Book.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:27080
+FileModTime:1489520988
+WeightClass:400
+WidthClass:5
+AngleClass:0
+DesignSize:120
+NameArray:0,Mac,4,Futura Std Book
+NameArray:0,Win,1,Futura Std Book
+NameArray:0,Win,16,Futura Std
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Gotham-Bold
+FamilyName:Gotham
+StyleName:Bold
+FullName:Gotham Bold
+MenuName:Gotham Bold
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\nafto_000\Desktop\ID cards\Document fonts\Gotham-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:127472
+FileModTime:1489520988
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Gotham Bold
+NameArray:0,Win,1,Gotham Bold
+NameArray:0,Win,16,Gotham
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Gotham-Book
+FamilyName:Gotham
+StyleName:Book
+FullName:Gotham Book
+MenuName:Gotham Book
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\nafto_000\Desktop\ID cards\Document fonts\GOTHAM-BOOK.OTF
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:128020
+FileModTime:1489520988
+WeightClass:325
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Gotham Book
+NameArray:0,Win,1,Gotham Book
+NameArray:0,Win,16,Gotham
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Gotham-Medium
+FamilyName:Gotham
+StyleName:Medium
+FullName:Gotham Medium
+MenuName:Gotham Medium
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\nafto_000\Desktop\ID cards\Document fonts\GOTHAM-MEDIUM.OTF
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:128768
+FileModTime:1489520988
+WeightClass:350
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Gotham Medium
+NameArray:0,Win,1,Gotham Medium
+NameArray:0,Win,16,Gotham
+%EndFont
+

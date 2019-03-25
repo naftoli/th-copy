@@ -1,14 +1,13 @@
 <?php
 ini_set('display_errors', 1);
-require '../../db.php';
+require __DIR__ . '/../../db.php';
 
 $info = array();
 $sql = "select u.first_he, u.last_he, tc.grade, tc.cert_number from users u
         join th_chidon tc using (user_id)
-        where tc.year = 5778
-        and tc.shabbaton = 1
+        where tc.year = 5779
         and tc.paid > 0 
-        and u.gender = 'M'
+        and u.gender = 'F'
         order by tc.cert_number";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -25,7 +24,7 @@ while ($row = mysql_fetch_assoc($result)) {
             }
             @font-face {
                 font-family: tramp;
-                src: url('certs/FbTrampolina-Regular_0.otf');
+                src: url('fonts/FiraCode-Regular.otf');
             }
             @font-face {
                 font-family: goth;
@@ -66,7 +65,7 @@ while ($row = mysql_fetch_assoc($result)) {
             $name = $row['first_he'] . "<br />" . $row['last_he'];
             ?>
             <div class="image">
-                <img src="certs\<?=$grade?>b.png" />
+                <img src="new\background\cert-<?=$grade?>-g.png" />
                 <div class="name">
                     <?=$name?>
                 </div>
