@@ -97,7 +97,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
       font-family: gotham;
       font-size: 10pt;
       color: blue;
-      top: 2.75in;
+      top: 2.95in;
       position: absolute;
       left: 1.5in;
       text-align: center;
@@ -169,7 +169,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           <?= $row['first'] . ' ' . $row['last'] ?>
         </div>
         <div class='school'>
-          <?= $row['school_name'] ?>
+          <?= $row['school_name'] ?><br />
+          <?= $row['school_city'] . ', ' . $row['school_state'] ?>
         </div>
         <div class='counselor'>
           Counselor: 
