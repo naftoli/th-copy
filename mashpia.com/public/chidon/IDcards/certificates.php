@@ -38,11 +38,11 @@ while ($row = mysql_fetch_assoc($result)) {
                 top: 580px;
                 position: absolute; 
                 width: 865px;
-                color: #f59900;
+                color: #e9c25f;
                 font-family: tramp;
-                font-size: 42pt; 
+                font-size: 48pt; 
                 text-align: center;
-                line-height: 35pt;
+                line-height: 0.8;
             }
             .image { 
                 position: relative; 
