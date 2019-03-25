@@ -1,14 +1,13 @@
 <?php
 ini_set('display_errors', 1);
-require '../../db.php';
+require __DIR__ . '/../../db.php';
 
 $info = array();
 $sql = "select u.first_he, u.last_he, tc.grade, tc.cert_number from users u
         join th_chidon tc using (user_id)
-        where tc.year = 5778
-        and tc.shabbaton = 1
+        where tc.year = 5779
         and tc.paid > 0 
-        and u.gender = 'M'
+        and u.gender = 'F'
         order by tc.cert_number";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -25,7 +24,7 @@ while ($row = mysql_fetch_assoc($result)) {
             }
             @font-face {
                 font-family: tramp;
-                src: url('certs/FbTrampolina-Regular_0.otf');
+                src: url('fonts/FiraCode-Regular.otf');
             }
             @font-face {
                 font-family: goth;
@@ -39,11 +38,11 @@ while ($row = mysql_fetch_assoc($result)) {
                 top: 580px;
                 position: absolute; 
                 width: 865px;
-                color: #f59900;
+                color: #e9c25f;
                 font-family: tramp;
-                font-size: 42pt; 
+                font-size: 48pt; 
                 text-align: center;
-                line-height: 35pt;
+                line-height: 0.8;
             }
             .image { 
                 position: relative; 
@@ -51,11 +50,12 @@ while ($row = mysql_fetch_assoc($result)) {
              }
              .certNum {
                 position: absolute;
-                color: #000;
-                top: 10.8in;
-                left: 0.5in;
-                font-size: 11px;
+                color: #c4578b;
+                font-size: 8pt;
                 font-family: goth;
+                top: 10.75in;
+                left: 8.45in;
+                transform: rotate(-90deg);
              }
         </style>
     </head>
@@ -64,9 +64,10 @@ while ($row = mysql_fetch_assoc($result)) {
         foreach ($info as $row) {
             $grade = $row['grade'];
             $name = $row['first_he'] . "<br />" . $row['last_he'];
+            $row['cert_number'] = 'A501-C';
             ?>
             <div class="image">
-                <img src="certs\<?=$grade?>b.png" />
+                <img src="new\background\cert-<?=$grade?>-g.png" />
                 <div class="name">
                     <?=$name?>
                 </div>

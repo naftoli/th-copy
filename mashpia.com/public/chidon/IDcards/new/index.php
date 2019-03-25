@@ -31,134 +31,44 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>ID Cards</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta charset="utf8" />
-  <style>
-    /* #main {
-      background-image: url('background/KIDS-1.png');
-    } */
-    @font-face {
-      font-family: gotham;
-      src: url('fonts/Gotham-Bold.otf');
-    }
-    @font-face {
-      font-family: gothamBook;
-      src: url('fonts/GOTHAM-BOOK.OTF');
-    }
-    @font-face {
-      font-family: gothamBlack;
-      src: url('fonts/GOTHAM-MEDIUM.OTF');
-    }
-    #main img {
-      width: 4.375in;
-      height: 5.625in;
-    }
-    .front, .back {
-      /* postion: relative; */
-      margin: 0.125in;
-    }
-    .rep {
-      transform: rotate(-90deg);
-      font-family: gothamBlack;
-      font-size: 28pt;
-      color: #fff;
-      position: absolute;
-      left: -0.8in;
-      top: 2in;
-    }
-    .contestant {
-      transform: rotate(-90deg);
-      font-family: gothamBlack;
-      font-size: 32pt;
-      color: #fff;
-      position: absolute;
-      left: -0.6in;
-      top: 2in;
-    }
-    .name {
-      font-family: gotham;
-      font-size: 20pt;
-      color: #000;
-      top: 2.125in;
-      position: absolute;
-      left: 1.5in;
-      text-align: center;
-      width: 250px;
-    }
-    .school {
-      font-family: gothamBook;
-      font-size: 10pt;
-      color: #000;
-      top: 2.5in;
-      position: absolute;
-      left: 1.5in;
-      text-align: center;
-      width: 250px;
-    }
-    .counselor {
-      font-family: gotham;
-      font-size: 10pt;
-      color: blue;
-      top: 2.95in;
-      position: absolute;
-      left: 1.5in;
-      text-align: center;
-      width: 250px;
-    }
-    .grade {
-      font-family: gotham;
-      font-size: 11pt;
-      color: #fff;
-      top: 3.9in;
-      position: absolute;
-      left: 2.025in;
-      text-align: center;
-      width: 0.8in;
-      height: 0.25in;
-    }
-    .bunk {
-      font-family: gotham;
-      font-size: 11pt;
-      color: #fff;
-      top: 3.9in;
-      position: absolute;
-      left: 2.825in;
-      text-align: center;
-      width: 0.7in;
-      height: 0.25in;
-    }
-    .team {
-      font-family: gotham;
-      font-size: 11pt;
-      color: #fff;
-      top: 4.15in;
-      position: absolute;
-      left: 2.125in;
-      width: 1.6in;
-      height: 0.25in;
-      /* text-align: center; */
-    }
-    .chidon_years {
-      font-family: gotham;
-      font-size: 8pt;
-      top: 4.5in;
-      left: 0.5in;
-      position: absolute;
-      width: 90px;
-      height: 60px;
-      text-align: center;
-      color: #fff;
-    }
-    .chidon_years .year {
-      font-size: 16pt;
-      padding-bottom: 2pt;
-    }
-  </style>
+  <link rel="stylesheet" href="cards.css" />
 </head>
 <body>
   <div id="main">
     <?php foreach ( $info as $row ) : ?>
       <div class='front'>
-        <img src="background\KIDS-1.png" />
+        <?php
+        $row['grade'] = 6;
+        // figure out which image and color to use
+        switch ( $row['grade'] ) {
+          case '4':
+            $color = '#009EDE';
+            $front = "background\KIDS-1.png";
+            $back = "background\KIDS-2.png";
+            break;
+          case '5':
+            $color = '#24b35f';
+            $front = "background\KIDS-3.png";
+            $back = "background\KIDS-4.png";
+            break;
+          case '6':
+            $color = '#f07621';
+            $front = "background\KIDS-5.png";
+            $back = "background\KIDS-6.png";
+            break;
+          case '7':
+            $color = '#fdcd06';
+            $front = "background\KIDS-7.png";
+            $back = "background\KIDS-8.png";
+            break;
+          case '8':
+            $color = '#a663a1';
+            $front = "background\KIDS-1.png";
+            $back = "background\KIDS-2.png";
+            break;
+        }
+        ?>
+        <img src="<?= $front ?>" />
         <?php
         $class = 'contestant';
         if ( $row['school_rep'] ) $class = 'rep';
@@ -173,7 +83,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           <?= $row['school_name'] ?><br />
           <?= $row['school_city'] . ', ' . $row['school_state'] ?>
         </div>
-        <div class='counselor'>
+        <div class='counselor' style='color: <?= $color ?>'>
           Counselor: 
         </div>
         <div class='grade'>
@@ -201,7 +111,69 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
       </div>  
       </div>
       <div class='back'>
-        <img src="background\KIDS-2.png" />
+        <img src="<?= $back ?>" />
+        <div class="zone1">
+          CERTIFICATE ID
+          <div class="cert_id">
+            <img src="icons/avatar.png" /><?= $row['cert_number'] ?>
+          </div>
+          TEST TABLE
+          <div class="test_table">
+            <img src="icons/table.png" /><?= $row['test_table'] ?>
+          </div>
+          WALKING ZONE
+          <div class="walking_group">
+            <img src="icons/walking icon.png" /><?= $row['walking_group'] ?>
+          </div>
+          BOWLING LANE
+          <div class="bowling_lane">
+          <img src="icons/bowling icon.png" /><?= $row['bowling_lane'] ?>
+          </div>
+          BUSES
+          <div class="buses">
+            <div class="school_bus"><img src="icons/bus icon.png" /><?= $row['school_bus'] ?></div>
+            <?php if ( $row['grade'] == 6 ) : ?>
+              <div class="open_air_bus"><img src="icons/icon double decker.png" /><?= $row['open_air_bus'] ?></div>
+            <?php elseif ( in_array( $row['grade'], [7,8] ) ) : ?>
+            <div class="coach_bus"><img src="icons/icon double decker.png" /><?= $row['coach_bus'] ?></div>
+            <?php endif; ?>
+            <div class="sunday_pm_bus"><img src="icons/icon double decker.png" /><?= $row['sunday_pm_bus'] ?></div>
+          </div>
+        </div>
+        <div class="zone2">
+            <div class="contacts">
+              <div style="font-size: 8pt; color: <?= $color ?>">CONTACTS</div>
+            </div>
+            <div class="host">
+              <div style="font-size: 8pt; color: <?= $color ?>">Host</div>
+              <?php
+              echo $row['host'] . " Family<br />" . $row['host_street_num'] . ' ' . $row['host_street'] . $row['host_street_num_suffix'] . "<br />";
+              echo "<span><i>btwn " . $row['between_streets1'] . ' & ' . $row['between_streets2'] . "</i></span><br />";
+              echo $row['host_number'];
+              ?>
+            </div>
+            <div class="chap">
+              <div style="font-size: 8pt; color: <?= $color ?>">Chaperone</div>
+            </div>
+            <div class="coordinator">
+              <div style="font-size: 8pt; color: <?= $color ?>">Safery Coordinator</div>
+            </div>
+            <div class="walking_counselor">
+              <div style="font-size: 8pt; color: <?= $color ?>">Walking Counselor</div>
+            </div>
+            <div class="hq">
+              <div style="font-size: 8pt; color: <?= $color ?>">HQ Hotline</div>
+              718-907-8884
+            </div>
+            <div class="emergency" style="color: <?= $color ?>">
+              EMERGENCY<br />
+              Police/Fire: 911<br />
+              Hatzola: 718-387-1750
+            </div>
+        </div>
+        <div class="zone3">
+          <p style="color: <?= $color ?>">AWARD CEREMONY</p>
+        </div>
       </div>
       <?php break; ?>
     <?php endforeach; ?>
