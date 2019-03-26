@@ -40,8 +40,9 @@ while ($row = mysql_fetch_assoc($result)) {
                 width: 865px;
                 color: #e9c25f;
                 font-family: tramp;
-                font-size: 56pt; 
+                font-size: 46pt; 
                 text-align: center;
+                word-spacing: -0.2em;
             }
             .image { 
                 position: relative; 
