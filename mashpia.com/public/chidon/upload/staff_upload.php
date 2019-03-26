@@ -35,7 +35,6 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
     $max = $numFields + 6;
     for ( $f = $numFields; $f <= $max; $f += 2 ) {
       if ( $data[$f] ) {
-        $id = 111111;
         $group = $data[$f+1];
         if ( strpos( $group, ',' ) !== false || strpos( $group, '-' ) !== false ) {
           $groups = extractList( $group );
