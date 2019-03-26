@@ -162,7 +162,7 @@ class StaffManager
         $field = "walking_group";
         break;
     } 
-    $groupsList = implode(',', $groups);
+    $groupsList = implode('","', $groups);
     $stmt = $this->db->prepare("
       SELECT 
           tc.*,
@@ -182,7 +182,7 @@ class StaffManager
           th_chidon_attendance_marks m ON m.th_chidon_id = tc.th_chidon_id
               AND m.att_time_id = :time_id
       WHERE
-          year = :year AND $field IN ($groupsList)
+          year = :year AND $field IN (\"$groupsList\")
       ORDER BY $field, last, first
     ");
     $res = $stmt->execute([ 
