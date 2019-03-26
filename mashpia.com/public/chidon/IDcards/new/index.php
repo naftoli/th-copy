@@ -195,9 +195,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               </div>
               <div class="coordinator">
                 <div style="font-size: 9pt; color: <?= $color ?>">Safety Coordinator</div>
+                <br /><br />
               </div>
               <div class="walking_counselor">
                 <div style="font-size: 9pt; color: <?= $color ?>">Walking Counselor</div>
+                <br /><br />
               </div>
               <div class="hq">
                 <div style="font-size: 9pt; color: <?= $color ?>">HQ Hotline</div>

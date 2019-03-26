@@ -24,7 +24,7 @@ while ($row = mysql_fetch_assoc($result)) {
             }
             @font-face {
                 font-family: tramp;
-                src: url('fonts/FiraCode-Regular.otf');
+                src: url('fonts/FbTrampolina-Regular.otf');
             }
             @font-face {
                 font-family: goth;
