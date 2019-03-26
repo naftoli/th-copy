@@ -5,11 +5,16 @@ $qrys = [];
 $headers = ['th_chidon_id', 'team_id', 'round_number', 'test_table', 'bowling_lane', 'bunk_number', 'school_bus', 'coach_bus', 'open_air_bus', 'walking_group', 'kol_hatorah'];
 if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   $row = 0;
+  $numFields = count( $headers );
   while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
     if ( $row++ < 1 ) continue;
     $qry = "update th_chidon set ";
-    for ( $i = 1; $i < count( $headers ); $i++ ) {
-      $qry .= $headers[$i] . " = '" . $data[$i] . "',";
+    for ( $i = 1; $i < $numFields; $i++ ) {
+      if ( $i == ($numFields - 1) ) {
+        if ( $data[$i] == 'Yes' ) $qry .= $headers[$i] . " = 1,";
+      } else {
+        $qry .= $headers[$i] . " = '" . $data[$i] . "',";
+      }
     }
     $qry = substr( $qry, 0, strlen( $qry ) - 1 );
     $qry .= " where th_chidon_id = " . $data[0];

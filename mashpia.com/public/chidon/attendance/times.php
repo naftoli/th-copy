@@ -133,9 +133,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             <div class="columns is-mobile">
               <?php
               $i = 1; // keep track of when to make a break
-              for ( $j = 1; $j <= 120; $j++ ) {
-                echo "<div class='column is-one-fifth'><input type='checkbox' class='checkbox' name='groups[" . $j . "]' /> " . $j . "</div>";
-                if ( $i++ % 5 == 0 ) echo "</div><div class='columns is-mobile'>";
+              for ( $j = 1; $j <= 30; $j++ ) {
+                for ( $a = 'A'; $a <= 'B'; $a++ ) {
+                  echo "<div class='column is-one-fifth'><input type='checkbox' class='checkbox' name='groups[" . $j . $a . "]' /> " . $j . $a . "</div>";
+                  if ( $i++ % 5 == 0 ) echo "</div><div class='columns is-mobile'>";
+                }
               }
               ?>
             </div>
