@@ -194,7 +194,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                 <?= $row['phone'] ?>
               </div>
               <div class="coordinator">
-                <div style="font-size: 9pt; color: <?= $color ?>">Safery Coordinator</div>
+                <div style="font-size: 9pt; color: <?= $color ?>">Safety Coordinator</div>
               </div>
               <div class="walking_counselor">
                 <div style="font-size: 9pt; color: <?= $color ?>">Walking Counselor</div>
