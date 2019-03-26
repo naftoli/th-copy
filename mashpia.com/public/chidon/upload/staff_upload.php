@@ -1,33 +1,87 @@
 <?php
 ini_set('display_errors',1);
 require __DIR__ . "/../../db.php";
+
+function extractList( $list ) {
+  if ( strpos( $list, ',' ) !== false ) {
+    $extracted = explode(',', $list);
+  } else if ( strpos( $list, '-' ) !== false ) {
+     $nums = explode('-', $list);
+     $extracted = [];
+     for ( $i = $nums[0]; $i <= $nums[1]; $i++ ) {
+       $extracted[] = $i;
+     }
+  }
+  return $extracted;
+}
+
 $qrys = [];
-$headers = ['super_admin', 'chap_id', 'first_name', 'last_name', 'sweater_size', 'school_bus', 'open_air_bus', 'coach_bus', 'sunday_pm_bus', 'team_id', 'bowling_lane', 
-            'address', 'email', 'cell', 'grade'];
+$positions = [];
+$headers = ['super_admin', 'chap_id', 'first_name', 'last_name', 'sweater_size', 'school_bus', 'open_air_bus', 'coach_bus', 'sunday_pm_bus', 'team_id', 'bowling_lane', 'address', 'email', 'cell', 'grade'];
 if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   $row = 0;
   $numFields = count( $headers );
   while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
     if ( $row++ < 1 ) continue;
-    $qry = "update th_chidon set ";
-    for ( $i = 1; $i < $numFields; $i++ ) {
+    if ( empty( $data[2] ) ) continue;
+    $qry = "insert into th_chidon_staff set ";
+    for ( $i = 0; $i < $numFields; $i++ ) {
+      if ( empty( $data[$i] ) ) continue;
       $qry .= $headers[$i] . " = '" . $data[$i] . "',";
     }
-    $qry .= " where th_chidon_id = " . $data[0];
-    $qrys[] = $qry;
+    $qry = substr( $qry, 0, strlen( $qry ) - 1 );
+    $qrys[$row] = $qry;
+    // figure out positions and groups
+    $max = $numFields + 6;
+    for ( $f = $numFields; $f <= $max; $f += 2 ) {
+      if ( $data[$f] ) {
+        $id = 111111;
+        $group = $data[$f+1];
+        if ( strpos( $group, ',' ) !== false || strpos( $group, '-' ) !== false ) {
+          $groups = extractList( $group );
+          foreach ( $groups as $group_number ) {
+            $sql = "insert into th_chidon_staff_assignments 
+                    set staff_type_id = " . $data[$f] . ", 
+                    group_number = '" . $group_number . "', 
+                    staff_id = ";
+            $positions[$row][] = $sql;
+          }
+        } else {
+          $sql = "insert into th_chidon_staff_assignments 
+                  set staff_type_id = " . $data[$f] . ", 
+                  group_number = '" . $group . "', 
+                  staff_id = ";
+          $positions[$row][] = $sql;
+        }
+      }
+    }
   }
   fclose($handle);
 }
-//echo "<pre>"; print_r( $qrys ); echo "</pre>"; exit;
+//echo "<pre>"; print_r( $qrys ); print_r( $positions ); echo "</pre>"; exit;
 mysql_query('set autocommit=0');
 mysql_query('begin');
 $success = true;
 
-foreach ( $qrys as $qry ) {
+$ids = [];
+foreach ( $qrys as $key => $qry ) {
   if ( !mysql_query( $qry ) ) {
     echo "There was an error - " . $qry . "<br />" . mysql_error();
     $success = false;
     break;
+  } else {
+    $ids[$key] = mysql_insert_id();
+  }
+}
+
+if ( $success ) {
+  foreach ( $positions as $key => $sql ) {
+    $sql .= '' . $ids[$key];
+    if ( !mysql_query( $sql ) ) {
+      echo "There was an error - " . $sql . "<br />" . mysql_error();
+      $success = false;
+      break;
+    }
   }
 }
 
