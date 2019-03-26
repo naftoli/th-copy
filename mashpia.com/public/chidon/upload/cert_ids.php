@@ -2,17 +2,11 @@
 ini_set('display_errors',1);
 require __DIR__ . "/../../db.php";
 $qrys = [];
-$headers = ['th_chidon_id', 'team_id', 'round_number', 'test_table', 'bowling_lane', 'bunk_number', 'school_bus', 'coach_bus', 'open_air_bus', 'walking_group', 'kol_hatorah'];
 if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   $row = 0;
   while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
     if ( $row++ < 1 ) continue;
-    $qry = "update th_chidon set ";
-    for ( $i = 1; $i < count( $headers ); $i++ ) {
-      $qry .= $headers[$i] . " = '" . $data[$i] . "',";
-    }
-    $qry = substr( $qry, 0, strlen( $qry ) - 1 );
-    $qry .= " where th_chidon_id = " . $data[0];
+    $qry = "update th_chidon set cert_number = '" . $data[1] . "' where th_chidon_id = " . $data[0];
     $qrys[] = $qry;
   }
   fclose($handle);
@@ -42,7 +36,7 @@ echo "done.";
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   </head>
   <body>
-    <form action="chidon_children.php" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+    <form action="cert_ids.php" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
       <label>Upload your spreadsheet
       <br /><input type="file" name="file" class="file"></label>
       <br /><input type="submit" name="submit" value="upload" />
