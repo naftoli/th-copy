@@ -4,6 +4,36 @@ require __DIR__ . '/../../../db.php';
 require __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+function getStaffInfo( $group_number ) {
+  $info = [];
+  $sql = "
+    SELECT 
+        staff_type_id, first_name, last_name, cell
+    FROM
+        th_chidon_staff_assignments sa
+            JOIN
+        th_chidon_staff s USING (staff_id)
+            JOIN
+        th_chidon_types t ON t.th_chidon_type_id = sa.staff_type_id
+    WHERE
+        group_number = '" . $group_number . "' 
+            AND staff_type_id IN (6 , 9)
+  ";
+  $result = mysql_query( $sql );
+  while ( $row = mysql_fetch_assoc( $result ) ) {
+    if ( $row['staff_type_id'] == 6 ) {
+      $type = 'coordinator';
+    } else if ( $row['staff_type_id'] == 9 ) {
+      $type = 'walking_counselor';
+    }
+    $info[$type] = [
+      'name'  =>  $row['first_name'] . ' ' . $row['last_name'], 
+      'phone' =>  $row['cell']
+    ];
+  }
+  return $info;
+}
+
 $info = [];
 $sql = "
   SELECT 
@@ -43,6 +73,12 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 <body>
   <div id="main">
     <?php foreach ( $info as $row ) : ?>
+
+      <?php
+      // get safety coordinator and walking counselor
+      $staffInfo = getStaffInfo( $row['walking_group'] );
+      ?>
+
       <div style="position: relative">
         <div class='front'>
           <?php
@@ -195,11 +231,23 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               </div>
               <div class="coordinator">
                 <div style="font-size: 9pt; color: <?= $color ?>">Safety Coordinator</div>
-                <br /><br />
+                <?php 
+                if ( isset( $staffInfo['coordinator'] ) ) {
+                  echo $staffInfo['coordinator']['name'] . "<br />" . $staffInfo['coordinator']['phone'];
+                } else {
+                  echo "<br /><br />";
+                }
+                ?>
               </div>
               <div class="walking_counselor">
                 <div style="font-size: 9pt; color: <?= $color ?>">Walking Counselor</div>
-                <br /><br />
+                <?php 
+                if ( isset( $staffInfo['walking_counselor'] ) ) {
+                  echo $staffInfo['walking_counselor']['name'] . "<br />" . $staffInfo['walking_counselor']['phone'];
+                } else {
+                  echo "<br /><br />";
+                }
+                ?>
               </div>
               <div class="hq">
                 <div style="font-size: 9pt; color: <?= $color ?>">HQ Hotline</div>
