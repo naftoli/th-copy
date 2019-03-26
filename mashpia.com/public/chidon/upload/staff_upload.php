@@ -29,8 +29,13 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
       if ( empty( $data[$i] ) ) continue;
       $qry .= $headers[$i] . " = '" . $data[$i] . "',";
     }
-    $qry = substr( $qry, 0, strlen( $qry ) - 1 );
+
+    $username = ucfirst( $data[2] ) . ucfirst( $data[3] );
+    $password = 'shabbaton';
+    $year = 5779;
+    $qry .= " username = '" . $username . "', password = '" . $password . "', year = " . $year;
     $qrys[$row] = $qry;
+    
     // figure out positions and groups
     $max = $numFields + 6;
     for ( $f = $numFields; $f <= $max; $f += 2 ) {
