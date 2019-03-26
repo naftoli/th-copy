@@ -1,6 +1,8 @@
 <?php
 ini_set('display_errors',1);
 require __DIR__ . "/../../db.php";
+require __DIR__ . "/../../class.globalSettings.php";
+$year = GlobalSettings::getChidonYear();
 
 function extractList( $list ) {
   if ( strpos( $list, ',' ) !== false ) {
@@ -31,8 +33,8 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
     }
 
     $username = str_replace("'", '', ucfirst( $data[2] ) . ucfirst( $data[3] ));
+    $username .= $year;
     $password = 'shabbaton';
-    $year = 5779;
     $qry .= " username = '" . $username . "', password = '" . $password . "', year = " . $year;
     $qrys[$row] = $qry;
 
@@ -63,9 +65,9 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   fclose($handle);
 }
 
-if ( isset( $_POST['submit'] ) ) { 
-  echo "<pre>"; print_r( $qrys ); print_r( $positions ); echo "</pre>"; exit;
-}
+// if ( isset( $_POST['submit'] ) ) { 
+//   echo "<pre>"; print_r( $qrys ); print_r( $positions ); echo "</pre>"; exit;
+// }
 mysql_query('set autocommit=0');
 mysql_query('begin');
 $success = true;
