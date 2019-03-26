@@ -65,9 +65,7 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   fclose($handle);
 }
 
-// if ( isset( $_POST['submit'] ) ) { 
-//   echo "<pre>"; print_r( $qrys ); print_r( $positions ); echo "</pre>"; exit;
-// }
+echo "<pre>"; print_r( $qrys ); print_r( $positions ); echo "</pre>"; exit;
 mysql_query('set autocommit=0');
 mysql_query('begin');
 $success = true;
@@ -84,12 +82,14 @@ foreach ( $qrys as $key => $qry ) {
 }
 
 if ( $success ) {
-  foreach ( $positions as $key => $sql ) {
-    $sql .= '' . $ids[$key];
-    if ( !mysql_query( $sql ) ) {
-      echo "There was an error - " . $sql . "<br />" . mysql_error();
-      $success = false;
-      break;
+  foreach ( $positions as $key => $rows ) {
+    foreach ( $rows as $sql ) {
+      $sql .= '' . $ids[$key];
+      if ( !mysql_query( $sql ) ) {
+        echo "There was an error - " . $sql . "<br />" . mysql_error();
+        $success = false;
+        break;
+      }
     }
   }
 }
