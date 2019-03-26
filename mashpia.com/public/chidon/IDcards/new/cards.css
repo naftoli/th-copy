@@ -37,9 +37,9 @@
 }
 .name {
   font-family: gotham;
-  font-size: 18pt;
+  font-size: 16pt;
   color: #000;
-  top: 2.125in;
+  top: 2in;
   position: absolute;
   left: 1.5in;
   text-align: center;
@@ -54,6 +54,7 @@
   left: 1.5in;
   text-align: center;
   width: 250px;
+  padding-top: 5px;
 }
 .counselor {
   font-family: gotham;
@@ -66,7 +67,7 @@
 }
 .grade {
   font-family: gotham;
-  font-size: 11pt;
+  font-size: 10pt;
   color: #fff;
   top: 3.7in;
   position: absolute;
@@ -77,7 +78,7 @@
 }
 .bunk {
   font-family: gotham;
-  font-size: 11pt;
+  font-size: 10pt;
   color: #fff;
   top: 3.7in;
   position: absolute;
