@@ -17,8 +17,7 @@ function extractList( $list ) {
 
 $qrys = [];
 $positions = [];
-$headers = ['super_admin', 'chap_id', 'first_name', 'last_name', 'sweater_size', 'school_bus', 'open_air_bus', 'coach_bus', 'sunday_pm_bus', 'team_id', 'bowling_lane', 
-            'address', 'email', 'cell', 'grade'];
+$headers = ['super_admin', 'chap_id', 'first_name', 'last_name', 'sweater_size', 'school_bus', 'open_air_bus', 'coach_bus', 'sunday_pm_bus', 'team_id', 'bowling_lane', 'address', 'email', 'cell', 'grade'];
 if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   $row = 0;
   $numFields = count( $headers );
