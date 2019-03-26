@@ -27,7 +27,7 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
     $qry = "insert into th_chidon_staff set ";
     for ( $i = 0; $i < $numFields; $i++ ) {
       if ( empty( $data[$i] ) ) continue;
-      $qry .= $headers[$i] . " = '" . $data[$i] . "',";
+      $qry .= $headers[$i] . " = \"" . $data[$i] . "\",";
     }
 
     $username = ucfirst( $data[2] ) . ucfirst( $data[3] );
@@ -35,7 +35,7 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
     $year = 5779;
     $qry .= " username = '" . $username . "', password = '" . $password . "', year = " . $year;
     $qrys[$row] = $qry;
-    
+
     // figure out positions and groups
     $max = $numFields + 6;
     for ( $f = $numFields; $f <= $max; $f += 2 ) {
