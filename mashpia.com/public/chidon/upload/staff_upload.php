@@ -63,7 +63,7 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   fclose($handle);
 }
 
-if ( isset( $_GET['debug'] ) ) { 
+if ( isset( $_POST['submit'] ) ) { 
   echo "<pre>"; print_r( $qrys ); print_r( $positions ); echo "</pre>"; exit;
 }
 mysql_query('set autocommit=0');
