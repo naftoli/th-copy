@@ -42,7 +42,7 @@ while ($row = mysql_fetch_assoc($result)) {
                 font-family: tramp;
                 font-size: 46pt; 
                 text-align: center;
-                word-spacing: -0.2em;
+                /* word-spacing: -0.2em; */
             }
             .image { 
                 position: relative; 
