@@ -37,9 +37,9 @@
 }
 .name {
   font-family: gotham;
-  font-size: 18pt;
+  font-size: 16pt;
   color: #000;
-  top: 2.125in;
+  top: 2in;
   position: absolute;
   left: 1.5in;
   text-align: center;
@@ -54,6 +54,7 @@
   left: 1.5in;
   text-align: center;
   width: 250px;
+  padding-top: 5px;
 }
 .counselor {
   font-family: gotham;
@@ -66,7 +67,7 @@
 }
 .grade {
   font-family: gotham;
-  font-size: 11pt;
+  font-size: 10pt;
   color: #fff;
   top: 3.7in;
   position: absolute;
@@ -77,7 +78,7 @@
 }
 .bunk {
   font-family: gotham;
-  font-size: 11pt;
+  font-size: 10pt;
   color: #fff;
   top: 3.7in;
   position: absolute;
@@ -113,14 +114,14 @@
   padding-bottom: 2pt;
 }
 .zone1 {
-  width: 1.0625in;
+  width: 1in;
   text-align: center;
   color: #fff;
   font-family: gotham;
   font-size: 6pt;
   position: absolute;
   top: 6.8in;
-  left: 0.4in;
+  left: 0.35in;
 }
 .cert_id, .test_table, .walking_group, .bowling_lane, .buses {
   font-size: 6pt;

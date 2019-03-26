@@ -1,22 +1,29 @@
 <?php
 ini_set('display_errors',1);
 require __DIR__ . '/../../../db.php';
+require __DIR__ . '/../../../class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
 
 $info = [];
 $sql = "
   SELECT 
-      *
+      tc.*, u.*, s.*, t.*, tcc.name as chap_name, tcc.phone as chap_phone 
   FROM
       th_chidon tc
+          JOIN
+      th_chidon_chaps tcc ON tcc.school_id = tc.school_id
           JOIN
       users u USING (user_id)
           JOIN
       schools s ON s.school_id = tc.school_id
-          left JOIN
+          LEFT JOIN
       th_chidon_teams t ON t.team_id = tc.team_id
   WHERE
-      tc.year = 5779 AND tc.date_paid > 0
+      tc.year = $year AND tc.date_paid > 0
           AND u.gender = 'F'
+          AND tcc.chap_type = 1
+          AND tcc.year = $year 
+  GROUP BY tc.user_id , tcc.school_id
 ";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
@@ -183,9 +190,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               </div>
               <div class="chap">
                 <div style="font-size: 9pt; color: <?= $color ?>">Chaperone</div>
+                <?= ucwords( $row['chap_name'] ) ?><br />
+                <?= $row['chap_phone'] ?>
               </div>
               <div class="coordinator">
-                <div style="font-size: 9pt; color: <?= $color ?>">Safery Coordinator</div>
+                <div style="font-size: 9pt; color: <?= $color ?>">Safety Coordinator</div>
               </div>
               <div class="walking_counselor">
                 <div style="font-size: 9pt; color: <?= $color ?>">Walking Counselor</div>
