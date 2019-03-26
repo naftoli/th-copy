@@ -7,7 +7,7 @@ $year = GlobalSettings::getChidonYear();
 $info = [];
 $sql = "
   SELECT 
-      *
+      tc.*, u.*, s.*, t.*, tcc.name as chap_name, tcc.phone as chap_phone 
   FROM
       th_chidon tc
           JOIN
@@ -190,8 +190,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               </div>
               <div class="chap">
                 <div style="font-size: 9pt; color: <?= $color ?>">Chaperone</div>
-                <?= $row['name'] ?><br />
-                <?= $row['phone'] ?>
+                <?= ucwords( $row['chap_name'] ) ?><br />
+                <?= $row['chap_phone'] ?>
               </div>
               <div class="coordinator">
                 <div style="font-size: 9pt; color: <?= $color ?>">Safety Coordinator</div>
