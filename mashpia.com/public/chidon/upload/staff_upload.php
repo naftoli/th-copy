@@ -30,7 +30,7 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
       $qry .= $headers[$i] . " = \"" . $data[$i] . "\",";
     }
 
-    $username = ucfirst( $data[2] ) . ucfirst( $data[3] );
+    $username = str_replace("'", '', ucfirst( $data[2] ) . ucfirst( $data[3] ));
     $password = 'shabbaton';
     $year = 5779;
     $qry .= " username = '" . $username . "', password = '" . $password . "', year = " . $year;
