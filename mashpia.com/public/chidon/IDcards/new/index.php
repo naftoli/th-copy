@@ -116,45 +116,65 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             
             <div class="cert_id">
               <div class="info">CERTIFICATE ID</div>
-              <img src="icons/avatar.png" /><span class="info"><?= $row['cert_number'] ?></span>
+              <img src="icons/avatar.png" />
+              <span class='number'><?= $row['cert_number'] ?></span>
             </div>
             <div style="clear: both"></div>
             <div class="test_table">
               TEST TABLE<br />
-              <img src="icons/table.png" /><?= $row['test_table'] ?>
+              <img src="icons/table.png" />
+              <span class="testInfo"><?= $row['test_table'] ?></span>
             </div>
             <div style="clear: both"></div>
             <div class="walking_group">
               WALKING ZONE<br />
-              <img src="icons/walking icon.png" /><?= $row['walking_group'] ?>
+              <img src="icons/walking icon.png" />
+              <span class='number'><?= $row['walking_group'] ?></span>
             </div>
             <div style="clear: both"></div>
             <div class="bowling_lane">
               BOWLING LANE<br />
-            <img src="icons/bowling icon.png" /><?= $row['bowling_lane'] ?>
+              <img src="icons/bowling icon.png" />
+              <span class='number'><?= $row['bowling_lane'] ?></span>
             </div>
             <div style="clear: both"></div>
             <div class="buses">
               BUSES<br />
-              <div class="school_bus"><img src="icons/bus icon.png" /><?= $row['school_bus'] ?></div>
+              <div class="school_bus">
+                <img src="icons/bus icon.png" />
+                <span class="busInfo">School Bus</span><br />
+                <span class='number'><?= $row['school_bus'] ?></span>
+              </div>
               <div style="clear: both"></div>
               <?php if ( $row['grade'] == 6 ) : ?>
-                <div class="open_air_bus"><img src="icons/icon double decker.png" /><?= $row['open_air_bus'] ?></div>
+                <div class="open_air_bus">
+                  <img src="icons/icon double decker.png" />
+                  <span class="busInfo">Open Air Bus</span><br />
+                  <span class='number'><?= $row['open_air_bus'] ?>
+                </div>
                 <div style="clear: both"></div>
               <?php elseif ( in_array( $row['grade'], [7,8] ) ) : ?>
-              <div class="coach_bus"><img src="icons/icon double decker.png" /><?= $row['coach_bus'] ?></div>
+              <div class="coach_bus">
+                <img src="icons/icon double decker.png" />
+                <span class="busInfo">Coach Bus</span><br />
+                <span class='number'><?= $row['coach_bus'] ?></span>
+              </div>
               <div style="clear: both"></div>
               <?php endif; ?>
-              <div class="sunday_pm_bus"><img src="icons/icon double decker.png" /><?= $row['sunday_pm_bus'] ?></div>
+              <div class="sunday_pm_bus">
+                <img src="icons/icon double decker.png" />
+                <span class="busInfo">Sunday PM Bus</span><br />
+                <span class='number'><?= $row['sunday_pm_bus'] ?></span>
+              </div>
               <div style="clear: both"></div>
             </div>
           </div>
           <div class="zone2">
               <div class="contacts">
-                <div style="font-size: 8pt; color: <?= $color ?>">CONTACTS</div>
+                <div style="font-size: 9pt; color: <?= $color ?>">CONTACTS</div>
               </div>
               <div class="host">
-                <div style="font-size: 8pt; color: <?= $color ?>">Host</div>
+                <div style="font-size: 9pt; color: <?= $color ?>">Host</div>
                 <?php
                 echo $row['host'] . " Family<br />" . $row['host_street_num'] . ' ' . $row['host_street'] . $row['host_street_num_suffix'] . "<br />";
                 echo "<span><i>btwn " . $row['between_streets1'] . ' & ' . $row['between_streets2'] . "</i></span><br />";
@@ -162,16 +182,16 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                 ?>
               </div>
               <div class="chap">
-                <div style="font-size: 8pt; color: <?= $color ?>">Chaperone</div>
+                <div style="font-size: 9pt; color: <?= $color ?>">Chaperone</div>
               </div>
               <div class="coordinator">
-                <div style="font-size: 8pt; color: <?= $color ?>">Safery Coordinator</div>
+                <div style="font-size: 9pt; color: <?= $color ?>">Safery Coordinator</div>
               </div>
               <div class="walking_counselor">
-                <div style="font-size: 8pt; color: <?= $color ?>">Walking Counselor</div>
+                <div style="font-size: 9pt; color: <?= $color ?>">Walking Counselor</div>
               </div>
               <div class="hq">
-                <div style="font-size: 8pt; color: <?= $color ?>">HQ Hotline</div>
+                <div style="font-size: 9pt; color: <?= $color ?>">HQ Hotline</div>
                 718-907-8884
               </div>
               <div class="emergency" style="color: <?= $color ?>">
@@ -181,7 +201,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               </div>
           </div>
           <div class="zone3">
-            <p style="color: <?= $color ?>">AWARD CEREMONY</p>
+            <p style="color: <?= $color ?>">
+              AWARD CEREMONY<br />
+              <span class="info">Round</span> <span class="number"><?= $row['round_number'] ?></span>&nbsp;&nbsp;
+              <span class="info">Stage Seat</span> <span class="number"><?= $row['seat_number'] ?></span>
+            </p>
           </div>
         </div>
       </div>
