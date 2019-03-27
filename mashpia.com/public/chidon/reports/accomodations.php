@@ -42,6 +42,7 @@ while ($row = mysql_fetch_assoc($result)) {
 				<th>School Name</th>
 				<th>First Name</th>
 				<th>Last Name</th>
+				<th>Grade</th>
 				<th>Host Family</th>
 				<th>Host Address</th>
 				<th>Host Number</th>
@@ -52,8 +53,8 @@ while ($row = mysql_fetch_assoc($result)) {
 				foreach ($other as $row) {
 					echo "<tr><td>" . $gender . "</td><td>" . $row['school_name'] . "</td><td>" . 
 						$row['u_first'] . "</td><td>" . $row['u_last'] . "</td><td>" . $row['host'] . 
-						"</td><td>" . $row['host_address1'] . ' ' . $row['host_address2'] . "</td><td>" . $row['host_number'] . "</td><td>" . 
-						$row['admin_phone_mobile'] . ', ' . $row['admin_phone_mobile2'] . "</td></tr>";
+						"</td><td>" . $row['host_street_num'] . $row['host_street_num_suffix'] . ' ' . $row['host_street'] . ' ' . $row['host_street_apt'] . "</td><td>" . 
+						$row['host_number'] . "</td><td>" . $row['admin_phone_mobile'] . ', ' . $row['admin_phone_mobile2'] . "</td></tr>";
 				}
 			}
 			?>
