@@ -151,7 +151,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               $yrs = 1;
               if ( $row['history'] ) {
                 $history = explode(',', $row['history']);
-                $yrs += count( $history );
+                foreach ( $history as $year ) if ( !empty( $year ) ) $yrs++;
               } 
               echo $yrs;
               ?>
@@ -268,8 +268,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           <div class="zone3">
             <p style="color: <?= $color ?>">
               AWARD CEREMONY<br />
-              <span class="info">Round</span> <span class="number"><?= $row['round_number'] ?></span>&nbsp;&nbsp;
-              <span class="info">Stage Seat</span> <span class="number"><?= $row['seat_number'] ?></span>
+              <span class="info">Round</span> <span class="number"><?= $row['round_number'] ? $row['round_number'] : ''; ?></span>&nbsp;&nbsp;
+              <span class="info">Stage Seat</span> <span class="number"><?= $row['seat_number'] ? $row['seat_number'] : ''; ?></span>
             </p>
           </div>
         </div>
