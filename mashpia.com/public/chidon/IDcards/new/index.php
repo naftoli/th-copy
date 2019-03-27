@@ -44,7 +44,7 @@ function getStaffInfo( $groups ) {
 $info = [];
 $sql = "
   SELECT 
-      tc.*, u.*, s.*, t.*, tcc.name as chap_name, tcc.phone as chap_phone 
+      tc.*, u.*, s.*, t.*, c.class_grade, tcc.first_name chap_first, tcc.last_name as chap_last, tcc.phone as chap_phone 
   FROM
       th_chidon tc
           JOIN
@@ -52,7 +52,9 @@ $sql = "
           JOIN
       users u USING (user_id)
           JOIN
-      schools s ON s.school_id = tc.school_id
+      schools s ON s.school_id = tc.school_id 
+          JOIN
+      classes c on tc.school_id = c.school_id 
           LEFT JOIN
       th_chidon_teams t ON t.team_id = tc.team_id
   WHERE
@@ -61,7 +63,8 @@ $sql = "
           AND tcc.chap_type = 1 
           AND tcc.chidon_type = 'girls' 
           AND tcc.year = $year 
-  GROUP BY tc.user_id , tcc.school_id
+  GROUP BY tc.user_id  
+  ORDER BY s.school_name, c.class_grade, u.last, u.first
 ";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
@@ -236,7 +239,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               </div>
               <div class="chap">
                 <div style="font-size: 9pt; color: <?= $color ?>">Chaperone</div>
-                <?= ucwords( $row['chap_name'] ) ?><br />
+                <?= ucfirst( $row['chap_first'] ) . ' ' . ucfirst( $row['chap_last'] ); ?><br />
                 <?= $row['chap_phone'] ?>
               </div>
               <div class="coordinator">
