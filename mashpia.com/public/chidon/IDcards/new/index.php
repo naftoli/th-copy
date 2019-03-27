@@ -267,7 +267,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               <div class="emergency" style="color: <?= $color ?>">
                 EMERGENCY<br />
                 Police/Fire: 911<br />
-                Hatzola: 718-387-1750
+                Hatzola: 718-387-1750<br />
+                Shmira: 718-221-0303<br />
+                Shomrim: 718-774-3333
               </div>
           </div>
           <div class="zone3">
