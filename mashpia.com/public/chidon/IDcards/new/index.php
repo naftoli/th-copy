@@ -132,7 +132,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           </div>
           <div class='school'>
             <?= $row['school_name'] ?><br />
+            <?php if ( in_array( $row['school_id'], [61,269] ) ) : ?>
+            Worldwide 
+            <?php else : ?>
             <?= $row['school_city'] . ', ' . $row['school_state'] ?>
+            <?php endif; ?>
           </div>
           <div class='counselor' style='color: <?= $color ?>'>
             Counselor: <?= isset( $staffInfo['counselor'] ) ? $staffInfo['counselor']['name'] : ''; ?>
