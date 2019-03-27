@@ -202,18 +202,17 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                   <span class='number'><?= $row['open_air_bus'] ?>
                 </div>
                 <div style="clear: both"></div>
-              <?php elseif ( in_array( $row['grade'], [7,8] ) ) : ?>
+                <?php endif; ?>
               <div class="coach_bus">
                 <img src="icons/icon double decker.png" />
                 <span class="busInfo">Coach Bus</span><br />
                 <span class='number'><?= $row['coach_bus'] ?></span>
               </div>
               <div style="clear: both"></div>
-              <?php endif; ?>
               <div class="sunday_pm_bus">
                 <img src="icons/icon double decker.png" />
                 <span class="busInfo">Sunday PM Bus</span><br />
-                <span class='number'><?= $row['sunday_pm_bus'] ?></span>
+                <span class='testInfo'><?= $row['sunday_pm_bus'] ?></span>
               </div>
               <div style="clear: both"></div>
             </div>
