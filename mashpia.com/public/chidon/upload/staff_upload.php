@@ -1,6 +1,8 @@
 <?php
 ini_set('display_errors',1);
 require __DIR__ . "/../../db.php";
+require __DIR__ . "/../../class.globalSettings.php";
+$year = GlobalSettings::getChidonYear();
 
 function extractList( $list ) {
   if ( strpos( $list, ',' ) !== false ) {
@@ -27,10 +29,15 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
     $qry = "insert into th_chidon_staff set ";
     for ( $i = 0; $i < $numFields; $i++ ) {
       if ( empty( $data[$i] ) ) continue;
-      $qry .= $headers[$i] . " = '" . $data[$i] . "',";
+      $qry .= $headers[$i] . " = \"" . $data[$i] . "\",";
     }
-    $qry = substr( $qry, 0, strlen( $qry ) - 1 );
+
+    $username = str_replace("'", '', ucfirst( $data[2] ) . ucfirst( $data[3] ));
+    $username .= $year;
+    $password = 'shabbaton';
+    $qry .= " username = '" . $username . "', password = '" . $password . "', year = " . $year;
     $qrys[$row] = $qry;
+
     // figure out positions and groups
     $max = $numFields + 6;
     for ( $f = $numFields; $f <= $max; $f += 2 ) {
@@ -57,6 +64,7 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   }
   fclose($handle);
 }
+
 //echo "<pre>"; print_r( $qrys ); print_r( $positions ); echo "</pre>"; exit;
 mysql_query('set autocommit=0');
 mysql_query('begin');
@@ -74,12 +82,14 @@ foreach ( $qrys as $key => $qry ) {
 }
 
 if ( $success ) {
-  foreach ( $positions as $key => $sql ) {
-    $sql .= '' . $ids[$key];
-    if ( !mysql_query( $sql ) ) {
-      echo "There was an error - " . $sql . "<br />" . mysql_error();
-      $success = false;
-      break;
+  foreach ( $positions as $key => $rows ) {
+    foreach ( $rows as $sql ) {
+      $sql .= '' . $ids[$key];
+      if ( !mysql_query( $sql ) ) {
+        echo "There was an error - " . $sql . "<br />" . mysql_error();
+        $success = false;
+        break;
+      }
     }
   }
 }

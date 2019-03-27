@@ -4,6 +4,43 @@ require __DIR__ . '/../../../db.php';
 require __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+function getStaffInfo( $groups ) {
+  $groupList = implode('","', $groups);
+  $info = [];
+  $sql = "
+    SELECT 
+        staff_type_id, first_name, last_name, cell
+    FROM
+        th_chidon_staff_assignments sa
+            JOIN
+        th_chidon_staff s USING (staff_id)
+            JOIN
+        th_chidon_types t ON t.th_chidon_type_id = sa.staff_type_id
+    WHERE
+        group_number in (\"$groupList\")  
+            AND staff_type_id IN (1,6,9)
+  ";
+  $result = mysql_query( $sql );
+  while ( $row = mysql_fetch_assoc( $result ) ) {
+    switch ( $row['staff_type_id'] ) {
+      case 1:
+        $type = "counselor";
+        break;
+      case 6:
+        $type = 'coordinator';
+        break;
+      case 9:
+        $type = 'walking_counselor';
+        break;
+    }
+    $info[$type] = [
+      'name'  =>  $row['first_name'] . ' ' . $row['last_name'], 
+      'phone' =>  $row['cell']
+    ];
+  }
+  return $info;
+}
+
 $info = [];
 $sql = "
   SELECT 
@@ -21,7 +58,8 @@ $sql = "
   WHERE
       tc.year = $year AND tc.date_paid > 0
           AND u.gender = 'F'
-          AND tcc.chap_type = 1
+          AND tcc.chap_type = 1 
+          AND tcc.chidon_type = 'girls' 
           AND tcc.year = $year 
   GROUP BY tc.user_id , tcc.school_id
 ";
@@ -43,10 +81,15 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 <body>
   <div id="main">
     <?php foreach ( $info as $row ) : ?>
+
+      <?php
+      // get safety coordinator and walking counselor
+      $staffInfo = getStaffInfo( [$row['walking_group'], $row['bunk_number']] );
+      ?>
+
       <div style="position: relative">
         <div class='front'>
           <?php
-          $row['grade'] = 6;
           // figure out which image and color to use
           switch ( $row['grade'] ) {
             case '4':
@@ -71,8 +114,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               break;
             case '8':
               $color = '#a663a1';
-              $front = "background\KIDS-1.png";
-              $back = "background\KIDS-2.png";
+              $front = "background\KIDS-9.png";
+              $back = "background\KIDS-10.png";
               break;
           }
           ?>
@@ -89,10 +132,14 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           </div>
           <div class='school'>
             <?= $row['school_name'] ?><br />
+            <?php if ( in_array( $row['school_id'], [61,269] ) ) : ?>
+            Worldwide 
+            <?php else : ?>
             <?= $row['school_city'] . ', ' . $row['school_state'] ?>
+            <?php endif; ?>
           </div>
           <div class='counselor' style='color: <?= $color ?>'>
-            Counselor: 
+            Counselor: <?= isset( $staffInfo['counselor'] ) ? $staffInfo['counselor']['name'] : ''; ?>
           </div>
           <div class='grade'>
             Grade <?= $row['grade'] ?>
@@ -109,7 +156,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               $yrs = 1;
               if ( $row['history'] ) {
                 $history = explode(',', $row['history']);
-                $yrs += count( $history );
+                foreach ( $history as $year ) if ( !empty( $year ) ) $yrs++;
               } 
               echo $yrs;
               ?>
@@ -160,18 +207,17 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                   <span class='number'><?= $row['open_air_bus'] ?>
                 </div>
                 <div style="clear: both"></div>
-              <?php elseif ( in_array( $row['grade'], [7,8] ) ) : ?>
+                <?php endif; ?>
               <div class="coach_bus">
                 <img src="icons/icon double decker.png" />
                 <span class="busInfo">Coach Bus</span><br />
                 <span class='number'><?= $row['coach_bus'] ?></span>
               </div>
               <div style="clear: both"></div>
-              <?php endif; ?>
               <div class="sunday_pm_bus">
                 <img src="icons/icon double decker.png" />
                 <span class="busInfo">Sunday PM Bus</span><br />
-                <span class='number'><?= $row['sunday_pm_bus'] ?></span>
+                <span class='testInfo'><?= $row['sunday_pm_bus'] ?></span>
               </div>
               <div style="clear: both"></div>
             </div>
@@ -183,7 +229,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               <div class="host">
                 <div style="font-size: 9pt; color: <?= $color ?>">Host</div>
                 <?php
-                echo $row['host'] . " Family<br />" . $row['host_street_num'] . ' ' . $row['host_street'] . $row['host_street_num_suffix'] . "<br />";
+                echo $row['host'] . " Family<br />" . $row['host_street_num'] . $row['host_street_num_suffix'] . ' ' . $row['host_street'] . $row['host_street_apt'] . "<br />";
                 echo "<span><i>btwn " . $row['between_streets1'] . ' & ' . $row['between_streets2'] . "</i></span><br />";
                 echo $row['host_number'];
                 ?>
@@ -195,11 +241,23 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               </div>
               <div class="coordinator">
                 <div style="font-size: 9pt; color: <?= $color ?>">Safety Coordinator</div>
-                <br /><br />
+                <?php 
+                if ( isset( $staffInfo['coordinator'] ) ) {
+                  echo $staffInfo['coordinator']['name'] . "<br />" . $staffInfo['coordinator']['phone'];
+                } else {
+                  echo "<br /><br />";
+                }
+                ?>
               </div>
               <div class="walking_counselor">
                 <div style="font-size: 9pt; color: <?= $color ?>">Walking Counselor</div>
-                <br /><br />
+                <?php 
+                if ( isset( $staffInfo['walking_counselor'] ) ) {
+                  echo $staffInfo['walking_counselor']['name'] . "<br />" . $staffInfo['walking_counselor']['phone'];
+                } else {
+                  echo "<br /><br />";
+                }
+                ?>
               </div>
               <div class="hq">
                 <div style="font-size: 9pt; color: <?= $color ?>">HQ Hotline</div>
@@ -214,8 +272,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           <div class="zone3">
             <p style="color: <?= $color ?>">
               AWARD CEREMONY<br />
-              <span class="info">Round</span> <span class="number"><?= $row['round_number'] ?></span>&nbsp;&nbsp;
-              <span class="info">Stage Seat</span> <span class="number"><?= $row['seat_number'] ?></span>
+              <span class="info">Round</span> <span class="number"><?= $row['round_number'] ? $row['round_number'] : ''; ?></span>&nbsp;&nbsp;
+              <span class="info">Stage Seat</span> <span class="number"><?= $row['seat_number'] ? $row['seat_number'] : ''; ?></span>
             </p>
           </div>
         </div>
