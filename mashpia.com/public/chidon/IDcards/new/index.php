@@ -20,7 +20,6 @@ function getStaffInfo( $groups ) {
         group_number in (\"$groupList\")  
             AND staff_type_id IN (1,6,9)
   ";
-  echo $sql . "<br />";
   $result = mysql_query( $sql );
   while ( $row = mysql_fetch_assoc( $result ) ) {
     switch ( $row['staff_type_id'] ) {
@@ -277,7 +276,6 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         </div>
       </div>
       <div style="clear: both"></div>
-      <?php break; ?>
     <?php endforeach; ?>
   </div>
 </body>
