@@ -165,6 +165,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             YEARS AT CHIDON
         </div>  
         </div>
+        <div style="page-break-after: always;"></div>
         <div class='back'>
           <img src="<?= $back ?>" />
           <div class="zone1">
@@ -282,6 +283,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         </div>
       </div>
       <div style="clear: both"></div>
+      <div style="page-break-after: always;"></div>
     <?php endforeach; ?>
   </div>
 </body>
