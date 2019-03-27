@@ -89,7 +89,6 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
       <div style="position: relative">
         <div class='front'>
           <?php
-          $row['grade'] = 6;
           // figure out which image and color to use
           switch ( $row['grade'] ) {
             case '4':
