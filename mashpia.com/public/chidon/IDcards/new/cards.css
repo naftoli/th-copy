@@ -93,10 +93,10 @@
   color: #fff;
   top: 4in;
   position: absolute;
-  left: 2.1in;
+  left: 2.085in;
   width: 1.6in;
   height: 0.25in;
-  /* text-align: center; */
+  text-align: center;
 }
 .chidon_years {
   font-family: gotham;
