@@ -7,6 +7,7 @@ class StaffManager
   private $db;
   private $year;
   private $staffID;
+  private $superAdmin;
   private $personalInfo;
   private $assignments;
   private $roles;
@@ -18,6 +19,7 @@ class StaffManager
     global $MASHPIA_DB;
     $this->db = $MASHPIA_DB;
     $this->staffID = 0;
+    $this->superAdmin = false;
     $this->personalInfo = [];
     $this->assignments = [];
     $this->roles = [];
@@ -39,6 +41,7 @@ class StaffManager
       foreach ( $rows as $row ) {
         $this->staffID = intval( $row['staff_id'] );
         $this->personalInfo = $row;
+        if ( intval( $row['super_admin'] ) ) $this->superAdmin = true;
       }
     }
     if ( $this->staffID ) return true;
@@ -53,6 +56,7 @@ class StaffManager
       foreach ( $rows as $row ) {
         $this->staffID = intval( $row['staff_id'] );
         $this->personalInfo = $row;
+        if ( intval( $row['super_admin'] ) ) $this->superAdmin = true;
         return true;
       }
     }
@@ -68,8 +72,8 @@ class StaffManager
   }
 
   public function getInfo() {
-    $this->setAssignments();
-    $this->setTypes();
+    if ( empty( $this->assignments ) ) $this->setAssignments();
+    if ( empty( $this->types ) ) $this->setTypes();
     return [
       'assignments' =>  $this->assignments, 
       'roles'       =>  $this->roles,
@@ -78,7 +82,27 @@ class StaffManager
   }
 
   private function setAssignments() {
-    if ( empty( $this->assignments ) ) {
+    if ( $this->superAdmin ) {
+      $this->roles = ['super admin'];
+      // all bunks
+      for ( $j = 1; $j <= 120; $j++ ) {
+        $this->assignments['bunk'][] = $j;
+      }
+      // all walking groups
+      for ( $j = 1; $j <= 32; $j++ ) {
+        for ( $a = 'A'; $a <= 'B'; $a++ ) {
+          $this->assignments['walking_group'][] = $j . $a;
+        }
+      }
+      for ( $j = 1; $j <= 15; $j++ ) {
+        for ( $a = 'A'; $a <= 'B'; $a++ ) {
+          $this->assignments['walking_group'][] = '78-' . $j . $a;
+        }
+      }
+      for ( $j = 1; $j <= 4; $j++ ) {
+        $this->assignments['walking_group'][] = $j . 'EF';
+      }
+    } else {
       $stmt = $this->db->prepare("
         SELECT 
             *
@@ -99,7 +123,9 @@ class StaffManager
   }
 
   private function setTypes() {
-    if ( empty( $this->types ) ) {
+    if ( $this->superAdmin ) {
+      $this->types = ['bunk', 'walking_group'];
+    } else {
       $stmt = $this->db->prepare("
         SELECT 
             t.type
@@ -116,7 +142,7 @@ class StaffManager
       foreach ( $rows as $row ) {
         $this->types[] = $row['type'];
       }
-    } 
+    }
   }
 
   public function getBunks() {
