@@ -120,7 +120,7 @@
 	 	</div>
  		<table id="teamNames">
  			<tbody><tr>
- 				<td class="teamName">Ahavat Yisrael</td>
+ 				<td class="teamName">משנה תורה</td>
  				<td><input type="radio" name="t1" value="1" class="one"> Team 1</td>
  				<td><input type="radio" name="t1" value="2" class="two"> Team 2</td>
         <td><input type="radio" name="t1" value="3" class="three"> Team 3</td>
@@ -128,7 +128,7 @@
  				<td><input type="radio" name="t1" value="0" checked=""> None</td>
  			</tr>
  			<tr>
- 				<td class="teamName">Tzedakah</td>
+ 				<td class="teamName">אגרת הרמב"ם</td>
  				<td><input type="radio" name="t2" value="1" class="one"> Team 1</td>
  				<td><input type="radio" name="t2" value="2" class="two"> Team 2</td>
         <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>
@@ -136,7 +136,7 @@
  				<td><input type="radio" name="t2" value="0" checked=""> None</td>
  			</tr>
  			<tr>
- 				<td class="teamName">Shabbat</td>
+ 				<td class="teamName">ספר המצוות</td>
  				<td><input type="radio" name="t3" value="1" class="one"> Team 1</td>
  				<td><input type="radio" name="t3" value="2" class="two"> Team 2</td>
         <td><input type="radio" name="t3" value="3" class="three"> Team 3</td>
@@ -144,7 +144,7 @@
  				<td><input type="radio" name="t3" value="0" checked=""> None</td>
  			</tr>
  			<tr>
- 				<td class="teamName">Kosher</td>
+ 				<td class="teamName">פירוש המשניות</td>
  				<td><input type="radio" name="t4" value="1" class="one"> Team 1</td>
  				<td><input type="radio" name="t4" value="2" class="two"> Team 2</td>
         <td><input type="radio" name="t4" value="3" class="three"> Team 3</td>
