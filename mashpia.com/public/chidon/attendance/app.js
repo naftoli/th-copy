@@ -25,12 +25,13 @@ var app = function() {
             success: function(response) {
                 try { response = JSON.parse(response); }
                 catch (e) { logout(); }
+                let res = response;
                 // make sure that we can get the user data....
-                if (!response.success) logout();
+                if (!res.success) logout();
                 // set the user in the state to the current user...
-                state.user = response.user;
-                state.info = JSON.parse( response.info );
-                $("#user-name").text(state.user.name);
+                state.user = res.user;
+                state.info = res.info;
+                $("#user-name").text(state.user.first_name + ' ' + state.user.last_name + ' (' + state.info.roles.join() + ')');
             }
         });
     }
@@ -66,17 +67,15 @@ var app = function() {
         
         for ( group_type in groups ) {
             let html = '';
-            for ( role in groups[group_type] ) {
-                for ( group in groups[group_type][role] ) {
-                    if ( groups[group_type][role][group] ) {
-                        html += `
-                            <div class='column is-one-fifth'>
-                                <input type='checkbox' class='checkbox group' value='${groups[group_type][role][group]}' /> ${groups[group_type][role][group]}
-                            </div>
-                        `;
-                    }
-                } 
-            }
+            for ( group in groups[group_type] ) {
+                if ( groups[group_type][group] ) {
+                    html += `
+                        <div class='column is-one-fifth'>
+                            <input type='checkbox' class='checkbox group' value='${groups[group_type][group]}' /> ${groups[group_type][group]}
+                        </div>
+                    `;
+                }
+            } 
             let type = "#" + group_type;
             let details = type + " .details";
             $( details ).append( html );

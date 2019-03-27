@@ -2,7 +2,7 @@
 ini_set('display_errors',1);
 require __DIR__ . "/../../db.php";
 $qrys = [];
-$headers = ['th_chidon_id', 'walking_group', 'dropoff_number', 'host_street_num', 'host_street_num_suffix', 'host_street', 'host_street_apt', 'between_streets1', 'between_streets2', 'walking'];
+$headers = ['th_chidon_id', 'host_street_num', 'host_street_num_suffix', 'host_street', 'host_street_apt', 'between_streets1', 'between_streets2'];
 if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   $row = 0;
   $numFields = count( $headers );
@@ -10,12 +10,9 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
     if ( $row++ < 1 ) continue;
     $qry = "update th_chidon set ";
     for ( $i = 1; $i < $numFields; $i++ ) {
-      if ( $i == ($numFields - 1) ) {
-        $qry .= $headers[$i] . " = " . ( strtolower( $data[$i] ) == 'yes' ? 1 : 0 );
-      } else {
-        $qry .= $headers[$i] . " = '" . $data[$i] . "',";
-      }
+      $qry .= $headers[$i] . " = '" . $data[$i] . "',";
     }
+    $qry = substr( $qry, 0, strlen( $qry ) - 1 );
     $qry .= " where th_chidon_id = " . $data[0];
     $qrys[] = $qry;
   }

@@ -9,6 +9,7 @@ class StaffManager
   private $staffID;
   private $personalInfo;
   private $assignments;
+  private $roles;
   private $types;
   private $bunks;
   private $walkingGroups;
@@ -19,6 +20,7 @@ class StaffManager
     $this->staffID = 0;
     $this->personalInfo = [];
     $this->assignments = [];
+    $this->roles = [];
     $this->types = [];
     $this->bunks = [];
     $this->walkingGroups = [];
@@ -68,10 +70,11 @@ class StaffManager
   public function getInfo() {
     $this->setAssignments();
     $this->setTypes();
-    return json_encode([
+    return [
       'assignments' =>  $this->assignments, 
+      'roles'       =>  $this->roles,
       'types'       =>  $this->types
-    ]);
+    ];
   }
 
   private function setAssignments() {
@@ -89,7 +92,8 @@ class StaffManager
       $stmt->execute([ ':staff_id' => $this->staffID ]);
       $rows = $stmt->fetchAll();
       foreach ( $rows as $row ) {
-        $this->assignments[$row['type']][$row['role']][] = $row['group_number'];
+        if ( !in_array( $row['group_number'], $this->assignments[$row['type']] ) ) $this->assignments[$row['type']][] = $row['group_number'];
+        if ( !in_array( $row['role'], $this->roles ) ) $this->roles[] = $row['role'];
       }
     }
   }
