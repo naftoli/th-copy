@@ -9,10 +9,10 @@ $sql = "select a.*, s.school_name, tc.grade, tc.th_chidon_id, tc.allergies, u.fi
 		join admins a on a.admin_id = tc.paid_by 
 		where tc.year = " . $year . "  
 		and tc.paid > 0
-		order by school_name, u_last, u_first";
+		order by school_name, tc.grade, u_last, u_first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-	$info[] = $row;
+	$info[$row['school_name']][] = $row;
 }
 ?>
 <!DOCTYPE html>
@@ -32,11 +32,11 @@ while ($row = mysql_fetch_assoc($result)) {
 	</head>
 	
 	<body>	
+		<?php	foreach ( $info as $school => $other ) : ?>
+		<h3><?= $school ?></h3><hr /><br />
 		<table>
 			<caption>Emergency Info</caption>
 			<tr>
-				<th>ID</th>
-				<th>School Name</th>
 				<th>Grade</th>
 				<th>First Name</th>
 				<th>Last Name</th>
@@ -47,13 +47,14 @@ while ($row = mysql_fetch_assoc($result)) {
 				<th>Parent's Email</th>
 			</tr>
 			<?
-			foreach ($info as $row) {
-				echo "<tr><td>" . $row['th_chidon_id'] . "</td><td>" . $row['school_name'] . "</td><td>" . 
-					$row['grade'] . "</td><td>" . $row['u_first'] . "</td><td>" . $row['u_last'] . "</td><td>" . 
+			foreach ($other as $row) {
+				echo "<tr><td>" . $row['grade'] . "</td><td>" . $row['u_first'] . "</td><td>" . $row['u_last'] . "</td><td>" . 
 					$row['allergies'] . "</td><td>" . $row['a_first'] . ' ' . $row['a_last'] . "</td><td>" . $row['admin_phone_mobile'] . "</td><td>" . 
 					$row['admin_phone_mobile2'] . "</td><td>" . $row['admin_email'] . "</td></tr>";
 			}
 			?>
 		</table>
+		<div style="page-break-after: always;"></div>
+		<?php endforeach; ?>
 	</body>
 </html>

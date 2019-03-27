@@ -66,7 +66,8 @@ var app = function() {
         console.log( groups );
         
         for ( group_type in groups ) {
-            let html = '';
+            let html = '<div class="columns is-mobile">';
+            i = 1;
             for ( group in groups[group_type] ) {
                 if ( groups[group_type][group] ) {
                     html += `
@@ -74,8 +75,12 @@ var app = function() {
                             <input type='checkbox' class='checkbox group' value='${groups[group_type][group]}' /> ${groups[group_type][group]}
                         </div>
                     `;
+                    if ( i++ % 5 == 0 ) {
+                        html += '</div><div class="columns is-mobile">';
+                    }
                 }
             } 
+            html += '</div>';
             let type = "#" + group_type;
             let details = type + " .details";
             $( details ).append( html );

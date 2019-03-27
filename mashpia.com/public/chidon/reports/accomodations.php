@@ -12,10 +12,10 @@ $sql = "select *, u.first as u_first, u.last as u_last from th_chidon tc
 		join admins a on a.admin_id = tc.paid_by 
 		where tc.year = " . $year . "
 		and tc.paid > 0 
-		order by school_name, u.last, u.first";
+		order by school_name, tc.grade, u.last, u.first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-	$info[$row['gender']][] = $row;
+	$info[$row['gender']][$row['school_name']][] = $row;
 }
 ?>
 <!DOCTYPE html>
@@ -35,29 +35,32 @@ while ($row = mysql_fetch_assoc($result)) {
 	</head>
 	
 	<body>		
-		<table>
-			<caption>Accomodations Info</caption>
-			<tr>
-				<th>Gender</th>
-				<th>School Name</th>
-				<th>First Name</th>
-				<th>Last Name</th>
-				<th>Grade</th>
-				<th>Host Family</th>
-				<th>Host Address</th>
-				<th>Host Number</th>
-				<th>Emergency Number</th>
-			</tr>
-			<?
-			foreach ($info as $gender => $other) {
-				foreach ($other as $row) {
-					echo "<tr><td>" . $gender . "</td><td>" . $row['school_name'] . "</td><td>" . 
-						$row['u_first'] . "</td><td>" . $row['u_last'] . "</td><td>" . $row['host'] . 
-						"</td><td>" . $row['host_street_num'] . $row['host_street_num_suffix'] . ' ' . $row['host_street'] . ' ' . $row['host_street_apt'] . "</td><td>" . 
-						$row['host_number'] . "</td><td>" . $row['admin_phone_mobile'] . ', ' . $row['admin_phone_mobile2'] . "</td></tr>";
+		<?php
+		foreach ($info as $gender => $more) {
+			foreach ( $more as $school => $other ) {
+				echo "<h3>" . $school . "</h3><hr /><br />";
+				?>
+				<table>
+					<caption>Accomodations Info</caption>
+					<tr>
+						<th>Gender</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Grade</th>
+						<th>Host Family</th>
+						<th>Host Address</th>
+						<th>Host Number</th>
+						<th>Emergency Number</th>
+					</tr>
+					<?php
+					foreach ($other as $row) {
+						echo "<tr><td>" . $gender . "</td><td>" . $row['u_first'] . "</td><td>" . $row['u_last'] . "</td><td>" . $row['grade'] . "</td><td>" . $row['host'] . 
+							"</td><td>" . $row['host_street_num'] . $row['host_street_num_suffix'] . ' ' . $row['host_street'] . ' ' . $row['host_street_apt'] . "</td><td>" . 
+							$row['host_number'] . "</td><td>" . $row['admin_phone_mobile'] . ', ' . $row['admin_phone_mobile2'] . "</td></tr>";
+					}
+					echo "</table><div style='page-break-after: always;'></div>";
 				}
 			}
 			?>
-		</table>
 	</body>
 </html>
