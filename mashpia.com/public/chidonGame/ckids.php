@@ -229,7 +229,7 @@
 	<!-- Pricing Table Section End -->
     	
     <!-- Pricing Table Section -->
-    <section id="pricing-table" style="width: 100%; padding-top: 150px; padding-left: 20px; padding-right: 20px;">
+    <section id="pricing-table" style="width: 100%; padding-left: 20px; padding-right: 20px;">
         <div class="container">
             <div class="row">
                 <div class="pricing">
