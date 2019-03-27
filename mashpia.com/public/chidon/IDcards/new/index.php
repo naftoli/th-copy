@@ -114,8 +114,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               break;
             case '8':
               $color = '#a663a1';
-              $front = "background\KIDS-1.png";
-              $back = "background\KIDS-2.png";
+              $front = "background\KIDS-9.png";
+              $back = "background\KIDS-10.png";
               break;
           }
           ?>
@@ -225,7 +225,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               <div class="host">
                 <div style="font-size: 9pt; color: <?= $color ?>">Host</div>
                 <?php
-                echo $row['host'] . " Family<br />" . $row['host_street_num'] . ' ' . $row['host_street'] . $row['host_street_num_suffix'] . "<br />";
+                echo $row['host'] . " Family<br />" . $row['host_street_num'] . $row['host_street_num_suffix'] . ' ' . $row['host_street'] . $row['host_street_apt'] . "<br />";
                 echo "<span><i>btwn " . $row['between_streets1'] . ' & ' . $row['between_streets2'] . "</i></span><br />";
                 echo $row['host_number'];
                 ?>
