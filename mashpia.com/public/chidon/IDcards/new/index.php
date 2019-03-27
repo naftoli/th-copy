@@ -58,7 +58,8 @@ $sql = "
   WHERE
       tc.year = $year AND tc.date_paid > 0
           AND u.gender = 'F'
-          AND tcc.chap_type = 1
+          AND tcc.chap_type = 1 
+          AND tcc.chidon_type = 'girls' 
           AND tcc.year = $year 
   GROUP BY tc.user_id , tcc.school_id
 ";
