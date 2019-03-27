@@ -11,7 +11,7 @@ $sql = "select *, u.first as u_first, u.last as u_last from th_chidon tc
 		join users u using (user_id)
 		join admins a on a.admin_id = tc.paid_by 
 		where tc.year = " . $year . "
-		and tc.paid > 0 
+		and tc.date_paid > 0 
 		order by school_name, tc.grade, u.last, u.first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {

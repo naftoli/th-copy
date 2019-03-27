@@ -31,7 +31,7 @@ var app = function() {
                 // set the user in the state to the current user...
                 state.user = res.user;
                 state.info = res.info;
-                $("#user-name").text(state.user.first_name + ' ' + state.user.last_name + ' (' + state.info.roles.join() + ')');
+                $("#user-name").text(state.user.first_name + ' ' + state.user.last_name + ' (' + state.info.roles.join(' / ') + ')');
             }
         });
     }
