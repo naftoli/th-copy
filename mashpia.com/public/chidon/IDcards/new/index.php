@@ -4,7 +4,8 @@ require __DIR__ . '/../../../db.php';
 require __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
-function getStaffInfo( $group_number ) {
+function getStaffInfo( $groups ) {
+  $groupList = implode('","', $groups);
   $info = [];
   $sql = "
     SELECT 
@@ -16,15 +17,22 @@ function getStaffInfo( $group_number ) {
             JOIN
         th_chidon_types t ON t.th_chidon_type_id = sa.staff_type_id
     WHERE
-        group_number = '" . $group_number . "' 
-            AND staff_type_id IN (6 , 9)
+        group_number in (\"$groupList\")  
+            AND staff_type_id IN (1,6,9)
   ";
+  echo $sql . "<br />";
   $result = mysql_query( $sql );
   while ( $row = mysql_fetch_assoc( $result ) ) {
-    if ( $row['staff_type_id'] == 6 ) {
-      $type = 'coordinator';
-    } else if ( $row['staff_type_id'] == 9 ) {
-      $type = 'walking_counselor';
+    switch ( $row['staff_type_id'] ) {
+      case 1:
+        $type = "counselor";
+        break;
+      case 6:
+        $type = 'coordinator';
+        break;
+      case 9:
+        $type = 'walking_counselor';
+        break;
     }
     $info[$type] = [
       'name'  =>  $row['first_name'] . ' ' . $row['last_name'], 
@@ -76,7 +84,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 
       <?php
       // get safety coordinator and walking counselor
-      $staffInfo = getStaffInfo( $row['walking_group'] );
+      $staffInfo = getStaffInfo( [$row['walking_group'], $row['bunk_number']] );
       ?>
 
       <div style="position: relative">
@@ -128,7 +136,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             <?= $row['school_city'] . ', ' . $row['school_state'] ?>
           </div>
           <div class='counselor' style='color: <?= $color ?>'>
-            Counselor: 
+            Counselor: <?= isset( $staffInfo['counselor'] ) ? $staffInfo['counselor']['name'] : ''; ?>
           </div>
           <div class='grade'>
             Grade <?= $row['grade'] ?>
@@ -269,6 +277,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         </div>
       </div>
       <div style="clear: both"></div>
+      <?php break; ?>
     <?php endforeach; ?>
   </div>
 </body>
