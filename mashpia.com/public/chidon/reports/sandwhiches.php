@@ -10,17 +10,15 @@ $sql = "
 		FROM
 				th_chidon tc
 						JOIN
-				schools s USING (school_id)
-						JOIN
 				users u USING (user_id)
 		WHERE
 				tc.year = $year AND tc.date_paid > 0
 		GROUP BY user_id
-		ORDER BY school_name, tc.grade, last, first
+		ORDER BY tc.bunk_number, last, first
 ";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-	$info[$row['gender']][$row['school_name']][] = $row;
+	$info[$row['gender']][$row['bunk_number']][] = $row;
 }
 //echo "<pre>"; print_r( $info ); echo "</pre>";
 ?>
@@ -44,9 +42,9 @@ while ($row = mysql_fetch_assoc($result)) {
 	<body>	
 		<?php 
 			foreach ($info as $gender => $more) {
-				foreach ( $more as $school => $other ) { 
+				foreach ( $more as $bunk => $other ) { 
 					?>
-					<h3><?= $school ?></h3><hr /><br />
+					<h3><?= $bunk ?></h3><hr /><br />
 					<table>
 						<caption>Sandwiches</caption>
 						<tr>   
@@ -57,7 +55,6 @@ while ($row = mysql_fetch_assoc($result)) {
 						</tr>
 						<?php
 						foreach ($other as $row) {
-							// find out walking counselor 
 							echo "<tr><td>" . $gender . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['sandwich'] . "</td></tr>";
 						}
 						?>
