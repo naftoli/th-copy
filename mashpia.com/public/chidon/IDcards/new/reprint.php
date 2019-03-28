@@ -19,7 +19,6 @@ function getStaffInfo( $groups ) {
     WHERE
         group_number in (\"$groupList\")  
             AND staff_type_id IN (1,6,9) 
-            AND tc.not_printed = 1
   ";
   $result = mysql_query( $sql );
   while ( $row = mysql_fetch_assoc( $result ) ) {
@@ -62,6 +61,7 @@ $sql = "
           AND tcc.chap_type = 1 
           AND tcc.chidon_type = 'girls' 
           AND tcc.year = $year 
+          AND tc.not_printed = 1
   GROUP BY tc.user_id  
   ORDER BY s.school_name, tc.grade, u.last, u.first
 ";
