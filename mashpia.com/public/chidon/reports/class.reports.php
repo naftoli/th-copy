@@ -126,9 +126,9 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  'walking',
             ),
-            'walking_zone'   =>  array(
+            'walking_group'   =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  'walking_zone'
+                'column'    =>  'walking_group'
             ),
             'winner_type'   =>  array(
                 'table'     =>  'th_chidon',
@@ -204,13 +204,13 @@ class Reports
                 'table'     =>  'th_chidon_chaps',
                 'column'    =>  'walking_zone as chap_walking_zone'
             ),
-            'bunk'      =>  array(
+            'bunk_number'      =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  'bunk'
+                'column'    =>  'bunk_number'
             ),
-            'team'      =>  array(
+            'team_id'      =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  'team'
+                'column'    =>  'team_id'
             ),
             'counselor_info'    =>  array(
                 'table'     =>  'counselors',
@@ -224,18 +224,18 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  array('plaque', 'plaque_number')
             ),
-            'bus'       =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'bus_number as bus'
-            ),
-            'seat'      =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'seat_number as seat'
-            ),
-            'waiver'    =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'waiver'
-            ),
+            // 'bus'       =>  array(
+            //     'table'     =>  'th_chidon',
+            //     'column'    =>  'bus_number as bus'
+            // ),
+            // 'seat'      =>  array(
+            //     'table'     =>  'th_chidon',
+            //     'column'    =>  'seat_number as seat'
+            // ),
+            // 'waiver'    =>  array(
+            //     'table'     =>  'th_chidon',
+            //     'column'    =>  'waiver'
+            // ),
             'parent_id'   =>  array(
                 'table'     =>  'admins',
                 'column'    =>  'admin_id as parent_id',
@@ -406,14 +406,14 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  'bowling_lane'
             ),
-            'dropoff_bus'   =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'dropoff_bus'
-            ),
-            'dropoff_seat'  =>  array(
-                'table'     =>  'th_chidon',
-                'column'    =>  'dropoff_seat'
-            ),
+            // 'dropoff_bus'   =>  array(
+            //     'table'     =>  'th_chidon',
+            //     'column'    =>  'dropoff_bus'
+            // ),
+            // 'dropoff_seat'  =>  array(
+            //     'table'     =>  'th_chidon',
+            //     'column'    =>  'dropoff_seat'
+            // ),
             'coach_bus'     =>  array(
                 'table'     =>  'th_chidon',
                 'column'    =>  'coach_bus'
@@ -422,9 +422,13 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  'school_bus'
             ),
-            'double_decker' =>  array(
+            'open_air_bus' =>  array(
                 'table'     =>  'th_chidon',
-                'column'    =>  'double_decker'
+                'column'    =>  'open_air_bus'
+            ),
+            'sunday_pm_bus' =>  array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'sunday_pm_bus'
             ),
             'seat_type'     =>  array(
                 'table'     =>  'th_chidon',
