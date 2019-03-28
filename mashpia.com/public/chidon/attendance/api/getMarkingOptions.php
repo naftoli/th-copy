@@ -12,10 +12,14 @@ if ( !$sm->setStaffByID( $login ) ) render_json_error("Invalid Staff ID", $_POST
 $times = [];
 $timesInfo = $sm->getTimes( $_POST['groups'] );
 foreach ( $timesInfo as $time_entry ) {
+    $time = $time_entry['att_time'];
+    $timeDetails = explode(' ', $time);
+    $time = ucfirst( $time_entry['day_of_week'] ) . ' ' . $timeDetails[1];
     $times[] = [
         "key" => $time_entry['att_time_id'],
         "type" => $time_entry['att_type'],
-        "description" => $time_entry['description']
+        "description" => $time_entry['short_name'], 
+        "time"  =>  $time
     ];
 }
 

@@ -116,7 +116,7 @@ var app = function() {
         rendered_options = "";
         for( var i = 0; i < options.length; i++ ) {
             var option = options[i];
-            rendered_options += "<option value='" + option.key + "' data-type='" + option.type + "'>" + option.type + '-' + option.description + "</option>";
+            rendered_options += "<option value='" + option.key + "' data-type='" + option.type + "'>" + option.time + ' : ' + option.type + ' - ' + option.description + "</option>";
         }
         
         $("select#timeDropdown").html( rendered_options );
