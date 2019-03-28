@@ -137,6 +137,7 @@ body{
   padding: 0px;
   display: table;
   margin: 0px auto;
+  margin-top: -6px;
 }
 #pricing-table .pricing .pricing-list ul li {
   list-style: none;
