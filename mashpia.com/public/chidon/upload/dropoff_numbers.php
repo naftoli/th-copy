@@ -2,20 +2,11 @@
 ini_set('display_errors',1);
 require __DIR__ . "/../../db.php";
 $qrys = [];
-$headers = ['th_chidon_id', 'host_street_num', 'host_street_num_suffix', 'host_street', 'host_street_apt', 'between_streets1', 'between_streets2', 
-    'host_number', 'walking_group', 'dropoff_number'];
 if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   $row = 0;
-  $numFields = count( $headers );
   while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
     if ( $row++ < 1 ) continue;
-    $qry = "update th_chidon set ";
-    for ( $i = 1; $i < $numFields; $i++ ) {
-      $qry .= $headers[$i] . " = '" . $data[$i] . "',";
-    }
-    $qry .= " not_printed = 1";
-    //$qry = substr( $qry, 0, strlen( $qry ) - 1 );
-    $qry .= " where th_chidon_id = " . $data[0];
+    $qry = "update th_chidon set walking_group = '" . $data[1] . "', dropoff_number = '" . $data[2] . "' where th_chidon_id = " . $data[0];
     $qrys[] = $qry;
   }
   fclose($handle);
@@ -45,7 +36,7 @@ echo "done.";
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   </head>
   <body>
-    <form action="updates.php" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+    <form action="dropoff_numbers.php" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
       <label>Upload your spreadsheet
       <br /><input type="file" name="file" class="file"></label>
       <br /><input type="submit" name="submit" value="upload" />
