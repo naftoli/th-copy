@@ -157,7 +157,7 @@ body{
   /* color: #34495e; */
   font-weight: bold;
   font-size: 42pt;
-  padding-right: 4px;
+  padding-right: 12px;
 }
 #bottom-table .pricing .pricing-list ul li span { 
 	font-size: 100px;	
