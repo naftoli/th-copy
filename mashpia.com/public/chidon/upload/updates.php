@@ -2,7 +2,8 @@
 ini_set('display_errors',1);
 require __DIR__ . "/../../db.php";
 $qrys = [];
-$headers = ['th_chidon_id', 'host_street_num', 'host_street_num_suffix', 'host_street', 'host_street_apt', 'between_streets1', 'between_streets2'];
+$headers = ['th_chidon_id', 'host_street_num', 'host_street_num_suffix', 'host_street', 'host_street_apt', 'between_streets1', 'between_streets2', 
+    'host_number', 'walking_group', 'dropoff_number'];
 if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   $row = 0;
   $numFields = count( $headers );
