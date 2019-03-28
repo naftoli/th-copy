@@ -6,7 +6,7 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   $row = 0;
   while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
     if ( $row++ < 1 ) continue;
-    $qry = "update th_chidon set dropoff_number = '" . $data[1] . "' where th_chidon_id = " . $data[0];
+    $qry = "update th_chidon set walking_group = '" . $data[1] . "', dropoff_number = '" . $data[2] . "' where th_chidon_id = " . $data[0];
     $qrys[] = $qry;
   }
   fclose($handle);
