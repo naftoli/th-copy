@@ -1,0 +1,84 @@
+%!Adobe-FontList 1.19
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:AdobeHebrew-Regular
+FamilyName:Adobe Hebrew
+StyleName:Regular
+FullName:Adobe Hebrew Regular
+MenuName:Adobe Hebrew
+StyleBits:0
+FamilyNameNative:Adobe Hebrew
+StyleNameNative:Regular
+FullNameNative:Adobe Hebrew Regular
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Chidon\Chidon 5779\Event\Video Screens\Chidon Slides\Scoreboards Folder\Document fonts\AdobeHebrew-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:73492
+FileModTime:1329328336
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,Adobe Hebrew
+NameArray:0,Mac,4,Adobe Hebrew Regular
+NameArray:0,Win,1,Adobe Hebrew
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:GothamNarrow-Bold
+FamilyName:Gotham Narrow
+StyleName:Bold
+FullName:Gotham Narrow Bold
+MenuName:Gotham Narrow Bold
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Chidon\Chidon 5779\Event\Video Screens\Chidon Slides\Scoreboards Folder\Document fonts\GothamNarrow-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:176412
+FileModTime:1221168868
+WeightClass:400
+WidthClass:3
+AngleClass:0
+NameArray:0,Mac,4,Gotham Narrow Bold
+NameArray:0,Win,1,Gotham Narrow Bold
+NameArray:0,Win,16,Gotham Narrow
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Oskar
+FamilyName:Oskar
+StyleName:Regular
+FullName:Oskar
+MenuName:Oskar
+StyleBits:0
+FamilyNameNative:Oskar
+StyleNameNative:Regular
+FullNameNative:Oskar Regular
+WritingScript:Hebrew
+OutlineFileName:C:\Users\Chaya\Dropbox\CTH\Chidon\Chidon 5779\Event\Video Screens\Chidon Slides\Scoreboards Folder\Document fonts\OskarRegular_0.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:49116
+FileModTime:1371598521
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Oskar
+NameArray:0,Win,1,Oskar
+%EndFont
+
