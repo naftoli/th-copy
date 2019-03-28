@@ -12,15 +12,17 @@ $sql = "
 						JOIN
 				users u USING (user_id)
 		WHERE
-				tc.year = $year AND tc.date_paid > 0
+        tc.year = $year AND tc.date_paid > 0 
+            AND u.gender = 'F'
 		GROUP BY user_id
-		ORDER BY tc.bunk_number, last, first
+		ORDER BY last, first
 ";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-	$info[$row['gender']][$row['bunk_number']][] = $row;
+	$info[intval($row['bunk_number'])][] = $row;
 }
-//echo "<pre>"; print_r( $info ); echo "</pre>";
+ksort( $info );
+//echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
@@ -41,28 +43,25 @@ while ($row = mysql_fetch_assoc($result)) {
 	
 	<body>	
 		<?php 
-			foreach ($info as $gender => $more) {
-				foreach ( $more as $bunk => $other ) { 
+			foreach ($info as $bunk => $other ) { 
 					?>
-					<h3><?= $bunk ?></h3><hr /><br />
+					<h3>Bunk #: <?= $bunk ?></h3><hr /><br />
 					<table>
 						<caption>Sandwiches</caption>
 						<tr>   
-              <th>Gender</th>  
 							<th>First Name</th>
 							<th>Last Name</th>
 							<th>Sandwich</th>
 						</tr>
 						<?php
 						foreach ($other as $row) {
-							echo "<tr><td>" . $gender . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['sandwich'] . "</td></tr>";
+							echo "<tr><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['sandwich'] . "</td></tr>";
 						}
 						?>
 					</table>
 					<div style="page-break-after: always;"></div>
 					<?php
 				}
-			}
 		?>
 	</body>
 </html>
