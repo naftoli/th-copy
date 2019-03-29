@@ -204,10 +204,10 @@ child_item.prototype.render = function() {
     html +=             '<input type="checkbox" ' + (this.props.marked ? "checked" : "") + ' data-th_chidon_id="' + this.props.th_chidon_id + '" class="mark"/>';
     html +=             '<span class="checkbox"></span>';
     html +=             '<span class="name"> ' + this.props.first + ' ' + this.props.last + ' </span><br/>';
-    if (this.type === "door")
+    //if (this.type === "door")
         html +=         'School: ' + this.props.school_name + "<br/>";
-    html +=             'Chidon #' + this.props.th_chidon_id + "<br/>";
-    html +=             'Serial #' + this.props.user_serial + "<br/>";
+    // html +=             'Chidon #' + this.props.th_chidon_id + "<br/>";
+    // html +=             'Serial #' + this.props.user_serial + "<br/>";
     if (this.type === "walk")
         html +=         'Walking Zone #' + this.props.walking_zone + "<br/>";
     html +=         '</div>';
