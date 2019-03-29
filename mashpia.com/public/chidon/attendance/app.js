@@ -63,18 +63,26 @@ var app = function() {
 
     function setupGroupInfo() {
         let groups = state.info.assignments;
-        console.log( groups );
+        let counselors = state.info.assignments.counselors;
+        let walking_counselors = state.info.assignments.walking_counselors;
+        console.log( counselors );
+        console.log( walking_counselors );
         
         for ( group_type in groups ) {
+            if ( group_type == 'counselors' ) continue; 
             let html = '<div class="columns is-mobile">';
             i = 1;
             for ( group in groups[group_type] ) {
                 if ( groups[group_type][group] ) {
                     html += `
                         <div class='column is-one-fifth'>
-                            <input type='checkbox' class='checkbox group' value='${groups[group_type][group]}' /> ${groups[group_type][group]}
-                        </div>
-                    `;
+                            <input type='checkbox' class='checkbox group' value='${groups[group_type][group]}' /> ${groups[group_type][group]} 
+                        `;
+                    let id = groups[group_type][group];
+                    if ( group_type == 'bunk' ) html += `(<i>${counselors[id]}</i>)`;
+                    else if ( group_type == 'walking_group' ) html += `(<i>${walking_counselors[id]}</i>)`;
+                    html += '</div>';
+
                     if ( i++ % 5 == 0 ) {
                         html += '</div><div class="columns is-mobile">';
                     }
@@ -204,10 +212,10 @@ child_item.prototype.render = function() {
     html +=             '<input type="checkbox" ' + (this.props.marked ? "checked" : "") + ' data-th_chidon_id="' + this.props.th_chidon_id + '" class="mark"/>';
     html +=             '<span class="checkbox"></span>';
     html +=             '<span class="name"> ' + this.props.first + ' ' + this.props.last + ' </span><br/>';
-    if (this.type === "door")
+    //if (this.type === "door")
         html +=         'School: ' + this.props.school_name + "<br/>";
-    html +=             'Chidon #' + this.props.th_chidon_id + "<br/>";
-    html +=             'Serial #' + this.props.user_serial + "<br/>";
+    // html +=             'Chidon #' + this.props.th_chidon_id + "<br/>";
+    // html +=             'Serial #' + this.props.user_serial + "<br/>";
     if (this.type === "walk")
         html +=         'Walking Zone #' + this.props.walking_zone + "<br/>";
     html +=         '</div>';
