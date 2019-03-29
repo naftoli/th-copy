@@ -90,6 +90,7 @@ body{
   position: relative;
   text-align: center;
   font-family: digi;
+  padding-right: 25px;
 }
 #bottom-table .pricing .pricing-table .pricing-header .pricing-rate { 
   font-size: 260px;	
