@@ -178,6 +178,7 @@ class StaffManager
         }
       }
     }
+    sort( $this->assignments['bunk'] );
   }
 
   private function setTypes() {
