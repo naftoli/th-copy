@@ -79,8 +79,8 @@ var app = function() {
                             <input type='checkbox' class='checkbox group' value='${groups[group_type][group]}' /> ${groups[group_type][group]} 
                         `;
                     let id = groups[group_type][group];
-                    if ( group_type == 'bunk' ) html += `(<i>${counselors[id].join(',')}</i>)`;
-                    else if ( group_type == 'walking_group' ) html += `(<i>${walking_counselors[id].join(',')}</i>)`;
+                    if ( group_type == 'bunk' && counselors[id] ) html += `(<i>${counselors[id].join(',')}</i>)`;
+                    else if ( group_type == 'walking_group' && walking_counselors[id] ) html += `(<i>${walking_counselors[id].join(',')}</i>)`;
                     html += '</div>';
 
                     if ( i++ % 5 == 0 ) {
