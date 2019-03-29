@@ -87,6 +87,11 @@ var app = function() {
             $( type ).show();
         }
         $("#buttons").show();
+        $(".toggleAll").click( function() {
+            $(this).parent().find(".group").each( function() {
+                $(this).trigger('click');
+            });
+        });
     }
 
     function updateTimes( groupList ) {
