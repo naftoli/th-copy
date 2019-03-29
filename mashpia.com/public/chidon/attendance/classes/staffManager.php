@@ -179,6 +179,45 @@ class StaffManager
       }
     }
     sort( $this->assignments['bunk'] );
+    // find out the counselors for each bunk in array
+    $counselors = [];
+    foreach ( $this->assignments['bunk'] as $bunk ) {
+      $stmt = $this->db->prepare("
+        SELECT 
+            first_name, last_name
+        FROM
+            th_chidon_staff_assignments sa
+                JOIN
+            th_chidon_staff s USING (staff_id)
+        WHERE
+            staff_type_id = 1 AND group_number = :bunk
+      ");
+      $res = $stmt->execute([ 'bunk' => intval( $bunk ) ]);
+      if ( $res ) {
+        $row = $stmt->fetch();
+        $counselors[$bunk] = $row['first_name'] . ' ' . $row['last_name'];
+      }
+    }
+    $this->assignments['counselors'] = $counselors;
+    $walking_counselors = [];
+    foreach ( $this->assignments['walking_group'] as $group ) {
+      $stmt = $this->db->prepare("
+        SELECT 
+            first_name, last_name
+        FROM
+            th_chidon_staff_assignments sa
+                JOIN
+            th_chidon_staff s USING (staff_id)
+        WHERE
+            staff_type_id = 8 AND group_number = :bunk
+      ");
+      $res = $stmt->execute([ 'bunk' => intval( $group ) ]);
+      if ( $res ) {
+        $row = $stmt->fetch();
+        $walking_counselors[$group] = $row['first_name'] . ' ' . $row['last_name'];
+      }
+    }
+    $this->assignments['walking_counselors'] = $walking_counselors;
   }
 
   private function setTypes() {
