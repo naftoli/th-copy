@@ -8,6 +8,8 @@ class StaffManager
   private $year;
   private $staffID;
   private $superAdmin;
+  private $chaperone;
+  private $chapID;
   private $personalInfo;
   private $assignments;
   private $roles;
@@ -20,6 +22,8 @@ class StaffManager
     $this->db = $MASHPIA_DB;
     $this->staffID = 0;
     $this->superAdmin = false;
+    $this->chaperone = false;
+    $this->chapID = 0;
     $this->personalInfo = [];
     $this->assignments = [];
     $this->roles = [];
@@ -42,6 +46,10 @@ class StaffManager
         $this->staffID = intval( $row['staff_id'] );
         $this->personalInfo = $row;
         if ( intval( $row['super_admin'] ) ) $this->superAdmin = true;
+        if ( intval( $row['chap_id'] ) ) {
+          $this->chaperone = true;
+          $this->chapID = intval( $row['chap_id'] );
+        }
       }
     }
     if ( $this->staffID ) return true;
@@ -57,6 +65,10 @@ class StaffManager
         $this->staffID = intval( $row['staff_id'] );
         $this->personalInfo = $row;
         if ( intval( $row['super_admin'] ) ) $this->superAdmin = true;
+        if ( intval( $row['chap_id'] ) ) {
+          $this->chaperone = true;
+          $this->chapID = intval( $row['chap_id'] );
+        }
         return true;
       }
     }
@@ -119,6 +131,52 @@ class StaffManager
         if ( !in_array( $row['group_number'], $this->assignments[$row['type']] ) ) $this->assignments[$row['type']][] = $row['group_number'];
         if ( !in_array( $row['role'], $this->roles ) ) $this->roles[] = $row['role'];
       }
+      // if chaperone add all other bunks
+      if ( $this->chaperone ) {
+        $this->roles[] = 'chaperone';
+        $stmt = $this->db->prepare("
+          SELECT 
+              bunk_number
+          FROM
+              th_chidon
+          WHERE
+              school_id = (SELECT 
+                      school_id
+                  FROM
+                      th_chidon_chaps
+                  WHERE
+                      th_chidon_chap_id = :chap_id)
+          GROUP BY bunk_number
+        ");
+        $res = $stmt->execute([ ':chap_id'  =>  $this->chapID ]);
+        if ( $res ) {
+          $rows = $stmt->fetchAll();
+          foreach ( $rows as $row ) {
+            if ( $row['bunk_number'] ) $this->assignments['bunk'][] = $row['bunk_number'];
+          }
+        }
+        $stmt = $this->db->prepare("
+          SELECT 
+              walking_group
+          FROM
+              th_chidon
+          WHERE
+              school_id = (SELECT 
+                      school_id
+                  FROM
+                      th_chidon_chaps
+                  WHERE
+                      th_chidon_chap_id = :chap_id)
+          GROUP BY walking_group
+        ");
+        $res = $stmt->execute([ ':chap_id'  =>  $this->chapID ]);
+        if ( $res ) {
+          $rows = $stmt->fetch();
+          foreach ( $rows as $row ) {
+            if ( $row['walking_group'] ) $this->assignments['walking_group'][] = $row['walking_group'];
+          }
+        }
+      }
     }
   }
 
@@ -167,11 +225,8 @@ class StaffManager
           t.*
       FROM
           th_chidon_attendance_times t
-              JOIN
-          th_chidon_staff_assignments sa ON sa.group_number = t.att_type_number
       WHERE
-          sa.staff_id = :staff_id
-              AND t.att_type_number IN (\"$listOfGroups\")
+          t.att_type_number IN (\"$listOfGroups\")
       GROUP BY att_type, att_time
     ");
     $res = $stmt->execute([ ':staff_id' => $this->staffID ]);
