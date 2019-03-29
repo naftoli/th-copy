@@ -192,10 +192,10 @@ class StaffManager
         WHERE
             staff_type_id = 1 AND group_number = :bunk
       ");
-      $res = $stmt->execute([ 'bunk' => intval( $bunk ) ]);
+      $res = $stmt->execute([ ':bunk' => intval( $bunk ) ]);
       if ( $res ) {
-        $row = $stmt->fetch();
-        $counselors[$bunk] = $row['first_name'] . ' ' . $row['last_name'];
+        $rows = $stmt->fetchAll();
+        foreach ( $rows as $row ) $counselors[$bunk][] = $row['first_name'] . ' ' . $row['last_name'];
       }
     }
     $this->assignments['counselors'] = $counselors;
@@ -209,12 +209,13 @@ class StaffManager
                 JOIN
             th_chidon_staff s USING (staff_id)
         WHERE
-            staff_type_id = 8 AND group_number = :bunk
+            staff_type_id = 8 AND group_number = :group
       ");
-      $res = $stmt->execute([ 'bunk' => intval( $group ) ]);
+      $res = $stmt->execute([ ':group' => intval( $group ) ]);
       if ( $res ) {
-        $row = $stmt->fetch();
-        $walking_counselors[$group] = $row['first_name'] . ' ' . $row['last_name'];
+        $rows = $stmt->fetchAll();
+        foreach ( $rows as $row )
+          $walking_counselors[$group][] = $row['first_name'] . ' ' . $row['last_name'];
       }
     }
     $this->assignments['walking_counselors'] = $walking_counselors;
