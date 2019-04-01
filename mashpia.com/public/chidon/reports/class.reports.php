@@ -148,6 +148,10 @@ class Reports
                 'column'    => 'class_teacher'
             ),
 
+            'chap_id'   =>  array(
+                'table'     =>  'th_chidon_chaps',
+                'column'     =>  'th_chidon_chap_id as chap_id'
+            ),
             'chap_type'     =>  array(
                 'table'     =>  'th_chidon_chaps', 
                 'column'    =>  'chap_type'
@@ -487,7 +491,7 @@ class Reports
                     $tables[$table][] = $this->fields[$field]['column'];
                 } 
             }
-            //echo "<pre>"; print_r($tables); echo "</pre>";
+            //echo "<pre>"; print_r($tables); echo "</pre>"; exit;
             
             $sql = "select ";
             foreach ($tables as $table => $other) {

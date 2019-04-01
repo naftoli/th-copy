@@ -77,8 +77,9 @@ $info = array(
 		'donations'		=>	'Number of Trips Sponsored'
 	),
 	'Chaperone Info'	=>	array(
+		'chap_id'			=>	'Chaperone ID',
 		'chap_type'		=>	'Chaperone / Walking Counselor',
-		'chap_name'		=>	'Name',
+		// 'chap_name'		=>	'Name',
 		'chap_first_name'	=>	'Chap First Name',
 		'chap_last_name'	=>	'Chap Last Name',
 		'chap_phone'	=>	'Chap Contact Number',
@@ -179,7 +180,7 @@ if (isset($_POST['submit'])) {
 	else $root = 'th_chidon';
 	
 	//echo $root; exit;
-	
+		//echo "<pre>"; print_r( $data ); echo "</pre>"; exit;
     if ($sql = $r->createSQL($data, $root, $gender, $limit, $chidonType)) {
 		echo "<input type='hidden' name='sql' value=\"" . $sql . "\" />";
 		echo "<input type='hidden' name='root' value='" . $root . "' />";
