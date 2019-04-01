@@ -222,3 +222,35 @@
   font-size: 7pt;
   font-family: gotham;
 }
+.staffInfo {
+  font-family: gotham;
+  font-size: 10pt;
+  color: #fff;
+  top: 3.85in;
+  position: absolute;
+  left: 2in;
+  text-align: center;
+  width: 1.58in;
+  line-height: 1.6;
+  height: 0.65in;
+}
+.role {
+  transform: rotate(-90deg);
+  font-family: gothamBlack;
+  font-size: 28pt;
+  color: #fff;
+  position: absolute;
+  left: -0.4in;
+  top: 2.3in;
+}
+.headCounselor {
+  font-size: 26pt;
+  position: absolute;
+  left: -0.9in;
+  top: 2.1in;
+}
+.safetyOfficer {
+  font-size: 26pt;
+  left: -0.7in;
+  top: 2.1in;
+}
