@@ -241,25 +241,25 @@
   color: #fff;
   position: absolute;
   left: -0.4in;
-  top: 2.3in;
+  top: 1.9in;
 }
 .headCounselor {
-  font-size: 26pt;
+  font-size: 24pt;
   position: absolute;
-  left: -0.9in;
-  top: 2.1in;
+  left: -0.7in;
+  top: 1.85in;
 }
 .safetyOfficer {
   font-size: 26pt;
   left: -0.7in;
-  top: 2.1in;
+  top: 1.9in;
 }
 .staffName {
   color: #fff;
   top: 2.4in;
 }
 .busInfo {
-  top: 4.15in;
+  top: 4in;
   position: absolute;
   color: #fff;
   font-family: gotham;
