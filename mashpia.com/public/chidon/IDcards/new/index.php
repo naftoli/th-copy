@@ -57,9 +57,9 @@ $sql = "
       th_chidon_teams t ON t.team_id = tc.team_id
   WHERE
       tc.year = $year AND tc.date_paid > 0
-          AND u.gender = 'F'
+          AND u.gender = 'M'
           AND tcc.chap_type = 1 
-          AND tcc.chidon_type = 'girls' 
+          AND tcc.chidon_type = 'boys' 
           AND tcc.year = $year 
   GROUP BY tc.user_id  
   ORDER BY s.school_name, tc.grade, u.last, u.first
