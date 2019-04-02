@@ -85,22 +85,20 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             Walking Group <?= $row['group_number'] ?>
           </div>
           <div class="busInfo">
-            <img src="icons/bus icon.png" />
-            <span class="bus">Bus</span><br />
             <div class="busDetails">
-              <div class="busDay">Thurs</div>
+              <div class="busDay">School Bus</div>
               <div class="busNum">53</div>
             </div>
-            <div class="busDetails busRight">
-              <div class="busDay">Fri</div>
+            <div class="busDetails">
+              <div class="busDay">Open Air Bus</div>
               <div class="busNum">61</div>
             </div>
             <div class="busDetails">
-              <div class="busDay">Sun AM</div>
+              <div class="busDay">Coach Bus</div>
               <div class="busNum">22</div>
             </div>
-            <div class="busDetails busRight" style="top: -.47in;">
-              <div class="busDay">Sun PM</div>
+            <div class="busDetails">
+              <div class="busDay">Sun PM Bus</div>
               <div class="busNum">33</div>
             </div>
           </div>                
