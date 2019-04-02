@@ -211,7 +211,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                   <span class='number'><?= $row['open_air_bus'] ?>
                 </div>
                 <div style="clear: both"></div>
-                <?php endif; ?>
+              <?php endif; ?>
               <div class="coach_bus">
                 <img src="icons/icon double decker.png" />
                 <span class="busInfo">Coach Bus</span><br />

@@ -16,7 +16,8 @@ $sql = "
       th_chidon_types t ON t.th_chidon_type_id = sa.staff_type_id
   WHERE
       staff_type_id in (1,2,3) 
-          and year = $year 
+          AND year = $year 
+          AND s.gender = 'boys' 
 ";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
@@ -84,22 +85,24 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             Bunk <?= $row['group_number']?> <br />
             Walking Group <?= $row['group_number'] ?>
           </div>
-          <div class="busInfo">
+          <div class="staffBusInfo">
             <div class="busDetails">
               <div class="busDay">School Bus</div>
-              <div class="busNum">53</div>
+              <div class="busNum"><?= $row['school_bus'] ?></div>
             </div>
-            <div class="busDetails">
-              <div class="busDay">Open Air Bus</div>
-              <div class="busNum">61</div>
-            </div>
+            <?php if ( $row['grade'] == 6 ) : ?>
+              <div class="busDetails">
+                <div class="busDay">Open Air Bus</div>
+                <div class="busNum"><?= $row['open_air_bus'] ?></div>
+              </div>
+            <?php endif; ?>
             <div class="busDetails">
               <div class="busDay">Coach Bus</div>
-              <div class="busNum">22</div>
+              <div class="busNum"><?= $row['coach_bus'] ?></div>
             </div>
             <div class="busDetails">
               <div class="busDay">Sun PM Bus</div>
-              <div class="busNum">33</div>
+              <div class="busNum"><?= $row['sunday_pm_bus'] ?></div>
             </div>
           </div>                
         </div>
