@@ -14,7 +14,7 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
     for ( $i = 1; $i < $numFields; $i++ ) {
       $qry .= $headers[$i] . " = '" . $data[$i] . "',";
     }
-    $qry .= " walking = 0,";
+    $qry .= " walking = 1,";
     $qry .= " not_printed = 1";
     //$qry = substr( $qry, 0, strlen( $qry ) - 1 );
     $qry .= " where th_chidon_id = " . $data[0];
