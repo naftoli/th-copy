@@ -18,7 +18,8 @@ function getStaffInfo( $groups ) {
         th_chidon_types t ON t.th_chidon_type_id = sa.staff_type_id
     WHERE
         group_number in (\"$groupList\")  
-            AND staff_type_id IN (1,6,9)
+            AND staff_type_id IN (1,6,9) 
+            AND s.gender = 'boys' 
   ";
   $result = mysql_query( $sql );
   while ( $row = mysql_fetch_assoc( $result ) ) {

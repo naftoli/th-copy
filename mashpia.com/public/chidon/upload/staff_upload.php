@@ -19,7 +19,7 @@ function extractList( $list ) {
 
 $qrys = [];
 $positions = [];
-$headers = ['super_admin', 'chap_id', 'first_name', 'last_name', 'sweater_size', 'school_bus', 'open_air_bus', 'coach_bus', 'sunday_pm_bus', 'team_id', 'bowling_lane', 'address', 'email', 'cell', 'grade'];
+$headers = ['chap_id', 'sweater_size', 'first_name', 'last_name', 'cell', 'grade', 'gender'];
 if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   $row = 0;
   $numFields = count( $headers );
@@ -32,14 +32,15 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
       $qry .= $headers[$i] . " = \"" . $data[$i] . "\",";
     }
 
-    $username = str_replace("'", '', ucfirst( $data[2] ) . ucfirst( $data[3] ));
+    $username = str_replace("'", '', ucfirst( trim( $data[2] ) ) . ucfirst( trim( $data[3] ) ) );
     $username .= $year;
     $password = 'shabbaton';
-    $qry .= " username = '" . $username . "', password = '" . $password . "', year = " . $year;
+    // only add username / password if not counselor
+    if ( intval( $data[$numFields] ) != 1 ) $qry .= " username = '" . $username . "', password = '" . $password . "', year = " . $year;
     $qrys[$row] = $qry;
 
     // figure out positions and groups
-    $max = $numFields + 6;
+    $max = $numFields + 5;
     for ( $f = $numFields; $f <= $max; $f += 2 ) {
       if ( $data[$f] ) {
         $group = $data[$f+1];
