@@ -2,7 +2,7 @@
 ini_set('display_errors',1);
 require __DIR__ . "/../../db.php";
 $qrys = [];
-$headers = ['th_chidon_id', 'school_bus', 'coach_bus', 'open_air_bus', 'sunday_pm_bus', 'team_id','test_table', 'bowling_lane', 'bunk_number', 'kol_hatorah', 'cert_number', 'round_number'];
+$headers = ['th_chidon_id', 'school_bus', 'coach_bus', 'open_air_bus', 'sunday_pm_bus', 'team_id', 'test_table', 'bowling_lane', 'bunk_number', 'kol_hatorah', 'cert_number', 'round_number'];
 if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   $row = 0;
   $numFields = count( $headers );
