@@ -258,7 +258,7 @@
   color: #fff;
   top: 2.4in;
 }
-.busInfo {
+/* .busInfo {
   top: 4in;
   position: absolute;
   color: #fff;
@@ -271,7 +271,7 @@
   height: 20px !important;
   padding-right: 5px;
   float: left;
-}
+} */
 .busDetails {
   width: 0.3in;
   margin-top: 5px;
