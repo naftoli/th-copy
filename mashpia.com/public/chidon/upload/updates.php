@@ -9,6 +9,7 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   $numFields = count( $headers );
   while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
     if ( $row++ < 1 ) continue;
+    if ( empty( $data[0] ) ) continue;
     $qry = "update th_chidon set ";
     for ( $i = 1; $i < $numFields; $i++ ) {
       $qry .= $headers[$i] . " = '" . $data[$i] . "',";
