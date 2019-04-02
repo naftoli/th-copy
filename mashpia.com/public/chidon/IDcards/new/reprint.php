@@ -19,6 +19,7 @@ function getStaffInfo( $groups ) {
     WHERE
         group_number in (\"$groupList\")  
             AND staff_type_id IN (1,6,9) 
+            AND s.gender = 'boys' 
   ";
   $result = mysql_query( $sql );
   while ( $row = mysql_fetch_assoc( $result ) ) {
@@ -57,9 +58,9 @@ $sql = "
       th_chidon_teams t ON t.team_id = tc.team_id
   WHERE
       tc.year = $year AND tc.date_paid > 0
-          AND u.gender = 'F'
+          AND u.gender = 'M'
           AND tcc.chap_type = 1 
-          AND tcc.chidon_type = 'girls' 
+          AND tcc.chidon_type = 'boys' 
           AND tcc.year = $year 
           AND tc.not_printed = 1
   GROUP BY tc.user_id  

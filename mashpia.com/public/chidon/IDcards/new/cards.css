@@ -258,23 +258,10 @@
   color: #fff;
   top: 2.4in;
 }
-/* .busInfo {
-  top: 4in;
-  position: absolute;
-  color: #fff;
-  font-family: gotham;
-  height: 1in;
-  left: 0.625in;
-}
-.busInfo img {
-  width: 30px !important;
-  height: 20px !important;
-  padding-right: 5px;
-  float: left;
-} */
 .busDetails {
-  width: 0.3in;
-  margin-top: 5px;
+  width: 50px;
+  font-family: gotham;
+  font-size: 9pt;
 }
 .busDay {
   font-size: 6pt;
@@ -283,4 +270,10 @@
   position: relative;
   float: right;
   top: -0.36in;
+}
+.staffBusInfo {
+  position: relative;
+  top: -1.85in;
+  color: #fff;
+  left: 0.5in;
 }
