@@ -43,6 +43,19 @@ foreach ( $info as $staff_id => $more ) {
     ];
   }
 }
+
+// find out if there's any walking group info for every staff member
+$walkingInfo = [];
+foreach ( $info as $id => $more ) {
+  $sql = "select group_number from th_chidon_staff_assignments where staff_type_id in (8,9,10,11,12,13) and staff_id = " . $id;
+  $result = mysql_query( $sql );
+  $walkingGroups = '';
+  while ( $row = mysql_fetch_assoc( $result ) ) {
+    $walkingGroups .= $row['group_number'] . ',';
+  }
+  $walkingGroups = substr( $walkingGroups, 0, strlen( $walkingGroups) - 1 );
+  if ( !empty( $walkingGroups ) ) $walkingInfo[$id] = $walkingGroups;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -109,10 +122,13 @@ foreach ( $info as $staff_id => $more ) {
             
             $groups = $staff[$id][$type];
             if ( $groups['start'] == $groups['end'] ) echo " / Bunk " . $groups['start'];
-            else echo "<br />Bunks " . $groups['start'] . ' - ' . $groups['end'];
+            else {
+              if ( !empty( $row['grade'] ) ) echo "<br />";
+              echo "Bunks " . $groups['start'] . ' - ' . $groups['end'];
+            }
+
+            if ( isset( $walkingInfo[$id] ) ) echo "<br />Walking Group " . $walkingInfo[$id];
             ?>
-            <br />
-            <!-- Walking Group <?= $row['group_number'] ?> -->
           </div>
           <div class="staffBusInfo">
             <div class="busDetails">
