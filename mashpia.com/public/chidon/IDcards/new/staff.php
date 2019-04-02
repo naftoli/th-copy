@@ -5,6 +5,7 @@ require __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $info = [];
+$staffInfo = [];
 $sql = "
  SELECT 
       * 
@@ -21,9 +22,40 @@ $sql = "
 ";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
-  $info[] = $row;
+  $info[$row['staff_id']][$row['staff_type_id']][$row['group_number']] = 1;
+  $staffInfo[$row['staff_id']] = $row;
 }
-//echo "<pre>"; print_r( $info[0] ); echo "</pre>";
+//echo "<pre>"; print_r( $info ); echo "</pre>"; 
+// create array with range of bunks with safety officer taking precedence
+$staff = [];
+foreach ( $info as $staff_id => $more ) {
+  krsort( $info[$staff_id] );
+}
+foreach ( $info as $staff_id => $more ) {
+  foreach ( $more as $type => $other ) {
+    if ( isset( $staff[$staff_id][$type] ) ) continue; // we already have this staff member in a higher capacity
+    $start = key( $other );
+    end( $other );
+    $end = key( $other );
+    $staff[$staff_id][$type] = [
+      'start' =>  $start,
+      'end'   =>  $end
+    ];
+  }
+}
+
+// find out if there's any walking group info for every staff member
+$walkingInfo = [];
+foreach ( $info as $id => $more ) {
+  $sql = "select group_number from th_chidon_staff_assignments where staff_type_id in (8,9,10,11,12,13) and staff_id = " . $id;
+  $result = mysql_query( $sql );
+  $walkingGroups = '';
+  while ( $row = mysql_fetch_assoc( $result ) ) {
+    $walkingGroups .= $row['group_number'] . ',';
+  }
+  $walkingGroups = substr( $walkingGroups, 0, strlen( $walkingGroups) - 1 );
+  if ( !empty( $walkingGroups ) ) $walkingInfo[$id] = $walkingGroups;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,7 +68,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 </head>
 <body>
   <div id="main">
-    <?php foreach ( $info as $row ) : ?>
+    <?php 
+    foreach ( $staff as $id => $more ) {
+      foreach ( $more as $type => $groupInfo ) {
+        $row = $staffInfo[$id];
+        ?>
 
       <div style="position: relative">
         <div class='front'>
@@ -68,9 +104,9 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           <img src="<?= $img ?>" />
           <?php
           $class = '';
-          if ( $row['staff_type_id'] == 2 ) {
+          if ( $type == 2 ) {
             $class = 'headCounselor';
-          } else if ( $row['staff_type_id'] == 3 ) {
+          } else if ( $type == 3 ) {
             $class = 'safetyOfficer';
           }
           ?>
@@ -81,9 +117,18 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             <?= $row['first_name'] . ' ' . $row['last_name'] ?>
           </div>
           <div class='staffInfo'>
-            Grade <?= $row['grade'] ?> / 
-            Bunk <?= $row['group_number']?> <br />
-            Walking Group <?= $row['group_number'] ?>
+            <?php
+            if ( !empty( $row['grade'] ) ) echo "Grade " . $row['grade'];
+            
+            $groups = $staff[$id][$type];
+            if ( $groups['start'] == $groups['end'] ) echo " / Bunk " . $groups['start'];
+            else {
+              if ( !empty( $row['grade'] ) ) echo "<br />";
+              echo "Bunks " . $groups['start'] . ' - ' . $groups['end'];
+            }
+
+            if ( isset( $walkingInfo[$id] ) ) echo "<br />Walking Group " . $walkingInfo[$id];
+            ?>
           </div>
           <div class="staffBusInfo">
             <div class="busDetails">
@@ -109,7 +154,10 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
       </div>
       <div style="clear: both"></div>
       <div style="page-break-after: always;"></div>
-    <?php endforeach; ?>
+    <?php
+      }
+    }
+    ?>
   </div>
 </body>
 </html>
