@@ -34,10 +34,12 @@ function getStaffInfo( $groups ) {
         $type = 'walking_counselor';
         break;
     }
-    $info[$type] = [
-      'name'  =>  $row['first_name'] . ' ' . $row['last_name'], 
-      'phone' =>  $row['cell']
-    ];
+    if ( !isset( $info[$type] ) ) {
+      $info[$type] = [
+        'name'  =>  $row['first_name'] . ' ' . $row['last_name'], 
+        'phone' =>  $row['cell']
+      ];
+    }
   }
   return $info;
 }
