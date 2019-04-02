@@ -35,9 +35,7 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
     $username = str_replace("'", '', ucfirst( trim( $data[2] ) ) . ucfirst( trim( $data[3] ) ) );
     $username .= $year;
     $password = 'shabbaton';
-    // only add username / password if not counselor
-    if ( intval( $data[$numFields] ) != 1 ) $qry .= " username = '" . $username . "', password = '" . $password . "', year = " . $year;
-    else $qry = substr( $qry, 0, strlen( $qry ) - 1 );
+    $qry .= " username = '" . $username . "', password = '" . $password . "', year = " . $year;
     $qrys[$row] = $qry;
 
     // figure out positions and groups
