@@ -13,7 +13,7 @@ $sql = "
 				users u USING (user_id)
 		WHERE
         tc.year = $year AND tc.date_paid > 0 
-            AND u.gender = 'F'
+            AND u.gender = 'M'
 		GROUP BY user_id
 		ORDER BY last, first
 ";
