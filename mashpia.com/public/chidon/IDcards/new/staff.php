@@ -16,7 +16,7 @@ $sql = "
           JOIN
       th_chidon_types t ON t.th_chidon_type_id = sa.staff_type_id
   WHERE
-      staff_type_id in (1,2,3) 
+      t.staff_type = 'bunk'  
           AND year = $year 
           AND s.gender = 'boys' 
 ";
