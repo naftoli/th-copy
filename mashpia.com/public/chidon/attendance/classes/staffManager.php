@@ -123,7 +123,7 @@ class StaffManager
                 JOIN
             th_chidon_types t ON sa.staff_type_id = t.th_chidon_type_id
         WHERE
-            sa.staff_id = :staff_id
+            sa.staff_id = :staff_id 
       ");
       $stmt->execute([ ':staff_id' => $this->staffID ]);
       $rows = $stmt->fetchAll();
@@ -190,7 +190,8 @@ class StaffManager
                 JOIN
             th_chidon_staff s USING (staff_id)
         WHERE
-            staff_type_id = 1 AND group_number = :bunk
+            staff_type_id = 1 AND group_number = :bunk 
+              AND s.gender = 'boys'
       ");
       $res = $stmt->execute([ ':bunk' => intval( $bunk ) ]);
       if ( $res ) {
@@ -209,7 +210,8 @@ class StaffManager
                 JOIN
             th_chidon_staff s USING (staff_id)
         WHERE
-            staff_type_id = 8 AND group_number = :group
+            staff_type_id = 8 AND group_number = :group 
+              AND s.gender = 'boys'
       ");
       $res = $stmt->execute([ ':group' => intval( $group ) ]);
       if ( $res ) {
@@ -267,7 +269,8 @@ class StaffManager
       FROM
           th_chidon_attendance_times t
       WHERE
-          t.att_type_number IN (\"$listOfGroups\")
+          t.att_type_number IN (\"$listOfGroups\") 
+            AND t.chidon_type = 'boys' 
       GROUP BY att_type, att_time
     ");
     $res = $stmt->execute([ ':staff_id' => $this->staffID ]);
@@ -308,7 +311,8 @@ class StaffManager
           th_chidon_attendance_marks m ON m.th_chidon_id = tc.th_chidon_id
               AND m.att_time_id = :time_id
       WHERE
-          year = :year AND $field IN (\"$groupsList\")
+          year = :year AND $field IN (\"$groupsList\") 
+            AND u.gender = 'M' 
       ORDER BY $field, last, first
     ");
     $res = $stmt->execute([ 
