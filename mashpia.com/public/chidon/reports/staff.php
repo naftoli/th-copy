@@ -31,13 +31,14 @@ while ($row = mysql_fetch_assoc($result)) {
 	<body>	
     <table>
       <tr>
+				<th>Staff ID</th>
         <th>Name</th>
         <th>Username</th>
         <th>Password</th>
       </tr>
       <?php 
       foreach ( $info as $staff ) {
-        echo "<tr><td>" . ($staff['first_name'] . ' ' . $staff['last_name']) . "</td><td>" . $staff['username'] . "</td><td>shabbaton</td></tr>";
+        echo "<tr><td>" . $staff['staff_id'] . "</td><td>" . ($staff['first_name'] . ' ' . $staff['last_name']) . "</td><td>" . $staff['username'] . "</td><td>shabbaton</td></tr>";
       }
       ?>
       </table>

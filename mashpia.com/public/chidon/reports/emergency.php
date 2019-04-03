@@ -8,7 +8,8 @@ $sql = "select a.*, s.school_name, tc.grade, tc.th_chidon_id, tc.allergies, u.fi
 		join users u using (user_id)
 		join admins a on a.admin_id = tc.paid_by 
 		where tc.year = " . $year . "  
-		and tc.date_paid > 0
+		and tc.date_paid > 0 
+		and u.gender = 'M' 
 		order by school_name, tc.grade, u_last, u_first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {

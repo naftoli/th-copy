@@ -145,10 +145,10 @@ foreach ( $info as $id => $more ) {
               <div class="busDay">Coach Bus</div>
               <div class="busNum"><?= $row['coach_bus'] ?></div>
             </div>
-            <div class="busDetails">
+            <!-- <div class="busDetails">
               <div class="busDay">Sun PM Bus</div>
               <div class="busNum"><?= $row['sunday_pm_bus'] ?></div>
-            </div>
+            </div> -->
           </div>                
         </div>
       </div>
