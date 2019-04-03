@@ -16,7 +16,7 @@ $sql = "
           JOIN
       th_chidon_types t ON t.th_chidon_type_id = sa.staff_type_id
   WHERE
-      staff_type_id in (1,2,3,4,5)   
+      staff_type_id in (1,2,3,4,5,7)   
           AND year = $year 
           AND s.gender = 'boys' 
 ";
@@ -116,6 +116,9 @@ foreach ( $info as $id => $more ) {
               break;
             case 5:
               $class = 'headRunner';
+              break;
+            case 7:
+              $class = 'director';
               break;
           }
           ?>
