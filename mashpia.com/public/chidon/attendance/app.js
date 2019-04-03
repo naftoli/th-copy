@@ -217,7 +217,7 @@ child_item.prototype.render = function() {
     // html +=             'Chidon #' + this.props.th_chidon_id + "<br/>";
     // html +=             'Serial #' + this.props.user_serial + "<br/>";
     if (this.type === "walk")
-        html +=         'Walking Zone #' + this.props.walking_zone + "<br/>";
+        html +=         'Dropoff #' + this.props.dropoff_number + "<br/>";
     html +=         '</div>';
     if (this.type === "walk") {
         html +=     '<div class="info">';
