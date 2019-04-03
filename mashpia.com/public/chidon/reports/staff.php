@@ -4,7 +4,7 @@ require '../../db.php';
 require 'vars.php';
 
 $info = array();
-$sql = "select * from th_chidon_staff where year = " . $year;
+$sql = "select * from th_chidon_staff where gender = 'boys' and year = " . $year . " order by first_name, last_name";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
 	$info[] = $row;
