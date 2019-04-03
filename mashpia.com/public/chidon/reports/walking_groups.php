@@ -17,7 +17,8 @@ $sql = "
 				th_chidon_chaps tcc ON tcc.school_id = tc.school_id 
 		WHERE
 				tc.year = $year AND tc.date_paid > 0
-						AND chap_type = 1
+						AND chap_type = 1 
+						AND u.gender = 'M' 
 		GROUP BY user_id
 		ORDER BY school_name, tc.grade, last, first
 ";
