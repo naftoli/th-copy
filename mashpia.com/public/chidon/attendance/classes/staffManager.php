@@ -292,7 +292,7 @@ class StaffManager
         break;
     } 
     $groupsList = implode('","', $groups);
-    $stmt = $this->db->prepare("
+    $sql = "
       SELECT 
           tc.*,
           s.school_name,
@@ -313,8 +313,14 @@ class StaffManager
       WHERE
           year = :year AND $field IN (\"$groupsList\") 
             AND u.gender = 'M' 
-      ORDER BY $field, last, first
-    ");
+    ";
+    if ( $type == 'walk' ) {
+      $sql .= "ORDER BY $field, dropoff_number";
+    } else {
+      $sql .= "ORDER BY $field, last, first";
+    }
+
+    $stmt = $this->db->prepare( $sql );
     $res = $stmt->execute([ 
       ':year'     =>  $this->year, 
       ':time_id'  =>  $time_id 
