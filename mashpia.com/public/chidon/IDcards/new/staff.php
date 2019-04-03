@@ -16,7 +16,7 @@ $sql = "
           JOIN
       th_chidon_types t ON t.th_chidon_type_id = sa.staff_type_id
   WHERE
-      t.staff_type = 'bunk'  
+      staff_type_id in (1,2,3,4,5,7)   
           AND year = $year 
           AND s.gender = 'boys' 
 ";
@@ -104,10 +104,22 @@ foreach ( $info as $id => $more ) {
           <img src="<?= $img ?>" />
           <?php
           $class = '';
-          if ( $type == 2 ) {
-            $class = 'headCounselor';
-          } else if ( $type == 3 ) {
-            $class = 'safetyOfficer';
+          switch ( $type ) {
+            case 2:
+             $class = 'headCounselor';
+             break;
+            case 3:
+              $class = 'safetyOfficer';
+              break;
+            case 4:
+              $class = 'runner';
+              break;
+            case 5:
+              $class = 'headRunner';
+              break;
+            case 7:
+              $class = 'director';
+              break;
           }
           ?>
           <div class="role <?= $class ?>">
