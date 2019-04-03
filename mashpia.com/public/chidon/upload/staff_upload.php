@@ -19,20 +19,20 @@ function extractList( $list ) {
 
 $qrys = [];
 $positions = [];
-$headers = ['chap_id', 'first_name', 'last_name', 'sweater_size', 'school_bus', 'coach_bus', 'open_air_bus', 'cell', 'gender'];
+$headers = ['first_name', 'last_name', 'sweater_size', 'school_bus', 'coach_bus', 'open_air_bus', 'cell', 'gender'];
 if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   $row = 0;
   $numFields = count( $headers );
   while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
     if ( $row++ < 1 ) continue;
-    if ( empty( $data[1] ) ) continue;
+    if ( empty( $data[0] ) ) continue;
     $qry = "insert into th_chidon_staff set ";
     for ( $i = 0; $i < $numFields; $i++ ) {
       if ( empty( $data[$i] ) ) continue;
       $qry .= $headers[$i] . " = \"" . $data[$i] . "\",";
     }
 
-    $username = str_replace("'", '', ucfirst( trim( $data[1] ) ) . ucfirst( trim( $data[2] ) ) );
+    $username = str_replace("'", '', ucfirst( trim( $data[0] ) ) . ucfirst( trim( $data[1] ) ) );
     $username .= $year;
     $password = 'shabbaton';
     $qry .= " username = '" . $username . "', password = '" . $password . "', year = " . $year;
