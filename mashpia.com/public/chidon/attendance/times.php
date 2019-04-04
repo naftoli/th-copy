@@ -130,6 +130,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 
           <div class="field" id="walking_groups">
             <label class="label">Choose Walking Groups</label>
+            <button class="button is-primary toggleAll">Check/Uncheck All</button>
+            <br /><br />
             <div class="columns is-mobile">
               <?php
               $i = 1; // keep track of when to make a break
@@ -159,6 +161,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 
           <div class="field" id="bunks" style="display: none;">
             <label class="label">Choose Bunks</label>
+            <button class="button is-primary toggleAll">Check/Uncheck All</button>
+            <br /><br />
             <div class="columns is-mobile">
               <?php
               $i = 1; // keep track of when to make a break
@@ -240,6 +244,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             $("#walking_groups").show();
           }
         }
+      });
+
+      $(".toggleAll").click( function( evt ) {
+        evt.preventDefault();
+        $(this).parent().find('input[type=checkbox]').trigger('click');
       });
     });
 
