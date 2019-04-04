@@ -19,7 +19,7 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   }
   fclose($handle);
 }
-echo "<pre>"; print_r( $qrys ); echo "</pre>"; exit;
+//echo "<pre>"; print_r( $qrys ); echo "</pre>"; exit;
 mysql_query('set autocommit=0');
 mysql_query('begin');
 $success = true;
