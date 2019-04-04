@@ -13,7 +13,7 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
     for ( $i = 1; $i < $numFields; $i++ ) {
       if ( !empty( $data[$i] ) ) $qry .= $headers[$i] . " = '" . $data[$i] . "',";
     }
-    $qry = substr( $qry, 0, strlen( $qry ) - 1 );
+    $qry .= " not_printed = 1";
     $qry .= " where th_chidon_id = " . $data[0];
     $qrys[] = $qry;
   }
