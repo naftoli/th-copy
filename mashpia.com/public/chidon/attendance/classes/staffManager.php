@@ -132,51 +132,51 @@ class StaffManager
         if ( !in_array( $row['role'], $this->roles ) ) $this->roles[] = $row['role'];
       }
       // if chaperone add all other bunks
-      if ( $this->chaperone ) {
-        $this->roles[] = 'chaperone';
-        $stmt = $this->db->prepare("
-          SELECT 
-              bunk_number
-          FROM
-              th_chidon
-          WHERE
-              school_id = (SELECT 
-                      school_id
-                  FROM
-                      th_chidon_chaps
-                  WHERE
-                      th_chidon_chap_id = :chap_id)
-          GROUP BY bunk_number
-        ");
-        $res = $stmt->execute([ ':chap_id'  =>  $this->chapID ]);
-        if ( $res ) {
-          $rows = $stmt->fetchAll();
-          foreach ( $rows as $row ) {
-            if ( $row['bunk_number'] ) $this->assignments['bunk'][] = $row['bunk_number'];
-          }
-        }
-        $stmt = $this->db->prepare("
-          SELECT 
-              walking_group
-          FROM
-              th_chidon
-          WHERE
-              school_id = (SELECT 
-                      school_id
-                  FROM
-                      th_chidon_chaps
-                  WHERE
-                      th_chidon_chap_id = :chap_id)
-          GROUP BY walking_group
-        ");
-        $res = $stmt->execute([ ':chap_id'  =>  $this->chapID ]);
-        if ( $res ) {
-          $rows = $stmt->fetch();
-          foreach ( $rows as $row ) {
-            if ( $row['walking_group'] ) $this->assignments['walking_group'][] = $row['walking_group'];
-          }
-        }
-      }
+      // if ( $this->chaperone ) {
+      //   $this->roles[] = 'chaperone';
+      //   $stmt = $this->db->prepare("
+      //     SELECT 
+      //         bunk_number
+      //     FROM
+      //         th_chidon
+      //     WHERE
+      //         school_id = (SELECT 
+      //                 school_id
+      //             FROM
+      //                 th_chidon_chaps
+      //             WHERE
+      //                 th_chidon_chap_id = :chap_id)
+      //     GROUP BY bunk_number
+      //   ");
+      //   $res = $stmt->execute([ ':chap_id'  =>  $this->chapID ]);
+      //   if ( $res ) {
+      //     $rows = $stmt->fetchAll();
+      //     foreach ( $rows as $row ) {
+      //       if ( $row['bunk_number'] ) $this->assignments['bunk'][] = $row['bunk_number'];
+      //     }
+      //   }
+      //   $stmt = $this->db->prepare("
+      //     SELECT 
+      //         walking_group
+      //     FROM
+      //         th_chidon
+      //     WHERE
+      //         school_id = (SELECT 
+      //                 school_id
+      //             FROM
+      //                 th_chidon_chaps
+      //             WHERE
+      //                 th_chidon_chap_id = :chap_id)
+      //     GROUP BY walking_group
+      //   ");
+      //   $res = $stmt->execute([ ':chap_id'  =>  $this->chapID ]);
+      //   if ( $res ) {
+      //     $rows = $stmt->fetch();
+      //     foreach ( $rows as $row ) {
+      //       if ( $row['walking_group'] ) $this->assignments['walking_group'][] = $row['walking_group'];
+      //     }
+      //   }
+      // }
     }
     sort( $this->assignments['bunk'] );
     // find out the counselors for each bunk in array
