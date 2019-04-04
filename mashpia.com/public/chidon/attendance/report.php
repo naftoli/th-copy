@@ -26,7 +26,7 @@ $sql = "
         JOIN
     classes c ON c.class_id = u.class_id
         JOIN
-    th_chidon_attendance_times t ON tc.bunk_number = t.att_type_number
+    th_chidon_attendance_times t ON (tc.bunk_number = t.att_type_number or tc.walking_group = t.att_type_number) 
         LEFT JOIN
     th_chidon_attendance_marks m USING (att_time_id, th_chidon_id)
   WHERE
