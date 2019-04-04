@@ -2,7 +2,8 @@
 ini_set('display_errors',1);
 require __DIR__ . "/../../db.php";
 $qrys = [];
-$headers = ['th_chidon_id', 'bunk_number', 'team_id', 'bowling_lane', 'school_bus', 'open_air_bus', 'coach_bus'];
+$headers = ['th_chidon_id', 'grade', 'bunk_number', 'test_table', 'round_number', 'sunday_pm_bus', 'cert_number', 'bowling_lane', 'walking_group', 'host', 'host_number', 'host_street_num', 
+  'host_street', 'between_streets1', 'between_streets2', 'team_id', 'school_bus', 'open_air_bus', 'coach_bus'];
 if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
   $row = 0;
   $numFields = count( $headers );
@@ -12,7 +13,7 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
     for ( $i = 1; $i < $numFields; $i++ ) {
       if ( !empty( $data[$i] ) ) $qry .= $headers[$i] . " = '" . $data[$i] . "',";
     }
-    $qry = substr( $qry, 0, strlen( $qry ) - 1 );
+    $qry .= " not_printed = 1";
     $qry .= " where th_chidon_id = " . $data[0];
     $qrys[] = $qry;
   }
@@ -43,7 +44,7 @@ echo "done.";
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   </head>
   <body>
-    <form action="chidon_children.php" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+    <form action="children_updates.php" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
       <label>Upload your spreadsheet
       <br /><input type="file" name="file" class="file"></label>
       <br /><input type="submit" name="submit" value="upload" />
