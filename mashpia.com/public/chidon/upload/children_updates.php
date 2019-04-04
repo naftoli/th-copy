@@ -44,7 +44,7 @@ echo "done.";
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   </head>
   <body>
-    <form action="chidon_updates.php" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+    <form action="children_updates.php" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
       <label>Upload your spreadsheet
       <br /><input type="file" name="file" class="file"></label>
       <br /><input type="submit" name="submit" value="upload" />
