@@ -381,7 +381,11 @@
 								if ( parseInt( numChildren ) > 0 ) amount = parseInt( numChildren * 100 );
 								break;
 							case "2":
-								amount = parseFloat( $("#donation_amount").val() );
+								let value = $("#donation_amount").val();
+								if ( value.indexOf('$') !== false ) {
+									value = value.replace(/\$/g, '');
+								}
+								amount = parseFloat( value );
 								break;
 							case 3:
 								break;
