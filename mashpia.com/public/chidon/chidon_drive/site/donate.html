@@ -429,7 +429,9 @@
 						donation.phone = $("#phone").val();
 						donation.dedication = $("#dedication").val();
 
-						//console.log( donation );
+						//donation.skip = 1;	
+
+						console.log( donation );
 						$.post('../ajax/processDonation.php', { donation_info: donation }, function( result ) {
 							console.log( result );
 							let res = JSON.parse( result );
