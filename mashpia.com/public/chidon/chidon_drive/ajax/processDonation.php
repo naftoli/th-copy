@@ -29,7 +29,8 @@ function checkMandatory( $values ) {
     'city'            =>  'Billing City',
     'state'           =>  'Billing State',
     'zip'             =>  'Billing Zip',
-    'country'         =>  'Billing Country'
+    'country'         =>  'Billing Country',
+    'phone'           =>  'Phone Number'
   ];
 
   foreach ( $values as $k => $v ) {
@@ -172,7 +173,7 @@ if ( !empty( $msg ) ) {
   $res = $stmt->execute([
     ':name'         =>  $name,
     ':display_name' =>  $display_name, 
-    ':anonymoust'   =>  $anonymous,
+    ':anonymous'    =>  $anonymous,
     ':year'         =>  $year, 
     ':amount'       =>  $amount, 
     ':trans_id'     =>  $trans_id, 
