@@ -330,6 +330,11 @@
 							} else {
 								html += '<img class="img-responsive" src="/v2/images/imgsrepo/default.png" alt="" title="">';
 							};
+						// find out if name of prize has backslash character
+						if ( prize.prize_name.indexOf('\\') !== false ) {
+							prize.prize_name = prize.prize_name.replace('\\', '');
+							prize.prize_name = prize.prize_name.replace('\"', ' inch');
+						}
 						html += '</figure>\
 								<div class="block-name">\
 									<a href="#" class="product-name">' + prize.prize_name + '</a>\
