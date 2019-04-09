@@ -82,9 +82,9 @@
 			.panel.panel-default .panel-heading{background: #5e1c77;font-weight: 400;}
 			.container>.navbar-header{margin-left: 0px;}
             /* Some modal Styles*/
-			.modal-header {border-top-left-radius: 4px;border-top-right-radius: 4px;background: #5e1c77; color: #fff;}
+			/* .modal-header {border-top-left-radius: 4px;border-top-right-radius: 4px;background: #5e1c77; color: #fff;}
 			.modal-header span, .modal-header{color: #fff;}
-			.modal-header .close{opacity: 1;font-size: 2em;width: 20px;font-weight: 100;}
+			.modal-header .close{opacity: 1;font-size: 2em;width: 20px;font-weight: 100;} */
             /* On small screens push the date selector down and let the buttons take up the full row*/
 			@media(max-width: 532px){.task{margin-bottom: 10px;}.long{font-size: 1.3em;}}
             /* Weekly navigation buttons*/
@@ -134,11 +134,36 @@
 			.dailyBoxesLine {clear: both;border: 1px solid #eee;}
             div.quota {font-size: 1.6em;}
             .page-missions .navbar-header .item, .page-missions .navbar-header .slick-slider {color: #fff;}
+			#pollModal .modal-header {
+				text-align: center;
+			}
         </style>
 	</head>
 	<body class="page-missions" id="main">
 		<div id="spinner"></div>
 	</body>
+	<!-- modal to find out which rally children liked the most -->
+	<div class="modal" tabindex="-1" role="dialog" id="pollModal">
+		<div class="modal-dialog " role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Please Choose Your Favorite Rally</h4>
+				</div>
+				<div class="modal-body">
+					<p>What was your favorite rally this year?</p>
+					<input type="radio" name="rally" class="rally" value='1' /> אלול - המלך בּשׂדה<br />
+					<input type="radio" name="rally" class="rally" value='2' /> כ׳ חשׁון - Lamplighters<br />
+					<input type="radio" name="rally" class="rally" value='3' /> חנוכּה - Shine Your Light<br />
+					<input type="radio" name="rally" class="rally" value='4' /> י' שׁבט - What's Your Koch<br />
+					<input type="radio" name="rally" class="rally" value='5' /> פּורים קטן - The Power of Youth<br />
+					<input type="radio" name="rally" class="rally" value='6' /> פּורים - Take that, Yetzer Hora<br />
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger submit" style="background-color: #5e1c77;border-color:#834999;">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
 <!--	The help modal (hardocoded in HTML?)-->
 	<div class="modal fade" tabindex="-1" role="dialog" id="myModal" style="display: none">
 		<div class="modal-dialog" role="document">
@@ -215,77 +240,106 @@
 				authenticate( id );
 				// update the missions for the user_id...
 				$.post('reg/ajax/updateMissions.php', { user_id : id });
-				// options for the loading spinner....
-				var opts = {
-					lines: 8, 		// The number of lines to draw
-					length: 26, 	// The length of each line
-					width: 12, 		// The line thickness
-					radius: 26, 	// The radius of the inner circle
-					scale: 0.75, 	// Scales overall size of the spinner
-					corners: 1, 	// Corner roundness (0..1)
-					color: '#888', 	// #rgb or #rrggbb or array of colors
-					opacity: 0.25, 	// Opacity of the lines
-					rotate: 0, 		// The rotation offset
-					direction: 1, 	// 1: clockwise-1: counterclockwise
-					speed: 1.1, 	// Rounds per second
-					trail: 60, 		// Afterglow percentage
-					fps: 20, 		// Frames per second when using setTimeout() as a fallback for CSS
-					zIndex: 2e9, 	// The z-index (defaults to 2000000000)
-					className: 'spinner', // The CSS class to assign to the spinner
-					top: '50%', 	// Top position relative to parent
-					left: '50%', 	// Left position relative to parent
-					shadow: false, 	// Whether to render a shadow
-					hwaccel: true, 	// Whether to use hardware acceleration
-					position: 'absolute' // Element positioning
-				};
-				var target = document.getElementById('spinner');
-				new Spinner(opts).spin(target);
-				
-				// use regex to determine desktop or mobile
-				var desktop = $(window).width() > 767; // all devices this small are mobile. As well as the folowing regex
-				if (/Android|webOS|iPhone|iPod|iPad|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)){ // look for common mobile names in userAgent
-					desktop = false;
-				}
-				console.log({"desktop": desktop});
-				// should we render the daily page?
-				var daily = (!desktop && Cookies.get('marking') != "weekly") || Cookies.get('marking') == "daily";
-				// load up the mission page...
-				$.get('getMissionPage.php?id=' + str + "&daily=" + daily + "&desktop=" + desktop, function( html ) {
-                    $("#spinner").empty(); // clear the spinner...
-                    $("#main").append( html ); // load up the html into the page...
-                    $("#main").addClass("animated fadeIn");
-                    // hide the personalize button for kids
-                    if( localStorage.getItem( "login" ) == "user" ){
-                        $( "#buttons > #leftButtons" ).hide();
-                        $( "#buttons > button").css( "float", lang == 1 ? "left" : "right" ); // move the help button to where the personalize button was
-                        $( "#mainLink a" ).attr('href', 'reg/medals/?id=' + id);
-                    }
-					// if the language is set to 2 (yiddish) in the html
-					if (lang == 2) {
-						$(".container").eq(1).addClass('he'); // add a he class to the page
-						$(".container.he").attr('dir', 'rtl'); // set the text direction to the other direction...
-						$(".personalImg").css({"right": "2%"}); // move the profile photo over a bit...
+
+				$.post('ajax/checkPoll.php', { user: id }, function( result ) {
+					if ( result == 'true' ) {
+						$("#pollModal").modal('show');
 					} else {
-						$(".personalImg").css({"left": "2%"}); // move the profile image a but from the edge...
+						continueLoading();
 					}
-                    // setup the links on the bottom of the page
-					$("#missionsLink").attr('href', 'missionsNew.html?id=' + id);
-					$("#goalsLink").attr('href', 'goalsNew.html?id=' + id + "&v=2");
-					$("#rankLink").attr('href', 'reg/rank.html?id=' + id);
-					$("#storeLink").attr('href', 'store/index.html?id=' + id);
-					// load up the users profile photo...
-					$.post('/mobile/reg/ajax/getPhoto.php', { user_id : id }, function( success ) {
-						var info = $.parseJSON( success ); // get the info from the response...
-						var html = '<a href="reg/medals/index.html?id=' + id +'">'; // setup the a tag...
-						// add the image based on the way the user's image is stored...
-						if (info.mobile_pic) html += '<img id="userImg" src="/mobile/reg/' + info.mobile_pic + '">';
-						else if (info.thumb) html += '<img id="userImg" src="/thumbs/' + info.thumb + '">';
-						else if (info.photo) html += '<img id="userImg" src="/file_view.php?id=' + info.photo + '">';
-						// close the a tag
-						html += '</a>';
-						$(".personalImg").append( html );
-					}); // end the user image
-				}); // end the AJAX loading of the Missions Page
+				});
+
+				$("#pollModal .submit").click( function() {
+					var poll = $("#pollModal .rally:checked").val();
+					if ( poll === undefined ) {
+						alert('You must choose one of the options.');
+						return;
+					}
+					$.post('ajax/poll.php', { user: id, poll_number: poll }, function( result ) {
+						if ( result == 'true' ) {
+							alert('Thank you.');
+							continueLoading();
+						} else {
+							alert('There was an error submiting your answer.');
+							continueLoading();
+						}
+					});
+				});
+
+				function continueLoading() {
+					$("#pollModal").remove();
+					// options for the loading spinner....
+					var opts = {
+						lines: 8, 		// The number of lines to draw
+						length: 26, 	// The length of each line
+						width: 12, 		// The line thickness
+						radius: 26, 	// The radius of the inner circle
+						scale: 0.75, 	// Scales overall size of the spinner
+						corners: 1, 	// Corner roundness (0..1)
+						color: '#888', 	// #rgb or #rrggbb or array of colors
+						opacity: 0.25, 	// Opacity of the lines
+						rotate: 0, 		// The rotation offset
+						direction: 1, 	// 1: clockwise-1: counterclockwise
+						speed: 1.1, 	// Rounds per second
+						trail: 60, 		// Afterglow percentage
+						fps: 20, 		// Frames per second when using setTimeout() as a fallback for CSS
+						zIndex: 2e9, 	// The z-index (defaults to 2000000000)
+						className: 'spinner', // The CSS class to assign to the spinner
+						top: '50%', 	// Top position relative to parent
+						left: '50%', 	// Left position relative to parent
+						shadow: false, 	// Whether to render a shadow
+						hwaccel: true, 	// Whether to use hardware acceleration
+						position: 'absolute' // Element positioning
+					};
+					var target = document.getElementById('spinner');
+					new Spinner(opts).spin(target);
+					
+					// use regex to determine desktop or mobile
+					var desktop = $(window).width() > 767; // all devices this small are mobile. As well as the folowing regex
+					if (/Android|webOS|iPhone|iPod|iPad|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)){ // look for common mobile names in userAgent
+						desktop = false;
+					}
+					console.log({"desktop": desktop});
+					// should we render the daily page?
+					var daily = (!desktop && Cookies.get('marking') != "weekly") || Cookies.get('marking') == "daily";
+					// load up the mission page...
+					$.get('getMissionPage.php?id=' + str + "&daily=" + daily + "&desktop=" + desktop, function( html ) {
+						$("#spinner").empty(); // clear the spinner...
+						$("#main").append( html ); // load up the html into the page...
+						$("#main").addClass("animated fadeIn");
+						// hide the personalize button for kids
+						if( localStorage.getItem( "login" ) == "user" ){
+							$( "#buttons > #leftButtons" ).hide();
+							$( "#buttons > button").css( "float", lang == 1 ? "left" : "right" ); // move the help button to where the personalize button was
+							$( "#mainLink a" ).attr('href', 'reg/medals/?id=' + id);
+						}
+						// if the language is set to 2 (yiddish) in the html
+						if (lang == 2) {
+							$(".container").eq(1).addClass('he'); // add a he class to the page
+							$(".container.he").attr('dir', 'rtl'); // set the text direction to the other direction...
+							$(".personalImg").css({"right": "2%"}); // move the profile photo over a bit...
+						} else {
+							$(".personalImg").css({"left": "2%"}); // move the profile image a but from the edge...
+						}
+						// setup the links on the bottom of the page
+						$("#missionsLink").attr('href', 'missionsNew.html?id=' + id);
+						$("#goalsLink").attr('href', 'goalsNew.html?id=' + id + "&v=2");
+						$("#rankLink").attr('href', 'reg/rank.html?id=' + id);
+						$("#storeLink").attr('href', 'store/index.html?id=' + id);
+						// load up the users profile photo...
+						$.post('/mobile/reg/ajax/getPhoto.php', { user_id : id }, function( success ) {
+							var info = $.parseJSON( success ); // get the info from the response...
+							var html = '<a href="reg/medals/index.html?id=' + id +'">'; // setup the a tag...
+							// add the image based on the way the user's image is stored...
+							if (info.mobile_pic) html += '<img id="userImg" src="/mobile/reg/' + info.mobile_pic + '">';
+							else if (info.thumb) html += '<img id="userImg" src="/thumbs/' + info.thumb + '">';
+							else if (info.photo) html += '<img id="userImg" src="/file_view.php?id=' + info.photo + '">';
+							// close the a tag
+							html += '</a>';
+							$(".personalImg").append( html );
+						}); // end the user image
+					}); // end the AJAX loading of the Missions Page
+				}
 			}); // end anynomus function
 		}); // end on page loaded listener
 	</script>
