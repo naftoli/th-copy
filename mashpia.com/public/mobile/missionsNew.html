@@ -241,13 +241,19 @@
 				// update the missions for the user_id...
 				$.post('reg/ajax/updateMissions.php', { user_id : id });
 
-				$.post('ajax/checkPoll.php', { user: id }, function( result ) {
-					if ( result == 'true' ) {
-						$("#pollModal").modal('show');
-					} else {
-						continueLoading();
-					}
-				});
+				var d1 = new Date();
+				var d2 = new Date('April 12, 2019 23:59:59');
+				if ( d2 > d1 ) {
+					$.post('ajax/checkPoll.php', { user: id }, function( result ) {
+						if ( result == 'true' ) {
+							$("#pollModal").modal('show');
+						} else {
+							continueLoading();
+						}
+					});
+				} else {
+					continueLoading();
+				}
 
 				$("#pollModal .submit").click( function() {
 					var poll = $("#pollModal .rally:checked").val();
