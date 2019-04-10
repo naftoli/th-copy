@@ -146,7 +146,8 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 		<br />
 		<div id="school_<?=$id?>">
 			<div style="float: right">
-				<button class="copy">Copy Parent Entered to Tanya Learned</button><br />
+				<button class="copyTanya">Copy Parent Entered to Tanya Learned</button><br /><br />
+				<button class="copyMishna">Copy Parent Entered to Mishna Learned</button><br />
 			</div>
 			<div class="runningTotals">
 				Total Tanya Learned: <span class="tlearned"></span><br />
@@ -169,8 +170,9 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 					<th>Student</th>
 					<th>Tanya Learned</th>
 					<th>Parent Entered</th>
-					<th colspan="2">Mishna Learned</th>
-					<th>Sync with Website</th>
+					<th>Mishna Learned</th>
+					<th>Parent Entered</th>
+					<th colspan="2">Actions</th>
 				</tr>
 				<?php // for each class...
 				foreach ($classes[$id] as $class) {
@@ -178,9 +180,14 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 					foreach ($users[$id][$class] as $user) {
 						// get the amount learned and the amount that the parent entered
 						$totalTanya['learned'] = $tanya->getTotalLearned( 'user', $user );
-						$totalTanya['parentEntered'] = $tanya->getParentEntered( $user );
 						// get the total amount of mishna that was learned
 						$totalMishna['learned'] = $mishna->getTotalLearned( 'user', $user );
+
+						// get parent entered 
+						$parentEntered = $tanya->getParentEntered( $user );
+						$totalTanya['parentEntered'] = $parentEntered[$tanyaCampaign];
+						$totalMishna['parentEntered'] = $parentEntered[$mishnaCampaign];
+
 						// sum them up in the grand totals
 						$grandTotals['tanya']['learned'] += $totalTanya['learned'];
 						$grandTotals['mishna']['learned'] += $totalMishna['learned'];
@@ -196,12 +203,15 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 							<td class='middle'>
 								<input type='text' size='5' class='tanya learn tlearn' value='<?=$totalTanya['learned']?>' />
 							</td>
-							<td class='parentEntered'>
+							<td class='parentTanyaEntered'>
 								<?=($totalTanya['parentEntered'] > 0 ? $totalTanya['parentEntered'] : '')?>
 							</td> 
 							<td class='middle'>
 								<input type='text' size='5' class='mishna learn mlearn' value='<?= $totalMishna['learned'] ?>' />
 							</td>
+							<td class='parentMishnaEntered'>
+								<?=($totalMishna['parentEntered'] > 0 ? $totalMishna['parentEntered'] : '')?>
+							</td> 
 							<td>
 								<button class='by_mishna'>Calcuate Mishna</button>
 							</td>
@@ -248,7 +258,7 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 	<script>
 		var campaigns = {
 			tanyaCampaign:  <?=$tanyaCampaign?>,
-    		mishnaCampaign: <?=$mishnaCampaign?>
+    	mishnaCampaign: <?=$mishnaCampaign?>
 		}
 		// after yud alef nissan disable all entries
 		// $("button").attr('disabled', true);
