@@ -114,7 +114,7 @@ abstract class BalPehCampaign {
 				$row = mysql_fetch_assoc($result);
 				$total = $row['lines_learned'];
 				// update mission sheet entered amount
-				$this->parentEntered[$id] = empty($row['mission_sheet_amount']) ? 0 : $row['mission_sheet_amount'];
+				$this->parentEntered[$id][$this->campaign_id] = empty($row['mission_sheet_amount']) ? 0 : $row['mission_sheet_amount'];
 				break;
 		}
 		return $total;
