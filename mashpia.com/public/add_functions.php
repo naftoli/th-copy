@@ -670,11 +670,9 @@ function add_mark($parameters, $update = true)
 		$mission_updater = new mission_updater();
 		$mission_updater->mission_update($user_id, $date_tasks_mission_id);
 
-		$tanyaGridIds = [21001,21002,21003,21004,21005,21006,21007,21008,21013];
-		$mishnaGridIds = [21014];
-
-		// if it's a tanya mark update the yud alef nissan tables
-		if (unixtojd() > 2458101 && isset($grid_id) && in_array($grid_id, $tanyaGridIds)) {
+		// if it's a tanya mark or mishna mark update the yud alef nissan tables
+		$gridIds = [21001,21002,21003,21004,21005,21006,21007,21008,21013,21014];
+		if (isset($grid_id) && in_array($grid_id, $gridIds)) {
 
 			require_once 'class.globalSettings.php';
 			$year = GlobalSettings::getChidonYear();
@@ -687,8 +685,8 @@ function add_mark($parameters, $update = true)
 				else if (strtolower($row['type']) == 'mishna') $mishnaCampaign = $row['id'];
 			}
 
-			if (in_array($grid_id, $tanyaGridIds)) $campaign = $tanyaCampaign;
-			else if (in_array($grid_id, $mishnaGridIds)) $campaign = $mishnaCampaign;
+			$campaign = $tanyaCampaign;
+			if ($grid_id == 21014) $campaign = $mishnaCampaign;
 
 			$exists_query = mysql_query("SELECT mission_sheet_amount AS t FROM lines_learned WHERE campaign_id = " . $campaign . " AND user_id = " . $user_id);
 			if (mysql_num_rows($exists_query) > 0) {
