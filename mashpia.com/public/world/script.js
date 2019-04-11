@@ -100,40 +100,43 @@ $( document ).ready( function(){
                 var row = response[index];
                 var nextLevel =  postData.grade ? 3 : parseInt( postData.level ) + 1;
 
-                html += "<tr>";
-                html +=     '<td class="first">';
-                if ( postData.level == 1 ){
-                    html += "<img class='school_logo' onerror='imgMissing(this)' alt='school_logo' src='//mashpia.com/schoolLogos/" + 
-                        ( row.logo ? row.logo : "_logo.png" ) + "'/>";
-                }
-                html += '<span class="number"></span>';
-                html += '</td><td>';
+                if ( row.campaigns.tanya.learned || row.campaigns.mishna.learned ) {
 
-                if ( postData.level < 3 && !row.lastLevel ) {
-                    html +=         '<a class="id_link" href="#' + nextLevel + '-' + row.id  + '" >';
-                    html +=             '<span class="school_name">' + row.name + '</span>';
-                    html +=         '</a>';
-                } else {
-                    html += '<span class="school_name">' + row.name + '</span>';
-                }
-                // get the averages
-                var tanya_avg = row.campaigns.tanya.avg;
-                var mishna_avg = row.campaigns.mishna.avg;
+                    html += "<tr>";
+                    html +=     '<td class="first">';
+                    if ( postData.level == 1 ){
+                        html += "<img class='school_logo' onerror='imgMissing(this)' alt='school_logo' src='//mashpia.com/schoolLogos/" + 
+                            ( row.logo ? row.logo : "_logo.png" ) + "'/>";
+                    }
+                    html += '<span class="number"></span>';
+                    html += '</td><td>';
 
-                html += '</td>';
-                html += '<td class="total">' + row.campaigns.tanya.learned + '</td>';
-                html += tanya_avg !== undefined ? '<td class="total ' + getColor( tanya_avg ) + '">' + tanya_avg + '</td>' : "";
-                html += '<td class="total">' + row.campaigns.mishna.learned + '</td>';
-                html += mishna_avg !== undefined ? '<td class="total ' + getColor( mishna_avg ) + '">' + mishna_avg + '</td>' : "";
-                // if the level is not 3, calculate and render the total average for both tanya and mishna combined
-                if ( postData.level !== 3 ) {
-                    html += '<td class="total">';
-                    html += Math.floor( 
-                        ( row.campaigns.tanya.learned + row.campaigns.mishna.learned ) / row.child_count 
-                    );
+                    if ( postData.level < 3 && !row.lastLevel ) {
+                        html +=         '<a class="id_link" href="#' + nextLevel + '-' + row.id  + '" >';
+                        html +=             '<span class="school_name">' + row.name + '</span>';
+                        html +=         '</a>';
+                    } else {
+                        html += '<span class="school_name">' + row.name + '</span>';
+                    }
+                    // get the averages
+                    var tanya_avg = row.campaigns.tanya.avg;
+                    var mishna_avg = row.campaigns.mishna.avg;
+
                     html += '</td>';
+                    html += '<td class="total">' + row.campaigns.tanya.learned + '</td>';
+                    html += tanya_avg !== undefined ? '<td class="total ' + getColor( tanya_avg ) + '">' + tanya_avg + '</td>' : "";
+                    html += '<td class="total">' + row.campaigns.mishna.learned + '</td>';
+                    html += mishna_avg !== undefined ? '<td class="total ' + getColor( mishna_avg ) + '">' + mishna_avg + '</td>' : "";
+                    // if the level is not 3, calculate and render the total average for both tanya and mishna combined
+                    if ( postData.level !== 3 ) {
+                        html += '<td class="total">';
+                        html += Math.floor( 
+                            ( row.campaigns.tanya.learned + row.campaigns.mishna.learned ) / row.child_count 
+                        );
+                        html += '</td>';
+                    }
+                    html += "</tr>";
                 }
-                html += "</tr>";
             }
             // close the table
             html += '</tbody>';

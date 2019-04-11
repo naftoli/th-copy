@@ -25,8 +25,10 @@ $results = [ "success" => true ];
 $grand_total = 0;
 // add the totals to the returned result
 while( $campaign_total = mysql_fetch_assoc( $totals_query ) ) {
-    $results['campaigns'][ $campaigns[ $campaign_total['campaign_id'] ] ] = intval( $campaign_total['total'] );
-    $grand_total += $campaign_total['total'];
+    if ( intval( $campaign_total['total'] ) > 0 ) {
+        $results['campaigns'][ $campaigns[ $campaign_total['campaign_id'] ] ] = intval( $campaign_total['total'] );
+        $grand_total += $campaign_total['total'];
+    }
 }
 // set the grand total
 $results['campaigns']['total'] = $grand_total;
