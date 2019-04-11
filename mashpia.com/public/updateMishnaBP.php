@@ -18,6 +18,8 @@ foreach ( $marks as $row ) {
               school_id = " . $row['school_id'] . ", 
               user_id = " . $row['user_id'] . ", 
               class_id = " . $row['class_id'] . ", 
+              mission_sheet_amount = " . $row['done_qty'] . " 
+              on duplicate key update 
               mission_sheet_amount = " . $row['done_qty'];
 }
 
