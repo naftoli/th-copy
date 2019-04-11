@@ -21,4 +21,23 @@ foreach ( $marks as $row ) {
               mission_sheet_amount = " . $row['done_qty'];
 }
 
-echo "<pre>"; print_r( $qrys ); echo "</pre>";
+//echo "<pre>"; print_r( $qrys ); echo "</pre>";
+mysql_query('set autocommit=0');
+mysql_query('begin');
+
+$success = true;
+foreach ( $qrys as $qry ) {
+  if ( !mysql_query( $qry ) ) {
+    $success = false;
+    break;
+  }
+}
+
+if ( $success ) {
+  echo "done.";
+  mysql_query('commit');
+} else {
+  echo "error.<br />" . $qry;
+  mysql_query('rollback');
+}
+mysql_query('set autocommit=1');
