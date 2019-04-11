@@ -14,7 +14,7 @@ abstract class BalPehCampaign {
 		$result = mysql_query( $sql );
 		$row = mysql_fetch_assoc( $result );
 		$this->start_date = $row['start_date'];
-		$this->parentEntered = array();
+		$this->parentEntered = [];
 	}
 	
 	public function getTotalPledged( $type, $id ) {
@@ -90,7 +90,7 @@ abstract class BalPehCampaign {
 	
 	public function getTotalLearned( $type, $id ) {
 		$total = 0;
-		$users = array();
+		$users = [];
 		
 		switch ($type) {
 			case 'school':
@@ -114,7 +114,7 @@ abstract class BalPehCampaign {
 				$row = mysql_fetch_assoc($result);
 				$total = $row['lines_learned'];
 				// update mission sheet entered amount
-				$this->parentEntered[$id][$this->campaign_id] = empty($row['mission_sheet_amount']) ? 0 : $row['mission_sheet_amount'];
+				$this->parentEntered[$id] = empty($row['mission_sheet_amount']) ? 0 : $row['mission_sheet_amount'];
 				break;
 		}
 		return $total;

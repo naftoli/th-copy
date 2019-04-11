@@ -178,15 +178,13 @@ $mishna = BalPehCampaign::getInstance(	$mishnaCampaign	);
 				foreach ($classes[$id] as $class) {
 					// for each student...
 					foreach ($users[$id][$class] as $user) {
-						// get the amount learned and the amount that the parent entered
+						// get the totals of amount learned 
 						$totalTanya['learned'] = $tanya->getTotalLearned( 'user', $user );
-						// get the total amount of mishna that was learned
 						$totalMishna['learned'] = $mishna->getTotalLearned( 'user', $user );
 
 						// get parent entered 
-						$parentEntered = $tanya->getParentEntered( $user );
-						$totalTanya['parentEntered'] = $parentEntered[$tanyaCampaign];
-						$totalMishna['parentEntered'] = $parentEntered[$mishnaCampaign];
+						$totalTanya['parentEntered'] = $tanya->getParentEntered( $user );
+						$totalMishna['parentEntered'] = $mishna->getParentEntered( $user );
 
 						// sum them up in the grand totals
 						$grandTotals['tanya']['learned'] += $totalTanya['learned'];
