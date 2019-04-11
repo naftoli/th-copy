@@ -372,9 +372,12 @@ $he_chars = array(
                                     $numDaily = count($user->daily_tasks); // count the tasks
                                     for ($j = 0; $j < $numDaily; $j++) { // for each task
                                         if ($user->daily_tasks[$j]->label_name == $label) { // make sure that the label fits the label that we are showing.....
-                                            $daily_task = $user->daily_tasks[$j]; // get the daily task
-                                            $date_task_mark = $daily_task->date_task_marks[ $from - 1 ]; // and get the mark for todays date <= does not work if the mission starts later in the week...
-                                            
+											$daily_task = $user->daily_tasks[$j]; // get the daily task
+											if ( isset( $daily_task->date_task_marks[ $from - 1 ] ) ) 
+                                            	$date_task_mark = $daily_task->date_task_marks[ $from - 1 ]; // and get the mark for todays date <= does not work if the mission starts later in the week...
+											else 
+												$date_task_mark = false;
+												
                                             // if the total count of the missions is less then 7 (does not cover the full week) AND the first one does not start at the beginning of the week....
                                             if($daily && count($daily_task->date_task_marks) < 7 && $daily_task->date_task_marks[0]->mark_date != $start){ // if there are less then 7 date_task_marks and the first one is not the first date....
                                                 foreach($daily_task->date_task_marks as $task){ // go through each task
@@ -1123,6 +1126,7 @@ $he_chars = array(
                 var parameters = [user_id, task, date, val];
                 url = "../add_functions.php?function_name=add_mark&parameters=" + parameters + "&update=1";
                 $.getJSON(url, function(success) {
+					return;
 					if (success == false) {
 						alert("Update not performed.");
 					} else {
