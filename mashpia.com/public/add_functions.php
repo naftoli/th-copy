@@ -209,15 +209,15 @@ function add_task_mark($parameters, $update = true) {
 		$start_date = $row['start_date'];
 		$end_date = $row['end_date'];
 		$sql = "select * from date_tasks_marks dtm
-				join date_tasks dt using (date_task_id)
-				where dt.grid_id = " . $grid_id . "
-				and user_id = " . $user_id . "
-				and mark_date >= " . $start_date . "
-				and mark_date <= " . $end_date;
+						join date_tasks dt using (date_task_id)
+						where dt.grid_id = " . $grid_id . "
+						and user_id = " . $user_id . "
+						and mark_date >= " . $start_date . "
+						and mark_date <= " . $end_date;
 	} else {
 		$sql = "select * from date_tasks_marks
-				where date_task_id = " . $date_task_id . "
-				and user_id = " . $user_id;
+						where date_task_id = " . $date_task_id . "
+						and user_id = " . $user_id;
 	}
 	$result = mysql_query($sql);
 	if (mysql_num_rows($result) > 0) {
@@ -322,15 +322,15 @@ function add_daily_task_mark($parameters, $update = true)
 	// bug on 11/27/2017 -> grid_id is ambiguos in the SQL satement, might be pulled from the wrong table
 	if ($grid_id) {
 		$sql = "select * from date_tasks_marks dtm
-				join date_tasks dt using (date_task_id)
-				where dt.grid_id = " . $grid_id . "
-				and user_id = " . $user_id . "
-				and mark_date = " . $mark_date;
+						join date_tasks dt using (date_task_id)
+						where dt.grid_id = " . $grid_id . "
+						and user_id = " . $user_id . "
+						and mark_date = " . $mark_date;
 	} else {
 		$sql = "select * from date_tasks_marks
-				where date_task_id = " . $date_task_id . "
-				and user_id = " . $user_id . "
-				and mark_date = " . $mark_date;
+						where date_task_id = " . $date_task_id . "
+						and user_id = " . $user_id . "
+						and mark_date = " . $mark_date;
 	}
 	//echo $sql;
 	$result = mysql_query($sql);
@@ -433,15 +433,15 @@ function add_daily_task_mark2($parameters, $update = true)
 	// make sure mark doesn't already exist either in current lang or in different lang / level
 	if ($grid_id) {
 		$sql = "select * from date_tasks_marks dtm
-				join date_tasks dt using (date_task_id)
-				where dt.grid_id = " . $grid_id . "
-				and dtm.user_id = " . $user_id . "
-				and dtm.mark_date = " . $mark_date;
+						join date_tasks dt using (date_task_id)
+						where dt.grid_id = " . $grid_id . "
+						and dtm.user_id = " . $user_id . "
+						and dtm.mark_date = " . $mark_date;
 	} else {
 		$sql = "select * from date_tasks_marks
-				where date_task_id = " . $date_task_id . "
-				and user_id = " . $user_id . "
-				and mark_date = " . $mark_date;
+						where date_task_id = " . $date_task_id . "
+						and user_id = " . $user_id . "
+						and mark_date = " . $mark_date;
 	}
 	$result = mysql_query($sql);
 	if (mysql_num_rows($result) > 0) {
@@ -579,9 +579,9 @@ function add_mark($parameters, $update = true)
 	// ***** DATE TASK INFORMATION ***** //
 
 	$sql = "SELECT dt.*, dtm.start_date, dtm.end_date
-			FROM date_tasks dt
-			join date_tasks_missions dtm using (date_tasks_mission_id)
-			WHERE date_task_id=" . $date_task_id;
+					FROM date_tasks dt
+					join date_tasks_missions dtm using (date_tasks_mission_id)
+					WHERE date_task_id=" . $date_task_id;
 	$query = mysql_query($sql);
 	$row = mysql_fetch_assoc($query);
 
@@ -621,15 +621,15 @@ function add_mark($parameters, $update = true)
 		$start_date = $row['start_date'];
 		$end_date = $row['end_date'];
 		$sql = "select * from date_tasks_marks dtm
-				join date_tasks dt using (date_task_id)
-				where grid_id = " . $grid_id . "
-				and mark_date >= " . $start_date . "
-				and mark_date <= " . $end_date . "
-				and user_id = " . $user_id;
+						join date_tasks dt using (date_task_id)
+						where grid_id = " . $grid_id . "
+						and mark_date >= " . $start_date . "
+						and mark_date <= " . $end_date . "
+						and user_id = " . $user_id;
 	} else {
 		$sql = "select * from date_tasks_marks
-				where date_task_id = " . $date_task_id . "
-				and user_id = " . $user_id;
+						where date_task_id = " . $date_task_id . "
+						and user_id = " . $user_id;
 	}
 
 	//$sql = "SELECT * FROM date_tasks_marks WHERE date_task_id=" . $date_task_id . " AND user_id=" . $user_id;
@@ -671,42 +671,42 @@ function add_mark($parameters, $update = true)
 		$mission_updater->mission_update($user_id, $date_tasks_mission_id);
 
 		// if it's a tanya mark or mishna mark update the yud alef nissan tables
-		$gridIds = [21001,21002,21003,21004,21005,21006,21007,21008,21013,21014];
-		if (isset($grid_id) && in_array($grid_id, $gridIds)) {
+		// $gridIds = [21001,21002,21003,21004,21005,21006,21007,21008,21013,21014];
+		// if (isset($grid_id) && in_array($grid_id, $gridIds)) {
 
-			require_once 'class.globalSettings.php';
-			$year = GlobalSettings::getChidonYear();
+		// 	require_once 'class.globalSettings.php';
+		// 	$year = GlobalSettings::getChidonYear();
 
-			// get campaigns for current year
-			$sql = "SELECT * FROM line_campaigns WHERE year = " . $year;
-			$result = mysql_query( $sql );
-			while ($row = mysql_fetch_assoc( $result )) {
-				if (strtolower($row['type']) == 'tanya') $tanyaCampaign = $row['id'];
-				else if (strtolower($row['type']) == 'mishna') $mishnaCampaign = $row['id'];
-			}
+		// 	// get campaigns for current year
+		// 	$sql = "SELECT * FROM line_campaigns WHERE year = " . $year;
+		// 	$result = mysql_query( $sql );
+		// 	while ($row = mysql_fetch_assoc( $result )) {
+		// 		if (strtolower($row['type']) == 'tanya') $tanyaCampaign = $row['id'];
+		// 		else if (strtolower($row['type']) == 'mishna') $mishnaCampaign = $row['id'];
+		// 	}
 
-			$campaign = $tanyaCampaign;
-			if ($grid_id == 21014) $campaign = $mishnaCampaign;
+		// 	$campaign = $tanyaCampaign;
+		// 	if ($grid_id == 21014) $campaign = $mishnaCampaign;
 
-			$exists_query = mysql_query("SELECT mission_sheet_amount AS t FROM lines_learned WHERE campaign_id = " . $campaign . " AND user_id = " . $user_id);
-			if (mysql_num_rows($exists_query) > 0) {
-				$update_sql = "UPDATE lines_learned"
-						." SET mission_sheet_amount = " . $user_mark
-						." WHERE campaign_id = " . $campaign
-						." AND user_id = " . $user_id;
-				mysql_query($update_sql);
-			} else {
-				$user_info_query = mysql_query("SELECT school_id, class_id FROM users WHERE user_id = " . $user_id);
-				$user_info = mysql_fetch_assoc($user_info_query);
-				$insert_sql = "INSERT INTO lines_learned SET "
-						."campaign_id = " . $campaign . ", "
-						."user_id = " . $user_id . ", "
-						."mission_sheet_amount = " . $user_mark . ", "
-						."school_id = " . $user_info['school_id'] . ", "
-						."class_id = " . $user_info['class_id'];
-				mysql_query($insert_sql);
-			}
-		}
+		// 	$exists_query = mysql_query("SELECT mission_sheet_amount AS t FROM lines_learned WHERE campaign_id = " . $campaign . " AND user_id = " . $user_id);
+		// 	if (mysql_num_rows($exists_query) > 0) {
+		// 		$update_sql = "UPDATE lines_learned"
+		// 				." SET mission_sheet_amount = " . $user_mark
+		// 				." WHERE campaign_id = " . $campaign
+		// 				." AND user_id = " . $user_id;
+		// 		mysql_query($update_sql);
+		// 	} else {
+		// 		$user_info_query = mysql_query("SELECT school_id, class_id FROM users WHERE user_id = " . $user_id);
+		// 		$user_info = mysql_fetch_assoc($user_info_query);
+		// 		$insert_sql = "INSERT INTO lines_learned SET "
+		// 				."campaign_id = " . $campaign . ", "
+		// 				."user_id = " . $user_id . ", "
+		// 				."mission_sheet_amount = " . $user_mark . ", "
+		// 				."school_id = " . $user_info['school_id'] . ", "
+		// 				."class_id = " . $user_info['class_id'];
+		// 		mysql_query($insert_sql);
+		// 	}
+		// }
 
 		return json_encode("1");
 	}
