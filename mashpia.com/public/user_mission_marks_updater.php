@@ -22,7 +22,7 @@ $user_count = 0;
 echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />";
 foreach ( $users as $user_id ) {	
 	$mission_marks_updater = new mission_marks_updater();
-	$mission_marks_updater->mission_marks_update($user_id, true);
+	$mission_marks_updater->mission_marks_update($user_id);
 
 	$medal_updater = new medal_updater();
 	$medal_updater->update_medal_two($user_id);

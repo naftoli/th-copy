@@ -506,17 +506,17 @@ class user_track
 						$this->subject_id . ", " . 
 						$row['mission_value'] . ",'', " . 
 						$row['end_date'] . ",0,0)";
-					if ($output) 
+					//if ($output) 
 						echo $ins . "<br />";
 					if (mysql_query($ins)) {
-						if ($output) 
+						//if ($output) 
 							echo "inserted<br />";
 						$inserted++;
 					} //else
 						//echo mysql_error() . "<br />";
 				}
 			}
-			if ($output)
+			//if ($output)
 				echo "<br />";
 		}
 		if ($output) {
