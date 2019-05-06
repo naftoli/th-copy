@@ -84,11 +84,11 @@
         
                 <div class="personalImg"></div>
 				
-				<div class="alert alert-warning" role="alert" dir="ltr">
+				<!-- <div class="alert alert-warning" role="alert" dir="ltr">
 					Coming Soon ...
-				</div>
+				</div> -->
 
-				<!-- <div class="alert alert-warning" role="alert" dir="ltr" style="color: red; margin-top: 20px;">
+				<div class="alert alert-warning" role="alert" dir="ltr" style="color: red; margin-top: 20px;">
 					<b>After adding a prize in your Auction cart, be sure to click "SAVE" at the very bottom of your cart (in the cart page).</b>
 				</div>
                 
@@ -104,7 +104,7 @@
                 </div>
         
                 <div id="main">
-                </div> -->
+                </div>
 
 			</div>
         </div>
@@ -202,7 +202,7 @@
             var cartQty = 0;
             var totalPrice = 0;
             var originalBal = 0;
-    		var auction_id = 79;
+    		var auction_id = 80;
 			var separator = '|';
             
             $.post('ajax/getBalance.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
