@@ -2,6 +2,10 @@
 //header("Location: under_construction2.php");
 $admin_auth = array('school','user'); 
 require('header.php'); 
+$sqlAuction = "select auction_id from auctions where auction_ran = 0 order by auction_id desc limit 1";
+$resultAuction = mysql_query( $sqlAuction );
+$rowAuction = mysql_fetch_assoc( $resultAuction );
+$auction_id = $rowAuction['auction_id'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -101,7 +105,7 @@ if ($admin_auth[0] == 'school') {
             echo "</form>";
        
         } else {
-            require 'class.points.php';
+            require_once 'class.points.php';
             ?>
             <div class='no-print'>
                 <div align='center'>
@@ -142,7 +146,7 @@ if ($admin_auth[0] == 'school') {
             	$user_classes[$grade][] = $user;
             }
             
-            $sql5 = "select * from auctions where auction_id = 78";
+            $sql5 = "select * from auctions where auction_id = " . $auction_id;
             $result5 = mysql_query($sql5);
             $auction = mysql_fetch_assoc($result5);
             
