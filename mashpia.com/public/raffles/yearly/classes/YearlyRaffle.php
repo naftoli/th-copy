@@ -14,11 +14,11 @@ use raffles\shared\Constants as Constants; // was created later and has correct 
 class YearlyRaffle {
     private $DAY_COUNT = 180; // iber yor, up limit to 180 days
     private $db_conn;
-    private $dates;
     private $year;
     // ends on lag baomer
     // private $deadline = 2458243; // 5778, May 4 2018
-    private $deadline = 2458626; // 5779, May 23 2019
+    private $deadline = 2458627; // 5779, May 24 2019
+    private $start = 2458362;
     
     public $eligibility;
 
@@ -32,8 +32,6 @@ class YearlyRaffle {
     public function __construct($db_conn = false) {
         // create a new DB adapter if one is not provided
         $db_conn ? $this->db_conn = $db_conn : $this->db_conn = new DBAdapter();
-        // get the dates for the raffle
-        $this->dates = GlobalSettings::getCurYearDates();
         $this->year  = GlobalSettings::getCurrentYear();
     }
 // WARNING: IF NO SCHOOL ID IS PROVIDED THIS FUNCTION WILL BE VERY SLOW
@@ -41,7 +39,7 @@ class YearlyRaffle {
         $eligibility_query = $this->db_conn->query(
              " SELECT user_id, COUNT( DISTINCT(mark_date) ) as days "
             ." FROM date_tasks_marks JOIN users USING (user_id) "
-            ." WHERE mark_date > " . $this->dates['start'] . " "
+            ." WHERE mark_date > " . $this->start . " "
             ." AND mark_date < " . $this->deadline . " "
             ." AND school_id = '$school_id' "
             ." GROUP BY user_id;"
@@ -80,7 +78,7 @@ class YearlyRaffle {
         $eligibility_query = $this->db_conn->query(
              " SELECT user_id, COUNT( DISTINCT(mark_date) ) as days "
             ." FROM date_tasks_marks JOIN users USING (user_id) "
-            ." WHERE mark_date > " . $this->dates['start'] . " "
+            ." WHERE mark_date > " . $this->start . " "
             ." AND mark_date < " . $this->deadline . " "
             ." AND user_id = '$user_id' "
         );
@@ -111,7 +109,7 @@ class YearlyRaffle {
             $users_sql = "SELECT user_id, user_serial, school_name, first, last, COUNT(DISTINCT (mark_date)) AS days, class_grade, class_sub "
                 ." FROM date_tasks_marks JOIN users USING (user_id) "
                 ." JOIN schools USING (school_id) JOIN classes USING (class_id) "
-                ." WHERE mark_date > " . $this->dates['start'] . " "
+                ." WHERE mark_date > " . $this->start . " "
                 ." AND mark_date < " . $this->deadline . " "
                 .( $school_id ? " AND users.school_id = '$school_id' " : "" ) // limit to school if provided
                 ." GROUP BY user_id "
@@ -162,7 +160,7 @@ class YearlyRaffle {
      * @return string
      */
     public function getStart() {
-        return $this->dates['start'];
+        return $this->start;
     }
 
     /**
