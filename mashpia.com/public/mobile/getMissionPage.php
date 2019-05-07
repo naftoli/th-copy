@@ -139,7 +139,7 @@ $user->get_rank(); // get his rank
 $user->get_school_class(); // and get his class
 chdir('../'); // move up a directory
 $user->get_user_tracks( -1, $start, $end, array(), $user->lang_id ); // get the users tracks
-echo "<pre>"; print_r( $user ); echo "</pre>"; exit;
+//echo "<pre>"; print_r( $user ); echo "</pre>"; exit;
 chdir('mobile'); // and come back to this folder
 
 /********************** GET THE PARSHA **********************/
