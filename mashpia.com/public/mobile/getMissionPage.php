@@ -60,7 +60,7 @@ $user_id = mysql_real_escape_string( $_GET['id'] );
 
 /********************** GET THE CURRENT PARSHA **********************/
 $curParsha = array();
-if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 21) { // if the date was not provided or it is older then 21 days ago (3 weeks)
+if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 28) { // if the date was not provided or it is older then 28 days ago (4 weeks)
 	//get todays day
 	$jd = floor(unixtojd());
 	$today = intval(date('w', jdtounix($jd))); //sunday starts 0
@@ -1193,16 +1193,16 @@ $he_chars = array(
 						var date = $('.slick-slider').find('.item').eq(currentSlide).attr('data-date');
 						$('.content .tasks-day').fadeOut('fast').filter('[data-date=' + date + ']').fadeIn('fast');
 					} else {
+						//var today = <?=floor(unixtojd())?>;
+						var start = <?=$start?>;
+						var end = start + 6;
 						if (currentSlide == 0 && d.currentSlide == 0) {
 							//only allow going back up to three weeks
-							var today = <?=floor(unixtojd())?>;
-							var start = <?=$start?>;
-							var end = start + 6;
-							if ((today - start) < 28) {
+							//if ((today - start) < 28) {
 								//reload page with mission dates of the previous week
 								var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + (++start);
 								window.location.href = url;
-							}						
+							//}						
 						} else if (currentSlide == 6 && d.currentSlide == 6) {
 							//reload page with mission dates of the next week					
 							var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + (--end) + "&s=1";
