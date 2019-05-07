@@ -60,7 +60,7 @@ $user_id = mysql_real_escape_string( $_GET['id'] );
 
 /********************** GET THE CURRENT PARSHA **********************/
 $curParsha = array();
-if (!isset($_GET['d']) || intval($_GET['d']) < unixtojd() - 21) { // if the date was not provided or it is older then 21 days ago (3 weeks)
+if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 28) { // if the date was not provided or it is older then 28 days ago (4 weeks)
 	//get todays day
 	$jd = floor(unixtojd());
 	$today = intval(date('w', jdtounix($jd))); //sunday starts 0
@@ -139,6 +139,7 @@ $user->get_rank(); // get his rank
 $user->get_school_class(); // and get his class
 chdir('../'); // move up a directory
 $user->get_user_tracks( -1, $start, $end, array(), $user->lang_id ); // get the users tracks
+//echo "<pre>"; print_r( $user ); echo "</pre>"; exit;
 chdir('mobile'); // and come back to this folder
 
 /********************** GET THE PARSHA **********************/
@@ -183,8 +184,8 @@ if (isset($_GET['d'])) {
 		$curParsha['end']++;
 	}
 }
-// only allow parents to go back 2 weeks
-$sql = "select * from parshos where end <= " . $curParsha['end'] . " order by end desc limit 3";
+// only allow parents to go back 3 weeks
+$sql = "select * from parshos where end <= " . $curParsha['end'] . " order by end desc limit 4";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
 	$parshos[$row['end']] = $row['name'];
@@ -268,17 +269,17 @@ $he_chars = array(
 						<? // create the parsha locator for the links
 						$parsha_locator = [];
 						foreach($parshos as $date => $parsha) {
-							$parsha_locator[$parsha] = $date;
+							$parsha_locator[] = $date;
 						}
-						if(!(array_values($parshos)[0] == $hWeek)) {?>
-							<span id="previous" class="parsha-navigator" data-d="<?=$parsha_locator[$hWeek] - 7?>">
-								<img src="img_new/arrow-1-color-white-svg.svg" /> <?=$parshos[$parsha_locator[$hWeek] - 7]?>
+						$pos = array_search($end, $parsha_locator);
+						if($pos > 0) {?>
+							<span id="previous" class="parsha-navigator" data-d="<?=$end - 7?>">
+								<img src="img_new/arrow-1-color-white-svg.svg" /> <?=$parshos[$end - 7]?>
 							</span>
 						<?}
-						if(!(end($parshos) == $hWeek)) {
-							$next_week = $parsha_locator[$hWeek] + 7?>
-							<span id="next" class="parsha-navigator" data-d="<?=$parshos[$next_week] != end($parshos) ? $next_week : ""?>">
-								<?=$parshos[$next_week]?> <img src="img_new/arrow-1-color-white-svg.svg" />
+						if($pos < (count($parshos) - 1)) {?>
+							<span id="next" class="parsha-navigator" data-d="<?=$end + 7?>">
+								<?=$parshos[$end + 7]?> <img src="img_new/arrow-1-color-white-svg.svg" />
 							</span>
 						<? } ?>
 					</div>
@@ -1192,18 +1193,19 @@ $he_chars = array(
 						var date = $('.slick-slider').find('.item').eq(currentSlide).attr('data-date');
 						$('.content .tasks-day').fadeOut('fast').filter('[data-date=' + date + ']').fadeIn('fast');
 					} else {
+						//var today = <?=floor(unixtojd())?>;
+						var start = <?=$start?>;
+						var end = start + 6;
 						if (currentSlide == 0 && d.currentSlide == 0) {
-							//only allow going back up to two weeks
-							var today = <?=floor(unixtojd())?>;
-							var start = <?=$start?>;
-							if ((today - start) < 18) {
+							//only allow going back up to three weeks
+							//if ((today - start) < 28) {
 								//reload page with mission dates of the previous week
-								var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + <?=$start - 1?>;
+								var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + (++start);
 								window.location.href = url;
-							}						
+							//}						
 						} else if (currentSlide == 6 && d.currentSlide == 6) {
 							//reload page with mission dates of the next week					
-							var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + <?=$end + 1?> + "&s=1";
+							var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + (--end) + "&s=1";
 							window.location.href = url;
 						}
 					}
