@@ -269,17 +269,17 @@ $he_chars = array(
 						<? // create the parsha locator for the links
 						$parsha_locator = [];
 						foreach($parshos as $date => $parsha) {
-							$parsha_locator[$parsha] = $date;
+							$parsha_locator[] = $date;
 						}
-						if(!(array_values($parshos)[0] == $hWeek)) {?>
-							<span id="previous" class="parsha-navigator" data-d="<?=$parsha_locator[$hWeek] - 7?>">
-								<img src="img_new/arrow-1-color-white-svg.svg" /> <?=$parshos[$parsha_locator[$hWeek] - 7]?>
+						$pos = array_search($end, $parsha_locator);
+						if($pos > 0) {?>
+							<span id="previous" class="parsha-navigator" data-d="<?=$end - 7?>">
+								<img src="img_new/arrow-1-color-white-svg.svg" /> <?=$parshos[$end - 7]?>
 							</span>
 						<?}
-						if(!(end($parshos) == $hWeek)) {
-							$next_week = $parsha_locator[$hWeek] + 7?>
-							<span id="next" class="parsha-navigator" data-d="<?=$parshos[$next_week] != end($parshos) ? $next_week : ""?>">
-								<?=$parshos[$next_week]?> <img src="img_new/arrow-1-color-white-svg.svg" />
+						if($pos < (count($parshos) - 1)) {?>
+							<span id="next" class="parsha-navigator" data-d="<?=$end + 7?>">
+								<?=$parshos[$end + 7]?> <img src="img_new/arrow-1-color-white-svg.svg" />
 							</span>
 						<? } ?>
 					</div>
