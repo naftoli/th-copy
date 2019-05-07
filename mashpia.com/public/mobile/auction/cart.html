@@ -128,7 +128,7 @@
             var bal = 0;
             var cart = [];
             var originalBal = 0;
-    		var auction_id = 79;
+    		var auction_id = 80;
             
             $.post('ajax/getBalance.php', { admin : Cookies.get('admin'), user : user, auction : auction_id }, function( success ) {
                 var info = $.parseJSON(success);
