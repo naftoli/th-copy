@@ -60,7 +60,7 @@ $user_id = mysql_real_escape_string( $_GET['id'] );
 
 /********************** GET THE CURRENT PARSHA **********************/
 $curParsha = array();
-if (!isset($_GET['d']) || intval($_GET['d']) < unixtojd() - 21) { // if the date was not provided or it is older then 21 days ago (3 weeks)
+if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 21) { // if the date was not provided or it is older then 21 days ago (3 weeks)
 	//get todays day
 	$jd = floor(unixtojd());
 	$today = intval(date('w', jdtounix($jd))); //sunday starts 0
@@ -139,6 +139,7 @@ $user->get_rank(); // get his rank
 $user->get_school_class(); // and get his class
 chdir('../'); // move up a directory
 $user->get_user_tracks( -1, $start, $end, array(), $user->lang_id ); // get the users tracks
+echo "<pre>"; print_r( $user ); echo "</pre>"; exit;
 chdir('mobile'); // and come back to this folder
 
 /********************** GET THE PARSHA **********************/
@@ -183,8 +184,8 @@ if (isset($_GET['d'])) {
 		$curParsha['end']++;
 	}
 }
-// only allow parents to go back 2 weeks
-$sql = "select * from parshos where end <= " . $curParsha['end'] . " order by end desc limit 3";
+// only allow parents to go back 3 weeks
+$sql = "select * from parshos where end <= " . $curParsha['end'] . " order by end desc limit 4";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
 	$parshos[$row['end']] = $row['name'];
@@ -1193,17 +1194,18 @@ $he_chars = array(
 						$('.content .tasks-day').fadeOut('fast').filter('[data-date=' + date + ']').fadeIn('fast');
 					} else {
 						if (currentSlide == 0 && d.currentSlide == 0) {
-							//only allow going back up to two weeks
+							//only allow going back up to three weeks
 							var today = <?=floor(unixtojd())?>;
 							var start = <?=$start?>;
-							if ((today - start) < 18) {
+							var end = start + 6;
+							if ((today - start) < 28) {
 								//reload page with mission dates of the previous week
-								var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + <?=$start - 1?>;
+								var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + (++start);
 								window.location.href = url;
 							}						
 						} else if (currentSlide == 6 && d.currentSlide == 6) {
 							//reload page with mission dates of the next week					
-							var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + <?=$end + 1?> + "&s=1";
+							var url = "..<?=$mobileURL?>missionsNew.html?id=" + id + "&d=" + (--end) + "&s=1";
 							window.location.href = url;
 						}
 					}
