@@ -22,7 +22,7 @@ function checkYearly( $user_id ) {
     
     $raffle_info = formatRaffleInfo( $num_days, $quota, "end of year" );
 
-    if ( $yearly_raffle->getEnd() < unixtojd() + 30 ) return false;
+    //if ( $yearly_raffle->getEnd() < unixtojd() + 30 ) return false;
 
     if ( $yearly_raffle->getEnd() < unixtojd() && $num_days < $quota ) {
         return [
