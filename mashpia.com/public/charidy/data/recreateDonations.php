@@ -24,14 +24,16 @@ function createDonor( $info, $admin = [] ) {
               zip = '" . $admin['admin_postal'] . "',
               country = '" . $admin['admin_country'] . "',
               phone = '" . $info['phone'] . "',
-              email = '" . $info['email'] . "',
+              email = '" . $info['email'] . "', 
+              parent_admin_id = " . $info['parent_admin_id'] . ", 
               needs_call = 1";
   } else {
     $insert = "insert into mashpia_charidy.donors
               set first_name = '" . $info['first_name'] . "',
               last_name = '" . $info['last_name'] . "',
               phone = '" . $info['phone'] . "',
-              email = '" . $info['email'] . "',
+              email = '" . $info['email'] . "', 
+              parent_admin_id = " . $info['parent_admin_id'] . ", 
               needs_call = 1";
   }
   if ( mysql_query( $insert ) ) {
