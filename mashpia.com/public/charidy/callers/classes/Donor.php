@@ -145,7 +145,7 @@ class Donor {
             return true;
 
         $query = mysql_query(
-             " SELECT SUM(amount) as amount, donation_date, year FROM charidy_donations "
+             " SELECT SUM(amount) as amount, donation_date, year FROM mashpia_charidy.donations "
             ." WHERE donor_id = '" . $this->donor_id . "'"
             .( $year ? " AND year = $year" : "" )
             ." GROUP BY donor_id, year;"

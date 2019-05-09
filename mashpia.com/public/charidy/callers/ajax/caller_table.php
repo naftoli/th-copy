@@ -14,8 +14,8 @@ $year = GlobalSettings::getCurrentYear();
 require_once( dirname(__FILE__) . "/../classes/Donor.php" );
 
 $donors_sql = 
-     " SELECT charidy_donors.* FROM charidy_donors "
-    ." LEFT JOIN charidy_donors_callers cdc ON cdc.donor_id = charidy_donors.donor_id AND year = $year "
+     " SELECT mashpia_charidy.donors.* FROM mashpia_charidy.donors "
+    ." LEFT JOIN charidy_donors_callers cdc ON cdc.donor_id = mashpi_charidy.donors.donor_id AND year = $year "
     ." WHERE ( needs_call = 1 OR parent_admin_id IN ( "
     ." SELECT admin_id FROM th_chidon JOIN users USING (user_id) JOIN admin_auths ON auth='user' "
     ." AND id = user_id WHERE date_paid IS NOT NULL "
