@@ -15,9 +15,11 @@ $emailExceptions = [
 function createDonor( $info, $admin = [] ) {
   if ( !empty( $admin ) ) {
     if ( in_array( $info['email'], $emailExceptions ) ) $info['email'] = ''; // don't assign email to donor for the ones that are connected to th staff
+    $first_name = $admin['first'] ? $admin['first'] : $info['fname'];
+    $last_name = $admin['last'] ? $admin['last'] : $info['lname'];
     $insert = "insert into mashpia_charidy.donors
-              set first_name = \"" . $admin['first'] . "\",
-              last_name = \"" . $admin['last'] . "\",
+              set first_name = \"" . $first_name . "\",
+              last_name = \"" . $last_name . "\",
               address = \"" . $admin['admin_address1'] . "\",
               city = '" . $admin['admin_city'] . "',
               state = '" . $admin['admin_state'] . "',
@@ -29,8 +31,8 @@ function createDonor( $info, $admin = [] ) {
               needs_call = 1";
   } else {
     $insert = "insert into mashpia_charidy.donors
-              set first_name = '" . $info['first_name'] . "',
-              last_name = '" . $info['last_name'] . "',
+              set first_name = '" . $info['fname'] . "',
+              last_name = '" . $info['lname'] . "',
               phone = '" . $info['phone'] . "',
               email = '" . $info['email'] . "', 
               parent_admin_id = " . $info['parent_admin_id'] . ", 
