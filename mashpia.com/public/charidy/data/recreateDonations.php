@@ -110,7 +110,7 @@ foreach ( $info as $row ) {
       $admin = findAdminByEmail( $row['email'] );
       if ( !$admin ) $admin = findAdminByName( $row['lname'], $row['fname'] );
       if ( $donor_id = createDonor( $row, $admin ) ) {
-        $created['donors']++
+        $created['donors']++;
         if ( createDonation( $donor_id, $row ) ) $created['donations']++;
       }
     }
