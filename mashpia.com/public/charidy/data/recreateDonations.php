@@ -41,6 +41,7 @@ function createDonor( $info, $admin = [] ) {
   if ( mysql_query( $insert ) ) {
     return mysql_insert_id();
   } else {
+    echo mysql_error() . "<br />" . $insert . "<br />";
     return false;
   }
 }
@@ -52,6 +53,7 @@ function createDonation( $donor_id, $info ) {
                     amount = " . $info['donation'] . ",
                     year = " . $info['year'];
     if ( mysql_query( $sqlDonation ) ) return true;
+    else echo mysql_error() . "<br />" . $sqlDonation . "<br />";
   }
   return false;
 }
