@@ -76,6 +76,18 @@ function findDonorByEmail( $email ) {
   return 0;
 }
 
+function findDonorByName( $last_name, $first_name ) {
+  if ( $parent_id > 0 ) {
+    $sql = "select donor_id from mashpia_charidy.donors where last_name = \"" . $last_name . "\" and first_name = \"" . $first_name . "\"";
+    $result = mysql_query( $sql );
+    if ( mysql_num_rows( $result ) > 0 ) {
+        $row = mysql_fetch_assoc( $result );
+        return $row['donor_id'];
+    }
+  }
+  return 0;
+}
+
 function findAdminByEmail( $email ) {
   if ( filter_var( $email, FILTER_VALIDATE_EMAIL ) !== false ) {
     $sql = "select * from admins where admin_email = '" . $email . "'";
@@ -113,6 +125,8 @@ foreach ( $info as $row ) {
       $donor_id = findDonorByParentID( $row['parent_admin_id'] ) 
       || 
       $donor_id = findDonorByEmail( $row['email'] ) 
+      ||
+      $donor_id = findDonorByName( $row['lname'], $row['fname'] )
     ) {
       if ( createDonation( $donor_id, $row ) ) $created['donations']++;
     }
