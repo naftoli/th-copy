@@ -1,8 +1,20 @@
 <?php
 require dirname(__FILE__) . "/../../db.php";
 
+$emailExceptions = [
+  'accounting@gmail.com',
+  'accounting@tzivoishashem.org',
+  'accounting@tzivoshashem.org',
+  'chayazirkind@gmail.com',
+  'kaplanmussi@gmail.com',
+  'shimmy@jcm.museum',
+  'shimmy@tzivoshashem.org',
+  'sholomber@jcm.museum'
+];
+
 function createDonor( $info, $admin = [] ) {
   if ( !empty( $admin ) ) {
+    if ( in_array( $info['email'], $emailExceptions ) ) $info['email'] = ''; // don't assign email to donor for the ones that are connected to th staff
     $insert = "insert into mashpia_charidy.donors
               set first_name = \"" . $admin['first'] . "\",
               last_name = \"" . $admin['last'] . "\",
