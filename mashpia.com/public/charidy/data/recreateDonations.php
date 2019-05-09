@@ -1,0 +1,119 @@
+<?php
+require dirname(__FILE__) . "/../../db.php";
+
+function createDonor( $info, $admin = [] ) {
+  if ( !empty( $admin ) ) {
+    $insert = "insert into mashpia_charidy.donors
+              set first_name = \"" . $admin['first'] . "\",
+              last_name = \"" . $admin['last'] . "\",
+              address = \"" . $admin['admin_address1'] . "\",
+              city = '" . $admin['admin_city'] . "',
+              state = '" . $admin['admin_state'] . "',
+              zip = '" . $admin['admin_postal'] . "',
+              country = '" . $admin['admin_country'] . "',
+              phone = '" . $info['phone'] . "',
+              email = '" . $info['email'] . "',
+              needs_call = 1";
+  } else {
+    $insert = "insert into mashpia_charidy.donors
+              set first_name = '" . $info['first_name'] . "',
+              last_name = '" . $info['last_name'] . "',
+              phone = '" . $info['phone'] . "',
+              email = '" . $info['email'] . "',
+              needs_call = 1";
+  }
+  if ( mysql_query( $insert ) ) {
+    return mysql_insert_id();
+  } else {
+    return false;
+  }
+}
+
+function createDonation( $donor_id, $info ) {
+  if ( $donor_id > 0 ) {
+    $sqlDonation = "insert into mashpia_charidy.donations
+                    set donor_id = " . $donor_id . ",
+                    amount = " . $info['donation'] . ",
+                    year = " . $info['year'];
+    if ( mysql_query( $sqlDonation ) ) return true;
+  }
+  return false;
+}
+
+function findDonorByParentID( $parent_id ) {
+  if ( $parent_id > 0 ) {
+    $sql = "select donor_id from mashpia_charidy.donors where parent_admin_id = " . $parent_id;
+    $result = mysql_query( $sql );
+    if ( mysql_num_rows( $result ) > 0 ) {
+        $row = mysql_fetch_assoc( $result );
+        return $row['donor_id'];
+    }
+  }
+  return 0;
+}
+
+function findDonorByEmail( $email ) {
+  if ( filter_var( $email, FILTER_VALIDATE_EMAIL ) !== false ) {
+    $sql = "select donor_id from mashpia_charidy.donors where email = '" . $email . "'";
+    $result = mysql_query( $sql );
+    if ( mysql_num_rows( $result ) > 0 ) {
+        $row = mysql_fetch_assoc( $result );
+        return $row['donor_id'];
+    }
+  }
+  return 0;
+}
+
+function findAdminByEmail( $email ) {
+  if ( filter_var( $email, FILTER_VALIDATE_EMAIL ) !== false ) {
+    $sql = "select * from admins where admin_email = '" . $email . "'";
+    $result = mysql_query( $sql );
+    if ( mysql_num_rows( $result ) > 0 ) {
+        $row = mysql_fetch_assoc( $result );
+        return $row;
+    }
+  }
+  return [];
+}
+
+function findAdminByName( $last_name, $first_name ) {
+  $sql = "select * from admins where last = \"" . $last_name . "\" and first = \"" . $first_name . "\"";
+  $result = mysql_query( $sql );
+  if ( mysql_num_rows( $result ) > 0 ) { 
+    $row = mysql_fetch_assoc( $result );
+    return $row;
+  }
+  return [];
+}
+
+$info = [];
+$sql = "select * from charidy";
+$result = mysql_query( $sql );
+while ( $row = mysql_fetch_assoc( $result ) ) {
+    $info[] = $row;
+}
+
+$created['donors'] = 0;
+$created['donations'] = 0;
+foreach ( $info as $row ) {
+    // find out if this donor already exists; check by parent_id, email address
+    if ( 
+      $donor_id = findDonorByParentID( $row['parent_admin_id'] ) 
+      || 
+      $donor_id = findDonorByEmail( $row['email'] ) 
+    ) {
+      if ( createDonation( $donor_id, $row ) ) $created['donations']++;
+    }
+    
+    // create donor if it doesn't exist
+    else {
+      $admin = findAdminByEmail( $row['email'] );
+      if ( !$admin ) $admin = findAdminByName( $row['lname'], $row['fname'] );
+      if ( $donor_id = createDonor( $row, $admin ) ) {
+        $created['donors']++
+        if ( createDonation( $donor_id, $row ) ) $created['donations']++;
+      }
+    }
+}
+echo "done.";
+echo "<pre>"; print_r( $created ); echo "</pre>";
