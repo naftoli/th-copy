@@ -38,12 +38,14 @@ function createDonor( $info, $admin = [] ) {
               parent_admin_id = " . $info['parent_admin_id'] . ", 
               needs_call = 1";
   }
-  if ( mysql_query( $insert ) ) {
-    return mysql_insert_id();
-  } else {
-    echo mysql_error() . "<br />" . $insert . "<br />";
-    return false;
-  }
+  echo $insert . "<br />";
+  return 111;
+  // if ( mysql_query( $insert ) ) {
+  //   return mysql_insert_id();
+  // } else {
+  //   echo mysql_error() . "<br />" . $insert . "<br />";
+  //   return false;
+  // }
 }
 
 function createDonation( $donor_id, $info ) {
@@ -52,8 +54,12 @@ function createDonation( $donor_id, $info ) {
                     set donor_id = " . $donor_id . ",
                     amount = " . $info['donation'] . ",
                     year = " . $info['year'];
-    if ( mysql_query( $sqlDonation ) ) return true;
-    else echo mysql_error() . "<br />" . $sqlDonation . "<br />";
+    echo $sqlDonation . "<br />";
+    return true;
+    // if ( mysql_query( $sqlDonation ) ) return true;
+    // else echo mysql_error() . "<br />" . $sqlDonation . "<br />";
+  } else {
+    echo "Missing donor id<br />";
   }
   return false;
 }
