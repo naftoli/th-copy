@@ -134,13 +134,10 @@ $created['donors'] = 0;
 $created['donations'] = 0;
 foreach ( $info as $row ) {
     // find out if this donor already exists; check by parent_id, email address, name
-    if ( 
-      $donor_id = findDonorByParentID( $row['parent_admin_id'] ) 
-      || 
-      $donor_id = findDonorByEmail( $row['email'] ) 
-      ||
-      $donor_id = findDonorByName( $row['lname'], $row['fname'] )
-    ) {
+    $donor_id = findDonorByParentID( $row['parent_admin_id'] );
+    if ( !$donor_id ) $donor_id = findDonorByEmail( $row['email'] );
+    if ( !$donor_id ) $donor_id = findDonorByName( $row['lname'], $row['fname'] );
+    if ( $donor_id ) {
       echo "found donor id: " . $donor_id . " - " . $row['parent_admin_id'] . ' : ' . $row['email'] . ' : ' . $row['lname'] . ' ' . $row['fname'] . "<br />";
       if ( createDonation( $donor_id, $row ) ) $created['donations']++;
     }
@@ -154,7 +151,6 @@ foreach ( $info as $row ) {
         if ( createDonation( $donor_id, $row ) ) $created['donations']++;
       }
     }
-    $donor_id = 0; // reset donor id
 }
 echo "done.";
 echo "<pre>"; print_r( $created ); echo "</pre>";
