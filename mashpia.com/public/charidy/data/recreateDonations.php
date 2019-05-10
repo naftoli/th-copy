@@ -53,10 +53,10 @@ function createDonation( $donor_id, $info ) {
                     set donor_id = " . $donor_id . ",
                     amount = " . $info['donation'] . ",
                     year = " . $info['year'];
-    echo $sqlDonation . "<br />";
-    return true;
-    // if ( mysql_query( $sqlDonation ) ) return true;
-    // else echo mysql_error() . "<br />" . $sqlDonation . "<br />";
+    // echo $sqlDonation . "<br />";
+    // return true;
+    if ( mysql_query( $sqlDonation ) ) return true;
+    else echo mysql_error() . "<br />" . $sqlDonation . "<br />";
   } else {
     echo "Missing donor id for Charidy ID: " . $info['charidy_id'] . "<br />";
   }
@@ -68,7 +68,6 @@ function findDonorByParentID( $parent_id ) {
     $sql = "select donor_id from mashpia_charidy.donors where parent_admin_id = " . $parent_id;
     $result = mysql_query( $sql );
     if ( mysql_num_rows( $result ) > 0 ) {
-      echo $sql . "<br />";
         $row = mysql_fetch_assoc( $result );
         return $row['donor_id'];
     }
@@ -81,7 +80,6 @@ function findDonorByEmail( $email ) {
     $sql = "select donor_id from mashpia_charidy.donors where email = '" . $email . "'";
     $result = mysql_query( $sql );
     if ( mysql_num_rows( $result ) > 0 ) {
-      echo $sql . "<br />";
         $row = mysql_fetch_assoc( $result );
         return $row['donor_id'];
     }
@@ -93,7 +91,6 @@ function findDonorByName( $last_name, $first_name ) {
   $sql = "select donor_id from mashpia_charidy.donors where last_name = \"" . $last_name . "\" and first_name = \"" . $first_name . "\"";
   $result = mysql_query( $sql );
   if ( mysql_num_rows( $result ) > 0 ) {
-    echo $sql . "<br />";
       $row = mysql_fetch_assoc( $result );
       return $row['donor_id'];
   }
@@ -138,7 +135,7 @@ foreach ( $info as $row ) {
     if ( !$donor_id ) $donor_id = findDonorByEmail( $row['email'] );
     if ( !$donor_id ) $donor_id = findDonorByName( $row['lname'], $row['fname'] );
     if ( $donor_id ) {
-      echo "found donor id: " . $donor_id . " - " . $row['parent_admin_id'] . ' : ' . $row['email'] . ' : ' . $row['lname'] . ' ' . $row['fname'] . "<br />";
+      //echo "found donor id: " . $donor_id . " - " . $row['parent_admin_id'] . ' : ' . $row['email'] . ' : ' . $row['lname'] . ' ' . $row['fname'] . "<br />";
       if ( createDonation( $donor_id, $row ) ) $created['donations']++;
     }
     
