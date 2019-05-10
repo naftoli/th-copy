@@ -17,10 +17,11 @@ function createDonor( $info, $admin = [] ) {
     if ( in_array( $info['email'], $emailExceptions ) ) $info['email'] = ''; // don't assign email to donor for the ones that are connected to th staff
     $first_name = $admin['first'] ? $admin['first'] : $info['fname'];
     $last_name = $admin['last'] ? $admin['last'] : $info['lname'];
+    $address = str_replace('#', '\#', $admin['admin_address1']);
     $insert = "insert into mashpia_charidy.donors
               set first_name = \"" . $first_name . "\",
               last_name = \"" . $last_name . "\",
-              address = \"" . $admin['admin_address1'] . "\",
+              address = \"" . $address . "\",
               city = '" . $admin['admin_city'] . "',
               state = '" . $admin['admin_state'] . "',
               zip = '" . $admin['admin_postal'] . "',
@@ -88,13 +89,11 @@ function findDonorByEmail( $email ) {
 }
 
 function findDonorByName( $last_name, $first_name ) {
-  if ( $parent_id > 0 ) {
-    $sql = "select donor_id from mashpia_charidy.donors where last_name = \"" . $last_name . "\" and first_name = \"" . $first_name . "\"";
-    $result = mysql_query( $sql );
-    if ( mysql_num_rows( $result ) > 0 ) {
-        $row = mysql_fetch_assoc( $result );
-        return $row['donor_id'];
-    }
+  $sql = "select donor_id from mashpia_charidy.donors where last_name = \"" . $last_name . "\" and first_name = \"" . $first_name . "\"";
+  $result = mysql_query( $sql );
+  if ( mysql_num_rows( $result ) > 0 ) {
+      $row = mysql_fetch_assoc( $result );
+      return $row['donor_id'];
   }
   return 0;
 }
