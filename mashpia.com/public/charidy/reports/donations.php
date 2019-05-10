@@ -59,13 +59,13 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
               $total += $donation['amount'];
               $totals[$year] += $donation['amount'];
             }
-            echo "$" . number_format( $total );
+            echo number_format( $total );
           }
           echo "</td><td>";
         }
         echo "</td></tr>";
       }
-      echo "<tr><td colspan='7'></td>";
+      echo "<tr><td colspan='6'></td>";
       foreach ( $totals as $year => $amount ) {
         echo "<th>$" . number_format( $amount ) . "</th>";
       }
