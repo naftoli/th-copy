@@ -138,6 +138,7 @@ foreach ( $info as $row ) {
       ||
       $donor_id = findDonorByName( $row['lname'], $row['fname'] )
     ) {
+      echo "found donor id: " . $donor_id . " - " . $row['parent_admin_id'] . ' : ' . $row['email'] . ' : ' . $row['lname'] . ' ' . $row['fname'] . "<br />";
       if ( createDonation( $donor_id, $row ) ) $created['donations']++;
     }
     
