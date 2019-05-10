@@ -1,18 +1,17 @@
 <?php
 require dirname(__FILE__) . "/../../db.php";
 
-$emailExceptions = [
-  'accounting@gmail.com',
-  'accounting@tzivoishashem.org',
-  'accounting@tzivoshashem.org',
-  'chayazirkind@gmail.com',
-  'kaplanmussi@gmail.com',
-  'shimmy@jcm.museum',
-  'shimmy@tzivoshashem.org',
-  'sholomber@jcm.museum'
-];
-
 function createDonor( $info, $admin = [] ) {
+  $emailExceptions = [
+    'accounting@gmail.com',
+    'accounting@tzivoshashem.org',
+    'chayazirkind@gmail.com',
+    'kaplanmussi@gmail.com',
+    'shimmy@jcm.museum',
+    'shimmy@tzivoshashem.org',
+    'sholomber@jcm.museum'
+  ];
+
   if ( !empty( $admin ) ) {
     if ( in_array( $info['email'], $emailExceptions ) ) $info['email'] = ''; // don't assign email to donor for the ones that are connected to th staff
     $first_name = $admin['first'] ? $admin['first'] : $info['fname'];
@@ -129,6 +128,7 @@ $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $info[] = $row;
 }
+//echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
 
 $created['donors'] = 0;
 $created['donations'] = 0;
@@ -154,6 +154,7 @@ foreach ( $info as $row ) {
         if ( createDonation( $donor_id, $row ) ) $created['donations']++;
       }
     }
+    $donor_id = 0; // reset donor id
 }
 echo "done.";
 echo "<pre>"; print_r( $created ); echo "</pre>";
