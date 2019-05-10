@@ -17,7 +17,7 @@ function createDonor( $info, $admin = [] ) {
     if ( in_array( $info['email'], $emailExceptions ) ) $info['email'] = ''; // don't assign email to donor for the ones that are connected to th staff
     $first_name = $admin['first'] ? $admin['first'] : $info['fname'];
     $last_name = $admin['last'] ? $admin['last'] : $info['lname'];
-    $address = str_replace('#', '-', $admin['admin_address1']);
+    $address = str_replace('"', '', $admin['admin_address1']);
     $insert = "insert into mashpia_charidy.donors
               set first_name = \"" . $first_name . "\",
               last_name = \"" . $last_name . "\",
@@ -37,7 +37,7 @@ function createDonor( $info, $admin = [] ) {
               email = '" . $info['email'] . "', 
               needs_call = 1";
   }
-  if ( $info['parent_admin_id'] ) $insert .= ", parent_admin_id = " . $info['parent_admin_id'];
+  if ( $info['parent_admin_id'] > 0 ) $insert .= ", parent_admin_id = " . $info['parent_admin_id'];
   // echo $insert . "<br />";
   // return 111;
   if ( mysql_query( $insert ) ) {
@@ -64,7 +64,7 @@ function createDonation( $donor_id, $info ) {
   return false;
 }
 
-function findDonorByParentID( $parent_id ) {
+function findDonorByParentID( $parent_id = 0 ) {
   if ( $parent_id > 0 ) {
     $sql = "select donor_id from mashpia_charidy.donors where parent_admin_id = " . $parent_id;
     $result = mysql_query( $sql );
