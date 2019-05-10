@@ -38,7 +38,7 @@ function createDonor( $info, $admin = [] ) {
               needs_call = 1";
   }
   if ( $info['parent_admin_id'] > 0 ) $insert .= ", parent_admin_id = " . $info['parent_admin_id'];
-  // echo $insert . "<br />";
+  echo $insert . "<br />";
   // return 111;
   if ( mysql_query( $insert ) ) {
     return mysql_insert_id();
@@ -54,10 +54,10 @@ function createDonation( $donor_id, $info ) {
                     set donor_id = " . $donor_id . ",
                     amount = " . $info['donation'] . ",
                     year = " . $info['year'];
-    // echo $sqlDonation . "<br />";
-    // return true;
-    if ( mysql_query( $sqlDonation ) ) return true;
-    else echo mysql_error() . "<br />" . $sqlDonation . "<br />";
+    echo $sqlDonation . "<br />";
+    return true;
+    // if ( mysql_query( $sqlDonation ) ) return true;
+    // else echo mysql_error() . "<br />" . $sqlDonation . "<br />";
   } else {
     echo "Missing donor id for Charidy ID: " . $info['charidy_id'] . "<br />";
   }
