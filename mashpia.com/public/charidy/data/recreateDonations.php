@@ -64,11 +64,12 @@ function createDonation( $donor_id, $info ) {
   return false;
 }
 
-function findDonorByParentID( $parent_id = 0 ) {
+function findDonorByParentID( $parent_id ) {
   if ( $parent_id > 0 ) {
     $sql = "select donor_id from mashpia_charidy.donors where parent_admin_id = " . $parent_id;
     $result = mysql_query( $sql );
     if ( mysql_num_rows( $result ) > 0 ) {
+      echo $sql . "<br />";
         $row = mysql_fetch_assoc( $result );
         return $row['donor_id'];
     }
@@ -81,6 +82,7 @@ function findDonorByEmail( $email ) {
     $sql = "select donor_id from mashpia_charidy.donors where email = '" . $email . "'";
     $result = mysql_query( $sql );
     if ( mysql_num_rows( $result ) > 0 ) {
+      echo $sql . "<br />";
         $row = mysql_fetch_assoc( $result );
         return $row['donor_id'];
     }
@@ -92,6 +94,7 @@ function findDonorByName( $last_name, $first_name ) {
   $sql = "select donor_id from mashpia_charidy.donors where last_name = \"" . $last_name . "\" and first_name = \"" . $first_name . "\"";
   $result = mysql_query( $sql );
   if ( mysql_num_rows( $result ) > 0 ) {
+    echo $sql . "<br />";
       $row = mysql_fetch_assoc( $result );
       return $row['donor_id'];
   }
@@ -130,7 +133,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 $created['donors'] = 0;
 $created['donations'] = 0;
 foreach ( $info as $row ) {
-    // find out if this donor already exists; check by parent_id, email address
+    // find out if this donor already exists; check by parent_id, email address, name
     if ( 
       $donor_id = findDonorByParentID( $row['parent_admin_id'] ) 
       || 
