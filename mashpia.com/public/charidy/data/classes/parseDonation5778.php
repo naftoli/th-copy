@@ -394,7 +394,7 @@ class ParseDonation5778
         $result = mysql_query( $qry );
         if ( mysql_num_rows( $result ) > 0 ) {
           $row = mysql_fetch_assoc( $result );
-          echo $sql . "<br />";
+          echo $qry . "<br />";
           echo "<pre>"; print_r( $this->info ); print_r( $row ); echo "</pre>";
           //$this->donation->donor_id = $row['donor_id'];
           break; // found a matching id
