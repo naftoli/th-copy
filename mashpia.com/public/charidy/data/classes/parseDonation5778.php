@@ -368,39 +368,36 @@ class ParseDonation5778
     }
 
     private function findDonor() {
-      $emailExceptions = [
-        'accounting@gmail.com',
-        'accounting@tzivoshashem.org',
-        'chayazirkind@gmail.com',
-        'kaplanmussi@gmail.com',
-        'shimmy@jcm.museum',
-        'shimmy@tzivoshashem.org',
-        'sholomber@jcm.museum'
-      ];
+      $qrys = [];
+
       $phone = $this->info->phone;
+      if ( $phone != '' ) $qrys[] = "select donor_id from mashpia_charidy.donors where phone = '" . $phone . "'";
+
       $name = $this->getFirstLast( $this->info->name );
-      $sql = "select donor_id from mashpia_charidy.donors where ";
-      if ( !empty( $phone ) ) {
-        $sql = "phone = '" . $phone . "'";
-        if ( $name ) {
-          $sql .= " or (first_name = '" . $name['first'] . "' and last_name = '" . $name['last'] . "')";
-        }
-        if ( $this->info->email && !in_array( $this->info->email, $emailExceptions ) ) $sql .= " or email = '" . $this->info->email . "'";
-      } else if ( !empty( $name ) ) {
-        $sql .= "(first_name = '" . $name['first'] . "' and last_name = '" . $name['last'] . "')";
-        if ( $this->info->email && !in_array( $this->info->email, $emailExceptions ) ) $sql .= " or email = '" . $this->info->email . "'";
-      } else if ( !empty( $this->info->email ) ) {
-        $sql .= " email = '" . $this->info->email . "'";
-      } else {
-        return;
+      if ( !empty( $name ) ) $qrys[] = "select donor_id from mashpia_charidy.donors where (first_name = '" . $name['first'] . "' and last_name = '" . $name['last'] . "')";
+
+      $email = $this->info->email;
+      if ( $email ) {
+        $emailExceptions = [
+          'accounting@gmail.com',
+          'accounting@tzivoshashem.org',
+          'chayazirkind@gmail.com',
+          'kaplanmussi@gmail.com',
+          'shimmy@jcm.museum',
+          'shimmy@tzivoshashem.org',
+          'sholomber@jcm.museum'
+        ];
+        if ( !in_array( $email, $emailExceptions ) ) $qrys[] = "select donor_id from mashpia_charidy.donors where  email = '" . $email . "'";
       }
 
-      $result = mysql_query( $sql );
-      if ( mysql_num_rows( $result ) > 0 ) {
-        $row = mysql_fetch_assoc( $result );
-        echo $sql . "<br />";
-        echo "<pre>"; print_r( $this->info ); print_r( $row ); echo "</pre>";
-        //$this->donation->donor_id = $row['donor_id'];
+      foreach ( $qrys as $qry ) {
+        $result = mysql_query( $sql );
+        if ( mysql_num_rows( $result ) > 0 ) {
+          $row = mysql_fetch_assoc( $result );
+          echo $sql . "<br />";
+          echo "<pre>"; print_r( $this->info ); print_r( $row ); echo "</pre>";
+          //$this->donation->donor_id = $row['donor_id'];
+        }
       }
     }
 
