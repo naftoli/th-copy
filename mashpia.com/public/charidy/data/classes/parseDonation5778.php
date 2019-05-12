@@ -379,8 +379,22 @@ class ParseDonation5778
       ];
       $phone = $this->info->phone;
       $name = $this->getFirstLast( $this->info->name );
-      $sql = "select donor_id from mashpia_charidy.donors where phone = '" . $phone . "' or (first_name = '" . $name['first'] . "' and last_name = '" . $name['last'] . "')";
-      if ( $this->info->email && !in_array( $this->info->email, $emailExceptions ) ) $sql .= " or email = '" . $this->info->email . "'";
+      $sql = "select donor_id from mashpia_charidy.donors where ";
+      if ( !empty( $phone ) ) {
+        $sql = "phone = '" . $phone . "'";
+        if ( $name ) {
+          $sql .= " or (first_name = '" . $name['first'] . "' and last_name = '" . $name['last'] . "')";
+        }
+        if ( $this->info->email && !in_array( $this->info->email, $emailExceptions ) ) $sql .= " or email = '" . $this->info->email . "'";
+      } else if ( !empty( $name ) ) {
+        $sql .= "(first_name = '" . $name['first'] . "' and last_name = '" . $name['last'] . "')";
+        if ( $this->info->email && !in_array( $this->info->email, $emailExceptions ) ) $sql .= " or email = '" . $this->info->email . "'";
+      } else if ( !empty( $this->info->email ) ) {
+        $sql .= " email = '" . $this->info->email . "'";
+      } else {
+        return;
+      }
+
       $result = mysql_query( $sql );
       if ( mysql_num_rows( $result ) > 0 ) {
         $row = mysql_fetch_assoc( $result );
