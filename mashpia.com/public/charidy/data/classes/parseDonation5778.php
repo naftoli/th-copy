@@ -391,7 +391,7 @@ class ParseDonation5778
       }
 
       foreach ( $qrys as $qry ) {
-        $result = mysql_query( $sql );
+        $result = mysql_query( $qry );
         if ( mysql_num_rows( $result ) > 0 ) {
           $row = mysql_fetch_assoc( $result );
           echo $sql . "<br />";
