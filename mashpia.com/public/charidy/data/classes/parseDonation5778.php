@@ -384,7 +384,8 @@ class ParseDonation5778
       $result = mysql_query( $sql );
       if ( mysql_num_rows( $result ) > 0 ) {
         $row = mysql_fetch_assoc( $result );
-        $this->donation->donor_id = $row['donor_id'];
+        echo "<pre>"; print_r( $this->info ); print_r( $row ); echo "</pre>";
+        //$this->donation->donor_id = $row['donor_id'];
       }
     }
 
