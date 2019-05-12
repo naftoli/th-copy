@@ -14,7 +14,7 @@ function parse( $info, $data = array() ) {
     if ( !empty( $data ) ) {
         $donation = json_decode( $data );
         if ( $donation ) $p = new ParseDonation5778( $info, $donation );
-        else return "Error parsing json object.<br />";
+        //else return "Error parsing json object.<br />";
     } else {
         $p = new ParseDonation5778( $info );
     }
