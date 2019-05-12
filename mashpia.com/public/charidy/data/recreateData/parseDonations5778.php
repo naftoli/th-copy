@@ -49,9 +49,9 @@ function parse( $info, $data = array() ) {
             }
         }
 
-        // if (empty( $errors )) {
-        //     mysql_query('commit');
-        // } else {
+        if (empty( $errors )) {
+            mysql_query('commit');
+        } else {
             mysql_query('rollback');
             echo "<pre>";
             print_r( $errors );
@@ -59,7 +59,7 @@ function parse( $info, $data = array() ) {
             // foreach ($errors as $error) {
             //     echo $error . "<br />";
             // }
-        //}
+        }
         mysql_query('set autocommit=1');
         echo "done.";
         ?>
