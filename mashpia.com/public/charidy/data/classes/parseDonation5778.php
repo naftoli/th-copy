@@ -368,10 +368,19 @@ class ParseDonation5778
     }
 
     private function findDonor() {
+      $emailExceptions = [
+        'accounting@gmail.com',
+        'accounting@tzivoshashem.org',
+        'chayazirkind@gmail.com',
+        'kaplanmussi@gmail.com',
+        'shimmy@jcm.museum',
+        'shimmy@tzivoshashem.org',
+        'sholomber@jcm.museum'
+      ];
       $phone = $this->info->phone;
-      $email = $this->info->email;
       $name = $this->getFirstLast( $this->info->name );
-      $sql = "select donor_id, parent_admin_id from mashpia_charidy.donors where phone = '" . $phone . "' or email = '" . $email . "' or (first_name = '" . $name['first'] . "' and last_name = '" . $name['last'] . "')";
+      $sql = "select donor_id, parent_admin_id from mashpia_charidy.donors where phone = '" . $phone . "' or (first_name = '" . $name['first'] . "' and last_name = '" . $name['last'] . "')";
+      if ( $this->info->email && !in_array( $this->info->email, $emailExceptions ) ) $sql .= ", or email = '" . $this->info->email . "'";
       $result = mysql_query( $sql );
       if ( mysql_num_rows( $result ) > 0 ) {
         $row = mysql_fetch_assoc( $result );
