@@ -397,6 +397,7 @@ class ParseDonation5778
           echo $sql . "<br />";
           echo "<pre>"; print_r( $this->info ); print_r( $row ); echo "</pre>";
           //$this->donation->donor_id = $row['donor_id'];
+          break; // found a matching id
         }
       }
     }
