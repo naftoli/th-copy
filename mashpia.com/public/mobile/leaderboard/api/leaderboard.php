@@ -31,6 +31,7 @@ $leaderboard_sql =
     ." JOIN (SELECT user_id, COUNT(*) AS medal_count FROM medal_marks GROUP BY user_id) mm USING (user_id) "
     ." JOIN (SELECT user_id, SUM( mission_count ) AS mission_count FROM date_tasks_mission_marks GROUP BY user_id) dtmm USING (user_id) "
     ." WHERE u.user_registered IS NOT NULL ";
+$leaderboard_sql .= "AND user_id not in (59350,59351) "; // remove babies added b/c of health issues
 if ( $gender )
     $leaderboard_sql .= " AND u.gender = '$gender' ";
 if ( $rank )
