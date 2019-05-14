@@ -54,12 +54,12 @@ krsort( $donations );
                 echo $amount;
                 $prevAmount = $amount;
               }
-              echo "</td><td>" . $donor . "</td><td>" . $donors[$donor]['parent_admin_id'] . "</td><td>" . $donors[$donor]['first_name'] . "</td><td>" . $donors[$donor]['last_name'] . "</td><td>" . 
-                $donors[$donor]['phone'] . "</td><td>" . $donors[$donor]['email'] . "</td><td>";
+              echo "</td><td>" . $donor . "</td><td>" . $donors[$donor]['parent_admin_id'] . "</td><td>" . $donors[$donor]['first_name'] . "</td><td>" . 
+                $donors[$donor]['last_name'] . "</td><td>" . $donors[$donor]['phone'] . "</td><td>" . $donors[$donor]['email'] . "</td>";
               foreach ( $donorsAmounts[$donor] as $year => $donationAmount ) {
-                echo $year . " - " . $donationAmount . "<br />";
+                echo "<td>" . $year . " - " . $donationAmount . "</td>";
               }
-              echo "</td></tr>";
+              echo "</tr>";
               unset( $donors[$donor] ); // remove donor so that he won't show up again.
             }
           }
