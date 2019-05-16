@@ -3,7 +3,7 @@ include_once(dirname(__FILE__) . "/header.php");
 
 $key = mysql_real_escape_string( $_POST['key'] );
 
-if ($key == 'cth5779!') {
+if ($key == 'cth5778!') {
     
     $students = [];
     $name = mysql_real_escape_string( $_POST['name'] );
