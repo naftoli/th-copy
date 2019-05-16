@@ -6,7 +6,7 @@ ini_set("display_errors", 1);
 $admin_auth = array('school'); 
 require_once( dirname(__FILE__).'/../../header.php' );
 
-if ( $admin_user['auth'] == 'super' ) {
+if ( $admin_user['auth'] != 'super' ) {
     header( 'Location: /raffles/' ); die();
 }
 /***************** EXTERNAL DEPENDENCIES **********************/

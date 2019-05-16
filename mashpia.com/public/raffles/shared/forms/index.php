@@ -50,18 +50,21 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         </div>
         <h2>Yearly Raffle</h2>
         <div id="action-links">
-            <a href="../../yearly/eligibility_report.php">
-                <div class="button">
-                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
-                    <span class="link-text">Student Eligibility Report</span>
-                </div>
-            </a>
+            <?if ($admin_user['auth'] == 'super') {?>
             <a href="../../yearly/eligibility_report_hq.php">
                 <div class="button">
                     <img src="/images/icon_auction.png" height="32" alt="tickets"/>
                     <span class="link-text">Eligible Students only</span>
                 </div>
             </a>
+            <? } else { ?>
+                <a href="../../yearly/eligibility_report.php">
+                <div class="button">
+                    <img src="/images/icon_profile.png" height="32" alt="tickets"/>
+                    <span class="link-text">Student Eligibility Report</span>
+                </div>
+            </a>
+            <? } ?>
             <!-- <a href="../../yearly/printout/">
                 <div class="button">
                     <img src="/images/parentIcons/Printer.gif" height="32" alt="tickets"/>
