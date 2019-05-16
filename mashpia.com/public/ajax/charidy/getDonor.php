@@ -82,7 +82,7 @@ function build_json( $row ) {
         }
     }
     
-    $donation_qry = "select sum(amount) as total from charidy_donations where donor_id = " . $donor_id . " and year = " . --$year;
+    $donation_qry = "select sum(amount) as total from mashpia_charidy.donations where donor_id = " . $donor_id . " and year = " . --$year;
     $donation_result = mysql_query( $donation_qry );
     $donation_row = mysql_fetch_assoc( $donation_result );
     
@@ -122,7 +122,7 @@ $response = [];
 $email = mysql_real_escape_string( trim( $_POST['email'] ) );
 
 $donor_query = mysql_query(
-    "SELECT * FROM charidy_donors WHERE email = '" . $email . "' "
+    "SELECT * FROM mashpia_charidy.donors WHERE email = '" . $email . "' "
 );
 // if we have a result...
 if ( $row = mysql_fetch_assoc($donor_query) ) {
