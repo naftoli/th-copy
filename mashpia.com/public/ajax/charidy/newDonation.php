@@ -23,7 +23,7 @@ if ($user_serial > 0) {
 
 if ($donor_id > 0) {
     if ( $donation_amount ) {
-        $sql = "insert into charidy_donations
+        $sql = "insert into mashpia_charidy.donations
                 set donor_id = " . $donor_id . ",
                 year = " . $year . ",
                 amount = " . $donation_amount . ",
@@ -45,7 +45,7 @@ if ($donor_id > 0) {
             if ($child['amount']) {
                 $user_id = mysql_real_escape_string( $child['user_id'] );
                 $amount = mysql_real_escape_string( $child['amount'] );
-                $sql = "insert into charidy_donations
+                $sql = "insert into mashpia_charidy.donations
                         set donor_id = " . $donor_id . ",
                         year = " . $year . ",
                         amount = " . $amount . ",

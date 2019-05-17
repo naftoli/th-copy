@@ -3,7 +3,7 @@ require_once '../../db.php';
 
 $donors = [];
 $donations = [];
-$sql = "select * from mashpia_charidy.donors";
+$sql = "select * from mashpia_charidy.donors d left join admins a on a.admin_id = d.parent_admin_id";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
   $donors[] = $row;
@@ -36,6 +36,11 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         <th>Last Name</th>
         <th>Phone</th>
         <th>Email</th>
+        <th>Mashpia Email</th>
+        <th>Work Phone</th>
+        <th>Home Phone</th>
+        <th>Cell Phone</th>
+        <th>Cell Phone2</th>
         <th>5776 Donation</th>
         <th>5777 Donation</th>
         <th>5778 Donation</th>
@@ -51,7 +56,8 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
       foreach ( $donors as $donor ) {
         $donor_id = $donor['donor_id'];
         echo "<tr><td>" . $donor_id . "</td><td>" . $donor['parent_admin_id'] . "</td><td>" . $donor['first_name'] . "</td><td>" . $donor['last_name'] . "</td><td>" . 
-          $donor['phone'] . "</td><td>" . $donor['email'] . "</td><td>";
+          $donor['phone'] . "</td><td>" . $donor['email'] . "</td><td>" . $donor['admin_email'] . "</td><td>" . $donor['admin_phone_work'] . "</td><td>" . 
+          $donor['admin_phone_home'] . "</td><td>" . $donor['admin_phone_mobile'] . "</td><td>" . $donor['admin_phone_mobile2'] . "</td><td>";
         foreach ( $years as $year ) {
           if ( isset( $donations[$donor_id][$year] ) ) {
             $total = 0;
