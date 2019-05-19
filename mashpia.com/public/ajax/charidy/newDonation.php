@@ -6,8 +6,8 @@ $year = GlobalSettings::getCurrentYear();
 
 //echo json_encode( $_POST );
 
-$donor_id = mysql_real_escape_string( $_POST['donor_id'] );
-$donation_amount = mysql_real_escape_string( $_POST['amount'] );
+$donor_id = intval( mysql_real_escape_string( $_POST['donor_id'] ) );
+$donation_amount = doubleval( mysql_real_escape_string( $_POST['amount'] );
 $date = mysql_real_escape_string( $_POST['date_time'] );
 $user_serial = isset($_POST['dedication_user_id']) && $_POST['dedication_user_id'] > 0 ?  mysql_real_escape_string( $_POST['dedication_user_id'] ) : 0;
 
@@ -19,6 +19,30 @@ if ($user_serial > 0) {
     $user_id = $row['user_id'];
 } else {
     $user_id = 0;
+}
+
+if ( $donor_id == 0 ) {
+    // create donor
+    $name = mysql_real_escape_string( $_POST['name'] );
+    $arrName = explode(' ', $name);
+    $last_name = $arrName[count($arrName) - 1];
+    $first_name = '';
+    for ( $i = 0; i < count($arrName) - 2; $i++ ) {
+        $first_name .= $arrName[$i] + ' ';
+    }
+    $phone = mysql_real_escape_string( $_POST['phone'] );
+    $address = mysql_real_escape_string( $_POST['address'] );
+    $email = mysql_real_escape_string( $_POST['email'] );
+    $parent_id = mysql_real_escape_string( $_POST['parent_id'] );
+
+    $sql = "insert into mashpia_charidy.donors 
+            set first_name = \"" . $first_name . "\", 
+            last_name = \"" . $last_name . "\", 
+            address = \"" . $address . "\", 
+            phone = '" . $phone . "', 
+            email = '" . $email . "'";
+    $result = mysql_query( $sql );
+    if ( $result ) $donor_id = mysql_insert_id();
 }
 
 if ($donor_id > 0) {
@@ -56,4 +80,5 @@ if ($donor_id > 0) {
             }
         }
     }
-}
+} 
+    
