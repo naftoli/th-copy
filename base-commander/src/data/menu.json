@@ -146,6 +146,11 @@
           { "label": "Marking", "legacy": true, "path": "/mivtzoim" },
           { "label": "Reports", "legacy": true, "path": "/mivtzoim/reports" }
         ]
+      }, 
+      { "label": "TH Drive", "module": "chayolei", 
+        "items": [
+          { "label": "Letter To Parents", "legacy": true, "path": "/charidy/pr/letter_to_parents.php" }
+        ]
       }
     ]
   },
