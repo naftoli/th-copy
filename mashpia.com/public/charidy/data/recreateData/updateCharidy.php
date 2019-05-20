@@ -30,20 +30,25 @@ if ( isset( $_FILES['charidy'] ) ) {
       $updateEmail = false;
       if ( $phone != '' ) $updatePhone = true;
       if ( $email != '' && filter_var($email, FILTER_VALIDATE_EMAIL) ) $updateEmail = true;
-      if ( $phone || $email ) {
-        $qry = "update mashpia_charidy.donors set ";
-        if ( $updatePhone ) $qry .= "phone   = '" . $phone . "'";
-        if ( $updatePhone && $updateEmail ) $qry .= ", ";
-        if ( $updateEmail ) $qry .= "email = '" . $email . "'";
-        $qry .= " where donor_id = " . $id;
-        $qrys[] = $qry;
-      }
-      if ( $caller > 0 ) {
-        $sql = "insert into mashpiadb.charidy_donors_callers 
-                set donor_id = " . $id . ", 
-                charidy_caller_id = " . $caller . ", 
-                year = 5779";
-        $qrys[] = $sql;
+      // if ( $updatePhone || $updateEmail ) {
+      //   $qry = "update mashpia_charidy.donors set ";
+      //   if ( $updatePhone ) $qry .= "phone   = '" . $phone . "'";
+      //   if ( $updatePhone && $updateEmail ) $qry .= ", ";
+      //   if ( $updateEmail ) $qry .= "email = '" . $email . "'";
+      //   $qry .= " where donor_id = " . $id;
+      //   $qrys[] = $qry;
+      // }
+      // prevent duplicates
+      $caller_ids = [];
+      if ( $id > 0 && $caller > 0 ) {
+        if ( !in_array( $caller, $caller_ids ) ) {
+          $caller_ids[] = $caller;
+          $sql = "insert into mashpiadb.charidy_donors_callers 
+                  set donor_id = " . $id . ", 
+                  charidy_caller_id = " . $caller . ", 
+                  year = 5779";
+          $qrys[] = $sql; 
+        }
       }
     }
     mysql_query('set autocommit = 0');

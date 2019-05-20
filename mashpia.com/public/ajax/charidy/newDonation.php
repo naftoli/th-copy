@@ -21,29 +21,29 @@ if ($user_serial > 0) {
     $user_id = 0;
 }
 
-if ( $donor_id == 0 ) {
-    // create donor
-    $name = mysql_real_escape_string( $_POST['name'] );
-    $arrName = explode(' ', $name);
-    $last_name = $arrName[count($arrName) - 1];
-    $first_name = '';
-    for ( $i = 0; i < count($arrName) - 2; $i++ ) {
-        $first_name .= $arrName[$i] + ' ';
-    }
-    $phone = mysql_real_escape_string( $_POST['phone'] );
-    $address = mysql_real_escape_string( $_POST['address'] );
-    $email = mysql_real_escape_string( $_POST['email'] );
-    $parent_id = mysql_real_escape_string( $_POST['parent_id'] );
+// if ( $donor_id == 0 ) {
+//     // create donor
+//     $name = mysql_real_escape_string( $_POST['name'] );
+//     $arrName = explode(' ', $name);
+//     $last_name = $arrName[count($arrName) - 1];
+//     $first_name = '';
+//     for ( $i = 0; i < count($arrName) - 2; $i++ ) {
+//         $first_name .= $arrName[$i] + ' ';
+//     }
+//     $phone = mysql_real_escape_string( $_POST['phone'] );
+//     $address = mysql_real_escape_string( $_POST['address'] );
+//     $email = mysql_real_escape_string( $_POST['email'] );
+//     $parent_id = mysql_real_escape_string( $_POST['parent_id'] );
 
-    $sql = "insert into mashpia_charidy.donors 
-            set first_name = \"" . $first_name . "\", 
-            last_name = \"" . $last_name . "\", 
-            address = \"" . $address . "\", 
-            phone = '" . $phone . "', 
-            email = '" . $email . "'";
-    $result = mysql_query( $sql );
-    if ( $result ) $donor_id = mysql_insert_id();
-}
+//     $sql = "insert into mashpia_charidy.donors 
+//             set first_name = \"" . $first_name . "\", 
+//             last_name = \"" . $last_name . "\", 
+//             address = \"" . $address . "\", 
+//             phone = '" . $phone . "', 
+//             email = '" . $email . "'";
+//     $result = mysql_query( $sql );
+//     if ( $result ) $donor_id = mysql_insert_id();
+// }
 
 if ($donor_id > 0) {
     if ( $donation_amount ) {
