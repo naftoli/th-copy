@@ -30,7 +30,7 @@ if ( isset( $_FILES['charidy'] ) ) {
       $updateEmail = false;
       if ( $phone != '' ) $updatePhone = true;
       if ( $email != '' && filter_var($email, FILTER_VALIDATE_EMAIL) ) $updateEmail = true;
-      if ( $phone || $email ) {
+      if ( $updatePhone || $updateEmail ) {
         $qry = "update mashpia_charidy.donors set ";
         if ( $updatePhone ) $qry .= "phone   = '" . $phone . "'";
         if ( $updatePhone && $updateEmail ) $qry .= ", ";
