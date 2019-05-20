@@ -1,4 +1,5 @@
 <?php
+//ini_set('display_errors',1);
 $admin_auth = ['school'];
 require_once '../../header.php';
 require_once '../../class.adminSchools.php';
@@ -7,18 +8,19 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
 $info = [];
-$sql = "select a.admin_email, u.first, u.last, c.class_grade, c.class_sub  
+$sql = "select a.admin_email, u.first, u.last, c.class_grade, c.class_sub, s.school_name   
         from admins a 
         join admin_auths aa using (admin_id) 
         join users u on u.user_id = aa.id 
         join classes c on c.class_id = u.class_id 
+        join schools s on s.school_id = u.school_id 
         where aa.auth = 'user' 
-        and u.school_id in (" . implode(',', array_keys( $schools )) . ") 
-        and u.user_registered > 0 
-        order by c.class_grade, c.class_sub";
+        and u.user_registered > 0 ";
+if ( $admin_user['auth'] != 'super' ) $sql .= "and u.school_id in (" . implode(',', array_keys( $schools )) . ") ";
+$sql .= "order by s.school_name, c.class_grade, c.class_sub";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
-  $info[$row['class_grade']][$row['class_sub']][] = $row;
+  $info[$row['school_name']][$row['class_grade']][$row['class_sub']][] = $row;
 }
 ?>
 <!DOCTYPE html>
@@ -33,13 +35,15 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
   </head>
   <body>
   <?php
-  foreach ( $info as $grade => $more ) {
-    foreach ( $more as $sub => $other ) {
-      echo "<br /><br /><br /><br /><br /><br /><h1>For Grade: " . $grade;
-      if ( $sub != '' ) echo '-' . $sub;
-      echo "</h1>";
-      echo "<div style='page-break-after: always'></div>";
-      foreach ( $other as $row ) {
+  foreach ( $info as $school => $other ) {
+    if ( count( $schools ) > 1 ) echo "<br /><br /><br /><br /><br /><h1>School: " . $school . "</h1><div style='page-break-after: always'></div>";
+    foreach ( $other as $grade => $more ) {
+      foreach ( $more as $sub => $other ) {
+        echo "<br /><br /><br /><br /><br /><br /><h1>Grade: " . $grade;
+        if ( $sub != '' ) echo '-' . $sub;
+        echo "</h1>";
+        echo "<div style='page-break-after: always'></div>";
+        foreach ( $other as $row ) {
       ?>
   <br /><br /><br /><br />
   B"H
@@ -58,6 +62,7 @@ ______________________<br />
 <b><?=$row['first'] . ' ' . $row['last']?></b>
 <div style="page-break-after: always;"></div>
     <?php
+        }
       }
     }
   }
