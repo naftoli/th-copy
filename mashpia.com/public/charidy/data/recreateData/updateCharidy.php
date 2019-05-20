@@ -38,13 +38,13 @@ if ( isset( $_FILES['charidy'] ) ) {
         $qry .= " where donor_id = " . $id;
         $qrys[] = $qry;
       }
-      if ( $caller > 0 ) {
-        $sql = "insert into mashpiadb.charidy_donors_callers 
-                set donor_id = " . $id . ", 
-                charidy_caller_id = " . $caller . ", 
-                year = 5779";
-        $qrys[] = $sql;
-      }
+      // if ( $caller > 0 ) {
+      //   $sql = "insert into mashpiadb.charidy_donors_callers 
+      //           set donor_id = " . $id . ", 
+      //           charidy_caller_id = " . $caller . ", 
+      //           year = 5779";
+      //   $qrys[] = $sql;
+      // }
     }
     mysql_query('set autocommit = 0');
     mysql_query('begin');
