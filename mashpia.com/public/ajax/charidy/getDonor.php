@@ -81,10 +81,16 @@ function build_json( $row ) {
             );
         }
     }
-    
-    $donation_qry = "select sum(amount) as total from mashpia_charidy.donations where donor_id = " . $donor_id . " and year = " . --$year;
-    $donation_result = mysql_query( $donation_qry );
-    $donation_row = mysql_fetch_assoc( $donation_result );
+
+    // figure out the highest donation amount that was given in the past (per year)
+    $highest = 0;
+    for ($i = 5776; $i <= $year; $i++) {
+        $donation_qry = "select sum(amount) as total from mashpia_charidy.donations where donor_id = " . $donor_id . " and year = " .$i;
+        $donation_result = mysql_query( $donation_qry );
+        $donation_row = mysql_fetch_assoc( $donation_result );
+        $total = (int) $donation_row['total'];
+        if ( $total > $highest ) $highest = $total;
+    }    
     
     $response['donor_id'] = $donor_id;
     $response['parent_id'] = $parent_id;
@@ -92,20 +98,20 @@ function build_json( $row ) {
     $response['address'] = $address;
     $response['name'] = $name;
 
-    // figure out which rank was done for last yr 
+    // figure out which rank was done in past 
     // show next rank for this yr
     $rankDone = 0;
-    if ($donation_row['total']) {
+    if ( $highest ) {
         $numAmounts = count( $amounts );
         for ($i = $numAmounts; $i > 0; $i--) {
-            if (intval($donation_row['total']) >= $amounts[$i-1]) {
+            if ( $highest >= $amounts[$i-1] ) {
                 $rankDone = $i-1;
                 break;
             }
         }
-        $response['donation_last_yr'] = (int)$donation_row['total'];
+        $response['donation_last_yr'] = $highest;
         $response['rank_last_yr'] = $ranks[$amounts[$rankDone]];
-        $response['donation_this_yr'] = (string)$amounts[$i];
+        $response['donation_this_yr'] = (string) $amounts[$i];
         $response['rank_this_yr'] = $ranks[$amounts[$i]];
     } else {
         $response['donation_last_yr'] = 0;
