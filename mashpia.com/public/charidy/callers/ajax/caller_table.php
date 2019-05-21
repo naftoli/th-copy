@@ -13,6 +13,9 @@ $year = GlobalSettings::getCurrentYear();
 // load the classes
 require_once( dirname(__FILE__) . "/../classes/Donor.php" );
 
+require_once( dirname(__FILE__) . '/../../../raffles/yearly/classes/YearlyRaffle.php');
+use raffles\yearly\YearlyRaffle as YearlyRaffle; // use the raffle class from its namespace
+
 $donors_sql = 
      " SELECT mashpia_charidy.donors.* FROM mashpia_charidy.donors "
     ." LEFT JOIN charidy_donors_callers cdc ON cdc.donor_id = mashpia_charidy.donors.donor_id AND year = $year "
@@ -33,14 +36,21 @@ $donors_query = mysql_query( $donors_sql );
 while ( $row = mysql_fetch_assoc( $donors_query ) ){
     $donors[] = Donor::LoadFromRow( $row );
 }
+
+$ranks = [];
+$sql = "select * from ranks";
+$result = mysql_query( $sql );
+while ( $row = mysql_fetch_assoc( $result ) ) {
+    $ranks[$row['rank_ord']] = $row['rank_name'];
+}
 ?>
 <div class="assign_callers">
     <table class="table table-striped table-bordered table-hover">
         <thead class="thead-dark">
             <tr>
-                <th></th><th>Name</th><th>Address</th><th>Zip</th><th>Country</th>
-                <th>Phone</th><th>New Phone</th><th>E-mail</th><th>5776</th><th>5777</th><th>5778</th>
-                <th>Shabbaton</th><th>Caller</th>
+                <th></th><th>First Name</th><th>Last Name</th><th>Address</th><th>Zip</th><th>Country</th>
+                <th>Phone</th><th>Mashpia Phone</th><th>E-mail</th><th>5776</th><th>5777</th><th>5778</th><th>5779</th>
+                <th>Highest Donation</th><th>Children in TH</th><th>Shabbaton</th><th>Yearly Raffle</th><th>Caller ID</th><th>Caller</th>
             </tr>
         </thead>
         <tbody>
@@ -54,16 +64,30 @@ while ( $row = mysql_fetch_assoc( $donors_query ) ){
                         <span class="fancy-check"></span>
                     </label>
                 </td>
-                <td><?= $donor->fullName(); ?></td>
+                <td><?= $donor->first_name ?></td>
+                <td><?= $donor->last_name ?></td>
                 <td><?= $donor->address; ?></td>
                 <td><?= $donor->zip; ?></td>
                 <td><?= $donor->country; ?></td>
                 <td><?= $donor->phoneNumber(); ?></td>
                 <td><?= $donor->mashpiaPhoneNumber(); ?></td>
                 <td><?= $donor->email; ?></td>
-                <td>$<?= isset( $donor->donations['5776'] ) ? $donor->donations['5776']['amount'] : 0 ?></td>
-                <td>$<?= isset( $donor->donations['5777'] ) ? $donor->donations['5777']['amount'] : 0 ?></td>
-                <td>$<?= isset( $donor->donations['5778'] ) ? $donor->donations['5778']['amount'] : 0 ?></td>
+                <?php 
+                    $highest = 0;
+                    foreach ( [5776,5777,5778,5779] as $year ) { 
+                        // set yearly amounts and keep track of highest donation
+                        $amounts[$year] = isset( $donor->donations[$year] ) ? $donor->donations[$year]['amount'] : 0;
+                        if ( $amounts[$year] > $highest ) $highest = $amounts[$year];
+                        echo "<td>$" . $amounts[$year] . "</td>";
+                    }
+                    echo "<td>$" . $highest . "</td>";
+                ?>
+                <td>
+                <?php
+                    $children = $donor->getChildren();
+                    foreach ( $children as $child ) echo $child['first'] . " - " . $ranks[$child['rank']]  . "<br />";
+                ?>                
+                </td>
                 <td>
                 <?php
                     foreach( $donor->onShabbaton( $year ) as $child ){
@@ -71,6 +95,18 @@ while ( $row = mysql_fetch_assoc( $donors_query ) ){
                     }
                 ?>
                 </td>
+                <td>
+                <?php
+                    $yearly_raffle = new YearlyRaffle;
+                    $quota = $yearly_raffle->getDayCount();
+                    foreach ( $children as $child ) {
+                        $num_days = $yearly_raffle->set_user_eligibility( $child['user_id'] )[ $child['user_id'] ];
+                        if ( $num_days >= $quota ) echo $child['first'] . " - yes<br />";
+                        else echo $child['first'] . " - no<br />";
+                    }
+                ?>
+                </td>
+                <td><?= $donor->getCaller( $year ) ? $donor->caller->charidy_caller_id : "N/A"; ?></th>
                 <td class="caller" id="donor-caller-<?= $donor->donor_id ?>">
                     <?= $donor->getCaller( $year ) ? $donor->caller->fullName() : "N/A"; ?>
                 </td>
