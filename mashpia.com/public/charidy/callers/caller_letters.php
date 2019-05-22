@@ -14,6 +14,9 @@ $year = GlobalSettings::getCurrentYear();
 require_once( dirname(__FILE__) . "/classes/Caller.php" );
 require_once( dirname(__FILE__) . "/classes/NoCaller.php" );
 
+require_once( dirname(__FILE__) . '/../../raffles/yearly/classes/YearlyRaffle.php');
+use raffles\yearly\YearlyRaffle as YearlyRaffle; // use the raffle class from its namespace
+
 // if we only want to print one caller
 if( isset( $_GET['id'] ) && $_GET['id'] ){
     if ( $_GET['id'] == "-1" )
@@ -23,6 +26,13 @@ if( isset( $_GET['id'] ) && $_GET['id'] ){
     $callers = [ $caller ]; //cast to array
 } else { // or just get everyone
     $callers = Caller::LoadAll();
+}
+
+$ranks = [];
+$sql = "select * from ranks";
+$result = mysql_query( $sql );
+while ( $row = mysql_fetch_assoc( $result ) ) {
+    $ranks[$row['rank_ord']] = $row['rank_name'];
 }
 ?>
 <!DOCTYPE html>
@@ -57,16 +67,36 @@ if( isset( $_GET['id'] ) && $_GET['id'] ){
             <h2 class="heading">Donor Information</h2>
             <div class="donor-info">
                 <div class="donated">
-                    <span id="donate-5776">
-                        <i class="fas fa-<?= $donor->getDonated( "5776" ) ? "check" : "times"; ?>"></i>
-                        Donated in 5776
-                        <?= $donor->getDonated( "5776" ) ? "( $" . $donor->donations["5776"]["amount"] . " )" : "" ?>
+                    <?php 
+                    $highest = 0; // keep track of highest payment
+                    foreach ( [5776,5777,5778,5779] as $yr ) : ?>
+                    <span id="donate-<?= $yr ?>">
+                        <i class="fas fa-<?= $donor->getDonated( $yr ) ? "check" : "times"; ?>"></i>
+                        Donated in <?= $yr ?>
+                        <?= $donor->getDonated( $yr ) ? "( $" . $donor->donations[$yr]["amount"] . " )" : "" ?>
+                        <?php
+                        if ( isset( $donor->donations[$yr]["amount"] ) && $donor->donations[$yr]["amount"] > $highest ) {
+                            $highest = $donor->donations[$yr]["amount"] . " (" . $yr . ")";
+                        }
+                        ?>
                     </span>
-                    <span id="donate-5777">
-                        <i class="fas fa-<?= $donor->getDonated( "5777" ) ? "check" : "times"; ?>"></i>
-                        Donated in 5777
-                        <?= $donor->getDonated( "5777" ) ? "( $" . $donor->donations["5777"]["amount"] . " )" : "" ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="donated">
+                    <span>
+                        Biggest Donation: $<?= $highest ?>
                     </span>
+                </div>
+                <div class="donated">
+                    <span>
+                        Children in TH:<br />
+                        <?php
+                        $children = $donor->getChildren();
+                        foreach ( $children as $child ) echo $child['first'] . " - " . $ranks[$child['rank']]  . "<br />";
+                        ?>
+                    </span>
+                </div>
+                <div class="donated">
                     <span id="<?=$year?>">
                         <?php if( count( $donor->onShabbaton( $year ) ) > 0 ) { ?>
                             <i class="fas fa-check"></i> Children on <?= $year ?> Shabbaton: 
@@ -82,6 +112,20 @@ if( isset( $_GET['id'] ) && $_GET['id'] ){
                         <?php } else { ?>
                             <i class="fas fa-times"></i> No Children on <?= $year ?> Shabbaton.
                         <?php } ?>
+                    </span>
+                </div>
+                <div class="donated">
+                    <span>
+                        Eligible for Yearly Raffle:<br />
+                        <?php
+                        $yearly_raffle = new YearlyRaffle;
+                        $quota = $yearly_raffle->getDayCount();
+                        foreach ( $children as $child ) {
+                            $num_days = $yearly_raffle->set_user_eligibility( $child['user_id'] )[ $child['user_id'] ];
+                            if ( $num_days >= $quota ) echo $child['first'] . " - yes<br />";
+                            else echo $child['first'] . " - no<br />";
+                        }
+                        ?>
                     </span>
                 </div>
             </div>
