@@ -29,12 +29,26 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 
 // for each prize randomly choose a winner
 $winners = [];
+$usersWon = []; // keep track of users won to make sure user doesn't win twice
 foreach ( $prizes as $prize_id ) {
   $totalTickets = count( $tickets[$prize_id] );
-  $winners[$prize_id] = $tickets[$prize_id][mt_rand( 0, $totalTickets - 1 )];
+  $found = false;
+  while ( !$found ) {
+    $user = $tickets[$prize_id][mt_rand( 0, $totalTickets - 1 )];
+    if ( !in_array( $user, $usersWon ) ) {
+      $winners[$prize_id] = $user;
+      $found = true;
+    }
+  }
 }
 
 // save to db
-echo "<pre>";
-print_r( $winners );
-echo "</pre>";
+foreach ( $winners as $prize => $winner ) {
+  $sql = "insert into auction_winners 
+          set auction_id = " . $auction_id . ", 
+          user_id = " . $winner . ", 
+          prize_id = " . $prize . ", 
+          quantity = 1";
+  mysql_query( $sql ) or die( mysql_error() );
+}
+echo "done";

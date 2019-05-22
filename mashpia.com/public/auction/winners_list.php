@@ -24,7 +24,7 @@ $sql = "select * from auction_winners aw
 		join schools s on (u.school_id = s.school_id) 
 		join classes c on (c.class_id = u.class_id) 
 		join prizes_auction pa using (prize_id) 
-		where aw.auction_id = 79  
+		where aw.auction_id = 80   
 		order by pa.prize_name, u.last, u.first";
 $result = mysql_query( $sql );
 $prizes = array();
