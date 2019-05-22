@@ -42,7 +42,7 @@ $schools = $as->getSchools();
         Please note that there are <strong>two types of reports:</strong>
     </p>
     <p class="info">
-        <strong>RealTime:</strong> This report will calculate and cache all users in all schools with 160+ days of missions. This report can take several minutes to compleate and your browser may loose connection to the server before it is done.
+        <strong>RealTime:</strong> This report will calculate and cache all users in all schools with 180+ days of missions. This report can take several minutes to compleate and your browser may loose connection to the server before it is done.
     </p>
     <p class="info">
         <strong>Cached:</strong> This report will display the cached information from the last time the system generated a realtime report.
