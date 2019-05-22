@@ -48,7 +48,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     <table class="table table-striped table-bordered table-hover">
         <thead class="thead-dark">
             <tr>
-                <th></th><th>First Name</th><th>Last Name</th><th>Address</th><th>Zip</th><th>Country</th>
+                <th></th><th>Donor ID</th><th>First Name</th><th>Last Name</th><th>Address</th><th>Zip</th><th>Country</th>
                 <th>Phone</th><th>Mashpia Phone</th><th>E-mail</th><th>5776</th><th>5777</th><th>5778</th><th>5779</th>
                 <th>Highest Donation</th><th>Children in TH</th><th>Shabbaton</th><th>Yearly Raffle</th><th>Caller ID</th><th>Caller</th>
             </tr>
@@ -64,6 +64,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                         <span class="fancy-check"></span>
                     </label>
                 </td>
+                <td><?= $donor->donor_id ?></td>
                 <td><?= $donor->first_name ?></td>
                 <td><?= $donor->last_name ?></td>
                 <td><?= $donor->address; ?></td>
