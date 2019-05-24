@@ -8,7 +8,8 @@ $sql = "select * from mashpia_charidy.donors d
         join mashpia_charidy.donations dd using (donor_id) 
         left join admins a on a.admin_id = d.parent_admin_id 
         where amount >= 18 
-        and (parent_admin_id > 0 or (address != '' and address is not null))";
+        and (parent_admin_id > 0 or (address != '' and address is not null)) 
+        group by d.donor_id";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
   $info[] = $row;
