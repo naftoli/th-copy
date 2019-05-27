@@ -42,7 +42,7 @@ for ($i = 0; $i < $num; $i++) {
 				width: 200px;
 			}
 			th, td {
-				font-size: 12px;
+				font-size: 14px;
 				padding: 5px;
 			}
 		</style>
