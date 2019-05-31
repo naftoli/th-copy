@@ -104,7 +104,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                                 echo implode(
                                     ", ",
                                     array_map( 
-                                        function ( $child ) { return $child['first']; }, 
+                                        function ( $child ) { return $child['first'] . ' (Bunk: ' . $child['bunk_number'] . ')'; }, 
                                         $donor->onShabbaton( $year ) 
                                     )
                                 );

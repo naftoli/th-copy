@@ -179,7 +179,7 @@ class Donor {
         $this->on_shabbaton[ $year ] = [];
         
         $query = mysql_query(
-             " SELECT first, last FROM th_chidon "
+             " SELECT first, last, bunk_number FROM th_chidon "
             ." JOIN users USING (user_id) "
             ." JOIN admin_auths ON id = user_id AND auth = 'user' "
             ." WHERE admin_id = '" . $this->parent_admin_id . "' "
