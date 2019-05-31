@@ -29,7 +29,7 @@ h1.donor-name, .caller-name, .header {
 }
 
 .donor-status, .donor-amount {
-    padding: .1in .8in;
+    /* padding: .1in .8in; */
 }
 .donor-amount {
     margin-top: .3in;
@@ -38,7 +38,7 @@ h1.donor-name, .caller-name, .header {
 h2.heading {
     margin: 0px;
     border-bottom: 1px solid;
-    margin-left: .3in;
+    /* margin-left: .3in; */
     margin-top: .2in;
 }
 
@@ -48,16 +48,16 @@ h2.heading {
     border-top: 1px solid #ccc;
 }
 .payment-method {
-    font-size: 1.5em;
+    font-size: 1.3em;
 }
 
 .payment-method i {
     margin-left: .3in;
-    font-size: 1.5em;
+    font-size: 1.2em;
 }
 
 .card-number {
-    font-size: 1.6em;
+    font-size: 1.2em;
     line-height: 2;
 }
 
@@ -75,10 +75,9 @@ h2.heading {
 
 .mailing_address, .email_address {
     line-height: 3;
-    font-size: 1.3em;
-    margin-top: .2in;
+    font-size: 1.2em;
 }
 .mailing_address span, .email_address span {
     font-weight: bold;
-    margin-left: 15px;
+    /* margin-left: 15px; */
 }
