@@ -28,9 +28,9 @@ h1.donor-name, .caller-name, .header {
     min-width: 100px;
 }
 
-.donor-status, .donor-amount {
-    /* padding: .1in .8in; */
-}
+/* .donor-status, .donor-amount {
+    padding: .1in .8in;
+} */
 .donor-amount {
     margin-top: .3in;
 }
