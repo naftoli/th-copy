@@ -1,10 +1,12 @@
+var myTimer;
 
 function loadTable( caller_id ) {
+    if ( myTimer ) clearInterval( myTimer );
     var caller_id = $("#caller_id").val();
     $("#donor-table").html('<div class="loader"></div>');
     
     // wrap post in timer function
-    setInterval( function() {
+    myTimer = setInterval( function() {
         $.post( "ajax/caller_table.php", { caller_id: caller_id }, function( response ){
             $("#donor-table").html( response );
             // use datatables
