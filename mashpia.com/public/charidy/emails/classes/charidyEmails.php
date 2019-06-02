@@ -1,5 +1,5 @@
 <?php
-require_once '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 class CharidyEmails {
 
@@ -34,7 +34,7 @@ class CharidyEmails {
 
   public function sendEmails() {
     // Subject
-    $subject = 'Tzivos Hashem Conquering the World!';
+    $subject = "What Philosophers and CEOs don't know";
 
     // Message
     $message = '
