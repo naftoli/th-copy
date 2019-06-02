@@ -1,5 +1,6 @@
 <?php
-require_once 'classes/charidyEmail.php';
+ini_set('display_errors',1);
+require_once 'classes/charidyEmails.php';
 
 $e = new charidyEmail();
 $e->sendEmails();
