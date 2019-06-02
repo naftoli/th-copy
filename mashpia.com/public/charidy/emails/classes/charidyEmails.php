@@ -1,5 +1,5 @@
 <?php
-require_once '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 class CharidyEmails {
 
@@ -34,27 +34,35 @@ class CharidyEmails {
 
   public function sendEmails() {
     // Subject
-    $subject = 'Birthday Reminders for August';
+    $subject = "What are kids in for on 2020?";
 
     // Message
     $message = '
     <html>
     <head>
-      <title>Birthday Reminders for August</title>
     </head>
     <body>
-      <p>Here are the birthdays upcoming in August!</p>
-      <table>
-        <tr>
-          <th>Person</th><th>Day</th><th>Month</th><th>Year</th>
-        </tr>
-        <tr>
-          <td>Johny</td><td>10th</td><td>August</td><td>1970</td>
-        </tr>
-        <tr>
-          <td>Sally</td><td>17th</td><td>August</td><td>1973</td>
-        </tr>
-      </table>
+    We invite you to celebrate <a href="https://issuu.com/tzivoshashem/docs/year_of_tzivos_hashem_book_5779_lr">a year in Hashem’s Army</a>. Thanks to you (and others like you), Tzivos Hashem has had an incredible year. Take a glimpse into the life of a child, a chayol in Tzivos Hashem. 
+    <br /><br />
+    How do you transform the world? Ancient philosophers and companies investing in ‘next big thing’ have posed this question—as have myriads of generations in between.
+    <br /><br />
+    The Rebbe gives the most effective answer.  
+    <br /><br />
+    Harnessing the innate power and goodness of youth, the Rebbe established an army and inspires them as forerunners in the race to Geulah.
+    <br /><br />
+    Tzivos Hashem, with your help, is bringing the Rebbe’s vision to life. 
+    <br /><br />
+    This Tuesday, Rosh Chodesh Sivan (June 4) join us again on the front lines of transformation at <a href="http://www.charidy.com/th">www.charidy.com/th</a>.
+    <br /><br />
+    <img src="http://www.mashpia.com/charidy/emails/Sticker Charidy 5779.png" />
+    <br /><br />    
+    Spread the word!<br /> 
+    web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
+    phone: 718.907.8884 <br />
+    email: <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a><br />
+    facebook:Tzivos Hashem <br />
+    instagram: tzivos_hashem_international<br />
+    #THTransforms<br />
     </body>
     </html>
     ';
@@ -62,14 +70,16 @@ class CharidyEmails {
     // To send HTML mail, the Content-type header must be set
     $headers[] = 'MIME-Version: 1.0';
     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-    $headers[] = 'From: Tzivos Hashem <cth@mashpia.com>';    
+    $headers[] = 'From: Tzivos Hashem <cth@mashpia.com>';   
+    $headers[] = 'Reply-To: Tzivos Hashem <cth@mashpia.com>'; 
 
     // Mail it
-    foreach ( $this->emails as $to ) {
+    //foreach ( $this->emails as $to ) {
+      $to = "naftoli@tzivoshashem.org, mushkagreene@gmail.com, shimmywienbaum@gmail.com";
       if ( !mail($to, $subject, $message, implode("\r\n", $headers)) ) {
         $this->errors[] = "Error sending email to " . $to;
       }
-    }
+    //}
   }
 
   public function getErrors() {
