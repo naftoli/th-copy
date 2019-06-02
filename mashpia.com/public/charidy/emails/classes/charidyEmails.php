@@ -37,12 +37,12 @@ class CharidyEmails {
     $subject = "What are kids in for on 2020?";
 
     // Message
-    $message = '
+    $message = `
     <html>
     <head>
     </head>
     <body>
-    We invite you to celebrate a <a href="http://issuu.com/tzivoshashem/docs/year_of_tzivos_hashem_book_5779_lr">year in Hashem’s Army</a>. Thanks to you (and others like you), Tzivos Hashem has had an incredible year. Take a glimpse into the life of a child, a chayol in Tzivos Hashem. 
+    We invite you to celebrate a <a href="http://issuu.com/tzivoshashem/docs/year_of_tzivos_hashem_book_5779_lr">year in Hashem's Army</a>. Thanks to you (and others like you), Tzivos Hashem has had an incredible year. Take a glimpse into the life of a child, a chayol in Tzivos Hashem. 
     <br /><br />
     How do you transform the world? Ancient philosophers and companies investing in ‘next big thing’ have posed this question—as have myriads of generations in between.
     <br /><br />
@@ -54,7 +54,7 @@ class CharidyEmails {
     <br /><br />
     This Tuesday, Rosh Chodesh Sivan (June 4) join us again on the front lines of transformation at <a href="http://www.charidy.com/th">www.charidy.com/th</a>.
     <br /><br />
-    <img src="http://www.mashpia.com/charidy/emails/Sticker Charidy 5779.png" />
+    <img src="http://www.mashpia.com/charidy/emails/StickerCharidy5779.png" />
     <br /><br />    
     Spread the word!<br /> 
     web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
@@ -64,8 +64,7 @@ class CharidyEmails {
     instagram: tzivos_hashem_international<br />
     #THTransforms<br />
     </body>
-    </html>
-    ';
+    </html>`;
 
     // To send HTML mail, the Content-type header must be set
     $headers[] = 'MIME-Version: 1.0';
