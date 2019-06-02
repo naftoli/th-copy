@@ -54,7 +54,7 @@ class CharidyEmails {
     <br /><br />
     This Tuesday, Rosh Chodesh Sivan (June 4) join us again on the front lines of transformation at <a href="http://www.charidy.com/th">www.charidy.com/th</a>.
     <br /><br />
-    <img src="http://www.mashpia.com/charidy/emails/classes/Sticker Charidy 5779.png" />
+    <img src="http://www.mashpia.com/charidy/emails/Sticker Charidy 5779.png" />
     <br /><br />    
     Spread the word!<br /> 
     web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
@@ -75,7 +75,7 @@ class CharidyEmails {
 
     // Mail it
     //foreach ( $this->emails as $to ) {
-      $to = "naftoli@tzivoshashem.org";
+      $to = "naftoli@tzivoshashem.org, mushkagreene@gmail.com, shimmywienbaum@gmail.com";
       if ( !mail($to, $subject, $message, implode("\r\n", $headers)) ) {
         $this->errors[] = "Error sending email to " . $to;
       }
