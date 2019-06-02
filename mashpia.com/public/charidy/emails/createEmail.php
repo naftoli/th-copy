@@ -2,7 +2,7 @@
 ini_set('display_errors',1);
 require_once 'classes/charidyEmails.php';
 
-$e = new charidyEmail();
+$e = new charidyEmails();
 $e->sendEmails();
 
 $errors = $e->getErrors();
