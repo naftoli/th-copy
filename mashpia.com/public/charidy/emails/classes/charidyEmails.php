@@ -54,7 +54,7 @@ class CharidyEmails {
     <br /><br />
     This Tuesday, Rosh Chodesh Sivan (June 4) join us again on the front lines of transformation at <a href="http://www.charidy.com/th">www.charidy.com/th</a>.
     <br /><br />
-    <img src="Sticker Charidy 5779.png" />
+    <img src="http://www.mashpia.com/charidy/emails/classes/Sticker Charidy 5779.png" />
     <br /><br />    
     Spread the word!<br /> 
     web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
@@ -70,7 +70,8 @@ class CharidyEmails {
     // To send HTML mail, the Content-type header must be set
     $headers[] = 'MIME-Version: 1.0';
     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-    $headers[] = 'From: Tzivos Hashem <cth@mashpia.com>';    
+    $headers[] = 'From: Tzivos Hashem <cth@mashpia.com>';   
+    $headers[] = 'Reply-To: Tzivos Hashem <cth@mashpia.com>'; 
 
     // Mail it
     //foreach ( $this->emails as $to ) {
