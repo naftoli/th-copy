@@ -3,15 +3,18 @@ function loadTable( caller_id ) {
     var caller_id = $("#caller_id").val();
     $("#donor-table").html('<div class="loader"></div>');
     
-    $.post( "ajax/caller_table.php", { caller_id: caller_id }, function( response ){
-        $("#donor-table").html( response );
-        // use datatables
-        $('#donor-table table').DataTable({
-            "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ]
-        });
+    // wrap post in timer function
+    setInterval( function() {
+        $.post( "ajax/caller_table.php", { caller_id: caller_id }, function( response ){
+            $("#donor-table").html( response );
+            // use datatables
+            $('#donor-table table').DataTable({
+                "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ]
+            });
 
-        $("tbody tr").click( clickRow );
-    });
+            $("tbody tr").click( clickRow );
+        });
+    }, 60000);
 }
 
 function clickRow( event ) {
