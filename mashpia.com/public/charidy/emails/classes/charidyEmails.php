@@ -75,7 +75,7 @@ class CharidyEmails {
 
     // Mail it
     //foreach ( $this->emails as $to ) {
-      $to = "naftoli@tzivoshashem.org, mushkagreene@gmail.com, shimmywienbaum@gmail.com";
+      $to = "naftoli@tzivoshashem.org, emmegreene@gmail.com,  Mushka@tzivoshashem.org";
       if ( !mail($to, $subject, $message, implode("\r\n", $headers)) ) {
         $this->errors[] = "Error sending email to " . $to;
       }
