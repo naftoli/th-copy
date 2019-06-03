@@ -1,22 +1,18 @@
 var myTimer;
 
 function loadTable( caller_id ) {
-    if ( myTimer ) clearInterval( myTimer );
     var caller_id = $("#caller_id").val();
     $("#donor-table").html('<div class="loader"></div>');
     
-    // wrap post in timer function
-    myTimer = setInterval( function() {
-        $.post( "ajax/caller_table.php", { caller_id: caller_id }, function( response ){
-            $("#donor-table").html( response );
-            // use datatables
-            $('#donor-table table').DataTable({
-                "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ]
-            });
-
-            $("tbody tr").click( clickRow );
+    $.post( "ajax/caller_table.php", { caller_id: caller_id }, function( response ){
+        $("#donor-table").html( response );
+        // use datatables
+        $('#donor-table table').DataTable({
+            "lengthMenu": [ [-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100] ]
         });
-    }, 60000);
+
+        $("tbody tr").click( clickRow );
+    });
 }
 
 function clickRow( event ) {
