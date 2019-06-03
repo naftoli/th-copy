@@ -188,6 +188,7 @@ class CharidyEmails {
         $subject = "Can I count on you?";
         $message = '
         <html><head></head><body>
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
         Dear <b>FULL_NAME</b>,
         <br /><br />
         Tzivos Hashem has had an incredible year of growth, as we continue to transform the world, child by child and mission by mission. We are committed to fulfill the Rebbe\'s vision of a world of completely transformed with the coming of Moshiach. Will you help us continue to grow?
