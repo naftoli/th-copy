@@ -54,7 +54,7 @@ class CharidyEmails {
     <br /><br />
     This Tuesday, Rosh Chodesh Sivan (June 4) join us again on the front lines of transformation at <a href="http://www.charidy.com/th">www.charidy.com/th</a>.
     <br /><br />
-    <img src="http://www.mashpia.com/charidy/emails/Sticker%20Charidy%205779.png" width="50" />
+    <img src="http://www.mashpia.com/charidy/emails/Sticker%20Charidy%205779.png" width="250" />
     <br /><br />    
     Spread the word!<br /> 
     web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
