@@ -88,12 +88,8 @@ class CharidyEmails {
     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
     $headers[] = 'From: Tzivos Hashem <Shimmy@tzivoshashem.org>';   
     $headers[] = 'Reply-To: Tzivos Hashem <Shimmy@tzivoshashem.org>'; 
+    
     // Mail it
-    $this->emails = [];
-    $this->emails[] = [
-      'to'  =>  'naftoli@tzivoshashem.org', 
-      'name'  =>  'Naftoli Rapoport'
-    ];
     foreach ( $this->emails as $email ) {
       $to = $email['to'];
       $name = $email['name'];
@@ -247,14 +243,14 @@ class CharidyEmails {
           <html><head></head><body>
           Dear FULL_NAME,
           <br /><br />
-          The Tzivos Hashem world transformation campaign has begun! From today, Tuesday, at 2 pm, to Wednesday at 6 pm, the clock will be ticking. These 28 hours are critical to raise $1 million dollars for Tzivos Hashem; it’s all or nothing!
+          The Tzivos Hashem world transformation campaign has begun! From <b>today, Tuesday, at 2 pm, to Wednesday at 6 pm,</b> the clock will be ticking. These <b>28 hours</b> are critical to raise $1 million dollars for Tzivos Hashem; <b>it’s all or nothing!</b>
           <br /><br />
-          Today, join us as #THTransforms!<br />
+          Today, join us at <b>#THTransforms!</b><br />
           Donate now and quadruple your contribution in Hashem’s army and your impact on the world.
           <br /><br />
           Here’s how:<br />
           Go to <a href="http://charidy.com">charidy.com/th</a><br />
-          Enter in your email address EMAIL_ADDRESS<br />
+          Enter in your email address <b>EMAIL_ADDRESS</b><br />
           Donate generously<br />
           Donate in honor of a specific child in Tzivos Hashem, and they will earn a raffle ticket to win a dollar from the Rebbe.<br />
           Donate more than in the past and go up in rank!<br />
