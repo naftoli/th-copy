@@ -89,7 +89,7 @@ class CharidyEmails {
     $headers[] = 'From: Tzivos Hashem <Shimmy@tzivoshashem.org>';   
     $headers[] = 'Reply-To: Tzivos Hashem <Shimmy@tzivoshashem.org>'; 
     // Mail it
-    $this->emails = [
+    $this->emails[] = [
       'to'  =>  'naftoli@tzivoshashem.org', 
       'name'  =>  'Naftoli Rapoport'
     ];
