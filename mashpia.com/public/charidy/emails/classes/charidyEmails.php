@@ -18,7 +18,7 @@ class CharidyEmails {
    * other emails are sent to those that have donated in the past
    */
   public function setRecipients( $first = false ) {
-    if ( $first ) {
+    //if ( $first ) {
       $sql = "select distinct email from mashpia_charidy.donors where email != ''";
       $result = $this->db->query( $sql );
       if ( $result ) {
@@ -29,7 +29,7 @@ class CharidyEmails {
           }
         }
       }
-    } 
+    //} 
   }
 
   public function sendEmails() {
@@ -45,7 +45,7 @@ class CharidyEmails {
     We invite you to celebrate a year in Hashem\'s Army</a>. Thanks to you (and others like you), Tzivos Hashem has had an incredible year. Take a glimpse into the life of a child, a chayol in Tzivos Hashem: 
     <a href="https://bit.ly/2EO8hlP">bit.ly/2EO8hlP</a> 
     <br /><br />
-    How do you transform the world? Ancient philosophers and companies investing in \'next big thing\' have posed this question, as have myriads of generations in between.
+    How do you transform the world? Ancient philosophers and companies investing in the \'next big thing\' have posed this question, as have myriads of generations in between.
     <br /><br />
     The Rebbe gives the most effective answer.  
     <br /><br />
@@ -74,12 +74,12 @@ class CharidyEmails {
     $headers[] = 'Reply-To: Tzivos Hashem <Shimmy@tzivoshashem.org>'; 
 
     // Mail it
-    //foreach ( $this->emails as $to ) {
-      $to = "naftoli@tzivoshashem.org, emmegreene@gmail.com,  Mushka@tzivoshashem.org, Shimmy@tzivoshashem.org";
+    foreach ( $this->emails as $to ) {
+      //$to = "naftoli@tzivoshashem.org, emmegreene@gmail.com,  Mushka@tzivoshashem.org, Shimmy@tzivoshashem.org";
       if ( !mail($to, $subject, $message, implode("\r\n", $headers)) ) {
         $this->errors[] = "Error sending email to " . $to;
       }
-    //}
+    }
   }
 
   public function getErrors() {
