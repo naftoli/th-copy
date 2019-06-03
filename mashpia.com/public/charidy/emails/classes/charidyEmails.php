@@ -64,6 +64,15 @@ class CharidyEmails {
     facebook:Tzivos Hashem <br />
     instagram: tzivos_hashem_international<br />
     #THTransforms<br />
+    <hr />
+    <div align="center">
+    &copy; 2019 Tzivos Hashem<br />
+    <address>
+      592 Eastern Pkwy, Brooklyn, NY 11213
+    </address>
+    <br />
+    <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+    </div>
     </body>
     </html>';
 
