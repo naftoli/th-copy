@@ -68,7 +68,7 @@ class CharidyEmails {
     <div align="center">
     &copy; 2019 Tzivos Hashem<br />
     <address>
-      592 Eastern Pkwy, Brooklyn, NY 11213
+      792 Eastern Pkwy, Brooklyn, NY 11213
     </address>
     <br />
     <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
