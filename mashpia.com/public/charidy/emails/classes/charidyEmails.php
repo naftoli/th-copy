@@ -44,17 +44,17 @@ class CharidyEmails {
     <body>
     We invite you to celebrate a <a href="http://issuu.com/tzivoshashem/docs/year_of_tzivos_hashem_book_5779_lr">year in Hashem\'s Army</a>. Thanks to you (and others like you), Tzivos Hashem has had an incredible year. Take a glimpse into the life of a child, a chayol in Tzivos Hashem. 
     <br /><br />
-    How do you transform the world? Ancient philosophers and companies investing in \'next big thing\' have posed this question—as have myriads of generations in between.
+    How do you transform the world? Ancient philosophers and companies investing in \'next big thing\' have posed this question, as have myriads of generations in between.
     <br /><br />
     The Rebbe gives the most effective answer.  
     <br /><br />
     Harnessing the innate power and goodness of youth, the Rebbe established an army and inspires them as forerunners in the race to Geulah.
     <br /><br />
-    Tzivos Hashem, with your help, is bringing the Rebbe’s vision to life. 
+    Tzivos Hashem, with your help, is bringing the Rebbe\'s vision to life. 
     <br /><br />
     This Tuesday, Rosh Chodesh Sivan (June 4) join us again on the front lines of transformation at <a href="http://www.charidy.com/th">www.charidy.com/th</a>.
     <br /><br />
-    <img src="http://www.mashpia.com/charidy/emails/StickerCharidy5779.png" />
+    <img src="http://www.mashpia.com/charidy/emails/Sticker%20Charidy%205779.png" width="50" />
     <br /><br />    
     Spread the word!<br /> 
     web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
