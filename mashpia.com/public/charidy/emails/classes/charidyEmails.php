@@ -8,7 +8,6 @@ class CharidyEmails {
   private $emails = [];
   private $errors = [];
   private $emailNum = 0;
-  private $emailsToSend = [];
 
   public function __construct() {
     global $MASHPIA_DB;
@@ -79,8 +78,8 @@ class CharidyEmails {
     }
   }
 
-  public function sendEmails( $emailNumber ) {
-    $info = $this->getSubjectMessage( $emailNumber );
+  public function sendEmails() {
+    $info = $this->getSubjectMessage();
     $subject = $info['subject'];
     $message = $info['message'];
 
@@ -112,6 +111,11 @@ class CharidyEmails {
           $new_amount = $amount;
           break;
         }
+        if ( !isset( $cur_rank ) ) {
+          $cur_rank = '5* General';
+          $next_rank = $cur_rank;
+          $new_amount = $highest;
+        }
         $message = str_replace('CURRENT_RANK', $cur_rank, $message);
         $message = str_replace('NEW_RANK', $next_rank, $message);
         $message = str_replace('AMOUNT', $new_amount, $message);
@@ -124,8 +128,8 @@ class CharidyEmails {
     //}
   }
 
-  private function getSubjectMessage( $emailNumber ) {
-    switch ( $emailNumber ) {
+  private function getSubjectMessage() {
+    switch ( $this->emailNum ) {
       case 1:
         // Subject
         $subject = "What are kids in for in 2020?";
