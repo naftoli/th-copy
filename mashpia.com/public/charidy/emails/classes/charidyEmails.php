@@ -49,7 +49,6 @@ class CharidyEmails {
               mashpia_charidy.donations USING (donor_id)
           WHERE
               email != '' 
-              and email in ('naftoli@tzivoshashem.org', 'zelda@tzivoshashem.org', 'mushka@tzivoshashem.org') 
           GROUP BY email
         ";
     } else {
@@ -90,11 +89,16 @@ class CharidyEmails {
     $headers[] = 'From: Tzivos Hashem <Shimmy@tzivoshashem.org>';   
     $headers[] = 'Reply-To: Tzivos Hashem <Shimmy@tzivoshashem.org>'; 
     // Mail it
+    $this->emails = [
+      'to'  =>  'naftoli@tzivoshashem.org', 
+      'name'  =>  'Naftoli Rapoport'
+    ];
     foreach ( $this->emails as $email ) {
       $to = $email['to'];
       $name = $email['name'];
       // update message with personalized info
       $message = str_replace('FULL_NAME', $name, $message);
+      $message = str_replace('EMAIL_ADDRESS', $to, $message);
 
       if ( isset( $email['highest'] ) ) {
         $highest = $email['highest'];
@@ -130,7 +134,6 @@ class CharidyEmails {
         $message = str_replace('CURRENT_RANK', $cur_rank, $message);
         $message = str_replace('NEW_RANK', $next_rank, $message);
         $message = str_replace('AMOUNT', $new_amount, $message);
-        $message = str_replace('EMAIL_ADDRESS', $to, $message);
       }
 
       if ( !mail($to, $subject, $message, implode("\r\n", $headers)) ) {
@@ -238,6 +241,67 @@ class CharidyEmails {
         ';
         break;
       case 3:
+          $subject = "We are LIVE!";
+          $message = '
+          <html><head></head><body>
+          Dear FULL_NAME,
+          <br /><br />
+          The Tzivos Hashem world transformation campaign has begun! From today, Tuesday, at 2 pm, to Wednesday at 6 pm, the clock will be ticking. These 28 hours are critical to raise $1 million dollars for Tzivos Hashem; it’s all or nothing!
+          <br /><br />
+          Today, join us as #THTransforms!<br />
+          Donate now and quadruple your contribution in Hashem’s army and your impact on the world.
+          <br /><br />
+          Here’s how:<br />
+          Go to <a href="http://charidy.com">charidy.com/th</a><br />
+          Enter in your email address EMAIL_ADDRESS<br />
+          Donate generously<br />
+          Donate in honor of a specific child in Tzivos Hashem, and they will earn a raffle ticket to win a dollar from the Rebbe.<br />
+          Donate more than in the past and go up in rank!<br />
+          <br /><br />
+          Every $1 is $4<br />
+          A Private’s donation of $18 = $72<br />
+          A Sergeant’s donation of $126 = $504<br />
+          A General’s donation of $3,600 = $14,400
+          <br /><br />
+          Our future—the future of our children—depends on you,
+          <br /><br />
+          Rabbi Moshe Kotlarsky <br />
+        Vice Chairman, Merkos L\'inyonei Chinuch 
+        <br /><br />
+        Rabbi Yerachmiel Benjaminson <br />
+        Executive Director of Tzivos Hashem 
+        <br /><br />
+        Rabbi Sholom Ber Baumgarten <br />
+        Director of Tzivos Hashem 
+        <br /><br />
+        Rabbi Zalman Glick <br />
+        Editor-in-chief, Living Lessons 
+        <br /><br />
+        Rabbi Shimmy and Zelda Weinbaum  <br />
+        Generals of the Chayolei Tzivos Hashem Brigade  
+        <br /><br />
+        <img src="http://www.mashpia.com/charidy/emails/Sticker%20Charidy%205779.png" width="250" />
+        <br /><br />    
+        Spread the word!<br /> 
+        web: <a href="http://www.charidy.com/th">www.charidy.com/th</a><br />  
+        phone: 718.907.8884 <br />
+        email: <a href="mailto:cth@tzivoshashem.org">cth@tzivoshashem.org</a><br />
+        facebook:Tzivos Hashem <br />
+        instagram: tzivos_hashem_international<br />
+        #THTransforms<br />
+        <a href="http://bit.ly/2EO8hlP">A Year in Hashem\'s Army</a><br />
+        <hr />
+        <div align="center">
+        &copy; 2019 Tzivos Hashem<br />
+        <address>
+          792 Eastern Pkwy, Brooklyn, NY 11213
+        </address>
+        <br />
+        <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+        </div>
+        </body>
+        </html>
+          ';
         break;
       case 4:
         break;
