@@ -83,12 +83,12 @@ class CharidyEmails {
     $headers[] = 'Reply-To: Tzivos Hashem <Shimmy@tzivoshashem.org>'; 
 
     // Mail it
-    foreach ( $this->emails as $to ) {
-      //$to = "naftoli@tzivoshashem.org, emmegreene@gmail.com,  Mushka@tzivoshashem.org, Shimmy@tzivoshashem.org";
+    //foreach ( $this->emails as $to ) {
+      $to = "naftoli@tzivoshashem.org, Nechamazukin@gmail.com, zelda@tzivoshashem.org";
       if ( !mail($to, $subject, $message, implode("\r\n", $headers)) ) {
         $this->errors[] = "Error sending email to " . $to;
       }
-    }
+    //}
   }
 
   public function getErrors() {
