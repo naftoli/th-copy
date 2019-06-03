@@ -3,6 +3,7 @@ ini_set('display_errors',1);
 require_once 'classes/charidyEmails.php';
 
 $e = new charidyEmails();
+$e->setRecipients();
 $e->sendEmails();
 
 $errors = $e->getErrors();
