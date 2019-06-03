@@ -42,7 +42,8 @@ class CharidyEmails {
     <head>
     </head>
     <body>
-    We invite you to celebrate a <a href="http://issuu.com/tzivoshashem/docs/year_of_tzivos_hashem_book_5779_lr">year in Hashem\'s Army</a>. Thanks to you (and others like you), Tzivos Hashem has had an incredible year. Take a glimpse into the life of a child, a chayol in Tzivos Hashem. 
+    We invite you to celebrate a year in Hashem\'s Army</a>. Thanks to you (and others like you), Tzivos Hashem has had an incredible year. Take a glimpse into the life of a child, a chayol in Tzivos Hashem: 
+    <a href="https://bit.ly/2EO8hlP">bit.ly/2EO8hlP</a> 
     <br /><br />
     How do you transform the world? Ancient philosophers and companies investing in \'next big thing\' have posed this question, as have myriads of generations in between.
     <br /><br />
