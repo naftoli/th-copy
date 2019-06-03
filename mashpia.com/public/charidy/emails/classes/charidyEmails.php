@@ -104,26 +104,37 @@ class CharidyEmails {
         $highest = $email['highest'];
         $message = str_replace('PAST_DONATION', $highest, $message);
         // figure out current rank 
+        $i = 0; // find out which index number is current rank
         foreach ( $this->ranks as $rank => $amount ) {
+          $i++;
           if ( $highest <= $amount ) {
             $cur_rank = $rank;
             break;
           }
         }
-        next($this->ranks);
+        
+        $j = 0;
         foreach ( $this->ranks as $rank => $amount ) {
-          $next_rank = $rank;
-          $new_amount = $amount;
-          break;
+          $j++;
+          if ( $j > $i ) {
+            $next_rank = $rank;
+            $new_amount = $amount;
+            break;
+          }
         }
+        // deal with case where user is already 5* general or 4* general
         if ( !isset( $cur_rank ) ) {
           $cur_rank = '5* General';
           $next_rank = $cur_rank;
           $new_amount = $highest;
+        } else if ( !isset( $next_rank ) ) {
+          $next_rank = '5* General';
+          $new_amount = 36000;
         }
         $message = str_replace('CURRENT_RANK', $cur_rank, $message);
         $message = str_replace('NEW_RANK', $next_rank, $message);
         $message = str_replace('AMOUNT', $new_amount, $message);
+        $message = str_replace('EMAIL_ADDRESS', $to, $message);
       }
 
       if ( !mail($to, $subject, $message, implode("\r\n", $headers)) ) {
