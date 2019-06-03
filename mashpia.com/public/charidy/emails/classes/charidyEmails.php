@@ -90,6 +90,11 @@ class CharidyEmails {
     $headers[] = 'Reply-To: Tzivos Hashem <Shimmy@tzivoshashem.org>'; 
     // Mail it
     //foreach ( $this->emails as $email ) {
+    $email = [
+      'to'  =>  'naftoli@tzivoshashem.org', 
+      'name'=>  'Naftoli Rapoport', 
+      'highest' => 126
+    ];
       $to = $email['to'];
       $name = $email['name'];
       // update message with personalized info
@@ -121,7 +126,6 @@ class CharidyEmails {
         $message = str_replace('AMOUNT', $new_amount, $message);
       }
 
-      $to = "naftoli@tzivoshashem.org, Nechamazukin@gmail.com, zelda@tzivoshashem.org, mushka@tzivoshashem.org";
       if ( !mail($to, $subject, $message, implode("\r\n", $headers)) ) {
         $this->errors[] = "Error sending email to " . $to;
       }
@@ -183,7 +187,7 @@ class CharidyEmails {
         <br /><br />
         In our past campaigns, you were promoted to CURRENT_RANK in Hashem\'s army with your generous donation of $PAST_DONATION. This year, you can increase your rank to NEW_RANK by donating $AMOUNT.
         <br /><br />
-        Tomorrow, <b>Tuesday at 2pm EST<b>, please go to <b><a href="http://charidy.com/th">charidy.com/th</a></b> and use the email <b>EMAIL_ADDRESS</b> to donate. 
+        Tomorrow, <b>Tuesday at 2pm EST</b>, please go to <b><a href="http://charidy.com/th">charidy.com/th</a></b> and use the email <b>EMAIL_ADDRESS</b> to donate. 
         <br /><br />
         Thank you so much, 
         <br /><br />
