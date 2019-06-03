@@ -34,7 +34,7 @@ class CharidyEmails {
 
   public function sendEmails() {
     // Subject
-    $subject = "What are kids in for on 2020?";
+    $subject = "What are kids in for in 2020?";
 
     // Message
     $message = '
