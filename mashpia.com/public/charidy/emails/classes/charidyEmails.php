@@ -189,9 +189,9 @@ class CharidyEmails {
         $subject = "Can I count on you?";
         $message = '
         <html><head></head><body>
-        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
-        <br /><br />
         OOOPS, PLEASE DISREGARD THE PREVIOUS EMAIL, THIS IS THE CORRECTED VERSION
+        <br /><br />
+        <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
         <br /><br />
         Dear <b>FULL_NAME</b>,
         <br /><br />
