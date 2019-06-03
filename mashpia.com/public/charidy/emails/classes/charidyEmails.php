@@ -48,7 +48,8 @@ class CharidyEmails {
                   JOIN
               mashpia_charidy.donations USING (donor_id)
           WHERE
-              email != ''
+              email != '' 
+              and email in ('naftoli@tzivoshashem.org', 'zelda@tzivoshashem.org', 'mushka@tzivoshashem.org') 
           GROUP BY email
         ";
     } else {
@@ -89,12 +90,7 @@ class CharidyEmails {
     $headers[] = 'From: Tzivos Hashem <Shimmy@tzivoshashem.org>';   
     $headers[] = 'Reply-To: Tzivos Hashem <Shimmy@tzivoshashem.org>'; 
     // Mail it
-    //foreach ( $this->emails as $email ) {
-    $email = [
-      'to'  =>  'naftoli@tzivoshashem.org', 
-      'name'=>  'Naftoli Rapoport', 
-      'highest' => 126
-    ];
+    foreach ( $this->emails as $email ) {
       $to = $email['to'];
       $name = $email['name'];
       // update message with personalized info
@@ -112,7 +108,7 @@ class CharidyEmails {
             break;
           }
         }
-        
+        // find next rank
         $j = 0;
         foreach ( $this->ranks as $rank => $amount ) {
           $j++;
@@ -140,7 +136,7 @@ class CharidyEmails {
       if ( !mail($to, $subject, $message, implode("\r\n", $headers)) ) {
         $this->errors[] = "Error sending email to " . $to;
       }
-    //}
+    }
   }
 
   private function getSubjectMessage() {
