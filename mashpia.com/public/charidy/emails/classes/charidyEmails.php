@@ -239,31 +239,31 @@ class CharidyEmails {
         ';
         break;
       case 3:
-          $subject = "We are LIVE!";
-          $message = '
-          <html><head></head><body>
-          Dear FULL_NAME,
-          <br /><br />
-          The Tzivos Hashem world transformation campaign has begun! From <b>today, Tuesday, at 2 pm, to Wednesday at 6 pm,</b> the clock will be ticking. These <b>28 hours</b> are critical to raise $1 million dollars for Tzivos Hashem; <b>it’s all or nothing!</b>
-          <br /><br />
-          Today, join us at <b>#THTransforms!</b><br />
-          Donate now and quadruple your contribution in Hashem’s army and your impact on the world.
-          <br /><br />
-          Here’s how:<br />
-          Go to <a href="http://charidy.com">charidy.com/th</a><br />
-          Enter in your email address <b>EMAIL_ADDRESS</b><br />
-          Donate generously<br />
-          Donate in honor of a specific child in Tzivos Hashem, and they will earn a raffle ticket to win a dollar from the Rebbe.<br />
-          Donate more than in the past and go up in rank!<br />
-          <br /><br />
-          Every $1 is $4<br />
-          A Private’s donation of $18 = $72<br />
-          A Sergeant’s donation of $126 = $504<br />
-          A General’s donation of $3,600 = $14,400
-          <br /><br />
-          Our future—the future of our children—depends on you,
-          <br /><br />
-          Rabbi Moshe Kotlarsky <br />
+        $subject = "We are LIVE!";
+        $message = '
+        <html><head></head><body>
+        Dear FULL_NAME,
+        <br /><br />
+        The Tzivos Hashem world transformation campaign has begun! From <b>today, Tuesday, at 2 pm, to Wednesday at 6 pm,</b> the clock will be ticking. These <b>28 hours</b> are critical to raise $1 million dollars for Tzivos Hashem; <b>it’s all or nothing!</b>
+        <br /><br />
+        Today, join us at <b>#THTransforms!</b><br />
+        Donate now and quadruple your contribution in Hashem’s army and your impact on the world.
+        <br /><br />
+        Here’s how:<br />
+        Go to <a href="http://charidy.com">charidy.com/th</a><br />
+        Enter in your email address <b>EMAIL_ADDRESS</b><br />
+        Donate generously<br />
+        Donate in honor of a specific child in Tzivos Hashem, and they will earn a raffle ticket to win a dollar from the Rebbe.<br />
+        Donate more than in the past and go up in rank!<br />
+        <br /><br />
+        Every $1 is $4<br />
+        A Private’s donation of $18 = $72<br />
+        A Sergeant’s donation of $126 = $504<br />
+        A General’s donation of $3,600 = $14,400
+        <br /><br />
+        Our future—the future of our children—depends on you,
+        <br /><br />
+        Rabbi Moshe Kotlarsky <br />
         Vice Chairman, Merkos L\'inyonei Chinuch 
         <br /><br />
         Rabbi Yerachmiel Benjaminson <br />
@@ -299,7 +299,7 @@ class CharidyEmails {
         </div>
         </body>
         </html>
-          ';
+        ';
         break;
       case 4:
         break;
