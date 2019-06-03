@@ -69,12 +69,12 @@ class CharidyEmails {
     // To send HTML mail, the Content-type header must be set
     $headers[] = 'MIME-Version: 1.0';
     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-    $headers[] = 'From: Tzivos Hashem <cth@mashpia.com>';   
-    $headers[] = 'Reply-To: Tzivos Hashem <cth@mashpia.com>'; 
+    $headers[] = 'From: Tzivos Hashem <Shimmy@tzivoshashem.org>';   
+    $headers[] = 'Reply-To: Tzivos Hashem <Shimmy@tzivoshashem.org>'; 
 
     // Mail it
     //foreach ( $this->emails as $to ) {
-      $to = "naftoli@tzivoshashem.org, emmegreene@gmail.com,  Mushka@tzivoshashem.org";
+      $to = "naftoli@tzivoshashem.org, emmegreene@gmail.com,  Mushka@tzivoshashem.org, Shimmy@tzivoshashem.org";
       if ( !mail($to, $subject, $message, implode("\r\n", $headers)) ) {
         $this->errors[] = "Error sending email to " . $to;
       }
