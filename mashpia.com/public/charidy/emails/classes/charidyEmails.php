@@ -79,10 +79,6 @@ class CharidyEmails {
   }
 
   public function sendEmails() {
-    $info = $this->getSubjectMessage();
-    $subject = $info['subject'];
-    $message = $info['message'];
-
     // To send HTML mail, the Content-type header must be set
     $headers[] = 'MIME-Version: 1.0';
     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
@@ -91,6 +87,11 @@ class CharidyEmails {
 
     // Mail it
     foreach ( $this->emails as $email ) {
+      // needs to be in loop so that message keeps getting loaded with template words
+      $info = $this->getSubjectMessage();
+      $subject = $info['subject'];
+      $message = $info['message'];
+
       $to = $email['to'];
       $name = $email['name'];
       // update message with personalized info
@@ -189,6 +190,8 @@ class CharidyEmails {
         $message = '
         <html><head></head><body>
         <img src="http://www.mashpia.com/charidy/emails/TH%20Charidy%20Email.png" style="max-width: 100%; height: auto;" />
+        <br /><br />
+        OOOPS, PLEASE DISREGARD THE PREVIOUS EMAIL, THIS IS THE CORRECTED VERSION
         <br /><br />
         Dear <b>FULL_NAME</b>,
         <br /><br />
