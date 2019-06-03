@@ -16,13 +16,17 @@ require_once( dirname(__FILE__) . "/../classes/Donor.php" );
 require_once( dirname(__FILE__) . '/../../../raffles/yearly/classes/YearlyRaffle.php');
 use raffles\yearly\YearlyRaffle as YearlyRaffle; // use the raffle class from its namespace
 
+// $donors_sql = 
+//      " SELECT mashpia_charidy.donors.* FROM mashpia_charidy.donors "
+//     ." LEFT JOIN charidy_donors_callers cdc ON cdc.donor_id = mashpia_charidy.donors.donor_id AND year = $year "
+//     ." WHERE ( needs_call = 1 OR parent_admin_id IN ( "
+//     ." SELECT admin_id FROM th_chidon JOIN users USING (user_id) JOIN admin_auths ON auth='user' "
+//     ." AND id = user_id WHERE date_paid IS NOT NULL "
+//     ." )) ";
 $donors_sql = 
      " SELECT mashpia_charidy.donors.* FROM mashpia_charidy.donors "
     ." LEFT JOIN charidy_donors_callers cdc ON cdc.donor_id = mashpia_charidy.donors.donor_id AND year = $year "
-    ." WHERE ( needs_call = 1 OR parent_admin_id IN ( "
-    ." SELECT admin_id FROM th_chidon JOIN users USING (user_id) JOIN admin_auths ON auth='user' "
-    ." AND id = user_id WHERE date_paid IS NOT NULL "
-    ." )) ";
+    ." WHERE needs_call = 1";
 if ( isset($_POST['caller_id']) ){
     if ( $_POST['caller_id'] == "-1" )
         $donors_sql .= " AND charidy_caller_id IS NULL";
