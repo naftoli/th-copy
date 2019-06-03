@@ -105,6 +105,7 @@ class CharidyEmails {
           $i++;
           if ( $highest <= $amount ) {
             $cur_rank = $rank;
+            $new_amount = ++$amount;
             break;
           }
         }
@@ -114,7 +115,6 @@ class CharidyEmails {
           $j++;
           if ( $j > $i ) {
             $next_rank = $rank;
-            $new_amount = $amount;
             break;
           }
         }
